@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  phone_number: MyString
+  carrier: MyString
+  shortcode: MyString
+  : 
+  country: MyString
+  person_id: MyString
+
+two:
+  phone_number: MyString
+  carrier: MyString
+  shortcode: MyString
+  : 
+  country: MyString
+  person_id: MyString

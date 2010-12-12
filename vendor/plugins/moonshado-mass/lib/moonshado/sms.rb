@@ -1,10 +1,10 @@
 require 'digest/md5'
 require 'crack/xml'
 
-module Moonshadosms
+module Moonshado
   API_ENDPOINT = 'api.moonshado.com'
   
-  class Sender
+  class Sms
     attr_accessor :originating_address, :api_key, :token, :logger, :mailer_callback, :response_callbacks, :default_keyword
     
     def initialize(originating_address, api_key, default_keyword)
@@ -23,7 +23,7 @@ module Moonshadosms
       return response
     end
     
-    def deliver(message, recipients, keyword = default_keyword)
+    def deliver(recipients, message, keyword = default_keyword)
       recipients = recipients.is_a?(Array) ? recipients : [recipients]
       text = prepare_text(message)
       send_time = Time.now

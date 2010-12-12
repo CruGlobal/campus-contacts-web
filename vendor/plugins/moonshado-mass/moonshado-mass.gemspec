@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "lib/moonshado-mass.rb",
-     "lib/moonshadosms/sender.rb",
+     "lib/moonshado/sms.rb",
      "moonshado-mass.gemspec",
      "test/helper.rb",
      "test/test_moonshado-mass.rb"

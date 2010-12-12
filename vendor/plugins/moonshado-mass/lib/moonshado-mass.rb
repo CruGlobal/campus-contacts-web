@@ -1,1 +1,1 @@
-require 'moonshadosms/sender'
+require 'moonshado/sms'

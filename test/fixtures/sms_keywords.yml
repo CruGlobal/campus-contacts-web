@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  keyword: MyString
+  local_level_id: 1
+  name: MyString
+  target_area_id: 1
+  chartfield: MyString
+
+two:
+  keyword: MyString
+  local_level_id: 1
+  name: MyString
+  target_area_id: 1
+  chartfield: MyString
