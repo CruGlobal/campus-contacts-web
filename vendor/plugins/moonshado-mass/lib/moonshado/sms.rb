@@ -5,12 +5,13 @@ module Moonshado
   API_ENDPOINT = 'api.moonshado.com'
   
   class Sms
-    attr_accessor :originating_address, :api_key, :token, :logger, :mailer_callback, :response_callbacks, :default_keyword
+    attr_accessor :originating_address, :api_key, :token, :logger, :mailer_callback, :response_callbacks, :default_keyword, :enabled
     
-    def initialize(originating_address, api_key, default_keyword)
+    def initialize(originating_address, api_key, default_keyword, enabled = true)
       @originating_address = originating_address
       @api_key = api_key
-      @keyword = default_keyword
+      @default_keyword = default_keyword
+      @enabled = enabled
       @response_callbacks = []
     end
     
@@ -41,25 +42,27 @@ module Moonshado
                 :body => text
               }
         }
-        begin
-          response = RestClient.post "https://#{API_ENDPOINT}/gateway/sms", d
-          status = Crack::XML.parse(response)["status"]
-          code = status["code"] rescue nil
-          info = status["info"] rescue nil
-          if code == "10"
-            logger.debug("response #{response}") if logger
-            logger.debug("Sent #{message} to #{recipient} Info: #{info}") if logger
-            response_callbacks.each do |response_callback|
-              response_callback.call(:recipient => recipient, :moonshado_claimcheck => moonshado_claimcheck )
+        if enabled
+          begin
+            response = RestClient.post "https://#{API_ENDPOINT}/gateway/sms", d
+            status = Crack::XML.parse(response)["status"]
+            code = status["code"] rescue nil
+            info = status["info"] rescue nil
+            if code == "10"
+              logger.debug("response #{response}") if logger
+              logger.debug("Sent #{message} to #{recipient} Info: #{info}") if logger
+              response_callbacks.each do |response_callback|
+                response_callback.call(:recipient => recipient, :moonshado_claimcheck => moonshado_claimcheck )
+              end
+            else
+              logger.error("Could not send message to #{recipient}. Code: #{code} Info: #{info} Error: #{response}") if logger
+              mailer_callback.call("Error in Moonshado SMS", "#{response}") if @mailer_callback
             end
-          else
-            logger.error("Could not send message to #{recipient}. Code: #{code} Info: #{info} Error: #{response}") if logger
-            mailer_callback.call("Error in Moonshado SMS", "#{response}") if @mailer_callback
-          end
-        rescue => e
-          logger.error("Caught exception sending message to #{recipient}. Code: #{code} Info: #{info} Error: #{response} Message: #{e.message}") if logger
-          mailer_callback.call("Exception in Moonshado SMS", "#{response.body}") if response && @mailer_callback
-        end        
+          rescue => e
+            logger.error("Caught exception sending message to #{recipient}. Code: #{code} Info: #{info} Error: #{response} Message: #{e.message}") if logger
+            mailer_callback.call("Exception in Moonshado SMS", "#{response.body}") if response && @mailer_callback
+          end        
+        end
       end
       claimchecks
     end

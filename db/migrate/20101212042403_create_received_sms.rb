@@ -9,7 +9,7 @@ class CreateReceivedSms < ActiveRecord::Migration
       t.string :person_id
       t.datetime :received_at
       t.boolean :followed_up, :default => false
-      t.boolean :assigned_to_id, :integer
+      t.integer :assigned_to_id
       t.integer :response_count, :default => 0
 
       t.timestamps

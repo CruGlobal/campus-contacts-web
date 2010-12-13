@@ -1,5 +1,5 @@
 Bonfire::Application.routes.draw do
-  devise_for :users
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
   match "/application.manifest" => OFFLINE
   mount Resque::Server.new, :at => "/resque"
   
@@ -14,5 +14,5 @@ Bonfire::Application.routes.draw do
   root :to => "welcome#index"
 
   # Map keyword responses with phone numbers
-  match ':keyword(/:received_sms_id)' => 'welcome#index'
+  match ':keyword(/:received_sms_id)' => 'contacts#new'
 end

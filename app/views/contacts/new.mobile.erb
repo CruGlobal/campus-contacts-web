@@ -1,0 +1,39 @@
+<% title "Hi #{@person.first_name}!" %>
+<%= form_for @person, :url => @person.new_record? ? contacts_path : contact_path(@person), :method => @person.new_record? ? :post : :put, :class => 'form' do |f| %>
+  <ul class="rounded">
+  <% unless @person.first_name.present? %>
+    <li><%= f.text_field :first_name, :placeholder => "First Name" %></li>
+  <% end %>
+  <% unless @person.last_name.present? %>
+    <li><%= f.text_field :last_name, :placeholder => "Last Name" %></li>
+  <% end %>
+  <li>
+    Check all that apply: <br />
+    <%#= f.check_box :community %> I would like to join a community group.<br />
+    <%#= f.check_box :jesus %> I need to begin a relationship with Jesus.<br />
+    <%#= f.check_box :church %> I would like to learn about becoming a member of a local church.
+  </li>
+  <% unless true && @person.gender.present? %>
+    <li>
+      <%= f.radio_button :gender, 'male' %> Male 
+      <%= f.radio_button :gender, 'female' %> Female 
+    </li>
+  <% end %>
+  <% unless @person.email.present? %>
+    <li><%= f.text_field :email, :placeholder => "Last Name" %></li>
+  <% end %>
+  <% unless @person.phone_number.present? %>
+    <li><%= f.text_field :phone_number, :placeholder => "Phone Number (optional)" %></li>
+  <% end %>
+  <li>
+    Year in Schoool: 
+    <%#= f.select :year_in_school, [['Pick One', ''], 'First Year', 'Second Year', 'Third Year', 'Fourth Year', 'Fifth Year', 'Graduate', 'Doctoral'] %>
+  </li>
+  <li>
+    Where do you live: 
+    <%#= f.select :year_in_school, [['Pick One', ''], 'The Towers', 'Lake Claire'] %>
+  </li>
+  </ul>
+  <%= link_to "Submit", nil, :class => "whiteButton submit" %>
+<% end %>
+

@@ -1,37 +1,13 @@
 class ContactsController < ApplicationController
+  before_filter :get_person
+  
   def new
-    if session[:person_id] #Person.count > 0 #
-      @person = Person.find(session[:person_id]) #Person.first #
-    else
-      @person = Person.new
-      code = params['code'] # Facebooks verification string
-      if code
-        access_token_hash = MiniFB.oauth_access_token(FB_APP_ID, HOST + "contacts/new", FB_SECRET, code)
-        @person.access_token = access_token_hash["access_token"]
-        @res = MiniFB.get(@person.access_token, 'me')
-        @person.email = @res.email
-        @person.first_name = @res.first_name
-        @person.last_name = @res.last_name
-        @person.facebook_uid = @res.id
-        @person.gender = @res.gender
-        @person.save!
-        session[:person_id] = @person.id
-      end
-    end
+    sms = ReceivedSms.find_by_id(Base62.decode(params[:received_sms_id])) if params[:received_sms_id]
+    @person.update_attribute(:phone_number, sms.phone_number) if sms && sms.phone_number != @person.phone_number
   end
     
   def update
-    @person = Person.find(session[:person_id]) #Person.first #
     if @person.update_attributes(params[:person])
-      render :thanks
-    else
-      render :new
-    end
-  end
-  
-  def create
-    @person = Person.new(params[:person])
-    if @person.save
       render :thanks
     else
       render :new
@@ -41,4 +17,10 @@ class ContactsController < ApplicationController
   def thanks
     
   end
+  
+  protected
+  
+    def get_person
+      @person = current_user.person
+    end
 end

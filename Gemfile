@@ -14,6 +14,7 @@ gem 'crack'
 gem 'resque'
 gem "devise", "1.2.rc"
 gem "oa-oauth", :require => "omniauth/oauth"
+gem 'mini_fb'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
@@ -24,4 +25,5 @@ group :development, :test do
   gem 'ephemeral_response'
   gem 'sqlite3-ruby', :require => 'sqlite3'
   gem 'factory_girl', '2.0.0.beta1'
+  gem 'simplecov', '>= 0.3.5', :require => false
 end

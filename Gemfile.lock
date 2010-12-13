@@ -51,6 +51,7 @@ GEM
       addressable (~> 2.2.2)
       multipart-post (~> 1.0.1)
       rack (>= 1.1.0, < 2)
+    hashie (0.4.0)
     highline (1.6.1)
     i18n (0.5.0)
     json (1.4.6)
@@ -62,6 +63,9 @@ GEM
     mail_safe (0.3.1)
       actionmailer (>= 1.3.6)
     mime-types (1.16)
+    mini_fb (1.1.6)
+      hashie
+      rest-client
     multi_json (0.0.5)
     multipart-post (1.0.1)
     mysql2 (0.2.6)
@@ -118,6 +122,9 @@ GEM
     rest-client (1.6.1)
       mime-types (>= 1.16)
     shoulda (2.11.3)
+    simplecov (0.3.7)
+      simplecov-html (>= 0.3.7)
+    simplecov-html (0.3.9)
     sinatra (1.1.0)
       rack (~> 1.1)
       tilt (~> 1.1)
@@ -142,6 +149,7 @@ DEPENDENCIES
   ephemeral_response
   factory_girl (= 2.0.0.beta1)
   mail_safe
+  mini_fb
   mysql2
   oa-oauth
   rack-offline
@@ -149,4 +157,5 @@ DEPENDENCIES
   resque
   rest-client
   shoulda
+  simplecov (>= 0.3.5)
   sqlite3-ruby

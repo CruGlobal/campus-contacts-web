@@ -10,7 +10,30 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101212170436) do
+ActiveRecord::Schema.define(:version => 20101213042426) do
+
+  create_table "authentications", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "provider"
+    t.string   "uid"
+    t.string   "token"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "authentications", ["provider", "uid"], :name => "index_authentications_on_provider_and_uid", :unique => true
+  add_index "authentications", ["user_id", "provider", "uid"], :name => "index_authentications_on_user_id_and_provider_and_uid", :unique => true
+
+  create_table "people", :force => true do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "gender"
+    t.string   "email"
+    t.string   "phone_number"
+    t.date     "birthday"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "received_sms", :force => true do |t|
     t.string   "phone_number"
@@ -21,8 +44,7 @@ ActiveRecord::Schema.define(:version => 20101212170436) do
     t.string   "person_id"
     t.datetime "received_at"
     t.boolean  "followed_up",    :default => false
-    t.boolean  "assigned_to_id"
-    t.boolean  "integer"
+    t.integer  "assigned_to_id"
     t.integer  "response_count", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -74,6 +96,7 @@ ActiveRecord::Schema.define(:version => 20101212170436) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "person_id"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
