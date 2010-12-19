@@ -23,6 +23,10 @@ class PhoneNumber < ActiveRecord::Base
     end
   end
   
+  def number_with_country_code
+    number.length == 10 ? '1' + number : number
+  end
+  
   protected
   
   def set_primary

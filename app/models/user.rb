@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   set_table_name 'simplesecuritymanager_user'
   set_primary_key 'userID'
   
-  has_one :person
+  has_one :person, :foreign_key => 'fk_ssmUserId'
   has_many :authentications
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
@@ -31,4 +31,9 @@ class User < ActiveRecord::Base
     user.save
     user
   end 
+  
+  def email=(email)
+    self.username = email
+    self[:email] = email
+  end
 end

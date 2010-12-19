@@ -1,20 +1,25 @@
 class EmailAddress < ActiveRecord::Base
   belongs_to :person
+  validates_presence_of :person_id, :email, :on => :create, :message => "can't be blank"
   
-  before_create :set_primary
+  before_validation :set_primary, :on => :create
   after_destroy :check_for_primary
   
   protected
   
   def set_primary
-    self.primary = true unless person.primary_phone_number
+    if person
+      self.primary = person.primary_email_address ? false : true
+    end
+    true
   end
   
   def check_for_primary
     if self.primary?
-      if person.phone_numbers.present?
-        person.phone_numbers.first.update_attribute(:primary, true)
+      if person && person.email_addresses.present?
+        person.email_addresses.first.update_attribute(:primary, true)
       end
     end
+    true
   end
 end

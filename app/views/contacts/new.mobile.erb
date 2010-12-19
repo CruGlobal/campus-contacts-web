@@ -1,11 +1,11 @@
-<% title "Hi #{@person.first_name}!" %>
+<% title "Hi #{@person.firstName}!" %>
 <%= form_for @person, :url => @person.new_record? ? contacts_path : contact_path(@person), :method => @person.new_record? ? :post : :put, :class => 'form' do |f| %>
   <ul class="rounded">
-  <% unless @person.first_name.present? %>
-    <li><%= f.text_field :first_name, :placeholder => "First Name" %></li>
+  <% unless @person.firstName.present? %>
+    <li><%= f.text_field :firstName, :placeholder => "First Name" %></li>
   <% end %>
-  <% unless @person.last_name.present? %>
-    <li><%= f.text_field :last_name, :placeholder => "Last Name" %></li>
+  <% unless @person.lastName.present? %>
+    <li><%= f.text_field :lastName, :placeholder => "Last Name" %></li>
   <% end %>
   <li>
     Check all that apply: <br />
@@ -19,11 +19,15 @@
       <%= f.radio_button :gender, 'female' %> Female 
     </li>
   <% end %>
-  <% unless @person.email.present? %>
-    <li><%= f.text_field :email, :placeholder => "Last Name" %></li>
+  <% unless @person.primary_email_address.present? %>
+    <%= f.fields_for :email_addresses do |ef| %>
+      <li><%= ef.text_field :email, :placeholder => "Email" %></li>
+    <% end %>
   <% end %>
-  <% unless @person.phone_number.present? %>
-    <li><%= f.text_field :phone_number, :placeholder => "Phone Number (optional)" %></li>
+  <% unless @person.primary_phone_number.present? %>
+    <%= f.fields_for :phone_numbers do |pf| %>
+      <li><%= pf.text_field :number, :placeholder => "Phone Number (optional)" %></li>
+    <% end %>
   <% end %>
   <li>
     Year in Schoool: 

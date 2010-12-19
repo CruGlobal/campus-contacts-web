@@ -1,4 +1,12 @@
 FactoryGirl.define do
+  factory :received_sms do
+    phone_number '15555555555'
+    carrier      'sprint'
+    shortcode    '69940'
+    message      'test'
+    country      'US'
+  end
+  
   factory :sms_carrier do
     moonshado_name 'fake'
   end
@@ -12,5 +20,11 @@ FactoryGirl.define do
   factory :person do
     firstName 'John'
     lastName 'Doe'
+  end
+  
+  factory :user do
+    email 'test@example.com'
+    password 'asdfasdf'
+    person
   end
 end

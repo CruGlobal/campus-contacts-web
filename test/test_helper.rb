@@ -1,8 +1,8 @@
 ENV["RAILS_ENV"] = "test"
 require 'simplecov'
-SimpleCov.start 'rails' do
-  # add_filter "/vendor/"
-end
+# SimpleCov.start 'rails' do
+#   add_filter "vendor"
+# end
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require 'ephemeral_response'
