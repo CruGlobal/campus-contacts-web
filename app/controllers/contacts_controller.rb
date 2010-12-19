@@ -3,7 +3,10 @@ class ContactsController < ApplicationController
   
   def new
     sms = ReceivedSms.find_by_id(Base62.decode(params[:received_sms_id])) if params[:received_sms_id]
-    @person.update_attribute(:phone_number, sms.phone_number) if sms && sms.phone_number != @person.phone_number
+    if sms
+      @person.update_attribute(:phone_number, sms.phone_number) unless sms.phone_number == @person.phone_number
+      sms.update_attribute(:person_id, @person.id) unless sms.person_id
+    end
   end
     
   def update

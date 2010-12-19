@@ -7,7 +7,6 @@ gem 'mysql2'
 
 gem 'rack-offline'
 
-# Deploy with Capistrano
 gem 'capistrano'
 gem 'rest-client'
 gem 'crack'
