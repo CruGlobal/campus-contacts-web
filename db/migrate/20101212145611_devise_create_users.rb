@@ -1,27 +1,28 @@
 class DeviseCreateUsers < ActiveRecord::Migration
   def self.up
-    create_table(:users) do |t|
-      t.database_authenticatable :null => false
-      # t.recoverable
-      t.rememberable
-      t.trackable
+    add_column :simplesecuritymanager_user, :email, :string
+    add_column :simplesecuritymanager_user, :encrypted_password, :string
+    add_column :simplesecuritymanager_user, :remember_created_at, :datetime
+    add_column :simplesecuritymanager_user, :sign_in_count, :integer, :default => 0
+    add_column :simplesecuritymanager_user, :current_sign_in_at, :datetime
+    add_column :simplesecuritymanager_user, :current_sign_in_ip, :string
+    add_column :simplesecuritymanager_user, :last_sign_in_ip, :string
+    add_column :simplesecuritymanager_user, :created_at, :datetime
+    add_column :simplesecuritymanager_user, :updated_at, :datetime
 
-      # t.encryptable
-      # t.confirmable
-      # t.lockable :lock_strategy => :failed_attempts, :unlock_strategy => :both
-      # t.token_authenticatable
-
-
-      t.timestamps
-    end
-
-    add_index :users, :email,                :unique => true
-    # add_index :users, :reset_password_token, :unique => true
-    # add_index :users, :confirmation_token,   :unique => true
-    # add_index :users, :unlock_token,         :unique => true
+    add_index :simplesecuritymanager_user, :email,                :unique => true
   end
 
   def self.down
-    drop_table :users
+    remove_column :simplesecuritymanager_user, :updated_at
+    remove_column :simplesecuritymanager_user, :created_at
+    remove_column :simplesecuritymanager_user, :last_sign_in_ip
+    remove_column :simplesecuritymanager_user, :current_sign_in_ip
+    remove_column :simplesecuritymanager_user, :current_sign_in_at
+    remove_column :simplesecuritymanager_user, :sign_in_count
+    remove_column :simplesecuritymanager_user, :remember_created_at
+    remove_column :simplesecuritymanager_user, :encrypted_password
+    remove_column :simplesecuritymanager_user, :email
+    drop_table :simplesecuritymanager_user
   end
 end

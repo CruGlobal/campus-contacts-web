@@ -9,4 +9,8 @@ FactoryGirl.define do
     email 'messaging.sprintpcs.com'
   end
   
+  factory :person do
+    firstName 'John'
+    lastName 'Doe'
+  end
 end

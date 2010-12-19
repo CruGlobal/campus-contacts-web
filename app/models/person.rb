@@ -1,5 +1,10 @@
 class Person < ActiveRecord::Base
-  has_one :user
+  set_table_name 'ministry_person'
+  set_primary_key 'personID'
+  
+  belongs_to :user
+  has_many :phone_numbers
+  has_one :primary_phone_number, :class_name => "PhoneNumber", :foreign_key => "person_id", :conditions => {:primary => true}
   
   def self.create_from_facebook(data, authentication)
     new.update_from_facebook(data, authentication)

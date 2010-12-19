@@ -15,8 +15,6 @@ class ApplicationController < ActionController::Base
   end
   
   def mobile_device?
-    return true # treat everything as mobile while we build views
-
     if session[:mobile_param]
       session[:mobile_param] == "1"
     else

@@ -1,5 +1,8 @@
 class User < ActiveRecord::Base
-  belongs_to :person
+  set_table_name 'simplesecuritymanager_user'
+  set_primary_key 'userID'
+  
+  has_one :person
   has_many :authentications
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
