@@ -11,7 +11,7 @@ gem 'capistrano'
 gem 'rest-client'
 gem 'crack'
 gem 'resque'
-gem "devise", "1.2.rc"
+gem "devise", :git => 'git://github.com/twinge/devise.git'
 gem "oa-oauth", :require => "omniauth/oauth"
 gem 'mini_fb'
 
