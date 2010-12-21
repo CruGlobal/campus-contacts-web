@@ -1,5 +1,5 @@
 class SmsController < ApplicationController
-  skip_before_filter :verify_authenticity_token, :authenticate_user!
+  skip_before_filter :authenticate_user!, :verify_authenticity_token
   def mo
     # Look for a previous response by this number
     @text = ReceivedSms.find_by_phone_number(sms_params[:phone_number])

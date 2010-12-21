@@ -7,8 +7,10 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     if request.session[:return_to].is_a? String
       [request.session[:return_to], request.session[:return_params].to_query].join("?")
+      session[:return_to] = root_path if session[:return_to].include?('sign_in')
     elsif request.session[:return_to].is_a? Hash
       request.session[:return_to].merge!(request.session[:return_params])
+      session[:return_to] = root_path if session[:return_to][:controller] == "devise/sessions" && session[:return_to][:action] == 'new'
     else
       super
     end

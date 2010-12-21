@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101219002322) do
+ActiveRecord::Schema.define(:version => 20101221171037) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -2146,22 +2146,20 @@ ActiveRecord::Schema.define(:version => 20101219002322) do
   create_table "mpd_contacts", :force => true do |t|
     t.integer  "mpd_user_id"
     t.integer  "mpd_priority_id"
-    t.string   "full_name",                     :default => "",    :null => false
-    t.string   "address_1"
+    t.string   "full_name",                     :default => "", :null => false
+    t.string   "address_1",                     :default => ""
     t.string   "address_2"
-    t.string   "city"
-    t.string   "state"
-    t.string   "zip",             :limit => 10
-    t.string   "phone",           :limit => 15
-    t.string   "email_address"
-    t.float    "gift_amount"
+    t.string   "city",                          :default => ""
+    t.string   "state",                         :default => ""
+    t.string   "zip",             :limit => 10, :default => ""
+    t.string   "phone",           :limit => 15, :default => ""
+    t.string   "email_address",                 :default => ""
     t.text     "notes"
-    t.boolean  "letter_sent",                   :default => false
-    t.boolean  "call_made",                     :default => false
-    t.boolean  "thankyou_sent",                 :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "salutation"
+    t.string   "phone_2",         :limit => 25, :default => ""
+    t.string   "relationship",                  :default => ""
   end
 
   add_index "mpd_contacts", ["mpd_priority_id"], :name => "mpd_contacts_mpd_priority_id_index"
@@ -2190,15 +2188,27 @@ ActiveRecord::Schema.define(:version => 20101219002322) do
     t.integer "mpd_user_id"
     t.integer "mpd_expense_type_id"
     t.integer "amount",              :default => 0, :null => false
+    t.integer "mpd_event_id"
   end
 
+  add_index "mpd_expenses", ["mpd_event_id"], :name => "mpd_event_id"
   add_index "mpd_expenses", ["mpd_expense_type_id"], :name => "mpd_expenses_mpd_expense_type_id_index"
   add_index "mpd_expenses", ["mpd_user_id"], :name => "mpd_expenses_mpd_user_id_index"
 
   create_table "mpd_letter_images", :force => true do |t|
-    t.integer "mpd_letter_id", :null => false
+    t.integer "mpd_letter_id"
     t.string  "image"
+    t.integer "parent_id"
+    t.string  "content_type"
+    t.string  "filename"
+    t.string  "thumbnail"
+    t.integer "size"
+    t.integer "width"
+    t.integer "height"
   end
+
+  add_index "mpd_letter_images", ["mpd_letter_id"], :name => "mpd_letter_id"
+  add_index "mpd_letter_images", ["parent_id"], :name => "parent_id"
 
   create_table "mpd_letter_templates", :force => true do |t|
     t.string  "name",                                 :null => false
@@ -2211,16 +2221,20 @@ ActiveRecord::Schema.define(:version => 20101219002322) do
   create_table "mpd_letters", :force => true do |t|
     t.integer "mpd_letter_template_id"
     t.date    "date"
-    t.string  "salutation",             :default => "Dear [[FULL_NAME]],"
+    t.string  "salutation",             :default => "Dear [[SALUTATION]],"
     t.text    "update_section"
     t.text    "educate_section"
     t.text    "needs_section"
     t.text    "involve_section"
     t.text    "acknowledge_section"
     t.string  "closing",                :default => "Thank you,"
+    t.string  "printed_name"
+    t.integer "mpd_user_id"
+    t.string  "name"
   end
 
   add_index "mpd_letters", ["mpd_letter_template_id"], :name => "mpd_letters_mpd_letter_template_id_index"
+  add_index "mpd_letters", ["mpd_user_id"], :name => "mpd_letters_mpd_user_id_index"
 
   create_table "mpd_priorities", :force => true do |t|
     t.integer  "mpd_user_id",                 :default => 0,  :null => false
@@ -2231,6 +2245,7 @@ ActiveRecord::Schema.define(:version => 20101219002322) do
   end
 
   add_index "mpd_priorities", ["mpd_user_id"], :name => "fk_mpd_priorities_mpd_user"
+  add_index "mpd_priorities", ["rateable_id"], :name => "rateable_id"
 
   create_table "mpd_roles", :force => true do |t|
     t.string "name"
@@ -2240,6 +2255,9 @@ ActiveRecord::Schema.define(:version => 20101219002322) do
     t.integer "role_id"
     t.integer "user_id"
   end
+
+  add_index "mpd_roles_users", ["role_id"], :name => "role_id"
+  add_index "mpd_roles_users", ["user_id"], :name => "user_id"
 
   create_table "mpd_sessions", :force => true do |t|
     t.string   "session_id", :null => false
@@ -2253,7 +2271,6 @@ ActiveRecord::Schema.define(:version => 20101219002322) do
 
   create_table "mpd_users", :force => true do |t|
     t.integer  "user_id"
-    t.integer  "mpd_letter_id"
     t.integer  "mpd_role_id"
     t.datetime "last_login"
     t.string   "type"
@@ -2262,11 +2279,12 @@ ActiveRecord::Schema.define(:version => 20101219002322) do
     t.boolean  "show_calculator",     :default => true
     t.boolean  "show_thank_help",     :default => true
     t.datetime "created_at"
+    t.integer  "current_event_id"
   end
 
-  add_index "mpd_users", ["mpd_letter_id"], :name => "mpd_users_mpd_letter_id_index"
+  add_index "mpd_users", ["current_event_id"], :name => "current_event_id"
   add_index "mpd_users", ["mpd_role_id"], :name => "mpd_users_mpd_role_id_index"
-  add_index "mpd_users", ["user_id"], :name => "mpd_users_user_id_index"
+  add_index "mpd_users", ["user_id"], :name => "mpd_users_ssm_id_index"
 
   create_table "nag_users", :force => true do |t|
     t.integer  "ssm_id",                    :null => false
@@ -2874,6 +2892,7 @@ ActiveRecord::Schema.define(:version => 20101219002322) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "last_sign_in_at"
   end
 
   add_index "simplesecuritymanager_user", ["email"], :name => "index_simplesecuritymanager_user_on_email", :unique => true
