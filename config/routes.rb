@@ -1,4 +1,6 @@
 Bonfire::Application.routes.draw do
+  resources :keyword_requests
+
   get "welcome/index"
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }

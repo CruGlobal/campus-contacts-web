@@ -1,0 +1,33 @@
+<%= form_for(@keyword_request) do |f| %>
+  <% if @keyword_request.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@keyword_request.errors.count, "error") %> prohibited this keyword_request from being saved:</h2>
+
+      <ul>
+      <% @keyword_request.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :message %><br />
+    <%= f.text_area :message %>
+  </div>
+  <div class="field">
+    <%= f.label :keyword %><br />
+    <%= f.text_field :keyword %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br />
+    <%= f.text_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :community_id %><br />
+    <%= f.text_field :community_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
