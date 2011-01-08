@@ -12,8 +12,9 @@ class ApplicationController < ActionController::Base
       request.session[:return_to].merge!(request.session[:return_params])
       session[:return_to] = root_path if session[:return_to][:controller] == "devise/sessions" && session[:return_to][:action] == 'new'
     else
-      super
+      return super
     end
+    session[:return_to]
   end
   
   def mobile_device?

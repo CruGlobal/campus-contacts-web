@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
       authentication.update_attribute(:token, access_token['credentials']['token'])
       user = authentication.user
     else
-      user = signed_in_resource || User.find_by_email(data['email']) || User.create!(:email => data["email"], :password => Devise.friendly_token[0,20])
+      user = signed_in_resource || User.find_by_email(data['email']) || User.find_by_email(data['username']) || User.create!(:email => data["email"], :password => Devise.friendly_token[0,20])
       authentication = user.authentications.create(:provider => 'facebook', :uid => access_token['uid'], :token => access_token['credentials']['token'])
     end
     if user.person 
