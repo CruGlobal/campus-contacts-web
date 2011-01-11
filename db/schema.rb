@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101221171037) do
+ActiveRecord::Schema.define(:version => 20110111041701) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -71,6 +71,14 @@ ActiveRecord::Schema.define(:version => 20101221171037) do
   end
 
   add_index "cms_cmsfile", ["accessCount"], :name => "index1"
+
+  create_table "communities", :force => true do |t|
+    t.string   "name"
+    t.string   "website"
+    t.string   "fbpage"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "counties", :force => true do |t|
     t.string "name"
@@ -1439,9 +1447,10 @@ ActiveRecord::Schema.define(:version => 20101221171037) do
   add_index "hr_si_users", ["fk_ssmUserID"], :name => "IX_hr_si_Users_fk_ssmUserID"
 
   create_table "keyword_requests", :force => true do |t|
-    t.string   "keyword"
     t.text     "message"
+    t.string   "keyword"
     t.integer  "user_id"
+    t.integer  "community_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

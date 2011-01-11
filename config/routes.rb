@@ -1,4 +1,6 @@
 Bonfire::Application.routes.draw do
+  resources :communities
+
   resources :ministries
 
   resources :keyword_requests
