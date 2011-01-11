@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Message:</b>
+  <%= @keyword_request.message %>
+</p>
+
+<p>
+  <b>Keyword:</b>
+  <%= @keyword_request.keyword %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @keyword_request.user_id %>
+</p>
+
+<p>
+  <b>Community:</b>
+  <%= @keyword_request.community_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_keyword_request_path(@keyword_request) %> |
+<%= link_to 'Back', keyword_requests_path %>

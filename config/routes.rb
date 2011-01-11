@@ -1,4 +1,6 @@
 Bonfire::Application.routes.draw do
+  resources :ministries
+
   resources :keyword_requests
 
   get "welcome/index"

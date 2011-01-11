@@ -6,9 +6,6 @@ body, p, ol, ul, td {
   line-height: 18px;
 }
 
-.title1 { color: #000; font-size: 18px; text-align:center; }
-.explanation1 { color: #000; font-size: 14px; }
-
 pre {
   background-color: #eee;
   padding: 10px;
