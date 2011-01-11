@@ -1,4 +1,5 @@
 Bonfire::Application.routes.draw do
+  resources :schools
   resources :communities
 
   resources :ministries

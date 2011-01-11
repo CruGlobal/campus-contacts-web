@@ -10,7 +10,9 @@
       </ul>
     </div>
   <% end %>
-
+ <div class="field">
+    <%= f.hidden_field :school_id, :id => 'link_origin_id'  %>
+   </div>
   <div class="field">
     <%= f.label :name %><br />
     <%= f.text_field :name %>
