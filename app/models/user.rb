@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
   
   has_one :person, :foreign_key => 'fk_ssmUserId'
   has_many :authentications
+  has_many :user_community_joins
+  has_many :communities, :through => :user_community_join
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable,
@@ -16,19 +18,24 @@ class User < ActiveRecord::Base
     data = access_token['extra']['user_hash']
     user = nil
     authentication = nil
+#   signed_in_resource = nil
+
     if authentication = Authentication.find_by_provider_and_uid(access_token['provider'], access_token['uid'])
       authentication.update_attribute(:token, access_token['credentials']['token'])
       user = authentication.user
     else
-      user = signed_in_resource || User.find_by_email(data['email']) || User.find_by_email(data['username']) || User.create!(:email => data["email"], :password => Devise.friendly_token[0,20])
-      authentication = user.authentications.create(:provider => 'facebook', :uid => access_token['uid'], :token => access_token['credentials']['token'])
+    user = signed_in_resource || User.find(:first, :conditions => ["email = ? or email = ?", data['email'], data['username']])
+    user = User.create!(:email => data["email"], :password => Devise.friendly_token[0,20]) if user.nil?
+    user.save
+    
+    authentication = user.authentications.create(:provider => 'facebook', :uid => access_token['uid'], :token => access_token['credentials']['token'])
     end
+
     if user.person 
       user.person.update_from_facebook(data, authentication)
     else
       user.person = Person.create_from_facebook(data, authentication)
     end
-    user.save
     user
   end 
   

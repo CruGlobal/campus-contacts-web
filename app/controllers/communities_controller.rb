@@ -2,7 +2,11 @@ class CommunitiesController < ApplicationController
   # GET /communities
   # GET /communities.xml
   def index
-    @communities = Community.all
+    if params[:term]
+      @communities = Community.where('name LIKE ?', "#{params[:term]}%").limit(6)
+    else
+      @communities = Community.all
+    end
 
     respond_to do |format|
       format.html # index.html.erb

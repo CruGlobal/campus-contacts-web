@@ -20,6 +20,7 @@ class Person < ActiveRecord::Base
     self.firstName = data['first_name'] if firstName.blank?
     self.lastName = data['last_name'] if lastName.blank?
     self.birth_date = DateTime.strptime(data['birthday'], '%m/%d/%Y') if birth_date.blank? && data['birthday'].present?
+    save
     unless email_addresses.detect {|e| e.email == data['email']}
       email_addresses.create(:email => data['email'])
     end
