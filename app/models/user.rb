@@ -4,8 +4,6 @@ class User < ActiveRecord::Base
   
   has_one :person, :foreign_key => 'fk_ssmUserId'
   has_many :authentications
-  has_many :user_community_joins
-  has_many :communities, :through => :user_community_join
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable,

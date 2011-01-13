@@ -1,4 +1,6 @@
 Bonfire::Application.routes.draw do
+  resources :community_memberships
+
   resources :schools
   resources :communities
 

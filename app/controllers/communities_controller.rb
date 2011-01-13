@@ -11,6 +11,7 @@ class CommunitiesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @communities }
+      format.json { render :json => @communities.to_json }
     end
   end
 

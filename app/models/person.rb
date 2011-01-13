@@ -7,13 +7,16 @@ class Person < ActiveRecord::Base
   has_one :primary_phone_number, :class_name => "PhoneNumber", :foreign_key => "person_id", :conditions => {:primary => true}
   has_many :email_addresses
   has_one :primary_email_address, :class_name => "EmailAddress", :foreign_key => "person_id", :conditions => {:primary => true}
+  has_many :communities, :through => :community_memberships
+  has_many :community_memberships
   validates_presence_of :firstName, :lastName
   
   accepts_nested_attributes_for :email_addresses, :phone_numbers, :allow_destroy => true
   
-  
+#We'll do this better at some point.  
+#New->Create? Gets rid of the save in update_from_facebook  
   def self.create_from_facebook(data, authentication)
-    new.update_from_facebook(data, authentication)
+    new.update_from_facebook(data, authentication) 
   end
   
   def update_from_facebook(data, authentication)

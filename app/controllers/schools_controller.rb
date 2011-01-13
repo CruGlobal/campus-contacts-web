@@ -4,7 +4,7 @@ class SchoolsController < ApplicationController
 # I will explain this part in a moment.
     if params[:term]
       #@school = School.find(:all,:conditions => ['name LIKE ?', "#{params[:term]}%"])
-      @school = School.where('name LIKE ?', "#{params[:term]}%").limit(6)
+      @school = School.select("targetAreaID, name").where('name LIKE ?', "#{params[:term]}%").limit(6)
     else
       @school = School.limit(6)
     end
