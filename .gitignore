@@ -7,3 +7,4 @@ config/database.yml
 test/fixtures/ephemeral_response
 /coverage/
 .DS_Store
+vendor/ruby

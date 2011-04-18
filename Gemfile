@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.3'
+gem 'rails', '3.0.6'
 
 
 gem 'mysql2'
@@ -11,9 +11,11 @@ gem 'capistrano'
 gem 'rest-client'
 gem 'crack'
 gem 'resque'
-gem "devise", :git => "http://github.com/plataformatec/devise.git"
+gem "devise"#, :git => "http://github.com/plataformatec/devise.git"
 gem "oa-oauth", :require => "omniauth/oauth"
 gem 'mini_fb'
+gem 'jquery-rails'
+gem 'nested_set'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
@@ -25,4 +27,5 @@ group :development, :test do
   gem 'sqlite3-ruby', :require => 'sqlite3'
   gem 'factory_girl', '2.0.0.beta1'
   gem 'simplecov', '>= 0.3.5', :require => false
+  gem 'railroady'
 end
