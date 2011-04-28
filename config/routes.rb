@@ -7,6 +7,14 @@ Bonfire::Application.routes.draw do
   resources :ministries
 
   resources :keyword_requests
+  
+  resources :people do
+    resources :organization_memberships do
+      member do
+        get :validate
+      end
+    end
+  end
 
   get "welcome/index"
 

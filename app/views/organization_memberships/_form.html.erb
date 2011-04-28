@@ -1,0 +1,17 @@
+<%= form_for(@organization_membership) do |f| %>
+  <% if @organization_membership.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@organization_membership.errors.count, "error") %> prohibited this organization_membership from being saved:</h2>
+
+      <ul>
+      <% @organization_membership.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

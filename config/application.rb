@@ -38,5 +38,8 @@ module Bonfire
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
+    
+    config.rubycas.cas_base_url = 'https://signin.ccci.org/cas'
+    config.rubycas.logger = Rails.logger
   end
 end

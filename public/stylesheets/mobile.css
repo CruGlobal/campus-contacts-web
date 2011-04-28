@@ -1,0 +1,15 @@
+#jqt .toolbar {
+	height: 65px;
+}
+
+#jqt .toolbar > h1 {
+	height: 60px;
+	font-size: 40px;	
+	width: 250px;
+	margin: 1px 0 0 -125px;
+}
+
+#jqt .info {
+	font-size: 14px;
+	line-height: 28px;
+}

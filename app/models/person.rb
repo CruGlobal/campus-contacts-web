@@ -9,6 +9,10 @@ class Person < ActiveRecord::Base
   has_one :primary_email_address, :class_name => "EmailAddress", :foreign_key => "person_id", :conditions => {:primary => true}
   has_many :communities, :through => :community_memberships
   has_many :community_memberships
+  has_many :organization_memberships, :class_name => "OrganizationMembership", :foreign_key => "person_id"
+  has_many :organizations, :through => :organization_memberships
+  has_one :primary_organization_membership, :class_name => "OrganizationMembership", :foreign_key => "person_id", :conditions => {:primary => true}
+  has_one :primary_organization, :through => :primary_organization_membership, :source => :organization
   validates_presence_of :firstName, :lastName
   
   accepts_nested_attributes_for :email_addresses, :phone_numbers, :allow_destroy => true

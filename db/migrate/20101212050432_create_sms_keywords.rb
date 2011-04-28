@@ -5,6 +5,8 @@ class CreateSmsKeywords < ActiveRecord::Migration
       t.integer :local_level_id
       t.string :name
       t.integer :target_area_id
+      t.integer :activity_id
+      t.integer :organization_id
 
       t.timestamps
     end

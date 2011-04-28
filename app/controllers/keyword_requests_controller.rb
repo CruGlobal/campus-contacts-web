@@ -1,4 +1,5 @@
 class KeywordRequestsController < ApplicationController
+  before_filter :check_org, :only => [:new]
   # GET /keyword_requests
   # GET /keyword_requests.xml
   def index
@@ -41,6 +42,7 @@ class KeywordRequestsController < ApplicationController
   # POST /keyword_requests.xml
   def create
     @keyword_request = KeywordRequest.new(params[:keyword_request])
+    @keyword_request.user = current_user
 
     respond_to do |format|
       if @keyword_request.save
@@ -80,4 +82,13 @@ class KeywordRequestsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+  
+  private
+    def check_org
+      unless current_person.primary_organization
+        session[:return_to] = params
+        redirect_to person_organization_memberships_path(current_person), :notice => 'Please pick which organization(s) you are associated with'
+        return false
+      end
+    end
 end

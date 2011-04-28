@@ -1,0 +1,16 @@
+<h1>New SMS Keyword Request</h1>
+<p>
+  Name: <%= @keyword_request.user %>.<br/>
+</p>
+<p>
+  Keyword: <%= @keyword_request.keyword %><br/>
+</p>
+<p>
+  Explanation: <br /><%= simple_format @keyword_request.explanation %><br/>
+</p>
+<p>
+  Chartfield: <%= @keyword_request.chartfield %><br/>
+</p>
+<p>
+  Click here to respond to the request: <%= keyword_request_url(@keyword_request) %>
+</p>

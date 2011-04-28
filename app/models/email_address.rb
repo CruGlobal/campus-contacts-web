@@ -3,7 +3,7 @@ class EmailAddress < ActiveRecord::Base
   validates_presence_of :person_id, :email, :on => :create, :message => "can't be blank"
   
   before_validation :set_primary, :on => :create
-  after_destroy :check_for_primary
+  after_destroy :set_new_primary
   
   protected
   
@@ -14,7 +14,7 @@ class EmailAddress < ActiveRecord::Base
     true
   end
   
-  def check_for_primary
+  def set_new_primary
     if self.primary?
       if person && person.email_addresses.present?
         person.email_addresses.first.update_attribute(:primary, true)

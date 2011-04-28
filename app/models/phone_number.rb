@@ -3,7 +3,7 @@ class PhoneNumber < ActiveRecord::Base
   validates_presence_of :person_id, :number, :location, :on => :create, :message => "can't be blank"
   
   before_validation :set_primary, :on => :create
-  after_destroy :check_for_primary
+  after_destroy :set_new_primary
   
   def number=(num)
     if num
@@ -36,7 +36,7 @@ class PhoneNumber < ActiveRecord::Base
     true
   end
   
-  def check_for_primary
+  def set_new_primary
     if self.primary?
       if person && person.phone_numbers.present?
         person.phone_numbers.first.update_attribute(:primary, true)

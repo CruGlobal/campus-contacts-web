@@ -1,0 +1,21 @@
+<h1>Listing admin_organizations</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @admin_organizations.each do |admin_organization| %>
+  <tr>
+    <td><%= link_to 'Show', admin_organization %></td>
+    <td><%= link_to 'Edit', edit_admin_organization_path(admin_organization) %></td>
+    <td><%= link_to 'Destroy', admin_organization, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Organization', new_admin_organization_path %>

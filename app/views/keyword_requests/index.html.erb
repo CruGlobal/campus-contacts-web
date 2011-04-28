@@ -13,10 +13,9 @@
 
 <% @keyword_requests.each do |keyword_request| %>
   <tr>
-    <td><%= keyword_request.message %></td>
+    <td><%= keyword_request.explanation %></td>
     <td><%= keyword_request.keyword %></td>
     <td><%= keyword_request.user_id %></td>
-    <td><%= keyword_request.community_id %></td>
     <td><%= link_to 'Show', keyword_request %></td>
     <td><%= link_to 'Edit', edit_keyword_request_path(keyword_request) %></td>
     <td><%= link_to 'Destroy', keyword_request, :confirm => 'Are you sure?', :method => :delete %></td>
