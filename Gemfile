@@ -1,9 +1,9 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.7'
+gem 'rails', '3.1.0.beta1'
 
 
-gem 'mysql2', '0.2.7'
+gem 'mysql2'
 
 gem 'rack-offline'
 
@@ -14,12 +14,12 @@ gem 'resque'
 gem "devise"#, :git => "http://github.com/plataformatec/devise.git"
 gem "oa-oauth", :require => "omniauth/oauth"
 gem 'mini_fb'
-gem 'jquery-rails'
-gem 'nested_set'
 gem 'client_side_validations'
 gem 'rubycas-client'
 gem 'rubycas-client-rails', :git => 'git://github.com/zuk/rubycas-client-rails.git'
-gem 'squeel'
+# gem 'squeel'
+gem 'ancestry'
+gem 'rails_admin', :git => 'git://github.com/twinge/rails_admin.git'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

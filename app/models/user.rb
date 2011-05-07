@@ -41,4 +41,8 @@ class User < ActiveRecord::Base
     self.username = email
     self[:email] = email
   end
+  
+  def email
+    username
+  end
 end

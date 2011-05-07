@@ -5,13 +5,13 @@
     <title><%= h(yield(:title) || "Cru") %></title>
     <%= stylesheet "/jqtouch/jqtouch.css" %>
     <% if request.user_agent.include?("iPhone") %>
-      <%= stylesheet "/jqtouch/themes/apple/theme.css" %>
+      <%= stylesheet_link_tag "jqtouch/themes/apple/theme.css" %>
     <% else %>
-      <%= stylesheet "/jqtouch/themes/default/theme.css" %>
+      <%= stylesheet_link_tag "jqtouch/themes/default/theme.css" %>
     <% end %>
-    <%= stylesheet 'mobile' %>
+    <%= stylesheet_link_tag 'mobile' %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript"></script>
-    <%= javascript '/jqtouch/jqtouch.js' %>
+    <%= javascript_include_tag 'jqtouch/jqtouch.js' %>
     <%= yield(:head) %>
   </head>
   <body id="jqt">

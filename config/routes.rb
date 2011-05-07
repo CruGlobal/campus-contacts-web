@@ -1,12 +1,12 @@
 Bonfire::Application.routes.draw do
-  resources :community_memberships
+  resources :organization_memberships
 
   resources :schools
   resources :communities
 
   resources :ministries
 
-  resources :keyword_requests
+  resources :sms_keywords
   
   resources :people do
     resources :organization_memberships do
@@ -15,6 +15,10 @@ Bonfire::Application.routes.draw do
       end
     end
   end
+  
+  # namespace :admin do
+  #   resources :organizations
+  # end
 
   get "welcome/index"
 
@@ -37,5 +41,5 @@ Bonfire::Application.routes.draw do
   root :to => "welcome#index"
 
   # Map keyword responses with phone numbers
-  match ':keyword(/:received_sms_id)' => 'contacts#new'
+  # match ':keyword(/:received_sms_id)' => 'contacts#new'
 end

@@ -14,18 +14,18 @@
 <% end %>
 <br />
 <% current_org_ids = current_person.organizations.collect(&:id) %>
-<% orgs_not_in = current_org_ids.present? ? Organization.where{id.not_in current_org_ids} : Organization.all %>
+<% orgs_not_in = current_org_ids.present? ? Organization.where("id NOT IN(?)", current_org_ids) : Organization.all %>
 <% if orgs_not_in.present? %>
-Below is a list of organizations currently using this system. Click on the name of one of the organizations below to associate yourself 
-with that organization.
+  Below is a list of organizations currently using this system. Click on the name of one of the organizations below to associate yourself 
+  with that organization.
 
-<ul>
-  <% orgs_not_in.each do |org| %>
-    <li><%= link_to(org.name, person_organization_memberships_path(current_person, :organization_id => org.id), :method => :post) %></li>
-  <% end %>
-</ul>
+  <ul>
+    <% orgs_not_in.each do |org| %>
+      <li><%= link_to(org.name, person_organization_memberships_path(current_person, :organization_id => org.id), :method => :post) %></li>
+    <% end %>
+  </ul>
 
-If your organization isn't on the list, <%= link_to("click here to request access for your organization.") %>
+  If your organization isn't on the list, <%= link_to("click here to request access for your organization.") %>
 <% else %>
-<%= link_to("Click here to request access for another organization.") %>
+  <%= link_to("Click here to request access for another organization.") %>
 <% end %>

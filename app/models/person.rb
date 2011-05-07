@@ -7,8 +7,8 @@ class Person < ActiveRecord::Base
   has_one :primary_phone_number, :class_name => "PhoneNumber", :foreign_key => "person_id", :conditions => {:primary => true}
   has_many :email_addresses
   has_one :primary_email_address, :class_name => "EmailAddress", :foreign_key => "person_id", :conditions => {:primary => true}
-  has_many :communities, :through => :community_memberships
-  has_many :community_memberships
+  has_many :communities, :through => :organization_memberships
+  has_many :organization_memberships
   has_many :organization_memberships, :class_name => "OrganizationMembership", :foreign_key => "person_id"
   has_many :organizations, :through => :organization_memberships
   has_one :primary_organization_membership, :class_name => "OrganizationMembership", :foreign_key => "person_id", :conditions => {:primary => true}

@@ -2,13 +2,13 @@ require 'test_helper'
 
 class Admin::OrganizationsControllerTest < ActionController::TestCase
   setup do
-    @admin_organization = admin_organizations(:one)
+    @organization = organizations(:one)
   end
 
   test "should get index" do
     get :index
     assert_response :success
-    assert_not_nil assigns(:admin_organizations)
+    assert_not_nil assigns(:organizations)
   end
 
   test "should get new" do
@@ -16,34 +16,34 @@ class Admin::OrganizationsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test "should create admin_organization" do
+  test "should create organization" do
     assert_difference('Admin::Organization.count') do
-      post :create, :admin_organization => @admin_organization.attributes
+      post :create, :organization => @organization.attributes
     end
 
-    assert_redirected_to admin_organization_path(assigns(:admin_organization))
+    assert_redirected_to admin_organization_path(assigns(:organization))
   end
 
-  test "should show admin_organization" do
-    get :show, :id => @admin_organization.to_param
+  test "should show organization" do
+    get :show, :id => @organization.to_param
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, :id => @admin_organization.to_param
+    get :edit, :id => @organization.to_param
     assert_response :success
   end
 
-  test "should update admin_organization" do
-    put :update, :id => @admin_organization.to_param, :admin_organization => @admin_organization.attributes
-    assert_redirected_to admin_organization_path(assigns(:admin_organization))
+  test "should update organization" do
+    put :update, :id => @organization.to_param, :organization => @organization.attributes
+    assert_redirected_to admin_organization_path(assigns(:organization))
   end
 
-  test "should destroy admin_organization" do
+  test "should destroy organization" do
     assert_difference('Admin::Organization.count', -1) do
-      delete :destroy, :id => @admin_organization.to_param
+      delete :destroy, :id => @organization.to_param
     end
 
-    assert_redirected_to admin_organizations_path
+    assert_redirected_to organizations_path
   end
 end
