@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/twinge/rails_admin.git
-  revision: 83c1c1d6fc7e6c2032f3eff067821dbfac78fed1
+  revision: 998c75cc25a711c0d5b4f3217c43ec6cdcf7244b
   specs:
     rails_admin (0.0.1)
       builder (~> 3.0.0)
@@ -46,6 +46,7 @@ GEM
       activesupport (= 3.1.0.beta1)
     activesupport (3.1.0.beta1)
       multi_json (~> 1.0)
+    acts_as_list (0.1.2)
     addressable (2.2.5)
     ancestry (1.2.4)
       activerecord (>= 2.2.2)
@@ -184,6 +185,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  acts_as_list
   ancestry
   capistrano
   client_side_validations
