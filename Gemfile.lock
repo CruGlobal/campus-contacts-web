@@ -67,6 +67,7 @@ GEM
       bcrypt-ruby (~> 2.1.2)
       orm_adapter (~> 0.0.3)
       warden (~> 1.0.3)
+    dynamic_form (1.1.4)
     ephemeral_response (0.4.0)
     erubis (2.7.0)
     factory_girl (2.0.0.beta1)
@@ -191,6 +192,7 @@ DEPENDENCIES
   client_side_validations
   crack
   devise
+  dynamic_form
   ephemeral_response
   factory_girl (= 2.0.0.beta1)
   mail_safe

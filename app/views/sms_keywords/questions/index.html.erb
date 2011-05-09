@@ -1,0 +1,18 @@
+<h3>Predefined Questions</h3>
+<table border="0" cellspacing="5" cellpadding="0">
+  <tr>
+    <th>Question</th>
+    <th>Use?</th>
+  </tr>
+  <tr><td>First Name</td></tr>
+  <tr><td>Last Name</td></tr>
+</table>
+<% if @quesiton.present? %>
+  <h3>Questions</h3>
+  <table border="0" cellspacing="5" cellpadding="0">
+    <% @questions.each do |question| %>
+      <tr><td><%= question.label %></td></tr>
+    <% end %>
+  </table>
+<% end %>
+<%= link_to('Add a question') %>

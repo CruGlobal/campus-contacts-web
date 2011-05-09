@@ -6,12 +6,45 @@ Ma::Application.routes.draw do
 
   resources :ministries
 
-  resources :sms_keywords
+  resources :sms_keywords do
+    resources :questions, :controller => "SmsKeywords::Questions"
+  end
   
   resources :people do
     resources :organization_memberships do
       member do
         get :validate
+      end
+    end
+  end
+  
+  namespace :admin do
+    resources :email_templates
+    resources :question_sheets do 
+      member do
+        post :archive
+        post :unarchive
+        post :duplicate
+      end
+      resources :pages,                               # pages/
+                :controller => :question_pages do         # question_sheet_pages_path(),
+                collection do
+                  post :reorder
+                end
+                member do
+                  get :show_panel
+                end
+        resources :elements do
+                  collection do
+                    post :reorder
+                  end
+                  member do
+                    get :remove_from_grid
+                    post :use_existing
+                    post :drop
+                    post :duplicate
+                  end
+                end
       end
     end
   end

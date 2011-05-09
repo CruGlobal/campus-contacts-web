@@ -30,4 +30,5 @@ class ApplicationController < ActionController::Base
       raise e.message + ' -- ' + ticket.response.inspect
     end
   end
+  
 end

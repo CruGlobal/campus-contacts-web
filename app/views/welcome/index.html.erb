@@ -11,11 +11,15 @@
       <tr>
         <td><%= keyword.keyword %></td>
         <td><%= keyword.state %></td>
-        <td><%= link_to 'Manage Questions',  %></td>
+        <td><%= link_to 'Manage Questions', sms_keyword_questions_path(keyword) %></td>
       </tr>
     <% end %>
   </table>
 <% else %>
   <%= link_to('Log In', new_user_session_path) %><br/>
 <% end %>
-<%= link_to('Click here to request an sms keyword.', new_sms_keyword_path) %>
+<% if user_signed_in? && current_user.sms_keywords.present? %>
+  <%= link_to('Click here to request another sms keyword.', new_sms_keyword_path) %>
+<% else %>
+  <%= link_to('Click here to request an sms keyword.', new_sms_keyword_path) %>
+<% end %>
