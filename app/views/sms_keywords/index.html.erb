@@ -1,4 +1,4 @@
-<h1>Listing keyword_requests</h1>
+<h1>Listing sms_keywords</h1>
 
 <table>
   <tr>
@@ -11,18 +11,18 @@
     <th></th>
   </tr>
 
-<% @keyword_requests.each do |keyword_request| %>
+<% @sms_keywords.each do |sms_keyword| %>
   <tr>
-    <td><%= keyword_request.explanation %></td>
-    <td><%= keyword_request.keyword %></td>
-    <td><%= keyword_request.user_id %></td>
-    <td><%= link_to 'Show', keyword_request %></td>
-    <td><%= link_to 'Edit', edit_keyword_request_path(keyword_request) %></td>
-    <td><%= link_to 'Destroy', keyword_request, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= sms_keyword.explanation %></td>
+    <td><%= sms_keyword.keyword %></td>
+    <td><%= sms_keyword.user_id %></td>
+    <td><%= link_to 'Show', sms_keyword %></td>
+    <td><%= link_to 'Edit', edit_sms_keyword_path(sms_keyword) %></td>
+    <td><%= link_to 'Destroy', sms_keyword, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New Keyword request', new_keyword_request_path %>
+<%= link_to 'New Keyword request', new_sms_keyword_path %>

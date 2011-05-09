@@ -2,9 +2,9 @@ class KeywordRequestMailer < ActionMailer::Base
   default :from => "no-reply@campuscrusadeforchrist.com"
   layout 'email'
   
-  def new_keyword_request(keyword_request)
-    @keyword_request = keyword_request
+  def new_keyword_request(keyword)
+    @keyword = keyword
     mail(:to => 'programmers@cojourners.com',
-         :subject => 'New keyword request')
+         :subject => 'New sms keyword request')
   end
 end

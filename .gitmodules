@@ -1,0 +1,3 @@
+[submodule "vendor/plugins/questionnaire_engine"]
+	path = vendor/plugins/questionnaire_engine
+	url = git@github.com:twinge/questionnaire_engine.git

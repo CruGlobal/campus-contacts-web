@@ -1,2 +1,17 @@
 <h1>Welcome to <%= APP_CONFIG['site_title'] %>!</h1>
+<h2>Your Keywords</h2>
+<table border="0" cellspacing="5" cellpadding="0">
+  <tr>
+    <th>Keyword</th>
+    <th>Status</th>
+    <th>&nbsp;</th>
+  </tr>
+  <% current_user.sms_keywords.each do |keyword| %>
+    <tr>
+      <td><%= keyword.keyword %></td>
+      <td><%= keyword.state %></td>
+      <td><%= link_to 'Manage Questions',  %></td>
+    </tr>
+  <% end %>
+</table>
 <%= link_to('Click here to request an sms keyword.', new_sms_keyword_path) %>

@@ -1,19 +1,15 @@
-<p id="notice"><%= notice %></p>
-
 <p>
   <b>Explanation:</b>
-  <%= @keyword_request.explanation %>
+  <%= @sms_keyword.explanation %>
 </p>
 
 <p>
   <b>Keyword:</b>
-  <%= @keyword_request.keyword %>
+  <%= @sms_keyword.keyword %>
 </p>
 
 <p>
-  <b>User:</b>
-  <%= @keyword_request.user_id %>
+  <strong>Status:</strong>
+  <%= @sms_keyword.state %>
 </p>
-
-<%= link_to 'Edit', edit_keyword_request_path(@keyword_request) %> |
-<%= link_to 'Back', keyword_requests_path %>
+<%= link_to 'Edit', edit_sms_keyword_path(@sms_keyword) %>

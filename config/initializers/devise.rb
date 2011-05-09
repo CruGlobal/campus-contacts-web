@@ -33,7 +33,7 @@ Devise.setup do |config|
   # config.http_authenticatable_on_xhr = true
 
   # The realm used in Http Basic Authentication
-  config.http_authentication_realm = "Bonfire"
+  config.http_authentication_realm = "Ma"
 
   # ==> Configuration for :database_authenticatable
   # For bcrypt, this is the cost for hashing the password and defaults to 10. If

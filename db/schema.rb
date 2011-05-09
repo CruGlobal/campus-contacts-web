@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110507192038) do
+ActiveRecord::Schema.define(:version => 20110509120742) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -3225,11 +3225,15 @@ ActiveRecord::Schema.define(:version => 20110507192038) do
   end
 
   create_table "sms_keywords", :force => true do |t|
-    t.string   "name"
+    t.string   "keyword"
     t.integer  "activity_id"
     t.integer  "community_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "chartfield"
+    t.integer  "user_id"
+    t.text     "explanation"
+    t.string   "state"
   end
 
   create_table "sn_campus_involvements", :force => true do |t|

@@ -1,0 +1,6 @@
+<div class="field <%= field.to_param %>">
+  <%= label_tag 'Action' %>
+  <% form.object.state_paths.events.each do |event| %>
+    <%= link_to(event, sms_keyword_transition_path(form.object.id, event)) %>
+  <% end %>
+</div>

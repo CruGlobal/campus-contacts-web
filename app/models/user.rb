@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   
   has_one :person, :foreign_key => 'fk_ssmUserId'
   has_many :authentications
+  has_many :sms_keywords
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable,
@@ -44,5 +45,9 @@ class User < ActiveRecord::Base
   
   def email
     username
+  end
+  
+  def to_s
+    person ? person.to_s : email
   end
 end

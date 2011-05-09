@@ -1,10 +1,10 @@
-<%= form_for(@keyword_request) do |f| %>
-  <% if @keyword_request.errors.any? %>
+<%= form_for(@sms_keyword) do |f| %>
+  <% if @sms_keyword.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@keyword_request.errors.count, "error") %> prohibited this keyword_request from being saved:</h2>
+      <h2><%= pluralize(@sms_keyword.errors.count, "error") %> prohibited this sms_keyword from being saved:</h2>
 
       <ul>
-      <% @keyword_request.errors.full_messages.each do |msg| %>
+      <% @sms_keyword.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
       </ul>

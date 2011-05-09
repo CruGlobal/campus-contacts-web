@@ -4,4 +4,4 @@
 require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
-Bonfire::Application.load_tasks
+Ma::Application.load_tasks

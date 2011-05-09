@@ -1,4 +1,4 @@
-Bonfire::Application.routes.draw do
+Ma::Application.routes.draw do
   resources :organization_memberships
 
   resources :schools
@@ -39,6 +39,9 @@ Bonfire::Application.routes.draw do
   end
 
   root :to => "welcome#index"
+  
+  # SMS keyword state transitions
+  match '/admin/sms_keywords/:id/t/:transition' => 'admin/sms_keywords#transition', :as => 'sms_keyword_transition'
 
   # Map keyword responses with phone numbers
   # match ':keyword(/:received_sms_id)' => 'contacts#new'

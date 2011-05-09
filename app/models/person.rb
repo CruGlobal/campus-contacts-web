@@ -17,6 +17,9 @@ class Person < ActiveRecord::Base
   
   accepts_nested_attributes_for :email_addresses, :phone_numbers, :allow_destroy => true
   
+  def to_s
+    [preferredName.blank? ? firstName : preferredName, lastName].join(' ')
+  end
 #We'll do this better at some point.  
 #New->Create? Gets rid of the save in update_from_facebook  
   def self.create_from_facebook(data, authentication)
