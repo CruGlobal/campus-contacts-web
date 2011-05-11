@@ -6,7 +6,7 @@ class SmsKeywords::QuestionsController < ApplicationController
   # GET /questions.xml
   def index
     @questions = @keyword.question_sheet.elements
-
+    @predefined = QuestionSheet.find(APP_CONFIG['predefined_question_sheet'])
     respond_to do |wants|
       wants.html # index.html.erb
       wants.xml  { render :xml => @questions }
@@ -40,11 +40,16 @@ class SmsKeywords::QuestionsController < ApplicationController
   # POST /questions
   # POST /questions.xml
   def create
-    @question = @keyword.question_sheet.elements.new(params[:question])
+    if (params[:question_id])
+      @question = Element.find(params[:question_id])
+      @keyword.question_sheet.elements << @question
+    else
+      @question = @keyword.question_sheet.elements.new(params[:question])
+    end
 
     respond_to do |wants|
       if @question.save
-        flash[:notice] = '@keyword.question_sheet.elements.was successfully created.'
+        flash[:notice] = 'Question was successfully created.'
         wants.html { redirect_to(@question) }
         wants.xml  { render :xml => @question, :status => :created, :location => @question }
       else

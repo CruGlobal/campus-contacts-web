@@ -1,14 +1,22 @@
+<%= form_tag do %>
 <h3>Predefined Questions</h3>
 <table border="0" cellspacing="5" cellpadding="0">
   <tr>
     <th>Question</th>
     <th>Use?</th>
   </tr>
-  <tr><td>First Name</td></tr>
-  <tr><td>Last Name</td></tr>
+  <% @predefined.questions.each do |question| %>
+    <% unless @questions.include?(question) %>
+      <tr id="pre_<%= dom_id(question) %>">
+        <td><%= question.label %></td>
+        <td><%= link_to('use', sms_keyword_questions_path(:question_id => question), :method => :post, :remote => true, :id => "use_#{dom_id(question)}", 
+                              :class => 'use_question', 'data-question' => dom_id(question)) %></td>
+      </tr>
+    <% end %>
+  <% end %>
 </table>
-<% if @quesiton.present? %>
-  <h3>Questions</h3>
+<h3>Your Questions</h3>
+<% if @quesitons.present? %>
   <table border="0" cellspacing="5" cellpadding="0">
     <% @questions.each do |question| %>
       <tr><td><%= question.label %></td></tr>
@@ -16,3 +24,4 @@
   </table>
 <% end %>
 <%= link_to('Add a question') %>
+<% end %>
