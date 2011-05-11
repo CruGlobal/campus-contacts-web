@@ -23,6 +23,7 @@ gem 'rails_admin', :git => 'git://github.com/twinge/rails_admin.git'
 gem "state_machine"
 gem 'acts_as_list'
 gem 'dynamic_form'
+gem 'translate-rails3', :require => 'translate', :git => 'https://github.com/romanbsd/translate.git'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

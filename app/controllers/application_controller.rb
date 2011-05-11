@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  before_filter :authenticate_user!, :prepare_for_mobile
+  before_filter :authenticate_user!, :prepare_for_mobile, :set_locale
   protect_from_forgery  
 
   protected
@@ -29,6 +29,12 @@ class ApplicationController < ActionController::Base
     rescue => e
       raise e.message + ' -- ' + ticket.response.inspect
     end
+  end
+  
+
+  def set_locale
+    # if params[:locale] is nil then I18n.default_locale will be used
+    I18n.locale = params[:locale]
   end
   
 end
