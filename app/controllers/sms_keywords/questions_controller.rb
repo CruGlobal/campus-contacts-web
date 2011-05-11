@@ -36,25 +36,39 @@ class SmsKeywords::QuestionsController < ApplicationController
   # GET /questions/1/edit
   def edit
   end
+  
+  def reorder 
+    @keyword.question_page.page_elements.each do |pe|
+      if params['questions'].index(pe.element_id.to_s)
+        pe.position = params['questions'].index(pe.element_id.to_s) + 1 
+        pe.save!
+      end
+    end
+    render :nothing => true
+  end
 
   # POST /questions
   # POST /questions.xml
   def create
     if (params[:question_id])
       @question = Element.find(params[:question_id])
-      @keyword.question_sheet.elements << @question
+      @keyword.question_page.elements << @question
     else
-      @question = @keyword.question_sheet.elements.new(params[:question])
+      @question = @keyword.question_sheet.elements.create(params[:question])
     end
 
     respond_to do |wants|
-      if @question.save
-        flash[:notice] = 'Question was successfully created.'
-        wants.html { redirect_to(@question) }
+      if !@question.new_record?
+        wants.html do
+          flash[:notice] = t('ma.questions.create.notice')
+          redirect_to(:back) 
+        end
         wants.xml  { render :xml => @question, :status => :created, :location => @question }
+        wants.js
       else
         wants.html { render :action => "new" }
         wants.xml  { render :xml => @question.errors, :status => :unprocessable_entity }
+        wants.js
       end
     end
   end

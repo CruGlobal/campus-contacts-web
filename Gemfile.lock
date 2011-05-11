@@ -13,6 +13,13 @@ GIT
       rails (>= 3.0.0)
       rubycas-client (>= 2.1.0)
 
+GIT
+  remote: https://github.com/romanbsd/translate.git
+  revision: 01f2c402075183718edd496300814a4a9c40a6eb
+  specs:
+    translate-rails3 (0.1.1)
+      ya2yaml (~> 0.30)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -187,6 +194,7 @@ GEM
       rack (>= 1.0.0)
     warden (1.0.4)
       rack (>= 1.0)
+    ya2yaml (0.30)
 
 PLATFORMS
   ruby
@@ -218,3 +226,4 @@ DEPENDENCIES
   simplecov (>= 0.3.5)
   sqlite3-ruby
   state_machine
+  translate-rails3!

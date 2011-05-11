@@ -1,7 +1,6 @@
-<% title "Hi #{@person.firstName}!" %>
 <%= form_for @person, :url => @person.new_record? ? contacts_path : contact_path(@person), :method => @person.new_record? ? :post : :put, :class => 'form' do |f| %>
   <%= hidden_field_tag :keyword, params[:keyword] %>
-  <ul class="rounded">
+  <ul>
     <% @keyword.questions.each do |question| %>
       <li><%= render 'answer_pages/element', :element => question %></li>
     <% end %>

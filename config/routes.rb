@@ -7,7 +7,11 @@ Ma::Application.routes.draw do
   resources :ministries
 
   resources :sms_keywords do
-    resources :questions, :controller => "SmsKeywords::Questions"
+    resources :questions, :controller => "SmsKeywords::Questions" do
+      collection do
+        post :reorder
+      end
+    end
   end
   
   resources :people do
@@ -77,5 +81,5 @@ Ma::Application.routes.draw do
   match '/admin/sms_keywords/:id/t/:transition' => 'admin/sms_keywords#transition', :as => 'sms_keyword_transition'
 
   # Map keyword responses with phone numbers
-  # match ':keyword(/:received_sms_id)' => 'contacts#new'
+  match 'c/:keyword(/:received_sms_id)' => 'contacts#new', :as => 'contact_form'
 end

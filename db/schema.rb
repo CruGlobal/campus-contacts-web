@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110509154848) do
+ActiveRecord::Schema.define(:version => 20110511200101) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -1487,20 +1487,11 @@ ActiveRecord::Schema.define(:version => 20110509154848) do
     t.string    "InfoWesley",           :limit => 1,   :default => "F"
   end
 
-  create_table "ma_answer_sheet_question_sheets", :force => true do |t|
-    t.integer  "answer_sheet_id"
-    t.integer  "question_sheet_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "ma_answer_sheet_question_sheets", ["answer_sheet_id"], :name => "index_ma_answer_sheet_question_sheets_on_answer_sheet_id"
-  add_index "ma_answer_sheet_question_sheets", ["question_sheet_id"], :name => "index_ma_answer_sheet_question_sheets_on_question_sheet_id"
-
   create_table "ma_answer_sheets", :force => true do |t|
     t.integer  "question_sheet_id", :null => false
     t.datetime "created_at",        :null => false
     t.datetime "completed_at"
+    t.integer  "person_id"
   end
 
   create_table "ma_answers", :force => true do |t|

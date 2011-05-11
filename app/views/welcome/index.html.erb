@@ -1,25 +1,25 @@
-<h1>Welcome to <%= APP_CONFIG['site_title'] %>!</h1>
+<h1><%= t("ma.welcome.index.title_top")%></h1>
 <% if user_signed_in? %>
-  <h2>Your Keywords</h2>
+  <h2><%= t("ma.welcome.index.subtitle") %></h2>
   <table border="0" cellspacing="5" cellpadding="0">
     <tr>
-      <th>Keyword</th>
-      <th>Status</th>
+      <th><%= t("ma.general.keyword") %></th>
+      <th><%= t("ma.general.status") %></th>
       <th>&nbsp;</th>
     </tr>
     <% current_user.sms_keywords.each do |keyword| %>
       <tr>
         <td><%= keyword.keyword %></td>
         <td><%= keyword.state %></td>
-        <td><%= link_to 'Manage Questions', sms_keyword_questions_path(keyword) %></td>
+        <td><%= link_to t("ma.welcome.index.q_manage"), sms_keyword_questions_path(keyword) %></td>
       </tr>
     <% end %>
   </table>
 <% else %>
-  <%= link_to('Log In', new_user_session_path) %><br/>
+  <%= link_to(t("ma.nav.login"), new_user_session_path) %><br/>
 <% end %>
 <% if user_signed_in? && current_user.sms_keywords.present? %>
-  <%= link_to('Click here to request another sms keyword.', new_sms_keyword_path) %>
+  <%= link_to(t("ma.welcome.index.request_another_key"), new_sms_keyword_path) %>
 <% else %>
-  <%= link_to('Click here to request an sms keyword.', new_sms_keyword_path) %>
+  <%= link_to(t("ma.welcome.index.request_key"), new_sms_keyword_path) %>
 <% end %>

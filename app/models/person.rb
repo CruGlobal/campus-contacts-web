@@ -55,4 +55,14 @@ class Person < ActiveRecord::Base
       self[:gender]
     end
   end
+  
+  def email
+    primary_email_address
+  end
+  
+  def email=(val)
+    email = primary_email_address || email_addresses.new
+    email.email = val
+    email.save
+  end
 end

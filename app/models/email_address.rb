@@ -5,6 +5,9 @@ class EmailAddress < ActiveRecord::Base
   before_validation :set_primary, :on => :create
   after_destroy :set_new_primary
   
+  def to_s
+    email
+  end
   protected
   
   def set_primary

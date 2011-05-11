@@ -1,27 +1,26 @@
 <%= form_tag do %>
-<h3>Predefined Questions</h3>
-<table border="0" cellspacing="5" cellpadding="0">
-  <tr>
-    <th>Question</th>
-    <th>Use?</th>
-  </tr>
-  <% @predefined.questions.each do |question| %>
-    <% unless @questions.include?(question) %>
-      <tr id="pre_<%= dom_id(question) %>">
-        <td><%= question.label %></td>
-        <td><%= link_to('use', sms_keyword_questions_path(:question_id => question), :method => :post, :remote => true, :id => "use_#{dom_id(question)}", 
-                              :class => 'use_question', 'data-question' => dom_id(question)) %></td>
-      </tr>
-    <% end %>
-  <% end %>
-</table>
-<h3>Your Questions</h3>
-<% if @quesitons.present? %>
+  <h3>Predefined Questions</h3>
   <table border="0" cellspacing="5" cellpadding="0">
-    <% @questions.each do |question| %>
-      <tr><td><%= question.label %></td></tr>
+    <tr>
+      <th>Question</th>
+      <th></th>
+    </tr>
+    <% @predefined.questions.each do |question| %>
+      <% unless @questions.include?(question) %>
+        <tr id="pre_<%= dom_id(question) %>">
+          <td><%= question.label %></td>
+          <td><%= link_to('use', sms_keyword_questions_path(:question_id => question), :method => :post, :remote => true, :class => 'use_question') %></td>
+        </tr>
+      <% end %>
     <% end %>
   </table>
+  <h3>Your Questions (drag to sort)</h3>
+  <table border="0" cellspacing="5" cellpadding="0">
+    <tbody id="questions" data-sortable="true" data-sortable-url="<%= reorder_sms_keyword_questions_path(@keyword) %>">
+      <%= render :partial => 'question', :collection => @questions %>
+    </tbody>
+  </table>
+  <%= link_to('Add a question') %>
 <% end %>
-<%= link_to('Add a question') %>
-<% end %>
+<br/><br/>
+<%= link_to('Preview Form', contact_form_path(:keyword => @keyword.keyword), :target => '_blank')%>

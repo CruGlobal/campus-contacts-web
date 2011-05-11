@@ -1,0 +1,5 @@
+<tr id="question-<%= dom_id(question) %>">
+  <td><%= question.label %></td>
+  <td><%= link_to('remove', sms_keyword_question_path(@keyword, question), :method => :delete, :confirm => "Are you sure you want to remove '#{question.label}'?",
+                                                                 :remote => true, :class => 'remove_question') %></td>
+</tr>

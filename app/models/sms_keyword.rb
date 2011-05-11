@@ -4,6 +4,7 @@ class SmsKeyword < ActiveRecord::Base
   has_many :question_sheets, :as => :questionnable
   validates_presence_of :keyword, :explanation, :user_id#, :chartfield
   validates_format_of :keyword, :with => /^[\w\d]+$/, :on => :create, :message => "can't have spaces or punctuation"
+  validates_uniqueness_of :keyword, :on => :create, :message => "must be unique"
   
   state_machine :state, :initial => :requested do
     state :requested
@@ -37,6 +38,14 @@ class SmsKeyword < ActiveRecord::Base
   
   def self.default
     new(:name => 'Cru', :keyword => 'cru')
+  end
+  
+  def question_page
+    @question_page ||= question_sheet.pages.first || question_sheet.pages.create(:number => 1)
+  end
+  
+  def questions
+    question_sheet.questions
   end
   
   private
