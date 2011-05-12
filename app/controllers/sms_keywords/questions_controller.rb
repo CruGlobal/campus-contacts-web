@@ -91,11 +91,17 @@ class SmsKeywords::QuestionsController < ApplicationController
   # DELETE /questions/1
   # DELETE /questions/1.xml
   def destroy
-    @question.destroy
+    # If a question is on more than one page, or has been answered, remove it from this question sheet, but don't delete it for real.
+    if @question.pages.length > 1 || (@question.respond_to?(:sheet_answers) && @question.sheet_answers.count > 0)
+      PageElement.where(:page_id => @keyword.question_page.id, :element_id => @question.id).first.try(:destroy)
+    else
+      @question.destroy
+    end
 
     respond_to do |wants|
       wants.html { redirect_to(questions_url) }
       wants.xml  { head :ok }
+      wants.js
     end
   end
 
@@ -105,7 +111,7 @@ class SmsKeywords::QuestionsController < ApplicationController
     end
     
     def find_keyword
-      @keyword = SmsKeyword.find(params[:sms_keyword_id])
+      @keyword = SmsKeyword.includes(:question_sheets).find(params[:sms_keyword_id])
     end
 
 end

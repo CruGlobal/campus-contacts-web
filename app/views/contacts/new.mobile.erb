@@ -5,7 +5,8 @@
     <% @keyword.questions.each do |question| %>
       <li><%= render 'answer_pages/element', :element => question %></li>
     <% end %>
+    <li><%= f.submit "Submit" %></li>
   </ul>
-  <%= f.submit "Submit" %>
 <% end %>
 
+<br />

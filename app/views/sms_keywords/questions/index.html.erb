@@ -1,18 +1,19 @@
 <%= form_tag do %>
   <h3>Predefined Questions</h3>
   <table border="0" cellspacing="5" cellpadding="0">
-    <tr>
-      <th>Question</th>
-      <th></th>
-    </tr>
-    <% @predefined.questions.each do |question| %>
-      <% unless @questions.include?(question) %>
-        <tr id="pre_<%= dom_id(question) %>">
-          <td><%= question.label %></td>
-          <td><%= link_to('use', sms_keyword_questions_path(:question_id => question), :method => :post, :remote => true, :class => 'use_question') %></td>
-        </tr>
+    <thead>
+      <tr>
+        <th>Question</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="predefined_questions">
+      <% @predefined.questions.each do |question| %>
+        <% unless @questions.include?(question) %>
+          <%= render 'predefined_question', :question => question %>
+        <% end %>
       <% end %>
-    <% end %>
+    </tbody>
   </table>
   <h3>Your Questions (drag to sort)</h3>
   <table border="0" cellspacing="5" cellpadding="0">
@@ -20,7 +21,7 @@
       <%= render :partial => 'question', :collection => @questions %>
     </tbody>
   </table>
-  <%= link_to('Add a question') %>
+  <%= link_to('Add a question', '#', :onclick => "alert(\"This link doesn't work yet\"); return false") %>
 <% end %>
 <br/><br/>
 <%= link_to('Preview Form', contact_form_path(:keyword => @keyword.keyword), :target => '_blank')%>
