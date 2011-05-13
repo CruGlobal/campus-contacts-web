@@ -1,4 +1,5 @@
 class SmsKeyword < ActiveRecord::Base  
+  enforce_schema_rules  
   
   belongs_to :user
   has_many :question_sheets, :as => :questionnable

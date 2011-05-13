@@ -25,6 +25,7 @@ gem 'acts_as_list'
 gem 'dynamic_form'
 gem 'coffee-script'
 gem 'translate-rails3', :require => 'translate', :git => 'https://github.com/romanbsd/translate.git'
+gem 'enforce_schema_rules'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
@@ -37,4 +38,5 @@ group :development, :test do
   gem 'factory_girl', '2.0.0.beta1'
   gem 'simplecov', '>= 0.3.5', :require => false
   gem 'railroady'
+  gem 'awesome_print'
 end

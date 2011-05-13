@@ -1,28 +1,29 @@
 <%= form_for(@sms_keyword) do |f| %>
-  <% if @sms_keyword.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@sms_keyword.errors.count, "error") %> prohibited this sms_keyword from being saved:</h2>
-
-      <ul>
-      <% @sms_keyword.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
+  <%= error_messages_for :sms_keyword %>
+  <% if @sms_keyword.new_record? %>
+    <div class="field">
+      <%= f.label :keyword, t('ma.keywords.form.keyword') %><br />
+      <%= tip(t('ma.keywords.form.keyword_tip')) %>
+      <%= f.text_field :keyword %>
     </div>
+  <% else %>
+    <%=  t('ma.keywords.form.keyword') %>: <%= @sms_keyword.keyword %>
   <% end %>
-
   <div class="field">
-    <%= f.label :keyword %><br />
-    <%= tip("This is what people will type into their phone. For example: when you say 'text <strong>ccc</strong> to 69940', 'ccc' is the keyword.") %>
-    <%= f.text_field :keyword %>
+    <%= f.label :explanation, t('ma.keywords.form.explanation') %><br />
+    <%= f.text_area :explanation, :rows => 5 %>
   </div>
   <div class="field">
-    <%= f.label :explanation, 'Please explain what you plan to use this keyword for.' %><br />
-    <%= f.text_area :explanation %>
+    <%= f.label :initial_response, t('ma.keywords.form.initial_response') %><br />
+    <%= f.text_field :initial_response, :size => 140, :maxlength => 140 %>
+  </div>
+  <div class="field">
+    <%= f.label :post_survey_message, t('ma.keywords.form.post_survey_message') %><br />
+    <%= f.text_area :post_survey_message, :rows => 5 %>
   </div>
   <!-- <div class="field">
-    <%= f.label :chartfield, 'A keyword costs $7/month. Please enter a chart field to be billed for this keyword.' %><br />
-    <%= f.text_field :chartfield %>
+    <%#= f.label :chartfield, t('ma.keywords.form.chartfield') %><br />
+    <%#= f.text_field :chartfield %>
   </div> -->
   <div class="actions">
     <%= f.submit %>

@@ -77,11 +77,12 @@ Ma::Application.routes.draw do
   end
 
   root :to => "welcome#index"
-  match 'home' => "sms_keywords#index", :as => 'user_root'
+  # match 'home' => "sms_keywords#index", :as => 'user_root'
   
   # SMS keyword state transitions
   match '/admin/sms_keywords/:id/t/:transition' => 'admin/sms_keywords#transition', :as => 'sms_keyword_transition'
 
   # Map keyword responses with phone numbers
   match 'c/:keyword(/:received_sms_id)' => 'contacts#new', :as => 'contact_form'
+  match 'm/:received_sms_id' => 'contacts#new', :as => 'contact_form'
 end

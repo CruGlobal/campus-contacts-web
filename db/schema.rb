@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110511200101) do
+ActiveRecord::Schema.define(:version => 20110513173629) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -2745,6 +2745,8 @@ ActiveRecord::Schema.define(:version => 20110511200101) do
     t.datetime "updated_at"
     t.string   "ancestry"
     t.string   "terminology"
+    t.integer  "importable_id"
+    t.string   "importable_type"
   end
 
   add_index "organizations", ["ancestry"], :name => "index_organizations_on_ancestry"
@@ -3351,6 +3353,8 @@ ActiveRecord::Schema.define(:version => 20110511200101) do
     t.integer  "user_id"
     t.text     "explanation"
     t.string   "state"
+    t.string   "initial_response",    :limit => 140, :default => "Hi! Thanks for checking out Cru. Visit {{ link }} to get more involved."
+    t.text     "post_survey_message"
   end
 
   create_table "sn_campus_involvements", :force => true do |t|

@@ -19,11 +19,7 @@
   Below is a list of organizations currently using this system. Click on the name of one of the organizations below to associate yourself 
   with that organization.
 
-  <ul>
-    <% orgs_not_in.each do |org| %>
-      <li><%= link_to(org.name, person_organization_memberships_path(current_person, :organization_id => org.id), :method => :post) %></li>
-    <% end %>
-  </ul>
+  <%= print_tree(Organization.roots) %>
 
   If your organization isn't on the list, <%= link_to("click here to request access for your organization.") %>
 <% else %>
