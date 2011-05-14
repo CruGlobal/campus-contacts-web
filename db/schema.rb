@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110513173629) do
+ActiveRecord::Schema.define(:version => 20110514174801) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -29,7 +29,8 @@ ActiveRecord::Schema.define(:version => 20110513173629) do
     t.string   "token"
   end
 
-  add_index "authentications", ["user_id", "provider", "uid"], :name => "user_id_provider_uid", :unique => true
+  add_index "authentications", ["provider", "uid"], :name => "index_authentications_on_provider_and_uid", :unique => true
+  add_index "authentications", ["user_id"], :name => "user_id"
 
   create_table "cms_assoc_filecategory", :id => false, :force => true do |t|
     t.string  "CmsFileID",     :limit => 64,                   :null => false
@@ -769,6 +770,8 @@ ActiveRecord::Schema.define(:version => 20110513173629) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "email_addresses", ["person_id", "email"], :name => "index_email_addresses_on_person_id_and_email", :unique => true
 
   create_table "engine_schema_info", :id => false, :force => true do |t|
     t.string  "engine_name"
@@ -1815,6 +1818,9 @@ ActiveRecord::Schema.define(:version => 20110513173629) do
     t.boolean "is_leader"
   end
 
+  add_index "ministry_missional_team_member", ["personID"], :name => "personID"
+  add_index "ministry_missional_team_member", ["teamID"], :name => "teamID"
+
   create_table "ministry_movement_contact", :id => false, :force => true do |t|
     t.integer "personID"
     t.integer "ActivityID"
@@ -1864,46 +1870,6 @@ ActiveRecord::Schema.define(:version => 20110513173629) do
   add_index "ministry_newaddress", ["addressType"], :name => "index_ministry_newAddress_on_addressType"
   add_index "ministry_newaddress", ["email"], :name => "email"
   add_index "ministry_newaddress", ["fk_PersonID"], :name => "fk_PersonID"
-
-  create_table "ministry_newaddress_restore", :primary_key => "addressID", :force => true do |t|
-    t.string   "deprecated_startDate", :limit => 25
-    t.string   "deprecated_endDate",   :limit => 25
-    t.string   "address1",             :limit => 55
-    t.string   "address2",             :limit => 55
-    t.string   "address3",             :limit => 55
-    t.string   "address4",             :limit => 55
-    t.string   "city",                 :limit => 50
-    t.string   "state",                :limit => 50
-    t.string   "zip",                  :limit => 15
-    t.string   "country",              :limit => 64
-    t.string   "homePhone",            :limit => 25
-    t.string   "workPhone",            :limit => 25
-    t.string   "cellPhone",            :limit => 25
-    t.string   "fax",                  :limit => 25
-    t.string   "email",                :limit => 200
-    t.string   "url",                  :limit => 100
-    t.string   "contactName",          :limit => 50
-    t.string   "contactRelationship",  :limit => 50
-    t.string   "addressType"
-    t.datetime "dateCreated"
-    t.datetime "dateChanged"
-    t.string   "createdBy",            :limit => 50
-    t.string   "changedBy",            :limit => 50
-    t.string   "fk_PersonID"
-    t.string   "email2",               :limit => 200
-    t.datetime "start_date"
-    t.datetime "end_date"
-    t.string   "facebook_link"
-    t.string   "myspace_link"
-    t.string   "title"
-    t.string   "dorm"
-    t.string   "room"
-  end
-
-  add_index "ministry_newaddress_restore", ["addressType", "fk_PersonID"], :name => "unique_person_addressType", :unique => true
-  add_index "ministry_newaddress_restore", ["addressType"], :name => "index_ministry_newaddress_restore_on_addressType"
-  add_index "ministry_newaddress_restore", ["email"], :name => "email"
-  add_index "ministry_newaddress_restore", ["fk_PersonID"], :name => "fk_PersonID"
 
   create_table "ministry_noncccmin", :primary_key => "NonCccMinID", :force => true do |t|
     t.string "ministry",    :limit => 50
@@ -2736,6 +2702,7 @@ ActiveRecord::Schema.define(:version => 20110513173629) do
   end
 
   add_index "organization_memberships", ["organization_id", "person_id"], :name => "index_organization_memberships_on_organization_id_and_person_id", :unique => true
+  add_index "organization_memberships", ["person_id"], :name => "person_id"
 
   create_table "organizations", :force => true do |t|
     t.string   "name"
@@ -2750,6 +2717,7 @@ ActiveRecord::Schema.define(:version => 20110513173629) do
   end
 
   add_index "organizations", ["ancestry"], :name => "index_organizations_on_ancestry"
+  add_index "organizations", ["importable_id", "importable_type"], :name => "importable", :unique => true
 
   create_table "phone_numbers", :force => true do |t|
     t.string   "number"
@@ -2760,6 +2728,8 @@ ActiveRecord::Schema.define(:version => 20110513173629) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "phone_numbers", ["person_id", "number"], :name => "index_phone_numbers_on_person_id_and_number", :unique => true
 
   create_table "plugin_schema_info", :id => false, :force => true do |t|
     t.string  "plugin_name"

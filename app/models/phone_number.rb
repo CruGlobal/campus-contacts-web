@@ -27,6 +27,22 @@ class PhoneNumber < ActiveRecord::Base
     number.length == 10 ? '1' + number : number
   end
   
+  def merge(other)
+    PhoneNumber.transaction do
+      %w{extension location primary}.each do |k, v|
+        next if v == other.attributes[k]
+        self[k] = case
+                  when other.attributes[k].blank? then v
+                  when v.blank? then other.attributes[k]
+                  else
+                    other.updated_at > updated_at ? other.attributes[k] : v
+                  end
+      end
+      other.destroy
+      save(:validate => false)
+    end
+  end
+  
   protected
   
   def set_primary

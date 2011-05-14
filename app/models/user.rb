@@ -50,4 +50,16 @@ class User < ActiveRecord::Base
   def to_s
     person ? person.to_s : email
   end
+  
+  def merge(other)
+    User.transaction do
+      person.merge(other.person)
+      
+      # Authentications
+      other.authentications.collect {|oa| oa.update_attribute(:user_id, id)}
+      
+      # Sms Keywords
+      other.sms_keywords.collect {|oa| oa.update_attribute(:user_id, id)}
+    end
+  end
 end
