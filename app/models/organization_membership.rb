@@ -9,11 +9,12 @@ class OrganizationMembership < ActiveRecord::Base
   
   def merge(other)
     OrganizationMembership.transaction do
-      if other.primary? && other.updated_at > updated_at
-        person.organization_membership.collect {|e| e.update_attribute(:primary, false)}
-        new_primary = person.organization_membership.detect {|e| e.organization_id == other.organization_id}
+      if other.primary? && other.updated_at && other.updated_at > updated_at
+        person.organization_memberships.collect {|e| e.update_attribute(:primary, false)}
+        new_primary = person.organization_memberships.detect {|e| e.organization_id == other.organization_id}
         new_primary.update_attribute(:primary, true) if new_primary
       end
+      MergeAudit.create!(:mergeable => self, :merge_looser => other)
       self.validated = true if other.validated?
       self.save(:validate => false)
       other.destroy

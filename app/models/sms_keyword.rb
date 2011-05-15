@@ -3,7 +3,9 @@ class SmsKeyword < ActiveRecord::Base
   
   belongs_to :user
   has_many :question_sheets, :as => :questionnable
-  validates_presence_of :keyword, :explanation, :user_id#, :chartfield
+  belongs_to :event, :polymorphic => true
+  belongs_to :organization
+  validates_presence_of :keyword, :explanation, :user_id, :organization_id#, :chartfield
   validates_format_of :keyword, :with => /^[\w\d]+$/, :on => :create, :message => "can't have spaces or punctuation"
   validates_uniqueness_of :keyword, :on => :create, :message => "must be unique"
   

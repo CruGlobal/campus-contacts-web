@@ -1,41 +1,7 @@
 <h1><%= t("ma.welcome.index.title_top")%></h1>
 <% if user_signed_in? %>
-  <h2><%= t("ma.welcome.index.subtitle") %></h2>
-  <table border="0" cellspacing="5" cellpadding="0">
-    <tr>
-      <th><%= t("ma.general.keyword") %></th>
-      <th><%= t("ma.general.status") %></th>
-      <th>&nbsp;</th>
-    </tr>
-    <% current_user.sms_keywords.each do |keyword| %>
-      <tr>
-        <td><%= keyword.keyword %></td>
-        <td><%= keyword.state %></td>
-        <td><%= link_to t("ma.welcome.index.manage_questions"), sms_keyword_questions_path(keyword) %></td>
-        <td><%= link_to t("ma.welcome.index.edit_keyword"), edit_sms_keyword_path(keyword) %></td>
-      </tr>
-    <% end %>
-  </table>
+  <%= link_to(t("ma.welcome.index.go_home"), user_root_path) %>
 <% else %>
   <%= link_to(t("ma.nav.login"), new_user_session_path) %><br/>
-<% end %>
-<% if user_signed_in? && current_user.sms_keywords.present? %>
-  <%= link_to(t("ma.welcome.index.request_another_key"), new_sms_keyword_path) %>
-<% else %>
   <%= link_to(t("ma.welcome.index.request_key"), new_sms_keyword_path) %>
-<% end %>
-
-<% if user_signed_in? %>
-  <% if current_person.organizations.present? %>
-    <h3><%= t('ma.welcome.index.your_orgs') %></h3>
-    <ul>
-      <% current_person.organizations.each do |org| %>
-        <% org.ancestors.each_with_index do |parent, i| %>
-          <li><%= raw('&nbsp;' * i * 4) %><%= parent %></li>
-        <% end %>
-        <li><%= raw('&nbsp;' * org.ancestors.length * 4) %><%= org %></li>
-      <% end %>
-    </ul>
-    <%= link_to(t('ma.welcome.index.edit_orgs'), organization_memberships_path) %>
-  <% end %>  
-<% end %>
+<% end %><br/>

@@ -10,11 +10,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110514174801) do
+ActiveRecord::Schema.define(:version => 20110515142750) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
   end
+
+  create_table "activities", :force => true do |t|
+    t.integer  "target_area_id"
+    t.integer  "organization_id"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.string   "status",          :default => "active"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "activities", ["target_area_id", "organization_id"], :name => "index_activities_on_target_area_id_and_organization_id", :unique => true
 
   create_table "aoas", :force => true do |t|
     t.string "name"
@@ -1670,6 +1682,18 @@ ActiveRecord::Schema.define(:version => 20110514174801) do
 
   add_index "mail_users", ["guid"], :name => "guid"
 
+  create_table "merge_audits", :force => true do |t|
+    t.integer  "mergeable_id"
+    t.string   "mergeable_type"
+    t.integer  "merge_looser_id"
+    t.string   "merge_looser_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "merge_audits", ["merge_looser_id", "merge_looser_type"], :name => "merge_looser"
+  add_index "merge_audits", ["mergeable_id", "mergeable_type"], :name => "mergeable"
+
   create_table "ministries", :force => true do |t|
     t.string "name"
   end
@@ -2656,42 +2680,6 @@ ActiveRecord::Schema.define(:version => 20110514174801) do
   add_index "old_wsn_sp_wsnapplication", ["status"], :name => "index8"
   add_index "old_wsn_sp_wsnapplication", ["wsnYear"], :name => "index9"
 
-  create_table "oncampus_orders", :force => true do |t|
-    t.integer  "person_id"
-    t.string   "purpose",                    :limit => 100,                          :null => false
-    t.string   "payment",                    :limit => 100,                          :null => false
-    t.boolean  "format_dvd",                                :default => true,        :null => false
-    t.boolean  "format_quicktime",                          :default => false,       :null => false
-    t.boolean  "format_flash",                              :default => false,       :null => false
-    t.string   "campus",                     :limit => 100,                          :null => false
-    t.string   "campus_state",               :limit => 50,                           :null => false
-    t.string   "commercial_movement_name",   :limit => 200,                          :null => false
-    t.string   "commercial_school_name",     :limit => 200
-    t.text     "commercial_additional_info"
-    t.boolean  "user_agreement",                            :default => false,       :null => false
-    t.string   "status",                     :limit => 20,  :default => "submitted", :null => false
-    t.datetime "created_at",                                                         :null => false
-    t.string   "commercial_website",         :limit => 300
-    t.boolean  "commercial_logo",                           :default => true
-    t.string   "color",                      :limit => 20,  :default => "#FFFFFF"
-    t.datetime "produced_at"
-    t.datetime "shipped_at"
-  end
-
-  create_table "oncampus_uses", :force => true do |t|
-    t.integer  "order_id",                                             :null => false
-    t.string   "type",               :limit => 20,                     :null => false
-    t.string   "context",            :limit => 20,                     :null => false
-    t.string   "title",              :limit => 150,                    :null => false
-    t.datetime "date_start"
-    t.datetime "date_end"
-    t.boolean  "single_event",                      :default => false, :null => false
-    t.boolean  "commercial_frisbee",                :default => false, :null => false
-    t.boolean  "commercial_ramen",                  :default => false, :null => false
-    t.text     "description",                                          :null => false
-    t.text     "feedback",                                             :null => false
-  end
-
   create_table "organization_memberships", :force => true do |t|
     t.integer  "organization_id"
     t.integer  "person_id"
@@ -2699,6 +2687,9 @@ ActiveRecord::Schema.define(:version => 20110514174801) do
     t.boolean  "validated",       :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "leader",          :default => false
+    t.date     "start_date"
+    t.date     "end_date"
   end
 
   add_index "organization_memberships", ["organization_id", "person_id"], :name => "index_organization_memberships_on_organization_id_and_person_id", :unique => true
@@ -3315,8 +3306,8 @@ ActiveRecord::Schema.define(:version => 20110514174801) do
 
   create_table "sms_keywords", :force => true do |t|
     t.string   "keyword"
-    t.integer  "activity_id"
-    t.integer  "community_id"
+    t.integer  "event_id"
+    t.integer  "organization_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "chartfield"
@@ -3325,6 +3316,7 @@ ActiveRecord::Schema.define(:version => 20110514174801) do
     t.string   "state"
     t.string   "initial_response",    :limit => 140, :default => "Hi! Thanks for checking out Cru. Visit {{ link }} to get more involved."
     t.text     "post_survey_message"
+    t.string   "event_type"
   end
 
   create_table "sn_campus_involvements", :force => true do |t|
@@ -4335,6 +4327,13 @@ ActiveRecord::Schema.define(:version => 20110514174801) do
   create_table "summer_placement_preferences", :force => true do |t|
     t.integer  "person_id"
     t.datetime "submitted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "teams", :force => true do |t|
+    t.integer  "organization_id"
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

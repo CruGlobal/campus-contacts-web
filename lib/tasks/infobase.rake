@@ -5,7 +5,7 @@ namespace :infobase do
     puts "Insert strategies"
     # First set up the strategies
     strategies = {
-      "FS" => "Campus Ministry",
+      "FS" => "Cru",
       "IE" => "Epic",
       "ID" => "Destino",
       "II" => "Impact",
@@ -20,17 +20,19 @@ namespace :infobase do
       "SV" => "Student Venture",
       "OT" => "Other"
     }
-    campus = nil
-    strategies.each_pair do |ab, name|
-      if strategy = Ccc::Strategy.find_by_name(name)
-        unless s = Organization.where(:importable_id => strategy.id, :importable_type => 'Ccc::Strategy').first
-          s = root.children.create!(:name => name, :terminology => 'Strategy', :importable_id => strategy.id, :importable_type => 'Ccc::Strategy')
-        end
-        campus = s if ab == 'FS'
-      end
-    end
+    campus_ministry = Ccc::Ministry.find_or_create_by_name('Campus Ministry')
+    campus = Organization.where(:importable_id => campus_ministry.id, :importable_type => 'Ccc::Ministry').first
+    campus ||= root.children.create!(:name => campus_ministry.name, :terminology => 'Ministry', :importable_id => campus_ministry.id, :importable_type => 'Ccc::Ministry')
+    # strategies.each_pair do |ab, name|
+    #   if strategy = Ccc::Strategy.find_by_name(name)
+    #     unless s = Organization.where(:importable_id => strategy.id, :importable_type => 'Ccc::Strategy').first
+    #       s = root.children.create!(:name => name, :terminology => 'Strategy', :importable_id => strategy.id, :importable_type => 'Ccc::Strategy')
+    #     end
+    #     campus = s if ab == 'FS'
+    #   end
+    # end
 
-    puts "Done strategies.  Insert regions."
+    puts "Insert regions."
 
     # make all regions the second level under the new ministries structure
     regions = {}
@@ -46,8 +48,8 @@ namespace :infobase do
 
     # ministry local level goes next
     Organization.connection.select_all("select * from ministry_locallevel").each do |level|
-      m = Organization.where(:importable_id => level['teamID'], :importable_type => 'Ccc::LocalLevel').first
-      attribs = {:name => level['name'], :terminology => 'Missional Team', :importable_id => level['teamID'], :importable_type => 'Ccc::LocalLevel'}
+      m = Organization.where(:importable_id => level['teamID'], :importable_type => 'Ccc::MinistryLocallevel').first
+      attribs = {:name => level['name'], :terminology => 'Missional Team', :importable_id => level['teamID'], :importable_type => 'Ccc::MinistryLocallevel'}
       if m
         m.update_attributes(attribs)
       else
@@ -61,42 +63,11 @@ namespace :infobase do
 
     puts "Done local level."
 
-    # next is activity
-    #strategy_abbrev_to_name = Hash[Strategy.all.collect{ |s| [ s.abbrv, s.name ] } ]
-    #strategy_abbrev_to_id = Hash[Strategy.all.collect{ |s| [ s.abbrv, s.id ] } ]
-    #campus_id_to_name = Hash[Campus.all(:select => "targetAreaID, name").collect{ |c| [ c.targetAreaID.to_s, c.name ] }]
-    
-    #activity_id_to_ministry_id = {}
-    # puts "Need to go through activity rows"
-    # i = 0
-    # Organization.connection.select_all("select * from ministry_locallevel").each do |activity|
-    #   #name = "#{strategy_abbrev_to_name[activity.strategy]} - #{campus_id_to_name[activity.fk_targetAreaID]}"
-    #   #m = Organization.find_or_create_by_name name
-    #   #m.parent_id = team_id_to_ministry_id[activity.fk_teamID]
-    #   #m.status = activity.status
-    #   #m.strategy_id = strategy_abbrev_to_id[activity.strategy]
-    #   #m.legacy_activity_id = activity.ActivityID
-    #   #m.save(false)
-    # 
-    #   #activity_id_to_ministry_id[activity.ActivityID.to_s] = m.id.to_s
-    # 
-    #   i += 1
-    #   puts i if i % 1000 == 0
-    # 
-    #   # TODO: also need to add ministry campus
-    #   begin
-    #     OrganizationCampus.create! :ministry_id => team_id_to_ministry_id[activity.fk_teamID], :campus_id => activity.fk_targetAreaID
-    #   rescue
-    #   end
-    # end
-    # 
-    # #Organization.connection.execute("UPDATE organizations SET type = 'activity' WHERE legacy_activity_id IS NOT NULL")
-    # 
     puts "Copy ministry_missional_team_member"
     
     #OrganizationMembership.set_table_name "sn_ministry_involvements2"
     #OrganizationMembership.reset_column_information 
-    mtms = OrganizationMembership.find_by_sql("select * from ministry_missional_team_member")
+    # mtms = OrganizationMembership.find_by_sql("select * from ministry_missional_team_member")
     # team_member_role_id = Organization.find(1).ministry_roles.find_by_name("Missional Team Member").id
     # team_leader_role_id = Organization.find(1).ministry_roles.find_by_name("Missional Team Leader").id
     puts "Adding team members"
@@ -107,14 +78,50 @@ namespace :infobase do
       next unless team
       #debugger
       unless OrganizationMembership.where(:organization_id => team, :person_id => mtm['personID']).present?
-        OrganizationMembership.create!(:organization_id => team, :person_id => mtm['personID'], :validated => 1)
+        OrganizationMembership.create!(:organization_id => team, :person_id => mtm['personID'], :validated => 1, :leader => mtm['is_leader'])
       end
       i += 1
       puts i if i % 1000 == 0
     end
-    # 
-    # # update groups without semester set to the current semester
-    # Group.update_all({ :semester_id => Semester.current }, { :semester_id => nil })
+
+    # next is activity
+    puts "Import activities as movements"
+    #strategy_abbrev_to_name = Hash[Strategy.all.collect{ |s| [ s.abbrv, s.name ] } ]
+    #strategy_abbrev_to_id = Hash[Strategy.all.collect{ |s| [ s.abbrv, s.id ] } ]
+    campus_id_to_name = Hash[Ccc::MinistryTargetarea.all(:select => "targetAreaID, name").collect{ |c| [ c.targetAreaID.to_s, c.name ] }]
+    
+    puts "Need to go through activity rows"
+    i = 0
+    Ccc::MinistryActivity.where("status NOT IN('IN', 'TN')").each do |activity|
+      i += 1
+      puts i if i % 1000 == 0
+      target = TargetArea.find(activity.fk_targetAreaID)
+      m = Organization.where(:importable_id => activity.id, :importable_type => 'Ccc::MinistryActivity').first
+      attribs = {:name => "#{strategies[activity.strategy]} at #{target.name}", :terminology => 'Movement', :importable_id => activity.id, :importable_type => 'Ccc::MinistryActivity'}
+      if m
+        m.update_attributes(attribs)
+      else
+        team = Organization.where(:importable_id => activity.fk_teamID, :importable_type => 'Ccc::MinistryLocallevel').first
+        next unless team
+        m = team.children.create!(attribs) 
+        m.target_areas << target
+        m.save!
+      end
+      
+      # Find all the students active in the system in the past year, and add them to this movement
+      Person.where(["dateChanged > ? AND (isStaff is null OR isStaff = 0) AND campus = ?", 1.year.ago, target.name]).each do |person|
+        unless OrganizationMembership.where(:organization_id => m.id, :person_id => person.id).present?
+          OrganizationMembership.create!(:organization_id => m.id, :person_id => person.id, :validated => 1, :start_date => person.dateCreated)
+        end
+      end
+      
+    end
+    
+    # Inactivate inactive activities
+    # Ccc::MinistryActivity.where("status IN('IN', 'TN')").each do |activity|
+    #   m = Organization.where(:importable_id => activity.id, :importable_type => 'Ccc::MinistryActivity').first
+    #   m.destroy if m
+    # end
   end
 
 end

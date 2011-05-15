@@ -77,7 +77,7 @@ Ma::Application.routes.draw do
   end
 
   root :to => "welcome#index"
-  # match 'home' => "sms_keywords#index", :as => 'user_root'
+  match 'home' => 'welcome#home', :as => 'user_root'
   
   # SMS keyword state transitions
   match '/admin/sms_keywords/:id/t/:transition' => 'admin/sms_keywords#transition', :as => 'sms_keyword_transition'

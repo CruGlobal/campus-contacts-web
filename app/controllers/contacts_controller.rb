@@ -7,7 +7,7 @@ class ContactsController < ApplicationController
       sms = ReceivedSms.find_by_id(Base62.decode(params[:received_sms_id])) 
       if sms
         @keyword ||= SmsKeyword.where(:keyword => sms.message).first
-        @person.phone_numbers.create!(:number => sms.phone_number, :location => 'mobile') unless @person.phone_numbers.detect {|p| p.number == sms.phone_number}
+        @person.phone_numbers.create!(:number => sms.phone_number, :location => 'mobile') unless @person.phone_numbers.detect {|p| p.number_with_country_code == sms.phone_number}
         sms.update_attribute(:person_id, @person.id) unless sms.person_id
       end
     end

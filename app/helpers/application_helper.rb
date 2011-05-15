@@ -7,7 +7,7 @@ module ApplicationHelper
     return '' unless tree.present?
     ret = '<ul>'
     tree.sort.each do |sub|
-      ret += "<li>#{sub} #{print_tree(sub.children)}</li>"
+      ret += "<li>#{link_to(sub.name, person_organization_memberships_path(current_person, :organization_id => sub.id), :method => :post)} #{print_tree(sub.children)}</li>"
     end
     (ret + '</ul>').html_safe
   end

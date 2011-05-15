@@ -2,5 +2,6 @@
 // FIXME: Tell people how Sprockets and CoffeeScript works
 //
 //= require jquery_ujs
+//= require ma
 //= require questions
 //= require rails.validations

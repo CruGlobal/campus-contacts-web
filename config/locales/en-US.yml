@@ -11,13 +11,18 @@
       status: "Status"
       edit: "Edit"
       back: "Back"
+      remove: 'Remove'
 
+    org_membership:
+      confirm_delete: "Are you sure you want to dissociate yourself from %{org}"
     welcome:
       index:
         title_top: "Welcome to Mission Accelerator!"
+        go_home: 'Go to your dashboard'
+        request_key: "Click here to request an sms keyword."
+      home:
         subtitle: "Your Keywords"
         request_another_key: "Click here to request another sms keyword."
-        request_key: "Click here to request an sms keyword."
         manage_questions: "Manage Questions"
         edit_keyword: 'Edit Keyword'
         your_orgs: 'Your Organizational Involvements'

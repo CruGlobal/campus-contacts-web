@@ -60,6 +60,9 @@ class User < ActiveRecord::Base
       
       # Sms Keywords
       other.sms_keywords.collect {|oa| oa.update_attribute(:user_id, id)}
+      
+      MergeAudit.create!(:mergeable => self, :merge_looser => other)
+      other.destroy
     end
   end
 end

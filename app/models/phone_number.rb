@@ -38,6 +38,7 @@ class PhoneNumber < ActiveRecord::Base
                     other.updated_at > updated_at ? other.attributes[k] : v
                   end
       end
+      MergeAudit.create!(:mergeable => self, :merge_looser => other)
       other.destroy
       save(:validate => false)
     end
