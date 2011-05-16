@@ -28,6 +28,8 @@ gem 'translate-rails3', :require => 'translate', :git => 'https://github.com/rom
 
 gem 'trumant-rack-oauth2-server', :git => 'git://github.com/mattrw89/rack-oauth2-server.git', :branch => 'active_record'
 
+gem 'enforce_schema_rules'
+
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
@@ -39,4 +41,5 @@ group :development, :test do
   gem 'factory_girl', '2.0.0.beta1'
   gem 'simplecov', '>= 0.3.5', :require => false
   gem 'railroady'
+  gem 'awesome_print'
 end

@@ -1,4 +1,5 @@
 class Person < ActiveRecord::Base
+  include Ccc::Person
   set_table_name 'ministry_person'
   set_primary_key 'personID'
   
@@ -7,9 +8,7 @@ class Person < ActiveRecord::Base
   has_one :primary_phone_number, :class_name => "PhoneNumber", :foreign_key => "person_id", :conditions => {:primary => true}
   has_many :email_addresses
   has_one :primary_email_address, :class_name => "EmailAddress", :foreign_key => "person_id", :conditions => {:primary => true}
-  has_many :communities, :through => :organization_memberships
   has_many :organization_memberships
-  has_many :organization_memberships, :class_name => "OrganizationMembership", :foreign_key => "person_id"
   has_many :organizations, :through => :organization_memberships
   has_one :primary_organization_membership, :class_name => "OrganizationMembership", :foreign_key => "person_id", :conditions => {:primary => true}
   has_one :primary_organization, :through => :primary_organization_membership, :source => :organization
@@ -64,5 +63,30 @@ class Person < ActiveRecord::Base
     email = primary_email_address || email_addresses.new
     email.email = val
     email.save
+  end
+  
+  def merge(other)
+    # Phone Numbers
+    phone_numbers.each do |pn|
+      opn = other.phone_numbers.detect {|oa| oa.number == pn.number && oa.extension == pn.extension}
+      pn.merge(opn) if opn
+    end
+    other.phone_numbers.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
+    
+    # Email Addresses
+    email_addresses.each do |pn|
+      opn = other.email_addresses.detect {|oa| oa.email == pn.email}
+      pn.merge(opn) if opn
+    end
+    other.email_addresses.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
+    
+    # Organizational Memberships
+    organization_memberships.each do |pn|
+      opn = other.organization_memberships.detect {|oa| oa.organization_id == pn.organization_id}
+      pn.merge(opn) if opn
+    end
+    other.organization_memberships.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
+    
+    super
   end
 end

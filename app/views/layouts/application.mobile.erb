@@ -3,7 +3,7 @@
 <html>
   <head>
     <title><%= h(yield(:title) || "Cru") %></title>
-    <%= stylesheet "/jqtouch/jqtouch.css" %>
+    <%= stylesheet_link_tag "jqtouch/jqtouch.css" %>
     <% if request.user_agent.include?("iPhone") %>
       <%= stylesheet_link_tag "jqtouch/themes/apple/theme.css" %>
     <% else %>

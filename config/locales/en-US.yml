@@ -11,17 +11,44 @@
       status: "Status"
       edit: "Edit"
       back: "Back"
+      remove: 'Remove'
 
+    org_membership:
+      confirm_delete: "Are you sure you want to dissociate yourself from %{org}"
     welcome:
       index:
         title_top: "Welcome to Mission Accelerator!"
+        go_home: 'Go to your dashboard'
+        request_key: "Click here to request an sms keyword."
+      home:
         subtitle: "Your Keywords"
         request_another_key: "Click here to request another sms keyword."
-        request_key: "Click here to request an sms keyword."
-        q_manage: "Manage Questions"
+        manage_questions: "Manage Questions"
+        edit_keyword: 'Edit Keyword'
+        your_orgs: 'Your Organizational Involvements'
+        edit_orgs: 'Edit your organizational involvements.'
     questions:
       create:
         notice: 'Question was successfully created.'
+    keywords:
+      edit:
+        heading: Editing Keyword
+      flash:
+        created: 'Keyword request was successfully created.'
+        updated: 'Keyword was successfully updated.'
+        pick_org: 'Please pick which organization(s) you are associated with'
+      form:
+        keyword: 'Keyword'
+        keyword_tip: "This is what people will type into their phone. For example: when you say 'text <strong>ccc</strong> to 69940', 'ccc' is the keyword."
+        explanation: 'Please explain what you plan to use this keyword for.'
+        initial_response: 'What response should we send back to people when they text in? If you want the person to complete a survey, the response MUST include {{ link }}'
+        post_survey_message: 'What message would you like to show after the person has completed the survey?'
+        chartfield: 'A keyword costs $7/month. Please enter a chart field to be billed for this keyword.'
+    contacts:
+      thanks:
+        message: Thank you for your interest.
+    sms:
+      keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
   date:
     formats:
       default: "%Y-%m-%d"
@@ -185,6 +212,8 @@
       even: "must be even"
 
   activerecord:
+    models:
+      sms_keyword: Keyword
     errors:
       template:
         header:

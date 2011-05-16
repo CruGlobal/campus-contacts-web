@@ -1,5 +1,5 @@
 require 'test_helper'
-
+# curl http://test.ccci.us:7880/sms/mo -d "timestamp=07/07/1982 12:00:00,999&message=asdf&device_address=16304182108&inbound_address=69940&country=US&carrier=sprint"
 class SmsControllerTest < ActionController::TestCase
   context "Receiving an incoming SMS" do
     setup do 

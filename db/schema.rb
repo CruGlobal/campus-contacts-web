@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110512210505) do
+ActiveRecord::Schema.define(:version => 20110515142750) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -61,6 +61,18 @@ ActiveRecord::Schema.define(:version => 20110512210505) do
   add_index "access_tokens", ["code"], :name => "index_access_tokens_on_code", :unique => true
   add_index "access_tokens", ["identity"], :name => "index_access_tokens_on_identity"
 
+  create_table "activities", :force => true do |t|
+    t.integer  "target_area_id"
+    t.integer  "organization_id"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.string   "status",          :default => "active"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "activities", ["target_area_id", "organization_id"], :name => "index_activities_on_target_area_id_and_organization_id", :unique => true
+
   create_table "aoas", :force => true do |t|
     t.string "name"
   end
@@ -92,7 +104,7 @@ ActiveRecord::Schema.define(:version => 20110512210505) do
     t.string   "token"
   end
 
-  add_index "authentications", ["user_id", "provider", "uid"], :name => "user_id_provider_uid", :unique => true
+  add_index "authentications", ["provider", "uid"], :name => "index_authentications_on_provider_and_uid", :unique => true
 
   create_table "client_applications", :force => true do |t|
     t.string   "name"
@@ -864,6 +876,8 @@ ActiveRecord::Schema.define(:version => 20110512210505) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "email_addresses", ["person_id", "email"], :name => "index_email_addresses_on_person_id_and_email", :unique => true
 
   create_table "engine_schema_info", :id => false, :force => true do |t|
     t.string  "engine_name"
@@ -1761,6 +1775,18 @@ ActiveRecord::Schema.define(:version => 20110512210505) do
   end
 
   add_index "mail_users", ["guid"], :name => "guid"
+
+  create_table "merge_audits", :force => true do |t|
+    t.integer  "mergeable_id"
+    t.string   "mergeable_type"
+    t.integer  "merge_looser_id"
+    t.string   "merge_looser_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "merge_audits", ["merge_looser_id", "merge_looser_type"], :name => "merge_looser"
+  add_index "merge_audits", ["mergeable_id", "mergeable_type"], :name => "mergeable"
 
   create_table "ministries", :force => true do |t|
     t.string "name"
@@ -2855,6 +2881,9 @@ ActiveRecord::Schema.define(:version => 20110512210505) do
     t.boolean  "validated",       :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "leader",          :default => false
+    t.date     "start_date"
+    t.date     "end_date"
   end
 
   add_index "organization_memberships", ["organization_id", "person_id"], :name => "index_organization_memberships_on_organization_id_and_person_id", :unique => true
@@ -2867,9 +2896,12 @@ ActiveRecord::Schema.define(:version => 20110512210505) do
     t.datetime "updated_at"
     t.string   "ancestry"
     t.string   "terminology"
+    t.integer  "importable_id"
+    t.string   "importable_type"
   end
 
   add_index "organizations", ["ancestry"], :name => "index_organizations_on_ancestry"
+  add_index "organizations", ["importable_type", "importable_id"], :name => "index_organizations_on_importable_type_and_importable_id", :unique => true
 
   create_table "phone_numbers", :force => true do |t|
     t.string   "number"
@@ -2880,6 +2912,8 @@ ActiveRecord::Schema.define(:version => 20110512210505) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "phone_numbers", ["person_id", "number"], :name => "index_phone_numbers_on_person_id_and_number", :unique => true
 
   create_table "plugin_schema_info", :id => false, :force => true do |t|
     t.string  "plugin_name"
@@ -3465,14 +3499,17 @@ ActiveRecord::Schema.define(:version => 20110512210505) do
 
   create_table "sms_keywords", :force => true do |t|
     t.string   "keyword"
-    t.integer  "activity_id"
-    t.integer  "community_id"
+    t.integer  "event_id"
+    t.integer  "organization_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "chartfield"
     t.integer  "user_id"
     t.text     "explanation"
     t.string   "state"
+    t.string   "initial_response",    :limit => 140, :default => "Hi! Thanks for checking out Cru. Visit {{ link }} to get more involved."
+    t.text     "post_survey_message"
+    t.string   "event_type"
   end
 
   create_table "sn_campus_involvements", :force => true do |t|
@@ -4486,6 +4523,15 @@ ActiveRecord::Schema.define(:version => 20110512210505) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "teams", :force => true do |t|
+    t.integer  "organization_id"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "teams", ["organization_id"], :name => "index_teams_on_organization_id"
 
   create_table "versions", :force => true do |t|
     t.integer  "versioned_id"

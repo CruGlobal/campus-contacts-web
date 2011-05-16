@@ -1,3 +1,3 @@
 <div class="info">
-  Thanks for telling us a little more about yourself.
+  <%= @keyword.post_survey_message.present? ? @keyword.post_survey_message : t('ma.contacts.thanks.message') %>
 </div>

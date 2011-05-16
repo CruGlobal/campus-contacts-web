@@ -1,6 +1,7 @@
 $ ->
 	$('.use_question, .remove_question').live 'click', ->
 		$(this).closest('tr').fadeOut()
+		$(this).closest('tr').remove()
 		false
 	$('.drag').live 'click', -> 
 		false

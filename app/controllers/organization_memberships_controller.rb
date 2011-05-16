@@ -35,8 +35,8 @@ class OrganizationMembershipsController < ApplicationController
       if @organization_membershipship.save
         format.html do 
           @org = @organization_membershipship.organization 
-          if @org.requires_validation?
-            case @org.validation_method
+          if @org.root.requires_validation?
+            case @org.root.validation_method
             when 'relay'
               redirect_to('https://signin.ccci.org/cas/login?service=' + validate_person_organization_membership_url(current_person, @organization_membershipship))
             end
@@ -76,22 +76,26 @@ class OrganizationMembershipsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(person_organization_memberships_path(current_person)) }
+      format.js   { render :nothing => true }
       format.xml  { head :ok }
     end
   end
   
   def validate
-    @organization_membershipship = current_person.organization_memberships.find(params[:id])
+    @organization_membershipship = current_person.organization_memberships.includes(:organization).find(params[:id])
     org = @organization_membershipship.organization
     @valid = false
-    case org.validation_method
+    case org.root.validation_method
     when 'relay'
       if RubyCAS::Filter.filter(self)
         guid = get_guid_from_ticket(session[:cas_last_valid_ticket])
         # See if we have a user with this guid
         user = User.find_by_globallyUniqueID(guid)
         unless current_user == user
-          #TODO we need to merge the users
+          sign_out(current_user)
+          old_user = User.find(current_user.id)
+          user.merge(old_user)
+          sign_in(user)
         end
         if user.person.isStaff?
           @valid = true
@@ -99,11 +103,11 @@ class OrganizationMembershipsController < ApplicationController
       end
     end
     if @valid
-      @organization_membershipship.update_attribute(:validated, true)
+      (@organization_membershipship.frozen? ? current_person.organization_memberships.where(:organization_id => org.id).first : @organization_membershipship).update_attribute(:validated, true)
       redirect_to(session[:return_to].present? ? session[:return_to] : :back, :notice => 'Organization membership was successfully created.') 
       return
     else
-      @organization_membershipship.destroy
+      # @organization_membershipship.destroy
       redirect_to person_organization_memberships_path(current_person), :error => "Validation of membership failed"
       return
     end
