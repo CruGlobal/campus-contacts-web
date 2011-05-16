@@ -10,15 +10,78 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110511200101) do
+ActiveRecord::Schema.define(:version => 20110512210505) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
   end
 
+  create_table "access_grants", :force => true do |t|
+    t.string   "code"
+    t.string   "identity"
+    t.string   "client_id"
+    t.string   "redirect_uri"
+    t.string   "scope"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "granted_at"
+    t.datetime "expires_at"
+    t.string   "access_token"
+    t.datetime "revoked"
+  end
+
+  add_index "access_grants", ["client_id"], :name => "index_access_grants_on_client_id"
+  add_index "access_grants", ["code"], :name => "index_access_grants_on_code", :unique => true
+
+  create_table "access_grantsold", :force => true do |t|
+    t.string   "code"
+    t.string   "access_token"
+    t.string   "refresh_token"
+    t.datetime "access_token_expires_at"
+    t.integer  "user_id"
+    t.integer  "application_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "access_tokens", :force => true do |t|
+    t.string   "code"
+    t.string   "identity"
+    t.string   "client_id"
+    t.string   "scope"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "expires_at"
+    t.datetime "revoked"
+    t.datetime "last_access"
+    t.datetime "prev_access"
+  end
+
+  add_index "access_tokens", ["client_id"], :name => "index_access_tokens_on_client_id"
+  add_index "access_tokens", ["code"], :name => "index_access_tokens_on_code", :unique => true
+  add_index "access_tokens", ["identity"], :name => "index_access_tokens_on_identity"
+
   create_table "aoas", :force => true do |t|
     t.string "name"
   end
+
+  create_table "auth_requests", :force => true do |t|
+    t.string   "code"
+    t.string   "client_id"
+    t.string   "scope"
+    t.string   "redirect_uri"
+    t.string   "state"
+    t.string   "response_type"
+    t.string   "grant_code"
+    t.string   "access_token"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "authorized_at"
+    t.datetime "revoked"
+  end
+
+  add_index "auth_requests", ["client_id"], :name => "index_auth_requests_on_client_id"
+  add_index "auth_requests", ["code"], :name => "index_auth_requests_on_code"
 
   create_table "authentications", :force => true do |t|
     t.integer  "user_id"
@@ -30,6 +93,38 @@ ActiveRecord::Schema.define(:version => 20110511200101) do
   end
 
   add_index "authentications", ["user_id", "provider", "uid"], :name => "user_id_provider_uid", :unique => true
+
+  create_table "client_applications", :force => true do |t|
+    t.string   "name"
+    t.string   "app_id"
+    t.string   "app_secret"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
+    t.string   "url",          :limit => 60
+    t.string   "callback_url", :limit => 60
+    t.string   "support_url",  :limit => 60
+    t.string   "key",          :limit => 60
+    t.string   "secret",       :limit => 60
+  end
+
+  create_table "clients", :force => true do |t|
+    t.string   "code"
+    t.string   "secret"
+    t.string   "display_name"
+    t.string   "link"
+    t.string   "image_url"
+    t.string   "redirect_uri"
+    t.string   "scope"
+    t.string   "notes"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "revoked"
+  end
+
+  add_index "clients", ["code"], :name => "index_clients_on_code", :unique => true
+  add_index "clients", ["display_name"], :name => "index_clients_on_display_name", :unique => true
+  add_index "clients", ["link"], :name => "index_clients_on_link", :unique => true
 
   create_table "cms_assoc_filecategory", :id => false, :force => true do |t|
     t.string  "CmsFileID",     :limit => 64,                   :null => false
@@ -2442,6 +2537,33 @@ ActiveRecord::Schema.define(:version => 20110511200101) do
     t.text   "usersubject"
     t.string "period"
   end
+
+  create_table "oauth_nonces", :force => true do |t|
+    t.string   "nonce"
+    t.integer  "timestamp"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "oauth_nonces", ["nonce", "timestamp"], :name => "index_oauth_nonces_on_nonce_and_timestamp", :unique => true
+
+  create_table "oauth_tokens", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "type",                  :limit => 20
+    t.integer  "client_application_id"
+    t.string   "token",                 :limit => 40
+    t.string   "secret",                :limit => 40
+    t.string   "callback_url"
+    t.string   "verifier",              :limit => 20
+    t.string   "scope"
+    t.datetime "authorized_at"
+    t.datetime "invalidated_at"
+    t.datetime "valid_to"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "oauth_tokens", ["token"], :name => "index_oauth_tokens_on_token", :unique => true
 
   create_table "old_wsn_sp_wsnapplication", :primary_key => "WsnApplicationID", :force => true do |t|
     t.string   "oldPrimaryKey",                 :limit => 64

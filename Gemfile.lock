@@ -1,6 +1,65 @@
 GIT
+  remote: git://github.com/mattrw89/rack-oauth2-server.git
+  revision: 97d1c86e51eb17d413e143bfa6b501889b68d422
+  branch: active_record
+  specs:
+    trumant-rack-oauth2-server (2.2.1.1)
+      rack (~> 1.1)
+      rails (>= 2.3.11)
+
+GIT
+  remote: git://github.com/rails/rails
+  revision: cbe6e09f6a02fcee9cab0f16a9143ee21d237809
+  branch: master
+  specs:
+    actionmailer (3.1.0.beta1)
+      actionpack (= 3.1.0.beta1)
+      mail (~> 2.3.0)
+    actionpack (3.1.0.beta1)
+      activemodel (= 3.1.0.beta1)
+      activesupport (= 3.1.0.beta1)
+      builder (~> 3.0.0)
+      erubis (~> 2.7.0)
+      i18n (~> 0.6.0beta1)
+      rack (~> 1.3.0.beta)
+      rack-cache (~> 1.0.1)
+      rack-mount (~> 0.8.0)
+      rack-test (~> 0.6.0)
+      sprockets (~> 2.0.0.beta.2)
+      tzinfo (~> 0.3.27)
+    activemodel (3.1.0.beta1)
+      activesupport (= 3.1.0.beta1)
+      bcrypt-ruby (~> 2.1.4)
+      builder (~> 3.0.0)
+      i18n (~> 0.6.0beta1)
+    activerecord (3.1.0.beta1)
+      activemodel (= 3.1.0.beta1)
+      activesupport (= 3.1.0.beta1)
+      arel (~> 2.1.0)
+      tzinfo (~> 0.3.27)
+    activeresource (3.1.0.beta1)
+      activemodel (= 3.1.0.beta1)
+      activesupport (= 3.1.0.beta1)
+    activesupport (3.1.0.beta1)
+      multi_json (~> 1.0)
+    rails (3.1.0.beta1)
+      actionmailer (= 3.1.0.beta1)
+      actionpack (= 3.1.0.beta1)
+      activerecord (= 3.1.0.beta1)
+      activeresource (= 3.1.0.beta1)
+      activesupport (= 3.1.0.beta1)
+      bundler (~> 1.0)
+      railties (= 3.1.0.beta1)
+    railties (3.1.0.beta1)
+      actionpack (= 3.1.0.beta1)
+      activesupport (= 3.1.0.beta1)
+      rack-ssl (~> 1.3.2)
+      rake (>= 0.8.7)
+      thor (~> 0.14.6)
+
+GIT
   remote: git://github.com/twinge/rails_admin.git
-  revision: 998c75cc25a711c0d5b4f3217c43ec6cdcf7244b
+  revision: 67745f59794adb2635bc69a40e379ee00ecb8c8b
   specs:
     rails_admin (0.0.1)
       builder (~> 3.0.0)
@@ -23,38 +82,8 @@ GIT
 GEM
   remote: http://rubygems.org/
   specs:
-    actionmailer (3.1.0.beta1)
-      actionpack (= 3.1.0.beta1)
-      mail (~> 2.3.0)
-    actionpack (3.1.0.beta1)
-      activemodel (= 3.1.0.beta1)
-      activesupport (= 3.1.0.beta1)
-      builder (~> 3.0.0)
-      erubis (~> 2.7.0)
-      i18n (~> 0.6.0beta1)
-      rack (~> 1.3.0.beta)
-      rack-cache (~> 1.0.1)
-      rack-mount (~> 0.7.2)
-      rack-test (~> 0.6.0)
-      sprockets (~> 2.0.0.beta.2)
-      tzinfo (~> 0.3.27)
-    activemodel (3.1.0.beta1)
-      activesupport (= 3.1.0.beta1)
-      bcrypt-ruby (~> 2.1.4)
-      builder (~> 3.0.0)
-      i18n (~> 0.6.0beta1)
-    activerecord (3.1.0.beta1)
-      activemodel (= 3.1.0.beta1)
-      activesupport (= 3.1.0.beta1)
-      arel (~> 2.1.0)
-      tzinfo (~> 0.3.27)
-    activeresource (3.1.0.beta1)
-      activemodel (= 3.1.0.beta1)
-      activesupport (= 3.1.0.beta1)
-    activesupport (3.1.0.beta1)
-      multi_json (~> 1.0)
     acts_as_list (0.1.2)
-    addressable (2.2.5)
+    addressable (2.2.6)
     ancestry (1.2.4)
       activerecord (>= 2.2.2)
     arel (2.1.0)
@@ -81,7 +110,7 @@ GEM
     dynamic_form (1.1.4)
     ephemeral_response (0.4.0)
     erubis (2.7.0)
-    execjs (0.3.3)
+    execjs (0.3.4)
       multi_json (~> 1.0)
     factory_girl (2.0.0.beta1)
     faraday (0.6.1)
@@ -89,7 +118,7 @@ GEM
       multipart-post (~> 1.1.0)
       rack (< 2, >= 1.1.0)
     hashie (1.0.0)
-    highline (1.6.1)
+    highline (1.6.2)
     hike (1.0.0)
     i18n (0.6.0beta1)
     json (1.4.3)
@@ -104,9 +133,9 @@ GEM
     mini_fb (1.1.7)
       hashie
       rest-client
-    multi_json (1.0.1)
+    multi_json (1.0.2)
     multi_xml (0.2.2)
-    multipart-post (1.1.0)
+    multipart-post (1.1.1)
     mysql2 (0.3.2)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
@@ -127,12 +156,12 @@ GEM
     oauth2 (0.4.1)
       faraday (~> 0.6.1)
       multi_json (>= 0.0.5)
-    orm_adapter (0.0.4)
+    orm_adapter (0.0.5)
     polyglot (0.3.1)
     rack (1.3.0.beta)
     rack-cache (1.0.1)
       rack (>= 0.4)
-    rack-mount (0.7.2)
+    rack-mount (0.8.0)
       rack (>= 1.0.0)
     rack-offline (0.6.1)
     rack-ssl (1.3.2)
@@ -140,20 +169,6 @@ GEM
     rack-test (0.6.0)
       rack (>= 1.0)
     railroady (1.0.2)
-    rails (3.1.0.beta1)
-      actionmailer (= 3.1.0.beta1)
-      actionpack (= 3.1.0.beta1)
-      activerecord (= 3.1.0.beta1)
-      activeresource (= 3.1.0.beta1)
-      activesupport (= 3.1.0.beta1)
-      bundler (~> 1.0)
-      railties (= 3.1.0.beta1)
-    railties (3.1.0.beta1)
-      actionpack (= 3.1.0.beta1)
-      activesupport (= 3.1.0.beta1)
-      rack-ssl (~> 1.3.2)
-      rake (>= 0.8.7)
-      thor (~> 0.14.6)
     rake (0.8.7)
     redis (2.2.0)
     redis-namespace (0.8.0)
@@ -170,7 +185,7 @@ GEM
     shoulda (2.11.3)
     simplecov (0.4.2)
       simplecov-html (~> 0.4.4)
-    simplecov-html (0.4.4)
+    simplecov-html (0.4.5)
     sinatra (1.2.6)
       rack (~> 1.1)
       tilt (< 2.0, >= 1.2.2)
@@ -181,7 +196,7 @@ GEM
     sqlite3 (1.3.3)
     sqlite3-ruby (1.3.3)
       sqlite3 (>= 1.3.3)
-    state_machine (0.10.4)
+    state_machine (1.0.0)
     thor (0.14.6)
     tilt (1.3)
     treetop (1.4.9)
@@ -216,7 +231,7 @@ DEPENDENCIES
   oa-oauth
   rack-offline
   railroady
-  rails (= 3.1.0.beta1)
+  rails!
   rails_admin!
   resque
   rest-client
@@ -227,3 +242,4 @@ DEPENDENCIES
   sqlite3-ruby
   state_machine
   translate-rails3!
+  trumant-rack-oauth2-server!

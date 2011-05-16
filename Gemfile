@@ -1,7 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.0.beta1'
-
+gem 'rails', :git => "git://github.com/rails/rails", :branch => "master"
 
 gem 'mysql2'
 
@@ -25,6 +24,9 @@ gem 'acts_as_list'
 gem 'dynamic_form'
 gem 'coffee-script'
 gem 'translate-rails3', :require => 'translate', :git => 'https://github.com/romanbsd/translate.git'
+#gem 'trumant-rack-oauth2-server', :git => 'git://github.com/trumant/rack-oauth2-server.git', :branch => 'active_record'
+
+gem 'trumant-rack-oauth2-server', :git => 'git://github.com/mattrw89/rack-oauth2-server.git', :branch => 'active_record'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

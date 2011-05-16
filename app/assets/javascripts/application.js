@@ -4,3 +4,4 @@
 //= require jquery_ujs
 //= require questions
 //= require rails.validations
+//= require oauthadmin
