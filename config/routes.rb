@@ -78,7 +78,7 @@ Ma::Application.routes.draw do
 
   #test validated api call
   match 'api/getuser' => 'api#getuser'
-  
+  match 'api/getschools' => 'api#getschools'
   #other oauth calls
   match "oauth/authorize" => "oauth#authorize"
   match "oauth/grant" => "oauth#grant"

@@ -1,6 +1,6 @@
 #!/bin/bash
 atk="b6fef51e27a21ffebb8ff33166ed0b8315b0b008987caf25d4cfb71c54f75b59"
-baseurl="http://localhost:8880"
+baseurl="http://localhost:8889"
 if [ ! -n "$1" ]
 	then
 	echo "fetching access_token via username & password"

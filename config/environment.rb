@@ -15,6 +15,7 @@ Ma::Application.configure do
       user if user && user.valid_password?(password)
       user.userID
     end
+    config.oauth.param_authentication = TRUE
     Rack::OAuth2::Server::Admin.set :client_id, "2"
     Rack::OAuth2::Server::Admin.set :client_secret, "e6f0bc02c1236f3d4cde6a4fd45e181569a8abf45ce17a3dba2fd88fe55722b6"
     
