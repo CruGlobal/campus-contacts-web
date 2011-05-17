@@ -12,4 +12,12 @@ class Organization < ActiveRecord::Base
   def <=>(other)
     name <=> other.name
   end
+  
+  def validation_method_enum
+    ['relay']
+  end
+  
+  def terminology_enum
+    Organization.connection.select_values("select distinct(terminology) term from organizations order by term")
+  end
 end

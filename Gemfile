@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.0.beta1'
+gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 
 gem 'mysql2'
@@ -26,6 +26,8 @@ gem 'dynamic_form'
 gem 'coffee-script'
 gem 'translate-rails3', :require => 'translate', :git => 'https://github.com/romanbsd/translate.git'
 gem 'enforce_schema_rules'
+# gem 'sentient_user'
+gem 'paper_trail', '~> 2'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
