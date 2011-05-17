@@ -76,6 +76,17 @@ Ma::Application.routes.draw do
     end
   end
 
+  #test validated api call
+  match 'api/getuser' => 'api#getuser'
+  match 'api/getschools' => 'api#getschools'
+  #other oauth calls
+  match "oauth/authorize" => "oauth#authorize"
+  match "oauth/grant" => "oauth#grant"
+  match "oauth/deny" => "oauth#deny"
+  #make admin portion of oauth2 rack accessible
+  #mount Rack::OAuth2::Server::Admin, :at => "/oauth/admin"
+  mount Rack::OAuth2::Server::Admin => "/oauth/admin"
+  
   root :to => "welcome#index"
   match 'home' => 'welcome#home', :as => 'user_root'
   

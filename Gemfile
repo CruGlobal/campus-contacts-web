@@ -2,7 +2,6 @@ source 'http://rubygems.org'
 
 gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-
 gem 'mysql2'
 
 gem 'rack-offline'
@@ -25,6 +24,10 @@ gem 'acts_as_list'
 gem 'dynamic_form'
 gem 'coffee-script'
 gem 'translate-rails3', :require => 'translate', :git => 'https://github.com/romanbsd/translate.git'
+#gem 'trumant-rack-oauth2-server', :git => 'git://github.com/trumant/rack-oauth2-server.git', :branch => 'active_record'
+
+gem 'trumant-rack-oauth2-server', :git => 'git://github.com/mattrw89/rack-oauth2-server.git', :branch => 'active_record'
+
 gem 'enforce_schema_rules'
 # gem 'sentient_user'
 gem 'paper_trail', '~> 2'

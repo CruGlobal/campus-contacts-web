@@ -1,6 +1,7 @@
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
+require 'rack/oauth2/server/admin'
 
 # If you have a Gemfile, require the gems listed there, including any gems
 # you've limited to :test, :development, or :production.
@@ -51,5 +52,6 @@ module Ma
 
     # Enable the asset pipeline
     config.assets.enabled = true
+    
   end
 end

@@ -49,7 +49,7 @@ GIT
 
 GIT
   remote: git://github.com/twinge/rails_admin.git
-  revision: 6aeb333d47b69f8128e48141e54d5fea9d1cba25
+  revision: 67745f59794adb2635bc69a40e379ee00ecb8c8b
   specs:
     rails_admin (0.0.1)
       builder (~> 3.0.0)
@@ -240,3 +240,4 @@ DEPENDENCIES
   sqlite3-ruby
   state_machine
   translate-rails3!
+  trumant-rack-oauth2-server!
