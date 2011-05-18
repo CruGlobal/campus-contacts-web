@@ -65,6 +65,18 @@ class Person < ActiveRecord::Base
     email.save
   end
   
+  def firstName=(firstName)      #always map firstName setter to the firstName field
+    self[:firstName] = firstName
+  end
+  
+  def firstName       # if preferredName is non-nil/null/'' output preferredName, else firstName
+    if ((preferredName != '') || (preferredName != NULL) || (preferredName != nil))
+      self.preferredName
+    else
+      self.firstName
+    end
+  end
+  
   def merge(other)
     # Phone Numbers
     phone_numbers.each do |pn|

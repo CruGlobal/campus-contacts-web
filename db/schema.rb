@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110517124354) do
+ActiveRecord::Schema.define(:version => 20110517191554) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -3222,6 +3222,7 @@ ActiveRecord::Schema.define(:version => 20110517124354) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "last_sign_in_at"
+    t.string   "locale"
   end
 
   add_index "simplesecuritymanager_user", ["email"], :name => "index_simplesecuritymanager_user_on_email", :unique => true

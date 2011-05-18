@@ -2,7 +2,6 @@
 require File.expand_path('../application', __FILE__)
 require "rack/oauth2/server/railtie"
 
-
 # Initialize the rails application
 Ma::Application.initialize!
 
