@@ -31,4 +31,10 @@ module ApiErrors
       super :invalid_request, "Your API request URL is invalid."
     end
   end
+
+  class NoDataReturned < ApiError
+    def initialize
+      super :no_data_returned, "Your API request did not return any data."
+    end
+  end
 end
