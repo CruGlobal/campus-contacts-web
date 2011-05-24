@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', :git => 'git://github.com/rails/rails.git'
+gem 'rails', '3.1.0.rc1'
 
 
 gem 'mysql2'
@@ -24,6 +24,8 @@ gem "state_machine"
 gem 'acts_as_list'
 gem 'dynamic_form'
 gem 'coffee-script'
+gem 'uglifier'
+
 gem 'translate-rails3', :require => 'translate', :git => 'https://github.com/romanbsd/translate.git'
 gem 'enforce_schema_rules'
 # gem 'sentient_user'
