@@ -120,7 +120,7 @@ GEM
     erubis (2.7.0)
     execjs (1.0.0)
       multi_json (~> 1.0)
-    factory_girl (2.0.0.beta1)
+    factory_girl (2.0.0.beta2)
     faraday (0.6.1)
       addressable (~> 2.2.4)
       multipart-post (~> 1.1.0)
@@ -236,7 +236,7 @@ DEPENDENCIES
   dynamic_form
   enforce_schema_rules
   ephemeral_response
-  factory_girl (= 2.0.0.beta1)
+  factory_girl (= 2.0.0.beta2)
   mail_safe
   mini_fb
   mysql2

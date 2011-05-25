@@ -27,4 +27,10 @@ FactoryGirl.define do
     password 'asdfasdf'
     person
   end
+  
+  factory :authentication do
+    provider "facebook"
+    uid "690860831"
+    token "164949660195249|bd3f24d52b4baf9412141538.1-690860831|w79R36CalrEAY-9e9kp8fDWJ69A"
+  end
 end

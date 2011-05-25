@@ -52,7 +52,7 @@ class Api::UserController < ApiController
         when "id"
           api_call[x] = user.userID
         when "name"
-          api_call[x] = "#{person.firstName} #{person.lastName}"
+          api_call[x] = person.to_s
         when "first_name"
           api_call[x] = person.firstName
         when "last_name"

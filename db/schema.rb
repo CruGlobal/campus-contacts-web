@@ -869,21 +869,6 @@ ActiveRecord::Schema.define(:version => 20110523171721) do
     t.string  "sortNames",   :limit => 1000
   end
 
-  create_table "education_histories", :force => true do |t|
-    t.string   "person_id"
-    t.string   "type"
-    t.string   "concentration_id"
-    t.string   "concentration_name"
-    t.string   "year_id"
-    t.integer  "year_name"
-    t.string   "degree_id"
-    t.string   "degree_name"
-    t.string   "school_id"
-    t.string   "school_name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "email_addresses", :force => true do |t|
     t.string   "email"
     t.integer  "person_id"
@@ -1802,6 +1787,26 @@ ActiveRecord::Schema.define(:version => 20110523171721) do
 
   add_index "merge_audits", ["merge_looser_id", "merge_looser_type"], :name => "merge_looser"
   add_index "merge_audits", ["mergeable_id", "mergeable_type"], :name => "mergeable"
+
+  create_table "mh_education_history", :force => true do |t|
+    t.string   "person_id"
+    t.string   "school_type"
+    t.string   "concentration_id1"
+    t.string   "concentration_name1"
+    t.string   "year_id"
+    t.integer  "year_name"
+    t.string   "degree_id"
+    t.string   "degree_name"
+    t.string   "school_id"
+    t.string   "school_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "provider"
+    t.string   "concentration_name2"
+    t.string   "concentration_name3"
+    t.string   "concentration_id2"
+    t.string   "concentration_id3"
+  end
 
   create_table "mh_friend", :force => true do |t|
     t.string   "name"

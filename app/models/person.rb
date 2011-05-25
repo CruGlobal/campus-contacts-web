@@ -44,7 +44,7 @@ class Person < ActiveRecord::Base
       email_addresses.create(:email => data['email'])
     end
     save
-    get_or_update_location(authentication, response)
+    get_location(authentication, response)
     self
   end
   
@@ -116,17 +116,6 @@ class Person < ActiveRecord::Base
         @create.push(friend['id'])
       end
     end
-     #    
-     # @friends.each do |friend|
-     #   @dbf2 = friends.find_by_uid(friend.id)
-     #   if friend.id == @dbf2.try(:uid)
-     #     @dbf2.update_attributes(:name => friend.name) unless friend.name == @dbf2.name
-     #     @match.push(@dbf2.uid)
-     #   elsif @dbf2.nil? #uid's did not match && @dbf2 is empty
-     #     friends.create!(:uid => friend['id'], :name => friend['name'], :person_id => personID.to_i, :provider => "facebook")
-     #     @create.push(friend['id'])
-     #   end
-     # end
     @dbf = friends.reload
     
     @dbf.each do |dbf|
@@ -156,7 +145,7 @@ class Person < ActiveRecord::Base
     end
   end
   
-  def get_or_update_location(authentication, response = nil)
+  def get_location(authentication, response = nil)
     if response.nil?
       @location = MiniFB.get(authentication.token, authentication.uid).location
     else @location = response.location
@@ -190,24 +179,6 @@ class Person < ActiveRecord::Base
           save!          
         end 
       end
-        
-      # @education.each do |education|
-      #   education_histories.create!(:school_name => education.school.try(:name), :school_id => education.school.try(:id), 
-      #   :year_id => education.year.try(:id), :year_name => education.year.try(:name), 
-      #   :provider => "facebook", :person_id => personID.to_i) do |h|
-      #     h.school_type = education.type
-      #     if (education.try(:concentration).nil?) != true
-      #       0.upto(education.concentration.length-1) do |c|
-      #         h["concentration_id#{c+1}"] = education.concentration[c].id
-      #         h["concentration_name#{c+1}"] = education.concentration[c].name
-      #       end
-      #     end
-      #     if(education.try(:degree).nil?) != true
-      #       h.degree_id = education.degree.id
-      #       h.degree_name = education.degree.name
-      #     end
-      #   end
-      # end
     end
   end  
   

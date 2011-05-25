@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ActivityTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  should belong_to(:target_area)
+  should belong_to(:organization)
+
 end
