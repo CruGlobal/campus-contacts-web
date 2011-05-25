@@ -5,6 +5,10 @@ class Person < ActiveRecord::Base
   
   belongs_to :user, :class_name => 'User', :foreign_key => 'fk_ssmUserId'
   has_many :phone_numbers
+  has_many :locations
+  has_many :friends
+  has_many :interests
+  has_many :education_histories
   has_one :primary_phone_number, :class_name => "PhoneNumber", :foreign_key => "person_id", :conditions => {:primary => true}
   has_many :email_addresses
   has_one :primary_email_address, :class_name => "EmailAddress", :foreign_key => "person_id", :conditions => {:primary => true}
@@ -12,30 +16,35 @@ class Person < ActiveRecord::Base
   has_many :organizations, :through => :organization_memberships
   has_one :primary_organization_membership, :class_name => "OrganizationMembership", :foreign_key => "person_id", :conditions => {:primary => true}
   has_one :primary_organization, :through => :primary_organization_membership, :source => :organization
-  validates_presence_of :firstName, :lastName
+  # 
+  #When validation turned on firstName supposedly doesn't have a value. Turned off insert works fine.
+   validates_presence_of :firstName, :lastName
   
-  accepts_nested_attributes_for :email_addresses, :phone_numbers, :allow_destroy => true
-  
+   accepts_nested_attributes_for :email_addresses, :phone_numbers, :allow_destroy => true
+
   def to_s
     [preferredName.blank? ? firstName : preferredName, lastName].join(' ')
   end
 #We'll do this better at some point.  
 #New->Create? Gets rid of the save in update_from_facebook  
   def self.create_from_facebook(data, authentication)
-    new.update_from_facebook(data, authentication) 
+    @response = MiniFB.get(authentication.token, authentication.uid)
+    new_person = Person.create(:firstName => data['first_name'], :lastName => data['last_name'])
+    new_person.update_from_facebook(data, authentication, @response)
+    new_person.get_first_time_only_login_data(authentication, @response)
+    
+    new_person
   end
   
-  def update_from_facebook(data, authentication)
-    self.firstName = data['first_name'] if firstName.blank?
-    self.lastName = data['last_name'] if lastName.blank?
+  def update_from_facebook(data, authentication, response = nil)
+    response = MiniFB.get(authentication.token, authentication.uid) if response.nil?
     self.birth_date = DateTime.strptime(data['birthday'], '%m/%d/%Y') if birth_date.blank? && data['birthday'].present?
-    save
+    self.gender = response.gender unless (response.gender.nil? && !gender.blank?)
     unless email_addresses.detect {|e| e.email == data['email']}
       email_addresses.create(:email => data['email'])
     end
-    # For some reason omniauth doesn't give us gender
-    self.gender = MiniFB.get(authentication.token, authentication.uid).gender if gender.blank?
     save
+    get_or_update_location(authentication, response)
     self
   end
   
@@ -65,17 +74,142 @@ class Person < ActiveRecord::Base
     email.save
   end
   
-  def firstName=(firstName)      #always map firstName setter to the firstName field
-    self[:firstName] = firstName
+  
+  def get_first_time_only_login_data(authentication = nil, response = nil, person = nil)
+    authentication = person.user.authentications.order("updated_at DESC").first unless authentication 
+    get_friends(authentication)
+    get_interests(authentication)
+    get_education_history(authentication, response)
   end
   
-  def firstName       # if preferredName is non-nil/null/'' output preferredName, else firstName
-    if ((preferredName != '') || (preferredName != NULL) || (preferredName != nil))
-      self.preferredName
-    else
-      self.firstName
+  def get_friends(authentication)
+    if friends.count == 0 
+      @friends = MiniFB.get(authentication.token, authentication.uid,:type => "friends")
+      @friends["data"].each do |friend|
+        friends.create(:uid => friend['id'], :name => friend['name'], :person_id => personID.to_i, :provider => "facebook")
+      end
     end
   end
+  
+  #
+  def update_friends(authentication)
+    @friends = MiniFB.get(authentication.token, authentication.uid,:type => "friends")
+    @friends = @friends["data"]
+    @removal = []
+    @create = []
+    @match = []
+    @dbf = friends.reload
+    
+    @friends.each do |friend|
+      @dbf.each do |dbf|
+        if dbf['uid'] == friend.id
+          @matching_friend = dbf if dbf['uid'] == friend.id
+          break
+        end
+        @matching_friend = nil
+      end
+      if @matching_friend
+        friends.find_by_uid(@matching_friend.uid).update_attributes(:name => friend['name']) unless @matching_friend.name.eql?(friend['name'])
+        @match.push(@matching_friend.uid)
+      elsif friends.find_by_uid(friend.id).nil? #uid's did not match && the DB is empty
+        friends.create!(:uid => friend['id'], :name => friend['name'], :person_id => personID.to_i, :provider => "facebook")
+        @create.push(friend['id'])
+      end
+    end
+     #    
+     # @friends.each do |friend|
+     #   @dbf2 = friends.find_by_uid(friend.id)
+     #   if friend.id == @dbf2.try(:uid)
+     #     @dbf2.update_attributes(:name => friend.name) unless friend.name == @dbf2.name
+     #     @match.push(@dbf2.uid)
+     #   elsif @dbf2.nil? #uid's did not match && @dbf2 is empty
+     #     friends.create!(:uid => friend['id'], :name => friend['name'], :person_id => personID.to_i, :provider => "facebook")
+     #     @create.push(friend['id'])
+     #   end
+     # end
+    @dbf = friends.reload
+    
+    @dbf.each do |dbf|
+      if !( @match.include?(dbf.uid) || @create.include?(dbf.uid) )
+        puts dbf.inspect
+        friend_to_delete = friends.select('id').where("uid = ?", dbf.uid).first
+        puts friend_to_delete.inspect
+        id_to_destroy = friend_to_delete['id'].to_i
+        Friend.destroy(id_to_destroy)
+        @removal.push(dbf.uid)
+      end
+    end
+    puts @create.inspect
+    puts @removal.inspect
+  end
+  
+  def get_interests(authentication)
+    @interests = MiniFB.get(authentication.token, authentication.uid,:type => "interests")
+    @interests["data"].each do |interest|
+      interests.find_or_initialize_by_interest_id_and_person_id_and_provider(interest['id'], personID.to_i, "facebook") do |i|
+        i.provider = "facebook"
+        i.category = interest['category']
+        i.name = interest['name']
+        i.interest_created_time = interest['created_time']
+      end
+      save
+    end
+  end
+  
+  def get_or_update_location(authentication, response = nil)
+    if response.nil?
+      @location = MiniFB.get(authentication.token, authentication.uid).location
+    else @location = response.location
+    end
+    Location.find_or_create_by_location_id_and_name_and_person_id_and_provider(@location['id'], @location['name'], personID.to_i,"facebook") unless @location.nil?
+  end
+  
+  def get_education_history(authentication, response = nil)
+    if response.nil?
+      @education = MiniFB.get(authentication.token, authentication.uid).education
+    else @education = response.education
+    end
+    unless @education.nil?
+      @education.each do |education|
+        education_histories.find_or_initialize_by_school_id_and_person_id_and_provider(education.school.try(:id), personID.to_i, "facebook") do |e|
+          e.year_id = education.year.try(:id) ? education.year.id : e.year_id
+          e.year_name = education.year.try(:name) ? education.year.name : e.year_name
+          e.school_type = education.try(:type) ? education.type : e.school_type
+          e.school_name = education.school.try(:name) ? education.school.name : e.school_name
+          unless education.try(:concentration).nil?
+            0.upto(education.concentration.length-1) do |c|
+              e["concentration_id#{c+1}"] = education.concentration[c].try(:id) ? education.concentration[c].id : e["concentration_id#{c+1}"]
+              e["concentration_name#{c+1}"] = education.concentration[c].try(:name) ? education.concentration[c].name : e["concentration_name#{c+1}"]
+            end
+          end
+          unless education.try(:degree).nil?
+            e.degree_id = education.degree.try(:id) ? education.degree.id : e.degree_id
+            e.degree_name = education.degree.try(:name) ? education.degree.name : e.degree_name
+          end
+          
+          save!          
+        end 
+      end
+        
+      # @education.each do |education|
+      #   education_histories.create!(:school_name => education.school.try(:name), :school_id => education.school.try(:id), 
+      #   :year_id => education.year.try(:id), :year_name => education.year.try(:name), 
+      #   :provider => "facebook", :person_id => personID.to_i) do |h|
+      #     h.school_type = education.type
+      #     if (education.try(:concentration).nil?) != true
+      #       0.upto(education.concentration.length-1) do |c|
+      #         h["concentration_id#{c+1}"] = education.concentration[c].id
+      #         h["concentration_name#{c+1}"] = education.concentration[c].name
+      #       end
+      #     end
+      #     if(education.try(:degree).nil?) != true
+      #       h.degree_id = education.degree.id
+      #       h.degree_name = education.degree.name
+      #     end
+      #   end
+      # end
+    end
+  end  
   
   def merge(other)
     # Phone Numbers

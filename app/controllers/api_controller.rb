@@ -1,133 +1,170 @@
-class ApiController < ApplicationController
-  skip_before_filter :authenticate_user!
-  #before_filter {valid_request?(request)}
-  oauth_required
-  
+class ApiController < ApplicationController  
   require 'Api_errors'
   include ApiErrors
-  
-  def user
-    #valid_request? ensures that their request is a legal api request.  if error, spits out an error message
-    valid_fields = valid_request?(request)
-    if params[:id]=="me"
-      user_id = oauth.identity
-    else
-      user_id = params[:id]
+#################################################################################
+#####CODE FROM http://www.starkiller.net/2011/03/17/versioned-api-1/  ###########
+#################################################################################
+  @@versions = {}
+  @@registered_methods = {}
+
+  class << self
+    alias_method :original_inherited, :inherited
+    def inherited(subclass)
+      original_inherited(subclass)
+    
+      load File.join("#{Rails.root}", "app", "controllers", 
+                     "api", "#{extract_filename(subclass)}")
+    
+      subclass.action_methods.each do |method|
+        regex = Regexp.new("^(.*)_(\\d+)$")
+        if match = regex.match(method)
+          key = "#{subclass.to_s}##{match[1]}"
+          @@versions[match[2].to_i] = true
+          @@registered_methods[key] ||= {}
+          @@registered_methods[key][match[2].to_i] = true
+      
+          subclass.instance_eval do
+            define_method(match[1].to_sym) {}
+          end
+        end
+      end
+      subclass.reset_action_methods
     end
- 
-    user = User.find_by_userID(user_id)
-    raise ApiErrors::NoDataReturned unless user
-    
-    person = user.person
-    
-    api_call = {}
-    #get their most recently authenticated facebook authorization entry
-    @fb_id = user.authentications.where(:provider => "facebook").order("updated_at DESC").first.uid
-    valid_fields.each do |x|
-      case x
-        when "id"
-          api_call[x] = user.userID
-        when "name"
-          api_call[x] = "#{person.firstName} #{person.lastName}"
-        when "first_name"
-          api_call[x] = person.firstName
-        when "last_name"
-          api_call[x] = person.lastName
-        when "gender" 
-          api_call[x] = person.gender
-        when "locale"
-          api_call[x] = user.locale ? user.locale : ""
-        when "lacation"
-          api_call[x] = ""
-        when "fb_id"
-          api_call[x] = @fb_id
-        when "birthday"
-          api_call[x] = person.birth_date
-        when "picture"
-          api_call[x] = "http://graph.facebook.com/#{@fb_id}/picture"
-        when "friends"
-          api_call[x] = ""
-        when "interests"
-          api_call[x] = ""
+  
+    def extract_filename(subclass)
+      classname = subclass.to_s.split('::')[1]
+      parts = classname.underscore.split('_')
+      "#{parts.reject{|c| c == 'controller'}.join('_')}_controller.rb"
+    end
+
+    def reset_action_methods
+      @action_methods = nil
+      action_methods
+    end
+  end
+  
+  
+  def versions
+    render :json => @@versions.keys.sort.reverse and return
+  end
+
+  def no_api_method
+    render :json => {"error" => "The requested method does not exist or is not\
+       enabled for the requested API version (v#{params[:version]})"}, 
+       :status => 404 and return
+  end
+
+
+  private
+  def protected_actions
+    ['versions','no_api_method']
+  end
+
+  alias_method :original_process_action, :process_action
+  def process_action(method_name, *args)
+    method = "no_api_method"
+    if protected_actions.include? method_name
+      method = method_name
+    else
+      if params[:version]
+        params[:version] = params[:version][1,params[:version].length - 1].to_i
+      else
+        params[:version] = @@versions.keys.max
+      end
+      method = find_method(method_name, params[:version])
+    end
+    #method = "no_api_method" unless valid_request?(request)
+    original_process_action(method, *args)
+  end
+
+  def find_method(method_name, version)
+    key = "#{self.class.to_s}##{method_name}"
+    versions = @@registered_methods[key].keys.sort
+  
+    final_method = 'no_api_method'
+
+    versions.reverse.each do |v|
+      if v <= version
+        final_method = "#{method_name}_#{v}"
+        break
       end
     end
-    render :text => api_call.to_json
+  
+    final_method
   end
   
-  def schools
-    result = School.select("targetAreaID, name, address1, city, state, zip").where('name LIKE ?', "%#{params[:term]}%").limit(100)
-    render :text => result.to_json
-  end
+  #########################################
+  #######Matt's Validation Methods#########
+  #########################################
   
   def valid_request?(request)
-    #retrieve the API action requested so we can match the right allowed fields
-    action = request.path_parameters[:action]
-    case action
-      when "me"
-        validator = Apic::API_ALLOWABLE[:user]
-      when "user"
-        validator = Apic::API_ALLOWABLE[:user]
-      when "schools"
-      else 
-        validator = Apic::API_ALLOWABLE[:user]
-        raise ApiErrors::InvalidRequest
-    end
-    
-    #Let's check to see if the fields query parameter is set first     
-    if params[:fields]
-      fields = params[:fields].split(',')
-      
-      valid_fields = valid_fields?(fields,validator)
-      if valid_fields.length == fields.length
-        if valid_scope?(valid_fields).length == valid_fields.length 
-          #valid_request = true
-        else 
-          #valid_request = false
-          raise ApiErrors::IncorrectScopeError
+    begin
+      #retrieve the API action requested so we can match the right allowed fields
+      action = request.path_parameters[:action]
+      # case action
+      #  when "user"
+      #    validator = Apic::API_ALLOWABLE_FIELDS[:user]
+      #  when "friends"
+      #    validator = Apic::API_ALLOWABLE_FIELDS[:friends]
+      #  else 
+      #    raise ApiErrors::InvalidRequest
+      #  end
+
+      #Let's check to see if the fields query parameter is set first     
+      if params[:fields]
+        fields = params[:fields].split(',')
+        
+        #Let's validate the fields that they entered into the query params
+        valid_fields = valid_fields?(fields, action)
+        if valid_fields.length == fields.length
+          raise ApiErrors::IncorrectScopeError unless valid_scope?(valid_fields).length == valid_fields.length 
+        else raise ApiErrors::InvalidFieldError
         end
       else
-        #valid_request = false
-        raise ApiErrors::InvalidFieldError
+        #if no fields supplied, check the scope for the action and go
+        raise ApiErrors::IncorrectScopeError unless true #valid_scope?(nil, action)
+        valid_fields = Apic::API_ALLOWABLE_FIELDS[action.to_sym]
       end
-    else
-      #if no fields supplied, give them all that we allow
-      valid_fields = validator
-      if valid_scope?(valid_fields).length == valid_fields.length
-        #valid_request = true
-      else
-        #valid_request = false
-        raise ApiErrors::IncorrectScopeError
-      end
-    end
+   # rescue Exception => e 
+    #  render :json => {"error" => "#{e.message}"}, 
+    #  :status => 404 and return
+    end    
   valid_fields
   end
   
-  def valid_fields?(fields,validator)
+  def valid_fields?(fields,action)
     #return fields that are valid
+    validator = [] unless Apic::API_ALLOWABLE_FIELDS[action.to_sym]
     valid_fields=[]
     fields.each do |field|
-      validator.each do |x|
-        if (x.eql?(field)) != false
-          valid_fields.push(field)    #push all of the fields that match onto valid_fields array
-          break
-        end
-      end
+      valid_fields.push(field) if validator.include?(field)    #push all of the fields that match onto valid_fields array
     end
     valid_fields
   end
   
-  def valid_scope?(fields)
+  def valid_scope?(fields, action)
     #return the fields that are in their allowed scope of those they requested
-    allowed_scopes = (Rack::OAuth2::Server.get_access_token(params[:access_token]).scope).split(' ')
+    allowed_scopes = Rack::OAuth2::Server.get_access_token(params[:access_token])
+    allowed_scopes = allowed_scopes.scope.to_s.split(' ')
+    
     valid_fields_by_scope = []
-    fields.each do |field|
-      allowed_scopes.each do |x|
-        if (Apic::SCOPE_REQUIRED[field].first.eql?(x))
-          valid_fields_by_scope.push(field)
+    if fields.nil?
+      Apic::SCOPE_REQUIRED[action.to_sym]["all"].each do |scope|
+        if allowed_scopes.include?(scope)
+          valid_fields_by_scope = true
           break
         end
       end
+    else
+      fields.each do |field|
+        if Apic::SCOPE_REQUIRED[action.to_sym].has_key?(field)
+          Apic::SCOPE_REQUIRED[action.to_sym][field].each do |scope|
+            valid_fields_by_scope.push(field) if allowed_scopes.include?(scope)
+          end
+        end
+      end
+      valid_fields_by_scope
     end
-    valid_fields_by_scope
-  end   
+  end
+
 end

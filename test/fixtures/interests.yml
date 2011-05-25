@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  interest_id: MyString
+  provider: MyString
+  category: MyString
+  created_time: 2011-05-19 13:56:26
+
+two:
+  name: MyString
+  interest_id: MyString
+  provider: MyString
+  category: MyString
+  created_time: 2011-05-19 13:56:26

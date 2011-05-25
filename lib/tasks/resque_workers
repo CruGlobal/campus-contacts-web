@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+INTERVAL=2 QUEUE=fb_critical rake environment resque:work
+INTERVAL=5 QUEUE=fb_slow rake environment resque:work

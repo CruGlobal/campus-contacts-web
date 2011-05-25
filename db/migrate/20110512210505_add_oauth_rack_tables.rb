@@ -8,7 +8,7 @@ class AddOauthRackTables < ActiveRecord::Migration
        t.string :link
        t.string :image_url
        t.string :redirect_uri
-       t.string :scope
+       t.string :scope, :default => ""
        t.string :notes
        t.timestamps
        t.datetime :revoked
@@ -21,7 +21,7 @@ class AddOauthRackTables < ActiveRecord::Migration
      create_table :auth_requests do |t|
        t.string :code
        t.string :client_id
-       t.string :scope
+       t.string :scope, :default => ""
        t.string :redirect_uri
        t.string :state
        t.string :response_type
@@ -39,7 +39,7 @@ class AddOauthRackTables < ActiveRecord::Migration
        t.string :code
        t.string :identity
        t.string :client_id
-       t.string :scope
+       t.string :scope, :default => ""
        t.timestamps
        t.datetime :expires_at
        t.datetime :revoked
@@ -56,7 +56,7 @@ class AddOauthRackTables < ActiveRecord::Migration
        t.string :identity
        t.string :client_id
        t.string :redirect_uri
-       t.string :scope
+       t.string :scope, :default => ""
        t.timestamps
        t.datetime :granted_at
        t.datetime :expires_at

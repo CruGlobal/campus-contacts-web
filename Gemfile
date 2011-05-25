@@ -10,7 +10,7 @@ gem 'capistrano'
 gem 'rest-client'
 gem 'crack'
 gem 'resque'
-gem "devise"#, :git => "http://github.com/plataformatec/devise.git"
+gem "devise", :git => "http://github.com/plataformatec/devise.git"
 gem "oa-oauth", :require => "omniauth/oauth"
 gem 'mini_fb'
 gem 'client_side_validations'

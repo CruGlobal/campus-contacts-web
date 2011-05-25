@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  person_id: MyString
+  type: MyString
+  concentration_id: MyString
+  concentration_name: MyString
+  year_id: MyString
+  year_name: 1
+  degree_id: MyString
+  degree_name: MyString
+  school_id: MyString
+  school_name: MyString
+
+two:
+  person_id: MyString
+  type: MyString
+  concentration_id: MyString
+  concentration_name: MyString
+  year_id: MyString
+  year_name: 1
+  degree_id: MyString
+  degree_name: MyString
+  school_id: MyString
+  school_name: MyString

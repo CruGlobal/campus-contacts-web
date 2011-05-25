@@ -77,8 +77,11 @@ Ma::Application.routes.draw do
   end
 
   #test validated api call
-  match 'api/:id' => 'api#user'
-  match 'api/getschools' => 'api#getschools'
+  scope 'api(/:version)', :module => :api, :version => /v\d+?/ do
+    get 'user/:id' => 'user#user', :as => "api_user_view"
+    get 'user/:id/friends' => 'user#friends', :as => "api_user_friends"
+  end
+
   #other oauth calls
   match "oauth/authorize" => "oauth#authorize"
   match "oauth/grant" => "oauth#grant"

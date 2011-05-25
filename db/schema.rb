@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110517191554) do
+ActiveRecord::Schema.define(:version => 20110523171721) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -867,6 +867,21 @@ ActiveRecord::Schema.define(:version => 20110517191554) do
     t.integer "reportGroup"
     t.string  "sorts",       :limit => 1000
     t.string  "sortNames",   :limit => 1000
+  end
+
+  create_table "education_histories", :force => true do |t|
+    t.string   "person_id"
+    t.string   "type"
+    t.string   "concentration_id"
+    t.string   "concentration_name"
+    t.string   "year_id"
+    t.integer  "year_name"
+    t.string   "degree_id"
+    t.string   "degree_name"
+    t.string   "school_id"
+    t.string   "school_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "email_addresses", :force => true do |t|
@@ -1787,6 +1802,35 @@ ActiveRecord::Schema.define(:version => 20110517191554) do
 
   add_index "merge_audits", ["merge_looser_id", "merge_looser_type"], :name => "merge_looser"
   add_index "merge_audits", ["mergeable_id", "mergeable_type"], :name => "mergeable"
+
+  create_table "mh_friend", :force => true do |t|
+    t.string   "name"
+    t.string   "uid"
+    t.string   "provider"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "person_id"
+  end
+
+  create_table "mh_interest", :force => true do |t|
+    t.string   "name"
+    t.string   "interest_id"
+    t.string   "provider"
+    t.string   "category"
+    t.datetime "interest_created_time"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "person_id"
+  end
+
+  create_table "mh_location", :force => true do |t|
+    t.string   "location_id"
+    t.string   "name"
+    t.string   "provider"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "person_id"
+  end
 
   create_table "ministries", :force => true do |t|
     t.string "name"
