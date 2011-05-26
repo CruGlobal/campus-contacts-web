@@ -52,10 +52,11 @@ class SmsKeywords::QuestionsController < ApplicationController
   def create
     if (params[:question_id])
       @question = Element.find(params[:question_id])
-      @keyword.question_page.elements << @question
     else
-      @question = @keyword.question_sheet.elements.create(params[:question])
+      type, style = params[:question_type].split(':')
+      @question = type.constantize.create!(params[:question].merge(:style => style))
     end
+    @keyword.question_page.elements << @question
 
     respond_to do |wants|
       if !@question.new_record?
@@ -78,7 +79,7 @@ class SmsKeywords::QuestionsController < ApplicationController
   def update
     respond_to do |wants|
       if @question.update_attributes(params[:question])
-        flash[:notice] = '@keyword.question_sheet.elements.was successfully updated.'
+        flash[:notice] = 'Question was successfully updated.'
         wants.html { redirect_to(@question) }
         wants.xml  { head :ok }
       else
@@ -107,7 +108,7 @@ class SmsKeywords::QuestionsController < ApplicationController
 
   private
     def find_question
-      @question = @keyword.question_sheet.elements.find(params[:id])
+      @question = @keyword.question_page.elements.find(params[:id])
     end
     
     def find_keyword

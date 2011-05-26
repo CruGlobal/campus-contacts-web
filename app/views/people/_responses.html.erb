@@ -36,7 +36,7 @@
           <tr id="<%= dom_id(person) %>">
             <td><%= check_box_tag 'ids[]', person.id, false, :id => "ids_#{person.id}", :class => 'id_checkbox' %></td>
             <% @question_sheet.questions.each do |q| %>
-              <td><%= q.response(answer_sheet) %></td>
+              <td><%= q.display_response(answer_sheet) %></td>
             <% end %>
             <td id="assigned_to_<%= person.id %>"><%= ContactAssignment.where(:person_id => person.id, :question_sheet_id => @question_sheet.id).first.try(:assigned_to) %></td>
             <td>

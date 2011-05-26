@@ -3,26 +3,21 @@ $ ->
 		$(this).closest('tr').fadeOut()
 		$(this).closest('tr').remove()
 		false
-	$('.drag').live 'click', -> 
-		false
 	
-	sortable_options = 
-		axis:'y'
-		dropOnEmpty:false
-		update: (event, ui) -> 
-			sortable = this
-			$.ajax({
-				data:$(this).sortable('serialize',{key:sortable.id + '[]'})
-				complete: (request) ->
-					$(sortable).effect('highlight')
-				success: (request) -> 
-					$('#errors').html(request)
-				type:'POST', 
-				url: $(sortable).attr('data-sortable-url')
-			})
+	$('#question_type').change ->
+		switch $(this).val()
+			when ''
+				$('#multiple_choice_form').hide()
+				$('#short_answer_form').hide()
+			when 'TextField:short'
+				$('#multiple_choice_form').hide()
+				$('#short_answer_form').show()
+			else
+				$('#short_answer_form').show()
+				$('#multiple_choice_form').show()
 	
-	$('[data-sortable]').sortable(sortable_options)
-	
-	$('[data-sortable][data-sortable-handle]').each ->
-		handle = $(this).attr('data-sortable-handle');
-		$(this).sortable("option", "handle", handle);
+	$('#new_question').submit ->
+		$('#question_form').slideUp 2000
+	.bind 'ajax:complete', ->
+		$('#new_question')[0].reset()
+		$('#question_type').change()

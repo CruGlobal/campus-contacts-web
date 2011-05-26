@@ -26,7 +26,7 @@
       confirm_delete: "Are you sure you want to dissociate yourself from %{org}"
     welcome:
       index:
-        title_top: "Welcome to Mission Accelerator!"
+        title_top: "Welcome to MissionHub!"
         go_home: 'Go to your dashboard'
         request_key: "Click here to request an sms keyword."
       home:
@@ -40,6 +40,12 @@
     questions:
       create:
         notice: 'Question was successfully created.'
+      form: 
+        what_question_type: What type of question would you like to ask?
+        short_answer: 'Short Answer'
+        multiple_choice: 'Multiple Choice'
+        checkboxes: 'Checkboxes'
+        dropdown: 'Dropdown'
     keywords:
       edit:
         heading: Editing Keyword
@@ -54,6 +60,7 @@
         initial_response: 'What response should we send back to people when they text in? If you want the person to complete a survey, the response MUST include {{ link }}'
         post_survey_message: 'What message would you like to show after the person has completed the survey?'
         chartfield: 'A keyword costs $7/month. Please enter a chart field to be billed for this keyword.'
+        organization: "You are associated with more than one organization or ministry. Which one would you like to associate this keyword with?"
     contacts:
       thanks:
         message: Thank you for your interest.

@@ -22,7 +22,7 @@ module Ccc
                       when other.attributes[k].blank? then v
                       when v.blank? then other.attributes[k]
                       else
-                        other.dateChanged > dateChanged ? other.attributes[k] : v
+                        other.dateChanged && dateChanged && other.dateChanged > dateChanged ? other.attributes[k] : v
                       end
           end
           

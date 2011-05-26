@@ -1,27 +1,35 @@
-<%= form_tag do %>
-  <h3>Predefined Questions</h3>
-  <table border="0" cellspacing="5" cellpadding="0">
-    <thead>
-      <tr>
-        <th>Question</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody id="predefined_questions">
-      <% @predefined.questions.each do |question| %>
-        <% unless @questions.include?(question) %>
-          <%= render 'predefined_question', :question => question %>
-        <% end %>
+<h3>Predefined Questions</h3>
+<table border="0" cellspacing="5" cellpadding="0">
+  <thead>
+    <tr>
+      <th>Question</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="predefined_questions">
+    <% @predefined.questions.each do |question| %>
+      <% unless @questions.include?(question) %>
+        <%= render 'predefined_question', :question => question %>
       <% end %>
-    </tbody>
-  </table>
-  <h3>Your Questions (drag to sort)</h3>
-  <table border="0" cellspacing="5" cellpadding="0">
-    <tbody id="questions" data-sortable="true" data-sortable-url="<%= reorder_sms_keyword_questions_path(@keyword) %>">
-      <%= render :partial => 'question', :collection => @questions %>
-    </tbody>
-  </table>
-  <%= link_to('Add a question', '#', :onclick => "alert(\"This link doesn't work yet\"); return false") %>
-<% end %>
+    <% end %>
+  </tbody>
+</table>
+<h3>Your Questions (drag to sort)</h3>
+<table border="0" cellspacing="5" cellpadding="0">
+  <tbody id="questions" data-sortable="true" data-sortable-url="<%= reorder_sms_keyword_questions_path(@keyword) %>">
+    <%= render :partial => 'question', :collection => @questions %>
+  </tbody>
+</table>
+<%= link_to('Add a question', '#', :onclick => "$('#question_form').slideDown()") %>
+<div id="question_form" style="display:none">
+  <%= render 'form' %>
+</div>
 <br/><br/>
 <%= link_to('Preview Form', contact_form_path(:keyword => @keyword.keyword), :target => '_blank')%>
+|
+<%= link_to('Back to Dashboard', user_root_path) %>
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+    $('#question_type').change()
+  })
+</script>
