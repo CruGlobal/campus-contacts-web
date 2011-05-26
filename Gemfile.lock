@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/romanbsd/translate.git
+  revision: 01f2c402075183718edd496300814a4a9c40a6eb
+  specs:
+    translate-rails3 (0.1.1)
+      ya2yaml (~> 0.30)
+
+GIT
   remote: git://github.com/twinge/rails_admin.git
   revision: 6aeb333d47b69f8128e48141e54d5fea9d1cba25
   specs:
@@ -12,13 +19,6 @@ GIT
     rubycas-client-rails (0.0.1)
       rails (>= 3.0.0)
       rubycas-client (>= 2.1.0)
-
-GIT
-  remote: https://github.com/romanbsd/translate.git
-  revision: 01f2c402075183718edd496300814a4a9c40a6eb
-  specs:
-    translate-rails3 (0.1.1)
-      ya2yaml (~> 0.30)
 
 GEM
   remote: http://rubygems.org/

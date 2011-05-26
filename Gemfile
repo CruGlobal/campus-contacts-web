@@ -26,7 +26,7 @@ gem 'dynamic_form'
 gem 'coffee-script'
 gem 'uglifier'
 
-gem 'translate-rails3', :require => 'translate', :git => 'https://github.com/romanbsd/translate.git'
+gem 'translate-rails3', :require => 'translate', :git => 'git://github.com/romanbsd/translate.git'
 gem 'enforce_schema_rules'
 # gem 'sentient_user'
 gem 'paper_trail', '~> 2'
