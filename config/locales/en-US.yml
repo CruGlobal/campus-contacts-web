@@ -13,6 +13,15 @@
       back: "Back"
       remove: 'Remove'
 
+    people: 
+      index:
+        leaders: Leaders
+        assign_to: "Assign To:"
+        assigned_to: "Assigned To"
+        all_responses: "Showing everyone who responded to '%{keyword}'"
+        responses_assigned_to: "Showing people assigned to %{assigned_to} who responded to '%{keyword}'"
+        unassigned_responses: "Showing Unassigned people who responded to '%{keyword}'"
+        none_checked: "Hey moron! You didn't select any contacts to assign."
     org_membership:
       confirm_delete: "Are you sure you want to dissociate yourself from %{org}"
     welcome:
@@ -27,6 +36,7 @@
         edit_keyword: 'Edit Keyword'
         your_orgs: 'Your Organizational Involvements'
         edit_orgs: 'Edit your organizational involvements.'
+        follow_up: 'Follow-up'
     questions:
       create:
         notice: 'Question was successfully created.'

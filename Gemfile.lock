@@ -116,6 +116,7 @@ GEM
     i18n (0.6.0beta1)
     json (1.4.3)
     json_pure (1.4.6)
+    kgio (2.4.1)
     mail (2.3.0)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -197,6 +198,9 @@ GEM
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.27)
+    unicorn (3.6.2)
+      kgio (~> 2.3)
+      rack
     validation_reflection (0.3.7)
     validation_reflection-active_model (0.3.1)
       validation_reflection (= 0.3.7)
@@ -240,3 +244,4 @@ DEPENDENCIES
   sqlite3-ruby
   state_machine
   translate-rails3!
+  unicorn

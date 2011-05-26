@@ -1,5 +1,7 @@
 Ma::Application.routes.draw do
   
+  resources :contact_assignments
+
   resources :organization_memberships
 
   resources :schools
@@ -84,5 +86,5 @@ Ma::Application.routes.draw do
 
   # Map keyword responses with phone numbers
   match 'c/:keyword(/:received_sms_id)' => 'contacts#new', :as => 'contact_form'
-  match 'm/:received_sms_id' => 'contacts#new', :as => 'contact_form'
+  match 'm/:received_sms_id' => 'contacts#new'
 end
