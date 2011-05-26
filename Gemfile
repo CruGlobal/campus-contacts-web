@@ -30,6 +30,7 @@ gem 'translate-rails3', :require => 'translate', :git => 'https://github.com/rom
 gem 'enforce_schema_rules'
 # gem 'sentient_user'
 gem 'paper_trail', '~> 2'
+gem 'unicorn'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

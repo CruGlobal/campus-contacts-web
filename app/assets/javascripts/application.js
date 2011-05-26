@@ -4,4 +4,5 @@
 //= require jquery_ujs
 //= require ma
 //= require questions
+//= require people
 //= require rails.validations

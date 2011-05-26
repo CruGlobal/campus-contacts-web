@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  assigned_to_id: 1
+  person_id: 1
+  question_sheet_id: 1
+
+two:
+  assigned_to_id: 1
+  person_id: 1
+  question_sheet_id: 1
