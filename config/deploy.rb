@@ -45,8 +45,8 @@ end
   
 task :production do
   set :deploy_to, "/var/www/html/production/#{application}"
-  # set :environment, 'production'
-  # set :rails_env, 'production'
+  set :environment, 'production'
+  set :rails_env, 'production'
 end
 
 
@@ -83,10 +83,8 @@ task :local_changes, :roles => :app do
     export LD_LIBRARY_PATH=/opt/oracle/instantclient_10_2 &&
     cd #{release_path} && bundle install --deployment --without development &&
     ln -s #{shared_path}/config/database.yml #{release_path}/config/database.yml &&
-    ln -s #{shared_path}/config/amazon_s3.yml #{release_path}/config/amazon_s3.yml &&
-    ln -s #{shared_path}/config/facebook.yml #{release_path}/config/facebook.yml &&
+    ln -s #{shared_path}/config/config.yml #{release_path}/config/config.yml &&
     ln -s #{shared_path}/config/initializers/email.rb #{release_path}/config/initializers/email.rb &&
-    ln -s #{shared_path}/config/initializers/active_merchant.rb #{release_path}/config/initializers/active_merchant.rb &&
     
     
     mkdir -p -m 770 #{shared_path}/tmp/{cache,sessions,sockets,pids} &&
@@ -113,22 +111,12 @@ task :long_deploy do
   # deploy.enable_web
 end
 
-desc "Automatically run cleanup"
-task :after_deploy, :roles => :app do
-  deploy.cleanup
+
+task :package_assets, :roles => :app do
+  run "cd #{release_path} && rake assets:precompile RAILS_ENV=#{rails_env}"
 end
 
-namespace :deploy do
-  desc 'Bundle and minify the JS and CSS files'
-  task :precache_assets, :roles => :app do
-    root_path = File.expand_path(File.dirname(__FILE__) + '/..')
-    assets_path = "#{root_path}/public/packages"
-    gem_path = ENV['GEM_PATH']
-    run_locally "jammit"
-    top.upload assets_path, "#{current_release}/public", :via => :scp, :recursive => true
-  end
-end
-after 'deploy:symlink', 'deploy:precache_assets'
-
+after "deploy:update_code", "package_assets"
+after "deploy", "deploy:cleanup"
 # require 'config/boot'
 require 'hoptoad_notifier/capistrano'
