@@ -12,7 +12,7 @@ class FriendTest < ActiveSupport::TestCase
       @person = Factory(:person)
     end
     should "be able to add a friend" do
-      friend1 = @person.friend.create(:provider => "facebook", :name => "Books", :person_id => @person.personID.to_i, :uid => "1")
+      friend1 = @person.friends.create(:provider => "facebook", :name => "Books", :person_id => @person.personID.to_i, :uid => "1")
       assert friend1.valid?
     end
   end

@@ -40,6 +40,7 @@ class Person < ActiveRecord::Base
     response = MiniFB.get(authentication.token, authentication.uid) if response.nil?
     self.birth_date = DateTime.strptime(data['birthday'], '%m/%d/%Y') if birth_date.blank? && data['birthday'].present?
     self.gender = response.gender unless (response.gender.nil? && !gender.blank?)
+    save!
     unless email_addresses.detect {|e| e.email == data['email']}
       email_addresses.create(:email => data['email'])
     end
@@ -82,18 +83,25 @@ class Person < ActiveRecord::Base
     get_education_history(authentication, response)
   end
   
-  def get_friends(authentication)
+  def get_friends(authentication, response = nil)
     if friends.count == 0 
-      @friends = MiniFB.get(authentication.token, authentication.uid,:type => "friends")
+      if response.nil?
+         @friends = MiniFB.get(authentication.token, authentication.uid,:type => "friends")
+      else @friends = response
+      end
       @friends["data"].each do |friend|
         friends.create(:uid => friend['id'], :name => friend['name'], :person_id => personID.to_i, :provider => "facebook")
       end
     end
+    @friends["data"].length  #return how many friend you got from facebook for testing
   end
   
   #
-  def update_friends(authentication)
-    @friends = MiniFB.get(authentication.token, authentication.uid,:type => "friends")
+  def update_friends(authentication,response = nil)
+      if response.nil?
+         @friends = MiniFB.get(authentication.token, authentication.uid,:type => "friends")
+      else @friends = response
+      end
     @friends = @friends["data"]
     @removal = []
     @create = []
@@ -128,8 +136,7 @@ class Person < ActiveRecord::Base
         @removal.push(dbf.uid)
       end
     end
-    puts @create.inspect
-    puts @removal.inspect
+    @removal.length + @create.length  #create way to test how many changes were made
   end
   
   def get_interests(authentication)
@@ -143,6 +150,7 @@ class Person < ActiveRecord::Base
       end
       save
     end
+    interests.count
   end
   
   def get_location(authentication, response = nil)
@@ -156,7 +164,7 @@ class Person < ActiveRecord::Base
   def get_education_history(authentication, response = nil)
     if response.nil?
       @education = MiniFB.get(authentication.token, authentication.uid).education
-    else @education = response.education
+    else @education = response.try(:education)
     end
     unless @education.nil?
       @education.each do |education|
@@ -175,8 +183,7 @@ class Person < ActiveRecord::Base
             e.degree_id = education.degree.try(:id) ? education.degree.id : e.degree_id
             e.degree_name = education.degree.try(:name) ? education.degree.name : e.degree_name
           end
-          
-          save!          
+          save!       
         end 
       end
     end

@@ -1,4 +1,6 @@
 class Api::UserController < ApiController
+  require 'api_helper'
+  include ApiHelper  
   skip_before_filter :authenticate_user!
   oauth_required
   
