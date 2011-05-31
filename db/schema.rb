@@ -16,6 +16,51 @@ ActiveRecord::Schema.define(:version => 20110526125711) do
     t.string "name"
   end
 
+  create_table "access_grants", :force => true do |t|
+    t.string   "code"
+    t.string   "identity"
+    t.string   "client_id"
+    t.string   "redirect_uri"
+    t.string   "scope"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "granted_at"
+    t.datetime "expires_at"
+    t.string   "access_token"
+    t.datetime "revoked"
+  end
+
+  add_index "access_grants", ["client_id"], :name => "index_access_grants_on_client_id"
+  add_index "access_grants", ["code"], :name => "index_access_grants_on_code", :unique => true
+
+  create_table "access_grantsold", :force => true do |t|
+    t.string   "code"
+    t.string   "access_token"
+    t.string   "refresh_token"
+    t.datetime "access_token_expires_at"
+    t.integer  "user_id"
+    t.integer  "application_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "access_tokens", :force => true do |t|
+    t.string   "code"
+    t.string   "identity"
+    t.string   "client_id"
+    t.string   "scope"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "expires_at"
+    t.datetime "revoked"
+    t.datetime "last_access"
+    t.datetime "prev_access"
+  end
+
+  add_index "access_tokens", ["client_id"], :name => "index_access_tokens_on_client_id"
+  add_index "access_tokens", ["code"], :name => "index_access_tokens_on_code", :unique => true
+  add_index "access_tokens", ["identity"], :name => "index_access_tokens_on_identity"
+
   create_table "activities", :force => true do |t|
     t.integer  "target_area_id"
     t.integer  "organization_id"
@@ -32,6 +77,24 @@ ActiveRecord::Schema.define(:version => 20110526125711) do
     t.string "name"
   end
 
+  create_table "auth_requests", :force => true do |t|
+    t.string   "code"
+    t.string   "client_id"
+    t.string   "scope"
+    t.string   "redirect_uri"
+    t.string   "state"
+    t.string   "response_type"
+    t.string   "grant_code"
+    t.string   "access_token"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "authorized_at"
+    t.datetime "revoked"
+  end
+
+  add_index "auth_requests", ["client_id"], :name => "index_auth_requests_on_client_id"
+  add_index "auth_requests", ["code"], :name => "index_auth_requests_on_code"
+
   create_table "authentications", :force => true do |t|
     t.integer  "user_id"
     t.string   "provider"
@@ -40,6 +103,40 @@ ActiveRecord::Schema.define(:version => 20110526125711) do
     t.datetime "updated_at"
     t.string   "token"
   end
+
+  add_index "authentications", ["provider", "uid"], :name => "index_authentications_on_provider_and_uid", :unique => true
+
+  create_table "client_applications", :force => true do |t|
+    t.string   "name"
+    t.string   "app_id"
+    t.string   "app_secret"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
+    t.string   "url",          :limit => 60
+    t.string   "callback_url", :limit => 60
+    t.string   "support_url",  :limit => 60
+    t.string   "key",          :limit => 60
+    t.string   "secret",       :limit => 60
+  end
+
+  create_table "clients", :force => true do |t|
+    t.string   "code"
+    t.string   "secret"
+    t.string   "display_name"
+    t.string   "link"
+    t.string   "image_url"
+    t.string   "redirect_uri"
+    t.string   "scope"
+    t.string   "notes"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "revoked"
+  end
+
+  add_index "clients", ["code"], :name => "index_clients_on_code", :unique => true
+  add_index "clients", ["display_name"], :name => "index_clients_on_display_name", :unique => true
+  add_index "clients", ["link"], :name => "index_clients_on_link", :unique => true
 
   create_table "cms_assoc_filecategory", :id => false, :force => true do |t|
     t.string  "CmsFileID",     :limit => 64,                   :null => false
@@ -1644,6 +1741,55 @@ ActiveRecord::Schema.define(:version => 20110526125711) do
   add_index "merge_audits", ["merge_looser_id", "merge_looser_type"], :name => "merge_looser"
   add_index "merge_audits", ["mergeable_id", "mergeable_type"], :name => "mergeable"
 
+  create_table "mh_education_history", :force => true do |t|
+    t.string   "person_id"
+    t.string   "school_type"
+    t.string   "concentration_id1"
+    t.string   "concentration_name1"
+    t.string   "year_id"
+    t.integer  "year_name"
+    t.string   "degree_id"
+    t.string   "degree_name"
+    t.string   "school_id"
+    t.string   "school_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "provider"
+    t.string   "concentration_name2"
+    t.string   "concentration_name3"
+    t.string   "concentration_id2"
+    t.string   "concentration_id3"
+  end
+
+  create_table "mh_friend", :force => true do |t|
+    t.string   "name"
+    t.string   "uid"
+    t.string   "provider"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "person_id"
+  end
+
+  create_table "mh_interest", :force => true do |t|
+    t.string   "name"
+    t.string   "interest_id"
+    t.string   "provider"
+    t.string   "category"
+    t.datetime "interest_created_time"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "person_id"
+  end
+
+  create_table "mh_location", :force => true do |t|
+    t.string   "location_id"
+    t.string   "name"
+    t.string   "provider"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "person_id"
+  end
+
   create_table "ministries", :force => true do |t|
     t.string "name"
   end
@@ -1785,9 +1931,6 @@ ActiveRecord::Schema.define(:version => 20110526125711) do
     t.boolean "is_leader"
   end
 
-  add_index "ministry_missional_team_member", ["personID"], :name => "personID"
-  add_index "ministry_missional_team_member", ["teamID"], :name => "teamID"
-
   create_table "ministry_movement_contact", :id => false, :force => true do |t|
     t.integer "personID"
     t.integer "ActivityID"
@@ -1838,6 +1981,46 @@ ActiveRecord::Schema.define(:version => 20110526125711) do
   add_index "ministry_newaddress", ["addressType"], :name => "index_ministry_newAddress_on_addressType"
   add_index "ministry_newaddress", ["email"], :name => "email"
   add_index "ministry_newaddress", ["fk_PersonID"], :name => "fk_PersonID"
+
+  create_table "ministry_newaddress_restore", :primary_key => "addressID", :force => true do |t|
+    t.string   "deprecated_startDate", :limit => 25
+    t.string   "deprecated_endDate",   :limit => 25
+    t.string   "address1",             :limit => 55
+    t.string   "address2",             :limit => 55
+    t.string   "address3",             :limit => 55
+    t.string   "address4",             :limit => 55
+    t.string   "city",                 :limit => 50
+    t.string   "state",                :limit => 50
+    t.string   "zip",                  :limit => 15
+    t.string   "country",              :limit => 64
+    t.string   "homePhone",            :limit => 25
+    t.string   "workPhone",            :limit => 25
+    t.string   "cellPhone",            :limit => 25
+    t.string   "fax",                  :limit => 25
+    t.string   "email",                :limit => 200
+    t.string   "url",                  :limit => 100
+    t.string   "contactName",          :limit => 50
+    t.string   "contactRelationship",  :limit => 50
+    t.string   "addressType"
+    t.datetime "dateCreated"
+    t.datetime "dateChanged"
+    t.string   "createdBy",            :limit => 50
+    t.string   "changedBy",            :limit => 50
+    t.string   "fk_PersonID"
+    t.string   "email2",               :limit => 200
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.string   "facebook_link"
+    t.string   "myspace_link"
+    t.string   "title"
+    t.string   "dorm"
+    t.string   "room"
+  end
+
+  add_index "ministry_newaddress_restore", ["addressType", "fk_PersonID"], :name => "unique_person_addressType", :unique => true
+  add_index "ministry_newaddress_restore", ["addressType"], :name => "index_ministry_newaddress_restore_on_addressType"
+  add_index "ministry_newaddress_restore", ["email"], :name => "email"
+  add_index "ministry_newaddress_restore", ["fk_PersonID"], :name => "fk_PersonID"
 
   create_table "ministry_noncccmin", :primary_key => "NonCccMinID", :force => true do |t|
     t.string "ministry",    :limit => 50
@@ -2540,6 +2723,33 @@ ActiveRecord::Schema.define(:version => 20110526125711) do
     t.string "period"
   end
 
+  create_table "oauth_nonces", :force => true do |t|
+    t.string   "nonce"
+    t.integer  "timestamp"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "oauth_nonces", ["nonce", "timestamp"], :name => "index_oauth_nonces_on_nonce_and_timestamp", :unique => true
+
+  create_table "oauth_tokens", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "type",                  :limit => 20
+    t.integer  "client_application_id"
+    t.string   "token",                 :limit => 40
+    t.string   "secret",                :limit => 40
+    t.string   "callback_url"
+    t.string   "verifier",              :limit => 20
+    t.string   "scope"
+    t.datetime "authorized_at"
+    t.datetime "invalidated_at"
+    t.datetime "valid_to"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "oauth_tokens", ["token"], :name => "index_oauth_tokens_on_token", :unique => true
+
   create_table "old_wsn_sp_wsnapplication", :primary_key => "WsnApplicationID", :force => true do |t|
     t.string   "oldPrimaryKey",                 :limit => 64
     t.string   "surferID",                      :limit => 64
@@ -2786,6 +2996,42 @@ ActiveRecord::Schema.define(:version => 20110526125711) do
   add_index "old_wsn_sp_wsnapplication", ["region"], :name => "index11"
   add_index "old_wsn_sp_wsnapplication", ["status"], :name => "index8"
   add_index "old_wsn_sp_wsnapplication", ["wsnYear"], :name => "index9"
+
+  create_table "oncampus_orders", :force => true do |t|
+    t.integer  "person_id"
+    t.string   "purpose",                    :limit => 100,                          :null => false
+    t.string   "payment",                    :limit => 100,                          :null => false
+    t.boolean  "format_dvd",                                :default => true,        :null => false
+    t.boolean  "format_quicktime",                          :default => false,       :null => false
+    t.boolean  "format_flash",                              :default => false,       :null => false
+    t.string   "campus",                     :limit => 100,                          :null => false
+    t.string   "campus_state",               :limit => 50,                           :null => false
+    t.string   "commercial_movement_name",   :limit => 200,                          :null => false
+    t.string   "commercial_school_name",     :limit => 200
+    t.text     "commercial_additional_info"
+    t.boolean  "user_agreement",                            :default => false,       :null => false
+    t.string   "status",                     :limit => 20,  :default => "submitted", :null => false
+    t.datetime "created_at",                                                         :null => false
+    t.string   "commercial_website",         :limit => 300
+    t.boolean  "commercial_logo",                           :default => true
+    t.string   "color",                      :limit => 20,  :default => "#FFFFFF"
+    t.datetime "produced_at"
+    t.datetime "shipped_at"
+  end
+
+  create_table "oncampus_uses", :force => true do |t|
+    t.integer  "order_id",                                             :null => false
+    t.string   "type",               :limit => 20,                     :null => false
+    t.string   "context",            :limit => 20,                     :null => false
+    t.string   "title",              :limit => 150,                    :null => false
+    t.datetime "date_start"
+    t.datetime "date_end"
+    t.boolean  "single_event",                      :default => false, :null => false
+    t.boolean  "commercial_frisbee",                :default => false, :null => false
+    t.boolean  "commercial_ramen",                  :default => false, :null => false
+    t.text     "description",                                          :null => false
+    t.text     "feedback",                                             :null => false
+  end
 
   create_table "organization_memberships", :force => true do |t|
     t.integer  "organization_id"
@@ -3331,6 +3577,7 @@ ActiveRecord::Schema.define(:version => 20110526125711) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "last_sign_in_at"
+    t.string   "locale"
   end
 
   add_index "simplesecuritymanager_user", ["email"], :name => "index_simplesecuritymanager_user_on_email", :unique => true

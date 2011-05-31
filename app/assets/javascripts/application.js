@@ -6,3 +6,4 @@
 //= require questions
 //= require people
 //= require rails.validations
+//= require oauthadmin
