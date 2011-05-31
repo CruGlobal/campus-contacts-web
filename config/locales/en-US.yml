@@ -30,6 +30,7 @@
         go_home: 'Go to your dashboard'
         request_key: "Click here to request an sms keyword."
       home:
+        title_top: "Welcome to MissionHub!"
         subtitle: "Your Keywords"
         request_another_key: "Click here to request another sms keyword."
         manage_questions: "Manage Questions"
@@ -37,6 +38,7 @@
         your_orgs: 'Your Organizational Involvements'
         edit_orgs: 'Edit your organizational involvements.'
         follow_up: 'Follow-up'
+        delete: "Delete"
     questions:
       create:
         notice: 'Question was successfully created.'

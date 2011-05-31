@@ -1,6 +1,6 @@
 class ContactsController < ApplicationController
   before_filter :get_person
-  before_filter :get_keyword, :only => [:new, :update]
+  before_filter :get_keyword, :only => [:new, :update, :thanks]
   
   def new
     if params[:received_sms_id]
@@ -28,7 +28,6 @@ class ContactsController < ApplicationController
   end
   
   def thanks
-    
   end
   
   protected
@@ -36,6 +35,7 @@ class ContactsController < ApplicationController
     def get_keyword
       @keyword = SmsKeyword.where(:keyword => params[:keyword]).first if params[:keyword]
     end
+    
     def get_person
       @person = current_user.person
     end

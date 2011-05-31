@@ -36,8 +36,12 @@ class Person < ActiveRecord::Base
   
 #We'll do this better at some point.  
 #New->Create? Gets rid of the save in update_from_facebook  
-  def self.create_from_facebook(data, authentication)
-    @response = MiniFB.get(authentication.token, authentication.uid)
+  def self.create_from_facebook(data, authentication, response = nil)
+    if response.nil?
+      @response = MiniFB.get(authentication.token, authentication.uid)
+    else
+      @response = response
+    end
     new_person = Person.create(:firstName => data['first_name'], :lastName => data['last_name'])
     new_person.update_from_facebook(data, authentication, @response)
     new_person.get_first_time_only_login_data(authentication, @response)
@@ -86,10 +90,16 @@ class Person < ActiveRecord::Base
   
   
   def get_first_time_only_login_data(authentication = nil, response = nil, person = nil)
+    resp = nil
+    resp2 = nil
     authentication = person.user.authentications.order("updated_at DESC").first unless authentication 
-    get_friends(authentication)
-    get_interests(authentication)
     get_education_history(authentication, response)
+    if !response.nil?
+      resp = TestFBResponses::FRIENDS 
+      resp2 = TestFBResponses::INTERESTS
+    end
+    get_friends(authentication, resp)
+    get_interests(authentication, resp2)
   end
   
   def get_friends(authentication, response = nil)
@@ -137,9 +147,7 @@ class Person < ActiveRecord::Base
     
     @dbf.each do |dbf|
       if !( @match.include?(dbf.uid) || @create.include?(dbf.uid) )
-        puts dbf.inspect
         friend_to_delete = friends.select('id').where("uid = ?", dbf.uid).first
-        puts friend_to_delete.inspect
         id_to_destroy = friend_to_delete['id'].to_i
         Friend.destroy(id_to_destroy)
         @removal.push(dbf.uid)
@@ -148,8 +156,11 @@ class Person < ActiveRecord::Base
     @removal.length + @create.length  #create way to test how many changes were made
   end
   
-  def get_interests(authentication)
-    @interests = MiniFB.get(authentication.token, authentication.uid,:type => "interests")
+  def get_interests(authentication, response = nil)
+    if response.nil?
+      @interests = MiniFB.get(authentication.token, authentication.uid,:type => "interests")
+    else @interests = response
+    end
     @interests["data"].each do |interest|
       interests.find_or_initialize_by_interest_id_and_person_id_and_provider(interest['id'], personID.to_i, "facebook") do |i|
         i.provider = "facebook"

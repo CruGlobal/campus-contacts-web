@@ -18,6 +18,7 @@ class Api::UserController < ApiController
      end
 
      user = User.find_by_userID(user_id)
+     raise ApiErrors::NoDataReturned unless user
      person = user.person
      @friends_json = []
      @friends = Friend.where("person_id = ?",person.personID)

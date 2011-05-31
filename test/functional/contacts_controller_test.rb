@@ -21,9 +21,10 @@ class ContactsControllerTest < ActionController::TestCase
 
   context "After logging in" do
     setup do
-      @user = Factory(:user)
-      #@user = Factory(:user_with_auxs)
+      #@user = Factory(:user)
+      @user = Factory(:user_with_auxs)  #user with a person object
       sign_in @user
+      @keywordDB = Factory.create(:sms_keyword)
     end
     context "new with received_sms_id from mobile" do
       setup do
@@ -34,6 +35,7 @@ class ContactsControllerTest < ActionController::TestCase
     
       should assign_to(:person)
       should respond_with(:success)
+      
       should "update person with sms phone number" do
         assert(@person.phone_numbers.detect {|p| p.number_with_country_code == @sms.phone_number}, 'phone number wasn\'t saved')
       end
@@ -46,7 +48,7 @@ class ContactsControllerTest < ActionController::TestCase
     context "when posting an update with good parameters" do
       setup do
         @contact = Factory(:person)
-        put :update, :id => @contact.id, :format => 'mobile'
+        put :update, :id => @contact.id, :format => 'mobile', :keyword => @keywordDB.keyword
       end
       should render_template('thanks')
     end
@@ -54,15 +56,19 @@ class ContactsControllerTest < ActionController::TestCase
     context "when posting an update with bad parameters" do
       setup do
         @contact = Factory(:person)
-        put :update, :id => @contact.id, :format => 'mobile', :person => {:firstName => ''}
+        put :update, :id => @contact.id, :format => 'mobile', :person => {:firstName => ''}, :keyword => @keywordDB.keyword
       end
       should render_template('new')
     end
     
-    should "show thanks" do
-      get :thanks, :format => 'mobile'
-      assert_response :success, @response.body
+    context "show thanks" do   
+      setup do 
+        @keywordDB2 = Factory.create(:sms_keyword, :keyword => "test2")
+        get :thanks, :format => 'mobile', :keyword => @keywordDB2.keyword
+      end
+      should "show thanks" do
+        assert_response :success, @response.body
+      end
     end
-
   end
 end

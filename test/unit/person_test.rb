@@ -16,6 +16,10 @@ class PersonTest < ActiveSupport::TestCase
   should have_many(:email_addresses)
   should have_many(:organizations)
   should have_many(:organization_memberships)
+  should have_many(:answer_sheets)
+  should have_many(:contact_assignments)
+  should have_many(:assigned_tos)
+  should have_many(:assigned_contacts)
   
   context "a person" do
     setup do
@@ -75,25 +79,25 @@ class PersonTest < ActiveSupport::TestCase
     end
     
     should "get & update interests" do
-      x = @person.get_interests(@authentication)
+      x = @person.get_interests(@authentication, TestFBResponses::INTERESTS)
       assert(x > 0, "Make sure we now have at least one interest")
       assert(@person.interests.first.name.is_a? String)
     end
     
     should "get & update location" do
-      @response = MiniFB.get(@authentication.token, @authentication.uid)
-      x = @person.get_location(@authentication, @response)
+      #@response = MiniFB.get(@authentication.token, @authentication.uid)
+      x = @person.get_location(@authentication, TestFBResponses::FULL)
       assert(@person.locations.first.name.is_a? String)
       
       number_of_locations1 = @person.locations.all.length
-      x = @person.get_location(@authentication)
+      x = @person.get_location(@authentication, TestFBResponses::FULL)
       number_of_locations2 = @person.locations.all.length
       assert_equal(number_of_locations1, number_of_locations2, "Ensure no duplicate locations")
     end
     
     should "get & update education history" do
-      real_response = MiniFB.get(@authentication.token, @authentication.uid)
-      array_of_responses = [real_response, TestFBResponses::FULL, TestFBResponses::NO_CONCENTRATION, TestFBResponses::NO_YEAR, TestFBResponses::WITH_DEGREE, TestFBResponses::NO_EDUCATION]
+      #real_response = MiniFB.get(@authentication.token, @authentication.uid)
+      array_of_responses = [ TestFBResponses::FULL, TestFBResponses::NO_CONCENTRATION, TestFBResponses::NO_YEAR, TestFBResponses::WITH_DEGREE, TestFBResponses::NO_EDUCATION]
     
       array_of_responses.each do |response| 
         @response = response
@@ -104,7 +108,7 @@ class PersonTest < ActiveSupport::TestCase
         name1 = @response.try(:education).nil? ? "" : @response.education.first.school.name
         name2 = @person.education_histories.all.length > 0 ? @person.education_histories.first.school_name : "" 
         assert_equal(name1, name2, "Assure name is properly written into DB")
-
+    
         #do it again and ensure that no duplicate school entries are created
         x = @person.get_education_history(@authentication, @response)
         number_of_schools2 = @person.education_histories.all.length
@@ -119,7 +123,7 @@ class PersonTest < ActiveSupport::TestCase
     
     should "create from facebook and return a person" do
       data_hash = Hashie::Mash.new({:first_name => "Matt", :last_name => "Webb", :email => "mattrw89@gmail.com"})
-      person = Person.create_from_facebook(data_hash,@authentication)
+      person = Person.create_from_facebook(data_hash,@authentication, TestFBResponses::FULL)
       assert(person.locations.first.name.is_a? String)
       assert(person.friends.first.name.is_a? String)
       assert(person.interests.first.name.is_a? String)

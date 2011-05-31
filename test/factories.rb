@@ -17,6 +17,26 @@ FactoryGirl.define do
     email 'messaging.sprintpcs.com'
   end
   
+  Factory.define :sms_keyword do |s|
+    s.keyword 'test'
+    s.organization_id 1
+    s.explanation "haoeu"
+    s.state "requested"
+    s.initial_response "Hi there!"
+    s.post_survey_message "bye!"
+    s.user_id 1
+  end
+  
+  Factory.define :question_sheet do |y|
+    y.label "Test Sheet"
+    y.archived 0
+    y.questionnable_type "SmsKeyword"
+  end
+  
+  Factory.define :sms_keyword_with_question_sheet, :parent => :sms_keyword do |q|
+    #q.after_create { |x| Factory(:question_sheet, :sms_keyword => x)}
+  end
+  
   Factory.define :person do |p|
     p.firstName 'John'
     p.lastName 'Doe'
