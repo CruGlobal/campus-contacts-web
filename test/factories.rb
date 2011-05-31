@@ -20,6 +20,8 @@ FactoryGirl.define do
   Factory.define :person do |p|
     p.firstName 'John'
     p.lastName 'Doe'
+    p.gender '1'
+    p.birth_date DateTime.strptime('12/18/1989', '%m/%d/%Y')
   end
   
   Factory.define :user do |u|
@@ -61,5 +63,7 @@ FactoryGirl.define do
     u.after_create { |a| Factory(:person_with_things, :user => a)}
     u.after_create { |a| Factory(:authentication, :user => a)}
   end
+  
+  
 end
 

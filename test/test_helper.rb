@@ -1,8 +1,8 @@
 ENV["RAILS_ENV"] = "test"
 require 'simplecov'
- SimpleCov.start 'rails' do
-   add_filter "vendor"
- end
+# SimpleCov.start 'rails' do
+#   add_filter "vendor"
+# end
 require File.expand_path('../../config/environment', __FILE__)
 require 'rack/oauth2/server'
 require 'rails/test_help'

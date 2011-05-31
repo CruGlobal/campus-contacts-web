@@ -22,6 +22,7 @@ class ContactsControllerTest < ActionController::TestCase
   context "After logging in" do
     setup do
       @user = Factory(:user)
+      #@user = Factory(:user_with_auxs)
       sign_in @user
     end
     context "new with received_sms_id from mobile" do

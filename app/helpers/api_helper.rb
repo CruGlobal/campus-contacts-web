@@ -1,14 +1,15 @@
 module ApiHelper
-  
   #########################################
   #######Matt's Validation Methods#########
   #########################################
   def valid_request?(request, in_action = nil, prms = nil, accesstoken = nil)
     begin
+      #raise request.inspect
       #retrieve the API action requested so we can match the right allowed fields
       raise ApiErrors::InvalidRequest if request.try(:path_parameters).nil? && in_action.nil?
-      action = in_action.nil? ? request.path_parameters[:action] : in_action
-   
+      #raise request.path_parameters["action"].inspect
+      path_param_test = request.path_parameters["action"].nil? ? request.path_parameters[:action] : request.path_parameters["action"]
+      action = in_action.nil? ?  path_param_test : in_action
       #Let's check to see if the fields query parameter is set first     
       param = prms.nil? ? params : prms
       if !param[:fields].nil?

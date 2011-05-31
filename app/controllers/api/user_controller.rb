@@ -28,10 +28,6 @@ class Api::UserController < ApiController
      render :json => @friends_json
   end
   
-  def user_2
-    render :text => "blarg"
-  end
-  
   def user_1
     #valid_request? ensures that their request is a legal api request.  if error, spits out an error message
     valid_fields = valid_request?(request)
@@ -40,7 +36,6 @@ class Api::UserController < ApiController
     else
       user_id = params[:id]
     end
- 
     user = User.find_by_userID(user_id)
     raise ApiErrors::NoDataReturned unless user
     
@@ -77,7 +72,7 @@ class Api::UserController < ApiController
           api_call[x] = ""
       end
     end
-    render :text => api_call.to_json
+    render :json => api_call.to_json
   end
   
   def schools
