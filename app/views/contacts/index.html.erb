@@ -3,8 +3,8 @@
   <tr>
     <td valign="top" id="leaders">
       <%= render 'contacts/leaders' %>
-    </td valign="top">
-    <td>
+    </td>
+    <td valign="top">
       <%= form_for ContactAssignment.new do |f| %>
         <h3>
           <% if params[:assigned_to] == 'none' %>
