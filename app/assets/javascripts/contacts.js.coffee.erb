@@ -15,3 +15,12 @@ $ ->
 			$('#check_all').prop('checked', false)
 		else
 			alert("<%= I18n.t('ma.people.index.none_checked') %>")
+			
+#	$('.handle').draggable(revert: true)
+#	$('.handle').live 'dragstart', ->
+#	  row = $(this).closest('tr').clone();
+#	  id = row.attr('id')
+#	  table = $('<table class="' + id + '"></table>')
+#	  table.append row
+#	    .draggable()
+#	  $(this).html(table)

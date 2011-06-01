@@ -10,7 +10,7 @@ class CreateEducationHistories < ActiveRecord::Migration
       t.string :concentration_id3
       t.string :concentration_name3
       t.string :year_id
-      t.integer :year_name
+      t.string :year_name
       t.string :degree_id
       t.string :degree_name
       t.string :school_id

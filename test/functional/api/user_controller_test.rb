@@ -7,9 +7,6 @@ class Api::UserControllerTest < ActionController::TestCase
       @access_token = Factory.create(:access_token)
       @access_token.identity = @user.userID
       @access_token.client_id = 1
-      #sign_in @user
-      #@person = Factory(:person)
-      #@person.fk_ssmUserId = @user.userID
     end
   end
 end

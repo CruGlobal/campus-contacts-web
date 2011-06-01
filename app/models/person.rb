@@ -233,4 +233,26 @@ class Person < ActiveRecord::Base
     
     super
   end
+
+  def to_hash
+    fb_id = user.authentications.where(:provider => "facebook").order("updated_at DESC").first.uid
+    hash = {}
+    hash['id'] = self.user.userID.to_s
+    hash['name'] = self.to_s
+    hash['first_name'] = self.firstName
+    hash['last_name'] = self.lastName
+    hash['gender'] = self.gender
+    hash['locale'] = user.locale ? user.locale : ""
+    hash['fb_id'] = fb_id
+    hash['birthday'] = self.birth_date.to_s
+    hash['picture'] = "http://graph.facebook.com/#{fb_id}/picture"
+    hash['interests'] = interests.collect(&:to_hash)
+    hash['education'] = education_histories.collect(&:to_hash)
+    locs = locations.order("updated_at DESC").first
+    if !locs.nil?
+      locs = locs.to_hash
+    end
+    hash['location'] = locs
+    hash
+  end
 end

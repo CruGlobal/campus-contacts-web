@@ -3,7 +3,7 @@ module Ccc
     extend ActiveSupport::Concern
     
     included do
-      # has_many :crs2_profiles, :class_name => 'Ccc::Crs2Profile', :dependent => :destroy
+      has_one :crs2_profiles, :class_name => 'Ccc::Crs2Profile', :dependent => :destroy
       # has_many :ministry_missional_team_members, :class_name => 'Ccc::MinistryMissionalTeamMember', :dependent => :destroy
       has_many :ministry_newaddresses, :class_name => 'Ccc::MinistryNewaddress', :foreign_key => :fk_PersonID, :dependent => :destroy
       # has_many :organization_memberships, :class_name => 'Ccc::OrganizationMembership', :dependent => :destroy
@@ -31,10 +31,10 @@ module Ccc
             other_address = other.ministry_newaddresses.detect {|oa| oa.addressType == address.addressType}
             address.merge(other_address) if other_address
           end
-          other.ministry_newaddresses.each {|pn| ma.update_attribute(:fk_PersonID, id) unless ma.frozen?}
+          other.ministry_newaddresses.each {|ma| ma.update_attribute(:fk_PersonID, id) unless ma.frozen?}
           
           MergeAudit.create!(:mergeable => self, :merge_looser => other)
-          other.destroy
+          # other.destroy
           save(:validate => false)
         end
       end

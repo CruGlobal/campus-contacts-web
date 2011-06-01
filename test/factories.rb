@@ -60,6 +60,65 @@ FactoryGirl.define do
     f.uid "1234567890"
     f.provider "facebook"
   end
+  
+  Factory.define :location do |l|
+    l.name "Orlando, FL"
+    l.location_id 1
+    l.provider "facebook"
+  end
+  
+  Factory.define :education_history_highschool, :class => EducationHistory do |e|
+    e.school_name "Test High School"
+    e.school_id "3"
+    e.school_type "High School"
+    e.year_id "4"
+    e.year_name "2008"
+    e.provider "facebook"
+  end  
+  
+  Factory.define :education_history_college, :class => EducationHistory do |e|
+    e.school_name "Test University"
+    e.school_id "1"
+    e.school_type "College"
+    e.year_id "2"
+    e.year_name "2012"
+    e.provider "facebook"
+    e.concentration_id1 "12"
+    e.concentration_name1 "Test Major 1"
+    e.concentration_id2 "42"
+    e.concentration_name2 "Test Major 2"
+    e.concentration_id3 "84"
+    e.concentration_name3 "Test Major 3"
+  end
+  
+  Factory.define :education_history_gradschool, :class => EducationHistory do |e|
+    e.school_name "Test University 2"
+    e.school_id "2"
+    e.school_type "College"
+    e.year_id "4"
+    e.year_name "2014"
+    e.provider "facebook"
+    e.concentration_id1 "13"
+    e.concentration_name1 "Test Major 4"
+    e.concentration_id2 "43"
+    e.concentration_name2 "Test Major 5"
+    e.concentration_id3 "86"
+    e.concentration_name3 "Test Major 6"
+  end
+  
+  Factory.define :interest, :class => Interest do |i|
+    i.interest_id "1"
+    i.name "Test Interest 1"
+    i.provider "facebook"
+    i.category "Test Category"
+  end
+  
+  Factory.define :interest_2, :class => Interest do |i|
+    i.interest_id "2"
+    i.name "Test Interest 2"
+    i.provider "facebook"
+    i.category "Test Category"
+  end
     
   Factory.define :access_token, :class => Rack::OAuth2::Server::AccessToken do |t|
     t.code "9d68af577f8a4c9076752c9699d2ac2ace64f9dcb407897f754439096cedbfca"
@@ -74,9 +133,12 @@ FactoryGirl.define do
      p.after_create { |f| Factory(:friend, :person => f)}
      p.after_create { |f| Factory(:friend, :person => f)}
      p.after_create { |f| Factory(:friend, :person => f)}
-  #     #p.after_create { |i| Factory(:interest, :person => i)}
-  #     #p.after_create { |e| Factory(:education_history, :person => e)}
-  #     #p.after_create { |l| Factory(:location, :person => l)}
+     p.after_create { |f| Factory(:education_history_highschool, :person => f)}
+     p.after_create { |f| Factory(:education_history_college, :person => f)}
+     p.after_create { |f| Factory(:education_history_gradschool, :person => f)}
+     p.after_create { |f| Factory(:interest, :person => f)}
+     p.after_create { |f| Factory(:interest_2, :person => f)}
+     p.after_create { |f| Factory(:location, :person => f)}
   end
   
   Factory.define :user_with_auxs, :parent => :user do |u|

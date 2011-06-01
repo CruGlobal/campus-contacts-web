@@ -1,9 +1,10 @@
+<%= link_to(t('ma.nav.back_to_dashboard'), user_root_path) %>
 <table border="0" cellspacing="5" cellpadding="5">
   <tr>
     <td valign="top" id="leaders">
-      <%= render :partial => 'leaders' %>
+      <%= render 'contacts/leaders' %>
     </td>
-    <td>
+    <td valign="top">
       <%= form_for ContactAssignment.new do |f| %>
         <h3>
           <% if params[:assigned_to] == 'none' %>
