@@ -90,7 +90,7 @@ class PeopleController < ApplicationController
     redirect_to user_root_path, error: "The url you just tried to go to wasn't valid." and return false unless @keyword
     @question_sheet = @keyword.question_sheet
     @organization = @keyword.organization
-    @people = Person.who_answered(@question_sheet)
+    @people = Person.who_answered(@question_sheet).order('lastName, firstName')
     if params[:assigned_to]
       if params[:assigned_to] == 'none'
         @people = unassigned_people
