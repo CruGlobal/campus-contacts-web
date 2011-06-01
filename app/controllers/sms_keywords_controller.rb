@@ -39,7 +39,7 @@ class SmsKeywordsController < ApplicationController
 
     respond_to do |format|
       if @sms_keyword.save
-        format.html { redirect_to(root_path, :notice => t('ma.keywords.flash.created')) }
+        format.html { redirect_to(user_root_path, :notice => t('ma.keywords.flash.created')) }
         format.xml  { render :xml => @sms_keyword, :status => :created, :location => @sms_keyword }
       else
         format.html { render :action => "new" }
@@ -71,7 +71,7 @@ class SmsKeywordsController < ApplicationController
     @sms_keyword.destroy
 
     respond_to do |format|
-      format.html { root_path }
+      format.html { redirect_to user_root_path, :notice => "Keyword has been deleted." }
       format.xml  { head :ok }
     end
   end

@@ -24,12 +24,15 @@ gem "state_machine"
 gem 'acts_as_list'
 gem 'dynamic_form'
 gem 'coffee-script'
-gem 'translate-rails3', :require => 'translate', :git => 'https://github.com/romanbsd/translate.git'
+gem 'uglifier'
+
+gem 'translate-rails3', :require => 'translate', :git => 'git://github.com/romanbsd/translate.git'
 gem 'enforce_schema_rules'
 # gem 'sentient_user'
 gem 'paper_trail', '~> 2'
 gem 'unicorn'
 gem 'rake', '0.8.7'
+gem 'hoptoad_notifier'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

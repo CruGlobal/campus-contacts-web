@@ -9,3 +9,4 @@ test/fixtures/ephemeral_response
 .DS_Store
 vendor/ruby
 unicorn.development.rb
+public/assets
