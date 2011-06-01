@@ -1,7 +1,7 @@
 <table border="0" cellspacing="5" cellpadding="5">
   <tr>
     <td valign="top" id="leaders">
-      <%= render :partial => 'leaders' %>
+      <%= render 'contacts/leaders' %>
     </td>
     <td>
       <%= form_for ContactAssignment.new do |f| %>
@@ -23,6 +23,7 @@
         <%= select_tag :assign_to, options_for_select(@organization.leaders.collect {|l| [l.to_s, l.id]}), :include_blank => true %>
         <table>
           <tr>
+            <!-- <th></th> -->
             <th><%= check_box_tag 'check_all' %></th>
             <% @question_sheet.questions.each do |q| %>
               <th><%= q.label %></th>
@@ -30,22 +31,24 @@
             <th><%= t('ma.people.index.assigned_to') %></th>
             <th></th>
           </tr>
-
-        <% @people.each do |person| %>
-          <% answer_sheet = person.answer_sheets.detect {|as| as.question_sheet_id == @question_sheet.id} %>
-          <tr id="<%= dom_id(person) %>">
-            <td><%= check_box_tag 'ids[]', person.id, false, :id => "ids_#{person.id}", :class => 'id_checkbox' %></td>
-            <% @question_sheet.questions.each do |q| %>
-              <td><%= q.response(answer_sheet) %></td>
+          <tbody>
+            <% @people.each do |person| %>
+              <% answer_sheet = person.answer_sheets.detect {|as| as.question_sheet_id == @question_sheet.id} %>
+              <tr id="<%= dom_id(person) %>" class="drag">
+                <!-- <td><div class="handle">D</div></td> -->
+                <td><%= check_box_tag 'ids[]', person.id, false, :id => "ids_#{person.id}", :class => 'id_checkbox' %></td>
+                <% @question_sheet.questions.each do |q| %>
+                  <td><%= q.response(answer_sheet) %></td>
+                <% end %>
+                <td id="assigned_to_<%= person.id %>"><%= ContactAssignment.where(:person_id => person.id, :question_sheet_id => @question_sheet.id).first.try(:assigned_to) %></td>
+                <td>
+                  <%#= link_to 'Show', person %>
+                  <%#= link_to 'Edit', edit_person_path(person) %>
+                  <%#= link_to 'Destroy', person, :confirm => 'Are you sure?', :method => :delete %>
+                </td>
+              </tr>
             <% end %>
-            <td id="assigned_to_<%= person.id %>"><%= ContactAssignment.where(:person_id => person.id, :question_sheet_id => @question_sheet.id).first.try(:assigned_to) %></td>
-            <td>
-              <%#= link_to 'Show', person %>
-              <%#= link_to 'Edit', edit_person_path(person) %>
-              <%#= link_to 'Destroy', person, :confirm => 'Are you sure?', :method => :delete %>
-            </td>
-          </tr>
-        <% end %>
+          </tbody>
         </table>
       <% end %>
     </td>

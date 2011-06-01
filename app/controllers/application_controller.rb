@@ -36,4 +36,17 @@ class ApplicationController < ActionController::Base
     I18n.locale = params[:locale] if params[:locale]
   end
   
+  # Fake login
+  # def authenticate_user!
+  #   true
+  # end
+  # 
+  # def user_signed_in?
+  #   true
+  # end
+  # 
+  # def current_user
+  #   @current_user ||= User.find(42655)
+  # end
+  
 end

@@ -5,6 +5,7 @@ class PeopleController < ApplicationController
     case
     when params[:keyword]
       return unless set_up_for_keyword
+      render 'contacts/index' and return
     end
   
     respond_to do |format|

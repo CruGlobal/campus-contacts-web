@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', :git => 'git://github.com/rails/rails.git'
+gem 'rails', '3.1.0.rc1'
 
 
 gem 'mysql2'
@@ -29,6 +29,7 @@ gem 'enforce_schema_rules'
 # gem 'sentient_user'
 gem 'paper_trail', '~> 2'
 gem 'unicorn'
+gem 'rake', '0.8.7'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
