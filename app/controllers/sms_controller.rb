@@ -5,16 +5,16 @@ class SmsController < ApplicationController
     @text = ReceivedSms.where(sms_params.slice(:phone_number)).order('created_at').last
     if @text
       keyword = @text.sms_keyword
-      if params[:message].split(' ').first.downcase == 'i'
-        # We're getting into a sticky session
-        # Find the last received sms from this phone number and send them the first question off the survey
-        if keyword
+      if keyword
+        if params[:message].split(' ').first.downcase == 'i'
+          # We're getting into a sticky session
+          # Find the last received sms from this phone number and send them the first question off the survey
+          send_next_survey_question(keyword, @text.person, @text.phone_number)
+        else
+          # Find the person, save the answer, send the next question
+          save_survey_question(keyword, @text.person, params[:message])
           send_next_survey_question(keyword, @text.person, @text.phone_number)
         end
-      else
-        # Find the person, save the answer, send the next question
-        save_survey_question(keyword, @text.person, params[:message])
-        send_next_survey_question(keyword, @text.person, @text.phone_number)
       end
     else
       # Look for a previous response by this number
