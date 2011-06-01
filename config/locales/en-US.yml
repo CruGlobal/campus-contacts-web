@@ -52,7 +52,7 @@
       flash:
         created: 'Keyword request was successfully created.'
         updated: 'Keyword was successfully updated.'
-        pick_org: 'Please pick which organization(s) you are associated with'
+        pick_org: 'Please pick which organization you are associated with'
       form:
         keyword: 'Keyword'
         keyword_tip: "This is what people will type into their phone. For example: when you say 'text <strong>ccc</strong> to 69940', 'ccc' is the keyword."
