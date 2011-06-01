@@ -57,7 +57,7 @@
         pick_org: 'Please pick which organization you are associated with'
       form:
         keyword: 'Keyword'
-        keyword_tip: "This is what people will type into their phone. For example: when you say 'text <strong>ccc</strong> to 69940', 'ccc' is the keyword."
+        keyword_tip: "This is what people will type into their phone. For example: when you say 'text <strong>ccc</strong> to 75572', 'ccc' is the keyword."
         explanation: 'Please explain what you plan to use this keyword for.'
         initial_response: 'What response should we send back to people when they text in? If you want the person to complete a survey, the response MUST include {{ link }}'
         post_survey_message: 'What message would you like to show after the person has completed the survey?'
