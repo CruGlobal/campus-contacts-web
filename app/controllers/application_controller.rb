@@ -54,4 +54,9 @@ class ApplicationController < ActionController::Base
   end
   helper_method :unassigned_people
   
+  def get_answer_sheet(keyword, person)
+    @answer_sheet = AnswerSheet.where(:person_id => person.id, :question_sheet_id => keyword.question_sheet.id).first || 
+                    AnswerSheet.create!(:person_id => person.id, :question_sheet_id => keyword.question_sheet.id)
+  end
+  
 end
