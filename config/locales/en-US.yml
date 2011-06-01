@@ -28,6 +28,7 @@
     welcome:
       index:
         title_top: "Welcome to MissionHub!"
+        title_top_mobile: "MissionHub"
         go_home: 'Go to your dashboard'
         request_key: "Click here to request an sms keyword."
       home:
