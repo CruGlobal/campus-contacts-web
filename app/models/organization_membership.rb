@@ -32,8 +32,8 @@ class OrganizationMembership < ActiveRecord::Base
   
   def set_new_primary
     if self.primary?
-      if person && person.organizations.present?
-        person.organizations.first.update_attribute(:primary, true)
+      if person && person.organization_memberships.present?
+        person.organization_memberships.first.update_attribute(:primary, true)
       end
     end
     true
