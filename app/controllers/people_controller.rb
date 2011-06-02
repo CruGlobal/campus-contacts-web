@@ -1,14 +1,18 @@
 class PeopleController < ApplicationController
   # GET /people
   # GET /people.xml
-  # def index
-  #   @people = Person.all
-  # 
-  #   respond_to do |format|
-  #     format.html # index.html.erb
-  #     format.xml  { render :xml => @people }
-  #   end
-  # end
+  def index
+    case
+    when params[:keyword]
+      return unless set_up_for_keyword
+      render 'contacts/index' and return
+    end
+  
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @people }
+    end
+  end
 
   # GET /people/1
   # GET /people/1.xml
@@ -80,4 +84,21 @@ class PeopleController < ApplicationController
   #     format.xml  { head :ok }
   #   end
   # end
+  
+  def set_up_for_keyword
+    @keyword = SmsKeyword.find_by_id(params[:keyword])
+    redirect_to user_root_path, error: "The url you just tried to go to wasn't valid." and return false unless @keyword
+    @question_sheet = @keyword.question_sheet
+    @organization = @keyword.organization
+    @people = Person.who_answered(@question_sheet).order('lastName, firstName')
+    if params[:assigned_to]
+      if params[:assigned_to] == 'none'
+        @people = unassigned_people
+      else
+        @assigned_to = Person.find(params[:assigned_to])
+        @people = @people.joins(:assigned_tos).where('contact_assignments.question_sheet_id' => @question_sheet.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
+      end
+    end
+    true
+  end
 end

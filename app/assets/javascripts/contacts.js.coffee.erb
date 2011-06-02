@@ -1,0 +1,26 @@
+$ ->
+	$('#assign_to').change ->
+		if $('.id_checkbox:checked').length > 0
+			$.rails.handleRemote($(this).closest('form'))
+			name = $('option:selected', this).text()
+			person_id = $(this).val()
+			$('.id_checkbox').each ->
+				if $(this).prop('checked')
+					$('#assigned_to_' + $(this).val()).text(name)
+					# hide people assigned to someone other than the current
+					if $('#assigned_to').val() != '' && $('#assigned_to').val() != ''
+						$(this).closest('tr').hide();
+					$(this).prop('checked', false)
+			$(this).val('')
+			$('#check_all').prop('checked', false)
+		else
+			alert("<%= I18n.t('ma.people.index.none_checked') %>")
+			
+#	$('.handle').draggable(revert: true)
+#	$('.handle').live 'dragstart', ->
+#	  row = $(this).closest('tr').clone();
+#	  id = row.attr('id')
+#	  table = $('<table class="' + id + '"></table>')
+#	  table.append row
+#	    .draggable()
+#	  $(this).html(table)

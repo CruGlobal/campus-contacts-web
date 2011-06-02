@@ -85,6 +85,7 @@ class OrganizationMembershipsController < ApplicationController
     @organization_membershipship = current_person.organization_memberships.includes(:organization).find(params[:id])
     org = @organization_membershipship.organization
     @valid = false
+    user = current_user
     case org.root.validation_method
     when 'relay'
       if RubyCAS::Filter.filter(self)
@@ -103,12 +104,12 @@ class OrganizationMembershipsController < ApplicationController
       end
     end
     if @valid
-      (@organization_membershipship.frozen? ? current_person.organization_memberships.where(:organization_id => org.id).first : @organization_membershipship).update_attribute(:validated, true)
+      (@organization_membershipship.frozen? ? user.person.organization_memberships.where(:organization_id => org.id).first : @organization_membershipship).update_attribute(:validated, true)
       redirect_to(session[:return_to].present? ? session[:return_to] : :back, :notice => 'Organization membership was successfully created.') 
       return
     else
       # @organization_membershipship.destroy
-      redirect_to person_organization_memberships_path(current_person), :error => "Validation of membership failed"
+      redirect_to person_organization_memberships_path(user.person), :error => "Validation of membership failed"
       return
     end
     

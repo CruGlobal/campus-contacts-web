@@ -32,4 +32,6 @@ Ma::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
+  
+  ActiveSupport::Deprecation.silenced = true
 end

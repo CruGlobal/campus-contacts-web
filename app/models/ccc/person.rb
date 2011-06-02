@@ -3,9 +3,13 @@ module Ccc
     extend ActiveSupport::Concern
     
     included do
+<<<<<<< HEAD
       has_many :ministry_newaddresses, :class_name => 'Ccc::MinistryNewaddress', :foreign_key => :fk_PersonID, :dependent => :destroy
 			has_many :crs_registrations, :class_name => 'Ccc::CrsRegistration', :dependent => :destroy
       # has_many :crs2_profiles, :class_name => 'Ccc::Crs2Profile', :dependent => :destroy
+=======
+      has_one :crs2_profiles, :class_name => 'Ccc::Crs2Profile', :dependent => :destroy
+>>>>>>> 4d1edf5a4c50d36e7e1049e53ca894cd102bc523
       # has_many :ministry_missional_team_members, :class_name => 'Ccc::MinistryMissionalTeamMember', :dependent => :destroy
 			has many :rideshare_rides, :class_name => 'Ccc::RideshareRides', :foreign_key => :person_id, :dependent => :destroy
       # has_many :organization_memberships, :class_name => 'Ccc::OrganizationMembership', :dependent => :destroy
@@ -28,7 +32,7 @@ module Ccc
                       when other.attributes[k].blank? then v
                       when v.blank? then other.attributes[k]
                       else
-                        other.dateChanged > dateChanged ? other.attributes[k] : v
+                        other.dateChanged && dateChanged && other.dateChanged > dateChanged ? other.attributes[k] : v
                       end
           end
           
@@ -37,6 +41,7 @@ module Ccc
             other_address = other.ministry_newaddresses.detect {|oa| oa.addressType == address.addressType}
             address.merge(other_address) if other_address
           end
+<<<<<<< HEAD
           other.ministry_newaddresses.each {|ma| ma.update_attribute(:fk_PersonID, personID) unless ma.frozen?}
 	         
 					other.crs_registrations.each { |ua| ua.update_attribute(:fk_PersonID, personID) }
@@ -105,8 +110,12 @@ module Ccc
 
 
  
+=======
+          other.ministry_newaddresses.each {|ma| ma.update_attribute(:fk_PersonID, id) unless ma.frozen?}
+          
+>>>>>>> 4d1edf5a4c50d36e7e1049e53ca894cd102bc523
           MergeAudit.create!(:mergeable => self, :merge_looser => other)
-          other.destroy
+          # other.destroy
           save(:validate => false)
         end
       end

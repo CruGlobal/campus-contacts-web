@@ -1,5 +1,7 @@
 Ma::Application.routes.draw do
   
+  resources :contact_assignments
+
   resources :organization_memberships
 
   resources :schools
@@ -76,6 +78,20 @@ Ma::Application.routes.draw do
     end
   end
 
+  #test validated api call
+  scope 'api(/:version)', :module => :api, :version => /v\d+?/ do
+    get 'user/:id' => 'user#user', :as => "api_user_view"
+    get 'user/:id/friends' => 'user#friends', :as => "api_user_friends"
+  end
+
+  #other oauth calls
+  match "oauth/authorize" => "oauth#authorize"
+  match "oauth/grant" => "oauth#grant"
+  match "oauth/deny" => "oauth#deny"
+  #make admin portion of oauth2 rack accessible
+  #mount Rack::OAuth2::Server::Admin, :at => "/oauth/admin"
+  mount Rack::OAuth2::Server::Admin => "/oauth/admin"
+  
   root :to => "welcome#index"
   match 'home' => 'welcome#home', :as => 'user_root'
   
@@ -84,5 +100,5 @@ Ma::Application.routes.draw do
 
   # Map keyword responses with phone numbers
   match 'c/:keyword(/:received_sms_id)' => 'contacts#new', :as => 'contact_form'
-  match 'm/:received_sms_id' => 'contacts#new', :as => 'contact_form'
+  match 'm/:received_sms_id' => 'contacts#new'
 end

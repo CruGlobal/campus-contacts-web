@@ -40,7 +40,8 @@ class SmsKeyword < ActiveRecord::Base
   end
   
   def self.default
-    new(:name => 'Cru', :keyword => 'cru')
+    #new(:name => 'Cru', :keyword => 'cru')  no name field in table
+    new(:keyword => 'cru')
   end
   
   def question_page

@@ -6,6 +6,7 @@
   ma:
     nav:
       login: "Log In"
+      back_to_dashboard: "Back to dashboard"
     general:
       keyword: "Keyword"
       status: "Status"
@@ -13,37 +14,57 @@
       back: "Back"
       remove: 'Remove'
 
+    people: 
+      index:
+        leaders: Leaders
+        assign_to: "Assign To:"
+        assigned_to: "Assigned To"
+        all_responses: "Showing everyone who responded to '%{keyword}'"
+        responses_assigned_to: "Showing people assigned to %{assigned_to} who responded to '%{keyword}'"
+        unassigned_responses: "Showing Unassigned people who responded to '%{keyword}'"
+        none_checked: "Hey moron! You didn't select any contacts to assign."
     org_membership:
       confirm_delete: "Are you sure you want to dissociate yourself from %{org}"
     welcome:
       index:
-        title_top: "Welcome to Mission Accelerator!"
+        title_top: "Welcome to MissionHub!"
+        title_top_mobile: "MissionHub"
         go_home: 'Go to your dashboard'
         request_key: "Click here to request an sms keyword."
       home:
+        title_top: "Welcome to MissionHub!"
         subtitle: "Your Keywords"
         request_another_key: "Click here to request another sms keyword."
         manage_questions: "Manage Questions"
         edit_keyword: 'Edit Keyword'
         your_orgs: 'Your Organizational Involvements'
         edit_orgs: 'Edit your organizational involvements.'
+        follow_up: 'Follow-up'
+        delete: "Delete"
     questions:
       create:
         notice: 'Question was successfully created.'
+      form: 
+        what_question_type: What type of question would you like to ask?
+        short_answer: 'Short Answer'
+        multiple_choice: 'Multiple Choice'
+        checkboxes: 'Checkboxes'
+        dropdown: 'Dropdown'
     keywords:
       edit:
         heading: Editing Keyword
       flash:
         created: 'Keyword request was successfully created.'
         updated: 'Keyword was successfully updated.'
-        pick_org: 'Please pick which organization(s) you are associated with'
+        pick_org: 'Please pick which organization you are associated with'
       form:
         keyword: 'Keyword'
-        keyword_tip: "This is what people will type into their phone. For example: when you say 'text <strong>ccc</strong> to 69940', 'ccc' is the keyword."
+        keyword_tip: "This is what people will type into their phone. For example: when you say 'text <strong>ccc</strong> to 75572', 'ccc' is the keyword."
         explanation: 'Please explain what you plan to use this keyword for.'
         initial_response: 'What response should we send back to people when they text in? If you want the person to complete a survey, the response MUST include {{ link }}'
         post_survey_message: 'What message would you like to show after the person has completed the survey?'
         chartfield: 'A keyword costs $7/month. Please enter a chart field to be billed for this keyword.'
+        organization: "You are associated with more than one organization or ministry. Which one would you like to associate this keyword with?"
     contacts:
       thanks:
         message: Thank you for your interest.

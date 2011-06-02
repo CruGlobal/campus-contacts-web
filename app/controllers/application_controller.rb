@@ -36,4 +36,27 @@ class ApplicationController < ActionController::Base
     I18n.locale = params[:locale] if params[:locale]
   end
   
+  # Fake login
+  # def authenticate_user!
+  #   true
+  # end
+  # 
+  # def user_signed_in?
+  #   true
+  # end
+  # 
+  # def current_user
+  #   @current_user ||= User.find(42655)
+  # end
+  
+  def unassigned_people
+    @unassigned_people ||= Person.who_answered(@question_sheet).joins("LEFT OUTER JOIN contact_assignments ON contact_assignments.person_id = #{Person.table_name}.#{Person.primary_key}").where('contact_assignments.question_sheet_id' => @question_sheet.id, 'contact_assignments.question_sheet_id' => nil)
+  end
+  helper_method :unassigned_people
+  
+  def get_answer_sheet(keyword, person)
+    @answer_sheet = AnswerSheet.where(:person_id => person.id, :question_sheet_id => keyword.question_sheet.id).first || 
+                    AnswerSheet.create!(:person_id => person.id, :question_sheet_id => keyword.question_sheet.id)
+  end
+  
 end

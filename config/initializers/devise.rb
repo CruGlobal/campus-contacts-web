@@ -148,7 +148,7 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', :scope => 'user,public_repo'
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', :scope => 'user,public_repo'
-  config.omniauth :facebook, FB_APP_ID, FB_SECRET, :scope => 'user_about_me,user_birthday,email,offline_access'
+  config.omniauth :facebook, FB_APP_ID, FB_SECRET, :scope => 'user_birthday,email,offline_access,user_interests,user_location,user_education_history'
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

@@ -18,9 +18,9 @@
     <div class="current" id="home">
       <%- if show_title? -%>
       <div class="toolbar">
-        <%= link_to "Back", nil, :class => "back" unless params[:controller] == 'welcome' && params[:action] == 'index' %>
+        <%= link_to "Back", nil, :class => "back" unless params[:controller] == 'welcome' %>
         <h1><%=h yield(:title) %></h1>
-        <%#= link_to "Full Site", root_url(:mobile => 0), :class => "button", :rel => "external" %>
+        <%= link_to "Full Site", root_url(:mobile => 0), :class => "button", :rel => "external" %>
         <%= yield(:toolbar) %>
       </div>
       <%- end -%>

@@ -7,6 +7,6 @@ module Questionnaire
   self.answer_sheet_class = 'AnswerSheet'
   
   mattr_accessor :from_email
-  self.from_email = 'Mission Accelerator <help@campuscrusadeforchrist.com>'
+  self.from_email = 'MissionHub <help@campuscrusadeforchrist.com>'
   
 end

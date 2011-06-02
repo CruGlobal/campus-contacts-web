@@ -1,6 +1,7 @@
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
+require 'rack/oauth2/server/admin'
 
 # If you have a Gemfile, require the gems listed there, including any gems
 # you've limited to :test, :development, or :production.
@@ -29,6 +30,7 @@ module Ma
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
      config.i18n.locale = :"en-US"
+     config.i18n.default_locale = :"en-US"
 
     # Please note that JavaScript expansions are *ignored altogether* if the asset
     # pipeline is enabled (see config.assets.enabled below). Put your defaults in
@@ -51,5 +53,6 @@ module Ma
 
     # Enable the asset pipeline
     config.assets.enabled = true
+    
   end
 end

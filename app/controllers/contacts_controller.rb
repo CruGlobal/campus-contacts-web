@@ -1,6 +1,6 @@
 class ContactsController < ApplicationController
   before_filter :get_person
-  before_filter :get_keyword, :only => [:new, :update]
+  before_filter :get_keyword, :only => [:new, :update, :thanks]
   
   def new
     if params[:received_sms_id]
@@ -11,11 +11,11 @@ class ContactsController < ApplicationController
         sms.update_attribute(:person_id, @person.id) unless sms.person_id
       end
     end
-    get_answer_sheet
+    get_answer_sheet(@keyword, @person)
   end
     
   def update
-    get_answer_sheet
+    get_answer_sheet(@keyword, @person)
     @person.update_attributes(params[:person]) if params[:person]
     question_set = QuestionSet.new(@keyword.questions, @answer_sheet)
     question_set.post(params[:answers], @answer_sheet)
@@ -28,7 +28,6 @@ class ContactsController < ApplicationController
   end
   
   def thanks
-    
   end
   
   protected
@@ -36,12 +35,8 @@ class ContactsController < ApplicationController
     def get_keyword
       @keyword = SmsKeyword.where(:keyword => params[:keyword]).first if params[:keyword]
     end
+    
     def get_person
       @person = current_user.person
-    end
-    
-    def get_answer_sheet
-      @answer_sheet = AnswerSheet.where(:person_id => @person.id, :question_sheet_id => @keyword.question_sheet.id).first || 
-                      AnswerSheet.create!(:person_id => @person.id, :question_sheet_id => @keyword.question_sheet.id)
     end
 end
