@@ -10,3 +10,4 @@ test/fixtures/ephemeral_response
 vendor/ruby
 unicorn.development.rb
 public/assets
+*.swp
