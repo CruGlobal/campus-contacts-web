@@ -10,4 +10,6 @@ class Ccc::Crs2Conference < ActiveRecord::Base
   has_many :crs2_registrant_types, :class_name => 'Ccc::Crs2RegistrantType'
   has_many :crs2_transactions, :class_name => 'Ccc::Crs2Transaction'
   has_many :crs2_user_roles, :class_name => 'Ccc::Crs2UserRole'
+
+
 end

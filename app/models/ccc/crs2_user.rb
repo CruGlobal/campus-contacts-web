@@ -7,4 +7,16 @@ class Ccc::Crs2User < ActiveRecord::Base
   has_many :crs2_transactions, :class_name => 'Ccc::Crs2Transaction'
   has_many :crs2_transactions, :class_name => 'Ccc::Crs2Transaction'
   has_many :crs2_user_roles, :class_name => 'Ccc::Crs2UserRole'
+
+
+	def merge(other)
+		other.crs2_conference.each { |ua| ua.update_attribute(:creator_id, id) }
+		other.crs2_user_role.each { |ua| ua.update_attribute(:user_id, id) }
+		other.crs2_registration.each { |ua| ua.update_attribute(:creator_id, id) } # ???
+		other.crs2_transaction.each { |ua| ua.update_attribute(:verified_id, id) }
+		
+		other.destroy
+		save
+	end
+
 end

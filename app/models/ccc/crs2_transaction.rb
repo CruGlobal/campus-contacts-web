@@ -10,4 +10,5 @@ class Ccc::Crs2Transaction < ActiveRecord::Base
   belongs_to :crs2_transaction, :class_name => 'Ccc::Crs2Transaction', :foreign_key => :scholarship_charge_id
   belongs_to :crs2_user, :class_name => 'Ccc::Crs2User', :foreign_key => :user_id
   belongs_to :crs2_user, :class_name => 'Ccc::Crs2User', :foreign_key => :verified_by_id
+
 end

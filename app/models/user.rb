@@ -54,6 +54,8 @@ class User < ActiveRecord::Base
   def merge(other)
     User.transaction do
       person.merge(other.person)
+
+			# other.staffsite_staffsiteprofile.destroy
       
       # Authentications
       other.authentications.collect {|oa| oa.update_attribute(:user_id, id)}

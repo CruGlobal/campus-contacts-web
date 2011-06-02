@@ -9,4 +9,10 @@ class Ccc::Crs2Registrant < ActiveRecord::Base
   belongs_to :crs2_registration, :class_name => 'Ccc::Crs2Registration', :foreign_key => :registration_before_cancellation_id
   belongs_to :crs2_registration, :class_name => 'Ccc::Crs2Registration', :foreign_key => :registration_id
   has_many :crs2_transactions, :class_name => 'Ccc::Crs2Transaction'
+
+  def merge(other)
+    # change old profile_id to new profile_id
+    # change old cancelled_by_id to new cancelled_by_id (crs2_user)
+  end
+
 end
