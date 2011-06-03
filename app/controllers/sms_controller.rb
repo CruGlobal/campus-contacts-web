@@ -31,7 +31,7 @@ class SmsController < ApplicationController
           person.phone_numbers.create!(:number => sms_params[:phone_number], :location => 'mobile')
         end
         @text.update_attribute(:person_id, person.id)
-      e0nd
+      end
       @text.increment!(:response_count)
       keyword = SmsKeyword.find_by_keyword(params[:message].split(' ').first.downcase)
       
