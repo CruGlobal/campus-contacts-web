@@ -2,7 +2,7 @@ class SmsController < ApplicationController
   skip_before_filter :authenticate_user!, :verify_authenticity_token
   def mo
     # See if this is a sticky session ( prior sms in the past 1 hour )
-    @text = ReceivedSms.where(sms_params.slice(:phone_number)).order('created_at').last
+    @text = ReceivedSms.where(sms_params.slice(:phone_number)).order('updated_at desc').where(["updated_at > ?", 1.hour.ago]).last
     if @text
       keyword = @text.sms_keyword
       if keyword
@@ -31,7 +31,7 @@ class SmsController < ApplicationController
           person.phone_numbers.create!(:number => sms_params[:phone_number], :location => 'mobile')
         end
         @text.update_attribute(:person_id, person.id)
-      end
+      e0nd
       @text.increment!(:response_count)
       keyword = SmsKeyword.find_by_keyword(params[:message].split(' ').first.downcase)
       
