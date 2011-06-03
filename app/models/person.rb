@@ -79,13 +79,13 @@ class Person < ActiveRecord::Base
   end
   
   def email
-    primary_email_address
+    primary_email_address.to_s
   end
   
   def email=(val)
     email = primary_email_address || email_addresses.new
     email.email = val
-    email.save
+    email.save!
   end
   
   

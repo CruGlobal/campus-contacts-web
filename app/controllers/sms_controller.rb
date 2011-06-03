@@ -1,6 +1,7 @@
 class SmsController < ApplicationController
   skip_before_filter :authenticate_user!, :verify_authenticity_token
   def mo
+    @letters = %w{a b c d e f g h i j k l m n o p q r s t u v w x y z}
     # See if this is a sticky session ( prior sms in the past 1 hour )
     @text = ReceivedSms.where(sms_params.slice(:phone_number)).order('updated_at desc').where(["updated_at > ?", 1.hour.ago]).last
     if @text && (@text.interactive? || params[:message].split(' ').first.downcase == 'i')
@@ -14,7 +15,13 @@ class SmsController < ApplicationController
         else
           # Find the person, save the answer, send the next question
           save_survey_question(keyword, @text.person, params[:message])
-          send_next_survey_question(keyword, @text.person, @text.phone_number)
+          @text.person.reload
+          question = send_next_survey_question(keyword, @text.person, @text.phone_number)
+          unless question
+            # survey is done. send final message
+            msg = keyword.post_survey_message.present? ? keyword.post_survey_message : t('ma.contacts.thanks.message')
+            send_message(msg, @text.phone_number)
+          end
         end
       end
     else
@@ -43,12 +50,7 @@ class SmsController < ApplicationController
         msg += 'No internet? reply with \'i\''
         @text.update_attribute(:sms_keyword_id, keyword.id)
       end
-
-      carrier = SmsCarrier.find_or_create_by_moonshado_name(@text.carrier)
-      sms_id = SMS.deliver(sms_params[:phone_number], msg).first
-      carrier.increment!(:sent_sms)
-      sent_via = 'moonshado'
-      SentSms.create!(:message => msg, :recipient => params[:device_address], :moonshado_claimcheck => sms_id, :sent_via => sent_via, :recieved_sms_id => @text.id)
+      send_message(msg, sms_params[:phone_number])
     end
     render :text => @text.inspect
   end
@@ -68,22 +70,39 @@ class SmsController < ApplicationController
       question = next_question(keyword, person)
       if question
         msg = question.label
-        sms_id = SMS.deliver(phone_number, msg).first
-        SentSms.create!(:message => msg, :recipient => phone_number, :moonshado_claimcheck => sms_id, :sent_via => 'moonshado', :recieved_sms_id => @text.id)
+        if question.kind == 'ChoiceField'
+          choices = []
+          question.choices.each_with_index {|c, i| choices << "#{@letters[i]}) #{c[0]}"}
+          msg += ' ' + choices.join('; ')
+        end
+        send_message(msg, phone_number)
       end
+      question
     end
     
     def save_survey_question(keyword, person, answer)
       question = next_question(keyword, person)
       answer_sheet = get_answer_sheet(keyword, person)
       if question
+        if question.kind == 'ChoiceField'
+          answer = answer.split(',').collect(&:strip)
+        end
         question.set_response(answer, answer_sheet)
       end
     end
     
     def next_question(keyword, person)
       answer_sheet = get_answer_sheet(keyword, person)
+      keyword.question_page.questions.reload
       question = keyword.questions.detect {|q| q.response(answer_sheet).blank?}      
+    end
+    
+    def send_message(msg, phone_number)
+      carrier = SmsCarrier.find_or_create_by_moonshado_name(@text.carrier)
+      sms_id = SMS.deliver(phone_number, msg).first
+      carrier.increment!(:sent_sms)
+      sent_via = 'moonshado'
+      SentSms.create!(:message => msg, :recipient => phone_number, :moonshado_claimcheck => sms_id, :sent_via => sent_via, :recieved_sms_id => @text.id)
     end
 
 end

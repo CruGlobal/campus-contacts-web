@@ -57,6 +57,8 @@ class ApplicationController < ActionController::Base
   def get_answer_sheet(keyword, person)
     @answer_sheet = AnswerSheet.where(:person_id => person.id, :question_sheet_id => keyword.question_sheet.id).first || 
                     AnswerSheet.create!(:person_id => person.id, :question_sheet_id => keyword.question_sheet.id)
+    @answer_sheet.reload
+    @answer_sheet
   end
   
 end
