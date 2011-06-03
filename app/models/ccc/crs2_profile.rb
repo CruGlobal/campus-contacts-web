@@ -9,7 +9,7 @@ class Ccc::Crs2Profile < ActiveRecord::Base
   def merge(other)
 		if !other
 			return
-		else if !self # ??? 
+		elsif !self # ??? 
 			other.ministry_person_ID = personID
 		else
     	other.crs2_registrants.each { |ua| ua.update_attribute(:profile_id, id) } # ???
@@ -20,5 +20,4 @@ class Ccc::Crs2Profile < ActiveRecord::Base
 			save
 		end
   end
-
 end
