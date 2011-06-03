@@ -7,12 +7,11 @@
   <% end %>
   <div id="short_answer_form" style="<%= question.new_record? ? 'display:none' : '' %>">
     <%= render 'short_answer_form', :f => f %>
-    <br/><br/>
-    <%= f.submit %>
   </div>
   <div id="multiple_choice_form" style="<%= (question.new_record? || question.kind == 'TextField') ? 'display:none' : '' %>">
     <%= render 'multiple_choice_form', :f => f %>
-    <br/><br/>
+  </div>
+  <div id="submit_button" style="<%= question.new_record? ? 'display:none' : '' %>">
     <%= f.submit %>
   </div>
 <% end %>
