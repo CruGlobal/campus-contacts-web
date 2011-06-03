@@ -3,10 +3,11 @@ class SmsController < ApplicationController
   def mo
     # See if this is a sticky session ( prior sms in the past 1 hour )
     @text = ReceivedSms.where(sms_params.slice(:phone_number)).order('updated_at desc').where(["updated_at > ?", 1.hour.ago]).last
-    if @text
+    if @text && (@text.interactive? || params[:message].split(' ').first.downcase == 'i')
       keyword = @text.sms_keyword
       if keyword
         if params[:message].split(' ').first.downcase == 'i'
+          @text.update_attribute(:interactive, true)
           # We're getting into a sticky session
           # Find the last received sms from this phone number and send them the first question off the survey
           send_next_survey_question(keyword, @text.person, @text.phone_number)
@@ -39,6 +40,7 @@ class SmsController < ApplicationController
         msg = t('ma.sms.keyword_inactive')
       else
         msg =  keyword.initial_response.sub(/\{\{\s*link\s*\}\}/, "http://#{request.host_with_port}/m/#{Base62.encode(@text.id)}")
+        msg += 'No internet? reply with \'i\''
         @text.update_attribute(:sms_keyword_id, keyword.id)
       end
 
@@ -65,7 +67,7 @@ class SmsController < ApplicationController
     def send_next_survey_question(keyword, person, phone_number)
       question = next_question(keyword, person)
       if question
-        msg = 'Please answer the following question: ' + question.label
+        msg = question.label
         sms_id = SMS.deliver(phone_number, msg).first
         SentSms.create!(:message => msg, :recipient => phone_number, :moonshado_claimcheck => sms_id, :sent_via => 'moonshado', :recieved_sms_id => @text.id)
       end
