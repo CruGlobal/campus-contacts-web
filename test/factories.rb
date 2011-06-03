@@ -104,6 +104,8 @@ FactoryGirl.define do
     e.concentration_name2 "Test Major 5"
     e.concentration_id3 "86"
     e.concentration_name3 "Test Major 6"
+    e.degree_id "1"
+    e.degree_name "Masters"
   end
   
   Factory.define :interest, :class => Interest do |i|

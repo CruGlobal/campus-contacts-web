@@ -9,11 +9,18 @@ class LocationTest < ActiveSupport::TestCase
   
   context "a location" do
     setup do
-      @person = Factory(:person)
+      @person = Factory(:person_with_things)
     end
     should "be able to add a location" do
       location1 = @person.locations.create(:provider => "facebook", :name => "Books", :person_id => @person.personID.to_i, :location_id => "1")
       assert location1.valid?
+    end
+    should "convert to a hash well" do 
+      location = @person.locations.first
+      hash = location.to_hash
+      assert_equal(hash['name'], "Orlando, FL")
+      assert_equal(hash['id'], "1")
+      assert_equal(hash['provider'], "facebook")
     end
   end
 end

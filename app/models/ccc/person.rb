@@ -7,7 +7,7 @@ module Ccc
 			has_many :crs_registrations, :class_name => 'Ccc::CrsRegistration', :dependent => :destroy
       # has_many :crs2_profiles, :class_name => 'Ccc::Crs2Profile', :dependent => :destroy
       # has_many :ministry_missional_team_members, :class_name => 'Ccc::MinistryMissionalTeamMember', :dependent => :destroy
-			has many :rideshare_rides, :class_name => 'Ccc::RideshareRides', :foreign_key => :person_id, :dependent => :destroy
+			has_many :rideshare_rides, :class_name => 'Ccc::RideshareRides', :foreign_key => :person_id, :dependent => :destroy
       # has_many :organization_memberships, :class_name => 'Ccc::OrganizationMembership', :dependent => :destroy
       # has_many :sn_timetables, :class_name => 'Ccc::SnTimetable', :dependent => :destroy
       has_many :sp_staff, :class_name => 'Ccc::SpStaff', :dependent => :destroy

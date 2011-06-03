@@ -84,7 +84,7 @@ class PeopleController < ApplicationController
   #     format.xml  { head :ok }
   #   end
   # end
-  
+
   def set_up_for_keyword
     @keyword = SmsKeyword.find_by_id(params[:keyword])
     redirect_to user_root_path, error: "The url you just tried to go to wasn't valid." and return false unless @keyword
