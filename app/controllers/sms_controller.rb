@@ -47,7 +47,7 @@ class SmsController < ApplicationController
         msg = t('ma.sms.keyword_inactive')
       else
         msg =  keyword.initial_response.sub(/\{\{\s*link\s*\}\}/, "http://#{request.host_with_port}/m/#{Base62.encode(@text.id)}")
-        msg += 'No internet? reply with \'i\''
+        msg += ' No internet? reply with \'i\''
         @text.update_attribute(:sms_keyword_id, keyword.id)
       end
       send_message(msg, sms_params[:phone_number])
