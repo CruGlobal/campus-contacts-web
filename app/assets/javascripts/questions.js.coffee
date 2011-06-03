@@ -16,8 +16,8 @@ $ ->
 				$('#short_answer_form').show()
 				$('#multiple_choice_form').show()
 	
-	$('#new_question').submit ->
+	$('#question_form_form').submit ->
 		$('#question_form').slideUp 2000
 	.bind 'ajax:complete', ->
-		$('#new_question')[0].reset()
+		$('#question_form_form')[0].reset()
 		$('#question_type').change()
