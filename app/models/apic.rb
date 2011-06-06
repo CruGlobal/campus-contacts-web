@@ -1,15 +1,16 @@
 class Apic 
   API_ALLOWABLE_FIELDS = {
     :v1 => {
-      :user => ["first_name", "last_name", "name", "id", "location", "birthday","locale","gender","interests","education","fb_id","picture"],
+      :users => ["first_name", "last_name", "name", "id", "location", "birthday","locale","gender","interests","education","fb_id","picture"],
       :school => [""],
-      :friends => ["uid", "name", "provider"]
+      :friends => ["uid", "name", "provider"],
+      :contacts => ["all"]
     }
    }
   STD_VERSION = 1
    
   SCOPE_REQUIRED = { 
-    :user => {
+    :users => {
       "all" => ["userinfo"],
       "first_name" => ["userinfo"],
       "last_name" => ["userinfo"], 
@@ -29,6 +30,9 @@ class Apic
      "uid" =>  ["userinfo"],
      "name" => ["userinfo"],
      "provider" => ["userinfo"]
+     },
+     :contacts => {
+       "all" => ["contacts"]
      }
    }
 end

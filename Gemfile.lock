@@ -186,6 +186,9 @@ GEM
     rubycas-client (2.2.1)
       activesupport
     shoulda (2.11.3)
+    simplecov (0.4.2)
+      simplecov-html (~> 0.4.4)
+    simplecov-html (0.4.5)
     sinatra (1.2.6)
       rack (~> 1.1)
       tilt (< 2.0, >= 1.2.2)
@@ -249,6 +252,7 @@ DEPENDENCIES
   rubycas-client
   rubycas-client-rails!
   shoulda
+  simplecov (>= 0.3.5)
   sqlite3-ruby
   state_machine
   translate-rails3!

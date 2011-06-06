@@ -59,6 +59,7 @@ class Person < ActiveRecord::Base
     end
     save
     get_location(authentication, response)
+    get_education_history(authentication, response)
     self
   end
   
@@ -235,7 +236,7 @@ class Person < ActiveRecord::Base
   end
 
   def to_hash
-    fb_id = user.authentications.where(:provider => "facebook").order("updated_at DESC").first.uid
+    fb_id = user.authentications.where(:provider => "facebook").order("updated_at DESC").first.try(:uid)
     hash = {}
     hash['id'] = self.user.userID.to_s
     hash['name'] = self.to_s
@@ -243,16 +244,12 @@ class Person < ActiveRecord::Base
     hash['last_name'] = self.lastName
     hash['gender'] = self.gender
     hash['locale'] = user.locale ? user.locale : ""
-    hash['fb_id'] = fb_id
+    hash['fb_id'] = fb_id unless fb_id.nil?
     hash['birthday'] = self.birth_date.to_s
-    hash['picture'] = "http://graph.facebook.com/#{fb_id}/picture"
-    hash['interests'] = interests.collect(&:to_hash)
-    hash['education'] = education_histories.collect(&:to_hash)
-    locs = locations.order("updated_at DESC").first
-    if !locs.nil?
-      locs = locs.to_hash
-    end
-    hash['location'] = locs
+    hash['picture'] = "http://graph.facebook.com/#{fb_id}/picture" unless fb_id.nil?
+    hash['interests'] = Interest.get_interests_hash(self.personID)
+    hash['education'] = EducationHistory.get_education_history_hash(self.personID)
+    hash['location'] = Location.get_latest_location_hash(self.personID)
     hash
   end
 end

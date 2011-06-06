@@ -1,5 +1,5 @@
 class ApiController < ApplicationController  
-  require 'Api_errors'
+  require 'api_errors'
   include ApiErrors
 #################################################################################
 #####CODE FROM http://www.starkiller.net/2011/03/17/versioned-api-1/  ###########

@@ -20,7 +20,7 @@ module ApiHelper
       request = Hashie::Mash.new()
       request[:path_parameters] = {:action => nil}
     end
-    action = in_action.nil? ?  request.path_parameters[:action] : in_action
+    action = in_action.nil? ?  request.path_parameters[:controller].split("/")[1] : in_action
     param = prms.nil? ? params : prms
     
     #Handle versioning of API in Apic class
@@ -74,13 +74,9 @@ module ApiHelper
   end
   
   def get_users
-    user_ids = []
-    user_ids.push params[:id] == "me" ? oauth.identity : params[:id]
-    if params[:and]
-      ands = params[:and].split(',')
-      ands.each do |x|
-        user_ids.push x
-      end
+    user_ids = params[:id].split(',')
+    user_ids.each_with_index do |x,i|
+      x[i] = oauth.identity if x == "me"
     end
     users = User.where(:userID => user_ids)
     raise ApiErrors::NoDataReturned unless users

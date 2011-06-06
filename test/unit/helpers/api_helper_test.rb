@@ -4,7 +4,7 @@ class ApiHelperTest < ActionView::TestCase
   context "a request that is being authenticated" do
     should "be considered valid" do
       params = {}
-      action = "user"
+      action = "users"
       user = Factory.create :user_with_authentication
       access_token = Factory.create :access_token
       access_token.identity = user.userID
