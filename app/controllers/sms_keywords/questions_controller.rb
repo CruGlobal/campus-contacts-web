@@ -77,10 +77,10 @@ class SmsKeywords::QuestionsController < ApplicationController
   # PUT /questions/1
   # PUT /questions/1.xml
   def update
+    params[:question] ||= params[:choice_field] ||= params[:text_field]
     respond_to do |wants|
       if @question.update_attributes(params[:question])
-        flash[:notice] = 'Question was successfully updated.'
-        wants.html { redirect_to(@question) }
+        wants.js {}
         wants.xml  { head :ok }
       else
         wants.html { render :action => "edit" }

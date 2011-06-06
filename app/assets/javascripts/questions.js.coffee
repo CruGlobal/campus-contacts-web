@@ -9,15 +9,18 @@ $ ->
 			when ''
 				$('#multiple_choice_form').hide()
 				$('#short_answer_form').hide()
+				$('#submit_button').hide()
 			when 'TextField:short'
 				$('#multiple_choice_form').hide()
 				$('#short_answer_form').show()
+				$('#submit_button').show()
 			else
 				$('#short_answer_form').show()
 				$('#multiple_choice_form').show()
+				$('#submit_button').show()
 	
-	$('#new_question').submit ->
+	$('#question_form_form').submit ->
 		$('#question_form').slideUp 2000
 	.bind 'ajax:complete', ->
-		$('#new_question')[0].reset()
+		$('#question_form_form')[0].reset()
 		$('#question_type').change()
