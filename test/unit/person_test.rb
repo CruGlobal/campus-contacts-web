@@ -129,7 +129,7 @@ class PersonTest < ActiveSupport::TestCase
       assert(person.interests.first.name.is_a? String)
       assert(person.education_histories.first.school_name.is_a? String)
       assert(person.gender == ('male' || 'female'))
-      assert_equal(person.email.email, "mattrw89@gmail.com", "See if person has correct email address")
+      assert_equal(person.email, "mattrw89@gmail.com", "See if person has correct email address")
     end    
   end
 end

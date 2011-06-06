@@ -14,11 +14,10 @@ class SmsControllerTest < ActionController::TestCase
       
       should respond_with(:success)
       
-      # currently fails
-      # should "increment the second time from the same number" do
-      #         post :mo, @post_params.merge({:carrier => @carrier.moonshado_name})
-      #         assert_equal(2, assigns(:text).response_count)
-      #       end
+      should "increment the second time from the same number" do
+        post :mo, @post_params.merge({:carrier => @carrier.moonshado_name})
+        assert_equal(2, assigns(:text).response_count)
+      end
     end
     
     context "from an unknown carrier" do

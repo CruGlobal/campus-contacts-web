@@ -18,7 +18,7 @@ gem 'rubycas-client'
 gem 'rubycas-client-rails', :git => 'git://github.com/zuk/rubycas-client-rails.git'
 # gem 'squeel'
 gem 'ancestry'
-gem 'rails_admin', :git => 'git://github.com/twinge/rails_admin.git'
+gem 'rails_admin'#, :git => 'git://github.com/twinge/rails_admin.git'
 gem "state_machine"
 gem 'acts_as_list'
 gem 'dynamic_form'
@@ -43,8 +43,10 @@ group :development, :test do
   gem 'ephemeral_response'
   gem 'sqlite3-ruby', :require => 'sqlite3'
   gem 'factory_girl','2.0.0.beta2'
-  #gem 'simplecov', '>= 0.3.5', :require => false
+  gem 'simplecov', '>= 0.3.5', :require => false
   #gem 'cover_me', '>= 1.0.0.rc6', :group => :test
+  gem 'guard'
+  gem 'guard-test'
   gem 'railroady'
   gem 'awesome_print'
 end
