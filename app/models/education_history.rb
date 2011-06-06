@@ -14,6 +14,13 @@ class EducationHistory < ActiveRecord::Base
     end
     hash['concentration'] = concentration unless concentration.empty?
     hash['degree'] = {'id' => degree_id, 'name' => degree_name} unless degree_name.nil?
+    hash['provider'] = provider
     hash
   end
+  
+  def self.get_education_history_hash(person_id)
+    eh = EducationHistory.where("person_id = ?", person_id)
+    eh.collect(&:to_hash)
+  end
+  
 end
