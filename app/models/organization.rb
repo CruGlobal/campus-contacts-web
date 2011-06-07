@@ -6,6 +6,10 @@ class Organization < ActiveRecord::Base
   has_many :organization_memberships, :dependent => :destroy
   has_many :people, :through => :organization_memberships
   has_many :keywords, :class_name => 'SmsKeyword'
+  has_many :question_sheets, :through => :keywords
+  has_many :pages, :through => :question_sheets
+  has_many :page_elements, :through => :pages
+  has_many :questions, :through => :pages
   has_many :leaders, :through => :organization_memberships, :source => :person, :conditions => 'organization_memberships.leader = 1', :order => "lastName, preferredName, firstName"
   validates_presence_of :name
   

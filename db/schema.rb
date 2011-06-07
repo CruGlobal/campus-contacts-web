@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110606185355) do
+ActiveRecord::Schema.define(:version => 20110607133333) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -1685,6 +1685,7 @@ ActiveRecord::Schema.define(:version => 20110606185355) do
     t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "hidden",     :default => false
   end
 
   create_table "ma_pages", :force => true do |t|

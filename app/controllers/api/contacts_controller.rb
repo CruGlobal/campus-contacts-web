@@ -49,7 +49,7 @@ class Api::ContactsController < ApiController
        #     hash[:form] = qa
        #     dh.push hash
        #   end
-       # end
+       end
        
        @answers = @answer_sheet.collect { |ax| @question_sheet.questions.collect {|x| x.display_response(ax)}}
        @questions = @question_sheet.questions.collect {|y| y.attributes.slice(:kind, :label, :style, :required, :content)}
@@ -58,7 +58,7 @@ class Api::ContactsController < ApiController
      end
    end
       #raise dh.to_json.inspect
-  render :json => JSON::pretty_generate(dh)
+    render :json => JSON::pretty_generate(dh)
   end
   
   def show_1

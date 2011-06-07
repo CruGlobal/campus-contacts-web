@@ -1,0 +1,2 @@
+module SmsKeywords::QuestionsHelper
+end

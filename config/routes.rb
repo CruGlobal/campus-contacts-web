@@ -10,7 +10,11 @@ Ma::Application.routes.draw do
   resources :ministries
 
   resources :sms_keywords do
-    resources :questions, :controller => "SmsKeywords::Questions" do
+    resources :questions, :controller => "sms_keywords/questions" do
+      member do
+        put :hide
+        put :unhide
+      end
       collection do
         post :reorder
       end

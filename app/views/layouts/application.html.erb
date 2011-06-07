@@ -9,14 +9,15 @@
   <%#= stylesheet_link_tag 'smoothness/jquery-ui-1.8.7.custom' %>
   <%= csrf_meta_tag %>
 </head>
-<body>
+<body id="<%= controller.controller_name %>_controller">
   <% if notice %>
    <p class="notice" id="notice"><%= notice %></p>
   <% elsif alert %>
    <p class="alert" id="alert"><%= alert %></p>
   <% end %>
-
-  <%= yield %>
+  <div class="<%= params[:action] %>">
+    <%= yield %>
+  </div>
 
 </body>
 </html>
