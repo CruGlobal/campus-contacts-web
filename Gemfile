@@ -46,7 +46,6 @@ group :development, :test do
   gem 'simplecov', '>= 0.3.5', :require => false
   #gem 'cover_me', '>= 1.0.0.rc6', :group => :test
   gem 'guard'
-  gem 'guard-test'
   gem 'railroady'
   gem 'awesome_print'
 end
