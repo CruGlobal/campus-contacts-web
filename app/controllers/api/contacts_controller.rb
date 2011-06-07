@@ -55,7 +55,8 @@ class Api::ContactsController < ApiController
        @questions = @question_sheet.questions.collect {|y| y.attributes.slice(:kind, :label, :style, :required, :content)}
 
        dh = @people.collect {|person| {person: person, form: @questions.collect {|q| {q: q, a: @answers[person][q]}}}}
-    end
+     end
+   end
       #raise dh.to_json.inspect
   render :json => JSON::pretty_generate(dh)
   end
