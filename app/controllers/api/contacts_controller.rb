@@ -11,16 +11,15 @@ class Api::ContactsController < ApiController
     else 
       if params[:keyword] 
         @keywords = SmsKeyword.find_all_by_id(params[:keyword])  
+        @questions = @keywords.collect(&:questions).flatten.uniq
+        @question_sheets = @keywords.collect(&:question_sheet)
       elsif params[:org] 
-        @keywords = SmsKeyword.where("organization_id = ?", params[:org])
-      else @keywords = nil
+        @organization = Organization.find(params[:org])
+        @questions = @organization.questions.where("#{PageElement.table_name}.hidden" => false).flatten.uniq
+        @question_sheets = @organization.question_sheets
       end
-      dh = []
       
-      @keywords.each do |keyword|
-        @question_sheet = keyword.question_sheet
-        @organization = keyword.organization
-        @people = Person.who_answered(@question_sheet).order('lastName, firstName')
+        @people = Person.who_answered(@question_sheets).order('lastName, firstName')
 
         if params[:assigned_to]
           if params[:assigned_to] == 'none'
@@ -30,33 +29,14 @@ class Api::ContactsController < ApiController
             @people = @people.joins(:assigned_tos).where('contact_assignments.question_sheet_id' => @question_sheet.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
           end
         end
-        @answer_sheet = []
+        
+        @answer_sheets = {}
         @people.each do |person|
-          @answer_sheet.push (person.answer_sheets.detect {|as| as.question_sheet_id == @question_sheet.id })
+          @answer_sheets[person] = person.answer_sheets.detect {|as| @question_sheets.collect(&:id).include?(as.question_sheet_id)}
         end
-
-       #  @peeps = @people.collect {|z| z.to_hash}
-       #   @answers = @answer_sheet.collect { |ax| @question_sheet.questions.collect {|x| x.display_response(ax)}}
-       #   @questions = @question_sheet.questions.collect {|y| y.get_api_question_hash}
-       # 
-       #   0.upto(@peeps.length-1) do |p|
-       #     hash = Hash.new
-       #     hash = {"person" => @peeps[p]}
-       #     qa = []
-       #     0.upto(@questions.length-1) do |q|
-       #       qa[q] = {"q" => @questions[q], "a" => @answers[p][q] }
-       #     end
-       #     hash[:form] = qa
-       #     dh.push hash
-       #   end
-       end
        
-       @answers = @answer_sheet.collect { |ax| @question_sheet.questions.collect {|x| x.display_response(ax)}}
-       @questions = @question_sheet.questions.collect {|y| y.attributes.slice(:kind, :label, :style, :required, :content)}
-
-       dh = @people.collect {|person| {person: person, form: @questions.collect {|q| {q: q, a: @answers[person][q]}}}}
+       dh = {questions: @questions.collect {|q| q.attributes.slice('id', 'kind', 'label', 'style', 'required', 'content')}, people: @people.collect {|person| {person: person.to_hash, form: @questions.collect {|q| {q: q.id, a: q.display_response(@answer_sheets[person])}}}}}
     end
-      #raise dh.to_json.inspect
     render :json => JSON::pretty_generate(dh)
   end
   

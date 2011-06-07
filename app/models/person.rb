@@ -6,6 +6,7 @@ class Person < ActiveRecord::Base
   belongs_to :user, :class_name => 'User', :foreign_key => 'fk_ssmUserId'
   has_many :phone_numbers
   has_many :locations
+  has_one :latest_location, :order => "updated_at DESC", :class_name => 'Location'
   has_many :friends
   has_many :interests
   has_many :education_histories
@@ -236,20 +237,20 @@ class Person < ActiveRecord::Base
   end
 
   def to_hash
-    fb_id = user.authentications.where(:provider => "facebook").order("updated_at DESC").first.try(:uid)
+    fb_id = user.authentications.where(:provider => "facebook").order("updated_at DESC").first.try(:uid) if user
     hash = {}
-    hash['id'] = self.user.userID.to_s
-    hash['name'] = self.to_s
-    hash['first_name'] = self.firstName
-    hash['last_name'] = self.lastName
-    hash['gender'] = self.gender
-    hash['locale'] = user.locale ? user.locale : ""
+    hash['id'] = id
+    hash['name'] = to_s
+    hash['first_name'] = firstName
+    hash['last_name'] = lastName
+    hash['gender'] = gender
+    hash['locale'] = user.try(:locale) ? user.locale : ""
     hash['fb_id'] = fb_id unless fb_id.nil?
-    hash['birthday'] = self.birth_date.to_s
+    hash['birthday'] = birth_date.to_s
     hash['picture'] = "http://graph.facebook.com/#{fb_id}/picture" unless fb_id.nil?
-    hash['interests'] = Interest.get_interests_hash(self.personID)
-    hash['education'] = EducationHistory.get_education_history_hash(self.personID)
-    hash['location'] = Location.get_latest_location_hash(self.personID)
+    hash['interests'] = Interest.get_interests_hash(id)
+    hash['education'] = EducationHistory.get_education_history_hash(id)
+    hash['location'] = latest_location.to_hash if latest_location
     hash
   end
 end
