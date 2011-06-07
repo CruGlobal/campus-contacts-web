@@ -58,7 +58,7 @@ FactoryGirl.define do
   end
   
   factory :user do
-    email 'test@exampl.com'
+    email {"test#{Factory.create(:count)}@example.com"}
     password 'asdfasdf'
   end
   
