@@ -35,21 +35,26 @@ class Api::ContactsController < ApiController
           @answer_sheet.push (person.answer_sheets.detect {|as| as.question_sheet_id == @question_sheet.id })
         end
 
-        @peeps = @people.collect {|z| z.to_hash}
-        @answers = @answer_sheet.collect { |ax| @question_sheet.questions.collect {|x| x.display_response(ax)}}
-        @questions = @question_sheet.questions.collect {|y| y.get_api_question_hash}
+       #  @peeps = @people.collect {|z| z.to_hash}
+       #   @answers = @answer_sheet.collect { |ax| @question_sheet.questions.collect {|x| x.display_response(ax)}}
+       #   @questions = @question_sheet.questions.collect {|y| y.get_api_question_hash}
+       # 
+       #   0.upto(@peeps.length-1) do |p|
+       #     hash = Hash.new
+       #     hash = {"person" => @peeps[p]}
+       #     qa = []
+       #     0.upto(@questions.length-1) do |q|
+       #       qa[q] = {"q" => @questions[q], "a" => @answers[p][q] }
+       #     end
+       #     hash[:form] = qa
+       #     dh.push hash
+       #   end
+       # end
+       
+       @answers = @answer_sheet.collect { |ax| @question_sheet.questions.collect {|x| x.display_response(ax)}}
+       @questions = @question_sheet.questions.collect {|y| y.attributes.slice(:kind, :label, :style, :required, :content)}
 
-        0.upto(@peeps.length-1) do |p|
-          hash = Hash.new
-          hash = {"person" => @peeps[p]}
-          qa = []
-          0.upto(@questions.length-1) do |q|
-            qa[q] = {"q" => @questions[q], "a" => @answers[p][q] }
-          end
-          hash[:form] = qa
-          dh.push hash
-        end
-      end
+       dh = @people.collect {|person| {person: person, form: @questions.collect {|q| {q: q, a: @answers[person][q]}}}}
     end
       #raise dh.to_json.inspect
   render :json => JSON::pretty_generate(dh)
