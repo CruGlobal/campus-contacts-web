@@ -1,9 +1,9 @@
 <h3><%= t('ma.people.index.leaders') %></h3>
 <ul>
   <% @organization.leaders.each do |person| %>
-    <li><%= link_to(person, people_path(keyword: @keyword.id, assigned_to: person.id)) %> (<%= person.contact_assignments.for_sheet(@question_sheet.id).count %>)</li>
+    <li><%= link_to(person, contacts_path(org_id: @organization.id, assigned_to: person.id)) %> (<%= person.contact_assignments.for_sheet(@question_sheets).count %>)</li>
   <% end %>
 </ul>
 
-<ul><li><%= link_to(t('ma.people.index.unassigned', :keyword => @keyword.keyword), params.dup.merge!(assigned_to: 'none')) %> (<%= unassigned_people.count %>)</li></ul>
-<ul><li><%= link_to(t('ma.people.index.all'), people_path(:keyword => @keyword.id)) %> (<%= Person.who_answered(@question_sheet).count %>)</li></ul>
+<ul><li><%= link_to(t('ma.people.index.unassigned'), params.dup.merge!(assigned_to: 'none')) %> (<%= unassigned_people(@question_sheets).count %>)</li></ul>
+<ul><li><%= link_to(t('ma.people.index.all'), contacts_path(org_id: @organization.id)) %> (<%= Person.who_answered(@question_sheets).count %>)</li></ul>
