@@ -1,42 +1,34 @@
 <h1><%= t("ma.welcome.index.title_top")%></h1>
-<h2><%= t("ma.welcome.home.subtitle") %></h2>
-<table border="0" cellspacing="5" cellpadding="0">
-  <tr>
-    <th><%= t("ma.general.keyword") %></th>
-    <th><%= t("ma.general.status") %></th>
-    <th>&nbsp;</th>
-  </tr>
-  <% current_user.sms_keywords.each do |keyword| %>
-    <tr>
-      <td><%= keyword.keyword %></td>
-      <td><%= keyword.state %></td>
-      <td><%= link_to t("ma.welcome.home.manage_questions"), sms_keyword_questions_path(keyword) %></td>
-      <td><%= link_to t("ma.welcome.home.edit_keyword"), edit_sms_keyword_path(keyword) %></td>
-      <td><%= link_to t("ma.welcome.home.follow_up"), people_path(:keyword => keyword) %></td>
-      <td><%= link_to t("ma.welcome.home.delete"), sms_keyword_path(keyword), :method => :delete, :confirm => "Are you sure you want to delete this keyword?" %></td>
-    </tr>
-  <% end %>
-</table>
-<% if current_user.sms_keywords.present? %>
-  <%= link_to(t("ma.welcome.home.request_another_key"), new_sms_keyword_path) %>
-<% else %>
-  <%= link_to(t("ma.welcome.index.request_key"), new_sms_keyword_path) %>
-<% end %>
 
-<% if current_person.organizations.present? %>
-  <h3><%= t('ma.welcome.home.your_orgs') %></h3>
-  <ul>
-    <% current_person.organization_memberships.includes(:organization).each do |membership| %>
-      <% org = membership.organization %>
-      <% org.ancestors.each_with_index do |parent, i| %>
-        <li><%= raw('&nbsp;' * i * 4) %><%= parent %></li>
+<h2><%= t('ma.welcome.home.your_orgs') %></h2>
+<% current_person.organization_memberships.each do |membership| %>
+  <% org = membership.organization %>
+  <h3><%= org.name %>
+  <%= link_to(t('ma.general.remove'), organization_membership_path(membership), 
+                                            :method => :delete, :remote => true, :confirm => t('ma.org_membership.confirm_delete', :org => org.to_s)) %></h3>
+  <% if membership.leader? %>
+    <%= link_to(t("ma.welcome.home.follow_up", count: unassigned_people(org.question_sheets).count), contacts_path(:org_id => org)) %>
+    <h3><%= t("ma.welcome.home.keywords") %></h3>
+    <table border="0" cellspacing="5" cellpadding="0">
+      <tr>
+        <th><%= t("ma.general.keyword") %></th>
+        <th><%= t("ma.general.status") %></th>
+        <th>&nbsp;</th>
+      </tr>
+      <% org.keywords.each do |keyword| %>
+        <tr>
+          <td><%= keyword.keyword %></td>
+          <td><%= keyword.state %></td>
+          <td><%= link_to t("ma.welcome.home.manage_questions"), sms_keyword_questions_path(keyword) %></td>
+          <td><%= link_to t("ma.welcome.home.edit_keyword"), edit_sms_keyword_path(keyword) %></td>
+          <td><%= link_to t("ma.welcome.home.delete"), sms_keyword_path(keyword), :method => :delete, :confirm => "Are you sure you want to delete this keyword?" %></td>
+        </tr>
       <% end %>
-      <li>
-        <%= raw('&nbsp;' * org.ancestors.length * 4) %><%= org %> 
-        <%= link_to(t('ma.general.remove'), organization_membership_path(membership), 
-                                          :method => :delete, :remote => true, :confirm => t('ma.org_membership.confirm_delete', :org => org.to_s)) %>
-      </li>
+    </table>
+    <% if current_user.sms_keywords.present? %>
+      <%= link_to(t("ma.welcome.home.request_another_key"), new_sms_keyword_path) %>
+    <% else %>
+      <%= link_to(t("ma.welcome.index.request_key"), new_sms_keyword_path) %>
     <% end %>
-  </ul>
-  <%#= link_to(t('ma.welcome.home.edit_orgs'), organization_memberships_path) %>
-<% end %>  
+  <% end %>
+<% end %>

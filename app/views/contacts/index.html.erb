@@ -1,3 +1,4 @@
+<% questions = @question_sheets.collect(&:questions).flatten.uniq %>
 <%= link_to(t('ma.nav.back_to_dashboard'), user_root_path) %>
 <table border="0" cellspacing="5" cellpadding="5">
   <tr>
@@ -8,24 +9,24 @@
       <%= form_for ContactAssignment.new do |f| %>
         <h3>
           <% if params[:assigned_to] == 'none' %>
-            <%= t('ma.people.index.unassigned_responses', keyword: @keyword.keyword) %>
+            <%= t('ma.people.index.unassigned_responses') %>
           <% else %>
             <% if @assigned_to.present? %>
-              <%= t('ma.people.index.responses_assigned_to', keyword: @keyword.keyword, assigned_to: @assigned_to) %>
+              <%= t('ma.people.index.responses_assigned_to', assigned_to: @assigned_to) %>
               <%= link_to(t('ma.people.index.show_all'), params.except(:assigned_to)) %>
             <% else %>
-              <%= t('ma.people.index.all_responses', keyword: @keyword.keyword) %>
+              <%= t('ma.people.index.all_responses') %>
             <% end %>
           <% end %>
         </h3>
-        <%= hidden_field_tag :keyword, params[:keyword] %>
+        <%= hidden_field_tag :org_id, params[:org_id] %>
         <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
         <%= t('ma.people.index.assign_to') %> 
         <%= select_tag :assign_to, options_for_select(@organization.leaders.collect {|l| [l.to_s, l.id]}), :include_blank => true %>
         <table>
           <tr>
             <th><%= check_box_tag 'check_all' %></th>
-            <% @question_sheet.questions.each do |q| %>
+            <% questions.each do |q| %>
               <th><%= q.label %></th>
             <% end %>
             <th><%= t('ma.people.index.assigned_to') %></th>
@@ -33,13 +34,13 @@
           </tr>
 
         <% @people.each do |person| %>
-          <% answer_sheet = person.answer_sheets.detect {|as| as.question_sheet_id == @question_sheet.id} %>
           <tr id="<%= dom_id(person) %>">
             <td><%= check_box_tag 'ids[]', person.id, false, :id => "ids_#{person.id}", :class => 'id_checkbox' %></td>
-            <% @question_sheet.questions.each do |q| %>
+            <% questions.each do |q| %>
+              <% answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)} %>
               <td><%= q.display_response(answer_sheet) %></td>
             <% end %>
-            <td id="assigned_to_<%= person.id %>"><%= ContactAssignment.where(:person_id => person.id, :question_sheet_id => @question_sheet.id).first.try(:assigned_to) %></td>
+            <td id="assigned_to_<%= person.id %>"><%= ContactAssignment.where(:person_id => person.id, :question_sheet_id => @question_sheets).first.try(:assigned_to) %></td>
             <td>
               <%#= link_to 'Show', person %>
               <%#= link_to 'Edit', edit_person_path(person) %>

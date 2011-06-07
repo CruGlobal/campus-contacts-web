@@ -2,6 +2,25 @@ class ContactsController < ApplicationController
   before_filter :get_person
   before_filter :get_keyword, :only => [:new, :update, :thanks]
   
+  def index
+    @organization = Organization.find_by_id(params[:org_id])
+    @organization ||= current_person.organizations.first
+    unless @organization
+      redirect_to user_root_path, :error => t('ma.contacts.index.which_org')
+      return false
+    end
+    @question_sheets = @organization.question_sheets
+    @people = Person.who_answered(@question_sheets).order('lastName, firstName')
+    if params[:assigned_to]
+      if params[:assigned_to] == 'none'
+        @people = unassigned_people
+      else
+        @assigned_to = Person.find(params[:assigned_to])
+        @people = @people.joins(:assigned_tos).where('contact_assignments.question_sheet_id' => @question_sheet.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
+      end
+    end
+  end
+  
   def new
     if params[:received_sms_id]
       sms = ReceivedSms.find_by_id(Base62.decode(params[:received_sms_id])) 
