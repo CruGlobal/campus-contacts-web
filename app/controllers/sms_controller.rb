@@ -1,7 +1,6 @@
 class SmsController < ApplicationController
   skip_before_filter :authenticate_user!, :verify_authenticity_token
   def mo
-    @letters = %w{a b c d e f g h i j k l m n o p q r s t u v w x y z}
     # See if this is a sticky session ( prior sms in the past 1 hour )
     @text = ReceivedSms.where(sms_params.slice(:phone_number)).order('updated_at desc').where(["updated_at > ?", 1.hour.ago]).last
     if @text && (@text.interactive? || params[:message].split(' ').first.downcase == 'i')
@@ -71,9 +70,7 @@ class SmsController < ApplicationController
       if question
         msg = question.label
         if question.kind == 'ChoiceField'
-          choices = []
-          question.choices.each_with_index {|c, i| choices << "#{@letters[i]}) #{c[0]}"}
-          msg += ' ' + choices.join('; ')
+          msg = question.label_with_choices
         end
         send_message(msg, phone_number)
       end
@@ -82,12 +79,12 @@ class SmsController < ApplicationController
     
     def save_survey_question(keyword, person, answer)
       question = next_question(keyword, person)
-      answer_sheet = get_answer_sheet(keyword, person)
+      @answer_sheet = get_answer_sheet(keyword, person)
       if question
         if question.kind == 'ChoiceField'
           answer = answer.split(',').collect(&:strip)
         end
-        question.set_response(answer, answer_sheet)
+        question.set_response(answer, @answer_sheet)
       end
     end
     
@@ -102,7 +99,7 @@ class SmsController < ApplicationController
       sms_id = SMS.deliver(phone_number, msg).first
       carrier.increment!(:sent_sms)
       sent_via = 'moonshado'
-      SentSms.create!(:message => msg, :recipient => phone_number, :moonshado_claimcheck => sms_id, :sent_via => sent_via, :recieved_sms_id => @text.id)
+      @sent_sms = SentSms.create!(:message => msg, :recipient => phone_number, :moonshado_claimcheck => sms_id, :sent_via => sent_via, :recieved_sms_id => @text.id)
     end
 
 end

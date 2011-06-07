@@ -112,7 +112,7 @@ class SmsKeywords::QuestionsController < ApplicationController
     end
     
     def find_keyword
-      @keyword = SmsKeyword.includes(:question_sheets).find(params[:sms_keyword_id])
+      @keyword = SmsKeyword.includes(:question_sheet).find(params[:sms_keyword_id])
     end
 
 end

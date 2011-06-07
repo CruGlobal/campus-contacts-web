@@ -37,7 +37,7 @@ class Api::ContactsController < ApiController
 
         @peeps = @people.collect {|z| z.to_hash}
         @answers = @answer_sheet.collect { |ax| @question_sheet.questions.collect {|x| x.display_response(ax)}}
-        @questions = @question_sheet.questions.collect {|y| y.get_api_question_hash}
+        @questions = @question_sheet.questions.collect {|y| y.attributes.slice(:kind, :label, :style, :required, :content)}
 
         0.upto(@peeps.length-1) do |p|
           hash = Hash.new

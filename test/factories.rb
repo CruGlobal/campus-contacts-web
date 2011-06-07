@@ -27,14 +27,25 @@ FactoryGirl.define do
     s.user_id 1
   end
   
+  Factory.define :approved_keyword, :parent => :sms_keyword do |s|
+    s.keyword 'approved'
+    s.organization_id 1
+    s.explanation "haoeu"
+    s.state "active"
+    s.initial_response "Hi there!"
+    s.post_survey_message "bye!"
+    s.user_id 1
+    s.after_create do |x| 
+      question_sheet = Factory(:question_sheet, :questionnable => x)
+      page = Factory(:page, :question_sheet => question_sheet)
+      element = Factory(:choice_field)
+      Factory(:page_element, :page => page, :element => element)
+    end
+  end
+  
   Factory.define :question_sheet do |y|
     y.label "Test Sheet"
     y.archived 0
-    y.questionnable_type "SmsKeyword"
-  end
-  
-  Factory.define :sms_keyword_with_question_sheet, :parent => :sms_keyword do |q|
-    #q.after_create { |x| Factory(:question_sheet, :sms_keyword => x)}
   end
   
   Factory.define :person do |p|
@@ -148,6 +159,33 @@ FactoryGirl.define do
     u.after_create { |a| Factory(:authentication, :user => a)}
   end
   
+  Factory.define :element do |e|
+    e.kind          'TextField'
+    e.label         'First Name'
+    e.style         'short'
+    e.object_name   'person'
+    e.attribute_name 'firstName'
+    e.required      false
+  end
+  
+  Factory.define :choice_field, :parent => :element do |e|
+    e.kind          'ChoiceField'
+    e.label         'Which of the following are you interested in?'
+    e.style         'checkbox'
+    e.content       "Prayer Group\nJesus"
+  end
+  
+  Factory.define :page do |p|
+    p.association   :question_sheet
+    p.label         'Welcome!'
+    p.number        1
+  end
+  
+  Factory.define :page_element do |p|
+    p.association   :page
+    p.association   :element
+    p.position        1
+  end
   
 end
 
