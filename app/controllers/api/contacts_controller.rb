@@ -34,7 +34,7 @@ class Api::ContactsController < ApiController
         @people.each do |person|
           @answer_sheets[person] = person.answer_sheets.detect {|as| @question_sheets.collect(&:id).include?(as.question_sheet_id)}
         end
-       
+       raise @people.inspect
        dh = {questions: @questions.collect {|q| q.attributes.slice('id', 'kind', 'label', 'style', 'required', 'content')}, people: @people.collect {|person| {person: person.to_hash, form: @questions.collect {|q| {q: q.id, a: q.display_response(@answer_sheets[person])}}}}}
     end
     render :json => JSON::pretty_generate(dh)

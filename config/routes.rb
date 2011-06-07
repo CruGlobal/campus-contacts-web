@@ -83,13 +83,15 @@ Ma::Application.routes.draw do
   end
 
   #test validated api call
-  scope 'api(/:version)', :module => :api, :version => /v\d+?/ do
-    resources :users
+  namespace :api do
+  scope '(/:version)', :version => /v\d+?/ do  #:module => :api
+    resources :people
     resources :friends
     resources :contacts
     #get 'user/:id' => 'user#user', :as => "api_user_view"
     #get 'user/:id/friends' => 'user#friends', :as => "api_user_friends"
     get 'schools' => 'users#schools'
+  end
   end
 
   #other oauth calls

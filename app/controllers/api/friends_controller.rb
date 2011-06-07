@@ -9,7 +9,7 @@ class Api::FriendsController < ApiController
     if valid_fields.is_a? Hash
       friends = valid_fields  #print out the exception
     else
-      friends = get_users.collect { |u| Friend.get_friends_from_person_id(u.person.personID, valid_fields)}
+      friends = get_people.collect { |u| Friend.get_friends_from_person_id(u.id, valid_fields)}
     end
     render :json => JSON::pretty_generate(friends)
   end

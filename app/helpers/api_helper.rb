@@ -64,23 +64,25 @@ module ApiHelper
     allowed_scopes = access_token.scope.to_s.split(' ')
     valid_fields_by_scope = []
     fields.each do |field|
-      if Apic::SCOPE_REQUIRED[action.to_sym].has_key?(field)
-        Apic::SCOPE_REQUIRED[action.to_sym][field].each do |scope|
-          valid_fields_by_scope.push(field) if allowed_scopes.include?(scope)
+      if Apic::SCOPE_REQUIRED.has_key?(action.to_sym)
+        if Apic::SCOPE_REQUIRED[action.to_sym].has_key?(field)
+          Apic::SCOPE_REQUIRED[action.to_sym][field].each do |scope|
+            valid_fields_by_scope.push(field) if allowed_scopes.include?(scope)
+          end
         end
       end
     end
   valid_fields_by_scope
   end
   
-  def get_users
-    user_ids = params[:id].split(',')
-    user_ids.each_with_index do |x,i|
+  def get_people
+    person_ids = params[:id].split(',')
+    person_ids.each_with_index do |x,i|
       x[i] = oauth.identity if x == "me"
     end
-    users = User.where(:userID => user_ids)
-    raise ApiErrors::NoDataReturned unless users
-    users
+    people = Person.where(:personID => person_ids)
+    raise ApiErrors::NoDataReturned unless people
+    people
   end
   
 end

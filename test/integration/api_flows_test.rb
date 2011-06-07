@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class ApiFlowsTest < ActionDispatch::IntegrationTest
-#  fixtures :all
 
   context "a user action" do
     setup do
@@ -12,7 +11,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
     end
     
     should "request user information" do
-      path = "/api/users/#{@user.userID}"
+      path = "/api/people/#{@user.person.id}"
       get path, {'access_token' => @access_token.code}
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json[0]['name'], "John Doe")
@@ -31,7 +30,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
     end
     
     should "request user information with fields" do
-      path = "/api/users/#{@user.userID}"
+      path = "/api/people/#{@user.person.id}"
       get path, {'access_token' => @access_token.code, 'fields' => "first_name,last_name,name,id,birthday,fb_id,picture,gender,education,interests,id,locale,location"}
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json[0]['name'], "John Doe")
@@ -50,7 +49,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
     end
     
     should "get user friends" do
-      path = "/api/friends/#{@user.userID}"
+      path = "/api/friends/#{@user.person.id}"
       get path, {'access_token' => @access_token.code}
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json[0]['friends'].length, 3)
@@ -60,7 +59,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
     end
     context "with version 1 specified" do
       should "request user information" do
-        path = "/api/v1/users/#{@user.userID}"
+        path = "/api/v1/people/#{@user.person.id}"
         get path, {'access_token' => @access_token.code}#, 'fields' => "first_name"}
         @json = ActiveSupport::JSON.decode(@response.body)
         assert_equal(@json[0]['name'], "John Doe")
@@ -79,7 +78,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       end
     
       should "request user information with fields" do
-        path = "/api/v1/users/#{@user.userID}"
+        path = "/api/v1/people/#{@user.person.id}"
         get path, {'access_token' => @access_token.code, 'fields' => "first_name,last_name,name,id,birthday,fb_id,picture,gender,education,interests,id,locale,location"}
         @json = ActiveSupport::JSON.decode(@response.body)
         assert_equal(@json[0]['name'], "John Doe")
@@ -98,7 +97,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       end
     
       should "get user friends" do
-        path = "/api/v1/friends/#{@user.userID}"
+        path = "/api/v1/friends/#{@user.person.id}"
         get path, {'access_token' => @access_token.code}
         @json = ActiveSupport::JSON.decode(@response.body)
         assert_equal(@json[0]['friends'].length, 3)
