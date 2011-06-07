@@ -27,7 +27,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       assert_equal(@json[0]['education'][2]['school']['name'], "Test University 2")
       assert_equal(@json[0]['interests'][1]['name'], "Test Interest 2")
       assert_equal(@json[0]['gender'], "male")
-      assert_equal(@json[0]['id'], @user.userID.to_s)
+      assert_equal(@json[0]['id'], @user.person.id)
     end
     
     should "request user information with fields" do
@@ -46,7 +46,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       assert_equal(@json[0]['education'][2]['school']['name'], "Test University 2")
       assert_equal(@json[0]['interests'][1]['name'], "Test Interest 2")
       assert_equal(@json[0]['gender'], "male")
-      assert_equal(@json[0]['id'], @user.userID.to_s)
+      assert_equal(@json[0]['id'], @user.person.id)
     end
     
     should "get user friends" do
@@ -75,7 +75,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
         assert_equal(@json[0]['education'][2]['school']['name'], "Test University 2")
         assert_equal(@json[0]['interests'][1]['name'], "Test Interest 2")
         assert_equal(@json[0]['gender'], "male")
-        assert_equal(@json[0]['id'], @user.userID.to_s)
+        assert_equal(@json[0]['id'], @user.person.id)
       end
     
       should "request user information with fields" do
@@ -94,7 +94,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
         assert_equal(@json[0]['education'][2]['school']['name'], "Test University 2")
         assert_equal(@json[0]['interests'][1]['name'], "Test Interest 2")
         assert_equal(@json[0]['gender'], "male")
-        assert_equal(@json[0]['id'], @user.userID.to_s)
+        assert_equal(@json[0]['id'], @user.person.id)
       end
     
       should "get user friends" do

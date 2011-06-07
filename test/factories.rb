@@ -21,12 +21,12 @@ FactoryGirl.define do
   
   factory :sms_keyword do 
     keyword 'test'
-    organization_id 1
+    association :organization
     explanation "haoeu"
     state "requested"
     initial_response "Hi there!"
     post_survey_message "bye!"
-    user_id 1
+    association :user
   end
   
   factory :approved_keyword, :parent => :sms_keyword do
@@ -36,7 +36,7 @@ FactoryGirl.define do
     state "active"
     initial_response "Hi there!"
     post_survey_message "bye!"
-    user_id 1
+    association :user
     after_create do |x| 
       question_sheet = Factory(:question_sheet, :questionnable => x)
       page = Factory(:page, :question_sheet => question_sheet)
@@ -164,8 +164,10 @@ FactoryGirl.define do
   end
   
   factory :user_with_auxs, :parent => :user do
-    after_create { |a| Factory(:person_with_things, :user => a)}
-    after_create { |a| Factory(:authentication, :user => a)}
+    after_create do |a| 
+      Factory(:person_with_things, :user => a)
+      Factory(:authentication, :user => a)
+    end
   end
   
   factory :element do
