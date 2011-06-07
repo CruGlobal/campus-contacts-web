@@ -71,6 +71,9 @@
     contacts:
       index:
         which_org: 'You need to choose which organization you want to do folow-up from'
+        assign_people:
+          one: Assign 1 person
+          other: "Assign %{count} people"
       thanks:
         message: Thank you for your interest.
     sms:
