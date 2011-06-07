@@ -10,6 +10,8 @@ class ContactsController < ApplicationController
       return false
     end
     @question_sheets = @organization.question_sheets
+    @questions = @organization.questions.where("#{PageElement.table_name}.hidden" => false).flatten.uniq
+    @hidden_questions = @organization.questions.where("#{PageElement.table_name}.hidden" => true).flatten.uniq
     @people = Person.who_answered(@question_sheets).order('lastName, firstName')
     if params[:assigned_to]
       if params[:assigned_to] == 'none'

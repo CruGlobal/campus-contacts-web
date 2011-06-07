@@ -1,5 +1,11 @@
-<% questions = @question_sheets.collect(&:questions).flatten.uniq %>
 <%= link_to(t('ma.nav.back_to_dashboard'), user_root_path) %>
+<%= link_to(t('ma.nav.hidden_questions'), '#', :id => 'hidden_questions_link') %>
+<div id="hidden_questions_div" style="display:none">
+  Click on a question to add it back to the page 
+  <ul id="hidden_questions">
+    <%= render :partial => 'contacts/hidden_question', :collection => @hidden_questions %>
+  </ul>
+</div>
 <table border="0" cellspacing="5" cellpadding="5">
   <tr>
     <td valign="top" id="leaders">
@@ -26,8 +32,11 @@
         <table>
           <tr>
             <th><%= check_box_tag 'check_all' %></th>
-            <% questions.each do |q| %>
-              <th><%= q.label %></th>
+            <% @questions.each do |q| %>
+              <th class="<%= dom_id(q) %>">
+                <%= q.label %><br/>
+                <%= link_to(t('ma.general.hide'), hide_sms_keyword_question_path(@organization.keywords.first, q), :remote => true, :method => :put, :class => 'hide', 'data-class' => dom_id(q)) %>
+              </th>
             <% end %>
             <th><%= t('ma.people.index.assigned_to') %></th>
             <th></th>
@@ -36,9 +45,9 @@
         <% @people.each do |person| %>
           <tr id="<%= dom_id(person) %>">
             <td><%= check_box_tag 'ids[]', person.id, false, :id => "ids_#{person.id}", :class => 'id_checkbox' %></td>
-            <% questions.each do |q| %>
+            <% @questions.each do |q| %>
               <% answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)} %>
-              <td><%= q.display_response(answer_sheet) %></td>
+              <td class="<%= dom_id(q) %>"><%= q.display_response(answer_sheet) %></td>
             <% end %>
             <td id="assigned_to_<%= person.id %>"><%= ContactAssignment.where(:person_id => person.id, :question_sheet_id => @question_sheets).first.try(:assigned_to) %></td>
             <td>

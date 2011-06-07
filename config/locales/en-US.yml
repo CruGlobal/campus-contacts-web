@@ -13,6 +13,7 @@
       edit: "Edit"
       back: "Back"
       remove: 'Remove'
+      hide: 'hide'
 
     people: 
       index:

@@ -106,13 +106,29 @@ class SmsKeywords::QuestionsController < ApplicationController
     end
   end
 
+  def hide
+    @question = Element.find(params[:id])
+    @organization = @keyword.organization
+    @organization.page_elements.each do |pe|
+      pe.update_attribute(:hidden, true) if pe.element_id == @question.id
+    end
+  end
+
+  def unhide
+    @organization = @keyword.organization
+    @organization.page_elements.each do |pe|
+      pe.update_attribute(:hidden, false) if pe.element_id == params[:id].to_i
+    end
+    redirect_to :back
+  end
+  
   private
     def find_question
       @question = @keyword.question_page.elements.find(params[:id])
     end
     
     def find_keyword
-      @keyword = SmsKeyword.includes(:question_sheet).find(params[:sms_keyword_id])
+      @keyword = SmsKeyword.includes(:question_sheets).find(params[:sms_keyword_id])
     end
 
 end

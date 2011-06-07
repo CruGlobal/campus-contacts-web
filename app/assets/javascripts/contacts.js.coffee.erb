@@ -15,7 +15,13 @@ $ ->
 			$('#check_all').prop('checked', false)
 		else
 			alert("<%= I18n.t('ma.people.index.none_checked') %>")
-			
+	$('#contacts_controller .index a.hide').live 'click', ->
+		$('.' + $(this).attr('data-class')).fadeOut()
+	
+	$('#hidden_questions_link').live 'click', ->
+		$('#hidden_questions_div').slideToggle()
+		false
+	
 #	$('.handle').draggable(revert: true)
 #	$('.handle').live 'dragstart', ->
 #	  row = $(this).closest('tr').clone();

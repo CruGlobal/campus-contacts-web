@@ -31,7 +31,7 @@ FactoryGirl.define do
   
   factory :approved_keyword, :parent => :sms_keyword do
     keyword 'approved'
-    organization_id 1
+    association :organization
     explanation "haoeu"
     state "active"
     initial_response "Hi there!"
@@ -72,6 +72,11 @@ FactoryGirl.define do
     name "Test Friend"
     uid "1234567890"
     provider "facebook"
+  end
+  
+  factory :organization do
+    name {"Organization #{Factory.create(:count)}"}
+    terminology 'Organization'
   end
   
   factory :location do 
