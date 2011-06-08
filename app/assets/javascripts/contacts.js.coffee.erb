@@ -34,6 +34,7 @@ $ ->
 				helper_text = '<%= I18n.t('ma.contacts.index.assign_people', count: 1) %>'
 			$('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'));
 	$('.leader').droppable 
+		activeClass: 'ui-state-highlight'
 		drop: (event, ui) ->
 			leader = $(this)
 			leader.effect('highlight', {}, 'slow')
@@ -45,6 +46,8 @@ $.fn.assignTo = (leader) ->
 	$('.id_checkbox:checked').each ->
 		row = $('tr[data-id=' + $(this).val() + ']')
 		assigned_to = $('.assigned_to', row)
+		# If they are already assigned to this leader, do nothing
+		return if assigned_to.html() == leader_name
 		if assigned_to.html() == ''
 			$('#unassigned_count').html(Number($('#unassigned_count').html()) - 1)
 		else
