@@ -46,20 +46,18 @@ $.fn.assignTo = (leader) ->
 	$('.id_checkbox:checked').each ->
 		row = $('tr[data-id=' + $(this).val() + ']')
 		assigned_to = $('.assigned_to', row)
-		# If they are already assigned to this leader, do nothing
-		return if assigned_to.html() == leader_name
-		if assigned_to.html() == ''
-			$('#unassigned_count').html(Number($('#unassigned_count').html()) - 1)
-		else
-			$('.leader a').each ->
-				if $(this).text() == assigned_to.html()
-					count = $(this).closest('.leader').find('.count')
-					count.html(Number(count.html()) - 1)
 		unless assigned_to.html() == leader_name
-			assigned_to.text(leader_name)
 			$('.count', leader).html(Number($('.count', leader).html()) + 1)
+			if assigned_to.html() == ''
+				$('#unassigned_count').html(Number($('#unassigned_count').html()) - 1)
+			else
+				$('.leader a').each ->
+					if $(this).text() == assigned_to.html()
+						count = $(this).closest('.leader').find('.count')
+						count.html(Number(count.html()) - 1)
+			assigned_to.text(leader_name)
 		# hide people assigned to someone other than the current
-		if $('#assigned_to').val() != '' && $('#assigned_to').val() != leader_name
+		if $('#assigned_to').val() != '' && $('#assigned_to').val() != leader.attr('data-id')
 			$(this).closest('tr').hide();
 	$.rails.handleRemote($('#new_contact_assignment'))
 	$('#assign_to').val('')

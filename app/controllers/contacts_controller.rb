@@ -18,7 +18,7 @@ class ContactsController < ApplicationController
         @people = unassigned_people
       else
         @assigned_to = Person.find(params[:assigned_to])
-        @people = @people.joins(:assigned_tos).where('contact_assignments.question_sheet_id' => @question_sheet.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
+        @people = @people.joins(:assigned_tos).where('contact_assignments.question_sheet_id' => @question_sheets, 'contact_assignments.assigned_to_id' => @assigned_to.id)
       end
     end
   end
