@@ -12,14 +12,15 @@ class ContactsController < ApplicationController
     @question_sheets = @organization.question_sheets
     @questions = @organization.questions.where("#{PageElement.table_name}.hidden" => false).flatten.uniq
     @hidden_questions = @organization.questions.where("#{PageElement.table_name}.hidden" => true).flatten.uniq
-    @people = Person.who_answered(@question_sheets).order('lastName, firstName')
     if params[:assigned_to]
-      if params[:assigned_to] == 'none'
-        @people = unassigned_people(@question_sheets)
+      if params[:assigned_to] == 'all'
+        @people = Person.who_answered(@question_sheets).order('lastName, firstName')
       else
         @assigned_to = Person.find(params[:assigned_to])
         @people = @people.joins(:assigned_tos).where('contact_assignments.question_sheet_id' => @question_sheets, 'contact_assignments.assigned_to_id' => @assigned_to.id)
       end
+    else
+      @people = unassigned_people(@question_sheets)
     end
   end
   

@@ -52,12 +52,15 @@ $.fn.assignTo = (leader) ->
 				$('#unassigned_count').html(Number($('#unassigned_count').html()) - 1)
 			else
 				$('.leader a').each ->
-					if $(this).text() == assigned_to.html()
+					if $(this).text() == assigned_to.html() || (leader.hasClass('unassigned') && assigned_to.html() == '')
 						count = $(this).closest('.leader').find('.count')
 						count.html(Number(count.html()) - 1)
-			assigned_to.text(leader_name)
+			if leader.hasClass('unassigned')
+				assigned_to.text('') 
+			else
+				assigned_to.text(leader_name) 
 		# hide people assigned to someone other than the current
-		if $('#assigned_to').val() != '' && $('#assigned_to').val() != leader.attr('data-id')
+		if $('#assigned_to').val() != 'all' && $('#assigned_to').val() != leader.attr('data-id')
 			$(this).closest('tr').hide();
 	$.rails.handleRemote($('#new_contact_assignment'))
 	$('#assign_to').val('')
