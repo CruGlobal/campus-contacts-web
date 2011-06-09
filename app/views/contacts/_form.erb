@@ -3,7 +3,7 @@
   <ul class="rounded jqm">
     <% @keyword.questions.each do |question| %>
       <li><div data-role="fieldcontain"><%= render 'answer_pages/element', :element => question %></div></li>
-    <% end %>
+    <% end %>			
     <li><div data-role="fieldcontain"><%= f.submit "Submit" %></div></li>
   </ul>
 <% end %>
