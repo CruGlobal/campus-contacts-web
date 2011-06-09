@@ -14,18 +14,20 @@
   </head>
   <body>
 		<div data-role="page">
+			<div data-role="header">
     		<div class="current" id="home">
 		     <%- if show_title? -%>
-		     <div class="toolbar">
-		       <%= link_to "Back", nil, :class => "back" unless params[:controller] == 'welcome' %>
-		       <h1><%=h yield(:title) %></h1>
-		       <%= link_to "Full Site", root_url(:mobile => 0), :class => "button", :rel => "external" %>
-		       <%= yield(:toolbar) %>
+		     <div data-role="header" role="banner">
+		       <%= link_to "Back", nil, "data-role" => "button" unless params[:controller] == 'welcome' %>
+		       <h1 class="ui-title" tabindex="0" role="heading"><%=h yield(:title) %></h1>
+		       <%= link_to "Full Site", root_url(:mobile => 0), "data-role" => "button", :rel => "external"%>
+		       <!-- <%= yield(:toolbar) %> -->
 		     </div>
 		     <%- end -%>
-     
+			</div>
+     	<div data-role="content">
 		     <%= yield %>
-		   </div>
+			</div>
 		</div>
   </body>
 </html>

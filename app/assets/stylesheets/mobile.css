@@ -1,4 +1,4 @@
-#jqt .toolbar {
+/*#jqt .toolbar {
 	height: 65px;
 }
 
@@ -13,3 +13,6 @@
 	font-size: 14px;
 	line-height: 28px;
 }
+*/
+
+ul.jqm {list-style-type:none;}
