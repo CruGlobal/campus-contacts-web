@@ -18,7 +18,7 @@ gem 'rubycas-client'
 gem 'rubycas-client-rails', :git => 'git://github.com/zuk/rubycas-client-rails.git'
 # gem 'squeel'
 gem 'ancestry'
-gem 'rails_admin'#, :git => 'git://github.com/twinge/rails_admin.git'
+gem 'rails_admin', :git => 'git://github.com/twinge/rails_admin.git'
 gem "state_machine"
 gem 'acts_as_list'
 gem 'dynamic_form'

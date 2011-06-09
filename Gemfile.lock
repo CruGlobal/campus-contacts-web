@@ -15,6 +15,13 @@ GIT
       ya2yaml (~> 0.30)
 
 GIT
+  remote: git://github.com/twinge/rails_admin.git
+  revision: 6aeb333d47b69f8128e48141e54d5fea9d1cba25
+  specs:
+    rails_admin (0.0.1)
+      builder (~> 3.0.0)
+
+GIT
   remote: git://github.com/zuk/rubycas-client-rails.git
   revision: cec213ae2fbe508284ebbdd666f9cfc20fc86d46
   specs:
@@ -159,7 +166,6 @@ GEM
       activesupport (= 3.1.0.rc1)
       bundler (~> 1.0)
       railties (= 3.1.0.rc1)
-    rails_admin (0.0.0)
     railties (3.1.0.rc1)
       actionpack (= 3.1.0.rc1)
       activesupport (= 3.1.0.rc1)
@@ -239,7 +245,7 @@ DEPENDENCIES
   rack-offline
   railroady
   rails (= 3.1.0.rc1)
-  rails_admin
+  rails_admin!
   rake (= 0.8.7)
   resque
   rest-client
