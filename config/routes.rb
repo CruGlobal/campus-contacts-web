@@ -90,7 +90,7 @@ Ma::Application.routes.draw do
     resources :contacts
     #get 'user/:id' => 'user#user', :as => "api_user_view"
     #get 'user/:id/friends' => 'user#friends', :as => "api_user_friends"
-    get 'schools' => 'users#schools'
+    get 'schools' => 'people#schools'
   end
   end
 
@@ -98,6 +98,7 @@ Ma::Application.routes.draw do
   match "oauth/authorize" => "oauth#authorize"
   match "oauth/grant" => "oauth#grant"
   match "oauth/deny" => "oauth#deny"
+  match "oauth/done" => "oauth#done"
   #make admin portion of oauth2 rack accessible
   #mount Rack::OAuth2::Server::Admin, :at => "/oauth/admin"
   mount Rack::OAuth2::Server::Admin => "/oauth/admin"
