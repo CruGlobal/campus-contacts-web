@@ -18,7 +18,7 @@ Ma::Application.routes.draw do
       collection do
         post :reorder
       end
-    end
+    end 
   end
   
   resources :people do
@@ -100,7 +100,6 @@ Ma::Application.routes.draw do
   match "oauth/deny" => "oauth#deny"
   match "oauth/done" => "oauth#done"
   #make admin portion of oauth2 rack accessible
-  #mount Rack::OAuth2::Server::Admin, :at => "/oauth/admin"
   mount Rack::OAuth2::Server::Admin => "/oauth/admin"
   
   root :to => "welcome#index"
