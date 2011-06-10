@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/mattrw89/rack-oauth2-server.git
-  revision: 73d5dca18f76400c6e039cf4b8ff9659322d8ce5
+  revision: d864b2f1abe50383cff4b2ced3afac1ae06669d4
   branch: active_record
   specs:
     trumant-rack-oauth2-server (2.2.1.1)

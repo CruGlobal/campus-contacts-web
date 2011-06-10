@@ -113,7 +113,7 @@ end
 
 
 task :package_assets, :roles => :app do
-  run "cd #{release_path} && rake assets:precompile RAILS_ENV=#{rails_env}"
+  run "cd #{release_path} && bundle exec rake assets:precompile RAILS_ENV=#{rails_env}"
 end
 
 after "deploy:update_code", "package_assets"
