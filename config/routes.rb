@@ -100,8 +100,8 @@ Ma::Application.routes.draw do
   match "oauth/deny" => "oauth#deny"
   match "oauth/done" => "oauth#done"
   #make admin portion of oauth2 rack accessible
-  mount Rack::OAuth2::Server::Admin => "/oauth/admin"
-  
+  mount Rack::OAuth2::Server::Admin =>"/oauth/admin"
+
   root :to => "welcome#index"
   match 'home' => 'welcome#home', :as => 'user_root'
   

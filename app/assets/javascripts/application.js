@@ -5,4 +5,5 @@
 //= require ma
 //= require questions
 //= require contacts
+//= require oauthadmin
 //= require rails.validations
