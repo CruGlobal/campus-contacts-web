@@ -35,23 +35,19 @@ class Person < ActiveRecord::Base
     preferredName.blank? ? self[:firstName] : preferredName
   end
   
-#We'll do this better at some point.  
-#New->Create? Gets rid of the save in update_from_facebook  
   def self.create_from_facebook(data, authentication, response = nil)
     if response.nil?
-      @response = MiniFB.get(authentication.token, authentication.uid)
+      response = MiniFB.get(authentication['token'], authentication['uid'])
     else
-      @response = response
+      response = response
     end
     new_person = Person.create(:firstName => data['first_name'], :lastName => data['last_name'])
-    new_person.update_from_facebook(data, authentication, @response)
-    new_person.get_first_time_only_login_data(authentication, @response)
-    
+    new_person.update_from_facebook(data, authentication, response)
     new_person
   end
   
   def update_from_facebook(data, authentication, response = nil)
-    response = MiniFB.get(authentication.token, authentication.uid) if response.nil?
+    response = MiniFB.get(authentication['token'], authentication['uid']) if response.nil?
     self.birth_date = DateTime.strptime(data['birthday'], '%m/%d/%Y') if birth_date.blank? && data['birthday'].present?
     self.gender = response.gender unless (response.gender.nil? && !gender.blank?)
     save!
@@ -59,6 +55,7 @@ class Person < ActiveRecord::Base
       email_addresses.create(:email => data['email'])
     end
     save
+    async_get_or_update_friends_and_interests(authentication)
     get_location(authentication, response)
     get_education_history(authentication, response)
     self
@@ -90,24 +87,10 @@ class Person < ActiveRecord::Base
     email.save!
   end
   
-  
-  def get_first_time_only_login_data(authentication = nil, response = nil, person = nil)
-    resp = nil
-    resp2 = nil
-    authentication = person.user.authentications.order("updated_at DESC").first unless authentication 
-    get_education_history(authentication, response)
-    if !response.nil?
-      resp = TestFBResponses::FRIENDS 
-      resp2 = TestFBResponses::INTERESTS
-    end
-    get_friends(authentication, resp)
-    get_interests(authentication, resp2)
-  end
-  
   def get_friends(authentication, response = nil)
     if friends.count == 0 
       if response.nil?
-         @friends = MiniFB.get(authentication.token, authentication.uid,:type => "friends")
+         @friends = MiniFB.get(authentication['token'], authentication['uid'],:type => "friends")
       else @friends = response
       end
       @friends["data"].each do |friend|
@@ -118,49 +101,49 @@ class Person < ActiveRecord::Base
   end
   
   #
-  def update_friends(authentication,response = nil)
+  def update_friends(authentication, response = nil)
       if response.nil?
-         @friends = MiniFB.get(authentication.token, authentication.uid,:type => "friends")
-      else @friends = response
-      end
-    @friends = @friends["data"]
-    @removal = []
-    @create = []
-    @match = []
-    @dbf = friends.reload
-    
-    @friends.each do |friend|
-      @dbf.each do |dbf|
-        if dbf['uid'] == friend.id
-          @matching_friend = dbf if dbf['uid'] == friend.id
-          break
-        end
-        @matching_friend = nil
-      end
-      if @matching_friend
-        friends.find_by_uid(@matching_friend.uid).update_attributes(:name => friend['name']) unless @matching_friend.name.eql?(friend['name'])
-        @match.push(@matching_friend.uid)
-      elsif friends.find_by_uid(friend.id).nil? #uid's did not match && the DB is empty
-        friends.create!(:uid => friend['id'], :name => friend['name'], :person_id => personID.to_i, :provider => "facebook")
-        @create.push(friend['id'])
-      end
-    end
-    @dbf = friends.reload
-    
-    @dbf.each do |dbf|
-      if !( @match.include?(dbf.uid) || @create.include?(dbf.uid) )
-        friend_to_delete = friends.select('id').where("uid = ?", dbf.uid).first
-        id_to_destroy = friend_to_delete['id'].to_i
-        Friend.destroy(id_to_destroy)
-        @removal.push(dbf.uid)
-      end
-    end
-    @removal.length + @create.length  #create way to test how many changes were made
+                @friends = MiniFB.get(authentication['token'], authentication['uid'],:type => "friends")
+             else @friends = response
+             end
+           @friends = @friends["data"]
+           @removal = []
+           @create = []
+           @match = []
+           @dbf = friends.reload
+           
+           @friends.each do |friend|
+             @dbf.each do |dbf|
+               if dbf['uid'] == friend.id
+                 @matching_friend = dbf if dbf['uid'] == friend.id
+                 break
+               end
+               @matching_friend = nil
+             end
+             if @matching_friend
+               friends.find_by_uid(@matching_friend.uid).update_attributes(:name => friend['name']) unless @matching_friend.name.eql?(friend['name'])
+               @match.push(@matching_friend.uid)
+             elsif friends.find_by_uid(friend.id).nil? #uid's did not match && the DB is empty
+               friends.create!(:uid => friend['id'], :name => friend['name'], :person_id => personID.to_i, :provider => "facebook")
+               @create.push(friend['id'])
+             end
+           end
+           @dbf = friends.reload
+           
+           @dbf.each do |dbf|
+             if !( @match.include?(dbf.uid) || @create.include?(dbf.uid) )
+               friend_to_delete = friends.select('id').where("uid = ?", dbf.uid).first
+               id_to_destroy = friend_to_delete['id'].to_i
+               Friend.destroy(id_to_destroy)
+               @removal.push(dbf.uid)
+             end
+           end
+           @removal.length + @create.length  #create way to test how many changes were made
   end
   
   def get_interests(authentication, response = nil)
     if response.nil?
-      @interests = MiniFB.get(authentication.token, authentication.uid,:type => "interests")
+      @interests = MiniFB.get(authentication['token'], authentication['uid'],:type => "interests")
     else @interests = response
     end
     @interests["data"].each do |interest|
@@ -177,7 +160,7 @@ class Person < ActiveRecord::Base
   
   def get_location(authentication, response = nil)
     if response.nil?
-      @location = MiniFB.get(authentication.token, authentication.uid).location
+      @location = MiniFB.get(authentication['token'], authentication['uid']).location
     else @location = response.location
     end
     Location.find_or_create_by_location_id_and_name_and_person_id_and_provider(@location['id'], @location['name'], personID.to_i,"facebook") unless @location.nil?
@@ -185,7 +168,7 @@ class Person < ActiveRecord::Base
   
   def get_education_history(authentication, response = nil)
     if response.nil?
-      @education = MiniFB.get(authentication.token, authentication.uid).education
+      @education = MiniFB.get(authentication['token'], authentication['uid']).education
     else @education = response.try(:education)
     end
     unless @education.nil?
@@ -252,5 +235,10 @@ class Person < ActiveRecord::Base
     hash['education'] = EducationHistory.get_education_history_hash(id)
     hash['location'] = latest_location.to_hash if latest_location
     hash
+  end
+  
+  def async_get_or_update_friends_and_interests(authentication)
+    Resque.enqueue(Jobs::UpdateFB, self.id, authentication,'friends')
+    Resque.enqueue(Jobs::UpdateFB, self.id, authentication,'interests')
   end
 end
