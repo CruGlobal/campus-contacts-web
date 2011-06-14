@@ -17,7 +17,7 @@ class ContactsController < ApplicationController
         @people = Person.who_answered(@question_sheets).order('lastName, firstName')
       else
         @assigned_to = Person.find(params[:assigned_to])
-        @people = @people.joins(:assigned_tos).where('contact_assignments.question_sheet_id' => @question_sheets, 'contact_assignments.assigned_to_id' => @assigned_to.id)
+        @people = Person.who_answered(@question_sheets).order('lastName, firstName').joins(:assigned_tos).where('contact_assignments.question_sheet_id' => @question_sheets, 'contact_assignments.assigned_to_id' => @assigned_to.id)
       end
     else
       @people = unassigned_people(@question_sheets)

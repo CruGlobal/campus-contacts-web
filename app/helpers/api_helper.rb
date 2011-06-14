@@ -12,6 +12,7 @@ module ApiHelper
     x
   end
   
+  
   def valid_request?(request, in_action = nil, prms = nil, accesstoken = nil)
     #retrieve the API action requested so we can match the right allowed fields
     raise ApiErrors::InvalidRequest if request.try(:path_parameters).nil? && in_action.nil?
@@ -81,8 +82,27 @@ module ApiHelper
       x[i] = oauth.identity if x == "me"
     end
     people = Person.where(:personID => person_ids)
-    raise ApiErrors::NoDataReturned unless people
+    raise ApiErrors::NoDataReturned if people.empty?
     people
   end
   
+  def get_me
+    Person.find(Rack::OAuth2::Server.get_access_token(params['access_token']).identity) if params['access_token']
+  end
+  
+  def organization_allowed?
+    @valid_orgs = get_me.organizations.collect { |x| x.subtree.collect(&:id)}.flatten.uniq
+    @valid_keywords = SmsKeyword.where(:organization_id => @valid_orgs)
+    
+    if params[:org]
+      return false unless @valid_orgs.include?(params[:org].to_i)
+    elsif params[:keyword]
+      @valid_key_ids = @valid_keywords.collect(&:id)
+      return false unless @valid_key_ids.include?(params[:keyword])
+    elsif params[:keyword_id]
+      @valid_key_names = @valid_keywords.collect(&:keyword)
+      return false unless @valid_key_names.include?(params[:keyword])
+    end
+  true
+  end
 end

@@ -234,6 +234,9 @@ class Person < ActiveRecord::Base
     hash['interests'] = Interest.get_interests_hash(id)
     hash['education'] = EducationHistory.get_education_history_hash(id)
     hash['location'] = latest_location.to_hash if latest_location
+    #hash['org_ids'] = organization_memberships.collect(&:organization_id)
+    #hash['primary_org_id'] = organization_memberships.where('primary = ?', 1)
+    hash['status'] = 'finish me!'
     hash
   end
   
