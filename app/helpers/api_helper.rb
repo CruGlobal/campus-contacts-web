@@ -87,7 +87,7 @@ module ApiHelper
   end
   
   def get_me
-    Person.find(Rack::OAuth2::Server.get_access_token(params['access_token']).identity) if params['access_token']
+    User.find(Rack::OAuth2::Server.get_access_token(params['access_token']).identity).person if params['access_token']
   end
   
   def organization_allowed?

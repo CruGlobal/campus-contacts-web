@@ -160,7 +160,14 @@ FactoryGirl.define do
        Factory(:interest, :person => f)
        Factory(:interest_2, :person => f)
        Factory(:location, :person => f)
+       org = Factory(:organization)
+       Factory(:organization_membership, :person => f, :organization => org, :leader => true)
+       #Factory(:access_token, :identity => f.id)
     end
+  end
+  
+  factory :organization_membership do 
+      association :organization
   end
   
   factory :user_with_auxs, :parent => :user do

@@ -46,10 +46,12 @@ class Api::ContactsController < ApiController
     valid_fields = valid_request_with_rescue(request)
     return render :json => valid_fields if valid_fields.is_a? Hash
     return render :json => {:error => "You do not have the appropriate organization memberships to view this data."} unless organization_allowed?
+    dh = []
     
     @answer_sheets = {}
     @question_sheets = []
     @people = get_people
+
     @people.each do |person|
       @answer_sheets[person] = person.answer_sheets.first
       @question_sheets.push person.answer_sheets.collect{|x| x.question_sheet}
@@ -59,7 +61,6 @@ class Api::ContactsController < ApiController
     @keywords = @question_sheets.collect { |k| k.questionnable}.flatten.uniq
     @keys = @keywords.collect {|k| {name: k.keyword, keyword_id: k.id, questions: k.questions.collect {|q| q.id}}}
     dh = {keywords: @keys, questions: @questions.collect {|q| q.attributes.slice('id', 'kind', 'label', 'style', 'required')}, people: @people.collect {|person| {person: person.to_hash, form: @questions.collect {|q| {q: q.id, a: q.display_response(@answer_sheets[person])}}}}}
-    dh = [] if !dh.is_a? Array
     render :json => JSON::pretty_generate(dh)
   end
 end

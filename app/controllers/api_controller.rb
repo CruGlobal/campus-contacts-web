@@ -73,7 +73,7 @@ class ApiController < ApplicationController
       end
       method = find_method(method_name, params[:version])
     end
-    #method = "no_api_method" unless valid_request?(request)
+    logger.info method.inspect
     original_process_action(method, *args)
   end
 

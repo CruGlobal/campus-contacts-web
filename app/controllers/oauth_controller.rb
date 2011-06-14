@@ -8,7 +8,7 @@ class OauthController < ApplicationController
     end
 
     def grant
-      head oauth.grant!(current_user.person.id)
+      head oauth.grant!(current_user.id)
     end
 
     def deny

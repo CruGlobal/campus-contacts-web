@@ -5,9 +5,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
   context "a user action" do
     setup do
       @user = Factory.create(:user_with_auxs)
-      @access_token = Factory.create(:access_token)
-      @access_token.identity = @user.userID
-      @access_token.client_id = 1
+      @access_token = Factory.create(:access_token, :identity => @user.id)
     end
     
     should "request user information" do

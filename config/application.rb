@@ -61,6 +61,14 @@ module Ma
         user if user && user.valid_password?(password)
         user.userID
       end
+      
+      #if evaluates to true then access_token can be granted, also required to be true for EVERY api call
+      config.oauth.permissions_authenticator = lambda do |identity|
+        org_memberships = User.find(identity).person.organization_memberships.where('leader = ?', 1)
+        return false if org_memberships.empty?
+        true
+      end
+      
       config.oauth.param_authentication = TRUE
       Rack::OAuth2::Server::Admin.set :client_id, "2"
       Rack::OAuth2::Server::Admin.set :client_secret, "e6f0bc02c1236f3d4cde6a4fd45e181569a8abf45ce17a3dba2fd88fe55722b6"
