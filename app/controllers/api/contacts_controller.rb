@@ -19,20 +19,47 @@ class Api::ContactsController < ApiController
     else @keywords = SmsKeyword.find_all_by_organization_id(get_me.primary_organization.id)
     end
 
+
     unless @keywords.empty?
       
       # @questions = @keywords.collect(&:questions).flatten.uniq
       @question_sheets = @keywords.collect(&:question_sheet)
       # @keys = @keywords.collect {|k| {name: k.keyword, keyword_id: k.id, questions: k.questions.collect {|q| q.id}}}
-      @people = Person.who_answered(@question_sheets).order('lastName, firstName')
+      @people = Person.who_answered(@question_sheets)  #.order('lastName, firstName')
       if params[:assigned_to]
         if params[:assigned_to] == 'none'
           @people = unassigned_people
         else
-          @assigned_to = Person.find(params[:assigned_to])
           @people = @people.joins(:assigned_tos).where('contact_assignments.question_sheet_id' => @question_sheets.collect(&:id), 'contact_assignments.assigned_to_id' => @assigned_to.id)
         end
       end
+      if params[:start]
+        @people = @people.offset(params[:start].to_i.abs) 
+      end
+      if params[:limit]
+        @people = @people.limit(params[:limit].to_i.abs) if params[:limit].to_i.abs != 0
+      end
+      if params[:sort]
+        @allowed_sorting_fields = ["time"]
+        @sorting_fields = @allowed_sorting_fields.collect { |s| s if params[:sort].split(',').include?(s)}
+        @sorting_directions = []
+        if params[:direction]
+          @allowed_sorting_directions = ["asc", "desc"]
+          params[:direction].split(',').each_with_index do |d|
+            @sorting_directions.push d if @allowed_sorting_directions.include?(d)
+          end
+        end
+        @sorting_fields.each_with_index do |field,i|
+          case field
+          when "time"
+            if !@sorting_directions[i].nil?
+              @people = @people.order("`ma_answer_sheets`.`created_at` #{@sorting_directions[i]}").all
+            else @people = @people.order("`ma_answer_sheets`.`created_at`").all
+            end
+          end
+        end
+      end
+      
       # @answer_sheets = {}
       # @people.each do |person|
       #   @answer_sheets[person] = person.answer_sheets.detect {|as| @question_sheets.collect(&:id).include?(as.question_sheet_id)}

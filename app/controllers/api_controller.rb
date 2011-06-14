@@ -73,7 +73,6 @@ class ApiController < ApplicationController
       end
       method = find_method(method_name, params[:version])
     end
-    logger.info method.inspect
     original_process_action(method, *args)
   end
 
