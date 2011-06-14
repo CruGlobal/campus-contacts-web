@@ -79,7 +79,7 @@ module ApiHelper
   def get_people
     person_ids = params[:id].split(',')
     person_ids.each_with_index do |x,i|
-      x[i] = User.find(oauth.identity).person.id if x == "me"
+      x[i] = User.find(oauth.identity).person.id.to_s if x == "me"
     end
     people = Person.where(:personID => person_ids)
     raise ApiErrors::NoDataReturned if people.empty?
