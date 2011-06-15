@@ -11,30 +11,11 @@ class Api::ContactsController < ApiController
     dh = []
     @keywords = get_keywords
     
-    unless ( @keywords.empty? && params[:term].nil?)
+    unless (@keywords.empty? && params[:term].nil?)
       @question_sheets = @keywords.collect(&:question_sheet)
       @people = Person.who_answered(@question_sheets).where('`ministry_person`.`firstName` LIKE ? OR `ministry_person`.`lastName` LIKE ? OR `ministry_person`.`preferredName` LIKE ?',"%#{params[:term]}%","%#{params[:term]}%","%#{params[:term]}%")
-      
-      @people = @people.offset(params[:start].to_i.abs) if params[:start]
-      @people = @people.limit(params[:limit].to_i.abs) if params[:limit] && params[:limit].to_i.abs != 0
-      if params[:sort]
-        @allowed_sorting_fields = ["time"]
-        @sorting_fields = params[:sort].split(',').select { |s| @allowed_sorting_fields.include?(s) }
-        @sorting_directions = []
-        if params[:direction]
-          @allowed_sorting_directions = ["asc", "desc"]
-          @sorting_directions = params[:direction].split(',').select { |d| @allowed_sorting_directions.include?(d) }
-        end
-        @sorting_fields.each_with_index do |field,i|
-          case field
-          when "time"
-            @people = @people.order("#{AnswerSheet.table_name}.`created_at` #{@sorting_directions[i]}") unless @sorting_directions[i].nil?
-          end
-        end
-      end
-      @people = @people.order("#{AnswerSheet.table_name}.`created_at` DESC") unless @sorting_fields.nil?
-
-      dh = @people.collect {|person| {person: person.to_hash.slice('id','first_name','last_name','gender','picture','org_ids','status')}}
+      @people = paginate_filter_sort_people(@people)      
+      dh = @people.collect {|person|  { person: person.to_hash.slice('id','first_name','last_name','gender','picture','org_ids','status')}}
     end
     render :json => JSON::pretty_generate(dh)
   end
@@ -53,38 +34,6 @@ class Api::ContactsController < ApiController
           @people = unassigned_people
         else
           @people = @people.joins(:assigned_tos).where('contact_assignments.question_sheet_id' => @question_sheets.collect(&:id), 'contact_assignments.assigned_to_id' => @assigned_to.id)
-        end
-      end
-       
-        @people = @people.offset(params[:start].to_i.abs) if params[:start]
-        @people = @people.limit(params[:limit].to_i.abs) if params[:limit] && params[:limit].to_i.abs != 0
-        if params[:sort]
-          @allowed_sorting_fields = ["time"]
-          @sorting_fields = params[:sort].split(',').select { |s| @allowed_sorting_fields.include?(s) }
-          @sorting_directions = []
-          if params[:direction]
-            @allowed_sorting_directions = ["asc", "desc"]
-            @sorting_directions = params[:direction].split(',').select { |d| @allowed_sorting_directions.include?(d) }
-          end
-          @sorting_fields.each_with_index do |field,i|
-            case field
-            when "time"
-              @people = @people.order("`#{AnswerSheet.table_name}`.`created_at` #{@sorting_directions[i]}") unless @sorting_directions[i].nil?
-            end
-          end
-        end
-        @people = @people.order("`#{AnswerSheet.table_name}`.`created_at` DESC") unless @sorting_fields.nil?
-      
-      if params[:filters] && params[:values]
-        @allowed_filter_fields = ["gender"]
-        @filter_fields = params[:filters].split(',').select { |f| @allowed_filter_fields.include?(f)}
-        @filter_values = params[:values].split(',')
-        @filter_fields.each_with_index do |field,index|
-          case field
-          when "gender"
-            gender = @filter_values[index].downcase == 'male' ? '1' : '0' if ['male','female'].include?(@filter_values[index].downcase)
-            @people = @people.where("`ministry_person`.`gender` = ?", gender)
-          end
         end
       end
       dh = @people.collect {|person| {person: person.to_hash.slice('id','first_name','last_name','gender','picture','org_ids','status')}}

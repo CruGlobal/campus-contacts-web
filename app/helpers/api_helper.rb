@@ -63,11 +63,13 @@ module ApiHelper
     #return the fields that are in their allowed scope of those they requested
     access_token = Rack::OAuth2::Server.get_access_token(params[:access_token]) if access_token.nil?
     allowed_scopes = access_token.scope.to_s.split(' ')
+    logger.info "allowed scopes:  #{allowed_scopes.inspect}"
     valid_fields_by_scope = []
     fields.each do |field|
       if Apic::SCOPE_REQUIRED.has_key?(action.to_sym)
         if Apic::SCOPE_REQUIRED[action.to_sym].has_key?(field)
           Apic::SCOPE_REQUIRED[action.to_sym][field].each do |scope|
+            logger.info "scope from required:  #{scope}"
             valid_fields_by_scope.push(field) if allowed_scopes.include?(scope)
           end
         end
@@ -92,10 +94,13 @@ module ApiHelper
   
   def organization_allowed?
     @valid_orgs = get_me.organizations.collect { |x| x.subtree.collect(&:id)}.flatten.uniq
+    logger.info "valid_orgs = #{@valid_orgs}"
     @valid_keywords = SmsKeyword.where(:organization_id => @valid_orgs)
     
-    if params[:org]
-      return false unless @valid_orgs.include?(params[:org].to_i)
+    if (params[:org] || params[:org_id])
+      org_id = params[:org] ? params[:org].to_i : params[:org_id].to_i
+      logger.info "org_id = #{org_id}"
+      return false unless @valid_orgs.include?(org_id)
     elsif params[:keyword]
       @valid_key_ids = @valid_keywords.collect(&:id)
       return false unless @valid_key_ids.include?(params[:keyword])
@@ -109,11 +114,47 @@ module ApiHelper
   def get_keywords
     if params[:keyword]
       @keywords = SmsKeyword.find_all_by_keyword(params[:keyword])
-    elsif params[:org] 
-      @keywords = SmsKeyword.find_all_by_organization_id(params[:org])
+    elsif (params[:org] || params[:org_id])
+      org_id = params[:org] ? params[:org].to_i : params[:org_id].to_i
+      @keywords = SmsKeyword.find_all_by_organization_id(org_id)
     elsif params[:keyword_id]
       @keywords = SmsKeyword.find_all_by_id(params[:id])
     else @keywords = SmsKeyword.find_all_by_organization_id(get_me.primary_organization.id)
     end
+  end
+  
+  def paginate_filter_sort_people(people)
+    people = people.offset(params[:start].to_i.abs) if params[:start]
+    people = people.limit(params[:limit].to_i.abs) if params[:limit] && params[:limit].to_i.abs != 0
+    if params[:sort]
+      @allowed_sorting_fields = ["time"]
+      @sorting_fields = params[:sort].split(',').select { |s| @allowed_sorting_fields.include?(s) }
+      @sorting_directions = []
+      if params[:direction]
+        @allowed_sorting_directions = ["asc", "desc"]
+        @sorting_directions = params[:direction].split(',').select { |d| @allowed_sorting_directions.include?(d) }
+      end
+      @sorting_fields.each_with_index do |field,i|
+        case field
+        when "time"
+          people = people.order("#{AnswerSheet.table_name}.`created_at` #{@sorting_directions[i]}") unless @sorting_directions[i].nil?
+        end
+      end
+    end
+    people = people.order("#{AnswerSheet.table_name}.`created_at` DESC") unless @sorting_fields.nil?
+    
+    if params[:filters] && params[:values]
+      @allowed_filter_fields = ["gender"]
+      @filter_fields = params[:filters].split(',').select { |f| @allowed_filter_fields.include?(f)}
+      @filter_values = params[:values].split(',')
+      @filter_fields.each_with_index do |field,index|
+        case field
+        when "gender"
+          gender = @filter_values[index].downcase == 'male' ? '1' : '0' if ['male','female'].include?(@filter_values[index].downcase)
+          people = people.where("`ministry_person`.`gender` = ?", gender)
+        end
+      end
+    end
+  people
   end
 end

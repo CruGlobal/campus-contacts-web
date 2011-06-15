@@ -4,12 +4,13 @@ class Apic
       :people => ["first_name", "last_name", "name", "id", "location", "birthday","locale","gender","interests","education","fb_id","picture"],
       :school => [""],
       :friends => ["uid", "name", "provider"],
-      :contacts => ["all"]
+      :contacts => ["all"],
+      :contact_assignments => ["all"]
     }
    }
   STD_VERSION = 1
    
-  SCOPE_REQUIRED = { 
+  SCOPE_REQUIRED = {
     :people => {
       "all" => ["userinfo"],
       "first_name" => ["userinfo"],
@@ -33,6 +34,9 @@ class Apic
      },
      :contacts => {
        "all" => ["contacts"]
-     }
+     }  ,
+     :contact_assignments => {
+       "all" => ["assignments"]
+    }
    }
 end

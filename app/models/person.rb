@@ -219,7 +219,7 @@ class Person < ActiveRecord::Base
     super
   end
 
-  def to_hash
+  def to_hash_basic
     fb_id = user.authentications.where(:provider => "facebook").order("updated_at DESC").first.try(:uid) if user
     hash = {}
     hash['id'] = id
@@ -227,16 +227,21 @@ class Person < ActiveRecord::Base
     hash['first_name'] = firstName
     hash['last_name'] = lastName
     hash['gender'] = gender
-    hash['locale'] = user.try(:locale) ? user.locale : ""
     hash['fb_id'] = fb_id unless fb_id.nil?
-    hash['birthday'] = birth_date.to_s
     hash['picture'] = "http://graph.facebook.com/#{fb_id}/picture" unless fb_id.nil?
+    hash['status'] = 'finish me!'
+    hash
+  end
+  
+  def to_hash
+    hash = to_hash_basic
+    hash['locale'] = user.try(:locale) ? user.locale : ""
+    hash['birthday'] = birth_date.to_s
     hash['interests'] = Interest.get_interests_hash(id)
     hash['education'] = EducationHistory.get_education_history_hash(id)
     hash['location'] = latest_location.to_hash if latest_location
     #hash['org_ids'] = organization_memberships.collect(&:organization_id)
     #hash['primary_org_id'] = organization_memberships.where('primary = ?', 1)
-    hash['status'] = 'finish me!'
     hash
   end
   

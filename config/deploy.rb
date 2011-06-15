@@ -29,9 +29,15 @@ set :keep_releases, '3'
 # set :target, ENV['target'] || ENV['TARGET'] || 'dev'
 default_run_options[:pty] = true
 set :scm, "git"
-role :db, "hart-w025.uscm.org", :primary => true
-role :web, "hart-w025.uscm.org"
-role :app, "hart-w025.uscm.org"
+#role :db, "hart-w025.uscm.org", :primary => true
+#role :web, "hart-w025.uscm.org"
+#role :app, "hart-w025.uscm.org"
+
+
+role :db, "172.16.1.25", :primary => true
+role :web, "172.16.1.25"
+role :app, "172.16.1.25"
+
 
 set :user, 'deploy'
 set :password, 'alt60m'
