@@ -64,7 +64,7 @@ module Mh
       
       #if evaluates to true then access_token can be granted, also required to be true for EVERY api call
       config.oauth.permissions_authenticator = lambda do |identity|
-        org_memberships = User.find(identity).person.organization_memberships.where('leader = ?', 1)
+        org_memberships = User.find(identity).person.organization_memberships.where('role = ? OR role = ?', "admin", "leader")
         return false if org_memberships.empty?
         true
       end

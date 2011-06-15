@@ -46,11 +46,8 @@ class Api::ContactsController < ApiController
     dh = []
     @keywords = get_keywords
     unless @keywords.empty?
-      
-      # @questions = @keywords.collect(&:questions).flatten.uniq
       @question_sheets = @keywords.collect(&:question_sheet)
-      # @keys = @keywords.collect {|k| {name: k.keyword, keyword_id: k.id, questions: k.questions.collect {|q| q.id}}}
-      # @people = Person.who_answered(@question_sheets)  #.order('lastName, firstName')
+      @people = Person.who_answered(@question_sheets)
       if params[:assigned_to]
         if params[:assigned_to] == 'none'
           @people = unassigned_people
@@ -90,11 +87,6 @@ class Api::ContactsController < ApiController
           end
         end
       end
-      
-      # @answer_sheets = {}
-      # @people.each do |person|
-      #   @answer_sheets[person] = person.answer_sheets.detect {|as| @question_sheets.collect(&:id).include?(as.question_sheet_id)}
-      # end
       dh = @people.collect {|person| {person: person.to_hash.slice('id','first_name','last_name','gender','picture','org_ids','status')}}
     end
     render :json => JSON::pretty_generate(dh)
@@ -109,7 +101,6 @@ class Api::ContactsController < ApiController
     @answer_sheets = {}
     @question_sheets = []
     @people = get_people
-
     @people.each do |person|
       @answer_sheets[person] = person.answer_sheets.first
       @question_sheets.push person.answer_sheets.collect{|x| x.question_sheet}
