@@ -6,8 +6,8 @@
   <h3><%= org.name %>
   <%= link_to(t('ma.general.remove'), organization_membership_path(membership), 
                                             :method => :delete, :remote => true, :confirm => t('ma.org_membership.confirm_delete', :org => org.to_s)) %></h3>
-  <% if membership.leader? %>
-    <%= link_to(t("ma.welcome.home.follow_up", count: unassigned_people(org.question_sheets).count), contacts_path(:org_id => org)) %>
+  <% if can? :manage, SmsKeyword %>
+    <%= link_to(t("ma.welcome.home.follow_up", count: unassigned_people(org).count), contacts_path(:org_id => org)) %>
     <h3><%= t("ma.welcome.home.keywords") %></h3>
     <table border="0" cellspacing="5" cellpadding="0">
       <tr>
@@ -16,13 +16,15 @@
         <th>&nbsp;</th>
       </tr>
       <% org.keywords.each do |keyword| %>
-        <tr>
-          <td><%= keyword.keyword %></td>
-          <td><%= keyword.state %></td>
-          <td><%= link_to t("ma.welcome.home.manage_questions"), sms_keyword_questions_path(keyword) %></td>
-          <td><%= link_to t("ma.welcome.home.edit_keyword"), edit_sms_keyword_path(keyword) %></td>
-          <td><%= link_to t("ma.welcome.home.delete"), sms_keyword_path(keyword), :method => :delete, :confirm => "Are you sure you want to delete this keyword?" %></td>
-        </tr>
+        <% if can? :manage, keyword %>
+          <tr>
+            <td><%= keyword.keyword %></td>
+            <td><%= keyword.state %></td>
+            <td><%= link_to t("ma.welcome.home.manage_questions"), sms_keyword_questions_path(keyword) %></td>
+            <td><%= link_to t("ma.welcome.home.edit_keyword"), edit_sms_keyword_path(keyword) %></td>
+            <td><%= link_to t("ma.welcome.home.delete"), sms_keyword_path(keyword), :method => :delete, :confirm => "Are you sure you want to delete this keyword?" %></td>
+          </tr>
+        <% end %>
       <% end %>
     </table>
     <% if current_user.sms_keywords.present? %>

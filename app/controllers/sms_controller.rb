@@ -7,6 +7,10 @@ class SmsController < ApplicationController
       keyword = @text.sms_keyword
       if keyword
         if params[:message].split(' ').first.downcase == 'i'
+          # Make them a contact of the org associated with this keyword
+          unless OrganizationMembership.find_by_person_id_and_organization_id(@text.person.id, @text.sms_keyword.organization.id)
+            OrganizationMembership.create!(:person_id => @text.person.id, :organization_id => @text.sms_keyword.organization.id, :role => 'contact') 
+          end
           @text.update_attribute(:interactive, true)
           # We're getting into a sticky session
           # Find the last received sms from this phone number and send them the first question off the survey

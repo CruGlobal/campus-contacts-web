@@ -70,6 +70,7 @@ GEM
     awesome_print (0.4.0)
     bcrypt-ruby (2.1.4)
     builder (3.0.0)
+    cancan (1.6.5)
     capistrano (2.6.0)
       highline
       net-scp (>= 1.0.0)
@@ -107,6 +108,8 @@ GEM
       builder
     i18n (0.6.0)
     json (1.5.1)
+    kaminari (0.12.4)
+      rails (>= 3.0.0)
     kgio (2.4.2)
     mail (2.3.0)
       i18n (>= 0.4.0)
@@ -221,6 +224,7 @@ DEPENDENCIES
   acts_as_list
   ancestry
   awesome_print
+  cancan
   capistrano
   client_side_validations
   coffee-script
@@ -231,6 +235,7 @@ DEPENDENCIES
   ephemeral_response
   factory_girl (= 2.0.0.beta2)
   hoptoad_notifier
+  kaminari
   mail_safe
   mini_fb
   mysql2

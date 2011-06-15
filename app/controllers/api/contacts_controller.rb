@@ -25,7 +25,7 @@ class Api::ContactsController < ApiController
       # @questions = @keywords.collect(&:questions).flatten.uniq
       @question_sheets = @keywords.collect(&:question_sheet)
       # @keys = @keywords.collect {|k| {name: k.keyword, keyword_id: k.id, questions: k.questions.collect {|q| q.id}}}
-      @people = Person.who_answered(@question_sheets)  #.order('lastName, firstName')
+      # @people = Person.who_answered(@question_sheets)  #.order('lastName, firstName')
       if params[:assigned_to]
         if params[:assigned_to] == 'none'
           @people = unassigned_people

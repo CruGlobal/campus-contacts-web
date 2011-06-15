@@ -161,7 +161,7 @@ FactoryGirl.define do
        Factory(:interest_2, :person => f)
        Factory(:location, :person => f)
        org = Factory(:organization)
-       Factory(:organization_membership, :person => f, :organization => org, :leader => true)
+       Factory(:organization_membership, :person => f, :organization => org, :role => 'admin')
        #Factory(:access_token, :identity => f.id)
     end
   end

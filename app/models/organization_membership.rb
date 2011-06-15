@@ -1,4 +1,5 @@
 class OrganizationMembership < ActiveRecord::Base
+  ROLES = %w[admin leader involved contact]
   belongs_to :person
   belongs_to :organization
   
@@ -19,6 +20,10 @@ class OrganizationMembership < ActiveRecord::Base
       self.save(:validate => false)
       other.destroy
     end
+  end
+  
+  def leader?
+    %w{admin leader}.include?(role)
   end
   
   protected

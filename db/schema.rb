@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110614231828) do
+ActiveRecord::Schema.define(:version => 20110615010025) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -174,9 +174,9 @@ ActiveRecord::Schema.define(:version => 20110614231828) do
   create_table "contact_assignments", :force => true do |t|
     t.integer  "assigned_to_id"
     t.integer  "person_id"
-    t.integer  "question_sheet_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "organization_id"
   end
 
   create_table "counties", :force => true do |t|
@@ -2816,9 +2816,9 @@ ActiveRecord::Schema.define(:version => 20110614231828) do
     t.boolean  "validated",       :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "leader",          :default => false
     t.date     "start_date"
     t.date     "end_date"
+    t.string   "role"
   end
 
   add_index "organization_memberships", ["organization_id", "person_id"], :name => "index_organization_memberships_on_organization_id_and_person_id", :unique => true

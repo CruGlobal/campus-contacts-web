@@ -22,7 +22,6 @@ class Person < ActiveRecord::Base
   has_many :assigned_tos, :class_name => "ContactAssignment", :foreign_key => "person_id"
   has_many :assigned_contacts, :through => :contact_assignments, :source => :assigned_to
   
-  
   scope :who_answered, lambda {|question_sheet_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.question_sheet_id' => question_sheet_id)}
   validates_presence_of :firstName, :lastName
   

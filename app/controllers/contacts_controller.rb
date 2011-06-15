@@ -14,13 +14,13 @@ class ContactsController < ApplicationController
     @hidden_questions = @organization.questions.where("#{PageElement.table_name}.hidden" => true).flatten.uniq
     if params[:assigned_to]
       if params[:assigned_to] == 'all'
-        @people = Person.who_answered(@question_sheets).order('lastName, firstName')
+        @people = @organization.contacts.order('lastName, firstName')
       else
         @assigned_to = Person.find(params[:assigned_to])
-        @people = Person.who_answered(@question_sheets).order('lastName, firstName').joins(:assigned_tos).where('contact_assignments.question_sheet_id' => @question_sheets, 'contact_assignments.assigned_to_id' => @assigned_to.id)
+        @people = Person.order('lastName, firstName').includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
       end
     else
-      @people = unassigned_people(@question_sheets)
+      @people = unassigned_people(@organization)
     end
   end
   
@@ -42,6 +42,10 @@ class ContactsController < ApplicationController
     question_set = QuestionSet.new(@keyword.questions, @answer_sheet)
     question_set.post(params[:answers], @answer_sheet)
     question_set.save
+    # Make them a contact of the org associated with this keyword
+    unless OrganizationMembership.find_by_person_id_and_organization_id(@person.id, @organization.id)
+      OrganizationMembership.create!(:person_id => @person.id, :organization_id => @keyword.organization.id, :role => 'contact') 
+    end
     if @person.valid?
       render :thanks
     else

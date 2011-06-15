@@ -52,7 +52,7 @@
                   <% answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)} %>
                   <td class="<%= dom_id(q) %>"><%= q.display_response(answer_sheet) %></td>
                 <% end %>
-                <td id="assigned_to_<%= person.id %>" class="assigned_to"><%= ContactAssignment.where(:person_id => person.id, :question_sheet_id => @question_sheets).first.try(:assigned_to) %></td>
+                <td id="assigned_to_<%= person.id %>" class="assigned_to"><%= ContactAssignment.where(:person_id => person.id, :organization_id => @organization.id).first.try(:assigned_to) %></td>
                 <td>
                   <%#= link_to 'Show', person %>
                   <%#= link_to 'Edit', edit_person_path(person) %>
