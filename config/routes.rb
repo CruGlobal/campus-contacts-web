@@ -88,6 +88,7 @@ Ma::Application.routes.draw do
   scope '(/:version)', :version => /v\d+?/ do  #:module => :api
     resources :people
     resources :friends
+    get 'contacts/search' => 'contacts#search'
     resources :contacts
     #get 'user/:id' => 'user#user', :as => "api_user_view"
     #get 'user/:id/friends' => 'user#friends', :as => "api_user_friends"

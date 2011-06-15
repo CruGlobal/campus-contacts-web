@@ -4,22 +4,47 @@ class Api::ContactsController < ApiController
   skip_before_filter :authenticate_user!
   oauth_required
   
+  def search_1
+    valid_fields = valid_request_with_rescue(request)
+    return render :json => valid_fields if valid_fields.is_a? Hash
+    return render :json => {:error => "You do not have the appropriate organization memberships to view this data."} unless organization_allowed?
+    dh = []
+    @keywords = get_keywords
+    
+    unless ( @keywords.empty? && params[:term].nil?)
+      @question_sheets = @keywords.collect(&:question_sheet)
+      @people = Person.who_answered(@question_sheets).where('`ministry_person`.`firstName` LIKE ? OR `ministry_person`.`lastName` LIKE ? OR `ministry_person`.`preferredName` LIKE ?',"%#{params[:term]}%","%#{params[:term]}%","%#{params[:term]}%")
+      
+      @people = @people.offset(params[:start].to_i.abs) if params[:start]
+      @people = @people.limit(params[:limit].to_i.abs) if params[:limit] && params[:limit].to_i.abs != 0
+      if params[:sort]
+        @allowed_sorting_fields = ["time"]
+        @sorting_fields = params[:sort].split(',').select { |s| @allowed_sorting_fields.include?(s) }
+        @sorting_directions = []
+        if params[:direction]
+          @allowed_sorting_directions = ["asc", "desc"]
+          @sorting_directions = params[:direction].split(',').select { |d| @allowed_sorting_directions.include?(d) }
+        end
+        @sorting_fields.each_with_index do |field,i|
+          case field
+          when "time"
+            @people = @people.order("`ma_answer_sheets`.`created_at` #{@sorting_directions[i]}") unless @sorting_directions[i].nil?
+          end
+        end
+      end
+      @people = @people.order("`ma_answer_sheets`.`created_at` DESC") unless @sorting_fields.nil?
+
+      dh = @people.collect {|person| {person: person.to_hash.slice('id','first_name','last_name','gender','picture','org_ids','status')}}
+    end
+    render :json => JSON::pretty_generate(dh)
+  end
+  
   def index_1
     valid_fields = valid_request_with_rescue(request)
     return render :json => valid_fields if valid_fields.is_a? Hash
     return render :json => {:error => "You do not have the appropriate organization memberships to view this data."} unless organization_allowed?
     dh = []
-
-    if params[:keyword]
-      @keywords = SmsKeyword.find_all_by_keyword(params[:keyword])
-    elsif params[:org] 
-      @keywords = SmsKeyword.find_all_by_organization_id(params[:org])
-    elsif params[:keyword_id]
-      @keywords = SmsKeyword.find_all_by_id(params[:id])
-    else @keywords = SmsKeyword.find_all_by_organization_id(get_me.primary_organization.id)
-    end
-
-
+    @keywords = get_keywords
     unless @keywords.empty?
       
       # @questions = @keywords.collect(&:questions).flatten.uniq
@@ -33,29 +58,35 @@ class Api::ContactsController < ApiController
           @people = @people.joins(:assigned_tos).where('contact_assignments.question_sheet_id' => @question_sheets.collect(&:id), 'contact_assignments.assigned_to_id' => @assigned_to.id)
         end
       end
-      if params[:start]
-        @people = @people.offset(params[:start].to_i.abs) 
-      end
-      if params[:limit]
-        @people = @people.limit(params[:limit].to_i.abs) if params[:limit].to_i.abs != 0
-      end
-      if params[:sort]
-        @allowed_sorting_fields = ["time"]
-        @sorting_fields = @allowed_sorting_fields.collect { |s| s if params[:sort].split(',').include?(s)}
-        @sorting_directions = []
-        if params[:direction]
-          @allowed_sorting_directions = ["asc", "desc"]
-          params[:direction].split(',').each_with_index do |d|
-            @sorting_directions.push d if @allowed_sorting_directions.include?(d)
+       
+        @people = @people.offset(params[:start].to_i.abs) if params[:start]
+        @people = @people.limit(params[:limit].to_i.abs) if params[:limit] && params[:limit].to_i.abs != 0
+        if params[:sort]
+          @allowed_sorting_fields = ["time"]
+          @sorting_fields = params[:sort].split(',').select { |s| @allowed_sorting_fields.include?(s) }
+          @sorting_directions = []
+          if params[:direction]
+            @allowed_sorting_directions = ["asc", "desc"]
+            @sorting_directions = params[:direction].split(',').select { |d| @allowed_sorting_directions.include?(d) }
+          end
+          @sorting_fields.each_with_index do |field,i|
+            case field
+            when "time"
+              @people = @people.order("`ma_answer_sheets`.`created_at` #{@sorting_directions[i]}") unless @sorting_directions[i].nil?
+            end
           end
         end
-        @sorting_fields.each_with_index do |field,i|
+        @people = @people.order("`ma_answer_sheets`.`created_at` DESC") unless @sorting_fields.nil?
+      
+      if params[:filters] && params[:values]
+        @allowed_filter_fields = ["gender"]
+        @filter_fields = params[:filters].split(',').select { |f| @allowed_filter_fields.include?(f)}
+        @filter_values = params[:values].split(',')
+        @filter_fields.each_with_index do |field,index|
           case field
-          when "time"
-            if !@sorting_directions[i].nil?
-              @people = @people.order("`ma_answer_sheets`.`created_at` #{@sorting_directions[i]}").all
-            else @people = @people.order("`ma_answer_sheets`.`created_at`").all
-            end
+          when "gender"
+            gender = @filter_values[index].downcase == 'male' ? '1' : '0' if ['male','female'].include?(@filter_values[index].downcase)
+            @people = @people.where("`ministry_person`.`gender` = ?", gender)
           end
         end
       end

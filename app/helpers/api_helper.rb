@@ -105,4 +105,15 @@ module ApiHelper
     end
   true
   end
+  
+  def get_keywords
+    if params[:keyword]
+      @keywords = SmsKeyword.find_all_by_keyword(params[:keyword])
+    elsif params[:org] 
+      @keywords = SmsKeyword.find_all_by_organization_id(params[:org])
+    elsif params[:keyword_id]
+      @keywords = SmsKeyword.find_all_by_id(params[:id])
+    else @keywords = SmsKeyword.find_all_by_organization_id(get_me.primary_organization.id)
+    end
+  end
 end
