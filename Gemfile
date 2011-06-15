@@ -33,6 +33,7 @@ gem 'paper_trail', '~> 2'
 gem 'unicorn'
 gem 'rake', '0.8.7'
 gem 'hoptoad_notifier'
+# gem 'cancan'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

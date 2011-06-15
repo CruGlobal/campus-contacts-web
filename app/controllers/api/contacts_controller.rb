@@ -53,8 +53,8 @@ class Api::ContactsController < ApiController
           case field
           when "time"
             if !@sorting_directions[i].nil?
-              @people = @people.order("`ma_answer_sheets`.`created_at` #{@sorting_directions[i]}").all
-            else @people = @people.order("`ma_answer_sheets`.`created_at`").all
+              @people = @people.order("`#{AnswerSheet.table_name}`.`created_at` #{@sorting_directions[i]}").all
+            else @people = @people.order("`#{AnswerSheet.table_name}`.`created_at`").all
             end
           end
         end

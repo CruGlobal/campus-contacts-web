@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110607133333) do
+ActiveRecord::Schema.define(:version => 20110614231828) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(:version => 20110607133333) do
     t.string   "identity"
     t.string   "client_id"
     t.string   "redirect_uri"
-    t.string   "scope"
+    t.string   "scope",        :default => ""
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "granted_at"
@@ -33,22 +33,11 @@ ActiveRecord::Schema.define(:version => 20110607133333) do
   add_index "access_grants", ["client_id"], :name => "index_access_grants_on_client_id"
   add_index "access_grants", ["code"], :name => "index_access_grants_on_code", :unique => true
 
-  create_table "access_grantsold", :force => true do |t|
-    t.string   "code"
-    t.string   "access_token"
-    t.string   "refresh_token"
-    t.datetime "access_token_expires_at"
-    t.integer  "user_id"
-    t.integer  "application_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "access_tokens", :force => true do |t|
     t.string   "code"
     t.string   "identity"
     t.string   "client_id"
-    t.string   "scope"
+    t.string   "scope",       :default => ""
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "expires_at"
@@ -80,7 +69,7 @@ ActiveRecord::Schema.define(:version => 20110607133333) do
   create_table "auth_requests", :force => true do |t|
     t.string   "code"
     t.string   "client_id"
-    t.string   "scope"
+    t.string   "scope",         :default => ""
     t.string   "redirect_uri"
     t.string   "state"
     t.string   "response_type"
@@ -105,20 +94,7 @@ ActiveRecord::Schema.define(:version => 20110607133333) do
   end
 
   add_index "authentications", ["provider", "uid"], :name => "index_authentications_on_provider_and_uid", :unique => true
-
-  create_table "client_applications", :force => true do |t|
-    t.string   "name"
-    t.string   "app_id"
-    t.string   "app_secret"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "user_id"
-    t.string   "url",          :limit => 60
-    t.string   "callback_url", :limit => 60
-    t.string   "support_url",  :limit => 60
-    t.string   "key",          :limit => 60
-    t.string   "secret",       :limit => 60
-  end
+  add_index "authentications", ["user_id"], :name => "user_id"
 
   create_table "clients", :force => true do |t|
     t.string   "code"
@@ -127,7 +103,7 @@ ActiveRecord::Schema.define(:version => 20110607133333) do
     t.string   "link"
     t.string   "image_url"
     t.string   "redirect_uri"
-    t.string   "scope"
+    t.string   "scope",        :default => ""
     t.string   "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -1035,51 +1011,51 @@ ActiveRecord::Schema.define(:version => 20110607133333) do
     t.string   "currentPosition",     :limit => 128
     t.string   "leadershipLevel",     :limit => 128
     t.string   "relationship",        :limit => 128
-    t.text     "q1",                  :limit => 16777215
+    t.text     "q1",                  :limit => 2147483647
     t.integer  "q2"
-    t.text     "q3",                  :limit => 16777215
-    t.text     "q4",                  :limit => 16777215
-    t.text     "q5",                  :limit => 16777215
-    t.text     "q6",                  :limit => 16777215
-    t.text     "q7",                  :limit => 16777215
+    t.text     "q3",                  :limit => 2147483647
+    t.text     "q4",                  :limit => 2147483647
+    t.text     "q5",                  :limit => 2147483647
+    t.text     "q6",                  :limit => 2147483647
+    t.text     "q7",                  :limit => 2147483647
     t.integer  "q8"
-    t.text     "q9",                  :limit => 16777215
+    t.text     "q9",                  :limit => 2147483647
     t.integer  "q10"
-    t.text     "q11",                 :limit => 16777215
+    t.text     "q11",                 :limit => 2147483647
     t.integer  "q12"
-    t.text     "q13",                 :limit => 16777215
+    t.text     "q13",                 :limit => 2147483647
     t.integer  "q14"
-    t.text     "q15",                 :limit => 16777215
+    t.text     "q15",                 :limit => 2147483647
     t.integer  "q16"
-    t.text     "q17",                 :limit => 16777215
+    t.text     "q17",                 :limit => 2147483647
     t.integer  "q18"
-    t.text     "q19",                 :limit => 16777215
+    t.text     "q19",                 :limit => 2147483647
     t.integer  "q20"
-    t.text     "q21",                 :limit => 16777215
+    t.text     "q21",                 :limit => 2147483647
     t.integer  "q22"
-    t.text     "q23",                 :limit => 16777215
+    t.text     "q23",                 :limit => 2147483647
     t.integer  "q24"
-    t.text     "q25",                 :limit => 16777215
-    t.text     "q26",                 :limit => 16777215
-    t.text     "q27",                 :limit => 16777215
-    t.text     "q28f1",               :limit => 16777215
+    t.text     "q25",                 :limit => 2147483647
+    t.text     "q26",                 :limit => 2147483647
+    t.text     "q27",                 :limit => 2147483647
+    t.text     "q28f1",               :limit => 2147483647
     t.integer  "q28f2"
-    t.text     "q28l1",               :limit => 16777215
+    t.text     "q28l1",               :limit => 2147483647
     t.integer  "q28l2"
-    t.text     "q28o1",               :limit => 16777215
+    t.text     "q28o1",               :limit => 2147483647
     t.integer  "q28o2"
-    t.text     "q28a1",               :limit => 16777215
+    t.text     "q28a1",               :limit => 2147483647
     t.integer  "q28a2"
-    t.text     "q28t1",               :limit => 16777215
+    t.text     "q28t1",               :limit => 2147483647
     t.integer  "q28t2"
-    t.text     "q28s1",               :limit => 16777215
+    t.text     "q28s1",               :limit => 2147483647
     t.integer  "q28s2"
-    t.text     "q29",                 :limit => 16777215
-    t.text     "q30",                 :limit => 16777215
-    t.text     "q31",                 :limit => 16777215
-    t.text     "q32",                 :limit => 16777215
-    t.text     "q33",                 :limit => 16777215
-    t.text     "q34",                 :limit => 16777215
+    t.text     "q29",                 :limit => 2147483647
+    t.text     "q30",                 :limit => 2147483647
+    t.text     "q31",                 :limit => 2147483647
+    t.text     "q32",                 :limit => 2147483647
+    t.text     "q33",                 :limit => 2147483647
+    t.text     "q34",                 :limit => 2147483647
     t.integer  "fk_ReviewSessionID"
     t.string   "reviewedByTitle",     :limit => 5
     t.string   "reviewedByFirstName", :limit => 30
@@ -1101,15 +1077,15 @@ ActiveRecord::Schema.define(:version => 20110607133333) do
     t.string   "currentPosition",         :limit => 128
     t.string   "leadershipLevel",         :limit => 128
     t.string   "relationship",            :limit => 128
-    t.text     "q1",                      :limit => 16777215
-    t.text     "q2",                      :limit => 16777215
-    t.text     "q3",                      :limit => 16777215
-    t.text     "q4",                      :limit => 16777215
-    t.text     "q5",                      :limit => 16777215
-    t.text     "q6",                      :limit => 16777215
-    t.text     "q7",                      :limit => 16777215
-    t.text     "q8",                      :limit => 16777215
-    t.text     "q9",                      :limit => 16777215
+    t.text     "q1",                      :limit => 2147483647
+    t.text     "q2",                      :limit => 2147483647
+    t.text     "q3",                      :limit => 2147483647
+    t.text     "q4",                      :limit => 2147483647
+    t.text     "q5",                      :limit => 2147483647
+    t.text     "q6",                      :limit => 2147483647
+    t.text     "q7",                      :limit => 2147483647
+    t.text     "q8",                      :limit => 2147483647
+    t.text     "q9",                      :limit => 2147483647
     t.integer  "fk_ReviewSessionLightID"
   end
 
@@ -1387,7 +1363,7 @@ ActiveRecord::Schema.define(:version => 20110607133333) do
     t.datetime "leadershipStartDate"
     t.datetime "leadershipEndDate"
     t.datetime "createDate"
-    t.binary   "lastChangedDate",               :limit => 8
+    t.binary   "lastChangedDate",               :limit => 255
     t.integer  "lastChangedBy"
     t.string   "displayLocation"
     t.boolean  "partnershipRegionOnly"
@@ -1578,148 +1554,30 @@ ActiveRecord::Schema.define(:version => 20110607133333) do
   end
 
   create_table "linczone_contacts", :primary_key => "ContactID", :force => true do |t|
-    t.timestamp "EntryDate"
-    t.string    "FirstName",            :limit => 120
-    t.string    "LastName",             :limit => 120
-    t.string    "HomeAddress",          :limit => 200
-    t.string    "City",                 :limit => 20
-    t.string    "State",                :limit => 20
-    t.string    "Zip",                  :limit => 80
-    t.string    "Email",                :limit => 120
-    t.string    "HighSchool",           :limit => 120
-    t.string    "CampusName",           :limit => 200
-    t.string    "CampusID",             :limit => 80
-    t.string    "ReferrerFirstName",    :limit => 120
-    t.string    "ReferrerLastName",     :limit => 120
-    t.string    "ReferrerRelationship", :limit => 100
-    t.string    "ReferrerEmail",        :limit => 200
-    t.string    "InfoCCC",              :limit => 1,   :default => "F"
-    t.string    "InfoNav",              :limit => 1,   :default => "F"
-    t.string    "InfoIV",               :limit => 1,   :default => "F"
-    t.string    "InfoFCA",              :limit => 1,   :default => "F"
-    t.string    "InfoBSU",              :limit => 1,   :default => "F"
-    t.string    "InfoCACM",             :limit => 1,   :default => "F"
-    t.string    "InfoEFCA",             :limit => 1,   :default => "F"
-    t.string    "InfoGCM",              :limit => 1,   :default => "F"
-    t.string    "InfoWesley",           :limit => 1,   :default => "F"
-  end
-
-  create_table "ma_answer_sheets", :force => true do |t|
-    t.integer  "question_sheet_id", :null => false
-    t.datetime "created_at",        :null => false
-    t.datetime "completed_at"
-    t.integer  "person_id"
-  end
-
-  create_table "ma_answers", :force => true do |t|
-    t.integer  "answer_sheet_id",         :null => false
-    t.integer  "question_id",             :null => false
-    t.text     "value"
-    t.string   "short_value"
-    t.integer  "attachment_file_size"
-    t.string   "attachment_content_type"
-    t.string   "attachment_file_name"
-    t.datetime "attachment_updated_at"
-  end
-
-  add_index "ma_answers", ["answer_sheet_id"], :name => "index_ma_answers_on_answer_sheet_id"
-  add_index "ma_answers", ["question_id"], :name => "index_ma_answers_on_question_id"
-  add_index "ma_answers", ["short_value"], :name => "index_ma_answers_on_short_value"
-
-  create_table "ma_conditions", :force => true do |t|
-    t.integer "question_sheet_id", :null => false
-    t.integer "trigger_id",        :null => false
-    t.string  "expression",        :null => false
-    t.integer "toggle_page_id",    :null => false
-    t.integer "toggle_id"
-  end
-
-  create_table "ma_elements", :force => true do |t|
-    t.string   "kind",                      :limit => 40,                    :null => false
-    t.string   "style",                     :limit => 40
-    t.string   "label"
-    t.text     "content"
-    t.boolean  "required"
-    t.string   "slug",                      :limit => 36
-    t.integer  "position"
-    t.string   "object_name"
-    t.string   "attribute_name"
-    t.string   "source"
-    t.string   "value_xpath"
-    t.string   "text_xpath"
-    t.integer  "question_grid_id"
-    t.string   "cols"
-    t.boolean  "is_confidential"
-    t.string   "total_cols"
-    t.string   "css_id"
-    t.string   "css_class"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "related_question_sheet_id"
-    t.integer  "conditional_id"
-    t.text     "tooltip"
-    t.boolean  "hide_label",                              :default => false
-    t.boolean  "hide_option_labels",                      :default => false
-    t.integer  "max_length"
-  end
-
-  add_index "ma_elements", ["conditional_id"], :name => "index_ma_elements_on_conditional_id"
-  add_index "ma_elements", ["position"], :name => "index_ma_elements_on_question_sheet_id_and_position_and_page_id"
-  add_index "ma_elements", ["question_grid_id"], :name => "index_ma_elements_on_question_grid_id"
-  add_index "ma_elements", ["slug"], :name => "index_ma_elements_on_slug"
-
-  create_table "ma_email_templates", :force => true do |t|
-    t.string   "name",       :limit => 1000, :null => false
-    t.text     "content"
-    t.boolean  "enabled"
-    t.string   "subject"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "ma_email_templates", ["name"], :name => "index_ma_email_templates_on_name", :length => {"name"=>767}
-
-  create_table "ma_page_elements", :force => true do |t|
-    t.integer  "page_id"
-    t.integer  "element_id"
-    t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "hidden",     :default => false
-  end
-
-  create_table "ma_pages", :force => true do |t|
-    t.integer "question_sheet_id",                                   :null => false
-    t.string  "label",             :limit => 100,                    :null => false
-    t.integer "number"
-    t.boolean "no_cache",                         :default => false
-    t.boolean "hidden",                           :default => false
-  end
-
-  create_table "ma_question_sheets", :force => true do |t|
-    t.string  "label",              :limit => 60,                    :null => false
-    t.boolean "archived",                         :default => false
-    t.integer "questionnable_id"
-    t.string  "questionnable_type"
-  end
-
-  add_index "ma_question_sheets", ["questionnable_id", "questionnable_type"], :name => "questionnable"
-
-  create_table "ma_references", :force => true do |t|
-    t.integer  "question_id"
-    t.integer  "applicant_answer_sheet_id"
-    t.datetime "email_sent_at"
-    t.string   "relationship"
-    t.string   "title"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "phone"
-    t.string   "email"
-    t.string   "status"
-    t.datetime "submitted_at"
-    t.string   "access_key"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "EntryDate"
+    t.string   "FirstName",            :limit => 120
+    t.string   "LastName",             :limit => 120
+    t.string   "HomeAddress",          :limit => 200
+    t.string   "City",                 :limit => 20
+    t.string   "State",                :limit => 20
+    t.string   "Zip",                  :limit => 80
+    t.string   "Email",                :limit => 120
+    t.string   "HighSchool",           :limit => 120
+    t.string   "CampusName",           :limit => 200
+    t.string   "CampusID",             :limit => 80
+    t.string   "ReferrerFirstName",    :limit => 120
+    t.string   "ReferrerLastName",     :limit => 120
+    t.string   "ReferrerRelationship", :limit => 100
+    t.string   "ReferrerEmail",        :limit => 200
+    t.string   "InfoCCC",              :limit => 1,   :default => "F"
+    t.string   "InfoNav",              :limit => 1,   :default => "F"
+    t.string   "InfoIV",               :limit => 1,   :default => "F"
+    t.string   "InfoFCA",              :limit => 1,   :default => "F"
+    t.string   "InfoBSU",              :limit => 1,   :default => "F"
+    t.string   "InfoCACM",             :limit => 1,   :default => "F"
+    t.string   "InfoEFCA",             :limit => 1,   :default => "F"
+    t.string   "InfoGCM",              :limit => 1,   :default => "F"
+    t.string   "InfoWesley",           :limit => 1,   :default => "F"
   end
 
   create_table "mail_delayed_jobs", :force => true do |t|
@@ -1797,33 +1655,109 @@ ActiveRecord::Schema.define(:version => 20110607133333) do
   add_index "merge_audits", ["merge_looser_id", "merge_looser_type"], :name => "merge_looser"
   add_index "merge_audits", ["mergeable_id", "mergeable_type"], :name => "mergeable"
 
+  create_table "mh_answer_sheets", :force => true do |t|
+    t.integer  "question_sheet_id", :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "completed_at"
+    t.integer  "person_id"
+  end
+
+  create_table "mh_answers", :force => true do |t|
+    t.integer  "answer_sheet_id",         :null => false
+    t.integer  "question_id",             :null => false
+    t.text     "value"
+    t.string   "short_value"
+    t.integer  "attachment_file_size"
+    t.string   "attachment_content_type"
+    t.string   "attachment_file_name"
+    t.datetime "attachment_updated_at"
+  end
+
+  add_index "mh_answers", ["answer_sheet_id"], :name => "index_ma_answers_on_answer_sheet_id"
+  add_index "mh_answers", ["question_id"], :name => "index_ma_answers_on_question_id"
+  add_index "mh_answers", ["short_value"], :name => "index_ma_answers_on_short_value"
+
+  create_table "mh_conditions", :force => true do |t|
+    t.integer "question_sheet_id", :null => false
+    t.integer "trigger_id",        :null => false
+    t.string  "expression",        :null => false
+    t.integer "toggle_page_id",    :null => false
+    t.integer "toggle_id"
+  end
+
   create_table "mh_education_history", :force => true do |t|
     t.string   "person_id"
-    t.string   "school_type"
+    t.string   "type"
     t.string   "concentration_id1"
     t.string   "concentration_name1"
+    t.string   "concentration_id2"
+    t.string   "concentration_name2"
+    t.string   "concentration_id3"
+    t.string   "concentration_name3"
     t.string   "year_id"
     t.string   "year_name"
     t.string   "degree_id"
     t.string   "degree_name"
     t.string   "school_id"
     t.string   "school_name"
+    t.string   "provider"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "provider"
-    t.string   "concentration_name2"
-    t.string   "concentration_name3"
-    t.string   "concentration_id2"
-    t.string   "concentration_id3"
+    t.string   "school_type"
   end
+
+  create_table "mh_elements", :force => true do |t|
+    t.string   "kind",                      :limit => 40,                    :null => false
+    t.string   "style",                     :limit => 40
+    t.string   "label"
+    t.text     "content"
+    t.boolean  "required"
+    t.string   "slug",                      :limit => 36
+    t.integer  "position"
+    t.string   "object_name"
+    t.string   "attribute_name"
+    t.string   "source"
+    t.string   "value_xpath"
+    t.string   "text_xpath"
+    t.integer  "question_grid_id"
+    t.string   "cols"
+    t.boolean  "is_confidential"
+    t.string   "total_cols"
+    t.string   "css_id"
+    t.string   "css_class"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "related_question_sheet_id"
+    t.integer  "conditional_id"
+    t.text     "tooltip"
+    t.boolean  "hide_label",                              :default => false
+    t.boolean  "hide_option_labels",                      :default => false
+    t.integer  "max_length"
+  end
+
+  add_index "mh_elements", ["conditional_id"], :name => "index_ma_elements_on_conditional_id"
+  add_index "mh_elements", ["position"], :name => "index_ma_elements_on_question_sheet_id_and_position_and_page_id"
+  add_index "mh_elements", ["question_grid_id"], :name => "index_ma_elements_on_question_grid_id"
+  add_index "mh_elements", ["slug"], :name => "index_ma_elements_on_slug"
+
+  create_table "mh_email_templates", :force => true do |t|
+    t.string   "name",       :limit => 1000, :null => false
+    t.text     "content"
+    t.boolean  "enabled"
+    t.string   "subject"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mh_email_templates", ["name"], :name => "index_ma_email_templates_on_name", :length => {"name"=>255}
 
   create_table "mh_friend", :force => true do |t|
     t.string   "name"
     t.string   "uid"
     t.string   "provider"
+    t.integer  "person_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "person_id"
   end
 
   create_table "mh_interest", :force => true do |t|
@@ -1831,19 +1765,62 @@ ActiveRecord::Schema.define(:version => 20110607133333) do
     t.string   "interest_id"
     t.string   "provider"
     t.string   "category"
+    t.integer  "person_id"
     t.datetime "interest_created_time"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "person_id"
   end
 
   create_table "mh_location", :force => true do |t|
     t.string   "location_id"
     t.string   "name"
     t.string   "provider"
+    t.integer  "person_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "person_id"
+  end
+
+  create_table "mh_page_elements", :force => true do |t|
+    t.integer  "page_id"
+    t.integer  "element_id"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "hidden",     :default => false
+  end
+
+  create_table "mh_pages", :force => true do |t|
+    t.integer "question_sheet_id",                                   :null => false
+    t.string  "label",             :limit => 100,                    :null => false
+    t.integer "number"
+    t.boolean "no_cache",                         :default => false
+    t.boolean "hidden",                           :default => false
+  end
+
+  create_table "mh_question_sheets", :force => true do |t|
+    t.string  "label",              :limit => 60,                    :null => false
+    t.boolean "archived",                         :default => false
+    t.integer "questionnable_id"
+    t.string  "questionnable_type"
+  end
+
+  add_index "mh_question_sheets", ["questionnable_id", "questionnable_type"], :name => "questionnable"
+
+  create_table "mh_references", :force => true do |t|
+    t.integer  "question_id"
+    t.integer  "applicant_answer_sheet_id"
+    t.datetime "email_sent_at"
+    t.string   "relationship"
+    t.string   "title"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "phone"
+    t.string   "email"
+    t.string   "status"
+    t.datetime "submitted_at"
+    t.string   "access_key"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "ministries", :force => true do |t|
@@ -1994,6 +1971,9 @@ ActiveRecord::Schema.define(:version => 20110607133333) do
     t.boolean "is_leader"
   end
 
+  add_index "ministry_missional_team_member", ["personID"], :name => "personID"
+  add_index "ministry_missional_team_member", ["teamID"], :name => "teamID"
+
   create_table "ministry_movement_contact", :id => false, :force => true do |t|
     t.integer "personID"
     t.integer "ActivityID"
@@ -2043,46 +2023,6 @@ ActiveRecord::Schema.define(:version => 20110607133333) do
   add_index "ministry_newaddress", ["addressType"], :name => "index_ministry_newAddress_on_addressType"
   add_index "ministry_newaddress", ["email"], :name => "email"
   add_index "ministry_newaddress", ["fk_PersonID"], :name => "fk_PersonID"
-
-  create_table "ministry_newaddress_restore", :primary_key => "addressID", :force => true do |t|
-    t.string   "deprecated_startDate", :limit => 25
-    t.string   "deprecated_endDate",   :limit => 25
-    t.string   "address1",             :limit => 55
-    t.string   "address2",             :limit => 55
-    t.string   "address3",             :limit => 55
-    t.string   "address4",             :limit => 55
-    t.string   "city",                 :limit => 50
-    t.string   "state",                :limit => 50
-    t.string   "zip",                  :limit => 15
-    t.string   "country",              :limit => 64
-    t.string   "homePhone",            :limit => 25
-    t.string   "workPhone",            :limit => 25
-    t.string   "cellPhone",            :limit => 25
-    t.string   "fax",                  :limit => 25
-    t.string   "email",                :limit => 200
-    t.string   "url",                  :limit => 100
-    t.string   "contactName",          :limit => 50
-    t.string   "contactRelationship",  :limit => 50
-    t.string   "addressType"
-    t.datetime "dateCreated"
-    t.datetime "dateChanged"
-    t.string   "createdBy",            :limit => 50
-    t.string   "changedBy",            :limit => 50
-    t.string   "fk_PersonID"
-    t.string   "email2",               :limit => 200
-    t.datetime "start_date"
-    t.datetime "end_date"
-    t.string   "facebook_link"
-    t.string   "myspace_link"
-    t.string   "title"
-    t.string   "dorm"
-    t.string   "room"
-  end
-
-  add_index "ministry_newaddress_restore", ["addressType", "fk_PersonID"], :name => "unique_person_addressType", :unique => true
-  add_index "ministry_newaddress_restore", ["addressType"], :name => "index_ministry_newaddress_restore_on_addressType"
-  add_index "ministry_newaddress_restore", ["email"], :name => "email"
-  add_index "ministry_newaddress_restore", ["fk_PersonID"], :name => "fk_PersonID"
 
   create_table "ministry_noncccmin", :primary_key => "NonCccMinID", :force => true do |t|
     t.string "ministry",    :limit => 50
@@ -2869,42 +2809,6 @@ ActiveRecord::Schema.define(:version => 20110607133333) do
   add_index "old_wsn_sp_wsnapplication", ["status"], :name => "index8"
   add_index "old_wsn_sp_wsnapplication", ["wsnYear"], :name => "index9"
 
-  create_table "oncampus_orders", :force => true do |t|
-    t.integer  "person_id"
-    t.string   "purpose",                    :limit => 100,                          :null => false
-    t.string   "payment",                    :limit => 100,                          :null => false
-    t.boolean  "format_dvd",                                :default => true,        :null => false
-    t.boolean  "format_quicktime",                          :default => false,       :null => false
-    t.boolean  "format_flash",                              :default => false,       :null => false
-    t.string   "campus",                     :limit => 100,                          :null => false
-    t.string   "campus_state",               :limit => 50,                           :null => false
-    t.string   "commercial_movement_name",   :limit => 200,                          :null => false
-    t.string   "commercial_school_name",     :limit => 200
-    t.text     "commercial_additional_info"
-    t.boolean  "user_agreement",                            :default => false,       :null => false
-    t.string   "status",                     :limit => 20,  :default => "submitted", :null => false
-    t.datetime "created_at",                                                         :null => false
-    t.string   "commercial_website",         :limit => 300
-    t.boolean  "commercial_logo",                           :default => true
-    t.string   "color",                      :limit => 20,  :default => "#FFFFFF"
-    t.datetime "produced_at"
-    t.datetime "shipped_at"
-  end
-
-  create_table "oncampus_uses", :force => true do |t|
-    t.integer  "order_id",                                             :null => false
-    t.string   "type",               :limit => 20,                     :null => false
-    t.string   "context",            :limit => 20,                     :null => false
-    t.string   "title",              :limit => 150,                    :null => false
-    t.datetime "date_start"
-    t.datetime "date_end"
-    t.boolean  "single_event",                      :default => false, :null => false
-    t.boolean  "commercial_frisbee",                :default => false, :null => false
-    t.boolean  "commercial_ramen",                  :default => false, :null => false
-    t.text     "description",                                          :null => false
-    t.text     "feedback",                                             :null => false
-  end
-
   create_table "organization_memberships", :force => true do |t|
     t.integer  "organization_id"
     t.integer  "person_id"
@@ -2918,6 +2822,7 @@ ActiveRecord::Schema.define(:version => 20110607133333) do
   end
 
   add_index "organization_memberships", ["organization_id", "person_id"], :name => "index_organization_memberships_on_organization_id_and_person_id", :unique => true
+  add_index "organization_memberships", ["person_id"], :name => "person_id"
 
   create_table "organizations", :force => true do |t|
     t.string   "name"
@@ -2932,7 +2837,7 @@ ActiveRecord::Schema.define(:version => 20110607133333) do
   end
 
   add_index "organizations", ["ancestry"], :name => "index_organizations_on_ancestry"
-  add_index "organizations", ["importable_type", "importable_id"], :name => "index_organizations_on_importable_type_and_importable_id", :unique => true
+  add_index "organizations", ["importable_id", "importable_type"], :name => "importable", :unique => true
 
   create_table "phone_numbers", :force => true do |t|
     t.string   "number"
@@ -3383,7 +3288,7 @@ ActiveRecord::Schema.define(:version => 20110607133333) do
     t.integer  "owner",                                           :null => false
     t.text     "criteria",   :limit => 2147483647,                :null => false
     t.integer  "saved",      :limit => 1,          :default => 0, :null => false
-    t.text     "options",    :limit => 16777215
+    t.text     "options",    :limit => 2147483647
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -3476,7 +3381,7 @@ ActiveRecord::Schema.define(:version => 20110607133333) do
     t.string   "summer_preference",    :limit => 100
     t.string   "summer_assignment",    :limit => 100
     t.string   "trainer"
-    t.text     "trainer_contact",      :limit => 16777215
+    t.text     "trainer_contact",      :limit => 2147483647
     t.string   "vonage"
     t.string   "website"
     t.integer  "send_dept"
@@ -4564,8 +4469,6 @@ ActiveRecord::Schema.define(:version => 20110607133333) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "teams", ["organization_id"], :name => "index_teams_on_organization_id"
 
   create_table "versions", :force => true do |t|
     t.string   "item_type",  :null => false
