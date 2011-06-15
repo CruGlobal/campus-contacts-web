@@ -7,7 +7,7 @@ class ApiHelperTest < ActionView::TestCase
       action = "people"
       user = Factory.create :user_with_authentication
       access_token = Factory.create :access_token
-      access_token.identity = user.userID
+      access_token.identity = user.id
       
       x = valid_request?(nil, action, params, access_token) #go ahead and test this with the user action WITHOUT params[:fields]
       assert_equal(x, Apic::API_ALLOWABLE_FIELDS[:v1][:people])

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110615010025) do
+ActiveRecord::Schema.define(:version => 20110615200849) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -69,7 +69,7 @@ ActiveRecord::Schema.define(:version => 20110615010025) do
   create_table "auth_requests", :force => true do |t|
     t.string   "code"
     t.string   "client_id"
-    t.string   "scope"
+    t.string   "scope",         :default => ""
     t.string   "redirect_uri"
     t.string   "state"
     t.string   "response_type"
@@ -94,20 +94,7 @@ ActiveRecord::Schema.define(:version => 20110615010025) do
   end
 
   add_index "authentications", ["provider", "uid"], :name => "index_authentications_on_provider_and_uid", :unique => true
-
-  create_table "client_applications", :force => true do |t|
-    t.string   "name"
-    t.string   "app_id"
-    t.string   "app_secret"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "user_id"
-    t.string   "url",          :limit => 60
-    t.string   "callback_url", :limit => 60
-    t.string   "support_url",  :limit => 60
-    t.string   "key",          :limit => 60
-    t.string   "secret",       :limit => 60
-  end
+  add_index "authentications", ["user_id"], :name => "user_id"
 
   create_table "clients", :force => true do |t|
     t.string   "code"
@@ -880,6 +867,18 @@ ActiveRecord::Schema.define(:version => 20110615010025) do
     t.string  "engine_name"
     t.integer "version"
   end
+
+  create_table "followup_comments", :force => true do |t|
+    t.integer  "contact_id"
+    t.integer  "commenter_id"
+    t.text     "comment"
+    t.string   "status"
+    t.integer  "organization_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "followup_comments", ["organization_id", "contact_id"], :name => "comment_organization_id_contact_id"
 
   create_table "fsk_allocations", :force => true do |t|
     t.integer  "ssm_id"
@@ -1700,22 +1699,23 @@ ActiveRecord::Schema.define(:version => 20110615010025) do
 
   create_table "mh_education_history", :force => true do |t|
     t.string   "person_id"
-    t.string   "school_type"
+    t.string   "type"
     t.string   "concentration_id1"
     t.string   "concentration_name1"
+    t.string   "concentration_id2"
+    t.string   "concentration_name2"
+    t.string   "concentration_id3"
+    t.string   "concentration_name3"
     t.string   "year_id"
     t.string   "year_name"
     t.string   "degree_id"
     t.string   "degree_name"
     t.string   "school_id"
     t.string   "school_name"
+    t.string   "provider"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "provider"
-    t.string   "concentration_name2"
-    t.string   "concentration_name3"
-    t.string   "concentration_id2"
-    t.string   "concentration_id3"
+    t.string   "school_type"
   end
 
   create_table "mh_elements", :force => true do |t|
@@ -1767,9 +1767,9 @@ ActiveRecord::Schema.define(:version => 20110615010025) do
     t.string   "name"
     t.string   "uid"
     t.string   "provider"
+    t.integer  "person_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "person_id"
   end
 
   create_table "mh_interest", :force => true do |t|
@@ -1777,19 +1777,19 @@ ActiveRecord::Schema.define(:version => 20110615010025) do
     t.string   "interest_id"
     t.string   "provider"
     t.string   "category"
+    t.integer  "person_id"
     t.datetime "interest_created_time"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "person_id"
   end
 
   create_table "mh_location", :force => true do |t|
     t.string   "location_id"
     t.string   "name"
     t.string   "provider"
+    t.integer  "person_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "person_id"
   end
 
   create_table "mh_page_elements", :force => true do |t|
@@ -1983,6 +1983,9 @@ ActiveRecord::Schema.define(:version => 20110615010025) do
     t.boolean "is_leader"
   end
 
+  add_index "ministry_missional_team_member", ["personID"], :name => "personID"
+  add_index "ministry_missional_team_member", ["teamID"], :name => "teamID"
+
   create_table "ministry_movement_contact", :id => false, :force => true do |t|
     t.integer "personID"
     t.integer "ActivityID"
@@ -2032,46 +2035,6 @@ ActiveRecord::Schema.define(:version => 20110615010025) do
   add_index "ministry_newaddress", ["addressType"], :name => "index_ministry_newAddress_on_addressType"
   add_index "ministry_newaddress", ["email"], :name => "email"
   add_index "ministry_newaddress", ["fk_PersonID"], :name => "fk_PersonID"
-
-  create_table "ministry_newaddress_restore", :primary_key => "addressID", :force => true do |t|
-    t.string   "deprecated_startDate", :limit => 25
-    t.string   "deprecated_endDate",   :limit => 25
-    t.string   "address1",             :limit => 55
-    t.string   "address2",             :limit => 55
-    t.string   "address3",             :limit => 55
-    t.string   "address4",             :limit => 55
-    t.string   "city",                 :limit => 50
-    t.string   "state",                :limit => 50
-    t.string   "zip",                  :limit => 15
-    t.string   "country",              :limit => 64
-    t.string   "homePhone",            :limit => 25
-    t.string   "workPhone",            :limit => 25
-    t.string   "cellPhone",            :limit => 25
-    t.string   "fax",                  :limit => 25
-    t.string   "email",                :limit => 200
-    t.string   "url",                  :limit => 100
-    t.string   "contactName",          :limit => 50
-    t.string   "contactRelationship",  :limit => 50
-    t.string   "addressType"
-    t.datetime "dateCreated"
-    t.datetime "dateChanged"
-    t.string   "createdBy",            :limit => 50
-    t.string   "changedBy",            :limit => 50
-    t.string   "fk_PersonID"
-    t.string   "email2",               :limit => 200
-    t.datetime "start_date"
-    t.datetime "end_date"
-    t.string   "facebook_link"
-    t.string   "myspace_link"
-    t.string   "title"
-    t.string   "dorm"
-    t.string   "room"
-  end
-
-  add_index "ministry_newaddress_restore", ["addressType", "fk_PersonID"], :name => "unique_person_addressType", :unique => true
-  add_index "ministry_newaddress_restore", ["addressType"], :name => "index_ministry_newaddress_restore_on_addressType"
-  add_index "ministry_newaddress_restore", ["email"], :name => "email"
-  add_index "ministry_newaddress_restore", ["fk_PersonID"], :name => "fk_PersonID"
 
   create_table "ministry_noncccmin", :primary_key => "NonCccMinID", :force => true do |t|
     t.string "ministry",    :limit => 50
@@ -2151,10 +2114,12 @@ ActiveRecord::Schema.define(:version => 20110615010025) do
     t.string   "lastAttended",                  :limit => 20
     t.string   "ministry"
     t.string   "strategy",                      :limit => 20
+    t.integer  "fb_uid",                        :limit => 8
   end
 
   add_index "ministry_person", ["accountNo"], :name => "accountNo_ministry_Person"
   add_index "ministry_person", ["campus"], :name => "campus"
+  add_index "ministry_person", ["fb_uid"], :name => "index_ministry_person_on_fb_uid"
   add_index "ministry_person", ["firstName"], :name => "firstname_ministry_Person"
   add_index "ministry_person", ["fk_ssmUserId"], :name => "fk_ssmUserId"
   add_index "ministry_person", ["lastName"], :name => "lastname_ministry_Person"
@@ -2858,55 +2823,22 @@ ActiveRecord::Schema.define(:version => 20110615010025) do
   add_index "old_wsn_sp_wsnapplication", ["status"], :name => "index8"
   add_index "old_wsn_sp_wsnapplication", ["wsnYear"], :name => "index9"
 
-  create_table "oncampus_orders", :force => true do |t|
-    t.integer  "person_id"
-    t.string   "purpose",                    :limit => 100,                          :null => false
-    t.string   "payment",                    :limit => 100,                          :null => false
-    t.boolean  "format_dvd",                                :default => true,        :null => false
-    t.boolean  "format_quicktime",                          :default => false,       :null => false
-    t.boolean  "format_flash",                              :default => false,       :null => false
-    t.string   "campus",                     :limit => 100,                          :null => false
-    t.string   "campus_state",               :limit => 50,                           :null => false
-    t.string   "commercial_movement_name",   :limit => 200,                          :null => false
-    t.string   "commercial_school_name",     :limit => 200
-    t.text     "commercial_additional_info"
-    t.boolean  "user_agreement",                            :default => false,       :null => false
-    t.string   "status",                     :limit => 20,  :default => "submitted", :null => false
-    t.datetime "created_at",                                                         :null => false
-    t.string   "commercial_website",         :limit => 300
-    t.boolean  "commercial_logo",                           :default => true
-    t.string   "color",                      :limit => 20,  :default => "#FFFFFF"
-    t.datetime "produced_at"
-    t.datetime "shipped_at"
-  end
-
-  create_table "oncampus_uses", :force => true do |t|
-    t.integer  "order_id",                                             :null => false
-    t.string   "type",               :limit => 20,                     :null => false
-    t.string   "context",            :limit => 20,                     :null => false
-    t.string   "title",              :limit => 150,                    :null => false
-    t.datetime "date_start"
-    t.datetime "date_end"
-    t.boolean  "single_event",                      :default => false, :null => false
-    t.boolean  "commercial_frisbee",                :default => false, :null => false
-    t.boolean  "commercial_ramen",                  :default => false, :null => false
-    t.text     "description",                                          :null => false
-    t.text     "feedback",                                             :null => false
-  end
-
   create_table "organization_memberships", :force => true do |t|
     t.integer  "organization_id"
     t.integer  "person_id"
-    t.boolean  "primary",         :default => false
-    t.boolean  "validated",       :default => false
+    t.boolean  "primary",                      :default => false
+    t.boolean  "validated",                    :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.date     "start_date"
     t.date     "end_date"
     t.string   "role"
+    t.string   "followup_status", :limit => 0
   end
 
+  add_index "organization_memberships", ["followup_status"], :name => "index_organization_memberships_on_followup_status"
   add_index "organization_memberships", ["organization_id", "person_id"], :name => "index_organization_memberships_on_organization_id_and_person_id", :unique => true
+  add_index "organization_memberships", ["person_id"], :name => "person_id"
 
   create_table "organizations", :force => true do |t|
     t.string   "name"
@@ -2921,7 +2853,7 @@ ActiveRecord::Schema.define(:version => 20110615010025) do
   end
 
   add_index "organizations", ["ancestry"], :name => "index_organizations_on_ancestry"
-  add_index "organizations", ["importable_type", "importable_id"], :name => "index_organizations_on_importable_type_and_importable_id", :unique => true
+  add_index "organizations", ["importable_id", "importable_type"], :name => "importable", :unique => true
 
   create_table "phone_numbers", :force => true do |t|
     t.string   "number"
@@ -2996,6 +2928,16 @@ ActiveRecord::Schema.define(:version => 20110615010025) do
     t.datetime "updated_at"
     t.boolean  "interactive",    :default => false
     t.integer  "sms_keyword_id"
+  end
+
+  create_table "rejoicables", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "created_by_id"
+    t.integer  "organization_id"
+    t.integer  "followup_comment_id"
+    t.string   "what",                :limit => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "rideshare_event", :force => true do |t|
@@ -4553,8 +4495,6 @@ ActiveRecord::Schema.define(:version => 20110615010025) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "teams", ["organization_id"], :name => "index_teams_on_organization_id"
 
   create_table "versions", :force => true do |t|
     t.string   "item_type",  :null => false

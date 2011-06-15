@@ -1,0 +1,4 @@
+$('#comment_form')[0].reset();
+$('#comment_submit').show();
+$('#spinner_comment').hide();
+$('#previous_comments').prepend('<%= j(render("followup_comment", followup_comment: @followup_comment)) %>');

@@ -59,7 +59,7 @@ module Mh
       config.oauth.authenticator = lambda do |email, password|
         user = User.find_for_database_authentication(:email => email)
         user if user && user.valid_password?(password)
-        user.userID
+        user.id
       end
       
       #if evaluates to true then access_token can be granted, also required to be true for EVERY api call

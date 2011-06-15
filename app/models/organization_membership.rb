@@ -1,4 +1,5 @@
 class OrganizationMembership < ActiveRecord::Base
+  FOLLOWUP_STATUSES = ['uncontacted','attempted_contact','contacted','do_not_contact','completed']
   ROLES = %w[admin leader involved contact]
   belongs_to :person
   belongs_to :organization
