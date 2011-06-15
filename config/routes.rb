@@ -1,5 +1,9 @@
 Mh::Application.routes.draw do
   
+  resources :rejoicables
+
+  resources :followup_comments
+
   resources :contact_assignments
 
   resources :organization_memberships

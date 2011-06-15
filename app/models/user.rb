@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
     end
 
     if user.person 
-      user.person.update_from_facebook(data, authentication).inspect
+      user.person.update_from_facebook(data, authentication)
     else
       user.person = Person.create_from_facebook(data, authentication)
     end

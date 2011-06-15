@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  contact_id: 1
+  commenter_id: 1
+  comment: MyText
+  status: MyString
+
+two:
+  contact_id: 1
+  commenter_id: 1
+  comment: MyText
+  status: MyString

@@ -43,8 +43,8 @@
           </tr>
           <tbody id="contacts_table">
             <% @people.each do |person| %>
-              <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>">
-                <td nowrap="nowrap">
+              <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row">
+                <td nowrap="nowrap" class="checkbox_cell">
                   <%= image_tag('grippy.png', :class => 'handle') %>
                   <%= check_box_tag 'ids[]', person.id, false, :id => "ids_#{person.id}", :class => 'id_checkbox' %>
                 </td>

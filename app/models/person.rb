@@ -21,6 +21,8 @@ class Person < ActiveRecord::Base
   has_many :contact_assignments, :class_name => "ContactAssignment", :foreign_key => "assigned_to_id"
   has_many :assigned_tos, :class_name => "ContactAssignment", :foreign_key => "person_id"
   has_many :assigned_contacts, :through => :contact_assignments, :source => :assigned_to
+  has_one :current_address, :class_name => "Address", :foreign_key => "fk_personID", :conditions => {:addressType => 'current'}
+  has_many :rejoicables, inverse_of: :created_by
   
   scope :who_answered, lambda {|question_sheet_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.question_sheet_id' => question_sheet_id)}
   validates_presence_of :firstName, :lastName
@@ -29,6 +31,10 @@ class Person < ActiveRecord::Base
 
   def to_s
     [preferredName.blank? ? firstName : preferredName, lastName].join(' ')
+  end
+  
+  def phone_number
+    primary_phone_number.try(:number)
   end
   
   def firstName
@@ -50,10 +56,11 @@ class Person < ActiveRecord::Base
     response = MiniFB.get(authentication['token'], authentication['uid']) if response.nil?
     self.birth_date = DateTime.strptime(data['birthday'], '%m/%d/%Y') if birth_date.blank? && data['birthday'].present?
     self.gender = response.gender unless (response.gender.nil? && !gender.blank?)
-    save!
+    # save!
     unless email_addresses.detect {|e| e.email == data['email']}
       email_addresses.create(:email => data['email'])
     end
+    self.fb_uid = authentication['uid']
     save
     async_get_or_update_friends_and_interests(authentication)
     get_location(authentication, response)

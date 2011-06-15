@@ -1,0 +1,7 @@
+<li id="<%= dom_id(followup_comment) %>">
+  <%= image_tag("https://graph.facebook.com/#{followup_comment.commenter.fb_uid}/picture", :alt => '') %>
+  <%= followup_comment.commenter %>
+  <%= followup_comment.status %>
+  <%= l followup_comment.created_at %>
+  <%= followup_comment.comment %>
+</li>

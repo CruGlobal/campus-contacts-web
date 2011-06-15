@@ -42,15 +42,20 @@ class ContactsController < ApplicationController
     question_set = QuestionSet.new(@keyword.questions, @answer_sheet)
     question_set.post(params[:answers], @answer_sheet)
     question_set.save
-    # Make them a contact of the org associated with this keyword
-    unless OrganizationMembership.find_by_person_id_and_organization_id(@person.id, @keyword.organization.id)
-      OrganizationMembership.create!(:person_id => @person.id, :organization_id => @keyword.organization.id, :role => 'contact') 
-    end
+    create_contact_at_org(@person, @keyword.organization)
     if @person.valid?
       render :thanks
     else
       render :new
     end
+  end
+  
+  def show
+    @person = Person.find(params[:id])
+    @organization = current_organization
+    @organization_membership = OrganizationMembership.where(:organization_id => @organization, :person_id => @person).first
+    @followup_comment = FollowupComment.new(:organization => @organization, :commenter => current_person, :contact => @person)
+    @followup_comments = FollowupComment.where(:organization_id => @organization, :contact_id => @person).order('created_at desc')
   end
   
   def thanks
