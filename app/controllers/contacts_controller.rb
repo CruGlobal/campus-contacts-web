@@ -43,7 +43,7 @@ class ContactsController < ApplicationController
     question_set.post(params[:answers], @answer_sheet)
     question_set.save
     # Make them a contact of the org associated with this keyword
-    unless OrganizationMembership.find_by_person_id_and_organization_id(@person.id, @organization.id)
+    unless OrganizationMembership.find_by_person_id_and_organization_id(@person.id, @keyword.organization.id)
       OrganizationMembership.create!(:person_id => @person.id, :organization_id => @keyword.organization.id, :role => 'contact') 
     end
     if @person.valid?
