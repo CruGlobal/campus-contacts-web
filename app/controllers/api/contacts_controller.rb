@@ -28,11 +28,11 @@ class Api::ContactsController < ApiController
         @sorting_fields.each_with_index do |field,i|
           case field
           when "time"
-            @people = @people.order("`ma_answer_sheets`.`created_at` #{@sorting_directions[i]}") unless @sorting_directions[i].nil?
+            @people = @people.order("#{AnswerSheet.table_name}.`created_at` #{@sorting_directions[i]}") unless @sorting_directions[i].nil?
           end
         end
       end
-      @people = @people.order("`ma_answer_sheets`.`created_at` DESC") unless @sorting_fields.nil?
+      @people = @people.order("#{AnswerSheet.table_name}.`created_at` DESC") unless @sorting_fields.nil?
 
       dh = @people.collect {|person| {person: person.to_hash.slice('id','first_name','last_name','gender','picture','org_ids','status')}}
     end
@@ -72,11 +72,11 @@ class Api::ContactsController < ApiController
           @sorting_fields.each_with_index do |field,i|
             case field
             when "time"
-              @people = @people.order("`ma_answer_sheets`.`created_at` #{@sorting_directions[i]}") unless @sorting_directions[i].nil?
+              @people = @people.order("`#{AnswerSheet.table_name}`.`created_at` #{@sorting_directions[i]}") unless @sorting_directions[i].nil?
             end
           end
         end
-        @people = @people.order("`ma_answer_sheets`.`created_at` DESC") unless @sorting_fields.nil?
+        @people = @people.order("`#{AnswerSheet.table_name}`.`created_at` DESC") unless @sorting_fields.nil?
       
       if params[:filters] && params[:values]
         @allowed_filter_fields = ["gender"]

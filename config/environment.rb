@@ -3,10 +3,10 @@ require File.expand_path('../application', __FILE__)
 require "rack/oauth2/server/railtie"
 
 # Initialize the rails application
-Ma::Application.initialize!
+Mh::Application.initialize!
 
 # configure rack-oauth2-server
-Ma::Application.configure do
+Mh::Application.configure do
   # config.after_initialize do
   #   # integrate with devise
   #   config.oauth.authenticator = lambda do |email, password|

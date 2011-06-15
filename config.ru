@@ -2,4 +2,4 @@
 
 require ::File.expand_path('../config/environment',  __FILE__)
 require 'facebook_mobile_omniauth.rb'
-run Ma::Application
+run Mh::Application
