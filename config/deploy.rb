@@ -45,12 +45,12 @@ set :password, 'alt60m'
 
 task :staging do
   set :deploy_to, "/var/www/html/integration/#{application}"
-  set :environment, 'development'
-  set :rails_env, 'development'
+  set :environment, 'production'
+  set :rails_env, 'production'
 end
   
 task :production do
-  set :deploy_to, "/var/www/html/production/#{application}"
+  set :deploy_to, "/var/www/html/integration/#{application}"
   set :environment, 'production'
   set :rails_env, 'production'
 end

@@ -1,5 +1,5 @@
 class AddHiddenToMaPageElement < ActiveRecord::Migration
   def change
-    add_column :ma_page_elements, :hidden, :boolean, :default => false
+    add_column PageElement.table_name, :hidden, :boolean, :default => false
   end
 end
