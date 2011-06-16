@@ -8,8 +8,10 @@ class Api::PeopleController < ApiController
     valid_fields = valid_request?(request)
     if valid_fields.is_a? Hash
        people = valid_fields
-       #get_users actually returns person objects!
-    else people = get_people.collect {|u| u.to_hash.slice(*valid_fields) unless u.nil?}
+       #get_people actually returns person objects!
+    else
+      org = get_organization
+      people = get_people.collect {|u| u.to_hash(org).slice(*valid_fields) unless u.nil?}
     end
     render :json => JSON::pretty_generate(people)
   end

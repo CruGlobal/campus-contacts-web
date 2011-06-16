@@ -94,6 +94,7 @@ Mh::Application.routes.draw do
     resources :friends
     get 'contacts/search' => 'contacts#search'
     resources :contacts
+    resources :contact_assignments
     #get 'user/:id' => 'user#user', :as => "api_user_view"
     #get 'user/:id/friends' => 'user#friends', :as => "api_user_friends"
     get 'schools' => 'people#schools'

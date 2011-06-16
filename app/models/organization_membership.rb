@@ -7,7 +7,7 @@ class OrganizationMembership < ActiveRecord::Base
   validates_presence_of :person_id, :organization_id
   before_validation :set_primary, :on => :create
   after_destroy :set_new_primary
-  
+  scope :leaders, where(:role => %w{admin leader})
   
   def merge(other)
     OrganizationMembership.transaction do
