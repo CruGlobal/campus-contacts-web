@@ -1,7 +1,7 @@
 <h1><%= @person %></h1>
 <div>
   <%# if @person.fb_uid.present? %>
-    <%= image_tag("https://graph.facebook.com/#{@person.fb_uid}/picture?type=large", :alt => '', width: 200, height:133) %>
+    <%= image_tag("https://graph.facebook.com/#{@person.fb_uid}/picture?type=large", alt: '') %>
   <%# else %>
     <!-- No Image because they don't have facebook connected -->
   <%# end %>
