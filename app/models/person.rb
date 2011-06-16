@@ -247,7 +247,9 @@ class Person < ActiveRecord::Base
     hash['gender'] = gender
     hash['fb_id'] = fb_uid.to_s unless fb_uid.nil?
     hash['picture'] = "http://graph.facebook.com/#{fb_uid}/picture" unless fb_uid.nil?
-    hash['status'] = organization_memberships.where(:organization_id => org_id.id).first.followup_status
+    status = organization_memberships.where(:organization_id => org_id.id)
+    logger.info "output of status query for organization_memberships with organization_id = #{org_id.id}; #{status.inspect}"
+    hash['status'] = status.first.followup_status unless status.empty?
     hash['request_org_id'] = org_id.id unless org_id.nil?
     hash['assignment'] = assign_hash unless assign_hash.nil?
 
