@@ -8,7 +8,7 @@ class Api::ContactAssignmentsController < ApiController
 
   def create_1
     json_render = {:error => "You did not provide the appropriate parameters to create a contact assignment."}
-    if params[:assign_to] && params[:id]
+    if ((params[:org_id].present? || params[:org].present?) && params[:id].present? && !@organization.empty? && params[:assign_to].present?)
       ids = params[:id].split(',')
       ContactAssignment.where(:person_id => ids, :organization_id => @organization.id).destroy_all
       if params[:assign_to].present?
@@ -29,14 +29,16 @@ class Api::ContactAssignmentsController < ApiController
     json_render = {:error => "You did not provide the appropriate parameters to delete a contact assignment."}
     
     ids = params[:id].split(',')
-    if params[:org_id] && params[:id]
-      ContactAssignment.where(:person_id => ids, :organization_id => @organization.id).destroy_all
+    
+    if ((params[:org_id].present? || params[:org].present?) && params[:id].present? && !@organization.empty?)
+      ContactAssignment.where(:person_id => ids, :organization_id => @organization.first.id).destroy_all
       json_render = []
     end
     render :json => JSON::pretty_generate(json_render)
   end
   
   def get_organization
-    @organization = Organization.find(params[:org_id])
+    org = params[:org_id].present? ? params[:org_id] : params[:org]
+    @organization = Organization.where('id = ?',org)
   end
 end

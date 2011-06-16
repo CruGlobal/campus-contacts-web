@@ -54,6 +54,7 @@ FactoryGirl.define do
     firstName 'John'
     lastName 'Doe'
     gender '1'
+    fb_uid "690860831"
     birth_date {DateTime.strptime('12/18/1989', '%m/%d/%Y')}
   end
   

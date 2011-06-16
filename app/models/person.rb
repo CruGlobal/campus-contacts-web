@@ -226,29 +226,44 @@ class Person < ActiveRecord::Base
     super
   end
 
-  def to_hash_basic
-    fb_id = user.authentications.where(:provider => "facebook").order("updated_at DESC").first.try(:uid) if user
+  def to_hash_mini
     hash = {}
     hash['id'] = id
     hash['name'] = to_s
-    hash['first_name'] = firstName
-    hash['last_name'] = lastName
-    hash['gender'] = gender
-    hash['fb_id'] = fb_id unless fb_id.nil?
-    hash['picture'] = "http://graph.facebook.com/#{fb_id}/picture" unless fb_id.nil?
-    hash['status'] = 'finish me!'
     hash
   end
   
-  def to_hash
-    hash = to_hash_basic
-    hash['locale'] = user.try(:locale) ? user.locale : ""
+  def to_hash_basic(org_id = nil)
+    #raise org_id.inspect
+    assign_hash = nil
+    unless org_id.nil?
+      assigned_to_person = contact_assignments.where('organization_id = ?',org_id)
+      assigned_to_person = assigned_to_person.empty? ? [] : assigned_to_person.collect{ |a| a.person.to_hash_mini }
+      person_assigned_to = ContactAssignment.where('assigned_to_id = ?', id ).collect {|c| c.person.to_hash_mini}
+      assign_hash = {assigned_to_person: assigned_to_person, person_assigned_to: person_assigned_to}
+    end
+    
+    hash = to_hash_mini
+    hash['gender'] = gender
+    hash['fb_id'] = fb_uid.to_s unless fb_uid.nil?
+    hash['picture'] = "http://graph.facebook.com/#{fb_uid}/picture" unless fb_uid.nil?
+    hash['status'] = organization_memberships.where(:organization_id => org_id.id).first.followup_status
+    hash['request_org_id'] = org_id.id unless org_id.nil?
+    hash['assignment'] = assign_hash unless assign_hash.nil?
+
+    hash
+  end
+  
+  def to_hash(org_id = nil)
+    hash = to_hash_basic(org_id)
+    hash['first_name'] = firstName
+    hash['last_name'] = lastName
     hash['birthday'] = birth_date.to_s
     hash['interests'] = Interest.get_interests_hash(id)
     hash['education'] = EducationHistory.get_education_history_hash(id)
     hash['location'] = latest_location.to_hash if latest_location
-    #hash['org_ids'] = organization_memberships.collect(&:organization_id)
-    #hash['primary_org_id'] = organization_memberships.where('primary = ?', 1)
+    hash['locale'] = user.try(:locale) ? user.locale : ""
+    hash['organization_membership'] = organization_memberships.collect{ |x| {org_id: x.organization_id, role: x.role, primary: (x.primary == true) ? "true" : "false"}}
     hash
   end
   
