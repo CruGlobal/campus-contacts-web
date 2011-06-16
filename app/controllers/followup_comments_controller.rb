@@ -5,6 +5,6 @@ class FollowupCommentsController < ApplicationController
       if Rejoicable::OPTIONS.include?(what)
         @followup_comment.rejoicables.create(what: what, created_by_id: current_person.id, person_id: @followup_comment.contact_id, organization_id: @followup_comment.organization_id)
       end
-    end
+    end if params[:rejoicables]
   end
 end
