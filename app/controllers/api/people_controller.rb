@@ -2,17 +2,14 @@ class Api::PeopleController < ApiController
   require 'api_helper'
   include ApiHelper  
   skip_before_filter :authenticate_user!
-  oauth_required
+  before_filter :valid_request_before, :organization_allowed?, :authorized_leader?
+  oauth_required :scope => "userinfo"
+  rescue_from Exception, :with => :render_json_error
   
   def show_1
     valid_fields = valid_request?(request)
-    if valid_fields.is_a? Hash
-       people = valid_fields
-       #get_people actually returns person objects!
-    else
-      org = get_organization
-      people = get_people.collect {|u| u.to_hash(org).slice(*valid_fields) unless u.nil?}
-    end
+    org = get_organization
+    people = get_people.collect {|u| u.to_hash(org).slice(*@valid_fields) unless u.nil?}
     render :json => JSON::pretty_generate(people)
   end
   

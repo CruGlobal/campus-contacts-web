@@ -20,13 +20,6 @@ class ApiHelperTest < ActionView::TestCase
       
       params[:fields] = "aname,aid,afirst_name,alast_name,abirthday,alocale,alocation,agender,ainterests,afriends,afb_id,apicture"
       assert_raise(ApiErrors::InvalidFieldError) { valid_request?(nil, action, params, access_token) }
-
-      access_token.scope = ""
-      params[:fields] = Apic::API_ALLOWABLE_FIELDS[:v1][:people].join(',')
-      assert_raise(ApiErrors::IncorrectScopeError) { valid_request?(nil, action, params, access_token) }
-  
-      params = {}
-      assert_raise(ApiErrors::IncorrectScopeError) { valid_request?(nil, action, params, access_token) }
    
       params = {:fields => ""}
       assert_raise(ApiErrors::InvalidFieldError) { valid_request?(nil, action, params, access_token) }

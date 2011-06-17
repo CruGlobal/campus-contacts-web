@@ -1,16 +1,13 @@
 class Api::FriendsController < ApiController
   require 'api_helper'
-  include ApiHelper  
+  include ApiHelper 
+  before_filter :valid_request_before, :organization_allowed?, :authorized_leader?
   skip_before_filter :authenticate_user!
-  oauth_required
+  oauth_required :scope => "userinfo"
+  rescue_from Exception, :with => :render_json_error
   
   def show_1
-    valid_fields = valid_request_with_rescue(request)
-    if valid_fields.is_a? Hash
-      friends = valid_fields  #print out the exception
-    else
-      friends = get_people.collect { |u| Friend.get_friends_from_person_id(u.id, valid_fields)}
-    end
+    friends = get_people.collect { |u| Friend.get_friends_from_person_id(u.id, @valid_fields)}
     render :json => JSON::pretty_generate(friends)
   end
 end

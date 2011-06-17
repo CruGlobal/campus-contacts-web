@@ -2,15 +2,13 @@ class Api::ContactsController < ApiController
   require 'api_helper'
   include ApiHelper  
   skip_before_filter :authenticate_user!
-  oauth_required
+  before_filter :valid_request_before, :organization_allowed?, :authorized_leader?
+  oauth_required :scope => "contacts"
+  rescue_from Exception, :with => :render_json_error
   
   def search_1
-    valid_fields = valid_request_with_rescue(request)
-    return render :json => valid_fields if valid_fields.is_a? Hash
-    return render :json => {:error => "You do not have the appropriate organization memberships to view this data."} unless organization_allowed?
     dh = []
     @keywords = get_keywords
-    
     unless (@keywords.empty? && params[:term].nil?)
       org = get_organization
       @question_sheets = @keywords.collect(&:question_sheet)
@@ -22,9 +20,6 @@ class Api::ContactsController < ApiController
   end
   
   def index_1
-    valid_fields = valid_request_with_rescue(request)
-    return render :json => valid_fields if valid_fields.is_a? Hash
-    return render :json => {:error => "You do not have the appropriate organization memberships to view this data."} unless organization_allowed?
     dh = []
     @keywords = get_keywords
     unless @keywords.empty?
@@ -46,25 +41,22 @@ class Api::ContactsController < ApiController
   end
   
   def show_1
-    valid_fields = valid_request_with_rescue(request)
-    return render :json => valid_fields if valid_fields.is_a? Hash
-    return render :json => {:error => "You do not have the appropriate organization memberships to view this data."} unless organization_allowed?
     dh = []
-    
     @answer_sheets = {}
     @question_sheets = []
     @people = get_people
     unless @people.empty?
-      @people.each do |person|
-        @answer_sheets[person] = person.answer_sheets.first
-        @question_sheets.push person.answer_sheets.collect{|x| x.question_sheet}
-      end
-      org = get_organization
-      @question_sheets.flatten!.uniq!
+      @organization = get_organization
+      @question_sheets = @organization.question_sheets
       @questions = (@question_sheets.collect { |q| q.questions }).flatten.uniq
+      @people.each do |person|
+        @question_sheets.each do |qs|
+          @answer_sheets[person] = person.answer_sheets.order('created_at DESC').detect {|as| qs.id == as.question_sheet_id}
+        end
+      end
       @keywords = @question_sheets.collect { |k| k.questionnable}.flatten.uniq
       @keys = @keywords.collect {|k| {name: k.keyword, keyword_id: k.id, questions: k.questions.collect {|q| q.id}}}
-      dh = {keywords: @keys, questions: @questions.collect {|q| q.attributes.slice('id', 'kind', 'label', 'style', 'required')}, people: @people.collect {|person| {person: person.to_hash(org), form: @questions.collect {|q| {q: q.id, a: q.display_response(@answer_sheets[person])}}}}}
+      dh = {keywords: @keys, questions: @questions.collect {|q| q.attributes.slice('id', 'kind', 'label', 'style', 'required')}, people: @people.collect {|person| {person: person.to_hash(@organization), form: @questions.collect {|q| {q: q.id, a: q.display_response(@answer_sheets[person])}}}}}
     end
     render :json => JSON::pretty_generate(dh)
   end
