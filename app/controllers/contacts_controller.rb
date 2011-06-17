@@ -3,6 +3,7 @@ class ContactsController < ApplicationController
   before_filter :get_keyword, :only => [:new, :update, :thanks]
   
   def index
+    session[:current_organization_id] = params[:org_id]
     @organization = Organization.find_by_id(params[:org_id])
     @organization ||= current_person.organizations.first
     unless @organization
@@ -54,6 +55,9 @@ class ContactsController < ApplicationController
     @person = Person.find(params[:id])
     @organization = current_organization
     @organization_membership = OrganizationMembership.where(:organization_id => @organization, :person_id => @person).first
+    unless @organization_membership
+      redirect_to '/404.html' and return
+    end
     @followup_comment = FollowupComment.new(:organization => @organization, :commenter => current_person, :contact => @person)
     @followup_comments = FollowupComment.where(:organization_id => @organization, :contact_id => @person).order('created_at desc')
   end
