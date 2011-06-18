@@ -236,9 +236,9 @@ class Person < ActiveRecord::Base
   def to_hash_basic(org_id = nil)
     assign_hash = nil
     unless org_id.nil?
-      assigned_to_person = contact_assignments.where('organization_id = ?',org_id)
+      assigned_to_person = ContactAssignment.where('person_id = ? AND organization_id = ?', id, org_id.id)
       assigned_to_person = assigned_to_person.empty? ? [] : assigned_to_person.collect{ |a| a.person.to_hash_mini }
-      person_assigned_to = ContactAssignment.where('assigned_to_id = ?', id ).collect {|c| c.person.to_hash_mini}
+      person_assigned_to = ContactAssignment.where('person_id = ? AND organization_id = ?', id, org_id.id).collect {|c| Person.find(c.assigned_to_id).to_hash_mini}
       assign_hash = {assigned_to_person: assigned_to_person, person_assigned_to: person_assigned_to}
     end
     hash = self.to_hash_mini
@@ -246,7 +246,6 @@ class Person < ActiveRecord::Base
     hash['fb_id'] = fb_uid.to_s unless fb_uid.nil?
     hash['picture'] = "http://graph.facebook.com/#{fb_uid}/picture" unless fb_uid.nil?
     status = organization_memberships.where(:organization_id => org_id.id) unless org_id.nil?
-    logger.info "output of status query for organization_memberships with organization_id = #{org_id.id}; #{status.inspect}"
     hash['status'] = status.first.followup_status unless status.empty?
     hash['request_org_id'] = org_id.id unless org_id.nil?
     hash['assignment'] = assign_hash unless assign_hash.nil?
