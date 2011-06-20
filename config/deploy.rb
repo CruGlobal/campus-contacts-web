@@ -13,7 +13,7 @@ require 'hoptoad_notifier/capistrano'
 
 set :application, "mh"
 # set :repository, "http://svn.uscm.org/#{application}/trunk"
-set :repository,  "git://github.com/twinge/missionhub.git"
+set :repository,  "https://github.com/twinge/missionhub.git"
 # set :checkout, 'co'
 set :keep_releases, '3'
 
@@ -33,12 +33,6 @@ set :scm, "git"
 #role :web, "hart-w025.uscm.org"
 #role :app, "hart-w025.uscm.org"
 
-
-role :db, "172.16.1.25", :primary => true
-role :web, "172.16.1.25"
-role :app, "172.16.1.25"
-
-
 set :user, 'deploy'
 set :password, 'alt60m'
 
@@ -47,19 +41,33 @@ task :staging do
   set :deploy_to, "/var/www/html/integration/#{application}"
   set :environment, 'production'
   set :rails_env, 'production'
+  
+  role :db, "172.16.1.25", :primary => true
+  role :web, "172.16.1.25"
+  role :app, "172.16.1.25"
+  set :deploy_via, :remote_cache
 end
   
 task :production do
-  set :deploy_to, "/var/www/html/integration/#{application}"
+  set :deploy_to, "/var/www/html/production/#{application}"
   set :environment, 'production'
   set :rails_env, 'production'
+  
+  role :db, "172.16.1.126", :primary => true
+  role :web, "172.16.1.126"
+  role :app, "172.16.1.126"
+  set :deploy_via, :copy
 end
 
 
 # define the restart task
 desc "Restart the web server"
 deploy.task :restart, :roles => :app do
+  if rails_env == 'production'
+    sudo "/etc/init.d/unicorn upgrade"
+  else
     run "touch #{current_path}/tmp/restart.txt"
+  end
 end  
 
 
