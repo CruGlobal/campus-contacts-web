@@ -10,14 +10,49 @@
   <%= csrf_meta_tag %>
 </head>
 <body id="<%= controller.controller_name %>_controller">
-  <% if notice %>
-   <p class="notice" id="notice"><%= notice %></p>
-  <% elsif alert %>
-   <p class="alert" id="alert"><%= alert %></p>
-  <% end %>
-  <div class="<%= params[:action] %>">
-    <%= yield %>
-  </div>
+  
+  <div id="outer">
+  
+    <div id="global">
+      <div class="item">
+        School Name
+      </div>
+      <div class="item">
+        <%= link_to("David Sudarma", "/profile") %>
+      </div>
+      <div class="item">
+        <%= link_to("Log Out", "/profile") %>
+      </div>   
+    </div>
+    
+    
+    <div id="left">
+      <%= link_to("", "/", :id => "logo") %>
+    </div>
+    
+    <div id="main">    
+      <div id="topmenu">
+        <ul>
+          <li><%= link_to("Dashboard", "/profile") %></li>
+          <li><%= link_to("Contacts", "/profile") %></li>
+          <li><%= link_to("Directory", "/profile") %></li>
+          <li><%= link_to("Keywords", "/profile") %></li>
+        </ul>
+      </div>
+      
+      
+      <% if notice %>
+       <p class="notice" id="notice"><%= notice %></p>
+      <% elsif alert %>
+       <p class="alert" id="alert"><%= alert %></p>
+      <% end %>
+          
+      <div class="<%= params[:action] %>">
+        <%= yield %>
+      </div>
+    </div><!-- main -->
+    
+  </div><!-- outer -->
 
 </body>
 </html>
