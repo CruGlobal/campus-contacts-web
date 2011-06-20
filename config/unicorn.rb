@@ -15,7 +15,7 @@ stderr_path "#{app_path}/log/unicorn.log"
 stdout_path "#{app_path}/log/unicorn.log"
 
 # Listen on a Unix data socket
-listen "#{app_path}/sockets/unicorn.sock", :backlog => 2048
+listen "#{app_path}/sockets/unicorn.sock", :backlog => 4000
 # listen 7888, :tcp_nopush => false
 
 pid "#{app_path}/pids/unicorn.pid"
