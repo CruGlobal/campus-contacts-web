@@ -57,5 +57,10 @@ module ApiErrors
       super :contact_assignment_create_params_error, "You did not provide the appropriate parameters to create a contact assignment.", "27"
     end
   end
+  class FollowupCommentCreateParamsError < ApiError
+    def initialize
+      super :followup_comment_create_params_error, "You did not prodive the appropriate parameters to create a followup comment.", "28"
+    end
+  end
   
 end
