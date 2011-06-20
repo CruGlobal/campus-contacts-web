@@ -3,7 +3,7 @@ app_path = "/var/www/html/production/mh/shared"
 
 rails_env = ENV['RAILS_ENV'] || 'production'
 
-worker_processes 40
+worker_processes 50
 
 # for super-fast worker spawn times
 preload_app true
