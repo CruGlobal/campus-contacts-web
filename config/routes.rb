@@ -74,6 +74,7 @@ Mh::Application.routes.draw do
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
   devise_scope :user do
     get "sign_in", :to => "devise/sessions#new"
+    get "sign_out", :to => "devise/sessions#destroy"
   end
   
   match "/application.manifest" => OFFLINE
@@ -87,18 +88,16 @@ Mh::Application.routes.draw do
     end
   end
 
-  #test validated api call
   namespace :api do
-  scope '(/:version)', :version => /v\d+?/ do  #:module => :api
-    resources :people
-    resources :friends
-    get 'contacts/search' => 'contacts#search'
-    resources :contacts
-    resources :contact_assignments
-    #get 'user/:id' => 'user#user', :as => "api_user_view"
-    #get 'user/:id/friends' => 'user#friends', :as => "api_user_friends"
-    get 'schools' => 'people#schools'
-  end
+    scope '(/:version)', :version => /v\d+?/ do  #:module => :api
+      resources :people
+      resources :friends
+      get 'contacts/search' => 'contacts#search'
+      resources :contacts
+      resources :contact_assignments
+      resources :followup_comments
+      get 'schools' => 'people#schools'
+    end
   end
 
   #other oauth calls

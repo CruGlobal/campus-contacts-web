@@ -162,8 +162,7 @@ FactoryGirl.define do
        Factory(:interest_2, :person => f)
        Factory(:location, :person => f)
        org = Factory(:organization)
-       Factory(:organization_membership, :person => f, :organization => org, :role => 'admin')
-       #Factory(:access_token, :identity => f.id)
+       Factory(:organization_membership, :person => f, :organization => org, :role => 'admin', :followup_status => "attempted_contact", :primary => 1, :validated => 0)
     end
   end
   
@@ -171,10 +170,20 @@ FactoryGirl.define do
       association :organization
   end
   
+  factory :contact_assignment do 
+  end
+  
   factory :user_with_auxs, :parent => :user do
     after_create do |a| 
       Factory(:person_with_things, :user => a)
       Factory(:authentication, :user => a)
+    end
+  end
+  
+  factory :user2_with_auxs, :parent => :user do
+    after_create do |a| 
+      Factory(:person_with_things, :user => a)
+      Factory(:authentication, :user => a, :uid => "123412123453453453")
     end
   end
   

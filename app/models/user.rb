@@ -18,18 +18,19 @@ class User < ActiveRecord::Base
     user = nil
     authentication = nil
 #   signed_in_resource = nil
-
-    if authentication = Authentication.find_by_provider_and_uid(access_token['provider'], access_token['uid'])
+    authentication = Authentication.find_by_provider_and_uid(access_token['provider'], access_token['uid'])
+    #Let's also ensure that someone who has an authentication also has a user.  If not, delete the authentication and make a user
+    if authentication && !authentication.user.nil?
       authentication.update_attribute(:token, access_token['credentials']['token'])
       user = authentication.user
     else
+      authentication.delete
       user = signed_in_resource || User.find(:first, :conditions => ["username = ? or username = ?", data['email'], data['username']])
       user = User.create!(:email => data["email"], :password => Devise.friendly_token[0,20]) if user.nil?
       user.save
-    
       authentication = user.authentications.create(:provider => 'facebook', :uid => access_token['uid'], :token => access_token['credentials']['token'])
     end
-
+    
     if user.person 
       user.person.update_from_facebook(data, authentication)
     else
