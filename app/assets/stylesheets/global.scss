@@ -22,7 +22,7 @@ $minpagewidth: 960px;
 }
 
 /* Elements */
-a {
+a, a:visited {
   color: $blue;
   text-decoration: none;
 }
@@ -84,6 +84,40 @@ body {
     width: 166px;
     height: 41px;
   }
+}
+
+.block {
+  border-bottom: 1px solid $blue;
+}
+
+ul.leftmenu {
+  @include clearlist;
+  font-size: 11px;
+  ul.indent {
+    margin: 0 0 0 15px;
+    padding: 0;
+    font-size: 11px;
+    li a {
+      font-weight: normal;
+    }
+  }
+  li {
+    a {
+      display: block;
+      line-height: 24px;
+      padding-left: 10px;
+      height: 24px;
+    }
+    > a {
+      font-weight: bold;
+    }
+  }
+  li.selected {
+    > a {
+      background: $light-gray;
+    }
+  }
+  
 }
 
 #main {
