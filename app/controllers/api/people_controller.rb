@@ -9,12 +9,8 @@ class Api::PeopleController < ApiController
   def show_1
     valid_fields = valid_request?(request)
     org = get_organization
-    people = get_people.collect {|u| u.to_hash(org).slice(*@valid_fields) unless u.nil?}
-    render :json => JSON::pretty_generate(people)
+    json_output = get_people.collect {|u| u.to_hash(org).slice(*@valid_fields) unless u.nil?}
+    final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
+    render :json => final_output
   end
-  
-  def schools_1
-    result = School.select("targetAreaID, name, address1, city, state, zip").where('name LIKE ?', "%#{params[:term]}%").limit(100)
-    render :json => result.to_json
-  end  
 end
