@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 gem 'rails', '3.1.0.rc4'
 
@@ -10,22 +10,22 @@ gem 'capistrano'
 gem 'rest-client'
 gem 'crack'
 gem 'resque'
-gem "devise"#, :git => "http://github.com/plataformatec/devise.git"
+gem "devise"#, :git => "https://github.com/plataformatec/devise.git"
 gem "oa-oauth", :require => "omniauth/oauth"
 gem 'mini_fb'
 gem 'client_side_validations'
 gem 'rubycas-client'
-gem 'rubycas-client-rails', :git => 'http://github.com/zuk/rubycas-client-rails.git'
+gem 'rubycas-client-rails', :git => 'https://github.com/zuk/rubycas-client-rails.git'
 # gem 'squeel'
 gem 'ancestry'
-gem 'rails_admin', :git => 'http://github.com/twinge/rails_admin.git'
+gem 'rails_admin', :git => 'https://github.com/twinge/rails_admin.git'
 gem "state_machine"
 gem 'acts_as_list'
 gem 'dynamic_form'
 gem 'coffee-script'
 gem 'uglifier'
-gem 'translate-rails3', :require => 'translate', :git => 'http://github.com/romanbsd/translate.git'
-gem 'trumant-rack-oauth2-server', :git => 'http://github.com/mattrw89/rack-oauth2-server.git', :branch => 'active_record'
+gem 'translate-rails3', :require => 'translate', :git => 'https://github.com/romanbsd/translate.git'
+gem 'trumant-rack-oauth2-server', :git => 'https://github.com/mattrw89/rack-oauth2-server.git', :branch => 'active_record'
 
 gem 'enforce_schema_rules'
 # gem 'sentient_user'

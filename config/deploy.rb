@@ -13,7 +13,7 @@ require 'hoptoad_notifier/capistrano'
 
 set :application, "mh"
 # set :repository, "http://svn.uscm.org/#{application}/trunk"
-set :repository,  "http://github.com/twinge/missionhub.git"
+set :repository,  "https://github.com/twinge/missionhub.git"
 # set :checkout, 'co'
 set :keep_releases, '3'
 
