@@ -32,12 +32,12 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    actionmailer (3.1.0.rc4)
-      actionpack (= 3.1.0.rc4)
+    actionmailer (3.1.0.rc3)
+      actionpack (= 3.1.0.rc3)
       mail (~> 2.3.0)
-    actionpack (3.1.0.rc4)
-      activemodel (= 3.1.0.rc4)
-      activesupport (= 3.1.0.rc4)
+    actionpack (3.1.0.rc3)
+      activemodel (= 3.1.0.rc3)
+      activesupport (= 3.1.0.rc3)
       builder (~> 3.0.0)
       erubis (~> 2.7.0)
       i18n (~> 0.6)
@@ -47,20 +47,20 @@ GEM
       rack-test (~> 0.6.0)
       sprockets (~> 2.0.0.beta.10)
       tzinfo (~> 0.3.27)
-    activemodel (3.1.0.rc4)
-      activesupport (= 3.1.0.rc4)
+    activemodel (3.1.0.rc3)
+      activesupport (= 3.1.0.rc3)
       bcrypt-ruby (~> 2.1.4)
       builder (~> 3.0.0)
       i18n (~> 0.6)
-    activerecord (3.1.0.rc4)
-      activemodel (= 3.1.0.rc4)
-      activesupport (= 3.1.0.rc4)
+    activerecord (3.1.0.rc3)
+      activemodel (= 3.1.0.rc3)
+      activesupport (= 3.1.0.rc3)
       arel (~> 2.1.1)
       tzinfo (~> 0.3.27)
-    activeresource (3.1.0.rc4)
-      activemodel (= 3.1.0.rc4)
-      activesupport (= 3.1.0.rc4)
-    activesupport (3.1.0.rc4)
+    activeresource (3.1.0.rc3)
+      activemodel (= 3.1.0.rc3)
+      activesupport (= 3.1.0.rc3)
+    activesupport (3.1.0.rc3)
       multi_json (~> 1.0)
     acts_as_list (0.1.3)
     addressable (2.2.6)
@@ -106,6 +106,9 @@ GEM
       activesupport
       builder
     i18n (0.6.0)
+    jquery-rails (1.0.11)
+      railties (~> 3.0)
+      thor (~> 0.14)
     json (1.5.3)
     kaminari (0.12.4)
       rails (>= 3.0.0)
@@ -158,23 +161,21 @@ GEM
     rack-test (0.6.0)
       rack (>= 1.0)
     railroady (1.0.2)
-    rails (3.1.0.rc4)
-      actionmailer (= 3.1.0.rc4)
-      actionpack (= 3.1.0.rc4)
-      activerecord (= 3.1.0.rc4)
-      activeresource (= 3.1.0.rc4)
-      activesupport (= 3.1.0.rc4)
+    rails (3.1.0.rc3)
+      actionmailer (= 3.1.0.rc3)
+      actionpack (= 3.1.0.rc3)
+      activerecord (= 3.1.0.rc3)
+      activeresource (= 3.1.0.rc3)
+      activesupport (= 3.1.0.rc3)
       bundler (~> 1.0)
-      railties (= 3.1.0.rc4)
-    railties (3.1.0.rc4)
-      actionpack (= 3.1.0.rc4)
-      activesupport (= 3.1.0.rc4)
+      railties (= 3.1.0.rc3)
+    railties (3.1.0.rc3)
+      actionpack (= 3.1.0.rc3)
+      activesupport (= 3.1.0.rc3)
       rack-ssl (~> 1.3.2)
       rake (>= 0.8.7)
-      rdoc (~> 3.4)
       thor (~> 0.14.6)
     rake (0.8.7)
-    rdoc (3.6.1)
     redis (2.2.1)
     redis-namespace (1.0.3)
       redis (< 3.0.0)
@@ -187,6 +188,7 @@ GEM
       mime-types (>= 1.16)
     rubycas-client (2.2.1)
       activesupport
+    sass (3.1.3)
     shoulda (2.11.3)
     sinatra (1.2.6)
       rack (~> 1.1)
@@ -234,6 +236,7 @@ DEPENDENCIES
   ephemeral_response
   factory_girl (= 2.0.0.beta2)
   hoptoad_notifier
+  jquery-rails
   kaminari
   mail_safe
   mini_fb
@@ -242,13 +245,14 @@ DEPENDENCIES
   paper_trail (~> 2)
   rack-offline
   railroady
-  rails (= 3.1.0.rc4)
+  rails (= 3.1.0.rc3)
   rails_admin!
   rake (= 0.8.7)
   resque
   rest-client
   rubycas-client
   rubycas-client-rails!
+  sass
   shoulda
   sqlite3-ruby
   state_machine

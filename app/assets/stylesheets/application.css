@@ -2,4 +2,5 @@
  * FIXME: Introduce SCSS & Sprockets
  *= require scaffold
  *= require contacts
+ *= require global
 */
