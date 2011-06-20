@@ -1,4 +1,5 @@
 # unicorn_ -c /var/www/html/production/mh/current/config/unicorn.rb -E production -D
+app_path = "/var/www/html/production/mh/shared"
 
 rails_env = ENV['RAILS_ENV'] || 'production'
 
@@ -10,11 +11,14 @@ preload_app true
 # Restart any workers that haven't responded in 30 seconds
 timeout 30
 
+stderr_path "#{app_path}/log/unicorn.log"
+stdout_path "#{app_path}/log/unicorn.log"
+
 # Listen on a Unix data socket
-listen '/var/www/html/production/mh/shared/sockets/unicorn.sock', :backlog => 2048
+listen "#{app_path}/sockets/unicorn.sock", :backlog => 2048
 # listen 7888, :tcp_nopush => false
 
-pid '/var/www/html/production/mh/shared/pids/unicorn.pid'
+pid "#{app_path}/pids/unicorn.pid"
 
 before_fork do |server, worker|
   ##
@@ -28,7 +32,7 @@ before_fork do |server, worker|
   #
   # Using this method we get 0 downtime deploys.
 
-  old_pid = '/var/www/html/production/mh/shared/pids/unicorn.pid.oldbin'
+  old_pid = "#{app_path}/pids/unicorn.pid.oldbin"
   if File.exists?(old_pid) && server.pid != old_pid
     begin
       Process.kill("QUIT", File.read(old_pid).to_i)
