@@ -39,8 +39,8 @@ set :password, 'alt60m'
 
 task :staging do
   set :deploy_to, "/var/www/html/integration/#{application}"
-  set :environment, 'production'
-  set :rails_env, 'production'
+  set :environment, 'staging'
+  set :rails_env, 'staging'
   
   role :db, "172.16.1.25", :primary => true
   role :web, "172.16.1.25"
