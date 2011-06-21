@@ -1,7 +1,7 @@
 module ApiErrors 
   class ApiError < StandardError
     def initialize(code, message, number)
-      super '{"error": {"message:"' + message + '", "code": "' + number  + '"}}'
+      super '{"error": {"message":"' + message + '", "code": "' + number  + '"}}'
       @code = code.to_sym
     end
 
@@ -62,5 +62,9 @@ module ApiErrors
       super :followup_comment_create_params_error, "You did not prodive the appropriate parameters to create a followup comment.", "28"
     end
   end
-  
+  class LimitRequiredWithStartError < ApiError
+    def initialize
+      super :limit_required_with_start_error, "A limit parameter is required with a start parameter.", "29"
+    end
+  end
 end

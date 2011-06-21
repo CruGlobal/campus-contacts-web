@@ -114,17 +114,18 @@ module ApiHelper
     end
   end
   
-  #Pass in a Person Activerecord Query object, return 
+  #Pass in a Person Activerecord Query object, return ActiveRecord Query object
   def paginate_filter_sort_people(people, org)
     #settings for below
     allowed_sorting_fields = ["time","status"]
     allowed_sorting_directions = ["asc", "desc"]
     allowed_filter_fields = ["gender", "status"]
-    allowed_status = ["uncontacted", "contacted", "attempted_contact","do_not_contact","completed","finished"]
+    allowed_status = ["uncontacted", "contacted", "attempted_contact", "do_not_contact", "completed", "finished"]
     
     #allow for start (SQL Offset) and limit on query.  use :start and :limit
-    people = people.offset(params[:start].to_i.abs) if params[:start]
-    people = people.limit(params[:limit].to_i.abs) if params[:limit] && params[:limit].to_i.abs != 0
+    raise LimitRequiredWithStartError if (params[:start] && !params[:limit])
+    people = people.offset(params[:start].to_i.abs) if params[:start].present? && params[:limit].to_i.abs !=0
+    people = people.limit(params[:limit].to_i.abs) if params[:limit].present? && params[:limit].to_i.abs != 0
     
     #allow for sort CSV array w/ directions CSV array.  Uses :sort and :direction
     if params[:sort].present?

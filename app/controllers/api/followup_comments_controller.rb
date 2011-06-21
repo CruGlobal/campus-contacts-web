@@ -21,7 +21,7 @@ rescue_from Exception, :with => :render_json_error
     contact_id = params[:id].present? ? params[:id] : 0
     org = get_organization
     @followup_comments = FollowupComment.includes(:rejoicables).where(:contact_id => contact_id).where(:organization_id => org.id).order("created_at DESC")
-    json_output = @followup_comments.collect {|c| {followup_comment: {comment: c.attributes.slice!('updated_at'), rejoicables: c.rejoicables.collect{|y| y.attributes.slice('id','what')}}}}
+    json_output = @followup_comments.collect {|c| {followup_comment: {comment: c.to_hash, rejoicables: c.rejoicables.collect{|y| y.attributes.slice('id','what')}}}}
     final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
     render :json => final_output
   end
