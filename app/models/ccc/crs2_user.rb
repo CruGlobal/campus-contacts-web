@@ -10,10 +10,16 @@ class Ccc::Crs2User < ActiveRecord::Base
 
 
 	def merge(other)
-		other.crs2_conference.each { |ua| ua.update_attribute(:creator_id, id) }
-		other.crs2_user_role.each { |ua| ua.update_attribute(:user_id, id) }
-		other.crs2_registration.each { |ua| ua.update_attribute(:creator_id, id) } # ???
-		other.crs2_transaction.each { |ua| ua.update_attribute(:verified_id, id) }
+		other.crs2_conferences.each { |ua| ua.update_attribute(:creator_id, id) }
+		other.crs2_user_roles.each { |ua| ua.update_attribute(:user_id, id) }
+   	other.crs2_registrants.each { |ua| ua.update_attribute(:cancelled_by_id, id) }
+
+		Crs2Registration.where(["creator_id = ? or cancelled_by_id = ?", other.id, other.id]).each do |ua|
+			ua.update_attribute(:creator_id, id) if ua.creator_id == other.id
+			ua.update_attribute(:cancelled_by_id, id) if ua.cancelled_by_id == other.id	
+		end
+
+		other.crs2_transactions.each { |ua| ua.update_attribute(:verified_id, id) }
 		
 		other.destroy
 		save
