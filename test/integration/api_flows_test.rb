@@ -219,6 +219,15 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       assert_equal(@json.length, 2)
       person_mini_test(@json[0]['person'],@user2)
     end
+    
+    should "be able to view their contacts by searching" do
+      path = "/api/contacts/search?term=Useroo"
+      get path, {'access_token' => @access_token.code}
+      assert_response :success, @response.body
+      @json = ActiveSupport::JSON.decode(@response.body)
+
+      person_basic_test(@json[0]['person'], @user2, @user)
+    end
         
     should "be able to view a specific contact" do
       path = "/api/contacts/#{@user.person.id}"

@@ -12,7 +12,7 @@ class Api::ContactsController < ApiController
       org = get_organization
       @question_sheets = @keywords.collect(&:question_sheet)
       @people = Person.who_answered(@question_sheets).where('`ministry_person`.`firstName` LIKE ? OR `ministry_person`.`lastName` LIKE ? OR `ministry_person`.`preferredName` LIKE ?',"%#{params[:term]}%","%#{params[:term]}%","%#{params[:term]}%")
-      @people = paginate_filter_sort_people(@people)      
+      @people = paginate_filter_sort_people(@people,org)      
       dh = @people.collect {|person|  { person: person.to_hash_basic(org)}}
     end
     render :json => JSON::pretty_generate(dh)
