@@ -201,6 +201,8 @@ FactoryGirl.define do
     label         'Which of the following are you interested in?'
     style         'checkbox'
     content       "Prayer Group\nJesus"
+    object_name ''
+    attribute_name ''
   end
   
   factory :page do
@@ -213,6 +215,22 @@ FactoryGirl.define do
     association   :page
     association   :element
     position        1
+  end
+  
+  factory :answer do
+    association :answer_sheet
+    association :choice_field
+  end
+  
+  factory :answer_1, :class => :answer do
+    value "Jesus"
+    short_value "Jesus"
+    association :answer_sheet
+  end
+  
+  factory :answer_sheet do
+    association :question_sheet
+    association :person
   end
 end
 

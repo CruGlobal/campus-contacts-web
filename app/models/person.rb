@@ -244,7 +244,7 @@ class Person < ActiveRecord::Base
     hash = self.to_hash_mini
     hash['gender'] = gender
     hash['fb_id'] = fb_uid.to_s unless fb_uid.nil?
-    hash['picture'] = "http://graph.facebook.com/#{fb_uid}/picture" unless fb_uid.nil?
+    hash['picture'] = picture unless fb_uid.nil?
     status = organization_memberships.where(:organization_id => org_id.id) unless org_id.nil?
     hash['status'] = status.first.followup_status unless status.empty?
     hash['request_org_id'] = org_id.id unless org_id.nil?
@@ -256,6 +256,8 @@ class Person < ActiveRecord::Base
     hash = self.to_hash_basic(org_id)
     hash['first_name'] = firstName
     hash['last_name'] = lastName
+    hash['phone_number'] = primary_phone_number.number if primary_phone_number
+    hash['email_address'] = primary_email_address.to_s if primary_email_address
     hash['birthday'] = birth_date.to_s
     hash['interests'] = Interest.get_interests_hash(id)
     hash['education'] = EducationHistory.get_education_history_hash(id)
@@ -268,5 +270,9 @@ class Person < ActiveRecord::Base
   def async_get_or_update_friends_and_interests(authentication)
     Resque.enqueue(Jobs::UpdateFB, self.id, authentication,'friends')
     Resque.enqueue(Jobs::UpdateFB, self.id, authentication,'interests')
+  end
+  
+  def picture
+    "http://graph.facebook.com/#{fb_uid}/picture"
   end
 end
