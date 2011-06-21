@@ -8,6 +8,12 @@ class Interest < ActiveRecord::Base
     @hash['name'] = name
     @hash['id'] = interest_id
     @hash['category'] = category
+    @hash['provider'] = provider
     @hash
+  end
+  
+  def self.get_interests_hash(person_id)
+    eh = Interest.where("person_id = ?", person_id)
+    eh.collect(&:to_hash)
   end
 end

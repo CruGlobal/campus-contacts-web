@@ -1,4 +1,6 @@
 FactoryGirl.define do
+  sequence(:count) {|n| n}
+  
   factory :received_sms do
     phone_number '15555555555'
     carrier      'sprint'
@@ -17,135 +19,200 @@ FactoryGirl.define do
     email 'messaging.sprintpcs.com'
   end
   
-  Factory.define :sms_keyword do |s|
-    s.keyword 'test'
-    s.organization_id 1
-    s.explanation "haoeu"
-    s.state "requested"
-    s.initial_response "Hi there!"
-    s.post_survey_message "bye!"
-    s.user_id 1
+  factory :sms_keyword do 
+    keyword 'test'
+    association :organization
+    explanation "haoeu"
+    state "requested"
+    initial_response "Hi there!"
+    post_survey_message "bye!"
+    association :user
   end
   
-  Factory.define :question_sheet do |y|
-    y.label "Test Sheet"
-    y.archived 0
-    y.questionnable_type "SmsKeyword"
+  factory :approved_keyword, :parent => :sms_keyword do
+    keyword 'approved'
+    association :organization
+    explanation "haoeu"
+    state "active"
+    initial_response "Hi there!"
+    post_survey_message "bye!"
+    association :user
+    after_create do |x| 
+      question_sheet = Factory(:question_sheet, :questionnable => x)
+      page = Factory(:page, :question_sheet => question_sheet)
+      element = Factory(:choice_field)
+      Factory(:page_element, :page => page, :element => element)
+    end
   end
   
-  Factory.define :sms_keyword_with_question_sheet, :parent => :sms_keyword do |q|
-    #q.after_create { |x| Factory(:question_sheet, :sms_keyword => x)}
+  factory :question_sheet do
+    label {"Test Sheet #{Factory.create(:count)}"}
+    archived 0
   end
   
-  Factory.define :person do |p|
-    p.firstName 'John'
-    p.lastName 'Doe'
-    p.gender '1'
-    p.birth_date DateTime.strptime('12/18/1989', '%m/%d/%Y')
+  factory :person do 
+    firstName 'John'
+    lastName 'Doe'
+    gender '1'
+    fb_uid "690860831"
+    birth_date {DateTime.strptime('12/18/1989', '%m/%d/%Y')}
   end
   
-  Factory.define :user do |u|
-    u.email 'test@example.com'
-    u.password 'asdfasdf'
+  factory :user do
+    email {"test#{Factory.create(:count)}@example.com"}
+    password 'asdfasdf'
   end
   
-  Factory.define :authentication do |a|
-    a.provider "facebook"
-    a.uid "690860831"
-    a.token "164949660195249|bd3f24d52b4baf9412141538.1-690860831|w79R36CalrEAY-9e9kp8fDWJ69A"
+  factory :authentication do
+    provider "facebook"
+    uid "690860831"
+    token "164949660195249|bd3f24d52b4baf9412141538.1-690860831|w79R36CalrEAY-9e9kp8fDWJ69A"
   end
   
-  Factory.define :friend do |f|
-    f.name "Test Friend"
-    f.uid "1234567890"
-    f.provider "facebook"
+  factory :friend do
+    name "Test Friend"
+    uid "1234567890"
+    provider "facebook"
   end
   
-  Factory.define :location do |l|
-    l.name "Orlando, FL"
-    l.location_id 1
-    l.provider "facebook"
+  factory :organization do
+    name {"Organization #{Factory.create(:count)}"}
+    terminology 'Organization'
   end
   
-  Factory.define :education_history_highschool, :class => EducationHistory do |e|
-    e.school_name "Test High School"
-    e.school_id "3"
-    e.school_type "High School"
-    e.year_id "4"
-    e.year_name "2008"
-    e.provider "facebook"
+  factory :location do 
+    name "Orlando, FL"
+    location_id 1
+    provider "facebook"
+  end
+  
+  factory :education_history_highschool, :class => EducationHistory do
+    school_name "Test High School"
+    school_id "3"
+    school_type "High School"
+    year_id "4"
+    year_name "2008"
+    provider "facebook"
   end  
   
-  Factory.define :education_history_college, :class => EducationHistory do |e|
-    e.school_name "Test University"
-    e.school_id "1"
-    e.school_type "College"
-    e.year_id "2"
-    e.year_name "2012"
-    e.provider "facebook"
-    e.concentration_id1 "12"
-    e.concentration_name1 "Test Major 1"
-    e.concentration_id2 "42"
-    e.concentration_name2 "Test Major 2"
-    e.concentration_id3 "84"
-    e.concentration_name3 "Test Major 3"
+  factory :education_history_college, :class => EducationHistory do
+    school_name "Test University"
+    school_id "1"
+    school_type "College"
+    year_id "2"
+    year_name "2012"
+    provider "facebook"
+    concentration_id1 "12"
+    concentration_name1 "Test Major 1"
+    concentration_id2 "42"
+    concentration_name2 "Test Major 2"
+    concentration_id3 "84"
+    concentration_name3 "Test Major 3"
   end
   
-  Factory.define :education_history_gradschool, :class => EducationHistory do |e|
-    e.school_name "Test University 2"
-    e.school_id "2"
-    e.school_type "College"
-    e.year_id "4"
-    e.year_name "2014"
-    e.provider "facebook"
-    e.concentration_id1 "13"
-    e.concentration_name1 "Test Major 4"
-    e.concentration_id2 "43"
-    e.concentration_name2 "Test Major 5"
-    e.concentration_id3 "86"
-    e.concentration_name3 "Test Major 6"
+  factory :education_history_gradschool, :class => EducationHistory do
+    school_name "Test University 2"
+    school_id "2"
+    school_type "College"
+    year_id "4"
+    year_name "2014"
+    provider "facebook"
+    concentration_id1 "13"
+    concentration_name1 "Test Major 4"
+    concentration_id2 "43"
+    concentration_name2 "Test Major 5"
+    concentration_id3 "86"
+    concentration_name3 "Test Major 6"
+    degree_id "1"
+    degree_name "Masters"
   end
   
-  Factory.define :interest, :class => Interest do |i|
-    i.interest_id "1"
-    i.name "Test Interest 1"
-    i.provider "facebook"
-    i.category "Test Category"
+  factory :interest, :class => Interest do
+    interest_id "1"
+    name "Test Interest 1"
+    provider "facebook"
+    category "Test Category"
   end
   
-  Factory.define :interest_2, :class => Interest do |i|
-    i.interest_id "2"
-    i.name "Test Interest 2"
-    i.provider "facebook"
-    i.category "Test Category"
+  factory :interest_2, :class => Interest do
+    interest_id "2"
+    name "Test Interest 2"
+    provider "facebook"
+    category "Test Category"
   end
     
-  Factory.define :access_token, :class => Rack::OAuth2::Server::AccessToken do |t|
-    t.code "9d68af577f8a4c9076752c9699d2ac2ace64f9dcb407897f754439096cedbfca"
-    t.scope "userinfo"
+  factory :access_token, :class => Rack::OAuth2::Server::AccessToken do
+    code "9d68af577f8a4c9076752c9699d2ac2ace64f9dcb407897f754439096cedbfca"
+    scope "userinfo contacts"
   end
   
-  Factory.define :user_with_authentication, :parent => :user do |u|
-    u.after_create { |a| Factory(:authentication, :user => a)}
+  factory :user_with_authentication, :parent => :user do
+    after_create { |a| Factory(:authentication, :user => a)}
   end
   
-   Factory.define :person_with_things, :parent => :person do |p|
-     p.after_create { |f| Factory(:friend, :person => f)}
-     p.after_create { |f| Factory(:friend, :person => f)}
-     p.after_create { |f| Factory(:friend, :person => f)}
-     p.after_create { |f| Factory(:education_history_highschool, :person => f)}
-     p.after_create { |f| Factory(:education_history_college, :person => f)}
-     p.after_create { |f| Factory(:education_history_gradschool, :person => f)}
-     p.after_create { |f| Factory(:interest, :person => f)}
-     p.after_create { |f| Factory(:interest_2, :person => f)}
-     p.after_create { |f| Factory(:location, :person => f)}
+   factory :person_with_things, :parent => :person do
+     after_create do |f| 
+       Factory(:friend, :person => f)
+       Factory(:friend, :person => f)
+       Factory(:friend, :person => f)
+       Factory(:education_history_highschool, :person => f)
+       Factory(:education_history_college, :person => f)
+       Factory(:education_history_gradschool, :person => f)
+       Factory(:interest, :person => f)
+       Factory(:interest_2, :person => f)
+       Factory(:location, :person => f)
+       org = Factory(:organization)
+       Factory(:organization_membership, :person => f, :organization => org, :role => 'admin', :followup_status => "attempted_contact", :primary => 1, :validated => 0)
+    end
   end
   
-  Factory.define :user_with_auxs, :parent => :user do |u|
-    u.after_create { |a| Factory(:person_with_things, :user => a)}
-    u.after_create { |a| Factory(:authentication, :user => a)}
+  factory :organization_membership do 
+      association :organization
   end
   
+  factory :contact_assignment do 
+  end
   
+  factory :user_with_auxs, :parent => :user do
+    after_create do |a| 
+      Factory(:person_with_things, :user => a)
+      Factory(:authentication, :user => a)
+    end
+  end
+  
+  factory :user2_with_auxs, :parent => :user do
+    after_create do |a| 
+      Factory(:person_with_things, :user => a)
+      Factory(:authentication, :user => a, :uid => "123412123453453453")
+    end
+  end
+  
+  factory :element do
+    kind          'TextField'
+    label         'First Name'
+    style         'short'
+    object_name   'person'
+    attribute_name 'firstName'
+    required      false
+  end
+  
+  factory :choice_field, :parent => :element do
+    kind          'ChoiceField'
+    label         'Which of the following are you interested in?'
+    style         'checkbox'
+    content       "Prayer Group\nJesus"
+  end
+  
+  factory :page do
+    association   :question_sheet
+    label         'Welcome!'
+    number        1
+  end
+  
+  factory :page_element do
+    association   :page
+    association   :element
+    position        1
+  end
 end
 

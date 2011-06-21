@@ -26,6 +26,16 @@ class ContactsControllerTest < ActionController::TestCase
       sign_in @user
       @keywordDB = Factory.create(:sms_keyword)
     end
+    
+    context "on index page" do
+      setup do
+        @organization = Factory(:organization)
+        @keyword = Factory(:approved_keyword, :organization => @organization)
+        get :index, :org_id => @organization.id
+      end
+      should respond_with(:success)
+    end
+    
     context "new with received_sms_id from mobile" do
       setup do
         @sms = Factory(:received_sms)

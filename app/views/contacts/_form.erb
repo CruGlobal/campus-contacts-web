@@ -1,9 +1,9 @@
 <%= form_for @person, :url => @person.new_record? ? contacts_path : contact_path(@person), :method => @person.new_record? ? :post : :put, :class => 'form' do |f| %>
   <%= hidden_field_tag :keyword, @keyword.keyword %>
-  <ul class="rounded">
+  <ul class="rounded jqm">
     <% @keyword.questions.each do |question| %>
-      <li><%= render 'answer_pages/element', :element => question %></li>
-    <% end %>
-    <li><%= f.submit "Submit" %></li>
+      <li><div data-role="fieldcontain"><%= render 'answer_pages/element', :element => question %></div></li>
+    <% end %>			
+    <li><div data-role="fieldcontain"><%= f.submit "Submit" %></div></li>
   </ul>
 <% end %>

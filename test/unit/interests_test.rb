@@ -12,11 +12,20 @@ class InterestTest < ActiveSupport::TestCase
   
   context "an interest" do
     setup do
-      @person = Factory(:person)
+      @person = Factory(:person_with_things)
     end
+    
     should "be able to add an interest" do
       interest1 = @person.interests.create(:provider => "facebook", :name => "Books", :person_id => @person.personID.to_i, :interest_id => "1", :category => "Things")
       assert interest1.valid?
+    end
+    
+    should "convert to a hash well" do 
+      interest = @person.interests.first
+      hash = interest.to_hash
+      assert_equal(hash['name'], "Test Interest 1")
+      assert_equal(hash['id'], "1")
+      assert_equal(hash['category'], "Test Category")
     end
   end    
 end

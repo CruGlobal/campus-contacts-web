@@ -125,11 +125,9 @@ class PersonTest < ActiveSupport::TestCase
       data_hash = Hashie::Mash.new({:first_name => "Matt", :last_name => "Webb", :email => "mattrw89@gmail.com"})
       person = Person.create_from_facebook(data_hash,@authentication, TestFBResponses::FULL)
       assert(person.locations.first.name.is_a? String)
-      assert(person.friends.first.name.is_a? String)
-      assert(person.interests.first.name.is_a? String)
       assert(person.education_histories.first.school_name.is_a? String)
       assert(person.gender == ('male' || 'female'))
-      assert_equal(person.email.email, "mattrw89@gmail.com", "See if person has correct email address")
+      assert_equal(person.email, "mattrw89@gmail.com", "See if person has correct email address")
     end    
   end
 end

@@ -78,7 +78,7 @@ namespace :infobase do
       next unless team
       #debugger
       unless OrganizationMembership.where(:organization_id => team, :person_id => mtm['personID']).present?
-        OrganizationMembership.create!(:organization_id => team, :person_id => mtm['personID'], :validated => 1, :leader => mtm['is_leader'])
+        OrganizationMembership.create!(:organization_id => team, :person_id => mtm['personID'], :validated => 1, :role => 'admin')
       end
       i += 1
       puts i if i % 1000 == 0
@@ -109,11 +109,11 @@ namespace :infobase do
       end
       
       # Find all the students active in the system in the past year, and add them to this movement
-      Person.where(["dateChanged > ? AND (isStaff is null OR isStaff = 0) AND campus = ?", 1.year.ago, target.name]).each do |person|
-        unless OrganizationMembership.where(:organization_id => m.id, :person_id => person.id).present?
-          OrganizationMembership.create!(:organization_id => m.id, :person_id => person.id, :validated => 1, :start_date => person.dateCreated)
-        end
-      end
+      # Person.where(["dateChanged > ? AND (isStaff is null OR isStaff = 0) AND campus = ?", 1.year.ago, target.name]).each do |person|
+      #   unless OrganizationMembership.where(:organization_id => m.id, :person_id => person.id).present?
+      #     OrganizationMembership.create!(:organization_id => m.id, :person_id => person.id, :validated => 1, :start_date => person.dateCreated)
+      #   end
+      # end
       
     end
     

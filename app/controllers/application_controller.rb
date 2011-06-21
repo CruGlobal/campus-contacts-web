@@ -4,6 +4,10 @@ class ApplicationController < ActionController::Base
 
   protected
   
+  def self.application_name
+    'MH'
+  end
+  
   def mobile_device?
     if session[:mobile_param]
       session[:mobile_param] == "1"
@@ -36,6 +40,14 @@ class ApplicationController < ActionController::Base
     I18n.locale = params[:locale] if params[:locale]
   end
   
+  def current_organization
+    return nil unless user_signed_in?
+    org = current_person.organizations.find_by_id(session[:current_organization_id]) if session[:current_organization_id] 
+    org ||= current_person.primary_organization
+    org
+  end
+  helper_method :current_organization
+  
   # Fake login
   # def authenticate_user!
   #   true
@@ -49,14 +61,23 @@ class ApplicationController < ActionController::Base
   #   @current_user ||= User.find(42655)
   # end
   
-  def unassigned_people
-    @unassigned_people ||= Person.who_answered(@question_sheet).joins("LEFT OUTER JOIN contact_assignments ON contact_assignments.person_id = #{Person.table_name}.#{Person.primary_key}").where('contact_assignments.question_sheet_id' => @question_sheet.id, 'contact_assignments.question_sheet_id' => nil)
+  def unassigned_people(organization)
+    @unassigned_people ||= Person.joins("INNER JOIN organization_memberships ON organization_memberships.person_id = #{Person.table_name}.#{Person.primary_key} AND organization_memberships.organization_id = #{organization.id} AND organization_memberships.role = 'contact' LEFT JOIN contact_assignments ON contact_assignments.person_id = #{Person.table_name}.#{Person.primary_key}").where('contact_assignments.id' => nil)
   end
   helper_method :unassigned_people
   
   def get_answer_sheet(keyword, person)
     @answer_sheet = AnswerSheet.where(:person_id => person.id, :question_sheet_id => keyword.question_sheet.id).first || 
                     AnswerSheet.create!(:person_id => person.id, :question_sheet_id => keyword.question_sheet.id)
+    @answer_sheet.reload
+    @answer_sheet
+  end
+  
+  def create_contact_at_org(person, organization)
+    # Make them a contact of the org associated with this keyword
+    unless OrganizationMembership.find_by_person_id_and_organization_id(person.id, organization.id)
+      OrganizationMembership.create!(:person_id => person.id, :organization_id => organization.id, :role => 'contact', :followup_status => OrganizationMembership::FOLLOWUP_STATUSES.first) 
+    end
   end
   
 end

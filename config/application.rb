@@ -7,7 +7,7 @@ require 'rack/oauth2/server/admin'
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env) if defined?(Bundler)
 
-module Ma
+module Mh
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -49,10 +49,31 @@ module Ma
     config.filter_parameters += [:password]
 
     # Enable IdentityMap for Active Record, to disable set to false or remove the line below.
-    config.active_record.identity_map = true
+    # config.active_record.identity_map = true
 
     # Enable the asset pipeline
     config.assets.enabled = true
     
+    config.after_initialize do
+      # integrate with devise
+      config.oauth.authenticator = lambda do |email, password|
+        user = User.find_for_database_authentication(:email => email)
+        user if user && user.valid_password?(password)
+        user.id
+      end
+      
+      #if evaluates to true then access_token can be granted, also required to be true for EVERY api call
+      config.oauth.permissions_authenticator = lambda do |identity|
+        org_memberships = User.find(identity).person.organization_memberships.leaders
+        return true if !org_memberships.empty?
+        false
+      end
+      
+      config.oauth.param_authentication = TRUE
+      config.oauth.authorization_types = %w{code}
+      Rack::OAuth2::Server::Admin.set :client_id, "2"
+      Rack::OAuth2::Server::Admin.set :client_secret, "e6f0bc02c1236f3d4cde6a4fd45e181569a8abf45ce17a3dba2fd88fe55722b6"
+      Rack::OAuth2::Server::Admin.set :scope, %w{read write}
+    end
   end
 end

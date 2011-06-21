@@ -39,11 +39,6 @@ class SmsKeyword < ActiveRecord::Base
     KeywordRequestMailer.new_keyword_request(self).deliver
   end
   
-  def self.default
-    #new(:name => 'Cru', :keyword => 'cru')  no name field in table
-    new(:keyword => 'cru')
-  end
-  
   def question_page
     @question_page ||= question_sheet.pages.first || question_sheet.pages.create(:number => 1)
   end

@@ -1,5 +1,9 @@
-Ma::Application.routes.draw do
+Mh::Application.routes.draw do
   
+  resources :rejoicables
+
+  resources :followup_comments
+
   resources :contact_assignments
 
   resources :organization_memberships
@@ -10,11 +14,15 @@ Ma::Application.routes.draw do
   resources :ministries
 
   resources :sms_keywords do
-    resources :questions, :controller => "SmsKeywords::Questions" do
+    resources :questions, :controller => "sms_keywords/questions" do
+      member do
+        put :hide
+        put :unhide
+      end
       collection do
         post :reorder
       end
-    end
+    end 
   end
   
   resources :people do
@@ -61,10 +69,12 @@ Ma::Application.routes.draw do
   # end
 
   get "welcome/index"
+  get "/test" => "welcome#test"
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
   devise_scope :user do
     get "sign_in", :to => "devise/sessions#new"
+    get "sign_out", :to => "devise/sessions#destroy"
   end
   
   match "/application.manifest" => OFFLINE
@@ -78,20 +88,26 @@ Ma::Application.routes.draw do
     end
   end
 
-  #test validated api call
-  scope 'api(/:version)', :module => :api, :version => /v\d+?/ do
-    get 'user/:id' => 'user#user', :as => "api_user_view"
-    get 'user/:id/friends' => 'user#friends', :as => "api_user_friends"
+  namespace :api do
+    scope '(/:version)', :version => /v\d+?/ do  #:module => :api
+      resources :people
+      resources :friends
+      get 'contacts/search' => 'contacts#search'
+      resources :contacts
+      resources :contact_assignments
+      resources :followup_comments
+      get 'schools' => 'people#schools'
+    end
   end
 
   #other oauth calls
   match "oauth/authorize" => "oauth#authorize"
   match "oauth/grant" => "oauth#grant"
   match "oauth/deny" => "oauth#deny"
+  match "oauth/done" => "oauth#done"
   #make admin portion of oauth2 rack accessible
-  #mount Rack::OAuth2::Server::Admin, :at => "/oauth/admin"
-  mount Rack::OAuth2::Server::Admin => "/oauth/admin"
-  
+  mount Rack::OAuth2::Server::Admin =>"/oauth/admin"
+
   root :to => "welcome#index"
   match 'home' => 'welcome#home', :as => 'user_root'
   

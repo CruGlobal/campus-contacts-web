@@ -22,7 +22,7 @@
 </table>
 <%= link_to('Add a question', '#', :onclick => "$('#question_form').slideDown()") %>
 <div id="question_form" style="display:none">
-  <%= render 'form' %>
+  <%= render 'form', :question => Question.new %>
 </div>
 <br/><br/>
 <%= link_to('Preview Form', contact_form_path(:keyword => @keyword.keyword), :target => '_blank')%>

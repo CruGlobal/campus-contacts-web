@@ -14,4 +14,8 @@ class OauthController < ApplicationController
     def deny
       head oauth.deny!
     end
+    
+    def done
+      render :json => '{"status":"done"}'
+    end
 end

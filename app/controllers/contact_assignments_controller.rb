@@ -1,13 +1,16 @@
 class ContactAssignmentsController < ApplicationController
   def create
-    @keyword = SmsKeyword.find(params[:keyword])
-    @question_sheet = @keyword.question_sheet
-    @assign_to = Person.find(params[:assign_to])
-    @organization = @keyword.organization
-    
-    ContactAssignment.where(:person_id => params[:ids], :question_sheet_id => @question_sheet.id).destroy_all
-    params[:ids].each do |id|
-      ContactAssignment.create!(:person_id => id, :question_sheet_id => @question_sheet.id, :assigned_to_id => @assign_to.id)
+    @organization = Organization.find(params[:org_id])
+    # @keyword = SmsKeyword.find(params[:keyword])
+    ContactAssignment.where(:person_id => params[:ids], :organization_id => @organization.id).destroy_all
+    if params[:assign_to].present?
+      @assign_to = Person.find(params[:assign_to])
+      params[:ids].each do |id|
+        ContactAssignment.create!(:person_id => id, :organization_id => @organization.id, :assigned_to_id => @assign_to.id)
+      end
+    else
+      
     end
+    render :nothing => true
   end
 end

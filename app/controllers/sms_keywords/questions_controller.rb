@@ -77,10 +77,10 @@ class SmsKeywords::QuestionsController < ApplicationController
   # PUT /questions/1
   # PUT /questions/1.xml
   def update
+    params[:question] ||= params[:choice_field] ||= params[:text_field]
     respond_to do |wants|
       if @question.update_attributes(params[:question])
-        flash[:notice] = 'Question was successfully updated.'
-        wants.html { redirect_to(@question) }
+        wants.js {}
         wants.xml  { head :ok }
       else
         wants.html { render :action => "edit" }
@@ -106,6 +106,22 @@ class SmsKeywords::QuestionsController < ApplicationController
     end
   end
 
+  def hide
+    @question = Element.find(params[:id])
+    @organization = @keyword.organization
+    @organization.page_elements.each do |pe|
+      pe.update_attribute(:hidden, true) if pe.element_id == @question.id
+    end
+  end
+
+  def unhide
+    @organization = @keyword.organization
+    @organization.page_elements.each do |pe|
+      pe.update_attribute(:hidden, false) if pe.element_id == params[:id].to_i
+    end
+    redirect_to :back
+  end
+  
   private
     def find_question
       @question = @keyword.question_page.elements.find(params[:id])

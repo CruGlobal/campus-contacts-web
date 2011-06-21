@@ -5,6 +5,7 @@ module Ccc
     included do
       has_many :ministry_newaddresses, :class_name => 'Ccc::MinistryNewaddress', :foreign_key => :fk_PersonID, :dependent => :destroy
 			has_many :crs_registrations, :class_name => 'Ccc::CrsRegistration', :dependent => :destroy
+
       has_one :crs2_profiles, :class_name => 'Ccc::Crs2Profile', :dependent => :destroy
       has_one :mpd_users, :class_name => 'Ccc::MpdUser', :dependent => :destroy
       has_many :pr_reviewers, :class_name => 'Ccc::PrReviewer', :dependent => :destroy
@@ -14,6 +15,7 @@ module Ccc
       has_many :pr_reminders, :class_name => 'Ccc::PrReminders', :dependent => :destroy
       has_many :pr_personal_forms, :class_name => 'Ccc::PrPersonalForm', :dependent => :destroy
       has_one :pr_users, :class_name => 'Ccc::PrUser', :dependent => :destroy
+
 			has_many :sp_applications, :class_name => 'Ccc::SpApplication', :dependent => :destroy
 			has_many :sp_projects, :class_name => 'Ccc::SpProject'
       has_one :sp_users, :class_name => 'Ccc::SpUser'  #created by and ssm/person?

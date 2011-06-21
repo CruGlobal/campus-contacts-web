@@ -13,7 +13,7 @@ require 'hoptoad_notifier/capistrano'
 
 set :application, "mh"
 # set :repository, "http://svn.uscm.org/#{application}/trunk"
-set :repository,  "git://github.com/twinge/missionhub.git"
+set :repository,  "https://github.com/twinge/missionhub.git"
 # set :checkout, 'co'
 set :keep_releases, '3'
 
@@ -29,9 +29,9 @@ set :keep_releases, '3'
 # set :target, ENV['target'] || ENV['TARGET'] || 'dev'
 default_run_options[:pty] = true
 set :scm, "git"
-role :db, "hart-w025.uscm.org", :primary => true
-role :web, "hart-w025.uscm.org"
-role :app, "hart-w025.uscm.org"
+#role :db, "hart-w025.uscm.org", :primary => true
+#role :web, "hart-w025.uscm.org"
+#role :app, "hart-w025.uscm.org"
 
 set :user, 'deploy'
 set :password, 'alt60m'
@@ -39,21 +39,35 @@ set :password, 'alt60m'
 
 task :staging do
   set :deploy_to, "/var/www/html/integration/#{application}"
-  set :environment, 'development'
-  set :rails_env, 'development'
+  set :environment, 'production'
+  set :rails_env, 'production'
+  
+  role :db, "172.16.1.25", :primary => true
+  role :web, "172.16.1.25"
+  role :app, "172.16.1.25"
+  set :deploy_via, :remote_cache
 end
   
 task :production do
   set :deploy_to, "/var/www/html/production/#{application}"
   set :environment, 'production'
   set :rails_env, 'production'
+  
+  role :db, "172.16.1.126", :primary => true
+  role :web, "172.16.1.126"
+  role :app, "172.16.1.126"
+  set :deploy_via, :copy
 end
 
 
 # define the restart task
 desc "Restart the web server"
 deploy.task :restart, :roles => :app do
+  if rails_env == 'production'
+    sudo "/etc/init.d/unicorn upgrade"
+  else
     run "touch #{current_path}/tmp/restart.txt"
+  end
 end  
 
 
@@ -113,7 +127,7 @@ end
 
 
 task :package_assets, :roles => :app do
-  run "cd #{release_path} && rake assets:precompile RAILS_ENV=#{rails_env}"
+  run "cd #{release_path} && bundle exec rake assets:precompile RAILS_ENV=#{rails_env}"
 end
 
 after "deploy:update_code", "package_assets"

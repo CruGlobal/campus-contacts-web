@@ -1,26 +1,78 @@
 $ ->
+	$('#comment_submit').live 'click', ->
+		$(this).hide()
+		$('#spinner_comment').show()
+		
+	$('#add_rejoicable').live 'click', ->
+		$('#rejoicable_fields').slideToggle()
+		false
+		
+	$('.contact_row td:not(.checkbox_cell)').live 'click', ->
+		tr = $(this).parent()
+		document.location = '/contacts/' + tr.attr('data-id')
+	
 	$('#assign_to').change ->
 		if $('.id_checkbox:checked').length > 0
-			$.rails.handleRemote($(this).closest('form'))
 			name = $('option:selected', this).text()
 			person_id = $(this).val()
-			$('.id_checkbox').each ->
-				if $(this).prop('checked')
-					$('#assigned_to_' + $(this).val()).text(name)
-					# hide people assigned to someone other than the current
-					if $('#assigned_to').val() != '' && $('#assigned_to').val() != ''
-						$(this).closest('tr').hide();
-					$(this).prop('checked', false)
-			$(this).val('')
+			$.fn.assignTo($('li[data-id=' + person_id + ']'))
 			$('#check_all').prop('checked', false)
 		else
 			alert("<%= I18n.t('ma.people.index.none_checked') %>")
+	$('#contacts_controller .index a.hide').live 'click', ->
+		$('.' + $(this).attr('data-class')).fadeOut()
+	
+	$('#hidden_questions_link').live 'click', ->
+		$('#hidden_questions_div').slideToggle()
+		false
+	$('.handle').draggable 
+		revert: true
+		start: (event, ui) ->
+			# If this row isn't checked, store the previously checked rows and check this row '
+			unless $(this).next('input').prop('checked') 
+				$(this).data 'checked',	$('.id_checkbox:checked').map ->
+					return $(this).val()
+				$('.id_checkbox:checked').prop('checked', false) 
+				$(this).next('input').prop('checked', true) 
+		stop: (event, ui) ->
+			if $(this).data('checked')?
+				$(this).next('input').prop('checked', false)
+				$.each $(this).data('checked'), (i, id) ->
+					$('.id_checkbox[value=' + id + ']').prop('checked', true)
+		helper: (event) ->
+			length = if $(this).next('input').prop('checked') then $('.id_checkbox:checked').length else 1
+			helper_text = '<%= I18n.t('ma.contacts.index.assign_people', count: 0) %>'.replace('0', length)
+			if length == 1
+				helper_text = '<%= I18n.t('ma.contacts.index.assign_people', count: 1) %>'
+			$('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'));
+	$('.leader').droppable 
+		activeClass: 'ui-state-highlight'
+		drop: (event, ui) ->
+			leader = $(this)
+			leader.effect('highlight', {}, 'slow')
+			$('#assign_to').val(leader.attr('data-id'))
+			$.fn.assignTo(leader)
 			
-#	$('.handle').draggable(revert: true)
-#	$('.handle').live 'dragstart', ->
-#	  row = $(this).closest('tr').clone();
-#	  id = row.attr('id')
-#	  table = $('<table class="' + id + '"></table>')
-#	  table.append row
-#	    .draggable()
-#	  $(this).html(table)
+$.fn.assignTo = (leader) ->
+	leader_name = $('.name a', leader).text()
+	$('.id_checkbox:checked').each ->
+		row = $('tr[data-id=' + $(this).val() + ']')
+		assigned_to = $('.assigned_to', row)
+		unless assigned_to.html() == leader_name
+			$('.count', leader).html(Number($('.count', leader).html()) + 1)
+			if assigned_to.html() == ''
+				$('#unassigned_count').html(Number($('#unassigned_count').html()) - 1)
+			else
+				$('.leader a').each ->
+					if $(this).text() == assigned_to.html() || (leader.hasClass('unassigned') && assigned_to.html() == '')
+						count = $(this).closest('.leader').find('.count')
+						count.html(Number(count.html()) - 1)
+			if leader.hasClass('unassigned')
+				assigned_to.text('') 
+			else
+				assigned_to.text(leader_name) 
+		# hide people assigned to someone other than the current
+		if $('#assigned_to').val() != 'all' && $('#assigned_to').val() != leader.attr('data-id')
+			$(this).closest('tr').hide();
+	$.rails.handleRemote($('#new_contact_assignment'))
+	$('#assign_to').val('')

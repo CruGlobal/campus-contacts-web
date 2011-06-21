@@ -13,15 +13,16 @@
       edit: "Edit"
       back: "Back"
       remove: 'Remove'
+      hide: 'hide'
 
     people: 
       index:
         leaders: Leaders
         assign_to: "Assign To:"
         assigned_to: "Assigned To"
-        all_responses: "Showing everyone who responded to '%{keyword}'"
-        responses_assigned_to: "Showing people assigned to %{assigned_to} who responded to '%{keyword}'"
-        unassigned_responses: "Showing Unassigned people who responded to '%{keyword}'"
+        all_responses: "Showing everyone who responded to a survey"
+        responses_assigned_to: "Showing people assigned to %{assigned_to}"
+        unassigned_responses: "Showing Unassigned people"
         none_checked: "Hey moron! You didn't select any contacts to assign."
     org_membership:
       confirm_delete: "Are you sure you want to dissociate yourself from %{org}"
@@ -33,13 +34,15 @@
         request_key: "Click here to request an sms keyword."
       home:
         title_top: "Welcome to MissionHub!"
-        subtitle: "Your Keywords"
+        keywords: "Keywords"
         request_another_key: "Click here to request another sms keyword."
         manage_questions: "Manage Questions"
         edit_keyword: 'Edit Keyword'
         your_orgs: 'Your Organizational Involvements'
         edit_orgs: 'Edit your organizational involvements.'
-        follow_up: 'Follow-up'
+        follow_up: 
+          one:   '1 Person to Follow-up'
+          other: '%{count} People to Follow-up'
         delete: "Delete"
     questions:
       create:
@@ -66,6 +69,23 @@
         chartfield: 'A keyword costs $7/month. Please enter a chart field to be billed for this keyword.'
         organization: "You are associated with more than one organization or ministry. Which one would you like to associate this keyword with?"
     contacts:
+      statuses:
+        uncontacted: Uncontacted
+        attempted_contact: Attempted Contact
+        contacted: Contacted
+        do_not_contact: Do Not Contact
+        completed: Completed
+      index:
+        which_org: 'You need to choose which organization you want to do folow-up from'
+        assign_people:
+          one: Assign 1 person
+          other: "Assign %{count} people"
+      show:
+        phone_number: "Phone #"
+        email: "Email"
+        status: "Status"
+        attach_rejoicable: 'Attach a Rejoicable'
+        add_comment: 'Add Comment'
       thanks:
         message: Thank you for your interest.
     sms:

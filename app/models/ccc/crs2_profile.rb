@@ -7,12 +7,13 @@ class Ccc::Crs2Profile < ActiveRecord::Base
 
 
   def merge(other)
+
    	other.crs2_registrants.each { |ua| ua.update_attribute(:profile_id, id) }
 		crs2_user.merge(other.crs2_user)
+
 
 		other.crs2_person.destroy
 		other.destroy
 		save
   end
-
 end

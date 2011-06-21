@@ -5,5 +5,4 @@ class WelcomeController < ApplicationController
       redirect_to user_root_path and return
     end
   end
-
 end

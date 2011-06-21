@@ -2,21 +2,72 @@
 <html>
 <head>
   <title><%= @title || APP_CONFIG['site_title'] %></title>
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.js" type="text/javascript"></script> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.js" type="text/javascript"></script>
   <%= stylesheet_link_tag 'application' %>
   <%= javascript_include_tag 'application' %>
   <%#= stylesheet_link_tag 'smoothness/jquery-ui-1.8.7.custom' %>
   <%= csrf_meta_tag %>
 </head>
-<body>
-  <% if notice %>
-   <p class="notice" id="notice"><%= notice %></p>
-  <% elsif alert %>
-   <p class="alert" id="alert"><%= alert %></p>
-  <% end %>
-
-  <%= yield %>
+<body id="<%= controller.controller_name %>_controller">
+  
+  <div id="outer">
+  
+    <div id="global">
+      <div class="item">
+        School Name
+      </div>
+      <div class="item">
+        <%= link_to("David Sudarma", "/profile") %>
+      </div>
+      <div class="item">
+        <%= link_to("Log Out", "/profile") %>
+      </div>   
+    </div>
+    
+    
+    <div id="left">
+      <%= link_to("", "/", :id => "logo") %>
+      <div class="block">
+        <ul class="leftmenu">
+          <li><%= link_to("My Contacts", "") %></li>
+          <li class="selected">
+            <%= link_to("Contact Distribution", "") %>
+            <ul class="indent">
+              <li><%= link_to("Contact Distribution", "") %></li>
+              <li><%= link_to("Contact Distribution", "") %></li>
+              <li><%= link_to("Contact Distribution", "") %></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <div id="main">    
+      <div id="topmenu">
+        <ul>
+          <li><%= link_to("Dashboard", "/profile") %></li>
+          <li><%= link_to("Contacts", "/profile") %></li>
+          <li><%= link_to("Directory", "/profile") %></li>
+          <li><%= link_to("Keywords", "/profile") %></li>
+        </ul>
+      </div>
+      
+      
+      <% if notice %>
+       <p class="notice" id="notice"><%= notice %></p>
+      <% elsif alert %>
+       <p class="alert" id="alert"><%= alert %></p>
+      <% end %>
+          
+      <div class="<%= params[:action] %>">
+        <%= yield %>
+      </div>
+    </div><!-- main -->
+    
+  </div><!-- outer -->
 
 </body>
 </html>
+
+
