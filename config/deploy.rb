@@ -1,3 +1,4 @@
+require "bundler/capistrano"
 require 'hoptoad_notifier/capistrano'
 # This defines a deployment "recipe" that you can feed to capistrano
 # (http://manuals.rubyonrails.com/read/book/17). It allows you to automate
@@ -56,7 +57,7 @@ task :production do
   role :db, "172.16.1.126", :primary => true
   role :web, "172.16.1.126"
   role :app, "172.16.1.126"
-  set :deploy_via, :copy
+  set :deploy_via, :remote_cache
 end
 
 
@@ -93,9 +94,6 @@ after 'deploy:update_code', 'local_changes'
 desc "Add linked files after deploy and set permissions"
 task :local_changes, :roles => :app do
   run <<-CMD
-    ln -s #{shared_path}/bundle #{release_path}/vendor/bundle &&
-    export LD_LIBRARY_PATH=/opt/oracle/instantclient_10_2 &&
-    cd #{release_path} && bundle install --deployment --without development &&
     ln -s #{shared_path}/config/database.yml #{release_path}/config/database.yml &&
     ln -s #{shared_path}/config/config.yml #{release_path}/config/config.yml &&
     ln -s #{shared_path}/config/initializers/email.rb #{release_path}/config/initializers/email.rb &&
@@ -126,8 +124,11 @@ task :long_deploy do
 end
 
 before :"deploy:symlink", :"deploy:assets";
-task :package_assets, :roles => :app do
-  run "cd #{release_path} && bundle exec rake assets:precompile RAILS_ENV=#{rails_env} --trace"
+namespace :deploy do
+  task :assets, :roles => :app do
+    run "ln -s #{shared_path}/assets #{release_path}/public/assets"
+    run "cd #{release_path} && bundle exec rake assets:precompile RAILS_ENV=#{rails_env}"
+  end
 end
 
 after "deploy", "deploy:cleanup"
