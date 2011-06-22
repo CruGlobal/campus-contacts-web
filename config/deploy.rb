@@ -125,12 +125,11 @@ task :long_deploy do
   # deploy.enable_web
 end
 
-
+before :"deploy:symlink", :"deploy:assets";
 task :package_assets, :roles => :app do
   run "cd #{release_path} && bundle exec rake assets:precompile RAILS_ENV=#{rails_env} --trace"
 end
 
-after "deploy:update_code", "package_assets"
 after "deploy", "deploy:cleanup"
 # require 'config/boot'
 require 'hoptoad_notifier/capistrano'
