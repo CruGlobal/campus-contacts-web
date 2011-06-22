@@ -8,7 +8,7 @@ rails_env = ENV['RAILS_ENV'] || 'production'
 worker_processes 50
 
 # for super-fast worker spawn times
-preload_app false #true
+preload_app true
 
 # Restart any workers that haven't responded in 30 seconds
 timeout 30
