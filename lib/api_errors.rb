@@ -67,4 +67,19 @@ module ApiErrors
       super :limit_required_with_start_error, "A limit parameter is required with a start parameter.", "29"
     end
   end
+  class OrganizationNotIntegerError < ApiError
+    def initialize
+      super :organization_not_integer_error, "Your given org or org_id parameter is not an integer.", "30"
+    end
+  end
+  class KeywordNotIntegerError < ApiError
+    def initialize
+      super :keyword_not_integer_error, "Your given keyword_id is not an integer.", "31"
+    end
+  end
+  class NoOrganizationError < ApiError
+    def initialize
+      super :no_organization_error, "We could not find your organization.  Specify org_id as a query parameter.", "32"
+    end
+  end
 end

@@ -103,7 +103,6 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       get path, {'access_token' => @access_token.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
-      
       person_basic_test(@json[0]['person'],@user,@user2)
       person_basic_test(@json[1]['person'],@user2,@user)
     end
@@ -219,6 +218,15 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       assert_equal(@json.length, 2)
       person_mini_test(@json[0]['person'],@user2)
     end
+    
+    should "be able to view their contacts by searching" do
+      path = "/api/contacts/search?term=Useroo"
+      get path, {'access_token' => @access_token.code}
+      assert_response :success, @response.body
+      @json = ActiveSupport::JSON.decode(@response.body)
+
+      person_basic_test(@json[0]['person'], @user2, @user)
+    end
         
     should "be able to view a specific contact" do
       path = "/api/contacts/#{@user.person.id}"
@@ -243,11 +251,85 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       person_full_test(@json['people'][0]['person'], @user, @user2)
       form_test(@json['people'][0]['form'], @questions, @answer_sheet)
     end
+    
+    should "be able to add a comment to a contact" do 
+      path = "/api/followup_comments/"
+      assert_equal(FollowupComment.all.count, 0)
+      assert_equal(Rejoicable.all.count, 0)
+      post path, {'access_token' => @access_token.code, :followup_comment => {:organization_id=> @user.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, :rejoicables => ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"], :commit=>"Add Comment"}
+      assert_equal(FollowupComment.all.count, 1)
+      assert_equal(Rejoicable.all.count,3)
+      assert_equal(FollowupComment.all.first.comment, "Testing the comment system.")
+    end
+    
+    should "be able to get the followup comments" do
+      #create a few test comments
+      path = "/api/followup_comments/"
+      post path, {'access_token' => @access_token.code, :followup_comment => {:organization_id=> @user.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, :rejoicables => ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"], :commit=>"Add Comment"}
+      post path, {'access_token' => @access_token.code, :followup_comment => {:organization_id=> @user.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, :rejoicables => ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"], :commit=>"Add Comment"}
+  
+      path = "/api/followup_comments/#{@user2.person.id}"
+      get path, {'access_token' => @access_token.code}
+      @json = ActiveSupport::JSON.decode(@response.body)
+      f1 = FollowupComment.first
+      f2 = FollowupComment.last
+
+      followup_comment_test(@json[0]['followup_comment'], f1, @user2.person, @user.person)
+    end
+    
+    should "be able to create a contact assignment" do 
+      path = "/api/contact_assignments/"
+      ContactAssignment.destroy_all
+      post path, {'access_token' => @access_token.code, :org_id => @user.person.primary_organization.id, :assign_to => @user2.person.id, :ids => @user2.person.id}
+      
+      assert_equal(@user2.person.contact_assignments.count, 1)
+    end
+    
+    should "fail to create a contact assignment" do 
+      path = "/api/contact_assignments/"
+      ContactAssignment.destroy_all
+      post path, {'access_token' => @access_token.code, :org_id => @user.person.primary_organization.id, :assign_to => "23423523a", :ids => @user2.person.id}
+      @json = ActiveSupport::JSON.decode(@response.body)      
+      assert_equal(@json['error']['code'], '27')
+      
+      ContactAssignment.destroy_all
+      post path, {'access_token' => @access_token.code, :org_id => '234abc', :assign_to => "23423523", :ids => @user2.person.id}
+      @json = ActiveSupport::JSON.decode(@response.body)      
+      assert_equal(@json['error']['code'], '30')
+    end
+    
+    should "be able to delete a contact assignment" do 
+      ContactAssignment.destroy_all
+      y = ContactAssignment.create(:organization_id => @user.person.primary_organization.id, :person_id => @user.person.id, :assigned_to_id => @user.person.id)
+      assert_equal(@user.person.contact_assignments.count, 1)
+      path = "/api/contact_assignments/#{@user.person.id}"
+      delete path, {'access_token' => @access_token.code}
+      assert_equal(@user.person.contact_assignments.count, 0)
+    end
   end
   
   ######################################
   ########## HELPER METHODS ############
   ######################################
+  
+  def followup_comment_test(json_comment, comment, contact, commenter)
+    assert_equal(json_comment['comment']['id'], comment.id)
+    assert_equal(json_comment['comment']['contact_id'], contact.id)
+    assert_equal(json_comment['comment']['commenter_id'], commenter.id)
+    assert_equal(json_comment['comment']['comment'], comment.comment)
+    assert_equal(json_comment['comment']['status'], comment.status)
+    assert_equal(json_comment['comment']['organization_id'], contact.primary_organization.id)
+    assert_equal(json_comment['comment']['created_by_picture_url'], commenter.picture)
+    
+    rejoicables_test(json_comment['rejoicables'], comment.rejoicables)
+  end
+  
+  def rejoicables_test(json_rejoicables, rejoicables)
+    json_rejoicables.each_with_index do |r,i|
+      assert_equal(r['id'], rejoicables[i].id)
+      assert_equal(r['what'], rejoicables[i].what)
+    end
+  end
   
   def friend_test(json_friend, friend)
     assert_equal(json_friend['name'],friend.name)
