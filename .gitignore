@@ -12,3 +12,4 @@ unicorn.development.rb
 public/assets
 *.swp
 coverage.data
+.sass-cache

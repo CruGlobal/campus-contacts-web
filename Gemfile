@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.1.0.rc3'
+gem 'rails', :git => 'git://github.com/rails/rails.git', :branch => '3-1-stable'
 gem 'sass'
 gem 'coffee-script'
 gem 'uglifier'

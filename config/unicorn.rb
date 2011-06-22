@@ -1,4 +1,6 @@
 # unicorn_ -c /var/www/html/production/mh/current/config/unicorn.rb -E production -D
+working_directory "/var/www/html/production/mh/current"
+
 app_path = "/var/www/html/production/mh/shared"
 
 rails_env = ENV['RAILS_ENV'] || 'production'
