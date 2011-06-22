@@ -2,34 +2,33 @@ class Api::ContactAssignmentsController < ApiController
   require 'api_helper'
   include ApiHelper
   oauth_required :scope => "contact_assignment"
-  before_filter :valid_request_before, :organization_allowed?, :authorized_leader?
+  before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization
   skip_before_filter :verify_authenticity_token, :authenticate_user!
   rescue_from Exception, :with => :render_json_error
   
   def create_1
-    raise ContactAssignmentCreateParamsError unless ((params[:org_id].present? || params[:org].present?) && params[:id].present? && params[:assign_to].present?)
-    if !@organization.empty?
-      ids = params[:id].split(',')
+    raise ContactAssignmentCreateParamsError unless ( params[:ids].present? && params[:assign_to].present? && is_int?(params[:assign_to]))
+    
+    if @organization
+      ids = params[:ids].split(',')
       ContactAssignment.where(:person_id => ids, :organization_id => @organization.id).destroy_all
-      @assign_to = Person.find(params[:assign_to])
-      params[:ids].each do |id|
-        ContactAssignment.create!(:person_id => id, :organization_id => @organization.id, :assigned_to_id => @assign_to.id)
+      #@assign_to = Person.find(params[:assign_to])
+      ids.each do |id|
+        raise ContactAssignmentCreateParamsError unless is_int?(id)
+        ContactAssignment.create!(:person_id => id, :organization_id => @organization.id, :assigned_to_id => params[:assign_to])
       end
+    else raise NoOrganizationError
     end
-    render :json => JSON::pretty_generate('[]')
+    render :json => '[]'
   end
   
   def destroy_1
-    raise ContactAssignmentDeleteParamsError unless ((params[:org_id].present? || params[:org].present?) && params[:id].present?)
+    raise ContactAssignmentDeleteParamsError unless (params[:id].present? && is_int?(params[:id]))
     ids = params[:id].split(',')
-    ContactAssignment.where(:person_id => ids, :organization_id => @organization.first.id).destroy_all unless @organization.empty?
-    render :json => JSON::pretty_generate('[]')
-  end
-  
-  private
-  
-  def get_organization
-    org = params[:org_id].present? ? params[:org_id] : params[:org]
-    @organization = Organization.where('id = ?',org)
+    if @organization
+      ContactAssignment.where(:person_id => ids, :organization_id => @organization.id).destroy_all
+    else raise NoOrganizationError
+    end
+    render :json => '[]'
   end
 end

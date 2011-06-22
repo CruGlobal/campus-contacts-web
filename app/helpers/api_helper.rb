@@ -53,17 +53,19 @@ module ApiHelper
     valid_fields
   end
  
-  def organization_allowed?
+  def organization_allowed?   
     @valid_orgs = get_me.organizations.collect { |x| x.subtree.collect(&:id)}.flatten.uniq
     @valid_keywords = SmsKeyword.where(:organization_id => @valid_orgs)
     
     if (params[:org].present? || params[:org_id].present?)
+      raise ApiErrors::OrganizationNotIntegerError unless (is_int?(params[:org_id]) || is_int?(params[:org])) 
       org_id = params[:org].present? ? params[:org].to_i : params[:org_id].to_i
       raise ApiErrors::OrgNotAllowedError unless @valid_orgs.include?(org_id)
     elsif params[:keyword].present?
       @valid_key_ids = @valid_keywords.collect(&:id)
       raise ApiErrors::OrgNotAllowedError unless @valid_key_ids.include?(params[:keyword])
     elsif params[:keyword_id].present?
+      raise ApiErrors::KeywordNotIntegerError unless is_int?(params[:keyword_id]) 
       @valid_key_names = @valid_keywords.collect(&:keyword)
       raise ApiErrors::OrgNotAllowedError unless @valid_key_names.include?(params[:keyword])
     end
@@ -107,10 +109,11 @@ module ApiHelper
   
   def get_organization
     if params[:org_id].present? || params[:org].present?
+      raise OrganizationNotIntegerError unless (is_int?(params[:org_id]) || is_int?(params[:org]))
       org_id_param = params[:org_id] ? params[:org_id].to_i : params[:org].to_i
-      Organization.find(org_id_param)
+      @organization = Organization.find(org_id_param)
     else
-      get_me.primary_organization
+      @organization = get_me.primary_organization
     end
   end
   
@@ -162,6 +165,10 @@ module ApiHelper
       end
     end
     people
+  end
+  
+  def is_int?(str)
+    return !!(str =~ /^[-+]?[1-9]([0-9]*)?$/)
   end
   
   #Handle all API controller exceptions and output as JSON
