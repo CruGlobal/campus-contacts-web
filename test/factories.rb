@@ -233,4 +233,3 @@ FactoryGirl.define do
     association :person
   end
 end
-

@@ -308,6 +308,39 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
     end
   end
   
+  context "a user" do
+    setup do
+      @user = Factory.create(:user_with_auxs)
+      @user2 = Factory.create(:user2_with_auxs)
+      @user2.person.update_attributes(:firstName => "Test", :lastName => "Useroo")
+      @user2.person.organization_memberships.destroy_all
+      @user2.person.organization_memberships.create(:organization_id => @user.person.primary_organization.id, :person_id => @user2.person.id, :primary => 1, :role => "leader", :followup_status => "contacted")
+      ContactAssignment.create(:assigned_to_id => @user.person.id, :person_id => @user2.person.id, :organization_id => @user.person.organizations.first.id)
+      ContactAssignment.create(:assigned_to_id => @user2.person.id, :person_id => @user.person.id, :organization_id => @user.person.organizations.first.id)
+      @access_token = Factory.create(:access_token, :identity => @user.id)
+      @access_token2 = Factory.create(:access_token, :identity => @user2.id, :code => "aoeuaocnpganoeuhnh234hnaeu")
+    end
+    
+    should "be denied access to resources when they have the wrong scope" do
+      path = "/api/contact_assignments/#{@user.person.id}"
+      @access_token.update_attributes(:scope => "contacts userinfo followup_comments")
+      delete path, {'access_token' => @access_token.code}
+      @json = ActiveSupport::JSON.decode(@response.body)
+      assert_equal(@json['error']['code'],"55")
+      
+      path = "/api/friends/#{@user.person.id}"
+      @access_token.update_attributes(:scope => "contacts contact_assignment followup_comments")
+      get path, {'access_token' => @access_token.code}
+      @json = ActiveSupport::JSON.decode(@response.body)
+      assert_equal(@json['error']['code'],"55")
+      
+      path = "/api/people/#{@user.person.id}"
+      get path, {'access_token' => @access_token.code}
+      @json = ActiveSupport::JSON.decode(@response.body)
+      assert_equal(@json['error']['code'],"55")
+    end
+end
+  
   ######################################
   ########## HELPER METHODS ############
   ######################################
@@ -315,11 +348,12 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
   def followup_comment_test(json_comment, comment, contact, commenter)
     assert_equal(json_comment['comment']['id'], comment.id)
     assert_equal(json_comment['comment']['contact_id'], contact.id)
-    assert_equal(json_comment['comment']['commenter_id'], commenter.id)
+    assert_equal(json_comment['comment']['commenter']['id'], commenter.id)
+    assert_equal(json_comment['comment']['commenter']['picture'], commenter.picture)
+    assert_equal(json_comment['comment']['commenter']['name'], commenter.to_s)
     assert_equal(json_comment['comment']['comment'], comment.comment)
     assert_equal(json_comment['comment']['status'], comment.status)
     assert_equal(json_comment['comment']['organization_id'], contact.primary_organization.id)
-    assert_equal(json_comment['comment']['created_by_picture_url'], commenter.picture)
     
     rejoicables_test(json_comment['rejoicables'], comment.rejoicables)
   end

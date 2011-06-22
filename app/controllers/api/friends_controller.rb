@@ -1,5 +1,5 @@
 class Api::FriendsController < ApiController
-  require 'api_helper'
+  require 'api_helper.rb'
   include ApiHelper 
   before_filter :valid_request_before, :organization_allowed?, :authorized_leader?
   skip_before_filter :authenticate_user!
