@@ -8,16 +8,11 @@ class Api::ContactAssignmentsController < ApiController
   
   def create_1
     raise ContactAssignmentCreateParamsError unless ( params[:ids].present? && params[:assign_to].present? && is_int?(params[:assign_to]))
-    
-    if @organization
-      ids = params[:ids].split(',')
-      ContactAssignment.where(:person_id => ids, :organization_id => @organization.id).destroy_all
-      #@assign_to = Person.find(params[:assign_to])
-      ids.each do |id|
-        raise ContactAssignmentCreateParamsError unless is_int?(id)
-        ContactAssignment.create!(:person_id => id, :organization_id => @organization.id, :assigned_to_id => params[:assign_to])
-      end
-    else raise NoOrganizationError
+    ids = params[:ids].split(',')
+    ContactAssignment.where(:person_id => ids, :organization_id => @organization.id).destroy_all
+    ids.each do |id|
+      raise ContactAssignmentCreateParamsError unless is_int?(id)
+      ContactAssignment.create!(:person_id => id, :organization_id => @organization.id, :assigned_to_id => params[:assign_to])
     end
     render :json => '[]'
   end
@@ -25,10 +20,7 @@ class Api::ContactAssignmentsController < ApiController
   def destroy_1
     raise ContactAssignmentDeleteParamsError unless (params[:id].present? && is_int?(params[:id]))
     ids = params[:id].split(',')
-    if @organization
-      ContactAssignment.where(:person_id => ids, :organization_id => @organization.id).destroy_all
-    else raise NoOrganizationError
-    end
+    ContactAssignment.where(:person_id => ids, :organization_id => @organization.id).destroy_all
     render :json => '[]'
   end
 end

@@ -9,12 +9,12 @@ class FollowupComment < ActiveRecord::Base
     hash = {}
     hash['id'] = id
     hash['contact_id'] = contact_id
-    hash['commenter_id'] = commenter_id
+    commenter = Person.find(commenter_id)
+    hash['commenter'] = { id: commenter_id, name: commenter.to_s, picture: commenter.picture } 
     hash['comment'] = comment
     hash['status'] = status
     hash['organization_id'] = organization_id
     hash['created_at'] = created_at
-    hash['created_by_picture_url'] = Person.find(commenter_id).picture
     hash
   end
 end

@@ -40,7 +40,6 @@ gem 'rake', '0.8.7'
 gem 'hoptoad_notifier'
 gem 'cancan'
 gem 'kaminari'
-
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
@@ -56,4 +55,8 @@ group :development, :test do
 #  gem 'guard-test'
   gem 'railroady'
   gem 'awesome_print'
+end
+
+group :performance do
+  gem 'ruby-prof'
 end

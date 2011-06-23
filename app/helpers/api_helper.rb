@@ -115,6 +115,8 @@ module ApiHelper
     else
       @organization = get_me.primary_organization
     end
+    raise NoOrganizationError if @organization.nil?
+    @organization
   end
   
   #Pass in a Person Activerecord Query object, return ActiveRecord Query object

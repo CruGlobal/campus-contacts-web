@@ -1,9 +1,95 @@
-require 'test_helper'
-require 'rails/performance_test_help'
+require 'performance_test_helper'
 
-# Profiling results for each test method are written to tmp/performance.
 class BrowsingTest < ActionDispatch::PerformanceTest
-  def test_homepage
-    get '/'
+  
+  def setup
+    @user = User.find(1170780)
+    @user2 = User.find(193194)
+    @access_token = Rack::OAuth2::Server::AccessToken.where(:identity => @user.id).first
   end
+  
+  # def test_request_a_person
+  #     path = "/api/people/#{@user.person.id}"
+  #     get path, {'access_token' => @access_token.code}
+  #     File.open('/users/Doulos/Desktop/testmytest.log', 'a') do |f2|
+  #       f2.puts "request a person\n"
+  #       f2.puts "#{@response.body}\n\n\n"
+  #     end
+  # end
+  #   
+  # def test_request_multiple_people
+  #   set_defaults
+  #   path="/api/people/#{@user.person.id},#{@user2.person.id}"
+  #   get path, {'access_token' => @access_token.code}
+  #   File.open('/users/Doulos/Desktop/testmytest.log', 'a') do |f2|
+  #     f2.puts "request multiple people\n"
+  #     f2.puts "#{@response.body}\n\n\n"
+  #   end
+  # end
+  #   
+  def test_request_contact_information_associated_with_a_person
+    path = "/api/contacts/#{@user.person.id}"
+    get path, {'access_token' => @access_token.code}
+    File.open('/users/Doulos/Desktop/testmytest.log', 'a') do |f2|
+      f2.puts "request contact information associated with person\n"
+      f2.puts "#{@response.body}\n\n\n"
+    end
+  end
+  #   
+  # def test_request_friends_of_person
+  #   set_defaults
+  #   path = "/api/friends/#{@user.person.id}"
+  #   get path, {'access_token' => @access_token.code}
+  #   File.open('/users/Doulos/Desktop/testmytest.log', 'a') do |f2|
+  #     f2.puts "request friends of person\n"
+  #     f2.puts "#{@response.body}\n\n\n"
+  #   end
+  # end
 end
+  
+  
+  
+  # context "A user" do
+  #   setup do
+  #     @user = User.find(1170780)
+  #     @user2 = User.find(193194)
+  #     @access_token = Rack::OAuth2::Server::AccessToken.where(:identity => @user.id).first
+  #   end
+  #   
+  #   should "be able to request a person via the API" do
+  #     path = "/api/people/#{@user.person.id}"
+  #     get path, {'access_token' => @access_token.code}
+  #     File.open('/users/Doulos/Desktop/testmytest.log', 'a') do |f2|
+  #       f2.puts "request a person\n"
+  #       f2.puts "#{@response.body}\n\n\n"
+  #     end
+  #   end
+  #   
+  #   should "be able to request multiple people via the API" do
+  #     path="/api/people/#{@user.person.id},#{@user2.person.id}"
+  #     get path, {'access_token' => @access_token.code}
+  #     File.open('/users/Doulos/Desktop/testmytest.log', 'a') do |f2|
+  #       f2.puts "request multiple people\n"
+  #       f2.puts "#{@response.body}\n\n\n"
+  #     end
+  #   end
+  #   
+  #   should "be able to request the contact information associated with a person" do
+  #     path = "/api/contacts/#{@user.person.id}"
+  #     get path, {'access_token' => @access_token.code}
+  #     File.open('/users/Doulos/Desktop/testmytest.log', 'a') do |f2|
+  #       f2.puts "request contact information associated with person\n"
+  #       f2.puts "#{@response.body}\n\n\n"
+  #     end
+  #   end
+  #   
+  #   should "be able to request the friends of a person" do
+  #     path = "/api/friends/#{@user.person.id}"
+  #     get path, {'access_token' => @access_token.code}
+  #     File.open('/users/Doulos/Desktop/testmytest.log', 'a') do |f2|
+  #       f2.puts "request friends of person\n"
+  #       f2.puts "#{@response.body}\n\n\n"
+  #     end
+  #   end
+#   end
+# end

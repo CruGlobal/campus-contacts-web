@@ -1,27 +1,26 @@
 class Api::ContactsController < ApiController
-  require 'api_helper'
+  require 'api_helper.rb'
   include ApiHelper  
   skip_before_filter :authenticate_user!
-  before_filter :valid_request_before, :organization_allowed?, :authorized_leader?
+  before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization
   oauth_required :scope => "contacts"
   rescue_from Exception, :with => :render_json_error
   
   def search_1
     @keywords = get_keywords
-    unless (@keywords.empty? && params[:term].nil?)
-      org = get_organization
+    unless (@keywords.empty? || !params[:term].present?)
       @question_sheets = @keywords.collect(&:question_sheet)
       @people = Person.who_answered(@question_sheets).where('`ministry_person`.`firstName` LIKE ? OR `ministry_person`.`lastName` LIKE ? OR `ministry_person`.`preferredName` LIKE ?',"%#{params[:term]}%","%#{params[:term]}%","%#{params[:term]}%")
-      @people = paginate_filter_sort_people(@people,org)      
-      dh = @people.collect {|person|  { person: person.to_hash_basic(org)}}
+      @people = paginate_filter_sort_people(@people,@organization)      
+      json_output = @people.collect {|person|  { person: person.to_hash_basic(@organization)}}
     end
-    render :json => JSON::pretty_generate(dh)
+    final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
+    render :json => final_output
   end
   
   def index_1
     @keywords = get_keywords
     unless @keywords.empty?
-      org = get_organization
       @question_sheets = @keywords.collect(&:question_sheet)
       @people = Person.who_answered(@question_sheets)
       if params[:assigned_to].present?
@@ -31,8 +30,8 @@ class Api::ContactsController < ApiController
           @people = @people.joins(:assigned_tos).where('contact_assignments.question_sheet_id' => @question_sheets.collect(&:id), 'contact_assignments.assigned_to_id' => @assigned_to.id)
         end
       end
-      @people = paginate_filter_sort_people(@people, org)
-      json_output = @people.collect {|person| {person: person.to_hash_basic(org)}}
+      @people = paginate_filter_sort_people(@people, @organization)
+      json_output = @people.collect {|person| {person: person.to_hash_basic(@organization)}}
     end
     final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
     render :json => final_output
@@ -42,7 +41,6 @@ class Api::ContactsController < ApiController
     @answer_sheets = {}
     @people = get_people
     unless @people.empty?
-      @organization = get_organization
       @question_sheets = @organization.question_sheets
       @questions = (@question_sheets.collect { |q| q.questions }).flatten.uniq
       @people.each do |person|
