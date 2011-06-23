@@ -42,8 +42,8 @@
         request_keyword: Request a Keyword
         designate_leaders: Designate Leaders
         create_survey: Create Survey
-        back: << Back
-        next: Next >>
+        back: Back
+        next: Next
         welcome_paragraph: "Welcome to MissionHub! We're so glad you decided to take ministry seriously."
         verify_paragraph: "Before you can go any further, we need to know if you have AIDS. This is a one-time test."
         verify_with_relay: "Verify With Relay"

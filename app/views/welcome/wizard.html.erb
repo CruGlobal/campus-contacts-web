@@ -17,7 +17,7 @@
           <div class="wizard_step_inactive"></div>
         <% end %>
         <div class="wizard_step_name"><%= link_to(t('ma.welcome.wizard.verify_identity'), '/wizard?step=verify') %></div>
-        <div class="wizard_step_visited"></div>
+       
         <% if current_user.globallyUniqueID %>
           <div class="wizard_step_visited"></div>
         <% else %>
@@ -32,7 +32,7 @@
         <div class="wizard_step_inactive"></div>
       <% end %>
       <div class="wizard_step_name"><%= link_to(t('ma.welcome.wizard.request_keyword'), '/wizard?step=keyword') %></div>
-      <div class="wizard_step_visited"></div>
+      
       <% if current_organization && current_organization.keywords.present? %>
         <div class="wizard_step_visited"></div>
       <% else %>
@@ -46,7 +46,7 @@
         <div class="wizard_step_inactive"></div>
       <% end %>
       <div class="wizard_step_name"><%= link_to(t('ma.welcome.wizard.create_survey'), '/wizard?step=survey') %></div>
-      <div class="wizard_step_visited"></div>
+      
       <% if current_organization && current_organization.question_sheets.present? %>
         <div class="wizard_step_visited"></div>
       <% else %>
@@ -60,7 +60,7 @@
         <div class="wizard_step_inactive"></div>
       <% end %>
       <div class="wizard_step_name"><%= link_to(t('ma.welcome.wizard.designate_leaders'), '/wizard?step=leaders') %></div>
-      <div class="wizard_step_visited"></div>
+      
       <% if current_organization && current_organization.keywords.present? %>
         <div class="wizard_step_visited"></div>
       <% else %>
@@ -74,24 +74,29 @@
   <% case params[:step] %>
   <% when 'verify' %>
     <% if params[:not_found] == '1' %>
+      <h2>Welcome!</h2>
       <p><%= t('ma.welcome.wizard.not_found_paragraph') %> </p>
     <% else %>
       <p><%= t('ma.welcome.wizard.verify_paragraph') %> </p>
       <%= link_to(t('ma.welcome.wizard.verify_with_relay'), verify_with_relay_path) %>
     <% end %>
   <% when 'keyword' %>
+    <h2>Request a Keyword!</h2>
     <p><%= t('ma.welcome.wizard.keyword_paragraph') %> </p>
     <%= link_to(t('ma.welcome.wizard.request_keyword_link'), new_sms_keyword_path) %><br/>
     <%= link_to(t('ma.welcome.wizard.skip_step'), '/wizard?step='+ current_user.next_wizard_step(current_organization)) %>
   <% when 'survey' %>
+    <h2>Create a Survey!</h2>
     <p><%= t('ma.welcome.wizard.survey_paragraph') %> </p>
     <%= link_to(t('ma.welcome.wizard.create_survey_link'), sms_keyword_questions_path(current_organization.keywords.first)) %><br/>
     <%= link_to(t('ma.welcome.wizard.skip_step'), '/wizard?step='+ current_user.next_wizard_step(current_organization)) %>
   <% when 'leaders' %>
+    
     <p><%= t('ma.welcome.wizard.leaders_paragraph') %> </p>
   <% else %>
+    <h2><%= t('ma.welcome.wizard.welcome') %></h2>
     <p><%= t('ma.welcome.wizard.welcome_paragraph') %> </p>
-    <%= link_to(t('ma.welcome.wizard.back'), '#', :class => 'disabled', :onclick => 'return false;') %>
-    <%= link_to(t('ma.welcome.wizard.next'), '/wizard?step=verify') %>
+    <%= link_to(t('ma.welcome.wizard.back'), '#', :class => 'disabled btn', :onclick => 'return false;') %>
+    <%= link_to(t('ma.welcome.wizard.next'), '/wizard?step=verify', :class => 'btn') %>
   <% end %>
 </div>

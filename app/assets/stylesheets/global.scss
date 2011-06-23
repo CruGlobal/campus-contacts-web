@@ -9,7 +9,7 @@ $light-gray: #F2F2F2;
 $white: #fff;
 
 /* Divs */
-$maxpagewidth: 1600px;
+$maxpagewidth: 1100px;
 $minpagewidth: 960px;
 
 @mixin clearlist {
@@ -67,8 +67,10 @@ body {
   border-radius: 10px 10px 0 0;
   height: 38px;
   a {
+    border-right: 1px solid #FFFFFF;
     color: $white;
     line-height: 38px;
+    padding: 0 13px;
   }
   ul {
     @include clearlist;
@@ -83,11 +85,13 @@ body {
     display: inline-block;
     width: 166px;
     height: 41px;
+    margin-bottom: 10px;
+    margin-left: 15px;
   }
 }
 
 .block {
-  border-bottom: 1px solid $blue;
+  /* border-bottom: 1px solid $blue; */
 }
 
 ul.leftmenu {
@@ -122,4 +126,88 @@ ul.leftmenu {
 
 #main {
   margin-left: 205px;
+}
+
+
+/* WIZARDRY */
+
+.wizard_steps {
+  margin-right: 10px;
+  div.wizard_step {
+    line-height: 30px;
+    height: 30px;
+    border: 1px solid #c1ddef;
+    padding: 0 8px;
+    margin-bottom: 3px;
+    background-image: -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      color-stop(0.49, rgb(255,255,255)),
+      color-stop(0.88, rgb(234,241,246))
+    );
+    background-image: -moz-linear-gradient(
+      center top,
+      rgb(255,255,255) 49%,
+      rgb(234,241,246) 88%  
+    );
+  }
+  .wizard_step_active,
+  .wizard_step_name,
+  .wizard_step_visited,
+  .wizard_step_not_visited {
+    display: inline-block;
+  }
+  .wizard_step_visited {
+    background: url("/assets/check_complete.png") no-repeat scroll 0 50% transparent;
+    float: right;
+    height: 30px;
+    vertical-align: middle;
+    width: 22px;
+  }
+  .wizard_step_not_visited {
+    background: url("/assets/check_incomplete.png") no-repeat scroll 0 50% transparent;
+    float: right;
+    height: 30px;
+    vertical-align: middle;
+    width: 22px;
+  }
+  .wizard_step_active,
+  .wizard_step_inactive {
+    width: 4px;
+    margin-right: 9px;
+    height: 30px;
+    background: url("/assets/blue_arrow.png") no-repeat 0 50%;
+    display: inline-block;
+    float: left;
+  }
+  .wizard_step_inactive {
+    background: none;
+  }
+}
+
+.wizard {
+  margin: 17px 0 0 0px;
+  border: 1px solid #c1ddef;
+  padding: 15px;
+}
+
+.btn {
+  background: url("/assets/btn.png") repeat-x scroll 0 0 transparent;
+  border: 1px solid silver;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+  color: #000000;
+  display: inline-block;
+  height: 24px;
+  line-height: 24px;
+  min-width: 27px;
+  padding: 0 12px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.btn.disabled {
+  opacity: .5;
+  font-weight: normal;
 }
