@@ -1,7 +1,13 @@
-<h1><%= t("ma.welcome.index.title_top")%></h1>
-<% if user_signed_in? %>
-  <%= link_to(t("ma.welcome.index.go_home"), user_root_path) %>
-<% else %>
-  <%= link_to(t("ma.nav.login"), new_user_session_path) %><br/>
-  <%= link_to(t("ma.welcome.index.request_key"), new_sms_keyword_path) %>
-<% end %><br/>
+Three. Words. Here
+<br/>
+Connection: text #### to *****
+<br/>
+Follow-up: Social & mobile
+<br/>
+Community: none of this is real
+<br/>
+Fake: When do we get final marketing content?
+<br/>
+Take a long boring tour to learn more
+<br/>
+<%= link_to(t("ma.welcome.index.get_started"), new_user_session_path) %>

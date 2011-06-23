@@ -5,6 +5,7 @@ class SmsKeywords::QuestionsController < ApplicationController
   # GET /questions
   # GET /questions.xml
   def index
+    session[:wizard] = true
     @questions = @keyword.question_sheet.elements
     @predefined = QuestionSheet.find(APP_CONFIG['predefined_question_sheet'])
     respond_to do |wants|

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%= render 'shared/head' %>
+</head>
+<body id="<%= controller.controller_name %>_controller">
+  
+  <div id="outer">
+  
+    <%= render 'shared/nav' %>
+    <div id="main">    
+      <div class="<%= params[:action] %>">
+        <%= yield %>
+      </div>
+    </div><!-- main -->
+    
+  </div><!-- outer -->
+
+</body>
+</html>
+
+

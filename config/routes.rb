@@ -71,7 +71,7 @@ Mh::Application.routes.draw do
   get "welcome/index"
   get "/test" => "welcome#test"
 
-  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks", :sessions => "sessions" }
   devise_scope :user do
     get "sign_in", :to => "devise/sessions#new"
     get "sign_out", :to => "devise/sessions#destroy"
@@ -85,6 +85,7 @@ Mh::Application.routes.draw do
   resources :contacts do
     collection do
       get :thanks
+      get :mine
     end
   end
 
@@ -110,6 +111,8 @@ Mh::Application.routes.draw do
 
   root :to => "welcome#index"
   match 'home' => 'welcome#home', :as => 'user_root'
+  match 'wizard' => 'welcome#wizard', :as => 'wizard'
+  match 'verify_with_relay' => 'welcome#verify_with_relay', :as => 'verify_with_relay'
   
   # SMS keyword state transitions
   match '/admin/sms_keywords/:id/t/:transition' => 'admin/sms_keywords#transition', :as => 'sms_keyword_transition'

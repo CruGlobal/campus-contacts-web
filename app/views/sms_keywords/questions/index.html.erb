@@ -27,7 +27,11 @@
 <br/><br/>
 <%= link_to('Preview Form', contact_form_path(:keyword => @keyword.keyword), :target => '_blank')%>
 |
-<%= link_to('Back to Dashboard', user_root_path) %>
+<% if session[:wizard] %>
+  <%= link_to(t('ma.nav.back_to_wizard'), wizard_path) %>
+<% else %>
+  <%= link_to(t('ma.nav.back_to_dashboard'), user_root_path) %>
+<% end %>
 <script type="text/javascript" charset="utf-8">
   $(function() {
     $('#question_type').change()

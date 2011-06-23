@@ -6,7 +6,10 @@
   ma:
     nav:
       login: "Log In"
+      logout: "Sign Out"
       back_to_dashboard: "Back to dashboard"
+      profile: 'My Profile'
+      back_to_wizard: "I'm done. Take me back to the Wizard"
     general:
       keyword: "Keyword"
       status: "Status"
@@ -32,6 +35,31 @@
         title_top_mobile: "MissionHub"
         go_home: 'Go to your dashboard'
         request_key: "Click here to request an sms keyword."
+        get_started: "Get Started"
+      wizard:
+        welcome: Welcome
+        verify_identity: Verify Your Identity
+        request_keyword: Request a Keyword
+        designate_leaders: Designate Leaders
+        create_survey: Create Survey
+        back: << Back
+        next: Next >>
+        welcome_paragraph: "Welcome to MissionHub! We're so glad you decided to take ministry seriously."
+        verify_paragraph: "Before you can go any further, we need to know if you have AIDS. This is a one-time test."
+        verify_with_relay: "Verify With Relay"
+        not_found_paragraph: "We weren't able to find a record of you associated with any of the organizations or ministries using MissionHub."
+        keyword_paragraph:
+          "One of the coolest features of MissionHub is the ability for you to interact with people using text messages. For this to work you have
+          to choose a keyword that is unique to you that people will send messages to. If that sounds confusing, you're over the age of 30."
+        request_keyword_link: "Click here to request a keyword. We'll return you to this wizard when you're done."
+        survey_paragraph:
+          "Now that you've requested a keyword, you're going to want to create a set of questions to ask people. Think along the lines of a freshmand survey or a 
+          basic contact card"
+        create_survey_link: "Click here to create your survey. We'll return you to this wizard when you're done."
+        leaders_paragraph:
+          "This part is optional. Odds are decent that there are other people you work with who you'd like to give the ability to manage the keyword you set up
+           as well as the contacts that will come from people responding to your survey. This step lets you add those people. Except we haven't programmed it quite yet."
+        skip_step: "Skip this step"
       home:
         title_top: "Welcome to MissionHub!"
         keywords: "Keywords"
