@@ -159,14 +159,14 @@ ul.leftmenu {
     display: inline-block;
   }
   .wizard_step_visited {
-    background: url("/assets/check_complete.png") no-repeat scroll 0 50% transparent;
+    background: url("/images/check_complete.png") no-repeat scroll 0 50% transparent;
     float: right;
     height: 30px;
     vertical-align: middle;
     width: 22px;
   }
   .wizard_step_not_visited {
-    background: url("/assets/check_incomplete.png") no-repeat scroll 0 50% transparent;
+    background: url("/images/check_incomplete.png") no-repeat scroll 0 50% transparent;
     float: right;
     height: 30px;
     vertical-align: middle;
@@ -177,7 +177,7 @@ ul.leftmenu {
     width: 4px;
     margin-right: 9px;
     height: 30px;
-    background: url("/assets/blue_arrow.png") no-repeat 0 50%;
+    background: url("/images/blue_arrow.png") no-repeat 0 50%;
     display: inline-block;
     float: left;
   }
@@ -193,7 +193,7 @@ ul.leftmenu {
 }
 
 .btn {
-  background: url("/assets/btn.png") repeat-x scroll 0 0 transparent;
+  background: url("/images/btn.png") repeat-x scroll 0 0 transparent;
   border: 1px solid silver;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
   color: #000000;

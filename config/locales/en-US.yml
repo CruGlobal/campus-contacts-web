@@ -56,6 +56,7 @@
           "Now that you've requested a keyword, you're going to want to create a set of questions to ask people. Think along the lines of a freshmand survey or a 
           basic contact card"
         create_survey_link: "Click here to create your survey. We'll return you to this wizard when you're done."
+        leaders_header: "Give access to other leaders"
         leaders_paragraph:
           "This part is optional. Odds are decent that there are other people you work with who you'd like to give the ability to manage the keyword you set up
            as well as the contacts that will come from people responding to your survey. This step lets you add those people. Except we haven't programmed it quite yet."
