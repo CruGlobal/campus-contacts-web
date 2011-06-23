@@ -4,7 +4,7 @@ class WelcomeController < ApplicationController
     if user_signed_in?
       redirect_to user_root_path and return
     end
-    render :layout => 'splash', :stream => true
+    render :layout => 'splash'#, :stream => true
   end
   
   def wizard
