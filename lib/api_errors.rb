@@ -59,7 +59,7 @@ module ApiErrors
   end
   class FollowupCommentCreateParamsError < ApiError
     def initialize
-      super :followup_comment_create_params_error, "You did not prodive the appropriate parameters to create a followup comment.", "28"
+      super :followup_comment_create_params_error, "You did not provide the appropriate parameters to create a followup comment.", "28"
     end
   end
   class LimitRequiredWithStartError < ApiError
@@ -80,6 +80,12 @@ module ApiErrors
   class NoOrganizationError < ApiError
     def initialize
       super :no_organization_error, "We could not find your organization.  Specify org_id as a query parameter.", "32"
+    end
+  end
+  
+  class InvalidJSONError < ApiError
+    def initialize
+      super :invalid_json_error, "You did not send valid JSON.","33"
     end
   end
 end

@@ -236,7 +236,7 @@ class Person < ActiveRecord::Base
   def to_hash_basic(org_id = nil)
     assign_hash = nil
     unless org_id.nil?
-      assigned_to_person = ContactAssignment.where('person_id = ? AND organization_id = ?', id, org_id.id)
+      assigned_to_person = ContactAssignment.where('assigned_to_id = ? AND organization_id = ?', id, org_id.id)
       assigned_to_person = assigned_to_person.empty? ? [] : assigned_to_person.collect{ |a| a.person.to_hash_mini }
       person_assigned_to = ContactAssignment.where('person_id = ? AND organization_id = ?', id, org_id.id).collect {|c| Person.find(c.assigned_to_id).to_hash_mini}
       assign_hash = {assigned_to_person: assigned_to_person, person_assigned_to: person_assigned_to}

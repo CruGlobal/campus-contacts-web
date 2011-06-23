@@ -1,10 +1,10 @@
 class Api::ContactsController < ApiController
   require 'api_helper.rb'
-  include ApiHelper  
+  include ApiHelper
   skip_before_filter :authenticate_user!
   before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization
   oauth_required :scope => "contacts"
-  rescue_from Exception, :with => :render_json_error
+  #rescue_from Exception, :with => :render_json_error
   
   def search_1
     @keywords = get_keywords
@@ -27,7 +27,7 @@ class Api::ContactsController < ApiController
         if params[:assigned_to] == 'none'
           @people = unassigned_people
         else
-          @people = @people.joins(:assigned_tos).where('contact_assignments.question_sheet_id' => @question_sheets.collect(&:id), 'contact_assignments.assigned_to_id' => @assigned_to.id)
+          @people = @people.joins(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => params[:assigned_to])
         end
       end
       @people = paginate_filter_sort_people(@people, @organization)

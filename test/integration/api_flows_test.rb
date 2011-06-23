@@ -256,7 +256,12 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       path = "/api/followup_comments/"
       assert_equal(FollowupComment.all.count, 0)
       assert_equal(Rejoicable.all.count, 0)
-      post path, {'access_token' => @access_token.code, :followup_comment => {:organization_id=> @user.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, :rejoicables => ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"], :commit=>"Add Comment"}
+      json = ActiveSupport::JSON.encode({:followup_comment => {:organization_id=> @user.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, :rejoicables => ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
+      post path, {'access_token' => @access_token.code, 'json' => json }
+      File.open('/users/Doulos/Desktop/testmytest.log', 'a') do |f2|
+        f2.puts "TESTING: \n"
+        f2.puts "#{@response.body}\n\n\n"
+      end
       assert_equal(FollowupComment.all.count, 1)
       assert_equal(Rejoicable.all.count,3)
       assert_equal(FollowupComment.all.first.comment, "Testing the comment system.")
@@ -265,9 +270,9 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
     should "be able to get the followup comments" do
       #create a few test comments
       path = "/api/followup_comments/"
-      post path, {'access_token' => @access_token.code, :followup_comment => {:organization_id=> @user.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, :rejoicables => ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"], :commit=>"Add Comment"}
-      post path, {'access_token' => @access_token.code, :followup_comment => {:organization_id=> @user.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, :rejoicables => ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"], :commit=>"Add Comment"}
-  
+      json = ActiveSupport::JSON.encode({:followup_comment => {:organization_id=> @user.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, :rejoicables => ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
+      post path, {'access_token' => @access_token.code, 'json' => json }
+      post path, {'access_token' => @access_token.code, 'json' => json }
       path = "/api/followup_comments/#{@user2.person.id}"
       get path, {'access_token' => @access_token.code}
       @json = ActiveSupport::JSON.decode(@response.body)
@@ -281,7 +286,6 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       path = "/api/contact_assignments/"
       ContactAssignment.destroy_all
       post path, {'access_token' => @access_token.code, :org_id => @user.person.primary_organization.id, :assign_to => @user2.person.id, :ids => @user2.person.id}
-      
       assert_equal(@user2.person.contact_assignments.count, 1)
     end
     

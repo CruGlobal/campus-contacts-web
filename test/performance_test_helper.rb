@@ -19,8 +19,8 @@ require 'action_controller/test_case'
 require 'action_dispatch/testing/integration'
 require 'rails/performance_test_help'
 
-require '/Users/doulos/Code/missionhub/app/controllers/api/people_controller.rb'
-require '/Users/doulos/Code/missionhub/app/helpers/api_helper.rb'
+# require '/Users/doulos/Code/missionhub/app/controllers/api/people_controller.rb'
+# require '/Users/doulos/Code/missionhub/app/helpers/api_helper.rb'
 
 # You may want to turn off caching, if you're trying to improve non-cached rendering speed.
 # Just uncomment this line:
