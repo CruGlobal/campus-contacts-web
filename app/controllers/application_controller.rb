@@ -80,4 +80,19 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def user_root_path
+    return '/wizard' unless current_organization
+    if current_person.leader_in?(current_organization)
+      '/contacts/mine'
+    else
+      '/people'
+    end
+  end
+  helper_method :user_root_path
+  
+  def wizard_path
+    '/wizard?step=' + current_user.next_wizard_step(current_organization)
+  end
+  helper_method :wizard_path
+  
 end

@@ -33,6 +33,10 @@ class Person < ActiveRecord::Base
     [preferredName.blank? ? firstName : preferredName, lastName].join(' ')
   end
   
+  def leader_in?(org)
+    OrganizationMembership.where(:person_id => id, :organization_id => org.id).first.try(:leader?)
+  end
+  
   def phone_number
     primary_phone_number.try(:number)
   end
@@ -54,7 +58,9 @@ class Person < ActiveRecord::Base
   
   def update_from_facebook(data, authentication, response = nil)
     response = MiniFB.get(authentication['token'], authentication['uid']) if response.nil?
-    self.birth_date = DateTime.strptime(data['birthday'], '%m/%d/%Y') if birth_date.blank? && data['birthday'].present?
+    begin
+      self.birth_date = DateTime.strptime(data['birthday'], '%m/%d/%Y') if birth_date.blank? && data['birthday'].present?
+    rescue ArgumentError; end
     self.gender = response.gender unless (response.gender.nil? && !gender.blank?)
     # save!
     unless email_addresses.detect {|e| e.email == data['email']}

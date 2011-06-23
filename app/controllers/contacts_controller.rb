@@ -25,6 +25,10 @@ class ContactsController < ApplicationController
     end
   end
   
+  def mine
+    @people = Person.order('lastName, firstName').includes(:assigned_tos).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id)
+  end
+  
   def new
     if params[:received_sms_id]
       sms = ReceivedSms.find_by_id(Base62.decode(params[:received_sms_id])) 

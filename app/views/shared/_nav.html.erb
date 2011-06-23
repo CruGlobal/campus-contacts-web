@@ -1,0 +1,17 @@
+<div id="global">
+  <% if user_signed_in? %>
+    <% if current_organization %>
+      <div class="item">
+        <%= current_organization %>
+      </div>
+      <div class="item">
+        <%= link_to(t('ma.nav.profile'), current_person) %>
+      </div>
+    <% end %>
+    <div class="item">
+      <%= link_to(t('ma.nav.logout'), destroy_user_session_path) %>
+    </div>   
+  <% else %>
+    <%= link_to(t('ma.nav.login'), new_user_session_path) %>
+  <% end %>
+</div>

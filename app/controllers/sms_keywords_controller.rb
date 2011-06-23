@@ -18,6 +18,7 @@ class SmsKeywordsController < ApplicationController
   # GET /sms_keywords/new
   # GET /sms_keywords/new.xml
   def new
+    session[:wizard] = true if request.referer.present? && request.referer.include?('wizard')
     @sms_keyword = SmsKeyword.new
 
     respond_to do |format|
@@ -39,7 +40,7 @@ class SmsKeywordsController < ApplicationController
 
     respond_to do |format|
       if @sms_keyword.save
-        format.html { redirect_to(user_root_path, :notice => t('ma.keywords.flash.created')) }
+        format.html { redirect_to(session[:wizard] ? wizard_path : user_root_path, :notice => t('ma.keywords.flash.created')) }
         format.xml  { render :xml => @sms_keyword, :status => :created, :location => @sms_keyword }
       else
         format.html { render :action => "new" }
