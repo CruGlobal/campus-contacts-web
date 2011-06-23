@@ -81,8 +81,12 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       @user = Factory.create(:user_with_auxs)
       @user2 = Factory.create(:user2_with_auxs)
       @user2.person.update_attributes(:firstName => "Test", :lastName => "Useroo")
+      temp_org = @user.person.primary_organization.id
       @user2.person.organization_memberships.destroy_all
-      @user2.person.organization_memberships.create(:organization_id => @user.person.primary_organization.id, :person_id => @user2.person.id, :primary => 1, :role => "leader", :followup_status => "contacted")
+      @user.person.organization_memberships.destroy_all
+      @user2.person.organization_memberships.create(:organization_id => temp_org, :person_id => @user2.person.id, :primary => 1, :role => "leader", :followup_status => "contacted")
+      @user.person.organization_memberships.create(:organization_id => temp_org, :person_id => @user.person.id, :primary => 1, :role => "leader", :followup_status => "attempted_contact")
+      
       ContactAssignment.create(:assigned_to_id => @user.person.id, :person_id => @user2.person.id, :organization_id => @user.person.organizations.first.id)
       ContactAssignment.create(:assigned_to_id => @user2.person.id, :person_id => @user.person.id, :organization_id => @user.person.organizations.first.id)
       @access_token = Factory.create(:access_token, :identity => @user.id)
@@ -317,8 +321,12 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       @user = Factory.create(:user_with_auxs)
       @user2 = Factory.create(:user2_with_auxs)
       @user2.person.update_attributes(:firstName => "Test", :lastName => "Useroo")
+      temp_org = @user.person.primary_organization.id
       @user2.person.organization_memberships.destroy_all
-      @user2.person.organization_memberships.create(:organization_id => @user.person.primary_organization.id, :person_id => @user2.person.id, :primary => 1, :role => "leader", :followup_status => "contacted")
+      @user.person.organization_memberships.destroy_all
+      @user2.person.organization_memberships.create(:organization_id => temp_org, :person_id => @user2.person.id, :primary => 1, :role => "leader", :followup_status => "contacted")
+      @user.person.organization_memberships.create(:organization_id => temp_org, :person_id => @user.person.id, :primary => 1, :role => "leader", :followup_status => "attempted_contact")
+ 
       ContactAssignment.create(:assigned_to_id => @user.person.id, :person_id => @user2.person.id, :organization_id => @user.person.organizations.first.id)
       ContactAssignment.create(:assigned_to_id => @user2.person.id, :person_id => @user.person.id, :organization_id => @user.person.organizations.first.id)
       @access_token = Factory.create(:access_token, :identity => @user.id)
@@ -414,7 +422,7 @@ end
     assert_equal(json_person['fb_id'], user.person.fb_uid.to_s)
     assert_equal(json_person['gender'], user.person.gender)
     assert_equal(json_person['status'], user.person.organization_memberships.first.followup_status)
-    person_mini_test(json_person['assignment']['assigned_to_person'][0],user)
+    person_mini_test(json_person['assignment']['assigned_to_person'][0],user2)
     person_mini_test(json_person['assignment']['person_assigned_to'][0],user2)
     assert_equal(json_person['request_org_id'], user.person.primary_organization.id)
   end
