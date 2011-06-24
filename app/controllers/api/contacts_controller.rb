@@ -8,6 +8,7 @@ class Api::ContactsController < ApiController
   
   def search_1
     @keywords = get_keywords
+    json_output = []
     unless (@keywords.empty? || !params[:term].present?)
       @question_sheets = @keywords.collect(&:question_sheet)
       @people = Person.who_answered(@question_sheets).where('`ministry_person`.`firstName` LIKE ? OR `ministry_person`.`lastName` LIKE ? OR `ministry_person`.`preferredName` LIKE ?',"%#{params[:term]}%","%#{params[:term]}%","%#{params[:term]}%")
@@ -20,6 +21,7 @@ class Api::ContactsController < ApiController
   
   def index_1
     @keywords = get_keywords
+    json_output = []
     unless @keywords.empty?
       @question_sheets = @keywords.collect(&:question_sheet)
       @people = Person.who_answered(@question_sheets)
@@ -38,6 +40,7 @@ class Api::ContactsController < ApiController
   end
   
   def show_1
+    json_output = []
     @answer_sheets = {}
     @people = get_people
     unless @people.empty?

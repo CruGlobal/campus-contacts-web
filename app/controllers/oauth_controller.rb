@@ -1,4 +1,5 @@
 class OauthController < ApplicationController
+  
   def authorize
       if current_user
         render :action=>"authorize"
@@ -16,6 +17,6 @@ class OauthController < ApplicationController
     end
     
     def done
-      render :json => '{"status":"done"}'
+      render :json => '{"status":"done", "code":"' + params[:code] + '"}'
     end
 end
