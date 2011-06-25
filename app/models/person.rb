@@ -30,7 +30,7 @@ class Person < ActiveRecord::Base
   accepts_nested_attributes_for :email_addresses, :phone_numbers, :allow_destroy => true
 
   def to_s
-    [preferredName.blank? ? firstName : preferredName, lastName].join(' ')
+    [preferredName.blank? ? firstName.strip : preferredName.strip, lastName.strip].join(' ')
   end
   
   def leader_in?(org)
@@ -42,7 +42,7 @@ class Person < ActiveRecord::Base
   end
   
   def firstName
-    preferredName.blank? ? self[:firstName] : preferredName
+    preferredName.blank? ? self[:firstName].strip : preferredName.strip
   end
   
   def self.create_from_facebook(data, authentication, response = nil)
@@ -51,7 +51,7 @@ class Person < ActiveRecord::Base
     else
       response = response
     end
-    new_person = Person.create(:firstName => data['first_name'], :lastName => data['last_name'])
+    new_person = Person.create(:firstName => data['first_name'].strip, :lastName => data['last_name'].strip)
     new_person.update_from_facebook(data, authentication, response)
     new_person
   end
@@ -64,7 +64,7 @@ class Person < ActiveRecord::Base
     self.gender = response.gender unless (response.gender.nil? && !gender.blank?)
     # save!
     unless email_addresses.detect {|e| e.email == data['email']}
-      email_addresses.create(:email => data['email'])
+      email_addresses.create(:email => data['email'].strip)
     end
     self.fb_uid = authentication['uid']
     save
