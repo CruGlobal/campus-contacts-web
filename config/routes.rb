@@ -76,6 +76,7 @@ Mh::Application.routes.draw do
     get "sign_in", :to => "devise/sessions#new"
     get "sign_out", :to => "devise/sessions#destroy"
   end
+  match '/auth/facebook/logout' => 'application#facebook_logout', :as => :facebook_logout
   
   match "/application.manifest" => OFFLINE
   mount Resque::Server.new, :at => "/resque"

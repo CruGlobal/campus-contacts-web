@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
     data = access_token['extra']['user_hash']
     user = nil
     authentication = nil
+    
     transaction do
       authentication = Authentication.find_by_provider_and_uid(access_token['provider'], access_token['uid'])
       #Let's also ensure that someone who has an authentication also has a user.  If not, delete the authentication and make a user
