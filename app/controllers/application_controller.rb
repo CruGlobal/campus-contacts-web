@@ -66,6 +66,11 @@ class ApplicationController < ActionController::Base
   end
   helper_method :unassigned_people
   
+  def unassigned_people_api(people,organization)
+    @unassigned_people ||= people.joins("INNER JOIN organization_memberships ON organization_memberships.person_id = #{Person.table_name}.#{Person.primary_key} AND organization_memberships.organization_id = #{organization.id} AND organization_memberships.role = 'contact' LEFT JOIN contact_assignments ON contact_assignments.person_id = #{Person.table_name}.#{Person.primary_key}").where('contact_assignments.id' => nil)
+  end
+  helper_method :unassigned_people_api
+  
   def get_answer_sheet(keyword, person)
     @answer_sheet = AnswerSheet.where(:person_id => person.id, :question_sheet_id => keyword.question_sheet.id).first || 
                     AnswerSheet.create!(:person_id => person.id, :question_sheet_id => keyword.question_sheet.id)

@@ -134,14 +134,15 @@ module ApiHelper
     
     if params[:assigned_to].present?
       if params[:assigned_to] == 'none'
-        @people = unassigned_people(@organization)
+        people = unassigned_people_api(people,@organization)
       else
-        @people = @people.joins(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => params[:assigned_to])
+        people = people.joins(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => params[:assigned_to])
       end
     end
     
     #allow for sort CSV array w/ directions CSV array.  Uses :sort and :direction
     if params[:sort].present?
+      @sorting_fields = []
       @sorting_directions = []
       @sorting_directions = params[:direction].split(',').select { |d| allowed_sorting_directions.include?(d) } if params[:direction].present?
       @sorting_fields = params[:sort].split(',').select { |s| allowed_sorting_fields.include?(s) }
@@ -154,13 +155,14 @@ module ApiHelper
           
           if params[:assigned_to].present? && params[:assigned_to] == 'none'
             people = people.order("`organization_memberships`.`followup_status` #{@sorting_directions[index]}")  
-          else people = people.joins(:organization_memberships).where("`organization_memberships`.`person_id` = `ministry_person`.`personID` AND `organization_memberships`.`organization_id` = ?", org.id).order("`organization_memberships`.`followup_status` #{@sorting_directions[index]}")  
+          else 
+            people = people.joins(:organization_memberships).where("`organization_memberships`.`person_id` = `ministry_person`.`personID` AND `organization_memberships`.`organization_id` = ?", org.id).order("`organization_memberships`.`followup_status` #{@sorting_directions[index]}")  
           end
         end
       end
     end
     #if there were no sorting fields then sort by most recent answer_sheet
-    people = people.order("#{AnswerSheet.table_name}.`created_at` DESC") unless @sorting_fields.nil?
+    people = people.order("#{AnswerSheet.table_name}.`created_at` DESC") if @sorting_fields.nil?
     
     #allow for filtering by allowed_filter_fields. filters and values both CSV arrays  Uses :filters and :values
     if params[:filters].present? && params[:values].present?
@@ -177,7 +179,8 @@ module ApiHelper
           status = ["uncontacted","attempted_contact","contacted"] if status == "not_finished"
           if params[:assigned_to].present? && params[:assigned_to] == 'none'
             people = people.where('organization_memberships.followup_status' => status)
-          else people = people.joins(:organization_memberships).where('organization_memberships.followup_status' => status).where("`organization_memberships`.`person_id` = `ministry_person`.`personID` AND `organization_memberships`.`organization_id` = ?", org.id) 
+          else 
+            people = people.joins(:organization_memberships).where('organization_memberships.followup_status' => status).where("`organization_memberships`.`person_id` = `ministry_person`.`personID` AND `organization_memberships`.`organization_id` = ?", org.id) 
           end
         end
       end
