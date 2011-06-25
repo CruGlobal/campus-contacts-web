@@ -162,6 +162,7 @@ module ApiHelper
         when "status"
           status = allowed_status.include?(@filter_values[index].downcase) ? @filter_values[index].downcase : nil
           status = ["do_not_contact","completed"] if status == "finished"
+          status = ["uncontacted","attempted_contact","contacted"] if status = "not_finished"
           people = people.joins(:organization_memberships).where('organization_memberships.followup_status' => status).where("`organization_memberships`.`person_id` = `ministry_person`.`personID` AND `organization_memberships`.`organization_id` = ?", org.id)
         end
       end

@@ -27,7 +27,7 @@ class Api::ContactsController < ApiController
       @people = Person.who_answered(@question_sheets)
       if params[:assigned_to].present?
         if params[:assigned_to] == 'none'
-          @people = unassigned_people
+          @people = unassigned_people(@organization)
         else
           @people = @people.joins(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => params[:assigned_to])
         end
