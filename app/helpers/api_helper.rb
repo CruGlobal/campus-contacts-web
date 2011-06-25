@@ -132,6 +132,14 @@ module ApiHelper
     people = people.offset(params[:start].to_i.abs) if params[:start].present? && params[:limit].to_i.abs !=0
     people = people.limit(params[:limit].to_i.abs) if params[:limit].present? && params[:limit].to_i.abs != 0
     
+    if params[:assigned_to].present?
+      if params[:assigned_to] == 'none'
+        @people = unassigned_people(@organization)
+      else
+        @people = @people.joins(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => params[:assigned_to])
+      end
+    end
+    
     #allow for sort CSV array w/ directions CSV array.  Uses :sort and :direction
     if params[:sort].present?
       @sorting_directions = []
@@ -143,7 +151,11 @@ module ApiHelper
           people = people.order("#{AnswerSheet.table_name}.`created_at` #{@sorting_directions[index]}") unless @sorting_directions[index].nil?
         when "status"
           status = ["uncontacted", "contacted", "attempted_contact","do_not_contact","completed"].include?(@sorting_fields[index].downcase) ? @sorting_fields[index].downcase : nil
-          people = people.joins(:organization_memberships).where("`organization_memberships`.`person_id` = `ministry_person`.`personID` AND `organization_memberships`.`organization_id` = ?", org.id).order("`organization_memberships`.`followup_status` #{@sorting_directions[index]}")  
+          
+          if params[:assigned_to].present? && params[:assigned_to] == 'none'
+            people = people.order("`organization_memberships`.`followup_status` #{@sorting_directions[index]}")  
+          else people = people.joins(:organization_memberships).where("`organization_memberships`.`person_id` = `ministry_person`.`personID` AND `organization_memberships`.`organization_id` = ?", org.id).order("`organization_memberships`.`followup_status` #{@sorting_directions[index]}")  
+          end
         end
       end
     end
@@ -163,7 +175,10 @@ module ApiHelper
           status = allowed_status.include?(@filter_values[index].downcase) ? @filter_values[index].downcase : nil
           status = ["do_not_contact","completed"] if status == "finished"
           status = ["uncontacted","attempted_contact","contacted"] if status == "not_finished"
-          people = people.joins(:organization_memberships).where('organization_memberships.followup_status' => status).where("`organization_memberships`.`person_id` = `ministry_person`.`personID` AND `organization_memberships`.`organization_id` = ?", org.id)
+          if params[:assigned_to].present? && params[:assigned_to] == 'none'
+            people = people.where('organization_memberships.followup_status' => status)
+          else people = people.joins(:organization_memberships).where('organization_memberships.followup_status' => status).where("`organization_memberships`.`person_id` = `ministry_person`.`personID` AND `organization_memberships`.`organization_id` = ?", org.id) 
+          end
         end
       end
     end

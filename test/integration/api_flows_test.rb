@@ -276,12 +276,10 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       path = "/api/followup_comments/"
       json = ActiveSupport::JSON.encode({:followup_comment => {:organization_id=> @user.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, :rejoicables => ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
       post path, {'access_token' => @access_token.code, 'json' => json }
-      post path, {'access_token' => @access_token.code, 'json' => json }
       path = "/api/followup_comments/#{@user2.person.id}"
       get path, {'access_token' => @access_token.code}
       @json = ActiveSupport::JSON.decode(@response.body)
       f1 = FollowupComment.first
-      f2 = FollowupComment.last
 
       followup_comment_test(@json[0]['followup_comment'], f1, @user2.person, @user.person)
     end

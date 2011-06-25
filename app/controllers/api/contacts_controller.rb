@@ -25,13 +25,6 @@ class Api::ContactsController < ApiController
     unless @keywords.empty?
       @question_sheets = @keywords.collect(&:question_sheet)
       @people = Person.who_answered(@question_sheets)
-      if params[:assigned_to].present?
-        if params[:assigned_to] == 'none'
-          @people = unassigned_people(@organization)
-        else
-          @people = @people.joins(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => params[:assigned_to])
-        end
-      end
       @people = paginate_filter_sort_people(@people, @organization)
       json_output = @people.collect {|person| {person: person.to_hash_basic(@organization)}}
     end
