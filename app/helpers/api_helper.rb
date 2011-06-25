@@ -125,7 +125,7 @@ module ApiHelper
     allowed_sorting_fields = ["time","status"]
     allowed_sorting_directions = ["asc", "desc"]
     allowed_filter_fields = ["gender", "status"]
-    allowed_status = ["uncontacted", "contacted", "attempted_contact", "do_not_contact", "completed", "finished"]
+    allowed_status = ["uncontacted", "contacted", "attempted_contact", "do_not_contact", "completed", "finished", "not_finished"]
     
     #allow for start (SQL Offset) and limit on query.  use :start and :limit
     raise LimitRequiredWithStartError if (params[:start] && !params[:limit])
