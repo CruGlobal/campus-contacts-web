@@ -1,9 +1,50 @@
-<% title "Welcome!" %>
-<div class="info">
-  To save some time (and typing), please log in with FB Connect:
-</div>
-<div class="info">
-  <ul>
-    <li><%= link_to(image_tag('login-button.png'), user_omniauth_authorize_path(:facebook), :rel => 'external') %></li>
-  </ul>
-</div>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <title><%= h(yield(:title) || "Cru") %></title>
+
+    <%= stylesheet_link_tag 'mobile' %>
+
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" />
+		<script src="http://code.jquery.com/jquery-1.5.2.min.js" ></script>
+		<script src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js" ></script>
+
+    <%= yield(:head) %>
+  </head>
+  <body>
+		<div data-role="page">
+			<%- unless params[:simple] == 'true' -%>
+				<div data-role="header">
+		    		<div class="current" id="home">
+				      <%- if show_title? -%>
+				        <div data-role="header" role="banner">
+				          <%= link_to "Back", nil, "data-role" => "button" unless params[:controller] == 'welcome' %>
+				          <h1 class="ui-title" tabindex="0" role="heading"><%=h yield(:title) %></h1>
+				          <%= link_to "Full Site", root_url(:mobile => 0), "data-role" => "button", :rel => "external"%>
+				          <!-- <%= yield(:toolbar) %> -->
+				        </div>
+				      <%- end -%>
+					 </div>
+				  </div>
+			<%- end -%>
+			<%- if params[:simple] == 'true' -%>
+				 <div data-role="header">
+				   <div data-role="header" role="banner">
+				     <h1 style='font-family:helvetica'>MissionHub Login</h1>
+				   </div>
+				</div>
+			<%- end -%>
+	      <div data-role="content">
+			<% title "Welcome!" %>
+			<div class="info">
+				<span style='text-align:center; width:100%;display:block;font-family:helvetica'>Please login with Facebook<br>to access MissionHub</span><br>
+			</div>
+			<div class="info">
+				<center><%= link_to(image_tag('fb_login_small.png'), user_omniauth_authorize_path(:facebook), :rel => 'external') %></center>
+			</div>
+		 </div>
+	  </div>
+  </body>
+</html>
+
