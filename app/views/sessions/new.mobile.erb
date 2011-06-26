@@ -14,7 +14,7 @@
   </head>
   <body>
 		<div data-role="page">
-			<%- unless params[:simple] == 'true' -%>
+			<%- unless true -%>
 				<div data-role="header">
 		    		<div class="current" id="home">
 				      <%- if show_title? -%>
@@ -28,7 +28,7 @@
 					 </div>
 				  </div>
 			<%- end -%>
-			<%- if params[:simple] == 'true' -%>
+			<%- if true -%>
 				 <div data-role="header">
 				   <div data-role="header" role="banner">
 				     <h1 style='font-family:helvetica'>MissionHub Login</h1>
