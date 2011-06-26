@@ -74,7 +74,7 @@ class ApplicationController < ActionController::Base
   helper_method :unassigned_people
   
   def unassigned_people_api(people,organization)
-    @unassigned_people ||= people.joins("INNER JOIN organization_memberships ON organization_memberships.person_id = #{Person.table_name}.#{Person.primary_key} AND organization_memberships.organization_id = #{organization.id} AND organization_memberships.role = 'contact' LEFT JOIN contact_assignments ON contact_assignments.person_id = #{Person.table_name}.#{Person.primary_key}").where('contact_assignments.id' => nil)
+    @unassigned_people ||= people.joins("INNER JOIN organization_memberships ON organization_memberships.person_id = #{Person.table_name}.#{Person.primary_key} AND organization_memberships.organization_id = #{organization.id} AND organization_memberships.role = 'contact' RIGHT JOIN contact_assignments ON contact_assignments.person_id = #{Person.table_name}.#{Person.primary_key} AND contact_assignments.organization_id = #{@organization.id}")
   end
   helper_method :unassigned_people_api
   
