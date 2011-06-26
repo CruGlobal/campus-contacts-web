@@ -11,7 +11,7 @@ class Api::ContactsController < ApiController
     json_output = []
     unless (@keywords.empty? || !params[:term].present?)
       @question_sheets = @keywords.collect(&:question_sheet)
-      @people = Person.who_answered(@question_sheets).where('`ministry_person`.`firstName` LIKE ? OR `ministry_person`.`lastName` LIKE ? OR `ministry_person`.`preferredName` LIKE ?',"%#{params[:term]}%","%#{params[:term]}%","%#{params[:term]}%")
+      @people = Person.who_answered(@question_sheets).where('CONCAT(`ministry_person`.`firstName`," ", `ministry_person`.`lastName`) LIKE ? OR `ministry_person`.`lastName` LIKE ? OR CONCAT(`ministry_person`.`preferredName`," ", `ministry_person`.`lastName`) LIKE ?',"%#{params[:term]}%","%#{params[:term]}%","%#{params[:term]}%")
       @people = paginate_filter_sort_people(@people,@organization)      
       json_output = @people.collect {|person|  { person: person.to_hash_basic(@organization)}}
     end
