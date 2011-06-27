@@ -79,8 +79,8 @@ class ApplicationController < ActionController::Base
   helper_method :unassigned_people_api
   
   def get_answer_sheet(keyword, person)
-    @answer_sheet = AnswerSheet.where(:person_id => person.id, :question_sheet_id => keyword.question_sheet.id).first || 
-                    AnswerSheet.create!(:person_id => person.id, :question_sheet_id => keyword.question_sheet.id)
+    @answer_sheet = AnswerSheet.where(person_id: person.id, question_sheet_id: keyword.question_sheet.id).first || 
+                    AnswerSheet.create!(person_id: person.id, question_sheet_id: keyword.question_sheet.id)
     @answer_sheet.reload
     @answer_sheet
   end
@@ -88,7 +88,7 @@ class ApplicationController < ActionController::Base
   def create_contact_at_org(person, organization)
     # Make them a contact of the org associated with this keyword
     unless OrganizationMembership.find_by_person_id_and_organization_id(person.id, organization.id)
-      OrganizationMembership.create!(:person_id => person.id, :organization_id => organization.id, :role => 'contact', :followup_status => OrganizationMembership::FOLLOWUP_STATUSES.first) 
+      OrganizationMembership.create!(person_id: person.id, organization_id: organization.id, role: 'contact', followup_status: OrganizationMembership::FOLLOWUP_STATUSES.first) 
     end
   end
   

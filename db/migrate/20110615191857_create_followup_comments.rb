@@ -9,7 +9,7 @@ class CreateFollowupComments < ActiveRecord::Migration
     
       t.timestamps
     end
-    add_index :followup_comments, [:organization_id, :contact_id], :name => 'comment_organization_id_contact_id'
+    add_index :followup_comments, [:organization_id, :contact_id], name: 'comment_organization_id_contact_id'
   end
   
   def down

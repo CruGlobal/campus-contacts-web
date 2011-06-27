@@ -12,16 +12,16 @@ class PhoneNumberTest < ActiveSupport::TestCase
       @person = Factory(:person)
     end
     should "set first number to primary" do
-      number = @person.phone_numbers.create(:number => '555-555-5555', :location => 'mobile')
+      number = @person.phone_numbers.create(number: '555-555-5555', location: 'mobile')
       assert(!number.new_record?, number.errors.full_messages.join(','))
       assert(number.primary?, "number should be primary")
     end
 
     should "set new primary when primary number is deleted" do
       person = Factory(:person)
-      number1 = @person.phone_numbers.create(:number => '555-555-5555', :location => 'mobile')
+      number1 = @person.phone_numbers.create(number: '555-555-5555', location: 'mobile')
       assert(!number1.new_record?, number1.errors.full_messages.join(','))
-      number2 = PhoneNumber.create!(:number => '444-444-4444', :location => 'fooo', :person_id => @person.id)
+      number2 = PhoneNumber.create!(number: '444-444-4444', location: 'fooo', person_id: @person.id)
       assert(!number2.new_record?, number2.errors.full_messages.join(','))
       assert_equal(number2.person, number1.person)
       assert(number1.primary?, "first number should be primary")
@@ -31,18 +31,18 @@ class PhoneNumberTest < ActiveSupport::TestCase
     end
   
     should "should store as digits only" do
-      number = @person.phone_numbers.create(:number => '555-555-5555', :location => 'mobile')
+      number = @person.phone_numbers.create(number: '555-555-5555', location: 'mobile')
       assert_equal('5555555555', number.number)
-      number = @person.phone_numbers.create(:number => '555-5555', :location => 'mobile')
+      number = @person.phone_numbers.create(number: '555-5555', location: 'mobile')
       assert_equal('5555555', number.number)
     end
     
     should "have a pretty format" do
-      number = @person.phone_numbers.create(:number => '555-555-5555', :location => 'mobile')
+      number = @person.phone_numbers.create(number: '555-555-5555', location: 'mobile')
       assert_equal('(555) 555-5555', number.pretty_number)
-      number = @person.phone_numbers.create(:number => '555-5555', :location => 'mobile')
+      number = @person.phone_numbers.create(number: '555-5555', location: 'mobile')
       assert_equal('555-5555', number.pretty_number)
-      number = @person.phone_numbers.create(:number => '555-555', :location => 'mobile')
+      number = @person.phone_numbers.create(number: '555-555', location: 'mobile')
       assert_equal('555555', number.pretty_number)
     end
   end

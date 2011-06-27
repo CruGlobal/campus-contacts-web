@@ -10,7 +10,7 @@
     <%= render 'shared/nav' %>
     
     <div id="left">
-      <%= link_to("", "/", :id => "logo") %>
+      <%= link_to("", "/", id: "logo") %>
       <div class="block">
         <%= yield :sidebar %>
       </div>
@@ -19,10 +19,13 @@
     <div id="main">    
       <div id="topmenu">
         <ul>
-          <li><%= link_to("Dashboard", "/profile") %></li>
-          <li><%= link_to("Contacts", "/profile") %></li>
-          <li><%= link_to("Directory", "/profile") %></li>
-          <li><%= link_to("Keywords", "/profile") %></li>
+          <!-- <li><%#= link_to("Dashboard", user_root_path) %></li> -->
+          <li><%= link_to(t('ma.nav.my_contacts'), "/contacts/mine") %></li>
+          <li><%= link_to(t('ma.nav.all_contacts'), "/contacts") %></li>
+          <li><%= link_to(t('ma.nav.directory'), "/people") %></li>
+          <% if can? :manage, SmsKeyword %>
+            <li><%= link_to(t('ma.nav.keywords'), sms_keywords_path) %></li>
+          <% end %>
         </ul>
       </div>
       
@@ -37,6 +40,8 @@
         <%= yield %>
       </div>
     </div><!-- main -->
+    
+    <div class="clear"></div>
     
   </div><!-- outer -->
 

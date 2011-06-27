@@ -1,8 +1,8 @@
 class EmailAddress < ActiveRecord::Base
   belongs_to :person
-  validates_presence_of :person_id, :email, :on => :create, :message => "can't be blank"
+  validates_presence_of :person_id, :email, on: :create, message: "can't be blank"
   
-  before_validation :set_primary, :on => :create
+  before_validation :set_primary, on: :create
   after_destroy :set_new_primary
   
   def to_s
@@ -24,7 +24,7 @@ class EmailAddress < ActiveRecord::Base
         new_primary = person.email_addresses.detect {|e| e.email == other.email}
         new_primary.update_attribute(:primary, true) if new_primary
       end
-      MergeAudit.create!(:mergeable => self, :merge_looser => other)
+      MergeAudit.create!(mergeable: self, merge_looser: other)
       other.destroy
     end
   end

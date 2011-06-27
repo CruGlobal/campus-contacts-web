@@ -39,9 +39,9 @@ rescue LoadError
   end
 end
 
-task :test => :check_dependencies
+task test: :check_dependencies
 
-task :default => :test
+task default: :test
 
 require 'rake/rdoctask'
 Rake::RDocTask.new do |rdoc|

@@ -1,7 +1,7 @@
 class CreateEmailTemplates < ActiveRecord::Migration
   def self.up
-    create_table EmailTemplate.table_name, :force => true do |t|
-      t.string  "name",    :limit => 1000, :null => false
+    create_table EmailTemplate.table_name, force: true do |t|
+      t.string  "name",    limit: 1000, null: false
       t.text    "content"
       t.boolean "enabled"
       t.string  "subject"

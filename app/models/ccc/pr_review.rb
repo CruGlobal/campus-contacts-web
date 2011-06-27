@@ -1,9 +1,9 @@
 class Review < ActiveRecord::Base
-  belongs_to :subject, :class_name => "Person"
-  belongs_to :initiator, :class_name => "Person"
+  belongs_to :subject, class_name: "Person"
+  belongs_to :initiator, class_name: "Person"
   belongs_to :question_sheet
-  has_many :reviewings, :class_name => "Reviewer", :dependent => :destroy
-  has_many :reviewers, :through => :reviewings, :class_name => "Person", :source => :person
+  has_many :reviewings, class_name: "Reviewer", dependent: :destroy
+  has_many :reviewers, through: :reviewings, class_name: "Person", source: :person
   has_one :summary_form
   set_table_name "pr_reviews"
 
@@ -11,10 +11,10 @@ class Review < ActiveRecord::Base
   validates_presence_of :due
   validates_presence_of :show_summary_form_days
 
-  default_scope where(:fake_deleted => false)
+  default_scope where(fake_deleted: false)
 
   def self.fake_deleted
-    unscoped.where(:fake_deleted => true)
+    unscoped.where(fake_deleted: true)
   end
 
   def undelete!
@@ -77,7 +77,7 @@ class Review < ActiveRecord::Base
   end
 
   def find_or_create_summary_form
-    return summary_form || SummaryForm.create!(:person_id => self.subject_id, :review_id => self.id)
+    return summary_form || SummaryForm.create!(person_id: self.subject_id, review_id: self.id)
   end
 
   def send_day_reminder(template, days_ago)
@@ -100,18 +100,18 @@ class Review < ActiveRecord::Base
   end
 
   def self.send_all_reminders
-    Review.where(:completed_at => nil).each do |review|
+    Review.where(completed_at: nil).each do |review|
       review.send_day_reminders
     end
   end
 
   def copy_answers_to(other_review)
     reviewings.each do |reviewing|
-      other_reviewing = other_review.reviewings.where(:person_id => reviewing.person_id).first
+      other_reviewing = other_review.reviewings.where(person_id: reviewing.person_id).first
       if other_reviewing
         num_copied = 0
         reviewing.answers.each do |a|
-          existing_answer = Answer.where(:answer_sheet_id => other_reviewing.id, :question_id => a.question_id).first
+          existing_answer = Answer.where(answer_sheet_id: other_reviewing.id, question_id: a.question_id).first
           unless existing_answer
             a2 = a.clone
             a2.answer_sheet_id = other_reviewing.id

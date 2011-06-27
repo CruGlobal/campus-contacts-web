@@ -17,6 +17,6 @@ class OauthController < ApplicationController
     end
     
     def done
-      render :json => '{"status":"done", "code":"' + params[:code] + '"}'
+      render json: '{"status":"done", "code":"' + params[:code] + '"}'
     end
 end

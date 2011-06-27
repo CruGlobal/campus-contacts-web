@@ -16,7 +16,7 @@ class InterestTest < ActiveSupport::TestCase
     end
     
     should "be able to add an interest" do
-      interest1 = @person.interests.create(:provider => "facebook", :name => "Books", :person_id => @person.personID.to_i, :interest_id => "1", :category => "Things")
+      interest1 = @person.interests.create(provider: "facebook", name: "Books", person_id: @person.personID.to_i, interest_id: "1", category: "Things")
       assert interest1.valid?
     end
     

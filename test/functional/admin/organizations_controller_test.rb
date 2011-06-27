@@ -18,30 +18,30 @@ class Admin::OrganizationsControllerTest < ActionController::TestCase
   # 
   # test "should create organization" do
   #   assert_difference('Admin::Organization.count') do
-  #     post :create, :organization => @organization.attributes
+  #     post :create, organization: @organization.attributes
   #   end
   # 
   #   assert_redirected_to admin_organization_path(assigns(:organization))
   # end
   # 
   # test "should show organization" do
-  #   get :show, :id => @organization.to_param
+  #   get :show, id: @organization.to_param
   #   assert_response :success
   # end
   # 
   # test "should get edit" do
-  #   get :edit, :id => @organization.to_param
+  #   get :edit, id: @organization.to_param
   #   assert_response :success
   # end
   # 
   # test "should update organization" do
-  #   put :update, :id => @organization.to_param, :organization => @organization.attributes
+  #   put :update, id: @organization.to_param, organization: @organization.attributes
   #   assert_redirected_to admin_organization_path(assigns(:organization))
   # end
   # 
   # test "should destroy organization" do
   #   assert_difference('Admin::Organization.count', -1) do
-  #     delete :destroy, :id => @organization.to_param
+  #     delete :destroy, id: @organization.to_param
   #   end
   # 
   #   assert_redirected_to organizations_path

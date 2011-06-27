@@ -13,7 +13,7 @@ FactoryGirl.define do
     moonshado_name 'fake'
   end
   
-  factory :sms_carrier_sprint, :parent => :sms_carrier do
+  factory :sms_carrier_sprint, parent: :sms_carrier do
     name 'Sprint'
     moonshado_name 'sprint'
     email 'messaging.sprintpcs.com'
@@ -29,7 +29,7 @@ FactoryGirl.define do
     association :user
   end
   
-  factory :approved_keyword, :parent => :sms_keyword do
+  factory :approved_keyword, parent: :sms_keyword do
     keyword 'approved'
     association :organization
     explanation "haoeu"
@@ -38,10 +38,10 @@ FactoryGirl.define do
     post_survey_message "bye!"
     association :user
     after_create do |x| 
-      question_sheet = Factory(:question_sheet, :questionnable => x)
-      page = Factory(:page, :question_sheet => question_sheet)
+      question_sheet = Factory(:question_sheet, questionnable: x)
+      page = Factory(:page, question_sheet: question_sheet)
       element = Factory(:choice_field)
-      Factory(:page_element, :page => page, :element => element)
+      Factory(:page_element, page: page, element: element)
     end
   end
   
@@ -86,7 +86,7 @@ FactoryGirl.define do
     provider "facebook"
   end
   
-  factory :education_history_highschool, :class => EducationHistory do
+  factory :education_history_highschool, class: EducationHistory do
     school_name "Test High School"
     school_id "3"
     school_type "High School"
@@ -95,7 +95,7 @@ FactoryGirl.define do
     provider "facebook"
   end  
   
-  factory :education_history_college, :class => EducationHistory do
+  factory :education_history_college, class: EducationHistory do
     school_name "Test University"
     school_id "1"
     school_type "College"
@@ -110,7 +110,7 @@ FactoryGirl.define do
     concentration_name3 "Test Major 3"
   end
   
-  factory :education_history_gradschool, :class => EducationHistory do
+  factory :education_history_gradschool, class: EducationHistory do
     school_name "Test University 2"
     school_id "2"
     school_type "College"
@@ -127,42 +127,42 @@ FactoryGirl.define do
     degree_name "Masters"
   end
   
-  factory :interest, :class => Interest do
+  factory :interest, class: Interest do
     interest_id "1"
     name "Test Interest 1"
     provider "facebook"
     category "Test Category"
   end
   
-  factory :interest_2, :class => Interest do
+  factory :interest_2, class: Interest do
     interest_id "2"
     name "Test Interest 2"
     provider "facebook"
     category "Test Category"
   end
     
-  factory :access_token, :class => Rack::OAuth2::Server::AccessToken do
+  factory :access_token, class: Rack::OAuth2::Server::AccessToken do
     code "9d68af577f8a4c9076752c9699d2ac2ace64f9dcb407897f754439096cedbfca"
     scope "userinfo contacts followup_comments contact_assignment"
   end
   
-  factory :user_with_authentication, :parent => :user do
-    after_create { |a| Factory(:authentication, :user => a)}
+  factory :user_with_authentication, parent: :user do
+    after_create { |a| Factory(:authentication, user: a)}
   end
   
-   factory :person_with_things, :parent => :person do
+   factory :person_with_things, parent: :person do
      after_create do |f| 
-       Factory(:friend, :person => f)
-       Factory(:friend, :person => f)
-       Factory(:friend, :person => f)
-       Factory(:education_history_highschool, :person => f)
-       Factory(:education_history_college, :person => f)
-       Factory(:education_history_gradschool, :person => f)
-       Factory(:interest, :person => f)
-       Factory(:interest_2, :person => f)
-       Factory(:location, :person => f)
+       Factory(:friend, person: f)
+       Factory(:friend, person: f)
+       Factory(:friend, person: f)
+       Factory(:education_history_highschool, person: f)
+       Factory(:education_history_college, person: f)
+       Factory(:education_history_gradschool, person: f)
+       Factory(:interest, person: f)
+       Factory(:interest_2, person: f)
+       Factory(:location, person: f)
        org = Factory(:organization)
-       Factory(:organization_membership, :person => f, :organization => org, :role => 'admin', :followup_status => "attempted_contact", :primary => 1, :validated => 0)
+       Factory(:organization_membership, person: f, organization: org, role: 'admin', followup_status: "attempted_contact", primary: 1, validated: 0)
     end
   end
   
@@ -174,17 +174,17 @@ FactoryGirl.define do
   factory :contact_assignment do 
   end
   
-  factory :user_with_auxs, :parent => :user do
+  factory :user_with_auxs, parent: :user do
     after_create do |a| 
-      Factory(:person_with_things, :user => a)
-      Factory(:authentication, :user => a)
+      Factory(:person_with_things, user: a)
+      Factory(:authentication, user: a)
     end
   end
   
-  factory :user2_with_auxs, :parent => :user do
+  factory :user2_with_auxs, parent: :user do
     after_create do |a| 
-      Factory(:person_with_things, :user => a)
-      Factory(:authentication, :user => a, :uid => "123412123453453453")
+      Factory(:person_with_things, user: a)
+      Factory(:authentication, user: a, uid: "123412123453453453")
     end
   end
   
@@ -197,7 +197,7 @@ FactoryGirl.define do
     required      false
   end
   
-  factory :choice_field, :parent => :element do
+  factory :choice_field, parent: :element do
     kind          'ChoiceField'
     label         'Which of the following are you interested in?'
     style         'checkbox'
@@ -223,7 +223,7 @@ FactoryGirl.define do
     association :choice_field
   end
   
-  factory :answer_1, :class => :answer do
+  factory :answer_1, class: :answer do
     value "Jesus"
     short_value "Jesus"
     association :answer_sheet

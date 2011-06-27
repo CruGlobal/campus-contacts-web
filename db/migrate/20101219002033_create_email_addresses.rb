@@ -3,7 +3,7 @@ class CreateEmailAddresses < ActiveRecord::Migration
     create_table :email_addresses do |t|
       t.string :email
       t.integer :person_id
-      t.boolean :primary, :default => 0
+      t.boolean :primary, default: 0
 
       t.timestamps
     end

@@ -1,7 +1,7 @@
 class Ccc::MinistryNewaddress < ActiveRecord::Base
   set_primary_key :addressID
   set_table_name 'ministry_newaddress'
-  belongs_to :ministry_person, :class_name => 'Ccc::MinistryPerson', :foreign_key => :fk_PersonID
+  belongs_to :ministry_person, class_name: 'Ccc::MinistryPerson', foreign_key: :fk_PersonID
   
   def merge(other)
     Ccc::MinistryNewaddress.transaction do
@@ -28,9 +28,9 @@ class Ccc::MinistryNewaddress < ActiveRecord::Base
         end
         self['changedBy'] = 'MERGE'
       end
-      MergeAudit.create!(:mergeable => self, :merge_looser => other)
+      MergeAudit.create!(mergeable: self, merge_looser: other)
       other.destroy
-      save(:validate => false)
+      save(validate: false)
     end
   end
 end

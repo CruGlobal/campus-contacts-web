@@ -17,10 +17,10 @@ module Moonshado
     
     def status(moonshado_claimcheck)
       d = {
-        :api_key => @api_key,
-        :reporting_keys => moonshado_claimcheck
+        api_key: @api_key,
+        reporting_keys: moonshado_claimcheck
       }
-      response = RestClient.get "https://#{API_ENDPOINT}/gateway/reports", :params => d
+      response = RestClient.get "https://#{API_ENDPOINT}/gateway/reports", params: d
       return response
     end
     
@@ -33,13 +33,13 @@ module Moonshado
         claimchecks << moonshado_claimcheck = Digest::MD5.hexdigest(Time.now.to_s + rand.to_s + recipient).to_s
         logger.debug(moonshado_claimcheck)
         d = {
-              :api_key => @api_key,
-              :message => {
-                :reporting_key => moonshado_claimcheck,
-                :originating_address => @originating_address,
-                :device_address => prepend_country_code(recipient),
-                :keyword => keyword,
-                :body => text
+              api_key: @api_key,
+              message: {
+                reporting_key: moonshado_claimcheck,
+                originating_address: @originating_address,
+                device_address: prepend_country_code(recipient),
+                keyword: keyword,
+                body: text
               }
         }
         if enabled
@@ -52,7 +52,7 @@ module Moonshado
               logger.debug("response #{response}") if logger
               logger.debug("Sent #{message} to #{recipient} Info: #{info}") if logger
               response_callbacks.each do |response_callback|
-                response_callback.call(:recipient => recipient, :moonshado_claimcheck => moonshado_claimcheck )
+                response_callback.call(recipient: recipient, moonshado_claimcheck: moonshado_claimcheck )
               end
             else
               logger.error("Could not send message to #{recipient}. Code: #{code} Info: #{info} Error: #{response}") if logger

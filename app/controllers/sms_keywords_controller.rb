@@ -1,8 +1,13 @@
 class SmsKeywordsController < ApplicationController
-  before_filter :check_org, :only => [:new]
+  before_filter :check_org, only: [:new]
 
   def index
-    @sms_keywords = current_user.sms_keywords
+    @keywords = current_organization.keywords
+    if @keywords.present?
+      authorize! :manage, @keywords.first
+    else
+      authorize! :manage, SmsKeyword
+    end
   end
   # GET /sms_keywords/1
   # GET /sms_keywords/1.xml
@@ -11,7 +16,7 @@ class SmsKeywordsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @sms_keyword }
+      format.xml  { render xml: @sms_keyword }
     end
   end
 
@@ -23,7 +28,7 @@ class SmsKeywordsController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @sms_keyword }
+      format.xml  { render xml: @sms_keyword }
     end
   end
 
@@ -40,11 +45,11 @@ class SmsKeywordsController < ApplicationController
 
     respond_to do |format|
       if @sms_keyword.save
-        format.html { redirect_to(session[:wizard] ? wizard_path : user_root_path, :notice => t('ma.keywords.flash.created')) }
-        format.xml  { render :xml => @sms_keyword, :status => :created, :location => @sms_keyword }
+        format.html { redirect_to(session[:wizard] ? wizard_path : user_root_path, notice: t('ma.keywords.flash.created')) }
+        format.xml  { render xml: @sms_keyword, status: :created, location: @sms_keyword }
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @sms_keyword.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.xml  { render xml: @sms_keyword.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -56,11 +61,11 @@ class SmsKeywordsController < ApplicationController
 
     respond_to do |format|
       if @sms_keyword.update_attributes(params[:sms_keyword])
-        format.html { redirect_to(root_path, :notice => t('ma.keywords.flash.updated')) }
+        format.html { redirect_to(root_path, notice: t('ma.keywords.flash.updated')) }
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @sms_keyword.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.xml  { render xml: @sms_keyword.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -72,7 +77,7 @@ class SmsKeywordsController < ApplicationController
     @sms_keyword.destroy
 
     respond_to do |format|
-      format.html { redirect_to user_root_path, :notice => "Keyword has been deleted." }
+      format.html { redirect_to user_root_path, notice: "Keyword has been deleted." }
       format.xml  { head :ok }
     end
   end
@@ -81,7 +86,7 @@ class SmsKeywordsController < ApplicationController
     def check_org
       unless current_person.primary_organization
         session[:return_to] = params
-        redirect_to person_organization_memberships_path(current_person), :notice => t('ma.keywords.flash.pick_org')
+        redirect_to person_organization_memberships_path(current_person), notice: t('ma.keywords.flash.pick_org')
         return false
       end
     end

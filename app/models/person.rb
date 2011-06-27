@@ -3,38 +3,38 @@ class Person < ActiveRecord::Base
   set_table_name 'ministry_person'
   set_primary_key 'personID'
   
-  belongs_to :user, :class_name => 'User', :foreign_key => 'fk_ssmUserId'
+  belongs_to :user, class_name: 'User', foreign_key: 'fk_ssmUserId'
   has_many :phone_numbers
   has_many :locations
-  has_one :latest_location, :order => "updated_at DESC", :class_name => 'Location'
+  has_one :latest_location, order: "updated_at DESC", class_name: 'Location'
   has_many :friends
   has_many :interests
   has_many :education_histories
-  has_one :primary_phone_number, :class_name => "PhoneNumber", :foreign_key => "person_id", :conditions => {:primary => true}
+  has_one :primary_phone_number, class_name: "PhoneNumber", foreign_key: "person_id", conditions: {primary: true}
   has_many :email_addresses
-  has_one :primary_email_address, :class_name => "EmailAddress", :foreign_key => "person_id", :conditions => {:primary => true}
+  has_one :primary_email_address, class_name: "EmailAddress", foreign_key: "person_id", conditions: {primary: true}
   has_many :organization_memberships
-  has_many :organizations, :through => :organization_memberships
-  has_one :primary_organization_membership, :class_name => "OrganizationMembership", :foreign_key => "person_id", :conditions => {:primary => true}
-  has_one :primary_organization, :through => :primary_organization_membership, :source => :organization
+  has_many :organizations, through: :organization_memberships
+  has_one :primary_organization_membership, class_name: "OrganizationMembership", foreign_key: "person_id", conditions: {primary: true}
+  has_one :primary_organization, through: :primary_organization_membership, source: :organization
   has_many :answer_sheets
-  has_many :contact_assignments, :class_name => "ContactAssignment", :foreign_key => "assigned_to_id"
-  has_many :assigned_tos, :class_name => "ContactAssignment", :foreign_key => "person_id"
-  has_many :assigned_contacts, :through => :contact_assignments, :source => :assigned_to
-  has_one :current_address, :class_name => "Address", :foreign_key => "fk_personID", :conditions => {:addressType => 'current'}
+  has_many :contact_assignments, class_name: "ContactAssignment", foreign_key: "assigned_to_id"
+  has_many :assigned_tos, class_name: "ContactAssignment", foreign_key: "person_id"
+  has_many :assigned_contacts, through: :contact_assignments, source: :assigned_to
+  has_one :current_address, class_name: "Address", foreign_key: "fk_personID", conditions: {addressType: 'current'}
   has_many :rejoicables, inverse_of: :created_by
   
   scope :who_answered, lambda {|question_sheet_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.question_sheet_id' => question_sheet_id)}
   validates_presence_of :firstName, :lastName
   
-  accepts_nested_attributes_for :email_addresses, :phone_numbers, :allow_destroy => true
+  accepts_nested_attributes_for :email_addresses, :phone_numbers, allow_destroy: true
 
   def to_s
     [preferredName.blank? ? firstName : preferredName.try(:strip), lastName.try(:strip)].join(' ')
   end
   
   def leader_in?(org)
-    OrganizationMembership.where(:person_id => id, :organization_id => org.id).first.try(:leader?)
+    OrganizationMembership.where(person_id: id, organization_id: org.id).first.try(:leader?)
   end
   
   def phone_number
@@ -51,7 +51,7 @@ class Person < ActiveRecord::Base
     else
       response = response
     end
-    new_person = Person.create(:firstName => data['first_name'].try(:strip), :lastName => data['last_name'].try(:strip))
+    new_person = Person.create(firstName: data['first_name'].try(:strip), lastName: data['last_name'].try(:strip))
     new_person.update_from_facebook(data, authentication, response)
     new_person
   end
@@ -64,7 +64,7 @@ class Person < ActiveRecord::Base
     self.gender = response.gender unless (response.gender.nil? && !gender.blank?)
     # save!
     unless email_addresses.detect {|e| e.email == data['email']}
-      email_addresses.create(:email => data['email'].try(:strip))
+      email_addresses.create(email: data['email'].try(:strip))
     end
     self.fb_uid = authentication['uid']
     save
@@ -103,11 +103,11 @@ class Person < ActiveRecord::Base
   def get_friends(authentication, response = nil)
     if friends.count == 0 
       if response.nil?
-         @friends = MiniFB.get(authentication['token'], authentication['uid'],:type => "friends")
+         @friends = MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
       else @friends = response
       end
       @friends["data"].each do |friend|
-        friends.create(:uid => friend['id'], :name => friend['name'], :person_id => personID.to_i, :provider => "facebook")
+        friends.create(uid: friend['id'], name: friend['name'], person_id: personID.to_i, provider: "facebook")
       end
     end
     @friends["data"].length  #return how many friend you got from facebook for testing
@@ -116,7 +116,7 @@ class Person < ActiveRecord::Base
   #
   def update_friends(authentication, response = nil)
       if response.nil?
-                @friends = MiniFB.get(authentication['token'], authentication['uid'],:type => "friends")
+                @friends = MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
              else @friends = response
              end
            @friends = @friends["data"]
@@ -134,10 +134,10 @@ class Person < ActiveRecord::Base
                @matching_friend = nil
              end
              if @matching_friend
-               friends.find_by_uid(@matching_friend.uid).update_attributes(:name => friend['name']) unless @matching_friend.name.eql?(friend['name'])
+               friends.find_by_uid(@matching_friend.uid).update_attributes(name: friend['name']) unless @matching_friend.name.eql?(friend['name'])
                @match.push(@matching_friend.uid)
              elsif friends.find_by_uid(friend.id).nil? #uid's did not match && the DB is empty
-               friends.create!(:uid => friend['id'], :name => friend['name'], :person_id => personID.to_i, :provider => "facebook")
+               friends.create!(uid: friend['id'], name: friend['name'], person_id: personID.to_i, provider: "facebook")
                @create.push(friend['id'])
              end
            end
@@ -156,7 +156,7 @@ class Person < ActiveRecord::Base
   
   def get_interests(authentication, response = nil)
     if response.nil?
-      @interests = MiniFB.get(authentication['token'], authentication['uid'],:type => "interests")
+      @interests = MiniFB.get(authentication['token'], authentication['uid'],type: "interests")
     else @interests = response
     end
     @interests["data"].each do |interest|
@@ -251,7 +251,7 @@ class Person < ActiveRecord::Base
     hash['gender'] = gender
     hash['fb_id'] = fb_uid.to_s unless fb_uid.nil?
     hash['picture'] = picture unless fb_uid.nil?
-    status = organization_memberships.where(:organization_id => org_id.id) unless org_id.nil?
+    status = organization_memberships.where(organization_id: org_id.id) unless org_id.nil?
     hash['status'] = status.first.followup_status unless status.first.try(:followup_status).nil?
     hash['request_org_id'] = org_id.id unless org_id.nil?
     hash['assignment'] = assign_hash unless assign_hash.nil?
@@ -270,7 +270,7 @@ class Person < ActiveRecord::Base
     hash['education'] = EducationHistory.get_education_history_hash(id)
     hash['location'] = latest_location.to_hash if latest_location
     hash['locale'] = user.try(:locale) ? user.locale : ""
-    orgs = OrganizationMembership.includes(:organization).where(:person_id => id)
+    orgs = OrganizationMembership.includes(:organization).where(person_id: id)
     hash['organization_membership'] = orgs.collect{ |x| {org_id: x.organization_id, role: x.role, primary: (x.primary == true) ? "true" : "false", name: x.organization.name}}
     hash
   end

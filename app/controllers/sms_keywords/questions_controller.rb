@@ -1,6 +1,6 @@
 class SmsKeywords::QuestionsController < ApplicationController
   before_filter :find_keyword
-  before_filter :find_question, :only => [:show, :edit, :update, :destroy]
+  before_filter :find_question, only: [:show, :edit, :update, :destroy]
 
   # GET /questions
   # GET /questions.xml
@@ -10,7 +10,7 @@ class SmsKeywords::QuestionsController < ApplicationController
     @predefined = QuestionSheet.find(APP_CONFIG['predefined_question_sheet'])
     respond_to do |wants|
       wants.html # index.html.erb
-      wants.xml  { render :xml => @questions }
+      wants.xml  { render xml: @questions }
     end
   end
 
@@ -19,7 +19,7 @@ class SmsKeywords::QuestionsController < ApplicationController
   def show
     respond_to do |wants|
       wants.html # show.html.erb
-      wants.xml  { render :xml => @question }
+      wants.xml  { render xml: @question }
     end
   end
 
@@ -30,7 +30,7 @@ class SmsKeywords::QuestionsController < ApplicationController
 
     respond_to do |wants|
       wants.html # new.html.erb
-      wants.xml  { render :xml => @question }
+      wants.xml  { render xml: @question }
     end
   end
 
@@ -45,7 +45,7 @@ class SmsKeywords::QuestionsController < ApplicationController
         pe.save!
       end
     end
-    render :nothing => true
+    render nothing: true
   end
 
   # POST /questions
@@ -55,7 +55,7 @@ class SmsKeywords::QuestionsController < ApplicationController
       @question = Element.find(params[:question_id])
     else
       type, style = params[:question_type].split(':')
-      @question = type.constantize.create!(params[:question].merge(:style => style))
+      @question = type.constantize.create!(params[:question].merge(style: style))
     end
     @keyword.question_page.elements << @question
 
@@ -65,11 +65,11 @@ class SmsKeywords::QuestionsController < ApplicationController
           flash[:notice] = t('ma.questions.create.notice')
           redirect_to(:back) 
         end
-        wants.xml  { render :xml => @question, :status => :created, :location => @question }
+        wants.xml  { render xml: @question, status: :created, location: @question }
         wants.js
       else
-        wants.html { render :action => "new" }
-        wants.xml  { render :xml => @question.errors, :status => :unprocessable_entity }
+        wants.html { render action: "new" }
+        wants.xml  { render xml: @question.errors, status: :unprocessable_entity }
         wants.js
       end
     end
@@ -84,8 +84,8 @@ class SmsKeywords::QuestionsController < ApplicationController
         wants.js {}
         wants.xml  { head :ok }
       else
-        wants.html { render :action => "edit" }
-        wants.xml  { render :xml => @question.errors, :status => :unprocessable_entity }
+        wants.html { render action: "edit" }
+        wants.xml  { render xml: @question.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -95,7 +95,7 @@ class SmsKeywords::QuestionsController < ApplicationController
   def destroy
     # If a question is on more than one page, or has been answered, remove it from this question sheet, but don't delete it for real.
     if @question.pages.length > 1 || (@question.respond_to?(:sheet_answers) && @question.sheet_answers.count > 0)
-      PageElement.where(:page_id => @keyword.question_page.id, :element_id => @question.id).first.try(:destroy)
+      PageElement.where(page_id: @keyword.question_page.id, element_id: @question.id).first.try(:destroy)
     else
       @question.destroy
     end

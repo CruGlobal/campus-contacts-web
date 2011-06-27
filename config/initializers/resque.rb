@@ -22,7 +22,7 @@ class RetrieveFBFriends
     @type = "friends"
     @fb_uid = fb_uid
     @access_token = access_token
-    @response_hash = MiniFB.get(@access_token.to_s, @fb_uid, :type => @type)
+    @response_hash = MiniFB.get(@access_token.to_s, @fb_uid, type: @type)
     open('fbfriends.log', 'a') { |f|
       f.puts Time.now.to_s
       f.puts @response_hash.to_json

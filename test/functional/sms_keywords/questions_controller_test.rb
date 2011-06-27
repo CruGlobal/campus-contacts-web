@@ -9,7 +9,7 @@ class SmsKeywords::QuestionsControllerTest < ActionController::TestCase
   
   test "should get index" do
     APP_CONFIG['predefined_question_sheet'] = Factory(:question_sheet).id
-    get :index, :sms_keyword_id => @keyword.id 
+    get :index, sms_keyword_id: @keyword.id 
     assert_response :success
   end
 end

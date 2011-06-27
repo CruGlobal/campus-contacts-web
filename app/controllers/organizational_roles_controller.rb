@@ -1,0 +1,2 @@
+class OrganizationalRolesController < ApplicationController
+end

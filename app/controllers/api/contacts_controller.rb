@@ -3,8 +3,8 @@ class Api::ContactsController < ApiController
   include ApiHelper
   skip_before_filter :authenticate_user!
   before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization
-  oauth_required :scope => "contacts"
-  rescue_from Exception, :with => :render_json_error
+  oauth_required scope: "contacts"
+  rescue_from Exception, with: :render_json_error
   
   def search_1
     @keywords = get_keywords
@@ -16,7 +16,7 @@ class Api::ContactsController < ApiController
       json_output = @people.collect {|person|  { person: person.to_hash_basic(@organization)}}
     end
     final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
-    render :json => final_output
+    render json: final_output
   end
   
   def index_1
@@ -29,7 +29,7 @@ class Api::ContactsController < ApiController
       json_output = @people.collect {|person| {person: person.to_hash_basic(@organization)}}
     end
     final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
-    render :json => final_output
+    render json: final_output
   end
   
   def show_1
@@ -49,6 +49,6 @@ class Api::ContactsController < ApiController
       json_output = {keywords: @keys, questions: @questions.collect {|q| q.attributes.slice('id', 'kind', 'label', 'style', 'required')}, people: @people.collect {|person| {person: person.to_hash(@organization), form: @questions.collect {|q| {q: q.id, a: q.display_response(@answer_sheets[person])}}}}}
     end
     final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
-    render :json => final_output
+    render json: final_output
   end
 end

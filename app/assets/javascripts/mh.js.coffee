@@ -1,4 +1,8 @@
 $ ->
+	$('#change_org').live 'click', ->
+		$('#other_orgs').toggle()
+		false
+		
 	$('[data-method=delete]').live 'ajax:before', ->
 		$(this).parent().fadeOut()
 	

@@ -5,7 +5,7 @@
 
 <% @organization_memberships.each do |organization_membership| %>
   <tr>
-    <td><%= organization_membership.organization %> <%= link_to 'Remove Membership', person_organization_membership_path(current_person, organization_membership), :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= organization_membership.organization %> <%= link_to 'Remove Membership', person_organization_membership_path(current_person, organization_membership), confirm: 'Are you sure?', method: :delete %></td>
   </tr>
 <% end %>
 </table>

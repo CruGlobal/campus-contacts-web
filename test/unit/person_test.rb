@@ -61,8 +61,8 @@ class PersonTest < ActiveSupport::TestCase
       assert_not_equal(@friend2.name,"Todd Gross","Make sure that Todd's local DB name change went through")
       
       @friend.destroy  #delete Pez from the local DB
-      friend1 = @person.friends.create(:provider => "facebook", :uid =>"1", :name => "Test User", :person_id => @person.personID.to_i)
-      friend2 = @person.friends.create(:provider => "facebook", :uid =>"2", :name => "Test User", :person_id => @person.personID.to_i)
+      friend1 = @person.friends.create(provider: "facebook", :uid =>"1", name: "Test User", person_id: @person.personID.to_i)
+      friend2 = @person.friends.create(provider: "facebook", :uid =>"2", name: "Test User", person_id: @person.personID.to_i)
       x = @person.update_friends(@authentication, TestFBResponses::FRIENDS)
       assert_equal(3, x, "Make sure that three changes took place... 2 deletions and 1 addition")
       
@@ -122,7 +122,7 @@ class PersonTest < ActiveSupport::TestCase
     end
     
     should "create from facebook and return a person" do
-      data_hash = Hashie::Mash.new({:first_name => "Matt", :last_name => "Webb", :email => "mattrw89@gmail.com"})
+      data_hash = Hashie::Mash.new({first_name: "Matt", last_name: "Webb", email: "mattrw89@gmail.com"})
       person = Person.create_from_facebook(data_hash,@authentication, TestFBResponses::FULL)
       assert(person.locations.first.name.is_a? String)
       assert(person.education_histories.first.school_name.is_a? String)

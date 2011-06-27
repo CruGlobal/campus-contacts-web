@@ -22,7 +22,7 @@ end
 # 
 #       def execute(*args)
 #         execute_without_retry(*args)
-#       rescue ActiveRecord::StatementInvalid => e
+#       rescue ActiveRecord:StatementInvalid: e
 #         if e.message =~ /server has gone away/i
 #           warn "Server timed out, retrying"
 #           reconnect!

@@ -3,7 +3,7 @@ class Reviewer < AnswerSheet
   set_table_name "pr_reviewers"
   belongs_to :review
   belongs_to :person
-  validates_uniqueness_of :person_id, :scope => [ :review_id ], :on => :create
+  validates_uniqueness_of :person_id, scope: [ :review_id ], on: :create
 
   before_destroy { |record| review.try(:update_percent_and_completed) }
   after_update { |record| review.try(:update_percent_and_completed) }

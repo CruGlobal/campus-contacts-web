@@ -8,7 +8,7 @@ class CreateMergeAudits < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :merge_audits, [:mergeable_id, :mergeable_type], :name => "mergeable"
-    add_index :merge_audits, [:merge_looser_id, :merge_looser_type], :name => "merge_looser"
+    add_index :merge_audits, [:mergeable_id, :mergeable_type], name: "mergeable"
+    add_index :merge_audits, [:merge_looser_id, :merge_looser_type], name: "merge_looser"
   end
 end

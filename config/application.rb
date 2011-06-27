@@ -57,7 +57,7 @@ module Mh
     config.after_initialize do
       # integrate with devise
       config.oauth.authenticator = lambda do |email, password|
-        user = User.find_for_database_authentication(:email => email)
+        user = User.find_for_database_authentication(email: email)
         user if user && user.valid_password?(password)
         user.id
       end

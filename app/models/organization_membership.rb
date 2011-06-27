@@ -5,9 +5,9 @@ class OrganizationMembership < ActiveRecord::Base
   belongs_to :organization
   
   validates_presence_of :person_id, :organization_id
-  before_validation :set_primary, :on => :create
+  before_validation :set_primary, on: :create
   after_destroy :set_new_primary
-  scope :leaders, where(:role => %w{admin leader})
+  scope :leaders, where(role: %w{admin leader})
   
   def merge(other)
     OrganizationMembership.transaction do
@@ -16,15 +16,22 @@ class OrganizationMembership < ActiveRecord::Base
         new_primary = person.organization_memberships.detect {|e| e.organization_id == other.organization_id}
         new_primary.update_attribute(:primary, true) if new_primary
       end
-      MergeAudit.create!(:mergeable => self, :merge_looser => other)
+      MergeAudit.create!(mergeable: self, merge_looser: other)
       self.validated = true if other.validated?
-      self.save(:validate => false)
+      self.save(validate: false)
       other.destroy
     end
   end
   
   def leader?
     %w{admin leader}.include?(role)
+  end
+  
+  def primary=(val)
+    if val == true
+      person.organization_memberships.update_all("`primary` = 0")
+    end
+    super
   end
   
   protected
