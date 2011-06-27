@@ -9,7 +9,7 @@
   <tbody id="predefined_questions">
     <% @predefined.questions.each do |question| %>
       <% unless @questions.include?(question) %>
-        <%= render 'predefined_question', :question => question %>
+        <%= render 'predefined_question', question: question %>
       <% end %>
     <% end %>
   </tbody>
@@ -17,15 +17,15 @@
 <h3>Your Questions (drag to sort)</h3>
 <table border="0" cellspacing="5" cellpadding="0">
   <tbody id="questions" data-sortable="true" data-sortable-url="<%= reorder_sms_keyword_questions_path(@keyword) %>">
-    <%= render :partial => 'question', :collection => @questions %>
+    <%= render partial: 'question', collection: @questions %>
   </tbody>
 </table>
-<%= link_to('Add a question', '#', :onclick => "$('#question_form').slideDown()") %>
+<%= link_to('Add a question', '#', onclick: "$('#question_form').slideDown()") %>
 <div id="question_form" style="display:none">
-  <%= render 'form', :question => Question.new %>
+  <%= render 'form', question: Question.new %>
 </div>
 <br/><br/>
-<%= link_to('Preview Form', contact_form_path(:keyword => @keyword.keyword), :target => '_blank')%>
+<%= link_to('Preview Form', contact_form_path(keyword: @keyword.keyword), target: '_blank')%>
 |
 <% if session[:wizard] %>
   <%= link_to(t('ma.nav.back_to_wizard'), wizard_path) %>

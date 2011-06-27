@@ -1,68 +1,59 @@
+<% provide :sidebar do %><%= render 'contacts/leaders' %><% end %>
 <%= link_to(t('ma.nav.back_to_dashboard'), user_root_path) %>
-<%= link_to(t('ma.nav.hidden_questions'), '#', :id => 'hidden_questions_link') %>
+<%= link_to(t('ma.nav.hidden_questions'), '#', id: 'hidden_questions_link') %>
 <div id="hidden_questions_div" style="display:none">
   Click on a question to add it back to the page 
   <ul id="hidden_questions">
-    <%= render :partial => 'contacts/hidden_question', :collection => @hidden_questions %>
+    <%= render partial: 'contacts/hidden_question', collection: @hidden_questions %>
   </ul>
 </div>
-<table border="0" cellspacing="5" cellpadding="5">
-  <tr>
-    <td valign="top" id="leaders">
-      <%= render 'contacts/leaders' %>
-    </td>
-    <td valign="top">
-      <%= form_for ContactAssignment.new do |f| %>
-        <h3>
-          <% if params[:assigned_to] == 'none' %>
-            <%= t('ma.people.index.unassigned_responses') %>
-          <% else %>
-            <% if @assigned_to.present? %>
-              <%= t('ma.people.index.responses_assigned_to', assigned_to: @assigned_to) %>
-              <%= link_to(t('ma.people.index.show_all'), params.except(:assigned_to)) %>
-            <% else %>
-              <%= t('ma.people.index.all_responses') %>
-            <% end %>
-          <% end %>
-        </h3>
-        <%= hidden_field_tag :org_id, params[:org_id] %>
-        <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
-        <%= t('ma.people.index.assign_to') %> 
-        <%= select_tag :assign_to, options_for_select(@organization.leaders.collect {|l| [l.to_s, l.id]}), :include_blank => true %>
-        <table>
-          <tr>
-            <th><%= check_box_tag 'check_all' %></th>
-            <% @questions.each do |q| %>
-              <th class="<%= dom_id(q) %>">
-                <%= q.label %><br/>
-                <%= link_to(t('ma.general.hide'), hide_sms_keyword_question_path(@organization.keywords.first, q), :remote => true, :method => :put, :class => 'hide', 'data-class' => dom_id(q)) %>
-              </th>
-            <% end %>
-            <th><%= t('ma.people.index.assigned_to') %></th>
-            <th></th>
-          </tr>
-          <tbody id="contacts_table">
-            <% @people.each do |person| %>
-              <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row">
-                <td nowrap="nowrap" class="checkbox_cell">
-                  <%= image_tag('grippy.png', :class => 'handle') %>
-                  <%= check_box_tag 'ids[]', person.id, false, :id => "ids_#{person.id}", :class => 'id_checkbox' %>
-                </td>
-                <% @questions.each do |q| %>
-                  <% answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)} %>
-                  <td class="<%= dom_id(q) %>"><%= q.display_response(answer_sheet) %></td>
-                <% end %>
-                <td id="assigned_to_<%= person.id %>" class="assigned_to"><%= ContactAssignment.where(:person_id => person.id, :organization_id => @organization.id).first.try(:assigned_to) %></td>
-                <td>
-                  <%#= link_to 'Show', person %>
-                  <%#= link_to 'Edit', edit_person_path(person) %>
-                  <%#= link_to 'Destroy', person, :confirm => 'Are you sure?', :method => :delete %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
+<%= form_for ContactAssignment.new do |f| %>
+  <h3>
+    <% if params[:assigned_to] == 'none' %>
+      <%= t('ma.people.index.unassigned_responses') %>
+    <% else %>
+      <% if @assigned_to.present? %>
+        <%= t('ma.people.index.responses_assigned_to', assigned_to: @assigned_to) %>
+        <%= link_to(t('ma.people.index.show_all'), params.except(:assigned_to)) %>
+      <% else %>
+        <%= t('ma.people.index.all_responses') %>
       <% end %>
-    </td>
-  </tr>
-</table>
+    <% end %>
+  </h3>
+  <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
+  <%= t('ma.people.index.assign_to') %> 
+  <%= select_tag :assign_to, options_for_select(@organization.leaders.collect {|l| [l.to_s, l.id]}), include_blank: true %>
+  <table>
+    <tr>
+      <th><%= check_box_tag 'check_all' %></th>
+      <% @questions.each do |q| %>
+        <th class="<%= dom_id(q) %>">
+          <%= q.label %><br/>
+          <%= link_to(t('ma.general.hide'), hide_sms_keyword_question_path(@organization.keywords.first, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
+        </th>
+      <% end %>
+      <th><%= t('ma.people.index.assigned_to') %></th>
+      <th></th>
+    </tr>
+    <tbody id="contacts_table">
+      <% @people.each do |person| %>
+        <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row">
+          <td nowrap="nowrap" class="checkbox_cell">
+            <%= image_tag('grippy.png', class: 'handle') %>
+            <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
+          </td>
+          <% @questions.each do |q| %>
+            <% answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)} %>
+            <td class="<%= dom_id(q) %>"><%= q.display_response(answer_sheet) %></td>
+          <% end %>
+          <td id="assigned_to_<%= person.id %>" class="assigned_to"><%= ContactAssignment.where(person_id: person.id, organization_id: @organization.id).first.try(:assigned_to) %></td>
+          <td>
+            <%#= link_to 'Show', person %>
+            <%#= link_to 'Edit', edit_person_path(person) %>
+            <%#= link_to 'Destroy', person, confirm: 'Are you sure?', method: :delete %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

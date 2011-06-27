@@ -7,7 +7,7 @@ class AddRoleToOrganizationMembership < ActiveRecord::Migration
   end
   
   def self.down
-    add_column :organization_memberships, :role, :boolean, :default => 0
+    add_column :organization_memberships, :role, :boolean, default: 0
     OrganizationMembership.update_all('leader = 1', "role = 'admin'")
     OrganizationMembership.update_all('leader = 0', "role = 'contact'")
     remove_column :organization_memberships, :role

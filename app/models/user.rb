@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   set_table_name 'simplesecuritymanager_user'
   set_primary_key 'userID'
   
-  has_one :person, :foreign_key => 'fk_ssmUserId'
+  has_one :person, foreign_key: 'fk_ssmUserId'
   has_many :authentications
   has_many :sms_keywords
   # Include default devise modules. Others available are:
@@ -27,10 +27,10 @@ class User < ActiveRecord::Base
         user = authentication.user
       else
         authentication.delete if authentication
-        user = signed_in_resource || User.find(:first, :conditions => ["username = ? or username = ?", data['email'], data['username']])
-        user = User.create!(:email => data["email"], :password => Devise.friendly_token[0,20]) if user.nil?
+        user = signed_in_resource || User.find(:first, conditions: ["username = ? or username = ?", data['email'], data['username']])
+        user = User.create!(email: data["email"], password: Devise.friendly_token[0,20]) if user.nil?
         user.save
-        authentication = user.authentications.create(:provider => 'facebook', :uid => access_token['uid'], :token => access_token['credentials']['token'])
+        authentication = user.authentications.create(provider: 'facebook', uid: access_token['uid'], token: access_token['credentials']['token'])
       end
     
       if user.person 
@@ -76,7 +76,7 @@ class User < ActiveRecord::Base
       # Sms Keywords
       other.sms_keywords.collect {|oa| oa.update_attribute(:user_id, id)}
       
-      MergeAudit.create!(:mergeable => self, :merge_looser => other)
+      MergeAudit.create!(mergeable: self, merge_looser: other)
       other.destroy
     end
   end

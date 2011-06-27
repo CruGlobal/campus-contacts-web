@@ -8,8 +8,8 @@ class CreatePageElements < ActiveRecord::Migration
     add_column Element.table_name, :updated_at, :datetime
     remove_column Element.table_name, :question_sheet_id
     Element.all.each do |e|
-      e.update_attributes({:created_at => Time.now, :updated_at => Time.now})
-      PageElement.create(:element_id => e.id, :page_id => e.page_id, :position => e.position, :updated_at => e.updated_at, :created_at => e.created_at)
+      e.update_attributes({created_at: Time.now, updated_at: Time.now})
+      PageElement.create(element_id: e.id, page_id: e.page_id, position: e.position, updated_at: e.updated_at, created_at: e.created_at)
     end
     remove_column Element.table_name, :page_id
   end

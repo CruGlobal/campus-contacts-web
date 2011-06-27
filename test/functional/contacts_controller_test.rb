@@ -9,7 +9,7 @@ class ContactsControllerTest < ActionController::TestCase
     
     should "redirect on update" do
       @contact = Factory(:person)
-      put :update, :id => @contact.id
+      put :update, id: @contact.id
       assert_redirected_to '/users/sign_in'
     end
     
@@ -30,8 +30,8 @@ class ContactsControllerTest < ActionController::TestCase
     context "on index page" do
       setup do
         @organization = Factory(:organization)
-        @keyword = Factory(:approved_keyword, :organization => @organization)
-        get :index, :org_id => @organization.id
+        @keyword = Factory(:approved_keyword, organization: @organization)
+        get :index, org_id: @organization.id
       end
       should respond_with(:success)
     end
@@ -39,7 +39,7 @@ class ContactsControllerTest < ActionController::TestCase
     context "new with received_sms_id from mobile" do
       setup do
         @sms = Factory(:received_sms)
-        get :new, :received_sms_id => Base62.encode(@sms.id), :format => 'mobile'
+        get :new, received_sms_id: Base62.encode(@sms.id), format: 'mobile'
         @person = assigns(:person)
       end
     
@@ -58,7 +58,7 @@ class ContactsControllerTest < ActionController::TestCase
     context "when posting an update with good parameters" do
       setup do
         @contact = Factory(:person)
-        put :update, :id => @contact.id, :format => 'mobile', :keyword => @keywordDB.keyword
+        put :update, id: @contact.id, format: 'mobile', keyword: @keywordDB.keyword
       end
       should render_template('thanks')
     end
@@ -66,15 +66,15 @@ class ContactsControllerTest < ActionController::TestCase
     context "when posting an update with bad parameters" do
       setup do
         @contact = Factory(:person)
-        put :update, :id => @contact.id, :format => 'mobile', :person => {:firstName => ''}, :keyword => @keywordDB.keyword
+        put :update, id: @contact.id, format: 'mobile', person: {firstName: ''}, keyword: @keywordDB.keyword
       end
       should render_template('new')
     end
     
     context "show thanks" do   
       setup do 
-        @keywordDB2 = Factory.create(:sms_keyword, :keyword => "test2")
-        get :thanks, :format => 'mobile', :keyword => @keywordDB2.keyword
+        @keywordDB2 = Factory.create(:sms_keyword, keyword: "test2")
+        get :thanks, format: 'mobile', keyword: @keywordDB2.keyword
       end
       should "show thanks" do
         assert_response :success, @response.body

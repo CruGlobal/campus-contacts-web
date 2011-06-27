@@ -5,10 +5,10 @@ class CreateActivities < ActiveRecord::Migration
       t.belongs_to :organization
       t.date :start_date
       t.date :end_date
-      t.string :status, :default => 'active'
+      t.string :status, default: 'active'
 
       t.timestamps
     end
-    add_index :activities, [:target_area_id, :organization_id], :unique => true
+    add_index :activities, [:target_area_id, :organization_id], unique: true
   end
 end

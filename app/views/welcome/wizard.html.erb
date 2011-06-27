@@ -96,7 +96,7 @@
   <% else %>
     <h2><%= t('ma.welcome.wizard.welcome') %></h2>
     <p><%= t('ma.welcome.wizard.welcome_paragraph') %> </p>
-    <%= link_to(t('ma.welcome.wizard.back'), '#', :class => 'disabled btn', :onclick => 'return false;') %>
-    <%= link_to(t('ma.welcome.wizard.next'), '/wizard?step=verify', :class => 'btn') %>
+    <%= link_to(t('ma.welcome.wizard.back'), '#', class: 'disabled btn', onclick: 'return false;') %>
+    <%= link_to(t('ma.welcome.wizard.next'), '/wizard?step=verify', class: 'btn') %>
   <% end %>
 </div>

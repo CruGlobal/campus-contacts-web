@@ -3,42 +3,42 @@ module Ccc
     extend ActiveSupport::Concern
     
     included do
-      has_many :ministry_newaddresses, :class_name => 'Ccc::MinistryNewaddress', :foreign_key => :fk_PersonID, :dependent => :destroy
-			has_many :crs_registrations, :class_name => 'Ccc::CrsRegistration', :dependent => :destroy
+      has_many :ministry_newaddresses, class_name: 'Ccc::MinistryNewaddress', foreign_key: :fk_PersonID, dependent: :destroy
+			has_many :crs_registrations, class_name: 'Ccc::CrsRegistration', dependent: :destroy
 
-      has_one :crs2_profiles, :class_name => 'Ccc::Crs2Profile', :dependent => :destroy
-      has_one :mpd_users, :class_name => 'Ccc::MpdUser', :dependent => :destroy
-      has_many :pr_reviewers, :class_name => 'Ccc::PrReviewer', :dependent => :destroy
-      has_many :pr_reviews, :class_name => 'Ccc::PrReview' # dependant? subject_id, initiator_id
-      has_many :pr_admins, :class_name => 'Ccc::PrAdmin', :dependent => :destroy
-      has_many :pr_summary_forms, :class_name => 'Ccc::PrSummaryForm', :dependent => :destroy
-      has_many :pr_reminders, :class_name => 'Ccc::PrReminders', :dependent => :destroy
-      has_many :pr_personal_forms, :class_name => 'Ccc::PrPersonalForm', :dependent => :destroy
-      has_one :pr_users, :class_name => 'Ccc::PrUser', :dependent => :destroy
+      has_one :crs2_profiles, class_name: 'Ccc::Crs2Profile', dependent: :destroy
+      has_one :mpd_users, class_name: 'Ccc::MpdUser', dependent: :destroy
+      has_many :pr_reviewers, class_name: 'Ccc::PrReviewer', dependent: :destroy
+      has_many :pr_reviews, class_name: 'Ccc::PrReview' # dependant? subject_id, initiator_id
+      has_many :pr_admins, class_name: 'Ccc::PrAdmin', dependent: :destroy
+      has_many :pr_summary_forms, class_name: 'Ccc::PrSummaryForm', dependent: :destroy
+      has_many :pr_reminders, class_name: 'Ccc::PrReminders', dependent: :destroy
+      has_many :pr_personal_forms, class_name: 'Ccc::PrPersonalForm', dependent: :destroy
+      has_one :pr_users, class_name: 'Ccc::PrUser', dependent: :destroy
 
-			has_many :sp_applications, :class_name => 'Ccc::SpApplication', :dependent => :destroy
-			has_many :sp_projects, :class_name => 'Ccc::SpProject'
-      has_one :sp_users, :class_name => 'Ccc::SpUser'  #created by and ssm/person?
-      has_many :sp_staff, :class_name => 'Ccc::SpStaff', :dependent => :destroy
-			has_many :sp_application_moves, :class_name => 'Ccc::SpApplicationMove'
-			has_many :sp_applies, :class_name => 'Ccc::SpApply', :dependent => :destroy
-			has_many :ministry_staff, :class_name => 'Ccc::MinistryStaff', :dependent => :destroy
-			has_many :hr_si_applications, :class_name => 'Ccc::HrSiApplication', :dependent => :destroy
-			has_one :si_users, :class_name => 'Ccc::SiUser' #created by and ssm?
-			has_many :sitrack_mpd, :class_name => 'Ccc::SitrackMpd', :dependent => :destroy
-			has_many :sitrack_tracking, :class_name => 'Ccc::SitrackTracking', :dependent => :destroy
-			has_many :sn_campus_involvements, :class_name => 'Ccc::SnCampusInvolvement' # don't destroy if added_by_id
-			has_many :sn_custom_values, :class_name => 'Ccc::SnCustomValue', :dependent => :destroy
-			has_many :sp_group_involvements, :class_name => 'Ccc::SnGroupInvolvement', :dependent => :destroy
-			has_many :sn_ministry_involvements, :class_name => 'Ccc::SnMinistryInvolvement', :dependent => :destroy
-			has_many :sp_user_memberships, :class_name => 'Ccc::SnUserMembership', :dependent => :destroy
-			has_many :sn_training_answers, :class_name => 'Ccc::SnTrainingAnswer', :dependent => :destroy
-			has_many :sn_imports, :class_name => 'Ccc::SnImport', :dependent => :destroy
-      has_many :sn_timetables, :class_name => 'Ccc::SnTimetable', :dependent => :destroy
-			has_many :rideshare_rides, :class_name => 'Ccc::RideshareRides', :foreign_key => :person_id, :dependent => :destroy
-      has_many :profile_pictures, :class_name => 'Ccc::ProfilePicture', :dependent => :destroy
-      has_many :ministry_missional_team_members, :class_name => 'Ccc::MinistryMissionalTeamMember', :dependent => :destroy
-      has_many :organization_memberships, :class_name => 'Ccc::OrganizationMembership', :dependent => :destroy
+			has_many :sp_applications, class_name: 'Ccc::SpApplication', dependent: :destroy
+			has_many :sp_projects, class_name: 'Ccc::SpProject'
+      has_one :sp_users, class_name: 'Ccc::SpUser'  #created by and ssm/person?
+      has_many :sp_staff, class_name: 'Ccc::SpStaff', dependent: :destroy
+			has_many :sp_application_moves, class_name: 'Ccc::SpApplicationMove'
+			has_many :sp_applies, class_name: 'Ccc::SpApply', dependent: :destroy
+			has_many :ministry_staff, class_name: 'Ccc::MinistryStaff', dependent: :destroy
+			has_many :hr_si_applications, class_name: 'Ccc::HrSiApplication', dependent: :destroy
+			has_one :si_users, class_name: 'Ccc::SiUser' #created by and ssm?
+			has_many :sitrack_mpd, class_name: 'Ccc::SitrackMpd', dependent: :destroy
+			has_many :sitrack_tracking, class_name: 'Ccc::SitrackTracking', dependent: :destroy
+			has_many :sn_campus_involvements, class_name: 'Ccc::SnCampusInvolvement' # don't destroy if added_by_id
+			has_many :sn_custom_values, class_name: 'Ccc::SnCustomValue', dependent: :destroy
+			has_many :sp_group_involvements, class_name: 'Ccc::SnGroupInvolvement', dependent: :destroy
+			has_many :sn_ministry_involvements, class_name: 'Ccc::SnMinistryInvolvement', dependent: :destroy
+			has_many :sp_user_memberships, class_name: 'Ccc::SnUserMembership', dependent: :destroy
+			has_many :sn_training_answers, class_name: 'Ccc::SnTrainingAnswer', dependent: :destroy
+			has_many :sn_imports, class_name: 'Ccc::SnImport', dependent: :destroy
+      has_many :sn_timetables, class_name: 'Ccc::SnTimetable', dependent: :destroy
+			has_many :rideshare_rides, class_name: 'Ccc::RideshareRides', foreign_key: :person_id, dependent: :destroy
+      has_many :profile_pictures, class_name: 'Ccc::ProfilePicture', dependent: :destroy
+      has_many :ministry_missional_team_members, class_name: 'Ccc::MinistryMissionalTeamMember', dependent: :destroy
+      has_many :organization_memberships, class_name: 'Ccc::OrganizationMembership', dependent: :destroy
     end
     
     module InstanceMethods
@@ -162,9 +162,9 @@ module Ccc
 					other.rideshare_rides.each {|ua| ua.update_attribute(:person_id, personID) }
 
  
-          MergeAudit.create!(:mergeable => self, :merge_looser => other)
+          MergeAudit.create!(mergeable: self, merge_looser: other)
           other.destroy
-          save(:validate => false)
+          save(validate: false)
 				end
       end
 		end

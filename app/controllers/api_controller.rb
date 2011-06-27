@@ -45,13 +45,13 @@ class ApiController < ApplicationController
   
   
   def versions
-    render :json => @@versions.keys.sort.reverse and return
+    render json: @@versions.keys.sort.reverse and return
   end
 
   def no_api_method
-    render :json => {"error" => "The requested method does not exist or is not\
+    render json: {"error" => "The requested method does not exist or is not\
        enabled for the requested API version (v#{params[:version]})"}, 
-       :status => 404 and return
+       status: 404 and return
   end
 
 

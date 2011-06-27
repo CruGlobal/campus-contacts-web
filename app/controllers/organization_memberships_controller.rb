@@ -6,7 +6,7 @@ class OrganizationMembershipsController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @organization_memberships }
+      format.xml  { render xml: @organization_memberships }
     end
   end
 
@@ -17,7 +17,7 @@ class OrganizationMembershipsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @organization_membershipship }
+      format.xml  { render xml: @organization_membershipship }
     end
   end
 
@@ -29,7 +29,7 @@ class OrganizationMembershipsController < ApplicationController
   # POST /organization_memberships
   # POST /organization_memberships.xml
   def create
-    @organization_membershipship = current_person.organization_memberships.new(:organization_id => params[:organization_id])
+    @organization_membershipship = current_person.organization_memberships.new(organization_id: params[:organization_id])
 
     respond_to do |format|
       if @organization_membershipship.save
@@ -41,13 +41,13 @@ class OrganizationMembershipsController < ApplicationController
               redirect_to('https://signin.ccci.org/cas/login?service=' + validate_person_organization_membership_url(current_person, @organization_membershipship))
             end
           else
-            redirect_to(session[:return_to].present? ? session[:return_to] : :back, :notice => 'Organization membership was successfully created.') 
+            redirect_to(session[:return_to].present? ? session[:return_to] : :back, notice: 'Organization membership was successfully created.') 
           end
         end
-        format.xml  { render :xml => @organization_membershipship, :status => :created, :location => @organization_membershipship }
+        format.xml  { render xml: @organization_membershipship, status: :created, location: @organization_membershipship }
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @organization_membershipship.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.xml  { render xml: @organization_membershipship.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -59,11 +59,11 @@ class OrganizationMembershipsController < ApplicationController
 
     respond_to do |format|
       if @organization_membershipship.update_attributes(params[:organization_membershipship])
-        format.html { redirect_to(@organization_membershipship, :notice => 'Organization membership was successfully updated.') }
+        format.html { redirect_to(@organization_membershipship, notice: 'Organization membership was successfully updated.') }
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @organization_membershipship.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.xml  { render xml: @organization_membershipship.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -76,7 +76,7 @@ class OrganizationMembershipsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(person_organization_memberships_path(current_person)) }
-      format.js   { render :nothing => true }
+      format.js   { render nothing: true }
       format.xml  { head :ok }
     end
   end
@@ -104,15 +104,30 @@ class OrganizationMembershipsController < ApplicationController
       end
     end
     if @valid
-      (@organization_membershipship.frozen? ? user.person.organization_memberships.where(:organization_id => org.id).first : @organization_membershipship).update_attribute(:validated, true)
-      redirect_to(session[:return_to].present? ? session[:return_to] : :back, :notice => 'Organization membership was successfully created.') 
+      (@organization_membershipship.frozen? ? user.person.organization_memberships.where(organization_id: org.id).first : @organization_membershipship).update_attribute(:validated, true)
+      redirect_to(session[:return_to].present? ? session[:return_to] : :back, notice: 'Organization membership was successfully created.') 
       return
     else
       # @organization_membershipship.destroy
-      redirect_to person_organization_memberships_path(user.person), :error => "Validation of membership failed"
+      redirect_to person_organization_memberships_path(user.person), error: "Validation of membership failed"
       return
     end
     
+  end
+  
+  def set_current
+    if @organization_membership = current_person.organization_memberships.find(params[:id])
+      session[:current_organization_id] = @organization_membership.id
+    end
+    redirect_to :back
+  end
+  
+  def set_primary
+    if @organization_membership = current_person.organization_memberships.find(params[:id])
+      @organization_membership.update_attribute(:primary, true)
+      session[:current_organization_id] = @organization_membership.organization.id
+    end
+    redirect_to request.referrer ? :back : user_root_path
   end
   
 end

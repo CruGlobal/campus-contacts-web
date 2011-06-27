@@ -1,8 +1,8 @@
 class PhoneNumber < ActiveRecord::Base
   belongs_to :person
-  validates_presence_of :person_id, :number, :location, :on => :create, :message => "can't be blank"
+  validates_presence_of :person_id, :number, :location, on: :create, message: "can't be blank"
   
-  before_validation :set_primary, :on => :create
+  before_validation :set_primary, on: :create
   after_destroy :set_new_primary
   
   def number=(num)
@@ -38,9 +38,9 @@ class PhoneNumber < ActiveRecord::Base
                     other.updated_at > updated_at ? other.attributes[k] : v
                   end
       end
-      MergeAudit.create!(:mergeable => self, :merge_looser => other)
+      MergeAudit.create!(mergeable: self, merge_looser: other)
       other.destroy
-      save(:validate => false)
+      save(validate: false)
     end
   end
   

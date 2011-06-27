@@ -1,0 +1,37 @@
+<% provide :sidebar do %>
+  <ul class="leftmenu">
+    <li class="selected"><%= link_to(t('ma.contacts.mine.my_contacts'), "") %></li>
+  </ul>
+<% end %>
+  
+<%= form_for ContactAssignment.new do |f| %>
+  <table>
+    <tr>
+      <th><%= check_box_tag 'check_all' %></th>
+      <th><%= t('ma.contacts.mine.name') %></th>
+      <th><%= t('ma.contacts.mine.phone') %></th>
+      <th><%= t('ma.contacts.mine.email') %></th>
+      <th><%= t('ma.contacts.mine.year') %></th>
+      <th></th>
+    </tr>
+    <tbody id="contacts_table">
+      <% @people.each do |person| %>
+        <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row">
+          <td nowrap="nowrap" class="checkbox_cell">
+            <%= image_tag('grippy.png', class: 'handle') %>
+            <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
+          </td>
+          <td><%= person %></td>
+          <td><%= person.phone_number %></td>
+          <td><%= person.email %></td>
+          <td><%= person.yearInSchool %></td>
+          <td>
+            <%#= link_to 'Show', person %>
+            <%#= link_to 'Edit', edit_person_path(person) %>
+            <%#= link_to 'Destroy', person, confirm: 'Are you sure?', method: :delete %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

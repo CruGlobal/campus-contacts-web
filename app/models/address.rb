@@ -4,7 +4,7 @@ class Address < ActiveRecord::Base
 	
 	validates_presence_of :addressType
 	
-	belongs_to :person, :foreign_key => "fk_PersonID"
+	belongs_to :person, foreign_key: "fk_PersonID"
 	
 	before_save :stamp
 	

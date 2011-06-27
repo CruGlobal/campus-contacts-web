@@ -5,7 +5,7 @@ class AssociateAnswerSheetWithPerson < ActiveRecord::Migration
   end
 
   def down
-    create_table AnswerSheetQuestionSheet.table_name, :force => true do |t|
+    create_table AnswerSheetQuestionSheet.table_name, force: true do |t|
       t.integer  "answer_sheet_id"
       t.integer  "question_sheet_id"
       t.datetime "created_at"

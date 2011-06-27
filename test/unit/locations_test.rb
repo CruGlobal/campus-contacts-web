@@ -12,7 +12,7 @@ class LocationTest < ActiveSupport::TestCase
       @person = Factory(:person_with_things)
     end
     should "be able to add a location" do
-      location1 = @person.locations.create(:provider => "facebook", :name => "Books", :person_id => @person.personID.to_i, :location_id => "1")
+      location1 = @person.locations.create(provider: "facebook", name: "Books", person_id: @person.personID.to_i, location_id: "1")
       assert location1.valid?
     end
     should "convert to a hash well" do 

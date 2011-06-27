@@ -4,20 +4,20 @@ tunnel_ns = namespace :tunnel do
   # http://www.BuildingWebApps.com
   # http://www.LearningRails.com
   desc "Create a reverse ssh tunnel from a public server to a private development server." 
-  task :start => [ :environment, :config ] do  
+  task start: [ :environment, :config ] do  
     puts @notification 
     system @ssh_command
   end 
 
   desc "Create a reverse ssh tunnel in the background. Requires ssh keys to be setup." 
-  task :background_start => [ :environment, :config ] do  
+  task background_start: [ :environment, :config ] do  
     puts @notification 
     system "#{@ssh_command} > /dev/null 2>&1 &" 
   end 
   
   # Adapted from Evan Weaver: http://blog.evanweaver.com/articles/2007/07/13/developing-a-facebook-app-locally/ 
   desc "Check if reverse tunnel is running"
-  task :status => [ :environment, :config ] do
+  task status: [ :environment, :config ] do
    if `ssh #{@public_host} -l #{@public_host_username} netstat -an | egrep "tcp.*:#{@public_port}.*LISTEN" | wc`.to_i > 0
      puts "Seems ok"
    else
@@ -25,7 +25,7 @@ tunnel_ns = namespace :tunnel do
    end
   end
 
-  task :config => :environment do
+  task config: :environment do
    facebook_config = File.join(Rails.root.to_s, 'config', 'config.yml')
    FACEBOOKER = YAML.load(ERB.new(File.read(facebook_config)).result)[Rails.env]
    @public_host_username = FACEBOOKER['tunnel']['public_host_username'] 
@@ -41,4 +41,4 @@ tunnel_ns = namespace :tunnel do
   end
 end  
 desc "Create a reverse ssh tunnel from a public server to a private development server."
-task :tunnel => tunnel_ns[:start]
+task tunnel: tunnel_ns[:start]

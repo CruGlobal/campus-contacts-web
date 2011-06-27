@@ -4,10 +4,10 @@ class CreateSmsCarriers < ActiveRecord::Migration
       t.string :name
       t.string :moonshado_name
       t.string :email
-      t.integer :recieved, :default => 0
-      t.integer :sent_emails, :default => 0
-      t.integer :bounced_emails, :default => 0
-      t.integer :sent_sms, :default => 0
+      t.integer :recieved, default: 0
+      t.integer :sent_emails, default: 0
+      t.integer :bounced_emails, default: 0
+      t.integer :sent_sms, default: 0
       t.timestamps
     end
   end

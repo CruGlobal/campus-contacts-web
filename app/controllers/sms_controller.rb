@@ -35,8 +35,8 @@ class SmsController < ApplicationController
         unless person = Person.includes(:phone_numbers).where('phone_numbers.number' => sms_params[:phone_number]).first
           # Create a person record for this phone number
           person = Person.new
-          person.save(:validate => false)
-          person.phone_numbers.create!(:number => sms_params[:phone_number], :location => 'mobile')
+          person.save(validate: false)
+          person.phone_numbers.create!(number: sms_params[:phone_number], location: 'mobile')
         end
         @text.update_attribute(:person_id, person.id)
       end
@@ -52,7 +52,7 @@ class SmsController < ApplicationController
       end
       send_message(msg, sms_params[:phone_number])
     end
-    render :text => @text.inspect
+    render text: @text.inspect
   end
   
   protected 
@@ -100,7 +100,7 @@ class SmsController < ApplicationController
       sms_id = SMS.deliver(phone_number, msg).first
       carrier.increment!(:sent_sms)
       sent_via = 'moonshado'
-      @sent_sms = SentSms.create!(:message => msg, :recipient => phone_number, :moonshado_claimcheck => sms_id, :sent_via => sent_via, :recieved_sms_id => @text.id)
+      @sent_sms = SentSms.create!(message: msg, recipient: phone_number, moonshado_claimcheck: sms_id, sent_via: sent_via, recieved_sms_id: @text.id)
     end
 
 end

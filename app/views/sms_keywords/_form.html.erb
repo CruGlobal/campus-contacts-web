@@ -11,15 +11,15 @@
   <% end %>
   <div class="field">
     <%= f.label :explanation, t('ma.keywords.form.explanation') %><br />
-    <%= f.text_area :explanation, :rows => 5 %>
+    <%= f.text_area :explanation, rows: 5 %>
   </div>
   <div class="field">
     <%= f.label :initial_response, t('ma.keywords.form.initial_response') %><br />
-    <%= f.text_field :initial_response, :size => 140, :maxlength => 140 %>
+    <%= f.text_field :initial_response, size: 140, maxlength: 140 %>
   </div>
   <div class="field">
     <%= f.label :post_survey_message, t('ma.keywords.form.post_survey_message') %><br />
-    <%= f.text_area :post_survey_message, :rows => 5 %>
+    <%= f.text_area :post_survey_message, rows: 5 %>
   </div>
   <% if current_user.person.organizations.length > 1 %>
     <div class="field">

@@ -21,7 +21,7 @@ class ApiHelperTest < ActionView::TestCase
       params[:fields] = "aname,aid,afirst_name,alast_name,abirthday,alocale,alocation,agender,ainterests,afriends,afb_id,apicture"
       assert_raise(ApiErrors::InvalidFieldError) { valid_request?(nil, action, params, access_token) }
    
-      params = {:fields => ""}
+      params = {fields: ""}
       assert_raise(ApiErrors::InvalidFieldError) { valid_request?(nil, action, params, access_token) }
       
     end

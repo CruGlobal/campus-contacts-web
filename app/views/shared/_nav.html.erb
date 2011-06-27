@@ -2,7 +2,22 @@
   <% if user_signed_in? %>
     <% if current_organization %>
       <div class="item">
-        <%= current_organization %>
+        <% if current_person.organizations.length > 1 %>
+          <%= link_to(current_organization, '', id: 'change_org') %>
+          <div id="other_orgs" style="display:none">
+            <ul>
+              <% current_person.organization_memberships.each do |om| %>
+                <li>
+                  <%= om.organization %> 
+                  <%= link_to(t('ma.nav.go_to'), set_current_organization_membership_path(om)) %>
+                  <%= link_to(t('ma.nav.make_default'), set_primary_organization_membership_path(om)) %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        <% else %>
+          <%= current_organization %>
+        <% end %>
       </div>
       <div class="item">
         <%= link_to(t('ma.nav.profile'), current_person) %>

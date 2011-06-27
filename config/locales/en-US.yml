@@ -10,6 +10,12 @@
       back_to_dashboard: "Back to dashboard"
       profile: 'My Profile'
       back_to_wizard: "I'm done. Take me back to the Wizard"
+      go_to: 'go to'
+      make_default: 'make default'
+      my_contacts: 'My Contacts'
+      all_contacts: 'All Contacts'
+      directory: 'Directory'
+      keywords: "Keywords"
     general:
       keyword: "Keyword"
       status: "Status"
@@ -109,6 +115,12 @@
         assign_people:
           one: Assign 1 person
           other: "Assign %{count} people"
+      mine:
+        my_contacts: "My Contacts"
+        name: Name
+        phone: Phone Number
+        email: Email
+        year: Year
       show:
         phone_number: "Phone #"
         email: "Email"

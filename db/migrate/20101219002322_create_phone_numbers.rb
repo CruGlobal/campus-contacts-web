@@ -5,7 +5,7 @@ class CreatePhoneNumbers < ActiveRecord::Migration
       t.string :extension
       t.integer :person_id
       t.string :location
-      t.boolean :primary, :default => false
+      t.boolean :primary, default: false
 
       t.timestamps
     end
