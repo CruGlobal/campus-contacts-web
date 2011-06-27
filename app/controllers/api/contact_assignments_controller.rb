@@ -18,7 +18,7 @@ class Api::ContactAssignmentsController < ApiController
   end
   
   def destroy_1
-    raise ContactAssignmentDeleteParamsError unless (params[:id].present? && is_int?(params[:id]))
+    raise ContactAssignmentDeleteParamsError unless (params[:id].present? && (is_int?(params[:id]) || is_a? Array params[:id]))
     ids = params[:id].split(',')
     ContactAssignment.where(:person_id => ids, :organization_id => @organization.id).destroy_all
     render :json => '[]'

@@ -62,6 +62,11 @@ module ApiErrors
       super :followup_comment_create_params_error, "You did not provide the appropriate parameters to create a followup comment.", "28"
     end
   end
+  class FollowupCommentDeleteParamsError < ApiError
+    def initialize
+      super :followup_comment_delete_params_error, "You did not provide the appropriate parameters to remove a comment.", "34"
+    end
+  end
   class LimitRequiredWithStartError < ApiError
     def initialize
       super :limit_required_with_start_error, "A limit parameter is required with a start parameter.", "29"
@@ -88,4 +93,11 @@ module ApiErrors
       super :invalid_json_error, "You did not send valid JSON.","33"
     end
   end
+  class FollowupCommentPermissionsError < ApiError
+    def initialize
+      super :followup_comments_permissions_error, "You do not have the appropriate permissions to delete this comment.","35"
+    end
+  end
+  
+  
 end
