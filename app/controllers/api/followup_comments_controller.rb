@@ -12,7 +12,7 @@ rescue_from Exception, :with => :render_json_error
     rescue 
       raise InvalidJSONError
     end
-    raise FollowupCommentCreateParamsError unless (@json['rejoicables'].present? && @json['followup_comment'].present?)
+    raise FollowupCommentCreateParamsError unless (!@json['rejoicables'].nil? && @json['followup_comment'].present?)
     
     @followup_comment = FollowupComment.create(@json['followup_comment'])
     @json['rejoicables'].each do |what|
