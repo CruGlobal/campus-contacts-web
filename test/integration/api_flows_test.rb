@@ -262,10 +262,6 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       assert_equal(Rejoicable.all.count, 0)
       json = ActiveSupport::JSON.encode({:followup_comment => {:organization_id=> @user.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, :rejoicables => ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
       post path, {'access_token' => @access_token.code, 'json' => json }
-      File.open('/users/Doulos/Desktop/testmytest.log', 'a') do |f2|
-        f2.puts "TESTING: \n"
-        f2.puts "#{@response.body}\n\n\n"
-      end
       assert_equal(FollowupComment.all.count, 1)
       assert_equal(Rejoicable.all.count,3)
       assert_equal(FollowupComment.all.first.comment, "Testing the comment system.")
