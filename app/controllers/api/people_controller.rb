@@ -5,7 +5,7 @@ class Api::PeopleController < ApiController
   skip_before_filter :authenticate_user!
   before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization
   oauth_required :scope => "userinfo"
-  #rescue_from Exception, :with => :render_json_error
+  rescue_from Exception, :with => :render_json_error
   
   def show_1
     valid_fields = valid_request?(request)

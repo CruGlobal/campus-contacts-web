@@ -255,6 +255,7 @@ class Person < ActiveRecord::Base
     hash['status'] = status.first.followup_status unless status.first.try(:followup_status).nil?
     hash['request_org_id'] = org_id.id unless org_id.nil?
     hash['assignment'] = assign_hash unless assign_hash.nil?
+    hash['first_contact_date'] = answer_sheets.first.created_at unless answer_sheets.empty?
     hash
   end
   
@@ -269,7 +270,8 @@ class Person < ActiveRecord::Base
     hash['education'] = EducationHistory.get_education_history_hash(id)
     hash['location'] = latest_location.to_hash if latest_location
     hash['locale'] = user.try(:locale) ? user.locale : ""
-    hash['organization_membership'] = organization_memberships.collect{ |x| {org_id: x.organization_id, role: x.role, primary: (x.primary == true) ? "true" : "false"}}
+    orgs = OrganizationMembership.includes(:organization).where(:person_id => id)
+    hash['organization_membership'] = orgs.collect{ |x| {org_id: x.organization_id, role: x.role, primary: (x.primary == true) ? "true" : "false", name: x.organization.name}}
     hash
   end
   
