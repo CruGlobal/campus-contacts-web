@@ -34,7 +34,7 @@ rescue_from Exception, with: :render_json_error
   end
   
   def destroy_1
-    raise FollowupCommentDeleteParamsError unless (params[:id].present? && (is_int?(params[:id]) || params[:id].is_a? Array))
+    raise FollowupCommentDeleteParamsError unless (params[:id].present? && (is_int?(params[:id]) || (params[:id].is_a? Array)))
     ids = params[:id].split(',')
     
     comments = FollowupComment.where(id: ids)
