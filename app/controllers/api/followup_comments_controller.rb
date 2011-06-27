@@ -15,10 +15,10 @@ rescue_from Exception, :with => :render_json_error
     raise FollowupCommentCreateParamsError unless (!@json['rejoicables'].nil? && @json['followup_comment'].present?)
     
     @followup_comment = FollowupComment.create(@json['followup_comment'])
+    Person.find(@followup_comment.contact_id).organization_memberships.where(:organization_id => @followup_comment.organization_id).first.update_attributes(:followup_status => @json['followup_comment']['followup_status'])
     @json['rejoicables'].each do |what|
       if Rejoicable::OPTIONS.include?(what)
         @followup_comment.rejoicables.create(what: what, created_by_id: get_me.id, person_id: @followup_comment.contact_id, organization_id: @followup_comment.organization_id)
-        Person.find(@followup_comment.contact_id).organization_memberships.where(:organization_id => @followup_comment.organization_id).first.update_attributes(:followup_status => @json['followup_comment']['followup_status'])
       end
     end if @json['rejoicables']
     render :json => "[]"
