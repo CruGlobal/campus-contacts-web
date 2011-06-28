@@ -12,6 +12,7 @@ class Organization < ActiveRecord::Base
   has_many :page_elements, through: :pages
   has_many :questions, through: :pages
   has_many :leaders, through: :organization_memberships, source: :person, conditions: "organization_memberships.role IN('admin','leader')", order: "lastName, preferredName, firstName"
+  has_many :roles, conditions: "organization_id = 0 or organization_id = #{id}"
   validates_presence_of :name
   
   def to_s() name; end
