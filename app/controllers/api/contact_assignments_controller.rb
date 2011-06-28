@@ -23,7 +23,7 @@ class Api::ContactAssignmentsController < ApiController
   end
   
   def destroy_1
-    raise ContactAssignmentDeleteParamsError unless (params[:id].present? && (is_int?(params[:id]) || is_a? Array params[:id]))
+    raise ContactAssignmentDeleteParamsError unless (params[:id].present? && (is_int?(params[:id]) || (params[:id].is_a? Array)))
     ids = params[:id].split(',')
     if @organization
       ContactAssignment.where(person_id: ids, organization_id: @organization.id).destroy_all
