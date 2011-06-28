@@ -23,6 +23,8 @@
       back: "Back"
       remove: 'Remove'
       hide: 'hide'
+      unassign: 'Unassign'
+      add_a_leader: 'Add a leader'
 
     people: 
       index:
