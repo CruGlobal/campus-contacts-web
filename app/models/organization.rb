@@ -4,18 +4,23 @@ class Organization < ActiveRecord::Base
   has_many :activities, dependent: :destroy
   has_many :target_areas, through: :activities
   has_many :organization_memberships, dependent: :destroy
-  has_many :contacts, through: :organization_memberships, source: :person, conditions: {'organization_memberships.role' => 'contact'}
   has_many :people, through: :organization_memberships
   has_many :keywords, class_name: 'SmsKeyword'
   has_many :question_sheets, through: :keywords
   has_many :pages, through: :question_sheets
   has_many :page_elements, through: :pages
   has_many :questions, through: :pages
-  has_many :leaders, through: :organization_memberships, source: :person, conditions: "organization_memberships.role IN('admin','leader')", order: "lastName, preferredName, firstName"
-  has_many :roles, conditions: "organization_id = 0 or organization_id = #{id}"
+  has_many :organizational_roles, inverse_of: :organization
+  has_many :leaders, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role.leader_ids}, order: "lastName, preferredName, firstName"
+  has_many :contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role.contact.id}
+  
   validates_presence_of :name
   
   def to_s() name; end
+  
+  def roles
+    Role.where("organization_id = 0 or organization_id = #{id}")
+  end
   
   def <=>(other)
     name <=> other.name

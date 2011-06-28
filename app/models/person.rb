@@ -24,6 +24,8 @@ class Person < ActiveRecord::Base
   has_one :current_address, class_name: "Address", foreign_key: "fk_personID", conditions: {addressType: 'current'}
   has_many :rejoicables, inverse_of: :created_by
   
+  has_many :organizational_roles, inverse_of: :person
+  
   scope :who_answered, lambda {|question_sheet_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.question_sheet_id' => question_sheet_id)}
   validates_presence_of :firstName, :lastName
   
@@ -34,7 +36,7 @@ class Person < ActiveRecord::Base
   end
   
   def leader_in?(org)
-    OrganizationMembership.where(person_id: id, organization_id: org.id).first.try(:leader?)
+    OrganizationalRole.where(person_id: id, role_id: Role.leader_ids, :organization_id => org.id).present?
   end
   
   def phone_number
@@ -270,8 +272,8 @@ class Person < ActiveRecord::Base
     hash['education'] = EducationHistory.get_education_history_hash(id)
     hash['location'] = latest_location.to_hash if latest_location
     hash['locale'] = user.try(:locale) ? user.locale : ""
-    orgs = OrganizationMembership.includes(:organization).where(person_id: id)
-    hash['organization_membership'] = orgs.collect{ |x| {org_id: x.organization_id, role: x.role, primary: (x.primary == true) ? "true" : "false", name: x.organization.name}}
+    hash['organization_membership'] = organization_memberships.includes(:organization).collect {|x| {org_id: x.organization_id, primary: x.primary?.to_s, name: x.organization.name}}
+    hash['organizational_roles'] = organizational_roles.includes(:role, :organization).collect {|r| {org_id: r.organization_id, role: r.role.i18n, name: r.organization.name}}
     hash
   end
   

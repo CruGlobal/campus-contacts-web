@@ -73,8 +73,7 @@ module ApiHelper
   end
  
   def authorized_leader?
-    temp = get_me.organization_memberships.where(:role => ['leader','admin']).where(:organization_id => get_organization.id).collect(&:organization_id)
-    raise ApiErrors::IncorrectPermissionsError if temp.empty?
+    raise ApiErrors::IncorrectPermissionsError unless get_me.leader_in?(get_organization)
   end
  
   #########################################
