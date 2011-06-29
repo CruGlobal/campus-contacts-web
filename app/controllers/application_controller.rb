@@ -94,11 +94,11 @@ class ApplicationController < ActionController::Base
   
   def user_root_path
     return '/wizard' unless current_organization
-    if current_person.leader_in?(current_organization)
+    # if current_person.leader_in?(current_organization)
       '/contacts/mine'
-    else
-      '/people'
-    end
+    # else
+      # '/people'
+    # end
   end
   helper_method :user_root_path
   
