@@ -53,7 +53,7 @@
         <div class="wizard_step_not_visited"></div>
       <% end %>
     </div>
-    <div id="leaders_step" class="wizard_step <%= 'disabled' unless current_organization %>" data-step="leaders">
+    <!-- <div id="leaders_step" class="wizard_step <%= 'disabled' unless current_organization %>" data-step="leaders">
       <% if params[:step] == 'leaders' %>
         <div class="wizard_step_active"></div>
       <% else %>
@@ -61,12 +61,12 @@
       <% end %>
       <div class="wizard_step_name"><%= link_to(t('ma.welcome.wizard.designate_leaders'), '/wizard?step=leaders') %></div>
       
-      <% if current_organization && current_organization.keywords.present? %>
+      <% if current_organization && current_organization.leaders.present? %>
         <div class="wizard_step_visited"></div>
       <% else %>
         <div class="wizard_step_not_visited"></div>
       <% end %>
-    </div>
+    </div> -->
   </div>
 <% end %>
 
