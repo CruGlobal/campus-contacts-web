@@ -163,14 +163,8 @@ FactoryGirl.define do
        Factory(:location, person: f)
        org = Factory(:organization)
        Factory(:organization_membership, person: f, organization: org, primary: 1, validated: 0)
-       Factory(:organizational_role, person: f, organization: org, followup_status: "attempted_contact", role: Factory(:role))
+       Factory(:organizational_role, person: f, organization: org, followup_status: "attempted_contact", role: Role.admin)
     end
-  end
-  
-  factory :role do
-    i18n 'admin'
-    name 'Admin'
-    organization_id 0
   end
   
   factory :organizational_role do 

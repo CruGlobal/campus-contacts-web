@@ -9,18 +9,18 @@ class Role < ActiveRecord::Base
   end
   
   def self.admin
-    Role.where(i18n: 'admin').first
+    Role.find_or_create_by_i18n_and_organization_id('admin', 0)
   end
   
   def self.leader
-    Role.where(i18n: 'leader').first
+    Role.find_or_create_by_i18n_and_organization_id('leader', 0)
   end
   
   def self.contact
-    Role.where(i18n: 'contact').first
+    Role.find_or_create_by_i18n_and_organization_id('contact', 0)
   end
   
   def self.involved
-    Role.where(i18n: 'involved').first
+    Role.find_or_create_by_i18n_and_organization_id('involved', 0)
   end
 end
