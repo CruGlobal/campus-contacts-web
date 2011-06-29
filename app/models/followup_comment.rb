@@ -1,3 +1,5 @@
+include ActionView::Helpers::DateHelper
+
 class FollowupComment < ActiveRecord::Base
   belongs_to :contact, class_name: "Person", foreign_key: "contact_id"
   belongs_to :commenter, class_name: "Person", foreign_key: "commenter_id"
@@ -15,7 +17,8 @@ class FollowupComment < ActiveRecord::Base
     hash['comment'] = comment
     hash['status'] = status
     hash['organization_id'] = organization_id
-    hash['created_at'] = created_at
+    hash['created_at'] = created_at.utc
+    hash['created_at_words'] = ActionView::Helpers::DateHelper.time_ago_in_words(created_at) + ' ago'
     hash
   end
   
