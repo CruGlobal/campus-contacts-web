@@ -7,7 +7,7 @@ skip_before_filter :verify_authenticity_token, :authenticate_user!
 rescue_from Exception, with: :render_json_error
 
   def create_1
-    begin
+      begin
       @json = ActiveSupport::JSON.decode(params[:json])
     rescue 
       raise InvalidJSONError

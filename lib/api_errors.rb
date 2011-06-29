@@ -44,7 +44,7 @@ module ApiErrors
   end
   class IncorrectPermissionsError < ApiError
     def initialize
-      super :incorrect_permissions, "You do not have the appropriate permissions to view this data.", "25"
+      super :incorrect_permissions, "You do not have a leader role in MissionHub.", "25"
     end
   end
   class ContactAssignmentDeleteParamsError < ApiError
