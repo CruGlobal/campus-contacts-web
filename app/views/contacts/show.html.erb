@@ -8,46 +8,62 @@
   <h1><%= image_tag("contact.png") %><%= @person %></h1>
 </div>
 
-<div>
-  <%# if @person.fb_uid.present? %>
-    <%= image_tag("https://graph.facebook.com/#{@person.fb_uid}/picture?type=large", alt: '') %>
-  <%# else %>
-    <!-- No Image because they don't have facebook connected -->
-  <%# end %>
-</div>
-<div>
-  <% if @person.phone_number.present? %>
-    <%= t('ma.contacts.show.phone_number') %>: <%= number_to_phone(@person.phone_number) %><br/>
-  <% end %>
-  <% if @person.email.present? %>
-    <%= t('ma.contacts.show.email') %>: <%= mail_to(@person.email) %><br/>
-  <% end %>
-  <% if @person.current_address %>
-    <%= raw @person.current_address.display_html %><br/>
-    <%= link_to('map', @person.current_address.map_link, target: '_blank') %>
-  <% end %>
-</div>
-<hr />
-<%= form_for @followup_comment, remote: true, html: {id: 'comment_form'} do |f| %>
-  <%= f.hidden_field :organization_id %>
-  <%= f.hidden_field :contact_id %>
-  <%= f.hidden_field :commenter_id %>
-  <%= t('ma.contacts.show.status') %> <br/>
-  <%= f.select :status, OrganizationMembership::FOLLOWUP_STATUSES.collect {|s| [t("ma.contacts.statuses.#{s}"), s]}, value: @organization_membership.followup_status %><br/>
-  <%= f.text_area :comment, placeholder: 'Add comments here...' %><br/>
-  <%= link_to(t('ma.contacts.show.attach_rejoicable'), '#', id: 'add_rejoicable') %><br/>
-  <div id="rejoicable_fields" style="display:none">
-    <% Rejoicable::OPTIONS.each do |option| %>
-      <%= check_box_tag 'rejoicables[]', option %> <%= t("ma.rejoicables.#{option}") %>
-      <br/>
-    <% end %>
+<div class="pad">
+  
+  <div class="contact_leftcol">
+    <div>
+      <%# if @person.fb_uid.present? %>
+        <%= image_tag("https://graph.facebook.com/#{@person.fb_uid}/picture?type=large", alt: '') %>
+      <%# else %>
+        <!-- No Image because they don't have facebook connected -->
+      <%# end %>
+    </div>
+    <div>
+      <% if @person.phone_number.present? %>
+        <%= t('ma.contacts.show.phone_number') %>: <%= number_to_phone(@person.phone_number) %><br/>
+      <% end %>
+      <% if @person.email.present? %>
+        <%= t('ma.contacts.show.email') %>: <%= mail_to(@person.email) %><br/>
+      <% end %>
+      <% if @person.current_address %>
+        <p><%= raw @person.current_address.display_html %></p>
+        <%= link_to('Google Map', @person.current_address.map_link, target: '_blank', :class => "maplink") %>
+      <% end %>
+    </div>
   </div>
-  <%= f.submit t('ma.contacts.show.add_comment'), id: 'comment_submit' %><%= spinner('comment') %>
-<% end %>
 
-<div>
-  <h3>Previous Comments</h3>
-  <ul id="previous_comments">
-    <%= render partial: 'followup_comments/followup_comment', collection: @followup_comments %>
-  </ul>
+  <div class="contact_rightbody">
+    <%= form_for @followup_comment, remote: true, html: {id: 'comment_form'} do |f| %>
+      <%= f.hidden_field :organization_id %>
+      <%= f.hidden_field :contact_id %>
+      <%= f.hidden_field :commenter_id %>
+      <span class="statusline">
+        <%= t('ma.contacts.show.status') %>: 
+        <%= f.select :status, OrganizationMembership::FOLLOWUP_STATUSES.collect {|s| [t("ma.contacts.statuses.#{s}"), s]}, value: @organization_membership.followup_status %><br/>
+      </span>
+      <div class="commentbox">
+        <div class="textarea">
+          <%= f.text_area :comment, :rows => "2", placeholder: 'Add comments here...' %><br/>
+        </div>
+        <%= f.submit t('ma.contacts.show.add_comment'), id: 'comment_submit' %><%= spinner('comment') %>
+        <div class="rejoiceablebox">
+          <%= link_to(t('ma.contacts.show.attach_rejoicable'), '#', id: 'add_rejoicable') %><br/>
+          <div id="rejoicable_fields" style="display:none">
+            <% Rejoicable::OPTIONS.each do |option| %>
+              <%= check_box_tag 'rejoicables[]', option %> <%= t("ma.rejoicables.#{option}") %>
+              <br/>
+            <% end %>
+          </div>
+        </div>        
+      </div>
+      
+    <% end %>
+    
+    <div class="commentswall">
+      <h3>Previous Comments</h3>
+      <ul id="previous_comments">
+        <%= render partial: 'followup_comments/followup_comment', collection: @followup_comments %>
+      </ul>
+    </div>
+  </div>
 </div>

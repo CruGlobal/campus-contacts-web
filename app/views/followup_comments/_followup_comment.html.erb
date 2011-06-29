@@ -1,7 +1,13 @@
 <li id="<%= dom_id(followup_comment) %>">
-  <%= image_tag("https://graph.facebook.com/#{followup_comment.commenter.fb_uid}/picture", alt: '') %>
-  <%= followup_comment.commenter %>
-  <%= followup_comment.status %>
-  <%= l followup_comment.created_at %>
-  <p><%= followup_comment.comment %></p>
+  <a class="profilepic">
+    <%= image_tag("https://graph.facebook.com/#{followup_comment.commenter.fb_uid}/picture", alt: '') %>
+  </a>
+  <div class="commentcontent">
+    <div class="meta">
+      <strong><%= followup_comment.commenter %></strong>
+      <%= followup_comment.status %>
+      <span class="date"><%= l followup_comment.created_at %></span>
+    </div>
+    <p><%= followup_comment.comment %></p>
+  </div>
 </li>
