@@ -6,6 +6,6 @@
   <% end %>
 </ul>
 
-<ul><li class="leader unassigned" data-id=""><span class="name"><%= link_to(t('ma.people.index.unassigned'), contacts_path) %></span> (<span id="unassigned_count" class="count"><%= unassigned_people(@organization).count %></span>)</li></ul>
-<ul><li><%= link_to(t('ma.people.index.all'), contacts_path(assigned_to: 'all')) %> (<%= @organization.contacts.count %>)</li></ul>
+<ul><li class="leader unassigned" data-id=""><span class="name"><%= link_to(t('ma.contacts.index.unassigned'), contacts_path) %></span> (<span id="unassigned_count" class="count"><%= unassigned_people(@organization).count %></span>)</li></ul>
+<ul><li><%= link_to(t('ma.contacts.index.all'), contacts_path(assigned_to: 'all')) %> (<%= @organization.contacts.count %>)</li></ul>
 <%= render 'leader_form' %>

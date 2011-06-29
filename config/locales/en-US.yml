@@ -7,7 +7,6 @@
     nav:
       login: "Log In"
       logout: "Sign Out"
-      back_to_dashboard: "Back to dashboard"
       profile: 'My Profile'
       back_to_wizard: "I'm done. Take me back to the Wizard"
       go_to: 'go to'
@@ -114,6 +113,10 @@
         completed: Completed
       index:
         which_org: 'You need to choose which organization you want to do folow-up from'
+        add: 'Add'
+        hidden_questions: 'Hidden Questions'
+        unassigned: 'Unassigned'
+        all: 'All'
         assign_people:
           one: Assign 1 person
           other: "Assign %{count} people"

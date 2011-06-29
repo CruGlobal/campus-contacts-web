@@ -33,7 +33,11 @@ class LeadersController < ApplicationController
       role.destroy 
       # make any contacts assigned to this person go back to unassinged
       @contacts = @person.contact_assignments.where(organization_id: current_organization.id).all
-      @contacts.destroy_all
+      @contacts.collect(&:destroy)
+      # If this person doesn't have any other roles in the org, destroy the membership too
+      if OrganizationalRole.find_by_person_id_and_organization_id(@person.id, current_organization.id).empty?
+        OrganizationMembership.find_by_person_id_and_organization_id(@person.id, current_organization.id).try(:destroy)
+      end
     end
   end
 
@@ -48,7 +52,13 @@ class LeadersController < ApplicationController
     params[:person] ||= {}
     params[:person][:email_address] ||= {}
     params[:person][:phone_number] ||= {}
-    @person = Person.new(params[:person].except(:email_address, :phone_number))
+    # try to find this person based on their email address
+    if (email = params[:person][:email_address][:email]).present?
+      @person = EmailAddress.find_by_email(email).try(:person) ||
+                Address.find_by_email(email).try(:person) ||
+                User.find_by_username(email).try(:person) 
+    end
+    @person ||= Person.new(params[:person].except(:email_address, :phone_number))
     @email = @person.email_addresses.new(params[:person].delete(:email_address))
     @phone = @person.phone_numbers.new(params[:person].delete(:phone_number).merge(location: 'mobile'))
     required_fields = {'First Name' => @person.firstName, 'Last Name' => @person.lastName, 'Gender' => @person.gender, 'Email' => @email.email, 'Phone' => @phone.number}
