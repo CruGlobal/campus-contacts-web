@@ -257,7 +257,7 @@ class Person < ActiveRecord::Base
     hash['status'] = status.first.followup_status unless status.first.try(:followup_status).nil?
     hash['request_org_id'] = org_id.id unless org_id.nil?
     hash['assignment'] = assign_hash unless assign_hash.nil?
-    hash['first_contact_date'] = answer_sheets.first.created_at.utc unless answer_sheets.empty?
+    hash['first_contact_date'] = answer_sheets.first.created_at.utc.to_s unless answer_sheets.empty?
     hash
   end
   

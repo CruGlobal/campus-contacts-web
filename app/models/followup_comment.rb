@@ -16,7 +16,7 @@ class FollowupComment < ActiveRecord::Base
     hash['comment'] = comment
     hash['status'] = status
     hash['organization_id'] = organization_id
-    hash['created_at'] = created_at.utc
+    hash['created_at'] = created_at.utc.to_s
     hash['created_at_words'] = time_ago_in_words(created_at) + ' ago'
     hash
   end
