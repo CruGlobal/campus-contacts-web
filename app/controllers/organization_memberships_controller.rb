@@ -117,7 +117,7 @@ class OrganizationMembershipsController < ApplicationController
   
   def set_current
     if @organization_membership = current_person.organization_memberships.find(params[:id])
-      session[:current_organization_id] = @organization_membership.id
+      session[:current_organization_id] = @organization_membership.organization.id
     end
     redirect_to :back
   end

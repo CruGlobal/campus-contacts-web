@@ -125,7 +125,7 @@ end
 before :"deploy:symlink", :"deploy:assets";
 namespace :deploy do
   task :assets, roles: :app do
-    run "ln -s #{shared_path}/assets #{release_path}/public/assets"
+    # run "ln -s #{shared_path}/assets #{release_path}/public/assets"
     run "cd #{release_path} && bundle exec rake assets:precompile RAILS_ENV=#{rails_env}"
   end
 end
