@@ -22,8 +22,10 @@ if SmsCarrier.all.empty?
   SmsCarrier.create(name: 'Virgin Mobile', moonshado_name: 'virgin', email: 'vmobl.com')
 end
 
-Role.create(name: 'Admin', i18n: 'admin', organization_id: 0)
-Role.create(name: 'Contact', i18n: 'contact',  organization_id: 0)
-Role.create(name: 'Involved', i18n: 'involved',  organization_id: 0)
-Role.create(name: 'Leader', i18n: 'leader',  organization_id: 0)
-Role.create(name: 'Alumni', i18n: 'alumni',  organization_id: 0)
+if Role.all.empty?
+  Role.create(name: 'Admin', i18n: 'admin', organization_id: 0)
+  Role.create(name: 'Contact', i18n: 'contact',  organization_id: 0)
+  Role.create(name: 'Involved', i18n: 'involved',  organization_id: 0)
+  Role.create(name: 'Leader', i18n: 'leader',  organization_id: 0)
+  Role.create(name: 'Alumni', i18n: 'alumni',  organization_id: 0)
+end

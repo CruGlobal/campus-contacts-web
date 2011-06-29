@@ -1,9 +1,11 @@
 <h3><%= t('ma.people.index.leaders') %></h3>
+<%= link_to(t('ma.contacts.index.add'), '#', class: 'add-leader') %>
 <ul>
   <% @organization.leaders.each do |person| %>
-    <li class="leader" data-id="<%= person.id %>"><span class="name"><%= link_to(person, contacts_path(org_id: @organization.id, assigned_to: person.id)) %></span> (<span class="count"><%= person.contact_assignments.for_org(@organization).count %></span>)</li>
+    <li class="leader" data-id="<%= person.id %>"><span class="name"><%= link_to(person, contacts_path(assigned_to: person.id)) %></span> (<span class="count"><%= person.contact_assignments.for_org(@organization).count %></span>)</li>
   <% end %>
 </ul>
 
-<ul><li class="leader unassigned" data-id=""><span class="name"><%= link_to(t('ma.people.index.unassigned'), contacts_path(org_id: @organization.id)) %></span> (<span id="unassigned_count" class="count"><%= unassigned_people(@organization).count %></span>)</li></ul>
-<ul><li><%= link_to(t('ma.people.index.all'), params.dup.merge!(assigned_to: 'all')) %> (<%= @organization.contacts.count %>)</li></ul>
+<ul><li class="leader unassigned" data-id=""><span class="name"><%= link_to(t('ma.people.index.unassigned'), contacts_path) %></span> (<span id="unassigned_count" class="count"><%= unassigned_people(@organization).count %></span>)</li></ul>
+<ul><li><%= link_to(t('ma.people.index.all'), contacts_path(assigned_to: 'all')) %> (<%= @organization.contacts.count %>)</li></ul>
+<%= render 'leader_form' %>

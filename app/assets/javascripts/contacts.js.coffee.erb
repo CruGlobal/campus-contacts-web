@@ -1,4 +1,36 @@
 $ ->
+	$("a.add-leader").live 'click', ->
+		$('#add_leader_form').hide()
+		$('#leader_search_form').show()
+		$('#leader_search_name').val('')
+		$("#leader_search_results").hide()
+		el = $('#leader_search')
+		form = $('#leader_search_form')
+		el.dialog
+			resizable: false,
+			height:444,
+			width:400,
+			modal: true,
+			buttons: 
+				Cancel: ->
+					$(this).dialog('destroy')
+		false
+
+	$('#leader_search_name').autocomplete
+		source: (request, response)->
+			$('#spinner_leader_search').show()
+			$.ajax
+				url: form.attr('action'), 
+				data: form.serialize(), 
+				dataType: 'script', 
+				type: 'POST',
+				success: (data)->
+					$('#leader_search_results').html(data)
+					$("#leader_search_results").show()
+				complete: ->
+					$('#spinner_leader_search').hide()
+			response([]);
+	
 	$('#comment_submit').live 'click', ->
 		$(this).hide()
 		$('#spinner_comment').show()

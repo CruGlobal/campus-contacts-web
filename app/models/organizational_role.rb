@@ -1,6 +1,8 @@
 class OrganizationalRole < ActiveRecord::Base
   belongs_to :person
   belongs_to :role
+  belongs_to :organization
+  scope :leaders, where(role_id: Role.leader_ids)
   scope :active, where(deleted: false)
   before_create :set_start_date
   after_save :set_end_date_if_deleted

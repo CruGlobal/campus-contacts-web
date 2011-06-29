@@ -81,7 +81,7 @@ body {
 }
 
 #topmenu {
-  background: url(/images/topmenubg.png) repeat-x;
+  background: url('<%= asset_path('topmenubg.png') %>') repeat-x;
   border-radius: 10px 10px 0 0;
   height: 38px;
   a {
@@ -99,7 +99,7 @@ body {
   float: left;
   width: 205px;
   #logo {
-    background: url(/images/logo.png) no-repeat;
+    background: url('<%= asset_path('logo.png') %>') no-repeat;
     display: inline-block;
     width: 166px;
     height: 41px;
@@ -177,14 +177,14 @@ ul.leftmenu {
     display: inline-block;
   }
   .wizard_step_visited {
-    background: url("/images/check_complete.png") no-repeat scroll 0 50% transparent;
+    background: url('<%= asset_path('check_complete.png') %>') no-repeat scroll 0 50% transparent;
     float: right;
     height: 30px;
     vertical-align: middle;
     width: 22px;
   }
   .wizard_step_not_visited {
-    background: url("/images/check_incomplete.png") no-repeat scroll 0 50% transparent;
+    background: url('<%= asset_path('check_incomplete.png') %>') no-repeat scroll 0 50% transparent;
     float: right;
     height: 30px;
     vertical-align: middle;
@@ -195,7 +195,7 @@ ul.leftmenu {
     width: 4px;
     margin-right: 9px;
     height: 30px;
-    background: url("/images/blue_arrow.png") no-repeat 0 50%;
+    background: url('<%= asset_path('blue_arrow.png') %>') no-repeat 0 50%;
     display: inline-block;
     float: left;
   }
@@ -211,7 +211,7 @@ ul.leftmenu {
 }
 
 .btn {
-  background: url("/images/btn.png") repeat-x scroll 0 0 transparent;
+  background: url('<%= asset_path('btn.png') %>') repeat-x scroll 0 0 transparent;
   border: 1px solid silver;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
   color: #000000;
@@ -264,7 +264,7 @@ ul.pillmenu {
   display: inline-block;
   border: 1px solid #808080;
   border-radius: 5px;
-  background: url("/images/pillbg.png") repeat-x;
+  background: url('<%= asset_path('pillbg.png') %>') repeat-x;
   overflow: hidden;
   li {
     border-right: 1px solid #666;
@@ -283,7 +283,7 @@ ul.pillmenu {
       display: block;
     }
     a:hover {
-      background: url("/images/pillbg_over.png") repeat-x;
+      background: url('<%= asset_path('pillbg_over.png') %>') repeat-x;
       text-decoration: none;
     }
   }

@@ -69,12 +69,12 @@ class ApplicationController < ActionController::Base
   # end
   
   def unassigned_people(organization)
-    @unassigned_people ||= Person.joins("INNER JOIN organization_memberships ON organization_memberships.person_id = #{Person.table_name}.#{Person.primary_key} AND organization_memberships.organization_id = #{organization.id} AND organization_memberships.role = 'contact' LEFT JOIN contact_assignments ON contact_assignments.person_id = #{Person.table_name}.#{Person.primary_key}  AND contact_assignments.organization_id = #{@organization.id}").where('contact_assignments.id' => nil)
+    @unassigned_people ||= Person.joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{Person.table_name}.#{Person.primary_key} AND organizational_roles.organization_id = #{organization.id} AND organizational_roles.role_id = '#{Role.contact.id}' LEFT JOIN contact_assignments ON contact_assignments.person_id = #{Person.table_name}.#{Person.primary_key}  AND contact_assignments.organization_id = #{@organization.id}").where('contact_assignments.id' => nil)
   end
   helper_method :unassigned_people
   
   def unassigned_people_api(people,organization)
-    @unassigned_people ||= people.joins("INNER JOIN organization_memberships ON organization_memberships.person_id = #{Person.table_name}.#{Person.primary_key} AND organization_memberships.organization_id = #{organization.id} AND organization_memberships.role = 'contact' LEFT OUTER JOIN contact_assignments ON contact_assignments.person_id = #{Person.table_name}.#{Person.primary_key} AND contact_assignments.organization_id = #{@organization.id}").where('contact_assignments.id' => nil)
+    @unassigned_people ||= people.joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{Person.table_name}.#{Person.primary_key} AND organizational_roles.organization_id = #{organization.id} AND organizational_roles.role_id = '#{Role.contact.id}' LEFT OUTER JOIN contact_assignments ON contact_assignments.person_id = #{Person.table_name}.#{Person.primary_key} AND contact_assignments.organization_id = #{@organization.id}").where('contact_assignments.id' => nil)
   end
   helper_method :unassigned_people_api
   
@@ -86,9 +86,9 @@ class ApplicationController < ActionController::Base
   end
   
   def create_contact_at_org(person, organization)
-    # Make them a contact of the org associated with this keyword
     unless OrganizationMembership.find_by_person_id_and_organization_id(person.id, organization.id)
-      OrganizationMembership.create!(person_id: person.id, organization_id: organization.id, role: 'contact', followup_status: OrganizationMembership::FOLLOWUP_STATUSES.first) 
+      OrganizationMembership.create!(person_id: person.id, organization_id: organization.id, followup_status: OrganizationMembership::FOLLOWUP_STATUSES.first) 
+      OrganizationalRole.create!(person_id: person.id, organization_id: organization.id, role_id: Role.contact.id)
     end
   end
   

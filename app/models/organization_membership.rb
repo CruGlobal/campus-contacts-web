@@ -1,13 +1,11 @@
 class OrganizationMembership < ActiveRecord::Base
   FOLLOWUP_STATUSES = ['uncontacted','attempted_contact','contacted','do_not_contact','completed']
-  ROLES = %w[admin leader involved contact]
   belongs_to :person
   belongs_to :organization
   
   validates_presence_of :person_id, :organization_id
   before_validation :set_primary, on: :create
   after_destroy :set_new_primary
-  scope :leaders, where(role: %w{admin leader})
   
   def merge(other)
     OrganizationMembership.transaction do
@@ -21,10 +19,6 @@ class OrganizationMembership < ActiveRecord::Base
       self.save(validate: false)
       other.destroy
     end
-  end
-  
-  def leader?
-    %w{admin leader}.include?(role)
   end
   
   def primary=(val)

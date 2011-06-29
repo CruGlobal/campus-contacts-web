@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110627204929) do
+ActiveRecord::Schema.define(:version => 20110628230112) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -2832,7 +2832,6 @@ ActiveRecord::Schema.define(:version => 20110627204929) do
     t.datetime "updated_at"
     t.date     "start_date"
     t.date     "end_date"
-    t.string   "role"
     t.string   "followup_status", :limit => 0
   end
 
@@ -2845,10 +2844,13 @@ ActiveRecord::Schema.define(:version => 20110627204929) do
     t.integer  "role_id"
     t.date     "start_date"
     t.date     "end_date"
-    t.boolean  "deleted",    :default => false, :null => false
+    t.boolean  "deleted",         :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "organization_id"
   end
+
+  add_index "organizational_roles", ["person_id", "organization_id", "role_id"], :name => "person_role_org", :unique => true
 
   create_table "organizations", :force => true do |t|
     t.string   "name"

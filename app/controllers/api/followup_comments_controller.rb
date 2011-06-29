@@ -38,7 +38,7 @@ rescue_from Exception, with: :render_json_error
     ids = params[:id].split(',')
     
     comments = FollowupComment.where(id: ids)
-    role = get_me.organization_memberships.where(organization_id: @organization.id).collect(&:role)
+    role = get_me.organizational_roles.where(organization_id: @organization.id).collect(&:role).collect(&:i18n)
     
     comments.each_with_index do |comment,i|
       if role[i] == 'leader'

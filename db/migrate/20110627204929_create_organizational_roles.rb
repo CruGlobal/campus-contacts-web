@@ -6,11 +6,18 @@ class CreateOrganizationalRoles < ActiveRecord::Migration
       t.date :start_date
       t.date :end_date
       t.boolean :deleted, default: false, null: false
-
+    
       t.timestamps
     end
     
     # Convert old roles system over to new system
+    if Role.all.empty?
+      Role.create(name: 'Admin', i18n: 'admin', organization_id: 0)
+      Role.create(name: 'Contact', i18n: 'contact',  organization_id: 0)
+      Role.create(name: 'Involved', i18n: 'involved',  organization_id: 0)
+      Role.create(name: 'Leader', i18n: 'leader',  organization_id: 0)
+      Role.create(name: 'Alumni', i18n: 'alumni',  organization_id: 0)
+    end
     contact = Role.find_by_i18n('contact').id
     admin = Role.find_by_i18n('admin').id
     leader = Role.find_by_i18n('leader').id
