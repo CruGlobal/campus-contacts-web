@@ -4,6 +4,7 @@ class FollowupComment < ActiveRecord::Base
   belongs_to :organization
   has_many :rejoicables, inverse_of: :followup_comment
   # accepts_nested_attributes_for :rejoicables, reject_if: proc { |obj| obj.what.blank? }
+  after_create :update_followup_status
   
   def to_hash
     hash = {}
@@ -16,5 +17,11 @@ class FollowupComment < ActiveRecord::Base
     hash['organization_id'] = organization_id
     hash['created_at'] = created_at
     hash
+  end
+  
+  private
+  def update_followup_status
+    om = OrganizationMembership.find_or_create_by_person_id_and_organization_id(contact_id, organization_id)
+    om.update_attribute(:followup_status, status)
   end
 end
