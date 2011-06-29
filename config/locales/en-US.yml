@@ -121,6 +121,7 @@
         hidden_questions: 'Hidden Questions'
         unassigned: 'Unassigned'
         all: 'All'
+        dnc: 'Do Not Contact'
         assign_people:
           one: Assign 1 person
           other: "Assign %{count} people"

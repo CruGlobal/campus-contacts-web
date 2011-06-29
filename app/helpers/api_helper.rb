@@ -124,12 +124,12 @@ module ApiHelper
     allowed_sorting_fields = ["time","status"]
     allowed_sorting_directions = ["asc", "desc"]
     allowed_filter_fields = ["gender", "status"]
-    allowed_status = ["uncontacted", "contacted", "attempted_contact", "do_not_contact", "completed", "finished", "not_finished"]
+    allowed_status = OrganizationMembership::FOLLOWUP_STATUSES + %w[finished not_finished]
     
     #allow for start (SQL Offset) and limit on query.  use :start and :limit
     raise LimitRequiredWithStartError if (params[:start] && !params[:limit])
-    people = people.offset(params[:start].to_i.abs) if params[:start].present? && params[:limit].to_i.abs !=0
-    people = people.limit(params[:limit].to_i.abs) if params[:limit].present? && params[:limit].to_i.abs != 0
+    people = people.offset(params[:start]) if params[:start].to_i !=0
+    people = people.limit(params[:limit]) if params[:limit].to_i != 0
     
     if params[:assigned_to].present?
       if params[:assigned_to] == 'none'
@@ -150,12 +150,12 @@ module ApiHelper
         when "time"
           people = people.order("#{AnswerSheet.table_name}.`created_at` #{@sorting_directions[index]}") unless @sorting_directions[index].nil?
         when "status"
-          status = ["uncontacted", "contacted", "attempted_contact","do_not_contact","completed"].include?(@sorting_fields[index].downcase) ? @sorting_fields[index].downcase : nil
+          # status = ["uncontacted", "contacted", "attempted_contact","do_not_contact","completed"].include?(@sorting_fields[index].downcase) ? @sorting_fields[index].downcase : nil
           
           if params[:assigned_to].present? && params[:assigned_to] == 'none'
-            people = people.order("`organization_memberships`.`followup_status` #{@sorting_directions[index]}")  
+            people = people.order("`organizational_roles`.`followup_status` #{@sorting_directions[index]}")  
           else 
-            people = people.joins(:organization_memberships).where("`organization_memberships`.`person_id` = `ministry_person`.`personID` AND `organization_memberships`.`organization_id` = ?", org.id).order("`organization_memberships`.`followup_status` #{@sorting_directions[index]}")  
+            people = people.joins(:organizational_roles).where("`organizational_roles`.`person_id` = `ministry_person`.`personID` AND `organizational_roles`.`organization_id` = ?", org.id).order("`organizational_roles`.`followup_status` #{@sorting_directions[index]}")  
           end
         end
       end
@@ -177,9 +177,9 @@ module ApiHelper
           status = ["do_not_contact","completed"] if status == "finished"
           status = ["uncontacted","attempted_contact","contacted"] if status == "not_finished"
           if params[:assigned_to].present? && params[:assigned_to] == 'none'
-            people = people.where('organization_memberships.followup_status' => status)
+            people = people.where('organizational_roles.followup_status' => status)
           else 
-            people = people.joins(:organization_memberships).where('organization_memberships.followup_status' => status).where("`organization_memberships`.`person_id` = `ministry_person`.`personID` AND `organization_memberships`.`organization_id` = ?", org.id) 
+            people = people.joins(:organizational_roles).where('organizational_roles.followup_status' => status).where("`organizational_roles`.`person_id` = `ministry_person`.`personID` AND `organizational_roles`.`organization_id` = ?", org.id) 
           end
         end
       end

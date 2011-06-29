@@ -8,8 +8,8 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       @user2 = Factory.create(:user2_with_auxs)
       @user2.person.update_attributes(firstName: "Test", lastName: "Useroo")
       @user2.person.organization_memberships.destroy_all
-      @user2.person.organization_memberships.create(organization_id: @user.person.primary_organization.id, person_id: @user2.person.id, primary: 1, followup_status: "contacted")
-      @user2.person.organizational_roles.create(organization_id: @user.person.primary_organization.id, person_id: @user2.person.id, role_id: Role.leader.id)
+      @user2.person.organization_memberships.create(organization_id: @user.person.primary_organization.id, person_id: @user2.person.id, primary: 1)
+      @user2.person.organizational_roles.create(organization_id: @user.person.primary_organization.id, person_id: @user2.person.id, role_id: Role.leader.id, followup_status: "contacted")
       ContactAssignment.create(assigned_to_id: @user.person.id, person_id: @user2.person.id, organization_id: @user.person.organizations.first.id)
       ContactAssignment.create(assigned_to_id: @user2.person.id, person_id: @user.person.id, organization_id: @user.person.organizations.first.id)
       @access_token = Factory.create(:access_token, identity: @user.id)
@@ -85,10 +85,10 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       temp_org = @user.person.primary_organization.id
       @user2.person.organization_memberships.destroy_all
       @user.person.organization_memberships.destroy_all
-      @user2.person.organization_memberships.create(organization_id: temp_org, person_id: @user2.person.id, primary: 1, followup_status: "contacted")
-      @user2.person.organizational_roles.create(organization_id: temp_org, person_id: @user2.person.id, role_id: Role.leader.id)
-      @user.person.organization_memberships.create(organization_id: temp_org, person_id: @user.person.id, primary: 1, followup_status: "attempted_contact")
-      @user.person.organizational_roles.create(organization_id: temp_org, person_id: @user.person.id, role_id: Role.leader.id)
+      @user2.person.organization_memberships.create(organization_id: temp_org, person_id: @user2.person.id, primary: 1)
+      @user2.person.organizational_roles.create(organization_id: temp_org, person_id: @user2.person.id, role_id: Role.leader.id, followup_status: "contacted")
+      @user.person.organization_memberships.create(organization_id: temp_org, person_id: @user.person.id, primary: 1)
+      @user.person.organizational_roles.create(organization_id: temp_org, person_id: @user.person.id, role_id: Role.leader.id, followup_status: "attempted_contact")
       
       ContactAssignment.create(assigned_to_id: @user.person.id, person_id: @user2.person.id, organization_id: @user.person.organizations.first.id)
       ContactAssignment.create(assigned_to_id: @user2.person.id, person_id: @user.person.id, organization_id: @user.person.organizations.first.id)
@@ -185,8 +185,8 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       assert_equal(@json.length,1)
       person_basic_test(@json[0]['person'],@user2,@user)
       
-      @user.person.organization_memberships.where(organization_id: @user.person.primary_organization.id).first.update_attributes(followup_status: 'attempted_contact')
-      @user2.person.organization_memberships.where(organization_id: @user.person.primary_organization.id).first.update_attributes(followup_status: 'attempted_contact')
+      @user.person.organizational_roles.where(organization_id: @user.person.primary_organization.id).first.update_attributes(followup_status: 'attempted_contact')
+      @user2.person.organizational_roles.where(organization_id: @user.person.primary_organization.id).first.update_attributes(followup_status: 'attempted_contact')
       path = "/api/contacts.json?filters=status&values=contacted"
       get path, {'access_token' => @access_token.code}
       assert_response :success, @response.body
@@ -321,10 +321,10 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       temp_org = @user.person.primary_organization.id
       @user2.person.organization_memberships.destroy_all
       @user.person.organization_memberships.destroy_all
-      @user2.person.organization_memberships.create(organization_id: temp_org, person_id: @user2.person.id, primary: 1, followup_status: "contacted")
-      @user2.person.organizational_roles.create(organization_id: temp_org, person_id: @user2.person.id, role_id: Role.leader.id)
-      @user.person.organization_memberships.create(organization_id: temp_org, person_id: @user.person.id, primary: 1, followup_status: "attempted_contact")
-      @user.person.organizational_roles.create(organization_id: temp_org, person_id: @user.person.id, role_id: Role.leader.id)
+      @user2.person.organization_memberships.create(organization_id: temp_org, person_id: @user2.person.id, primary: 1)
+      @user2.person.organizational_roles.create(organization_id: temp_org, person_id: @user2.person.id, role_id: Role.leader.id, followup_status: "contacted")
+      @user.person.organization_memberships.create(organization_id: temp_org, person_id: @user.person.id, primary: 1)
+      @user.person.organizational_roles.create(organization_id: temp_org, person_id: @user.person.id, role_id: Role.leader.id, followup_status: "attempted_contact")
  
       ContactAssignment.create(assigned_to_id: @user.person.id, person_id: @user2.person.id, organization_id: @user.person.organizations.first.id)
       ContactAssignment.create(assigned_to_id: @user2.person.id, person_id: @user.person.id, organization_id: @user.person.organizations.first.id)
@@ -420,7 +420,7 @@ end
     assert_equal(json_person['picture'], user.person.picture)
     assert_equal(json_person['fb_id'], user.person.fb_uid.to_s)
     assert_equal(json_person['gender'], user.person.gender)
-    assert_equal(json_person['status'], user.person.organization_memberships.first.followup_status)
+    assert_equal(json_person['status'], user.person.organizational_roles.first.followup_status)
     person_mini_test(json_person['assignment']['assigned_to_person'][0],user2)
     person_mini_test(json_person['assignment']['person_assigned_to'][0],user2)
     assert_equal(json_person['request_org_id'], user.person.primary_organization.id)

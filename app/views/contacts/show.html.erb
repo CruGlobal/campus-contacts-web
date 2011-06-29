@@ -39,7 +39,7 @@
       <%= f.hidden_field :commenter_id %>
       <span class="statusline">
         <%= t('ma.contacts.show.status') %>: 
-        <%= f.select :status, OrganizationMembership::FOLLOWUP_STATUSES.collect {|s| [t("ma.contacts.statuses.#{s}"), s]}, value: @organization_membership.followup_status %><br/>
+        <%= f.select :status, OrganizationMembership::FOLLOWUP_STATUSES.collect {|s| [t("ma.contacts.statuses.#{s}"), s]}, value: @organizational_role.followup_status %><br/>
       </span>
       <div class="commentbox">
         <div class="textarea">
