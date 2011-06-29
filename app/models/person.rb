@@ -253,7 +253,7 @@ class Person < ActiveRecord::Base
     hash['gender'] = gender
     hash['fb_id'] = fb_uid.to_s unless fb_uid.nil?
     hash['picture'] = picture unless fb_uid.nil?
-    status = organization_memberships.where(organization_id: org_id.id) unless org_id.nil?
+    status = organizational_roles.where(organization_id: org_id.id) unless org_id.nil?
     hash['status'] = status.first.followup_status unless status.first.try(:followup_status).nil?
     hash['request_org_id'] = org_id.id unless org_id.nil?
     hash['assignment'] = assign_hash unless assign_hash.nil?

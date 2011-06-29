@@ -5,5 +5,7 @@ class Rejoicable < ActiveRecord::Base
   belongs_to :person
   OPTIONS = %w[spiritual_conversation prayed_to_receive gospel_presentation]
   
-
+  def to_s
+    I18n.t("ma.rejoicables.#{what}")
+  end
 end

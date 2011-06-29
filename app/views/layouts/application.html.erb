@@ -24,7 +24,7 @@
             <!-- <li><%#= link_to("Dashboard", user_root_path) %></li> -->
             <li><%= link_to(t('ma.nav.my_contacts'), "/contacts/mine") %></li>
             <li><%= link_to(t('ma.nav.all_contacts'), "/contacts") %></li>
-            <li><%= link_to(t('ma.nav.directory'), "/people") %></li>
+            <!-- <li><%= link_to(t('ma.nav.directory'), "/people") %></li> -->
             <% if can? :manage, SmsKeyword %>
               <li><%= link_to(t('ma.nav.keywords'), sms_keywords_path) %></li>
             <% end %>

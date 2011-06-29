@@ -6,6 +6,11 @@ class OrganizationMembership < ActiveRecord::Base
   validates_presence_of :person_id, :organization_id
   before_validation :set_primary, on: :create
   after_destroy :set_new_primary
+  before_create :set_start_date
+  
+  def followup_status
+    OrganizationalRole.where(person_id: person_id, organization_id: organization_id, role_id: Role.contact.id).first.try(:followup_status)
+  end
   
   def merge(other)
     OrganizationMembership.transaction do
@@ -30,20 +35,24 @@ class OrganizationMembership < ActiveRecord::Base
   
   protected
   
-  def set_primary
-    if person
-      self.primary = person.primary_organization ? false : true
-    end
-    true
-  end
-  
-  def set_new_primary
-    if self.primary?
-      if person && person.organization_memberships.present?
-        om = person.organization_memberships.detect {|o| !o.frozen?}
-        om.update_attribute(:primary, true) if om
+    def set_primary
+      if person
+        self.primary = person.primary_organization ? false : true
       end
+      true
     end
-    true
-  end
+
+    def set_new_primary
+      if self.primary?
+        if person && person.organization_memberships.present?
+          om = person.organization_memberships.detect {|o| !o.frozen?}
+          om.update_attribute(:primary, true) if om
+        end
+      end
+      true
+    end
+    
+    def set_start_date
+      self.start_date = Date.today
+    end
 end
