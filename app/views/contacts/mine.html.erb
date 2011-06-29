@@ -1,6 +1,6 @@
 <% provide :sidebar do %>
   <ul class="leftmenu">
-    <li class="selected"><%= link_to(t('ma.contacts.mine.my_contacts'), "") %></li>
+    <li class="selected"><%= link_to(t('ma.contacts.mine.my_contacts'), '#') %></li>
   </ul>
 <% end %>
 
@@ -9,6 +9,7 @@
 </div>
 
 <%= form_for ContactAssignment.new do |f| %>
+  <%= hidden_field_tag :assigned_to %>
 
 <div class="pagemenu">
   <ul class="pillmenu">
@@ -16,7 +17,7 @@
   </ul>
   <ul class="pillmenu">
     <li><%= link_to("Assign", "") %></li>
-    <li><%= link_to("Unassign", "") %></li>
+    <li><%= link_to("Unassign", "", id: 'bulk_unassign') %></li>
     <li><%= link_to("Add Contact", "") %></li>
   </ul>
   <ul class="pillmenu">
@@ -48,11 +49,8 @@
           
           <td class="controls">
             <%= link_to("Show","", :class => "icon magnify") %>
-            <%= link_to(t('ma.general.unassign'), contact_assignments_path(ids: person.id), remote: true, class: "icon unassign") %>
+            <%= link_to(t('ma.general.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign") %>
             <%= link_to("Delete","", :class => "icon delete") %>
-            <%#= link_to 'Show', person %>
-            <%#= link_to 'Edit', edit_person_path(person) %>
-            <%#= link_to 'Destroy', person, confirm: 'Are you sure?', method: :delete %>
           </td>
         </tr>
       <% end %>
