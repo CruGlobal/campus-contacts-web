@@ -1,11 +1,18 @@
-<h3><%= t('ma.people.index.leaders') %></h3>
-<%= link_to(t('ma.contacts.index.add'), '#', class: 'add-leader') %>
-<ul id="leaders">
-  <% @organization.leaders.each do |person| %>
-    <%= render 'contacts/leader', person: person %>
-  <% end %>
+<ul class="leftmenu">
+  <li class="heading selected">
+    <%= link_to(raw(t('ma.contacts.index.add') + " " + image_tag('add.png')), '#', class: 'add-leader listaction') %>
+    <h3><%= t('ma.people.index.leaders') %></h3>
+  </li>
+  <li>
+    <ul id="leaders" class="indent">
+      <% @organization.leaders.each do |person| %>
+        <%= render 'contacts/leader', person: person %>
+      <% end %>
+    </ul>
+  </li>
+  <li class="leader unassigned" data-id="">
+    <span class="name"><%= link_to(t('ma.contacts.index.unassigned'), contacts_path) %></span> (<span id="unassigned_count" class="count"><%= unassigned_people(@organization).count %></span>)
+  </li>
+  <li><span class="name"><strong><%= link_to(t('ma.contacts.index.all'), contacts_path(assigned_to: 'all')) %></strong></span> (<%= @organization.contacts.count %>)</li>
 </ul>
-
-<ul><li class="leader unassigned" data-id=""><span class="name"><%= link_to(t('ma.contacts.index.unassigned'), contacts_path) %></span> (<span id="unassigned_count" class="count"><%= unassigned_people(@organization).count %></span>)</li></ul>
-<ul><li><%= link_to(t('ma.contacts.index.all'), contacts_path(assigned_to: 'all')) %> (<%= @organization.contacts.count %>)</li></ul>
 <%= render 'leader_form' %>

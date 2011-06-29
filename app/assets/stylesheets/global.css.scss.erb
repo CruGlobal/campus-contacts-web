@@ -116,17 +116,25 @@ body {
 ul.leftmenu {
   @include clearlist;
   font-size: 11px;
+  h3 {
+    margin: 0;
+    font-size: 12px;
+  }
   ul.indent {
-    margin: 0 0 0 15px;
+    @include clearlist;
+    margin: 0 0 0px 10px;
     padding: 0;
     font-size: 11px;
     li a {
       font-weight: normal;
     }
+    li {
+      display: block;
+    }
   }
   li {
     display: block;
-    a {
+    a, h3 {
       display: block;
       line-height: 24px;
       padding-left: 10px;
@@ -136,12 +144,42 @@ ul.leftmenu {
       font-weight: bold;
     }
   }
+  > li {
+    padding-right: 15px;
+  }
   li.selected {
+    background: $light-gray;
     > a {
       background: $light-gray;
     }
   }
-  
+  a.delete_leader {
+    float: right;
+    background: silver;
+    color: $white;
+    width: 12px;
+    height: 12px;
+    line-height: 9px;
+    margin-top: 6px;
+    text-align: center;
+    font-weight: bold !important;
+    padding: 0;
+  }
+  a.delete_leader:hover {
+    background: $blue;
+    text-decoration: none;
+  }
+  .name {
+    display: inline-block;
+  }
+  .listaction {
+    float: right;
+    font-size: 10px;
+    font-weight: normal;
+    img {
+      vertical-align: middle;
+    }
+  }
 }
 
 #main {
@@ -274,6 +312,12 @@ ul.leftmenu {
   }
   td.name {
     width: 40%;
+  }
+}
+
+a.hide {
+  img {
+    vertical-align: middle;
   }
 }
 
