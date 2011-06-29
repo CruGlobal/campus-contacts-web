@@ -1,6 +1,6 @@
 class AddOgranizationIdToOrganizationalRole < ActiveRecord::Migration
   def up
-    add_column :organizational_roles, :organization_id, :integer
+#    add_column :organizational_roles, :organization_id, :integer
     
     OrganizationalRole.delete_all
     contact = Role.find_by_i18n('contact').id

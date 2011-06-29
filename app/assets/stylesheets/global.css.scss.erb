@@ -82,13 +82,14 @@ body {
 
 #topmenu {
   background: url('<%= asset_path('topmenubg.png') %>') repeat-x;
-  border-radius: 10px 10px 0 0;
+  border-radius: 0;
   height: 38px;
   a {
     border-right: 1px solid #FFFFFF;
     color: $white;
     line-height: 38px;
     padding: 0 13px;
+    font-size: 11px;
   }
   ul {
     @include clearlist;
@@ -124,6 +125,7 @@ ul.leftmenu {
     }
   }
   li {
+    display: block;
     a {
       display: block;
       line-height: 24px;
@@ -146,6 +148,10 @@ ul.leftmenu {
   margin-left: 205px;
 }
 
+
+#rest {
+  background: url('<%= asset_path('linebg.png') %>') repeat-y 0% 0%;
+}
 
 /* WIZARDRY */
 
@@ -232,6 +238,10 @@ ul.leftmenu {
 
 /* CONTACTS */
 
+.mine {
+  border-left: 1px solid $blue;
+}
+
 .contacts-main {
   width: 100%;
   th {
@@ -241,13 +251,23 @@ ul.leftmenu {
   }
   .check {
     width: 30px;
-    padding-left: 15px;
-    text-align: right;
+    padding-left: 15px !important;
+    text-align: left;
   }
   .contact_row td {
     border-bottom: 1px solid silver;
     padding: 3px 2px;
     font-size: 12px;
+  }
+  .contact_row:hover {
+    background: #f5ffc4;
+    cursor: pointer;
+  }
+  td.controls {
+    width: 75px;
+  }
+  td.name {
+    width: 40%;
   }
 }
 
@@ -263,6 +283,7 @@ ul.pillmenu {
   height: 24px;
   display: inline-block;
   border: 1px solid #808080;
+  margin-right: 8px;
   border-radius: 5px;
   background: url('<%= asset_path('pillbg.png') %>') repeat-x;
   overflow: hidden;
@@ -301,5 +322,13 @@ ul.pillmenu {
 }
 
 .icon {
-  background: url("/images/delete.png") no-repeat;
+  background: url("<%= asset_path('delete.png') %>") no-repeat 50% 50%;
+  text-indent: -1000px;
+  overflow: hidden;
+  width: 16px;
+  display: inline-block;
 }
+
+.icon.magnify {  background-image: url("<%= asset_path('magnify.png') %>");}
+.icon.unassign {  background-image: url("<%= asset_path('undo.png') %>");}
+.icon.delete {  background-image: url("<%= asset_path('delete.png') %>");}

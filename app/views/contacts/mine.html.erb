@@ -8,7 +8,12 @@
   <h1><%= image_tag("contact.png") %>Contacts</h1>
 </div>
 
+<%= form_for ContactAssignment.new do |f| %>
+
 <div class="pagemenu">
+  <ul class="pillmenu">
+    <li><%= check_box_tag 'check_all' %></li>
+  </ul>
   <ul class="pillmenu">
     <li><%= link_to("Assign", "") %></li>
     <li><%= link_to("Unassign", "") %></li>
@@ -19,11 +24,10 @@
   </ul>
 </div>
   
-<%= form_for ContactAssignment.new do |f| %>
+
   <table class="contacts-main" cellpadding="0" cellspacing="0">
-    <tr>
-    <tr>
-      <th class="check"><%= check_box_tag 'check_all' %></th>
+    <tr style="display: none;">
+      <th class="check"></th>
       <th class="name"><%= t('ma.contacts.mine.name') %></th>
       <th class="phone"><%= t('ma.contacts.mine.phone') %></th>
       <th class="email"><%= t('ma.contacts.mine.email') %></th>
@@ -34,13 +38,14 @@
       <% @people.each do |person| %>
         <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row">
           <td nowrap="nowrap" class="checkbox_cell check">
-            <%= image_tag('grippy.png', class: 'handle') %>
+            <%#= image_tag('grippy.png', class: 'handle') %>
             <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
           </td>
           <td class="name"><%= person %></td>
           <td class="phone"><%= person.phone_number %></td>
           <td class="email"><%= person.email %></td>
           <td class="year"><%= person.yearInSchool %></td>
+          
           <td class="controls">
             <%= link_to("Show","", :class => "icon magnify") %>
             <%= link_to(t('ma.general.unassign'), contact_assignments_path(ids: person.id), remote: true, class: "icon unassign") %>
@@ -54,3 +59,5 @@
     </tbody>
   </table>
 <% end %>
+
+<p>&nbsp;</p>
