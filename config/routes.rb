@@ -1,4 +1,10 @@
 Mh::Application.routes.draw do
+  resources :leaders do
+    collection do
+      post :search
+      post :add_person
+    end
+  end
   
   resources :rejoicables
 
@@ -31,9 +37,6 @@ Mh::Application.routes.draw do
   end
   
   resources :people do
-    collection do
-      post :search_leaders
-    end
     resources :organization_memberships do
       member do
         get :validate

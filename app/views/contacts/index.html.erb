@@ -21,8 +21,9 @@
     <% end %>
   </h3>
   <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
-  <%= t('ma.people.index.assign_to') %> 
-  <%= select_tag :assign_to, options_for_select(@organization.leaders.collect {|l| [l.to_s, l.id]}), include_blank: true %>
+  <%#= t('ma.people.index.assign_to') %> 
+  <%#= select_tag :assign_to, options_for_select(@organization.leaders.collect {|l| [l.to_s, l.id]}), include_blank: true %>
+  <%= hidden_field_tag :assign_to %>
   <table>
     <tr>
       <th><%= check_box_tag 'check_all' %></th>

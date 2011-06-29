@@ -35,10 +35,6 @@ class PeopleController < ApplicationController
     @person = Person.find(params[:id])
   end
   
-  def search_leaders
-    
-  end
-  
   # POST /people
   # POST /people.xml
   # def create

@@ -1,0 +1,4 @@
+$("#leader_search").dialog('close');
+$('#leaders').append('<%= j(render('contacts/leader', person: @person)) %>')
+$.fn.activateLeaderDroppable();
+$('#leader_search_results').html('');

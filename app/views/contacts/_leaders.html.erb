@@ -1,8 +1,8 @@
 <h3><%= t('ma.people.index.leaders') %></h3>
 <%= link_to(t('ma.contacts.index.add'), '#', class: 'add-leader') %>
-<ul>
+<ul id="leaders">
   <% @organization.leaders.each do |person| %>
-    <li class="leader" data-id="<%= person.id %>"><span class="name"><%= link_to(person, contacts_path(assigned_to: person.id)) %></span> (<span class="count"><%= person.contact_assignments.for_org(@organization).count %></span>)</li>
+    <%= render 'contacts/leader', person: person %>
   <% end %>
 </ul>
 
