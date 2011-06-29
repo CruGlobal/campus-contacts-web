@@ -4,7 +4,6 @@ class ContactsController < ApplicationController
   
   def index
     @organization = params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : current_organization
-    @organization ||= current_person.organizations.first
     unless @organization
       redirect_to user_root_path, error: t('ma.contacts.index.which_org')
       return false
