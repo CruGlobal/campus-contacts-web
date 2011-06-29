@@ -1,4 +1,13 @@
-<h1><%= @person %></h1>
+<% provide :sidebar do %>
+  <ul class="leftmenu">
+    <li class="selected"><%= link_to(t('ma.contacts.mine.my_contacts'), "") %></li>
+  </ul>
+<% end %>
+
+<div class="titlebar">
+  <h1><%= image_tag("contact.png") %><%= @person %></h1>
+</div>
+
 <div>
   <%# if @person.fb_uid.present? %>
     <%= image_tag("https://graph.facebook.com/#{@person.fb_uid}/picture?type=large", alt: '') %>
