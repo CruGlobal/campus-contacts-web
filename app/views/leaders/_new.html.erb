@@ -1,0 +1,44 @@
+<!-- Pick director form -->
+<%= form_tag add_person_leaders_path, :remote => true, :id => 'create_leader_form' do %>
+  <% if flash[:error] %>
+    <div class="flash error"><%= raw flash[:error] %></div>
+  <% end %>
+  <label for="leader_search_name">All of the following fields are required to add a leader:</label>
+  
+  
+  <%= fields_for @person do |pf| %>
+    <style>.modal_person_info td.left {width: 82px;}</style>
+    <table border="0" cellspacing="0" cellpadding="0" class="modal_person_info">
+    <tr>
+      <td class="left">First Name:</td>
+      <td><%= pf.text_field :firstName %></td>
+    </tr>
+    <tr>
+      <td class="left">Last Name:</td>
+      <td><%= pf.text_field :lastName %></td>
+    </tr>
+    <tr>
+      <td class="left">Gender:</td>
+      <td>
+        <%= pf.radio_button :gender, '1' %> Male 
+        <%= pf.radio_button :gender, '0' %> Female 
+      </td>
+    </tr>
+    <%= pf.fields_for @email do |af| %>
+    <tr>
+      <td class="left">Email:</td>
+      <td><%= af.text_field :email %></td>
+    </tr>
+    <% end %>
+    <%= pf.fields_for @phone do |af| %>
+    <tr>
+      <td class="left">Phone:</td>
+      <td><%= af.text_field :number %></td>
+    </tr>
+    <% end %>
+    </table>
+  <% end %>
+    
+  
+  <%= submit_tag "Add", :disable_with => "Adding..." %>
+<% end %>

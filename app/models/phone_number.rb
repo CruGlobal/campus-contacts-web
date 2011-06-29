@@ -1,6 +1,6 @@
 class PhoneNumber < ActiveRecord::Base
   belongs_to :person
-  validates_presence_of :person_id, :number, :location, on: :create, message: "can't be blank"
+  validates_presence_of :number, :location, on: :create, message: "can't be blank"
   
   before_validation :set_primary, on: :create
   after_destroy :set_new_primary

@@ -1,0 +1,11 @@
+<ul>
+  <% @people.each do |person| %>
+    <li><%= link_to("#{person} (#{person.user.try(:username)})", leaders_path(person_id: person.id), method: :post, remote: true) %></li>
+  <% end %>
+</ul>
+<% if @total > @people.length %>
+  <span style="font-size: 11px;">Showing <%= @people.length %> of <%= @total %> matches, keep typing or 
+  <%= link_to('click here to show all', '#', :class => 'search_show_all_link') %></span><br/>
+<% end %>
+<%= link_to('If the person you are looking for is not already in the system, click here to add them',
+              new_leader_path(name: params[:name]), :remote => true, :class => 'add_new_person') %>

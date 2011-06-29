@@ -1,4 +1,8 @@
 $ ->
+	$('a.delete_leader').live 'click', ->
+		li = $(this).parent()
+		li.fadeOut 'slow', ->
+			li.remove()
 	$("a.add-leader").live 'click', ->
 		$('#add_leader_form').hide()
 		$('#leader_search_form').show()
@@ -18,19 +22,35 @@ $ ->
 
 	$('#leader_search_name').autocomplete
 		source: (request, response)->
+			form = $('#leader_search_form')
 			$('#spinner_leader_search').show()
 			$.ajax
 				url: form.attr('action'), 
 				data: form.serialize(), 
-				dataType: 'script', 
 				type: 'POST',
 				success: (data)->
 					$('#leader_search_results').html(data)
 					$("#leader_search_results").show()
 				complete: ->
 					$('#spinner_leader_search').hide()
+				error: (xhr, status, error)->
+					alert(error)
 			response([]);
-	
+	$('.search_show_all_link').live 'click', ->
+		$('#spinner_leader_search').show()
+		$('#show_all').val('true')
+		form = $('#leader_search_form')
+		$.ajax
+			url: form.attr('action')
+			data: form.serialize(),
+			type: 'POST',
+			success: (data)->
+				$('#leader_search_results').html(data)
+				$("#leader_search_results").show()
+			complete: ->
+				$('#spinner_leader_search').hide()
+		false;
+		
 	$('#comment_submit').live 'click', ->
 		$(this).hide()
 		$('#spinner_comment').show()
@@ -77,6 +97,10 @@ $ ->
 			if length == 1
 				helper_text = '<%= I18n.t('ma.contacts.index.assign_people', count: 1) %>'
 			$('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'));
+
+	$.fn.activateLeaderDroppable()
+	
+$.fn.activateLeaderDroppable = () ->
 	$('.leader').droppable 
 		activeClass: 'ui-state-highlight'
 		drop: (event, ui) ->

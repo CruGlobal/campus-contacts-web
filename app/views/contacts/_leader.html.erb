@@ -1,0 +1,4 @@
+<li class="leader" data-id="<%= person.id %>">
+  <%= link_to('x', leader_path(person.id), method: :delete, remote: true, class: 'delete_leader') %>
+  <span class="name"><%= link_to(person, contacts_path(assigned_to: person.id)) %></span> (<span class="count"><%= person.contact_assignments.for_org(@organization).count %></span>)
+</li>
