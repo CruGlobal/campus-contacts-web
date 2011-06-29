@@ -24,8 +24,16 @@
   <div class="pagemenu">
     <ul class="pillmenu">
       <li><%= check_box_tag 'check_all' %></li>
+    </ul>
+    <ul class="pillmenu">
       <li><%= link_to(t('ma.contacts.index.hidden_questions'), '#', id: 'hidden_questions_link') %></li>
     </ul>
+    <ul class="pillmenu">
+      <li><%= link_to("Assign", "") %></li>
+      <li><%= link_to("Unassign", "", id: 'bulk_unassign') %></li>
+      <li><%= link_to("Add Contact", "") %></li>
+    </ul>
+    
     <div id="hidden_questions_div" style="display:none">
       Click on a question to add it back to the page 
       <ul id="hidden_questions">
