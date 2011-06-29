@@ -48,7 +48,7 @@
           <td class="year"><%= person.yearInSchool %></td>
           
           <td class="controls">
-            <%= link_to("Show","", :class => "icon magnify") %>
+            <%= link_to("Show", contact_path(person), :class => "icon magnify") %>
             <%= link_to(t('ma.general.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign") %>
             <%= link_to("Delete","", :class => "icon delete") %>
           </td>

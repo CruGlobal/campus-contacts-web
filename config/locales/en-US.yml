@@ -4,6 +4,10 @@
 
 "en-US":
   ma:
+    rejoicables:
+      spiritual_conversation: 'Spiritual Conversation' 
+      prayed_to_receive: 'Prayed To Receive' 
+      gospel_presentation: 'Gospel Presentation'
     nav:
       login: "Log In"
       logout: "Sign Out"

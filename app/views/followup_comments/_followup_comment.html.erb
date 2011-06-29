@@ -5,9 +5,16 @@
   <div class="commentcontent">
     <div class="meta">
       <strong><%= followup_comment.commenter %></strong>
-      <%= followup_comment.status %>
-      <span class="date"><%= l followup_comment.created_at %></span>
+      <%= t("ma.contacts.statuses.#{followup_comment.status}") %>
+      <span class="date"><%= time_ago_in_words(followup_comment.created_at) %></span>
     </div>
+    <% if followup_comment.rejoicables.present? %>
+      <ul class="rejoicables">
+        <% followup_comment.rejoicables.each do |r| %>
+          <li><%= r %></li>
+        <% end %>
+      </ul>
+    <% end %>
     <p><%= followup_comment.comment %></p>
   </div>
 </li>
