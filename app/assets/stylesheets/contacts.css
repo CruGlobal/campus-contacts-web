@@ -2,4 +2,4 @@
   Place all the styles related to the matching controller here.
   They will automatically be included in application.css.
 */
-.handle {cursor: pointer;}
+.handle {cursor: pointer; vertical-align: middle; margin-left: 5px;}
