@@ -1,5 +1,7 @@
 class OauthController < ApplicationController
-  
+  require 'api_helper'
+  include ApiHelper
+    
   def authorize
       if current_user
         render :action=>"authorize"
@@ -17,6 +19,8 @@ class OauthController < ApplicationController
     end
     
     def done
-      render json: '{"status":"done", "code":"' + params[:code] + '"}'
+      json_output = '{"error": {"message": "You do not have a leader role in MissionHub.", "code": "25"}}'
+      json_output = '{"status":"done", "code":"' + params[:code] + '"}' if current_user.person.leader_in?(current_user.person.primary_organization)
+      render json: json_output
     end
 end

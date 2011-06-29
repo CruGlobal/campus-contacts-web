@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/mattrw89/rack-oauth2-server.git
-  revision: 945bebdc18811eb9804f60f1a284a05a4dcd31d8
+  revision: 7edd808f2b0fa212de4a22abf564caeb13a32760
   branch: active_record
   specs:
     trumant-rack-oauth2-server (2.2.1.1)
@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: git://github.com/rails/rails.git
-  revision: 54531b87b623f57b5949479fc6e759e16a411adf
+  revision: c093ea9f4edb9ef3973afc76f062cda357054f01
   branch: 3-1-stable
   specs:
     actionmailer (3.1.0.rc4)
@@ -35,7 +35,7 @@ GIT
     activerecord (3.1.0.rc4)
       activemodel (= 3.1.0.rc4)
       activesupport (= 3.1.0.rc4)
-      arel (~> 2.1.1)
+      arel (~> 2.1.3)
       tzinfo (~> 0.3.27)
     activeresource (3.1.0.rc4)
       activemodel (= 3.1.0.rc4)
@@ -87,7 +87,7 @@ GEM
     addressable (2.2.6)
     ancestry (1.2.4)
       activerecord (>= 2.2.2)
-    arel (2.1.1)
+    arel (2.1.3)
     awesome_print (0.4.0)
     bcrypt-ruby (2.1.4)
     builder (3.0.0)
@@ -182,8 +182,9 @@ GEM
     rack-test (0.6.0)
       rack (>= 1.0)
     railroady (1.0.2)
+    raindrops (0.7.0)
     rake (0.8.7)
-    rdoc (3.6.1)
+    rdoc (3.7)
     redis (2.2.1)
     redis-namespace (1.0.3)
       redis (< 3.0.0)
@@ -211,13 +212,14 @@ GEM
     tilt (1.3.2)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
-    tzinfo (0.3.28)
+    tzinfo (0.3.29)
     uglifier (1.0.0)
       execjs (>= 0.3.0)
       multi_json (>= 1.0.2)
-    unicorn (3.7.0)
-      kgio (~> 2.3)
+    unicorn (4.0.0)
+      kgio (~> 2.4)
       rack
+      raindrops (~> 0.6)
     vegas (0.1.8)
       rack (>= 1.0.0)
     warden (1.0.4)
