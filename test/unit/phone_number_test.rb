@@ -4,7 +4,7 @@ class PhoneNumberTest < ActiveSupport::TestCase
   # Replace this with your real tests.
   should belong_to(:person)
   should validate_presence_of(:number)
-  should validate_presence_of(:person_id)
+  # should validate_presence_of(:person_id)
   should validate_presence_of(:location)
 
   context "a phone number" do

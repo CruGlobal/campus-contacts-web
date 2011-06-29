@@ -58,8 +58,8 @@ class ContactsController < ApplicationController
   def show
     @person = Person.find(params[:id])
     @organization = current_organization
-    @organization_membership = OrganizationMembership.where(organization_id: @organization, person_id: @person).first
-    unless @organization_membership
+    @organizational_role = OrganizationalRole.where(organization_id: @organization, person_id: @person, role_id: Role.contact.id).first
+    unless @organizational_role
       redirect_to '/404.html' and return
     end
     @followup_comment = FollowupComment.new(organization: @organization, commenter: current_person, contact: @person)

@@ -162,8 +162,8 @@ FactoryGirl.define do
        Factory(:interest_2, person: f)
        Factory(:location, person: f)
        org = Factory(:organization)
-       Factory(:organization_membership, person: f, organization: org, followup_status: "attempted_contact", primary: 1, validated: 0)
-       Factory(:organizational_role, person: f, organization: org, role: Factory(:role))
+       Factory(:organization_membership, person: f, organization: org, primary: 1, validated: 0)
+       Factory(:organizational_role, person: f, organization: org, followup_status: "attempted_contact", role: Factory(:role))
     end
   end
   
@@ -175,11 +175,11 @@ FactoryGirl.define do
   
   factory :organizational_role do 
     association :organization
+    followup_status "attempted_contact"
   end
   
   factory :organization_membership do 
     association :organization
-    followup_status "attempted_contact"
   end
   
   factory :contact_assignment do 
