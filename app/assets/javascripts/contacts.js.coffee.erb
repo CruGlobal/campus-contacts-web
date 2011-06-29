@@ -1,4 +1,13 @@
 $ ->
+	$('#contacts_controller.mine #bulk_unassign').live 'click', ->
+		if $('.id_checkbox:checked').length > 0
+			$.rails.handleRemote($('#new_contact_assignment'))
+			$('.id_checkbox:checked').closest('tr').fadeOut()
+		$('#check_all').prop('checked', false)
+		false
+	$('#contacts_controller.mine a.unassign').live 'click', ->
+		$(this).closest('tr').fadeOut()
+		false
 	$('a.delete_leader').live 'click', ->
 		li = $(this).parent()
 		li.fadeOut 'slow', ->

@@ -1,6 +1,5 @@
 <% provide :sidebar do %><%= render 'contacts/leaders' %><% end %>
-<%= link_to(t('ma.nav.back_to_dashboard'), user_root_path) %>
-<%= link_to(t('ma.nav.hidden_questions'), '#', id: 'hidden_questions_link') %>
+<%= link_to(t('ma.contacts.index.hidden_questions'), '#', id: 'hidden_questions_link') %>
 <div id="hidden_questions_div" style="display:none">
   Click on a question to add it back to the page 
   <ul id="hidden_questions">
