@@ -5,7 +5,7 @@
   <div class="commentcontent">
     <div class="meta">
       <strong><%= followup_comment.commenter %></strong>
-      <%= t("ma.contacts.statuses.#{followup_comment.status}") %>
+      <span class="status"><%= t("ma.contacts.statuses.#{followup_comment.status}") %></span>
       <span class="date"><%= time_ago_in_words(followup_comment.created_at) %></span>
     </div>
     <% if followup_comment.rejoicables.present? %>
