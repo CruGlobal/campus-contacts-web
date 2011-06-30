@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
     return nil unless user_signed_in?
     org = current_person.organizations.find_by_id(session[:current_organization_id]) 
     unless org
-      org = current_person.primary_organization
+      org = current_person.primary_organization || current_person.organizations.first
       session[:current_organization_id] = org.id
     end
     org
