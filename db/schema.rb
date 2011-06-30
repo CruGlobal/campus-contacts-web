@@ -183,9 +183,9 @@ ActiveRecord::Schema.define(:version => 20110629054522) do
     t.datetime "attachment_updated_at"
   end
 
-  add_index "mh_answers", ["answer_sheet_id"], :name => "index_mh_answers_on_answer_sheet_id"
-  add_index "mh_answers", ["question_id"], :name => "index_mh_answers_on_question_id"
-  add_index "mh_answers", ["short_value"], :name => "index_mh_answers_on_short_value"
+  add_index "mh_answers", ["answer_sheet_id"], :name => "index_ma_answers_on_answer_sheet_id"
+  add_index "mh_answers", ["question_id"], :name => "index_ma_answers_on_question_id"
+  add_index "mh_answers", ["short_value"], :name => "index_ma_answers_on_short_value"
 
   create_table "mh_conditions", :force => true do |t|
     t.integer "question_sheet_id", :null => false
@@ -245,10 +245,10 @@ ActiveRecord::Schema.define(:version => 20110629054522) do
     t.integer  "max_length"
   end
 
-  add_index "mh_elements", ["conditional_id"], :name => "index_mh_elements_on_conditional_id"
-  add_index "mh_elements", ["position"], :name => "index_mh_elements_on_question_sheet_id_and_position_and_page_id"
-  add_index "mh_elements", ["question_grid_id"], :name => "index_mh_elements_on_question_grid_id"
-  add_index "mh_elements", ["slug"], :name => "index_mh_elements_on_slug"
+  add_index "mh_elements", ["conditional_id"], :name => "index_ma_elements_on_conditional_id"
+  add_index "mh_elements", ["position"], :name => "index_ma_elements_on_question_sheet_id_and_position_and_page_id"
+  add_index "mh_elements", ["question_grid_id"], :name => "index_ma_elements_on_question_grid_id"
+  add_index "mh_elements", ["slug"], :name => "index_ma_elements_on_slug"
 
   create_table "mh_email_templates", :force => true do |t|
     t.string   "name",       :limit => 1000, :null => false
@@ -259,7 +259,7 @@ ActiveRecord::Schema.define(:version => 20110629054522) do
     t.datetime "updated_at"
   end
 
-  add_index "mh_email_templates", ["name"], :name => "index_mh_email_templates_on_name", :length => {"name"=>255}
+  add_index "mh_email_templates", ["name"], :name => "index_ma_email_templates_on_name", :length => {"name"=>767}
 
   create_table "mh_friend", :force => true do |t|
     t.string   "name"
@@ -337,6 +337,25 @@ ActiveRecord::Schema.define(:version => 20110629054522) do
     t.string "name"
   end
 
+  create_table "ministry_activity", :primary_key => "ActivityID", :force => true do |t|
+    t.string   "status",                   :limit => 2
+    t.datetime "periodBegin"
+    t.datetime "periodEnd_deprecated"
+    t.string   "strategy",                 :limit => 2
+    t.string   "transUsername",            :limit => 50
+    t.integer  "fk_targetAreaID"
+    t.integer  "fk_teamID"
+    t.string   "statusHistory_deprecated", :limit => 2
+    t.string   "url"
+    t.string   "facebook"
+    t.integer  "sent_teamID"
+  end
+
+  add_index "ministry_activity", ["fk_targetAreaID"], :name => "index1"
+  add_index "ministry_activity", ["fk_teamID"], :name => "index2"
+  add_index "ministry_activity", ["periodBegin"], :name => "index3"
+  add_index "ministry_activity", ["strategy"], :name => "index5"
+
   create_table "ministry_locallevel", :primary_key => "teamID", :force => true do |t|
     t.string   "name",                   :limit => 100
     t.string   "lane",                   :limit => 10
@@ -361,6 +380,16 @@ ActiveRecord::Schema.define(:version => 20110629054522) do
     t.string   "hasMultiRegionalAccess"
     t.string   "dept_id"
   end
+
+  create_table "ministry_missional_team_member", :force => true do |t|
+    t.integer "personID"
+    t.integer "teamID"
+    t.boolean "is_people_soft"
+    t.boolean "is_leader"
+  end
+
+  add_index "ministry_missional_team_member", ["personID"], :name => "personID"
+  add_index "ministry_missional_team_member", ["teamID"], :name => "teamID"
 
   create_table "ministry_newaddress", :primary_key => "addressID", :force => true do |t|
     t.string   "address1"
