@@ -49,6 +49,7 @@ class ApplicationController < ActionController::Base
   
   def current_organization
     return nil unless user_signed_in?
+    return nil if current_person.organizations.empty?
     org = current_person.organizations.find_by_id(session[:current_organization_id]) 
     unless org
       org = current_person.primary_organization || current_person.organizations.first
