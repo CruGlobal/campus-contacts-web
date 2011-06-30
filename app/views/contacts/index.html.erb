@@ -11,6 +11,8 @@
         <% if @assigned_to.present? %>
           <%= t('.responses_assigned_to', assigned_to: @assigned_to) %>
           <%= link_to(t('.show_all'), contacts_path(assigned_to: 'all')) %>
+        <% elsif params[:dnc] == 'true' %>
+          <%= t('.dnc_contacts') %>
         <% else %>
           <%= t('.unassigned_responses') %>
         <% end %>
