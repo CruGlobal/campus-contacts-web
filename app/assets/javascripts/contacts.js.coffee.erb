@@ -1,5 +1,64 @@
 $ ->
-	$('#contacts_controller.mine #bulk_unassign').live 'click', ->
+	$('#assign_search .assign_button').live 'click', ->
+		leader = $('.leftmenu .leader[data-id=' + $('#assign_to').val() + ']')
+		$.fn.assignTo(leader)
+		$('#assign_search').dialog('destroy')
+		
+	$('#assign_search .leader a').live 'click', (e)->
+		e.preventDefault()
+		leader = $('.leftmenu .leader[data-id=' + $(this).closest('li').attr('data-id') + ']')
+		$('#assign_to').val(leader.attr('data-id'))
+	false
+		
+	$('#assign_search .leader_search_name').keyup ->
+		name = $('#assign_search .leader_search_name').val()
+		$('#assign_search ul li').each ->
+			regex = new RegExp('.*' + name + '.*', 'i')
+			if regex.test($('.name', $(this)).text())
+				$(this).show()
+			else
+				$(this).hide()
+				
+	$('#assign_to_me, #assign_to_unassigned').live 'click', ->
+		$('#assign_search .leader_search').hide()
+		$('#assign_search .org_search').hide()
+		$('#assign_search .assign_button').show()
+		
+	$('#assign_to_leader').live 'click', ->
+		$('#assign_search .leader_search').show()
+		$('#assign_search .org_search').hide()
+		$('#assign_search .assign_button').hide()
+		
+	$('#assign_to_org').live 'click', ->
+		$('#assign_search .leader_search').hide()
+		$('#assign_search .org_search').show()
+		$('#assign_search .assign_button').hide()
+		
+	$('.assign_to_radio').live 'click', -> 
+		$('#assign_to').val($(this).val())
+		
+	$("#contacts_controller a.assign").live 'click', ->
+		if $('.id_checkbox:checked').length > 0
+			$('#assign_to_me').click()
+			el = $('#assign_search')
+			# $('#add_leader_form').hide()
+			# $('#leader_search_form').show()
+			# $('#leader_search_name').val('')
+			# $("#leader_search_results").hide()
+			# form = $('#leader_search_form')
+			el.dialog
+				resizable: false,
+				height:444,
+				width:400,
+				modal: true,
+				buttons: 
+					Cancel: ->
+						$(this).dialog('destroy')
+		else
+			alert("<%= I18n.t('ma.people.index.none_checked') %>")
+		false
+
+	$('#contacts_controller #bulk_unassign').live 'click', ->
 		if $('.id_checkbox:checked').length > 0
 			$.rails.handleRemote($('#new_contact_assignment'))
 			$('.id_checkbox:checked').closest('tr').fadeOut()
@@ -23,13 +82,13 @@ $ ->
 		li = $(this).parent()
 		li.fadeOut 'slow', ->
 			li.remove()
+
 	$("a.add-leader").live 'click', ->
 		$('#add_leader_form').hide()
 		$('#leader_search_form').show()
 		$('#leader_search_name').val('')
 		$("#leader_search_results").hide()
 		el = $('#leader_search')
-		form = $('#leader_search_form')
 		el.dialog
 			resizable: false,
 			height:444,
@@ -113,15 +172,15 @@ $ ->
 					$('.id_checkbox[value=' + id + ']').prop('checked', true)
 		helper: (event) ->
 			length = if $(this).next('input').prop('checked') then $('.id_checkbox:checked').length else 1
-			helper_text = '<%= I18n.t('ma.contacts.index.assign_people', count: 0) %>'.replace('0', length)
+			helper_text = "<%= I18n.t('ma.contacts.index.assign_people', count: 0) %>".replace('0', length)
 			if length == 1
-				helper_text = '<%= I18n.t('ma.contacts.index.assign_people', count: 1) %>'
+				helper_text = "<%= I18n.t('ma.contacts.index.assign_people', count: 1) %>"
 			$('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'));
 
 	$.fn.activateLeaderDroppable()
 	
 $.fn.activateLeaderDroppable = () ->
-	$('.leader').droppable 
+	$('.leftmenu .leader').droppable 
 		activeClass: 'ui-state-highlight'
 		drop: (event, ui) ->
 			leader = $(this)

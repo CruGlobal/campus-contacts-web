@@ -10,7 +10,7 @@
       <% end %>
     </ul>
   </li>
-  <li class="leader unassigned">
+  <li class="leader unassigned" data-id="">
     <span class="name"><%= link_to(t('ma.contacts.index.unassigned'), contacts_path) %></span> (<span id="unassigned_count" class="count"><%= unassigned_people(@organization).count %></span>)
   </li>
   <li><span class="name"><strong><%= link_to(t('ma.contacts.index.all'), contacts_path(assigned_to: 'all')) %></strong></span> (<%= OrganizationalRole.not_dnc.where(organization_id: @organization.id).count %>)</li>

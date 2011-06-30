@@ -36,10 +36,11 @@
         leaders: Leaders
         assign_to: "Assign To:"
         assigned_to: "Assigned To"
-        all_responses: "Showing everyone who responded to a survey"
-        responses_assigned_to: "Showing people assigned to %{assigned_to}"
-        unassigned_responses: "Showing Unassigned people"
-        none_checked: "Hey moron! You didn't select any contacts to assign."
+        all_responses: "Showing all contacts"
+        responses_assigned_to: "Showing contacts assigned to %{assigned_to}"
+        unassigned_responses: "Showing unassigned contacts"
+        none_checked: "You didn't select any contacts to assign."
+        show_all: 'Click here to show all'
     org_membership:
       confirm_delete: "Are you sure you want to dissociate yourself from %{org}"
     welcome:

@@ -2,24 +2,21 @@
   <%= render 'contacts/leaders' %>
 <% end %>
 
-
-
 <%= form_for ContactAssignment.new do |f| %>
   <div class="titlebar">  
     <h1>
-      <% if params[:assigned_to] == 'none' %>
-        <%= t('ma.people.index.unassigned_responses') %>
+      <% if params[:assigned_to] == 'all' %>
+        <%= t('ma.people.index.all_responses') %>
       <% else %>
         <% if @assigned_to.present? %>
           <%= t('ma.people.index.responses_assigned_to', assigned_to: @assigned_to) %>
-          <%= link_to(t('ma.people.index.show_all'), params.except(:assigned_to)) %>
+          <%= link_to(t('ma.people.index.show_all'), contacts_path(assigned_to: 'all')) %>
         <% else %>
-          <%= t('ma.people.index.all_responses') %>
+          <%= t('ma.people.index.unassigned_responses') %>
         <% end %>
       <% end %>
     </h3>
   </div>
-  
   
   <div class="pagemenu">
     <ul class="pillmenu">
@@ -29,7 +26,7 @@
       <li><%= link_to(t('ma.contacts.index.hidden_questions'), '#', id: 'hidden_questions_link') %></li>
     </ul>
     <ul class="pillmenu">
-      <li><%= link_to("Assign", "") %></li>
+      <li><%= link_to("Assign", "", class: 'assign') %></li>
       <li><%= link_to("Unassign", "", id: 'bulk_unassign') %></li>
       <li><%= link_to("Add Contact", "") %></li>
     </ul>
@@ -96,4 +93,5 @@
       <% end %>
     </tbody>
   </table>
+  <%= render 'assign' %>
 <% end %>
