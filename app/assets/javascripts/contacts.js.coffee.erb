@@ -1,4 +1,14 @@
 $ ->
+	$('#survey_answers_link').live 'click', ->
+		$('#survey_answers').dialog
+			resizable: false,
+			height:444,
+			width:600,
+			modal: true,
+			buttons: 
+				Cancel: ->
+					$(this).dialog('destroy')
+		false
 	$('#assign_search .assign_button').live 'click', ->
 		leader = $('.leftmenu .leader[data-id=' + $('#assign_to').val() + ']')
 		$.fn.assignTo(leader)

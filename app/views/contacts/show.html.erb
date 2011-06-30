@@ -29,6 +29,15 @@
         <p><%= raw @person.current_address.display_html %></p>
         <%= link_to('Google Map', @person.current_address.map_link, target: '_blank', :class => "maplink") %>
       <% end %>
+      <p><%= link_to('Survey Answers', '', id: 'survey_answers_link') %></p>
+      <div id="survey_answers" style="display:none" title="Survey Answers">
+        <ul>
+          <% @organization.questions.where("#{PageElement.table_name}.hidden" => false).flatten.uniq.each do |q| %>
+            <% answer_sheet = @person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)} %>
+            <li><%= q.label %>: <%= q.display_response(answer_sheet) %></li>
+          <% end %>
+        </ul>
+      </div>
     </div>
   </div>
 

@@ -7,4 +7,10 @@ class FollowupCommentsController < ApplicationController
       end
     end if params[:rejoicables]
   end
+  
+  def destroy
+    @followup_comment = FollowupComment.find(params[:id])
+    @followup_comment.destroy
+    render nothing: true
+  end
 end
