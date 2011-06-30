@@ -10,10 +10,10 @@
       <% end %>
     </ul>
   </li>
-  <li class="leader unassigned" data-id="">
+  <li class="leader unassigned">
     <span class="name"><%= link_to(t('ma.contacts.index.unassigned'), contacts_path) %></span> (<span id="unassigned_count" class="count"><%= unassigned_people(@organization).count %></span>)
   </li>
   <li><span class="name"><strong><%= link_to(t('ma.contacts.index.all'), contacts_path(assigned_to: 'all')) %></strong></span> (<%= OrganizationalRole.not_dnc.where(organization_id: @organization.id).count %>)</li>
-  <li><span class="name"><strong><%= link_to(t('ma.contacts.index.dnc'), contacts_path(dnc: true)) %></strong></span> (<%= OrganizationalRole.dnc.where(organization_id: @organization.id).count %>)</li>
+  <li class="leader dnc"><span class="name"><strong><%= link_to(t('ma.contacts.index.dnc'), contacts_path(dnc: true)) %></strong></span> (<span id="dnc_count" class="count"><%= OrganizationalRole.dnc.where(organization_id: @organization.id).count %></span>)</li>
 </ul>
-<%= render 'leader_form' %>
+<%= render 'contacts/leader_form' %>

@@ -5,8 +5,19 @@ $ ->
 			$('.id_checkbox:checked').closest('tr').fadeOut()
 		$('#check_all').prop('checked', false)
 		false
-	$('#contacts_controller.mine a.unassign').live 'click', ->
+		
+	$('#contacts_controller .controls a.delete').live 'click', (e)->
 		$(this).closest('tr').fadeOut()
+		if $('#leaders')[0]?
+			$('.id_checkbox', $(this).closest('tr')).prop('checked', true)
+			$.fn.assignTo($('.leader.dnc'), true)
+		false
+		
+	$('#contacts_controller .controls a.unassign').live 'click', (e)->
+		$(this).closest('tr').fadeOut()
+		if $('#leaders')[0]?
+			$('.id_checkbox', $(this).closest('tr')).prop('checked', true)
+			$.fn.assignTo($('.leader.unassigned'), true)
 		false
 	$('a.delete_leader').live 'click', ->
 		li = $(this).parent()
@@ -118,7 +129,7 @@ $.fn.activateLeaderDroppable = () ->
 			$('#assign_to').val(leader.attr('data-id'))
 			$.fn.assignTo(leader)
 			
-$.fn.assignTo = (leader) ->
+$.fn.assignTo = (leader, skip_remote) ->
 	leader_name = $('.name a', leader).text()
 	$('.id_checkbox:checked').each ->
 		row = $('tr[data-id=' + $(this).val() + ']')
@@ -132,12 +143,13 @@ $.fn.assignTo = (leader) ->
 					if $(this).text() == assigned_to.html() || (leader.hasClass('unassigned') && assigned_to.html() == '')
 						count = $(this).closest('.leader').find('.count')
 						count.html(Number(count.html()) - 1)
-			if leader.hasClass('unassigned')
+			if leader.hasClass('unassigned') or leader.hasClass('dn')
 				assigned_to.text('') 
 			else
 				assigned_to.text(leader_name) 
 		# hide people assigned to someone other than the current
 		if $('#assigned_to').val() != 'all' && $('#assigned_to').val() != leader.attr('data-id')
 			$(this).closest('tr').hide();
-	$.rails.handleRemote($('#new_contact_assignment'))
+	unless skip_remote
+		$.rails.handleRemote($('#new_contact_assignment'))
 	$('#assign_to').val('')

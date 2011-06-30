@@ -49,6 +49,8 @@
   <table class="contacts-main" cellpadding="0" cellspacing="0">
     <tr>
       <th></th>
+      <th><%= t('ma.people.index.first_name') %></th>
+      <th><%= t('ma.people.index.last_name') %></th>
       <% @questions.each do |q| %>
         <th class="<%= dom_id(q) %>">
           <%= q.label %>
@@ -65,15 +67,30 @@
             <%= image_tag('grippy.png', class: 'handle') %>
             <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
           </td>
+          <td><%= person.firstName %></td>
+          <td><%= person.lastName %></td>
           <% @questions.each do |q| %>
-            <% answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)} %>
-            <td class="<%= dom_id(q) %>"><%= q.display_response(answer_sheet) %></td>
+            <td class="<%= dom_id(q) %>">
+              <% case q.slug %>
+              <% when 'email' %>
+                <%= person.email %>
+              <% when 'phone_number' %>
+                <%= person.phone_number %>
+              <% else %>
+                <% answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)} %><%= q.display_response(answer_sheet) %>
+              <% end %>
+            </td>
           <% end %>
           <td id="assigned_to_<%= person.id %>" class="assigned_to"><%= ContactAssignment.where(person_id: person.id, organization_id: @organization.id).first.try(:assigned_to) %></td>
-          <td>
-            <%#= link_to 'Show', person %>
-            <%#= link_to 'Edit', edit_person_path(person) %>
-            <%#= link_to 'Destroy', person, confirm: 'Are you sure?', method: :delete %>
+
+          <td class="controls">
+            <%= link_to("Show", contact_path(person), :class => "icon magnify") %>
+            <% if params[:assigned_to].present? || params[:dnc] == 'true' %>
+              <%= link_to(t('ma.general.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign") %>
+            <% end %>
+            <% unless params[:dnc] == 'true' %>
+              <%= link_to("Delete", organizational_role_path(:id => OrganizationalRole.where(:person_id => person.id, :organization_id => current_organization.id, :role_id => Role.contact.id).first.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete", :confirm => t('ma.contacts.index.delete_confirm')) %>
+            <% end %>
           </td>
         </tr>
       <% end %>

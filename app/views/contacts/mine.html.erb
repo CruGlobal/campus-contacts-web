@@ -11,20 +11,19 @@
 <%= form_for ContactAssignment.new do |f| %>
   <%= hidden_field_tag :assigned_to %>
 
-<div class="pagemenu">
-  <ul class="pillmenu">
-    <li><%= check_box_tag 'check_all' %></li>
-  </ul>
-  <ul class="pillmenu">
-    <li><%= link_to("Assign", "") %></li>
-    <li><%= link_to("Unassign", "", id: 'bulk_unassign') %></li>
-    <li><%= link_to("Add Contact", "") %></li>
-  </ul>
-  <!-- <ul class="pillmenu">
-    <li><%= link_to("Show", "") %></li>
-  </ul> -->
-</div>
-  
+  <div class="pagemenu">
+    <ul class="pillmenu">
+      <li><%= check_box_tag 'check_all' %></li>
+    </ul>
+    <ul class="pillmenu">
+      <li><%= link_to("Assign", "", id: 'assign_button') %></li>
+      <li><%= link_to("Unassign", "", id: 'bulk_unassign') %></li>
+      <li><%= link_to("Add Contact", "") %></li>
+    </ul>
+    <!-- <ul class="pillmenu">
+      <li><%= link_to("Show", "") %></li>
+    </ul> -->
+  </div>
 
   <table class="contacts-main" cellpadding="0" cellspacing="0">
     <tr style="display: none;">
@@ -50,7 +49,7 @@
           <td class="controls">
             <%= link_to("Show", contact_path(person), :class => "icon magnify") %>
             <%= link_to(t('ma.general.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign") %>
-            <%= link_to("Delete","", :class => "icon delete") %>
+            <%= link_to("Delete", organizational_role_path(:id => OrganizationalRole.where(:person_id => person.id, :organization_id => current_organization.id, :role_id => Role.contact.id).first.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete", :confirm => t('ma.contacts.index.delete_confirm')) %>
           </td>
         </tr>
       <% end %>

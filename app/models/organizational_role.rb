@@ -4,8 +4,8 @@ class OrganizationalRole < ActiveRecord::Base
   belongs_to :organization
   scope :leaders, where(role_id: Role.leader_ids)
   scope :active, where(deleted: false)
-  scope :not_dnc, where("followup_status <> 'do_not_call'")
-  scope :dnc, where("followup_status = 'do_not_call'")
+  scope :not_dnc, where("followup_status <> 'do_not_contact'")
+  scope :dnc, where("followup_status = 'do_not_contact'")
   before_create :set_start_date, :set_contact_uncontacted
   after_save :set_end_date_if_deleted
   

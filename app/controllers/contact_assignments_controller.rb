@@ -11,6 +11,15 @@ class ContactAssignmentsController < ApplicationController
     else
       
     end
-    render nothing: true
+    # if you're assigning this person and their status is DNC, change it back to their prior status or uncontacted
+    OrganizationalRole.where(person_id: params[:ids], organization_id: @organization.id, role_id: Role.contact.id, followup_status: 'do_not_contact').each do |role|
+      role.followup_status = FollowupComment.where(contact_id: role.person_id, organization_id: role.organization_id).where("status <> 'do_not_contact'").order('created_at').last.try(:status) ||
+                             'uncontacted'
+      role.save!
+      @reload_sidebar = true
+    end
+    unless @reload_sidebar
+      render nothing: true
+    end
   end
 end

@@ -43,6 +43,12 @@ class Person < ActiveRecord::Base
     primary_phone_number.try(:number)
   end
   
+  def phone_number=(val)
+    phone_number = primary_phone_number || phone_numbers.new
+    phone_number.number = val
+    phone_number.save!
+  end
+  
   def firstName
     preferredName.blank? ? self[:firstName].try(:strip) : preferredName.try(:strip)
   end

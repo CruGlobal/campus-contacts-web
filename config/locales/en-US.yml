@@ -31,6 +31,8 @@
 
     people: 
       index:
+        first_name: 'Frist Name'
+        last_name: 'Last Name'
         leaders: Leaders
         assign_to: "Assign To:"
         assigned_to: "Assigned To"
@@ -122,6 +124,7 @@
         unassigned: 'Unassigned'
         all: 'All'
         dnc: 'Do Not Contact'
+        delete_confirm: You are about to send this contact to the "Do Not Contact" list. If that's not what you meant to do, click cancel.
         assign_people:
           one: Assign 1 person
           other: "Assign %{count} people"

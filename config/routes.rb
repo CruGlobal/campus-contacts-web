@@ -6,6 +6,8 @@ Mh::Application.routes.draw do
     end
   end
   
+  resources :organizational_roles
+  
   resources :rejoicables
 
   resources :followup_comments
