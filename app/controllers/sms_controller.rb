@@ -19,7 +19,7 @@ class SmsController < ApplicationController
           question = send_next_survey_question(keyword, @text.person, @text.phone_number)
           unless question
             # survey is done. send final message
-            msg = keyword.post_survey_message.present? ? keyword.post_survey_message : t('ma.contacts.thanks.message')
+            msg = keyword.post_survey_message.present? ? keyword.post_survey_message : t('contacts.thanks.message')
             send_message(msg, @text.phone_number)
           end
         end
@@ -44,7 +44,7 @@ class SmsController < ApplicationController
       keyword = SmsKeyword.find_by_keyword(params[:message].split(' ').first.downcase)
       
       if !keyword || !keyword.active?
-        msg = t('ma.sms.keyword_inactive')
+        msg = t('sms.keyword_inactive')
       else
         msg =  keyword.initial_response.sub(/\{\{\s*link\s*\}\}/, "http://#{request.host_with_port}/m/#{Base62.encode(@text.id)}")
         msg += ' No internet? reply with \'i\''

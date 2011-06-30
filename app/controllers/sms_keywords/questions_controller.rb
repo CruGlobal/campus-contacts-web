@@ -62,7 +62,7 @@ class SmsKeywords::QuestionsController < ApplicationController
     respond_to do |wants|
       if !@question.new_record?
         wants.html do
-          flash[:notice] = t('ma.questions.create.notice')
+          flash[:notice] = t('questions.create.notice')
           redirect_to(:back) 
         end
         wants.xml  { render xml: @question, status: :created, location: @question }

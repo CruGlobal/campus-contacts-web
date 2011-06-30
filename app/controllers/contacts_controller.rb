@@ -5,7 +5,7 @@ class ContactsController < ApplicationController
   def index
     @organization = params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : current_organization
     unless @organization
-      redirect_to user_root_path, error: t('ma.contacts.index.which_org')
+      redirect_to user_root_path, error: t('contacts.index.which_org')
       return false
     end
     @question_sheets = @organization.question_sheets
@@ -13,10 +13,12 @@ class ContactsController < ApplicationController
     @hidden_questions = @organization.questions.where("#{PageElement.table_name}.hidden" => true).flatten.uniq
     if params[:dnc] == 'true'
       @people = @organization.dnc_contacts.order('lastName, firstName')
+    elsif params[:completed] == 'true'
+      @people = @organization.completed_contacts.order('lastName, firstName')
     else
       if params[:assigned_to]
         if params[:assigned_to] == 'all'
-          @people = @organization.contacts.order('lastName, firstName')
+          @people = @organization.inprogress_contacts.order('lastName, firstName')
         else
           @assigned_to = Person.find(params[:assigned_to])
           @people = Person.order('lastName, firstName').includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
@@ -28,7 +30,12 @@ class ContactsController < ApplicationController
   end
   
   def mine
-    @people = Person.order('lastName, firstName').includes(:assigned_tos).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id)
+    @people = Person.order('lastName, firstName').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.role_id' => Role.contact.id)
+    if params[:status] == 'completed'
+      @people = @people.where("organizational_roles.followup_status = 'completed'")
+    else
+      @people = @people.where("organizational_roles.followup_status <> 'completed'")
+    end
   end
   
   def new

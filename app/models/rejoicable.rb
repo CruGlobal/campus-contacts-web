@@ -6,6 +6,6 @@ class Rejoicable < ActiveRecord::Base
   OPTIONS = %w[spiritual_conversation prayed_to_receive gospel_presentation]
   
   def to_s
-    I18n.t("ma.rejoicables.#{what}")
+    I18n.t("rejoicables.#{what}")
   end
 end

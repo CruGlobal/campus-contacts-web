@@ -55,7 +55,7 @@ $ ->
 					Cancel: ->
 						$(this).dialog('destroy')
 		else
-			alert("<%= I18n.t('ma.people.index.none_checked') %>")
+			alert("<%= I18n.t('contacts.index.none_checked') %>")
 		false
 
 	$('#contacts_controller #bulk_unassign').live 'click', ->
@@ -149,7 +149,7 @@ $ ->
 			$.fn.assignTo($('li[data-id=' + person_id + ']'))
 			$('#check_all').prop('checked', false)
 		else
-			alert("<%= I18n.t('ma.people.index.none_checked') %>")
+			alert("<%= I18n.t('contacts.index.none_checked') %>")
 	$('#contacts_controller .index a.hide').live 'click', ->
 		$('.' + $(this).attr('data-class')).fadeOut()
 	
@@ -172,9 +172,9 @@ $ ->
 					$('.id_checkbox[value=' + id + ']').prop('checked', true)
 		helper: (event) ->
 			length = if $(this).next('input').prop('checked') then $('.id_checkbox:checked').length else 1
-			helper_text = "<%= I18n.t('ma.contacts.index.assign_people', count: 0) %>".replace('0', length)
+			helper_text = "<%= I18n.t('contacts.index.assign_people', count: 0) %>".replace('0', length)
 			if length == 1
-				helper_text = "<%= I18n.t('ma.contacts.index.assign_people', count: 1) %>"
+				helper_text = "<%= I18n.t('contacts.index.assign_people', count: 1) %>"
 			$('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'));
 
 	$.fn.activateLeaderDroppable()

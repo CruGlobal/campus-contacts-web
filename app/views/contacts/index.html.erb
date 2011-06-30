@@ -6,13 +6,13 @@
   <div class="titlebar">  
     <h1>
       <% if params[:assigned_to] == 'all' %>
-        <%= t('ma.people.index.all_responses') %>
+        <%= t('.all_responses') %>
       <% else %>
         <% if @assigned_to.present? %>
-          <%= t('ma.people.index.responses_assigned_to', assigned_to: @assigned_to) %>
-          <%= link_to(t('ma.people.index.show_all'), contacts_path(assigned_to: 'all')) %>
+          <%= t('.responses_assigned_to', assigned_to: @assigned_to) %>
+          <%= link_to(t('.show_all'), contacts_path(assigned_to: 'all')) %>
         <% else %>
-          <%= t('ma.people.index.unassigned_responses') %>
+          <%= t('.unassigned_responses') %>
         <% end %>
       <% end %>
     </h3>
@@ -23,7 +23,7 @@
       <li><%= check_box_tag 'check_all' %></li>
     </ul>
     <ul class="pillmenu">
-      <li><%= link_to(t('ma.contacts.index.hidden_questions'), '#', id: 'hidden_questions_link') %></li>
+      <li><%= link_to(t('.hidden_questions'), '#', id: 'hidden_questions_link') %></li>
     </ul>
     <ul class="pillmenu">
       <li><%= link_to("Assign", "", class: 'assign') %></li>
@@ -40,21 +40,21 @@
   </div>
   
   <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
-  <%#= t('ma.people.index.assign_to') %> 
+  <%#= t('.assign_to') %> 
   <%#= select_tag :assign_to, options_for_select(@organization.leaders.collect {|l| [l.to_s, l.id]}), include_blank: true %>
   <%= hidden_field_tag :assign_to %>
   <table class="contacts-main" cellpadding="0" cellspacing="0">
     <tr>
       <th class="checkbox_cell"></th>
-      <th><%= t('ma.people.index.first_name') %></th>
-      <th><%= t('ma.people.index.last_name') %></th>
+      <th><%= t('.first_name') %></th>
+      <th><%= t('.last_name') %></th>
       <% @questions.each do |q| %>
         <th class="<%= dom_id(q) %>">
           <%= q.label %>
           <%= link_to(image_tag("close.png"), hide_sms_keyword_question_path(@organization.keywords.first, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
         </th>
       <% end %>
-      <th><%= t('ma.people.index.assigned_to') %></th>
+      <th><%= t('.assigned_to') %></th>
       <th></th>
     </tr>
     <tbody id="contacts_table">
@@ -83,10 +83,10 @@
           <td class="controls">
             <%= link_to("Show", contact_path(person), :class => "icon magnify") %>
             <% if params[:assigned_to].present? || params[:dnc] == 'true' %>
-              <%= link_to(t('ma.general.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign") %>
+              <%= link_to(t('general.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign") %>
             <% end %>
             <% unless params[:dnc] == 'true' %>
-              <%= link_to("Delete", organizational_role_path(:id => OrganizationalRole.where(:person_id => person.id, :organization_id => current_organization.id, :role_id => Role.contact.id).first.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete", :confirm => t('ma.contacts.index.delete_confirm')) %>
+              <%= link_to("Delete", organizational_role_path(:id => OrganizationalRole.where(:person_id => person.id, :organization_id => current_organization.id, :role_id => Role.contact.id).first.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete", :confirm => t('.delete_confirm')) %>
             <% end %>
           </td>
         </tr>

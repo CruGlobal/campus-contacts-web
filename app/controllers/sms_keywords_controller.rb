@@ -45,7 +45,7 @@ class SmsKeywordsController < ApplicationController
 
     respond_to do |format|
       if @sms_keyword.save
-        format.html { redirect_to(session[:wizard] ? wizard_path : user_root_path, notice: t('ma.keywords.flash.created')) }
+        format.html { redirect_to(session[:wizard] ? wizard_path : user_root_path, notice: t('keywords.flash.created')) }
         format.xml  { render xml: @sms_keyword, status: :created, location: @sms_keyword }
       else
         format.html { render action: "new" }
@@ -61,7 +61,7 @@ class SmsKeywordsController < ApplicationController
 
     respond_to do |format|
       if @sms_keyword.update_attributes(params[:sms_keyword])
-        format.html { redirect_to(root_path, notice: t('ma.keywords.flash.updated')) }
+        format.html { redirect_to(root_path, notice: t('keywords.flash.updated')) }
         format.xml  { head :ok }
       else
         format.html { render action: "edit" }
@@ -86,7 +86,7 @@ class SmsKeywordsController < ApplicationController
     def check_org
       unless current_person.primary_organization
         session[:return_to] = params
-        redirect_to person_organization_memberships_path(current_person), notice: t('ma.keywords.flash.pick_org')
+        redirect_to person_organization_memberships_path(current_person), notice: t('keywords.flash.pick_org')
         return false
       end
     end
