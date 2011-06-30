@@ -1,6 +1,6 @@
 class SessionsController < Devise::SessionsController
   def new
-    render layout: 'login'
+    render layout: 'splash'
   end
   
   def destroy
