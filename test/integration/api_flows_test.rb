@@ -177,7 +177,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       assert_equal(@json.length, 1)
     end
     
-    should "be able to view their contacts filtered by status=contacted" do
+    should "be able to view their contacts filtered by status" do
       path = "/api/contacts.json?filters=status&values=contacted"
       get path, {'access_token' => @access_token.code}
       assert_response :success, @response.body
@@ -204,7 +204,65 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,0)
+      
+      # use filter and sort by status
+      path = "/api/contacts.json?filters=status&values=attempted_contact&sort=status&direction=asc"
+      get path, {'access_token' => @access_token.code}
+      assert_response :success, @response.body
+      @json = ActiveSupport::JSON.decode(@response.body)
+      assert_equal(@json.length,2)
     end    
+    
+    
+    should "not make the iPhone contacts category queries fail" do
+      # contacts assigned to me (My contacts) on mobile app
+      path = "/api/contacts.json?filters=status&values=not_finished&assigned_to=#{@user.person.id}&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
+      get path, {'access_token' => @access_token.code}
+      assert_response :success, @response.body
+      @json = ActiveSupport::JSON.decode(@response.body)
+      assert_equal(@json.length,1)
+      assert_equal(@json[0]['person']['id'], @user2.person.id)
+
+      # my completed contacts on mobile app
+      path = "/api/contacts.json?filters=status&values=finished&assigned_to=#{@user.person.id}&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
+      get path, {'access_token' => @access_token.code}
+      assert_response :success, @response.body
+      @json = ActiveSupport::JSON.decode(@response.body)
+      assert_equal(@json.length,0)
+      
+      @user2.person.organizational_roles.where(organization_id: @user.person.primary_organization.id).first.update_attributes(followup_status: 'completed')
+      path = "/api/contacts.json?filters=status&values=finished&assigned_to=#{@user.person.id}&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
+      get path, {'access_token' => @access_token.code}
+      assert_response :success, @response.body
+      @json = ActiveSupport::JSON.decode(@response.body)
+      assert_equal(@json.length,1)
+      assert_equal(@json[0]['person']['id'], @user2.person.id)
+      
+      # unassigned contacts mobile app query
+      path = "/api/contacts.json?filters=status&values=not_finished&assigned_to=none&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
+      get path, {'access_token' => @access_token.code}
+      assert_response :success, @response.body
+      @json = ActiveSupport::JSON.decode(@response.body)
+      assert_equal(@json.length,0)  
+      
+      @user.person.organizational_roles.where(organization_id: @user.person.primary_organization.id).first.update_attributes(followup_status: 'uncontacted')      
+      path = "/api/contacts.json?filters=status&values=not_finished&assigned_to=none&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
+      get path, {'access_token' => @access_token.code}
+      assert_response :success, @response.body
+      @json = ActiveSupport::JSON.decode(@response.body)
+      assert_equal(@json.length,0)  
+      
+      @user.person.organizational_roles.first.update_attributes(role_id: 2)
+      @user2.person.organizational_roles.first.update_attributes(role_id: 2)
+      ContactAssignment.destroy_all
+      path = "/api/contacts.json?filters=status&values=not_finished&assigned_to=none&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
+      get path, {'access_token' => @access_token.code}
+      assert_response :success, @response.body
+      @json = ActiveSupport::JSON.decode(@response.body)
+      assert_equal(@json.length,1)
+      assert_equal(@json[0]['person']['id'], @user.person.id)
+    end
+    
     
     should "be able to view their contacts with sorting" do
       path = "/api/contacts.json?sort=time&direction=desc"
@@ -234,6 +292,9 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
 
       person_basic_test(@json[0]['person'], @user2, @user)
     end
+    
+    
+    
         
     should "be able to view a specific contact" do
       path = "/api/contacts/#{@user.person.id}"
@@ -258,6 +319,9 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       person_full_test(@json['people'][0]['person'], @user, @user2)
       form_test(@json['people'][0]['form'], @questions, @answer_sheet)
     end
+    
+    
+    
     
     should "be able to add a comment to a contact" do 
       path = "/api/followup_comments/"

@@ -44,7 +44,7 @@ module ApiErrors
   end
   class IncorrectPermissionsError < ApiError
     def initialize
-      super :incorrect_permissions, "You do not have a leader role in MissionHub.", "25"
+      super :incorrect_permissions, "You currently do not have leader permissions in MissionHub. Contact your a local MissionHub administrator.", "25"
     end
   end
   class ContactAssignmentDeleteParamsError < ApiError
