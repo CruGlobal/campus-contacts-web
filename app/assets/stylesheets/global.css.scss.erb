@@ -292,7 +292,7 @@ ul.leftmenu {
   th {
     text-align: left;
     background: #c7dff0;
-    padding: 3px 0;
+    padding: 3px 2px;
   }
   .check {
     width: 30px;
@@ -313,6 +313,9 @@ ul.leftmenu {
   }
   td.name {
     width: 40%;
+  }
+  .checkbox_cell {
+    width: 50px;
   }
 }
 
@@ -498,3 +501,74 @@ ul.pillmenu {
 .icon.magnify {  background-image: url("<%= asset_path('magnify.png') %>");}
 .icon.unassign {  background-image: url("<%= asset_path('undo.png') %>");}
 .icon.delete {  background-image: url("<%= asset_path('delete.png') %>");}
+
+
+/* SPLASH PAGE */
+
+.splash {
+  max-width: 991px !important;
+  #logoline {
+    margin: 0 25px;
+  }
+  #logoline #logo {
+    background: url("<%= asset_path("splash/mh_logo.png") %>") no-repeat 0 0;
+    width: 168px;
+    height: 85px;
+    display: block;
+  }
+  #roundwrap {
+    border-radius: 35px;
+    -moz-border-radius: 35px;
+    -webkit-border-radius: 35px;
+    box-shadow: 0 0 8px #bbb inset;
+    padding: 25px;
+  }
+  .salespush {
+    font-size: 22px;
+    text-align: right;
+    margin-top: 15px;
+  }
+  .learnmore {
+    text-transform: uppercase;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+  .getstartedbt {
+    background: url("<%= asset_path("splash/btn_gs.png") %>") no-repeat 0 0;
+    color: #FFFFFF;
+    display: inline-block;
+    font-weight: bold;
+    height: 72px;
+    line-height: 62px;
+    padding-left: 29px;
+    text-align: left;
+    text-transform: uppercase;
+    width: 220px;
+  }
+  .getstartedbt:hover {
+    background-image: url("<%= asset_path("splash/btn_gshover.png") %>");
+    text-decoration: none;
+  }
+  h1.headlinetext {
+    font-size: 29px;
+    color: #0078AE;
+    margin-bottom: 0px;
+    text-align: right;
+  }
+  span.babyblue {
+    color: #5794c0;
+  }
+  h4.subheadlinetext {
+    text-align: right;
+    color: #B3B3B3;
+    font-size: 21px;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    font-weight: normal;
+  }
+  .footer {
+    text-align: right;
+    color: #B3B3B3;
+    margin: 20px;
+  }
+}

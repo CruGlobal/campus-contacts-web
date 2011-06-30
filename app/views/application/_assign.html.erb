@@ -1,0 +1,25 @@
+<div id="assign_search" style="display:none" title="Assign To:">
+  <%= radio_button_tag :assign_to, current_person.id, true, id: 'assign_to_me', class: 'assign_to_radio' %> Me
+  <%= radio_button_tag :assign_to, '', false, id: 'assign_to_unassigned', class: 'assign_to_radio' %> Unassigned
+  <%= radio_button_tag :assign_to, '', false, id: 'assign_to_leader', class: 'assign_to_radio' %> Leader
+  <!-- <%= radio_button_tag :assign_to, '', false, id: 'assign_to_org', class: 'assign_to_radio' %> Campus / Organization -->
+  <div class="leader_search" style="display:none">
+    Type to find a leader then click on the leader's name
+    <%= text_field_tag :leader_name, '', class: 'leader_search_name', autocomplete: 'off' %>
+    <div class="leaders_list">
+      <ul>
+        <% @organization.leaders.each do |person| %>
+          <li class="leader" data-id="<%= person.id %>"><span class="name"><%= link_to(person, contacts_path(assigned_to: person.id)) %></span></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <div class="org_search" style="display:none">
+    <%= text_field_tag :org_name, '', class: 'org_search_name', autocomplete: 'off' %>
+  </div>
+  
+  <div id="add_leader_form">
+    
+  </div>
+  <%= button_tag 'Assign', class: 'assign_button' %>
+</div>

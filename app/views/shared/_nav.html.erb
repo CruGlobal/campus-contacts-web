@@ -9,8 +9,8 @@
               <% current_person.organization_memberships.each do |om| %>
                 <li>
                   <%= om.organization %> 
-                  <%= link_to(t('ma.nav.go_to'), set_current_organization_membership_path(om)) %>
-                  <%= link_to(t('ma.nav.make_default'), set_primary_organization_membership_path(om)) %>
+                  <%= link_to(t('nav.go_to'), set_current_organization_membership_path(om)) %>
+                  <%= link_to(t('nav.make_default'), set_primary_organization_membership_path(om)) %>
                 </li>
               <% end %>
             </ul>
@@ -20,13 +20,13 @@
         <% end %>
       </div>
       <!-- <div class="item">
-        <%= link_to(t('ma.nav.profile'), current_person) %>
+        <%= link_to(t('nav.profile'), current_person) %>
       </div> -->
     <% end %>
     <div class="item">
-      <%= link_to(t('ma.nav.logout'), destroy_user_session_path) %>
+      <%= link_to(t('nav.logout'), destroy_user_session_path) %>
     </div>   
   <% else %>
-    <%= link_to(t('ma.nav.login'), new_user_session_path) %>
+    <%= link_to(t('nav.login'), new_user_session_path) %>
   <% end %>
 </div>

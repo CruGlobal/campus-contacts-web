@@ -28,9 +28,9 @@
 <%= link_to('Preview Form', contact_form_path(keyword: @keyword.keyword), target: '_blank')%>
 |
 <% if session[:wizard] %>
-  <%= link_to(t('ma.nav.back_to_wizard'), wizard_path) %>
+  <%= link_to(t('nav.back_to_wizard'), wizard_path) %>
 <% else %>
-  <%= link_to(t('ma.nav.back_to_dashboard'), user_root_path) %>
+  <%= link_to(t('nav.back_to_dashboard'), user_root_path) %>
 <% end %>
 <script type="text/javascript" charset="utf-8">
   $(function() {

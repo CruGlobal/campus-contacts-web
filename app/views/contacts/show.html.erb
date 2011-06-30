@@ -1,6 +1,6 @@
 <% provide :sidebar do %>
   <ul class="leftmenu">
-    <li class="selected"><%= link_to(t('ma.contacts.mine.my_contacts'), "") %></li>
+    <li class="selected"><%= link_to(t('contacts.mine.my_contacts'), "") %></li>
   </ul>
 <% end %>
 
@@ -20,10 +20,10 @@
     </div>
     <div>
       <% if @person.phone_number.present? %>
-        <%= t('ma.contacts.show.phone_number') %>: <%= number_to_phone(@person.phone_number) %><br/>
+        <%= t('contacts.show.phone_number') %>: <%= number_to_phone(@person.phone_number) %><br/>
       <% end %>
       <% if @person.email.present? %>
-        <%= t('ma.contacts.show.email') %>: <%= mail_to(@person.email) %><br/>
+        <%= t('contacts.show.email') %>: <%= mail_to(@person.email) %><br/>
       <% end %>
       <% if @person.current_address %>
         <p><%= raw @person.current_address.display_html %></p>
@@ -38,19 +38,19 @@
       <%= f.hidden_field :contact_id %>
       <%= f.hidden_field :commenter_id %>
       <span class="statusline">
-        <%= t('ma.contacts.show.status') %>: 
-        <%= f.select :status, OrganizationMembership::FOLLOWUP_STATUSES.collect {|s| [t("ma.contacts.statuses.#{s}"), s]}, value: @organizational_role.followup_status %><br/>
+        <%= t('contacts.show.status') %>: 
+        <%= f.select :status, OrganizationMembership::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]}, value: @organizational_role.followup_status %><br/>
       </span>
       <div class="commentbox">
         <div class="textarea">
           <%= f.text_area :comment, :rows => "2", placeholder: 'Add comments here...' %><br/>
         </div>
-        <%= f.submit t('ma.contacts.show.add_comment'), id: 'comment_submit' %><%= spinner('comment') %>
+        <%= f.submit t('contacts.show.add_comment'), id: 'comment_submit' %><%= spinner('comment') %>
         <div class="rejoiceablebox">
-          <%= link_to(t('ma.contacts.show.attach_rejoicable'), '#', id: 'add_rejoicable') %><br/>
+          <%= link_to(t('contacts.show.attach_rejoicable'), '#', id: 'add_rejoicable') %><br/>
           <div id="rejoicable_fields" style="display:none">
             <% Rejoicable::OPTIONS.each do |option| %>
-              <%= check_box_tag 'rejoicables[]', option %> <%= t("ma.rejoicables.#{option}") %>
+              <%= check_box_tag 'rejoicables[]', option %> <%= t("rejoicables.#{option}") %>
               <br/>
             <% end %>
           </div>

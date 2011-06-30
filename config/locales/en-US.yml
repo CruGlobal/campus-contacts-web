@@ -3,144 +3,151 @@
 # Use this as the base for the locale file of your language.
 
 "en-US":
-  ma:
-    rejoicables:
-      spiritual_conversation: 'Spiritual Conversation' 
-      prayed_to_receive: 'Prayed To Receive' 
-      gospel_presentation: 'Gospel Presentation'
-    nav:
-      login: "Log In"
-      logout: "Sign Out"
-      profile: 'My Profile'
-      back_to_wizard: "I'm done. Take me back to the Wizard"
-      go_to: 'go to'
-      make_default: 'make default'
-      my_contacts: 'My Contacts'
-      all_contacts: 'All Contacts'
-      directory: 'Directory'
-      keywords: "Keywords"
-    general:
-      keyword: "Keyword"
-      status: "Status"
-      edit: "Edit"
-      back: "Back"
-      remove: 'Remove'
-      hide: 'hide'
-      unassign: 'Unassign'
-      add_a_leader: 'Add a leader'
+  rejoicables:
+    spiritual_conversation: 'Spiritual Conversation' 
+    prayed_to_receive: 'Prayed To Receive' 
+    gospel_presentation: 'Gospel Presentation'
+  nav:
+    login: "Log In"
+    logout: "Sign Out"
+    profile: 'My Profile'
+    back_to_wizard: "I'm done. Take me back to the Wizard"
+    go_to: 'go to'
+    make_default: 'make default'
+    my_contacts: 'My Contacts'
+    all_contacts: 'All Contacts'
+    directory: 'Directory'
+    keywords: "Keywords"
+  general:
+    keyword: "Keyword"
+    status: "Status"
+    edit: "Edit"
+    back: "Back"
+    remove: 'Remove'
+    hide: 'hide'
+    unassign: 'Unassign'
+    add_a_leader: 'Add a leader'
 
-    people: 
-      index:
-        leaders: Leaders
-        assign_to: "Assign To:"
-        assigned_to: "Assigned To"
-        all_responses: "Showing everyone who responded to a survey"
-        responses_assigned_to: "Showing people assigned to %{assigned_to}"
-        unassigned_responses: "Showing Unassigned people"
-        none_checked: "Hey moron! You didn't select any contacts to assign."
-    org_membership:
-      confirm_delete: "Are you sure you want to dissociate yourself from %{org}"
-    welcome:
-      index:
-        title_top: "Welcome to MissionHub!"
-        title_top_mobile: "MissionHub"
-        go_home: 'Go to your dashboard'
-        request_key: "Click here to request an sms keyword."
-        get_started: "Get Started"
-      wizard:
-        welcome: Welcome
-        verify_identity: Verify Your Identity
-        request_keyword: Request a Keyword
-        designate_leaders: Designate Leaders
-        create_survey: Create Survey
-        back: Back
-        next: Next
-        welcome_paragraph: "Welcome to MissionHub! We're so glad you decided to take ministry seriously."
-        verify_paragraph: "Before you can go any further, we need to know if you have AIDS. This is a one-time test."
-        verify_with_relay: "Verify With Relay"
-        not_found_paragraph: "We weren't able to find a record of you associated with any of the organizations or ministries using MissionHub."
-        keyword_paragraph:
-          "One of the coolest features of MissionHub is the ability for you to interact with people using text messages. For this to work you have
-          to choose a keyword that is unique to you that people will send messages to. If that sounds confusing, you're over the age of 30."
-        request_keyword_link: "Click here to request a keyword. We'll return you to this wizard when you're done."
-        survey_paragraph:
-          "Now that you've requested a keyword, you're going to want to create a set of questions to ask people. Think along the lines of a freshmand survey or a 
-          basic contact card"
-        create_survey_link: "Click here to create your survey. We'll return you to this wizard when you're done."
-        leaders_header: "Give access to other leaders"
-        leaders_paragraph:
-          "This part is optional. Odds are decent that there are other people you work with who you'd like to give the ability to manage the keyword you set up
-           as well as the contacts that will come from people responding to your survey. This step lets you add those people. Except we haven't programmed it quite yet."
-        skip_step: "Skip this step"
-      home:
-        title_top: "Welcome to MissionHub!"
-        keywords: "Keywords"
-        request_another_key: "Click here to request another sms keyword."
-        manage_questions: "Manage Questions"
-        edit_keyword: 'Edit Keyword'
-        your_orgs: 'Your Organizational Involvements'
-        edit_orgs: 'Edit your organizational involvements.'
-        follow_up: 
-          one:   '1 Person to Follow-up'
-          other: '%{count} People to Follow-up'
-        delete: "Delete"
-    questions:
-      create:
-        notice: 'Question was successfully created.'
-      form: 
-        what_question_type: What type of question would you like to ask?
-        short_answer: 'Short Answer'
-        multiple_choice: 'Multiple Choice'
-        checkboxes: 'Checkboxes'
-        dropdown: 'Dropdown'
-    keywords:
-      edit:
-        heading: Editing Keyword
-      flash:
-        created: 'Keyword request was successfully created.'
-        updated: 'Keyword was successfully updated.'
-        pick_org: 'Please pick which organization you are associated with'
-      form:
-        keyword: 'Keyword'
-        keyword_tip: "This is what people will type into their phone. For example: when you say 'text <strong>ccc</strong> to 75572', 'ccc' is the keyword."
-        explanation: 'Please explain what you plan to use this keyword for.'
-        initial_response: 'What response should we send back to people when they text in? If you want the person to complete a survey, the response MUST include {{ link }}'
-        post_survey_message: 'What message would you like to show after the person has completed the survey?'
-        chartfield: 'A keyword costs $7/month. Please enter a chart field to be billed for this keyword.'
-        organization: "You are associated with more than one organization or ministry. Which one would you like to associate this keyword with?"
-    contacts:
-      statuses:
-        uncontacted: Uncontacted
-        attempted_contact: Attempted Contact
-        contacted: Contacted
-        do_not_contact: Do Not Contact
-        completed: Completed
-      index:
-        which_org: 'You need to choose which organization you want to do folow-up from'
-        add: 'Add'
-        hidden_questions: 'Hidden Questions'
-        unassigned: 'Unassigned'
-        all: 'All'
-        dnc: 'Do Not Contact'
-        assign_people:
-          one: Assign 1 person
-          other: "Assign %{count} people"
-      mine:
-        my_contacts: "My Contacts"
-        name: Name
-        phone: Phone Number
-        email: Email
-        year: Year
-      show:
-        phone_number: "Phone #"
-        email: "Email"
-        status: "Status"
-        attach_rejoicable: 'Attach a Rejoicable'
-        add_comment: 'Add Comment'
-      thanks:
-        message: Thank you for your interest.
-    sms:
-      keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
+  people: 
+    index:
+  org_membership:
+    confirm_delete: "Are you sure you want to dissociate yourself from %{org}"
+  welcome:
+    index:
+      title_top: "Welcome to MissionHub!"
+      title_top_mobile: "MissionHub"
+      go_home: 'Go to your dashboard'
+      request_key: "Click here to request an sms keyword."
+      get_started: "Get Started"
+    wizard:
+      welcome: Welcome
+      verify_identity: Verify Your Identity
+      request_keyword: Request a Keyword
+      designate_leaders: Designate Leaders
+      create_survey: Create Survey
+      back: Back
+      next: Next
+      welcome_paragraph: "Welcome to MissionHub! We're so glad you decided to take ministry seriously."
+      verify_paragraph: "Before you can go any further, we need to know if you have AIDS. This is a one-time test."
+      verify_with_relay: "Verify With Relay"
+      not_found_paragraph: "We weren't able to find a record of you associated with any of the organizations or ministries using MissionHub."
+      keyword_paragraph:
+        "One of the coolest features of MissionHub is the ability for you to interact with people using text messages. For this to work you have
+        to choose a keyword that is unique to you that people will send messages to. If that sounds confusing, you're over the age of 30."
+      request_keyword_link: "Click here to request a keyword. We'll return you to this wizard when you're done."
+      survey_paragraph:
+        "Now that you've requested a keyword, you're going to want to create a set of questions to ask people. Think along the lines of a freshmand survey or a 
+        basic contact card"
+      create_survey_link: "Click here to create your survey. We'll return you to this wizard when you're done."
+      leaders_header: "Give access to other leaders"
+      leaders_paragraph:
+        "This part is optional. Odds are decent that there are other people you work with who you'd like to give the ability to manage the keyword you set up
+         as well as the contacts that will come from people responding to your survey. This step lets you add those people. Except we haven't programmed it quite yet."
+      skip_step: "Skip this step"
+    home:
+      title_top: "Welcome to MissionHub!"
+      keywords: "Keywords"
+      request_another_key: "Click here to request another sms keyword."
+      manage_questions: "Manage Questions"
+      edit_keyword: 'Edit Keyword'
+      your_orgs: 'Your Organizational Involvements'
+      edit_orgs: 'Edit your organizational involvements.'
+      follow_up: 
+        one:   '1 Person to Follow-up'
+        other: '%{count} People to Follow-up'
+      delete: "Delete"
+  questions:
+    create:
+      notice: 'Question was successfully created.'
+    form: 
+      what_question_type: What type of question would you like to ask?
+      short_answer: 'Short Answer'
+      multiple_choice: 'Multiple Choice'
+      checkboxes: 'Checkboxes'
+      dropdown: 'Dropdown'
+  keywords:
+    edit:
+      heading: Editing Keyword
+    flash:
+      created: 'Keyword request was successfully created.'
+      updated: 'Keyword was successfully updated.'
+      pick_org: 'Please pick which organization you are associated with'
+    form:
+      keyword: 'Keyword'
+      keyword_tip: "This is what people will type into their phone. For example: when you say 'text <strong>ccc</strong> to 75572', 'ccc' is the keyword."
+      explanation: 'Please explain what you plan to use this keyword for.'
+      initial_response: 'What response should we send back to people when they text in? If you want the person to complete a survey, the response MUST include {{ link }}'
+      post_survey_message: 'What message would you like to show after the person has completed the survey?'
+      chartfield: 'A keyword costs $7/month. Please enter a chart field to be billed for this keyword.'
+      organization: "You are associated with more than one organization or ministry. Which one would you like to associate this keyword with?"
+  contacts:
+    statuses:
+      uncontacted: Uncontacted
+      attempted_contact: Attempted Contact
+      contacted: Contacted
+      do_not_contact: Do Not Contact
+      completed: Completed
+    index:
+      first_name: 'Frist Name'
+      last_name: 'Last Name'
+      leaders: Leaders
+      assign_to: "Assign To:"
+      assigned_to: "Assigned To"
+      all_responses: "Showing all contacts"
+      responses_assigned_to: "Showing contacts assigned to %{assigned_to}"
+      unassigned_responses: "Showing unassigned contacts"
+      dnc_contacts: "Showing contacts that have been marked 'Do Not Contact'"
+      none_checked: "You didn't select any contacts to assign."
+      show_all: 'Click here to show all'
+      which_org: 'You need to choose which organization you want to do folow-up from'
+      add: 'Add'
+      hidden_questions: 'Hidden Questions'
+      unassigned: 'Unassigned'
+      all: 'All'
+      dnc: 'Do Not Contact'
+      completed: 'Completed'
+      delete_confirm: You are about to send this contact to the "Do Not Contact" list. If that's not what you meant to do, click cancel.
+      assign_people:
+        one: Assign 1 person
+        other: "Assign %{count} people"
+    mine:
+      in_progress: 'In Progress'
+      completed: 'Completed'
+      my_contacts: "My Contacts"
+      name: Name
+      phone: Phone Number
+      email: Email
+      year: Year
+    show:
+      phone_number: "Phone #"
+      email: "Email"
+      status: "Status"
+      attach_rejoicable: 'Attach a Rejoicable'
+      add_comment: 'Add Comment'
+    thanks:
+      message: Thank you for your interest.
+  sms:
+    keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
   date:
     formats:
       default: "%Y-%m-%d"

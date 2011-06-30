@@ -38,7 +38,7 @@ class SmsControllerTest < ActionController::TestCase
       should "reply with default message to inactive keyword" do
         @keyword = Factory(:sms_keyword)
         post :mo, @post_params.merge!({message: @keyword.keyword})
-        assert_equal(assigns(:sent_sms).message, I18n.t('ma.sms.keyword_inactive'))
+        assert_equal(assigns(:sent_sms).message, I18n.t('sms.keyword_inactive'))
       end
     end
     

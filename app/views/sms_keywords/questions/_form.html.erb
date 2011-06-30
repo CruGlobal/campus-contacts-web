@@ -1,9 +1,9 @@
 <%= form_for question, url: question.new_record? ? sms_keyword_questions_path(@keyword) : sms_keyword_question_path(@keyword, question), 
                        method: question.new_record? ? :post : :put, remote: true, html: {id: 'question_form_form'} do |f| %>
   <% if question.new_record? %>
-    <%= t('ma.questions.form.what_question_type') %>
-    <%= select_tag('question_type', options_for_select([[t('ma.quesitons.form.short_answer'), 'TextField:short'], [t('ma.quesitons.form.multiple_choice'), 'ChoiceField:radio'], 
-                                    [t('ma.quesitons.form.checkboxes'), 'ChoiceField:checkbox'], [t('ma.quesitons.form.dropdown'),'ChoiceField:drop-down']]), include_blank: true) %>
+    <%= t('questions.form.what_question_type') %>
+    <%= select_tag('question_type', options_for_select([[t('quesitons.form.short_answer'), 'TextField:short'], [t('quesitons.form.multiple_choice'), 'ChoiceField:radio'], 
+                                    [t('quesitons.form.checkboxes'), 'ChoiceField:checkbox'], [t('quesitons.form.dropdown'),'ChoiceField:drop-down']]), include_blank: true) %>
   <% end %>
   <div id="short_answer_form" style="<%= question.new_record? ? 'display:none' : '' %>">
     <%= render 'short_answer_form', f: f %>
