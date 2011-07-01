@@ -1,7 +1,7 @@
 class OauthController < ApplicationController
   require 'api_helper'
   include ApiHelper
-    
+  rescue_from Exception, with: :render_json_error    
   def authorize
       if current_user
         render :action=>"authorize"
@@ -19,10 +19,10 @@ class OauthController < ApplicationController
     end
     
     def done
-      json_output = '{"error": {"message": "You do not have a leader role in MissionHub.", "code": "25"}}'
-      if (!current_user.nil? && !current_user.try(:person).nil? && !current_user.person.primary_organization.nil?)
-        json_output = '{"status":"done", "code":"' + params[:code] + '"}' if current_user.person.leader_in?(current_user.person.primary_organization)
-      end
+      raise AccountSetupRequiredError if (current_user.nil? || current_user.try(:person).nil? || current_user.person.primary_organization.nil?)
+      raise IncorrectPermissionsError unless current_user.person.leader_in?(current_user.person.primary_organization)
+      
+      json_output = '{"status":"done", "code":"' + params[:code] + '"}'
       render json: json_output
     end
 end

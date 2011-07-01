@@ -64,14 +64,14 @@ class Api::ContactsController < ApiController
     end
     
     #flatten and uniquize all of the questions & question_sheet_ids for display
-    @all_questions.flatten!.try(:uniq!)
-    @all_question_sheet_ids.flatten!(3).try(:uniq!)
+    @all_questions = @all_questions.flatten(2).uniq
+    @all_question_sheet_ids = @all_question_sheet_ids.flatten(3).uniq
 
     #get the keywords belonging to the questions sheets that the request people filled out
-    @keywords = QuestionSheet.where(id: @all_question_sheet_ids).collect { |k| k.questionnable}.flatten.try(:uniq)
+    @keywords = QuestionSheet.where(id: @all_question_sheet_ids).collect { |k| k.questionnable}.flatten.uniq
     @keys = @keywords.collect {|k| {name: k.keyword, keyword_id: k.id, questions: k.questions.collect {|q| q.id}}}
 
-    json_output = {keywords: @keys, questions: @all_questions.collect {|q| q.attributes.slice('id', 'kind', 'label', 'style', 'required')}, people: @people.collect {|person| {person: person.to_hash(@organization), form: (@answer_sheets[person].collect {|as| @questions[person][as].collect {|q| {q: q.id, a: q.display_response(as)}}}).flatten(2).try(:uniq)}}}
+    json_output = {keywords: @keys, questions: @all_questions.collect {|q| q.attributes.slice('id', 'kind', 'label', 'style', 'required')}, people: @people.collect {|person| {person: person.to_hash(@organization), form: (@answer_sheets[person].collect {|as| @questions[person][as].collect {|q| {q: q.id, a: q.display_response(as)}}}).flatten(2).uniq}}}
     final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
     render json: final_output
   end
