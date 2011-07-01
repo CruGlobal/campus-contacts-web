@@ -1,6 +1,7 @@
 $ ->
 	$('#change_org').live 'click', ->
 		$('#other_orgs').toggle()
+		$('#change_org').toggleClass("on")
 		false
 		
 	$('[data-method=delete]').live 'ajax:before', ->
@@ -28,6 +29,8 @@ $ ->
 			})
 	
 	$('[data-sortable]').sortable(sortable_options)
+	
+	$('.tipthis[title]').qtip()
 	
 	$('[data-sortable][data-sortable-handle]').each ->
 		handle = $(this).attr('data-sortable-handle');

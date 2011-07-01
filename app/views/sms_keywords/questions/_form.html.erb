@@ -1,17 +1,21 @@
-<%= form_for question, url: question.new_record? ? sms_keyword_questions_path(@keyword) : sms_keyword_question_path(@keyword, question), 
-                       method: question.new_record? ? :post : :put, remote: true, html: {id: 'question_form_form'} do |f| %>
-  <% if question.new_record? %>
-    <%= t('questions.form.what_question_type') %>
-    <%= select_tag('question_type', options_for_select([[t('quesitons.form.short_answer'), 'TextField:short'], [t('quesitons.form.multiple_choice'), 'ChoiceField:radio'], 
-                                    [t('quesitons.form.checkboxes'), 'ChoiceField:checkbox'], [t('quesitons.form.dropdown'),'ChoiceField:drop-down']]), include_blank: true) %>
+<div class="inlineform">
+  <%= form_for question, url: question.new_record? ? sms_keyword_questions_path(@keyword) : sms_keyword_question_path(@keyword, question), 
+                         method: question.new_record? ? :post : :put, remote: true, html: {id: 'question_form_form'} do |f| %>
+    <% if question.new_record? %>
+    <div class="field">
+      <label><%= t('questions.form.what_question_type') %></label>
+      <%= select_tag('question_type', options_for_select([[t('quesitons.form.short_answer'), 'TextField:short'], [t('quesitons.form.multiple_choice'), 'ChoiceField:radio'], 
+                                      [t('quesitons.form.checkboxes'), 'ChoiceField:checkbox'], [t('quesitons.form.dropdown'),'ChoiceField:drop-down']]), include_blank: true) %>
+    </div>
+    <% end %>
+    <div id="short_answer_form" style="<%= question.new_record? ? 'display:none' : '' %>">
+      <%= render 'short_answer_form', f: f %>
+    </div>
+    <div id="multiple_choice_form" style="<%= (question.new_record? || question.kind == 'TextField') ? 'display:none' : '' %>">
+      <%= render 'multiple_choice_form', f: f %>
+    </div>
+    <div id="submit_button" style="<%= question.new_record? ? 'display:none' : '' %>">
+      <%= f.submit %>
+    </div>
   <% end %>
-  <div id="short_answer_form" style="<%= question.new_record? ? 'display:none' : '' %>">
-    <%= render 'short_answer_form', f: f %>
-  </div>
-  <div id="multiple_choice_form" style="<%= (question.new_record? || question.kind == 'TextField') ? 'display:none' : '' %>">
-    <%= render 'multiple_choice_form', f: f %>
-  </div>
-  <div id="submit_button" style="<%= question.new_record? ? 'display:none' : '' %>">
-    <%= f.submit %>
-  </div>
-<% end %>
+</div>

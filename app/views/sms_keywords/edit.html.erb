@@ -1,5 +1,18 @@
-<h1><%= t('keywords.edit.heading') %></h1>
+<% provide :sidebar do %>
+  <ul class="leftmenu">
+    <li class="selected"><a href="/sms_keywords">Keywords</a></li>
+    <li><%= link_to("Request Keyword", new_sms_keyword_path) %></li>
+<% end %>
+<div class="titlebar">
+  <h1><%= t('keywords.edit.heading') %></h1>
+</div>
 
-<%= render 'form' %>
+<div class="pagemenu">
+  <ul class="pillmenu">
+    <li><%= link_to 'Back', :back %></li>
+  </ul>
+</div>
 
-<%= link_to 'Back', :back %>
+<div class="contentpad">
+  <%= render 'form' %>
+</div>

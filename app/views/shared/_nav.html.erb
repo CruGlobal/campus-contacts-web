@@ -8,9 +8,9 @@
             <ul>
               <% current_person.organization_memberships.each do |om| %>
                 <li>
-                  <%= om.organization %> 
-                  <%= link_to(t('nav.go_to'), set_current_organization_membership_path(om)) %>
-                  <%= link_to(t('nav.make_default'), set_primary_organization_membership_path(om)) %>
+                  <label><%= om.organization %> </label>
+                  <%= link_to(t('nav.go_to'), set_current_organization_membership_path(om), :class => "icon magnify") %>
+                  <%= link_to(t('nav.make_default'), set_primary_organization_membership_path(om), :class => "icon check") %>
                 </li>
               <% end %>
             </ul>

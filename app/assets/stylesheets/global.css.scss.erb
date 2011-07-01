@@ -43,6 +43,8 @@ body {
   font-size: 12px;
 }
 
+
+
 .titlebar {
   background: $white;
   padding: 14px;
@@ -71,9 +73,12 @@ body {
   .item {
     display: inline-block;
     border-left: 1px solid $blue;
-    padding: 0 5px;
     height: 18px;
     line-height: 18px;
+    >a {
+      padding: 5px;
+      text-decoration: none;
+    }
   }
   .item:first-child {
     border-left: none;
@@ -200,7 +205,17 @@ ul.leftmenu {
   margin-left: 1px;
 }
 
+.contentpad {
+  padding: 14px;
+}
+
 /* WIZARDRY */
+
+.wizard {
+  #rest {
+    background: none;
+  }
+}
 
 .wizard_steps {
   margin-right: 10px;
@@ -299,12 +314,12 @@ ul.leftmenu {
     padding-left: 15px !important;
     text-align: left;
   }
-  .contact_row td {
+  tr td{
     border-bottom: 1px solid silver;
     padding: 3px 2px;
     font-size: 12px;
   }
-  .contact_row:hover {
+  tr:hover {
     background: #f5ffc4;
     cursor: pointer;
   }
@@ -490,6 +505,23 @@ ul.pillmenu {
   }
 }
 
+
+
+#hidden_questions_div {
+  background: $white;
+  padding: 6px;
+  margin: 10px 0;
+  ul#hidden_questions {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  li {
+    background: url("<%= asset_path('li.png') %>") no-repeat 0 50%;
+    padding-left: 13px;
+  }
+}
+
 .icon {
   background: url("<%= asset_path('delete.png') %>") no-repeat 50% 50%;
   text-indent: -1000px;
@@ -501,6 +533,8 @@ ul.pillmenu {
 .icon.magnify {  background-image: url("<%= asset_path('magnify.png') %>");}
 .icon.unassign {  background-image: url("<%= asset_path('undo.png') %>");}
 .icon.delete {  background-image: url("<%= asset_path('delete.png') %>");}
+.icon.edit {  background-image: url("<%= asset_path('edit_sm.png') %>");}
+.icon.check {  background-image: url("<%= asset_path('check.png') %>");}
 
 
 /* SPLASH PAGE */
@@ -570,5 +604,158 @@ ul.pillmenu {
     text-align: right;
     color: #B3B3B3;
     margin: 20px;
+  }
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.width30 {width: 30%;}
+.width60 {width: 60%;}
+
+/* MODAL STYLES */
+.modalfield {
+  margin-bottom: 5px;
+}
+
+.modalresults {
+  border: 1px solid gray;;
+  padding: 8px;
+  margin-top: 20px;
+}
+
+.modalresults ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 144px;
+  border: 1px solid silver;
+  overflow: hidden;
+  li a {
+    display: block;
+    height: 24px;
+    line-height: 24px;
+    padding-left: 2px;
+    color: $blue;
+  }
+  li a:hover {
+    text-decoration: none;
+    background: #F5FFC4;
+  }
+}
+
+.inlinebutton {
+  background: $blue;
+  color: $white !important;
+  background: none repeat scroll 0 0 #0379AE;
+  border: 1px solid gray;
+  box-shadow: 0 0 1px #FFFFFF inset;
+  font-size: 11px;
+  font-weight: normal;
+  padding: 1px 3px;
+    
+}
+
+/* KEYWORDS */
+.keywordtable {
+  td.controls {
+    width: 145px;
+  }
+}
+
+#sms_keyword_keyword, .keywordname {
+  font-size: 18px;
+  border: 1px solid gray;
+  box-shadow: 0 0 4px #999;
+  padding: 5px;
+  font-weight: bold;
+}
+
+.keywordname {
+  color: gray;
+  width: 300px;
+  margin-bottom: 10px;
+  background: #f0f0f0;
+}
+
+
+/* FORM */
+
+.field {
+  margin-bottom: 10px;
+  label {
+    margin-bottom: 5px;
+    display: block;
+  }
+}
+
+.inlineform {
+  border: 1px solid gray;
+  padding: 8px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/* SORTABLE ROWS */
+.ui-sortable {
+  tr:hover {
+    cursor: move;
+  }
+  .ui-sortable-helper {
+    background: #fcf0b9;
+    border: 1px dotted #eca700;
+    height: 20px;
+  }
+  td {
+    padding: 3px;
+  }
+}
+.questiontitle {
+  min-width: 150px;
+  padding-left: 5px;
+}
+
+.ui-sortable tr:hover {
+  background: #fcf0b9;
+  border: 1px dotted #eca700;
+  height: 20px;
+  td.questiontitle {text-indent: 10px;}
+}
+
+#change_org.on {
+  background: $blue;
+  color: #fff;
+}
+
+#other_orgs {
+  display: block;
+  position: absolute;
+  margin-top: 3px;
+  text-align: left;
+  background: $blue;
+  padding: 2px;
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  label {
+    width: 150px;
+    display: inline-block;
+  }
+  .icon {
+    vertical-align: bottom;
+  }
+  li {
+    padding: 5px;
+    background: #fff;
+  }
+  li:hover {
+    background: #F5FFC4;
   }
 }
