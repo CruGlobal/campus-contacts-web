@@ -78,7 +78,10 @@ namespace :infobase do
       next unless team
       #debugger
       unless OrganizationMembership.where(organization_id: team, person_id: mtm['personID']).present?
-        OrganizationMembership.create!(organization_id: team, person_id: mtm['personID'], validated: 1, role: 'admin')
+        OrganizationMembership.create!(organization_id: team, person_id: mtm['personID'], validated: 1)
+      end
+      unless OrganizationalRole.where(organization_id: team, person_id: mtm['personID'], role_id: Role.admin.id).present?
+        OrganizationalRole.create!(organization_id: team, person_id: mtm['personID'], role_id: Role.admin.id)
       end
       i += 1
       puts i if i % 1000 == 0

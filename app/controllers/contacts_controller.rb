@@ -87,11 +87,19 @@ class ContactsController < ApplicationController
       render :nothing => true and return
     end
     @person = create_person(params[:person])
-    @person.save!
-    create_contact_at_org(@person, current_organization)
-    if params[:assign_to_me] == 'true'
-      ContactAssignment.where(person_id: @person.id, organization_id: current_organization.id).destroy_all
-      ContactAssignment.create!(person_id: @person.id, organization_id: current_organization.id, assigned_to_id: current_person.id)
+    if @person.save
+      create_contact_at_org(@person, current_organization)
+      if params[:assign_to_me] == 'true'
+        ContactAssignment.where(person_id: @person.id, organization_id: current_organization.id).destroy_all
+        ContactAssignment.create!(person_id: @person.id, organization_id: current_organization.id, assigned_to_id: current_person.id)
+      end
+    else
+      flash.now[:error] = ''
+      flash.now[:error] += 'First name is required.<br />' unless @person.firstName.present?
+      flash.now[:error] += 'Phone number is not valid.<br />' if @phone && !@phone.valid?
+      flash.now[:error] += 'Email address is not valid.<br />' if @email && !@email.valid?
+      render 'add_contact'
+      return
     end
   end
   
