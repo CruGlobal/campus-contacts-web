@@ -8,18 +8,6 @@ module ApiErrors
     attr_reader :code
   end
 
-  # class IncorrectScopeError < ApiError
-  #   def initialize
-  #     super :incorrect_scope, "You do not have sufficient scope to access this information.", 
-  #   end
-  # end
-  # 
-  # class InvalidScopeError < ApiError
-  #   def initialize
-  #     super :invalid_scope, "One or more of the specified scopes does not exist."
-  #   end
-  # end
-
   class InvalidFieldError < ApiError
     def initialize 
       super :invalid_fields, "One or more of the specified fields does not exist.", "21"
@@ -98,6 +86,13 @@ module ApiErrors
       super :followup_comments_permissions_error, "You do not have the appropriate permissions to delete this comment.","35"
     end
   end
+  class AccountSetupRequiredError < ApiError
+    def initialize
+      super :account_setup_error, "You need to go to www.MissionHub.com to setup your account in order use the MissionHub application.","36"
+    end
+  end
+  
+  
   
   
 end
