@@ -20,7 +20,7 @@ class OauthController < ApplicationController
     
     def done
       json_output = '{"error": {"message": "You do not have a leader role in MissionHub.", "code": "25"}}'
-      if (!current_user.nil? && !current_user.try(:person).nil?)
+      if (!current_user.nil? && !current_user.try(:person).nil? && !current_user.person.primary_organization.nil?)
         json_output = '{"status":"done", "code":"' + params[:code] + '"}' if current_user.person.leader_in?(current_user.person.primary_organization)
       end
       render json: json_output
