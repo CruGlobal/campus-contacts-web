@@ -127,4 +127,10 @@ class ApplicationController < ActionController::Base
     @person
   end
   
+  def ensure_current_org
+    unless current_organization
+      redirect_to '/wizard' and return false
+    end
+  end
+  
 end

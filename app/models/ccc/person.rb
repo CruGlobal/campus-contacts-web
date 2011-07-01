@@ -51,7 +51,13 @@ module Ccc
                       when other.attributes[k].blank? then v
                       when v.blank? then other.attributes[k]
                       else
-                        other.dateChanged > dateChanged ? other.attributes[k] : v
+                        other_date = other.dateChanged || other.dateCreated
+                        this_date = dateChanged || dateCreated
+                        if other_date && this_date
+                          other_date > this_date ? other.attributes[k] : v
+                        else
+                          v
+                        end
                       end
           end
 
