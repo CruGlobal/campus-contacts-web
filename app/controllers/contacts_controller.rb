@@ -72,7 +72,7 @@ class ContactsController < ApplicationController
     unless @organizational_role
       redirect_to '/404.html' and return
     end
-    @followup_comment = FollowupComment.new(organization: @organization, commenter: current_person, contact: @person)
+    @followup_comment = FollowupComment.new(organization: @organization, commenter: current_person, contact: @person, status: @organizational_role.followup_status)
     @followup_comments = FollowupComment.where(organization_id: @organization, contact_id: @person).order('created_at desc')
   end
   

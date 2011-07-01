@@ -4,8 +4,19 @@
   </ul>
 <% end %>
 
+<%= form_for ContactAssignment.new, html: {style: 'display:none'} do |f| %>
+  <%= check_box_tag 'ids[]', @person.id, true, id: "ids_#{@person.id}", class: 'id_checkbox' %>
+  <%= hidden_field_tag :assign_to %>
+  <%= render 'assign' %>
+<% end %>
 <div class="titlebar">
-  <h1><%= image_tag("contact.png") %><%= @person %></h1>
+  <h1>
+    <%= image_tag("contact.png") %>
+    <%= @person %>
+    <ul class="pillmenu">
+      <li><%= link_to("Assign", "", class: 'assign', 'data-id' => @person.id) %></li>
+    </ul>
+  </h1>
 </div>
 
 <div class="pad">
@@ -29,6 +40,9 @@
         <p><%= raw @person.current_address.display_html %></p>
         <%= link_to('Google Map', @person.current_address.map_link, target: '_blank', :class => "maplink") %>
       <% end %>
+      <% if @person.fb_uid.present? %>
+      <p><%= link_to('Facebook Profile', "http://www.facebook.com/profile.php?id=#{@person.fb_uid}", target: '_blank') %></p>
+      <% end %>
       <p><%= link_to('Survey Answers', '', id: 'survey_answers_link') %></p>
       <div id="survey_answers" style="display:none" title="Survey Answers">
         <ul>
@@ -48,7 +62,7 @@
       <%= f.hidden_field :commenter_id %>
       <span class="statusline">
         <%= t('contacts.show.status') %>: 
-        <%= f.select :status, OrganizationMembership::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]}, value: @organizational_role.followup_status %><br/>
+        <%= f.select :status, OrganizationMembership::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]} %><br/>
       </span>
       <div class="commentbox">
         <div class="textarea">
