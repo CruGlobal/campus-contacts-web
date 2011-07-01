@@ -108,7 +108,7 @@
       do_not_contact: Do Not Contact
       completed: Completed
     index:
-      first_name: 'Frist Name'
+      first_name: 'First Name'
       last_name: 'Last Name'
       leaders: Leaders
       assign_to: "Assign To:"

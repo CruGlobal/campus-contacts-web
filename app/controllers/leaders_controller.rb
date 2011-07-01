@@ -49,18 +49,7 @@ class LeadersController < ApplicationController
   end
   
   def add_person
-    params[:person] ||= {}
-    params[:person][:email_address] ||= {}
-    params[:person][:phone_number] ||= {}
-    # try to find this person based on their email address
-    if (email = params[:person][:email_address][:email]).present?
-      @person = EmailAddress.find_by_email(email).try(:person) ||
-                Address.find_by_email(email).try(:person) ||
-                User.find_by_username(email).try(:person) 
-    end
-    @person ||= Person.new(params[:person].except(:email_address, :phone_number))
-    @email = @person.email_addresses.new(params[:person].delete(:email_address))
-    @phone = @person.phone_numbers.new(params[:person].delete(:phone_number).merge(location: 'mobile'))
+    @person = create_person(params[:person])
     required_fields = {'First Name' => @person.firstName, 'Last Name' => @person.lastName, 'Gender' => @person.gender, 'Email' => @email.email, 'Phone' => @phone.number}
     @person.valid?; @email.valid?; @phone.valid?
     unless required_fields.values.all?(&:present?)

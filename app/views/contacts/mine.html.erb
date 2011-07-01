@@ -19,7 +19,7 @@
     <ul class="pillmenu">
       <li><%= link_to("Assign", "", id: 'assign_button', class: 'assign') %></li>
       <li><%= link_to("Unassign", "", id: 'bulk_unassign') %></li>
-      <li><%= link_to("Add Contact", "") %></li>
+      <li><%= link_to("Add Contact", "", class: 'add_contact') %></li>
     </ul>
     <!-- <ul class="pillmenu">
       <li><%= link_to("Show", "") %></li>
@@ -37,32 +37,16 @@
     </tr>
     <tbody id="contacts_table">
       <% @people.each do |person| %>
-        <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row">
-          <td nowrap="nowrap" class="checkbox_cell check">
-            <%#= image_tag('grippy.png', class: 'handle') %>
-            <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
-          </td>
-          <td class="name"><%= person %></td>
-          <td class="phone"><%= person.phone_number %></td>
-          <td class="email"><%= person.email %></td>
-          <td class="year"><%= person.yearInSchool %></td>
-          
-          <td class="controls">
-            <%= link_to("Show", contact_path(person), :class => "icon magnify") %>
-            <%= link_to(t('general.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign") %>
-            <%= link_to("Delete", organizational_role_path(:id => OrganizationalRole.where(:person_id => person.id, :organization_id => current_organization.id, :role_id => Role.contact.id).first.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete", :confirm => t('contacts.index.delete_confirm')) %>
-          </td>
-        </tr>
+        <%= render 'contacts/my_contact', :person => person %>
       <% end %>
     </tbody>
   </table>
   <% if @people.blank? %>
-    <div class="contentpad">
+    <div class="contentpad no_contacts">
         Sorry, there are no contacts here.
     </div>
   <% end %>
   <%= render 'assign' %>
-  <%= render 'add_contact' %>
 <% end %>
-
+<%= render 'add_contact' %>
 <p>&nbsp;</p>

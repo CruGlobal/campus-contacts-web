@@ -1,0 +1,19 @@
+<div id="add_contact_div" style="display:none" title="Add a Contact">
+
+  <div class="explain">
+    <p>Add a contact to <%= current_organization %></p>
+  </div>
+
+  <div id="add_contact_form">
+    <%= form_for Person.new, url: contacts_path, :remote => true do |f| %>
+      <% if params[:action] == 'mine' %>
+        <%= hidden_field_tag :assign_to_me, true %>
+      <% end %>
+      <%= render 'people/person_form', person: Person.new %>
+      <br/>
+      <%= submit_tag 'Save and close', class: 'save_and_close save' %>
+      <%= submit_tag 'Save and add another', class: 'save_and_more save' %>
+    <% end %>
+  </div>
+  
+</div>

@@ -78,6 +78,22 @@ class ContactsController < ApplicationController
   def thanks
   end
   
+  def create
+    params[:person] ||= {}
+    params[:person][:email_address] ||= {}
+    params[:person][:phone_number] ||= {}
+    unless params[:person][:firstName].present? && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
+      render :nothing => true and return
+    end
+    @person = create_person(params[:person])
+    @person.save!
+    create_contact_at_org(@person, current_organization)
+    if params[:assign_to_me] == 'true'
+      ContactAssignment.where(person_id: @person.id, organization_id: current_organization.id).destroy_all
+      ContactAssignment.create!(person_id: @person.id, organization_id: current_organization.id, assigned_to_id: current_person.id)
+    end
+  end
+  
   protected
     
     def get_keyword

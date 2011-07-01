@@ -1,0 +1,6 @@
+<% if params[:assign_to_me] == 'true' %>
+	$('#contacts_table').append("<%= j(render('contacts/my_contact', :person => @person)) %>")
+<% else %>
+	$('#contacts_table').append("<%= j(render('contacts/contact', :person => @person)) %>")
+<% end %>
+$('.no_contacts').hide()
