@@ -3,7 +3,7 @@
 <html>
   <head>
     <title><%= h(yield(:title) || "Cru") %></title>
-
+		<meta name = "viewport" content = "user-scalable = no">
     <%= stylesheet_link_tag 'mobile' %>
 
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" />
@@ -31,17 +31,17 @@
 			<%- if true -%>
 				 <div data-role="header">
 				   <div data-role="header" role="banner">
-				     <h1 style='font-family:helvetica'>MissionHub Login</h1>
+				     <h1 style='font-family:helvetica'>MHub Login</h1>
 				   </div>
 				</div>
 			<%- end -%>
 	      <div data-role="content">
 			<% title "Welcome!" %>
 			<div class="info">
-				<span style='text-align:center; width:100%;display:block;font-family:helvetica'>Please login with Facebook<br>to access MissionHub</span><br>
+				<span style='text-align:center; width:100%;display:block;font-family:helvetica'>Please login with Facebook<br>to get started</span><br>
 			</div>
 			<div class="info">
-				<center><%= link_to(image_tag('fb_login_small.png'), user_omniauth_authorize_path(:facebook), rel: 'external') %></center>
+				<center><%= link_to(image_tag('fb_login_small.png'), user_omniauth_authorize_path(:facebook), rel: 'external', alt: 'Login with Facebook') %></center>
 			</div>
 		 </div>
 	  </div>

@@ -1,7 +1,7 @@
 #!/bin/bash
 atk="b6fef51e27a21ffebb8ff33166ed0b8315b0b008987caf25d4cfb71c54f75b59"
 atoken="e7c01a607441887f30467bdfe74c2bed02e464585ca62a5b8cc0207218dbfd12"
-baseurl="http://test.ccci.us:8881"
+baseurl="localhost:7888"
 
 # curl -i $baseurl/oauth/access_token \
 # 	-F grant_type=authorization_code \
@@ -38,8 +38,9 @@ baseurl="http://test.ccci.us:8881"
 # 	-F client_id=1 \
 # 	-F client_secret=c3dea407509f4b8ee93dc4f52eb917e01b9c4b8fc0c4a445938a0216ef327e4e
 #fi	
+curl -X POST -d 'org_id=1825&assign_to=1282204&ids=244771&access_token=e7c01a607441887f30467bdfe74c2bed02e464585ca62a5b8cc0207218dbfd12' $baseurl/api/v1/contact_assignments.json
 
-curl -X POST -d 'followup_comment[organization_id]=1825&followup_comment[contact_id=115315]&followup_comment[commenter_id]=1282204&followup_comment[status]=do_not_contact&followup_comment[comment]=aoeuoeucgohigh&rejoicables[]=spiritual_conversation&rejoicables[]=prayed_to_receive&rejoicables[]=gospel_presentation&commit=Add Comment&access_token=e7c01a607441887f30467bdfe74c2bed02e464585ca62a5b8cc0207218dbfd12' $baseurl/api/followup_comments.json  
+#curl -X POST -d 'followup_comment[organization_id]=1825&followup_comment[contact_id=115315]&followup_comment[commenter_id]=1282204&followup_comment[status]=do_not_contact&followup_comment[comment]=aoeuoeucgohigh&rejoicables[]=spiritual_conversation&rejoicables[]=prayed_to_receive&rejoicables[]=gospel_presentation&commit=Add Comment&access_token=e7c01a607441887f30467bdfe74c2bed02e464585ca62a5b8cc0207218dbfd12' $baseurl/api/followup_comments.json  
 #	-F  \
 # 	-d 'followup_comment[organization_id]=1825&followup_comment[contact_id=115315]&followup_comment[commenter_id]=1282204&followup_comment[status]=do_not_contact&followup_comment[comment]=aoeuoeucgohigh&rejoiceables=spiritual_conversation,prayed_to_receive,gospel_presentation&commit=Add Comment&access_token=e7c01a607441887f30467bdfe74c2bed02e464585ca62a5b8cc0207218dbfd12'
 # #"followup_comment"=>{"organization_id"=>"1825", "contact_id"=>"115315", "commenter_id"=>"1282204", "status"=>"do_not_contact", "comment"=>"aoeaeaouaoeu"}, "rejoicables"=>["spiritual_conversation", "prayed_to_receive", "gospel_presentation"], "commit"=>"Add Comment"}
