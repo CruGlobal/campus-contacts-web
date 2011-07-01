@@ -18,6 +18,8 @@ $ ->
 		e.preventDefault()
 		leader = $('.leftmenu .leader[data-id=' + $(this).closest('li').attr('data-id') + ']')
 		$('#assign_to').val(leader.attr('data-id'))
+		$.fn.assignTo(leader)
+		$('#assign_search').dialog('destroy')
 	false
 		
 	$('#assign_search .leader_search_name').keyup ->

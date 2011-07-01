@@ -45,7 +45,7 @@
       <% else %>
         <div class="wizard_step_inactive"></div>
       <% end %>
-      <div class="wizard_step_name"><%= link_to(t('welcome.wizard.create_survey'), '/wizard?step=survey') %></div>
+      <div class="wizard_step_name"><%= current_organization && current_organization.keywords.present? ? link_to(t('welcome.wizard.create_survey'), '/wizard?step=survey') : t('welcome.wizard.create_survey') %></div>
       
       <% if current_organization && current_organization.question_sheets.present? %>
         <div class="wizard_step_visited"></div>
@@ -84,7 +84,7 @@
     <h2>Request a Keyword!</h2>
     <p><%= t('welcome.wizard.keyword_paragraph') %> </p>
     <%= link_to(t('welcome.wizard.request_keyword_link'), new_sms_keyword_path) %><br/>
-    <%= link_to(t('welcome.wizard.skip_step'), '/wizard?step='+ current_user.next_wizard_step(current_organization)) %>
+    <%#= link_to(t('welcome.wizard.skip_step'), '/wizard?step='+ current_user.next_wizard_step(current_organization)) %>
   <% when 'survey' %>
     <h2>Create a Survey!</h2>
     <p><%= t('welcome.wizard.survey_paragraph') %> </p>
