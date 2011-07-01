@@ -1,39 +1,65 @@
-<h3>Predefined Questions</h3>
-<table border="0" cellspacing="5" cellpadding="0">
-  <thead>
-    <tr>
-      <th>Question</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="predefined_questions">
-    <% @predefined.questions.each do |question| %>
-      <% unless @questions.include?(question) %>
-        <%= render 'predefined_question', question: question %>
-      <% end %>
-    <% end %>
-  </tbody>
-</table>
-<h3>Your Questions (drag to sort)</h3>
-<table border="0" cellspacing="5" cellpadding="0">
-  <tbody id="questions" data-sortable="true" data-sortable-url="<%= reorder_sms_keyword_questions_path(@keyword) %>">
-    <%= render partial: 'question', collection: @questions %>
-  </tbody>
-</table>
-<%= link_to('Add a question', '#', onclick: "$('#question_form').slideDown()") %>
-<div id="question_form" style="display:none">
-  <%= render 'form', question: Question.new %>
+<div class="titlebar">
+  <h1>Manage Questions</h1>
 </div>
-<br/><br/>
-<%= link_to('Preview Form', contact_form_path(keyword: @keyword.keyword), target: '_blank')%>
-|
-<% if session[:wizard] %>
-  <%= link_to(t('nav.back_to_wizard'), wizard_path) %>
-<% else %>
-  <%= link_to(t('nav.back_to_dashboard'), user_root_path) %>
+
+<div class="pagemenu">
+  <ul class="pillmenu">
+    <li><%= link_to('Preview Form', contact_form_path(keyword: @keyword.keyword), target: '_blank')%></li>
+    <li>     
+      <% if session[:wizard] %>
+        <%= link_to(t('nav.back_to_wizard'), wizard_path) %>
+      <% else %>
+        <%= link_to(t('nav.back_to_dashboard'), user_root_path) %>
+      <% end %>
+    </li>
+  </ul>
+</div>
+
+<% provide :sidebar do %>
+  <ul class="leftmenu">
+    <li class="selected"><a href="/sms_keywords">Keywords</a></li>
+    <li><%= link_to("Request Keyword", new_sms_keyword_path) %></li>
+  </ul>
 <% end %>
-<script type="text/javascript" charset="utf-8">
-  $(function() {
-    $('#question_type').change()
-  })
-</script>
+
+<div class="contentpad">
+  
+  <h3>Predefined Questions</h3>
+  <table border="0" cellspacing="5" cellpadding="0">
+    <thead>
+      <tr>
+        <th>Question</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="predefined_questions">
+      <% @predefined.questions.each do |question| %>
+        <% unless @questions.include?(question) %>
+          <%= render 'predefined_question', question: question %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+  
+  
+  
+  
+  <h3>Your Questions (drag to sort)</h3>
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tbody id="questions" data-sortable="true" data-sortable-url="<%= reorder_sms_keyword_questions_path(@keyword) %>">
+      <%= render partial: 'question', collection: @questions %>
+    </tbody>
+  </table>  
+  
+  <%= link_to('+ Add a question', '#', onclick: "$('#question_form').slideDown()", class: "inlinebutton") %>
+  
+  <div id="question_form" style="display:none">
+    <%= render 'form', question: Question.new %>
+  </div>
+  
+  <script type="text/javascript" charset="utf-8">
+    $(function() {
+      $('#question_type').change()
+    })
+  </script>
+</div>

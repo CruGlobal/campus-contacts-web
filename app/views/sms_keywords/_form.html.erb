@@ -2,28 +2,32 @@
   <%= error_messages_for :sms_keyword %>
   <% if @sms_keyword.new_record? %>
     <div class="field">
-      <%= f.label :keyword, t('keywords.form.keyword') %><br />
-      <%= tip(t('keywords.form.keyword_tip')) %>
-      <%= f.text_field :keyword %>
+      <%= f.label :keyword, t('keywords.form.keyword'), :title => t('keywords.form.keyword_tip'), :class=> "tipthis" %><br />
+      <%= f.text_field :keyword, :placeholder => "Shorter keywords are better" %>
     </div>
   <% else %>
-    <%=  t('keywords.form.keyword') %>: <%= @sms_keyword.keyword %>
+    <div class="keywordname tipthis" title="Keywords can't be changed. You can delete this one and create a new one if necessary.">
+      <%=  t('keywords.form.keyword') %>: <%= @sms_keyword.keyword %>
+    </div>
   <% end %>
   <div class="field">
     <%= f.label :explanation, t('keywords.form.explanation') %><br />
     <%= f.text_area :explanation, rows: 5 %>
   </div>
+  
   <div class="field">
-    <%= f.label :initial_response, t('keywords.form.initial_response') %><br />
-    <%= f.text_field :initial_response, size: 140, maxlength: 140 %>
+    <%= f.label :initial_response, raw(t('keywords.form.initial_response')) %><br />
+    <%= f.text_area :initial_response, rows: 3 %>
   </div>
+  
   <div class="field">
     <%= f.label :post_survey_message, t('keywords.form.post_survey_message') %><br />
     <%= f.text_area :post_survey_message, rows: 5 %>
   </div>
+  
   <% if current_user.person.organizations.length > 1 %>
     <div class="field">
-      <%= f.label :organization_id, t('keywords.form.organization') %><br />
+      <%= f.label :organization_id, raw(t('keywords.form.organization')) %><br />
       <%= f.select :organization_id, current_user.person.organizations.collect {|o| [o.name, o.id]} %>
     </div>
   <% else %>
@@ -33,7 +37,9 @@
     <%#= f.label :chartfield, t('keywords.form.chartfield') %><br />
     <%#= f.text_field :chartfield %>
   </div> -->
+  
   <div class="actions">
     <%= f.submit %>
   </div>
+
 <% end %>

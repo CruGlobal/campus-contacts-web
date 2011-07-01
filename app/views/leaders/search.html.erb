@@ -4,8 +4,10 @@
   <% end %>
 </ul>
 <% if @total > @people.length %>
-  <span style="font-size: 11px;">Showing <%= @people.length %> of <%= @total %> matches, keep typing or 
-  <%= link_to('click here to show all', '#', :class => 'search_show_all_link') %></span><br/>
+  <span style="font-size: 11px;">Showing <%= @people.length %> of <%= @total %>, keep typing or 
+  <%= link_to('show all', '#', :class => 'search_show_all_link') %></span><br/>
 <% end %>
-<%= link_to('If the person you are looking for is not already in the system, click here to add them',
-              new_leader_path(name: params[:name]), :remote => true, :class => 'add_new_person') %>
+
+
+If the person you are looking for is not already in the system, 
+<%= link_to('Add Them', new_leader_path(name: params[:name]), :remote => true, :class => 'add_new_person inlinebutton') %>

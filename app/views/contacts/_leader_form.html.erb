@@ -1,15 +1,23 @@
+
+
 <div id="leader_search" style="display:none" title="<%= t('general.add_a_leader') %>">
-  <%= form_tag search_leaders_path, :id => 'leader_search_form', :onsubmit => 'return false;' do %>
-    <label for="leader_search_name">Start typing a name to find a person to make a leader:</label>
-    <%= hidden_field_tag :show_all %>
-    <%= text_field_tag :name, '', :id => 'leader_search_name', :autocomplete => 'off' %>
-    <%= spinner('leader_search') %>
-  <% end %>
-  <div id="leader_search_results">
-    
+
+  <div class="explain">
+    <p>Start typing a name to find a person to make a leader:</p>
   </div>
   
-  <div id="add_leader_form">
+  <div class="modalresults"> 
+    <%= form_tag search_leaders_path, :id => 'leader_search_form', :onsubmit => 'return false;' do %>
+      <%= hidden_field_tag :show_all %>
+      <%= text_field_tag :name, '', :id => 'leader_search_name', :autocomplete => 'off' %>
+      <%= spinner('leader_search') %>
+    <% end %>
+    <div id="leader_search_results">
+      
+    </div>
     
+    <div id="add_leader_form">
+      
+    </div>
   </div>
 </div>

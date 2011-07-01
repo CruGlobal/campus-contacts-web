@@ -17,12 +17,12 @@
     <label for="assign_to_leader">Leader</label>
     <!-- <%= radio_button_tag :assign_to, '', false, id: 'assign_to_org', class: 'assign_to_radio' %> Campus / Organization -->
   </div>
-  <div class="leader_search" style="display:none">
-    Type to find a leader then click on the leader's name
-    <%= text_field_tag :leader_name, '', class: 'leader_search_name', autocomplete: 'off' %>
+  <div class="leader_search modalresults" style="display:none">
+    <p style="margin: 0 0 5px 0;">Type to find a leader then click on the leader's name</p>
+    <%= text_field_tag :leader_name, '', class: 'leader_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>
     <div class="leaders_list">
       <ul>
-        <% @organization.leaders.each do |person| %>
+        <% current_organization.leaders.each do |person| %>
           <li class="leader" data-id="<%= person.id %>"><span class="name"><%= link_to(person, contacts_path(assigned_to: person.id)) %></span></li>
         <% end %>
       </ul>

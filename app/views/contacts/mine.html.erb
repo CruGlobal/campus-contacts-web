@@ -17,7 +17,7 @@
       <li><%= check_box_tag 'check_all' %></li>
     </ul>
     <ul class="pillmenu">
-      <li><%= link_to("Assign", "", id: 'assign_button') %></li>
+      <li><%= link_to("Assign", "", id: 'assign_button', class: 'assign') %></li>
       <li><%= link_to("Unassign", "", id: 'bulk_unassign') %></li>
       <li><%= link_to("Add Contact", "") %></li>
     </ul>
@@ -56,6 +56,12 @@
       <% end %>
     </tbody>
   </table>
+  <% if @people.blank? %>
+    <div class="contentpad">
+        Sorry, there are no contacts here.
+    </div>
+  <% end %>
+  <%= render 'assign' %>
 <% end %>
 
 <p>&nbsp;</p>

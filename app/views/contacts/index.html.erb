@@ -60,6 +60,7 @@
       <th></th>
     </tr>
     <tbody id="contacts_table">
+      
       <% @people.each do |person| %>
         <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row">
           <td nowrap="nowrap" class="checkbox_cell">
@@ -95,5 +96,12 @@
       <% end %>
     </tbody>
   </table>
+  
+  <% if @people.blank? %>
+    <div class="contentpad">
+        Sorry, there are no contacts here.
+    </div>
+  <% end %>
+  
   <%= render 'assign' %>
 <% end %>

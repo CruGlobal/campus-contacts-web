@@ -96,10 +96,10 @@
       keyword: 'Keyword'
       keyword_tip: "This is what people will type into their phone. For example: when you say 'text <strong>ccc</strong> to 75572', 'ccc' is the keyword."
       explanation: 'Please explain what you plan to use this keyword for.'
-      initial_response: 'What response should we send back to people when they text in? If you want the person to complete a survey, the response MUST include {{ link }}'
+      initial_response: 'What response should we send back to people when they text in? <br/>If you want the person to complete a survey, the response MUST include {{ link }}'
       post_survey_message: 'What message would you like to show after the person has completed the survey?'
       chartfield: 'A keyword costs $7/month. Please enter a chart field to be billed for this keyword.'
-      organization: "You are associated with more than one organization or ministry. Which one would you like to associate this keyword with?"
+      organization: "You are associated with more than one organization or ministry.<br/> Which one would you like to associate this keyword with?"
   contacts:
     statuses:
       uncontacted: Uncontacted
