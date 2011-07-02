@@ -113,12 +113,12 @@
       leaders: Leaders
       assign_to: "Assign To:"
       assigned_to: "Assigned To"
-      all_responses: "Showing all contacts"
+      all_responses: "Showing all 'In Progress' contacts"
       responses_assigned_to: "Showing contacts assigned to %{assigned_to}"
       unassigned_responses: "Showing unassigned contacts"
       dnc_contacts: "Showing contacts that have been marked 'Do Not Contact'"
       none_checked: "You didn't select any contacts to assign."
-      show_all: 'Click here to show all'
+      show_all: Click here to show all 'In Progress' contacts
       which_org: 'You need to choose which organization you want to do folow-up from'
       add: 'Add'
       hidden_questions: 'Hidden Questions'

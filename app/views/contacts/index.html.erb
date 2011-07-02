@@ -74,4 +74,6 @@
   <% end %>
   <%= render 'assign' %>
 <% end %>
-<%= render 'add_contact' %>
+<div id="add_contact_div" style="display:none" title="Add a Contact">
+  <%= render 'add_contact', person: Person.new %>
+</div>

@@ -72,7 +72,7 @@ class ContactsController < ApplicationController
     unless @organizational_role
       redirect_to '/404.html' and return
     end
-    @followup_comment = FollowupComment.new(organization: @organization, commenter: current_person, contact: @person)
+    @followup_comment = FollowupComment.new(organization: @organization, commenter: current_person, contact: @person, status: @organizational_role.followup_status)
     @followup_comments = FollowupComment.where(organization_id: @organization, contact_id: @person).order('created_at desc')
   end
   
@@ -87,11 +87,19 @@ class ContactsController < ApplicationController
       render :nothing => true and return
     end
     @person = create_person(params[:person])
-    @person.save!
-    create_contact_at_org(@person, current_organization)
-    if params[:assign_to_me] == 'true'
-      ContactAssignment.where(person_id: @person.id, organization_id: current_organization.id).destroy_all
-      ContactAssignment.create!(person_id: @person.id, organization_id: current_organization.id, assigned_to_id: current_person.id)
+    if @person.save
+      create_contact_at_org(@person, current_organization)
+      if params[:assign_to_me] == 'true'
+        ContactAssignment.where(person_id: @person.id, organization_id: current_organization.id).destroy_all
+        ContactAssignment.create!(person_id: @person.id, organization_id: current_organization.id, assigned_to_id: current_person.id)
+      end
+    else
+      flash.now[:error] = ''
+      flash.now[:error] += 'First name is required.<br />' unless @person.firstName.present?
+      flash.now[:error] += 'Phone number is not valid.<br />' if @phone && !@phone.valid?
+      flash.now[:error] += 'Email address is not valid.<br />' if @email && !@email.valid?
+      render 'add_contact'
+      return
     end
   end
   

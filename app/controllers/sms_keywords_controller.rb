@@ -4,7 +4,7 @@ class SmsKeywordsController < ApplicationController
   def index
     @keywords = current_organization.keywords
     if @keywords.present?
-      authorize! :manage, @keywords.first
+      authorize! :manage, SmsKeyword#@keywords.first
     else
       authorize! :manage, SmsKeyword
     end
@@ -41,11 +41,12 @@ class SmsKeywordsController < ApplicationController
   # POST /sms_keywords.xml
   def create
     @sms_keyword = current_user.sms_keywords.new(params[:sms_keyword])
+    @sms_keyword.organization = current_organization
     @sms_keyword.user = current_user
 
     respond_to do |format|
       if @sms_keyword.save
-        format.html { redirect_to(session[:wizard] ? wizard_path : user_root_path, notice: t('keywords.flash.created')) }
+        format.html { redirect_to(session[:wizard] ? wizard_path : sms_keywords_path, notice: t('keywords.flash.created')) }
         format.xml  { render xml: @sms_keyword, status: :created, location: @sms_keyword }
       else
         format.html { render action: "new" }

@@ -4,10 +4,10 @@ $ ->
 		if $('#person_firstName', form).val() == '' or ($('#person_email_address_email', form).val() == '' &&$('#person_phone_number_number', form).val() == '')
 			alert('At a minimum you need to provide a first name and either an email address or a phone number.')
 			return false
+		if $(this).hasClass('save_and_more')
+			$('#add_another').val('true')
 		$.rails.handleRemote(form)
-		if $(this).hasClass('save_and_close')
-			$('#add_contact_div').dialog('destroy')
-		form[0].reset()
+		form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
 		false
 		
 	$('#contacts_controller a.add_contact').live 'click', ->

@@ -1,6 +1,13 @@
 <% if params[:assign_to_me] == 'true' %>
-	$('#contacts_table').append("<%= j(render('contacts/my_contact', :person => @person)) %>")
+	$('#contacts_table').prepend("<%= j(render('contacts/my_contact', :person => @person)) %>")
 <% else %>
-	$('#contacts_table').append("<%= j(render('contacts/contact', :person => @person)) %>")
+	$('#contacts_table').prepend("<%= j(render('contacts/contact', :person => @person)) %>")
 <% end %>
+<% unless params[:add_another] == 'true' %>
+	$('#add_contact_div').dialog('destroy')
+<% end %>
+$('#<%= dom_id(@person) %>').effect('highlight')
 $('.no_contacts').hide()
+<% @email = EmailAddress.new %>
+<% @phone = PhoneNumber.new %>
+$('#add_contact_div').html('<%= j(render('add_contact', person: Person.new)) %>')

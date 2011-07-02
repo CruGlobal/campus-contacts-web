@@ -27,11 +27,8 @@
   
   <% if current_user.person.organizations.length > 1 %>
     <div class="field">
-      <%= f.label :organization_id, raw(t('keywords.form.organization')) %><br />
-      <%= f.select :organization_id, current_user.person.organizations.collect {|o| [o.name, o.id]} %>
+      This keyword will be associated with <%= current_organization %>.
     </div>
-  <% else %>
-    <%= hidden_field_tag 'sms_keyword[organization_id]', current_user.person.organizations.first.id %>
   <% end %>
   <!-- <div class="field">
     <%#= f.label :chartfield, t('keywords.form.chartfield') %><br />

@@ -45,4 +45,7 @@ class WelcomeController < ApplicationController
       return
     end
   end
+  def tour
+    render layout: 'splash'
+  end
 end
