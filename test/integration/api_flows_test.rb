@@ -414,6 +414,15 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json['error']['code'],"55")
     end
+    
+    # should "produce the correct permissions errors on OAuth2 authentication (End of grant action)" do
+    #       @client = Server.register(
+    #         :display_name => "UberClient", 
+    #         :redirect_uri => "http://uberclient.dot/callback", 
+    #         :link => "http://example.com/", 
+    #         :scope => "read write oauth-admin")
+    #       Rack::OAuth2::Server::AccessGrant.create(code:  "1234567890abcdef", identity: @user.id, client_id: @client.id, redirect_uri: '' )
+    #     end
 end
   
   ######################################
