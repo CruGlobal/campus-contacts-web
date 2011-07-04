@@ -13,17 +13,14 @@
   
   <div class="splashbanner">
     <div class="slide slide1">
-      <!-- <a href="/tour"><%= image_tag("splash/box_left.jpg") %></a>
-      <a href="/tour"><%= image_tag("splash/box_mid.jpg") %></a>
-      <a href="/tour"><%= image_tag("splash/box_right.jpg") %></a> -->
-      <%= image_tag("splash/box_left.jpg") %>
-      <%= image_tag("splash/box_mid.jpg") %>
-      <%= image_tag("splash/box_right.jpg") %>
+      <a href="/welcome/tour"><%= image_tag("splash/box_left.jpg") %></a>
+      <a href="/welcome/tour"><%= image_tag("splash/box_mid.jpg") %></a>
+      <a href="/welcome/tour"><%= image_tag("splash/box_right.jpg") %></a> 
     </div>
   </div>
 
   <div class="salespush">
-    <!-- Get the Details & <a href="/tour" class="learnmore">Learn More</a> or  --><%= link_to("Get Started", new_user_session_path, :class => "getstartedbt") %>
+    Get the Details & <a href="/welcome/tour" class="learnmore">Learn More</a> or <%= link_to("Get Started", new_user_session_path, :class => "getstartedbt") %>
   </div>
 
 </div>
