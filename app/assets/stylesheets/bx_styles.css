@@ -1,3 +1,20 @@
+
+
+
+
+@font-face {
+    font-family: 'SpecialEliteRegular';
+    src: url('/assets/SpecialElite-webfont.eot');
+    src: url('/assets/SpecialElite-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/assets/SpecialElite-webfont.woff') format('woff'),
+         url('/assets/SpecialElite-webfont.ttf') format('truetype'),
+         url('/assets/SpecialElite-webfont.svg#SpecialEliteRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
 /* @override http://localhost/bxslider_v3_plugin/css/styles.css */
 
 /*
@@ -9,7 +26,7 @@
 .bx-next {
 	position:absolute;
 	top:40%;
-	right:-50px;
+	right:-13px;
 	z-index:999;
 	width: 30px;
 	height: 30px;
@@ -21,7 +38,7 @@
 .bx-prev {
 	position:absolute;
 	top:40%;
-	left:-50px;
+	left:-13px;
 	z-index:999;
 	width: 30px;
 	height: 30px;
@@ -101,7 +118,60 @@
   border-radius: 15px;
 }
 
+#splashslider {
+  margin: 0;
+  width: 940px;
+}
+
 #splashslider li {
   padding: 0;
   margin: 0;
+}
+
+#splashslider .slide {
+  width: 930px;
+  color: #fff;
+}
+
+.slide h2 {
+  color: #C5D96F;
+  font-family: 'SpecialEliteRegular', Tahoma;
+  font-size: 36px;
+  font-weight: normal;
+  margin-top: 0px;
+  margin-bottom: 15px;
+  
+}
+
+.slide {
+  font-size: 14px;
+  font-family: Verdana;
+  min-height: 315px;
+}
+
+.slide a {
+  color: #70CDE3;
+}
+
+.slide .questions a {
+  text-decoration: none;
+}
+
+.slide .questions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#splashslider .questions li {
+  margin-bottom: 5px;
+}
+
+.slide1 {
+  background: url(/assets/slide1.png) no-repeat 90% 100%;
+}
+
+.slide .left {
+  width: 440px;
+  padding: 35px 0px 35px 46px;
 }

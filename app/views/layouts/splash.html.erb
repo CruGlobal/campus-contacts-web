@@ -2,18 +2,13 @@
 <html>
 <head>
   <%= render 'shared/head' %>
-  <!-- bxslider stuff -->
-  <%= stylesheet_link_tag 'bx_styles' %>
-  <%= javascript_include_tag 'jquery.bxSlider.min.js' %>
-  <%= javascript_include_tag 'jquery.easing.1.3.js' %>
-  
-  <script type="text/javascript">
-    $(document).ready(function(){
-      $('#splashslider').bxSlider({
-        pager: true
-      });
-    });
-  </script>
+  <script>
+	  $(function() {
+  		$( "#thetour" ).tabs();
+  	  $("table.actionpack tr:even").addClass("even");
+  	});
+  	
+	</script>
   
 </head>
 <body id="<%= controller.controller_name %>_controller">
