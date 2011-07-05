@@ -12,6 +12,7 @@ class ContactsController < ApplicationController
     @question_sheets = @organization.question_sheets
     @questions = @organization.questions.where("#{PageElement.table_name}.hidden" => false).flatten.uniq
     @hidden_questions = @organization.questions.where("#{PageElement.table_name}.hidden" => true).flatten.uniq
+    @people = unassigned_people(@organization)
     if params[:dnc] == 'true'
       @people = @organization.dnc_contacts.order('lastName, firstName')
     elsif params[:completed] == 'true'
@@ -21,11 +22,10 @@ class ContactsController < ApplicationController
         if params[:assigned_to] == 'all'
           @people = @organization.inprogress_contacts.order('lastName, firstName')
         else
-          @assigned_to = Person.find(params[:assigned_to])
-          @people = Person.order('lastName, firstName').includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
+          if params[:assigned_to].present? && @assigned_to = Person.find_by_id(params[:assigned_to])
+            @people = Person.order('lastName, firstName').includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
+          end
         end
-      else
-        @people = unassigned_people(@organization)
       end
     end
     if params[:first_name].present?
