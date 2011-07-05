@@ -40,7 +40,7 @@ class ContactsController < ApplicationController
     
     if params[:answers].present?
       params[:answers].each do |q_id, v|
-        @people = @people.includes(:answer_sheets => :answers).where("#{Answer.table_name}.question_id = ? AND #{Answer.table_name}.value like ?", q_id, '%' + v + '%')
+        @people = @people.includes(:answer_sheets => :answers).where("#{Answer.table_name}.question_id = ? AND #{Answer.table_name}.value like ?", q_id, '%' + v + '%') unless v.strip.blank?
       end
     end
   end
