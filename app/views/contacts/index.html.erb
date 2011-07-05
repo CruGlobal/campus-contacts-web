@@ -49,11 +49,16 @@
       First Name: <%= text_field_tag :first_name, params[:first_name] %><br>
       Last Name: <%= text_field_tag :last_name, params[:last_name] %><br>
       Email: <%= text_field_tag :email, params[:email] %><br>
-      <% @questions.each do |q| %>
+      <div>
+      <% @questions.each_with_index do |q, i| %>
+        <% if i == (@questions.length / 2.0).ceil %>
+          </div><div>
+        <% end %>
         <%= q.label %>:
         <%= render :partial => 'questions/' + q.ptemplate, :object => q, :locals => {:col => nil} %>
         <br>
       <% end %>
+      </div>
       <%= submit_tag 'Search' %>
     <% end %>
   </div>
