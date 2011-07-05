@@ -2,61 +2,64 @@
   <%= render 'contacts/leaders' %>
 <% end %>
 
-<%= link_to(t('.filter'), '#', id: 'filter_link') %>
-<div id="filter_box" style="<%= 'display:none' unless params[:search] %>">
-  <%= form_tag params, method: :get do %>
-    <%= hidden_field_tag :search, 1 %>
-    <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
-    First Name: <%= text_field_tag :first_name, params[:first_name] %><br>
-    Last Name: <%= text_field_tag :last_name, params[:last_name] %><br>
-    Email: <%= text_field_tag :email, params[:email] %><br>
-    <% @questions.each do |q| %>
-      <%= q.label %>:
-      <%= render :partial => 'questions/' + q.ptemplate, :object => q, :locals => {:col => nil} %>
-      <br>
-    <% end %>
-    <%= submit_tag 'Search' %>
-  <% end %>
-</div>
-<%= form_for ContactAssignment.new do |f| %>
-  <div class="titlebar">  
-    <h1>
-      <% if params[:assigned_to] == 'all' %>
-        <%= t('.all_responses') %>
+<div class="titlebar">  
+  <h1>
+    <% if params[:assigned_to] == 'all' %>
+      <%= t('.all_responses') %>
+    <% else %>
+      <% if @assigned_to.present? %>
+        <%= t('.responses_assigned_to', assigned_to: @assigned_to) %>
+        <%= link_to(t('.show_all'), contacts_path(assigned_to: 'all')) %>
+      <% elsif params[:dnc] == 'true' %>
+        <%= t('.dnc_contacts') %>
       <% else %>
-        <% if @assigned_to.present? %>
-          <%= t('.responses_assigned_to', assigned_to: @assigned_to) %>
-          <%= link_to(t('.show_all'), contacts_path(assigned_to: 'all')) %>
-        <% elsif params[:dnc] == 'true' %>
-          <%= t('.dnc_contacts') %>
-        <% else %>
-          <%= t('.unassigned_responses') %>
-        <% end %>
+        <%= t('.unassigned_responses') %>
       <% end %>
-    </h3>
-  </div>
+    <% end %>
+  </h3>
+</div>
+
+<div class="pagemenu">
+  <ul class="pillmenu">
+    <li><%= check_box_tag 'check_all' %></li>
+  </ul>
+  <ul class="pillmenu">
+    <li><%= link_to(t('.hidden_questions'), '#', id: 'hidden_questions_link') %></li>
+  </ul>
+  <ul class="pillmenu">
+    <li><%= link_to("Assign", "", class: 'assign') %></li>
+    <li><%= link_to("Unassign", "", id: 'bulk_unassign') %></li>
+    <li><%= link_to("Add Contact", "", class: 'add_contact') %></li>
+  </ul>
   
-  <div class="pagemenu">
-    <ul class="pillmenu">
-      <li><%= check_box_tag 'check_all' %></li>
-    </ul>
-    <ul class="pillmenu">
-      <li><%= link_to(t('.hidden_questions'), '#', id: 'hidden_questions_link') %></li>
-    </ul>
-    <ul class="pillmenu">
-      <li><%= link_to("Assign", "", class: 'assign') %></li>
-      <li><%= link_to("Unassign", "", id: 'bulk_unassign') %></li>
-      <li><%= link_to("Add Contact", "", class: 'add_contact') %></li>
-    </ul>
-    
-    <div id="hidden_questions_div" style="display:none">
-      Click on a question to add it back to the page 
-      <ul id="hidden_questions">
-        <%= render partial: 'contacts/hidden_question', collection: @hidden_questions %>
-      </ul>
-    </div>
-  </div>
+  <ul class="pillmenu">
+    <li><%= link_to(t('.filter'), '#', id: 'filter_link') %></li>
+  </ul>
   
+  <div id="hidden_questions_div" style="display:none">
+    Click on a question to add it back to the page 
+    <ul id="hidden_questions">
+      <%= render partial: 'contacts/hidden_question', collection: @hidden_questions %>
+    </ul>
+  </div>
+  <div id="filter_box" style="<%= 'display:none' unless params[:search] %>">
+    <%= form_tag params, method: :get do %>
+      <%= hidden_field_tag :search, 1 %>
+      <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
+      First Name: <%= text_field_tag :first_name, params[:first_name] %><br>
+      Last Name: <%= text_field_tag :last_name, params[:last_name] %><br>
+      Email: <%= text_field_tag :email, params[:email] %><br>
+      <% @questions.each do |q| %>
+        <%= q.label %>:
+        <%= render :partial => 'questions/' + q.ptemplate, :object => q, :locals => {:col => nil} %>
+        <br>
+      <% end %>
+      <%= submit_tag 'Search' %>
+    <% end %>
+  </div>
+</div>
+  
+<%= form_for ContactAssignment.new do |f| %>
   <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
   <%#= t('.assign_to') %> 
   <%#= select_tag :assign_to, options_for_select(@organization.leaders.collect {|l| [l.to_s, l.id]}), include_blank: true %>

@@ -108,7 +108,7 @@
       do_not_contact: Do Not Contact
       completed: Completed
     index:
-      filter: 'Click here to filter results'
+      filter: 'Filter Results'
       first_name: 'First Name'
       last_name: 'Last Name'
       leaders: Leaders
