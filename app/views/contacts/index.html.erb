@@ -63,13 +63,20 @@
           </div><div class="q2b">
         <% end %>
         <div class="field userdefinied">
-          <span class="title"><%= q.label %>:</span>
+          <span class="title"><%= q.label %></span>
+          <% if q.style == 'radio' %>
+            <div class="field field_radio">
+              <input type="radio" value="" name="answers[<%= q.id %>]" class="radio ">
+              <label class="choice"></label>
+            </div>
+          <% end %>
           <%= render :partial => 'questions/' + q.ptemplate, :object => q, :locals => {:col => nil} %>
         </div>
       <% end %>
       </div>
       <div class="actionbarinline">
         <%= submit_tag 'Search' %>
+        <%= link_to 'Reset Form', '', onclick: "$(this).closest('form')[0].reset(); return false;" %>
       </div>
     <% end %>
   </div>

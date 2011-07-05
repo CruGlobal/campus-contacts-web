@@ -14,11 +14,7 @@
   <div class="pagemenu">
     <ul class="pillmenu">
       <li>
-        <% if current_user.sms_keywords.present? %>
-          <%= link_to(t("welcome.home.request_another_key"), new_sms_keyword_path) %>
-        <% else %>
-          <%= link_to(t("welcome.index.request_key"), new_sms_keyword_path) %>
-        <% end %>
+        <%= link_to(t("welcome.index.request_key"), new_sms_keyword_path) %>
       </li>
     </ul>
   </div>

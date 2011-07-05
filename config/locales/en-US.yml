@@ -67,7 +67,6 @@
     home:
       title_top: "Welcome to MissionHub!"
       keywords: "Keywords"
-      request_another_key: "Click here to request another sms keyword."
       manage_questions: "Manage Questions"
       edit_keyword: 'Edit Keyword'
       your_orgs: 'Your Organizational Involvements'

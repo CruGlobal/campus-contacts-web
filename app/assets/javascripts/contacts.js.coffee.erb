@@ -1,7 +1,17 @@
 $ ->
   if $.params.answers
     $.each $.params.answers, (k, v) ->
-      $("[name='answers[" + k + "]']").val(v)
+      if $.isPlainObject(v)
+        # Checkboxes
+        $.each v, (k1, v1) ->
+          if v1 != ""
+            $("[name='answers[" + k + "][" + k1 + "]']").prop('checked', true)
+      else
+        field = $("[name='answers[" + k + "]']")
+        if field.attr('type') == 'radio'
+          field.prop('checked', true)
+        else
+          field.val(v)
 
   $('#filter_link').click -> 
     $('#filter_box').toggle()

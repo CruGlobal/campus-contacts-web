@@ -40,7 +40,20 @@ class ContactsController < ApplicationController
     
     if params[:answers].present?
       params[:answers].each do |q_id, v|
-        @people = @people.includes(:answer_sheets => :answers).where("#{Answer.table_name}.question_id = ? AND #{Answer.table_name}.value like ?", q_id, '%' + v + '%') unless v.strip.blank?
+        if v.is_a?(String)
+          @people = @people.includes(:answer_sheets => :answers).where("#{Answer.table_name}.question_id = ? AND #{Answer.table_name}.value like ?", q_id, '%' + v + '%') unless v.strip.blank?
+        else
+          conditions = ["#{Answer.table_name}.question_id = ?", q_id]
+          answers_conditions = []
+          v.each do |k1, v1| 
+            unless v1.strip.blank?
+              answers_conditions << "#{Answer.table_name}.value like ?"
+              conditions << v1
+            end
+          end
+          conditions[0] = conditions[0] + ' AND (' + answers_conditions.join(' OR ') + ')' if answers_conditions.present?
+          @people = @people.includes(:answer_sheets => :answers).where(conditions) 
+        end
       end
     end
   end
@@ -74,6 +87,7 @@ class ContactsController < ApplicationController
     question_set.save
     create_contact_at_org(@person, @keyword.organization)
     if @person.valid?
+      create_contact_at_org(@person, current_organization)
       render :thanks
     else
       render :new

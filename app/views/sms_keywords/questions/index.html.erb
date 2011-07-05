@@ -51,7 +51,7 @@
     </tbody>
   </table>  
   
-  <%= link_to('+ Add a question', '#', onclick: "$('#question_form').slideDown()", class: "inlinebutton") %>
+  <%= link_to('+ Add a question', '', id: 'add_question_link', class: "inlinebutton") %>
   
   <div id="question_form" style="display:none">
     <%= render 'form', question: Question.new %>
