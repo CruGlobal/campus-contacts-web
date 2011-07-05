@@ -40,8 +40,17 @@ class ContactsController < ApplicationController
     
     if params[:answers].present?
       params[:answers].each do |q_id, v|
+        question = Element.find(q_id)
         if v.is_a?(String)
-          @people = @people.includes(:answer_sheets => :answers).where("#{Answer.table_name}.question_id = ? AND #{Answer.table_name}.value like ?", q_id, '%' + v + '%') unless v.strip.blank?
+          # If this question is assigned to a column, we need to handle that differently
+          if question.object_name.present?
+            table_name = case question.object_name
+                         when 'person'
+                           @people = @people.where("#{Person.table_name}.#{question.attribute_name} like ?", '%' + v + '%') unless v.strip.blank?
+                         end
+          else
+            @people = @people.includes(:answer_sheets => :answers).where("#{Answer.table_name}.question_id = ? AND #{Answer.table_name}.value like ?", q_id, '%' + v + '%') unless v.strip.blank?
+          end
         else
           conditions = ["#{Answer.table_name}.question_id = ?", q_id]
           answers_conditions = []
