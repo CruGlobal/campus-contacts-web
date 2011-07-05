@@ -21,8 +21,9 @@ class ContactsController < ApplicationController
         if params[:assigned_to] == 'all'
           @people = @organization.inprogress_contacts.order('lastName, firstName')
         else
-          @assigned_to = Person.find(params[:assigned_to])
-          @people = Person.order('lastName, firstName').includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
+          if params[:assigned_to].present? && @assigned_to = Person.find_by_id(params[:assigned_to])
+            @people = Person.order('lastName, firstName').includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
+          end
         end
       else
         @people = unassigned_people(@organization)
