@@ -2,6 +2,22 @@
   <%= render 'contacts/leaders' %>
 <% end %>
 
+<%= link_to(t('.filter'), '#', id: 'filter_link') %>
+<div id="filter_box" style="<%= 'display:none' unless params[:search] %>">
+  <%= form_tag params, method: :get do %>
+    <%= hidden_field_tag :search, 1 %>
+    <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
+    First Name: <%= text_field_tag :first_name, params[:first_name] %><br>
+    Last Name: <%= text_field_tag :last_name, params[:last_name] %><br>
+    Email: <%= text_field_tag :email, params[:email] %><br>
+    <% @questions.each do |q| %>
+      <%= q.label %>:
+      <%= render :partial => 'questions/' + q.ptemplate, :object => q, :locals => {:col => nil} %>
+      <br>
+    <% end %>
+    <%= submit_tag 'Search' %>
+  <% end %>
+</div>
 <%= form_for ContactAssignment.new do |f| %>
   <div class="titlebar">  
     <h1>

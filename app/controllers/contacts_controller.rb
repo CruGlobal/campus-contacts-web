@@ -28,6 +28,21 @@ class ContactsController < ApplicationController
         @people = unassigned_people(@organization)
       end
     end
+    if params[:first_name].present?
+      @people = @people.where("firstName like ? OR preferredName like ?", '%' + params[:first_name].strip + '%', '%' + params[:first_name].strip + '%')
+    end
+    if params[:last_name].present?
+      @people = @people.where("lastName like ?", '%' + params[:last_name].strip + '%')
+    end
+    if params[:email].present?
+      @people = @people.includes(:primary_email_address).where("email_addresses.email like ?", '%' + params[:email].strip + '%')
+    end
+    
+    if params[:answers].present?
+      params[:answers].each do |q_id, v|
+        @people = @people.includes(:answer_sheets => :answers).where("#{Answer.table_name}.question_id = ? AND #{Answer.table_name}.value like ?", q_id, '%' + v + '%')
+      end
+    end
   end
   
   def mine
