@@ -1,6 +1,6 @@
 <li class="leader" data-id="<%= person.id %>">
-  <% if can? :manage, @organization %>
+  <%# if can? :manage, @organization %>
     <%= link_to('x', leader_path(person.id), method: :delete, remote: true, class: 'delete_leader', :confirm => "Are you sure you want to remove #{person} as a leader?") %>
-  <% end %>
+  <%# end %>
   <span class="name"><%= link_to(person, contacts_path(assigned_to: person.id)) %></span> (<span class="count"><%= person.contact_assignments.for_org(@organization).count %></span>)
 </li>

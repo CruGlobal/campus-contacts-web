@@ -279,7 +279,7 @@ class Person < ActiveRecord::Base
     hash['location'] = latest_location.to_hash if latest_location
     hash['locale'] = user.try(:locale) ? user.locale : ""
     hash['organization_membership'] = organization_memberships.includes(:organization).collect {|x| {org_id: x.organization_id, primary: x.primary?.to_s, name: x.organization.name}}
-    hash['organizational_roles'] = organizational_roles.includes(:role, :organization).collect {|r| {org_id: r.organization_id, role: r.role.i18n, name: r.organization.name}}
+    hash['organizational_roles'] = organizational_roles.includes(:role, :organization).collect {|r| {org_id: r.organization_id, role: r.role.i18n, name: r.organization.name, primary: organization_memberships.where(organization_id: r.organization_id).first.primary?.to_s}}
     hash
   end
   
