@@ -1,6 +1,8 @@
 <ul class="leftmenu">
   <li class="heading selected">
-    <%= link_to(raw(t('contacts.index.add') + " " + image_tag('add.png')), '#', class: 'add-leader listaction') %>
+    <%# if can? :manage, @organization %>
+      <%= link_to(raw(t('contacts.index.add') + " " + image_tag('add.png')), '#', class: 'add-leader listaction') %>
+    <%# end %>
     <h3><%= t('contacts.index.leaders') %></h3>
   </li>
   <li>

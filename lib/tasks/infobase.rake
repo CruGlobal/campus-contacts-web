@@ -96,19 +96,21 @@ namespace :infobase do
     puts "Need to go through activity rows"
     i = 0
     Ccc::MinistryActivity.where("status NOT IN('IN', 'TN')").each do |activity|
-      i += 1
-      puts i if i % 1000 == 0
-      target = TargetArea.find(activity.fk_targetAreaID)
-      m = Organization.where(importable_id: activity.id, importable_type: 'Ccc::MinistryActivity').first
-      attribs = {name: "#{strategies[activity.strategy]} at #{target.name}", terminology: 'Movement', importable_id: activity.id, importable_type: 'Ccc::MinistryActivity'}
-      if m
-        m.update_attributes(attribs)
-      else
-        team = Organization.where(importable_id: activity.fk_teamID, importable_type: 'Ccc::MinistryLocallevel').first
-        next unless team
-        m = team.children.create!(attribs) 
-        m.target_areas << target
-        m.save!
+      if activity.fk_targetAreaID.present?
+        i += 1
+        puts i if i % 1000 == 0
+        target = TargetArea.find(activity.fk_targetAreaID)
+        m = Organization.where(importable_id: activity.id, importable_type: 'Ccc::MinistryActivity').first
+        attribs = {name: "#{strategies[activity.strategy]} at #{target.name}", terminology: 'Movement', importable_id: activity.id, importable_type: 'Ccc::MinistryActivity'}
+        if m
+          m.update_attributes(attribs)
+        else
+          team = Organization.where(importable_id: activity.fk_teamID, importable_type: 'Ccc::MinistryLocallevel').first
+          next unless team
+          m = team.children.create!(attribs) 
+          m.target_areas << target
+          m.save!
+        end
       end
       
       # Find all the students active in the system in the past year, and add them to this movement

@@ -12,6 +12,7 @@ class ContactsController < ApplicationController
     @question_sheets = @organization.question_sheets
     @questions = @organization.questions.where("#{PageElement.table_name}.hidden" => false).flatten.uniq
     @hidden_questions = @organization.questions.where("#{PageElement.table_name}.hidden" => true).flatten.uniq
+    @people = unassigned_people(@organization)
     if params[:dnc] == 'true'
       @people = @organization.dnc_contacts.order('lastName, firstName')
     elsif params[:completed] == 'true'
@@ -21,11 +22,49 @@ class ContactsController < ApplicationController
         if params[:assigned_to] == 'all'
           @people = @organization.inprogress_contacts.order('lastName, firstName')
         else
-          @assigned_to = Person.find(params[:assigned_to])
-          @people = Person.order('lastName, firstName').includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
+          if params[:assigned_to].present? && @assigned_to = Person.find_by_personID(params[:assigned_to])
+            @people = Person.order('lastName, firstName').includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
+          end
         end
-      else
-        @people = unassigned_people(@organization)
+      end
+    end
+    if params[:first_name].present?
+      @people = @people.where("firstName like ? OR preferredName like ?", '%' + params[:first_name].strip + '%', '%' + params[:first_name].strip + '%')
+    end
+    if params[:last_name].present?
+      @people = @people.where("lastName like ?", '%' + params[:last_name].strip + '%')
+    end
+    if params[:email].present?
+      @people = @people.includes(:primary_email_address).where("email_addresses.email like ?", '%' + params[:email].strip + '%')
+    end
+    
+    if params[:answers].present?
+      params[:answers].each do |q_id, v|
+        question = Element.find(q_id)
+        if v.is_a?(String)
+          # If this question is assigned to a column, we need to handle that differently
+          if question.object_name.present?
+            table_name = case question.object_name
+                         when 'person'
+                           @people = @people.where("#{Person.table_name}.#{question.attribute_name} like ?", '%' + v + '%') unless v.strip.blank?
+                         end
+          else
+            @people = @people.includes(:answer_sheets => :answers).where("#{Answer.table_name}.question_id = ? AND #{Answer.table_name}.value like ?", q_id, '%' + v + '%') unless v.strip.blank?
+          end
+        else
+          conditions = ["#{Answer.table_name}.question_id = ?", q_id]
+          answers_conditions = []
+          v.each do |k1, v1| 
+            unless v1.strip.blank?
+              answers_conditions << "#{Answer.table_name}.value like ?"
+              conditions << v1
+            end
+          end
+          if answers_conditions.present?
+            conditions[0] = conditions[0] + ' AND (' + answers_conditions.join(' OR ') + ')'
+            @people = @people.includes(:answer_sheets => :answers).where(conditions) 
+          end
+        end
       end
     end
   end
@@ -59,6 +98,7 @@ class ContactsController < ApplicationController
     question_set.save
     create_contact_at_org(@person, @keyword.organization)
     if @person.valid?
+      create_contact_at_org(@person, current_organization)
       render :thanks
     else
       render :new

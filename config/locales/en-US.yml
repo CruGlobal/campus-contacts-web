@@ -67,7 +67,6 @@
     home:
       title_top: "Welcome to MissionHub!"
       keywords: "Keywords"
-      request_another_key: "Click here to request another sms keyword."
       manage_questions: "Manage Questions"
       edit_keyword: 'Edit Keyword'
       your_orgs: 'Your Organizational Involvements'
@@ -108,6 +107,7 @@
       do_not_contact: Do Not Contact
       completed: Completed
     index:
+      filter: 'Filter Results'
       first_name: 'First Name'
       last_name: 'Last Name'
       leaders: Leaders

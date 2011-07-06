@@ -507,7 +507,8 @@ ul.pillmenu {
 
 
 
-#hidden_questions_div {
+#hidden_questions_div,
+#filter_box {
   background: $white;
   padding: 6px;
   margin: 10px 0;
@@ -535,6 +536,36 @@ ul.pillmenu {
 .icon.delete {  background-image: url("<%= asset_path('delete.png') %>");}
 .icon.edit {  background-image: url("<%= asset_path('edit_sm.png') %>");}
 .icon.check {  background-image: url("<%= asset_path('check.png') %>");}
+
+.q1b, .q2b {
+	display: inline-block;
+	margin-right: 50px;
+	vertical-align: top;
+}
+
+span.title {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.field .field_check,
+.field .field_radio {
+	margin-bottom: 5px;
+	label{
+		display: inline-block;
+	}
+}
+
+.ononeline > .field {
+	display: inline-block;
+}
+
+.actionbarinline {
+	background: #f0f0f0;
+	padding: 3px;
+}
 
 
 /* SPLASH PAGE */
