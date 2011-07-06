@@ -4,9 +4,9 @@ module Ccc
     
     included do
       has_many :ministry_newaddresses, class_name: 'Ccc::MinistryNewaddress', foreign_key: :fk_PersonID, dependent: :destroy
-			has_many :crs_registrations, class_name: 'Ccc::CrsRegistration', dependent: :destroy
+			has_many :crs_registrations, class_name: 'Ccc::CrsRegistration', foreign_key: :fk_PersonID, dependent: :destroy
 
-      has_one :crs2_profiles, class_name: 'Ccc::Crs2Profile', dependent: :destroy
+      has_one :crs2_profiles, class_name: 'Ccc::Crs2Profile', foreign_key: :ministry_person_id, dependent: :destroy
       has_one :mpd_users, class_name: 'Ccc::MpdUser', dependent: :destroy
       has_many :pr_reviewers, class_name: 'Ccc::PrReviewer', dependent: :destroy
       has_many :pr_reviews, class_name: 'Ccc::PrReview' # dependant? subject_id, initiator_id
