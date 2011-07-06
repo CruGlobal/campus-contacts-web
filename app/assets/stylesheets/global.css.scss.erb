@@ -811,17 +811,26 @@ span.title {
 
 }
 
+#thetour {
+	margin-top: 15px;
+}
+
 .essay {
 	font-size: 14px;
 	h3.ui-accordion-header {
 	  color: #C5D96F;
-	  font-family: 'SpecialEliteRegular', Tahoma;
-	  font-size: 24px;
-	  font-weight: normal;
-		margin: 0;
+	  font-family: Arial, Tahoma;
+	  font-size: 18px;
+	  font-weight: bold;
+		margin: 10px 0;
 		text-align: left;
 		border: none;
 		background: none;
+		text-shadow: 0 0 4px rgba(255,255,255,.75);
+		padding-left: 35px;
+	}
+	h3.ui-state-active {
+		text-shadow: 0 0 4px #000;
 	}
 	.column3 {
 		display: table-cell;
@@ -830,20 +839,24 @@ span.title {
 	}
 	.column3center {
 		padding: 0 15px;
-		border: 1px dashed silver;
+		border: 1px dashed #777;
 		border-width: 0 1px;
 	}
 	.column2 {
-		width: 300px;
+		width: 280px;
 		display: table-cell;
 		padding-right: 20px;
 	}
 	h3 {
-		color: $blue;
+		color: #ababab;
+		font-family: Arial;
+		font-weight: normal;
 		.emphasis {
+			color: #fff;
 			display: block;
 			font-weight: normal;
 			font-size: 40px;
+			line-height: 40px;
 		}
 	}
 	.explination ul {
@@ -854,12 +867,18 @@ span.title {
 			background: url("<%= asset_path("arrow.png") %>") no-repeat 0 0;
 			margin-bottom: 8px;
 			padding: 0 0 0 22px;
-			font-size: 14px;
+			font-size: 11px;
 		}
 	}
 	.explination {
-		margin-bottom: 0px;
-		border: none;
+		background: none repeat scroll 0 0 #3F3F3F;
+    border: 1px solid #5D5D5D;
+    border-radius: 12px 12px 12px 12px;
+    box-shadow: 0 0 21px rgba(0, 0, 0, 0.16) inset;
+		margin-bottom: 20px;
+		color: #fff;
+		padding: 15px;
+		font-size: 12px;
 	}
 	.imageleft, .imageright {
 		float: left;
@@ -867,11 +886,13 @@ span.title {
 	}
 	.imageright {
 		float: right;
+		margin-top: 8px;
 	}
 	.story {
-		font-family: Georgia;
-		font-size: 15px;
+		font-family: "Courier New", Georgia;
+		font-size: 13.5px;
 		margin: 0 auto;
+		line-height: 1.35em;
 	}
 	hr.fun {
 		border: none;
@@ -879,11 +900,14 @@ span.title {
 		margin: 30px 0;
 		height: 12px;
 	}
+	p {
+		line-height: 1.5em;
+	}
 	.ui-widget-header {
 		background: none;
 		border: none;
 		padding-left: 20px;
-		margin-bottom: 5px;
+		margin-bottom: 0px;
 	}
 	table.actionpack {
 		border-collapse: collapse;
@@ -893,7 +917,7 @@ span.title {
 		.how {}
 		.do {font-weight: bold;}
 		tr.even td {
-			background: #f0f0f0;
+			background: #303030;
 		}
 	}
 	.ui-tabs-panel {
@@ -904,12 +928,12 @@ span.title {
 	}
 	.ui-tabs-nav .ui-state-active {
     border: none;
-    color: #fff;
+    color: #f0f0f0;
     font-weight: bold;
-		background: $blue;
-		border-radius: 5px;
+		background: #4d4d4d;
+		border-radius: 5px 5px 0 0;
 		overflow: hidden;
-		a {color: #fff;}
+		a {color: #f0f0f0;}
 	}
 	.ui-tabs .ui-tabs-nav li.ui-tabs-selected  {
 		margin-bottom: -1px;	
@@ -917,6 +941,20 @@ span.title {
 	.ui-tabs-nav li {
 		background: none;
 		border: none;
+	}
+	.ui-state-default a {
+		color:$blue;
+	}
+	
+	.ui-state-default .ui-icon {
+		background-image: url("/assets/pointer.png");
+    background-position: 0 2px;
+    left: 14px;
+	}
+	.ui-state-active .ui-icon {
+		background-image: url("/assets/pointer.png");
+    background-position: 0 -65px;
+    left: 14px;
 	}
 }
 
