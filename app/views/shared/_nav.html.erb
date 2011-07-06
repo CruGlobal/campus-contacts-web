@@ -7,7 +7,7 @@
           <div id="other_orgs" style="display:none">
             <ul>
               <% current_person.organization_memberships.each do |om| %>
-                <li>
+                <li <% if om.primary %>class="primary" title="This is your primary organization"<% end %>>
                   <label><%= om.organization %> </label>
                   <%= link_to(t('nav.go_to'), set_current_organization_membership_path(om), class: "icon magnify", title: "Go to #{om.organization}") %>
                   <%= link_to(t('nav.make_default'), set_primary_organization_membership_path(om), class: "icon check", title: "Set #{om.organization} as your default") %>
