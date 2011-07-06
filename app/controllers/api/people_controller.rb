@@ -8,7 +8,6 @@ class Api::PeopleController < ApiController
   rescue_from Exception, with: :render_json_error
   
   def show_1
-    # valid_fields = valid_request?(request)
     json_output = get_people.collect {|u| u.to_hash(@organization).slice(*@valid_fields) unless u.nil?}
     final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
     render json: final_output
