@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  before_filter :authenticate_user!, :prepare_for_mobile, :set_locale
+  before_filter :authenticate_user!, :set_locale
   protect_from_forgery  
 
   def facebook_logout
