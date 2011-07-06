@@ -68,12 +68,12 @@
         <div class="textarea">
           <%= f.text_area :comment, :rows => "2", placeholder: 'Add comments here...' %><br/>
         </div>
-        <%= f.submit t('contacts.show.add_comment'), id: 'comment_submit' %><%= spinner('comment') %>
+        <%= button_tag(t('contacts.show.add_comment'), id: 'comment_submit') %><%= spinner('comment') %>
         <div class="rejoiceablebox">
-          <%= link_to(t('contacts.show.attach_rejoicable'), '#', id: 'add_rejoicable') %><br/>
+          <%= link_to(t('contacts.show.attach_rejoicable'), '#', id: 'add_rejoicable', :class => "rj rejoiceable") %><br/>
           <div id="rejoicable_fields" style="display:none">
             <% Rejoicable::OPTIONS.each do |option| %>
-              <%= check_box_tag 'rejoicables[]', option %> <%= t("rejoicables.#{option}") %>
+              <%= check_box_tag 'rejoicables[]', option %> <span class="<%= option %> rj"><%= t("rejoicables.#{option}") %></span>
               <br/>
             <% end %>
           </div>
