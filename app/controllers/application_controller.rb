@@ -93,7 +93,7 @@ class ApplicationController < ActionController::Base
     unless OrganizationalRole.find_by_person_id_and_organization_id_and_role_id(person.id, organization.id, Role.contact.id)
       OrganizationalRole.create!(person_id: person.id, organization_id: organization.id, role_id: Role.contact.id, followup_status: OrganizationMembership::FOLLOWUP_STATUSES.first)
     end
-    unless OrganizationMembership.find_by_person_id_and_organization_id(person_id: person.id, organization_id: organization.id) 
+    unless OrganizationMembership.find_by_person_id_and_organization_id(person.id, organization.id) 
       OrganizationMembership.create!(person_id: person.id, organization_id: organization.id) 
     end
   end
