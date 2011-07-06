@@ -43,6 +43,10 @@ body {
   font-size: 12px;
 }
 
+img {
+	border: none;
+}
+
 
 
 .titlebar {
@@ -50,13 +54,36 @@ body {
   padding: 14px;
   h1 {
     font-family: $font-base;
+    color: #333333;
     font-size: 16px;
     margin: 0;
+    text-shadow: 1px 1px 3px #888888;
   }
   h1 img {
     margin-right: 5px;
   }
 }
+
+.headerlink {
+	background: url("/assets/pillbg.png") repeat-x scroll 0 0 transparent;
+	border: 1px solid #999999;
+  border-radius: 4px 4px 4px 4px;
+	box-shadow: 0 0 2px #999999;
+	color: #000000 !important;
+	display: inline-block;
+	font-size: 11px;
+	font-weight: bold;
+	margin: 0 7px;
+	padding: 2px 7px;
+	vertical-align: top;
+	text-decoration: none;
+}
+
+a.headerlink:hover {
+	text-decoration: none;
+}
+
+
 
 #outer {
   max-width: $maxpagewidth;
@@ -180,7 +207,7 @@ ul.leftmenu {
   }
   a.delete_leader {
     float: right;
-    background: silver;
+    background: #999 !important;
     color: $white;
     width: 12px;
     height: 12px;
@@ -524,6 +551,8 @@ ul.pillmenu {
   border: 1px solid #808080;
   margin-right: 8px;
   border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
   background: url('<%= asset_path('pillbg.png') %>') repeat-x;
   overflow: hidden;
   li {
@@ -641,7 +670,9 @@ span.title {
     -moz-border-radius: 35px;
     -webkit-border-radius: 35px;
     box-shadow: 0 0 8px #bbb inset;
-    padding: 25px;
+		-webkit-box-shadow: 0 0 8px #bbb inset;
+    -moz-box-shadow: 0 0 8px #bbb inset;
+		padding: 25px;
   }
   .salespush {
     font-size: 22px;
@@ -691,24 +722,6 @@ span.title {
     color: #B3B3B3;
     margin: 20px;
   }
-}
-
-.headerlink {
-	background: url("/assets/pillbg.png") repeat-x scroll 0 0 transparent;
-	border: 1px solid #999999;
-  border-radius: 4px 4px 4px 4px;
-	box-shadow: 0 0 2px #999999;
-	color: #000000 !important;
-	display: inline-block;
-	font-size: 11px;
-	font-weight: bold;
-	margin: 0 7px;
-	padding: 2px 7px;
-	vertical-align: top;
-	text-decoration: none;
-}
-a.headerlink:hover {
-	text-decoration: none;
 }
 
 .left {
@@ -851,9 +864,17 @@ a.headerlink:hover {
     padding: 0;
   }
   label {
-    width: 150px;
+    width: auto;
     display: inline-block;
+		margin-right: 10px;
   }
+	a {
+		text-decoration: none;
+		cursor: pointer;
+	}
+	a label:hover {
+		text-decoration: none;
+	}
   .icon {
     vertical-align: bottom;
   }
@@ -867,6 +888,9 @@ a.headerlink:hover {
 	li.primary {
 		font-weight: bold;
 		color:$blue;
+	}
+	.orgactions {
+		float: right;
 	}
 }
 
@@ -939,14 +963,20 @@ a.headerlink:hover {
 			background: url("<%= asset_path("arrow.png") %>") no-repeat 0 0;
 			margin-bottom: 8px;
 			padding: 0 0 0 22px;
-			font-size: 11px;
+			font-size: 12px;
 		}
 	}
 	.explination {
 		background: none repeat scroll 0 0 #3F3F3F;
     border: 1px solid #5D5D5D;
     border-radius: 12px 12px 12px 12px;
+		-webkit-border-radius: 12px 12px 12px 12px;
+		-moz-border-radius: 12px 12px 12px 12px;
+		
     box-shadow: 0 0 21px rgba(0, 0, 0, 0.16) inset;
+		-moz-box-shadow: 0 0 21px rgba(0, 0, 0, 0.16) inset;
+		-webkit-box-shadow: 0 0 21px rgba(0, 0, 0, 0.16) inset;
+		
 		margin-bottom: 20px;
 		color: #fff;
 		padding: 15px;
@@ -961,7 +991,6 @@ a.headerlink:hover {
 		margin-top: 8px;
 	}
 	.story {
-		font-family: "Courier New", Georgia;
 		font-size: 13.5px;
 		margin: 0 auto;
 		line-height: 1.35em;
@@ -996,7 +1025,11 @@ a.headerlink:hover {
 		border: none;
 		background: #4d4d4d;
 		border-radius: 20px;
+		-webkit-border-radius: 20px;
+		-moz-border-radius: 20px;
 		box-shadow: 0 0 15px #000 inset;
+		-webkit-box-shadow: 0 0 15px #000 inset;
+		-moz-box-shadow: 0 0 15px #000 inset;
 	}
 	.ui-tabs-nav .ui-state-active {
     border: none;
@@ -1004,6 +1037,8 @@ a.headerlink:hover {
     font-weight: bold;
 		background: #4d4d4d;
 		border-radius: 5px 5px 0 0;
+		-moz-border-radius: 5px 5px 0 0;
+		-webkit-border-radius: 5px 5px 0 0;
 		overflow: hidden;
 		a {color: #f0f0f0;}
 	}

@@ -2,25 +2,22 @@
 <html>
 <head>
   <%= render 'shared/head' %>
-  <script>
-	  $(function() {
-  	  $("table.actionpack tr:even").addClass("even");
-  	  $(".touraccordion").accordion({animated: 'bounceslide', autoHeight: false});
-  	  
-  		$( "#thetour" ).tabs();
-  	});
-  	
-	</script>
-  
+  <%= stylesheet_link_tag 'plain' %>
 </head>
 <body id="<%= controller.controller_name %>_controller">
   
-  <div id="outer" class="splash">
+  <div id="outer" class="plain">
+    <div id="plainheader">
+      <a href="/" id="logo"></a>
+    </div>
   
-    <%= render 'shared/nav' %>
-      <div class="<%= params[:action] %>">
-        <%= yield %>
-      </div>
+    <div class="<%= params[:action] %>">
+      <%= yield %>
+    </div>
+    
+    <div class="footer">
+      MissionHub 2011 &copy;
+    </div>
     
   </div><!-- outer -->
 

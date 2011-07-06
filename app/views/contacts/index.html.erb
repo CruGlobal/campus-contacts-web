@@ -23,13 +23,15 @@
   <ul class="pillmenu">
     <li><%= check_box_tag 'check_all' %></li>
   </ul>
-  <ul class="pillmenu">
-    <li><%= link_to(t('.hidden_questions'), '#', id: 'hidden_questions_link') %></li>
-  </ul>
+  
   <ul class="pillmenu">
     <li><%= link_to("Assign", "", class: 'assign') %></li>
     <li><%= link_to("Unassign", "", id: 'bulk_unassign') %></li>
     <li><%= link_to("Add Contact", "", class: 'add_contact') %></li>
+  </ul>
+  
+  <ul class="pillmenu">
+    <li><%= link_to(t('.hidden_questions'), '#', id: 'hidden_questions_link') %></li>
   </ul>
   
   <ul class="pillmenu">
