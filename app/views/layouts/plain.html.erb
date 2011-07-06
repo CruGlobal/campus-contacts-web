@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%= render 'shared/head' %>
+  <script>
+	  $(function() {
+  	  $("table.actionpack tr:even").addClass("even");
+  	  $(".touraccordion").accordion({animated: 'bounceslide', autoHeight: false});
+  	  
+  		$( "#thetour" ).tabs();
+  	});
+  	
+	</script>
+  
+</head>
+<body id="<%= controller.controller_name %>_controller">
+  
+  <div id="outer" class="splash">
+  
+    <%= render 'shared/nav' %>
+      <div class="<%= params[:action] %>">
+        <%= yield %>
+      </div>
+    
+  </div><!-- outer -->
+
+</body>
+</html>
+
+

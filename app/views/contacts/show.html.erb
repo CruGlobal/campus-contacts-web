@@ -13,9 +13,7 @@
   <h1>
     <%= image_tag("contact.png") %>
     <%= @person %>
-    <ul class="pillmenu">
-      <li><%= link_to("Assign", "", class: 'assign', 'data-id' => @person.id) %></li>
-    </ul>
+    <%= link_to("Assign", "", class: 'assign headerlink', 'data-id' => @person.id) %>
   </h1>
 </div>
 
