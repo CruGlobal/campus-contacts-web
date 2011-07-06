@@ -99,7 +99,7 @@ class ApplicationController < ActionController::Base
   end
   
   def user_root_path
-    return '/wizard' unless current_organization
+    return '/wizard' unless current_organization && current_organization.keywords.present?
     # if current_person.leader_in?(current_organization)
       '/contacts/mine'
     # else
