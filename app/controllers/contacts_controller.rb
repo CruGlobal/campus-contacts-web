@@ -89,6 +89,10 @@ class ContactsController < ApplicationController
       end
     end
     get_answer_sheet(@keyword, @person)
+    respond_to do |wants|
+      wants.html { render :layout => 'plain'}
+      wants.mobile
+    end
   end
     
   def update
