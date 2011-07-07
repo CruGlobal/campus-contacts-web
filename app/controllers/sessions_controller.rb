@@ -1,4 +1,5 @@
 class SessionsController < Devise::SessionsController
+  before_filter :prepare_for_mobile
   def new
     render layout: 'splash'
   end
