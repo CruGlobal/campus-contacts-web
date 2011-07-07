@@ -5,7 +5,7 @@
 "en-US":
   rejoicables:
     spiritual_conversation: 'Spiritual Conversation' 
-    prayed_to_receive: 'Prayed To Receive' 
+    prayed_to_receive: 'Prayed To Receive Christ' 
     gospel_presentation: 'Gospel Presentation'
   nav:
     login: "Log In"
@@ -37,7 +37,7 @@
       title_top: "Welcome to MissionHub!"
       title_top_mobile: "MissionHub"
       go_home: 'Go to your dashboard'
-      request_key: "Click here to request an sms keyword."
+      request_key: "Click here to request a keyword."
       get_started: "Get Started"
     wizard:
       welcome: Welcome
@@ -88,7 +88,7 @@
     edit:
       heading: Editing Keyword
     flash:
-      created: 'Keyword request was successfully created.'
+      created: 'Keyword request was successfully submitted.'
       updated: 'Keyword was successfully updated.'
       pick_org: 'Please pick which organization you are associated with'
     form:
@@ -113,10 +113,10 @@
       leaders: Leaders
       assign_to: "Assign To:"
       assigned_to: "Assigned To"
-      all_responses: "Showing all 'In Progress' contacts"
-      responses_assigned_to: "Showing contacts assigned to %{assigned_to}"
-      unassigned_responses: "Showing unassigned contacts"
-      dnc_contacts: "Showing contacts that have been marked 'Do Not Contact'"
+      all_responses: "Contacts 'In Progress'"
+      responses_assigned_to: "Contacts assigned to %{assigned_to}"
+      unassigned_responses: "Contacts unassigned"
+      dnc_contacts: "Contacts 'Do Not Contact'"
       none_checked: "You didn't select any contacts to assign."
       show_all: Show 'In Progress' contacts
       which_org: 'You need to choose which organization you want to do folow-up from'
