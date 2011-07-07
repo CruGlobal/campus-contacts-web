@@ -7,12 +7,12 @@
       <strong><%= followup_comment.commenter %></strong>
       <span class="status"><%= t("contacts.statuses.#{followup_comment.status}") %></span>
       <span class="date"><%= time_ago_in_words(followup_comment.created_at) %></span>
-      <span class="delete"><%= link_to('delete', followup_comment_path(followup_comment), method: :delete, remote: true, onclick: "$(this).closest('li').fadeOut()") %>
+      <span class="delete"><%= link_to('delete', followup_comment_path(followup_comment), method: :delete, remote: true, onclick: "$(this).closest('li').fadeOut()", :class => "inlinedel", :title => "Delete this comment") %>
     </div>
     <% if followup_comment.rejoicables.present? %>
       <ul class="rejoicables">
         <% followup_comment.rejoicables.each do |r| %>
-          <li><%= r %></li>
+          <li class="<%= r.what %> rj"><%= r %></li>
         <% end %>
       </ul>
     <% end %>

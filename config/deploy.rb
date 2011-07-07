@@ -63,11 +63,11 @@ end
 # define the restart task
 desc "Restart the web server"
 deploy.task :restart, roles: :app do
-  if rails_env == 'production'
-    sudo "/etc/init.d/unicorn upgrade"
-  else
+  # if rails_env == 'production'
+    # sudo "/etc/init.d/unicorn upgrade"
+  # else
     run "touch #{current_path}/tmp/restart.txt"
-  end
+  # end
 end  
 
 

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%= render 'shared/head' %>
+  <%= stylesheet_link_tag 'plain' %>
+</head>
+<body id="<%= controller.controller_name %>_controller">
+  
+  <div id="outer" class="plain">
+    <div id="plainheader">
+      <a href="/" id="logo"></a>
+    </div>
+  
+    <div class="<%= params[:action] %>">
+      <%= yield %>
+    </div>
+    
+    <div class="footer">
+      MissionHub 2011 &copy;
+    </div>
+    
+  </div><!-- outer -->
+
+</body>
+</html>
+
+

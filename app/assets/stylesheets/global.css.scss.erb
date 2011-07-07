@@ -43,6 +43,10 @@ body {
   font-size: 12px;
 }
 
+img {
+	border: none;
+}
+
 
 
 .titlebar {
@@ -50,13 +54,40 @@ body {
   padding: 14px;
   h1 {
     font-family: $font-base;
+    color: #333333;
     font-size: 16px;
     margin: 0;
+    text-shadow: 1px 1px 3px #888888;
   }
   h1 img {
     margin-right: 5px;
   }
 }
+
+.headerlink {
+	background: url("/assets/pillbg.png") repeat-x scroll 0 0 transparent;
+	border: 1px solid #999999;
+  border-radius: 4px 4px 4px 4px;
+	-moz-border-radius: 4px 4px 4px 4px;
+	-webkit-border-radius: 4px 4px 4px 4px;
+	box-shadow: 0 0 2px #999999;
+	-moz-box-shadow: 0 0 2px #999999;
+	-webkit-box-shadow: 0 0 2px #999999;
+	color: #000000 !important;
+	display: inline-block;
+	font-size: 11px;
+	font-weight: bold;
+	margin: 0 7px;
+	padding: 2px 7px;
+	vertical-align: top;
+	text-decoration: none;
+}
+
+a.headerlink:hover {
+	text-decoration: none;
+}
+
+
 
 #outer {
   max-width: $maxpagewidth;
@@ -90,15 +121,35 @@ body {
   border-radius: 0;
   height: 38px;
   a {
-    border-right: 1px solid #FFFFFF;
     color: $white;
     line-height: 38px;
     padding: 0 13px;
     font-size: 11px;
+		display: block;
   }
+	a:hover {
+		text-decoration: none;
+	}
+	li.selected,
+	li.selected:hover {
+		background: url("<%= asset_path("topmenubg_on.png") %>") 0 100%;
+	}
+	li:hover {
+		background: url("<%= asset_path("topmenubg_hover.png") %>") 50% 100%;
+	}
   ul {
     @include clearlist;
   }
+	ul li {
+		display: block;
+		float: left;
+	}
+	ul {height: 38px;}
+}
+
+img.tmenu {
+	margin-right: 5px;
+	vertical-align: middle;
 }
 
 #left {
@@ -160,7 +211,7 @@ ul.leftmenu {
   }
   a.delete_leader {
     float: right;
-    background: silver;
+    background: #999 !important;
     color: $white;
     width: 12px;
     height: 12px;
@@ -325,7 +376,8 @@ ul.leftmenu {
     cursor: pointer;
   }
   td.controls {
-    width: 75px;
+    width: 60px;
+		white-space:nowrap;
   }
   td.name {
     width: 40%;
@@ -377,20 +429,25 @@ a.hide {
     background: $white;
     margin-bottom: 5px;
   }
-  input[type=submit] {
+  input[type=submit], button[type=submit] {
     float: right;
   }
 }
 
-input[type=submit] {
+input[type=submit], button[type=submit] {
   background: none repeat scroll 0 0 #0379AE;
   border: 1px solid #000000;
   border-radius: 5px 5px 5px 5px;
+	-moz-border-radius: 5px 5px 5px 5px;
+	-webkit-border-radius: 5px 5px 5px 5px;
   box-shadow: 0 0 1px #FFFFFF inset;
+	-moz-box-shadow: 0 0 1px #FFFFFF inset;
+	-webkit-box-shadow: 0 0 1px #FFFFFF inset;
   color: white;
   font-size: 12px;
-  line-height: 22px;
-  padding: 4px 8px;
+  line-height: 0px;
+	height: 26px;
+  padding: 0px 6px;
   vertical-align: top;
   font-weight: bold;
 }
@@ -399,6 +456,8 @@ input[type=submit] {
   background: $white;
   border: 1px solid silver;
   border-radius: 3px 3px 3px 3px;
+	-moz-border-radius: 3px 3px 3px 3px;
+	-webkit-border-radius: 3px 3px 3px 3px;
   display: inline-block;
   padding: 4px 8px;
 }
@@ -413,8 +472,16 @@ input[type=submit] {
     padding: 0px 3px;
     margin-right: 0px;
     border-radius: 5px;
-    background: #FFF4D7;
+		-moz-border-radius: 5px;
+		-webkit-border-radius: 5px;
+    background-color: #FFF4D7;
   }
+}
+
+.rejoicables li {
+	background-position: 5px 50%;
+	padding-left: 24px;
+	line-height: 20px;
 }
 
 .commentswall {
@@ -447,7 +514,7 @@ input[type=submit] {
         font-size: 12px;
       }
       .status {
-        color: $blue;
+        color: #4e970c;
       }
       .date {
         color: silver;
@@ -455,6 +522,32 @@ input[type=submit] {
     }
   }
 }
+
+.rj {background: url(<%= asset_path("del.png") %>) no-repeat 0 50%; padding-left: 24px;}
+.spiritual_conversation {background-image: url(<%= asset_path("icon-s-convo16.png") %>);}
+.prayed_to_receive {background-image: url(<%= asset_path("icon-r-christ16.png") %>);}
+.gospel_presentation {background-image: url(<%= asset_path("icon-g-present16.png") %>);}
+.rejoiceable {background-image: url(<%= asset_path("icon-rejoicable16.png") %>);}
+
+#rejoicable_fields {
+	line-height: 26px;
+	margin-top: 5px;
+}
+
+.inlinedel {
+	background: url("<%= asset_path("del.png") %>") no-repeat 50% 50% silver;
+	display: inline-block;
+  height: 11px;
+  overflow: hidden;
+  text-indent: -1000px;
+  vertical-align: baseline;
+  width: 11px;
+}
+
+.inlinedel:hover {
+	background-color: $blue;
+}
+
 
 .pagemenu {
   background: $light-blue;
@@ -470,6 +563,8 @@ ul.pillmenu {
   border: 1px solid #808080;
   margin-right: 8px;
   border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
   background: url('<%= asset_path('pillbg.png') %>') repeat-x;
   overflow: hidden;
   li {
@@ -577,8 +672,8 @@ span.title {
     margin: 0 25px;
   }
   #logoline #logo {
-    background: url("<%= asset_path("splash/mh_logo.png") %>") no-repeat 0 0;
-    width: 168px;
+    background: url("<%= asset_path("logo_bg.png") %>") no-repeat 0 50%;
+    width: 247px;
     height: 85px;
     display: block;
   }
@@ -587,7 +682,9 @@ span.title {
     -moz-border-radius: 35px;
     -webkit-border-radius: 35px;
     box-shadow: 0 0 8px #bbb inset;
-    padding: 25px;
+		-webkit-box-shadow: 0 0 8px #bbb inset;
+    -moz-box-shadow: 0 0 8px #bbb inset;
+		padding: 25px;
   }
   .salespush {
     font-size: 22px;
@@ -779,9 +876,17 @@ span.title {
     padding: 0;
   }
   label {
-    width: 150px;
+    width: auto;
     display: inline-block;
+		margin-right: 10px;
   }
+	a {
+		text-decoration: none;
+		cursor: pointer;
+	}
+	a label:hover {
+		text-decoration: none;
+	}
   .icon {
     vertical-align: bottom;
   }
@@ -795,6 +900,9 @@ span.title {
 	li.primary {
 		font-weight: bold;
 		color:$blue;
+	}
+	.orgactions {
+		float: right;
 	}
 }
 
@@ -867,14 +975,20 @@ span.title {
 			background: url("<%= asset_path("arrow.png") %>") no-repeat 0 0;
 			margin-bottom: 8px;
 			padding: 0 0 0 22px;
-			font-size: 11px;
+			font-size: 12px;
 		}
 	}
 	.explination {
 		background: none repeat scroll 0 0 #3F3F3F;
     border: 1px solid #5D5D5D;
     border-radius: 12px 12px 12px 12px;
+		-webkit-border-radius: 12px 12px 12px 12px;
+		-moz-border-radius: 12px 12px 12px 12px;
+		
     box-shadow: 0 0 21px rgba(0, 0, 0, 0.16) inset;
+		-moz-box-shadow: 0 0 21px rgba(0, 0, 0, 0.16) inset;
+		-webkit-box-shadow: 0 0 21px rgba(0, 0, 0, 0.16) inset;
+		
 		margin-bottom: 20px;
 		color: #fff;
 		padding: 15px;
@@ -889,7 +1003,6 @@ span.title {
 		margin-top: 8px;
 	}
 	.story {
-		font-family: "Courier New", Georgia;
 		font-size: 13.5px;
 		margin: 0 auto;
 		line-height: 1.35em;
@@ -924,7 +1037,11 @@ span.title {
 		border: none;
 		background: #4d4d4d;
 		border-radius: 20px;
+		-webkit-border-radius: 20px;
+		-moz-border-radius: 20px;
 		box-shadow: 0 0 15px #000 inset;
+		-webkit-box-shadow: 0 0 15px #000 inset;
+		-moz-box-shadow: 0 0 15px #000 inset;
 	}
 	.ui-tabs-nav .ui-state-active {
     border: none;
@@ -932,6 +1049,8 @@ span.title {
     font-weight: bold;
 		background: #4d4d4d;
 		border-radius: 5px 5px 0 0;
+		-moz-border-radius: 5px 5px 0 0;
+		-webkit-border-radius: 5px 5px 0 0;
 		overflow: hidden;
 		a {color: #f0f0f0;}
 	}

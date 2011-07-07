@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  before_filter :authenticate_user!, :prepare_for_mobile, :set_locale
+  before_filter :authenticate_user!, :set_locale
   protect_from_forgery  
 
   def facebook_logout
@@ -91,13 +91,15 @@ class ApplicationController < ActionController::Base
   
   def create_contact_at_org(person, organization)
     unless OrganizationalRole.find_by_person_id_and_organization_id_and_role_id(person.id, organization.id, Role.contact.id)
-      OrganizationMembership.create!(person_id: person.id, organization_id: organization.id) 
       OrganizationalRole.create!(person_id: person.id, organization_id: organization.id, role_id: Role.contact.id, followup_status: OrganizationMembership::FOLLOWUP_STATUSES.first)
+    end
+    unless OrganizationMembership.find_by_person_id_and_organization_id(person.id, organization.id) 
+      OrganizationMembership.create!(person_id: person.id, organization_id: organization.id) 
     end
   end
   
   def user_root_path
-    return '/wizard' unless current_organization
+    return '/wizard' unless current_organization && current_organization.keywords.present?
     # if current_person.leader_in?(current_organization)
       '/contacts/mine'
     # else

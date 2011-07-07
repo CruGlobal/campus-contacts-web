@@ -9,27 +9,29 @@
     <% else %>
       <% if @assigned_to.present? %>
         <%= t('.responses_assigned_to', assigned_to: @assigned_to) %>
-        <%= link_to(t('.show_all'), contacts_path(assigned_to: 'all')) %>
+        <%= link_to(t('.show_all'), contacts_path(assigned_to: 'all'), :class => "headerlink") %>
       <% elsif params[:dnc] == 'true' %>
         <%= t('.dnc_contacts') %>
       <% else %>
         <%= t('.unassigned_responses') %>
       <% end %>
     <% end %>
-  </h3>
+  </h1>
 </div>
 
 <div class="pagemenu">
   <ul class="pillmenu">
     <li><%= check_box_tag 'check_all' %></li>
   </ul>
-  <ul class="pillmenu">
-    <li><%= link_to(t('.hidden_questions'), '#', id: 'hidden_questions_link') %></li>
-  </ul>
+  
   <ul class="pillmenu">
     <li><%= link_to("Assign", "", class: 'assign') %></li>
     <li><%= link_to("Unassign", "", id: 'bulk_unassign') %></li>
     <li><%= link_to("Add Contact", "", class: 'add_contact') %></li>
+  </ul>
+  
+  <ul class="pillmenu">
+    <li><%= link_to(t('.hidden_questions'), '#', id: 'hidden_questions_link') %></li>
   </ul>
   
   <ul class="pillmenu">

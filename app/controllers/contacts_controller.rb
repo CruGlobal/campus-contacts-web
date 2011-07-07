@@ -1,5 +1,6 @@
 class ContactsController < ApplicationController
   before_filter :get_person
+  before_filter :prepare_for_mobile, only: [:new, :update, :thanks]
   before_filter :get_keyword, only: [:new, :update, :thanks]
   before_filter :ensure_current_org
   
@@ -88,6 +89,10 @@ class ContactsController < ApplicationController
       end
     end
     get_answer_sheet(@keyword, @person)
+    respond_to do |wants|
+      wants.html { render :layout => 'plain'}
+      wants.mobile
+    end
   end
     
   def update
