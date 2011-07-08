@@ -1,3 +1,24 @@
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+.clearfix {
+	display: inline-block;
+}
+ 
+html[xmlns] .clearfix {
+	display: block;
+}
+ 
+* html .clearfix {
+	height: 1%;
+}
+
 /* Fonts */
 $font-base: Tahoma, Arial;
 $font-secondary: Arial, Verdana;
@@ -879,6 +900,7 @@ span.title {
     width: auto;
     display: inline-block;
 		margin-right: 10px;
+		float: left;
   }
 	a {
 		text-decoration: none;
@@ -893,6 +915,7 @@ span.title {
   li {
     padding: 5px;
     background: #fff;
+		height: 20px;
   }
   li:hover {
     background: #F5FFC4;
@@ -1080,3 +1103,44 @@ span.title {
 #thetour.ui-widget-content {
 	border: none;
 }
+
+div.field_in {
+	margin-bottom: 8px;
+	label {
+		float: left;
+		width: 60px;
+		padding-top: 5px;
+	}
+	.in {margin-left: 65px;}
+}
+
+#sendremind {
+	input[type=text], textarea {
+		border: 1px solid silver;
+		box-shadow: 0 0 2px #999;
+		-webkit-box-shadow: 0 0 2px #999;
+		-moz-box-shadow: 0 0 2px #999;
+		min-width: 350px;
+		padding: 5px;
+	}
+}
+
+ul.to_list {
+	border: 1px solid silver;
+	margin: 0;
+	width: 480px;
+	list-style: none;
+	padding: 5px 5px 0 5px;
+	li {
+		margin: 0 3px 5px 0; 
+		padding: 2px;
+		border-radius: 3px;
+		-webkit-border-radius: 3px;
+		-moz-border-radius: 3px;
+		background: $light-blue;
+		border: 1px solid $blue;
+		float: left;
+		font-size: 11px;
+		}
+}
+

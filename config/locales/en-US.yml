@@ -105,6 +105,21 @@
       do_not_contact: Do Not Contact
       completed: Completed
     index:
+      send_reminder: 'Send Reminder'
+      reminder_email_subject: New contacts have arrived!
+      reminder_email_body:
+        Hey!
+        
+        
+        Just letting you know that you have been given new contacts to follow-up.
+        
+        
+        Login to MissionHub at http://www.missionhub.com to access your contacts.
+        
+        
+        In Christ,
+        
+        %{name}
       filter: 'Filter Results'
       first_name: 'First Name'
       last_name: 'Last Name'

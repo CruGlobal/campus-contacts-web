@@ -100,6 +100,7 @@ Mh::Application.routes.draw do
     collection do
       get :thanks
       get :mine
+      post :send_reminder
     end
   end
 
