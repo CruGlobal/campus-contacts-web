@@ -37,7 +37,8 @@
 	      <div data-role="content">
 			<% title "Welcome!" %>
 			<div class="info">
-				<span style='text-align:center; width:100%;display:block;font-family:helvetica'>Please login with Facebook<br>to get started</span><br>
+				<span style='text-align:center; width:100%;display:block;font-family:helvetica'>Login with Facebook to get started.<br><br>
+				Don't worry.  We won't spam you.</span><br>
 			</div>
 			<div class="info">
 				<center><%= link_to(image_tag('fb_login_small.png'), user_omniauth_authorize_path(:facebook), rel: 'external', alt: 'Login with Facebook') %></center>
