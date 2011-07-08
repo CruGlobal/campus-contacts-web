@@ -5,7 +5,7 @@
 "en-US":
   rejoicables:
     spiritual_conversation: 'Spiritual Conversation' 
-    prayed_to_receive: 'Prayed To Receive' 
+    prayed_to_receive: 'Prayed To Receive Christ' 
     gospel_presentation: 'Gospel Presentation'
   nav:
     login: "Log In"
@@ -37,7 +37,7 @@
       title_top: "Welcome to MissionHub!"
       title_top_mobile: "MissionHub"
       go_home: 'Go to your dashboard'
-      request_key: "Click here to request an sms keyword."
+      request_key: "Click here to request a keyword."
       get_started: "Get Started"
     wizard:
       welcome: Welcome
@@ -47,17 +47,15 @@
       create_survey: Create Survey
       back: Back
       next: Next
-      welcome_paragraph: "Welcome to MissionHub! We're so glad you decided to take ministry seriously."
-      verify_paragraph: "Before you can go any further, we need to know if you have AIDS. This is a one-time test."
+      welcome_paragraph: "Welcome to MissionHub!<br/><br/> This setup wizard will help you get started and set up a keyword, which is an essential part of getting contacts into the system."
+      verify_paragraph: "If you have a CCC Relay login account, please sign in to link your account. You only need to do this once."
       verify_with_relay: "Verify With Relay"
       not_found_paragraph: "We weren't able to find a record of you associated with any of the organizations or ministries using MissionHub."
-      keyword_paragraph:
-        "One of the coolest features of MissionHub is the ability for you to interact with people using text messages. For this to work you have
-        to choose a keyword that is unique to you that people will send messages to. If that sounds confusing, you're over the age of 30."
+      keyword_paragraph: "A powerful feature of MissionHub is the ability for you to collect contacts through text messages. For this to work, you have to choose a keyword that is unique to your ministry that people will send messages to. With a keyword, you will be able to say, “Text <strong>your keyword</strong>  to 75572” at your next event or meeting."
       request_keyword_link: "Click here to request a keyword. We'll return you to this wizard when you're done."
       survey_paragraph:
-        "Now that you've requested a keyword, you're going to want to create a set of questions to ask people. Think along the lines of a freshmand survey or a 
-        basic contact card"
+        "Now that you've requested a keyword, you're going to want to create a set of questions to ask people. Think along the lines of a short survey or a 
+        basic contact card."
       create_survey_link: "Click here to create your survey. We'll return you to this wizard when you're done."
       leaders_header: "Give access to other leaders"
       leaders_paragraph:
@@ -88,7 +86,7 @@
     edit:
       heading: Editing Keyword
     flash:
-      created: 'Keyword request was successfully created.'
+      created: 'Keyword request was successfully submitted.'
       updated: 'Keyword was successfully updated.'
       pick_org: 'Please pick which organization you are associated with'
     form:
@@ -113,10 +111,10 @@
       leaders: Leaders
       assign_to: "Assign To:"
       assigned_to: "Assigned To"
-      all_responses: "Showing all 'In Progress' contacts"
-      responses_assigned_to: "Showing contacts assigned to %{assigned_to}"
-      unassigned_responses: "Showing unassigned contacts"
-      dnc_contacts: "Showing contacts that have been marked 'Do Not Contact'"
+      all_responses: "All Contacts - 'In Progress'"
+      responses_assigned_to: "All Contacts - assigned to %{assigned_to}"
+      unassigned_responses: "All Contacts - Unassigned"
+      dnc_contacts: "All Contacts - 'Do Not Contact'"
       none_checked: "You didn't select any contacts to assign."
       show_all: Show 'In Progress' contacts
       which_org: 'You need to choose which organization you want to do folow-up from'
