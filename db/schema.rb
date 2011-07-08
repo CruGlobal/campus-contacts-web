@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110629054522) do
+ActiveRecord::Schema.define(:version => 20110708031833) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -1022,51 +1022,51 @@ ActiveRecord::Schema.define(:version => 20110629054522) do
     t.string   "currentPosition",     :limit => 128
     t.string   "leadershipLevel",     :limit => 128
     t.string   "relationship",        :limit => 128
-    t.text     "q1",                  :limit => 2147483647
+    t.text     "q1",                  :limit => 16777215
     t.integer  "q2"
-    t.text     "q3",                  :limit => 2147483647
-    t.text     "q4",                  :limit => 2147483647
-    t.text     "q5",                  :limit => 2147483647
-    t.text     "q6",                  :limit => 2147483647
-    t.text     "q7",                  :limit => 2147483647
+    t.text     "q3",                  :limit => 16777215
+    t.text     "q4",                  :limit => 16777215
+    t.text     "q5",                  :limit => 16777215
+    t.text     "q6",                  :limit => 16777215
+    t.text     "q7",                  :limit => 16777215
     t.integer  "q8"
-    t.text     "q9",                  :limit => 2147483647
+    t.text     "q9",                  :limit => 16777215
     t.integer  "q10"
-    t.text     "q11",                 :limit => 2147483647
+    t.text     "q11",                 :limit => 16777215
     t.integer  "q12"
-    t.text     "q13",                 :limit => 2147483647
+    t.text     "q13",                 :limit => 16777215
     t.integer  "q14"
-    t.text     "q15",                 :limit => 2147483647
+    t.text     "q15",                 :limit => 16777215
     t.integer  "q16"
-    t.text     "q17",                 :limit => 2147483647
+    t.text     "q17",                 :limit => 16777215
     t.integer  "q18"
-    t.text     "q19",                 :limit => 2147483647
+    t.text     "q19",                 :limit => 16777215
     t.integer  "q20"
-    t.text     "q21",                 :limit => 2147483647
+    t.text     "q21",                 :limit => 16777215
     t.integer  "q22"
-    t.text     "q23",                 :limit => 2147483647
+    t.text     "q23",                 :limit => 16777215
     t.integer  "q24"
-    t.text     "q25",                 :limit => 2147483647
-    t.text     "q26",                 :limit => 2147483647
-    t.text     "q27",                 :limit => 2147483647
-    t.text     "q28f1",               :limit => 2147483647
+    t.text     "q25",                 :limit => 16777215
+    t.text     "q26",                 :limit => 16777215
+    t.text     "q27",                 :limit => 16777215
+    t.text     "q28f1",               :limit => 16777215
     t.integer  "q28f2"
-    t.text     "q28l1",               :limit => 2147483647
+    t.text     "q28l1",               :limit => 16777215
     t.integer  "q28l2"
-    t.text     "q28o1",               :limit => 2147483647
+    t.text     "q28o1",               :limit => 16777215
     t.integer  "q28o2"
-    t.text     "q28a1",               :limit => 2147483647
+    t.text     "q28a1",               :limit => 16777215
     t.integer  "q28a2"
-    t.text     "q28t1",               :limit => 2147483647
+    t.text     "q28t1",               :limit => 16777215
     t.integer  "q28t2"
-    t.text     "q28s1",               :limit => 2147483647
+    t.text     "q28s1",               :limit => 16777215
     t.integer  "q28s2"
-    t.text     "q29",                 :limit => 2147483647
-    t.text     "q30",                 :limit => 2147483647
-    t.text     "q31",                 :limit => 2147483647
-    t.text     "q32",                 :limit => 2147483647
-    t.text     "q33",                 :limit => 2147483647
-    t.text     "q34",                 :limit => 2147483647
+    t.text     "q29",                 :limit => 16777215
+    t.text     "q30",                 :limit => 16777215
+    t.text     "q31",                 :limit => 16777215
+    t.text     "q32",                 :limit => 16777215
+    t.text     "q33",                 :limit => 16777215
+    t.text     "q34",                 :limit => 16777215
     t.integer  "fk_ReviewSessionID"
     t.string   "reviewedByTitle",     :limit => 5
     t.string   "reviewedByFirstName", :limit => 30
@@ -1088,15 +1088,15 @@ ActiveRecord::Schema.define(:version => 20110629054522) do
     t.string   "currentPosition",         :limit => 128
     t.string   "leadershipLevel",         :limit => 128
     t.string   "relationship",            :limit => 128
-    t.text     "q1",                      :limit => 2147483647
-    t.text     "q2",                      :limit => 2147483647
-    t.text     "q3",                      :limit => 2147483647
-    t.text     "q4",                      :limit => 2147483647
-    t.text     "q5",                      :limit => 2147483647
-    t.text     "q6",                      :limit => 2147483647
-    t.text     "q7",                      :limit => 2147483647
-    t.text     "q8",                      :limit => 2147483647
-    t.text     "q9",                      :limit => 2147483647
+    t.text     "q1",                      :limit => 16777215
+    t.text     "q2",                      :limit => 16777215
+    t.text     "q3",                      :limit => 16777215
+    t.text     "q4",                      :limit => 16777215
+    t.text     "q5",                      :limit => 16777215
+    t.text     "q6",                      :limit => 16777215
+    t.text     "q7",                      :limit => 16777215
+    t.text     "q8",                      :limit => 16777215
+    t.text     "q9",                      :limit => 16777215
     t.integer  "fk_ReviewSessionLightID"
   end
 
@@ -1374,7 +1374,7 @@ ActiveRecord::Schema.define(:version => 20110629054522) do
     t.datetime "leadershipStartDate"
     t.datetime "leadershipEndDate"
     t.datetime "createDate"
-    t.binary   "lastChangedDate",               :limit => 255
+    t.binary   "lastChangedDate",               :limit => 8
     t.integer  "lastChangedBy"
     t.string   "displayLocation"
     t.boolean  "partnershipRegionOnly"
@@ -1565,30 +1565,30 @@ ActiveRecord::Schema.define(:version => 20110629054522) do
   end
 
   create_table "linczone_contacts", :primary_key => "ContactID", :force => true do |t|
-    t.datetime "EntryDate"
-    t.string   "FirstName",            :limit => 120
-    t.string   "LastName",             :limit => 120
-    t.string   "HomeAddress",          :limit => 200
-    t.string   "City",                 :limit => 20
-    t.string   "State",                :limit => 20
-    t.string   "Zip",                  :limit => 80
-    t.string   "Email",                :limit => 120
-    t.string   "HighSchool",           :limit => 120
-    t.string   "CampusName",           :limit => 200
-    t.string   "CampusID",             :limit => 80
-    t.string   "ReferrerFirstName",    :limit => 120
-    t.string   "ReferrerLastName",     :limit => 120
-    t.string   "ReferrerRelationship", :limit => 100
-    t.string   "ReferrerEmail",        :limit => 200
-    t.string   "InfoCCC",              :limit => 1,   :default => "F"
-    t.string   "InfoNav",              :limit => 1,   :default => "F"
-    t.string   "InfoIV",               :limit => 1,   :default => "F"
-    t.string   "InfoFCA",              :limit => 1,   :default => "F"
-    t.string   "InfoBSU",              :limit => 1,   :default => "F"
-    t.string   "InfoCACM",             :limit => 1,   :default => "F"
-    t.string   "InfoEFCA",             :limit => 1,   :default => "F"
-    t.string   "InfoGCM",              :limit => 1,   :default => "F"
-    t.string   "InfoWesley",           :limit => 1,   :default => "F"
+    t.timestamp "EntryDate"
+    t.string    "FirstName",            :limit => 120
+    t.string    "LastName",             :limit => 120
+    t.string    "HomeAddress",          :limit => 200
+    t.string    "City",                 :limit => 20
+    t.string    "State",                :limit => 20
+    t.string    "Zip",                  :limit => 80
+    t.string    "Email",                :limit => 120
+    t.string    "HighSchool",           :limit => 120
+    t.string    "CampusName",           :limit => 200
+    t.string    "CampusID",             :limit => 80
+    t.string    "ReferrerFirstName",    :limit => 120
+    t.string    "ReferrerLastName",     :limit => 120
+    t.string    "ReferrerRelationship", :limit => 100
+    t.string    "ReferrerEmail",        :limit => 200
+    t.string    "InfoCCC",              :limit => 1,   :default => "F"
+    t.string    "InfoNav",              :limit => 1,   :default => "F"
+    t.string    "InfoIV",               :limit => 1,   :default => "F"
+    t.string    "InfoFCA",              :limit => 1,   :default => "F"
+    t.string    "InfoBSU",              :limit => 1,   :default => "F"
+    t.string    "InfoCACM",             :limit => 1,   :default => "F"
+    t.string    "InfoEFCA",             :limit => 1,   :default => "F"
+    t.string    "InfoGCM",              :limit => 1,   :default => "F"
+    t.string    "InfoWesley",           :limit => 1,   :default => "F"
   end
 
   create_table "mail_delayed_jobs", :force => true do |t|
@@ -1697,7 +1697,7 @@ ActiveRecord::Schema.define(:version => 20110629054522) do
   end
 
   create_table "mh_education_history", :force => true do |t|
-    t.string   "person_id"
+    t.integer  "person_id"
     t.string   "school_type"
     t.string   "concentration_id1"
     t.string   "concentration_name1"
@@ -1759,7 +1759,7 @@ ActiveRecord::Schema.define(:version => 20110629054522) do
     t.datetime "updated_at"
   end
 
-  add_index "mh_email_templates", ["name"], :name => "index_ma_email_templates_on_name", :length => {"name"=>255}
+  add_index "mh_email_templates", ["name"], :name => "index_ma_email_templates_on_name", :length => {"name"=>767}
 
   create_table "mh_friend", :force => true do |t|
     t.string   "name"
@@ -3403,7 +3403,7 @@ ActiveRecord::Schema.define(:version => 20110629054522) do
     t.integer  "owner",                                           :null => false
     t.text     "criteria",   :limit => 2147483647,                :null => false
     t.integer  "saved",      :limit => 1,          :default => 0, :null => false
-    t.text     "options",    :limit => 2147483647
+    t.text     "options",    :limit => 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -3496,7 +3496,7 @@ ActiveRecord::Schema.define(:version => 20110629054522) do
     t.string   "summer_preference",    :limit => 100
     t.string   "summer_assignment",    :limit => 100
     t.string   "trainer"
-    t.text     "trainer_contact",      :limit => 2147483647
+    t.text     "trainer_contact",      :limit => 16777215
     t.string   "vonage"
     t.string   "website"
     t.integer  "send_dept"
