@@ -1,12 +1,18 @@
 <div id="reminder_email" style="display:none">
-  <%= form_tag '/contacts/send_reminder' do %>
+  <%= form_tag '/contacts/send_reminder', :id => "sendremind" do %>
     <%= hidden_field_tag :to %>
-    To:
-    <ul class="to_list"></ul>
-    Subject: 
-    <%= text_field_tag :subject, t('contacts.index.reminder_email_subject') %>
-    <br><br>
+    <div class="field_in">
+      <label>To:</label>
+      <div class="in"><ul class="to_list clearfix"><div class="clear"></div></ul></div>
+    </div>
+    
+    <div class="field_in">
+      <label>Subject:</label> 
+      <div class="in"><%= text_field_tag :subject, t('contacts.index.reminder_email_subject') %></div>
+    </div>
+    <div class="field">
     <%= text_area_tag :body, t('contacts.index.reminder_email_body', name: current_person), cols: 90, rows: 10 %>
     <%= submit_tag 'Send' %>
+    </div>
   <% end %>
 </div>

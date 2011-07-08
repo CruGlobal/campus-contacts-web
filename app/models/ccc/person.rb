@@ -6,25 +6,25 @@ module Ccc
       has_many :ministry_newaddresses, class_name: 'Ccc::MinistryNewaddress', foreign_key: :fk_PersonID, dependent: :destroy
 			has_many :crs_registrations, class_name: 'Ccc::CrsRegistration', foreign_key: :fk_PersonID, dependent: :destroy
 
-      has_one :crs2_profiles, class_name: 'Ccc::Crs2Profile', foreign_key: :ministry_person_id, dependent: :destroy
-      has_one :mpd_users, class_name: 'Ccc::MpdUser', dependent: :destroy
+      has_one :crs2_profile, class_name: 'Ccc::Crs2Profile', foreign_key: :ministry_person_id, dependent: :destroy
+      has_one :mpd_user, class_name: 'Ccc::MpdUser', dependent: :destroy
       has_many :pr_reviewers, class_name: 'Ccc::PrReviewer', dependent: :destroy
       has_many :pr_reviews, class_name: 'Ccc::PrReview' # dependant? subject_id, initiator_id
       has_many :pr_admins, class_name: 'Ccc::PrAdmin', dependent: :destroy
       has_many :pr_summary_forms, class_name: 'Ccc::PrSummaryForm', dependent: :destroy
       has_many :pr_reminders, class_name: 'Ccc::PrReminders', dependent: :destroy
       has_many :pr_personal_forms, class_name: 'Ccc::PrPersonalForm', dependent: :destroy
-      has_one :pr_users, class_name: 'Ccc::PrUser', dependent: :destroy
+      has_one :pr_user, class_name: 'Ccc::PrUser', dependent: :destroy
 
 			has_many :sp_applications, class_name: 'Ccc::SpApplication', dependent: :destroy
 			has_many :sp_projects, class_name: 'Ccc::SpProject'
-      has_one :sp_users, class_name: 'Ccc::SpUser'  #created by and ssm/person?
+      has_one :sp_user, class_name: 'Ccc::SpUser'  #created by and ssm/person?
       has_many :sp_staff, class_name: 'Ccc::SpStaff', dependent: :destroy
 			has_many :sp_application_moves, class_name: 'Ccc::SpApplicationMove'
 			has_many :sp_applies, class_name: 'Ccc::SpApply', dependent: :destroy
 			has_many :ministry_staff, class_name: 'Ccc::MinistryStaff', dependent: :destroy
 			has_many :hr_si_applications, class_name: 'Ccc::HrSiApplication', dependent: :destroy
-			has_one :si_users, class_name: 'Ccc::SiUser' #created by and ssm?
+			has_one :si_user, class_name: 'Ccc::SiUser' #created by and ssm?
 			has_many :sitrack_mpd, class_name: 'Ccc::SitrackMpd', dependent: :destroy
 			has_many :sitrack_tracking, class_name: 'Ccc::SitrackTracking', dependent: :destroy
 			has_many :sn_campus_involvements, class_name: 'Ccc::SnCampusInvolvement' # don't destroy if added_by_id

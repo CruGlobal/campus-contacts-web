@@ -19,9 +19,10 @@
 	    		<div class="current" id="home">
 			      <%- if show_title? -%>
 			        <div data-role="header" role="banner">
-			          <%= link_to "Back", nil, "data-role" => "button" unless params[:controller] == 'welcome' %>
 			          <h1 class="ui-title" tabindex="0" role="heading"><%=h yield(:title) %></h1>
-			          <%= link_to "Full Site", root_url(mobile: 0), "data-role" => "button", rel: "external"%>
+						<% if current_user %>
+			          		<%= link_to "Logout", facebook_logout_url(mobile:1), "data-role" => "button", rel: "external"%>
+						<% end %>
 			          <!-- <%= yield(:toolbar) %> -->
 			        </div>
 			      <%- end -%>

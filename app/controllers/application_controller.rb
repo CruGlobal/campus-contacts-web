@@ -6,7 +6,12 @@ class ApplicationController < ActionController::Base
     split_token = session[:fb_token].split("|")
     fb_api_key = split_token[0]
     fb_session_key = split_token[1]
-    redirect_to "http://www.facebook.com/logout.php?api_key=#{fb_api_key}&session_key=#{fb_session_key}&confirm=1&next=#{destroy_user_session_url}";
+    sign_out
+    session[:fb_token] = nil
+    redirect_url = !params[:next].nil? ? params[:next] : new_user_session_url
+    logger.info redirect_url
+    
+    redirect_to "http://www.facebook.com/logout.php?api_key=#{fb_api_key}&session_key=#{fb_session_key}&confirm=1&next=#{redirect_url}";
   end
 
   protected
