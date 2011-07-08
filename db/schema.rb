@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110708031833) do
+ActiveRecord::Schema.define(:version => 20110708033332) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(:version => 20110708031833) do
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
-    t.string   "identity"
+    t.integer  "identity"
     t.string   "client_id"
     t.string   "redirect_uri"
     t.string   "scope"
@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(:version => 20110708031833) do
 
   create_table "access_tokens", :force => true do |t|
     t.string   "code"
-    t.string   "identity"
+    t.integer  "identity"
     t.string   "client_id"
     t.string   "scope"
     t.datetime "created_at"
