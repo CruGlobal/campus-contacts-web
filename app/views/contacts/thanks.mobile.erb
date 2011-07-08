@@ -3,54 +3,36 @@
 	<br><br>
 
 	<script type="text/javascript">
-	function getUrlVar( name )
-	{
-	  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-	  var regexS = "[\\?&]"+name+"=([^&#]*)";
-	  var regex = new RegExp( regexS );
-	  var results = regex.exec( window.location.href );
-	  if( results == null )
-	    return "";
-	  else
-	    return results[1];
-	}
-	
-	var start=new Date();
-		start=Date.parse(start)/1000;
-		var counts=10;
-		var stop = false;
-		function CountDown(){
-			$('#cancel').click(function() {
-				stop=true;
-			});
-			var now=new Date();
-			now=Date.parse(now)/1000;
-			var x=parseInt(counts-(now-start),10);
-			$('#numOfSecond').html(x);
-			if(!stop) {
-				if(x>0){
-					timerID=setTimeout("CountDown()", 100)
-				}else{
-					window.location="http://test.ccci.us:8881/auth/facebook/logout?next=" + getUrlVar('redirect_uri');
+		var start=new Date();
+			start=Date.parse(start)/1000;
+			var counts=20;
+			var gonow = false;
+			function CountDown(){
+				$('#done').click(function() {
+					gonow=true;
+				});
+				var now=new Date();
+				now=Date.parse(now)/1000;
+				var x=parseInt(counts-(now-start),10);
+				$('#numOfSecond').html(x);
+				if(!gonow) {
+					if(x>0){
+						timerID=setTimeout("CountDown()", 100)
+					}else{
+						window.location="<%= facebook_logout_url %>?next=<%= request.referrer %>";
+					}	
+				}	else {
+						window.location="<%= facebook_logout_url %>?next=<%= request.referrer %>";
 				}	
-			} else {
-				$('#countdown').hide();
 			}
-			
-		}
-	if (getUrlVar('refresh')=="true")	{
-		window.setTimeout('CountDown()',100);
-		$('#countdown').show();
-	} else {
-		$('#countdown').hide();
-	}
-
+			CountDown();
 	</script>
 
 	<div id="countdown">
-		<center><h4>
-			You are going to be redirected to a fresh contact form and logged out of Facebook in <span id="numOfSecond">10</span> seconds.<br><br>
-			Click <span id="cancel"><font color="#0379AE">here</font></span> to cancel the redirect.
-		</h4></center>
+		<center>
+			<h4><%= t('contacts.thanks.facebook')%></h4>
+			<br><br>
+			<h3><span id="done"><font color="#0379AE"><%= t('contacts.thanks.done')%></font></span></h3>
+		</center>
 	</div>
 </div>
