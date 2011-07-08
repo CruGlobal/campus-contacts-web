@@ -1,4 +1,37 @@
 $ ->
+  $('.to_list a.delete').live 'click', ->
+    li = $(this).closest('li')
+    li.remove()
+    false
+    
+  $('#send_reminder_link').live 'click', -> 
+    $('.to_list').html('')
+    ids = []
+    $('#leaders .leader').each ->
+      if Number($('.count', this).text()) > 0
+        id = $(this).attr('data-id')
+        ids.push(id)
+        $('.to_list').append('<li data-id="'+id + '">'+$('.name a', this).html() + ' <a href="" class="delete">x</a></li>')
+    $('#reminder_email').dialog
+      resizable: false,
+      height:444,
+      width:600,
+      modal: true,
+      buttons: 
+        Cancel: ->
+          $(this).dialog('destroy')
+    false
+    
+  $('#reminder_email form').live 'submit', ->
+    ids = []
+    $('.to_list li').each ->
+      id = $(this).attr('data-id')
+      ids.push(id)
+    $('#to').val(ids.join(','))
+    $('#reminder_email').dialog('destroy')
+    $.rails.handleRemote($(this))
+    false
+    
   if $.params.answers
     $.each $.params.answers, (k, v) ->
       if $.isPlainObject(v)

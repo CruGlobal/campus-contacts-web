@@ -19,4 +19,8 @@
   <li><span class="name"><strong><%= link_to(t('contacts.index.completed'), contacts_path(completed: true)) %></strong></span> (<%= @organization.completed_contacts.count %>)</li>
   <li class="dnc"><span class="name"><strong><%= link_to(t('contacts.index.dnc'), contacts_path(dnc: true)) %></strong></span> (<span id="dnc_count" class="count"><%= OrganizationalRole.dnc.where(organization_id: @organization.id).count %></span>)</li>
 </ul>
+<ul class="pillmenu">
+    <li><a href="#" id="send_reminder_link"><%= t('contacts.index.send_reminder') %></a></li>
+</ul>
 <%= render 'contacts/leader_form' %>
+<%= render 'contacts/send_reminder_form' %>

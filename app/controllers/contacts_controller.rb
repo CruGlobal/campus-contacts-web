@@ -149,7 +149,12 @@ class ContactsController < ApplicationController
   end
   
   def send_reminder
-    
+    to_ids = params[:ids].split(',')
+    leaders = current_organization.leaders.where(id: to_ids)
+    if leaders.present?
+      ContactsMailer.reminder()
+    end
+    render nothing: true
   end
   
   protected
