@@ -2,7 +2,7 @@ class ContactsController < ApplicationController
   before_filter :get_person
   before_filter :prepare_for_mobile, only: [:new, :update, :thanks]
   before_filter :get_keyword, only: [:new, :update, :thanks]
-  before_filter :ensure_current_org
+  before_filter :ensure_current_org, except: [:new, :update, :thanks]
   
   def index
     @organization = params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : current_organization
@@ -146,6 +146,10 @@ class ContactsController < ApplicationController
       render 'add_contact'
       return
     end
+  end
+  
+  def send_reminder
+    
   end
   
   protected
