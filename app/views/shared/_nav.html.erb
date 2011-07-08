@@ -26,7 +26,7 @@
       </div> -->
     <% end %>
     <div class="item">
-      <%= link_to(t('nav.logout'), destroy_user_session_path) %>
+      <%= link_to(t('nav.logout'), facebook_logout_url)  %> 
     </div>   
   <% else %>
     <%= link_to(t('nav.login'), new_user_session_path) %>
