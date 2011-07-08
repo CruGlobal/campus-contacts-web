@@ -82,7 +82,7 @@
     <% end %>
   <% when 'keyword' %>
     <h2>Request a Keyword!</h2>
-    <p><%= t('welcome.wizard.keyword_paragraph') %> </p>
+    <p><%= raw t('welcome.wizard.keyword_paragraph') %> </p>
     <%= link_to(t('welcome.wizard.request_keyword_link'), new_sms_keyword_path) %><br/>
     <%#= link_to(t('welcome.wizard.skip_step'), '/wizard?step='+ current_user.next_wizard_step(current_organization)) %>
   <% when 'survey' %>
@@ -95,7 +95,7 @@
     <p><%= t('welcome.wizard.leaders_paragraph') %> </p>
   <% else %>
     <h2><%= t('welcome.wizard.welcome') %></h2>
-    <p><%= t('welcome.wizard.welcome_paragraph') %> </p>
+    <p><%= raw t('welcome.wizard.welcome_paragraph') %> </p>
     <%= link_to(t('welcome.wizard.back'), '#', class: 'disabled btn', onclick: 'return false;') %>
     <%= link_to(t('welcome.wizard.next'), '/wizard?step=verify', class: 'btn') %>
   <% end %>

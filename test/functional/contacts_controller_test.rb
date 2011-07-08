@@ -19,7 +19,7 @@ class ContactsControllerTest < ActionController::TestCase
     end
   end
 
-  context "After logging in" do
+  context "After logging in a person with orgs" do
     setup do
       #@user = Factory(:user)
       @user = Factory(:user_with_auxs)  #user with a person object
@@ -79,6 +79,49 @@ class ContactsControllerTest < ActionController::TestCase
       should "show thanks" do
         assert_response :success, @response.body
       end
+    end
+  end  
+
+  context "After logging in a person without orgs" do
+    setup do
+      #@user = Factory(:user)
+      @user = Factory(:user_no_org)  #user with a person object
+      sign_in @user
+      @organization = Factory(:organization)
+      @keyword = Factory.create(:sms_keyword, organization: @organization)
+    end
+    
+    context "on index page" do
+      setup do
+        get :index
+        assert_redirected_to '/wizard'
+      end
+    end
+    
+    context "new with received_sms_id from mobile" do
+      setup do
+        @sms = Factory(:received_sms)
+        get :new, received_sms_id: Base62.encode(@sms.id), format: 'mobile'
+        @person = assigns(:person)
+      end
+    
+      should assign_to(:person)
+      should respond_with(:success)
+      
+      should "update person with sms phone number" do
+        assert(@person.phone_numbers.detect {|p| p.number_with_country_code == @sms.phone_number}, 'phone number wasn\'t saved')
+      end
+      should "associate the sms with the person" do
+        @sms.reload
+        assert(@sms.person == @person, "Sms wasn't assiged to person properly")
+      end
+    end
+    
+    context "going to web contact form" do
+      setup do
+        get :new, keyword: @keyword.keyword
+      end
+      should respond_with(:success)
     end
   end
 end

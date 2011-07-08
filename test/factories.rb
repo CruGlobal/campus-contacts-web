@@ -186,6 +186,13 @@ FactoryGirl.define do
     end
   end
   
+  factory :user_no_org, parent: :user do
+    after_create do |a| 
+      Factory(:person, user: a)
+      Factory(:authentication, user: a)
+    end
+  end
+  
   factory :user2_with_auxs, parent: :user do
     after_create do |a| 
       Factory(:person_with_things, user: a)
