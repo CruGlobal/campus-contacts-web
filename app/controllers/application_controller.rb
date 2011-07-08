@@ -95,9 +95,9 @@ class ApplicationController < ActionController::Base
   end
   
   def create_contact_at_org(person, organization)
-    unless OrganizationalRole.find_by_person_id_and_organization_id_and_role_id(person.id, organization.id, Role.contact.id)
-      OrganizationalRole.create!(person_id: person.id, organization_id: organization.id, role_id: Role.contact.id, followup_status: OrganizationMembership::FOLLOWUP_STATUSES.first)
-    end
+    # if someone already has a status in an org, we shouldn't add them as a contact
+    return false if OrganizationalRole.find_by_person_id_and_organization_id(person.id, organization.id).first
+    OrganizationalRole.create!(person_id: person.id, organization_id: organization.id, role_id: Role.contact.id, followup_status: OrganizationMembership::FOLLOWUP_STATUSES.first)
     unless OrganizationMembership.find_by_person_id_and_organization_id(person.id, organization.id) 
       OrganizationMembership.create!(person_id: person.id, organization_id: organization.id) 
     end
