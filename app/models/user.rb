@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  include Ccc::SimplesecuritymanagerUser
   WIZARD_STEPS = %w[welcome verify keyword survey leaders]
   set_table_name 'simplesecuritymanager_user'
   set_primary_key 'userID'
@@ -75,6 +76,8 @@ class User < ActiveRecord::Base
       
       # Sms Keywords
       other.sms_keywords.collect {|oa| oa.update_attribute(:user_id, id)}
+      
+      super
       
       MergeAudit.create!(mergeable: self, merge_looser: other)
       other.destroy

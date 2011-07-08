@@ -7,7 +7,6 @@ module Ccc
 			has_many :crs_registrations, class_name: 'Ccc::CrsRegistration', foreign_key: :fk_PersonID, dependent: :destroy
 
       has_one :crs2_profile, class_name: 'Ccc::Crs2Profile', foreign_key: :ministry_person_id, dependent: :destroy
-      has_one :mpd_user, class_name: 'Ccc::MpdUser', dependent: :destroy
       has_many :pr_reviewers, class_name: 'Ccc::PrReviewer', dependent: :destroy
       has_many :pr_reviews, class_name: 'Ccc::PrReview' # dependant? subject_id, initiator_id
       has_many :pr_admins, class_name: 'Ccc::PrAdmin', dependent: :destroy
@@ -77,12 +76,6 @@ module Ccc
 						other.crs2_profile.ministry_person_id = personID
 					end
 
-					# MPD
-					if other.mpd_user and mpd_user
-	  				mpd_user.merge(other.mpd_user)
-					elsif other.mpd_user
-						other.mpd_user.user_id = fk_ssmUserID
-					end
 
 					# Panorama
 					other.pr_reviewers.each { |ua| ua.update_attribute(:person_id, personID) }
@@ -97,11 +90,6 @@ module Ccc
 					other.pr_reminders.each { |ua| ua.update_attribute(:person_id, personID) }
 					other.pr_personal_forms.each { |ua| ua.update_attribute(:person_id, personID) }
 
-					if other.pr_user and pr_user
-						other.pr_user.destroy				
-					elsif other.pr_user
-						other.pr_user.ssm_id = fk_ssmUserID
-					end
 					# end Panorama
 					
 					# Summer Project Tool

@@ -1,5 +1,5 @@
 class Ccc::MpdUser < ActiveRecord::Base
-	set_table_name 'mpd_user'
+	set_table_name 'mpd_users'
 	has_many :mpd_contacts, class_name: 'Ccc::MpdContact', dependent: :destroy
 	has_many :mpd_events, class_name: 'Ccc::MpdEvent', dependent: :destroy
 	has_many :mpd_expenses, class_name: 'Ccc::MpdExpense', dependent: :destroy
