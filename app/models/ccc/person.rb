@@ -118,7 +118,7 @@ module Ccc
 						sp_user.merge(other.sp_user)
 					elsif other.sp_user
 						SpUser.where(["person_id = ? or ssm_id = ? or created_by_id = ?", other.id, other.fk_ssmUserId, other.fk_ssmUserId]).each do |ua|
-							ua.update_attribute(:person_mid, personID) if ua.person_id == other.id
+							ua.update_attribute(:person_id, personID) if ua.person_id == other.id
 							ua.update_attribute(:ssm_id, fk_ssmUserId) if ua.ssm_id == other.fk_ssmUserID
 							ua.update_attribute(:created_by_id, fk_ssmUserId) if ua.created_by_id == other.fk_ssmUserID
 						end
