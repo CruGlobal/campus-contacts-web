@@ -46,7 +46,7 @@ class SmsController < ApplicationController
       if !keyword || !keyword.active?
         msg = t('sms.keyword_inactive')
       else
-        msg =  keyword.initial_response.sub(/\{\{\s*link\s*\}\}/, "http://#{request.host_with_port}/m/#{Base62.encode(@text.id)}")
+        msg =  keyword.initial_response.sub(/\{\{\s*link\s*\}\}/, "http://missionhub.com/m/#{Base62.encode(@text.id)}")
         msg += ' No internet? reply with \'i\''
         @text.update_attribute(:sms_keyword_id, keyword.id)
       end
