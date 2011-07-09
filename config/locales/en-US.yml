@@ -159,6 +159,8 @@
       add_comment: 'Add Comment'
     thanks:
       message: Thank you for your interest.
+      done: Done
+      facebook: You have been logged out of Facebook.
   sms:
     keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
   date:
