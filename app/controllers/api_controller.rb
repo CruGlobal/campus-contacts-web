@@ -3,7 +3,6 @@ class ApiController < ApplicationController
   include ApiErrors
   require 'api_helper'
   include ApiHelper
-  
   skip_before_filter :authenticate_user!
   before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization
   after_filter :logApiRequest

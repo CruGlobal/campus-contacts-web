@@ -1,5 +1,5 @@
 class Api::FollowupCommentsController < ApiController
-oauth_required scope: "followup_comments"
+  oauth_required scope: "followup_comments"
 
   def create_1
       begin
