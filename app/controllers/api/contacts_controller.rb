@@ -1,10 +1,5 @@
 class Api::ContactsController < ApiController
-  require 'api_helper.rb'
-  include ApiHelper
-  skip_before_filter :authenticate_user!
-  before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization
   oauth_required scope: "contacts"
-  rescue_from Exception, with: :render_json_error
   
   def search_1
     @keywords = get_keywords

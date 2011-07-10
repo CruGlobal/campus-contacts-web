@@ -193,7 +193,38 @@ module ApiHelper
   
   #Handle all API controller exceptions and output as JSON
   def render_json_error(exception = nil)
-    logger.info "#{exception.message}" if exception
-    render :json => exception.message and return false
+    finiteExceptions = ApiErrors.constants.collect { |x| "ApiErrors::#{x}"}
+    oauthExceptions = [:OAuthError, :AccessDeniedError, :ExpiredTokenError, :InvalidClientError, :InvalidGrantError, :InvalidRequestError, :InvalidScopeError, :InvalidTokenError, :RedirectUriMismatchError, :UnauthorizedClientError, :UnsupportedGrantType, :UnsupportedResponseTypeError].collect { |x| "Rack::OAuth2::Server::#{x}"}
+    finiteExceptions = finiteExceptions + oauthExceptions
+
+    logger.info "#{exception.message}"
+    logApiRequest(exception)
+    HoptoadNotifier.notify(exception)
+
+    if finiteExceptions.include?(exception.class.to_s)
+      output_message = exception.message
+    else
+      output_message = '{"error": {"message":"An unknown error has occurred.", "code":"99"}}'
+    end
+    
+    render :json => output_message and return false
   end
+  
+  def logApiRequest(exception = nil)
+    begin
+      apiLog = {}
+      apiLog[:platform] = params[:platform].to_s if params[:platform]
+      apiLog[:access_token] = params[:access_token] if params[:access_token]
+      apiLog[:url] = request.url
+      apiLog[:action] = "#{request.path_parameters[:controller]}##{request.path_parameters[:action]}"
+      apiLog[:organization_id] = @organization.id
+      apiLog[:error] = exception.nil? ? "success" : {message: exception.message, backtrace: exception.backtrace}.to_json
+      apiLog[:identity] = Rack::OAuth2::Server.get_access_token(params['access_token']).identity if params[:access_token]
+      apiLog[:remote_ip] = request.remote_ip
+      ApiLog.create(apiLog)
+    rescue Exception
+    end
+  end
+  
+  
 end

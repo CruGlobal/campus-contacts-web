@@ -1,10 +1,5 @@
 class Api::FollowupCommentsController < ApiController
-require 'api_helper'
-include ApiHelper
 oauth_required scope: "followup_comments"
-before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization
-skip_before_filter :verify_authenticity_token, :authenticate_user!
-rescue_from Exception, with: :render_json_error
 
   def create_1
       begin
@@ -50,7 +45,6 @@ rescue_from Exception, with: :render_json_error
     end
     
     comments.destroy_all
-    
     render :json => '[]'
   end
 end
