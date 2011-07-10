@@ -199,12 +199,12 @@ module ApiHelper
 
     logger.info "#{exception.message}"
     logApiRequest(exception)
-    HoptoadNotifier.notify(exception)
 
     if finiteExceptions.include?(exception.class.to_s)
       output_message = exception.message
     else
       output_message = '{"error": {"message":"An unknown error has occurred.", "code":"99"}}'
+      HoptoadNotifier.notify(exception)
     end
     
     render :json => output_message and return false
@@ -222,7 +222,8 @@ module ApiHelper
       apiLog[:identity] = Rack::OAuth2::Server.get_access_token(params['access_token']).identity if params[:access_token]
       apiLog[:remote_ip] = request.remote_ip
       ApiLog.create(apiLog)
-    rescue Exception
+    rescue Exception => e
+      logger.info e.inspect
     end
   end
   
