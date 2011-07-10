@@ -8,8 +8,17 @@ class Ccc::Crs2Profile < ActiveRecord::Base
 
 
   def merge(other)
+		other.crs2_registrants.each do |ua|
+  		crs2_registrants.each do |cr|
+   	 		if ua.registration_type_id == cr.registration_type_id
+    	  	ua.orphan = true
+      		break
+    		end
+  		end
+  		ua.profile_id = cr.profile_id unless ua.orphan?
+  		ua.save(:validate => false)
+		end
 
-   	other.crs2_registrants.each { |ua| ua.update_attribute(:profile_id, id) }
 		crs2_user.merge(other.crs2_user)
 
 
