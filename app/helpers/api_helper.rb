@@ -220,7 +220,7 @@ module ApiHelper
       apiLog[:organization_id] = @organization.id
       apiLog[:error] = exception.nil? ? "success" : {message: exception.message, backtrace: exception.backtrace}.to_json
       apiLog[:identity] = Rack::OAuth2::Server.get_access_token(params['access_token']).identity if params[:access_token]
-      apiLog[:remote_ip] = request.env["HTTP_X_FORWARDED_FOR"]
+      apiLog[:remote_ip] = request.remote_ip
       ApiLog.create(apiLog)
     rescue Exception
     end
