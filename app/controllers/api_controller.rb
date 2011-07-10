@@ -4,7 +4,6 @@ class ApiController < ApplicationController
   require 'api_helper'
   include ApiHelper
   skip_before_filter :authenticate_user!
-  before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization
   after_filter :logApiRequest
   rescue_from Exception, with: :render_json_error
   

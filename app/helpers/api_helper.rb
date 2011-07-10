@@ -113,6 +113,7 @@ module ApiHelper
       @organization = Organization.find(org_id_param)
     else
       @organization = get_me.primary_organization
+      @organization = get_me.organizations.first if @organization.nil?
     end
     raise NoOrganizationError if @organization.nil?
     @organization

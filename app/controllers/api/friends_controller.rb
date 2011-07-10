@@ -1,5 +1,6 @@
 class Api::FriendsController < ApiController
   oauth_required scope: "userinfo"
+  before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization
   
   def show_1
     json_output = get_people.collect { |u| Friend.get_friends_from_person_id(u.id, @valid_fields)}

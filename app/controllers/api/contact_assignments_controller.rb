@@ -1,5 +1,6 @@
 class Api::ContactAssignmentsController < ApiController
   oauth_required scope: "contact_assignment"
+  before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization
   
   def create_1
     raise ContactAssignmentCreateParamsError unless ( params[:ids].present? && params[:assign_to].present? && is_int?(params[:assign_to]))

@@ -1,5 +1,6 @@
 class Api::FollowupCommentsController < ApiController
   oauth_required scope: "followup_comments"
+  before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization
 
   def create_1
       begin
