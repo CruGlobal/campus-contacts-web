@@ -65,7 +65,7 @@
     home:
       title_top: "Welcome to MissionHub!"
       keywords: "Keywords"
-      manage_questions: "Manage Questions"
+      manage_questions: "Manage Survey Questions"
       edit_keyword: 'Edit Keyword'
       your_orgs: 'Your Organizational Involvements'
       edit_orgs: 'Edit your organizational involvements.'
