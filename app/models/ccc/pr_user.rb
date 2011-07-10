@@ -1,4 +1,4 @@
-class PrUser < ActiveRecord::Base
+class Ccc::PrUser < ActiveRecord::Base
   belongs_to :user, foreign_key: :ssm_id
   belongs_to :person
 

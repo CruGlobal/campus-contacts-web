@@ -1,7 +1,7 @@
-class Reviewer < AnswerSheet
+class Ccc::PrReviewer < AnswerSheet
   before_create :generate_access_key
   set_table_name "pr_reviewers"
-  belongs_to :review
+  belongs_to :review, class_name: "Ccc::PrReview"
   belongs_to :person
   validates_uniqueness_of :person_id, scope: [ :review_id ], on: :create
 

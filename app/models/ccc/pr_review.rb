@@ -1,8 +1,8 @@
-class Review < ActiveRecord::Base
+class Ccc::PrReview < ActiveRecord::Base
   belongs_to :subject, class_name: "Person"
   belongs_to :initiator, class_name: "Person"
   belongs_to :question_sheet
-  has_many :reviewings, class_name: "Reviewer", dependent: :destroy
+  has_many :reviewings, class_name: "Ccc::PrReviewer", dependent: :destroy
   has_many :reviewers, through: :reviewings, class_name: "Person", source: :person
   has_one :summary_form
   set_table_name "pr_reviews"

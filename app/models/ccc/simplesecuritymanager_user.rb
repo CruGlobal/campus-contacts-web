@@ -7,6 +7,9 @@ module Ccc
   	set_table_name 'simplesecuritymanager_user'
   	has_one :sp_user, class_name: 'Ccc::SpUser'
   	has_one :mpd_user, class_name: 'Ccc::MpdUser', dependent: :destroy
+		has_one :si_user, class_name: 'Ccc::SiUser', foreign_key: 'ssm_id'
+    has_one :pr_user, class_name: 'Ccc::PrUser', dependent: :destroy, foreign_key: 'ssm_id'
+		has_many :sn_user_memberships, class_name: 'Ccc::SnUserMembership'
 	end  
 
 		module InstanceMethods
@@ -22,6 +25,17 @@ module Ccc
 				elsif other.pr_user
 					other.pr_user.ssm_id = fk_ssmUserID
 				end
+				
+				if other.si_user and si_user
+					other.si_user.destroy				
+				elsif other.si_user
+					SiUser.where(["ssm_id = ? or created_by_id = ?", other.fk_ssmUserId, other.fk_ssmUserId]).each do |ua|
+						ua.update_attribute(:ssm_id, personID) if ua.ssm_id == other.fk_ssmUserId
+						ua.update_attribute(:created_by_id, personID) if ua.created_by_id == other.fk_ssmUserId
+					end
+				end
+				
+				other.sn_user_memberships.each { |ua| ua.update_attribute(:user_id, id) }
 
 			end
 		end

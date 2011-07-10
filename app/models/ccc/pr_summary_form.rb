@@ -1,4 +1,4 @@
-class SummaryForm < AnswerSheet
+class Ccc::PrSummaryForm < AnswerSheet
   belongs_to :review
   #belongs_to :person
   set_table_name "pr_summary_forms"
