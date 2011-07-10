@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110710014153) do
+ActiveRecord::Schema.define(:version => 20110710052424) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -69,13 +69,17 @@ ActiveRecord::Schema.define(:version => 20110710014153) do
   create_table "api_logs", :force => true do |t|
     t.string   "platform"
     t.string   "action"
-    t.integer  "identity"
     t.integer  "organization_id"
     t.text     "error"
     t.text     "url"
     t.string   "access_token"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "identity"
+    t.string   "remote_ip"
+    t.string   "platform_release"
+    t.string   "platform_product"
+    t.string   "app"
   end
 
   create_table "auth_requests", :force => true do |t|

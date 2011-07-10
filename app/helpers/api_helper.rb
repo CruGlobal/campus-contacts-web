@@ -214,6 +214,9 @@ module ApiHelper
     begin
       apiLog = {}
       apiLog[:platform] = params[:platform].to_s if params[:platform]
+      apiLog[:platform_release] = params[:platform_release] if params[:platform_release]
+      apiLog[:platform_product] = params[:platform_product] if params[:platform_product]
+      apiLog[:app] = params[:app] if params[:app]
       apiLog[:access_token] = params[:access_token] if params[:access_token]
       apiLog[:url] = request.url
       apiLog[:action] = "#{request.path_parameters[:controller]}##{request.path_parameters[:action]}"
@@ -221,6 +224,7 @@ module ApiHelper
       apiLog[:error] = exception.nil? ? "success" : {message: exception.message, backtrace: exception.backtrace}.to_json
       apiLog[:identity] = Rack::OAuth2::Server.get_access_token(params['access_token']).identity if params[:access_token]
       apiLog[:remote_ip] = request.remote_ip
+
       ApiLog.create(apiLog)
     rescue Exception => e
       logger.info e.inspect
