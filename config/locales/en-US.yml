@@ -120,7 +120,7 @@
         In Christ,
         
         %{name}
-      filter: 'Filter Results'
+      filter: 'Search'
       first_name: 'First Name'
       last_name: 'Last Name'
       leaders: Leaders
