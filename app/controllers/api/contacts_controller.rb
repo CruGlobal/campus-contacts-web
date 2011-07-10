@@ -1,5 +1,6 @@
 class Api::ContactsController < ApiController
   oauth_required scope: "contacts"
+  before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization
   
   def search_1
     @keywords = get_keywords

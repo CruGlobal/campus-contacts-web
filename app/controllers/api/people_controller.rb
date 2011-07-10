@@ -1,5 +1,6 @@
 class Api::PeopleController < ApiController
   oauth_required scope: "userinfo"
+  before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization
   
   def show_1
     json_output = get_people.collect {|u| u.to_hash(@organization).slice(*@valid_fields) unless u.nil?}    
