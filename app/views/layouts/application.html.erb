@@ -3,6 +3,16 @@
 <head>
   <%= render 'shared/head' %>
   <!-- <%= current_person.id %> -->
+  <script>
+  	$(function(){
+  	  $('.tipit[title]').qtip({
+  	    position: {
+          my: 'top right',  // Position my top left...
+          at: 'bottom left' // at the bottom right of...
+        }
+    	});
+  	});
+	</script>
 </head>
 <body id="<%= controller.controller_name %>_controller" class="<%= params[:action] %>">
   
@@ -24,7 +34,7 @@
           <ul>
             <!-- <li><%#= link_to("Dashboard", user_root_path) %></li> -->
             <li class="<%= 'selected' if request.fullpath == '/contacts/mine' %>"><%= link_to(image_tag("t_contact_white.png", :class=> "tmenu") + t('nav.my_contacts'), "/contacts/mine") %></li>
-            <li class="<%= 'selected' if  params[:controller] == 'contacts' && params[:action] == 'index' %>"><%= link_to(t('nav.all_contacts'), "/contacts") %></li>
+            <li class="<%= 'selected' if  params[:controller] == 'contacts' && params[:action] == 'index' %>"><%= link_to(image_tag("t_group_white.png", :class=> "tmenu") + t('nav.all_contacts'), "/contacts") %></li>
             <!-- <li><%= link_to(t('nav.directory'), "/people") %></li> -->
             <% if can? :manage, current_organization %>
               <li class="<%= 'selected' if params[:controller] == 'sms_keywords' %>"><%= link_to(image_tag("t_keyword_white.png", :class=> "tmenu") + t('nav.keywords'), sms_keywords_path) %></li>
