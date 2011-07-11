@@ -8,17 +8,13 @@
         setTimeout(function() {
     			window.location="<%= facebook_logout_url %>?next=<%= request.referrer %>";      
         }, 10000);
-        
-        $('#done').click(function() {
-        					window.location="<%= facebook_logout_url %>?next=<%= request.referrer %>";
-        				});
     </script>
-
+    
 	<div id="countdown">
 		<center>
 			<h4><%= t('contacts.thanks.facebook')%></h4>
 			<br><br>
-			<h3><span id="done"><font color="#0379AE"><%= t('contacts.thanks.done')%></font></span></h3>
+			<h3><%= link_to(t('contacts.thanks.done'), facebook_logout_url(next: request.referrer)) %></h3>
 		</center>
 	</div>
 </div>

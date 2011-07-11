@@ -16,6 +16,7 @@
         <%= t('.unassigned_responses') %>
       <% end %>
     <% end %>
+    <%= t('.matching_seach') if params[:search] %>
   </h1>
 </div>
 
@@ -44,7 +45,7 @@
       <%= render partial: 'contacts/hidden_question', collection: @hidden_questions %>
     </ul>
   </div>
-  <div id="filter_box" style="<%= 'display:none' unless params[:search] %>">
+  <div id="filter_box" style="<%= 'display:none' %>">
     <%= form_tag params, method: :get do %>
       <%= hidden_field_tag :search, 1 %>
       <%= hidden_field_tag :assigned_to, params[:assigned_to] %>

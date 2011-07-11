@@ -132,6 +132,7 @@
       dnc_contacts: "All Contacts - 'Do Not Contact'"
       none_checked: "You didn't select any contacts to assign."
       show_all: Show 'In Progress' contacts
+      matching_seach: Matching the criteria you searched for
       which_org: 'You need to choose which organization you want to do folow-up from'
       add: 'Add'
       hidden_questions: 'Hidden Questions'

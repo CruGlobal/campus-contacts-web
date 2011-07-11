@@ -18,7 +18,7 @@ class ContactsControllerTest < ActionController::TestCase
       assert_redirected_to '/users/sign_in'
     end
   end
-
+  
   context "After logging in a person with orgs" do
     setup do
       #@user = Factory(:user)
@@ -81,7 +81,7 @@ class ContactsControllerTest < ActionController::TestCase
       end
     end
   end  
-
+  
   context "After logging in a person without orgs" do
     setup do
       #@user = Factory(:user)
@@ -94,8 +94,8 @@ class ContactsControllerTest < ActionController::TestCase
     context "on index page" do
       setup do
         get :index
-        assert_redirected_to '/wizard'
       end
+      should redirect_to '/wizard'
     end
     
     context "new with received_sms_id from mobile" do
@@ -122,6 +122,23 @@ class ContactsControllerTest < ActionController::TestCase
         get :new, keyword: @keyword.keyword
       end
       should respond_with(:success)
+    end
+  end
+
+  context "After logging in as a contact" do
+    setup do
+      @user = Factory(:user_no_org)  #user with a person object
+      @organization = Factory(:organization)
+      @organization_membership = Factory(:organization_membership, person: @user.person, organization: @organization)
+      @organizational_role = Factory(:organizational_role, person: @user.person, organization: @organization, :role => Role.contact)
+      sign_in @user
+    end
+    
+    context "on index page" do
+      setup do
+        get :index
+      end
+      should redirect_to('/wizard')
     end
   end
 end

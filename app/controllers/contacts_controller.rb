@@ -104,7 +104,10 @@ class ContactsController < ApplicationController
     create_contact_at_org(@person, @keyword.organization)
     if @person.valid?
       create_contact_at_org(@person, current_organization)
-      render :thanks
+      respond_to do |wants|
+        wants.html { render :thanks, :layout => 'plain'}
+        wants.mobile { render :thanks }
+      end
     else
       render :new
     end
@@ -121,8 +124,6 @@ class ContactsController < ApplicationController
     @followup_comments = FollowupComment.where(organization_id: @organization, contact_id: @person).order('created_at desc')
   end
   
-  def thanks
-  end
   
   def create
     params[:person] ||= {}

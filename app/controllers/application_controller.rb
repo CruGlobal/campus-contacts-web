@@ -54,11 +54,16 @@ class ApplicationController < ActionController::Base
   
   def current_organization
     return nil unless user_signed_in?
-    return nil if current_person.organizations.empty?
-    org = current_person.organizations.find_by_id(session[:current_organization_id]) 
+    non_contact_roles = current_person.organizational_roles.includes(:organization).where("role_id <> #{Role.contact.id}")
+    return nil if non_contact_roles.empty?
+    org = current_person.organizations.find_by_id(session[:current_organization_id]) if session[:current_organization_id]
     unless org
-      org = current_person.primary_organization || current_person.organizations.first
-      session[:current_organization_id] = org.id
+      org = current_person.primary_organization
+      # If they're a contact at their primary org, look for another org where they have a different role
+      unless non_contact_roles.collect(&:organization).include?(org)
+        org = current_person.organizations.where("role_id <> #{Role.contact.id}").first.try(:organization)
+      end
+      session[:current_organization_id] = org.try(:id)
     end
     org
   end
