@@ -17,12 +17,12 @@
 			<%- unless params[:simple] == 'true' -%>
 				<div data-role="header">
 	    		<div class="current" id="home">
-			      <%- if show_title? -%>
-			        <div data-role="header" role="banner">
+
+			        <div data-role="header" role="banner" data-backbtn="false">
 			          <h1 class="ui-title" tabindex="0" role="heading"><%=h yield(:title) %></h1>
-						<% if current_user %>
+						<% if current_user && !params[:button].present? %>
 			          		<%= link_to "Logout", facebook_logout_url(mobile:1), "data-role" => "button", rel: "external"%>
-						<% end %>
+
 			          <!-- <%= yield(:toolbar) %> -->
 			        </div>
 			      <%- end -%>

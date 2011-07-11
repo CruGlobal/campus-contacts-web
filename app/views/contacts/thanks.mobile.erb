@@ -1,32 +1,18 @@
+<% provide :title, "Thanks!"%>
+
 <div class="info">
   <center><h4><%= @keyword.post_survey_message.present? ? @keyword.post_survey_message : t('contacts.thanks.message') %></h4></center>
 	<br><br>
 
-	<script type="text/javascript">
-		var start=new Date();
-			start=Date.parse(start)/1000;
-			var counts=20;
-			var gonow = false;
-			function CountDown(){
-				$('#done').click(function() {
-					gonow=true;
-				});
-				var now=new Date();
-				now=Date.parse(now)/1000;
-				var x=parseInt(counts-(now-start),10);
-				$('#numOfSecond').html(x);
-				if(!gonow) {
-					if(x>0){
-						timerID=setTimeout("CountDown()", 100)
-					}else{
-						window.location="<%= facebook_logout_url %>?next=<%= request.referrer %>";
-					}	
-				}	else {
-						window.location="<%= facebook_logout_url %>?next=<%= request.referrer %>";
-				}	
-			}
-			CountDown();
-	</script>
+    <script type="text/javascript">
+        setTimeout(function() {
+    			window.location="<%= facebook_logout_url %>?next=<%= request.referrer %>";      
+        }, 10000);
+        
+        $('#done').click(function() {
+        					window.location="<%= facebook_logout_url %>?next=<%= request.referrer %>";
+        				});
+    </script>
 
 	<div id="countdown">
 		<center>
