@@ -34,9 +34,9 @@
         
         
         <% if notice %>
-         <p class="notice" id="notice"><%= notice %></p>
+          <div style="padding:10px"><p class="notice" id="notice"><%= notice %></p></div>
         <% elsif alert %>
-         <p class="alert" id="alert"><%= alert %></p>
+          <div style="padding:10px"><p class="alert" id="alert"><%= alert %></p></div>
         <% end %>
             
         <div class="<%= params[:action] %> carea">

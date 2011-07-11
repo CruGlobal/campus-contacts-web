@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   before_filter :authenticate_user!, :set_locale
+  rescue_from CanCan::AccessDenied, with: :access_denied
   protect_from_forgery  
 
   def facebook_logout
@@ -143,6 +144,11 @@ class ApplicationController < ActionController::Base
     unless current_organization
       redirect_to '/wizard' and return false
     end
+  end
+  
+  def access_denied
+    flash[:alert] =  "You don't have permission to access that area of MissionHub"
+    render 'application/access_denied'
   end
   
 end
