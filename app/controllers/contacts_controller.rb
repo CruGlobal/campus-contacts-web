@@ -101,9 +101,8 @@ class ContactsController < ApplicationController
     question_set = QuestionSet.new(@keyword.questions, @answer_sheet)
     question_set.post(params[:answers], @answer_sheet)
     question_set.save
-    create_contact_at_org(@person, @keyword.organization)
     if @person.valid?
-      create_contact_at_org(@person, current_organization)
+      create_contact_at_org(@person, @keyword.organization)
       respond_to do |wants|
         wants.html { render :thanks, :layout => 'plain'}
         wants.mobile { render :thanks }
