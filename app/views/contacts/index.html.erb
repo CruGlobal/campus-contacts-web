@@ -4,8 +4,11 @@
 
 <div class="titlebar">  
   <h1>
-    <% if params[:assigned_to] == 'all' %>
+    <% case params[:assigned_to] %>
+    <% when 'all' %>
       <%= t('.all_responses') %>
+    <% when 'progress' %>
+      <%= t('.in_progress_responses') %>
     <% else %>
       <% if @assigned_to.present? %>
         <%= t('.responses_assigned_to', assigned_to: @assigned_to) %>
@@ -22,7 +25,7 @@
 
 <div class="pagemenu">
   <ul class="pillmenu">
-    <li><%= check_box_tag 'check_all' %></li>
+    <li><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment' %></li>
   </ul>
   
   <ul class="pillmenu">

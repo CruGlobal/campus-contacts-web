@@ -11,6 +11,10 @@ class Ability
       # leaders and admins can edit other ppl's info
       can :manage, Person, organizations: {id: user.person.organizational_roles.where(role_id: [leader_role.id, admin_role.id]).collect(&:organization_id)}
       
+      can :manage, Organization, id: user.person.organizational_roles.where(role_id: admin_role.id).collect(&:organization_id)
+      
+      can :manage_contacts, Organization, id: user.person.organizational_roles.where(role_id: [leader_role.id, admin_role.id]).collect(&:organization_id)
+      
       # can only manage keywords from orgs you're an admin of
       can :manage, SmsKeyword, organization_id: user.person.organizational_roles.where(role_id: admin_role.id).collect(&:organization_id)
       # Gotta be an admin somewhere to see keyword options

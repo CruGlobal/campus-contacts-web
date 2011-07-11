@@ -1,4 +1,14 @@
+<ul class="pillmenu">
+    <li><a href="#" id="send_reminder_link"><%= t('contacts.index.send_reminder') %></a></li>
+</ul>
 <ul class="leftmenu">
+  <li class="leader unassigned" data-id="">
+    <strong><span class="name"><%= link_to(t('contacts.index.unassigned'), contacts_path) %></span></strong> (<span id="unassigned_count" class="count"><%= unassigned_people(@organization).count %></span>)
+  </li>
+  <li><span class="name"><strong><%= link_to(t('contacts.index.in_progress'), contacts_path(assigned_to: 'progress')) %></strong></span> (<%= @organization.inprogress_contacts.count %>)</li>
+  <li><span class="name"><strong><%= link_to(t('contacts.index.all'), contacts_path(assigned_to: 'all')) %></strong></span> (<%= @organization.contacts.count %>)</li>
+  <li><span class="name"><strong><%= link_to(t('contacts.index.completed'), contacts_path(completed: true)) %></strong></span> (<%= @organization.completed_contacts.count %>)</li>
+  <li class="dnc"><span class="name"><strong><%= link_to(t('contacts.index.dnc'), contacts_path(dnc: true)) %></strong></span> (<span id="dnc_count" class="count"><%= OrganizationalRole.dnc.where(organization_id: @organization.id).count %></span>)</li>
   <li class="heading selected">
     <%# if can? :manage, @organization %>
       <%= link_to(raw(t('contacts.index.add') + " " + image_tag('add.png')), '#', class: 'add-leader listaction') %>
@@ -11,16 +21,8 @@
         <%= render 'contacts/leader', person: person %>
       <% end %>
     </ul>
+    <a href="#" id="moreleaders"><span><strong>+</strong> Show More Leaders</span></a>
   </li>
-  <li class="leader unassigned" data-id="">
-    <strong><span class="name"><%= link_to(t('contacts.index.unassigned'), contacts_path) %></span></strong> (<span id="unassigned_count" class="count"><%= unassigned_people(@organization).count %></span>)
-  </li>
-  <li><span class="name"><strong><%= link_to(t('contacts.index.in_progress'), contacts_path(assigned_to: 'all')) %></strong></span> (<%= @organization.inprogress_contacts.count %>)</li>
-  <li><span class="name"><strong><%= link_to(t('contacts.index.completed'), contacts_path(completed: true)) %></strong></span> (<%= @organization.completed_contacts.count %>)</li>
-  <li class="dnc"><span class="name"><strong><%= link_to(t('contacts.index.dnc'), contacts_path(dnc: true)) %></strong></span> (<span id="dnc_count" class="count"><%= OrganizationalRole.dnc.where(organization_id: @organization.id).count %></span>)</li>
-</ul>
-<ul class="pillmenu">
-    <li><a href="#" id="send_reminder_link"><%= t('contacts.index.send_reminder') %></a></li>
 </ul>
 <%= render 'contacts/leader_form' %>
 <%= render 'contacts/send_reminder_form' %>

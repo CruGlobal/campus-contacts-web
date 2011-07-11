@@ -20,7 +20,11 @@ $ ->
 		$(this).parent().fadeOut()
 	
 	$('#check_all').live 'click', ->
-		$('input[type=checkbox]', $(this).closest('form')).prop('checked', $(this).prop('checked'))
+		if $(this).attr('data-target')
+			form = $($(this).attr('data-target'))
+		else
+			form = $(this).closest('form')
+		$('input[type=checkbox]', form).prop('checked', $(this).prop('checked'))
 		
 	$('.drag').live 'click', -> 
 		false

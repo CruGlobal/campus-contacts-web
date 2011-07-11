@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   before_filter :authenticate_user!, :except => [:facebook_logout]
   before_filter :set_locale
+  rescue_from CanCan::AccessDenied, with: :access_denied
   protect_from_forgery  
 
   def facebook_logout
@@ -64,8 +65,9 @@ class ApplicationController < ActionController::Base
     unless org
       org = current_person.primary_organization
       # If they're a contact at their primary org, look for another org where they have a different role
-      unless non_contact_roles.collect(&:organization).include?(org)
-        org = current_person.organizations.where("role_id <> #{Role.contact.id}").first.try(:organization)
+      non_contact_organization = non_contact_roles.collect(&:organization)
+      unless non_contact_organization.include?(org)
+        org = non_contact_organization.first
       end
       session[:current_organization_id] = org.try(:id)
     end
@@ -105,6 +107,8 @@ class ApplicationController < ActionController::Base
   
   def create_contact_at_org(person, organization)
     # if someone already has a status in an org, we shouldn't add them as a contact
+    raise 'no person' unless person
+    raise 'no org' unless organization
     return false if OrganizationalRole.find_by_person_id_and_organization_id(person.id, organization.id)
     OrganizationalRole.create!(person_id: person.id, organization_id: organization.id, role_id: Role.contact.id, followup_status: OrganizationMembership::FOLLOWUP_STATUSES.first)
     unless OrganizationMembership.find_by_person_id_and_organization_id(person.id, organization.id) 
@@ -147,6 +151,11 @@ class ApplicationController < ActionController::Base
     unless current_organization
       redirect_to '/wizard' and return false
     end
+  end
+  
+  def access_denied
+    flash[:alert] =  "You don't have permission to access that area of MissionHub"
+    render 'application/access_denied'
   end
   
 end

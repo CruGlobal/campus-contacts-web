@@ -344,7 +344,7 @@ ul.leftmenu {
   }
 }
 
-.wizard {
+div.wizard {
   margin: 17px 0 0 0px;
   border: 1px solid #c1ddef;
   padding: 15px;
@@ -837,6 +837,15 @@ span.title {
 
 /* FORM */
 
+.inlinehelp {
+		background: url("<%= asset_path("light.png") %>") no-repeat #fff6d4 5px 5px;
+		border: 1px solid #ff7800;
+		padding: 5px 5px 5px 25px;
+		border-radius: 4px;
+		display: inline-block;
+		margin: 0;
+}
+
 .field {
   margin-bottom: 10px;
   label {
@@ -1082,7 +1091,6 @@ span.title {
 		margin-top: 8px;
 	}
 	.story {
-		font-size: 13.5px;
 		margin: 0 auto;
 		line-height: 1.35em;
 	}
@@ -1198,5 +1206,33 @@ ul.to_list {
 		float: left;
 		font-size: 11px;
 		}
+}
+
+ul#leaders li.ui-state-highlight:hover {
+	background: red;
+}
+
+#leaders {
+	height: 265px;
+	overflow: hidden;
+}
+
+#moreleaders {
+	font-weight: normal;
+	line-height: 13px;
+	padding: 0;
+	text-decoration: none;
+	span {
+		background: $light-blue;
+    color: $blue;
+    display: inline-block;
+    margin-left: 19px;
+    padding: 3px 5px;
+	}
+}
+
+#moreleaders:hover span{
+	background: $blue;
+	color: $light-blue;
 }
 
