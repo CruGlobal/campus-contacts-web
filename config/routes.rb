@@ -116,7 +116,7 @@ Mh::Application.routes.draw do
       resources :contacts
       resources :contact_assignments
       resources :followup_comments
-      get 'schools' => 'people#schools'
+      resources :roles
     end
   end
 
