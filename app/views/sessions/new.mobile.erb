@@ -3,11 +3,12 @@
 <html>
   <head>
     <title><%= h(yield(:title) || "Cru") %></title>
-    <%= stylesheet_link_tag 'mobile' %>
+    
 
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" />
 		<script src="http://code.jquery.com/jquery-1.5.2.min.js" ></script>
 		<script src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js" ></script>
+		<%= stylesheet_link_tag 'mobile' %>
 
     <%= yield(:head) %>
   </head>
@@ -30,7 +31,7 @@
 			<%- if true -%>
 				 <div data-role="header">
 				   <div data-role="header" role="banner">
-				     <h1 style='font-family:helvetica'>MHub Login</h1>
+				     <h1 style='font-family:helvetica' class="mh-login"><%= image_tag("mh-logo-full.png", :style =>"width: 135px;") %></h1>
 				   </div>
 				</div>
 			<%- end -%>

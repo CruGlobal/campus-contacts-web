@@ -15,4 +15,46 @@
 }
 */
 
-ul.jqm {list-style-type:none;}
+ul.jqm {
+	list-style-type:none;
+	margin: 0;
+	padding: 0;
+}
+
+.mh-logo {
+	background: none;
+	border: none;
+	margin: 0;
+	padding: 0;
+	box-shadow: none !important;
+	-webkit-box-shadow: none !important;
+}
+
+.mh-logo .ui-btn-inner {
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
+.mh-logo img {
+	width: 35px;
+}
+
+.ui-bar-a {
+	background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0.13, rgb(18,70,110)),
+    color-stop(0.79, rgb(3,120,174))
+	);
+	background-image: -moz-linear-gradient(
+	    center bottom,
+	    rgb(18,70,110) 13%,
+	    rgb(3,120,174) 79%
+	);
+}
+
+.mh-login {
+	margin: 5px 0 0 !important;
+}

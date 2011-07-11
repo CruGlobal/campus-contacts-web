@@ -4,11 +4,13 @@
   <head>
     <title><%= h(yield(:title) || "Cru") %></title>
 
-    <%= stylesheet_link_tag 'mobile' %>
+    
 
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" />
 		<script src="http://code.jquery.com/jquery-1.5.2.min.js" ></script>
 		<script src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js" ></script>
+		
+		<%= stylesheet_link_tag 'mobile' %>
 
     <%= yield(:head) %>
   </head>
@@ -24,6 +26,11 @@
 			          		<%= link_to "Logout", facebook_logout_url(mobile:1), "data-role" => "button", rel: "external"%>
 						<% end %>
 			          <!-- <%= yield(:toolbar) %> -->
+			          
+			          <a class="ui-btn-right mh-logo">
+			            <%= image_tag("mh-logo.png") %>
+			          </a>
+			          
 			        </div>
 			      <%- end -%>
 				  </div>
