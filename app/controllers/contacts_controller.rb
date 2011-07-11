@@ -21,7 +21,10 @@ class ContactsController < ApplicationController
       @people = @organization.completed_contacts.order('lastName, firstName')
     else
       if params[:assigned_to]
-        if params[:assigned_to] == 'all'
+        case params[:assigned_to]
+        when 'all'
+          @people = @organization.contacts.order('lastName, firstName')
+        when 'progress'
           @people = @organization.inprogress_contacts.order('lastName, firstName')
         else
           if params[:assigned_to].present? && @assigned_to = Person.find_by_personID(params[:assigned_to])

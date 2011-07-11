@@ -126,7 +126,8 @@
       leaders: Leaders
       assign_to: "Assign To:"
       assigned_to: "Assigned To"
-      all_responses: "All Contacts - 'In Progress'"
+      all_responses: "All Contacts"
+      in_progress_responses: "All Contacts - 'In Progress'"
       responses_assigned_to: "All Contacts - assigned to %{assigned_to}"
       unassigned_responses: "All Contacts - Unassigned"
       dnc_contacts: "All Contacts - 'Do Not Contact'"
