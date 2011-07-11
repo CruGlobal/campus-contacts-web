@@ -104,7 +104,7 @@ class ContactsController < ApplicationController
     create_contact_at_org(@person, @keyword.organization)
     if @person.valid?
       create_contact_at_org(@person, current_organization)
-      render :thanks
+      thanks
     else
       render :new
     end
@@ -122,6 +122,10 @@ class ContactsController < ApplicationController
   end
   
   def thanks
+    respond_to do |wants|
+      wants.html { render :thanks, :layout => 'plain'}
+      wants.mobile { render :thanks }
+    end
   end
   
   def create

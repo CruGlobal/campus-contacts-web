@@ -169,11 +169,14 @@ FactoryGirl.define do
   
   factory :organizational_role do 
     association :organization
+    association :person
+    association :role
     followup_status "attempted_contact"
   end
   
   factory :organization_membership do 
     association :organization
+    association :person
   end
   
   factory :contact_assignment do 

@@ -1,5 +1,5 @@
 namespace :infobase do
-  desc "pulls the ministry_* table info into sn_* tables"
+  desc "pulls the ministry_* table info into missionhub tables"
   task sync: :environment do
     root = Organization.find_or_create_by_name "Campus Crusade for Christ"
     puts "Insert strategies"
