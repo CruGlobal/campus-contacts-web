@@ -10,7 +10,8 @@
 </div>
 
 <%= form_for ContactAssignment.new do |f| %>
-  <%= hidden_field_tag :assigned_to %>
+  <%= hidden_field_tag :assign_to %>
+  <%= hidden_field_tag :my_id, current_person.id %>
 
   <div class="pagemenu">
     <ul class="pillmenu">

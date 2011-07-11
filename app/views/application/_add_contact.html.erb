@@ -9,7 +9,7 @@
       <% end %>
       <%= hidden_field_tag :add_another %>
       <% if params[:action] == 'mine' %>
-        <%= hidden_field_tag :assign_to_me, true %>
+        <%= hidden_field_tag :assign_to_me, true, id: 'assign_new_contact_to_me' %>
       <% else %>
         <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
         <%= hidden_field_tag :dnc, params[:dnc] %>

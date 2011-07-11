@@ -36,7 +36,7 @@
             <li class="<%= 'selected' if request.fullpath == '/contacts/mine' %>"><%= link_to(image_tag("t_contact_white.png", :class=> "tmenu") + t('nav.my_contacts'), "/contacts/mine") %></li>
             <li class="<%= 'selected' if  params[:controller] == 'contacts' && params[:action] == 'index' %>"><%= link_to(image_tag("t_group_white.png", :class=> "tmenu") + t('nav.all_contacts'), "/contacts") %></li>
             <!-- <li><%= link_to(t('nav.directory'), "/people") %></li> -->
-            <% if can? :manage, SmsKeyword %>
+            <% if can? :manage, current_organization %>
               <li class="<%= 'selected' if params[:controller] == 'sms_keywords' %>"><%= link_to(image_tag("t_keyword_white.png", :class=> "tmenu") + t('nav.keywords'), sms_keywords_path) %></li>
             <% end %>
           </ul>
@@ -44,9 +44,9 @@
         
         
         <% if notice %>
-         <p class="notice" id="notice"><%= notice %></p>
+          <div style="padding:10px"><p class="notice" id="notice"><%= notice %></p></div>
         <% elsif alert %>
-         <p class="alert" id="alert"><%= alert %></p>
+          <div style="padding:10px"><p class="alert" id="alert"><%= alert %></p></div>
         <% end %>
             
         <div class="<%= params[:action] %> carea">

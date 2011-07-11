@@ -119,7 +119,7 @@ class OrganizationMembershipsController < ApplicationController
     if @organization_membership = current_person.organization_memberships.find(params[:id])
       session[:current_organization_id] = @organization_membership.organization.id
     end
-    redirect_to :back
+    redirect_to user_root_path
   end
   
   def set_primary
@@ -127,7 +127,7 @@ class OrganizationMembershipsController < ApplicationController
       @organization_membership.update_attribute(:primary, true)
       session[:current_organization_id] = @organization_membership.organization.id
     end
-    redirect_to request.referrer ? :back : user_root_path
+    redirect_to user_root_path
   end
   
 end
