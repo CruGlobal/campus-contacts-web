@@ -19,7 +19,12 @@ class Api::RolesController < ApiController
     @role_to_update = @roles.collect {|x| x if mh_roles.include?(x.role_id.to_s)}.try(:first)
     
     unless @role_to_update.nil?
-      @role_to_update.update_attributes(:role_id => role)
+      update_hash = {}
+      if role == 2 
+        update_hash[:followup_status] = OrganizationMembership::FOLLOWUP_STATUSES.first
+      end
+      update_hash[:role_id] = role
+      @role_to_update.update_attributes(update_hash)
     else 
       raise NoRoleChangeMade
     end
