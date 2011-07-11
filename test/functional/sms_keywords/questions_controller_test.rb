@@ -4,7 +4,7 @@ class SmsKeywords::QuestionsControllerTest < ActionController::TestCase
   setup do 
     @user = Factory(:user_with_auxs) 
     sign_in @user
-    @keyword = Factory(:approved_keyword)
+    @keyword = Factory(:approved_keyword, organization: @user.person.primary_organization)
   end
   
   test "should get index" do

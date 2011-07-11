@@ -1,5 +1,6 @@
 class ContactsController < ApplicationController
   before_filter :get_person
+  before_filter :authorize, except: [:new, :update, :thanks]
   before_filter :prepare_for_mobile, only: [:new, :update, :thanks]
   before_filter :get_keyword, only: [:new, :update, :thanks]
   before_filter :ensure_current_org, except: [:new, :update, :thanks]
@@ -165,5 +166,9 @@ class ContactsController < ApplicationController
     
     def get_person
       @person = current_user.person
+    end
+    
+    def authorize
+      authorize! :manage_contacts, current_organization
     end
 end
