@@ -82,7 +82,9 @@ Mh::Application.routes.draw do
   #   resources :organizations
   # end
   get "/surveys" => 'surveys#index'
+  get "/surveys/stopsurveymode" => 'surveys#stop', as: :survey_keyword_stop
   get "/surveys/(:keyword)" => 'surveys#start', as: :survey_keyword_start
+
   get "welcome/index"
   get "/test" => "welcome#test"
 

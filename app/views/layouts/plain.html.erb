@@ -9,7 +9,7 @@
   <div id="outer" class="plain">
     <div id="plainheader">
       <!-- <a href="/" id="logo"></a> -->
-      <%= link_to(t('contacts.plain.exit_survey'), facebook_logout_url(next: 'http://' + request.host_with_port)) %> 
+      <%= link_to(t('contacts.plain.exit_survey'), survey_keyword_stop_url) %> 
       <% if can? :manage, @keyword %>
         | <%= link_to('Close Window', '#', onclick: 'window.close()') %>
       <% end %>

@@ -1,6 +1,9 @@
 
 <% if cookies[:survey_mode] == "1" %>
+  <center>
+    Login with Facebook to get started with your survey <br><br>
     <%= link_to(image_tag('login-button.png'), user_omniauth_authorize_path(:facebook), rel: 'external') %>
+  </center>
 
 <% else%>
   <div class="splash">
