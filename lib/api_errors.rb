@@ -7,6 +7,7 @@ module ApiErrors
         m = '{"error": {"message":"' + message + '", "code": "' + number  + '", "title":"' + title + '"}}'
       super m
       @code = code.to_sym
+      end
     end
 
     attr_reader :code
