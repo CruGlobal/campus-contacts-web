@@ -1,4 +1,5 @@
 Mh::Application.routes.draw do
+
   resources :leaders do
     collection do
       post :search
@@ -80,7 +81,7 @@ Mh::Application.routes.draw do
   # namespace :admin do
   #   resources :organizations
   # end
-
+  get "/surveys" => 'surveys#index'
   get "welcome/index"
   get "/test" => "welcome#test"
 
