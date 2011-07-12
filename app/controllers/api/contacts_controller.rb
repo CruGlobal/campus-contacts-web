@@ -38,7 +38,6 @@ class Api::ContactsController < ApiController
     @all_question_sheet_ids = []
     json_output = {}
     @people = get_people
-    
     unless @people.empty?
       @people.each do |person|
         @questions[person] = {}

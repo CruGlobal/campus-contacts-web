@@ -149,14 +149,12 @@ module ApiHelper
       @sorting_fields.each_with_index do |field,index|
         case field
         when "time"
-          people = people.order("#{AnswerSheet.table_name}.`created_at` #{@sorting_directions[index]}") unless @sorting_directions[index].nil?
+          people = people.order("#{AnswerSheet.table_name}.`created_at` #{@sorting_directions[index]}").joins(:organizational_roles).where("`organizational_roles`.`role_id` = '#{Role.contact.id}' AND `organizational_roles`.`followup_status` <> 'do_not_contact'") unless @sorting_directions[index].nil?
         when "status"
-          # status = ["uncontacted", "contacted", "attempted_contact","do_not_contact","completed"].include?(@sorting_fields[index].downcase) ? @sorting_fields[index].downcase : nil
-          
           if params[:assigned_to].present? && params[:assigned_to] == 'none'
-            people = people.order("`organizational_roles`.`followup_status` #{@sorting_directions[index]}")  
+            people = people.order("organizational_roles.followup_status #{@sorting_directions[index]}")  
           else 
-            people = people.joins(:organizational_roles).where("`organizational_roles`.`person_id` = `ministry_person`.`personID` AND `organizational_roles`.`organization_id` = ?", org.id).order("`organizational_roles`.`followup_status` #{@sorting_directions[index]}")  
+            people = people.joins(:organizational_roles).where("`organizational_roles`.`person_id` = `ministry_person`.`personID` AND `organizational_roles`.`organization_id` = ?", org.id).order("`organizational_roles`.`followup_status` #{@sorting_directions[index]}").where("`organizational_roles`.`role_id` = '#{Role.contact.id}' AND `organizational_roles`.`followup_status` <> 'do_not_contact'")
           end
         end
       end
@@ -172,7 +170,7 @@ module ApiHelper
         case field
         when "gender"
           gender = @filter_values[index].downcase == 'male' ? '1' : '0' if ['male','female'].include?(@filter_values[index].downcase)
-          people = people.where("`ministry_person`.`gender` = ?", gender)
+          people = people.where("`ministry_person`.`gender` = ?", gender).joins(:organizational_roles).where("`organizational_roles`.`role_id` = '#{Role.contact.id}' AND `organizational_roles`.`followup_status` <> 'do_not_contact'")
         when "status"
           status = allowed_status.include?(@filter_values[index].downcase) ? @filter_values[index].downcase : nil
           status = ["do_not_contact","completed"] if status == "finished"
@@ -180,11 +178,16 @@ module ApiHelper
           if params[:assigned_to].present? && params[:assigned_to] == 'none'
             people = people.where('organizational_roles.followup_status' => status)
           else 
-            people = people.joins(:organizational_roles).where('organizational_roles.followup_status' => status).where("`organizational_roles`.`person_id` = `ministry_person`.`personID` AND `organizational_roles`.`organization_id` = ?", org.id) 
+            people = people.joins(:organizational_roles).where('organizational_roles.followup_status' => status).where("`organizational_roles`.`person_id` = `ministry_person`.`personID` AND `organizational_roles`.`organization_id` = ?", org.id).where("`organizational_roles`.`role_id` = '#{Role.contact.id}' AND `organizational_roles`.`followup_status` <> 'do_not_contact'")
           end
         end
       end
     end
+    
+    if !params[:filters].present? && !params[:sort]
+      people = people.joins(:organizational_roles).where("`organizational_roles`.`role_id` = '#{Role.contact.id}' AND `organizational_roles`.`followup_status` <> 'do_not_contact'")
+    end
+    
     people
   end
   

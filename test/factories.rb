@@ -203,6 +203,13 @@ FactoryGirl.define do
     end
   end
   
+  factory :user3_with_auxs, parent: :user do
+    after_create do |a| 
+      Factory(:person_with_things, user: a)
+      Factory(:authentication, user: a, uid: "123412123453453453234234")
+    end
+  end
+  
   factory :element do
     kind          'TextField'
     label         'First Name'

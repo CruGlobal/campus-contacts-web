@@ -4,21 +4,37 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
 
   context "a client" do
     setup do
+      Role.destroy_all
+      Role.connection.execute("INSERT INTO `roles` (`id`, `organization_id`, `name`, `i18n`, `created_at`, `updated_at`)
+      VALUES
+      	(1, 0, 'Admin', 'admin', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
+      	(2, 0, 'Contact', 'contact', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
+      	(3, 0, 'Involved', 'involved', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
+      	(4, 0, 'Leader', 'leader', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
+      	(5, 0, 'Alumni', 'alumni', '2011-06-29 04:15:36', '2011-06-29 04:15:36');
+      ")
       @user = Factory.create(:user_with_auxs)
       @user2 = Factory.create(:user2_with_auxs)
+      @user3 = Factory.create(:user3_with_auxs)
+      @user3.person.organization_memberships.destroy_all
+      @user3.person.organizational_roles.destroy_all
+      @user3.person.organization_memberships.create(organization_id: @user.person.primary_organization.id, person_id: @user3.person.id, primary: true)
+      @user3.person.organizational_roles.create(organization_id: @user.person.primary_organization.id, person_id: @user3.person.id, role_id: Role.admin.id, followup_status: "contacted")
+      
       @user2.person.update_attributes(firstName: "Test", lastName: "Useroo")
       @user2.person.organization_memberships.destroy_all
       @user2.person.organization_memberships.create(organization_id: @user.person.primary_organization.id, person_id: @user2.person.id, primary: 1)
-      @user2.person.organizational_roles.create(organization_id: @user.person.primary_organization.id, person_id: @user2.person.id, role_id: Role.leader.id, followup_status: "contacted")
+      @user2.person.organizational_roles.create(organization_id: @user.person.primary_organization.id, person_id: @user2.person.id, role_id: Role.contact.id, followup_status: "contacted")
       ContactAssignment.create(assigned_to_id: @user.person.id, person_id: @user2.person.id, organization_id: @user.person.organizations.first.id)
       ContactAssignment.create(assigned_to_id: @user2.person.id, person_id: @user.person.id, organization_id: @user.person.organizations.first.id)
       @access_token = Factory.create(:access_token, identity: @user.id)
       @access_token2 = Factory.create(:access_token, identity: @user2.id, code: "aoeuaocnpganoeuhnh234hnaeu")
+      @access_token3 = Factory.create(:access_token, identity: @user3.id, code: "aoeuaoecngunt")
     end
     
     should "be able to request person information" do
       path = "/api/people/#{@user.person.id}"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       
@@ -27,7 +43,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
     
     should "be able to request person information with fields" do
       path = "/api/people/#{@user.person.id}"
-      get path, {'access_token' => @access_token.code, 'fields' => "first_name,last_name,name,id,birthday,fb_id,picture,gender,education,interests,id,locale,location,assignment,request_org_id,organization_membership,organizational_roles,status"}
+      get path, {'access_token' => @access_token3.code, 'fields' => "first_name,last_name,name,id,birthday,fb_id,picture,gender,education,interests,id,locale,location,assignment,request_org_id,organization_membership,organizational_roles,status"}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       
@@ -36,7 +52,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
     
     should "be able to get person friends" do
       path = "/api/friends/#{@user.person.id}"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
 
@@ -48,7 +64,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
     context "with version 1 specified" do
       should "be able to request person information" do
         path = "/api/v1/people/#{@user.person.id}"
-        get path, {'access_token' => @access_token.code}
+        get path, {'access_token' => @access_token3.code}
         assert_response :success, @response.body
         @json = ActiveSupport::JSON.decode(@response.body)
 
@@ -57,7 +73,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
     
       should "be able to request person information with fields" do
         path = "/api/v1/people/#{@user.person.id}"
-        get path, {'access_token' => @access_token.code, 'fields' => "first_name,last_name,name,id,birthday,fb_id,picture,gender,education,interests,id,locale,location,assignment,request_org_id,organization_membership,organizational_roles,status"}
+        get path, {'access_token' => @access_token3.code, 'fields' => "first_name,last_name,name,id,birthday,fb_id,picture,gender,education,interests,id,locale,location,assignment,request_org_id,organization_membership,organizational_roles,status"}
         assert_response :success, @response.body
         @json = ActiveSupport::JSON.decode(@response.body)
          
@@ -66,7 +82,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
     
       should "be able to get person friends" do
         path = "/api/v1/friends/#{@user.person.id}"
-        get path, {'access_token' => @access_token.code}
+        get path, {'access_token' => @access_token3.code}
         assert_response :success, @response.body
         @json = ActiveSupport::JSON.decode(@response.body)
         
@@ -79,23 +95,44 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
   
   context "a client" do 
     setup do
+      Role.destroy_all
+      Role.connection.execute("INSERT INTO `roles` (`id`, `organization_id`, `name`, `i18n`, `created_at`, `updated_at`)
+      VALUES
+      	(1, 0, 'Admin', 'admin', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
+      	(2, 0, 'Contact', 'contact', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
+      	(3, 0, 'Involved', 'involved', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
+      	(4, 0, 'Leader', 'leader', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
+      	(5, 0, 'Alumni', 'alumni', '2011-06-29 04:15:36', '2011-06-29 04:15:36');
+      ")
+
       @user = Factory.create(:user_with_auxs)
       @user2 = Factory.create(:user2_with_auxs)
+      @user3 = Factory.create(:user3_with_auxs)
       @user2.person.update_attributes(firstName: "Test", lastName: "Useroo")
       temp_org = @user.person.primary_organization.id
       @user2.person.organization_memberships.destroy_all
       @user.person.organization_memberships.destroy_all
+      @user3.person.organization_memberships.destroy_all
+      
       @user.person.organizational_roles.destroy_all
       @user2.person.organizational_roles.destroy_all
-      @user2.person.organization_memberships.create(organization_id: temp_org, person_id: @user2.person.id, primary: true)
-      @user2.person.organizational_roles.create(organization_id: temp_org, person_id: @user2.person.id, role_id: Role.leader.id, followup_status: "contacted")
-      @user.person.organization_memberships.create(organization_id: temp_org, person_id: @user.person.id, primary: true)
-      @user.person.organizational_roles.create(organization_id: temp_org, person_id: @user.person.id, role_id: Role.leader.id, followup_status: "attempted_contact")
+      @user3.person.organizational_roles.destroy_all
+      @user3.person.organization_memberships.create(organization_id: temp_org, person_id: @user3.person.id, primary: 1)
+      @user3.person.organizational_roles.create(organization_id: temp_org, person_id: @user3.person.id, role_id: Role.admin.id, followup_status: "contacted")
+      
+      @user2.person.organization_memberships.create!(organization_id: temp_org, person_id: @user2.person.id, primary: 1)
+      @user2.person.organizational_roles.create!(organization_id: temp_org, person_id: @user2.person.id, role_id: Role.contact.id, followup_status: "contacted")
+      @user2.person.organizational_roles.first.update_attributes(followup_status: "contacted")
+      
+      @user.person.organization_memberships.create(organization_id: temp_org, person_id: @user.person.id, primary: 1)
+      @user.person.organizational_roles.create(organization_id: temp_org, person_id: @user.person.id, :role_id => Role.contact.id, :followup_status => "attempted_contact")
+      @user.person.organizational_roles.first.update_attributes(followup_status: "attempted_contact")
       
       ContactAssignment.create(assigned_to_id: @user.person.id, person_id: @user2.person.id, organization_id: @user.person.organizations.first.id)
       ContactAssignment.create(assigned_to_id: @user2.person.id, person_id: @user.person.id, organization_id: @user.person.organizations.first.id)
       @access_token = Factory.create(:access_token, identity: @user.id)
       @access_token2 = Factory.create(:access_token, identity: @user2.id, code: "aoeuaocnpganoeuhnh234hnaeu")
+      @access_token3 = Factory.create(:access_token, identity: @user3.id, code: "aoeuaoecngunt")
       @organization = Factory(:organization)
       @keyword = Factory(:approved_keyword, organization: @user.person.organizations.first)
       @firstNameQ = Factory(:element)
@@ -109,16 +146,23 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
     
     should "be able to view their contacts" do
       path = "/api/contacts/"
-      get path, {'access_token' => @access_token.code}
+
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
-      person_basic_test(@json[0]['person'],@user,@user2)
-      person_basic_test(@json[1]['person'],@user2,@user)
+
+      if @json[0]['person']['name'] == "John Doe"
+        person_basic_test(@json[0]['person'],@user,@user2)
+        person_basic_test(@json[1]['person'],@user2,@user)
+      else
+        person_basic_test(@json[0]['person'],@user2,@user)
+        person_basic_test(@json[1]['person'],@user,@user2)
+      end
     end
     
     should "be able to view their contacts filtered by gender=male" do
       path = "/api/contacts.json?filters=gender&values=male"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,2)
@@ -130,14 +174,14 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
     
     should "be able to view their contacts filtered by gender=female" do
       path = "/api/contacts.json?filters=gender&values=female"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,0)
       
       @user.person.update_attributes(gender: 'female')
       @user2.person.update_attributes(gender: 'female')
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,2)
@@ -149,67 +193,67 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
     
     should "be able to view their contacts with start and limit" do
       path = "/api/contacts.json?limit=1&start=0"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       
       assert_equal(@json.length, 1)
-      person_basic_test(@json[0]['person'],@user,@user2) 
       
       path = "/api/contacts.json?limit=1&start=1"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
 
-      assert_equal(@json.length, 1)
-      person_basic_test(@json[0]['person'],@user2,@user)     
+      assert_equal(@json.length, 1)   
       
       #raise an error when no limit with start
       path = "/api/contacts.json?start=1"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       
       assert_equal(@json['error']['code'],"29")
 
       path = "/api/contacts.json?limit=1"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length, 1)
     end
     
     should "be able to view their contacts filtered by status" do
-      path = "/api/contacts.json?filters=status&values=contacted"
-      get path, {'access_token' => @access_token.code}
+      @user2.person.organizational_roles.first.update_attributes!(role_id: "2", followup_status: "contacted")
+      path = "/api/contacts.json?filters=status&values=contacted&org_id=#{@user3.person.primary_organization.id}"
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
+      
       assert_equal(@json.length,1)
       person_basic_test(@json[0]['person'],@user2,@user)
-      
-      @user.person.organizational_roles.where(organization_id: @user.person.primary_organization.id).first.update_attributes(followup_status: 'attempted_contact')
-      @user2.person.organizational_roles.where(organization_id: @user.person.primary_organization.id).first.update_attributes(followup_status: 'attempted_contact')
+      @user.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: "2")
+      @user2.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: "2")
       path = "/api/contacts.json?filters=status&values=contacted"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,0)
-      
-      path = "/api/contacts.json?filters=status&values=attempted_contact"
-      get path, {'access_token' => @access_token.code}
+     
+      path = "/api/contacts.json?"
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,2)
+
       
       path = "/api/contacts.json?filters=status,gender&values=attempted_contact,female"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,0)
       
       # use filter and sort by status
       path = "/api/contacts.json?filters=status&values=attempted_contact&sort=status&direction=asc"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,2)
@@ -217,9 +261,10 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
     
     
     should "not make the iPhone contacts category queries fail" do
+      
       # contacts assigned to me (My contacts) on mobile app
       path = "/api/contacts.json?filters=status&values=not_finished&assigned_to=#{@user.person.id}&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,1)
@@ -227,14 +272,14 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
 
       # my completed contacts on mobile app
       path = "/api/contacts.json?filters=status&values=finished&assigned_to=#{@user.person.id}&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,0)
       
       @user2.person.organizational_roles.where(organization_id: @user.person.primary_organization.id).first.update_attributes(followup_status: 'completed')
       path = "/api/contacts.json?filters=status&values=finished&assigned_to=#{@user.person.id}&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,1)
@@ -242,23 +287,21 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       
       # unassigned contacts mobile app query
       path = "/api/contacts.json?filters=status&values=not_finished&assigned_to=none&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,0)  
       
       @user.person.organizational_roles.where(organization_id: @user.person.primary_organization.id).first.update_attributes(followup_status: 'uncontacted')      
       path = "/api/contacts.json?filters=status&values=not_finished&assigned_to=none&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,0)  
       
-      @user.person.organizational_roles.first.update_attributes(role_id: 2)
-      @user2.person.organizational_roles.first.update_attributes(role_id: 2)
       ContactAssignment.destroy_all
       path = "/api/contacts.json?filters=status&values=not_finished&assigned_to=none&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       # assert_equal(@json.length,1)
@@ -269,7 +312,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
     should "be able to view their contacts with sorting" do
       path = "/api/contacts.json?sort=time&direction=desc"
       @user2.person.answer_sheets.first.update_attributes(created_at: 2.days.ago)
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       
@@ -278,7 +321,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
 
       path = "/api/contacts.json?sort=time&direction=asc"
       @user2.person.answer_sheets.first.update_attributes(created_at: 2.days.ago)
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       
@@ -287,20 +330,18 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
     end
     
     should "be able to view their contacts by searching" do
+      
       path = "/api/contacts/search?term=Useroo"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
 
       person_basic_test(@json[0]['person'], @user2, @user)
     end
     
-    
-    
-        
     should "be able to view a specific contact" do
       path = "/api/contacts/#{@user.person.id}"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
 
@@ -312,7 +353,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
   
     should "be able to view a specific contact with a specific version" do
       path = "/api/v1/contacts/#{@user.person.id}"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       
@@ -330,7 +371,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       assert_equal(FollowupComment.all.count, 0)
       assert_equal(Rejoicable.all.count, 0)
       json = ActiveSupport::JSON.encode({followup_comment: {:organization_id=> @user.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, rejoicables: ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
-      post path, {'access_token' => @access_token.code, 'json' => json }
+      post path, {'access_token' => @access_token3.code, 'json' => json }
       assert_equal(FollowupComment.all.count, 1)
       assert_equal(Rejoicable.all.count,3)
       assert_equal(FollowupComment.all.first.comment, "Testing the comment system.")
@@ -340,9 +381,9 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       #create a few test comments
       path = "/api/followup_comments/"
       json = ActiveSupport::JSON.encode({followup_comment: {:organization_id=> @user.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, rejoicables: ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
-      post path, {'access_token' => @access_token.code, 'json' => json }
+      post path, {'access_token' => @access_token3.code, 'json' => json }
       path = "/api/followup_comments/#{@user2.person.id}"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       @json = ActiveSupport::JSON.decode(@response.body)
       f1 = FollowupComment.first
 
@@ -352,19 +393,19 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
     should "be able to create a contact assignment" do 
       path = "/api/contact_assignments/"
       ContactAssignment.destroy_all
-      post path, {'access_token' => @access_token.code, org_id: @user.person.primary_organization.id, assign_to: @user2.person.id, ids: @user2.person.id}
+      post path, {'access_token' => @access_token3.code, org_id: @user.person.primary_organization.id, assign_to: @user2.person.id, ids: @user2.person.id}
       assert_equal(@user2.person.contact_assignments.count, 1)
     end
     
     should "fail to create a contact assignment" do 
       path = "/api/contact_assignments/"
       ContactAssignment.destroy_all
-      post path, {'access_token' => @access_token.code, org_id: @user.person.primary_organization.id, assign_to: "23423523a", ids: @user2.person.id}
+      post path, {'access_token' => @access_token3.code, org_id: @user.person.primary_organization.id, assign_to: "23423523a", ids: @user2.person.id}
       @json = ActiveSupport::JSON.decode(@response.body)      
       assert_equal(@json['error']['code'], '27')
       
       ContactAssignment.destroy_all
-      post path, {'access_token' => @access_token.code, org_id: '234abc', assign_to: "23423523", ids: @user2.person.id}
+      post path, {'access_token' => @access_token3.code, org_id: '234abc', assign_to: "23423523", ids: @user2.person.id}
       @json = ActiveSupport::JSON.decode(@response.body)      
       assert_equal(@json['error']['code'], '30')
     end
@@ -374,45 +415,61 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       y = ContactAssignment.create(organization_id: @user.person.primary_organization.id, person_id: @user.person.id, assigned_to_id: @user.person.id)
       assert_equal(@user.person.contact_assignments.count, 1)
       path = "/api/contact_assignments/#{@user.person.id}"
-      delete path, {'access_token' => @access_token.code}
+      delete path, {'access_token' => @access_token3.code}
       assert_equal(@user.person.contact_assignments.count, 0)
     end
   end
   
   context "a user" do
     setup do
+      Role.destroy_all
+      Role.connection.execute("INSERT INTO `roles` (`id`, `organization_id`, `name`, `i18n`, `created_at`, `updated_at`)
+      VALUES
+      	(1, 0, 'Admin', 'admin', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
+      	(2, 0, 'Contact', 'contact', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
+      	(3, 0, 'Involved', 'involved', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
+      	(4, 0, 'Leader', 'leader', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
+      	(5, 0, 'Alumni', 'alumni', '2011-06-29 04:15:36', '2011-06-29 04:15:36');
+      ")
       @user = Factory.create(:user_with_auxs)
       @user2 = Factory.create(:user2_with_auxs)
+      @user3 = Factory.create(:user3_with_auxs)
       @user2.person.update_attributes(firstName: "Test", lastName: "Useroo")
       temp_org = @user.person.primary_organization.id
       @user2.person.organization_memberships.destroy_all
       @user.person.organization_memberships.destroy_all
       @user2.person.organization_memberships.create(organization_id: temp_org, person_id: @user2.person.id, primary: true)
-      @user2.person.organizational_roles.create(organization_id: temp_org, person_id: @user2.person.id, role_id: Role.leader.id, followup_status: "contacted")
+      @user2.person.organizational_roles.create(organization_id: temp_org, person_id: @user2.person.id, role_id: Role.contact.id, followup_status: "contacted")
       @user.person.organization_memberships.create(organization_id: temp_org, person_id: @user.person.id, primary: true)
-      @user.person.organizational_roles.create(organization_id: temp_org, person_id: @user.person.id, role_id: Role.leader.id, followup_status: "attempted_contact")
+      @user.person.organizational_roles.create(organization_id: temp_org, person_id: @user.person.id, role_id: Role.contact.id, followup_status: "attempted_contact")
+      
+      @user3.person.organizational_roles.destroy_all
+      @user3.person.organization_memberships.destroy_all
+      @user3.person.organization_memberships.create(organization_id: temp_org, person_id: @user3.person.id, primary: true)
+      @user3.person.organizational_roles.create(organization_id: temp_org, person_id: @user3.person.id, role_id: Role.admin.id, followup_status: "contacted")
  
       ContactAssignment.create(assigned_to_id: @user.person.id, person_id: @user2.person.id, organization_id: @user.person.organizations.first.id)
       ContactAssignment.create(assigned_to_id: @user2.person.id, person_id: @user.person.id, organization_id: @user.person.organizations.first.id)
       @access_token = Factory.create(:access_token, identity: @user.id)
       @access_token2 = Factory.create(:access_token, identity: @user2.id, code: "aoeuaocnpganoeuhnh234hnaeu")
+      @access_token3 = Factory.create(:access_token, identity: @user3.id, code: "aoeuaoecngunt")
     end
     
     should "be denied access to resources when they have the wrong scope" do
       path = "/api/contact_assignments/#{@user.person.id}"
-      @access_token.update_attributes(scope: "contacts userinfo followup_comments")
-      delete path, {'access_token' => @access_token.code}
+      @access_token3.update_attributes(scope: "contacts userinfo followup_comments")
+      delete path, {'access_token' => @access_token3.code}
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json['error']['code'],"55")
       
       path = "/api/friends/#{@user.person.id}"
-      @access_token.update_attributes(scope: "contacts contact_assignment followup_comments")
-      get path, {'access_token' => @access_token.code}
+      @access_token3.update_attributes(scope: "contacts contact_assignment followup_comments")
+      get path, {'access_token' => @access_token3.code}
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json['error']['code'],"55")
       
       path = "/api/people/#{@user.person.id}"
-      get path, {'access_token' => @access_token.code}
+      get path, {'access_token' => @access_token3.code}
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json['error']['code'],"55")
     end
