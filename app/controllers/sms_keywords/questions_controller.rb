@@ -1,5 +1,5 @@
 class SmsKeywords::QuestionsController < ApplicationController
-  before_filter :find_keyword
+  before_filter :find_keyword_and_authorize
   before_filter :find_question, only: [:show, :edit, :update, :destroy]
 
   # GET /questions
@@ -128,8 +128,9 @@ class SmsKeywords::QuestionsController < ApplicationController
       @question = @keyword.question_page.elements.find(params[:id])
     end
     
-    def find_keyword
+    def find_keyword_and_authorize
       @keyword = SmsKeyword.includes(:question_sheets).find(params[:sms_keyword_id])
+      authorize! :manage, @keyword
     end
 
 end

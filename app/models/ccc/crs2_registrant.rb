@@ -10,5 +10,4 @@ class Ccc::Crs2Registrant < ActiveRecord::Base
   belongs_to :crs2_registration, class_name: 'Ccc::Crs2Registration', foreign_key: :registration_id
   has_many :crs2_transactions, class_name: 'Ccc::Crs2Transaction'
 
-
 end

@@ -2,6 +2,19 @@
   <% if user_signed_in? %>
     <% if current_organization %>
       <div class="item">
+        <%= link_to("Survey Mode", '', id: 'survey_keywords_mode_link')%>
+        <div id="show_survey_keywords_menu" style="display:none">
+          <ul><% current_organization.keywords.each do |keyword| %>
+            <li><div style="width:100%; display:inline"><%= link_to("Use Keyword: #{keyword.keyword}", survey_keyword_start_path(keyword.keyword), id: 'select_keyword')%>
+                <div class="surveymodeactions">
+                <%= link_to("Go to #{keyword.keyword}", survey_keyword_start_path(keyword.keyword), class: "icon magnify", title: "Go to #{keyword.keyword}") %>
+                </div></div>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+      <div class="item">
         <% if current_person.organizations.length > 1 %>
           <%= link_to(current_organization, '', id: 'change_org') %>
           <div id="other_orgs" style="display:none">

@@ -120,18 +120,20 @@
         In Christ,
         
         %{name}
-      filter: 'Filter Results'
+      filter: 'Search'
       first_name: 'First Name'
       last_name: 'Last Name'
       leaders: Leaders
       assign_to: "Assign To:"
       assigned_to: "Assigned To"
-      all_responses: "All Contacts - 'In Progress'"
+      all_responses: "All Contacts"
+      in_progress_responses: "All Contacts - 'In Progress'"
       responses_assigned_to: "All Contacts - assigned to %{assigned_to}"
       unassigned_responses: "All Contacts - Unassigned"
       dnc_contacts: "All Contacts - 'Do Not Contact'"
       none_checked: "You didn't select any contacts to assign."
       show_all: Show 'In Progress' contacts
+      matching_seach: Matching the criteria you searched for
       which_org: 'You need to choose which organization you want to do folow-up from'
       add: 'Add'
       hidden_questions: 'Hidden Questions'
@@ -161,6 +163,8 @@
       message: Thank you for your interest.
       done: Done
       facebook: You have been logged out of Facebook.
+    plain:
+      exit_survey: 'Exit survey mode'
   sms:
     keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
   date:

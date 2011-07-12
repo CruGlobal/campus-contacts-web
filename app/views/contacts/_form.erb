@@ -1,5 +1,6 @@
-<%= form_for @person, url: @person.new_record? ? contacts_path : contact_path(@person), method: @person.new_record? ? :post : :put, class: 'form' do |f| %>
+<%= form_for @person, url: contact_path(@person), method: :put, class: 'form' do |f| %>
   <%= hidden_field_tag :keyword, @keyword.keyword %>
+  <%= hidden_field_tag :button, false if mobile_device?%>
   <ul class="rounded jqm">
     <% @keyword.questions.each do |question| %>
       <li><div data-role="fieldcontain" class="field"><%= render 'answer_pages/element', element: question %></div></li>

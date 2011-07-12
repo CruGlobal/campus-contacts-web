@@ -2,13 +2,29 @@ $ ->
 	$('#change_org').live 'click', ->
 		$('#other_orgs').toggle()
 		$('#change_org').toggleClass("on")
+		$('#show_survey_keywords_menu').hide()
+		$('#survey_keywords_mode_link').removeClass("on")
+		false
+		
+	$('#survey_keywords_mode_link').live 'click', ->
+		$('#show_survey_keywords_menu').toggle()
+		$('#survey_keywords_mode_link').toggleClass("on")
+		x = $('#change_org').width() + 85
+		$("#show_survey_keywords_menu").css('right', x)
+		
+		$('#other_orgs').hide()
+		$('#change_org').removeClass("on")
 		false
 		
 	$('[data-method=delete]').live 'ajax:before', ->
 		$(this).parent().fadeOut()
 	
 	$('#check_all').live 'click', ->
-		$('input[type=checkbox]', $(this).closest('form')).prop('checked', $(this).prop('checked'))
+		if $(this).attr('data-target')
+			form = $($(this).attr('data-target'))
+		else
+			form = $(this).closest('form')
+		$('input[type=checkbox]', form).prop('checked', $(this).prop('checked'))
 		
 	$('.drag').live 'click', -> 
 		false

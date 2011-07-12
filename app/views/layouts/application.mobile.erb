@@ -3,12 +3,11 @@
 <html>
   <head>
     <title><%= h(yield(:title) || "Cru") %></title>
-
-    <%= stylesheet_link_tag 'mobile' %>
-
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" />
 		<script src="http://code.jquery.com/jquery-1.5.2.min.js" ></script>
 		<script src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js" ></script>
+		
+		<%= stylesheet_link_tag 'mobile' %>
 
     <%= yield(:head) %>
   </head>
@@ -17,15 +16,20 @@
 			<%- unless params[:simple] == 'true' -%>
 				<div data-role="header">
 	    		<div class="current" id="home">
-			      <%- if show_title? -%>
-			        <div data-role="header" role="banner">
+
+			        <div data-role="header" role="banner" data-backbtn="false">
 			          <h1 class="ui-title" tabindex="0" role="heading"><%=h yield(:title) %></h1>
-						<% if current_user %>
+						<% if current_user && !params[:button].present? %>
 			          		<%= link_to "Logout", facebook_logout_url(mobile:1), "data-role" => "button", rel: "external"%>
-						<% end %>
+
 			          <!-- <%= yield(:toolbar) %> -->
+			          <!-- 
+			          <a class="ui-btn-right mh-logo">
+			            <%= image_tag("mh-logo.png") %>
+			          </a>
+			          -->
+			          <%- end -%>
 			        </div>
-			      <%- end -%>
 				  </div>
 			  </div>
 			<%- end -%>

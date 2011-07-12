@@ -85,9 +85,11 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       temp_org = @user.person.primary_organization.id
       @user2.person.organization_memberships.destroy_all
       @user.person.organization_memberships.destroy_all
-      @user2.person.organization_memberships.create(organization_id: temp_org, person_id: @user2.person.id, primary: 1)
+      @user.person.organizational_roles.destroy_all
+      @user2.person.organizational_roles.destroy_all
+      @user2.person.organization_memberships.create(organization_id: temp_org, person_id: @user2.person.id, primary: true)
       @user2.person.organizational_roles.create(organization_id: temp_org, person_id: @user2.person.id, role_id: Role.leader.id, followup_status: "contacted")
-      @user.person.organization_memberships.create(organization_id: temp_org, person_id: @user.person.id, primary: 1)
+      @user.person.organization_memberships.create(organization_id: temp_org, person_id: @user.person.id, primary: true)
       @user.person.organizational_roles.create(organization_id: temp_org, person_id: @user.person.id, role_id: Role.leader.id, followup_status: "attempted_contact")
       
       ContactAssignment.create(assigned_to_id: @user.person.id, person_id: @user2.person.id, organization_id: @user.person.organizations.first.id)
@@ -158,7 +160,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       get path, {'access_token' => @access_token.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
-      
+
       assert_equal(@json.length, 1)
       person_basic_test(@json[0]['person'],@user2,@user)     
       
@@ -385,9 +387,9 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       temp_org = @user.person.primary_organization.id
       @user2.person.organization_memberships.destroy_all
       @user.person.organization_memberships.destroy_all
-      @user2.person.organization_memberships.create(organization_id: temp_org, person_id: @user2.person.id, primary: 1)
+      @user2.person.organization_memberships.create(organization_id: temp_org, person_id: @user2.person.id, primary: true)
       @user2.person.organizational_roles.create(organization_id: temp_org, person_id: @user2.person.id, role_id: Role.leader.id, followup_status: "contacted")
-      @user.person.organization_memberships.create(organization_id: temp_org, person_id: @user.person.id, primary: 1)
+      @user.person.organization_memberships.create(organization_id: temp_org, person_id: @user.person.id, primary: true)
       @user.person.organizational_roles.create(organization_id: temp_org, person_id: @user.person.id, role_id: Role.leader.id, followup_status: "attempted_contact")
  
       ContactAssignment.create(assigned_to_id: @user.person.id, person_id: @user2.person.id, organization_id: @user.person.organizations.first.id)

@@ -3,6 +3,7 @@ class ContactsController < ApplicationController
   before_filter :prepare_for_mobile, only: [:new, :update, :thanks]
   before_filter :get_keyword, only: [:new, :update, :thanks]
   before_filter :ensure_current_org, except: [:new, :update, :thanks]
+  before_filter :authorize, except: [:new, :update, :thanks]
   
   def index
     @organization = params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : current_organization
@@ -20,7 +21,10 @@ class ContactsController < ApplicationController
       @people = @organization.completed_contacts.order('lastName, firstName')
     else
       if params[:assigned_to]
-        if params[:assigned_to] == 'all'
+        case params[:assigned_to]
+        when 'all'
+          @people = @organization.contacts.order('lastName, firstName')
+        when 'progress'
           @people = @organization.inprogress_contacts.order('lastName, firstName')
         else
           if params[:assigned_to].present? && @assigned_to = Person.find_by_personID(params[:assigned_to])
@@ -101,10 +105,12 @@ class ContactsController < ApplicationController
     question_set = QuestionSet.new(@keyword.questions, @answer_sheet)
     question_set.post(params[:answers], @answer_sheet)
     question_set.save
-    create_contact_at_org(@person, @keyword.organization)
     if @person.valid?
-      create_contact_at_org(@person, current_organization)
-      render :thanks
+      create_contact_at_org(@person, @keyword.organization)
+      respond_to do |wants|
+        wants.html { render :thanks, :layout => 'plain'}
+        wants.mobile { render :thanks }
+      end
     else
       render :new
     end
@@ -121,8 +127,6 @@ class ContactsController < ApplicationController
     @followup_comments = FollowupComment.where(organization_id: @organization, contact_id: @person).order('created_at desc')
   end
   
-  def thanks
-  end
   
   def create
     params[:person] ||= {}
@@ -165,5 +169,9 @@ class ContactsController < ApplicationController
     
     def get_person
       @person = current_user.person
+    end
+    
+    def authorize
+      authorize! :manage_contacts, current_organization
     end
 end

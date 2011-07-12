@@ -89,10 +89,17 @@ $ ->
     $('#assign_search').dialog('destroy')
     
   $('#assign_search .leader a').live 'click', (e)->
+    $('#assign_to').val($(this).closest('li').attr('data-id'))
     e.preventDefault()
-    leader = $('.leftmenu .leader[data-id=' + $(this).closest('li').attr('data-id') + ']')
-    $('#assign_to').val(leader.attr('data-id'))
-    $.fn.assignTo(leader)
+    leader = $('.leftmenu .leader[data-id=' + $('#assign_to').val() + ']')
+    if leader[0]
+      $.fn.assignTo(leader)
+    else
+      $.rails.handleRemote($('#new_contact_assignment'))
+      unless $('#assign_to').val() == $('#my_id').val()
+        console.log($('.id_checkbox:checked'))
+        $('.id_checkbox:checked').each ->
+          $(this).closest('tr').remove();
     $('#assign_search').dialog('destroy')
   false
     

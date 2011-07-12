@@ -4,8 +4,11 @@
 
 <div class="titlebar">  
   <h1>
-    <% if params[:assigned_to] == 'all' %>
+    <% case params[:assigned_to] %>
+    <% when 'all' %>
       <%= t('.all_responses') %>
+    <% when 'progress' %>
+      <%= t('.in_progress_responses') %>
     <% else %>
       <% if @assigned_to.present? %>
         <%= t('.responses_assigned_to', assigned_to: @assigned_to) %>
@@ -16,12 +19,13 @@
         <%= t('.unassigned_responses') %>
       <% end %>
     <% end %>
+    <%= t('.matching_seach') if params[:search] %>
   </h1>
 </div>
 
 <div class="pagemenu">
   <ul class="pillmenu">
-    <li><%= check_box_tag 'check_all' %></li>
+    <li><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment' %></li>
   </ul>
   
   <ul class="pillmenu">
@@ -44,7 +48,7 @@
       <%= render partial: 'contacts/hidden_question', collection: @hidden_questions %>
     </ul>
   </div>
-  <div id="filter_box" style="<%= 'display:none' unless params[:search] %>">
+  <div id="filter_box" style="<%= 'display:none' %>">
     <%= form_tag params, method: :get do %>
       <%= hidden_field_tag :search, 1 %>
       <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
@@ -78,7 +82,7 @@
       </div>
       <div class="actionbarinline">
         <%= submit_tag 'Search' %>
-        <%= link_to 'Reset Form', '', onclick: "$(this).closest('form')[0].reset(); return false;" %>
+        <%= link_to 'Clear Search Form', '', onclick: "$(this).closest('form')[0].reset(); return false;" %>
       </div>
     <% end %>
   </div>

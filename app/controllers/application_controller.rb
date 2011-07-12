@@ -1,17 +1,22 @@
 class ApplicationController < ActionController::Base
-  before_filter :authenticate_user!, :set_locale
+  before_filter :authenticate_user!, :except => [:facebook_logout]
+  before_filter :set_locale
+  rescue_from CanCan::AccessDenied, with: :access_denied
   protect_from_forgery  
 
   def facebook_logout
-    split_token = session[:fb_token].split("|")
-    fb_api_key = split_token[0]
-    fb_session_key = split_token[1]
-    sign_out
-    session[:fb_token] = nil
     redirect_url = !params[:next].nil? ? params[:next] : new_user_session_url
-    logger.info redirect_url
-    
-    redirect_to "http://www.facebook.com/logout.php?api_key=#{fb_api_key}&session_key=#{fb_session_key}&confirm=1&next=#{redirect_url}";
+    if session[:fb_token]
+      split_token = session[:fb_token].split("|")
+      fb_api_key = split_token[0]
+      fb_session_key = split_token[1]
+      sign_out
+      session[:fb_token] = nil
+  
+      redirect_to "http://www.facebook.com/logout.php?api_key=#{fb_api_key}&session_key=#{fb_session_key}&confirm=1&next=#{redirect_url}"
+    else
+      redirect_to redirect_url
+    end
   end
 
   protected
@@ -54,11 +59,17 @@ class ApplicationController < ActionController::Base
   
   def current_organization
     return nil unless user_signed_in?
-    return nil if current_person.organizations.empty?
-    org = current_person.organizations.find_by_id(session[:current_organization_id]) 
+    non_contact_roles = current_person.organizational_roles.includes(:organization).where("role_id <> #{Role.contact.id}")
+    return nil if non_contact_roles.empty?
+    org = current_person.organizations.find_by_id(session[:current_organization_id]) if session[:current_organization_id]
     unless org
-      org = current_person.primary_organization || current_person.organizations.first
-      session[:current_organization_id] = org.id
+      org = current_person.primary_organization
+      # If they're a contact at their primary org, look for another org where they have a different role
+      non_contact_organization = non_contact_roles.collect(&:organization)
+      unless non_contact_organization.include?(org)
+        org = non_contact_organization.first
+      end
+      session[:current_organization_id] = org.try(:id)
     end
     org
   end
@@ -96,6 +107,8 @@ class ApplicationController < ActionController::Base
   
   def create_contact_at_org(person, organization)
     # if someone already has a status in an org, we shouldn't add them as a contact
+    raise 'no person' unless person
+    raise 'no org' unless organization
     return false if OrganizationalRole.find_by_person_id_and_organization_id(person.id, organization.id)
     OrganizationalRole.create!(person_id: person.id, organization_id: organization.id, role_id: Role.contact.id, followup_status: OrganizationMembership::FOLLOWUP_STATUSES.first)
     unless OrganizationMembership.find_by_person_id_and_organization_id(person.id, organization.id) 
@@ -138,6 +151,11 @@ class ApplicationController < ActionController::Base
     unless current_organization
       redirect_to '/wizard' and return false
     end
+  end
+  
+  def access_denied
+    flash[:alert] =  "You don't have permission to access that area of MissionHub"
+    render 'application/access_denied'
   end
   
 end

@@ -1,3 +1,19 @@
 <div class="info">
-  <%= @keyword.post_survey_message.present? ? @keyword.post_survey_message : t('contacts.thanks.message') %>
+  <center><h4><%= @keyword.post_survey_message.present? ? @keyword.post_survey_message : t('contacts.thanks.message') %></h4></center>
+	<br><br>
+
+  <% unless can? :manage, @keyword %>
+  	<script type="text/javascript">
+      setTimeout(function() {
+  			window.location="<%= facebook_logout_url %>?next=<%= request.referrer %>";      
+      }, 10000)
+  	</script>
+  <% end %>
+	<div id="countdown">
+		<center>
+			<h4><%= t('contacts.thanks.facebook')%></h4>
+			<br><br>
+			<h3><%= link_to(t('contacts.thanks.done'), facebook_logout_url(next: request.referrer)) %></h3>
+		</center>
+	</div>
 </div>

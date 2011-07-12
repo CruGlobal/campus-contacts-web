@@ -89,14 +89,14 @@
     <h2>Create a Survey!</h2>
     <p><%= t('welcome.wizard.survey_paragraph') %> </p>
     <%= link_to(t('welcome.wizard.create_survey_link'), sms_keyword_questions_path(current_organization.keywords.first)) %><br/>
-    <%= link_to(t('welcome.wizard.skip_step'), '/wizard?step='+ current_user.next_wizard_step(current_organization)) %>
+    <!-- <%= link_to(t('welcome.wizard.skip_step'), '/wizard?step='+ current_user.next_wizard_step(current_organization)) %> -->
   <% when 'leaders' %>
     <h2><%= t('welcome.wizard.leaders_header') %></h2>
     <p><%= t('welcome.wizard.leaders_paragraph') %> </p>
   <% else %>
     <h2><%= t('welcome.wizard.welcome') %></h2>
     <p><%= raw t('welcome.wizard.welcome_paragraph') %> </p>
-    <%= link_to(t('welcome.wizard.back'), '#', class: 'disabled btn', onclick: 'return false;') %>
-    <%= link_to(t('welcome.wizard.next'), '/wizard?step=verify', class: 'btn') %>
+    <!-- <%= link_to(t('welcome.wizard.back'), '#', class: 'disabled btn', onclick: 'return false;') %> -->
+    <!-- <%= link_to(t('welcome.wizard.next'), '/wizard?step=verify', class: 'btn') %> -->
   <% end %>
 </div>

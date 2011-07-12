@@ -1,24 +1,12 @@
 class SmsKeywordsController < ApplicationController
-  before_filter :check_org, only: [:new]
-
+  before_filter :check_org_and_authorize
+  before_filter :find_keyword, :only => [:edit, :update, :destroy]
+  
   def index
+    authorize! :manage, current_organization
     @keywords = current_organization.keywords
-    if @keywords.present?
-      authorize! :manage, SmsKeyword#@keywords.first
-    else
-      authorize! :manage, SmsKeyword
-    end
   end
-  # GET /sms_keywords/1
-  # GET /sms_keywords/1.xml
-  def show
-    @sms_keyword = current_user.sms_keywords.find(params[:id])
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render xml: @sms_keyword }
-    end
-  end
 
   # GET /sms_keywords/new
   # GET /sms_keywords/new.xml
@@ -34,7 +22,6 @@ class SmsKeywordsController < ApplicationController
 
   # GET /sms_keywords/1/edit
   def edit
-    @sms_keyword = current_user.sms_keywords.find(params[:id])
   end
 
   # POST /sms_keywords
@@ -58,8 +45,6 @@ class SmsKeywordsController < ApplicationController
   # PUT /sms_keywords/1
   # PUT /sms_keywords/1.xml
   def update
-    @sms_keyword = current_user.sms_keywords.find(params[:id])
-
     respond_to do |format|
       if @sms_keyword.update_attributes(params[:sms_keyword])
         format.html { redirect_to(root_path, notice: t('keywords.flash.updated')) }
@@ -74,7 +59,6 @@ class SmsKeywordsController < ApplicationController
   # DELETE /sms_keywords/1
   # DELETE /sms_keywords/1.xml
   def destroy
-    @sms_keyword = current_user.sms_keywords.find(params[:id])
     @sms_keyword.destroy
 
     respond_to do |format|
@@ -84,11 +68,17 @@ class SmsKeywordsController < ApplicationController
   end
   
   private
-    def check_org
+    def check_org_and_authorize
       unless current_person.primary_organization
         session[:return_to] = params
-        redirect_to person_organization_memberships_path(current_person), notice: t('keywords.flash.pick_org')
+        redirect_to '/wizard'
         return false
       end
+      authorize! :manage, current_organization
+    end
+    
+    def find_keyword
+      @sms_keyword = SmsKeyword.find(params[:id])
+      authorize! :manage, @sms_keyword
     end
 end
