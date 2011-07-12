@@ -27,7 +27,7 @@
     <% end %>
     <% if current_organization.try(:keywords).present? %>
       <div class="item">
-        <%= link_to("Survey Mode", '', id: 'survey_keywords_mode_link')%>
+        <%= link_to("Enter Survey Mode", '', id: 'survey_keywords_mode_link')%>
         <div id="show_survey_keywords_menu" style="display:none">
           <ul><% current_organization.keywords.each do |keyword| %>
             <li><div style="width:100%; display:inline"><%= link_to("Use Keyword: #{keyword.keyword}", facebook_logout_url(next: contact_form_url(keyword.keyword)), id: 'select_keyword')%>
