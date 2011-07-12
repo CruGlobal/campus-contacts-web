@@ -10,20 +10,22 @@ class Ccc::Crs2Profile < ActiveRecord::Base
   def merge(other)
 		other.crs2_registrants.each do |ua|
   		crs2_registrants.each do |cr|
-   	 		if ua.registration_type_id == cr.registration_type_id
+   	 		if ua.registrant_type_id == cr.registrant_type_id
     	  	ua.orphan = true
       		break
     		end
   		end
-  		ua.profile_id = cr.profile_id unless ua.orphan?
-  		ua.save(:validate => false)
+  		ua.profile_id = id unless ua.orphan?
+			if ua.cancelled_by_id == other.user_id
+				ua.concelled_by_id = user_id
+			end
+  		ua.save(:validate => false)			
 		end
 
+		other.destroy
+		other.crs2_person.destroy
 		crs2_user.merge(other.crs2_user)
 
-
-		other.crs2_person.destroy
-		other.destroy
 		save
   end
 end
