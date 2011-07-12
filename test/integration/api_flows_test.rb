@@ -238,7 +238,7 @@ class ApiFlowsTest < ActionDispatch::IntegrationTest
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,0)
      
-      path = "/api/contacts.json?"
+      path = "/api/contacts.json?filters=status&values=attempted_contact"
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
