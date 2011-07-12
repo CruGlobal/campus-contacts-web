@@ -69,7 +69,7 @@ module Mh
         false
       end
       
-      config.oauth.param_authentication = TRUE
+      config.oauth.param_authentication = true
       config.oauth.authorization_types = %w{code}
       Rack::OAuth2::Server::Admin.set :client_id, "2"
       Rack::OAuth2::Server::Admin.set :client_secret, "e6f0bc02c1236f3d4cde6a4fd45e181569a8abf45ce17a3dba2fd88fe55722b6"
