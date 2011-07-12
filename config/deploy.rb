@@ -1,7 +1,7 @@
-set :whenever_command, "bundle exec whenever"
-require "whenever/capistrano"
 require "bundler/capistrano"
 require 'hoptoad_notifier/capistrano'
+set :whenever_command, "bundle exec whenever"
+require "whenever/capistrano"
 # This defines a deployment "recipe" that you can feed to capistrano
 # (http://manuals.rubyonrails.com/read/book/17). It allows you to automate
 # (among other things) the deployment of your application.
