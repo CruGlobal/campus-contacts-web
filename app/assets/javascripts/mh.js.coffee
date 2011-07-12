@@ -30,11 +30,11 @@ $ ->
 	$('#survey_keywords_mode_link').live 'click', ->
 	  # hide other menu
 	  $('#other_orgs').hide()
-		$('#change_org').removeClass("on")
+	  $('#change_org').removeClass("on")
 	  
-		$('#show_survey_keywords_menu').toggle()
-		$('#survey_keywords_mode_link').toggleClass("on")
-		false
+	  $('#show_survey_keywords_menu').toggle()
+	  $('#survey_keywords_mode_link').toggleClass("on")
+	  false
 		
 	$('[data-method=delete]').live 'ajax:before', ->
 		$(this).parent().fadeOut()
