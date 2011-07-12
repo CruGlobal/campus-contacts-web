@@ -23,5 +23,7 @@
     <br>
     OR
     <br>
-    <%= link_to "Enter Survey Mode", '', id: "show_keywords" %>
+    <% current_organization.keywords.each do |keyword| %>
+      <%= link_to "Enter Survey Mode for #{keyword.keyword}", facebook_logout_url(next: contact_form_url(keyword.keyword)), id: "show_keywords" %><br>
+    <% end %>
   </div>
