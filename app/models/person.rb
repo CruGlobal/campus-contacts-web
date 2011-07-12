@@ -99,7 +99,11 @@ class Person < ActiveRecord::Base
   end
   
   def email
-    primary_email_address.to_s
+    @email = primary_email_address.try(:email)
+    @email ||= email_addresses.first.try(:email)
+    @email ||= current_address.try(:email)
+    @email ||= user.try(:username) || user.try(:email)
+    @email.to_s
   end
   
   def email=(val)
