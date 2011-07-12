@@ -69,6 +69,10 @@ deploy.task :restart, roles: :app do
     # sudo "/etc/init.d/unicorn upgrade"
   # else
     run "touch #{current_path}/tmp/restart.txt"
+    
+    #restart resque task
+    
+    sudo "bluepill restart resque"
   # end
 end  
 
