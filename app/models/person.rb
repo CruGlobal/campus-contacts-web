@@ -99,7 +99,11 @@ class Person < ActiveRecord::Base
   end
   
   def email
-    primary_email_address.to_s
+    @email = primary_email_address.try(:email)
+    @email ||= email_addresses.first.try(:email)
+    @email ||= current_address.try(:email)
+    @email ||= user.try(:username) || user.try(:email)
+    @email.to_s
   end
   
   def email=(val)
@@ -230,12 +234,19 @@ class Person < ActiveRecord::Base
     end
     other.email_addresses.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
     
-    # Organizational Memberships
+    # Organization Memberships
     organization_memberships.each do |pn|
       opn = other.organization_memberships.detect {|oa| oa.organization_id == pn.organization_id}
       pn.merge(opn) if opn
     end
     other.organization_memberships.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
+    
+    # Organizational Roles
+    organizational_roles.each do |pn|
+      opn = other.organizational_roles.detect {|oa| oa.organization_id == pn.organization_id}
+      pn.merge(opn) if opn
+    end
+    other.organizational_roles.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
     
     super
   end

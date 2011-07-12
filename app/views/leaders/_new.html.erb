@@ -8,6 +8,6 @@
   
   <%= render 'people/person_form', :person => @person %>
     
-  
+  <%= check_box_tag :notify, 1, true %> Notify this person that they've been added and send them a link to log in.<br/><br/>
   <%= submit_tag "Add", :disable_with => "Adding..." %>
 <% end %>
