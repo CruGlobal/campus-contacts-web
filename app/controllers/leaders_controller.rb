@@ -6,7 +6,7 @@ class LeadersController < ApplicationController
     # This is for the case where the person gets entered with one email, but has a different email for FB
     if params[:token] && params[:user_id]
       user = User.find(params[:user_id])
-      if user.remember_token == params[:token] && user.remember_token_expires_at >= Time.now
+      if current_user != user && user.remember_token == params[:token] && user.remember_token_expires_at >= Time.now
         # the link was valid merge the created user into the current user
         current_user.merge(user)
         user.destroy
