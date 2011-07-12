@@ -1,5 +1,24 @@
 class LeadersController < ApplicationController
   respond_to :html, :js
+  
+  def leader_sign_in
+    # Reconcile the person comeing from a leader link with the link itself.
+    # This is for the case where the person gets entered with one email, but has a different email for FB
+    if params[:token] && params[:user_id]
+      user = User.find(params[:user_id])
+      if user.remember_token == params[:token] && user.remember_token_expires_at >= Time.now
+        # the link was valid merge the created user into the current user
+        current_user.merge(user)
+        user.destroy
+        redirect_to '/contacts/mine'
+      else
+        redirect_to user_root_path
+      end
+    else
+      redirect_to user_root_path
+    end
+  end
+  
   def search
     if params[:name].present?
       query = params[:name].strip.split(' ')
@@ -51,7 +70,7 @@ class LeadersController < ApplicationController
   def add_person
     @person = create_person(params[:person])
     required_fields = {'First Name' => @person.firstName, 'Last Name' => @person.lastName, 'Gender' => @person.gender, 'Email' => @email.try(:email), 'Phone' => @phone.try(:number)}
-    @person.valid?; @email.valid?; @phone.valid?
+    @person.valid?; @email.try(:valid?); @phone.try(:valid?)
     unless required_fields.values.all?(&:present?)
       flash.now[:error] = "Please fill in all fields<br />"
       required_fields.each do |k,v|
@@ -59,7 +78,20 @@ class LeadersController < ApplicationController
       end
       render :new and return
     end
+    # Make sure we have a user for this person
+    unless @person.user
+      @person.user = User.create!(:username => @email.email, :email => @email.email, :password => SecureRandom.hex(10))
+    end
     @person.save!
+    
+    # Notify the new user if we're supposed to
+    if params[:notify] == '1'
+      token = SecureRandom.hex(12)
+      @person.user.remember_token = token
+      @person.user.remember_token_expires_at = 1.month.from_now
+      @person.user.save(validate: false)
+      LeaderMailer.added(@person, current_person, current_organization, token).deliver
+    end
     create and return
   end
 

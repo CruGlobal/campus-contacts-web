@@ -9,6 +9,26 @@ class OrganizationalRole < ActiveRecord::Base
   before_create :set_start_date, :set_contact_uncontacted
   after_save :set_end_date_if_deleted
   
+  
+  def merge(other)
+    # We can have multiple roles, but if we're a contact that should be the only role
+    OrganizationalRole.transaction do
+      case
+      when role_id == Role.contact.id && other.role_id != Role.contact.id
+        MergeAudit.create!(mergeable: other, merge_looser: self)
+        self.destroy
+      when other.role_id == Role.contact.id && role_id != Role.contact.id
+        MergeAudit.create!(mergeable: self, merge_looser: other)
+        other.destroy
+      when other.role_id == Role.contact.id && role_id == Role.contact.id
+        # Both roles are contact, and we only need one contact role
+        MergeAudit.create!(mergeable: self, merge_looser: other)
+        other.destroy
+      else
+        # keep both roles
+      end
+    end
+  end
   private
     def set_start_date
       self.start_date = Date.today

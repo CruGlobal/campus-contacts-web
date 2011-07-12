@@ -230,12 +230,19 @@ class Person < ActiveRecord::Base
     end
     other.email_addresses.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
     
-    # Organizational Memberships
+    # Organization Memberships
     organization_memberships.each do |pn|
       opn = other.organization_memberships.detect {|oa| oa.organization_id == pn.organization_id}
       pn.merge(opn) if opn
     end
     other.organization_memberships.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
+    
+    # Organizational Roles
+    organizational_roles.each do |pn|
+      opn = other.organizational_roles.detect {|oa| oa.organization_id == pn.organization_id}
+      pn.merge(opn) if opn
+    end
+    other.organizational_roles.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
     
     super
   end
