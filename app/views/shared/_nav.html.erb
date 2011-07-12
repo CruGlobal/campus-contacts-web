@@ -1,5 +1,18 @@
 <div id="global">
   <% if user_signed_in? %>
+  
+    <% if current_organization.try(:keywords).present? %>
+      <div class="item">
+        <%= link_to("Enter Survey Mode", '', id: 'survey_keywords_mode_link')%>
+        <div id="show_survey_keywords_menu" style="display:none">
+          <ul><% current_organization.keywords.each do |keyword| %>
+            <li><div style="width:100%; display:inline"><%= link_to("Use Keyword: #{keyword.keyword}", facebook_logout_url(next: contact_form_url(keyword.keyword)), id: 'select_keyword')%>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
     <% if current_organization %>
       <div class="item">
         <% if current_person.organizations.length > 1 %>
@@ -24,18 +37,6 @@
       <!-- <div class="item">
         <%= link_to(t('nav.profile'), current_person) %>
       </div> -->
-    <% end %>
-    <% if current_organization.try(:keywords).present? %>
-      <div class="item">
-        <%= link_to("Enter Survey Mode", '', id: 'survey_keywords_mode_link')%>
-        <div id="show_survey_keywords_menu" style="display:none">
-          <ul><% current_organization.keywords.each do |keyword| %>
-            <li><div style="width:100%; display:inline"><%= link_to("Use Keyword: #{keyword.keyword}", facebook_logout_url(next: contact_form_url(keyword.keyword)), id: 'select_keyword')%>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-      </div>
     <% end %>
     <div class="item">
       <%= link_to(t('nav.logout'), facebook_logout_url)  %> 
