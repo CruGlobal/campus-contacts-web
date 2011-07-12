@@ -1,31 +1,34 @@
-<div class="splash">
-  <div id="logoline">
-    <a href="/" id="logo"></a>
-  </div>
-  <div id="roundwrap">
-    <div class="left width30">
+  <center>
+    Login with Facebook to get started <br><br>
+    <%= link_to(image_tag('login-button.png'), user_omniauth_authorize_path(:facebook), rel: 'external') %>
+  </center>
+
+  <!-- <div class="splash">
+    <div id="logoline">
+    </div>
+    <div id="roundwrap">
+      <div class="left width30">
     
-      <h3>Login:</h3>
+        <h3>Login:</h3>
     
-      <div class="loginscreen">
-      <%= link_to(image_tag('login-button.png'), user_omniauth_authorize_path(:facebook), rel: 'external') %>
+        <div class="loginscreen">
+        <%= link_to(image_tag('login-button.png'), user_omniauth_authorize_path(:facebook), rel: 'external') %>
+        </div>      
       </div>
+    
+    
+    
+      <div class="right width60">
+        <h3><Instructions:</h3>
+        <p>
+          To get started, you'll need to have a Facebook account. 
+                        Click the login link to the left and "allow" MHub to access
+                        your information. You'll be taken to the wizard if this is your first
+                        time accessing MissionHub.</p>
+      </div>
+    
+      <div class="clear"></div>
   
-  
-      
     </div>
-    
-    
-    
-    <div class="right width60">
-      <h3>Instructions:</h3>
-      <p>To get started, you'll need to have a Facebook account. 
-      Click the login link to the left and "allow" MHub to access
-      your information. You'll be taken to the wizard if this is your first
-      time accessing MissionHub.</p>
-    </div>
-    
-    <div class="clear"></div>
-  
-  </div>
-</div>
+  </div> -->
+

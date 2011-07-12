@@ -8,14 +8,18 @@ module Ccc
 
       has_one :crs2_profile, class_name: 'Ccc::Crs2Profile', foreign_key: :ministry_person_id, dependent: :destroy
       has_many :pr_reviewers, class_name: 'Ccc::PrReviewer', dependent: :destroy
-      has_many :pr_reviews, class_name: 'Ccc::PrReview' # dependant? subject_id, initiator_id
+      has_many :pr_reviews, class_name: 'Ccc::PrReview', foreign_key: :subject_id # dependant? subject_id, initiator_id
+      has_many :pr_review_initiators, class_name: 'Ccc::PrReview', foreign_key: :initiator_id
       has_many :pr_admins, class_name: 'Ccc::PrAdmin', dependent: :destroy
       has_many :pr_summary_forms, class_name: 'Ccc::PrSummaryForm', dependent: :destroy
       has_many :pr_reminders, class_name: 'Ccc::PrReminder', dependent: :destroy
       has_many :pr_personal_forms, class_name: 'Ccc::PrPersonalForm', dependent: :destroy
 
 			has_many :sp_applications, class_name: 'Ccc::SpApplication', dependent: :destroy
-			has_many :sp_projects, class_name: 'Ccc::SpProject'
+			has_many :sp_projects, class_name: 'Ccc::SpProject', foreign_key: :pd_id
+			has_many :sp_project_apds, class_name: 'Ccc::SpProject', foreign_key: :apd_id
+			has_many :sp_project_opds, class_name: 'Ccc::SpProject', foreign_key: :opd_id
+			has_many :sp_project_coordinators, class_name: 'Ccc::SpProject', foreign_key: :coordinator_id
       has_one :sp_user, class_name: 'Ccc::SpUser'  #created by and ssm/person?
       has_many :sp_staff, class_name: 'Ccc::SpStaff', dependent: :destroy
 			has_many :sp_application_moves, class_name: 'Ccc::SpApplicationMove', foreign_key: 'moved_by_person_id'
@@ -25,7 +29,8 @@ module Ccc
 			has_many :sitrack_mpd, class_name: 'Ccc::SitrackMpd', dependent: :destroy
 			has_many :sitrack_tracking, class_name: 'Ccc::SitrackTracking', dependent: :destroy
 			has_many :sn_campus_involvements, class_name: 'Ccc::SnCampusInvolvement' # don't destroy if added_by_id
-			has_many :sn_custom_values, class_name: 'Ccc::SnCustomValue', dependent: :destroy
+			has_many :sn_campus_involvement_added_bys, class_name: 'Ccc::SnCampusInvolvement', foreign_key: 'added_by_id'
+  		has_many :sn_custom_values, class_name: 'Ccc::SnCustomValue', dependent: :destroy
 			has_many :sn_group_involvements, class_name: 'Ccc::SnGroupInvolvement', dependent: :destroy
 			has_many :sn_ministry_involvements, class_name: 'Ccc::SnMinistryInvolvement', dependent: :destroy
 			has_many :sn_training_answers, class_name: 'Ccc::SnTrainingAnswer', dependent: :destroy
@@ -119,7 +124,7 @@ module Ccc
 
 					other.hr_si_applications.each do |ua|
 						ua.update_attribute(:fk_personID, personID)
-						ua.update_attribute(:fk_ssmUserId, fk_ssmUserId)
+						ua.update_attribute(:fk_ssmUserID, fk_ssmUserId)
 					end
 
 					other.si_applies.each { |ua| ua.update_attribute(:applicant_id, personID) }

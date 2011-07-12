@@ -19,4 +19,11 @@
       <%= submit_tag 'Save and close', class: 'save_and_close save' %>
       <%= submit_tag 'Save and add another', class: 'save_and_more save' %>
     <% end %>
+    
+    <br>
+    OR
+    <br>
+    <% current_organization.keywords.each do |keyword| %>
+      <%= link_to "Enter Survey Mode for #{keyword.keyword}", facebook_logout_url(next: contact_form_url(keyword.keyword)), id: "show_keywords" %><br>
+    <% end %>
   </div>

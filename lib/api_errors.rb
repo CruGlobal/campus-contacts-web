@@ -93,4 +93,19 @@ module ApiErrors
       super :account_setup_error, "You need to go to www.MissionHub.com to setup your account in order use the MissionHub application.","36", "Message"
     end
   end
+  class InvalidRolesParamaters < ApiError
+    def initialize
+      super :invalid_roles_parameters, "You did not provide the appropriate parameters to change a person's role.", "37", "API Error"
+    end
+  end
+  class NoRoleChangeMade < ApiError
+    def initialize
+      super :no_role_change_made, "No role change was made. Try again.", "38", "API Error"
+    end
+  end
+  class RolesPermissionsError < ApiError
+    def initialize
+      super :roles_permissions_error, "You do not have the appropriate permissions to change roles.","39", "Message"
+    end
+  end
 end
