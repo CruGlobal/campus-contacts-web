@@ -11,6 +11,7 @@ require 'rails/test_help'
 require 'shoulda/rails'
 require 'ephemeral_response'
 require 'factory_girl'
+require 'api_test_helper'
 require File.dirname(__FILE__) + "/factories"
 
 EphemeralResponse.activate
