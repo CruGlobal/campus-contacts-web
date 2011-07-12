@@ -83,6 +83,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    aaronh-chronic (0.3.9)
     acts_as_list (0.1.3)
     addressable (2.2.6)
     ancestry (1.2.4)
@@ -224,6 +225,9 @@ GEM
       rack (>= 1.0.0)
     warden (1.0.4)
       rack (>= 1.0)
+    whenever (0.6.8)
+      aaronh-chronic (>= 0.3.9)
+      activesupport (>= 2.3.4)
     ya2yaml (0.30)
 
 PLATFORMS
@@ -268,3 +272,4 @@ DEPENDENCIES
   trumant-rack-oauth2-server!
   uglifier
   unicorn
+  whenever

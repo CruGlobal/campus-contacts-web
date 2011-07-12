@@ -1,3 +1,5 @@
+set :whenever_command, "bundle exec whenever"
+require "whenever/capistrano"
 require "bundler/capistrano"
 require 'hoptoad_notifier/capistrano'
 # This defines a deployment "recipe" that you can feed to capistrano
