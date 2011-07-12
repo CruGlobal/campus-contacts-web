@@ -1,4 +1,23 @@
 $ ->
+	$('.expandable').each (i)->
+		e = $(this)
+		if e.height() > e.attr("data-height")
+			e.next('.moredown').show();
+			e.attr("data-original-height", e.height())
+			e.css({height: e.attr("data-height") + 'px', overflow: 'hidden'})
+			
+	$('a.moredown').click ->
+		target = $($(this).attr('href'))
+		target.toggleClass('showall')
+		if target.hasClass('showall')
+			target.attr('data-height', target.height())
+			target.animate({height: target.attr("data-original-height")})
+			$('span', this).html('<strong>+</strong> Show Less Leaders')
+		else
+			target.animate({height: target.attr("data-height")})
+			$('span', this).html('<strong>+</strong> Show More Leaders')
+		false
+			
 	$('#change_org').live 'click', ->
 		$('#other_orgs').toggle()
 		$('#change_org').toggleClass("on")

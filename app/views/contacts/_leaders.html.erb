@@ -9,12 +9,12 @@
     <h3><%= t('contacts.index.leaders') %></h3>
   </li>
   <li>
-    <ul id="leaders" class="indent">
+    <ul id="leaders" class="indent expandable" data-height="244">
       <% @organization.leaders.each do |person| %>
         <%= render 'contacts/leader', person: person %>
       <% end %>
     </ul>
-    <a href="#" id="moreleaders"><span><strong>+</strong> Show More Leaders</span></a>
+    <a href="#leaders" class="moredown" style="display:none"><span><strong>+</strong> Show More Leaders</span></a>
   </li>
     <li class="leader unassigned" data-id="">
     <strong><span class="name"><%= link_to(t('contacts.index.unassigned'), contacts_path) %></span></strong> (<span id="unassigned_count" class="count"><%= unassigned_people(@organization).count %></span>)
