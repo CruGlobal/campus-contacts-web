@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery  
 
   def facebook_logout
-    redirect_url = !params[:next].nil? ? params[:next] : new_user_session_url
+    redirect_url = params[:next].present? ? params[:next] : '/'
     if session[:fb_token]
       split_token = session[:fb_token].split("|")
       fb_api_key = split_token[0]

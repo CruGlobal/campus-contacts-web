@@ -1,5 +1,5 @@
 class WelcomeController < ApplicationController
-  skip_before_filter :authenticate_user!, only: [:index, :tour]
+  skip_before_filter :authenticate_user!, only: [:index, :tour, :terms, :privacy]
   def index
     if user_signed_in?
       redirect_to user_root_path and return
@@ -46,6 +46,14 @@ class WelcomeController < ApplicationController
     end
   end
   def tour
+    render layout: 'splash'
+  end
+  
+  def terms
+    render layout: 'splash'
+  end
+  
+  def privacy
     render layout: 'splash'
   end
 end
