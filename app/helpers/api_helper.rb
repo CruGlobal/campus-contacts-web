@@ -112,9 +112,9 @@ module ApiHelper
       org_id_param = params[:org_id] ? params[:org_id].to_i : params[:org].to_i
       @organization = Organization.find(org_id_param)
     else
-      @organization = current_organization(get_me) if @organization.empty?
+      @organization ||= current_organization(get_me)
     end
-    raise NoOrganizationError if @organization.empty?
+    raise NoOrganizationError unless @organization
     @organization
   end
   
@@ -127,9 +127,9 @@ module ApiHelper
     allowed_status = OrganizationMembership::FOLLOWUP_STATUSES + %w[finished not_finished]
     
     #allow for start (SQL Offset) and limit on query.  use :start and :limit
-    raise LimitRequiredWithStartError if (params[:start] && !params[:limit])
-    people = people.offset(params[:start]) if params[:start].to_i !=0
-    people = people.limit(params[:limit]) if params[:limit].to_i != 0
+    raise LimitRequiredWithStartError if (params[:start].present? && !params[:limit].present?)
+    people = people.offset(params[:start]) if params[:start].to_i  0
+    people = people.limit(params[:limit]) if params[:limit].to_i > 0
     
     if params[:assigned_to].present?
       if params[:assigned_to] == 'none'
