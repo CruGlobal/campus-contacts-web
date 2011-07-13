@@ -22,6 +22,15 @@ begin
           partial "keyword_state"
         end
       end
+      list do
+        field :keyword
+        field :state
+        field :organization
+        field :explanation
+        field :initial_response
+        field :post_survey_message
+        field :chartfield
+      end
     end
   end
 rescue; end
