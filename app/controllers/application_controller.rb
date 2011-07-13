@@ -57,13 +57,14 @@ class ApplicationController < ActionController::Base
     I18n.locale = params[:locale] if params[:locale]
   end
   
-  def current_organization
-    return nil unless user_signed_in?
-    non_contact_roles = current_person.organizational_roles.includes(:organization).where("role_id <> #{Role.contact.id}")
+  def current_organization(person = nil)
+    person ||= current_person if user_signed_in?
+    return nil unless person
+    non_contact_roles = person.organizational_roles.includes(:organization).where("role_id <> #{Role.contact.id}")
     return nil if non_contact_roles.empty?
-    org = current_person.organizations.find_by_id(session[:current_organization_id]) if session[:current_organization_id]
+    org = person.organizations.find_by_id(session[:current_organization_id]) if session[:current_organization_id]
     unless org
-      org = current_person.primary_organization
+      org = person.primary_organization
       # If they're a contact at their primary org, look for another org where they have a different role
       non_contact_organization = non_contact_roles.collect(&:organization)
       unless non_contact_organization.include?(org)
