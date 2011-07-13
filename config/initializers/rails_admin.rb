@@ -18,9 +18,22 @@ begin
         field :keyword
         field :chartfield
         field :explanation
+        field :initial_response
+        field :post_survey_message
+        field :chartfield
         field :state do
           partial "keyword_state"
         end
+      end
+      list do
+        field :keyword
+        field :state
+        field :user
+        field :organization
+        field :explanation
+        field :initial_response
+        field :post_survey_message
+        field :chartfield
       end
     end
   end

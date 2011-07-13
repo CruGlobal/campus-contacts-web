@@ -10,10 +10,17 @@
     <div id="plainheader">
       <!-- <a href="/" id="logo"></a> -->
       <% if params[:controller] == 'contacts' %>
-        <%= link_to(t('contacts.plain.exit_survey'), survey_keyword_stop_url) %> 
       
         <% if can? :manage, @keyword %>
-          | <%= link_to('Close Window', '#', onclick: 'window.close()') %>
+          <span id="close_window" style="display:none">| <%= link_to('Close Window', '#', onclick: 'window.close()') %></span>
+          <script type="text/javascript" charset="utf-8">
+            if(window.opener !== null) {
+              $('#close_window').show();
+            }
+          </script>
+          <%= link_to(t('contacts.plain.exit_survey'), '/contacts') %> 
+        <% else %>
+          <%= link_to(t('contacts.plain.exit_survey'), facebook_logout_url(next: '/contacts')) %> 
         <% end %>
       <% end %>
     </div>
@@ -23,6 +30,8 @@
     </div>
     
     <div class="footer">
+      <%= link_to(t('nav.terms'), '/terms') %> |
+      <%= link_to(t('nav.privacy'), '/privacy') %>
       <!-- MissionHub 2011 &copy; -->
     </div>
     

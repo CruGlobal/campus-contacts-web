@@ -1,0 +1,7 @@
+<h2>Your request for the keyword <%= @keyword %> was APPROVED</h2>
+<p>
+  To use the keyword, tell people to text <%= @keyword %> to <%= SmsKeyword::SHORT %><br/>
+</p>
+<p>
+  If you have any questions, <%= mail_to('support@missionhub.com', 'send us an email at support@missionhub.com') %>.
+</p>

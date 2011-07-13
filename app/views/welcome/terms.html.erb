@@ -1,0 +1,27 @@
+<div id="logoline">
+  <a href="/" id="logo"></a>
+</div>
+<div id="TOS-content"> 
+
+	<h2>MissionHub (MHub) SMS - Short Code <%= SmsKeyword::SHORT %></h2> 
+
+	<h3>Terms of Service</h3> 
+
+	<div id="TOS-body-text"> 
+		<p><strong>1.</strong> When you opt-in to the service, we will send you an SMS message to confirm your signup.</p> 
+
+		<p><strong>2.</strong> You can cancel at any time. Just text "<strong>STOP</strong>" to <strong><%= SmsKeyword::SHORT %></strong>. After you send the SMS message "<strong>STOP</strong>" to us, we will send you an SMS message to confirm that you have been unsubscribed. After this, you will no longer receive SMS messages from us.</p> 
+
+		<p>If you want to join again, just sign up as you did the first time and we will start sending SMS messages to you again.</p> 
+
+		<p><strong>3.</strong> If at any time you forget what keywords are supported, just text "<strong>HELP</strong>" to <strong><%= SmsKeyword::SHORT %></strong>. After you send the SMS message "<strong>HELP</strong>" to us, we will respond with instructions on how to use our service as well as how to unsubscribe.</p> 
+
+		<p><strong>4.</strong> <strong>Participating carriers</strong>: Alaska Communications Systems (ACS), Alltel, AT&amp;T, Bluegrass Cellular, Boost Mobile, Boost-CDMA, Centennial, Cincinnati Bell, Cingular Blue, Cox Wireless, Cricket (Leap Wireless), Dobson, ECIT (Cellular One of East Central Illinois), GCI Communications, Hawkeye (Chat Mobility), Illinois Valley Cellular, Immix/Keystone Wireless/PC Man, Inland Cellular, Nex Tech Communications, Nextel, nTelos, Pioneer, Plateau, Pocket, Revol Wireless, Sprint, T-Mobile, Thumb Cellular, TracFone, Unicell, Union Wireless, U.S. Cellular, United Wireless, Verizon, Virgin Mobile, and West Central Wireless.</p> 
+
+		<p><strong>5.</strong> As always, message and data rates may apply for any messages sent to you from us and to us from you. Message frequency depends on the user's interaction. If you have any questions about your text plan or data plan, it is best to contact your wireless provider.</p> 
+
+		<p>For all questions about the services provided by this short code, you can send an email to <%= mail_to('support@missionhub.com', nil, encode: 'javascript') %>.</p> 
+
+		<p><strong>6.</strong> If you have any questions regarding privacy, please read our <%= link_to('privacy policy', '/privacy') %>.</p> 
+	</div> 
+</div> 

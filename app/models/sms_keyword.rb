@@ -1,4 +1,5 @@
 class SmsKeyword < ActiveRecord::Base  
+  SHORT = '75572'
   enforce_schema_rules  
   
   belongs_to :user
@@ -18,6 +19,7 @@ class SmsKeyword < ActiveRecord::Base
     event :approve do
       transition requested: :active
     end
+    after_transition :on => :approve, :do => :notify_user
     
     event :deny do
       transition requested: :denied
@@ -30,6 +32,10 @@ class SmsKeyword < ActiveRecord::Base
   
   @queue = :general
   after_create :queue_notify_admin_of_request
+  
+  def to_s
+    keyword
+  end
   
   def question_sheet
     @question_sheet ||= question_sheets.last || question_sheets.create!(label: "Keyword #{id}")
@@ -51,5 +57,11 @@ class SmsKeyword < ActiveRecord::Base
     def queue_notify_admin_of_request
       async(:notify_admin_of_request) 
       true
+    end
+    
+    def notify_user
+      if user
+        KeywordRequestMailer.notify_user(self).deliver
+      end
     end
 end

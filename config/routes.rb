@@ -131,6 +131,8 @@ Mh::Application.routes.draw do
   root to: "welcome#index"
 #  match 'home' => 'welcome#home', as: 'user_root' ---- LOOK FOR THIS IN application_controller.rb
   match 'wizard' => 'welcome#wizard', as: 'wizard'
+  match 'terms' => 'welcome#terms', as: 'terms'
+  match 'privacy' => 'welcome#privacy', as: 'privacy'
   match 'verify_with_relay' => 'welcome#verify_with_relay', as: 'verify_with_relay'
   
   # SMS keyword state transitions
@@ -140,6 +142,7 @@ Mh::Application.routes.draw do
   match 'c/:keyword(/:received_sms_id)' => 'contacts#new', as: 'contact_form'
   match 'm/:received_sms_id' => 'contacts#new'
   match 'l/:token/:user_id' => 'leaders#leader_sign_in'
+  # mount RailsAdmin::Engine => "/admin"
   
   get "welcome/tour"
 end
