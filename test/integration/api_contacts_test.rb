@@ -23,6 +23,7 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       end
     end
     
+    #make sure that filtering by gender works
     should "be able to view their contacts filtered by gender=male" do
       path = "/api/contacts.json?filters=gender&values=male"
       get path, {'access_token' => @access_token3.code}
@@ -35,6 +36,7 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       end
     end
     
+    #make sure filtering by female works
     should "be able to view their contacts filtered by gender=female" do
       path = "/api/contacts.json?filters=gender&values=female"
       get path, {'access_token' => @access_token3.code}
@@ -59,7 +61,7 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
-      
+
       assert_equal(@json.length, 1)
       
       path = "/api/contacts.json?limit=1&start=1"

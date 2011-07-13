@@ -112,10 +112,9 @@ module ApiHelper
       org_id_param = params[:org_id] ? params[:org_id].to_i : params[:org].to_i
       @organization = Organization.find(org_id_param)
     else
-      @organization = get_me.primary_organization
-      @organization = get_me.organizations.first if @organization.nil?
+      @organization = current_organization(get_me) if @organization.empty?
     end
-    raise NoOrganizationError if @organization.nil?
+    raise NoOrganizationError if @organization.empty?
     @organization
   end
   

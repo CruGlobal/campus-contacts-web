@@ -8,11 +8,11 @@ def setup_api_env
   Role.destroy_all
   Role.connection.execute("INSERT INTO `roles` (`id`, `organization_id`, `name`, `i18n`, `created_at`, `updated_at`)
   VALUES
-  	(1, 0, 'Admin', 'admin', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
-  	(2, 0, 'Contact', 'contact', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
-  	(3, 0, 'Involved', 'involved', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
-  	(4, 0, 'Leader', 'leader', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
-  	(5, 0, 'Alumni', 'alumni', '2011-06-29 04:15:36', '2011-06-29 04:15:36');
+    (1, 0, 'Admin', 'admin', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
+    (2, 0, 'Contact', 'contact', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
+    (3, 0, 'Involved', 'involved', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
+    (4, 0, 'Leader', 'leader', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
+    (5, 0, 'Alumni', 'alumni', '2011-06-29 04:15:36', '2011-06-29 04:15:36');
   ")
   @user = Factory.create(:user_with_auxs)
   @user2 = Factory.create(:user2_with_auxs)
@@ -48,18 +48,18 @@ def setup_api_env
   Factory.create(:contact_assignment, assigned_to_id: @user.person.id, person_id: @user2.person.id, organization_id: @temp_org.id)
   Factory.create(:contact_assignment, assigned_to_id: @user2.person.id, person_id: @user.person.id, organization_id: @temp_org.id)
   
-  File.open('/users/Doulos/Desktop/testmytest.log', 'a') do |f2|
-    f2.puts "restart\n"
-    f2.puts "#{@user.person.inspect}\n\n"
-    f2.puts "#{@user2.person.inspect}\n\n"
-    f2.puts "#{OrganizationalRole.all.inspect}\n\n"
-    f2.puts "#{@user.person.organizational_roles.inspect}\n"
-    f2.puts "#{@user2.person.organizational_roles.inspect}\n"
-    f2.puts "#{@user.person.organization_memberships.inspect}\n"
-    f2.puts "#{@user2.person.organization_memberships.inspect}\n"
-    f2.puts "#{@user.person.contact_assignments.inspect}\n"
-    f2.puts "#{@user2.person.contact_assignments.inspect}\n"
-  end
+  # File.open('/users/Doulos/Desktop/testmytest.log', 'a') do |f2|
+  #   f2.puts "restart\n"
+  #   f2.puts "#{@user.person.inspect}\n\n"
+  #   f2.puts "#{@user2.person.inspect}\n\n"
+  #   f2.puts "#{OrganizationalRole.all.inspect}\n\n"
+  #   f2.puts "#{@user.person.organizational_roles.inspect}\n"
+  #   f2.puts "#{@user2.person.organizational_roles.inspect}\n"
+  #   f2.puts "#{@user.person.organization_memberships.inspect}\n"
+  #   f2.puts "#{@user2.person.organization_memberships.inspect}\n"
+  #   f2.puts "#{@user.person.contact_assignments.inspect}\n"
+  #   f2.puts "#{@user2.person.contact_assignments.inspect}\n"
+  # end
 
   @access_token = Factory.create(:access_token, identity: @user.id)
   @access_token2 = Factory.create(:access_token, identity: @user2.id, code: "abcdefgh")
