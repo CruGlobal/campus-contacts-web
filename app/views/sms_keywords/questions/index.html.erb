@@ -28,14 +28,10 @@
     To begin your survey, <strong>text <%= @keyword.keyword %> to <%= SmsKeyword::SHORT %>.</strong>
   </p>
   
+  <p>Note: First and Last name will be automatically added to every survey. There's no need for you to add those.</p>
+  
   <h3>Predefined Questions</h3>
   <table border="0" cellspacing="5" cellpadding="0">
-    <thead>
-      <tr>
-        <th>Question</th>
-        <th></th>
-      </tr>
-    </thead>
     <tbody id="predefined_questions">
       <% @predefined.questions.each do |question| %>
         <% unless @questions.include?(question) %>

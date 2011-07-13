@@ -8,6 +8,8 @@
     prayed_to_receive: 'Prayed To Receive Christ' 
     gospel_presentation: 'Gospel Presentation'
   nav:
+    terms: 'Terms and Conditions'
+    privacy: 'Privacy Policy'
     login: "Log In"
     logout: "Sign Out"
     profile: 'My Profile'
@@ -56,7 +58,7 @@
       survey_paragraph:
         "Now that you've requested a keyword, you're going to want to create a set of questions to ask people. Think along the lines of a short survey or a 
         basic contact card."
-      create_survey_link: "Click here to create your survey. We'll return you to this wizard when you're done."
+      create_survey_link: "Click here to create your survey."
       leaders_header: "Give access to other leaders"
       leaders_paragraph:
         "This part is optional. Odds are decent that there are other people you work with who you'd like to give the ability to manage the keyword you set up

@@ -48,7 +48,7 @@ class User < ActiveRecord::Base
     when org.nil? then 'verify'
     when org && org.keywords.blank? then 'keyword'
     when org && org.question_sheets.blank? then 'survey'
-    else 'leaders'
+    else 'keyword'
     end
   end
   

@@ -131,6 +131,8 @@ Mh::Application.routes.draw do
   root to: "welcome#index"
 #  match 'home' => 'welcome#home', as: 'user_root' ---- LOOK FOR THIS IN application_controller.rb
   match 'wizard' => 'welcome#wizard', as: 'wizard'
+  match 'terms' => 'welcome#terms', as: 'terms'
+  match 'privacy' => 'welcome#privacy', as: 'privacy'
   match 'verify_with_relay' => 'welcome#verify_with_relay', as: 'verify_with_relay'
   
   # SMS keyword state transitions
