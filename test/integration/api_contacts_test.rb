@@ -87,7 +87,7 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
     end
     
     should "be able to view their contacts filtered by status" do
-      @user2.person.organizational_roles.first.update_attributes!(role_id: "2", followup_status: "contacted")
+      @user2.person.organizational_roles.first.update_attributes!(role_id: Role.contact.id, followup_status: "contacted")
       path = "/api/contacts.json?filters=status&values=contacted&org_id=#{@user3.person.primary_organization.id}"
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
@@ -95,8 +95,8 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       
       assert_equal(@json.length,1)
       person_basic_test(@json[0]['person'],@user2,@user)
-      @user.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: "2")
-      @user2.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: "2")
+      @user.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: Role.contact.id)
+      @user2.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: Role.contact.id)
       path = "/api/contacts.json?filters=status&values=contacted"
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
@@ -128,15 +128,19 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
     should "not make the iPhone contacts category queries fail" do
       
       # contacts assigned to me (My contacts) on mobile app
-      path = "/api/contacts.json?filters=status&values=not_finished&assigned_to=#{@user.person.id}&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
+      @user2.person.organizational_roles.first.update_attributes(followup_status: 'completed')
+      ContactAssignment.create(assigned_to_id:@user3.person.id, person_id: @user.person.id, organization_id: @user.person.primary_organization.id)
+
+      path = "/api/contacts.json?filters=status&values=not_finished&assigned_to=#{@user3.person.id}&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
 
       assert_equal(@json.length,1)
-      assert_equal(@json[0]['person']['id'], @user2.person.id)
+      assert_equal(@json[0]['person']['id'], @user.person.id)
 
       # my completed contacts on mobile app
+      @user2.person.organizational_roles.first.update_attributes(followup_status: 'uncontacted')
       path = "/api/contacts.json?filters=status&values=finished&assigned_to=#{@user.person.id}&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
@@ -151,27 +155,23 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       assert_equal(@json.length,1)
       assert_equal(@json[0]['person']['id'], @user2.person.id)
       
-      # unassigned contacts mobile app query
-      path = "/api/contacts.json?filters=status&values=not_finished&assigned_to=none&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
-      get path, {'access_token' => @access_token3.code}
-      assert_response :success, @response.body
-      @json = ActiveSupport::JSON.decode(@response.body)
-      assert_equal(@json.length,0)  
-      
       @user.person.organizational_roles.where(organization_id: @user.person.primary_organization.id).first.update_attributes(followup_status: 'uncontacted')      
       path = "/api/contacts.json?filters=status&values=not_finished&assigned_to=none&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
-      assert_equal(@json.length,0)  
+      assert_equal(@json.length,0)
       
       ContactAssignment.destroy_all
-      path = "/api/contacts.json?filters=status&values=not_finished&assigned_to=none&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
+      # unassigned contacts mobile app query
+      @user.person.organizational_roles.first.update_attributes(followup_status: 'uncontacted')
+      path = "/api/contacts.json?assigned_to=none&filters=status&values=not_finished&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
-      # assert_equal(@json.length,1)
-      # assert_equal(@json[0]['person']['id'], @user.person.id)
+
+      assert_equal(@json.length,1)  
+      assert_equal(@json[0]['person']['id'], @user.person.id)
     end
     
     
@@ -182,6 +182,9 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       
+      File.open('/users/Doulos/Desktop/testmytest.log', 'a') do |f2|
+        f2.puts("#{@json.inspect}\n\n")
+      end
       assert_equal(@json.length, 2)
       person_mini_test(@json[0]['person'],@user) 
 
@@ -190,7 +193,9 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
-      
+      File.open('/users/Doulos/Desktop/testmytest.log', 'a') do |f2|
+        f2.puts("#{@json.inspect}")
+      end
       assert_equal(@json.length, 2)
       person_mini_test(@json[0]['person'],@user2)
     end

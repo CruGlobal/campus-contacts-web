@@ -90,14 +90,14 @@ class ApplicationController < ActionController::Base
   # end
   
   def unassigned_people(organization)
-    @unassigned_people ||= Person.joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{Person.table_name}.#{Person.primary_key} AND organizational_roles.organization_id = #{organization.id} AND organizational_roles.role_id = '#{Role.contact.id}' AND followup_status <> 'do_not_contact' LEFT JOIN contact_assignments ON contact_assignments.person_id = #{Person.table_name}.#{Person.primary_key}  AND contact_assignments.organization_id = #{@organization.id}").where('contact_assignments.id' => nil)
+    @unassigned_people ||= Person.joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{Person.table_name}.#{Person.primary_key} AND organizational_roles.organization_id = #{organization.id} AND organizational_roles.role_id = '#{Role.contact.id}' AND followup_status <> 'do_not_contact' LEFT JOIN contact_assignments ON contact_assignments.person_id = #{Person.table_name}.#{Person.primary_key}  AND contact_assignments.organization_id = #{organization.id}").where('contact_assignments.id' => nil)
   end
   helper_method :unassigned_people
   
   def unassigned_people_api(people,organization)
-    @unassigned_people ||= people.joins(:organizational_roles).where("`organizational_roles`.`person_id` = `#{Person.table_name}`.`#{Person.primary_key}`").where('organizational_roles.organization_id' => "#{organization.id}").where('organizational_roles.role_id' => "#{Role.contact.id}").where("`organizational_roles`.`followup_status` <> 'do_not_contact'").joins("LEFT OUTER JOIN contact_assignments ON `contact_assignments`.`person_id` = #{Person.table_name}.#{Person.primary_key} AND `contact_assignments`.`organization_id` = #{@organization.id}").where('contact_assignments.id' => nil)
+    @unassigned_people ||= people.joins(:organizational_roles).where("`organizational_roles`.`person_id` = `#{Person.table_name}`.`#{Person.primary_key}`").where('organizational_roles.organization_id' => "#{organization.id}").where('organizational_roles.role_id' => "#{Role.contact.id}").where("`organizational_roles`.`followup_status` <> 'do_not_contact'").joins("LEFT OUTER JOIN contact_assignments ON `contact_assignments`.`person_id` = #{Person.table_name}.#{Person.primary_key} AND `contact_assignments`.`organization_id` = #{organization.id}").where('contact_assignments.id' => nil)
   end
-  helper_method :unassigned_people_api
+
   
   def get_answer_sheet(keyword, person)
     @answer_sheet = AnswerSheet.where(person_id: person.id, question_sheet_id: keyword.question_sheet.id).first || 

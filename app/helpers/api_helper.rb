@@ -118,8 +118,96 @@ module ApiHelper
     @organization
   end
   
+  def limit_and_offset_object(object)
+    #allow for start (SQL Offset) and limit on query.  use :start and :limit
+    raise LimitRequiredWithStartError if (params[:start].present? && !params[:limit].present?)
+    object = object.offset(params[:start]) if params[:start].to_i > 0
+    object = object.limit(params[:limit]) if params[:limit].to_i > 0
+    
+    object
+  end
+  
+  def restrict_to_contact_role(people, organization)
+    people = people.where("`#{OrganizationalRole.table_name}`.`organization_id` = ?", organization.id).
+    where("`#{OrganizationalRole.table_name}`.`person_id` = `#{Person.table_name}`.`#{Person.primary_key}`").
+    where("`#{OrganizationalRole.table_name}`.`role_id` = #{Role.contact.id}").
+    where("`#{OrganizationalRole.table_name}`.`followup_status` <> 'do_not_contact'")
+    
+    people
+  end
+  
+  def restrict_to_unassigned_people(people,organization)
+    people = people.joins("LEFT OUTER JOIN `#{ContactAssignment.table_name}` ON `#{ContactAssignment.table_name}`.`person_id` = `#{Person.table_name}`.`#{Person.primary_key}` AND `#{ContactAssignment.table_name}`.`organization_id` = #{organization.id}").where("#{ContactAssignment.table_name}.#{ContactAssignment.primary_key}" => nil)
+    
+    people
+  end
+  
+  #Pass in a Person Activerecord Query object, return ActiveRecord Query object VERSION 2
+  def paginate_filter_sort_people(people, organization)
+    #settings for below
+    allowed_sorting_fields = ["time","status"]
+    allowed_sorting_directions = ["asc", "desc"]
+    allowed_filter_fields = ["gender", "status"]
+    allowed_status = OrganizationMembership::FOLLOWUP_STATUSES + %w[finished not_finished]
+    @sorting_fields = []
+    
+    people = limit_and_offset_object(people)
+    
+    #let's go ahead and include all of the possible tables needed for this filtering and sorting
+    people = people.includes(:contact_assignments).includes(:organizational_roles)
+    
+    if params[:assigned_to].present? && (params[:assigned_to] == 'none' || params[:assigned_to].to_i > 0)
+      if params[:assigned_to] == 'none'
+        people = restrict_to_unassigned_people(people, organization)
+      else
+        people = people.joins(:assigned_tos).where('contact_assignments.organization_id' => organization.id, 'contact_assignments.assigned_to_id' => params[:assigned_to])
+      end
+    end
+    
+    if params[:sort].present?
+      @sorting_directions = []
+      @sorting_directions = params[:direction].split(',').select { |d| allowed_sorting_directions.include?(d) } if params[:direction].present?
+      @sorting_fields = params[:sort].split(',').select { |s| allowed_sorting_fields.include?(s) }
+      
+      @sorting_fields.each_with_index do |field,index|
+        case field  
+        when "time"
+          people = people.order("`#{AnswerSheet.table_name}`.`created_at` #{@sorting_directions[index]}")
+        when "status"
+          people = people.order("`#{OrganizationalRole.table_name}`.`followup_status` #{@sorting_directions[index]}")
+        end
+      end
+    end
+    
+    #if there were no sorting fields then sort by most recent answer_sheet
+    people = people.order("`#{AnswerSheet.table_name}`.`created_at` DESC") if @sorting_fields.blank?
+
+    
+    if params[:filters].present? && params[:values].present?
+      @filter_fields = params[:filters].split(',').select { |f| allowed_filter_fields.include?(f)}
+      @filter_values = params[:values].split(',')
+      
+      @filter_fields.each_with_index do |field,index|
+        case field
+        when "gender"
+          gender = (@filter_values[index].downcase == 'male') ? '1' : '0' if ['male', 'female'].include?(@filter_values[index].downcase)
+          people = people.where("`#{Person.table_name}`.`gender` = ?", gender)
+        when "status"
+          status = allowed_status.include?(@filter_values[index].downcase) ? @filter_values[index].downcase : nil
+          status = ["do_not_contact","completed"] if status == "finished"
+          status = ["uncontacted","attempted_contact","contacted"] if status == "not_finished"
+          people = people.where('organizational_roles.followup_status' => status)
+        end
+      end
+    end
+    
+    people = restrict_to_contact_role(people,organization)
+    people
+  end
+  
   #Pass in a Person Activerecord Query object, return ActiveRecord Query object
-  def paginate_filter_sort_people(people, org)
+  def old_paginate_filter_sort_people(people, org)
+
     #settings for below
     allowed_sorting_fields = ["time","status"]
     allowed_sorting_directions = ["asc", "desc"]
@@ -130,7 +218,7 @@ module ApiHelper
     raise LimitRequiredWithStartError if (params[:start].present? && !params[:limit].present?)
     people = people.offset(params[:start]) if params[:start].to_i > 0
     people = people.limit(params[:limit]) if params[:limit].to_i > 0
-    
+
     if params[:assigned_to].present?
       if params[:assigned_to] == 'none'
         people = unassigned_people_api(people,@organization)
