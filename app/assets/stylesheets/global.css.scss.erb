@@ -125,7 +125,7 @@ a.headerlink:hover {
   .item {
     display: inline-block;
     border-left: 1px solid $blue;
-    height: 18px;
+    height: 28px;
     line-height: 18px;
     >a {
       padding: 5px;
@@ -642,10 +642,14 @@ ul.pillmenu {
 
 .icon {
   background: url("<%= asset_path('delete.png') %>") no-repeat 50% 50%;
-  text-indent: -1000px;
+  text-indent: 1000px;
   overflow: hidden;
   width: 16px;
-  display: inline-block;
+	height: 16px;
+  display: inline-block !important;
+}
+
+.icon:hover {
 }
 
 .icon.magnify {  background-image: url("<%= asset_path('magnify.png') %>");}
@@ -653,6 +657,8 @@ ul.pillmenu {
 .icon.delete {  background-image: url("<%= asset_path('delete.png') %>");}
 .icon.edit {  background-image: url("<%= asset_path('edit_sm.png') %>");}
 .icon.check {  background-image: url("<%= asset_path('check.png') %>");}
+.icon.star, .icon.star_empty:hover {  background-image: url("<%= asset_path('star.png') %>");}
+.icon.star_empty, .icon.star:hover,  {  background-image: url("<%= asset_path('star_empty.png') %>");}
 
 .q1b, .q2b {
 	display: inline-block;
@@ -933,9 +939,10 @@ span.title {
 		font-weight: bold;
 		color:$blue;
 	}
-	.orgactions {
-		float: right;
-	}
+}
+
+.orgactions {
+	float: right;
 }
 
 #survey_keywords_mode_link.on {
