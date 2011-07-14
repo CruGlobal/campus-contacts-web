@@ -4,32 +4,27 @@ module ApiTestHelper
 ########## API TEST SETUP ############
 ######################################
 
-def logger
-  RAILS_DEFAULT_LOGGER
-end
-
 def setup_api_env
+  @temp_org = Factory(:organization)
+  
+  @user = Factory.create(:user_no_org_with_facebook)
+  Factory.create(:authentication, user: @user)
 
-  @user = Factory.create(:user_with_auxs)
-  @user2 = Factory.create(:user2_with_auxs)
-  @user3 = Factory.create(:user3_with_auxs)
+  Factory.create(:organization_membership, organization: @temp_org, person: @user.person)
+  Factory.create(:organizational_role, organization: @temp_org, person: @user.person, role: Role.contact)
   
+  @user2 = Factory.create(:user_no_org_with_facebook)
+  Factory.create(:authentication, user: @user2, uid: "1234")
+  Factory.create(:organization_membership, organization: @temp_org, person: @user2.person)
+  Factory.create(:organizational_role, organization: @temp_org, person: @user2.person, role: Role.contact)
   @user2.person.update_attributes(firstName: "Test", lastName: "Useroo")
-  @user3.person.update_attributes(firstName: "Another Test", lastName: "Usereeeee")
   
-  #now let's make sure they all have the same organization
-  @temp_org = @user.person.primary_organization
-  
-  # #destroy old memberships
-  # @user.person.organization_memberships.destroy_all
-  # @user2.person.organization_memberships.destroy_all
-  # @user3.person.organization_memberships.destroy_all
-  # 
-  # #destroy old roles
-  # @user.person.organizational_roles.destroy_all
-  # @user2.person.organizational_roles.destroy_all
-  # @user3.person.organizational_roles.destroy_all
-  
+  @user3 = Factory.create(:user_no_org_with_facebook)
+  Factory.create(:authentication, user: @user3, uid: "123456")
+  Factory.create(:organization_membership, organization: @temp_org, person: @user3.person)
+  Factory.create(:organizational_role, organization: @temp_org, person: @user3.person, role: Role.contact)
+  @user3.person.update_attributes(firstName: "Another Test", lastName: "Usereeeee")  
+    
   Rails.logger.info "\n\n"
   Rails.logger.info "Primary org user1: #{@user.person.primary_organization}\n\n"
   Rails.logger.info "#{Organization.all.inspect}\n\n"
@@ -37,26 +32,6 @@ def setup_api_env
   Rails.logger.info "#{@user.person.organizations.inspect}\n\n}"
   Rails.logger.info "#{@user2.person.organizations.inspect} \n\n"
   
-  #update memberships to point to same org
-  @user.person.organization_memberships.first.update_attributes(organization_id: @temp_org.id)
-  @user2.person.organization_memberships.first.update_attributes(organization_id: @temp_org.id)
-  @user3.person.organization_memberships.first.update_attributes(organization_id: @temp_org.id)
-  
-  #update roles to point to same org
-  @user.person.organizational_roles.first.update_attributes(organization_id: @temp_org.id)
-  @user2.person.organizational_roles.first.update_attributes(organization_id: @temp_org.id)
-  @user3.person.organizational_roles.first.update_attributes(organization_id: @temp_org.id)
-  
-  # #create new roles all pointed towards @temp_org
-  #   @user.person.organizational_roles.create(organization_id: @temp_org.id, person_id: @user.person.id, role_id: Role.contact.id, followup_status: "attempted_contact")
-  #   @user2.person.organizational_roles.create(organization_id: @temp_org.id, person_id: @user2.person.id, role_id: Role.contact.id, followup_status: "contacted")
-  #   @user3.person.organizational_roles.create(organization_id: @temp_org.id, person_id: @user3.person.id, role_id: Role.admin.id, followup_status: "uncontacted")  
-  # 
-  #   #create new memberships all pointed towards @temp_org
-  #   @user.person.organization_memberships.create(organization_id: @temp_org.id, person_id: @user.person.id, primary: 1)
-  #   @user2.person.organization_memberships.create(organization_id: @temp_org.id, person_id: @user2.person.id, primary: 1)
-  #   @user3.person.organization_memberships.create(organization_id: @temp_org.id, person_id: @user3.person.id, primary: 1)
-    
   #create contact assignments
   Factory.create(:contact_assignment, assigned_to_id: @user.person.id, person_id: @user2.person.id, organization_id: @temp_org.id)
   Factory.create(:contact_assignment, assigned_to_id: @user2.person.id, person_id: @user.person.id, organization_id: @temp_org.id)

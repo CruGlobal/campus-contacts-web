@@ -150,6 +150,20 @@ FactoryGirl.define do
     after_create { |a| Factory(:authentication, user: a)}
   end
   
+  factory :person_with_facebook_data, parent: :person do
+    after_create do |f| 
+      Factory(:friend, person: f)
+      Factory(:friend, person: f)
+      Factory(:friend, person: f)
+      Factory(:education_history_highschool, person: f)
+      Factory(:education_history_college, person: f)
+      Factory(:education_history_gradschool, person: f)
+      Factory(:interest, person: f)
+      Factory(:interest_2, person: f)
+      Factory(:location, person: f)
+    end
+  end
+  
    factory :person_with_things, parent: :person do 
      after_create do |f| 
        Factory(:friend, person: f)
@@ -189,24 +203,16 @@ FactoryGirl.define do
     end
   end
   
+  factory :user_no_org_with_facebook, parent: :user do
+    after_create do |a|
+      Factory(:person_with_facebook_data, user: a)
+    end
+  end
+  
   factory :user_no_org, parent: :user do
     after_create do |a| 
       Factory(:person, user: a)
       Factory(:authentication, user: a)
-    end
-  end
-  
-  factory :user2_with_auxs, parent: :user do
-    after_create do |a| 
-      Factory(:person_with_things, user: a)
-      Factory(:authentication, user: a, uid: "123412123453453453")
-    end
-  end
-  
-  factory :user3_with_auxs, parent: :user do
-    after_create do |a| 
-      Factory(:person_with_things, user: a)
-      Factory(:authentication, user: a, uid: "123412123453453453234234")
     end
   end
   
