@@ -2,18 +2,12 @@
   <% if user_signed_in? %>
     <% if current_organization %>
       <div class="item">
-        <% if current_person.organizations.length > 1 %>
+        <% if current_person.organizations.length > 1 || current_person.organizations.detect(&:show_sub_orgs?) %>
           <%= link_to(current_organization, '', id: 'change_org') %>
           <div id="other_orgs" style="display:none">
             <ul>
               <% current_person.organization_memberships.each do |om| %>
-                <li <% if om.primary %>class="primary" title="This is your primary organization"<% end %>>
-                  <%= link_to(set_current_organization_membership_path(om), title: "Go to #{om.organization}") do  %><label><%= om.organization %></label><% end %>
-                  <div class="orgactions">
-                    <%= link_to(t('nav.go_to'), set_current_organization_membership_path(om), class: "icon magnify", title: "Go to #{om.organization}") %>
-                    <%= link_to(t('nav.make_default'), set_primary_organization_membership_path(om), class: "icon check", title: "Set #{om.organization} as your default") %>
-                  </div>
-                </li>
+                <%= render 'org', org: om.organization, primary: om.primary?, involved: true %>
               <% end %>
             </ul>
           </div>

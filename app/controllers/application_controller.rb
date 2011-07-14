@@ -60,15 +60,15 @@ class ApplicationController < ActionController::Base
   def current_organization(person = nil)
     person ||= current_person if user_signed_in?
     return nil unless person
-    non_contact_roles = person.organizational_roles.includes(:organization).where("role_id <> #{Role.contact.id}")
-    return nil if non_contact_roles.empty?
-    org = person.organizations.find_by_id(session[:current_organization_id]) if session[:current_organization_id]
+    if session[:current_organization_id]
+      org = Organization.find_by_id(session[:current_organization_id]) 
+      org = nil unless person.organizations.include?(org) || person.organizations.include?(org.parent)
+    end
     unless org
       org = person.primary_organization
-      # If they're a contact at their primary org, look for another org where they have a different role
-      non_contact_organization = non_contact_roles.collect(&:organization)
-      unless non_contact_organization.include?(org)
-        org = non_contact_organization.first
+      # If they're a contact at their primary org (shouldn't happen), look for another org where they have a different role
+      unless person.organizations.include?(org)
+        org = person.organizations.first
       end
       session[:current_organization_id] = org.try(:id)
     end
@@ -118,7 +118,7 @@ class ApplicationController < ActionController::Base
   end
   
   def user_root_path
-    return '/wizard' unless current_organization && current_organization.keywords.present?
+    return '/wizard' if !current_organization || (current_person.organizations.include?(current_organization) && current_organization.keywords.blank?)
     # if current_person.leader_in?(current_organization)
       '/contacts/mine'
     # else
