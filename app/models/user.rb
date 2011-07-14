@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
   
   def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
     data = access_token['extra']['user_hash']
+    
     user = nil
     authentication = nil
     
@@ -62,15 +63,13 @@ class User < ActiveRecord::Base
   end
   
   def to_s
-    person ? person.to_s : email
+    person ? person.to_s : (email || username).to_s
   end
   
   def merge(other)
     User.transaction do
       person.merge(other.person)
 
-			# other.staffsite_staffsiteprofile.destroy
-      
       # Authentications
       other.authentications.collect {|oa| oa.update_attribute(:user_id, id)}
       

@@ -8,17 +8,18 @@ class Ability
     involved_role = roles.detect {|r| r.i18n == 'involved'}
     user ||= User.new # guest user (not logged in)
     if user && user.person
+      admin_of_org_ids = user.person.organizational_roles.where(role_id: [leader_role.id, admin_role.id]).collect(&:organization_id).collect {|id| Organization.subtree_of(id).collect(&:id)}.flatten
       # leaders and admins can edit other ppl's info
-      can :manage, Person, organizations: {id: user.person.organizational_roles.where(role_id: [leader_role.id, admin_role.id]).collect(&:organization_id)}
+      can :manage, Person, organizations: {id: admin_of_org_ids}
       
       # can :manage, Organization, id: user.person.organizational_roles.where(role_id: admin_role.id).collect(&:organization_id)
-      can :manage, Organization, id: user.person.organizational_roles.where(role_id: [leader_role.id, admin_role.id]).collect(&:organization_id)
+      can :manage, Organization, id: admin_of_org_ids
       
-      can :manage_contacts, Organization, id: user.person.organizational_roles.where(role_id: [leader_role.id, admin_role.id]).collect(&:organization_id)
+      can :manage_contacts, Organization, id: admin_of_org_ids
       
       # can only manage keywords from orgs you're an admin of
       # can :manage, SmsKeyword, organization_id: user.person.organizational_roles.where(role_id: admin_role.id).collect(&:organization_id)
-      can :manage, SmsKeyword, organization_id: user.person.organizational_roles.where(role_id: [leader_role.id, admin_role.id]).collect(&:organization_id)
+      can :manage, SmsKeyword, organization_id: admin_of_org_ids
       # Gotta be an admin somewhere to see keyword options
       # unless user.person.organizational_roles.where(role_id: admin_role.id).present?
       unless user.person.organizational_roles.where(role_id: [leader_role.id, admin_role.id]).present?

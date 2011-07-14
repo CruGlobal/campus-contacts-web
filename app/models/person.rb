@@ -13,8 +13,6 @@ class Person < ActiveRecord::Base
   has_one :primary_phone_number, class_name: "PhoneNumber", foreign_key: "person_id", conditions: {primary: true}
   has_many :email_addresses
   has_one :primary_email_address, class_name: "EmailAddress", foreign_key: "person_id", conditions: {primary: true}
-  has_many :organization_memberships
-  has_many :organizations, through: :organization_memberships
   has_one :primary_organization_membership, class_name: "OrganizationMembership", foreign_key: "person_id", conditions: {primary: true}
   has_one :primary_organization, through: :primary_organization_membership, source: :organization
   has_many :answer_sheets
@@ -24,7 +22,9 @@ class Person < ActiveRecord::Base
   has_one :current_address, class_name: "Address", foreign_key: "fk_personID", conditions: {addressType: 'current'}
   has_many :rejoicables, inverse_of: :created_by
   
-  has_many :organizational_roles, inverse_of: :person
+  has_many :organization_memberships, inverse_of: :person
+  has_many :organizational_roles
+  has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role.contact.id}"
   
   scope :who_answered, lambda {|question_sheet_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.question_sheet_id' => question_sheet_id)}
   validates_presence_of :firstName, :lastName

@@ -116,16 +116,17 @@ class OrganizationMembershipsController < ApplicationController
   end
   
   def set_current
-    if @organization_membership = current_person.organization_memberships.find(params[:id])
-      session[:current_organization_id] = @organization_membership.organization.id
+    org = Organization.find(params[:id])
+    if current_person.organizations.include?(org) || current_person.organizations.include?(org.parent)
+      session[:current_organization_id] = params[:id]
     end
     redirect_to user_root_path
   end
   
   def set_primary
-    if @organization_membership = current_person.organization_memberships.find(params[:id])
+    if @organization_membership = current_person.organization_memberships_organization_id.find(params[:id])
       @organization_membership.update_attribute(:primary, true)
-      session[:current_organization_id] = @organization_membership.organization.id
+      session[:current_organization_id] = params[:id]
     end
     redirect_to user_root_path
   end

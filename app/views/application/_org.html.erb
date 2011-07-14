@@ -1,0 +1,14 @@
+<li <% if primary %>class="primary" title="This is your primary organization"<% end %>>
+  <%= link_to(set_current_organization_membership_path(org), title: "Go to #{org}") do  %><label><%= org %></label><% end %>
+  <div class="orgactions">
+    <%= link_to(t('nav.go_to'), set_current_organization_membership_path(org), class: "icon magnify", title: "Go to #{org}") %>
+    <%= link_to(t('nav.make_default'), set_primary_organization_membership_path(org), class: "icon check", title: "Set #{org} as your default") if involved %>
+  </div>
+  <% if org.show_sub_orgs? && org.children.present? %>
+    <ul>
+      <% org.children.each do |org| %>
+        <%= render 'org', org: org, primary: false, involved: false %>
+      <% end %>
+    </ul>
+  <% end %>
+</li>
