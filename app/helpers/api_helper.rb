@@ -55,7 +55,6 @@ module ApiHelper
  
   def organization_allowed?   
     @valid_orgs = get_me.organizations.collect { |x| x.subtree.collect(&:id)}.flatten.uniq
-    raise @valid_orgs.inspect
     @valid_keywords = SmsKeyword.where(:organization_id => @valid_orgs)
 
     if (params[:org].present? || params[:org_id].present?)

@@ -9,15 +9,7 @@ def logger
 end
 
 def setup_api_env
-  Role.destroy_all
-  Role.connection.execute("INSERT INTO `roles` (`id`, `organization_id`, `name`, `i18n`, `created_at`, `updated_at`)
-  VALUES
-    (1, 0, 'Admin', 'admin', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
-    (2, 0, 'Contact', 'contact', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
-    (3, 0, 'Involved', 'involved', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
-    (4, 0, 'Leader', 'leader', '2011-06-29 04:15:36', '2011-06-29 04:15:36'),
-    (5, 0, 'Alumni', 'alumni', '2011-06-29 04:15:36', '2011-06-29 04:15:36');
-  ")
+
   @user = Factory.create(:user_with_auxs)
   @user2 = Factory.create(:user2_with_auxs)
   @user3 = Factory.create(:user3_with_auxs)
@@ -50,16 +42,10 @@ def setup_api_env
   @user2.person.organization_memberships.first.update_attributes(organization_id: @temp_org.id)
   @user3.person.organization_memberships.first.update_attributes(organization_id: @temp_org.id)
   
-  #update memberships to point to same org
+  #update roles to point to same org
   @user.person.organizational_roles.first.update_attributes(organization_id: @temp_org.id)
   @user2.person.organizational_roles.first.update_attributes(organization_id: @temp_org.id)
   @user3.person.organizational_roles.first.update_attributes(organization_id: @temp_org.id)
-  
-
-  
-  
-  raise @user3.person.organizations.inspect
-raise  @user.person.organizational_roles.inspect
   
   # #create new roles all pointed towards @temp_org
   #   @user.person.organizational_roles.create(organization_id: @temp_org.id, person_id: @user.person.id, role_id: Role.contact.id, followup_status: "attempted_contact")
