@@ -1,13 +1,13 @@
 class SmsKeywords::QuestionsController < ApplicationController
   before_filter :find_keyword_and_authorize
   before_filter :find_question, only: [:show, :edit, :update, :destroy]
+  before_filter :get_predefined
 
   # GET /questions
   # GET /questions.xml
   def index
     session[:wizard] = false
     @questions = @keyword.question_sheet.elements
-    @predefined = QuestionSheet.find(APP_CONFIG['predefined_question_sheet'])
     respond_to do |wants|
       wants.html # index.html.erb
       wants.xml  { render xml: @questions }
@@ -131,6 +131,10 @@ class SmsKeywords::QuestionsController < ApplicationController
     def find_keyword_and_authorize
       @keyword = SmsKeyword.includes(:question_sheets).find(params[:sms_keyword_id])
       authorize! :manage, @keyword
+    end
+    
+    def get_predefined
+      @predefined = QuestionSheet.find(APP_CONFIG['predefined_question_sheet'])
     end
 
 end
