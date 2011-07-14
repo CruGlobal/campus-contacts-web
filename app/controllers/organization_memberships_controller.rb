@@ -124,7 +124,7 @@ class OrganizationMembershipsController < ApplicationController
   end
   
   def set_primary
-    if @organization_membership = current_person.organization_memberships_organization_id.find(params[:id])
+    if @organization_membership = current_person.organization_memberships.find_by_organization_id(params[:id])
       @organization_membership.update_attribute(:primary, true)
       session[:current_organization_id] = params[:id]
     end
