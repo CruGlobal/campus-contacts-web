@@ -92,7 +92,7 @@ class SmsController < ApplicationController
         if question
           if question.kind == 'ChoiceField'
             choices = question.choices_by_letter
-            answer = answer.gsub(/[^\w]/, '').split(//).collect {|a| choices[a]}.compact
+            answer = answer.gsub(/[^\w]/, '').split(//).collect {|a| choices[a.downcase]}.compact
             # only checkbox fields can have more than one answer
             answer = answer.first unless question.style == 'checkbox'
           end
