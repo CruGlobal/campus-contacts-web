@@ -150,7 +150,7 @@ FactoryGirl.define do
     after_create { |a| Factory(:authentication, user: a)}
   end
   
-   factory :person_with_things, parent: :person do
+   factory :person_with_things, parent: :person do 
      after_create do |f| 
        Factory(:friend, person: f)
        Factory(:friend, person: f)
