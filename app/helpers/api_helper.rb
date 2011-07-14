@@ -128,7 +128,7 @@ module ApiHelper
     
     #allow for start (SQL Offset) and limit on query.  use :start and :limit
     raise LimitRequiredWithStartError if (params[:start].present? && !params[:limit].present?)
-    people = people.offset(params[:start]) if params[:start].to_i  0
+    people = people.offset(params[:start]) if params[:start].to_i > 0
     people = people.limit(params[:limit]) if params[:limit].to_i > 0
     
     if params[:assigned_to].present?

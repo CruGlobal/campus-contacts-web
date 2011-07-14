@@ -28,7 +28,6 @@ class Api::RolesController < ApiController
     else 
       raise NoRoleChangeMade
     end
-    raise @role_to_update.inspect
     render json: '[]'
   end
 end

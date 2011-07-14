@@ -132,6 +132,7 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
+
       assert_equal(@json.length,1)
       assert_equal(@json[0]['person']['id'], @user2.person.id)
 
