@@ -6,8 +6,8 @@
   </div>
   <% if org.show_sub_orgs? && org.children.present? %>
     <ul>
-      <% org.children.each do |org| %>
-        <%= render 'org', org: org, primary: false, involved: current_person.organizations.include?(org) %>
+      <% org.children.order('organizations.name').each do |org| %>
+        <%= render 'org', org: org, primary: current_person.primary_organization == org, involved: current_person.organizations.include?(org) %>
       <% end %>
     </ul>
   <% end %>
