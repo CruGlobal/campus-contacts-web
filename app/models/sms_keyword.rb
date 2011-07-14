@@ -8,7 +8,7 @@ class SmsKeyword < ActiveRecord::Base
   belongs_to :organization
   validates_presence_of :keyword, :explanation, :user_id, :organization_id#, :chartfield
   validates_format_of :keyword, with: /^[\w\d]+$/, on: :create, message: "can't have spaces or punctuation"
-  validates_uniqueness_of :keyword, on: :create, message: "must be unique"
+  validates_uniqueness_of :keyword, on: :create, case_sensitive: false, message: "must be unique"
   
   state_machine :state, initial: :requested do
     state :requested
