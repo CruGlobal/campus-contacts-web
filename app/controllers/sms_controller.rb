@@ -8,7 +8,7 @@ class SmsController < ApplicationController
     if @text && (@text.interactive? || message.split(' ').first.downcase == 'i')
       keyword = @text.sms_keyword
       if keyword
-        if message.split(' ').first.downcase == 'i'
+        if !@text.interactive? && message.split(' ').first.downcase == 'i'
           create_contact_at_org(@text.person, @text.sms_keyword.organization)
           @text.update_attribute(:interactive, true)
           # We're getting into a sticky session
