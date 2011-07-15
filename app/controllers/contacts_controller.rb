@@ -26,6 +26,8 @@ class ContactsController < ApplicationController
           @people = @organization.contacts.order('lastName, firstName')
         when 'progress'
           @people = @organization.inprogress_contacts.order('lastName, firstName')
+        when 'friends'
+          @people = current_person.contact_friends(current_organization)
         else
           if params[:assigned_to].present? && @assigned_to = Person.find_by_personID(params[:assigned_to])
             @people = Person.order('lastName, firstName').includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)

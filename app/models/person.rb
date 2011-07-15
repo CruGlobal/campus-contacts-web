@@ -74,8 +74,8 @@ class Person < ActiveRecord::Base
     unless email_addresses.detect {|e| e.email == data['email']}
       email_addresses.create(email: data['email'].try(:strip))
     end
-    self.fb_uid = authentication['uid']
-    save
+    self.fb_uid = authentication.uid
+    save(validate: false)
     async_get_or_update_friends_and_interests(authentication)
     get_location(authentication, response)
     get_education_history(authentication, response)
@@ -218,6 +218,10 @@ class Person < ActiveRecord::Base
       end
     end
   end  
+  
+  def contact_friends(org)
+    Person.where(fb_uid: friends.select(:uid).collect(&:uid)).joins(:organizational_roles).where('organizational_roles.role_id' => Role.contact.id, 'organizational_roles.organization_id' => org.id)
+  end
   
   def merge(other)
     # Phone Numbers

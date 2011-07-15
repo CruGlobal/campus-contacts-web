@@ -9,6 +9,8 @@
       <%= t('.all_responses') %>
     <% when 'progress' %>
       <%= t('.in_progress_responses') %>
+    <% when 'friends' %>
+      <%= t('.friend_responses') %>
     <% else %>
       <% if @assigned_to.present? %>
         <%= t('.responses_assigned_to', assigned_to: @assigned_to) %>
@@ -105,6 +107,7 @@
         </th>
       <% end %>
       <th><%= t('.assigned_to') %></th>
+      <th><%= t('.friends') %></th>
       <th></th>
     </tr>
     <tbody id="contacts_table">

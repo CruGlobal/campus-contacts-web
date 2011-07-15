@@ -5,6 +5,7 @@ class Organization < ActiveRecord::Base
   has_many :target_areas, through: :activities
   has_many :organization_memberships, dependent: :destroy
   has_many :people, through: :organization_memberships
+  has_many :contact_assignments
   has_many :keywords, class_name: 'SmsKeyword'
   has_many :question_sheets, through: :keywords
   has_many :pages, through: :question_sheets
@@ -15,11 +16,15 @@ class Organization < ActiveRecord::Base
   has_many :contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ?", Role.contact.id]
   has_many :dnc_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role.contact.id, 'organizational_roles.followup_status' => 'do_not_contact'}
   has_many :completed_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role.contact.id, 'organizational_roles.followup_status' => 'completed'}
-  has_many :inprogress_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.followup_status NOT IN('do_not_contact', 'completed')", Role.contact.id]
+  has_many :inprogress_contacts, through: :contact_assignments, source: :person
   
   validates_presence_of :name
   
   def to_s() name; end
+  
+  def unassigned_people
+    Person.joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{Person.table_name}.#{Person.primary_key} AND organizational_roles.organization_id = #{self.id} AND organizational_roles.role_id = '#{Role.contact.id}' AND followup_status <> 'do_not_contact' LEFT JOIN contact_assignments ON contact_assignments.person_id = #{Person.table_name}.#{Person.primary_key}  AND contact_assignments.organization_id = #{self.id}").where('contact_assignments.id' => nil)
+  end
   
   def roles
     Role.where("organization_id = 0 or organization_id = #{id}")

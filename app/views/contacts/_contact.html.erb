@@ -18,7 +18,15 @@
     </td>
   <% end %>
   <td id="assigned_to_<%= person.id %>" class="assigned_to"><%= ContactAssignment.where(person_id: person.id, organization_id: current_organization.id).first.try(:assigned_to) %></td>
-
+  <td>
+    <% friends = person.friends.where(uid: current_organization.leaders.collect(&:fb_uid)) %>
+    <% if friends.length > 0 %>
+      <% friend_leaders = Person.where(fb_uid: friends.collect(&:uid)).order("lastName, preferredName, firstName") %>
+      <%= link_to(friend_leaders.length, '', class: 'friends_count tipthis', title: friend_leaders.collect {|f| "#{f}<br>"} ) %>
+    <% else %>
+    0
+    <% end %>
+  </td>
   <td class="controls">
     <%= link_to("Show", contact_path(person), :class => "icon magnify tipit", :title => "View contact details") %>
     <% if params[:assigned_to].present? || params[:dnc] == 'true' || params[:assign_to_me] == 'true' %>

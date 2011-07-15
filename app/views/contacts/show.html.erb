@@ -44,9 +44,9 @@
       <p><%= link_to('Survey Answers', '', id: 'survey_answers_link') %></p>
       <div id="survey_answers" style="display:none" title="Survey Answers">
         <ul>
-          <% @organization.questions.where("#{PageElement.table_name}.hidden" => false).flatten.uniq.each do |q| %>
+          <% @organization.questions.flatten.uniq.each do |q| %>
             <% answer_sheet = @person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)} %>
-            <li><%= q.label %>: <%= q.display_response(answer_sheet) %></li>
+            <li><%= q.label %><%= ':' unless q.label[-1] =~ /\.;:\?/ %> <%= q.display_response(answer_sheet) %></li>
           <% end %>
         </ul>
       </div>
@@ -80,7 +80,7 @@
       
     <% end %>
     
-    <div class="commentswall">
+    <div class="commentswall" style="<%= 'display:none' unless @followup_comments.present? %>">
       <h3>Previous Comments</h3>
       <ul id="previous_comments">
         <%= render partial: 'followup_comments/followup_comment', collection: @followup_comments %>
