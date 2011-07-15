@@ -1,0 +1,14 @@
+<style type="text/css" media="screen">* {display:none}</style>
+<h2>The application <% link_to h(oauth.client.display_name), oauth.client.link %>
+    is requesting to <%= oauth.scope.to_s %> your account.</h2>
+  <form action="/oauth/grant" id="grant_form">
+    <button>Grant</button>
+    <input type="hidden" name="authorization" value="<%= oauth.authorization %>">
+  </form>
+  <!-- <form action="/oauth/deny">
+    <button>Deny</button>
+    <input type="hidden" name="authorization" value="<%= oauth.authorization %>">
+  </form> -->
+  <script type="text/javascript" charset="utf-8">
+    $('#grant_form').submit();
+  </script>
