@@ -163,7 +163,7 @@ FactoryGirl.define do
        Factory(:education_history_college, person: f)
        Factory(:education_history_gradschool, person: f)
        Factory(:interest, person: f)
-       Factory(:interest_2, person: f)
+       Factory(:interest, person: f)
        Factory(:location, person: f)
        org = Factory(:organization)
        Factory(:organization_membership, person: f, organization: org, primary: 1, validated: 0)
