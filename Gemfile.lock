@@ -8,6 +8,12 @@ GIT
       rails (>= 2.3.11)
 
 GIT
+  remote: git://github.com/mperham/dalli.git
+  revision: 1754b1094dfc275f91fb820509491212adf0a644
+  specs:
+    dalli (1.1.0)
+
+GIT
   remote: git://github.com/rails/rails.git
   revision: 675c20e1bc8d39918f19680326394688f9d63a3a
   branch: 3-1-stable
@@ -105,7 +111,6 @@ GEM
       execjs
     coffee-script-source (1.1.1)
     crack (0.1.8)
-    dalli (1.0.5)
     devise (1.4.2)
       bcrypt-ruby (~> 2.1.2)
       orm_adapter (~> 0.0.3)
@@ -245,7 +250,7 @@ DEPENDENCIES
   client_side_validations
   coffee-script
   crack
-  dalli
+  dalli!
   devise
   dynamic_form
   enforce_schema_rules
