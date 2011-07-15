@@ -1,23 +1,25 @@
 class SmsController < ApplicationController
   skip_before_filter :authenticate_user!, :verify_authenticity_token
   def mo
+    message = params[:message].strip
+    render nothing: true and return unless message.present?
     # See if this is a sticky session ( prior sms in the past 1 hour )
-    @text = ReceivedSms.where(sms_params.slice(:phone_number)).order('updated_at desc').where(["updated_at > ?", 1.hour.ago]).last
-    if @text && (@text.interactive? || params[:message].split(' ').first.downcase == 'i')
+    @text = ReceivedSms.where(sms_params.slice(:phone_number)).order('updated_at desc').where(["updated_at > ?", 15.minutes.ago]).where('sms_keyword_id is not null').first
+    if @text && (@text.interactive? || message.split(' ').first.downcase == 'i')
       keyword = @text.sms_keyword
       if keyword
-        if params[:message].split(' ').first.downcase == 'i'
-          create_contact_at_org(@text.person, @text.sms_keyword)
+        if !@text.interactive? && message.split(' ').first.downcase == 'i'
+          create_contact_at_org(@text.person, @text.sms_keyword.organization)
           @text.update_attribute(:interactive, true)
           # We're getting into a sticky session
           # Find the last received sms from this phone number and send them the first question off the survey
-          send_next_survey_question(keyword, @text.person, @text.phone_number)
+          msg = send_next_survey_question(keyword, @text.person, @text.phone_number)
         else
           # Find the person, save the answer, send the next question
           save_survey_question(keyword, @text.person, params[:message])
           @text.person.reload
-          question = send_next_survey_question(keyword, @text.person, @text.phone_number)
-          unless question
+          msg = send_next_survey_question(keyword, @text.person, @text.phone_number)
+          unless msg
             # survey is done. send final message
             msg = keyword.post_survey_message.present? ? keyword.post_survey_message : t('contacts.thanks.message')
             send_message(msg, @text.phone_number)
@@ -52,7 +54,7 @@ class SmsController < ApplicationController
       end
       send_message(msg, sms_params[:phone_number])
     end
-    render text: @text.inspect
+    render text: msg.to_s + "\n"
   end
   
   protected 
@@ -75,24 +77,45 @@ class SmsController < ApplicationController
         end
         send_message(msg, phone_number)
       end
-      question
+      msg
     end
     
     def save_survey_question(keyword, person, answer)
-      question = next_question(keyword, person)
-      @answer_sheet = get_answer_sheet(keyword, person)
-      if question
-        if question.kind == 'ChoiceField'
-          answer = answer.split(',').collect(&:strip)
+      case
+      when person.firstName.blank?
+        person.update_attribute(:firstName, answer)
+      when person.lastName.blank?  
+        person.update_attribute(:lastName, answer)
+      else
+        question = next_question(keyword, person)
+        @answer_sheet = get_answer_sheet(keyword, person)
+        if question
+          if question.kind == 'ChoiceField'
+            choices = question.choices_by_letter
+            answer = answer.gsub(/[^\w]/, '').split(//).collect {|a| choices[a.downcase]}.compact
+            # only checkbox fields can have more than one answer
+            answer = answer.first unless question.style == 'checkbox'
+          end
+          begin
+            question.set_response(answer, @answer_sheet)
+          rescue
+            # Don't blow up on bad saves
+          end
         end
-        question.set_response(answer, @answer_sheet)
       end
     end
     
     def next_question(keyword, person)
-      answer_sheet = get_answer_sheet(keyword, person)
-      keyword.question_page.questions.reload
-      question = keyword.questions.detect {|q| q.response(answer_sheet).blank?}      
+      case
+      when person.firstName.blank?
+        Question.new(label: "What is your first name?")
+      when person.lastName.blank?  
+        Question.new(label: "What is your last name?")
+      else
+        answer_sheet = get_answer_sheet(keyword, person)
+        keyword.question_page.questions.reload
+        keyword.questions.detect {|q| q.response(answer_sheet).blank?}      
+      end
     end
     
     def send_message(msg, phone_number)

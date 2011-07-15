@@ -1,7 +1,7 @@
 class EmailAddress < ActiveRecord::Base
   belongs_to :person
   validates_presence_of :email, on: :create, message: "can't be blank"
-  
+  validates_email_for :email
   before_validation :set_primary, on: :create
   after_destroy :set_new_primary
   

@@ -1,6 +1,6 @@
 $('.inlineform').hide()
 if ($('#form_for_<%= @question.id %>')[0] != null) {
-  $('.form_for_<%= @question.id %>').closest('.inlineform').show()
+  $('#form_for_<%= @question.id %>').closest('.inlineform').show()
 } else {
   $('#question_form').append('<%= j(render('form', question: @question)) %>') 
 }

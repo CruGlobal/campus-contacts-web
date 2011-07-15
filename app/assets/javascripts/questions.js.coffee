@@ -1,4 +1,24 @@
 $ ->
+  # update sms length
+  $('.label, .content').live 'keyup', (event)->
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+    parent = $(this).closest('.inlineform')
+    sms = $('.label', parent).val()
+    if $('.content', parent)[0]? and $('.content', parent).val().trim() != ''
+      $.each $('.content', parent).val().split("\n"), (i, option) ->
+        sms += ' ' + letters[i] + ')' + option;
+    if sms.length >= 141
+      inp = String.fromCharCode event.which
+      if /[a-zA-Z0-9-_ ]/.test(inp)
+        alert('Due to restrctions on text message lengths, the total length of your question can\'t be more than 140 characters.')
+        if $('.content', parent)[0]? and $('.content', parent).val().trim() != ''
+          $('.content', parent).val($('.content', parent).val().substr(0,$('.content', parent).val().length - 1))
+        else
+          $('.label', parent).val($('.label', parent).val().substr(0,140))
+        return false
+    $('.sms_length', parent).html(sms.length)
+    $('.sms_preview').html(sms)
+  
   $('#add_question_link').live 'click', ->
     $('.inlineform').hide()
     $('#new_question_form').closest('.inlineform').show()

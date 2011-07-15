@@ -8,7 +8,7 @@ gem 'jquery-rails'
 
 
 gem 'mysql2'
-
+gem 'format_for_extensions'
 gem 'rack-offline'
 gem 'rake', '0.8.7'
 gem 'capistrano'
@@ -26,6 +26,7 @@ gem 'ancestry'
 gem 'rails_admin', git: 'git://github.com/twinge/rails_admin.git'
 # gem 'rails_admin', git: 'git://github.com/sferik/rails_admin.git', branch: 'rails-3.1'
 
+gem 'dalli'
 gem "state_machine"
 gem 'acts_as_list'
 gem 'dynamic_form'
