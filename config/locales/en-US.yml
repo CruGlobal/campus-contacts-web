@@ -134,6 +134,7 @@
       responses_assigned_to: "All Contacts - assigned to %{assigned_to}"
       unassigned_responses: "All Contacts - Unassigned"
       dnc_contacts: "All Contacts - 'Do Not Contact'"
+      friend_responses: "Contacts who are also my friends on Facebook"
       none_checked: "You didn't select any contacts to assign."
       show_all: Show 'In Progress' contacts
       matching_seach: Matching the criteria you searched for
@@ -144,6 +145,8 @@
       all: 'All'
       dnc: 'Do Not Contact'
       completed: 'Completed'
+      in_progress: 'In Progress'
+      my_friends: 'My Friends'
       delete_confirm: You are about to send this contact to the "Do Not Contact" list. If that's not what you meant to do, click cancel.
       assign_people:
         one: Assign 1 person

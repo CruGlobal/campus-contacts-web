@@ -219,6 +219,10 @@ class Person < ActiveRecord::Base
     end
   end  
   
+  def contact_friends(org)
+    Person.where(fb_uid: friends.select(:uid).collect(&:uid)).joins(:organizational_roles).where('organizational_roles.role_id' => Role.contact.id, 'organizational_roles.organization_id' => org.id)
+  end
+  
   def merge(other)
     # Phone Numbers
     phone_numbers.each do |pn|
