@@ -5,7 +5,7 @@ class ApiController < ApplicationController
   include ApiHelper
   skip_before_filter :authenticate_user!
   after_filter :logApiRequest
-  #rescue_from Exception, with: :render_json_error
+  rescue_from Exception, with: :render_json_error
   
 #################################################################################
 #####CODE FROM http://www.starkiller.net/2011/03/17/versioned-api-1/  ###########
