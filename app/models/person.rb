@@ -127,43 +127,43 @@ class Person < ActiveRecord::Base
   
   #
   def update_friends(authentication, response = nil)
-      if response.nil?
-                @friends = MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
-             else @friends = response
-             end
-           @friends = @friends["data"]
-           @removal = []
-           @create = []
-           @match = []
-           @dbf = friends.reload
+    if response.nil?
+      @friends = MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
+    else @friends = response
+    end
+    @friends = @friends["data"]
+    @removal = []
+    @create = []
+    @match = []
+    @dbf = friends.reload
            
-           @friends.each do |friend|
-             @dbf.each do |dbf|
-               if dbf['uid'] == friend.id
-                 @matching_friend = dbf if dbf['uid'] == friend.id
-                 break
-               end
-               @matching_friend = nil
-             end
-             if @matching_friend
-               friends.find_by_uid(@matching_friend.uid).update_attributes(name: friend['name']) unless @matching_friend.name.eql?(friend['name'])
-               @match.push(@matching_friend.uid)
-             elsif friends.find_by_uid(friend.id).nil? #uid's did not match && the DB is empty
-               friends.create!(uid: friend['id'], name: friend['name'], person_id: personID.to_i, provider: "facebook")
-               @create.push(friend['id'])
-             end
-           end
-           @dbf = friends.reload
-           
-           @dbf.each do |dbf|
-             if !( @match.include?(dbf.uid) || @create.include?(dbf.uid) )
-               friend_to_delete = friends.select('id').where("uid = ?", dbf.uid).first
-               id_to_destroy = friend_to_delete['id'].to_i
-               Friend.destroy(id_to_destroy)
-               @removal.push(dbf.uid)
-             end
-           end
-           @removal.length + @create.length  #create way to test how many changes were made
+    @friends.each do |friend|
+     @dbf.each do |dbf|
+       if dbf['uid'] == friend.id
+         @matching_friend = dbf if dbf['uid'] == friend.id
+         break
+       end
+       @matching_friend = nil
+     end
+     if @matching_friend
+       friends.find_by_uid(@matching_friend.uid).update_attributes(name: friend['name']) unless @matching_friend.name.eql?(friend['name'])
+       @match.push(@matching_friend.uid)
+     elsif friends.find_by_uid(friend.id).nil? #uid's did not match && the DB is empty
+       friends.create!(uid: friend['id'], name: friend['name'], person_id: personID.to_i, provider: "facebook")
+       @create.push(friend['id'])
+     end
+   end
+   @dbf = friends.reload
+   
+   @dbf.each do |dbf|
+     if !( @match.include?(dbf.uid) || @create.include?(dbf.uid) )
+       friend_to_delete = friends.select('id').where("uid = ?", dbf.uid).first
+       id_to_destroy = friend_to_delete['id'].to_i
+       Friend.destroy(id_to_destroy)
+       @removal.push(dbf.uid)
+     end
+   end
+   @removal.length + @create.length  #create way to test how many changes were made
   end
   
   def get_interests(authentication, response = nil)
@@ -254,7 +254,7 @@ class Person < ActiveRecord::Base
   def to_hash_mini
     hash = {}
     hash['id'] = self.personID
-    hash['name'] = self.to_s
+    hash['name'] = self.to_s.gsub(/\n/," ")
     hash
   end
   
@@ -282,8 +282,8 @@ class Person < ActiveRecord::Base
   
   def to_hash(org_id = nil)
     hash = self.to_hash_basic(org_id)
-    hash['first_name'] = firstName
-    hash['last_name'] = lastName
+    hash['first_name'] = firstName.gsub(/\n/," ")
+    hash['last_name'] = lastName.gsub(/\n/," ")
     hash['phone_number'] = primary_phone_number.number if primary_phone_number
     hash['email_address'] = primary_email_address.to_s if primary_email_address
     hash['birthday'] = birth_date.to_s

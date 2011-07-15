@@ -75,7 +75,7 @@ module ApiErrors
   end
   class NoOrganizationError < ApiError
     def initialize
-      super :no_organization_error, "We could not find your organization.  Specify org_id as a query parameter.", "32", "Message"
+      super :no_organization_error, "We could not find your organization.", "32", "Message"
     end
   end
   class InvalidJSONError < ApiError
@@ -100,7 +100,7 @@ module ApiErrors
   end
   class NoRoleChangeMade < ApiError
     def initialize
-      super :no_role_change_made, "No role change was made. Try again.", "38", "API Error"
+      super :no_role_change_made, "No role change was made. Try again.", "38", "Message"
     end
   end
   class RolesPermissionsError < ApiError
