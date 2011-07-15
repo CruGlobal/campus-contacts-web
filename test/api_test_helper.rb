@@ -9,9 +9,18 @@ def setup_api_env
   
   @user = Factory.create(:user_no_org_with_facebook)
   Factory.create(:authentication, user: @user)
+  #@user.person.organization_memberships.create(organization_id: @temp_org.id, person_id: @user.person.id, primary: true)
+  #@user.person.organizational_roles.create(organization_id: @temp_org.id, person_id: @user.person.id, role_id: Role.contact.id)
+  Factory(:organization_membership, organization: @temp_org, person: @user.person)
+  Factory(:organizational_role, organization: @temp_org, person: @user.person, role: Role.contact)
 
-  Factory.create(:organization_membership, organization: @temp_org, person: @user.person)
-  Factory.create(:organizational_role, organization: @temp_org, person: @user.person, role: Role.contact)
+  Rails.logger.info "\n\n"
+  Rails.logger.info "Primary org user1: #{@user.person.primary_organization}\n\n"
+  Rails.logger.info "#{Organization.all.inspect}\n\n"
+  Rails.logger.info "#{OrganizationalRole.all.inspect}\n\n"
+  Rails.logger.info "#{@user.person.organizations.inspect}\n\n}"
+
+  raise @user.person.organizations.inspect
   
   @user2 = Factory.create(:user_no_org_with_facebook)
   Factory.create(:authentication, user: @user2, uid: "1234")

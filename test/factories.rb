@@ -70,8 +70,8 @@ FactoryGirl.define do
   end
   
   factory :friend do
-    name "Test Friend"
-    uid "1234567890"
+    name "Test Friend #{Factory.create(:count)}"
+    uid "#{Factory.create(:count)}"
     provider "facebook"
   end
   
@@ -128,15 +128,8 @@ FactoryGirl.define do
   end
   
   factory :interest, class: Interest do
-    interest_id "1"
-    name "Test Interest 1"
-    provider "facebook"
-    category "Test Category"
-  end
-  
-  factory :interest_2, class: Interest do
-    interest_id "2"
-    name "Test Interest 2"
+    interest_id "#{Factory.create(:count)}"
+    name "Test Interest #{Factory.create(:count)}"
     provider "facebook"
     category "Test Category"
   end
@@ -152,14 +145,11 @@ FactoryGirl.define do
   
   factory :person_with_facebook_data, parent: :person do
     after_create do |f| 
-      Factory(:friend, person: f)
-      Factory(:friend, person: f)
-      Factory(:friend, person: f)
+      3.times {Factory(:friend, person: f)}
       Factory(:education_history_highschool, person: f)
       Factory(:education_history_college, person: f)
       Factory(:education_history_gradschool, person: f)
-      Factory(:interest, person: f)
-      Factory(:interest_2, person: f)
+      2.times {Factory(:interest, person: f)}
       Factory(:location, person: f)
     end
   end
