@@ -80,7 +80,7 @@
       
     <% end %>
     
-    <div class="commentswall">
+    <div class="commentswall" style="<%= 'display:none' unless @followup_comments.present? %>">
       <h3>Previous Comments</h3>
       <ul id="previous_comments">
         <%= render partial: 'followup_comments/followup_comment', collection: @followup_comments %>

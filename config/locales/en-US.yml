@@ -107,6 +107,7 @@
       do_not_contact: Do Not Contact
       completed: Completed
     index:
+      friends: 'Friends'
       send_reminder: 'Send Reminder'
       reminder_email_subject: New contacts have arrived!
       reminder_email_body:

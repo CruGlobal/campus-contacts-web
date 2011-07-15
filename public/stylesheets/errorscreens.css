@@ -1,11 +1,11 @@
 .bigbunny {
-	background: url("<%= asset_path("500rabbit.jpg") %>") no-repeat;
+	background: url("/images/500rabbit.jpg") no-repeat;
 	width:285px;
 	height:298px;
 	display: inline-block;
 }
 .cat {
-	background: url("<%= asset_path("400cat.jpg") %>") no-repeat;
+	background: url("/images/400cat.jpg") no-repeat;
 	width:305px;
 	height:298px;
 	display: inline-block;

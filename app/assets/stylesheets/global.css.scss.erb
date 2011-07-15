@@ -1013,11 +1013,11 @@ span.title {
 /* WELCOME */
 @font-face {
     font-family: 'SpecialEliteRegular';
-    src: url('/assets/SpecialElite-webfont.eot');
-    src: url('/assets/SpecialElite-webfont.eot?#iefix') format('embedded-opentype'),
-         url('/assets/SpecialElite-webfont.woff') format('woff'),
-         url('/assets/SpecialElite-webfont.ttf') format('truetype'),
-         url('/assets/SpecialElite-webfont.svg#SpecialEliteRegular') format('svg');
+    src: url('<%= asset_path("SpecialElite-webfont.eot") %>');
+    src: url('<%= asset_path("SpecialElite-webfont.eot?#iefix") %>') format('embedded-opentype'),
+         url('<%= asset_path("SpecialElite-webfont.woff") %>') format('woff'),
+         url('<%= asset_path("SpecialElite-webfont.ttf") %>') format('truetype'),
+         url('<%= asset_path("SpecialElite-webfont.svg#SpecialEliteRegular") %>') format('svg');
     font-weight: normal;
     font-style: normal;
 
