@@ -13,14 +13,6 @@ def setup_api_env
   #@user.person.organizational_roles.create(organization_id: @temp_org.id, person_id: @user.person.id, role_id: Role.contact.id)
   Factory(:organization_membership, organization: @temp_org, person: @user.person)
   Factory(:organizational_role, organization: @temp_org, person: @user.person, role: Role.contact)
-
-  Rails.logger.info "\n\n"
-  Rails.logger.info "Primary org user1: #{@user.person.primary_organization}\n\n"
-  Rails.logger.info "#{Organization.all.inspect}\n\n"
-  Rails.logger.info "#{OrganizationalRole.all.inspect}\n\n"
-  Rails.logger.info "#{@user.person.organizations.inspect}\n\n}"
-
-  raise @user.person.organizations.inspect
   
   @user2 = Factory.create(:user_no_org_with_facebook)
   Factory.create(:authentication, user: @user2, uid: "1234")
@@ -31,16 +23,9 @@ def setup_api_env
   @user3 = Factory.create(:user_no_org_with_facebook)
   Factory.create(:authentication, user: @user3, uid: "123456")
   Factory.create(:organization_membership, organization: @temp_org, person: @user3.person)
-  Factory.create(:organizational_role, organization: @temp_org, person: @user3.person, role: Role.contact)
+  Factory.create(:organizational_role, organization: @temp_org, person: @user3.person, role: Role.admin)
   @user3.person.update_attributes(firstName: "Another Test", lastName: "Usereeeee")  
     
-  Rails.logger.info "\n\n"
-  Rails.logger.info "Primary org user1: #{@user.person.primary_organization}\n\n"
-  Rails.logger.info "#{Organization.all.inspect}\n\n"
-  Rails.logger.info "#{OrganizationalRole.all.inspect}\n\n"
-  Rails.logger.info "#{@user.person.organizations.inspect}\n\n}"
-  Rails.logger.info "#{@user2.person.organizations.inspect} \n\n"
-  
   #create contact assignments
   Factory.create(:contact_assignment, assigned_to_id: @user.person.id, person_id: @user2.person.id, organization_id: @temp_org.id)
   Factory.create(:contact_assignment, assigned_to_id: @user2.person.id, person_id: @user.person.id, organization_id: @temp_org.id)
