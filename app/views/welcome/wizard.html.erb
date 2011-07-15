@@ -9,7 +9,7 @@
       <div class="wizard_step_name"><%= link_to(t('welcome.wizard.welcome'), '/wizard') %></div>
       <div class="wizard_step_visited"></div>
     </div>
-    <% unless current_user.globallyUniqueID %>
+    <% unless current_organization %>
       <div id="verify_step" class="wizard_step" data-step="verify">
         <% if params[:step] == 'verify' %>
           <div class="wizard_step_active"></div>
@@ -18,7 +18,7 @@
         <% end %>
         <div class="wizard_step_name"><%= link_to(t('welcome.wizard.verify_identity'), '/wizard?step=verify') %></div>
        
-        <% if current_user.globallyUniqueID %>
+        <% if current_organization %>
           <div class="wizard_step_visited"></div>
         <% else %>
           <div class="wizard_step_not_visited"></div>
