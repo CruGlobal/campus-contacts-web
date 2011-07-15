@@ -4,7 +4,7 @@ class SmsController < ApplicationController
     message = params[:message].strip
     render nothing: true and return unless message.present?
     # See if this is a sticky session ( prior sms in the past 1 hour )
-    @text = ReceivedSms.where(sms_params.slice(:phone_number)).order('updated_at desc').where(["updated_at > ?", 15.minutes.ago]).where('sms_keyword_id is not null').last
+    @text = ReceivedSms.where(sms_params.slice(:phone_number)).order('updated_at desc').where(["updated_at > ?", 15.minutes.ago]).where('sms_keyword_id is not null').first
     if @text && (@text.interactive? || message.split(' ').first.downcase == 'i')
       keyword = @text.sms_keyword
       if keyword
