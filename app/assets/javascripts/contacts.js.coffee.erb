@@ -1,4 +1,6 @@
 $ ->
+  $('.friends_count').live 'click', ->
+    false
   $('.to_list a.delete').live 'click', ->
     li = $(this).closest('li')
     li.remove()
