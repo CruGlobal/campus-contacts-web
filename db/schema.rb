@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110715161200) do
+ActiveRecord::Schema.define(:version => 20110715170234) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -108,9 +108,6 @@ ActiveRecord::Schema.define(:version => 20110715161200) do
     t.datetime "updated_at"
     t.string   "token"
   end
-
-  add_index "authentications", ["provider", "uid"], :name => "index_authentications_on_provider_and_uid", :unique => true
-  add_index "authentications", ["user_id"], :name => "user_id"
 
   create_table "clients", :force => true do |t|
     t.string   "code"
@@ -1787,6 +1784,8 @@ ActiveRecord::Schema.define(:version => 20110715161200) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "mh_friends", ["person_id", "uid"], :name => "person_uid", :unique => true
 
   create_table "mh_interest", :force => true do |t|
     t.string   "name"
