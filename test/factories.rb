@@ -70,8 +70,9 @@ FactoryGirl.define do
   end
   
   factory :friend do
-    name "Test Friend #{Factory.create(:count)}"
-    uid "#{Factory.create(:count)}"
+    
+    name "Test Friend #{Random.rand(999999999)}"
+    uid "#{Random.rand(999999999)}"
     provider "facebook"
   end
   

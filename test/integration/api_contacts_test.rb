@@ -129,9 +129,9 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       
       # contacts assigned to me (My contacts) on mobile app
       @user2.person.organizational_roles.first.update_attributes(followup_status: 'completed')
-      ContactAssignment.create(assigned_to_id:@user3.person.id, person_id: @user.person.id, organization_id: @user.person.primary_organization.id)
+      ContactAssignment.create(assigned_to_id:@user3.person.id, person_id: @user.person.id, organization_id: @user3.person.primary_organization.id)
 
-      path = "/api/contacts.json?filters=status&values=not_finished&assigned_to=#{@user3.person.id}&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
+      path = "/api/contacts.json?filters=status&values=not_finished&assigned_to=#{@user3.person.id}&limit=15&start=0&org_id=#{@user3.person.primary_organization.id}"
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
@@ -141,22 +141,22 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
 
       # my completed contacts on mobile app
       @user2.person.organizational_roles.first.update_attributes(followup_status: 'uncontacted')
-      path = "/api/contacts.json?filters=status&values=finished&assigned_to=#{@user.person.id}&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
+      path = "/api/contacts.json?filters=status&values=finished&assigned_to=#{@user.person.id}&limit=15&start=0&org_id=#{@user3.person.primary_organization.id}"
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,0)
       
-      @user2.person.organizational_roles.where(organization_id: @user.person.primary_organization.id).first.update_attributes(followup_status: 'completed')
-      path = "/api/contacts.json?filters=status&values=finished&assigned_to=#{@user.person.id}&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
+      @user2.person.organizational_roles.where(organization_id: @user3.person.primary_organization.id).first.update_attributes(followup_status: 'completed')
+      path = "/api/contacts.json?filters=status&values=finished&assigned_to=#{@user.person.id}&limit=15&start=0&org_id=#{@user3.person.primary_organization.id}"
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,1)
       assert_equal(@json[0]['person']['id'], @user2.person.id)
       
-      @user.person.organizational_roles.where(organization_id: @user.person.primary_organization.id).first.update_attributes(followup_status: 'uncontacted')      
-      path = "/api/contacts.json?filters=status&values=not_finished&assigned_to=none&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
+      @user.person.organizational_roles.where(organization_id: @user3.person.primary_organization.id).first.update_attributes(followup_status: 'uncontacted')      
+      path = "/api/contacts.json?filters=status&values=not_finished&assigned_to=none&limit=15&start=0&org_id=#{@user3.person.primary_organization.id}"
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
@@ -165,7 +165,7 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       ContactAssignment.destroy_all
       # unassigned contacts mobile app query
       @user.person.organizational_roles.first.update_attributes(followup_status: 'uncontacted')
-      path = "/api/contacts.json?assigned_to=none&filters=status&values=not_finished&limit=15&start=0&org_id=#{@user.person.primary_organization.id}"
+      path = "/api/contacts.json?assigned_to=none&filters=status&values=not_finished&limit=15&start=0&org_id=#{@user3.person.primary_organization.id}"
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)

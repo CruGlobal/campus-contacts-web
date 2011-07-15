@@ -11,7 +11,7 @@ class ApiCommentsTest < ActionDispatch::IntegrationTest
       path = "/api/followup_comments/"
       assert_equal(FollowupComment.all.count, 0)
       assert_equal(Rejoicable.all.count, 0)
-      json = ActiveSupport::JSON.encode({followup_comment: {:organization_id => @user.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, rejoicables: ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
+      json = ActiveSupport::JSON.encode({followup_comment: {:organization_id => @user3.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, rejoicables: ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
       post path, {'access_token' => @access_token3.code, 'json' => json }
       assert_equal(FollowupComment.all.count, 1)
       assert_equal(Rejoicable.all.count,3)
@@ -21,7 +21,7 @@ class ApiCommentsTest < ActionDispatch::IntegrationTest
     should "be denied adding a comment to a contact with improper scope" do 
       @access_token3.update_attributes(scope: "contacts userinfo")
       path = "/api/followup_comments/"
-      json = ActiveSupport::JSON.encode({followup_comment: {:organization_id => @user.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, rejoicables: ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
+      json = ActiveSupport::JSON.encode({followup_comment: {:organization_id => @user3.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, rejoicables: ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
       post path, {'access_token' => @access_token3.code, 'json' => json }
       @json = ActiveSupport::JSON.decode(@response.body)
 
@@ -45,7 +45,7 @@ class ApiCommentsTest < ActionDispatch::IntegrationTest
       assert_equal(@json['error']['code'], "28")
       
       #raise error if no rejoicables
-      json = ActiveSupport::JSON.encode({followup_comment: {:organization_id => '@user.person.primary_organization.id', :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}})
+      json = ActiveSupport::JSON.encode({followup_comment: {:organization_id => '@user3.person.primary_organization.id', :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}})
       post path, {'access_token' => @access_token3.code, 'json' => json }
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json['error']['code'], "28")
@@ -54,7 +54,7 @@ class ApiCommentsTest < ActionDispatch::IntegrationTest
     should "be able to get the followup comments" do
       #create a few test comments
       path = "/api/followup_comments/"
-      json = ActiveSupport::JSON.encode({followup_comment: {:organization_id => @user.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, rejoicables: ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
+      json = ActiveSupport::JSON.encode({followup_comment: {:organization_id => @user3.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, rejoicables: ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
       post path, {'access_token' => @access_token3.code, 'json' => json }
       path = "/api/followup_comments/#{@user2.person.id}"
       get path, {'access_token' => @access_token3.code}
@@ -66,7 +66,7 @@ class ApiCommentsTest < ActionDispatch::IntegrationTest
     
     should "be able to delete a followup comment" do 
       path = "/api/followup_comments/"
-      json = ActiveSupport::JSON.encode({followup_comment: {:organization_id => @user.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, rejoicables: ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
+      json = ActiveSupport::JSON.encode({followup_comment: {:organization_id => @user3.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, rejoicables: ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
       post path, {'access_token' => @access_token3.code, 'json' => json }
       
       assert_equal(FollowupComment.where(contact_id: @user2.person.id).count, 1)
@@ -86,7 +86,7 @@ class ApiCommentsTest < ActionDispatch::IntegrationTest
     
     should "return a json error when the identity of the access_token is not a leader/admin in the current organization" do 
       path = "/api/followup_comments/"
-      json = ActiveSupport::JSON.encode({followup_comment: {:organization_id => @user.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, rejoicables: ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
+      json = ActiveSupport::JSON.encode({followup_comment: {:organization_id => @user3.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, rejoicables: ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
       post path, {'access_token' => @access_token3.code, 'json' => json }
       
       assert_equal(FollowupComment.where(contact_id: @user2.person.id).count, 1)
@@ -101,7 +101,7 @@ class ApiCommentsTest < ActionDispatch::IntegrationTest
     
     should "return a json error when the identity of the access_token is a leader in the current organization and attempts to delete a comment other than their own" do 
       path = "/api/followup_comments/"
-      json = ActiveSupport::JSON.encode({followup_comment: {:organization_id => @user.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, rejoicables: ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
+      json = ActiveSupport::JSON.encode({followup_comment: {:organization_id => @user3.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, rejoicables: ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
       post path, {'access_token' => @access_token3.code, 'json' => json }
       
       assert_equal(FollowupComment.where(contact_id: @user2.person.id).count, 1)

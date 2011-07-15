@@ -10,14 +10,14 @@ class ApiAssignmentsTest < ActionDispatch::IntegrationTest
    should "be able to create a contact assignment" do 
       path = "/api/contact_assignments/"
       ContactAssignment.destroy_all
-      post path, {'access_token' => @access_token3.code, org_id: @user.person.primary_organization.id, assign_to: @user2.person.id, ids: @user2.person.id}
+      post path, {'access_token' => @access_token3.code, org_id: @user3.person.primary_organization.id, assign_to: @user2.person.id, ids: @user2.person.id}
       assert_equal(@user2.person.contact_assignments.count, 1)
     end
 
     should "fail to create a contact assignment" do 
       path = "/api/contact_assignments/"
       ContactAssignment.destroy_all
-      post path, {'access_token' => @access_token3.code, org_id: @user.person.primary_organization.id, assign_to: "23423523a", ids: @user2.person.id}
+      post path, {'access_token' => @access_token3.code, org_id: @user3.person.primary_organization.id, assign_to: "23423523a", ids: @user2.person.id}
       @json = ActiveSupport::JSON.decode(@response.body)      
       assert_equal(@json['error']['code'], '27')
 
@@ -29,7 +29,7 @@ class ApiAssignmentsTest < ActionDispatch::IntegrationTest
 
     should "be able to delete a contact assignment" do 
       ContactAssignment.destroy_all
-      y = ContactAssignment.create(organization_id: @user.person.primary_organization.id, person_id: @user.person.id, assigned_to_id: @user.person.id)
+      y = ContactAssignment.create(organization_id: @user3.person.primary_organization.id, person_id: @user.person.id, assigned_to_id: @user.person.id)
       assert_equal(@user.person.contact_assignments.count, 1)
       path = "/api/contact_assignments/#{@user.person.id}"
       delete path, {'access_token' => @access_token3.code}
