@@ -75,7 +75,8 @@ module ApiErrors
   end
   class NoOrganizationError < ApiError
     def initialize
-      super :no_organization_error, "We could not find your organization.", "32", "Message"
+      # super :no_organization_error, "We could not find your organization.", "32", "Message"
+      super :no_organization_error, "You need to go to www.MissionHub.com to setup your account in order use the MissionHub application.","36", "Message"
     end
   end
   class InvalidJSONError < ApiError

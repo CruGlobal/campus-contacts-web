@@ -24,12 +24,12 @@ class SmsControllerTest < ActionController::TestCase
       
       should "send first survey question 'i' is texted" do
         post :mo, @post_params.merge!({message: 'i'})
-        assert_equal(assigns(:sent_sms).message, @keyword.question_sheet.questions.first.label_with_choices)
+        assert_equal(assigns(:sent_sms).message, 'What is your first name?')
         # save reply
         post :mo, @post_params.merge!({message: 'Jesus'})
-        assert_equal(@keyword.questions.first.display_response(assigns(:answer_sheet)), 'Jesus') 
+        assert_equal(assigns(:text).person.firstName, 'Jesus') 
         # Response should be thanks message
-        assert_equal(assigns(:sent_sms).message, @keyword.post_survey_message)
+        # assert_equal(assigns(:sent_sms).message, @keyword.post_survey_message)
       end
       
     end

@@ -182,9 +182,6 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       
-      File.open('/users/Doulos/Desktop/testmytest.log', 'a') do |f2|
-        f2.puts("#{@json.inspect}\n\n")
-      end
       assert_equal(@json.length, 2)
       person_mini_test(@json[0]['person'],@user) 
 
@@ -193,9 +190,6 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
-      File.open('/users/Doulos/Desktop/testmytest.log', 'a') do |f2|
-        f2.puts("#{@json.inspect}")
-      end
       assert_equal(@json.length, 2)
       person_mini_test(@json[0]['person'],@user2)
     end

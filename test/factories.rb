@@ -46,7 +46,7 @@ FactoryGirl.define do
   end
   
   factory :question_sheet do
-    label {"Test Sheet #{Factory.create(:count)}"}
+    label {"Test Sheet #{Factory.next(:count)}"}
     archived 0
   end
   
@@ -59,7 +59,7 @@ FactoryGirl.define do
   end
   
   factory :user do
-    email {"test#{Factory.create(:count)}@example.com"}
+    email {"test#{Factory.next(:count)}@example.com"}
     password 'asdfasdf'
   end
   
@@ -71,13 +71,13 @@ FactoryGirl.define do
   
   factory :friend do
     
-    name "Test Friend #{Random.rand(999999999)}"
-    uid "#{Random.rand(999999999)}"
+    name "Test Friend #{Factory.next(:count)}"
+    uid {Factory.next(:count)}
     provider "facebook"
   end
   
   factory :organization do
-    name {"Organization #{Factory.create(:count)}"}
+    name {"Organization #{Factory.next(:count)}"}
     terminology 'Organization'
   end
   
@@ -129,8 +129,8 @@ FactoryGirl.define do
   end
   
   factory :interest, class: Interest do
-    interest_id "#{Factory.create(:count)}"
-    name "Test Interest #{Factory.create(:count)}"
+    interest_id "#{Factory.next(:count)}"
+    name "Test Interest #{Factory.next(:count)}"
     provider "facebook"
     category "Test Category"
   end
@@ -157,9 +157,7 @@ FactoryGirl.define do
   
    factory :person_with_things, parent: :person do 
      after_create do |f| 
-       Factory(:friend, person: f)
-       Factory(:friend, person: f)
-       Factory(:friend, person: f)
+       3.times {Factory(:friend, person: f)}
        Factory(:education_history_highschool, person: f)
        Factory(:education_history_college, person: f)
        Factory(:education_history_gradschool, person: f)

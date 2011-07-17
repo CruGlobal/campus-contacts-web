@@ -130,7 +130,7 @@ end
     assert_equal(json_person['education'][0]['school']['name'], "Test High School")
     assert_equal(json_person['education'][1]['school']['name'], "Test University")
     assert_equal(json_person['education'][2]['school']['name'], "Test University 2")
-    assert_equal(json_person['interests'][1]['name'], "Test Interest 2")
+    assert_equal(json_person['interests'][1]['name'], "Test Interest 3")
     assert_equal(json_person['organization_membership'][0]['org_id'], user.person.organizational_roles.first.organization_id)
     assert_equal(json_person['organizational_roles'][0]['role'], user.person.organizational_roles.first.role.i18n)
     assert_equal(json_person['organization_membership'][0]['primary'].downcase, 'true')
