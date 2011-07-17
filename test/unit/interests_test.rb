@@ -23,7 +23,7 @@ class InterestTest < ActiveSupport::TestCase
     should "convert to a hash well" do 
       interest = @person.interests.first
       hash = interest.to_hash
-      assert_equal(hash['id'], interest.id)
+      assert_equal(hash['id'], interest.interest_id)
       assert_equal(hash['name'], interest.name)
       assert_equal(hash['category'], interest.category)
     end
