@@ -22,8 +22,10 @@
     
     <br>
     OR
-    <br>
+    <br/><br/>
     <% current_organization.keywords.each do |keyword| %>
-      <%= link_to "Enter Survey Mode for #{keyword.keyword}", facebook_logout_url(next: contact_form_url(keyword.keyword)), id: "show_keywords" %><br>
+      <%= link_to raw("Enter Survey Mode for " + "<strong>" + "#{keyword.keyword}" + "</strong>"), facebook_logout_url(next: contact_form_url(keyword.keyword)), id: "show_keywords", class: "inlinebutton" %><br/>
     <% end %>
+    
+    <p>Survey mode allows you to see how the survey will look for your contacts.</p>
   </div>
