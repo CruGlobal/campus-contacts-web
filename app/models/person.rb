@@ -21,7 +21,6 @@ class Person < ActiveRecord::Base
   has_many :assigned_contacts, through: :contact_assignments, source: :assigned_to
   has_one :current_address, class_name: "Address", foreign_key: "fk_personID", conditions: {addressType: 'current'}
   has_many :rejoicables, inverse_of: :created_by
-  validates_email_for :email, allow_blank: true
   
   has_many :organization_memberships, inverse_of: :person
   has_many :organizational_roles
@@ -29,6 +28,7 @@ class Person < ActiveRecord::Base
   
   scope :who_answered, lambda {|question_sheet_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.question_sheet_id' => question_sheet_id)}
   validates_presence_of :firstName, :lastName
+  validates_email_for :email, allow_blank: true
   
   accepts_nested_attributes_for :email_addresses, :phone_numbers, allow_destroy: true
 
@@ -45,11 +45,9 @@ class Person < ActiveRecord::Base
   end
   
   def phone_number=(val)
-    if val.present?
-      phone_number = primary_phone_number || phone_numbers.new
-      phone_number.number = val
-      phone_number.save
-    end
+    phone_number = primary_phone_number || phone_numbers.new
+    phone_number.number = val
+    phone_number.save
   end
   
   def firstName
@@ -110,9 +108,9 @@ class Person < ActiveRecord::Base
   end
   
   def email=(val)
-    self.primary_email_address ||= email_addresses.new
-    self.primary_email_address.email = val
-    self.primary_email_address.save
+    email = primary_email_address || email_addresses.new
+    email.email = val
+    email.save
   end
   
   def get_friends(authentication, response = nil)
