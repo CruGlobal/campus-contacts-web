@@ -8,6 +8,7 @@ class Api::RolesController < ApiController
     role = Role.where(i18n: params[:role]).first.id
     
     @roles = OrganizationalRole.where(person_id: params[:id], organization_id: @organization.id)
+    
     mh_roles = [Role.admin.id.to_s, Role.contact.id.to_s, Role.leader.id.to_s]
     @role_to_update = @roles.collect {|x| x if mh_roles.include?(x.role_id.to_s)}.try(:first)
     

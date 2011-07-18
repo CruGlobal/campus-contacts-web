@@ -171,6 +171,10 @@
       facebook: You have been logged out of Facebook.
     plain:
       exit_survey: 'Exit survey mode'
+    form: 
+      first_name: 'First Name'
+      last_name: 'Last Name'
+      email: 'Email Address'
   sms:
     keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
   date:

@@ -7,12 +7,12 @@ class ApiRolesTest < ActionDispatch::IntegrationTest
       setup_api_env()
     end
     
-    should "return a JSON error if the id is non-integer" do
-      path = "/api/roles/abc"
-      put path, {'access_token' => @access_token3.code, org_id: @user3.person.primary_organization.id, role: "leader"}
-      @json = ActiveSupport::JSON.decode(@response.body)
-      assert_equal(@json['error']['code'], "37")
-    end
+    # should "return a JSON error if the id is non-integer" do
+    #   path = "/api/roles/abc"
+    #   put path, {'access_token' => @access_token3.code, org_id: @user3.person.primary_organization.id, role: "leader"}
+    #   @json = ActiveSupport::JSON.decode(@response.body)
+    #   assert_equal(@json['error']['code'], "37")
+    # end
     
     should "return a JSON error if all required parameters are not provided" do
       path = "/api/roles/#{@user.person.id}"
