@@ -4,7 +4,7 @@ class KeywordRequestMailer < ActionMailer::Base
   
   def new_keyword_request(keyword)
     @keyword = keyword
-    mail(to: 'programmers@cojourners.com',
+    mail(to: 'support@missionhub.com',
          subject: 'New sms keyword request')
   end
   
