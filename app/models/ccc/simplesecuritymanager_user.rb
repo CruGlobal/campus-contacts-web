@@ -17,21 +17,21 @@ module Ccc
     		if other.mpd_user and mpd_user
       		mpd_user.merge(other.mpd_user)
     		elsif other.mpd_user
-     		 other.mpd_user.user_id = fk_ssmUserID
+     		 other.mpd_user.user_id = userID
     		end
   
 				if other.pr_user and pr_user
 					other.pr_user.destroy				
 				elsif other.pr_user
-					other.pr_user.ssm_id = fk_ssmUserID
+					other.pr_user.ssm_id = userID
 				end
 				
 				if other.si_user and si_user
 					other.si_user.destroy				
 				elsif other.si_user
-					SiUser.where(["ssm_id = ? or created_by_id = ?", other.fk_ssmUserId, other.fk_ssmUserId]).each do |ua|
-						ua.update_attribute(:ssm_id, personID) if ua.ssm_id == other.fk_ssmUserId
-						ua.update_attribute(:created_by_id, personID) if ua.created_by_id == other.fk_ssmUserId
+					SiUser.where(["ssm_id = ? or created_by_id = ?", other.userID, other.userID]).each do |ua|
+						ua.update_attribute(:ssm_id, personID) if ua.ssm_id == other.userID
+						ua.update_attribute(:created_by_id, personID) if ua.created_by_id == other.userID
 					end
 				end
 				
