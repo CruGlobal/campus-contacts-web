@@ -12,13 +12,13 @@
       <% if params[:controller] == 'contacts' %>
       
         <% if can? :manage, @keyword %>
+          <%= link_to(t('contacts.plain.exit_survey'), '/contacts') %> 
           <span id="close_window" style="display:none">| <%= link_to('Close Window', '#', onclick: 'window.close()') %></span>
           <script type="text/javascript" charset="utf-8">
             if(window.opener !== null) {
               $('#close_window').show();
             }
           </script>
-          <%= link_to(t('contacts.plain.exit_survey'), '/contacts') %> 
         <% else %>
           <%= link_to(t('contacts.plain.exit_survey'), facebook_logout_url(next: '/contacts')) %> 
         <% end %>

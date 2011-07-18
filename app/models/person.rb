@@ -109,7 +109,7 @@ class Person < ActiveRecord::Base
   def email=(val)
     email = primary_email_address || email_addresses.new
     email.email = val
-    email.save!
+    email.save
   end
   
   def get_friends(authentication, response = nil)
