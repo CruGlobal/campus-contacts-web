@@ -39,7 +39,7 @@ class SmsController < ApplicationController
       else
         @text = ReceivedSms.create!(sms_params)
         # If we already have a person with this phone number associate it with this SMS
-        unless person = Person.includes(:phone_numbers).where('phone_numbers.number' => sms_params[:phone_number]).first
+        unless person = Person.includes(:phone_numbers).where('phone_numbers.number' => sms_params[:phone_number][1..-1]).first
           # Create a person record for this phone number
           person = Person.new
           person.save(validate: false)
