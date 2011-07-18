@@ -14,16 +14,19 @@ class ContactsController < ApplicationController
     @question_sheets = @organization.question_sheets
     @questions = @organization.questions.where("#{PageElement.table_name}.hidden" => false).flatten.uniq
     @hidden_questions = @organization.questions.where("#{PageElement.table_name}.hidden" => true).flatten.uniq
-    @people = unassigned_people(@organization)
+    # @people = unassigned_people(@organization)
     if params[:dnc] == 'true'
       @people = @organization.dnc_contacts.order('lastName, firstName')
     elsif params[:completed] == 'true'
       @people = @organization.completed_contacts.order('lastName, firstName')
     else
+      params[:assigned_to] ||= 'all'
       if params[:assigned_to]
         case params[:assigned_to]
         when 'all'
           @people = @organization.contacts.order('lastName, firstName')
+        when 'unassigned'
+          @people = unassigned_people(@organization)
         when 'progress'
           @people = @organization.inprogress_contacts.order('lastName, firstName')
         when 'friends'

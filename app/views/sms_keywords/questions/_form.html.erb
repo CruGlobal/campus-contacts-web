@@ -11,7 +11,7 @@
     <div class="right_col">
       <div class="sms_length_div">
         <label>Text Message Length:</label>
-        <span class="sms_length"><%= (question.kind == 'ChoiceField' ? question.label_with_choices : question.label).to_s.length %></span>
+        <span class="sms_length"><%= (question.kind == 'ChoiceField' ? question.label_with_choices : question.label).to_s.length %></span> / 140
       </div><br>
       <div class="sms_preview_div">
         <label>Text Message Preview</label><br/>

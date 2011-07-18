@@ -120,7 +120,7 @@ class SmsController < ApplicationController
     
     def send_message(msg, phone_number)
       carrier = SmsCarrier.find_or_create_by_moonshado_name(@text.carrier)
-      sms_id = SMS.deliver(phone_number, msg).first
+      sms_id = SMS.deliver(phone_number, msg + ' Txt HELP for help STOP to quit').first
       carrier.increment!(:sent_sms)
       sent_via = 'moonshado'
       @sent_sms = SentSms.create!(message: msg, recipient: phone_number, moonshado_claimcheck: sms_id, sent_via: sent_via, recieved_sms_id: @text.id)
