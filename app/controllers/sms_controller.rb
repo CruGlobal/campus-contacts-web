@@ -11,6 +11,8 @@ class SmsController < ApplicationController
     # See if this is a sticky session ( prior sms in the past 1 hour )
     @text = ReceivedSms.where(sms_params.slice(:phone_number)).order('updated_at desc').where(["updated_at > ?", 15.minutes.ago]).where('sms_keyword_id is not null').first
     if @text && (@text.interactive? || message.split(' ').first.downcase == 'i')
+      # Save new message
+      ReceivedSms.create!(sms_params)
       keyword = @text.sms_keyword
       if keyword
         if !@text.interactive? && message.split(' ').first.downcase == 'i'
