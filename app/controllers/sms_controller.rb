@@ -2,7 +2,12 @@ class SmsController < ApplicationController
   skip_before_filter :authenticate_user!, :verify_authenticity_token
   def mo
     message = params[:message].strip
-    render nothing: true and return unless message.present?
+    render nothing: true and return if message.blank? || message.downcase == 'stop'
+    if message.downcase == 'help'
+      msg = 'MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to http://mhub.cc/ for more help.'
+      send_message(msg, sms_params()[:phone_number])
+      render text: msg + "\n" and return
+    end
     # See if this is a sticky session ( prior sms in the past 1 hour )
     @text = ReceivedSms.where(sms_params.slice(:phone_number)).order('updated_at desc').where(["updated_at > ?", 15.minutes.ago]).where('sms_keyword_id is not null').first
     if @text && (@text.interactive? || message.split(' ').first.downcase == 'i')
@@ -119,11 +124,13 @@ class SmsController < ApplicationController
     end
     
     def send_message(msg, phone_number)
-      carrier = SmsCarrier.find_or_create_by_moonshado_name(@text.carrier)
+      if @text
+        carrier = SmsCarrier.find_or_create_by_moonshado_name(@text.carrier) 
+        carrier.increment!(:sent_sms)
+      end
       sms_id = SMS.deliver(phone_number, msg + ' Txt HELP for help STOP to quit').first
-      carrier.increment!(:sent_sms)
       sent_via = 'moonshado'
-      @sent_sms = SentSms.create!(message: msg, recipient: phone_number, moonshado_claimcheck: sms_id, sent_via: sent_via, recieved_sms_id: @text.id)
+      @sent_sms = SentSms.create!(message: msg, recipient: phone_number, moonshado_claimcheck: sms_id, sent_via: sent_via, recieved_sms_id: @text.try(:id))
     end
 
 end
