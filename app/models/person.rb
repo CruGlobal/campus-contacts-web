@@ -37,6 +37,7 @@ class Person < ActiveRecord::Base
   end
   
   def leader_in?(org)
+    return false unless org
     OrganizationalRole.where(person_id: id, role_id: Role.leader_ids, :organization_id => org.id).present?
   end
   

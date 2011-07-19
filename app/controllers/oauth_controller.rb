@@ -19,8 +19,8 @@ class OauthController < ApplicationController
     end
     
     def done
-      raise AccountSetupRequiredError unless current_user && current_user.person && current_user.person.organizations.present?
-      raise IncorrectPermissionsError unless current_user.person.leader_in?(current_user.person.primary_organization)
+      raise AccountSetupRequiredError unless current_organization
+      raise IncorrectPermissionsError unless current_user.person.leader_in?(current_organization)
       
       json_output = '{"status":"done", "code":"' + params[:code] + '"}'
       render json: json_output
