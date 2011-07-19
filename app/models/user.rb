@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
   has_one :person, foreign_key: 'fk_ssmUserId'
   has_many :authentications
   has_many :sms_keywords
+  has_many :access_tokens, :class_name => "Rack::OAuth2::Server::AccessToken", :foreign_key => "identity"
+  has_many :access_grants, :class_name => "Rack::OAuth2::Server::AccessGrant", :foreign_key => "identity"
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable,
@@ -68,10 +70,14 @@ class User < ActiveRecord::Base
   
   def merge(other)
     User.transaction do
-      person.merge(other.person)
+      person.merge(other.person) if person
 
       # Authentications
       other.authentications.collect {|oa| oa.update_attribute(:user_id, id)}
+      
+      # Oauth
+      other.access_tokens.collect {|at| at.update_attribute(:identity, id)}
+      other.access_grants.collect {|ag| ag.update_attribute(:identity, id)}
       
       # Sms Keywords
       other.sms_keywords.collect {|oa| oa.update_attribute(:user_id, id)}
