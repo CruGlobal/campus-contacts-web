@@ -6,7 +6,7 @@ leaders.css({height: 'auto'})
 leaders.attr("data-original-height", leaders.height())
 if (leaders.hasClass('showall')) {
   // leaders.attr('data-height', leaders.height())
-	leaders.animate({height: leaders.attr("data-original-height")})
+	leaders.css({height: leaders.attr("data-original-height"), overflow: 'hidden'})
 }	else {
-	leaders.animate({height: leaders.attr("data-height")})
+	leaders.css({height: leaders.attr("data-height"), overflow: 'hidden'})
 }

@@ -69,7 +69,7 @@ class LeadersController < ApplicationController
   
   def add_person
     @person = create_person(params[:person])
-    required_fields = {'First Name' => @person.firstName, 'Last Name' => @person.lastName, 'Gender' => @person.gender, 'Email' => @email.try(:email), 'Phone' => @phone.try(:number)}
+    required_fields = {'First Name' => @person.firstName, 'Last Name' => @person.lastName, 'Gender' => @person.gender, 'Email' => @email.try(:email)}
     @person.valid?; @email.try(:valid?); @phone.try(:valid?)
     unless required_fields.values.all?(&:present?)
       flash.now[:error] = "Please fill in all fields<br />"

@@ -10,7 +10,7 @@ $ ->
     
 	$('.expandable').each (i)->
 		e = $(this)
-		if e.height() > e.attr("data-height")
+		if e.height() > Number(e.attr("data-height"))
 			e.next('.moredown').show();
 			e.attr("data-original-height", e.height())
 			e.css({height: e.attr("data-height") + 'px', overflow: 'hidden'})
