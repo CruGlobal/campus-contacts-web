@@ -67,20 +67,28 @@ class Person < ActiveRecord::Base
   end
   
   def update_from_facebook(data, authentication, response = nil)
-    response = MiniFB.get(authentication['token'], authentication['uid']) if response.nil?
     begin
-      self.birth_date = DateTime.strptime(data['birthday'], '%m/%d/%Y') if birth_date.blank? && data['birthday'].present?
-    rescue ArgumentError; end
-    self.gender = response.gender unless (response.gender.nil? && !gender.blank?)
-    # save!
-    unless email_addresses.detect {|e| e.email == data['email']}
-      email_addresses.create(email: data['email'].try(:strip))
+      response = MiniFB.get(authentication['token'], authentication['uid']) if response.nil?
+      begin
+        self.birth_date = DateTime.strptime(data['birthday'], '%m/%d/%Y') if birth_date.blank? && data['birthday'].present?
+      rescue ArgumentError; end
+      self.gender = response.gender unless (response.gender.nil? && !gender.blank?)
+      # save!
+      unless email_addresses.detect {|e| e.email == data['email']}
+        email_addresses.create(email: data['email'].try(:strip))
+      end
+      async_get_or_update_friends_and_interests(authentication)
+      get_location(authentication, response)
+      get_education_history(authentication, response)
+    rescue MiniFB::FaceBookError => e
+      HoptoadNotifier.notify(
+        :error_class   => "MiniFB::FaceBookError",
+        :error_message => "MiniFB::FaceBookError: #{e.message}",
+        :parameters    => {data: data, authentication: authentication, response: response}
+      )
     end
     self.fb_uid = authentication.uid
     save(validate: false)
-    async_get_or_update_friends_and_interests(authentication)
-    get_location(authentication, response)
-    get_education_history(authentication, response)
     self
   end
   
@@ -282,7 +290,9 @@ class Person < ActiveRecord::Base
     hash['request_org_id'] = org_id.id unless org_id.nil?
     hash['assignment'] = assign_hash unless assign_hash.nil?
     hash['first_contact_date'] = answer_sheets.first.created_at.utc.to_s unless answer_sheets.empty?
-    hash['organizational_roles'] = organizational_roles.includes(:role, :organization).collect {|r| {org_id: r.organization_id, role: r.role.i18n, name: r.organization.name, primary: organization_memberships.where(organization_id: r.organization_id).first.primary?.to_s}}
+    hash['organizational_roles'] = organizational_roles.includes(:role, :organization).collect {|r| 
+      {org_id: r.organization_id, role: r.role.i18n, name: r.organization.name, primary: organization_memberships.where(organization_id: r.organization_id).first.try(:primary?) ? 'true' : 'false'}
+    }
     hash
   end
   
