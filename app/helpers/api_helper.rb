@@ -54,7 +54,7 @@ module ApiHelper
   end
  
   def organization_allowed?   
-    @valid_orgs = get_me.organizations.collect { |x| x.subtree.collect(&:id)}.flatten.uniq
+    @valid_orgs = current_person.organizations.collect { |x| x.subtree.collect(&:id)}.flatten.uniq
     @valid_keywords = SmsKeyword.where(:organization_id => @valid_orgs)
 
     if (params[:org].present? || params[:org_id].present?)
@@ -73,7 +73,7 @@ module ApiHelper
   end
  
   def authorized_leader?
-    raise ApiErrors::IncorrectPermissionsError unless get_me.leader_in?(get_organization)
+    raise ApiErrors::IncorrectPermissionsError unless current_person.leader_in?(get_organization)
   end
  
   #########################################
@@ -102,7 +102,7 @@ module ApiHelper
       @keywords = SmsKeyword.find_all_by_organization_id(org_id)
     elsif params[:keyword_id].present?
       @keywords = SmsKeyword.find_all_by_id(params[:id])
-    else @keywords = SmsKeyword.find_all_by_organization_id(get_me.primary_organization.id)
+    else @keywords = SmsKeyword.find_all_by_organization_id(current_person.primary_organization.id)
     end
   end
   
@@ -112,7 +112,7 @@ module ApiHelper
       org_id_param = params[:org_id] ? params[:org_id].to_i : params[:org].to_i
       @organization = Organization.find(org_id_param)
     else
-      @organization ||= current_organization(get_me)
+      @organization ||= current_organization(current_person)
     end
     raise NoOrganizationError unless @organization
     @organization

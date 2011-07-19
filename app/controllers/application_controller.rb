@@ -38,8 +38,7 @@ class ApplicationController < ActionController::Base
   end
   
   def switch_to_user(user_id, save_old = false)
-    logger.debug("Switched to user: #{user_id}")
-    session['old_user_id'] = current_user.id if save_old
+    session['old_user_id'] = save_old ? current_user.id : nil
     session['fb_token'] = nil
     session['current_organization_id'] = nil
     session['warden.user.user.key'] = ["User", [user_id.to_i], nil]

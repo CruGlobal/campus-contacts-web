@@ -4,7 +4,7 @@ class Api::RolesController < ApiController
   
   def update_1
     raise InvalidRolesParamaters unless params[:id].present? && params[:role].present? && params[:org_id].present?
-    raise RolesPermissionsError if get_me.organizational_roles.where(organization_id: @organization.id, role_id: Role.admin.id).empty?
+    raise RolesPermissionsError if current_person.organizational_roles.where(organization_id: @organization.id, role_id: Role.admin.id).empty?
     role = Role.where(i18n: params[:role]).first.id
     
     @roles = OrganizationalRole.where(person_id: params[:id], organization_id: @organization.id)

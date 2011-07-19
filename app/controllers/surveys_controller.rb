@@ -10,7 +10,7 @@ class SurveysController < ApplicationController
     @title = "Pick A Keyword"
     @organization = params[:org_id].present? ? Organization.find(params[:org_id]) : current_organization
     @keywords = @organization.keywords
-    @person = try(:current_user).nil? ? get_me : current_person
+    @person = current_person
   end
   
   def start

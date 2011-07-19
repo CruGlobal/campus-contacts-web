@@ -15,7 +15,7 @@ class Api::FollowupCommentsController < ApiController
 
     @json['rejoicables'].each do |what|
       if Rejoicable::OPTIONS.include?(what)
-        @followup_comment.rejoicables.create(what: what, created_by_id: get_me.id, person_id: @followup_comment.contact_id, organization_id: @followup_comment.organization_id)
+        @followup_comment.rejoicables.create(what: what, created_by_id: current_person.id, person_id: @followup_comment.contact_id, organization_id: @followup_comment.organization_id)
       end
     end if @json['rejoicables']
     render json: "[]"
@@ -34,11 +34,11 @@ class Api::FollowupCommentsController < ApiController
     ids = params[:id].split(',')
     
     comments = FollowupComment.where(id: ids)
-    role = get_me.organizational_roles.where(organization_id: @organization.id).collect(&:role).collect(&:i18n)
+    role = current_person.organizational_roles.where(organization_id: @organization.id).collect(&:role).collect(&:i18n)
     
     comments.each_with_index do |comment,i|
       if role[i] == 'leader'
-        raise FollowupCommentPermissionsError unless comment.commenter_id == get_me.id
+        raise FollowupCommentPermissionsError unless comment.commenter_id == current_person.id
       elsif role[i] == 'admin'
         raise FollowupCommentPermissionsError unless comment.organization_id == @organization.id
       else raise FollowupCommentPermissionsError
