@@ -177,7 +177,7 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
     
     should "be able to view their contacts with sorting" do
       path = "/api/contacts.json?sort=time&direction=desc"
-      @user2.person.answer_sheets.first.update_attributes(created_at: 2.days.ago)
+      @user2.person.organizational_roles.first.update_attributes(created_at: 2.days.ago)
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
@@ -186,7 +186,7 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       person_mini_test(@json[0]['person'],@user) 
 
       path = "/api/contacts.json?sort=time&direction=asc"
-      @user2.person.answer_sheets.first.update_attributes(created_at: 2.days.ago)
+      @user2.person.organizational_roles.first.update_attributes(created_at: 2.days.ago)
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)

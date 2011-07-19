@@ -298,8 +298,8 @@ class Person < ActiveRecord::Base
   
   def to_hash(org_id = nil)
     hash = self.to_hash_basic(org_id)
-    hash['first_name'] = firstName.gsub(/\n/," ")
-    hash['last_name'] = lastName.gsub(/\n/," ")
+    hash['first_name'] = firstName.to_s.gsub(/\n/," ")
+    hash['last_name'] = lastName.to_s.gsub(/\n/," ")
     hash['phone_number'] = primary_phone_number.number if primary_phone_number
     hash['email_address'] = primary_email_address.to_s if primary_email_address
     hash['birthday'] = birth_date.to_s
