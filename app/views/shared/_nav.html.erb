@@ -2,40 +2,47 @@
   
   <div class="gmwrap">
     <ul class="sf-menu">
-    <% if user_signed_in? %>
-      <% if current_organization %>
-        <li class="item">
-          <% if current_person.organizations.length > 1 || current_person.organizations.detect(&:show_sub_orgs?) %>
-            <%= link_to(current_organization, '', id: 'change_org') %>
+      <% if session[:old_user_id].present? %>
+        <li class="item"><%= link_to('Exit SU Mode', '?exit=true') %></li>
+      <% end %>
+      <% if user_signed_in? %>
+        <% if current_organization %>
+          <li class="item">
+            <% if current_person.organizations.length > 1 || current_person.organizations.detect(&:show_sub_orgs?) %>
+              <%= link_to(current_organization, '', class: 'disabled') %>
               <ul class="under">
                 <% current_person.organizations.order('organizations.name').each do |org| %>
                   <%= render 'org', org: org, primary: current_person.primary_organization == org, involved: true unless current_person.organizations.include?(org.parent) %>
                 <% end %>
               </ul>
-          <% else %>
-            <%= link_to(current_organization, user_root_path) %>
-          <% end %>
-        </li>
-        <!-- <div class="item">
-          <%= link_to(t('nav.profile'), current_person) %>
-        </div> -->
-      <% end %>
-      <% if current_organization.try(:keywords).present? %>
-        <li class="item smallermenu">
-          <%= link_to("Enter Survey Mode", '', id: 'survey_keywords_mode_link', :class => "tipit", :title => "Survey mode allows you to.......")%>
-            <ul style=""><% current_organization.keywords.each do |keyword| %>
-              <li><div style="width:100%; display:inline"><%= link_to("Use Keyword: #{keyword.keyword}", facebook_logout_url(next: contact_form_url(keyword.keyword)), id: 'select_keyword')%>
-                </li>
+            <% else %>
+              <%= link_to(current_organization, user_root_path) %>
+            <% end %>
+          </li>
+          <!-- <div class="item">
+            <%= link_to(t('nav.profile'), current_person) %>
+          </div> -->
+          <% if current_organization.keywords.present? %>
+            <li class="item smallermenu">
+              <% if current_organization.keywords.length == 1 %>
+                <%= link_to("Enter Survey Mode", facebook_logout_url(next: contact_form_url(current_organization.keywords.first.keyword)), :class => "tipit disabled", :title => t('nav.survey_mode_tip'))%>
+              <% else %>
+                <%= link_to("Enter Survey Mode", '', id: 'survey_keywords_mode_link', :class => "tipit", :title => t('nav.survey_mode_tip'))%>
+                <ul style=""><% current_organization.keywords.each do |keyword| %>
+                  <li><div style="width:100%; display:inline"><%= link_to("Use Keyword: #{keyword.keyword}", facebook_logout_url(next: contact_form_url(keyword.keyword)), id: 'select_keyword')%>
+                    </li>
+                  <% end %>
+                </ul>
               <% end %>
-            </ul>
-        </li>
+            </li>
+          <% end %>
+        <% end %>
+        <li class="item">
+          <%= link_to(t('nav.logout'), facebook_logout_url)  %> 
+        </li>   
+      <% else %>
+        <%= link_to(t('nav.login'), new_user_session_path) %>
       <% end %>
-      <li class="item">
-        <%= link_to(t('nav.logout'), facebook_logout_url)  %> 
-      </li>   
-    <% else %>
-      <%= link_to(t('nav.login'), new_user_session_path) %>
-    <% end %>
     </ul>
   </div>
   

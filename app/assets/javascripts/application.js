@@ -2,7 +2,12 @@
 // FIXME: Tell people how Sprockets and CoffeeScript works
 //
 //= require jquery_ujs
+//= require jquery.qtip
+//= require jquery.counter-1.0.min
+//= require superfish
 //= require mh
 //= require questions
 //= require contacts
 //= require rails.validations
+//= require rails.validations.callbacks
+//= require sms_keywords.js.coffee

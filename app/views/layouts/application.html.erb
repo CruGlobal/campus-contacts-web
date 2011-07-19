@@ -2,22 +2,6 @@
 <html>
 <head>
   <%= render 'shared/head' %>
-  <!-- <%= current_person.id %> -->
-  <script>
-  	$(function(){
-  	  $('.tipit[title]').qtip({
-  	    position: {
-          my: 'top right',  // Position my top left...
-          at: 'bottom left' // at the bottom right of...
-        }
-    	});
-    	// Count up to 20 words and stop
-      $("#sms_keyword_post_survey_message, #sms_keyword_initial_response, #sms_keyword_explanation").counter({
-          goal: 120,
-          count: 'up'            
-      });
-  	});
-	</script>
 </head>
 <body id="<%= controller.controller_name %>_controller" class="<%= params[:action] %>">
   

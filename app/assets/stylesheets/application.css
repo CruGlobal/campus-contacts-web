@@ -2,4 +2,6 @@
  * FIXME: Introduce SCSS & Sprockets
  *= require contacts
  *= require global
+ *= require jquery.qtip
+ *= require superfish
 */

@@ -8,6 +8,7 @@
     prayed_to_receive: 'Prayed To Receive Christ' 
     gospel_presentation: 'Gospel Presentation'
   nav:
+    survey_mode_tip: "Survey mode allows you to......."
     terms: 'Terms and Conditions'
     privacy: 'Privacy Policy'
     login: "Log In"

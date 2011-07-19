@@ -1,4 +1,13 @@
 $ ->
+  $('.tipit[title]').qtip
+    position: 
+      my: 'top right',  
+      at: 'bottom left' 
+    
+  $('ul.sf-menu').superfish
+    dropShadows: false,
+    delay: 100
+    
 	$('.expandable').each (i)->
 		e = $(this)
 		if e.height() > e.attr("data-height")
@@ -18,23 +27,8 @@ $ ->
 			$('span', this).html('<strong>+</strong> Show More Leaders')
 		false
 			
-	$('#change_org').live 'click', ->
-	  # hide other menu
-		$('#show_survey_keywords_menu').hide()
-		$('#survey_keywords_mode_link').removeClass("on")
-		
-		$('#other_orgs').toggle()
-		$('#change_org').toggleClass("on")
+	$('a.disabled').live 'click', ->
 		false
-		
-	$('#survey_keywords_mode_link').live 'click', ->
-	  # hide other menu
-	  $('#other_orgs').hide()
-	  $('#change_org').removeClass("on")
-	  
-	  $('#show_survey_keywords_menu').toggle()
-	  $('#survey_keywords_mode_link').toggleClass("on")
-	  false
 		
 	$('[data-method=delete]').live 'ajax:before', ->
 		$(this).parent().fadeOut()

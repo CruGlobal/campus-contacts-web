@@ -91,7 +91,7 @@ module ApiHelper
   end
   
   def get_me
-    User.find(Rack::OAuth2::Server.get_access_token(params['access_token']).identity).person if params['access_token']
+    current_person
   end
   
   def get_keywords

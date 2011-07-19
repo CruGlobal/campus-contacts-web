@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   before_filter :authenticate_user!, :except => [:facebook_logout]
+  before_filter :check_su
   before_filter :set_locale
   rescue_from CanCan::AccessDenied, with: :access_denied
   protect_from_forgery  
@@ -10,19 +11,48 @@ class ApplicationController < ActionController::Base
       split_token = session[:fb_token].split("|")
       fb_api_key = split_token[0]
       fb_session_key = split_token[1]
-      sign_out
       session[:fb_token] = nil
-  
       redirect_to "http://www.facebook.com/logout.php?api_key=#{fb_api_key}&session_key=#{fb_session_key}&confirm=1&next=#{redirect_url}"
     else
       redirect_to redirect_url
     end
+    sign_out
   end
 
   protected
   
   def self.application_name
     'MH'
+  end
+  
+  def check_su
+    # Act as another user
+    if params[:user_id] && params[:su] && current_user.developer?
+      switch_to_user(params[:user_id], true)
+      redirect = true
+    elsif params[:exit] && session['old_user_id']
+      switch_to_user(session['old_user_id'])
+      redirect = true
+    end
+    redirect_to params.except(:user_id, :su, :exit) and return false if redirect
+  end
+  
+  def switch_to_user(user_id, save_old = false)
+    logger.debug("Switched to user: #{user_id}")
+    session['old_user_id'] = current_user.id if save_old
+    session['fb_token'] = nil
+    session['current_organization_id'] = nil
+    session['warden.user.user.key'] = ["User", [user_id.to_i], nil]
+    session['wizard'] = nil
+  end
+  
+  def current_user
+    # check for access token, then do it the devise way
+    if params['access_token']
+      User.find(Rack::OAuth2::Server.get_access_token(params['access_token']).identity)
+    else
+      super # devise user
+    end
   end
   
   def mobile_device?
