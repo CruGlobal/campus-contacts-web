@@ -20,7 +20,8 @@ class Api::ContactsController < ApiController
     json_output = []
     unless @keywords.empty?
       @question_sheets = @keywords.collect(&:question_sheet)
-      @people = Person.who_answered(@question_sheets)
+      # @people = Person.who_answered(@question_sheets)
+      @people = @organization.contacts#.order('lastName, firstName')
       @people = paginate_filter_sort_people(@people, @organization)
       json_output = @people.collect {|person| {person: person.to_hash_basic(@organization)}}
     end

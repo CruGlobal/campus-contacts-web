@@ -9,5 +9,4 @@
 //= require questions
 //= require contacts
 //= require rails.validations
-//= require rails.validations.callbacks
 //= require sms_keywords.js.coffee

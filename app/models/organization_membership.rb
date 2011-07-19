@@ -4,9 +4,8 @@ class OrganizationMembership < ActiveRecord::Base
   belongs_to :organization
   
   validates_presence_of :person_id, :organization_id
-  before_validation :set_primary, on: :create
   after_destroy :set_new_primary
-  before_create :set_start_date
+  before_create :set_start_date, :set_primary
   
   def followup_status
     OrganizationalRole.where(person_id: person_id, organization_id: organization_id, role_id: Role.contact.id).first.try(:followup_status)

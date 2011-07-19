@@ -90,10 +90,6 @@ module ApiHelper
     people
   end
   
-  def get_me
-    current_person
-  end
-  
   def get_keywords
     if params[:keyword].present?
       @keywords = SmsKeyword.find_all_by_keyword(params[:keyword])
@@ -102,7 +98,7 @@ module ApiHelper
       @keywords = SmsKeyword.find_all_by_organization_id(org_id)
     elsif params[:keyword_id].present?
       @keywords = SmsKeyword.find_all_by_id(params[:id])
-    else @keywords = SmsKeyword.find_all_by_organization_id(current_person.primary_organization.id)
+    else @keywords = SmsKeyword.find_all_by_organization_id(current_organization.id)
     end
   end
   
@@ -172,15 +168,15 @@ module ApiHelper
       @sorting_fields.each_with_index do |field,index|
         case field  
         when "time"
-          people = people.order("`#{AnswerSheet.table_name}`.`created_at` #{@sorting_directions[index]}")
+          people = people.order("`#{OrganizationalRole.table_name}`.`created_at` #{@sorting_directions[index]}")
         when "status"
           people = people.order("`#{OrganizationalRole.table_name}`.`followup_status` #{@sorting_directions[index]}")
         end
       end
     end
     
-    #if there were no sorting fields then sort by most recent answer_sheet
-    people = people.order("`#{AnswerSheet.table_name}`.`created_at` DESC") if @sorting_fields.blank?
+    #if there were no sorting fields then sort by most recent org_role
+    people = people.order("`#{OrganizationalRole.table_name}`.`created_at` DESC") if @sorting_fields.blank?
 
     
     if params[:filters].present? && params[:values].present?
