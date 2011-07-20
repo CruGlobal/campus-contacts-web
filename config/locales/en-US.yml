@@ -8,7 +8,7 @@
     prayed_to_receive: 'Prayed To Receive Christ' 
     gospel_presentation: 'Gospel Presentation'
   nav:
-    survey_mode_tip: "Survey mode allows you to......."
+    survey_mode_tip: "Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts."
     terms: 'Terms and Conditions'
     privacy: 'Privacy Policy'
     login: "Log In"
@@ -21,6 +21,7 @@
     all_contacts: 'All Contacts'
     directory: 'Directory'
     keywords: "Surveys"
+		back_to_dashboard: "Back To My Contacts"
   general:
     keyword: "Keyword"
     status: "Status"
@@ -39,7 +40,7 @@
     index:
       title_top: "Welcome to MissionHub!"
       title_top_mobile: "MissionHub"
-      go_home: 'Go to your dashboard'
+      go_home: 'Go to My Contacts'
       request_key: "Click here to request a keyword"
       get_started: "Get Started"
     wizard:
