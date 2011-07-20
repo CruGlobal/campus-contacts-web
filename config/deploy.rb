@@ -135,6 +135,6 @@ namespace :deploy do
     run "cd #{release_path} && bundle exec rake assets:precompile RAILS_ENV=#{rails_env}"
   end
 end
-
+after "deploy:symlink", "deploy:migrate"
 after "deploy", "deploy:cleanup"
 # require 'config/boot'

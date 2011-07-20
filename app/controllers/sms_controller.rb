@@ -1,14 +1,15 @@
 class SmsController < ApplicationController
   skip_before_filter :authenticate_user!, :verify_authenticity_token
   def mo
-    # Ignore duplicate messages
-    if duplicate = ReceivedSms.where(sms_params.slice(:phone_number, :hash, :message)).first
-      # raise duplicate.inspect
+    begin
+      # try to save the new message
+      @received = ReceivedSms.create!(sms_params)
+    rescue ActiveRecord::RecordNotUnique
+      # the mysql index just saved us from a duplicate message 
       render nothing: true and return 
     end
-    
     # Process incoming text
-    message = params[:message].strip
+    message = sms_params[:message]
     
     # Handle STOP and HELP messages
     render nothing: true and return if message.blank? || message.downcase == 'stop'
@@ -23,7 +24,7 @@ class SmsController < ApplicationController
     @text = ReceivedSms.where(sms_params.slice(:phone_number)).order('updated_at desc').where(["updated_at > ?", 15.minutes.ago]).where('sms_keyword_id is not null').first
     if @text && (@text.interactive? || message.split(' ').first.downcase == 'i')
       # Save new message
-      ReceivedSms.create!(sms_params.merge(sms_keyword_id: @text.sms_keyword_id, person_id: @text.person_id))
+      @received.update_attributes(sms_keyword_id: @text.sms_keyword_id, person_id: @text.person_id)
       keyword = @text.sms_keyword
       if keyword
         if !@text.interactive? && message.split(' ').first.downcase == 'i'
@@ -45,22 +46,15 @@ class SmsController < ApplicationController
         end
       end
     else
-      # Look for a previous response by this number
-      @text = ReceivedSms.where(phone_number: sms_params[:phone_number], message: message).first
-      if @text
-        @text.update_attributes(sms_params)
-      else
-        @text = ReceivedSms.create!(sms_params)
-        # If we already have a person with this phone number associate it with this SMS
-        unless person = Person.includes(:phone_numbers).where('phone_numbers.number' => sms_params[:phone_number][1..-1]).first
-          # Create a person record for this phone number
-          person = Person.new
-          person.save(validate: false)
-          person.phone_numbers.create!(number: sms_params[:phone_number], location: 'mobile')
-        end
-        @text.update_attribute(:person_id, person.id)
+      @text = @received
+      # If we already have a person with this phone number associate it with this SMS
+      unless person = Person.includes(:phone_numbers).where('phone_numbers.number' => sms_params[:phone_number][1..-1]).first
+        # Create a person record for this phone number
+        person = Person.new
+        person.save(validate: false)
+        person.phone_numbers.create!(number: sms_params[:phone_number], location: 'mobile')
       end
-      @text.increment!(:response_count)
+      @text.update_attribute(:person_id, person.id)
       keyword = SmsKeyword.find_by_keyword(message.split(' ').first.downcase)
       
       if !keyword || !keyword.active?
@@ -78,10 +72,11 @@ class SmsController < ApplicationController
   protected 
     def sms_params
       unless @sms_params
-        @sms_params = params.slice(:carrier, :message, :country, :hash)
+        @sms_params = params.slice(:carrier, :country)
         @sms_params[:phone_number] = params[:device_address]
         @sms_params[:shortcode] = params[:inbound_address]
         @sms_params[:received_at] = DateTime.strptime(params[:timestamp], '%m/%d/%Y %H:%M:%S')
+        @sms_params[:message] = params[:message].strip.gsub(/\n+/, ' ')
       end
       @sms_params
     end
@@ -143,7 +138,7 @@ class SmsController < ApplicationController
       end
       sms_id = SMS.deliver(phone_number, msg).first #  + ' Txt HELP for help STOP to quit'
       sent_via = 'moonshado'
-      @sent_sms = SentSms.create!(message: msg, recipient: phone_number, moonshado_claimcheck: sms_id, sent_via: sent_via, recieved_sms_id: @text.try(:id))
+      @sent_sms = SentSms.create!(message: msg, recipient: phone_number, moonshado_claimcheck: sms_id, sent_via: sent_via, received_sms_id: @text.try(:id))
     end
 
 end
