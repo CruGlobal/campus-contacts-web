@@ -2,7 +2,7 @@ class SmsController < ApplicationController
   skip_before_filter :authenticate_user!, :verify_authenticity_token
   def mo
     # Ignore duplicate messages
-    if duplicate = ReceivedSms.where(sms_params.slice(:phone_number, :hash, :message)).first
+    if duplicate = ReceivedSms.where(sms_params.slice(:phone_number, :hash, :received_at)).first
       # raise duplicate.inspect
       render nothing: true and return 
     end
