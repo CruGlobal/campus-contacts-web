@@ -182,6 +182,7 @@
       first_name: 'First Name'
       last_name: 'Last Name'
       email: 'Email Address'
+      phone_number: 'Phone Number'
   sms:
     keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
   date:

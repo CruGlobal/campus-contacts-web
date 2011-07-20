@@ -1,1 +1,5 @@
-$('#predefined_questions').append('<%= j(render('predefined_question', question: @question)) %>')
+<% if @predefined.questions.include?(@question) %>
+  $('#predefined_questions').append('<%= j(render('predefined_question', question: @question)) %>')
+<% else %>
+  // move it to archived questions
+<% end %>

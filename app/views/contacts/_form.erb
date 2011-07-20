@@ -4,29 +4,48 @@
   <%= hidden_field_tag :received_sms_id, params[:received_sms_id] if params[:received_sms_id] %>
   <%= hidden_field_tag :button, false if mobile_device?%>
   <ul class="rounded jqm">
-    <% if @person.firstName.blank? %>
-      <li>
-        <div data-role="fieldcontain" class="field">
-          <label class="desc" for="firstName"><%= t('contacts.form.first_name') %></label>
-          <%= f.text_field :firstName %>
-        </div>
-      </li>
-    <% end %>
-    <% if @person.lastName.blank? %>
-      <li>
-        <div data-role="fieldcontain" class="field">
-          <label class="desc" for="lastName"><%= t('contacts.form.last_name') %></label>
+    <li>
+      <div data-role="fieldcontain" class="field">
+        <label class="desc" for="firstName"><%= t('contacts.form.first_name') %></label>
+  			<% if @person.firstName.blank? %>
+        	<%= f.text_field :firstName %>
+      	<% else %>
+      	  <%= @person.firstName %>
+  			<% end %>
+      </div>
+    </li>
+    <li>
+      <div data-role="fieldcontain" class="field">
+        <label class="desc" for="lastName"><%= t('contacts.form.last_name') %></label>
+        <% if @person.lastName.blank? %>
           <%= f.text_field :lastName %>
-        </div>
-      </li>
-    <% end %>
+        <% else %>
+          <%= @person.lastName %>
+        <% end %>
+      </div>
+    </li>
     <% @keyword.questions.each do |question| %>
       <% case question.slug %>
       <% when 'email' %>
         <li>
           <div data-role="fieldcontain" class="field">
             <label class="desc" for="email"><%= t('contacts.form.email') %></label>
-            <%= f.text_field :email %>
+  			    <% if @person.email.blank? %>
+              <%= f.text_field :email %>
+            <% else %>
+              <%= @person.email %>
+            <% end %>
+          </div>
+        </li>
+      <% when 'phone' %>
+        <li>
+          <div data-role="fieldcontain" class="field">
+            <label class="desc" for="email"><%= t('contacts.form.phone_number') %></label>
+  			    <% if @person.phone_number.blank? %>
+              <%= f.text_field :phone_number %>
+            <% else %>
+              <%= @person.pretty_phone_number %>
+            <% end %>
           </div>
         </li>
       <% else %>

@@ -91,7 +91,7 @@ class ApplicationController < ActionController::Base
     return nil unless person
     if session[:current_organization_id]
       org = Organization.find_by_id(session[:current_organization_id]) 
-      org = nil unless person.organizations.include?(org) || person.organizations.include?(org.parent)
+      org = nil unless org && (person.organizations.include?(org) || person.organizations.include?(org.parent))
     end
     unless org
       org = person.primary_organization
