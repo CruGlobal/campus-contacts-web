@@ -1,11 +1,13 @@
 class SmsController < ApplicationController
   skip_before_filter :authenticate_user!, :verify_authenticity_token
   def mo
-    # Ignore duplicate messages
-    if ReceivedSms.where(sms_params.slice(:phone_number, :hash, :received_at)).first
+    begin
+      # try to save the new message
+      @received = ReceivedSms.create!(sms_params)
+    rescue ActiveRecord::RecordNotUnique
+      # the mysql index just saved us from a duplicate message 
       render nothing: true and return 
     end
-    
     # Process incoming text
     message = sms_params[:message]
     
@@ -22,7 +24,7 @@ class SmsController < ApplicationController
     @text = ReceivedSms.where(sms_params.slice(:phone_number)).order('updated_at desc').where(["updated_at > ?", 15.minutes.ago]).where('sms_keyword_id is not null').first
     if @text && (@text.interactive? || message.split(' ').first.downcase == 'i')
       # Save new message
-      ReceivedSms.create!(sms_params.merge(sms_keyword_id: @text.sms_keyword_id, person_id: @text.person_id))
+      @received.update_attributes(sms_keyword_id: @text.sms_keyword_id, person_id: @text.person_id)
       keyword = @text.sms_keyword
       if keyword
         if !@text.interactive? && message.split(' ').first.downcase == 'i'
@@ -44,8 +46,7 @@ class SmsController < ApplicationController
         end
       end
     else
-      # Look for a previous response by this number
-      @text = ReceivedSms.create!(sms_params)
+      @text = @received
       # If we already have a person with this phone number associate it with this SMS
       unless person = Person.includes(:phone_numbers).where('phone_numbers.number' => sms_params[:phone_number][1..-1]).first
         # Create a person record for this phone number
@@ -137,7 +138,7 @@ class SmsController < ApplicationController
       end
       sms_id = SMS.deliver(phone_number, msg).first #  + ' Txt HELP for help STOP to quit'
       sent_via = 'moonshado'
-      @sent_sms = SentSms.create!(message: msg, recipient: phone_number, moonshado_claimcheck: sms_id, sent_via: sent_via, recieved_sms_id: @text.try(:id))
+      @sent_sms = SentSms.create!(message: msg, recipient: phone_number, moonshado_claimcheck: sms_id, sent_via: sent_via, received_sms_id: @text.try(:id))
     end
 
 end
