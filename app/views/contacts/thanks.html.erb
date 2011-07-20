@@ -13,7 +13,7 @@
 		<center>
 			<h4><%= t('contacts.thanks.facebook')%></h4>
 			<br><br>
-			<h3><%= link_to(t('contacts.thanks.done'), facebook_logout_url(next: request.referrer)) %></h3>
+			<h3><%= link_to(t('contacts.thanks.done'), facebook_logout_url(next: contact_form_url(@keyword.keyword))) %></h3>
 		</center>
 	</div>
 </div>
