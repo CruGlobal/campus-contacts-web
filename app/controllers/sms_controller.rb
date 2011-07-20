@@ -1,14 +1,25 @@
 class SmsController < ApplicationController
   skip_before_filter :authenticate_user!, :verify_authenticity_token
   def mo
+    # Ignore duplicate messages
+    if duplicate = ReceivedSms.where(sms_params.slice(:phone_number, :hash, :message)).first
+      # raise duplicate.inspect
+      render nothing: true and return 
+    end
+    
+    # Process incoming text
     message = params[:message].strip
+    
+    # Handle STOP and HELP messages
     render nothing: true and return if message.blank? || message.downcase == 'stop'
     if message.downcase == 'help'
       msg = 'MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to http://mhub.cc/ for more help.'
       send_message(msg, sms_params()[:phone_number])
       render text: msg + "\n" and return
     end
-    # See if this is a sticky session ( prior sms in the past 1 hour )
+    
+    # See if this is a sticky session ( prior sms in the past XX minutes )
+    # If it is, check for interactive texting
     @text = ReceivedSms.where(sms_params.slice(:phone_number)).order('updated_at desc').where(["updated_at > ?", 15.minutes.ago]).where('sms_keyword_id is not null').first
     if @text && (@text.interactive? || message.split(' ').first.downcase == 'i')
       # Save new message
@@ -67,7 +78,7 @@ class SmsController < ApplicationController
   protected 
     def sms_params
       unless @sms_params
-        @sms_params = params.slice(:carrier, :message, :country)
+        @sms_params = params.slice(:carrier, :message, :country, :hash)
         @sms_params[:phone_number] = params[:device_address]
         @sms_params[:shortcode] = params[:inbound_address]
         @sms_params[:received_at] = DateTime.strptime(params[:timestamp], '%m/%d/%Y %H:%M:%S')
