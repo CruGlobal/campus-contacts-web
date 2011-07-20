@@ -86,7 +86,7 @@ img {
 }
 
 .headerlink {
-	background: url("/assets/pillbg.png") repeat-x scroll 0 0 transparent;
+	background: url("<%= asset_path('pillbg.png') %>") repeat-x scroll 0 0 transparent;
 	border: 1px solid #999999;
   border-radius: 4px 4px 4px 4px;
 	-moz-border-radius: 4px 4px 4px 4px;
@@ -807,15 +807,19 @@ span.title {
 }
 
 .inlinebutton {
-  background: $blue;
-  color: $white !important;
-  background: none repeat scroll 0 0 #0379AE;
-  border: 1px solid gray;
-  box-shadow: 0 0 1px #FFFFFF inset;
-  font-size: 11px;
-  font-weight: normal;
-  padding: 1px 3px;
-    
+  background: url('<%= asset_path('pillbg.png') %>') repeat-x;
+  color: #000 !important;
+  border: 1px solid #999;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 7px;
+  border-radius: 6px;
+  display: inline-block;
+  margin: 3px 0;
+}
+
+.inlinebutton:hover {
+  text-decoration: none;
 }
 
 /* KEYWORDS */
@@ -840,6 +844,16 @@ span.title {
   background: #f0f0f0;
 }
 
+.yourquestions {
+  margin-left: 15px;
+}
+
+.fakesort {
+  td {
+    padding: 3px;
+    color: #999;
+  }
+}
 
 /* FORM */
 
@@ -1316,4 +1330,6 @@ div.field_with_errors div.ui-effects-wrapper {
   width: 16px;
   height: 16px;
   display: inline-block;
+	float: left;
+	margin-right: 5px;
 }
