@@ -8,7 +8,7 @@ class SmsController < ApplicationController
     end
     
     # Process incoming text
-    message = params[:message].strip
+    message = params[:message].strip.gsub(/\n+/, ' ')
     
     # Handle STOP and HELP messages
     render nothing: true and return if message.blank? || message.downcase == 'stop'
@@ -46,21 +46,15 @@ class SmsController < ApplicationController
       end
     else
       # Look for a previous response by this number
-      @text = ReceivedSms.where(phone_number: sms_params[:phone_number], message: message).first
-      if @text
-        @text.update_attributes(sms_params)
-      else
-        @text = ReceivedSms.create!(sms_params)
-        # If we already have a person with this phone number associate it with this SMS
-        unless person = Person.includes(:phone_numbers).where('phone_numbers.number' => sms_params[:phone_number][1..-1]).first
-          # Create a person record for this phone number
-          person = Person.new
-          person.save(validate: false)
-          person.phone_numbers.create!(number: sms_params[:phone_number], location: 'mobile')
-        end
-        @text.update_attribute(:person_id, person.id)
+      @text = ReceivedSms.create!(sms_params)
+      # If we already have a person with this phone number associate it with this SMS
+      unless person = Person.includes(:phone_numbers).where('phone_numbers.number' => sms_params[:phone_number][1..-1]).first
+        # Create a person record for this phone number
+        person = Person.new
+        person.save(validate: false)
+        person.phone_numbers.create!(number: sms_params[:phone_number], location: 'mobile')
       end
-      @text.increment!(:response_count)
+      @text.update_attribute(:person_id, person.id)
       keyword = SmsKeyword.find_by_keyword(message.split(' ').first.downcase)
       
       if !keyword || !keyword.active?
