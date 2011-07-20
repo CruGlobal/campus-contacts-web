@@ -60,6 +60,7 @@ $ ->
   $('[data-sortable]').sortable(sortable_options)
   
   $('.tipthis[title]').qtip()
+  $('.tiplight[title]').qtip()
   
   $('[data-sortable][data-sortable-handle]').each ->
     handle = $(this).attr('data-sortable-handle');
