@@ -2,6 +2,7 @@ FactoryGirl.define do
   sequence(:count) {|n| n}
   
   factory :received_sms do
+    # association  :person
     phone_number '15555555555'
     carrier      'sprint'
     shortcode    '69940'
@@ -56,6 +57,11 @@ FactoryGirl.define do
     gender '1'
     fb_uid "690860831"
     birth_date {DateTime.strptime('12/18/1989', '%m/%d/%Y')}
+  end
+  
+  factory :person_without_name, parent: :person do
+    firstName ''
+    lastName ''
   end
   
   factory :user do

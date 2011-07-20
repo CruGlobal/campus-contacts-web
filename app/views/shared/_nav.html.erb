@@ -9,7 +9,7 @@
         <% if current_organization %>
           <li class="item">
             <% if current_person.organizations.length > 1 || current_person.organizations.detect(&:show_sub_orgs?) %>
-              <%= link_to(current_organization, '', class: 'disabled') %>
+              <%= link_to(current_organization, '/contacts') %>
               <ul class="under">
                 <% current_person.organizations.order('organizations.name').each do |org| %>
                   <%= render 'org', org: org, primary: current_person.primary_organization == org, involved: true unless current_person.organizations.include?(org.parent) %>

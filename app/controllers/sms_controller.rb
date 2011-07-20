@@ -1,11 +1,13 @@
 class SmsController < ApplicationController
   skip_before_filter :authenticate_user!, :verify_authenticity_token
   def mo
+    logger.info(params.inspect)
     begin
       # try to save the new message
       @received = ReceivedSms.create!(sms_params)
     rescue ActiveRecord::RecordNotUnique
       # the mysql index just saved us from a duplicate message 
+      logger.info("Duplicate")
       render nothing: true and return 
     end
     # Process incoming text
@@ -28,21 +30,19 @@ class SmsController < ApplicationController
       keyword = @text.sms_keyword
       if keyword
         if !@text.interactive? && message.split(' ').first.downcase == 'i'
+          # We're getting into a sticky session
           create_contact_at_org(@text.person, @text.sms_keyword.organization)
           @text.update_attribute(:interactive, true)
-          # We're getting into a sticky session
-          # Find the last received sms from this phone number and send them the first question off the survey
-          msg = send_next_survey_question(keyword, @text.person, @text.phone_number)
         else
           # Find the person, save the answer, send the next question
           save_survey_question(keyword, @text.person, message)
           @text.person.reload
-          msg = send_next_survey_question(keyword, @text.person, @text.phone_number)
-          unless msg
-            # survey is done. send final message
-            msg = keyword.post_survey_message.present? ? keyword.post_survey_message : t('contacts.thanks.message')
-            send_message(msg, @text.phone_number)
-          end
+        end
+        msg = send_next_survey_question(keyword, @text.person, @text.phone_number)
+        unless msg
+          # survey is done. send final message
+          msg = keyword.post_survey_message.present? ? keyword.post_survey_message : t('contacts.thanks.message')
+          send_message(msg, @text.phone_number)
         end
       end
     else
