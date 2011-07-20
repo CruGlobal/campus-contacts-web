@@ -1,8 +1,4 @@
-$ ->
-  $('.tipit[title]').qtip
-    position: 
-      my: 'top right',  
-      at: 'bottom left' 
+$ -> 
     
   $('ul.sf-menu').superfish
     dropShadows: false,
@@ -60,6 +56,13 @@ $ ->
   $('[data-sortable]').sortable(sortable_options)
   
   $('.tipthis[title]').qtip()
+  $('.tiplight[title]').qtip
+  content: 
+    text: $('.tiplightcontent').next() 
+  $('.tipit[title]').qtip
+    position: 
+      my: 'top right',  
+      at: 'bottom left'
   
   $('[data-sortable][data-sortable-handle]').each ->
     handle = $(this).attr('data-sortable-handle');

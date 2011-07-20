@@ -1270,13 +1270,50 @@ div.field_with_errors {
 		border: 2px solid red !important;
   }
 }
+
 .message {
-  background-color: red !important;
-  border-bottom-right-radius: 5px 5px;
-  border-top-right-radius: 5px 5px;
-  padding: 2px 5px;
+  color: red !important;
+  padding: 2px 0px;
+  text-transform: capitalize;
+  font-weight: bold;
 }
 
 div.field_with_errors div.ui-effects-wrapper {
   display: inline-block !important;
+}
+
+.rwidth {
+  width: 730px;
+}
+
+.biglabel {
+  font-size: 14px;
+}
+
+.stepwrap {
+  margin-bottom: 15px;
+  background: #F0F0F0;
+  padding: 15px 15px 10px 15px;
+  border-radius: 10px;
+  .stepnumber {
+    float: left;
+  }
+  .stepcontent {
+    margin-left: 85px;
+  }
+}
+
+.charcount {
+  font-size: 11px;
+  color: gray;
+  display: block;
+  clear: both;
+  text-indent: 4px;
+}
+
+.tiplight {
+  background: url("<%= asset_path("light.png") %>") no-repeat;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
 }
