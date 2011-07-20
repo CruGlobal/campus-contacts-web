@@ -1,6 +1,6 @@
 <% provide :sidebar do %>
   <ul class="leftmenu">
-    <li class="selected"><a href="/sms_keywords">Keywords</a></li>
+    <li class="selected"><a href="/sms_keywords">Surveys</a></li>
     <li><%= link_to("Request Keyword", new_sms_keyword_path) %></li>
 <% end %>
 
@@ -8,7 +8,7 @@
 
 <% if can? :manage, SmsKeyword %>
   <div class="titlebar">
-    <h1>Keywords</h1>
+    <h1>Surveys</h1>
   </div>
   
   <div class="pagemenu">

@@ -21,7 +21,7 @@
     all_contacts: 'All Contacts'
     directory: 'Directory'
     keywords: "Surveys"
-		back_to_dashboard: "Back To My Contacts"
+    back_to_dashboard: "Back To My Contacts"
   general:
     keyword: "Keyword"
     status: "Status"
