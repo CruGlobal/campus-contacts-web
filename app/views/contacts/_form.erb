@@ -1,6 +1,7 @@
 <%= form_for @person, url: contact_path(@person), method: :put, class: 'form', validate: true do |f| %>
   <%= error_messages_for @person, @answer_sheet.person %>
   <%= hidden_field_tag :keyword, @keyword.keyword %>
+  <%= hidden_field_tag :received_sms_id, params[:received_sms_id] if params[:received_sms_id] %>
   <%= hidden_field_tag :button, false if mobile_device?%>
   <ul class="rounded jqm">
     <% if @person.firstName.blank? %>

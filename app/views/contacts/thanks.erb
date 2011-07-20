@@ -1,3 +1,5 @@
+<% provide :title, "Thanks!"%>
+<% redirect_url = params[:received_sms_id].present? ? '' : contact_form_url(@keyword.keyword) %>
 <div class="info">
   <center><h4><%= @keyword.post_survey_message.present? ? @keyword.post_survey_message : t('contacts.thanks.message') %></h4></center>
 	<br><br>
@@ -5,7 +7,7 @@
   <% unless can? :manage, @keyword %>
   	<script type="text/javascript">
       setTimeout(function() {
-  			window.location="<%= facebook_logout_url %>?next=<%= request.referrer %>";      
+  			window.location="<%= facebook_logout_url(next: redirect_url) %>";      
       }, 10000)
   	</script>
   <% end %>
@@ -13,7 +15,7 @@
 		<center>
 			<h4><%= t('contacts.thanks.facebook')%></h4>
 			<br><br>
-			<h3><%= link_to(t('contacts.thanks.done'), facebook_logout_url(next: contact_form_url(@keyword.keyword))) %></h3>
+			<h3><%= link_to(t('contacts.thanks.done'), facebook_logout_url(next: redirect_url)) %></h3>
 		</center>
 	</div>
 </div>
