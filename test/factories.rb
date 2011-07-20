@@ -2,7 +2,6 @@ FactoryGirl.define do
   sequence(:count) {|n| n}
   
   factory :received_sms do
-    # association  :person
     phone_number '15555555555'
     carrier      'sprint'
     shortcode    '69940'

@@ -45,6 +45,10 @@ class Person < ActiveRecord::Base
     primary_phone_number.try(:number)
   end
   
+  def pretty_phone_number
+    primary_phone_number.try(:pretty_number)
+  end
+  
   def phone_number=(val)
     phone_number = primary_phone_number || phone_numbers.new
     phone_number.number = val
