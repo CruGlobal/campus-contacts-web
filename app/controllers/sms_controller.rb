@@ -12,7 +12,7 @@ class SmsController < ApplicationController
     @text = ReceivedSms.where(sms_params.slice(:phone_number)).order('updated_at desc').where(["updated_at > ?", 15.minutes.ago]).where('sms_keyword_id is not null').first
     if @text && (@text.interactive? || message.split(' ').first.downcase == 'i')
       # Save new message
-      ReceivedSms.create!(sms_params)
+      ReceivedSms.create!(sms_params.merge(sms_keyword_id: @text.sms_keyword_id, person_id: @text.person_id))
       keyword = @text.sms_keyword
       if keyword
         if !@text.interactive? && message.split(' ').first.downcase == 'i'
@@ -23,7 +23,7 @@ class SmsController < ApplicationController
           msg = send_next_survey_question(keyword, @text.person, @text.phone_number)
         else
           # Find the person, save the answer, send the next question
-          save_survey_question(keyword, @text.person, params[:message])
+          save_survey_question(keyword, @text.person, message)
           @text.person.reload
           msg = send_next_survey_question(keyword, @text.person, @text.phone_number)
           unless msg
@@ -35,7 +35,7 @@ class SmsController < ApplicationController
       end
     else
       # Look for a previous response by this number
-      @text = ReceivedSms.where(sms_params.slice(:phone_number, :message)).first
+      @text = ReceivedSms.where(phone_number: sms_params[:phone_number], message: message).first
       if @text
         @text.update_attributes(sms_params)
       else
@@ -50,7 +50,7 @@ class SmsController < ApplicationController
         @text.update_attribute(:person_id, person.id)
       end
       @text.increment!(:response_count)
-      keyword = SmsKeyword.find_by_keyword(params[:message].split(' ').first.downcase)
+      keyword = SmsKeyword.find_by_keyword(message.split(' ').first.downcase)
       
       if !keyword || !keyword.active?
         msg = t('sms.keyword_inactive')
