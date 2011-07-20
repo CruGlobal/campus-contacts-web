@@ -2,13 +2,12 @@ class SmsController < ApplicationController
   skip_before_filter :authenticate_user!, :verify_authenticity_token
   def mo
     # Ignore duplicate messages
-    if duplicate = ReceivedSms.where(sms_params.slice(:phone_number, :hash, :received_at)).first
-      # raise duplicate.inspect
+    if ReceivedSms.where(sms_params.slice(:phone_number, :hash, :received_at)).first
       render nothing: true and return 
     end
     
     # Process incoming text
-    message = params[:message].strip.gsub(/\n+/, ' ')
+    message = sms_params[:message]
     
     # Handle STOP and HELP messages
     render nothing: true and return if message.blank? || message.downcase == 'stop'
@@ -72,10 +71,11 @@ class SmsController < ApplicationController
   protected 
     def sms_params
       unless @sms_params
-        @sms_params = params.slice(:carrier, :message, :country, :hash)
+        @sms_params = params.slice(:carrier, :country, :hash)
         @sms_params[:phone_number] = params[:device_address]
         @sms_params[:shortcode] = params[:inbound_address]
         @sms_params[:received_at] = DateTime.strptime(params[:timestamp], '%m/%d/%Y %H:%M:%S')
+        @sms_params[:message] = params[:message].strip.gsub(/\n+/, ' ')
       end
       @sms_params
     end
