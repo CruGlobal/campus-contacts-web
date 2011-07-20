@@ -72,7 +72,7 @@ class SmsController < ApplicationController
   protected 
     def sms_params
       unless @sms_params
-        @sms_params = params.slice(:carrier, :country, :hash)
+        @sms_params = params.slice(:carrier, :country)
         @sms_params[:phone_number] = params[:device_address]
         @sms_params[:shortcode] = params[:inbound_address]
         @sms_params[:received_at] = DateTime.strptime(params[:timestamp], '%m/%d/%Y %H:%M:%S')
