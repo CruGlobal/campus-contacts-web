@@ -3076,6 +3076,8 @@ ActiveRecord::Schema.define(:version => 20110720174832) do
     t.integer "answer_sheet_id", :null => false
   end
 
+<<<<<<< HEAD
+=======
   add_index "si_apply_sheets", ["apply_id"], :name => "apply_id"
 
   create_table "si_character_references", :force => true do |t|
@@ -3226,6 +3228,7 @@ ActiveRecord::Schema.define(:version => 20110720174832) do
     t.string   "locale"
   end
 
+>>>>>>> 0bfdfd50abff98bdfc81ef232e66aeec6431af65
   add_index "simplesecuritymanager_user", ["email"], :name => "index_simplesecuritymanager_user_on_email", :unique => true
   add_index "simplesecuritymanager_user", ["fb_user_id"], :name => "index_simplesecuritymanager_user_on_fb_user_id"
   add_index "simplesecuritymanager_user", ["globallyUniqueID"], :name => "globallyUniqueID", :unique => true
@@ -4425,6 +4428,32 @@ ActiveRecord::Schema.define(:version => 20110720174832) do
   end
 
   add_index "sp_references", ["question_id"], :name => "question_id"
+<<<<<<< HEAD
+
+  create_table "sp_references_deprecated", :force => true do |t|
+    t.integer  "application_id"
+    t.string   "type",           :limit => 50
+    t.datetime "email_sent_at"
+    t.boolean  "is_staff"
+    t.string   "title"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "accountNo"
+    t.string   "phone"
+    t.string   "email"
+    t.string   "status"
+    t.datetime "submitted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.string   "access_key"
+    t.boolean  "mail",                         :default => false
+  end
+
+  add_index "sp_references_deprecated", ["application_id"], :name => "application_id"
+=======
+>>>>>>> 0bfdfd50abff98bdfc81ef232e66aeec6431af65
 
   create_table "sp_roles", :force => true do |t|
     t.string "role",       :limit => 50
