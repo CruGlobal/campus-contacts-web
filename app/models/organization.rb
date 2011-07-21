@@ -13,7 +13,7 @@ class Organization < ActiveRecord::Base
   has_many :questions, through: :pages
   has_many :organizational_roles, inverse_of: :organization
   has_many :leaders, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role.leader_ids}, order: "lastName, preferredName, firstName"
-  has_many :contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ?", Role.contact.id]
+  has_many :contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.followup_status <> 'do_not_contact'", Role.contact.id]
   has_many :dnc_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role.contact.id, 'organizational_roles.followup_status' => 'do_not_contact'}
   has_many :completed_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role.contact.id, 'organizational_roles.followup_status' => 'completed'}
   has_many :inprogress_contacts, through: :contact_assignments, source: :person
