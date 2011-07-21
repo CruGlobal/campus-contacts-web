@@ -96,7 +96,6 @@ Mh::Application.routes.draw do
   match '/auth/facebook/logout' => 'application#facebook_logout', as: :facebook_logout
   
   match "/application.manifest" => OFFLINE
-  mount Resque::Server.new, at: "/resque"
   
   post "sms/mo"
   
@@ -120,14 +119,6 @@ Mh::Application.routes.draw do
     end
   end
 
-  #other oauth calls
-  match "oauth/authorize" => "oauth#authorize"
-  match "oauth/grant" => "oauth#grant"
-  match "oauth/deny" => "oauth#deny"
-  match "oauth/done" => "oauth#done"
-  #make admin portion of oauth2 rack accessible
-  mount Rack::OAuth2::Server::Admin =>"/oauth/admin"
-
   root to: "welcome#index"
 #  match 'home' => 'welcome#home', as: 'user_root' ---- LOOK FOR THIS IN application_controller.rb
   match 'wizard' => 'welcome#wizard', as: 'wizard'
@@ -145,4 +136,15 @@ Mh::Application.routes.draw do
   # mount RailsAdmin::Engine => "/admin"
   
   get "welcome/tour"
+  
+  mount RailsAdmin::Engine => "/admin"
+  mount Resque::Server.new, at: "/resque"
+
+  #other oauth calls
+  match "oauth/authorize" => "oauth#authorize"
+  match "oauth/grant" => "oauth#grant"
+  match "oauth/deny" => "oauth#deny"
+  match "oauth/done" => "oauth#done"
+  #make admin portion of oauth2 rack accessible
+  mount Rack::OAuth2::Server::Admin =>"/oauth/admin"
 end
