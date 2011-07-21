@@ -91,7 +91,7 @@ class ContactsController < ApplicationController
   
   def new
     if params[:received_sms_id]
-      sms = ReceivedSms.find_by_id(Base62.decode(params[:received_sms_id])) 
+      sms = ReceivedSms.find(Base62.decode(params[:received_sms_id])) 
       if sms
         @keyword ||= sms.sms_keyword || SmsKeyword.where(keyword: sms.message.strip).first
         @person.phone_numbers.create!(number: sms.phone_number, location: 'mobile') unless @person.phone_numbers.detect {|p| p.number_with_country_code == sms.phone_number}
@@ -142,7 +142,7 @@ class ContactsController < ApplicationController
     unless params[:person][:firstName].present? && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
       render :nothing => true and return
     end
-    @person = create_person(params[:person])
+    @person, @email, @phone = create_person(params[:person])
     if @person.save
       create_contact_at_org(@person, current_organization)
       if params[:assign_to_me] == 'true'

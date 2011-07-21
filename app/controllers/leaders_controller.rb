@@ -68,7 +68,7 @@ class LeadersController < ApplicationController
   end
   
   def add_person
-    @person = create_person(params[:person])
+    @person, @email, @phone = create_person(params[:person])
     required_fields = {'First Name' => @person.firstName, 'Last Name' => @person.lastName, 'Gender' => @person.gender, 'Email' => @email.try(:email)}
     @person.valid?; @email.try(:valid?); @phone.try(:valid?)
     unless required_fields.values.all?(&:present?)

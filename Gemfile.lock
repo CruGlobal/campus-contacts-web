@@ -8,12 +8,6 @@ GIT
       rails (>= 2.3.11)
 
 GIT
-  remote: git://github.com/mperham/dalli.git
-  revision: 1754b1094dfc275f91fb820509491212adf0a644
-  specs:
-    dalli (1.1.0)
-
-GIT
   remote: git://github.com/rails/rails.git
   revision: 56fb7fc1b217297c412d7d75e8a2fd85b3bd1a15
   branch: 3-1-stable
@@ -253,7 +247,6 @@ DEPENDENCIES
   client_side_validations
   coffee-script
   crack
-  dalli!
   devise
   dynamic_form
   enforce_schema_rules
