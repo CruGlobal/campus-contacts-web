@@ -61,6 +61,10 @@ $ ->
     position: 
       my: 'top right',  
       at: 'bottom left'
+  $('.tipit2[title]').qtip
+    position: 
+      my: 'top right',  
+      at: 'top left'
   
   $('[data-sortable][data-sortable-handle]').each ->
     handle = $(this).attr('data-sortable-handle');
