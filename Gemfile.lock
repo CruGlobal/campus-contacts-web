@@ -65,8 +65,8 @@ GIT
       ya2yaml (~> 0.30)
 
 GIT
-  remote: git://github.com/sferik/rails_admin.git
-  revision: 39ffb6214b8796bd5abd6216da38d0cb7f6eec30
+  remote: git://github.com/twinge/rails_admin.git
+  revision: d33d9a86ebfdccc2591c3bf674f43960b60143d6
   branch: rails-3.1
   specs:
     rails_admin (0.0.1)
