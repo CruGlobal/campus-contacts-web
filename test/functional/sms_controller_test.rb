@@ -48,6 +48,12 @@ class SmsControllerTest < ActionController::TestCase
         assert_equal(assigns(:person).lastName, 'Christ')
         assert_equal(assigns(:sent_sms).message, @keyword.questions.first.label_with_choices)
       end
+      
+      should "convert a letter to a choice option" do
+        @sms_session.update_attribute(:interactive, true)
+        @person.update_attributes(firstName: 'Jesus', lastName: 'Christ')
+        
+      end
     end
     
     context "on first sms" do

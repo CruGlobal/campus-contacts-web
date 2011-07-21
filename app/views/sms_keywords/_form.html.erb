@@ -8,8 +8,10 @@
     <div class="stepcontent"> 
       <% if @sms_keyword.new_record? %>
         <div class="field">
-          <span class="tiplight" title="<%= t('keywords.form.keyword_instruct') %>"></span>
-          <%= f.label :keyword, t('keywords.form.keyword') + ": " + t('keywords.form.keyword_tip') %>
+          <label for="sms_keyword_<%= :keyword %>">
+            <%= t('keywords.form.keyword') + ": " + t('keywords.form.keyword_tip') %>
+            <span class="tiplight" title="<%= t('keywords.form.keyword_instruct') %>"></span>
+          </label>
           <%= f.text_field :keyword, :placeholder => "Shorter keywords are better" %>
         </div>
       <% else %>
@@ -29,8 +31,12 @@
     </div>
     <div class="stepcontent">    
       <div class="field">
-        <span class="tiplight" title="<%= t('keywords.form.post_survey_why') %>"></span>
-        <%= f.label :initial_response, raw(t('keywords.form.initial_response')) %>
+        
+        <%# = f.label :initial_response, raw(t('keywords.form.initial_response')) %>
+        <label for="sms_keyword_<%= :initial_response %>">
+          <%= raw(t('keywords.form.initial_response')) %> 
+          <span class="tiplight" title="<%= t('keywords.form.post_survey_why') %>"></span>
+        </label>
         <%= f.text_area :initial_response, rows: 3 %>
       </div>
       

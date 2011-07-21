@@ -30,7 +30,10 @@ class Person < ActiveRecord::Base
   validates_presence_of :firstName, :lastName
   validates_email_for :email, allow_blank: true
   
-  accepts_nested_attributes_for :email_addresses, :phone_numbers, allow_destroy: true
+  accepts_nested_attributes_for :email_addresses, :phone_numbers, allow_destroy: true  
+  
+  before_save :stamp_changed
+  before_create :stamp_created
 
   def to_s
     [preferredName.blank? ? firstName : preferredName.try(:strip), lastName.try(:strip)].join(' ')
@@ -322,5 +325,19 @@ class Person < ActiveRecord::Base
   
   def picture
     "http://graph.facebook.com/#{fb_uid}/picture"
+  end
+
+  def updated_at() dateChanged end
+  def updated_by() changedBy end
+  def created_at() dateCreated end
+  def created_by() createdBy end
+    
+  def stamp_changed
+    self.dateChanged = Time.now
+    self.changedBy = ApplicationController.application_name
+  end
+  def stamp_created
+    self.dateCreated = Time.now
+    self.createdBy = ApplicationController.application_name
   end
 end

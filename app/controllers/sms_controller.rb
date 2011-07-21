@@ -119,8 +119,9 @@ class SmsController < ApplicationController
           end
           begin
             question.set_response(answer, @answer_sheet)
-          rescue
+          rescue => e
             # Don't blow up on bad saves
+            HoptoadNotifier.notify(e)
           end
         end
       end

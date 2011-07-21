@@ -168,10 +168,11 @@ $ ->
     false
     
   $('#contacts_controller .controls a.unassign').live 'click', (e)->
-    $(this).closest('tr').fadeOut()
+    # $(this).closest('tr').fadeOut()
     if $('#leaders')[0]?
       $('.id_checkbox', $(this).closest('tr')).prop('checked', true)
       $.fn.assignTo($('.leader.unassigned'), true)
+      $('.id_checkbox', $(this).closest('tr')).prop('checked', false)
     false
   $('a.delete_leader').live 'click', ->
     li = $(this).parent()
@@ -289,6 +290,11 @@ $.fn.assignTo = (leader, skip_remote) ->
   $('.id_checkbox:checked').each ->
     row = $('tr[data-id=' + $(this).val() + ']')
     assigned_to = $('.assigned_to', row)
+    if leader_name == 'Unassigned'
+      $('.unassign_link', row).hide()
+    else
+      $('.unassign_link', row).show()
+      
     unless assigned_to.html() == leader_name
       $('.count', leader).html(Number($('.count', leader).html()) + 1)
       if assigned_to.html() == ''
@@ -303,8 +309,8 @@ $.fn.assignTo = (leader, skip_remote) ->
       else
         assigned_to.text(leader_name) 
     # hide people assigned to someone other than the current
-    if $('#assigned_to').val() != 'all' && $('#assigned_to').val() != leader.attr('data-id')
-      $(this).closest('tr').hide();
+    if $.params.assigned_to != 'all' && $.params.assigned_to != leader_name
+      row.hide();
   unless skip_remote
     $.rails.handleRemote($('#new_contact_assignment'))
   $('#assign_to').val('')
