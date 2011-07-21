@@ -172,6 +172,7 @@ $ ->
     if $('#leaders')[0]?
       $('.id_checkbox', $(this).closest('tr')).prop('checked', true)
       $.fn.assignTo($('.leader.unassigned'), true)
+      $('.id_checkbox', $(this).closest('tr')).prop('checked', false)
     false
   $('a.delete_leader').live 'click', ->
     li = $(this).parent()
