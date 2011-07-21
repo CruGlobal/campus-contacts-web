@@ -1,72 +1,77 @@
 class SmsController < ApplicationController
   skip_before_filter :authenticate_user!, :verify_authenticity_token
   def mo
-    logger.info(params.inspect)
     begin
       # try to save the new message
       @received = ReceivedSms.create!(sms_params)
     rescue ActiveRecord::RecordNotUnique
       # the mysql index just saved us from a duplicate message 
-      logger.info("Duplicate")
       render nothing: true and return 
     end
     # Process incoming text
     message = sms_params[:message]
     
+    # See if this is a sticky session ( prior sms in the past XX minutes )
+    @sms_session = SmsSession.where(sms_params.slice(:phone_number)).order('updated_at desc').where(["updated_at > ?", 30.minutes.ago]).first
+    
     # Handle STOP and HELP messages
-    render nothing: true and return if message.blank? || message.downcase == 'stop'
-    if message.downcase == 'help'
-      msg = 'MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to http://mhub.cc/ for more help.'
-      send_message(msg, sms_params()[:phone_number])
-      render text: msg + "\n" and return
+    case message.downcase
+    when 'stop'
+      @sms_session.update_attribute(:interactive, false)
+      render nothing: true and return
+    when 'help'
+      @msg = 'MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to http://mhub.cc/ for more help.'
+      send_message(@msg, sms_params()[:phone_number])
+      render text: @msg + "\n" and return
+    when ''
+      render nothing: true and return
     end
     
-    # See if this is a sticky session ( prior sms in the past XX minutes )
     # If it is, check for interactive texting
-    @text = ReceivedSms.where(sms_params.slice(:phone_number)).order('updated_at desc').where(["updated_at > ?", 15.minutes.ago]).where('sms_keyword_id is not null').first
-    if @text && (@text.interactive? || message.split(' ').first.downcase == 'i')
-      # Save new message
-      @received.update_attributes(sms_keyword_id: @text.sms_keyword_id, person_id: @text.person_id)
-      keyword = @text.sms_keyword
+    if @sms_session && (@sms_session.interactive? || message.split(' ').first.downcase == 'i')
+      @received.update_attributes(sms_keyword_id: @sms_session.sms_keyword_id, person_id: @sms_session.person_id, sms_session_id: @sms_session.id)
+      @person = @sms_session.person
+      keyword = @sms_session.sms_keyword
       if keyword
-        if !@text.interactive? && message.split(' ').first.downcase == 'i'
+        if !@sms_session.interactive? # they just texted in 'i'
           # We're getting into a sticky session
-          create_contact_at_org(@text.person, @text.sms_keyword.organization)
-          @text.update_attribute(:interactive, true)
+          create_contact_at_org(@person, @sms_session.sms_keyword.organization)
+          @sms_session.update_attribute(:interactive, true)
         else
           # Find the person, save the answer, send the next question
-          save_survey_question(keyword, @text.person, message)
-          @text.person.reload
+          save_survey_question(keyword, @person, message)
+          @person.reload
         end
-        msg = send_next_survey_question(keyword, @text.person, @text.phone_number)
-        unless msg
+        @msg = send_next_survey_question(keyword, @person, @sms_session.phone_number)
+        unless @msg
           # survey is done. send final message
-          msg = keyword.post_survey_message.present? ? keyword.post_survey_message : t('contacts.thanks.message')
-          send_message(msg, @text.phone_number)
+          @msg = keyword.post_survey_message.present? ? keyword.post_survey_message : t('contacts.thanks.message')
+          send_message(@msg, @text.phone_number)
         end
       end
     else
-      @text = @received
-      # If we already have a person with this phone number associate it with this SMS
-      unless person = Person.includes(:phone_numbers).where('phone_numbers.number' => sms_params[:phone_number][1..-1]).first
+      # We're starting a new sms session
+      # Try to find a person with this phone number. If we can't, create a new person
+      unless person = Person.includes(:phone_numbers).where('phone_numbers.number' => PhoneNumber.strip_us_country_code(sms_params[:phone_number])).first
         # Create a person record for this phone number
         person = Person.new
         person.save(validate: false)
         person.phone_numbers.create!(number: sms_params[:phone_number], location: 'mobile')
       end
-      @text.update_attribute(:person_id, person.id)
-      keyword = SmsKeyword.find_by_keyword(message.split(' ').first.downcase)
       
+      # Look for an active keyword for this message
+      keyword = SmsKeyword.find_by_keyword(message.split(' ').first.downcase)
       if !keyword || !keyword.active?
-        msg = t('sms.keyword_inactive')
+        @msg = t('sms.keyword_inactive')
       else
-        msg =  keyword.initial_response.sub(/\{\{\s*link\s*\}\}/, "http://mhub.cc/m/#{Base62.encode(@text.id)}")
-        msg += ' No internet? reply with \'i\''
-        @text.update_attribute(:sms_keyword_id, keyword.id)
+        @msg =  keyword.initial_response.sub(/\{\{\s*link\s*\}\}/, "http://mhub.cc/m/#{Base62.encode(@received.id)}")
+        @msg += ' No internet? reply with \'i\''
+        @sms_session = SmsSession.create!(person_id: person.id, sms_keyword_id: keyword.id, phone_number: sms_params[:phone_number])
+        @received.update_attributes(sms_keyword_id: keyword.id, person_id: person.id, sms_session_id: @sms_session.id)
       end
-      send_message(msg, sms_params[:phone_number])
+      send_message(@msg, sms_params[:phone_number])
     end
-    render text: msg.to_s + "\n"
+    render text: @msg.to_s + "\n"
   end
   
   protected 
@@ -105,7 +110,10 @@ class SmsController < ApplicationController
         if question
           if question.kind == 'ChoiceField'
             choices = question.choices_by_letter
-            answer = answer.gsub(/[^\w]/, '').split(//).collect {|a| choices[a.downcase]}.compact
+            # convert the letter selections to real answers
+            answers = answer.gsub(/[^\w]/, '').split(//).collect {|a| choices[a.downcase]}.compact
+            # also keep the value if they typed the exact answer in
+            answers += answer.split(' ').collect {|a| choices.map(&:downcase).detect {|c| c == a.downcase} }.compact
             # only checkbox fields can have more than one answer
             answer = answer.first unless question.style == 'checkbox'
           end
@@ -121,9 +129,9 @@ class SmsController < ApplicationController
     def next_question(keyword, person)
       case
       when person.firstName.blank?
-        Question.new(label: "What is your first name?")
+        Question.new(label: "What is your first name? Reply STOP to quit")
       when person.lastName.blank?  
-        Question.new(label: "What is your last name?")
+        Question.new(label: "What is your last name? Reply STOP to quit")
       else
         answer_sheet = get_answer_sheet(keyword, person)
         keyword.question_page.questions.reload

@@ -13,7 +13,7 @@ class SmsControllerTest < ActionController::TestCase
     context "from a known carrier" do
       setup do
         post :mo, @post_params.merge!(timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
-        assert_equal assigns(:text).sms_keyword, @keyword
+        assert_equal assigns(:received).sms_keyword, @keyword
       end 
       
       should respond_with(:success)
@@ -23,20 +23,30 @@ class SmsControllerTest < ActionController::TestCase
       setup do
         @person = Factory.build(:person_without_name) 
         @person.save(validate: false)
+        @sms_session = Factory(:sms_session, person: @person, sms_keyword: @keyword, phone_number: @phone_number)
         @sms_params = @post_params.slice(:message, :carrier, :country).merge(phone_number: @phone_number, shortcode: APP_CONFIG['sms_short_code'], sms_keyword_id: @keyword.id, person: @person)
       end
       
       should "send first survey question when 'i' is texted" do
         Factory(:received_sms, @sms_params)
         post :mo, @post_params.merge(message: 'i', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
-        assert_equal(assigns(:sent_sms).message, 'What is your first name?')
+        assert_equal(assigns(:sms_session).interactive, true)
+        assert_equal(assigns(:msg), 'What is your first name? Reply STOP to quit')
       end
       
       should "save response to interactive sms" do
-        Factory(:received_sms, @sms_params.merge(interactive: true))
-        Factory(:received_sms, @sms_params.merge(message: 'i'))
+        @sms_session.update_attribute(:interactive, true)
         post :mo, @post_params.merge!({message: 'Jesus', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
-        assert_equal(assigns(:text).person.firstName, 'Jesus')
+        assert_equal(assigns(:person).firstName, 'Jesus')
+        assert_equal(assigns(:msg), 'What is your last name? Reply STOP to quit')
+      end
+      
+      should "send the first survey question after first and last name are present" do
+        @sms_session.update_attribute(:interactive, true)
+        @person.update_attribute(:firstName, 'Jesus')
+        post :mo, @post_params.merge!({message: 'Christ', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
+        assert_equal(assigns(:person).lastName, 'Christ')
+        assert_equal(assigns(:sent_sms).message, @keyword.questions.first.label_with_choices)
       end
     end
     

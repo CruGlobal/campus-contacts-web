@@ -5,10 +5,15 @@ class PhoneNumber < ActiveRecord::Base
   before_validation :set_primary, on: :create
   after_destroy :set_new_primary
   
+  def self.strip_us_country_code(num)
+    return unless num
+    num = num.to_s.gsub(/[^\d]/, '')
+    num.length == 11 && num.first == '1' ? num[1..-1] : num
+  end
+  
   def number=(num)
     if num
-      num = num.gsub(/[^\d]/, '')
-      self[:number] = num.length == 11 ? num[1..-1] : num
+      self[:number] = PhoneNumber.strip_us_country_code(num)
     end
   end
   
