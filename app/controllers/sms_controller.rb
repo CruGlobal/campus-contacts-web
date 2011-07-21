@@ -46,7 +46,7 @@ class SmsController < ApplicationController
         unless @msg
           # survey is done. send final message
           @msg = keyword.post_survey_message.present? ? keyword.post_survey_message : t('contacts.thanks.message')
-          send_message(@msg, @text.phone_number)
+          send_message(@msg, @received.phone_number)
         end
       end
     else
@@ -110,12 +110,12 @@ class SmsController < ApplicationController
         if question
           if question.kind == 'ChoiceField'
             choices = question.choices_by_letter
-            # convert the letter selections to real answers
-            answers = answer.gsub(/[^\w]/, '').split(//).collect {|a| choices[a.downcase]}.compact
-            # also keep the value if they typed the exact answer in
-            answers += answer.split(' ').collect {|a| choices.map(&:downcase).detect {|c| c == a.downcase} }.compact
+            # if they typed out a full answer, use that
+            answers = answer.gsub(/[^\w]/, '').split(/\s+/).collect {|a| choices.values.detect {|c| c.downcase == a.downcase} }.compact
+            # if they used letter selections, convert the letter selections to real answers
+            answers = answer.gsub(/[^\w]/, '').split(//).collect {|a| choices[a.downcase]}.compact if answers.empty?
             # only checkbox fields can have more than one answer
-            answer = answer.first unless question.style == 'checkbox'
+            answer = question.style == 'checkbox' ? answers : answers.first
           end
           begin
             question.set_response(answer, @answer_sheet)
@@ -141,13 +141,13 @@ class SmsController < ApplicationController
     end
     
     def send_message(msg, phone_number)
-      if @text
-        carrier = SmsCarrier.find_or_create_by_moonshado_name(@text.carrier) 
+      if @received
+        carrier = SmsCarrier.find_or_create_by_moonshado_name(@received.carrier) 
         carrier.increment!(:sent_sms)
       end
       sms_id = SMS.deliver(phone_number, msg).first #  + ' Txt HELP for help STOP to quit'
       sent_via = 'moonshado'
-      @sent_sms = SentSms.create!(message: msg, recipient: phone_number, moonshado_claimcheck: sms_id, sent_via: sent_via, received_sms_id: @text.try(:id))
+      @sent_sms = SentSms.create!(message: msg, recipient: phone_number, moonshado_claimcheck: sms_id, sent_via: sent_via, received_sms_id: @received.try(:id))
     end
 
 end

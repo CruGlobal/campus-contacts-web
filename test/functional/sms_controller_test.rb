@@ -52,7 +52,15 @@ class SmsControllerTest < ActionController::TestCase
       should "convert a letter to a choice option" do
         @sms_session.update_attribute(:interactive, true)
         @person.update_attributes(firstName: 'Jesus', lastName: 'Christ')
-        
+        post :mo, @post_params.merge!({message: 'a', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
+        assert_equal(assigns(:answer_sheet).answers.first.value, 'Prayer Group')
+      end
+      
+      should "save an option typed in" do
+        @sms_session.update_attribute(:interactive, true)
+        @person.update_attributes(firstName: 'Jesus', lastName: 'Christ')
+        post :mo, @post_params.merge!({message: 'Jesus', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
+        assert_equal(assigns(:answer_sheet).answers.first.value, 'Jesus') 
       end
     end
     
