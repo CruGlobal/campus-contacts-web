@@ -117,7 +117,7 @@
       <% end %>
     </tbody>
   </table>
-  
+  <%= paginate @people %>
   <% if @people.blank? %>
     <div class="contentpad no_contacts">
         Sorry, there are no contacts here.

@@ -77,6 +77,7 @@ class ContactsController < ApplicationController
         end
       end
     end
+    @people = @people.page(params[:page])
   end
   
   def mine
