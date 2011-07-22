@@ -32,9 +32,10 @@ class WelcomeController < ApplicationController
           sign_out(current_user)
           old_user = User.find(current_user.id)
           user.merge(old_user)
+          user.reload
           sign_in(user)
         end
-        if user && user.person.organizations.present? && user.person.organizations.any? {|org| user.person.leader_in?(org)}
+        if user && user.person && user.person.organizations.present? && user.person.organizations.any? {|org| user.person.leader_in?(org)}
           redirect_to '/wizard?step=keyword'
         else
           redirect_to '/wizard?step=verify&not_found=1'

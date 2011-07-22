@@ -230,7 +230,7 @@ class Person < ActiveRecord::Base
             e.degree_id = education.degree.try(:id) ? education.degree.id : e.degree_id
             e.degree_name = education.degree.try(:name) ? education.degree.name : e.degree_name
           end
-          save!       
+          save(validate: false)
         end 
       end
     end

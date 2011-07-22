@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110721134014) do
+ActiveRecord::Schema.define(:version => 20110722141812) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -465,7 +465,7 @@ ActiveRecord::Schema.define(:version => 20110721134014) do
   create_table "crs2_registrant", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "version",                                                :null => false
+    t.integer  "version",                                                   :null => false
     t.date     "arrival_date"
     t.datetime "began_at"
     t.datetime "cancelled_at"
@@ -474,15 +474,16 @@ ActiveRecord::Schema.define(:version => 20110721134014) do
     t.date     "departure_date"
     t.string   "registrant_role"
     t.boolean  "requires_childcare"
-    t.string   "status",                                 :default => "", :null => false
+    t.string   "status",                                 :default => "",    :null => false
     t.integer  "registration_before_cancellation_id"
     t.integer  "cancelled_by_id"
-    t.integer  "profile_id",                                             :null => false
+    t.integer  "profile_id",                                                :null => false
     t.integer  "registrant_type_id"
     t.integer  "registrant_type_before_cancellation_id"
     t.integer  "registration_id"
     t.string   "early_registration_override"
     t.boolean  "name_disabled"
+    t.boolean  "orphan",                                 :default => false, :null => false
   end
 
   add_index "crs2_registrant", ["cancelled_by_id"], :name => "fk_registrant_cancelled_by_id"
