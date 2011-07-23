@@ -16,5 +16,5 @@ module ApplicationHelper
     e = extra ? "spinner_#{extra}" : 'spinner'
     image_tag('spinner.gif', id: e, style: 'display:none', class: 'spinner')
   end
-
+  
 end

@@ -25,10 +25,10 @@
           <% if current_organization.keywords.present? %>
             <li class="item smallermenu">
               <% if current_organization.keywords.length == 1 %>
-                <%= link_to("Enter Survey Mode", facebook_logout_url(next: contact_form_url(current_organization.keywords.first.keyword)), :class => "tipit disabled", :title => t('nav.survey_mode_tip'))%>
+                <%= link_to("Enter Survey Mode", facebook_logout_url(next: contact_form_url(current_organization.keywords.first.keyword)), :class => "tipit", :title => t('nav.survey_mode_tip'))%>
               <% else %>
-                <%= link_to("Enter Survey Mode", '', id: 'survey_keywords_mode_link', :class => "tipit", :title => t('nav.survey_mode_tip'))%>
-                <ul style=""><% current_organization.keywords.each do |keyword| %>
+                <%= link_to("Enter Survey Mode", '', id: 'survey_keywords_mode_link')%>
+                <ul style="" class="tipit2" title="<%= t("nav.survey_mode_tip") %>"><% current_organization.keywords.each do |keyword| %>
                   <li><div style="width:100%; display:inline"><%= link_to("Use Keyword: #{keyword.keyword}", facebook_logout_url(next: contact_form_url(keyword.keyword)), id: 'select_keyword')%>
                     </li>
                   <% end %>

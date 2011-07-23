@@ -23,10 +23,11 @@ gem 'rubycas-client'
 gem 'rubycas-client-rails', git: 'git://github.com/zuk/rubycas-client-rails.git'
 # gem 'squeel'
 gem 'ancestry'
-gem 'rails_admin', git: 'git://github.com/twinge/rails_admin.git'
+gem 'rails_admin', git: 'git://github.com/twinge/rails_admin.git', branch: 'rails-3.1'
 # gem 'rails_admin', git: 'git://github.com/sferik/rails_admin.git', branch: 'rails-3.1'
 
-gem 'dalli', git: 'git://github.com/mperham/dalli.git'
+# gem 'dalli', git: 'git://github.com/mperham/dalli.git'
+gem 'memcache-client'
 gem "state_machine"
 gem 'acts_as_list'
 gem 'dynamic_form'

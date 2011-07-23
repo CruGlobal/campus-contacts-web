@@ -13,3 +13,4 @@ public/assets
 *.swp
 coverage.data
 .sass-cache
+config/deploy.rb

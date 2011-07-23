@@ -117,7 +117,7 @@
       <% end %>
     </tbody>
   </table>
-  
+  <%= paginate @people %>
   <% if @people.blank? %>
     <div class="contentpad no_contacts">
         Sorry, there are no contacts here.
@@ -125,6 +125,12 @@
   <% end %>
   <%= render 'assign' %>
 <% end %>
+
+<div class="searchstat">
+  <%= "Displaying #{@people.offset_value + 1} - #{@people.offset_value + @people.length} of #{@people.total_count}" %>
+</div>
+
+
 <div id="add_contact_div" style="display:none" title="Add a Contact">
   <%= render 'add_contact', person: Person.new %>
 </div>

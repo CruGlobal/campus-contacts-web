@@ -33,7 +33,7 @@ class SmsKeywordsController < ApplicationController
 
     respond_to do |format|
       if @sms_keyword.save
-        format.html { redirect_to(session[:wizard] ? wizard_path : sms_keywords_path, notice: t('keywords.flash.created')) }
+        format.html { redirect_to(session[:wizard] ? wizard_path : sms_keywords_path) } #, notice: t('keywords.flash.created')
         format.xml  { render xml: @sms_keyword, status: :created, location: @sms_keyword }
       else
         format.html { render action: "new" }
