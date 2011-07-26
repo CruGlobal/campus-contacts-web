@@ -29,7 +29,7 @@ gem 'rails_admin', git: 'git://github.com/twinge/rails_admin.git', branch: 'rail
 # gem 'dalli', git: 'git://github.com/mperham/dalli.git'
 gem 'memcache-client'
 
-gem 'newrelic_rpm'
+gem 'newrelic_rpm', '3.1.1.beta3'
 gem "state_machine"
 gem 'acts_as_list'
 gem 'dynamic_form'

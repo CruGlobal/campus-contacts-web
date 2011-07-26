@@ -141,7 +141,7 @@ GEM
     net-ssh (2.1.4)
     net-ssh-gateway (1.1.0)
       net-ssh (>= 1.99.1)
-    newrelic_rpm (3.1.0)
+    newrelic_rpm (3.1.1.beta3)
     oa-core (0.2.6)
     oa-oauth (0.2.6)
       faraday (~> 0.6.1)
@@ -256,7 +256,7 @@ DEPENDENCIES
   memcache-client
   mini_fb
   mysql2
-  newrelic_rpm
+  newrelic_rpm (= 3.1.1.beta3)
   oa-oauth
   paper_trail (~> 2)
   rack-offline
