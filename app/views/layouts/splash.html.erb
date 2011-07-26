@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <%= NewRelic::Agent.browser_timing_header rescue "" %>
   <%= render 'shared/head' %>
   <script>
 	  $(function() {
@@ -37,6 +38,7 @@
     </div>
   </div><!-- outer -->
 
+  <%= NewRelic::Agent.browser_timing_header rescue "" %>
 </body>
 </html>
 

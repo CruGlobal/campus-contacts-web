@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <%= NewRelic::Agent.browser_timing_header rescue "" %>
   <%= render 'shared/head' %>
 </head>
 <body id="<%= controller.controller_name %>_controller">
@@ -16,6 +17,7 @@
     
   </div><!-- outer -->
 
+  <%= NewRelic::Agent.browser_timing_header rescue "" %>
 </body>
 </html>
 

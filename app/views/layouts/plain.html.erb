@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <%= NewRelic::Agent.browser_timing_header rescue "" %>
   <%= render 'shared/head' %>
   <%= stylesheet_link_tag 'plain' %>
 </head>
@@ -37,6 +38,7 @@
     
   </div><!-- outer -->
 
+  <%= NewRelic::Agent.browser_timing_header rescue "" %>
 </body>
 </html>
 
