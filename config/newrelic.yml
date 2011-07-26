@@ -9,6 +9,8 @@
 
 # Here are the settings that are common to all environments:
 common: &default_settings
+  browser_monitoring:
+      auto_instrument: true
   # ============================== LICENSE KEY ===============================
 
   # You must specify the license key associated with your New Relic

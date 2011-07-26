@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <%= NewRelic::Agent.browser_timing_header rescue "" %>
   <%= render 'shared/head' %>
 </head>
 <body id="<%= controller.controller_name %>_controller" class="<%= params[:action] %>">
@@ -53,7 +54,7 @@
     </div>
     
   </div><!-- outer -->
-
+  <%= NewRelic::Agent.browser_timing_footer rescue "" %>
 </body>
 </html>
 
