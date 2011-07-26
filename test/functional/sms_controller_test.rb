@@ -31,14 +31,14 @@ class SmsControllerTest < ActionController::TestCase
         Factory(:received_sms, @sms_params)
         post :mo, @post_params.merge(message: 'i', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
         assert_equal(assigns(:sms_session).interactive, true)
-        assert_equal(assigns(:msg), 'What is your first name? Reply STOP to quit')
+        assert_equal(assigns(:msg), 'What is your first name?')
       end
       
       should "save response to interactive sms" do
         @sms_session.update_attribute(:interactive, true)
         post :mo, @post_params.merge!({message: 'Jesus', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
         assert_equal(assigns(:person).firstName, 'Jesus')
-        assert_equal(assigns(:msg), 'What is your last name? Reply STOP to quit')
+        assert_equal(assigns(:msg), 'What is your last name?')
       end
       
       should "send the first survey question after first and last name are present" do

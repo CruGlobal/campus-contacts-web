@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', git: 'git://github.com/rails/rails.git', branch: '3-1-stable'
+gem 'rails', '3.1.0.rc5'#, git: 'git://github.com/rails/rails.git', branch: '3-1-stable'
 gem 'sass'
 gem 'coffee-script'
 gem 'uglifier'
@@ -28,6 +28,8 @@ gem 'rails_admin', git: 'git://github.com/twinge/rails_admin.git', branch: 'rail
 
 # gem 'dalli', git: 'git://github.com/mperham/dalli.git'
 gem 'memcache-client'
+
+gem 'newrelic_rpm'
 gem "state_machine"
 gem 'acts_as_list'
 gem 'dynamic_form'

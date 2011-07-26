@@ -130,9 +130,9 @@ class SmsController < ApplicationController
     def next_question(keyword, person)
       case
       when person.firstName.blank?
-        Question.new(label: "What is your first name? Reply STOP to quit")
+        Question.new(label: "What is your first name?")
       when person.lastName.blank?  
-        Question.new(label: "What is your last name? Reply STOP to quit")
+        Question.new(label: "What is your last name?")
       else
         answer_sheet = get_answer_sheet(keyword, person)
         keyword.question_page.questions.reload
