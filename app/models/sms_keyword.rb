@@ -24,6 +24,7 @@ class SmsKeyword < ActiveRecord::Base
     event :deny do
       transition requested: :denied
     end
+    after_transition :on => :deny, :do => :notify_user_of_denial
     
     event :disable do
       transition any => :inactive
@@ -53,6 +54,30 @@ class SmsKeyword < ActiveRecord::Base
     question_sheet.questions
   end
   
+  rails_admin do
+    edit do
+      field :keyword
+      field :chartfield
+      field :explanation
+      field :initial_response
+      field :post_survey_message
+      field :chartfield
+      field :state do
+        partial "keyword_state"
+      end
+    end
+    list do
+      field :keyword
+      field :state
+      field :user
+      field :organization
+      field :explanation
+      field :initial_response
+      field :post_survey_message
+      field :chartfield
+    end
+  end
+  
   private
     def queue_notify_admin_of_request
       async(:notify_admin_of_request) 
@@ -63,5 +88,13 @@ class SmsKeyword < ActiveRecord::Base
       if user
         KeywordRequestMailer.notify_user(self).deliver
       end
+      true
+    end
+    
+    def notify_user_of_denial
+      if user
+        KeywordRequestMailer.notify_user_of_denial(self).deliver
+      end
+      true
     end
 end

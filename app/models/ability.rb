@@ -20,6 +20,7 @@ class Ability
       # can only manage keywords from orgs you're an admin of
       # can :manage, SmsKeyword, organization_id: user.person.organizational_roles.where(role_id: admin_role.id).collect(&:organization_id)
       can :manage, SmsKeyword, organization_id: admin_of_org_ids
+      can :all, SmsKeyword, user.developer?
       # Gotta be an admin somewhere to see keyword options
       # unless user.person.organizational_roles.where(role_id: admin_role.id).present?
       unless user.person.organizational_roles.where(role_id: [leader_role.id, admin_role.id]).present?

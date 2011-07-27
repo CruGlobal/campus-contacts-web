@@ -45,4 +45,15 @@ class Organization < ActiveRecord::Base
   def question_sheets
     keywords.collect(&:question_sheet)
   end
+  
+  rails_admin do
+    edit do
+      field :name
+      field :requires_validation
+      field :validation_method, :enum
+      field :terminology, :enum do
+        help "What do you refer to this organization as? i.e. a Ministry, a Movement, etc"
+      end
+    end
+  end
 end

@@ -1,6 +1,6 @@
 <div class="field <%= field.to_param %>">
   <%= label_tag 'Action' %>
   <% form.object.state_paths.events.each do |event| %>
-    <%= link_to(event, "/admin/sms_keywords/#{form.object.id}/t/#{event}") %>
+    <%= link_to(event, "/admin/sms_keywords/#{form.object.id}/t/#{event}", method: :post, class: "#{event} keyword") %>
   <% end %>
 </div>

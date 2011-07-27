@@ -128,6 +128,7 @@ Mh::Application.routes.draw do
   
   # SMS keyword state transitions
   match '/admin/sms_keywords/:id/t/:transition' => 'admin/sms_keywords#transition', as: 'sms_keyword_transition'
+  match '/admin/sms_keywords/approve'
 
   # Map keyword responses with phone numbers
   match 'c/:keyword(/:received_sms_id)' => 'contacts#new', as: 'contact_form'
@@ -137,7 +138,7 @@ Mh::Application.routes.draw do
   
   get "welcome/tour"
   
-  mount RailsAdmin::Engine => "/admin"
+  mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
   mount Resque::Server.new, at: "/resque"
 
   #other oauth calls
