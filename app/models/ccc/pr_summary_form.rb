@@ -1,5 +1,5 @@
 class Ccc::PrSummaryForm < AnswerSheet
-  belongs_to :review
+  belongs_to :review, class_name: 'Ccc::PrReview'
   #belongs_to :person
   set_table_name "pr_summary_forms"
 

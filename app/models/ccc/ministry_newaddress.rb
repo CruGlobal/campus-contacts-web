@@ -1,7 +1,7 @@
 class Ccc::MinistryNewaddress < ActiveRecord::Base
   set_primary_key :addressID
   set_table_name 'ministry_newaddress'
-  belongs_to :ministry_person, class_name: 'Ccc::MinistryPerson', foreign_key: :fk_PersonID
+  belongs_to :ministry_person, class_name: 'Person', foreign_key: :fk_PersonID
   
   def merge(other)
     Ccc::MinistryNewaddress.transaction do
