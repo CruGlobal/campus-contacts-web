@@ -16,8 +16,8 @@ GIT
 
 GIT
   remote: git://github.com/twinge/rails_admin.git
-  revision: 19ac4500e1f0e663e68d76cb070af4a6c0649ff1
-  branch: rails-3.1
+  revision: ae09c0ac5597e67d3298d1c1b699792c136b5a19
+  branch: rails-3.1-no-ck
   specs:
     rails_admin (0.0.1)
       builder (~> 3.0.0)

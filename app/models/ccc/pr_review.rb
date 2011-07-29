@@ -4,7 +4,7 @@ class Ccc::PrReview < ActiveRecord::Base
   belongs_to :question_sheet
   has_many :reviewings, class_name: "Ccc::PrReviewer", dependent: :destroy
   has_many :reviewers, through: :reviewings, class_name: "Person", source: :person
-  has_one :summary_form
+  has_one :summary_form, class_name: "Ccc::PrSummaryForm"
   set_table_name "pr_reviews"
 
   validates_presence_of :name
