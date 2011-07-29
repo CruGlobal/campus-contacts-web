@@ -28,7 +28,7 @@ class Person < ActiveRecord::Base
   
   scope :who_answered, lambda {|question_sheet_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.question_sheet_id' => question_sheet_id)}
   validates_presence_of :firstName, :lastName
-  validates_email_for :email, allow_blank: true
+  validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/, allow_blank: true
   
   accepts_nested_attributes_for :email_addresses, :phone_numbers, allow_destroy: true  
   
