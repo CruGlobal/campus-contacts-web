@@ -9,7 +9,7 @@ class SmsKeyword < ActiveRecord::Base
   belongs_to :organization
   validates_presence_of :keyword, :explanation, :user_id, :organization_id, :post_survey_message#, :chartfield
   validates_format_of :keyword, with: /^[\w\d]+$/, on: :create, message: "can't have spaces or punctuation"
-  validates_uniqueness_of :keyword, on: :create, case_sensitive: false, message: "has already been taken by someone else."
+  validates_uniqueness_of :keyword, on: :create, case_sensitive: false, message: "This keyword has already been taken by someone else. Please choose something else"
   
   state_machine :state, initial: :requested do
     state :requested

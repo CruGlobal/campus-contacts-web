@@ -1,0 +1,5 @@
+<!-- <label for="<%= dom_id(text_field) %>" class="desc"><%= raw text_field.label %></label> -->
+<%= text_field_tag "answers[#{text_field.id}]", text_field.response(@answer_sheet), 
+      :id => dom_id(text_field),
+      :maxlength => text_field.max_length.to_i > 0 ? text_field.max_length : 255 %>
+
