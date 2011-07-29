@@ -61,6 +61,7 @@ group :development, :test do
 #  gem 'guard-test'
   gem 'railroady'
   gem 'awesome_print'
+  gem 'active_reload'
 end
 
 group :performance do

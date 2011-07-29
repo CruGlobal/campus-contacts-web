@@ -1,5 +1,6 @@
   <div class="explain">
     <p>Add a contact to <%= current_organization %></p>
+    <p>If the person you are adding is standing next to you, click "Enter Survey Mode" from the top right corner of your screen.</p>
   </div>
 
   <div id="add_contact_form">
@@ -15,17 +16,32 @@
         <%= hidden_field_tag :dnc, params[:dnc] %>
       <% end %>
       <%= render 'people/person_form', person: person %>
+      
+      <table border="0" cellspacing="0" cellpadding="0" class="modal_person_info">
+        <% current_organization.questions.uniq {|q| q.label}.each do |question| %>
+          <% next if ['email','phone'].include?(question.slug) %>
+          <tr>
+            <td class="left"><%= raw question.label %></td>
+            <td><%= render :partial => 'questions/' + question.ptemplate, :object => question, :locals => {:col => nil} %></td>
+          </tr>
+        <% end %>
+      </table>
       <br/>
       <%= submit_tag 'Save and close', class: 'save_and_close save' %>
       <%= submit_tag 'Save and add another', class: 'save_and_more save' %>
     <% end %>
     
-    <br>
-    OR
-    <br/><br/>
-    <% current_organization.keywords.each do |keyword| %>
-      <%= link_to raw("Enter Survey Mode for " + "<strong>" + "#{keyword.keyword}" + "</strong>"), facebook_logout_url(next: contact_form_url(keyword.keyword)), id: "show_keywords", class: "inlinebutton" %><br/>
-    <% end %>
+    <%# if current_organization.keywords.length > 0 %>
+      <!-- <br/><br/> -->
+      <!-- <%# if current_organization.keywords.length > 1 %>
+        <%# current_organization.keywords.each do |keyword| %>
+          <%#= link_to raw("Enter Survey Mode for " + "<strong>" + "#{keyword.keyword}" + "</strong>"), facebook_logout_url(next: contact_form_url(keyword.keyword)), id: "show_keywords", class: "inlinebutton" %><br/>
+        <%# end %>
+      <%# else %>
+        <%# keyword = current_organization.keywords.first %>
+        <%#= link_to raw("Enter Survey Mode for " + "<strong>" + "#{keyword.keyword}" + "</strong>"), facebook_logout_url(next: contact_form_url(keyword.keyword)), id: "show_keywords", class: "inlinebutton" %><br/>
+      <%# end %>
     
-    <p>Survey mode allows you to see how the survey will look for your contacts.</p>
+      <p>Survey mode allows you to see how the survey will look for your contacts.</p> -->
+    <%# end %>
   </div>

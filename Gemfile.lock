@@ -61,6 +61,7 @@ GEM
       rack-mount (~> 0.8.1)
       rack-test (~> 0.6.0)
       sprockets (~> 2.0.0.beta.12)
+    active_reload (0.3.0)
     activemodel (3.1.0.rc5)
       activesupport (= 3.1.0.rc5)
       bcrypt-ruby (~> 2.1.4)
@@ -242,6 +243,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_reload
   acts_as_list
   ancestry
   awesome_print

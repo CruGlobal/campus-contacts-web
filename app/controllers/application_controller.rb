@@ -128,10 +128,10 @@ class ApplicationController < ActionController::Base
   helper_method :unassigned_people
   
   def get_answer_sheet(keyword, person)
-    @answer_sheet = AnswerSheet.where(person_id: person.id, question_sheet_id: keyword.question_sheet.id).first || 
-                    AnswerSheet.create!(person_id: person.id, question_sheet_id: keyword.question_sheet.id)
-    @answer_sheet.reload
-    @answer_sheet
+    answer_sheet = AnswerSheet.where(person_id: person.id, question_sheet_id: keyword.question_sheet.id).first || 
+                   AnswerSheet.create!(person_id: person.id, question_sheet_id: keyword.question_sheet.id)
+    answer_sheet.reload
+    answer_sheet
   end
   
   def create_contact_at_org(person, organization)

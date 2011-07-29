@@ -98,7 +98,7 @@ class ContactsController < ApplicationController
         sms.update_attribute(:person_id, @person.id) unless sms.person_id
       end
     end
-    get_answer_sheet(@keyword, @person)
+    @answer_sheet = get_answer_sheet(@keyword, @person)
     respond_to do |wants|
       wants.html { render :layout => 'plain'}
       wants.mobile
@@ -106,7 +106,7 @@ class ContactsController < ApplicationController
   end
     
   def update
-    get_answer_sheet(@keyword, @person)
+    @answer_sheet = get_answer_sheet(@keyword, @person)
     @person.update_attributes(params[:person]) if params[:person]
     question_set = QuestionSet.new(@keyword.questions, @answer_sheet)
     question_set.post(params[:answers], @answer_sheet)
@@ -144,6 +144,13 @@ class ContactsController < ApplicationController
     end
     @person, @email, @phone = create_person(params[:person])
     if @person.save
+      # save survey answers
+      current_organization.keywords.each do |keyword|
+        @answer_sheet = get_answer_sheet(keyword, @person)
+        question_set = QuestionSet.new(keyword.questions, @answer_sheet)
+        question_set.post(params[:answers], @answer_sheet)
+        question_set.save
+      end
       create_contact_at_org(@person, current_organization)
       if params[:assign_to_me] == 'true'
         ContactAssignment.where(person_id: @person.id, organization_id: current_organization.id).destroy_all
