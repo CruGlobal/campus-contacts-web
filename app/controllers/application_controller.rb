@@ -146,7 +146,7 @@ class ApplicationController < ActionController::Base
   end
   
   def user_root_path
-    return wizard_path if !current_organization || (current_person.organizations.include?(current_organization) && current_organization.keywords.blank?)
+    return wizard_path if !current_organization || (current_person.organizations.include?(current_organization) && wizard_path)
     # if current_person.leader_in?(current_organization)
       '/contacts/mine'
     # else

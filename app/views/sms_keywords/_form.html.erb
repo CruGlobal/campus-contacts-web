@@ -59,7 +59,7 @@
       <%= image_tag("step4.png") %>
     </div>
     <div class="stepcontent"> 
-      <% if current_organization.show_sub_orgs? %>   
+      <% if current_organization.show_sub_orgs? && current_organization.has_children? %>   
         <div class="field">
           <label for="sms_keyword_organization">
             <%= raw(t('keywords.form.association', this_term: current_organization.terminology, child_term: current_organization.children.first.terminology)) %> 
