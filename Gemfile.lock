@@ -105,8 +105,6 @@ GEM
       multipart-post (~> 1.1.0)
       rack (< 2, >= 1.1.0)
     fastercsv (1.5.4)
-    format_for_extensions (0.1.3)
-      rails (>= 2.3.5)
     haml (3.1.2)
     hashie (1.0.0)
     highline (1.6.2)
@@ -252,7 +250,6 @@ DEPENDENCIES
   enforce_schema_rules
   ephemeral_response
   factory_girl (~> 2.0.0.rc4)
-  format_for_extensions
   hoptoad_notifier
   jquery-rails
   kaminari

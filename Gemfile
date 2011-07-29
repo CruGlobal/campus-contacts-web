@@ -8,7 +8,6 @@ gem 'jquery-rails'
 
 
 gem 'mysql2'
-gem 'format_for_extensions'
 gem 'rack-offline'
 gem 'rake', '0.8.7'
 gem 'capistrano'
