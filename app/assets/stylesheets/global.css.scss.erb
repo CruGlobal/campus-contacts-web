@@ -733,7 +733,7 @@ span.title {
     text-decoration: underline;
   }
   .getstartedbt {
-    background: url("<%= asset_path("splash/btn_gs.png") %>") no-repeat 0 0;
+    background: url("<%= asset_path("splash/btn_gsc.png") %>") no-repeat 0 0;
     color: #FFFFFF;
     display: inline-block;
     font-weight: bold;
@@ -743,10 +743,11 @@ span.title {
     text-align: left;
     text-transform: uppercase;
     width: 220px;
+    overflow: hidden;
   }
   .getstartedbt:hover {
-    background-image: url("<%= asset_path("splash/btn_gshover.png") %>");
     text-decoration: none;
+    background-position: 0 100%;
   }
   h1.headlinetext {
     font-size: 29px;
