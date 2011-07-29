@@ -7,7 +7,7 @@ class SmsKeywords::QuestionsController < ApplicationController
   # GET /questions.xml
   def index
     session[:wizard] = false
-    @questions = @keyword.question_sheet.elements
+    @questions = @keyword.questions.all
     respond_to do |wants|
       wants.html # index.html.erb
       wants.xml  { render xml: @questions }

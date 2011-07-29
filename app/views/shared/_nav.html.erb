@@ -1,3 +1,4 @@
+<% cache(user_signed_in? ? ['global_nav', "#{current_user.id}-#{current_user.current_sign_in_at.to_i}", current_organization.try(:id)] : 'global_nav') do %>
 <div id="global">
   
   <div class="gmwrap">
@@ -48,3 +49,4 @@
   
   
 </div>
+<% end %>

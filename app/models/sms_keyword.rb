@@ -4,11 +4,12 @@ class SmsKeyword < ActiveRecord::Base
   
   belongs_to :user
   has_many :question_sheets, as: :questionnable
+  has_many :questions, :through => :question_sheets
   belongs_to :event, polymorphic: true
   belongs_to :organization
   validates_presence_of :keyword, :explanation, :user_id, :organization_id, :post_survey_message#, :chartfield
   validates_format_of :keyword, with: /^[\w\d]+$/, on: :create, message: "can't have spaces or punctuation"
-  validates_uniqueness_of :keyword, on: :create, case_sensitive: false, message: "must be unique"
+  validates_uniqueness_of :keyword, on: :create, case_sensitive: false, message: "has already been taken by someone else."
   
   state_machine :state, initial: :requested do
     state :requested

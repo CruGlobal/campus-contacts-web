@@ -89,19 +89,23 @@ class ApplicationController < ActionController::Base
   def current_organization(person = nil)
     person ||= current_person if user_signed_in?
     return nil unless person
-    if session[:current_organization_id]
-      org = Organization.find_by_id(session[:current_organization_id]) 
-      org = nil unless org && (person.organizations.include?(org) || person.organizations.include?(org.parent))
-    end
-    unless org
-      org = person.primary_organization
-      # If they're a contact at their primary org (shouldn't happen), look for another org where they have a different role
-      unless person.organizations.include?(org)
-        org = person.organizations.first
+    @current_organizations ||= {}
+    unless @current_organizations[person]
+      if session[:current_organization_id]
+        org = Organization.find_by_id(session[:current_organization_id]) 
+        org = nil unless org && (person.organizations.include?(org) || person.organizations.include?(org.parent))
       end
-      session[:current_organization_id] = org.try(:id)
+      unless org
+        org = person.primary_organization
+        # If they're a contact at their primary org (shouldn't happen), look for another org where they have a different role
+        unless person.organizations.include?(org)
+          org = person.organizations.first
+        end
+        session[:current_organization_id] = org.try(:id)
+      end
+      @current_organizations[person] = org
     end
-    org
+    @current_organizations[person]
   end
   helper_method :current_organization
   
@@ -142,7 +146,7 @@ class ApplicationController < ActionController::Base
   end
   
   def user_root_path
-    return '/wizard' if !current_organization || (current_person.organizations.include?(current_organization) && current_organization.keywords.blank?)
+    return wizard_path if !current_organization || (current_person.organizations.include?(current_organization) && current_organization.keywords.blank?)
     # if current_person.leader_in?(current_organization)
       '/contacts/mine'
     # else
@@ -152,7 +156,10 @@ class ApplicationController < ActionController::Base
   helper_method :user_root_path
   
   def wizard_path
-    '/wizard?step=' + current_user.next_wizard_step(current_organization)
+    step = current_user.next_wizard_step(current_organization)
+    if step
+      '/wizard?step=' + step
+    end
   end
   helper_method :wizard_path
   

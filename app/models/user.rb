@@ -49,9 +49,8 @@ class User < ActiveRecord::Base
   def next_wizard_step(org)
     case 
     when org.nil? then 'verify'
-    when org && org.keywords.blank? then 'keyword'
-    when org && org.question_sheets.blank? then 'survey'
-    else 'keyword'
+    when org && org.self_and_children_keywords.blank? then 'keyword'
+    when org && org.self_and_children_questions.blank? then 'survey'
     end
   end
   
