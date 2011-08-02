@@ -4,7 +4,7 @@ class Organization < ActiveRecord::Base
   has_many :activities, dependent: :destroy
   has_many :target_areas, through: :activities
   has_many :organization_memberships, dependent: :destroy
-  has_many :people, through: :organization_memberships
+  has_many :people, through: :organizational_roles
   has_many :contact_assignments
   has_many :keywords, class_name: 'SmsKeyword'
   has_many :question_sheets, through: :keywords

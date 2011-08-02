@@ -2,6 +2,7 @@ class PeopleController < ApplicationController
   # GET /people
   # GET /people.xml
   def index
+    @people = current_organization.people.page(params[:page])
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render xml: @people }
