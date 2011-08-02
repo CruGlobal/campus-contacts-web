@@ -16,7 +16,7 @@ GIT
 
 GIT
   remote: git://github.com/sferik/rails_admin.git
-  revision: 83dacd631f7aa0268a7ee1f0204d0bc3eaa9ed43
+  revision: 98f2371ae855d2e372bda9b877660e1155fb945b
   branch: rails-3.1
   specs:
     rails_admin (0.0.1)
@@ -28,7 +28,7 @@ GIT
 
 GIT
   remote: git://github.com/sstephenson/sprockets.git
-  revision: fc31a6b42d5137496ca022c78be88b58777fa311
+  revision: 7345d9a38a4b204f7701746063610a958af22447
   specs:
     sprockets (2.0.0.beta.12)
       hike (~> 1.2)
@@ -107,16 +107,16 @@ GEM
       activerecord
     ephemeral_response (0.4.0)
     erubis (2.7.0)
-    execjs (1.2.0)
+    execjs (1.2.1)
       multi_json (~> 1.0)
-    factory_girl (2.0.1)
+    factory_girl (2.0.2)
     faraday (0.6.1)
       addressable (~> 2.2.4)
       multipart-post (~> 1.1.0)
       rack (< 2, >= 1.1.0)
     fastercsv (1.5.4)
     haml (3.1.2)
-    hashie (1.0.0)
+    hashie (1.1.0)
     highline (1.6.2)
     hike (1.2.0)
     hoptoad_notifier (2.4.11)
@@ -197,7 +197,7 @@ GEM
       thor (~> 0.14.6)
     raindrops (0.7.0)
     rake (0.8.7)
-    rdoc (3.8)
+    rdoc (3.9.1)
     redis (2.2.1)
     redis-namespace (1.0.3)
       redis (< 3.0.0)
