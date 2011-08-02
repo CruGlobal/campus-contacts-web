@@ -12,7 +12,7 @@ class SmsController < ApplicationController
     message = sms_params[:message]
     
     # See if this is a sticky session ( prior sms in the past XX minutes )
-    @sms_session = SmsSession.where(sms_params.slice(:phone_number)).order('updated_at desc').where(["updated_at > ?", 30.minutes.ago]).first
+    @sms_session = SmsSession.where(sms_params.slice(:phone_number)).order('updated_at desc').where(["updated_at > ?", 15.minutes.ago]).first
     
     # Handle STOP and HELP messages
     case message.downcase
