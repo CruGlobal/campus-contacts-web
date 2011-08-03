@@ -1,5 +1,7 @@
 require 'csv'
 class PeopleController < ApplicationController
+  before_filter :ensure_current_org
+  before_filter :authorize_read
   # GET /people
   # GET /people.xml
   def index
@@ -100,5 +102,11 @@ class PeopleController < ApplicationController
   #     format.xml  { head :ok }
   #   end
   # end
+  
+  protected
+    
+    def authorize_read
+      authorize! :read, Person
+    end
 
 end
