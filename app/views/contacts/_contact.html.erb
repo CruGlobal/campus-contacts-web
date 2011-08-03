@@ -9,9 +9,9 @@
     <td class="<%= dom_id(q) %>">
       <% case q.slug %>
       <% when 'email' %>
-        <%= person.email %>
-      <% when 'phone_number' %>
-        <%= person.phone_number %>
+        <%= mail_to(person.email) %>
+      <% when 'phone' %>
+        <%= person.pretty_phone_number %>
       <% else %>
         <% answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)} %><%= q.display_response(answer_sheet) %>
       <% end %>

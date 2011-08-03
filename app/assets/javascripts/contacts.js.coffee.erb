@@ -236,12 +236,14 @@ $ ->
     false
     
   $('.contact_row td:not(.checkbox_cell)').live 'click', ->
-    tr = $(this).parent()
-    document.location = '/contacts/' + tr.attr('data-id')
+    unless $('a', this)[0]?
+      tr = $(this).parent()
+      document.location = '/contacts/' + tr.attr('data-id')
     
-  $('.person_row td:not(.checkbox_cell, .email_cell)').live 'click', ->
-    tr = $(this).parent()
-    document.location = '/people/' + tr.attr('data-id')
+  $('.person_row td:not(.checkbox_cell)').live 'click', ->
+    unless $('a', this)[0]?
+      tr = $(this).parent()
+      document.location = '/people/' + tr.attr('data-id')
   
   $('#assign_to').change ->
     if $('.id_checkbox:checked').length > 0

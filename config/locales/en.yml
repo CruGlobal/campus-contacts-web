@@ -47,6 +47,7 @@ en:
     add_a_leader: 'Add a leader'
   people: 
     index:
+      export: "Export this list"
       directory_title: "Directory - %{org}"
       labels: 'Labels'
       gender: 'Gender'

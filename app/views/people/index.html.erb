@@ -2,8 +2,17 @@
   <%= render 'labels' %>
 <% end %>
 <div class="titlebar">  
-  <h1><%= t('.directory_title', org: current_organization) %></h1>
+  <h1>
+    <%= t('.directory_title', org: current_organization) %>
+    <%= " - #{Role.find_by_id(params[:role_id]).to_s.pluralize}" if params[:role_id].present? %>
+  </h1>
 </div>
+<div class="pagemenu">
+  <ul class="pillmenu">
+    <li><%= link_to(t('.export'), export_people_path(params.except(:action, :controller, :utf8))) %></li>
+  </ul>
+</div>
+  
 <table class="contacts-main" cellpadding="0" cellspacing="0">
   <tr>
     <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment' %></th>
@@ -26,11 +35,11 @@
         <td><%= person.firstName %></td>
         <td><%= person.lastName %></td>
         <td><%= person.gender.to_s.titleize %></td>
-        <td class="email_cell"><%= mail_to(person.email) %></td>
+        <td><%= mail_to(person.email) %></td>
         <td><%= person.pretty_phone_number %></td>
         <td><%= person.yearInSchool %></td>
         <td class="controls">
-          <%= link_to("Show", '', :class => "icon magnify tipit", :title => t('nav.view_details')) %>
+          <%= link_to("Show", "/people/#{person.id}", :class => "icon magnify tipit", :title => t('nav.view_details')) %>
         </td>
       </tr>
     <% end %>

@@ -1,3 +1,4 @@
+require 'csv'
 class PeopleController < ApplicationController
   # GET /people
   # GET /people.xml
@@ -9,10 +10,24 @@ class PeopleController < ApplicationController
     @q = @q.search(params[:q])
     @q.sorts = ['lastName asc', 'firstName asc'] if @q.sorts.empty?
     @people = @q.result(distinct: true)
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render xml: @people }
+    # respond_to do |format|
+    #   format.html # index.html.erb
+    #   format.xml  { render xml: @people }
+    # end
+  end
+  
+  def export
+    index
+    out = ""
+    CSV.generate(out) do |rows|
+      rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('people.index.gender'), t('people.index.email'), t('people.index.phone'), t('people.index.year_in_school')]
+      @people.each do |person|
+        rows << [person.firstName, person.lastName, person.gender, person.email, person.pretty_phone_number, person.yearInSchool]
+      end
     end
+    filename = current_organization.to_s
+    filename += " - #{Role.find_by_id(params[:role_id]).to_s.pluralize}" if params[:role_id].present?
+    send_data(out, :filename => "#{filename}.csv", :type => 'application/csv' )
   end
 
   # GET /people/1

@@ -40,6 +40,9 @@ Mh::Application.routes.draw do
   end
   
   resources :people do
+    collection do
+      get :export
+    end
     resources :organization_memberships do
       member do
         get :validate
