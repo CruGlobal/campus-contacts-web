@@ -3,6 +3,12 @@
 # Use this as the base for the locale file of your language.
 
 en:
+  roles: 
+    admin: Admin
+    contact: Contact
+    involved: Involved
+    leader: Leader
+    alumni: Alumni
   views:
     pagination:
       first: "&laquo; First"
@@ -40,6 +46,8 @@ en:
     add_a_leader: 'Add a leader'
   people: 
     index:
+      directory_title: "Directory - %{org}"
+      labels: 'Labels'
   org_membership:
     confirm_delete: "Are you sure you want to dissociate yourself from %{org}"
   welcome:

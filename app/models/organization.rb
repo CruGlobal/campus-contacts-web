@@ -26,8 +26,12 @@ class Organization < ActiveRecord::Base
     SmsKeyword.where(organization_id: child_ids)
   end
   
+  def self_and_children_ids
+    @self_and_children_ids ||= [id] + child_ids
+  end
+  
   def self_and_children_keywords
-    SmsKeyword.where(organization_id: [id] + child_ids)
+    SmsKeyword.where(organization_id: self_and_children_ids)
   end
   
   def self_and_children_questions

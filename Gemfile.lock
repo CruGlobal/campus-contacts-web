@@ -197,6 +197,10 @@ GEM
       thor (~> 0.14.6)
     raindrops (0.7.0)
     rake (0.8.7)
+    ransack (0.5.4)
+      actionpack (~> 3.0)
+      activerecord (~> 3.0)
+      activesupport (~> 3.0)
     rdoc (3.9.1)
     redis (2.2.1)
     redis-namespace (1.0.3)
@@ -272,6 +276,7 @@ DEPENDENCIES
   rails (= 3.1.0.rc5)
   rails_admin!
   rake (= 0.8.7)
+  ransack
   resque
   rest-client
   ruby-prof

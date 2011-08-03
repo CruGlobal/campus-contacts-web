@@ -23,4 +23,8 @@ class Role < ActiveRecord::Base
   def self.involved
     Role.find_or_create_by_i18n_and_organization_id('involved', 0)
   end
+  
+  def to_s
+    organization_id == 0 ? I18n.t("roles.#{i18n}") : name
+  end
 end

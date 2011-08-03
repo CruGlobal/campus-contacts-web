@@ -1,4 +1,39 @@
-<% case %>
-<% when @question_sheet.present? %>
-  <%= render 'responses' %>
+<% provide :sidebar do %>
+  <%= render 'labels' %>
 <% end %>
+<div class="titlebar">  
+  <h1><%= t('.directory_title', org: current_organization) %></h1>
+</div>
+<table class="contacts-main" cellpadding="0" cellspacing="0">
+  <tr>
+    <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment' %></th>
+    <th><%= sort_link @q, :firstName, t('contacts.index.first_name') %></th>
+    <th><%= sort_link @q, :lastName, t('contacts.index.last_name') %></th>
+    <th></th>
+  </tr>
+  <tbody id="contacts_table">
+    
+    <% @people.each do |person| %>
+      <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row">
+        <td nowrap="nowrap" class="checkbox_cell">
+          <%#= image_tag('grippy.png', class: 'handle') %>
+          <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
+        </td>
+        <td><%= person.firstName %></td>
+        <td><%= person.lastName %></td>
+        <td class="controls">
+          <%= link_to("Show", contact_path(person), :class => "icon magnify tipit", :title => "View details") %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @people %>
+<% if @people.blank? %>
+  <div class="contentpad no_contacts">
+      Sorry, there are no people involved here.
+  </div>
+<% end %>
+<div class="searchstat">
+  <%= "Displaying #{@people.offset_value + 1} - #{@people.offset_value + @people.length} of #{@people.total_count}" %>
+</div>

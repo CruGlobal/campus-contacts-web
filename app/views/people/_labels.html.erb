@@ -1,0 +1,9 @@
+<ul class="leftmenu">
+  <li class="heading selected">
+    <h3><%= t('people.index.labels') %></h3>
+  </li>
+  <% current_organization.roles.each do |role| %>
+    <li><span class="name"><%= link_to(role) %></span> (<%= @people_scope.where('organizational_roles.role_id' => role.id).count %>)</li>
+  <% end %>
+  <li><span class="name"><%= link_to(t('contacts.index.all'), '/people') %></span> (<%= @people.total_count %>)</li>
+</ul>

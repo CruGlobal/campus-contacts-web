@@ -2,7 +2,11 @@ class PeopleController < ApplicationController
   # GET /people
   # GET /people.xml
   def index
-    @people = current_organization.people.page(params[:page])
+    org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
+    @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles)
+    @q = @people_scope.page(params[:page]).search(params[:q])
+    @q.sorts = ['lastName asc', 'firstName asc'] if @q.sorts.empty?
+    @people = @q.result(distinct: true)
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render xml: @people }
