@@ -16,7 +16,7 @@ GIT
 
 GIT
   remote: git://github.com/sferik/rails_admin.git
-  revision: 98f2371ae855d2e372bda9b877660e1155fb945b
+  revision: e1334ed8685229f5ab09f6018fc76f394007a1e1
   branch: rails-3.1
   specs:
     rails_admin (0.0.1)
@@ -28,7 +28,7 @@ GIT
 
 GIT
   remote: git://github.com/sstephenson/sprockets.git
-  revision: 7345d9a38a4b204f7701746063610a958af22447
+  revision: 581e3fac5be62d3fc97c6605d25a74601ceb4fca
   specs:
     sprockets (2.0.0.beta.12)
       hike (~> 1.2)
@@ -86,7 +86,7 @@ GEM
     bcrypt-ruby (2.1.4)
     builder (3.0.0)
     cancan (1.6.5)
-    capistrano (2.6.0)
+    capistrano (2.8.0)
       highline
       net-scp (>= 1.0.0)
       net-sftp (>= 2.0.0)
@@ -211,7 +211,7 @@ GEM
     ruby-prof (0.10.8)
     rubycas-client (2.2.1)
       activesupport
-    sass (3.1.5)
+    sass (3.1.6)
     shoulda (2.11.3)
     sinatra (1.2.6)
       rack (~> 1.1)
