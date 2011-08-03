@@ -3,7 +3,7 @@
     <h3><%= t('people.index.labels') %></h3>
   </li>
   <% current_organization.roles.each do |role| %>
-    <li><span class="name"><%= link_to(role) %></span> (<%= @people_scope.where('organizational_roles.role_id' => role.id).count %>)</li>
+    <li><span class="name"><%= link_to(role, params.merge(:role_id => role.id)) %></span> (<%= @people_scope.where('organizational_roles.role_id' => role.id).count %>)</li>
   <% end %>
-  <li><span class="name"><%= link_to(t('contacts.index.all'), '/people') %></span> (<%= @people.total_count %>)</li>
+  <li><span class="name"><%= link_to(t('contacts.index.all'), params.except(:role_id)) %></span> (<%= @people.total_count %>)</li>
 </ul>

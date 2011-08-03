@@ -4,7 +4,9 @@ class PeopleController < ApplicationController
   def index
     org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
     @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles)
-    @q = @people_scope.page(params[:page]).search(params[:q])
+    @q = @people_scope.includes(:primary_phone_number, :primary_email_address).page(params[:page])
+    @q = @q.where('organizational_roles.role_id' => params[:role_id]) if params[:role_id]
+    @q = @q.search(params[:q])
     @q.sorts = ['lastName asc', 'firstName asc'] if @q.sorts.empty?
     @people = @q.result(distinct: true)
     respond_to do |format|

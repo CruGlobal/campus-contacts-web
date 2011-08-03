@@ -9,20 +9,28 @@
     <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment' %></th>
     <th><%= sort_link @q, :firstName, t('contacts.index.first_name') %></th>
     <th><%= sort_link @q, :lastName, t('contacts.index.last_name') %></th>
+    <th><%= sort_link @q, :gender, t('.gender') %></th>
+    <th><%= t('.email') %></th>
+    <th><%= t('.phone') %></th>
+    <th><%= sort_link @q, :yearInSchool, t('.year_in_school') %></th>
     <th></th>
   </tr>
   <tbody id="contacts_table">
     
     <% @people.each do |person| %>
-      <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row">
+      <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="person_row">
         <td nowrap="nowrap" class="checkbox_cell">
           <%#= image_tag('grippy.png', class: 'handle') %>
           <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
         </td>
         <td><%= person.firstName %></td>
         <td><%= person.lastName %></td>
+        <td><%= person.gender.to_s.titleize %></td>
+        <td class="email_cell"><%= mail_to(person.email) %></td>
+        <td><%= person.pretty_phone_number %></td>
+        <td><%= person.yearInSchool %></td>
         <td class="controls">
-          <%= link_to("Show", contact_path(person), :class => "icon magnify tipit", :title => "View details") %>
+          <%= link_to("Show", '', :class => "icon magnify tipit", :title => t('nav.view_details')) %>
         </td>
       </tr>
     <% end %>

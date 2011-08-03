@@ -82,7 +82,7 @@ class Person < ActiveRecord::Base
       self.gender = response.gender unless (response.gender.nil? && !gender.blank?)
       # save!
       unless email_addresses.detect {|e| e.email == data['email']}
-        email_addresses.create(email: data['email'].try(:strip))
+        email_addresses.find_or_create_by_email(data['email'].try(:strip)) if data['email'].try(:strip).present?
       end
       async_get_or_update_friends_and_interests(authentication)
       get_location(authentication, response)
@@ -117,9 +117,16 @@ class Person < ActiveRecord::Base
   
   def email
     @email = primary_email_address.try(:email)
-    @email ||= email_addresses.first.try(:email)
-    @email ||= current_address.try(:email)
-    @email ||= user.try(:username) || user.try(:email)
+    unless @email
+      if email_addresses.present?
+        @email = email_addresses.first.try(:email)
+        email_addresses.first.update_attribute(:primary, true)
+      else
+        @email ||= current_address.try(:email)
+        @email ||= user.try(:username) || user.try(:email)
+        new_record? ? email_addresses.new(:email => @email, :primary => true) : email_addresses.create(:email => @email, :primary => true) if @email
+      end
+    end
     @email.to_s
   end
   

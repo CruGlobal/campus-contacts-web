@@ -11,14 +11,13 @@ module UrlHelper
     end
     current_order = prev_attr == attr_name ? prev_order : nil
     new_order = current_order == 'asc' ? 'desc' : 'asc'
-    options = args.first.is_a?(Hash) ? args.shift : {}
+    options = args.first.is_a?(Hash) ? args.shift : params.dup
     html_options = args.first.is_a?(Hash) ? args.shift : {}
     css = ['sort_link', current_order].compact.join(' ')
     html_options[:class] = [css, html_options[:class]].compact.join(' ')
-    id = rand(999999999999)
     options.merge!(
       'q' => search_attributes.merge(
-        's' => {id => {dir: new_order, name: attr_name}}
+        's' => {1 => {dir: new_order, name: attr_name}}
       )
     )
     link_to [ERB::Util.h(name), order_indicator_for(current_order)].compact.join(' ').html_safe,

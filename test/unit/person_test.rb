@@ -126,7 +126,7 @@ class PersonTest < ActiveSupport::TestCase
       person = Person.create_from_facebook(data_hash,@authentication, TestFBResponses::FULL)
       assert(person.locations.first.name.is_a? String)
       assert(person.education_histories.first.school_name.is_a? String)
-      assert(person.gender == ('male' || 'female'))
+      assert(['male', 'female'].include?(person.gender))
       assert_equal(person.email, "mattrw89@gmail.com", "See if person has correct email address")
     end    
   end
