@@ -14,7 +14,7 @@ class Ccc::Crs2User < ActiveRecord::Base
 		other.crs2_user_roles.each { |ua| ua.update_attribute(:user_id, id) }
    	#other.crs2_registrants.each { |ua| ua.update_attribute(:cancelled_by_id, id) }
 
-		Crs2Registration.where(["creator_id = ? or cancelled_by_id = ?", other.id, other.id]).each do |ua|
+		Ccc::Crs2Registration.where(["creator_id = ? or cancelled_by_id = ?", other.id, other.id]).each do |ua|
 			ua.update_attribute(:creator_id, id) if ua.creator_id == other.id
 			ua.update_attribute(:cancelled_by_id, id) if ua.cancelled_by_id == other.id	
 		end
