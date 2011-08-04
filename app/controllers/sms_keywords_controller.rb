@@ -28,7 +28,7 @@ class SmsKeywordsController < ApplicationController
   # POST /sms_keywords.xml
   def create
     @sms_keyword = current_user.sms_keywords.new(params[:sms_keyword])
-    @sms_keyword.organization_id ||= current_organization
+    @sms_keyword.organization_id ||= current_organization.id
     @sms_keyword.user = current_user
 
     respond_to do |format|
