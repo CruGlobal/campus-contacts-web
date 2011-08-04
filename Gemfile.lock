@@ -15,18 +15,8 @@ GIT
       ya2yaml (~> 0.30)
 
 GIT
-  remote: git://github.com/sstephenson/sprockets.git
-  revision: 581e3fac5be62d3fc97c6605d25a74601ceb4fca
-  specs:
-    sprockets (2.0.0.beta.12)
-      hike (~> 1.2)
-      rack (~> 1.0)
-      tilt (~> 1.1, != 1.3.0)
-
-GIT
-  remote: git://github.com/twinge/rails_admin.git
-  revision: 291274ca0b01ac3f96d4f4506913268121dce86c
-  branch: sass-error
+  remote: git://github.com/sferik/rails_admin.git
+  revision: 0840cfd388043eb74df28d0bf7e76b5388ff9976
   specs:
     rails_admin (0.0.1)
       builder (~> 3.0.0)
@@ -34,6 +24,15 @@ GIT
       fastercsv (~> 1.5.4)
       haml (>= 3.1.0, < 3.3.0)
       rails (~> 3.1.0.rc1)
+
+GIT
+  remote: git://github.com/sstephenson/sprockets.git
+  revision: 581e3fac5be62d3fc97c6605d25a74601ceb4fca
+  specs:
+    sprockets (2.0.0.beta.12)
+      hike (~> 1.2)
+      rack (~> 1.0)
+      tilt (~> 1.1, != 1.3.0)
 
 GIT
   remote: git://github.com/zuk/rubycas-client-rails.git
