@@ -36,7 +36,7 @@ class WelcomeController < ApplicationController
           sign_in(user)
         end
         if user && user.person && user.person.organizations.present? && user.person.organizations.any? {|org| user.person.leader_in?(org)}
-          redirect_to wizard_path
+          redirect_to wizard_path ? wizard_path : user_root_path
         else
           redirect_to '/wizard?step=verify&not_found=1'
         end
