@@ -69,9 +69,9 @@ class SmsKeywordsController < ApplicationController
   
   private
     def check_org_and_authorize
-      unless current_person.primary_organization
+      unless current_organization
         session[:return_to] = params
-        redirect_to '/wizard'
+        redirect_to wizard_path || user_root_path
         return false
       end
       authorize! :manage, current_organization
