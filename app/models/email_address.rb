@@ -8,16 +8,6 @@ class EmailAddress < ActiveRecord::Base
   def to_s
     email
   end
-  protected
-  
-  def set_primary
-    if person
-      self.primary = person.primary_email_address ? false : true
-    else 
-      self.primary = true
-    end
-    true
-  end
   
   def merge(other)
     EmailAddress.transaction do
@@ -29,6 +19,17 @@ class EmailAddress < ActiveRecord::Base
       MergeAudit.create!(mergeable: self, merge_looser: other)
       other.destroy
     end
+  end
+  
+  protected
+  
+  def set_primary
+    if person
+      self.primary = person.primary_email_address ? false : true
+    else 
+      self.primary = true
+    end
+    true
   end
   
   def set_new_primary
