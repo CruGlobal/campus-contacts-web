@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110722141812) do
+ActiveRecord::Schema.define(:version => 20110806182402) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -191,6 +191,8 @@ ActiveRecord::Schema.define(:version => 20110722141812) do
     t.datetime "updated_at"
     t.integer  "organization_id"
   end
+
+  add_index "contact_assignments", ["person_id", "organization_id"], :name => "index_contact_assignments_on_person_id_and_organization_id", :unique => true
 
   create_table "counties", :force => true do |t|
     t.string "name"
@@ -1711,7 +1713,7 @@ ActiveRecord::Schema.define(:version => 20110722141812) do
     t.integer "toggle_id"
   end
 
-  create_table "mh_education_history", :force => true do |t|
+  create_table "mh_education_histories", :force => true do |t|
     t.integer  "person_id"
     t.string   "type"
     t.string   "concentration_id1"
@@ -1788,7 +1790,7 @@ ActiveRecord::Schema.define(:version => 20110722141812) do
 
   add_index "mh_friends", ["person_id", "uid"], :name => "person_uid", :unique => true
 
-  create_table "mh_interest", :force => true do |t|
+  create_table "mh_interests", :force => true do |t|
     t.string   "name"
     t.string   "interest_id"
     t.string   "provider"
@@ -1799,7 +1801,7 @@ ActiveRecord::Schema.define(:version => 20110722141812) do
     t.datetime "updated_at"
   end
 
-  create_table "mh_location", :force => true do |t|
+  create_table "mh_locations", :force => true do |t|
     t.string   "location_id"
     t.string   "name"
     t.string   "provider"

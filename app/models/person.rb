@@ -5,12 +5,12 @@ class Person < ActiveRecord::Base
   
   belongs_to :user, class_name: 'User', foreign_key: 'fk_ssmUserId'
   has_many :phone_numbers
+  has_one :primary_phone_number, class_name: "PhoneNumber", foreign_key: "person_id", conditions: {primary: true}
   has_many :locations
   has_one :latest_location, order: "updated_at DESC", class_name: 'Location'
   has_many :friends
   has_many :interests
   has_many :education_histories
-  has_one :primary_phone_number, class_name: "PhoneNumber", foreign_key: "person_id", conditions: {primary: true}
   has_many :email_addresses
   has_one :primary_email_address, class_name: "EmailAddress", foreign_key: "person_id", conditions: {primary: true}
   has_one :primary_organization_membership, class_name: "OrganizationMembership", foreign_key: "person_id", conditions: {primary: true}
@@ -25,6 +25,9 @@ class Person < ActiveRecord::Base
   has_many :organization_memberships, inverse_of: :person
   has_many :organizational_roles
   has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role.contact.id}"
+  
+  has_many :received_sms, class_name: "ReceivedSms", foreign_key: "person_id"
+  has_many :sms_sessions, inverse_of: :person
   
   scope :who_answered, lambda {|question_sheet_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.question_sheet_id' => question_sheet_id)}
   validates_presence_of :firstName, :lastName
@@ -255,6 +258,42 @@ class Person < ActiveRecord::Base
     end
     other.phone_numbers.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
     
+    # Locations
+    other.locations.each do |location|
+      if location_ids.include?(location.id)
+        location.destroy
+      else
+        location.update_column(:person_id, id)
+      end
+    end
+    
+    # Locations
+    other.friends.each do |friend|
+      if friends.find_by_uid_and_provider(friend.uid, friend.provider)
+        friend.destroy
+      else
+        friend.update_column(:person_id, id)
+      end
+    end
+    
+    # Interests
+    other.interests.each do |i|
+      if interest_ids.include?(i.id)
+        i.destroy
+      else
+        i.update_column(:person_id, id)
+      end
+    end
+    
+    # Edudation Histories
+    other.education_histories.each do |eh|
+      if education_history_ids.include?(eh.id)
+        eh.destroy
+      else
+        eh.update_column(:person_id, id)
+      end
+    end
+    
     # Email Addresses
     email_addresses.each do |pn|
       opn = other.email_addresses.detect {|oa| oa.email == pn.email}
@@ -275,6 +314,12 @@ class Person < ActiveRecord::Base
       pn.merge(opn) if opn
     end
     other.organizational_roles.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
+    
+    # Answer Sheets
+    other.answer_sheets.collect {|as| as.update_column(:person_id, id)}
+    
+    # Contact Assignments
+    other.contact_assignments.collect {|as| as.update_column(:assigned_to_id, id)}
     
     super
   end
