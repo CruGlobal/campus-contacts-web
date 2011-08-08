@@ -62,7 +62,12 @@ class Organization < ActiveRecord::Base
     keywords.collect(&:question_sheet)
   end
   
+  def name_with_keyword_count
+    "#{name} (#{keywords.length})"
+  end
+  
   rails_admin do
+    object_label_method {:name_with_keyword_count}
     edit do
       field :name
       field :requires_validation
