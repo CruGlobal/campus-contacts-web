@@ -92,9 +92,21 @@ class SmsKeyword < ActiveRecord::Base
           end.to_sentence.html_safe
         end
       end
-      field :explanation
-      field :initial_response
-      field :post_survey_message
+      field :explanation do
+        pretty_value do
+          value
+        end
+      end
+      field :initial_response do
+        pretty_value do
+          value
+        end
+      end
+      field :post_survey_message do
+        pretty_value do
+          value
+        end
+      end
       # field :chartfield
     end
   end

@@ -1,5 +1,6 @@
 RailsAdmin.config do |config|
   config.included_models = ["Organization", "SmsKeyword"]
+  config.total_columns_width = 2000
   # if Rails.env.production?
     RailsAdmin::AbstractModel.all_models = nil
     RailsAdmin::AbstractModel.all_abstract_models = nil

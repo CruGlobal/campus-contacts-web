@@ -15,17 +15,6 @@ GIT
       ya2yaml (~> 0.30)
 
 GIT
-  remote: git://github.com/sferik/rails_admin.git
-  revision: edfb7c3226bf9505bc3dc0165b4733cb1ee49f70
-  specs:
-    rails_admin (0.0.1)
-      builder (~> 3.0.0)
-      fastercsv
-      fastercsv (~> 1.5.4)
-      haml (>= 3.1.0, < 3.3.0)
-      rails (~> 3.1.0.rc1)
-
-GIT
   remote: git://github.com/sstephenson/sprockets.git
   revision: 9e88aee9ee3b28626ab30b00f905cc6737677fff
   specs:
@@ -33,6 +22,17 @@ GIT
       hike (~> 1.2)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
+
+GIT
+  remote: git://github.com/twinge/rails_admin.git
+  revision: cc5bf1efe63c3976a96f5c3f00b3111ec6ed2811
+  branch: configure_list_view_width
+  specs:
+    rails_admin (0.0.1)
+      builder (~> 3.0.0)
+      fastercsv (~> 1.5.4)
+      haml (>= 3.1.0, < 3.3.0)
+      rails (~> 3.1.0.rc1)
 
 GIT
   remote: git://github.com/zuk/rubycas-client-rails.git

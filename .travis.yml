@@ -7,3 +7,4 @@ before_script:
   - "cp /home/vagrant/builds/twinge/missionhub/config/database.example.yml /home/vagrant/builds/twinge/missionhub/config/database.yml >/dev/null"
   - "cp /home/vagrant/builds/twinge/missionhub/config/config.example.yml /home/vagrant/builds/twinge/missionhub/config/config.yml >/dev/null"
   - "mysql -e 'create database missionhub_test;' >/dev/null"
+script: "bundle exec rake db:schema:load test"
