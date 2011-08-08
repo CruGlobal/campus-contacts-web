@@ -7,7 +7,11 @@ Mh::Application.routes.draw do
     end
   end
   
-  resources :organizational_roles
+  resources :organizational_roles do
+    collection do
+      post :move_to
+    end
+  end
   
   resources :rejoicables
 

@@ -87,7 +87,7 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
     end
     
     should "be able to view their contacts filtered by status" do
-      @user2.person.organizational_roles.first.update_attributes!(role_id: Role.contact.id, followup_status: "contacted")
+      @user2.person.organizational_roles.first.update_attributes!(role_id: Role::CONTACT_ID, followup_status: "contacted")
       path = "/api/contacts.json?filters=status&values=contacted&org_id=#{@user3.person.primary_organization.id}"
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
@@ -95,8 +95,8 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       
       assert_equal(@json.length,1)
       person_basic_test(@json[0]['person'],@user2,@user)
-      @user.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: Role.contact.id)
-      @user2.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: Role.contact.id)
+      @user.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: Role::CONTACT_ID)
+      @user2.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: Role::CONTACT_ID)
       path = "/api/contacts.json?filters=status&values=contacted"
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body

@@ -139,7 +139,7 @@ class ApplicationController < ActionController::Base
     raise 'no person' unless person
     raise 'no org' unless organization
     return false if OrganizationalRole.find_by_person_id_and_organization_id(person.id, organization.id)
-    OrganizationalRole.create!(person_id: person.id, organization_id: organization.id, role_id: Role.contact.id, followup_status: OrganizationMembership::FOLLOWUP_STATUSES.first)
+    OrganizationalRole.create!(person_id: person.id, organization_id: organization.id, role_id: Role::CONTACT_ID, followup_status: OrganizationMembership::FOLLOWUP_STATUSES.first)
     unless OrganizationMembership.find_by_person_id_and_organization_id(person.id, organization.id) 
       OrganizationMembership.create!(person_id: person.id, organization_id: organization.id, primary: false) 
     end

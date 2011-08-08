@@ -81,7 +81,7 @@ class ContactsController < ApplicationController
   end
   
   def mine
-    @people = Person.order('lastName, firstName').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.role_id' => Role.contact.id)
+    @people = Person.order('lastName, firstName').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.role_id' => Role::CONTACT_ID)
     if params[:status] == 'completed'
       @people = @people.where("organizational_roles.followup_status = 'completed'")
     else
@@ -126,7 +126,7 @@ class ContactsController < ApplicationController
   def show
     @person = Person.find(params[:id])
     @organization = current_organization
-    @organizational_role = OrganizationalRole.where(organization_id: @organization, person_id: @person, role_id: Role.contact.id).first
+    @organizational_role = OrganizationalRole.where(organization_id: @organization, person_id: @person, role_id: Role::CONTACT_ID).first
     unless @organizational_role
       redirect_to '/404.html' and return
     end

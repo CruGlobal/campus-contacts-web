@@ -126,7 +126,7 @@ module ApiHelper
   def restrict_to_contact_role(people, organization)
     people = people.where("`#{OrganizationalRole.table_name}`.`organization_id` = ?", organization.id).
     where("`#{OrganizationalRole.table_name}`.`person_id` = `#{Person.table_name}`.`#{Person.primary_key}`").
-    where("`#{OrganizationalRole.table_name}`.`role_id` = #{Role.contact.id}").
+    where("`#{OrganizationalRole.table_name}`.`role_id` = #{Role::CONTACT_ID}").
     where("`#{OrganizationalRole.table_name}`.`followup_status` <> 'do_not_contact'")
     
     people

@@ -80,8 +80,8 @@ namespace :infobase do
       unless OrganizationMembership.where(organization_id: team, person_id: mtm['personID']).present?
         OrganizationMembership.create!(organization_id: team, person_id: mtm['personID'], validated: 1)
       end
-      unless OrganizationalRole.where(organization_id: team, person_id: mtm['personID'], role_id: Role.admin.id).present?
-        OrganizationalRole.create!(organization_id: team, person_id: mtm['personID'], role_id: Role.admin.id)
+      unless OrganizationalRole.where(organization_id: team, person_id: mtm['personID'], role_id: Role::ADMIN_ID).present?
+        OrganizationalRole.create!(organization_id: team, person_id: mtm['personID'], role_id: Role::ADMIN_ID)
       end
       i += 1
       puts i if i % 1000 == 0

@@ -11,7 +11,7 @@ def setup_api_env
   @user = Factory.create(:user_no_org_with_facebook)
   Factory.create(:authentication, user: @user)
   #@user.person.organization_memberships.create(organization_id: @temp_org.id, person_id: @user.person.id, primary: true)
-  #@user.person.organizational_roles.create(organization_id: @temp_org.id, person_id: @user.person.id, role_id: Role.contact.id)
+  #@user.person.organizational_roles.create(organization_id: @temp_org.id, person_id: @user.person.id, role_id: Role::CONTACT_ID)
   Factory(:organization_membership, organization: @temp_org, person: @user.person, primary: true)
   Factory(:organizational_role, organization: @temp_org, person: @user.person, role: Role.contact)
   

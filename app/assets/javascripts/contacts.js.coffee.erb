@@ -105,6 +105,20 @@ $ ->
     $('#assign_search').dialog('destroy')
   false
     
+  $('#assign_search .org a').live 'click', (e)->
+    e.preventDefault()
+    form = $('#new_contact_assignment')
+    from_id = $(this).closest('div').attr('data-org-id')
+    to_id = $(this).attr('data-id')
+    old_action = form.attr('action')
+    form.attr('action', '/organizational_roles/move_to?from_id='+from_id+'&to_id='+to_id)
+    $.rails.handleRemote(form)
+    $('.id_checkbox:checked').each ->
+      $(this).closest('tr').remove();
+    form.attr('action', old_action)
+    $('#assign_search').dialog('destroy')
+  false
+    
   $('#assign_search .leader_search_name').keyup ->
     name = $('#assign_search .leader_search_name').val()
     $('#assign_search ul li').each ->

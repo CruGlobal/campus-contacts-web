@@ -63,7 +63,7 @@ class LeadersController < ApplicationController
   def create
     @person ||= Person.find(params[:person_id]) if params[:person_id]
     OrganizationMembership.find_or_create_by_person_id_and_organization_id(@person.id, current_organization.id)
-    OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(@person.id, current_organization.id, Role.leader.id)
+    OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(@person.id, current_organization.id, Role::LEADER_ID)
     render :create
   end
   

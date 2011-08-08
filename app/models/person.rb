@@ -24,7 +24,7 @@ class Person < ActiveRecord::Base
   
   has_many :organization_memberships, inverse_of: :person
   has_many :organizational_roles
-  has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role.contact.id}"
+  has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role::CONTACT_ID}"
   
   has_many :received_sms, class_name: "ReceivedSms", foreign_key: "person_id"
   has_many :sms_sessions, inverse_of: :person
@@ -247,7 +247,7 @@ class Person < ActiveRecord::Base
   end  
   
   def contact_friends(org)
-    Person.where(fb_uid: friends.select(:uid).collect(&:uid)).joins(:organizational_roles).where('organizational_roles.role_id' => Role.contact.id, 'organizational_roles.organization_id' => org.id)
+    Person.where(fb_uid: friends.select(:uid).collect(&:uid)).joins(:organizational_roles).where('organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.organization_id' => org.id)
   end
   
   def merge(other)

@@ -30,7 +30,7 @@
   <td class="controls">
     <%= link_to("Show", contact_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
     <% unless params[:dnc] == 'true' %>
-      <% if om = OrganizationalRole.where(:person_id => person.id, :organization_id => current_organization.id, :role_id => Role.contact.id).first %>
+      <% if om = OrganizationalRole.where(:person_id => person.id, :organization_id => current_organization.id, :role_id => Role::CONTACT_ID).first %>
         <%= link_to("Delete", organizational_role_path(:id => om.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.delete_confirm')) %>
       <% end %>
     <% end %>

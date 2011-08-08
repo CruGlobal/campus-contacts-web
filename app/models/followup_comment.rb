@@ -23,7 +23,7 @@ class FollowupComment < ActiveRecord::Base
   
   private
   def update_followup_status
-    om = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(contact_id, organization_id, Role.contact.id)
+    om = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(contact_id, organization_id, Role::CONTACT_ID)
     om.update_attribute(:followup_status, status)
   end
 end
