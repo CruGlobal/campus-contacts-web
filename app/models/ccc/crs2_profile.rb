@@ -11,7 +11,8 @@ class Ccc::Crs2Profile < ActiveRecord::Base
 		other.crs2_registrants.each do |ua|
   		crs2_registrants.each do |cr|
         if ua.registrant_type_id == cr.registrant_type_id
-          ua.orphan = true
+          ua.update_column(:orphan, true)
+          ua.update_column(:profile_id, nil)
           break
         end
   		end
