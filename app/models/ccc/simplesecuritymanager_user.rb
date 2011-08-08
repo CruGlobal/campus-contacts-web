@@ -2,15 +2,15 @@ module Ccc
 	module SimplesecuritymanagerUser
 		extend ActiveSupport::Concern
 
-	included do
-  	set_primary_key :userID
-  	set_table_name 'simplesecuritymanager_user'
-  	has_one :sp_user, class_name: 'Ccc::SpUser'
-  	has_one :mpd_user, class_name: 'Ccc::MpdUser', dependent: :destroy
-		has_one :si_user, class_name: 'Ccc::SiUser', foreign_key: 'ssm_id'
-    has_one :pr_user, class_name: 'Ccc::PrUser', dependent: :destroy, foreign_key: 'ssm_id'
-		has_many :sn_user_memberships, class_name: 'Ccc::SnUserMembership'
-	end  
+  	included do
+    	set_primary_key :userID
+    	set_table_name 'simplesecuritymanager_user'
+    	has_one :sp_user, class_name: 'Ccc::SpUser'
+    	has_one :mpd_user, class_name: 'Ccc::MpdUser', dependent: :destroy
+  		has_one :si_user, class_name: 'Ccc::SiUser', foreign_key: 'ssm_id'
+      has_one :pr_user, class_name: 'Ccc::PrUser', dependent: :destroy, foreign_key: 'ssm_id'
+  		has_many :sn_user_memberships, class_name: 'Ccc::SnUserMembership'
+  	end  
 
 		module InstanceMethods
   		def merge(other)

@@ -1,10 +1,10 @@
 RailsAdmin.config do |config|
   config.included_models = ["Organization", "SmsKeyword"]
-  if (Rails.env.production?)
+  # if Rails.env.production?
     RailsAdmin::AbstractModel.all_models = nil
     RailsAdmin::AbstractModel.all_abstract_models = nil
     RailsAdmin::AbstractModel.all # rebuild model arrays
-  end
+  # end
 end
 
 module RailsAdmin

@@ -16,6 +16,10 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :remember_me, :password
+  # alias_method :find_by_userID, :find_by_id
+  def self.find_by_id(*args)
+    find_by_userID(args)
+  end
   
   def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
     data = access_token['extra']['user_hash']
@@ -65,6 +69,14 @@ class User < ActiveRecord::Base
   
   def to_s
     person ? person.to_s : (email || username).to_s
+  end
+  
+  rails_admin do
+    object_label_method {:to_s}
+    visible false
+    list do
+      field :username
+    end
   end
   
   def merge(other)

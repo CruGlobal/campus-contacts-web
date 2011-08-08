@@ -2,3 +2,7 @@ rvm: 1.9.2
 notifications:
   recipients:
     - josh.starcher@cojourners.com
+    
+before_script:
+  - "cp config/database.example.yml config/database.yml >/dev/null"
+  - "mysql -e 'create database missionhub_test;' >/dev/null"

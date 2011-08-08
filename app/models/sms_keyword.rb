@@ -75,7 +75,7 @@ class SmsKeyword < ActiveRecord::Base
       field :explanation
       field :initial_response
       field :post_survey_message
-      field :chartfield
+      # field :chartfield
     end
   end
   
