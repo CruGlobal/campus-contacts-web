@@ -129,6 +129,7 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       
       # contacts assigned to me (My contacts) on mobile app
       @user2.person.organizational_roles.first.update_attributes(followup_status: 'completed')
+      @contact_assignment2.destroy
       ContactAssignment.create(assigned_to_id:@user3.person.id, person_id: @user.person.id, organization_id: @user3.person.primary_organization.id)
 
       path = "/api/contacts.json?filters=status&values=not_finished&assigned_to=#{@user3.person.id}&limit=15&start=0&org_id=#{@user3.person.primary_organization.id}"
