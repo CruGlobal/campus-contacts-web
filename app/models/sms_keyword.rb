@@ -77,7 +77,7 @@ class SmsKeyword < ActiveRecord::Base
       field :state
       field :user do
         pretty_value do
-          value.name_with_keyword_count
+          value ? value.name_with_keyword_count : ''
         end
       end
       field :organization do
