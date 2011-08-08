@@ -4,5 +4,5 @@ notifications:
     - josh.starcher@cojourners.com
     
 before_script:
-  - "cp config/database.example.yml config/database.yml >/dev/null"
+  - "cp /home/vagrant/builds/twinge/missionhub/config/database.example.yml /home/vagrant/builds/twinge/missionhub/config/database.yml >/dev/null"
   - "mysql -e 'create database missionhub_test;' >/dev/null"

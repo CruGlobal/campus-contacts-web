@@ -63,7 +63,7 @@ class Organization < ActiveRecord::Base
   end
   
   def name_with_keyword_count
-    "#{name} (#{keywords.length})"
+    "#{name} (#{keywords.count})"
   end
   
   rails_admin do

@@ -71,8 +71,12 @@ class User < ActiveRecord::Base
     person ? person.to_s : (email || username).to_s
   end
   
+  def name_with_keyword_count
+    "#{to_s} (#{sms_keywords.count})"
+  end
+  
   rails_admin do
-    object_label_method {:to_s}
+    object_label_method {:name_with_keyword_count}
     visible false
     list do
       field :username
