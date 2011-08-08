@@ -7,22 +7,22 @@
   # columns paginate
   @filterable_fields = @model_config.list.fields.select(&:filterable?)
   @style, @other, properties = get_column_set(properties)
-  if params[:filters]
-    @ordered_filters = params[:filters].inject({}) { |memo, filter|
-      field_name = filter.first
-      filter.last.each do |index, filter_hash|
-        memo[index] = { field_name => filter_hash } unless filter_hash['disabled']
-      end
-      memo
-    }.to_a.sort_by(&:first)
-  end
+  
+  @index = 0
+  @ordered_filters = (params[:filters] || @model_config.list.filters).inject({}) { |memo, filter|
+    field_name = filter.is_a?(Array) ? filter.first : filter
+  (filter.is_a?(Array) ? filter.last : { (@index += 1) => { "value" => '' } }) .each do |index, filter_hash|
+      memo[index] = { field_name => filter_hash } unless filter_hash['disabled']
+    end
+    memo
+  }.to_a.sort_by(&:first)
 
   @ordered_filter_string = @ordered_filters.map do |duplet|
     filter_index = duplet[0]
     filter_for_field = duplet[1]
     filter_name = filter_for_field.keys.first
     filter_hash = filter_for_field.values.first
-    field = @filterable_fields.find{ |field| field.name == filter_name.intern }
+    field = @filterable_fields.find{ |field| field.name == filter_name.to_sym }
 
     field_options = case field.type
     when :enum
@@ -70,8 +70,8 @@
           = action_button new_path, t("admin.list.add_new"), :add
 
         - if authorized? :delete, @abstract_model
-          = action_button '#', t("admin.list.delete_selected"), :cross, :onclick => "$j('#bulk_action').val('delete'); $j('#bulk_form').submit(); return false;"
-
+          = action_button '#', t("admin.list.delete_selected"), :cross, :onclick => "$j('#bulk_action').val('delete'); $j('#bulk_form').submit(); return false;"        
+        
         - if authorized?(:edit, @abstract_model) && @abstract_model.new.respond_to?(:approve!)
           = action_button '#', 'Approve Selected', :tick, :onclick => "$j('#bulk_form').attr('action', '#{"/admin/sms_keywords/approve"}'); $j('#bulk_form').submit(); return false;"
 
@@ -88,7 +88,7 @@
         - can_export      = authorized? :export,      @abstract_model
         - can_delete      = authorized? :delete,      @abstract_model
         - can_see_history = authorized? :see_history, @abstract_model
-        - can_bulk_action = can_export || can_delete_global
+        - can_bulk_action = can_export || can_delete
         %table.table.grid
           %thead
             %tr
@@ -122,13 +122,13 @@
               - row_class = "#{cycle("odd", "even")}#{" link" if can_edit}"
 
               %tr{:class => row_class, :"data-link" => (can_show ? show_path : nil)}
-                - if can_bulk_action
-                  %td.action.select
+                %td.action.select
+                  - if can_bulk_action
                     = check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_ids_#{object.id}", :class => "checkbox"
                 - other_left = list_path(params.except("set").merge(:model_name => @abstract_model.to_param, :set => params[:set].to_i - 1))
                 %td.other.left{ :style => "#{'display: none' if @other.include?("left")}" }= link_to "...", other_left, :remote => true
                 - properties.map{|property| property.bind(:object, object)}.each do |property|
-                  %td{:class => "#{property.css_class}"}= ([:text, :string].include?(property.type) && property.truncated?) ? property.pretty_value.truncate(40) : property.pretty_value
+                  %td{:class => "#{property.css_class}"}= property.pretty_value
                 - other_right = list_path(params.except("set").merge(:model_name => @abstract_model.to_param, :set => params[:set].to_i + 1))
                 %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
                 %td.last

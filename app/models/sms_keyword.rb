@@ -55,7 +55,12 @@ class SmsKeyword < ActiveRecord::Base
     question_sheet.questions
   end
   
+  def keyword_with_state
+    "#{keyword} (#{state})"
+  end
+  
   rails_admin do
+    object_label_method {:keyword_with_state}
     edit do
       field :keyword
       field :chartfield
@@ -70,8 +75,23 @@ class SmsKeyword < ActiveRecord::Base
     list do
       field :keyword
       field :state
-      field :user
-      field :organization
+      field :user do
+        pretty_value do
+          value.name_with_keyword_count
+        end
+      end
+      field :organization do
+        pretty_value do
+          v = bindings[:view]
+          [value].flatten.select(&:present?).map do |associated|
+            amc = polymorphic? ? RailsAdmin::Config.model(associated) : associated_model_config # perf optimization for non-polymorphic associations
+            am = amc.abstract_model
+            wording = value.name_with_keyword_count
+            can_see = v.authorized?(:show, am, associated)
+            can_see ? v.link_to(wording, v.show_path(:model_name => am.to_param, :id => associated.id)) : wording
+          end.to_sentence.html_safe
+        end
+      end
       field :explanation
       field :initial_response
       field :post_survey_message

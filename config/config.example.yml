@@ -1,0 +1,32 @@
+development:
+ sms_enabled: false
+ sms_short_code: 
+ sms_api_key: 
+ sms_default_keyword: 
+ resque_username: test
+ resque_password: test
+ fb_api_key: 
+ fb_secret: 
+ fb_app_id: 
+ fb_host: 
+ predefined_question_sheet: 
+ from_email: from@example.com
+
+test:
+  from_email: from@example.com
+  send_sms: false
+  sms_default_keyword: 26am
+
+production:
+ sms_enabled: true
+ sms_short_code: 
+ sms_api_key: 
+ sms_default_keyword: 
+ resque_username: test
+ resque_password: test
+ fb_api_key: 
+ fb_secret: 
+ fb_app_id: 
+ fb_host: 
+ predefined_question_sheet: 
+ from_email: from@example.com

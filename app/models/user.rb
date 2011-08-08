@@ -76,7 +76,7 @@ class User < ActiveRecord::Base
   end
   
   rails_admin do
-    object_label_method {:name_with_keyword_count}
+    # object_label_method {:name_with_keyword_count}
     visible false
     list do
       field :username
