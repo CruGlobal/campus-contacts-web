@@ -51,6 +51,9 @@ en:
       directory_title: "Directory - %{org}"
       labels: 'Labels'
       gender: 'Gender'
+      phone: 'Phone'
+      email: 'Email'
+      year_in_school: 'Year in School'
   org_membership:
     confirm_delete: "Are you sure you want to dissociate yourself from %{org}"
   welcome:
