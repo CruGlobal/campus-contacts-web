@@ -13,7 +13,7 @@
               <%= link_to(current_organization, '/contacts') %>
               <ul class="under">
                 <% current_person.organizations.order('organizations.name').each do |org| %>
-                  <%= render 'org', org: org, primary: current_person.primary_organization == org, involved: true unless current_person.organizations.include?(org.parent) %>
+                  <%= render 'org', org: org, primary: current_person.primary_organization == org, involved: true unless current_person.organizations.include?(org.parent) && org.parent.show_sub_orgs? %>
                 <% end %>
               </ul>
             <% else %>
