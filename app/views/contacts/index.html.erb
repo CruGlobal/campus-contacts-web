@@ -41,7 +41,7 @@
   </ul>
   
   <div id="hidden_questions_div" style="display:none">
-    Click on a question to add it back to the page 
+    <%= t('.add_question_back') %>
     <ul id="hidden_questions">
       <%= render partial: 'contacts/hidden_question', collection: @hidden_questions %>
     </ul>
@@ -99,7 +99,7 @@
       <% @questions.each do |q| %>
         <th class="<%= dom_id(q) %>">
           <%= q.label %>
-          <%= link_to(image_tag("close.png"), hide_sms_keyword_question_path(@organization.keywords.first, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
+          <%= link_to(image_tag("close.png", alt: t('nav.hide'), title: t('nav.hide')), hide_sms_keyword_question_path(@organization.keywords.first, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
         </th>
       <% end %>
       <th><%= t('.assigned_to') %></th>
