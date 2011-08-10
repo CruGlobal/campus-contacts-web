@@ -11,10 +11,8 @@
     <label for="assign_to_unassigned">Unassigned</label>
     <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_leader', class: 'assign_to_radio' %> 
     <label for="assign_to_leader">Leader</label>
-    <% if current_organization.has_children? %>
-      <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_org', class: 'assign_to_radio' %> 
-      <label for="assign_to_org"><%= current_organization.terminology %></label>
-    <% end %>
+    <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_org', class: 'assign_to_radio' %> 
+    <label for="assign_to_org"><%= current_organization.terminology %></label>
   </div>
   <div class="leader_search modalresults" style="display:none">
     <p style="margin: 0 0 5px 0;">Type to find a leader then click on the leader's name</p>
@@ -29,15 +27,13 @@
   </div>
   <div class="org_search modalresults" style="display:none">
     <p style="margin: 0 0 5px 0;">Type to find a <%= current_organization.terminology %> then click on the <%= current_organization.terminology %>'s name</p>
-    <%#= text_field_tag :org_name, '', class: 'org_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>
+    <%= text_field_tag :org_name, '', class: 'org_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>
+    <%= spinner('org_search') %>
     <div class="orgs_list" data-org-id="<%= current_organization.id %>">
-      <ul>
-        <% current_organization.children.each do |org| %>
-          <li class="org"><span class="name"><%= link_to(org, '#',  'data-id' => org.id) %></span></li>
-        <% end %>
-      </ul>
+      <% orgs = current_person.organizations.collect {|top_org| ([top_org] + (top_org.show_sub_orgs? ? top_org.children : []))}.flatten %>
+      <%= render 'organizations/search', organizations: orgs %>
     </div>
-  </div>
+  </div>  
   
   <div id="add_leader_form">
     

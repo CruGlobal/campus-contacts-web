@@ -120,13 +120,23 @@ $ ->
   false
     
   $('#assign_search .leader_search_name').keyup ->
-    name = $('#assign_search .leader_search_name').val()
+    name = $(this).val()
     $('#assign_search ul li').each ->
       regex = new RegExp('.*' + name + '.*', 'i')
       if regex.test($('.name', $(this)).text())
         $(this).show()
       else
         $(this).hide()
+    
+  $('#assign_search .org_search_name').observe_field 0.5, ->
+    name = $(this).val()
+    $('#spinner_org_search').show()
+    $.ajax
+      url: '/organizations/search.js?q='+name, 
+      type: 'GET',
+      complete: ->
+        $('#spinner_org_search').hide()
+
         
   $('#assign_to_me, #assign_to_unassigned').live 'click', ->
     $('#assign_search .leader_search').hide()
@@ -158,7 +168,7 @@ $ ->
       el.dialog
         resizable: false,
         height:444,
-        width:400,
+        width:600,
         modal: true,
         buttons: 
           Cancel: ->

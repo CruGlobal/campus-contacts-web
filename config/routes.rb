@@ -94,6 +94,13 @@ Mh::Application.routes.draw do
   # namespace :admin do
   #   resources :organizations
   # end
+  
+  resources :organizations do
+    collection do
+      get :search
+    end
+  end
+  
   get "/surveys" => 'surveys#index'
   get "/surveys/stopsurveymode" => 'surveys#stop', as: :survey_keyword_stop
   get "/surveys/(:keyword)" => 'surveys#start', as: :survey_keyword_start
