@@ -18,7 +18,7 @@ class Ccc::Crs2Profile < ActiveRecord::Base
   		end
   		ua.profile_id = id unless ua.orphan?
 			if ua.cancelled_by_id == other.user_id
-				ua.concelled_by_id = user_id
+				ua.cancelled_by_id = user_id
 			end
   		ua.save(:validate => false)			
 		end
