@@ -21,6 +21,7 @@ en:
     prayed_to_receive: 'Prayed To Receive Christ' 
     gospel_presentation: 'Gospel Presentation'
   nav:
+    hide: 'Hide'
     view_details: "View details"
     survey_mode_tip: "Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts."
     terms: 'Terms and Conditions'
@@ -51,6 +52,9 @@ en:
       directory_title: "Directory - %{org}"
       labels: 'Labels'
       gender: 'Gender'
+      phone: 'Phone'
+      email: 'Email'
+      year_in_school: 'Year in School'
   org_membership:
     confirm_delete: "Are you sure you want to dissociate yourself from %{org}"
   welcome:
@@ -138,6 +142,7 @@ en:
       do_not_contact: Do Not Contact
       completed: Completed
     index:
+      add_question_back: Click on a question to add it back to the page 
       unassign_contact: "Unassign contact"
       delete_contact: "Delete this contact"
       friends: 'Friends'
