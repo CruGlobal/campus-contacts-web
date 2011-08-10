@@ -30,15 +30,24 @@
             <% end %>
           </ul>
         </div>
-        
-        
-        <% if notice %>
-          <div style="padding:10px"><p class="notice" id="notice"><%= notice %></p></div>
-        <% elsif alert %>
-          <div style="padding:10px"><p class="alert" id="alert"><%= alert %></p></div>
-        <% end %>
             
         <div class="<%= params[:action] %> carea">
+          <% if flash && (flash[:error] || flash[:notice] || flash[:alert]) %>
+            <div class="flash" style="margin:10px;width:770px">
+              <% if flash[:error].present? || flash[:alert].present? %>
+                <div class="flash_message error">
+                  <p><%= flash[:error] || flash[:alert] %></p>
+                </div>
+              <% end %>
+
+              <% if flash[:notice].present? %>
+                <div class="flash_message notice">
+                  <p><%= flash[:notice] %></p>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+                
           <%= yield %>
         </div>
       </div><!-- main -->

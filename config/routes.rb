@@ -1,5 +1,5 @@
 Mh::Application.routes.draw do
-
+  
   resources :leaders do
     collection do
       post :search
@@ -46,6 +46,12 @@ Mh::Application.routes.draw do
   resources :people do
     collection do
       get :export
+      get :merge
+      post :confirm_merge
+      post :do_merge
+    end
+    member do
+      get :merge_preview
     end
     resources :organization_memberships do
       member do

@@ -4,9 +4,11 @@
 //= require jquery_ujs
 //= require jquery.qtip
 //= require jquery.counter-1.0.min
+//= require jquery.observe_field.js
 //= require superfish
 //= require mh
 //= require questions
 //= require contacts
 //= require rails.validations
 //= require sms_keywords.js.coffee
+//= require people.js.coffee

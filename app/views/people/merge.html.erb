@@ -1,0 +1,18 @@
+<div class="pagemenu">
+  Enter the Person IDs of the people you'd like to merge. Click the radio button next to the ID of the person you'd like the others to merge into.
+</div>
+<%= form_tag '/people/confirm_merge', style: 'padding:20px', id: 'user_merge_form' do %>
+  <div class="col1" style="float:left;width:300px">
+    <%= radio_button_tag :keep, 0, true %> Person ID: <%= text_field_tag :person1, params[:person1] %> <%= spinner('person1') %><br/><br/>
+    <%= radio_button_tag :keep, 1 %> Person ID: <%= text_field_tag :person2, params[:person2] %> <%= spinner('person2') %><br/><br/>
+    <%= radio_button_tag :keep, 2 %> Person ID: <%= text_field_tag :person3, params[:person3] %> <%= spinner('person3') %><br/><br/>
+    <%= radio_button_tag :keep, 3 %> Person ID: <%= text_field_tag :person4, params[:person4] %> <%= spinner('person4') %><br/><br/>
+    <%= submit_tag 'Review Merge' %>
+  </div>
+  <div style="width:630px;float:right">
+    <div class="merge person preview person2" style="<%= 'display:none' unless @people[1] %>"><%= render 'merge_preview', :person => @people[1] if @people[1] %></div>
+    <div class="merge person preview person1" style="<%= 'display:none' unless @people[0] %>"><%= render 'merge_preview', :person => @people[0] if @people[0] %></div>
+    <div class="merge person preview person4" style="<%= 'display:none' unless @people[3] %>"><%= render 'merge_preview', :person => @people[3] if @people[3] %></div>
+    <div class="merge person preview person3" style="<%= 'display:none' unless @people[2] %>"><%= render 'merge_preview', :person => @people[2] if @people[2] %></div>
+  </div>
+<% end %>
