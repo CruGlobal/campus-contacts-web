@@ -24,9 +24,13 @@ class Ccc::Crs2Profile < ActiveRecord::Base
 		end
 
 		other.crs2_person.try(:destroy)
+		if crs2_user && other.crs2_user
+  		crs2_user.merge(other.crs2_user)
+		elsif other.crs2_user
+		  self.user_id = other.user_id
+	  end
+    
 		other.destroy
-		crs2_user.merge(other.crs2_user)
-
 		save
   end
 end
