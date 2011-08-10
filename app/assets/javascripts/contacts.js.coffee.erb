@@ -104,7 +104,7 @@ $ ->
           $(this).closest('tr').remove();
     $('#assign_search').dialog('destroy')
   false
-    
+  
   $('#assign_search .org a').live 'click', (e)->
     e.preventDefault()
     form = $('#new_contact_assignment')
@@ -117,6 +117,8 @@ $ ->
       $(this).closest('tr').remove();
     form.attr('action', old_action)
     $('#assign_search').dialog('destroy')
+    if $('#contacts_controller.show')[0]
+      setTimeout "document.location = '/contacts'", 1000
   false
     
   $('#assign_search .leader_search_name').keyup ->
@@ -160,11 +162,6 @@ $ ->
     if $('.id_checkbox:checked').length > 0
       $('#assign_to_me').click()
       el = $('#assign_search')
-      # $('#add_leader_form').hide()
-      # $('#leader_search_form').show()
-      # $('#leader_search_name').val('')
-      # $("#leader_search_results").hide()
-      # form = $('#leader_search_form')
       el.dialog
         resizable: false,
         height:444,
