@@ -66,6 +66,28 @@ class Organization < ActiveRecord::Base
     "#{name} (#{keywords.count})"
   end
   
+  def add_leader(person)
+    OrganizationMembership.find_or_create_by_person_id_and_organization_id(person.id, id)
+    OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person.id, id, Role::LEADER_ID)
+  end
+  
+  def add_contact(person)
+    unless OrganizationalRole.find_by_person_id_and_organization_id(person.id, id)
+      OrganizationalRole.create!(person_id: person.id, organization_id: id, role_id: Role::CONTACT_ID, followup_status: OrganizationMembership::FOLLOWUP_STATUSES.first)
+      OrganizationMembership.create!(person_id: person.id, organization_id: id, primary: false) 
+    end
+  end
+  
+  def add_admin(person)
+    OrganizationMembership.find_or_create_by_person_id_and_organization_id(person.id, id)
+    OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person.id, id, Role::ADMIN_ID)
+  end
+  
+  def remove_contact(person)
+    OrganizationalRole.where(person_id: person.id, organization_id: id, role_id: Role::CONTACT_ID).first.try(:destroy)
+    OrganizationMembership.where(person_id: person.id, organization_id: id).first.try(:destroy)
+  end
+  
   rails_admin do
     object_label_method {:name_with_keyword_count}
     edit do

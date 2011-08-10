@@ -47,6 +47,10 @@ class Person < ActiveRecord::Base
     OrganizationalRole.where(person_id: id, role_id: Role.leader_ids, :organization_id => org.id).present?
   end
   
+  def orgs_with_children
+    organizations.collect {|top_org| ([top_org] + (top_org.show_sub_orgs? ? top_org.children : []))}.flatten
+  end
+  
   def phone_number
     primary_phone_number.try(:number)
   end

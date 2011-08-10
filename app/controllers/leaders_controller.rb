@@ -29,9 +29,14 @@ class LeadersController < ApplicationController
         conditions = ["(preferredName like ? OR firstName like ?) AND lastName like ?", first, first, last]
       end
 
-      @people = Person.where(conditions).includes(:user)
-      @people = @people.limit(10) unless params[:show_all].to_s == 'true'
-      @total = Person.where(conditions).count
+      scope = Person.where(conditions).where('organizational_roles.organization_id IN(?)', current_person.orgs_with_children.collect(&:id)).includes(:organizational_roles)
+      @people = scope.includes(:user)
+      if params[:show_all].to_s == 'true'
+        @total = @people.all.length
+      else
+        @people = @people.limit(10) 
+        @total = scope.count
+      end
       render :layout => false
     else
       render :nothing => true
@@ -62,8 +67,8 @@ class LeadersController < ApplicationController
 
   def create
     @person ||= Person.find(params[:person_id]) if params[:person_id]
-    OrganizationMembership.find_or_create_by_person_id_and_organization_id(@person.id, current_organization.id)
-    OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(@person.id, current_organization.id, Role::LEADER_ID)
+    current_organization.add_leader(@person)
+    notify_new_leader(@person)
     render :create
   end
   
@@ -86,13 +91,18 @@ class LeadersController < ApplicationController
     
     # Notify the new user if we're supposed to
     if params[:notify] == '1'
-      token = SecureRandom.hex(12)
-      @person.user.remember_token = token
-      @person.user.remember_token_expires_at = 1.month.from_now
-      @person.user.save(validate: false)
-      LeaderMailer.added(@person, current_person, current_organization, token).deliver
+      notify_new_leader(@person)
     end
     create and return
   end
+  
+  protected
+    def notify_new_leader(person)
+      token = SecureRandom.hex(12)
+      person.user.remember_token = token
+      person.user.remember_token_expires_at = 1.month.from_now
+      person.user.save(validate: false)
+      LeaderMailer.added(person, current_person, current_organization, token).deliver
+    end
 
 end

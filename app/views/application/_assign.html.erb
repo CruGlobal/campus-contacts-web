@@ -30,8 +30,7 @@
     <%= text_field_tag :org_name, '', class: 'org_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>
     <%= spinner('org_search') %>
     <div class="orgs_list" data-org-id="<%= current_organization.id %>">
-      <% orgs = current_person.organizations.collect {|top_org| ([top_org] + (top_org.show_sub_orgs? ? top_org.children : []))}.flatten %>
-      <%= render 'organizations/search', organizations: orgs %>
+      <%= render 'organizations/search', organizations: current_person.orgs_with_children %>
     </div>
   </div>  
   
