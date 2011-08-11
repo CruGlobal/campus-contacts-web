@@ -1,4 +1,4 @@
-<%= form_for(@sms_keyword, validate: true) do |f| %>
+<%= form_for(@sms_keyword, validate: true, html: {id: 'sms_keyword_form'}) do |f| %>
   <%= error_messages_for :sms_keyword %>
   
   <div class="stepwrap rwidth">
