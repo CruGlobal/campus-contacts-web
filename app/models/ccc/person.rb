@@ -67,7 +67,10 @@ module Ccc
             other_address = other.ministry_newaddresses.detect {|oa| oa.addressType == address.addressType}
             address.merge(other_address) if other_address
           end
-          other.ministry_newaddresses.each {|ma| ma.update_attribute(:fk_PersonID, personID) unless ma.frozen?}
+          other.ministry_newaddresses do |address|
+            other_address = ministry_newaddresses.detect {|oa| oa.addressType == address.addressType}
+            address.update_attribute(:fk_PersonID, personID) unless address.frozen? || other_address
+          end
 	        
  					# CRS
 					other.crs_registrations.each { |ua| ua.update_attribute(:fk_PersonID, personID) }

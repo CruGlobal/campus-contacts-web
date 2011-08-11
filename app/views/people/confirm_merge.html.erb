@@ -1,6 +1,9 @@
 <%= form_tag '/people/do_merge', style: 'padding:20px', id: 'user_merge_form' do %>
   <%= hidden_field_tag :keep_id, @keep.id %>
-  <h2>The following person will be kept:</h2>
+  <h2>
+    The following person will be kept:
+    <%= submit_tag("Do the merge!", :confirm => "Are you sure? There's no going back!!!") %>
+  </h2>
   <div class="merge person"><%= render 'merge_preview', :person => @keep %></div>
   <div class="clear">
   <h2>The following people will be merged into the person shown above:</h2>
@@ -9,5 +12,4 @@
     <div class="merge person"><%= render 'merge_preview', :person => person %></div>
   <% end %>
   <div class="clear">
-  <%= submit_tag("Do the merge!", :confirm => "Are you sure? There's no going back!!!") %>
 <% end %>
