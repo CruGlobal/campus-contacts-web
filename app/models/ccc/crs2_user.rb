@@ -1,7 +1,7 @@
 class Ccc::Crs2User < ActiveRecord::Base
   set_table_name 'crs2_user'
   has_many :crs2_conferences, class_name: 'Ccc::Crs2Conference', foreign_key: :creator_id
-  has_many :crs2_profiles, class_name: 'Ccc::Crs2Profile', foreign_key: :user_id
+  has_one :crs2_profile, class_name: 'Ccc::Crs2Profile', foreign_key: :user_id
   has_many :crs2_registrants, class_name: 'Ccc::Crs2Registrant', foreign_key: :cancelled_by_id
   has_many :crs2_registrations, class_name: 'Ccc::Crs2Registration', foreign_key: :creator_id
   has_many :crs2_registration_cancellers, class_name: 'Ccc::Crs2Registration', foreign_key: :cancelled_by_id
@@ -21,9 +21,6 @@ class Ccc::Crs2User < ActiveRecord::Base
 
 		other.crs2_transactions.each { |ua| ua.update_attribute(:verified_by_id, id) }
 		
-		other.crs2_profiles.each { |ua| ua.update_attribute(:user_id, id) }
-    other.reload
-		other.destroy
 		save
 	end
 
