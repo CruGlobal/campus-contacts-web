@@ -21,15 +21,7 @@ class LeadersController < ApplicationController
   
   def search
     if params[:name].present?
-      query = params[:name].strip.split(' ')
-      first, last = query[0].to_s + '%', query[1].to_s + '%'
-      if last == '%'
-        conditions = ["preferredName like ? OR firstName like ? OR lastName like ?", first, first, first]
-      else
-        conditions = ["(preferredName like ? OR firstName like ?) AND lastName like ?", first, first, last]
-      end
-
-      scope = Person.where(conditions).where('organizational_roles.organization_id IN(?)', current_person.orgs_with_children.collect(&:id)).includes(:organizational_roles)
+      scope = Person.search(params[:name], current_person.orgs_with_children.collect(&:id))
       @people = scope.includes(:user)
       if params[:show_all].to_s == 'true'
         @total = @people.all.length

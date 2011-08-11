@@ -38,6 +38,19 @@ class Person < ActiveRecord::Base
   before_save :stamp_changed
   before_create :stamp_created
 
+  def self.search(name, organization_ids = nil, scope = nil)
+    scope ||= Person
+    query = name.strip.split(' ')
+    first, last = query[0].to_s + '%', query[1].to_s + '%'
+    if last == '%'
+      conditions = ["preferredName like ? OR firstName like ? OR lastName like ?", first, first, first]
+    else
+      conditions = ["(preferredName like ? OR firstName like ?) AND lastName like ?", first, first, last]
+    end
+    scope = scope.where(conditions)
+    scope = scope.where('organizational_roles.organization_id IN(?)', organization_ids).includes(:organizational_roles) if organization_ids
+    scope
+  end
   def to_s
     [preferredName.blank? ? firstName : preferredName.try(:strip), lastName.try(:strip)].join(' ')
   end

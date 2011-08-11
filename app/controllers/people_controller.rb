@@ -60,6 +60,13 @@ class PeopleController < ApplicationController
     @person = Person.find(params[:id])
   end
   
+  def search_ids
+    @people = Person.search(params[:q])
+    respond_to do |wants|
+      wants.json { render text: @people.collect(&:id).to_json }
+    end
+  end
+  
   def merge
     @people = 1.upto(4).collect {|i| Person.find_by_personID(params["person#{i}"]) if params["person#{i}"].present?}.compact
   end

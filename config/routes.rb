@@ -49,6 +49,7 @@ Mh::Application.routes.draw do
       get :merge
       post :confirm_merge
       post :do_merge
+      get :search_ids
     end
     member do
       get :merge_preview
