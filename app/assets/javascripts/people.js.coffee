@@ -1,19 +1,20 @@
 $ ->
   $('#user_merge_form input.person').observe_field 0.75, ->
-    css_class = $(this).attr('id')
-    id = $(this).val()
-    return false unless Number(id) > 0
-    $("#spinner_" + css_class).show()
-    $.ajax
-      url: '/people/' + id + '/merge_preview?class=' + css_class
-      type: 'GET',
-      complete: ->
-        $('.merge.' + css_class).show()
-        $("#spinner_" + css_class).hide()
+    $(this).triggerPersonLookup()
           
-  $('#user_merge_form input.name').observe_field 0.75, ->
+  $('#user_merge_form input.name').observe_field 1, ->
+    $(this).triggerPersonSearch()
+
+  
+  $('#user_merge_form input.person').triggerPersonLookup()
+  $('#user_merge_form input.name').triggerPersonSearch()
+  
+$.fn.triggerPersonSearch = ->
+  this.each ->
     name = $(this).val()
     $('#person_ids').hide()
+    $('input.person').val('')
+    $('.merge.person.preview').hide()
     return false if $.trim(name) == ''
     $("#spinner_name").show()
     $.ajax
@@ -28,3 +29,18 @@ $ ->
             field.val(val)
       complete: ->
         $("#spinner_name").hide()
+        
+$.fn.triggerPersonLookup = ->
+  this.each ->
+    css_class = $(this).attr('id')
+    id = $(this).val()
+    unless Number(id) > 0
+      $('.merge.' + css_class).hide()
+      return false 
+    $("#spinner_" + css_class).show()
+    $.ajax
+      url: '/people/' + id + '/merge_preview?class=' + css_class
+      type: 'GET',
+      complete: ->
+        $('.merge.' + css_class).show()
+        $("#spinner_" + css_class).hide()
