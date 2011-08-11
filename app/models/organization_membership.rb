@@ -21,6 +21,7 @@ class OrganizationMembership < ActiveRecord::Base
       MergeAudit.create!(mergeable: self, merge_looser: other)
       self.validated = true if other.validated?
       self.save(validate: false)
+      other.reload
       other.destroy
     end
   end

@@ -7,6 +7,7 @@ class Ccc::SpUser < ActiveRecord::Base
 		if other.type != nil and roles.index_of(other.type) < roles.index_of(type)
    		self.type = other.type
 		end	
+    other.reload
    	other.destroy
 		save
   end

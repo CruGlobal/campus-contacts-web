@@ -100,6 +100,7 @@ class User < ActiveRecord::Base
       super
       
       MergeAudit.create!(mergeable: self, merge_looser: other)
+      other.reload
       other.destroy
     end
   end

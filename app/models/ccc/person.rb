@@ -72,10 +72,10 @@ module Ccc
  					# CRS
 					other.crs_registrations.each { |ua| ua.update_attribute(:fk_PersonID, personID) }
 
-					if other.crs2_profile and crs2_profile
+					if other.crs2_profile && crs2_profile
 	  				crs2_profile.merge(other.crs2_profile)
 					elsif other.crs2_profile
-						other.crs2_profile.ministry_person_id = personID
+						other.crs2_profile.update_column(:ministry_person_id, personID)
 					end
 
 
@@ -150,6 +150,7 @@ module Ccc
 
  
           MergeAudit.create!(mergeable: self, merge_looser: other)
+          other.reload
           other.destroy
           save(validate: false)
 				end

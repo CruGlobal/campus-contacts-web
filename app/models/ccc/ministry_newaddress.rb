@@ -29,6 +29,7 @@ class Ccc::MinistryNewaddress < ActiveRecord::Base
         self['changedBy'] = 'MERGE'
       end
       MergeAudit.create!(mergeable: self, merge_looser: other)
+      other.reload
       other.destroy
       save(validate: false)
     end

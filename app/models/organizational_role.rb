@@ -16,13 +16,16 @@ class OrganizationalRole < ActiveRecord::Base
       case
       when role_id == Role::CONTACT_ID && other.role_id != Role::CONTACT_ID
         MergeAudit.create!(mergeable: other, merge_looser: self)
+        self.reload
         self.destroy
       when other.role_id == Role::CONTACT_ID && role_id != Role::CONTACT_ID
         MergeAudit.create!(mergeable: self, merge_looser: other)
+        other.reload
         other.destroy
       when other.role_id == Role::CONTACT_ID && role_id == Role::CONTACT_ID
         # Both roles are contact, and we only need one contact role
         MergeAudit.create!(mergeable: self, merge_looser: other)
+        other.reload
         other.destroy
       else
         # keep both roles

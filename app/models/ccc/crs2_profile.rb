@@ -30,6 +30,7 @@ class Ccc::Crs2Profile < ActiveRecord::Base
 		  self.user_id = other.user_id
 	  end
     
+    other.reload
 		other.destroy
 		save
   end

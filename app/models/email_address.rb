@@ -17,6 +17,7 @@ class EmailAddress < ActiveRecord::Base
         new_primary.update_attribute(:primary, true) if new_primary
       end
       MergeAudit.create!(mergeable: self, merge_looser: other)
+      other.reload
       other.destroy
     end
   end
