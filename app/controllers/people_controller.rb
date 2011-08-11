@@ -61,7 +61,7 @@ class PeopleController < ApplicationController
   end
   
   def search_ids
-    @people = Person.search(params[:q])
+    @people = Person.search_by_name(params[:q])
     respond_to do |wants|
       wants.json { render text: @people.collect(&:id).to_json }
     end
