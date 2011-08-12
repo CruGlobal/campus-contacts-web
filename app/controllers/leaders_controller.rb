@@ -59,6 +59,11 @@ class LeadersController < ApplicationController
 
   def create
     @person ||= Person.find(params[:person_id]) if params[:person_id]
+    # Make sure we have a user for this person
+    unless @person.user
+      @person.user = User.create!(:username => @email.email, :email => @email.email, :password => SecureRandom.hex(10))
+      @person.save(validate: false)
+    end
     current_organization.add_leader(@person)
     notify_new_leader(@person)
     render :create
