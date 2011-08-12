@@ -97,14 +97,16 @@ class ContactsController < ApplicationController
         @person.phone_numbers.create!(number: sms.phone_number, location: 'mobile') unless @person.phone_numbers.detect {|p| p.number_with_country_code == sms.phone_number}
         sms.update_attribute(:person_id, @person.id) unless sms.person_id
       end
+    end
+    if @keyword
       @answer_sheet = get_answer_sheet(@keyword, @person)
       respond_to do |wants|
         wants.html { render :layout => 'plain'}
         wants.mobile
       end
-      return
+    else
+      redirect_to '/404.html' and return
     end
-    redirect_to '/404.html' and return
   end
     
   def update
