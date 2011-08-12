@@ -83,7 +83,7 @@ module Ccc
 
 
 					# Panorama
-					other.pr_reviewers.each { |ua| ua.update_attribute(:person_id, personID) }
+					other.pr_reviewers.each { |ua| ua.update_column(:person_id, personID) }
 
 					PrReview.where(["subject_id = ? or initiator_id = ?", other.id, other.id]).each do |ua|
 						ua.update_attribute(:subject_id, personID) if ua.subject_id == other.id

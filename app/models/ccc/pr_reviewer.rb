@@ -5,10 +5,6 @@ class Ccc::PrReviewer < AnswerSheet
   belongs_to :person
   validates_uniqueness_of :person_id, scope: [ :review_id ], on: :create
 
-  before_destroy { |record| review.try(:update_percent_and_completed) }
-  after_update { |record| review.try(:update_percent_and_completed) }
-  after_create { |record| review.try(:update_percent_and_completed) }
-
   def complete?
     !submitted_at.nil?
   end
