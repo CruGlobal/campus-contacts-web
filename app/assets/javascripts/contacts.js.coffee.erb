@@ -175,8 +175,8 @@ $ ->
     false
 
   $('#contacts_controller #bulk_unassign').live 'click', ->
-    if $('.id_checkbox:checked').length > 0
-      $.rails.handleRemote($('#new_contact_assignment'))
+    if $('.id_checkbox:checked').length > 0 && $('#leaders')[0]?
+      $.fn.assignTo($('.leader.unassigned'))
       $('.id_checkbox:checked').closest('tr').fadeOut()
     $('#check_all').prop('checked', false)
     false
