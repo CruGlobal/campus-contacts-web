@@ -62,7 +62,16 @@ class LeadersController < ApplicationController
     # Make sure we have a user for this person
     unless @person.user
       if @person.email.present?
-        @person.user = User.create!(:username => @person.email, :email => @person.email, :password => SecureRandom.hex(10))
+        if user =  User.find_by_username(@person.email)
+          if user.person
+            user.person.merge(@person)
+            @person = user.person
+          else
+            @person.user = user
+          end
+        else
+          @person.user = User.create!(:username => @person.email, :email => @person.email, :password => SecureRandom.hex(10))
+        end
         @person.save(validate: false)
       end
     end
