@@ -59,7 +59,7 @@ class ContactsController < ApplicationController
                            @people = @people.where("#{Person.table_name}.#{question.attribute_name} like ?", '%' + v + '%') unless v.strip.blank?
                          end
           else
-            @people = @people.includes(:answer_sheets => :answers).where("#{Answer.table_name}.question_id = ? AND #{Answer.table_name}.value like ?", q_id, '%' + v + '%') unless v.strip.blank?
+            @people = @people.joins(:answer_sheets => :answers).where("#{Answer.table_name}.question_id = ? AND #{Answer.table_name}.value like ?", q_id, '%' + v + '%') unless v.strip.blank?
           end
         else
           conditions = ["#{Answer.table_name}.question_id = ?", q_id]
