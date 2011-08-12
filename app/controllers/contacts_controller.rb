@@ -72,7 +72,7 @@ class ContactsController < ApplicationController
           end
           if answers_conditions.present?
             conditions[0] = conditions[0] + ' AND (' + answers_conditions.join(' OR ') + ')'
-            @people = @people.includes(:answer_sheets => :answers).where(conditions) 
+            @people = @people.joins(:answer_sheets => :answers).where(conditions) 
           end
         end
       end
