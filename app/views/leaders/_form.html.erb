@@ -1,5 +1,5 @@
 <!-- Pick director form -->
-<%= form_tag add_person_leaders_path, :remote => true, :id => 'create_leader_form' do %>
+<%= form_tag @person.new_record? ? add_person_leaders_path : leader_path(@person), method: :put, :remote => true, :id => 'create_leader_form' do %>
   <% if flash[:error] %>
     <div class="flash error"><%= raw flash[:error] %></div>
   <% end %>

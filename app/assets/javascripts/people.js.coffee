@@ -1,5 +1,6 @@
 $ ->
-  $('#people_controller.confirm_merge input[type=submit]')[0].focus()
+  if $('#people_controller.confirm_merge input[type=submit]')[0]
+    $('#people_controller.confirm_merge input[type=submit]')[0].focus() 
   $('#user_merge_form input.person').observe_field 0.75, ->
     $(this).triggerPersonLookup()
           

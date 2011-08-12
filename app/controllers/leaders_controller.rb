@@ -61,7 +61,8 @@ class LeadersController < ApplicationController
     @person ||= Person.find(params[:person_id]) if params[:person_id]
     # Make sure we have a user for this person
     unless @person.user
-      if @person.email.present?
+      params[:notify] = "1"
+      if @person.email.present? && @person.primary_email_address.valid?
         if user =  User.find_by_username(@person.email)
           if user.person
             user.person.merge(@person)
@@ -73,11 +74,49 @@ class LeadersController < ApplicationController
           @person.user = User.create!(:username => @person.email, :email => @person.email, :password => SecureRandom.hex(10))
         end
         @person.save(validate: false)
+      else
+        # Delete invalid emails
+        @person.email_addresses.each {|email| email.destroy unless email.valid?}
+        @person.reload
+        # we need a valid email address to make a leader
+        @email = @person.primary_email_address || @person.email_addresses.new
+        @phone = @person.primary_phone_number || @person.phone_numbers.new
+        render :edit and return
       end
     end
     current_organization.add_leader(@person)
-    notify_new_leader(@person) if @person.user
+        # Notify the new user if we're supposed to
+    if params[:notify] == '1'
+      notify_new_leader(@person) 
+    end
     render :create
+  end
+  
+  def update
+    @person = Person.find(params[:id])
+    if params[:person]
+      email_attributes = params[:person].delete(:email_address)
+      phone_attributes = params[:person].delete(:phone_number)
+      if email_attributes[:email].present?
+        @email = @person.email_addresses.find_or_create_by_email(email_attributes[:email])
+      end
+      if phone_attributes[:phone].present?
+        @phone = @person.phone_numbers.find_or_create_by_number(phone_attributes[:phone][-10..-1])
+      end
+      @person.save
+      @person.update_attributes(params[:person])
+    end
+    required_fields = {'First Name' => @person.firstName, 'Last Name' => @person.lastName, 'Gender' => @person.gender, 'Email' => @email.try(:email)}
+    @person.valid?; @email.try(:valid?); @phone.try(:valid?)
+    unless required_fields.values.all?(&:present?)
+      flash.now[:error] = "Please fill in all fields<br />"
+      required_fields.each do |k,v|
+        flash.now[:error] += k + " is required.<br />" unless v.present?
+      end
+      raise flash[:error].inspect
+      render :edit and return
+    end
+    create and return
   end
   
   def add_person
@@ -97,10 +136,6 @@ class LeadersController < ApplicationController
     end
     @person.save!
     
-    # Notify the new user if we're supposed to
-    if params[:notify] == '1'
-      notify_new_leader(@person)
-    end
     create and return
   end
   

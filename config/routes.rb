@@ -3,7 +3,7 @@ Mh::Application.routes.draw do
   resources :leaders do
     collection do
       post :search
-      post :add_person
+      put :add_person
     end
   end
   
