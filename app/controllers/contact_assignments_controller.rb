@@ -6,7 +6,7 @@ class ContactAssignmentsController < ApplicationController
     if params[:assign_to].present?
       @assign_to = Person.find(params[:assign_to])
       params[:ids].each do |id|
-        ContactAssignment.create!(person_id: id, organization_id: @organization.id, assigned_to_id: @assign_to.id)
+        ContactAssignment.create(person_id: id, organization_id: @organization.id, assigned_to_id: @assign_to.id)
       end
     else
       

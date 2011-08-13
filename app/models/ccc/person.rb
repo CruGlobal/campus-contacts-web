@@ -140,12 +140,12 @@ module Ccc
 					end
 
 					# SN
-					other.sn_custom_values.each { |ua| ua.update_attribute(:person_id, personID) }
-					other.sn_group_involvements.each { |ua| ua.update_attribute(:person_id, personID) }
-					other.sn_ministry_involvements.each { |ua| ua.update_attribute(:person_id, personID) }
-					other.sn_training_answers.each { |ua| ua.update_attribute(:person_id, personID) }
-					other.sn_imports.each { |ua| ua.update_attribute(:person_id, personID) }
-					other.sn_timetables.each { |ua| ua.update_attribute(:person_id, personID) }
+          # other.sn_custom_values.each { |ua| ua.update_attribute(:person_id, personID) }
+          # other.sn_group_involvements.each { |ua| ua.update_attribute(:person_id, personID) }
+          # other.sn_ministry_involvements.each { |ua| ua.update_attribute(:person_id, personID) }
+          # other.sn_training_answers.each { |ua| ua.update_attribute(:person_id, personID) }
+          # other.sn_imports.each { |ua| ua.update_attribute(:person_id, personID) }
+          # other.sn_timetables.each { |ua| ua.update_attribute(:person_id, personID) }
 
 					other.profile_pictures.each { |ua| ua.update_attribute(:person_id, personID) }
 					other.ministry_missional_team_members.each { |ua| ua.update_attribute(:personID, personID) }

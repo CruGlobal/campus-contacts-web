@@ -40,10 +40,10 @@ class ApiRolesTest < ActionDispatch::IntegrationTest
       assert_equal(@json['error']['code'], "24")
     end
     
-    should "return a JSON error if no role is found to update" do
+    should "return a JSON error if role name doesnt' exist" do
       path = "/api/roles/#{@user.person.id}"
       @user.person.organizational_roles.destroy_all
-      put path, {'access_token' => @access_token3.code, role: "leader", org_id: @user3.person.primary_organization.id}
+      put path, {'access_token' => @access_token3.code, role: "bad_role", org_id: @user3.person.primary_organization.id}
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json['error']['code'], "38")
     end

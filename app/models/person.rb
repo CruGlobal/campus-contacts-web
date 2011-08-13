@@ -39,6 +39,7 @@ class Person < ActiveRecord::Base
   before_create :stamp_created
 
   def self.search_by_name(name, organization_ids = nil, scope = nil)
+    return scope.where('1 = 0') unless name.present?
     scope ||= Person
     query = name.strip.split(' ')
     first, last = query[0].to_s + '%', query[1].to_s + '%'
