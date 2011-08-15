@@ -76,7 +76,7 @@ namespace :infobase do
       # personID, teamID
       team = team_id_to_ministry_id[mtm['teamID']]
       next unless team
-      team.add_admin(mtm['personID'].id)
+      team.add_admin(mtm['personID'])
       i += 1
       puts i if i % 1000 == 0
     end
