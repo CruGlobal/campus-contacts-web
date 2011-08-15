@@ -24,7 +24,11 @@ class ApplicationController < ActionController::Base
   protected
   
   def check_url
-    redirect_to surveys_path and return false if mhub?
+    render_404 if mhub?
+  end
+  
+  def render_404
+    raise ActionController::RoutingError.new('Not Found')
   end
   
   def mhub?

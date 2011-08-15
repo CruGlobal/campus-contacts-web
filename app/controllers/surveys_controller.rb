@@ -12,8 +12,9 @@ class SurveysController < ApplicationController
     if current_user
       @organization = current_person.organizations.find_by_id(params[:org_id]) || current_organization
       @keywords = @organization ? @organization.keywords : nil
+    else
+      render_404
     end
-    @keywords ||= SmsKeyword.order('keyword')
     respond_to do |wants|
       wants.html { render layout: 'plain' }
       wants.mobile
@@ -21,9 +22,9 @@ class SurveysController < ApplicationController
   end
   
   def start
+    render_404 unless params[:keyword].present?
     cookies[:survey_mode] = 1
-    url = params[:keyword].present? ? contact_form_url(params[:keyword]) : new_user_session_url
-    redirect_to facebook_logout_url(next: url)
+    redirect_to facebook_logout_url(next: contact_form_url(params[:keyword], host: 'mhub.cc'))
   end
   
   def stop

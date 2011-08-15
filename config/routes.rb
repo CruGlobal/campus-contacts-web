@@ -103,16 +103,16 @@ Mh::Application.routes.draw do
   end
   
   get "/surveys" => 'surveys#index'
-  get "/surveys/stopsurveymode" => 'surveys#stop', as: :survey_keyword_stop
-  get "/surveys/(:keyword)" => 'surveys#start', as: :survey_keyword_start
+  get "/surveys/stopsurveymode" => 'surveys#stop', as: :stop_survey
+  get "/surveys/:keyword" => 'surveys#start', as: :start_survey
 
   get "welcome/index"
   get "/test" => "welcome#test"
 
   devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks", sessions: "sessions" }
   devise_scope :user do
-    get "sign_in", to: "devise/sessions#new"
-    get "sign_out", to: "devise/sessions#destroy"
+    get "sign_in", to: "sessions#new"
+    get "sign_out", to: "sessions#destroy"
   end
   match '/auth/facebook/logout' => 'application#facebook_logout', as: :facebook_logout
   

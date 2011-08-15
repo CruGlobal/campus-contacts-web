@@ -12,29 +12,12 @@
         <div class="gmwrap">
           <ul class="sf-menu">
             <li class="item">
-              <%= link_to(t('nav.logout'), facebook_logout_url)  %> 
+              <%= link_to(t('nav.logout'), facebook_logout_url(next: cookies[:survey_mode].present? ? contact_form_url(@keyword.keyword, host: 'mhub.cc') : sign_out_url))  %> 
             </li>   
           </ul>
         </div>
       </div>
     <% end %>
-    <div id="plainheader">
-      <!-- <a href="/" id="logo"></a> -->
-      <% if params[:controller] == 'contacts' %>
-      
-        <% if can? :manage, @keyword %>
-          <%= link_to(t('contacts.plain.exit_survey'), '/contacts') %> 
-          <span id="close_window" style="display:none">| <%= link_to('Close Window', '#', onclick: 'window.close()') %></span>
-          <script type="text/javascript" charset="utf-8">
-            if(window.opener !== null) {
-              $('#close_window').show();
-            }
-          </script>
-        <% else %>
-          <%= link_to(t('contacts.plain.exit_survey'), facebook_logout_url(next: '/contacts')) %> 
-        <% end %>
-      <% end %>
-    </div>
   
     <div class="<%= params[:action] %>">
       <%= yield %>

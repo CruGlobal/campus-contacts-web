@@ -11,7 +11,12 @@ class SessionsController < Devise::SessionsController
   end
   
   def destroy
-    super
     session[:fb_token] = nil
+    if mhub?
+      render layout: mobile_device? ? 'applicaiton' : 'plain'
+    else
+      redirect_to after_sign_out_path_for('user')
+    end
+    sign_out
   end
 end
