@@ -62,7 +62,7 @@ en:
   welcome:
     index:
       title_top: "Welcome to MissionHub!"
-      title_top_mobile: "MissionHub"
+      title_top_mobile: "MHub"
       go_home: 'Go to My Contacts'
       request_key: "Click here to request a keyword"
       get_started: "Get Started"

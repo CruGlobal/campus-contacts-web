@@ -2,9 +2,11 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_user!, :except => [:facebook_logout]
   before_filter :check_su
   before_filter :set_locale
+  before_filter :check_url, except: :facebook_logout
   rescue_from CanCan::AccessDenied, with: :access_denied
   protect_from_forgery  
 
+  
   def facebook_logout
     redirect_url = params[:next] ? params[:next] : root_url
     if session[:fb_token]
@@ -18,8 +20,17 @@ class ApplicationController < ActionController::Base
     end
     sign_out
   end
-
+  
   protected
+  
+  def check_url
+    redirect_to surveys_path and return false if mhub?
+  end
+  
+  def mhub?
+    request.host.include?('mhub.cc')
+  end
+  helper_method :mhub?
   
   def self.application_name
     'MH'
@@ -48,7 +59,7 @@ class ApplicationController < ActionController::Base
   def current_user
     # check for access token, then do it the devise way
     if params['access_token']
-      User.find(Rack::OAuth2::Server.get_access_token(params['access_token']).identity)
+      @current_user ||= User.find(Rack::OAuth2::Server.get_access_token(params['access_token']).identity)
     else
       super # devise user
     end

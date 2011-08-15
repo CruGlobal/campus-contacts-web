@@ -4,6 +4,7 @@ class ContactsController < ApplicationController
   before_filter :get_keyword, only: [:new, :update, :thanks]
   before_filter :ensure_current_org, except: [:new, :update, :thanks]
   before_filter :authorize, except: [:new, :update, :thanks]
+  skip_before_filter :check_url, only: [:new, :update]
   
   def index
     @organization = params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : current_organization

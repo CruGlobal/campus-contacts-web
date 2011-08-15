@@ -58,25 +58,15 @@ class LeadersController < ApplicationController
   end
 
   def create
-    @person ||= Person.find(params[:person_id]) if params[:person_id]
+    if @person
+      @notify = params[:notify] == '1'
+    else
+      @person = Person.find(params[:person_id])
+      @notify = true
+    end
     # Make sure we have a user for this person
     unless @person.user
-      params[:notify] = "1"
-      if @person.email.present? && @person.primary_email_address.valid?
-        if user =  User.find_by_username(@person.email)
-          if user.person
-            user.person.merge(@person)
-            @person = user.person
-          else
-            @person.user = user
-          end
-        else
-          @person.user = User.create!(:username => @person.email, :email => @person.email, :password => SecureRandom.hex(10))
-        end
-        @person.save(validate: false)
-      else
-        # Delete invalid emails
-        @person.email_addresses.each {|email| email.destroy unless email.valid?}
+      unless @person.create_user!
         @person.reload
         # we need a valid email address to make a leader
         @email = @person.primary_email_address || @person.email_addresses.new

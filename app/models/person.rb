@@ -103,7 +103,11 @@ class Person < ActiveRecord::Base
       self.gender = response.gender unless (response.gender.nil? && !gender.blank?)
       # save!
       unless email_addresses.detect {|e| e.email == data['email']}
-        email_addresses.find_or_create_by_email(data['email'].try(:strip)) if data['email'].try(:strip).present?
+        begin
+          email_addresses.find_or_create_by_email(data['email'].try(:strip)) if data['email'].try(:strip).present?
+        rescue Mysql2::Error
+          return self
+        end
       end
       async_get_or_update_friends_and_interests(authentication)
       get_location(authentication, response)
@@ -395,6 +399,27 @@ class Person < ActiveRecord::Base
   
   def picture
     "http://graph.facebook.com/#{fb_uid}/picture"
+  end
+  
+  def create_user!
+    if self.email.present? && self.primary_email_address.valid?
+      if user =  User.find_by_username(self.email)
+        if user.person
+          user.person.merge(@person)
+          @person = user.person
+        else
+          self.user = user
+        end
+      else
+        self.user = User.create!(:username => self.email, :email => self.email, :password => SecureRandom.hex(10))
+      end
+      self.save(validate: false)
+      return true
+    else
+      # Delete invalid emails
+      self.email_addresses.each {|email| email.destroy unless email.valid?}
+      return false
+    end
   end
 
   def updated_at() dateChanged end

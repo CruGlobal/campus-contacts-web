@@ -7,6 +7,17 @@
 <body id="<%= controller.controller_name %>_controller">
   
   <div id="outer" class="plain">
+    <% if user_signed_in? %>
+      <div id="global">
+        <div class="gmwrap">
+          <ul class="sf-menu">
+            <li class="item">
+              <%= link_to(t('nav.logout'), facebook_logout_url)  %> 
+            </li>   
+          </ul>
+        </div>
+      </div>
+    <% end %>
     <div id="plainheader">
       <!-- <a href="/" id="logo"></a> -->
       <% if params[:controller] == 'contacts' %>
@@ -30,8 +41,8 @@
     </div>
     
     <div class="footer">
-      <%#= link_to(t('nav.terms'), '/terms') %> |
-      <%#= link_to(t('nav.privacy'), '/privacy') %>
+      <%= link_to(t('nav.terms'), '/terms') %> |
+      <%= link_to(t('nav.privacy'), '/privacy') %>
     </div>
     
   </div><!-- outer -->

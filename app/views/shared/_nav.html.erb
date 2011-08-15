@@ -42,7 +42,11 @@
           <%= link_to(t('nav.logout'), facebook_logout_url)  %> 
         </li>   
       <% else %>
-        <%= link_to(t('nav.login'), new_user_session_path) %>
+        <% if mhub? %>
+          <%= link_to('nav.login', user_omniauth_authorize_path(:facebook_mhub)) %>
+        <% else %>
+          <%= link_to(t('nav.login'), new_user_session_path) %>
+        <% end %>
       <% end %>
     </ul>
   </div>

@@ -122,10 +122,11 @@
   <%= render 'assign' %>
 <% end %>
 
-<div class="searchstat">
-  <%= "Displaying #{@people.offset_value + 1} - #{@people.offset_value + @people.length} of #{@people.total_count}" %>
-</div>
-
+<% if @people.length > 0 %>
+  <div class="searchstat">
+    <%= "Displaying #{@people.offset_value + 1} - #{@people.offset_value + @people.length} of #{@people.total_count}" %>
+  </div>
+<% end %>
 
 <div id="add_contact_div" style="display:none" title="Add a Contact">
   <%= render 'add_contact', person: Person.new %>

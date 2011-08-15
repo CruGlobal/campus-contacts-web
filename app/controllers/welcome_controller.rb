@@ -1,5 +1,6 @@
 class WelcomeController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:index, :tour, :terms, :privacy]
+  skip_before_filter :check_url, only: [:terms, :privacy]
   def index
     # if user_signed_in?
     #   redirect_to user_root_path and return
@@ -51,10 +52,10 @@ class WelcomeController < ApplicationController
   end
   
   def terms
-    render layout: 'splash'
+    render layout: mhub? ? 'plain' : 'splash'
   end
   
   def privacy
-    render layout: 'splash'
+    render layout: mhub? ? 'plain' : 'splash'
   end
 end
