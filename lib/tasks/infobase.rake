@@ -76,13 +76,7 @@ namespace :infobase do
       # personID, teamID
       team = team_id_to_ministry_id[mtm['teamID']]
       next unless team
-      #debugger
-      unless OrganizationMembership.where(organization_id: team, person_id: mtm['personID']).present?
-        OrganizationMembership.create!(organization_id: team, person_id: mtm['personID'], validated: 1)
-      end
-      unless OrganizationalRole.where(organization_id: team, person_id: mtm['personID'], role_id: Role::ADMIN_ID).present?
-        OrganizationalRole.create!(organization_id: team, person_id: mtm['personID'], role_id: Role::ADMIN_ID)
-      end
+      team.add_admin(mtm['personID'].id)
       i += 1
       puts i if i % 1000 == 0
     end
