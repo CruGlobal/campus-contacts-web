@@ -165,7 +165,8 @@ class ApplicationController < ActionController::Base
     person_params[:email_address] ||= {}
     person_params[:phone_number] ||= {}
     # try to find this person based on their email address
-    if (email = person_params[:email_address][:email]).present?
+    email = person_params[:email_address][:email]
+    if email.present?
       person = EmailAddress.find_by_email(email).try(:person) ||
                 Address.find_by_email(email).try(:person) ||
                 User.find_by_username(email).try(:person) 

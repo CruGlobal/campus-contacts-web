@@ -26,7 +26,10 @@
 <div class="contentpad">
   
   <p class="inlinehelp">
-    To begin your survey, <strong>text <%= @keyword.keyword %> to <%= SmsKeyword::SHORT %>.</strong>
+    <%= t('general.survey_text_tip_html', keyword: @keyword.keyword, shortcode: SmsKeyword::SHORT) %>
+  </p><br/><br/>
+  <p class="inlinehelp">
+    <%= t('general.survey_web_tip_html', keyword: @keyword.keyword) %>
   </p>
   
   <p>Note: First and Last name will be automatically added to every survey. There's no need for you to add those.</p>

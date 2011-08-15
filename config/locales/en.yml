@@ -46,6 +46,8 @@ en:
     hide: 'hide'
     unassign: 'Unassign'
     add_a_leader: 'Add a leader'
+    survey_text_tip_html: "To begin your survey, <strong>text %{keyword} to %{shortcode}.</strong>"
+    survey_web_tip_html: "For the web version of the survey, send people to <strong>http://mhub.cc/c/%{keyword}</strong>"
   people: 
     index:
       export: "Export this list"
@@ -76,7 +78,7 @@ en:
       welcome_paragraph: "Welcome to MissionHub!<br><br> This setup wizard will help you get started and set up a keyword, which is an essential part of getting contacts into the system."
       verify_paragraph: "If you have a CCC Relay login account, please sign in to link your account. You only need to do this once. WARNING: If you logged into MissionHub using someone else's Facebook Account, Log Out now! Clicking verify will merge your information with theirs, creating a big mess."
       verify_with_relay: "Verify With Relay"
-      not_found_paragraph: "At the current time MissionHub is being field tested with the Campus Ministry. If you're not a part of the Campus Ministry, sit tight! We plan to release to a larger audience soon. If you are part of the Campus Ministry and are seeing this message, send us an email at support@missionhub.com and we'll help you out."
+      not_found_paragraph: "At the current time MissionHub is being field tested with the US Campus Ministry. If you're not a part of the US Campus Ministry, sit tight! We plan to release to a larger audience soon. If you are part of the US Campus Ministry and are seeing this message, send us an email at support@missionhub.com and we'll help you out."
       # not_found_paragraph: "We weren't able to find a record of you associated with any of the organizations or ministries using MissionHub."
       keyword_paragraph: "A powerful feature of MissionHub is the ability for you to collect contacts through text messages. For this to work, you have to choose a keyword that is unique to your ministry that people will send messages to. With a keyword, you will be able to say, “Text <strong>your keyword</strong>  to 75572” at your next event or meeting."
       request_keyword_link: "Click here to request a keyword. We'll return you to this wizard when you're done."
