@@ -67,7 +67,7 @@ class Organization < ActiveRecord::Base
   end
   
   def add_leader(person)
-    person_id = person.is_a?(Person) : person.id : person
+    person_id = person.is_a?(Person) ? person.id : person
     # First remove the contact (if there is one)
     remove_contact(person)
     OrganizationMembership.find_or_create_by_person_id_and_organization_id(person_id, id)
@@ -75,7 +75,7 @@ class Organization < ActiveRecord::Base
   end
   
   def add_contact(person)
-    person_id = person.is_a?(Person) : person.id : person
+    person_id = person.is_a?(Person) ? person.id : person
     unless OrganizationalRole.find_by_person_id_and_organization_id(person_id, id)
       OrganizationalRole.create!(person_id: person_id, organization_id: id, role_id: Role::CONTACT_ID, followup_status: OrganizationMembership::FOLLOWUP_STATUSES.first)
       OrganizationMembership.create!(person_id: person_id, organization_id: id, primary: false) 
@@ -83,7 +83,7 @@ class Organization < ActiveRecord::Base
   end
   
   def add_admin(person)
-    person_id = person.is_a?(Person) : person.id : person
+    person_id = person.is_a?(Person) ? person.id : person
     # First remove the contact (if there is one)
     remove_contact(person)
     OrganizationMembership.find_or_create_by_person_id_and_organization_id(person_id, id)
@@ -91,7 +91,7 @@ class Organization < ActiveRecord::Base
   end
   
   def remove_contact(person)
-    person_id = person.is_a?(Person) : person.id : person
+    person_id = person.is_a?(Person) ? person.id : person
     OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: Role::CONTACT_ID).first.try(:destroy)
     OrganizationMembership.where(person_id: person_id, organization_id: id).first.try(:destroy)
   end
