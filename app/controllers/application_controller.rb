@@ -165,14 +165,14 @@ class ApplicationController < ActionController::Base
     person_params[:email_address] ||= {}
     person_params[:phone_number] ||= {}
     # try to find this person based on their email address
-    email = person_params[:email_address][:email]
-    if email.present?
-      person = EmailAddress.find_by_email(email).try(:person) ||
-                Address.find_by_email(email).try(:person) ||
-                User.find_by_username(email).try(:person) 
+    email_address = person_params[:email_address][:email]
+    if email_address.present?
+      person = EmailAddress.find_by_email(email_address).try(:person) ||
+                Address.find_by_email(email_address).try(:person) ||
+                User.find_by_username(email_address).try(:person) 
     end
     person ||= Person.new(person_params.except(:email_address, :phone_number))
-    email = (person.email_addresses.find_by_email(person_params[:email_address][:email].strip) || person.email_addresses.new(person_params.delete(:email_address))) if person_params[:email_address][:email].present? 
+    email = (person.email_addresses.find_by_email(email_address) || person.email_addresses.new(email_address)) if email_address.present? 
     phone = (person.phone_numbers.find_by_number(person_params[:phone_number][:number].gsub(/[^\d]/, '')) || person.phone_numbers.new(person_params.delete(:phone_number).merge(location: 'mobile'))) if person_params[:phone_number][:number].present?
     [person, email, phone]
   end
