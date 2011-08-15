@@ -8,9 +8,8 @@ class SurveysController < ApplicationController
     authenticate_user! unless params[:access_token] && params[:org_id]
     
     @title = "Pick A Keyword"
-    @organization = params[:org_id].present? ? Organization.find(params[:org_id]) : current_organization
-    @keywords = @organization.keywords
-    @person = current_person
+    @organization = current_person.organizations.find_by_id(params[:org_id]) || current_organization
+    @keywords = @organization ? @organization.keywords : []
   end
   
   def start
