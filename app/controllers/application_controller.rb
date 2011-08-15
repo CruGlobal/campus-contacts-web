@@ -172,7 +172,7 @@ class ApplicationController < ActionController::Base
                 User.find_by_username(email_address).try(:person) 
     end
     person ||= Person.new(person_params.except(:email_address, :phone_number))
-    email = (person.email_addresses.find_by_email(email_address) || person.email_addresses.new(email_address)) if email_address.present? 
+    email = (person.email_addresses.find_by_email(email_address) || person.email_addresses.new(email: email_address)) if email_address.present? 
     phone = (person.phone_numbers.find_by_number(person_params[:phone_number][:number].gsub(/[^\d]/, '')) || person.phone_numbers.new(person_params.delete(:phone_number).merge(location: 'mobile'))) if person_params[:phone_number][:number].present?
     [person, email, phone]
   end
