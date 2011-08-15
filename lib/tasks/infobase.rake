@@ -43,7 +43,7 @@ namespace :infobase do
       regions[region['region']] = r
     end
 
-    team_id_to_ministry_id = {}
+    team_id_to_ministry = {}
     puts "Done regions.  Insert local level."
 
     # ministry local level goes next
@@ -58,7 +58,7 @@ namespace :infobase do
         m = region.children.create!(attribs) 
       end
 
-      team_id_to_ministry_id[level['teamID']] = m.id
+      team_id_to_ministry[level['teamID']] = m
     end
 
     puts "Done local level."
@@ -74,7 +74,7 @@ namespace :infobase do
     i = 0
     Organization.connection.select_all("select * from ministry_missional_team_member").each do |mtm|
       # personID, teamID
-      team = team_id_to_ministry_id[mtm['teamID']]
+      team = team_id_to_ministry[mtm['teamID']]
       next unless team
       team.add_admin(mtm['personID'])
       i += 1
