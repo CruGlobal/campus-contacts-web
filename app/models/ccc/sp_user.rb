@@ -4,7 +4,7 @@ class Ccc::SpUser < ActiveRecord::Base
 
   def merge(other)
 		roles = %w{SPNationalCoordinator SpRegionalCoordinator SpDirector SpProjectStaff SpGeneralStaff}
-		if other.type != nil and roles.index_of(other.type) < roles.index_of(type)
+		if other.type != nil && roles.index(other.type) < roles.index(type)
    		self.type = other.type
 		end	
     other.reload
