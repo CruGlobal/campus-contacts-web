@@ -149,7 +149,12 @@ class Person < ActiveRecord::Base
       else
         @email ||= current_address.try(:email)
         @email ||= user.try(:username) || user.try(:email)
-        new_record? ? email_addresses.new(:email => @email, :primary => true) : email_addresses.create(:email => @email, :primary => true) if @email
+        begin
+          new_record? ? email_addresses.new(:email => @email, :primary => true) : email_addresses.create(:email => @email, :primary => true) if @email
+        rescue ActiveRecord::RecordNotUnique
+          reload
+          return self.email
+        end
       end
     end
     @email.to_s

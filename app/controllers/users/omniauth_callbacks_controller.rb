@@ -2,6 +2,19 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_filter :authenticate_user!
   skip_before_filter :check_url
   def facebook
+    facebook_login
+    return false
+  end
+  
+  def facebook_mhub
+    env["omniauth.auth"]['provider'] = 'facebook'
+    facebook_login
+    return false
+  end
+  
+  protected
+  
+  def facebook_login
     @user = User.find_for_facebook_oauth(env["omniauth.auth"], current_user)
     omniauth = env["omniauth.auth"]
     session[:fb_token] = omniauth["credentials"]["token"]
@@ -18,11 +31,5 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       session["devise.facebook_data"] = env["omniauth.auth"]
       redirect_to '/'
     end
-  end
-  
-  def facebook_mhub
-    env["omniauth.auth"]['provider'] = 'facebook'
-    facebook
-    return
   end
 end
