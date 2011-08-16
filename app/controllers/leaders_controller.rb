@@ -125,6 +125,7 @@ class LeadersController < ApplicationController
     unless @person.user
       @person.user = User.create!(:username => @email.email, :email => @email.email, :password => SecureRandom.hex(10))
     end
+    @person.email ||= @email.email
     @person.save!
     
     create and return
