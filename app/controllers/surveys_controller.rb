@@ -1,6 +1,6 @@
 class SurveysController < ApplicationController
   before_filter :prepare_for_mobile
-  skip_before_filter :authenticate_user!, except: :start
+  skip_before_filter :authenticate_user!#, except: :start
   skip_before_filter :check_url
   
   require 'api_helper'
@@ -13,7 +13,7 @@ class SurveysController < ApplicationController
       @organization = current_person.organizations.find_by_id(params[:org_id]) || current_organization
       @keywords = @organization ? @organization.keywords : nil
     else
-      render_404
+      return render_404
     end
     respond_to do |wants|
       wants.html { render layout: 'plain' }
@@ -22,9 +22,12 @@ class SurveysController < ApplicationController
   end
   
   def start
-    render_404 unless params[:keyword].present?
-    cookies[:survey_mode] = 1
-    redirect_to contact_form_url(params[:keyword], host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port'])
+    unless params[:keyword].present? && SmsKeyword.find_by_keyword(params[:keyword])
+      cookies[:survey_mode] = nil
+      render_404 
+    end
+    cookies[:survey_mode] = params[:keyword]
+    redirect_to facebook_logout_url(next: contact_form_url(params[:keyword]))
   end
   
   def stop

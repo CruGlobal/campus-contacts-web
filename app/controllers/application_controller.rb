@@ -28,7 +28,11 @@ class ApplicationController < ActionController::Base
   end
   
   def render_404
-    raise ActionController::RoutingError.new('Not Found')
+    if cookies[:survey_mode] && SmsKeyword.find_by_keyword(cookies[:survey_mode])
+      redirect_to "/c/#{cookies[:survey_mode]}" and return false
+    else
+      raise ActionController::RoutingError.new('Not Found')
+    end
   end
   
   def mhub?
@@ -159,12 +163,16 @@ class ApplicationController < ActionController::Base
   end
   
   def user_root_path
-    return wizard_path if !current_organization || (current_person.organizations.include?(current_organization) && wizard_path)
-    # if current_person.leader_in?(current_organization)
-      '/contacts/mine'
-    # else
-      # '/people'
-    # end
+    if mhub?
+      render_404
+    else
+      return wizard_path if !current_organization || (current_person.organizations.include?(current_organization) && wizard_path)
+      # if current_person.leader_in?(current_organization)
+        '/contacts/mine'
+      # else
+        # '/people'
+      # end
+    end
   end
   helper_method :user_root_path
   

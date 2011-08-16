@@ -91,6 +91,11 @@ class ContactsController < ApplicationController
   end
   
   def new
+    unless mhub?
+      redirect_to new_contact_url(params.merge(host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']))
+      return false
+    end
+    
     if params[:received_sms_id]
       sms_id = Base62.decode(params[:received_sms_id])
       sms = SmsSession.find_by_id(sms_id) || ReceivedSms.find_by_id(sms_id)

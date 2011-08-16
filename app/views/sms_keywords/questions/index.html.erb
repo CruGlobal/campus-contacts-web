@@ -4,7 +4,7 @@
 
 <div class="pagemenu">
   <ul class="pillmenu">
-    <li><%= link_to('Preview Survey', contact_form_path(keyword: @keyword.keyword), target: '_blank')%></li>
+    <li><%= link_to('Preview Survey', contact_form_path(keyword: @keyword.keyword, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), target: '_blank')%></li>
     <li>     
       <% if session[:wizard] && wizard_path %>
         <%= link_to(t('nav.back_to_wizard'), wizard_path) %>

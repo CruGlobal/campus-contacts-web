@@ -12,7 +12,7 @@
         <div class="gmwrap">
           <ul class="sf-menu">
             <li class="item">
-              <%= link_to(t('nav.logout'), facebook_logout_url(next: cookies[:survey_mode].present? ? contact_form_url(@keyword.keyword, host: 'mhub.cc') : sign_out_url))  %> 
+              <%= link_to(t('nav.logout'), facebook_logout_url(next: cookies[:survey_mode].present? ? contact_form_url(@keyword.keyword) : sign_out_url))  %> 
             </li>   
           </ul>
         </div>
@@ -23,10 +23,10 @@
       <%= yield %>
     </div>
     
-    <div class="footer">
-      <%= link_to(t('nav.terms'), '/terms') %> |
-      <%= link_to(t('nav.privacy'), '/privacy') %>
-    </div>
+    <!--     <div class="footer">
+          <%= link_to(t('nav.terms'), '/terms') %> |
+          <%= link_to(t('nav.privacy'), '/privacy') %>
+        </div> -->
     
   </div><!-- outer -->
 
