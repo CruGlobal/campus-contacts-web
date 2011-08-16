@@ -18,7 +18,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     session[:fb_token] = omniauth["credentials"]["token"]
    
     if @user && @user.persisted?
-      sign_in_and_redirect @user, event: :authentication
+      sign_in_and_redirect(@user, event: :authentication) and return
     else
       # There was a problem logging this person in
       HoptoadNotifier.notify(
@@ -27,7 +27,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         :parameters => env["omniauth.auth"]
       )
       session["devise.facebook_data"] = env["omniauth.auth"]
-      redirect_to '/'
+      redirect_to '/' and return
     end
   end
 end
