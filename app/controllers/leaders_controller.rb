@@ -66,13 +66,15 @@ class LeadersController < ApplicationController
     end
     # Make sure we have a user for this person
     unless @person.user
-      unless @person.create_user!
+      @new_person = @person.create_user!
+      unless @new_person
         @person.reload
         # we need a valid email address to make a leader
         @email = @person.primary_email_address || @person.email_addresses.new
         @phone = @person.primary_phone_number || @person.phone_numbers.new
         render :edit and return
       end
+      @person = @new_person
     end
     current_organization.add_leader(@person)
         # Notify the new user if we're supposed to

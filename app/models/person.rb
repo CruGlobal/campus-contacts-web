@@ -348,6 +348,10 @@ class Person < ActiveRecord::Base
     # Contact Assignments
     other.contact_assignments.collect {|as| as.update_column(:assigned_to_id, id)}
     
+    # SMS stuff
+    other.received_sms.collect {|as| as.update_column(:person_id, id)}
+    other.sms_sessions.collect {|as| as.update_column(:person_id, id)}
+    
     super
   end
 
@@ -411,6 +415,7 @@ class Person < ActiveRecord::Base
       if user =  User.find_by_username(self.email)
         if user.person
           user.person.merge(self)
+          return user.person
         else
           self.user = user
         end
@@ -418,11 +423,11 @@ class Person < ActiveRecord::Base
         self.user = User.create!(:username => self.email, :email => self.email, :password => SecureRandom.hex(10))
       end
       self.save(validate: false)
-      return true
+      return self
     else
       # Delete invalid emails
       self.email_addresses.each {|email| email.destroy unless email.valid?}
-      return false
+      return nil
     end
   end
 
