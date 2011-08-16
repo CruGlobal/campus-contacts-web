@@ -410,8 +410,7 @@ class Person < ActiveRecord::Base
     if self.email.present? && self.primary_email_address.valid?
       if user =  User.find_by_username(self.email)
         if user.person
-          user.person.merge(@person)
-          @person = user.person
+          user.person.merge(self)
         else
           self.user = user
         end
