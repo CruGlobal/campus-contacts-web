@@ -38,6 +38,7 @@ class ContactsController < ApplicationController
           end
         end
       end
+      @people ||= Person.where("1=0")
     end
     if params[:first_name].present?
       @people = @people.where("firstName like ? OR preferredName like ?", '%' + params[:first_name].strip + '%', '%' + params[:first_name].strip + '%')
