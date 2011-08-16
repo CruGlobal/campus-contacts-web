@@ -1,7 +1,8 @@
-unless defined?(FB_API_KEY)
+unless defined?(FB_SECRET)
   require Rails.root.join('config','initializers','load_config')
-  FB_API_KEY = APP_CONFIG['fb_api_key']
   FB_SECRET = APP_CONFIG['fb_secret']
   FB_APP_ID = APP_CONFIG['fb_app_id']
-  FB_HOST = APP_CONFIG['fb_host']
+  
+  FB_SECRET_MHUB = APP_CONFIG['fb_secret_mhub']
+  FB_APP_ID_MHUB = APP_CONFIG['fb_app_id_mhub']
 end

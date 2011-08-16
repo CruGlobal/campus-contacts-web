@@ -8,7 +8,7 @@ class OrganizationMembership < ActiveRecord::Base
   before_create :set_start_date, :set_primary
   
   def followup_status
-    OrganizationalRole.where(person_id: person_id, organization_id: organization_id, role_id: Role.contact.id).first.try(:followup_status)
+    OrganizationalRole.where(person_id: person_id, organization_id: organization_id, role_id: Role::CONTACT_ID).first.try(:followup_status)
   end
   
   def merge(other)
@@ -21,6 +21,7 @@ class OrganizationMembership < ActiveRecord::Base
       MergeAudit.create!(mergeable: self, merge_looser: other)
       self.validated = true if other.validated?
       self.save(validate: false)
+      other.reload
       other.destroy
     end
   end

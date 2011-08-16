@@ -9,7 +9,6 @@ gem 'jquery-rails'
 gem 'sprockets', :git => 'git://github.com/sstephenson/sprockets.git'
 gem 'mysql2'
 gem 'rack-offline'
-gem 'rake', '0.8.7'
 gem 'capistrano'
 gem 'rest-client'
 gem 'crack'
@@ -22,8 +21,8 @@ gem 'rubycas-client'
 gem 'rubycas-client-rails', git: 'git://github.com/zuk/rubycas-client-rails.git'
 # gem 'squeel'
 gem 'ancestry'
-# gem 'rails_admin', git: 'git://github.com/twinge/rails_admin.git', branch: 'rails-3.1-no-ck'
-gem 'rails_admin', git: 'git://github.com/sferik/rails_admin.git', branch: 'rails-3.1'
+# gem 'rails_admin', git: 'git://github.com/twinge/rails_admin.git', branch: 'configure_list_view_width'
+gem 'rails_admin', git: 'git://github.com/sferik/rails_admin.git'
 
 # gem 'dalli', git: 'git://github.com/mperham/dalli.git'
 gem 'memcache-client'
@@ -41,16 +40,15 @@ gem 'enforce_schema_rules'
 # gem 'sentient_user'
 gem 'paper_trail', '~> 2'
 gem 'unicorn'
-gem 'rake', '0.8.7'
 gem 'hoptoad_notifier'
 gem 'cancan'
 gem 'kaminari'
 gem 'whenever'
+gem "ransack"
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
 group :development, :test do
-  gem 'mail_safe'
   gem 'shoulda'
   gem 'ephemeral_response'
   # gem 'sqlite3-ruby', require: 'sqlite3'
@@ -61,6 +59,7 @@ group :development, :test do
 #  gem 'guard-test'
   gem 'railroady'
   gem 'awesome_print'
+  gem 'active_reload'
 end
 
 group :performance do

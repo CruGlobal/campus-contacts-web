@@ -1,0 +1,20 @@
+development:
+  adapter: mysql2
+  database: missionhub_dev
+  username: 
+  encoding: utf8
+
+staging:
+  development
+  
+test:
+  adapter: mysql2
+  database: missionhub_test
+  username: 
+  encoding: utf8
+
+production:
+  adapter: mysql2
+  database: missionhub_prod
+  username: 
+  encoding: utf8

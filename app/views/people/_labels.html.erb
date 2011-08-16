@@ -1,0 +1,10 @@
+<ul class="leftmenu">
+  <li class="heading selected">
+    <h3><%= t('people.index.labels') %></h3>
+  </li>
+  <% current_organization.roles.each do |role| %>
+    <% count = @people_scope.where('organizational_roles.role_id' => role.id).count %>
+    <li style="<%= 'display:none' if count == 0 %>"><span class="name"><%= link_to(role, params.merge(:role_id => role.id)) %></span> (<%= count %>)</li>
+  <% end %>
+  <li><span class="name"><%= link_to(t('contacts.index.all'), params.except(:role_id)) %></span> (<%= @people_scope.count %>)</li>
+</ul>

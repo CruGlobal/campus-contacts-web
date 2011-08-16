@@ -24,21 +24,30 @@
             <!-- <li><%#= link_to("Dashboard", user_root_path) %></li> -->
             <li class="<%= 'selected' if request.fullpath == '/contacts/mine' %>"><%= link_to(image_tag("t_contact_white.png", :class=> "tmenu") + t('nav.my_contacts'), "/contacts/mine") %></li>
             <li class="<%= 'selected' if  params[:controller] == 'contacts' && params[:action] == 'index' %>"><%= link_to(image_tag("t_group_white.png", :class=> "tmenu") + t('nav.all_contacts'), "/contacts") %></li>
-            <!-- <li><%= link_to(t('nav.directory'), "/people") %></li> -->
+            <li class="<%= 'selected' if  params[:controller] == 'people' %>"><%= link_to(image_tag("t_directory.png", :class=> "tmenu") + t('nav.directory'), "/people") %></li>
             <% if can? :manage, current_organization %>
               <li class="<%= 'selected' if params[:controller] == 'sms_keywords' %>"><%= link_to(image_tag("t_keyword_white.png", :class=> "tmenu") + t('nav.keywords'), sms_keywords_path) %></li>
             <% end %>
           </ul>
         </div>
-        
-        
-        <% if notice %>
-          <div style="padding:10px"><p class="notice" id="notice"><%= notice %></p></div>
-        <% elsif alert %>
-          <div style="padding:10px"><p class="alert" id="alert"><%= alert %></p></div>
-        <% end %>
             
         <div class="<%= params[:action] %> carea">
+          <% if flash && (flash[:error] || flash[:notice] || flash[:alert]) %>
+            <div class="flash" style="margin:10px;width:770px">
+              <% if flash[:error].present? || flash[:alert].present? %>
+                <div class="flash_message error">
+                  <p><%= flash[:error] || flash[:alert] %></p>
+                </div>
+              <% end %>
+
+              <% if flash[:notice].present? %>
+                <div class="flash_message notice">
+                  <p><%= flash[:notice] %></p>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+                
           <%= yield %>
         </div>
       </div><!-- main -->
@@ -47,7 +56,8 @@
     </div>
     
     <div class="footer">
-      Need help? Email us at <%= mail_to('support@missionhub.com', nil, encode: 'javascript', replace_at: ' (at) ', replace_dot: ' (dot) ') %> |
+      <%= link_to 'FAQ', 'http://wiki.uscm.org/display/MH/MissionHub+FAQ' %> |
+      Can't find it in the <%= link_to 'FAQ', 'http://wiki.uscm.org/display/MH/MissionHub+FAQ' %>? <%= mail_to('support@missionhub.com', 'Shoot us an email', encode: 'javascript', replace_at: ' (at) ', replace_dot: ' (dot) ') %> |
       <%= link_to(t('nav.terms'), '/terms') %> |
       <%= link_to(t('nav.privacy'), '/privacy') %>
     </div>

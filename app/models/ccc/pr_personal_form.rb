@@ -1,3 +1,4 @@
+require 'answer_sheet'
 class Ccc::PrPersonalForm < AnswerSheet
   set_table_name "pr_personal_forms"
 

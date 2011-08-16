@@ -1,0 +1,9 @@
+<% provide :title, "Pick a Keyword" %>
+<h1>Click on a keyword to complete a survey</h1>
+<ul>
+  <% @keywords.each do |keyword| %>
+    <li>
+      <%= link_to keyword.keyword, "#{facebook_logout_url}?next=#{root_url}c/#{keyword.keyword}" %>
+    </li>
+  <% end %>
+</ul>

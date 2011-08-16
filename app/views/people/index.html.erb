@@ -1,4 +1,56 @@
-<% case %>
-<% when @question_sheet.present? %>
-  <%= render 'responses' %>
+<% provide :sidebar do %>
+  <%= render 'labels' %>
 <% end %>
+<div class="titlebar">  
+  <h1>
+    <%= t('.directory_title', org: current_organization) %>
+    <%= " - #{Role.find_by_id(params[:role_id]).to_s.pluralize}" if params[:role_id].present? %>
+  </h1>
+</div>
+<div class="pagemenu">
+  <ul class="pillmenu">
+    <li><%= link_to(t('.export'), export_people_path(params.except(:action, :controller, :utf8))) %></li>
+  </ul>
+</div>
+  
+<table class="listing" cellpadding="0" cellspacing="0">
+  <tr>
+    <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment' %></th>
+    <th><%= sort_link @q, :firstName, t('contacts.index.first_name') %></th>
+    <th><%= sort_link @q, :lastName, t('contacts.index.last_name') %></th>
+    <th><%= sort_link @q, :gender, t('.gender') %></th>
+    <th><%= t('.email') %></th>
+    <th><%= t('.phone') %></th>
+    <th><%= sort_link @q, :yearInSchool, t('.year_in_school') %></th>
+    <th></th>
+  </tr>
+  <tbody id="contacts_table">
+    
+    <% @people.each do |person| %>
+      <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="person_row">
+        <td nowrap="nowrap" class="checkbox_cell">
+          <%#= image_tag('grippy.png', class: 'handle') %>
+          <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
+        </td>
+        <td><%= person.firstName %></td>
+        <td><%= person.lastName %></td>
+        <td><%= person.gender.to_s.titleize %></td>
+        <td><%= mail_to(person.email) %></td>
+        <td><%= person.pretty_phone_number %></td>
+        <td><%= person.yearInSchool %></td>
+        <td class="controls">
+          <%= link_to("Show", "/people/#{person.id}", :class => "icon magnify tipit", :title => t('nav.view_details')) %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @people %>
+<% if @people.blank? %>
+  <div class="contentpad no_contacts">
+      Sorry, there are no people involved here.
+  </div>
+<% end %>
+<div class="searchstat">
+  <%= "Displaying #{@people.offset_value + 1} - #{@people.offset_value + @people.length} of #{@people.total_count}" %>
+</div>

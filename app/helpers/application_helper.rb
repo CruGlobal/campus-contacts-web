@@ -17,4 +17,12 @@ module ApplicationHelper
     image_tag('spinner.gif', id: e, style: 'display:none', class: 'spinner')
   end
   
+  def site_name
+    mhub? ? 'MHub' : 'MissionHub'
+  end
+  
+  def site_email
+    mhub? ? 'support@mhub.cc' : 'support@missionhub.com'
+  end
+  
 end

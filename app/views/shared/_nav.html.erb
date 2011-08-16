@@ -1,3 +1,4 @@
+<% cache(user_signed_in? ? ['global_nav', "#{current_user.id}-#{current_user.current_sign_in_at.to_i}", current_organization.try(:id)] : 'global_nav') do %>
 <div id="global">
   
   <div class="gmwrap">
@@ -12,7 +13,7 @@
               <%= link_to(current_organization, '/contacts') %>
               <ul class="under">
                 <% current_person.organizations.order('organizations.name').each do |org| %>
-                  <%= render 'org', org: org, primary: current_person.primary_organization == org, involved: true unless current_person.organizations.include?(org.parent) %>
+                  <%= render 'org', org: org, primary: current_person.primary_organization == org, involved: true unless current_person.organizations.include?(org.parent) && org.parent.show_sub_orgs? %>
                 <% end %>
               </ul>
             <% else %>
@@ -25,11 +26,11 @@
           <% if current_organization.keywords.present? %>
             <li class="item smallermenu">
               <% if current_organization.keywords.length == 1 %>
-                <%= link_to("Enter Survey Mode", facebook_logout_url(next: contact_form_url(current_organization.keywords.first.keyword)), :class => "tipit", :title => t('nav.survey_mode_tip'))%>
+                <%= link_to("Enter Survey Mode", start_survey_url(current_organization.keywords.first.keyword, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), :class => "tipit", :title => t('nav.survey_mode_tip'))%>
               <% else %>
-                <%= link_to("Enter Survey Mode", '', id: 'survey_keywords_mode_link')%>
+                <%= link_to("Enter Survey Mode", '#', id: 'survey_keywords_mode_link')%>
                 <ul style="" class="tipit2" title="<%= t("nav.survey_mode_tip") %>"><% current_organization.keywords.each do |keyword| %>
-                  <li><div style="width:100%; display:inline"><%= link_to("Use Keyword: #{keyword.keyword}", facebook_logout_url(next: contact_form_url(keyword.keyword)), id: 'select_keyword')%>
+                  <li><div style="width:100%; display:inline"><%= link_to("Use Keyword: #{keyword.keyword}", start_survey_url(keyword.keyword, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), id: 'select_keyword')%>
                     </li>
                   <% end %>
                 </ul>
@@ -41,10 +42,15 @@
           <%= link_to(t('nav.logout'), facebook_logout_url)  %> 
         </li>   
       <% else %>
-        <%= link_to(t('nav.login'), new_user_session_path) %>
+        <% if mhub? %>
+          <%= link_to('nav.login', user_omniauth_authorize_path(:facebook_mhub)) %>
+        <% else %>
+          <%= link_to(t('nav.login'), new_user_session_path) %>
+        <% end %>
       <% end %>
     </ul>
   </div>
   
   
 </div>
+<% end %>

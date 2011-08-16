@@ -3,6 +3,12 @@
 # Use this as the base for the locale file of your language.
 
 en:
+  roles: 
+    admin: Admin
+    contact: Contact
+    involved: Involved
+    leader: Leader
+    alumni: Alumni
   views:
     pagination:
       first: "&laquo; First"
@@ -15,6 +21,8 @@ en:
     prayed_to_receive: 'Prayed To Receive Christ' 
     gospel_presentation: 'Gospel Presentation'
   nav:
+    hide: 'Hide'
+    view_details: "View details"
     survey_mode_tip: "Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts."
     terms: 'Terms and Conditions'
     privacy: 'Privacy Policy'
@@ -38,15 +46,23 @@ en:
     hide: 'hide'
     unassign: 'Unassign'
     add_a_leader: 'Add a leader'
-
+    survey_text_tip_html: "To begin your survey, <strong>text %{keyword} to %{shortcode}.</strong>"
+    survey_web_tip_html: "For the web version of the survey, send people to <strong>http://mhub.cc/c/%{keyword}</strong>"
   people: 
     index:
+      export: "Export this list"
+      directory_title: "Directory - %{org}"
+      labels: 'Labels'
+      gender: 'Gender'
+      phone: 'Phone'
+      email: 'Email'
+      year_in_school: 'Year in School'
   org_membership:
     confirm_delete: "Are you sure you want to dissociate yourself from %{org}"
   welcome:
     index:
       title_top: "Welcome to MissionHub!"
-      title_top_mobile: "MissionHub"
+      title_top_mobile: "MHub"
       go_home: 'Go to My Contacts'
       request_key: "Click here to request a keyword"
       get_started: "Get Started"
@@ -60,9 +76,9 @@ en:
       back: Back
       next: Next
       welcome_paragraph: "Welcome to MissionHub!<br><br> This setup wizard will help you get started and set up a keyword, which is an essential part of getting contacts into the system."
-      verify_paragraph: "If you have a CCC Relay login account, please sign in to link your account. You only need to do this once."
+      verify_paragraph: "If you have a CCC Relay login account, please sign in to link your account. You only need to do this once. WARNING: If you logged into MissionHub using someone else's Facebook Account, Log Out now! Clicking verify will merge your information with theirs, creating a big mess."
       verify_with_relay: "Verify With Relay"
-      not_found_paragraph: "At the current time MissionHub is being field tested with the Campus Ministry. If you're not a part of the Campus Ministry, sit tight! We plan to release to a larger audience soon. If you are part of the Campus Ministry and are seeing this message, send us an email at support@missionhub.com and we'll help you out."
+      not_found_paragraph: "At the current time MissionHub is being field tested with the US Campus Ministry. If you're not a part of the US Campus Ministry, sit tight! We plan to release to a larger audience soon. If you are part of the US Campus Ministry and are seeing this message, send us an email at support@missionhub.com and we'll help you out."
       # not_found_paragraph: "We weren't able to find a record of you associated with any of the organizations or ministries using MissionHub."
       keyword_paragraph: "A powerful feature of MissionHub is the ability for you to collect contacts through text messages. For this to work, you have to choose a keyword that is unique to your ministry that people will send messages to. With a keyword, you will be able to say, “Text <strong>your keyword</strong>  to 75572” at your next event or meeting."
       request_keyword_link: "Click here to request a keyword. We'll return you to this wizard when you're done."
@@ -98,6 +114,9 @@ en:
     your_questions_help: "Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service."
     predefined_help: "Predefined  questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided."
   keywords:
+    index:
+      association: Associate Contacts With
+      association_help: "When a contact responds to a survey, they are associated with the same team or movement as the keyword they responded to."
     default_rejection_email:
       "Your keyword request has been denied"
     edit:
@@ -112,11 +131,11 @@ en:
       keyword_instruct: "- A keyword is required to collect contacts and surveys via text, web and smartphones. <br/> - 'FSUCRU' is the keyword in 'Text FSUCRU to 75572'.<br/>- Use at least 3 letters for your keyword."
       keyword_why: "This is for our use only. The use description could include words like 'weekly meeting', 'outreach event', and other uses the keyword will have."
       explanation: 'Please explain what you plan to use this keyword for.'
-      initial_response: 'What response should we send back to people when they text in? <br/>If you want the person to complete a survey, the response MUST include {{ link }}'
+      initial_response: "What response should we send back to people when they text in? <br/>If you want the person to complete a survey, the response MUST include {{ link }} (exactly like that, dont change that part of the response.)"
       post_survey_why: "When someone texts in the keyword, this message will be sent to them and '{{link}}' will be replaced by a website address that will take them to an online survey for them to fill out. If they don't have internet, replying 'i' will send them all the questions via interactive text message."
       post_survey_message: 'What message would you like to show after the person has completed the survey?'
       chartfield: 'A keyword costs $7/month. Please enter a chart field to be billed for this keyword.'
-      organization: "You are associated with more than one organization or ministry.<br/> Which one would you like to associate this keyword with?"
+      association: "The %{this_term} you are currently requesting this keyword for has at leaset one %{child_term} under it.<br/> Select if you'd like to associate this keyword with the %{this_term} or a %{child_term} under this %{this_term}"
   contacts:
     statuses:
       uncontacted: Uncontacted
@@ -125,6 +144,9 @@ en:
       do_not_contact: Do Not Contact
       completed: Completed
     index:
+      add_question_back: Click on a question to add it back to the page 
+      unassign_contact: "Unassign contact"
+      delete_contact: "Delete this contact"
       friends: 'Friends'
       send_reminder: 'Send Reminder'
       reminder_email_subject: New contacts have arrived!
@@ -214,7 +236,7 @@ en:
 
   time:
     formats:
-      default: "%a, %d %b %Y %H:%M:%S %z"
+      default: "%m/%d/%Y %H:%M:%S"
       short: "%d %b %H:%M"
       long: "%B %d, %Y %H:%M"
     am: "am"

@@ -28,45 +28,45 @@ class ApiRolesTest < ActionDispatch::IntegrationTest
     
     should "return a JSON error if the identity of the access token is not an admin" do
       path = "/api/roles/#{@user.person.id}"
-      @user3.person.organizational_roles.first.update_attributes(role_id: Role.leader.id)
+      @user3.person.organizational_roles.first.update_attributes(role_id: Role::LEADER_ID)
       put path, {'access_token' => @access_token3.code, role: "leader", org_id: @user3.person.primary_organization.id}
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json['error']['code'], "39")
       
       path = "/api/roles/#{@user.person.id}"
-      @user3.person.organizational_roles.first.update_attributes(role_id: Role.contact.id)
+      @user3.person.organizational_roles.first.update_attributes(role_id: Role::CONTACT_ID)
       put path, {'access_token' => @access_token3.code, role: "leader", org_id: @user3.person.primary_organization.id}
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json['error']['code'], "24")
     end
     
-    should "return a JSON error if no role is found to update" do
+    should "return a JSON error if role name doesnt' exist" do
       path = "/api/roles/#{@user.person.id}"
       @user.person.organizational_roles.destroy_all
-      put path, {'access_token' => @access_token3.code, role: "leader", org_id: @user3.person.primary_organization.id}
+      put path, {'access_token' => @access_token3.code, role: "bad_role", org_id: @user3.person.primary_organization.id}
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json['error']['code'], "38")
     end
     
     should "successfully update a person from contact to leader status" do
       path = "/api/roles/#{@user.person.id}"
-      @user.person.organizational_roles.first.update_attributes(role_id: Role.contact.id)
+      @user.person.organizational_roles.first.update_attributes(role_id: Role::CONTACT_ID)
       
       put path, {'access_token' => @access_token3.code, role: "leader", org_id: @user3.person.primary_organization.id}
       @json = ActiveSupport::JSON.decode(@response.body)
       
       #weird error... gets updated in roles controller but does not report back as being changed here
-      #assert_equal(Role.leader.id, @user.person.organizational_roles.first.role_id)
+      #assert_equal(Role::LEADER_ID, @user.person.organizational_roles.first.role_id)
     end
     
     should "successfully update a person from leader to contact status" do
       path = "/api/roles/#{@user.person.id}"
-      @user.person.organizational_roles.first.update_attributes(role_id: Role.leader.id)
+      @user.person.organizational_roles.first.update_attributes(role_id: Role::LEADER_ID)
       put path, {'access_token' => @access_token3.code, role: "contact", org_id: @user3.person.primary_organization.id}
       @json = ActiveSupport::JSON.decode(@response.body)
       
       #weird error... gets updated in roles controller but does not report back as being changed here
-      #assert_equal(Role.contact.id, @user.person.organizational_roles.first.role_id)
+      #assert_equal(Role::CONTACT_ID, @user.person.organizational_roles.first.role_id)
     end
     
     

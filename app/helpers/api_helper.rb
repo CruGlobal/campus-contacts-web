@@ -117,8 +117,8 @@ module ApiHelper
   def limit_and_offset_object(object)
     #allow for start (SQL Offset) and limit on query.  use :start and :limit
     raise LimitRequiredWithStartError if (params[:start].present? && !params[:limit].present?)
-    object = object.offset(params[:start]) if params[:start].to_i > 0
-    object = object.limit(params[:limit]) if params[:limit].to_i > 0
+    object = object.offset(params[:start].to_i) if params[:start].to_i > 0
+    object = object.limit(params[:limit].to_i) if params[:limit].to_i > 0
     
     object
   end
@@ -126,7 +126,7 @@ module ApiHelper
   def restrict_to_contact_role(people, organization)
     people = people.where("`#{OrganizationalRole.table_name}`.`organization_id` = ?", organization.id).
     where("`#{OrganizationalRole.table_name}`.`person_id` = `#{Person.table_name}`.`#{Person.primary_key}`").
-    where("`#{OrganizationalRole.table_name}`.`role_id` = #{Role.contact.id}").
+    where("`#{OrganizationalRole.table_name}`.`role_id` = #{Role::CONTACT_ID}").
     where("`#{OrganizationalRole.table_name}`.`followup_status` <> 'do_not_contact'")
     
     people

@@ -1,13 +1,17 @@
 Mh::Application.routes.draw do
-
+  
   resources :leaders do
     collection do
       post :search
-      post :add_person
+      put :add_person
     end
   end
   
-  resources :organizational_roles
+  resources :organizational_roles do
+    collection do
+      post :move_to
+    end
+  end
   
   resources :rejoicables
 
@@ -40,6 +44,16 @@ Mh::Application.routes.draw do
   end
   
   resources :people do
+    collection do
+      get :export
+      get :merge
+      post :confirm_merge
+      post :do_merge
+      get :search_ids
+    end
+    member do
+      get :merge_preview
+    end
     resources :organization_memberships do
       member do
         get :validate
@@ -81,17 +95,24 @@ Mh::Application.routes.draw do
   # namespace :admin do
   #   resources :organizations
   # end
+  
+  resources :organizations do
+    collection do
+      get :search
+    end
+  end
+  
   get "/surveys" => 'surveys#index'
-  get "/surveys/stopsurveymode" => 'surveys#stop', as: :survey_keyword_stop
-  get "/surveys/(:keyword)" => 'surveys#start', as: :survey_keyword_start
+  get "/surveys/stopsurveymode" => 'surveys#stop', as: :stop_survey
+  get "/surveys/:keyword" => 'surveys#start', as: :start_survey
 
   get "welcome/index"
   get "/test" => "welcome#test"
 
   devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks", sessions: "sessions" }
   devise_scope :user do
-    get "sign_in", to: "devise/sessions#new"
-    get "sign_out", to: "devise/sessions#destroy"
+    get "sign_in", to: "sessions#new"
+    get "sign_out", to: "sessions#destroy"
   end
   match '/auth/facebook/logout' => 'application#facebook_logout', as: :facebook_logout
   

@@ -9,9 +9,9 @@
     <td class="<%= dom_id(q) %>">
       <% case q.slug %>
       <% when 'email' %>
-        <%= person.email %>
-      <% when 'phone_number' %>
-        <%= person.phone_number %>
+        <%= mail_to(person.email) %>
+      <% when 'phone' %>
+        <%= person.pretty_phone_number %>
       <% else %>
         <% answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)} %><%= q.display_response(answer_sheet) %>
       <% end %>
@@ -28,14 +28,14 @@
     <% end %>
   </td>
   <td class="controls">
-    <%= link_to("Show", contact_path(person), :class => "icon magnify tipit", :title => "View contact details") %>
+    <%= link_to("Show", contact_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
     <% unless params[:dnc] == 'true' %>
-      <% if om = OrganizationalRole.where(:person_id => person.id, :organization_id => current_organization.id, :role_id => Role.contact.id).first %>
-        <%= link_to("Delete", organizational_role_path(:id => om.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => "Delete this contact", :confirm => t('contacts.index.delete_confirm')) %>
+      <% if om = OrganizationalRole.where(:person_id => person.id, :organization_id => current_organization.id, :role_id => Role::CONTACT_ID).first %>
+        <%= link_to("Delete", organizational_role_path(:id => om.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.delete_confirm')) %>
       <% end %>
     <% end %>
     <span class="unassign_link" style="<%= 'display:none' unless assigned_to %>">
-      <%= link_to(t('general.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign tipit", :title => "Unassign contact") %>
+      <%= link_to(t('general.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign tipit", :title => t('contacts.index.unassign_contact')) %>
     </span>
   </td>
 </tr>

@@ -27,10 +27,6 @@
 
 <div class="pagemenu">
   <ul class="pillmenu">
-    <li><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment' %></li>
-  </ul>
-  
-  <ul class="pillmenu">
     <li><%= link_to("Assign", "", class: 'assign') %></li>
     <li><%= link_to("Unassign", "", id: 'bulk_unassign') %></li>
     <li><%= link_to("Add Contact", "", class: 'add_contact') %></li>
@@ -45,7 +41,7 @@
   </ul>
   
   <div id="hidden_questions_div" style="display:none">
-    Click on a question to add it back to the page 
+    <%= t('.add_question_back') %>
     <ul id="hidden_questions">
       <%= render partial: 'contacts/hidden_question', collection: @hidden_questions %>
     </ul>
@@ -95,15 +91,15 @@
   <%#= t('.assign_to') %> 
   <%#= select_tag :assign_to, options_for_select(@organization.leaders.collect {|l| [l.to_s, l.id]}), include_blank: true %>
   <%= hidden_field_tag :assign_to %>
-  <table class="contacts-main" cellpadding="0" cellspacing="0">
+  <table class="listing" cellpadding="0" cellspacing="0">
     <tr>
-      <th class="checkbox_cell"></th>
+      <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment' %></th>
       <th><%= t('.first_name') %></th>
       <th><%= t('.last_name') %></th>
       <% @questions.each do |q| %>
         <th class="<%= dom_id(q) %>">
           <%= q.label %>
-          <%= link_to(image_tag("close.png"), hide_sms_keyword_question_path(@organization.keywords.first, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
+          <%= link_to(image_tag("close.png", alt: t('nav.hide'), title: t('nav.hide')), hide_sms_keyword_question_path(@organization.keywords.first, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
         </th>
       <% end %>
       <th><%= t('.assigned_to') %></th>
@@ -126,10 +122,11 @@
   <%= render 'assign' %>
 <% end %>
 
-<div class="searchstat">
-  <%= "Displaying #{@people.offset_value + 1} - #{@people.offset_value + @people.length} of #{@people.total_count}" %>
-</div>
-
+<% if @people.length > 0 %>
+  <div class="searchstat">
+    <%= "Displaying #{@people.offset_value + 1} - #{@people.offset_value + @people.length} of #{@people.total_count}" %>
+  </div>
+<% end %>
 
 <div id="add_contact_div" style="display:none" title="Add a Contact">
   <%= render 'add_contact', person: Person.new %>

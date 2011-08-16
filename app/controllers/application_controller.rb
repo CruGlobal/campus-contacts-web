@@ -2,9 +2,11 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_user!, :except => [:facebook_logout]
   before_filter :check_su
   before_filter :set_locale
+  before_filter :check_url, except: :facebook_logout
   rescue_from CanCan::AccessDenied, with: :access_denied
   protect_from_forgery  
 
+  
   def facebook_logout
     redirect_url = params[:next] ? params[:next] : root_url
     if session[:fb_token]
@@ -18,8 +20,26 @@ class ApplicationController < ActionController::Base
     end
     sign_out
   end
-
+  
   protected
+  
+  def check_url
+    render_404 if mhub?
+  end
+  
+  def render_404
+    if cookies[:survey_mode] && SmsKeyword.find_by_keyword(cookies[:survey_mode])
+      redirect_to "/c/#{cookies[:survey_mode]}" and return false
+    else
+      raise ActionController::RoutingError.new('Not Found')
+    end
+  end
+  
+  def mhub?
+    @mhub = request.host.include?('mhub.cc') if @mhub.nil?
+    @mhub
+  end
+  helper_method :mhub?
   
   def self.application_name
     'MH'
@@ -48,7 +68,7 @@ class ApplicationController < ActionController::Base
   def current_user
     # check for access token, then do it the devise way
     if params['access_token']
-      User.find(Rack::OAuth2::Server.get_access_token(params['access_token']).identity)
+      @current_user ||= User.find(Rack::OAuth2::Server.get_access_token(params['access_token']).identity)
     else
       super # devise user
     end
@@ -89,19 +109,23 @@ class ApplicationController < ActionController::Base
   def current_organization(person = nil)
     person ||= current_person if user_signed_in?
     return nil unless person
-    if session[:current_organization_id]
-      org = Organization.find_by_id(session[:current_organization_id]) 
-      org = nil unless org && (person.organizations.include?(org) || person.organizations.include?(org.parent))
-    end
-    unless org
-      org = person.primary_organization
-      # If they're a contact at their primary org (shouldn't happen), look for another org where they have a different role
-      unless person.organizations.include?(org)
-        org = person.organizations.first
+    @current_organizations ||= {}
+    unless @current_organizations[person]
+      if session[:current_organization_id]
+        org = Organization.find_by_id(session[:current_organization_id]) 
+        org = nil unless org && (person.organizations.include?(org) || person.organizations.include?(org.parent))
       end
-      session[:current_organization_id] = org.try(:id)
+      unless org
+        org = person.primary_organization
+        # If they're a contact at their primary org (shouldn't happen), look for another org where they have a different role
+        unless person.organizations.include?(org)
+          org = person.organizations.first
+        end
+        session[:current_organization_id] = org.try(:id)
+      end
+      @current_organizations[person] = org
     end
-    org
+    @current_organizations[person]
   end
   helper_method :current_organization
   
@@ -124,10 +148,10 @@ class ApplicationController < ActionController::Base
   helper_method :unassigned_people
   
   def get_answer_sheet(keyword, person)
-    @answer_sheet = AnswerSheet.where(person_id: person.id, question_sheet_id: keyword.question_sheet.id).first || 
-                    AnswerSheet.create!(person_id: person.id, question_sheet_id: keyword.question_sheet.id)
-    @answer_sheet.reload
-    @answer_sheet
+    answer_sheet = AnswerSheet.where(person_id: person.id, question_sheet_id: keyword.question_sheet.id).first || 
+                   AnswerSheet.create!(person_id: person.id, question_sheet_id: keyword.question_sheet.id)
+    answer_sheet.reload
+    answer_sheet
   end
   
   def create_contact_at_org(person, organization)
@@ -135,24 +159,28 @@ class ApplicationController < ActionController::Base
     raise 'no person' unless person
     raise 'no org' unless organization
     return false if OrganizationalRole.find_by_person_id_and_organization_id(person.id, organization.id)
-    OrganizationalRole.create!(person_id: person.id, organization_id: organization.id, role_id: Role.contact.id, followup_status: OrganizationMembership::FOLLOWUP_STATUSES.first)
-    unless OrganizationMembership.find_by_person_id_and_organization_id(person.id, organization.id) 
-      OrganizationMembership.create!(person_id: person.id, organization_id: organization.id, primary: false) 
-    end
+    organization.add_contact(person)
   end
   
   def user_root_path
-    return '/wizard' if !current_organization || (current_person.organizations.include?(current_organization) && current_organization.keywords.blank?)
-    # if current_person.leader_in?(current_organization)
-      '/contacts/mine'
-    # else
-      # '/people'
-    # end
+    if mhub?
+      render_404
+    else
+      return wizard_path if !current_organization || (current_person.organizations.include?(current_organization) && wizard_path)
+      # if current_person.leader_in?(current_organization)
+        '/contacts/mine'
+      # else
+        # '/people'
+      # end
+    end
   end
   helper_method :user_root_path
   
   def wizard_path
-    '/wizard?step=' + current_user.next_wizard_step(current_organization)
+    step = current_user.next_wizard_step(current_organization)
+    if step
+      '/wizard?step=' + step
+    end
   end
   helper_method :wizard_path
   
@@ -161,14 +189,15 @@ class ApplicationController < ActionController::Base
     person_params[:email_address] ||= {}
     person_params[:phone_number] ||= {}
     # try to find this person based on their email address
-    if (email = person_params[:email_address][:email]).present?
-      person = EmailAddress.find_by_email(email).try(:person) ||
-                Address.find_by_email(email).try(:person) ||
-                User.find_by_username(email).try(:person) 
+    email_address = person_params[:email_address][:email]
+    if email_address.present?
+      person = EmailAddress.find_by_email(email_address).try(:person) ||
+                Address.find_by_email(email_address).try(:person) ||
+                User.find_by_username(email_address).try(:person) 
     end
     person ||= Person.new(person_params.except(:email_address, :phone_number))
-    email = (@person.email_addresses.find_by_email(person_params[:email_address][:email].strip) || person.email_addresses.new(person_params.delete(:email_address))) if person_params[:email_address][:email].present? 
-    phone = (@person.phone_numbers.find_by_number(person_params[:phone_number][:number].gsub(/[^\d]/, '')) || person.phone_numbers.new(person_params.delete(:phone_number).merge(location: 'mobile'))) if person_params[:phone_number][:number].present?
+    email = (person.email_addresses.find_by_email(email_address) || person.email_addresses.new(email: email_address)) if email_address.present? 
+    phone = (person.phone_numbers.find_by_number(person_params[:phone_number][:number].gsub(/[^\d]/, '')) || person.phone_numbers.new(person_params.delete(:phone_number).merge(location: 'mobile'))) if person_params[:phone_number][:number].present?
     [person, email, phone]
   end
   

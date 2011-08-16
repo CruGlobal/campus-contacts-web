@@ -1,9 +1,11 @@
-<div id="logoline">
-  <a href="/" id="logo"></a>
-</div>
+<% unless mhub? %>
+  <div id="logoline">
+    <a href="/" id="logo"></a>
+  </div>
+<% end %>
 <div id="TOS-content"> 
 
-	<h2>MissionHub (MHub) SMS - Short Code <%= SmsKeyword::SHORT %></h2> 
+	<h2><%= site_name %> SMS - Short Code <%= SmsKeyword::SHORT %></h2> 
 
 	<h3>Terms of Service</h3> 
 
@@ -20,7 +22,7 @@
 
 		<p><strong>5.</strong> As always, message and data rates may apply for any messages sent to you from us and to us from you. Message frequency depends on the user's interaction. If you have any questions about your text plan or data plan, it is best to contact your wireless provider.</p> 
 
-		<p>For all questions about the services provided by this short code, you can send an email to <%= mail_to('support@missionhub.com', nil, encode: 'javascript') %>.</p> 
+		<p>For all questions about the services provided by this short code, you can send an email to <%= mail_to(site_email, nil, encode: 'javascript') %>.</p> 
 
 		<p><strong>6.</strong> If you have any questions regarding privacy, please read our <%= link_to('privacy policy', '/privacy') %>.</p> 
 	</div> 

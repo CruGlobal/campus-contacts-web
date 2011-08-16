@@ -67,20 +67,23 @@ module Ccc
             other_address = other.ministry_newaddresses.detect {|oa| oa.addressType == address.addressType}
             address.merge(other_address) if other_address
           end
-          other.ministry_newaddresses.each {|ma| ma.update_attribute(:fk_PersonID, personID) unless ma.frozen?}
+          other.ministry_newaddresses do |address|
+            other_address = ministry_newaddresses.detect {|oa| oa.addressType == address.addressType}
+            address.update_attribute(:fk_PersonID, personID) unless address.frozen? || other_address
+          end
 	        
  					# CRS
 					other.crs_registrations.each { |ua| ua.update_attribute(:fk_PersonID, personID) }
 
-					if other.crs2_profile and crs2_profile
+					if other.crs2_profile && crs2_profile
 	  				crs2_profile.merge(other.crs2_profile)
 					elsif other.crs2_profile
-						other.crs2_profile.ministry_person_id = personID
+						other.crs2_profile.update_column(:ministry_person_id, personID)
 					end
 
 
 					# Panorama
-					other.pr_reviewers.each { |ua| ua.update_attribute(:person_id, personID) }
+					other.pr_reviewers.each { |ua| ua.update_column(:person_id, personID) }
 
 					PrReview.where(["subject_id = ? or initiator_id = ?", other.id, other.id]).each do |ua|
 						ua.update_attribute(:subject_id, personID) if ua.subject_id == other.id
@@ -137,12 +140,12 @@ module Ccc
 					end
 
 					# SN
-					other.sn_custom_values.each { |ua| ua.update_attribute(:person_id, personID) }
-					other.sn_group_involvements.each { |ua| ua.update_attribute(:person_id, personID) }
-					other.sn_ministry_involvements.each { |ua| ua.update_attribute(:person_id, personID) }
-					other.sn_training_answers.each { |ua| ua.update_attribute(:person_id, personID) }
-					other.sn_imports.each { |ua| ua.update_attribute(:person_id, personID) }
-					other.sn_timetables.each { |ua| ua.update_attribute(:person_id, personID) }
+          # other.sn_custom_values.each { |ua| ua.update_attribute(:person_id, personID) }
+          # other.sn_group_involvements.each { |ua| ua.update_attribute(:person_id, personID) }
+          # other.sn_ministry_involvements.each { |ua| ua.update_attribute(:person_id, personID) }
+          # other.sn_training_answers.each { |ua| ua.update_attribute(:person_id, personID) }
+          # other.sn_imports.each { |ua| ua.update_attribute(:person_id, personID) }
+          # other.sn_timetables.each { |ua| ua.update_attribute(:person_id, personID) }
 
 					other.profile_pictures.each { |ua| ua.update_attribute(:person_id, personID) }
 					other.ministry_missional_team_members.each { |ua| ua.update_attribute(:personID, personID) }
@@ -150,6 +153,7 @@ module Ccc
 
  
           MergeAudit.create!(mergeable: self, merge_looser: other)
+          other.reload
           other.destroy
           save(validate: false)
 				end

@@ -104,15 +104,41 @@ $ ->
           $(this).closest('tr').remove();
     $('#assign_search').dialog('destroy')
   false
+  
+  $('#assign_search .org a').live 'click', (e)->
+    e.preventDefault()
+    form = $('#new_contact_assignment')
+    from_id = $(this).closest('div').attr('data-org-id')
+    to_id = $(this).attr('data-id')
+    old_action = form.attr('action')
+    form.attr('action', '/organizational_roles/move_to?from_id='+from_id+'&to_id='+to_id)
+    $.rails.handleRemote(form)
+    $('.id_checkbox:checked').each ->
+      $(this).closest('tr').remove();
+    form.attr('action', old_action)
+    $('#assign_search').dialog('destroy')
+    if $('#contacts_controller.show')[0]
+      setTimeout "document.location = '/contacts'", 1000
+  false
     
   $('#assign_search .leader_search_name').keyup ->
-    name = $('#assign_search .leader_search_name').val()
+    name = $(this).val()
     $('#assign_search ul li').each ->
       regex = new RegExp('.*' + name + '.*', 'i')
       if regex.test($('.name', $(this)).text())
         $(this).show()
       else
         $(this).hide()
+    
+  $('#assign_search .org_search_name').observe_field 0.5, ->
+    name = $(this).val()
+    $('#spinner_org_search').show()
+    $.ajax
+      url: '/organizations/search.js?q='+name, 
+      type: 'GET',
+      complete: ->
+        $('#spinner_org_search').hide()
+
         
   $('#assign_to_me, #assign_to_unassigned').live 'click', ->
     $('#assign_search .leader_search').hide()
@@ -136,15 +162,10 @@ $ ->
     if $('.id_checkbox:checked').length > 0
       $('#assign_to_me').click()
       el = $('#assign_search')
-      # $('#add_leader_form').hide()
-      # $('#leader_search_form').show()
-      # $('#leader_search_name').val('')
-      # $("#leader_search_results").hide()
-      # form = $('#leader_search_form')
       el.dialog
         resizable: false,
         height:444,
-        width:400,
+        width:600,
         modal: true,
         buttons: 
           Cancel: ->
@@ -154,8 +175,8 @@ $ ->
     false
 
   $('#contacts_controller #bulk_unassign').live 'click', ->
-    if $('.id_checkbox:checked').length > 0
-      $.rails.handleRemote($('#new_contact_assignment'))
+    if $('.id_checkbox:checked').length > 0 && $('#leaders')[0]?
+      $.fn.assignTo($('.leader.unassigned'))
       $('.id_checkbox:checked').closest('tr').fadeOut()
     $('#check_all').prop('checked', false)
     false
@@ -236,8 +257,14 @@ $ ->
     false
     
   $('.contact_row td:not(.checkbox_cell)').live 'click', ->
-    tr = $(this).parent()
-    document.location = '/contacts/' + tr.attr('data-id')
+    unless $('a', this)[0]?
+      tr = $(this).parent()
+      document.location = '/contacts/' + tr.attr('data-id')
+    
+  $('.person_row td:not(.checkbox_cell)').live 'click', ->
+    unless $('a', this)[0]?
+      tr = $(this).parent()
+      document.location = '/people/' + tr.attr('data-id')
   
   $('#assign_to').change ->
     if $('.id_checkbox:checked').length > 0

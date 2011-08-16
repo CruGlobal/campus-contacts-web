@@ -1,6 +1,9 @@
 require 'test_helper'
 
 class PeopleControllerTest < ActionController::TestCase
+  test 'true' do
+    assert true
+  end
   # setup do
   #   @person = people(:one)
   # end

@@ -21,17 +21,14 @@ class LeadersController < ApplicationController
   
   def search
     if params[:name].present?
-      query = params[:name].strip.split(' ')
-      first, last = query[0].to_s + '%', query[1].to_s + '%'
-      if last == '%'
-        conditions = ["preferredName like ? OR firstName like ? OR lastName like ?", first, first, first]
+      scope = Person.search_by_name(params[:name], current_person.orgs_with_children.collect(&:id))
+      @people = scope.includes(:user)
+      if params[:show_all].to_s == 'true'
+        @total = @people.all.length
       else
-        conditions = ["(preferredName like ? OR firstName like ?) AND lastName like ?", first, first, last]
+        @people = @people.limit(10) 
+        @total = scope.count
       end
-
-      @people = Person.where(conditions).includes(:user)
-      @people = @people.limit(10) unless params[:show_all].to_s == 'true'
-      @total = Person.where(conditions).count
       render :layout => false
     else
       render :nothing => true
@@ -61,10 +58,56 @@ class LeadersController < ApplicationController
   end
 
   def create
-    @person ||= Person.find(params[:person_id]) if params[:person_id]
-    OrganizationMembership.find_or_create_by_person_id_and_organization_id(@person.id, current_organization.id)
-    OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(@person.id, current_organization.id, Role.leader.id)
+    if @person
+      @notify = params[:notify] == '1'
+    else
+      @person = Person.find(params[:person_id])
+      @notify = true
+    end
+    # Make sure we have a user for this person
+    unless @person.user
+      @new_person = @person.create_user!
+      unless @new_person
+        @person.reload
+        # we need a valid email address to make a leader
+        @email = @person.primary_email_address || @person.email_addresses.new
+        @phone = @person.primary_phone_number || @person.phone_numbers.new
+        render :edit and return
+      end
+      @person = @new_person
+    end
+    current_organization.add_leader(@person)
+        # Notify the new user if we're supposed to
+    if params[:notify] == '1'
+      notify_new_leader(@person) 
+    end
     render :create
+  end
+  
+  def update
+    @person = Person.find(params[:id])
+    if params[:person]
+      email_attributes = params[:person].delete(:email_address)
+      phone_attributes = params[:person].delete(:phone_number)
+      if email_attributes[:email].present?
+        @email = @person.email_addresses.find_or_create_by_email(email_attributes[:email])
+      end
+      if phone_attributes[:phone].present?
+        @phone = @person.phone_numbers.find_or_create_by_number(phone_attributes[:phone][-10..-1])
+      end
+      @person.save
+      @person.update_attributes(params[:person])
+    end
+    required_fields = {'First Name' => @person.firstName, 'Last Name' => @person.lastName, 'Gender' => @person.gender, 'Email' => @email.try(:email)}
+    @person.valid?; @email.try(:valid?); @phone.try(:valid?)
+    unless required_fields.values.all?(&:present?)
+      flash.now[:error] = "Please fill in all fields<br />"
+      required_fields.each do |k,v|
+        flash.now[:error] += k + " is required.<br />" unless v.present?
+      end
+      render :edit and return
+    end
+    create and return
   end
   
   def add_person
@@ -84,15 +127,16 @@ class LeadersController < ApplicationController
     end
     @person.save!
     
-    # Notify the new user if we're supposed to
-    if params[:notify] == '1'
-      token = SecureRandom.hex(12)
-      @person.user.remember_token = token
-      @person.user.remember_token_expires_at = 1.month.from_now
-      @person.user.save(validate: false)
-      LeaderMailer.added(@person, current_person, current_organization, token).deliver
-    end
     create and return
   end
+  
+  protected
+    def notify_new_leader(person)
+      token = SecureRandom.hex(12)
+      person.user.remember_token = token
+      person.user.remember_token_expires_at = 1.month.from_now
+      person.user.save(validate: false)
+      LeaderMailer.added(person, current_person, current_organization, token).deliver
+    end
 
 end

@@ -1,0 +1,23 @@
+<% if person %>
+  <strong>Person ID: <%= person.personID %></strong><br/>
+  First Name: <%= person.firstName %><br/>
+  Last Name: <%= person.lastName %><br/>
+  Preferred Name: <%= person.preferredName %><br/>
+  Gender: <%= person.gender %><br/>
+  Campus: <%= person.campus %><br/>
+  Birthday: <%= l(person.birth_date) if person.birth_date %><br/>
+  Preferred Name: <%= person.preferredName %><br/>
+  Person Created: <%= l(person.dateCreated) if person.dateCreated %><br/>
+  Person Updated: <%= l(person.dateChanged) if person.dateChanged %>
+  <% user = person.user %>
+  <% if user %>
+  <hr>
+  User ID: <%= user.userID %><br/>
+  Username: <%= user.username %><br/>
+  Guid: <%= user.globallyUniqueID %><br/>
+  User Created: <%= l(user.createdOn || user.created_at) if user.createdOn || user.created_at %><br/>
+  User Updated: <%= l(user.updated_at) if user.updated_at %><br/>
+  <% end %>
+<% else %>
+  No person with ID of <%= params[:id] %>
+<% end %>

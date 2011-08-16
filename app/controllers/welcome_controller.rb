@@ -1,5 +1,6 @@
 class WelcomeController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:index, :tour, :terms, :privacy]
+  skip_before_filter :check_url, only: [:terms, :privacy]
   def index
     # if user_signed_in?
     #   redirect_to user_root_path and return
@@ -13,12 +14,12 @@ class WelcomeController < ApplicationController
     when 'keyword'
       @redirect = true unless current_organization
     when 'survey'
-      @redirect = true unless current_organization && current_organization.keywords.present?
+      @redirect = true unless current_organization && current_organization.self_and_children_keywords.present?
     when 'leaders'
       @redirect = true unless current_organization
     end
     if @redirect
-      redirect_to '/wizard?step=' + current_user.next_wizard_step(current_organization) and return
+      redirect_to wizard_path and return
     end
   end
   
@@ -36,7 +37,7 @@ class WelcomeController < ApplicationController
           sign_in(user)
         end
         if user && user.person && user.person.organizations.present? && user.person.organizations.any? {|org| user.person.leader_in?(org)}
-          redirect_to '/wizard?step=keyword'
+          redirect_to wizard_path ? wizard_path : user_root_path
         else
           redirect_to '/wizard?step=verify&not_found=1'
         end
@@ -51,10 +52,10 @@ class WelcomeController < ApplicationController
   end
   
   def terms
-    render layout: 'splash'
+    render layout: mhub? ? 'plain' : 'splash'
   end
   
   def privacy
-    render layout: 'splash'
+    render layout: mhub? ? 'plain' : 'splash'
   end
 end

@@ -1,0 +1,9 @@
+<fieldset data-role="controlgroup">
+  <% radio_button_field.choices.each_with_index do |choice, num| -%>
+      <% dom_id = dom_id(radio_button_field) + "_" + pretty_tag(choice[1]) 
+         checked = radio_button_field.has_answer?(choice[1], @answer_sheet) -%>
+      <label class="choice" for="<%= dom_id %>"><%= raw word_wrap(choice[0], line_width: 30).gsub(/\n/,'<br>') %></label>
+      <%= radio_button_tag "answers[#{radio_button_field.id}]", choice[1], checked, 
+            :id => dom_id %>
+  <% end -%>
+</fieldset>

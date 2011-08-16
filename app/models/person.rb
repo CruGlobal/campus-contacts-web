@@ -5,12 +5,12 @@ class Person < ActiveRecord::Base
   
   belongs_to :user, class_name: 'User', foreign_key: 'fk_ssmUserId'
   has_many :phone_numbers
+  has_one :primary_phone_number, class_name: "PhoneNumber", foreign_key: "person_id", conditions: {primary: true}
   has_many :locations
   has_one :latest_location, order: "updated_at DESC", class_name: 'Location'
   has_many :friends
   has_many :interests
   has_many :education_histories
-  has_one :primary_phone_number, class_name: "PhoneNumber", foreign_key: "person_id", conditions: {primary: true}
   has_many :email_addresses
   has_one :primary_email_address, class_name: "EmailAddress", foreign_key: "person_id", conditions: {primary: true}
   has_one :primary_organization_membership, class_name: "OrganizationMembership", foreign_key: "person_id", conditions: {primary: true}
@@ -24,7 +24,10 @@ class Person < ActiveRecord::Base
   
   has_many :organization_memberships, inverse_of: :person
   has_many :organizational_roles
-  has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role.contact.id}"
+  has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role::CONTACT_ID}"
+  
+  has_many :received_sms, class_name: "ReceivedSms", foreign_key: "person_id"
+  has_many :sms_sessions, inverse_of: :person
   
   scope :who_answered, lambda {|question_sheet_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.question_sheet_id' => question_sheet_id)}
   validates_presence_of :firstName, :lastName
@@ -35,6 +38,20 @@ class Person < ActiveRecord::Base
   before_save :stamp_changed
   before_create :stamp_created
 
+  def self.search_by_name(name, organization_ids = nil, scope = nil)
+    return scope.where('1 = 0') unless name.present?
+    scope ||= Person
+    query = name.strip.split(' ')
+    first, last = query[0].to_s + '%', query[1].to_s + '%'
+    if last == '%'
+      conditions = ["preferredName like ? OR firstName like ? OR lastName like ?", first, first, first]
+    else
+      conditions = ["(preferredName like ? OR firstName like ?) AND lastName like ?", first, first, last]
+    end
+    scope = scope.where(conditions)
+    scope = scope.where('organizational_roles.organization_id IN(?)', organization_ids).includes(:organizational_roles) if organization_ids
+    scope
+  end
   def to_s
     [preferredName.blank? ? firstName : preferredName.try(:strip), lastName.try(:strip)].join(' ')
   end
@@ -42,6 +59,10 @@ class Person < ActiveRecord::Base
   def leader_in?(org)
     return false unless org
     OrganizationalRole.where(person_id: id, role_id: Role.leader_ids, :organization_id => org.id).present?
+  end
+  
+  def orgs_with_children
+    organizations.collect {|top_org| ([top_org] + (top_org.show_sub_orgs? ? top_org.children : []))}.flatten
   end
   
   def phone_number
@@ -82,7 +103,11 @@ class Person < ActiveRecord::Base
       self.gender = response.gender unless (response.gender.nil? && !gender.blank?)
       # save!
       unless email_addresses.detect {|e| e.email == data['email']}
-        email_addresses.create(email: data['email'].try(:strip))
+        begin
+          email_addresses.find_or_create_by_email(data['email'].try(:strip)) if data['email'].try(:strip).present?
+        rescue Mysql2::Error
+          return self
+        end
       end
       async_get_or_update_friends_and_interests(authentication)
       get_location(authentication, response)
@@ -117,9 +142,21 @@ class Person < ActiveRecord::Base
   
   def email
     @email = primary_email_address.try(:email)
-    @email ||= email_addresses.first.try(:email)
-    @email ||= current_address.try(:email)
-    @email ||= user.try(:username) || user.try(:email)
+    unless @email
+      if email_addresses.present?
+        @email = email_addresses.first.try(:email)
+        email_addresses.first.update_attribute(:primary, true)
+      else
+        @email ||= current_address.try(:email)
+        @email ||= user.try(:username) || user.try(:email)
+        begin
+          new_record? ? email_addresses.new(:email => @email, :primary => true) : email_addresses.create(:email => @email, :primary => true) if @email
+        rescue ActiveRecord::RecordNotUnique
+          reload
+          return self.email
+        end
+      end
+    end
     @email.to_s
   end
   
@@ -237,7 +274,7 @@ class Person < ActiveRecord::Base
   end  
   
   def contact_friends(org)
-    Person.where(fb_uid: friends.select(:uid).collect(&:uid)).joins(:organizational_roles).where('organizational_roles.role_id' => Role.contact.id, 'organizational_roles.organization_id' => org.id)
+    Person.where(fb_uid: friends.select(:uid).collect(&:uid)).joins(:organizational_roles).where('organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.organization_id' => org.id)
   end
   
   def merge(other)
@@ -247,6 +284,42 @@ class Person < ActiveRecord::Base
       pn.merge(opn) if opn
     end
     other.phone_numbers.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
+    
+    # Locations
+    other.locations.each do |location|
+      if location_ids.include?(location.id)
+        location.destroy
+      else
+        location.update_column(:person_id, id)
+      end
+    end
+    
+    # Locations
+    other.friends.each do |friend|
+      if friends.find_by_uid_and_provider(friend.uid, friend.provider)
+        friend.destroy
+      else
+        friend.update_column(:person_id, id)
+      end
+    end
+    
+    # Interests
+    other.interests.each do |i|
+      if interest_ids.include?(i.id)
+        i.destroy
+      else
+        i.update_column(:person_id, id)
+      end
+    end
+    
+    # Edudation Histories
+    other.education_histories.each do |eh|
+      if education_history_ids.include?(eh.id)
+        eh.destroy
+      else
+        eh.update_column(:person_id, id)
+      end
+    end
     
     # Email Addresses
     email_addresses.each do |pn|
@@ -268,6 +341,16 @@ class Person < ActiveRecord::Base
       pn.merge(opn) if opn
     end
     other.organizational_roles.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
+    
+    # Answer Sheets
+    other.answer_sheets.collect {|as| as.update_column(:person_id, id)}
+    
+    # Contact Assignments
+    other.contact_assignments.collect {|as| as.update_column(:assigned_to_id, id)}
+    
+    # SMS stuff
+    other.received_sms.collect {|as| as.update_column(:person_id, id)}
+    other.sms_sessions.collect {|as| as.update_column(:person_id, id)}
     
     super
   end
@@ -325,6 +408,27 @@ class Person < ActiveRecord::Base
   
   def picture
     "http://graph.facebook.com/#{fb_uid}/picture"
+  end
+  
+  def create_user!
+    if self.email.present? && self.primary_email_address.valid?
+      if user =  User.find_by_username(self.email)
+        if user.person
+          user.person.merge(self)
+          return user.person
+        else
+          self.user = user
+        end
+      else
+        self.user = User.create!(:username => self.email, :email => self.email, :password => SecureRandom.hex(10))
+      end
+      self.save(validate: false)
+      return self
+    else
+      # Delete invalid emails
+      self.email_addresses.each {|email| email.destroy unless email.valid?}
+      return nil
+    end
   end
 
   def updated_at() dateChanged end

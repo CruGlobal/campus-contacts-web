@@ -15,6 +15,6 @@ class KeywordRequestMailer < ActionMailer::Base
   
   def notify_user_of_denial(keyword)
     @keyword = keyword
-    mail(to: keyword.user.person.email, subject: "Keyword '#{keyword}' was approved!")
+    mail(to: keyword.user.person.email, subject: "Keyword '#{keyword}' was rejected.")
   end
 end

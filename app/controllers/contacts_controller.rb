@@ -4,6 +4,7 @@ class ContactsController < ApplicationController
   before_filter :get_keyword, only: [:new, :update, :thanks]
   before_filter :ensure_current_org, except: [:new, :update, :thanks]
   before_filter :authorize, except: [:new, :update, :thanks]
+  skip_before_filter :check_url, only: [:new, :update]
   
   def index
     @organization = params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : current_organization
@@ -37,6 +38,7 @@ class ContactsController < ApplicationController
           end
         end
       end
+      @people ||= Person.where("1=0")
     end
     if params[:first_name].present?
       @people = @people.where("firstName like ? OR preferredName like ?", '%' + params[:first_name].strip + '%', '%' + params[:first_name].strip + '%')
@@ -59,7 +61,7 @@ class ContactsController < ApplicationController
                            @people = @people.where("#{Person.table_name}.#{question.attribute_name} like ?", '%' + v + '%') unless v.strip.blank?
                          end
           else
-            @people = @people.includes(:answer_sheets => :answers).where("#{Answer.table_name}.question_id = ? AND #{Answer.table_name}.value like ?", q_id, '%' + v + '%') unless v.strip.blank?
+            @people = @people.joins(:answer_sheets => :answers).where("#{Answer.table_name}.question_id = ? AND #{Answer.table_name}.value like ?", q_id, '%' + v + '%') unless v.strip.blank?
           end
         else
           conditions = ["#{Answer.table_name}.question_id = ?", q_id]
@@ -72,7 +74,7 @@ class ContactsController < ApplicationController
           end
           if answers_conditions.present?
             conditions[0] = conditions[0] + ' AND (' + answers_conditions.join(' OR ') + ')'
-            @people = @people.includes(:answer_sheets => :answers).where(conditions) 
+            @people = @people.joins(:answer_sheets => :answers).where(conditions) 
           end
         end
       end
@@ -81,7 +83,7 @@ class ContactsController < ApplicationController
   end
   
   def mine
-    @people = Person.order('lastName, firstName').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.role_id' => Role.contact.id)
+    @people = Person.order('lastName, firstName').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.role_id' => Role::CONTACT_ID)
     if params[:status] == 'completed'
       @people = @people.where("organizational_roles.followup_status = 'completed'")
     else
@@ -90,23 +92,33 @@ class ContactsController < ApplicationController
   end
   
   def new
+    unless mhub? || Rails.env.test?
+      redirect_to new_contact_url(params.merge(host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']))
+      return false
+    end
+    
     if params[:received_sms_id]
-      sms = ReceivedSms.find(Base62.decode(params[:received_sms_id])) 
+      sms_id = Base62.decode(params[:received_sms_id])
+      sms = SmsSession.find_by_id(sms_id) || ReceivedSms.find_by_id(sms_id)
       if sms
         @keyword ||= sms.sms_keyword || SmsKeyword.where(keyword: sms.message.strip).first
         @person.phone_numbers.create!(number: sms.phone_number, location: 'mobile') unless @person.phone_numbers.detect {|p| p.number_with_country_code == sms.phone_number}
         sms.update_attribute(:person_id, @person.id) unless sms.person_id
       end
     end
-    get_answer_sheet(@keyword, @person)
-    respond_to do |wants|
-      wants.html { render :layout => 'plain'}
-      wants.mobile
+    if @keyword
+      @answer_sheet = get_answer_sheet(@keyword, @person)
+      respond_to do |wants|
+        wants.html { render :layout => 'plain'}
+        wants.mobile
+      end
+    else
+      redirect_to '/404.html' and return
     end
   end
     
   def update
-    get_answer_sheet(@keyword, @person)
+    @answer_sheet = get_answer_sheet(@keyword, @person)
     @person.update_attributes(params[:person]) if params[:person]
     question_set = QuestionSet.new(@keyword.questions, @answer_sheet)
     question_set.post(params[:answers], @answer_sheet)
@@ -126,7 +138,7 @@ class ContactsController < ApplicationController
   def show
     @person = Person.find(params[:id])
     @organization = current_organization
-    @organizational_role = OrganizationalRole.where(organization_id: @organization, person_id: @person, role_id: Role.contact.id).first
+    @organizational_role = OrganizationalRole.where(organization_id: @organization, person_id: @person, role_id: Role::CONTACT_ID).first
     unless @organizational_role
       redirect_to '/404.html' and return
     end
@@ -144,6 +156,13 @@ class ContactsController < ApplicationController
     end
     @person, @email, @phone = create_person(params[:person])
     if @person.save
+      # save survey answers
+      current_organization.keywords.each do |keyword|
+        @answer_sheet = get_answer_sheet(keyword, @person)
+        question_set = QuestionSet.new(keyword.questions, @answer_sheet)
+        question_set.post(params[:answers], @answer_sheet)
+        question_set.save
+      end
       create_contact_at_org(@person, current_organization)
       if params[:assign_to_me] == 'true'
         ContactAssignment.where(person_id: @person.id, organization_id: current_organization.id).destroy_all

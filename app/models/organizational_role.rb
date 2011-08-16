@@ -14,15 +14,18 @@ class OrganizationalRole < ActiveRecord::Base
     # We can have multiple roles, but if we're a contact that should be the only role
     OrganizationalRole.transaction do
       case
-      when role_id == Role.contact.id && other.role_id != Role.contact.id
+      when role_id == Role::CONTACT_ID && other.role_id != Role::CONTACT_ID
         MergeAudit.create!(mergeable: other, merge_looser: self)
+        self.reload
         self.destroy
-      when other.role_id == Role.contact.id && role_id != Role.contact.id
+      when other.role_id == Role::CONTACT_ID && role_id != Role::CONTACT_ID
         MergeAudit.create!(mergeable: self, merge_looser: other)
+        other.reload
         other.destroy
-      when other.role_id == Role.contact.id && role_id == Role.contact.id
+      when other.role_id == Role::CONTACT_ID && role_id == Role::CONTACT_ID
         # Both roles are contact, and we only need one contact role
         MergeAudit.create!(mergeable: self, merge_looser: other)
+        other.reload
         other.destroy
       else
         # keep both roles
@@ -42,7 +45,7 @@ class OrganizationalRole < ActiveRecord::Base
     end
     
     def set_contact_uncontacted
-      if role_id == Role.contact.id
+      if role_id == Role::CONTACT_ID
         self.followup_status = OrganizationMembership::FOLLOWUP_STATUSES.first
       end
       true

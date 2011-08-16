@@ -1,14 +1,14 @@
 <% provide :title, "Thanks!"%>
-<% redirect_url = params[:received_sms_id].present? ? '' : contact_form_url(@keyword.keyword) %>
+<% redirect_url = cookies[:survey_mode].present? ? contact_form_url(@keyword.keyword) : sign_out_url %>
 <div class="info">
   <center><h4><%= @keyword.post_survey_message.present? ? @keyword.post_survey_message : t('contacts.thanks.message') %></h4></center>
 	<br><br>
 
-  <% unless can? :manage, @keyword %>
+  <% if mhub? %>
   	<script type="text/javascript">
       setTimeout(function() {
   			window.location="<%= facebook_logout_url(next: redirect_url) %>";      
-      }, 10000)
+      }, 8000)
   	</script>
   <% end %>
 	<div id="countdown">

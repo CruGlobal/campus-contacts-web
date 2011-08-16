@@ -6,13 +6,13 @@ class ContactAssignmentsController < ApplicationController
     if params[:assign_to].present?
       @assign_to = Person.find(params[:assign_to])
       params[:ids].each do |id|
-        ContactAssignment.create!(person_id: id, organization_id: @organization.id, assigned_to_id: @assign_to.id)
+        ContactAssignment.create(person_id: id, organization_id: @organization.id, assigned_to_id: @assign_to.id)
       end
     else
       
     end
     # if you're assigning this person and their status is DNC, change it back to their prior status or uncontacted
-    OrganizationalRole.where(person_id: params[:ids], organization_id: @organization.id, role_id: Role.contact.id, followup_status: 'do_not_contact').each do |role|
+    OrganizationalRole.where(person_id: params[:ids], organization_id: @organization.id, role_id: Role::CONTACT_ID, followup_status: 'do_not_contact').each do |role|
       role.followup_status = FollowupComment.where(contact_id: role.person_id, organization_id: role.organization_id).where("status <> 'do_not_contact'").order('created_at').last.try(:status) ||
                              'uncontacted'
       role.save!

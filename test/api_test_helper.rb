@@ -11,7 +11,7 @@ def setup_api_env
   @user = Factory.create(:user_no_org_with_facebook)
   Factory.create(:authentication, user: @user)
   #@user.person.organization_memberships.create(organization_id: @temp_org.id, person_id: @user.person.id, primary: true)
-  #@user.person.organizational_roles.create(organization_id: @temp_org.id, person_id: @user.person.id, role_id: Role.contact.id)
+  #@user.person.organizational_roles.create(organization_id: @temp_org.id, person_id: @user.person.id, role_id: Role::CONTACT_ID)
   Factory(:organization_membership, organization: @temp_org, person: @user.person, primary: true)
   Factory(:organizational_role, organization: @temp_org, person: @user.person, role: Role.contact)
   
@@ -28,8 +28,8 @@ def setup_api_env
   @user3.person.update_attributes(firstName: "Another Test", lastName: "Usereeeee")  
     
   #create contact assignments
-  Factory.create(:contact_assignment, assigned_to_id: @user.person.id, person_id: @user2.person.id, organization_id: @temp_org.id)
-  Factory.create(:contact_assignment, assigned_to_id: @user2.person.id, person_id: @user.person.id, organization_id: @temp_org.id)
+  @contact_assignment1 = Factory.create(:contact_assignment, assigned_to_id: @user.person.id, person_id: @user2.person.id, organization_id: @temp_org.id)
+  @contact_assignment2 = Factory.create(:contact_assignment, assigned_to_id: @user2.person.id, person_id: @user.person.id, organization_id: @temp_org.id)
 
   @access_token = Factory.create(:access_token, identity: @user.id)
   @access_token2 = Factory.create(:access_token, identity: @user2.id, code: "abcdefgh")

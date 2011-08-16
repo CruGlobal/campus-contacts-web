@@ -16,6 +16,10 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :remember_me, :password
+  # alias_method :find_by_userID, :find_by_id
+  def self.find_by_id(*args)
+    find_by_userID(args)
+  end
   
   def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
     data = access_token['extra']['user_hash']
@@ -31,8 +35,8 @@ class User < ActiveRecord::Base
         user = authentication.user
       else
         authentication.delete if authentication
-        user = signed_in_resource || User.find(:first, conditions: ["username = ? or username = ?", data['email'], data['username']])
-        user = User.create!(email: data["email"], password: Devise.friendly_token[0,20]) if user.nil?
+        user = signed_in_resource || User.where(["username = ? or username = ?", data['email'], data['username']]).first
+        user ||= User.create!(email: data["email"], password: Devise.friendly_token[0,20]) 
         user.save
         authentication = user.authentications.create(provider: 'facebook', uid: access_token['uid'], token: access_token['credentials']['token'])
       end
@@ -49,9 +53,8 @@ class User < ActiveRecord::Base
   def next_wizard_step(org)
     case 
     when org.nil? then 'verify'
-    when org && org.keywords.blank? then 'keyword'
-    when org && org.question_sheets.blank? then 'survey'
-    else 'keyword'
+    when org && org.self_and_children_keywords.blank? then 'keyword'
+    when org && org.self_and_children_questions.blank? then 'survey'
     end
   end
   
@@ -66,6 +69,18 @@ class User < ActiveRecord::Base
   
   def to_s
     person ? person.to_s : (email || username).to_s
+  end
+  
+  def name_with_keyword_count
+    "#{to_s} (#{sms_keywords.count})"
+  end
+  
+  rails_admin do
+    # object_label_method {:name_with_keyword_count}
+    visible false
+    list do
+      field :username
+    end
   end
   
   def merge(other)
@@ -85,6 +100,7 @@ class User < ActiveRecord::Base
       super
       
       MergeAudit.create!(mergeable: self, merge_looser: other)
+      other.reload
       other.destroy
     end
   end

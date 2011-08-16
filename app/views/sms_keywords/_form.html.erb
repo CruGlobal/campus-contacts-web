@@ -1,4 +1,4 @@
-<%= form_for(@sms_keyword, validate: true) do |f| %>
+<%= form_for(@sms_keyword, validate: true, html: {id: 'sms_keyword_form'}) do |f| %>
   <%= error_messages_for :sms_keyword %>
   
   <div class="stepwrap rwidth">
@@ -31,9 +31,7 @@
     </div>
     <div class="stepcontent">    
       <div class="field">
-        
-        <%# = f.label :initial_response, raw(t('keywords.form.initial_response')) %>
-        <label for="sms_keyword_<%= :initial_response %>">
+        <label for="sms_keyword_initial_response">
           <%= raw(t('keywords.form.initial_response')) %> 
           <span class="tiplight" title="<%= t('keywords.form.post_survey_why') %>"></span>
         </label>
@@ -53,16 +51,27 @@
         <%= f.label :post_survey_message, t('keywords.form.post_survey_message') %>
         <%= f.text_area :post_survey_message, rows: 5, :placeholder => "Example: Thank you for your time! If you're interested in Cru, we meet at Moore Auditorium every Thursday @ 8PM" %>
       </div>
-      <% if current_user.person.organizations.length > 1 %>
+    </div>
+  </div>
+  
+  <div class="stepwrap rwidth">
+    <div class="stepnumber">
+      <%= image_tag("step4.png") %>
+    </div>
+    <div class="stepcontent"> 
+      <% if current_organization.show_sub_orgs? && current_organization.has_children? %>   
+        <div class="field">
+          <label for="sms_keyword_organization">
+            <%= raw(t('keywords.form.association', this_term: current_organization.terminology, child_term: current_organization.children.first.terminology)) %> 
+            <span class="tiplight" title="<%= t('keywords.index.association_help') %>"></span>
+          </label>
+          <%= f.select :organization_id, ([current_organization] + current_organization.children).collect {|o| [o.to_s, o.id]} %>
+        </div>
+      <% else %>
         <div class="field">
           <strong>This keyword will be associated with <%= current_organization %>.</strong>
         </div>
       <% end %>
-      <!-- <div class="field">
-        <%#= f.label :chartfield, t('keywords.form.chartfield') %>
-        <%#= f.text_field :chartfield %>
-      </div> -->
-      
       <div class="actions">
         <%= f.submit %> Note: Processing requests may take up to 24 hours.
       </div>

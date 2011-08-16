@@ -374,7 +374,7 @@ div.wizard {
 
 .mine {}
 
-.contacts-main {
+.listing {
   width: 100%;
   th {
     text-align: left;
@@ -794,7 +794,7 @@ span.title {
   list-style: none;
   margin: 0;
   padding: 0;
-  height: 144px;
+  height: 185px;
   border: 1px solid silver;
   overflow-x: hidden;
   overflow-y: scroll;
@@ -1362,7 +1362,21 @@ div.pagination {
 }
 
 .searchstat {
+  padding-top: 5px;
   text-align: center;
+}
+
+
+#people_controller {
+  #check_all {
+    margin-left: 4px;
+  }
+}
+
+#contacts_controller {
+  #check_all {
+    margin-left: 19px;
+  }
 }
 
 body#welcome_controller {
@@ -1371,3 +1385,53 @@ body#welcome_controller {
     background: #fff;
   }
 }
+
+div.merge.person {
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid black;
+  width: 270px;
+}
+
+div.merge.person.preview {
+  float:right;
+}
+
+.confirm_merge div.merge.person {
+  float:left;
+}
+
+.flash .flash_message {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  text-align: center;
+  margin: 0 auto 15px;
+  color: white;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 1px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 1px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 1px rgba(0, 0, 0, 0.1); }
+  .flash .flash_message p {
+    margin: 8px; }
+.flash .error, .flash .error-list {
+  border: 1px solid #993624;
+  background: #cc4831 url("<%= image_path('rails_admin/theme/activo/images/messages/error.png') %>") no-repeat 10px center; }
+.flash .warning {
+  border: 1px solid #bb9004;
+  background: #f9c006 url("<%= image_path('rails_admin/theme/activo/images/messages/warning.png') %>") no-repeat 10px center; }
+.flash .notice {
+  color: #28485e;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+  border: 1px solid #8a9daa;
+  background: #b8d1e2 url("<%= image_path('rails_admin/theme/activo/images/messages/notice.png') %>") no-repeat 10px center; }
+.flash .error-list {
+  text-align: left; }
+  .flash .error-list h2 {
+    font-size: 16px;
+    text-align: center; }
+  .flash .error-list ul {
+    padding-left: 22px;
+    line-height: 18px;
+    list-style-type: square;
+    margin-bottom: 15px; }
