@@ -2,14 +2,12 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_filter :authenticate_user!
   skip_before_filter :check_url
   def facebook
-    facebook_login
-    return false
+    facebook_login and return
   end
   
   def facebook_mhub
     env["omniauth.auth"]['provider'] = 'facebook'
-    facebook_login
-    return false
+    facebook_login and return
   end
   
   protected
