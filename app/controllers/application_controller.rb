@@ -32,7 +32,8 @@ class ApplicationController < ActionController::Base
   end
   
   def mhub?
-    request.host.include?('mhub.cc')
+    @mhub = request.host.include?('mhub.cc') if @mhub.nil?
+    @mhub
   end
   helper_method :mhub?
   

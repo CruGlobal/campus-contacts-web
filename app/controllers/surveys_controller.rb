@@ -24,7 +24,7 @@ class SurveysController < ApplicationController
   def start
     render_404 unless params[:keyword].present?
     cookies[:survey_mode] = 1
-    redirect_to facebook_logout_url(next: contact_form_url(params[:keyword], host: 'mhub.cc'))
+    redirect_to contact_form_url(params[:keyword], host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port'])
   end
   
   def stop

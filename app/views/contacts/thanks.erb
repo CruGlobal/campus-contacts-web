@@ -4,7 +4,7 @@
   <center><h4><%= @keyword.post_survey_message.present? ? @keyword.post_survey_message : t('contacts.thanks.message') %></h4></center>
 	<br><br>
 
-  <% unless can? :manage, @keyword %>
+  <% if cookies[:survey_mode].present? %>
   	<script type="text/javascript">
       setTimeout(function() {
   			window.location="<%= facebook_logout_url(next: redirect_url) %>";      
