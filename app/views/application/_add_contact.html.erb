@@ -17,16 +17,16 @@
       <% end %>
       <%= render 'people/person_form', person: person %>
       
-      <table border="0" cellspacing="0" cellpadding="0" class="modal_person_info">
+      <div class="user_defined_contact_fields">
         <% current_organization.questions.uniq {|q| q.label}.each do |question| %>
           <% next if ['email','phone'].include?(question.slug) %>
-          <tr>
-            <td class="left"><%= raw question.label %></td>
-            <td><%= render :partial => 'questions/' + question.ptemplate, :object => question, :locals => {:col => nil} %></td>
-          </tr>
+          <div class="field">
+          	<label><%= raw question.label %></label>
+          	<%= render :partial => 'questions/' + question.ptemplate, :object => question, :locals => {:col => nil} %>
+          </div>
         <% end %>
-      </table>
-      <br/>
+      </div>
+
       <%= submit_tag 'Save and close', class: 'save_and_close save' %>
       <%= submit_tag 'Save and add another', class: 'save_and_more save' %>
     <% end %>
