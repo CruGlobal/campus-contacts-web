@@ -103,7 +103,6 @@ class LeadersController < ApplicationController
       required_fields.each do |k,v|
         flash.now[:error] += k + " is required.<br />" unless v.present?
       end
-      raise flash[:error].inspect
       render :edit and return
     end
     create and return
