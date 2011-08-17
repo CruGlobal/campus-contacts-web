@@ -38,9 +38,9 @@ class ContactsControllerTest < ActionController::TestCase
     
     context "new with received_sms_id from mobile" do
       setup do
-        @sms = Factory(:sms_session, sms_keyword: @keyword)
+        @sms = Factory(:sms_session, sms_keyword: @keyword, person: @user.person)
         get :new, received_sms_id: Base62.encode(@sms.id), format: 'mobile'
-        @person = assigns(:person)
+        @person = assigns(:person) 
       end
     
       should assign_to(:person)
@@ -100,7 +100,7 @@ class ContactsControllerTest < ActionController::TestCase
     
     context "new with received_sms_id from mobile" do
       setup do
-        @sms = Factory(:received_sms)
+        @sms = Factory(:sms_session, sms_keyword: @keyword, person: @user.person)
         get :new, received_sms_id: Base62.encode(@sms.id), format: 'mobile'
         @person = assigns(:person)
       end

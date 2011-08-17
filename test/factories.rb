@@ -4,7 +4,7 @@ FactoryGirl.define do
   factory :sms_session do
     phone_number '15555555555'
     # association :person
-    association :sms_keyword
+    # association :sms_keyword
   end
   
   factory :received_sms do
