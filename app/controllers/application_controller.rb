@@ -28,10 +28,10 @@ class ApplicationController < ActionController::Base
   end
   
   def render_404
-    if cookies[:survey_mode] && SmsKeyword.find_by_keyword(cookies[:survey_mode])
-      redirect_to "/c/#{cookies[:survey_mode]}" and return false
+    if cookies[:keyword] && SmsKeyword.find_by_keyword(cookies[:keyword])
+      redirect_to "/c/#{cookies[:keyword]}" and return false
     else
-      raise ActionController::RoutingError.new('Not Found')
+      render :file => Rails.root.join(mhub? ? 'public/404_mhub.html' : 'public/404.html'), :layout => false, :status => 404
     end
   end
   

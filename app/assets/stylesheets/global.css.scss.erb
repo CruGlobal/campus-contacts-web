@@ -82,6 +82,7 @@ img {
   }
   h1 img {
     margin-right: 5px;
+    vertical-align: sub;
   }
 }
 
@@ -622,6 +623,29 @@ ul.pillmenu {
   }
 }
 
+.pillbutton,
+.pillbutton:visited {
+  display: inline-block;
+  border: 1px solid #808080;
+  margin-right: 8px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  background: url('<%= asset_path('pillbg.png') %>') repeat-x;
+  overflow: hidden;
+  padding: 0 7px;
+  line-height: 20px;
+  height: 20px;
+  color: #000;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.pillbutton:hover {
+	background: url('<%= asset_path('pillbg_over.png') %>') repeat-x;
+  text-decoration: none;
+}
+
 
 
 #hidden_questions_div,
@@ -747,7 +771,7 @@ span.title {
   }
   .getstartedbt:hover {
     text-decoration: none;
-    background-position: 0 100%;
+    background-position: -1px 100%;
   }
   h1.headlinetext {
     font-size: 29px;
@@ -1027,6 +1051,14 @@ span.title {
 	  margin-right: 5px;
 	  float:left;
 	}
+}
+
+.top_left_notice {
+	border: 2px solid #ffb026;
+	background: #fff0d7;
+	margin-bottom: 10px;
+  margin-right: 10px;
+  padding: 8px;
 }
 
 /* WELCOME */
@@ -1399,6 +1431,29 @@ div.merge.person.preview {
 
 .confirm_merge div.merge.person {
   float:left;
+}
+
+.modal_person_info {
+	td {
+		vertical-align: middle;
+		padding: 3px 0;
+	}
+	td.left {
+		min-width: 85px;
+		float: none;
+	}
+}
+
+.user_defined_contact_fields {
+	border-top: 2px solid silver;
+	margin-top: 15px;
+	padding-top: 15px;
+	> .field {
+		margin-bottom: 15px;
+		> label {
+			font-weight: bold;
+		}
+	}
 }
 
 .flash .flash_message {

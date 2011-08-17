@@ -169,4 +169,7 @@ Mh::Application.routes.draw do
   match "oauth/done" => "oauth#done"
   #make admin portion of oauth2 rack accessible
   mount Rack::OAuth2::Server::Admin =>"/oauth/admin"
+  
+  # Monitor
+  match "monitor/:action", controller: 'monitor'
 end

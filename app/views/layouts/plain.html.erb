@@ -12,7 +12,7 @@
         <div class="gmwrap">
           <ul class="sf-menu">
             <li class="item">
-              <%= link_to(t('nav.logout'), facebook_logout_url(next: cookies[:survey_mode].present? ? contact_form_url(@keyword.keyword) : sign_out_url))  %> 
+              <%= link_to(t('nav.logout'), facebook_logout_url(next: cookies[:survey_mode].present? && cookies[:keyword].present? ? contact_form_url(cookies[:keyword]) : sign_out_url))  %> 
             </li>   
           </ul>
         </div>

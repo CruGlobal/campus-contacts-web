@@ -3,7 +3,7 @@ FactoryGirl.define do
   
   factory :sms_session do
     phone_number '15555555555'
-    association :person
+    # association :person
     association :sms_keyword
   end
   
@@ -26,7 +26,7 @@ FactoryGirl.define do
   end
   
   factory :sms_keyword do 
-    keyword 'test'
+    keyword {"test#{Factory.next(:count)}"}
     association :organization
     explanation "haoeu"
     state "requested"
