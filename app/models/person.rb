@@ -24,7 +24,7 @@ class Person < ActiveRecord::Base
   
   has_many :organization_memberships, inverse_of: :person
   has_many :organizational_roles
-  has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role::CONTACT_ID}"
+  has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role::CONTACT_ID}", uniq: true
   
   has_many :received_sms, class_name: "ReceivedSms", foreign_key: "person_id"
   has_many :sms_sessions, inverse_of: :person
