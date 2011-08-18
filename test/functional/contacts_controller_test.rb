@@ -3,7 +3,7 @@ require 'test_helper'
 class ContactsControllerTest < ActionController::TestCase
   context "Before logging in" do
     should "redirect on new" do
-      get :new
+      get :new, keyword: Factory(:sms_keyword).keyword
       assert_redirected_to '/users/sign_in'
     end
     
@@ -24,7 +24,7 @@ class ContactsControllerTest < ActionController::TestCase
       #@user = Factory(:user)
       @user = Factory(:user_with_auxs)  #user with a person object
       sign_in @user
-      @keywordDB = Factory.create(:sms_keyword)
+      @keyword = Factory.create(:sms_keyword)
     end
     
     context "on index page" do
@@ -38,9 +38,9 @@ class ContactsControllerTest < ActionController::TestCase
     
     context "new with received_sms_id from mobile" do
       setup do
-        @sms = Factory(:received_sms)
+        @sms = Factory(:sms_session, sms_keyword: @keyword, person: @user.person)
         get :new, received_sms_id: Base62.encode(@sms.id), format: 'mobile'
-        @person = assigns(:person)
+        @person = assigns(:person) 
       end
     
       should assign_to(:person)
@@ -58,7 +58,7 @@ class ContactsControllerTest < ActionController::TestCase
     context "when posting an update with good parameters" do
       setup do
         @contact = Factory(:person)
-        put :update, id: @contact.id, format: 'mobile', keyword: @keywordDB.keyword
+        put :update, id: @contact.id, format: 'mobile', keyword: @keyword.keyword
       end
       should render_template('thanks')
     end
@@ -66,7 +66,7 @@ class ContactsControllerTest < ActionController::TestCase
     context "when posting an update with bad parameters" do
       setup do
         @contact = Factory(:person)
-        put :update, id: @contact.id, format: 'mobile', person: {firstName: ''}, keyword: @keywordDB.keyword
+        put :update, id: @contact.id, format: 'mobile', person: {firstName: ''}, keyword: @keyword.keyword
       end
       should render_template('new')
     end
@@ -100,7 +100,7 @@ class ContactsControllerTest < ActionController::TestCase
     
     context "new with received_sms_id from mobile" do
       setup do
-        @sms = Factory(:received_sms)
+        @sms = Factory(:sms_session, sms_keyword: @keyword, person: @user.person)
         get :new, received_sms_id: Base62.encode(@sms.id), format: 'mobile'
         @person = assigns(:person)
       end

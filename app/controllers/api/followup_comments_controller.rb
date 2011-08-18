@@ -9,7 +9,8 @@ class Api::FollowupCommentsController < ApiController
       raise InvalidJSONError
     end
 
-    raise FollowupCommentCreateParamsError if ((@json['rejoicables'].nil?) || !(@json['followup_comment'].present?) || (@json['followup_comment']['organization_id'].nil?))
+    raise FollowupCommentCreateParamsError if @json['rejoicables'].nil? || @json['followup_comment'].blank?
+    @json['followup_comment']['organization_id'] ||= @organization.id
     
     @followup_comment = FollowupComment.create(@json['followup_comment'])
 

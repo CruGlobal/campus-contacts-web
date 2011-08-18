@@ -1,4 +1,5 @@
 class ContactsController < ApplicationController
+  prepend_before_filter :set_keyword_cookie, only: :new
   before_filter :get_person
   before_filter :prepare_for_mobile, only: [:new, :update, :thanks]
   before_filter :get_keyword, only: [:new, :update, :thanks]
@@ -97,14 +98,9 @@ class ContactsController < ApplicationController
       return false
     end
     
-    if params[:received_sms_id]
-      sms_id = Base62.decode(params[:received_sms_id])
-      sms = SmsSession.find_by_id(sms_id) || ReceivedSms.find_by_id(sms_id)
-      if sms
-        @keyword ||= sms.sms_keyword || SmsKeyword.where(keyword: sms.message.strip).first
-        @person.phone_numbers.create!(number: sms.phone_number, location: 'mobile') unless @person.phone_numbers.detect {|p| p.number_with_country_code == sms.phone_number}
-        sms.update_attribute(:person_id, @person.id) unless sms.person_id
-      end
+    if @sms
+      @person.phone_numbers.create!(number: @sms.phone_number, location: 'mobile') unless @person.phone_numbers.detect {|p| p.number_with_country_code == @sms.phone_number}
+      @sms.update_attribute(:person_id, @person.id) unless @sms.person_id
     end
     if @keyword
       @answer_sheet = get_answer_sheet(@keyword, @person)
@@ -113,7 +109,7 @@ class ContactsController < ApplicationController
         wants.mobile
       end
     else
-      redirect_to '/404.html' and return
+      render_404 and return
     end
   end
     
@@ -190,7 +186,27 @@ class ContactsController < ApplicationController
   protected
     
     def get_keyword
-      @keyword = SmsKeyword.where(keyword: params[:keyword]).first if params[:keyword]
+      if params[:keyword]
+        @keyword ||= SmsKeyword.where(keyword: params[:keyword]).first 
+      elsif params[:received_sms_id]
+        sms_id = Base62.decode(params[:received_sms_id])
+        @sms = SmsSession.find_by_id(sms_id) || ReceivedSms.find_by_id(sms_id)
+        if @sms
+          @keyword ||= @sms.sms_keyword || SmsKeyword.where(keyword: @sms.message.strip).first
+        end
+      end
+      unless @keyword
+        render_404 and return false
+      end
+    end
+    
+    def set_keyword_cookie
+      get_keyword
+      if @keyword
+        cookies[:keyword] = @keyword.keyword 
+      else
+        return false
+      end
     end
     
     def get_person

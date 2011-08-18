@@ -1,4 +1,4 @@
-<div class="inlineform">
+<div class="inlineform" data-elem-id="<%= question.id %>">
   <%= form_for question, url: question.new_record? ? sms_keyword_questions_path(@keyword) : sms_keyword_question_path(@keyword, question), 
                          method: question.new_record? ? :post : :put, remote: true, html: {class: 'question_form', id: question.new_record? ? 'new_question_form' : "form_for_#{question.id}"} do |f| %>
     <% if question.new_record? %>
@@ -8,7 +8,7 @@
                                       [t('quesitons.form.checkboxes'), 'ChoiceField:checkbox'], [t('quesitons.form.dropdown'),'ChoiceField:drop-down']]), include_blank: true, class: 'question_type') %>
     </div>
     <% end %>
-    <div class="right_col">
+    <div class="right_col" style="<%= 'display:none' if question.new_record? || question.web_only %>">
       <div class="sms_length_div">
         <label>Text Message Length:</label>
         <span class="sms_length"><%= (question.kind == 'ChoiceField' ? question.label_with_choices : question.label).to_s.length %></span> / 140
@@ -25,6 +25,7 @@
       <%= render 'multiple_choice_form', f: f %>
     </div>
     <div class="submit_button" style="<%= question.new_record? ? 'display:none' : '' %>">
+      <%= f.check_box :web_only, id: "web_only_#{f.object.id}", class: 'web_only' %> <%= t('questions.form.web_only') %><br /><br />
       <%= f.submit %>
     </div>
   <% end %>

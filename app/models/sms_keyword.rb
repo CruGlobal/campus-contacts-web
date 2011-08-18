@@ -5,6 +5,7 @@ class SmsKeyword < ActiveRecord::Base
   belongs_to :user
   has_many :question_sheets, as: :questionnable
   has_many :questions, :through => :question_sheets
+  
   belongs_to :event, polymorphic: true
   belongs_to :organization
   validates_presence_of :keyword, :explanation, :user_id, :organization_id, :post_survey_message#, :chartfield

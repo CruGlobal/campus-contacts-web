@@ -111,6 +111,7 @@ en:
       multiple_choice: 'Multiple Choice'
       checkboxes: 'Checkboxes'
       dropdown: 'Dropdown'
+      web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
     your_questions_help: "Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service."
     predefined_help: "Predefined  questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided."
   keywords:

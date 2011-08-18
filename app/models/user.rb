@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
-  include Ccc::SimplesecuritymanagerUser
+  begin
+    include Ccc::SimplesecuritymanagerUser
+  rescue LoadError; end
   WIZARD_STEPS = %w[welcome verify keyword survey leaders]
   set_table_name 'simplesecuritymanager_user'
   set_primary_key 'userID'

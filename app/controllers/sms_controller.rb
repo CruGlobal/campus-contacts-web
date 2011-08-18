@@ -135,8 +135,7 @@ class SmsController < ApplicationController
         Question.new(label: "What is your last name?")
       else
         answer_sheet = get_answer_sheet(keyword, person)
-        keyword.question_page.questions.reload
-        keyword.questions.detect {|q| q.response(answer_sheet).blank?}      
+        keyword.questions.reload.where(web_only: false).detect {|q| q.response(answer_sheet).blank?}      
       end
     end
     

@@ -39,7 +39,7 @@ class ApiCommentsTest < ActionDispatch::IntegrationTest
     should "return a json error when create params are incorrect" do
       #raise error if no org_id
       path = "/api/followup_comments/"      
-      json = ActiveSupport::JSON.encode({followup_comment: { :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, rejoicables: ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
+      json = ActiveSupport::JSON.encode({rejoicables: ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
       post path, {'access_token' => @access_token3.code, 'json' => json }
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json['error']['code'], "28")
