@@ -24,6 +24,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         sign_in(@user)
       else
         # There was a problem logging this person in
+        # This usually means the data coming back from FB didn't include an email address
         HoptoadNotifier.notify(
           :error_class => "FacebookLoginError",
           :error_messsage => "Facebook Login Error",

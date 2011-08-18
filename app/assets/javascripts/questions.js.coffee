@@ -1,6 +1,7 @@
 $ ->
   # update sms length
   $('.label, .content').live 'keyup', (event)->
+    return false if $('#web_only_' + $(this).closest('.inlineform').attr('data-elem-id')).prop("checked")
     letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
     parent = $(this).closest('.inlineform')
     sms = $('.label', parent).val()
@@ -34,19 +35,29 @@ $ ->
 	  form = $(this).closest('form')
 	  switch $(this).val()
 	    when ''
-	      $('.multiple_choice_form', form).hide()
-	      $('.short_answer_form', form).hide()
-	      $('.submit_button', form).hide()
-	    when 'TextField:short'
-	      $('.multiple_choice_form', form).hide()
-	      $('.short_answer_form', form).show()
-	      $('.submit_button', form).show()
-	    else
-	      $('.short_answer_form', form).show()
-	      $('.multiple_choice_form', form).show()
-	      $('.submit_button', form).show()
+        $('.right_col').hide()
+        $('.multiple_choice_form', form).hide()
+        $('.short_answer_form', form).hide()
+        $('.submit_button', form).hide()
+      when 'TextField:short'
+        $('.multiple_choice_form', form).hide()
+      else
+        $('.multiple_choice_form', form).show()
     false
+    if $(this).val() != ''
+      if $('#web_only_' + $(this).closest('.inlineform').attr('data-elem-id')).prop("checked")
+        $('.right_col').hide()
+      else
+        $('.right_col').show()
+      $('.short_answer_form', form).show()
+      $('.submit_button', form).show()
     
+  $('.web_only').live 'click', -> 
+    if $(this).val()
+      $(this).closest('.inlineform').find('.right_col').hide()
+    else
+      $(this).closest('.inlineform').find('.right_col').show()    
+      
   $('.question_form').submit ->
     $('#question_form').slideUp 2000
   .bind 'ajax:complete', ->
