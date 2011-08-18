@@ -28,6 +28,18 @@
         </div>
       </li>
     <% end %>
+    <% if !mhub? || @person.phone_number.blank? %>
+      <li>
+        <div data-role="fieldcontain" class="field">
+          <label class="desc" for="lastName"><%= t('contacts.form.phone_number') %></label>
+          <% if @person.phone_number.blank? %>
+            <%= f.text_field :phone_number %>
+          <% else %>
+            <%= @person.phone_number %>
+          <% end %>
+        </div>
+      </li>
+    <% end %>
     <% @keyword.questions.each do |question| %>
       <% case question.slug %>
       <% when 'email' %>
