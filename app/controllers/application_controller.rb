@@ -29,10 +29,11 @@ class ApplicationController < ActionController::Base
   
   def render_404
     if cookies[:keyword] && SmsKeyword.find_by_keyword(cookies[:keyword])
-      redirect_to "/c/#{cookies[:keyword]}" and return false
+      redirect_to "/c/#{cookies[:keyword]}"
     else
       render :file => Rails.root.join(mhub? ? 'public/404_mhub.html' : 'public/404.html'), :layout => false, :status => 404
     end
+    return false
   end
   
   def mhub?
