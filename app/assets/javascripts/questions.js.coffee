@@ -11,11 +11,11 @@ $ ->
     if sms.length >= 141
       inp = String.fromCharCode event.which
       if /[a-zA-Z0-9-_ ]/.test(inp)
-        alert('Due to restrctions on text message lengths, the total length of your question can\'t be more than 140 characters.')
-        if $('.content', parent)[0]? and $('.content', parent).val().trim() != ''
-          $('.content', parent).val($('.content', parent).val().substr(0,$('.content', parent).val().length - 1))
-        else
-          $('.label', parent).val($('.label', parent).val().substr(0,140))
+        alert('Due to restrctions on text message lengths, the total length of your question can\'t be more than 140 characters. If you exceed 140, the text will get truncated.')
+        # if $('.content', parent)[0]? and $('.content', parent).val().trim() != ''
+        #   $('.content', parent).val($('.content', parent).val().substr(0,$('.content', parent).val().length - 1))
+        # else
+        #   $('.label', parent).val($('.label', parent).val().substr(0,140))
         return false
     $('.sms_length', parent).html(sms.length)
     $('.sms_preview').html(sms)
@@ -52,11 +52,13 @@ $ ->
       $('.short_answer_form', form).show()
       $('.submit_button', form).show()
     
-  $('.web_only').live 'click', -> 
-    if $(this).val()
+  $('.web_only').live 'click', ->
+    if $(this).prop('checked')
       $(this).closest('.inlineform').find('.right_col').hide()
     else
-      $(this).closest('.inlineform').find('.right_col').show()    
+      wrapper = $(this).closest('.inlineform')
+      wrapper.find('.label').keyup()
+      wrapper.find('.right_col').show()
       
   $('.question_form').submit ->
     $('#question_form').slideUp 2000
