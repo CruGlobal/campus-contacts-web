@@ -4,3 +4,10 @@ require "rack/oauth2/server/railtie"
 
 # Initialize the rails application
 Mh::Application.initialize!
+
+if defined?(PhusionPassenger)
+  PhusionPassenger.on_event(:starting_worker_process) do |forked|
+    # Only works with DalliStore
+    Rails.cache.reset if forked
+  end
+end

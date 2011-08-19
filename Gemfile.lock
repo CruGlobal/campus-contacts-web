@@ -95,6 +95,7 @@ GEM
       execjs
     coffee-script-source (1.1.2)
     crack (0.1.8)
+    dalli (1.0.5)
     devise (1.4.2)
       bcrypt-ruby (~> 2.1.2)
       orm_adapter (~> 0.0.3)
@@ -130,7 +131,6 @@ GEM
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    memcache-client (1.8.5)
     mime-types (1.16)
     mini_fb (1.1.7)
       hashie
@@ -250,6 +250,7 @@ DEPENDENCIES
   client_side_validations
   coffee-script
   crack
+  dalli
   devise
   dynamic_form
   enforce_schema_rules
@@ -258,7 +259,6 @@ DEPENDENCIES
   hoptoad_notifier
   jquery-rails
   kaminari
-  memcache-client
   mini_fb
   mysql2
   newrelic_rpm (= 3.1.1.beta3)
