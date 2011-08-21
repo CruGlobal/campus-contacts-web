@@ -96,10 +96,16 @@ namespace :infobase do
         target = TargetArea.find(activity.fk_targetAreaID)
         m = Organization.where(importable_id: activity.id, importable_type: 'Ccc::MinistryActivity').first
         attribs = {name: "#{strategies[activity.strategy]} at #{target.name}", terminology: 'Movement', importable_id: activity.id, importable_type: 'Ccc::MinistryActivity'}
-        if m
-          m.update_attributes(attribs)
+        team = Organization.where(importable_id: activity.fk_teamID, importable_type: 'Ccc::MinistryLocallevel').first
+        if m 
+          if team == m.parent
+            m.update_attributes(attribs)
+          else
+            # The movement was moved from one team to another
+            m.parent = team
+            m.save!
+          end
         else
-          team = Organization.where(importable_id: activity.fk_teamID, importable_type: 'Ccc::MinistryLocallevel').first
           next unless team
           m = team.children.create!(attribs) 
           m.target_areas << target

@@ -2,7 +2,7 @@ class PhoneNumber < ActiveRecord::Base
   belongs_to :person
   validates_presence_of :number, :location, message: "can't be blank"
   
-  before_validation :set_primary, on: :create
+  before_create :set_primary
   after_destroy :set_new_primary
   
   def self.strip_us_country_code(num)

@@ -66,7 +66,25 @@ class Person < ActiveRecord::Base
   end
   
   def phone_number
-    primary_phone_number.try(:number)
+    @phone_number = primary_phone_number.try(:number)
+    
+    unless @phone_number
+      if phone_numbers.present?
+        @phone_number = phone_numbers.first.try(:number)
+        phone_numbers.first.update_attribute(:primary, true)
+      elsif current_address
+        @phone_number = current_address.cellPhone.strip if current_address.cellPhone.present?
+        @phone_number ||= current_address.homePhone.strip if current_address.homePhone.present?
+        @phone_number ||= current_address.workPhone.strip if current_address.workPhone.present?
+        begin
+          new_record? ? phone_numbers.new(number: @phone_number, primary: true) : phone_numbers.create(number: @phone_number, primary: true) if @phone_number.present?
+        rescue ActiveRecord::RecordNotUnique
+          reload
+          return self.phone_number
+        end
+      end
+    end
+    @phone_number.to_s
   end
   
   def pretty_phone_number
@@ -145,7 +163,7 @@ class Person < ActiveRecord::Base
     unless @email
       if email_addresses.present?
         @email = email_addresses.first.try(:email)
-        email_addresses.first.update_attribute(:primary, true)
+        email_addresses.first.update_attribute(:primary, true) unless new_record?
       else
         @email ||= current_address.try(:email)
         @email ||= user.try(:username) || user.try(:email)

@@ -152,6 +152,8 @@ class ContactsController < ApplicationController
     end
     @person, @email, @phone = create_person(params[:person])
     if @person.save
+      # @email.save
+      # @phone.save
       # save survey answers
       current_organization.keywords.each do |keyword|
         @answer_sheet = get_answer_sheet(keyword, @person)
