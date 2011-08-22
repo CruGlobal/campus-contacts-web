@@ -80,14 +80,15 @@ class ContactsController < ApplicationController
         end
       end
     end
+    @all_people = @people
     @people = @people.page(params[:page])
     respond_to do |wants|
       wants.html
       wants.csv do
         out = ""
         CSV.generate(out) do |rows|
-          rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('people.index.phone')] + @questions.collect {|q| q.label}
-          @people.each do |person|
+          rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('contacts.index.phone_number')] + @questions.collect {|q| q.label}
+          @all_people.each do |person|
             answers = [person.firstName, person.lastName, person.pretty_phone_number]
             @questions.each do |q|
               answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)}
