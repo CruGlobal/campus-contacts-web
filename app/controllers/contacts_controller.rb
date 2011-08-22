@@ -81,6 +81,25 @@ class ContactsController < ApplicationController
       end
     end
     @people = @people.page(params[:page])
+    respond_to do |wants|
+      wants.html
+      wants.csv do
+        out = ""
+        CSV.generate(out) do |rows|
+          rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('people.index.phone')] + @questions.collect {|q| q.label}
+          @people.each do |person|
+            answers = [person.firstName, person.lastName, person.pretty_phone_number]
+            @questions.each do |q|
+              answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)}
+              answers << q.display_response(answer_sheet)
+            end
+            rows << answers
+          end
+        end
+        filename = current_organization.to_s
+        send_data(out, :filename => "#{filename} - Contacts.csv", :type => 'application/csv' )
+      end
+    end
   end
   
   def mine

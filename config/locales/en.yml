@@ -145,6 +145,7 @@ en:
       do_not_contact: Do Not Contact
       completed: Completed
     index:
+      export: Export
       add_question_back: Click on a question to add it back to the page 
       unassign_contact: "Unassign contact"
       delete_contact: "Delete this contact"

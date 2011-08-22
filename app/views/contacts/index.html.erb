@@ -41,6 +41,10 @@
     <li><%= link_to(t('.filter'), '#', id: 'filter_link') %></li>
   </ul>
   
+  <ul class="pillmenu">
+    <li><%= link_to(t('.export'), params.merge(format: 'csv')) %></li>
+  </ul>
+  
   <div id="hidden_questions_div" style="display:none">
     <%= t('.add_question_back') %>
     <ul id="hidden_questions">
@@ -89,8 +93,6 @@
   
 <%= form_for ContactAssignment.new do |f| %>
   <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
-  <%#= t('.assign_to') %> 
-  <%#= select_tag :assign_to, options_for_select(@organization.leaders.collect {|l| [l.to_s, l.id]}), include_blank: true %>
   <%= hidden_field_tag :assign_to %>
   <table class="listing" cellpadding="0" cellspacing="0">
     <tr>

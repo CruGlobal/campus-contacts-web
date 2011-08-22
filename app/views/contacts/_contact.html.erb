@@ -5,6 +5,7 @@
   </td>
   <td><%= person.firstName %></td>
   <td><%= person.lastName %></td>
+  <td><%= person.phone_number %></td>
   <% current_organization.questions.where("#{PageElement.table_name}.hidden" => false).flatten.uniq.each do |q| %>
     <td class="<%= dom_id(q) %>">
       <% case q.slug %>
