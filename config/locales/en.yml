@@ -168,6 +168,7 @@ en:
       filter: 'Search'
       first_name: 'First Name'
       last_name: 'Last Name'
+      phone_number: 'Phone Number'
       leaders: Leaders
       assign_to: "Assign To:"
       assigned_to: "Assigned To"

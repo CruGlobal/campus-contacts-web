@@ -5,14 +5,12 @@
   </td>
   <td><%= person.firstName %></td>
   <td><%= person.lastName %></td>
-  <td><%= person.phone_number %></td>
+  <td><%= person.pretty_phone_number %></td>
   <% current_organization.questions.where("#{PageElement.table_name}.hidden" => false).flatten.uniq.each do |q| %>
     <td class="<%= dom_id(q) %>">
       <% case q.slug %>
       <% when 'email' %>
         <%= mail_to(person.email) %>
-      <% when 'phone' %>
-        <%= person.pretty_phone_number %>
       <% else %>
         <% answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)} %><%= q.display_response(answer_sheet) %>
       <% end %>
