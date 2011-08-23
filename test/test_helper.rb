@@ -9,17 +9,17 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rack/oauth2/server'
 require 'rails/test_help'
 require 'shoulda/rails'
-require 'ephemeral_response'
+# require 'ephemeral_response'
 require 'factory_girl'
 require 'api_test_helper'
 require File.dirname(__FILE__) + "/factories"
 
-EphemeralResponse.activate
-
-EphemeralResponse.configure do |config|
-  config.fixture_directory = "test/fixtures/ephemeral_response"
-  config.white_list = 'localhost'
-end
+# EphemeralResponse.activate
+# 
+# EphemeralResponse.configure do |config|
+#   config.fixture_directory = "test/fixtures/ephemeral_response"
+#   config.white_list = 'localhost'
+# end
 
 #Devise::OmniAuth.test_mode!
 OmniAuth.config.test_mode = true

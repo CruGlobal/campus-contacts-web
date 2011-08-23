@@ -50,7 +50,8 @@ gem "ransack"
 # and rake tasks are available in development mode:
 group :development, :test do
   gem 'shoulda'
-  gem 'ephemeral_response'
+  # gem 'ephemeral_response'
+  gem 'mocha'
   # gem 'sqlite3-ruby', require: 'sqlite3'
   gem 'factory_girl','~> 2.0.0.rc4'
 #  gem 'simplecov', '>= 0.3.5', require: false

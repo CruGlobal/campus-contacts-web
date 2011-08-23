@@ -102,7 +102,6 @@ GEM
     dynamic_form (1.1.4)
     enforce_schema_rules (0.0.16)
       activerecord
-    ephemeral_response (0.4.0)
     erubis (2.7.0)
     execjs (1.2.4)
       multi_json (~> 1.0)
@@ -135,6 +134,7 @@ GEM
     mini_fb (1.1.7)
       hashie
       rest-client
+    mocha (0.9.12)
     multi_json (1.0.3)
     multi_xml (0.2.2)
     multipart-post (1.1.3)
@@ -253,13 +253,13 @@ DEPENDENCIES
   devise
   dynamic_form
   enforce_schema_rules
-  ephemeral_response
   factory_girl (~> 2.0.0.rc4)
   hoptoad_notifier
   jquery-rails
   kaminari
   memcache-client
   mini_fb
+  mocha
   mysql2
   newrelic_rpm (= 3.1.1.beta3)
   oa-oauth

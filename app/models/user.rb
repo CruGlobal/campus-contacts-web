@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
       else
         authentication.delete if authentication
         user = signed_in_resource || User.where(["username = ? or username = ?", data['email'], data['username']]).first
-        user ||= User.create!(email: data["email"], password: Devise.friendly_token[0,20]) 
+        user ||= create!(email: data["email"], password: Devise.friendly_token[0,20]) rescue find_by_email(data['email'])
         user.save
         authentication = user.authentications.create(provider: 'facebook', uid: access_token['uid'], token: access_token['credentials']['token'])
       end
