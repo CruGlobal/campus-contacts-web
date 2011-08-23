@@ -59,7 +59,12 @@ class ContactsController < ApplicationController
           if question.object_name.present?
             table_name = case question.object_name
                          when 'person'
-                           @people = @people.where("#{Person.table_name}.#{question.attribute_name} like ?", '%' + v + '%') unless v.strip.blank?
+                           case question.attribute_name
+                           when 'email'
+                             @people = @people.includes(:email_addresses).where("#{EmailAddress.table_name}.email like ?", '%' + v + '%') unless v.strip.blank?
+                           else
+                             @people = @people.where("#{Person.table_name}.#{question.attribute_name} like ?", '%' + v + '%') unless v.strip.blank?
+                           end
                          end
           else
             @people = @people.joins(:answer_sheets => :answers).where("#{Answer.table_name}.question_id = ? AND #{Answer.table_name}.value like ?", q_id, '%' + v + '%') unless v.strip.blank?
