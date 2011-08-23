@@ -22,6 +22,10 @@ class Organization < ActiveRecord::Base
   
   def to_s() name; end
   
+  def self_and_children
+    [self] + children
+  end
+  
   def children_keywords
     SmsKeyword.where(organization_id: child_ids)
   end

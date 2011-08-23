@@ -415,7 +415,7 @@ class Person < ActiveRecord::Base
     hash['education'] = EducationHistory.get_education_history_hash(id)
     hash['location'] = latest_location.to_hash if latest_location
     hash['locale'] = user.try(:locale) ? user.locale : ""
-    hash['organization_membership'] = organization_memberships.includes(:organization).collect {|x| {org_id: x.organization_id, primary: x.primary?.to_s, name: x.organization.name}}
+    hash['organization_membership'] = organizations.collect(&:self_and_children).flatten.collect {|org| {org_id: org.id, primary: (primary_organization == org).to_s, name: org.name}}
     hash
   end
   
