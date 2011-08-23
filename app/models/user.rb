@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
           begin
             user = create!(email: data["email"], password: Devise.friendly_token[0,20]) 
           rescue 
-            user = find_by_email(data['email'])
+            user = find_by_email(data['email']) || find_by_username(data['email']) # create!(email: data["email"], password: Devise.friendly_token[0,20]) 
             raise data.inspect unless user
           end
         end
