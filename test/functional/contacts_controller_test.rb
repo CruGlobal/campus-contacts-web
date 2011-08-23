@@ -27,6 +27,13 @@ class ContactsControllerTest < ActionController::TestCase
       @keyword = Factory.create(:sms_keyword)
     end
     
+    context "creating a new contact manually" do
+      should "create a person with only an email address" do
+        xhr :post, :create, {"assigned_to" => "all", "dnc" => "", "person" => {"email_address" => {"email" => "test@uscm.org"},"firstName" => "Test","lastName" => "Test",  "phone_number" => {"number" => ""}}}
+        assert_response :success, @response.body
+      end
+    end
+    
     context "on index page" do
       setup do
         @organization = Factory(:organization)

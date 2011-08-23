@@ -21,6 +21,13 @@ class PersonTest < ActiveSupport::TestCase
   should have_many(:assigned_tos)
   should have_many(:assigned_contacts)
   
+  context "create a person from params" do
+    should "not fail if there's no phone number" do
+      person, email, phone = Person.create_from_params({"email_address" => {"email" => "test@uscm.org"},"firstName" => "Test","lastName" => "Test","phone_number" => {"number" => ""}})
+      assert_nil(phone)
+    end
+  end
+  
   context "a person" do
     setup do
       @person = Factory(:person)

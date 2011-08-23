@@ -176,8 +176,7 @@ FactoryGirl.define do
        Factory(:interest, person: f)
        Factory(:location, person: f)
        org = Factory(:organization)
-       Factory(:organization_membership, person: f, organization: org, primary: 1, validated: 0)
-       Factory(:organizational_role, person: f, organization: org, role: Role.admin)
+       org.add_admin(f)
     end
   end
   

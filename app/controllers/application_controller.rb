@@ -186,24 +186,7 @@ class ApplicationController < ActionController::Base
   helper_method :wizard_path
   
   def create_person(person_params)
-    person_params ||= {}
-    person_params[:email_address] ||= {}
-    person_params[:phone_number] ||= {}
-    # try to find this person based on their email address
-    email_address = person_params[:email_address][:email]
-    if email_address.present?
-      person = EmailAddress.find_by_email(email_address).try(:person) ||
-                Address.find_by_email(email_address).try(:person) ||
-                User.find_by_username(email_address).try(:person) 
-    end
-    person ||= Person.new(person_params.except(:email_address, :phone_number))
-    email = (person.email_addresses.find_by_email(email_address) || person.email_addresses.new(email: email_address)) if email_address.present? 
-    phone = (person.phone_numbers.find_by_number(person_params[:phone_number][:number].gsub(/[^\d]/, '')) || person.phone_numbers.new(person_params.delete(:phone_number).merge(location: 'mobile'))) if person_params[:phone_number][:number].present?
-    unless person.new_record?
-      email.save
-      phone.save
-    end
-    [person, email, phone]
+    Person.create_from_params(person_params)
   end
   
   def ensure_current_org

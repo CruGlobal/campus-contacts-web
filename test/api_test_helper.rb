@@ -12,19 +12,16 @@ def setup_api_env
   Factory.create(:authentication, user: @user)
   #@user.person.organization_memberships.create(organization_id: @temp_org.id, person_id: @user.person.id, primary: true)
   #@user.person.organizational_roles.create(organization_id: @temp_org.id, person_id: @user.person.id, role_id: Role::CONTACT_ID)
-  Factory(:organization_membership, organization: @temp_org, person: @user.person, primary: true)
-  Factory(:organizational_role, organization: @temp_org, person: @user.person, role: Role.contact)
+  @temp_org.add_contact(@user.person)
   
   @user2 = Factory.create(:user_no_org_with_facebook)
   Factory.create(:authentication, user: @user2, uid: "1234")
-  Factory.create(:organization_membership, organization: @temp_org, person: @user2.person, primary: true)
-  Factory.create(:organizational_role, organization: @temp_org, person: @user2.person, role: Role.contact)
+  @temp_org.add_contact(@user2.person)
   @user2.person.update_attributes(firstName: "Test", lastName: "Useroo")
   
   @user3 = Factory.create(:user_no_org_with_facebook)
   Factory.create(:authentication, user: @user3, uid: "123456")
-  Factory.create(:organization_membership, organization: @temp_org, person: @user3.person, primary: true)
-  Factory.create(:organizational_role, organization: @temp_org, person: @user3.person, role: Role.admin)
+  @temp_org.add_admin(@user3.person)
   @user3.person.update_attributes(firstName: "Another Test", lastName: "Usereeeee")  
     
   #create contact assignments
@@ -131,8 +128,10 @@ end
     assert_equal(json_person['education'][1]['school']['name'], "Test University")
     assert_equal(json_person['education'][2]['school']['name'], "Test University 2")
     assert_equal(json_person['interests'][1]['name'], "Test Interest 3")
-    assert_equal(json_person['organization_membership'][0]['org_id'], user.person.organizational_roles.first.organization_id)
-    assert_equal(json_person['organizational_roles'][0]['role'], user.person.organizational_roles.first.role.i18n)
-    assert_equal(json_person['organization_membership'][0]['primary'].downcase, 'true')
+    if json_person['organization_membership'].present?
+      assert_equal(json_person['organization_membership'][0]['org_id'], user.person.organizatiosn.first.id)
+      assert_equal(json_person['organizational_roles'][0]['role'], user.person.organizational_roles.first.role.i18n)
+      assert_equal(json_person['organization_membership'][0]['primary'].downcase, 'true')
+    end
   end
 end

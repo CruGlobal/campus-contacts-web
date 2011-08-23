@@ -15,7 +15,7 @@ class ApiContactTest < ActionDispatch::IntegrationTest
 
       keyword_test(@json['keywords'], @keyword)
       question_test(@json['questions'], @questions)
-      person_full_test(@json['people'][0]['person'], @user, @user2)
+      person_basic_test(@json['people'][0]['person'], @user, @user2)
       form_test(@json['people'][0]['form'], @questions, @answer_sheet)
     end
   
@@ -27,7 +27,7 @@ class ApiContactTest < ActionDispatch::IntegrationTest
       
       keyword_test(@json['keywords'], @keyword)
       question_test(@json['questions'], @questions)
-      person_full_test(@json['people'][0]['person'], @user, @user2)
+      person_basic_test(@json['people'][0]['person'], @user, @user2)
       form_test(@json['people'][0]['form'], @questions, @answer_sheet)
     end
   end
