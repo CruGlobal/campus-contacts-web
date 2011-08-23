@@ -8,11 +8,12 @@ class PeopleController < ApplicationController
   def index
     org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
     @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles)
-    @q = @people_scope.includes(:primary_phone_number, :primary_email_address).page(params[:page])
+    @q = @people_scope.includes(:primary_phone_number, :primary_email_address)
     @q = @q.where('organizational_roles.role_id' => params[:role_id]) if params[:role_id]
     @q = @q.search(params[:q])
     @q.sorts = ['lastName asc', 'firstName asc'] if @q.sorts.empty?
-    @people = @q.result(distinct: true)
+    @all_people = @q.result(distinct: true)
+    @people = @all_people.page(params[:page])
     # respond_to do |format|
     #   format.html # index.html.erb
     #   format.xml  { render xml: @people }
@@ -24,7 +25,7 @@ class PeopleController < ApplicationController
     out = ""
     CSV.generate(out) do |rows|
       rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('people.index.gender'), t('people.index.email'), t('people.index.phone'), t('people.index.year_in_school')]
-      @people.each do |person|
+      @all_people.each do |person|
         rows << [person.firstName, person.lastName, person.gender, person.email, person.pretty_phone_number, person.yearInSchool]
       end
     end
