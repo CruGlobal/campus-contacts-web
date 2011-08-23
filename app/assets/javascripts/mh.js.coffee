@@ -1,5 +1,6 @@
-$ -> 
-    
+$ ->   
+  $('.fingerme').oneFingerScroll();
+  
   $('ul.sf-menu').superfish
     dropShadows: false,
     delay: 100

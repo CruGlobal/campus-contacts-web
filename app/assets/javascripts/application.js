@@ -5,6 +5,7 @@
 //= require jquery.qtip
 //= require jquery.counter-1.0.min
 //= require jquery.observe_field.js
+//= require jquery.one_finger_scroll.js
 //= require superfish
 //= require mh
 //= require questions
