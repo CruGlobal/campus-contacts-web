@@ -70,34 +70,32 @@ class Organization < ActiveRecord::Base
     "#{name} (#{keywords.count})"
   end
   
+  def add_member(person_id)
+    OrganizationMembership.find_or_create_by_person_id_and_organization_id(person_id, id) 
+  end
+  
   def add_leader(person)
-    person_id = person.is_a?(Person) ? person.id : person
-    # First remove the contact (if there is one)
-    # remove_contact(person)
-    OrganizationMembership.find_or_create_by_person_id_and_organization_id(person_id, id)
+    person_id = person.is_a?(Person) ? person.id : personadd_member(person_id)
     OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::LEADER_ID)
   end
   
   def add_contact(person)
     person_id = person.is_a?(Person) ? person.id : person
-    # unless OrganizationalRole.find_by_person_id_and_organization_id(person_id, id)
-      OrganizationalRole.create!(person_id: person_id, organization_id: id, role_id: Role::CONTACT_ID, followup_status: OrganizationMembership::FOLLOWUP_STATUSES.first)
-      OrganizationMembership.create!(person_id: person_id, organization_id: id, primary: false) 
-    # end
+    add_member(person_id)
+    OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::CONTACT_ID)
   end
   
   def add_admin(person)
-    person_id = person.is_a?(Person) ? person.id : person
-    # First remove the contact (if there is one)
-    # remove_contact(person)
-    OrganizationMembership.find_or_create_by_person_id_and_organization_id(person_id, id) 
+    person_id = person.is_a?(Person) ? person.id : personadd_member(person_id)
     OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::ADMIN_ID)
   end
   
   def remove_contact(person)
     person_id = person.is_a?(Person) ? person.id : person
+    unless Person.find(person_id).organizational_roles.where("organization_id = ? AND role_id <> ?", id, Role::CONTACT_ID).first
+      OrganizationMembership.where(person_id: person_id, organization_id: id).first.try(:destroy)
+    end
     OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: Role::CONTACT_ID).first.try(:destroy)
-    OrganizationMembership.where(person_id: person_id, organization_id: id).first.try(:destroy)
   end
   
   rails_admin do
