@@ -28,7 +28,7 @@ class ContactsController < ApplicationController
         when 'all'
           @people = @organization.contacts.order('lastName, firstName')
         when 'unassigned'
-          @people = unassigned_people(@organization)
+          @people = unassigned_people(@organization).order('lastName, firstName')
         when 'progress'
           @people = @organization.inprogress_contacts.order('lastName, firstName')
         when 'friends'

@@ -73,7 +73,7 @@ class Organization < ActiveRecord::Base
   def add_leader(person)
     person_id = person.is_a?(Person) ? person.id : person
     # First remove the contact (if there is one)
-    remove_contact(person)
+    # remove_contact(person)
     OrganizationMembership.find_or_create_by_person_id_and_organization_id(person_id, id)
     OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::LEADER_ID)
   end
@@ -89,7 +89,7 @@ class Organization < ActiveRecord::Base
   def add_admin(person)
     person_id = person.is_a?(Person) ? person.id : person
     # First remove the contact (if there is one)
-    remove_contact(person)
+    # remove_contact(person)
     OrganizationMembership.find_or_create_by_person_id_and_organization_id(person_id, id) 
     OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::ADMIN_ID)
   end
