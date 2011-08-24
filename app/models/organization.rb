@@ -75,7 +75,8 @@ class Organization < ActiveRecord::Base
   end
   
   def add_leader(person)
-    person_id = person.is_a?(Person) ? person.id : personadd_member(person_id)
+    person_id = person.is_a?(Person) ? person.id : person
+    add_member(person_id)
     OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::LEADER_ID)
   end
   
@@ -86,7 +87,8 @@ class Organization < ActiveRecord::Base
   end
   
   def add_admin(person)
-    person_id = person.is_a?(Person) ? person.id : personadd_member(person_id)
+    person_id = person.is_a?(Person) ? person.id : person
+    add_member(person_id)
     OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::ADMIN_ID)
   end
   
