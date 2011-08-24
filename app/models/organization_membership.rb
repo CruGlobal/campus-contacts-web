@@ -36,8 +36,8 @@ class OrganizationMembership < ActiveRecord::Base
   protected
   
     def set_primary
-      if primary.nil? && person
-        self.primary = person.primary_organization ? false : true
+      if person
+        self.primary = (person.primary_organization ? false : true)
       end
       true
     end

@@ -26,7 +26,7 @@ class EmailAddress < ActiveRecord::Base
   
   def set_primary
     if person
-      self.primary = person.primary_email_address ? false : true
+      self.primary = (person.primary_email_address ? false : true)
     else 
       self.primary = true
     end

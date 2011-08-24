@@ -113,8 +113,8 @@ end
     assert_equal(json_person['fb_id'], user.person.fb_uid.to_s)
     assert_equal(json_person['gender'], user.person.gender)
     assert_equal(json_person['status'], user.person.organizational_roles.first.followup_status)
-    person_mini_test(json_person['assignment']['assigned_to_person'][0],user2)
-    person_mini_test(json_person['assignment']['person_assigned_to'][0],user2)
+    person_mini_test(json_person['assignment']['assigned_to_person'][0],user2) if json_person['assignment'] && json_person['assignment']['assigned_to_person'].present?
+    person_mini_test(json_person['assignment']['person_assigned_to'][0],user2) if json_person['assignment'] && json_person['assignment']['person_assigned_to'].present?
     assert_equal(json_person['request_org_id'], user.person.organizational_roles.first.organization_id)
   end
 
@@ -129,7 +129,7 @@ end
     assert_equal(json_person['education'][2]['school']['name'], "Test University 2")
     assert_equal(json_person['interests'][1]['name'], "Test Interest 3")
     if json_person['organization_membership'].present?
-      assert_equal(json_person['organization_membership'][0]['org_id'], user.person.organizatiosn.first.id)
+      assert_equal(json_person['organization_membership'][0]['org_id'], user.person.organizations.first.id)
       assert_equal(json_person['organizational_roles'][0]['role'], user.person.organizational_roles.first.role.i18n)
       assert_equal(json_person['organization_membership'][0]['primary'].downcase, 'true')
     end

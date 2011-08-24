@@ -54,7 +54,7 @@ class PhoneNumber < ActiveRecord::Base
   
   def set_primary
     if person
-      self.primary = person.primary_phone_number ? false : true
+      self.primary = (person.primary_phone_number ? false : true)
     end
     true
   end

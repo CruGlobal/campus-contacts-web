@@ -119,9 +119,9 @@ class Ccc::PrReview < ActiveRecord::Base
             num_copied += 1
           end
         end
-        puts "#{reviewing.person.full_name}: Found an answer sheet for this person, and copied #{num_copied} of #{reviewing.answers.count} answers over."
+        # puts "#{reviewing.person.full_name}: Found an answer sheet for this person, and copied #{num_copied} of #{reviewing.answers.count} answers over."
       else
-        puts "#{reviewing.person.full_name}: Could not find an answer sheet for this person."
+        # puts "#{reviewing.person.full_name}: Could not find an answer sheet for this person."
       end
     end
   end

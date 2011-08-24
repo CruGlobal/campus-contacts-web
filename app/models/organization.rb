@@ -90,7 +90,7 @@ class Organization < ActiveRecord::Base
     person_id = person.is_a?(Person) ? person.id : person
     # First remove the contact (if there is one)
     remove_contact(person)
-    OrganizationMembership.find_or_create_by_person_id_and_organization_id(person_id, id)
+    OrganizationMembership.find_or_create_by_person_id_and_organization_id(person_id, id) 
     OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::ADMIN_ID)
   end
   
