@@ -80,10 +80,10 @@ class Organization < ActiveRecord::Base
   
   def add_contact(person)
     person_id = person.is_a?(Person) ? person.id : person
-    unless OrganizationalRole.find_by_person_id_and_organization_id(person_id, id)
+    # unless OrganizationalRole.find_by_person_id_and_organization_id(person_id, id)
       OrganizationalRole.create!(person_id: person_id, organization_id: id, role_id: Role::CONTACT_ID, followup_status: OrganizationMembership::FOLLOWUP_STATUSES.first)
       OrganizationMembership.create!(person_id: person_id, organization_id: id, primary: false) 
-    end
+    # end
   end
   
   def add_admin(person)
