@@ -2,6 +2,9 @@ class OrganizationalRolesController < ApplicationController
   def update
     @organizational_role = OrganizationalRole.find(params[:id])
     @organizational_role.followup_status = params[:status]
+    if params[:status] == 'do_not_contact'
+      ContactAssignment.where(person_id: @organizational_role.person_id, organization_id: @organizational_role.organization_id).destroy_all
+    end
     @organizational_role.save
     respond_to do |wants|
       wants.html
