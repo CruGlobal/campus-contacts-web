@@ -358,7 +358,13 @@ class Person < ActiveRecord::Base
       opn = other.organizational_roles.detect {|oa| oa.organization_id == pn.organization_id}
       pn.merge(opn) if opn
     end
-    other.organizational_roles.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
+    other.organizational_roles.each do |role| 
+      begin
+        role.update_attribute(:person_id, id) unless role.frozen?
+      rescue Mysql2::Error
+        role.destroy
+      end
+    end
     
     # Answer Sheets
     other.answer_sheets.collect {|as| as.update_column(:person_id, id)}
