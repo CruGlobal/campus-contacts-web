@@ -114,11 +114,16 @@ class LeadersController < ApplicationController
     @person, @email, @phone = create_person(params[:person])
     @required_fields = {'First Name' => @person.firstName, 'Last Name' => @person.lastName, 'Gender' => @person.gender, 'Email' => @email.try(:email)}
     @person.valid?; @email.try(:valid?); @phone.try(:valid?)
+    error_message = ''
     unless @required_fields.values.all?(&:present?)
-      flash.now[:error] = "Please fill in all fields<br />"
+      error_message += "Please fill in all fields<br />"
       @required_fields.each do |k,v|
-        flash.now[:error] += k + " is required.<br />" unless v.present?
+        error_message += k + " is required.<br />" unless v.present?
       end
+    end
+    error_message += "Email Address isn't valid.<br />" if @email && !@email.valid? 
+    if error_message.present?
+      flash.now[:error] = error_message
       render :new and return
     end
     @person.email ||= @email.email

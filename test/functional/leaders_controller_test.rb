@@ -91,6 +91,13 @@ class LeadersControllerTest < ActionController::TestCase
       assert_template 'leaders/new'
     end
     
+    should "validate email when adding a leader" do 
+      xhr :post, :add_person, person: {firstName: 'John', lastName: 'Doe', gender: '1', email_address: {email: 'Howie Koffman <howie.kauffman@facultycommons.org>'}, phone_number: {phone: '444-444-4444'}}, notify: '1' 
+      assert_response :success 
+      assert_equal("Email Address isn't valid.<br />", flash[:error])
+      assert_template 'leaders/new'
+    end
+    
     should "update a person and add them as a leader" do
       person = Factory(:person)
       person.email = 'bad email'
