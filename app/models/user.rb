@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
     find_by_userID(args)
   end
   
-  def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
+  def self.find_for_facebook_oauth(access_token, signed_in_resource=nil, attempts = 0)
     data = access_token['extra']['user_hash']
     unless data["email"].present?
       return data.inspect
@@ -46,7 +46,11 @@ class User < ActiveRecord::Base
           rescue 
             sleep(1)
             user = find_by_email(data['email']) || find_by_username(data['email']) # create!(email: data["email"], password: Devise.friendly_token[0,20]) 
-            raise data.inspect unless user
+            if !user && attempts < 3
+              find_for_facebook_oauth(access_token, signed_in_resource, attempts + 1)
+            else
+              raise data.inspect 
+            end
           end
         end
         user.save
