@@ -314,10 +314,10 @@ class Person < ActiveRecord::Base
     
     # Locations
     other.friends.each do |friend|
-      if friends.find_by_uid_and_provider(friend.uid, friend.provider)
-        friend.destroy
-      else
+      begin
         friend.update_column(:person_id, id)
+      rescue Mysql2::Error
+        friend.destroy
       end
     end
     

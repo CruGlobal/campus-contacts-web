@@ -1,4 +1,5 @@
 class ApiController < ApplicationController  
+  extend ::Rack::OAuth2::Rails::Filters
   require 'api_errors'
   include ApiErrors
   require 'api_helper'
