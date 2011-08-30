@@ -6,7 +6,12 @@ class ContactAssignmentsController < ApplicationController
     if params[:assign_to].present?
       @assign_to = Person.find(params[:assign_to])
       params[:ids].each do |id|
-        ContactAssignment.create(person_id: id, organization_id: @organization.id, assigned_to_id: @assign_to.id)
+        begin
+          ContactAssignment.create(person_id: id, organization_id: @organization.id, assigned_to_id: @assign_to.id)
+        rescue Mysql2::Error
+          ca = ContactAssignment.find_by_organization_id_and_person_id(@organization.id, id)
+          ca.update_attribute(:assigned_to_id, @assign_to.id) if ca
+        end
       end
     else
       
