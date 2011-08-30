@@ -111,9 +111,9 @@ class SmsController < ApplicationController
           if question.kind == 'ChoiceField'
             choices = question.choices_by_letter
             # if they typed out a full answer, use that
-            answers = answer.gsub(/[^\w]/, '').split(/\s+/).collect {|a| choices.values.detect {|c| c.downcase == a.downcase} }.compact
+            answers = answer.gsub(/[^\w]/, '').split(/\s+/).collect {|a| choices.values.detect {|c| c.to_s.downcase == a.to_s.downcase} }.compact
             # if they used letter selections, convert the letter selections to real answers
-            answers = answer.gsub(/[^\w]/, '').split(//).collect {|a| choices[a.downcase]}.compact if answers.empty?
+            answers = answer.gsub(/[^\w]/, '').split(//).collect {|a| choices[a.to_s.downcase]}.compact if answers.empty?
             # only checkbox fields can have more than one answer
             answer = question.style == 'checkbox' ? answers : answers.first
           end
