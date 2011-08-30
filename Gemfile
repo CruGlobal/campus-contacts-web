@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.1.0.rc6'#, git: 'git://github.com/rails/rails.git', branch: '3-1-stable'
+gem 'rails', '3.1.0.rc8'#, git: 'git://github.com/rails/rails.git', branch: '3-1-stable'
 gem 'sass'
 gem 'coffee-script'
 gem 'uglifier'
@@ -34,7 +34,7 @@ gem 'dynamic_form'
 gem 'coffee-script'
 gem 'uglifier'
 gem 'translate-rails3', require: 'translate', git: 'git://github.com/romanbsd/translate.git'
-gem 'trumant-rack-oauth2-server', git: 'git://github.com/mattrw89/rack-oauth2-server.git', branch: 'active_record'
+gem 'trumant-rack-oauth2-server', git: 'git://github.com/twinge/rack-oauth2-server.git', branch: 'active_record'
 
 gem 'enforce_schema_rules'
 # gem 'sentient_user'
@@ -45,6 +45,7 @@ gem 'cancan'
 gem 'kaminari'
 gem 'whenever'
 gem "ransack"
+gem 'deadlock_retry'
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:

@@ -431,8 +431,9 @@ class Person < ActiveRecord::Base
   end
   
   def create_user!
-    if self.email.present? && self.primary_email_address.valid?
-      if user =  User.find_by_username(self.email)
+    reload
+    if email.present? && primary_email_address.valid?
+      if user =  User.find_by_username(email)
         if user.person
           user.person.merge(self)
           return user.person
@@ -440,7 +441,7 @@ class Person < ActiveRecord::Base
           self.user = user
         end
       else
-        self.user = User.create!(:username => self.email, :email => self.email, :password => SecureRandom.hex(10))
+        self.user = User.create!(:username => email, :email => email, :password => SecureRandom.hex(10))
       end
       self.save(validate: false)
       return self

@@ -37,17 +37,20 @@ class User < ActiveRecord::Base
         user = authentication.user
       else
         authentication.delete if authentication
-        user = signed_in_resource || User.where(["username = ? or username = ?", data['email'], data['username']]).first
+        user = signed_in_resource || User.where(username: data['email']).first
         unless user
           begin
             user = create!(email: data["email"], password: Devise.friendly_token[0,20]) 
           rescue 
+            sleep(1)
             user = find_by_email(data['email']) || find_by_username(data['email']) # create!(email: data["email"], password: Devise.friendly_token[0,20]) 
             raise data.inspect unless user
           end
         end
         user.save
-        authentication = user.authentications.create(provider: 'facebook', uid: access_token['uid'], token: access_token['credentials']['token'])
+        begin
+          authentication = user.authentications.create(provider: 'facebook', uid: access_token['uid'], token: access_token['credentials']['token'])
+        rescue; end
       end
     
       if user.person 

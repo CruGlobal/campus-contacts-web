@@ -112,18 +112,14 @@ class LeadersController < ApplicationController
   
   def add_person
     @person, @email, @phone = create_person(params[:person])
-    required_fields = {'First Name' => @person.firstName, 'Last Name' => @person.lastName, 'Gender' => @person.gender, 'Email' => @email.try(:email)}
+    @required_fields = {'First Name' => @person.firstName, 'Last Name' => @person.lastName, 'Gender' => @person.gender, 'Email' => @email.try(:email)}
     @person.valid?; @email.try(:valid?); @phone.try(:valid?)
-    unless required_fields.values.all?(&:present?)
+    unless @required_fields.values.all?(&:present?)
       flash.now[:error] = "Please fill in all fields<br />"
-      required_fields.each do |k,v|
+      @required_fields.each do |k,v|
         flash.now[:error] += k + " is required.<br />" unless v.present?
       end
       render :new and return
-    end
-    # Make sure we have a user for this person
-    unless @person.user
-      @person.user = User.create!(:username => @email.email, :email => @email.email, :password => SecureRandom.hex(10))
     end
     @person.email ||= @email.email
     @person.save!
