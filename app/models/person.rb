@@ -402,7 +402,7 @@ class Person < ActiveRecord::Base
       if r.role_id != Role::CONTACT_ID && om = organization_memberships.where(organization_id: r.organization_id).first
         {org_id: r.organization_id, role: r.role.i18n, name: r.organization.name, primary: om.primary? ? 'true' : 'false'}
       end
-    end
+    end.compact
     hash
   end
   

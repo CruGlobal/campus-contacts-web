@@ -26,7 +26,12 @@ class EmailAddress < ActiveRecord::Base
   
   def set_primary
     if person
-      self.primary = (person.primary_email_address ? false : true)
+      if person.primary_email_address && person.primary_email_address.valid?
+        self.primary = false
+      else
+        person.primary_email_address.try(:destroy)
+        self.primary = true
+      end
     else 
       self.primary = true
     end

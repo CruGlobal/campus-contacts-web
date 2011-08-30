@@ -87,22 +87,22 @@ class LeadersController < ApplicationController
   def update
     @person = Person.find(params[:id])
     if params[:person]
-      email_attributes = params[:person].delete(:email_address)
-      phone_attributes = params[:person].delete(:phone_number)
+      email_attributes = params[:person].delete(:email_address) || {} 
+      phone_attributes = params[:person].delete(:phone_number) || {}
       if email_attributes[:email].present?
         @email = @person.email_addresses.find_or_create_by_email(email_attributes[:email])
       end
       if phone_attributes[:phone].present?
-        @phone = @person.phone_numbers.find_or_create_by_number(phone_attributes[:phone][-10..-1])
+        @phone = @person.phone_numbers.find_or_create_by_number(PhoneNumber.strip_us_country_code(phone_attributes[:phone]))
       end
       @person.save
       @person.update_attributes(params[:person])
     end
-    required_fields = {'First Name' => @person.firstName, 'Last Name' => @person.lastName, 'Gender' => @person.gender, 'Email' => @email.try(:email)}
+    @required_fields = {'First Name' => @person.firstName, 'Last Name' => @person.lastName, 'Gender' => @person.gender, 'Email' => @email.try(:email)}
     @person.valid?; @email.try(:valid?); @phone.try(:valid?)
-    unless required_fields.values.all?(&:present?)
+    unless @required_fields.values.all?(&:present?)
       flash.now[:error] = "Please fill in all fields<br />"
-      required_fields.each do |k,v|
+      @required_fields.each do |k,v|
         flash.now[:error] += k + " is required.<br />" unless v.present?
       end
       render :edit and return

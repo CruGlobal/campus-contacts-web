@@ -20,7 +20,7 @@ class EmailAddressTest < ActiveSupport::TestCase
       person = Factory(:person)
       email1 = @person.email_addresses.create(email: 'test@example.com')
       assert(!email1.new_record?, email1.errors.full_messages.join(','))
-      email2 = @person.email_addresses.create(email: 'test2@ecample.com')
+      email2 = @person.email_addresses.create(email: 'test2@example.com')
       assert(!email2.new_record?, email2.errors.full_messages.join(','))
       assert_equal(email2.person, email1.person)
       assert(email1.primary?, "first email should be primary")
