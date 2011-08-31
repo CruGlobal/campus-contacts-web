@@ -6,7 +6,6 @@ gem 'coffee-script'
 gem 'uglifier'
 gem 'jquery-rails'
 
-gem 'sprockets'#, :git => 'git://github.com/sstephenson/sprockets.git'
 gem 'mysql2'
 gem 'rack-offline'
 gem 'capistrano'
@@ -24,8 +23,8 @@ gem 'ancestry'
 # gem 'rails_admin', git: 'git://github.com/twinge/rails_admin.git', branch: 'configure_list_view_width'
 gem 'rails_admin', git: 'git://github.com/sferik/rails_admin.git'
 
-# gem 'dalli'#, git: 'git://github.com/mperham/dalli.git'
-gem 'memcache-client'
+gem 'dalli'#, git: 'git://github.com/mperham/dalli.git'
+# gem 'memcache-client'
 
 gem 'newrelic_rpm', '3.1.1.beta3'
 gem "state_machine"
