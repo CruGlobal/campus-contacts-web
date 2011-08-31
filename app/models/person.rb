@@ -123,7 +123,7 @@ class Person < ActiveRecord::Base
       unless email_addresses.detect {|e| e.email == data['email']}
         begin
           email_addresses.find_or_create_by_email(data['email'].try(:strip)) if data['email'].try(:strip).present?
-        rescue Mysql2::Error
+        rescue
           return self
         end
       end
@@ -316,7 +316,7 @@ class Person < ActiveRecord::Base
     other.friends.each do |friend|
       begin
         friend.update_column(:person_id, id)
-      rescue Mysql2::Error
+      rescue
         friend.destroy
       end
     end
@@ -347,7 +347,7 @@ class Person < ActiveRecord::Base
     other.email_addresses.each do |pn| 
       begin
         pn.update_attribute(:person_id, id) unless pn.frozen?
-      rescue Mysql2::Error
+      rescue
         pn.destroy
       end
     end
@@ -367,7 +367,7 @@ class Person < ActiveRecord::Base
     other.organizational_roles.each do |role| 
       begin
         role.update_attribute(:person_id, id) unless role.frozen?
-      rescue Mysql2::Error
+      rescue
         role.destroy
       end
     end
