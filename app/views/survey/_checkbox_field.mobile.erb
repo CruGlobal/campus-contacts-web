@@ -5,6 +5,6 @@
     <%= check_box_tag "answers[#{checkbox_field.id}][#{num}]", choice[1],
           checkbox_field.has_answer?(choice[1], @answer_sheet), 
           :id => dom_id %>
-    <label class="choice" for="<%= dom_id %>"><%= raw word_wrap(choice[0].to_s, line_width: 30).gsub(/\n/,'<br>') %></label>
+    <label class="choice" for="<%= dom_id %>"><%= raw word_wrap(choice[0], line_width: 30).gsub(/\n/,'<br>') %></label>
   <% end -%>
 </fieldset>
