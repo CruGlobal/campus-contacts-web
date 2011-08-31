@@ -6,7 +6,7 @@ gem 'coffee-script'
 gem 'uglifier'
 gem 'jquery-rails'
 
-gem 'sprockets', :git => 'git://github.com/sstephenson/sprockets.git'
+gem 'sprockets'#, :git => 'git://github.com/sstephenson/sprockets.git'
 gem 'mysql2'
 gem 'rack-offline'
 gem 'capistrano'
