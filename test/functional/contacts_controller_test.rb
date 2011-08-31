@@ -95,7 +95,7 @@ class ContactsControllerTest < ActionController::TestCase
       @user = Factory(:user_no_org)  #user with a person object
       sign_in @user
       @organization = Factory(:organization)
-      @keyword = Factory.create(:sms_keyword, organization: @organization)
+      @keyword = Factory.create(:approved_keyword, organization: @organization)
     end
     
     context "on index page" do
@@ -129,6 +129,10 @@ class ContactsControllerTest < ActionController::TestCase
         get :new, keyword: @keyword.keyword
       end
       should respond_with(:success)
+      should render_template('new')
+      should "not show archived questions" do
+        assert_equal(1, assigns(:questions).length)
+      end
     end
   end
 

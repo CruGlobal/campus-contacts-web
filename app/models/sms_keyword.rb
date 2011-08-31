@@ -5,6 +5,7 @@ class SmsKeyword < ActiveRecord::Base
   belongs_to :user
   has_many :question_sheets, as: :questionnable
   has_many :questions, :through => :question_sheets
+  has_many :archived_questions, :through => :question_sheets
   
   belongs_to :event, polymorphic: true
   belongs_to :organization
@@ -52,9 +53,9 @@ class SmsKeyword < ActiveRecord::Base
     @question_page ||= question_sheet.pages.first || question_sheet.pages.create(number: 1)
   end
   
-  def questions
-    question_sheet.questions
-  end
+  # def questions
+  #   question_sheet.questions
+  # end
   
   def keyword_with_state
     "#{keyword} (#{state})"

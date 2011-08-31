@@ -8,6 +8,7 @@ class SmsKeywords::QuestionsController < ApplicationController
   def index
     session[:wizard] = false
     @questions = @keyword.questions.all
+    @archived_questions = @keyword.archived_questions
     respond_to do |wants|
       wants.html # index.html.erb
       wants.xml  { render xml: @questions }
@@ -57,7 +58,14 @@ class SmsKeywords::QuestionsController < ApplicationController
       type, style = params[:question_type].split(':')
       @question = type.constantize.create!(params[:question].merge(style: style))
     end
-    @keyword.question_page.elements << @question
+    
+    # If this was an archived question, unarchive it. otherwise, add it
+    if @keyword.archived_questions.include?(@question)
+      pe = PageElement.where(page_id: @keyword.question_page.id, element_id: @question.id).first
+      pe.update_attribute(:archived, false)
+    else
+      @keyword.question_page.elements << @question
+    end
 
     respond_to do |wants|
       if !@question.new_record?
@@ -95,7 +103,8 @@ class SmsKeywords::QuestionsController < ApplicationController
   def destroy
     # If a question is on more than one page, or has been answered, remove it from this question sheet, but don't delete it for real.
     if @question.pages.length > 1 || (@question.respond_to?(:sheet_answers) && @question.sheet_answers.count > 0)
-      PageElement.where(page_id: @keyword.question_page.id, element_id: @question.id).first.try(:destroy)
+      pe = PageElement.where(page_id: @keyword.question_page.id, element_id: @question.id).first
+      pe.update_attribute(:archived, true) if pe
     else
       @question.destroy
     end

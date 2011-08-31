@@ -225,6 +225,7 @@ class ContactsController < ApplicationController
       unless @keyword
         render_404 and return false
       end
+      @questions = @keyword.questions
     end
     
     def set_keyword_cookie

@@ -40,7 +40,7 @@
         </div>
       </li>
     <% end %>
-    <% @keyword.questions.each do |question| %>
+    <% @questions.each do |question| %>
       <% case question.slug %>
       <% when 'email' %>
         <% if !mhub? || @person.email.blank? %>

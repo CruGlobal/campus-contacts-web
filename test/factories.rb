@@ -46,8 +46,10 @@ FactoryGirl.define do
     after_create do |x| 
       question_sheet = Factory(:question_sheet, questionnable: x)
       page = Factory(:page, question_sheet: question_sheet)
+      element = Factory(:choice_field, label: 'foobar')
+      Factory(:page_element, page: page, element: element, position: 1, archived: true)
       element = Factory(:choice_field)
-      Factory(:page_element, page: page, element: element)
+      Factory(:page_element, page: page, element: element, position: 2)
     end
   end
   

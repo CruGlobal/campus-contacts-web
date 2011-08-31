@@ -46,9 +46,6 @@
   </table>
   
   
-  
-  
-  
   <h3>Your Questions (drag to sort) <span class="tiplight" title="<%= t('questions.your_questions_help') %>"></span> </h3>
   <table border="0" cellspacing="0" cellpadding="0" class="yourquestions fakesort">
     <tbody>
@@ -75,6 +72,15 @@
     </tbody>
   </table>  
   
+  
+  <h3>Archived Questions <span class="tiplight" title="<%= t('questions.predefined_help') %>"></span></h3>
+  <table border="0" cellspacing="5" cellpadding="0" class="yourquestions">
+    <tbody id="archived_questions">
+      <% @archived_questions.each do |question| %>
+        <%= render 'predefined_question', question: question %>
+      <% end %>
+    </tbody>
+  </table>
   <%= link_to('+ Add a question', '', id: 'add_question_link', class: "inlinebutton") %>
   
   <div id="question_form" style="display:none">
