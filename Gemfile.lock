@@ -1,10 +1,4 @@
 GIT
-  remote: git://github.com/mperham/dalli.git
-  revision: 51fae4f2dc93bf633e00783ad44108b0eba31224
-  specs:
-    dalli (1.1.0)
-
-GIT
   remote: git://github.com/romanbsd/translate.git
   revision: 01f2c402075183718edd496300814a4a9c40a6eb
   specs:
@@ -135,6 +129,7 @@ GEM
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    memcache-client (1.8.5)
     mime-types (1.16)
     mini_fb (1.1.7)
       hashie
@@ -258,7 +253,6 @@ DEPENDENCIES
   client_side_validations
   coffee-script
   crack
-  dalli!
   deadlock_retry
   devise
   dynamic_form
@@ -267,6 +261,7 @@ DEPENDENCIES
   hoptoad_notifier
   jquery-rails
   kaminari
+  memcache-client
   mini_fb
   mocha
   mysql2
