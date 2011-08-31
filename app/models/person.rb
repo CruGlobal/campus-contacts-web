@@ -344,7 +344,13 @@ class Person < ActiveRecord::Base
       opn = other.email_addresses.detect {|oa| oa.email == pn.email}
       pn.merge(opn) if opn
     end
-    other.email_addresses.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
+    other.email_addresses.each do |pn| 
+      begin
+        pn.update_attribute(:person_id, id) unless pn.frozen?
+      rescue Mysql2::Error
+        pn.destroy
+      end
+    end
     
     # Organization Memberships
     organization_memberships.each do |pn|
