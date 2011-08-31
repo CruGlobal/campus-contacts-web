@@ -21,7 +21,7 @@ class SmsController < ApplicationController
       render nothing: true and return
     when 'help'
       @msg = 'MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to http://mhub.cc/ for more help.'
-      send_message(@msg, sms_params()[:phone_number])
+      send_message(@msg, sms_params[:phone_number])
       render text: @msg + "\n" and return
     when ''
       render nothing: true and return
@@ -81,7 +81,7 @@ class SmsController < ApplicationController
         @sms_params[:phone_number] = params[:device_address]
         @sms_params[:shortcode] = params[:inbound_address]
         @sms_params[:received_at] = DateTime.strptime(params[:timestamp], '%m/%d/%Y %H:%M:%S')
-        @sms_params[:message] = params[:message].strip.gsub(/\n+/, ' ')
+        @sms_params[:message] = params[:message].strip.gsub(/\n/, ' ')
       end
       @sms_params
     end
