@@ -26,7 +26,8 @@ gem 'rails_admin', git: 'git://github.com/sferik/rails_admin.git'
 # gem 'dalli'#, git: 'git://github.com/mperham/dalli.git'
 gem 'memcache-client'
 
-gem 'newrelic_rpm', '3.1.1.beta3'
+gem 'valium'
+gem 'newrelic_rpm', '3.1.1'
 gem "state_machine"
 gem 'acts_as_list'
 gem 'dynamic_form'

@@ -28,7 +28,7 @@ class Ability
       end
       
       # involved members can see other people's info
-      can :read, Person, organizations: {id: user.person.organizational_roles.where(role_id: involved_role.id).collect(&:organization_id)}
+      can :read, Person, organizations: {id: user.person.organizational_roles.where(role_id: involved_role.id)[:organization_id]}
       
       can :all, :all if user.developer?
       

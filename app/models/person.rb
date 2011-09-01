@@ -314,10 +314,10 @@ class Person < ActiveRecord::Base
     
     # Locations
     other.friends.each do |friend|
-      begin
-        friend.update_column(:person_id, id)
-      rescue
+      if friend_ids.include?(friend.id)
         friend.destroy
+      else
+        friend.update_column(:person_id, id) 
       end
     end
     
@@ -344,11 +344,12 @@ class Person < ActiveRecord::Base
       opn = other.email_addresses.detect {|oa| oa.email == pn.email}
       pn.merge(opn) if opn
     end
+    emails = email_address.collect(&:email)
     other.email_addresses.each do |pn| 
-      begin
-        pn.update_attribute(:person_id, id) unless pn.frozen?
-      rescue
+      if emails.include?(pn.email)
         pn.destroy
+      else
+        pn.update_attribute(:person_id, id) unless pn.frozen?
       end
     end
     

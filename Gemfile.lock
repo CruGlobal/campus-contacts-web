@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: git://github.com/sferik/rails_admin.git
-  revision: c458f1424d1c44514e2ace7fd4bc342f04f614e6
+  revision: 0c85e54e99a90cf53fc1590ec3d1cc0d6075cf89
   specs:
     rails_admin (0.0.1)
       builder (~> 3.0.0)
@@ -137,7 +137,7 @@ GEM
     net-ssh (2.2.1)
     net-ssh-gateway (1.1.0)
       net-ssh (>= 1.99.1)
-    newrelic_rpm (3.1.1.beta3)
+    newrelic_rpm (3.1.1)
     oa-core (0.2.6)
     oa-oauth (0.2.6)
       faraday (~> 0.6.1)
@@ -226,6 +226,8 @@ GEM
       kgio (~> 2.4)
       rack
       raindrops (~> 0.6)
+    valium (0.2.1)
+      activerecord (>= 3.0.2)
     vegas (0.1.8)
       rack (>= 1.0.0)
     warden (1.0.5)
@@ -260,7 +262,7 @@ DEPENDENCIES
   mini_fb
   mocha
   mysql2
-  newrelic_rpm (= 3.1.1.beta3)
+  newrelic_rpm (= 3.1.1)
   oa-oauth
   paper_trail (~> 2)
   rack-offline
@@ -281,4 +283,5 @@ DEPENDENCIES
   trumant-rack-oauth2-server!
   uglifier
   unicorn
+  valium
   whenever
