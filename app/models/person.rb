@@ -344,7 +344,7 @@ class Person < ActiveRecord::Base
       opn = other.email_addresses.detect {|oa| oa.email == pn.email}
       pn.merge(opn) if opn
     end
-    emails = email_address.collect(&:email)
+    emails = email_addresses.collect(&:email)
     other.email_addresses.each do |pn| 
       if emails.include?(pn.email)
         pn.destroy
