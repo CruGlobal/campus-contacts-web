@@ -7,7 +7,7 @@ class SmsKeywords::QuestionsController < ApplicationController
   # GET /questions.xml
   def index
     session[:wizard] = false
-    @questions = @keyword.questions.all
+    @questions = @keyword.questions
     @archived_questions = @keyword.archived_questions
     respond_to do |wants|
       wants.html # index.html.erb

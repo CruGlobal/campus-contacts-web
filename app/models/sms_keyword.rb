@@ -4,7 +4,7 @@ class SmsKeyword < ActiveRecord::Base
   
   belongs_to :user
   has_many :question_sheets, as: :questionnable
-  has_many :questions, :through => :question_sheets
+  has_many :questions, :through => :question_sheets, :order => 'mh_page_elements.position'
   has_many :archived_questions, :through => :question_sheets
   
   belongs_to :event, polymorphic: true
