@@ -69,9 +69,14 @@
           <%= text_field_tag :phone_number, params[:phone_number] %><br>
         </div>
         <div class="field">
-          <label for="last_name"><span class="title">Gender</span></label>
-          <%= check_box_tag :gender, '1', params[:gender] == '1' %> Male
-          <%= check_box_tag :gender, '0', params[:gender] == '0' %> Female<br>
+          <label for="gender"><span class="title">Gender</span></label>
+          <%= radio_button_tag :gender, '1', params[:gender] == '1' %> Male
+          <%= radio_button_tag :gender, '0', params[:gender] == '0' %> Female
+          <%= radio_button_tag :gender, '', params[:gender] == '' %> Both<br>
+        </div>
+        <div class="field">
+          <label for="status"><span class="title">Status</span></label>
+          <%= select_tag :status, options_for_select(OrganizationMembership::FOLLOWUP_STATUSES.collect(&:titleize), params[:gender]), include_blank: true %><br>
         </div>
       </div>
       <!-- Email: <%#= text_field_tag :email, params[:email] %> -->
