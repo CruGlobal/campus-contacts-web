@@ -99,9 +99,9 @@ class ContactsController < ApplicationController
       wants.csv do
         out = ""
         CSV.generate(out) do |rows|
-          rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('contacts.index.phone_number')] + @questions.collect {|q| q.label}
+          rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('contacts.index.phone_number'), t('people.index.gender')] + @questions.collect {|q| q.label}
           @all_people.each do |person|
-            answers = [person.firstName, person.lastName, person.pretty_phone_number]
+            answers = [person.firstName, person.lastName, person.pretty_phone_number, person.gender.to_s.titleize]
             @questions.each do |q|
               answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)}
               answers << q.display_response(answer_sheet)
