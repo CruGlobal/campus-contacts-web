@@ -50,6 +50,12 @@ class ContactsController < ApplicationController
     if params[:email].present?
       @people = @people.includes(:primary_email_address).where("email_addresses.email like ?", '%' + params[:email].strip + '%')
     end
+    if params[:phone_number].present?
+      @people = @people.includes(:primary_phone_number).where("phone_numbers.number like ?", '%' + PhoneNumber.strip_us_country_code(params[:phone_number]) + '%')
+    end
+    if params[:gender].present?
+      @people = @people.where("gender = ?", params[:gender].strip)
+    end
     
     if params[:answers].present?
       params[:answers].each do |q_id, v|
