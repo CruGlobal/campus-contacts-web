@@ -76,7 +76,7 @@
         </div>
         <div class="field">
           <label for="status"><span class="title">Status</span></label>
-          <%= select_tag :status, options_for_select(OrganizationMembership::FOLLOWUP_STATUSES.collect(&:titleize), params[:gender]), include_blank: true %><br>
+          <%= select_tag :status, options_for_select(OrganizationMembership::FOLLOWUP_STATUSES.collect {|s| [s.titleize, s]}, params[:status]), include_blank: true %><br>
         </div>
       </div>
       <!-- Email: <%#= text_field_tag :email, params[:email] %> -->

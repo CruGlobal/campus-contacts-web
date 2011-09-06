@@ -56,6 +56,9 @@ class ContactsController < ApplicationController
     if params[:gender].present?
       @people = @people.where("gender = ?", params[:gender].strip)
     end
+    if params[:status].present?
+      @people = @people.where("organizational_roles.followup_status = ?", params[:status].strip)
+    end
     
     if params[:answers].present?
       params[:answers].each do |q_id, v|

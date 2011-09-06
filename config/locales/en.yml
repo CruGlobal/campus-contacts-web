@@ -209,7 +209,7 @@ en:
       email: "Email"
       status: "Status"
       attach_rejoicable: 'Attach a Rejoicable'
-      add_comment: 'Add Comment'
+      add_comment: 'Add Comment / Update Status'
     thanks:
       message: Thank you for your interest.
       done: Done
