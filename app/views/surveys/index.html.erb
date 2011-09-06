@@ -3,7 +3,7 @@
 <ul>
   <% @keywords.each do |keyword| %>
     <li>
-      <%= link_to keyword.keyword, "#{facebook_logout_url}?next=#{root_url}c/#{keyword.keyword}" %>
+      <%= link_to(keyword.keyword, start_survey_url(keyword.keyword, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port'])) %>
     </li>
   <% end %>
 </ul>

@@ -1,8 +1,7 @@
 <% provide :title, "Pick a Keyword" %>
 
 <div data-role="controlgroup">
-    <% @keywords.each do |keyword| %>
-    <% url = "#{facebook_logout_url}?next=#{root_url}c/#{keyword.keyword}" %>
-    <%= link_to keyword.keyword, url, {"data-role" => "button", "data-icon" => "arrow-r", "data-iconpos" => "right"} %>
-    <% end %>
+  <% @keywords.each do |keyword| %>
+    <%= link_to(keyword.keyword, start_survey_url(keyword.keyword, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), {"data-role" => "button", "data-icon" => "arrow-r", "data-iconpos" => "right"}) %>
+  <% end %>
 </div>
