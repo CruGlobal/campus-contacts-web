@@ -4,6 +4,7 @@ notifications:
     - josh.starcher@cojourners.com
     
 before_script:
+  - "sudo /etc/init.d/redis-server start"
   - "git submodule init"
   - "git submodule update"
   - "cp /home/vagrant/builds/twinge/missionhub/config/database.example.yml /home/vagrant/builds/twinge/missionhub/config/database.yml >/dev/null"
