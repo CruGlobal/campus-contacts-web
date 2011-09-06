@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: git://github.com/sferik/rails_admin.git
-  revision: 964c980ab711625e1af1bfe96e0beb7e4b757889
+  revision: 08e296957f04ed07c7ad930ed41e66cb1e3c41ef
   specs:
     rails_admin (0.0.1)
       builder (~> 3.0.0)
@@ -90,6 +90,7 @@ GEM
       execjs
     coffee-script-source (1.1.2)
     crack (0.1.8)
+    dalli (1.1.2)
     deadlock_retry (1.1.1)
     devise (1.4.4)
       bcrypt-ruby (~> 3.0)
@@ -124,7 +125,6 @@ GEM
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    memcache-client (1.8.5)
     metaclass (0.0.1)
     mime-types (1.16)
     mini_fb (1.1.7)
@@ -265,6 +265,7 @@ DEPENDENCIES
   coffee-rails (~> 3.1.0)
   coffee-script
   crack
+  dalli
   deadlock_retry
   devise
   dynamic_form
@@ -273,7 +274,6 @@ DEPENDENCIES
   hoptoad_notifier
   jquery-rails
   kaminari
-  memcache-client
   mini_fb
   mocha
   mysql2

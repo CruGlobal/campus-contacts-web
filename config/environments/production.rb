@@ -25,8 +25,8 @@ Mh::Application.configure do
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
-  config.cache_store = :mem_cache_store
-  # config.cache_store = :dalli_store,  { :namespace => 'MissionHubCache', :expire_after => 1.day, :compress => true }
+  # config.cache_store = :mem_cache_store
+  config.cache_store = :dalli_store,  { :namespace => 'MissionHubCache', :expire_after => 1.day, :compress => true }
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
