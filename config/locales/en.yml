@@ -145,6 +145,8 @@ en:
       do_not_contact: Do Not Contact
       completed: Completed
     index:
+      gender: Gender
+      status: Status
       export: Export
       add_question_back: Click on a question to add it back to the page 
       unassign_contact: "Unassign contact"

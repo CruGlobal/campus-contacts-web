@@ -95,13 +95,16 @@ class ContactsController < ApplicationController
     @all_people = @people
     @people = @people.page(params[:page])
     respond_to do |wants|
-      wants.html
+      wants.html do
+        @roles = Hash[OrganizationalRole.active.where(role_id: Role::CONTACT_ID, person_id: @people.collect(&:id)).map {|r| [r.person_id, r]}]
+      end
       wants.csv do
+        @roles = Hash[OrganizationalRole.active.where(role_id: Role::CONTACT_ID, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r]}]
         out = ""
         CSV.generate(out) do |rows|
-          rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('contacts.index.phone_number'), t('people.index.gender')] + @questions.collect {|q| q.label}
+          rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('contacts.index.status'), t('people.index.gender'), t('contacts.index.phone_number')] + @questions.collect {|q| q.label}
           @all_people.each do |person|
-            answers = [person.firstName, person.lastName, person.pretty_phone_number, person.gender.to_s.titleize]
+            answers = [person.firstName, person.lastName, @roles[person.id].followup_status.to_s.titleize, person.gender.to_s.titleize, person.pretty_phone_number]
             @questions.each do |q|
               answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)}
               answers << q.display_response(answer_sheet)

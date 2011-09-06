@@ -5,6 +5,10 @@
   </td>
   <td><%= person.firstName %></td>
   <td><%= person.lastName %></td>
+  <% if @roles %>
+    <td><%= @roles[person.id].followup_status.to_s.titleize %></td>
+  <% end %>
+  <td><%= person.gender.to_s.titleize %></td>
   <td><%= person.pretty_phone_number %></td>
   <% current_organization.questions.where("#{PageElement.table_name}.hidden" => false).flatten.uniq.each do |q| %>
     <td class="<%= dom_id(q) %>">

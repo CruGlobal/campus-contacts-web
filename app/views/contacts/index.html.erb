@@ -108,6 +108,8 @@
       <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment' %></th>
       <th><%= t('.first_name') %></th>
       <th><%= t('.last_name') %></th>
+      <th><%= t('.status') %></th>
+      <th><%= t('.gender') %></th>
       <th><%= t('.phone_number') %></th>
       <% @questions.each do |q| %>
         <th class="<%= dom_id(q) %>">
