@@ -100,15 +100,4 @@ class Organization < ActiveRecord::Base
     OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: Role::CONTACT_ID).first.try(:destroy)
   end
   
-  rails_admin do
-    object_label_method {:name_with_keyword_count}
-    edit do
-      field :name
-      field :requires_validation
-      field :validation_method, :enum
-      field :terminology, :enum do
-        help "What do you refer to this organization as? i.e. a Ministry, a Movement, etc"
-      end
-    end
-  end
 end

@@ -1,9 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'rails', '~>3.1.0'#, git: 'git://github.com/rails/rails.git', branch: '3-1-stable'
-gem 'sass'
-gem 'coffee-script'
-gem 'uglifier'
 gem 'jquery-rails'
 
 gem 'mysql2'
@@ -62,8 +59,19 @@ group :development, :test do
   gem 'railroady'
   gem 'awesome_print'
   gem 'active_reload'
+  # Pretty printed test output
+  gem 'turn', :require => false
 end
+
 
 group :performance do
   gem 'ruby-prof'
+end
+
+# Gems used only for assets and not required
+# in production environments by default.
+group :assets do
+  gem 'sass-rails', "  ~> 3.1.0"
+  gem 'coffee-rails', "~> 3.1.0"
+  gem 'uglifier'
 end
