@@ -167,19 +167,19 @@ class ContactsController < ApplicationController
       create_contact_at_org(@person, @keyword.organization) if @keyword
       respond_to do |wants|
         wants.html do
-          if request.referrer && request.referrer.include?('edit')
-            redirect_to contact_path(@person)
-          else
+          if mhub?
             render :thanks, layout: 'plain'
+          else
+            redirect_to contact_path(@person)
           end
         end
         wants.mobile { render :thanks }
       end
     else
-      if request.referrer && request.referrer.include?('edit')
-        render :edit
-      else
+      if mhub?
         render :new, layout: 'plain'
+      else
+        render :edit
       end
     end
   end
