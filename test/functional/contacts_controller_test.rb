@@ -73,6 +73,7 @@ class ContactsControllerTest < ActionController::TestCase
     context "when posting an update with bad parameters" do
       setup do
         @contact = Factory(:person)
+        @request.host = 'mhub.cc'
         put :update, id: @contact.id, format: 'mobile', person: {firstName: ''}, keyword: @keyword.keyword
       end
       should render_template('new')
