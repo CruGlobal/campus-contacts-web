@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   before_filter :authenticate_user!, :except => [:facebook_logout]
+  before_filter :set_login_cookie
   before_filter :check_su
   before_filter :set_locale
   before_filter :check_url, except: :facebook_logout
@@ -22,6 +23,14 @@ class ApplicationController < ActionController::Base
   end
   
   protected
+  
+  def set_login_cookie
+    if user_signed_in?
+      cookies['logged_in'] = true unless cookies['logged_in']
+    else
+      cookies['logged_in'] = nil if cookies['logged_in']
+    end
+  end
   
   def check_url
     render_404 if mhub?
