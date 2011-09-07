@@ -57,25 +57,25 @@
       <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
       <div class="ononeline">
         <div class="field">
-          <label for="first_name"><span class="title">First Name</span></label> 
+          <label for="first_name"><span class="title"><%= t('.first_name') %></span></label> 
           <%= text_field_tag :first_name, params[:first_name] %><br>
         </div>
         <div class="field">
-          <label for="last_name"><span class="title">Last Name</span></label>
+          <label for="last_name"><span class="title"><%= t('.last_name') %></span></label>
           <%= text_field_tag :last_name, params[:last_name] %><br>
         </div>
         <div class="field">
-          <label for="last_name"><span class="title">Phone Number</span></label>
+          <label for="last_name"><span class="title"><%= t('.phone_number') %></span></label>
           <%= text_field_tag :phone_number, params[:phone_number] %><br>
         </div>
         <div class="field">
-          <label for="gender"><span class="title">Gender</span></label>
-          <%= radio_button_tag :gender, '1', params[:gender] == '1' %> Male
-          <%= radio_button_tag :gender, '0', params[:gender] == '0' %> Female
-          <%= radio_button_tag :gender, '', params[:gender] == '' %> Both<br>
+          <label for="gender"><span class="title"><%= t('general.gender') %></span></label>
+          <%= radio_button_tag :gender, '1', params[:gender] == '1' %> <%= t('general.male') %>
+          <%= radio_button_tag :gender, '0', params[:gender] == '0' %> <%= t('general.female') %>
+          <%= radio_button_tag :gender, '', params[:gender] == '' %> <%= t('general.both') %><br>
         </div>
         <div class="field">
-          <label for="status"><span class="title">Status</span></label>
+          <label for="status"><span class="title"><%= t('general.status') %></span></label>
           <%= select_tag :status, options_for_select(OrganizationMembership::FOLLOWUP_STATUSES.collect {|s| [s.titleize, s]}, params[:status]), include_blank: true %><br>
         </div>
       </div>
@@ -93,7 +93,7 @@
               <label class="choice"></label>
             </div>
           <% end %>
-          <%= render :partial => 'questions/' + q.ptemplate, :object => q, :locals => {:col => nil} %>
+          <%= render :partial => 'questions/' + q.ptemplate, :object => q, :locals => {:col => nil, :answer_sheet => @answer_sheet} %>
         </div>
       <% end %>
       </div>
@@ -113,8 +113,8 @@
       <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment' %></th>
       <th><%= t('.first_name') %></th>
       <th><%= t('.last_name') %></th>
-      <th><%= t('.status') %></th>
-      <th><%= t('.gender') %></th>
+      <th><%= t('general.status') %></th>
+      <th><%= t('general.gender') %></th>
       <th><%= t('.phone_number') %></th>
       <% @questions.each do |q| %>
         <th class="<%= dom_id(q) %>">
@@ -136,7 +136,7 @@
   <%= paginate @people %>
   <% if @people.blank? %>
     <div class="contentpad no_contacts">
-        Sorry, there are no contacts here.
+        <%= t('.no_contacts') %>
     </div>
   <% end %>
   <%= render 'assign' %>

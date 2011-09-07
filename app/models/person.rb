@@ -92,9 +92,17 @@ class Person < ActiveRecord::Base
   end
   
   def phone_number=(val)
-    phone_number = primary_phone_number || phone_numbers.new
-    phone_number.number = val
-    phone_number.save
+    if val.is_a?(Hash)
+      self.phone_number = val[:number]
+    else
+      if val.to_s.strip.blank?
+        primary_phone_number.try(:destroy)
+      else
+        phone_number = primary_phone_number || phone_numbers.new
+        phone_number.number = val
+        phone_number.save
+      end
+    end
   end
   
   def firstName
@@ -182,6 +190,10 @@ class Person < ActiveRecord::Base
     email = primary_email_address || email_addresses.new
     email.email = val
     email.save
+  end
+  
+  def email_address=(hash)
+    self.email = hash['email']
   end
   
   def get_friends(authentication, response = nil)

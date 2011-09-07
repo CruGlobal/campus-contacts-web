@@ -48,6 +48,15 @@ en:
     add_a_leader: 'Add a leader'
     survey_text_tip_html: "To begin your survey, <strong>text %{keyword} to %{shortcode}.</strong>"
     survey_web_tip_html: "For the web version of the survey, send people to <strong>http://mhub.cc/c/%{keyword}</strong>"
+    male: Male
+    female: Female
+    both: Both
+    gender: Gender
+    status: Status
+    first_name: First Name
+    last_name: Last Name
+    email: Email
+    phone: Phone
   people: 
     index:
       export: "Export this list"
@@ -145,8 +154,7 @@ en:
       do_not_contact: Do Not Contact
       completed: Completed
     index:
-      gender: Gender
-      status: Status
+      no_contacts: 'Sorry, there are no contacts here.'
       export: Export
       add_question_back: Click on a question to add it back to the page 
       unassign_contact: "Unassign contact"
@@ -205,6 +213,11 @@ en:
       email: Email
       year: Year
     show:
+      add_comments_here: 'Add comments here...'
+      previous_comments: 'Previous Comments'
+      survey_answers: 'Survey Answers'
+      edit_contact_info: 'Edit Contact Info'
+      facebook_profile: 'Facebook Profile'
       phone_number: "Phone #"
       email: "Email"
       status: "Status"

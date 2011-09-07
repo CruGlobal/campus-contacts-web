@@ -105,7 +105,7 @@ class ContactsController < ApplicationController
         @roles = Hash[OrganizationalRole.active.where(role_id: Role::CONTACT_ID, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r]}]
         out = ""
         CSV.generate(out) do |rows|
-          rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('contacts.index.status'), t('people.index.gender'), t('contacts.index.phone_number')] + @questions.collect {|q| q.label}
+          rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('general.status'), t('general.gender'), t('contacts.index.phone_number')] + @questions.collect {|q| q.label}
           @all_people.each do |person|
             answers = [person.firstName, person.lastName, @roles[person.id].followup_status.to_s.titleize, person.gender.to_s.titleize, person.pretty_phone_number]
             @questions.each do |q|
@@ -152,20 +152,35 @@ class ContactsController < ApplicationController
   end
     
   def update
-    @answer_sheet = get_answer_sheet(@keyword, @person)
+    person_to_update = Person.find(params[:id])
+    @person = person_to_update if can?(:update, person_to_update)
     @person.update_attributes(params[:person]) if params[:person]
-    question_set = QuestionSet.new(@keyword.questions, @answer_sheet)
-    question_set.post(params[:answers], @answer_sheet)
-    question_set.save
+    keywords = @keyword ? [@keyword] : current_organization.keywords
+    keywords.each do |keyword|
+      @answer_sheet = get_answer_sheet(keyword, @person)
+      question_set = QuestionSet.new(keyword.questions, @answer_sheet)
+      question_set.post(params[:answers], @answer_sheet)
+      question_set.save
+    end
     if @person.valid? && @answer_sheet.person.valid? &&
        (!@answer_sheet.person.primary_phone_number || @answer_sheet.person.primary_phone_number.valid?)
-      create_contact_at_org(@person, @keyword.organization)
+      create_contact_at_org(@person, @keyword.organization) if @keyword
       respond_to do |wants|
-        wants.html { render :thanks, layout: 'plain'}
+        wants.html do
+          if request.referrer && request.referrer.include?('edit')
+            redirect_to contact_path(@person)
+          else
+            render :thanks, layout: 'plain'
+          end
+        end
         wants.mobile { render :thanks }
       end
     else
-      render :new, layout: 'plain'
+      if request.referrer && request.referrer.include?('edit')
+        render :edit
+      else
+        render :new, layout: 'plain'
+      end
     end
   end
   
@@ -180,6 +195,10 @@ class ContactsController < ApplicationController
     @followup_comments = FollowupComment.where(organization_id: @organization, contact_id: @person).order('created_at desc')
   end
   
+  def edit
+    @person = Person.find(params[:id])
+    authorize!(:update, @person)
+  end
   
   def create
     params[:person] ||= {}
@@ -235,10 +254,12 @@ class ContactsController < ApplicationController
           @keyword ||= @sms.sms_keyword || SmsKeyword.where(keyword: @sms.message.strip).first
         end
       end
-      unless @keyword
-        render_404 and return false
+      if params[:keyword] || params[:received_sms_id]
+        unless @keyword
+          render_404 and return false
+        end
+        @questions = @keyword.questions
       end
-      @questions = @keyword.questions
     end
     
     def set_keyword_cookie

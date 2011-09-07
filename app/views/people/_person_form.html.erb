@@ -1,29 +1,29 @@
 <%= fields_for person, {validators: {}} do |pf| %>
   <table border="0" cellspacing="0" cellpadding="0" class="modal_person_info">
   <tr>
-    <td class="left">First Name:</td>
+    <td class="left"><%= t('general.first_name') %>:</td>
     <td><%= pf.text_field :firstName %></td>
   </tr>
   <tr>
-    <td class="left">Last Name:</td>
+    <td class="left"><%= t('general.last_name') %>:</td>
     <td><%= pf.text_field :lastName %></td>
   </tr>
   <tr>
-    <td class="left">Gender:</td>
+    <td class="left"><%= t('general.gender') %>:</td>
     <td>
-      <%= pf.radio_button :gender, '1' %> Male 
-      <%= pf.radio_button :gender, '0' %> Female 
+      <%= pf.radio_button :gender, '1' %> <%= t('general.male') %> 
+      <%= pf.radio_button :gender, '0' %> <%= t('general.female') %> 
     </td>
   </tr>
-  <%= pf.fields_for (@email || person.email_addresses.new) do |af| %>
+  <%= pf.fields_for (@email || person.primary_email_address || person.email_addresses.new) do |af| %>
   <tr>
-    <td class="left">Email:</td>
+    <td class="left"><%= t('general.email') %>:</td>
     <td><%= af.text_field :email %></td>
   </tr>
   <% end %>
-  <%= pf.fields_for (@phone || person.phone_numbers.new) do |af| %>
+  <%= pf.fields_for (@phone || person.primary_phone_number || person.phone_numbers.new) do |af| %>
   <tr>
-    <td class="left">Phone:</td>
+    <td class="left"><%= t('general.phone') %>:</td>
     <td><%= af.text_field :number %></td>
   </tr>
   <% end %>
