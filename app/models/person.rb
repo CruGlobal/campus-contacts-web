@@ -447,8 +447,8 @@ class Person < ActiveRecord::Base
     hash['request_org_id'] = org_id.id unless org_id.nil?
     hash['assignment'] = assign_hash unless assign_hash.nil?
     hash['first_contact_date'] = answer_sheets.first.created_at.utc.to_s unless answer_sheets.empty?
-    hash['organizational_roles'] = organizational_roles.includes(:role, :organization).uniq {|r| r.organization_id}.collect do |r| 
-      if r.role_id != Role::CONTACT_ID && om = organization_memberships.where(organization_id: r.organization_id).first
+    hash['organizational_roles'] = organizational_roles.includes(:role, :organization).where("role_id <> #{Role::CONTACT_ID}").uniq {|r| r.organization_id}.collect do |r| 
+      if om = organization_memberships.where(organization_id: r.organization_id).first
         {org_id: r.organization_id, role: r.role.i18n, name: r.organization.name, primary: om.primary? ? 'true' : 'false'}
       end
     end.compact
