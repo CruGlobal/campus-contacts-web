@@ -32,7 +32,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         )
         session["devise.facebook_data"] = env["omniauth.auth"]
       end
-    rescue => e
+    rescue Exception => e
       if Rails.env.test?
         raise e 
       else
