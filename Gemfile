@@ -22,6 +22,7 @@ gem 'rails_admin', git: 'git://github.com/sferik/rails_admin.git'
 
 gem 'dalli'#, git: 'git://github.com/mperham/dalli.git'
 # gem 'memcache-client'
+gem 'resque_mail_queue'
 
 gem 'valium'
 gem 'newrelic_rpm', '3.1.1'
@@ -61,6 +62,7 @@ group :development, :test do
   gem 'active_reload'
   # Pretty printed test output
   gem 'turn', :require => false
+  gem 'rails-footnotes', '>= 3.7'
 end
 
 

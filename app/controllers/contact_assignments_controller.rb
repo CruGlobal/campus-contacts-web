@@ -8,7 +8,7 @@ class ContactAssignmentsController < ApplicationController
       params[:ids].each do |id|
         begin
           ContactAssignment.create(person_id: id, organization_id: @organization.id, assigned_to_id: @assign_to.id)
-        rescue Mysql2::Error
+        rescue ActiveRecord::RecordNotUnique
           ca = ContactAssignment.find_by_organization_id_and_person_id(@organization.id, id)
           ca.update_attribute(:assigned_to_id, @assign_to.id) if ca
         end

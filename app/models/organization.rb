@@ -77,13 +77,25 @@ class Organization < ActiveRecord::Base
   def add_leader(person)
     person_id = person.is_a?(Person) ? person.id : person
     add_member(person_id)
-    OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::LEADER_ID)
+    begin
+      OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::LEADER_ID)
+    rescue => error
+      @save_retry_count =  (@save_retry_count || 5)
+      retry if( (@save_retry_count -= 1) > 0 )
+      raise error
+    end
   end
   
   def add_contact(person)
     person_id = person.is_a?(Person) ? person.id : person
     add_member(person_id)
-    OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::CONTACT_ID)
+    begin
+      OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::CONTACT_ID)
+    rescue => error
+      @save_retry_count =  (@save_retry_count || 5)
+      retry if( (@save_retry_count -= 1) > 0 )
+      raise error
+    end
   end
   
   def add_admin(person)

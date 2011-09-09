@@ -231,6 +231,11 @@ class ContactsController < ApplicationController
       render 'add_contact'
       return
     end
+    respond_to do |wants|
+      wants.html { redirect_to :back }
+      wants.mobile { redirect_to :back }
+      wants.js
+    end
   end
   
   def send_reminder
@@ -256,7 +261,8 @@ class ContactsController < ApplicationController
       end
       if params[:keyword] || params[:received_sms_id]
         unless @keyword
-          render_404 and return false
+          render_404 
+          return false
         end
         @questions = @keyword.questions
       end

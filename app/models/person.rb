@@ -26,6 +26,9 @@ class Person < ActiveRecord::Base
   has_many :organizational_roles
   has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role::CONTACT_ID}", uniq: true
   
+  has_many :followup_comments, :class_name => "FollowupComment", :foreign_key => "commenter_id"
+  has_many :comments_on_me, :class_name => "FollowupComment", :foreign_key => "contact_id"
+  
   has_many :received_sms, class_name: "ReceivedSms", foreign_key: "person_id"
   has_many :sms_sessions, inverse_of: :person
   
@@ -98,11 +101,14 @@ class Person < ActiveRecord::Base
       if val.to_s.strip.blank?
         primary_phone_number.try(:destroy)
       else
-        phone_number = primary_phone_number || phone_numbers.new
-        phone_number.number = val
-        phone_number.save
+        unless phone_numbers.find_by_number(PhoneNumber.strip_us_country_code(val))
+          phone_number = primary_phone_number || phone_numbers.new
+          phone_number.number = val
+          phone_number.save
+        end
       end
     end
+    val
   end
   
   def firstName
@@ -131,7 +137,7 @@ class Person < ActiveRecord::Base
       unless email_addresses.detect {|e| e.email == data['email']}
         begin
           email_addresses.find_or_create_by_email(data['email'].try(:strip)) if data['email'].try(:strip).present?
-        rescue
+        rescue ActiveRecord::RecordNotUnique
           return self
         end
       end
@@ -329,7 +335,9 @@ class Person < ActiveRecord::Base
       if friend_ids.include?(friend.id)
         friend.destroy
       else
-        friend.update_column(:person_id, id) 
+        begin
+          friend.update_column(:person_id, id) 
+        rescue; end
       end
     end
     
@@ -351,6 +359,16 @@ class Person < ActiveRecord::Base
       end
     end
     
+    # Followup Comments
+    other.followup_comments.each do |fc|
+      fc.update_column(:commenter_id, id)
+    end
+    
+    # Comments on me
+    other.comments_on_me.each do |fc|
+      fc.update_column(:contact_id, id)
+    end
+    
     # Email Addresses
     email_addresses.each do |pn|
       opn = other.email_addresses.detect {|oa| oa.email == pn.email}
@@ -361,7 +379,11 @@ class Person < ActiveRecord::Base
       if emails.include?(pn.email)
         pn.destroy
       else
-        pn.update_attribute(:person_id, id) unless pn.frozen?
+        begin
+          pn.update_attribute(:person_id, id) unless pn.frozen?
+        rescue ActiveRecord::RecordNotUnique
+          pn.destroy
+        end
       end
     end
     
@@ -380,7 +402,7 @@ class Person < ActiveRecord::Base
     other.organizational_roles.each do |role| 
       begin
         role.update_attribute(:person_id, id) unless role.frozen?
-      rescue
+      rescue ActiveRecord::RecordNotUnique
         role.destroy
       end
     end
@@ -394,6 +416,8 @@ class Person < ActiveRecord::Base
     # SMS stuff
     other.received_sms.collect {|as| as.update_column(:person_id, id)}
     other.sms_sessions.collect {|as| as.update_column(:person_id, id)}
+    
+    
     
     super
   end
@@ -423,11 +447,11 @@ class Person < ActiveRecord::Base
     hash['request_org_id'] = org_id.id unless org_id.nil?
     hash['assignment'] = assign_hash unless assign_hash.nil?
     hash['first_contact_date'] = answer_sheets.first.created_at.utc.to_s unless answer_sheets.empty?
-    hash['organizational_roles'] = organizational_roles.includes(:role, :organization).collect do |r| 
+    hash['organizational_roles'] = organizational_roles.includes(:role, :organization).uniq {|r| r.organization_id}.collect do |r| 
       if r.role_id != Role::CONTACT_ID && om = organization_memberships.where(organization_id: r.organization_id).first
         {org_id: r.organization_id, role: r.role.i18n, name: r.organization.name, primary: om.primary? ? 'true' : 'false'}
       end
-    end.compact.uniq {|r| r.organization_id}
+    end.compact
     hash
   end
   
