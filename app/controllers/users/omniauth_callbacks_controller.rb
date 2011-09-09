@@ -3,7 +3,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_filter :check_url
   def facebook
     facebook_login
-    redirect_to redirect_location(:user, @user)
+    redirect_to @user ? redirect_location(:user, @user) : '/'
   end
   
   def facebook_mhub
