@@ -17,6 +17,10 @@
 #   runner "AnotherModel.prune_old_records"
 # end
 
+set :output, '/tmp/sync.log'
+
+job_type :rake,    "cd :path && RAILS_ENV=:environment /usr/local/bin/bundle exec /usr/local/bin/rake :task --silent :output"
+
 every 4.hours do
   rake "infobase:sync"
 end
