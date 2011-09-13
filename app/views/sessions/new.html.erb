@@ -1,5 +1,10 @@
   <center>
-    Please login with Facebook to get started <br><br>
+    <% if mhub? %>
+      To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
+    <% else %>
+      Please login with Facebook to get started 
+    <% end %>
+    <br><br>
     <%= link_to(image_tag('login-button.png'), user_omniauth_authorize_path(mhub? ? :facebook_mhub : :facebook), rel: 'external') %>
   </center>
 
