@@ -18,28 +18,28 @@ class ContactsController < ApplicationController
     @hidden_questions = @organization.questions.where("#{PageElement.table_name}.hidden" => true).flatten.uniq
     # @people = unassigned_people(@organization)
     if params[:dnc] == 'true'
-      @people = @organization.dnc_contacts.order('lastName, firstName')
+      @people = @organization.dnc_contacts
     elsif params[:completed] == 'true'
-      @people = @organization.completed_contacts.order('lastName, firstName')
+      @people = @organization.completed_contacts
     else
       params[:assigned_to] ||= 'all'
       if params[:assigned_to]
         case params[:assigned_to]
         when 'all'
-          @people = @organization.contacts.order('lastName, firstName')
+          @people = @organization.contacts
         when 'unassigned'
-          @people = unassigned_people(@organization).order('lastName, firstName')
+          @people = unassigned_people(@organization)
         when 'progress'
-          @people = @organization.inprogress_contacts.order('lastName, firstName')
+          @people = @organization.inprogress_contacts
         when 'no_activity'
-          @people = @organization.no_activity_contacts.order('lastName, firstName')
+          @people = @organization.no_activity_contacts
         when 'friends'
           @people = current_person.contact_friends(current_organization)
         when *Rejoicable::OPTIONS
-          @people = @organization.send(:"#{params[:assigned_to]}_contacts").order('lastName, firstName')
+          @people = @organization.send(:"#{params[:assigned_to]}_contacts")
         else
           if params[:assigned_to].present? && @assigned_to = Person.find_by_personID(params[:assigned_to])
-            @people = Person.order('lastName, firstName').includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
+            @people = Person.includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
           end
         end
       end
@@ -99,7 +99,9 @@ class ContactsController < ApplicationController
         end
       end
     end
+    @people = @people.order('lastName, firstName')
     @all_people = @people
+    # @q = @people.search(params[:q])
     @people = @people.page(params[:page])
     respond_to do |wants|
       wants.html do
