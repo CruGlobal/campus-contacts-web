@@ -183,8 +183,9 @@ en:
       assign_to: "Assign To:"
       assigned_to: "Assigned To"
       all_responses: "All Contacts"
-      in_progress_responses: "All Contacts - 'In Progress'"
-      responses_assigned_to: "All Contacts - assigned to %{assigned_to}"
+      in_progress_responses: "All Contacts - Assigned"
+      no_activity_responses: "All Contacts - No Activity"
+      responses_assigned_to: "All Contacts - Assigned to %{assigned_to}"
       unassigned_responses: "All Contacts - Unassigned"
       dnc_contacts: "All Contacts - 'Do Not Contact'"
       friend_responses: "Contacts who are also my friends on Facebook"
@@ -198,7 +199,8 @@ en:
       all: 'All'
       dnc: 'Do Not Contact'
       completed: 'Completed'
-      in_progress: 'In Progress'
+      in_progress: 'Assigned'
+      no_activity: 'No Activity'
       my_friends: 'My Friends'
       delete_confirm: You are about to send this contact to the "Do Not Contact" list. If that's not what you meant to do, click cancel.
       assign_people:

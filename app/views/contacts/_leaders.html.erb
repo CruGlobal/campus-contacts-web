@@ -27,6 +27,10 @@
   <li><span class="name"><strong><%= link_to(t('contacts.index.completed'), contacts_path(completed: true)) %></strong></span> (<%= @organization.completed_contacts.count %>)</li>
   <li><span class="name"><strong><%= link_to(t('contacts.index.all'), contacts_path(assigned_to: 'all')) %></strong></span> (<%= @organization.contacts.count %>)</li>
   <li><hr /></li>
+  <li><span class="name"><strong><%= link_to(t('contacts.index.no_activity'), contacts_path(assigned_to: 'no_activity')) %></strong></span> (<%= @organization.no_activity_contacts.count %>)</li>
+  <% Rejoicable::OPTIONS.each do |option| %>
+    <li><span class="name"><strong><%= link_to(t("contacts.index.#{option}"), contacts_path(assigned_to: option)) %></strong></span> (<%= @organization.send(:"#{option}_contacts").count %>)</li>
+  <% end %>
   <li><span class="name"><strong><%= link_to(t('contacts.index.my_friends'), contacts_path(assigned_to: 'friends')) %></strong></span> (<%= current_person.contact_friends(current_organization).count %>)</li>
   <li class="dnc"><span class="name"><strong><%= link_to(t('contacts.index.dnc'), contacts_path(dnc: true)) %></strong></span> (<span id="dnc_count" class="count"><%= OrganizationalRole.dnc.where(organization_id: @organization.id).count %></span>)</li>
 </ul>

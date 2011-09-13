@@ -31,8 +31,12 @@ class ContactsController < ApplicationController
           @people = unassigned_people(@organization).order('lastName, firstName')
         when 'progress'
           @people = @organization.inprogress_contacts.order('lastName, firstName')
+        when 'no_activity'
+          @people = @organization.no_activity_contacts.order('lastName, firstName')
         when 'friends'
           @people = current_person.contact_friends(current_organization)
+        when *Rejoicable::OPTIONS
+          @people = @organization.send(:"#{params[:assigned_to]}_contacts").order('lastName, firstName')
         else
           if params[:assigned_to].present? && @assigned_to = Person.find_by_personID(params[:assigned_to])
             @people = Person.order('lastName, firstName').includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
