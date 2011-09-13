@@ -111,11 +111,11 @@
   <table class="listing" cellpadding="0" cellspacing="0">
     <tr>
       <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment' %></th>
-      <th><%= t('.first_name') %></th>
-      <th><%= t('.last_name') %></th>
-      <th><%= t('general.status') %></th>
-      <th><%= t('general.gender') %></th>
-      <th><%= t('.phone_number') %></th>
+      <th><%= sort_link @q, :firstName, t('.first_name') %></th>
+      <th><%= sort_link @q, :lastName, t('.last_name') %></th>
+      <th><%= sort_link @q, :followup_status, t('general.status') %></th>
+      <th><%= sort_link @q, :gender, t('general.gender') %></th>
+      <th><%= sort_link @q, 'phone_numbers.number', t('.phone_number') %></th>
       <% @questions.each do |q| %>
         <th class="<%= dom_id(q) %>">
           <%= q.label %>

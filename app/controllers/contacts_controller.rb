@@ -55,7 +55,7 @@ class ContactsController < ApplicationController
       @people = @people.includes(:primary_email_address).where("email_addresses.email like ?", '%' + params[:email].strip + '%')
     end
     if params[:phone_number].present?
-      @people = @people.includes(:primary_phone_number).where("phone_numbers.number like ?", '%' + PhoneNumber.strip_us_country_code(params[:phone_number]) + '%')
+      @people = @people.where("phone_numbers.number like ?", '%' + PhoneNumber.strip_us_country_code(params[:phone_number]) + '%')
     end
     if params[:gender].present?
       @people = @people.where("gender = ?", params[:gender].strip)
@@ -99,9 +99,10 @@ class ContactsController < ApplicationController
         end
       end
     end
-    @people = @people.order('lastName, firstName')
+    @q = Person.where('1 <> 1').search(params[:q])
+    # raise @q.sorts.inspect
+    @people = @people.includes(:primary_phone_number).order(params[:q] && params[:q][:s] ? params[:q][:s] : ['lastName, firstName'])
     @all_people = @people
-    # @q = @people.search(params[:q])
     @people = @people.page(params[:page])
     respond_to do |wants|
       wants.html do
