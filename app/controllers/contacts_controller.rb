@@ -57,7 +57,7 @@ class ContactsController < ApplicationController
       @people = @people.where("gender = ?", params[:gender].strip)
     end
     if params[:status].present?
-      @people = @people.joins(:organizational_roles).where("organizational_roles.followup_status = ?", params[:status].strip)
+      @people = @people.includes(:organizational_roles).where("organizational_roles.followup_status = ?", params[:status].strip)
     end
     
     if params[:answers].present?
