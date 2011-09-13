@@ -115,6 +115,8 @@ class SmsController < ApplicationController
               answers = answer.gsub(/[^\w]/, '').split(/\s+/).collect {|a| choices.values.detect {|c| c.to_s.downcase == a.to_s.downcase} }.compact
               # if they used letter selections, convert the letter selections to real answers
               answers = answer.gsub(/[^\w]/, '').split(//).collect {|a| choices[a.to_s.downcase]}.compact if answers.empty?
+              
+              answers = answers.select {|a| a.to_s.strip != ''}
               # only checkbox fields can have more than one answer
               answer = question.style == 'checkbox' ? answers : answers.first
             end
@@ -135,7 +137,7 @@ class SmsController < ApplicationController
         Question.new(label: "What is your last name?")
       else
         answer_sheet = get_answer_sheet(keyword, person)
-        keyword.questions.reload.where(web_only: false).detect {|q| q.response(answer_sheet).blank?}      
+        keyword.questions.reload.where(web_only: false).detect {|q| q.responses(answer_sheet).blank?}      
       end
     end
     
