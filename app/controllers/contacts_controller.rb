@@ -166,7 +166,7 @@ class ContactsController < ApplicationController
       question_set.post(params[:answers], @answer_sheet)
       question_set.save
     end
-    if @person.valid? && (!@answer_sheet (|| @answer_sheet.person.valid? &&
+    if @person.valid? && (!@answer_sheet || (@answer_sheet.person.valid? &&
        (!@answer_sheet.person.primary_phone_number || @answer_sheet.person.primary_phone_number.valid?)))
       create_contact_at_org(@person, @keyword.organization) if @keyword
       respond_to do |wants|
