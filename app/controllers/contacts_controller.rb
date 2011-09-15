@@ -61,8 +61,10 @@ class ContactsController < ApplicationController
       @people = @people.where("gender = ?", params[:gender].strip)
     end
     if params[:status].present?
-      @people = @people.includes(:organizational_roles).where("organizational_roles.followup_status = ?", params[:status].strip)
+      @people = @people.where("organizational_roles.followup_status" => params[:status].strip)
     end
+    
+    @people = @people.includes(:organizational_roles).where("organizational_roles.organization_id" => current_organization.id)
     
     if params[:answers].present?
       params[:answers].each do |q_id, v|
@@ -106,7 +108,7 @@ class ContactsController < ApplicationController
     @people = @people.page(params[:page])
     respond_to do |wants|
       wants.html do
-        @roles = Hash[OrganizationalRole.active.where(role_id: Role::CONTACT_ID, person_id: @people.collect(&:id)).map {|r| [r.person_id, r]}]
+        @roles = Hash[OrganizationalRole.active.where(organization_id: current_organization.id, role_id: Role::CONTACT_ID, person_id: @people.collect(&:id)).map {|r| [r.person_id, r]}]
       end
       wants.csv do
         @roles = Hash[OrganizationalRole.active.where(role_id: Role::CONTACT_ID, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r]}]
