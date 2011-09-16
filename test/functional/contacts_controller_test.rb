@@ -62,9 +62,10 @@ class ContactsControllerTest < ActionController::TestCase
       end
     end
     
-    context "when posting an update with good parameters" do
+    context "when posting an update with good parameters from mhub" do
       setup do
         @contact = Factory(:person)
+        @request.host = 'mhub.cc' 
         put :update, id: @contact.id, format: 'mobile', keyword: @keyword.keyword
       end
       should render_template('thanks')
