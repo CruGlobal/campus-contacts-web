@@ -182,7 +182,13 @@ class ContactsController < ApplicationController
             redirect_to contact_path(@person)
           end
         end
-        wants.mobile { render :thanks }
+        wants.mobile do
+          if mhub?
+            render :thanks
+          else
+            redirect_to contact_path(@person)
+          end
+        end
       end
     else
       if mhub?
