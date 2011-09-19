@@ -151,7 +151,7 @@ class Person < ActiveRecord::Base
         :parameters    => {data: data, authentication: authentication, response: response}
       )
     end
-    self.fb_uid = authentication.uid
+    self.fb_uid = authentication['uid']
     save(validate: false)
     self
   end
