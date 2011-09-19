@@ -103,7 +103,7 @@ class ContactsController < ApplicationController
     end
     @q = Person.where('1 <> 1').search(params[:q])
     # raise @q.sorts.inspect
-    @people = @people.includes(:primary_phone_number).order(params[:q] && params[:q][:s] ? params[:q][:s] : ['lastName, firstName'])
+    @people = @people.includes(:primary_phone_number).order(params[:q] && params[:q][:s] ? params[:q][:s] : ['lastName, firstName']).group('ministry_person.personID')
     @all_people = @people
     @people = @people.page(params[:page])
     respond_to do |wants|
