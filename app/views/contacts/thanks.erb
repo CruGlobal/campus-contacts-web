@@ -10,12 +10,16 @@
   			window.location="<%= facebook_logout_url(next: redirect_url) %>";      
       }, 8000)
   	</script>
-  	<div id="countdown">
-  		<center>
+  <% end %>
+	<div id="countdown">
+		<center>
+		  <% if user_signed_in? %>
   			<h4><%= t('contacts.thanks.facebook')%></h4>
   			<br><br>
   			<h3><%= link_to(t('contacts.thanks.done'), facebook_logout_url(next: redirect_url)) %></h3>
-  		</center>
-  	</div>
-  <% end %>
+  	  <% else %>
+			  <h3><%= link_to(t('contacts.thanks.done'), redirect_url) %></h3>
+			<% end %>
+		</center>
+	</div>
 </div>
