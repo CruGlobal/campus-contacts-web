@@ -191,7 +191,7 @@ module ApiHelper
           people = people.where("`#{Person.table_name}`.`gender` = ?", gender)
         when "status"
           status = allowed_status.include?(@filter_values[index].downcase) ? @filter_values[index].downcase : nil
-          status = ["do_not_contact","completed"] if status == "finished"
+          status = ["completed"] if status == "finished"
           status = ["uncontacted","attempted_contact","contacted"] if status == "not_finished"
           people = people.where('organizational_roles.followup_status' => status)
         end
