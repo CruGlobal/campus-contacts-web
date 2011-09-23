@@ -4,18 +4,18 @@
   <center><h4><%= @keyword.post_survey_message.present? ? @keyword.post_survey_message : t('contacts.thanks.message') %></h4></center>
 	<br><br>
 
-  <% if mhub? %>
+  <% if mhub? && user_signed_in? %>
   	<script type="text/javascript">
       setTimeout(function() {
   			window.location="<%= facebook_logout_url(next: redirect_url) %>";      
       }, 8000)
   	</script>
+  	<div id="countdown">
+  		<center>
+  			<h4><%= t('contacts.thanks.facebook')%></h4>
+  			<br><br>
+  			<h3><%= link_to(t('contacts.thanks.done'), facebook_logout_url(next: redirect_url)) %></h3>
+  		</center>
+  	</div>
   <% end %>
-	<div id="countdown">
-		<center>
-			<h4><%= t('contacts.thanks.facebook')%></h4>
-			<br><br>
-			<h3><%= link_to(t('contacts.thanks.done'), facebook_logout_url(next: redirect_url)) %></h3>
-		</center>
-	</div>
 </div>

@@ -38,11 +38,22 @@
 	      <div data-role="content">
 			<% title "Welcome!" %>
 			<div class="info">
-				<span style='text-align:center; width:100%;display:block;font-family:helvetica'>Please login with Facebook to get started</span><br>
+				<span style='text-align:center; width:100%;display:block;font-family:helvetica'>
+          <% if mhub? %>
+            To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
+          <% else %>
+            Please login with Facebook to get started 
+          <% end %>
+        </span><br>
 			</div>
 			<div class="info">
 				<center><%= link_to(image_tag('fb_login_small.png'), user_omniauth_authorize_path(mhub? ? :facebook_mhub : :facebook), rel: 'external', alt: 'Login with Facebook') %></center>
 			</div>
+			<% if mhub? && cookies[:keyword] %>
+  			<div class="info">
+  				<center><%= link_to('Skip facebook login', "/c/#{cookies[:keyword]}") %></center>
+  			</div>
+  		<% end %>
 		 </div>
 	  </div>
   </body>

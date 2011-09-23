@@ -1,11 +1,13 @@
 class ContactsController < ApplicationController
   prepend_before_filter :set_keyword_cookie, only: :new
   before_filter :get_person
-  before_filter :prepare_for_mobile, only: [:new, :update, :thanks]
-  before_filter :get_keyword, only: [:new, :update, :thanks]
-  before_filter :ensure_current_org, except: [:new, :update, :thanks]
-  before_filter :authorize, except: [:new, :update, :thanks]
-  skip_before_filter :check_url, only: [:new, :update]
+  before_filter :prepare_for_mobile, only: [:new, :update, :thanks, :create_from_survey]
+  before_filter :get_keyword, only: [:new, :update, :thanks, :create_from_survey]
+  before_filter :ensure_current_org, except: [:new, :update, :thanks, :create_from_survey]
+  before_filter :authorize, except: [:new, :update, :thanks, :create_from_survey]
+  skip_before_filter :check_url, only: [:new, :update, :create_from_survey]
+  skip_before_filter :authenticate_user!, only: [:new, :create_from_survey], :if => proc {|c| c.request.params[:nologin] == 'true'}
+  skip_before_filter :authenticate_user!, only: :create_from_survey
   
   def index
     @organization = params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : current_organization
@@ -159,10 +161,23 @@ class ContactsController < ApplicationController
       render_404 and return
     end
   end
+  
+  def create_from_survey
+    @person = Person.create(params[:person])
+    if @person.valid?
+      update
+      return
+    else
+      new
+      render :new
+    end
+  end
     
   def update
-    person_to_update = Person.find(params[:id])
-    @person = person_to_update if can?(:update, person_to_update)
+    unless @person
+      person_to_update = Person.find(params[:id])
+      @person = person_to_update if can?(:update, person_to_update)
+    end
     @person.update_attributes(params[:person]) if params[:person]
     keywords = @keyword ? [@keyword] : current_organization.keywords
     keywords.each do |keyword|
@@ -293,7 +308,7 @@ class ContactsController < ApplicationController
     end
     
     def get_person
-      @person = current_user.person
+      @person = user_signed_in? ? current_user.person : Person.new
     end
     
     def authorize

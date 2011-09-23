@@ -2,10 +2,10 @@ require 'test_helper'
 
 class ContactsControllerTest < ActionController::TestCase
   context "Before logging in" do
-    should "redirect on new" do
-      get :new, keyword: Factory(:sms_keyword).keyword
-      assert_redirected_to '/users/sign_in'
-    end
+    # should "redirect on new" do
+    #   get :new, keyword: Factory(:sms_keyword).keyword
+    #   assert_redirected_to '/users/sign_in'
+    # end
     
     should "redirect on update" do
       @contact = Factory(:person)
