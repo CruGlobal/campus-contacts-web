@@ -6,8 +6,7 @@ class ContactsController < ApplicationController
   before_filter :ensure_current_org, except: [:new, :update, :thanks, :create_from_survey]
   before_filter :authorize, except: [:new, :update, :thanks, :create_from_survey]
   skip_before_filter :check_url, only: [:new, :update, :create_from_survey]
-  skip_before_filter :authenticate_user!, only: [:new, :create_from_survey], :if => proc {|c| c.request.params[:nologin] == 'true'}
-  skip_before_filter :authenticate_user!, only: :create_from_survey
+  skip_before_filter :authenticate_user!, only: [:create_from_survey, :new]
   
   def index
     @organization = params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : current_organization
@@ -147,9 +146,17 @@ class ContactsController < ApplicationController
       return false
     end
     
+    unless params[:nologin] == 'true'
+      return unless authenticate_user! 
+    end
+    
     if @sms
-      @person.phone_numbers.create!(number: @sms.phone_number, location: 'mobile') unless @person.phone_numbers.detect {|p| p.number_with_country_code == @sms.phone_number}
-      @sms.update_attribute(:person_id, @person.id) unless @sms.person_id
+      if @person.new_record?
+        @person.phone_numbers.new(:number => @sms.phone_number)
+      else
+        @person.phone_numbers.create!(number: @sms.phone_number, location: 'mobile') unless @person.phone_numbers.detect {|p| p.number_with_country_code == @sms.phone_number}
+        @sms.update_attribute(:person_id, @person.id) unless @sms.person_id
+      end
     end
     if @keyword
       @answer_sheet = get_answer_sheet(@keyword, @person)

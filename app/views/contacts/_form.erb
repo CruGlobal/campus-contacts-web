@@ -40,6 +40,8 @@
           <% end %>
         </div>
       </li>
+    <% else %>
+      <%= f.hidden_field :phone_number %>
     <% end %>
     <% @questions.each do |question| %>
       <% case question.slug %>
