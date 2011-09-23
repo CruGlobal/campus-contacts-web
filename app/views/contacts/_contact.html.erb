@@ -10,7 +10,7 @@
   <% end %>
   <td><%= person.gender.to_s.titleize %></td>
   <td><%= person.pretty_phone_number %></td>
-  <% current_organization.questions.where("#{PageElement.table_name}.hidden" => false).flatten.uniq.each do |q| %>
+  <% current_organization.all_questions.where("#{PageElement.table_name}.hidden" => false).flatten.uniq.each do |q| %>
     <td class="<%= dom_id(q) %>">
       <% case q.slug %>
       <% when 'email' %>

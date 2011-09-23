@@ -14,8 +14,8 @@ class ContactsController < ApplicationController
       return false
     end
     @question_sheets = @organization.question_sheets
-    @questions = @organization.questions.where("#{PageElement.table_name}.hidden" => false).flatten.uniq
-    @hidden_questions = @organization.questions.where("#{PageElement.table_name}.hidden" => true).flatten.uniq
+    @questions = @organization.all_questions.where("#{PageElement.table_name}.hidden" => false).flatten.uniq
+    @hidden_questions = @organization.all_questions.where("#{PageElement.table_name}.hidden" => true).flatten.uniq
     # @people = unassigned_people(@organization)
     if params[:dnc] == 'true'
       @people = @organization.dnc_contacts

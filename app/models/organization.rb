@@ -11,6 +11,7 @@ class Organization < ActiveRecord::Base
   has_many :pages, through: :question_sheets
   has_many :page_elements, through: :pages
   has_many :questions, through: :pages
+  has_many :all_questions, through: :pages, source: :all_questions
   has_many :followup_comments
   has_many :organizational_roles, inverse_of: :organization
   has_many :leaders, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role.leader_ids}, order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
