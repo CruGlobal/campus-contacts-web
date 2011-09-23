@@ -137,6 +137,7 @@ Mh::Application.routes.draw do
       resources :contact_assignments
       resources :followup_comments
       resources :roles
+      resources :organizations
     end
   end
 
