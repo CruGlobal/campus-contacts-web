@@ -74,7 +74,7 @@
         <div class="textarea">
           <%= f.text_area :comment, :rows => "2", placeholder: t('.add_comments_here') %><br/>
         </div>
-        <%= button_tag(t('contacts.show.add_comment'), id: 'comment_submit') %><%= spinner('comment') %>
+        <%= button_tag(t('contacts.show.add_comment'), id: 'comment_submit') %>
         <div class="rejoiceablebox">
           <%= link_to(t('contacts.show.attach_rejoicable'), '#', id: 'add_rejoicable', :class => "rj rejoiceable") %><br/>
           <div id="rejoicable_fields" style="display:none">
@@ -84,6 +84,7 @@
             <% end %>
           </div>
         </div>        
+        <%= spinner('comment') %>
       </div>
       
     <% end %>

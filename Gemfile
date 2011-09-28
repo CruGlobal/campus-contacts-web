@@ -44,7 +44,6 @@ gem 'kaminari'
 gem 'whenever'
 gem "ransack"
 gem 'deadlock_retry'
-gem 'rails-dev-tweaks'
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
@@ -66,6 +65,9 @@ group :development, :test do
   gem 'rails-footnotes', '>= 3.7'
 end
 
+group :development do
+  gem 'rails-dev-tweaks'
+end
 
 group :performance do
   gem 'ruby-prof'
