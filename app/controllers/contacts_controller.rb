@@ -181,10 +181,12 @@ class ContactsController < ApplicationController
   end
     
   def update
-    unless @person
+    if params[:id]
       person_to_update = Person.find(params[:id])
       @person = person_to_update if can?(:update, person_to_update)
     end
+    redirect_to :back and return false unless @person
+    
     @person.update_attributes(params[:person]) if params[:person]
     keywords = @keyword ? [@keyword] : current_organization.keywords
     keywords.each do |keyword|
