@@ -2,10 +2,10 @@ require 'test_helper'
 
 class ContactsControllerTest < ActionController::TestCase
   context "Before logging in" do
-    should "redirect on new" do
-      get :new, keyword: Factory(:sms_keyword).keyword
-      assert_redirected_to '/users/sign_in'
-    end
+    # should "redirect on new" do
+    #   get :new, keyword: Factory(:sms_keyword).keyword
+    #   assert_redirected_to '/users/sign_in'
+    # end
     
     should "redirect on update" do
       @contact = Factory(:person)
@@ -62,9 +62,10 @@ class ContactsControllerTest < ActionController::TestCase
       end
     end
     
-    context "when posting an update with good parameters" do
+    context "when posting an update with good parameters from mhub" do
       setup do
         @contact = Factory(:person)
+        @request.host = 'mhub.cc' 
         put :update, id: @contact.id, format: 'mobile', keyword: @keyword.keyword
       end
       should render_template('thanks')
@@ -88,6 +89,14 @@ class ContactsControllerTest < ActionController::TestCase
         assert_response :success, @response.body
       end
     end
+    
+    should "update a contact's info" do
+      @contact = Factory(:person)
+      @user.person.organizations.first.add_contact(@contact)
+      put :update, id: @contact.id, person: {firstName: 'Frank'}
+      assert_redirected_to contact_path(@contact)
+      assert_equal(assigns(:person).id, @contact.id)
+    end 
   end  
   
   context "After logging in a person without orgs" do
@@ -150,7 +159,7 @@ class ContactsControllerTest < ActionController::TestCase
       setup do
         get :index
       end
-      should redirect_to('/wizard')
+      should redirect_to('/wizard') 
     end
   end
 end

@@ -1,14 +1,10 @@
-
-
-
-
 @font-face {
     font-family: 'SpecialEliteRegular';
-    src: url('/assets/SpecialElite-webfont.eot');
-    src: url('/assets/SpecialElite-webfont.eot?#iefix') format('embedded-opentype'),
-         url('/assets/SpecialElite-webfont.woff') format('woff'),
-         url('/assets/SpecialElite-webfont.ttf') format('truetype'),
-         url('/assets/SpecialElite-webfont.svg#SpecialEliteRegular') format('svg');
+    src: url('<%= asset_path('SpecialElite-webfont.eot') %>');
+    src: url('<%= asset_path('SpecialElite-webfont.eot?#iefix') %>') format('embedded-opentype'),
+         url('<%= asset_path('SpecialElite-webfont.woff') %>') format('woff'),
+         url('<%= asset_path('SpecialElite-webfont.ttf') %>') format('truetype'),
+         url('<%= asset_path('SpecialElite-webfont.svg#SpecialEliteRegular') %>') format('svg');
     font-weight: normal;
     font-style: normal;
 
@@ -31,7 +27,7 @@
 	width: 30px;
 	height: 30px;
 	text-indent: -999999px;
-	background: url(/assets/bx_styles/gray_next.png) no-repeat 0 -30px;
+	background: url('<%= asset_path('bx_styles/gray_next.png') %>') no-repeat 0 -30px;
 }
 
 /*previous button*/
@@ -43,7 +39,7 @@
 	width: 30px;
 	height: 30px;
 	text-indent: -999999px;
-	background: url(/assets/bx_styles/gray_prev.png) no-repeat 0 -30px;
+	background: url('<%= asset_path('bx_styles/gray_prev.png') %>') no-repeat 0 -30px;
 }
 
 /*pager links*/
@@ -53,18 +49,18 @@
 	padding: 3px 8px 3px 6px;
 	font-size: 12px;
 	zoom:1;
-	background: url(/assets/bx_styles/gray_pager.png) no-repeat 0 -20px;
+	background: url('<%= asset_path('bx_styles/gray_pager.png') %>') no-repeat 0 -20px;
 }
 
 /*auto start button*/
 .bx-auto .start {
-	background: url(/assets/bx_styles/gray_auto.png) no-repeat 0 2px;
+	background: url('<%= asset_path('bx_styles/gray_auto.png') %>') no-repeat 0 2px;
 	padding-left: 13px;
 }
 
 /*auto stop button*/
 .bx-auto .stop {
-	background: url(/assets/bx_styles/gray_auto.png) no-repeat 0 -14px;
+	background: url('<%= asset_path('bx_styles/gray_auto.png') %>') no-repeat 0 -14px;
 	padding-left: 13px;
 }
 
@@ -168,7 +164,7 @@
 }
 
 .slide1 {
-  background: url(/assets/slide1.png) no-repeat 90% 100%;
+  background: url('<%= asset_path('slide1.png') %>') no-repeat 90% 100%;
 }
 
 .slide .left {

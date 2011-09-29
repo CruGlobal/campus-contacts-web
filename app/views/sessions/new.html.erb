@@ -6,6 +6,12 @@
     <% end %>
     <br><br>
     <%= link_to(image_tag('login-button.png'), user_omniauth_authorize_path(mhub? ? :facebook_mhub : :facebook), rel: 'external') %>
+    <br/>
+			<% if mhub? && cookies[:keyword] %>
+  			<div class="info"><br/><br/>
+  				<center><%= link_to("Don't like Facebook? Click here to skip facebook login", session[:return_to] ? session[:return_to].merge(:nologin => true) : "/c/#{cookies[:keyword]}?nologin=true") %></center>
+  			</div>
+  		<% end %>
   </center>
 
   <!-- <div class="splash">

@@ -30,6 +30,7 @@ class Ability
       
       # leaders and admins can edit other ppl's info
       can :manage, Person, organizational_roles: {organization_id: admin_of_org_ids}
+      can :manage, Person, id: user.person.try(:id)
       
       can :all, :all if user.developer?
       

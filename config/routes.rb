@@ -125,6 +125,7 @@ Mh::Application.routes.draw do
       get :thanks
       get :mine
       post :send_reminder
+      put :create_from_survey
     end
   end
 
@@ -137,6 +138,7 @@ Mh::Application.routes.draw do
       resources :contact_assignments
       resources :followup_comments
       resources :roles
+      resources :organizations
     end
   end
 

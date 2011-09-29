@@ -1,11 +1,12 @@
 class ContactsController < ApplicationController
   prepend_before_filter :set_keyword_cookie, only: :new
   before_filter :get_person
-  before_filter :prepare_for_mobile, only: [:new, :update, :thanks]
-  before_filter :get_keyword, only: [:new, :update, :thanks]
-  before_filter :ensure_current_org, except: [:new, :update, :thanks]
-  before_filter :authorize, except: [:new, :update, :thanks]
-  skip_before_filter :check_url, only: [:new, :update]
+  before_filter :prepare_for_mobile, only: [:new, :update, :thanks, :create_from_survey]
+  before_filter :get_keyword, only: [:new, :update, :thanks, :create_from_survey]
+  before_filter :ensure_current_org, except: [:new, :update, :thanks, :create_from_survey]
+  before_filter :authorize, except: [:new, :update, :thanks, :create_from_survey]
+  skip_before_filter :check_url, only: [:new, :update, :create_from_survey]
+  skip_before_filter :authenticate_user!, only: [:create_from_survey, :new]
   
   def index
     @organization = params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : current_organization
@@ -14,8 +15,8 @@ class ContactsController < ApplicationController
       return false
     end
     @question_sheets = @organization.question_sheets
-    @questions = @organization.questions.where("#{PageElement.table_name}.hidden" => false).flatten.uniq
-    @hidden_questions = @organization.questions.where("#{PageElement.table_name}.hidden" => true).flatten.uniq
+    @questions = @organization.all_questions.where("#{PageElement.table_name}.hidden" => false).flatten.uniq
+    @hidden_questions = @organization.all_questions.where("#{PageElement.table_name}.hidden" => true).flatten.uniq
     # @people = unassigned_people(@organization)
     if params[:dnc] == 'true'
       @people = @organization.dnc_contacts
@@ -61,8 +62,10 @@ class ContactsController < ApplicationController
       @people = @people.where("gender = ?", params[:gender].strip)
     end
     if params[:status].present?
-      @people = @people.includes(:organizational_roles).where("organizational_roles.followup_status = ?", params[:status].strip)
+      @people = @people.where("organizational_roles.followup_status" => params[:status].strip)
     end
+    
+    @people = @people.includes(:organizational_roles).where("organizational_roles.organization_id" => current_organization.id)
     
     if params[:answers].present?
       params[:answers].each do |q_id, v|
@@ -101,12 +104,12 @@ class ContactsController < ApplicationController
     end
     @q = Person.where('1 <> 1').search(params[:q])
     # raise @q.sorts.inspect
-    @people = @people.includes(:primary_phone_number).order(params[:q] && params[:q][:s] ? params[:q][:s] : ['lastName, firstName'])
+    @people = @people.includes(:primary_phone_number).order(params[:q] && params[:q][:s] ? params[:q][:s] : ['lastName, firstName']).group('ministry_person.personID')
     @all_people = @people
     @people = @people.page(params[:page])
     respond_to do |wants|
       wants.html do
-        @roles = Hash[OrganizationalRole.active.where(role_id: Role::CONTACT_ID, person_id: @people.collect(&:id)).map {|r| [r.person_id, r]}]
+        @roles = Hash[OrganizationalRole.active.where(organization_id: current_organization.id, role_id: Role::CONTACT_ID, person_id: @people.collect(&:id)).map {|r| [r.person_id, r]}]
       end
       wants.csv do
         @roles = Hash[OrganizationalRole.active.where(role_id: Role::CONTACT_ID, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r]}]
@@ -143,9 +146,17 @@ class ContactsController < ApplicationController
       return false
     end
     
+    unless params[:nologin] == 'true'
+      return unless authenticate_user! 
+    end
+    
     if @sms
-      @person.phone_numbers.create!(number: @sms.phone_number, location: 'mobile') unless @person.phone_numbers.detect {|p| p.number_with_country_code == @sms.phone_number}
-      @sms.update_attribute(:person_id, @person.id) unless @sms.person_id
+      if @person.new_record?
+        @person.phone_numbers.new(:number => @sms.phone_number)
+      else
+        @person.phone_numbers.create!(number: @sms.phone_number, location: 'mobile') unless @person.phone_numbers.detect {|p| p.number_with_country_code == @sms.phone_number}
+        @sms.update_attribute(:person_id, @person.id) unless @sms.person_id
+      end
     end
     if @keyword
       @answer_sheet = get_answer_sheet(@keyword, @person)
@@ -157,10 +168,25 @@ class ContactsController < ApplicationController
       render_404 and return
     end
   end
+  
+  def create_from_survey
+    @person = Person.create(params[:person])
+    if @person.valid?
+      update
+      return
+    else
+      new
+      render :new
+    end
+  end
     
   def update
-    person_to_update = Person.find(params[:id])
-    @person = person_to_update if can?(:update, person_to_update)
+    if params[:id]
+      person_to_update = Person.find(params[:id])
+      @person = person_to_update if can?(:update, person_to_update)
+    end
+    redirect_to :back and return false unless @person
+    
     @person.update_attributes(params[:person]) if params[:person]
     keywords = @keyword ? [@keyword] : current_organization.keywords
     keywords.each do |keyword|
@@ -180,7 +206,13 @@ class ContactsController < ApplicationController
             redirect_to contact_path(@person)
           end
         end
-        wants.mobile { render :thanks }
+        wants.mobile do
+          if mhub?
+            render :thanks
+          else
+            redirect_to contact_path(@person)
+          end
+        end
       end
     else
       if mhub?
@@ -285,7 +317,7 @@ class ContactsController < ApplicationController
     end
     
     def get_person
-      @person = current_user.person
+      @person = user_signed_in? ? current_user.person : Person.new
     end
     
     def authorize

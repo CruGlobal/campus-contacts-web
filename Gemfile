@@ -65,6 +65,9 @@ group :development, :test do
   gem 'rails-footnotes', '>= 3.7'
 end
 
+group :development do
+  gem 'rails-dev-tweaks'
+end
 
 group :performance do
   gem 'ruby-prof'

@@ -151,7 +151,7 @@ class Person < ActiveRecord::Base
         :parameters    => {data: data, authentication: authentication, response: response}
       )
     end
-    self.fb_uid = authentication.uid
+    self.fb_uid = authentication['uid']
     save(validate: false)
     self
   end
@@ -429,12 +429,12 @@ class Person < ActiveRecord::Base
     hash
   end
   
-  def to_hash_basic(org_id = nil)
+  def to_hash_basic(organization = nil)
     assign_hash = nil
-    unless org_id.nil?
-      assigned_to_person = ContactAssignment.where('assigned_to_id = ? AND organization_id = ?', id, org_id.id)
+    unless organization.nil?
+      assigned_to_person = ContactAssignment.where('assigned_to_id = ? AND organization_id = ?', id, organization.id)
       assigned_to_person = assigned_to_person.empty? ? [] : assigned_to_person.collect{ |a| a.person.try(:to_hash_mini) }
-      person_assigned_to = ContactAssignment.where('person_id = ? AND organization_id = ?', id, org_id.id)
+      person_assigned_to = ContactAssignment.where('person_id = ? AND organization_id = ?', id, organization.id)
       person_assigned_to = person_assigned_to.empty? ? [] : person_assigned_to.collect {|c| Person.find(c.assigned_to_id).try(:to_hash_mini)}
       assign_hash = {assigned_to_person: assigned_to_person, person_assigned_to: person_assigned_to}
     end
@@ -442,9 +442,9 @@ class Person < ActiveRecord::Base
     hash['gender'] = gender
     hash['fb_id'] = fb_uid.to_s unless fb_uid.nil?
     hash['picture'] = picture unless fb_uid.nil?
-    status = organizational_roles.where(organization_id: org_id.id).where('followup_status IS NOT NULL') unless org_id.nil?
+    status = organizational_roles.where(organization_id: organization.id).where('followup_status IS NOT NULL') unless organization.nil?
     hash['status'] = status.first.followup_status unless (status.nil? || status.empty?)
-    hash['request_org_id'] = org_id.id unless org_id.nil?
+    hash['request_org_id'] = organization.id unless organization.nil?
     hash['assignment'] = assign_hash unless assign_hash.nil?
     hash['first_contact_date'] = answer_sheets.first.created_at.utc.to_s unless answer_sheets.empty?
     hash['organizational_roles'] = []
@@ -461,8 +461,8 @@ class Person < ActiveRecord::Base
     hash
   end
   
-  def to_hash(org_id = nil)
-    hash = self.to_hash_basic(org_id)
+  def to_hash(organization = nil)
+    hash = self.to_hash_basic(organization)
     hash['first_name'] = firstName.to_s.gsub(/\n/," ")
     hash['last_name'] = lastName.to_s.gsub(/\n/," ")
     hash['phone_number'] = primary_phone_number.number if primary_phone_number

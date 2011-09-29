@@ -11,7 +11,7 @@ class SurveysController < ApplicationController
     @title = "Pick A Keyword"
     if current_user
       @organization = current_person.organizations.find_by_id(params[:org_id]) || current_organization
-      @keywords = @organization ? @organization.keywords : nil
+      @keywords = @organization ? @organization.self_and_children_keywords : nil
     else
       return render_404
     end
