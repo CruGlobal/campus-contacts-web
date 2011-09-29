@@ -168,7 +168,6 @@ class ApplicationController < ActionController::Base
     # if someone already has a status in an org, we shouldn't add them as a contact
     raise 'no person' unless person
     raise 'no org' unless organization
-    return false if OrganizationalRole.find_by_person_id_and_organization_id(person.id, organization.id)
     organization.add_contact(person)
   end
   
