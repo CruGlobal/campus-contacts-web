@@ -275,6 +275,13 @@ class ContactsController < ApplicationController
     end
   end
   
+  def destroy
+    contact = Person.find(params[:id])
+    current_organization.remove_contact(contact)
+
+    render :nothing => true      
+  end
+  
   def send_reminder
     to_ids = params[:to].split(',')
     leaders = current_organization.leaders.where(personID: to_ids)

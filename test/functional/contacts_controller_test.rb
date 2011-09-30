@@ -101,6 +101,15 @@ class ContactsControllerTest < ActionController::TestCase
       put :update, id: @contact.id, person: {firstName: 'Frank'}
       assert_redirected_to contact_path(@contact)
       assert_equal(assigns(:person).id, @contact.id)
+    end
+    
+    context "remove a contact from an organization" do   
+       setup do 
+         contact = Factory(:person)
+         @user.person.organizations.first.add_contact(contact)         
+         xhr :delete, :destroy, :id => contact.id
+       end
+       should respond_with(:success)
     end 
   end  
   

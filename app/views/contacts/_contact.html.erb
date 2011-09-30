@@ -36,8 +36,9 @@
       <% if om = OrganizationalRole.where(:person_id => person.id, :organization_id => current_organization.id, :role_id => Role::CONTACT_ID).first %>
         <%= link_to("Delete", organizational_role_path(:id => om.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.delete_confirm')) %>
       <% end %>
-    <% end %>
-    <span class="unassign_link" style="<%= 'display:none' unless assigned_to %>">
+      <% else %>
+      <%= link_to("Delete", contact_path(person), :method => :delete, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.destroy_confirm')) %>      
+    <% end %>    <span class="unassign_link" style="<%= 'display:none' unless assigned_to %>">
       <%= link_to(t('general.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign tipit", :title => t('contacts.index.unassign_contact')) %>
     </span>
   </td>

@@ -126,6 +126,7 @@ Mh::Application.routes.draw do
       get :mine
       post :send_reminder
       put :create_from_survey
+      delete :destroy      
     end
   end
 
