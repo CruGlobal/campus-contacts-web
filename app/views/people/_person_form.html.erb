@@ -27,5 +27,45 @@
     <td><%= af.text_field :number %></td>
   </tr>
   <% end %>
+        
+ <%= pf.fields_for :current_address, (person.current_address || person.build_current_address) do |af| %>        
+  <tr>
+    <td class="left"><%= t('general.address1') %>:</td>
+    <td><%= af.text_field :address1 %></td>
+  </tr>
+  
+  <tr>
+    <td class="left"><%= t('general.address2') %>:</td>
+    <td><%= af.text_field :address2 %></td>
+  </tr>
+
+  <tr>
+    <td class="left"><%= t('general.city') %>:</td>
+    <td><%= af.text_field :city %></td>
+  </tr>
+
+  <tr>
+    <td class="left"><%= t('general.state') %>:</td>
+    <td><%= af.text_field :state %></td>
+  </tr>
+  
+  <tr>
+    <td class="left"><%= t('general.zip') %>:</td>
+    <td><%= af.text_field :zip %></td>
+  </tr>
+  
+  <tr>
+    <td class="left"><%= t('general.country') %>:</td>
+    <td><%= af.text_field :country %></td>
+  </tr>
+  
+  
+ <% end %>
+
+
+  
+
+          
+  
   </table>
 <% end %>

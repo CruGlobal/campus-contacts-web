@@ -32,6 +32,9 @@
       <% if @person.fb_uid.present? %>
       <p><%= link_to('Facebook Profile', "http://www.facebook.com/profile.php?id=#{@person.fb_uid}", target: '_blank') %></p>
       <% end %>
+      <% if can?(:edit, @person) %>
+        <p><%= link_to(t('.edit_contact_info'), edit_person_path(@person)) %></p>
+      <% end %>
     </div>
   </div>
 </div>
