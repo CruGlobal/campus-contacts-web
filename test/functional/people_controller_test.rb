@@ -1,12 +1,12 @@
 require 'test_helper'
 
 class PeopleControllerTest < ActionController::TestCase
-  test 'true' do
-    assert true
+
+  setup do
+    @person = Factory(:user_with_auxs)  #user with a person object
+    sign_in @person
   end
-  # setup do
-  #   @person = people(:one)
-  # end
+  
   # 
   # test "should get index" do
   #   get :index
@@ -27,20 +27,22 @@ class PeopleControllerTest < ActionController::TestCase
   #   assert_redirected_to person_path(assigns(:person))
   # end
   # 
-  # test "should show person" do
-  #   get :show, id: @person.to_param
-  #   assert_response :success
-  # end
+
+  should "should show person" do
+    get :show, id: @person.person.id
+    assert_response :success, @response.body
+  end
+  
+  should "should get edit" do
+    get :edit, id: @person.person.id
+    assert_response :success
+  end
   # 
-  # test "should get edit" do
-  #   get :edit, id: @person.to_param
-  #   assert_response :success
-  # end
-  # 
-  # test "should update person" do
-  #   put :update, id: @person.to_param, person: @person.attributes
-  #   assert_redirected_to person_path(assigns(:person))
-  # end
+  should "should update person" do
+    put :update, id: @person.person.id, person: {firstName: 'David', lastName: 'Ang',  :current_address_attributes => { :address1 => "#41 Sgt. Esguerra Ave", :country => "Philippines"} }
+    #put :update, id: @person.person.id, person: @person.attributes
+    assert_redirected_to person_path(assigns(:person))
+  end
   # 
   # test "should destroy person" do
   #   assert_difference('Person.count', -1) do
