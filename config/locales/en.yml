@@ -66,6 +66,8 @@ en:
       phone: 'Phone'
       email: 'Email'
       year_in_school: 'Year in School'
+    show:
+      edit_profile: 'Edit Profile'
   org_membership:
     confirm_delete: "Are you sure you want to dissociate yourself from %{org}"
   welcome:
@@ -204,6 +206,7 @@ en:
       no_activity: 'No Activity'
       my_friends: 'My Friends'
       delete_confirm: You are about to send this contact to the "Do Not Contact" list. If that's not what you meant to do, click cancel.
+      destroy_confirm: Are you sure you want to delete this contact? If that's not what you meant to do, click cancel.      
       assign_people:
         one: Assign 1 person
         other: "Assign %{count} people"

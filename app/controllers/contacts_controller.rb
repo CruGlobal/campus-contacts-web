@@ -227,10 +227,8 @@ class ContactsController < ApplicationController
     @person = Person.find(params[:id])
     @organization = current_organization
     @organizational_role = OrganizationalRole.where(organization_id: @organization, person_id: @person, role_id: Role::CONTACT_ID).first
-    unless @organizational_role
-      redirect_to '/404.html' and return
-    end
-    @followup_comment = FollowupComment.new(organization: @organization, commenter: current_person, contact: @person, status: @organizational_role.followup_status)
+    authorize!(:read, @person)
+    @followup_comment = FollowupComment.new(organization: @organization, commenter: current_person, contact: @person, status: @organizational_role.followup_status) if @organizational_role
     @followup_comments = FollowupComment.where(organization_id: @organization, contact_id: @person).order('created_at desc')
   end
   
@@ -275,6 +273,13 @@ class ContactsController < ApplicationController
       wants.mobile { redirect_to :back }
       wants.js
     end
+  end
+  
+  def destroy
+    contact = Person.find(params[:id])
+    current_organization.remove_contact(contact)
+
+    render :nothing => true      
   end
   
   def send_reminder

@@ -62,31 +62,33 @@
   </div>
 
   <div class="contact_rightbody">
-    <%= form_for @followup_comment, remote: true, html: {id: 'comment_form'} do |f| %>
-      <%= f.hidden_field :organization_id %>
-      <%= f.hidden_field :contact_id %>
-      <%= f.hidden_field :commenter_id %>
-      <span class="statusline">
-        <%= t('contacts.show.status') %>: 
-        <%= f.select :status, OrganizationMembership::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]} %><br/>
-      </span>
-      <div class="commentbox">
-        <div class="textarea">
-          <%= f.text_area :comment, :rows => "2", placeholder: t('.add_comments_here') %><br/>
-        </div>
-        <%= button_tag(t('contacts.show.add_comment'), id: 'comment_submit') %>
-        <div class="rejoiceablebox">
-          <%= link_to(t('contacts.show.attach_rejoicable'), '#', id: 'add_rejoicable', :class => "rj rejoiceable") %><br/>
-          <div id="rejoicable_fields" style="display:none">
-            <% Rejoicable::OPTIONS.each do |option| %>
-              <%= check_box_tag 'rejoicables[]', option %> <span class="<%= option %> rj"><%= t("rejoicables.#{option}") %></span>
-              <br/>
-            <% end %>
+    <% if @followup_comment %>
+      <%= form_for @followup_comment, remote: true, html: {id: 'comment_form'} do |f| %>
+        <%= f.hidden_field :organization_id %>
+        <%= f.hidden_field :contact_id %>
+        <%= f.hidden_field :commenter_id %>
+        <span class="statusline">
+          <%= t('contacts.show.status') %>: 
+          <%= f.select :status, OrganizationMembership::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]} %><br/>
+        </span>
+        <div class="commentbox">
+          <div class="textarea">
+            <%= f.text_area :comment, :rows => "2", placeholder: t('.add_comments_here') %><br/>
           </div>
-        </div>        
-        <%= spinner('comment') %>
-      </div>
+          <%= button_tag(t('contacts.show.add_comment'), id: 'comment_submit') %>
+          <div class="rejoiceablebox">
+            <%= link_to(t('contacts.show.attach_rejoicable'), '#', id: 'add_rejoicable', :class => "rj rejoiceable") %><br/>
+            <div id="rejoicable_fields" style="display:none">
+              <% Rejoicable::OPTIONS.each do |option| %>
+                <%= check_box_tag 'rejoicables[]', option %> <span class="<%= option %> rj"><%= t("rejoicables.#{option}") %></span>
+                <br/>
+              <% end %>
+            </div>
+          </div>        
+          <%= spinner('comment') %>
+        </div>
       
+      <% end %>
     <% end %>
     
     <div class="commentswall" style="<%= 'display:none' unless @followup_comments.present? %>">

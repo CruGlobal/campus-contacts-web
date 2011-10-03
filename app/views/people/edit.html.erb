@@ -1,6 +1,25 @@
-<h1>Editing person</h1>
+<div class="titlebar">
+  <h1>
+    <%= image_tag("contact.png") %>
+    Editing <%= @person %>
+  </h1>
+</div>
 
-<%= render 'form' %>
-
-<%= link_to 'Show', @person %> |
-<%= link_to 'Back', people_path %>
+<div class="pad">
+  
+  <div class="contact_leftcol">
+    <div>
+      <%# if @person.fb_uid.present? %>
+        <%= image_tag("https://graph.facebook.com/#{@person.fb_uid}/picture?type=large", alt: '') %>
+      <%# else %>
+        <!-- No Image because they don't have facebook connected -->
+      <%# end %>
+    </div>
+  </div>
+  
+  <div class="contact_rightbody">
+  
+    <%= render 'form' %>
+  </div>
+  
+</div>

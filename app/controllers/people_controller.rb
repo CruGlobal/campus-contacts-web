@@ -131,19 +131,19 @@ class PeopleController < ApplicationController
 
   # PUT /people/1
   # PUT /people/1.xml
-  # def update
-  #   @person = Person.find(params[:id])
-  # 
-  #   respond_to do |format|
-  #     if @person.update_attributes(params[:person])
-  #       format.html { redirect_to(@person, notice: 'Person was successfully updated.') }
-  #       format.xml  { head :ok }
-  #     else
-  #       format.html { render action: "edit" }
-  #       format.xml  { render xml: @person.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
+  def update
+    @person = Person.find(params[:id])
+  
+    respond_to do |format|
+      if @person.update_attributes(params[:person])
+        format.html { redirect_to(@person, notice: 'Person was successfully updated.') }
+        format.xml  { head :ok }
+      else
+        format.html { render action: "edit" }
+        format.xml  { render xml: @person.errors, status: :unprocessable_entity }
+      end
+    end
+  end
   # 
   # # DELETE /people/1
   # # DELETE /people/1.xml

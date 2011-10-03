@@ -22,12 +22,7 @@ class OrganizationalRolesController < ApplicationController
         # Remove them from the current org
         ContactAssignment.where(person_id: params[:ids], organization_id: from_org.id).destroy_all
         people.each do |person|
-          from_org.remove_contact(person)
-        end
-    
-        # Add them to the new org
-        people.each do |person|
-          to_org.add_contact(person)
+          from_org.move_contact(person, to_org)
         end
       end
     end

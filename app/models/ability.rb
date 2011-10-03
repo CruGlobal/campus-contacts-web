@@ -26,7 +26,7 @@ class Ability
       end
       
       # involved members can see other people's info
-      can :read, Person, organizational_roles: {organization_id: user.person.organizational_roles.where(role_id: involved_role.id)[:organization_id]}
+      can :read, Person, organizational_roles: {organization_id: user.person.organizational_roles.where(role_id: involved_role.id).value_of(:organization_id)}
       
       # leaders and admins can edit other ppl's info
       can :manage, Person, organizational_roles: {organization_id: admin_of_org_ids}
