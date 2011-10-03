@@ -5,13 +5,13 @@ RailsAdmin.config do |config|
     redirect_to root_path unless warden.user.developer?
   end
   
-  config.model User do
-    # object_label_method {:name_with_keyword_count}
-    visible false
-    list do
-      field :username
-    end
-  end
+  # config.model User do
+  #   # object_label_method {:name_with_keyword_count}
+  #   visible false
+  #   list do
+  #     field :username
+  #   end
+  # end
   
   config.model Organization do
     object_label_method {:name_with_keyword_count}
