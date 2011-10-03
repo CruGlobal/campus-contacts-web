@@ -5,6 +5,7 @@ class Person < ActiveRecord::Base
   
   belongs_to :user, class_name: 'User', foreign_key: 'fk_ssmUserId'
   has_many :phone_numbers
+  
   has_one :primary_phone_number, class_name: "PhoneNumber", foreign_key: "person_id", conditions: {primary: true}
   has_many :locations
   has_one :latest_location, order: "updated_at DESC", class_name: 'Location'
@@ -19,7 +20,7 @@ class Person < ActiveRecord::Base
   has_many :contact_assignments, class_name: "ContactAssignment", foreign_key: "assigned_to_id"
   has_many :assigned_tos, class_name: "ContactAssignment", foreign_key: "person_id"
   has_many :assigned_contacts, through: :contact_assignments, source: :assigned_to
-  has_one :current_address, class_name: "Address", foreign_key: "fk_personID", conditions: {addressType: 'current'}
+  has_one :current_address, class_name: "Address", foreign_key: "fk_PersonID", conditions: {addressType: 'current'}
   has_many :rejoicables, inverse_of: :created_by
   
   has_many :organization_memberships, inverse_of: :person
@@ -36,7 +37,7 @@ class Person < ActiveRecord::Base
   validates_presence_of :firstName, :lastName
   validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/, allow_blank: true
   
-  accepts_nested_attributes_for :email_addresses, :phone_numbers, allow_destroy: true  
+  accepts_nested_attributes_for :email_addresses, :phone_numbers, :current_address, allow_destroy: true  
   
   before_save :stamp_changed
   before_create :stamp_created
