@@ -11,8 +11,8 @@
   <tr>
     <td class="left"><%= t('general.gender') %>:</td>
     <td>
-      <%= pf.radio_button :gender, '1' %> <%= t('general.male') %> 
-      <%= pf.radio_button :gender, '0' %> <%= t('general.female') %> 
+      <%= pf.radio_button :gender, 'male' %> <%= t('general.male') %> 
+      <%= pf.radio_button :gender, 'female' %> <%= t('general.female') %> 
     </td>
   </tr>
   <%= pf.fields_for (@email || person.primary_email_address || person.email_addresses.new) do |af| %>

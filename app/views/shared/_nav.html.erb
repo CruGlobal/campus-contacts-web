@@ -38,7 +38,7 @@
             </li>
           <% end %>
         <% end %>
-        <li class="item"><%= link_to('My Profile', contact_path(current_person)) %></li>
+        <li class="item"><%= link_to('My Profile', person_path(current_person)) %></li>
         <li class="item">
           <%= link_to(t('nav.logout'), facebook_logout_url)  %> 
         </li>   
