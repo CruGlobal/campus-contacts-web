@@ -104,6 +104,10 @@
     <% end %>
   </div>
 </div>
+
+<%= form_tag("", :id => "move_to_dnc", :method => :put) do %>
+  <%= hidden_field_tag :status, "do_not_contact" %>
+<% end %>
   
 <%= form_for ContactAssignment.new do |f| %>
   <%= hidden_field_tag :assigned_to, params[:assigned_to] %>

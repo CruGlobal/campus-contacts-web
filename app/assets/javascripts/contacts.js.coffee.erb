@@ -300,7 +300,8 @@ $ ->
       if length == 1
         helper_text = "<%= I18n.t('contacts.index.assign_people', count: 1) %>"
       $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'));
-
+ 
+  $.fn.activateDncDroppable()
   $.fn.activateLeaderDroppable()
   
 $.fn.activateLeaderDroppable = () ->
@@ -311,6 +312,19 @@ $.fn.activateLeaderDroppable = () ->
       leader.effect('highlight', {}, 'slow')
       $('#assign_to').val(leader.attr('data-id'))
       $.fn.assignTo(leader)
+      
+$.fn.activateDncDroppable = () ->
+  $('.leftmenu .dnc').droppable 
+    activeClass: 'ui-state-highlight'
+    drop: (event, ui) ->
+      li = $(this)
+      li.effect('highlight', {}, 'slow')
+      $.fn.moveToDnc(ui.draggable.attr("data-dnc-url"))      
+      
+$.fn.moveToDnc = (url) ->
+  $("#move_to_dnc").attr("action", url)
+  $.rails.handleRemote($("#move_to_dnc"))
+      
       
 $.fn.assignTo = (leader, skip_remote) ->
   leader_name = $('.name a', leader).text()
