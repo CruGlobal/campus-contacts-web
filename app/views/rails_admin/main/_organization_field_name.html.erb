@@ -1,0 +1,4 @@
+<%= field_wrapper_for(form, field) do %>
+<%= form.send field.view_helper, field.name, field.html_attributes %> 
+<%= form.hidden_field :person_id, :value => current_user.person.id %>
+<% end %>

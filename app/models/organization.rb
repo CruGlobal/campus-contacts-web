@@ -1,4 +1,6 @@
 class Organization < ActiveRecord::Base
+  attr_accessor :person_id
+    
   has_ancestry
   belongs_to :importable, polymorphic: true
   has_many :activities, dependent: :destroy
@@ -26,7 +28,9 @@ class Organization < ActiveRecord::Base
     has_many :"#{option}_contacts", :through => :rejoicables, source: :person, conditions: {'rejoicables.what' => option}, uniq: true
   end
   
-  validates_presence_of :name
+  validates_presence_of :name, :person_id
+  
+  after_create :create_admin_user
   
   def to_s() name; end
   
@@ -119,5 +123,15 @@ class Organization < ActiveRecord::Base
     end
     OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: Role::CONTACT_ID).first.try(:destroy)
   end
-  
+
+  def move_contact(person, to_org)
+    remove_contact(person)
+    to_org.add_contact(person)
+    FollowupComment.where(organization_id: id, contact_id: person.id).update_all(organization_id: to_org.id)
+  end
+
+  def create_admin_user
+    add_admin(Person.find(self.person_id))  
+  end 
+
 end
