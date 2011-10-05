@@ -17,6 +17,16 @@ module ApplicationHelper
     image_tag('spinner.gif', id: e, style: 'display:none', class: 'spinner')
   end
   
+  def add_params(url, hash)
+    if url.is_a?(Hash)
+      url.merge(hash)
+    else
+      parts = url.split('?')
+      url_params = (parts[1] + hash.map {|k,v| "#{k}=#{v}"}).join('&')
+      [parts[0], url_params].join('?')
+    end
+  end
+  
   def site_name
     mhub? ? '' : 'MissionHub'
   end
