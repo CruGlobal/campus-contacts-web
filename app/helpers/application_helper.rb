@@ -18,7 +18,7 @@ module ApplicationHelper
   end
   
   def site_name
-    mhub? ? 'MHub' : 'MissionHub'
+    mhub? ? '' : 'MissionHub'
   end
   
   def site_email

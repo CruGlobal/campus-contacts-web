@@ -175,6 +175,7 @@ class ContactsController < ApplicationController
       update
       return
     else
+      # raise @person.errors.full_messages.inspect
       new
       render :new
     end
@@ -241,7 +242,7 @@ class ContactsController < ApplicationController
     params[:person] ||= {}
     params[:person][:email_address] ||= {}
     params[:person][:phone_number] ||= {}
-    unless params[:person][:firstName].present? && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
+    unless params[:person][:firstName].present?# && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
       render :nothing => true and return
     end
     @person, @email, @phone = create_person(params[:person])
