@@ -98,8 +98,7 @@ $ ->
       $.fn.assignTo(leader)
     else
       $.rails.handleRemote($('#new_contact_assignment'))
-      unless $('#assign_to').val() == $('#my_id').val()
-        console.log($('.id_checkbox:checked'))
+      unless $('#assign_to').val() == $('#my_id').val()        
         $('.id_checkbox:checked').each ->
           $(this).closest('tr').remove();
     $('#assign_search').dialog('destroy')
@@ -255,6 +254,21 @@ $ ->
   $('#add_rejoicable').live 'click', ->
     $('#rejoicable_fields').slideToggle()
     false
+    
+  $("#contacts_controller a#bulk_delete").live 'click', ->
+    num_selected = $('.id_checkbox:checked').length
+    if num_selected  > 0
+      if(confirm('Are you sure you want to delete ' + num_selected + ' contacts permanently?'))
+        $('.id_checkbox:checked').each ->
+          $(this).closest('tr').fadeOut();
+
+        url = $(this).attr('href')
+        params = $('#new_contact_assignment').serialize();
+        $.post(url, params)
+    
+    else
+      alert("<%= I18n.t('contacts.index.none_checked') %>")
+    false    
     
   $('.contact_row td:not(.checkbox_cell)').live 'click', ->
     unless $('a', this)[0]?
