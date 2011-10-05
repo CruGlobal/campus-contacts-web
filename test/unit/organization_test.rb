@@ -1,6 +1,14 @@
 require 'test_helper'
 
 class OrganizationTest < ActiveSupport::TestCase
+  
+  test "add initial admin after creating an org" do
+    person = Factory(:person)
+    assert_difference "OrganizationalRole.count", 1 do
+      Factory(:organization, person_id: person.id)
+    end
+  end
+  
   # Replace this with your real tests.
   test "move contact" do
     person = Factory(:person_with_things)
@@ -16,4 +24,6 @@ class OrganizationTest < ActiveSupport::TestCase
     assert_equal(0, FollowupComment.where(contact_id: contact.id, organization_id: org1.id).count)
     assert_equal(1, FollowupComment.where(contact_id: contact.id, organization_id: org2.id).count)
   end
+  
+  
 end
