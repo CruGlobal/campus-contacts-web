@@ -16,7 +16,9 @@ RailsAdmin.config do |config|
   config.model Organization do
     object_label_method {:name_with_keyword_count}
     edit do
-      field :name
+      field :name do
+        edit_partial "organization_field_name"
+      end
       field :requires_validation
       field :validation_method, :enum
       field :terminology, :enum do
