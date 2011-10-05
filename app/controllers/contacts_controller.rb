@@ -282,6 +282,15 @@ class ContactsController < ApplicationController
     render :nothing => true      
   end
   
+  def bulk_destroy
+    params[:ids].each do |id|
+      contact = Person.find(id)
+      current_organization.remove_contact(contact)
+    end
+
+    render :nothing => true    
+  end
+  
   def send_reminder
     to_ids = params[:to].split(',')
     leaders = current_organization.leaders.where(personID: to_ids)
