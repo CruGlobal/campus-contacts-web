@@ -319,11 +319,14 @@ $.fn.activateDncDroppable = () ->
     drop: (event, ui) ->
       li = $(this)
       li.effect('highlight', {}, 'slow')
-      $.fn.moveToDnc(ui.draggable.attr("data-dnc-url"))      
+      $.fn.moveToDnc(ui.draggable)      
       
-$.fn.moveToDnc = (url) ->
-  $("#move_to_dnc").attr("action", url)
-  $.rails.handleRemote($("#move_to_dnc"))
+$.fn.moveToDnc = (dragObject) ->
+  $('#dnc_count').html(Number($('#dnc_count').html()) + 1)  
+  row = $("#" + $(dragObject).attr("data-row-id"))
+  row.hide()  
+  $('#move_to_dnc').attr('action', $(dragObject).attr("data-dnc-url"))  
+  $.rails.handleRemote($('#move_to_dnc'))
       
       
 $.fn.assignTo = (leader, skip_remote) ->
