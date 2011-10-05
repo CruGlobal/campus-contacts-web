@@ -61,7 +61,7 @@ group :development, :test do
   gem 'awesome_print'
   gem 'active_reload'
   # Pretty printed test output
-  gem 'turn', :require => false
+  # gem 'turn', :require => false
   gem 'rails-footnotes', '>= 3.7'
 end
 

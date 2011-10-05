@@ -1,12 +1,7 @@
 class ContactsController < ApplicationController
-  prepend_before_filter :set_keyword_cookie, only: :new
   before_filter :get_person
-  before_filter :prepare_for_mobile, only: [:new, :update, :thanks, :create_from_survey]
-  before_filter :get_keyword, only: [:new, :update, :thanks, :create_from_survey]
-  before_filter :ensure_current_org, except: [:new, :update, :thanks, :create_from_survey]
-  before_filter :authorize, except: [:new, :update, :thanks, :create_from_survey]
-  skip_before_filter :check_url, only: [:new, :update, :create_from_survey]
-  skip_before_filter :authenticate_user!, only: [:create_from_survey, :new]
+  before_filter :ensure_current_org
+  before_filter :authorize
   
   def index
     @organization = params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : current_organization
@@ -140,87 +135,19 @@ class ContactsController < ApplicationController
     end
   end
   
-  def new
-    unless mhub? || Rails.env.test?
-      redirect_to new_contact_url(params.merge(host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']))
-      return false
-    end
-    
-    unless params[:nologin] == 'true'
-      return unless authenticate_user! 
-    end
-    
-    if @sms
-      if @person.new_record?
-        @person.phone_numbers.new(:number => @sms.phone_number)
-      else
-        @person.phone_numbers.create!(number: @sms.phone_number, location: 'mobile') unless @person.phone_numbers.detect {|p| p.number_with_country_code == @sms.phone_number}
-        @sms.update_attribute(:person_id, @person.id) unless @sms.person_id
-      end
-    end
-    if @keyword
-      @answer_sheet = get_answer_sheet(@keyword, @person)
-      respond_to do |wants|
-        wants.html { render :layout => 'plain'}
-        wants.mobile
-      end
-    else
-      render_404 and return
-    end
-  end
-  
-  def create_from_survey
-    @person = Person.create(params[:person])
-    if @person.valid?
-      update
-      return
-    else
-      # raise @person.errors.full_messages.inspect
-      new
-      render :new
-    end
-  end
-    
   def update
-    if params[:id]
-      person_to_update = Person.find(params[:id])
-      @person = person_to_update if can?(:update, person_to_update)
-    end
-    redirect_to :back and return false unless @person
+    @person = Person.find(params[:id])
+    authorize!(:update, @person)
     
     @person.update_attributes(params[:person]) if params[:person]
-    keywords = @keyword ? [@keyword] : current_organization.keywords
-    keywords.each do |keyword|
-      @answer_sheet = get_answer_sheet(keyword, @person)
-      question_set = QuestionSet.new(keyword.questions, @answer_sheet)
-      question_set.post(params[:answers], @answer_sheet)
-      question_set.save
-    end
+    
+    save_survey_answers
+
     if @person.valid? && (!@answer_sheet || (@answer_sheet.person.valid? &&
        (!@answer_sheet.person.primary_phone_number || @answer_sheet.person.primary_phone_number.valid?)))
-      create_contact_at_org(@person, @keyword.organization) if @keyword
-      respond_to do |wants|
-        wants.html do
-          if mhub?
-            render :thanks, layout: 'plain'
-          else
-            redirect_to contact_path(@person)
-          end
-        end
-        wants.mobile do
-          if mhub?
-            render :thanks
-          else
-            redirect_to contact_path(@person)
-          end
-        end
-      end
+      redirect_to contact_path(@person)
     else
-      if mhub?
-        render :new, layout: 'plain'
-      else
-        render :edit
-      end
+      render :edit
     end
   end
   
@@ -247,15 +174,9 @@ class ContactsController < ApplicationController
     end
     @person, @email, @phone = create_person(params[:person])
     if @person.save
-      # @email.save
-      # @phone.save
-      # save survey answers
-      current_organization.keywords.each do |keyword|
-        @answer_sheet = get_answer_sheet(keyword, @person)
-        question_set = QuestionSet.new(keyword.questions, @answer_sheet)
-        question_set.post(params[:answers], @answer_sheet)
-        question_set.save
-      end
+
+      save_survey_answers
+
       create_contact_at_org(@person, current_organization)
       if params[:assign_to_me] == 'true'
         ContactAssignment.where(person_id: @person.id, organization_id: current_organization.id).destroy_all
@@ -293,32 +214,13 @@ class ContactsController < ApplicationController
   end
   
   protected
-    
-    def get_keyword
-      if params[:keyword]
-        @keyword ||= SmsKeyword.where(keyword: params[:keyword]).first 
-      elsif params[:received_sms_id]
-        sms_id = Base62.decode(params[:received_sms_id])
-        @sms = SmsSession.find_by_id(sms_id) || ReceivedSms.find_by_id(sms_id)
-        if @sms
-          @keyword ||= @sms.sms_keyword || SmsKeyword.where(keyword: @sms.message.strip).first
-        end
-      end
-      if params[:keyword] || params[:received_sms_id]
-        unless @keyword
-          render_404 
-          return false
-        end
-        @questions = @keyword.questions
-      end
-    end
-    
-    def set_keyword_cookie
-      get_keyword
-      if @keyword
-        cookies[:keyword] = @keyword.keyword 
-      else
-        return false
+  
+    def save_survey_answers
+      current_organization.keywords.each do |keyword|
+        @answer_sheet = get_answer_sheet(keyword, @person)
+        question_set = QuestionSet.new(keyword.questions, @answer_sheet)
+        question_set.post(params[:answers], @answer_sheet)
+        question_set.save
       end
     end
     

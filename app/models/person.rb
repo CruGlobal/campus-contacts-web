@@ -194,6 +194,7 @@ class Person < ActiveRecord::Base
   end
   
   def email=(val)
+    return if val.blank?
     email = primary_email_address || email_addresses.new
     email.email = val
     email.save

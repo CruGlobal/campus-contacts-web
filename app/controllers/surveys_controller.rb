@@ -21,6 +21,7 @@ class SurveysController < ApplicationController
     end
   end
   
+  # Enter survey mode
   def start
     unless params[:keyword].present? && SmsKeyword.find_by_keyword(params[:keyword])
       cookies[:survey_mode] = nil
@@ -32,10 +33,12 @@ class SurveysController < ApplicationController
     redirect_to facebook_logout_url(next: contact_form_url(params[:keyword]))
   end
   
+  # Exit survey mode
   def stop
     cookies[:survey_mode] = nil
     cookies[:keyword] = nil
     redirect_to facebook_logout_url
   end
-
+  
+    
 end

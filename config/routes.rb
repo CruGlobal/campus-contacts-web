@@ -1,5 +1,11 @@
 Mh::Application.routes.draw do
   
+  resources :survey_responses do
+    collection do
+      get :thanks
+    end
+  end
+  
   resources :leaders do
     collection do
       post :search
@@ -122,7 +128,6 @@ Mh::Application.routes.draw do
   
   resources :contacts do
     collection do
-      get :thanks
       get :mine
       post :send_reminder
       put :create_from_survey
@@ -155,8 +160,8 @@ Mh::Application.routes.draw do
   match '/admin/sms_keywords/approve'
 
   # Map keyword responses with phone numbers
-  match 'c/:keyword(/:received_sms_id)' => 'contacts#new', as: 'contact_form'
-  match 'm/:received_sms_id' => 'contacts#new'
+  match 'c/:keyword(/:received_sms_id)' => 'survey_responses#new', as: 'contact_form'
+  match 'm/:received_sms_id' => 'survey_responses#new'
   match 'l/:token/:user_id' => 'leaders#leader_sign_in'
   # mount RailsAdmin::Engine => "/admin"
   
