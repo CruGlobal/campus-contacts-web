@@ -544,4 +544,11 @@ class Person < ActiveRecord::Base
     end
     [person, email, phone]
   end
+  
+  def do_not_contact(organizational_role_id)
+    organizational_role = OrganizationalRole.find(organizational_role_id)
+    organizational_role.followup_status = 'do_not_contact'
+    ContactAssignment.where(person_id: self.id, organization_id: organizational_role.organization_id).destroy_all
+    organizational_role.save
+  end
 end
