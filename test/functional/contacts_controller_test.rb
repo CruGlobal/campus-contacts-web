@@ -111,6 +111,16 @@ class ContactsControllerTest < ActionController::TestCase
        end
        should respond_with(:success)
     end 
+    
+    context "bulk remove contacts from an organization" do   
+       setup do 
+         contact = Factory(:person)
+         contact2 = Factory(:person)         
+         @user.person.organizations.first.add_contact(contact)         
+         xhr :post, :bulk_destroy, :ids => [contact.id, contact2.id]
+       end
+       should respond_with(:success)
+    end
   end  
   
   context "After logging in a person without orgs" do
