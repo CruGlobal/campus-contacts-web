@@ -45,6 +45,12 @@
     <li><%= link_to(t('.export'), params.merge(format: 'csv')) %></li>
   </ul>
   
+  <% if params[:dnc] == 'true' %>
+    <ul class="pillmenu">
+      <li><%= link_to(t('.bulk_delete'), bulk_destroy_contacts_path, id: "bulk_delete") %></li>
+    </ul>  
+  <% end %>
+  
   <div id="hidden_questions_div" style="display:none">
     <%= t('.add_question_back') %>
     <ul id="hidden_questions">
@@ -131,7 +137,6 @@
       <th></th>
     </tr>
     <tbody id="contacts_table">
-      
       <% @people.each do |person| %>
         <%= render 'contacts/contact', :person => person %>
       <% end %>
@@ -146,6 +151,7 @@
   <%= render 'assign' %>
 <% end %>
 
+  
 <% if @people.length > 0 %>
   <div class="searchstat">
     <%= "Displaying #{@people.offset_value + 1} - #{@people.offset_value + @people.length} of #{@people.total_count}" %>
