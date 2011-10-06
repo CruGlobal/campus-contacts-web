@@ -45,6 +45,12 @@
     <li><%= link_to(t('.export'), params.merge(format: 'csv')) %></li>
   </ul>
   
+  <% if params[:dnc] == 'true' %>
+    <ul class="pillmenu">
+      <li><%= link_to(t('.bulk_delete'), bulk_destroy_contacts_path, id: "bulk_delete") %></li>
+    </ul>  
+  <% end %>
+  
   <div id="hidden_questions_div" style="display:none">
     <%= t('.add_question_back') %>
     <ul id="hidden_questions">
@@ -104,6 +110,10 @@
     <% end %>
   </div>
 </div>
+
+<%= form_tag("", :id => "move_to_dnc", :method => :put) do %>
+  <%= hidden_field_tag :status, "do_not_contact" %>
+<% end %>
   
 <%= form_for ContactAssignment.new do |f| %>
   <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
@@ -122,12 +132,13 @@
           <%= link_to(image_tag("close.png", alt: t('nav.hide'), title: t('nav.hide')), hide_sms_keyword_question_path(@organization.keywords.first, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
         </th>
       <% end %>
-      <th><%= t('.assigned_to') %></th>
-      <th><%= t('.friends') %></th>
+      <% unless params[:dnc] %>
+        <th><%= t('.assigned_to') %></th>
+        <th><%= t('.friends') %></th>
+      <% end %>
       <th></th>
     </tr>
     <tbody id="contacts_table">
-      
       <% @people.each do |person| %>
         <%= render 'contacts/contact', :person => person %>
       <% end %>
@@ -142,6 +153,7 @@
   <%= render 'assign' %>
 <% end %>
 
+  
 <% if @people.length > 0 %>
   <div class="searchstat">
     <%= "Displaying #{@people.offset_value + 1} - #{@people.offset_value + @people.length} of #{@people.total_count}" %>

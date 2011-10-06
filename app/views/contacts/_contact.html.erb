@@ -1,6 +1,10 @@
 <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row">
   <td nowrap="nowrap" class="checkbox_cell">
-    <%= image_tag('grippy.png', class: 'handle') %>
+    <% if om = OrganizationalRole.where(:person_id => person.id, :organization_id => current_organization.id, :role_id => Role::CONTACT_ID).first %>
+      <img alt="Grippy" class="handle" data-row-id="<%= dom_id(person) %>" data-dnc-url="<%= organizational_role_path(:id => om.id, :status => 'do_not_contact') %>" src="/assets/grippy.png" />
+    <% else %>
+      <%= image_tag('grippy.png', class: 'handle' ) %>
+    <% end %>
     <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
   </td>
   <td><%= person.firstName %></td>
@@ -20,16 +24,18 @@
       <% end %>
     </td>
   <% end %>
-  <td id="assigned_to_<%= person.id %>" class="assigned_to"><%= assigned_to = ContactAssignment.where(person_id: person.id, organization_id: current_organization.id).first.try(:assigned_to) %></td>
-  <td>
-    <% friends = person.friends.where(uid: current_organization.leaders.collect(&:fb_uid)) %>
-    <% if friends.length > 0 %>
-      <% friend_leaders = Person.where(fb_uid: friends.collect(&:uid)).order("lastName, preferredName, firstName") %>
-      <%= link_to(friend_leaders.length, '', class: 'friends_count tipthis', title: friend_leaders.collect {|f| "#{f}<br>"} ) %>
-    <% else %>
-    0
-    <% end %>
-  </td>
+  <% unless params[:dnc] %>
+    <td id="assigned_to_<%= person.id %>" class="assigned_to"><%= assigned_to = ContactAssignment.where(person_id: person.id, organization_id: current_organization.id).first.try(:assigned_to) %></td>
+    <td>
+      <% friends = person.friends.where(uid: current_organization.leaders.collect(&:fb_uid)) %>
+      <% if friends.length > 0 %>
+        <% friend_leaders = Person.where(fb_uid: friends.collect(&:uid)).order("lastName, preferredName, firstName") %>
+        <%= link_to(friend_leaders.length, '', class: 'friends_count tipthis', title: friend_leaders.collect {|f| "#{f}<br>"} ) %>
+      <% else %>
+      0
+      <% end %>
+    </td>
+  <% end %>
   <td class="controls">
     <%= link_to("Show", contact_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
     <% if params[:dnc] == 'true' %>
@@ -39,7 +45,7 @@
         <%= link_to("Delete", organizational_role_path(:id => om.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.delete_confirm')) %>
       <% end %>
     <% end %>    
-    <span class="unassign_link" style="<%= 'display:none' unless assigned_to %>">
+    <span class="unassign_link" style="<%= 'display:none' unless assigned_to || params[:dnc] %>">
       <%= link_to(t('general.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign tipit", :title => t('contacts.index.unassign_contact')) %>
     </span>
   </td>
