@@ -5,6 +5,7 @@ class ContactAssignmentsControllerTest < ActionController::TestCase
     setup do
       #@user = Factory(:user)
       @user = Factory(:user_with_auxs)  #user with a person object
+      @current_organization = @user.person.organizations.first
       sign_in @user
     end
     
@@ -15,11 +16,18 @@ class ContactAssignmentsControllerTest < ActionController::TestCase
         
         @user.person.organizations.first.add_contact(@contact1)
         @user.person.organizations.first.add_contact(@contact2)        
+        
+        assert_not_nil OrganizationalRole.where(person_id: @contact1, organization_id: @current_organization, role_id: Role::CONTACT_ID)
+        assert_not_nil OrganizationalRole.where(person_id: @contact2, organization_id: @current_organization, role_id: Role::CONTACT_ID)
       end
       
       should "should move the contact to do not contact" do
-        xhr :post, :create, { :assign_to => "do_not_contact", :ids => [@contact1.id, @contact2.id], :org_id =>  @user.person.organizations.first.id }        
-        # need to assert if @contact1 is really gone from organization        
+        xhr :post, :create, { :assign_to => "do_not_contact", :ids => [@contact1, @contact2], :org_id => @current_organization }        
+
+        assert_equal 0, ContactAssignment.where(person_id: @contact1, organization_id: @current_organization).size
+        assert_equal 0, ContactAssignment.where(person_id: @contact2, organization_id: @current_organization).size        
+        assert_equal "do_not_contact", OrganizationalRole.where(person_id: @contact1, organization_id: @current_organization, role_id: Role::CONTACT_ID).first.followup_status
+        assert_equal "do_not_contact", OrganizationalRole.where(person_id: @contact2, organization_id: @current_organization, role_id: Role::CONTACT_ID).first.followup_status
       end
       
     end
