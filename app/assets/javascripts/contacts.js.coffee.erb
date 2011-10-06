@@ -163,7 +163,7 @@ $ ->
       el = $('#assign_search')
       el.dialog
         resizable: false,
-        height:444,
+        height:650,
         width:600,
         modal: true,
         buttons: 
@@ -196,8 +196,8 @@ $ ->
     false
   $('a.delete_leader').live 'click', ->
     li = $(this).parent()
-    li.fadeOut 'slow', ->
-      li.remove()
+    person_id = li.attr('data-id')
+    $('.leader[data-id='+person_id+']').remove()
 
   $("a.add-leader").live 'click', ->
     $('#add_leader_form').hide()
@@ -208,7 +208,7 @@ $ ->
     el = $('#leader_search')
     el.dialog
       resizable: false,
-      height:450,
+      height:650,
       width:400,
       modal: true,
       buttons: 

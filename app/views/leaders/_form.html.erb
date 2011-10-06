@@ -1,9 +1,9 @@
 <!-- Pick director form -->
 <%= form_tag @person.new_record? ? add_person_leaders_path : leader_path(@person), method: :put, :remote => true, :id => 'create_leader_form' do %>
   <% if flash[:error] %>
-    <div class="flash error"><%= raw flash[:error] %></div>
+    <div class="flash error"><strong><%= raw flash[:error] %></strong></div>
   <% end %>
-  <label for="leader_search_name">All of the following fields are required to add a leader:</label>
+  <label for="leader_search_name">Name and email fields are required to add a leader:</label>
   
   
   <%= render 'people/person_form', :person => @person %>

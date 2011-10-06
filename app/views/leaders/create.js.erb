@@ -10,3 +10,4 @@ if (leaders.hasClass('showall')) {
 }	else {
 	leaders.css({height: leaders.attr("data-height"), overflow: 'hidden'})
 }
+$('.leaders_list ul').prepend('<li class="leader" data-id="<%= @person.id %>"><span class="name"><%= j(link_to(@person, '#')) %></span></li>')
