@@ -132,8 +132,10 @@
           <%= link_to(image_tag("close.png", alt: t('nav.hide'), title: t('nav.hide')), hide_sms_keyword_question_path(@organization.keywords.first, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
         </th>
       <% end %>
-      <th><%= t('.assigned_to') %></th>
-      <th><%= t('.friends') %></th>
+      <% unless params[:dnc] %>
+        <th><%= t('.assigned_to') %></th>
+        <th><%= t('.friends') %></th>
+      <% end %>
       <th></th>
     </tr>
     <tbody id="contacts_table">
