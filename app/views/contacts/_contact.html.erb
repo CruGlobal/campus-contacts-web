@@ -1,7 +1,7 @@
 <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row">
   <td nowrap="nowrap" class="checkbox_cell">
     <% if om = OrganizationalRole.where(:person_id => person.id, :organization_id => current_organization.id, :role_id => Role::CONTACT_ID).first %>
-      <img alt="Grippy" class="handle" data-row-id="<%= dom_id(person) %>" data-dnc-url="<%= organizational_role_path(:id => om.id, :status => 'do_not_contact') %>" src="/assets/grippy.png" />
+      <%= image_tag('grippy.png', class: 'handle', 'data-row-id' => dom_id(person), 'data-dnc-url' => organizational_role_path(:id => om.id, :status => 'do_not_contact') ) %>
     <% else %>
       <%= image_tag('grippy.png', class: 'handle' ) %>
     <% end %>
