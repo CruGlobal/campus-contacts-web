@@ -195,9 +195,17 @@ class Person < ActiveRecord::Base
   
   def email=(val)
     return if val.blank?
-    email = primary_email_address || email_addresses.new
-    email.email = val
-    email.save
+    existing = email_addresses.where(email: val).first
+    if existing
+      unless existing.primary?
+        email_addresses.where(["email <> ?", val]).update_all(primary: false)
+        existing.update_attribute(:primary, true)
+      end
+    else
+      email = primary_email_address || email_addresses.new
+      email.email = val
+      email.save
+    end
   end
   
   def email_address=(hash)

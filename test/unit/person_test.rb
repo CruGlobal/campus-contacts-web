@@ -86,6 +86,15 @@ class PersonTest < ActiveSupport::TestCase
       assert_equal(@friend2.name, "Todd Gross", "Make sure that Todd's name was updated")
     end
     
+    should "not create a duplicate email when adding an email they already have" do
+      primary_email = @person.email_addresses.create(email: 'test1@example.com')
+      assert primary_email.primary?
+      secondary_email = @person.email_addresses.create(email: 'test2@example.com')
+      @person.email = 'test2@example.com'
+      @person.reload
+      assert_equal(secondary_email, @person.primary_email_address)
+    end
+    
     should "get & update interests" do
       x = @person.get_interests(@authentication, TestFBResponses::INTERESTS)
       assert(x > 0, "Make sure we now have at least one interest")
