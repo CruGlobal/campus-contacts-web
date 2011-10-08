@@ -332,6 +332,7 @@ DEPENDENCIES
   rails-dev-tweaks
   rails-footnotes (>= 3.7)
   ransack
+  redis
   resque
   resque_mail_queue
   rest-client

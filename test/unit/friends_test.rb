@@ -11,9 +11,17 @@ class FriendTest < ActiveSupport::TestCase
     setup do
       @person = Factory(:person)
     end
+
     should "be able to add a friend" do
       friend1 = @person.friends.create(provider: "facebook", name: "Books", person_id: @person.personID.to_i, uid: "1")
       assert friend1.valid?
+    end
+
+    should "be able to insert friendship to redis" do
+      friend1 = @person.friends.create(provider: "facebook", name: "Books", person_id: @person.personID.to_i, uid: "1")
+      friend1.follow!(@person)
+      assert_equal(Friend.followers(@person).length, @person.friends.all.length)
+      assert_equal(friend1.following?(@person), true)
     end
   end
 end

@@ -224,13 +224,13 @@ class Person < ActiveRecord::Base
       else @friends = response
       end
       @friends["data"].each do |friend|
-        friends.create(uid: friend['id'], name: friend['name'], person_id: personID.to_i, provider: "facebook")
+        the_friend = friends.create(uid: friend['id'], name: friend['name'], person_id: personID.to_i, provider: "facebook")
+        the_friend.follow!(self) unless the_friend.following?(self)
       end
     end
     @friends["data"].length  #return how many friend you got from facebook for testing
   end
   
-  #
   def update_friends(authentication, response = nil)
     if response.nil?
       @friends = MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
@@ -251,12 +251,14 @@ class Person < ActiveRecord::Base
        @matching_friend = nil
      end
      if @matching_friend
-       friends.find_by_uid(@matching_friend.uid).update_attributes(name: friend['name']) unless @matching_friend.name.eql?(friend['name'])
+       the_friend = friends.find_by_uid(@matching_friend.uid)
+       the_friend.update_attributes(name: friend['name']) unless @matching_friend.name.eql?(friend['name'])
        @match.push(@matching_friend.uid)
      elsif friends.find_by_uid(friend.id).nil? #uid's did not match && the DB is empty
-       friends.create!(uid: friend['id'], name: friend['name'], person_id: personID.to_i, provider: "facebook")
+       the_friend = friends.create!(uid: friend['id'], name: friend['name'], person_id: personID.to_i, provider: "facebook")
        @create.push(friend['id'])
      end
+     the_friend.follow!(self) unless the_friend.following?(self)
    end
    @dbf = friends.reload
    
