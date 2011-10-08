@@ -28,9 +28,9 @@
   <% unless params[:dnc] %>
     <td id="assigned_to_<%= person.id %>" class="assigned_to"><%= assigned_to = (assignments[person.id] || []).first.try(:assigned_to) %></td>
     <td>
-      <% friends = person.friends.where(uid: current_organization.leaders.collect(&:fb_uid)) %>
+      <% friends = person.friends_and_leaders(current_organization) %> 
       <% if friends.length > 0 %>
-        <% friend_leaders = Person.where(fb_uid: Friend.followers(person)).order("lastName, preferredName, firstName") %>
+        <% friend_leaders = Person.where(fb_uid: friends).order("lastName, preferredName, firstName") %>
         <%= link_to(friend_leaders.length, '', class: 'friends_count tipthis', title: friend_leaders.collect {|f| "#{f}<br>"} ) %>
       <% else %>
       0

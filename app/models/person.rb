@@ -577,4 +577,8 @@ class Person < ActiveRecord::Base
     ContactAssignment.where(person_id: self.id, organization_id: organizational_role.organization_id).destroy_all
     organizational_role.save
   end
+
+  def friends_and_leaders(organization)
+    Friend.followers(self) & organization.leaders.collect(&:fb_uid)  
+  end
 end
