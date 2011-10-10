@@ -3,7 +3,7 @@ require 'test_helper'
 class PersonTest < ActiveSupport::TestCase
   should belong_to(:user)
   should validate_presence_of(:firstName)
-  should validate_presence_of(:lastName)
+  # should validate_presence_of(:lastName)
   should have_one(:primary_organization)
   should have_one(:primary_organization_membership)
   should have_one(:primary_phone_number)
