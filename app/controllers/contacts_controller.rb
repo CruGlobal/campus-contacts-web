@@ -114,12 +114,14 @@ class ContactsController < ApplicationController
         CSV.generate(out) do |rows|
           rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('general.status'), t('general.gender'), t('contacts.index.phone_number')] + @questions.collect {|q| q.label}
           @all_people.each do |person|
-            answers = [person.firstName, person.lastName, @roles[person.id].followup_status.to_s.titleize, person.gender.to_s.titleize, person.pretty_phone_number]
-            @questions.each do |q|
-              answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)}
-              answers << q.display_response(answer_sheet)
+            if @roles[person.id]
+              answers = [person.firstName, person.lastName, @roles[person.id].followup_status.to_s.titleize, person.gender.to_s.titleize, person.pretty_phone_number]
+              @questions.each do |q|
+                answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)}
+                answers << q.display_response(answer_sheet)
+              end
+              rows << answers
             end
-            rows << answers
           end
         end
         filename = @organization.to_s
