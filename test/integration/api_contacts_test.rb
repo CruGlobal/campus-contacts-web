@@ -62,14 +62,14 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
 
-      assert_equal(@json.length, 1)
+      assert_equal(1, @json.length)
       
       path = "/api/contacts.json?limit=1&start=1"
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
 
-      assert_equal(@json.length, 1)   
+      assert_equal(1, @json.length)   
       
       #raise an error when no limit with start
       path = "/api/contacts.json?start=1"
@@ -77,13 +77,13 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       
-      assert_equal(@json['error']['code'],"29")
+      assert_equal("29", @json['error']['code'])
 
       path = "/api/contacts.json?limit=1"
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
-      assert_equal(@json.length, 1)
+      assert_equal(1, @json.length)
     end
     
     should "be able to view their contacts filtered by status" do
@@ -93,7 +93,7 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       
-      assert_equal(@json.length,1)
+      assert_equal(1, @json.length)
       person_basic_test(@json[0]['person'],@user2,@user)
       @user.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: Role::CONTACT_ID)
       @user2.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: Role::CONTACT_ID)
@@ -101,27 +101,27 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
-      assert_equal(@json.length,0)
+      assert_equal(0, @json.length)
      
       path = "/api/contacts.json?filters=status&values=attempted_contact"
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
-      assert_equal(@json.length,2)
+      assert_equal(2, @json.length)
 
       
       path = "/api/contacts.json?filters=status,gender&values=attempted_contact,female"
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
-      assert_equal(@json.length,0)
+      assert_equal(0, @json.length)
       
       # use filter and sort by status
       path = "/api/contacts.json?filters=status&values=attempted_contact&sort=status&direction=asc"
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
-      assert_equal(@json.length,2)
+      assert_equal(2, @json.length)
     end    
     
     
@@ -137,7 +137,7 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
 
-      assert_equal(@json.length,1)
+      assert_equal(1, @json.length)
       assert_equal(@json[0]['person']['id'], @user.person.id)
 
       # my completed contacts on mobile app
@@ -146,7 +146,7 @@ class ApiContactsTest < ActionDispatch::IntegrationTest
       get path, {'access_token' => @access_token3.code}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
-      assert_equal(@json.length,0)
+      assert_equal(0, @json.length)
       
       @user2.person.organizational_roles.where(organization_id: @user3.person.primary_organization.id).first.update_attributes(followup_status: 'completed')
       path = "/api/contacts.json?filters=status&values=finished&assigned_to=#{@user.person.id}&limit=15&start=0&org_id=#{@user3.person.primary_organization.id}"

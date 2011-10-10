@@ -21,7 +21,7 @@ class ApiPeopleTest < ActionDispatch::IntegrationTest
        get path, {'access_token' => @access_token3.code, 'fields' => "first_name,last_name,name,id,birthday,fb_id,picture,gender,education,interests,id,locale,location,assignment,request_org_id,organization_membership,organizational_roles,status"}
        assert_response :success, @response.body
        @json = ActiveSupport::JSON.decode(@response.body)
-       
+       raise @response.body.inspect unless @json[0]
        person_full_test(@json[0], @user3, @user2)
      end
      

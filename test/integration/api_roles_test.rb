@@ -18,12 +18,12 @@ class ApiRolesTest < ActionDispatch::IntegrationTest
       path = "/api/roles/#{@user.person.id}"
       put path, {'access_token' => @access_token3.code, role: "leader"}
       @json = ActiveSupport::JSON.decode(@response.body)
-      assert_equal(@json['error']['code'], "37")
+      assert_equal("37", @json['error']['code'], @json['error'])
       
       path = "/api/roles/#{@user.person.id}"
       put path, {'access_token' => @access_token3.code, org_id: @user3.person.primary_organization.id}
       @json = ActiveSupport::JSON.decode(@response.body)
-      assert_equal(@json['error']['code'], "37")
+      assert_equal("37", @json['error']['code'], @json['error'])
     end
     
     should "return a JSON error if the identity of the access token is not an admin" do
@@ -31,13 +31,13 @@ class ApiRolesTest < ActionDispatch::IntegrationTest
       @user3.person.organizational_roles.first.update_attributes(role_id: Role::LEADER_ID)
       put path, {'access_token' => @access_token3.code, role: "leader", org_id: @user3.person.primary_organization.id}
       @json = ActiveSupport::JSON.decode(@response.body)
-      assert_equal(@json['error']['code'], "39")
+      assert_equal("39", @json['error']['code'], @json['error'])
       
       path = "/api/roles/#{@user.person.id}"
       @user3.person.organizational_roles.first.update_attributes(role_id: Role::CONTACT_ID)
       put path, {'access_token' => @access_token3.code, role: "leader", org_id: @user3.person.primary_organization.id}
       @json = ActiveSupport::JSON.decode(@response.body)
-      assert_equal(@json['error']['code'], "24")
+      assert_equal("24", @json['error']['code'], @json['error'])
     end
     
     should "return a JSON error if role name doesnt' exist" do
@@ -45,7 +45,7 @@ class ApiRolesTest < ActionDispatch::IntegrationTest
       @user.person.organizational_roles.destroy_all
       put path, {'access_token' => @access_token3.code, role: "bad_role", org_id: @user3.person.primary_organization.id}
       @json = ActiveSupport::JSON.decode(@response.body)
-      assert_equal(@json['error']['code'], "38")
+      assert_equal("38", @json['error']['code'])
     end
     
     should "successfully update a person from contact to leader status" do
