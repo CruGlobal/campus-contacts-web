@@ -57,7 +57,8 @@ class Person < ActiveRecord::Base
     scope
   end
   def to_s
-    [preferredName.blank? ? firstName : preferredName.try(:strip), lastName.try(:strip)].join(' ')
+    # [preferredName.blank? ? firstName : preferredName.try(:strip), lastName.try(:strip)].join(' ')
+    [firstName.to_s, lastName.to_s.strip].join(' ')
   end
   
   def leader_in?(org)
@@ -112,9 +113,9 @@ class Person < ActiveRecord::Base
     val
   end
   
-  def firstName
-    preferredName.blank? ? self[:firstName].try(:strip) : preferredName.try(:strip)
-  end
+  # def firstName
+  #   preferredName.blank? ? self[:firstName].try(:strip) : preferredName.try(:strip)
+  # end
   
   def self.create_from_facebook(data, authentication, response = nil)
     if response.nil?
