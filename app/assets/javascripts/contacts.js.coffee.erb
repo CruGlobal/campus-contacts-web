@@ -54,8 +54,8 @@ $ ->
     
   $('#add_contact_div .save').live 'click', ->
     form = $(this).closest('form')
-    if $('#person_firstName', form).val() == '' or ($('#person_email_address_email', form).val() == '' &&$('#person_phone_number_number', form).val() == '')
-      alert('At a minimum you need to provide a first name and either an email address or a phone number.')
+    if $('#person_firstName', form).val() == '' #or ($('#person_email_address_email', form).val() == '' &&$('#person_phone_number_number', form).val() == '')
+      alert('At a minimum you need to provide a first name.')
       return false
     if $(this).hasClass('save_and_more')
       $('#add_another').val('true')

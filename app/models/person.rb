@@ -34,7 +34,7 @@ class Person < ActiveRecord::Base
   has_many :sms_sessions, inverse_of: :person
   
   scope :who_answered, lambda {|question_sheet_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.question_sheet_id' => question_sheet_id)}
-  validates_presence_of :firstName, :lastName
+  validates_presence_of :firstName
   validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/, allow_blank: true
   
   accepts_nested_attributes_for :email_addresses, :phone_numbers, :current_address, allow_destroy: true  
