@@ -1,7 +1,7 @@
 <% if params[:assign_to_me] == 'true' %>
 	$('#contacts_table').prepend("<%= j(render('contacts/my_contact', :person => @person)) %>")
 <% else %>
-	$('#contacts_table').prepend("<%= j(render('contacts/contact', :person => @person)) %>")
+	$('#contacts_table').prepend("<%= j(render('contacts/contact', person: @person, answers: @answers, questions: @questions, assignments: @assignments)) %>")
 <% end %>
 <% unless params[:add_another] == 'true' %>
 	$('#add_contact_div').dialog('destroy')

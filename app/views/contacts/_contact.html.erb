@@ -1,7 +1,8 @@
+<% contact_role = @roles[person.id] if @roles %>
 <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row">
   <td nowrap="nowrap" class="checkbox_cell">
-    <% if om = OrganizationalRole.where(:person_id => person.id, :organization_id => current_organization.id, :role_id => Role::CONTACT_ID).first %>
-      <%= image_tag('grippy.png', class: 'handle', 'data-row-id' => dom_id(person), 'data-dnc-url' => organizational_role_path(:id => om.id, :status => 'do_not_contact') ) %>
+    <% if contact_role %>
+      <%= image_tag('grippy.png', class: 'handle', 'data-row-id' => dom_id(person), 'data-dnc-url' => organizational_role_path(:id => contact_role.id, :status => 'do_not_contact') ) %>
     <% else %>
       <%= image_tag('grippy.png', class: 'handle' ) %>
     <% end %>
@@ -10,39 +11,39 @@
   <td><%= person.firstName %></td>
   <td><%= person.lastName %></td>
   <% if @roles %>
-    <td><%= @roles[person.id].followup_status.to_s.titleize %></td>
+    <td><%= contact_role.followup_status.to_s.titleize %></td>
   <% end %>
   <td><%= person.gender.to_s.titleize %></td>
   <td><%= person.pretty_phone_number %></td>
-  <% current_organization.all_questions.where("#{PageElement.table_name}.hidden" => false).flatten.uniq.each do |q| %>
+  <% questions.each do |q| %>
     <td class="<%= dom_id(q) %>">
       <% case q.slug %>
       <% when 'email' %>
         <%= mail_to(person.email) %>
       <% else %>
-        <% answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)} %><%= q.display_response(answer_sheet) %>
+        <%= answers[person.id][q.id] %>
       <% end %>
     </td>
   <% end %>
   <% unless params[:dnc] %>
-    <td id="assigned_to_<%= person.id %>" class="assigned_to"><%= assigned_to = ContactAssignment.where(person_id: person.id, organization_id: current_organization.id).first.try(:assigned_to) %></td>
-    <td>
-      <% friends = person.friends.where(uid: current_organization.leaders.collect(&:fb_uid)) %>
-      <% if friends.length > 0 %>
-        <% friend_leaders = Person.where(fb_uid: friends.collect(&:uid)).order("lastName, preferredName, firstName") %>
-        <%= link_to(friend_leaders.length, '', class: 'friends_count tipthis', title: friend_leaders.collect {|f| "#{f}<br>"} ) %>
-      <% else %>
+    <td id="assigned_to_<%= person.id %>" class="assigned_to"><%= assigned_to = (assignments[person.id] || []).first.try(:assigned_to) %></td>
+    <!-- <td>
+      <%# friends = person.friends.where(uid: current_organization.leaders.collect(&:fb_uid)) %>
+      <%# if friends.length > 0 %>
+        <%# friend_leaders = Person.where(fb_uid: friends.collect(&:uid)).order("lastName, preferredName, firstName") %>
+        <%#= link_to(friend_leaders.length, '', class: 'friends_count tipthis', title: friend_leaders.collect {|f| "#{f}<br>"} ) %>
+      <%# else %>
       0
-      <% end %>
-    </td>
+      <%# end %>
+    </td> -->
   <% end %>
   <td class="controls">
     <%= link_to("Show", contact_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
     <% if params[:dnc] == 'true' %>
       <%= link_to("Delete", contact_path(person), :method => :delete, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.destroy_confirm')) %>      
     <% else %>
-      <% if om = OrganizationalRole.where(:person_id => person.id, :organization_id => current_organization.id, :role_id => Role::CONTACT_ID).first %>
-        <%= link_to("Delete", organizational_role_path(:id => om.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.delete_confirm')) %>
+      <% if contact_role %>
+        <%= link_to("Delete", organizational_role_path(:id => contact_role.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.delete_confirm')) %>
       <% end %>
     <% end %>    
     <span class="unassign_link" style="<%= 'display:none' unless assigned_to || params[:dnc] %>">
