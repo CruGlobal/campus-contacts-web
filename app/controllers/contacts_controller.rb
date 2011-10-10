@@ -168,38 +168,43 @@ class ContactsController < ApplicationController
   end
   
   def create
-    params[:person] ||= {}
-    params[:person][:email_address] ||= {}
-    params[:person][:phone_number] ||= {}
-    unless params[:person][:firstName].present?# && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
-      render :nothing => true and return
-    end
-    @person, @email, @phone = create_person(params[:person])
-    if @person.save
-
-      save_survey_answers
-
-      create_contact_at_org(@person, current_organization)
-      if params[:assign_to_me] == 'true'
-        ContactAssignment.where(person_id: @person.id, organization_id: current_organization.id).destroy_all
-        ContactAssignment.create!(person_id: @person.id, organization_id: current_organization.id, assigned_to_id: current_person.id)
+    Person.transaction do
+      params[:person] ||= {}
+      params[:person][:email_address] ||= {}
+      params[:person][:phone_number] ||= {}
+      unless params[:person][:firstName].present?# && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
+        render :nothing => true and return
       end
-    else
-      flash.now[:error] = ''
-      flash.now[:error] += 'First name is required.<br />' unless @person.firstName.present?
-      flash.now[:error] += 'Phone number is not valid.<br />' if @phone && !@phone.valid?
-      flash.now[:error] += 'Email address is not valid.<br />' if @email && !@email.valid?
-      render 'add_contact'
-      return
-    end
-    respond_to do |wants|
-      wants.html { redirect_to :back }
-      wants.mobile { redirect_to :back }
-      wants.js do
-        @assignments = ContactAssignment.where(person_id: @person.id, organization_id: current_organization.id).group_by(&:person_id)
-        @roles = Hash[OrganizationalRole.active.where(organization_id: current_organization.id, role_id: Role::CONTACT_ID, person_id: @person).map {|r| [r.person_id, r]}]
+      @person, @email, @phone = create_person(params[:person])
+      if @person.save
+
         @questions = current_organization.all_questions.where("#{PageElement.table_name}.hidden" => false)
-        @answers = generate_answers([@person], current_organization, @questions)
+
+        save_survey_answers
+      
+        FollowupComment.create_from_survey(current_organization, @person, current_organization.all_questions, @answer_sheets)
+
+        create_contact_at_org(@person, current_organization)
+        if params[:assign_to_me] == 'true'
+          ContactAssignment.where(person_id: @person.id, organization_id: current_organization.id).destroy_all
+          ContactAssignment.create!(person_id: @person.id, organization_id: current_organization.id, assigned_to_id: current_person.id)
+        end
+        respond_to do |wants|
+          wants.html { redirect_to :back }
+          wants.mobile { redirect_to :back }
+          wants.js do
+            @assignments = ContactAssignment.where(person_id: @person.id, organization_id: current_organization.id).group_by(&:person_id)
+            @roles = Hash[OrganizationalRole.active.where(organization_id: current_organization.id, role_id: Role::CONTACT_ID, person_id: @person).map {|r| [r.person_id, r]}]
+            @answers = generate_answers([@person], current_organization, @questions)
+          end
+        end
+      else
+        flash.now[:error] = ''
+        flash.now[:error] += 'First name is required.<br />' unless @person.firstName.present?
+        flash.now[:error] += 'Phone number is not valid.<br />' if @phone && !@phone.valid?
+        flash.now[:error] += 'Email address is not valid.<br />' if @email && !@email.valid?
+        render 'add_contact'
+        return
       end
     end
   end
@@ -232,11 +237,13 @@ class ContactsController < ApplicationController
   protected
   
     def save_survey_answers
+      @answer_sheets = []
       current_organization.keywords.each do |keyword|
         @answer_sheet = get_answer_sheet(keyword, @person)
         question_set = QuestionSet.new(keyword.questions, @answer_sheet)
         question_set.post(params[:answers], @answer_sheet)
         question_set.save
+        @answer_sheets << @answer_sheet
       end
     end
     

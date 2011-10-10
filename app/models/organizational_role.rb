@@ -4,7 +4,8 @@ class OrganizationalRole < ActiveRecord::Base
   belongs_to :organization
   scope :leaders, where(role_id: Role.leader_ids)
   scope :active, where(deleted: false)
-  scope :not_dnc, where("followup_status <> 'do_not_contact', role_id = #{Role::CONTACT_ID}")
+  scope :contact, where("role_id = #{Role::CONTACT_ID}")
+  scope :not_dnc, where("followup_status <> 'do_not_contact' AND role_id = #{Role::CONTACT_ID}")
   scope :dnc, where("followup_status = 'do_not_contact' AND role_id = #{Role::CONTACT_ID}")
   scope :completed, where("followup_status = 'completed' AND role_id = #{Role::CONTACT_ID}")
   scope :uncontacted, where("followup_status = 'uncontacted' AND role_id = #{Role::CONTACT_ID}")

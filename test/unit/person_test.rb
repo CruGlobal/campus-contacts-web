@@ -36,8 +36,6 @@ class PersonTest < ActiveSupport::TestCase
     end
     should "output the person's correct full name" do 
       assert_equal(@person.to_s, "John Doe")
-      # @person.preferredName = "Buford"
-      # assert_equal(@person.to_s, "Buford Doe")
     end
     
     context "has a gender which" do

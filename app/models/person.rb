@@ -113,10 +113,6 @@ class Person < ActiveRecord::Base
     val
   end
   
-  # def firstName
-  #   preferredName.blank? ? self[:firstName].try(:strip) : preferredName.try(:strip)
-  # end
-  
   def self.create_from_facebook(data, authentication, response = nil)
     if response.nil?
       response = MiniFB.get(authentication['token'], authentication['uid'])
