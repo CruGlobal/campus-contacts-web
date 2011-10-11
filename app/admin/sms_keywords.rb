@@ -3,7 +3,11 @@ ActiveAdmin.register SmsKeyword do
   filter :state, :as => :select, :collection => %w[requested active denied inactive]
   
   index do
+    column 'User' do |keyword|
+      "#{keyword.user.person} (#{keyword.user.sms_keywords.length})"
+    end
     column :keyword
+    column :organization
     column :state
     column :explanation
     column :initial_response

@@ -1,7 +1,15 @@
 Mh::Application.routes.draw do
   
   ActiveAdmin.routes(self)
-
+  ActiveAdmin::ResourceController.class_eval do
+    def authenticate_admin!
+      unless user_signed_in? && SuperAdmin.find_by_user_id_and_site(current_user.id, 'MissionHub')
+        render :file => Rails.root.join(mhub? ? 'public/404_mhub.html' : 'public/404.html'), :layout => false, :status => 404
+        false
+      end
+    end
+  end
+  
   resources :survey_responses do
     collection do
       get :thanks
