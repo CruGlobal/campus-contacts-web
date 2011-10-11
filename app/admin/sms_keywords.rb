@@ -7,6 +7,9 @@ ActiveAdmin.register SmsKeyword do
       "#{keyword.user.person} (#{keyword.user.sms_keywords.length})"
     end
     column :keyword
+    column 'Organization' do |keyword|
+      "#{keyword.organization} (#{keyword.organization.keywords.length})"
+    end
     column :organization
     column :state
     column :explanation
