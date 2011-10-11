@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111010163721) do
+ActiveRecord::Schema.define(:version => 20111011140850) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -50,6 +50,21 @@ ActiveRecord::Schema.define(:version => 20111010163721) do
   add_index "access_tokens", ["client_id"], :name => "index_access_tokens_on_client_id"
   add_index "access_tokens", ["code"], :name => "index_access_tokens_on_code", :unique => true
   add_index "access_tokens", ["identity"], :name => "index_access_tokens_on_identity"
+
+  create_table "active_admin_comments", :force => true do |t|
+    t.integer  "resource_id",   :null => false
+    t.string   "resource_type", :null => false
+    t.integer  "author_id"
+    t.string   "author_type"
+    t.text     "body"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "namespace"
+  end
+
+  add_index "active_admin_comments", ["author_type", "author_id"], :name => "index_active_admin_comments_on_author_type_and_author_id"
+  add_index "active_admin_comments", ["namespace"], :name => "index_active_admin_comments_on_namespace"
+  add_index "active_admin_comments", ["resource_type", "resource_id"], :name => "index_admin_notes_on_resource_type_and_resource_id"
 
   create_table "activities", :force => true do |t|
     t.integer  "target_area_id"
@@ -4883,6 +4898,15 @@ ActiveRecord::Schema.define(:version => 20111010163721) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "super_admins", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "site"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "super_admins", ["user_id"], :name => "index_super_admins_on_user_id"
 
   create_table "teams", :force => true do |t|
     t.integer  "organization_id"

@@ -1,5 +1,7 @@
 Mh::Application.routes.draw do
   
+  ActiveAdmin.routes(self)
+
   resources :survey_responses do
     collection do
       get :thanks
@@ -168,7 +170,7 @@ Mh::Application.routes.draw do
   
   get "welcome/tour"
   
-  mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
+  # mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
   mount Resque::Server.new, at: "/resque"
 
   #other oauth calls
