@@ -33,10 +33,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         session["devise.facebook_data"] = env["omniauth.auth"]
       end
     rescue Exception => e
-      if Rails.env.test?
-        raise e 
-      else
+      if Rails.env.production?
         notify_hoptoad(e)
+      else
+        raise e 
       end
     end
   end
