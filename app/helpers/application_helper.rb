@@ -35,4 +35,14 @@ module ApplicationHelper
     mhub? ? 'support@mhub.cc' : 'support@missionhub.com'
   end
   
+  def times(start_time, end_time)
+    midnight = Time.now.beginning_of_day
+    # start_time = midnight + start_time.hours
+    # end_time = midnight.beginning_of_day + end_time.hours
+    time_options = []
+    start_time.to_i.step(end_time.to_i, 900) do |time|
+      time_options << [(midnight + time).to_s(:time), time]
+    end
+    time_options
+  end  
 end

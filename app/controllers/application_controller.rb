@@ -218,4 +218,12 @@ class ApplicationController < ActionController::Base
     return false
   end
   
+  def is_leader?
+    current_user.has_role?(Role::LEADER_ID, current_organization) || is_admin?
+  end
+  
+  def is_admin?
+    current_user.has_role?(Role::ADMIN_ID, current_organization)
+  end
+  
 end

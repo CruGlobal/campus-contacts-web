@@ -1,5 +1,5 @@
 Mh::Application.routes.draw do
-  
+
   ActiveAdmin.routes(self)
   ActiveAdmin::ResourceController.class_eval do
     def authenticate_admin!
@@ -9,6 +9,8 @@ Mh::Application.routes.draw do
       end
     end
   end
+  
+  resources :groups
   
   resources :survey_responses do
     collection do
