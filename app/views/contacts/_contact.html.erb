@@ -27,15 +27,15 @@
   <% end %>
   <% unless params[:dnc] %>
     <td id="assigned_to_<%= person.id %>" class="assigned_to"><%= assigned_to = (assignments[person.id] || []).first.try(:assigned_to) %></td>
-    <!-- <td>
-      <%# friends = person.friends.where(uid: current_organization.leaders.collect(&:fb_uid)) %>
-      <%# if friends.length > 0 %>
-        <%# friend_leaders = Person.where(fb_uid: friends.collect(&:uid)).order("lastName, preferredName, firstName") %>
-        <%#= link_to(friend_leaders.length, '', class: 'friends_count tipthis', title: friend_leaders.collect {|f| "#{f}<br>"} ) %>
-      <%# else %>
+    <td>
+      <% friends = person.friends.where(uid: current_organization.leaders.collect(&:fb_uid)) %>
+      <% if friends.length > 0 %>
+        <% friend_leaders = Person.where(fb_uid: friends.collect(&:uid)).order("lastName, preferredName, firstName") %>
+        <%= link_to(friend_leaders.length, '', class: 'friends_count tipthis', title: friend_leaders.collect {|f| "#{f}<br>"} ) %>
+      <% else %>
       0
-      <%# end %>
-    </td> -->
+      <% end %>
+    </td>
   <% end %>
   <td class="controls">
     <%= link_to("Show", contact_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
