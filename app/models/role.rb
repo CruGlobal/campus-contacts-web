@@ -3,7 +3,9 @@ class Role < ActiveRecord::Base
   belongs_to :organization, inverse_of: :roles
   scope :default, where(organization_id: 0)
   scope :leaders, where(i18n: %w[leader admin])
-  
+
+  validates :i18n, :presence => true, :uniqueness => true
+ 
   def self.leader_ids
     self.leaders.collect(&:id)
   end

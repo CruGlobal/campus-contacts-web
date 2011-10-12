@@ -9,6 +9,17 @@ en:
     involved: Involved
     leader: Leader
     alumni: Alumni
+    views:
+      organizational_roles: "Organizational Roles"
+      system_roles: "System Roles"
+      create_role: "Create new role"
+      edit_role: "Edit role"
+      delete_role: "Delete role"
+      update: "Update"
+      create: "Create"
+      name: "Name"
+      i18n: "i18n"
+     
   views:
     pagination:
       first: "&laquo; First"
@@ -66,6 +77,7 @@ en:
       phone: 'Phone'
       email: 'Email'
       year_in_school: 'Year in School'
+      manage_roles: 'Manage Roles'
     show:
       edit_profile: 'Edit Profile'
   org_membership:

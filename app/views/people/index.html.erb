@@ -12,11 +12,14 @@
 </div>
 <div class="pagemenu">
   <ul class="pillmenu">
-		<li><%= link_to(t('.bulk_email'), nil, :id => "send_bulkemail_link") %></li>	
-		<li><%= link_to(t('.bulk_sms'), nil, :id => "send_bulksms_link") %></li>			
-	</ul>
+    <li><%= link_to(t('.bulk_email'), nil, :id => "send_bulkemail_link") %></li>	
+    <li><%= link_to(t('.bulk_sms'), nil, :id => "send_bulksms_link") %></li>			
+  </ul>
   <ul class="pillmenu">
-   	<li><%= link_to(t('.export'), export_people_path(params.except(:action, :controller, :utf8))) %></li>
+    <li><%= link_to(t('.export'), export_people_path(params.except(:action, :controller, :utf8))) %></li>
+  </ul>
+  <ul class="pillmenu">
+    <li><%= link_to(t('.manage_roles'), roles_path(organization: current_organization)) %></li>
   </ul>
 </div>
   
@@ -32,7 +35,6 @@
     <th></th>
   </tr>
   <tbody id="contacts_table">
-    
     <% @people.each do |person| %>
       <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="person_row">
         <td nowrap="nowrap" class="checkbox_cell">

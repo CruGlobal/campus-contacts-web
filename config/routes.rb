@@ -82,7 +82,9 @@ Mh::Application.routes.draw do
       end
     end
   end
-  
+ 
+  resources :roles
+ 
   namespace :admin do
     resources :email_templates
     resources :question_sheets do 
