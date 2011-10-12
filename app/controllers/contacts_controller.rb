@@ -265,7 +265,7 @@ class ContactsController < ApplicationController
       AnswerSheet.where(question_sheet_id: organization.question_sheet_ids, person_id: people.collect(&:id)).includes(:answers, {:person => :primary_email_address}).each do |answer_sheet|
         answers[answer_sheet.person_id] ||= {}
         questions.each do |q|
-          answers[answer_sheet.person_id][q.id] = q.display_response(answer_sheet)
+          answers[answer_sheet.person_id][q.id] = q.display_response(answer_sheet) if q.display_response(answer_sheet).present?
         end
       end
       answers
