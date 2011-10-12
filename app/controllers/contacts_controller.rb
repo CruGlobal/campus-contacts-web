@@ -1,3 +1,4 @@
+require 'csv'
 class ContactsController < ApplicationController
   before_filter :get_person
   before_filter :ensure_current_org
@@ -109,7 +110,7 @@ class ContactsController < ApplicationController
         @answers = generate_answers(@people, @organization, @questions)
       end
       wants.csv do
-        @answers = generate_answers(@all_people, @organization, @questions)
+        @all_answers = generate_answers(@all_people, @organization, @questions)
         out = ""
         CSV.generate(out) do |rows|
           rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('general.status'), t('general.gender'), t('contacts.index.phone_number')] + @questions.collect {|q| q.label}
@@ -117,8 +118,9 @@ class ContactsController < ApplicationController
             if @roles[person.id]
               answers = [person.firstName, person.lastName, @roles[person.id].followup_status.to_s.titleize, person.gender.to_s.titleize, person.pretty_phone_number]
               @questions.each do |q|
-                answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)}
-                answers << q.display_response(answer_sheet)
+                answers << @all_answers[person.id][q.id]
+                # answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)}
+                # answers << q.display_response(answer_sheet)
               end
               rows << answers
             end
