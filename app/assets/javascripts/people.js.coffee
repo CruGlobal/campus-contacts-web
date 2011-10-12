@@ -47,29 +47,96 @@ $.fn.triggerPersonLookup = ->
         $('.merge.' + css_class).show()
         $("#spinner_" + css_class).hide()
         
-$('#send_bulkemail_link').live 'click', -> 
-  $('.to_list').html('')
-  ids = []
-  $('.id_checkbox:checked').each ->
-    id = $(this).val()
-    ids.push(id)
-    $('.to_list').append('<li data-id="'+id + '">'+$(this).parent().next().html() + ' <a href="" class="delete">x</a></li>')
-  $('#bulk_send_dialog').dialog
-    resizable: false,
-    height:444,
-    width:600,
-    modal: true,
-    buttons: 
-      Cancel: ->
-        $(this).dialog('destroy')
-  false        
-  
-$('#bulk_send_dialog form').live 'submit', ->
+$.fn.submitBulkSendDialog = ->
   ids = []
   $('.to_list li').each ->
     id = $(this).attr('data-id')
     ids.push(id)
   $('#to').val(ids.join(','))
   $('#bulk_send_dialog').dialog('destroy')
-  $.rails.handleRemote($(this))
+  $.rails.handleRemote($("#bulk_send_dialog form"))
+        
+        
+$('#send_bulkemail_link').live 'click', -> 
+  $('.to_list').html('')
+  ids = []
+  $('.id_checkbox:checked').each ->
+    id = $(this).val()
+    ids.push(id)
+    tr = $(this).parent().parent();
+    name = tr.find('.first_name').html() + ' ' + tr.find('.last_name').html()
+    $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
+  $('#bulk_send_dialog').dialog
+    resizable: false,
+    height:444,
+    width:600,
+    modal: true,
+    title: 'Bulk Send Email Message',
+    open: (event, ui)->
+      no_emails = []
+      $('.id_checkbox:checked').each ->
+         tr = $(this).parent().parent();
+         name = tr.find('.first_name').html() + ' ' + tr.find('.last_name').html()
+         email = tr.find('.email').text().length
+         if email == 0
+           no_emails.push(name)
+      if no_emails.length > 0
+        html = '<p>The following people are missing email addresses and will not be contacted:<br/>'
+        for name in no_emails
+          html += '&middot; ' + name + '<br/>'
+        html += '</p>'
+        $("#bulk_send_dialog_message .notice").html(html).show()
+      else
+        $("#bulk_send_dialog_message").hide()
+        
+      $(this).find('form').attr("action", '/people/bulk_email')
+    buttons: 
+      Send: ->
+        $(this).submitBulkSendDialog()
+      Cancel: ->
+        $(this).dialog('destroy')
+  false        
+  
+$('#send_bulksms_link').live 'click', -> 
+  $('.to_list').html('')
+  ids = []
+  $('.id_checkbox:checked').each ->
+    id = $(this).val()
+    ids.push(id)
+    tr = $(this).parent().parent();
+    name = tr.find('.first_name').html() + ' ' + tr.find('.last_name').html()
+    $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
+  $('#bulk_send_dialog').dialog
+    resizable: false,
+    height:444,
+    width:600,
+    modal: true,
+    title: 'Bulk Send Sms Message',
+    open: (event, ui)->
+      no_numbers = []
+      $('.id_checkbox:checked').each ->
+         tr = $(this).parent().parent();
+         name = tr.find('.first_name').html() + ' ' + tr.find('.last_name').html()
+         number = tr.find('.phone_number').text().length
+         if number == 0
+           no_numbers.push(name)
+      if no_numbers.length > 0
+        html = '<p>The following people are missing phone numbers and will not be contacted:<br/>'
+        for name in no_numbers
+          html += '&middot; ' + name + '<br/>'
+        html += '</p>'
+        $("#bulk_send_dialog_message .notice").html(html).show()
+      else
+        $("#bulk_send_dialog_message").hide()
+    
+      $(this).find('form').attr("action", '/people/bulk_sms')
+    buttons: 
+      Send: ->
+        $(this).submitBulkSendDialog()
+      Cancel: ->
+        $(this).dialog('destroy')
+  false        
+  
+  
+$('#bulk_send_dialog form').live 'submit', ->
   false

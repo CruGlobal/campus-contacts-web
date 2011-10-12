@@ -10,7 +10,7 @@
 <div class="pagemenu">
   <ul class="pillmenu">
 		<li><%= link_to(t('.bulk_email'), nil, :id => "send_bulkemail_link") %></li>	
-		<li><%= link_to(t('.bulk_sms'), nil, :id => "send_bulkemail_link") %></li>			
+		<li><%= link_to(t('.bulk_sms'), nil, :id => "send_bulksms_link") %></li>			
 	</ul>
   <ul class="pillmenu">
    	<li><%= link_to(t('.export'), export_people_path(params.except(:action, :controller, :utf8))) %></li>
@@ -36,11 +36,11 @@
           <%#= image_tag('grippy.png', class: 'handle') %>
           <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
         </td>
-        <td><%= person.firstName %></td>
-        <td><%= person.lastName %></td>
+        <td class="first_name"><%= person.firstName %></td>
+        <td class="last_name"><%= person.lastName %></td>
         <td><%= person.gender.to_s.titleize %></td>
-        <td><%= mail_to(person.email) %></td>
-        <td><%= person.pretty_phone_number %></td>
+        <td class="email"><%= mail_to(person.email) %></td>
+        <td class="phone_number"><%= person.pretty_phone_number %></td>
         <td><%= person.yearInSchool %></td>
         <td class="controls">
           <%= link_to("Show", "/people/#{person.id}", :class => "icon magnify tipit", :title => t('nav.view_details')) %>

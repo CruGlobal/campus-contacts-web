@@ -1,5 +1,5 @@
-<div id="bulk_send_dialog" style="display:none" title="Send Bulk Email">
-  <%= form_tag '/people/bulk_email' do %>
+<div id="bulk_send_dialog" style="display:none" title="Send Bulk Message">
+  <%= form_tag "" do %>
     <%= hidden_field_tag :to %>
     <div class="field_in">
       <label>To:</label>
@@ -15,4 +15,9 @@
     <%= submit_tag 'Send' %>
     </div>
   <% end %>
+
+<div id="bulk_send_dialog_message" class="flash">
+ <div class="flash_message notice alignleft" style="padding-left:30px;">
+ </div>
+</div>
 </div>

@@ -159,18 +159,25 @@ class PeopleController < ApplicationController
   
   def bulk_email
     to_ids = params[:to].split(',')    
-
-    to_ids.each do |id|
+    
+   to_ids.each do |id|
       person = Person.find_by_personID(id)
-      PeopleMailer.enqueue.bulk_message(person.email, current_person.email, params[:subject], params[:body])
+      PeopleMailer.enqueue.bulk_message(person.email, current_person.email, params[:subject], params[:body]) if !person.email.blank?
     end
+    
+    render :nothing => true
+  end
+  
+  def bulk_sms
+    to_ids = params[:to].split(',')    
 
-
-    # leaders = current_organization.leaders.where(personID: to_ids)
-    # if leaders.present?
-    #   ContactsMailer.reminder(leaders.collect(&:email).compact, current_person.email, params[:subject], params[:body]).deliver
-    # end
-    render nothing: true
+   to_ids.each do |id|
+      person = Person.find_by_personID(id)
+      #@sent_sms = SentSms.create!(message: params[:body], recipient: person.phone_number, moonshado_claimcheck: 'sms_id', sent_via: 'moonshado', received_sms_id: '@received.try(:id)') if person.phone_number
+      Resque.enqueue(SentSms, params[:body] person.phone_number, @received.try(:id)) if person.phone_number
+    end
+    
+    render :nothing => true
   end
   
   protected
