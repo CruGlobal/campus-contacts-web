@@ -112,6 +112,10 @@ class Person < ActiveRecord::Base
     val
   end
   
+  def name 
+    firstName + " " + lastName
+  end
+  
   def firstName
     preferredName.blank? ? self[:firstName].try(:strip) : preferredName.try(:strip)
   end
