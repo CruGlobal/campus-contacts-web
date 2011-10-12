@@ -71,3 +71,25 @@ $ ->
     handle = $(this).attr('data-sortable-handle');
     $(this).sortable("option", "handle", handle);
     
+  $('.handle').draggable 
+    revert: true
+    start: (event, ui) ->
+      # If this row isn't checked, store the previously checked rows and check this row '
+      unless $(this).next('input').prop('checked') 
+        $(this).data 'checked', $('.id_checkbox:checked').map ->
+          return $(this).val()
+        $('.id_checkbox:checked').prop('checked', false) 
+        $(this).next('input').prop('checked', true) 
+    stop: (event, ui) ->
+      if $(this).data('checked')?
+        $(this).next('input').prop('checked', false)
+        $.each $(this).data('checked'), (i, id) ->
+          $('.id_checkbox[value=' + id + ']').prop('checked', true)
+      $(this).data('checked', null)
+    helper: (event) ->
+      length = if $(this).next('input').prop('checked') then $('.id_checkbox:checked').length else 1
+      if length == 1
+        helper_text = $('#drag_helper_text_one').html()
+      else
+        helper_text = $('#drag_helper_text_other').html().replace('0', length)
+      $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'));

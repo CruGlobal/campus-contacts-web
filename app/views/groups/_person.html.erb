@@ -1,0 +1,11 @@
+<tr id="<%= dom_id(person) %>" data-name="<%= person.name %>" data-id="<%= person.id %>">
+  <td nowrap="nowrap" class="checkbox_cell">
+    <%= image_tag('grippy.png', class: 'handle' ) %>
+    <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
+  </td>
+  <td><%= person.name %></td>
+  <td class="email"><%= mail_to(person.email) if person.email.present? %></td>
+  <td class="phone_number"><%= person.pretty_phone_number %></td>
+  <td><%= t(group_membership.role) %></td>
+  <td class="controls"><%= link_to("Delete", group_group_membership_path(@group, group_membership), :method => :delete, :remote => true, :class => "icon delete", :confirm => t('.remove_confirm', name: person)) %></td>
+</tr>

@@ -1,0 +1,97 @@
+<% provide :sidebar do %>
+  <ul class="leftmenu">
+    <li class="heading selected">
+      <%# if can? :manage, @organization %>
+        <%= link_to(raw(t('.add') + " " + image_tag('add.png')), '#', class: 'add-label listaction') %>
+      <%# end %>
+      <h3><%= t('.labels') %></h3>
+    </li>
+    <li>
+      <ul id="labels" class="indent expandable">
+        <% current_organization.group_labels.each do |label| %>
+          <%= render 'label', label: label %>
+        <% end %>
+      </ul>
+    </li>
+  </ul>
+    <div id="new_label" style="display:none" title="<%= t('.add_a_label') %>">
+      <%= form_for GroupLabel.new, remote: true, validate: true do |f| %>
+        <div class="explain">
+          <p><%= t('.new_label_prompt') %>:</p>
+        </div>
+          <%= f.text_field :name, :autocomplete => 'off' %>
+          <%= spinner('new_label') %>
+      <% end %>
+    </div>
+<% end %>
+
+<% if @label %>
+  <div class="controlbar">
+    <%= link_to(t('groups.see_all'), '/groups', :class=>"backto") %>
+  </div>
+<% end %>
+<div class="titlebar">
+  <h1>
+    <%= t('.group_list', org: current_organization.to_s) %>
+    <% if @label %>
+      <%= t('.labeled_with', label: @label) %>
+    <% end %>
+  </h1>
+</div>
+
+<div class="pagemenu">
+  <ul class="pillmenu">
+    <li>     
+      <%= link_to(t('.add_group'), new_group_path) %>
+    </li>
+  </ul>
+</div>
+
+<span style="display:none" id="drag_helper_text_one"><%= t('.assign_to_label', count: 1) %></span>
+<span style="display:none" id="drag_helper_text_other"><%= t('.assign_to_label', count: 0) %></span>
+<table class="listing" cellpadding="0" cellspacing="0">
+  <thead>
+    <tr>
+      <th class="checkbox_cell">
+        <%= check_box_tag 'check_all', true, false %>
+      </th>
+      <th class="groupname"><%= t('.group_name') %></th>
+      <th></th>
+      <th><%= t('.members') %></th>
+      <th><%= t('.leaders') %></th>
+      <th><%= t('.labels') %></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="groups_table">
+    <% total_involved = 0 %>
+    <% total_leaders = 0 %>
+    <% @groups.each do |group| %>
+      <% group_p = Present(group) %>
+      <tr data-id="<%= group.id %>">
+        <td nowrap="nowrap" class="checkbox_cell">
+          <%= image_tag('grippy.png', class: 'handle' ) %>
+          <%= check_box_tag 'ids[]', group.id, false, id: "ids_#{group.id}", class: 'id_checkbox' %>
+        </td>
+        <td><%= link_to(group.name, group) %></td>
+        <td><% if !group.list_publicly %><%= image_tag('lock.gif', class: 'privategroup' ) %><% end %></td>
+        <td><%= group.involved.count %> <% total_involved += group.involved.count %></td>
+        <td><%= group_p.leaders_names %> <% total_leaders += group.leaders.length %></td>
+        <td class="labels"><%= group_p.labels %></td>
+        <td class="controls">
+           <%= link_to("Show", group_path(group), :class => "icon magnify") %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr class="totals">
+      <td>Totals:</td>
+      <td><%= @groups.length %> group(s)</td>
+      <td></td>
+      <td><%= total_involved %></td>
+      <td><%= total_leaders %></td>
+      <td colspan="2"></td>
+    </tr>
+  </tfoot>
+</table>

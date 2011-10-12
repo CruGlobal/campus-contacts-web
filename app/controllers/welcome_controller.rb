@@ -52,10 +52,10 @@ class WelcomeController < ApplicationController
   end
   
   def terms
-    render layout: mhub? ? 'plain' : 'splash'
+    render layout: mhub? ? 'mhub' : 'splash'
   end
   
   def privacy
-    render layout: mhub? ? 'plain' : 'splash'
+    render layout: mhub? ? 'mhub' : 'splash'
   end
 end

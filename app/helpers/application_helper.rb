@@ -1,6 +1,6 @@
 module ApplicationHelper
   def tip(tip)
-    "<div>#{tip}</div>".html_safe
+    "<span class=\"tiplight\" title=\"#{h(tip)}\" style=\"float: none;\"></span>".html_safe
   end
   
   def print_tree(tree)
@@ -35,4 +35,24 @@ module ApplicationHelper
     mhub? ? 'support@mhub.cc' : 'support@missionhub.com'
   end
   
+  def times(start_time, end_time)
+    midnight = Time.now.beginning_of_day
+    # start_time = midnight + start_time.hours
+    # end_time = midnight.beginning_of_day + end_time.hours
+    time_options = []
+    start_time.to_i.step(end_time.to_i, 900) do |time|
+      # raise (midnight + time).to_formatted_s("%l:%M %p").inspect
+      time_options << [l(midnight + time, format: :time_only), time]
+    end
+    time_options
+  end  
+  
+  def no_left_sidebar
+    case "#{params[:controller]}/#{params[:action]}"
+    when 'groups/new', 'groups/edit', 'groups/create', 'groups/update'
+      true
+    else
+      false
+    end
+  end
 end

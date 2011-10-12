@@ -1,11 +1,22 @@
 Mh::Application.routes.draw do
-  
+
+  resources :group_labels
+
   ActiveAdmin.routes(self)
   ActiveAdmin::ResourceController.class_eval do
     def authenticate_admin!
       unless user_signed_in? && SuperAdmin.find_by_user_id_and_site(current_user.id, 'MissionHub')
         render :file => Rails.root.join(mhub? ? 'public/404_mhub.html' : 'public/404.html'), :layout => false, :status => 404
         false
+      end
+    end
+  end
+  
+  resources :groups do
+    resources :group_labelings
+    resources :group_memberships do
+      collection do
+        get :search
       end
     end
   end
@@ -18,7 +29,7 @@ Mh::Application.routes.draw do
   
   resources :leaders do
     collection do
-      post :search
+      get :search
       put :add_person
     end
   end

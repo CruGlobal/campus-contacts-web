@@ -30,7 +30,7 @@ class SurveyResponsesController < ApplicationController
     if @keyword
       @answer_sheet = get_answer_sheet(@keyword, @person)
       respond_to do |wants|
-        wants.html { render :layout => 'plain'}
+        wants.html { render :layout => 'mhub'}
         wants.mobile
       end
     else
@@ -47,13 +47,13 @@ class SurveyResponsesController < ApplicationController
     if @person.valid? && @answer_sheet.person.valid?
       create_contact_at_org(@person, @keyword.organization)
       respond_to do |wants|
-        wants.html { render :thanks, layout: 'plain'}
+        wants.html { render :thanks, layout: 'mhub'}
         wants.mobile { render :thanks }
       end
     else
       @answer_sheet = get_answer_sheet(@keyword, @person)
       respond_to do |wants|
-        wants.html { render :new, layout: 'plain'}
+        wants.html { render :new, layout: 'mhub'}
         wants.mobile { render :new }
       end
     end
@@ -69,20 +69,20 @@ class SurveyResponsesController < ApplicationController
           create_contact_at_org(@person, @keyword.organization)
           FollowupComment.create_from_survey(@keyword.organization, @person, @keyword.questions, @answer_sheet)
           respond_to do |wants|
-            wants.html { render :thanks, layout: 'plain'}
+            wants.html { render :thanks, layout: 'mhub'}
             wants.mobile { render :thanks }
           end
         else
           @answer_sheet = get_answer_sheet(@keyword, @person)
           respond_to do |wants|
-            wants.html { render :new, layout: 'plain'}
+            wants.html { render :new, layout: 'mhub'}
             wants.mobile { render :new }
           end
         end
       else
         @answer_sheet = get_answer_sheet(@keyword, @person)
         respond_to do |wants|
-          wants.html { render :new, layout: 'plain'}
+          wants.html { render :new, layout: 'mhub'}
           wants.mobile { render :new }
         end
       end

@@ -34,6 +34,9 @@ class Ability
       can :manage, Person, organizational_roles: {organization_id: admin_of_org_ids}
       can :manage, Person, id: user.person.try(:id)
       
+      can :manage, Group, organization_id: admin_of_org_ids
+      can :manage, GroupPresenter, organization_id: admin_of_org_ids
+      
       can :all, :all if user.developer?
       
     end

@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  extend DelegatePresenter::ApplicationController
   before_filter :authenticate_user!, :except => [:facebook_logout]
   before_filter :set_login_cookie
   before_filter :check_su
@@ -216,6 +217,14 @@ class ApplicationController < ActionController::Base
     flash[:alert] =  "You don't have permission to access that area of MissionHub"
     render 'application/access_denied'
     return false
+  end
+  
+  def is_leader?
+    current_user.has_role?(Role::LEADER_ID, current_organization) || is_admin?
+  end
+  
+  def is_admin?
+    current_user.has_role?(Role::ADMIN_ID, current_organization)
   end
   
 end

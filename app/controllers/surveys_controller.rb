@@ -16,7 +16,7 @@ class SurveysController < ApplicationController
       return render_404
     end
     respond_to do |wants|
-      wants.html { render layout: 'plain' }
+      wants.html { render layout: 'mhub' }
       wants.mobile
     end
   end

@@ -32,6 +32,7 @@ en:
     prayed_to_receive: 'Prayed To Receive Christ' 
     gospel_presentation: 'Gospel Presentation'
   nav:
+    groups: 'Groups'
     hide: 'Hide'
     view_details: "View details"
     survey_mode_tip: "Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts."
@@ -78,8 +79,21 @@ en:
       email: 'Email'
       year_in_school: 'Year in School'
       manage_roles: 'Manage Roles'
+      send_sms: Send Text
+      send_email: Send Email
     show:
       edit_profile: 'Edit Profile'
+  sessions:
+    new:
+      login_paragraph_html:
+        To get started, you'll need to have a Facebook account. <br/>
+        Click the login link to the left and <strong>allow</strong> MHub to access your information. <br/>
+        You'll be taken to the wizard if this is your first time accessing MissionHub.
+      login_paragraph_mhub: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
+      instructions: Instructions
+      back: Back Home
+      dont_like_facebook: Don't like Facebook?
+      skip_facebook: Click here to skip Facebook login
   org_membership:
     confirm_delete: "Are you sure you want to dissociate yourself from %{org}"
   welcome:
@@ -259,6 +273,7 @@ en:
       default: "%Y-%m-%d"
       short: "%b %d"
       long: "%B %d, %Y"
+      time: "%l:%M %p"
 
     day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
     abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
@@ -275,6 +290,7 @@ en:
       default: "%m/%d/%Y %H:%M:%S"
       short: "%d %b %H:%M"
       long: "%B %d, %Y %H:%M"
+      time_only: "%l:%M %p"
     am: "am"
     pm: "pm"
 
@@ -436,3 +452,65 @@ en:
 
   bulk_sms: Bulk Text
   bulk_email: Bulk Email
+        
+  weekly: Weekly
+  monthly: Monthly
+  sporadically: Sporadically
+  
+  groups:
+    see_all: See all groups
+    index:
+      group_list: 'Group List for %{org}'
+      group_name: Group Name
+      members: Involved
+      leaders: Leaders
+      add_group: 'Add a group'
+      labels: Labels
+      add: Add
+      assign_to_label:
+        one: '1 Group'
+        other: '%{count} Groups' 
+      labeled_with: 'Labeled With "%{label}"'
+      new_label_prompt: Please enter a new label name
+      add_a_label: Add a Label
+    new:
+      new_group: Create a New Group
+    edit:
+      edit_group: Editing %{group}
+    show:  
+      add_member: 'Add Member'
+      location: Location
+      edit: edit
+      meets: Meets
+      sporadically: Sporadically
+      weekly: Weekly on %{day}s<br/> %{start_time} - %{end_time}
+      monthly: Monthly on the %{day}<br /> %{start_time} - %{end_time}
+      delete_group: 'Delete this group'
+      edit_group: 'Edit Group'
+      confirm_delete_group: Are you sure you want to delete this group?
+    form:
+      location_tip: 'For your location, type an address that you would expect to work if you did a search on a Google Map (i.e. "1600 Pennsylvania Ave, Washington, DC 20006")'
+      list_publicly_tip: "If this option is selected, this group will be visible to the general public when they do a search. (Public search doesn't exist yet, but will at some point)"
+      approve_join_tip: 'If the group is listed publicly, checking this option will require you to approve any requests to join the group.'
+      meets_on: 'On'
+      meets_on_the: 'On the'
+      of_month: 'of the month'
+      back: 'Cancel and go back'
+    person:
+      remove_confirm: "Are you sure you want to remove %{name} from your group?"
+      
+  group_memberships:
+    form:
+      start_typing: Start typing a name to find a person add to this group
+      add_a_member: 'Add a member'
+    search:
+      not_found: We couldn't find anyone in your %{terminology} with that name
+  
+  helpers:
+    label:
+      group:
+        name: 'Group Name'
+        start_time: 'From'
+        
+  member: Member
+  leader: Leader

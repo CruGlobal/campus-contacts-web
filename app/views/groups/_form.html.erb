@@ -1,0 +1,105 @@
+<%= form_for @group, validate: true do |f| %>
+<div class="customform group_form">
+  <div class="sfield">
+    <div class="ls">
+      <%= f.label :name %>
+    </div>
+    <div class="rs">
+      <%= f.text_field :name %>
+    </div>
+  </div>
+  <div class="sfield">
+    <div class="ls">
+      <%= f.label :location %>
+      <%= tip(t('groups.form.location_tip')) %>
+    </div>
+    <div class="rs">
+      <%= f.text_area :location, :class => "location" %>
+    </div>
+  </div>
+  
+  <div class="sgroup">
+    <div class="sfield">
+      <div class="ls">
+        <%= f.label :meets %>
+      </div>
+      <div class="rs">
+        <%= f.select :meets, [[t('weekly'), 'weekly'], [t('monthly'), 'monthly'], [t('sporadically'), 'sporadically']] %>
+      </div>
+    </div>
+    <div class="sfield regular" style="<%= 'display:none' if @group.meets == 'sporadically' %>">
+      <div class="ls">
+        <div class="day_of_week_div" style="<%= 'display:none' unless @group.meets == 'weekly' || @group.meets.blank?  %>">
+          <%= f.label :meeting_day, t('.meets_on') %>
+        </div>
+        <div class="day_of_month_div" style="<%= 'display:none' unless @group.meets == 'monthly' %>">
+          <%= f.label :meeting_day, t('.meets_on_the') %>
+        </div>
+      </div>
+      <div class="rs">
+        <div class="day_of_week_div regular" style="<%= 'display:none' unless @group.meets == 'weekly' || @group.meets.blank? %>">
+          <%= select_tag :day_of_week, options_for_select(t('date.day_names').collect.with_index {|d, i| [d, i]}) %>
+        </div>
+        <div class="day_of_month_div regular" style="<%= 'display:none' unless @group.meets == 'monthly' %>">
+          <%= select_tag :day_of_month, options_for_select((1..31).collect {|i| [i.ordinalize, i]}) %>
+          <%= t('.of_month') %>
+        </div>
+        <%= f.hidden_field :meeting_day %>
+      </div>
+    </div>
+    <div class="sfield regular" style="<%= 'display:none' if @group.meets == 'sporadically' %>">
+      <div class="ls">
+        <%= f.label :start_time %>
+      </div>
+      <div class="rs">
+        <div class="sidebyside">
+          <div class="element">
+            <%= f.select :start_time, times(6.hours.to_i, 22.hours.to_i) %>
+          </div>
+          <div class="element">
+            to:
+          </div>
+          <div class="element">
+            <%= f.select :end_time, times(7.hours.to_i, 22.hours.to_i) %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="sfield">
+    <div class="ls">
+    </div>
+    <div class="rs">
+      <%= f.check_box :list_publicly %>
+      <%= f.label :list_publicly %>
+      <%= tip(t('groups.form.list_publicly_tip')) %>
+    </div>
+  </div>
+  <div class="sfield">
+    <div class="ls">
+    
+    </div>
+    <div class="rs approve_join" style="<%= 'display:none' if !@group.list_publicly? %>">
+      <%= f.check_box :approve_join_requests %>
+      <%= f.label :approve_join_requests %>
+      <%= tip(t('.approve_join_tip')) %>
+    </div>
+  </div>
+  <div class="formactions">
+    <div class="sfield">
+      <div class="ls"></div>
+      <div class="rs">
+        <div class="sidebyside">
+          <div class="element">
+            <%= f.submit %>
+          </div>
+          <div class="element" style="vertical-align: middle; height: 29px; line-height: 39px;">
+            <%= link_to(t('.back'), :back, :class=> "cancel")%>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
