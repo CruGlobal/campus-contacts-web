@@ -9,7 +9,11 @@
 </div>
 <div class="pagemenu">
   <ul class="pillmenu">
-    <li><%= link_to(t('.export'), export_people_path(params.except(:action, :controller, :utf8))) %></li>
+		<li><%= link_to(t('.bulk_email'), nil, :id => "send_bulkemail_link") %></li>	
+		<li><%= link_to(t('.bulk_sms'), nil, :id => "send_bulkemail_link") %></li>			
+	</ul>
+  <ul class="pillmenu">
+   	<li><%= link_to(t('.export'), export_people_path(params.except(:action, :controller, :utf8))) %></li>
   </ul>
 </div>
   
@@ -54,3 +58,6 @@
 <div class="searchstat">
   <%= "Displaying #{@people.offset_value + 1} - #{@people.offset_value + @people.length} of #{@people.total_count}" %>
 </div>
+
+
+<%= render 'shared/bulk_send_form' %>
