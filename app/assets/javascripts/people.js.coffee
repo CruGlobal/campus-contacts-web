@@ -46,3 +46,30 @@ $.fn.triggerPersonLookup = ->
       complete: ->
         $('.merge.' + css_class).show()
         $("#spinner_" + css_class).hide()
+        
+$('#send_bulkemail_link').live 'click', -> 
+  $('.to_list').html('')
+  ids = []
+  $('.id_checkbox:checked').each ->
+    id = $(this).val()
+    ids.push(id)
+    $('.to_list').append('<li data-id="'+id + '">'+$(this).parent().next().html() + ' <a href="" class="delete">x</a></li>')
+  $('#bulk_send_dialog').dialog
+    resizable: false,
+    height:444,
+    width:600,
+    modal: true,
+    buttons: 
+      Cancel: ->
+        $(this).dialog('destroy')
+  false        
+  
+$('#bulk_send_dialog form').live 'submit', ->
+  ids = []
+  $('.to_list li').each ->
+    id = $(this).attr('data-id')
+    ids.push(id)
+  $('#to').val(ids.join(','))
+  $('#bulk_send_dialog').dialog('destroy')
+  $.rails.handleRemote($(this))
+  false

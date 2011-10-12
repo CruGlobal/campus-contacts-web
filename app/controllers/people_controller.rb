@@ -157,6 +157,22 @@ class PeopleController < ApplicationController
   #   end
   # end
   
+  def bulk_email
+    to_ids = params[:to].split(',')    
+
+    to_ids.each do |id|
+      person = Person.find_by_personID(id)
+      PeopleMailer.enqueue.bulk_message(person.email, current_person.email, params[:subject], params[:body])
+    end
+
+
+    # leaders = current_organization.leaders.where(personID: to_ids)
+    # if leaders.present?
+    #   ContactsMailer.reminder(leaders.collect(&:email).compact, current_person.email, params[:subject], params[:body]).deliver
+    # end
+    render nothing: true
+  end
+  
   protected
     
     def authorize_read
