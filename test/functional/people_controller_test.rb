@@ -100,8 +100,12 @@ class PeopleControllerTest < ActionController::TestCase
         
         assert_response :success
       end      
-    end
     
+      should "update roles" do
+        xhr :post, :update_roles, { :role_ids => "1,2,3", :person_ids => "#{@person1.id},#{@person2.id}" }
+        assert_response :success
+      end
+    end
   end
 
 end

@@ -83,6 +83,7 @@ Mh::Application.routes.draw do
       post :bulk_email
       post :bulk_sms      
       get :all
+      post :update_roles
     end
     member do
       get :merge_preview

@@ -48,6 +48,7 @@ en:
     all_contacts: 'All Contacts'
     directory: 'Directory'
     keywords: "Surveys"
+    roles: "Roles"
     back_to_dashboard: "Back To My Contacts"
   general:
     keyword: "Keyword"
@@ -81,6 +82,7 @@ en:
       manage_roles: 'Manage Roles'
       send_sms: Send Text
       send_email: Send Email
+      apply_roles: 'Apply Roles'
     show:
       edit_profile: 'Edit Profile'
   sessions:
