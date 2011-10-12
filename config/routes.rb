@@ -57,6 +57,7 @@ Mh::Application.routes.draw do
       post :do_merge
       get :search_ids
       post :bulk_email
+      post :bulk_sms      
     end
     member do
       get :merge_preview
