@@ -1,10 +1,11 @@
+require 'csv'
 class ContactsController < ApplicationController
   before_filter :get_person
   before_filter :ensure_current_org
   before_filter :authorize
   
   def index
-    @organization = params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : current_organization
+    @organization = current_organization # params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : 
     unless @organization
       redirect_to user_root_path, error: t('contacts.index.which_org')
       return false
@@ -30,7 +31,7 @@ class ContactsController < ApplicationController
         when 'no_activity'
           @people = @organization.no_activity_contacts
         when 'friends'
-          @people = current_person.contact_friends(current_organization)
+          @people = current_person.contact_friends(@organization)
         when *Rejoicable::OPTIONS
           @people = @organization.send(:"#{params[:assigned_to]}_contacts")
         else
@@ -41,6 +42,8 @@ class ContactsController < ApplicationController
       end
       @people ||= Person.where("1=0")
     end
+    @people = @people.includes(:organizational_roles).where("organizational_roles.organization_id" => @organization.id)
+    
     if params[:first_name].present?
       @people = @people.where("firstName like ? OR preferredName like ?", '%' + params[:first_name].strip + '%', '%' + params[:first_name].strip + '%')
     end
@@ -59,9 +62,6 @@ class ContactsController < ApplicationController
     if params[:status].present?
       @people = @people.where("organizational_roles.followup_status" => params[:status].strip)
     end
-    
-    @people = @people.includes(:organizational_roles).where("organizational_roles.organization_id" => current_organization.id)
-    
     if params[:answers].present?
       params[:answers].each do |q_id, v|
         question = Element.find(q_id)
@@ -97,30 +97,36 @@ class ContactsController < ApplicationController
         end
       end
     end
-    @q = Person.where('1 <> 1').search(params[:q])
+    @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
     # raise @q.sorts.inspect
-    @people = @people.includes(:primary_phone_number).order(params[:q] && params[:q][:s] ? params[:q][:s] : ['lastName, firstName']).group('ministry_person.personID')
+    @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? params[:q][:s] : ['lastName, firstName']).group('ministry_person.personID')
     @all_people = @people
     @people = @people.page(params[:page])
+    @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, role_id: Role::CONTACT_ID, person_id: @people.collect(&:id)).map {|r| [r.person_id, r]}]
+    
     respond_to do |wants|
       wants.html do
-        @roles = Hash[OrganizationalRole.active.where(organization_id: current_organization.id, role_id: Role::CONTACT_ID, person_id: @people.collect(&:id)).map {|r| [r.person_id, r]}]
+        @assignments = ContactAssignment.where(person_id: @people.collect(&:id), organization_id: @organization.id).group_by(&:person_id)
+        @answers = generate_answers(@people, @organization, @questions)
       end
       wants.csv do
-        @roles = Hash[OrganizationalRole.active.where(role_id: Role::CONTACT_ID, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r]}]
+        @all_answers = generate_answers(@all_people, @organization, @questions)
         out = ""
         CSV.generate(out) do |rows|
           rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('general.status'), t('general.gender'), t('contacts.index.phone_number')] + @questions.collect {|q| q.label}
           @all_people.each do |person|
-            answers = [person.firstName, person.lastName, @roles[person.id].followup_status.to_s.titleize, person.gender.to_s.titleize, person.pretty_phone_number]
-            @questions.each do |q|
-              answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)}
-              answers << q.display_response(answer_sheet)
+            if @roles[person.id]
+              answers = [person.firstName, person.lastName, @roles[person.id].followup_status.to_s.titleize, person.gender.to_s.titleize, person.pretty_phone_number]
+              @questions.each do |q|
+                answers << @all_answers[person.id][q.id]
+                # answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)}
+                # answers << q.display_response(answer_sheet)
+              end
+              rows << answers
             end
-            rows << answers
           end
         end
-        filename = current_organization.to_s
+        filename = @organization.to_s
         send_data(out, :filename => "#{filename} - Contacts.csv", :type => 'application/csv' )
       end
     end
@@ -166,34 +172,44 @@ class ContactsController < ApplicationController
   end
   
   def create
-    params[:person] ||= {}
-    params[:person][:email_address] ||= {}
-    params[:person][:phone_number] ||= {}
-    unless params[:person][:firstName].present?# && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
-      render :nothing => true and return
-    end
-    @person, @email, @phone = create_person(params[:person])
-    if @person.save
-
-      save_survey_answers
-
-      create_contact_at_org(@person, current_organization)
-      if params[:assign_to_me] == 'true'
-        ContactAssignment.where(person_id: @person.id, organization_id: current_organization.id).destroy_all
-        ContactAssignment.create!(person_id: @person.id, organization_id: current_organization.id, assigned_to_id: current_person.id)
+    Person.transaction do
+      params[:person] ||= {}
+      params[:person][:email_address] ||= {}
+      params[:person][:phone_number] ||= {}
+      unless params[:person][:firstName].present?# && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
+        render :nothing => true and return
       end
-    else
-      flash.now[:error] = ''
-      flash.now[:error] += 'First name is required.<br />' unless @person.firstName.present?
-      flash.now[:error] += 'Phone number is not valid.<br />' if @phone && !@phone.valid?
-      flash.now[:error] += 'Email address is not valid.<br />' if @email && !@email.valid?
-      render 'add_contact'
-      return
-    end
-    respond_to do |wants|
-      wants.html { redirect_to :back }
-      wants.mobile { redirect_to :back }
-      wants.js
+      @person, @email, @phone = create_person(params[:person])
+      if @person.save
+
+        @questions = current_organization.all_questions.where("#{PageElement.table_name}.hidden" => false)
+
+        save_survey_answers
+      
+        FollowupComment.create_from_survey(current_organization, @person, current_organization.all_questions, @answer_sheets)
+
+        create_contact_at_org(@person, current_organization)
+        if params[:assign_to_me] == 'true'
+          ContactAssignment.where(person_id: @person.id, organization_id: current_organization.id).destroy_all
+          ContactAssignment.create!(person_id: @person.id, organization_id: current_organization.id, assigned_to_id: current_person.id)
+        end
+        respond_to do |wants|
+          wants.html { redirect_to :back }
+          wants.mobile { redirect_to :back }
+          wants.js do
+            @assignments = ContactAssignment.where(person_id: @person.id, organization_id: current_organization.id).group_by(&:person_id)
+            @roles = Hash[OrganizationalRole.active.where(organization_id: current_organization.id, role_id: Role::CONTACT_ID, person_id: @person).map {|r| [r.person_id, r]}]
+            @answers = generate_answers([@person], current_organization, @questions)
+          end
+        end
+      else
+        flash.now[:error] = ''
+        flash.now[:error] += 'First name is required.<br />' unless @person.firstName.present?
+        flash.now[:error] += 'Phone number is not valid.<br />' if @phone && !@phone.valid?
+        flash.now[:error] += 'Email address is not valid.<br />' if @email && !@email.valid?
+        render 'add_contact'
+        return
+      end
     end
   end
   
@@ -225,11 +241,13 @@ class ContactsController < ApplicationController
   protected
   
     def save_survey_answers
+      @answer_sheets = []
       current_organization.keywords.each do |keyword|
         @answer_sheet = get_answer_sheet(keyword, @person)
         question_set = QuestionSet.new(keyword.questions, @answer_sheet)
         question_set.post(params[:answers], @answer_sheet)
         question_set.save
+        @answer_sheets << @answer_sheet
       end
     end
     
@@ -239,5 +257,19 @@ class ContactsController < ApplicationController
     
     def authorize
       authorize! :manage_contacts, current_organization
+    end
+    
+    def generate_answers(people, organization, questions)
+      answers = {}
+      people.each do |person|
+        answers[person.id] = {}
+      end
+      AnswerSheet.where(question_sheet_id: organization.question_sheet_ids, person_id: people.collect(&:id)).includes(:answers, {:person => :primary_email_address}).each do |answer_sheet|
+        answers[answer_sheet.person_id] ||= {}
+        questions.each do |q|
+          answers[answer_sheet.person_id][q.id] = q.display_response(answer_sheet) if q.display_response(answer_sheet).present?
+        end
+      end
+      answers
     end
 end

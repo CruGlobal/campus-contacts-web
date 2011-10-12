@@ -3,7 +3,7 @@ require 'test_helper'
 class PersonTest < ActiveSupport::TestCase
   should belong_to(:user)
   should validate_presence_of(:firstName)
-  should validate_presence_of(:lastName)
+  # should validate_presence_of(:lastName)
   should have_one(:primary_organization)
   should have_one(:primary_organization_membership)
   should have_one(:primary_phone_number)
@@ -36,8 +36,6 @@ class PersonTest < ActiveSupport::TestCase
     end
     should "output the person's correct full name" do 
       assert_equal(@person.to_s, "John Doe")
-      @person.preferredName = "Buford"
-      assert_equal(@person.to_s, "Buford Doe")
     end
     
     context "has a gender which" do
@@ -84,6 +82,15 @@ class PersonTest < ActiveSupport::TestCase
       
       @friend2.reload
       assert_equal(@friend2.name, "Todd Gross", "Make sure that Todd's name was updated")
+    end
+    
+    should "not create a duplicate email when adding an email they already have" do
+      primary_email = @person.email_addresses.create(email: 'test1@example.com')
+      assert primary_email.primary?
+      secondary_email = @person.email_addresses.create(email: 'test2@example.com')
+      @person.email = 'test2@example.com'
+      @person.reload
+      assert_equal(secondary_email, @person.primary_email_address)
     end
     
     should "get & update interests" do

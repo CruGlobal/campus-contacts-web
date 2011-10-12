@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 gem 'rails', '~>3.1.0'#, git: 'git://github.com/rails/rails.git', branch: '3-1-stable'
 gem 'jquery-rails'
-
 gem 'mysql2'
 gem 'rack-offline'
 gem 'capistrano'
@@ -10,7 +9,7 @@ gem 'rest-client'
 gem 'crack'
 gem 'resque'
 gem "devise"#, git: "git://github.com/plataformatec/devise.git"
-gem "oa-oauth", require: "omniauth/oauth"
+gem "oa-oauth", '~> 0.2.6', require: "omniauth/oauth"
 gem 'mini_fb'
 gem 'client_side_validations'
 gem 'rubycas-client'
@@ -18,7 +17,8 @@ gem 'rubycas-client-rails', git: 'git://github.com/zuk/rubycas-client-rails.git'
 # gem 'squeel'
 gem 'ancestry'
 # gem 'rails_admin', git: 'git://github.com/twinge/rails_admin.git', branch: 'configure_list_view_width'
-gem 'rails_admin', git: 'git://github.com/sferik/rails_admin.git'
+# gem 'rails_admin', git: 'git://github.com/sferik/rails_admin.git'
+gem 'activeadmin', git: 'git://github.com/gregbell/active_admin.git'
 
 gem 'dalli'#, git: 'git://github.com/mperham/dalli.git'
 # gem 'memcache-client'
@@ -75,8 +75,8 @@ end
 
 # Gems used only for assets and not required
 # in production environments by default.
+gem 'sass-rails', "  ~> 3.1.0"
 group :assets do
-  gem 'sass-rails', "  ~> 3.1.0"
   gem 'coffee-rails', "~> 3.1.0"
   gem 'uglifier'
 end

@@ -87,7 +87,7 @@ class LeadersControllerTest < ActionController::TestCase
     should "require gender, first name, last name and email when adding a leader" do 
       xhr :post, :add_person, person: {firstName: '', lastName: '', email_address: {email: ''}, phone_number: {phone: ''}}, notify: '1' 
       assert_response :success 
-      assert_equal('Please fill in all fields<br />First Name is required.<br />Last Name is required.<br />Gender is required.<br />Email is required.<br />', flash[:error])
+      assert_equal('First Name is required.<br />Last Name is required.<br />Gender is required.<br />Email is required.<br />', flash[:error])
       assert_template 'leaders/new'
     end
     

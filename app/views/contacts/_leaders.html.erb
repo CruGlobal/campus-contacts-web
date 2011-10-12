@@ -23,8 +23,8 @@
     <li class="leader unassigned" data-id="">
     <strong><span class="name"><%= link_to(t('contacts.index.unassigned'), contacts_path(assigned_to: 'unassigned')) %></span></strong> (<span id="unassigned_count" class="count"><%= unassigned_people(@organization).count %></span>)
   </li>
-  <li><span class="name"><strong><%= link_to(t('contacts.index.in_progress'), contacts_path(assigned_to: 'progress')) %></strong></span> (<%= @organization.inprogress_contacts.count %>)</li>
-  <li><span class="name"><strong><%= link_to(t('contacts.index.completed'), contacts_path(completed: true)) %></strong></span> (<%= @organization.completed_contacts.count %>)</li>
+  <li><span class="name"><strong><%= link_to(t('contacts.index.in_progress'), contacts_path(assigned_to: 'progress')) %></strong></span> (<%= @organization.contact_assignments.count %>)</li>
+  <li><span class="name"><strong><%= link_to(t('contacts.index.completed'), contacts_path(completed: true)) %></strong></span> (<%= @organization.organizational_roles.completed.count %>)</li>
   <li><span class="name"><strong><%= link_to(t('contacts.index.all'), contacts_path(assigned_to: 'all')) %></strong></span> (<%= @organization.contacts.count %>)</li>
   <li><hr /></li>
   <li><span class="name"><strong><%= link_to(t('contacts.index.no_activity'), contacts_path(assigned_to: 'no_activity')) %></strong></span> (<%= @organization.no_activity_contacts.count %>)</li>

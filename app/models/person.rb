@@ -34,7 +34,7 @@ class Person < ActiveRecord::Base
   has_many :sms_sessions, inverse_of: :person
   
   scope :who_answered, lambda {|question_sheet_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.question_sheet_id' => question_sheet_id)}
-  validates_presence_of :firstName, :lastName
+  validates_presence_of :firstName
   validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/, allow_blank: true
   
   accepts_nested_attributes_for :email_addresses, :phone_numbers, :current_address, allow_destroy: true  
@@ -57,7 +57,8 @@ class Person < ActiveRecord::Base
     scope
   end
   def to_s
-    [preferredName.blank? ? firstName : preferredName.try(:strip), lastName.try(:strip)].join(' ')
+    # [preferredName.blank? ? firstName : preferredName.try(:strip), lastName.try(:strip)].join(' ')
+    [firstName.to_s, lastName.to_s.strip].join(' ')
   end
   
   def leader_in?(org)
@@ -199,9 +200,17 @@ class Person < ActiveRecord::Base
   
   def email=(val)
     return if val.blank?
-    email = primary_email_address || email_addresses.new
-    email.email = val
-    email.save
+    existing = email_addresses.where(email: val).first
+    if existing
+      unless existing.primary?
+        email_addresses.where(["email <> ?", val]).update_all(primary: false)
+        existing.update_attribute(:primary, true)
+      end
+    else
+      email = primary_email_address || email_addresses.new
+      email.email = val
+      email.save
+    end
   end
   
   def email_address=(hash)

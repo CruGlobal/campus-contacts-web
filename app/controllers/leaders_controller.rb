@@ -116,7 +116,6 @@ class LeadersController < ApplicationController
     @person.valid?; @email.try(:valid?); @phone.try(:valid?)
     error_message = ''
     unless @required_fields.values.all?(&:present?)
-      error_message += "Please fill in all fields<br />"
       @required_fields.each do |k,v|
         error_message += k + " is required.<br />" unless v.present?
       end

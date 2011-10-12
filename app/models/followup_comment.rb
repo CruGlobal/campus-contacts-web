@@ -21,6 +21,21 @@ class FollowupComment < ActiveRecord::Base
     hash
   end
   
+  def self.create_from_survey(organization, person, questions, answer_sheet, status = nil, timestamp = nil)
+    timestamp ||= Time.now
+    answer_sheets = Array.wrap(answer_sheet)
+    answer_sheets.each {|as| as.reload}
+    status ||= OrganizationMembership::FOLLOWUP_STATUSES.first
+    answers = questions.collect do |q| 
+      sheet = answer_sheets.detect {|as| q.display_response(as).present?}
+      "#{q.label} #{q.display_response(sheet)}" if sheet
+    end
+    comment = answers.compact.join("\n")
+    unless comment.blank?
+      create!(contact_id: person.id, commenter_id: person.id, organization_id: organization.id, comment: comment, status: status, created_at: timestamp)
+    end
+  end
+  
   private
   def update_followup_status
     om = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(contact_id, organization_id, Role::CONTACT_ID)

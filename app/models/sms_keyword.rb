@@ -20,12 +20,12 @@ class SmsKeyword < ActiveRecord::Base
     state :inactive
     
     event :approve do
-      transition requested: :active
+      transition :requested => :active
     end
     after_transition :on => :approve, :do => :notify_user
     
     event :deny do
-      transition requested: :denied
+      transition :requested => :denied
     end
     after_transition :on => :deny, :do => :notify_user_of_denial
     

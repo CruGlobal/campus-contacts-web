@@ -32,6 +32,15 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def raise_or_hoptoad(e)
+    if Rails.env.production? 
+      HoptoadNotifier.notify(e)
+    else
+      raise e
+    end
+  end
+  helper_method :raise_or_hoptoad
+  
   def check_url
     render_404 if mhub?
   end

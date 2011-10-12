@@ -7,23 +7,19 @@ module ApiHelper
   #########################################
   
   def valid_request_before
-      @valid_fields = valid_request?(request)
+    @valid_fields = valid_request?(request)
   end
   
-  def valid_request?(request, in_action = nil, prms = nil, accesstoken = nil)
+  def valid_request?(request) #, in_action = nil, prms = nil, accesstoken = nil
     #retrieve the API action requested so we can match the right allowed fields
-    raise ApiErrors::InvalidRequest if request.try(:path_parameters).nil? && in_action.nil?
+    raise ApiErrors::InvalidRequest if request.params[:action].nil?# && in_action.nil?
     
-    #Next block of code primarily to enable testing
-    if request.nil?
-      request = Hashie::Mash.new()
-      request[:path_parameters] = {:action => nil}
-    end
-    action = in_action.nil? ?  request.path_parameters[:controller].split("/")[1] : in_action
-    param = prms.nil? ? params : prms
+    # action = in_action.nil? ?  request.params[:action] : in_action
+    action = request.params[:controller].split("/").last
+    param = request.params #prms.nil? ? params : prms
     
     #Handle versioning of API in Apic class
-    version = param.try(:version).nil? && ((param.try(:version).nil? ? 0 : param[:version]) <= Apic::STD_VERSION) ? Apic::STD_VERSION : param[:version]
+    version = '1' #param[:version].to_i < Apic::STD_VERSION ? Apic::STD_VERSION : param[:version]
     version = ["v", version].join
     
     #Let's check to see if the fields query parameter is set first   
@@ -32,24 +28,20 @@ module ApiHelper
       raise ApiErrors::InvalidFieldError if fields.empty?
       #Let's validate the fields that they entered into the query params
       valid_fields = valid_fields?(fields, action, version)
-      raise ApiErrors::InvalidFieldError unless valid_fields.length == fields.length
     else
       #if no fields supplied, send all
       valid_fields = Apic::API_ALLOWABLE_FIELDS[version.to_sym][action.to_sym]
     end
-  valid_fields
+    valid_fields
   end
   
   def valid_fields?(fields,action,version)
     #return fields that are valid
      valid_fields = []
-    if !Apic::API_ALLOWABLE_FIELDS[version.to_sym][action.to_sym].nil?
-      validator = Apic::API_ALLOWABLE_FIELDS[version.to_sym][action.to_sym]
-      valid_fields=[]
-      fields.each do |field|
-        valid_fields.push(field) if validator.include?(field)    #push all of the fields that match onto valid_fields array
-      end
+    if Apic::API_ALLOWABLE_FIELDS[version.to_sym][action.to_sym].present?
+      valid_fields = fields & Apic::API_ALLOWABLE_FIELDS[version.to_sym][action.to_sym]
     end
+    raise "#{action} -- #{version}" if valid_fields.empty?
     valid_fields
   end
  
@@ -219,13 +211,18 @@ module ApiHelper
       output_message = exception.message
     else
       output_message = '{"error": {"message":"An unknown error has occurred.", "code":"99"}}'
-      HoptoadNotifier.notify(exception)
+      if Rails.env.production?
+        HoptoadNotifier.notify(exception)
+      else
+        raise exception
+      end
     end
     
     render :json => output_message and return false
   end
   
   def logApiRequest(exception = nil)
+    return unless exception
     begin
       apiLog = {}
       apiLog[:platform] = params[:platform].to_s if params[:platform]
@@ -240,9 +237,14 @@ module ApiHelper
       apiLog[:identity] = Rack::OAuth2::Server.get_access_token(params['access_token']).identity if params[:access_token]
       apiLog[:remote_ip] = request.remote_ip
 
+      HoptoadNotifier.notify(
+        :error_class => "Api Error",
+        :error_message => exception.message,
+        :parameters => apiLog
+      )
       ApiLog.create(apiLog)
     rescue Exception => e
-      logger.info e.inspect
+      raise_or_hoptoad(e)
     end
   end
   

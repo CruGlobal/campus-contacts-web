@@ -8,7 +8,7 @@ class SurveyResponsesController < ApplicationController
   
   def new
     unless mhub? || Rails.env.test?
-      redirect_to new_contact_url(params.merge(host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']))
+      redirect_to new_survey_response_url(params.merge(host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']))
       return false
     end
     
@@ -60,14 +60,24 @@ class SurveyResponsesController < ApplicationController
   end
   
   def create
-    @person = Person.create(params[:person])
-    if @person.valid?
-      save_survey
-      if @person.valid? && @answer_sheet.person.valid?
-        create_contact_at_org(@person, @keyword.organization)
-        respond_to do |wants|
-          wants.html { render :thanks, layout: 'plain'}
-          wants.mobile { render :thanks }
+    Person.transaction do
+      @person = Person.create(params[:person])
+      if @person.valid?
+        save_survey
+      
+        if @person.valid? && @answer_sheet.person.valid?
+          create_contact_at_org(@person, @keyword.organization)
+          FollowupComment.create_from_survey(@keyword.organization, @person, @keyword.questions, @answer_sheet)
+          respond_to do |wants|
+            wants.html { render :thanks, layout: 'plain'}
+            wants.mobile { render :thanks }
+          end
+        else
+          @answer_sheet = get_answer_sheet(@keyword, @person)
+          respond_to do |wants|
+            wants.html { render :new, layout: 'plain'}
+            wants.mobile { render :new }
+          end
         end
       else
         @answer_sheet = get_answer_sheet(@keyword, @person)
@@ -75,12 +85,6 @@ class SurveyResponsesController < ApplicationController
           wants.html { render :new, layout: 'plain'}
           wants.mobile { render :new }
         end
-      end
-    else
-      @answer_sheet = get_answer_sheet(@keyword, @person)
-      respond_to do |wants|
-        wants.html { render :new, layout: 'plain'}
-        wants.mobile { render :new }
       end
     end
   end

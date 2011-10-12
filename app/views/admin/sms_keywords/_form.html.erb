@@ -1,0 +1,17 @@
+<div class="field">
+  Action: 
+  <% @sms_keyword.state_paths.events.each do |event| %>
+    <%= link_to(event, "/admin/sms_keywords/#{@sms_keyword.id}/t/#{event}", method: :post, class: "#{event} keyword") %>
+  <% end %>
+</div>
+<%= semantic_form_for [:admin, @sms_keyword] do |f| %>
+    <%= f.inputs "" do %>
+      <%= f.input :user_id, :as => :string %>
+      <%= f.input :organization, :collection => Organization.order('name') %>
+      <%= f.input :keyword %>
+      <%= f.input :explanation %>
+      <%= f.input :initial_response %>
+      <%= f.input :post_survey_message %>
+    <% end %>
+    <%= f.buttons %>
+<% end %>
