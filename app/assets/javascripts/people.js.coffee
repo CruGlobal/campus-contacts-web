@@ -58,6 +58,9 @@ $.fn.submitBulkSendDialog = ->
         
         
 $('#send_bulkemail_link').live 'click', -> 
+  if $('.id_checkbox:checked').length == 0
+    alert("You didn't select any people to email")
+    return
   $('.to_list').html('')
   ids = []
   $('.id_checkbox:checked').each ->
@@ -66,6 +69,7 @@ $('#send_bulkemail_link').live 'click', ->
     tr = $(this).parent().parent();
     name = tr.find('.first_name').html() + ' ' + tr.find('.last_name').html()
     $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
+  $('#bulk_send_dialog .subject').show()
   $('#bulk_send_dialog').dialog
     resizable: false,
     height:444,
@@ -98,6 +102,9 @@ $('#send_bulkemail_link').live 'click', ->
   false        
   
 $('#send_bulksms_link').live 'click', -> 
+  if $('.id_checkbox:checked').length == 0
+    alert("You didn't select any people to text")
+    return
   $('.to_list').html('')
   ids = []
   $('.id_checkbox:checked').each ->
@@ -106,6 +113,7 @@ $('#send_bulksms_link').live 'click', ->
     tr = $(this).parent().parent();
     name = tr.find('.first_name').html() + ' ' + tr.find('.last_name').html()
     $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
+  $('#bulk_send_dialog .subject').hide()
   $('#bulk_send_dialog').dialog
     resizable: false,
     height:444,

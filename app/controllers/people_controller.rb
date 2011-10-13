@@ -173,7 +173,7 @@ class PeopleController < ApplicationController
 
    to_ids.each do |id|
       person = Person.find_by_personID(id)
-      Resque.enqueue(SentSms, params[:body], person.phone_number, @received.try(:id)) if person.phone_number.length > 0
+      @sent_sms = SentSms.create!(message: params[:body], recipient: person.phone_number) if person.phone_number.length > 0
     end
     
     render :nothing => true
