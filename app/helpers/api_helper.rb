@@ -19,8 +19,8 @@ module ApiHelper
     param = request.params #prms.nil? ? params : prms
     
     #Handle versioning of API in Apic class
-    version = '1' #param[:version].to_i < Apic::STD_VERSION ? Apic::STD_VERSION : param[:version]
-    version = ["v", version].join
+    version = param[:version].to_i > Apic::STD_VERSION ? Apic::STD_VERSION : param[:version]
+    version = ["v", version.to_s].join
     
     #Let's check to see if the fields query parameter is set first   
     if !param[:fields].nil?
