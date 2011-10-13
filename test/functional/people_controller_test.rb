@@ -67,12 +67,13 @@ class PeopleControllerTest < ActionController::TestCase
       get :edit, id: @person.person.id
       assert_response :success
     end
-    # 
+
     should "should update person" do
       put :update, id: @person.person.id, person: {firstName: 'David', lastName: 'Ang',  :current_address_attributes => { :address1 => "#41 Sgt. Esguerra Ave", :country => "Philippines"} }
       #put :update, id: @person.person.id, person: @person.attributes
       assert_redirected_to person_path(assigns(:person))
     end
+    
     # 
     # test "should destroy person" do
     #   assert_difference('Person.count', -1) do
@@ -81,7 +82,26 @@ class PeopleControllerTest < ActionController::TestCase
     # 
     #   assert_redirected_to people_path
     # end
-  
+
+    context "bulk sending" do
+      setup do
+        @person1 = Factory(:person)
+        @person2 = Factory(:person)        
+      end
+      
+      should "send bulk email" do
+        xhr :post, :bulk_email, { :to => "#{@person1.id},#{@person2.id}", :subject => "functional test", :body => "test email body" }
+        
+        assert_response :success
+      end
+      
+      should "send bulk sms" do
+        xhr :post, :bulk_sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
+        
+        assert_response :success
+      end      
+    end
+    
   end
 
 end
