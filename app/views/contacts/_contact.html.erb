@@ -10,7 +10,7 @@
   </td>
   <td><%= person.firstName %></td>
   <td><%= person.lastName %></td>
-  <% if @roles %>
+  <% if contact_role %>
     <td><%= contact_role.followup_status.to_s.titleize %></td>
   <% end %>
   <td><%= person.gender.to_s.titleize %></td>
