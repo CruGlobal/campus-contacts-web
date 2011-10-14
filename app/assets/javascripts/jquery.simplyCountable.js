@@ -16,7 +16,7 @@
   $.fn.simplyCountable = function(options){
     
     options = $.extend({
-      counter:            '#counter',
+      counter:            '#char_counter',
       countType:          'characters',
       wordSeparator:      ' ',
       maxCount:           140,
@@ -25,6 +25,7 @@
       safeClass:          'safe',
       overClass:          'over',
       thousandSeparator:  ',',
+      additionalText:     ' characters left.', 
       onOverCount:        function(){},
       onSafeCount:        function(){},
       onMaxCount:         function(){}
@@ -85,7 +86,7 @@
         count = 0, revCount = options.maxCount;
       }
       
-      counter.text(numberFormat(countInt()));
+      counter.text(numberFormat(countInt()) + options.additionalText);
       
       /* Set CSS class rules and API callbacks */
       if (!counter.hasClass(options.safeClass) && !counter.hasClass(options.overClass)){

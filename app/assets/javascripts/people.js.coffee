@@ -70,6 +70,9 @@ $('#send_bulkemail_link').live 'click', ->
     name = tr.find('.first_name').html() + ' ' + tr.find('.last_name').html()
     $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
   $('#bulk_send_dialog .subject').show()
+  $("#char_counter").hide()
+  $("#body").unbind("keyup")
+  $("#body").unbind("paste")  
   $('#bulk_send_dialog').dialog
     resizable: false,
     height:444,
@@ -114,6 +117,8 @@ $('#send_bulksms_link').live 'click', ->
     name = tr.find('.first_name').html() + ' ' + tr.find('.last_name').html()
     $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
   $('#bulk_send_dialog .subject').hide()
+  $("#char_counter").show()
+  $('#body').simplyCountable( { maxCount: 140 } )
   $('#bulk_send_dialog').dialog
     resizable: false,
     height:444,

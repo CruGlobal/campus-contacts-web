@@ -12,11 +12,12 @@
     </div>
     <div class="field">
     <%= text_area_tag :body, t('people.index.bulk_send_body', name: current_person), cols: 80, rows: 10 %>
+		<div id="char_counter"></div>
     </div>
   <% end %>
 
-<div id="bulk_send_dialog_message" class="flash">
- <div class="flash_message notice alignleft" style="padding-left:30px;">
- </div>
-</div>
+	<div id="bulk_send_dialog_message" class="flash">
+	 <div class="flash_message notice alignleft" style="padding-left:30px;">
+	 </div>
+	</div>
 </div>
