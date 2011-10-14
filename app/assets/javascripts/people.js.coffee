@@ -75,6 +75,7 @@ $('#send_bulkemail_link').live 'click', ->
   $('#char_counter').hide()
   $('#body').unbind('keyup')
   $('#body').unbind('paste')  
+  nicEdit = null
   $('#bulk_send_dialog').dialog
     resizable: false,
     height:444,
@@ -98,11 +99,15 @@ $('#send_bulkemail_link').live 'click', ->
       else
         $('#bulk_send_dialog_message').hide()
         
+      nicEdit = new nicEditor({fullPanel : true}).panelInstance('body');  
       $(this).find('form').attr('action', '/people/bulk_email')
+    close: (event, ui) ->
+      nicEdit.removeInstance('body');
     buttons: 
       Send: ->
         $(this).submitBulkSendDialog()
       Cancel: ->
+        nicEdit.removeInstance('body');      
         $(this).dialog('destroy')
   false        
   
@@ -129,7 +134,7 @@ $('#send_bulksms_link').live 'click', ->
     width:600,
     modal: true,
     title: 'Bulk Send Sms Message',
-    open: (event, ui)->
+    open: (event, ui) ->
       no_numbers = []
       $('.id_checkbox:checked').each ->
          tr = $(this).parent().parent();
@@ -147,6 +152,7 @@ $('#send_bulksms_link').live 'click', ->
         $('#bulk_send_dialog_message').hide()
     
       $(this).find('form').attr('action', '/people/bulk_sms')
+    close: (event, ui) ->
     buttons: 
       Send: ->
         $(this).submitBulkSendDialog()
