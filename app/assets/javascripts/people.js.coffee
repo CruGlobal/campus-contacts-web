@@ -163,3 +163,6 @@ $('#send_bulksms_link').live 'click', ->
   
 $('#bulk_send_dialog form').live 'submit', ->
   false
+
+$('#check_all').live 'click', ->
+  $('input.id_checkbox').prop('checked', $(this).prop('checked'))  
