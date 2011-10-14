@@ -68,11 +68,13 @@ $('#send_bulkemail_link').live 'click', ->
     ids.push(id)
     tr = $(this).parent().parent();
     name = tr.find('.first_name').html() + ' ' + tr.find('.last_name').html()
-    $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
+    email = tr.find('.email').text().length
+    if email > 0
+      $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
   $('#bulk_send_dialog .subject').show()
-  $("#char_counter").hide()
-  $("#body").unbind("keyup")
-  $("#body").unbind("paste")  
+  $('#char_counter').hide()
+  $('#body').unbind('keyup')
+  $('#body').unbind('paste')  
   $('#bulk_send_dialog').dialog
     resizable: false,
     height:444,
@@ -92,11 +94,11 @@ $('#send_bulkemail_link').live 'click', ->
         for name in no_emails
           html += '&middot; ' + name + '<br/>'
         html += '</p>'
-        $("#bulk_send_dialog_message .notice").html(html).show()
+        $('#bulk_send_dialog_message').show().find('.notice').html(html)
       else
-        $("#bulk_send_dialog_message").hide()
+        $('#bulk_send_dialog_message').hide()
         
-      $(this).find('form').attr("action", '/people/bulk_email')
+      $(this).find('form').attr('action', '/people/bulk_email')
     buttons: 
       Send: ->
         $(this).submitBulkSendDialog()
@@ -115,9 +117,11 @@ $('#send_bulksms_link').live 'click', ->
     ids.push(id)
     tr = $(this).parent().parent();
     name = tr.find('.first_name').html() + ' ' + tr.find('.last_name').html()
-    $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
+    number = tr.find('.phone_number').text().length
+    if number > 0
+      $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
   $('#bulk_send_dialog .subject').hide()
-  $("#char_counter").show()
+  $('#char_counter').show()
   $('#body').simplyCountable( { maxCount: 140 } )
   $('#bulk_send_dialog').dialog
     resizable: false,
@@ -138,11 +142,11 @@ $('#send_bulksms_link').live 'click', ->
         for name in no_numbers
           html += '&middot; ' + name + '<br/>'
         html += '</p>'
-        $("#bulk_send_dialog_message .notice").html(html).show()
+        $('#bulk_send_dialog_message').find('.notice').show().html(html)
       else
-        $("#bulk_send_dialog_message").hide()
+        $('#bulk_send_dialog_message').hide()
     
-      $(this).find('form').attr("action", '/people/bulk_sms')
+      $(this).find('form').attr('action', '/people/bulk_sms')
     buttons: 
       Send: ->
         $(this).submitBulkSendDialog()
