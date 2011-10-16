@@ -160,7 +160,7 @@ class PeopleController < ApplicationController
   def bulk_email
     to_ids = params[:to].split(',')    
     
-   to_ids.each do |id|
+   to_ids.each do |id|
       person = Person.find_by_personID(id)
       PeopleMailer.enqueue.bulk_message(person.email, current_person.email, params[:subject], params[:body]) if !person.email.blank?
     end
@@ -171,12 +171,28 @@ class PeopleController < ApplicationController
   def bulk_sms
     to_ids = params[:to].split(',')    
 
-   to_ids.each do |id|
+   to_ids.each do |id|
       person = Person.find_by_personID(id)
       @sent_sms = SentSms.create!(message: params[:body], recipient: person.phone_number) if person.phone_number.length > 0
     end
     
     render :nothing => true
+  end
+  
+  def all
+    org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
+    @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles)
+    @q = @people_scope.includes(:primary_phone_number, :primary_email_address)
+    @q = @q.where('organizational_roles.role_id' => params[:role_id]) if params[:role_id]
+    @q = @q.search(params[:q])
+    @q.sorts = ['lastName asc', 'firstName asc'] if @q.sorts.empty?
+    @all_people = @q.result(distinct: true)
+    @people = @all_people.page(params[:page])
+    
+      
+    @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
+     
+    render :partial => 'all'
   end
   
   protected

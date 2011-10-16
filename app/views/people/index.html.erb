@@ -1,6 +1,9 @@
 <%= javascript_include_tag 'jquery.simplyCountable.js' %>
 <%= javascript_include_tag 'nicEditMinimal.js' %>
 
+<input type="hidden" id="num_total" value="<%= @people.total_count %>">
+<input type="hidden" id="num_rows" value="<%= @people.size %>">
+
 <% provide :sidebar do %>
   <%= render 'labels' %>
 <% end %>

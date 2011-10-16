@@ -7,9 +7,10 @@ $ ->
   $('#user_merge_form input.name').observe_field 1, ->
     $(this).triggerPersonSearch()
 
-  
   $('#user_merge_form input.person').triggerPersonLookup()
   $('#user_merge_form input.name').triggerPersonSearch()
+  
+  true
   
 $.fn.triggerPersonSearch = ->
   this.each ->
@@ -71,6 +72,13 @@ $('#send_bulkemail_link').live 'click', ->
     email = tr.find('.email').text().length
     if email > 0
       $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
+  if($('#all_selected_text').is(':visible'))    
+    $('#all .all_row').each ->
+      id = $(this).find('.id').html()    
+      ids.push(id)
+      name = $(this).find('.name').html()    
+      $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')    
+    
   $('#bulk_send_dialog .subject').show()
   $('#char_counter').hide()
   $('#body').unbind('keyup')
@@ -165,4 +173,12 @@ $('#bulk_send_dialog form').live 'submit', ->
   false
 
 $('#check_all').live 'click', ->
-  $('input.id_checkbox').prop('checked', $(this).prop('checked'))  
+  checked = $(this).prop('checked')
+  $('input.id_checkbox').prop('checked', checked)  
+  if(checked)    
+    $.get '/people/all', (html) ->
+      $('#contacts_table').prepend(html)     
+    
+  else
+    $('#contacts_table').find('tr:first').remove()
+

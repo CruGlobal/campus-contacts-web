@@ -1,0 +1,18 @@
+<tr>
+	<td colspan="8" align="center" id="all">
+		<% @filtered_people.each do |person| %>
+			<div class="all_row"  style="display:none">
+				<span class="id"><%= person.id %></span> 		
+				<span class="name"><%= person.firstName %> <%= person.lastName %></span> 
+				<span class="email"><%= person.email %></span> 
+			</div>
+		<% end %>
+	
+		<span id="all_text">
+			All <%= @people.size %> people on this page are selected. <a href="#" onclick="$('#all_text, #all_selected_text').toggle()">Select all <%= @all_people.size %> people in the directory.</a>
+		</span>
+		<span id="all_selected_text" style="display:none">
+			All <%= @all_people.size %> people in the directory is selected. <a href="#" onclick="$('#all_text, #all_selected_text').toggle()">Select all people on this page only.</a>
+		</span>
+	</td>
+</tr>
