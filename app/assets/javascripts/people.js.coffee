@@ -174,9 +174,10 @@ $('#bulk_send_dialog form').live 'submit', ->
 
 $('#check_all').live 'click', ->
   checked = $(this).prop('checked')
+  page = $(this).attr('data-page')  
   $('input.id_checkbox').prop('checked', checked)  
   if(checked)    
-    $.get '/people/all', (html) ->
+    $.get '/people/all?page=' + page, (html) ->
       $('#contacts_table').prepend(html)     
     
   else
