@@ -168,7 +168,7 @@ $('#send_bulksms_link').live 'click', ->
         for name in no_numbers
           html += '&middot; ' + name + '<br/>'
         html += '</p>'
-        $('#bulk_send_dialog_message').find('.notice').show().html(html)
+        $('#bulk_send_dialog_message').show().find('.notice').html(html)
       else
         $('#bulk_send_dialog_message').hide()
     
