@@ -194,11 +194,17 @@ $('#bulk_send_dialog form').live 'submit', ->
   false
 
 $('#check_all').live 'click', ->
+  text = $('#contacts_table').find('tr:first').text()
+  if text.indexOf('Fetching') == 0
+    return false
+    
   checked = $(this).prop('checked')
   page = $(this).attr('data-page')  
   $('input.id_checkbox').prop('checked', checked)  
   if(checked)    
+    $('#contacts_table').prepend('<tr><td colspan="8" align="center">Fetching information...</td></tr>') 
     $.get '/people/all?page=' + page, (html) ->
+      $('#contacts_table').find('tr:first').remove()
       $('#contacts_table').prepend(html)     
     
   else
