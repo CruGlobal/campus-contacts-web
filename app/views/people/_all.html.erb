@@ -1,14 +1,14 @@
 <tr>
-	<td colspan="8" align="center" id="all">
+	<td colspan="8" align="center">
 		<% @filtered_people.each do |person| %>
 			<span class="all_row" data-id="<%= person.id %>" data-name="<%= person.firstName %> <%= person.lastName %>" data-email="<%= person.email %>" data-phone-number="<%= person.pretty_phone_number %>"></span>
 		<% end %>
 	
 		<span id="all_text">
-			All <%= @people.size %> people on this page are selected. <a href="#" onclick="$('#all_text, #all_selected_text').toggle()">Select all <%= @all_people.size %> people in the directory.</a>
+			All <b><%= @people.size %></b> people on this page are selected. <a href="#" onclick="$('#all_text, #all_selected_text').toggle()">Select all <b><%= @all_people.size %></b> people in the directory.</a>
 		</span>
 		<span id="all_selected_text" style="display:none">
-			All <%= @all_people.size %> people in the directory is selected. <a href="#" onclick="$('#all_text, #all_selected_text').toggle()">Select all people on this page only.</a>
+			All <b><%= @all_people.size %></b> people in the directory is selected. <a href="#" onclick="$('#all_text, #all_selected_text').toggle()">Select all people on this page only.</a>
 		</span>
 	</td>
 </tr>

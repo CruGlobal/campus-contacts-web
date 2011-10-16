@@ -78,7 +78,7 @@ $('#send_bulkemail_link').live 'click', ->
       no_emails.push(name)
       
   if($('#all_selected_text').is(':visible'))    
-    $('#all .all_row').each ->
+    $('.all_row').each ->
       id = $(this).attr('data-id')
       name = $(this).attr('data-name')
       email = $(this).attr('data-email').length
@@ -143,7 +143,7 @@ $('#send_bulksms_link').live 'click', ->
       no_numbers.push(name)
 
   if($('#all_selected_text').is(':visible'))    
-    $('#all .all_row').each ->
+    $('.all_row').each ->
       id = $(this).attr('data-id')
       name = $(this).attr('data-name')
       number = $(this).attr('data-phone-number').length
