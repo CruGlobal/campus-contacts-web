@@ -64,22 +64,32 @@ $('#send_bulkemail_link').live 'click', ->
     return
   $('.to_list').html('')
   ids = []
+  no_emails = []
+  
   $('.id_checkbox:checked').each ->
     id = $(this).val()
-    ids.push(id)
     tr = $(this).parent().parent();
     name = tr.find('.first_name').html() + ' ' + tr.find('.last_name').html()
     email = tr.find('.email').text().length
     if email > 0
+      ids.push(id)    
       $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
+    else
+      no_emails.push(name)
+      
   if($('#all_selected_text').is(':visible'))    
     $('#all .all_row').each ->
-      id = $(this).find('.id').html()    
-      ids.push(id)
-      name = $(this).find('.name').html()    
-      $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')    
-    
+      id = $(this).attr('data-id')
+      name = $(this).attr('data-name')
+      email = $(this).attr('data-email').length
+      if email > 0
+        ids.push(id)      
+        $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')    
+      else
+        no_emails.push(name)
+        
   $('#bulk_send_dialog .subject').show()
+  /* disable char counter */
   $('#char_counter').hide()
   $('#body').unbind('keyup')
   $('#body').unbind('paste')  
@@ -90,14 +100,8 @@ $('#send_bulkemail_link').live 'click', ->
     width:600,
     modal: true,
     title: 'Bulk Send Email Message',
-    open: (event, ui)->
-      no_emails = []
-      $('.id_checkbox:checked').each ->
-         tr = $(this).parent().parent();
-         name = tr.find('.first_name').html() + ' ' + tr.find('.last_name').html()
-         email = tr.find('.email').text().length
-         if email == 0
-           no_emails.push(name)
+    open: (event, ui) ->
+
       if no_emails.length > 0
         html = '<p>The following people are missing email addresses and will not be contacted:<br/>'
         for name in no_emails
@@ -125,6 +129,8 @@ $('#send_bulksms_link').live 'click', ->
     return
   $('.to_list').html('')
   ids = []
+  no_numbers = []
+  
   $('.id_checkbox:checked').each ->
     id = $(this).val()
     ids.push(id)
@@ -133,6 +139,20 @@ $('#send_bulksms_link').live 'click', ->
     number = tr.find('.phone_number').text().length
     if number > 0
       $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
+    else
+      no_numbers.push(name)
+
+  if($('#all_selected_text').is(':visible'))    
+    $('#all .all_row').each ->
+      id = $(this).attr('data-id')
+      name = $(this).attr('data-name')
+      number = $(this).attr('data-phone-number').length
+      if number > 0
+        ids.push(id)      
+        $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')    
+      else
+        no_numbers.push(name)
+      
   $('#bulk_send_dialog .subject').hide()
   $('#char_counter').show()
   $('#body').simplyCountable( { maxCount: 140 } )
@@ -143,13 +163,6 @@ $('#send_bulksms_link').live 'click', ->
     modal: true,
     title: 'Bulk Send Sms Message',
     open: (event, ui) ->
-      no_numbers = []
-      $('.id_checkbox:checked').each ->
-         tr = $(this).parent().parent();
-         name = tr.find('.first_name').html() + ' ' + tr.find('.last_name').html()
-         number = tr.find('.phone_number').text().length
-         if number == 0
-           no_numbers.push(name)
       if no_numbers.length > 0
         html = '<p>The following people are missing phone numbers and will not be contacted:<br/>'
         for name in no_numbers
