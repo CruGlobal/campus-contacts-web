@@ -61,7 +61,7 @@ $.fn.submitBulkSendDialog = ->
 $('#send_bulkemail_link').live 'click', -> 
   if $('.id_checkbox:checked').length == 0
     alert("You didn't select any people to email")
-    return
+    return false
   $('.to_list').html('')
   ids = []
   no_emails = []
@@ -87,6 +87,10 @@ $('#send_bulkemail_link').live 'click', ->
         $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')    
       else
         no_emails.push(name)
+        
+  if ids.length == 0
+    alert("Your selection didn't contain any person with a an email.")
+    return false
         
   $('#bulk_send_dialog .subject').show()
   /* disable char counter */
@@ -126,18 +130,18 @@ $('#send_bulkemail_link').live 'click', ->
 $('#send_bulksms_link').live 'click', -> 
   if $('.id_checkbox:checked').length == 0
     alert("You didn't select any people to text")
-    return
+    return false
   $('.to_list').html('')
   ids = []
   no_numbers = []
   
   $('.id_checkbox:checked').each ->
     id = $(this).val()
-    ids.push(id)
     tr = $(this).parent().parent();
     name = tr.find('.first_name').html() + ' ' + tr.find('.last_name').html()
     number = tr.find('.phone_number').text().length
     if number > 0
+      ids.push(id)    
       $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
     else
       no_numbers.push(name)
@@ -152,7 +156,11 @@ $('#send_bulksms_link').live 'click', ->
         $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')    
       else
         no_numbers.push(name)
-      
+
+  if ids.length == 0
+    alert("Your selection didn't contain any person with a phone number.")
+    return false
+
   $('#bulk_send_dialog .subject').hide()
   $('#char_counter').show()
   $('#body').simplyCountable( { maxCount: 140 } )
