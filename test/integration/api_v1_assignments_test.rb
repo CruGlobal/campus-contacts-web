@@ -1,7 +1,7 @@
 require 'test_helper'
 include ApiTestHelper
 
-class ApiAssignmentsTest < ActionDispatch::IntegrationTest
+class ApiV1AssignmentsTest < ActionDispatch::IntegrationTest
   context "the api" do
     setup do
       setup_api_env()
