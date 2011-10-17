@@ -10,26 +10,32 @@
     <%= render 'shared/nav' %>
     
     <div id="rest">
+      <div id="menugroups">
+        <ul>
+          <li class="selected"><%= link_to("Gather", "") %></li>
+          <li><%= link_to("Minister", "") %></li>
+        </ul>
+      </div>
+      <div id="topmenu">
+        <ul>
+          <!-- <li><%#= link_to("Dashboard", user_root_path) %></li> -->
+          <li class="<%= 'selected' if request.fullpath == '/contacts/mine' %>"><%= link_to(image_tag("t_contact_white.png", :class=> "tmenu") + t('nav.my_contacts'), "/contacts/mine") %></li>
+          <li class="<%= 'selected' if  params[:controller] == 'contacts' && params[:action] == 'index' %>"><%= link_to(image_tag("t_group_white.png", :class=> "tmenu") + t('nav.all_contacts'), "/contacts") %></li>
+          <li class="<%= 'selected' if  params[:controller] == 'people' %>"><%= link_to(image_tag("t_directory.png", :class=> "tmenu") + t('nav.directory'), "/people") %></li>
+          <% if can? :manage, current_organization %>
+            <li class="<%= 'selected' if params[:controller] == 'sms_keywords' %>"><%= link_to(image_tag("t_keyword_white.png", :class=> "tmenu") + t('nav.keywords'), sms_keywords_path) %></li>
+          <% end %>
+        </ul>
+      </div>
     
       <div id="left">
-        <%= link_to("", "/", id: "logo") %>
+        
         <div class="block">
           <%= yield :sidebar %>
         </div>
       </div>
   
       <div id="main">    
-        <div id="topmenu">
-          <ul>
-            <!-- <li><%#= link_to("Dashboard", user_root_path) %></li> -->
-            <li class="<%= 'selected' if request.fullpath == '/contacts/mine' %>"><%= link_to(image_tag("t_contact_white.png", :class=> "tmenu") + t('nav.my_contacts'), "/contacts/mine") %></li>
-            <li class="<%= 'selected' if  params[:controller] == 'contacts' && params[:action] == 'index' %>"><%= link_to(image_tag("t_group_white.png", :class=> "tmenu") + t('nav.all_contacts'), "/contacts") %></li>
-            <li class="<%= 'selected' if  params[:controller] == 'people' %>"><%= link_to(image_tag("t_directory.png", :class=> "tmenu") + t('nav.directory'), "/people") %></li>
-            <% if can? :manage, current_organization %>
-              <li class="<%= 'selected' if params[:controller] == 'sms_keywords' %>"><%= link_to(image_tag("t_keyword_white.png", :class=> "tmenu") + t('nav.keywords'), sms_keywords_path) %></li>
-            <% end %>
-          </ul>
-        </div>
             
         <div class="<%= params[:action] %> carea">
           <% if flash && (flash[:error] || flash[:notice] || flash[:alert]) %>

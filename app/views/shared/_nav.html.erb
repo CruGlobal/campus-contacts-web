@@ -1,6 +1,8 @@
 <%# cache(user_signed_in? ? ['global_nav', "#{current_user.id}", current_organization.try(:id)] : 'global_nav', expires_in: 15.minutes) do %>
 <div id="global">
   
+  <%= link_to("", "/", id: "logo") %>
+  
   <div class="gmwrap">
     <ul class="sf-menu">
       <% if session[:old_user_id].present? %>

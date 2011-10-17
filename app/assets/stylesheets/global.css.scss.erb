@@ -121,7 +121,9 @@ a.headerlink:hover {
 #global {
   text-align: right;
   font-size: 11px;
-  height: 28px;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  height: 40px;
   line-height: 28px;
   .item {
     display: inline-block;
@@ -137,14 +139,41 @@ a.headerlink:hover {
     border-left: none;
   }
 }
+#menugroups {
+  background: url("<%= asset_path('topmenubgtall.png') %>") repeat-x scroll 0 0 transparent;
+  border-radius: 8px 8px 0 0;
+  height: 48px;
+  ul {
+    list-style: none;
+    margin: 0 0 0 12px;
+    padding: 0;
+  }
+  li {
+    float: left;
+    padding: 0;
+    list-style: none;
+    margin: 0;
+  }
+  li.selected {
+    font-weight: bold;
+    background: url("<%= asset_path('groupselected.png') %>") no-repeat 50% 100%;
+  }
+  a {
+    color: #FFFFFF;
+    font-size: 14px;
+    line-height: 48px;
+    padding: 0 10px;
+  }
+}
 
 #topmenu {
-  background: url('<%= asset_path('topmenubg.png') %>') repeat-x;
+  background: #e5e5e5 repeat-x;
   border-radius: 0;
   height: 38px;
   a {
-    color: $white;
-    line-height: 38px;
+    margin-top: 5px;
+    color: #000;
+    line-height: 27px;
     padding: 0 13px;
     font-size: 11px;
 		display: block;
@@ -152,12 +181,12 @@ a.headerlink:hover {
 	a:hover {
 		text-decoration: none;
 	}
-	li.selected,
-	li.selected:hover {
-		background: url("<%= asset_path("topmenubg_on.png") %>") 0 100%;
+	li.selected > a,
+	li.selected:hover > a {
+		background: #B7B7B7;
+		border-radius: 5px;
 	}
 	li:hover {
-		background: url("<%= asset_path("topmenubg_hover.png") %>") 50% 100%;
 	}
   ul {
     @include clearlist;
@@ -166,25 +195,29 @@ a.headerlink:hover {
 		display: block;
 		float: left;
 	}
-	ul {height: 38px;}
+	ul {
+	  margin-left: 5px;
+	  height: 38px;
+	}
 }
 
 img.tmenu {
 	margin-right: 5px;
-	vertical-align: middle;
+	vertical-align: sub;
 }
 
 #left {
   float: left;
   width: 205px;
-  #logo {
-    background: url('<%= asset_path('logo.png') %>') no-repeat;
-    display: inline-block;
-    width: 166px;
-    height: 41px;
-    margin-bottom: 10px;
-    margin-left: 15px;
-  }
+}
+
+#logo {
+  background: url('<%= asset_path('logo.png') %>') no-repeat;
+  float: left;
+  width: 166px;
+  height: 41px;
+  margin-bottom: 10px;
+  margin-left: 15px;
 }
 
 .block {
