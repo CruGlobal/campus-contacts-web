@@ -81,7 +81,7 @@ class ApiController < ApplicationController
         default_version = @@versions.keys.max
         pattern = /application\/vnd\.missionhub-v(\d+)\+.*/
         # pattern = /application\/vnd\.com\.example\.api\.v([\d\.]+)\+.*/
-        params[:version] = (request.env['HTTP_ACCEPT'][pattern, 1] || default_version).to_s
+        params[:version] = (request.env['HTTP_ACCEPT'][pattern, 1] || default_version).to_i
       end
       method = find_method(method_name, params[:version])
     end
