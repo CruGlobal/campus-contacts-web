@@ -114,4 +114,8 @@ class User < ActiveRecord::Base
       other.destroy
     end
   end
+  
+  def has_role?(role_id, organization)
+    OrganizationalRole.where(role_id: role_id, organization_id: organization.id).first.present?
+  end
 end

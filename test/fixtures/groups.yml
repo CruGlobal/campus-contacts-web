@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  location: MyText
+  meets: MyString
+  meeting_day: 1
+  start_time: 1
+  end_time: 1
+  organization_id: 1
+
+two:
+  name: MyString
+  location: MyText
+  meets: MyString
+  meeting_day: 1
+  start_time: 1
+  end_time: 1
+  organization_id: 1

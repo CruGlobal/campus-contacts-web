@@ -1,0 +1,10 @@
+<%= semantic_form_for @group do |f| %>
+    <%= f.inputs "" do %>
+      <%= f.input :name %>
+      <%= f.input :location %>
+      <%= f.input :meets, :as => :select, :collection => [['weekly', t('weekly')], ['monthly', t('monthly')], ['sporadically', t('sporadically')]] %>
+      <%= f.input :start_time, :as => :select, :collection => times(6.hours.to_i, 22.hours.to_i) %>
+      <%= f.input :start_time, :as => :select, :collection => times(6.hours.to_i, 22.hours.to_i) %>
+    <% end %>
+    <%= f.buttons %>
+<% end %>
