@@ -21,17 +21,19 @@ class ApiController < ApplicationController
     
       load File.join("#{Rails.root}", "app", "controllers", 
                      "api", "#{extract_filename(subclass)}")
-    
+
       subclass.action_methods.each do |method|
         regex = Regexp.new("^(.*)_(\\d+)$")
         if match = regex.match(method)
           key = "#{subclass.to_s}##{match[1]}"
-          @@versions[match[2].to_i] = true
-          @@registered_methods[key] ||= {}
-          @@registered_methods[key][match[2].to_i] = true
+          if match[2].to_i <= Apic::STD_VERSION
+            @@versions[match[2].to_i] = true
+            @@registered_methods[key] ||= {}
+            @@registered_methods[key][match[2].to_i] = true
       
-          subclass.instance_eval do
-            define_method(match[1].to_sym) {}
+            subclass.instance_eval do
+              define_method(match[1].to_sym) {}
+            end
           end
         end
       end
@@ -74,9 +76,12 @@ class ApiController < ApplicationController
       method = method_name
     else
       if params[:version]
-        params[:version] = params[:version][1,params[:version].length - 1].to_i
+        params[:version] = params[:version][1..-1].to_i
       else
-        params[:version] = @@versions.keys.max
+        default_version = @@versions.keys.max
+        pattern = /application\/vnd\.missionhub-v(\d+)\+.*/
+        # pattern = /application\/vnd\.com\.example\.api\.v([\d\.]+)\+.*/
+        params[:version] = request.env['HTTP_ACCEPT'][pattern, 1] || default_version
       end
       method = find_method(method_name, params[:version])
     end
