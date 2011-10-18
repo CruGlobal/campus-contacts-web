@@ -57,7 +57,6 @@ $.fn.submitBulkSendDialog = ->
   $('#bulk_send_dialog').dialog('destroy')
   $.rails.handleRemote($("#bulk_send_dialog form"))
         
-        
 $('#send_bulkemail_link').live 'click', -> 
   if $('.id_checkbox:checked').length == 0
     alert("You didn't select any people to email")
@@ -122,6 +121,7 @@ $('#send_bulkemail_link').live 'click', ->
     buttons: 
       Send: ->
         $(this).submitBulkSendDialog()
+        $.n('Bulk email message sent')
       Cancel: ->
         nicEdit.removeInstance('body');      
         $(this).dialog('destroy')
@@ -185,6 +185,7 @@ $('#send_bulksms_link').live 'click', ->
     buttons: 
       Send: ->
         $(this).submitBulkSendDialog()
+        $.n('Bulk sms message sent')        
       Cancel: ->
         $(this).dialog('destroy')
   false        
