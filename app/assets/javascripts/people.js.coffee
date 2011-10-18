@@ -202,12 +202,13 @@ $('#check_all').live 'click', ->
   checked = $(this).prop('checked')
   params = $(this).attr('data-params')  
   $('input.id_checkbox').prop('checked', checked)  
-  if(checked)    
-    $('#contacts_table').prepend('<tr><td colspan="8" align="center">Fetching information...</td></tr>') 
-    $.get '/people/all?' + params, (html) ->
+  
+  if $('.pagination').length
+    if checked    
+      $('#contacts_table').prepend('<tr><td colspan="8" align="center">Fetching information...</td></tr>') 
+      $.get '/people/all?' + params, (html) ->
+        $('#contacts_table').find('tr:first').remove()
+        $('#contacts_table').prepend(html)     
+    else
       $('#contacts_table').find('tr:first').remove()
-      $('#contacts_table').prepend(html)     
-    
-  else
-    $('#contacts_table').find('tr:first').remove()
 
