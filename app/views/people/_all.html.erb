@@ -5,7 +5,10 @@
 		<% end %>
 	
 		<span id="all_text">
-			All <b><%= @people.size %></b> people on this page are selected. <a href="#" onclick="$('#all_text, #all_selected_text').toggle()">Select all <b><%= @all_people.size %></b> people in the directory.</a>
+			All <b><%= @people.size %></b> people on this page are selected. 
+			<% if @all_people.size > @people.size %>
+			<a href="#" onclick="$('#all_text, #all_selected_text').toggle()">Select all <b><%= @all_people.size %></b> people in the directory.</a>
+			<% end %>
 		</span>
 		<span id="all_selected_text" style="display:none">
 			All <b><%= @all_people.size %></b> people in the directory is selected.</a>

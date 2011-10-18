@@ -187,7 +187,7 @@ class PeopleController < ApplicationController
       org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
       @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles)
       @q = @people_scope.includes(:primary_phone_number, :primary_email_address)
-      @q = @q.where('organizational_roles.role_id' => params[:role_id]) if params[:role_id]
+      @q = @q.where('organizational_roles.role_id' => params[:role_id]) if !params[:role_id].blank?
       @q = @q.search(params[:q])
       @q.sorts = ['lastName asc', 'firstName asc'] if @q.sorts.empty?
       @all_people = @q.result(distinct: true)

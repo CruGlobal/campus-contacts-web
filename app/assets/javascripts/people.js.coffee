@@ -200,11 +200,11 @@ $('#check_all').live 'click', ->
     return false
     
   checked = $(this).prop('checked')
-  page = $(this).attr('data-page')  
+  params = $(this).attr('data-params')  
   $('input.id_checkbox').prop('checked', checked)  
   if(checked)    
     $('#contacts_table').prepend('<tr><td colspan="8" align="center">Fetching information...</td></tr>') 
-    $.get '/people/all?page=' + page, (html) ->
+    $.get '/people/all?' + params, (html) ->
       $('#contacts_table').find('tr:first').remove()
       $('#contacts_table').prepend(html)     
     
