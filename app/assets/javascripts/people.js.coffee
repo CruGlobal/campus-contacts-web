@@ -120,6 +120,7 @@ $('#send_bulkemail_link').live 'click', ->
       nicEdit.removeInstance('body');
     buttons: 
       Send: ->
+        nicEdit.removeInstance('body');        
         $(this).submitBulkSendDialog()
         $.n('Bulk email message sent')
       Cancel: ->
@@ -203,6 +204,7 @@ $('#check_all').live 'click', ->
   params = $(this).attr('data-params')  
   $('input.id_checkbox').prop('checked', checked)  
   
+  /* only show option to select more if there are more than 1 page */
   if $('.pagination').length
     if checked    
       $('#contacts_table').prepend('<tr><td colspan="8" align="center">Fetching information...</td></tr>') 
