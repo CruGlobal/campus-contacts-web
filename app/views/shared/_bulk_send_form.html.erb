@@ -1,0 +1,23 @@
+<div id="bulk_send_dialog" style="display:none" title="Send Bulk Message">
+  <%= form_tag "" do %>
+    <%= hidden_field_tag :to %>
+    <div class="field_in">
+      <label>To:</label>
+      <div class="in"><ul class="to_list clearfix"><div class="clear"></div></ul></div>
+    </div>
+    
+    <div class="field_in subject">
+      <label>Subject:</label> 
+      <div class="in"><%= text_field_tag :subject %></div>
+    </div>
+    <div class="field">
+    <%= text_area_tag :body, '', cols: 80, rows: 10 %>
+		<div id="char_counter"></div>
+    </div>
+  <% end %>
+
+	<div id="bulk_send_dialog_message" class="flash">
+	 <div class="flash_message notice alignleft" style="padding-left:30px;">
+	 </div>
+	</div>
+</div>

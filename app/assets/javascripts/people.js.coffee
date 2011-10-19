@@ -7,9 +7,10 @@ $ ->
   $('#user_merge_form input.name').observe_field 1, ->
     $(this).triggerPersonSearch()
 
-  
   $('#user_merge_form input.person').triggerPersonLookup()
   $('#user_merge_form input.name').triggerPersonSearch()
+  
+  true
   
 $.fn.triggerPersonSearch = ->
   this.each ->
@@ -46,3 +47,178 @@ $.fn.triggerPersonLookup = ->
       complete: ->
         $('.merge.' + css_class).show()
         $("#spinner_" + css_class).hide()
+        
+$.fn.submitBulkSendDialog = ->
+  ids = []
+  $('.to_list li').each ->
+    id = $(this).attr('data-id')
+    ids.push(id)
+  $('#to').val(ids.join(','))
+  $('#bulk_send_dialog').dialog('destroy')
+  $.rails.handleRemote($("#bulk_send_dialog form"))
+        
+$('#send_bulkemail_link').live 'click', -> 
+  if $('.id_checkbox:checked').length == 0
+    alert("You didn't select any people to email")
+    return false
+  $('.to_list').html('')
+  ids = []
+  no_emails = []
+  
+  $('.id_checkbox:checked').each ->
+    id = $(this).val()
+    tr = $(this).parent().parent();
+    name = tr.find('.first_name').html() + ' ' + tr.find('.last_name').html()
+    email = tr.find('.email').text().length
+    if email > 0
+      ids.push(id)    
+      $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
+    else
+      no_emails.push(name)
+      
+  if($('#all_selected_text').is(':visible'))    
+    $('.all_row').each ->
+      id = $(this).attr('data-id')
+      name = $(this).attr('data-name')
+      email = $(this).attr('data-email').length
+      if email > 0
+        ids.push(id)      
+        $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')    
+      else
+        no_emails.push(name)
+        
+  if ids.length == 0
+    alert("Your selection didn't contain any person with a an email.")
+    return false
+        
+  $('#bulk_send_dialog .subject').show()
+  /* disable char counter */
+  $('#char_counter').hide()
+  $('#body').unbind('keyup')
+  $('#body').unbind('paste')  
+  $('#body').val($('#bulk_email_message').val())
+  nicEdit = null
+  $('#bulk_send_dialog').dialog
+    resizable: false,
+    height:444,
+    width:600,
+    modal: true,
+    title: 'Bulk Send Email Message',
+    open: (event, ui) ->
+
+      if no_emails.length > 0
+        html = '<p>The following people are missing email addresses and will not be contacted:<br/>'
+        for name in no_emails
+          html += '&middot; ' + name + '<br/>'
+        html += '</p>'
+        $('#bulk_send_dialog_message').show().find('.notice').html(html)
+      else
+        $('#bulk_send_dialog_message').hide()
+        
+      nicEdit = new nicEditor({fullPanel : true}).panelInstance('body');  
+      $(this).find('form').attr('action', '/people/bulk_email')
+    close: (event, ui) ->
+      nicEdit.removeInstance('body');
+      $('#bulk_email_message').val($('#body').val())      
+    buttons: 
+      Send: ->
+        nicEdit.removeInstance('body');        
+        $(this).submitBulkSendDialog()
+        $('#bulk_email_message').val($('#body').val())              
+        $.n('Bulk email message sent')
+      Cancel: ->
+        nicEdit.removeInstance('body');      
+        $('#bulk_email_message').val($('#body').val())              
+        $(this).dialog('destroy')
+  false        
+  
+$('#send_bulksms_link').live 'click', -> 
+  if $('.id_checkbox:checked').length == 0
+    alert("You didn't select any people to text")
+    return false
+  $('.to_list').html('')
+  ids = []
+  no_numbers = []
+  
+  $('.id_checkbox:checked').each ->
+    id = $(this).val()
+    tr = $(this).parent().parent();
+    name = tr.find('.first_name').html() + ' ' + tr.find('.last_name').html()
+    number = tr.find('.phone_number').text().length
+    if number > 0
+      ids.push(id)    
+      $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
+    else
+      no_numbers.push(name)
+
+  if($('#all_selected_text').is(':visible'))    
+    $('.all_row').each ->
+      id = $(this).attr('data-id')
+      name = $(this).attr('data-name')
+      number = $(this).attr('data-phone-number').length
+      if number > 0
+        ids.push(id)      
+        $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')    
+      else
+        no_numbers.push(name)
+
+  if ids.length == 0
+    alert("Your selection didn't contain any person with a phone number.")
+    return false
+
+  $('#bulk_send_dialog .subject').hide()
+  $('#char_counter').show()
+  $('#body').simplyCountable( { maxCount: 140 } )
+  $('#body').val($('#bulk_sms_message').val())  
+  $('#bulk_send_dialog').dialog
+    resizable: false,
+    height:444,
+    width:600,
+    modal: true,
+    title: 'Bulk Send Sms Message',
+    open: (event, ui) ->
+      if no_numbers.length > 0
+        html = '<p>The following people are missing phone numbers and will not be contacted:<br/>'
+        for name in no_numbers
+          html += '&middot; ' + name + '<br/>'
+        html += '</p>'
+        $('#bulk_send_dialog_message').show().find('.notice').html(html)
+      else
+        $('#bulk_send_dialog_message').hide()
+    
+      $(this).find('form').attr('action', '/people/bulk_sms')
+    close: (event, ui) ->
+      $('#bulk_sms_message').val($('#body').val())            
+    buttons: 
+      Send: ->
+        $(this).submitBulkSendDialog()
+        $('#bulk_sms_message').val($('#body').val())                
+        $.n('Bulk sms message sent')        
+      Cancel: ->
+        $('#bulk_sms_message').val($('#body').val())        
+        $(this).dialog('destroy')
+  false        
+  
+  
+$('#bulk_send_dialog form').live 'submit', ->
+  false
+
+$('#check_all').live 'click', ->
+  text = $('#contacts_table').find('tr:first').text()
+  if text.indexOf('Fetching') == 0
+    return false
+    
+  checked = $(this).prop('checked')
+  params = $(this).attr('data-params')  
+  $('input.id_checkbox').prop('checked', checked)  
+  
+  /* only show option to select more if there are more than 1 page */
+  if $('.pagination').length
+    if checked    
+      $('#contacts_table').prepend('<tr><td colspan="8" align="center">Fetching information...</td></tr>') 
+      $.get '/people/all?' + params, (html) ->
+        $('#contacts_table').find('tr:first').remove()
+        $('#contacts_table').prepend(html)     
+    else
+      $('#contacts_table').find('tr:first').remove()
+

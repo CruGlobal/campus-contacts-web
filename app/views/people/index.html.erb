@@ -1,3 +1,6 @@
+<input type="hidden" id="bulk_email_message" value="" />
+<input type="hidden" id="bulk_sms_message" value="" />
+
 <% provide :sidebar do %>
   <%= render 'labels' %>
 <% end %>
@@ -9,13 +12,17 @@
 </div>
 <div class="pagemenu">
   <ul class="pillmenu">
-    <li><%= link_to(t('.export'), export_people_path(params.except(:action, :controller, :utf8))) %></li>
+		<li><%= link_to(t('.bulk_email'), nil, :id => "send_bulkemail_link") %></li>	
+		<li><%= link_to(t('.bulk_sms'), nil, :id => "send_bulksms_link") %></li>			
+	</ul>
+  <ul class="pillmenu">
+   	<li><%= link_to(t('.export'), export_people_path(params.except(:action, :controller, :utf8))) %></li>
   </ul>
 </div>
   
 <table class="listing" cellpadding="0" cellspacing="0">
   <tr>
-    <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment' %></th>
+    <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment',  'data-params' => 'page=' + (params[:page] ? params[:page] : '1') + '&role_id=' + (params[:role_id] ? params[:role_id] : '')   %></th>
     <th><%= sort_link @q, :firstName, t('contacts.index.first_name') %></th>
     <th><%= sort_link @q, :lastName, t('contacts.index.last_name') %></th>
     <th><%= sort_link @q, :gender, t('.gender') %></th>
@@ -32,11 +39,11 @@
           <%#= image_tag('grippy.png', class: 'handle') %>
           <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
         </td>
-        <td><%= person.firstName %></td>
-        <td><%= person.lastName %></td>
+        <td class="first_name"><%= person.firstName %></td>
+        <td class="last_name"><%= person.lastName %></td>
         <td><%= person.gender.to_s.titleize %></td>
-        <td><%= mail_to(person.email) %></td>
-        <td><%= person.pretty_phone_number %></td>
+        <td class="email"><%= mail_to(person.email) %></td>
+        <td class="phone_number"><%= person.pretty_phone_number %></td>
         <td><%= person.yearInSchool %></td>
         <td class="controls">
           <%= link_to("Show", "/people/#{person.id}", :class => "icon magnify tipit", :title => t('nav.view_details')) %>
@@ -54,3 +61,6 @@
 <div class="searchstat">
   <%= "Displaying #{@people.offset_value + 1} - #{@people.offset_value + @people.length} of #{@people.total_count}" %>
 </div>
+
+
+<%= render 'shared/bulk_send_form' %>
