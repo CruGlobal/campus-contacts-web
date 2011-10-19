@@ -176,7 +176,7 @@ $('#send_bulksms_link').live 'click', ->
   $('#bulk_send_dialog').dialog
     resizable: false,
     height:444,
-    width:700,
+    width:600,
     modal: true,
     title: 'Bulk Send Sms Message',
     open: (event, ui) ->
@@ -217,7 +217,7 @@ $('#check_all').live 'click', ->
   /* only show option to select more if there are more than 1 page */
   if $('.pagination').length
     if checked    
-      $('#contacts_table').prepend('<tr><td colspan="8" align="center">Fetching information...</td></tr>') 
+      $('#contacts_table').prepend('<tr><td colspan="8" align="center" style="background:none;">Fetching information...</td></tr>') 
       $.get '/people/all?' + params, (html) ->
         $('#contacts_table').find('tr:first').remove()
         $('#contacts_table').prepend(html)     
