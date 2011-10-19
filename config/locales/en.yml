@@ -426,3 +426,5 @@ en:
   weekly: weekly
   monthly: monthly
   sporadically: sporadically
+  bulk_sms: Bulk Text
+  bulk_email: Bulk Email

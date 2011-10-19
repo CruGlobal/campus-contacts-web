@@ -1,16 +1,15 @@
 require 'test_helper'
 include ApiTestHelper
 
-class ApiContactsTest < ActionDispatch::IntegrationTest
+class ApiV2ContactsTest < ActionDispatch::IntegrationTest
   context "API v2" do
     setup do
-      setup_api_env()
+      setup_api_env
     end
     
     should "be able to view their contacts" do
-      path = "/api/v2/contacts/"
-
-      get path, {'access_token' => @access_token3.code}
+      path = "/api/contacts/"
+      get path, {'access_token' => @access_token3.code}, {:accept => 'application/vnd.missionhub-v2+json'}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
 

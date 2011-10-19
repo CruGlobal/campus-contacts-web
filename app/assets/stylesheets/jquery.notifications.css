@@ -1,0 +1,54 @@
+/* jQuery Notifications plugin - http://programmingmind.com */
+/* notification container */
+#jquery-notifications {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 100000;
+}
+#jquery-notifications p {
+  text-align: center;
+  position: relative;
+  margin: 0;
+  padding: 5px;
+  padding-left: 10px;
+  border-bottom: 2px solid;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 1px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 1px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+/* style property for the close text */
+#jquery-notifications p a {
+  position: absolute;
+  right: 10px;
+  margin-right: 10px;
+  color: #ffffff;
+  text-decoration: none;
+  border: 1px solid #ffffff;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+#jquery-notifications .notice {
+  background: #b8d1e2;
+  color: #28485e;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+  border-color: #8a9daa;
+}
+#jquery-notifications .success {
+  background: #96f96f;
+  color: #ffffff;
+  border-color: #045419;
+}
+#jquery-notifications .warning {
+  background: #f9c006;
+  color: #ffffff;
+  border-color: #bb9004;
+}
+#jquery-notifications .error {
+  background: #cc4831;
+  color: #ffffff;
+  border-color: #993624;
+}

@@ -13,3 +13,6 @@
 //= require rails.validations
 //= require sms_keywords.js.coffee
 //= require people.js.coffee
+//= require jquery.notifications-1.1
+//= require jquery.simplyCountable.js
+//= require nicEditMinimal.js
