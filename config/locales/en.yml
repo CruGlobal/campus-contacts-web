@@ -66,8 +66,6 @@ en:
       phone: 'Phone'
       email: 'Email'
       year_in_school: 'Year in School'
-      bulk_send_subject: 'Bulk send subject'
-      bulk_send_body: 'Bulk send body'
     show:
       edit_profile: 'Edit Profile'
   org_membership:
