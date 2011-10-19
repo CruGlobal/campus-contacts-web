@@ -74,7 +74,7 @@ $('#send_bulkemail_link').live 'click', ->
       ids.push(id)    
       $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
     else
-      no_emails.push(name)
+      no_emails.push($.trim(name))
       
   if($('#all_selected_text').is(':visible'))    
     $('.all_row').each ->
@@ -90,7 +90,9 @@ $('#send_bulkemail_link').live 'click', ->
   if ids.length == 0
     alert("Your selection didn't contain any person with a an email.")
     return false
-        
+  
+  $('#bulk_send_dialog form').addClass('bulk-email')
+  $('#bulk_send_dialog form').removeClass('bulk-sms')
   $('#bulk_send_dialog .subject').show()
   /* disable char counter */
   $('#char_counter').hide()
@@ -100,7 +102,7 @@ $('#send_bulkemail_link').live 'click', ->
   nicEdit = null
   $('#bulk_send_dialog').dialog
     resizable: false,
-    height:444,
+    height:644,
     width:600,
     modal: true,
     title: 'Bulk Send Email Message',
@@ -108,9 +110,8 @@ $('#send_bulkemail_link').live 'click', ->
 
       if no_emails.length > 0
         html = '<p>The following people are missing email addresses and will not be contacted:<br/>'
-        for name in no_emails
-          html += '&middot; ' + name + '<br/>'
-        html += '</p>'
+        html += no_emails.join(', ')
+        html += '</p></div>'
         $('#bulk_send_dialog_message').show().find('.notice').html(html)
       else
         $('#bulk_send_dialog_message').hide()
@@ -149,7 +150,7 @@ $('#send_bulksms_link').live 'click', ->
       ids.push(id)    
       $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
     else
-      no_numbers.push(name)
+      no_numbers.push($.trim(name))
 
   if($('#all_selected_text').is(':visible'))    
     $('.all_row').each ->
@@ -166,6 +167,8 @@ $('#send_bulksms_link').live 'click', ->
     alert("Your selection didn't contain any person with a phone number.")
     return false
 
+  $('#bulk_send_dialog form').removeClass('bulk-email')
+  $('#bulk_send_dialog form').addClass('bulk-sms')
   $('#bulk_send_dialog .subject').hide()
   $('#char_counter').show()
   $('#body').simplyCountable( { maxCount: 140 } )
@@ -173,15 +176,14 @@ $('#send_bulksms_link').live 'click', ->
   $('#bulk_send_dialog').dialog
     resizable: false,
     height:444,
-    width:600,
+    width:700,
     modal: true,
     title: 'Bulk Send Sms Message',
     open: (event, ui) ->
       if no_numbers.length > 0
-        html = '<p>The following people are missing phone numbers and will not be contacted:<br/>'
-        for name in no_numbers
-          html += '&middot; ' + name + '<br/>'
-        html += '</p>'
+        html = '<div class="missing"><p>The following people are missing phone numbers and will not be contacted:<br/>'
+        html += no_numbers.join(', ')
+        html += '</p></div>'
         $('#bulk_send_dialog_message').show().find('.notice').html(html)
       else
         $('#bulk_send_dialog_message').hide()
