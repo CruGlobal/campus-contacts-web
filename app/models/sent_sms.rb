@@ -16,14 +16,14 @@ class SentSms < ActiveRecord::Base
       when 'moonshado'
         self.moonshado_claimcheck = SMS.deliver(recipient, message).first #  + ' Txt HELP for help STOP to quit'
       when 'twilio'
-        sms = Twilio::SMS.create :to => recipient, :body => 'test', :from => '85005'
+        sms = Twilio::SMS.create :to => recipient, :body => message, :from => '85005'
       else
         raise "Not sure how to send this sms: sent_via = #{sent_via}"
       end
       save
     
       # Log count sent through this carrier (just for fun)
-      if received_sms
+      if received_sms && received_sms.carrier.present?
         carrier = SmsCarrier.find_or_create_by_moonshado_name(received_sms.carrier) 
         carrier.increment!(:sent_sms)
       end
