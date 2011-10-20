@@ -444,6 +444,15 @@ class Person < ActiveRecord::Base
     hash
   end
   
+  def to_hash_mini_leader
+    hash = {}
+    hash['id'] = self.personID
+    hash['name'] = self.to_s.gsub(/\n/," ")
+    hash['picture'] = picture unless fb_uid.nil?
+    hash['num_contacts'] = assigned_contacts.count
+    hash
+  end
+  
   def to_hash_basic(organization = nil)
     assign_hash = nil
     unless organization.nil?
