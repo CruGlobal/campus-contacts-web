@@ -79,7 +79,7 @@ class SmsController < ApplicationController
   protected 
     def sms_params
       unless @sms_params
-        if params['To'] == '85005' # Twilio
+        if params['To'] # Twilio
           @sms_params = {}
           @sms_params[:city] = params['FromCity']
           @sms_params[:state] = params['FromState']
@@ -156,7 +156,8 @@ class SmsController < ApplicationController
     end
     
     def send_message(msg, phone_number)
-      @sent_sms = SentSms.create!(message: msg, recipient: phone_number, received_sms_id: @received.try(:id))
+      sent_via = @sms_params[:shortcode] == '75572' ? 'moonshado' : 'twilio'
+      @sent_sms = SentSms.create!(message: msg, recipient: phone_number, received_sms_id: @received.try(:id), sent_via: sent_via)
     end
 
 end

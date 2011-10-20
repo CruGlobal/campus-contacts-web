@@ -1,5 +1,8 @@
 class SmsKeyword < ActiveRecord::Base  
-  SHORT = '75572'
+  MOONSHADO_SHORT = '75572'
+  SHORT = '85005'
+  LONG = '14248886482'
+  
   enforce_schema_rules  
   
   belongs_to :user

@@ -171,7 +171,7 @@ $('#send_bulksms_link').live 'click', ->
   $('#bulk_send_dialog form').addClass('bulk-sms')
   $('#bulk_send_dialog .subject').hide()
   $('#char_counter').show()
-  $('#body').simplyCountable( { maxCount: 140 } )
+  $('#body').simplyCountable( { maxCount: 125 } )
   $('#body').val($('#bulk_sms_message').val())  
   $('#bulk_send_dialog').dialog
     resizable: false,
