@@ -10,7 +10,18 @@
   <div class="titlebar">
     <h1><%= image_tag("c_survey.png") %>Surveys</h1>
   </div>
-  
+  <% if current_organization.keywords.any? {|keyword| keyword.gateway != 'twilio'} %>
+  <div class="flash" style="margin:10px;width:770px">
+    <div class="flash_message error" style="text-align:left">
+      <p>Notice: We have a new short code (the phone number you text in to)! The new code is <strong>85005</strong>. Please start using this new number immediately.
+        The old code (75572) will continue to work until December 1st, 2011. Your surveys will currently work using either number, but you can help us out by making 
+        the move earlier. Unless you have a reason not to, please <%= link_to("click here to accept the number change.", accept_twilio_sms_keywords_path, method: :post) %> 
+        Once you do that, your surveys will only
+        work on the new number. If you have a reason why you need to use the old number past December 1st, 2011, please email us at <%= mail_to 'support@missionhub.com' %>
+      </p>
+    </div>
+  </div>
+  <% end %>
   <div class="pagemenu">
     <ul class="pillmenu">
       <li>

@@ -67,6 +67,11 @@ class SmsKeywordsController < ApplicationController
     end
   end
   
+  def accept_twilio
+    current_organization.keywords.update_all("gateway = 'twilio'")
+    redirect_to :back
+  end
+  
   private
     def check_org_and_authorize
       unless current_organization

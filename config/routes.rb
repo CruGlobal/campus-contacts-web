@@ -48,6 +48,9 @@ Mh::Application.routes.draw do
   resources :ministries
 
   resources :sms_keywords do
+    collection do
+      post :accept_twilio
+    end
     resources :questions, controller: "sms_keywords/questions" do
       member do
         put :hide
