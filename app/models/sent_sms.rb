@@ -14,9 +14,9 @@ class SentSms < ActiveRecord::Base
     def send_sms
       case sent_via 
       when 'moonshado'
-        self.moonshado_claimcheck = SMS.deliver(recipient, message).first #  + ' Txt HELP for help STOP to quit'
+        self.moonshado_claimcheck = SMS.deliver(recipient, message).first # 
       when 'twilio'
-        sms = Twilio::SMS.create :to => recipient, :body => message, :from => '85005'
+        sms = Twilio::SMS.create :to => recipient, :body => message + ' Txt HELP for help STOP to quit', :from => '85005'
       else
         raise "Not sure how to send this sms: sent_via = #{sent_via}"
       end
