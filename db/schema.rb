@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111011140850) do
+ActiveRecord::Schema.define(:version => 20111020171606) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -968,6 +968,18 @@ ActiveRecord::Schema.define(:version => 20111011140850) do
   end
 
   add_index "followup_comments", ["organization_id", "contact_id"], :name => "comment_organization_id_contact_id"
+
+  create_table "groups", :force => true do |t|
+    t.string   "name"
+    t.text     "location"
+    t.string   "meets"
+    t.integer  "meeting_day"
+    t.integer  "start_time"
+    t.integer  "end_time"
+    t.integer  "organization_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "hr_ms_payment", :primary_key => "paymentID", :force => true do |t|
     t.datetime "paymentDate"
@@ -3294,6 +3306,10 @@ ActiveRecord::Schema.define(:version => 20111011140850) do
     t.datetime "updated_at"
     t.integer  "sms_keyword_id"
     t.integer  "sms_session_id"
+    t.string   "state"
+    t.string   "city"
+    t.string   "zip"
+    t.string   "twilio_sid"
   end
 
   add_index "received_sms", ["person_id"], :name => "person_id"
@@ -3369,6 +3385,8 @@ ActiveRecord::Schema.define(:version => 20111011140850) do
     t.integer  "received_sms_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "twilio_sid"
+    t.string   "twilio_uri"
   end
 
   create_table "si_answer_sheets", :force => true do |t|

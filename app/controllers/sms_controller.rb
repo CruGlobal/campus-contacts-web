@@ -1,13 +1,13 @@
 class SmsController < ApplicationController
   skip_before_filter :authenticate_user!, :verify_authenticity_token
   def mo
-    begin
+    # begin
       # try to save the new message
       @received = ReceivedSms.create!(sms_params)
-    rescue ActiveRecord::RecordNotUnique
-      # the mysql index just saved us from a duplicate message 
-      render nothing: true and return 
-    end
+    # rescue ActiveRecord::RecordNotUnique
+    #   # the mysql index just saved us from a duplicate message 
+    #   render nothing: true and return 
+    # end
     # Process incoming text
     message = sms_params[:message]
     
@@ -77,11 +77,23 @@ class SmsController < ApplicationController
   protected 
     def sms_params
       unless @sms_params
-        @sms_params = params.slice(:carrier, :country)
-        @sms_params[:phone_number] = params[:device_address]
-        @sms_params[:shortcode] = params[:inbound_address]
-        @sms_params[:received_at] = DateTime.strptime(params[:timestamp], '%m/%d/%Y %H:%M:%S')
-        @sms_params[:message] = params[:message].strip.gsub(/\n/, ' ')
+        if params['To'] == '85005' # Twilio
+          @sms_params = {}
+          @sms_params[:city] = params['FromCity']
+          @sms_params[:state] = params['FromState']
+          @sms_params[:zip] = params['FromZip']
+          @sms_params[:country] = params['FromCountry']
+          @sms_params[:phone_number] = params['From'].sub('+','')
+          @sms_params[:shortcode] = params['To']
+          @sms_params[:received_at] = Time.now
+          @sms_params[:message] = params["Body"].strip.gsub(/\n/, ' ')
+        else
+          @sms_params = params.slice(:carrier, :country)
+          @sms_params[:phone_number] = params[:device_address]
+          @sms_params[:shortcode] = params[:inbound_address]
+          @sms_params[:received_at] = DateTime.strptime(params[:timestamp], '%m/%d/%Y %H:%M:%S')
+          @sms_params[:message] = params[:message].strip.gsub(/\n/, ' ')
+        end
       end
       @sms_params
     end

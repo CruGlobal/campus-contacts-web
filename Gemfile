@@ -20,6 +20,9 @@ gem 'ancestry'
 # gem 'rails_admin', git: 'git://github.com/sferik/rails_admin.git'
 gem 'activeadmin', git: 'git://github.com/gregbell/active_admin.git'
 
+gem 'twilio-rb'
+gem "default_value_for"
+
 gem 'dalli'#, git: 'git://github.com/mperham/dalli.git'
 # gem 'memcache-client'
 gem 'resque_mail_queue'
