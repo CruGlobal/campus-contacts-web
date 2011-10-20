@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111020171606) do
+ActiveRecord::Schema.define(:version => 20111020174602) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -3314,6 +3314,7 @@ ActiveRecord::Schema.define(:version => 20111020171606) do
 
   add_index "received_sms", ["person_id"], :name => "person_id"
   add_index "received_sms", ["phone_number", "message", "received_at"], :name => "index_received_sms_on_phone_number_and_message_and_received_at", :unique => true
+  add_index "received_sms", ["twilio_sid"], :name => "index_received_sms_on_twilio_sid", :unique => true
 
   create_table "rejoicables", :force => true do |t|
     t.integer  "person_id"
@@ -3388,6 +3389,8 @@ ActiveRecord::Schema.define(:version => 20111020171606) do
     t.string   "twilio_sid"
     t.string   "twilio_uri"
   end
+
+  add_index "sent_sms", ["twilio_sid"], :name => "index_sent_sms_on_twilio_sid", :unique => true
 
   create_table "si_answer_sheets", :force => true do |t|
     t.integer  "question_sheet_id", :null => false

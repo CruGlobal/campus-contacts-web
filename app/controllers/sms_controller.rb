@@ -1,13 +1,13 @@
 class SmsController < ApplicationController
   skip_before_filter :authenticate_user!, :verify_authenticity_token
   def mo
-    # begin
+    begin
       # try to save the new message
       @received = ReceivedSms.create!(sms_params)
-    # rescue ActiveRecord::RecordNotUnique
-    #   # the mysql index just saved us from a duplicate message 
-    #   render nothing: true and return 
-    # end
+    rescue ActiveRecord::RecordNotUnique
+      # the mysql index just saved us from a duplicate message 
+      render nothing: true and return 
+    end
     # Process incoming text
     message = sms_params[:message]
     
