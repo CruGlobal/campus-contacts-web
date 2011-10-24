@@ -26,7 +26,7 @@ class Friend < ActiveRecord::Base
   end
 
   def self.followers(person)
-   $redis.smembers(Friend.redis_key(person, :followers))
+   $redis.smembers(Friend.redis_key(person, :followers)) || []
   end
 
   def follow!(person)
