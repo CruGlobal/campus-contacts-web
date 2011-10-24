@@ -514,10 +514,10 @@ input[type=submit], button[type=submit] {
 	-moz-box-shadow: 0 0 1px #FFFFFF inset;
 	-webkit-box-shadow: 0 0 1px #FFFFFF inset;
   color: white;
-  font-size: 12px;
-  line-height: 0px;
-	height: 26px;
-  padding: 0px 6px;
+  font-size: 14px;
+  line-height: 35px;
+	height: 35px;
+  padding: 0px 15px;
   vertical-align: top;
   font-weight: bold;
 }
@@ -1650,5 +1650,62 @@ span.all_text {
   select {
     border: 1px solid gray;
     padding: 4px;
+  }
+}
+
+.customform {
+  margin-top: 15px;
+  .sgroup {
+    margin: 20px 0;
+  }
+  textarea, input, select {
+    margin: 0;
+  }
+  textarea, input[type=text], input[type=password] {
+    border: 1px solid silver;
+    padding: 3px;
+    font-size: 12px;
+    width: 290px;
+  }
+  select {
+    border: 1px solid silver;
+    border-radius: 2px;
+    padding: 2px;
+  }
+  input.largefield {
+    font-size: 16px;
+  }
+  .ls, .rs {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    line-height: 1.5em;
+  }
+  .ls {
+    min-width: 100px;
+    text-align: right;
+    margin-right: 10px;
+    label {
+      font-weight: bold;
+    }
+    .tiplight {
+      margin-right: 0px;
+    }
+  }
+  .location {
+    height: 60px;
+  }
+  .sfield {
+    margin-bottom: 8px;
+  }
+  .sidebyside {
+    .element {
+      display: inline-block;
+      text-align: center;
+      margin-right: 10px;
+    }
+  }
+  .cancel {
+    color: #999;
   }
 }

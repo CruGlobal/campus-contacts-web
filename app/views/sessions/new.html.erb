@@ -6,7 +6,7 @@
     <br/>
 		<% if cookies[:keyword] %>
       <div class="info"><br/><br/>
-        <center><%= link_to("Don't like Facebook? Click here to skip facebook login", session[:return_to] ? add_params(session[:return_to], :nologin => true) : "/c/#{cookies[:keyword]}?nologin=true") %></center>
+        <center>Don't like Facebook? <%= link_to("Click here to skip Facebook login", session[:return_to] ? add_params(session[:return_to], :nologin => true) : "/c/#{cookies[:keyword]}?nologin=true") %></center>
       </div>
 		<% end %>
   </center>

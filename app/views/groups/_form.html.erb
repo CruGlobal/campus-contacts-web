@@ -1,40 +1,92 @@
 <%= form_for @group do |f| %>
-  <div>
-    <%= f.label :name %>
-    <%= f.text_field :name %>
+<div class="customform">
+  <div class="sfield">
+    <div class="ls">
+    </div>
+    <div class="rs">
+      <%= f.text_field :name, :placeholder => "Group Name", :class => "largefield" %>
+    </div>
   </div>
-  <div>
-    <%= f.label :location %>
-    <%= tip(t('groups.form.location_tip')) %>
-    <%= f.text_area :location %>
+  <div class="sfield">
+    <div class="ls">
+      <%= f.label :location %>
+      <%= tip(t('groups.form.location_tip')) %>
+    </div>
+    <div class="rs">
+      <%= f.text_area :location, :class => "location" %>
+    </div>
   </div>
-  <div>
-    <%= f.label :meets %>
-    <%= f.select :meets, [['weekly', t('weekly')], ['monthly', t('monthly')], ['sporadically', t('sporadically')]] %>
+  
+  <div class="sgroup">
+    <div class="sfield">
+      <div class="ls">
+      <%= f.label :meets %>
+      </div>
+      <div class="rs">
+      <%= f.select :meets, [['weekly', t('weekly')], ['monthly', t('monthly')], ['sporadically', t('sporadically')]] %>
+      </div>
+    </div>
+    <div style="display:none">
+      <div class="ls">
+      <%= f.label :meets %>
+      </div>
+      <div class="rs">
+      <%= f.select :meets, [['Weekly', t('Weekly')], ['monthly', t('monthly')], ['sporadically', t('sporadically')]] %>
+      </div>
+    </div>
+    <div class="sfield">
+      <div class="ls">
+
+      </div>
+      <div class="rs">
+        <div class="sidebyside">
+          <div class="element">
+            <%= f.label :start_time %><br/>
+            <%= f.select :start_time, times(6.hours.to_i, 22.hours.to_i) %>
+          </div>
+          <div class="element">
+            to:
+          </div>
+          <div class="element">
+            <%= f.label :end_time %><br/>
+            <%= f.select :end_time, times(6.hours.to_i, 22.hours.to_i) %>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div style="display:none">
-    <%= f.label :meets %>
-    <%= f.select :meets, [['weekly', t('weekly')], ['monthly', t('monthly')], ['sporadically', t('sporadically')]] %>
+  
+  
+  <div class="sfield">
+    <div class="ls">
+    </div>
+    <div class="rs">
+      <%= f.check_box :list_publicly %>
+      <%= f.label :list_publicly %>
+      <%= tip(t('groups.form.list_publicly_tip')) %>
+    </div>
   </div>
-  <div>
-    <%= f.label :start_time %>
-    <%= f.select :start_time, times(6.hours.to_i, 22.hours.to_i) %>
+  <div class="sfield">
+    <div class="ls">
+    
+    </div>
+    <div class="rs">
+      <%= f.check_box :approve_join_requests %>
+      <%= f.label :approve_join_requests %>
+      <%= tip('') %>
+    </div>
   </div>
-  <div>
-    <%= f.label :end_time %>
-    <%= f.select :end_time, times(6.hours.to_i, 22.hours.to_i) %>
+  <div class="sfield">
+    <div class="ls"></div>
+    <div class="rs">
+      <div class="sidebyside">
+        <div class="element">
+          <%= f.submit %>
+        </div>
+        <div class="element" style="vertical-align: middle; height: 29px; line-height: 39px;">
+          <%= link_to("Cancel and go back to groups", "", :class=> "cancel")%>
+        </div>
+    </div>
   </div>
-  <div>
-    <%= f.label :list_publicly %>
-    <%= tip(t('groups.form.list_publicly_tip')) %>
-    <%= f.check_box :list_publicly %>
-  </div>
-  <div>
-    <%= f.label :approve_join_requests %>
-    <%= tip('') %>
-    <%= f.check_box :approve_join_requests %>
-  </div>
-  <div>
-    <%= f.submit %>
-  </div>
+</div>
 <% end %>
