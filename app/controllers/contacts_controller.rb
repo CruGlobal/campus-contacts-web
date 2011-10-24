@@ -106,7 +106,7 @@ class ContactsController < ApplicationController
     
     respond_to do |wants|
       wants.html do
-        @assignments = ContactAssignment.where(person_id: @people.collect(&:id), organization_id: @organization.id).group_by(&:person_id)
+        @assignments = ContactAssignment.includes(:assigned_to).where(person_id: @people.collect(&:id), organization_id: @organization.id).group_by(&:person_id)
         @answers = generate_answers(@people, @organization, @questions)
       end
       wants.csv do

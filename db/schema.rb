@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111011195158) do
+ActiveRecord::Schema.define(:version => 20111020183941) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -1001,121 +1001,6 @@ ActiveRecord::Schema.define(:version => 20111011195158) do
   end
 
   add_index "followup_comments", ["organization_id", "contact_id"], :name => "comment_organization_id_contact_id"
-
-  create_table "fsk_allocations", :force => true do |t|
-    t.integer  "ssm_id"
-    t.integer  "region_id"
-    t.integer  "impact_allotment"
-    t.integer  "forerunner_allotment"
-    t.integer  "regional_allotment"
-    t.integer  "regionally_raised"
-    t.integer  "locally_raised"
-    t.string   "allocation_year",      :limit => 10
-    t.text     "national_notes",       :limit => 2147483647
-    t.text     "impact_notes",         :limit => 2147483647
-    t.text     "forerunner_notes",     :limit => 2147483647
-    t.text     "regional_notes",       :limit => 2147483647
-    t.text     "local_notes",          :limit => 2147483647
-    t.integer  "lock_version",                               :default => 0, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "agree_to_report"
-  end
-
-  add_index "fsk_allocations", ["ssm_id"], :name => "FK_fsk_allocations_simplesecuritymanager_user"
-
-  create_table "fsk_fields", :force => true do |t|
-    t.string "name", :limit => 50
-  end
-
-  create_table "fsk_fields_roles", :id => false, :force => true do |t|
-    t.integer "role_id",  :null => false
-    t.integer "field_id", :null => false
-  end
-
-  add_index "fsk_fields_roles", ["field_id"], :name => "FK_fsk_fields_roles"
-
-  create_table "fsk_kit_categories", :force => true do |t|
-    t.string   "name",         :limit => 50,                  :null => false
-    t.string   "description",  :limit => 2000
-    t.integer  "lock_version",                 :default => 0, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "fsk_line_items", :force => true do |t|
-    t.integer  "product_id",   :default => 0, :null => false
-    t.integer  "order_id",     :default => 0, :null => false
-    t.integer  "quantity",     :default => 0, :null => false
-    t.integer  "lock_version", :default => 0, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "fsk_line_items", ["order_id"], :name => "FK_fsk_line_items_fsk_orders"
-  add_index "fsk_line_items", ["product_id"], :name => "FK_fsk_line_items_fsk_products"
-
-  create_table "fsk_orders", :force => true do |t|
-    t.string   "location_name",      :limit => 128
-    t.datetime "updated_at"
-    t.integer  "allocation_id"
-    t.string   "contact_first_name", :limit => 30
-    t.string   "contact_last_name",  :limit => 30
-    t.string   "contact_phone",      :limit => 24
-    t.string   "contact_cell",       :limit => 24
-    t.string   "contact_email",      :limit => 50
-    t.string   "ship_first_name",    :limit => 30
-    t.string   "ship_address1",      :limit => 50
-    t.string   "ship_address2",      :limit => 50
-    t.string   "ship_city",          :limit => 30
-    t.string   "ship_state",         :limit => 6
-    t.string   "ship_zip",           :limit => 10
-    t.string   "ship_phone",         :limit => 24
-    t.integer  "total_kits"
-    t.string   "business_unit",      :limit => 20
-    t.string   "operating_unit",     :limit => 20
-    t.string   "dept_id",            :limit => 20
-    t.string   "project_id",         :limit => 10
-    t.string   "type",               :limit => 20
-    t.string   "order_year",         :limit => 10
-    t.integer  "ssm_id"
-    t.integer  "lock_version",                             :default => 0,     :null => false
-    t.datetime "created_at"
-    t.string   "ship_last_name"
-    t.boolean  "freeze_order",                             :default => false
-    t.text     "target_audience",    :limit => 2147483647
-    t.text     "how_used",           :limit => 2147483647
-  end
-
-  add_index "fsk_orders", ["ssm_id"], :name => "FK_fsk_orders_simplesecuritymanager_user"
-
-  create_table "fsk_products", :force => true do |t|
-    t.string   "name",            :limit => 100,        :default => "",     :null => false
-    t.text     "description",     :limit => 2147483647
-    t.string   "image_filename",  :limit => 1000
-    t.float    "price"
-    t.integer  "quantity",                              :default => 0,      :null => false
-    t.integer  "lock_version",                          :default => 0,      :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "kit_category_id"
-    t.string   "availability",    :limit => 20,         :default => "both", :null => false
-    t.integer  "box_quantity",                          :default => 100
-  end
-
-  add_index "fsk_products", ["kit_category_id"], :name => "FK_fsk_products_fsk_kit_categories"
-
-  create_table "fsk_roles", :force => true do |t|
-    t.string "name", :limit => 50
-  end
-
-  create_table "fsk_users", :force => true do |t|
-    t.integer "role_id", :default => 0, :null => false
-    t.integer "ssm_id",  :default => 0, :null => false
-  end
-
-  add_index "fsk_users", ["role_id"], :name => "FK_fsk_users_fsk_roles"
-  add_index "fsk_users", ["ssm_id"], :name => "FK_fsk_users_simplesecuritymanager_user"
 
   create_table "groups", :force => true do |t|
     t.string   "name"
@@ -4652,9 +4537,14 @@ ActiveRecord::Schema.define(:version => 20111011195158) do
     t.datetime "updated_at"
     t.integer  "sms_keyword_id"
     t.integer  "sms_session_id"
+    t.string   "state"
+    t.string   "city"
+    t.string   "zip"
+    t.string   "twilio_sid"
   end
 
   add_index "received_sms", ["phone_number", "message", "received_at"], :name => "index_received_sms_on_phone_number_and_message_and_received_at", :unique => true
+  add_index "received_sms", ["twilio_sid"], :name => "index_received_sms_on_twilio_sid", :unique => true
 
   create_table "rejoicables", :force => true do |t|
     t.integer  "person_id"
@@ -4726,7 +4616,11 @@ ActiveRecord::Schema.define(:version => 20111011195158) do
     t.integer  "received_sms_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "twilio_sid"
+    t.string   "twilio_uri"
   end
+
+  add_index "sent_sms", ["twilio_sid"], :name => "index_sent_sms_on_twilio_sid", :unique => true
 
   create_table "si_answer_sheets", :force => true do |t|
     t.integer  "question_sheet_id", :null => false
@@ -5382,6 +5276,7 @@ ActiveRecord::Schema.define(:version => 20111011195158) do
     t.string   "initial_response",    :limit => 140, :default => "Hi! Thanks for checking out Cru. Visit {{ link }} to get more involved."
     t.text     "post_survey_message"
     t.string   "event_type"
+    t.string   "gateway",                            :default => "",                                                                        :null => false
   end
 
   create_table "sms_sessions", :force => true do |t|

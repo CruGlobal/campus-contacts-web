@@ -15,7 +15,11 @@
 
 <div class="contentpad">
   <p class="inlinehelp" style="margin-bottom: 1em;">
-    To begin your survey, <strong>text <%= @sms_keyword.keyword %> to <%= SmsKeyword::SHORT %>.</strong>
+    <% if @sms_keyword.gateway == 'twilio' %>
+      To begin your survey, <strong>text <%= @sms_keyword.keyword %> to <%= SmsKeyword::SHORT %>.</strong>
+    <% else %>
+      To begin your survey, <strong>text <%= @sms_keyword.keyword %> to <%= SmsKeyword::MOONSHADO_SHORT %>.</strong>
+    <% end %>
   </p>
   
   

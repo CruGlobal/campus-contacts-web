@@ -18,7 +18,9 @@ class SmsController < ApplicationController
     case message.downcase
     when 'stop'
       @sms_session.update_attribute(:interactive, false)
-      render nothing: true and return
+      @msg = 'You have been unsubscribed from MHub SMS alerts. You will receive no more messages.'
+      send_message(@msg, sms_params[:phone_number])
+      render text: @msg + "\n" and return
     when 'help'
       @msg = 'MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to http://mhub.cc/ for more help.'
       send_message(@msg, sms_params[:phone_number])
@@ -77,11 +79,23 @@ class SmsController < ApplicationController
   protected 
     def sms_params
       unless @sms_params
-        @sms_params = params.slice(:carrier, :country)
-        @sms_params[:phone_number] = params[:device_address]
-        @sms_params[:shortcode] = params[:inbound_address]
-        @sms_params[:received_at] = DateTime.strptime(params[:timestamp], '%m/%d/%Y %H:%M:%S')
-        @sms_params[:message] = params[:message].strip.gsub(/\n/, ' ')
+        if params['To'] # Twilio
+          @sms_params = {}
+          @sms_params[:city] = params['FromCity']
+          @sms_params[:state] = params['FromState']
+          @sms_params[:zip] = params['FromZip']
+          @sms_params[:country] = params['FromCountry']
+          @sms_params[:phone_number] = params['From'].sub('+','')
+          @sms_params[:shortcode] = params['To']
+          @sms_params[:received_at] = Time.now
+          @sms_params[:message] = params["Body"].strip.gsub(/\n/, ' ')
+        else
+          @sms_params = params.slice(:carrier, :country)
+          @sms_params[:phone_number] = params[:device_address]
+          @sms_params[:shortcode] = params[:inbound_address]
+          @sms_params[:received_at] = DateTime.strptime(params[:timestamp], '%m/%d/%Y %H:%M:%S')
+          @sms_params[:message] = params[:message].strip.gsub(/\n/, ' ')
+        end
       end
       @sms_params
     end
@@ -142,7 +156,8 @@ class SmsController < ApplicationController
     end
     
     def send_message(msg, phone_number)
-      @sent_sms = SentSms.create!(message: msg, recipient: phone_number, received_sms_id: @received.try(:id))
+      sent_via = @sms_params[:shortcode] == '75572' ? 'moonshado' : 'twilio'
+      @sent_sms = SentSms.create!(message: msg, recipient: phone_number, received_sms_id: @received.try(:id), sent_via: sent_via)
     end
 
 end

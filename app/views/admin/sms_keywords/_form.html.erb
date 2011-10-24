@@ -9,6 +9,7 @@
       <%= f.input :user_id, :as => :string %>
       <%= f.input :organization, :collection => Organization.order('name') %>
       <%= f.input :keyword %>
+      <%= f.input :gateway, :as => :select, :collection => ['moonshado','twilio'] %>
       <%= f.input :explanation %>
       <%= f.input :initial_response %>
       <%= f.input :post_survey_message %>
