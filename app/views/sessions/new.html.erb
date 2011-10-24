@@ -2,7 +2,7 @@
   <center>
     To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
     <br><br>
-    <%= link_to(image_tag('login-button.png'), user_omniauth_authorize_path(:facebook_mhub), rel: 'external') %>
+    <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook_mhub), rel: 'external') %>
     <br/>
 		<% if cookies[:keyword] %>
       <div class="info"><br/><br/>
@@ -11,32 +11,30 @@
 		<% end %>
   </center>
 <% else %>
-  <div class="splash">
-    <div id="logoline">
-    </div>
-    <div id="roundwrap">
+  <div class="splash login">
+    
+      
+    
       <div class="left width30">
     
-        <h3>Login:</h3>
     
-        <div class="loginscreen">
-        <%= link_to(image_tag('login-button.png'), user_omniauth_authorize_path(:facebook), rel: 'external') %>
+        <div class="loginscreen" style="text-align: center;">
+        <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook), rel: 'external') %>
+        <p><a href="/">Back home</a></p>
         </div>      
       </div>
     
     
     
-      <div class="right width60">
-        <h3><Instructions:</h3>
-        <p>
-          To get started, you'll need to have a Facebook account. 
-                        Click the login link to the left and "allow" MHub to access
-                        your information. You'll be taken to the wizard if this is your first
-                        time accessing MissionHub.</p>
+      <div class="right width68 instruct">
+        <h3 style="margin: 10px 0 0;">Instructions:</h3>
+        <p style="margin: 6px 0px 0 0;">
+          To get started, you'll need to have a Facebook account. <br/>
+          Click the login link to the left and <strong>allow</strong> MHub to access your information. <br/>
+          You'll be taken to the wizard if this is your first time accessing MissionHub.</p>
       </div>
     
       <div class="clear"></div>
   
-    </div>
   </div>
 <% end %>

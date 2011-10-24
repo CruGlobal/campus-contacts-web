@@ -774,6 +774,32 @@ span.title {
   float: left;
 }
 
+.splash.login {
+  background: #E5E5E5 repeat-x;
+  border-radius: 5px 5px 0 0;
+  padding: 10px;
+}
+
+.loginbt {
+  background: url("<%= asset_path('topmenubgtall.png') %>") repeat-x scroll 0 0 transparent;
+  color: white !important;
+  font-weight: normal;
+  border-radius: 5px;
+  padding: 5px 10px !important;
+  display: inline-block;
+  font-size: 12px;
+}
+
+.instruct {
+  p {font-size: 16px; line-height: 1.75em;}
+}
+
+.loginscreen {
+  padding: 20px;
+  background: $white;
+  border-radius: 5px;
+}
+
 .splash {
   width: 991px !important;
   #logoline {
@@ -854,6 +880,7 @@ span.title {
 }
 
 .width30 {width: 30%;}
+.width68 {width: 68%;}
 .width60 {width: 60%;}
 
 /* MODAL STYLES */
@@ -1468,6 +1495,19 @@ body#welcome_controller {
 /*  background: url("<%= asset_path("bluebg.jpg") %>") repeat-x 0 0 #0078ae; */
   .splash {
     background: #fff;
+  }
+  
+  #global #logo {
+    display: none;
+  }
+  
+  #logo {
+    position: absolute;
+    margin-top: -90px;
+    margin-left: 0px;
+  }
+  .tour, .index, .privacy, .terms {
+    margin-top: 50px;
   }
 }
 
