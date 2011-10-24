@@ -428,3 +428,14 @@ en:
   sporadically: sporadically
   bulk_sms: Bulk Text
   bulk_email: Bulk Email
+  
+  groups:
+    form:
+      location_tip: 'For your location, type an address that you would expect to work if you did a search on a Google Map (i.e. "1600 Pennsylvania Ave, Washington, DC 20006")'
+      list_publicly_tip: 'If this option is selected, this group will be visible to the general public when they do a search '
+      
+  
+  helpers:
+    label:
+      group:
+        name: 'Group Name'
