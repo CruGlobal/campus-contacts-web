@@ -224,13 +224,13 @@ class Person < ActiveRecord::Base
       else @friends = response
       end
       @friends["data"].each do |friend|
-        friends.create(uid: friend['id'], name: friend['name'], person_id: personID.to_i, provider: "facebook")
+        the_friend = friends.create(uid: friend['id'], name: friend['name'], person_id: personID.to_i, provider: "facebook")
+        the_friend.follow!(self) unless the_friend.following?(self)
       end
     end
     @friends["data"].length  #return how many friend you got from facebook for testing
   end
   
-  #
   def update_friends(authentication, response = nil)
     if response.nil?
       @friends = MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
@@ -251,12 +251,14 @@ class Person < ActiveRecord::Base
        @matching_friend = nil
      end
      if @matching_friend
-       friends.find_by_uid(@matching_friend.uid).update_attributes(name: friend['name']) unless @matching_friend.name.eql?(friend['name'])
+       the_friend = friends.find_by_uid(@matching_friend.uid)
+       the_friend.update_attributes(name: friend['name']) unless @matching_friend.name.eql?(friend['name'])
        @match.push(@matching_friend.uid)
      elsif friends.find_by_uid(friend.id).nil? #uid's did not match && the DB is empty
-       friends.create!(uid: friend['id'], name: friend['name'], person_id: personID.to_i, provider: "facebook")
+       the_friend = friends.create!(uid: friend['id'], name: friend['name'], person_id: personID.to_i, provider: "facebook")
        @create.push(friend['id'])
      end
+     the_friend.follow!(self) unless the_friend.following?(self)
    end
    @dbf = friends.reload
    
@@ -444,6 +446,15 @@ class Person < ActiveRecord::Base
     hash
   end
   
+  def to_hash_mini_leader
+    hash = {}
+    hash['id'] = self.personID
+    hash['name'] = self.to_s.gsub(/\n/," ")
+    hash['picture'] = picture unless fb_uid.nil?
+    hash['num_contacts'] = assigned_contacts.count
+    hash
+  end
+  
   def to_hash_basic(organization = nil)
     assign_hash = nil
     unless organization.nil?
@@ -565,5 +576,9 @@ class Person < ActiveRecord::Base
     organizational_role.followup_status = 'do_not_contact'
     ContactAssignment.where(person_id: self.id, organization_id: organizational_role.organization_id).destroy_all
     organizational_role.save
+  end
+
+  def friends_and_leaders(organization)
+    Friend.followers(self) & organization.leaders.collect(&:fb_uid).collect(&:to_s)
   end
 end

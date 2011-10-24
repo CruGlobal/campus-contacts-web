@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '~>3.1.0'#, git: 'git://github.com/rails/rails.git', branch: '3-1-stable'
 gem 'jquery-rails'
 gem 'mysql2'
+gem 'redis'
 gem 'rack-offline'
 gem 'capistrano'
 gem 'rest-client'
@@ -19,6 +20,9 @@ gem 'ancestry'
 # gem 'rails_admin', git: 'git://github.com/twinge/rails_admin.git', branch: 'configure_list_view_width'
 # gem 'rails_admin', git: 'git://github.com/sferik/rails_admin.git'
 gem 'activeadmin', git: 'git://github.com/gregbell/active_admin.git'
+
+gem 'twilio-rb'
+gem "default_value_for"
 
 gem 'dalli'#, git: 'git://github.com/mperham/dalli.git'
 # gem 'memcache-client'

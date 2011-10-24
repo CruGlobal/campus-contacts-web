@@ -1,6 +1,6 @@
 module ApplicationHelper
   def tip(tip)
-    "<div>#{tip}</div>".html_safe
+    "<span class=\"tiplight\" title=\"#{tip}\" style=\"float: none;\"></span>".html_safe
   end
   
   def print_tree(tree)

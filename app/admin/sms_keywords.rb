@@ -1,6 +1,7 @@
 ActiveAdmin.register SmsKeyword do
   filter :keyword
   filter :state, :as => :select, :collection => %w[requested active denied inactive]
+  filter :gateway, :as => :select, :collection => ['', 'moonshado', 'twilio']
   
   index do
     column 'User' do |keyword|
@@ -10,7 +11,7 @@ ActiveAdmin.register SmsKeyword do
     column 'Organization' do |keyword|
       "#{keyword.organization} (#{keyword.organization.keywords.length})"
     end
-    column :organization
+    column :gateway
     column :state
     column :explanation
     column :initial_response

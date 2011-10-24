@@ -52,36 +52,46 @@ class PersonTest < ActiveSupport::TestCase
         assert_equal(@person.gender,"female")
       end
     end
-    
-    should "get & update friends" do
-      #make sure # of friends from MiniFB = # written into DB
-      @x = @person.get_friends(@authentication, TestFBResponses::FRIENDS)
-      assert_equal(@x,@person.friends.all.length )
+   
+    context "get friendships" do
+      should "get & update friends" do
+        #make sure # of friends from MiniFB = # written into DB
+        @x = @person.get_friends(@authentication, TestFBResponses::FRIENDS)
+        assert_equal(@x,@person.friends.all.length )
       
-      #Pez's UID 
-      @friend = @person.friends.find_by_uid(5108015)
-      assert_equal(@friend.name, "David Pezzoli","Make sure that Pez is in the local friends DB now")
-      #Todd's UID
-      @friend2 = @person.friends.find_by_uid(514392571)
-      @friend2.name = "Not Todd Gross"
-      assert_not_equal(@friend2.name,"Todd Gross","Make sure that Todd's local DB name change went through")
+        #Pez's UID 
+        @friend = @person.friends.find_by_uid(5108015)
+        assert_equal(@friend.name, "David Pezzoli","Make sure that Pez is in the local friends DB now")
+        #Todd's UID
+        @friend2 = @person.friends.find_by_uid(514392571)
+        @friend2.name = "Not Todd Gross"
+        assert_not_equal(@friend2.name,"Todd Gross","Make sure that Todd's local DB name change went through")
       
-      @friend.destroy  #delete Pez from the local DB
-      friend1 = @person.friends.create(provider: "facebook", :uid =>"1", name: "Test User", person_id: @person.personID.to_i)
-      friend2 = @person.friends.create(provider: "facebook", :uid =>"2", name: "Test User", person_id: @person.personID.to_i)
-      x = @person.update_friends(@authentication, TestFBResponses::FRIENDS)
-      assert_equal(3, x, "Make sure that three changes took place... 2 deletions and 1 addition")
+        @friend.destroy  #delete Pez from the local DB
+        friend1 = @person.friends.create(provider: "facebook", :uid =>"1", name: "Test User", person_id: @person.personID.to_i)
+        friend2 = @person.friends.create(provider: "facebook", :uid =>"2", name: "Test User", person_id: @person.personID.to_i)
+        x = @person.update_friends(@authentication, TestFBResponses::FRIENDS)
+        assert_equal(3, x, "Make sure that three changes took place... 2 deletions and 1 addition")
       
-      friend1 = @person.friends.find_by_uid("1")
-      friend2 = @person.friends.find_by_uid("2")
-      assert_nil(friend1, "Make sure that test friend 1 was deleted")
-      assert_nil(friend2, "Make sure that test friend 2 was deleted")
+        friend1 = @person.friends.find_by_uid("1")
+        friend2 = @person.friends.find_by_uid("2")
+        assert_nil(friend1, "Make sure that test friend 1 was deleted")
+        assert_nil(friend2, "Make sure that test friend 2 was deleted")
+        
+        @friend = @person.friends.find_by_uid(5108015)
+        assert_equal(@friend.name,"David Pezzoli", "Make sure that Pez was readded")
       
-      @friend = @person.friends.find_by_uid(5108015)
-      assert_equal(@friend.name,"David Pezzoli", "Make sure that Pez was readded")
-      
-      @friend2.reload
-      assert_equal(@friend2.name, "Todd Gross", "Make sure that Todd's name was updated")
+        @friend2.reload
+        assert_equal(@friend2.name, "Todd Gross", "Make sure that Todd's name was updated")
+      end
+
+      should "insert friendship to redis database" do
+        @person.get_friends(@authentication, TestFBResponses::FRIENDS)
+        assert_equal(Friend.followers(@person).length, @person.friends.all.length)
+ 
+        @person.update_friends(@authentication, TestFBResponses::FRIENDS)
+        assert_equal(Friend.followers(@person).length, @person.friends.all.length)
+      end
     end
     
     should "not create a duplicate email when adding an email they already have" do
