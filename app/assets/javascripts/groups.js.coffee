@@ -32,22 +32,13 @@ $ ->
       
       
   $("a.add-member").live 'click', ->
-    $('#add_member_form').hide()
-    $('#member_search_form').show()
-    $('#member_search_name').val('')
-    $("#member_search_results").hide()
-    $('#new_member_form').hide();
-    el = $('#member_search')
-    el.dialog
-      resizable: false,
-      height:650,
-      width:600,
-      modal: true,
-      buttons: 
-        Cancel: ->
-          $(this).dialog('destroy')
-    false
-
+    $('#role').val('member')
+    showSearchBox()
+    
+  $("a.add-leader").live 'click', ->
+    $('#role').val('leader')
+    showSearchBox()
+    
   $('#member_search_name').autocomplete
     source: (request, response)->
       form = $('#member_search_form')
@@ -64,3 +55,20 @@ $ ->
         error: (xhr, status, error)->
           alert(error)
       response([]);
+      
+showSearchBox = ->
+  $('#add_member_form').hide()
+  $('#member_search_form').show()
+  $('#member_search_name').val('')
+  $("#member_search_results").hide()
+  $('#new_member_form').hide();
+  el = $('#member_search')
+  el.dialog
+    resizable: false,
+    height:650,
+    width:600,
+    modal: true,
+    buttons: 
+      Cancel: ->
+        $(this).dialog('destroy')
+  false
