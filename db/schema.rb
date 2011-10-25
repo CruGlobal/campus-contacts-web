@@ -82,8 +82,6 @@ ActiveRecord::Schema.define(:version => 20111020183941) do
     t.string "name"
   end
 
-  add_index "aoas", ["name"], :name => "name", :unique => true
-
   create_table "api_logs", :force => true do |t|
     t.string   "platform"
     t.string   "action"
@@ -969,17 +967,17 @@ ActiveRecord::Schema.define(:version => 20111020183941) do
 
   add_index "followup_comments", ["organization_id", "contact_id"], :name => "comment_organization_id_contact_id"
 
-  create_table "groups", :force => true do |t|
-    t.string   "name"
-    t.text     "location"
-    t.string   "meets"
-    t.integer  "meeting_day"
-    t.integer  "start_time"
-    t.integer  "end_time"
-    t.integer  "organization_id"
+  create_table "group_memberships", :force => true do |t|
+    t.integer  "group_id"
+    t.integer  "person_id"
+    t.string   "role",       :default => "member"
+    t.boolean  "requested",  :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "group_memberships", ["group_id"], :name => "index_group_memberships_on_group_id"
+  add_index "group_memberships", ["person_id"], :name => "index_group_memberships_on_person_id"
 
   create_table "hr_ms_payment", :primary_key => "paymentID", :force => true do |t|
     t.datetime "paymentDate"
@@ -1554,6 +1552,14 @@ ActiveRecord::Schema.define(:version => 20111020183941) do
   add_index "infobase_bookmarks", ["name"], :name => "index_infobase_bookmarks_on_name"
   add_index "infobase_bookmarks", ["user_id"], :name => "index_infobase_bookmarks_on_user_id"
 
+  create_table "infobase_users", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "type",       :default => "InfobaseAdminUser"
+    t.integer  "created_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "lat_long_by_zip_code", :force => true do |t|
     t.string  "zip"
     t.decimal "lat",  :precision => 15, :scale => 10
@@ -1860,19 +1866,17 @@ ActiveRecord::Schema.define(:version => 20111020183941) do
   add_index "ministry_activity", ["strategy"], :name => "index5"
 
   create_table "ministry_activity_history", :force => true do |t|
-    t.integer  "activity_id",                  :null => false
-    t.string   "from_status",    :limit => 2
-    t.string   "to_status",      :limit => 2
+    t.integer  "activity_id",                          :null => false
+    t.string   "from_status_deprecated", :limit => 2
+    t.string   "status",                 :limit => 2
     t.datetime "period_begin"
-    t.datetime "period_end"
-    t.string   "trans_username", :limit => 50
-    t.string   "fromStrategy"
-    t.string   "toStrategy"
+    t.datetime "period_end_deprecated"
+    t.string   "trans_username",         :limit => 50
   end
 
   add_index "ministry_activity_history", ["activity_id"], :name => "activity_id"
   add_index "ministry_activity_history", ["period_begin"], :name => "period_begin"
-  add_index "ministry_activity_history", ["to_status"], :name => "to_status"
+  add_index "ministry_activity_history", ["status"], :name => "to_status"
 
   create_table "ministry_address", :primary_key => "AddressID", :force => true do |t|
     t.datetime "startdate"
@@ -2272,8 +2276,8 @@ ActiveRecord::Schema.define(:version => 20111020183941) do
   end
 
   create_table "ministry_statistic", :primary_key => "StatisticID", :force => true do |t|
-    t.datetime "periodBegin"
-    t.datetime "periodEnd"
+    t.date     "periodBegin"
+    t.date     "periodEnd"
     t.integer  "exposures"
     t.integer  "exposuresViaMedia"
     t.integer  "evangelisticOneOnOne"
@@ -2305,6 +2309,7 @@ ActiveRecord::Schema.define(:version => 20111020183941) do
     t.string   "peopleGroup"
     t.integer  "holySpiritConversations"
     t.integer  "dollars_raised"
+    t.integer  "sp_year"
   end
 
   add_index "ministry_statistic", ["fk_Activity"], :name => "index1"
@@ -2369,6 +2374,7 @@ ActiveRecord::Schema.define(:version => 20111020183941) do
     t.integer  "eventKeyID"
     t.string   "type",                   :limit => 20
     t.string   "county"
+    t.boolean  "ongoing_special_event",                 :default => false
   end
 
   add_index "ministry_targetarea", ["country"], :name => "index4"
@@ -3876,7 +3882,6 @@ ActiveRecord::Schema.define(:version => 20111020183941) do
     t.string   "gateway",                            :default => "",                                                                        :null => false
   end
 
-  add_index "sms_keywords", ["organization_id"], :name => "organization_id"
   add_index "sms_keywords", ["user_id"], :name => "user_id"
 
   create_table "sms_sessions", :force => true do |t|
@@ -4723,8 +4728,8 @@ ActiveRecord::Schema.define(:version => 20111020183941) do
     t.string   "project_contact_role",               :limit => 40
     t.string   "project_contact_phone",              :limit => 20
     t.string   "project_contact_email",              :limit => 100
-    t.integer  "max_student_men_applicants",                         :default => 70,    :null => false
-    t.integer  "max_student_women_applicants",                       :default => 70,    :null => false
+    t.integer  "max_student_men_applicants",                         :default => 70,   :null => false
+    t.integer  "max_student_women_applicants",                       :default => 70,   :null => false
     t.integer  "max_accepted_men"
     t.integer  "max_accepted_women"
     t.integer  "ideal_staff_men",                                    :default => 0,     :null => false
@@ -4820,6 +4825,27 @@ ActiveRecord::Schema.define(:version => 20111020183941) do
   end
 
   add_index "sp_references", ["question_id"], :name => "question_id"
+
+  create_table "sp_references_deprecated", :force => true do |t|
+    t.integer  "application_id"
+    t.string   "type",           :limit => 50
+    t.datetime "email_sent_at"
+    t.boolean  "is_staff"
+    t.string   "title"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "accountNo"
+    t.string   "phone"
+    t.string   "email"
+    t.string   "status"
+    t.datetime "submitted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.string   "access_key"
+    t.boolean  "mail",                         :default => false
+  end
 
   create_table "sp_roles", :force => true do |t|
     t.string "role",       :limit => 50
