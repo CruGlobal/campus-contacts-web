@@ -1397,17 +1397,32 @@ ul.leftmenu li .moredown:hover span{
   padding-left:10px;
 }
 
+.ls .field_with_errors {
+  display: inline;
+}
+
+.rs .field_with_errors {
+  background: url("<%= asset_path("alert_small.png") %>") no-repeat 100% 5px;
+  padding-right: 30px;
+}
+
 div.field_with_errors {
 	input, textarea {
-		border: 2px solid red !important;
+		border: 2px solid #C00 !important;
+  }
+  label.message {
+    display: block;
+    font-style: italic;
   }
 }
 
+
+
 .message {
-  color: red !important;
+  color: #C00 !important;
   padding: 2px 0px;
   text-transform: capitalize;
-  font-weight: bold;
+  font-weight: normal;
 }
 
 div.field_with_errors div.ui-effects-wrapper {
