@@ -44,7 +44,7 @@ class GroupsController < ApplicationController
   protected 
   
     def get_group
-      @group = current_organization.groups.find(params[:id]) if params[:id]
+      @group = Present(current_organization.groups.find(params[:id])) if params[:id]
     end
     
     def leader_needed

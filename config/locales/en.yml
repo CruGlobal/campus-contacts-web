@@ -448,17 +448,25 @@ en:
       add_group: 'Add a group'
       labels: Labels
       add: Add
+    show:  
+      add_member: 'Add Member'
     form:
       location_tip: 'For your location, type an address that you would expect to work if you did a search on a Google Map (i.e. "1600 Pennsylvania Ave, Washington, DC 20006")'
-      list_publicly_tip: 'If this option is selected, this group will be visible to the general public when they do a search '
+      list_publicly_tip: "If this option is selected, this group will be visible to the general public when they do a search. (Public search doesn't exist yet, but will at some point)"
       approve_join_tip: 'If the group is listed publicly, checking this option will require you to approve any requests to join the group.'
       meets_on: 'On'
       meets_on_the: 'On the'
       of_month: 'of the month'
       back: 'Cancel and go back to groups'
+      
+  group_memberships:
+    form:
+      start_typing: Start typing a name to find a person add to this group
+      add_a_member: 'Add a member'
   
   helpers:
     label:
       group:
         name: 'Group Name'
         start_time: 'From'
+        

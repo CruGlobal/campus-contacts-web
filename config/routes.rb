@@ -4,8 +4,6 @@ Mh::Application.routes.draw do
 
   resources :group_labels
 
-  resources :group_memberships
-
   ActiveAdmin.routes(self)
   ActiveAdmin::ResourceController.class_eval do
     def authenticate_admin!
@@ -16,7 +14,13 @@ Mh::Application.routes.draw do
     end
   end
   
-  resources :groups
+  resources :groups do
+    resources :group_memberships do
+      collection do
+        get :search
+      end
+    end
+  end
   
   resources :survey_responses do
     collection do
@@ -26,7 +30,7 @@ Mh::Application.routes.draw do
   
   resources :leaders do
     collection do
-      post :search
+      get :search
       put :add_person
     end
   end

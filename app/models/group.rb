@@ -5,4 +5,8 @@ class Group < ActiveRecord::Base
   has_many :group_labels, through: :group_labelings
   
   validates_presence_of :name, :location, :meets
+  
+  def to_s
+    name
+  end
 end

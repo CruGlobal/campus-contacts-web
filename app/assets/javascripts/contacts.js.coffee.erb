@@ -209,7 +209,7 @@ $ ->
     el.dialog
       resizable: false,
       height:650,
-      width:400,
+      width:600,
       modal: true,
       buttons: 
         Cancel: ->
@@ -223,7 +223,7 @@ $ ->
       $.ajax
         url: form.attr('action'), 
         data: form.serialize(), 
-        type: 'POST',
+        type: 'GET',
         success: (data)->
           $('#leader_search_results').html(data)
           $("#leader_search_results").show()

@@ -1,11 +1,26 @@
+<% provide :sidebar do %>
+  <ul class="leftmenu">
+    <li class="heading selected">
+      <h3><%= t('.details') %></h3>
+    </li>
+    <li>
+      <ul id="leaders" class="indent expandable" data-height="244">
+        <% current_organization.group_labels.each do |label| %>
+          <li><%= label %></li>
+        <% end %>
+      </ul>
+    </li>
+  </ul>
+<% end %>
+
 <div class="titlebar">
-  <h1><%= t('.group_list', org: current_organization.to_s) %></h1>
+  <h1><%= @group %></h1>
 </div>
 
 <div class="pagemenu">
   <ul class="pillmenu">
     <li>     
-      <%= link_to(t('.add_group'), new_group_path) %>
+      <%= link_to(t('.add_member'), '#', class: 'add-member') %>
     </li>
   </ul>
 </div>
@@ -14,3 +29,5 @@
   <tbody id="group_table">
   </tbody>
 </table>
+
+<%= render 'group_memberships/form' %>

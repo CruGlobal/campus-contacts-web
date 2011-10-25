@@ -30,3 +30,37 @@ $ ->
     else
       $('.approve_join').hide()
       
+      
+  $("a.add-member").live 'click', ->
+    $('#add_member_form').hide()
+    $('#member_search_form').show()
+    $('#member_search_name').val('')
+    $("#member_search_results").hide()
+    $('#new_member_form').hide();
+    el = $('#member_search')
+    el.dialog
+      resizable: false,
+      height:650,
+      width:600,
+      modal: true,
+      buttons: 
+        Cancel: ->
+          $(this).dialog('destroy')
+    false
+
+  $('#member_search_name').autocomplete
+    source: (request, response)->
+      form = $('#member_search_form')
+      $('#spinner_member_search').show()
+      $.ajax
+        url: form.attr('action'), 
+        data: form.serialize(), 
+        type: 'GET',
+        success: (data)->
+          $('#member_search_results').html(data)
+          $("#member_search_results").show()
+        complete: ->
+          $('#spinner_member_search').hide()
+        error: (xhr, status, error)->
+          alert(error)
+      response([]);
