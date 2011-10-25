@@ -76,9 +76,8 @@ img {
   h1 {
     font-family: $font-base;
     color: #333333;
-    font-size: 16px;
+    font-size: 21px;
     margin: 0;
-    text-shadow: 1px 1px 3px #888888;
   }
   h1 img {
     margin-right: 5px;
@@ -1575,6 +1574,10 @@ span.all_text {
   padding: 5px 0;
 }
 
+.flash_message {
+  padding: 10px;
+}
+
 .flash .flash_message {
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -1582,18 +1585,24 @@ span.all_text {
   text-align: center;
   margin: 0 auto 15px;
   color: white;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 1px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 1px rgba(0, 0, 0, 0.1);
   -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 1px rgba(0, 0, 0, 0.1); }
-  .flash .flash_message p {
-    margin: 8px; }
+  .flash .flash_message p {margin-top: 0px;}
+  .flash .flash_message p:last-child {margin-bottom: 0px;}
+  .flash h2 {
+    font-size: 18px;
+    margin: 10px 0 ;
+    line-height: 16px;
+  }
 .flash .error, .flash .error-list {
   border: 1px solid #993624;
   background: #cc4831 url("<%= image_path('rails_admin/theme/activo/images/messages/error.png') %>") no-repeat 10px center; }
 .flash .warning {
   border: 1px solid #bb9004;
-  background: #f9c006 url("<%= image_path('rails_admin/theme/activo/images/messages/warning.png') %>") no-repeat 10px center; }
+  color: #000;
+  background: #f9e08e url("<%= image_path('warning.png') %>") no-repeat 10px center; 
+  padding-left: 75px;}
 .flash .notice {
   color: #28485e;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
