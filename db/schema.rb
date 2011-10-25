@@ -4878,8 +4878,6 @@ ActiveRecord::Schema.define(:version => 20111024194753) do
     t.boolean  "mail",                         :default => false
   end
 
-  add_index "sp_references_deprecated", ["application_id"], :name => "application_id"
-
   create_table "sp_roles", :force => true do |t|
     t.string "role",       :limit => 50
     t.string "user_class"
