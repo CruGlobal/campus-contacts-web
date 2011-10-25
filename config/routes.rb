@@ -1,5 +1,7 @@
 Mh::Application.routes.draw do
 
+  resources :group_memberships
+
   ActiveAdmin.routes(self)
   ActiveAdmin::ResourceController.class_eval do
     def authenticate_admin!

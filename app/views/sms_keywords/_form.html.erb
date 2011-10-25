@@ -10,7 +10,7 @@
         <div class="field">
           <label for="sms_keyword_<%= :keyword %>">
             <%= t('keywords.form.keyword') + ": " + t('keywords.form.keyword_tip') %>
-            <span class="tiplight" title="<%= t('keywords.form.keyword_instruct') %>"></span>
+            <%= tip(t('keywords.form.keyword_instruct')) %>
           </label>
           <%= f.text_field :keyword, :placeholder => "Shorter keywords are better" %>
         </div>
@@ -33,7 +33,7 @@
       <div class="field">
         <label for="sms_keyword_initial_response">
           <%= raw(t('keywords.form.initial_response')) %> 
-          <span class="tiplight" title="<%= t('keywords.form.post_survey_why') %>"></span>
+          <%= tip(t('keywords.form.post_survey_why')) %>
         </label>
         <%= f.text_area :initial_response, rows: 3 %>
       </div>
@@ -63,7 +63,7 @@
         <div class="field">
           <label for="sms_keyword_organization">
             <%= raw(t('keywords.form.association', this_term: current_organization.terminology, child_term: current_organization.children.first.terminology)) %> 
-            <span class="tiplight" title="<%= t('keywords.index.association_help') %>"></span>
+            <%= tip(t('keywords.index.association_help')) %>
           </label>
           <%= f.select :organization_id, ([current_organization] + current_organization.children).collect {|o| [o.to_s, o.id]} %>
         </div>

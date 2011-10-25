@@ -1,2 +1,11 @@
-<h1>Groups#index</h1>
-<p>Find me in app/views/groups/index.html.erb</p>
+<div class="titlebar">
+  <h1><%= t('.group_list') %></h1>
+</div>
+
+<div class="pagemenu">
+  <ul class="pillmenu">
+    <li>     
+      <%= link_to(t('.add_group'), new_group_path) %>
+    </li>
+  </ul>
+</div>

@@ -1,5 +1,5 @@
 <%= form_for @group do |f| %>
-<div class="customform">
+<div class="customform group_form">
   <div class="sfield">
     <div class="ls">
     </div>
@@ -20,36 +20,46 @@
   <div class="sgroup">
     <div class="sfield">
       <div class="ls">
-      <%= f.label :meets %>
+        <%= f.label :meets %>
       </div>
       <div class="rs">
-      <%= f.select :meets, [['weekly', t('weekly')], ['monthly', t('monthly')], ['sporadically', t('sporadically')]] %>
+        <%= f.select :meets, [[t('weekly'), 'weekly'], [t('monthly'), 'monthly'], [t('sporadically'), 'sporadically']] %>
       </div>
     </div>
-    <div style="display:none">
+    <div class="sfield" style="<%= 'display:none' if @group.meets == 'sporadically' %>">
       <div class="ls">
-      <%= f.label :meets %>
+        <div class="day_of_week_div" style="<%= 'display:none' unless @group.meets == 'weekly' || @group.meets.blank?  %>">
+          <%= f.label :meeting_day, t('.meets_on') %>
+        </div>
+        <div class="day_of_month_div" style="<%= 'display:none' unless @group.meets == 'monthly' %>">
+          <%= f.label :meeting_day, t('.meets_on_the') %>
+        </div>
       </div>
       <div class="rs">
-      <%= f.select :meets, [['Weekly', t('Weekly')], ['monthly', t('monthly')], ['sporadically', t('sporadically')]] %>
+        <div class="day_of_week_div regular" style="<%= 'display:none' unless @group.meets == 'weekly' || @group.meets.blank? %>">
+          <%= select_tag :day_of_week, options_for_select(t('date.day_names').collect.with_index {|d, i| [d, i]}) %>
+        </div>
+        <div class="day_of_month_div regular" style="<%= 'display:none' unless @group.meets == 'monthly' %>">
+          <%= select_tag :day_of_month, options_for_select((1..31).collect {|i| [i.ordinalize, i]}) %>
+          <%= t('.of_month') %>
+        </div>
+        <%= f.hidden_field :meeting_day %>
       </div>
     </div>
-    <div class="sfield">
+    <div class="sfield regular" style="<%= 'display:none' if @group.meets == 'sporadically' %>">
       <div class="ls">
-
+        <%= f.label :start_time %>
       </div>
       <div class="rs">
         <div class="sidebyside">
           <div class="element">
-            <%= f.label :start_time %><br/>
             <%= f.select :start_time, times(6.hours.to_i, 22.hours.to_i) %>
           </div>
           <div class="element">
             to:
           </div>
           <div class="element">
-            <%= f.label :end_time %><br/>
-            <%= f.select :end_time, times(6.hours.to_i, 22.hours.to_i) %>
+            <%= f.select :end_time, times(6.5.hours.to_i, 22.hours.to_i) %>
           </div>
         </div>
       </div>

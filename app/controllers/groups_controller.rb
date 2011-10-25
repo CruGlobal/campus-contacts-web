@@ -27,7 +27,7 @@ class GroupsController < ApplicationController
   end
 
   def create
-    if current_organization.groups.create(params[:group])
+    if @group = current_organization.groups.create(params[:group])
       redirect_to @group
     else
       redirect_to :back
