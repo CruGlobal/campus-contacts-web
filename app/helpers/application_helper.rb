@@ -46,4 +46,13 @@ module ApplicationHelper
     end
     time_options
   end  
+  
+  def no_left_sidebar
+    case "#{params[:controller]}/#{params[:action]}"
+    when 'groups/new', 'groups/edit', 'groups/create', 'groups/update'
+      true
+    else
+      false
+    end
+  end
 end

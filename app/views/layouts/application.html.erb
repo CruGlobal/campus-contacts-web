@@ -28,7 +28,7 @@
             <% end %>
           <% else %>
             <li class="<%= 'selected' if  params[:controller] == 'people' %>"><%= link_to(t('nav.directory'), "/people", :class => "topset directory") %></li>
-            <% if can? :create, Group %>
+            <% if can? :manage, current_organization %>
               <li class="<%= 'selected' if  params[:controller] == 'groups' %>"><%= link_to(t('nav.groups'), "/groups", :class => "topset groups") %></li>
             <% end %>
           <% end %>
