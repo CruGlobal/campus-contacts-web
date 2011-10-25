@@ -1,12 +1,12 @@
 <% if mhub? %>
   <center>
-    To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
+    <%= t('.login_paragraph_mhub') %>
     <br><br>
     <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook_mhub), rel: 'external') %>
     <br/>
 		<% if cookies[:keyword] %>
       <div class="info"><br/><br/>
-        <center>Don't like Facebook? <%= link_to("Click here to skip Facebook login", session[:return_to] ? add_params(session[:return_to], :nologin => true) : "/c/#{cookies[:keyword]}?nologin=true") %></center>
+        <center><%= t('.dont_like_faceook') %> <%= link_to(t('.skip_facebook'), session[:return_to] ? add_params(session[:return_to], :nologin => true) : "/c/#{cookies[:keyword]}?nologin=true") %></center>
       </div>
 		<% end %>
   </center>
@@ -20,18 +20,17 @@
     
         <div class="loginscreen" style="text-align: center;">
         <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook), rel: 'external') %>
-        <p><a href="/">Back home</a></p>
+        <p><a href="/"><%= t('.back') %></a></p>
         </div>      
       </div>
     
     
     
       <div class="right width68 instruct">
-        <h3 style="margin: 10px 0 0;">Instructions:</h3>
+        <h3 style="margin: 10px 0 0;"><%= t('.instructions') %>:</h3>
         <p style="margin: 6px 0px 0 0;">
-          To get started, you'll need to have a Facebook account. <br/>
-          Click the login link to the left and <strong>allow</strong> MHub to access your information. <br/>
-          You'll be taken to the wizard if this is your first time accessing MissionHub.</p>
+          <%= t('.login_paragraph_html') %>
+        </p>
       </div>
     
       <div class="clear"></div>

@@ -16,3 +16,4 @@
 //= require jquery.notifications-1.1
 //= require jquery.simplyCountable.js
 //= require nicEditMinimal.js
+//= require groups

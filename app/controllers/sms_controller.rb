@@ -22,7 +22,7 @@ class SmsController < ApplicationController
       send_message(@msg, sms_params[:phone_number])
       render text: @msg + "\n" and return
     when 'help'
-      @msg = 'MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to http://mhub.cc/ for more help.'
+      @msg = 'MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to http://mhub.cc/terms for more help.'
       send_message(@msg, sms_params[:phone_number])
       render text: @msg + "\n" and return
     when ''

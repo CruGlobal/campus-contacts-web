@@ -21,7 +21,8 @@ class SentSms < ActiveRecord::Base
           from = received_sms.shortcode
         else
           # If the recipient is in the US, use the shortcode, otherwise use the long number
-          from = recipient.first == '1' ? SmsKeyword::SHORT : SmsKeyword::LONG
+          # from = recipient.first == '1' ? SmsKeyword::SHORT : SmsKeyword::LONG
+          from = SmsKeyword::SHORT
         end
         sms = Twilio::SMS.create :to => recipient, :body => message, :from => from
         self.twilio_sid = sms.sid

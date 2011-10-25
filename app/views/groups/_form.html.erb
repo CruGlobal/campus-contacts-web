@@ -26,7 +26,7 @@
         <%= f.select :meets, [[t('weekly'), 'weekly'], [t('monthly'), 'monthly'], [t('sporadically'), 'sporadically']] %>
       </div>
     </div>
-    <div class="sfield" style="<%= 'display:none' if @group.meets == 'sporadically' %>">
+    <div class="sfield regular" style="<%= 'display:none' if @group.meets == 'sporadically' %>">
       <div class="ls">
         <div class="day_of_week_div" style="<%= 'display:none' unless @group.meets == 'weekly' || @group.meets.blank?  %>">
           <%= f.label :meeting_day, t('.meets_on') %>
@@ -59,7 +59,7 @@
             to:
           </div>
           <div class="element">
-            <%= f.select :end_time, times(6.5.hours.to_i, 22.hours.to_i) %>
+            <%= f.select :end_time, times(7.hours.to_i, 22.hours.to_i) %>
           </div>
         </div>
       </div>
@@ -80,10 +80,10 @@
     <div class="ls">
     
     </div>
-    <div class="rs">
+    <div class="rs approve_join" style="<%= 'display:none' if !@group.list_publicly? %>">
       <%= f.check_box :approve_join_requests %>
       <%= f.label :approve_join_requests %>
-      <%= tip('') %>
+      <%= tip(t('.approve_join_tip')) %>
     </div>
   </div>
   <div class="sfield">
@@ -94,7 +94,7 @@
           <%= f.submit %>
         </div>
         <div class="element" style="vertical-align: middle; height: 29px; line-height: 39px;">
-          <%= link_to("Cancel and go back to groups", "", :class=> "cancel")%>
+          <%= link_to(t('.back'), "", :class=> "cancel")%>
         </div>
     </div>
   </div>
