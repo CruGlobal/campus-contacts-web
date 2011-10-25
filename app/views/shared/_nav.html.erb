@@ -20,9 +20,6 @@
               <%= link_to(current_organization, user_root_path) %>
             <% end %>
           </li>
-          <!-- <div class="item">
-            <%= link_to(t('nav.profile'), current_person) %>
-          </div> -->
           <% if current_organization.keywords.present? %>
             <li class="item smallermenu">
               <% if current_organization.keywords.length == 1 %>
