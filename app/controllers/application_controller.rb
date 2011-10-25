@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  extend DelegatePresenter::ApplicationController
   before_filter :authenticate_user!, :except => [:facebook_logout]
   before_filter :set_login_cookie
   before_filter :check_su

@@ -3,6 +3,7 @@ class GroupsController < ApplicationController
   before_filter :leader_needed, :only => [:create, :new]
   
   def index
+    @groups = current_organization.groups.includes(:group_labels)
   end
 
   def show

@@ -96,6 +96,8 @@ GEM
     dalli (1.1.2)
     deadlock_retry (1.1.1)
     default_value_for (1.0.6)
+    delegate_presenter (0.0.2)
+      rails
     devise (1.4.8)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.0.3)
@@ -313,6 +315,7 @@ DEPENDENCIES
   dalli
   deadlock_retry
   default_value_for
+  delegate_presenter
   devise
   dynamic_form
   enforce_schema_rules

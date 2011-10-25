@@ -1,0 +1,2 @@
+class GroupLabelsController < ApplicationController
+end
