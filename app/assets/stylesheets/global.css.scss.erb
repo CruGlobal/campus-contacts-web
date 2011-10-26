@@ -893,7 +893,8 @@ span.title {
   margin-top: 20px;
 }
 
-.modalresults ul {
+.modalresults ul,
+.name_search_results ul {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -912,6 +913,11 @@ span.title {
     text-decoration: none;
     background: #F5FFC4;
   }
+}
+
+.name_search_results ul {
+  height: auto;
+  max-height: 400px;
 }
 
 .inlinebutton {
@@ -1640,6 +1646,13 @@ span.all_text {
 
 
 /* ********************************* FORMTASTIC ****/
+textarea, input[type=text], input[type=password] {
+  border: 1px solid silver;
+  padding: 3px;
+  font-size: 12px;
+  width: 290px;
+}
+
 .formtastic {
   fieldset {
     border: none;

@@ -1,22 +1,20 @@
 <div id="member_search" title="<%= t('.add_a_member') %>">style="display:none" 
 
   <div class="explain">
+    <h3>This group needs some members.</h3>
     <p><%= t('.start_typing') %>:</p>
   </div>
   
-  <div class="modalresults"> 
-    <%= form_tag search_group_group_memberships_path(@group), :id => 'member_search_form', :onsubmit => 'return false;' do %>
-      <%= hidden_field_tag :show_all %>
-      <%= hidden_field_tag :role %>
-      <%= text_field_tag :name, '', :id => 'member_search_name', :autocomplete => 'off' %>
-      <%= spinner('member_search') %>
-    <% end %>
-    <div id="member_search_results">
-      
-    </div>
+  <%= form_tag search_group_group_memberships_path(@group), :id => 'member_search_form', :onsubmit => 'return false;' do %>
+    <%= hidden_field_tag :show_all %>
+    <%= hidden_field_tag :role %>
+    <%= text_field_tag :name, '', :id => 'member_search_name', :autocomplete => 'off', :placeholder => 'Enter a name here' %>
+    <%= spinner('member_search') %>
+  <% end %>
+  
+  <div id="member_search_results" class="name_search_results"></div>
+  
+  <div id="new_member_form">
     
-    <div id="new_member_form">
-      
-    </div>
   </div>
 </div>
