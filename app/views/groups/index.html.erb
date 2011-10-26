@@ -29,6 +29,14 @@
 </div>
 
 <table class="listing" cellpadding="0" cellspacing="0">
+  <thead>
+    <th></th>
+    <th>Group Name</th>
+    <th></th>
+    <th>Member Count</th>
+    <th>Labels</th>
+    <th></th>
+  </thead>
   <tbody id="groups_table">
     <% @groups.each do |group| %>
       <% group_p = Present(group) %>
@@ -38,7 +46,14 @@
           <%= check_box_tag 'ids[]', group.id, false, id: "ids_#{group.id}", class: 'id_checkbox' %>
         </td>
         <td><%= link_to(group.name, group) %></td>
+        <td><% if group.list_publicly %><%= image_tag('lock.gif', class: 'privategroup' ) %><% end %></td>
+        <td>5</td>
         <td><%= group_p.labels %></td>
+         <td class="controls">
+            <%= link_to("Show", "", :class => "icon magnify tipit", :title => "Title") %>
+            <%= link_to("Delete", "", :method => :delete, :remote => true, :class => "icon delete tipit", :title => "Delete", :confirm => "You Sure") %>      
+            
+         </td>
       </tr>
     <% end %>
   </tbody>
