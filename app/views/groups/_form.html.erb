@@ -87,16 +87,18 @@
       <%= tip(t('.approve_join_tip')) %>
     </div>
   </div>
-  <div class="sfield">
-    <div class="ls"></div>
-    <div class="rs">
-      <div class="sidebyside">
-        <div class="element">
-          <%= f.submit %>
-        </div>
-        <div class="element" style="vertical-align: middle; height: 29px; line-height: 39px;">
-          <%= link_to(t('.back'), "", :class=> "cancel")%>
-        </div>
+  <div class="formactions">
+    <div class="sfield">
+      <div class="ls"></div>
+      <div class="rs">
+        <div class="sidebyside">
+          <div class="element">
+            <%= f.submit %>
+          </div>
+          <div class="element" style="vertical-align: middle; height: 29px; line-height: 39px;">
+            <%= link_to(t('.back'), "", :class=> "cancel")%>
+          </div>
+      </div>
     </div>
   </div>
 </div>

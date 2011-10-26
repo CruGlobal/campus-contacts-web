@@ -13,8 +13,13 @@
   </ul>
 <% end %>
 
+<div class="controlbar">
+  <%= link_to("See all groups", '/groups', :class=>"backto") %>
+</div>
 <div class="titlebar">
-  <h1><%= @group %></h1>
+  <h1>
+    <%= @group %>
+  </h1>
 </div>
 
 <div class="pagemenu">

@@ -68,11 +68,16 @@ img {
 	border: none;
 }
 
-
+.controlbar {
+  padding: 15px 15px 5px 15px;
+  background: 0;
+  margin: 0px 0px 0px;
+  a {font-weight: bold;}
+}
 
 .titlebar {
   background: $white;
-  padding: 0 14px 14px;
+  padding: 14px 14px;
   h1 {
     font-family: $font-base;
     color: #333333;
@@ -82,6 +87,10 @@ img {
   h1 img {
     margin-right: 5px;
     vertical-align: initial;
+  }
+  a.backto {
+    font-size: 12px;
+    float: right;
   }
 }
 
@@ -169,7 +178,8 @@ a.headerlink:hover {
   background: #e5e5e5 repeat-x;
   border-radius: 0;
   height: 38px;
-  margin-bottom: 15px;
+  border-bottom: 2px solid silver;
+  margin-bottom: 0px;
   a {
     margin-top: 5px;
     color: #000;
@@ -224,6 +234,7 @@ img.tmenu {
 #left {
   float: left;
   width: 205px;
+  padding-top: 10px;
 }
 
 #logo {
@@ -521,6 +532,14 @@ input[type=submit], button[type=submit] {
   font-weight: bold;
 }
 
+input[type=submit].smallbtn, 
+button[type=submit].smallbtn {
+  font-size: 12px;
+  line-height: 24px;
+  height: 24px;
+  padding: 0 10px;
+}
+
 .rejoiceablebox {
   background: $white;
   border: 1px solid silver;
@@ -620,7 +639,7 @@ input[type=submit], button[type=submit] {
 
 .pagemenu {
   background: $light-blue;
-  padding: 6px 14px 3px;
+  padding: 10px 14px 8px;
 }
 
 ul.pillmenu {
@@ -763,9 +782,13 @@ span.title {
 
 
 .footer {
+  border-top: 2px solid silver;
   text-align: right;
   color: #B3B3B3;
-  margin: 20px;
+  margin: 15px 0px;
+  padding: 15px;
+  background: #e5e5e5;
+  border-radius: 0 0 8px 8px;
 }
 /* SPLASH PAGE */
 
@@ -1560,9 +1583,6 @@ div.merge.person.preview {
 }
 
 .user_defined_contact_fields {
-	border-top: 2px solid silver;
-	margin-top: 15px;
-	padding-top: 15px;
 	> .field {
 		margin-bottom: 15px;
 		> label {
@@ -1588,6 +1608,15 @@ div.merge.person.preview {
     width: 99%;
     height: 135px;
   }
+}
+
+#char_counter {
+  display: block;
+  line-height: 2em;
+  text-align: right;
+  font-weight: bold;
+  color: black;
+  font-size: 11px;
 }
 
 span.all_text {
@@ -1740,9 +1769,25 @@ textarea, input[type=text], input[type=password] {
       display: inline-block;
       text-align: center;
       margin-right: 10px;
+      vertical-align: top;
     }
   }
+  .leftalign .element {
+    text-align: left;
+  }
+  .field_zip[type=text] {
+    width: 70px;
+  }
+}
+
+.formactions {
+  line-height: 35px;
   .cancel {
     color: #999;
   }
 }
+.contact_form {
+  .ls {min-width: 75px;}
+}
+
+
