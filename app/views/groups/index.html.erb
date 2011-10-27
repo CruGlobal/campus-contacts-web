@@ -28,12 +28,17 @@
   </ul>
 </div>
 
+<span style="display:none" id="drag_helper_text_one"><%= t('.assign_to_label', count: 1) %></span>
+<span style="display:none" id="drag_helper_text_other"><%= t('.assign_to_label', count: 0) %></span>
 <table class="listing" cellpadding="0" cellspacing="0">
   <thead>
-    <th></th>
+    <th class="checkbox_cell">
+      <%= check_box_tag 'check_all', true, false %>
+    </th>
     <th>Group Name</th>
     <th></th>
-    <th>Member Count</th>
+    <th>Members</th>
+    <th>Involved</th>
     <th>Labels</th>
     <th></th>
   </thead>
@@ -46,13 +51,12 @@
           <%= check_box_tag 'ids[]', group.id, false, id: "ids_#{group.id}", class: 'id_checkbox' %>
         </td>
         <td><%= link_to(group.name, group) %></td>
-        <td><% if group.list_publicly %><%= image_tag('lock.gif', class: 'privategroup' ) %><% end %></td>
-        <td>5</td>
+        <td><% if !group.list_publicly %><%= image_tag('lock.gif', class: 'privategroup' ) %><% end %></td>
+        <td><%= group.involved.count %></td>
+        <td><%= group_p.leaders_names %></td>
         <td><%= group_p.labels %></td>
          <td class="controls">
-            <%= link_to("Show", "", :class => "icon magnify tipit", :title => "Title") %>
-            <%= link_to("Delete", "", :method => :delete, :remote => true, :class => "icon delete tipit", :title => "Delete", :confirm => "You Sure") %>      
-            
+            <%= link_to("Show", group_path(group), :class => "icon magnify") %>
          </td>
       </tr>
     <% end %>

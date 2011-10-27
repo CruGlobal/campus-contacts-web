@@ -448,6 +448,9 @@ en:
       add_group: 'Add a group'
       labels: Labels
       add: Add
+      assign_to_label:
+        one: '1 Group'
+        other: '%{count} Groups' 
     show:  
       add_member: 'Add Member'
       location: Location

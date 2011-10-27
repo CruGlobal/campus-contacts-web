@@ -36,11 +36,11 @@ $ ->
       
   $("a.add-member").live 'click', ->
     $('#role').val('member')
-    showSearchBox()
+    $.fn.showSearchBox()
     
   $("a.add-leader").live 'click', ->
     $('#role').val('leader')
-    showSearchBox()
+    $.fn.showSearchBox()
     
   $('#member_search_name').autocomplete
     source: (request, response)->
@@ -59,7 +59,7 @@ $ ->
           alert(error)
       response([]);
       
-showSearchBox = ->
+$.fn.showSearchBox = ->
   $('#add_member_form').hide()
   $('#member_search_form').show()
   $('#member_search_name').val('')
@@ -75,3 +75,12 @@ showSearchBox = ->
       Cancel: ->
         $(this).dialog('destroy')
   false
+  
+$.fn.activateGroupLabelDroppable = () ->
+  $('#groups_controller.index .leftmenu .label').droppable 
+    activeClass: 'ui-state-highlight'
+    drop: (event, ui) ->
+      label = $(this)
+      label.effect('highlight', {}, 'slow')
+      $('#assign_to').val(label.attr('data-id'))
+      # $.fn.assignTo(leader)

@@ -3,7 +3,7 @@
     <li class="heading selected">
       <h3><%= t('.details') %></h3>
       <p>
-        <%= t('.leaders') %>: <%= @group.leaders.collect(&:name).join(', ') %>
+        <%= t('.leaders') %>: <%= @group.leaders_names %>
       </p>
       <p>
         <%= t('.location') %>: <%= link_to(@group.location, "http://www.google.com/maps?q=#{@group.location}", target: '_blank') %>
