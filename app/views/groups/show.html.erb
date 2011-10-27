@@ -2,13 +2,13 @@
   <ul class="leftmenu">
     <li class="heading selected">
       <h3><%= t('.details') %></h3>
-    </li>
-    <li>
-      <ul id="leaders" class="indent expandable" data-height="244">
-        <% current_organization.group_labels.each do |label| %>
-          <li><%= label %></li>
-        <% end %>
-      </ul>
+      <p>
+        <%= t('.leaders') %>: <%= @group.leaders.collect(&:name).join(', ') %>
+      </p>
+      <p>
+        <%= t('.location') %>: <%= link_to(@group.location, "http://www.google.com/maps?q=#{@group.location}", target: '_blank') %>
+      </p>
+      <%= image_tag("http://maps.googleapis.com/maps/api/staticmap?center=#{@group.location}&zoom=15&size=200x200&markers=color:blue|label:G|#{@group.location}&sensor=false") %>
     </li>
   </ul>
 <% end %>
@@ -36,6 +36,9 @@
 <div class="pad">
   <table class="listing" cellpadding="0" cellspacing="0">
     <tbody id="group_table">
+      <% @group.group_memberships.involved.order('role').includes(:person).each do |gm| %>
+        <%= render 'person', person: gm.person, group_membership: gm %>
+      <% end %>
     </tbody>
   </table>
 

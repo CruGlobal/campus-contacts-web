@@ -2,7 +2,7 @@
   <% original_total = @people.length %>
   <% @people = @people.select {|p| p.email.present?} %>
   <% @people.each do |person| %>
-    <li><%= link_to("#{person} (#{person.user.try(:username)})", leaders_path(person_id: person.id), method: :post, remote: true) %></li>
+    <li><%= link_to("#{person} (#{person.user.try(:username)})", group_group_memberships_path(group_id: params[:group_id], role: params[:role], person_id: person.id), method: :post, remote: true) %></li>
   <% end %>
 </ul>
 <% if @total > original_total %>
@@ -11,5 +11,5 @@
 <% end %>
 
 
-If the person you are looking for is not already in the system, 
-<%= link_to('Add Them', "/leaders/new?name=#{params[:name]}", :remote => true, :class => 'add_new_person inlinebutton') %>
+<!-- If the person you are looking for is not already in the system, 
+<%= link_to('Add Them', "/leaders/new?name=#{params[:name]}", :remote => true, :class => 'add_new_person inlinebutton') %> -->

@@ -1,0 +1,6 @@
+<tr id="<%= dom_id(person) %>">
+  <td><%= person.name %></td>
+  <td><%= mail_to(person.email) if person.email.present? %></td>
+  <td><%= person.pretty_phone_number %></td>
+  <td><%= t(group_membership.role) %></td>
+</tr>
