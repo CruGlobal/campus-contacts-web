@@ -5,6 +5,20 @@ class Rejoicable < ActiveRecord::Base
   belongs_to :person
   OPTIONS = %w[spiritual_conversation prayed_to_receive gospel_presentation]
   
+  default_scope where(:deleted_at => nil)
+  
+  def destroy
+    run_callbacks :destroy do
+      self.update_attribute(:deleted_at, DateTime.now)
+    end
+  end
+  
+  def delete
+    run_callbacks :delete do
+      self.update_attribute(:deleted_at, DateTime.now)
+    end
+  end
+  
   def to_s
     I18n.t("rejoicables.#{what}")
   end

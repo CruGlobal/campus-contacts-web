@@ -7,6 +7,8 @@ class FollowupComment < ActiveRecord::Base
   # accepts_nested_attributes_for :rejoicables, reject_if: proc { |obj| obj.what.blank? }
   after_create :update_followup_status
   
+  default_scope where(:deleted_at => nil)
+  
   def to_hash
     hash = {}
     hash['id'] = id
@@ -18,7 +20,23 @@ class FollowupComment < ActiveRecord::Base
     hash['organization_id'] = organization_id
     hash['created_at'] = created_at.utc.to_s
     hash['created_at_words'] = time_ago_in_words(created_at) + ' ago'
+    hash['updated_at'] = updated_at.utc.to_s
+    hash['deleted_at'] = deleted_at.utc.to_s unless deleted_at.nil?
     hash
+  end
+  
+  def destroy
+    run_callbacks :destroy do
+      self.update_attribute(:updated_at, DateTime.now)
+      self.update_attribute(:deleted_at, DateTime.now)
+    end
+  end
+  
+  def delete
+    run_callbacks :delete do
+      self.update_attribute(:updated_at, DateTime.now)
+      self.update_attribute(:deleted_at, DateTime.now)
+    end
   end
   
   def self.create_from_survey(organization, person, questions, answer_sheet, status = nil, timestamp = nil)

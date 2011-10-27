@@ -53,10 +53,10 @@ class ApiV1CommentsTest < ActionDispatch::IntegrationTest
 
     should "be able to get the followup comments" do
       #create a few test comments
-      path = "/api/followup_comments/"
+      path = "/api/v1/followup_comments/"
       json = ActiveSupport::JSON.encode({followup_comment: {:organization_id => @user3.person.primary_organization.id, :contact_id=>@user2.person.id, :commenter_id=>@user.person.id, :status=>"do_not_contact", :comment=>"Testing the comment system."}, rejoicables: ["spiritual_conversation", "prayed_to_receive", "gospel_presentation"]})
       post path, {'access_token' => @access_token3.code, 'json' => json }
-      path = "/api/followup_comments/#{@user2.person.id}"
+      path = "/api/v1/followup_comments/#{@user2.person.id}"
       get path, {'access_token' => @access_token3.code}
       @json = ActiveSupport::JSON.decode(@response.body)
       f1 = FollowupComment.first

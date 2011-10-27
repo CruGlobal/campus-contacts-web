@@ -1,6 +1,6 @@
 class Api::OrganizationsController < ApiController
   oauth_required scope: "organization_info"
-  before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization
+  before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization, :get_api_json_header
   
   def show_1
     json_output = []
@@ -40,7 +40,10 @@ class Api::OrganizationsController < ApiController
       json_output<<json
     end
     
-    render json: json_output
+    output = @api_json_header
+    output[:organizations] = json_output
+    
+    render json: output
   end
   
   def build_question_json ( keyword_json, q, active)
