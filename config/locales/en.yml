@@ -459,6 +459,8 @@ en:
       meets_on_the: 'On the'
       of_month: 'of the month'
       back: 'Cancel and go back to groups'
+    person:
+      remove_confirm: "Are you sure you want to remove %{name} from your group?"
       
   group_memberships:
     form:

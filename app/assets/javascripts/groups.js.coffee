@@ -1,4 +1,7 @@
 $ ->
+  $('#group_table .controls a.delete').live 'click', (e)->
+    $(this).closest('tr').fadeOut()
+    
   if $('#group_meeting_day')?
     $('#group_meeting_day').val($('#day_of_week').val())
   $('#group_meets').live 'change', ->
