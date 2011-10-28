@@ -51,15 +51,17 @@
 <span style="display:none" id="drag_helper_text_other"><%= t('.assign_to_label', count: 0) %></span>
 <table class="listing" cellpadding="0" cellspacing="0">
   <thead>
-    <th class="checkbox_cell">
-      <%= check_box_tag 'check_all', true, false %>
-    </th>
-    <th><%= t('.group_name') %></th>
-    <th></th>
-    <th><%= t('.members') %></th>
-    <th><%= t('.leaders') %></th>
-    <th><%= t('.labels') %></th>
-    <th></th>
+    <tr>
+      <th class="checkbox_cell">
+        <%= check_box_tag 'check_all', true, false %>
+      </th>
+      <th><%= t('.group_name') %></th>
+      <th></th>
+      <th><%= t('.members') %></th>
+      <th><%= t('.leaders') %></th>
+      <th><%= t('.labels') %></th>
+      <th></th>
+    </tr>
   </thead>
   <tbody id="groups_table">
     <% total_involved = 0 %>

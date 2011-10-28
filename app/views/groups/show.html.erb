@@ -14,6 +14,7 @@
       <%= image_tag("http://maps.googleapis.com/maps/api/staticmap?center=#{@group.location}&zoom=15&size=200x200&markers=color:blue|label:G|#{@group.location}&sensor=false") %>
     </li>
   </ul>
+  <%= link_to(t('.delete_group'), group_path(@group), method: :delete, confirm: t('.confirm_delete_group')) %>
 <% end %>
 
 <div class="controlbar">
@@ -33,11 +34,27 @@
     <li>     
       <%= link_to(t('.add_leader'), '#', class: 'add-leader') %>
     </li>
-  </ul>
+  </ul>  
+  <ul class="pillmenu">
+		<li><%= link_to(t('people.index.send_email'), nil, :id => "send_bulkemail_link") %></li>	
+		<li><%= link_to(t('people.index.send_sms'), nil, :id => "send_bulksms_link") %></li>			
+	</ul>
 </div>
 
 <div class="pad">
   <table class="listing" cellpadding="0" cellspacing="0">
+    <thead>
+      <tr>
+        <th class="checkbox_cell">
+          <%= check_box_tag 'check_all', true, false %>
+        </th>
+        <th><%= t('.name') %></th>
+        <th><%= t('.email') %></th>
+        <th><%= t('.phone') %></th>
+        <th><%= t('.role') %></th>
+        <th></th>
+      </tr>
+    </thead>
     <tbody id="group_table">
       <% @group.group_memberships.involved.order('role').includes(:person).each do |gm| %>
         <%= render 'person', person: gm.person, group_membership: gm %>
@@ -47,3 +64,5 @@
 
   <%= render 'group_memberships/form' %>
 </div>
+
+<%= render 'shared/bulk_send_form' %>

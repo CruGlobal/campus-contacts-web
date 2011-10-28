@@ -44,6 +44,7 @@ class GroupsController < ApplicationController
 
   def destroy
     authorize! :destroy, @group
+    @group.destroy
     redirect_to groups_path
   end
 
