@@ -67,6 +67,8 @@ en:
       phone: 'Phone'
       email: 'Email'
       year_in_school: 'Year in School'
+      send_sms: Send Text
+      send_email: Send Email
     show:
       edit_profile: 'Edit Profile'
   sessions:
@@ -439,8 +441,6 @@ en:
   weekly: Weekly
   monthly: Monthly
   sporadically: Sporadically
-  send_sms: Send Text
-  send_email: Send Email
   
   groups:
     see_all: See all groups
