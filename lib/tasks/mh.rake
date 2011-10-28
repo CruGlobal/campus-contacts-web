@@ -22,12 +22,35 @@ task "carriers" => :environment do
     puts response
     begin
       json = JSON.parse(response)
-      PhoneNumber.connection.update("update phone_numbers set carrier = '#{json['allocation']['carrier_name']}' where number = '#{number}'")
-      time_to_sleep = rand(5) + 2
-      puts "Sleeping #{time_to_sleep} seconds"
+      carrier = normalize(json['allocation']['carrier_name'])
+      PhoneNumber.connection.update("update phone_numbers set carrier = '#{carrier}' where number = '#{number}'")
     rescue
       # PhoneNumber.where(:number => number).collect(&:destroy)
     end
+    time_to_sleep = rand(5) + 2
+    puts "Sleeping #{time_to_sleep} seconds"
     sleep(time_to_sleep)
+  end
+end
+
+
+def normalize(carrier)
+  case carrier
+  when /VERIZON/
+    'verizon'
+  when /SPRINT/
+    'sprint'
+  when /CINGULAR/
+    'cingular'
+  when /NEXTEL/
+    'nextel'
+  when /T-MOBILE/
+    't-mobile'
+  when /WESTERN WIRELESS/
+    'western wireless'
+  when /OMNIPOINT/
+    'omnipoint'
+  else
+    carrier
   end
 end
