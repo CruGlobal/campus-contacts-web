@@ -20,10 +20,14 @@ task "carriers" => :environment do
     uri = URI.parse("http://digits.cloudvox.com/#{number}.json")
     response = Net::HTTP.get(uri)
     puts response
-    json = JSON.parse(response)
-    PhoneNumber.connection.update("update phone_numbers set txt_to_email = carrier = '#{json['allocation']['carrier_name']}' where number = '#{number}'")
-    time_to_sleep = rand(5) + 2
-    puts "Sleeping #{time_to_sleep} seconds"
+    begin
+      json = JSON.parse(response)
+      PhoneNumber.connection.update("update phone_numbers set carrier = '#{json['allocation']['carrier_name']}' where number = '#{number}'")
+      time_to_sleep = rand(5) + 2
+      puts "Sleeping #{time_to_sleep} seconds"
+    rescue
+      # PhoneNumber.where(:number => number).collect(&:destroy)
+    end
     sleep(time_to_sleep)
   end
 end

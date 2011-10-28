@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111028185228) do
+ActiveRecord::Schema.define(:version => 20111028194831) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -3897,6 +3897,7 @@ ActiveRecord::Schema.define(:version => 20111028185228) do
     t.integer  "sent_sms",       :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "cloudvox_name"
   end
 
   create_table "sms_keywords", :force => true do |t|
