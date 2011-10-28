@@ -17,8 +17,10 @@ task "carriers" => :environment do
   # require 'hpricot'
   require 'net/http'
   PhoneNumber.connection.select_values("select distinct(number) as number from phone_numbers where carrier is null or carrier = ''").each do |number|
-    uri = URI.parse('http://digits.cloudvox.com/2066831234.json')
-    json = JSON.parse(Net::HTTP.get(uri))
+    uri = URI.parse("http://digits.cloudvox.com/#{number}.json")
+    response = Net::HTTP.get(uri)
+    puts response
+    json = JSON.parse(response)
     PhoneNumber.connection.update("update phone_numbers set txt_to_email = carrier = '#{json['allocation']['carrier_name']}' where number = '#{number}'")
     time_to_sleep = rand(5) + 2
     puts "Sleeping #{time_to_sleep} seconds"
