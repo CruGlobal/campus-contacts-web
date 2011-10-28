@@ -17,3 +17,4 @@
 //= require jquery.simplyCountable.js
 //= require nicEditMinimal.js
 //= require groups
+//= require group_labels

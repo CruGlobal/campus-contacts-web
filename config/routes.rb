@@ -1,7 +1,5 @@
 Mh::Application.routes.draw do
 
-  resources :group_labelings
-
   resources :group_labels
 
   ActiveAdmin.routes(self)
@@ -15,6 +13,7 @@ Mh::Application.routes.draw do
   end
   
   resources :groups do
+    resources :group_labelings
     resources :group_memberships do
       collection do
         get :search

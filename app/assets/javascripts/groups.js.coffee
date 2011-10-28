@@ -75,12 +75,3 @@ $.fn.showSearchBox = ->
       Cancel: ->
         $(this).dialog('destroy')
   false
-  
-$.fn.activateGroupLabelDroppable = () ->
-  $('#groups_controller.index .leftmenu .label').droppable 
-    activeClass: 'ui-state-highlight'
-    drop: (event, ui) ->
-      label = $(this)
-      label.effect('highlight', {}, 'slow')
-      $('#assign_to').val(label.attr('data-id'))
-      # $.fn.assignTo(leader)

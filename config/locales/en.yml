@@ -443,14 +443,19 @@ en:
   bulk_email: Bulk Email
   
   groups:
+    see_all: See all groups
     index:
       group_list: 'Group List for %{org}'
+      group_name: Group Name
+      members: Involved
+      leaders: Leaders
       add_group: 'Add a group'
       labels: Labels
       add: Add
       assign_to_label:
         one: '1 Group'
         other: '%{count} Groups' 
+      labeled_with: 'Labeled With "%{label}"'
     show:  
       add_member: 'Add Member'
       location: Location
