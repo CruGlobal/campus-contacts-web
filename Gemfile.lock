@@ -121,6 +121,7 @@ GEM
     hoptoad_notifier (2.4.11)
       activesupport
       builder
+    hpricot (0.8.4)
     httparty (0.8.1)
       multi_json
       multi_xml
@@ -316,6 +317,7 @@ DEPENDENCIES
   enforce_schema_rules
   factory_girl (~> 2.0.0.rc4)
   hoptoad_notifier
+  hpricot
   jquery-rails
   kaminari
   mini_fb
