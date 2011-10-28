@@ -9,6 +9,30 @@ $ ->
       type: 'DELETE'
     false
     
+  $('#groups_controller.index #labels a.delete_label').live 'click', ->
+    li = $(this).closest('li')
+    li.fadeOut()
+    $.ajax
+      url: '/group_labels/' + li.attr('data-id')
+      type: 'DELETE'
+    false
+    
+  $('#groups_controller.index a.add-label').live 'click', ->
+    el = $('#new_label')
+    el.dialog
+      resizable: false,
+      height:250,
+      width:400,
+      modal: true,
+      buttons: 
+        Create: ->
+          $('form', el).submit()
+        Cancel: ->
+          $(this).dialog('destroy')
+    
+  $('#new_label form').live 'submit', ->
+    $('#spinner_new_label').show()
+    
 $.fn.activateGroupLabelDroppable = () ->
   $('#groups_controller.index .leftmenu .label').droppable 
     activeClass: 'ui-state-highlight'

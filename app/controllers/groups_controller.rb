@@ -22,7 +22,7 @@ class GroupsController < ApplicationController
 
   def update
     authorize! :update, @group
-    if @group.update_attributes(@group)
+    if @group.update_attributes(params[:group])
       redirect_to @group
     else
       redirect_to :back

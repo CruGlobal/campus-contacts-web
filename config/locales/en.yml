@@ -456,9 +456,16 @@ en:
         one: '1 Group'
         other: '%{count} Groups' 
       labeled_with: 'Labeled With "%{label}"'
+      new_label_prompt: Please enter a new label name
+      add_a_label: Add a Label
+    new:
+      new_group: Create a New Group
+    edit:
+      edit_group: Editing %{group}
     show:  
       add_member: 'Add Member'
       location: Location
+      edit: edit
     form:
       location_tip: 'For your location, type an address that you would expect to work if you did a search on a Google Map (i.e. "1600 Pennsylvania Ave, Washington, DC 20006")'
       list_publicly_tip: "If this option is selected, this group will be visible to the general public when they do a search. (Public search doesn't exist yet, but will at some point)"
@@ -466,7 +473,7 @@ en:
       meets_on: 'On'
       meets_on_the: 'On the'
       of_month: 'of the month'
-      back: 'Cancel and go back to groups'
+      back: 'Cancel and go back'
     person:
       remove_confirm: "Are you sure you want to remove %{name} from your group?"
       

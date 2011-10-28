@@ -1,7 +1,7 @@
 <% provide :sidebar do %>
   <ul class="leftmenu">
     <li class="heading selected">
-      <h3><%= t('.details') %></h3>
+      <h3><%= t('.details') %> (<%= link_to(t('.edit'), edit_group_path(@group)) %>)</h3>
       <p>
         <%= t('.leaders') %>: <%= @group.leaders_names %>
       </p>
