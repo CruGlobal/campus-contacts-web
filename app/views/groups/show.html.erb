@@ -8,6 +8,9 @@
       <p>
         <%= t('.location') %>: <%= link_to(@group.location, "http://www.google.com/maps?q=#{@group.location}", target: '_blank') %>
       </p>
+      <p>
+        <%= t('.meets') %>: <%= @group.meets_at %>
+      </p>
       <%= image_tag("http://maps.googleapis.com/maps/api/staticmap?center=#{@group.location}&zoom=15&size=200x200&markers=color:blue|label:G|#{@group.location}&sensor=false") %>
     </li>
   </ul>

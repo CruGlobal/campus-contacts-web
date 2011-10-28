@@ -466,6 +466,10 @@ en:
       add_member: 'Add Member'
       location: Location
       edit: edit
+      meets: Meets
+      sporadically: Sporadically
+      weekly: %{day} from %{start_time} to %{end_time}
+      monthly: on the %{day} from %{start_time} to %{end_time}
     form:
       location_tip: 'For your location, type an address that you would expect to work if you did a search on a Google Map (i.e. "1600 Pennsylvania Ave, Washington, DC 20006")'
       list_publicly_tip: "If this option is selected, this group will be visible to the general public when they do a search. (Public search doesn't exist yet, but will at some point)"
@@ -481,6 +485,8 @@ en:
     form:
       start_typing: Start typing a name to find a person add to this group
       add_a_member: 'Add a member'
+    search:
+      not_found: We couldn't find anyone in your %{terminology} with that name
   
   helpers:
     label:

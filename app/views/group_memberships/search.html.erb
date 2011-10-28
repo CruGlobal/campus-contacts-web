@@ -1,15 +1,21 @@
-<ul>
-  <% original_total = @people.length %>
-  <% @people = @people.select {|p| p.email.present?} %>
-  <% @people.each do |person| %>
-    <li><%= link_to("#{person} (#{person.user.try(:username)})", group_group_memberships_path(group_id: params[:group_id], role: params[:role], person_id: person.id), method: :post, remote: true) %></li>
+<% if @total > 0 %>
+  <ul>
+    <% original_total = @people.length %>
+    <% @people = @people.select {|p| p.email.present?} %>
+    <% @people.each do |person| %>
+      <li><%= link_to("#{person} (#{person.user.try(:username)})", group_group_memberships_path(group_id: params[:group_id], role: params[:role], person_id: person.id), method: :post, remote: true) %></li>
+    <% end %>
+  </ul>
+  <% if @total > original_total %>
+    <span style="font-size: 11px;">Showing <%= @people.length %> of <%= @total %>, keep typing or 
+    <%= link_to('show all', '#', :class => 'search_show_all_link') %></span><br/>
   <% end %>
-</ul>
-<% if @total > original_total %>
-  <span style="font-size: 11px;">Showing <%= @people.length %> of <%= @total %>, keep typing or 
-  <%= link_to('show all', '#', :class => 'search_show_all_link') %></span><br/>
+  
+<% else %>
+  <p>
+    <%= t('.not_found', terminology: current_organization.terminology.downcase) %>
+  </p>
 <% end %>
 
-
-<!-- If the person you are looking for is not already in the system, 
-<%= link_to('Add Them', "/leaders/new?name=#{params[:name]}", :remote => true, :class => 'add_new_person inlinebutton') %> -->
+If the person you are looking for is not already in the system, 
+<%= link_to('Add Them', "/leaders/new?name=#{params[:name]}", :remote => true, :class => 'add_new_person inlinebutton') %>
