@@ -290,7 +290,8 @@ ul.leftmenu {
       background: $light-gray;
     }
   }
-  a.delete_leader {
+  a.delete_leader,
+  a.delete_label {
     float: right;
     background: #999 !important;
     color: $white;
@@ -302,7 +303,8 @@ ul.leftmenu {
     font-weight: bold !important;
     padding: 0;
   }
-  a.delete_leader:hover {
+  a.delete_leader:hover,
+  a.delete_label:hover {
     background: $blue;
     text-decoration: none;
   }
@@ -1373,7 +1375,7 @@ div.field_in {
 	}
 }
 
-ul.to_list {
+ul.to_list, td.labels ul {
 	border: 1px solid silver;
 	margin: 0;
 	width: 480px;
@@ -1392,6 +1394,42 @@ ul.to_list {
 		float: left;
 		font-size: 11px;
 		}
+}
+
+td.labels {
+  margin: 0;
+  padding: 0;
+  ul {
+    width: auto;
+    border: none;
+    padding: 0;
+    list-style: none;
+    margin: 3px 0 0;
+    height: auto;
+    li {
+      list-style: none;
+      a {margin: 0 2px 0 4px;}
+    }
+  }
+}
+
+.listing {
+  tfoot .totals {
+    td {
+      border-top: 1px solid silver;
+      border-bottom: 0px;
+      padding: 5px 0;
+      background: #EAF1F6;
+    }
+    td:first-child {
+      text-align: right;
+      padding-right: 5px;
+      font-weight: bold;
+    }
+  }
+  th.groupname {
+    width: 40%;
+  }
 }
 
 ul#leaders li.ui-state-highlight:hover {
@@ -1519,8 +1557,9 @@ div.pagination {
 }
 
 .searchstat {
-  padding-top: 5px;
+  padding-top: 20px;
   text-align: center;
+  font-weight: bold;
 }
 
 

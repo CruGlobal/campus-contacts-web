@@ -55,7 +55,7 @@
       <th class="checkbox_cell">
         <%= check_box_tag 'check_all', true, false %>
       </th>
-      <th><%= t('.group_name') %></th>
+      <th class="groupname"><%= t('.group_name') %></th>
       <th></th>
       <th><%= t('.members') %></th>
       <th><%= t('.leaders') %></th>
@@ -87,7 +87,7 @@
   <tfoot>
     <tr class="totals">
       <td>Totals:</td>
-      <td><%= @groups.length %></td>
+      <td><%= @groups.length %> group(s)</td>
       <td></td>
       <td><%= total_involved %></td>
       <td><%= total_leaders %></td>
