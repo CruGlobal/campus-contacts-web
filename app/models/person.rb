@@ -114,7 +114,7 @@ class Person < ActiveRecord::Base
   end
   
   def name 
-    firstName + " " + lastName
+    [firstName, lastName].collect(&:to_s).join(' ')
   end
   
   def firstName

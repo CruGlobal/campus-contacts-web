@@ -19,6 +19,6 @@
   $.params = <%= raw params.dup.keep_if {|k, v| v.is_a?(String) || v.is_a?(Numeric) || v.is_a?(Enumerable)}.to_json %>;
 </script>
 
-<%= render 'google_analytics' %>
 <meta name="viewport" content="width=1000, user-scalable=no" />
 
+<%= render 'google_analytics' %>
