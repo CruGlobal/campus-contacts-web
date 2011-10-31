@@ -44,7 +44,7 @@ def normalize(carrier)
     'cingular'
   when /NEXTEL/
     'nextel'
-  when /T-MOBILE/
+  when /T-MOBILE/, /AERIAL COMMUNICATIONS/
     't-mobile'
   when /WESTERN WIRELESS/
     'western wireless'
