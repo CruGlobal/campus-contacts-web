@@ -468,9 +468,10 @@ en:
       edit: edit
       meets: Meets
       sporadically: Sporadically
-      weekly: %{day}s %{start_time} - %{end_time}
-      monthly: %{day}, %{start_time} - %{end_time}
+      weekly: %{day}s<br/> %{start_time} - %{end_time}
+      monthly: %{day} of the month<br /> %{start_time} - %{end_time}
       delete_group: 'Delete this group'
+      edit_group: 'Edit Group'
       confirm_delete_group: Are you sure you want to delete this group?
     form:
       location_tip: 'For your location, type an address that you would expect to work if you did a search on a Google Map (i.e. "1600 Pennsylvania Ave, Washington, DC 20006")'
