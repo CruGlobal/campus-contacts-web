@@ -28,14 +28,6 @@ GIT
       rack (~> 1.1)
       rails (>= 2.3.11)
 
-GIT
-  remote: git://github.com/zuk/rubycas-client-rails.git
-  revision: af0007048c0c6d3c31a18bacd71754cc4ba9ec22
-  specs:
-    rubycas-client-rails (0.1.0)
-      rails (>= 3.0.0)
-      rubycas-client (>= 2.2.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -240,8 +232,11 @@ GEM
     rest-client (1.6.7)
       mime-types (>= 1.16)
     ruby-prof (0.10.8)
-    rubycas-client (2.3.1)
+    rubycas-client (2.2.1)
       activesupport
+    rubycas-client-rails (0.1.0)
+      rails (>= 3.0.0)
+      rubycas-client (>= 2.2.0)
     sass (3.1.10)
     sass-rails (3.1.4)
       actionpack (~> 3.1.0)
@@ -338,8 +333,8 @@ DEPENDENCIES
   resque_mail_queue
   rest-client
   ruby-prof
-  rubycas-client
-  rubycas-client-rails!
+  rubycas-client (~> 2.2.1)
+  rubycas-client-rails (~> 0.1.0)
   sass-rails (~> 3.1.0)
   shoulda
   simplecov (>= 0.3.5)

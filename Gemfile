@@ -13,8 +13,8 @@ gem "devise"#, git: "git://github.com/plataformatec/devise.git"
 gem "oa-oauth", '~> 0.2.6', require: "omniauth/oauth"
 gem 'mini_fb'
 gem 'client_side_validations'
-gem 'rubycas-client'
-gem 'rubycas-client-rails', git: 'git://github.com/zuk/rubycas-client-rails.git'
+gem 'rubycas-client', '~> 2.2.1'
+gem 'rubycas-client-rails', '~> 0.1.0'
 # gem 'squeel'
 gem 'ancestry'
 # gem 'rails_admin', git: 'git://github.com/twinge/rails_admin.git', branch: 'configure_list_view_width'
