@@ -1,6 +1,4 @@
 class SmsCarrier < ActiveRecord::Base
-  validates_presence_of :moonshado_name
-  
   @queue = :general
   
   after_create :check_for_email
