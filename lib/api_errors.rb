@@ -1,6 +1,10 @@
 module ApiErrors 
   class ApiError < StandardError
     def initialize(code, message, number, title = nil)
+      @code = code
+      @mess = message
+      @number = number
+      @title = title  
       if title.nil?
         m = '{"error": {"message":"' + message + '", "code": "' + number  + '"}}'
       else
@@ -8,6 +12,14 @@ module ApiErrors
       super m
       @code = code.to_sym
       end
+    end
+
+    def to_hash
+      error = {}
+      error[:message] = @mess unless @mess.nil?
+      error[:code] = @number unless @number.nil?
+      error[:title] = @title unless @title.nil?
+      error
     end
 
     attr_reader :code

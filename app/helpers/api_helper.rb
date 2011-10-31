@@ -218,11 +218,14 @@ module ApiHelper
       end
     end
     
-    render :json => output_message and return false
+    output = get_api_json_header()
+    output[:error] = exception.to_hash
+    
+    render :json => output and return false
   end
   
   def logApiRequest(exception = nil)
-    return unless exception
+    
     begin
       apiLog = {}
       apiLog[:platform] = params[:platform].to_s if params[:platform]
@@ -241,12 +244,26 @@ module ApiHelper
         :error_class => "Api Error",
         :error_message => exception.message,
         :parameters => apiLog
-      )
+      ) unless exception.nil?
       ApiLog.create(apiLog)
     rescue Exception => e
       raise_or_hoptoad(e)
     end
   end
   
-  
+  def get_api_json_header
+    @api_json_header = {}
+    meta = {}
+    meta[:request_time] = DateTime.now.utc.to_i
+    meta[:request_organization] = @organization.id unless @organization.nil?
+    identity = Rack::OAuth2::Server.get_access_token(params['access_token']).identity if params[:access_token]
+    if (!identity.nil?)
+      log = ApiLog.where("identity = ?", [identity]).last
+      meta[:last_request] = log.created_at.utc.to_i unless log.nil?
+      log2 = ApiLog.where("identity = ? AND url = ?", identity, request.url).last
+      meta[:last_identical_request] = log2.created_at.utc.to_i unless log2.nil?
+    end
+    @api_json_header[:meta] = meta
+    @api_json_header
+  end
 end
