@@ -1,20 +1,27 @@
 <% provide :sidebar do %>
   <ul class="leftmenu">
-    <li class="heading selected">
-      <h3><%= t('.details') %> (<%= link_to(t('.edit'), edit_group_path(@group)) %>)</h3>
-      <p>
-        <%= t('.leaders') %>: <%= @group.leaders_names %>
-      </p>
-      <p>
-        <%= t('.location') %>: <%= link_to(@group.location, "http://www.google.com/maps?q=#{@group.location}", target: '_blank') %>
-      </p>
-      <p>
-        <%= t('.meets') %>: <%= @group.meets_at %>
-      </p>
-      <%= image_tag("http://maps.googleapis.com/maps/api/staticmap?center=#{@group.location}&zoom=15&size=200x200&markers=color:blue|label:G|#{@group.location}&sensor=false") %>
+    <li class="heading selected"><h3><%= t('.details') %></h3></li>
+    <li class="information">
+      
+      <div class="field">
+        <div class="ls"><label><%= t('.leaders') %>:</label></div>
+        <div class="rs"><%= @group.leaders_names %></div>
+      </div>
+      <div class="field">
+        <div class="ls"><label><%= t('.location') %>:</label></div>
+        <div class="rs"><%= link_to(@group.location, "http://www.google.com/maps?q=#{@group.location}", target: '_blank') %></div>
+      </div>
+      <div class="field">
+        <div class="ls"><label><%= t('.meets') %>:</label></div>
+        <div class="rs"><%= @group.meets_at %></div>
+      </div>
     </li>
+    <li class="nostyle">
+      <%= link_to(image_tag("http://maps.googleapis.com/maps/api/staticmap?center=#{@group.location}&zoom=15&size=200x200&markers=color:blue|label:G|#{@group.location}&sensor=false"), "http://www.google.com/maps?q=#{@group.location}", target: '_blank', class: "nostyle") %>
+    </li>
+    <li><%= link_to("Edit Group", edit_group_path(@group)) %></li>
+    <li><%= link_to(t('.delete_group'), group_path(@group), method: :delete, confirm: t('.confirm_delete_group')) %></li>
   </ul>
-  <%= link_to(t('.delete_group'), group_path(@group), method: :delete, confirm: t('.confirm_delete_group')) %>
 <% end %>
 
 <div class="controlbar">
