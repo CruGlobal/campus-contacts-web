@@ -47,7 +47,7 @@ class Api::OrganizationsController < ApiController
   end
   
   def build_question_json ( keyword_json, q, active)
-    question_json = {id: q.id, label:q.label, style:q.style, required:q.required};
+    question_json = {id: q.id, label:q.label, style:q.style, kind: q.kind, required:q.required};
     question_json[:object_name] = q.object_name unless q.object_name.nil?
     question_json[:attribute_name] = q.attribute_name unless q.attribute_name.nil?
     question_json[:required] = 0 unless !q.required.nil?
