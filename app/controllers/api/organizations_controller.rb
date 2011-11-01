@@ -22,7 +22,7 @@ class Api::OrganizationsController < ApiController
       org.ancestry.nil? ? json[:ancestry] = [] : json[:ancestry] = org.ancestry.split('/')
       
       # Leaders
-      json[:leaders] = org.leaders.collect{|l| l.to_hash_mini_leader}
+      json[:leaders] = org.leaders.collect{|l| l.to_hash_mini_leader(@organization.id)}
       
       # Keywords and Questions
       json[:keywords] = []
