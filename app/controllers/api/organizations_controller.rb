@@ -27,7 +27,7 @@ class Api::OrganizationsController < ApiController
       # Keywords and Questions
       json[:keywords] = []
       org.keywords.order("keyword").each do |keyword|
-          keyword_json = {keyword:keyword.keyword, questions: [], state: keyword.state}
+          keyword_json = {id: keyword.id, keyword:keyword.keyword, questions: [], state: keyword.state}
           keyword.questions.each do |q|
              build_question_json(keyword_json, q, true)
           end
