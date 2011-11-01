@@ -19,7 +19,7 @@ class Api::OrganizationsController < ApiController
       json = {id:org.id, name:org.name}
       
       # Ancestry
-      org.ancestry.nil? ? json[:ancestry] = [] : json[:ancestry] = org.ancestry.split('/')
+      json[:ancestry] = org.ancestry unless org.ancestry.nil?
       
       # Leaders
       json[:leaders] = org.leaders.collect{|l| l.to_hash_mini_leader(@organization.id)}
