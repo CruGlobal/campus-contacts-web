@@ -446,12 +446,19 @@ class Person < ActiveRecord::Base
     hash
   end
   
-  def to_hash_mini_leader
+  def to_hash_mini_leader(org_id)
     hash = {}
     hash['id'] = self.personID
     hash['name'] = self.to_s.gsub(/\n/," ")
     hash['picture'] = picture unless fb_uid.nil?
     hash['num_contacts'] = assigned_contacts.count
+    hash['organizational_roles'] = []
+    org_roles = organizational_roles.includes(:role, :organization).where("role_id <> #{Role::CONTACT_ID}").where(:organization_id => org_id)
+    org_roles.uniq {|r| r.organization_id}.collect do |r| 
+      if om = organization_memberships.where(organization_id: r.organization_id).first
+        hash['organizational_roles'] << {org_id: r.organization_id, role: r.role.i18n, name: r.organization.name, primary: om.primary? ? 'true' : 'false'}
+      end
+    end.compact
     hash
   end
   

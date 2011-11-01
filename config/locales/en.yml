@@ -9,6 +9,17 @@ en:
     involved: Involved
     leader: Leader
     alumni: Alumni
+    views:
+      organizational_roles: "Organizational Roles"
+      system_roles: "System Roles"
+      create_role: "Create new role"
+      edit_role: "Edit role"
+      delete_role: "Delete role"
+      update: "Update"
+      create: "Create"
+      name: "Name"
+      i18n: "i18n"
+     
   views:
     pagination:
       first: "&laquo; First"
@@ -37,6 +48,7 @@ en:
     all_contacts: 'All Contacts'
     directory: 'Directory'
     keywords: "Surveys"
+    roles: "Roles"
     back_to_dashboard: "Back To My Contacts"
   general:
     keyword: "Keyword"
@@ -67,8 +79,10 @@ en:
       phone: 'Phone'
       email: 'Email'
       year_in_school: 'Year in School'
+      manage_roles: 'Manage Roles'
       send_sms: Send Text
       send_email: Send Email
+      apply_roles: 'Apply Roles'
     show:
       edit_profile: 'Edit Profile'
   sessions:
@@ -437,6 +451,9 @@ en:
 
       full_messages:
         format: "%{attribute} %{message}"
+
+  bulk_sms: Bulk Text
+  bulk_email: Bulk Email
         
   weekly: Weekly
   monthly: Monthly

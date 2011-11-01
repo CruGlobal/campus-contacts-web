@@ -7,7 +7,8 @@ class PeopleController < ApplicationController
   # GET /people.xml
   def index
     fetch_people
-    
+    @roles = Role.default | Role.where(organization_id: current_organization.id)
+     
     # respond_to do |format|
     #   format.html # index.html.erb
     #   format.xml  { render xml: @people }
@@ -180,7 +181,22 @@ class PeopleController < ApplicationController
      
     render :partial => 'all'
   end
-  
+
+  def update_roles
+    role_ids = params[:role_ids].split(',')
+    person_ids = params[:person_ids].split(',')
+
+    person_ids.each do |person_id|
+      organizational_roles = OrganizationalRole.where(person_id: person_id).where(organization_id: current_organization.id).collect { |role| role.role_id }
+ 
+      role_ids.each do |role_id|
+        OrganizationalRole.create!(person_id: person_id, role_id: role_id, organization_id: current_organization.id) unless organizational_roles.include?(role_id.to_i)  
+      end
+    end 
+
+    render :nothing => true 
+  end 
+ 
   protected
   
     def fetch_people

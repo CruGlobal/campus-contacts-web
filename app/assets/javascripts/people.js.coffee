@@ -1,4 +1,7 @@
 $ ->
+  $('#apply_roles_spinner').hide()
+  $("#apply_roles_successful").hide()
+
   if $('#people_controller.confirm_merge input[type=submit]')[0]
     $('#people_controller.confirm_merge input[type=submit]')[0].focus() 
   $('#user_merge_form input.person').observe_field 0.75, ->
@@ -224,3 +227,34 @@ $('#check_all').live 'click', ->
     else
       $('#contacts_table').find('tr:first').remove()
 
+$('#apply_roles').live 'click', -> 
+  role_ids = []
+  person_ids = []
+
+  if $('.role_id_checkbox:checked').length == 0
+    alert("You didn't select any roles to apply.")
+    return false
+  
+  if $('.id_checkbox:checked').length == 0
+    alert("You didn't select any people to update roles.")
+    return false
+
+  $('.role_id_checkbox:checked').each ->
+    role_id = $(this).val()
+    role_ids.push(role_id)    
+
+  $('.id_checkbox:checked').each ->
+    person_id = $(this).val()
+    person_ids.push(person_id)
+
+  $('#apply_roles_spinner').show()
+ 
+  $.ajax
+    type: 'POST',
+    url: '/people/update_roles',
+    data: 'role_ids='+role_ids+'&person_ids='+person_ids,
+    success: (data)->
+      $("#apply_roles_successful").show()
+      $("#apply_roles_successful").html("Roles have been applied.")
+    complete: ->
+      $("#apply_roles_spinner").hide()

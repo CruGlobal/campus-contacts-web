@@ -1,0 +1,20 @@
+<% provide :sidebar do %>
+  <ul class="leftmenu">
+    <li class="selected"><%= link_to(t('roles.views.organizational_roles'), roles_path) %></li>
+  </ul>
+<% end %>
+
+<div class="titlebar">
+  <h1>
+    <%= image_tag("c_directory.png") %>
+    <%= "#{current_organization} - #{t('roles.views.edit_role')}" %>
+  </h1>
+</div>
+
+<div class="pad">  
+  <div>
+    <%= form_for @role, :method => 'put' do |f| %>
+      <%= render :partial => 'form', :locals => { :button_label => t('roles.views.update'), :f => f } %>
+    <% end %>
+  </div>
+</div>

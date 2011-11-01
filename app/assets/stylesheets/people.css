@@ -1,0 +1,66 @@
+#menu li:hover .dropdown_1column {
+  left:44em;
+  top:auto;
+}
+
+#menu #apply_roles_spinner {
+  float: left;
+  margin: 9px 2px 0;
+}
+
+#menu #apply_roles_successful {
+  clear: both;
+  color: #0379AE;
+  font-size: 11px;
+}
+
+#menu .col_1 {
+  display:inline;
+  float: left;
+  margin: 0 5px;
+  position: relative;
+}
+
+#menu .dropdown_1column {
+  background: #F4F4F4;
+  background: -moz-linear-gradient(top, #F4F4F4, #EEEEEE);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F4F4F4), to(#EEEEEE));
+  border:1px solid #777777;
+  float:left;
+  left:-999em; /* Hides the drop down */
+  margin:1px auto;
+  padding:10px 5px 10px 5px;
+  position:absolute;
+  text-align:left;
+  width: 140px;
+  -moz-border-radius: 0px 5px 5px 5px;
+  -webkit-border-radius: 0px 5px 5px 5px;
+  border-radius: 0px 5px 5px 5px;
+}
+
+#menu .greyborder_top {
+  border-top:1px solid #bbb;
+  margin: 10px 8px 0;
+  width: 124px;
+}
+
+#menu .greyborder_top a:hover {
+  background:#ffffff;
+}
+
+#menu a.greybox {
+  background:#F4F4F4;
+  border:1px solid #bbbbbb;
+  float: left;
+  margin:5px 3px;
+  padding:0 8px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+}
+
+#menu li a.greybox:hover {
+  background:#ffffff;
+  border:1px solid #aaaaaa;
+}

@@ -83,6 +83,7 @@ Mh::Application.routes.draw do
       post :bulk_email
       post :bulk_sms      
       get :all
+      post :update_roles
     end
     member do
       get :merge_preview
@@ -93,7 +94,9 @@ Mh::Application.routes.draw do
       end
     end
   end
-  
+ 
+  resources :roles
+ 
   namespace :admin do
     resources :email_templates
     resources :question_sheets do 
