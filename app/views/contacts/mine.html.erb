@@ -1,6 +1,6 @@
 <% provide :sidebar do %>
   <ul class="leftmenu">
-    <li class="<%= 'selected' unless params[:status] == 'completed' %>"><%= link_to(t('contacts.mine.in_progess'), mine_contacts_path) %></li>
+    <li class="<%= 'selected' unless params[:status] == 'completed' %>"><%= link_to(t('contacts.mine.in_progress'), mine_contacts_path) %></li>
     <li class="<%= 'selected' if params[:status] == 'completed' %>"><%= link_to(t('contacts.mine.completed'), mine_contacts_path(status: 'completed')) %></li>
   </ul>
 <% end %>
