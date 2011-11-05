@@ -3,12 +3,6 @@
 # Use this as the base for the locale file of your language.
 
 en:
-  application:
-    add_contact: 
-      add_contact: Add a contact to %{org}
-      survey_mode_instructions: If the person you are adding is standing next to you, click "Enter Survey Mode" from the top right corner of your screen.
-      save_and_close: 'Save and close'
-      save_and_add: 'Save and add another'
   roles: 
     admin: Admin
     contact: Contact
@@ -44,7 +38,7 @@ en:
     survey_mode_tip: "Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts."
     terms: 'Terms and Conditions'
     privacy: 'Privacy Policy'
-    login: "Log In"
+    login: 
     logout: "Sign Out"
     profile: 'My Profile'
     back_to_wizard: "I'm done. Take me back to the Wizard"
