@@ -207,13 +207,9 @@ class Api::ContactsController < ApiController
   end
   
   def show_2
-    @filled_out_question_sheets = {}
     @answer_sheets = {}
     @question_sheets = {}
     @questions = {}
-    @filled_out_org_question_sheets = {}
-    @all_questions = []
-    @all_question_sheet_ids = []
     @people = get_people
     unless @people.empty?
       @people.each do |person|
@@ -222,31 +218,17 @@ class Api::ContactsController < ApiController
         @question_sheets = @organization.question_sheets
         #find all of the answer sheets from this person that belong to this organization
         @answer_sheets[person] = person.answer_sheets.where(question_sheet_id: @question_sheets)
-        #push all of the question sheet ids onto an arroy so we can build the keywords answered by all people in the request
-        @all_question_sheet_ids << @answer_sheets[person].collect(&:question_sheet_id) unless @answer_sheets[person].empty?
         
         #get all of the questions for each person and answer sheet... three dimensional because I need to know
         # the person the answer is for and the answer_sheet
         @answer_sheets[person].each do |as|
           @questions[person][as] = as.question_sheet.questions
-          #push all of the questions onto all_questions so we can print out all of the uniq questions
-          @all_questions << @questions[person][as]
         end
       end
     end
     
-    #flatten and uniquize all of the questions & question_sheet_ids for display
-    @all_questions = @all_questions.flatten(2).uniq
-    @all_question_sheet_ids = @all_question_sheet_ids.flatten(3).uniq
-
-    #get the keywords belonging to the questions sheets that the request people filled out
-    @keywords = QuestionSheet.where(id: @all_question_sheet_ids).collect { |k| k.questionnable}.flatten.uniq
-    @keys = @keywords.collect {|k| {name: k.keyword, keyword_id: k.id, questions: k.questions.collect {|q| q.id}}}
-
     json_output = @api_json_header
-    json_output[:keywords] = @keys
-    json_output[:questions] = @all_questions.collect {|q| q.attributes.slice('id', 'kind', 'label', 'style', 'required')}
-    json_output[:people] = @people.collect {|person| {person: person.to_hash(@organization), form: (@answer_sheets[person].collect {|as| @questions[person][as].collect {|q| {q: q.id, a: q.display_response(as)}}}).flatten(2).uniq}}
+    json_output[:contacts] = @people.collect {|person| {person: person.to_hash(@organization), form: (@answer_sheets[person].collect {|as| @questions[person][as].collect {|q| {q: q.id, a: q.display_response(as)}}}).flatten(2).uniq}}
     
     final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
     render json: final_output
