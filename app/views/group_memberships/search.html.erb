@@ -7,8 +7,8 @@
     <% end %>
   </ul>
   <% if @total > original_total %>
-    <span style="font-size: 11px;">Showing <%= @people.length %> of <%= @total %>, keep typing or 
-    <%= link_to('show all', '#', :class => 'search_show_all_link') %></span><br/>
+    <span style="font-size: 11px;"><%= t('.showing_count', length: @people.length, total: @total) %>
+    <%= link_to(t('.show_all'), '#', :class => 'search_show_all_link') %></span><br/>
   <% end %>
   
 <% else %>
@@ -17,5 +17,5 @@
   </p>
 <% end %>
 
-If the person you are looking for is not already in the system, 
-<%= link_to('Add Them', "/leaders/new?name=#{params[:name]}", :remote => true, :class => 'add_new_person inlinebutton') %>
+<!-- If the person you are looking for is not already in the system, 
+<%= link_to('Add Them', "/leaders/new?name=#{params[:name]}", :remote => true, :class => 'add_new_person inlinebutton') %> -->

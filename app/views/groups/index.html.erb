@@ -1,9 +1,9 @@
 <% provide :sidebar do %>
   <ul class="leftmenu">
     <li class="heading selected">
-      <%# if can? :manage, @organization %>
+      <% if can? :manage, current_organization %>
         <%= link_to(raw(t('.add') + " " + image_tag('add.png')), '#', class: 'add-label listaction') %>
-      <%# end %>
+      <% end %>
       <h3><%= t('.labels') %></h3>
     </li>
     <li>

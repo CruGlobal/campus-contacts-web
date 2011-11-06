@@ -13,7 +13,7 @@
 
 <div class="pad">  
   <div>
-    <%= form_for @role do |f| %>
+    <%= form_for @role, validate: true do |f| %>
       <%= render :partial => 'form', :locals => { :button_label => t('roles.views.create'), :f => f } %>
     <% end %>
   </div>

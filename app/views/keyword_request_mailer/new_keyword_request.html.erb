@@ -1,18 +1,18 @@
 <h1>New SMS Keyword Request</h1>
 <p>
-  Name: <%= @keyword.user %>.<br/>
+  Name: <%= @keyword.user %><br/>
 </p>
 <p>
   Email: <%= @keyword.user.person.email %>.<br/>
+</p>
+<p>
+  Organization: <%= @keyword.organization %>.<br/>
 </p>
 <p>
   Keyword: <%= @keyword.keyword %><br/>
 </p>
 <p>
   Explanation: <br /><%= simple_format @keyword.explanation %><br/>
-</p>
-<p>
-  Chartfield: <%= @keyword.chartfield %><br/>
 </p>
 <!-- <p>
   Click here to respond to the request: <%#= rails_admin_edit_url(model_name: 'sms_keyword', id: @keyword) %>

@@ -25,11 +25,11 @@
           <% if current_organization.keywords.present? %>
             <li class="item smallermenu">
               <% if current_organization.keywords.length == 1 %>
-                <%= link_to("Enter Survey Mode", start_survey_url(current_organization.keywords.first.keyword, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), :class => "tipit", :title => t('nav.survey_mode_tip'))%>
+                <%= link_to(t('nav.enter_survey_mode'), start_survey_url(current_organization.keywords.first.keyword, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), :class => "tipit", :title => t('nav.survey_mode_tip'))%>
               <% else %>
-                <%= link_to("Enter Survey Mode", '#', id: 'survey_keywords_mode_link')%>
+                <%= link_to(t('nav.enter_survey_mode'), '#', id: 'survey_keywords_mode_link')%>
                 <ul style="" class="tipit2" title="<%= t("nav.survey_mode_tip") %>"><% current_organization.keywords.each do |keyword| %>
-                  <li><div style="width:100%; display:inline"><%= link_to("Use Keyword: #{keyword.keyword}", start_survey_url(keyword.keyword, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), id: 'select_keyword')%>
+                  <li><div style="width:100%; display:inline"><%= link_to(t('nav.use_keyword', keyword: keyword.keyword), start_survey_url(keyword.keyword, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), id: 'select_keyword')%>
                     </li>
                   <% end %>
                 </ul>
@@ -37,7 +37,7 @@
             </li>
           <% end %>
         <% end %>
-        <li class="item"><%= link_to('My Profile', person_path(current_person)) %></li>
+        <li class="item"><%= link_to(t('nav.my_profile'), person_path(current_person)) %></li>
         <li class="item">
           <%= link_to(t('nav.logout'), facebook_logout_url)  %> 
         </li>   

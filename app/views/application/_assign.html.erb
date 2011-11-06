@@ -1,23 +1,23 @@
 <div id="assign_search" style="display:none" title="Assign To:">
 
   <div class="explain">
-    <p>You can assign a contact using any of the options below:</p>
+    <p><%= t('.assign_explanation') %></p>
   </div>
 
   <div class="modalfield">
     <%= radio_button_tag :assign_contact_to, current_person.id, true, id: 'assign_to_me', class: 'assign_to_radio' %>
-    <label for="assign_to_me">Me</label>
+    <label for="assign_to_me"><%= t('.me') %></label>
     <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_unassigned', class: 'assign_to_radio' %>
-    <label for="assign_to_unassigned">Unassigned</label>
+    <label for="assign_to_unassigned"><%= t('contacts.index.unassigned') %></label>
     <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_leader', class: 'assign_to_radio' %> 
-    <label for="assign_to_leader">Leader</label>
+    <label for="assign_to_leader"><%= t('leader') %></label>
     <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_org', class: 'assign_to_radio' %> 
     <label for="assign_to_org"><%= current_organization.terminology %></label>
     <%= radio_button_tag :assign_contact_to, 'do_not_contact', false, id: 'assign_to_dnc', class: 'assign_to_radio' %> 
-    <label for="assign_to_dnc">Do Not Contact</label>    
+    <label for="assign_to_dnc"><%= t('contacts.statuses.do_not_contact') %></label>    
   </div>
   <div class="leader_search modalresults" style="display:none">
-    <p style="margin: 0 0 5px 0;">Type to find a leader then click on the leader's name</p>
+    <p style="margin: 0 0 5px 0;"><%= t('.type_to_find_leader') %></p>
     <%= text_field_tag :leader_name, '', class: 'leader_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>
     <div class="leaders_list">
       <ul>
@@ -28,7 +28,7 @@
     </div>
   </div>
   <div class="org_search modalresults" style="display:none">
-    <p style="margin: 0 0 5px 0;">Type to find a <%= current_organization.terminology %> then click on the <%= current_organization.terminology %>'s name</p>
+    <p style="margin: 0 0 5px 0;"><%= t('.type_to_find_org', terminology: current_organization.terminology) %></p>
     <%= text_field_tag :org_name, '', class: 'org_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>
     <%= spinner('org_search') %>
     <div class="orgs_list" data-org-id="<%= current_organization.id %>">

@@ -1,24 +1,24 @@
 <% provide :sidebar do %>
   <ul class="leftmenu">
-    <li class="selected"><a href="/sms_keywords">Keywords</a></li>
+    <li class="selected"><a href="/sms_keywords"><%= t('.keywords') %></a></li>
     <li><%= link_to("Request Keyword", new_sms_keyword_path) %></li>
 <% end %>
 <div class="titlebar">
-  <h1><%= t('keywords.edit.heading') %></h1>
+  <h1><%= t('.heading') %></h1>
 </div>
 
 <div class="pagemenu">
   <ul class="pillmenu">
-    <li><%= link_to 'Back', :back %></li>
+    <li><%= link_to t('general.back'), :back %></li>
   </ul>
 </div>
 
 <div class="contentpad">
   <p class="inlinehelp" style="margin-bottom: 1em;">
     <% if @sms_keyword.gateway == 'twilio' %>
-      To begin your survey, <strong>text <%= @sms_keyword.keyword %> to <%= SmsKeyword::SHORT %>.</strong>
+      <%= t('.to_begin_survey_html', keyword: @sms_keyword.keyword, number: SmsKeyword::SHORT) %>
     <% else %>
-      To begin your survey, <strong>text <%= @sms_keyword.keyword %> to <%= SmsKeyword::MOONSHADO_SHORT %>.</strong>
+      <%= t('.to_begin_survey_html', keyword: @sms_keyword.keyword, number: SmsKeyword::MOONSHADO_SHORT) %>
     <% end %>
   </p>
   

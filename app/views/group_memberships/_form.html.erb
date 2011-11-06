@@ -1,14 +1,16 @@
-<div id="member_search" title="<%= t('.add_a_member') %>" style="display:none">
+<span id="add_member_prompt" style="display:none"><%= t('.add_a_member') %></span>
+<span id="add_leader_prompt" style="display:none"><%= t('.add_a_leader') %></span>
+<div id="member_search" title="" style="display:none">
 
   <div class="explain">
     <!-- <h3>This group needs some members.</h3> -->
-    <p><%= t('.start_typing') %>:</p>
+    <p><%= t('.start_typing') %></p>
   </div>
   
   <%= form_tag search_group_group_memberships_path(@group), :id => 'member_search_form', :onsubmit => 'return false;' do %>
     <%= hidden_field_tag :show_all %>
     <%= hidden_field_tag :role %>
-    <%= text_field_tag :name, '', :id => 'member_search_name', :autocomplete => 'off', :placeholder => 'Enter a name here' %>
+    <%= text_field_tag :name, '', :id => 'member_search_name', :autocomplete => 'off' %>
     <%= spinner('member_search') %>
   <% end %>
   

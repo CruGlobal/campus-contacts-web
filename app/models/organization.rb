@@ -3,6 +3,7 @@ class Organization < ActiveRecord::Base
     
   has_ancestry
   belongs_to :importable, polymorphic: true
+  has_many :roles, inverse_of: :organization
   has_many :group_labels
   has_many :activities, dependent: :destroy
   has_many :target_areas, through: :activities

@@ -7,5 +7,5 @@
   <td class="email"><%= mail_to(person.email) if person.email.present? %></td>
   <td class="phone_number"><%= person.pretty_phone_number %></td>
   <td><%= t(group_membership.role) %></td>
-  <td class="controls"><%= link_to("Delete", group_group_membership_path(@group, group_membership), :method => :delete, :remote => true, :class => "icon delete", :confirm => t('.remove_confirm', name: person)) %></td>
+  <td class="controls"><%= link_to(t('general.delete'), group_group_membership_path(@group, group_membership), :method => :delete, :remote => true, :class => "icon delete", :confirm => t('.remove_confirm', name: person)) %></td>
 </tr>

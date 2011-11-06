@@ -31,6 +31,7 @@ module Mh
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
      config.i18n.locale = :"en"
      config.i18n.default_locale = :"en"
+     config.i18n.fallbacks = true
 
     # Please note that JavaScript expansions are *ignored altogether* if the asset
     # pipeline is enabled (see config.assets.enabled below). Put your defaults in

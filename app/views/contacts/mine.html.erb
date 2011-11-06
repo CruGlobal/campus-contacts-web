@@ -6,7 +6,7 @@
 <% end %>
 
 <div class="titlebar">
-  <h1><%= image_tag("contact.png") %>My Contacts</h1>
+  <h1><%= image_tag("contact.png") %><%= t('.my_contacts') %></h1>
 </div>
 
 <%= form_for ContactAssignment.new do |f| %>
@@ -18,9 +18,8 @@
       <li><%= check_box_tag 'check_all' %></li>
     </ul>
     <ul class="pillmenu">
-      <li><%= link_to("Assign", "", id: 'assign_button', class: 'assign') %></li>
-      <li><%= link_to("Unassign", "", id: 'bulk_unassign') %></li>
-      <li><%= link_to("Add Contact", "", class: 'add_contact') %></li>
+      <li><%= link_to(t('contacts.assign'), "", id: 'assign_button', class: 'assign') %></li>
+      <li><%= link_to(t('contacts.add_contact'), "", class: 'add_contact') %></li>
     </ul>
     <!-- <ul class="pillmenu">
       <li><%= link_to("Show", "") %></li>
@@ -44,7 +43,7 @@
   </table>
   <% if @people.blank? %>
     <div class="contentpad no_contacts">
-        Sorry, there are no contacts here.
+      <%= t('contacts.index.no_contacts') %>
     </div>
   <% end %>
   <%= render 'assign' %>

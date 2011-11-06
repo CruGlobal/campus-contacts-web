@@ -4,7 +4,8 @@ class Role < ActiveRecord::Base
   scope :default, where(organization_id: 0)
   scope :leaders, where(i18n: %w[leader admin])
 
-  validates :i18n, :presence => true, :uniqueness => true
+  validates :i18n, uniqueness: true, allow_nil: true
+  validates :name, presence: true
  
   def self.leader_ids
     self.leaders.collect(&:id)

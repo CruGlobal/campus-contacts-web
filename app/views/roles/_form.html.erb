@@ -1,7 +1,5 @@
 <% if @role.errors.any? %>
   <div id="error_explanation">
-    <h2><%= pluralize(@role.errors.count, "error") %> prohibited this role from being saved:</h2>
-
     <ul>
       <% @role.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
@@ -14,10 +12,6 @@
   <tr>
     <td class="left"><%= t('roles.name') %>:</td>
     <td><%= f.text_field :name %></td>
-  </tr>
-  <tr>
-    <td class="left"><%= t('roles.i18n') %>:</td>
-    <td><%= f.text_field :i18n %></td>
   </tr>
 </table>
 

@@ -5,10 +5,10 @@
 <div id="roundwrap">
 
   <h1 class="headlinetext">
-    An online <span class="babyblue">follow-up system</span> with your audience in mind.
+    <%= t('.headline_html') %>
   </h1>
   <h4 class="subheadlinetext">
-    Students text to connect. You empower follow-up from the web or a smart phone.
+    <%= t('.subheadline_html') %>
   </h4>
   
   <div class="splashbanner">
@@ -20,7 +20,7 @@
   </div>
 
   <div class="salespush">
-    Get the Details & <a href="/welcome/tour" class="learnmore">Learn More</a> or <%= link_to("Get Started", new_user_session_path, :class => "getstartedbt") %>
+    <%= t('.get_details_html', link: link_to(t('.get_started'), new_user_session_path, :class => "getstartedbt")) %> 
   </div>
 
 </div>

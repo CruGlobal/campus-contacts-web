@@ -36,10 +36,12 @@ $ ->
       
   $("a.add-member").live 'click', ->
     $('#role').val('member')
+    $('#member_search').attr('title', $('#add_member_prompt').text())
     $.fn.showSearchBox()
     
   $("a.add-leader").live 'click', ->
     $('#role').val('leader')
+    $('#member_search').attr('title', $('#add_leader_prompt').text())
     $.fn.showSearchBox()
     
   $('#member_search_name').autocomplete

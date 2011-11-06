@@ -4,7 +4,7 @@
   </ul>
 <% end %>
 <div class="controlbar">
-  <%= link_to("Back to profile", '/contacts/mine', :class=>"backto") %>
+  <%= link_to(t('.back'), '/contacts/mine', :class=>"backto") %>
 </div>
 <div class="titlebar">
   <h1>
@@ -31,14 +31,14 @@
         <div class="flash error"><%= raw flash[:error] %></div>
       <% end %>
       
-      <h2 class="form_section">Basic Information</h2>
+      <h2 class="form_section"><%= t('.basic_information') %></h2>
       <%= render 'people/person_form', person: @person %>
       
       <br/>
       <hr/>
       
       <div class="user_defined_contact_fields">   
-        <h2 class="form_section">Additional Information</h2>       
+        <h2 class="form_section"><%= t('.additional_information') %></h2>       
         <% current_organization.question_sheets.flatten.uniq.each do |qs| %>
           <% answer_sheet = @person.answer_sheets.detect {|as| qs.id == as.question_sheet_id} %>
           <% qs.questions.each do |question| %>
@@ -53,8 +53,8 @@
         <% end %>
       </div>
       <div class="formactions">
-        <%= submit_tag 'Save' %>
-        <%= link_to("Cancel and go back to profile", "", :class => "cancel")%>
+        <%= submit_tag t('general.save') %>
+        <%= link_to(t('.cancel'), contact_path(@contact), :class => "cancel")%>
       </div>
     <% end %>
   </div>

@@ -2,12 +2,12 @@
   <%= form_tag "" do %>
     <%= hidden_field_tag :to %>
     <div class="field_in">
-      <label>To:</label>
+      <label><%= t('general.to') %></label>
       <div class="in"><ul class="to_list clearfix"><div class="clear"></div></ul></div>
     </div>
     
     <div class="field_in subject">
-      <label>Subject:</label> 
+      <label><%= t('general.subject') %></label> 
       <div class="in"><%= text_field_tag :subject %></div>
     </div>
     <div class="field">

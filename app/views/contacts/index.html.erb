@@ -28,9 +28,9 @@
 
 <div class="pagemenu">
   <ul class="pillmenu">
-    <li><%= link_to("Assign", "", class: 'assign') %></li>
-    <li><%= link_to("Unassign", "", id: 'bulk_unassign') %></li>
-    <li><%= link_to("Add Contact", "", class: 'add_contact') %></li>
+    <li><%= link_to(t('contacts.assign'), "", class: 'assign') %></li>
+    <li><%= link_to(t('contacts.unassign'), "", id: 'bulk_unassign') %></li>
+    <li><%= link_to(t('contacts.add_contact'), "", class: 'add_contact') %></li>
   </ul>
   
   <ul class="pillmenu">
@@ -104,8 +104,8 @@
       <% end %>
       </div>
       <div class="actionbarinline">
-        <%= submit_tag 'Search' %>
-        <%= link_to 'Clear Search Form', '', onclick: "$(this).closest('form')[0].reset(); return false;" %>
+        <%= submit_tag t('general.search') %>
+        <%= link_to t('.clear_search_form'), '', onclick: "$(this).closest('form')[0].reset(); return false;" %>
       </div>
     <% end %>
   </div>
