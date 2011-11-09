@@ -1,0 +1,9 @@
+<%= semantic_form_for [:admin, @organization] do |f| %>
+  <%= hidden_field_tag 'organization[person_id]', current_person.id %>
+  <%= f.inputs "" do %>
+    <%= f.input :name %>
+    <%= f.input :terminology %>
+    <%= f.input :show_sub_orgs %>
+  <% end %>
+  <%= f.buttons %>
+<% end %>

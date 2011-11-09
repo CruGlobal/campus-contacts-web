@@ -102,14 +102,15 @@ class ContactsController < ApplicationController
     @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? params[:q][:s] : ['lastName, firstName']).group('ministry_person.personID')
     @all_people = @people
     @people = @people.page(params[:page])
-    @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, role_id: Role::CONTACT_ID, person_id: @people.collect(&:id)).map {|r| [r.person_id, r]}]
     
     respond_to do |wants|
       wants.html do
+        @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, role_id: Role::CONTACT_ID, person_id: @people.collect(&:id)).map {|r| [r.person_id, r]}]
         @assignments = ContactAssignment.includes(:assigned_to).where(person_id: @people.collect(&:id), organization_id: @organization.id).group_by(&:person_id)
         @answers = generate_answers(@people, @organization, @questions)
       end
       wants.csv do
+        @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, role_id: Role::CONTACT_ID, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r]}]
         @all_answers = generate_answers(@all_people, @organization, @questions)
         out = ""
         CSV.generate(out) do |rows|

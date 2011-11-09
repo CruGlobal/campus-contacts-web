@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111028194831) do
+ActiveRecord::Schema.define(:version => 20111110195907) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -4430,10 +4430,12 @@ ActiveRecord::Schema.define(:version => 20111028194831) do
     t.boolean  "primary",      :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "carrier"
+    t.string   "carrier_name"
     t.string   "txt_to_email"
+    t.integer  "carrier_id"
   end
 
+  add_index "phone_numbers", ["carrier_id"], :name => "index_phone_numbers_on_carrier_id"
   add_index "phone_numbers", ["person_id", "number"], :name => "index_phone_numbers_on_person_id_and_number", :unique => true
 
   create_table "plugin_schema_info", :id => false, :force => true do |t|
