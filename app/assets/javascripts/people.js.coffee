@@ -258,14 +258,17 @@ $('#apply_roles').live 'click', ->
 
   $(checked_elements).each ->
     person = $(this)
+    person_id = person.val()
  
     $.ajax
       type: 'POST',
       url: '/people/update_roles',
-      data: 'role_ids='+role_ids+'&person_id='+person.val(),
+      data: 'role_ids='+role_ids+'&person_id='+person_id,
+      success: (data) ->
+        roles_user = "#roles_user_" + person_id
+        $(roles_user).html data
       complete: ->
         if checked_elements.last().val() == person.val()
-          console.log "KARREN" 
           $("#apply_roles_spinner").hide()
           $("#apply_roles_successful").show()
           $("#apply_roles_successful").html("Roles have been applied.")
