@@ -172,6 +172,8 @@ Mh::Application.routes.draw do
       resources :friends
       get 'contacts/search' => 'contacts#search'
       resources :contacts
+      get "contact_assignments/list_leaders" => "contact_assignments#list_leaders"
+      get "contact_assignments/list_organizations" => "contact_assignments#list_organizations"
       resources :contact_assignments
       resources :followup_comments
       resources :roles

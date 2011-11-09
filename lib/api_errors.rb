@@ -121,4 +121,9 @@ module ApiErrors
       super :roles_permissions_error, "You do not have the appropriate permissions to change roles.","39", "Message"
     end
   end
+  class ContactAssignmentStateError < ApiError
+    def initialize
+      super :contact_assignment_state_error, "The contact was no longer assigned to the expected person or organization.", "40", "API Error"
+    end
+  end
 end
