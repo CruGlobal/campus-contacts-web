@@ -8,7 +8,8 @@ class SmsKeyword < ActiveRecord::Base
   enforce_schema_rules  
   
   belongs_to :user
-  has_many :question_sheets, as: :questionnable
+  belongs_to :survey
+  has_many :question_sheets, through: :survey
   has_many :questions, :through => :question_sheets, :order => 'mh_page_elements.position'
   has_many :archived_questions, :through => :question_sheets
   
@@ -25,7 +26,7 @@ class SmsKeyword < ActiveRecord::Base
     state :inactive
     
     event :approve do
-      transition :requested => :active
+      transition [:denied, :requested] => :active
     end
     after_transition :on => :approve, :do => :notify_user
     
@@ -37,6 +38,10 @@ class SmsKeyword < ActiveRecord::Base
     event :disable do
       transition any => :inactive
     end
+    
+    event :activate do
+      transition :inactive => :active
+    end
   end
   
   @queue = :general
@@ -44,10 +49,6 @@ class SmsKeyword < ActiveRecord::Base
   
   def to_s
     keyword
-  end
-  
-  def question_sheet
-    @question_sheet ||= question_sheets.last || question_sheets.create!(label: "Keyword #{id}")
   end
   
   def notify_admin_of_request

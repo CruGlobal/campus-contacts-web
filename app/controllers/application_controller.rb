@@ -150,17 +150,19 @@ class ApplicationController < ActionController::Base
   helper_method :current_organization
   
   # Fake login
-  # def authenticate_user!
-  #   true
-  # end
-  # 
-  # def user_signed_in?
-  #   true
-  # end
-  # 
-  # def current_user
-  #   @current_user ||= User.find(42655)
-  # end
+  def authenticate_user!
+    true
+  end
+  
+  def user_signed_in?
+    true
+  end
+  
+  def current_user
+    @current_user ||= User.find(42655)
+    session[:user_id] = @current_user.id
+    @current_user
+  end
   
   def unassigned_people(organization)
     @unassigned_people ||= organization.unassigned_people

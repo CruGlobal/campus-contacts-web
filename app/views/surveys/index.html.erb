@@ -1,9 +1,58 @@
-<% provide :title, t('.pick_keyword') %>
-<h1>Click on a keyword to complete a survey</h1>
-<ul>
-  <% @keywords.each do |keyword| %>
-    <li>
-      <%= link_to(keyword.keyword, start_survey_url(keyword.keyword, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port'])) %>
-    </li>
+<% if mhub? %>
+  <% provide :title, t('.pick_keyword') %>
+  <h1>Click on a keyword to complete a survey</h1>
+  <ul>
+    <% @keywords.each do |keyword| %>
+      <li>
+        <%= link_to(keyword.keyword, start_survey_url(keyword.keyword, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port'])) %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+
+  <% provide :sidebar do %>
+    <%= render 'surveys/survey_menu' %>
   <% end %>
-</ul>
+
+  <% if can? :manage, QuestionSheet %>
+    <div class="titlebar">
+      <h1><%= image_tag("c_survey.png") %><%= t('nav.surveys') %></h1>
+    </div>
+    <div class="pagemenu">
+      <ul class="pillmenu">
+        <li>
+          <%= link_to(t(".new"), new_survey_path) %>
+        </li>
+      </ul>
+    </div>
+  
+  
+  
+    <table class="listing keywordtable" cellpadding="0" cellspacing="0">
+      <tr>
+        <th class="check"></th>
+        <th><%= t("general.survey") %> <%= tip(t('welcome.index.request_key_help')) %></th>
+        <% if current_organization.show_sub_orgs? %>
+          <th><%= t("keywords.index.association") %> <%= tip(t('sms_keywords.index.association_help')) %></th>
+        <% end %>
+        <th class="controls">&nbsp;</th>
+      </tr>
+      <% @surveys.each do |survey| %>
+        <tr>
+          <td class="checkbox"></td>
+          <td><%= survey %></td>
+          <% if current_organization.show_sub_orgs? %>
+            <td><%= survey.organization %></td>
+          <% end %>
+          <td class="controls">
+            <%= link_to t("welcome.home.manage_questions"), edit_survey_path(survey) %>
+            <%= link_to t("welcome.home.delete"), survey_path(survey), method: :delete, confirm: t('.delete_confirm'), :class => "icon delete tipit", :title => "Delete survey" %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+    <div class="contentpad">
+    
+    </div>
+  <% end %>
+<% end %>

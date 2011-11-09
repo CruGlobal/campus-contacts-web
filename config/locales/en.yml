@@ -61,7 +61,8 @@ en:
     my_contacts: 'My Contacts'
     all_contacts: 'All Contacts'
     directory: 'Directory'
-    keywords: "Surveys"
+    surveys: "Surveys"
+    keywords: "Keywords"
     roles: "Roles"
     back_to_dashboard: "Back To My Contacts"
   general:
@@ -127,7 +128,7 @@ en:
     new:
       login_paragraph_html:
         To get started, you'll need to have a Facebook account. <br/>
-        Click the login link to the left and <strong>allow</strong> MHub to access your information. <br/>
+        Click the login link to the left and <strong>allow</strong> MissionHub to access your information. <br/>
         You'll be taken to the wizard if this is your first time accessing MissionHub.
       login_paragraph_mhub: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
       instructions: Instructions
@@ -179,7 +180,8 @@ en:
       skip_step: "Skip this step"
     home:
       title_top: "Welcome to MissionHub!"
-      keywords: "Surveys"
+      surveys: "Surveys"
+      keywords: "Keywords"
       manage_questions: "Manage Survey Questions"
       edit_keyword: 'Edit Keyword'
       your_orgs: 'Your Organizational Involvements'
@@ -190,6 +192,10 @@ en:
         one:   '1 Person to Follow-up'
         other: '%{count} People to Follow-up'
       delete: "Delete"
+  surveys:
+    index: 
+      confirm_delete: "Are you sure you want to delete this keyword?"
+      new: 'New Survey'
   sms_keywords:
     index:
       association: Associate Contacts With
