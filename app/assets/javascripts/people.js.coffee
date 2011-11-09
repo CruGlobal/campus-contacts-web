@@ -228,9 +228,18 @@ $('#check_all').live 'click', ->
     else
       $('#contacts_table').find('tr:first').remove()
 
+$('#roles_menu_div').live 'click', ->
+  role_div = $(this).parent().find('.dropdown_1column')
+
+  if $(role_div).attr('style')
+    role_div.attr('style', '')
+    $(this).attr('style', '')
+  else
+    role_div.css('left', '44.8em')
+    $(this).attr('style', 'background: url("/assets/pillbg_over.png") repeat-x')
+   
 $('#apply_roles').live 'click', -> 
   role_ids = []
-  person_ids = []
 
   if $('.role_id_checkbox:checked').length == 0
     alert("You didn't select any roles to apply.")
@@ -244,21 +253,22 @@ $('#apply_roles').live 'click', ->
     role_id = $(this).val()
     role_ids.push(role_id)    
 
-  $('.id_checkbox:checked').each ->
-    person_id = $(this).val()
-    person_ids.push(person_id)
-
   $('#apply_roles_spinner').show()
+  checked_elements = $('.id_checkbox:checked')
+
+  $(checked_elements).each ->
+    person = $(this)
  
-  $.ajax
-    type: 'POST',
-    url: '/people/update_roles',
-    data: 'role_ids='+role_ids+'&person_ids='+person_ids,
-    success: (data)->
-      $("#apply_roles_successful").show()
-      $("#apply_roles_successful").html("Roles have been applied.")
-    complete: ->
-      $("#apply_roles_spinner").hide()
+    $.ajax
+      type: 'POST',
+      url: '/people/update_roles',
+      data: 'role_ids='+role_ids+'&person_id='+person.val(),
+      complete: ->
+        if checked_elements.last().val() == person.val()
+          console.log "KARREN" 
+          $("#apply_roles_spinner").hide()
+          $("#apply_roles_successful").show()
+          $("#apply_roles_successful").html("Roles have been applied.")
 
 $('.id_checkbox').live 'click', ->
   mark_as_checked = $(this).is ':checked'

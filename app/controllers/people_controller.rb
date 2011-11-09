@@ -189,17 +189,14 @@ class PeopleController < ApplicationController
   end
 
   def update_roles
-Rails.logger.info "\n\nPARAMS: #{params.inspect} \n\n"
-#    role_ids = params[:role_ids].split(',')
-#    person_ids = params[:person_ids].split(',')
+    role_ids = params[:role_ids].split(',')
+    person = Person.find(params[:person_id])
+    organizational_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.id }
+    OrganizationalRole.delete(organizational_roles)
 
-#    person_ids.each do |person_id|
-#      organizational_roles = OrganizationalRole.where(person_id: person_id).where(organization_id: current_organization.id).collect { |role| role.role_id }
- 
-#      role_ids.each do |role_id|
-#        OrganizationalRole.create!(person_id: person_id, role_id: role_id, organization_id: current_organization.id) unless organizational_roles.include?(role_id.to_i)  
-#      end
-#    end 
+    role_ids.each do |role_id|
+       OrganizationalRole.create!(person_id: person.id, role_id: role_id, organization_id: current_organization.id) 
+    end
 
     render :nothing => true 
   end 
