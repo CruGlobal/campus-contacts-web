@@ -239,45 +239,31 @@ $('#roles_menu_div').live 'click', ->
     $(this).attr('style', 'background: url("/assets/pillbg_over.png") repeat-x')
    
 $('#apply_roles').live 'click', -> 
-  role_ids = []
+  return false if check_selected_roles() == 0
+  return false if check_selected_people() == 0
+  update_persons_roles()
 
-  if $('.role_id_checkbox:checked').length == 0
-    alert("You didn't select any roles to apply.")
-    return false
-  
-  if $('.id_checkbox:checked').length == 0
-    alert("You didn't select any people to update roles.")
-    return false
-
-  $('.role_id_checkbox:checked').each ->
-    role_id = $(this).val()
-    role_ids.push(role_id)    
-
-  $('#apply_roles_spinner').show()
-  checked_elements = $('.id_checkbox:checked')
-
-  $(checked_elements).each ->
-    person = $(this)
-    person_id = person.val()
- 
-    $.ajax
-      type: 'POST',
-      url: '/people/update_roles',
-      data: 'role_ids='+role_ids+'&person_id='+person_id,
-      success: (data) ->
-        roles_user = "#roles_user_" + person_id
-        $(roles_user).html data
-      complete: ->
-        if checked_elements.last().val() == person.val()
-          $("#apply_roles_spinner").hide()
-          $("#apply_roles_successful").show()
-          $("#apply_roles_successful").html("Roles have been applied.")
-
+$('.role_link_checkbox').live 'click', ->
+  return false if check_selected_people() == 0
+  role_checkbox = $(this).parent().find('input')
+  update_checkbox_checkmark(role_checkbox)
+  update_persons_roles()
+   
 $('.id_checkbox').live 'click', ->
   mark_as_checked = $(this).is ':checked'
   role_labels = get_role_labels($(this))
   change_role_checkboxes(role_labels, mark_as_checked)
   change_all_role_checkboxes(true) if !mark_as_checked  
+
+check_selected_people = () ->
+  checked = $('.id_checkbox:checked').length
+  alert("You didn't select any people to update roles.") if checked == 0
+  checked
+
+check_selected_roles = () ->
+  checked =  $('.role_id_checkbox:checked').length 
+  alert("You didn't select any roles to apply.") if checked == 0
+  checked
 
 get_role_labels = (obj) ->   
   firstname_div = $(obj).parent().next()
@@ -294,3 +280,37 @@ change_all_role_checkboxes = (check) ->
   $('input.id_checkbox:checked').each ->
     role_labels = get_role_labels($(this))
     change_role_checkboxes(role_labels, check) 
+
+update_checkbox_checkmark = (role_checkbox) ->
+  if role_checkbox.is ':checked'
+    role_checkbox.attr checked: false
+  else
+    role_checkbox.attr checked: true
+
+update_persons_roles = () ->
+  role_ids = []
+
+  $('#apply_roles_spinner').show()
+  $("#apply_roles_successful").hide()
+
+  $('.role_id_checkbox:checked').each ->
+    role_id = $(this).val()
+    role_ids.push(role_id)    
+
+  checked_elements = $('.id_checkbox:checked')
+
+  checked_elements.each ->
+    person_id = $(this).val()
+ 
+    $.ajax
+      type: 'POST',
+      url: '/people/update_roles',
+      data: 'role_ids='+role_ids+'&person_id='+person_id,
+      success: (data) ->
+        roles_user = "#roles_user_" + person_id
+        $(roles_user).html data
+      complete: ->
+        if checked_elements.last().val() == person_id
+          $("#apply_roles_spinner").hide()
+          $("#apply_roles_successful").show()
+          $("#apply_roles_successful").html("Roles have been applied.")

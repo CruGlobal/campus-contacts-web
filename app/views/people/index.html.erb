@@ -25,8 +25,11 @@
       <div class="dropdown_1column">
         <div class="col_1">
           <%- @roles.each do |role| %>
-            <div>
-              <%= check_box_tag 'role_ids[]', role.id, false, id: "role_ids_#{role.id}", class: 'role_id_checkbox' %> <%= role %>
+            <div class="role_div_checkbox">
+              <span>
+                <%= check_box_tag 'role_ids[]', role.id, false, id: "role_ids_#{role.id}", class: 'role_id_checkbox' %> 
+                <span class="role_link_checkbox"><%= role %></span>
+              </span>
             </div>
           <% end %>
      
