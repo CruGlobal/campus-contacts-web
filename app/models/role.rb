@@ -1,5 +1,7 @@
 class Role < ActiveRecord::Base
+  has_many :people, through: :organizational_roles
   has_many :organizational_roles, inverse_of: :role
+  belongs_to :organization, inverse_of: :roles
   belongs_to :organization, inverse_of: :roles
   scope :default, where(organization_id: 0)
   scope :leaders, where(i18n: %w[leader admin])

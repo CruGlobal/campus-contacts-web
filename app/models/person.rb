@@ -26,6 +26,7 @@ class Person < ActiveRecord::Base
   has_many :organization_memberships, inverse_of: :person
   has_many :organizational_roles
   has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role::CONTACT_ID}", uniq: true
+  has_many :roles, through: :organizational_roles
   
   has_many :followup_comments, :class_name => "FollowupComment", :foreign_key => "commenter_id"
   has_many :comments_on_me, :class_name => "FollowupComment", :foreign_key => "contact_id"
@@ -599,5 +600,9 @@ class Person < ActiveRecord::Base
 
   def friends_and_leaders(organization)
     Friend.followers(self) & organization.leaders.collect(&:fb_uid).collect(&:to_s)
+  end
+
+  def assigned_organizational_roles(organizations)
+    roles.where('organizational_roles.organization_id' => organizations)
   end
 end

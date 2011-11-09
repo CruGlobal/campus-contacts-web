@@ -204,7 +204,6 @@ $('#send_bulksms_link').live 'click', ->
         $(this).dialog('destroy')
   false        
   
-  
 $('#bulk_send_dialog form').live 'submit', ->
   false
 
@@ -214,8 +213,10 @@ $('#check_all').live 'click', ->
     return false
     
   checked = $(this).prop('checked')
+  change_all_role_checkboxes(false) if !checked
   params = $(this).attr('data-params')  
   $('input.id_checkbox').prop('checked', checked)  
+  change_all_role_checkboxes(true) if checked
   
   /* only show option to select more if there are more than 1 page */
   if $('.pagination').length
@@ -258,3 +259,25 @@ $('#apply_roles').live 'click', ->
       $("#apply_roles_successful").html("Roles have been applied.")
     complete: ->
       $("#apply_roles_spinner").hide()
+
+$('.id_checkbox').live 'click', ->
+  mark_as_checked = $(this).is ':checked'
+  role_labels = get_role_labels($(this))
+  change_role_checkboxes(role_labels, mark_as_checked)
+  change_all_role_checkboxes(true) if !mark_as_checked  
+
+get_role_labels = (obj) ->   
+  firstname_div = $(obj).parent().next()
+  role_labels = $(firstname_div).find('span.role_label')
+  role_labels
+
+change_role_checkboxes = (role_labels, check) ->
+  role_labels.each ->
+    role = $(this).attr('id').split('_')
+    checkbox = '#role_ids_' + role[1] 
+    $(checkbox).attr checked: check 
+
+change_all_role_checkboxes = (check) ->
+  $('input.id_checkbox:checked').each ->
+    role_labels = get_role_labels($(this))
+    change_role_checkboxes(role_labels, check) 

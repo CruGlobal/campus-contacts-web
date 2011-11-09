@@ -7,8 +7,14 @@ class PeopleController < ApplicationController
   # GET /people.xml
   def index
     fetch_people
-    @roles = Role.default | Role.where(organization_id: current_organization.id)
-     
+  
+    @allowed_organizations = case params[:subs]
+    when 'true' then current_organization.self_and_children_ids
+    else current_organization.id
+    end
+
+    @roles = Role.default | Role.where(:organization_id => @allowed_organizations)
+
     # respond_to do |format|
     #   format.html # index.html.erb
     #   format.xml  { render xml: @people }
@@ -183,16 +189,17 @@ class PeopleController < ApplicationController
   end
 
   def update_roles
-    role_ids = params[:role_ids].split(',')
-    person_ids = params[:person_ids].split(',')
+Rails.logger.info "\n\nPARAMS: #{params.inspect} \n\n"
+#    role_ids = params[:role_ids].split(',')
+#    person_ids = params[:person_ids].split(',')
 
-    person_ids.each do |person_id|
-      organizational_roles = OrganizationalRole.where(person_id: person_id).where(organization_id: current_organization.id).collect { |role| role.role_id }
+#    person_ids.each do |person_id|
+#      organizational_roles = OrganizationalRole.where(person_id: person_id).where(organization_id: current_organization.id).collect { |role| role.role_id }
  
-      role_ids.each do |role_id|
-        OrganizationalRole.create!(person_id: person_id, role_id: role_id, organization_id: current_organization.id) unless organizational_roles.include?(role_id.to_i)  
-      end
-    end 
+#      role_ids.each do |role_id|
+#        OrganizationalRole.create!(person_id: person_id, role_id: role_id, organization_id: current_organization.id) unless organizational_roles.include?(role_id.to_i)  
+#      end
+#    end 
 
     render :nothing => true 
   end 
@@ -207,7 +214,7 @@ class PeopleController < ApplicationController
       @q = @q.search(params[:q])
       @q.sorts = ['lastName asc', 'firstName asc'] if @q.sorts.empty?
       @all_people = @q.result(distinct: true)
-     @people = @all_people.page(params[:page])
+      @people = @all_people.page(params[:page])
     end
     
     def authorize_read

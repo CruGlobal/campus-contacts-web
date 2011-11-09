@@ -61,7 +61,12 @@
           <%#= image_tag('grippy.png', class: 'handle') %>
           <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
         </td>
-        <td class="first_name"><%= person.firstName %></td>
+        <td class="first_name">
+          <% person.assigned_organizational_roles(@allowed_organizations).each do |role| %>
+            <span id="<%= person.id%>_<%= role.id %>" class="role_label role_<%= role.id %>"><%= role.i18n %></span>
+          <% end %>
+          <%= person.firstName %>
+        </td>
         <td class="last_name"><%= person.lastName %></td>
         <td><%= person.gender.to_s.titleize %></td>
         <td class="email"><%= mail_to(person.email) %></td>
