@@ -15,4 +15,7 @@
 //= require people.js.coffee
 //= require jquery.notifications-1.1
 //= require jquery.simplyCountable.js
+//= require touch-scroll.min.js
 //= require nicEditMinimal.js
+//= require groups
+//= require group_labels

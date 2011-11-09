@@ -1,6 +1,6 @@
   <div class="explain">
-    <p>Add a contact to <%= current_organization %></p>
-    <p>If the person you are adding is standing next to you, click "Enter Survey Mode" from the top right corner of your screen.</p>
+    <p><%= t('.add_contact', org: current_organization) %></p>
+    <p><%= t('.survey_mode_instructions') %></p>
   </div>
 
   <div id="add_contact_form">
@@ -27,8 +27,8 @@
         <% end %>
       </div>
 
-      <%= submit_tag 'Save and close', class: 'save_and_close save' %>
-      <%= submit_tag 'Save and add another', class: 'save_and_more save' %>
+      <%= submit_tag t('.save_and_close'), class: 'save_and_close save' %>
+      <%= submit_tag t('.save_and_add'), class: 'save_and_more save' %>
     <% end %>
     
     <%# if current_organization.keywords.length > 0 %>

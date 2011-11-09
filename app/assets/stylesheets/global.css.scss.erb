@@ -68,11 +68,16 @@ img {
 	border: none;
 }
 
-
+.controlbar {
+  padding: 15px 15px 5px 15px;
+  background: 0;
+  margin: 0px 0px 0px;
+  a {font-weight: bold;}
+}
 
 .titlebar {
   background: $white;
-  padding: 14px;
+  padding: 14px 14px;
   h1 {
     font-family: $font-base;
     color: #333333;
@@ -81,7 +86,11 @@ img {
   }
   h1 img {
     margin-right: 5px;
-    vertical-align: sub;
+    vertical-align: initial;
+  }
+  a.backto {
+    font-size: 12px;
+    float: right;
   }
 }
 
@@ -120,7 +129,9 @@ a.headerlink:hover {
 #global {
   text-align: right;
   font-size: 11px;
-  height: 28px;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  height: 40px;
   line-height: 28px;
   .item {
     display: inline-block;
@@ -136,54 +147,103 @@ a.headerlink:hover {
     border-left: none;
   }
 }
+#menugroups {
+  background: url("<%= asset_path('topmenubgtall.png') %>") repeat-x scroll 0 0 transparent;
+  border-radius: 8px 8px 0 0;
+  height: 48px;
+  ul {
+    list-style: none;
+    margin: 0 0 0 12px;
+    padding: 0;
+  }
+  li {
+    float: left;
+    padding: 0;
+    list-style: none;
+    margin: 0;
+  }
+  li.selected {
+    font-weight: bold;
+    background: url("<%= asset_path('groupselected.png') %>") no-repeat 50% 100%;
+  }
+  a {
+    color: #FFFFFF;
+    font-size: 14px;
+    line-height: 48px;
+    padding: 0 15px;
+  }
+}
 
 #topmenu {
-  background: url('<%= asset_path('topmenubg.png') %>') repeat-x;
+  background: #e5e5e5 repeat-x;
   border-radius: 0;
   height: 38px;
+  border-bottom: 2px solid silver;
+  margin-bottom: 0px;
   a {
-    color: $white;
-    line-height: 38px;
-    padding: 0 13px;
+    margin-top: 5px;
+    color: #000;
+    line-height: 27px;
+    padding: 0 10px;
     font-size: 11px;
 		display: block;
   }
 	a:hover {
 		text-decoration: none;
 	}
-	li.selected,
-	li.selected:hover {
-		background: url("<%= asset_path("topmenubg_on.png") %>") 0 100%;
+	li.selected > a,
+	li.selected:hover > a {
+		background-color: #fff;
+		border-radius: 5px;
 	}
 	li:hover {
-		background: url("<%= asset_path("topmenubg_hover.png") %>") 50% 100%;
 	}
   ul {
     @include clearlist;
   }
 	ul li {
+	  margin-right: 5px;
 		display: block;
 		float: left;
 	}
-	ul {height: 38px;}
+	ul {
+	  margin-left: 5px;
+	  height: 38px;
+	}
+}
+
+#topmenu {
+  a.topset {
+    background-image: url("<%= asset_path("iconslice.png") %>") !important;
+    background-position: 8px 50%;
+    background-repeat: no-repeat;
+    padding-left: 30px;
+  }
+  a.topset.allcontacts {background-position: 8px -200px;}
+  a.topset.surveys {background-position: 8px -47px;}
+  a.topset.mycontacts {background-position: 8px -150px;}
+  a.topset.directory {background-position: 8px 4px;}
+  a.topset.groups {}
 }
 
 img.tmenu {
 	margin-right: 5px;
-	vertical-align: middle;
+	vertical-align: sub;
 }
 
 #left {
   float: left;
   width: 205px;
-  #logo {
-    background: url('<%= asset_path('logo.png') %>') no-repeat;
-    display: inline-block;
-    width: 166px;
-    height: 41px;
-    margin-bottom: 10px;
-    margin-left: 15px;
-  }
+  padding-top: 10px;
+}
+
+#logo {
+  background: url('<%= asset_path('logo.png') %>') no-repeat;
+  float: left;
+  width: 166px;
+  height: 41px;
+  margin-bottom: 10px;
+  margin-left: 15px;
 }
 
 .block {
@@ -230,7 +290,8 @@ ul.leftmenu {
       background: $light-gray;
     }
   }
-  a.delete_leader {
+  a.delete_leader,
+  a.delete_label {
     float: right;
     background: #999 !important;
     color: $white;
@@ -242,7 +303,8 @@ ul.leftmenu {
     font-weight: bold !important;
     padding: 0;
   }
-  a.delete_leader:hover {
+  a.delete_leader:hover,
+  a.delete_label:hover {
     background: $blue;
     text-decoration: none;
   }
@@ -464,12 +526,20 @@ input[type=submit], button[type=submit] {
 	-moz-box-shadow: 0 0 1px #FFFFFF inset;
 	-webkit-box-shadow: 0 0 1px #FFFFFF inset;
   color: white;
-  font-size: 12px;
-  line-height: 0px;
-	height: 26px;
-  padding: 0px 6px;
+  font-size: 14px;
+  line-height: 35px;
+	height: 35px;
+  padding: 0px 15px;
   vertical-align: top;
   font-weight: bold;
+}
+
+input[type=submit].smallbtn, 
+button[type=submit].smallbtn {
+  font-size: 12px;
+  line-height: 24px;
+  height: 24px;
+  padding: 0 10px;
 }
 
 .rejoiceablebox {
@@ -571,7 +641,7 @@ input[type=submit], button[type=submit] {
 
 .pagemenu {
   background: $light-blue;
-  padding: 6px 14px 3px;
+  padding: 10px 14px 8px;
 }
 
 ul.pillmenu {
@@ -714,14 +784,44 @@ span.title {
 
 
 .footer {
+  border-top: 2px solid silver;
   text-align: right;
   color: #B3B3B3;
-  margin: 20px;
+  margin: 15px 0px;
+  padding: 15px;
+  background: #e5e5e5;
+  border-radius: 0 0 8px 8px;
 }
 /* SPLASH PAGE */
 
 .storeicons {
   float: left;
+}
+
+.splash.login {
+  background: #E5E5E5 repeat-x;
+  border-radius: 5px 5px 0 0;
+  padding: 10px;
+}
+
+.loginbt {
+  background: url("<%= asset_path('topmenubgtall.png') %>") repeat-x scroll 0 0 transparent;
+  color: white !important;
+  font-weight: normal;
+  border-radius: 5px;
+  padding: 5px 10px !important;
+  display: inline-block;
+  font-size: 12px;
+}
+
+.instruct {
+  p {font-size: 16px; line-height: 1.75em;}
+}
+
+.loginscreen {
+  padding: 20px;
+  background: $white;
+  border-radius: 5px;
 }
 
 .splash {
@@ -804,6 +904,7 @@ span.title {
 }
 
 .width30 {width: 30%;}
+.width68 {width: 68%;}
 .width60 {width: 60%;}
 
 /* MODAL STYLES */
@@ -817,7 +918,8 @@ span.title {
   margin-top: 20px;
 }
 
-.modalresults ul {
+.modalresults ul,
+.name_search_results ul {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -836,6 +938,11 @@ span.title {
     text-decoration: none;
     background: #F5FFC4;
   }
+}
+
+.name_search_results ul {
+  height: auto;
+  max-height: 400px;
 }
 
 .inlinebutton {
@@ -1268,7 +1375,7 @@ div.field_in {
 	}
 }
 
-ul.to_list {
+ul.to_list, td.labels ul {
 	border: 1px solid silver;
 	margin: 0;
 	width: 480px;
@@ -1287,6 +1394,42 @@ ul.to_list {
 		float: left;
 		font-size: 11px;
 		}
+}
+
+td.labels {
+  margin: 0;
+  padding: 0;
+  ul {
+    width: auto;
+    border: none;
+    padding: 0;
+    list-style: none;
+    margin: 3px 0 0;
+    height: auto;
+    li {
+      list-style: none;
+      a {margin: 0 2px 0 4px;}
+    }
+  }
+}
+
+.listing {
+  tfoot .totals {
+    td {
+      border-top: 1px solid silver;
+      border-bottom: 0px;
+      padding: 5px 0;
+      background: #EAF1F6;
+    }
+    td:first-child {
+      text-align: right;
+      padding-right: 5px;
+      font-weight: bold;
+    }
+  }
+  th.groupname {
+    width: 40%;
+  }
 }
 
 ul#leaders li.ui-state-highlight:hover {
@@ -1312,26 +1455,77 @@ ul.leftmenu li .moredown {
 	}
 }
 
+ul.leftmenu li a.nostyle {
+   margin: 0; padding: 0; height: auto;
+}
+
 ul.leftmenu li .moredown:hover span{
 	background: $blue;
 	color: $light-blue;
+}
+
+
+ul.leftmenu li.information {
+  background: #FFF0D7;
+  margin-right: 5px;
+  padding: 5px 7px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  
+  h3 {
+    margin: 0;
+    padding: 0;
+  }
+  label {
+    font-weight: bold;
+  }
+  .ls {
+    width: 60px;
+    display: inline-block;
+    vertical-align: top;
+  }
+  .rs {
+    width: 100px;
+    display: inline-block;
+  }
+  a {
+    padding: 0;
+    line-height: 1em;
+    height: 1em;
+    display: inline;
+  }
 }
 
 #TOS-content {
   padding-left:10px;
 }
 
+.ls .field_with_errors {
+  display: inline;
+}
+
+.rs .field_with_errors {
+  background: url("<%= asset_path("alert_small.png") %>") no-repeat 100% 5px;
+  padding-right: 30px;
+}
+
 div.field_with_errors {
 	input, textarea {
-		border: 2px solid red !important;
+		border: 2px solid #C00 !important;
+  }
+  label.message {
+    display: block;
+    font-style: italic;
   }
 }
 
+
+
 .message {
-  color: red !important;
+  color: #C00 !important;
   padding: 2px 0px;
   text-transform: capitalize;
-  font-weight: bold;
+  font-weight: normal;
 }
 
 div.field_with_errors div.ui-effects-wrapper {
@@ -1399,8 +1593,9 @@ div.pagination {
 }
 
 .searchstat {
-  padding-top: 5px;
+  padding-top: 20px;
   text-align: center;
+  font-weight: bold;
 }
 
 
@@ -1420,6 +1615,19 @@ body#welcome_controller {
 /*  background: url("<%= asset_path("bluebg.jpg") %>") repeat-x 0 0 #0078ae; */
   .splash {
     background: #fff;
+  }
+  
+  #global #logo {
+    display: none;
+  }
+  
+  #logo {
+    position: absolute;
+    margin-top: -90px;
+    margin-left: 0px;
+  }
+  .tour, .index, .privacy, .terms {
+    margin-top: 50px;
   }
 }
 
@@ -1450,9 +1658,6 @@ div.merge.person.preview {
 }
 
 .user_defined_contact_fields {
-	border-top: 2px solid silver;
-	margin-top: 15px;
-	padding-top: 15px;
 	> .field {
 		margin-bottom: 15px;
 		> label {
@@ -1478,6 +1683,15 @@ div.merge.person.preview {
     width: 99%;
     height: 135px;
   }
+}
+
+#char_counter {
+  display: block;
+  line-height: 2em;
+  text-align: right;
+  font-weight: bold;
+  color: black;
+  font-size: 11px;
 }
 
 span.all_text {
@@ -1533,3 +1747,122 @@ span.all_text {
 .sms_preview {
   word-wrap: break-word;
 }
+
+
+/* ********************************* FORMTASTIC ****/
+textarea, input[type=text], input[type=password] {
+  border: 1px solid silver;
+  padding: 3px;
+  font-size: 12px;
+  width: 290px;
+}
+
+.formtastic {
+  fieldset {
+    border: none;
+    border-bottom: 1px solid silver;
+    padding: 15px;
+  }
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  label {
+    display: block;
+    font-weight: normal;
+    margin-bottom: .25em;
+  }
+  li {
+    margin-bottom: .5em;
+  }
+  input[type=text], input[type=password], textarea {
+    border: 1px solid gray;
+    margin: 0;
+    padding: 4px;
+  }
+  input[type=text], input[type=password] {
+    min-width: 200px;
+  }
+  textarea {
+    min-width: 400px;
+    height: 5em;
+  }
+  select {
+    border: 1px solid gray;
+    padding: 4px;
+  }
+}
+
+.customform {
+  margin-top: 15px;
+  .sgroup {
+    margin: 20px 0;
+  }
+  textarea, input, select {
+    margin: 0;
+  }
+  textarea, input[type=text], input[type=password] {
+    border: 1px solid silver;
+    padding: 3px;
+    font-size: 12px;
+    width: 290px;
+  }
+  select {
+    border: 1px solid silver;
+    border-radius: 2px;
+    padding: 2px;
+  }
+  input.largefield {
+    font-size: 16px;
+  }
+  .ls, .rs {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    line-height: 1.5em;
+  }
+  .ls {
+    min-width: 100px;
+    text-align: right;
+    margin-right: 10px;
+    label {
+      font-weight: bold;
+    }
+    .tiplight {
+      margin-right: 0px;
+    }
+  }
+  .location {
+    height: 60px;
+  }
+  .sfield {
+    margin-bottom: 8px;
+  }
+  .sidebyside {
+    .element {
+      display: inline-block;
+      text-align: center;
+      margin-right: 10px;
+      vertical-align: top;
+    }
+  }
+  .leftalign .element {
+    text-align: left;
+  }
+  .field_zip[type=text] {
+    width: 70px;
+  }
+}
+
+.formactions {
+  line-height: 35px;
+  .cancel {
+    color: #999;
+  }
+}
+.contact_form {
+  .ls {min-width: 75px;}
+}
+
+

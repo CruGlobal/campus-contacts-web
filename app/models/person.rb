@@ -114,7 +114,7 @@ class Person < ActiveRecord::Base
   end
   
   def name 
-    firstName + " " + lastName
+    [firstName, lastName].collect(&:to_s).join(' ')
   end
   
   def firstName
@@ -446,16 +446,31 @@ class Person < ActiveRecord::Base
     hash
   end
   
-  def to_hash_mini_leader
-    hash = {}
-    hash['id'] = self.personID
-    hash['name'] = self.to_s.gsub(/\n/," ")
-    hash['picture'] = picture unless fb_uid.nil?
-    hash['num_contacts'] = assigned_contacts.count
+  def to_hash_micro_leader
+   hash = to_hash_mini
+   hash['picture'] = picture unless fb_uid.nil?
+   hash['num_contacts'] = assigned_contacts.count
+   hash 
+  end
+  
+  def to_hash_mini_leader(org_id)
+    hash = to_hash_micro_leader
+    hash['organizational_roles'] = []
+    organizational_roles.includes(:role, :organization).where("role_id <> #{Role::CONTACT_ID}").uniq {|r| r.organization_id}.collect do |r| 
+      if om = organization_memberships.where(organization_id: r.organization_id).first
+        hash['organizational_roles'] << {org_id: r.organization_id, role: r.role.i18n, name: r.organization.name, primary: om.primary? ? 'true' : 'false'}
+        if r.organization.show_sub_orgs?
+          r.organization.children.each do |o|
+            hash['organizational_roles'] << {org_id: o.id, role: r.role.i18n, name: o.name, primary: 'false'}
+          end
+        end
+      end
+    end.compact
     hash
   end
   
-  def to_hash_basic(organization = nil)
+  def to_hash_assign(organization = nil)
+    hash = self.to_hash_mini
     assign_hash = nil
     unless organization.nil?
       assigned_to_person = ContactAssignment.where('assigned_to_id = ? AND organization_id = ?', id, organization.id)
@@ -464,14 +479,18 @@ class Person < ActiveRecord::Base
       person_assigned_to = person_assigned_to.empty? ? [] : person_assigned_to.collect {|c| Person.find(c.assigned_to_id).try(:to_hash_mini)}
       assign_hash = {assigned_to_person: assigned_to_person, person_assigned_to: person_assigned_to}
     end
-    hash = self.to_hash_mini
+    hash['assignment'] = assign_hash unless assign_hash.nil?
+    hash
+  end
+  
+  def to_hash_basic(organization = nil)
+    hash = self.to_hash_assign(organization)
     hash['gender'] = gender
     hash['fb_id'] = fb_uid.to_s unless fb_uid.nil?
     hash['picture'] = picture unless fb_uid.nil?
     status = organizational_roles.where(organization_id: organization.id).where('followup_status IS NOT NULL') unless organization.nil?
     hash['status'] = status.first.followup_status unless (status.nil? || status.empty?)
     hash['request_org_id'] = organization.id unless organization.nil?
-    hash['assignment'] = assign_hash unless assign_hash.nil?
     hash['first_contact_date'] = answer_sheets.first.created_at.utc.to_s unless answer_sheets.empty?
     hash['date_surveyed'] = answer_sheets.last.created_at.utc.to_s unless answer_sheets.empty?
     hash['organizational_roles'] = []

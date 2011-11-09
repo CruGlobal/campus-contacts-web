@@ -1,45 +1,39 @@
+<% if mhub? %>
   <center>
-    <% if mhub? %>
-      To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
-    <% else %>
-      Please login with Facebook to get started 
-    <% end %>
+    <%= t('.login_paragraph_mhub') %>
     <br><br>
-    <%= link_to(image_tag('login-button.png'), user_omniauth_authorize_path(mhub? ? :facebook_mhub : :facebook), rel: 'external') %>
+    <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook_mhub), rel: 'external') %>
     <br/>
-			<% if mhub? && cookies[:keyword] %>
-        <div class="info"><br/><br/>
-          <center><%= link_to("Don't like Facebook? Click here to skip facebook login", session[:return_to] ? add_params(session[:return_to], :nologin => true) : "/c/#{cookies[:keyword]}?nologin=true") %></center>
-        </div>
-  		<% end %>
+		<% if cookies[:keyword] %>
+      <div class="info"><br/><br/>
+        <center><%= t('.dont_like_faceook') %> <%= link_to(t('.skip_facebook'), session[:return_to] ? add_params(session[:return_to], :nologin => true) : "/c/#{cookies[:keyword]}?nologin=true") %></center>
+      </div>
+		<% end %>
   </center>
-
-  <!-- <div class="splash">
-    <div id="logoline">
-    </div>
-    <div id="roundwrap">
+<% else %>
+  <div class="splash login">
+    
+      
+    
       <div class="left width30">
     
-        <h3>Login:</h3>
     
-        <div class="loginscreen">
-        <%= link_to(image_tag('login-button.png'), user_omniauth_authorize_path(:facebook), rel: 'external') %>
+        <div class="loginscreen" style="text-align: center;">
+        <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook), rel: 'external') %>
+        <p><a href="/"><%= t('.back') %></a></p>
         </div>      
       </div>
     
     
     
-      <div class="right width60">
-        <h3><Instructions:</h3>
-        <p>
-          To get started, you'll need to have a Facebook account. 
-                        Click the login link to the left and "allow" MHub to access
-                        your information. You'll be taken to the wizard if this is your first
-                        time accessing MissionHub.</p>
+      <div class="right width68 instruct">
+        <h3 style="margin: 10px 0 0;"><%= t('.instructions') %>:</h3>
+        <p style="margin: 6px 0px 0 0;">
+          <%= t('.login_paragraph_html') %>
+        </p>
       </div>
     
       <div class="clear"></div>
   
-    </div>
-  </div> -->
-
+  </div>
+<% end %>

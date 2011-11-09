@@ -262,4 +262,10 @@ FactoryGirl.define do
     association :question_sheet
     association :person
   end
+
+  factory :member_role do
+    association :organization
+    name        'member'
+    i18n        'member'
+  end
 end

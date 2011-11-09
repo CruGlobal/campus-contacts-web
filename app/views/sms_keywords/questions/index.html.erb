@@ -1,5 +1,5 @@
 <div class="titlebar">
-  <h1>Manage Survey Questions</h1>
+  <h1><%= t('.manage') %></h1>
 </div>
 
 <div class="pagemenu">
@@ -18,8 +18,8 @@
 
 <% provide :sidebar do %>
   <ul class="leftmenu">
-    <li class="selected"><a href="/sms_keywords">Keywords</a></li>
-    <li><%= link_to("Request Keyword", new_sms_keyword_path) %></li>
+    <li class="selected"><a href="/sms_keywords"><%= t('sms_keywords.edit.keywords') %></a></li>
+    <li><%= link_to(t('.request_keyword'), new_sms_keyword_path) %></li>
   </ul>
 <% end %>
 
@@ -32,9 +32,9 @@
     <%= t('general.survey_web_tip_html', keyword: @keyword.keyword) %>
   </p>
   
-  <p>Note: First and Last name will be automatically added to every survey. There's no need for you to add those.</p>
+  <p><%= t('.note') %></p>
   
-  <h3>Predefined Questions <span class="tiplight" title="<%= t('questions.predefined_help') %>"></span></h3>
+  <h3><%= t('.predefined') %> <%= tip(t('questions.predefined_help')) %></h3>
   <table border="0" cellspacing="5" cellpadding="0" class="yourquestions">
     <tbody id="predefined_questions">
       <% @predefined.questions.each do |question| %>
@@ -46,21 +46,21 @@
   </table>
   
   
-  <h3>Your Questions (drag to sort) <span class="tiplight" title="<%= t('questions.your_questions_help') %>"></span> </h3>
+  <h3><%= t('.your_questions') %> <%= tip(t('questions.your_questions_help')) %></h3>
   <table border="0" cellspacing="0" cellpadding="0" class="yourquestions fakesort">
     <tbody>
       <tr>
-        <td>First Name</td>
+        <td><%= t('contacts.index.first_name') %></td>
         <td></td>
         <td></td>
       </tr>
       <tr>
-        <td>Last Name</td>
+        <td><%= t('contacts.index.last_name') %></td>
         <td></td>
         <td></td>
       </tr>
       <tr>
-        <td>Phone Number</td>
+        <td><%= t('contacts.index.phone_number') %></td>
         <td></td>
         <td></td>
       </tr>
@@ -73,7 +73,7 @@
   </table>  
   
   
-  <h3>Archived Questions <span class="tiplight" title="<%= t('questions.archived_help') %>"></span></h3>
+  <h3><%= t('.archived_questions') %> <%= tip(t('questions.archived_help')) %></h3>
   <table border="0" cellspacing="5" cellpadding="0" class="yourquestions">
     <tbody id="archived_questions">
       <% @archived_questions.each do |question| %>
@@ -81,7 +81,7 @@
       <% end %>
     </tbody>
   </table>
-  <%= link_to('+ Add a question', '', id: 'add_question_link', class: "inlinebutton") %>
+  <%= link_to('+ ' + t('.add_question'), '', id: 'add_question_link', class: "inlinebutton") %>
   
   <div id="question_form" style="display:none">
     <%= render 'form', question: Question.new %>

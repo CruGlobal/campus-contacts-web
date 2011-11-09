@@ -19,15 +19,15 @@ class Api::OrganizationsController < ApiController
       json = {id:org.id, name:org.name}
       
       # Ancestry
-      org.ancestry.nil? ? json[:ancestry] = [] : json[:ancestry] = org.ancestry.split('/')
+      json[:ancestry] = org.ancestry unless org.ancestry.nil?
       
       # Leaders
-      json[:leaders] = org.leaders.collect{|l| l.to_hash_mini_leader}
+      json[:leaders] = org.leaders.collect{|l| l.to_hash_mini_leader(@organization.id)}
       
       # Keywords and Questions
       json[:keywords] = []
       org.keywords.order("keyword").each do |keyword|
-          keyword_json = {keyword:keyword.keyword, questions: [], state: keyword.state}
+          keyword_json = {id: keyword.id, keyword:keyword.keyword, questions: [], state: keyword.state}
           keyword.questions.each do |q|
              build_question_json(keyword_json, q, true)
           end
@@ -47,7 +47,7 @@ class Api::OrganizationsController < ApiController
   end
   
   def build_question_json ( keyword_json, q, active)
-    question_json = {id: q.id, label:q.label, style:q.style, required:q.required};
+    question_json = {id: q.id, label:q.label, style:q.style, kind: q.kind, required:q.required};
     question_json[:object_name] = q.object_name unless q.object_name.nil?
     question_json[:attribute_name] = q.attribute_name unless q.attribute_name.nil?
     question_json[:required] = 0 unless !q.required.nil?

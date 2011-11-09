@@ -5,13 +5,13 @@
 		<% end %>
 	
 		<span id="all_text">
-			All <b><%= @people.size %></b> people on this page are selected. 
+			<%= t('.page_selected_html', count: @people.size) %> 
 			<% if @all_people.size > @people.size %>
-			<a href="#" onclick="$('#all_text, #all_selected_text').toggle()">Select all <b><%= @all_people.size %></b> people in the directory.</a>
+			<a href="#" onclick="$('#all_text, #all_selected_text').toggle()"><%= t('.select_all_html', count: @all_people.size) %></a>
 			<% end %>
 		</span>
 		<span id="all_selected_text" style="display:none">
-			All <b><%= @all_people.size %></b> people in the directory is selected.</a>
+			<%= t('.all_selected_html', count: @all_people.size) %>
 		</span>
 	</td>
 </tr>

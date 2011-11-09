@@ -1,4 +1,7 @@
 $ ->
+  $('#apply_roles_spinner').hide()
+  $("#apply_roles_successful").hide()
+
   if $('#people_controller.confirm_merge input[type=submit]')[0]
     $('#people_controller.confirm_merge input[type=submit]')[0].focus() 
   $('#user_merge_form input.person').observe_field 0.75, ->
@@ -68,7 +71,7 @@ $('#send_bulkemail_link').live 'click', ->
   $('.id_checkbox:checked').each ->
     id = $(this).val()
     tr = $(this).parent().parent();
-    name = tr.find('.first_name').html() + ' ' + tr.find('.last_name').html()
+    name = tr.attr('data-name')
     email = tr.find('.email').text().length
     if email > 0
       ids.push(id)    
@@ -105,7 +108,7 @@ $('#send_bulkemail_link').live 'click', ->
     height:644,
     width:600,
     modal: true,
-    title: 'Bulk Send Email Message',
+    title: 'Send Email Message',
     open: (event, ui) ->
 
       if no_emails.length > 0
@@ -126,7 +129,7 @@ $('#send_bulkemail_link').live 'click', ->
         nicEdit.removeInstance('body');        
         $(this).submitBulkSendDialog()
         $('#bulk_email_message').val($('#body').val())              
-        $.n('Bulk email message sent')
+        $.n('Email message sent')
       Cancel: ->
         nicEdit.removeInstance('body');      
         $('#bulk_email_message').val($('#body').val())              
@@ -144,7 +147,7 @@ $('#send_bulksms_link').live 'click', ->
   $('.id_checkbox:checked').each ->
     id = $(this).val()
     tr = $(this).parent().parent();
-    name = tr.find('.first_name').html() + ' ' + tr.find('.last_name').html()
+    name = tr.attr('data-name')
     number = tr.find('.phone_number').text().length
     if number > 0
       ids.push(id)    
@@ -178,7 +181,7 @@ $('#send_bulksms_link').live 'click', ->
     height:444,
     width:600,
     modal: true,
-    title: 'Bulk Send Sms Message',
+    title: 'Send Text Message',
     open: (event, ui) ->
       if no_numbers.length > 0
         html = '<div class="missing"><p>The following people are missing phone numbers and will not be contacted:<br/>'
@@ -195,7 +198,7 @@ $('#send_bulksms_link').live 'click', ->
       Send: ->
         $(this).submitBulkSendDialog()
         $('#bulk_sms_message').val($('#body').val())                
-        $.n('Bulk sms message sent')        
+        $.n('Text message sent')        
       Cancel: ->
         $('#bulk_sms_message').val($('#body').val())        
         $(this).dialog('destroy')
@@ -224,3 +227,34 @@ $('#check_all').live 'click', ->
     else
       $('#contacts_table').find('tr:first').remove()
 
+$('#apply_roles').live 'click', -> 
+  role_ids = []
+  person_ids = []
+
+  if $('.role_id_checkbox:checked').length == 0
+    alert("You didn't select any roles to apply.")
+    return false
+  
+  if $('.id_checkbox:checked').length == 0
+    alert("You didn't select any people to update roles.")
+    return false
+
+  $('.role_id_checkbox:checked').each ->
+    role_id = $(this).val()
+    role_ids.push(role_id)    
+
+  $('.id_checkbox:checked').each ->
+    person_id = $(this).val()
+    person_ids.push(person_id)
+
+  $('#apply_roles_spinner').show()
+ 
+  $.ajax
+    type: 'POST',
+    url: '/people/update_roles',
+    data: 'role_ids='+role_ids+'&person_ids='+person_ids,
+    success: (data)->
+      $("#apply_roles_successful").show()
+      $("#apply_roles_successful").html("Roles have been applied.")
+    complete: ->
+      $("#apply_roles_spinner").hide()

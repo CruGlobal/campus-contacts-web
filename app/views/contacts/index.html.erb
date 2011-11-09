@@ -28,9 +28,9 @@
 
 <div class="pagemenu">
   <ul class="pillmenu">
-    <li><%= link_to("Assign", "", class: 'assign') %></li>
-    <li><%= link_to("Unassign", "", id: 'bulk_unassign') %></li>
-    <li><%= link_to("Add Contact", "", class: 'add_contact') %></li>
+    <li><%= link_to(t('contacts.assign'), "", class: 'assign') %></li>
+    <li><%= link_to(t('contacts.unassign'), "", id: 'bulk_unassign') %></li>
+    <li><%= link_to(t('contacts.add_contact'), "", class: 'add_contact') %></li>
   </ul>
   
   <ul class="pillmenu">
@@ -104,8 +104,8 @@
       <% end %>
       </div>
       <div class="actionbarinline">
-        <%= submit_tag 'Search' %>
-        <%= link_to 'Clear Search Form', '', onclick: "$(this).closest('form')[0].reset(); return false;" %>
+        <%= submit_tag t('general.search') %>
+        <%= link_to t('.clear_search_form'), '', onclick: "$(this).closest('form')[0].reset(); return false;" %>
       </div>
     <% end %>
   </div>
@@ -115,6 +115,8 @@
   <%= hidden_field_tag :status, "do_not_contact" %>
 <% end %>
   
+<span style="display:none" id="drag_helper_text_one"><%= I18n.t('contacts.index.assign_people', count: 1) %></span>
+<span style="display:none" id="drag_helper_text_other"><%= I18n.t('contacts.index.assign_people', count: 0) %></span>
 <%= form_for ContactAssignment.new do |f| %>
   <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
   <%= hidden_field_tag :assign_to %>

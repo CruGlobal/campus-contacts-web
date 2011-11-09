@@ -29,14 +29,14 @@
     </div>
     <div>
       <% if @person.phone_number.present? %>
-        <%= t('contacts.show.phone_number') %>: <%= number_to_phone(@person.phone_number) %><br/>
+        <%= t('contacts.show.phone_number') %> <%= number_to_phone(@person.phone_number) %><br/>
       <% end %>
       <% if @person.email.present? %>
-        <%= t('contacts.show.email') %>: <%= mail_to(@person.email) %><br/>
+        <%= t('contacts.show.email') %> <%= mail_to(@person.email) %><br/>
       <% end %>
       <% if @person.current_address %>
         <p><%= raw @person.current_address.display_html %></p>
-        <%= link_to('Google Map', @person.current_address.map_link, target: '_blank', :class => "maplink") %>
+        <%= link_to(t('.google_map'), @person.current_address.map_link, target: '_blank', :class => "maplink") %>
       <% end %>
       <% if @person.fb_uid.present? %>
       <p><%= link_to(t('.facebook_profile'), "http://www.facebook.com/profile.php?id=#{@person.fb_uid}", target: '_blank') %></p>
@@ -45,7 +45,7 @@
       <% if can?(:edit, @person) %>
         <p><%= link_to(t('.edit_contact_info'), edit_contact_path(@person)) %></p>
       <% end %>
-      <div id="survey_answers" style="display:none" title="Survey Answers">
+      <div id="survey_answers" style="display:none" title="<%= t('.survey_answers') %>">
         <ul>
           <% @organization.question_sheets.flatten.uniq.each do |qs| %>
             <% answer_sheet = @person.answer_sheets.detect {|as| qs.id == as.question_sheet_id} %>
@@ -75,7 +75,7 @@
           <div class="textarea">
             <%= f.text_area :comment, :rows => "2", placeholder: t('.add_comments_here') %><br/>
           </div>
-          <%= button_tag(t('contacts.show.add_comment'), id: 'comment_submit') %>
+          <%= button_tag(t('contacts.show.add_comment'), id: 'comment_submit', :class => "smallbtn") %>
           <div class="rejoiceablebox">
             <%= link_to(t('contacts.show.attach_rejoicable'), '#', id: 'add_rejoicable', :class => "rj rejoiceable") %><br/>
             <div id="rejoicable_fields" style="display:none">

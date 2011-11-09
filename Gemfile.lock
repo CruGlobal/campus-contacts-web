@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/gregbell/active_admin.git
-  revision: 7f263d9ca47eceadac5639b48ff83e6d2b5efdc4
+  revision: eb3d2a748f545f0b6641e52ea2589840afd6cb68
   specs:
-    activeadmin (0.3.2)
+    activeadmin (0.3.3)
       devise (>= 1.1.2)
       fastercsv
       formtastic (>= 2.0.0)
@@ -27,14 +27,6 @@ GIT
     trumant-rack-oauth2-server (2.2.1.1)
       rack (~> 1.1)
       rails (>= 2.3.11)
-
-GIT
-  remote: git://github.com/zuk/rubycas-client-rails.git
-  revision: af0007048c0c6d3c31a18bacd71754cc4ba9ec22
-  specs:
-    rubycas-client-rails (0.1.0)
-      rails (>= 3.0.0)
-      rubycas-client (>= 2.2.0)
 
 GEM
   remote: https://rubygems.org/
@@ -83,6 +75,7 @@ GEM
       net-sftp (>= 2.0.0)
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.1.0)
+    carmen (0.2.8)
     chronic (0.6.4)
     client_side_validations (3.1.1)
     coffee-rails (3.1.1)
@@ -96,6 +89,8 @@ GEM
     dalli (1.1.3)
     deadlock_retry (1.1.2)
     default_value_for (1.0.6)
+    delegate_presenter (0.0.2)
+      rails
     devise (1.4.9)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.0.3)
@@ -121,7 +116,6 @@ GEM
     hoptoad_notifier (2.4.11)
       activesupport
       builder
-    hpricot (0.8.4)
     httparty (0.8.1)
       multi_json
       multi_xml
@@ -239,8 +233,11 @@ GEM
     rest-client (1.6.7)
       mime-types (>= 1.16)
     ruby-prof (0.10.8)
-    rubycas-client (2.3.1)
+    rubycas-client (2.2.1)
       activesupport
+    rubycas-client-rails (0.1.0)
+      rails (>= 3.0.0)
+      rubycas-client (>= 2.2.0)
     sass (3.1.10)
     sass-rails (3.1.4)
       actionpack (~> 3.1.0)
@@ -305,6 +302,7 @@ DEPENDENCIES
   awesome_print
   cancan
   capistrano
+  carmen
   client_side_validations
   coffee-rails (~> 3.1.0)
   coffee-script
@@ -312,12 +310,12 @@ DEPENDENCIES
   dalli
   deadlock_retry
   default_value_for
+  delegate_presenter
   devise
   dynamic_form
   enforce_schema_rules
   factory_girl (~> 2.0.0.rc4)
   hoptoad_notifier
-  hpricot
   jquery-rails
   kaminari
   mini_fb
@@ -337,8 +335,8 @@ DEPENDENCIES
   resque_mail_queue
   rest-client
   ruby-prof
-  rubycas-client
-  rubycas-client-rails!
+  rubycas-client (~> 2.2.1)
+  rubycas-client-rails (~> 0.1.0)
   sass-rails (~> 3.1.0)
   shoulda
   simplecov (>= 0.3.5)

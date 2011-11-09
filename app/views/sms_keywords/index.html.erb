@@ -1,31 +1,32 @@
 <% provide :sidebar do %>
   <ul class="leftmenu">
-    <li class="selected"><a href="/sms_keywords">Surveys</a></li>
-    <li><%= link_to("Request Keyword", new_sms_keyword_path) %></li>
+    <li class="selected"><a href="/sms_keywords"><%= t('sms_keywords.edit.keywords') %></a></li>
+    <li><%= link_to(t('.request_keyword'), new_sms_keyword_path) %></li>
+  </ul>
 <% end %>
 
 
 
 <% if can? :manage, SmsKeyword %>
   <div class="titlebar">
-    <h1><%= image_tag("c_survey.png") %>Surveys</h1>
+    <h1><%= image_tag("c_survey.png") %><%= t('nav.keywords') %></h1>
   </div>
   <% if current_organization.keywords.any? {|keyword| keyword.gateway != 'twilio'} %>
-  <div class="flash" style="margin:10px;width:700px">
-    <div class="flash_message warning" style="text-align:left">
-        <h2>85005 is the new shortcode<br/><small style="font-weight: normal; font-size: 12px;">The phone number you text in to</small> </h2>
-        Please start using this new number immediately.
-        The old code will continue to work until December 1st, 2011. 
-        Your surveys will currently work using either number, but you can help us out by making 
-        the move earlier.</p>
+    <div class="flash" style="margin:10px;width:700px">
+      <div class="flash_message warning" style="text-align:left">
+          <h2>85005 is the new shortcode<br/><small style="font-weight: normal; font-size: 12px;">The phone number you text in to</small> </h2>
+          Please start using this new number immediately.
+          The old code will continue to work until December 1st, 2011. 
+          Your surveys will currently work using either number, but you can help us out by making 
+          the move earlier.</p>
         
-        <p><%= link_to("Accept the number change.", accept_twilio_sms_keywords_path, method: :post, :class => "acceptchange pillbutton") %> </p>
+          <p><%= link_to("Accept the number change.", accept_twilio_sms_keywords_path, method: :post, :class => "acceptchange pillbutton") %> </p>
         
-        Once you do that, your surveys will only
-        work on the new number. If you need to use the old number past December 1st, 2011, email us at <%= mail_to 'support@missionhub.com' %>
-      </p>
+          Once you do that, your surveys will only
+          work on the new number. If you need to use the old number past December 1st, 2011, email us at <%= mail_to 'support@missionhub.com' %>
+        </p>
+      </div>
     </div>
-  </div>
   <% end %>
   <div class="pagemenu">
     <ul class="pillmenu">
@@ -40,9 +41,9 @@
   <table class="listing keywordtable" cellpadding="0" cellspacing="0">
     <tr>
       <th class="check"></th>
-      <th><%= t("general.keyword") %> <span class="tiplight" title="<%= t('welcome.index.request_key_help') %>" style="float: none;"></span></th>
+      <th><%= t("general.keyword") %> <%= tip(t('welcome.index.request_key_help')) %></th>
       <% if current_organization.show_sub_orgs? %>
-        <th><%= t("keywords.index.association") %> <span class="tiplight" title="<%= t('keywords.index.association_help') %>" style="float: none;"></span></th>
+        <th><%= t("keywords.index.association") %> <%= tip(t('sms_keywords.index.association_help')) %></th>
       <% end %>
       <th><%= t("general.status") %></th>
       <th class="controls">&nbsp;</th>

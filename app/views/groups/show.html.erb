@@ -1,0 +1,75 @@
+<% provide :sidebar do %>
+  <ul class="leftmenu">
+    <li class="heading selected"><h3><%= t('.details') %></h3></li>
+    <li class="information">
+      
+      <div class="field">
+        <div class="ls"><label><%= t('.leaders') %>:</label></div>
+        <div class="rs"><%= @group.leaders_names %></div>
+      </div>
+      <div class="field">
+        <div class="ls"><label><%= t('.location') %>:</label></div>
+        <div class="rs"><%= link_to(@group.location, "http://www.google.com/maps?q=#{@group.location}", target: '_blank') %></div>
+      </div>
+      <div class="field">
+        <div class="ls"><label><%= t('.meets') %>:</label></div>
+        <div class="rs"><%= raw(@group.meets_at) %></div>
+      </div>
+    </li>
+    <li class="nostyle">
+      <%= link_to(image_tag("http://maps.googleapis.com/maps/api/staticmap?center=#{@group.location}&zoom=15&size=200x200&markers=color:blue|label:G|#{@group.location}&sensor=false"), "http://www.google.com/maps?q=#{@group.location}", target: '_blank', class: "nostyle") %>
+    </li>
+    <li><%= link_to(t('.edit_group'), edit_group_path(@group)) %></li>
+    <li><%= link_to(t('.delete_group'), group_path(@group), method: :delete, confirm: t('.confirm_delete_group')) %></li>
+  </ul>
+<% end %>
+
+<div class="controlbar">
+  <%= link_to(t('groups.see_all'), '/groups', :class=>"backto") %>
+</div>
+<div class="titlebar">
+  <h1>
+    <%= @group %>
+  </h1>
+</div>
+
+<div class="pagemenu">
+  <ul class="pillmenu">
+    <li>     
+      <%= link_to(t('.add_member'), '#', class: 'add-member') %>
+    </li>
+    <li>     
+      <%= link_to(t('.add_leader'), '#', class: 'add-leader') %>
+    </li>
+  </ul>  
+  <ul class="pillmenu">
+		<li><%= link_to(t('people.index.send_email'), nil, :id => "send_bulkemail_link") %></li>	
+		<li><%= link_to(t('people.index.send_sms'), nil, :id => "send_bulksms_link") %></li>			
+	</ul>
+</div>
+
+<div class="pad">
+  <table class="listing" cellpadding="0" cellspacing="0">
+    <thead>
+      <tr>
+        <th class="checkbox_cell">
+          <%= check_box_tag 'check_all', true, false %>
+        </th>
+        <th><%= t('.name') %></th>
+        <th><%= t('.email') %></th>
+        <th><%= t('.phone') %></th>
+        <th><%= t('.role') %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="group_table">
+      <% @group.group_memberships.involved.order('role').includes(:person).each do |gm| %>
+        <%= render 'person', person: gm.person, group_membership: gm %>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= render 'group_memberships/form' %>
+</div>
+
+<%= render 'shared/bulk_send_form' %>

@@ -1,15 +1,15 @@
 <p>
-  <b>Explanation:</b>
+  <b><%= t('.explanation') %></b>
   <%= @sms_keyword.explanation %>
 </p>
 
 <p>
-  <b>Keyword:</b>
+  <b><%= t('.keyword') %></b>
   <%= @sms_keyword.keyword %>
 </p>
 
 <p>
-  <strong>Status:</strong>
+  <strong><%= t('.status') %></strong>
   <%= @sms_keyword.state %>
 </p>
-<%= link_to 'Edit', edit_sms_keyword_path(@sms_keyword) %>
+<%= link_to t('general.back'), edit_sms_keyword_path(@sms_keyword) %>

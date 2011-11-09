@@ -14,6 +14,8 @@ class Ability
       can :manage, Organization, id: admin_of_org_ids
       
       can :manage_contacts, Organization, id: admin_of_org_ids
+
+      can :manage_roles, Organization, id: admin_of_org_ids
       
       # can only manage keywords from orgs you're an admin of
       # can :manage, SmsKeyword, organization_id: user.person.organizational_roles.where(role_id: admin_role.id).collect(&:organization_id)
@@ -31,6 +33,9 @@ class Ability
       # leaders and admins can edit other ppl's info
       can :manage, Person, organizational_roles: {organization_id: admin_of_org_ids}
       can :manage, Person, id: user.person.try(:id)
+      
+      can :manage, Group, organization_id: admin_of_org_ids
+      can :manage, GroupPresenter, organization_id: admin_of_org_ids
       
       can :all, :all if user.developer?
       

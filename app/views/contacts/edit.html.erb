@@ -3,7 +3,9 @@
     <li class="selected"><%= link_to(t('contacts.mine.my_contacts'), "/contacts/mine") %></li>
   </ul>
 <% end %>
-
+<div class="controlbar">
+  <%= link_to(t('.back'), '/contacts/mine', :class=>"backto") %>
+</div>
 <div class="titlebar">
   <h1>
     <%= image_tag("contact.png") %>
@@ -28,9 +30,15 @@
       <% if flash[:error] %>
         <div class="flash error"><%= raw flash[:error] %></div>
       <% end %>
+      
+      <h2 class="form_section"><%= t('.basic_information') %></h2>
       <%= render 'people/person_form', person: @person %>
       
-      <div class="user_defined_contact_fields">          
+      <br/>
+      <hr/>
+      
+      <div class="user_defined_contact_fields">   
+        <h2 class="form_section"><%= t('.additional_information') %></h2>       
         <% current_organization.question_sheets.flatten.uniq.each do |qs| %>
           <% answer_sheet = @person.answer_sheets.detect {|as| qs.id == as.question_sheet_id} %>
           <% qs.questions.each do |question| %>
@@ -44,8 +52,10 @@
           <% end %>
         <% end %>
       </div>
-
-      <%= submit_tag 'Save' %>
+      <div class="formactions">
+        <%= submit_tag t('general.save') %>
+        <%= link_to(t('.cancel'), contact_path(@contact), :class => "cancel")%>
+      </div>
     <% end %>
   </div>
 </div>

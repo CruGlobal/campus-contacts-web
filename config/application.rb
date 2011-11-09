@@ -14,7 +14,7 @@ module Mh
     # -- all .rb files in that directory are automatically loaded.
 
     # Custom directories with classes and modules you want to be autoloadable.
-    # config.autoload_paths += %W(#{config.root}/extras)
+    config.autoload_paths += %W(#{config.root}/app/presenters)
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
@@ -31,6 +31,7 @@ module Mh
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
      config.i18n.locale = :"en"
      config.i18n.default_locale = :"en"
+     config.i18n.fallbacks = true
 
     # Please note that JavaScript expansions are *ignored altogether* if the asset
     # pipeline is enabled (see config.assets.enabled below). Put your defaults in

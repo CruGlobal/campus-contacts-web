@@ -1,0 +1,6 @@
+<li class="label <%= 'selected' if params[:label].to_i == label.id %>" data-id="<%= label.id %>">
+  <% if can? :manage, current_organization %>
+    <%= link_to('x', group_label_path(label), method: :delete, remote: true, class: 'delete_label', :confirm => t('.delete_confirm', label: label)) %>
+  <% end %>
+  <span class="name"><%= link_to(label, groups_path(label: label)) %></span>
+</li>

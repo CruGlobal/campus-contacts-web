@@ -120,7 +120,8 @@ class OrganizationMembershipsController < ApplicationController
     if current_person.organizations.include?(org) || current_person.organizations.include?(org.parent)
       session[:current_organization_id] = params[:id]
     end
-    redirect_to '/contacts' #user_root_path
+    redirect_to :back
+    # redirect_to '/contacts' #user_root_path
   end
   
   def set_primary

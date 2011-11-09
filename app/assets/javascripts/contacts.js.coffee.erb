@@ -209,7 +209,7 @@ $ ->
     el.dialog
       resizable: false,
       height:650,
-      width:400,
+      width:600,
       modal: true,
       buttons: 
         Cancel: ->
@@ -223,7 +223,7 @@ $ ->
       $.ajax
         url: form.attr('action'), 
         data: form.serialize(), 
-        type: 'POST',
+        type: 'GET',
         success: (data)->
           $('#leader_search_results').html(data)
           $("#leader_search_results").show()
@@ -289,26 +289,6 @@ $ ->
   $('#hidden_questions_link').live 'click', ->
     $('#hidden_questions_div').slideToggle()
     false
-  $('.handle').draggable 
-    revert: true
-    start: (event, ui) ->
-      # If this row isn't checked, store the previously checked rows and check this row '
-      unless $(this).next('input').prop('checked') 
-        $(this).data 'checked',  $('.id_checkbox:checked').map ->
-          return $(this).val()
-        $('.id_checkbox:checked').prop('checked', false) 
-        $(this).next('input').prop('checked', true) 
-    stop: (event, ui) ->
-      if $(this).data('checked')?
-        $(this).next('input').prop('checked', false)
-        $.each $(this).data('checked'), (i, id) ->
-          $('.id_checkbox[value=' + id + ']').prop('checked', true)
-    helper: (event) ->
-      length = if $(this).next('input').prop('checked') then $('.id_checkbox:checked').length else 1
-      helper_text = "<%= I18n.t('contacts.index.assign_people', count: 0) %>".replace('0', length)
-      if length == 1
-        helper_text = "<%= I18n.t('contacts.index.assign_people', count: 1) %>"
-      $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'));
  
   $.fn.activateDncDroppable()
   $.fn.activateLeaderDroppable()

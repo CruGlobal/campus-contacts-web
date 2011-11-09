@@ -3,6 +3,8 @@ class Organization < ActiveRecord::Base
     
   has_ancestry
   belongs_to :importable, polymorphic: true
+  has_many :roles, inverse_of: :organization
+  has_many :group_labels
   has_many :activities, dependent: :destroy
   has_many :target_areas, through: :activities
   has_many :organization_memberships, dependent: :destroy
@@ -24,6 +26,7 @@ class Organization < ActiveRecord::Base
   has_many :inprogress_contacts, through: :contact_assignments, source: :person
   has_many :no_activity_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.followup_status' => 'uncontacted'}
   has_many :rejoicables
+  has_many :groups
   Rejoicable::OPTIONS.each do |option|
     has_many :"#{option}_contacts", :through => :rejoicables, source: :person, conditions: {'rejoicables.what' => option}, uniq: true
   end

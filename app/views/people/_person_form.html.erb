@@ -1,71 +1,73 @@
 <%= fields_for person, {validators: {}} do |pf| %>
-  <table border="0" cellspacing="0" cellpadding="0" class="modal_person_info">
-  <tr>
-    <td class="left"><%= t('general.first_name') %>:</td>
-    <td><%= pf.text_field :firstName %></td>
-  </tr>
-  <tr>
-    <td class="left"><%= t('general.last_name') %>:</td>
-    <td><%= pf.text_field :lastName %></td>
-  </tr>
-  <tr>
-    <td class="left"><%= t('general.gender') %>:</td>
-    <td>
-      <%= pf.radio_button :gender, 'male' %> <%= t('general.male') %> 
-      <%= pf.radio_button :gender, 'female' %> <%= t('general.female') %> 
-    </td>
-  </tr>
+<div class="customform contact_form">
+  <div class="sfield">
+    <div class="ls"><%= t('general.first_name') %>:</div>
+    <div class="rs"><%= pf.text_field :firstName %></div>
+  </div>
+  <div class="sfield">
+    <div class="ls"><%= t('general.last_name') %>:</div>
+    <div class="rs"><%= pf.text_field :lastName %></div>
+  </div>
+  <div class="sfield">
+    <div class="ls"><%= t('general.gender') %>:</div>
+    <div class="rs">
+      <%= pf.radio_button :gender, 'male' %> <label for="person_gender_male"><%= t('general.male') %></label> <br/>
+      <%= pf.radio_button :gender, 'female' %> <label for="person_gender_female"><%= t('general.female') %> </label>
+    </div>
+  </div>
   <%= pf.fields_for (@email || person.primary_email_address || person.email_addresses.new) do |af| %>
-  <tr>
-    <td class="left"><%= t('general.email') %>:</td>
-    <td><%= af.text_field :email %></td>
-  </tr>
+  <div class="sfield">
+    <div class="ls"><%= t('general.email') %>:</div>
+    <div class="rs"><%= af.text_field :email %></div>
+  </div>
   <% end %>
   <%= pf.fields_for (@phone || person.primary_phone_number || person.phone_numbers.new) do |af| %>
-  <tr>
-    <td class="left"><%= t('general.phone') %>:</td>
-    <td><%= af.text_field :number %></td>
-  </tr>
+  <div class="sfield">
+    <div class="ls"><%= t('general.phone') %>:</div>
+    <div class="rs"><%= af.text_field :number %></div>
+  </div>
   <% end %>
         
- <%= pf.fields_for :current_address, (person.current_address || person.build_current_address) do |af| %>        
-  <tr>
-    <td class="left"><%= t('general.address1') %>:</td>
-    <td><%= af.text_field :address1 %></td>
-  </tr>
+  <%= pf.fields_for :current_address, (person.current_address || person.build_current_address) do |af| %>        
+  <div class="sfield">
+    <div class="ls"><%= t('general.address1') %>:</div>
+    <div class="rs"><%= af.text_field :address1 %></div>
+  </div>
   
-  <tr>
-    <td class="left"><%= t('general.address2') %>:</td>
-    <td><%= af.text_field :address2 %></td>
-  </tr>
+  <div class="sfield">
+    <div class="ls"><%= t('general.address2') %>:</div>
+    <div class="rs"><%= af.text_field :address2 %></div>
+  </div>
 
-  <tr>
-    <td class="left"><%= t('general.city') %>:</td>
-    <td><%= af.text_field :city %></td>
-  </tr>
-
-  <tr>
-    <td class="left"><%= t('general.state') %>:</td>
-    <td><%= af.text_field :state %></td>
-  </tr>
+  <div class="sfield">
+    <div class="ls"><%= t('general.city') %>:</div>
+    <div class="rs"><%= af.text_field :city %></div>
+  </div>
   
-  <tr>
-    <td class="left"><%= t('general.zip') %>:</td>
-    <td><%= af.text_field :zip %></td>
-  </tr>
+  <div class="sfield">
+    <div class="ls"></div>
+    <div class="rs">
+      <div class="sidebyside leftalign">
+        <div class="element">
+          <%= t('general.state') %>:<br/>
+          <%= af.select :state, Carmen::states('US') %>
+        </div>
+        <div class="element">
+          <%= t('general.zip') %>:<br/>
+          <%= af.text_field :zip, :class => "field_zip" %>
+        </div>
+      </div>
+    </div>
+  </div>
   
-  <tr>
-    <td class="left"><%= t('general.country') %>:</td>
-    <td><%= af.text_field :country %></td>
-  </tr>
+  <div class="sfield">
+    <div class="ls"><%= t('general.country') %>:</div>
+    <div class="rs">
+      <% Carmen.priority_countries = %w(US CA) %>
+      <%= af.select :country, Carmen::countries(:locale => I18n.locale) %>
+    </div>
+  </div>
+  <% end %>
+</div>
   
-  
- <% end %>
-
-
-  
-
-          
-  
-  </table>
 <% end %>

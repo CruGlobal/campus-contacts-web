@@ -110,6 +110,11 @@ module ApiHelper
   def limit_and_offset_object(object)
     #allow for start (SQL Offset) and limit on query.  use :start and :limit
     raise LimitRequiredWithStartError if (params[:start].present? && !params[:limit].present?)
+
+    if (params[:limit].to_i > 100 || params[:limit].to_i == 0)
+      params[:limit] = 100
+    end
+    
     object = object.offset(params[:start].to_i) if params[:start].to_i > 0
     object = object.limit(params[:limit].to_i) if params[:limit].to_i > 0
     
@@ -225,7 +230,9 @@ module ApiHelper
   end
   
   def logApiRequest(exception = nil)
-    
+    if exception.nil?
+      return
+    end
     begin
       apiLog = {}
       apiLog[:platform] = params[:platform].to_s if params[:platform]
@@ -256,13 +263,6 @@ module ApiHelper
     meta = {}
     meta[:request_time] = DateTime.now.utc.to_i
     meta[:request_organization] = @organization.id unless @organization.nil?
-    identity = Rack::OAuth2::Server.get_access_token(params['access_token']).identity if params[:access_token]
-    if (!identity.nil?)
-      log = ApiLog.where("identity = ?", [identity]).last
-      meta[:last_request] = log.created_at.utc.to_i unless log.nil?
-      log2 = ApiLog.where("identity = ? AND url = ?", identity, request.url).last
-      meta[:last_identical_request] = log2.created_at.utc.to_i unless log2.nil?
-    end
     @api_json_header[:meta] = meta
     @api_json_header
   end

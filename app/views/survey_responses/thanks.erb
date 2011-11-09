@@ -1,4 +1,4 @@
-<% provide :title, "Thanks!"%>
+<% provide :title, t('.thanks') %>
 <% redirect_url = cookies[:survey_mode].present? ? contact_form_url(@keyword.keyword) : sign_out_url %>
 <div class="info">
   <center><h4><%= @keyword.post_survey_message.present? ? @keyword.post_survey_message : t('contacts.thanks.message') %></h4></center>

@@ -1,28 +1,27 @@
 <% provide :sidebar do %>
   <ul class="leftmenu">
-    <li><a href="/sms_keywords">Keywords</a></li>
-    <li class="selected"><%= link_to("Request Keyword", new_sms_keyword_path) %></li>
+    <li><a href="/sms_keywords"><%= t('sms_keywords.edit.keywords') %></a></li>
+    <li class="selected"><%= link_to(t('sms_keywords.index.request_keyword'), new_sms_keyword_path) %></li>
   </ul>
 <% end %>
 
 <div class="titlebar">
-  <h1>Request a Keyword</h1>
+  <h1><%= t('sms_keywords.index.request_keyword') %></h1>
 </div>
 
 
 <div class="pagemenu">
   <ul class="pillmenu">
-    <li><%= link_to 'Back', :back %></li>
+    <li><%= link_to t('general.back'), :back %></li>
   </ul>
 </div>
 
 
 <div class="contentpad">
   
-  <p class="explanation1"> Choosing a keyword for your community or event enables you to have people fill out your survey questions via the web, interactive texting,
-    and smartphones.  <strong>They will text your keyword to the number <%= SmsKeyword::SHORT %></strong> and your survey questions will appear on their device.  Note: The process of acquiring new keywords
-    requires manual intervention. Once you request your keyword expect to wait up to 24 hours before we notify you via email that your keyword is approved and
-	ready for use.  </p>
+  <p class="explanation1"> 
+    <%= t('.choose_keyword_explanation_html', number: SmsKeyword::SHORT) %>  
+  </p>
   
   <%= render 'form' %>
   
