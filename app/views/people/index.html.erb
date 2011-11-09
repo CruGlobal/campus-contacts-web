@@ -26,7 +26,7 @@
         <div class="col_1">
           <%- @roles.each do |role| %>
             <div>
-              <%= check_box_tag 'role_ids[]', role.id, false, id: "role_ids_#{role.id}", class: 'role_id_checkbox' %> <%= role.i18n %>
+              <%= check_box_tag 'role_ids[]', role.id, false, id: "role_ids_#{role.id}", class: 'role_id_checkbox' %> <%= role %>
             </div>
           <% end %>
      
