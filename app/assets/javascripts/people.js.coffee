@@ -97,7 +97,7 @@ $('#send_bulkemail_link').live 'click', ->
   $('#bulk_send_dialog form').addClass('bulk-email')
   $('#bulk_send_dialog form').removeClass('bulk-sms')
   $('#bulk_send_dialog .subject').show()
-  /* disable char counter */
+  # disable char counter 
   $('#char_counter').hide()
   $('#body').unbind('keyup')
   $('#body').unbind('paste')  
@@ -217,7 +217,7 @@ $('#check_all').live 'click', ->
   params = $(this).attr('data-params')  
   $('input.id_checkbox').prop('checked', checked)  
   
-  /* only show option to select more if there are more than 1 page */
+  # only show option to select more if there are more than 1 page 
   if $('.pagination').length
     if checked    
       $('#contacts_table').prepend('<tr><td colspan="8" align="center" style="background:none;">Fetching information...</td></tr>') 
