@@ -155,7 +155,7 @@ class PeopleController < ApplicationController
   def bulk_email
     to_ids = params[:to].split(',')    
     
-   to_ids.each do |id|
+    to_ids.each do |id|
       person = Person.find_by_personID(id)
       PeopleMailer.enqueue.bulk_message(person.email, current_person.email, params[:subject], params[:body]) if !person.email.blank?
     end
@@ -166,9 +166,17 @@ class PeopleController < ApplicationController
   def bulk_sms
     to_ids = params[:to].split(',')    
 
-   to_ids.each do |id|
+    to_ids.each do |id|
       person = Person.find_by_personID(id)
-      @sent_sms = SentSms.create!(message: params[:body][0..128] + ' Txt HELP for help STOP to quit', recipient: person.phone_number) if person.phone_number.length > 0
+      if person.primary_phone_number
+        if person.primary_phone_number.carrier && person.primary_phone_number.carrier.email.present?
+          # Use email to sms if we have it
+          @sent_sms = SmsMailer.enqueue.text(person.primary_phone_number.email_address, current_person.email, params[:body])
+        else
+          # Otherwise send it as a text
+          @sent_sms = SentSms.create!(message: params[:body][0..128] + ' Txt HELP for help STOP to quit', recipient: person.phone_number) 
+        end
+      end
     end
     
     render :nothing => true

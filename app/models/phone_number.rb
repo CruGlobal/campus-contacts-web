@@ -1,4 +1,6 @@
 class PhoneNumber < ActiveRecord::Base
+  belongs_to :carrier, class_name: 'SmsCarrier', foreign_key: 'carrier_id'
+  
   belongs_to :person
   validates_presence_of :number, message: "can't be blank"
   
@@ -26,6 +28,10 @@ class PhoneNumber < ActiveRecord::Base
     else
       number
     end
+  end
+  
+  def email_address
+    number + '@' + person.primary_phone_number.carrier.email
   end
   
   def number_with_country_code
