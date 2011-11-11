@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '~>3.1.0'#, git: 'git://github.com/rails/rails.git', branch: '3-1-stable'
 gem 'jquery-rails'
-gem 'mysql2', '0.3.9'
+gem 'mysql2', '0.3.8'
 gem 'redis'
 gem 'rack-offline'
 gem 'capistrano'
@@ -36,7 +36,6 @@ gem 'acts_as_list'
 gem 'dynamic_form'
 gem 'coffee-script'
 gem 'uglifier'
-gem 'translate-rails3', require: 'translate', git: 'git://github.com/romanbsd/translate.git'
 gem 'trumant-rack-oauth2-server', git: 'git://github.com/twinge/rack-oauth2-server.git', branch: 'active_record'
 
 gem 'enforce_schema_rules'
@@ -69,6 +68,7 @@ group :development, :test do
   # Pretty printed test output
   # gem 'turn', :require => false
   gem 'rails-footnotes', '>= 3.7'
+  gem 'translate-rails3', :require => 'translate'
 end
 
 group :development do
