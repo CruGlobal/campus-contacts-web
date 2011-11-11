@@ -1,0 +1,103 @@
+--- 
+fr: 
+  active_admin: 
+    dashboard: Tableau de Bord
+    dashboard_welcome: 
+      welcome: "Bienvenue dans Active Admin. Ceci est la page par d\xC3\xA9faut."
+      call_to_action: Pour ajouter des sections au tableau de bord, consultez 'app/admin/dashboards.rb'
+    view: Voir
+    edit: Modifier
+    delete: Supprimer
+    delete_confirmation: "\xC3\x8Ates-vous certain de vouloir supprimer ceci ?"
+    new_model: Nouveau %{model}
+    edit_model: Modifier %{model}
+    delete_model: Supprimer %{model}
+    details: "D\xC3\xA9tails de %{model}"
+    cancel: Annuler
+    empty: Vide
+    previous: "Pr\xC3\xA9c\xC3\xA9dent"
+    next: Suivant
+    download: "T\xC3\xA9l\xC3\xA9charger:"
+    has_many_new: Ajouter un nouveau %{model}
+    has_many_delete: Supprimer
+    filter: Filtrer
+    clear_filters: Supprimer les filtres
+    search_field: Rechercher %{field}
+    equal_to: "Egal \xC3\xA0"
+    greater_than: Plus grand que
+    less_than: Plus petit que
+    main_content: "Veuillez impl\xC3\xA9menter %{model}#main_content pour afficher le contenu."
+    logout: "D\xC3\xA9connexion"
+    sidebars: 
+      filters: Filtres
+    pagination: 
+      empty: "Aucun %{model} trouv\xC3\xA9"
+      one: Affichage de <b>1</b> %{model}
+      one_page: Affichage de <b>tous les %{n}</b> %{model}
+      multiple: Affichage de %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> sur un total de <b>%{total}</b>
+    any: N'importe lequel
+    blank_slate: 
+      content: Il n'y a pas encore de %{resource_name}.
+      link: "Cr\xC3\xA9ez en un"
+  contacts: 
+    form: 
+      first_name: "Pr\xC3\xA9nom"
+      last_name: Nom
+      phone_number: "Num\xC3\xA9ro de t\xC3\xA9l\xC3\xA9phone"
+    index: 
+      add: Ajouter
+      add_question_back: "Cliquez sur une question pour l&#39;ajouter \xC3\xA0 nouveau \xC3\xA0 la page"
+      all: Tous les
+      all_responses: Tous les contacts
+      assign_people: 
+        one: Attribuer une personne
+        other: Attribuer %{count} des gens
+      assign_to: "Attribuer \xC3\xA0:"
+      assigned_to: "Assign\xC3\xA9e \xC3\xA0"
+      clear_search_form: Formulaire de Recherche Effacer
+      completed: "Termin\xC3\xA9"
+      delete_confirm: "Vous allez envoyer ce contact \xC3\xA0 la &quot;Ne pas contacter&quot; liste. Si ce n&#39;est pas ce que vous vouliez faire, cliquez sur Annuler."
+      delete_contact: Supprimer ce contact
+      destroy_confirm: "Etes-vous s\xC3\xBBr de vouloir supprimer ce contact? Si ce n&#39;est pas ce que vous vouliez faire, cliquez sur Annuler."
+      dnc: Ne pas contacter
+      dnc_contacts: "Tous les contacts - \xC2\xABNe pas contacter\xC2\xBB"
+      export: Export
+      filter: Rechercher
+      first_name: "Pr\xC3\xA9nom"
+      friend_responses: Les contacts qui sont aussi mes amis sur Facebook
+      friends: Amis
+      hidden_questions: Questions Invisible
+      in_progress: "Assign\xC3\xA9"
+      in_progress_responses: "Tous les contacts - Assign\xC3\xA9"
+      last_name: Nom
+      leaders: Leaders
+      matching_seach: "Correspondant aux crit\xC3\xA8res que vous avez cherch\xC3\xA9 des"
+      my_friends: Mes amis
+      no_activity: "Aucune activit\xC3\xA9"
+      no_activity_responses: "Tous les contacts - aucune activit\xC3\xA9"
+      no_contacts: "D\xC3\xA9sol\xC3\xA9, il n&#39;y a pas de contacts ici."
+      none_checked: "Vous n&#39;avez pas s\xC3\xA9lectionn\xC3\xA9 tous les contacts \xC3\xA0 affecter."
+      phone_number: "Num\xC3\xA9ro de t\xC3\xA9l\xC3\xA9phone"
+      reminder_email_body: "Salut! \r\n\
+        Juste vous faire savoir que vous avez re\xC3\xA7u de nouveaux contacts pour le suivi. \r\n\
+        Connectez-vous au moins MissionHub http://www.missionhub.com pour acc\xC3\xA9der \xC3\xA0 vos contacts. \r\n\
+        Dans le Christ,\r\n\
+        %{name}"
+      reminder_email_subject: "De nouveaux contacts sont arriv\xC3\xA9s!"
+      responses_assigned_to: "Tous les contacts - Assign\xC3\xA9 \xC3\xA0 %{assigned_to}"
+      send_reminder: Envoyer un rappel
+      show_all: "Voir \xC2\xABen cours\xC2\xBB des contacts"
+      unassign_contact: Unassign contacts
+      unassigned: Unassigned
+      unassigned_responses: Tous les contacts - Unassigned
+      which_org: Vous devez choisir l&#39;organisation qui vous voulez faire folow-up de
+    leader: 
+      delete_confirm: "Etes-vous s\xC3\xBBr de vouloir supprimer %{person} en tant que leader?"
+    leader_form: 
+      start_typing: "Commencez \xC3\xA0 taper un nom pour trouver une personne pour faire un chef de file:"
+    leaders: 
+      reminder_prompt: "Certains de vos dirigeants ont des contacts qui n&#39;ont pas \xC3\xA9t\xC3\xA9 suivies! Laissez vos dirigeants savent!"
+      show_more: Afficher plus Leaders
+    mine: 
+      completed: "Termin\xC3\xA9"
+      email: Email
