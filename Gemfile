@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '~>3.1.0'#, git: 'git://github.com/rails/rails.git', branch: '3-1-stable'
 gem 'jquery-rails'
-gem 'mysql2'
+gem 'mysql2', '0.3.9'
 gem 'redis'
 gem 'rack-offline'
 gem 'capistrano'
