@@ -91,7 +91,6 @@ class SmsController < ApplicationController
           @sms_params[:message] = params["Body"].strip.gsub(/\n/, ' ')
         else
           @sms_params = params.slice(:country)
-          @sms_params[:carrier_name] = params[:carrier]
           @sms_params[:phone_number] = params[:device_address]
           @sms_params[:shortcode] = params[:inbound_address]
           @sms_params[:received_at] = DateTime.strptime(params[:timestamp], '%m/%d/%Y %H:%M:%S')
