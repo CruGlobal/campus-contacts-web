@@ -16,7 +16,7 @@ end
 task "carriers" => :environment do
   # require 'hpricot'
   require 'open-uri'
-  PhoneNumber.connection.select_values("select distinct(number) as number from phone_numbers where txt_to_email is null or txt_to_email = ''").each do |number|
+  PhoneNumber.connection.select_values("select distinct(number) as number from phone_numbers where txt_to_email is null or txt_to_email = '' order by updated_at desc").each do |number|
     puts number
     next unless number.length == 10
     url = "https://api.data24-7.com/textat.php?username=support@missionhub.com&password=Windows7&p1=#{number}"
