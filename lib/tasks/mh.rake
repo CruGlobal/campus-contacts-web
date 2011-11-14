@@ -26,8 +26,8 @@ task "carriers" => :environment do
       carrier_name = xml.xpath('.//carrier_name').text
       carrier = SmsCarrier.find_or_create_by_data247_name(normalize_carrier(carrier_name))
       PhoneNumber.connection.update("update phone_numbers set carrier_id = #{carrier.id}, txt_to_email = '#{email}', email_updated_at = '#{Time.now.to_s(:db)}' where number = '#{number}'")
-    rescue
-      raise xml.inspect
+    rescue => e
+      raise xml.inspect + "\n" + e.inspect
     end
     # time_to_sleep = rand(5) + 2
     # puts "Sleeping #{time_to_sleep} seconds"
