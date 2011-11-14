@@ -34,7 +34,8 @@ class PhoneNumber < ActiveRecord::Base
   end
   
   def email_address
-    number + '@' + person.primary_phone_number.carrier.email
+    # number + '@' + person.primary_phone_number.carrier.email
+    txt_to_email
   end
   
   def number_with_country_code
