@@ -33,10 +33,10 @@ class SentSms < ActiveRecord::Base
       save
     
       # Log count sent through this carrier (just for fun)
-      if received_sms && received_sms.carrier_name.present?
-        carrier = SmsCarrier.find_or_create_by_moonshado_name(received_sms.carrier_name) 
-        carrier.increment!(:sent_sms)
-      end
+      # if received_sms && received_sms.carrier_name.present?
+      #   carrier = SmsCarrier.find_or_create_by_moonshado_name(received_sms.carrier_name) 
+      #   carrier.increment!(:sent_sms)
+      # end
     end
   
 end
