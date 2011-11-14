@@ -175,7 +175,7 @@ class PeopleController < ApplicationController
     to_ids.each do |id|
       person = Person.find_by_personID(id)
       if person.primary_phone_number
-        if person.primary_phone_number.carrier && person.primary_phone_number.carrier.email.present?
+        if person.primary_phone_number.txt_to_email
           # Use email to sms if we have it
           from_email = person.primary_phone_number && person.primary_phone_number.email_address.present? ? 
                         person.primary_phone_number.number : current_person.email
