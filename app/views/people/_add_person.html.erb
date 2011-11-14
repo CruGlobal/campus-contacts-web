@@ -10,16 +10,19 @@
     <%= hidden_field_tag :add_another %>
     <%= render 'people/person_form', person: person %>
     
-    <div class="user_defined_contact_fields">
-      Roles:
-      <br/>
+    <div class="user_defined_contact_fields customform contact_form">
+      <div class="ls">Roles:</div>
+      <div class="rs">
       <% current_organization.roles.each do |role| %>
-        <div class="field">
+        <div class="sfield">
           <%= check_box_tag "roles[#{role.id}]", 1 %>
-        	<%= role %>
+        	<label for="<%= "roles_#{role.id}" %>"><%= role %></label>
         </div>
       <% end %>
+      </div>
     </div>
+    
+    <br/>
 
     <%= submit_tag t('application.add_contact.save_and_close'), class: 'save_and_close save' %>
     <%= submit_tag t('application.add_contact.save_and_add'), class: 'save_and_more save' %>
