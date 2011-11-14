@@ -69,7 +69,7 @@ class PhoneNumber < ActiveRecord::Base
 
   def update_carrier
     url = "https://api.data24-7.com/textat.php?username=support@missionhub.com&password=Windows7&p1=#{number}"
-    xml = Nokogiri::XML(open(url))
+    xml = Nokogiri::XML(open(url, :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE))
     begin
       email = xml.xpath('.//sms_address').text
       carrier_name = xml.xpath('.//carrier_name').text
