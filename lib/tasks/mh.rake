@@ -15,20 +15,22 @@ end
 
 task "carriers" => :environment do
   # require 'hpricot'
-  require 'net/http'
-  PhoneNumber.connection.select_values("select distinct(number) as number from phone_numbers where carrier is null or carrier = ''").each do |number|
-    uri = URI.parse("http://digits.cloudvox.com/#{number}.json")
-    response = Net::HTTP.get(uri)
-    puts response
+  require 'open-uri'
+  PhoneNumber.connection.select_values("select distinct(number) as number from phone_numbers where txt_to_email is null or txt_to_email = ''").each do |number|
+    puts number
+    url = "https://api.data24-7.com/textat.php?username=support@missionhub.com&password=Windows7&p1=#{number}"
+    xml = Nokogiri::XML(open(url))
     begin
-      json = JSON.parse(response)
-      carrier = normalize(json['allocation']['carrier_name'])
-      PhoneNumber.connection.update("update phone_numbers set carrier = '#{carrier}' where number = '#{number}'")
+      email = xml.xpath('.//sms_address').text
+      carrier_name = xml.xpath('.//carrier_name').text
+      carrier = SmsCarrier.find_or_create_by_data247_name(normalize_carrier(carrier_name))
+      PhoneNumber.connection.update("update phone_numbers set carrier_id = #{carrier.id}, txt_to_email = '#{email}', email_updated_at = '#{Time.now.to_s(:db)}' where number = '#{number}'")
     rescue
-      # PhoneNumber.where(:number => number).collect(&:destroy)
+      puts xml.inspect
+      # cloudvox didn't like the number
     end
-    time_to_sleep = rand(5) + 2
-    puts "Sleeping #{time_to_sleep} seconds"
-    sleep(time_to_sleep)
+    # time_to_sleep = rand(5) + 2
+    # puts "Sleeping #{time_to_sleep} seconds"
+    # sleep(time_to_sleep)
   end
 end

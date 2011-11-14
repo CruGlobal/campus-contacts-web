@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '~>3.1.0'#, git: 'git://github.com/rails/rails.git', branch: '3-1-stable'
 gem 'jquery-rails'
 gem 'mysql2', '0.3.8'
+gem 'nokogiri'
 gem 'redis'
 gem 'rack-offline'
 gem 'capistrano'
@@ -22,7 +23,7 @@ gem 'ancestry'
 # gem 'rails_admin', git: 'git://github.com/sferik/rails_admin.git'
 gem 'activeadmin', git: 'git://github.com/gregbell/active_admin.git'
 
-gem 'twilio-rb', git: 'git://github.com/twinge/twilio-rb.git'
+gem 'twilio-rb'#, git: 'git://github.com/twinge/twilio-rb.git'
 gem "default_value_for"
 
 gem 'dalli'#, git: 'git://github.com/mperham/dalli.git'

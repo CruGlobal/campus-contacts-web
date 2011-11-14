@@ -1,3 +1,4 @@
+require 'open-uri'
 class PhoneNumber < ActiveRecord::Base
   @queue = :general
   belongs_to :carrier, class_name: 'SmsCarrier', foreign_key: 'carrier_id'
@@ -67,13 +68,13 @@ class PhoneNumber < ActiveRecord::Base
   end
 
   def update_carrier
-    uri = URI.parse("http://digits.cloudvox.com/#{number}.json")
-    response = Net::HTTP.get(uri)
+    url = "https://api.data24-7.com/textat.php?username=support@missionhub.com&password=Windows7&p1=#{number}"
+    xml = Nokogiri::XML(open(url))
     begin
-      json = JSON.parse(response)
-      carrier_name = json['allocation']['carrier_name']
-      carrier = SmsCarrier.find_or_create_by_cloudvox_name(normalize_carrier(carrier_name))
-      PhoneNumber.connection.update("update phone_numbers set carrier_id = '#{carrier.id}' where number = '#{number}'")
+      email = xml.xpath('.//sms_address').text
+      carrier_name = xml.xpath('.//carrier_name').text
+      carrier = SmsCarrier.find_or_create_by_data247_name(normalize_carrier(carrier_name))
+      PhoneNumber.connection.update("update phone_numbers set carrier_id = #{carrier.id}, txt_to_email = '#{email}', email_updated_at = '#{Time.now.to_s(:db)}' where number = '#{number}'")
     rescue
       # cloudvox didn't like the number
     end
