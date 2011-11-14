@@ -12,7 +12,18 @@ $ ->
 
   $('#user_merge_form input.person').triggerPersonLookup()
   $('#user_merge_form input.name').triggerPersonSearch()
-  
+
+  $('#people_controller a.add_person').live 'click', ->
+    $('#new_person')[0].reset()
+    $('#add_person_div').dialog
+      resizable: false,
+      height:444,
+      width:600,
+      modal: true,
+      buttons: 
+        Cancel: ->
+          $(this).dialog('destroy')
+    false
   true
   
 $.fn.triggerPersonSearch = ->

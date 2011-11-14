@@ -19,6 +19,7 @@
     <li><%= link_to(t('.export'), export_people_path(params.except(:action, :controller, :utf8))) %></li>
   </ul>
   <ul id="menu" class="pillmenu">
+    <li><%= link_to(t('.add_person'), "", class: 'add_person') %></li>
     <li>
       <%= link_to(t('nav.roles'), '#', :id => 'roles_menu_div') %>
 
@@ -51,7 +52,7 @@
     <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment',  'data-params' => 'page=' + (params[:page] ? params[:page] : '1') + '&role_id=' + (params[:role_id] ? params[:role_id] : '')   %></th>
     <th><%= sort_link @q, :firstName, t('contacts.index.first_name') %></th>
     <th><%= sort_link @q, :lastName, t('contacts.index.last_name') %></th>
-    <th><%= t('.roles') %></th>
+    <th><%= t('nav.roles') %></th>
     <th><%= sort_link @q, :gender, t('.gender') %></th>
     <th><%= t('.email') %></th>
     <th><%= t('.phone') %></th>
@@ -96,3 +97,8 @@
 </div>
 
 <%= render 'shared/bulk_send_form' %>
+
+
+<div id="add_person_div" style="display:none" title="<%= t('.add_person') %>" class="fingerme">
+  <%= render 'add_person', person: Person.new %>
+</div>

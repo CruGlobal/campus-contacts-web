@@ -99,7 +99,10 @@ en:
     search:
       not_in_system: 'If the person you are looking for is not already in the system click here to add them.'
   people: 
+    add_person:
+      add_person: Add a person to %{org}
     index:
+      add_person: Add Person
       export: "Export this list"
       directory_title: "Directory - %{org}"
       labels: 'Labels'
