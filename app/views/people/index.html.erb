@@ -51,6 +51,7 @@
     <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment',  'data-params' => 'page=' + (params[:page] ? params[:page] : '1') + '&role_id=' + (params[:role_id] ? params[:role_id] : '')   %></th>
     <th><%= sort_link @q, :firstName, t('contacts.index.first_name') %></th>
     <th><%= sort_link @q, :lastName, t('contacts.index.last_name') %></th>
+    <th><%= t('.roles') %></th>
     <th><%= sort_link @q, :gender, t('.gender') %></th>
     <th><%= t('.email') %></th>
     <th><%= t('.phone') %></th>
@@ -64,15 +65,15 @@
           <%#= image_tag('grippy.png', class: 'handle') %>
           <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
         </td>
-        <td class="first_name">
+        <td class="first_name"><%= person.firstName %></td>
+        <td class="last_name"><%= person.lastName %></td>
+        <td>
           <div id="roles_user_<%= person.id %>" class="roles_spaces">
             <% person.assigned_organizational_roles(@allowed_organizations).each do |role| %>
-              <span id="<%= person.id%>_<%= role.id %>" class="role_label role_<%= role.id %>"><%= role.i18n %></span>
+              <span id="<%= person.id%>_<%= role.id %>" class="role_label role_<%= role.id %>"><%= role %></span>
             <% end %>
           </div>
-          <%= person.firstName %>
         </td>
-        <td class="last_name"><%= person.lastName %></td>
         <td><%= person.gender.to_s.titleize %></td>
         <td class="email"><%= mail_to(person.email) %></td>
         <td class="phone_number"><%= person.pretty_phone_number %></td>

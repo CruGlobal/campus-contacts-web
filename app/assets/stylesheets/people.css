@@ -1,8 +1,8 @@
-td.first_name div.roles_spaces { 
+td div.roles_spaces { 
   display: inline;
 }
 
-td.first_name span.role_label {
+td span.role_label {
   background: #E5E5E5;
   font-size: 10px;
   padding: 3px 5px;
