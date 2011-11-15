@@ -1,8 +1,11 @@
 <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="person_row" data-name="<%= person.name %>">
-  <td nowrap="nowrap" class="checkbox_cell">
-    <%#= image_tag('grippy.png', class: 'handle') %>
-    <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
-  </td>
+  
+  <% if can? :manage, current_organization %>
+    <td nowrap="nowrap" class="checkbox_cell">
+      <%#= image_tag('grippy.png', class: 'handle') %>
+      <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
+    </td>
+  <% end %>
   <td class="first_name"><%= person.firstName %></td>
   <td class="last_name"><%= person.lastName %></td>
   <td>
