@@ -102,7 +102,7 @@ ru:
       send_email: Отправить Email
       apply_roles: 'Применить роли'
       no_people: "Извините, здесь вовлеченных людей нет."
-      displaying: "Отобразить %{start} - %{finish} of %{totals}"
+      displaying: "Отобразить %{start} - %{finish} of %{total}"
     all:
       page_selected_html: "Все <b>%{count}</b> люди на этой странице выбраны."
       select_all_html: "Выбрать всех <b>%{count}</b> людей в директории."
