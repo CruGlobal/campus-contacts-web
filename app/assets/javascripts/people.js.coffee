@@ -24,6 +24,18 @@ $ ->
         Cancel: ->
           $(this).dialog('destroy')
     false
+  
+  $('#add_person_div .save').live 'click', ->
+    form = $(this).closest('form')
+    if $('#person_firstName', form).val() == '' #or ($('#person_email_address_email', form).val() == '' &&$('#person_phone_number_number', form).val() == '')
+      alert('At a minimum you need to provide a first name.')
+      return false
+    if $(this).hasClass('save_and_more')
+      $('#add_another').val('true')
+    $.rails.handleRemote(form)
+    form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
+    false
+    
   true
   
 $.fn.triggerPersonSearch = ->
