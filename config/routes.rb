@@ -155,6 +155,7 @@ Mh::Application.routes.draw do
   match "/application.manifest" => OFFLINE
   
   post "sms/mo"
+  get "sms/mo"
   
   resources :contacts do
     collection do
