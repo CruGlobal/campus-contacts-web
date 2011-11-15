@@ -6,6 +6,7 @@ class PeopleController < ApplicationController
   # GET /people
   # GET /people.xml
   def index
+    authorize! :read, Person
     fetch_people
   
     @roles = current_organization.roles
@@ -33,7 +34,8 @@ class PeopleController < ApplicationController
   # GET /people/1
   # GET /people/1.xml
   def show
-    @person = Person.find(params[:id])
+    @person = current_organization.people.find(params[:id])
+    authorize! :read, @person
 
     respond_to do |format|
       format.html # show.html.erb
@@ -43,18 +45,20 @@ class PeopleController < ApplicationController
 
   # GET /people/new
   # GET /people/new.xml
-  def new
-    @person = Person.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render xml: @person }
-    end
-  end
+  # def new
+  #   authorize! :create, Person
+  #   @person = Person.new
+  # 
+  #   respond_to do |format|
+  #     format.html # new.html.erb
+  #     format.xml  { render xml: @person }
+  #   end
+  # end
 
   # GET /people/1/edit
   def edit
-    @person = Person.find(params[:id])
+    @person = current_organization.people.find(params[:id])
+    authorize! :edit, @person
   end
   
   def search_ids
@@ -111,6 +115,7 @@ class PeopleController < ApplicationController
   end
 
   def create
+    authorize! :manage, current_organization
     Person.transaction do
       params[:person] ||= {}
       params[:person][:email_address] ||= {}
@@ -142,7 +147,8 @@ class PeopleController < ApplicationController
   # PUT /people/1
   # PUT /people/1.xml
   def update
-    @person = Person.find(params[:id])
+    @person = current_organization.people.find(params[:id])
+    authorize! :edit, @person
   
     respond_to do |format|
       if @person.update_attributes(params[:person])
@@ -168,6 +174,7 @@ class PeopleController < ApplicationController
   # end
   
   def bulk_email
+    authorize! :manage, current_organization
     to_ids = params[:to].split(',')    
     
     to_ids.each do |id|
@@ -179,6 +186,7 @@ class PeopleController < ApplicationController
   end
   
   def bulk_sms
+    authorize! :manage, current_organization
     to_ids = params[:to].split(',')    
 
     to_ids.each do |id|
@@ -208,6 +216,7 @@ class PeopleController < ApplicationController
   end
 
   def update_roles
+    authorize! :manage, current_organization
     data = ""
     role_ids = params[:role_ids].split(',')
     person = Person.find(params[:person_id])
