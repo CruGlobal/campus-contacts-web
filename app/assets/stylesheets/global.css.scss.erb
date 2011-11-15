@@ -1865,4 +1865,80 @@ textarea, input[type=text], input[type=password] {
   .ls {min-width: 75px;}
 }
 
+#orgs {
+  margin: 10px;
+}
+.org_column {
+  border: 1px solid silver;
+  width: 250px;
+  display: inline-block;
+  vertical-align: top;
+  padding: 0px;
+  .ctrl {
+    display: none;
+    float: right;
+    font-size: 10px;
+    text-transform: uppercase;
+    margin-left: 20px;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    height: 300px;
+    li {
+      line-height: 1.75em;
+      padding: 0 5px;
+    }
+    li:hover {
+      background: $light-blue;
+    }
+    li:hover > .ctrl {
+      display: block;
+    }
+  }
+}
+
+.org_empty {
+  height: 327px;
+  line-height: 300px;
+  vertical-align: middle;
+}
+
+.org_big_add {
+  text-align: center;
+  background: $light-gray;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 26px auto;
+  width: 100px;
+  line-height: 1em !important;
+  display:block;
+  .plus {
+    font-size: 50px;
+    display: block;
+    margin: 0 auto 10px auto;
+    background: $white;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 8px;
+  }
+}
+.org_big_add:hover {
+  text-decoration: none;
+}
+
+.org_new {
+  font-weight: bold;
+  border-bottom: 1px solid silver;
+  display: block;
+  padding: 6px 4px;
+}
+.org_new:hover {
+  background: $light-blue;
+  text-decoration: none;
+}
+
 

@@ -1,0 +1,39 @@
+<div class="controlbar">
+  <a href="/organizations">Back to Organizations</a>
+</div>
+
+<div class="titlebar">
+  <h1>Edit Organization</h1>
+  <p>
+    From this screen you can edit, delete or rearrange your organizations. Clicking "Add new organization"<br/>
+    will do a quick add by name. To edit more details, permissions and other info, select "edit" from the item's<br/>
+    name on the list.
+  </p>
+</div>
+
+<form>
+<div class="customform group_form">
+  <div class="sfield">
+    <div class="ls">
+      <label>Name</label>
+    </div>
+    <div class="rs">
+      <input type=text>
+    </div>
+  </div>
+  <div class="formactions">
+    <div class="sfield">
+      <div class="ls"></div>
+      <div class="rs">
+        <div class="sidebyside">
+          <div class="element">
+            <%#= f.submit %>
+          </div>
+          <div class="element" style="vertical-align: middle; height: 29px; line-height: 39px;">
+            <%= link_to(t('.back'), :back, :class=> "cancel")%>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+</form>
