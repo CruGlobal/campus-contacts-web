@@ -17,7 +17,7 @@ $ ->
     $('#new_person')[0].reset()
     $('#add_person_div').dialog
       resizable: false,
-      height:444,
+      height:664,
       width:600,
       modal: true,
       buttons: 
@@ -231,7 +231,7 @@ $('#bulk_send_dialog form').live 'submit', ->
   false
 
 $('#check_all').live 'click', ->
-  text = $('#contacts_table').find('tr:first').text()
+  text = $('#people_table').find('tr:first').text()
   if text.indexOf('Fetching') == 0
     return false
     
@@ -244,12 +244,12 @@ $('#check_all').live 'click', ->
   # only show option to select more if there are more than 1 page 
   if $('.pagination').length
     if checked    
-      $('#contacts_table').prepend('<tr><td colspan="8" align="center" style="background:none;">Fetching information...</td></tr>') 
+      $('#people_table').prepend('<tr><td colspan="8" align="center" style="background:none;">Fetching information...</td></tr>') 
       $.get '/people/all?' + params, (html) ->
-        $('#contacts_table').find('tr:first').remove()
-        $('#contacts_table').prepend(html)     
+        $('#people_table').find('tr:first').remove()
+        $('#people_table').prepend(html)     
     else
-      $('#contacts_table').find('tr:first').remove()
+      $('#people_table').find('tr:first').remove()
 
 $('#roles_menu_div').live 'click', ->
   role_div = $(this).parent().find('.dropdown_1column')
@@ -289,9 +289,7 @@ check_selected_roles = () ->
   checked
 
 get_role_labels = (obj) ->   
-  firstname_div = $(obj).parent().next()
-  role_labels = $(firstname_div).find('span.role_label')
-  role_labels
+  $('span.role_label', obj.closest('tr'))
 
 change_role_checkboxes = (role_labels, check) ->
   role_labels.each ->

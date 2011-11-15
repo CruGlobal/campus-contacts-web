@@ -119,6 +119,12 @@ class Organization < ActiveRecord::Base
     OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::ADMIN_ID)
   end
   
+  def add_involved(person)
+    person_id = person.is_a?(Person) ? person.id : person
+    add_member(person_id)
+    OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::INVOLVED_ID)
+  end
+  
   def remove_contact(person)
     person_id = person.is_a?(Person) ? person.id : person
     unless Person.find(person_id).organizational_roles.where("organization_id = ? AND role_id <> ?", id, Role::CONTACT_ID).first

@@ -8,12 +8,7 @@ class PeopleController < ApplicationController
   def index
     fetch_people
   
-    @allowed_organizations = case params[:subs]
-    when 'true' then current_organization.self_and_children_ids
-    else current_organization.id
-    end
-
-    @roles = Role.default | Role.where(:organization_id => @allowed_organizations)
+    @roles = current_organization.roles
 
     # respond_to do |format|
     #   format.html # index.html.erb
@@ -114,19 +109,32 @@ class PeopleController < ApplicationController
     end
     redirect_to merge_people_path, notice: "You've just merged #{params[:merge_ids].length + 1} people"
   end
-  # POST /people
-  # POST /people.xml
+
   def create
-    raise params.inspect
-    @person = Person.new(params[:person])
-  
-    respond_to do |format|
+    Person.transaction do
+      params[:person] ||= {}
+      params[:person][:email_address] ||= {}
+      params[:person][:phone_number] ||= {}
+      unless params[:person][:firstName].present?# && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
+        render :nothing => true and return
+      end
+      @person, @email, @phone = create_person(params[:person])
       if @person.save
-        format.html { redirect_to(@person, notice: 'Person was successfully created.') }
-        format.xml  { render xml: @person, status: :created, location: @person }
+
+        current_organization.add_involved(@person)
+        
+        respond_to do |wants|
+          wants.html { redirect_to :back }
+          wants.mobile { redirect_to :back }
+          wants.js 
+        end
       else
-        format.html { render action: "new" }
-        format.xml  { render xml: @person.errors, status: :unprocessable_entity }
+        flash.now[:error] = ''
+        flash.now[:error] += 'First name is required.<br />' unless @person.firstName.present?
+        flash.now[:error] += 'Phone number is not valid.<br />' if @phone && !@phone.valid?
+        flash.now[:error] += 'Email address is not valid.<br />' if @email && !@email.valid?
+        render 'add_person'
+        return
       end
     end
   end
