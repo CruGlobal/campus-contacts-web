@@ -15,13 +15,17 @@
   <% end %>
   <td><%= person.gender.to_s.titleize %></td>
   <td><%= person.pretty_phone_number %></td>
+  <% dates = [] %>
   <% questions.each do |q| %>
     <td class="<%= dom_id(q) %>">
       <% case q.slug %>
       <% when 'email' %>
         <%= mail_to(person.email) %>
       <% else %>
-        <%= answers[person.id][q.id] %>
+        <% if answer = answers[person.id][q.id] %>
+          <%= answer.first %>
+          <% dates << answer.last %>
+        <% end %>
       <% end %>
     </td>
   <% end %>
@@ -37,6 +41,7 @@
       <% end %>
     </td>
   <% end %>
+  <td><%= l(dates.sort.last, :format => :date) if dates.present? %></td>
   <td class="controls">
     <%= link_to(t('nav.view_details'), contact_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
     <% if params[:dnc] == 'true' %>

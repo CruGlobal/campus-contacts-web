@@ -371,6 +371,7 @@ en:
       assign_people:
         one: Assign 1 person
         other: "Assign %{count} people"
+      last_survey: 'Last Survey'
     mine:
       in_progress: 'In Progress'
       completed: 'Completed'
@@ -443,6 +444,7 @@ en:
       short: "%d %b %H:%M"
       long: "%B %d, %Y %H:%M"
       time_only: "%l:%M %p"
+      date: "%m/%d/%Y"
     am: "am"
     pm: "pm"
 
