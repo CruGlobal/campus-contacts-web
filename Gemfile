@@ -18,17 +18,13 @@ gem 'client_side_validations'
 gem 'rubycas-client', '~> 2.2.1'
 gem 'rubycas-client-rails', '~> 0.1.0'
 gem 'carmen', git: 'git://github.com/twinge/carmen.git'
-# gem 'squeel'
 gem 'ancestry'
-# gem 'rails_admin', git: 'git://github.com/twinge/rails_admin.git', branch: 'configure_list_view_width'
-# gem 'rails_admin', git: 'git://github.com/sferik/rails_admin.git'
 gem 'activeadmin', git: 'git://github.com/gregbell/active_admin.git'
 
-gem 'twilio-rb'#, git: 'git://github.com/twinge/twilio-rb.git'
+gem 'twilio-rb'
 gem "default_value_for"
 
-gem 'dalli'#, git: 'git://github.com/mperham/dalli.git'
-# gem 'memcache-client'
+gem 'dalli'
 gem 'resque_mail_queue'
 
 gem 'valium'

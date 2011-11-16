@@ -31,7 +31,7 @@ class Organization < ActiveRecord::Base
     has_many :"#{option}_contacts", :through => :rejoicables, source: :person, conditions: {'rejoicables.what' => option}, uniq: true
   end
   
-  validates_presence_of :name#, :person_id
+  validates_presence_of :name, :terminology#, :person_id
   
   after_create :create_admin_user
   

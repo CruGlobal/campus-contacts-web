@@ -317,6 +317,7 @@ en:
       reminder_prompt: "Some of your leaders have contacts that haven't been followed up! Let your leaders know!"
       show_more: "Show More Leaders"
     index:
+      add_contact: Add a Contact
       clear_search_form: 'Clear Search Form'
       no_contacts: 'Sorry, there are no contacts here.'
       export: Export
@@ -673,3 +674,12 @@ en:
         
   member: Member
   leader: Leader
+  organizations:
+    index:
+      add_sub_org: Add %{terminology} under this one
+      add_a_sub_org: Add new %{terminology}
+      add: Add
+    edit:
+      title: Edit %{org}
+      back_to_orgs: Back to Organizations
+      delete_confirm: "Are you really really sure you want to delete this %{terminology}? There's no going back, and all the related data will be deleted!"

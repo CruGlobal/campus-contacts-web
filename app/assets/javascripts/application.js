@@ -19,3 +19,4 @@
 //= require nicEditMinimal.js
 //= require groups
 //= require group_labels
+//= require organizations

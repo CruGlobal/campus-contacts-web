@@ -1,0 +1,36 @@
+<div id="add_org_form">
+  <%= form_for organization, url: organizations_path, method: :post, remote: true, validate: true do |f| %>
+    <% if flash[:error] %>
+      <div class="flash error"><%= raw flash[:error] %></div>
+    <% end %>
+    <%= f.hidden_field :parent_id %>
+    <%= hidden_field_tag :add_another %>
+    <div class="customform">
+      <div class="sfield">
+        <div class="ls">
+          <%= f.label :name %>
+        </div>
+        <div class="rs">
+          <%= f.text_field :name %>
+        </div>
+      </div>
+      <div class="sfield">
+        <div class="ls">
+          <%= f.label :terminology %>
+        </div>
+        <div class="rs">
+          <%= f.text_field :terminology %>
+        </div>
+      </div>
+      <div class="ls"></div>
+      <div class="rs">
+        <div class="sfield">
+          <%= f.check_box :show_sub_orgs %>
+        	<%= f.label :show_sub_orgs %>
+        </div>
+      </div>
+    </div>
+    <%= submit_tag t('application.add_contact.save_and_close'), class: 'save_and_close save' %>
+    <%= submit_tag t('application.add_contact.save_and_add'), class: 'save_and_more save' %>
+  <% end %>
+</div>

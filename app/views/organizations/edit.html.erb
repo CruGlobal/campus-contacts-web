@@ -1,39 +1,57 @@
 <div class="controlbar">
-  <a href="/organizations">Back to Organizations</a>
+  <a href="/organizations"><%= t('.back_to_orgs') %></a>
 </div>
 
 <div class="titlebar">
-  <h1>Edit Organization</h1>
-  <p>
+  <h1><%= t('.title', org: @organization) %></h1>
+  <!-- <p>
     From this screen you can edit, delete or rearrange your organizations. Clicking "Add new organization"<br/>
     will do a quick add by name. To edit more details, permissions and other info, select "edit" from the item's<br/>
     name on the list.
-  </p>
+  </p> -->
 </div>
 
-<form>
-<div class="customform group_form">
-  <div class="sfield">
-    <div class="ls">
-      <label>Name</label>
-    </div>
-    <div class="rs">
-      <input type=text>
-    </div>
-  </div>
-  <div class="formactions">
+<%= form_for @organization, validate: true do |f| %>
+  <div class="customform group_form">
     <div class="sfield">
-      <div class="ls"></div>
+      <div class="ls">
+        <%= f.label :name %>
+      </div>
       <div class="rs">
-        <div class="sidebyside">
+        <%= f.text_field :name %>
+      </div>
+    </div>
+    <div class="sfield">
+      <div class="ls">
+        <%= f.label :terminology %>
+      </div>
+      <div class="rs">
+        <%= f.text_field :terminology %>
+      </div>
+    </div>
+    <div class="formactions">
+      <div class="sfield">
+        <div class="ls"></div>
+        <div class="rs">
+          <div class="sidebyside">
           <div class="element">
-            <%#= f.submit %>
+            <%= f.submit %>
           </div>
           <div class="element" style="vertical-align: middle; height: 29px; line-height: 39px;">
             <%= link_to(t('.back'), :back, :class=> "cancel")%>
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="formactions">
+      <div class="sfield">
+        <div class="ls">Danger Zone!</div>
+        <div class="rs">
+          <div class="element" style="vertical-align: middle; height: 29px; line-height: 39px;">
+            <%= link_to(t('.delete'), organization_path(@organization), method: :delete, class: 'delete', confirm: t('.delete_confirm', terminology: @organization.terminology))%>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
-</form>
+<% end %>

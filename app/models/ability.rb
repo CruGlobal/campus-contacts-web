@@ -8,7 +8,8 @@ class Ability
     involved_role = roles.detect {|r| r.i18n == 'involved'}
     user ||= User.new # guest user (not logged in)
     if user && user.person
-      admin_of_org_ids = user.person.organizations.where('organizational_roles.role_id' => admin_role.id).collect {|org| org.show_sub_orgs? ? org.self_and_children_ids : org.id}.flatten
+      # admin_of_org_ids = user.person.organizations.where('organizational_roles.role_id' => admin_role.id).collect {|org| org.show_sub_orgs? ? org.self_and_children_ids : org.id}.flatten
+      admin_of_org_ids = user.person.organizations.where('organizational_roles.role_id' => admin_role.id).collect {|org| org.subtree_ids}.flatten
       leader_of_org_ids = user.person.organizations.where('organizational_roles.role_id' => [leader_role.id, admin_role.id]).collect {|org| org.show_sub_orgs? ? org.self_and_children_ids : org.id}.flatten
       
       # can :manage, Organization, id: user.person.organizational_roles.where(role_id: admin_role.id).collect(&:organization_id)
