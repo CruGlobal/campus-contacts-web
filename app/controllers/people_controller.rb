@@ -196,7 +196,7 @@ class PeopleController < ApplicationController
           # Use email to sms if we have it
           from_email = current_person.primary_phone_number && current_person.primary_phone_number.email_address.present? ? 
                         current_person.primary_phone_number.email_address : current_person.email
-          @sent_sms = SmsMailer.enqueue.text(person.primary_phone_number.email_address, from_email, params[:body])
+          @sent_sms = SmsMailer.enqueue.text(person.primary_phone_number.email_address, "#{current_person.to_s} <#{from_email}>", params[:body])
         else
           # Otherwise send it as a text
           @sent_sms = SentSms.create!(message: params[:body][0..128] + ' Txt HELP for help STOP to quit', recipient: person.phone_number) 
