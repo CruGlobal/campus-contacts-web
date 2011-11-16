@@ -23,8 +23,9 @@
         <%= mail_to(person.email) %>
       <% else %>
         <% if answer = answers[person.id][q.id] %>
-          <%= answer.first %>
-          <% dates << answer.last %>
+          <% date = answer.last %>
+          <span title="<%= l(date, format: :date) if date %>" class="tipit"><%= answer.first %></span>
+          <% dates << date %>
         <% end %>
       <% end %>
     </td>
