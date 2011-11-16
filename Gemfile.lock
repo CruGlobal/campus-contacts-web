@@ -114,6 +114,7 @@ GEM
     hoptoad_notifier (2.4.11)
       activesupport
       builder
+    http_accept_language (1.0.2)
     httparty (0.8.1)
       multi_json
       multi_xml
@@ -317,6 +318,7 @@ DEPENDENCIES
   enforce_schema_rules
   factory_girl (~> 2.0.0.rc4)
   hoptoad_notifier
+  http_accept_language
   jquery-rails
   kaminari
   mini_fb

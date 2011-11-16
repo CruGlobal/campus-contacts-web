@@ -123,7 +123,12 @@ class ApplicationController < ActionController::Base
   
 
   def set_locale
-    I18n.locale = params[:locale] if params[:locale]
+    if params[:locale]
+      I18n.locale = params[:locale] 
+    else
+      available = %w{en ru}
+      I18n.locale = request.preferred_language_from(available)
+    end
   end
   
   def current_organization(person = nil)
