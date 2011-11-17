@@ -42,6 +42,11 @@
       <% end %>
     </td>
   <% end %>
+  <td>
+    <% @surveys[person.id].each do |keyword,date| %>
+      <span title="<%= l(date, format: :date) if date %>" class="tipit"><%= keyword %></span><br/>
+    <% end %>
+  </td>
   <td><%= l(dates.sort.last, :format => :date) if dates.present? %></td>
   <td class="controls">
     <%= link_to(t('nav.view_details'), contact_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>

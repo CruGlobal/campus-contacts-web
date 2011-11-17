@@ -373,6 +373,7 @@ en:
         one: Assign 1 person
         other: "Assign %{count} people"
       last_survey: 'Last Survey'
+      surveys: 'Surveys'
     mine:
       in_progress: 'In Progress'
       completed: 'Completed'

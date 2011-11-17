@@ -138,7 +138,8 @@
         <th><%= t('.assigned_to') %></th>
         <th><%= t('.friends') %></th>
       <% end %>
-      <th><%= t('.last_survey') %></th>
+      <th><%= t('.surveys') %></th>
+      <th><%= sort_link @q, 'mh_answer_sheets.updated_at', t('.last_survey') %></th>
       <th></th>
     </tr>
     <tbody id="contacts_table">
