@@ -152,7 +152,7 @@ class Person < ActiveRecord::Base
       get_location(authentication, response)
       get_education_history(authentication, response)
     rescue MiniFB::FaceBookError => e
-      HoptoadNotifier.notify(
+      Airbrake.notify(
         :error_class   => "MiniFB::FaceBookError",
         :error_message => "MiniFB::FaceBookError: #{e.message}",
         :parameters    => {data: data, authentication: authentication, response: response}

@@ -40,7 +40,7 @@ gem 'enforce_schema_rules'
 # gem 'sentient_user'
 gem 'paper_trail', '~> 2'
 gem 'unicorn'
-gem 'hoptoad_notifier'
+gem 'airbrake'
 gem 'cancan'
 gem 'kaminari'
 gem 'whenever'
@@ -66,7 +66,7 @@ group :development, :test do
   # Pretty printed test output
   # gem 'turn', :require => false
   gem 'rails-footnotes', '>= 3.7'
-  gem 'translate-rails3', :require => 'translate'
+  # gem 'translate-rails3', :require => 'translate'
 end
 
 group :development do
