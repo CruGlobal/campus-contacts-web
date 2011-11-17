@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
   
   def raise_or_hoptoad(e)
     if Rails.env.production? 
-      HoptoadNotifier.notify(e)
+      Airbrake.notify(e)
     else
       raise e
     end

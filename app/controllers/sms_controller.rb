@@ -139,7 +139,7 @@ class SmsController < ApplicationController
         end
       rescue => e
         # Don't blow up on bad saves
-        HoptoadNotifier.notify(e)
+        Airbrake.notify(e)
       end
     end
     

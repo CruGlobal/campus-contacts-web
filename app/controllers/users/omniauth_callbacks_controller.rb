@@ -25,7 +25,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       else
         # There was a problem logging this person in
         # This usually means the data coming back from FB didn't include an email address
-        HoptoadNotifier.notify(
+        Airbrake.notify(
           :error_class => "FacebookLoginError",
           :error_messsage => "Facebook Login Error",
           :parameters => env["omniauth.auth"]
