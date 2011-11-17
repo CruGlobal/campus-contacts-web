@@ -43,8 +43,10 @@
     </td>
   <% end %>
   <td>
-    <% @surveys[person.id].each do |keyword,date| %>
-      <span title="<%= l(date, format: :date) if date %>" class="tipit"><%= keyword %></span><br/>
+    <% if @surveys && @surveys[person.id] %>
+      <% @surveys[person.id].each do |keyword,date| %>
+        <span title="<%= l(date, format: :date) if date %>" class="tipit"><%= keyword %></span><br/>
+      <% end %>
     <% end %>
   </td>
   <td><%= l(dates.sort.last, :format => :date) if dates.present? %></td>
