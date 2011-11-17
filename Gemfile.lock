@@ -61,6 +61,9 @@ GEM
       multi_json (~> 1.0)
     acts_as_list (0.1.4)
     addressable (2.2.6)
+    airbrake (3.0.5)
+      activesupport
+      builder
     ancestry (1.2.4)
       activerecord (>= 2.2.2)
     arel (2.2.1)
@@ -111,9 +114,6 @@ GEM
     hashie (1.2.0)
     highline (1.6.8)
     hike (1.2.1)
-    hoptoad_notifier (2.4.11)
-      activesupport
-      builder
     http_accept_language (1.0.2)
     httparty (0.8.1)
       multi_json
@@ -300,6 +300,7 @@ DEPENDENCIES
   active_reload
   activeadmin!
   acts_as_list
+  airbrake
   ancestry
   awesome_print
   cancan
@@ -317,7 +318,6 @@ DEPENDENCIES
   dynamic_form
   enforce_schema_rules
   factory_girl (~> 2.0.0.rc4)
-  hoptoad_notifier
   http_accept_language
   jquery-rails
   kaminari
