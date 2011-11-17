@@ -227,7 +227,7 @@ class PeopleController < ApplicationController
        OrganizationalRole.create!(person_id: person.id, role_id: role_id, organization_id: current_organization.id) 
        data << "<span id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
        data << "style='margin-right:4px;'" if index < role_ids.length - 1
-       data << ">#{Role.find(role_id).i18n}</span>"
+       data << ">#{Role.find(role_id).to_s}</span>"
     end
 
     render :text => data
