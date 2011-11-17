@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.integer  "identity"
     t.string   "client_id"
     t.string   "redirect_uri"
-    t.string   "scope"
+    t.string   "scope",        :default => ""
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "granted_at"
@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.string   "code"
     t.integer  "identity"
     t.string   "client_id"
-    t.string   "scope"
+    t.string   "scope",       :default => ""
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "expires_at"
@@ -166,7 +166,7 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.datetime "dateAdded"
     t.datetime "dateModified"
     t.string   "moderatedYet", :limit => 1
-    t.string   "summary",      :limit => 5000
+    t.text     "summary"
     t.string   "quality",      :limit => 256
     t.datetime "expDate"
     t.datetime "lastAccessed"
@@ -184,20 +184,69 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
 
   add_index "cms_cmsfile", ["accessCount"], :name => "index1"
 
-  create_table "communities", :force => true do |t|
-    t.string   "name"
-    t.string   "website"
-    t.string   "fbpage"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "school_id"
+  create_table "cms_viewcategoryidfiles", :id => false, :force => true do |t|
+    t.integer  "CmsFileID",                     :default => 0, :null => false
+    t.string   "mime",          :limit => 128
+    t.string   "title",         :limit => 256
+    t.integer  "accessCount"
+    t.datetime "dateAdded"
+    t.datetime "dateModified"
+    t.string   "moderatedYet",  :limit => 1
+    t.text     "summary"
+    t.string   "quality",       :limit => 256
+    t.datetime "expDate"
+    t.datetime "lastAccessed"
+    t.string   "modMsg",        :limit => 4000
+    t.string   "keywords",      :limit => 4000
+    t.string   "url",           :limit => 128
+    t.string   "detail",        :limit => 4000
+    t.string   "language",      :limit => 128
+    t.string   "version",       :limit => 128
+    t.string   "author",        :limit => 256
+    t.string   "submitter",     :limit => 256
+    t.string   "contact",       :limit => 256
+    t.integer  "rating"
+    t.string   "CmsCategoryID", :limit => 64,                  :null => false
   end
 
-  create_table "community_memberships", :force => true do |t|
-    t.integer  "community_id"
-    t.integer  "person_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "cms_viewfileidcategories", :id => false, :force => true do |t|
+    t.integer "CmsCategoryID",                  :default => 0, :null => false
+    t.integer "parentCategory"
+    t.string  "catName",        :limit => 256
+    t.string  "catDesc",        :limit => 2000
+    t.string  "path",           :limit => 2000
+    t.string  "pathid",         :limit => 2000
+    t.string  "CmsFileID",      :limit => 64,                  :null => false
+  end
+
+  create_table "cms_viewfilesandcategories", :id => false, :force => true do |t|
+    t.integer  "CmsFileID",                      :default => 0, :null => false
+    t.string   "mime",           :limit => 128
+    t.string   "title",          :limit => 256
+    t.integer  "accessCount"
+    t.datetime "dateAdded"
+    t.datetime "dateModified"
+    t.string   "moderatedYet",   :limit => 1
+    t.text     "summary"
+    t.string   "quality",        :limit => 256
+    t.datetime "expDate"
+    t.datetime "lastAccessed"
+    t.string   "modMsg",         :limit => 4000
+    t.string   "keywords",       :limit => 4000
+    t.string   "url",            :limit => 128
+    t.string   "detail",         :limit => 4000
+    t.string   "language",       :limit => 128
+    t.string   "version",        :limit => 128
+    t.string   "author",         :limit => 256
+    t.string   "submitter",      :limit => 256
+    t.string   "contact",        :limit => 256
+    t.integer  "rating"
+    t.integer  "CmsCategoryID",                  :default => 0, :null => false
+    t.integer  "parentCategory"
+    t.string   "catName",        :limit => 256
+    t.string   "catDesc",        :limit => 2000
+    t.string   "path",           :limit => 2000
+    t.string   "pathid",         :limit => 2000
   end
 
   create_table "contact_assignments", :force => true do |t|
@@ -503,6 +552,7 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.integer  "registration_id"
     t.string   "early_registration_override"
     t.boolean  "name_disabled"
+    t.boolean  "confirmed_unique",                       :default => false
     t.boolean  "orphan",                                 :default => false, :null => false
   end
 
@@ -558,6 +608,7 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.boolean  "require_full_payment"
     t.boolean  "shut_off"
     t.text     "shut_off_message"
+    t.boolean  "enable_rideshare"
   end
 
   add_index "crs2_registrant_type", ["conference_id"], :name => "fk_registrant_type_conference_id"
@@ -915,121 +966,6 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
 
   add_index "followup_comments", ["organization_id", "contact_id"], :name => "comment_organization_id_contact_id"
 
-  create_table "fsk_allocations", :force => true do |t|
-    t.integer  "ssm_id"
-    t.integer  "region_id"
-    t.integer  "impact_allotment"
-    t.integer  "forerunner_allotment"
-    t.integer  "regional_allotment"
-    t.integer  "regionally_raised"
-    t.integer  "locally_raised"
-    t.string   "allocation_year",      :limit => 10
-    t.text     "national_notes",       :limit => 2147483647
-    t.text     "impact_notes",         :limit => 2147483647
-    t.text     "forerunner_notes",     :limit => 2147483647
-    t.text     "regional_notes",       :limit => 2147483647
-    t.text     "local_notes",          :limit => 2147483647
-    t.integer  "lock_version",                               :default => 0, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "agree_to_report"
-  end
-
-  add_index "fsk_allocations", ["ssm_id"], :name => "FK_fsk_allocations_simplesecuritymanager_user"
-
-  create_table "fsk_fields", :force => true do |t|
-    t.string "name", :limit => 50
-  end
-
-  create_table "fsk_fields_roles", :id => false, :force => true do |t|
-    t.integer "role_id",  :null => false
-    t.integer "field_id", :null => false
-  end
-
-  add_index "fsk_fields_roles", ["field_id"], :name => "FK_fsk_fields_roles"
-
-  create_table "fsk_kit_categories", :force => true do |t|
-    t.string   "name",         :limit => 50,                  :null => false
-    t.string   "description",  :limit => 2000
-    t.integer  "lock_version",                 :default => 0, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "fsk_line_items", :force => true do |t|
-    t.integer  "product_id",   :default => 0, :null => false
-    t.integer  "order_id",     :default => 0, :null => false
-    t.integer  "quantity",     :default => 0, :null => false
-    t.integer  "lock_version", :default => 0, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "fsk_line_items", ["order_id"], :name => "FK_fsk_line_items_fsk_orders"
-  add_index "fsk_line_items", ["product_id"], :name => "FK_fsk_line_items_fsk_products"
-
-  create_table "fsk_orders", :force => true do |t|
-    t.string   "location_name",      :limit => 128
-    t.datetime "updated_at"
-    t.integer  "allocation_id"
-    t.string   "contact_first_name", :limit => 30
-    t.string   "contact_last_name",  :limit => 30
-    t.string   "contact_phone",      :limit => 24
-    t.string   "contact_cell",       :limit => 24
-    t.string   "contact_email",      :limit => 50
-    t.string   "ship_first_name",    :limit => 30
-    t.string   "ship_address1",      :limit => 50
-    t.string   "ship_address2",      :limit => 50
-    t.string   "ship_city",          :limit => 30
-    t.string   "ship_state",         :limit => 6
-    t.string   "ship_zip",           :limit => 10
-    t.string   "ship_phone",         :limit => 24
-    t.integer  "total_kits"
-    t.string   "business_unit",      :limit => 20
-    t.string   "operating_unit",     :limit => 20
-    t.string   "dept_id",            :limit => 20
-    t.string   "project_id",         :limit => 10
-    t.string   "type",               :limit => 20
-    t.string   "order_year",         :limit => 10
-    t.integer  "ssm_id"
-    t.integer  "lock_version",                             :default => 0,     :null => false
-    t.datetime "created_at"
-    t.string   "ship_last_name"
-    t.boolean  "freeze_order",                             :default => false
-    t.text     "target_audience",    :limit => 2147483647
-    t.text     "how_used",           :limit => 2147483647
-  end
-
-  add_index "fsk_orders", ["ssm_id"], :name => "FK_fsk_orders_simplesecuritymanager_user"
-
-  create_table "fsk_products", :force => true do |t|
-    t.string   "name",            :limit => 100,        :default => "",     :null => false
-    t.text     "description",     :limit => 2147483647
-    t.string   "image_filename",  :limit => 1000
-    t.float    "price"
-    t.integer  "quantity",                              :default => 0,      :null => false
-    t.integer  "lock_version",                          :default => 0,      :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "kit_category_id"
-    t.string   "availability",    :limit => 20,         :default => "both", :null => false
-    t.integer  "box_quantity",                          :default => 100
-  end
-
-  add_index "fsk_products", ["kit_category_id"], :name => "FK_fsk_products_fsk_kit_categories"
-
-  create_table "fsk_roles", :force => true do |t|
-    t.string "name", :limit => 50
-  end
-
-  create_table "fsk_users", :force => true do |t|
-    t.integer "role_id", :default => 0, :null => false
-    t.integer "ssm_id",  :default => 0, :null => false
-  end
-
-  add_index "fsk_users", ["role_id"], :name => "FK_fsk_users_fsk_roles"
-  add_index "fsk_users", ["ssm_id"], :name => "FK_fsk_users_simplesecuritymanager_user"
-
   create_table "hr_ms_payment", :primary_key => "paymentID", :force => true do |t|
     t.datetime "paymentDate"
     t.float    "debit"
@@ -1058,51 +994,51 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.string   "currentPosition",     :limit => 128
     t.string   "leadershipLevel",     :limit => 128
     t.string   "relationship",        :limit => 128
-    t.text     "q1",                  :limit => 2147483647
+    t.text     "q1",                  :limit => 16777215
     t.integer  "q2"
-    t.text     "q3",                  :limit => 2147483647
-    t.text     "q4",                  :limit => 2147483647
-    t.text     "q5",                  :limit => 2147483647
-    t.text     "q6",                  :limit => 2147483647
-    t.text     "q7",                  :limit => 2147483647
+    t.text     "q3",                  :limit => 16777215
+    t.text     "q4",                  :limit => 16777215
+    t.text     "q5",                  :limit => 16777215
+    t.text     "q6",                  :limit => 16777215
+    t.text     "q7",                  :limit => 16777215
     t.integer  "q8"
-    t.text     "q9",                  :limit => 2147483647
+    t.text     "q9",                  :limit => 16777215
     t.integer  "q10"
-    t.text     "q11",                 :limit => 2147483647
+    t.text     "q11",                 :limit => 16777215
     t.integer  "q12"
-    t.text     "q13",                 :limit => 2147483647
+    t.text     "q13",                 :limit => 16777215
     t.integer  "q14"
-    t.text     "q15",                 :limit => 2147483647
+    t.text     "q15",                 :limit => 16777215
     t.integer  "q16"
-    t.text     "q17",                 :limit => 2147483647
+    t.text     "q17",                 :limit => 16777215
     t.integer  "q18"
-    t.text     "q19",                 :limit => 2147483647
+    t.text     "q19",                 :limit => 16777215
     t.integer  "q20"
-    t.text     "q21",                 :limit => 2147483647
+    t.text     "q21",                 :limit => 16777215
     t.integer  "q22"
-    t.text     "q23",                 :limit => 2147483647
+    t.text     "q23",                 :limit => 16777215
     t.integer  "q24"
-    t.text     "q25",                 :limit => 2147483647
-    t.text     "q26",                 :limit => 2147483647
-    t.text     "q27",                 :limit => 2147483647
-    t.text     "q28f1",               :limit => 2147483647
+    t.text     "q25",                 :limit => 16777215
+    t.text     "q26",                 :limit => 16777215
+    t.text     "q27",                 :limit => 16777215
+    t.text     "q28f1",               :limit => 16777215
     t.integer  "q28f2"
-    t.text     "q28l1",               :limit => 2147483647
+    t.text     "q28l1",               :limit => 16777215
     t.integer  "q28l2"
-    t.text     "q28o1",               :limit => 2147483647
+    t.text     "q28o1",               :limit => 16777215
     t.integer  "q28o2"
-    t.text     "q28a1",               :limit => 2147483647
+    t.text     "q28a1",               :limit => 16777215
     t.integer  "q28a2"
-    t.text     "q28t1",               :limit => 2147483647
+    t.text     "q28t1",               :limit => 16777215
     t.integer  "q28t2"
-    t.text     "q28s1",               :limit => 2147483647
+    t.text     "q28s1",               :limit => 16777215
     t.integer  "q28s2"
-    t.text     "q29",                 :limit => 2147483647
-    t.text     "q30",                 :limit => 2147483647
-    t.text     "q31",                 :limit => 2147483647
-    t.text     "q32",                 :limit => 2147483647
-    t.text     "q33",                 :limit => 2147483647
-    t.text     "q34",                 :limit => 2147483647
+    t.text     "q29",                 :limit => 16777215
+    t.text     "q30",                 :limit => 16777215
+    t.text     "q31",                 :limit => 16777215
+    t.text     "q32",                 :limit => 16777215
+    t.text     "q33",                 :limit => 16777215
+    t.text     "q34",                 :limit => 16777215
     t.integer  "fk_ReviewSessionID"
     t.string   "reviewedByTitle",     :limit => 5
     t.string   "reviewedByFirstName", :limit => 30
@@ -1124,15 +1060,15 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.string   "currentPosition",         :limit => 128
     t.string   "leadershipLevel",         :limit => 128
     t.string   "relationship",            :limit => 128
-    t.text     "q1",                      :limit => 2147483647
-    t.text     "q2",                      :limit => 2147483647
-    t.text     "q3",                      :limit => 2147483647
-    t.text     "q4",                      :limit => 2147483647
-    t.text     "q5",                      :limit => 2147483647
-    t.text     "q6",                      :limit => 2147483647
-    t.text     "q7",                      :limit => 2147483647
-    t.text     "q8",                      :limit => 2147483647
-    t.text     "q9",                      :limit => 2147483647
+    t.text     "q1",                      :limit => 16777215
+    t.text     "q2",                      :limit => 16777215
+    t.text     "q3",                      :limit => 16777215
+    t.text     "q4",                      :limit => 16777215
+    t.text     "q5",                      :limit => 16777215
+    t.text     "q6",                      :limit => 16777215
+    t.text     "q7",                      :limit => 16777215
+    t.text     "q8",                      :limit => 16777215
+    t.text     "q9",                      :limit => 16777215
     t.integer  "fk_ReviewSessionLightID"
   end
 
@@ -1410,7 +1346,7 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.datetime "leadershipStartDate"
     t.datetime "leadershipEndDate"
     t.datetime "createDate"
-    t.binary   "lastChangedDate",               :limit => 255
+    t.binary   "lastChangedDate",               :limit => 8
     t.integer  "lastChangedBy"
     t.string   "displayLocation"
     t.boolean  "partnershipRegionOnly"
@@ -1594,6 +1530,23 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
 
   add_index "hr_si_users", ["fk_ssmUserID"], :name => "IX_hr_si_Users_fk_ssmUserID"
 
+  create_table "infobase_bookmarks", :force => true do |t|
+    t.integer "user_id"
+    t.string  "name",    :limit => 64
+    t.string  "value"
+  end
+
+  add_index "infobase_bookmarks", ["name"], :name => "index_infobase_bookmarks_on_name"
+  add_index "infobase_bookmarks", ["user_id"], :name => "index_infobase_bookmarks_on_user_id"
+
+  create_table "infobase_users", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "type",       :default => "InfobaseAdminUser"
+    t.integer  "created_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "lat_long_by_zip_code", :force => true do |t|
     t.string  "zip"
     t.decimal "lat",  :precision => 15, :scale => 10
@@ -1601,30 +1554,30 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
   end
 
   create_table "linczone_contacts", :primary_key => "ContactID", :force => true do |t|
-    t.datetime "EntryDate"
-    t.string   "FirstName",            :limit => 120
-    t.string   "LastName",             :limit => 120
-    t.string   "HomeAddress",          :limit => 200
-    t.string   "City",                 :limit => 20
-    t.string   "State",                :limit => 20
-    t.string   "Zip",                  :limit => 80
-    t.string   "Email",                :limit => 120
-    t.string   "HighSchool",           :limit => 120
-    t.string   "CampusName",           :limit => 200
-    t.string   "CampusID",             :limit => 80
-    t.string   "ReferrerFirstName",    :limit => 120
-    t.string   "ReferrerLastName",     :limit => 120
-    t.string   "ReferrerRelationship", :limit => 100
-    t.string   "ReferrerEmail",        :limit => 200
-    t.string   "InfoCCC",              :limit => 1,   :default => "F"
-    t.string   "InfoNav",              :limit => 1,   :default => "F"
-    t.string   "InfoIV",               :limit => 1,   :default => "F"
-    t.string   "InfoFCA",              :limit => 1,   :default => "F"
-    t.string   "InfoBSU",              :limit => 1,   :default => "F"
-    t.string   "InfoCACM",             :limit => 1,   :default => "F"
-    t.string   "InfoEFCA",             :limit => 1,   :default => "F"
-    t.string   "InfoGCM",              :limit => 1,   :default => "F"
-    t.string   "InfoWesley",           :limit => 1,   :default => "F"
+    t.timestamp "EntryDate"
+    t.string    "FirstName",            :limit => 120
+    t.string    "LastName",             :limit => 120
+    t.string    "HomeAddress",          :limit => 200
+    t.string    "City",                 :limit => 20
+    t.string    "State",                :limit => 20
+    t.string    "Zip",                  :limit => 80
+    t.string    "Email",                :limit => 120
+    t.string    "HighSchool",           :limit => 120
+    t.string    "CampusName",           :limit => 200
+    t.string    "CampusID",             :limit => 80
+    t.string    "ReferrerFirstName",    :limit => 120
+    t.string    "ReferrerLastName",     :limit => 120
+    t.string    "ReferrerRelationship", :limit => 100
+    t.string    "ReferrerEmail",        :limit => 200
+    t.string    "InfoCCC",              :limit => 1,   :default => "F"
+    t.string    "InfoNav",              :limit => 1,   :default => "F"
+    t.string    "InfoIV",               :limit => 1,   :default => "F"
+    t.string    "InfoFCA",              :limit => 1,   :default => "F"
+    t.string    "InfoBSU",              :limit => 1,   :default => "F"
+    t.string    "InfoCACM",             :limit => 1,   :default => "F"
+    t.string    "InfoEFCA",             :limit => 1,   :default => "F"
+    t.string    "InfoGCM",              :limit => 1,   :default => "F"
+    t.string    "InfoWesley",           :limit => 1,   :default => "F"
   end
 
   create_table "mail_delayed_jobs", :force => true do |t|
@@ -1802,7 +1755,7 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.datetime "updated_at"
   end
 
-  add_index "mh_email_templates", ["name"], :name => "index_ma_email_templates_on_name", :length => {"name"=>255}
+  add_index "mh_email_templates", ["name"], :name => "index_ma_email_templates_on_name", :length => {"name"=>767}
 
   create_table "mh_friends", :force => true do |t|
     t.string   "name"
@@ -1950,20 +1903,17 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
   add_index "ministry_activity", ["strategy"], :name => "index5"
 
   create_table "ministry_activity_history", :force => true do |t|
-    t.integer  "activity_id",                  :null => false
-    t.string   "from_status",    :limit => 2
-    t.string   "to_status",      :limit => 2
+    t.integer  "activity_id",                          :null => false
+    t.string   "from_status_deprecated", :limit => 2
+    t.string   "status",                 :limit => 2
     t.datetime "period_begin"
-    t.datetime "period_end"
-    t.string   "trans_username", :limit => 50
-    t.string   "fromStrategy"
-    t.string   "toStrategy"
+    t.datetime "period_end_deprecated"
+    t.string   "trans_username",         :limit => 50
   end
 
   add_index "ministry_activity_history", ["activity_id"], :name => "activity_id"
   add_index "ministry_activity_history", ["period_begin"], :name => "period_begin"
-  add_index "ministry_activity_history", ["toStrategy"], :name => "toStrategy"
-  add_index "ministry_activity_history", ["to_status"], :name => "to_status"
+  add_index "ministry_activity_history", ["status"], :name => "to_status"
 
   create_table "ministry_address", :primary_key => "AddressID", :force => true do |t|
     t.datetime "startdate"
@@ -1976,12 +1926,6 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.string   "state",     :limit => 6
     t.string   "zip",       :limit => 10
     t.string   "country",   :limit => 64
-  end
-
-  create_table "ministry_assoc_activitycontact", :id => false, :force => true do |t|
-    t.integer "ActivityID",                                 :null => false
-    t.string  "accountNo",  :limit => 11,                   :null => false
-    t.boolean "dbioDummy",                :default => true, :null => false
   end
 
   create_table "ministry_assoc_dependents", :id => false, :force => true do |t|
@@ -2083,6 +2027,7 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
   end
 
   add_index "ministry_movement_contact", ["ActivityID"], :name => "ActivityID"
+  add_index "ministry_movement_contact", ["personID", "ActivityID"], :name => "both"
   add_index "ministry_movement_contact", ["personID"], :name => "personID"
 
   create_table "ministry_newaddress", :primary_key => "addressID", :force => true do |t|
@@ -2260,98 +2205,98 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
   end
 
   create_table "ministry_staff", :force => true do |t|
-    t.string   "accountNo",                :limit => 11,                                                  :null => false
-    t.string   "firstName",                :limit => 30
-    t.string   "middleInitial",            :limit => 1
-    t.string   "lastName",                 :limit => 30
-    t.string   "isMale",                   :limit => 1
-    t.string   "position",                 :limit => 30
-    t.string   "countryStatus",            :limit => 10
-    t.string   "jobStatus",                :limit => 60
-    t.string   "ministry",                 :limit => 35
-    t.string   "strategy",                 :limit => 20
-    t.string   "isNewStaff",               :limit => 1
-    t.string   "primaryEmpLocState",       :limit => 6
-    t.string   "primaryEmpLocCountry",     :limit => 64
-    t.string   "primaryEmpLocCity",        :limit => 35
-    t.string   "primaryEmpLocDesc",        :limit => 128
-    t.string   "spouseFirstName",          :limit => 22
-    t.string   "spouseMiddleName",         :limit => 15
-    t.string   "spouseLastName",           :limit => 30
-    t.string   "spouseAccountNo",          :limit => 11
-    t.string   "spouseEmail",              :limit => 50
-    t.string   "fianceeFirstName",         :limit => 15
-    t.string   "fianceeMiddleName",        :limit => 15
-    t.string   "fianceeLastName",          :limit => 30
-    t.string   "fianceeAccountno",         :limit => 11
-    t.string   "isFianceeStaff",           :limit => 1
-    t.datetime "fianceeJoinStaffDate"
-    t.string   "isFianceeJoiningNS",       :limit => 1
-    t.string   "joiningNS",                :limit => 1
-    t.string   "homePhone",                :limit => 24
-    t.string   "workPhone",                :limit => 24
-    t.string   "mobilePhone",              :limit => 24
-    t.string   "pager",                    :limit => 24
-    t.string   "email",                    :limit => 50
-    t.string   "isEmailSecure",            :limit => 1
-    t.string   "url"
-    t.datetime "newStaffTrainingdate"
-    t.string   "fax",                      :limit => 24
-    t.string   "note",                     :limit => 2048
-    t.string   "region",                   :limit => 10
-    t.string   "countryCode",              :limit => 3
-    t.string   "ssn",                      :limit => 9
-    t.string   "maritalStatus",            :limit => 1
-    t.string   "deptId",                   :limit => 10
-    t.string   "jobCode",                  :limit => 6
-    t.string   "accountCode",              :limit => 25
-    t.string   "compFreq",                 :limit => 1
-    t.string   "compRate",                 :limit => 20
-    t.string   "compChngAmt",              :limit => 21
-    t.string   "jobTitle",                 :limit => 80
-    t.string   "deptName",                 :limit => 30
-    t.string   "coupleTitle",              :limit => 12
-    t.string   "otherPhone",               :limit => 24
-    t.string   "preferredName",            :limit => 50
-    t.string   "namePrefix",               :limit => 4
-    t.datetime "origHiredate"
-    t.datetime "birthDate"
-    t.datetime "marriageDate"
-    t.datetime "hireDate"
-    t.datetime "rehireDate"
-    t.datetime "loaStartDate"
-    t.datetime "loaEndDate"
-    t.string   "loaReason",                :limit => 80
-    t.integer  "severancePayMonthsReq"
-    t.datetime "serviceDate"
-    t.datetime "lastIncDate"
-    t.datetime "jobEntryDate"
-    t.datetime "deptEntryDate"
-    t.datetime "reportingDate"
-    t.string   "employmentType",           :limit => 20
-    t.string   "resignationReason",        :limit => 80
-    t.datetime "resignationDate"
-    t.string   "contributionsToOtherAcct", :limit => 1
-    t.string   "contributionsToAcntName",  :limit => 80
-    t.string   "contributionsToAcntNo",    :limit => 11
-    t.integer  "fk_primaryAddress"
-    t.integer  "fk_secondaryAddress"
-    t.integer  "fk_teamID"
-    t.string   "isSecure",                 :limit => 1
-    t.string   "isSupported",              :limit => 1
-    t.string   "removedFromPeopleSoft",    :limit => 1,                                  :default => "N"
-    t.string   "isNonUSStaff",             :limit => 1
-    t.integer  "person_id"
-    t.string   "middleName",               :limit => 30
-    t.string   "paygroup",                 :limit => 3
-    t.string   "idType",                   :limit => 2
-    t.string   "statusDescr",              :limit => 30
-    t.string   "internationalStatus",      :limit => 3
-    t.decimal  "balance",                                  :precision => 9, :scale => 2
-    t.string   "cccHrSendingDept",         :limit => 10
-    t.string   "cccHrCaringDept",          :limit => 10
-    t.string   "cccCaringMinistry",        :limit => 10
-    t.string   "assignmentLength",         :limit => 4
+    t.string  "accountNo",                :limit => 11,                                                  :null => false
+    t.string  "firstName",                :limit => 30
+    t.string  "middleInitial",            :limit => 1
+    t.string  "lastName",                 :limit => 30
+    t.string  "isMale",                   :limit => 1
+    t.string  "position",                 :limit => 30
+    t.string  "countryStatus",            :limit => 10
+    t.string  "jobStatus",                :limit => 60
+    t.string  "ministry",                 :limit => 35
+    t.string  "strategy",                 :limit => 20
+    t.string  "isNewStaff",               :limit => 1
+    t.string  "primaryEmpLocState",       :limit => 6
+    t.string  "primaryEmpLocCountry",     :limit => 64
+    t.string  "primaryEmpLocCity",        :limit => 35
+    t.string  "primaryEmpLocDesc",        :limit => 128
+    t.string  "spouseFirstName",          :limit => 22
+    t.string  "spouseMiddleName",         :limit => 15
+    t.string  "spouseLastName",           :limit => 30
+    t.string  "spouseAccountNo",          :limit => 11
+    t.string  "spouseEmail",              :limit => 50
+    t.string  "fianceeFirstName",         :limit => 15
+    t.string  "fianceeMiddleName",        :limit => 15
+    t.string  "fianceeLastName",          :limit => 30
+    t.string  "fianceeAccountno",         :limit => 11
+    t.string  "isFianceeStaff",           :limit => 1
+    t.date    "fianceeJoinStaffDate"
+    t.string  "isFianceeJoiningNS",       :limit => 1
+    t.string  "joiningNS",                :limit => 1
+    t.string  "homePhone",                :limit => 24
+    t.string  "workPhone",                :limit => 24
+    t.string  "mobilePhone",              :limit => 24
+    t.string  "pager",                    :limit => 24
+    t.string  "email",                    :limit => 50
+    t.string  "isEmailSecure",            :limit => 1
+    t.string  "url"
+    t.date    "newStaffTrainingdate"
+    t.string  "fax",                      :limit => 24
+    t.string  "note",                     :limit => 2048
+    t.string  "region",                   :limit => 10
+    t.string  "countryCode",              :limit => 3
+    t.string  "ssn",                      :limit => 9
+    t.string  "maritalStatus",            :limit => 1
+    t.string  "deptId",                   :limit => 10
+    t.string  "jobCode",                  :limit => 6
+    t.string  "accountCode",              :limit => 25
+    t.string  "compFreq",                 :limit => 1
+    t.string  "compRate",                 :limit => 20
+    t.string  "compChngAmt",              :limit => 21
+    t.string  "jobTitle",                 :limit => 80
+    t.string  "deptName",                 :limit => 30
+    t.string  "coupleTitle",              :limit => 12
+    t.string  "otherPhone",               :limit => 24
+    t.string  "preferredName",            :limit => 50
+    t.string  "namePrefix",               :limit => 4
+    t.date    "origHiredate"
+    t.date    "birthDate"
+    t.date    "marriageDate"
+    t.date    "hireDate"
+    t.date    "rehireDate"
+    t.date    "loaStartDate"
+    t.date    "loaEndDate"
+    t.string  "loaReason",                :limit => 80
+    t.integer "severancePayMonthsReq"
+    t.date    "serviceDate"
+    t.date    "lastIncDate"
+    t.date    "jobEntryDate"
+    t.date    "deptEntryDate"
+    t.date    "reportingDate"
+    t.string  "employmentType",           :limit => 20
+    t.string  "resignationReason",        :limit => 80
+    t.date    "resignationDate"
+    t.string  "contributionsToOtherAcct", :limit => 1
+    t.string  "contributionsToAcntName",  :limit => 80
+    t.string  "contributionsToAcntNo",    :limit => 11
+    t.integer "fk_primaryAddress"
+    t.integer "fk_secondaryAddress"
+    t.integer "fk_teamID"
+    t.string  "isSecure",                 :limit => 1
+    t.string  "isSupported",              :limit => 1
+    t.string  "removedFromPeopleSoft",    :limit => 1,                                  :default => "N"
+    t.string  "isNonUSStaff",             :limit => 1
+    t.integer "person_id"
+    t.string  "middleName",               :limit => 30
+    t.string  "paygroup",                 :limit => 3
+    t.string  "idType",                   :limit => 2
+    t.string  "statusDescr",              :limit => 30
+    t.string  "internationalStatus",      :limit => 3
+    t.decimal "balance",                                  :precision => 9, :scale => 2
+    t.string  "cccHrSendingDept",         :limit => 10
+    t.string  "cccHrCaringDept",          :limit => 10
+    t.string  "cccCaringMinistry",        :limit => 10
+    t.string  "assignmentLength",         :limit => 4
   end
 
   add_index "ministry_staff", ["accountNo"], :name => "accountNo", :unique => true
@@ -2368,8 +2313,8 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
   end
 
   create_table "ministry_statistic", :primary_key => "StatisticID", :force => true do |t|
-    t.datetime "periodBegin"
-    t.datetime "periodEnd"
+    t.date     "periodBegin"
+    t.date     "periodEnd"
     t.integer  "exposures"
     t.integer  "exposuresViaMedia"
     t.integer  "evangelisticOneOnOne"
@@ -2401,6 +2346,7 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.string   "peopleGroup"
     t.integer  "holySpiritConversations"
     t.integer  "dollars_raised"
+    t.integer  "sp_year"
   end
 
   add_index "ministry_statistic", ["fk_Activity"], :name => "index1"
@@ -2465,6 +2411,7 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.integer  "eventKeyID"
     t.string   "type",                   :limit => 20
     t.string   "county"
+    t.boolean  "ongoing_special_event",                 :default => false
   end
 
   add_index "ministry_targetarea", ["country"], :name => "index4"
@@ -2474,6 +2421,169 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
   add_index "ministry_targetarea", ["name"], :name => "index1"
   add_index "ministry_targetarea", ["region"], :name => "index6"
   add_index "ministry_targetarea", ["state"], :name => "index3"
+
+  create_table "ministry_viewdependentsstaff", :id => false, :force => true do |t|
+    t.string  "accountNo",                :limit => 11,                    :null => false
+    t.string  "firstName",                :limit => 30
+    t.string  "middleInitial",            :limit => 1
+    t.string  "lastName",                 :limit => 30
+    t.string  "isMale",                   :limit => 1
+    t.string  "position",                 :limit => 30
+    t.string  "countryStatus",            :limit => 10
+    t.string  "jobStatus",                :limit => 60
+    t.string  "ministry",                 :limit => 35
+    t.string  "strategy",                 :limit => 20
+    t.string  "isNewStaff",               :limit => 1
+    t.string  "primaryEmpLocState",       :limit => 6
+    t.string  "primaryEmpLocCountry",     :limit => 64
+    t.string  "primaryEmpLocCity",        :limit => 35
+    t.string  "spouseFirstName",          :limit => 22
+    t.string  "spouseMiddleName",         :limit => 15
+    t.string  "spouseLastName",           :limit => 30
+    t.string  "spouseAccountNo",          :limit => 11
+    t.string  "spouseEmail",              :limit => 50
+    t.string  "fianceeFirstName",         :limit => 15
+    t.string  "fianceeMiddleName",        :limit => 15
+    t.string  "fianceeLastName",          :limit => 30
+    t.string  "isFianceeStaff",           :limit => 1
+    t.date    "fianceeJoinStaffDate"
+    t.string  "isFianceeJoiningNS",       :limit => 1
+    t.string  "joiningNS",                :limit => 1
+    t.string  "homePhone",                :limit => 24
+    t.string  "workPhone",                :limit => 24
+    t.string  "mobilePhone",              :limit => 24
+    t.string  "pager",                    :limit => 24
+    t.string  "email",                    :limit => 50
+    t.string  "isEmailSecure",            :limit => 1
+    t.string  "url"
+    t.date    "newStaffTrainingdate"
+    t.string  "fax",                      :limit => 24
+    t.string  "note",                     :limit => 2048
+    t.string  "region",                   :limit => 10
+    t.string  "countryCode",              :limit => 3
+    t.string  "ssn",                      :limit => 9
+    t.string  "maritalStatus",            :limit => 1
+    t.string  "deptId",                   :limit => 10
+    t.string  "jobCode",                  :limit => 6
+    t.string  "accountCode",              :limit => 25
+    t.string  "compFreq",                 :limit => 1
+    t.string  "compRate",                 :limit => 20
+    t.string  "compChngAmt",              :limit => 21
+    t.string  "jobTitle",                 :limit => 80
+    t.string  "deptName",                 :limit => 30
+    t.string  "coupleTitle",              :limit => 12
+    t.string  "otherPhone",               :limit => 24
+    t.string  "preferredName",            :limit => 50
+    t.string  "namePrefix",               :limit => 4
+    t.date    "origHiredate"
+    t.date    "birthDate"
+    t.date    "marriageDate"
+    t.date    "hireDate"
+    t.date    "rehireDate"
+    t.date    "loaStartDate"
+    t.date    "loaEndDate"
+    t.string  "loaReason",                :limit => 80
+    t.integer "severancePayMonthsReq"
+    t.date    "serviceDate"
+    t.date    "lastIncDate"
+    t.date    "jobEntryDate"
+    t.date    "deptEntryDate"
+    t.date    "reportingDate"
+    t.string  "employmentType",           :limit => 20
+    t.string  "resignationReason",        :limit => 80
+    t.date    "resignationDate"
+    t.string  "contributionsToOtherAcct", :limit => 1
+    t.string  "contributionsToAcntName",  :limit => 80
+    t.string  "contributionsToAcntNo",    :limit => 11
+    t.integer "fk_primaryAddress"
+    t.integer "fk_secondaryAddress"
+    t.integer "fk_teamID"
+    t.string  "isSecure",                 :limit => 1
+    t.string  "isSupported",              :limit => 1
+    t.integer "DependentID",                                               :null => false
+    t.string  "fianceeAccountno",         :limit => 11
+    t.string  "removedFromPeopleSoft",    :limit => 1,    :default => "N"
+    t.string  "primaryEmpLocDesc",        :limit => 128
+  end
+
+  create_table "ministry_viewnoncccmintargetarea", :id => false, :force => true do |t|
+    t.string  "NonCccMinID",       :limit => 64,                 :null => false
+    t.integer "TargetAreaID",                     :default => 0, :null => false
+    t.string  "name",              :limit => 100
+    t.string  "address1",          :limit => 35
+    t.string  "address2",          :limit => 35
+    t.string  "city",              :limit => 30
+    t.string  "state",             :limit => 32
+    t.string  "zip",               :limit => 10
+    t.string  "country",           :limit => 64
+    t.string  "phone",             :limit => 24
+    t.string  "fax",               :limit => 24
+    t.string  "email",             :limit => 50
+    t.string  "url"
+    t.string  "abbrv",             :limit => 32
+    t.string  "fice",              :limit => 32
+    t.string  "note"
+    t.string  "altName",           :limit => 100
+    t.string  "isSecure",          :limit => 1
+    t.string  "isClosed",          :limit => 1
+    t.string  "region"
+    t.string  "mpta",              :limit => 30
+    t.string  "urlToLogo"
+    t.string  "enrollment",        :limit => 10
+    t.string  "monthSchoolStarts", :limit => 10
+    t.string  "monthSchoolStops",  :limit => 10
+    t.string  "isSemester",        :limit => 1
+    t.string  "isApproved",        :limit => 1
+    t.string  "aoaPriority",       :limit => 10
+    t.string  "aoa",               :limit => 100
+    t.string  "ciaUrl"
+    t.string  "infoUrl"
+  end
+
+  create_table "ministry_viewsortedactivities", :id => false, :force => true do |t|
+    t.string   "name",            :limit => 100
+    t.string   "url"
+    t.string   "facebook"
+    t.integer  "ActivityID",                     :default => 0, :null => false
+    t.string   "status",          :limit => 2
+    t.datetime "periodBegin"
+    t.string   "strategy",        :limit => 2
+    t.string   "transUsername",   :limit => 50
+    t.integer  "fk_teamID"
+    t.integer  "fk_targetAreaID"
+  end
+
+  create_table "ministry_viewstaffdependents", :id => false, :force => true do |t|
+    t.integer  "DependentID",               :default => 0, :null => false
+    t.string   "firstName",   :limit => 80
+    t.string   "middleName",  :limit => 80
+    t.string   "lastName",    :limit => 80
+    t.datetime "birthdate"
+    t.string   "gender",      :limit => 1
+    t.string   "accountNo",   :limit => 11,                :null => false
+  end
+
+  create_table "ministry_viewtargetareanoncccmin", :id => false, :force => true do |t|
+    t.integer "NonCccMinID",                :default => 0, :null => false
+    t.string  "ministry",     :limit => 50
+    t.string  "firstName",    :limit => 30
+    t.string  "lastName",     :limit => 30
+    t.string  "address1",     :limit => 35
+    t.string  "address2",     :limit => 35
+    t.string  "city",         :limit => 30
+    t.string  "state",        :limit => 6
+    t.string  "zip",          :limit => 10
+    t.string  "country",      :limit => 64
+    t.string  "homePhone",    :limit => 24
+    t.string  "workPhone",    :limit => 24
+    t.string  "mobilePhone",  :limit => 24
+    t.string  "email",        :limit => 80
+    t.string  "url",          :limit => 50
+    t.string  "pager",        :limit => 24
+    t.string  "fax",          :limit => 24
+    t.string  "note"
+    t.string  "TargetAreaID", :limit => 64,                :null => false
+  end
 
   create_table "mpd_contact_actions", :force => true do |t|
     t.integer  "mpd_contact_id"
@@ -2926,7 +3036,6 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
   end
 
   add_index "organization_memberships", ["organization_id", "person_id"], :name => "index_organization_memberships_on_organization_id_and_person_id", :unique => true
-  add_index "organization_memberships", ["person_id"], :name => "person_id"
 
   create_table "organizational_roles", :force => true do |t|
     t.integer  "person_id"
@@ -2941,7 +3050,6 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
   end
 
   add_index "organizational_roles", ["organization_id", "role_id", "followup_status"], :name => "role_org_status"
-  add_index "organizational_roles", ["organization_id"], :name => "organization_id"
   add_index "organizational_roles", ["person_id", "organization_id", "role_id"], :name => "person_role_org", :unique => true
 
   create_table "organizations", :force => true do |t|
@@ -2958,7 +3066,7 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
   end
 
   add_index "organizations", ["ancestry"], :name => "index_organizations_on_ancestry"
-  add_index "organizations", ["importable_id", "importable_type"], :name => "importable", :unique => true
+  add_index "organizations", ["importable_type", "importable_id"], :name => "index_organizations_on_importable_type_and_importable_id", :unique => true
   add_index "organizations", ["name"], :name => "index_organizations_on_name"
 
   create_table "phone_numbers", :force => true do |t|
@@ -3124,7 +3232,7 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
   create_table "pr_reminders", :force => true do |t|
     t.integer  "person_id"
     t.string   "label"
-    t.string   "note"
+    t.text     "note"
     t.date     "reminder_date"
     t.boolean  "send_email",      :default => false
     t.integer  "email_days_diff", :default => 0
@@ -3152,7 +3260,7 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"
-    t.string   "purpose"
+    t.text     "purpose"
     t.integer  "question_sheet_id"
     t.datetime "completed_at"
     t.integer  "show_summary_form_days", :default => 14
@@ -3262,17 +3370,17 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.integer "event_id"
     t.integer "driver_ride_id"
     t.integer "person_id"
-    t.string  "address1",          :limit => 50, :null => false
-    t.string  "address2",          :limit => 50, :null => false
-    t.string  "address3",          :limit => 50, :null => false
-    t.string  "address4",          :limit => 50, :null => false
+    t.string  "address1",                        :null => false
+    t.string  "address2",                        :null => false
+    t.string  "address3",                        :null => false
+    t.string  "address4",                        :null => false
     t.string  "city",              :limit => 50, :null => false
     t.string  "state",             :limit => 50, :null => false
     t.string  "zip",               :limit => 20, :null => false
-    t.string  "country",           :limit => 50, :null => false
+    t.string  "country",           :limit => 64, :null => false
     t.float   "latitude"
     t.float   "longitude"
-    t.string  "phone",             :limit => 20, :null => false
+    t.string  "phone",             :limit => 25, :null => false
     t.string  "contact_method",    :limit => 0
     t.integer "number_passengers", :limit => 1
     t.integer "drive_willingness", :limit => 1
@@ -3482,15 +3590,15 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
 
   create_table "simplesecuritymanager_user", :primary_key => "userID", :force => true do |t|
     t.string   "globallyUniqueID",          :limit => 80
-    t.string   "username",                  :limit => 80,                     :null => false
+    t.string   "username",                  :limit => 200,                    :null => false
     t.string   "password",                  :limit => 80
     t.string   "passwordQuestion",          :limit => 200
     t.string   "passwordAnswer",            :limit => 200
-    t.datetime "lastFailure_deprecated"
-    t.integer  "lastFailureCnt_deprecated"
+    t.datetime "lastFailure"
+    t.integer  "lastFailureCnt"
     t.datetime "lastLogin"
     t.datetime "createdOn"
-    t.boolean  "emailVerified_deprecated",                 :default => false, :null => false
+    t.boolean  "emailVerified",                            :default => false, :null => false
     t.string   "remember_token"
     t.datetime "remember_token_expires_at"
     t.boolean  "developer"
@@ -3637,7 +3745,7 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.integer  "owner",                                           :null => false
     t.text     "criteria",   :limit => 2147483647,                :null => false
     t.integer  "saved",      :limit => 1,          :default => 0, :null => false
-    t.text     "options",    :limit => 2147483647
+    t.text     "options",    :limit => 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -3730,7 +3838,7 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.string   "summer_preference",    :limit => 100
     t.string   "summer_assignment",    :limit => 100
     t.string   "trainer"
-    t.text     "trainer_contact",      :limit => 2147483647
+    t.text     "trainer_contact",      :limit => 16777215
     t.string   "vonage"
     t.string   "website"
     t.integer  "send_dept"
@@ -3802,6 +3910,8 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.string   "event_type"
     t.string   "gateway",                            :default => "",                                                                        :null => false
   end
+
+  add_index "sms_keywords", ["user_id"], :name => "user_id"
 
   create_table "sms_sessions", :force => true do |t|
     t.string   "phone_number"
@@ -4123,9 +4233,9 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.boolean  "sticky"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "staff"
-    t.boolean  "students"
-    t.boolean  "featured"
+    t.boolean  "staff",       :default => false
+    t.boolean  "students",    :default => false
+    t.boolean  "featured",    :default => false
   end
 
   create_table "sn_news_comments", :force => true do |t|
@@ -4371,11 +4481,27 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
   end
 
   create_table "sp_donations", :force => true do |t|
-    t.integer "designation_number", :null => false
-    t.float   "amount",             :null => false
+    t.integer "designation_number",                                :null => false
+    t.decimal "amount",             :precision => 10, :scale => 2, :null => false
+    t.string  "people_id"
+    t.string  "donor_name"
+    t.date    "donation_date"
+    t.string  "address1"
+    t.string  "address2"
+    t.string  "address3"
+    t.string  "city"
+    t.string  "state"
+    t.string  "zip"
+    t.string  "phone"
+    t.string  "email_address"
+    t.string  "medium_type"
+    t.string  "donation_id"
   end
 
+  add_index "sp_donations", ["designation_number"], :name => "index_sp_donations_on_designation_number"
   add_index "sp_donations", ["designation_number"], :name => "sp_donations_designation_number_index"
+  add_index "sp_donations", ["donation_date"], :name => "index_sp_donations_on_donation_date"
+  add_index "sp_donations", ["donation_id"], :name => "donation_id", :unique => true
 
   create_table "sp_elements", :force => true do |t|
     t.string   "kind",                      :limit => 40,                    :null => false
@@ -4406,8 +4532,27 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.integer  "max_length"
   end
 
+  add_index "sp_elements", ["conditional_id"], :name => "index_sp_elements_on_conditional_id"
   add_index "sp_elements", ["position"], :name => "index_sp_elements_on_question_sheet_id_and_position_and_page_id"
+  add_index "sp_elements", ["question_grid_id"], :name => "index_sp_elements_on_question_grid_id"
   add_index "sp_elements", ["slug"], :name => "index_sp_elements_on_slug"
+
+  create_table "sp_elements_deprecated", :force => true do |t|
+    t.integer  "parent_id"
+    t.string   "type",            :limit => 50
+    t.text     "text"
+    t.boolean  "is_required"
+    t.string   "question_table",  :limit => 50
+    t.string   "question_column", :limit => 50
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.integer  "dependency_id"
+    t.integer  "max_length",                    :default => 0, :null => false
+    t.boolean  "is_confidential"
+  end
 
   create_table "sp_email_templates", :force => true do |t|
     t.string   "name",       :limit => 1000, :null => false
@@ -4465,6 +4610,14 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
   add_index "sp_page_elements", ["element_id"], :name => "element_id"
   add_index "sp_page_elements", ["page_id"], :name => "page_id"
 
+  create_table "sp_page_elements_deprecated", :force => true do |t|
+    t.integer  "page_id"
+    t.integer  "element_id"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "sp_pages", :force => true do |t|
     t.integer "question_sheet_id",                                   :null => false
     t.string  "label",             :limit => 100,                    :null => false
@@ -4474,6 +4627,16 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
   end
 
   add_index "sp_pages", ["question_sheet_id", "number"], :name => "page_number"
+
+  create_table "sp_pages_deprecated", :force => true do |t|
+    t.string   "title",         :limit => 50
+    t.string   "url_name",      :limit => 50
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.boolean  "hidden"
+  end
 
   create_table "sp_payments", :force => true do |t|
     t.integer  "application_id"
@@ -4629,8 +4792,8 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.string   "project_contact_role",               :limit => 40
     t.string   "project_contact_phone",              :limit => 20
     t.string   "project_contact_email",              :limit => 100
-    t.integer  "max_student_men_applicants",                         :default => 60,   :null => false
-    t.integer  "max_student_women_applicants",                       :default => 60,   :null => false
+    t.integer  "max_student_men_applicants",                         :default => 70,   :null => false
+    t.integer  "max_student_women_applicants",                       :default => 70,   :null => false
     t.integer  "max_accepted_men"
     t.integer  "max_accepted_women"
     t.integer  "ideal_staff_men",                                    :default => 0,    :null => false
@@ -4725,6 +4888,29 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
   end
 
   add_index "sp_references", ["question_id"], :name => "question_id"
+
+  create_table "sp_references_deprecated", :force => true do |t|
+    t.integer  "application_id"
+    t.string   "type",           :limit => 50
+    t.datetime "email_sent_at"
+    t.boolean  "is_staff"
+    t.string   "title"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "accountNo"
+    t.string   "phone"
+    t.string   "email"
+    t.string   "status"
+    t.datetime "submitted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.string   "access_key"
+    t.boolean  "mail",                         :default => false
+  end
+
+  add_index "sp_references_deprecated", ["application_id"], :name => "application_id"
 
   create_table "sp_roles", :force => true do |t|
     t.string "role",       :limit => 50
@@ -4841,6 +5027,8 @@ ActiveRecord::Schema.define(:version => 20111116164718) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "teams", ["organization_id"], :name => "index_teams_on_organization_id"
 
   create_table "versions", :force => true do |t|
     t.string   "item_type",  :null => false
