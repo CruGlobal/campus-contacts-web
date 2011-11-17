@@ -51,9 +51,9 @@
       <li><%= link_to(t('.add_person'), "", class: 'add_person') %></li>
     </ul>
     <% if can? :manage, current_organization %>
-      <!-- <ul class="pillmenu">
+      <ul class="pillmenu">
         <li><%= link_to(t('.bulk_delete'), bulk_destroy_contacts_path, id: "bulk_delete") %></li>
-      </ul>   -->
+      </ul>  
     <% end %>
   </div>
 <% end %>

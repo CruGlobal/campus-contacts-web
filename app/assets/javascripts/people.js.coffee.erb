@@ -37,6 +37,17 @@ $ ->
     false
     
   true
+
+  $("#people_controller a#bulk_delete").live 'click', ->
+    num_selected = $('.id_checkbox:checked:visible').length
+    if num_selected  > 0
+      if(confirm('Are you sure you want to delete ' + num_selected + ' people permanently?'))
+        $('.id_checkbox:checked').each ->
+          $(this).closest('tr').fadeOut();
+
+        url = $(this).attr('href')
+        params = $('#new_contact_assignment').serialize();
+        $.post(url, params)
   
 $.fn.triggerPersonSearch = ->
   this.each ->
