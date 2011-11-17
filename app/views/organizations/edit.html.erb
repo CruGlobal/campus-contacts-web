@@ -16,6 +16,7 @@
     <div class="sfield">
       <div class="ls">
         <%= f.label :name %>
+        <%= tip(t('organizations.edit.name_explain')) %>
       </div>
       <div class="rs">
         <%= f.text_field :name %>
@@ -24,10 +25,15 @@
     <div class="sfield">
       <div class="ls">
         <%= f.label :terminology %>
+        <%= tip(t('organizations.edit.term_explain')) %>
       </div>
       <div class="rs">
         <%= f.text_field :terminology %>
       </div>
+    </div>
+    <div class="sfield">
+      <div class="ls"></div>
+      <div class="rs"><%= f.check_box :show_sub_orgs %> <%= f.label :show_sub_orgs %></div>
     </div>
     <div class="formactions">
       <div class="sfield">
@@ -43,15 +49,14 @@
         </div>
       </div>
     </div>
-    <div class="formactions">
-      <div class="sfield">
-        <div class="ls">Danger Zone!</div>
-        <div class="rs">
-          <div class="element" style="vertical-align: middle; height: 29px; line-height: 39px;">
-            <%= link_to(t('.delete'), organization_path(@organization), method: :delete, class: 'delete', confirm: t('.delete_confirm', terminology: @organization.terminology))%>
+    <div class="formactions dangerzone">
+          <h3>Danger Zone</h3>
+          <div class="content">
+          <p>Deleting this Organization will also delete all sub organizations under this organization. Deleting an organization cannot be undone! Be certain that you want to delete this item before proceeding</p>
+          <hr/>
+          <p style="margin-top: 15px;"><%= link_to(t('.delete'), organization_path(@organization), method: :delete, class: 'delete cleangray', confirm: t('.delete_confirm', terminology: @organization.terminology))%></p>
           </div>
-        </div>
-      </div>
+      
     </div>
   </div>
 <% end %>

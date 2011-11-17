@@ -9,6 +9,7 @@
 <% if root_org.children.length == 0 %>
   <br/><%= link_to(t('.add_sub_org', terminology: root_org.terminology.pluralize), '#', id: 'add_sub_orgs') %>
 <% end %>
+<div class="orgwrap">
 <div id="orgs" style="<%= 'display:none' if root_org.children.length == 0 %>">
   <%= render 'org_column', parent: root_org %>
   <div class="org_column" id="spinner_column" style="display:none">
@@ -17,6 +18,7 @@
       <li><%= image_tag('spinner.gif') %></li>
     </ul>
   </div>
+</div>
 </div>
 
 <div id="new_org" style="display:none" title="<%= t('.add') %>" class="fingerme">

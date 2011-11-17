@@ -681,6 +681,9 @@ en:
       add_a_sub_org: Add new %{terminology}
       add: Add
     edit:
+      delete: Delete Organization
       title: Edit %{org}
+      term_explain: Terminology is how you define this item, for example, Church, Small Groups etc.
+      name_explain: A name is what you call something
       back_to_orgs: Back to Organizations
       delete_confirm: "Are you really really sure you want to delete this %{terminology}? There's no going back, and all the related data will be deleted!"
