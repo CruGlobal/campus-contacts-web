@@ -247,7 +247,7 @@ module ApiHelper
       apiLog[:identity] = Rack::OAuth2::Server.get_access_token(params['access_token']).identity if params[:access_token]
       apiLog[:remote_ip] = request.remote_ip
 
-      Airbrake.notify(
+      Airbrake.notify(exception,
         :error_class => "Api Error",
         :error_message => exception.message,
         :parameters => apiLog
