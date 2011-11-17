@@ -4,13 +4,15 @@ $ ->
     $('#orgs').show()
     
   $('.org_link').live 'ajax:before', ->
-    level = Number($(this).closest('div').attr('data-level')) + 1
-    console.log(level)
+    col$ = $(this).closest('div')
+    $('.org_link', col$).closest('li').removeClass('selected')
+    level = Number(col$.attr('data-level')) + 1
     $('[data-level]').each ->
       if Number($(this).attr('data-level')) >= level
         $(this).hide()
     # $('[data-level=' + level + ']').hide()
     # $('[data-ancestor-id=' + $(this).attr('data-id') + ']').nextAll().hide()
+    $(this).closest('li').addClass('selected')
     $('#spinner_column').show()
     
   $('.add_sub_org').live 'click', ->
