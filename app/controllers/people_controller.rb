@@ -124,10 +124,14 @@ class PeopleController < ApplicationController
         render :nothing => true and return
       end
       @person, @email, @phone = create_person(params[:person])
-      if @person.save
+      if @email.present? && @person.save
         if params[:roles].present?
+          role_ids = params[:roles].keys.map(&:to_i)
           params[:roles].keys.each do |role_id|
             @person.organizational_roles.create(role_id: role_id, organization_id: current_organization.id)
+          end
+          if role_ids.include?(Role::LEADER_ID) || role_ids.include?(Role::ADMIN_ID)
+            current_organization.notify_new_leader(@person, current_person) 
           end
         else
           current_organization.add_involved(@person)
@@ -142,7 +146,7 @@ class PeopleController < ApplicationController
         flash.now[:error] = ''
         flash.now[:error] += 'First name is required.<br />' unless @person.firstName.present?
         flash.now[:error] += 'Phone number is not valid.<br />' if @phone && !@phone.valid?
-        flash.now[:error] += 'Email address is not valid.<br />' if @email && !@email.valid?
+        flash.now[:error] += 'Email address is not valid.<br />' unless @email && @email.valid?
         render 'add_person'
         return
       end

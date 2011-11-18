@@ -13,12 +13,13 @@
     <div class="user_defined_contact_fields customform contact_form">
       <div class="ls">Roles:</div>
       <div class="rs">
-      <% current_organization.roles.each do |role| %>
-        <div class="sfield">
-          <%= check_box_tag "roles[#{role.id}]", 1 %>
-        	<label for="<%= "roles_#{role.id}" %>"><%= role %></label>
-        </div>
-      <% end %>
+        <% role_ids = params[:roles] ? params[:roles].keys.map(&:to_i) : [] %>
+        <% current_organization.roles.each do |role| %>
+          <div class="sfield">
+            <%= check_box_tag "roles[#{role.id}]", 1, role_ids.include?(role.id) %>
+          	<label for="<%= "roles_#{role.id}" %>"><%= role %></label>
+          </div>
+        <% end %>
       </div>
     </div>
     

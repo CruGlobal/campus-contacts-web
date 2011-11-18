@@ -142,5 +142,13 @@ class Organization < ActiveRecord::Base
   def create_admin_user
     add_admin(Person.find(self.person_id)) if person_id
   end 
+  
+  def notify_new_leader(person, added_by)
+    token = SecureRandom.hex(12)
+    person.user.remember_token = token
+    person.user.remember_token_expires_at = 1.month.from_now
+    person.user.save(validate: false)
+    LeaderMailer.added(person, added_by, self, token).deliver
+  end
 
 end
