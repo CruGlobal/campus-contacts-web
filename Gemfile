@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~>3.1.0'#, git: 'git://github.com/rails/rails.git', branch: '3-1-stable'
+gem 'rails', '3.1.1'
 gem 'jquery-rails'
 gem 'mysql2', '0.3.8'
 gem 'nokogiri'

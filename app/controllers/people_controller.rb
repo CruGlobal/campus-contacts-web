@@ -125,8 +125,13 @@ class PeopleController < ApplicationController
       end
       @person, @email, @phone = create_person(params[:person])
       if @person.save
-
-        current_organization.add_involved(@person)
+        if params[:roles].present?
+          params[:roles].keys.each do |role_id|
+            @person.organizational_roles.create(role_id: role_id, organization_id: current_organization.id)
+          end
+        else
+          current_organization.add_involved(@person)
+        end
         
         respond_to do |wants|
           wants.html { redirect_to :back }
