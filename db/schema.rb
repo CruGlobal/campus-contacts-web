@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111114151916) do
+ActiveRecord::Schema.define(:version => 20111116164718) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -1660,6 +1660,7 @@ ActiveRecord::Schema.define(:version => 20111114151916) do
     t.datetime "created_at",        :null => false
     t.datetime "completed_at"
     t.integer  "person_id"
+    t.datetime "updated_at"
   end
 
   add_index "mh_answer_sheets", ["question_sheet_id"], :name => "index_mh_answer_sheets_on_question_sheet_id"
@@ -1673,6 +1674,8 @@ ActiveRecord::Schema.define(:version => 20111114151916) do
     t.string   "attachment_content_type"
     t.string   "attachment_file_name"
     t.datetime "attachment_updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "mh_answers", ["answer_sheet_id"], :name => "index_ma_answers_on_answer_sheet_id"

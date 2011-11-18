@@ -6,6 +6,7 @@ gem 'mysql2', '0.3.8'
 gem 'nokogiri'
 gem 'redis'
 gem 'rack-offline'
+gem 'http_accept_language'
 gem 'capistrano'
 gem 'rest-client'
 gem 'crack'
@@ -17,17 +18,13 @@ gem 'client_side_validations'
 gem 'rubycas-client', '~> 2.2.1'
 gem 'rubycas-client-rails', '~> 0.1.0'
 gem 'carmen', git: 'git://github.com/twinge/carmen.git'
-# gem 'squeel'
 gem 'ancestry'
-# gem 'rails_admin', git: 'git://github.com/twinge/rails_admin.git', branch: 'configure_list_view_width'
-# gem 'rails_admin', git: 'git://github.com/sferik/rails_admin.git'
 gem 'activeadmin', git: 'git://github.com/gregbell/active_admin.git'
 
-gem 'twilio-rb'#, git: 'git://github.com/twinge/twilio-rb.git'
+gem 'twilio-rb'
 gem "default_value_for"
 
-gem 'dalli'#, git: 'git://github.com/mperham/dalli.git'
-# gem 'memcache-client'
+gem 'dalli'
 gem 'resque_mail_queue'
 
 gem 'valium'
@@ -43,7 +40,7 @@ gem 'enforce_schema_rules'
 # gem 'sentient_user'
 gem 'paper_trail', '~> 2'
 gem 'unicorn'
-gem 'hoptoad_notifier'
+gem 'airbrake'
 gem 'cancan'
 gem 'kaminari'
 gem 'whenever'
@@ -69,7 +66,7 @@ group :development, :test do
   # Pretty printed test output
   # gem 'turn', :require => false
   gem 'rails-footnotes', '>= 3.7'
-  gem 'translate-rails3', :require => 'translate'
+  # gem 'translate-rails3', :require => 'translate'
 end
 
 group :development do

@@ -117,7 +117,8 @@ class OrganizationMembershipsController < ApplicationController
   
   def set_current
     org = Organization.find(params[:id])
-    if current_person.organizations.include?(org) || current_person.organizations.include?(org.parent)
+    orgs_i_have_access_to = current_person.organizations.collect {|o| o.subtree_ids}.flatten
+    if orgs_i_have_access_to.include?(org.id)
       session[:current_organization_id] = params[:id]
     end
     redirect_to :back

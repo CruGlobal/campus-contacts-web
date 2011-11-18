@@ -7,7 +7,8 @@ class PhoneNumber < ActiveRecord::Base
   validates_presence_of :number, message: "can't be blank"
   
   before_create :set_primary
-  after_save   :async_update_carrier
+  before_save :clear_carrier_if_number_changed
+  after_commit :async_update_carrier
   after_destroy :set_new_primary
   
   def self.strip_us_country_code(num)
@@ -62,22 +63,35 @@ class PhoneNumber < ActiveRecord::Base
   
   protected
   
-  def async_update_carrier
+  def clear_carrier_if_number_changed
     if changed.include?('number')
-      async(:update_carrier)
+      self.txt_to_email = nil
+      self.carrier_id = nil
     end
+  end
+  
+  def async_update_carrier
+    async(:update_carrier)
   end
 
   def update_carrier
-    url = "https://api.data24-7.com/textat.php?username=support@missionhub.com&password=Windows7&p1=#{number}"
-    xml = Nokogiri::XML(open(url, :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE))
-    begin
-      email = xml.xpath('.//sms_address').text
-      carrier_name = xml.xpath('.//carrier_name').text
-      carrier = SmsCarrier.find_or_create_by_data247_name(carrier_name)
-      PhoneNumber.connection.update("update phone_numbers set carrier_id = #{carrier.id}, txt_to_email = '#{email}', email_updated_at = '#{Time.now.to_s(:db)}' where number = '#{number}'")
-    rescue
-      # cloudvox didn't like the number
+    unless txt_to_email
+      # First see if this number is already in our db
+      existing = PhoneNumber.where(number: number).where("txt_to_email is not null").order('email_updated_at desc').first
+      if existing
+        PhoneNumber.connection.update("update phone_numbers set carrier_id = #{existing.carrier_id}, txt_to_email = '#{existing.txt_to_email}', email_updated_at = '#{existing.email_updated_at.to_s(:db)}' where number = '#{number}'")
+      else
+        url = "https://api.data24-7.com/textat.php?username=support@missionhub.com&password=Windows7&p1=#{number}"
+        xml = Nokogiri::XML(open(url, :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE))
+        begin
+          email = xml.xpath('.//sms_address').text
+          carrier_name = xml.xpath('.//carrier_name').text
+          carrier = SmsCarrier.find_or_create_by_data247_name(carrier_name)
+          PhoneNumber.connection.update("update phone_numbers set carrier_id = #{carrier.id}, txt_to_email = '#{email}', email_updated_at = '#{Time.now.to_s(:db)}' where number = '#{number}'")
+        # rescue
+          # cloudvox didn't like the number
+        end
+      end
     end
   end
   

@@ -15,13 +15,18 @@
   <% end %>
   <td><%= person.gender.to_s.titleize %></td>
   <td><%= person.pretty_phone_number %></td>
+  <% dates = [] %>
   <% questions.each do |q| %>
     <td class="<%= dom_id(q) %>">
       <% case q.slug %>
       <% when 'email' %>
         <%= mail_to(person.email) %>
       <% else %>
-        <%= answers[person.id][q.id] %>
+        <% if answer = answers[person.id][q.id] %>
+          <% date = answer.last %>
+          <span title="<%= l(date, format: :date) if date %>" class="tipit"><%= answer.first %></span>
+          <% dates << date %>
+        <% end %>
       <% end %>
     </td>
   <% end %>
@@ -37,6 +42,14 @@
       <% end %>
     </td>
   <% end %>
+  <td>
+    <% if @surveys && @surveys[person.id] %>
+      <% @surveys[person.id].each do |keyword,date| %>
+        <span title="<%= l(date, format: :date) if date %>" class="tipit"><%= keyword %></span><br/>
+      <% end %>
+    <% end %>
+  </td>
+  <td><%= l(dates.sort.last, :format => :date) if dates.present? %></td>
   <td class="controls">
     <%= link_to(t('nav.view_details'), contact_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
     <% if params[:dnc] == 'true' %>

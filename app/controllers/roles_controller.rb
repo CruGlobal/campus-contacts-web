@@ -10,7 +10,7 @@ class RolesController < ApplicationController
 
   def create
     Role.transaction do
-      @role.organization_id = current_organization
+      @role.organization_id = current_organization.id
 
       if @role.save
         redirect_to roles_path

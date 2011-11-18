@@ -43,7 +43,9 @@ class ContactsController < ApplicationController
       @people ||= Person.where("1=0")
     end
     @people = @people.includes(:organizational_roles).where("organizational_roles.organization_id" => @organization.id)
-    
+    if params[:q] && params[:q][:s].include?('mh_answer_sheets')
+      @people = @people.joins({:answer_sheets => :question_sheet}).joins("LEFT JOIN sms_keywords on sms_keywords.id = mh_question_sheets.questionnable_id").where("sms_keywords.organization_id" => @organization.id)
+    end
     if params[:first_name].present?
       @people = @people.where("firstName like ? OR preferredName like ?", '%' + params[:first_name].strip + '%', '%' + params[:first_name].strip + '%')
     end
@@ -114,15 +116,23 @@ class ContactsController < ApplicationController
         @all_answers = generate_answers(@all_people, @organization, @questions)
         out = ""
         CSV.generate(out) do |rows|
-          rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('general.status'), t('general.gender'), t('contacts.index.phone_number')] + @questions.collect {|q| q.label}
+          rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('general.status'), t('general.gender'), t('contacts.index.phone_number')] + @questions.collect {|q| q.label} + [t('contacts.index.last_survey')]
           @all_people.each do |person|
             if @roles[person.id]
               answers = [person.firstName, person.lastName, @roles[person.id].followup_status.to_s.titleize, person.gender.to_s.titleize, person.pretty_phone_number]
+              dates = []
               @questions.each do |q|
-                answers << @all_answers[person.id][q.id]
+                answer = @all_answers[person.id][q.id]
+                if answer
+                  answers << answer.first
+                  dates << answer.last
+                else
+                  answers << ''
+                end
                 # answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)}
                 # answers << q.display_response(answer_sheet)
               end
+              answers << I18n.l(dates.sort.last, format: :date) if dates.present?
               rows << answers
             end
           end
@@ -265,10 +275,14 @@ class ContactsController < ApplicationController
       people.each do |person|
         answers[person.id] = {}
       end
+      @surveys = {}
       AnswerSheet.where(question_sheet_id: organization.question_sheet_ids, person_id: people.collect(&:id)).includes(:answers, {:person => :primary_email_address}).each do |answer_sheet|
+        @surveys[answer_sheet.person_id] ||= {}
+        @surveys[answer_sheet.person_id][answer_sheet.question_sheet.questionnable.to_s] = answer_sheet.updated_at
+        
         answers[answer_sheet.person_id] ||= {}
         questions.each do |q|
-          answers[answer_sheet.person_id][q.id] = q.display_response(answer_sheet) if q.display_response(answer_sheet).present?
+          answers[answer_sheet.person_id][q.id] = [q.display_response(answer_sheet), answer_sheet.created_at] if q.display_response(answer_sheet).present?
         end
       end
       answers

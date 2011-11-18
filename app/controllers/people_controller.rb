@@ -201,7 +201,7 @@ class PeopleController < ApplicationController
           # Use email to sms if we have it
           from_email = current_person.primary_phone_number && current_person.primary_phone_number.email_address.present? ? 
                         current_person.primary_phone_number.email_address : current_person.email
-          @sent_sms = SmsMailer.enqueue.text(person.primary_phone_number.email_address, from_email, params[:body])
+          @sent_sms = SmsMailer.enqueue.text(person.primary_phone_number.email_address, "#{current_person.to_s} <#{from_email}>", params[:body])
         else
           # Otherwise send it as a text
           @sent_sms = SentSms.create!(message: params[:body][0..128] + ' Txt HELP for help STOP to quit', recipient: person.phone_number) 
@@ -232,7 +232,7 @@ class PeopleController < ApplicationController
        OrganizationalRole.create!(person_id: person.id, role_id: role_id, organization_id: current_organization.id) 
        data << "<span id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
        data << "style='margin-right:4px;'" if index < role_ids.length - 1
-       data << ">#{Role.find(role_id).i18n}</span>"
+       data << ">#{Role.find(role_id).to_s}</span>"
     end
 
     render :text => data
