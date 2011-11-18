@@ -11,8 +11,10 @@ gem 'capistrano'
 gem 'rest-client'
 gem 'crack'
 gem 'resque'
-gem "devise", '~> 1.4.9' #, git: "git://github.com/plataformatec/devise.git"
-gem "oa-oauth", '~> 0.2.6', require: "omniauth/oauth"
+gem "devise"#, '~> 1.4.9' #, git: "git://github.com/plataformatec/devise.git"
+# gem "oa-oauth", '~> 0.3.2', require: "omniauth/oauth"
+gem 'omniauth'
+gem 'omniauth-facebook', '~> 1.0.0.rc2'
 gem 'mini_fb'
 gem 'client_side_validations'
 gem 'rubycas-client', '~> 2.2.1'

@@ -181,7 +181,7 @@ Mh::Application.routes.draw do
       resources :organizations
     end
   end
-  
+
   root to: "welcome#index"
 #  match 'home' => 'welcome#home', as: 'user_root' ---- LOOK FOR THIS IN application_controller.rb
   match 'wizard' => 'welcome#wizard', as: 'wizard'
@@ -214,5 +214,4 @@ Mh::Application.routes.draw do
   
   # Monitor
   match "monitor/:action", controller: 'monitor'
-  
 end

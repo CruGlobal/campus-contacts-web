@@ -1,5 +1,5 @@
 require Rails.root.join('config','initializers','fb')
-require 'omniauth/strategies/facebook_mhub'
+# require 'omniauth/strategies/facebook_mhub'
 # Use this hook to configure devise mailer, warden hooks and so forth. The first
 # four configuration values can also be set straight in your models.
 Devise.setup do |config|
@@ -150,7 +150,7 @@ Devise.setup do |config|
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   config.omniauth :facebook, FB_APP_ID, FB_SECRET, scope: 'user_birthday,email,offline_access,user_interests,user_location,user_education_history'
-  config.omniauth :facebook_mhub, FB_APP_ID_MHUB, FB_SECRET_MHUB, scope: 'user_birthday,email,offline_access,user_interests,user_location,user_education_history'
+  config.omniauth :facebook_mhub, FB_APP_ID_MHUB, FB_SECRET_MHUB, scope: 'user_birthday,email,user_interests,user_location,user_education_history'
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

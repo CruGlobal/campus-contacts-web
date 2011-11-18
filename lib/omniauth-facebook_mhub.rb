@@ -1,7 +1,7 @@
 require 'omniauth/strategies/facebook'
 module OmniAuth 
  module Strategies 
-   class FacebookMhub < Strategies::Facebook 
+   class FacebookMhub < OmniAuth::Strategies::Facebook 
       def name 
          :facebook_mhub
       end 
