@@ -17,7 +17,11 @@ class ApplicationController < ActionController::Base
       fb_session_key = split_token[1]
       # raise session[:fb_token].inspect if fb_session_key.blank?
       session[:fb_token] = nil
-      redirect_to "http://m.facebook.com/logout.php?confirm=1&next=#{redirect_url}"
+      if mhub?
+        redirect_to "http://m.facebook.com/logout.php?confirm=1&next=#{redirect_url}"
+      else
+        redirect_to redirect_url
+      end
     else
       redirect_to redirect_url
     end
