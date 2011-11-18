@@ -182,8 +182,6 @@ Mh::Application.routes.draw do
     end
   end
   
-  get '/mu-ef6976f3-8583d795-412f1034-4d00d2ba', :to => proc {|env| [200, {}, ["42"]] } 
-  
   root to: "welcome#index"
 #  match 'home' => 'welcome#home', as: 'user_root' ---- LOOK FOR THIS IN application_controller.rb
   match 'wizard' => 'welcome#wizard', as: 'wizard'
@@ -216,4 +214,6 @@ Mh::Application.routes.draw do
   
   # Monitor
   match "monitor/:action", controller: 'monitor'
+  
+  match '/mu-ef6976f3-8583d795-412f1034-4d00d2ba', :to => proc {|env| [200, {}, ["42"]] } 
 end
