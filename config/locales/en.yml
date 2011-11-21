@@ -693,7 +693,8 @@ en:
       group:
         name: 'Group Name'
         start_time: 'From'
-        
+      organization:
+        terminology: Type
   member: Member
   leader: Leader
   organizations:
@@ -712,5 +713,5 @@ en:
       danger_explanation: Deleting this Organization will also delete all sub organizations under this organization. Deleting an organization cannot be undone! Be certain that you want to delete this item before proceeding
       show_sub_explain: Checking this box will cause sub-organizations you define under this level to show up in the navigation for people involved at the %{org} level. If this box is checked, Admins of %{org} will also be admins of levels under this one.
     new:
-      title: Sign up for your organization to use MissionHub
+      title: Sign up your organization
       signup: Sign Up!

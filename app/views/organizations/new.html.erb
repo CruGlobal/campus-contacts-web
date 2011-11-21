@@ -1,43 +1,53 @@
-<div class="titlebar">
-  <h1><%= t('.title', org: @organization) %></h1>
-  <!-- <p>
-    From this screen you can edit, delete or rearrange your organizations. Clicking "Add new organization"<br/>
-    will do a quick add by name. To edit more details, permissions and other info, select "edit" from the item's<br/>
-    name on the list.
-  </p> -->
-</div>
+<div id="roundwrap">
 
-<%= form_for @organization, url: signup_organizations_path, validate: true do |f| %>
-  <%= f.hidden_field :person_id %>
-  <div class="customform group_form">
-    <div class="sfield">
-      <div class="ls">
-        <%= f.label :name %>
-        <%= tip(t('organizations.edit.name_explain')) %>
-      </div>
-      <div class="rs">
-        <%= f.text_field :name %>
-      </div>
-    </div>
-    <div class="sfield">
-      <div class="ls">
-        <%= f.label :terminology %>
-        <%= tip(t('organizations.edit.term_explain')) %>
-      </div>
-      <div class="rs">
-        <%= f.text_field :terminology %>
-      </div>
-    </div>
-    <div class="formactions">
+  <%= image_tag("org.png", :class => "orgdiag") %>
+
+  <div class="titlebar">
+    <h1><%= t('.title', org: @organization) %></h1>
+    <p>
+      An organization can be something like your church, an association or network,
+      or your non-profit. Once you've made your organization, you'll be able to add what we call "sub-organizations."
+      These are things like departments, divisions or whatever you decide to call sub-organizations. 
+      For flexibility, you can have as many levels of sub-organizations as you'd like. 
+    </p>
+  </div>
+
+  <%= form_for @organization, url: signup_organizations_path, validate: true do |f| %>
+    <%= f.hidden_field :person_id %>
+    <div class="customform group_form signup_org">
       <div class="sfield">
-        <div class="ls"></div>
+        <div class="ls">
+          <%= f.label :name %>
+          <%= tip(t('organizations.edit.name_explain')) %>
+        </div>
         <div class="rs">
-          <div class="sidebyside">
-          <div class="element">
-            <%= f.submit(t('.signup')) %>
+          <%= f.text_field :name %>
+        </div>
+      </div>
+      <div class="sfield">
+        <div class="ls">
+          <%= f.label :terminology %>
+          <%= tip(t('organizations.edit.term_explain')) %>
+        </div>
+        <div class="rs">
+          <%= f.text_field :terminology, :placeholder => "eg. Church, Company, Ministry" %>
+        </div>
+      </div>
+      <div class="formactions">
+        <div class="sfield">
+          <div class="ls"></div>
+          <div class="rs">
+            <div class="sidebyside">
+            <div class="element">
+              <%= f.submit(t('.signup')) %>
+            </div>
+            <div class="element">
+              <%= link_to("Cancel and return","Cancel") %> 
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-<% end %>
+  <% end %>
+
+</div>

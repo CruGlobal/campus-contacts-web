@@ -27,6 +27,10 @@ class OrganizationsController < ApplicationController
     render layout: 'splash'
   end
   
+  def thanks
+    render layout: 'splash'
+  end
+  
   def signup
     @organization = Organization.new(params[:organization])
     if @organization.save
