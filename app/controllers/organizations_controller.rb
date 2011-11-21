@@ -38,7 +38,7 @@ class OrganizationsController < ApplicationController
   def create
     @parent = Organization.find(params[:organization][:parent_id])
     authorize! :manage, @parent
-    @organization = @parent.children.create(params[:organization])
+    @organization = Organization.create(params[:organization]) # @parent.children breaks for some reason
     if @organization.new_record?
       render 'add_org' and return
     else
