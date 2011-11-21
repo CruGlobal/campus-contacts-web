@@ -15,6 +15,7 @@
         <ul>
           <li class="<%= 'selected' if request.path =~ connect_pattern %>"><%= link_to("Connect", "/contacts") %></li>
           <li class="<%= 'selected' if request.path !~ connect_pattern %>"><%= link_to("Care", "/people") %></li>
+          <li class=""><%= link_to("Organizations", "/organizations") %></li>
         </ul>
       </div>
       <div id="topmenu">
@@ -32,6 +33,8 @@
               <li class="<%= 'selected' if  params[:controller] == 'groups' %>"><%= link_to(t('nav.groups'), "/groups", :class => "topset groups") %></li>
             <% end %>
           <% end %>
+          <li class=""><%= link_to("Manage", "/organizations", :class => "topset ") %></li>
+          <li class=""><%= link_to("New", "/organizations/new", :class => "topset ") %></li>
         </ul>
       </div>
     
