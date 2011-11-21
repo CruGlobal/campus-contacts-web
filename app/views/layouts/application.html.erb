@@ -1,4 +1,5 @@
 <% connect_pattern = /contacts|surveys|keywords/ %>
+<% care_pattern = /people|groups/ %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,27 +15,31 @@
       <div id="menugroups">
         <ul>
           <li class="<%= 'selected' if request.path =~ connect_pattern %>"><%= link_to("Connect", "/contacts") %></li>
-          <li class="<%= 'selected' if request.path !~ connect_pattern %>"><%= link_to("Care", "/people") %></li>
-          <li class=""><%= link_to("Organizations", "/organizations") %></li>
+          <li class="<%= 'selected' if request.path =~ care_pattern %>"><%= link_to("Care", "/people") %></li>
+          <% if can? :manage, current_organization %>
+            <li class="<%= 'selected' if params[:controller] == 'organizations' %>"><%= link_to(t('nav.organizations'), "/organizations") %></li>
+          <% end %>
         </ul>
       </div>
       <div id="topmenu">
         <ul>
           <!-- <li><%#= link_to("Dashboard", user_root_path) %></li> -->
-          <% if request.path =~ connect_pattern %>
+          <% case %>
+          <% when request.path =~ connect_pattern %>
             <li class="<%= 'selected' if request.fullpath == '/contacts/mine' %>"><%= link_to(t('nav.my_contacts'), "/contacts/mine", :class => "topset mycontacts") %></li>
             <li class="<%= 'selected' if  params[:controller] == 'contacts' && params[:action] == 'index' %>"><%= link_to(t('nav.all_contacts'), "/contacts", :class => "topset allcontacts") %></li>
             <% if can? :manage, current_organization %>
               <li class="<%= 'selected' if params[:controller] == 'sms_keywords' %>"><%= link_to(t('nav.keywords'), sms_keywords_path, :class => "topset surveys") %></li>
             <% end %>
-          <% else %>
+          <% when request.path =~ care_pattern %>
             <li class="<%= 'selected' if  params[:controller] == 'people' %>"><%= link_to(t('nav.directory'), "/people", :class => "topset directory") %></li>
             <% if can? :manage, current_organization %>
               <li class="<%= 'selected' if  params[:controller] == 'groups' %>"><%= link_to(t('nav.groups'), "/groups", :class => "topset groups") %></li>
             <% end %>
+          <% when params[:controller] == 'organizations' %>
+            <li class="<%= 'selected' if params[:controller] == 'organizations' %>"><%= link_to(t('nav.manage'), "/organizations", :class => "topset ") %></li>
+            <!-- <li class=""><%= link_to("New", "/organizations/new", :class => "topset ") %></li> -->
           <% end %>
-          <li class=""><%= link_to("Manage", "/organizations", :class => "topset ") %></li>
-          <li class=""><%= link_to("New", "/organizations/new", :class => "topset ") %></li>
         </ul>
       </div>
     

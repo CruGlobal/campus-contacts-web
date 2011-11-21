@@ -43,6 +43,8 @@ en:
     prayed_to_receive: 'Prayed To Receive Christ' 
     gospel_presentation: 'Gospel Presentation'
   nav:
+    organizations: Organizations
+    manage: Manage
     enter_survey_mode: "Enter Survey Mode"
     use_keyword: 'Use Keyword: %{keyword}'
     my_profile: My Profile
