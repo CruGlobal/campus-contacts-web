@@ -1,0 +1,43 @@
+<div class="titlebar">
+  <h1><%= t('.title', org: @organization) %></h1>
+  <!-- <p>
+    From this screen you can edit, delete or rearrange your organizations. Clicking "Add new organization"<br/>
+    will do a quick add by name. To edit more details, permissions and other info, select "edit" from the item's<br/>
+    name on the list.
+  </p> -->
+</div>
+
+<%= form_for @organization, url: signup_organizations_path, validate: true do |f| %>
+  <%= f.hidden_field :person_id %>
+  <div class="customform group_form">
+    <div class="sfield">
+      <div class="ls">
+        <%= f.label :name %>
+        <%= tip(t('organizations.edit.name_explain')) %>
+      </div>
+      <div class="rs">
+        <%= f.text_field :name %>
+      </div>
+    </div>
+    <div class="sfield">
+      <div class="ls">
+        <%= f.label :terminology %>
+        <%= tip(t('organizations.edit.term_explain')) %>
+      </div>
+      <div class="rs">
+        <%= f.text_field :terminology %>
+      </div>
+    </div>
+    <div class="formactions">
+      <div class="sfield">
+        <div class="ls"></div>
+        <div class="rs">
+          <div class="sidebyside">
+          <div class="element">
+            <%= f.submit(t('.signup')) %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -136,6 +136,8 @@ Mh::Application.routes.draw do
   resources :organizations do
     collection do
       get :search
+      get :thanks
+      post :signup
     end
   end
   
@@ -193,6 +195,9 @@ Mh::Application.routes.draw do
   # SMS keyword state transitions
   match '/admin/sms_keywords/:id/t/:transition' => 'admin/sms_keywords#transition', as: 'sms_keyword_transition'
   match '/admin/sms_keywords/approve'
+  
+  match '/admin/organizations/:id/t/:transition' => 'admin/organizations#transition', as: 'organization_transition'
+  match '/admin/organizations/approve'
 
   # Map keyword responses with phone numbers
   match 'c/:keyword(/:received_sms_id)' => 'survey_responses#new', as: 'contact_form'

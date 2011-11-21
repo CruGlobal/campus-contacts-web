@@ -62,7 +62,7 @@ class SmsKeywordsController < ApplicationController
     @sms_keyword.destroy
 
     respond_to do |format|
-      format.html { redirect_to user_root_path, notice: "Keyword has been deleted." }
+      format.html { redirect_to sms_keywords_path, notice: "Keyword has been deleted." }
       format.xml  { head :ok }
     end
   end

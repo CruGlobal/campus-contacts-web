@@ -22,10 +22,23 @@ class OrganizationsController < ApplicationController
     end
   end
   
+  def new
+    @organization = Organization.new(person_id: current_person.id)
+  end
+  
+  def signup
+    @organization = Organization.new(params[:organization])
+    if @organization.save
+      redirect_to thanks_organizations_path
+    else
+      render :new
+    end
+  end
+  
   def create
     @parent = Organization.find(params[:organization][:parent_id])
     authorize! :manage, @parent
-    @organization = Organization.create(params[:organization])
+    @organization = @parent.children.create(params[:organization])
     if @organization.new_record?
       render 'add_org' and return
     else

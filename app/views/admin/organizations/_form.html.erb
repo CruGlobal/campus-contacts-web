@@ -1,3 +1,9 @@
+<div class="field">
+  Action: 
+  <% @organization.status_paths.events.each do |event| %>
+    <%= link_to(event, "/admin/organizations/#{@organization.id}/t/#{event}", method: :post, class: "#{event} organization") %>
+  <% end %>
+</div>
 <%= semantic_form_for [:admin, @organization] do |f| %>
   <%= hidden_field_tag 'organization[person_id]', current_person.id %>
   <%= f.inputs "" do %>

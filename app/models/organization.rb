@@ -19,6 +19,7 @@ class Organization < ActiveRecord::Base
   has_many :followup_comments
   has_many :organizational_roles, inverse_of: :organization
   has_many :leaders, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role.leader_ids}, order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
+  has_many :admins, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::ADMIN_ID}, order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
   has_many :all_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ?", Role::CONTACT_ID]
   has_many :contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.followup_status <> 'do_not_contact'", Role::CONTACT_ID]
   has_many :dnc_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.followup_status' => 'do_not_contact'}
@@ -35,7 +36,29 @@ class Organization < ActiveRecord::Base
   
   validates_presence_of :name, :terminology#, :person_id
   
-  after_create :create_admin_user
+  @queue = :general
+  after_create :create_admin_user, :notify_admin_of_request
+  
+  state_machine :status, initial: :requested do
+    state :requested
+    state :active
+    state :denied
+    state :inactive
+    
+    event :approve do
+      transition :requested => :active
+    end
+    after_transition :on => :approve, :do => :notify_user
+    
+    event :deny do
+      transition :requested => :denied
+    end
+    after_transition :on => :deny, :do => :notify_user_of_denial
+    
+    event :disable do
+      transition any => :inactive
+    end
+  end
   
   def to_s() name; end
   
@@ -145,6 +168,14 @@ class Organization < ActiveRecord::Base
     add_admin(Person.find(self.person_id)) if person_id
   end 
   
+  def notify_admin_of_request
+    if parent
+      update_column(:status, 'active')
+    else
+      OrganizationMailer.enqueue.notify_admin_of_request(self.id)
+    end
+  end
+  
   def notify_new_leader(person, added_by)
     token = SecureRandom.hex(12)
     person.user.remember_token = token
@@ -152,5 +183,21 @@ class Organization < ActiveRecord::Base
     person.user.save(validate: false)
     LeaderMailer.added(person, added_by, self, token).deliver
   end
+  
+  private
+    
+    def notify_user
+      if admins
+        OrganizationMailer.enqueue.notify_user(id)
+      end
+      true
+    end
+    
+    def notify_user_of_denial
+      if admins
+        OrganizationMailer.enqueue.notify_user_of_denial(id)
+      end
+      true
+    end
 
 end

@@ -261,6 +261,27 @@ en:
       predefined_help: "Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided."
       archived_help: "Archived questions will no longer be included in the survey.  If no answers have ever been given to the question, the archived question will be deleted.  If you USE an archived question, the question will move to the YOUR QUESTIONS section and the previous answers will re-appear."
 
+  organization_mailer:
+    notify_user:
+      link_text: 'send us an email at support@missionhub.com'
+      body_html:
+        <p>Congratulations, your organization request has been approved!  Go to %{manage_link} to add your sub-organizations, and please don't forget to give us feedback on your MissionHub experience!<p>
+        <p>
+          If you have any questions, %{link}.
+        </p>
+        <p>
+          Thanks,<br/>
+          MissionHub Support Team
+        </p>
+    notify_user_of_denial:
+      body_html:
+        <p>We're sorry, but the information you provided does not allow us to meet your request for a MissionHub organization.  If you have further questions, or would like a clarification, please email support@missionhub.com.</p>
+
+        <p>
+          Thanks,<br/>
+          MissionHub Support Team
+        </p>
+        
   keyword_request_mailer:
     notify_user:
       link_text: 'send us an email at support@missionhub.com'
@@ -274,7 +295,7 @@ en:
         </p>
     notify_user_of_denial:
       body_html:
-        <p>Your request for the keyword keyword has been declined. Keywords are typically declined for one of the following reasons:</p>
+        <p>Your request for the keyword %{keyword} has been declined. Keywords are typically declined for one of the following reasons:</p>
 
         <ul>
           <li>The keyword was too long. We recommend that you keep your keywords as short as possible, preferably under 10 characters.</li>
@@ -690,3 +711,6 @@ en:
       danger_zone: Danger Zone
       danger_explanation: Deleting this Organization will also delete all sub organizations under this organization. Deleting an organization cannot be undone! Be certain that you want to delete this item before proceeding
       show_sub_explain: Checking this box will cause sub-organizations you define under this level to show up in the navigation for people involved at the %{org} level. If this box is checked, Admins of %{org} will also be admins of levels under this one.
+    new:
+      title: Sign up for your organization to use MissionHub
+      signup: Sign Up!

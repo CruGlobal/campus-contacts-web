@@ -40,7 +40,7 @@ class SmsKeyword < ActiveRecord::Base
   end
   
   @queue = :general
-  after_create :queue_notify_admin_of_request
+  after_create :notify_admin_of_request
   
   def to_s
     keyword
@@ -51,7 +51,7 @@ class SmsKeyword < ActiveRecord::Base
   end
   
   def notify_admin_of_request
-    KeywordRequestMailer.new_keyword_request(self).deliver
+    KeywordRequestMailer.enqueue.new_keyword_request(self.id)
   end
   
   def question_page
@@ -67,10 +67,6 @@ class SmsKeyword < ActiveRecord::Base
   end
   
   private
-    def queue_notify_admin_of_request
-      async(:notify_admin_of_request) 
-      true
-    end
     
     def notify_user
       if user

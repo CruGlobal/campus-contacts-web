@@ -115,7 +115,7 @@ class PeopleController < ApplicationController
   end
 
   def create
-    authorize! :manage, current_organization
+    authorize! :create, Person
     Person.transaction do
       params[:person] ||= {}
       params[:person][:email_address] ||= {}
@@ -171,6 +171,7 @@ class PeopleController < ApplicationController
   end
   
   def bulk_delete
+    authorize! :manage, current_organization
     ids = params[:ids].to_s.split(',')
     if ids.present?
       current_organization.organization_memberships.where(:person_id => ids).destroy_all
