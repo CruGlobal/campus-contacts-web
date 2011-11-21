@@ -5,14 +5,35 @@
   <%= stylesheet_link_tag 'plain' %>
 </head>
 <body id="<%= controller.controller_name %>_controller">
-  
+  <div id="fb-root"></div>
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '169839456413947', // App ID
+        channelURL : '//<%= request.host_with_port %>/channel.html', // Channel File
+        status     : true, // check login status
+        cookie     : true, // enable cookies to allow the server to access the session
+        oauth      : true, // enable OAuth 2.0
+        xfbml      : true  // parse XFBML
+      });
+
+    };
+
+    // Load the SDK Asynchronously
+    (function(d){
+       var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+       js = d.createElement('script'); js.id = id; js.async = true;
+       js.src = "//connect.facebook.net/en_US/all.js";
+       d.getElementsByTagName('head')[0].appendChild(js);
+     }(document));
+  </script>
   <div id="outer" class="plain">
     <% if user_signed_in? %>
       <div id="global">
         <div class="gmwrap">
           <ul class="sf-menu">
             <li class="item">
-              <%= link_to(t('nav.logout'), facebook_logout_url(next: cookies[:survey_mode].present? && cookies[:keyword].present? ? contact_form_url(cookies[:keyword]) : sign_out_url))  %> 
+              <%= link_to(t('nav.logout'), facebook_logout_url(next: cookies[:survey_mode].present? && cookies[:keyword].present? ? contact_form_url(cookies[:keyword]) : sign_out_url), onclick: 'FB.logout()')  %> 
             </li>   
           </ul>
         </div>

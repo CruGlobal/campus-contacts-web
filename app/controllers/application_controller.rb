@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
       session[:fb_token] = nil
       if mhub?
         # redirect_to "http://www.facebook.com/logout.php?api_key=#{fb_api_key}&session_key=#{fb_session_key}&confirm=1&next=#{redirect_url}"
-        redirect_to "http://m.facebook.com/logout.php?confirm=1&next=#{redirect_url}"
+        redirect_to redirect_url #"http://m.facebook.com/logout.php?confirm=1&next=#{redirect_url}"
       else
         redirect_to redirect_url
       end
