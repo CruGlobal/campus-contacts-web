@@ -1,6 +1,6 @@
 <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="person_row" data-name="<%= person.name %>">
   
-  <% if can? :create, Person || can? :create, SmsMailer %>
+  <% if can?(:create, Person) || can?(:create, SmsMailer) %>
     <td nowrap="nowrap" class="checkbox_cell">
       <%#= image_tag('grippy.png', class: 'handle') %>
       <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>

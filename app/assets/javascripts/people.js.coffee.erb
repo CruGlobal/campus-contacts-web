@@ -48,7 +48,8 @@ $ ->
         url = $(this).attr('href')
         params = $('#new_contact_assignment').serialize();
         $.post(url, params)
-  
+    false
+    
 $.fn.triggerPersonSearch = ->
   this.each ->
     name = $(this).val()
