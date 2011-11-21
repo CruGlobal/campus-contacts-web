@@ -194,7 +194,7 @@ class PeopleController < ApplicationController
   
   def bulk_email
     authorize! :manage, current_organization
-    to_ids = params[:to].split(',')    
+    to_ids = params[:to].split(',').uniq
     
     to_ids.each do |id|
       person = Person.find_by_personID(id)
@@ -206,7 +206,7 @@ class PeopleController < ApplicationController
   
   def bulk_sms
     authorize! :manage, current_organization
-    to_ids = params[:to].split(',')    
+    to_ids = params[:to].split(',').uniq 
 
     to_ids.each do |id|
       person = Person.find_by_personID(id)

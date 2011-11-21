@@ -98,9 +98,9 @@ $.fn.submitBulkSendDialog = ->
   $('.to_list li').each ->
     id = $(this).attr('data-id')
     ids.push(id)
-  $('#to').val(ids.join(','))
-  $('#bulk_send_dialog').dialog('destroy')
+  $('#bulk_send_dialog form #to').val(ids.join(','))
   $.rails.handleRemote($("#bulk_send_dialog form"))
+  $('#bulk_send_dialog').dialog('destroy')
         
 $('#send_bulkemail_link').live 'click', -> 
   if $('.id_checkbox:checked').length == 0
@@ -216,7 +216,7 @@ $('#send_bulksms_link').live 'click', ->
   $('#bulk_send_dialog form').addClass('bulk-sms')
   $('#bulk_send_dialog .subject').hide()
   $('#char_counter').show()
-  $('#body').simplyCountable( { maxCount: 125 } )
+  $('#bulk_send_dialog #body').simplyCountable( { maxCount: 125 } )
   $('#body').val($('#bulk_sms_message').val())  
   $('#bulk_send_dialog').dialog
     resizable: false,
