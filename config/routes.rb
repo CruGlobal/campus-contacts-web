@@ -84,6 +84,7 @@ Mh::Application.routes.draw do
       post :bulk_sms      
       get :all
       post :update_roles
+      post :bulk_delete
     end
     member do
       get :merge_preview

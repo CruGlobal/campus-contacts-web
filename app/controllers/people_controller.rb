@@ -169,18 +169,27 @@ class PeopleController < ApplicationController
       end
     end
   end
+  
+  def bulk_delete
+    ids = params[:ids].to_s.split(',')
+    if ids.present?
+      current_organization.organization_memberships.where(:person_id => ids).destroy_all
+      current_organization.organizational_roles.where(:person_id => ids).destroy_all
+    end
+    render nothing: true
+  end
   # 
   # # DELETE /people/1
   # # DELETE /people/1.xml
-  # def destroy
-  #   @person = Person.find(params[:id])
-  #   @person.destroy
-  # 
-  #   respond_to do |format|
-  #     format.html { redirect_to(people_url) }
-  #     format.xml  { head :ok }
-  #   end
-  # end
+  def destroy
+    @person = Person.find(params[:id])
+    # @person.destroy
+  
+    respond_to do |format|
+      format.html { redirect_to(people_url) }
+      format.xml  { head :ok }
+    end
+  end
   
   def bulk_email
     authorize! :manage, current_organization
