@@ -15,9 +15,9 @@ class ApplicationController < ActionController::Base
       split_token = session[:fb_token].split("|")
       fb_api_key = split_token[0]
       fb_session_key = split_token[1]
-      # raise session[:fb_token].inspect if fb_session_key.blank?
       session[:fb_token] = nil
       if mhub?
+        # redirect_to "http://www.facebook.com/logout.php?api_key=#{fb_api_key}&session_key=#{fb_session_key}&confirm=1&next=#{redirect_url}"
         redirect_to "http://m.facebook.com/logout.php?confirm=1&next=#{redirect_url}"
       else
         redirect_to redirect_url
@@ -143,7 +143,7 @@ class ApplicationController < ActionController::Base
     unless @current_organizations[person]
       if session[:current_organization_id]
         org = Organization.find_by_id(session[:current_organization_id]) 
-        org = nil unless org && (person.organizations.include?(org) || person.organizations.include?(org.parent))
+        # org = nil unless org && (person.organizations.include?(org) || person.organizations.include?(org.parent))
       end
       unless org
         org = person.primary_organization
