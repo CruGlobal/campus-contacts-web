@@ -24,6 +24,7 @@ class OrganizationsController < ApplicationController
   
   def new
     @organization = Organization.new(person_id: current_person.id)
+    render layout: 'splash'
   end
   
   def signup
@@ -31,7 +32,7 @@ class OrganizationsController < ApplicationController
     if @organization.save
       redirect_to thanks_organizations_path
     else
-      render :new
+      render :new, layout: 'splash'
     end
   end
   
