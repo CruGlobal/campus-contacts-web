@@ -17,7 +17,6 @@ $ ->
     
   $('.add_sub_org').live 'click', ->
     $('#new_org form')[0].reset()
-    console.log($(this).attr('data-parent-id'))
     $('#organization_parent_id').val($(this).attr('data-parent-id'))
     $('#new_org').dialog
       resizable: false,

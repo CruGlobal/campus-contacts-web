@@ -39,13 +39,18 @@ $ ->
   true
 
   $("#people_controller a#bulk_delete").live 'click', ->
-    num_selected = $('.id_checkbox:checked:visible').length
+    ids = []
+    $('.id_checkbox:checked').each ->
+      ids.push($(this).val())
+    if($('#all_selected_text').is(':visible'))    
+      $('.all_row').each ->
+        ids.push($(this).attr('data-id'))
+        
+    num_selected = ids.length
     if num_selected  > 0
       if(confirm('Are you sure you want to delete ' + num_selected + ' people permanently?'))
-        ids = []
         $('.id_checkbox:checked').each ->
           $(this).closest('tr').fadeOut();
-          ids.push($(this).val())
         $('#ids').val(ids.join(','))
         url = $(this).attr('href')
         params = $('#people_form').serialize();
@@ -245,7 +250,8 @@ $('#bulk_send_dialog form').live 'submit', ->
   false
 
 $('#check_all').live 'click', ->
-  text = $('#people_table').find('tr:first').text()
+  first_row = $('#people_table').find('tr:first')
+  text = first_row.text()
   if text.indexOf('Fetching') == 0
     return false
     
@@ -263,7 +269,8 @@ $('#check_all').live 'click', ->
         $('#people_table').find('tr:first').remove()
         $('#people_table').prepend(html)     
     else
-      $('#people_table').find('tr:first').remove()
+      if $('span.all_text', first_row)[0]?
+        first_row.remove()
 
 $('#roles_menu_div').live 'click', ->
   role_div = $(this).parent().find('.dropdown_1column')

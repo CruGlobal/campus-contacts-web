@@ -4,4 +4,4 @@ $('#<%= dom_id(@parent) %> ul').prepend('<%= j(render('org', org: @organization)
 <% end %>
 $('[data-id=<%= @organization.id %>]').effect('highlight')
 $('.org_big_add').closest('li').hide()
-$('#new_org').html('<%= j(render('add_org', organization: Organization.new)) %>')
+$('#new_org').html('<%= j(render('add_org', organization: @parent.children.new)) %>')

@@ -13,7 +13,7 @@ class OrganizationsController < ApplicationController
   def update
     if @organization.update_attributes(params[:organization])
       respond_to do |wants|
-        wants.html { redirect_to :back }
+        wants.html { organizations_path }
       end
     else
       respond_to do |wants|

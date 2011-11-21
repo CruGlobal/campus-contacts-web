@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="sfield">
-      <div class="ls"></div>
+      <div class="ls"><%= tip(t('organizations.edit.show_sub_explain', org: @organization)) %></div>
       <div class="rs"><%= f.check_box :show_sub_orgs %> <%= f.label :show_sub_orgs %></div>
     </div>
     <div class="formactions">
@@ -50,9 +50,9 @@
       </div>
     </div>
     <div class="formactions dangerzone">
-          <h3>Danger Zone</h3>
+          <h3><%= t('.danger_zone') %></h3>
           <div class="content">
-          <p>Deleting this Organization will also delete all sub organizations under this organization. Deleting an organization cannot be undone! Be certain that you want to delete this item before proceeding</p>
+          <p><%= t('.danger_explanation') %></p>
           <hr/>
           <p style="margin-top: 15px;"><%= link_to(t('.delete'), organization_path(@organization), method: :delete, class: 'delete cleangray', confirm: t('.delete_confirm', terminology: @organization.terminology))%></p>
           </div>

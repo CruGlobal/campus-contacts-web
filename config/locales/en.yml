@@ -687,3 +687,6 @@ en:
       name_explain: A name is what you call something
       back_to_orgs: Back to Organizations
       delete_confirm: "Are you really really sure you want to delete this %{terminology}? There's no going back, and all the related data will be deleted!"
+      danger_zone: Danger Zone
+      danger_explanation: Deleting this Organization will also delete all sub organizations under this organization. Deleting an organization cannot be undone! Be certain that you want to delete this item before proceeding
+      show_sub_explain: Checking this box will cause sub-organizations you define under this level to show up in the navigation for people involved at the %{org} level. If this box is checked, Admins of %{org} will also be admins of levels under this one.
