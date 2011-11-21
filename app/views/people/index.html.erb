@@ -10,7 +10,7 @@
     <%= " - #{Role.find_by_id(params[:role_id]).to_s.pluralize}" if params[:role_id].present? %>
   </h1>
 </div>
-<% if can? :create, Person %>
+<% if can? :create, Person || can? :create, SmsMailer %>
   <div class="pagemenu">
     <ul class="pillmenu">
       <li><%= link_to(t('.send_email'), nil, :id => "send_bulkemail_link") %></li>	
@@ -60,7 +60,7 @@
   
 <table class="listing" cellpadding="0" cellspacing="0">
   <tr>
-    <% if can? :manage, current_organization %>
+    <% if can? :create, Person || can? :create, SmsMailer %>
       <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment',  'data-params' => 'page=' + (params[:page] ? params[:page] : '1') + '&role_id=' + (params[:role_id] ? params[:role_id] : '')   %></th>
     <% end %>
     <th><%= sort_link @q, :firstName, t('contacts.index.first_name') %></th>

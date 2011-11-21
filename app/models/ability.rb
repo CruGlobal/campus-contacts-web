@@ -33,6 +33,7 @@ class Ability
       
       # leaders and admins can edit other ppl's info
       if user.person.organizational_roles.where(role_id: [admin_role.id, leader_role.id]).present?
+        can :create, SmsMailer
         can :create, Person
       end
       
