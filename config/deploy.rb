@@ -144,9 +144,9 @@ task :long_deploy do
   # deploy.enable_web
 end
 # after "deploy:update", "newrelic:notice_deployment"
-before :"deploy:symlink", :"deploy:assets";
-namespace :deploy do
-  task :assets, roles: :app do
+before :"deploy:symlink", :"assets:precompile";
+namespace :assets do
+  task :precompile, roles: :app do
     run "ln -s #{shared_path}/assets #{release_path}/public/assets"
     run "cd #{release_path} && bundle exec rake assets:precompile RAILS_ENV=#{rails_env}"
   end
