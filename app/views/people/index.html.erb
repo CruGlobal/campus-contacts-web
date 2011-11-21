@@ -12,11 +12,11 @@
 </div>
 <% if can? :create, Person %>
   <div class="pagemenu">
+    <ul class="pillmenu">
+      <li><%= link_to(t('.send_email'), nil, :id => "send_bulkemail_link") %></li>	
+      <li><%= link_to(t('.send_sms'), nil, :id => "send_bulksms_link") %></li>			
+    </ul>
     <% if can? :manage, current_organization %>
-      <ul class="pillmenu">
-        <li><%= link_to(t('.send_email'), nil, :id => "send_bulkemail_link") %></li>	
-        <li><%= link_to(t('.send_sms'), nil, :id => "send_bulksms_link") %></li>			
-      </ul>
       <ul class="pillmenu">
         <li><%= link_to(t('.export'), export_people_path(params.except(:action, :controller, :utf8))) %></li>
       </ul>
@@ -88,11 +88,9 @@
   <%= t('.displaying', start: @people.offset_value + 1, finish: @people.offset_value + @people.length, total: @people.total_count) %>
 </div>
 
-<% if can? :manage, current_organization %>
-  <%= render 'shared/bulk_send_form' %>
+<%= render 'shared/bulk_send_form' %>
 
 
-  <div id="add_person_div" style="display:none" title="<%= t('.add_person') %>" class="fingerme">
-    <%= render 'add_person', person: Person.new %>
-  </div>
-<% end %>
+<div id="add_person_div" style="display:none" title="<%= t('.add_person') %>" class="fingerme">
+  <%= render 'add_person', person: Person.new %>
+</div>
