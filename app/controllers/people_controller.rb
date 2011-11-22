@@ -124,14 +124,27 @@ class PeopleController < ApplicationController
         render :nothing => true and return
       end
       @person, @email, @phone = create_person(params[:person])
-      if @email.present? && @person.save
+      
+      if @person.save
+        
         if params[:roles].present?
           role_ids = params[:roles].keys.map(&:to_i)
           params[:roles].keys.each do |role_id|
             @person.organizational_roles.create(role_id: role_id, organization_id: current_organization.id)
           end
+
+          # we need a valid email address to make a leader
           if role_ids.include?(Role::LEADER_ID) || role_ids.include?(Role::ADMIN_ID)
-            current_organization.notify_new_leader(@person, current_person) 
+            @new_person = @person.create_user! if @email.present? # create a user account if we have an email address
+            if @new_person && @new_person.save
+              @person = @new_person
+              current_organization.notify_new_leader(@person, current_person) 
+            else
+              @person.reload
+              @email = @person.primary_email_address || @person.email_addresses.new
+              @phone = @person.primary_phone_number || @person.phone_numbers.new
+              render 'add_person' and return
+            end
           end
         else
           current_organization.add_involved(@person)
