@@ -83,10 +83,14 @@ deploy.task :restart, roles: :app do
     
     #restart resque task
     
+end  
+
+after 'deploy:restart', 'deploy:bluepill'
+deploy.task :bluepill, roles: :db do
   if rails_env == 'production'
     sudo "bluepill restart resque"
   end
-end  
+end
 
 
 # =============================================================================
