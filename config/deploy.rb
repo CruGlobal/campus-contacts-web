@@ -67,8 +67,8 @@ task :production do
   set :rails_env, 'production'
   
   role :db, "10.10.11.166", primary: true
-  role :web, "10.10.11.166"
-  role :app, "10.10.11.166"
+  role :web, ["10.10.11.166", "10.10.11.167"]
+  role :app, ["10.10.11.166", "10.10.11.167"]
   set :deploy_via, :remote_cache
 end
 
