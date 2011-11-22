@@ -1,32 +1,32 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~>3.1.0'#, git: 'git://github.com/rails/rails.git', branch: '3-1-stable'
+gem 'rails', '3.1.1'
 gem 'jquery-rails'
-gem 'mysql2'
+gem 'mysql2', '0.3.8'
+gem 'nokogiri'
 gem 'redis'
 gem 'rack-offline'
+gem 'http_accept_language'
 gem 'capistrano'
 gem 'rest-client'
 gem 'crack'
 gem 'resque'
-gem "devise"#, git: "git://github.com/plataformatec/devise.git"
-gem "oa-oauth", '~> 0.2.6', require: "omniauth/oauth"
+gem "devise"#, '~> 1.4.9' #, git: "git://github.com/plataformatec/devise.git"
+# gem "oa-oauth", '~> 0.3.2', require: "omniauth/oauth"
+gem 'omniauth'
+gem 'omniauth-facebook', '~> 1.0.0.rc2'
 gem 'mini_fb'
 gem 'client_side_validations'
 gem 'rubycas-client', '~> 2.2.1'
 gem 'rubycas-client-rails', '~> 0.1.0'
-gem 'carmen'
-# gem 'squeel'
+gem 'carmen', git: 'git://github.com/twinge/carmen.git'
 gem 'ancestry'
-# gem 'rails_admin', git: 'git://github.com/twinge/rails_admin.git', branch: 'configure_list_view_width'
-# gem 'rails_admin', git: 'git://github.com/sferik/rails_admin.git'
 gem 'activeadmin', git: 'git://github.com/gregbell/active_admin.git'
 
 gem 'twilio-rb'
 gem "default_value_for"
 
-gem 'dalli'#, git: 'git://github.com/mperham/dalli.git'
-# gem 'memcache-client'
+gem 'dalli'
 gem 'resque_mail_queue'
 
 gem 'valium'
@@ -36,14 +36,13 @@ gem 'acts_as_list'
 gem 'dynamic_form'
 gem 'coffee-script'
 gem 'uglifier'
-gem 'translate-rails3', require: 'translate', git: 'git://github.com/romanbsd/translate.git'
 gem 'trumant-rack-oauth2-server', git: 'git://github.com/twinge/rack-oauth2-server.git', branch: 'active_record'
 
 gem 'enforce_schema_rules'
 # gem 'sentient_user'
 gem 'paper_trail', '~> 2'
 gem 'unicorn'
-gem 'hoptoad_notifier'
+gem 'airbrake'
 gem 'cancan'
 gem 'kaminari'
 gem 'whenever'
@@ -69,6 +68,7 @@ group :development, :test do
   # Pretty printed test output
   # gem 'turn', :require => false
   gem 'rails-footnotes', '>= 3.7'
+  # gem 'translate-rails3', :require => 'translate'
 end
 
 group :development do

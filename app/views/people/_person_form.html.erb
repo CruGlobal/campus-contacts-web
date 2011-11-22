@@ -50,7 +50,7 @@
       <div class="sidebyside leftalign">
         <div class="element">
           <%= t('general.state') %>:<br/>
-          <%= af.select :state, Carmen::states('US') %>
+          <%= af.select :state, Carmen::states('US'), include_blank: true %>
         </div>
         <div class="element">
           <%= t('general.zip') %>:<br/>

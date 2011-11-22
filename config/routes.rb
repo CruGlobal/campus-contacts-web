@@ -84,6 +84,7 @@ Mh::Application.routes.draw do
       post :bulk_sms      
       get :all
       post :update_roles
+      post :bulk_delete
     end
     member do
       get :merge_preview
@@ -135,6 +136,8 @@ Mh::Application.routes.draw do
   resources :organizations do
     collection do
       get :search
+      get :thanks
+      post :signup
     end
   end
   
@@ -155,6 +158,7 @@ Mh::Application.routes.draw do
   match "/application.manifest" => OFFLINE
   
   post "sms/mo"
+  get "sms/mo"
   
   resources :contacts do
     collection do
@@ -172,6 +176,8 @@ Mh::Application.routes.draw do
       resources :friends
       get 'contacts/search' => 'contacts#search'
       resources :contacts
+      get "contact_assignments/list_leaders" => "contact_assignments#list_leaders"
+      get "contact_assignments/list_organizations" => "contact_assignments#list_organizations"
       resources :contact_assignments
       resources :followup_comments
       resources :roles
@@ -189,6 +195,9 @@ Mh::Application.routes.draw do
   # SMS keyword state transitions
   match '/admin/sms_keywords/:id/t/:transition' => 'admin/sms_keywords#transition', as: 'sms_keyword_transition'
   match '/admin/sms_keywords/approve'
+  
+  match '/admin/organizations/:id/t/:transition' => 'admin/organizations#transition', as: 'organization_transition'
+  match '/admin/organizations/approve'
 
   # Map keyword responses with phone numbers
   match 'c/:keyword(/:received_sms_id)' => 'survey_responses#new', as: 'contact_form'

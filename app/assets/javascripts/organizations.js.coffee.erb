@@ -1,0 +1,36 @@
+$ ->
+  $('#add_sub_orgs').live 'click', ->
+    $(this).hide()
+    $('#orgs').show()
+    
+  $('.org_link').live 'ajax:before', ->
+    col$ = $(this).closest('div')
+    $('.org_link', col$).closest('li').removeClass('selected')
+    level = Number(col$.attr('data-level')) + 1
+    $('[data-level]').each ->
+      if Number($(this).attr('data-level')) >= level
+        $(this).hide()
+    # $('[data-level=' + level + ']').hide()
+    # $('[data-ancestor-id=' + $(this).attr('data-id') + ']').nextAll().hide()
+    $(this).closest('li').addClass('selected')
+    $('#spinner_column').show()
+    
+  $('.add_sub_org').live 'click', ->
+    $('#new_org form')[0].reset()
+    $('#organization_parent_id').val($(this).attr('data-parent-id'))
+    $('#new_org').dialog
+      resizable: false,
+      height:444,
+      width:600,
+      modal: true,
+      buttons: 
+        Cancel: ->
+          $(this).dialog('destroy')
+
+  $('#new_org .save').live 'click', ->
+    form = $(this).closest('form')
+    if $(this).hasClass('save_and_more')
+      $('#add_another').val('true')
+    $.rails.handleRemote(form)
+    form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
+    false

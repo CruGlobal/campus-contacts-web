@@ -1,0 +1,358 @@
+$ ->
+  $('#apply_roles_spinner').hide()
+  $("#apply_roles_successful").hide()
+
+  if $('#people_controller.confirm_merge input[type=submit]')[0]
+    $('#people_controller.confirm_merge input[type=submit]')[0].focus() 
+  $('#user_merge_form input.person').observe_field 0.75, ->
+    $(this).triggerPersonLookup()
+          
+  $('#user_merge_form input.name').observe_field 1, ->
+    $(this).triggerPersonSearch()
+
+  $('#user_merge_form input.person').triggerPersonLookup()
+  $('#user_merge_form input.name').triggerPersonSearch()
+
+  $('#people_controller a.add_person').live 'click', ->
+    $('#new_person')[0].reset()
+    $('#add_person_div').dialog
+      resizable: false,
+      height:664,
+      width:600,
+      modal: true,
+      buttons: 
+        Cancel: ->
+          $(this).dialog('destroy')
+    false
+  
+  $('#add_person_div .save').live 'click', ->
+    form = $(this).closest('form')
+    if $('#person_firstName', form).val() == '' #or ($('#person_email_address_email', form).val() == '' &&$('#person_phone_number_number', form).val() == '')
+      alert('At a minimum you need to provide a first name.')
+      return false
+    if $(this).hasClass('save_and_more')
+      $('#add_another').val('true')
+    $.rails.handleRemote(form)
+    form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
+    false
+    
+  true
+
+  $("#people_controller a#bulk_delete").live 'click', ->
+    ids = []
+    $('.id_checkbox:checked').each ->
+      ids.push($(this).val())
+    if($('#all_selected_text').is(':visible'))    
+      $('.all_row').each ->
+        ids.push($(this).attr('data-id'))
+        
+    num_selected = ids.length
+    if num_selected  > 0
+      if(confirm('Are you sure you want to delete ' + num_selected + ' people permanently?'))
+        $('.id_checkbox:checked').each ->
+          $(this).closest('tr').fadeOut();
+        $('#ids').val(ids.join(','))
+        url = $(this).attr('href')
+        params = $('#people_form').serialize();
+        $.post(url, params)
+    false
+    
+$.fn.triggerPersonSearch = ->
+  this.each ->
+    name = $(this).val()
+    $('#person_ids').hide()
+    $('input.person').val('')
+    $('.merge.person.preview').hide()
+    return false if $.trim(name) == ''
+    $("#spinner_name").show()
+    $.ajax
+      url: '/people/search_ids.json?q=' + name
+      type: 'GET',
+      success: (data)->
+        $('#ids').html('<strong>' + name + '</strong>: ' + data.join(', '))
+        $('#person_ids').show()
+        $.each data, (i, val)->
+          field = $('#person'+(i+1))
+          if field[0]
+            field.val(val)
+      complete: ->
+        $("#spinner_name").hide()
+        
+$.fn.triggerPersonLookup = ->
+  this.each ->
+    css_class = $(this).attr('id')
+    id = $(this).val()
+    unless Number(id) > 0
+      $('.merge.' + css_class).hide()
+      return false 
+    $("#spinner_" + css_class).show()
+    $.ajax
+      url: '/people/' + id + '/merge_preview?class=' + css_class
+      type: 'GET',
+      complete: ->
+        $('.merge.' + css_class).show()
+        $("#spinner_" + css_class).hide()
+        
+$.fn.submitBulkSendDialog = ->
+  ids = []
+  $('.to_list li').each ->
+    id = $(this).attr('data-id')
+    ids.push(id)
+  $('#bulk_send_dialog form #to').val(ids.join(','))
+  $.rails.handleRemote($("#bulk_send_dialog form"))
+  $('#bulk_send_dialog').dialog('destroy')
+        
+$('#send_bulkemail_link').live 'click', -> 
+  if $('.id_checkbox:checked').length == 0
+    alert("You didn't select any people to email")
+    return false
+  $('.to_list').html('')
+  ids = []
+  no_emails = []
+  
+  $('.id_checkbox:checked').each ->
+    id = $(this).val()
+    tr = $(this).parent().parent();
+    name = tr.attr('data-name')
+    email = tr.find('.email').text().length
+    if email > 0
+      ids.push(id)    
+      $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
+    else
+      no_emails.push($.trim(name))
+      
+  if($('#all_selected_text').is(':visible'))    
+    $('.all_row').each ->
+      id = $(this).attr('data-id')
+      name = $(this).attr('data-name')
+      email = $(this).attr('data-email').length
+      if email > 0
+        ids.push(id)      
+        $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')    
+      else
+        no_emails.push(name)
+        
+  if ids.length == 0
+    alert("Your selection didn't contain any person with a an email.")
+    return false
+  
+  $('#bulk_send_dialog form').addClass('bulk-email')
+  $('#bulk_send_dialog form').removeClass('bulk-sms')
+  $('#bulk_send_dialog .subject').show()
+  # disable char counter 
+  $('#char_counter').hide()
+  $('#body').unbind('keyup')
+  $('#body').unbind('paste')  
+  $('#body').val($('#bulk_email_message').val())
+  nicEdit = null
+  $('#bulk_send_dialog').dialog
+    resizable: false,
+    height:644,
+    width:600,
+    modal: true,
+    title: 'Send Email Message',
+    open: (event, ui) ->
+
+      if no_emails.length > 0
+        html = '<p>The following people are missing email addresses and will not be contacted:<br/>'
+        html += no_emails.join(', ')
+        html += '</p></div>'
+        $('#bulk_send_dialog_message').show().find('.notice').html(html)
+      else
+        $('#bulk_send_dialog_message').hide()
+        
+      nicEdit = new nicEditor({fullPanel : true}).panelInstance('body');  
+      $(this).find('form').attr('action', '/people/bulk_email')
+    close: (event, ui) ->
+      nicEdit.removeInstance('body');
+      $('#bulk_email_message').val($('#body').val())      
+    buttons: 
+      Send: ->
+        nicEdit.removeInstance('body');        
+        $(this).submitBulkSendDialog()
+        $('#bulk_email_message').val($('#body').val())              
+        $.n('Email message sent')
+      Cancel: ->
+        nicEdit.removeInstance('body');      
+        $('#bulk_email_message').val($('#body').val())              
+        $(this).dialog('destroy')
+  false        
+  
+$('#send_bulksms_link').live 'click', -> 
+  if $('.id_checkbox:checked').length == 0
+    alert("You didn't select any people to text")
+    return false
+  $('.to_list').html('')
+  ids = []
+  no_numbers = []
+  
+  $('.id_checkbox:checked').each ->
+    id = $(this).val()
+    tr = $(this).parent().parent();
+    name = tr.attr('data-name')
+    number = tr.find('.phone_number').text().length
+    if number > 0
+      ids.push(id)    
+      $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
+    else
+      no_numbers.push($.trim(name))
+
+  if($('#all_selected_text').is(':visible'))    
+    $('.all_row').each ->
+      id = $(this).attr('data-id')
+      name = $(this).attr('data-name')
+      number = $(this).attr('data-phone-number').length
+      if number > 0
+        ids.push(id)      
+        $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')    
+      else
+        no_numbers.push(name)
+
+  if ids.length == 0
+    alert("Your selection didn't contain any person with a phone number.")
+    return false
+
+  $('#bulk_send_dialog form').removeClass('bulk-email')
+  $('#bulk_send_dialog form').addClass('bulk-sms')
+  $('#bulk_send_dialog .subject').hide()
+  $('#char_counter').show()
+  $('#bulk_send_dialog #body').simplyCountable( { maxCount: 125 } )
+  $('#body').val($('#bulk_sms_message').val())  
+  $('#bulk_send_dialog').dialog
+    resizable: false,
+    height:444,
+    width:600,
+    modal: true,
+    title: 'Send Text Message',
+    open: (event, ui) ->
+      if no_numbers.length > 0
+        html = '<div class="missing"><p>The following people are missing phone numbers and will not be contacted:<br/>'
+        html += no_numbers.join(', ')
+        html += '</p></div>'
+        $('#bulk_send_dialog_message').show().find('.notice').html(html)
+      else
+        $('#bulk_send_dialog_message').hide()
+    
+      $(this).find('form').attr('action', '/people/bulk_sms')
+    close: (event, ui) ->
+      $('#bulk_sms_message').val($('#body').val())            
+    buttons: 
+      Send: ->
+        $(this).submitBulkSendDialog()
+        $('#bulk_sms_message').val($('#body').val())                
+        $.n('Text message sent')        
+      Cancel: ->
+        $('#bulk_sms_message').val($('#body').val())        
+        $(this).dialog('destroy')
+  false        
+  
+$('#bulk_send_dialog form').live 'submit', ->
+  false
+
+$('#check_all').live 'click', ->
+  first_row = $('#people_table').find('tr:first')
+  text = first_row.text()
+  if text.indexOf('Fetching') == 0
+    return false
+    
+  checked = $(this).prop('checked')
+  change_all_role_checkboxes(false) if !checked
+  params = $(this).attr('data-params')  
+  $('input.id_checkbox').prop('checked', checked)  
+  change_all_role_checkboxes(true) if checked
+  
+  # only show option to select more if there are more than 1 page 
+  if $('.pagination').length
+    if checked    
+      $('#people_table').prepend('<tr><td colspan="8" align="center" style="background:none;">Fetching information...</td></tr>') 
+      $.get '/people/all?' + params, (html) ->
+        $('#people_table').find('tr:first').remove()
+        $('#people_table').prepend(html)     
+    else
+      if $('span.all_text', first_row)[0]?
+        first_row.remove()
+
+$('#roles_menu_div').live 'click', ->
+  role_div = $(this).parent().find('.dropdown_1column')
+
+  if $(role_div).attr('style')
+    role_div.attr('style', '')
+    $(this).attr('style', '')
+  else
+    role_div.css('left', '44.8em')
+    $(this).attr('style', 'background: url("/assets/pillbg_over.png") repeat-x')
+   
+$('#apply_roles').live 'click', -> 
+  return false if check_selected_roles() == 0
+  return false if check_selected_people() == 0
+  update_persons_roles()
+
+$('.role_link_checkbox').live 'click', ->
+  return false if check_selected_people() == 0
+  role_checkbox = $(this).parent().find('input')
+  update_checkbox_checkmark(role_checkbox)
+  update_persons_roles()
+   
+$('.id_checkbox').live 'click', ->
+  mark_as_checked = $(this).is ':checked'
+  role_labels = get_role_labels($(this))
+  change_role_checkboxes(role_labels, mark_as_checked)
+  change_all_role_checkboxes(true) if !mark_as_checked  
+
+check_selected_people = () ->
+  checked = $('.id_checkbox:checked').length
+  alert("You didn't select any people to update roles.") if checked == 0
+  checked
+
+check_selected_roles = () ->
+  checked =  $('.role_id_checkbox:checked').length 
+  alert("You didn't select any roles to apply.") if checked == 0
+  checked
+
+get_role_labels = (obj) ->   
+  $('span.role_label', obj.closest('tr'))
+
+change_role_checkboxes = (role_labels, check) ->
+  role_labels.each ->
+    role = $(this).attr('id').split('_')
+    checkbox = '#role_ids_' + role[1] 
+    $(checkbox).attr checked: check 
+
+change_all_role_checkboxes = (check) ->
+  $('input.id_checkbox:checked').each ->
+    role_labels = get_role_labels($(this))
+    change_role_checkboxes(role_labels, check) 
+
+update_checkbox_checkmark = (role_checkbox) ->
+  if role_checkbox.is ':checked'
+    role_checkbox.attr checked: false
+  else
+    role_checkbox.attr checked: true
+
+update_persons_roles = () ->
+  role_ids = []
+
+  $('#apply_roles_spinner').show()
+  $("#apply_roles_successful").hide()
+
+  $('.role_id_checkbox:checked').each ->
+    role_id = $(this).val()
+    role_ids.push(role_id)    
+
+  checked_elements = $('.id_checkbox:checked')
+
+  checked_elements.each ->
+    person_id = $(this).val()
+ 
+    $.ajax
+      type: 'POST',
+      url: '/people/update_roles',
+      data: 'role_ids='+role_ids+'&person_id='+person_id,
+      success: (data) ->
+        roles_user = "#roles_user_" + person_id
+        $(roles_user).html data
+      complete: ->
+        if checked_elements.last().val() == person_id
+          $("#apply_roles_spinner").hide()
+          $("#apply_roles_successful").show()
+          $("#apply_roles_successful").html("Roles have been applied.")

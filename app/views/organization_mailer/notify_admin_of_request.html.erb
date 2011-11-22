@@ -1,0 +1,13 @@
+<h1>New Organization Request</h1>
+<p>
+  Name: <%= @admin.to_s %><br/>
+</p>
+<p>
+  Email: <%= @admin.email %>.<br/>
+</p>
+<p>
+  Organization Name: <%= @org %><br/>
+</p>
+<p>
+  Click here to respond to the request: <%= link_to(@org, admin_organization_url(@org)) %>
+</p>

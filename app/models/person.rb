@@ -26,6 +26,7 @@ class Person < ActiveRecord::Base
   has_many :organization_memberships, inverse_of: :person
   has_many :organizational_roles
   has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role::CONTACT_ID}", uniq: true
+  has_many :roles, through: :organizational_roles
   
   has_many :followup_comments, :class_name => "FollowupComment", :foreign_key => "commenter_id"
   has_many :comments_on_me, :class_name => "FollowupComment", :foreign_key => "contact_id"
@@ -151,7 +152,7 @@ class Person < ActiveRecord::Base
       get_location(authentication, response)
       get_education_history(authentication, response)
     rescue MiniFB::FaceBookError => e
-      HoptoadNotifier.notify(
+      Airbrake.notify(
         :error_class   => "MiniFB::FaceBookError",
         :error_message => "MiniFB::FaceBookError: #{e.message}",
         :parameters    => {data: data, authentication: authentication, response: response}
@@ -446,12 +447,15 @@ class Person < ActiveRecord::Base
     hash
   end
   
+  def to_hash_micro_leader
+   hash = to_hash_mini
+   hash['picture'] = picture unless fb_uid.nil?
+   hash['num_contacts'] = assigned_contacts.count
+   hash 
+  end
+  
   def to_hash_mini_leader(org_id)
-    hash = {}
-    hash['id'] = self.personID
-    hash['name'] = self.to_s.gsub(/\n/," ")
-    hash['picture'] = picture unless fb_uid.nil?
-    hash['num_contacts'] = assigned_contacts.count
+    hash = to_hash_micro_leader
     hash['organizational_roles'] = []
     organizational_roles.includes(:role, :organization).where("role_id <> #{Role::CONTACT_ID}").uniq {|r| r.organization_id}.collect do |r| 
       if om = organization_memberships.where(organization_id: r.organization_id).first
@@ -466,7 +470,8 @@ class Person < ActiveRecord::Base
     hash
   end
   
-  def to_hash_basic(organization = nil)
+  def to_hash_assign(organization = nil)
+    hash = self.to_hash_mini
     assign_hash = nil
     unless organization.nil?
       assigned_to_person = ContactAssignment.where('assigned_to_id = ? AND organization_id = ?', id, organization.id)
@@ -475,14 +480,18 @@ class Person < ActiveRecord::Base
       person_assigned_to = person_assigned_to.empty? ? [] : person_assigned_to.collect {|c| Person.find(c.assigned_to_id).try(:to_hash_mini)}
       assign_hash = {assigned_to_person: assigned_to_person, person_assigned_to: person_assigned_to}
     end
-    hash = self.to_hash_mini
+    hash['assignment'] = assign_hash unless assign_hash.nil?
+    hash
+  end
+  
+  def to_hash_basic(organization = nil)
+    hash = self.to_hash_assign(organization)
     hash['gender'] = gender
     hash['fb_id'] = fb_uid.to_s unless fb_uid.nil?
     hash['picture'] = picture unless fb_uid.nil?
     status = organizational_roles.where(organization_id: organization.id).where('followup_status IS NOT NULL') unless organization.nil?
     hash['status'] = status.first.followup_status unless (status.nil? || status.empty?)
     hash['request_org_id'] = organization.id unless organization.nil?
-    hash['assignment'] = assign_hash unless assign_hash.nil?
     hash['first_contact_date'] = answer_sheets.first.created_at.utc.to_s unless answer_sheets.empty?
     hash['date_surveyed'] = answer_sheets.last.created_at.utc.to_s unless answer_sheets.empty?
     hash['organizational_roles'] = []
@@ -591,5 +600,9 @@ class Person < ActiveRecord::Base
 
   def friends_and_leaders(organization)
     Friend.followers(self) & organization.leaders.collect(&:fb_uid).collect(&:to_s)
+  end
+
+  def assigned_organizational_roles(organizations)
+    roles.where('organizational_roles.organization_id' => organizations)
   end
 end

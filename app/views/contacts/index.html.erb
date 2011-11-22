@@ -32,6 +32,10 @@
     <li><%= link_to(t('contacts.unassign'), "", id: 'bulk_unassign') %></li>
     <li><%= link_to(t('contacts.add_contact'), "", class: 'add_contact') %></li>
   </ul>
+  <ul class="pillmenu">
+    <li><%= link_to(t('.send_email'), nil, :id => "send_bulkemail_link") %></li>	
+    <li><%= link_to(t('.send_sms'), nil, :id => "send_bulksms_link") %></li>			
+  </ul>
   
   <ul class="pillmenu">
     <li><%= link_to(t('.hidden_questions'), '#', id: 'hidden_questions_link') %></li>
@@ -138,6 +142,8 @@
         <th><%= t('.assigned_to') %></th>
         <th><%= t('.friends') %></th>
       <% end %>
+      <th><%= t('.surveys') %></th>
+      <th><%= sort_link @q, 'mh_answer_sheets.updated_at', t('.last_survey') %></th>
       <th></th>
     </tr>
     <tbody id="contacts_table">
@@ -162,6 +168,7 @@
   </div>
 <% end %>
 
-<div id="add_contact_div" style="display:none" title="Add a Contact" class="fingerme">
+<div id="add_contact_div" style="display:none" title="<%= t('.add_contact') %>" class="fingerme">
   <%= render 'add_contact', person: Person.new %>
 </div>
+<%= render 'shared/bulk_send_form' %>

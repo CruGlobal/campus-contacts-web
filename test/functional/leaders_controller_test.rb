@@ -136,7 +136,7 @@ class LeadersControllerTest < ActionController::TestCase
       user2 = Factory(:user_with_auxs)
       @user.person.primary_organization.add_leader(user2.person)
       assert_difference('OrganizationalRole.count', -1) do
-        get :destroy, id: user2.person.id
+        xhr :get,  :destroy, id: user2.person.id
         assert_response :success
       end
     end

@@ -90,7 +90,7 @@ class SmsController < ApplicationController
           @sms_params[:received_at] = Time.now
           @sms_params[:message] = params["Body"].strip.gsub(/\n/, ' ')
         else
-          @sms_params = params.slice(:carrier, :country)
+          @sms_params = params.slice(:country)
           @sms_params[:phone_number] = params[:device_address]
           @sms_params[:shortcode] = params[:inbound_address]
           @sms_params[:received_at] = DateTime.strptime(params[:timestamp], '%m/%d/%Y %H:%M:%S')
@@ -139,7 +139,7 @@ class SmsController < ApplicationController
         end
       rescue => e
         # Don't blow up on bad saves
-        HoptoadNotifier.notify(e)
+        Airbrake.notify(e)
       end
     end
     

@@ -79,7 +79,7 @@ class LeadersController < ApplicationController
     current_organization.add_leader(@person)
         # Notify the new user if we're supposed to
     if params[:notify] == '1'
-      notify_new_leader(@person) 
+      current_organization.notify_new_leader(@person, current_person) 
     end
     render :create
   end
@@ -131,13 +131,4 @@ class LeadersController < ApplicationController
     create and return
   end
   
-  protected
-    def notify_new_leader(person)
-      token = SecureRandom.hex(12)
-      person.user.remember_token = token
-      person.user.remember_token_expires_at = 1.month.from_now
-      person.user.save(validate: false)
-      LeaderMailer.added(person, current_person, current_organization, token).deliver
-    end
-
 end

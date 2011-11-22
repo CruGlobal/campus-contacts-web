@@ -6,9 +6,11 @@ class PeopleController < ApplicationController
   # GET /people
   # GET /people.xml
   def index
+    authorize! :read, Person
     fetch_people
-    @roles = Role.default | Role.where(organization_id: current_organization.id)
-     
+  
+    @roles = current_organization.roles
+
     # respond_to do |format|
     #   format.html # index.html.erb
     #   format.xml  { render xml: @people }
@@ -32,7 +34,8 @@ class PeopleController < ApplicationController
   # GET /people/1
   # GET /people/1.xml
   def show
-    @person = Person.find(params[:id])
+    @person = current_organization.people.find(params[:id])
+    authorize! :read, @person
 
     respond_to do |format|
       format.html # show.html.erb
@@ -42,18 +45,20 @@ class PeopleController < ApplicationController
 
   # GET /people/new
   # GET /people/new.xml
-  def new
-    @person = Person.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render xml: @person }
-    end
-  end
+  # def new
+  #   authorize! :create, Person
+  #   @person = Person.new
+  # 
+  #   respond_to do |format|
+  #     format.html # new.html.erb
+  #     format.xml  { render xml: @person }
+  #   end
+  # end
 
   # GET /people/1/edit
   def edit
-    @person = Person.find(params[:id])
+    @person = current_organization.people.find(params[:id])
+    authorize! :edit, @person
   end
   
   def search_ids
@@ -108,26 +113,64 @@ class PeopleController < ApplicationController
     end
     redirect_to merge_people_path, notice: "You've just merged #{params[:merge_ids].length + 1} people"
   end
-  # POST /people
-  # POST /people.xml
-  # def create
-  #   @person = Person.new(params[:person])
-  # 
-  #   respond_to do |format|
-  #     if @person.save
-  #       format.html { redirect_to(@person, notice: 'Person was successfully created.') }
-  #       format.xml  { render xml: @person, status: :created, location: @person }
-  #     else
-  #       format.html { render action: "new" }
-  #       format.xml  { render xml: @person.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
+
+  def create
+    authorize! :create, Person
+    Person.transaction do
+      params[:person] ||= {}
+      params[:person][:email_address] ||= {}
+      params[:person][:phone_number] ||= {}
+      unless params[:person][:firstName].present?# && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
+        render :nothing => true and return
+      end
+      @person, @email, @phone = create_person(params[:person])
+      
+      if @person.save
+        
+        if params[:roles].present?
+          role_ids = params[:roles].keys.map(&:to_i)
+          params[:roles].keys.each do |role_id|
+            @person.organizational_roles.create(role_id: role_id, organization_id: current_organization.id)
+          end
+
+          # we need a valid email address to make a leader
+          if role_ids.include?(Role::LEADER_ID) || role_ids.include?(Role::ADMIN_ID)
+            @new_person = @person.create_user! if @email.present? # create a user account if we have an email address
+            if @new_person && @new_person.save
+              @person = @new_person
+              current_organization.notify_new_leader(@person, current_person) 
+            else
+              @person.reload
+              @email = @person.primary_email_address || @person.email_addresses.new
+              @phone = @person.primary_phone_number || @person.phone_numbers.new
+              render 'add_person' and return
+            end
+          end
+        else
+          current_organization.add_involved(@person)
+        end
+        
+        respond_to do |wants|
+          wants.html { redirect_to :back }
+          wants.mobile { redirect_to :back }
+          wants.js 
+        end
+      else
+        flash.now[:error] = ''
+        flash.now[:error] += 'First name is required.<br />' unless @person.firstName.present?
+        flash.now[:error] += 'Phone number is not valid.<br />' if @phone && !@phone.valid?
+        flash.now[:error] += 'Email address is not valid.<br />' unless @email && @email.valid?
+        render 'add_person'
+        return
+      end
+    end
+  end
 
   # PUT /people/1
   # PUT /people/1.xml
   def update
-    @person = Person.find(params[:id])
+    @person = current_organization.people.find(params[:id])
+    authorize! :edit, @person
   
     respond_to do |format|
       if @person.update_attributes(params[:person])
@@ -139,23 +182,34 @@ class PeopleController < ApplicationController
       end
     end
   end
+  
+  def bulk_delete
+    authorize! :manage, current_organization
+    ids = params[:ids].to_s.split(',')
+    if ids.present?
+      current_organization.organization_memberships.where(:person_id => ids).destroy_all
+      current_organization.organizational_roles.where(:person_id => ids).destroy_all
+    end
+    render nothing: true
+  end
   # 
   # # DELETE /people/1
   # # DELETE /people/1.xml
-  # def destroy
-  #   @person = Person.find(params[:id])
-  #   @person.destroy
-  # 
-  #   respond_to do |format|
-  #     format.html { redirect_to(people_url) }
-  #     format.xml  { head :ok }
-  #   end
-  # end
+  def destroy
+    @person = Person.find(params[:id])
+    # @person.destroy
+  
+    respond_to do |format|
+      format.html { redirect_to(people_url) }
+      format.xml  { head :ok }
+    end
+  end
   
   def bulk_email
-    to_ids = params[:to].split(',')    
+    authorize! :manage, current_organization
+    to_ids = params[:to].split(',').uniq
     
-   to_ids.each do |id|
+    to_ids.each do |id|
       person = Person.find_by_personID(id)
       PeopleMailer.enqueue.bulk_message(person.email, current_person.email, params[:subject], params[:body]) if !person.email.blank?
     end
@@ -164,11 +218,22 @@ class PeopleController < ApplicationController
   end
   
   def bulk_sms
-    to_ids = params[:to].split(',')    
+    authorize! :manage, current_organization
+    to_ids = params[:to].split(',').uniq 
 
-   to_ids.each do |id|
+    to_ids.each do |id|
       person = Person.find_by_personID(id)
-      @sent_sms = SentSms.create!(message: params[:body][0..128] + ' Txt HELP for help STOP to quit', recipient: person.phone_number) if person.phone_number.length > 0
+      if person.primary_phone_number
+        if person.primary_phone_number.email_address.present?
+          # Use email to sms if we have it
+          from_email = current_person.primary_phone_number && current_person.primary_phone_number.email_address.present? ? 
+                        current_person.primary_phone_number.email_address : current_person.email
+          @sent_sms = SmsMailer.enqueue.text(person.primary_phone_number.email_address, "#{current_person.to_s} <#{from_email}>", params[:body])
+        else
+          # Otherwise send it as a text
+          @sent_sms = SentSms.create!(message: params[:body][0..128] + ' Txt HELP for help STOP to quit', recipient: person.phone_number) 
+        end
+      end
     end
     
     render :nothing => true
@@ -183,18 +248,21 @@ class PeopleController < ApplicationController
   end
 
   def update_roles
+    authorize! :manage, current_organization
+    data = ""
     role_ids = params[:role_ids].split(',')
-    person_ids = params[:person_ids].split(',')
+    person = Person.find(params[:person_id])
+    organizational_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.id }
+    OrganizationalRole.delete(organizational_roles)
 
-    person_ids.each do |person_id|
-      organizational_roles = OrganizationalRole.where(person_id: person_id).where(organization_id: current_organization.id).collect { |role| role.role_id }
- 
-      role_ids.each do |role_id|
-        OrganizationalRole.create!(person_id: person_id, role_id: role_id, organization_id: current_organization.id) unless organizational_roles.include?(role_id.to_i)  
-      end
-    end 
+    role_ids.each_with_index do |role_id, index|
+       OrganizationalRole.create!(person_id: person.id, role_id: role_id, organization_id: current_organization.id) 
+       data << "<span id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
+       data << "style='margin-right:4px;'" if index < role_ids.length - 1
+       data << ">#{Role.find(role_id).to_s}</span>"
+    end
 
-    render :nothing => true 
+    render :text => data
   end 
  
   protected
@@ -207,7 +275,7 @@ class PeopleController < ApplicationController
       @q = @q.search(params[:q])
       @q.sorts = ['lastName asc', 'firstName asc'] if @q.sorts.empty?
       @all_people = @q.result(distinct: true)
-     @people = @all_people.page(params[:page])
+      @people = @all_people.page(params[:page])
     end
     
     def authorize_read

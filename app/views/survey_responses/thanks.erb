@@ -7,6 +7,7 @@
   <% if mhub? && user_signed_in? %>
   	<script type="text/javascript">
       setTimeout(function() {
+				FB.logout();
   			window.location="<%= facebook_logout_url(next: redirect_url) %>";      
       }, 8000)
   	</script>
@@ -16,7 +17,7 @@
 		  <% if user_signed_in? %>
   			<h4><%= t('contacts.thanks.facebook')%></h4>
   			<br><br>
-  			<h3><%= link_to(t('contacts.thanks.done'), facebook_logout_url(next: redirect_url)) %></h3>
+  			<h3><%= link_to(t('contacts.thanks.done'), facebook_logout_url(next: redirect_url), onclick: 'FB.logout()') %></h3>
   	  <% else %>
 			  <h3><%= link_to(t('contacts.thanks.done'), redirect_url) %></h3>
 			<% end %>

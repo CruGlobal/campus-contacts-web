@@ -24,8 +24,9 @@ class User < ActiveRecord::Base
   end
   
   def self.find_for_facebook_oauth(access_token, signed_in_resource=nil, attempts = 0)
-    data = access_token['extra']['user_hash']
+    data = access_token['extra']['raw_info']
     unless data["email"].present?
+      raise access_token['extra'].inspect
       raise "No Email: " + data.inspect
     end
     user = nil

@@ -110,6 +110,11 @@ module ApiHelper
   def limit_and_offset_object(object)
     #allow for start (SQL Offset) and limit on query.  use :start and :limit
     raise LimitRequiredWithStartError if (params[:start].present? && !params[:limit].present?)
+
+    if (params[:limit].to_i > 100 || params[:limit].to_i == 0)
+      params[:limit] = 100
+    end
+    
     object = object.offset(params[:start].to_i) if params[:start].to_i > 0
     object = object.limit(params[:limit].to_i) if params[:limit].to_i > 0
     
@@ -212,7 +217,7 @@ module ApiHelper
     else
       output_message = '{"error": {"message":"An unknown error has occurred.", "code":"99"}}'
       if Rails.env.production?
-        HoptoadNotifier.notify(exception)
+        Airbrake.notify(exception)
       else
         raise exception
       end
@@ -242,7 +247,7 @@ module ApiHelper
       apiLog[:identity] = Rack::OAuth2::Server.get_access_token(params['access_token']).identity if params[:access_token]
       apiLog[:remote_ip] = request.remote_ip
 
-      HoptoadNotifier.notify(
+      Airbrake.notify(exception,
         :error_class => "Api Error",
         :error_message => exception.message,
         :parameters => apiLog

@@ -13,6 +13,5 @@ public/assets
 *.swp
 coverage.data
 .sass-cache
-config/deploy.rb
 active-record-query-trace
 .project

@@ -1,0 +1,7 @@
+$('#spinner_column').hide()
+if($('#<%= dom_id(@organization) %>')[0]) {
+  $('#<%= dom_id(@organization) %>').replaceWith('<%= j(render('org_column', parent: @organization)) %>')
+  $('#<%= dom_id(@organization) %>').show()
+} else {
+  $('#spinner_column').before('<%= j(render('org_column', parent: @organization)) %>')
+}

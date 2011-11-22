@@ -2,19 +2,19 @@ class KeywordRequestMailer < ActionMailer::Base
   default from: "support@missionhub.com"
   layout 'email'
   
-  def new_keyword_request(keyword)
-    @keyword = keyword
+  def new_keyword_request(keyword_id)
+    @keyword = SmsKeyword.find(keyword_id)
     mail(to: 'support@missionhub.com',
          subject: 'New sms keyword request')
   end
   
   def notify_user(keyword)
     @keyword = keyword
-    mail(to: keyword.user.person.email, subject: "Keyword '#{keyword}' was approved!")
+    mail(to: @keyword.user.person.email, subject: "Keyword '#{@keyword}' was approved!")
   end
   
   def notify_user_of_denial(keyword)
     @keyword = keyword
-    mail(to: keyword.user.person.email, subject: "Keyword '#{keyword}' was rejected.")
+    mail(to: @keyword.user.person.email, subject: "Keyword '#{@keyword}' was rejected.")
   end
 end

@@ -1,3 +1,5 @@
 #rest {background: none;}
 #left {display: none;}
-#main {margin-left: 0px;}
+#main {margin: 15px;}
+.titlebar {padding: 0;}
+.controlbar {padding-left: 0px; padding-bottom: 15px;}

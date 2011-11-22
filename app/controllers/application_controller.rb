@@ -16,7 +16,12 @@ class ApplicationController < ActionController::Base
       fb_api_key = split_token[0]
       fb_session_key = split_token[1]
       session[:fb_token] = nil
-      redirect_to "http://www.facebook.com/logout.php?api_key=#{fb_api_key}&session_key=#{fb_session_key}&confirm=1&next=#{redirect_url}"
+      if mhub?
+        # redirect_to "http://www.facebook.com/logout.php?api_key=#{fb_api_key}&session_key=#{fb_session_key}&confirm=1&next=#{redirect_url}"
+        redirect_to redirect_url #"http://m.facebook.com/logout.php?confirm=1&next=#{redirect_url}"
+      else
+        redirect_to redirect_url
+      end
     else
       redirect_to redirect_url
     end
@@ -35,7 +40,7 @@ class ApplicationController < ActionController::Base
   
   def raise_or_hoptoad(e)
     if Rails.env.production? 
-      HoptoadNotifier.notify(e)
+      Airbrake.notify(e)
     else
       raise e
     end
@@ -123,7 +128,12 @@ class ApplicationController < ActionController::Base
   
 
   def set_locale
-    I18n.locale = params[:locale] if params[:locale]
+    if params[:locale]
+      I18n.locale = params[:locale] 
+    else
+      available = %w{en ru}
+      I18n.locale = request.preferred_language_from(available)
+    end
   end
   
   def current_organization(person = nil)
@@ -133,7 +143,7 @@ class ApplicationController < ActionController::Base
     unless @current_organizations[person]
       if session[:current_organization_id]
         org = Organization.find_by_id(session[:current_organization_id]) 
-        org = nil unless org && (person.organizations.include?(org) || person.organizations.include?(org.parent))
+        # org = nil unless org && (person.organizations.include?(org) || person.organizations.include?(org.parent))
       end
       unless org
         org = person.primary_organization

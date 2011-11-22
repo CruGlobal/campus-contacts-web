@@ -49,7 +49,8 @@ module ApplicationHelper
   
   def no_left_sidebar
     case "#{params[:controller]}/#{params[:action]}"
-    when 'groups/new', 'groups/edit', 'groups/create', 'groups/update'
+    when 'groups/new', 'groups/edit', 'groups/create', 'groups/update', 'organizations/index', 'organizations/edit', 'organizations/update',
+         'organizations/new'
       true
     else
       false

@@ -7,12 +7,12 @@ class ApiV1AssignmentsTest < ActionDispatch::IntegrationTest
       setup_api_env()
     end
     
-   should "be able to create a contact assignment" do 
-      path = "/api/contact_assignments/"
-      ContactAssignment.destroy_all
-      post path, {'access_token' => @access_token3.code, org_id: @user3.person.primary_organization.id, assign_to: @user2.person.id, ids: @user2.person.id}
-      assert_equal(@user2.person.contact_assignments.count, 1)
-    end
+   # should "be able to create a contact assignment" do 
+   #    path = "/api/contact_assignments/"
+   #    ContactAssignment.destroy_all
+   #    post path, {'access_token' => @access_token3.code, org_id: @user3.person.primary_organization.id, assign_to: @user2.person.id, ids: @user2.person.id}
+   #    assert_equal(@user2.person.contact_assignments.count, 1)
+   #  end
 
     should "fail to create a contact assignment" do 
       path = "/api/contact_assignments/"
@@ -27,14 +27,14 @@ class ApiV1AssignmentsTest < ActionDispatch::IntegrationTest
       assert_equal(@json['error']['code'], '30')
     end
 
-    should "be able to delete a contact assignment" do 
-      ContactAssignment.destroy_all
-      y = ContactAssignment.create(organization_id: @user3.person.primary_organization.id, person_id: @user.person.id, assigned_to_id: @user.person.id)
-      assert_equal(@user.person.contact_assignments.count, 1)
-      path = "/api/contact_assignments/#{@user.person.id}"
-      delete path, {'access_token' => @access_token3.code}
-      assert_equal(@user.person.contact_assignments.count, 0)
-    end
+    # should "be able to delete a contact assignment" do 
+    #   ContactAssignment.destroy_all
+    #   y = ContactAssignment.create(organization_id: @user3.person.primary_organization.id, person_id: @user.person.id, assigned_to_id: @user.person.id)
+    #   assert_equal(@user.person.contact_assignments.count, 1)
+    #   path = "/api/contact_assignments/#{@user.person.id}"
+    #   delete path, {'access_token' => @access_token3.code}
+    #   assert_equal(@user.person.contact_assignments.count, 0)
+    # end
     
     should "raise a json exception when deleting a contact assignment without the contact_assignment scope" do
       path = "/api/contact_assignments/#{@user.person.id}"

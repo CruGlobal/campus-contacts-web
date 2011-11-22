@@ -16,8 +16,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   
   def facebook_login
     begin
-      @user = User.find_for_facebook_oauth(env["omniauth.auth"], current_user)
       omniauth = env["omniauth.auth"]
+      @user = User.find_for_facebook_oauth(omniauth, current_user)
       session[:fb_token] = omniauth["credentials"]["token"]
    
       if @user && @user.persisted?
@@ -25,15 +25,15 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       else
         # There was a problem logging this person in
         # This usually means the data coming back from FB didn't include an email address
-        HoptoadNotifier.notify(
+        Airbrake.notify(Exception.new,
           :error_class => "FacebookLoginError",
           :error_messsage => "Facebook Login Error",
           :parameters => env["omniauth.auth"]
         )
         session["devise.facebook_data"] = env["omniauth.auth"]
       end
-    rescue Exception => e
-      raise_or_hoptoad(e)
+    # rescue Exception => e
+    #   raise_or_hoptoad(e)
     end
   end
 end

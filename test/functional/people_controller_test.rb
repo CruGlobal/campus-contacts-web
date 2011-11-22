@@ -102,7 +102,10 @@ class PeopleControllerTest < ActionController::TestCase
       end      
     
       should "update roles" do
-        xhr :post, :update_roles, { :role_ids => "1,2,3", :person_ids => "#{@person1.id},#{@person2.id}" }
+        roles = []
+        (1..3).each { |index| roles << Role.create!(organization_id: 1, name: "member_#{index}", i18n: "member_#{index}") }
+        roles = roles.collect { |role| role.id }.join(',')
+        xhr :post, :update_roles, { :role_ids => roles, :person_id => @person1.id }
         assert_response :success
       end
     end

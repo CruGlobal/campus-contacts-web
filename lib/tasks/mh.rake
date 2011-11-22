@@ -15,154 +15,22 @@ end
 
 task "carriers" => :environment do
   # require 'hpricot'
-  require 'net/http'
-  PhoneNumber.connection.select_values("select distinct(number) as number from phone_numbers where carrier is null or carrier = ''").each do |number|
-    uri = URI.parse("http://digits.cloudvox.com/#{number}.json")
-    response = Net::HTTP.get(uri)
-    puts response
+  require 'open-uri'
+  PhoneNumber.connection.select_values("select distinct(number) as number from phone_numbers where txt_to_email is null or txt_to_email = '' order by updated_at desc").each do |number|
+    puts number
+    next unless number.length == 10
+    url = "https://api.data24-7.com/textat.php?username=support@missionhub.com&password=Windows7&p1=#{number}"
+    xml = Nokogiri::XML(open(url, :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE))
     begin
-      json = JSON.parse(response)
-      carrier = normalize(json['allocation']['carrier_name'])
-      PhoneNumber.connection.update("update phone_numbers set carrier = '#{carrier}' where number = '#{number}'")
-    rescue
-      # PhoneNumber.where(:number => number).collect(&:destroy)
+      email = xml.xpath('.//sms_address').text
+      carrier_name = xml.xpath('.//carrier_name').text
+      carrier = SmsCarrier.find_or_create_by_data247_name(carrier_name)
+      PhoneNumber.connection.update("update phone_numbers set carrier_id = #{carrier.id}, txt_to_email = '#{email}', email_updated_at = '#{Time.now.to_s(:db)}' where number = '#{number}'")
+    rescue => e
+      raise xml.inspect + "\n" + e.inspect
     end
-    time_to_sleep = rand(5) + 2
-    puts "Sleeping #{time_to_sleep} seconds"
-    sleep(time_to_sleep)
-  end
-end
-
-
-def normalize(carrier)
-  case carrier
-  when /VERIZON/, /BELL ATLANTIC/
-    'verizon'
-  when /SPRINT/
-    'sprint'
-  when /CINGULAR/
-    'cingular'
-  when /NEXTEL/
-    'nextel'
-  when /T-MOBILE/
-    't-mobile'
-  when /WESTERN WIRELESS/
-    'western wireless'
-  when /OMNIPOINT/
-    'omnipoint'
-  when /POWERTEL/
-    'powertel'
-  when /ALLTEL/
-    'alltel'
-  when /CRICKET/
-    'cricket'
-  when /UNITED STATES CELLULAR/
-    'us cellular'
-  when /ELTOPIA COMMUNICATIONS/
-    'eltopia'
-  when /AMERITECH/
-    'ameritech'
-  when /SOUTHERN BELL/, /BELLSOUTH/
-    'bell south'
-  when /SOUTHWESTERN BELL/
-    'SOUTHWESTERN BELL'
-  when /CINCINNATI BELL/
-    'CINCINNATI BELL'
-  when /CELLCOM/
-    'CELLCOM'
-  when /METRO PCS/, /METRO SOUTHWEST PCS/
-    'METRO PCS'
-  when /XO/
-    'xo'
-  when /BANDWIDTH.COM/
-    'BANDWIDTH.COM'
-  when /LEVEL 3 COMMUNICATIONS/
-    'LEVEL 3 COMMUNICATIONS'
-  when /CENTURYTEL/
-    'CENTURYTEL'
-  when /360NETWORKS/
-    '360NETWORKS'
-  when /ACS/
-    'ACS'
-  when /BROADWING/
-    'BROADWING'
-  when /CABLEVISION/
-    'CABLEVISION'
-  when /CENTENNIAL/
-    'CENTENNIAL'
-  when /CENTRAL/
-    'CENTRAL'
-  when /CHARTER FIBERLINK/
-    'CHARTER FIBERLINK'
-  when /CENTRAL/
-    'CENTRAL'
-  when /CHOICE ONE COMMUNICATIONS/
-    'CHOICE ONE COMMUNICATIONS'
-  when /FRONTIER/, /CITIZENS/
-    'FRONTIER'
-  when /CITYNET/
-    'CITYNET'
-  when /COMCAST/
-    'COMCAST'
-  when /COMMPARTNERS/
-    'COMMPARTNERS'
-  when /COX/
-    'COX'
-  when /DELTACOM/
-    'DELTACOM'
-  when /INTEGRA/
-    'INTEGRA'
-  when /EMBARQ/
-    'EMBARQ'
-  when /ESCHELON/
-    'ESCHELON'
-  when /GLOBAL CROSSING/
-    'GLOBAL CROSSING'
-  when /ICG TELECOM/
-    'ICG TELECOM'
-  when /ESCHELON/
-    'ESCHELON'
-  when /INTERMEDIA/
-    'INTERMEDIA'
-  when /MCI WORLDCOM/, /MCIMETRO/
-    'mci'
-  when /MPOWER/
-    'MPOWER'
-  when /NEUTRAL TANDEM/
-    'NEUTRAL TANDEM'
-  when /MPOWER/
-    'MPOWER'
-  when /NUVOX COMMUNICATIONS/
-    'NUVOX COMMUNICATIONS'
-  when /PAC - WEST TELECOMM/
-    'PAC - WEST TELECOMM'
-  when /PACIFIC BELL/
-    'pacific bell'
-  when /PAETEC COMMUNICATIONS/
-    'PAETEC COMMUNICATIONS'
-  when /RCN/
-    'RCN'
-  when /AT&T/
-    'att'
-  when /SUREWEST/
-    'SUREWEST'
-  when /TCG/
-    'TCG'
-  when /TELCOVE/
-    'TELCOVE'
-  when /TIME WARNER/
-    'TIME WARNER'
-  when /TW TELECOM/
-    'TW TELECOM'
-  when /UNITED TEL/
-    'UNITED TEL'
-  when /US LEC/
-    'US LEC'
-  when /WINDSTREAM/
-    'WINDSTREAM'
-  when /YMAX COMMUNICATIONS/
-    'YMAX COMMUNICATIONS'
-  else
-    carrier
+    # time_to_sleep = rand(5) + 2
+    # puts "Sleeping #{time_to_sleep} seconds"
+    # sleep(time_to_sleep)
   end
 end

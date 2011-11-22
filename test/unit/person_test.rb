@@ -154,5 +154,16 @@ class PersonTest < ActiveSupport::TestCase
       assert(['male', 'female'].include?(person.gender))
       assert_equal(person.email, "mattrw89@gmail.com", "See if person has correct email address")
     end    
+
+    should "get organizational roles" do
+      (1..3).each do |index| 
+        default_role = Role.create!(organization_id: 0, name: "default_role_#{index}", i18n: "default_role_#{index}") 
+        role = Role.create!(organization_id: 1, name: "role_#{index}", i18n: "role_#{index}") 
+        @person.organizational_roles.create!(organization_id: 1, role_id: default_role.id)
+        @person.organizational_roles.create!(organization_id: 1, role_id: role.id)
+      end
+  
+      assert_equal(@person.assigned_organizational_roles(1).count, 6) 
+    end
   end
 end

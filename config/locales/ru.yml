@@ -1,74 +1,66 @@
-# US English translations for Ruby on Rails
-#
-# Use this as the base for the locale file of your language.
-
 ru:
   application:
     add_contact: 
-      add_contact: добавить контакт в %{org}
-      survey_mode_instructions: If the person you are adding is standing next to you, click "Enter Survey Mode" from the top right corner of your screen.
-      save_and_close: 'Сохранить и закрыть'
-      save_and_add: 'Сохранить и добавить лругой контакт'
+      add_contact: Добавить контакт в %{org}
+      survey_mode_instructions: Если добавляемый вами человек стоит рядом с вами, нажмите "Enter Survey Mode" находящийся в верхнем правом углу вашего экрана.
+      save_and_close: 'Сохранить и Закрыть'
+      save_and_add: 'Сохранить и добавить еще'
     assign:
-      assign_explanation: 'You can assign a contact using any of the options below:'
-      me: Me
-      type_to_find_leader: Type to find a leader then click on the leader's name
-      type_to_find_org: "Type to find a %{terminology} then click on the %{terminology}'s name"
+      assign_explanation: 'Вы можете назначить контакт используя любую из нижеприведенных опций:'
+      me: Я
+      type_to_find_leader: Чтобы найти лидера, наберите имя лидера и нажмите имя лидера
+      type_to_find_org: "Наберите чтобы найти a %{terminology} нажмите на %{terminology}на имя"
   roles: 
     admin: Админ
     contact: Контакт
     involved: Вовлечен
-    leader: Лилер
-    alumni: Не студент
+    leader: Лидер
+    alumni: Выпускник
     views:
-      organizational_roles: "Роль организации"
-      system_roles: "Роль системы"
-      create_role: "Созлать новый роль"
+      organizational_roles: "Организационные роли"
+      system_roles: "Системные роли"
+      create_role: "Создать новую роль"
       edit_role: "Редактировать роль"
       delete_role: "Удалить роль"
       update: "Обновить"
       create: "Создать"
       name: "Имя"
-      i18n: "i18n"
      
   views:
     pagination:
-      first: "&laquo; First"
-      last: "Last &raquo;"
-      previous: "&lsaquo; Prev"
-      next: "Next &rsaquo;"
+      first: "&laquo; Первый"
+      last: "Последний &raquo;"
+      previous: "&lsaquo; Предыдущий"
+      next: "Следующий &rsaquo;"
       truncate: "..."
   rejoicables:
     spiritual_conversation: 'Духовный разговор' 
-    prayed_to_receive: 'Prayed To Receive Christ' 
-    gospel_presentation: 'Gospel Presentation'
+    prayed_to_receive: 'Молитва принятия Христа' 
+    gospel_presentation: 'Рассказать евангелие'
   nav:
-    enter_survey_mode: "Enter Survey Mode"
-    use_keyword: 'Use Keyword: %{keyword}'
-    my_profile: Мой профайл
     groups: 'Группы'
     hide: 'Скрыть'
-    view_details: "Посмотреть детели"
+    view_details: "Посмотреть детали"
     survey_mode_tip: "Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts."
-    terms: 'Terms and Conditions'
-    privacy: 'Privacy Policy'
+    terms: 'Условия и Соглашения'
+    privacy: 'Политика конфиденциальности'
     login: "Войти"
     logout: "Выйти"
-    profile: 'Мой профайл'
-    back_to_wizard: "I'm done. Take me back to the Wizard"
+    profile: 'Мой профиль'
+    back_to_wizard: "Завершить. Вернуться в мастер установки"
     go_to: 'go to'
-    make_default: 'make default'
-    my_contacts: 'My Contacts'
-    all_contacts: 'All Contacts'
-    directory: 'Directory'
+    make_default: 'Установить по умолчанию'
+    my_contacts: 'Мои контакты'
+    all_contacts: 'Все контакты'
+    directory: 'Директории'
     keywords: "Surveys"
-    roles: "Roles"
-    back_to_dashboard: "Back To My Contacts"
+    roles: "Роли"
+    back_to_dashboard: "Вернуться в Мои контакты"
   general:
     save: 'Сохранить'
     show: Показать
-    delete: Удалить
-    keyword: "Keyword"
+    delete: Стереть
+    keyword: "Ключевое слово"
     status: "Статус"
     edit: "Редактировать"
     back: "Назад"
@@ -76,10 +68,10 @@ ru:
     hide: 'скрыть'
     add_a_leader: 'Добавить лидера'
     survey_text_tip_html: "To begin your survey, <strong>text %{keyword} to %{shortcode}.</strong>"
-    survey_web_tip_html: "For the web version of the survey, send people to <strong>http://mhub.cc/c/%{keyword}/</strong>"
-    male: Муж
-    female: Жен
-    both: вместе
+    survey_web_tip_html: "For the web version of the survey, send people to <strong>http://mhub.cc/c/%{keyword}</strong>"
+    male: Мужской
+    female: Женский
+    both: Оба
     gender: Пол
     status: Статус
     first_name: Имя
@@ -89,79 +81,66 @@ ru:
     send_email: 'Отправить Email'
     search: 'Поиск'
     add: Добавить
-    adding: Adding...
-    to: "To"
-    subject: 'Subject'
+    adding: Добавление...
   leaders:
     form:
       name_required: "Name and email fields are required to add a leader:"
       notify: "Notify this person that they've been added and send them a link to log in."
     search:
-      not_in_system: 'If the person you are looking for is not already in the system click here to add them.'
+      not_in_system: 'Если человек которого вы ищете еще не в системе, нажмите сюда чтобы добавить его.'
   people: 
     index:
-      export: "Export this list"
-      directory_title: "Directory - %{org}"
-      labels: 'Labels'
-      gender: 'Gender'
-      phone: 'Phone'
+      export: "Экспортировать этот список"
+      directory_title: "Директория - %{org}"
+      labels: 'Метки'
+      gender: 'Пол'
+      phone: 'Телефон'
       email: 'Email'
-      year_in_school: 'Year in School'
-      manage_roles: 'Manage Roles'
-      send_sms: Send Text
-      send_email: Send Email
-      apply_roles: 'Apply Roles'
-      no_people: "Sorry, there are no people involved here."
-      displaying: "Displaying %{start} - %{finish} of %{total}"
+      year_in_school: 'Годы учебы'
+      manage_roles: 'Управление ролями'
+      send_sms: Отправить текст
+      send_email: Отправить Email
+      apply_roles: 'Применить роли'
+      no_people: "Извините, здесь вовлеченных людей нет."
+      displaying: "Отобразить %{start} - %{finish} of %{total}"
     all:
-      page_selected_html: "All <b>%{count}</b> people on this page are selected."
-      select_all_html: "Select all <b>%{count}</b> people in the directory."
-      all_selected_html: "All <b>%{count}</b> people in the directory is selected."
+      page_selected_html: "Все <b>%{count}</b> люди на этой странице выбраны."
+      select_all_html: "Выбрать всех <b>%{count}</b> людей в директории."
+      all_selected_html: "Все <b>%{count}</b> люди в директории выбраны."
     show:
-      edit_profile: 'Edit Profile'
+      edit_profile: 'Редактировать профиль'
     edit:
-      editing: Editing
+      editing: Редактирование
   sessions:
-    destroy:
-      signed_out: You've been signed out.
     new:
       login_paragraph_html:
         To get started, you'll need to have a Facebook account. <br/>
         Click the login link to the left and <strong>allow</strong> MHub to access your information. <br/>
         You'll be taken to the wizard if this is your first time accessing MissionHub.
       login_paragraph_mhub: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
-      instructions: Instructions
-      back: Back Home
-      dont_like_facebook: Don't like Facebook?
-      skip_facebook: Click here to skip Facebook login
-      start_survey: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
-      login_with_facebook: Please login with Facebook to get started 
-      login: Login
-      welcome: Welcome!
-      no_facebook: "Don't like Facebook? Click here to skip Facebook login"
+      instructions: Инструкции
+      back: Домой
+      dont_like_facebook: Не нравится Facebook?
+      skip_facebook: Нажмите чтобы пропустить Facebook login
   org_membership:
     confirm_delete: "Are you sure you want to dissociate yourself from %{org}"
   welcome:
     index:
       title_top: "Добро пожаловать в MissionHub!"
       title_top_mobile: "Survey"
-      go_home: 'Go to My Contacts'
+      go_home: 'Перейти в Мои контакты'
       request_key: "Click here to request a keyword"
-      get_started: "Get Started"
+      get_started: "Начать"
       request_key_help: "A Keyword is both the name of the survey and what the person would text to fill out the survey questions. For example, you would say, 'Text UFCRU to the number 75572.' UFCRU is the keyword."
-      headline_html: An online <span class="babyblue">follow-up system</span> with your audience in mind.
-      subheadline_html: Students text to connect. You empower follow-up from the web or a smart phone.
-      get_details_html: Get the Details & <a href="/welcome/tour" class="learnmore">Learn More</a> or %{link}
-      get_started: "Get Started"
     wizard:
       welcome: Добро пожаловать
-      verify_identity: Подтвердите Вашу личность
-      request_keyword: Request a Keyword
-      designate_leaders: Designate Leaders
-      create_survey: Create Survey
+      verify_identity: Подтвердите вашу личность
+      request_keyword: Запросить ключевое слово
+      designate_leaders: Обозначить лидеров
+      create_survey: Создать анкету
       back: Назад
       next: Следующий
-      welcome_paragraph: "Welcome to MissionHub!<br><br> This setup wizard will help you get started and set up a keyword, which is an essential part of getting contacts into the system."
+      welcome_paragraph: "Добро пожаловать в MissionHub!<br><br> This setup wizard will help you get started and set up a keyword, which is an essential part of getting contacts into the system."
       verify_paragraph: "If you have a CCC Relay login account, please sign in to link your account. You only need to do this once. WARNING: If you logged into MissionHub using someone else's Facebook Account, Log Out now! Clicking verify will merge your information with theirs, creating a big mess."
       verify_with_relay: "Verify With Relay"
       not_found_paragraph: "At the current time MissionHub is being field tested with the US Campus Ministry. If you're not a part of the US Campus Ministry, sit tight! We plan to release to a larger audience soon. If you are part of the US Campus Ministry and are seeing this message, send us an email at support@missionhub.com and we'll help you out."
@@ -171,36 +150,44 @@ ru:
       survey_paragraph:
         "Now that you've requested a keyword, you're going to want to create a set of questions to ask people. Think along the lines of a short survey or a 
         basic contact card."
-      create_survey_link: "Click here to create your survey."
-      leaders_header: "Добавить доступ другому лидеру"
+      create_survey_link: "Нажмите здесь чтобы создать вашу анкету."
+      leaders_header: "Дать доступ другим лидерам"
       leaders_paragraph:
         "This part is optional. Odds are decent that there are other people you work with who you'd like to give the ability to manage the keyword you set up
          as well as the contacts that will come from people responding to your survey. This step lets you add those people. Except we haven't programmed it quite yet."
-      skip_step: "Skip this step"
+      skip_step: "Пропустить этот шаг"
     home:
       title_top: "Добро пожаловать в MissionHub!"
-      keywords: "Surveys"
-      manage_questions: "Manage Survey Questions"
-      edit_keyword: 'Edit Keyword'
+      keywords: "Анкеты"
+      manage_questions: "Организовать вопросы анкеты"
+      edit_keyword: 'Редактировать ключевое слово'
       your_orgs: 'Your Organizational Involvements'
       edit_orgs: 'Edit your organizational involvements.'
-      delete_keyword_confirm: "Are you sure you want to delete this keyword?"
-      no_mobile: The mobile version of this page hasn't been built yet. Sorry.
       follow_up: 
         one:   '1 Person to Follow-up'
         other: '%{count} People to Follow-up'
-      delete: "Delete"
-  sms_keywords:
+      delete: "Удалить"
+  questions:
+    create:
+      notice: 'Вопрос был успешно создан.'
+    form: 
+      what_question_type: Какого типа вопрос вы хотели бы задать?
+      short_answer: 'Короткий ответ'
+      multiple_choice: 'Множественный выбор'
+      checkboxes: 'Checkboxes'
+      dropdown: 'Выпадающий'
+      web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
+    your_questions_help: "Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service."
+    predefined_help: "Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided."
+    archived_help: "Archived questions will no longer be included in the survey.  If no answers have ever been given to the question, the archived question will be deleted.  If you USE an archived question, the question will move to the YOUR QUESTIONS section and the previous answers will re-appear."
+  keywords:
     index:
-      association: Associate Contacts With
+      association: Ассоциировать контакты с
       association_help: "When a contact responds to a survey, they are associated with the same team or movement as the keyword they responded to."
-      request_keyword: Request a Keyword
     default_rejection_email:
       "Your keyword request has been denied"
     edit:
       heading: Editing Keyword
-      keywords: Keywords
-      to_begin_survey_html: To begin your survey, <strong>text %{keyword} to %{number}.</strong>
     flash:
       created: 'Keyword request was successfully submitted.'
       updated: 'Keyword was successfully updated.'
@@ -214,50 +201,8 @@ ru:
       initial_response: "What response should we send back to people when they text in? <br/>If you want the person to complete a survey, the response MUST include {{ link }} (exactly like that, dont change that part of the response.)"
       post_survey_why: "When someone texts in the keyword, this message will be sent to them and '{{link}}' will be replaced by a website address that will take them to an online survey for them to fill out. If they don't have internet, replying 'i' will send them all the questions via interactive text message."
       post_survey_message: 'What message would you like to show after the person has completed the survey?'
+      chartfield: 'A keyword costs $7/month. Please enter a chart field to be billed for this keyword.'
       association: "The %{this_term} you are currently requesting this keyword for has at leaset one %{child_term} under it.<br/> Select if you'd like to associate this keyword with the %{this_term} or a %{child_term} under this %{this_term}"
-      keyword_locked: Keywords can't be changed. You can delete this one and create a new one if necessary.
-      keyword_associated_with: This keyword will be associated with %{org}.
-      note: 'Note: Processing requests may take up to 24 hours.'
-    show:
-      explanation: 'Explanation:'
-      keyword: 'Keyword:'
-      status: 'Status:'
-      
-    new:
-      choose_keyword_explanation_html:
-        'Choosing a keyword for your community or event enables you to have people fill out your survey questions via the web, interactive texting,
-        and smartphones.  <strong>They will text your keyword to the number %{number}</strong> and your survey questions will appear on their device.  Note: The process of acquiring new keywords
-        requires manual intervention. Once you request your keyword expect to wait up to 24 hours before we notify you via email that your keyword is approved and
-    	  ready for use.'
-    questions:
-      create:
-        notice: 'Question was successfully created.'
-      form: 
-        text_message_length: 'Text Message Length:'
-        what_question_type: What type of question would you like to ask?
-        short_answer: 'Short Answer'
-        multiple_choice: 'Multiple Choice'
-        checkboxes: 'Checkboxes'
-        dropdown: 'Dropdown'
-        web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
-        text_message_preview: Text Message Preview
-      multiple_choice_form:
-        list_choices: 'List out the possible choices, one per line:'
-      question:
-        confirm_delete: "Are you sure you want to remove '%{question}'?"
-      short_answer_form:
-        question: 'Question:'
-      index: 
-        manage: Manage Survey Questions
-        note: "Note: First and Last name will be automatically added to every survey. There's no need for you to add those."
-        predefined: Predefined Questions
-        your_questions: Your Questions (drag to sort)
-        archived_questions: Archived Questions
-        add_question: Add a question
-      your_questions_help: "Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service."
-      predefined_help: "Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided."
-      archived_help: "Archived questions will no longer be included in the survey.  If no answers have ever been given to the question, the archived question will be deleted.  If you USE an archived question, the question will move to the YOUR QUESTIONS section and the previous answers will re-appear."
-
   keyword_request_mailer:
     notify_user:
       link_text: 'send us an email at support@missionhub.com'
@@ -267,7 +212,7 @@ ru:
           To use the keyword, tell people to text %{keyword} to %{number}<br/>
         </p>
         <p>
-          If you have any questions, %{link}.
+          Если у вас есть вопросы, %{link}.
         </p>
     notify_user_of_denial:
       body_html:
@@ -282,22 +227,22 @@ ru:
         <p>If you have good reason for an exception, please send an explanation to support@missionhub.com with Keyword Request Declined in the subject line and we will review your situation.</p>
 
         <p>
-          Thanks,<br/>
+          Спасибо,<br/>
           MissionHub Support Team
         </p>
   leader_mailer:
     added:
       body_html:
-        <p>Hi %{name},</p>
+        <p>Привет %{name},</p>
 
-        <p>I've has just added you as a leader for %{org} on MissionHub</p>
+        <p>Я только что добавил вас в качестве лидера %{org} на MissionHub</p>
 
-        <p>Visit %{link} to log in. Please don't share this link with anyone else.</p>
+        <p>Посетите %{link} чтобы войти. Пожалуйста не делитесь этой ссылкой ни с кем.</p>
 
         <p>%{added_by}</p>
 
   contacts:
-    assign: Assign
+    assign: Назначить
     unassign: 'Unassign'
     add_contact: "Add Contact"
     statuses:
@@ -307,12 +252,15 @@ ru:
       do_not_contact: Do Not Contact
       completed: Completed
     leader:
-      delete_confirm: "Are you sure you want to remove %{person} as a leader?"
+      delete_confirm: "Вы уверены что вы хотите удалить человека %{person} из списка лидеров?"
     leader_form: 
       start_typing: "Start typing a name to find a person to make a leader:"
     leaders:
       reminder_prompt: "Some of your leaders have contacts that haven't been followed up! Let your leaders know!"
       show_more: "Show More Leaders"
+    send_reminder_form:
+      to: "To"
+      subject: 'Subject'
     index:
       clear_search_form: 'Clear Search Form'
       no_contacts: 'Sorry, there are no contacts here.'
@@ -406,17 +354,6 @@ ru:
       cancel: "Cancel and go back to profile"
   sms:
     keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
-  survey:
-    drop_down_field: 
-      choose_one: "Choose One"
-  survey_responses:
-    new:
-      greeting_with_name: "Hi %{name}!"
-      greeting_no_name: Hi!
-    thanks:
-      thanks: "Thanks!"
-    index:
-      pick_keyword: "Pick a Keyword"
   date:
     formats:
       default: "%Y-%m-%d"

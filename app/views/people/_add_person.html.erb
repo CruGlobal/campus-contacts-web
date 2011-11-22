@@ -1,0 +1,32 @@
+<div class="explain">
+  <p><%= t('.add_person', org: current_organization) %></p>
+</div>
+
+<div id="add_person_form">
+  <%= form_for person, url: people_path, method: :post, remote: true do |f| %>
+    <% if flash[:error] %>
+      <div class="flash error"><%= raw flash[:error] %></div>
+    <% end %>
+    <%= hidden_field_tag :add_another %>
+    <%= render 'people/person_form', person: person %>
+    
+    <div class="user_defined_contact_fields customform contact_form">
+      <div class="ls">Roles:</div>
+      <div class="rs">
+        <% role_ids = params[:roles] ? params[:roles].keys.map(&:to_i) : [] %>
+        <% current_organization.roles.each do |role| %>
+          <div class="sfield">
+            <%= check_box_tag "roles[#{role.id}]", 1, role_ids.include?(role.id) %>
+          	<label for="<%= "roles_#{role.id}" %>"><%= role %></label>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    
+    <br/>
+
+    <%= submit_tag t('application.add_contact.save_and_close'), class: 'save_and_close save' %>
+    <%= submit_tag t('application.add_contact.save_and_add'), class: 'save_and_more save' %>
+  <% end %>
+  
+</div>

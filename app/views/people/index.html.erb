@@ -10,67 +10,74 @@
     <%= " - #{Role.find_by_id(params[:role_id]).to_s.pluralize}" if params[:role_id].present? %>
   </h1>
 </div>
-<div class="pagemenu">
-  <ul class="pillmenu">
-    <li><%= link_to(t('.send_email'), nil, :id => "send_bulkemail_link") %></li>	
-    <li><%= link_to(t('.send_sms'), nil, :id => "send_bulksms_link") %></li>			
-  </ul>
-  <ul class="pillmenu">
-    <li><%= link_to(t('.export'), export_people_path(params.except(:action, :controller, :utf8))) %></li>
-  </ul>
-  <ul id="menu" class="pillmenu">
-    <li>
-      <%= link_to(t('nav.roles'), '#') %>
+<% if can?(:create, Person) || can?(:create, SmsMailer) %>
+  <div class="pagemenu">
+    <ul class="pillmenu">
+      <li><%= link_to(t('.send_email'), nil, :id => "send_bulkemail_link") %></li>	
+      <li><%= link_to(t('.send_sms'), nil, :id => "send_bulksms_link") %></li>			
+    </ul>
+    <% if can? :manage, current_organization %>
+      <ul class="pillmenu">
+        <li><%= link_to(t('.export'), export_people_path(params.except(:action, :controller, :utf8))) %></li>
+      </ul>
+      <ul id="menu" class="pillmenu">
+        <li>
+          <%= link_to(t('nav.roles'), '#', :id => 'roles_menu_div') %>
 
-      <div class="dropdown_1column">
-        <div class="col_1">
-          <%- @roles.each do |role| %>
-            <div>
-              <%= check_box_tag 'role_ids[]', role.id, false, id: "role_ids_#{role.id}", class: 'role_id_checkbox' %> <%= role.i18n %>
-            </div>
-          <% end %>
+          <div class="dropdown_1column">
+            <div class="col_1">
+              <%- @roles.each do |role| %>
+                <div class="role_div_checkbox">
+                  <span>
+                    <%= check_box_tag 'role_ids[]', role.id, false, id: "role_ids_#{role.id}", class: 'role_id_checkbox' %> 
+                    <span class="role_link_checkbox"><%= role %></span>
+                  </span>
+                </div>
+              <% end %>
      
-          <%= link_to(t('.apply_roles'), '#', :class => 'greybox', :id => 'apply_roles') %>
-          <div id="apply_roles_spinner"><%= image_tag('spinner.gif') %></div>
-          <div id="apply_roles_successful"></div>
-        </div>
+              <%= link_to(t('.apply_roles'), '#', :class => 'greybox', :id => 'apply_roles') %>
+              <div id="apply_roles_spinner"><%= image_tag('spinner.gif') %></div>
+              <div id="apply_roles_successful"></div>
+            </div>
 
-        <div class="col_1 greyborder_top">
-          <%= link_to(t('.manage_roles'), roles_path(organization: current_organization)) %>
-        </div>
-      </div>
-    </li>
-  </ul>
-</div>
-  
+            <div class="col_1 greyborder_top">
+              <%= link_to(t('.manage_roles'), roles_path(organization: current_organization)) %>
+            </div>
+          </div>
+        </li>
+      </ul>
+    <% end %>
+    <ul class="pillmenu">
+      <li><%= link_to(t('.add_person'), "", class: 'add_person') %></li>
+    </ul>
+    <% if can? :manage, current_organization %>
+      <ul class="pillmenu">
+        <li><%= link_to(t('.bulk_delete'), bulk_delete_people_path, id: "bulk_delete") %></li>
+      </ul>  
+    <% end %>
+  </div>
+<% end %>
+
+<%= form_tag people_path, id: 'people_form' do %>
+  <% hidden_field_tag :ids %>
+<% end %>
 <table class="listing" cellpadding="0" cellspacing="0">
   <tr>
-    <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment',  'data-params' => 'page=' + (params[:page] ? params[:page] : '1') + '&role_id=' + (params[:role_id] ? params[:role_id] : '')   %></th>
+    <% if can?(:create, Person) || can?(:create, SmsMailer) %>
+      <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment',  'data-params' => 'page=' + (params[:page] ? params[:page] : '1') + '&role_id=' + (params[:role_id] ? params[:role_id] : '')   %></th>
+    <% end %>
     <th><%= sort_link @q, :firstName, t('contacts.index.first_name') %></th>
     <th><%= sort_link @q, :lastName, t('contacts.index.last_name') %></th>
+    <th><%= t('nav.roles') %></th>
     <th><%= sort_link @q, :gender, t('.gender') %></th>
     <th><%= t('.email') %></th>
     <th><%= t('.phone') %></th>
     <th><%= sort_link @q, :yearInSchool, t('.year_in_school') %></th>
     <th></th>
   </tr>
-  <tbody id="contacts_table">
+  <tbody id="people_table">
     <% @people.each do |person| %>
-      <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="person_row" data-name="<%= person.name %>">
-        <td nowrap="nowrap" class="checkbox_cell">
-          <%#= image_tag('grippy.png', class: 'handle') %>
-          <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
-        </td>
-        <td class="first_name"><%= person.firstName %></td>
-        <td class="last_name"><%= person.lastName %></td>
-        <td><%= person.gender.to_s.titleize %></td>
-        <td class="email"><%= mail_to(person.email) %></td>
-        <td class="phone_number"><%= person.pretty_phone_number %></td>
-        <td><%= person.yearInSchool %></td>
-        <td class="controls">
-          <%= link_to("Show", "/people/#{person.id}", :class => "icon magnify tipit", :title => t('nav.view_details')) %>
-        </td>
-      </tr>
+      <%= render 'person', person: person %>
     <% end %>
   </tbody>
 </table>
@@ -85,3 +92,8 @@
 </div>
 
 <%= render 'shared/bulk_send_form' %>
+
+
+<div id="add_person_div" style="display:none" title="<%= t('.add_person') %>" class="fingerme">
+  <%= render 'add_person', person: Person.new %>
+</div>

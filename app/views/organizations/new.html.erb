@@ -1,0 +1,54 @@
+<div id="roundwrap">
+
+  <div id="yourorg_trans"><%= t('organizations.new.your_org') %></div>
+  <%= image_tag("org.png", :class => "orgdiag") %>
+
+  <div class="titlebar">
+    <h1><%= t('.title', org: @organization) %></h1>
+    <p>
+      An organization can be something like your church, an association or network,
+      or your non-profit. Once you've made your organization, you'll be able to add what we call "sub-organizations."
+      These are things like departments, divisions or whatever you decide to call sub-organizations. 
+      For flexibility, you can have as many levels of sub-organizations as you'd like. 
+    </p>
+  </div>
+
+  <%= form_for @organization, url: signup_organizations_path, validate: true do |f| %>
+    <%= f.hidden_field :person_id %>
+    <div class="customform group_form signup_org">
+      <div class="sfield">
+        <div class="ls">
+          <%= f.label :name %>
+          <%= tip(t('organizations.edit.name_explain')) %>
+        </div>
+        <div class="rs">
+          <%= f.text_field :name %>
+        </div>
+      </div>
+      <div class="sfield">
+        <div class="ls">
+          <%= f.label :terminology %>
+          <%= tip(t('organizations.edit.term_explain')) %>
+        </div>
+        <div class="rs">
+          <%= f.text_field :terminology, :placeholder => "eg. Church, Company, Ministry" %>
+        </div>
+      </div>
+      <div class="formactions">
+        <div class="sfield">
+          <div class="ls"></div>
+          <div class="rs">
+            <div class="sidebyside">
+            <div class="element">
+              <%= f.submit(t('.signup')) %>
+            </div>
+            <div class="element">
+              <%= link_to("Cancel and return","Cancel") %> 
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+</div>

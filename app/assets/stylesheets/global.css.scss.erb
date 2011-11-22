@@ -56,6 +56,9 @@ a:hover {
   clear: both;
 }
 
+small {
+  font-size: 11px;
+}
 
 body {
   font-family: $font-base;
@@ -516,8 +519,57 @@ a.hide {
   }
 }
 
+/* clean gray
+*******************************************************************************/
+input[type=submit], button[type=submit], .cleangray, .cleangray:visited  {
+  background-color: #eeeeee;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#cccccc));
+  /* Saf4+, Chrome */
+  background-image: -webkit-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -moz-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -ms-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -o-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: linear-gradient(top, #eeeeee, #cccccc);
+  border: 1px solid #ccc;
+  cursor: pointer;
+  border-bottom: 1px solid #bbb;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  color: #333;
+  font: bold 11px "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+  line-height: 1;
+  padding: 8px;
+  text-align: center;
+  text-shadow: 0 1px 0 #eee;
+  width: 150px; }
+  input[type=submit]:hover, button[type=submit]:hover, .cleangray:hover, .cleangray:hover {
+    background-color: #dddddd;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#dddddd), to(#bbbbbb));
+    /* Saf4+, Chrome */
+    background-image: -webkit-linear-gradient(top, #dddddd, #bbbbbb);
+    background-image: -moz-linear-gradient(top, #dddddd, #bbbbbb);
+    background-image: -ms-linear-gradient(top, #dddddd, #bbbbbb);
+    background-image: -o-linear-gradient(top, #dddddd, #bbbbbb);
+    background-image: linear-gradient(top, #dddddd, #bbbbbb);
+    border: 1px solid #bbb;
+    border-bottom: 1px solid #999;
+    cursor: pointer;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #ddd; }
+  button.clean-gray:active {
+    border: 1px solid #aaa;
+    border-bottom: 1px solid #888;
+    -webkit-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
+    -moz-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
+    -ms-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
+    -o-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
+    box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee; }
+
 input[type=submit], button[type=submit] {
-  background: none repeat scroll 0 0 #0379AE;
+  /* background: none repeat scroll 0 0 #0379AE;
   border: 1px solid #000000;
   border-radius: 5px 5px 5px 5px;
 	-moz-border-radius: 5px 5px 5px 5px;
@@ -531,7 +583,7 @@ input[type=submit], button[type=submit] {
 	height: 35px;
   padding: 0px 15px;
   vertical-align: top;
-  font-weight: bold;
+  font-weight: bold; */
 }
 
 input[type=submit].smallbtn, 
@@ -901,6 +953,32 @@ span.title {
 
 .right {
   float: right;
+}
+
+.signup_org {
+  padding: 15px;
+  background: $light-blue;
+  display: inline-block;
+  margin: 0 auto;
+  border-radius: 5px;
+}
+.orgdiag {
+  float: left;
+  margin-right: 40px;
+  margin-top: 10px;
+}
+
+#yourorg_trans {
+  font-size: 12px;
+  font-weight: bold;
+  display: inline-block;
+  position: absolute;
+  margin-top: 68px;
+  text-align: center;
+  background: white;
+  width: 163px;
+  height: 18px;
+  line-height: 18px;
 }
 
 .width30 {width: 30%;}
@@ -1865,4 +1943,131 @@ textarea, input[type=text], input[type=password] {
   .ls {min-width: 75px;}
 }
 
+.orgwrap {
+  width: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+#orgs {
+  margin: 10px 0;
+  display: block;
+  white-space: nowrap;
+}
+.org_column {
+  border: 1px solid silver;
+  width: 250px;
+  vertical-align: top;
+  padding: 0px;
+  display: inline-block;
+  white-space: normal !important;
+  .ctrl {
+    display: none;
+    font-size: 10px;
+    text-transform: uppercase;
+    margin-left: 20px;
+    background: $blue;
+    border-radius: 4px;
+    line-height: 1.5em;
+    margin-top: 3px;
+    vertical-align: top;
+    border: 1px solid silver;
+    a {
+      color: $white;
+      padding: 0 4px;
+    }
+    a:hover {text-decoration: none;}
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    height: 300px;
+    li {
+      line-height: 1.75em;
+      padding: 2px 5px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    li:hover {
+      background: $light-blue;
+    }
+    li:hover > .ctrl {
+      display: inline-block;
+    }
+    li.selected {
+      background: $blue;
+      a {color: #fff;}
+    }
+  }
+  .org_link {
+    line-height: 1.25em;
+    width: 75%;
+    display: inline-block;
+    text-decoration: none;
+    white-space: normal;
+  }
+}
 
+.org_empty {
+  height: 327px;
+  line-height: 300px;
+  vertical-align: middle;
+}
+
+.org_big_add {
+  text-align: center;
+  background: $light-gray;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 26px auto;
+  width: 100px;
+  line-height: 1em !important;
+  display:block;
+  .plus {
+    font-size: 50px;
+    display: block;
+    margin: 0 auto 10px auto;
+    background: $white;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 8px;
+  }
+}
+.org_big_add:hover {
+  text-decoration: none;
+}
+
+.org_new {
+  font-weight: bold;
+  border-bottom: 1px solid silver;
+  display: block;
+  padding: 6px 4px;
+}
+.org_new:hover {
+  background: $light-blue;
+  text-decoration: none;
+}
+
+.dangerzone {
+  width: 490px;
+  border: 5px solid #f0f0f0;
+  h3 {
+    display: block;
+    background: url("<%= asset_path("dangerbg.png") %>") repeat-x;;
+    padding-left: 15px;
+    margin: 0;
+    color: #fff;
+    text-shadow: 1px 1px 2px #000;
+  }
+  .content {
+    margin: 0;
+    padding: 15px;
+    p {
+      line-height: 1.25em;
+      margin: 0 0 1em 0;
+      clear: both;
+      display: block;
+    }
+  }
+}

@@ -1,6 +1,28 @@
-#menu li:hover .dropdown_1column {
-  left:44em;
-  top:auto;
+td div.roles_spaces { 
+  display: inline;
+}
+
+td span.role_label {
+  background: #E5E5E5;
+  font-size: 10px;
+  padding: 3px 5px;
+}
+
+#menu a.greybox {
+  background:#F4F4F4;
+  border:1px solid #bbbbbb;
+  float: left;
+  margin:10px 3px 5px;
+  padding:0 8px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+}
+
+#menu li a.greybox:hover {
+  background:#ffffff;
+  border:1px solid #aaaaaa;
 }
 
 #menu #apply_roles_spinner {
@@ -44,23 +66,18 @@
   width: 124px;
 }
 
-#menu .greyborder_top a:hover {
+#menu .greyborder_top a:hover,
+#menu .role_div_checkbox:hover {
   background:#ffffff;
 }
 
-#menu a.greybox {
-  background:#F4F4F4;
-  border:1px solid #bbbbbb;
-  float: left;
-  margin:5px 3px;
-  padding:0 8px;
-  border-radius: 5px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  -khtml-border-radius: 5px;
+#menu .role_div_checkbox {
+  cursor: pointer;
+  margin: 0 -10px;
+  padding: 6px 0 4px;
+  width: 148px;
 }
 
-#menu li a.greybox:hover {
-  background:#ffffff;
-  border:1px solid #aaaaaa;
+#menu .role_div_checkbox span {
+  margin: 0 10px;
 }

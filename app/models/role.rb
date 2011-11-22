@@ -1,12 +1,14 @@
 class Role < ActiveRecord::Base
+  has_many :people, through: :organizational_roles
   has_many :organizational_roles, inverse_of: :role
+  belongs_to :organization, inverse_of: :roles
   belongs_to :organization, inverse_of: :roles
   scope :default, where(organization_id: 0)
   scope :leaders, where(i18n: %w[leader admin])
 
   validates :i18n, uniqueness: true, allow_nil: true
-  validates :name, presence: true
- 
+  validates :name, presence: true, :if => Proc.new { |role| organization_id != 0 }
+  
   def self.leader_ids
     self.leaders.collect(&:id)
   end
@@ -31,9 +33,9 @@ class Role < ActiveRecord::Base
     organization_id == 0 ? I18n.t("roles.#{i18n}") : name
   end
   
-  
   ADMIN_ID = admin.id
   LEADER_ID = leader.id
   CONTACT_ID = contact.id
   INVOLVED_ID = involved.id
+  
 end
