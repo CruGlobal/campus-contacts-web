@@ -21,7 +21,7 @@ ActiveAdmin.register Organization do
       ret = []
       ret << link_to("View", admin_organization_path(org))
       ret << link_to("Edit", edit_admin_organization_path(org))
-      ret << link_to("Delete", admin_organization_path(org), :method => :destroy)
+      ret << link_to("Delete", admin_organization_path(org), :method => :delete, :confirm => "Are you sure?")
       org.status_paths.events.each do |event|
         ret << link_to(event.to_s.titleize, "/admin/organizations/#{org.id}/t/#{event}", method: :post, class: "#{event} organization", confirm: "Are you sure you want to #{event} #{org}")
       end 
