@@ -3,3 +3,7 @@
   They will automatically be included in application.css.
 */
 .handle {cursor: pointer; vertical-align: middle; margin-left: 5px;}
+
+#send_contact_info_dialog input {
+  width: 270px;
+}

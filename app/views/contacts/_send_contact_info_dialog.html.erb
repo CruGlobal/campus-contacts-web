@@ -6,7 +6,7 @@
     <%= hidden_field_tag :send_contact_info_person_id %>
     <div class="field_in">
       <label><%= t('general.email') %></label> 
-      <div class="in"><%= text_field_tag :send_contact_info_email %></div>
+      <div class="in"><%= text_field_tag :send_contact_info_email, current_person.email %></div>
     </div>
   <% end %>
 </div>
