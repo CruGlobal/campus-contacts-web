@@ -1,3 +1,5 @@
+require 'vpim/vcard'
+ 
 class Person < ActiveRecord::Base
   include Ccc::Person
   set_table_name 'ministry_person'
@@ -605,4 +607,37 @@ class Person < ActiveRecord::Base
   def assigned_organizational_roles(organizations)
     roles.where('organizational_roles.organization_id' => organizations)
   end
+  
+  def vcard
+    
+    card = Vpim::Vcard::Maker.make2 do |maker|
+      maker.add_name do |name|
+        name.prefix = ''
+        name.given = firstName
+        name.family = lastName
+      end
+
+      if current_address
+        maker.add_addr do |addr|
+          addr.preferred = true
+          addr.location = 'home'
+          addr.street =  current_address.address1 + ' ' + current_address.address2
+          addr.locality = current_address.city
+          addr.postalcode = current_address.zip
+          addr.region = current_address.state
+          addr.country = current_address.country
+        end
+      end
+      
+      maker.birthday = birth_date if birth_date
+      maker.add_tel(phone_number) if phone_number != ''
+      if email != ''
+        maker.add_email(email) do |email|
+          email.preferred = true
+          email.location = 'home'
+        end  
+      end
+    end
+        
+  end  
 end

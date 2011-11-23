@@ -435,6 +435,9 @@ en:
       basic_information: Basic Information
       additional_information: Additional Information
       cancel: "Cancel and go back to profile"
+    mailer:
+      vcard_subject: 'Contact information of '
+      email_content: 'Attached in this email is the contact information of'
   sms:
     keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
   survey:
