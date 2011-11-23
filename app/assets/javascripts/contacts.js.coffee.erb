@@ -42,17 +42,19 @@ $ ->
       modal: true,
       buttons: 
         Ok: ->
-          $('#send_contact_info_form').submit ->
-            url = $(this).prop('action')
-            params = $(this).serialize()
-            $.post(url, params)
-            false
-          .submit()
-          $(this).dialog('destroy')            
-          
+          $('#send_contact_info_form').submit()
+          $.n('Contact information has been sent.') 
+          $(this).dialog('destroy')   
         Cancel: ->
           $(this).dialog('destroy')
+    false   
+
+  $('#send_contact_info_form').submit ->
+    url = $(this).prop('action')
+    params = $(this).serialize()
+    $.post(url, params)
     false
+    
     
   if $.params.answers
     $.each $.params.answers, (k, v) ->

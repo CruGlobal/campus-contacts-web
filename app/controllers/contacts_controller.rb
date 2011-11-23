@@ -250,36 +250,10 @@ class ContactsController < ApplicationController
   end
   
   def send_vcard
-    require 'vpim/vcard'
-    
-    @person = Person.find(params[:id])
-    card = Vpim::Vcard::Maker.make2 do |maker|
-      maker.add_name do |name|
-        name.prefix = ''
-        name.given = @person.firstName
-        name.family = @person.lastName
-      end
-      maker.add_addr do |addr|
-        addr.preferred = true
-        addr.location = 'home'
-        addr.street =  @person.current_address.address1 + ' ' + @person.current_address.address2
-        addr.locality = @person.current_address.city
-        addr.postalcode = @person.current_address.zip
-        addr.region = @person.current_address.state
-        addr.country = @person.current_address.country
-      end
-      
-      maker.birthday = @person.birth_date
-      maker.add_tel(@person.phone_number)
-      maker.add_email(@person.email) do |email|
-        email.preferred = true
-        email.location = 'home'
-      end  
+    ContactsMailer.vcard(params[:email], 'Mission Hub<noreply@missionhub.com>', params[:id]).deliver
 
-    end
-
-    ContactsMailer.vcard(params[:email], current_person.email, 'Contact information of ' + @person.name).deliver
-    #send_data card.to_s, :filename => "contact.vcf"    
+    #send_data Person.find(params[:id]).vcard.to_s, :filename => "#{Person.find(params[:id]).name}.vcf"        
+    render nothing: true
   end
   
   protected
