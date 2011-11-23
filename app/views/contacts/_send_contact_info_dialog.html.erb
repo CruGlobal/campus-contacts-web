@@ -2,10 +2,11 @@
   <p>
     <%= t('contacts.show.send_vcard_desc') %> 
   </p>
-  <%= form_tag send_vcard_contact_path(person), :id => "send_contact_info_form" do %>
+  <%= form_tag send_vcard_contacts_path, :id => "send_contact_info_form" do %>
+    <%= hidden_field_tag :send_contact_info_person_id %>
     <div class="field_in">
       <label><%= t('general.email') %></label> 
-      <div class="in"><%= text_field_tag :email %></div>
+      <div class="in"><%= text_field_tag :send_contact_info_email %></div>
     </div>
   <% end %>
 </div>

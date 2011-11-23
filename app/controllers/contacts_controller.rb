@@ -250,9 +250,9 @@ class ContactsController < ApplicationController
   end
   
   def send_vcard
-    ContactsMailer.vcard(params[:email], 'Mission Hub<noreply@missionhub.com>', params[:id]).deliver
+    ContactsMailer.vcard(params[:send_contact_info_email], 'Mission Hub<noreply@missionhub.com>', params[:send_contact_info_person_id]).deliver
 
-    #send_data Person.find(params[:id]).vcard.to_s, :filename => "#{Person.find(params[:id]).name}.vcf"        
+    #send_data Person.find(params[:send_contact_info_person_id]).vcard.to_s, :filename => "#{Person.find(params[:send_contact_info_person_id]).name}.vcf"        
     render nothing: true
   end
   

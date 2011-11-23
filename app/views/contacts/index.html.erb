@@ -119,6 +119,8 @@
   <%= hidden_field_tag :status, "do_not_contact" %>
 <% end %>
   
+<%= render :partial => 'send_contact_info_dialog' %>  
+
 <span style="display:none" id="drag_helper_text_one"><%= I18n.t('contacts.index.assign_people', count: 1) %></span>
 <span style="display:none" id="drag_helper_text_other"><%= I18n.t('contacts.index.assign_people', count: 0) %></span>
 <%= form_for ContactAssignment.new do |f| %>

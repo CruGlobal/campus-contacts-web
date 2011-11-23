@@ -167,8 +167,6 @@ Mh::Application.routes.draw do
       put :create_from_survey
       delete :destroy      
       post :bulk_destroy
-    end
-    member do
       post :send_vcard
     end
   end

@@ -34,14 +34,16 @@ $ ->
     $.rails.handleRemote($(this))
     false
     
-  $('#send_contact_info_link').live 'click', ->
+  $('.send_contact_info').live 'click', ->
+    $('#send_contact_info_person_id').val($(this).attr('data-person_id'))    
+    
     $('#send_contact_info_dialog').dialog
       resizable: false,
       height: 200,
       width: 400,
       modal: true,
       buttons: 
-        Ok: ->
+        Ok: ->          
           $('#send_contact_info_form').submit()
           $.n('Contact information has been sent.') 
           $(this).dialog('destroy')   

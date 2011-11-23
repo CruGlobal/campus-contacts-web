@@ -45,7 +45,7 @@
       <% if can?(:edit, @person) %>
         <p><%= link_to(t('.edit_contact_info'), edit_contact_path(@person)) %></p>
       <% end %>
-        <p><%= link_to(t('.send_contact_info'), '#', :id => 'send_contact_info_link' ) %></p>      
+        <p><%= link_to(t('.send_contact_info'), '#', class: 'send_contact_info', 'data-person_id' => @person.id ) %></p>      
       <%= render :partial => 'send_contact_info_dialog', :locals => { person: @person } %>
       
       <div id="survey_answers" style="display:none" title="<%= t('.survey_answers') %>">
