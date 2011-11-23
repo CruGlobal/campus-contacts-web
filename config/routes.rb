@@ -168,6 +168,9 @@ Mh::Application.routes.draw do
       delete :destroy      
       post :bulk_destroy
     end
+    member do
+      get :send_vcard
+    end
   end
 
   namespace :api do
