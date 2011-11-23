@@ -11,4 +11,8 @@ class ContactsMailer < ActionMailer::Base
 
     mail to: to, from: from, subject: subject
   end
+  
+  def vcard(to, from, subject)
+    mail to: to, from: from, subject: subject    
+  end
 end

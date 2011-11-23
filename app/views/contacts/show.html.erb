@@ -45,7 +45,9 @@
       <% if can?(:edit, @person) %>
         <p><%= link_to(t('.edit_contact_info'), edit_contact_path(@person)) %></p>
       <% end %>
-        <p><%= link_to(t('.send_contact_info'), send_vcard_contact_path(@person)) %></p>      
+        <p><%= link_to(t('.send_contact_info'), '#', :id => 'send_contact_info_link' ) %></p>      
+      <%= render :partial => 'send_contact_info_dialog', :locals => { person: @person } %>
+      
       <div id="survey_answers" style="display:none" title="<%= t('.survey_answers') %>">
         <ul>
           <% @organization.question_sheets.flatten.uniq.each do |qs| %>

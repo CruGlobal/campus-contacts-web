@@ -278,7 +278,8 @@ class ContactsController < ApplicationController
 
     end
 
-    send_data card.to_s, :filename => "contact.vcf"    
+    ContactsMailer.vcard(params[:email], current_person.email, 'Contact information of ' + @person.name).deliver
+    #send_data card.to_s, :filename => "contact.vcf"    
   end
   
   protected

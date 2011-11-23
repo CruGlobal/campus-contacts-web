@@ -169,7 +169,7 @@ Mh::Application.routes.draw do
       post :bulk_destroy
     end
     member do
-      get :send_vcard
+      post :send_vcard
     end
   end
 

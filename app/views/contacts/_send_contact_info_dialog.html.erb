@@ -1,0 +1,11 @@
+<div id="send_contact_info_dialog" style="display:none" title="Send Reminder Email">
+  <p>
+    <%= t('contacts.show.send_vcard_desc') %> 
+  </p>
+  <%= form_tag send_vcard_contact_path(person), :id => "send_contact_info_form" do %>
+    <div class="field_in">
+      <label><%= t('general.email') %></label> 
+      <div class="in"><%= text_field_tag :email %></div>
+    </div>
+  <% end %>
+</div>

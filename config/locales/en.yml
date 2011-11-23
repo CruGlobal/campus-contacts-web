@@ -411,6 +411,7 @@ en:
       survey_answers: 'Survey Answers'
       edit_contact_info: 'Edit Contact Info'
       send_contact_info: 'Send Contact Info'
+      send_vcard_desc: 'This will create a vcard and send it to the email address you enter below.'
       facebook_profile: 'Facebook Profile'
       phone_number: "Phone #:"
       email: "Email:"
