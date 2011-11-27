@@ -150,10 +150,14 @@ class PeopleController < ApplicationController
           current_organization.add_involved(@person)
         end
         
-        respond_to do |wants|
-          wants.html { redirect_to :back }
-          wants.mobile { redirect_to :back }
-          wants.js 
+        if params.has_key?(:add_to_group)
+          render json: @person
+        else
+          respond_to do |wants|
+            wants.html { redirect_to :back }
+            wants.mobile { redirect_to :back }
+            wants.js
+          end
         end
       else
         flash.now[:error] = ''

@@ -1,4 +1,6 @@
-$("#member_search").dialog('close');
+<% unless params[:add_another] == 'true' %>
+  $("#member_search").dialog('close');
+<% end %>
 row = '<%= j(render('groups/person', person: @person, group_membership: @group_membership)) %>'
 if($('#<%= dom_id(@person) %>')[0]) {
   $('#<%= dom_id(@person) %>').replaceWith(row)
