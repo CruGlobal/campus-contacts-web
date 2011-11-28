@@ -85,6 +85,17 @@ deploy.task :restart, roles: :app do
     
 end  
 
+deploy.task :restart, :roles => [:app], :except => {:no_release => true} do
+  servers = find_servers_for_task(current_task)
+  servers.map do |s|
+    run "cd #{deploy_to}/current && echo '' > public/lb.txt", :hosts => s.host
+    run "touch #{current_path}/tmp/restart.txt", :hosts => s.host
+    sleep 60
+    run "cd #{deploy_to}/current && echo 'ok' > public/lb.txt", :hosts => s.host
+  end
+end
+
+
 after 'deploy:restart', 'deploy:bluepill'
 deploy.task :bluepill, roles: :db do
   if rails_env == 'production'
