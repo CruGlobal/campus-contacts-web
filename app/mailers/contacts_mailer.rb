@@ -24,11 +24,11 @@ class ContactsMailer < ActionMailer::Base
     mail to: to, from: from, subject: subject
   end
   
-  def bulk_vcard(to, from, attachment)
-    filename = 'vcards.zip'
+  def bulk_vcard(to, from, book)
+    filename = 'contacts.vcf'
     subject = t('contacts.mailer.bulk_vcard_email_subject')
 
-    attachments[filename] = { mime_type: 'application/zip', content: File.read(attachment.path) }
+    attachments[filename] = { mime_type: 'application/zip', content: book.to_s }
     mail to: to, from: from, subject: subject
   end
   

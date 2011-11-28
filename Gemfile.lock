@@ -27,6 +27,12 @@ GIT
       rack (~> 1.1)
       rails (>= 2.3.11)
 
+GIT
+  remote: git://github.com/twinge/vpim.git
+  revision: a26584128f95fcbe8e8f438e31d74b675e094a1f
+  specs:
+    vpim (11.9.6)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -282,7 +288,6 @@ GEM
       activerecord (>= 3.0.2)
     vegas (0.1.8)
       rack (>= 1.0.0)
-    vpim (0.695)
     warden (1.1.0)
       rack (>= 1.0)
     whenever (0.7.0)
@@ -349,5 +354,5 @@ DEPENDENCIES
   uglifier
   unicorn
   valium
-  vpim
+  vpim!
   whenever

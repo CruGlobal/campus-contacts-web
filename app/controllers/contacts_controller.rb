@@ -1,4 +1,5 @@
 require 'csv'
+require 'vpim/book'
 class ContactsController < ApplicationController
   before_filter :get_person
   before_filter :ensure_current_org
@@ -257,33 +258,28 @@ class ContactsController < ApplicationController
   end
   
   def send_bulk_vcard
-    require 'zip/zip'
-    require 'zip/zipfilesystem'
 
     ids = params[:ids].split(',')
     
     if ids.size
-      temp_file = Tempfile.new("vcards-#{request.remote_ip}")
-      # Give the path of the temp file to the zip outputstream, it won't try to open it as an archive.
-      Zip::ZipOutputStream.open(temp_file.path) do |zip|
-        ids.each do |id|
-          person = Person.find(id)
-          zip.put_next_entry(person.name + '.vcf')
-         zip.printf "%s", person.vcard
-       end
+      book = Vpim::Book.new
+      ids.each do |id|
+        person = Person.find(id)
+       book << person.vcard
       end
 
       respond_to do |wants|
         wants.html do
           if params.has_key?(:email)
-            ContactsMailer.bulk_vcard(params[:email], 'Mission Hub<noreply@missionhub.com>', temp_file).deliver
+            ContactsMailer.bulk_vcard(params[:email], 'Mission Hub<noreply@missionhub.com>', book).deliver
+            render nothing: true
           else
-            send_file temp_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => "vcards.zip"
+            send_data book, :type => 'application/vcard', :disposition => 'attachment', :filename => "contacts.vcf"
           end
         end
       end
 
-      temp_file.close          
+      # temp_file.close          
     end
 
   end

@@ -80,7 +80,7 @@ $ ->
           $(this).dialog('destroy')   
         "Download": ->
           window.location = '/contacts/send_bulk_vcard?ids=' + ids
-          $.n('You should be downloading a zip file now containing all the contact information you requested.') 
+          $.n('A .vcf file now containing all the contact information you requested is being downloaded.') 
           $(this).dialog('destroy')             
         Cancel: ->
           $(this).dialog('destroy')

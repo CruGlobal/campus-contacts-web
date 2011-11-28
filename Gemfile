@@ -50,7 +50,7 @@ gem "ransack"
 gem 'deadlock_retry'
 gem 'delegate_presenter'
 
-gem 'vpim'      # vcard maker
+gem 'vpim', git: 'git://github.com/twinge/vpim.git'      # vcard maker
 gem 'rubyzip'   # for zipping files
 
 # Bundle gems for the local environment. Make sure to

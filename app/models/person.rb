@@ -621,11 +621,11 @@ class Person < ActiveRecord::Base
         maker.add_addr do |addr|
           addr.preferred = true
           addr.location = 'home'
-          addr.street =  current_address.address1 + ' ' + current_address.address2
-          addr.locality = current_address.city
-          addr.postalcode = current_address.zip
-          addr.region = current_address.state
-          addr.country = current_address.country
+          addr.street =  "#{current_address.address1} #{current_address.address2}" if current_address.address1.present? || current_address.address2.present?
+          addr.locality = current_address.city if current_address.city.present?
+          addr.postalcode = current_address.zip if current_address.zip.present?
+          addr.region = current_address.state if current_address.state.present?
+          addr.country = current_address.country if current_address.country.present?
         end
       end
       
