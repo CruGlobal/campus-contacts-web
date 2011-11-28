@@ -64,8 +64,8 @@ $ ->
       ids.push(id)
 
     if ids.length == 0
-      alert('Please select at least one contact.')
-      return
+      $.w(I18n.t('contacts.index.contact_no_select_message'))
+      return false
       
     $('#bulk_vcard_dialog').dialog
       resizable: false,
@@ -76,11 +76,11 @@ $ ->
         "Send to email": ->          
           email = $('#bulk_vcard_email').val()
           $.get('/contacts/send_bulk_vcard?ids=' + ids + '&email=' + email)
-          $.n('Contacts information has been sent to ' + email) 
+          $.n(I18n.t('contacts.index.bulk_vcard_email_message') + email) 
           $(this).dialog('destroy')   
         "Download": ->
           window.location = '/contacts/send_bulk_vcard?ids=' + ids
-          $.n('A .vcf file now containing all the contact information you requested is being downloaded.') 
+          $.n(I18n.t('contacts.index.bulk_vcard_download_message'))  
           $(this).dialog('destroy')             
         Cancel: ->
           $(this).dialog('destroy')
@@ -108,7 +108,7 @@ $ ->
   $('#add_contact_div .save').live 'click', ->
     form = $(this).closest('form')
     if $('#person_firstName', form).val() == '' #or ($('#person_email_address_email', form).val() == '' &&$('#person_phone_number_number', form).val() == '')
-      alert('At a minimum you need to provide a first name.')
+      $.w(I18n.t('contacts.index.no_name_message'))
       return false
     if $(this).hasClass('save_and_more')
       $('#add_another').val('true')

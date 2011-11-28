@@ -399,6 +399,10 @@ en:
       surveys: 'Surveys'
       bulk_vcard_dialog_title: 'Bulk Vcard Options'
       bulk_vcard_dialog_desc: 'We can send the contacts information to you via email or you can download it all in one zip package'
+      bulk_vcard_download_message: 'A .vcf file now containing all the contact information you requested is being downloaded.'
+      bulk_vcard_email_message: 'Contacts information has been sent to '      
+      contact_no_select_message: 'Please select atleast one contact.'      
+      no_name_message: 'At a minimum you need to provide a first name.'
     mine:
       in_progress: 'In Progress'
       completed: 'Completed'

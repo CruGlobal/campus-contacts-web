@@ -49,7 +49,7 @@
   
   <ul class="pillmenu">
     <li><%= link_to(t('.export'), params.merge(format: 'csv')) %></li>
-    <li><%= link_to(t('.vcard'), '#', id: 'bulk_vcard_link' ) %></li>
+    <li><%= link_to(t('.vcard'), '', id: 'bulk_vcard_link' ) %></li>
   </ul>
   
   <% if params[:dnc] == 'true' %>

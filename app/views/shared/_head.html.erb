@@ -13,6 +13,11 @@
 <%= stylesheet_link_tag 'no_left_sidebar' if no_left_sidebar %>
 
 <%= javascript_include_tag 'application' %>
+
+<script type="text/javascript" charset="utf-8">
+  I18n.defaultLocale = "<%= I18n.default_locale %>";
+  I18n.locale = "<%= I18n.locale %>";
+</script>
 <%#= stylesheet_link_tag 'smoothness/jquery-ui-1.8.7.custom' %>
 <%= csrf_meta_tag %>
 <script type="text/javascript" charset="utf-8">
