@@ -227,14 +227,15 @@ class ContactsController < ApplicationController
   
   def destroy
     contact = Person.find(params[:id])
+    authorize! :manage, contact
     current_organization.remove_contact(contact)
 
     render :nothing => true      
   end
   
   def bulk_destroy
-    params[:ids].each do |id|
-      contact = Person.find(id)
+    authorize! :manage, current_organization
+    Person.find(params[:ids]).each do |contact|
       current_organization.remove_contact(contact)
     end
 
@@ -263,8 +264,7 @@ class ContactsController < ApplicationController
     
     if ids.size
       book = Vpim::Book.new
-      ids.each do |id|
-        person = Person.find(id)
+      Person.includes(:current_address, :primary_phone_number, :primary_email_address).find(ids).each do |person|
        book << person.vcard
       end
 
@@ -278,8 +278,6 @@ class ContactsController < ApplicationController
           end
         end
       end
-
-      # temp_file.close          
     end
 
   end

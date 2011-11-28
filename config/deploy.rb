@@ -73,25 +73,13 @@ task :production do
 end
 
 
-# define the restart task
-desc "Restart the web server"
-deploy.task :restart, roles: :app do
-  # if rails_env == 'production'
-    # sudo "/etc/init.d/unicorn upgrade"
-  # else
-    run "touch #{current_path}/tmp/restart.txt"
-    
-    #restart resque task
-    
-end  
-
 deploy.task :restart, :roles => [:app], :except => {:no_release => true} do
   servers = find_servers_for_task(current_task)
   servers.map do |s|
-    run "cd #{deploy_to}/current && echo '' > public/lb.txt", :hosts => s.host
+    run "cd #{deploy_to}/current && echo '' > public/lb.html", :hosts => s.host
     run "touch #{current_path}/tmp/restart.txt", :hosts => s.host
     sleep 120
-    run "cd #{deploy_to}/current && echo 'ok' > public/lb.txt", :hosts => s.host
+    run "cd #{deploy_to}/current && echo 'ok' > public/lb.html", :hosts => s.host
   end
 end
 
