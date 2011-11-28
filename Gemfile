@@ -50,7 +50,8 @@ gem "ransack"
 gem 'deadlock_retry'
 gem 'delegate_presenter'
 
-gem 'vpim' # vcard maker
+gem 'vpim'      # vcard maker
+gem 'rubyzip'   # for zipping files
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

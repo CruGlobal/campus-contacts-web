@@ -256,6 +256,38 @@ class ContactsController < ApplicationController
     render nothing: true
   end
   
+  def send_bulk_vcard
+    require 'zip/zip'
+    require 'zip/zipfilesystem'
+
+    ids = params[:ids].split(',')
+    
+    if ids.size
+      temp_file = Tempfile.new("vcards-#{request.remote_ip}")
+      # Give the path of the temp file to the zip outputstream, it won't try to open it as an archive.
+      Zip::ZipOutputStream.open(temp_file.path) do |zip|
+        ids.each do |id|
+          person = Person.find(id)
+          zip.put_next_entry(person.name + '.vcf')
+         zip.printf "%s", person.vcard
+       end
+      end
+
+      respond_to do |wants|
+        wants.html do
+          if params.has_key?(:email)
+            ContactsMailer.bulk_vcard(params[:email], 'Mission Hub<noreply@missionhub.com>', temp_file).deliver
+          else
+            send_file temp_file.path, :type => 'application/zip', :disposition => 'attachment', :filename => "vcards.zip"
+          end
+        end
+      end
+
+      temp_file.close          
+    end
+
+  end
+  
   protected
   
     def save_survey_answers

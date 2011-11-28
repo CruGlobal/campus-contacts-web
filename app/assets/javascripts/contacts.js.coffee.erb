@@ -58,6 +58,15 @@ $ ->
     false
 
   $('#bulk_vcard_link').live 'click', ->
+    ids = []
+    $('.id_checkbox:checked').each ->
+      id = $(this).val()
+      ids.push(id)
+
+    if ids.length == 0
+      alert('Please select at least one contact.')
+      return
+      
     $('#bulk_vcard_dialog').dialog
       resizable: false,
       height: 200,
@@ -65,11 +74,14 @@ $ ->
       modal: true,
       buttons: 
         "Send to email": ->          
-          $('#bulk_vcard_form').submit()
-          $.n('Contact information has been sent.') 
+          email = $('#bulk_vcard_email').val()
+          $.get('/contacts/send_bulk_vcard?ids=' + ids + '&email=' + email)
+          $.n('Contacts information has been sent to ' + email) 
           $(this).dialog('destroy')   
         "Download": ->
-          $(this).dialog('destroy')           
+          window.location = '/contacts/send_bulk_vcard?ids=' + ids
+          $.n('You should be downloading a zip file now containing all the contact information you requested.') 
+          $(this).dialog('destroy')             
         Cancel: ->
           $(this).dialog('destroy')
     false   
