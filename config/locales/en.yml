@@ -397,6 +397,8 @@ en:
         other: "Assign %{count} people"
       last_survey: 'Last Survey'
       surveys: 'Surveys'
+      bulk_vcard_dialog_title: 'Bulk Vcard Options'
+      bulk_vcard_dialog_desc: 'We can send the contacts information to you via email or you can download it all in one zip package'
     mine:
       in_progress: 'In Progress'
       completed: 'Completed'
