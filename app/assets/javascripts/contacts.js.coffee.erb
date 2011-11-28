@@ -56,6 +56,23 @@ $ ->
     params = $(this).serialize()
     $.post(url, params)
     false
+
+  $('#bulk_vcard_link').live 'click', ->
+    $('#bulk_vcard_dialog').dialog
+      resizable: false,
+      height: 200,
+      width: 400,
+      modal: true,
+      buttons: 
+        "Send to email": ->          
+          $('#bulk_vcard_form').submit()
+          $.n('Contact information has been sent.') 
+          $(this).dialog('destroy')   
+        "Download": ->
+          $(this).dialog('destroy')           
+        Cancel: ->
+          $(this).dialog('destroy')
+    false   
     
     
   if $.params.answers
