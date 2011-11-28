@@ -696,6 +696,7 @@ en:
       not_found: We couldn't find anyone in your %{terminology} with that name
       showing_count: "Showing %{length} of %{total}, keep typing or "
       show_all: 'show all'
+      add_new_person_group: Add a new person
   
   helpers:
     label:
