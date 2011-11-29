@@ -92,4 +92,6 @@ $ ->
         helper_text = $('#drag_helper_text_one').html()
       else
         helper_text = $('#drag_helper_text_other').html().replace('0', length)
-      $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'));
+      $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'));     
+      
+window.t = (s) -> I18n.translate(s)    

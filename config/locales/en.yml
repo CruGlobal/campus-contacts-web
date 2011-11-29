@@ -377,7 +377,7 @@ en:
       unassigned_responses: "All Contacts - Unassigned"
       dnc_contacts: "All Contacts - 'Do Not Contact'"
       friend_responses: "Contacts who are also my friends on Facebook"
-      none_checked: "You didn't select any contacts to assign."
+      none_checked: "You need to mark at least one contact."
       show_all: Show 'In Progress' contacts
       matching_seach: Matching the criteria you searched for
       which_org: 'You need to choose which organization you want to do folow-up from'
@@ -402,7 +402,6 @@ en:
       bulk_vcard_download_message: 'A .vcf file now containing all the contact information you requested is being downloaded.'
       bulk_vcard_email_message: 'Contacts information has been sent to '      
       contact_no_select_message: 'Please select atleast one contact.'      
-      no_name_message: 'At a minimum you need to provide a first name.'
     mine:
       in_progress: 'In Progress'
       completed: 'Completed'
