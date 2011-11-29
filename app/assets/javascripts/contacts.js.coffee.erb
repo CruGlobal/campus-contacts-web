@@ -64,7 +64,7 @@ $ ->
       ids.push(id)
 
     if ids.length == 0
-      $.w(t('contacts.index.none_checked'))
+      $.a(t('contacts.index.none_checked'))
       return false
       
     $('#bulk_vcard_dialog').dialog
@@ -108,7 +108,7 @@ $ ->
   $('#add_contact_div .save').live 'click', ->
     form = $(this).closest('form')
     if $('#person_firstName', form).val() == '' #or ($('#person_email_address_email', form).val() == '' &&$('#person_phone_number_number', form).val() == '')
-      $.w(t('contacts.index.no_name_message'))
+      $.a(t('contacts.index.no_name_message'))
       return false
     if $(this).hasClass('save_and_more')
       $('#add_another').val('true')
@@ -223,7 +223,7 @@ $ ->
           Cancel: ->
             $(this).dialog('destroy')
     else
-      $.w(t('contacts.index.none_checked'))
+      $.a(t('contacts.index.none_checked'))
     false
 
   $('#contacts_controller #bulk_unassign').live 'click', ->
@@ -320,7 +320,7 @@ $ ->
         $.post(url, params)
     
     else
-      $.w(t('contacts.index.none_checked'))
+      $.a(t('contacts.index.none_checked'))
     false    
     
   $('.contact_row td:not(.checkbox_cell)').live 'click', ->
@@ -335,7 +335,7 @@ $ ->
       $.fn.assignTo($('li[data-id=' + person_id + ']'))
       $('#check_all').prop('checked', false)
     else
-      $.w(t('contacts.index.none_checked'))
+      $.a(t('contacts.index.none_checked'))
   $('#contacts_controller .index a.hide').live 'click', ->
     $('.' + $(this).attr('data-class')).fadeOut()
   

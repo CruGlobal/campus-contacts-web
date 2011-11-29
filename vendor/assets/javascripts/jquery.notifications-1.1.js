@@ -117,7 +117,7 @@
     
 	$.n = $.notifications;
 	$.s = $.n.success;	
-	$.w = $.n.warning;
+  $.w = $.n.warning;
 	$.e = $.n.error;
 				
 })(jQuery);
