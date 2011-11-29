@@ -68,7 +68,6 @@ class SmsController < ApplicationController
       else
         @sms_session = SmsSession.create!(person_id: person.id, sms_keyword_id: keyword.id, phone_number: sms_params[:phone_number])
         @msg =  keyword.initial_response.sub(/\{\{\s*link\s*\}\}/, "http://mhub.cc/m/#{Base62.encode(@sms_session.id)}")
-        @msg += ' No internet? reply with \'i\''
         @received.update_attributes(sms_keyword_id: keyword.id, person_id: person.id, sms_session_id: @sms_session.id)
       end
       send_message(@msg, sms_params[:phone_number])

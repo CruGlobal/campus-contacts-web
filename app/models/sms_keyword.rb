@@ -4,6 +4,9 @@ class SmsKeyword < ActiveRecord::Base
   LONG = '14248886482'
   
   default_value_for :gateway, 'twilio'
+  default_value_for :initial_response do |keyword| 
+    I18n.t('sms_keywords.form.initial_response_default', org: keyword.organization)
+  end
   
   enforce_schema_rules  
   

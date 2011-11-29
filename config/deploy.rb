@@ -83,7 +83,7 @@ deploy.task :restart, :roles => [:app], :except => {:no_release => true} do
       run "cd #{deploy_to}/current && echo 'ok' > public/lb.html", :hosts => s.host
     end
   else
-    run "touch #{current_path}/tmp/restart.txt", :hosts => s.host
+    run "touch #{current_path}/tmp/restart.txt"#, :hosts => s.host
   end
 end
 
@@ -162,6 +162,9 @@ namespace :assets do
     run "cd #{current_path} && RAILS_ENV=production bundle exec rake assets:clean"
   end
 end
-after "deploy:symlink", "deploy:migrate"
+
+if rails_env == 'production'
+  after "deploy:symlink", "deploy:migrate"
+end
 after "deploy", "deploy:cleanup"
 # require 'config/boot'
