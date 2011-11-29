@@ -92,4 +92,21 @@ $ ->
         helper_text = $('#drag_helper_text_one').html()
       else
         helper_text = $('#drag_helper_text_other').html().replace('0', length)
-      $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'));
+      $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'));     
+      
+window.t = (s) -> I18n.translate(s)    
+
+$.a = (msg, title) -> 
+  unless $('#alert_dialog')[0]?
+    $('body').append('<div id="alert_dialog" title="' + t('general.alert') + '"></div>')
+  if title?
+    $('#alert_dialog').attr('title', title)
+  $('#alert_dialog').html(msg)
+  $('#alert_dialog').dialog
+    resizable: false,
+    height: 200,
+    width: 400,
+    modal: true,
+    buttons: 
+      Ok: ->
+        $(this).dialog('destroy')
