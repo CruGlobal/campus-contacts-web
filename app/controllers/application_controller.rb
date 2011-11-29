@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   before_filter :check_su
   before_filter :set_locale
   before_filter :check_url, except: :facebook_logout
+  before_filter :export_i18n_messages
   rescue_from CanCan::AccessDenied, with: :access_denied
   protect_from_forgery  
 
@@ -126,7 +127,6 @@ class ApplicationController < ActionController::Base
     end
   end
   
-
   def set_locale
     if params[:locale]
       I18n.locale = params[:locale] 
@@ -134,6 +134,11 @@ class ApplicationController < ActionController::Base
       available = %w{en ru}
       I18n.locale = request.preferred_language_from(available)
     end
+  end
+  
+  def export_i18n_messages
+     # generates the Javascript translation file
+     SimplesIdeias::I18n.export! if Rails.env.development?
   end
   
   def current_organization(person = nil)
