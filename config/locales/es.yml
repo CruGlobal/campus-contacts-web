@@ -381,6 +381,7 @@ es:
       previous_comments: 'Previous Comments'
       survey_answers: 'Survey Answers'
       edit_contact_info: 'Edit Contact Info'
+      send_contact_info: 'Send Contact Info'      
       facebook_profile: 'Facebook Profile'
       phone_number: "Phone #:"
       email: "Email:"

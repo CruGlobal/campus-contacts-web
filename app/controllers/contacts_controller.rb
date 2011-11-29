@@ -1,4 +1,5 @@
 require 'csv'
+require 'vpim/book'
 class ContactsController < ApplicationController
   before_filter :get_person
   before_filter :ensure_current_org
@@ -226,14 +227,15 @@ class ContactsController < ApplicationController
   
   def destroy
     contact = Person.find(params[:id])
+    authorize! :manage, contact
     current_organization.remove_contact(contact)
 
     render :nothing => true      
   end
   
   def bulk_destroy
-    params[:ids].each do |id|
-      contact = Person.find(id)
+    authorize! :manage, current_organization
+    Person.find(params[:ids]).each do |contact|
       current_organization.remove_contact(contact)
     end
 
@@ -247,6 +249,37 @@ class ContactsController < ApplicationController
       ContactsMailer.reminder(leaders.collect(&:email).compact, current_person.email, params[:subject], params[:body]).deliver
     end
     render nothing: true
+  end
+  
+  def send_vcard
+    ContactsMailer.vcard(params[:send_contact_info_email], 'Mission Hub<noreply@missionhub.com>', params[:send_contact_info_person_id]).deliver
+
+    #send_data Person.find(params[:send_contact_info_person_id]).vcard.to_s, :filename => "#{Person.find(params[:send_contact_info_person_id]).name}.vcf"        
+    render nothing: true
+  end
+  
+  def send_bulk_vcard
+
+    ids = params[:ids].split(',')
+    
+    if ids.size
+      book = Vpim::Book.new
+      Person.includes(:current_address, :primary_phone_number, :primary_email_address).find(ids).each do |person|
+       book << person.vcard
+      end
+
+      respond_to do |wants|
+        wants.html do
+          if params.has_key?(:email)
+            ContactsMailer.bulk_vcard(params[:email], 'Mission Hub<noreply@missionhub.com>', book).deliver
+            render nothing: true
+          else
+            send_data book, :type => 'application/vcard', :disposition => 'attachment', :filename => "contacts.vcf"
+          end
+        end
+      end
+    end
+
   end
   
   protected

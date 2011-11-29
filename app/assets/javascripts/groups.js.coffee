@@ -32,8 +32,7 @@ $ ->
       $('.approve_join').show()
     else
       $('.approve_join').hide()
-      
-      
+
   $("a.add-member").live 'click', ->
     $('#role').val('member')
     $('#member_search').attr('title', $('#add_member_prompt').text())
@@ -60,6 +59,32 @@ $ ->
         error: (xhr, status, error)->
           alert(error)
       response([]);
+
+  $('#add_new_person_group_button').live 'click', ->
+    $('#add_person_group_div').show()
+
+  $('#add_person_group_div .save').live 'click', ->
+    form = $(this).closest('form')
+    if $('#person_firstName', form).val() == '' #or ($('#person_email_address_email', form).val() == '' &&$('#person_phone_number_number', form).val() == '')
+      alert('At a minimum you need to provide a first name.')
+      return false
+
+    add_another = false      
+    if $(this).hasClass('save_and_more')
+      add_another = true
+    params = form.serialize() + '&add_to_group=y'
+    url = form.prop('action')
+    $.post url, params, (data) ->
+      group_id = 1
+      personId = data.person.personID
+      $('<a href="/groups/' + group_id  + '/group_memberships?person_id=' + personId + '&role=member&add_another=' + add_another + '"data-method="post" data-remote="true"></a>')
+      .appendTo(body)
+      .click()
+      .remove()
+    , 'json'
+    $('#new_person')[0].reset()
+    false
+      
       
 $.fn.showSearchBox = ->
   $('#add_member_form').hide()

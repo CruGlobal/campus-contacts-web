@@ -61,6 +61,6 @@
     <% end %>    
     <span class="unassign_link" style="<%= 'display:none' unless assigned_to || params[:dnc] %>">
       <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign tipit", :title => t('contacts.index.unassign_contact')) %>
-    </span>
+    </span>    
   </td>
 </tr>

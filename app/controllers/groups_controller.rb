@@ -13,6 +13,7 @@ class GroupsController < ApplicationController
   end
 
   def show
+    @group = Present(current_organization.groups.find(params[:id]))
     authorize! :read, @group
   end
 
@@ -51,7 +52,7 @@ class GroupsController < ApplicationController
   protected 
   
     def get_group
-      @group = Present(current_organization.groups.find(params[:id])) if params[:id]
+      @group = current_organization.groups.find(params[:id]) if params[:id]
     end
     
     def leader_needed

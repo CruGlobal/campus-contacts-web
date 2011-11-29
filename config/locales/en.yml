@@ -68,6 +68,7 @@ en:
     roles: "Roles"
     back_to_dashboard: "Back To My Contacts"
   general:
+    alert: Alert
     save: 'Save'
     show: Show
     delete: Delete
@@ -223,6 +224,7 @@ en:
       keyword_why: "This is for our use only. The use description could include words like 'weekly meeting', 'outreach event', and other uses the keyword will have."
       explanation: 'Please explain what you plan to use this keyword for.'
       initial_response: "What response should we send back to people when they text in? <br/>If you want the person to complete a survey, the response MUST include {{ link }} (exactly like that, dont change that part of the response.)"
+      initial_response_default: 'Hi! Thanks for checking out %{org}. To get more involved, reply with "i" or click {{ link }} if you have a smartphone.'
       post_survey_why: "When someone texts in the keyword, this message will be sent to them and '{{link}}' will be replaced by a website address that will take them to an online survey for them to fill out. If they don't have internet, replying 'i' will send them all the questions via interactive text message."
       post_survey_message: 'What message would you like to show after the person has completed the survey?'
       association: "The %{this_term} you are currently requesting this keyword for has at leaset one %{child_term} under it.<br/> Select if you'd like to associate this keyword with the %{this_term} or a %{child_term} under this %{this_term}"
@@ -346,6 +348,7 @@ en:
       reminder_prompt: "Some of your leaders have contacts that haven't been followed up! Let your leaders know!"
       show_more: "Show More Leaders"
     index:
+      vcard: 'Vcard'
       add_contact: Add a Contact
       clear_search_form: 'Clear Search Form'
       no_contacts: 'Sorry, there are no contacts here.'
@@ -383,7 +386,7 @@ en:
       unassigned_responses: "All Contacts - Unassigned"
       dnc_contacts: "All Contacts - 'Do Not Contact'"
       friend_responses: "Contacts who are also my friends on Facebook"
-      none_checked: "You didn't select any contacts to assign."
+      none_checked: "You need to select at least one contact."
       show_all: Show 'In Progress' contacts
       matching_seach: Matching the criteria you searched for
       which_org: 'You need to choose which organization you want to do folow-up from'
@@ -403,6 +406,12 @@ en:
         other: "Assign %{count} people"
       last_survey: 'Last Survey'
       surveys: 'Surveys'
+      bulk_vcard_dialog_title: 'Bulk Vcard Options'
+      bulk_vcard_dialog_desc: 'We can send the contacts information to you via email or you can download it all in one zip package'
+      bulk_vcard_download_message: 'A .vcf file now containing all the contact information you requested is being downloaded.'
+      bulk_vcard_email_message: 'Contacts information has been sent to '      
+      contact_no_select_message: 'Please select atleast one contact.'      
+      no_name_message: 'At a minimum you need to provide a first name.'
     mine:
       in_progress: 'In Progress'
       completed: 'Completed'
@@ -416,6 +425,8 @@ en:
       previous_comments: 'Previous Comments'
       survey_answers: 'Survey Answers'
       edit_contact_info: 'Edit Contact Info'
+      send_contact_info: 'Email me this contact'
+      send_vcard_desc: 'This will create a vcard and send it to the email address you enter below.'
       facebook_profile: 'Facebook Profile'
       phone_number: "Phone #:"
       email: "Email:"
@@ -439,6 +450,11 @@ en:
       basic_information: Basic Information
       additional_information: Additional Information
       cancel: "Cancel and go back to profile"
+    mailer:
+      vcard_email_subject: 'Contact information of '
+      vcard_email_content: 'Attached in this email is the contact information of'
+      bulk_vcard_email_subject: 'Your request for contact informations'      
+      bulk_vcard_email_content: 'Attached in this email are vcards of the contact information you requested'
   sms:
     keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
   survey:
@@ -695,6 +711,7 @@ en:
       not_found: We couldn't find anyone in your %{terminology} with that name
       showing_count: "Showing %{length} of %{total}, keep typing or "
       show_all: 'show all'
+      add_new_person_group: Add a new person
   
   helpers:
     label:

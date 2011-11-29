@@ -1,7 +1,7 @@
 .bundle
 db/*.sqlite3
 log/*.log
-tmp/**/*
+tmp/*
 config/config.yml
 config/database.yml
 test/fixtures/ephemeral_response

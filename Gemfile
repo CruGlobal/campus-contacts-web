@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.1.1'
+gem 'rails', '3.1.3'
 gem 'jquery-rails'
 gem 'mysql2', '0.3.8'
 gem 'nokogiri'
@@ -11,7 +11,7 @@ gem 'capistrano'
 gem 'rest-client'
 gem 'crack'
 gem 'resque'
-gem "devise"#, '~> 1.4.9' #, git: "git://github.com/plataformatec/devise.git"
+gem "devise", '1.5.1' #, git: "git://github.com/plataformatec/devise.git"
 # gem "oa-oauth", '~> 0.3.2', require: "omniauth/oauth"
 gem 'omniauth'
 gem 'omniauth-facebook', '~> 1.0.0.rc2'
@@ -49,6 +49,11 @@ gem 'whenever'
 gem "ransack"
 gem 'deadlock_retry'
 gem 'delegate_presenter'
+
+gem 'vpim', git: 'git://github.com/twinge/vpim.git'   # vcard maker
+gem 'rubyzip'                                         # for zipping files
+gem 'i18n-js'                                         # allow i18n on js files 
+
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:

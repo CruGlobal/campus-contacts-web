@@ -34,6 +34,59 @@ $ ->
     $.rails.handleRemote($(this))
     false
     
+  $('.send_contact_info').live 'click', ->
+    $('#send_contact_info_person_id').val($(this).attr('data-person_id'))    
+    
+    $('#send_contact_info_dialog').dialog
+      resizable: false,
+      height: 200,
+      width: 400,
+      modal: true,
+      buttons: 
+        Ok: ->          
+          $('#send_contact_info_form').submit()
+          $.n('Contact information has been sent.') 
+          $(this).dialog('destroy')   
+        Cancel: ->
+          $(this).dialog('destroy')
+    false   
+
+  $('#send_contact_info_form').submit ->
+    url = $(this).prop('action')
+    params = $(this).serialize()
+    $.post(url, params)
+    false
+
+  $('#bulk_vcard_link').live 'click', ->
+    ids = []
+    $('.id_checkbox:checked').each ->
+      id = $(this).val()
+      ids.push(id)
+
+    if ids.length == 0
+      $.a(t('contacts.index.none_checked'))
+      return false
+      
+    $('#bulk_vcard_dialog').dialog
+      resizable: false,
+      height: 200,
+      width: 400,
+      modal: true,
+      buttons: 
+        "Send to email": ->          
+          email = $('#bulk_vcard_email').val()
+          $.get('/contacts/send_bulk_vcard?ids=' + ids + '&email=' + email)
+          $.n(t('contacts.index.bulk_vcard_email_message') + email) 
+          $(this).dialog('destroy')   
+        "Download": ->
+          window.location = '/contacts/send_bulk_vcard?ids=' + ids
+          $.n(t('contacts.index.bulk_vcard_download_message'))  
+          $(this).dialog('destroy')             
+        Cancel: ->
+          $(this).dialog('destroy')
+    false   
+    
+    
   if $.params.answers
     $.each $.params.answers, (k, v) ->
       if $.isPlainObject(v)
@@ -55,7 +108,7 @@ $ ->
   $('#add_contact_div .save').live 'click', ->
     form = $(this).closest('form')
     if $('#person_firstName', form).val() == '' #or ($('#person_email_address_email', form).val() == '' &&$('#person_phone_number_number', form).val() == '')
-      alert('At a minimum you need to provide a first name.')
+      $.a(t('contacts.index.no_name_message'))
       return false
     if $(this).hasClass('save_and_more')
       $('#add_another').val('true')
@@ -170,7 +223,7 @@ $ ->
           Cancel: ->
             $(this).dialog('destroy')
     else
-      alert("<%= I18n.t('contacts.index.none_checked') %>")
+      $.a(t('contacts.index.none_checked'))
     false
 
   $('#contacts_controller #bulk_unassign').live 'click', ->
@@ -230,7 +283,7 @@ $ ->
         complete: ->
           $('#spinner_leader_search').hide()
         error: (xhr, status, error)->
-          alert(error)
+          $.e(error)
       response([]);
   $('.search_show_all_link').live 'click', ->
     $('#spinner_leader_search').show()
@@ -267,7 +320,7 @@ $ ->
         $.post(url, params)
     
     else
-      alert("<%= I18n.t('contacts.index.none_checked') %>")
+      $.a(t('contacts.index.none_checked'))
     false    
     
   $('.contact_row td:not(.checkbox_cell)').live 'click', ->
@@ -282,7 +335,7 @@ $ ->
       $.fn.assignTo($('li[data-id=' + person_id + ']'))
       $('#check_all').prop('checked', false)
     else
-      alert("<%= I18n.t('contacts.index.none_checked') %>")
+      $.a(t('contacts.index.none_checked'))
   $('#contacts_controller .index a.hide').live 'click', ->
     $('.' + $(this).attr('data-class')).fadeOut()
   

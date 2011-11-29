@@ -2,6 +2,8 @@
   <%= render 'contacts/leaders' %>
 <% end %>
 
+<%= render :partial => 'bulk_vcard_dialog' %>  
+
 <div class="titlebar">  
   <h1>
     <%= image_tag("c_allcontacts.png") %>
@@ -47,6 +49,7 @@
   
   <ul class="pillmenu">
     <li><%= link_to(t('.export'), params.merge(format: 'csv')) %></li>
+    <li><%= link_to(t('.vcard'), '', id: 'bulk_vcard_link' ) %></li>
   </ul>
   
   <% if params[:dnc] == 'true' %>

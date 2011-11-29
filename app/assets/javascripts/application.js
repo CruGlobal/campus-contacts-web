@@ -10,7 +10,7 @@
 //= require mh
 //= require questions
 //= require contacts
-//= require rails.validations
+//= require rails-validations
 //= require sms_keywords.js.coffee
 //= require people.js.coffee
 //= require jquery.notifications-1.1
@@ -20,3 +20,5 @@
 //= require groups
 //= require group_labels
 //= require organizations
+//= require i18n
+//= require i18n/translations

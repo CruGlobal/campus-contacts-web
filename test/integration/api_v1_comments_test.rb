@@ -96,7 +96,7 @@ class ApiV1CommentsTest < ActionDispatch::IntegrationTest
       delete path, {'access_token' => @access_token3.code}
       @json = ActiveSupport::JSON.decode(@response.body)
       
-      assert_equal(@json['error']['code'], "32")
+      assert_equal(@json['error']['code'], "25")
     end
     
     should "return a json error when the identity of the access_token is a leader in the current organization and attempts to delete a comment other than their own" do 
