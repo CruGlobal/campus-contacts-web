@@ -31,15 +31,19 @@ class Ability
       
       # involved members can see other people's info
       can :read, Person, organizational_roles: {organization_id: user.person.organizational_roles.where(role_id: [admin_role.id, leader_role.id, involved_role.id]).value_of(:organization_id)}
+      can :read, PersonPresenter, organizational_roles: {organization_id: user.person.organizational_roles.where(role_id: [admin_role.id, leader_role.id, involved_role.id]).value_of(:organization_id)}
       
       # leaders and admins can edit other ppl's info
       if user.person.organizational_roles.where(role_id: [admin_role.id, leader_role.id]).present?
         can :create, SmsMailer
         can :create, Person
+        can :create, PersonPresenter
       end
       
       can :manage, Person, organizational_roles: {organization_id: leader_of_org_ids}
       can :manage, Person, id: user.person.try(:id)
+      can :manage, PersonPresenter, organizational_roles: {organization_id: leader_of_org_ids}
+      can :manage, PersonPresenter, id: user.person.try(:id)
       
       can :manage, Group, organization_id: leader_of_org_ids
       can :manage, GroupPresenter, organization_id: leader_of_org_ids

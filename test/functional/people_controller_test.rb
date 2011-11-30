@@ -62,7 +62,7 @@ class PeopleControllerTest < ActionController::TestCase
       get :show, id: @person.person.id
       assert_response :success, @response.body
     end
-  
+    
     should "should get edit" do
       get :edit, id: @person.person.id
       assert_response :success

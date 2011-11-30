@@ -51,9 +51,9 @@
   </td>
   <td><%= l(dates.sort.last, :format => :date) if dates.present? %></td>
   <td class="controls">
-    <%= link_to(t('nav.view_details'), contact_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
+    <%= link_to(t('nav.view_details'), person_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
     <% if params[:dnc] == 'true' %>
-      <%= link_to(t('contacts.index.delete_contact'), contact_path(person), :method => :delete, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.destroy_confirm')) %>      
+      <%= link_to(t('contacts.index.delete_contact'), person_path(person), :method => :delete, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.destroy_confirm')) %>      
     <% else %>
       <% if contact_role %>
         <%= link_to(t('contacts.index.delete_contact'), organizational_role_path(:id => contact_role.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.delete_confirm')) %>

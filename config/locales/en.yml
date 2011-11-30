@@ -68,6 +68,9 @@ en:
     roles: "Roles"
     back_to_dashboard: "Back To My Contacts"
   general:
+    mobile: Cell
+    home: Home
+    work: Work
     alert: Alert
     save: 'Save'
     show: Show
@@ -102,7 +105,10 @@ en:
       notify: "Notify this person that they've been added and send them a link to log in."
     search:
       not_in_system: 'If the person you are looking for is not already in the system click here to add them.'
-  people: 
+  people:
+    person_form:
+      add_phone_number: "Add Phone Number" 
+      add_email_address: "Add Email Address" 
     add_person:
       add_person: Add a person to %{org}
     index:
@@ -125,7 +131,25 @@ en:
       select_all_html: "Select all <b>%{count}</b> people in the directory."
       all_selected_html: "All <b>%{count}</b> people in the directory is selected."
     show:
-      edit_profile: 'Edit Profile'
+      profile: "%{name}'s Profile"
+      edit_profile: "Edit %{name}'s Profile"
+      add_comments_here: 'Add comments here...'
+      previous_comments: 'Previous Comments'
+      survey_answers: 'Survey Answers'
+      edit_contact_info: 'Edit Contact Info'
+      send_contact_info: 'Email me this contact'
+      send_vcard_desc: 'This will create a vcard and send it to the email address you enter below.'
+      facebook_profile: 'Facebook Profile'
+      phone_number: 
+        one:   "Phone #:"
+        other: "Phone #s:"
+      email:
+        one:   "Email:"
+        other: "Emails:"
+      google_map: 'Google Map'
+      status: "Status"
+      attach_rejoicable: 'Attach a Rejoicable'
+      add_comment: 'Add Comment / Update Status'
     edit:
       editing: Editing
   sessions:
@@ -427,20 +451,7 @@ en:
       phone: Phone Number
       email: Email
       year: Year
-    show:
-      add_comments_here: 'Add comments here...'
-      previous_comments: 'Previous Comments'
-      survey_answers: 'Survey Answers'
-      edit_contact_info: 'Edit Contact Info'
-      send_contact_info: 'Email me this contact'
-      send_vcard_desc: 'This will create a vcard and send it to the email address you enter below.'
-      facebook_profile: 'Facebook Profile'
-      phone_number: "Phone #:"
-      email: "Email:"
-      google_map: 'Google Map'
-      status: "Status"
-      attach_rejoicable: 'Attach a Rejoicable'
-      add_comment: 'Add Comment / Update Status'
+
     thanks:
       message: Thank you for your interest.
       done: Done
@@ -475,6 +486,12 @@ en:
       thanks: "Thanks!"
     index:
       pick_keyword: "Pick a Keyword"
+    show: 
+      title: "%{name}'s Survey Answers"
+      edit_answers: "Edit Answers"
+      no_answers: "%{name} has not completed any surveys"
+    edit:
+      title: "Edit %{name}'s Survey Answers"
   date:
     formats:
       default: "%Y-%m-%d"
@@ -727,6 +744,8 @@ en:
         start_time: 'From'
       organization:
         terminology: Type
+    submit:
+      update: Update
   member: Member
   leader: Leader
   organizations:

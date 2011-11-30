@@ -210,7 +210,7 @@ $ ->
   $('.assign_to_radio').live 'click', -> 
     $('#assign_to').val($(this).val())
     
-  $("#contacts_controller a.assign").live 'click', ->
+  $("a.assign").live 'click', ->
     if $('.id_checkbox:checked').length > 0
       $('#assign_to_me').click()
       el = $('#assign_search')
@@ -326,7 +326,7 @@ $ ->
   $('.contact_row td:not(.checkbox_cell)').live 'click', ->
     unless $('a', this)[0]?
       tr = $(this).parent()
-      document.location = '/contacts/' + tr.attr('data-id')
+      document.location = '/people/' + tr.attr('data-id')
   
   $('#assign_to').change ->
     if $('.id_checkbox:checked').length > 0

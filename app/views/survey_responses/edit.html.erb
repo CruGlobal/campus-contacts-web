@@ -1,44 +1,19 @@
 <% provide :sidebar do %>
-  <ul class="leftmenu">
-    <li class="selected"><%= link_to(t('contacts.mine.my_contacts'), "/contacts/mine") %></li>
-  </ul>
+  <%= render :partial => 'people/left_sidebar' %>
 <% end %>
-<div class="controlbar">
-  <%= link_to(t('.back'), '/contacts/mine', :class=>"backto") %>
-</div>
 <div class="titlebar">
   <h1>
     <%= image_tag("contact.png") %>
-    <%= @person %>
+    <%= t('.title', name: @person) %>
   </h1>
 </div>
-
 <div class="pad">
-  
-  <div class="contact_leftcol">
-    <div>
-      <%# if @person.fb_uid.present? %>
-        <%= image_tag("https://graph.facebook.com/#{@person.fb_uid}/picture?type=large", alt: '') %>
-      <%# else %>
-        <!-- No Image because they don't have facebook connected -->
-      <%# end %>
-    </div>
-  </div>
-
-  <div class="contact_rightbody">
     <%= form_for @person, url: contact_path(@person), method: :put do |f| %>
       <% if flash[:error] %>
         <div class="flash error"><%= raw flash[:error] %></div>
       <% end %>
       
-      <h2 class="form_section"><%= t('.basic_information') %></h2>
-      <%= render 'people/person_form', person: @person %>
-      
-      <br/>
-      <hr/>
-      
       <div class="user_defined_contact_fields">   
-        <h2 class="form_section"><%= t('.additional_information') %></h2>       
         <% current_organization.question_sheets.flatten.uniq.each do |qs| %>
           <% answer_sheet = @person.answer_sheets.detect {|as| qs.id == as.question_sheet_id} %>
           <% qs.questions.each do |question| %>
@@ -54,8 +29,7 @@
       </div>
       <div class="formactions">
         <%= submit_tag t('general.save') %>
-        <%= link_to(t('.cancel'), contact_path(@contact), :class => "cancel")%>
+        <%= link_to(t('.cancel'), person_path(@contact), :class => "cancel")%>
       </div>
     <% end %>
-  </div>
 </div>
