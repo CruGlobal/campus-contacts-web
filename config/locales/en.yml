@@ -130,13 +130,9 @@ en:
       select_all_html: "Select all <b>%{count}</b> people in the directory."
       all_selected_html: "All <b>%{count}</b> people in the directory is selected."
     show:
-      profile: "%{name}'s Profile"
-      edit_profile: "Edit %{name}'s Profile"
       add_comments_here: 'Add comments here...'
       previous_comments: 'Previous Comments'
-      survey_answers: 'Survey Answers'
-      edit_contact_info: 'Edit Contact Info'
-      send_contact_info: 'Email me this contact'
+      send_contact_info: "Email me %{name}'s info"
       send_vcard_desc: 'This will create a vcard and send it to the email address you enter below.'
       facebook_profile: 'Facebook Profile'
       phone_number: 
@@ -151,6 +147,10 @@ en:
       add_comment: 'Add Comment / Update Status'
     edit:
       editing: Editing
+    left_sidebar:
+      profile: "%{name}'s Profile"
+      edit_profile: "Edit %{name}'s Profile"
+      survey_answers: 'Survey Answers'
   sessions:
     destroy:
       signed_out: You've been signed out.

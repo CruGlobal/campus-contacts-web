@@ -35,7 +35,7 @@
       <% if @person.fb_uid.present? %>
       <p><%= link_to(t('.facebook_profile'), "http://www.facebook.com/profile.php?id=#{@person.fb_uid}", target: '_blank') %></p>
       <% end %>
-      <p><%= link_to(t('.send_contact_info'), '#', class: 'send_contact_info', 'data-person_id' => @person.id ) %></p>      
+      <p><%= link_to(t('.send_contact_info', name: @person.firstName), '#', class: 'send_contact_info', 'data-person_id' => @person.id ) %></p>      
       <%= render :partial => 'contacts/send_contact_info_dialog', :locals => { person: @person } %>
     </div>
   </div>
