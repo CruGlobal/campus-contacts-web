@@ -9,17 +9,22 @@
 </div>
 <div class="pad">
   <div id="survey_answers">
+    <% has_answers = false %>
     <ul>
       <% current_organization.question_sheets.flatten.uniq.each do |qs| %>
         <% answer_sheet = @person.answer_sheets.detect {|as| qs.id == as.question_sheet_id} %>
         <% qs.all_questions.each do |q| %>
           <% answer = q.display_response(answer_sheet) %>
           <% if answer.present? %>
+            <% has_answers = true %>
             <li><%= q.label %><%= ':' unless q.label[-1] =~ /\.;:\?/ %> <%= answer %></li>
           <% end %>
         <% end %>
       <% end %>
     </ul>
+    <% unless has_answers %>
+      <%= t('.no_answers', name: @person) %><br/><br/>
+    <% end %>
   </div>
   <%= link_to(t('.edit_answers'), edit_survey_response_path(@person)) %>
 </div>

@@ -476,6 +476,7 @@ en:
     show: 
       title: "%{name}'s Survey Answers"
       edit_answers: "Edit Answers"
+      no_answers: "%{name} has not completed any surveys"
     edit:
       title: "Edit %{name}'s Survey Answers"
   date:

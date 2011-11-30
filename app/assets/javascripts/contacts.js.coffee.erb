@@ -213,7 +213,7 @@ $ ->
   $('.assign_to_radio').live 'click', -> 
     $('#assign_to').val($(this).val())
     
-  $("#contacts_controller a.assign").live 'click', ->
+  $("a.assign").live 'click', ->
     if $('.id_checkbox:checked').length > 0
       $('#assign_to_me').click()
       el = $('#assign_search')
