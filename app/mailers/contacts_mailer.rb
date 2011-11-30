@@ -1,5 +1,3 @@
-require 'vpim/vcard'
-    
 class ContactsMailer < ActionMailer::Base
   default from: "support@missionhub.com"
 

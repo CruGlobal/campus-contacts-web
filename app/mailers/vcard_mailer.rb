@@ -17,7 +17,7 @@ class VcardMailer < ActionMailer::Base
     filename = 'contacts.vcf'
     subject = t('contacts.mailer.bulk_vcard_email_subject')
 
-    attachments[filename] = { mime_type: 'application/zip', content: book }
+    attachments[filename] = { mime_type: 'application/zip', content: book.to_s }
     mail to: to, subject: subject
   end
   
