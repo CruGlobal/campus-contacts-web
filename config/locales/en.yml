@@ -130,7 +130,25 @@ en:
       select_all_html: "Select all <b>%{count}</b> people in the directory."
       all_selected_html: "All <b>%{count}</b> people in the directory is selected."
     show:
-      edit_profile: 'Edit Profile'
+      profile: "%{name}'s Profile"
+      edit_profile: "Edit %{name}'s Profile"
+      add_comments_here: 'Add comments here...'
+      previous_comments: 'Previous Comments'
+      survey_answers: 'Survey Answers'
+      edit_contact_info: 'Edit Contact Info'
+      send_contact_info: 'Email me this contact'
+      send_vcard_desc: 'This will create a vcard and send it to the email address you enter below.'
+      facebook_profile: 'Facebook Profile'
+      phone_number: 
+        one:   "Phone #:"
+        other: "Phone #s:"
+      email:
+        one:   "Email:"
+        other: "Emails:"
+      google_map: 'Google Map'
+      status: "Status"
+      attach_rejoicable: 'Attach a Rejoicable'
+      add_comment: 'Add Comment / Update Status'
     edit:
       editing: Editing
   sessions:
@@ -420,24 +438,7 @@ en:
       phone: Phone Number
       email: Email
       year: Year
-    show:
-      add_comments_here: 'Add comments here...'
-      previous_comments: 'Previous Comments'
-      survey_answers: 'Survey Answers'
-      edit_contact_info: 'Edit Contact Info'
-      send_contact_info: 'Email me this contact'
-      send_vcard_desc: 'This will create a vcard and send it to the email address you enter below.'
-      facebook_profile: 'Facebook Profile'
-      phone_number: 
-        one:   "Phone #:"
-        other: "Phone #s:"
-      email:
-        one:   "Email:"
-        other: "Emails:"
-      google_map: 'Google Map'
-      status: "Status"
-      attach_rejoicable: 'Attach a Rejoicable'
-      add_comment: 'Add Comment / Update Status'
+
     thanks:
       message: Thank you for your interest.
       done: Done
@@ -472,6 +473,11 @@ en:
       thanks: "Thanks!"
     index:
       pick_keyword: "Pick a Keyword"
+    show: 
+      title: "%{name}'s Survey Answers"
+      edit_answers: "Edit Answers"
+    edit:
+      title: "Edit %{name}'s Survey Answers"
   date:
     formats:
       default: "%Y-%m-%d"

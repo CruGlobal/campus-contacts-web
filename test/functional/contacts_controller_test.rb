@@ -16,11 +16,6 @@ class ContactsControllerTest < ActionController::TestCase
       @keyword = Factory.create(:sms_keyword)
     end
     
-    should "show your own contact record" do
-      get :show, :id => @user.person.id
-      assert_response :success, @response.body
-    end
-    
     context "creating a new contact manually" do
       should "create a person with only an email address" do
         xhr :post, :create, {"assigned_to" => "all", "dnc" => "", "person" => {"email_address" => {"email" => "test@uscm.org"},"firstName" => "Test","lastName" => "Test",  "phone_number" => {"number" => ""}}}
@@ -41,7 +36,7 @@ class ContactsControllerTest < ActionController::TestCase
       @contact = Factory(:person)
       @user.person.organizations.first.add_contact(@contact)
       put :update, id: @contact.id, person: {firstName: 'Frank'}
-      assert_redirected_to contact_path(@contact)
+      assert_redirected_to person_path(@contact)
       assert_equal(assigns(:person).id, @contact.id)
     end
     

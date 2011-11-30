@@ -9,7 +9,7 @@
   <td class="year"><%= person.yearInSchool %></td>
   
   <td class="controls">
-    <%= link_to(t('general.show'), contact_path(person), :class => "icon magnify") %>
+    <%= link_to(t('general.show'), person_path(person), :class => "icon magnify") %>
     <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign") %>
     <% if org_role = OrganizationalRole.where(:person_id => person.id, :organization_id => current_organization.id, :role_id => Role::CONTACT_ID).first %>
       <%= link_to(t('general.delete'), organizational_role_path(:id => org_role.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete", :confirm => t('contacts.index.delete_confirm')) %>

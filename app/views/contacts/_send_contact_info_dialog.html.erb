@@ -1,6 +1,6 @@
-<div id="send_contact_info_dialog" style="display:none" title="<%= t('contacts.show.send_contact_info') %>">
+<div id="send_contact_info_dialog" style="display:none" title="<%= t('people.show.send_contact_info') %>">
   <p>
-    <%= t('contacts.show.send_vcard_desc') %> 
+    <%= t('people.show.send_vcard_desc') %> 
   </p>
   <%= form_tag send_vcard_contacts_path, :id => "send_contact_info_form" do %>
     <%= hidden_field_tag :send_contact_info_person_id %>
