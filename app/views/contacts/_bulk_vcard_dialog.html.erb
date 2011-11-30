@@ -2,7 +2,7 @@
   <p>
     <%= t('contacts.index.bulk_vcard_dialog_desc') %> 
   </p>
-  <%= form_tag send_vcard_contacts_path, :id => "bulk_vcard_form" do %>
+  <%= form_tag bulk_create_vcards_url, :id => "bulk_vcard_form" do %>
     <div class="field_in">
       <label><%= t('general.email') %></label> 
       <div class="in"><%= text_field_tag :bulk_vcard_email, current_person.email %></div>

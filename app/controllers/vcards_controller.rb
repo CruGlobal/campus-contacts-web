@@ -1,17 +1,15 @@
 class VcardsController < ApplicationController
 
+  def create
+     VcardMailer.enqueue.vcard(params[:email], params[:person_id])
 
-  def create    
-     VcardMailer.enqueue.vcard(params[:send_contact_info_email], params[:person_id])
-
-      #send_data Person.find(params[:send_contact_info_person_id]).vcard.to_s, :filename => "#{Person.find(params[:send_contact_info_person_id]).name}.vcf"        
      render nothing: true      
   end
-  
+
   def bulk_create
-    
+
     ids = params[:ids].split(',')
-    
+
     if ids.size
       book = Vpim::Book.new
       Person.includes(:current_address, :primary_phone_number, :primary_email_address).find(ids).each do |person|
@@ -29,7 +27,7 @@ class VcardsController < ApplicationController
         end
       end
     end
-    
+
   end
-  
+
 end
