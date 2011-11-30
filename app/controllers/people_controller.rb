@@ -45,15 +45,11 @@ class PeopleController < ApplicationController
   end
 
   # GET /people/new
-  # GET /people/new.xml
   # def new
-  #   authorize! :create, Person
-  #   @person = Person.new
-  # 
-  #   respond_to do |format|
-  #     format.html # new.html.erb
-  #     format.xml  { render xml: @person }
-  #   end
+  #   names = params[:name].to_s.split(' ')
+  #   @person = Person.new(:firstName => names[0], :lastName => names[1..-1].join(' '))
+  #   @email = @person.email_addresses.new
+  #   @phone = @person.phone_numbers.new
   # end
 
   # GET /people/1/edit

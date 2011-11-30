@@ -35,7 +35,8 @@ $ ->
     false
     
   $('.send_contact_info').live 'click', ->
-    $('#send_contact_info_person_id').val($(this).attr('data-person_id'))    
+    form = $('#send_contact_info_form')
+    form.find('#person_id').val($(this).attr('data-person_id'))    
     
     $('#send_contact_info_dialog').dialog
       resizable: false,
@@ -44,7 +45,7 @@ $ ->
       modal: true,
       buttons: 
         Ok: ->          
-          $('#send_contact_info_form').submit()
+          form.submit()
           $.n('Contact information has been sent.') 
           $(this).dialog('destroy')   
         Cancel: ->
@@ -75,11 +76,13 @@ $ ->
       buttons: 
         "Send to email": ->          
           email = $('#bulk_vcard_email').val()
-          $.get('/contacts/send_bulk_vcard?ids=' + ids + '&email=' + email)
+          url = $('#bulk_vcard_form').attr('action')
+          $.get(url + '?ids=' + ids + '&email=' + email)
           $.n(t('contacts.index.bulk_vcard_email_message') + email) 
           $(this).dialog('destroy')   
         "Download": ->
-          window.location = '/contacts/send_bulk_vcard?ids=' + ids
+          url = $('#bulk_vcard_form').attr('action')
+          window.location = url + '?ids=' + ids
           $.n(t('contacts.index.bulk_vcard_download_message'))  
           $(this).dialog('destroy')             
         Cancel: ->
@@ -254,6 +257,7 @@ $ ->
 
   $("a.add-leader").live 'click', ->
     $('#add_leader_form').hide()
+    $('#leader_search .explain').show()
     $('#leader_search_form').show()
     $('#leader_search_name').val('')
     $("#leader_search_results").hide()
@@ -262,7 +266,7 @@ $ ->
     el.dialog
       resizable: false,
       height:650,
-      width:600,
+      width:650,
       modal: true,
       buttons: 
         Cancel: ->

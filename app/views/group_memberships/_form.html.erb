@@ -15,8 +15,10 @@
   <% end %>
   
   <div id="member_search_results" class="name_search_results"></div>
-  
+
   <div id="new_member_form">
-    
+    <div id="add_person_group_div" style="display:none;">
+      <%= render 'people/add_person', person: Person.new %>  
+    </div>
   </div>
 </div>

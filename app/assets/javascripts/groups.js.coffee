@@ -37,11 +37,13 @@ $ ->
     $('#role').val('member')
     $('#member_search').attr('title', $('#add_member_prompt').text())
     $.fn.showSearchBox()
+    false
     
   $("a.add-leader").live 'click', ->
     $('#role').val('leader')
     $('#member_search').attr('title', $('#add_leader_prompt').text())
     $.fn.showSearchBox()
+    false
     
   $('#member_search_name').autocomplete
     source: (request, response)->
@@ -61,7 +63,12 @@ $ ->
       response([]);
 
   $('#add_new_person_group_button').live 'click', ->
+    $('#member_search .explain').hide()
+    $('#member_search_form').hide()
+    $('#member_search_results').hide()
     $('#add_person_group_div').show()
+    $('#new_member_form').show()
+    false
 
   $('#add_person_group_div .save').live 'click', ->
     form = $(this).closest('form')
@@ -82,11 +89,13 @@ $ ->
       .click()
       .remove()
     , 'json'
+    $.fn.showSearchBox()
     $('#new_person')[0].reset()
     false
       
       
 $.fn.showSearchBox = ->
+  $('#member_search .explain').show()
   $('#add_member_form').hide()
   $('#member_search_form').show()
   $('#member_search_name').val('')

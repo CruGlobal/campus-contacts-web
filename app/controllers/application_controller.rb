@@ -227,7 +227,7 @@ class ApplicationController < ActionController::Base
   helper_method :wizard_path
   
   def create_person(person_params)
-    Person.create_from_params(person_params)
+    Person.new_from_params(person_params)
   end
   
   def ensure_current_org

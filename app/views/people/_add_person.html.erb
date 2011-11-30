@@ -15,10 +15,12 @@
       <div class="rs">
         <% role_ids = params[:roles] ? params[:roles].keys.map(&:to_i) : [] %>
         <% current_organization.roles.each do |role| %>
-          <div class="sfield">
-            <%= check_box_tag "roles[#{role.id}]", 1, role_ids.include?(role.id) %>
-          	<label for="<%= "roles_#{role.id}" %>"><%= role %></label>
-          </div>
+          <% if can?(:manage, current_organization) || role.i18n != 'admin' %>
+            <div class="sfield">
+              <%= check_box_tag "roles[#{role.id}]", 1, role_ids.include?(role.id) %>
+            	<label for="<%= "roles_#{role.id}" %>"><%= role %></label>
+            </div>
+          <% end %>
         <% end %>
       </div>
     </div>

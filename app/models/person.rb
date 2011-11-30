@@ -572,7 +572,7 @@ class Person < ActiveRecord::Base
     self.createdBy = ApplicationController.application_name
   end
   
-  def self.create_from_params(person_params = nil)
+  def self.new_from_params(person_params = nil)
     person_params = person_params.with_indifferent_access || {}
     person_params[:email_address] ||= {}
     person_params[:phone_number] ||= {}

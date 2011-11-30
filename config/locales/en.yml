@@ -100,7 +100,7 @@ en:
     subject: 'Subject'
   leaders:
     form:
-      name_required: "Name and email fields are required to add a leader:"
+      name_required: "Name, gender, and email fields are required to add a leader:"
       notify: "Notify this person that they've been added and send them a link to log in."
     search:
       not_in_system: 'If the person you are looking for is not already in the system click here to add them.'
