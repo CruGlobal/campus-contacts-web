@@ -36,7 +36,7 @@ class ContactsControllerTest < ActionController::TestCase
       @contact = Factory(:person)
       @user.person.organizations.first.add_contact(@contact)
       put :update, id: @contact.id, person: {firstName: 'Frank'}
-      assert_redirected_to person_path(@contact)
+      assert_redirected_to survey_response_path(@contact)
       assert_equal(assigns(:person).id, @contact.id)
     end
     

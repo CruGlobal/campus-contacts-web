@@ -170,12 +170,11 @@ class ContactsController < ApplicationController
   end
   
   def show
-    redirect_to Person.find(params[:id])
+    redirect_to person_path(params[:id])
   end
   
   def edit
-    @person = Person.find(params[:id])
-    authorize!(:update, @person)
+    redirect_to survey_response_path(params[:id])
   end
   
   def create
