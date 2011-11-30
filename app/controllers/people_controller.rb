@@ -36,7 +36,7 @@ class PeopleController < ApplicationController
   def show
     @person = current_organization.people.find(params[:id])
     authorize! :read, @person
-
+    @person = Present(@person)
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render xml: @person }

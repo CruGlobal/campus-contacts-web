@@ -176,6 +176,7 @@ class ContactsController < ApplicationController
     authorize!(:read, @person)
     @followup_comment = FollowupComment.new(organization: @organization, commenter: current_person, contact: @person, status: @organizational_role.followup_status) if @organizational_role
     @followup_comments = FollowupComment.where(organization_id: @organization, contact_id: @person).order('created_at desc')
+    @person = Present(@person)
   end
   
   def edit

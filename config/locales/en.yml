@@ -67,6 +67,9 @@ en:
     roles: "Roles"
     back_to_dashboard: "Back To My Contacts"
   general:
+    mobile: Cell
+    home: Home
+    work: Work
     alert: Alert
     save: 'Save'
     show: Show
@@ -101,7 +104,10 @@ en:
       notify: "Notify this person that they've been added and send them a link to log in."
     search:
       not_in_system: 'If the person you are looking for is not already in the system click here to add them.'
-  people: 
+  people:
+    person_form:
+      add_phone_number: "Add Phone Number" 
+      add_email_address: "Add Email Address" 
     add_person:
       add_person: Add a person to %{org}
     index:
@@ -422,8 +428,12 @@ en:
       send_contact_info: 'Email me this contact'
       send_vcard_desc: 'This will create a vcard and send it to the email address you enter below.'
       facebook_profile: 'Facebook Profile'
-      phone_number: "Phone #:"
-      email: "Email:"
+      phone_number: 
+        one:   "Phone #:"
+        other: "Phone #s:"
+      email:
+        one:   "Email:"
+        other: "Emails:"
       google_map: 'Google Map'
       status: "Status"
       attach_rejoicable: 'Attach a Rejoicable'
@@ -714,6 +724,8 @@ en:
         start_time: 'From'
       organization:
         terminology: Type
+    submit:
+      update: Update
   member: Member
   leader: Leader
   organizations:

@@ -1,4 +1,17 @@
 $ ->   
+  $('input[type=checkbox].primary').live 'click', -> 
+    fieldset = $(this).closest('.fieldset')
+    $('input[type=checkbox].primary', fieldset).prop('checked', false)
+    $(this).prop('checked', true)
+    
+  $('a.remove_field').live 'click', ->  
+    link = this
+    $(link).prev("input[type=hidden]").val("1");
+    $(link).closest(".sfield").hide();
+    fieldset = $(link).closest('.fieldset')
+    if $('.sfield:visible', fieldset).length <= 2
+      $('.remove_field', fieldset).hide()
+    
   $('.fingerme').oneFingerScroll();
   
   $('ul.sf-menu').superfish
@@ -110,3 +123,10 @@ $.a = (msg, title) ->
     buttons: 
       Ok: ->
         $(this).dialog('destroy')
+        
+window.addFields = (link, association, content) ->
+  new_id = new Date().getTime()
+  regexp = new RegExp("new_" + association, "g")
+  $(link).closest(".sfield").before(content.replace(regexp, new_id))
+  fieldset = $(link).closest('.fieldset')
+  $('.remove_field', fieldset).show()

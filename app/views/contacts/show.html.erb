@@ -29,10 +29,10 @@
     </div>
     <div>
       <% if @person.phone_number.present? %>
-        <%= t('contacts.show.phone_number') %> <%= number_to_phone(@person.phone_number) %><br/>
+        <%= t('contacts.show.phone_number', count: @person.phone_numbers.length) %> <%= @person.phone_numbers_html %><br/>
       <% end %>
       <% if @person.email.present? %>
-        <%= t('contacts.show.email') %> <%= mail_to(@person.email) %><br/>
+        <%= t('contacts.show.email', count: @person.email_addresses.length) %> <%= mail_to(@person.email) %><br/>
       <% end %>
       <% if @person.current_address %>
         <p><%= raw @person.current_address.display_html %></p>
