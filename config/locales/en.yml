@@ -161,18 +161,25 @@ en:
       get_details_html: Get the Details & <a href="/welcome/tour" class="learnmore">Learn More</a> or %{link}
       get_started: "Get Started"
     wizard:
-      welcome: Welcome
+      welcome: Welcome!
       verify_identity: Verify Your Identity
       request_keyword: Request a Keyword
       designate_leaders: Designate Leaders
       create_survey: Create Survey
+      request_a_keyword: Request a Keyword!
+      create_a_survey: Create a Survey!
       back: Back
       next: Next
       welcome_paragraph: "Welcome to MissionHub!<br><br> This setup wizard will help you get started and set up a keyword, which is an essential part of getting contacts into the system."
       verify_paragraph: "If you have a CCC Relay login account, please sign in to link your account. You only need to do this once. WARNING: If you logged into MissionHub using someone else's Facebook Account, Log Out now! Clicking verify will merge your information with theirs, creating a big mess."
-      verify_with_relay: "Verify With Relay"
-      not_found_paragraph: "At the current time MissionHub is being field tested with the US Campus Ministry. If you're not a part of the US Campus Ministry, sit tight! We plan to release to a larger audience soon. If you are part of the US Campus Ministry and are seeing this message, send us an email at support@missionhub.com and we'll help you out."
-      # not_found_paragraph: "We weren't able to find a record of you associated with any of the organizations or ministries using MissionHub."
+      not_found_paragraph: 
+        "<p>We weren't able to match you up with an organization currently using MissionHub. There are two likely causes:</p> 
+        <ol>
+        <li>An leader in your organization who can already log into MissionHub needs to add you to MissionHub</li>
+        <li>Your facebook email address doesn't match the email that was entered for you when your leader added you.</li>
+        </ol>
+        <p>Please contact the person who told you about MissionHub and ask them to enter you with your facebook email address. If you are that person or need more help, shoot us an email at support@missionhub.com</p>"
+        
       keyword_paragraph: "A powerful feature of MissionHub is the ability for you to collect contacts through text messages. For this to work, you have to choose a keyword that is unique to your ministry that people will send messages to. With a keyword, you will be able to say, “Text <strong>your keyword</strong>  to 75572” at your next event or meeting."
       request_keyword_link: "Click here to request a keyword. We'll return you to this wizard when you're done."
       survey_paragraph:

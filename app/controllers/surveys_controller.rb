@@ -12,7 +12,7 @@ class SurveysController < ApplicationController
       @title = "Pick A Keyword"
       if current_user
         @organization = current_person.organizations.find_by_id(params[:org_id]) || current_organization
-        @keywords = @organization ? @organization.self_and_children_keywords : nil
+        @surveys = @organization ? @organization.self_and_children_surveys : nil
       else
         return render_404
       end
@@ -24,6 +24,10 @@ class SurveysController < ApplicationController
       @organization = current_person.organizations.find_by_id(params[:org_id]) || current_organization
       @surveys = @organization.surveys
     end
+  end
+  
+  def edit
+    
   end
   
   # Enter survey mode

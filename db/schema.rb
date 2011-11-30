@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111121165021) do
+ActiveRecord::Schema.define(:version => 20111130140314) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -1657,6 +1657,7 @@ ActiveRecord::Schema.define(:version => 20111121165021) do
     t.datetime "completed_at"
     t.integer  "person_id"
     t.datetime "updated_at"
+    t.integer  "survey_id"
   end
 
   add_index "mh_answer_sheets", ["question_sheet_id"], :name => "index_mh_answer_sheets_on_question_sheet_id"
@@ -1831,24 +1832,6 @@ ActiveRecord::Schema.define(:version => 20111121165021) do
     t.datetime "updated_at"
   end
 
-  create_table "mh_page_elements", :force => true do |t|
-    t.integer  "page_id"
-    t.integer  "element_id"
-    t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "hidden",     :default => false
-    t.boolean  "archived",   :default => false
-  end
-
-  create_table "mh_pages", :force => true do |t|
-    t.integer "question_sheet_id",                                   :null => false
-    t.string  "label",             :limit => 100,                    :null => false
-    t.integer "number"
-    t.boolean "no_cache",                         :default => false
-    t.boolean "hidden",                           :default => false
-  end
-
   create_table "mh_question_sheets", :force => true do |t|
     t.string  "label",              :limit => 60,                    :null => false
     t.boolean "archived",                         :default => false
@@ -1875,8 +1858,19 @@ ActiveRecord::Schema.define(:version => 20111121165021) do
     t.datetime "updated_at"
   end
 
+  create_table "mh_survey_elements", :force => true do |t|
+    t.integer  "survey_id"
+    t.integer  "element_id"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "hidden",     :default => false
+    t.boolean  "archived",   :default => false
+  end
+
   create_table "mh_surveys", :force => true do |t|
-    t.string   "title"
+    t.integer  "question_sheet_id",                :null => false
+    t.string   "title",             :limit => 100, :null => false
     t.integer  "organization_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -3930,9 +3924,11 @@ ActiveRecord::Schema.define(:version => 20111121165021) do
     t.text     "post_survey_message"
     t.string   "event_type"
     t.string   "gateway",                            :default => "",                                                                        :null => false
+    t.integer  "survey_id"
   end
 
   add_index "sms_keywords", ["organization_id"], :name => "organization_id"
+  add_index "sms_keywords", ["survey_id"], :name => "index_sms_keywords_on_survey_id"
   add_index "sms_keywords", ["user_id"], :name => "user_id"
 
   create_table "sms_sessions", :force => true do |t|

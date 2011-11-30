@@ -12,9 +12,8 @@ class SmsKeyword < ActiveRecord::Base
   
   belongs_to :user
   belongs_to :survey
-  has_many :question_sheets, through: :survey
-  has_many :questions, :through => :question_sheets, :order => 'mh_page_elements.position'
-  has_many :archived_questions, :through => :question_sheets
+  has_many :questions, :through => :survey, :order => 'mh_page_elements.position'
+  has_many :archived_questions, :through => :survey
   
   belongs_to :event, polymorphic: true
   belongs_to :organization
@@ -56,10 +55,6 @@ class SmsKeyword < ActiveRecord::Base
   
   def notify_admin_of_request
     KeywordRequestMailer.enqueue.new_keyword_request(self.id)
-  end
-  
-  def question_page
-    @question_page ||= question_sheet.pages.first || question_sheet.pages.create(number: 1)
   end
   
   # def questions

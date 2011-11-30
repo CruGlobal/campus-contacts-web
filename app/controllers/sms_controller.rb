@@ -48,6 +48,9 @@ class SmsController < ApplicationController
         unless @msg
           # survey is done. send final message
           @msg = keyword.post_survey_message.present? ? keyword.post_survey_message : t('contacts.thanks.message')
+          # Mark answer_sheet as complete
+          @answer_sheet.update_attribute(:completed_at, Time.now)
+          
           send_message(@msg, @received.phone_number)
         end
       end
@@ -149,8 +152,8 @@ class SmsController < ApplicationController
       when person.lastName.blank?  
         Question.new(label: "What is your last name?")
       else
-        answer_sheet = get_answer_sheet(keyword, person)
-        keyword.questions.reload.where(web_only: false).detect {|q| q.responses(answer_sheet).select {|a| a.present?}.blank?}      
+        @answer_sheet = get_answer_sheet(keyword, person)
+        keyword.questions.reload.where(web_only: false).detect {|q| q.responses(@answer_sheet).select {|a| a.present?}.blank?}      
       end
     end
     
