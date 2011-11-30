@@ -480,6 +480,18 @@ a.hide {
 
 .contact_leftcol {
   float: left;
+  label {
+    font-weight: bold;
+    display: block;
+  }
+}
+
+.primarymark {
+  background: url("<%= asset_path('best.png') %>") no-repeat 50% 50%;;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-left: 4px;
 }
 
 .maplink {
@@ -784,7 +796,7 @@ ul.pillmenu {
   }
 }
 
-.icon {
+.icon, .remove_field {
   background: url("<%= asset_path('delete.png') %>") no-repeat 50% 50%;
   text-indent: 1000px;
   overflow: hidden;
@@ -797,6 +809,7 @@ ul.pillmenu {
 }
 
 .icon.magnify {  background-image: url("<%= asset_path('magnify.png') %>");}
+.icon.add {  background-image: url("<%= asset_path('add.png') %>");}
 .icon.unassign {  background-image: url("<%= asset_path('undo.png') %>");}
 .icon.send_contact_info {  background-image: url("<%= asset_path('email_go.png') %>");}
 .icon.delete {  background-image: url("<%= asset_path('delete.png') %>");}
