@@ -165,5 +165,13 @@ class PersonTest < ActiveSupport::TestCase
   
       assert_equal(@person.assigned_organizational_roles(1).count, 6) 
     end
+    
+    should 'create and return vcard information of a person' do  
+      vcard = @person.vcard
+          
+      assert_not_nil(vcard.name)
+      assert_equal(Vpim::Vcard, vcard.class)      
+    end
+    
   end
 end

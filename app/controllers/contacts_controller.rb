@@ -1,5 +1,5 @@
 require 'csv'
-require 'vpim/book'
+
 class ContactsController < ApplicationController
   before_filter :get_person
   before_filter :ensure_current_org

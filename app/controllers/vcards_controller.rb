@@ -1,3 +1,5 @@
+require 'vpim/book'
+
 class VcardsController < ApplicationController
 
   def create
