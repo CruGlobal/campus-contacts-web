@@ -78,7 +78,6 @@ en:
     status: "Status"
     edit: "Edit"
     back: "Back"
-    remove: 'Remove'
     hide: 'hide'
     add_a_leader: 'Add a leader'
     survey_text_tip_html: "To begin your survey, <strong>text %{keyword} to %{shortcode}.</strong>"

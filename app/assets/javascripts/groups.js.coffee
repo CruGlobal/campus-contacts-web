@@ -68,6 +68,9 @@ $ ->
     $('#member_search_results').hide()
     $('#add_person_group_div').show()
     $('#new_member_form').show()
+    name = $('#member_search_name').val().split(' ')
+    $('#person_firstName').val(name[0])
+    $('#person_lastName').val(name[1])
     false
 
   $('#add_person_group_div .save').live 'click', ->
@@ -85,11 +88,12 @@ $ ->
       group_id = 1
       personId = data.person.personID
       $('<a href="/groups/' + group_id  + '/group_memberships?person_id=' + personId + '&role=member&add_another=' + add_another + '"data-method="post" data-remote="true"></a>')
-      .appendTo(body)
+      .appendTo('body')
       .click()
       .remove()
     , 'json'
-    $.fn.showSearchBox()
+    if add_another
+      $.fn.showSearchBox()
     $('#new_person')[0].reset()
     false
       
