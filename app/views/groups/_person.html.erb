@@ -1,4 +1,4 @@
-<tr id="<%= dom_id(person) %>" data-name="<%= person.name %>" data-id="<%= person.id %>">
+<tr id="<%= dom_id(person) %>" class="person_row" data-name="<%= person.name %>" data-id="<%= person.id %>">
   <td nowrap="nowrap" class="checkbox_cell">
     <%= image_tag('grippy.png', class: 'handle' ) %>
     <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
