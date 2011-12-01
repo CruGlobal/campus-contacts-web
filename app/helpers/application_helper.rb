@@ -35,6 +35,18 @@ module ApplicationHelper
     mhub? ? 'support@mhub.cc' : 'support@missionhub.com'
   end
   
+  def link_to_remove_fields(name, f, hidden)
+    f.hidden_field(:_destroy) + link_to(name, '#', class: 'remove_field', style: hidden ? 'display:none' : '')
+  end
+  
+  def link_to_add_fields(name, f, association)
+    new_object = f.object.class.reflect_on_association(association).klass.new
+    fields = f.fields_for(association, new_object, :child_index => "new_#{association}") do |builder|
+      render("people/#{association.to_s.singularize}_fields", :builder => builder, no_remove: false)
+    end
+    link_to_function(name, raw("addFields(this, \"#{association}\", \"#{escape_javascript(fields)}\")"))
+  end
+  
   def times(start_time, end_time)
     midnight = Time.now.beginning_of_day
     # start_time = midnight + start_time.hours

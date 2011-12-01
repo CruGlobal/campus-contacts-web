@@ -1,46 +1,66 @@
 <%= fields_for person, {validators: {}} do |pf| %>
 <div class="customform contact_form">
   <div class="sfield">
-    <div class="ls"><%= t('general.first_name') %>:</div>
+    <div class="ls"><%= pf.label :firstName, t('general.first_name') %>:</div>
     <div class="rs"><%= pf.text_field :firstName %></div>
   </div>
   <div class="sfield">
-    <div class="ls"><%= t('general.last_name') %>:</div>
+    <div class="ls"><%= pf.label :lastName, t('general.last_name') %>:</div>
     <div class="rs"><%= pf.text_field :lastName %></div>
   </div>
   <div class="sfield">
-    <div class="ls"><%= t('general.gender') %>:</div>
+    <div class="ls"><%= pf.label :gender, t('general.gender') %>:</div>
     <div class="rs">
       <%= pf.radio_button :gender, 'male' %> <label for="person_gender_male"><%= t('general.male') %></label> <br/>
       <%= pf.radio_button :gender, 'female' %> <label for="person_gender_female"><%= t('general.female') %> </label>
     </div>
   </div>
-  <%= pf.fields_for (@email || person.primary_email_address || person.email_addresses.new) do |af| %>
-  <div class="sfield">
-    <div class="ls"><%= t('general.email') %>:</div>
-    <div class="rs"><%= af.text_field :email %></div>
+  <div class="fieldset">
+    <% if person.new_record? || person.email_addresses.blank? %>
+      <%= pf.fields_for (@email || person.primary_email_address || person.email_addresses.new) do |builder| %>
+        <%= render 'people/email_address_fields', builder: builder, no_remove: true %>
+      <% end %>
+    <% else %>
+      <%= pf.fields_for :email_addresses do |builder| %>
+        <%= render 'people/email_address_fields', builder: builder, no_remove: person.email_addresses.length <= 1 %>
+      <% end %>
+    <% end %>
+  
+    <div class="sfield">
+      <div class="ls"></div>
+      <div class="rs"><%= link_to_add_fields(image_tag("add.png") + " " + t('.add_email_address'), pf, :email_addresses) %></div>
+    </div>
   </div>
-  <% end %>
-  <%= pf.fields_for (@phone || person.primary_phone_number || person.phone_numbers.new) do |af| %>
-  <div class="sfield">
-    <div class="ls"><%= t('general.phone') %>:</div>
-    <div class="rs"><%= af.text_field :number %></div>
+  <div class="fieldset">
+    <% if person.new_record? || person.phone_numbers.blank? %>
+      <%= pf.fields_for (@phone || person.primary_phone_number || person.phone_numbers.new) do |builder| %>
+        <%= render 'people/phone_number_fields', builder: builder, no_remove: true %>
+      <% end %>
+    <% else %>
+      <%= pf.fields_for :phone_numbers do |builder| %>
+        <%= render 'people/phone_number_fields', builder: builder, no_remove: person.phone_numbers.length <= 1 %>
+      <% end %>
+    <% end %>
+  
+    <div class="sfield">
+      <div class="ls"></div>
+      <div class="rs"><%= link_to_add_fields(image_tag("add.png") + " " + t('.add_phone_number'), pf, :phone_numbers) %></div>
+    </div>
   </div>
-  <% end %>
         
   <%= pf.fields_for :current_address, (person.current_address || person.build_current_address) do |af| %>        
   <div class="sfield">
-    <div class="ls"><%= t('general.address1') %>:</div>
+    <div class="ls"><%= af.label :address1, t('general.address1') %>:</div>
     <div class="rs"><%= af.text_field :address1 %></div>
   </div>
   
   <div class="sfield">
-    <div class="ls"><%= t('general.address2') %>:</div>
+    <div class="ls"><%= af.label :address2, t('general.address2') %>:</div>
     <div class="rs"><%= af.text_field :address2 %></div>
   </div>
 
   <div class="sfield">
-    <div class="ls"><%= t('general.city') %>:</div>
+    <div class="ls"><%= af.label :city, t('general.city') %>:</div>
     <div class="rs"><%= af.text_field :city %></div>
   </div>
   
@@ -49,11 +69,11 @@
     <div class="rs">
       <div class="sidebyside leftalign">
         <div class="element">
-          <%= t('general.state') %>:<br/>
+          <%= af.label :state, t('general.state') %>:<br/>
           <%= af.select :state, Carmen::states('US'), include_blank: true %>
         </div>
         <div class="element">
-          <%= t('general.zip') %>:<br/>
+          <%= af.label :zip, t('general.zip') %>:<br/>
           <%= af.text_field :zip, :class => "field_zip" %>
         </div>
       </div>
@@ -61,7 +81,7 @@
   </div>
   
   <div class="sfield">
-    <div class="ls"><%= t('general.country') %>:</div>
+    <div class="ls"><%= af.label :country, t('general.country') %>:</div>
     <div class="rs">
       <% Carmen.priority_countries = %w(US CA) %>
       <%= af.select :country, Carmen::countries(:locale => I18n.locale) %>

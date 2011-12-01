@@ -40,7 +40,9 @@ class Person < ActiveRecord::Base
   validates_presence_of :firstName
   validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/, allow_blank: true
   
-  accepts_nested_attributes_for :email_addresses, :phone_numbers, :current_address, allow_destroy: true  
+  accepts_nested_attributes_for :email_addresses, :reject_if => lambda { |a| a[:email].blank? }, allow_destroy: true  
+  accepts_nested_attributes_for :phone_numbers, :reject_if => lambda { |a| a[:number].blank? }, allow_destroy: true  
+  accepts_nested_attributes_for :current_address, allow_destroy: true  
   
   before_save :stamp_changed
   before_create :stamp_created
@@ -117,12 +119,12 @@ class Person < ActiveRecord::Base
   end
   
   def name 
-    [firstName, lastName].collect(&:to_s).join(' ')
+    [firstName, lastName].collect(&:to_s).join(' ') 
   end
   
-  def firstName
-    preferredName.blank? ? self[:firstName].try(:strip) : preferredName.try(:strip)
-  end
+  # def firstName
+  #   preferredName.blank? ? self[:firstName].try(:strip) : preferredName.try(:strip)
+  # end
   
   def self.create_from_facebook(data, authentication, response = nil)
     if response.nil?

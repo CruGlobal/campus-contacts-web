@@ -121,8 +121,7 @@ class OrganizationMembershipsController < ApplicationController
     if orgs_i_have_access_to.include?(org.id)
       session[:current_organization_id] = params[:id]
     end
-    redirect_to :back
-    # redirect_to '/contacts' #user_root_path
+    redirect_to request.referrer ? :back : '/contacts'
   end
   
   def set_primary
@@ -130,7 +129,7 @@ class OrganizationMembershipsController < ApplicationController
       @organization_membership.update_attribute(:primary, true)
       session[:current_organization_id] = params[:id]
     end
-    redirect_to '/contacts' #user_root_path
+    redirect_to request.referrer ? :back : '/contacts'
   end
   
 end

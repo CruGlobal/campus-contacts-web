@@ -67,6 +67,9 @@ en:
     roles: "Roles"
     back_to_dashboard: "Back To My Contacts"
   general:
+    mobile: Cell
+    home: Home
+    work: Work
     alert: Alert
     save: 'Save'
     show: Show
@@ -101,7 +104,10 @@ en:
       notify: "Notify this person that they've been added and send them a link to log in."
     search:
       not_in_system: 'If the person you are looking for is not already in the system click here to add them.'
-  people: 
+  people:
+    person_form:
+      add_phone_number: "Add Phone Number" 
+      add_email_address: "Add Email Address" 
     add_person:
       add_person: Add a person to %{org}
     index:
@@ -124,7 +130,25 @@ en:
       select_all_html: "Select all <b>%{count}</b> people in the directory."
       all_selected_html: "All <b>%{count}</b> people in the directory is selected."
     show:
-      edit_profile: 'Edit Profile'
+      profile: "%{name}'s Profile"
+      edit_profile: "Edit %{name}'s Profile"
+      add_comments_here: 'Add comments here...'
+      previous_comments: 'Previous Comments'
+      survey_answers: 'Survey Answers'
+      edit_contact_info: 'Edit Contact Info'
+      send_contact_info: 'Email me this contact'
+      send_vcard_desc: 'This will create a vcard and send it to the email address you enter below.'
+      facebook_profile: 'Facebook Profile'
+      phone_number: 
+        one:   "Phone #:"
+        other: "Phone #s:"
+      email:
+        one:   "Email:"
+        other: "Emails:"
+      google_map: 'Google Map'
+      status: "Status"
+      attach_rejoicable: 'Attach a Rejoicable'
+      add_comment: 'Add Comment / Update Status'
     edit:
       editing: Editing
   sessions:
@@ -218,6 +242,7 @@ en:
       keyword_why: "This is for our use only. The use description could include words like 'weekly meeting', 'outreach event', and other uses the keyword will have."
       explanation: 'Please explain what you plan to use this keyword for.'
       initial_response: "What response should we send back to people when they text in? <br/>If you want the person to complete a survey, the response MUST include {{ link }} (exactly like that, dont change that part of the response.)"
+      initial_response_default: 'Hi! Thanks for checking out %{org}. To get more involved, reply with "i" or click {{ link }} if you have a smartphone.'
       post_survey_why: "When someone texts in the keyword, this message will be sent to them and '{{link}}' will be replaced by a website address that will take them to an online survey for them to fill out. If they don't have internet, replying 'i' will send them all the questions via interactive text message."
       post_survey_message: 'What message would you like to show after the person has completed the survey?'
       association: "The %{this_term} you are currently requesting this keyword for has at leaset one %{child_term} under it.<br/> Select if you'd like to associate this keyword with the %{this_term} or a %{child_term} under this %{this_term}"
@@ -413,20 +438,7 @@ en:
       phone: Phone Number
       email: Email
       year: Year
-    show:
-      add_comments_here: 'Add comments here...'
-      previous_comments: 'Previous Comments'
-      survey_answers: 'Survey Answers'
-      edit_contact_info: 'Edit Contact Info'
-      send_contact_info: 'Email me this contact'
-      send_vcard_desc: 'This will create a vcard and send it to the email address you enter below.'
-      facebook_profile: 'Facebook Profile'
-      phone_number: "Phone #:"
-      email: "Email:"
-      google_map: 'Google Map'
-      status: "Status"
-      attach_rejoicable: 'Attach a Rejoicable'
-      add_comment: 'Add Comment / Update Status'
+
     thanks:
       message: Thank you for your interest.
       done: Done
@@ -461,6 +473,12 @@ en:
       thanks: "Thanks!"
     index:
       pick_keyword: "Pick a Keyword"
+    show: 
+      title: "%{name}'s Survey Answers"
+      edit_answers: "Edit Answers"
+      no_answers: "%{name} has not completed any surveys"
+    edit:
+      title: "Edit %{name}'s Survey Answers"
   date:
     formats:
       default: "%Y-%m-%d"
@@ -713,6 +731,8 @@ en:
         start_time: 'From'
       organization:
         terminology: Type
+    submit:
+      update: Update
   member: Member
   leader: Leader
   organizations:

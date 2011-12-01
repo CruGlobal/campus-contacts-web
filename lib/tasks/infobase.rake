@@ -49,7 +49,7 @@ namespace :infobase do
     # ministry local level goes next
     Organization.connection.select_all("select * from ministry_locallevel").each do |level|
       m = Organization.where(importable_id: level['teamID'], importable_type: 'Ccc::MinistryLocallevel').first
-      attribs = {name: level['name'], terminology: 'Missional Team', importable_id: level['teamID'], importable_type: 'Ccc::MinistryLocallevel', show_sub_orgs: true}
+      attribs = {name: level['name'], terminology: 'Missional Team', importable_id: level['teamID'], importable_type: 'Ccc::MinistryLocallevel', show_sub_orgs: true, status: 'active'}
       if m
         m.update_attributes(attribs)
       else

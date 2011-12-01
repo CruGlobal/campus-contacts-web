@@ -12,7 +12,7 @@ class SmsKeywordsController < ApplicationController
   # GET /sms_keywords/new.xml
   def new
     session[:wizard] = true if request.referer.present? && request.referer.include?('wizard')
-    @sms_keyword = SmsKeyword.new
+    @sms_keyword = SmsKeyword.new(organization: current_organization)
 
     respond_to do |format|
       format.html # new.html.erb

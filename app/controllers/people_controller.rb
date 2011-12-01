@@ -34,13 +34,14 @@ class PeopleController < ApplicationController
   # GET /people/1
   # GET /people/1.xml
   def show
-    @person = current_organization.people.find(params[:id])
-    authorize! :read, @person
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render xml: @person }
+    @person = Person.find(params[:id])
+    authorize!(:read, @person)
+    if can? :manage, @person
+      @organizational_role = OrganizationalRole.where(organization_id: @organization, person_id: @person, role_id: Role::CONTACT_ID).first
+      @followup_comment = FollowupComment.new(organization: @organization, commenter: current_person, contact: @person, status: @organizational_role.followup_status) if @organizational_role
+      @followup_comments = FollowupComment.where(organization_id: @organization, contact_id: @person).order('created_at desc')
     end
+    @person = Present(@person)
   end
 
   # GET /people/new

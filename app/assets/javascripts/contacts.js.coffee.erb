@@ -35,7 +35,8 @@ $ ->
     false
     
   $('.send_contact_info').live 'click', ->
-    $('#send_contact_info_person_id').val($(this).attr('data-person_id'))    
+    form = $('#send_contact_info_form')
+    form.find('#person_id').val($(this).attr('data-person_id'))    
     
     $('#send_contact_info_dialog').dialog
       resizable: false,
@@ -44,7 +45,7 @@ $ ->
       modal: true,
       buttons: 
         Ok: ->          
-          $('#send_contact_info_form').submit()
+          form.submit()
           $.n('Contact information has been sent.') 
           $(this).dialog('destroy')   
         Cancel: ->
@@ -75,11 +76,13 @@ $ ->
       buttons: 
         "Send to email": ->          
           email = $('#bulk_vcard_email').val()
-          $.get('/contacts/send_bulk_vcard?ids=' + ids + '&email=' + email)
+          url = $('#bulk_vcard_form').attr('action')
+          $.get(url + '?ids=' + ids + '&email=' + email)
           $.n(t('contacts.index.bulk_vcard_email_message') + email) 
           $(this).dialog('destroy')   
         "Download": ->
-          window.location = '/contacts/send_bulk_vcard?ids=' + ids
+          url = $('#bulk_vcard_form').attr('action')
+          window.location = url + '?ids=' + ids
           $.n(t('contacts.index.bulk_vcard_download_message'))  
           $(this).dialog('destroy')             
         Cancel: ->
@@ -210,7 +213,7 @@ $ ->
   $('.assign_to_radio').live 'click', -> 
     $('#assign_to').val($(this).val())
     
-  $("#contacts_controller a.assign").live 'click', ->
+  $("a.assign").live 'click', ->
     if $('.id_checkbox:checked').length > 0
       $('#assign_to_me').click()
       el = $('#assign_search')
@@ -326,7 +329,7 @@ $ ->
   $('.contact_row td:not(.checkbox_cell)').live 'click', ->
     unless $('a', this)[0]?
       tr = $(this).parent()
-      document.location = '/contacts/' + tr.attr('data-id')
+      document.location = '/people/' + tr.attr('data-id')
   
   $('#assign_to').change ->
     if $('.id_checkbox:checked').length > 0

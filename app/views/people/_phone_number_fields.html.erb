@@ -1,0 +1,9 @@
+<div class="sfield">
+  <div class="ls"><%= builder.label :number, t('general.phone') %>:</div>
+  <div class="rs">
+    <%= builder.text_field :number %>
+    <%= builder.select :location, %w[mobile home work].collect {|l| [t("general.#{l}"), l]} %>
+    <%= builder.check_box :primary, class: 'primary' %> <%= builder.label :primary %>
+    <%= link_to_remove_fields(t('general.remove'), builder, no_remove) %>
+  </div>
+</div>

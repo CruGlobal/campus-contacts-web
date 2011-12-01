@@ -1,6 +1,9 @@
 <input type="hidden" id="bulk_email_message" value="" />
 <input type="hidden" id="bulk_sms_message" value="" />
 
+<%= render 'shared/bulk_vcard_dialog' %>  
+<%= render 'shared/bulk_send_form' %>
+
 <% provide :sidebar do %>
   <%= render 'labels' %>
 <% end %>
@@ -55,6 +58,9 @@
         <li><%= link_to(t('.bulk_delete'), bulk_delete_people_path, id: "bulk_delete") %></li>
       </ul>  
     <% end %>
+      <ul class="pillmenu">
+        <li><%= link_to(t('.vcard'), '', id: 'bulk_vcard_link' ) %></li>
+      </ul>        
   </div>
 <% end %>
 
@@ -90,9 +96,6 @@
 <div class="searchstat">
   <%= t('.displaying', start: @people.offset_value + 1, finish: @people.offset_value + @people.length, total: @people.total_count) %>
 </div>
-
-<%= render 'shared/bulk_send_form' %>
-
 
 <div id="add_person_div" style="display:none" title="<%= t('.add_person') %>" class="fingerme">
   <%= render 'add_person', person: Person.new %>

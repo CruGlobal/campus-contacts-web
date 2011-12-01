@@ -1,5 +1,5 @@
 require 'csv'
-require 'vpim/book'
+
 class ContactsController < ApplicationController
   before_filter :get_person
   before_filter :ensure_current_org
@@ -163,24 +163,18 @@ class ContactsController < ApplicationController
 
     if @person.valid? && (!@answer_sheet || (@answer_sheet.person.valid? &&
        (!@answer_sheet.person.primary_phone_number || @answer_sheet.person.primary_phone_number.valid?)))
-      redirect_to contact_path(@person)
+      redirect_to survey_response_path(@person)
     else
       render :edit
     end
   end
   
   def show
-    @person = Person.find(params[:id])
-    @organization = current_organization
-    @organizational_role = OrganizationalRole.where(organization_id: @organization, person_id: @person, role_id: Role::CONTACT_ID).first
-    authorize!(:read, @person)
-    @followup_comment = FollowupComment.new(organization: @organization, commenter: current_person, contact: @person, status: @organizational_role.followup_status) if @organizational_role
-    @followup_comments = FollowupComment.where(organization_id: @organization, contact_id: @person).order('created_at desc')
+    redirect_to person_path(params[:id])
   end
   
   def edit
-    @person = Person.find(params[:id])
-    authorize!(:update, @person)
+    redirect_to survey_response_path(params[:id])
   end
   
   def create
@@ -246,40 +240,9 @@ class ContactsController < ApplicationController
     to_ids = params[:to].split(',')
     leaders = current_organization.leaders.where(personID: to_ids)
     if leaders.present?
-      ContactsMailer.reminder(leaders.collect(&:email).compact, current_person.email, params[:subject], params[:body]).deliver
+      ContactsMailer.enqueue.reminder(leaders.collect(&:email).compact, current_person.email, params[:subject], params[:body])
     end
     render nothing: true
-  end
-  
-  def send_vcard
-    ContactsMailer.vcard(params[:send_contact_info_email], 'Mission Hub<noreply@missionhub.com>', params[:send_contact_info_person_id]).deliver
-
-    #send_data Person.find(params[:send_contact_info_person_id]).vcard.to_s, :filename => "#{Person.find(params[:send_contact_info_person_id]).name}.vcf"        
-    render nothing: true
-  end
-  
-  def send_bulk_vcard
-
-    ids = params[:ids].split(',')
-    
-    if ids.size
-      book = Vpim::Book.new
-      Person.includes(:current_address, :primary_phone_number, :primary_email_address).find(ids).each do |person|
-       book << person.vcard
-      end
-
-      respond_to do |wants|
-        wants.html do
-          if params.has_key?(:email)
-            ContactsMailer.bulk_vcard(params[:email], 'Mission Hub<noreply@missionhub.com>', book).deliver
-            render nothing: true
-          else
-            send_data book, :type => 'application/vcard', :disposition => 'attachment', :filename => "contacts.vcf"
-          end
-        end
-      end
-    end
-
   end
   
   protected

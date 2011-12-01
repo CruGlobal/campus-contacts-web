@@ -74,12 +74,16 @@ end
 
 
 deploy.task :restart, :roles => [:app], :except => {:no_release => true} do
-  servers = find_servers_for_task(current_task)
-  servers.map do |s|
-    run "cd #{deploy_to}/current && echo '' > public/lb.html", :hosts => s.host
-    run "touch #{current_path}/tmp/restart.txt", :hosts => s.host
-    sleep 120
-    run "cd #{deploy_to}/current && echo 'ok' > public/lb.html", :hosts => s.host
+  if rails_env == 'production'
+    servers = find_servers_for_task(current_task)
+    servers.map do |s|
+      run "cd #{deploy_to}/current && echo '' > public/lb.html", :hosts => s.host
+      run "touch #{current_path}/tmp/restart.txt", :hosts => s.host
+      sleep 120
+      run "cd #{deploy_to}/current && echo 'ok' > public/lb.html", :hosts => s.host
+    end
+  else
+    run "touch #{current_path}/tmp/restart.txt"#, :hosts => s.host
   end
 end
 
@@ -158,6 +162,9 @@ namespace :assets do
     run "cd #{current_path} && RAILS_ENV=production bundle exec rake assets:clean"
   end
 end
-after "deploy:symlink", "deploy:migrate"
+
+if rails_env == 'production'
+  after "deploy:symlink", "deploy:migrate"
+end
 after "deploy", "deploy:cleanup"
 # require 'config/boot'

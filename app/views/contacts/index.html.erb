@@ -2,7 +2,8 @@
   <%= render 'contacts/leaders' %>
 <% end %>
 
-<%= render :partial => 'bulk_vcard_dialog' %>  
+<%= render 'shared/bulk_vcard_dialog' %>  
+<%= render 'shared/bulk_send_form' %>
 
 <div class="titlebar">  
   <h1>
@@ -174,4 +175,3 @@
 <div id="add_contact_div" style="display:none" title="<%= t('.add_contact') %>" class="fingerme">
   <%= render 'add_contact', person: Person.new %>
 </div>
-<%= render 'shared/bulk_send_form' %>
