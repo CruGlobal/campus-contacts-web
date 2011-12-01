@@ -23,13 +23,22 @@
     </div>
     <div>
       <% if @person.phone_number.present? %>
-        <%= t('.phone_number', count: @person.phone_numbers.length) %> <%= @person.phone_numbers_html %><br/>
+        <p>
+        <label><%= t('.phone_number', count: @person.phone_numbers.length) %></label>
+        <%= @person.phone_numbers_html %><br/>
+        </p>
       <% end %>
       <% if @person.email.present? %>
-        <%= t('.email', count: @person.email_addresses.length) %> <%= @person.email_addresses_html %><br/>
+        <p>
+        <label><%= t('.email', count: @person.email_addresses.length) %></label>
+        <%= @person.email_addresses_html %><br/>
+        </p>
       <% end %>
       <% if @person.current_address %>
-        <p><%= raw @person.current_address.display_html %></p>
+        <p>
+          <label>Address:</label>
+          <%= raw @person.current_address.display_html %>
+        </p>
         <%= link_to(t('.google_map'), @person.current_address.map_link, target: '_blank', :class => "maplink") %>
       <% end %>
       <% if @person.fb_uid.present? %>
