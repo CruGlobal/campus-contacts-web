@@ -55,7 +55,7 @@
     </ul>
     <% if can? :manage, current_organization %>
       <ul class="pillmenu">
-        <li><%= link_to(t('.bulk_delete'), bulk_delete_people_path, id: "bulk_delete") %></li>
+        <li><%= link_to(t('general.delete'), bulk_delete_people_path, id: "bulk_delete") %></li>
       </ul>  
     <% end %>
       <ul class="pillmenu">
