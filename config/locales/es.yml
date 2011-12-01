@@ -114,7 +114,7 @@ es:
       no_people: "Lo siento, no hay gente involucrada aquí."
       displaying: "Mostrando %{start} - %{finish} de %{total}"
     todos:
-      page_selected_html: "Todas <b>%{count}</b> las personas en esta página están seleccionadas
+      page_selected_html: "Todas <b>%{count}</b> las personas en esta página están seleccionadas"
       select_all_html: "Selecciona <b>%{count}</b> personas en el directorio."
       all_selected_html: "Todas <b>%{count}</b> las personas en el directorio han sido seleccionadas."
     show:
@@ -213,9 +213,9 @@ es:
       initial_response: "¿Qué respuesta debemos devolver a las personas cuando nos escriben? <br/>Si quieres que la persona complete la encuesta, la respuesta DEBE incluir {{ link }} (exactamente así, no cambies esa parte de la respuesta.)"
       post_survey_why: "cuando alguien te envía un mensaje de texto, el mensaje será enviado ellos y '{{link}}' será sustituida por una dirección de sitio web que les llevará a una encuesta en línea para que la completen. Si no tienen Internet, contestando 'yo' les enviará a todas las preguntas a través de mensaje de texto interactivo."
       post_survey_message: 'Qué tipo de mensaje te gustaría mostrar después de que la persona haya completado la encuesta?'
-      association: "El %{this_term} Usted está actualmente solicitando esta palabra clave para tener al menos una%{child_term} abajo de ella.<br/> Selecciona si quieres asociar esta palabra clave con %{this_term} o a %{child_term} abajo de ella %{this_term}"
+      association: "El %{this_term} Usted está actualmente solicitando esta palabra clave para tener al menos una %{child_term} abajo de ella.<br/> Selecciona si quieres asociar esta palabra clave con %{this_term} o a %{child_term} abajo de ella %{this_term}"
       keyword_locked: La palabra clave no puede ser cambiada. Puedes eliminar esta y crear una nueva si es necesario.
-      keyword_associated_with: Esta palabra clave se asociará con%{org}.
+      keyword_associated_with: Esta palabra clave se asociará con %{org}.
       note: 'Note: El proceso de la solicitud puede tomar hasta 24 horas.'
     show:
       explanation: 'Explicación:'
@@ -235,8 +235,8 @@ es:
         multiple_choice: 'Opción Multiple'
         checkboxes: 'Casillas de Verificación'
         dropdown: 'Flujo de Opciones'
-        web_only: "Solo mostrar esta pregunta en la web / dispositivos moviles, no incluidos \"interactivo\" modo."
-        text_message_preview: Texto del Mensaje Previo forma de elección múltiple:
+        web_only: 'Solo mostrar esta pregunta en la web / dispositivos moviles, no incluidos "interactivo" modo.'
+        text_message_preview: 'Texto del Mensaje Previo forma de elección múltiple:'
         list_choices: 'Haz una lista de las posibles opciones una por línea:'
       question:
         confirm_delete: "¿Estás seguro de querer eliminar '%{question}'?"
