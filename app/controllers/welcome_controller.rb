@@ -30,8 +30,8 @@ class WelcomeController < ApplicationController
         # See if we have a user with this guid
         user = User.find_by_globallyUniqueID(guid)
         if user && current_user != user
-          sign_out(current_user)
           old_user = User.find(current_user.id)
+          sign_out(current_user)
           user.merge(old_user)
           user.reload
           sign_in(user)
