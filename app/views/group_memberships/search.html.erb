@@ -18,8 +18,3 @@
 <% end %>
 
 <%= link_to(t('.add_new_person_group'), '#', :id => 'add_new_person_group_button', :class => 'add_new_person_group inlinebutton') %>
-
-<div id="add_person_group_div" style="display:none;">
-  <%= render 'people/add_person', person: Person.new %>  
-</div>
-

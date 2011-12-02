@@ -37,23 +37,19 @@ class PeopleController < ApplicationController
     @person = Person.find(params[:id])
     authorize!(:read, @person)
     if can? :manage, @person
-      @organizational_role = OrganizationalRole.where(organization_id: @organization, person_id: @person, role_id: Role::CONTACT_ID).first
-      @followup_comment = FollowupComment.new(organization: @organization, commenter: current_person, contact: @person, status: @organizational_role.followup_status) if @organizational_role
-      @followup_comments = FollowupComment.where(organization_id: @organization, contact_id: @person).order('created_at desc')
+      @organizational_role = OrganizationalRole.where(organization_id: current_organization, person_id: @person, role_id: Role::CONTACT_ID).first
+      @followup_comment = FollowupComment.new(organization: current_organization, commenter: current_person, contact: @person, status: @organizational_role.followup_status) if @organizational_role
+      @followup_comments = FollowupComment.where(organization_id: current_organization, contact_id: @person).order('created_at desc')
     end
     @person = Present(@person)
   end
 
   # GET /people/new
-  # GET /people/new.xml
   # def new
-  #   authorize! :create, Person
-  #   @person = Person.new
-  # 
-  #   respond_to do |format|
-  #     format.html # new.html.erb
-  #     format.xml  { render xml: @person }
-  #   end
+  #   names = params[:name].to_s.split(' ')
+  #   @person = Person.new(:firstName => names[0], :lastName => names[1..-1].join(' '))
+  #   @email = @person.email_addresses.new
+  #   @phone = @person.phone_numbers.new
   # end
 
   # GET /people/1/edit

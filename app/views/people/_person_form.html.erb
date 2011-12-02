@@ -24,12 +24,12 @@
       <%= pf.fields_for :email_addresses do |builder| %>
         <%= render 'people/email_address_fields', builder: builder, no_remove: person.email_addresses.length <= 1 %>
       <% end %>
+      <div class="sfield">
+        <div class="ls"></div>
+        <div class="rs"><%= link_to_add_fields(image_tag("add.png") + " " + t('.add_email_address'), pf, :email_addresses) %></div>
+      </div>
     <% end %>
   
-    <div class="sfield">
-      <div class="ls"></div>
-      <div class="rs"><%= link_to_add_fields(t('.add_email_address'), pf, :email_addresses) %></div>
-    </div>
   </div>
   <div class="fieldset">
     <% if person.new_record? || person.phone_numbers.blank? %>
@@ -40,12 +40,12 @@
       <%= pf.fields_for :phone_numbers do |builder| %>
         <%= render 'people/phone_number_fields', builder: builder, no_remove: person.phone_numbers.length <= 1 %>
       <% end %>
+      <div class="sfield">
+        <div class="ls"></div>
+        <div class="rs"><%= link_to_add_fields(image_tag("add.png") + " " + t('.add_phone_number'), pf, :phone_numbers) %></div>
+      </div>
     <% end %>
   
-    <div class="sfield">
-      <div class="ls"></div>
-      <div class="rs"><%= link_to_add_fields(t('.add_phone_number'), pf, :phone_numbers) %></div>
-    </div>
   </div>
         
   <%= pf.fields_for :current_address, (person.current_address || person.build_current_address) do |af| %>        

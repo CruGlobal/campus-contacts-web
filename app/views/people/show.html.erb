@@ -23,20 +23,29 @@
     </div>
     <div>
       <% if @person.phone_number.present? %>
-        <%= t('.phone_number', count: @person.phone_numbers.length) %> <%= @person.phone_numbers_html %><br/>
+        <p>
+        <label><%= t('.phone_number', count: @person.phone_numbers.length) %></label>
+        <%= @person.phone_numbers_html %><br/>
+        </p>
       <% end %>
       <% if @person.email.present? %>
-        <%= t('.email', count: @person.email_addresses.length) %> <%= @person.email_addresses_html %><br/>
+        <p>
+        <label><%= t('.email', count: @person.email_addresses.length) %></label>
+        <%= @person.email_addresses_html %><br/>
+        </p>
       <% end %>
       <% if @person.current_address %>
-        <p><%= raw @person.current_address.display_html %></p>
+        <p>
+          <label>Address:</label>
+          <%= raw @person.current_address.display_html %>
+        </p>
         <%= link_to(t('.google_map'), @person.current_address.map_link, target: '_blank', :class => "maplink") %>
       <% end %>
       <% if @person.fb_uid.present? %>
       <p><%= link_to(t('.facebook_profile'), "http://www.facebook.com/profile.php?id=#{@person.fb_uid}", target: '_blank') %></p>
       <% end %>
-      <p><%= link_to(t('.send_contact_info'), '#', class: 'send_contact_info', 'data-person_id' => @person.id ) %></p>      
-      <%= render :partial => 'contacts/send_contact_info_dialog', :locals => { person: @person } %>
+      <p><%= link_to(t('.send_contact_info', name: @person.firstName), '#', class: 'send_contact_info', 'data-person_id' => @person.id ) %></p>      
+      <%= render :partial => 'shared/send_contact_info_dialog', :locals => { person: @person } %>
     </div>
   </div>
 

@@ -171,6 +171,12 @@ Mh::Application.routes.draw do
       get :send_bulk_vcard
     end
   end
+  
+  resources :vcards do
+    collection do
+      get :bulk_create
+    end
+  end
 
   namespace :api do
     scope '(/:version)', version: /v\d+?/ do  #module: :api

@@ -35,8 +35,8 @@ module ApplicationHelper
     mhub? ? 'support@mhub.cc' : 'support@missionhub.com'
   end
   
-  def link_to_remove_fields(name, f, hidden)
-    f.hidden_field(:_destroy) + link_to(name, '#', class: 'remove_field', style: hidden ? 'display:none' : '')
+  def link_to_remove_fields(f, hidden)
+    f.hidden_field(:_destroy) + link_to(' ', '#', class: 'remove_field', style: hidden ? 'display:none' : '')
   end
   
   def link_to_add_fields(name, f, association)

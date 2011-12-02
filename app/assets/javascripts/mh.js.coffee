@@ -11,6 +11,7 @@ $ ->
     fieldset = $(link).closest('.fieldset')
     if $('.sfield:visible', fieldset).length <= 2
       $('.remove_field', fieldset).hide()
+    false
     
   $('.fingerme').oneFingerScroll();
   
@@ -130,3 +131,4 @@ window.addFields = (link, association, content) ->
   $(link).closest(".sfield").before(content.replace(regexp, new_id))
   fieldset = $(link).closest('.fieldset')
   $('.remove_field', fieldset).show()
+  false

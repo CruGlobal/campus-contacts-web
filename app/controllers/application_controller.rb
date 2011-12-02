@@ -120,7 +120,7 @@ class ApplicationController < ActionController::Base
     if params[:locale]
       I18n.locale = params[:locale] 
     else
-      available = %w{en ru}
+      available = %w{en ru es}
       I18n.locale = request.preferred_language_from(available)
     end
   end
@@ -210,7 +210,7 @@ class ApplicationController < ActionController::Base
   helper_method :wizard_path
   
   def create_person(person_params)
-    Person.create_from_params(person_params)
+    Person.new_from_params(person_params)
   end
   
   def ensure_current_org

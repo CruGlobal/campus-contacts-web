@@ -2,6 +2,7 @@
   <div class="ls"><%= builder.label :email, t('general.email') %>:</div>
   <div class="rs">
     <%= builder.text_field :email %>
-    <%= link_to_remove_fields(t('general.remove'), builder, no_remove) %>
+    <%= builder.check_box :primary, class: 'primary' %> <%= builder.label :primary %>
+    <%= link_to_remove_fields(builder, no_remove) %>
   </div>
 </div>

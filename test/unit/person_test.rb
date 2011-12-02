@@ -24,7 +24,7 @@ class PersonTest < ActiveSupport::TestCase
   context "create a person from params" do
     should "not fail if there's no phone number when adding a person who already exists" do
       Factory(:user_with_auxs, email: 'test@uscm.org')
-      person, email, phone = Person.create_from_params({"email_address" => {"email" => "test@uscm.org"},"firstName" => "Test","lastName" => "Test","phone_number" => {"number" => ""}})
+      person, email, phone = Person.new_from_params({"email_address" => {"email" => "test@uscm.org"},"firstName" => "Test","lastName" => "Test","phone_number" => {"number" => ""}})
       assert_nil(phone)
     end
   end
@@ -165,5 +165,13 @@ class PersonTest < ActiveSupport::TestCase
   
       assert_equal(@person.assigned_organizational_roles(1).count, 6) 
     end
+    
+    should 'create and return vcard information of a person' do  
+      vcard = @person.vcard
+          
+      assert_not_nil(vcard.name)
+      assert_equal(Vpim::Vcard, vcard.class)      
+    end
+    
   end
 end

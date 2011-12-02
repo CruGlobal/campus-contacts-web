@@ -25,7 +25,7 @@ class Address < ActiveRecord::Base
 		ret_val += city+', ' unless city.nil? || city.empty? 
 		ret_val += state + ' ' unless state.nil?
 		ret_val += zip unless zip.nil?
-		ret_val += '<br/>'+country unless country.nil? || country.empty? || country == 'US'
+		ret_val += '<br/>'+country unless country.nil? || country.empty? || country == 'US' || country == 'USA'
 		return ret_val
 	end
 	alias_method :to_s, :display_html

@@ -114,6 +114,8 @@ GEM
       multipart-post (~> 1.1.3)
       rack (>= 1.1.0, < 2)
     fastercsv (1.5.4)
+    foreigner (1.1.1)
+      activerecord (>= 3.0.0)
     formtastic (2.0.2)
       rails (~> 3.0)
     has_scope (0.5.1)
@@ -322,6 +324,7 @@ DEPENDENCIES
   dynamic_form
   enforce_schema_rules
   factory_girl (~> 2.0.0.rc4)
+  foreigner
   http_accept_language
   i18n-js
   jquery-rails

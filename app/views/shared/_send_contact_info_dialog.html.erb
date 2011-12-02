@@ -1,0 +1,12 @@
+<div id="send_contact_info_dialog" style="display:none" title="<%= t('people.show.send_contact_info', name: @person.firstName) %>">
+  <p>
+    <%= t('people.show.send_vcard_desc') %> 
+  </p>
+  <%= form_tag vcards_url, :id => "send_contact_info_form" do %>
+    <%= hidden_field_tag :person_id %>
+    <div class="field_in">
+      <label><%= t('general.email') %></label> 
+      <div class="in"><%= text_field_tag :email, current_person.email %></div>
+    </div>
+  <% end %>
+</div>

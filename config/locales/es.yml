@@ -5,419 +5,413 @@
 es:
   application:
     add_contact: 
-      add_contact: Add a contact to %{org}
-      survey_mode_instructions: If the person you are adding is standing next to you, click "Enter Survey Mode" from the top right corner of your screen.
-      save_and_close: 'Save and close'
-      save_and_add: 'Save and add another'
+      add_contact: Agregar un contacto a %{org}
+      survey_mode_instructions: Si la persona que estás agregando esta a lado tuyo, presiona "Entrar en modo de encuesta" en la esquina derecha de tu pantalla.
+      save_and_close: 'Guarda y cierra'
+      save_and_add: 'Guarda y añade otra'
     assign:
-      assign_explanation: 'You can assign a contact using any of the options below:'
-      me: Me
-      type_to_find_leader: Type to find a leader then click on the leader's name
-      type_to_find_org: "Type to find a %{terminology} then click on the %{terminology}'s name"
+      assign_explanation: 'Puedes añadir un contacto usando cualquiera de las opciones abajo:'
+      me: Yo
+      type_to_find_leader: Escribe para encontrar un líder y luego haz clic en el nombre del líder
+      type_to_find_org: "Escribe para encontrar un %{terminology} luego haz clic en %{terminology} del nombre"
   roles: 
-    admin: Admin
-    contact: Contact
-    involved: Involved
-    leader: Leader
-    alumni: Alumni
+    admin: Administrador
+    contact: Contacto
+    involved: Involucrado
+    leader: Líder
+    alumni: graduados
     views:
-      organizational_roles: "Organizational Roles"
-      system_roles: "System Roles"
-      create_role: "Create new role"
-      edit_role: "Edit role"
-      delete_role: "Delete role"
-      update: "Update"
-      create: "Create"
-      name: "Name"
+      organizational_roles: "Roles de la organización"
+      system_roles: "Roles del sistema"
+      create_role: "Crear un nuevo rol"
+      edit_role: "Editar un rol"
+      delete_role: "Eliminar un rol"
+      update: "Actualizar"
+      create: "Crear"
+      name: "Nombre"
       i18n: "i18n"
      
   views:
     pagination:
-      first: "&laquo; First"
-      last: "Last &raquo;"
-      previous: "&lsaquo; Prev"
-      next: "Next &rsaquo;"
+      first: "&laquo; Primero"
+      last: "Último &raquo;"
+      previous: "&lsaquo; Anterior"
+      next: "Siguiente &rsaquo;"
       truncate: "..."
   rejoicables:
-    spiritual_conversation: 'Spiritual Conversation' 
-    prayed_to_receive: 'Prayed To Receive Christ' 
-    gospel_presentation: 'Gospel Presentation'
+    spiritual_conversation: 'Conversación Espiritual' 
+    prayed_to_receive: 'Oró para recibir a Cristo' 
+    gospel_presentation: 'Presentación del Evangelio'
   nav:
-    enter_survey_mode: "Enter Survey Mode"
-    use_keyword: 'Use Keyword: %{keyword}'
-    my_profile: My Profile
-    groups: 'Groups'
+    enter_survey_mode: "Entrar en modo de encuesta"
+    use_keyword: 'Utilizar palabra clave: %{keyword}'
+    my_profile: Mi Perfil
+    groups: 'Grupos'
     hide: 'Hide'
-    view_details: "View details"
-    survey_mode_tip: "Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts."
-    terms: 'Terms and Conditions'
-    privacy: 'Privacy Policy'
-    login: "Log In"
-    logout: "Sign Out"
-    profile: 'My Profile'
-    back_to_wizard: "I'm done. Take me back to the Wizard"
-    go_to: 'go to'
-    make_default: 'make default'
-    my_contacts: 'My Contacts'
-    all_contacts: 'All Contacts'
-    directory: 'Directory'
-    keywords: "Surveys"
+    view_details: "Ver detalles"
+    survey_mode_tip: "El modo de encuesta permite que otras personas puedan llenar las encuestas en tu dispositivo. Les pedirá iniciar sesión con su cuenta de Facebook y se cerrará la sesión al completar la encuesta. La siguiente persona que entra a la encuesta se le pedirá iniciar sesión en Facebook, etc.. etc. Cuando haya terminado con la encuesta haga clic el el modo de salir de la encuesta, en la esquina superior izquierda y todos aquellos que completaron la encuesta aparecerán en Contactos sin Asignar"
+    terms: 'Terminos y Condiciones'
+    privacy: 'Política de Privacidad'
+    login: "Iniciar sesión"
+    logout: "Cerrar sesión"
+    profile: 'Mi Perfil'
+    back_to_wizard: "Ya he terminado. Regresar al asistente"
+    go_to: 'ir a'
+    make_default: 'hacer por defecto'
+    my_contacts: 'Mis Contáctos'
+    all_contacts: 'Todos los Contáctos'
+    directory: 'Directorio'
+    keywords: "Encuestas"
     roles: "Roles"
-    back_to_dashboard: "Back To My Contacts"
+    back_to_dashboard: "Regresar a mis Contactos"
   general:
-    save: 'Save'
-    show: Show
-    delete: Delete
-    keyword: "Keyword"
-    status: "Status"
-    edit: "Edit"
-    back: "Back"
-    remove: 'Remove'
-    hide: 'hide'
-    add_a_leader: 'Add a leader'
-    survey_text_tip_html: "To begin your survey, <strong>text %{keyword} to %{shortcode}.</strong>"
-    survey_web_tip_html: "For the web version of the survey, send people to <strong>http://mhub.cc/c/%{keyword}/</strong>"
-    male: Male
-    female: Female
-    both: Both
-    gender: Gender
-    status: Status
-    first_name: First Name
-    last_name: Last Name
-    email: Email
-    phone: Phone
-    send_email: 'Send Email'
-    search: 'Search'
-    add: Add
-    adding: Adding...
-    to: "To"
-    subject: 'Subject'
+    save: 'Guardar'
+    show: Mostrar
+    delete: Eliminar
+    keyword: "Palabra Clave"
+    status: "Estado"
+    edit: "Editar"
+    back: "Atrás"
+    remove: 'Borrar'
+    hide: 'Ocultar'
+    add_a_leader: 'Agregar un líder'
+    survey_text_tip_html: "Para iniciar tu encuesta, <strong>text %{keyword} de %{shortcode}.</strong>"
+    survey_web_tip_html: "Para la versión web de la encuesta, enviar a la gente a <strong>http://mhub.cc/c/%{keyword}/</strong>"
+    male: Masculino
+    female: Femenino
+    both: Ambos
+    gender: Sexo
+    status: Estado
+    first_name: Nombre
+    last_name: Apellido
+    email: Correo electrónico 
+    phone: Teléfono 
+    send_email: 'Enviar un correo'
+    search: 'Buscar'
+    add: Agregar
+    adding: Agregando...
+    to: "A"
+    subject: 'Asunto'
   leaders:
     form:
-      name_required: "Name and email fields are required to add a leader:"
-      notify: "Notify this person that they've been added and send them a link to log in."
+      name_required: "Se requiere llenar los campos de Nombre y correo para poder agregar un líder:"
+      notify: "Notificarle a la persona que ha sido agregada y enviarle un enlace para que pueda iniciar sesión."
     search:
-      not_in_system: 'If the person you are looking for is not already in the system click here to add them.'
+      not_in_system: 'Si la persona que buscas no está en el sistema, haga clic aquí para agregarle.'
   people: 
     index:
-      export: "Export this list"
-      directory_title: "Directory - %{org}"
-      labels: 'Labels'
-      gender: 'Gender'
-      phone: 'Phone'
-      email: 'Email'
-      year_in_school: 'Year in School'
-      manage_roles: 'Manage Roles'
-      send_sms: Send Text
-      send_email: Send Email
-      apply_roles: 'Apply Roles'
-      no_people: "Sorry, there are no people involved here."
-      displaying: "Displaying %{start} - %{finish} of %{total}"
-    all:
-      page_selected_html: "All <b>%{count}</b> people on this page are selected."
-      select_all_html: "Select all <b>%{count}</b> people in the directory."
-      all_selected_html: "All <b>%{count}</b> people in the directory is selected."
+      export: "Exportar esta lista"
+      directory_title: "Directorio - %{org}"
+      labels: 'Etiquetas'
+      gender: 'Sexo'
+      phone: 'Telefono'
+      email: 'Correo'
+      year_in_school: 'Año que cursa'
+      manage_roles: 'Gestión de Roles'
+      send_sms: Enviar texto
+      send_email: Enviar Correo
+      apply_roles: 'Aplicar Roles'
+      no_people: "Lo siento, no hay gente involucrada aquí."
+      displaying: "Mostrando %{start} - %{finish} de %{total}"
+    todos:
+      page_selected_html: "Todas <b>%{count}</b> las personas en esta página están seleccionadas"
+      select_all_html: "Selecciona <b>%{count}</b> personas en el directorio."
+      all_selected_html: "Todas <b>%{count}</b> las personas en el directorio han sido seleccionadas."
     show:
-      edit_profile: 'Edit Profile'
+      edit_profile: 'Editar Perfil'
     edit:
-      editing: Editing
+      editing: Editar
   sessions:
     destroy:
-      signed_out: You've been signed out.
+      signed_out: Has cerrado tu sesión.
     new:
       login_paragraph_html:
-        To get started, you'll need to have a Facebook account. <br/>
-        Click the login link to the left and <strong>allow</strong> MHub to access your information. <br/>
-        You'll be taken to the wizard if this is your first time accessing MissionHub.
-      login_paragraph_mhub: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
-      instructions: Instructions
-      back: Back Home
-      dont_like_facebook: Don't like Facebook?
-      skip_facebook: Click here to skip Facebook login
-      start_survey: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
-      login_with_facebook: Please login with Facebook to get started 
-      login: Login
-      welcome: Welcome!
-      no_facebook: "Don't like Facebook? Click here to skip Facebook login"
+        Para comenzar, necesitarás tener una cuenta de Facebook. <br/>
+        Haz clic en el enlace de iniciar que está a la izquierda y <strong>permite</strong> MHub para acceder tu información. <br/>
+        Serás dirigido con el asistente si es tu primera vez accesando MissionHub.
+      login_paragraph_mhub: Para comenzar la encuesta, por favor inicia sesión con Facebook para saber quien realmente eres. Esto nos ayudará a ahorrarnos tiempo al completar la encuesta.
+      instructions: Instrucciones
+      back: Atrás al Inicio
+      dont_like_facebook: ¿No te gusta el Facebook?
+      skip_facebook: Haz clic para saltar el iniciar en Facebook
+      start_survey: Para comenzar la encuesta, por favor inicia sesión con Facebook para saber quien realmente eres. Esto nos ayudará a ahorrarnos tiempo al completar la encuesta.
+      login_with_facebook: Por favor inicia sesión en Facebook para comenzar 
+      login: Iniciar 
+      welcome: Bienvenido!
+      no_facebook: "¿No te gusta el Facebook? Haz clic aquí para saltar el iniciar en Facebook"
   org_membership:
-    confirm_delete: "Are you sure you want to dissociate yourself from %{org}"
+    confirm_delete: "Estás seguro que quieres disociarte de %{org}"
   welcome:
     index:
-      title_top: "Welcome to MissionHub!"
-      title_top_mobile: "Survey"
-      go_home: 'Go to My Contacts'
-      request_key: "Click here to request a keyword"
-      get_started: "Get Started"
-      request_key_help: "A Keyword is both the name of the survey and what the person would text to fill out the survey questions. For example, you would say, 'Text UFCRU to the number 75572.' UFCRU is the keyword."
-      headline_html: An online <span class="babyblue">follow-up system</span> with your audience in mind.
-      subheadline_html: Students text to connect. You empower follow-up from the web or a smart phone.
-      get_details_html: Get the Details & <a href="/welcome/tour" class="learnmore">Learn More</a> or %{link}
-      get_started: "Get Started"
+      title_top: "Bienvenido a MissionHub!"
+      title_top_mobile: "Encuesta"
+      go_home: 'Ir a mis contactos'
+      request_key: "Haz clic para pedir una palabra clave"
+      get_started: "Comenzar"
+      request_key_help: "La palabra clave es el nombre de la encuesta y también lo que la persona va escribir para llenar su encuesta. Por ejemplo, puedes decir, 'Escribe UFCRU al número 75572.' UFCRU es la palabra clave."
+      headline_html: Un sistema de seguimiento <span class="babyblue">en línea</span> con tu audiencia en mente.
+      subheadline_html: Escribir a estudiante para conectar. Tu seguimiento potencial desde la web o un teléfono inteligente.
+      get_details_html: Obtener detalles& <a href="/welcome/tour" class="learnmore">Aprender más</a> or %{link}
+      get_started: "Comenzar"
     wizard:
-      welcome: Welcome
-      verify_identity: Verify Your Identity
-      request_keyword: Request a Keyword
-      designate_leaders: Designate Leaders
-      create_survey: Create Survey
+      welcome: Bienvenido
+      verify_identity: Verifica tu identidad
+      request_keyword: Solicita una clave
+      designate_leaders: Designar líder
+      create_survey: Crear una encuesta
       back: Back
       next: Next
-      welcome_paragraph: "Welcome to MissionHub!<br><br> This setup wizard will help you get started and set up a keyword, which is an essential part of getting contacts into the system."
-      verify_paragraph: "If you have a CCC Relay login account, please sign in to link your account. You only need to do this once. WARNING: If you logged into MissionHub using someone else's Facebook Account, Log Out now! Clicking verify will merge your information with theirs, creating a big mess."
-      verify_with_relay: "Verify With Relay"
-      not_found_paragraph: "At the current time MissionHub is being field tested with the US Campus Ministry. If you're not a part of the US Campus Ministry, sit tight! We plan to release to a larger audience soon. If you are part of the US Campus Ministry and are seeing this message, send us an email at support@missionhub.com and we'll help you out."
-      # not_found_paragraph: "We weren't able to find a record of you associated with any of the organizations or ministries using MissionHub."
-      keyword_paragraph: "A powerful feature of MissionHub is the ability for you to collect contacts through text messages. For this to work, you have to choose a keyword that is unique to your ministry that people will send messages to. With a keyword, you will be able to say, “Text <strong>your keyword</strong>  to 75572” at your next event or meeting."
-      request_keyword_link: "Click here to request a keyword. We'll return you to this wizard when you're done."
+      welcome_paragraph: "Bienvenido MissionHub!<br><br> Este asistente de configuración te ayudará a empezar y crear una palabra clave, que es una parte esencial para obtener contactos en el sistema."
+      verify_paragraph: "Si ya tienes una cuenta relacionada de acceso de CCC, por favor inicie sesión para vincular su cuenta. Solo necesitarás hacer esto una vez. ADVERTENCIA: Si haz iniciado sesión en MissionHub utilizando la cuenta de Facebook de alguien más, Cierra la sesión! Al hacer clic en verificar combinará su información con la de ellos, creando un gran enredo."
+      verify_with_relay: "Verificar con Relé"
+      not_found_paragraph: "En estos momentos MissionHub está siendo probado con el Ministerio Estudiantil de los Estados Unidos. Si no eres parte del Ministerio Estudiantil en Estados Unidos, no te preocupes! Tenemos el plan de lanzarlo pronto a una audiencia mayor. Si tu eres parte del Ministerio Estudiantil en Estados Unidos y estás viendo este mensaje, envíanos un correo a support@missionhub.com y te ayudaremos."
+      # not_found_paragraph: "No pudimos encontrar un registro tuyo asociado con ninguna de las organizaciones o ministerios que utilizan MissionHub."
+      keyword_paragraph: "Una potente característica de MissionHub es la capacidad de coleccionar contactos a través de los mensajes de texto. Para que esto funcione, debes elegir una palabra clave que sea única para tu ministerio y que haga que las personas envíen mensajes de texto. Con una palabra clave, podrás decir ‚ÄúText <strong>tu palabra clave</strong>  al 75572‚Äù a tu reunión o evento siguiente."
+      request_keyword_link: "Haz Clic aquí para solicitar una palabra clave. Te regresaremos a este asistente cuando termines."
       survey_paragraph:
-        "Now that you've requested a keyword, you're going to want to create a set of questions to ask people. Think along the lines of a short survey or a 
-        basic contact card."
-      create_survey_link: "Click here to create your survey."
-      leaders_header: "Give access to other leaders"
+        "Ahora que has solicitado una palabra clave, vas a querer crear un par de preguntas para hacerle a las personas. Piensa a lo largo de las líneas en una encuesta corta o una tarjeta de contacto básico."
+      create_survey_link: "Haz Clic aquí para crear tu encuesta."
+      leaders_header: "Dar acceso a otros líderes"
       leaders_paragraph:
-        "This part is optional. Odds are decent that there are other people you work with who you'd like to give the ability to manage the keyword you set up
-         as well as the contacts that will come from people responding to your survey. This step lets you add those people. Except we haven't programmed it quite yet."
-      skip_step: "Skip this step"
+        "Esta parte es opcional. Hay probabilidades de que hayan otras personas con las que trabajas a quienes te gustaría darles la capacidad de administrar la palabra clave que configuraste la palabra clave que 
+         al igual que los contactos que obtienes de las personas que respondieron a tu encuesta. Este paso te permitirá agregar esas personas. Excepto que no lo hemos programado aun."
+      skip_step: "Saltar este paso"
     home:
-      title_top: "Welcome to MissionHub!"
-      keywords: "Surveys"
-      manage_questions: "Manage Survey Questions"
-      edit_keyword: 'Edit Keyword'
-      your_orgs: 'Your Organizational Involvements'
-      edit_orgs: 'Edit your organizational involvements.'
-      delete_keyword_confirm: "Are you sure you want to delete this keyword?"
-      no_mobile: The mobile version of this page hasn't been built yet. Sorry.
+      title_top: "Bienvenido a MissionHub!"
+      keywords: "Encuesta"
+      manage_questions: "Administrar Preguntas de Encuesta"
+      edit_keyword: 'Editar Palabra Clave'
+      your_orgs: 'Involucramiento de tu Organización'
+      edit_orgs: 'Editar tus involucramiento en la Organización.'
+      delete_keyword_confirm: "Estás seguro que quieres borrar esta palabra clave?"
+      no_mobile: La versión de esta página para móvil aun no está construida. Lo sentimos.
       follow_up: 
-        one:   '1 Person to Follow-up'
-        other: '%{count} People to Follow-up'
-      delete: "Delete"
+        one:   '1 Persona para darle seguimiento'
+        other: '%{count} Personas para darle seguimiento'
+      delete: "Borrar"
   sms_keywords:
     index:
-      association: Associate Contacts With
-      association_help: "When a contact responds to a survey, they are associated with the same team or movement as the keyword they responded to."
-      request_keyword: Request a Keyword
+      association: Asociar contactos con
+      association_help: "Cuando un contactos responde a una encuesta, ellos se asocian con el mismo equipo o movimiento al igual que la palabra clave a la que responden."
+      request_keyword: Solicita una Palabra 
     default_rejection_email:
-      "Your keyword request has been denied"
+      "Tu solicitud de palabra clave ha sido denegada"
     edit:
-      heading: Editing Keyword
-      keywords: Keywords
-      to_begin_survey_html: To begin your survey, <strong>text %{keyword} to %{number}.</strong>
+      heading: Editando Palabra Clave
+      keywords: Palabra Clave
+      to_begin_survey_html: Para comenzar tu encuesta, <strong>text %{keyword} a %{number}.</strong>
     flash:
-      created: 'Keyword request was successfully submitted.'
-      updated: 'Keyword was successfully updated.'
-      pick_org: 'Please pick which organization you are associated with'
+      created: 'La solicitud de la Palabra Clave fue enviada correctamente.'
+      updated: 'La Palabra Clave fue actualizada correctamente.'
+      pick_org: 'Por favor elige con que organización te asocias'
     form:
-      keyword: 'Keyword'
-      keyword_tip: "This is what people will type into their phone."
-      keyword_instruct: "- A keyword is required to collect contacts and surveys via text, web and smartphones. <br/> - 'FSUCRU' is the keyword in 'Text FSUCRU to 75572'.<br/>- Use at least 3 letters for your keyword."
-      keyword_why: "This is for our use only. The use description could include words like 'weekly meeting', 'outreach event', and other uses the keyword will have."
-      explanation: 'Please explain what you plan to use this keyword for.'
-      initial_response: "What response should we send back to people when they text in? <br/>If you want the person to complete a survey, the response MUST include {{ link }} (exactly like that, dont change that part of the response.)"
-      post_survey_why: "When someone texts in the keyword, this message will be sent to them and '{{link}}' will be replaced by a website address that will take them to an online survey for them to fill out. If they don't have internet, replying 'i' will send them all the questions via interactive text message."
-      post_survey_message: 'What message would you like to show after the person has completed the survey?'
-      association: "The %{this_term} you are currently requesting this keyword for has at leaset one %{child_term} under it.<br/> Select if you'd like to associate this keyword with the %{this_term} or a %{child_term} under this %{this_term}"
-      keyword_locked: Keywords can't be changed. You can delete this one and create a new one if necessary.
-      keyword_associated_with: This keyword will be associated with %{org}.
-      note: 'Note: Processing requests may take up to 24 hours.'
+      keyword: 'Palabra Clave'
+      keyword_tip: "Esto es lo que las personas escribirán en su teléfono."
+      keyword_instruct: "- Una palabra clave es requerida para coleccionar contactos y encuestas vía texto, web y teléfono inteligente. <br/> - 'FSUCRU' es la palabra clave 'Escribe FSUCRU para 75572'.<br/>- Utiliza por lo menos 3 letras para tu palabra clave."
+      keyword_why: "Esto para nuestro uso exclusivo. La descripción puede incluir el uso de palabras como 'reunión semanal', 'eventos de alcance', y otros usos que la palabra clave tendrá."
+      explanation: 'Por favor explica para que va utilizar esta palabra clave.'
+      initial_response: "¿Qué respuesta debemos devolver a las personas cuando nos escriben? <br/>Si quieres que la persona complete la encuesta, la respuesta DEBE incluir {{ link }} (exactamente así, no cambies esa parte de la respuesta.)"
+      post_survey_why: "cuando alguien te envía un mensaje de texto, el mensaje será enviado ellos y '{{link}}' será sustituida por una dirección de sitio web que les llevará a una encuesta en línea para que la completen. Si no tienen Internet, contestando 'yo' les enviará a todas las preguntas a través de mensaje de texto interactivo."
+      post_survey_message: 'Qué tipo de mensaje te gustaría mostrar después de que la persona haya completado la encuesta?'
+      association: "El %{this_term} Usted está actualmente solicitando esta palabra clave para tener al menos una %{child_term} abajo de ella.<br/> Selecciona si quieres asociar esta palabra clave con %{this_term} o a %{child_term} abajo de ella %{this_term}"
+      keyword_locked: La palabra clave no puede ser cambiada. Puedes eliminar esta y crear una nueva si es necesario.
+      keyword_associated_with: Esta palabra clave se asociará con %{org}.
+      note: 'Note: El proceso de la solicitud puede tomar hasta 24 horas.'
     show:
-      explanation: 'Explanation:'
-      keyword: 'Keyword:'
-      status: 'Status:'
+      explanation: 'Explicación:'
+      keyword: 'Palabra clave:'
+      status: 'Estado:'
       
     new:
       choose_keyword_explanation_html:
-        'Choosing a keyword for your community or event enables you to have people fill out your survey questions via the web, interactive texting,
-        and smartphones.  <strong>They will text your keyword to the number %{number}</strong> and your survey questions will appear on their device.  Note: The process of acquiring new keywords
-        requires manual intervention. Once you request your keyword expect to wait up to 24 hours before we notify you via email that your keyword is approved and
-    	  ready for use.'
+        'Escoger una palabra clave para tu comunidad o evento te permite que las personas completen las encuestas a través de la web, texto interactivo, y celulares inteligentes.  <strong>Ellos escribirán tu palabra clave al número %{number}</strong> y tu encuesta de preguntas aparecerán en el dispositivo.  Note: El proceso de adquirir una nueva palabra clave requiere una intervención manual. Una vez que solicitas tu palabra clave, espera hasta 24 horas para ser notificado a través de tu correo electrónico de que tu palabra clave fue aprobada y está lista para su uso.'
     questions:
       create:
-        notice: 'Question was successfully created.'
+        notice: 'La pregunta fue exitosamente creada.'
       form: 
-        text_message_length: 'Text Message Length:'
-        what_question_type: What type of question would you like to ask?
-        short_answer: 'Short Answer'
-        multiple_choice: 'Multiple Choice'
-        checkboxes: 'Checkboxes'
-        dropdown: 'Dropdown'
-        web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
-        text_message_preview: Text Message Preview
-      multiple_choice_form:
-        list_choices: 'List out the possible choices, one per line:'
+        text_message_length: 'Longitud del mensaje de texto:'
+        what_question_type: Que tipo de pregunta te gustaría hacer?
+        short_answer: 'Respuesta corta'
+        multiple_choice: 'Opción Multiple'
+        checkboxes: 'Casillas de Verificación'
+        dropdown: 'Flujo de Opciones'
+        web_only: 'Solo mostrar esta pregunta en la web / dispositivos moviles, no incluidos "interactivo" modo.'
+        text_message_preview: 'Texto del Mensaje Previo forma de elección múltiple:'
+        list_choices: 'Haz una lista de las posibles opciones una por línea:'
       question:
-        confirm_delete: "Are you sure you want to remove '%{question}'?"
+        confirm_delete: "¿Estás seguro de querer eliminar '%{question}'?"
       short_answer_form:
-        question: 'Question:'
+        question: 'Pregunta:'
       index: 
-        manage: Manage Survey Questions
-        note: "Note: First and Last name will be automatically added to every survey. There's no need for you to add those."
-        predefined: Predefined Questions
-        your_questions: Your Questions (drag to sort)
-        archived_questions: Archived Questions
-        add_question: Add a question
-      your_questions_help: "Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service."
-      predefined_help: "Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided."
-      archived_help: "Archived questions will no longer be included in the survey.  If no answers have ever been given to the question, the archived question will be deleted.  If you USE an archived question, the question will move to the YOUR QUESTIONS section and the previous answers will re-appear."
+        manage: Administrar Preguntas de la Encuesta
+        note: "Note: Nombre y Apellido serán agregados automáticamente para cada encuesta. No tienes necesidad de agregarlo."
+        predefined: Pregunta Predefinida 
+        your_questions: Tus preguntas (arrastrar para ordenar)
+        archived_questions: Preguntas guardadas
+        add_question: Agregar una pregunta
+      your_questions_help: "Solo tus preguntas se mostrarán en la encuesta. Trata de LIMITAR tu ENCUESTA a 4 preguntas (sin incluir nombre y apellido). Muchas preguntas pueden ser lentas para aquellos que utilizan Texto Interactivo que toma aproximadamente de 10-15 segundos/pregunta dependiendo del servicio telefónico."
+      predefined_help: "Las preguntas predefinidas son usadas comúnmente pero no se incluirán en la encuesta al menos que le des clic en 'usar'. Para reportar precisión por favor no parafrasear preguntas definidas. Solo utilice lo que ha sido provisto."
+      archived_help: "Las preguntas archivadas ya no serán incluidas en la encuesta.  Si nadie ha dado respuesta a la pregunta, las preguntas archivadas serán eliminadas. Si usas una pregunta archivada, la pregunta se moverá a tu sección de preguntas y las respuestas previas aparecerán."
 
   keyword_request_mailer:
     notify_user:
-      link_text: 'send us an email at support@missionhub.com'
+      link_text: 'envíanos un correo electrónico a support@missionhub.com'
       body_html:
-        <h2>Your request for the keyword %{keyword} was APPROVED</h2>
+        <h2>Tu solicitud para la palabra clave %{keyword} fue APROBADA</h2>
         <p>
-          To use the keyword, tell people to text %{keyword} to %{number}<br/>
+          Para usar la palabra clave, dile a las personas que escriban%{keyword} a %{number}<br/>
         </p>
         <p>
-          If you have any questions, %{link}.
+          si tienes alguna pregunta, %{link}.
         </p>
     notify_user_of_denial:
       body_html:
-        <p>Your request for the keyword keyword has been declined. Keywords are typically declined for one of the following reasons:</p>
+        <p>Tu solicitud de palabra clave para la palabra clave ha sido denegada. Las palabras claves son denegadas por alguna de estas razones:</p>
 
         <ul>
-          <li>The keyword was too long. We recommend that you keep your keywords as short as possible, preferably under 10 characters.</li>
-          <li>The keyword was too generic. Keywords should be specific to your location. We reserve generic keywords for regional or national audiences.  (e.g. osucru instead of cru)</li>
-          <li>Too many keywords were requested. At this point in time, we are only allowing 2 keywords per location to minimize our cost.</li>
+          <li>La palabra clave está muy larga. Te recomendamos que mantengas tu palabra clave lo más corta posible, preferiblemente abajo de los 10 caracteres.</li>
+          <li>La palabra clave es demasiada genérica. La palabra clave debe ser específica para tu ubicación. Reservamos las palabras claves genéricas para una región o audiencia nacional. (e.g. osucru en vez de cru)</li>
+          <li>Demasiadas palabras fueron solicitadas. En estos momentos, solo estamos permitiendo 2 palabras claves por ubicación para minimizar nuestro costo.</li>
         </ul>
 
-        <p>If you have good reason for an exception, please send an explanation to support@missionhub.com with Keyword Request Declined in the subject line and we will review your situation.</p>
+        <p>Si tienes una buena razón para una excepción, por favor envíanos una explicación a support@missionhub.com con la Solicitud de la Palabra Clave Denegada en el asunto y revisaremos tu situación.</p>
 
         <p>
-          Thanks,<br/>
-          MissionHub Support Team
+          Gracias,<br/>
+          MissionHub Equipo de Soporte
         </p>
   leader_mailer:
     added:
       body_html:
         <p>Hi %{name},</p>
 
-        <p>I've has just added you as a leader for %{org} on MissionHub</p>
+        <p>Te acabo de agregar como lider de%{org} en MissionHub</p>
 
-        <p>Visit %{link} to log in. Please don't share this link with anyone else.</p>
+        <p>Visita %{link} para iniciar sesión. Por favor no compartas este enlace con nadie.</p>
 
         <p>%{added_by}</p>
 
   contacts:
-    assign: Assign
-    unassign: 'Unassign'
-    add_contact: "Add Contact"
+    assign: Asignar
+    unassign: 'Desasignar'
+    add_contact: "Agregar un Contacto"
     statuses:
-      uncontacted: Uncontacted
-      attempted_contact: Attempted Contact
-      contacted: Contacted
-      do_not_contact: Do Not Contact
-      completed: Completed
+      uncontacted: Quitar contacto
+      attempted_contact: Intento de contacto
+      contacted: Contactado
+      do_not_contact: No Contactar
+      completed: Completado
     leader:
-      delete_confirm: "Are you sure you want to remove %{person} as a leader?"
+      delete_confirm: "¿Estás seguro que quieres eliminar a%{person} como líder?"
     leader_form: 
-      start_typing: "Start typing a name to find a person to make a leader:"
+      start_typing: "Comienza escribir un nombre para encontrar una persona para hacerle líder:"
     leaders:
-      reminder_prompt: "Some of your leaders have contacts that haven't been followed up! Let your leaders know!"
-      show_more: "Show More Leaders"
+      reminder_prompt: "Alguno de tus líderes tienen contactos a los cuales no se les ha dado seguimiento! Hazle saber a tus líderes!"
+      show_more: "Mostrar más líderes"
     index:
-      clear_search_form: 'Clear Search Form'
-      no_contacts: 'Sorry, there are no contacts here.'
-      export: Export
-      add_question_back: Click on a question to add it back to the page 
-      unassign_contact: "Unassign contact"
-      delete_contact: "Delete this contact"
-      friends: 'Friends'
-      send_reminder: 'Send Reminder'
-      reminder_email_subject: New contacts have arrived!
+      clear_search_form: 'Borrar la búsqueda'
+      no_contacts: 'Lo sentimos, no hay contactos aquí.'
+      export: Exportar
+      add_question_back: Haz clic en una pregunta para agregarla otra vez a la página 
+      unassign_contact: "Desasignar contacto"
+      delete_contact: "Eliminar este contacto"
+      friends: 'Amigos'
+      send_reminder: 'Enviar Recordatorio'
+      reminder_email_subject: Un nuevo contacto ha llegado!
       reminder_email_body:
-        Hey!
+        Hola!
         
         
-        Just letting you know that you have been given new contacts to follow-up.
+        Solo para hacerte saber que se te ha dado nuevos contactos para que les des seguimiento.
         
         
-        Login to MissionHub at http://www.missionhub.com to access your contacts.
+       Inicia sesión MissionHub en http://www.missionhub.com para accesar a tus contactos.
         
         
-        In Christ,
+        En Cristo,
         
         %{name}
-      filter: 'Search'
-      first_name: 'First Name'
-      last_name: 'Last Name'
-      phone_number: 'Phone Number'
-      leaders: Leaders
-      assign_to: "Assign To:"
-      assigned_to: "Assigned To"
-      all_responses: "All Contacts"
-      in_progress_responses: "All Contacts - Assigned"
-      no_activity_responses: "All Contacts - No Activity"
-      responses_assigned_to: "All Contacts - Assigned to %{assigned_to}"
-      unassigned_responses: "All Contacts - Unassigned"
-      dnc_contacts: "All Contacts - 'Do Not Contact'"
-      friend_responses: "Contacts who are also my friends on Facebook"
-      none_checked: "You didn't select any contacts to assign."
-      show_all: Show 'In Progress' contacts
-      matching_seach: Matching the criteria you searched for
-      which_org: 'You need to choose which organization you want to do folow-up from'
-      add: 'Add'
-      hidden_questions: 'Hidden Questions'
-      unassigned: 'Unassigned'
-      all: 'All'
-      dnc: 'Do Not Contact'
-      completed: 'Completed'
-      in_progress: 'Assigned'
-      no_activity: 'No Activity'
-      my_friends: 'My Friends'
-      delete_confirm: You are about to send this contact to the "Do Not Contact" list. If that's not what you meant to do, click cancel.
-      destroy_confirm: Are you sure you want to delete this contact? If that's not what you meant to do, click cancel.      
+      filter: 'Búsqueda'
+      first_name: 'Nombre'
+      last_name: 'Apellido'
+      phone_number: 'Número telefónico'
+      leaders: Líderes
+      assign_to: "Asignar a:"
+      assigned_to: "Asignado a"
+      all_responses: "Todos los contactos"
+      in_progress_responses: "Todos los contactos - Asignados"
+      no_activity_responses: "Todos los contactos - Sin Actividad"
+      responses_assigned_to: "Todos los contactos - Asignados a%{assigned_to}"
+      unassigned_responses: "Todos los contactos - Desasignados"
+      dnc_contacts: "Todos los contactos - 'No contactar'"
+      friend_responses: "Contactos que también son mis amigos en Facebook"
+      none_checked: "No has seleccionado ni un contacto para asignar."
+      show_all: Show 'En Proceso' contactos
+      matching_seach: Coincide Criteria con tu búsqueda
+      which_org: 'Debes elegir con cual organización quieres tener seguimiento'
+      add: 'Agregar'
+      hidden_questions: 'Preguntas Oculta'
+      unassigned: 'Desasignado'
+      all: 'Todos'
+      dnc: 'No contactar'
+      completed: 'Completado'
+      in_progress: 'Asignado'
+      no_activity: 'Sin Actividad'
+      my_friends: 'Mis amigos'
+      delete_confirm: Estás apunto de enviar un contacto a la lista de "No contactar". Si no es lo que quieres hacer, haz clic en cancelar.
+      destroy_confirm: Estás seguro que quieres eliminar este contacto? Si no es lo que quieres hacer, haz clic en cancelar.
       assign_people:
-        one: Assign 1 person
-        other: "Assign %{count} people"
+        one: Asignar 1 persona
+        other: "Asignar %{count} personas"
     mine:
-      in_progress: 'In Progress'
-      completed: 'Completed'
-      my_contacts: "My Contacts"
-      name: Name
-      phone: Phone Number
-      email: Email
-      year: Year
+      in_progress: 'En Proceso'
+      completed: 'Completado'
+      my_contacts: "Mis Contactos"
+      name: Nombre
+      phone: Número de Teléfono
+      email: Correo electrónico
+      year: Año
     show:
-      add_comments_here: 'Add comments here...'
-      previous_comments: 'Previous Comments'
-      survey_answers: 'Survey Answers'
-      edit_contact_info: 'Edit Contact Info'
-      send_contact_info: 'Send Contact Info'      
-      facebook_profile: 'Facebook Profile'
-      phone_number: "Phone #:"
-      email: "Email:"
-      google_map: 'Google Map'
-      status: "Status"
-      attach_rejoicable: 'Attach a Rejoicable'
-      add_comment: 'Add Comment / Update Status'
+      add_comments_here: 'Agregar comentarios aquí...'
+      previous_comments: 'Comentarios Previos'
+      survey_answers: 'Respuestas de la Encuesta'
+      edit_contact_info: 'Editar Información de Contacto'
+      facebook_profile: 'Perfil de Facebook'
+      phone_number: "Teléfono #:"
+      email: "Correo electrónico:"
+      google_map: 'Mapa de Google'
+      status: "Estado"
+      attach_rejoicable: 'Adjunto a Rejoicable'
+      add_comment: 'Agregar Comentario / Actualizar Estado'
     thanks:
-      message: Thank you for your interest.
-      done: Done
-      facebook: You have been logged out of Facebook.
+      message: Gracias por tu interés.
+      done: Hecho
+      facebook: Haz cerrado sesión en Facebook.
     plain:
-      exit_survey: 'Exit survey mode'
+      exit_survey: 'Salir de modo encuesta'
     form: 
-      first_name: 'First Name'
-      last_name: 'Last Name'
-      email: 'Email Address'
-      phone_number: 'Phone Number'
+      first_name: 'Nombre'
+      last_name: 'Apellido'
+      email: 'Dirección de Correo electrónico'
+      phone_number: 'Número Telefónico'
     edit: 
-      back: "Back to profile"
-      basic_information: Basic Information
-      additional_information: Additional Information
-      cancel: "Cancel and go back to profile"
+      back: "Regresar al perfil"
+      basic_information: Información Básica
+      additional_information: Información Adicional
+      cancel: "Cancelar y regresar a tu perfil"
   sms:
-    keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
+    keyword_inactive: "La palabra clave que acabas de escribir no está activa. Por favor verifique su ortografía e inténtelo de nuevo."
   survey:
     drop_down_field: 
-      choose_one: "Choose One"
+      choose_one: "Elige una"
   survey_responses:
     new:
-      greeting_with_name: "Hi %{name}!"
-      greeting_no_name: Hi!
+      greeting_with_name: "¡Hola %{name}!"
+      greeting_no_name: ¡Hola!
     thanks:
-      thanks: "Thanks!"
+      thanks: "¡Gracias!"
     index:
-      pick_keyword: "Pick a Keyword"
+      pick_keyword: "Escoge una Palabra Clave"
   date:
     formats:
       default: "%Y-%m-%d"
@@ -425,15 +419,15 @@ es:
       long: "%B %d, %Y"
       time: "%l:%M %p"
 
-    day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
-    abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
+    day_names: [Domingo, Lunes, Martes, Miércoles, Jueves, Viernes, Sábado]
+    abbr_day_names: [Dom, Lun, Mar, Mié, Jue, Vie, Sáb]
 
-    month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
-    abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    month_names: [~, Enero, Febrero, Marzo, Abril, Mayo, Junio, Julio, Agosto, Septiembre, Octubre, Noviembre, Diciembre]
+    abbr_month_names: [~, Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Sep, Oct, Nov, Dic]
     order:
-      - :year
-      - :month
-      - :day
+      - :año
+      - :mes
+      - :día
 
   time:
     formats:
@@ -447,19 +441,19 @@ es:
   support:
     array:
       words_connector: ", "
-      two_words_connector: " and "
-      last_word_connector: ", and "
+      two_words_connector: " y "
+      last_word_connector: ", y "
 
     select:
-      prompt: "Please select"
+      prompt: "Por favor seleccionar"
 
   number:
     format:
       separator: "."
       delimiter: ","
       precision: 3
-      significant: false
-      strip_insignificant_zeros: false
+      significant: falso
+      strip_insignificant_zeros: falso
 
     currency:
       format:
@@ -468,8 +462,8 @@ es:
         separator: "."
         delimiter: ","
         precision: 2
-        significant: false
-        strip_insignificant_zeros: false
+        significant: falso
+        strip_insignificant_zeros: falso
 
     percentage:
       format:
@@ -483,8 +477,8 @@ es:
       format:
         delimiter: ""
         precision: 3
-        significant: true
-        strip_insignificant_zeros: true
+        significant: verdadero
+        strip_insignificant_zeros: verdadero
       storage_units:
         format: "%n %u"
         units:
@@ -499,173 +493,173 @@ es:
         format: "%n %u"
         units:
           unit: ""
-          thousand: Thousand
-          million: Million
-          billion: Billion
-          trillion: Trillion
-          quadrillion: Quadrillion
+          thousand: Miles
+          million: Millones
+          billion: Billones
+          trillion: Trillones
+          quadrillion: Cuatrillones
 
   datetime:
     distance_in_words:
-      half_a_minute: "half a minute"
+      half_a_minute: "medio mínuto"
       less_than_x_seconds:
-        one:   "less than 1 second"
-        other: "less than %{count} seconds"
+        one:   "menos de un segundo"
+        other: "menos de %{count} segundos"
       x_seconds:
-        one:   "1 second"
-        other: "%{count} seconds"
+        one:   "1 segundo"
+        other: "%{count} segundos"
       less_than_x_minutes:
-        one:   "less than a minute"
-        other: "less than %{count} minutes"
+        one:   "menos de un minuto"
+        other: "menos de %{count} minutos"
       x_minutes:
-        one:   "1 minute"
-        other: "%{count} minutes"
+        one:   "1 minuto"
+        other: "%{count} minutos"
       about_x_hours:
-        one:   "about 1 hour"
-        other: "about %{count} hours"
+        one:   "casi de 1 hora"
+        other: "casi %{count} horas"
       x_days:
-        one:   "1 day"
-        other: "%{count} days"
+        one:   "1 día"
+        other: "%{count} días"
       about_x_months:
-        one:   "about 1 month"
-        other: "about %{count} months"
+        one:   "casi 1 mes"
+        other: "casi %{count} meses"
       x_months:
-        one:   "1 month"
-        other: "%{count} months"
+        one:   "1 mes"
+        other: "%{count} mes"
       about_x_years:
-        one:   "about 1 year"
-        other: "about %{count} years"
+        one:   "casi 1 año"
+        other: "casi %{count} años"
       over_x_years:
-        one:   "over 1 year"
-        other: "over %{count} years"
+        one:   "más de 1 año"
+        other: "más %{count} año"
       almost_x_years:
-        one:   "almost 1 year"
-        other: "almost %{count} years"
+        one:   "casi 1 año"
+        other: "casi %{count} años"
     prompts:
-      year:   "Year"
-      month:  "Month"
-      day:    "Day"
-      hour:   "Hour"
-      minute: "Minute"
-      second: "Seconds"
+      year:   "Año"
+      month:  "Mes"
+      day:    "Día"
+      hour:   "Hora"
+      minute: "Minutos"
+      second: "Segundos"
 
   helpers:
     select:
-      prompt: "Please select"
+      prompt: "Por favor seleccionar"
 
     submit:
-      create: 'Create %{model}'
-      update: 'Update %{model}'
-      submit: 'Save %{model}'
+      create: 'Crear %{model}'
+      update: 'Actualizar %{model}'
+      submit: 'Guardar %{model}'
 
   errors:
     format: "%{attribute} %{message}"
 
     messages: &errors_messages
-      inclusion: "is not included in the list"
-      exclusion: "is reserved"
-      invalid: "is invalid"
-      confirmation: "doesn't match confirmation"
-      accepted: "must be accepted"
-      empty: "can't be empty"
-      blank: "can't be blank"
-      too_long: "is too long (maximum is %{count} characters)"
-      too_short: "is too short (minimum is %{count} characters)"
-      wrong_length: "is the wrong length (should be %{count} characters)"
-      not_a_number: "is not a number"
-      not_an_integer: "must be an integer"
-      greater_than: "must be greater than %{count}"
-      greater_than_or_equal_to: "must be greater than or equal to %{count}"
-      equal_to: "must be equal to %{count}"
-      less_than: "must be less than %{count}"
-      less_than_or_equal_to: "must be less than or equal to %{count}"
-      odd: "must be odd"
-      even: "must be even"
+      inclusion: "no está incluido en la lista"
+      exclusion: "está reservado"
+      invalid: "es invalido"
+      confirmation: "no coincide con la confirmación"
+      accepted: "debe ser aceptada"
+      empty: "no puede estar vacío"
+      blank: "no puede estar en blanco"
+      too_long: "está muy largo (máximo de %{count} caracteres)"
+      too_short: "es demasiado corto (mínimo de %{count} caracteres)"
+      wrong_length: "es la longitud incorrecta (en caso de ser %{count} caracteres)"
+      not_a_number: "no es un número"
+      not_an_integer: "debe ser un entero"
+      greater_than: "debe ser mayor que %{count}"
+      greater_than_or_equal_to: "debe ser mayor que o igual a %{count}"
+      equal_to: "debe ser igual a %{count}"
+      less_than: "debe ser menos de %{count}"
+      less_than_or_equal_to: "debe ser menos de o igual a %{count}"
+      odd: "debe ser impar"
+      even: "debe ser aún"
 
   activerecord:
     models:
-      sms_keyword: Keyword
+      sms_keyword: Palabra clave
     errors:
       template:
         header:
-          one:    "1 error prohibited this %{model} from being saved"
-          other:  "%{count} errors prohibited this %{model} from being saved"
-        body: "There were problems with the following fields:"
+          one:    "1 error está prohibido %{model} de ser guardados"
+          other:  "%{count} errores que prohíbe este %{model} de ser guardados"
+        body: "Hubo problemas con los siguientes campos:"
 
       messages:
-        taken: "has already been taken"
-        record_invalid: "Validation failed: %{errors}"
+        taken: "ya lo están utilizando"
+        record_invalid: "Error de validación: %{errors}"
         <<: *errors_messages
 
       full_messages:
         format: "%{attribute} %{message}"
 
-  bulk_sms: Bulk Text
-  bulk_email: Bulk Email
+  bulk_sms: Texto masivo
+  bulk_email: Correo electrónico masivo
         
-  weekly: Weekly
-  monthly: Monthly
-  sporadically: Sporadically
+  weekly: Semanalmente
+  monthly: Mensualmente
+  sporadically: Esporádicamente 
   
   groups:
-    see_all: See all groups
+    see_all: Ver todo los grupos
     index:
-      group_list: 'Group List for %{org}'
-      group_name: Group Name
-      members: Involved
-      leaders: Leaders
-      add_group: 'Add a group'
-      labels: Labels
-      add: Add
+      group_list: 'Lista de grupo para %{org}'
+      group_name: Nombre del grupo
+      members: Involucrado
+      leaders: Líderes
+      add_group: 'Agregar a grupo'
+      labels: Etiquetas
+      add: Agregar
       assign_to_label:
-        one: '1 Group'
-        other: '%{count} Groups' 
-      labeled_with: 'Labeled With "%{label}"'
-      new_label_prompt: Please enter a new label name
-      add_a_label: Add a Label
+        one: '1 Grupo'
+        other: '%{count} Grupo' 
+      labeled_with: 'Etiquetar con "%{label}"'
+      new_label_prompt: Por favor, introduzca un nuevo nombre de etiqueta
+      add_a_label: Agregar una etiqueta
     new:
-      new_group: Create a New Group
+      new_group: Crear un nuevo grupo
     edit:
-      edit_group: Editing %{group}
+      edit_group: Editar %{group}
     show:  
-      add_member: 'Add Member'
-      location: Location
-      edit: edit
-      meets: Meets
-      sporadically: Sporadically
-      weekly: Weekly on %{day}s<br/> %{start_time} - %{end_time}
-      monthly: Monthly on the %{day}<br /> %{start_time} - %{end_time}
-      delete_group: 'Delete this group'
-      edit_group: 'Edit Group'
-      confirm_delete_group: Are you sure you want to delete this group?
+      add_member: 'Agregar Miembro'
+      location: Ubicación
+      edit: editar
+      meets: Cumple
+      sporadically: Esporadicamente 
+      weekly: Semanalmente en %{day}s<br/> %{start_time} - %{end_time}
+      monthly: Mensualmente en el %{day}<br /> %{start_time} - %{end_time}
+      delete_group: 'Eliminar este grupo'
+      edit_group: 'Editar este grupo'
+      confirm_delete_group: ¿Estás seguro de querer eliminar este grupo?
     form:
-      location_tip: 'For your location, type an address that you would expect to work if you did a search on a Google Map (i.e. "1600 Pennsylvania Ave, Washington, DC 20006")'
-      list_publicly_tip: "If this option is selected, this group will be visible to the general public when they do a search. (Public search doesn't exist yet, but will at some point)"
-      approve_join_tip: 'If the group is listed publicly, checking this option will require you to approve any requests to join the group.'
-      meets_on: 'On'
-      meets_on_the: 'On the'
-      of_month: 'of the month'
-      back: 'Cancel and go back'
+      location_tip: 'Para tu ubicación, escribe una dirección en la que te gustaría trabajar si hiciste una búsqueda en un Mapa de Google (i.e. "1600 Pennsylvania Ave, Washington, DC 20006")'
+      list_publicly_tip: "Si se selecciona esta opción, este grupo será visible al público general cuando hagan una búsqueda. (Búsqueda pública no existe aun, pero en algun momento la tendremos)"
+      approve_join_tip: 'Si el grupo está listado como público, el marcar esta opción te solicitará aprobar cualquier solicitud para unirse al grupo.'
+      meets_on: 'En'
+      meets_on_the: 'En el'
+      of_month: 'del mes'
+      back: 'Cancelar y regresar'
     person:
-      remove_confirm: "Are you sure you want to remove %{name} from your group?"
+      remove_confirm: "¿Estás seguro de querer eliminar %{name} de tu grupo?"
     label:
-      delete_confirm: "Are you sure you want to remove the '%{label}' label?"
+      delete_confirm: "¿Estás seguro de querer eliminar '%{label}' etiqueta?"
       
   group_memberships:
     form:
-      start_typing: "Start typing a name to find a person add to this group:"
-      add_a_member: 'Add a member'
-      add_a_leader: 'Add a leader'
+      start_typing: "Comienza a escribir un nombre para encontrar una persona para agregar a este grupo:"
+      add_a_member: 'Agregar un miembro'
+      add_a_leader: 'Agregar un líder'
     search:
-      not_found: We couldn't find anyone in your %{terminology} with that name
-      showing_count: "Showing %{length} of %{total}, keep typing or "
-      show_all: 'show all'
+      not_found: No pudimos encontrar a nadie en tu %{terminology} con ese nombre
+      showing_count: "Mostrando %{length} de %{total}, sigue escribiendo o "
+      show_all: 'muestra todo'
   
   helpers:
     label:
       group:
-        name: 'Group Name'
-        start_time: 'From'
+        name: 'Nombre del Grupo'
+        start_time: 'De'
         
-  member: Member
-  leader: Leader
+  member: Miembro
+  leader: Líder
