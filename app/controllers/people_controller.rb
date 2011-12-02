@@ -36,10 +36,10 @@ class PeopleController < ApplicationController
   def show
     @person = Person.find(params[:id])
     authorize!(:read, @person)
-    if can? :followup, @person
-      @organizational_role = OrganizationalRole.where(organization_id: @organization, person_id: @person, role_id: Role::CONTACT_ID).first
-      @followup_comment = FollowupComment.new(organization: @organization, commenter: current_person, contact: @person, status: @organizational_role.followup_status) if @organizational_role
-      @followup_comments = FollowupComment.where(organization_id: @organization, contact_id: @person).order('created_at desc')
+    if can? :manage, @person
+      @organizational_role = OrganizationalRole.where(organization_id: current_organization, person_id: @person, role_id: Role::CONTACT_ID).first
+      @followup_comment = FollowupComment.new(organization: current_organization, commenter: current_person, contact: @person, status: @organizational_role.followup_status) if @organizational_role
+      @followup_comments = FollowupComment.where(organization_id: current_organization, contact_id: @person).order('created_at desc')
     end
     @person = Present(@person)
   end
