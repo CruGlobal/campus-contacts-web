@@ -139,7 +139,7 @@ class ApplicationController < ActionController::Base
     if params[:locale]
       I18n.locale = params[:locale] 
     else
-      available = %w{en ru}
+      available = %w{en ru es}
       I18n.locale = request.preferred_language_from(available)
     end
   end

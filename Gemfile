@@ -11,6 +11,7 @@ gem 'capistrano'
 gem 'rest-client'
 gem 'crack'
 gem 'resque'
+gem 'foreigner'
 gem "devise", '1.5.1' #, git: "git://github.com/plataformatec/devise.git"
 # gem "oa-oauth", '~> 0.3.2', require: "omniauth/oauth"
 gem 'omniauth'
