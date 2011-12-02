@@ -44,6 +44,8 @@ class ApplicationController < ActionController::Base
   def render_404
     if cookies[:keyword] && SmsKeyword.find_by_keyword(cookies[:keyword])
       redirect_to "/c/#{cookies[:keyword]}"
+    elsif cookies[:survey_id] && Survey.find_by_id(cookies[:survey_id])
+      redirect_to "/survey_responses/new?survey_id=#{cookies[:survey_id]}"
     else
       render :file => Rails.root.join(mhub? ? 'public/404_mhub.html' : 'public/404.html'), :layout => false, :status => 404
     end
@@ -173,9 +175,9 @@ class ApplicationController < ActionController::Base
   end
   helper_method :unassigned_people
   
-  def get_answer_sheet(keyword, person)
-    answer_sheet = AnswerSheet.where(person_id: person.id, question_sheet_id: keyword.question_sheet.id).first || 
-                   AnswerSheet.create!(person_id: person.id, question_sheet_id: keyword.question_sheet.id)
+  def get_answer_sheet(survey, person)
+    answer_sheet = AnswerSheet.where(person_id: person.id, survey_id: survey.id).first || 
+                   AnswerSheet.create!(person_id: person.id, survey_id: survey.id)
     answer_sheet.reload
     answer_sheet
   end

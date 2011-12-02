@@ -35,19 +35,20 @@ class SmsController < ApplicationController
       @person = @sms_session.person
       keyword = @sms_session.sms_keyword
       if keyword
+        survey = keyword.survey
         if !@sms_session.interactive? # they just texted in 'i'
           # We're getting into a sticky session
           create_contact_at_org(@person, @sms_session.sms_keyword.organization)
           @sms_session.update_attribute(:interactive, true)
         else
           # Find the person, save the answer, send the next question
-          save_survey_question(keyword, @person, message)
+          save_survey_question(keyword.survey, @person, message)
           @person.reload
         end
-        @msg = send_next_survey_question(keyword, @person, @sms_session.phone_number)
+        @msg = send_next_survey_question(keyword.survey, @person, @sms_session.phone_number)
         unless @msg
           # survey is done. send final message
-          @msg = keyword.post_survey_message.present? ? keyword.post_survey_message : t('contacts.thanks.message')
+          @msg = survey.post_survey_message.present? ? survey.post_survey_message : t('contacts.thanks.message')
           # Mark answer_sheet as complete
           @answer_sheet.update_attribute(:completed_at, Time.now)
           
@@ -102,8 +103,8 @@ class SmsController < ApplicationController
       @sms_params
     end
     
-    def send_next_survey_question(keyword, person, phone_number)
-      question = next_question(keyword, person)
+    def send_next_survey_question(survey, person, phone_number)
+      question = next_question(survey, person)
       if question
         msg = question.label
         if question.kind == 'ChoiceField'
@@ -114,7 +115,7 @@ class SmsController < ApplicationController
       msg
     end
     
-    def save_survey_question(keyword, person, answer)
+    def save_survey_question(survey, person, answer)
       begin
         case
         when person.firstName.blank?
@@ -122,8 +123,8 @@ class SmsController < ApplicationController
         when person.lastName.blank?  
           person.update_attribute(:lastName, answer)
         else
-          question = next_question(keyword, person)
-          @answer_sheet = get_answer_sheet(keyword, person)
+          question = next_question(survey, person)
+          @answer_sheet = get_answer_sheet(survey, person)
           if question
             if question.kind == 'ChoiceField'
               choices = question.choices_by_letter
@@ -145,15 +146,15 @@ class SmsController < ApplicationController
       end
     end
     
-    def next_question(keyword, person)
+    def next_question(survey, person)
       case
       when person.firstName.blank?
         Question.new(label: "What is your first name?")
       when person.lastName.blank?  
         Question.new(label: "What is your last name?")
       else
-        @answer_sheet = get_answer_sheet(keyword, person)
-        keyword.questions.reload.where(web_only: false).detect {|q| q.responses(@answer_sheet).select {|a| a.present?}.blank?}      
+        @answer_sheet = get_answer_sheet(survey, person)
+        survey.questions.reload.where(web_only: false).detect {|q| q.responses(@answer_sheet).select {|a| a.present?}.blank?}      
       end
     end
     

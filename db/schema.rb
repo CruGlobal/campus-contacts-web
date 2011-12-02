@@ -82,8 +82,6 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
     t.string "name"
   end
 
-  add_index "aoas", ["name"], :name => "name", :unique => true
-
   create_table "api_logs", :force => true do |t|
     t.string   "platform"
     t.string   "action"
@@ -126,8 +124,6 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
     t.datetime "updated_at"
     t.string   "token"
   end
-
-  add_index "authentications", ["uid", "provider"], :name => "uid_provider", :unique => true
 
   create_table "clients", :force => true do |t|
     t.string   "code"
@@ -550,7 +546,7 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
     t.string   "status",                                 :default => "",    :null => false
     t.integer  "registration_before_cancellation_id"
     t.integer  "cancelled_by_id"
-    t.integer  "profile_id"
+    t.integer  "profile_id",                                                :null => false
     t.integer  "registrant_type_id"
     t.integer  "registrant_type_before_cancellation_id"
     t.integer  "registration_id"
@@ -998,51 +994,51 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
     t.string   "currentPosition",     :limit => 128
     t.string   "leadershipLevel",     :limit => 128
     t.string   "relationship",        :limit => 128
-    t.text     "q1",                  :limit => 16777215
+    t.text     "q1",                  :limit => 2147483647
     t.integer  "q2"
-    t.text     "q3",                  :limit => 16777215
-    t.text     "q4",                  :limit => 16777215
-    t.text     "q5",                  :limit => 16777215
-    t.text     "q6",                  :limit => 16777215
-    t.text     "q7",                  :limit => 16777215
+    t.text     "q3",                  :limit => 2147483647
+    t.text     "q4",                  :limit => 2147483647
+    t.text     "q5",                  :limit => 2147483647
+    t.text     "q6",                  :limit => 2147483647
+    t.text     "q7",                  :limit => 2147483647
     t.integer  "q8"
-    t.text     "q9",                  :limit => 16777215
+    t.text     "q9",                  :limit => 2147483647
     t.integer  "q10"
-    t.text     "q11",                 :limit => 16777215
+    t.text     "q11",                 :limit => 2147483647
     t.integer  "q12"
-    t.text     "q13",                 :limit => 16777215
+    t.text     "q13",                 :limit => 2147483647
     t.integer  "q14"
-    t.text     "q15",                 :limit => 16777215
+    t.text     "q15",                 :limit => 2147483647
     t.integer  "q16"
-    t.text     "q17",                 :limit => 16777215
+    t.text     "q17",                 :limit => 2147483647
     t.integer  "q18"
-    t.text     "q19",                 :limit => 16777215
+    t.text     "q19",                 :limit => 2147483647
     t.integer  "q20"
-    t.text     "q21",                 :limit => 16777215
+    t.text     "q21",                 :limit => 2147483647
     t.integer  "q22"
-    t.text     "q23",                 :limit => 16777215
+    t.text     "q23",                 :limit => 2147483647
     t.integer  "q24"
-    t.text     "q25",                 :limit => 16777215
-    t.text     "q26",                 :limit => 16777215
-    t.text     "q27",                 :limit => 16777215
-    t.text     "q28f1",               :limit => 16777215
+    t.text     "q25",                 :limit => 2147483647
+    t.text     "q26",                 :limit => 2147483647
+    t.text     "q27",                 :limit => 2147483647
+    t.text     "q28f1",               :limit => 2147483647
     t.integer  "q28f2"
-    t.text     "q28l1",               :limit => 16777215
+    t.text     "q28l1",               :limit => 2147483647
     t.integer  "q28l2"
-    t.text     "q28o1",               :limit => 16777215
+    t.text     "q28o1",               :limit => 2147483647
     t.integer  "q28o2"
-    t.text     "q28a1",               :limit => 16777215
+    t.text     "q28a1",               :limit => 2147483647
     t.integer  "q28a2"
-    t.text     "q28t1",               :limit => 16777215
+    t.text     "q28t1",               :limit => 2147483647
     t.integer  "q28t2"
-    t.text     "q28s1",               :limit => 16777215
+    t.text     "q28s1",               :limit => 2147483647
     t.integer  "q28s2"
-    t.text     "q29",                 :limit => 16777215
-    t.text     "q30",                 :limit => 16777215
-    t.text     "q31",                 :limit => 16777215
-    t.text     "q32",                 :limit => 16777215
-    t.text     "q33",                 :limit => 16777215
-    t.text     "q34",                 :limit => 16777215
+    t.text     "q29",                 :limit => 2147483647
+    t.text     "q30",                 :limit => 2147483647
+    t.text     "q31",                 :limit => 2147483647
+    t.text     "q32",                 :limit => 2147483647
+    t.text     "q33",                 :limit => 2147483647
+    t.text     "q34",                 :limit => 2147483647
     t.integer  "fk_ReviewSessionID"
     t.string   "reviewedByTitle",     :limit => 5
     t.string   "reviewedByFirstName", :limit => 30
@@ -1064,15 +1060,15 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
     t.string   "currentPosition",         :limit => 128
     t.string   "leadershipLevel",         :limit => 128
     t.string   "relationship",            :limit => 128
-    t.text     "q1",                      :limit => 16777215
-    t.text     "q2",                      :limit => 16777215
-    t.text     "q3",                      :limit => 16777215
-    t.text     "q4",                      :limit => 16777215
-    t.text     "q5",                      :limit => 16777215
-    t.text     "q6",                      :limit => 16777215
-    t.text     "q7",                      :limit => 16777215
-    t.text     "q8",                      :limit => 16777215
-    t.text     "q9",                      :limit => 16777215
+    t.text     "q1",                      :limit => 2147483647
+    t.text     "q2",                      :limit => 2147483647
+    t.text     "q3",                      :limit => 2147483647
+    t.text     "q4",                      :limit => 2147483647
+    t.text     "q5",                      :limit => 2147483647
+    t.text     "q6",                      :limit => 2147483647
+    t.text     "q7",                      :limit => 2147483647
+    t.text     "q8",                      :limit => 2147483647
+    t.text     "q9",                      :limit => 2147483647
     t.integer  "fk_ReviewSessionLightID"
   end
 
@@ -1350,7 +1346,7 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
     t.datetime "leadershipStartDate"
     t.datetime "leadershipEndDate"
     t.datetime "createDate"
-    t.binary   "lastChangedDate",               :limit => 8
+    t.binary   "lastChangedDate",               :limit => 255
     t.integer  "lastChangedBy"
     t.string   "displayLocation"
     t.boolean  "partnershipRegionOnly"
@@ -1558,30 +1554,30 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
   end
 
   create_table "linczone_contacts", :primary_key => "ContactID", :force => true do |t|
-    t.timestamp "EntryDate"
-    t.string    "FirstName",            :limit => 120
-    t.string    "LastName",             :limit => 120
-    t.string    "HomeAddress",          :limit => 200
-    t.string    "City",                 :limit => 20
-    t.string    "State",                :limit => 20
-    t.string    "Zip",                  :limit => 80
-    t.string    "Email",                :limit => 120
-    t.string    "HighSchool",           :limit => 120
-    t.string    "CampusName",           :limit => 200
-    t.string    "CampusID",             :limit => 80
-    t.string    "ReferrerFirstName",    :limit => 120
-    t.string    "ReferrerLastName",     :limit => 120
-    t.string    "ReferrerRelationship", :limit => 100
-    t.string    "ReferrerEmail",        :limit => 200
-    t.string    "InfoCCC",              :limit => 1,   :default => "F"
-    t.string    "InfoNav",              :limit => 1,   :default => "F"
-    t.string    "InfoIV",               :limit => 1,   :default => "F"
-    t.string    "InfoFCA",              :limit => 1,   :default => "F"
-    t.string    "InfoBSU",              :limit => 1,   :default => "F"
-    t.string    "InfoCACM",             :limit => 1,   :default => "F"
-    t.string    "InfoEFCA",             :limit => 1,   :default => "F"
-    t.string    "InfoGCM",              :limit => 1,   :default => "F"
-    t.string    "InfoWesley",           :limit => 1,   :default => "F"
+    t.datetime "EntryDate"
+    t.string   "FirstName",            :limit => 120
+    t.string   "LastName",             :limit => 120
+    t.string   "HomeAddress",          :limit => 200
+    t.string   "City",                 :limit => 20
+    t.string   "State",                :limit => 20
+    t.string   "Zip",                  :limit => 80
+    t.string   "Email",                :limit => 120
+    t.string   "HighSchool",           :limit => 120
+    t.string   "CampusName",           :limit => 200
+    t.string   "CampusID",             :limit => 80
+    t.string   "ReferrerFirstName",    :limit => 120
+    t.string   "ReferrerLastName",     :limit => 120
+    t.string   "ReferrerRelationship", :limit => 100
+    t.string   "ReferrerEmail",        :limit => 200
+    t.string   "InfoCCC",              :limit => 1,   :default => "F"
+    t.string   "InfoNav",              :limit => 1,   :default => "F"
+    t.string   "InfoIV",               :limit => 1,   :default => "F"
+    t.string   "InfoFCA",              :limit => 1,   :default => "F"
+    t.string   "InfoBSU",              :limit => 1,   :default => "F"
+    t.string   "InfoCACM",             :limit => 1,   :default => "F"
+    t.string   "InfoEFCA",             :limit => 1,   :default => "F"
+    t.string   "InfoGCM",              :limit => 1,   :default => "F"
+    t.string   "InfoWesley",           :limit => 1,   :default => "F"
   end
 
   create_table "mail_delayed_jobs", :force => true do |t|
@@ -1760,7 +1756,7 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
     t.datetime "updated_at"
   end
 
-  add_index "mh_email_templates", ["name"], :name => "index_ma_email_templates_on_name", :length => {"name"=>767}
+  add_index "mh_email_templates", ["name"], :name => "index_ma_email_templates_on_name", :length => {"name"=>255}
 
   create_table "mh_friends", :force => true do |t|
     t.string   "name"
@@ -3057,7 +3053,6 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
   end
 
   add_index "organizational_roles", ["organization_id", "role_id", "followup_status"], :name => "role_org_status"
-  add_index "organizational_roles", ["organization_id"], :name => "organization_id"
   add_index "organizational_roles", ["person_id", "organization_id", "role_id"], :name => "person_role_org", :unique => true
 
   create_table "organizations", :force => true do |t|
@@ -3082,7 +3077,7 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
     t.string   "number"
     t.string   "extension"
     t.integer  "person_id"
-    t.string   "location",         :default => "mobile"
+    t.string   "location"
     t.boolean  "primary",          :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -3342,7 +3337,7 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
     t.string   "shortcode"
     t.string   "message"
     t.string   "country"
-    t.integer  "person_id"
+    t.string   "person_id"
     t.datetime "received_at"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -3354,7 +3349,6 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
     t.string   "twilio_sid"
   end
 
-  add_index "received_sms", ["person_id"], :name => "person_id"
   add_index "received_sms", ["phone_number", "message", "received_at"], :name => "index_received_sms_on_phone_number_and_message_and_received_at", :unique => true
   add_index "received_sms", ["twilio_sid"], :name => "index_received_sms_on_twilio_sid", :unique => true
 
@@ -3421,7 +3415,7 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
   end
 
   create_table "sent_sms", :force => true do |t|
-    t.text     "message"
+    t.string   "message"
     t.string   "recipient"
     t.text     "reports"
     t.string   "moonshado_claimcheck"
@@ -3755,7 +3749,7 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
     t.integer  "owner",                                           :null => false
     t.text     "criteria",   :limit => 2147483647,                :null => false
     t.integer  "saved",      :limit => 1,          :default => 0, :null => false
-    t.text     "options",    :limit => 16777215
+    t.text     "options",    :limit => 2147483647
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -3848,7 +3842,7 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
     t.string   "summer_preference",    :limit => 100
     t.string   "summer_assignment",    :limit => 100
     t.string   "trainer"
-    t.text     "trainer_contact",      :limit => 16777215
+    t.text     "trainer_contact",      :limit => 2147483647
     t.string   "vonage"
     t.string   "website"
     t.integer  "send_dept"
@@ -3919,8 +3913,10 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
     t.text     "post_survey_message"
     t.string   "event_type"
     t.string   "gateway",                            :default => "",                                                                        :null => false
+    t.integer  "survey_id"
   end
 
+  add_index "sms_keywords", ["survey_id"], :name => "index_sms_keywords_on_survey_id"
   add_index "sms_keywords", ["user_id"], :name => "user_id"
 
   create_table "sms_sessions", :force => true do |t|
@@ -4806,8 +4802,8 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
     t.integer  "max_student_women_applicants",                       :default => 70,   :null => false
     t.integer  "max_accepted_men"
     t.integer  "max_accepted_women"
-    t.integer  "ideal_staff_men",                                    :default => 0,     :null => false
-    t.integer  "ideal_staff_women",                                  :default => 0,     :null => false
+    t.integer  "ideal_staff_men",                                    :default => 0,    :null => false
+    t.integer  "ideal_staff_women",                                  :default => 0,    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "created_by_id"
@@ -4816,7 +4812,7 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
     t.integer  "current_students_women",                             :default => 0
     t.integer  "current_applicants_men",                             :default => 0
     t.integer  "current_applicants_women",                           :default => 0
-    t.integer  "year",                                                                  :null => false
+    t.integer  "year",                                                                 :null => false
     t.integer  "coordinator_id"
     t.integer  "old_id"
     t.string   "project_status"
@@ -4850,7 +4846,6 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
     t.integer  "basic_info_question_sheet_id"
     t.integer  "template_question_sheet_id"
     t.integer  "project_specific_question_sheet_id"
-    t.boolean  "high_school",                                        :default => false
   end
 
   add_index "sp_projects", ["name"], :name => "sp_projects_name_index", :unique => true
@@ -4967,7 +4962,7 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
   create_table "sp_student_quotes", :force => true do |t|
     t.integer  "project_id"
     t.text     "quote"
-    t.text     "name"
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

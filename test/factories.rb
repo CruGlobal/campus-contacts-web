@@ -38,24 +38,24 @@ FactoryGirl.define do
   factory :approved_keyword, parent: :sms_keyword do
     keyword 'approved'
     association :organization
+    association :survey
     explanation "haoeu"
     state "active"
     initial_response "Hi there!"
     post_survey_message "bye!"
     association :user
     after_create do |x| 
-      question_sheet = Factory(:question_sheet, questionnable: x)
-      page = Factory(:page, question_sheet: question_sheet)
+      survey = Factory(:survey, organization: x.organization)
       element = Factory(:choice_field, label: 'foobar')
-      Factory(:page_element, page: page, element: element, position: 1, archived: true)
+      Factory(:survey_element, survey: survey, element: element, position: 1, archived: true)
       element = Factory(:choice_field)
-      Factory(:page_element, page: page, element: element, position: 2)
+      Factory(:survey_element, survey: survey, element: element, position: 2)
     end
   end
   
-  factory :question_sheet do
-    label {"Test Sheet #{Factory.next(:count)}"}
-    archived 0
+  factory :survey do
+    title {"Test survey #{Factory.next(:count)}"}
+    association :organization
   end
   
   factory :person do 
@@ -241,8 +241,8 @@ FactoryGirl.define do
     number        1
   end
   
-  factory :page_element do
-    association   :page
+  factory :survey_element do
+    association   :survey
     association   :element
     position        1
   end
@@ -259,7 +259,7 @@ FactoryGirl.define do
   end
   
   factory :answer_sheet do
-    association :question_sheet
+    association :survey
     association :person
   end
 

@@ -1,5 +1,5 @@
-class SmsKeywords::QuestionsController < ApplicationController
-  before_filter :find_keyword_and_authorize
+class Surveys::QuestionsController < ApplicationController
+  before_filter :find_survey_and_authorize
   before_filter :find_question, only: [:show, :edit, :update, :destroy]
   before_filter :get_predefined
 
@@ -7,8 +7,8 @@ class SmsKeywords::QuestionsController < ApplicationController
   # GET /questions.xml
   def index
     session[:wizard] = false
-    @questions = @keyword.questions
-    @archived_questions = @keyword.archived_questions
+    @questions = @survey.questions
+    @archived_questions = @survey.archived_questions
     respond_to do |wants|
       wants.html # index.html.erb
       wants.xml  { render xml: @questions }
@@ -27,7 +27,7 @@ class SmsKeywords::QuestionsController < ApplicationController
   # GET /questions/new
   # GET /questions/new.xml
   def new
-    @question = @keyword.question_sheet.elements.new
+    @question = @survey.question_sheet.elements.new
 
     respond_to do |wants|
       wants.html # new.html.erb
@@ -40,7 +40,7 @@ class SmsKeywords::QuestionsController < ApplicationController
   end
   
   def reorder 
-    @keyword.question_page.page_elements.each do |pe|
+    @survey.survey_elements.each do |pe|
       if params['questions'].index(pe.element_id.to_s)
         pe.position = params['questions'].index(pe.element_id.to_s) + 1 
         pe.save!
@@ -60,11 +60,11 @@ class SmsKeywords::QuestionsController < ApplicationController
     end
     
     # If this was an archived question, unarchive it. otherwise, add it
-    if @keyword.archived_questions.include?(@question)
-      pe = PageElement.where(page_id: @keyword.question_page.id, element_id: @question.id).first
+    if @survey.archived_questions.include?(@question)
+      pe = PageElement.where(survey_id: @survey.id, element_id: @question.id).first
       pe.update_attribute(:archived, false)
     else
-      @keyword.question_page.elements << @question
+      @survey.elements << @question
     end
 
     respond_to do |wants|
@@ -101,10 +101,10 @@ class SmsKeywords::QuestionsController < ApplicationController
   # DELETE /questions/1
   # DELETE /questions/1.xml
   def destroy
-    # If a question is on more than one page, or has been answered, remove it from this question sheet, but don't delete it for real.
-    if @question.pages.length > 1 || (@question.respond_to?(:sheet_answers) && @question.sheet_answers.count > 0)
-      pe = PageElement.where(page_id: @keyword.question_page.id, element_id: @question.id).first
-      pe.update_attribute(:archived, true) if pe
+    # If a question is on more than one survey, or has been answered, remove it from this survey, but don't delete it for real.
+    if @question.surveys.length > 1 || (@question.respond_to?(:sheet_answers) && @question.sheet_answers.count > 0)
+      se = SurveyElement.where(survey_id: @survey.id, element_id: @question.id).first
+      se.update_attribute(:archived, true) if pe
     else
       @question.destroy
     end
@@ -118,15 +118,15 @@ class SmsKeywords::QuestionsController < ApplicationController
 
   def hide
     @question = Element.find(params[:id])
-    @organization = @keyword.organization
-    @organization.page_elements.each do |pe|
+    @organization = @survey.organization
+    @organization.survey_elements.each do |pe|
       pe.update_attribute(:hidden, true) if pe.element_id == @question.id
     end
   end
 
   def unhide
-    @organization = @keyword.organization
-    @organization.page_elements.each do |pe|
+    @organization = @survey.organization
+    @organization.survey_elements.each do |pe|
       pe.update_attribute(:hidden, false) if pe.element_id == params[:id].to_i
     end
     redirect_to :back
@@ -134,16 +134,16 @@ class SmsKeywords::QuestionsController < ApplicationController
   
   private
     def find_question
-      @question = @keyword.question_page.elements.find(params[:id])
+      @question = @survey.elements.find(params[:id])
     end
     
-    def find_keyword_and_authorize
-      @keyword = SmsKeyword.includes(:question_sheets).find(params[:sms_keyword_id])
-      authorize! :manage, @keyword
+    def find_survey_and_authorize
+      @survey = Survey.find(params[:survey_id])
+      authorize! :manage, @survey
     end
     
     def get_predefined
-      @predefined = QuestionSheet.find(APP_CONFIG['predefined_question_sheet'])
+      @predefined = Survey.find(APP_CONFIG['predefined_survey'])
     end
 
 end

@@ -1,7 +1,7 @@
 class SurveyResponsesController < ApplicationController
   prepend_before_filter :set_keyword_cookie, only: :new
   before_filter :get_person
-  before_filter :get_keyword
+  before_filter :get_survey
   before_filter :prepare_for_mobile
   skip_before_filter :authenticate_user!, except: :update
   skip_before_filter :check_url
@@ -27,8 +27,8 @@ class SurveyResponsesController < ApplicationController
       end
     end
     
-    if @keyword
-      @answer_sheet = get_answer_sheet(@keyword, @person)
+    if @survey
+      @answer_sheet = get_answer_sheet(@survey, @person)
       respond_to do |wants|
         wants.html { render :layout => 'mhub'}
         wants.mobile
@@ -55,13 +55,13 @@ class SurveyResponsesController < ApplicationController
     save_survey
 
     if @person.valid? && @answer_sheet.person.valid?
-      create_contact_at_org(@person, @keyword.organization)
+      create_contact_at_org(@person, @survey.organization)
       respond_to do |wants|
         wants.html { render :thanks, layout: 'mhub'}
         wants.mobile { render :thanks }
       end
     else
-      @answer_sheet = get_answer_sheet(@keyword, @person)
+      @answer_sheet = get_answer_sheet(@survey, @person)
       respond_to do |wants|
         wants.html { render :new, layout: 'mhub'}
         wants.mobile { render :new }
@@ -76,21 +76,21 @@ class SurveyResponsesController < ApplicationController
         save_survey
       
         if @person.valid? && @answer_sheet.person.valid?
-          create_contact_at_org(@person, @keyword.organization)
-          FollowupComment.create_from_survey(@keyword.organization, @person, @keyword.questions, @answer_sheet)
+          create_contact_at_org(@person, @survey.organization)
+          FollowupComment.create_from_survey(@survey.organization, @person, @survey.questions, @answer_sheet)
           respond_to do |wants|
             wants.html { render :thanks, layout: 'mhub'}
             wants.mobile { render :thanks }
           end
         else
-          @answer_sheet = get_answer_sheet(@keyword, @person)
+          @answer_sheet = get_answer_sheet(@survey, @person)
           respond_to do |wants|
             wants.html { render :new, layout: 'mhub'}
             wants.mobile { render :new }
           end
         end
       else
-        @answer_sheet = get_answer_sheet(@keyword, @person)
+        @answer_sheet = get_answer_sheet(@survey, @person)
         respond_to do |wants|
           wants.html { render :new, layout: 'mhub'}
           wants.mobile { render :new }
@@ -103,36 +103,42 @@ class SurveyResponsesController < ApplicationController
   
     def save_survey
       @person.update_attributes(params[:person]) if params[:person]
-      @answer_sheet = get_answer_sheet(@keyword, @person)
-      question_set = QuestionSet.new(@keyword.questions, @answer_sheet)
+      @answer_sheet = get_answer_sheet(@survey, @person)
+      question_set = QuestionSet.new(@survey.questions, @answer_sheet)
       question_set.post(params[:answers], @answer_sheet)
       question_set.save
       @answer_sheet.update_attribute(:completed_at, Time.now)
     end
     
-    def get_keyword
+    def get_survey
       if params[:keyword]
         @keyword ||= SmsKeyword.where(keyword: params[:keyword]).first 
+        @survey = @keyword.survey
       elsif params[:received_sms_id]
         sms_id = Base62.decode(params[:received_sms_id])
         @sms = SmsSession.find_by_id(sms_id) || ReceivedSms.find_by_id(sms_id)
         if @sms
           @keyword ||= @sms.sms_keyword || SmsKeyword.where(keyword: @sms.message.strip).first
         end
+        @survey = @keyword.survey
+      elsif params[:survey_id]
+        @survey = Survey.find_by_id(params[:survey_id])
       end
-      if params[:keyword] || params[:received_sms_id]
-        unless @keyword
+      if params[:keyword] || params[:received_sms_id] || params[:survey_id]
+        unless @survey
           render_404 
           return false
         end
-        @questions = @keyword.questions
+        @questions = @survey.questions
       end
     end
     
     def set_keyword_cookie
-      get_keyword
+      get_survey
       if @keyword
         cookies[:keyword] = @keyword.keyword 
+      elsif @survey
+        cookies[:survey_id] = @survey.id
       else
         return false
       end

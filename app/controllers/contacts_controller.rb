@@ -249,9 +249,9 @@ class ContactsController < ApplicationController
   
     def save_survey_answers
       @answer_sheets = []
-      current_organization.keywords.each do |keyword|
-        @answer_sheet = get_answer_sheet(keyword, @person)
-        question_set = QuestionSet.new(keyword.questions, @answer_sheet)
+      current_organization.surveys.each do |survey|
+        @answer_sheet = get_answer_sheet(survey, @person)
+        question_set = QuestionSet.new(survey.questions, @answer_sheet)
         question_set.post(params[:answers], @answer_sheet)
         question_set.save
         @answer_sheets << @answer_sheet

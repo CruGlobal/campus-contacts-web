@@ -62,15 +62,6 @@ Mh::Application.routes.draw do
     collection do
       post :accept_twilio
     end
-    resources :questions, controller: "sms_keywords/questions" do
-      member do
-        put :hide
-        put :unhide
-      end
-      collection do
-        post :reorder
-      end
-    end 
   end
   
   resources :people do
@@ -141,7 +132,17 @@ Mh::Application.routes.draw do
     end
   end
   
-  resources :surveys
+  resources :surveys do
+    resources :questions, controller: "surveys/questions" do
+      member do
+        put :hide
+        put :unhide
+      end
+      collection do
+        post :reorder
+      end
+    end 
+  end
   get "/surveys/stopsurveymode" => 'surveys#stop', as: :stop_survey
   get "/surveys/:keyword" => 'surveys#start', as: :start_survey
 
