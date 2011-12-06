@@ -2,9 +2,9 @@
   <% provide :title, t('.pick_keyword') %>
   <h1>Click on a keyword to complete a survey</h1>
   <ul>
-    <% @keywords.each do |keyword| %>
+    <% @surveys.each do |survey| %>
       <li>
-        <%= link_to(keyword.keyword, start_survey_url(keyword.keyword, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port'])) %>
+        <%= link_to(survey, start_survey_url(survey.id, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port'])) %>
       </li>
     <% end %>
   </ul>

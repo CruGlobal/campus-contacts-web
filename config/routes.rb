@@ -143,8 +143,6 @@ Mh::Application.routes.draw do
       end
     end 
   end
-  get "/surveys/stopsurveymode" => 'surveys#stop', as: :stop_survey
-  get "/surveys/:keyword" => 'surveys#start', as: :start_survey
 
   get "welcome/index"
   get "/test" => "welcome#test"
@@ -211,7 +209,9 @@ Mh::Application.routes.draw do
   match 'c/:keyword(/:received_sms_id)' => 'survey_responses#new', as: 'contact_form'
   match 'm/:received_sms_id' => 'survey_responses#new'
   match 'l/:token/:user_id' => 'leaders#leader_sign_in'
-  match 's/:survey_id' => 'survey_responses#new', as: 'take_survey'
+  get 's/:survey_id' => 'surveys#start', as: :start_survey
+  get "/surveys/:keyword" => 'surveys#start'
+  get "/surveys/stopsurveymode" => 'surveys#stop', as: :stop_survey
   # mount RailsAdmin::Engine => "/admin"
   
   get "welcome/tour"

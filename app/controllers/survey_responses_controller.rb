@@ -49,7 +49,6 @@ class SurveyResponsesController < ApplicationController
   end
   
   def update
-    # A survey responder should always be updating their own record
     redirect_to :back and return false unless @person.id == params[:id].to_i
     
     save_survey
