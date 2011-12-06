@@ -14,7 +14,6 @@ class SurveyResponsesControllerTest < ActionController::TestCase
   
   context "After logging in a person without orgs" do
     setup do
-      #@user = Factory(:user)
       @user = Factory(:user_no_org)  #user with a person object
       sign_in @user
       @organization = Factory(:organization)

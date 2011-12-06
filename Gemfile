@@ -52,7 +52,6 @@ gem 'deadlock_retry'
 gem 'delegate_presenter'
 
 gem 'vpim', git: 'git://github.com/twinge/vpim.git'   # vcard maker
-gem 'rubyzip'                                         # for zipping files
 gem 'i18n-js'                                         # allow i18n on js files 
 
 # Bundle gems for the local environment. Make sure to

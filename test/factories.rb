@@ -31,21 +31,19 @@ FactoryGirl.define do
     explanation "haoeu"
     state "requested"
     initial_response "Hi there!"
-    post_survey_message "bye!"
     association :user
   end
   
   factory :approved_keyword, parent: :sms_keyword do
     keyword 'approved'
     association :organization
-    association :survey
     explanation "haoeu"
     state "active"
     initial_response "Hi there!"
-    post_survey_message "bye!"
     association :user
     after_create do |x| 
       survey = Factory(:survey, organization: x.organization)
+      x.update_attribute(:survey_id, survey.id)
       element = Factory(:choice_field, label: 'foobar')
       Factory(:survey_element, survey: survey, element: element, position: 1, archived: true)
       element = Factory(:choice_field)
@@ -56,6 +54,7 @@ FactoryGirl.define do
   factory :survey do
     title {"Test survey #{Factory.next(:count)}"}
     association :organization
+    post_survey_message "bye!"
   end
   
   factory :person do 
@@ -233,12 +232,6 @@ FactoryGirl.define do
     content       "Prayer Group\nJesus"
     object_name ''
     attribute_name ''
-  end
-  
-  factory :page do
-    association   :question_sheet
-    label         'Welcome!'
-    number        1
   end
   
   factory :survey_element do

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111130140314) do
+ActiveRecord::Schema.define(:version => 20111206144944) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -1656,7 +1656,7 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
   add_index "merge_audits", ["mergeable_id", "mergeable_type"], :name => "mergeable"
 
   create_table "mh_answer_sheets", :force => true do |t|
-    t.integer  "question_sheet_id", :null => false
+    t.integer  "question_sheet_id"
     t.datetime "created_at",        :null => false
     t.datetime "completed_at"
     t.integer  "person_id"
@@ -1873,11 +1873,12 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
   end
 
   create_table "mh_surveys", :force => true do |t|
-    t.integer  "question_sheet_id",                :null => false
-    t.string   "title",             :limit => 100, :null => false
+    t.integer  "question_sheet_id"
+    t.string   "title",               :limit => 100, :null => false
     t.integer  "organization_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "post_survey_message"
   end
 
   add_index "mh_surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
@@ -3909,10 +3910,10 @@ ActiveRecord::Schema.define(:version => 20111130140314) do
     t.integer  "user_id"
     t.text     "explanation"
     t.string   "state"
-    t.string   "initial_response",    :limit => 140, :default => "Hi! Thanks for checking out Cru. Visit {{ link }} to get more involved."
-    t.text     "post_survey_message"
+    t.string   "initial_response",               :limit => 140, :default => "Hi! Thanks for checking out Cru. Visit {{ link }} to get more involved."
+    t.text     "post_survey_message_deprecated"
     t.string   "event_type"
-    t.string   "gateway",                            :default => "",                                                                        :null => false
+    t.string   "gateway",                                       :default => "",                                                                        :null => false
     t.integer  "survey_id"
   end
 

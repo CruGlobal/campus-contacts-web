@@ -15,7 +15,7 @@ ActiveAdmin.register SmsKeyword do
     column :state
     column :explanation
     column :initial_response
-    column :post_survey_message
+    # column :post_survey_message
     column :created_at
     column :updated_at
     column "Actions" do |keyword|

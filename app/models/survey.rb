@@ -11,7 +11,7 @@ class Survey < ActiveRecord::Base
   has_many :question_grids, :through => :survey_elements, :conditions => "kind = 'QuestionGrid'", :source => :element
   
   # validation
-  validates_presence_of :title
+  validates_presence_of :title, :post_survey_message
   validates_length_of :title, :maximum => 100, :allow_nil => true
   
   def to_s
