@@ -81,8 +81,7 @@ en:
     back: "Back"
     hide: 'hide'
     add_a_leader: 'Add a leader'
-    survey_text_tip_html: "To begin your survey, <strong>text %{keyword} to %{shortcode}.</strong>"
-    survey_web_tip_html: "For the web version of the survey, send people to <strong>http://mhub.cc/c/%{keyword}/</strong>"
+    survey_web_tip_html: "For the web version of the survey, send people to <strong>%{link}/</strong>"
     male: Male
     female: Female
     both: Both
@@ -232,46 +231,22 @@ en:
     index: 
       confirm_delete: "Are you sure you want to delete this keyword?"
       new: 'New Survey'
-  sms_keywords:
-    index:
-      association: Associate Contacts With
+      edit_survey: Edit Survey
       association_help: "When a contact responds to a survey, they are associated with the same team or movement as the keyword they responded to."
-      request_keyword: Request a Keyword
-    default_rejection_email:
-      "Your keyword request has been denied"
     edit:
-      heading: Editing Keyword
-      keywords: Keywords
-      to_begin_survey_html: To begin your survey, <strong>text %{keyword} to %{number}.</strong>
-    flash:
-      created: 'Keyword request was successfully submitted.'
-      updated: 'Keyword was successfully updated.'
-      pick_org: 'Please pick which organization you are associated with'
+      edit_survey: "Edit Survey"
+      
+    new: 
+      create_a_survey: "Create a Survey"
     form:
-      keyword: 'Keyword'
-      keyword_tip: "This is what people will type into their phone."
-      keyword_instruct: "- A keyword is required to collect contacts and surveys via text, web and smartphones. <br/> - 'FSUCRU' is the keyword in 'Text FSUCRU to 75572'.<br/>- Use at least 3 letters for your keyword."
-      keyword_why: "This is for our use only. The use description could include words like 'weekly meeting', 'outreach event', and other uses the keyword will have."
-      explanation: 'Please explain what you plan to use this keyword for.'
-      initial_response: "What response should we send back to people when they text in? <br/>If you want the person to complete a survey, the response MUST include {{ link }} (exactly like that, dont change that part of the response.)"
-      initial_response_default: 'Hi! Thanks for checking out %{org}. To get more involved, reply with "i" or click {{ link }} if you have a smartphone.'
-      post_survey_why: "When someone texts in the keyword, this message will be sent to them and '{{link}}' will be replaced by a website address that will take them to an online survey for them to fill out. If they don't have internet, replying 'i' will send them all the questions via interactive text message."
+      title_placeholder: "Shorter titles are better"
+      post_survey_placeholder: "Example: Thank you for your time! If you're interested in Cru, we meet at Moore Auditorium every Thursday @ 8PM"
       post_survey_message: 'What message would you like to show after the person has completed the survey?'
       association: "The %{this_term} you are currently requesting this keyword for has at leaset one %{child_term} under it.<br/> Select if you'd like to associate this keyword with the %{this_term} or a %{child_term} under this %{this_term}"
-      keyword_locked: Keywords can't be changed. You can delete this one and create a new one if necessary.
-      keyword_associated_with: This keyword will be associated with %{org}.
-      note: 'Note: Processing requests may take up to 24 hours.'
-    show:
-      explanation: 'Explanation:'
-      keyword: 'Keyword:'
-      status: 'Status:'
-      
-    new:
-      choose_keyword_explanation_html:
-        'Choosing a keyword for your community or event enables you to have people fill out your survey questions via the web, interactive texting,
-        and smartphones.  <strong>They will text your keyword to the number %{number}</strong> and your survey questions will appear on their device.  Note: The process of acquiring new keywords
-        requires manual intervention. Once you request your keyword expect to wait up to 24 hours before we notify you via email that your keyword is approved and
-    	  ready for use.'
+      survey_associated_with: This survey will be associated with %{org}.
+      title: Title
+      title_tip: "This is what people will see as the header on the survey"
+    
     questions:
       create:
         notice: 'Question was successfully created.'
@@ -297,6 +272,43 @@ en:
         your_questions: Your Questions (drag to sort)
         archived_questions: Archived Questions
         add_question: Add a question
+      
+  sms_keywords:
+    index:
+      association: Associate Contacts With
+      request_keyword: Request a Keyword
+    default_rejection_email:
+      "Your keyword request has been denied"
+    edit:
+      heading: Editing Keyword
+      keywords: Keywords
+      to_begin_survey_html: To begin your survey, <strong>text %{keyword} to %{number}.</strong>
+    flash:
+      created: 'Keyword request was successfully submitted.'
+      updated: 'Keyword was successfully updated.'
+      pick_org: 'Please pick which organization you are associated with'
+    form:
+      keyword: 'Keyword'
+      keyword_tip: "This is what people will type into their phone."
+      keyword_instruct: "- A keyword is required to collect contacts and surveys via text, web and smartphones. <br/> - 'FSUCRU' is the keyword in 'Text FSUCRU to 75572'.<br/>- Use at least 3 letters for your keyword."
+      keyword_why: "This is for our use only. The use description could include words like 'weekly meeting', 'outreach event', and other uses the keyword will have."
+      explanation: 'Please explain what you plan to use this keyword for.'
+      initial_response: "What response should we send back to people when they text in? <br/>If you want the person to complete a survey, the response MUST include {{ link }} (exactly like that, dont change that part of the response.)"
+      initial_response_default: 'Hi! Thanks for checking out %{org}. To get more involved, reply with "i" or click {{ link }} if you have a smartphone.'
+      post_survey_why: "When someone texts in the keyword, this message will be sent to them and '{{link}}' will be replaced by a website address that will take them to an online survey for them to fill out. If they don't have internet, replying 'i' will send them all the questions via interactive text message."
+      keyword_locked: Keywords can't be changed. You can delete this one and create a new one if necessary.
+      note: 'Note: Processing requests may take up to 24 hours.'
+    show:
+      explanation: 'Explanation:'
+      keyword: 'Keyword:'
+      status: 'Status:'
+      
+    new:
+      choose_keyword_explanation_html:
+        'Choosing a keyword for your community or event enables you to have people fill out your survey questions via the web, interactive texting,
+        and smartphones.  <strong>They will text your keyword to the number %{number}</strong> and your survey questions will appear on their device.  Note: The process of acquiring new keywords
+        requires manual intervention. Once you request your keyword expect to wait up to 24 hours before we notify you via email that your keyword is approved and
+    	  ready for use.'
       your_questions_help: "Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service."
       predefined_help: "Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided."
       archived_help: "Archived questions will no longer be included in the survey.  If no answers have ever been given to the question, the archived question will be deleted.  If you USE an archived question, the question will move to the YOUR QUESTIONS section and the previous answers will re-appear."

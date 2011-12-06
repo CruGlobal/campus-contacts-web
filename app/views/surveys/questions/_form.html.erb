@@ -1,5 +1,5 @@
 <div class="inlineform" data-elem-id="<%= question.id %>">
-  <%= form_for question, url: question.new_record? ? sms_keyword_questions_path(@keyword) : sms_keyword_question_path(@keyword, question), 
+  <%= form_for question, url: question.new_record? ? survey_questions_path(@survey) : survey_question_path(@survey, question), 
                          method: question.new_record? ? :post : :put, remote: true, html: {class: 'question_form', id: question.new_record? ? 'new_question_form' : "form_for_#{question.id}"} do |f| %>
     <% if question.new_record? %>
     <div class="field">

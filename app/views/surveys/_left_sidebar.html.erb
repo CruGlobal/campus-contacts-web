@@ -1,0 +1,5 @@
+<ul class="leftmenu">
+    <li class="<%= 'selected' if current_page?(surveys_path) %>"><a href="/surveys"><%= t('.surveys') %></a></li>
+    <li class="<%= 'selected' if current_page?(edit_survey_path(@survey)) %>"><%= link_to(t('.edit_survey'), edit_survey_path(@survey)) %></li>
+    <li class="<%= 'selected' if current_page?(new_survey_path) %>"><%= link_to(t('.create_a_survey'), new_survey_path) %></li>
+</ul>

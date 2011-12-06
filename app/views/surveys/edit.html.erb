@@ -1,0 +1,16 @@
+<% provide :sidebar do %>
+  <%= render 'left_sidebar' %>
+<% end %>
+<div class="titlebar">
+  <h1><%= t('.edit_survey') %></h1>
+</div>
+
+<div class="pagemenu">
+  <ul class="pillmenu">
+    <li><%= link_to t('general.back'), :back %></li>
+  </ul>
+</div>
+
+<div class="contentpad">
+  <%= render 'form' %>
+</div>

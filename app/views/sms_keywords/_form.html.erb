@@ -42,21 +42,9 @@
     </div>
   </div>
   
-  <!-- <div class="stepwrap rwidth">
-    <div class="stepnumber">
-      <%= image_tag("step3.png") %>
-    </div>
-    <div class="stepcontent">
-      <div class="field">
-        <%#= f.label :post_survey_message, t('sms_keywords.form.post_survey_message') %>
-        <%#= f.text_area :post_survey_message, rows: 5, :placeholder => "Example: Thank you for your time! If you're interested in Cru, we meet at Moore Auditorium every Thursday @ 8PM" %>
-      </div>
-    </div>
-  </div> -->
-  
   <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step4.png") %>
+      <%= image_tag("step3.png") %>
     </div>
     <div class="stepcontent"> 
       <% if current_organization.show_sub_orgs? && current_organization.has_children? %>   
@@ -73,7 +61,7 @@
         </div>
       <% end %>
       <div class="actions">
-        <%= f.submit %> <%= t('sms_keywords.form.note') %>
+        <%= f.submit %> <%= t('sms_keywords.form.note') if @sms_keyword.new_record? %>
       </div>
     </div>
   </div>

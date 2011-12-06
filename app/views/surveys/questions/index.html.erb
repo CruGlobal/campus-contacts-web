@@ -4,7 +4,7 @@
 
 <div class="pagemenu">
   <ul class="pillmenu">
-    <li><%= link_to('Preview Survey', contact_form_path(keyword: @keyword.keyword, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), target: '_blank')%></li>
+    <li><%= link_to('Preview Survey', take_survey_path(survey_id: @survey.id, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), target: '_blank')%></li>
     <li>     
       <% if session[:wizard] && wizard_path %>
         <%= link_to(t('nav.back_to_wizard'), wizard_path) %>
@@ -17,19 +17,13 @@
 </div>
 
 <% provide :sidebar do %>
-  <ul class="leftmenu">
-    <li class="selected"><a href="/sms_keywords"><%= t('sms_keywords.edit.keywords') %></a></li>
-    <li><%= link_to(t('.request_keyword'), new_sms_keyword_path) %></li>
-  </ul>
+  <%= render 'surveys/left_sidebar' %>
 <% end %>
 
 <div class="contentpad">
   
   <p class="inlinehelp">
-    <%= t('general.survey_text_tip_html', keyword: @keyword.keyword, shortcode: SmsKeyword::SHORT) %>
-  </p><br/><br/>
-  <p class="inlinehelp">
-    <%= t('general.survey_web_tip_html', keyword: @keyword.keyword) %>
+    <%= t('general.survey_web_tip_html', link: take_survey_url(survey_id: @survey.id, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port'])) %>
   </p>
   
   <p><%= t('.note') %></p>
@@ -67,7 +61,7 @@
     </tbody>
   </table>
   <table border="0" cellspacing="0" cellpadding="0" class="yourquestions">
-    <tbody id="questions" data-sortable="true" data-sortable-url="<%= reorder_sms_keyword_questions_path(@keyword) %>">
+    <tbody id="questions" data-sortable="true" data-sortable-url="<%= reorder_survey_questions_path(@survey) %>">
       <%= render partial: 'question', collection: @questions %>
     </tbody>
   </table>  

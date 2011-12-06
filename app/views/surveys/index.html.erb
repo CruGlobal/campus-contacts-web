@@ -45,7 +45,8 @@
             <td><%= survey.organization %></td>
           <% end %>
           <td class="controls">
-            <%= link_to t("welcome.home.manage_questions"), edit_survey_path(survey) %>
+            <%= link_to t("welcome.home.manage_questions"), survey_questions_path(survey) %>
+          <%= link_to('', edit_survey_path(survey), :class => "icon edit tipit", :title => t('.edit_survey')) %>
             <%= link_to t("welcome.home.delete"), survey_path(survey), method: :delete, confirm: t('.delete_confirm'), :class => "icon delete tipit", :title => "Delete survey" %>
           </td>
         </tr>

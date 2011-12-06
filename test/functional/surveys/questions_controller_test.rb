@@ -8,7 +8,7 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
   end
   
   test "should get index" do
-    APP_CONFIG['predefined_question_sheet'] = Factory(:survey).id
+    APP_CONFIG['predefined_survey'] = Factory(:survey).id
     get :index, survey_id: @survey.id 
     assert_response :success
   end

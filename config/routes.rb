@@ -211,6 +211,7 @@ Mh::Application.routes.draw do
   match 'c/:keyword(/:received_sms_id)' => 'survey_responses#new', as: 'contact_form'
   match 'm/:received_sms_id' => 'survey_responses#new'
   match 'l/:token/:user_id' => 'leaders#leader_sign_in'
+  match 's/:survey_id' => 'survey_responses#new', as: 'take_survey'
   # mount RailsAdmin::Engine => "/admin"
   
   get "welcome/tour"

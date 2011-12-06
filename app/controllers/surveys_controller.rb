@@ -2,6 +2,7 @@ class SurveysController < ApplicationController
   before_filter :prepare_for_mobile
   skip_before_filter :authenticate_user!#, except: :start
   skip_before_filter :check_url
+  load_and_authorize_resource
   
   require 'api_helper'
   include ApiHelper
@@ -28,6 +29,26 @@ class SurveysController < ApplicationController
   
   def edit
     
+  end
+  
+  def new
+    
+  end
+  
+  def update
+    if @survey.update_attributes(params[:survey])
+      redirect_to surveys_path
+    else
+      render :edit
+    end
+  end
+  
+  def create
+    if @survey = current_organization.surveys.create(params[:survey])
+      redirect_to surveys_path
+    else
+      render :new
+    end
   end
   
   # Enter survey mode
