@@ -14,6 +14,7 @@ class Ability
       
       # can :manage, Organization, id: user.person.organizational_roles.where(role_id: admin_role.id).collect(&:organization_id)
       can :manage, Organization, id: admin_of_org_ids
+      can :lead, Organization, id: leader_of_org_ids
       
       can :manage_contacts, Organization, id: leader_of_org_ids
 
