@@ -277,6 +277,7 @@ en:
     index:
       association: Associate Contacts With
       request_keyword: Request a Keyword
+      create_survey_first: You need to create a survey before requesting a keyword.
     default_rejection_email:
       "Your keyword request has been denied"
     edit:
@@ -297,6 +298,7 @@ en:
       initial_response_default: 'Hi! Thanks for checking out %{org}. To get more involved, reply with "i" or click {{ link }} if you have a smartphone.'
       post_survey_why: "When someone texts in the keyword, this message will be sent to them and '{{link}}' will be replaced by a website address that will take them to an online survey for them to fill out. If they don't have internet, replying 'i' will send them all the questions via interactive text message."
       keyword_locked: Keywords can't be changed. You can delete this one and create a new one if necessary.
+      associated_survey_tip: "When a person texts in this keyword, they'll be presented with questions from the survey you select below."
       note: 'Note: Processing requests may take up to 24 hours.'
     show:
       explanation: 'Explanation:'
@@ -755,6 +757,8 @@ en:
         start_time: 'From'
       organization:
         terminology: Type
+      sms_keyword:
+        survey_id: Associated Survey
     submit:
       update: Update
   member: Member
