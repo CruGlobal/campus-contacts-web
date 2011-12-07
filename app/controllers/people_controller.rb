@@ -207,7 +207,7 @@ class PeopleController < ApplicationController
   end
   
   def bulk_email
-    authorize! :manage, current_organization
+    authorize! :lead, current_organization
     to_ids = params[:to].split(',').uniq
     
     to_ids.each do |id|
