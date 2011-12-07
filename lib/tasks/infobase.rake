@@ -95,7 +95,7 @@ namespace :infobase do
         puts i if i % 1000 == 0
         target = TargetArea.find(activity.fk_targetAreaID)
         m = Organization.where(importable_id: activity.id, importable_type: 'Ccc::MinistryActivity').first
-        attribs = {name: "#{strategies[activity.strategy]} at #{target.name}", terminology: 'Movement', importable_id: activity.id, importable_type: 'Ccc::MinistryActivity'}
+        attribs = {name: "#{strategies[activity.strategy]} at #{target.name}", terminology: 'Movement', importable_id: activity.id, importable_type: 'Ccc::MinistryActivity', status: 'active'}
         team = Organization.where(importable_id: activity.fk_teamID, importable_type: 'Ccc::MinistryLocallevel').first
         if m 
           if team == m.parent
