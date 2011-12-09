@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/gregbell/active_admin.git
-  revision: 3c4ac594f5571e6792d1834cf54f973c7da9107b
+  revision: 5676c997af88a206b9660af1bc73afd21ca0c47b
   specs:
     activeadmin (0.3.4)
       bourbon (>= 1.0.0)
@@ -110,7 +110,7 @@ GEM
     enforce_schema_rules (0.0.16)
       activerecord
     erubis (2.7.0)
-    execjs (1.2.11)
+    execjs (1.2.12)
       multi_json (~> 1.0)
     factory_girl (2.0.5)
     faraday (0.7.5)

@@ -67,6 +67,9 @@ group :development, :test do
   #gem 'cover_me', '>= 1.0.0.rc6', group: :test
 #  gem 'guard'
 #  gem 'guard-test'
+  # gem 'ZenTest'
+  # gem 'autotest-growl'
+  # gem 'autotest-fsevent'
   gem 'railroady'
   gem 'awesome_print'
   gem 'active_reload'

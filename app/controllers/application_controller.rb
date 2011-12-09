@@ -84,12 +84,17 @@ class ApplicationController < ActionController::Base
   
   def current_user
     # check for access token, then do it the devise way
-    if params['access_token']
-      @current_user ||= User.find(Rack::OAuth2::Server.get_access_token(params['access_token']).identity)
+    if current_access_token
+      @current_user ||= User.find(Rack::OAuth2::Server.get_access_token(current_access_token).identity)
     else
       super # devise user
     end
   end
+  
+  def current_access_token
+    @access_token ||= params['access_token'] || request.env['oauth.access_token']
+  end
+  helper_method :current_access_token
   
   def mobile_device?
     if session[:mobile_param]

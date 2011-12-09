@@ -18,13 +18,10 @@ class Api::ContactsController < ApiController
   def index_1
     @keywords = get_keywords
     json_output = []
-    # unless @keywords.empty?
-      @surveys = @keywords.collect(&:survey)
-      # @people = Person.who_answered(@surveys)
-      @people = @organization.all_contacts#.order('lastName, firstName')
-      @people = paginate_filter_sort_people(@people, @organization)
-      json_output = @people.collect {|person| {person: person.to_hash_basic(@organization)}}
-    # end
+    @surveys = @keywords.collect(&:survey)
+    @people = @organization.all_contacts#.order('lastName, firstName')
+    @people = paginate_filter_sort_people(@people, @organization)
+    json_output = @people.collect {|person| {person: person.to_hash_basic(@organization)}}
     final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
     render json: final_output
   end
@@ -198,8 +195,8 @@ class Api::ContactsController < ApiController
     @all_survey_ids = @all_survey_ids.flatten(3).uniq
 
     #get the keywords belonging to the questions sheets that the request people filled out
-    @keywords = QuestionSheet.where(id: @all_survey_ids).collect { |k| k.questionnable}.flatten.uniq
-    @keys = @keywords.collect {|k| {name: k.keyword, keyword_id: k.id, questions: k.questions.collect {|q| q.id}}}
+    @keywords = SmsKeyword.where(survey_id: @all_survey_ids)
+    @keys = @keywords.collect {|k| {name: k.keyword, keyword_id: k.id, questions: k.survey.questions.collect {|q| q.id}}}
 
     json_output = {keywords: @keys, questions: @all_questions.collect {|q| q.attributes.slice('id', 'kind', 'label', 'style', 'required')}, people: @people.collect {|person| {person: person.to_hash(@organization), form: (@answer_sheets[person].collect {|as| @questions[person][as].collect {|q| {q: q.id, a: q.display_response(as)}}}).flatten(2).uniq}}}
     final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
