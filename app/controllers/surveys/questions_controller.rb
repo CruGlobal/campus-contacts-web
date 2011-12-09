@@ -104,7 +104,7 @@ class Surveys::QuestionsController < ApplicationController
     # If a question is on more than one survey, or has been answered, remove it from this survey, but don't delete it for real.
     if @question.surveys.length > 1 || (@question.respond_to?(:sheet_answers) && @question.sheet_answers.count > 0)
       se = SurveyElement.where(survey_id: @survey.id, element_id: @question.id).first
-      se.update_attribute(:archived, true) if pe
+      se.update_attribute(:archived, true) if se
     else
       @question.destroy
     end
