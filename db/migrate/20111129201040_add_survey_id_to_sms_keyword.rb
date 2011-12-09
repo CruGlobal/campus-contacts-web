@@ -34,7 +34,7 @@ class AddSurveyIdToSmsKeyword < ActiveRecord::Migration
           survey.update_column(:organization_id, keyword.organization_id)
           survey.update_column(:updated_at, keyword.updated_at)
           survey.update_column(:created_at, keyword.created_at)
-          survey.update_column(:title, keyword.keyword)
+          survey.update_column(:title, "Survey for: " + keyword.keyword)
         else
           survey.update_column(:title, qs.label)
         end
