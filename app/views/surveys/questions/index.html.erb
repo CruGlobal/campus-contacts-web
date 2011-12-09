@@ -21,42 +21,32 @@
 <% end %>
 
 <div class="contentpad">
-  
   <p class="inlinehelp">
     <%= t('general.survey_web_tip_html', link: start_survey_url(survey_id: @survey.id, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port'])) %>
   </p>
   
   <p><%= t('.note') %></p>
   
-  <h3><%= t('.predefined') %> <%= tip(t('questions.predefined_help')) %></h3>
-  <table border="0" cellspacing="5" cellpadding="0" class="yourquestions">
-    <tbody id="predefined_questions">
-      <% @predefined.questions.each do |question| %>
-        <% unless @questions.include?(question) %>
-          <%= render 'predefined_question', question: question %>
-        <% end %>
-      <% end %>
-    </tbody>
-  </table>
+ 
   
   
   <h3><%= t('.your_questions') %> <%= tip(t('questions.your_questions_help')) %></h3>
   <table border="0" cellspacing="0" cellpadding="0" class="yourquestions fakesort">
     <tbody>
       <tr>
-        <td><%= t('contacts.index.first_name') %></td>
+        <td class="questiontitle"><%= t('contacts.index.first_name') %></td>
         <td></td>
-        <td></td>
+        <td><span class="icon lock"></span></td>
       </tr>
       <tr>
-        <td><%= t('contacts.index.last_name') %></td>
+        <td class="questiontitle"><%= t('contacts.index.last_name') %></td>
         <td></td>
-        <td></td>
+        <td><span class="icon lock"></span></td>
       </tr>
       <tr>
-        <td><%= t('contacts.index.phone_number') %></td>
+        <td class="questiontitle"><%= t('contacts.index.phone_number') %></td>
         <td></td>
-        <td></td>
+        <td><span class="icon lock"></span></td>
       </tr>
     </tbody>
   </table>
@@ -66,8 +56,20 @@
     </tbody>
   </table>  
   
+  <%= link_to('+ ' + t('.add_question'), '', id: 'add_question_link', class: "inlinebutton") %>
+  <%= link_to('+ ' + t('.add_prev_question'), '', id: 'add_question_link', class: "inlinebutton") %>
   
   <h3><%= t('.archived_questions') %> <%= tip(t('questions.archived_help')) %></h3>
+  <!-- <h3><%= t('.predefined') %> <%= tip(t('questions.predefined_help')) %></h3> -->
+  <table border="0" cellspacing="5" cellpadding="0" class="yourquestions">
+    <tbody id="predefined_questions">
+      <% @predefined.questions.each do |question| %>
+        <% unless @questions.include?(question) %>
+          <%= render 'predefined_question', question: question %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
   <table border="0" cellspacing="5" cellpadding="0" class="yourquestions">
     <tbody id="archived_questions">
       <% @archived_questions.each do |question| %>
@@ -75,7 +77,7 @@
       <% end %>
     </tbody>
   </table>
-  <%= link_to('+ ' + t('.add_question'), '', id: 'add_question_link', class: "inlinebutton") %>
+  
   
   <div id="question_form" style="display:none">
     <%= render 'form', question: Question.new %>

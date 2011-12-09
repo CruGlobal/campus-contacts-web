@@ -271,7 +271,8 @@ en:
         predefined: Predefined Questions
         your_questions: Your Questions (drag to sort)
         archived_questions: Archived Questions
-        add_question: Add a question
+        add_question: Add a new question
+        add_prev_question: Add an old question
       
   sms_keywords:
     index:
