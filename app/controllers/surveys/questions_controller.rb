@@ -61,7 +61,7 @@ class Surveys::QuestionsController < ApplicationController
     
     # If this was an archived question, unarchive it. otherwise, add it
     if @survey.archived_questions.include?(@question)
-      pe = PageElement.where(survey_id: @survey.id, element_id: @question.id).first
+      pe = SurveyElement.where(survey_id: @survey.id, element_id: @question.id).first
       pe.update_attribute(:archived, false)
     else
       @survey.elements << @question
