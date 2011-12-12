@@ -136,11 +136,16 @@ class ApplicationController < ActionController::Base
   end
   
   def set_locale
-    if params[:locale]
-      I18n.locale = params[:locale] 
+    # if the locale is in the subdomain, use that
+    available = %w{en ru es}
+    if available.include?(request.subdomains.first)
+      I18n.locale = request.subdomains.first
     else
-      available = %w{en ru es}
-      I18n.locale = request.preferred_language_from(available)
+      if params[:locale]
+        I18n.locale = params[:locale] 
+      else
+        I18n.locale = request.preferred_language_from(available)
+      end
     end
   end
   
