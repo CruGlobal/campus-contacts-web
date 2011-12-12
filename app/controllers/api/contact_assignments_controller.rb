@@ -113,5 +113,4 @@ class Api::ContactAssignmentsController < ApiController
     def ensure_organization
       raise NoOrganizationError unless @organization
     end
-    end
 end
