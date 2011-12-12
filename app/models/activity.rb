@@ -1,7 +1,7 @@
 class Activity < ActiveRecord::Base
   belongs_to :target_area
   belongs_to :organization
-  
+
   before_validation :set_start_date, on: :create
   
   protected

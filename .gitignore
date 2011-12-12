@@ -16,3 +16,4 @@ coverage.data
 .sass-cache
 active-record-query-trace
 .project
+rails_best_practices_output.html
