@@ -1873,7 +1873,7 @@ ActiveRecord::Schema.define(:version => 20111206144944) do
   end
 
   create_table "mh_surveys", :force => true do |t|
-    t.integer  "question_sheet_id",                  :null => false
+    t.integer  "question_sheet_id"
     t.string   "title",               :limit => 100, :null => false
     t.integer  "organization_id"
     t.datetime "created_at"
