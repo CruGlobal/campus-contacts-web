@@ -11,9 +11,9 @@
   <div id="survey_answers">
     <% has_answers = false %>
     <ul>
-      <% current_organization.question_sheets.flatten.uniq.each do |qs| %>
-        <% answer_sheet = @person.answer_sheets.detect {|as| qs.id == as.question_sheet_id} %>
-        <% qs.all_questions.each do |q| %>
+      <% current_organization.surveys.flatten.uniq.each do |survey| %>
+        <% answer_sheet = @person.answer_sheets.detect {|as| survey.id == as.survey_id} %>
+        <% survey.all_questions.each do |q| %>
           <% answer = q.display_response(answer_sheet) %>
           <% if answer.present? %>
             <% has_answers = true %>

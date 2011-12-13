@@ -5,7 +5,9 @@
 
   <% if mhub? && user_signed_in? %>
   	<script type="text/javascript">
-			FB.logout();
+      window.fbAsyncInit = function() {
+  			FB.logout();
+  		}
   	</script>
   <% end %>
 	<div id="countdown">

@@ -2,14 +2,23 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_filter :authenticate_user!
   skip_before_filter :check_url
   def facebook
-    facebook_login
-    redirect_to @user ? redirect_location(:user, @user) : '/'
+    if facebook_login
+      redirect_to @user ? redirect_location(:user, @user) : '/'
+    else
+      # Redirect to signup page
+    end
   end
   
   def facebook_mhub
     env["omniauth.auth"]['provider'] = 'facebook'
-    facebook_login
-    redirect_to stored_location_for(:user) || '/'
+    if facebook_login
+      location = stored_location_for(:user)
+      if location.present?
+        redirect_to location
+      else
+        render_404
+      end
+    end
   end
   
   protected
@@ -32,8 +41,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         )
         session["devise.facebook_data"] = env["omniauth.auth"]
       end
-    # rescue Exception => e
-    #   raise_or_hoptoad(e)
+    rescue NoEmailError, FailedFacebookCreateError
+      
+    rescue Exception => e
+      raise_or_hoptoad(e)
     end
   end
 end

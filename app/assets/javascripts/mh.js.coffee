@@ -132,3 +132,10 @@ window.addFields = (link, association, content) ->
   fieldset = $(link).closest('.fieldset')
   $('.remove_field', fieldset).show()
   false
+
+$.mh = {}
+$.mh.logout = (url) ->
+  FB.logout() if FB?
+  document.location = url
+  
+  

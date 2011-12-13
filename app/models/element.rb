@@ -57,9 +57,9 @@ class Element < ActiveRecord::Base
   #   position
   # end
   
-  # def question?
-  #   self.kind_of?(Question)
-  # end
+  def question?
+    self.kind_of?(Question)
+  end
   
   
   # by default the partial for an element matches the class name (override as necessary)

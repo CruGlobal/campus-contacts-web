@@ -109,40 +109,6 @@ class SurveyResponsesController < ApplicationController
       @answer_sheet.update_attribute(:completed_at, Time.now)
     end
     
-    def get_survey
-      if params[:keyword]
-        @keyword ||= SmsKeyword.where(keyword: params[:keyword]).first 
-        @survey = @keyword.survey
-      elsif params[:received_sms_id]
-        sms_id = Base62.decode(params[:received_sms_id])
-        @sms = SmsSession.find_by_id(sms_id) || ReceivedSms.find_by_id(sms_id)
-        if @sms
-          @keyword ||= @sms.sms_keyword || SmsKeyword.where(keyword: @sms.message.strip).first
-        end
-        @survey = @keyword.survey
-      elsif params[:survey_id]
-        @survey = Survey.find_by_id(params[:survey_id])
-      end
-      if params[:keyword] || params[:received_sms_id] || params[:survey_id]
-        unless @survey
-          render_404 
-          return false
-        end
-        @questions = @survey.questions
-      end
-    end
-    
-    def set_keyword_cookie
-      get_survey
-      if @keyword
-        cookies[:keyword] = @keyword.keyword 
-      elsif @survey
-        cookies[:survey_id] = @survey.id
-      else
-        return false
-      end
-    end
-    
     def get_person
       @person = user_signed_in? ? current_user.person : Person.new
     end

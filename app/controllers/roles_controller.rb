@@ -7,6 +7,12 @@ class RolesController < ApplicationController
     @organizational_roles = Role.where(organization_id: current_organization.id)
     @system_roles = Role.default
   end
+  
+  def new
+  end
+  
+  def edit
+  end
 
   def create
     Role.transaction do
