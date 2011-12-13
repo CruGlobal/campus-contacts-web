@@ -18,14 +18,14 @@ class Survey < ActiveRecord::Base
     title
   end
   
-  def questions_before_position(position)
-    self.elements.where(["#{SurveyElement.table_name}.position < ?", position])
-  end
+  # def questions_before_position(position)
+  #   self.elements.where(["#{SurveyElement.table_name}.position < ?", position])
+  # end
   
   # Include nested elements
-  def all_elements
-    (elements + elements.collect(&:all_elements)).flatten
-  end
+  # def all_elements
+  #   (elements + elements.collect(&:all_elements)).flatten
+  # end
   
   def duplicate
     new_survey = Survey.new(self.attributes)

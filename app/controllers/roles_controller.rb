@@ -1,7 +1,7 @@
 class RolesController < ApplicationController
   before_filter :ensure_current_org
   before_filter :authorize
-  before_filter :set_role, :only => [:new, :create, :edit, :update, :destroy]
+  before_filter :set_role, :only => [:new, :edit, :update, :destroy]
  
   def index
     @organizational_roles = Role.where(organization_id: current_organization.id)
@@ -10,7 +10,7 @@ class RolesController < ApplicationController
 
   def create
     Role.transaction do
-      @role.organization_id = current_organization.id
+      @role = current_organization.roles.build(params[:role])
 
       if @role.save
         redirect_to roles_path
@@ -41,7 +41,6 @@ class RolesController < ApplicationController
   def set_role
     @role = case action_name 
     when 'new' then Role.new
-    when 'create' then Role.new(params[:role])
     else Role.find(params[:id]) 
     end 
   end

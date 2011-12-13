@@ -62,13 +62,13 @@ class Organization < ActiveRecord::Base
   
   def to_s() name; end
   
-  def self_and_children
-    [self] + children
-  end
+  # def self_and_children
+  #   [self] + children
+  # end
   
-  def children_surveys
-    Survey.where(organization_id: child_ids)
-  end
+  # def children_surveys
+  #   Survey.where(organization_id: child_ids)
+  # end
   
   def self_and_children_ids
     @self_and_children_ids ||= [id] + child_ids

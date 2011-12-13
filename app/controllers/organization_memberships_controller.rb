@@ -35,14 +35,14 @@ class OrganizationMembershipsController < ApplicationController
       if @organization_membershipship.save
         format.html do 
           @org = @organization_membershipship.organization 
-          if @org.root.requires_validation?
-            case @org.root.validation_method
-            when 'relay'
-              redirect_to('https://signin.ccci.org/cas/login?service=' + validate_person_organization_membership_url(current_person, @organization_membershipship))
-            end
-          else
+          # if @org.root.requires_validation?
+          #   case @org.root.validation_method
+          #   when 'relay'
+          #     redirect_to('https://signin.ccci.org/cas/login?service=' + validate_person_organization_membership_url(current_person, @organization_membershipship))
+          #   end
+          # else
             redirect_to(session[:return_to].present? ? session[:return_to] : :back, notice: 'Organization membership was successfully created.') 
-          end
+          # end
         end
         format.xml  { render xml: @organization_membershipship, status: :created, location: @organization_membershipship }
       else
@@ -81,39 +81,39 @@ class OrganizationMembershipsController < ApplicationController
     end
   end
   
-  def validate
-    @organization_membershipship = current_person.organization_memberships.includes(:organization).find(params[:id])
-    org = @organization_membershipship.organization
-    @valid = false
-    user = current_user
-    case org.root.validation_method
-    when 'relay'
-      if RubyCAS::Filter.filter(self)
-        guid = get_guid_from_ticket(session[:cas_last_valid_ticket])
-        # See if we have a user with this guid
-        user = User.find_by_globallyUniqueID(guid)
-        unless current_user == user
-          sign_out(current_user)
-          old_user = User.find(current_user.id)
-          user.merge(old_user)
-          sign_in(user)
-        end
-        if user.person.isStaff?
-          @valid = true
-        end
-      end
-    end
-    if @valid
-      (@organization_membershipship.frozen? ? user.person.organization_memberships.where(organization_id: org.id).first : @organization_membershipship).update_attribute(:validated, true)
-      redirect_to(session[:return_to].present? ? session[:return_to] : :back, notice: 'Organization membership was successfully created.') 
-      return
-    else
-      # @organization_membershipship.destroy
-      redirect_to person_organization_memberships_path(user.person), error: "Validation of membership failed"
-      return
-    end
-    
-  end
+  # def validate
+  #   @organization_membershipship = current_person.organization_memberships.includes(:organization).find(params[:id])
+  #   org = @organization_membershipship.organization
+  #   @valid = false
+  #   user = current_user
+  #   case org.root.validation_method
+  #   when 'relay'
+  #     if RubyCAS::Filter.filter(self)
+  #       guid = get_guid_from_ticket(session[:cas_last_valid_ticket])
+  #       # See if we have a user with this guid
+  #       user = User.find_by_globallyUniqueID(guid)
+  #       unless current_user == user
+  #         sign_out(current_user)
+  #         old_user = User.find(current_user.id)
+  #         user.merge(old_user)
+  #         sign_in(user)
+  #       end
+  #       if user.person.isStaff?
+  #         @valid = true
+  #       end
+  #     end
+  #   end
+  #   if @valid
+  #     (@organization_membershipship.frozen? ? user.person.organization_memberships.where(organization_id: org.id).first : @organization_membershipship).update_attribute(:validated, true)
+  #     redirect_to(session[:return_to].present? ? session[:return_to] : :back, notice: 'Organization membership was successfully created.') 
+  #     return
+  #   else
+  #     # @organization_membershipship.destroy
+  #     redirect_to person_organization_memberships_path(user.person), error: "Validation of membership failed"
+  #     return
+  #   end
+  #   
+  # end
   
   def set_current
     org = Organization.find(params[:id])

@@ -31,9 +31,9 @@ class Element < ActiveRecord::Base
   #   HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   # end
   
-  def has_response?(answer_sheet = nil)
-    false
-  end
+  # def has_response?(answer_sheet = nil)
+  #   false
+  # end
   
   def required?(answer_sheet = nil)
     super()
@@ -47,19 +47,19 @@ class Element < ActiveRecord::Base
     end
   end
   
-  def set_position(position, survey = nil)
-    if survey
-      pe = survey_elements.where(:survey_id => survey.id).first
-      pe.update_attribute(:position, position) if pe
-    else
-      self[:position] = position
-    end
-    position
-  end
+  # def set_position(position, survey = nil)
+  #   if survey
+  #     pe = survey_elements.where(:survey_id => survey.id).first
+  #     pe.update_attribute(:position, position) if pe
+  #   else
+  #     self[:position] = position
+  #   end
+  #   position
+  # end
   
-  def question?
-    self.kind_of?(Question)
-  end
+  # def question?
+  #   self.kind_of?(Question)
+  # end
   
   
   # by default the partial for an element matches the class name (override as necessary)
@@ -88,13 +88,13 @@ class Element < ActiveRecord::Base
   end
   
   # include nested elements
-  def all_elements
-    if respond_to?(:elements)
-      (elements + elements.collect(&:all_elements)).flatten
-    else
-      []
-    end
-  end
+  # def all_elements
+  #   if respond_to?(:elements)
+  #     (elements + elements.collect(&:all_elements)).flatten
+  #   else
+  #     []
+  #   end
+  # end
   
   def reuseable?
     (self.is_a?(Question) || self.is_a?(QuestionGrid) || self.is_a?(QuestionGridWithTotal))

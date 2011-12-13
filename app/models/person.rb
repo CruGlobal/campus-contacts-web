@@ -559,7 +559,7 @@ class Person < ActiveRecord::Base
   end
 
   def updated_at() dateChanged end
-  def updated_by() changedBy end
+  # def updated_by() changedBy end
   def created_at() dateCreated end
   def created_by() createdBy end
     
