@@ -22,7 +22,7 @@ GIT
 
 GIT
   remote: git://github.com/twinge/rack-oauth2-server.git
-  revision: 6287b2fba5b5979e2d00d61f62825bb4649b0ad3
+  revision: d0e010062bab245f8aaf7dfc93a2162e3fc1cc80
   branch: active_record
   specs:
     trumant-rack-oauth2-server (2.2.1.1)
@@ -144,7 +144,7 @@ GEM
       json (>= 1.2.4)
     kaminari (0.12.4)
       rails (>= 3.0.0)
-    kgio (2.6.0)
+    kgio (2.7.0)
     mail (2.3.0)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -212,7 +212,7 @@ GEM
       activesupport (= 3.1.3)
       bundler (~> 1.0)
       railties (= 3.1.3)
-    rails-dev-tweaks (0.5.1)
+    rails-dev-tweaks (0.5.2)
       rails (~> 3.1.0)
     rails-footnotes (3.7.5)
       rails (>= 3.0.0)
