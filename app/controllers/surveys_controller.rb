@@ -1,8 +1,9 @@
 class SurveysController < ApplicationController
+  before_filter :set_keyword_cookie, only: :start
   before_filter :prepare_for_mobile
-  skip_before_filter :authenticate_user!#, except: :start
+  skip_before_filter :authenticate_user!
   skip_before_filter :check_url
-  load_and_authorize_resource
+  load_and_authorize_resource except: [:start, :stop]
   
   require 'api_helper'
   include ApiHelper
@@ -53,21 +54,20 @@ class SurveysController < ApplicationController
   
   # Enter survey mode
   def start
-    unless params[:keyword].present? && SmsKeyword.find_by_keyword(params[:keyword])
-      cookies[:survey_mode] = nil
-      cookies[:keyword] = nil
-      render_404 
+    unless mhub? #|| Rails.env.test?
+      redirect_to start_survey_url(params.merge(host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']))
+      return false
     end
     cookies[:survey_mode] = 1
-    cookies[:keyword] = params[:keyword]
-    redirect_to facebook_logout_url(next: contact_form_url(params[:keyword]))
+    redirect_to sign_out_url(next: contact_form_url(params[:keyword]))
   end
   
   # Exit survey mode
   def stop
     cookies[:survey_mode] = nil
     cookies[:keyword] = nil
-    redirect_to facebook_logout_url
+    cookies[:survey_id] = nil
+    redirect_to sign_out_url
   end
   
     

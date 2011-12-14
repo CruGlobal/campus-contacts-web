@@ -33,7 +33,7 @@
         <div class="gmwrap">
           <ul class="sf-menu">
             <li class="item">
-              <%= link_to(t('nav.logout'), sign_out_path(next: cookies[:survey_mode].present? && cookies[:keyword].present? ? contact_form_url(cookies[:keyword]) : sign_out_url), onclick: 'FB.logout()')  %> 
+              <%= link_to(t('nav.logout'), sign_out_path(next: cookies[:survey_mode].present? && cookies[:keyword].present? ? contact_form_url(cookies[:keyword]) : sign_out_path), onclick: 'FB.logout()')  %> 
             </li>   
           </ul>
         </div>

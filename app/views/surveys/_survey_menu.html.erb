@@ -1,5 +1,0 @@
-<ul class="leftmenu">
-  <li class="surveys <%= 'selected' if params[:controller] == 'sms_keywords' %>"><a href="/sms_keywords"><%= t('nav.surveys') %></a></li>
-  <li class="<%= 'selected' if params[:controller] == 'sms_keywords' %>"><a href="/sms_keywords"><%= t('nav.keywords') %></a></li>
-  <li><%= link_to(t('.request_keyword'), new_sms_keyword_path) %></li>
-</ul>

@@ -133,6 +133,9 @@ Mh::Application.routes.draw do
   end
   
   resources :surveys, :only => [:new, :create, :edit, :update, :index] do
+    member do
+      get :start
+    end
     resources :questions, controller: "surveys/questions" do
       member do
         put :hide
@@ -209,9 +212,8 @@ Mh::Application.routes.draw do
   match 'c/:keyword(/:received_sms_id)' => 'survey_responses#new', as: 'contact_form'
   match 'm/:received_sms_id' => 'survey_responses#new'
   match 'l/:token/:user_id' => 'leaders#leader_sign_in'
-  get 's/:survey_id' => 'surveys#start', as: :start_survey
+  get 's/:survey_id' => 'survey_responses#new', as: 'short_survey'
   get "/surveys/:keyword" => 'surveys#start'
-  get "/surveys/stopsurveymode" => 'surveys#stop', as: :stop_survey
   # mount RailsAdmin::Engine => "/admin"
   
   get "welcome/tour"

@@ -4,7 +4,7 @@
 
 <div class="pagemenu">
   <ul class="pillmenu">
-    <li><%= link_to('Preview Survey', start_survey_url(survey_id: @survey.id, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), target: '_blank')%></li>
+    <li><%= link_to('Preview Survey', new_survey_response_url(survey_id: @survey.id, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), target: '_blank')%></li>
     <li>     
       <% if session[:wizard] && wizard_path %>
         <%= link_to(t('nav.back_to_wizard'), wizard_path) %>
@@ -22,7 +22,7 @@
 
 <div class="contentpad">
   <p class="inlinehelp">
-    <%= t('general.survey_web_tip_html', link: start_survey_url(survey_id: @survey.id, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port'])) %>
+    <%= t('general.survey_web_tip_html', link: short_survey_url(@survey.id, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port'])) %>
   </p>
   
   <p><%= t('.note') %></p>

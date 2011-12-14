@@ -259,7 +259,6 @@ class ApplicationController < ActionController::Base
         render_404 
         return false
       end
-      @questions = @survey.questions
     end
   end
   
