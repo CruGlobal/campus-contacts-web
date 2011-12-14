@@ -251,10 +251,10 @@ class ApplicationController < ActionController::Base
         @keyword ||= @sms.sms_keyword || SmsKeyword.where(keyword: @sms.message.strip).first
       end
       @survey = @keyword.survey
-    elsif params[:survey_id]
-      @survey = Survey.find_by_id(params[:survey_id])
+    elsif params[:survey_id] || params[:id]
+      @survey = Survey.find_by_id(params[:survey_id] || params[:id])
     end
-    if params[:keyword] || params[:received_sms_id] || params[:survey_id]
+    if params[:keyword] || params[:received_sms_id] || params[:survey_id] || params[:id]
       unless @survey
         render_404 
         return false

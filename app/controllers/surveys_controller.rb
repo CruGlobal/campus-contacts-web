@@ -11,7 +11,7 @@ class SurveysController < ApplicationController
   def index
     # authenticate_user! unless params[:access_token] && params[:org_id]
     if mhub?
-      @title = "Pick A Keyword"
+      @title = "Pick A Survey"
       if current_user
         @organization = current_person.organizations.find_by_id(params[:org_id]) || current_organization
         @surveys = @organization ? @organization.self_and_children_surveys : nil
@@ -59,7 +59,7 @@ class SurveysController < ApplicationController
       return false
     end
     cookies[:survey_mode] = 1
-    redirect_to sign_out_url(next: contact_form_url(params[:keyword]))
+    redirect_to sign_out_url(next: short_survey_url(@survey.id))
   end
   
   # Exit survey mode
