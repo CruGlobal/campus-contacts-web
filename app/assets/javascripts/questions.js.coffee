@@ -26,6 +26,10 @@ $ ->
     $('#question_form').slideDown()
     false
     
+  $('#add_old_question_link').live 'click', ->
+    
+    false
+    
   $('.use_question, .remove_question').live 'click', ->
   	$(this).closest('tr').fadeOut()
   	$(this).closest('tr').remove()
