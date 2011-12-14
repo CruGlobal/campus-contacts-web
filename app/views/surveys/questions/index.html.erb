@@ -22,7 +22,7 @@
 
 <div class="contentpad">
   <p class="inlinehelp">
-    <%= t('general.survey_web_tip_html', link: short_survey_url(@survey.id, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port'])) %>
+    <%= t('general.survey_web_tip_html', link: short_survey_url(@survey.id, host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port']))) %>
   </p>
   
   <p><%= t('.note') %></p>
