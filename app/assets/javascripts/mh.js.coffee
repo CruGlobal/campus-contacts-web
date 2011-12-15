@@ -148,11 +148,9 @@ $.mh.logout = (url) ->
   
 $.mh.fbEnsureInit = (callback) -> 
   if(!$.mh.fbInitialized)
-    console.log('sleeping')
     setTimeout(()-> 
       $.mh.fbEnsureInit(callback)
     , 50)
   else 
     if(callback)
       callback();
-      console.log('logged out')
