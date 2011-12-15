@@ -11,6 +11,22 @@
         <li class="item"><%= link_to('Exit SU Mode', '?exit=true') %></li>
       <% end %>
       <% if user_signed_in? %>
+        <% if current_organization.keywords.present? %>
+          <li>
+            <% if current_organization.keywords.length == 1 %>
+              <%= link_to(t('nav.enter_survey_mode'), start_survey_url(current_organization.keywords.first.keyword, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), :class => "tipit", :title => t('nav.survey_mode_tip'))%>
+            <% else %>
+              <%= link_to(t('nav.enter_survey_mode'), '#', id: 'survey_keywords_mode_link')%>
+              <ul>
+                <% current_organization.keywords.each do |keyword| %>
+                  <li>
+                    <div><%= link_to(t('nav.use_keyword', keyword: keyword.keyword), start_survey_url(keyword.keyword, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), id: 'select_keyword')%>
+                  </li>
+                <% end %>
+              </ul>
+            <% end %>
+          </li>
+        <% end %>
         <% if current_organization %>
           <li>
             <% if current_person.organizations.length > 1 || current_person.organizations.detect(&:show_sub_orgs?) %>
@@ -24,22 +40,7 @@
               <%= link_to(current_organization, user_root_path) %>
             <% end %>
           </li>
-          <% if current_organization.keywords.present? %>
-            <li>
-              <% if current_organization.keywords.length == 1 %>
-                <%= link_to(t('nav.enter_survey_mode'), start_survey_url(current_organization.keywords.first.keyword, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), :class => "tipit", :title => t('nav.survey_mode_tip'))%>
-              <% else %>
-                <%= link_to(t('nav.enter_survey_mode'), '#', id: 'survey_keywords_mode_link')%>
-                <ul>
-                  <% current_organization.keywords.each do |keyword| %>
-                    <li>
-                      <div><%= link_to(t('nav.use_keyword', keyword: keyword.keyword), start_survey_url(keyword.keyword, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), id: 'select_keyword')%>
-                    </li>
-                  <% end %>
-                </ul>
-              <% end %>
-            </li>
-          <% end %>
+          
         <% end %>
         <li><%= link_to(t('nav.my_profile'), person_path(current_person)) %></li>
         <li>
