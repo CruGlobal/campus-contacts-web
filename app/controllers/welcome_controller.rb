@@ -12,9 +12,9 @@ class WelcomeController < ApplicationController
     session[:wizard] = nil
     case params[:step]
     when 'keyword'
-      @redirect = true unless current_organization
-    when 'survey'
       @redirect = true unless current_organization && current_organization.self_and_children_surveys.present?
+    when 'survey'
+      @redirect = true unless current_organization
     when 'leaders'
       @redirect = true unless current_organization
     end
