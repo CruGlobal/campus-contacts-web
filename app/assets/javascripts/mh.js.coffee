@@ -13,10 +13,10 @@ $ ->
       $('.remove_field', fieldset).hide()
     false
   
-  if oneFingerScroll?
+  if $.fn.oneFingerScroll?
     $('.fingerme').oneFingerScroll();
   
-  if superfish?
+  if $.fn.superfish?
     $('ul.sf-menu').superfish
       dropShadows: false,
       delay: 100
@@ -70,10 +70,10 @@ $ ->
         type:'POST', 
         url: $(sortable).attr('data-sortable-url')
         
-  if sortable?
+  if $.fn.sortable?
     $('[data-sortable]').sortable(sortable_options)
   
-  if qtip?
+  if $.fn.qtip?
     $('.tipthis[title]').qtip()
     $('.tiplight').qtip()
     $('.tipit[title]').qtip
@@ -89,7 +89,7 @@ $ ->
     handle = $(this).attr('data-sortable-handle');
     $(this).sortable("option", "handle", handle);
     
-  if draggable?
+  if $.fn.draggable?
     $('.handle').draggable 
       revert: true
       start: (event, ui) ->
