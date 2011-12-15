@@ -2,6 +2,10 @@ class OrganizationsController < ApplicationController
   respond_to :html, :js
   before_filter :get_organization, :only => [:show, :edit, :update, :destroy]
   
+  def index
+    
+  end
+  
   def show
     respond_with @organization
   end

@@ -36,7 +36,7 @@ class Person < ActiveRecord::Base
   has_many :received_sms, class_name: "ReceivedSms", foreign_key: "person_id"
   has_many :sms_sessions, inverse_of: :person
   
-  scope :who_answered, lambda {|question_sheet_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.question_sheet_id' => question_sheet_id)}
+  scope :who_answered, lambda {|survey_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.survey_id' => survey_id)}
   validates_presence_of :firstName
   validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/, allow_blank: true
   
@@ -559,7 +559,7 @@ class Person < ActiveRecord::Base
   end
 
   def updated_at() dateChanged end
-  def updated_by() changedBy end
+  # def updated_by() changedBy end
   def created_at() dateCreated end
   def created_by() createdBy end
     

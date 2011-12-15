@@ -12,25 +12,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery  
 
   
-  def facebook_logout
-    redirect_url = params[:next] ? params[:next] : root_url
-    if session[:fb_token]
-      split_token = session[:fb_token].split("|")
-      fb_api_key = split_token[0]
-      fb_session_key = split_token[1]
-      session[:fb_token] = nil
-      if mhub?
-        # redirect_to "http://www.facebook.com/logout.php?api_key=#{fb_api_key}&session_key=#{fb_session_key}&confirm=1&next=#{redirect_url}"
-        redirect_to redirect_url #"http://m.facebook.com/logout.php?confirm=1&next=#{redirect_url}"
-      else
-        redirect_to redirect_url
-      end
-    else
-      redirect_to redirect_url
-    end
-    sign_out
-  end
-  
   protected
   
   def set_newrelic_params
@@ -60,9 +41,15 @@ class ApplicationController < ActionController::Base
     render_404 if mhub?
   end
   
-  def render_404
+  def render_404(nologin = false)
     if cookies[:keyword] && SmsKeyword.find_by_keyword(cookies[:keyword])
-      redirect_to "/c/#{cookies[:keyword]}"
+      url = "/c/#{cookies[:keyword]}"
+      url += '?nologin=true' if nologin
+      redirect_to url
+    elsif cookies[:survey_id] && Survey.find_by_id(cookies[:survey_id])
+      url = "/survey_responses/new?survey_id=#{cookies[:survey_id]}"
+      url += '&nologin=true' if nologin
+      redirect_to url
     else
       render :file => Rails.root.join(mhub? ? 'public/404_mhub.html' : 'public/404.html'), :layout => false, :status => 404
     end
@@ -101,12 +88,17 @@ class ApplicationController < ActionController::Base
   
   def current_user
     # check for access token, then do it the devise way
-    if params['access_token']
-      @current_user ||= User.find(Rack::OAuth2::Server.get_access_token(params['access_token']).identity)
+    if current_access_token
+      @current_user ||= User.find(Rack::OAuth2::Server.get_access_token(current_access_token).identity)
     else
       super # devise user
     end
   end
+  
+  def current_access_token
+    @access_token ||= params['access_token'] || request.env['oauth.access_token']
+  end
+  helper_method :current_access_token
   
   def mobile_device?
     if session[:mobile_param]
@@ -188,6 +180,8 @@ class ApplicationController < ActionController::Base
   # 
   # def current_user
   #   @current_user ||= User.find(42655)
+  #   session[:user_id] = @current_user.id
+  #   @current_user
   # end
   
   def unassigned_people(organization)
@@ -195,9 +189,9 @@ class ApplicationController < ActionController::Base
   end
   helper_method :unassigned_people
   
-  def get_answer_sheet(keyword, person)
-    answer_sheet = AnswerSheet.where(person_id: person.id, question_sheet_id: keyword.question_sheet.id).first || 
-                   AnswerSheet.create!(person_id: person.id, question_sheet_id: keyword.question_sheet.id)
+  def get_answer_sheet(survey, person)
+    answer_sheet = AnswerSheet.where(person_id: person.id, survey_id: survey.id).first || 
+                   AnswerSheet.create!(person_id: person.id, survey_id: survey.id)
     answer_sheet.reload
     answer_sheet
   end
@@ -253,6 +247,39 @@ class ApplicationController < ActionController::Base
   
   def is_admin?
     current_user.has_role?(Role::ADMIN_ID, current_organization)
+  end
+    
+  def get_survey
+    if params[:keyword]
+      @keyword ||= SmsKeyword.where(keyword: params[:keyword]).first 
+      @survey = @keyword.survey
+    elsif params[:received_sms_id]
+      sms_id = Base62.decode(params[:received_sms_id])
+      @sms = SmsSession.find_by_id(sms_id) || ReceivedSms.find_by_id(sms_id)
+      if @sms
+        @keyword ||= @sms.sms_keyword || SmsKeyword.where(keyword: @sms.message.strip).first
+      end
+      @survey = @keyword.survey
+    elsif params[:survey_id] || params[:id]
+      @survey = Survey.find_by_id(params[:survey_id] || params[:id])
+    end
+    if params[:keyword] || params[:received_sms_id] || params[:survey_id] || params[:id]
+      unless @survey
+        render_404 
+        return false
+      end
+    end
+  end
+  
+  def set_keyword_cookie
+    get_survey
+    if @keyword
+      cookies[:keyword] = @keyword.keyword 
+    elsif @survey
+      cookies[:survey_id] = @survey.id
+    else
+      return false
+    end
   end
   
 end

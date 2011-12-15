@@ -26,6 +26,17 @@ $ ->
     $('#question_form').slideDown()
     false
     
+  $('#add_old_question_link').live 'click', ->
+    $('#previously_used').dialog
+      resizable: false,
+      height: 700,
+      width: 800,
+      modal: true,
+      buttons: 
+        Close: ->
+          $(this).dialog('destroy')
+    false
+    
   $('.use_question, .remove_question').live 'click', ->
   	$(this).closest('tr').fadeOut()
   	$(this).closest('tr').remove()

@@ -1,6 +1,7 @@
 class Api::ContactAssignmentsController < ApiController
   oauth_required scope: "contact_assignment"
   before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization, :get_api_json_header
+  before_filter :ensure_organization, :only => [:create_2, :list_leaders_2, :list_organizations_2, :destroy_2]
   
   def create_1
     raise ContactAssignmentCreateParamsError unless ( params[:ids].present? && params[:assign_to].present? && is_int?(params[:assign_to]))
@@ -30,7 +31,6 @@ class Api::ContactAssignmentsController < ApiController
   def create_2
     #required params: id, type = leader|organization, assign_to_id = int|none
     #recommended params: current_assign_to_id = int|none
-    raise NoOrganizationError unless @organization
     raise ContactAssignmentCreateParamsError unless params[:id].present? && params[:type].present? && params[:assign_to_id].present?
     raise ContactAssignmentCreateParamsError unless params[:id].to_i.to_s == params[:id]
     raise ContactAssignmentCreateParamsError unless params[:type] == "leader" || params[:type] == "organization"
@@ -82,7 +82,6 @@ class Api::ContactAssignmentsController < ApiController
   end
   
   def list_leaders_2
-    raise NoOrganizationError unless @organization
     
     output = @api_json_header
     output[:leaders] = @organization.leaders.collect{|l| l.to_hash_micro_leader}
@@ -90,7 +89,6 @@ class Api::ContactAssignmentsController < ApiController
   end
   
   def list_organizations_2
-    raise NoOrganizationError unless @organization
     
     scope = Organization.subtree_of(current_organization.root_id).where("name like ?", "%#{params[:q]}%")
     @organizations = scope.order('name')
@@ -102,7 +100,6 @@ class Api::ContactAssignmentsController < ApiController
   end
   
   def destroy_2
-    raise NoOrganizationError unless @organization
     raise ContactAssignmentDeleteParamsError unless (params[:ids].present? && (is_int?(params[:ids]) || (params[:ids].is_a? Array)))
     
     ContactAssignment.where(person_id: params[:ids].split(','), organization_id: @organization.id).destroy_all
@@ -111,4 +108,9 @@ class Api::ContactAssignmentsController < ApiController
     output[:success] = true
     render json: output
   end
+  
+  protected
+    def ensure_organization
+      raise NoOrganizationError unless @organization
+    end
 end

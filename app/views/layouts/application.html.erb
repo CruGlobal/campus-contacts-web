@@ -6,6 +6,7 @@
   <%= render 'shared/head' %>
 </head>
 <body id="<%= controller.controller_name %>_controller" class="<%= params[:action] %>">
+  <%= render 'fb_init' %>
   
   <div id="outer">
   
@@ -29,6 +30,7 @@
             <li class="<%= 'selected' if request.fullpath == '/contacts/mine' %>"><%= link_to(t('nav.my_contacts'), "/contacts/mine", :class => "topset mycontacts") %></li>
             <li class="<%= 'selected' if  params[:controller] == 'contacts' && params[:action] == 'index' %>"><%= link_to(t('nav.all_contacts'), "/contacts", :class => "topset allcontacts") %></li>
             <% if can? :manage, current_organization %>
+              <li class="<%= 'selected' if params[:controller] == 'surveys' %>"><%= link_to(t('nav.surveys'), surveys_path, :class => "topset surveys") %></li>
               <li class="<%= 'selected' if params[:controller] == 'sms_keywords' %>"><%= link_to(t('nav.keywords'), sms_keywords_path, :class => "topset surveys") %></li>
             <% end %>
           <% when request.path =~ care_pattern %>

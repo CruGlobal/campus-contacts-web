@@ -63,7 +63,8 @@ en:
     my_contacts: 'My Contacts'
     all_contacts: 'All Contacts'
     directory: 'Directory'
-    keywords: "Surveys"
+    surveys: "Surveys"
+    keywords: "Keywords"
     roles: "Roles"
     back_to_dashboard: "Back To My Contacts"
   general:
@@ -80,8 +81,7 @@ en:
     back: "Back"
     hide: 'hide'
     add_a_leader: 'Add a leader'
-    survey_text_tip_html: "To begin your survey, <strong>text %{keyword} to %{shortcode}.</strong>"
-    survey_web_tip_html: "For the web version of the survey, send people to <strong>http://mhub.cc/c/%{keyword}/</strong>"
+    survey_web_tip_html: "For the web version of the survey, send people to <strong>%{link}/</strong>"
     male: Male
     female: Female
     both: Both
@@ -156,7 +156,7 @@ en:
     new:
       login_paragraph_html:
         To get started, you'll need to have a Facebook account. <br/>
-        Click the login link to the left and <strong>allow</strong> MHub to access your information. <br/>
+        Click the login link to the left and <strong>allow</strong> MissionHub to access your information. <br/>
         You'll be taken to the wizard if this is your first time accessing MissionHub.
       login_paragraph_mhub: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
       instructions: Instructions
@@ -183,18 +183,25 @@ en:
       get_details_html: Get the Details & <a href="/welcome/tour" class="learnmore">Learn More</a> or %{link}
       get_started: "Get Started"
     wizard:
-      welcome: Welcome
+      welcome: Welcome!
       verify_identity: Verify Your Identity
       request_keyword: Request a Keyword
       designate_leaders: Designate Leaders
       create_survey: Create Survey
+      request_a_keyword: Request a Keyword!
+      create_a_survey: Create a Survey!
       back: Back
       next: Next
       welcome_paragraph: "Welcome to MissionHub!<br><br> This setup wizard will help you get started and set up a keyword, which is an essential part of getting contacts into the system."
       verify_paragraph: "If you have a CCC Relay login account, please sign in to link your account. You only need to do this once. WARNING: If you logged into MissionHub using someone else's Facebook Account, Log Out now! Clicking verify will merge your information with theirs, creating a big mess."
-      verify_with_relay: "Verify With Relay"
-      not_found_paragraph: "At the current time MissionHub is being field tested with the US Campus Ministry. If you're not a part of the US Campus Ministry, sit tight! We plan to release to a larger audience soon. If you are part of the US Campus Ministry and are seeing this message, send us an email at support@missionhub.com and we'll help you out."
-      # not_found_paragraph: "We weren't able to find a record of you associated with any of the organizations or ministries using MissionHub."
+      not_found_paragraph: 
+        "<p>We weren't able to match you up with an organization currently using MissionHub. There are two likely causes:</p> 
+        <ol>
+        <li>An leader in your organization who can already log into MissionHub needs to add you to MissionHub</li>
+        <li>Your facebook email address doesn't match the email that was entered for you when your leader added you.</li>
+        </ol>
+        <p>Please contact the person who told you about MissionHub and ask them to enter you with your facebook email address. If you are that person or need more help, shoot us an email at support@missionhub.com</p>"
+        
       keyword_paragraph: "A powerful feature of MissionHub is the ability for you to collect contacts through text messages. For this to work, you have to choose a keyword that is unique to your ministry that people will send messages to. With a keyword, you will be able to say, “Text <strong>your keyword</strong>  to 75572” at your next event or meeting."
       request_keyword_link: "Click here to request a keyword. We'll return you to this wizard when you're done."
       survey_paragraph:
@@ -208,7 +215,8 @@ en:
       skip_step: "Skip this step"
     home:
       title_top: "Welcome to MissionHub!"
-      keywords: "Surveys"
+      surveys: "Surveys"
+      keywords: "Keywords"
       manage_questions: "Manage Survey Questions"
       edit_keyword: 'Edit Keyword'
       your_orgs: 'Your Organizational Involvements'
@@ -219,11 +227,60 @@ en:
         one:   '1 Person to Follow-up'
         other: '%{count} People to Follow-up'
       delete: "Delete"
+  surveys:
+    index: 
+      confirm_delete: "Are you sure you want to delete this keyword?"
+      new: 'New Survey'
+      edit_survey: Edit Survey
+      association_help: "When a contact responds to a survey, they are associated with the same team or movement as the keyword they responded to."
+    edit:
+      edit_survey: "Edit Survey"
+      
+    new: 
+      create_a_survey: "Create a Survey"
+    form:
+      title_placeholder: "Shorter titles are better"
+      post_survey_placeholder: "Example: Thank you for your time! If you're interested in Cru, we meet at Moore Auditorium every Thursday @ 8PM"
+      post_survey_message: 'What message would you like to show after the person has completed the survey?'
+      association: "The %{this_term} you are currently requesting this keyword for has at leaset one %{child_term} under it.<br/> Select if you'd like to associate this keyword with the %{this_term} or a %{child_term} under this %{this_term}"
+      survey_associated_with: This survey will be associated with %{org}.
+      title: Title
+      title_tip: "This is what people will see as the header on the survey"
+    
+    questions:
+      create:
+        notice: 'Question was successfully created.'
+      form: 
+        text_message_length: 'Text Message Length:'
+        what_question_type: What type of question would you like to ask?
+        short_answer: 'Short Answer'
+        multiple_choice: 'Multiple Choice'
+        checkboxes: 'Checkboxes'
+        dropdown: 'Dropdown'
+        web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
+        text_message_preview: Text Message Preview
+      multiple_choice_form:
+        list_choices: 'List out the possible choices, one per line:'
+      question:
+        confirm_delete: "Are you sure you want to remove '%{question}'?"
+        delete_tip: "If this question has been answered any contact, it will be archived. If no one has answered this question yet it will be deleted."
+      short_answer_form:
+        question: 'Question:'
+      index: 
+        manage: Manage Survey Questions
+        note: "Note: First and Last name will be automatically added to every survey. There's no need for you to add those."
+        predefined: Predefined Questions
+        your_questions: Your Questions (drag to sort)
+        previously_used: Previously Used Questions
+        add_question: Add a new question
+        add_prev_question: Add a previously used question
+        forced_tip: This question is required on every survey and will be pre-filled if they connect with facebook.
+      
   sms_keywords:
     index:
       association: Associate Contacts With
-      association_help: "When a contact responds to a survey, they are associated with the same team or movement as the keyword they responded to."
       request_keyword: Request a Keyword
+      create_survey_first: You need to create a survey before requesting a keyword.
     default_rejection_email:
       "Your keyword request has been denied"
     edit:
@@ -243,10 +300,8 @@ en:
       initial_response: "What response should we send back to people when they text in? <br/>If you want the person to complete a survey, the response MUST include {{ link }} (exactly like that, dont change that part of the response.)"
       initial_response_default: 'Hi! Thanks for checking out %{org}. To get more involved, reply with "i" or click {{ link }} if you have a smartphone.'
       post_survey_why: "When someone texts in the keyword, this message will be sent to them and '{{link}}' will be replaced by a website address that will take them to an online survey for them to fill out. If they don't have internet, replying 'i' will send them all the questions via interactive text message."
-      post_survey_message: 'What message would you like to show after the person has completed the survey?'
-      association: "The %{this_term} you are currently requesting this keyword for has at leaset one %{child_term} under it.<br/> Select if you'd like to associate this keyword with the %{this_term} or a %{child_term} under this %{this_term}"
       keyword_locked: Keywords can't be changed. You can delete this one and create a new one if necessary.
-      keyword_associated_with: This keyword will be associated with %{org}.
+      associated_survey_tip: "When a person texts in this keyword, they'll be presented with questions from the survey you select below."
       note: 'Note: Processing requests may take up to 24 hours.'
     show:
       explanation: 'Explanation:'
@@ -259,34 +314,8 @@ en:
         and smartphones.  <strong>They will text your keyword to the number %{number}</strong> and your survey questions will appear on their device.  Note: The process of acquiring new keywords
         requires manual intervention. Once you request your keyword expect to wait up to 24 hours before we notify you via email that your keyword is approved and
     	  ready for use.'
-    questions:
-      create:
-        notice: 'Question was successfully created.'
-      form: 
-        text_message_length: 'Text Message Length:'
-        what_question_type: What type of question would you like to ask?
-        short_answer: 'Short Answer'
-        multiple_choice: 'Multiple Choice'
-        checkboxes: 'Checkboxes'
-        dropdown: 'Dropdown'
-        web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
-        text_message_preview: Text Message Preview
-      multiple_choice_form:
-        list_choices: 'List out the possible choices, one per line:'
-      question:
-        confirm_delete: "Are you sure you want to remove '%{question}'?"
-      short_answer_form:
-        question: 'Question:'
-      index: 
-        manage: Manage Survey Questions
-        note: "Note: First and Last name will be automatically added to every survey. There's no need for you to add those."
-        predefined: Predefined Questions
-        your_questions: Your Questions (drag to sort)
-        archived_questions: Archived Questions
-        add_question: Add a question
       your_questions_help: "Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service."
       predefined_help: "Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided."
-      archived_help: "Archived questions will no longer be included in the survey.  If no answers have ever been given to the question, the archived question will be deleted.  If you USE an archived question, the question will move to the YOUR QUESTIONS section and the previous answers will re-appear."
 
   organization_mailer:
     notify_user:
@@ -730,6 +759,8 @@ en:
         start_time: 'From'
       organization:
         terminology: Type
+      sms_keyword:
+        survey_id: Associated Survey
     submit:
       update: Update
   member: Member

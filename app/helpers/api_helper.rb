@@ -1,6 +1,7 @@
+require 'apic.rb'
+require 'api_errors.rb'
+
 module ApiHelper
-  require 'apic.rb'
-  require 'api_errors.rb'
   include ApiErrors
   #########################################
   #######Validation Methods################
@@ -244,7 +245,7 @@ module ApiHelper
       apiLog[:action] = "#{request.path_parameters[:controller]}##{request.path_parameters[:action]}"
       apiLog[:organization_id] = @organization.nil? ? (params['org_id'] ? params['org_id'] : (params['org'] ? params['org'] : nil)) : @organization.id
       apiLog[:error] = exception.nil? ? "success" : {message: exception.message, backtrace: exception.backtrace}.to_json
-      apiLog[:identity] = Rack::OAuth2::Server.get_access_token(params['access_token']).identity if params[:access_token]
+      apiLog[:identity] = Rack::OAuth2::Server.get_access_token(current_access_token).identity if params[:access_token]
       apiLog[:remote_ip] = request.remote_ip
 
       Airbrake.notify(exception,

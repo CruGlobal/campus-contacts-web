@@ -56,6 +56,11 @@ a:hover {
   clear: both;
 }
 
+table {
+  border-collapse: collapse;
+  td {padding: 3px;}
+}
+
 small {
   font-size: 11px;
 }
@@ -823,6 +828,7 @@ ul.pillmenu {
 .icon.delete {  background-image: url("<%= asset_path('delete.png') %>");}
 .icon.edit {  background-image: url("<%= asset_path('edit_sm.png') %>");}
 .icon.check {  background-image: url("<%= asset_path('check.png') %>");}
+.icon.lock {  background-image: url("<%= asset_path('lock.png') %>");}
 .icon.star, .icon.star_empty:hover {  background-image: url("<%= asset_path('star.png') %>");}
 .icon.star_empty, .icon.star:hover,  {  background-image: url("<%= asset_path('star_empty.png') %>");}
 
@@ -1083,16 +1089,6 @@ span.title {
   background: #f0f0f0;
 }
 
-.yourquestions {
-  margin-left: 15px;
-}
-
-.fakesort {
-  td {
-    padding: 3px;
-    color: #999;
-  }
-}
 
 /* FORM */
 
@@ -1130,30 +1126,51 @@ span.title {
 
 
 /* SORTABLE ROWS */
+.ui-sortable tr:hover {
+  background: #f0f0f0;
+  height: 20px;
+}
+
 .ui-sortable {
+  width: 100%;
+  tr {min-height: 20px;}
   tr:hover {
     cursor: move;
   }
-  .ui-sortable-helper {
+  tr.ui-sortable-helper {
     background: #fcf0b9;
     border: 1px dotted #eca700;
-    height: 20px;
+    min-height: 20px;
+    box-shadow: 2px 2px 4px #bbb;
   }
   td {
     padding: 3px;
   }
+  td.questiontitle {
+    min-width: 700px;
+  }
 }
 .questiontitle {
-  min-width: 150px;
-  padding-left: 5px;
+  min-width: 700px;
+  padding-left: 3px;
 }
 
-.ui-sortable tr:hover {
-  background: #fcf0b9;
-  border: 1px dotted #eca700;
-  height: 20px;
-  td.questiontitle {text-indent: 10px;}
+
+.yourquestions {
+  margin-left: 0px;
+  tr {
+    td {border-bottom: 1px solid silver;}
+  }
+  width: 550pm
 }
+
+.fakesort {
+  td {
+    padding: 3px;
+    color: #999;
+  }
+}
+
 
 #change_org.on {
   background: $blue;

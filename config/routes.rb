@@ -1,6 +1,6 @@
 Mh::Application.routes.draw do
 
-  resources :group_labels
+  resources :group_labels, :only => [:create, :destroy]
 
   ActiveAdmin.routes(self)
   ActiveAdmin::ResourceController.class_eval do
@@ -13,67 +13,58 @@ Mh::Application.routes.draw do
   end
   
   resources :groups do
-    resources :group_labelings
-    resources :group_memberships do
+    resources :group_labelings, :only => [:create, :destroy]
+    resources :group_memberships, :only => [:create, :destroy] do
       collection do
         get :search
       end
     end
   end
   
-  resources :survey_responses do
+  resources :survey_responses, :only => [:show, :new, :create, :edit, :update] do
     collection do
       get :thanks
     end
   end
   
-  resources :leaders do
+  resources :leaders, :only => [:new, :create, :update, :destroy] do
     collection do
       get :search
       put :add_person
     end
   end
   
-  resources :organizational_roles do
+  resources :organizational_roles, :only => :update do
     collection do
       post :move_to
     end
   end
   
-  resources :rejoicables
+  # resources :rejoicables
 
-  resources :followup_comments
+  resources :followup_comments, :only => [:create, :destroy]
 
-  resources :contact_assignments
+  resources :contact_assignments, :only => [:create]
 
-  resources :organization_memberships do
+  resources :organization_memberships, :only => [:show, :create, :edit, :update, :destroy, :index] do
     member do
       get :set_current
       get :set_primary
     end
   end
 
-  resources :schools
+  resources :schools, :only => :index
   resources :communities
 
   resources :ministries
 
-  resources :sms_keywords do
+  resources :sms_keywords, :only => [:new, :create, :edit, :update, :destroy, :index] do
     collection do
       post :accept_twilio
     end
-    resources :questions, controller: "sms_keywords/questions" do
-      member do
-        put :hide
-        put :unhide
-      end
-      collection do
-        post :reorder
-      end
-    end 
   end
   
-  resources :people do
+  resources :people, :only => [:show, :create, :edit, :update, :destroy, :index] do
     collection do
       get :export
       get :merge
@@ -89,14 +80,14 @@ Mh::Application.routes.draw do
     member do
       get :merge_preview
     end
-    resources :organization_memberships do
-      member do
-        get :validate
-      end
+    resources :organization_memberships, :only => [:show, :create, :edit, :update, :destroy, :index] do
+      # member do
+      #   get :validate
+      # end
     end
   end
  
-  resources :roles
+  resources :roles, :only => [:create, :update, :destroy, :index, :new, :edit]
  
   namespace :admin do
     resources :email_templates
@@ -133,7 +124,7 @@ Mh::Application.routes.draw do
   #   resources :organizations
   # end
   
-  resources :organizations do
+  resources :organizations, :only => [:show, :new, :create, :edit, :update, :destroy, :index] do
     collection do
       get :search
       get :thanks
@@ -141,9 +132,20 @@ Mh::Application.routes.draw do
     end
   end
   
-  get "/surveys" => 'surveys#index'
-  get "/surveys/stopsurveymode" => 'surveys#stop', as: :stop_survey
-  get "/surveys/:keyword" => 'surveys#start', as: :start_survey
+  resources :surveys, :only => [:new, :create, :edit, :update, :index] do
+    member do
+      get :start
+    end
+    resources :questions, controller: "surveys/questions" do
+      member do
+        put :hide
+        put :unhide
+      end
+      collection do
+        post :reorder
+      end
+    end 
+  end
 
   get "welcome/index"
   get "/test" => "welcome#test"
@@ -160,7 +162,7 @@ Mh::Application.routes.draw do
   post "sms/mo"
   get "sms/mo"
   
-  resources :contacts do
+  resources :contacts, :only => [:show, :create, :edit, :update, :destroy, :index] do
     collection do
       get :mine
       post :send_reminder
@@ -172,7 +174,7 @@ Mh::Application.routes.draw do
     end
   end
   
-  resources :vcards do
+  resources :vcards, :only => [:create] do
     collection do
       get :bulk_create
     end
@@ -198,7 +200,6 @@ Mh::Application.routes.draw do
   match 'wizard' => 'welcome#wizard', as: 'wizard'
   match 'terms' => 'welcome#terms', as: 'terms'
   match 'privacy' => 'welcome#privacy', as: 'privacy'
-  match 'verify_with_relay' => 'welcome#verify_with_relay', as: 'verify_with_relay'
   
   # SMS keyword state transitions
   match '/admin/sms_keywords/:id/t/:transition' => 'admin/sms_keywords#transition', as: 'sms_keyword_transition'
@@ -211,6 +212,8 @@ Mh::Application.routes.draw do
   match 'c/:keyword(/:received_sms_id)' => 'survey_responses#new', as: 'contact_form'
   match 'm/:received_sms_id' => 'survey_responses#new'
   match 'l/:token/:user_id' => 'leaders#leader_sign_in'
+  get 's/:survey_id' => 'survey_responses#new', as: 'short_survey'
+  get "/surveys/:keyword" => 'surveys#start'
   # mount RailsAdmin::Engine => "/admin"
   
   get "welcome/tour"

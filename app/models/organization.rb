@@ -11,11 +11,10 @@ class Organization < ActiveRecord::Base
   has_many :people, through: :organizational_roles
   has_many :contact_assignments
   has_many :keywords, class_name: 'SmsKeyword'
-  has_many :question_sheets, through: :keywords
-  has_many :pages, through: :question_sheets
-  has_many :page_elements, through: :pages
-  has_many :questions, through: :pages
-  has_many :all_questions, through: :pages, source: :all_questions
+  has_many :surveys
+  has_many :survey_elements, through: :surveys
+  has_many :questions, through: :surveys
+  has_many :all_questions, through: :surveys, source: :all_questions
   has_many :followup_comments
   has_many :organizational_roles, inverse_of: :organization
   has_many :leaders, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role.leader_ids}, order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
@@ -28,6 +27,7 @@ class Organization < ActiveRecord::Base
   has_many :no_activity_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.followup_status' => 'uncontacted'}
   has_many :rejoicables
   has_many :groups
+  has_many :surveys
   Rejoicable::OPTIONS.each do |option|
     has_many :"#{option}_contacts", :through => :rejoicables, source: :person, conditions: {'rejoicables.what' => option}, uniq: true
   end
@@ -66,12 +66,16 @@ class Organization < ActiveRecord::Base
     [self] + children
   end
   
-  def children_keywords
-    SmsKeyword.where(organization_id: child_ids)
-  end
+  # def children_surveys
+  #   Survey.where(organization_id: child_ids)
+  # end
   
   def self_and_children_ids
     @self_and_children_ids ||= [id] + child_ids
+  end
+  
+  def self_and_children_surveys
+    Survey.where(organization_id: self_and_children_ids)
   end
   
   def self_and_children_keywords
@@ -79,7 +83,7 @@ class Organization < ActiveRecord::Base
   end
   
   def self_and_children_questions
-    @self_and_children_questions ||= self_and_children_keywords.collect(&:questions).flatten.uniq
+    @self_and_children_questions ||= self_and_children_surveys.collect(&:questions).flatten.uniq
   end
   
   def unassigned_people
@@ -100,10 +104,6 @@ class Organization < ActiveRecord::Base
   
   def terminology_enum
     Organization.connection.select_values("select distinct(terminology) term from organizations order by term")
-  end
-  
-  def question_sheets
-    keywords.collect(&:question_sheet)
   end
   
   def name_with_keyword_count

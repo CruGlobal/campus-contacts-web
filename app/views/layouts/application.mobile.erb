@@ -7,14 +7,17 @@
 		<script src="http://code.jquery.com/jquery-1.5.2.min.js" ></script>
 		<script src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js" ></script>
     <%= javascript_include_tag 'rails-validations' %>
+    <%= javascript_include_tag 'mh' %>
 		
 		<%= stylesheet_link_tag 'mobile' %>
 
     <%= render 'google_analytics' %>
     <%= yield(:head) %>
+    <script type="text/javascript">if (window.location.hash == '#_=_')window.location.hash = '';</script>
     
   </head>
   <body>
+    <%= render 'fb_init' %>
 		<div data-role="page">
 			<%- unless params[:simple] == 'true' -%>
 				<div data-role="header">
@@ -22,16 +25,10 @@
 
 			        <div data-role="header" role="banner" data-backbtn="false">
 			          <h1 class="ui-title" tabindex="0" role="heading"><%=h yield(:title) %></h1>
-						<% if current_user && !params[:button].present? %>
-			          		<%= link_to "Logout", facebook_logout_url(mobile:1), "data-role" => "button", rel: "external"%>
+						    <% if current_user && !params[:button].present? %>
+          		    <%= link_to t('nav.logout'), '#', onclick: "$.mh.logout()", "data-role" => "button", rel: "external"%>
 
-			          <!-- <%= yield(:toolbar) %> -->
-			          <!-- 
-			          <a class="ui-btn-right mh-logo">
-			            <%= image_tag("mh-logo.png") %>
-			          </a>
-			          -->
-			          <%- end -%>
+		            <%- end -%>
 			        </div>
 				  </div>
 			  </div>
