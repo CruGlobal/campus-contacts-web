@@ -252,7 +252,7 @@ class ApplicationController < ActionController::Base
   def get_survey
     if params[:keyword]
       @keyword ||= SmsKeyword.where(keyword: params[:keyword]).first 
-      @survey = @keyword.survey
+      @survey = @keyword ? @keyword.survey : Survey.find(params[:keyword])
     elsif params[:received_sms_id]
       sms_id = Base62.decode(params[:received_sms_id])
       @sms = SmsSession.find_by_id(sms_id) || ReceivedSms.find_by_id(sms_id)
