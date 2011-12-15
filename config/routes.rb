@@ -124,7 +124,7 @@ Mh::Application.routes.draw do
   #   resources :organizations
   # end
   
-  resources :organizations, :only => [:show, :new, :create, :edit, :update, :destroy] do
+  resources :organizations, :only => [:show, :new, :create, :edit, :update, :destroy, :index] do
     collection do
       get :search
       get :thanks
