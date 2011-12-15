@@ -2,5 +2,5 @@
   <td class="questiontitle"><%= question.label %></td>
   <td><%= link_to('edit', edit_survey_question_path(@survey, question), remote: true, class: 'edit_question icon edit') unless @predefined.questions.include?(question) %></td>
   <td><%= link_to('remove', survey_question_path(@survey, question), method: :delete, confirm: t('.confirm_delete', question: question.label),
-                                                                 remote: true, class: 'remove_question icon delete') %></td>
+                                                                 remote: true, class: 'remove_question icon delete tiplight', title: t('.delete_tip')) %></td>
 </tr>

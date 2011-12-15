@@ -263,6 +263,7 @@ en:
         list_choices: 'List out the possible choices, one per line:'
       question:
         confirm_delete: "Are you sure you want to remove '%{question}'?"
+        delete_tip: "If this question has been answered any contact, it will be archived. If no one has answered this question yet it will be deleted."
       short_answer_form:
         question: 'Question:'
       index: 
@@ -270,9 +271,10 @@ en:
         note: "Note: First and Last name will be automatically added to every survey. There's no need for you to add those."
         predefined: Predefined Questions
         your_questions: Your Questions (drag to sort)
-        archived_questions: Archived Questions
+        previously_used: Previously Used Questions
         add_question: Add a new question
-        add_prev_question: Add an old question
+        add_prev_question: Add a previously used question
+        forced_tip: This question is required on every survey and will be pre-filled if they connect with facebook.
       
   sms_keywords:
     index:
@@ -314,7 +316,6 @@ en:
     	  ready for use.'
       your_questions_help: "Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service."
       predefined_help: "Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided."
-      archived_help: "Archived questions will no longer be included in the survey.  If no answers have ever been given to the question, the archived question will be deleted.  If you USE an archived question, the question will move to the YOUR QUESTIONS section and the previous answers will re-appear."
 
   organization_mailer:
     notify_user:

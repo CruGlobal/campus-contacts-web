@@ -34,17 +34,17 @@
       <tr>
         <td class="questiontitle"><%= t('contacts.index.first_name') %></td>
         <td></td>
-        <td><span class="icon lock"></span></td>
+        <td><span class="icon lock tiplight" title="<%= t('.forced_tip') %>"></span></td>
       </tr>
       <tr>
         <td class="questiontitle"><%= t('contacts.index.last_name') %></td>
         <td></td>
-        <td><span class="icon lock"></span></td>
+        <td><span class="icon lock tiplight" title="<%= t('.forced_tip') %>"></span></td>
       </tr>
       <tr>
         <td class="questiontitle"><%= t('contacts.index.phone_number') %></td>
         <td></td>
-        <td><span class="icon lock"></span></td>
+        <td><span class="icon lock tiplight" title="<%= t('.forced_tip') %>"></span></td>
       </tr>
     </tbody>
   </table>
@@ -57,25 +57,17 @@
   <%= link_to('+ ' + t('.add_question'), '', id: 'add_question_link', class: "inlinebutton") %>
   <%= link_to('+ ' + t('.add_prev_question'), '', id: 'add_old_question_link', class: "inlinebutton") %>
   
-  <h3><%= t('.archived_questions') %> <%= tip(t('questions.archived_help')) %></h3>
-  <!-- <h3><%= t('.predefined') %> <%= tip(t('questions.predefined_help')) %></h3> -->
-  <table border="0" cellspacing="5" cellpadding="0" class="yourquestions">
-    <tbody id="predefined_questions">
-      <% @predefined.questions.each do |question| %>
-        <% unless @questions.include?(question) %>
+  <div id="previously_used" style="display:none">
+    <h3><%= t('.previously_used') %> <%#= tip(t('questions.previously_used_help')) %></h3>
+    <!-- <h3><%= t('.predefined') %> <%= tip(t('questions.predefined_help')) %></h3> -->
+    <table border="0" cellspacing="5" cellpadding="0" class="yourquestions">
+      <tbody id="predefined_questions">
+        <% @other_questions.each do |question| %>
           <%= render 'predefined_question', question: question %>
         <% end %>
-      <% end %>
-    </tbody>
-  </table>
-  <table border="0" cellspacing="5" cellpadding="0" class="yourquestions">
-    <tbody id="archived_questions">
-      <% @archived_questions.each do |question| %>
-        <%= render 'predefined_question', question: question %>
-      <% end %>
-    </tbody>
-  </table>
-  
+      </tbody>
+    </table>
+  </div>
   
   <div id="question_form" style="display:none">
     <%= render 'form', question: Question.new %>
