@@ -55,7 +55,7 @@ class SurveysController < ApplicationController
   # Enter survey mode
   def start
     unless mhub? #|| Rails.env.test?
-      redirect_to start_survey_url(params.merge(host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']))
+      redirect_to start_survey_url(@survey, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']))
       return false
     end
     cookies[:survey_mode] = 1
