@@ -39,7 +39,7 @@
         <% end %>
         <li class="item"><%= link_to(t('nav.my_profile'), person_path(current_person)) %></li>
         <li class="item">
-          <%= link_to(t('nav.logout'), sign_out_path)  %> 
+          <%= link_to(t('nav.logout'), '#', onclick: "$.mh.logout()")  %> 
         </li>   
       <% else %>
         <% unless params[:controller] == 'sessions' %>

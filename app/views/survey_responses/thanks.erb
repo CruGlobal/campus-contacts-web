@@ -4,22 +4,18 @@
 	<br><br>
 
   <% if mhub? && user_signed_in? %>
-  	<script type="text/javascript">
-      window.fbAsyncInit = function() {
-  			FB.logout();
-  		}
-  	</script>
+    <%= render 'fb_logout' %>
   <% end %>
 	<div id="countdown">
 		<center>
 		  <% if cookies[:survey_mode].present? %>
-		    <% survey_url = contact_form_url(@keyword.keyword) %>
+		    <% survey_url = start_survey_url(@survey) %>
   		  <% if user_signed_in? %>
     			<h4><%= t('contacts.thanks.facebook')%></h4>
     			<br><br>
-    			<h3><%= link_to(t('contacts.thanks.done'), sign_out_path(next: survey_url), onclick: 'FB.logout()', data: {ajax: false}) %></h3>
+    			<h3><%= link_to(t('contacts.thanks.done'), '#', onclick: "$.mh.logout('#{survey_url}')", data: {ajax: false}) %></h3>
     	  <% else %>
-  			  <h3><%= link_to(t('contacts.thanks.done'), survey_url) %></h3>
+  			  <h3><%= link_to(t('contacts.thanks.done'), survey_url, data: {ajax: false}) %></h3>
   			<% end %>
   		<% end %>
 		</center>

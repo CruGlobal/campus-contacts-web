@@ -41,11 +41,15 @@ class ApplicationController < ActionController::Base
     render_404 if mhub?
   end
   
-  def render_404
+  def render_404(nologin = false)
     if cookies[:keyword] && SmsKeyword.find_by_keyword(cookies[:keyword])
-      redirect_to "/c/#{cookies[:keyword]}"
+      url = "/c/#{cookies[:keyword]}"
+      url += '?nologin=true' if nologin
+      redirect_to url
     elsif cookies[:survey_id] && Survey.find_by_id(cookies[:survey_id])
-      redirect_to "/survey_responses/new?survey_id=#{cookies[:survey_id]}"
+      url = "/survey_responses/new?survey_id=#{cookies[:survey_id]}"
+      url += '&nologin=true' if nologin
+      redirect_to url
     else
       render :file => Rails.root.join(mhub? ? 'public/404_mhub.html' : 'public/404.html'), :layout => false, :status => 404
     end
