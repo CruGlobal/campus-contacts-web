@@ -21,6 +21,7 @@ namespace :crs do
     survey = Survey.find(survey_id)
     org = survey.organization
     grad_q = Element.find(2186)
+    contact_q = Element.find(2183)
     conference_q = Element.find(2517)
     interest_q = Element.find(2187)
     interest_map = {'OpsOther' => 'Other', 
@@ -63,6 +64,9 @@ namespace :crs do
         
         conference_answer = Answer.find_or_create_by_answer_sheet_id_and_question_id(answer_sheet.id, conference_q.id)
         conference_answer.update_attribute(:value, answers['conference_name'])
+        
+        contact_answer = Answer.find_or_create_by_answer_sheet_id_and_question_id(answer_sheet.id, contact_q.id)
+        contact_answer.update_attribute(:value, answers['contact_me'] ? 'Yes' : 'No')
       
         # Add to org
         org.add_contact(person_id)
