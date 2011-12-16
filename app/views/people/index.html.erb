@@ -37,15 +37,14 @@
                   </span>
                 </div>
               <% end %>
-     
-              <%= link_to(t('.apply_roles'), '#', :class => 'greybox', :id => 'apply_roles') %>
+              <div class="role_actions">
+                <%= link_to(t('.apply_roles'), '#', :class => 'greybox', :id => 'apply_roles') %>
+                <%= link_to(t('.manage_roles'), roles_path(organization: current_organization), :class => 'greybox') %>
+              </div>
               <div id="apply_roles_spinner"><%= image_tag('spinner.gif') %></div>
               <div id="apply_roles_successful"></div>
             </div>
 
-            <div class="col_1 greyborder_top">
-              <%= link_to(t('.manage_roles'), roles_path(organization: current_organization)) %>
-            </div>
           </div>
         </li>
       </ul>
