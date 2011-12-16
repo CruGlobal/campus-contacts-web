@@ -586,7 +586,7 @@ class Person < ActiveRecord::Base
     person ||= Person.new(person_params.except(:email_address, :phone_number))
     email = (person.email_addresses.find_by_email(email_address) || person.email_addresses.new(email: email_address)) if email_address.present? 
     if person_params[:phone_number][:number].present?
-      phone = (person.phone_numbers.find_by_number(person_params[:phone_number][:number].gsub(/[^\d]/, '')) || person.phone_numbers.new(person_params.delete(:phone_number).merge(location: 'mobile'))) 
+      phone = (person.phone_numbers.find_by_number(person_params[:phone_number][:number].gsub(/[^\d]/, '')) || person.phone_numbers.new(person_params.delete(:phone_number).except(:_destroy).merge(location: 'mobile'))) 
     end
     unless person.new_record?
       email.save if email
