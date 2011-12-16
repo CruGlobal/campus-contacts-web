@@ -1,0 +1,38 @@
+<% provide :sidebar do %>
+  <%= render :partial => 'people/left_sidebar' %>
+<% end %>
+
+<%= form_for ContactAssignment.new, html: {style: 'display:none'} do |f| %>
+  <%= check_box_tag 'ids[]', @person.id, true, id: "ids_#{@person.id}", class: 'id_checkbox' %>
+  <%= hidden_field_tag :assign_to %>
+  <%= render 'assign' %>
+<% end %>
+<div class="titlebar">
+  <h1>
+    <%= image_tag("contact.png") %>
+    <%= @person %>
+    <%= link_to("Assign", "", class: 'assign headerlink', 'data-id' => @person.id) if can?(:manage, @person) %>
+  </h1>
+</div>
+
+<div class="pad">
+  
+    <% if @person.conferences.present? %>
+      <h2><%= t('.conferences') %></h2>
+      <ul>
+        <% @person.conferences.order('crs2_conference.begin_date').each do |conference| %>
+          <li><%= conference %> - <%= l(conference.begin_date) %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  
+    <% if @person.summer_projects.present? %>
+      <h2><%= t('.summer_projects') %></h2>
+      <ul>
+        <% @person.summer_projects.order(:name).each do |project| %>
+          <li><%= project %></li>
+        <% end %>
+      </ul>
+    <% end %>
+    
+</div>

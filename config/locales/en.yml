@@ -156,6 +156,10 @@ en:
       profile: "%{name}'s Profile"
       edit_profile: "Edit %{name}'s Profile"
       survey_answers: 'Survey Answers'
+      involvement: Involvement
+    involvement:
+      conferences: Conferences
+      summer_projects: Summer Projects
   sessions:
     destroy:
       signed_out: You've been signed out.
@@ -515,7 +519,7 @@ en:
       title: "Edit %{name}'s Survey Answers"
   date:
     formats:
-      default: "%Y-%m-%d"
+      default: "%m/%d/%Y"
       short: "%b %d"
       long: "%B %d, %Y"
       time: "%l:%M %p"

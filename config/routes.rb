@@ -79,6 +79,7 @@ Mh::Application.routes.draw do
     end
     member do
       get :merge_preview
+      get :involvement
     end
     resources :organization_memberships, :only => [:show, :create, :edit, :update, :destroy, :index] do
       # member do

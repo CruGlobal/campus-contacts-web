@@ -130,8 +130,6 @@ class ContactsController < ApplicationController
                 else
                   answers << ''
                 end
-                # answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)}
-                # answers << q.display_response(answer_sheet)
               end
               answers << I18n.l(dates.sort.last, format: :date) if dates.present?
               rows << answers

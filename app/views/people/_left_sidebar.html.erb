@@ -3,5 +3,8 @@
   <% if can? :edit, @person %>
     <li class="<%= 'selected' if current_page?(edit_person_path(@person)) %>"><%= link_to(t('.edit_profile', name: @person.firstName), edit_person_path(@person)) %></li>
     <li class="<%= 'selected' if current_page?(survey_response_path(@person)) %>"><%= link_to(t('.survey_answers', name: @person.firstName), survey_response_path(@person)) %></li>
+    <% if @person.summer_projects.present? || @person.conferences.present? %>
+      <li class="<%= 'selected' if current_page?(involvement_person_path(@person)) %>"><%= link_to(t('.involvement', name: @person.firstName), involvement_person_path(@person)) %></li>
+    <% end %>
   <% end %>
 </ul>
