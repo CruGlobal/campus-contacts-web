@@ -51,7 +51,7 @@ class OrganizationsController < ApplicationController
     if @organization.new_record?
       render 'add_org' and return
     else
-      @organization.add_admin(current_person)
+      @organization.add_admin(current_person) unless @organization.parent && @organization.parent.show_sub_orgs?
     end
   end
   

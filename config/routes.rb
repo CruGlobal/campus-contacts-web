@@ -133,7 +133,7 @@ Mh::Application.routes.draw do
     end
   end
   
-  resources :surveys, :only => [:new, :create, :edit, :update, :index] do
+  resources :surveys, :only => [:new, :create, :edit, :update, :index, :destroy] do
     member do
       get :start
     end

@@ -36,6 +36,14 @@ class SurveysController < ApplicationController
     
   end
   
+  def destroy
+    @survey.destroy
+    respond_to do |wants|
+      wants.html { redirect_to :back }
+      wants.js {render :nothing => true}
+    end
+  end
+  
   def update
     if @survey.update_attributes(params[:survey])
       redirect_to surveys_path

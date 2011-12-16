@@ -23,7 +23,7 @@ class ContactsControllerTest < ActionController::TestCase
       end
     
       should "create a person with email and phone number" do
-        post :create, {
+        xhr :post, :create, {
                         "person" => {
                           "current_address_attributes" => {
                             "country" => "US"
