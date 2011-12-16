@@ -13,7 +13,33 @@
     <%= render 'shared/nav' %>
     
     <div id="rest">
-      <div id="menugroups">
+      <div id="menutop">
+        <ul class="sf-menu mh-top">
+          <li class="current">
+            <a href="" class="sf-with-ul">Menu Item 1</a>
+            <ul>
+              <li><a href="">Sub</a></li>
+              <li class="current"><a href="">Sub</a></li>
+              <li><a href="">Sub</a></li>
+              <li><a href="">Sub</a></li>
+              <li><a href="">Sub</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="">Menu Item 1</a>
+            <ul>
+              <li><a href="">Sub</a></li>
+              <li><a href="">Sub</a></li>
+              <li><a href="">Sub</a></li>
+              <li><a href="">Sub</a></li>
+              <li><a href="">Sub</a></li>
+            </ul>
+          </li>
+          <li><a href="">Menu Item 1</a></li>
+          <li><a href="">Menu Item 1</a></li>
+        </ul>
+      </div>
+      <div id="menugroups" style="">
         <ul>
           <li class="<%= 'selected' if request.path =~ connect_pattern %>"><%= link_to("Connect", "/contacts") %></li>
           <li class="<%= 'selected' if request.path =~ care_pattern %>"><%= link_to("Care", "/people") %></li>
@@ -22,7 +48,7 @@
           <% end %>
         </ul>
       </div>
-      <div id="topmenu">
+      <div id="topmenu" style="">
         <ul>
           <!-- <li><%#= link_to("Dashboard", user_root_path) %></li> -->
           <% case %>
