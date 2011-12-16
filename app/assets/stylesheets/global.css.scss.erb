@@ -485,6 +485,7 @@ a.hide {
 
 .contact_leftcol {
   float: left;
+  width: 200px;
   label {
     font-weight: bold;
     display: block;
@@ -814,6 +815,10 @@ ul.pillmenu {
 	display: inline-block 
 }
 
+.icon_holder {
+  width: 16px;display: block;
+}
+
 .icon {
   display: inline-block !important;
 }
@@ -825,7 +830,7 @@ ul.pillmenu {
 .icon.add {  background-image: url("<%= asset_path('add.png') %>");}
 .icon.unassign {  background-image: url("<%= asset_path('undo.png') %>");}
 .icon.send_contact_info {  background-image: url("<%= asset_path('email_go.png') %>");}
-.icon.delete {  background-image: url("<%= asset_path('delete.png') %>");}
+.icon.delete {  background-image: url("<%= asset_path('delete.png') %>"); background-position: 50% 50%;}
 .icon.edit {  background-image: url("<%= asset_path('edit_sm.png') %>");}
 .icon.check {  background-image: url("<%= asset_path('check.png') %>");}
 .icon.lock {  background-image: url("<%= asset_path('lock.png') %>");}
@@ -1065,6 +1070,10 @@ span.title {
 
 .inlinebutton:hover {
   text-decoration: none;
+}
+
+.button_block {
+  margin: 20px 0;
 }
 
 /* KEYWORDS */
@@ -1985,7 +1994,7 @@ textarea, input[type=text], input[type=password] {
 
 .orgwrap {
   width: 100%;
-  overflow-x: scroll;
+  overflow-x: auto;
   overflow-y: hidden;
 }
 #orgs {
