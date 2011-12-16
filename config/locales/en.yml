@@ -71,6 +71,12 @@ en:
     mobile: Cell
     home: Home
     work: Work
+    address1: Address 1
+    address2: Address 2
+    city: City
+    state: State
+    country: Country
+    zip: Zip
     alert: Alert
     save: 'Save'
     show: Show
