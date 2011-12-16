@@ -1,4 +1,5 @@
 require 'vpim/vcard'
+require 'ccc/person'
  
 class Person < ActiveRecord::Base
   include Ccc::Person
@@ -38,7 +39,7 @@ class Person < ActiveRecord::Base
   
   scope :who_answered, lambda {|survey_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.survey_id' => survey_id)}
   validates_presence_of :firstName
-  validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/, allow_blank: true
+  validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, allow_blank: true
   
   accepts_nested_attributes_for :email_addresses, :reject_if => lambda { |a| a[:email].blank? }, allow_destroy: true  
   accepts_nested_attributes_for :phone_numbers, :reject_if => lambda { |a| a[:number].blank? }, allow_destroy: true  
