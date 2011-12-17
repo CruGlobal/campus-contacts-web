@@ -113,8 +113,9 @@ class SmsController < ApplicationController
         msg = question.label
         if question.kind == 'ChoiceField'
           msg = question.label_with_choices
+          separator = / [a-z]\)/
         end
-        send_message(msg, phone_number)
+        send_message(msg, phone_number, separator)
       end
       msg
     end
@@ -162,9 +163,9 @@ class SmsController < ApplicationController
       end
     end
     
-    def send_message(msg, phone_number)
+    def send_message(msg, phone_number, separator = nil)
       sent_via = @sms_params[:shortcode] == '75572' ? 'moonshado' : 'twilio'
-      @sent_sms = SentSms.create!(message: msg, recipient: phone_number, received_sms_id: @received.try(:id), sent_via: sent_via)
+      @sent_sms = SentSms.create!(message: msg, recipient: phone_number, received_sms_id: @received.try(:id), sent_via: sent_via, separator: separator)
     end
 
 end

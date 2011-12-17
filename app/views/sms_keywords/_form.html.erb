@@ -49,7 +49,7 @@
     <div class="stepcontent"> 
       <div class="field">
         <%= f.label :survey_id, raw(t('helpers.label.sms_keyword.survey_id') + ' ' + tip(t('.associated_survey_tip'))) %>
-        <%= f.select :survey_id, current_organization.self_and_children_surveys %>
+        <%= f.select :survey_id, current_organization.self_and_children_surveys.collect {|s| [s, s.id]} %>
       </div>
       <div class="actions">
         <%= f.submit %> <%= t('sms_keywords.form.note') if @sms_keyword.new_record? %>

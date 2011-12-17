@@ -14,6 +14,8 @@ en:
       me: Me
       type_to_find_leader: Type to find a leader then click on the leader's name
       type_to_find_org: "Type to find a %{terminology} then click on the %{terminology}'s name"
+    messages:
+      question_too_long: "WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages."
   roles: 
     admin: Admin
     contact: Contact
