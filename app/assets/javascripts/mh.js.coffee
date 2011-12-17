@@ -1,9 +1,11 @@
 $ ->   
-  $('ul.sf-menu').superfish() 
-  $("ul.mh-top").superfish({ 
-    pathClass:  'current',
-    pathLevels: 2
-  })
+
+  if $.fn.superfish?
+    $('ul.sf-menu').superfish({ 
+      pathClass:  'current',
+      speed:         'fast',
+      pathLevels: 2
+    }) 
         
   $('input[type=checkbox].primary').live 'click', -> 
     fieldset = $(this).closest('.fieldset')
@@ -22,11 +24,6 @@ $ ->
   if $.fn.oneFingerScroll?
     $('.fingerme').oneFingerScroll();
   
-  if $.fn.superfish?
-    $('ul.sf-menu').superfish
-      dropShadows: false,
-      delay: 100
-    
   $('.expandable').each (i)->
     e = $(this)
     if e.height() > Number(e.attr("data-height"))
