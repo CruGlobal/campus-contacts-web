@@ -97,6 +97,7 @@ en:
     adding: Adding...
     to: "To"
     subject: 'Subject'
+    autocomplete_name_hint: 'Type a name here:'
   leaders:
     form:
       name_required: "Name, gender, and email fields are required to add a leader:"
@@ -146,6 +147,9 @@ en:
       add_comment: 'Add Comment / Update Status'
     edit:
       editing: Editing
+      fb_name_search_dialog_title: Facebook Profile Search
+      fb_name_search_dialog_desc: Please wait while we fetch additional names. Once the result shows up, click on any of the names to retrieve their profile url.
+      fb_name_search_dialog_no_more: There are no more results. Click previous button to see the previous searched names.
     left_sidebar:
       profile: "%{name}'s Profile"
       edit_profile: "Edit %{name}'s Profile"

@@ -265,6 +265,35 @@ class PeopleController < ApplicationController
 
     render :text => data
   end 
+
+  def facebook_search
+    url = params[:url]
+    # if a url exist in the param, then we're using FB's previous/next url to fetch the data
+    if url.nil?
+      # else, this is an initial search so we construct the url
+      url = "https://graph.facebook.com/search?q=#{params[:term]}&type=user&access_token=#{session[:fb_token]}"
+    end
+
+    url = URI.escape(url)
+    response = RestClient.get url, { accept: :json}
+    result = JSON.parse(response)
+
+    data = Array.new
+    if result['data'].size > 0
+      # construct the json result - autocomplete only accepts an array
+      result['data'].each do |d|
+          data << { 'name' => d['name'] , 'id' => d['id'] }
+      end
+      # next result
+      data <<  {'name' => 'Next result', 'id' => result['paging']['next'] }
+    else
+      data <<  {'name' => 'No result found', 'id' => nil }
+    end
+
+    respond_to do |format|
+      format.js { render json: params[:url].nil? ? data : result } # we don't need an array for the dialog search result anymore so we are fine in just passing along the result from FB
+    end
+  end
  
   protected
   
