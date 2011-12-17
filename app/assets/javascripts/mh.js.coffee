@@ -1,4 +1,10 @@
 $ ->   
+  $('ul.sf-menu').superfish() 
+  $("ul.mh-top").superfish({ 
+    pathClass:  'current',
+    pathLevels: 2
+  })
+        
   $('input[type=checkbox].primary').live 'click', -> 
     fieldset = $(this).closest('.fieldset')
     $('input[type=checkbox].primary', fieldset).prop('checked', false)

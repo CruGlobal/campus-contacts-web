@@ -16,15 +16,6 @@
 <link rel="icon" type="image/png" href="<%= image_path("favicon.png") %>">
 
 <%= javascript_include_tag 'application' %>
-<%= javascript_include_tag 'superfish' %>
-<script> 
-  $(document).ready(function() { 
-      $('ul.sf-menu').superfish(); 
-      $("ul.mh-top").superfish({ 
-            pathClass:  'current' 
-        }); 
-  }); 
-</script>
 <script type="text/javascript" charset="utf-8">
   I18n.defaultLocale = "<%= I18n.default_locale %>";
   I18n.locale = "<%= I18n.locale %>";
