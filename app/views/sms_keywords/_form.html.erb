@@ -46,34 +46,13 @@
     <div class="stepnumber">
       <%= image_tag("step3.png") %>
     </div>
-    <div class="stepcontent">
-      <div class="field">
-        <%= f.label :post_survey_message, t('sms_keywords.form.post_survey_message') %>
-        <%= f.text_area :post_survey_message, rows: 5, :placeholder => "Example: Thank you for your time! If you're interested in Cru, we meet at Moore Auditorium every Thursday @ 8PM" %>
-      </div>
-    </div>
-  </div>
-  
-  <div class="stepwrap rwidth">
-    <div class="stepnumber">
-      <%= image_tag("step4.png") %>
-    </div>
     <div class="stepcontent"> 
-      <% if current_organization.show_sub_orgs? && current_organization.has_children? %>   
-        <div class="field">
-          <label for="sms_keyword_organization">
-            <%= raw(t('sms_keywords.form.association', this_term: current_organization.terminology, child_term: current_organization.children.first.terminology)) %> 
-            <%= tip(t('sms_keywords.index.association_help')) %>
-          </label>
-          <%= f.select :organization_id, ([current_organization] + current_organization.children).collect {|o| [o.to_s, o.id]} %>
-        </div>
-      <% else %>
-        <div class="field">
-          <strong><%= t('sms_keywords.form.keyword_associated_with', org: current_organization) %></strong>
-        </div>
-      <% end %>
+      <div class="field">
+        <%= f.label :survey_id, raw(t('helpers.label.sms_keyword.survey_id') + ' ' + tip(t('.associated_survey_tip'))) %>
+        <%= f.select :survey_id, current_organization.self_and_children_surveys.collect {|s| [s, s.id]} %>
+      </div>
       <div class="actions">
-        <%= f.submit %> <%= t('sms_keywords.form.note') %>
+        <%= f.submit %> <%= t('sms_keywords.form.note') if @sms_keyword.new_record? %>
       </div>
     </div>
   </div>

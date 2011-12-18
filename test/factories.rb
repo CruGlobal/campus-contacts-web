@@ -31,7 +31,6 @@ FactoryGirl.define do
     explanation "haoeu"
     state "requested"
     initial_response "Hi there!"
-    post_survey_message "bye!"
     association :user
   end
   
@@ -41,21 +40,21 @@ FactoryGirl.define do
     explanation "haoeu"
     state "active"
     initial_response "Hi there!"
-    post_survey_message "bye!"
     association :user
     after_create do |x| 
-      question_sheet = Factory(:question_sheet, questionnable: x)
-      page = Factory(:page, question_sheet: question_sheet)
+      survey = Factory(:survey, organization: x.organization)
+      x.update_attribute(:survey_id, survey.id)
       element = Factory(:choice_field, label: 'foobar')
-      Factory(:page_element, page: page, element: element, position: 1, archived: true)
+      Factory(:survey_element, survey: survey, element: element, position: 1, archived: true)
       element = Factory(:choice_field)
-      Factory(:page_element, page: page, element: element, position: 2)
+      Factory(:survey_element, survey: survey, element: element, position: 2)
     end
   end
   
-  factory :question_sheet do
-    label {"Test Sheet #{Factory.next(:count)}"}
-    archived 0
+  factory :survey do
+    title {"Test survey #{Factory.next(:count)}"}
+    association :organization
+    post_survey_message "bye!"
   end
   
   factory :person do 
@@ -150,7 +149,7 @@ FactoryGirl.define do
     
   factory :access_token, class: Rack::OAuth2::Server::AccessToken do
     code "9d68af577f8a4c9076752c9699d2ac2ace64f9dcb407897f754439096cedbfca"
-    scope "userinfo contacts followup_comments contact_assignment roles"
+    scope "userinfo contacts followup_comments contact_assignment roles organization_info"
   end
   
   factory :user_with_authentication, parent: :user do
@@ -235,14 +234,8 @@ FactoryGirl.define do
     attribute_name ''
   end
   
-  factory :page do
-    association   :question_sheet
-    label         'Welcome!'
-    number        1
-  end
-  
-  factory :page_element do
-    association   :page
+  factory :survey_element do
+    association   :survey
     association   :element
     position        1
   end
@@ -259,7 +252,7 @@ FactoryGirl.define do
   end
   
   factory :answer_sheet do
-    association :question_sheet
+    association :survey
     association :person
   end
 

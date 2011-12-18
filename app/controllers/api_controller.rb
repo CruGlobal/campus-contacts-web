@@ -1,8 +1,8 @@
+require 'api_errors'
+require 'api_helper'
 class ApiController < ApplicationController  
   extend ::Rack::OAuth2::Rails::Filters
-  require 'api_errors'
   include ApiErrors
-  require 'api_helper'
   include ApiHelper
   skip_before_filter :authenticate_user!
   after_filter :logApiRequest

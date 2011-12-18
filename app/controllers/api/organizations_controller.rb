@@ -12,7 +12,7 @@ class Api::OrganizationsController < ApiController
     end
     
     # Get all of the organizations from org_roles
-    orgs = Organization.includes(:leaders, {:keywords=>{:question_sheets=>{:pages=>:questions}}}).find(org_roles.collect{|x| x.organization_id})
+    orgs = Organization.includes(:leaders, {:surveys=>:questions}).find(org_roles.collect{|x| x.organization_id})
     
     orgs.each do |org|
       # Initial hash with id and name

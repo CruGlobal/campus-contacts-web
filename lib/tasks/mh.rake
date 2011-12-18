@@ -34,3 +34,22 @@ task "carriers" => :environment do
     # sleep(time_to_sleep)
   end
 end
+
+
+  
+task "phone_numbers" => :environment do
+  # Copy phone numbers from ministry_newaddress to phone_numbers table
+  sql = "select homePhone, cellPhone, workPhone, fk_personID from ministry_newaddress a where a.addressType = 'current'"
+  ActiveRecord::Base.connection.select_all(sql).each do |row|
+    person = Person.find_by_personID(row['fk_personID'])
+    if person
+      {'homePhone' => 'home', 'cellPhone' => 'mobile', 'workPhone' => 'work'}.each do |column, location|
+        num = row[column]
+        stripped_num = num.to_s.gsub(/[^\d]/, '')
+        if stripped_num.length == 10
+          person.phone_numbers.find_by_number(stripped_num) || person.phone_numbers.create(number: stripped_num, location: location)
+        end
+      end
+    end
+  end
+end

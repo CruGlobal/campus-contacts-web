@@ -11,10 +11,10 @@ td span.role_label {
 #menu a.greybox {
   background:#F4F4F4;
   border:1px solid #bbbbbb;
-  float: left;
-  margin:10px 3px 5px;
+  margin:10px 4px 0px 0;
   padding:0 8px;
   border-radius: 5px;
+  display: inline-block;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   -khtml-border-radius: 5px;
@@ -34,11 +34,12 @@ td span.role_label {
   clear: both;
   color: #0379AE;
   font-size: 11px;
+  padding: 4px;
+  background: #d3f3bb;
 }
 
 #menu .col_1 {
-  display:inline;
-  float: left;
+  display:block;
   margin: 0 5px;
   position: relative;
 }
@@ -48,13 +49,11 @@ td span.role_label {
   background: -moz-linear-gradient(top, #F4F4F4, #EEEEEE);
   background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F4F4F4), to(#EEEEEE));
   border:1px solid #777777;
-  float:left;
   left:-999em; /* Hides the drop down */
   margin:1px auto;
   padding:10px 5px 10px 5px;
   position:absolute;
   text-align:left;
-  width: 140px;
   -moz-border-radius: 0px 5px 5px 5px;
   -webkit-border-radius: 0px 5px 5px 5px;
   border-radius: 0px 5px 5px 5px;
@@ -63,7 +62,6 @@ td span.role_label {
 #menu .greyborder_top {
   border-top:1px solid #bbb;
   margin: 10px 8px 0;
-  width: 124px;
 }
 
 #menu .greyborder_top a:hover,
@@ -75,7 +73,6 @@ td span.role_label {
   cursor: pointer;
   margin: 0 -10px;
   padding: 6px 0 4px;
-  width: 148px;
 }
 
 #menu .role_div_checkbox span {

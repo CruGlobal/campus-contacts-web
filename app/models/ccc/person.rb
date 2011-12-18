@@ -7,6 +7,10 @@ module Ccc
 			has_many :crs_registrations, class_name: 'Ccc::CrsRegistration', foreign_key: :fk_PersonID, dependent: :destroy
 
       has_one :crs2_profile, class_name: 'Ccc::Crs2Profile', foreign_key: :ministry_person_id, dependent: :destroy
+      has_many :crs2_registrants, through: :crs2_profile
+      has_many :crs2_registrant_types, through: :crs2_registrants
+      has_many :conferences, :through => :crs2_registrant_types, source: :crs2_conference, conditions: "crs2_registrant.status = 'Complete'"
+      
       has_many :pr_reviewers, class_name: 'Ccc::PrReviewer', dependent: :destroy
       has_many :pr_reviews, class_name: 'Ccc::PrReview', foreign_key: :subject_id # dependant? subject_id, initiator_id
       has_many :pr_review_initiators, class_name: 'Ccc::PrReview', foreign_key: :initiator_id
@@ -16,6 +20,7 @@ module Ccc
       has_many :pr_personal_forms, class_name: 'Ccc::PrPersonalForm', dependent: :destroy
 
 			has_many :sp_applications, class_name: 'Ccc::SpApplication', dependent: :destroy
+			has_many :summer_projects, :class_name => "Ccc::SpProject", through: :sp_applications, source: :sp_project, conditions: "sp_applications.status IN('accepted_as_participant', 'accepted_as_student_staff')"
 			has_many :sp_projects, class_name: 'Ccc::SpProject', foreign_key: :pd_id
 			has_many :sp_project_apds, class_name: 'Ccc::SpProject', foreign_key: :apd_id
 			has_many :sp_project_opds, class_name: 'Ccc::SpProject', foreign_key: :opd_id

@@ -56,6 +56,11 @@ a:hover {
   clear: both;
 }
 
+table {
+  border-collapse: collapse;
+  td {padding: 3px;}
+}
+
 small {
   font-size: 11px;
 }
@@ -480,6 +485,7 @@ a.hide {
 
 .contact_leftcol {
   float: left;
+  width: 200px;
   label {
     font-weight: bold;
     display: block;
@@ -809,6 +815,10 @@ ul.pillmenu {
 	display: inline-block 
 }
 
+.icon_holder {
+  width: 16px;display: block;
+}
+
 .icon {
   display: inline-block !important;
 }
@@ -820,9 +830,10 @@ ul.pillmenu {
 .icon.add {  background-image: url("<%= asset_path('add.png') %>");}
 .icon.unassign {  background-image: url("<%= asset_path('undo.png') %>");}
 .icon.send_contact_info {  background-image: url("<%= asset_path('email_go.png') %>");}
-.icon.delete {  background-image: url("<%= asset_path('delete.png') %>");}
+.icon.delete {  background-image: url("<%= asset_path('delete.png') %>"); background-position: 50% 50%;}
 .icon.edit {  background-image: url("<%= asset_path('edit_sm.png') %>");}
 .icon.check {  background-image: url("<%= asset_path('check.png') %>");}
+.icon.lock {  background-image: url("<%= asset_path('lock.png') %>");}
 .icon.star, .icon.star_empty:hover {  background-image: url("<%= asset_path('star.png') %>");}
 .icon.star_empty, .icon.star:hover,  {  background-image: url("<%= asset_path('star_empty.png') %>");}
 
@@ -1061,6 +1072,10 @@ span.title {
   text-decoration: none;
 }
 
+.button_block {
+  margin: 20px 0;
+}
+
 /* KEYWORDS */
 .keywordtable {
   td.controls {
@@ -1083,16 +1098,6 @@ span.title {
   background: #f0f0f0;
 }
 
-.yourquestions {
-  margin-left: 15px;
-}
-
-.fakesort {
-  td {
-    padding: 3px;
-    color: #999;
-  }
-}
 
 /* FORM */
 
@@ -1130,30 +1135,51 @@ span.title {
 
 
 /* SORTABLE ROWS */
+.ui-sortable tr:hover {
+  background: #f0f0f0;
+  height: 20px;
+}
+
 .ui-sortable {
+  width: 100%;
+  tr {min-height: 20px;}
   tr:hover {
     cursor: move;
   }
-  .ui-sortable-helper {
+  tr.ui-sortable-helper {
     background: #fcf0b9;
     border: 1px dotted #eca700;
-    height: 20px;
+    min-height: 20px;
+    box-shadow: 2px 2px 4px #bbb;
   }
   td {
     padding: 3px;
   }
+  td.questiontitle {
+    min-width: 700px;
+  }
 }
 .questiontitle {
-  min-width: 150px;
-  padding-left: 5px;
+  min-width: 700px;
+  padding-left: 3px;
 }
 
-.ui-sortable tr:hover {
-  background: #fcf0b9;
-  border: 1px dotted #eca700;
-  height: 20px;
-  td.questiontitle {text-indent: 10px;}
+
+.yourquestions {
+  margin-left: 0px;
+  tr {
+    td {border-bottom: 1px solid silver;}
+  }
+  width: 550pm
 }
+
+.fakesort {
+  td {
+    padding: 3px;
+    color: #999;
+  }
+}
+
 
 #change_org.on {
   background: $blue;
@@ -1205,6 +1231,7 @@ span.title {
 
 .orgactions {
 	float: right;
+	margin: 6px !important;
 }
 
 #survey_keywords_mode_link.on {
@@ -1967,7 +1994,7 @@ textarea, input[type=text], input[type=password] {
 
 .orgwrap {
   width: 100%;
-  overflow-x: scroll;
+  overflow-x: auto;
   overflow-y: hidden;
 }
 #orgs {

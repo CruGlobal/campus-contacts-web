@@ -1,0 +1,2 @@
+class FailedFacebookCreateError < StandardError
+end

@@ -36,8 +36,8 @@
     <li><%= link_to(t('contacts.add_contact'), "", class: 'add_contact') %></li>
   </ul>
   <ul class="pillmenu">
-    <li><%= link_to(t('.send_email'), nil, :id => "send_bulkemail_link") %></li>	
-    <li><%= link_to(t('.send_sms'), nil, :id => "send_bulksms_link") %></li>			
+    <li><%= link_to(t('people.index.send_email'), nil, :id => "send_bulkemail_link") %></li>	
+    <li><%= link_to(t('people.index.send_sms'), nil, :id => "send_bulksms_link") %></li>			
   </ul>
   
   <ul class="pillmenu">
@@ -131,15 +131,15 @@
   <table class="listing" cellpadding="0" cellspacing="0">
     <tr>
       <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment' %></th>
-      <th><%= sort_link @q, :firstName, t('.first_name') %></th>
-      <th><%= sort_link @q, :lastName, t('.last_name') %></th>
-      <th><%= sort_link @q, :followup_status, t('general.status') %></th>
-      <th><%= sort_link @q, :gender, t('general.gender') %></th>
-      <th><%= sort_link @q, 'phone_numbers.number', t('.phone_number') %></th>
+      <th><%= sort_link @q, :firstName, t('.first_name'), params %></th>
+      <th><%= sort_link @q, :lastName, t('.last_name'), params %></th>
+      <th><%= sort_link @q, :followup_status, t('general.status'), params %></th>
+      <th><%= sort_link @q, :gender, t('general.gender'), params %></th>
+      <th><%= sort_link @q, 'phone_numbers.number', t('.phone_number'), params %></th>
       <% @questions.each do |q| %>
         <th class="<%= dom_id(q) %>">
           <%= q.label %>
-          <%= link_to(image_tag("close.png", alt: t('nav.hide'), title: t('nav.hide')), hide_sms_keyword_question_path(@organization.keywords.first, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
+          <%= link_to(image_tag("close.png", alt: t('nav.hide'), title: t('nav.hide')), hide_survey_question_path(@organization.surveys.first, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
         </th>
       <% end %>
       <% unless params[:dnc] %>
@@ -147,7 +147,7 @@
         <th><%= t('.friends') %></th>
       <% end %>
       <th><%= t('.surveys') %></th>
-      <th><%= sort_link @q, 'mh_answer_sheets.updated_at', t('.last_survey') %></th>
+      <th><%= sort_link @q, 'mh_answer_sheets.updated_at', t('.last_survey'), params %></th>
       <th></th>
     </tr>
     <tbody id="contacts_table">

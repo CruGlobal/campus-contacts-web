@@ -1,4 +1,12 @@
 $ ->   
+
+  if $.fn.superfish?
+    $('ul.sf-menu').superfish({ 
+      pathClass:  'current',
+      speed:         'fast',
+      pathLevels: 2
+    }) 
+        
   $('input[type=checkbox].primary').live 'click', -> 
     fieldset = $(this).closest('.fieldset')
     $('input[type=checkbox].primary', fieldset).prop('checked', false)
@@ -12,13 +20,10 @@ $ ->
     if $('.sfield:visible', fieldset).length <= 2
       $('.remove_field', fieldset).hide()
     false
-    
-  $('.fingerme').oneFingerScroll();
   
-  $('ul.sf-menu').superfish
-    dropShadows: false,
-    delay: 100
-    
+  if $.fn.oneFingerScroll?
+    $('.fingerme').oneFingerScroll();
+  
   $('.expandable').each (i)->
     e = $(this)
     if e.height() > Number(e.attr("data-height"))
@@ -68,45 +73,48 @@ $ ->
         type:'POST', 
         url: $(sortable).attr('data-sortable-url')
         
-  $('[data-sortable]').sortable(sortable_options)
+  if $.fn.sortable?
+    $('[data-sortable]').sortable(sortable_options)
   
-  $('.tipthis[title]').qtip()
-  $('.tiplight').qtip()
-  $('.tipit[title]').qtip
-    position: 
-      my: 'top right',  
-      at: 'bottom left'
-  $('.tipit2[title]').qtip
-    position: 
-      my: 'top right',  
-      at: 'top left'
+  if $.fn.qtip?
+    $('.tipthis[title]').qtip()
+    $('.tiplight').qtip()
+    $('.tipit[title]').qtip
+      position: 
+        my: 'top right',  
+        at: 'bottom left'
+    $('.tipit2[title]').qtip
+      position: 
+        my: 'top right',  
+        at: 'top left'
   
   $('[data-sortable][data-sortable-handle]').each ->
     handle = $(this).attr('data-sortable-handle');
     $(this).sortable("option", "handle", handle);
     
-  $('.handle').draggable 
-    revert: true
-    start: (event, ui) ->
-      # If this row isn't checked, store the previously checked rows and check this row '
-      unless $(this).next('input').prop('checked') 
-        $(this).data 'checked', $('.id_checkbox:checked').map ->
-          return $(this).val()
-        $('.id_checkbox:checked').prop('checked', false) 
-        $(this).next('input').prop('checked', true) 
-    stop: (event, ui) ->
-      if $(this).data('checked')?
-        $(this).next('input').prop('checked', false)
-        $.each $(this).data('checked'), (i, id) ->
-          $('.id_checkbox[value=' + id + ']').prop('checked', true)
-      $(this).data('checked', null)
-    helper: (event) ->
-      length = if $(this).next('input').prop('checked') then $('.id_checkbox:checked').length else 1
-      if length == 1
-        helper_text = $('#drag_helper_text_one').html()
-      else
-        helper_text = $('#drag_helper_text_other').html().replace('0', length)
-      $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'));     
+  if $.fn.draggable?
+    $('.handle').draggable 
+      revert: true
+      start: (event, ui) ->
+        # If this row isn't checked, store the previously checked rows and check this row '
+        unless $(this).next('input').prop('checked') 
+          $(this).data 'checked', $('.id_checkbox:checked').map ->
+            return $(this).val()
+          $('.id_checkbox:checked').prop('checked', false) 
+          $(this).next('input').prop('checked', true) 
+      stop: (event, ui) ->
+        if $(this).data('checked')?
+          $(this).next('input').prop('checked', false)
+          $.each $(this).data('checked'), (i, id) ->
+            $('.id_checkbox[value=' + id + ']').prop('checked', true)
+        $(this).data('checked', null)
+      helper: (event) ->
+        length = if $(this).next('input').prop('checked') then $('.id_checkbox:checked').length else 1
+        if length == 1
+          helper_text = $('#drag_helper_text_one').html()
+        else
+          helper_text = $('#drag_helper_text_other').html().replace('0', length)
+        $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'));     
       
 window.t = (s) -> I18n.translate(s)    
 
@@ -132,3 +140,20 @@ window.addFields = (link, association, content) ->
   fieldset = $(link).closest('.fieldset')
   $('.remove_field', fieldset).show()
   false
+
+$.mh = {}
+$.mh.logout = (url) ->
+  FB.logout() if FB?
+  if url?
+    document.location = '/sign_out?next=' + url
+  else
+    document.location = '/sign_out'
+  
+$.mh.fbEnsureInit = (callback) -> 
+  if(!$.mh.fbInitialized)
+    setTimeout(()-> 
+      $.mh.fbEnsureInit(callback)
+    , 50)
+  else 
+    if(callback)
+      callback();
