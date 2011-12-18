@@ -4,16 +4,20 @@ class SessionsController < Devise::SessionsController
   layout :pick_layout
   
   def destroy
-    session[:fb_token] = nil
-    if mhub?
-      render layout: 'mhub'
-    else
-      redirect_to after_sign_out_path_for('user')
+    if session[:fb_token]
+      split_token = session[:fb_token].split("|")
+      fb_api_key = split_token[0]
+      fb_session_key = split_token[1]
+      session[:fb_token] = nil
     end
-    sign_out
+    super
   end
   
   protected
+  
+  def after_sign_out_path_for(resource_or_scope)
+    params[:next] ? params[:next] : root_url
+  end
   
   def pick_layout
     mhub? ? 'mhub' : 'login'

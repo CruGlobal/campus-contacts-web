@@ -6,12 +6,45 @@
   <%= render 'shared/head' %>
 </head>
 <body id="<%= controller.controller_name %>_controller" class="<%= params[:action] %>">
+  <%= render 'fb_init' %>
   
   <div id="outer">
   
     <%= render 'shared/nav' %>
     
     <div id="rest">
+      <!-- <div id="menutop">
+        <ul class="sf-menu sf-navbar mh-top">
+          <li class="<%= 'current' if request.path =~ connect_pattern %>">
+            <%= link_to("Connect", "/contacts") %>
+            <ul>
+              <li class="<%= 'current' if request.fullpath == '/contacts/mine' %>"><%= link_to(t('nav.my_contacts'), "/contacts/mine", :class => "topset mycontacts") %></li>
+              <li class="<%= 'current' if  params[:controller] == 'contacts' && params[:action] == 'index' %>"><%= link_to(t('nav.all_contacts'), "/contacts", :class => "topset allcontacts") %></li>
+              <% if can? :manage, current_organization %>
+                <li class="<%= 'current' if ['surveys','questions'].include?(controller.controller_name) %>"><%= link_to(t('nav.surveys'), surveys_path, :class => "topset surveys") %></li>
+                <li class="<%= 'current' if params[:controller] == 'sms_keywords' %>"><%= link_to(t('nav.keywords'), sms_keywords_path, :class => "topset surveys") %></li>
+              <% end %>
+            </ul>
+          </li>
+          <li class="">
+            <%= link_to("Care", "/people") %>
+            <ul>
+              <li class="<%= 'current' if  params[:controller] == 'people' %>"><%= link_to(t('nav.directory'), "/people", :class => "topset directory") %></li>
+              <% if can? :manage, current_organization %>
+                <li class="<%= 'current' if  params[:controller] == 'groups' %>"><%= link_to(t('nav.groups'), "/groups", :class => "topset groups") %></li>
+              <% end %>
+            </ul>
+          </li>
+          <% if can? :manage, current_organization %>
+            <li>
+              <%= link_to(t('nav.organizations'), "/organizations") %>
+              <ul>
+                <li class="<%= 'current' if params[:controller] == 'organizations' %>"><%= link_to(t('nav.manage'), "/organizations", :class => "topset ") %></li>
+              </ul>
+            </li>
+          <% end %>
+        </ul>
+      </div> -->
       <div id="menugroups">
         <ul>
           <li class="<%= 'selected' if request.path =~ connect_pattern %>"><%= link_to("Connect", "/contacts") %></li>
@@ -29,6 +62,7 @@
             <li class="<%= 'selected' if request.fullpath == '/contacts/mine' %>"><%= link_to(t('nav.my_contacts'), "/contacts/mine", :class => "topset mycontacts") %></li>
             <li class="<%= 'selected' if  params[:controller] == 'contacts' && params[:action] == 'index' %>"><%= link_to(t('nav.all_contacts'), "/contacts", :class => "topset allcontacts") %></li>
             <% if can? :manage, current_organization %>
+              <li class="<%= 'selected' if params[:controller] == 'surveys' %>"><%= link_to(t('nav.surveys'), surveys_path, :class => "topset surveys") %></li>
               <li class="<%= 'selected' if params[:controller] == 'sms_keywords' %>"><%= link_to(t('nav.keywords'), sms_keywords_path, :class => "topset surveys") %></li>
             <% end %>
           <% when request.path =~ care_pattern %>
@@ -42,7 +76,7 @@
           <% end %>
         </ul>
       </div>
-    
+
       <div id="left">
         
         <div class="block">

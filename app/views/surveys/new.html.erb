@@ -1,0 +1,29 @@
+<% provide :sidebar do %>
+  <ul class="leftmenu">
+    <li><a href="/sms_keywords"><%= t('sms_keywords.edit.keywords') %></a></li>
+    <li class="selected"><%= link_to(t('sms_keywords.index.request_keyword'), new_sms_keyword_path) %></li>
+  </ul>
+<% end %>
+
+<div class="titlebar">
+  <h1><%= t('.create_a_survey') %></h1>
+</div>
+
+
+<div class="pagemenu">
+  <ul class="pillmenu">
+    <li><%= link_to t('general.back'), :back %></li>
+  </ul>
+</div>
+
+
+<div class="contentpad">
+  
+  <p class="explanation1"> 
+    <%= t('.choose_keyword_explanation_html', number: SmsKeyword::SHORT) %>  
+  </p>
+  
+  <%= render 'form' %>
+  
+  
+</div>

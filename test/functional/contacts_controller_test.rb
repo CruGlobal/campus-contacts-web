@@ -21,6 +21,31 @@ class ContactsControllerTest < ActionController::TestCase
         xhr :post, :create, {"assigned_to" => "all", "dnc" => "", "person" => {"email_address" => {"email" => "test@uscm.org"},"firstName" => "Test","lastName" => "Test",  "phone_number" => {"number" => ""}}}
         assert_response :success, @response.body
       end
+    
+      should "create a person with email and phone number" do
+        xhr :post, :create, {
+                        "person" => {
+                          "current_address_attributes" => {
+                            "country" => "US"
+                          },
+                          "email_address" => {
+                            "_destroy" => "false",
+                            "email" => "trbooth@uark.edu",
+                            "primary" => "0"
+                          },
+                          "firstName" => "Tyler",
+                          "gender" => "male",
+                          "lastName" => "Booth",
+                          "phone_number" => {
+                            "_destroy" => "false",
+                            "location" => "mobile",
+                            "number" => "479-283-4946",
+                            "primary" => "0"
+                          }
+                        }
+                      }
+        assert_response :success, @response.body 
+      end
     end
     
     context "on index page" do

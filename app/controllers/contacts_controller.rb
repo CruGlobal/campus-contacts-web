@@ -11,9 +11,9 @@ class ContactsController < ApplicationController
       redirect_to user_root_path, error: t('contacts.index.which_org')
       return false
     end
-    @question_sheets = @organization.question_sheets
-    @questions = @organization.all_questions.where("#{PageElement.table_name}.hidden" => false).flatten.uniq
-    @hidden_questions = @organization.all_questions.where("#{PageElement.table_name}.hidden" => true).flatten.uniq
+    @surveys = @organization.surveys
+    @questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => false).flatten.uniq
+    @hidden_questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => true).flatten.uniq
     # @people = unassigned_people(@organization)
     if params[:dnc] == 'true'
       @people = @organization.dnc_contacts
@@ -45,7 +45,7 @@ class ContactsController < ApplicationController
     end
     @people = @people.includes(:organizational_roles).where("organizational_roles.organization_id" => @organization.id)
     if params[:q] && params[:q][:s].include?('mh_answer_sheets')
-      @people = @people.joins({:answer_sheets => :question_sheet}).joins("LEFT JOIN sms_keywords on sms_keywords.id = mh_question_sheets.questionnable_id").where("sms_keywords.organization_id" => @organization.id)
+      @people = @people.joins({:answer_sheets => :survey}).where("mh_surveys.organization_id" => @organization.id)
     end
     if params[:first_name].present?
       @people = @people.where("firstName like ? OR preferredName like ?", '%' + params[:first_name].strip + '%', '%' + params[:first_name].strip + '%')
@@ -130,8 +130,6 @@ class ContactsController < ApplicationController
                 else
                   answers << ''
                 end
-                # answer_sheet = person.answer_sheets.detect {|as| q.question_sheets.collect(&:id).include?(as.question_sheet_id)}
-                # answers << q.display_response(answer_sheet)
               end
               answers << I18n.l(dates.sort.last, format: :date) if dates.present?
               rows << answers
@@ -188,7 +186,7 @@ class ContactsController < ApplicationController
       @person, @email, @phone = create_person(params[:person])
       if @person.save
 
-        @questions = current_organization.all_questions.where("#{PageElement.table_name}.hidden" => false)
+        @questions = current_organization.all_questions.where("#{SurveyElement.table_name}.hidden" => false)
 
         save_survey_answers
       
@@ -249,9 +247,9 @@ class ContactsController < ApplicationController
   
     def save_survey_answers
       @answer_sheets = []
-      current_organization.keywords.each do |keyword|
-        @answer_sheet = get_answer_sheet(keyword, @person)
-        question_set = QuestionSet.new(keyword.questions, @answer_sheet)
+      current_organization.surveys.each do |survey|
+        @answer_sheet = get_answer_sheet(survey, @person)
+        question_set = QuestionSet.new(survey.questions, @answer_sheet)
         question_set.post(params[:answers], @answer_sheet)
         question_set.save
         @answer_sheets << @answer_sheet
@@ -272,9 +270,9 @@ class ContactsController < ApplicationController
         answers[person.id] = {}
       end
       @surveys = {}
-      AnswerSheet.where(question_sheet_id: organization.question_sheet_ids, person_id: people.collect(&:id)).includes(:answers, {:person => :primary_email_address}).each do |answer_sheet|
+      AnswerSheet.where(survey_id: organization.survey_ids, person_id: people.collect(&:id)).includes(:answers, {:person => :primary_email_address}).each do |answer_sheet|
         @surveys[answer_sheet.person_id] ||= {}
-        @surveys[answer_sheet.person_id][answer_sheet.question_sheet.questionnable.to_s] = answer_sheet.updated_at
+        @surveys[answer_sheet.person_id][answer_sheet.survey] = answer_sheet.completed_at
         
         answers[answer_sheet.person_id] ||= {}
         questions.each do |q|

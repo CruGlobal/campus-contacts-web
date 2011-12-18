@@ -1,0 +1,137 @@
+
+
+/*** adding the class mh-top in addition to sf-menu creates an all-horizontal nav-bar menu ***/
+.mh-top {
+	background:		url("<%= asset_path("topmenubgtall.png") %>") repeat-x 0 0 #e5e5e5;
+	height:			88px;
+	padding-bottom:	0em;
+	position:		relative;
+	float: none;
+  border-radius: 9px 9px 0 0;
+  font-family: Tahoma, Arial;
+  font-size: 14px;
+}
+.mh-top li {
+	background: none;
+	position:		static;
+	border: none;
+	height: 48px;
+	line-height: 48px;
+	font-size: 14px;
+}
+
+.mh-top li:first-child {
+  margin-left: 10px;
+}
+
+.mh-top a {
+	border-top:		none;
+	padding: 0 1.5em;
+}
+.mh-top li ul {
+	width:			44em; /*IE6 soils itself without this*/
+}
+.mh-top li li {
+	background:		none;
+	position:		relative;
+	height: 40px;
+	line-height: 40px;
+}
+
+.mh-top li li ul {
+	width:			13em;
+}
+.mh-top li li li {
+	width:			100%;
+}
+.mh-top ul li {
+	width:			auto;
+	float:			left;
+}
+.mh-top a, .mh-top a:visited {
+	border:			none;
+}
+
+
+#menutop .mh-top a {
+  color: #fff;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+#menutop .mh-top li li a {color: #000;}
+
+
+.mh-top li.current {
+	background:		none;
+	font-weight: bold;
+}
+.mh-top li:hover,
+.mh-top li.sfHover,
+.mh-top li li.current,
+.mh-top a:focus, .mh-top a:hover, .mh-top a:active {
+	background:		none;
+}
+.mh-top ul li:hover,
+.mh-top ul li.sfHover,
+ul.mh-top ul li:hover li,
+ul.mh-top ul li.sfHover li,
+.mh-top ul a:focus, .mh-top ul a:hover, .mh-top ul a:active {
+	background:		#D1DFFF;
+}
+ul.mh-top li li li:hover,
+ul.mh-top li li li.sfHover,
+.mh-top li li.current li.current,
+.mh-top ul li li a:focus, .mh-top ul li li a:hover, .mh-top ul li li a:active {
+	background:		#E6EEFF;
+}
+ul.mh-top .current ul,
+ul.mh-top ul li:hover ul,
+ul.mh-top ul li.sfHover ul {
+	left:			0 !important;
+	top:			48px; /* match top ul list item height */
+}
+
+.mh-top li:hover ul, .mh-top li.sfHover ul {
+left: 0px;
+top: 48px;
+z-index: 99;
+}
+
+ul.mh-top .current ul ul {
+	top: 			-999em;
+}
+
+.mh-top li li.current > a {
+	font-weight:	bold;
+}
+
+/*** point all arrows down ***/
+/* point right for anchors in subs */
+.mh-top ul .sf-sub-indicator { background-position: -10px -100px; display: none;}
+.mh-top ul a > .sf-sub-indicator { background-position: 0 -100px;  display: none;}
+/* apply hovers to modern browsers */
+.mh-top ul a:focus > .sf-sub-indicator,
+.mh-top ul a:hover > .sf-sub-indicator,
+.mh-top ul a:active > .sf-sub-indicator,
+.mh-top ul li:hover > a > .sf-sub-indicator,
+.mh-top ul li.sfHover > a > .sf-sub-indicator {
+	background-position: -10px -100px; /* arrow hovers for modern browsers*/
+  display: none;
+}
+
+.mh-top .sf-sub-indicator {display: none;}
+
+/*** remove shadow on first submenu ***/
+.mh-top > li > ul {
+	background: transparent;
+	padding: 0;
+	-moz-border-radius-bottomleft: 0;
+	-moz-border-radius-topright: 0;
+	-webkit-border-top-right-radius: 0;
+	-webkit-border-bottom-left-radius: 0;
+}
+
+.mh-top a.sf-with-ul {
+  padding-right: 1em;
+}

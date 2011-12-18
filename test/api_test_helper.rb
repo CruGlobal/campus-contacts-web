@@ -33,12 +33,13 @@ def setup_api_env
   @access_token3 = Factory.create(:access_token, identity: @user3.id, code: "abcdefghijklmnop")
   
   #setup question sheets, questions, and an answer sheet for user1 and user2
-  @keyword = Factory(:approved_keyword, organization: @temp_org)
+  @survey = Factory(:survey, organization: @temp_org)
+  @keyword = Factory(:approved_keyword, organization: @temp_org, survey: @survey)
   @firstNameQ = Factory(:element)
-  @keyword.question_page.elements << @firstNameQ  
-  @questions = @keyword.question_sheet.questions
-  @answer_sheet = Factory(:answer_sheet, question_sheet: @keyword.question_sheet, person: @user.person)
-  @answer_sheet2 = Factory(:answer_sheet, question_sheet: @keyword.question_sheet, person: @user2.person)
+  @survey.elements << @firstNameQ  
+  @questions = @survey.questions
+  @answer_sheet = Factory(:answer_sheet, survey: @survey, person: @user.person)
+  @answer_sheet2 = Factory(:answer_sheet, survey: @survey, person: @user2.person)
   @answer_to_choice = Factory(:answer_1, answer_sheet: @answer_sheet, question: @questions.first)
   @answer_to_choice2 = Factory(:answer_1, answer_sheet: @answer_sheet2, question: @questions.first)
 end
@@ -88,7 +89,7 @@ end
     json_keywords.each_with_index do |keyword,i|
       assert_equal(keyword['name'],'approved')
       assert_equal(keyword['keyword_id'],keywords[i].id)
-      assert_equal(keyword['questions'], keywords[i].question_sheets.first.questions.collect(&:id))
+      assert_equal(keyword['questions'], keywords[i].survey.questions.collect(&:id))
     end
   end
 

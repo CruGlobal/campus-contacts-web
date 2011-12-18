@@ -2,6 +2,10 @@ class OrganizationsController < ApplicationController
   respond_to :html, :js
   before_filter :get_organization, :only => [:show, :edit, :update, :destroy]
   
+  def index
+    
+  end
+  
   def show
     respond_with @organization
   end
@@ -47,7 +51,7 @@ class OrganizationsController < ApplicationController
     if @organization.new_record?
       render 'add_org' and return
     else
-      @organization.add_admin(current_person)
+      @organization.add_admin(current_person) unless @organization.parent && @organization.parent.show_sub_orgs?
     end
   end
   

@@ -13,7 +13,6 @@ gem 'crack'
 gem 'resque'
 gem 'foreigner'
 gem "devise", '1.5.1' #, git: "git://github.com/plataformatec/devise.git"
-# gem "oa-oauth", '~> 0.3.2', require: "omniauth/oauth"
 gem 'omniauth'
 gem 'omniauth-facebook', '~> 1.0.0.rc2'
 gem 'mini_fb'
@@ -52,7 +51,6 @@ gem 'deadlock_retry'
 gem 'delegate_presenter'
 
 gem 'vpim', git: 'git://github.com/twinge/vpim.git'   # vcard maker
-gem 'rubyzip'                                         # for zipping files
 gem 'i18n-js'                                         # allow i18n on js files 
 
 gem 'rest-client'
@@ -64,12 +62,8 @@ group :development, :test do
   gem 'shoulda'
   # gem 'ephemeral_response'
   gem 'mocha'
-  # gem 'sqlite3-ruby', require: 'sqlite3'
   gem 'factory_girl','~> 2.0.0.rc4'
   gem 'simplecov', '>= 0.3.5', require: false
-  #gem 'cover_me', '>= 1.0.0.rc6', group: :test
-#  gem 'guard'
-#  gem 'guard-test'
   gem 'railroady'
   gem 'awesome_print'
   gem 'active_reload'

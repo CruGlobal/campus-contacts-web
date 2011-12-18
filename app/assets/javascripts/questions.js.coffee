@@ -8,10 +8,10 @@ $ ->
     if $('.content', parent)[0]? and $('.content', parent).val().trim() != ''
       $.each $('.content', parent).val().split("\n"), (i, option) ->
         sms += ' ' + letters[i] + ')' + option;
-    if sms.length >= 141
+    if sms.length == 141
       inp = String.fromCharCode event.which
       if /[a-zA-Z0-9-_ ]/.test(inp)
-        alert('Due to restrctions on text message lengths, the total length of your question can\'t be more than 140 characters. If you exceed 140, the text will get truncated.')
+        alert(t('application.messages.sms_too_long'))
         # if $('.content', parent)[0]? and $('.content', parent).val().trim() != ''
         #   $('.content', parent).val($('.content', parent).val().substr(0,$('.content', parent).val().length - 1))
         # else
@@ -24,6 +24,17 @@ $ ->
     $('.inlineform').hide()
     $('#new_question_form').closest('.inlineform').show()
     $('#question_form').slideDown()
+    false
+    
+  $('#add_old_question_link').live 'click', ->
+    $('#previously_used').dialog
+      resizable: false,
+      height: 700,
+      width: 800,
+      modal: true,
+      buttons: 
+        Close: ->
+          $(this).dialog('destroy')
     false
     
   $('.use_question, .remove_question').live 'click', ->

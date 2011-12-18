@@ -1,7 +1,6 @@
-<%= 
-  form_for(@person, url: @person.new_record? ? survey_responses_path : survey_response_path(@person), method: @person.new_record? ? :post : :put, class: 'form', validate: true) do |f| %>
+<%= form_for(@person, url: @person.new_record? ? survey_responses_path : survey_response_path(@person), html: {method: @person.new_record? ? :post : :put, class: 'form', validate: true, 'data-ajax' => false}) do |f| %>
   <%= error_messages_for @person, @answer_sheet.person %>
-  <%= hidden_field_tag :keyword, @keyword.keyword %>
+  <%= hidden_field_tag :survey_id, @survey.id %>
   <%= hidden_field_tag :received_sms_id, params[:received_sms_id] if params[:received_sms_id] %>
   <%= hidden_field_tag :button, false if mobile_device? %>
   <% if @person.new_record? %>
@@ -39,7 +38,7 @@
       </li>
     <% end %>
     
-    <% @questions.each do |question| %>
+    <% @survey.questions.each do |question| %>
       <% case question.slug %>
       <% when 'email' %>
         <% if @person.email.blank? %>

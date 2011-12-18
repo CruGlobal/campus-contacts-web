@@ -58,6 +58,11 @@ class PeopleController < ApplicationController
     authorize! :edit, @person
   end
   
+  def involvement
+    @person = current_organization.people.find(params[:id])
+    authorize! :edit, @person
+  end
+  
   def search_ids
     @people = Person.search_by_name(params[:q])
     respond_to do |wants|

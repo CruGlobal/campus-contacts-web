@@ -1,28 +1,8 @@
-.gmwrap {
-	float: right;
-	margin-top: 7px;
+.gmdrop {
+  float: right;
+  margin-top: 4px;
 }
 
-.gmwrap .under li > a {
-	float: left;
-	width: 255px;
-	text-align: left;
-}
-
-.orgactions {
-	float: right;
-	width: 40px;
-}
-
-.sf-menu .orgactions a {
-	display: inline-block !important;
-}
-
-
-li.smallermenu ul {
-	width: 200px;
-	overflow: hidden;
-}
 
 /*** ESSENTIAL STYLES ***/
 .sf-menu, .sf-menu * {
@@ -32,17 +12,14 @@ li.smallermenu ul {
 }
 .sf-menu {
 	line-height:	1.0;
-	text-align: left;
 }
 .sf-menu ul {
 	position:		absolute;
 	top:			-999em;
-	width:			323px; /* left offset of submenus need to match (see below) */
-	border: 2px solid silver;
+	width:			20em; /* left offset of submenus need to match (see below) */
 }
 .sf-menu ul li {
-	width:			315px;
-	padding: 4px;
+	width:			100%;
 }
 .sf-menu li:hover {
 	visibility:		inherit; /* fixes IE7 'sticky bug' */
@@ -50,6 +27,8 @@ li.smallermenu ul {
 .sf-menu li {
 	float:			left;
 	position:		relative;
+	font-size: 12px;
+	line-height: 15px;
 }
 .sf-menu a {
 	display:		block;
@@ -57,7 +36,7 @@ li.smallermenu ul {
 }
 .sf-menu li:hover ul,
 .sf-menu li.sfHover ul {
-	right:			0;
+	right:			-0px;
 	top:			2.5em; /* match top ul list item height */
 	z-index:		99;
 }
@@ -67,8 +46,8 @@ ul.sf-menu li.sfHover li ul {
 }
 ul.sf-menu li li:hover ul,
 ul.sf-menu li li.sfHover ul {
-	left:			5em; /* match ul width */
-	top:			20px;
+	left:			-20em; /* match ul width */
+	top:			0;
 }
 ul.sf-menu li li:hover li ul,
 ul.sf-menu li li.sfHover li ul {
@@ -76,7 +55,7 @@ ul.sf-menu li li.sfHover li ul {
 }
 ul.sf-menu li li li:hover ul,
 ul.sf-menu li li li.sfHover ul {
-	left:			10em; /* match ul width */
+	left:			-20em; /* match ul width */
 	top:			0;
 }
 
@@ -85,45 +64,65 @@ ul.sf-menu li li li.sfHover ul {
 	float:			left;
 	margin-bottom:	1em;
 }
+
+
 .sf-menu a {
+	border-left:	0px solid #fff;
+	border-top:		0px solid #CFDEFF;
+	padding: 		.75em 1em .75em 1.5em;
 	text-decoration:none;
 }
+
+.sf-menu li a {padding-left: 1em;}
+
+.sf-menu li ul a {
+	padding-left: 1.5em;
+}
+
 .sf-menu a, .sf-menu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
 	color:			#0379AE;
 }
 .sf-menu li {
-	background:		#fff;
+	background:		none;
+	font-size: 13px;
+	border-radius: 0px;
 }
+
+.mh-global {
+  font-family: Arial;
+}
+
+.sf-menu > li {	border-right: 1px solid #ddd;}
+
+.sf-menu a.orgname {width: 160px; float: left; text-align: left; display: block}
+.sf-menu a.icon {padding: 0; line-height: 20px;}
+
+
+.sf-menu li:last-child {
+  border-right: none;
+}
+
 .sf-menu li li {
-	background:		#fff;
+	background-color:		#f0f0f0;
 }
-
-
 .sf-menu li li li {
-	background:		#fff;
+	background-color:		#f0f0f0;
 }
 .sf-menu li:hover, .sf-menu li.sfHover,
 .sf-menu a:focus, .sf-menu a:hover, .sf-menu a:active {
+	background-color:		#d9d9d9;
 	outline:		0;
 }
 
 .sf-menu li:hover {
-	background: #f0f0f0;
+  border-radius: 0px;
 }
-
 
 /*** arrows **/
 .sf-menu a.sf-with-ul {
-	padding-right: 	0em;
-	min-width:		0px; /* trigger IE7 hasLayout so spans position accurately */
+	padding-right: 	2.25em;
+	min-width:		1px; /* trigger IE7 hasLayout so spans position accurately */
 }
-.sf-menu a.sf-with-ul label{
-	text-indent: 16px;
-	display:inline-block;
-	background: url("<%= asset_path("down.png") %>") no-repeat 0 50%;
-}
-
-
 .sf-sub-indicator {
 	position:		absolute;
 	display:		block;
@@ -133,7 +132,7 @@ ul.sf-menu li li li.sfHover ul {
 	height:			10px;
 	text-indent: 	-999em;
 	overflow:		hidden;
-	/* background:		url('../images/arrows-ffffff.png') no-repeat -10px -100px;*/ /* 8-bit indexed alpha png. IE6 gets solid image only */  
+	background:		url('<%= asset_path('arrows-blue.png') %>') no-repeat -10px -100px; /* 8-bit indexed alpha png. IE6 gets solid image only */
 }
 a > .sf-sub-indicator {  /* give all except IE6 the correct values */
 	top:			.8em;
@@ -151,6 +150,9 @@ li.sfHover > a > .sf-sub-indicator {
 /* point right for anchors in subs */
 .sf-menu ul .sf-sub-indicator { background-position:  -10px 0; }
 .sf-menu ul a > .sf-sub-indicator { background-position:  0 0; }
+.sf-menu ul a > .sf-sub-indicator {float: left; left: .5em;}
+
+
 /* apply hovers to modern browsers */
 .sf-menu ul a:focus > .sf-sub-indicator,
 .sf-menu ul a:hover > .sf-sub-indicator,
@@ -160,18 +162,9 @@ li.sfHover > a > .sf-sub-indicator {
 	background-position: -10px 0; /* arrow hovers for modern browsers*/
 }
 
-.sf-sub-indicator {
-	display:none !important;
-}
-
 /*** shadows for all but IE6 ***/
 .sf-shadow ul {
-	background:	url('../images/shadow.png') no-repeat bottom right;
-	padding: 0 8px 9px 0;
-	-moz-border-radius-bottomleft: 17px;
-	-moz-border-radius-topright: 17px;
-	-webkit-border-top-right-radius: 17px;
-	-webkit-border-bottom-left-radius: 17px;
+	padding: 0;
 }
 .sf-shadow ul.sf-shadow-off {
 	background: transparent;
