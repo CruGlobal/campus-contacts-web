@@ -158,6 +158,7 @@ en:
       fb_name_search_dialog_title: Facebook Profile Search
       fb_name_search_dialog_desc: Please wait while we fetch additional names. Once the result shows up, click on any of the names to retrieve their profile url.
       fb_name_search_dialog_no_more: There are no more results. Click previous button to see the previous searched names.
+      fb_profile_link: link to profile on facebook
     left_sidebar:
       profile: "%{name}'s Profile"
       edit_profile: "Edit %{name}'s Profile"

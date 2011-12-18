@@ -62,7 +62,8 @@ $ ->
         params = $('#people_form').serialize();
         $.post(url, params)
     false
-    
+  
+  fromViewingFBProfile = false  
   $('#person_url').autocomplete
     minLength: 3
     source: '/people/facebook_search'
@@ -86,14 +87,25 @@ $ ->
         if(ui.item.id == null)
           $('#fb_name_search_dialog').dialog('destroy')
         else
-          $('#person_url').val('http://www.facebook.com/profile.php?id=' + ui.item.id)
+          if(event.srcElement)
+            if(event.srcElement.nodeName.toLowerCase() == 'a')
+              $('#person_url').val('http://www.facebook.com/profile.php?id=' + ui.item.id)            
+            else
+              fromViewingFBProfile = true
+          else if(!event.srcElement)  
+            $('#person_url').val('http://www.facebook.com/profile.php?id=' + ui.item.id)
       false
   .data( "autocomplete" )
   ._renderItem = ( ul, item )->
     return $( "<li></li>" )
       .data( "item.autocomplete", item )
-      .append( '<img src="http://graph.facebook.com/' + item.id + '/picture" /><a>' + item.name + '</a>' )
+      .append( '<img src="http://graph.facebook.com/' + item.id + '/picture" /><a>' + item.name + '<br/><span onclick="window.open(\'http://www.facebook.com/profile.php?id=' + item.id + '\')">' + t('people.edit.fb_profile_link') + '</span></a>' )
       .appendTo( ul );
+      
+  $(window).focus ->
+    if(fromViewingFBProfile)
+      $('#people_controller.edit .ui-autocomplete').show();
+      fromViewingFBProfile = false
 
 $.fn.fbNameSearch = (url)->
   prevBtn = $("#fb_name_search_dialog").next(".ui-dialog-buttonpane").find('button')[1]
@@ -111,14 +123,14 @@ $.fn.fbNameSearch = (url)->
 
       $('#fb_name_search_result').html('<ul>')
       for v, k in response.data
-        $('#fb_name_search_result ul').append('<li><img src="http://graph.facebook.com/' + v.id + '/picture" /><a data-id="' + v.id + '">' + v.name + '</a></li>')
+        $('#fb_name_search_result ul').append('<li><img src="http://graph.facebook.com/' + v.id + '/picture" /><a class="name" data-id="' + v.id + '">' + v.name + '</a><a onclick="window.open(\'http://www.facebook.com/profile.php?id=' + v.id + '\')">' + t('people.edit.fb_profile_link') + '</a></li>')        
 
     if(response.paging.previous)
       $(prevBtn).button('enable')
       $(prevBtn).unbind('click').button().click ->
         $(this).fbNameSearch(escape(response.paging.previous))
 
-    $('#fb_name_search_result a').click ->
+    $('#fb_name_search_result a.name').click ->
       $('#person_url').val('http://www.facebook.com/profile.php?id=' + $(this).attr('data-id'))
       $('#fb_name_search_dialog').dialog('destroy')
 
