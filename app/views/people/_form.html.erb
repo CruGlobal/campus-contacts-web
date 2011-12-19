@@ -13,6 +13,17 @@
 
   <%= render 'people/person_form', person: @person %>
 
+  <div class="customform contact_form">
+    <div class="sfield">
+      <div class="ls"></div>
+      <div class="rs">
+        <%= tip(t('.facebook_url_tip')) %> <strong><%= f.label :url, t('.facebook_url') %></strong>
+        <span id="facebook_url"><%= link_to(@person.facebook_url, @person.facebook_url, target: '_blank') if @person.facebook_url %></span><br/>
+        <%= text_field_tag 'facebook_name_search', '', autocomplete: 'off', placeholder: t('general.autocomplete_name_hint') %>
+        <%= f.hidden_field :fb_uid %>
+      </div>
+    </div>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

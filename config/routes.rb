@@ -76,6 +76,7 @@ Mh::Application.routes.draw do
       get :all
       post :update_roles
       post :bulk_delete
+      get :facebook_search
     end
     member do
       get :merge_preview
