@@ -36,6 +36,7 @@
 	position:		relative;
 	height: 40px;
 	line-height: 40px;
+	font-size: 11px;
 }
 
 .mh-top li li ul {
@@ -47,6 +48,7 @@
 .mh-top ul li {
 	width:			auto;
 	float:			left;
+	margin-right: 4px;
 }
 .mh-top a, .mh-top a:visited {
 	border:			none;
@@ -59,7 +61,7 @@
   padding-bottom: 0px;
 }
 
-#menutop .mh-top li li a {color: #000;}
+#menutop .mh-top li li a {color: #000; line-height: 30px; margin-top: 5px;}
 
 
 .mh-top li.current {
@@ -77,8 +79,18 @@
 ul.mh-top ul li:hover li,
 ul.mh-top ul li.sfHover li,
 .mh-top ul a:focus, .mh-top ul a:hover, .mh-top ul a:active {
-	background:		#D1DFFF;
+	background:		inherit
 }
+
+.mh-top ul a:focus, .mh-top ul a:hover, .mh-top ul a:active {
+	background:		inherit;
+	background-repeat: no-repeat;
+	background-color: #fff;
+	border-radius: 5px;
+	font-size: 11px;
+	font-weight: normal;
+}
+
 ul.mh-top li li li:hover,
 ul.mh-top li li li.sfHover,
 .mh-top li li.current li.current,
@@ -103,7 +115,9 @@ ul.mh-top .current ul ul {
 }
 
 .mh-top li li.current > a {
-	font-weight:	bold;
+	font-weight:	normal;
+	background-color: #fff;
+	border-radius: 4px;
 }
 
 /*** point all arrows down ***/
