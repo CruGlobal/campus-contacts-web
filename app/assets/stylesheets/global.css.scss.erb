@@ -182,45 +182,8 @@ a.headerlink:hover {
   }
 }
 
-#topmenu {
-  background: #e5e5e5 repeat-x;
-  border-radius: 0;
-  height: 38px;
-  border-bottom: 2px solid silver;
-  margin-bottom: 0px;
-  a {
-    margin-top: 5px;
-    color: #000;
-    line-height: 27px;
-    padding: 0 10px;
-    font-size: 11px;
-		display: block;
-  }
-	a:hover {
-		text-decoration: none;
-	}
-	li.selected > a,
-	li.selected:hover > a {
-		background-color: #fff;
-		border-radius: 5px;
-	}
-	li:hover {
-	}
-  ul {
-    @include clearlist;
-  }
-	ul li {
-	  margin-right: 5px;
-		display: block;
-		float: left;
-	}
-	ul {
-	  margin-left: 5px;
-	  height: 38px;
-	}
-}
 
-#topmenu, .topmenu {
+.topmenu {
   a.topset {
     background-image: url("<%= asset_path("iconslice.png") %>") !important;
     background-position: 8px 100px;
