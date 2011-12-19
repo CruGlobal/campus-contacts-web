@@ -10,6 +10,7 @@
   border-radius: 9px 9px 0 0;
   font-family: Tahoma, Arial;
   font-size: 14px;
+  margin-bottom: 0px;
 }
 .mh-top li {
 	background: none;
@@ -148,4 +149,10 @@ ul.mh-top .current ul ul {
 
 .mh-top a.sf-with-ul {
   padding-right: 1em;
+}
+
+.mh-top li.sfHover {
+  background-image: url("<%= asset_path("groupselected.png") %>");
+  background-repeat: no-repeat;
+  background-position: 50% 100%;
 }

@@ -3,8 +3,9 @@ $ ->
   if $.fn.superfish?
     $('ul.sf-menu').superfish({ 
       pathClass:  'current',
-      speed:         'fast',
-      pathLevels: 2
+      speed:         0,
+      pathLevels: 2,
+      delay: 500
     }) 
         
   $('input[type=checkbox].primary').live 'click', -> 
