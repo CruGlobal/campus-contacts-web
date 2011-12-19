@@ -64,39 +64,40 @@ $ ->
     false
   
   fromViewingFBProfile = false  
-  $('#facebook_name_search').autocomplete
-    minLength: 3
-    source: '/people/facebook_search'
-    select: (event, ui)->
-      if(isNaN(ui.item.id))
-        url = escape(ui.item.id)
-        $('#fb_name_search_dialog').dialog
-          resizable: false,
-          height: 600,
-          width: 800,
-          modal: true,
-          open: (event, ui) ->
-            $(this).fbNameSearch(url)
-          buttons:
-            Cancel: ->
-              $(this).dialog('destroy')
-            Previous: ->
-            More: ->
-        false
-      else
-        if(ui.item.id == null)
-          $('#fb_name_search_dialog').dialog('destroy')
+  if $('#facebook_name_search')[0]?
+    $('#facebook_name_search').autocomplete
+      minLength: 3
+      source: '/people/facebook_search'
+      select: (event, ui)->
+        if(isNaN(ui.item.id))
+          url = escape(ui.item.id)
+          $('#fb_name_search_dialog').dialog
+            resizable: false,
+            height: 600,
+            width: 800,
+            modal: true,
+            open: (event, ui) ->
+              $(this).fbNameSearch(url)
+            buttons:
+              Cancel: ->
+                $(this).dialog('destroy')
+              Previous: ->
+              More: ->
+          false
         else
-          $('#person_fb_uid').val(ui.item.id)
-          link = 'http://www.facebook.com/profile.php?id=' + ui.item.id
-          $('#facebook_url').html('<a href="' + link + '">' + link + '<a>')
-      false
-  .data( "autocomplete" )
-  ._renderItem = ( ul, item )->
-    return $( "<li></li>" )
-      .data( "item.autocomplete", item )
-      .append( '<img src="http://graph.facebook.com/' + item.id + '/picture" /><a>' + item.name )
-      .appendTo( ul );
+          if(ui.item.id == null)
+            $('#fb_name_search_dialog').dialog('destroy')
+          else
+            $('#person_fb_uid').val(ui.item.id)
+            link = 'http://www.facebook.com/profile.php?id=' + ui.item.id
+            $('#facebook_url').html('<a href="' + link + '">' + link + '<a>')
+        false
+    .data( "autocomplete" )
+    ._renderItem = ( ul, item )->
+      return $( "<li></li>" )
+        .data( "item.autocomplete", item )
+        .append( '<img src="http://graph.facebook.com/' + item.id + '/picture" /><a>' + item.name )
+        .appendTo( ul );
       # + '<br/><span onclick="window.open(\'http://www.facebook.com/profile.php?id=' + item.id + '\')">' + t('people.edit.fb_profile_link') + '</span></a>'
       
   $(window).focus ->
