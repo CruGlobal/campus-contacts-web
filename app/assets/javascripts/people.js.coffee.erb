@@ -64,7 +64,7 @@ $ ->
     false
   
   fromViewingFBProfile = false  
-  $('#person_url').autocomplete
+  $('#facebook_name_search').autocomplete
     minLength: 3
     source: '/people/facebook_search'
     select: (event, ui)->
@@ -87,20 +87,17 @@ $ ->
         if(ui.item.id == null)
           $('#fb_name_search_dialog').dialog('destroy')
         else
-          if(event.srcElement)
-            if(event.srcElement.nodeName.toLowerCase() == 'a')
-              $('#person_url').val('http://www.facebook.com/profile.php?id=' + ui.item.id)            
-            else
-              fromViewingFBProfile = true
-          else if(!event.srcElement)  
-            $('#person_url').val('http://www.facebook.com/profile.php?id=' + ui.item.id)
+          $('#person_fb_uid').val(ui.item.id)
+          link = 'http://www.facebook.com/profile.php?id=' + ui.item.id
+          $('#facebook_url').html('<a href="' + link + '">' + link + '<a>')
       false
   .data( "autocomplete" )
   ._renderItem = ( ul, item )->
     return $( "<li></li>" )
       .data( "item.autocomplete", item )
-      .append( '<img src="http://graph.facebook.com/' + item.id + '/picture" /><a>' + item.name + '<br/><span onclick="window.open(\'http://www.facebook.com/profile.php?id=' + item.id + '\')">' + t('people.edit.fb_profile_link') + '</span></a>' )
+      .append( '<img src="http://graph.facebook.com/' + item.id + '/picture" /><a>' + item.name )
       .appendTo( ul );
+      # + '<br/><span onclick="window.open(\'http://www.facebook.com/profile.php?id=' + item.id + '\')">' + t('people.edit.fb_profile_link') + '</span></a>'
       
   $(window).focus ->
     if(fromViewingFBProfile)
@@ -121,17 +118,17 @@ $.fn.fbNameSearch = (url)->
       $(moreBtn).unbind('click').button().click ->
         $(this).fbNameSearch(escape(response.paging.next))
 
-      $('#fb_name_search_result').html('<ul>')
+      $('#fb_name_search_result').html('<ul></ul>')
       for v, k in response.data
-        $('#fb_name_search_result ul').append('<li><img src="http://graph.facebook.com/' + v.id + '/picture" /><a class="name" data-id="' + v.id + '">' + v.name + '</a><a onclick="window.open(\'http://www.facebook.com/profile.php?id=' + v.id + '\')">' + t('people.edit.fb_profile_link') + '</a></li>')        
-
+        $('#fb_name_search_result ul').append('<li><img src="http://graph.facebook.com/' + v.id + '/picture" /><a class="name" data-id="' + v.id + '">' + v.name + '</a></li>')        
+      # <a onclick="window.open(\'http://www.facebook.com/profile.php?id=' + v.id + '\')">' + t('people.edit.fb_profile_link') + '</a>
     if(response.paging.previous)
       $(prevBtn).button('enable')
       $(prevBtn).unbind('click').button().click ->
         $(this).fbNameSearch(escape(response.paging.previous))
 
     $('#fb_name_search_result a.name').click ->
-      $('#person_url').val('http://www.facebook.com/profile.php?id=' + $(this).attr('data-id'))
+      $('#facebook_name_search').val('http://www.facebook.com/profile.php?id=' + $(this).attr('data-id'))
       $('#fb_name_search_dialog').dialog('destroy')
 
 $.fn.triggerPersonSearch = ->

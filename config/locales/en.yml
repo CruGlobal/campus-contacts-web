@@ -153,12 +153,17 @@ en:
       status: "Status"
       attach_rejoicable: 'Attach a Rejoicable'
       add_comment: 'Add Comment / Update Status'
+    form:
+      facebook_url: "Facebook Profile Url:"
+      facebook_url_tip: You can manually search facebook for this person's profile if they haven't already connected. Keep in mind that some people set their facebook privacy settings such that they won't show up in this search.
     edit:
       editing: Editing
       fb_name_search_dialog_title: Facebook Profile Search
       fb_name_search_dialog_desc: Please wait while we fetch additional names. Once the result shows up, click on any of the names to retrieve their profile url.
       fb_name_search_dialog_no_more: There are no more results. Click previous button to see the previous searched names.
       fb_profile_link: link to profile on facebook
+      more_facebook_matches: "Click here to see more results"
+      no_results: "We couldn't find anyone on facebook with that name"
     left_sidebar:
       profile: "%{name}'s Profile"
       edit_profile: "Edit %{name}'s Profile"

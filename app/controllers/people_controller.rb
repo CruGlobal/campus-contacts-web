@@ -282,17 +282,17 @@ class PeopleController < ApplicationController
     url = URI.escape(url)
     response = RestClient.get url, { accept: :json}
     result = JSON.parse(response)
-
     data = Array.new
     if result['data'].size > 0
       # construct the json result - autocomplete only accepts an array
       result['data'].each do |d|
           data << { 'name' => d['name'] , 'id' => d['id'] }
       end
+      logger.debug result
       # next result
-      data <<  {'name' => 'Next result', 'id' => result['paging']['next'] }
+      data <<  {'name' => t('people.edit.more_facebook_matches'), 'id' => result['paging']['next'] } if data.length == 25
     else
-      data <<  {'name' => 'No result found', 'id' => nil }
+      data <<  {'name' => t('people.edit.no_results'), 'id' => nil }
     end
 
     respond_to do |format|

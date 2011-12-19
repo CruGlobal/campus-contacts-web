@@ -1,10 +1,6 @@
 <%= fields_for person, {validators: {}} do |pf| %>
 <div class="customform contact_form">
   <div class="sfield">
-    <div class="ls"><%= pf.label :url, t('general.profile_url') %>:</div>
-    <div class="rs"><%= pf.text_field :url, autocomplete: 'off', placeholder: t('general.autocomplete_name_hint') %></div>
-  </div>
-  <div class="sfield">
     <div class="ls"><%= pf.label :firstName, t('general.first_name') %>:</div>
     <div class="rs"><%= pf.text_field :firstName %></div>
   </div>

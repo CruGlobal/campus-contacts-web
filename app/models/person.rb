@@ -67,6 +67,12 @@ class Person < ActiveRecord::Base
     [firstName.to_s, lastName.to_s.strip].join(' ')
   end
   
+  def facebook_url
+    if fb_uid.present?
+      "http://www.facebook.com/profile.php?id=#{fb_uid}"
+    end
+  end
+  
   def leader_in?(org)
     return false unless org
     OrganizationalRole.where(person_id: id, role_id: Role.leader_ids, :organization_id => org.id).present?
