@@ -797,8 +797,11 @@ ul.pillmenu {
 .icon.edit {  background-image: url("<%= asset_path('edit_sm.png') %>");}
 .icon.check {  background-image: url("<%= asset_path('check.png') %>");}
 .icon.lock {  background-image: url("<%= asset_path('lock.png') %>");}
+.icon.facebook {background-image: url("<%= asset_path('icon_facebook.gif') %>");}
 .icon.star, .icon.star_empty:hover {  background-image: url("<%= asset_path('star.png') %>");}
 .icon.star_empty, .icon.star:hover,  {  background-image: url("<%= asset_path('star_empty.png') %>");}
+
+.showtext {text-indent: 0px; width: auto; background-position: 0% 50%; text-indent: 20px;}
 
 .q1b, .q2b {
 	display: inline-block;
@@ -1951,6 +1954,11 @@ textarea, input[type=text], input[type=password] {
     color: #999;
   }
 }
+
+.indentedfields {
+  padding-left: 88px;
+}
+
 .contact_form {
   .ls {min-width: 75px;}
 }

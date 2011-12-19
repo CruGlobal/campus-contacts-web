@@ -109,23 +109,41 @@ ul.ui-autocomplete li:last-child img, ul.ui-autocomplete li:last-child span {
   display: none;
 }
 
-#fb_name_search_result li {
-  float: left;
-  list-style-type: none;
-  width: 100px;
-  height: 100px;
-  border: 1px dashed black;
-  border-radius: 10px;
-  margin: 5px;
-  padding: 5px;
-}
-
-#fb_name_search_result li img {
-  display: block;
-  margin: auto;
-}
-
-#fb_name_search_result li a {
-  margin: auto;
-  display: block;
+.fb_results {
+  ul {
+    margin: 0;
+    padding: 0;
+    display: block;
+    li:hover {
+      box-shadow: 0 0 4px #999;
+    }
+    li {
+      list-style-type: none;
+      border: 1px solid #CCC;
+      border-radius: 5px;
+      margin: 0px 5px 5px 0px;
+      padding: 5px;
+      min-height: 50px;
+      text-align: left;
+      width: 231px;
+      float: left;
+      border-image: initial;
+      img {
+        display: block;
+        margin: auto;
+        float: left;
+      }
+      .meta {
+        margin-left: 60px;
+        color: #555;
+        .fbname {color: #0379AE; display: block; font-weight: bold;}
+      }
+      a {
+        margin: auto;
+        display: block;
+        cursor: pointer;
+      }
+      a:hover {text-decoration: none;}
+    }
+  }
 }

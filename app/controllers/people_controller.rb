@@ -276,7 +276,7 @@ class PeopleController < ApplicationController
     # if a url exist in the param, then we're using FB's previous/next url to fetch the data
     if url.nil?
       # else, this is an initial search so we construct the url
-      url = "https://graph.facebook.com/search?q=#{params[:term]}&type=user&access_token=#{session[:fb_token]}"
+      url = "https://graph.facebook.com/search?q=#{params[:term]}&type=user&limit=24&access_token=#{session[:fb_token]}"
     end
 
     url = URI.escape(url)
@@ -290,7 +290,7 @@ class PeopleController < ApplicationController
       end
       logger.debug result
       # next result
-      data <<  {'name' => t('people.edit.more_facebook_matches'), 'id' => result['paging']['next'] } if data.length == 25
+      data <<  {'name' => t('people.edit.more_facebook_matches'), 'id' => result['paging']['next'] } if data.length == 24
     else
       data <<  {'name' => t('people.edit.no_results'), 'id' => nil }
     end

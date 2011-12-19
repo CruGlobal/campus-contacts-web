@@ -42,7 +42,7 @@
         <%= link_to(t('.google_map'), @person.current_address.map_link, target: '_blank', :class => "maplink") %>
       <% end %>
       <% if @person.fb_uid.present? %>
-      <p><%= link_to(t('.facebook_profile'), "http://www.facebook.com/profile.php?id=#{@person.fb_uid}", target: '_blank') %></p>
+      <p><%= link_to(t('.facebook_profile'), "http://www.facebook.com/profile.php?id=#{@person.fb_uid}", target: '_blank', :class => "icon facebook") %> <%= link_to(t('.facebook_profile'), "http://www.facebook.com/profile.php?id=#{@person.fb_uid}", target: '_blank') %></p>
       <% elsif @person.url.present? %>      
       <p><%= link_to(t('.facebook_profile'), @person.url, target: '_blank') %></p>      
       <% end %>
