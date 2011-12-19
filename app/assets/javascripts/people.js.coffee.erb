@@ -121,7 +121,8 @@ $.fn.fbNameSearch = (url)->
 
       $('#fb_name_search_result').html('<ul></ul>')
       for v, k in response.data
-        $('#fb_name_search_result ul').append('<li><a class="name" data-id="' + v.id + '"><img src="http://graph.facebook.com/' + v.id + '/picture?type=square" /><div class="meta"><span class="fbname">' + v.name + '</span>School Name Here</div></a></li>')        
+        $('#fb_name_search_result ul').append('<li><a class="name" data-id="' + v.id + '"><img src="http://graph.facebook.com/' + v.id + '/picture?type=square" /><div class="meta"><span class="fbname">' + v.name + '</span></div></a></li>')        
+      # School Name Here
       # <a onclick="window.open(\'http://www.facebook.com/profile.php?id=' + v.id + '\')">' + t('people.edit.fb_profile_link') + '</a>
     if(response.paging.previous)
       $(prevBtn).button('enable')
