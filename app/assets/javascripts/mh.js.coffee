@@ -5,7 +5,7 @@ $ ->
       pathClass:  'current',
       speed:         0,
       pathLevels: 2,
-      delay: 500
+      delay: 300
     }) 
         
   $('input[type=checkbox].primary').live 'click', -> 

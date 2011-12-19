@@ -26,7 +26,7 @@
               <% end %>
             </ul>
           </li>
-          <li class="">
+          <li class="<%= 'current' if request.path =~ care_pattern %>">
             <%= link_to("Care", "/people") %>
             <ul>
               <li class="<%= 'current' if  params[:controller] == 'people' %>"><%= link_to(t('nav.directory'), "/people", :class => "topset directory") %></li>
@@ -36,7 +36,7 @@
             </ul>
           </li>
           <% if can? :manage, current_organization %>
-            <li>
+            <li class="<%= 'current' if params[:controller] == 'organizations' %>">
               <%= link_to(t('nav.organizations'), "/organizations") %>
               <ul>
                 <li class="<%= 'current' if params[:controller] == 'organizations' %>"><%= link_to(t('nav.manage'), "/organizations", :class => "topset groups") %></li>
