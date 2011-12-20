@@ -64,6 +64,13 @@
     <!-- <h3><%= t('.predefined') %> <%= tip(t('questions.predefined_help')) %></h3> -->
     <table border="0" cellspacing="5" cellpadding="0" class="yourquestions">
       <tbody id="predefined_questions">
+        <% @predefined_questions.each do |question| %>
+          <%= render 'predefined_question', question: question %>
+        <% end %>
+      </tbody>
+    </table>
+    <table border="0" cellspacing="5" cellpadding="0" class="yourquestions">
+      <tbody id="other_questions">
         <% @other_questions.each do |question| %>
           <%= render 'predefined_question', question: question %>
         <% end %>
