@@ -1,6 +1,6 @@
 class Survey < ActiveRecord::Base
   set_table_name 'mh_surveys'
-  belongs_to :organization, dependent: :destroy
+  belongs_to :organization
   
   has_many :survey_elements, :dependent => :destroy, :order => :position
   has_many :elements, :through => :survey_elements, :order => SurveyElement.table_name + '.position'

@@ -11,7 +11,7 @@ class Organization < ActiveRecord::Base
   has_many :people, through: :organizational_roles
   has_many :contact_assignments
   has_many :keywords, class_name: 'SmsKeyword'
-  has_many :surveys
+  has_many :surveys, dependent: :destroy
   has_many :survey_elements, through: :surveys
   has_many :questions, through: :surveys
   has_many :all_questions, through: :surveys, source: :all_questions
