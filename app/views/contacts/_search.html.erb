@@ -1,0 +1,56 @@
+<div id="filter_box" style="<%= 'display:none' %>">
+  <%= form_tag params, method: :get do %>
+    <%= hidden_field_tag :search, 1 %>
+    <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
+    <div class="ononeline">
+      <div class="field">
+        <label for="first_name"><span class="title"><%= t('.first_name') %></span></label> 
+        <%= text_field_tag :first_name, params[:first_name] %><br>
+      </div>
+      <div class="field">
+        <label for="last_name"><span class="title"><%= t('.last_name') %></span></label>
+        <%= text_field_tag :last_name, params[:last_name] %><br>
+      </div>
+      <div class="field">
+        <label for="last_name"><span class="title"><%= t('.phone_number') %></span></label>
+        <%= text_field_tag :phone_number, params[:phone_number] %><br>
+      </div>
+      <div class="field">
+        <label for="gender"><span class="title"><%= t('general.gender') %></span></label>
+        <%= radio_button_tag :gender, '1', params[:gender] == '1' %> <%= t('general.male') %>
+        <%= radio_button_tag :gender, '0', params[:gender] == '0' %> <%= t('general.female') %>
+        <%= radio_button_tag :gender, '', params[:gender] == '' %> <%= t('general.both') %><br>
+      </div>
+      <div class="field">
+        <label for="status"><span class="title"><%= t('general.status') %></span></label>
+        <%= select_tag :status, options_for_select(OrganizationMembership::FOLLOWUP_STATUSES.collect {|s| [s.titleize, s]}, params[:status]), include_blank: true %><br>
+      </div>
+      <div class="field">
+        <label for="status"><span class="title"><%= t('general.survey') %></span></label>
+        <%= select_tag :survey, options_for_select(current_organization.surveys.order(:title).collect {|s| [s, s.id]}, params[:survey]), include_blank: true %><br>
+      </div>
+    </div>
+    <!-- Email: <%#= text_field_tag :email, params[:email] %> -->
+    <div class="q1b">
+    <% @questions.each_with_index do |q, i| %>
+      <% if i == (@questions.length / 2.0).ceil %>
+        </div><div class="q2b">
+      <% end %>
+      <div class="field userdefinied">
+        <span class="title"><%= q.label %></span>
+        <% if q.style == 'radio' %>
+          <div class="field field_radio">
+            <input type="radio" value="" name="answers[<%= q.id %>]" class="radio ">
+            <label class="choice"></label>
+          </div>
+        <% end %>
+        <%= render :partial => 'questions/' + q.ptemplate, :object => q, :locals => {:col => nil, :answer_sheet => @answer_sheet} %>
+      </div>
+    <% end %>
+    </div>
+    <div class="actionbarinline">
+      <%= submit_tag t('general.search') %>
+      <%= link_to t('.clear_search_form'), '', onclick: "$(this).closest('form')[0].reset(); return false;" %>
+    </div>
+  <% end %>
+</div>

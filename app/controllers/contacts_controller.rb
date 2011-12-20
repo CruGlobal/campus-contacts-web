@@ -47,6 +47,9 @@ class ContactsController < ApplicationController
     if params[:q] && params[:q][:s].include?('mh_answer_sheets')
       @people = @people.joins({:answer_sheets => :survey}).where("mh_surveys.organization_id" => @organization.id)
     end
+    if params[:survey]
+      @people = @people.joins(:answer_sheets).where("mh_answer_sheets.survey_id" => params[:survey])
+    end
     if params[:first_name].present?
       @people = @people.where("firstName like ? OR preferredName like ?", '%' + params[:first_name].strip + '%', '%' + params[:first_name].strip + '%')
     end
