@@ -259,7 +259,7 @@ class ContactsController < ApplicationController
       end
       # Delete any answer_sheet with no answers
       @answer_sheets.each do |as|
-        if as.answers.blank?
+        if as.reload.answers.blank?
           as.destroy 
           @answer_sheets -= [as]
         end
