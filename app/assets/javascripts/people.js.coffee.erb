@@ -190,8 +190,7 @@ $('#send_bulkemail_link').live 'click', ->
     id = $(this).val()
     tr = $(this).parent().parent();
     name = tr.attr('data-name')
-    email = tr.find('.email').text().length
-    if email > 0
+    if tr.attr('data-email').length > 0
       ids.push(id)    
       $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
     else
@@ -201,8 +200,7 @@ $('#send_bulkemail_link').live 'click', ->
     $('.all_row').each ->
       id = $(this).attr('data-id')
       name = $(this).attr('data-name')
-      email = $(this).attr('data-email').length
-      if email > 0
+      if $(this).attr('data-email').length > 0
         ids.push(id)      
         $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')    
       else

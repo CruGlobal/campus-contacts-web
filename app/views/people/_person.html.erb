@@ -1,4 +1,4 @@
-<tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="person_row" data-name="<%= person.name %>">
+<tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="person_row" data-name="<%= person.name %>" data-email="<%= person.email %>">
   
   <% if can?(:create, Person) || can?(:create, SmsMailer) %>
     <td nowrap="nowrap" class="checkbox_cell">

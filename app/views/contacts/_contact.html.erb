@@ -1,5 +1,5 @@
 <% contact_role = @roles[person.id] if @roles %>
-<tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row" data-name="<%= person.name %>">
+<tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row" data-name="<%= person.name %>" data-email="<%= person.email %>">
   <td nowrap="nowrap" class="checkbox_cell">
     <% if contact_role %>
       <%= image_tag('grippy.png', class: 'handle', 'data-row-id' => dom_id(person), 'data-dnc-url' => organizational_role_path(:id => contact_role.id, :status => 'do_not_contact') ) %>
