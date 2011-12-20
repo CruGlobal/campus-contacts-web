@@ -16,7 +16,7 @@
   <td><%= person.gender.to_s.titleize %></td>
   <td class="phone_number"><%= person.pretty_phone_number %></td>
   <% dates = [] %>
-  <% questions.each do |q| %>
+  <% questions.uniq.each do |q| %>
     <td class="<%= dom_id(q) %>">
       <% case q.slug %>
       <% when 'email' %>
@@ -30,7 +30,7 @@
       <% end %>
     </td>
   <% end %>
-  <% unless params[:dnc] %>
+  <% unless params[:dnc].present? %>
     <td id="assigned_to_<%= person.id %>" class="assigned_to"><%= assigned_to = (assignments[person.id] || []).first.try(:assigned_to) %></td>
     <td>
       <% friends = person.friends_and_leaders(current_organization) %> 

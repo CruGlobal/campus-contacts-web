@@ -108,17 +108,6 @@ $ ->
     $('#filter_box').toggle()
     false
     
-  $('#add_contact_div .save').live 'click', ->
-    form = $(this).closest('form')
-    if $('#person_firstName', form).val() == '' #or ($('#person_email_address_email', form).val() == '' &&$('#person_phone_number_number', form).val() == '')
-      $.a(t('contacts.index.no_name_message'))
-      return false
-    if $(this).hasClass('save_and_more')
-      $('#add_another').val('true')
-    $.rails.handleRemote(form)
-    form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
-    false
-    
   $('#contacts_controller a.add_contact').live 'click', ->
     $('#new_person')[0].reset()
     $('#add_contact_div').dialog
@@ -126,9 +115,19 @@ $ ->
       height:444,
       width:600,
       modal: true,
-      buttons: 
-        Cancel: ->
+      buttons: [
+        text: t('application.add_contact.save_and_close'),
+        click: -> 
+          $.mh.saveContact(false)
+      ,
+        text: t('application.add_contact.save_and_add'),
+        click: -> 
+          $.mh.saveContact(true)
+      ,
+        text: 'Cancel',
+        click: ->
           $(this).dialog('destroy')
+      ]
     false
           
   $('#survey_answers_link').live 'click', ->
@@ -374,7 +373,6 @@ $.fn.moveToDnc = (dragObject) ->
   $('#move_to_dnc').attr('action', $(dragObject).attr("data-dnc-url"))  
   $.rails.handleRemote($('#move_to_dnc'))
       
-      
 $.fn.assignTo = (leader, skip_remote) ->
   leader_name = $('.name a', leader).text()
   $('.id_checkbox:checked').each ->
@@ -405,3 +403,14 @@ $.fn.assignTo = (leader, skip_remote) ->
   unless skip_remote
     $.rails.handleRemote($('#new_contact_assignment'))
   $('#assign_to').val('')
+  
+$.mh.saveContact = (add_more) ->
+  form = $('#new_person')
+  if $('#person_firstName', form).val() == ''
+    $.a(t('contacts.index.no_name_message'))
+    return false
+  if add_more
+    $('#add_another').val('true')
+  $.rails.handleRemote(form)
+  form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
+  false

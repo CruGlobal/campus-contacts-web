@@ -47,7 +47,7 @@ class ContactsController < ApplicationController
     if params[:q] && params[:q][:s].include?('mh_answer_sheets')
       @people = @people.joins({:answer_sheets => :survey}).where("mh_surveys.organization_id" => @organization.id)
     end
-    if params[:survey]
+    if params[:survey].present?
       @people = @people.joins(:answer_sheets).where("mh_answer_sheets.survey_id" => params[:survey])
     end
     if params[:first_name].present?
@@ -256,6 +256,13 @@ class ContactsController < ApplicationController
         question_set.post(params[:answers], @answer_sheet)
         question_set.save
         @answer_sheets << @answer_sheet
+      end
+      # Delete any answer_sheet with no answers
+      @answer_sheets.each do |as|
+        if as.answers.blank?
+          as.destroy 
+          @answer_sheets -= [as]
+        end
       end
     end
     
