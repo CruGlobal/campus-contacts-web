@@ -138,6 +138,9 @@ Mh::Application.routes.draw do
     member do
       get :start
     end
+    collection do
+      get :index_admin
+    end
     resources :questions, controller: "surveys/questions" do
       member do
         put :hide

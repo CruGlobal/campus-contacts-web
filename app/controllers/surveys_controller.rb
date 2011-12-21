@@ -7,24 +7,25 @@ class SurveysController < ApplicationController
   
   require 'api_helper'
   include ApiHelper
+  
+  def index_admin
+    @organization = current_person.organizations.find_by_id(params[:org_id]) || current_organization
+    authorize! :manage, @organization
+    @surveys = @organization.surveys
+  end
    
   def index
     # authenticate_user! unless params[:access_token] && params[:org_id]
-    if mhub?
-      @title = "Pick A Survey"
-      if current_user
-        @organization = current_person.organizations.find_by_id(params[:org_id]) || current_organization
-        @surveys = @organization ? @organization.self_and_children_surveys : nil
-      else
-        return render_404
-      end
-      respond_to do |wants|
-        wants.html { render layout: 'mhub' }
-        wants.mobile
-      end
-    else
+    @title = "Pick A Survey"
+    if current_user
       @organization = current_person.organizations.find_by_id(params[:org_id]) || current_organization
-      @surveys = @organization.surveys
+      @surveys = @organization ? @organization.self_and_children_surveys : nil
+    else
+      return render_404
+    end
+    respond_to do |wants|
+      wants.html { render layout: 'mhub' }
+      wants.mobile
     end
   end
   
@@ -46,7 +47,7 @@ class SurveysController < ApplicationController
   
   def update
     if @survey.update_attributes(params[:survey])
-      redirect_to surveys_path
+      redirect_to index_admin_surveys_path
     else
       render :edit
     end
@@ -54,7 +55,7 @@ class SurveysController < ApplicationController
   
   def create
     if @survey = current_organization.surveys.create(params[:survey])
-      redirect_to surveys_path
+      redirect_to index_admin_surveys_path
     else
       render :new
     end

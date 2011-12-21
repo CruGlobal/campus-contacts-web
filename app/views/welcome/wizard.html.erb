@@ -51,7 +51,7 @@
     <p><%= t('welcome.wizard.survey_paragraph') %> </p>
     <% link = case
               when current_organization.self_and_children_surveys.length > 1 
-                surveys_path
+                index_admin_surveys_path
               when current_organization.self_and_children_surveys.length == 1
                 survey_questions_path(current_organization.self_and_children_surveys.first)
               else
