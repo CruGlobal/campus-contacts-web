@@ -26,6 +26,23 @@
   $.params = <%= raw params.dup.keep_if {|k, v| v.is_a?(String) || v.is_a?(Numeric) || v.is_a?(Enumerable)}.to_json %>;
 </script>
 
+<script type="text/javascript">
+		$(document).ready(function () {
+			$("div.sb").css({
+				 'padding' : '5px 20px',
+				 'font-size' : '14px'
+			});
+			$("div.dummyDrop").styledButton({
+				'orientation' : 'alone',
+				'dropdown' : { 'element' : 'ul' },
+				'role' : 'button',
+				'defaultValue' : 'default value',
+				'name' : 'dummy',
+				'clear' : true
+			});
+		} );
+	</script>
+
 <meta name="viewport" content="width=1000, user-scalable=no" />
 
 <%= render 'google_analytics' %>

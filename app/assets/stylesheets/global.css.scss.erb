@@ -1133,10 +1133,18 @@ span.title {
 
 .yourquestions {
   margin-left: 0px;
+  #predefined_questions {}
+  #other_questions {}
   tr {
-    td {border-bottom: 1px solid silver;}
+    td {border-bottom: 1px solid #ddd;}
   }
-  width: 550pm
+  
+  width: 550px;
+  th {
+    padding: 3px;
+    background: #efefef;
+    text-align: left;
+  }
 }
 
 .fakesort {
@@ -1144,6 +1152,11 @@ span.title {
     padding: 3px;
     color: #999;
   }
+}
+
+#previously_used .yourquestions {
+  margin-bottom: 1em;
+  width: 100%;
 }
 
 
