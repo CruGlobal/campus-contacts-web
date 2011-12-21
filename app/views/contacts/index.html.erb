@@ -41,7 +41,7 @@
   <ul class="pillmenu">
     <li>
       <%= link_to('Send', '#', class: 'action_dropdown') %>
-      <ul>
+      <ul style="display:none">
         <li><%= link_to(t('people.index.send_email'), nil, :id => "send_bulkemail_link") %></li>	
         <li><%= link_to(t('people.index.send_sms'), nil, :id => "send_bulksms_link") %></li>	
       </ul>
@@ -58,8 +58,8 @@
   
   <ul class="pillmenu">
     <li>
-      <%= link_to('Download', '') %>
-      <ul>
+      <%= link_to('Download', '#', class: 'action_dropdown') %>
+      <ul style="display:none">
         <li><%= link_to(t('.export'), params.merge(format: 'csv')) %></li>
         <li><%= link_to(t('.vcard'), '', id: 'bulk_vcard_link' ) %></li>
       </ul>

@@ -1,7 +1,7 @@
 $ ->   
 
   $('.action_dropdown').live 'click', -> 
-    $('ul').toggle()
+    $(this).next('ul').toggle()
     false
   
   if $.fn.superfish?
