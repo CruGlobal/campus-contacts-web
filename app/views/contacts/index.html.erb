@@ -32,13 +32,20 @@
 <div class="pagemenu">
   
   <ul class="pillmenu">
-    <li><%= link_to(t('contacts.assign'), "", class: 'assign') %></li>
-    <li><%= link_to(t('contacts.unassign'), "", id: 'bulk_unassign') %></li>
     <li><%= link_to(t('contacts.add_contact'), "", class: 'add_contact') %></li>
   </ul>
   <ul class="pillmenu">
-    <li><%= link_to(t('people.index.send_email'), nil, :id => "send_bulkemail_link") %></li>	
-    <li><%= link_to(t('people.index.send_sms'), nil, :id => "send_bulksms_link") %></li>			
+    <li><%= link_to(t('contacts.assign'), "", class: 'assign') %></li>
+    <li><%= link_to(t('contacts.unassign'), "", id: 'bulk_unassign') %></li>
+  </ul>
+  <ul class="pillmenu">
+    <li>
+      <%= link_to('Send', '') %>
+      <ul>
+        <li><%= link_to(t('people.index.send_email'), nil, :id => "send_bulkemail_link") %></li>	
+        <li><%= link_to(t('people.index.send_sms'), nil, :id => "send_bulksms_link") %></li>	
+      </ul>
+    </li>    		
   </ul>
   
   <ul class="pillmenu">
@@ -50,8 +57,12 @@
   </ul>
   
   <ul class="pillmenu">
-    <li><%= link_to(t('.export'), params.merge(format: 'csv')) %></li>
-    <li><%= link_to(t('.vcard'), '', id: 'bulk_vcard_link' ) %></li>
+    <li>
+      <%= link_to('Download', '') %>
+      <ul>
+        <li><%= link_to(t('.export'), params.merge(format: 'csv')) %></li>
+        <li><%= link_to(t('.vcard'), '', id: 'bulk_vcard_link' ) %></li>
+      </ul>
   </ul>
   
   <% if params[:dnc] == 'true' %>
