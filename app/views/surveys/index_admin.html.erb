@@ -45,7 +45,7 @@
           <% if current_organization.show_sub_orgs? %>
             <td><%= survey.organization %></td>
           <% end %>
-          <td><%= survey.keyword if survey.keyword %></td>
+          <td><%= link_to(survey.keyword, edit_sms_keyword_path(survey.keyword)) if survey.keyword %></td>
           <td class="controls">
             <%= link_to t("welcome.home.manage_questions"), survey_questions_path(survey) %>
             <%= link_to('', edit_survey_path(survey), :class => "icon edit tipit", :title => t('.edit_survey')) %>
