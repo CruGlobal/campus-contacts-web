@@ -7,6 +7,7 @@ class Group < ActiveRecord::Base
   has_many :involved, through: :group_memberships, source: :involved
   has_many :members, through: :group_memberships, source: :member
   has_many :leaders, through: :group_memberships, source: :leader
+  belongs_to :organization
   
   validates_presence_of :name, :location, :meets
   

@@ -6,10 +6,19 @@ class GroupsControllerTest < ActionController::TestCase
   #   assert_response :success
   # end
   # 
-  # test "should get show" do
-  #   get :show
-  #   assert_response :success
-  # end
+  test "should have permission to see a group in a sub-org" do
+    set_up_group_at_sub_org
+    get :show, id: @group.id
+    assert_response :success
+    assert_template :show
+  end
+  
+  test "should be able to create a group in a sub-org" do
+    set_up_group_at_sub_org
+    get :new
+    assert_response :success
+    assert_template :new
+  end
   # 
   # test "should get edit" do
   #   get :edit
@@ -30,5 +39,15 @@ class GroupsControllerTest < ActionController::TestCase
   #   get :create
   #   assert_response :success
   # end
+  
+  def set_up_group_at_sub_org
+    @user = Factory(:user_with_auxs)
+    sign_in @user
+    org = Factory(:organization)
+    org.add_admin(@user.person)
+    @sub_org = Factory(:organization, parent: org, show_sub_orgs: false)
+    @group = Factory(:group, organization: @sub_org)
+    request.session[:current_organization_id] = @sub_org.id 
+  end
 
 end

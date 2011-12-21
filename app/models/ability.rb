@@ -10,7 +10,7 @@ class Ability
     if user && user.person
       # admin_of_org_ids = user.person.organizations.where('organizational_roles.role_id' => admin_role.id).collect {|org| org.show_sub_orgs? ? org.self_and_children_ids : org.id}.flatten
       admin_of_org_ids = user.person.organizations.where('organizational_roles.role_id' => admin_role.id).collect {|org| org.subtree_ids}.flatten
-      leader_of_org_ids = user.person.organizations.where('organizational_roles.role_id' => Role.leader_ids).collect {|org| org.show_sub_orgs? ? org.self_and_children_ids : org.id}.flatten
+      leader_of_org_ids = user.person.organizations.where('organizational_roles.role_id' => Role.leader_ids).collect {|org| org.subtree_ids}.flatten
 
       # can :manage, Organization, id: user.person.organizational_roles.where(role_id: admin_role.id).collect(&:organization_id)
       can :manage, Organization, id: admin_of_org_ids

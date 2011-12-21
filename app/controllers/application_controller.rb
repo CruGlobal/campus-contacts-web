@@ -236,7 +236,6 @@ class ApplicationController < ActionController::Base
   end
   
   def access_denied
-    flash[:alert] =  "You don't have permission to access that area of MissionHub"
     render 'application/access_denied'
     return false
   end

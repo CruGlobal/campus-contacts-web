@@ -1,5 +1,9 @@
 $ ->   
 
+  $('.action_dropdown').live 'click', -> 
+    $('ul').toggle()
+    false
+  
   if $.fn.superfish?
     $('ul.sf-menu').superfish({ 
       pathClass:  'current',

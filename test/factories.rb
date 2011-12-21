@@ -1,6 +1,13 @@
 FactoryGirl.define do
   sequence(:count) {|n| n}
   
+  factory :group do
+    name 'foo'
+    location 'here'
+    meets 'sporadically'
+    association :organization
+  end
+  
   factory :sms_session do
     phone_number '15555555555'
     # association :person

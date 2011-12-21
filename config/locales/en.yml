@@ -265,7 +265,7 @@ en:
       title_placeholder: "Shorter titles are better"
       post_survey_placeholder: "Example: Thank you for your time! If you're interested in Cru, we meet at Moore Auditorium every Thursday @ 8PM"
       post_survey_message: 'What message would you like to show after the person has completed the survey?'
-      association: "The %{this_term} you are currently requesting this keyword for has at leaset one %{child_term} under it.<br/> Select if you'd like to associate this keyword with the %{this_term} or a %{child_term} under this %{this_term}"
+      association: "The %{this_term} you are currently requesting this keyword for has at least one %{child_term} under it.<br/> Select if you'd like to associate this keyword with the %{this_term} or a %{child_term} under this %{this_term}"
       survey_associated_with: This survey will be associated with %{org}.
       title: Title
       title_tip: "This is what people will see as the header on the survey"
@@ -300,10 +300,13 @@ en:
         forced_tip: This question is required on every survey and will be pre-filled if they connect with facebook.
       
   sms_keywords:
+    keyword_deleted: "Keyword has been deleted."
     index:
       association: Associate Contacts With
       request_keyword: Request a Keyword
       create_survey_first: You need to create a survey before requesting a keyword.
+      delete_confirm: "Are you sure you want to delete this keyword?"
+      delete_tip: "Delete keyword"
     default_rejection_email:
       "Your keyword request has been denied"
     edit:
