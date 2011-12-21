@@ -1,7 +1,12 @@
 $ ->   
 
   $('.action_dropdown').live 'click', -> 
-    $(this).next('ul').toggle()
+    link = $(this)
+    link.toggleClass('active')
+    link.next('ul').toggle()
+    link.parent().mouseleave ->
+      link.removeClass('active')
+      link.next('ul').hide()
     false
   
   if $.fn.superfish?
