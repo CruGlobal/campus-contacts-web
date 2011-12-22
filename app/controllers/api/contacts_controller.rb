@@ -156,8 +156,10 @@ class Api::ContactsController < ApiController
     
     output = @api_json_header
     output[:contacts] = @people.collect {|person| {person: person.to_hash_basic(@organization)}}
+
+    final_output = Rails.env.production? ? output.to_json : JSON::pretty_generate(output)
     
-    render json: output
+    render json: final_output
   end
   
   def show_1

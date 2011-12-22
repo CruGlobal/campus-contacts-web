@@ -89,7 +89,17 @@ class ApplicationController < ActionController::Base
   def current_user
     # check for access token, then do it the devise way
     if current_access_token
-      @current_user ||= User.find(Rack::OAuth2::Server.get_access_token(current_access_token).identity)
+      token = Rack::OAuth2::Server.get_access_token(current_access_token)
+      if token.identity
+        @current_user ||= User.find(token.identity)
+      else
+        organization = token.client.organization || Organization.find(params[:org_id])
+        if params[:user_id]
+          @current_user ||= token.client.organization.admins.where(:fk_ssmUserID => params[:user_id]).first.user
+        else
+          @current_user ||= token.client.organization.admins.where("fk_ssmUserID is not null").first.user
+        end
+      end
     else
       super # devise user
     end
