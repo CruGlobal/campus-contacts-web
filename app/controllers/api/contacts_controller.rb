@@ -1,4 +1,6 @@
+require 'contact_actions'
 class Api::ContactsController < ApiController
+  include ContactActions
   oauth_required scope: "contacts"
   before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization, :get_api_json_header
   
@@ -231,5 +233,9 @@ class Api::ContactsController < ApiController
     
     final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
     render json: final_output
+  end
+
+  def create_2
+    create_contact
   end
 end

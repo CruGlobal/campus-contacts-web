@@ -1,6 +1,9 @@
 require 'csv'
+require 'contact_actions'
 
 class ContactsController < ApplicationController
+  include ContactActions
+  
   before_filter :get_person
   before_filter :ensure_current_org
   before_filter :authorize
@@ -179,45 +182,7 @@ class ContactsController < ApplicationController
   end
   
   def create
-    Person.transaction do
-      params[:person] ||= {}
-      params[:person][:email_address] ||= {}
-      params[:person][:phone_number] ||= {}
-      unless params[:person][:firstName].present?# && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
-        render :nothing => true and return
-      end
-      @person, @email, @phone = create_person(params[:person])
-      if @person.save
-
-        @questions = current_organization.all_questions.where("#{SurveyElement.table_name}.hidden" => false)
-
-        save_survey_answers
-      
-        FollowupComment.create_from_survey(current_organization, @person, current_organization.all_questions, @answer_sheets)
-
-        create_contact_at_org(@person, current_organization)
-        if params[:assign_to_me] == 'true'
-          ContactAssignment.where(person_id: @person.id, organization_id: current_organization.id).destroy_all
-          ContactAssignment.create!(person_id: @person.id, organization_id: current_organization.id, assigned_to_id: current_person.id)
-        end
-        respond_to do |wants|
-          wants.html { redirect_to :back }
-          wants.mobile { redirect_to :back }
-          wants.js do
-            @assignments = ContactAssignment.where(person_id: @person.id, organization_id: current_organization.id).group_by(&:person_id)
-            @roles = Hash[OrganizationalRole.active.where(organization_id: current_organization.id, role_id: Role::CONTACT_ID, person_id: @person).map {|r| [r.person_id, r]}]
-            @answers = generate_answers([@person], current_organization, @questions)
-          end
-        end
-      else
-        flash.now[:error] = ''
-        flash.now[:error] += 'First name is required.<br />' unless @person.firstName.present?
-        flash.now[:error] += 'Phone number is not valid.<br />' if @phone && !@phone.valid?
-        flash.now[:error] += 'Email address is not valid.<br />' if @email && !@email.valid?
-        render 'add_contact'
-        return
-      end
-    end
+    create_contact
   end
   
   def destroy
