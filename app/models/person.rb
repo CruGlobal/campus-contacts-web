@@ -617,6 +617,15 @@ class Person < ActiveRecord::Base
     roles.where('organizational_roles.organization_id' => organizations)
   end
   
+  def self.vcard(ids)
+    ids = Array.wrap(ids)
+    book = Vpim::Book.new
+    Person.includes(:current_address, :primary_phone_number, :primary_email_address).find(ids).each do |person|
+     book << person.vcard
+    end
+    book
+  end
+  
   def vcard
     
     card = Vpim::Vcard::Maker.make2 do |maker|
