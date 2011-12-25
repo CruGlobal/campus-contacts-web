@@ -46,6 +46,23 @@ class ContactsControllerTest < ActionController::TestCase
                       }
         assert_response :success, @response.body 
       end
+    
+      should "render the form with errors if email is bad" do
+        xhr :post, :create, {
+                        "person" => {
+                          "email_address" => {
+                            "email" => "trbooth@asdf",
+                          },
+                          "firstName" => "Tyler",
+                          "gender" => "male",
+                          "lastName" => "Booth",
+                          "phone_number" => {
+                            "number" => "479-283-4946",
+                          }
+                        }
+                      }
+        assert_response :success, @response.body 
+      end
     end
     
     context "on index page" do

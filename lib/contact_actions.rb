@@ -38,13 +38,14 @@ module ContactActions
           end
           wants.json { @person.to_hash_basic(current_organization) }
         end
+        return
       else
         errors = []
         errors << 'First name is required.' unless @person.firstName.present?
         errors << 'Phone number is not valid.' if @phone && !@phone.valid?
         errors << 'Email address is not valid.' if @email && !@email.valid?
         respond_to do |wants|
-          wants.html do render :nothing => true 
+          wants.js do 
             flash.now[:error] = errors.join('<br />')
             render 'add_contact'
           end
@@ -52,6 +53,7 @@ module ContactActions
             raise ApiErrors::MissingData, errors.join(', ')
           end
         end
+        return false
       end
     end
   end
