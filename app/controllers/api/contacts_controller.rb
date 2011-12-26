@@ -212,6 +212,8 @@ class Api::ContactsController < ApiController
     @surveys = {}
     @questions = {}
     @people = get_people
+    @all_questions = []
+    @all_survey_ids = []
     unless @people.empty?
       @people.each do |person|
         @questions[person] = {}
@@ -219,16 +221,24 @@ class Api::ContactsController < ApiController
         @surveys = @organization.surveys
         #find all of the answer sheets from this person that belong to this organization
         @answer_sheets[person] = person.answer_sheets.where(survey_id: @surveys)
+        @all_survey_ids << @answer_sheets[person].collect(&:survey_id) unless @answer_sheets[person].empty?
         
         #get all of the questions for each person and answer sheet... three dimensional because I need to know
         # the person the answer is for and the answer_sheet
         @answer_sheets[person].each do |as|
-          @questions[person][as] = as.survey.questions
+          @questions[person][as] = as.survey.questions.all
+          @all_questions << @questions[person][as]
         end
       end
     end
     
+    @all_questions.flatten!
+    
+    @surveys = Survey.where(id: @all_survey_ids).collect {|s| {name: s.title, id: s.id, questions: s.questions.collect {|q| q.id}}}
+    
     json_output = @api_json_header
+    
+    json_output.merge!({surveys: @surveys, questions: @all_questions.collect {|q| q.attributes.slice('id', 'kind', 'label', 'style', 'required')}, people: @people.collect {|person| {person: person.to_hash(@organization), form: (@answer_sheets[person].collect {|as| @questions[person][as].collect {|q| {q: q.id, a: q.display_response(as)}}}).flatten(2).uniq}}})
     json_output[:contacts] = @people.collect {|person| {person: person.to_hash(@organization), form: (@answer_sheets[person].collect {|as| @questions[person][as].collect {|q| {q: q.id, a: q.display_response(as)}}}).flatten(2).uniq}}
     
     final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
