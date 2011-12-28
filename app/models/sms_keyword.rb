@@ -38,7 +38,7 @@ class SmsKeyword < ActiveRecord::Base
     after_transition :on => :deny, :do => :notify_user_of_denial
     
     event :disable do
-      transition any => :inactive
+      transition :active => :inactive
     end
     
     event :activate do
