@@ -66,7 +66,7 @@ module ApiHelper
   end
  
   def authorized_leader?
-    raise ApiErrors::IncorrectPermissionsError unless current_person.leader_in?(get_organization)
+    raise ApiErrors::IncorrectPermissionsError unless can?(:lead, get_organization)
   end
  
   #########################################
@@ -211,7 +211,7 @@ module ApiHelper
     finiteExceptions = finiteExceptions + oauthExceptions
 
     logger.info "#{exception.message}"
-    logApiRequest(exception)
+    log_api_request(exception)
 
     if finiteExceptions.include?(exception.class.to_s)
       output_message = exception.message
@@ -230,7 +230,7 @@ module ApiHelper
     render :json => output and return false
   end
   
-  def logApiRequest(exception = nil)
+  def log_api_request(exception = nil)
     if exception.nil?
       return
     end

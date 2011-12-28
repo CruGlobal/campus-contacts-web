@@ -4,8 +4,8 @@ class ApiController < ApplicationController
   extend ::Rack::OAuth2::Rails::Filters
   include ApiErrors
   include ApiHelper
-  skip_before_filter :authenticate_user!
-  after_filter :logApiRequest
+  skip_before_filter :authenticate_user!, :verify_authenticity_token
+  after_filter :log_api_request
   rescue_from Exception, with: :render_json_error
   
 #################################################################################

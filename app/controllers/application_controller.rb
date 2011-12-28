@@ -112,6 +112,7 @@ class ApplicationController < ActionController::Base
         @current_user ||= User.find(token.identity)
       else
         organization = token.client.organization || Organization.find(params[:org_id])
+        session[:current_organization_id] ||= organization.id
         if params[:user_id]
           @current_user ||= token.client.organization.admins.where(:fk_ssmUserID => params[:user_id]).first.user
         else

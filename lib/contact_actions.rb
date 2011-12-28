@@ -36,7 +36,7 @@ module ContactActions
             @roles = Hash[OrganizationalRole.active.where(organization_id: current_organization.id, role_id: Role::CONTACT_ID, person_id: @person).map {|r| [r.person_id, r]}]
             @answers = generate_answers([@person], current_organization, @questions)
           end
-          wants.json { @person.to_hash_basic(current_organization) }
+          wants.json { render text: @person.to_hash_basic(current_organization) }
         end
         return
       else
@@ -54,6 +54,25 @@ module ContactActions
           end
         end
         return false
+      end
+    end
+  end
+  
+  
+  def save_survey_answers
+    @answer_sheets = []
+    current_organization.surveys.each do |survey|
+      @answer_sheet = get_answer_sheet(survey, @person)
+      question_set = QuestionSet.new(survey.questions, @answer_sheet)
+      question_set.post(params[:answers], @answer_sheet)
+      question_set.save
+      @answer_sheets << @answer_sheet
+    end
+    # Delete any answer_sheet with no answers
+    @answer_sheets.each do |as|
+      if as.reload.answers.blank?
+        as.destroy 
+        @answer_sheets -= [as]
       end
     end
   end
