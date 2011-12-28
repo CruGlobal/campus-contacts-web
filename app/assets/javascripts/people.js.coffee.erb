@@ -215,9 +215,9 @@ $('#send_bulkemail_link').live 'click', ->
   $('#bulk_send_dialog .subject').show()
   # disable char counter 
   $('#char_counter').hide()
-  $('#body').unbind('keyup')
-  $('#body').unbind('paste')  
-  $('#body').val($('#bulk_email_message').val())
+  $('#bulk_send_body').unbind('keyup')
+  $('#bulk_send_body').unbind('paste')  
+  $('#bulk_send_body').val($('#bulk_email_message').val())
   nicEdit = null
   $('#bulk_send_dialog').dialog
     resizable: false,
@@ -234,20 +234,20 @@ $('#send_bulkemail_link').live 'click', ->
       else
         $('#bulk_send_dialog_message').hide()
         
-      nicEdit = new nicEditor({fullPanel : true}).panelInstance('body');  
+      nicEdit = new nicEditor({fullPanel : true}).panelInstance('bulk_send_body')
       $(this).find('form').attr('action', '/people/bulk_email')
     close: (event, ui) ->
-      nicEdit.removeInstance('body');
-      $('#bulk_email_message').val($('#body').val())
+      nicEdit.removeInstance('bulk_send_body');
+      $('#bulk_email_message').val($('#bulk_send_body').val())
     buttons: 
       Send: ->
-        nicEdit.removeInstance('body');
+        nicEdit.removeInstance('bulk_send_body');
         $(this).submitBulkSendDialog()
-        $('#bulk_email_message').val($('#body').val())
+        $('#bulk_email_message').val($('#bulk_send_body').val())
         $.n('Email message sent')
       Cancel: ->
-        nicEdit.removeInstance('body');
-        $('#bulk_email_message').val($('#body').val())
+        nicEdit.removeInstance('bulk_send_body');
+        $('#bulk_email_message').val($('#bulk_send_body').val())
         $(this).dialog('destroy')
   false        
   
@@ -289,8 +289,8 @@ $('#send_bulksms_link').live 'click', ->
   $('#bulk_send_dialog form').addClass('bulk-sms')
   $('#bulk_send_dialog .subject').hide()
   $('#char_counter').show()
-  $('#bulk_send_dialog #body').simplyCountable( { maxCount: 125 } )
-  $('#body').val($('#bulk_sms_message').val())  
+  $('#bulk_send_dialog #bulk_send_body').simplyCountable( { maxCount: 160 } )
+  $('#bulk_send_body').val($('#bulk_sms_message').val())  
   $('#bulk_send_dialog').dialog
     resizable: false,
     height:444,
@@ -308,14 +308,14 @@ $('#send_bulksms_link').live 'click', ->
     
       $(this).find('form').attr('action', '/people/bulk_sms')
     close: (event, ui) ->
-      $('#bulk_sms_message').val($('#body').val())            
+      $('#bulk_sms_message').val($('#bulk_send_body').val())            
     buttons: 
       Send: ->
         $(this).submitBulkSendDialog()
-        $('#bulk_sms_message').val($('#body').val())                
+        $('#bulk_sms_message').val($('#bulk_send_body').val())                
         $.n('Text message sent')        
       Cancel: ->
-        $('#bulk_sms_message').val($('#body').val())        
+        $('#bulk_sms_message').val($('#bulk_send_body').val())        
         $(this).dialog('destroy')
   false        
   

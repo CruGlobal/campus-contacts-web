@@ -11,7 +11,7 @@
       <div class="in"><%= text_field_tag :subject %></div>
     </div>
     <div class="field">
-    <%= text_area_tag :body, '', cols: 80, rows: 10 %>
+    <%= text_area_tag :body, '', cols: 80, rows: 10, id: 'bulk_send_body' %>
 		<div id="char_counter"></div>
     </div>
   <% end %>
