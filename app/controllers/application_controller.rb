@@ -11,7 +11,25 @@ class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied, with: :access_denied
   protect_from_forgery  
 
-  
+  def facebook_logout
+    redirect_url = params[:next] ? params[:next] : root_url
+    if session[:fb_token]
+      split_token = session[:fb_token].split("|")
+      fb_api_key = split_token[0]
+      fb_session_key = split_token[1]
+      session[:fb_token] = nil
+      if mhub?
+        # redirect_to "http://www.facebook.com/logout.php?api_key=#{fb_api_key}&session_key=#{fb_session_key}&confirm=1&next=#{redirect_url}"
+        redirect_to redirect_url #"http://m.facebook.com/logout.php?confirm=1&next=#{redirect_url}"
+      else
+        redirect_to redirect_url
+      end
+    else
+      redirect_to redirect_url
+    end
+    sign_out
+  end
+
   protected
   
   def set_newrelic_params
@@ -100,6 +118,7 @@ class ApplicationController < ActionController::Base
           @current_user ||= token.client.organization.admins.where("fk_ssmUserID is not null").first.user
         end
       end
+      @current_user
     else
       super # devise user
     end
