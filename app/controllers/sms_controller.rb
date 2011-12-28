@@ -21,7 +21,7 @@ class SmsController < ApplicationController
     # Handle STOP and HELP messages
     case message.downcase
     when 'stop'
-      @sms_session.update_attribute(:interactive, false)
+      @sms_session.update_attribute(:interactive, false) if @sms_session
       @msg = 'You have been unsubscribed from MHub SMS alerts. You will receive no more messages.'
       send_message(@msg, sms_params[:phone_number])
       render text: @msg + "\n" and return
