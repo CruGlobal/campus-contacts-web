@@ -153,17 +153,25 @@ window.addFields = (link, association, content) ->
 
 $.mh = {}
 $.mh.logout = (url) ->
-  FB.logout() if FB?
-  if url?
-    document.location = '/sign_out?next=' + url
+  next =   if url?
+    '/sign_out?next=' + url
   else
-    document.location = '/sign_out'
+    '/sign_out'
+  if FB?
+    FB.logout((request) ->
+      document.location = next
+    ) 
+  else
+    document.location = next
+
   
 $.mh.fbEnsureInit = (callback) -> 
-  if(!$.mh.fbInitialized)
+  if(!$.mh.fb)
     setTimeout(()-> 
       $.mh.fbEnsureInit(callback)
     , 50)
   else 
     if(callback)
-      callback();
+      setTimeout(()-> 
+        callback
+      , 50)
