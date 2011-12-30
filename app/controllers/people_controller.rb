@@ -237,7 +237,7 @@ class PeopleController < ApplicationController
           @sent_sms = SmsMailer.enqueue.text(person.primary_phone_number.email_address, "#{current_person.to_s} <#{from_email}>", params[:body])
         else
           # Otherwise send it as a text
-          @sent_sms = SentSms.create!(message: params[:body][0..128] + ' Txt HELP for help STOP to quit', recipient: person.phone_number) 
+          @sent_sms = SentSms.create!(message: params[:body], recipient: person.phone_number) # + ' Txt HELP for help STOP to quit'
         end
       end
     end
