@@ -11,17 +11,17 @@ class SentSms < ActiveRecord::Base
     new_text = ''
     remaining_text = text
     previous_separator = ''
-    separator ||= /s+/
+    separator ||= /\s+/
     while match = separator.match(remaining_text)
       text_parts = remaining_text.split(match[0])
       next_chunk = previous_separator + text_parts[0]
-      if next_chunk.length + new_text.length > char_limit
+      if new_text.length + next_chunk.length > char_limit
         too_big = true
         break
       else
         new_text += next_chunk
         previous_separator = match[0]
-        remaining_text = text_parts[1]
+        remaining_text = text_parts[1..-1].join(' ')
       end
     end 
     unless too_big

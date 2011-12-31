@@ -1,4 +1,5 @@
 require 'vpim/vcard'
+require 'vpim/book'
 require 'ccc/person'
  
 class Person < ActiveRecord::Base

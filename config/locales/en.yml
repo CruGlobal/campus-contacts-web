@@ -512,10 +512,10 @@ en:
       additional_information: Additional Information
       cancel: "Cancel and go back to profile"
     mailer:
-      vcard_email_subject: 'Contact information of '
-      vcard_email_content: 'Attached in this email is the contact information of'
-      bulk_vcard_email_subject: 'Your request for contact informations'      
-      bulk_vcard_email_content: 'Attached in this email are vcards of the contact information you requested'
+      vcard_email_subject: 'Contact information'
+      vcard_email_content: 'Attached in this email is a vcard containing the contact you selected'
+      bulk_vcard_email_subject: 'Your request for contact information'      
+      bulk_vcard_email_content: 'Attached to this email is a vcard containing the contacts you selected'
   sms:
     keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
   survey:

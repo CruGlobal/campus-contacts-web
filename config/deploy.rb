@@ -88,7 +88,7 @@ deploy.task :restart, :roles => [:app], :except => {:no_release => true} do
 end
 
 
-after 'deploy:restart', 'deploy:bluepill'
+before 'deploy:restart', 'deploy:bluepill'
 deploy.task :bluepill, roles: :db do
   if rails_env == 'production'
     sudo "bluepill restart resque"

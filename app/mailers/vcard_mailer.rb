@@ -9,7 +9,7 @@ class VcardMailer < ActionMailer::Base
     filename = @name + '.vcf'
     subject = t('contacts.mailer.vcard_email_subject') + person.name
 
-    attachments[filename] = person.vcard
+    attachments[filename] = person.vcard.to_s
     mail to: to,  subject: subject
   end
 
@@ -17,7 +17,7 @@ class VcardMailer < ActionMailer::Base
     filename = 'contacts.vcf'
     subject = t('contacts.mailer.bulk_vcard_email_subject')
 
-    attachments[filename] = Person.vcard(ids.split)
+    attachments[filename] = Person.vcard(ids.split).to_s
     mail to: to, subject: subject
   end
   
