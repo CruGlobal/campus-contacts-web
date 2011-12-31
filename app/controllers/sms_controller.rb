@@ -1,6 +1,7 @@
 class SmsController < ApplicationController
   skip_before_filter :authenticate_user!, :verify_authenticity_token
   def mo
+    render nothing: true and return if sms_params[:message].blank?
     begin
       # try to save the new message
       @received = ReceivedSms.create!(sms_params)
