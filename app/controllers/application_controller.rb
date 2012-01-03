@@ -165,8 +165,8 @@ class ApplicationController < ActionController::Base
     else
       if params[:locale]
         I18n.locale = params[:locale] 
-      # else
-        # I18n.locale = request.preferred_language_from(available)
+      else
+        I18n.locale = 'en'
       end
     end
   end
