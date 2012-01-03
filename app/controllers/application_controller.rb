@@ -304,7 +304,8 @@ class ApplicationController < ActionController::Base
     get_survey
     if @keyword
       cookies[:keyword] = @keyword.keyword 
-    elsif @survey
+    end
+    if @survey
       cookies[:survey_id] = @survey.id
     else
       return false
