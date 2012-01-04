@@ -51,9 +51,9 @@
 			<div class="info">
 				<center><%= link_to(image_tag('fb_login_small.png'), user_omniauth_authorize_path(mhub? ? :facebook_mhub : :facebook), rel: 'external', alt: t('.login_with_facebook')) %></center>
 			</div>
-			<% if mhub? && cookies[:keyword] %>
+			<% if mhub? && cookies[:survey_id] %>
   			<div class="info"><br/><br/>
-          <center><%= link_to(t('.no_facebook'), session[:return_to] ? add_params(session[:return_to], :nologin => true) : "/c/#{cookies[:keyword]}?nologin=true") %></center>
+          <center><%= link_to(t('.no_facebook'), session[:return_to] ? add_params(session[:return_to], :nologin => true) : "/s/#{cookies[:survey_id]}?nologin=true") %></center>
   			</div>
   		<% end %>
 		 </div>

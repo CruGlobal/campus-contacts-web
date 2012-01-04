@@ -165,8 +165,8 @@ class ApplicationController < ActionController::Base
     else
       if params[:locale]
         I18n.locale = params[:locale] 
-      # else
-        # I18n.locale = request.preferred_language_from(available)
+      else
+        I18n.locale = 'en'
       end
     end
   end
@@ -304,7 +304,8 @@ class ApplicationController < ActionController::Base
     get_survey
     if @keyword
       cookies[:keyword] = @keyword.keyword 
-    elsif @survey
+    end
+    if @survey
       cookies[:survey_id] = @survey.id
     else
       return false
