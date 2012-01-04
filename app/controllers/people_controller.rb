@@ -309,10 +309,13 @@ class PeopleController < ApplicationController
       @q = @q.where('organizational_roles.role_id' => params[:role_id]) if !params[:role_id].blank?
       
       
-      unless search_params[:name].blank?
+      unless search_params[:query].blank?
         @q = @q.select("ministry_person.*, email_addresses.*")
-               .where("firstName LIKE :search OR lastName LIKE :search OR email_addresses.email LIKE :search", 
-                      {:search => "%#{search_params[:name]}%"})
+               .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID")
+               .where("concat(firstName,' ',lastName) LIKE :search OR
+                       concat(lastName, ' ',firstName) LIKE :search OR
+                       emails.email LIKE :search", 
+                       {:search => "%#{search_params[:query]}%"})
       end
       
       @q = @q.search(params[:q])
