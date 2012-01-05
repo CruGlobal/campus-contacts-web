@@ -1,4 +1,6 @@
 $ ->
+  if $('#query').val().length > 0
+    $('#filter_box').show()
   
   $('.person_row td:not(.checkbox_cell)').live 'click', ->
     unless $('a', this)[0]?

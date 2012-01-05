@@ -3,7 +3,7 @@
     <div class="ononeline">
       <div class="field">
         <label for="Search"><span class="title"><%= t('.search_title') %></span></label> 
-        <%= text_field_tag :query, '', placeholder: t('.search_placeholder') %><br>
+        <%= text_field_tag :query, params[:query], placeholder: t('.search_placeholder') %><br>
       </div>
     </div>
     <div class="actionbarinline">
