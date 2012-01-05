@@ -1,0 +1,11 @@
+<div id="advanced_filter_box" style="<%= 'display:none' %>">
+  <%= form_tag params, method: :get do %>
+    <div class="ononeline">
+      
+    </div>
+    <div class="actionbarinline">
+      <%= submit_tag t('general.search') %>
+      <%= link_to t('.clear_search_form'), '', onclick: "$(this).closest('form')[0].reset(); return false;" %>
+    </div>
+  <% end %>
+</div>

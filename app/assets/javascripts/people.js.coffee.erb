@@ -1,6 +1,17 @@
 $ ->
-  if $('#query').val().length > 0
-    $('#filter_box').show()
+  if $('#query')[0]
+    if $('#query').val().length > 0
+      $('#filter_box').show()
+      false
+  
+  $('#advanced_search').live 'click', ->
+    $('#search_filter_box').hide()
+    $('#advanced_filter_box').toggle()
+    false
+ 
+  $('#filter_link').click ->
+    $('#search_filter_box').toggle()
+    $('#advanced_filter_box').hide()
   
   $('.person_row td:not(.checkbox_cell)').live 'click', ->
     unless $('a', this)[0]?
