@@ -3,6 +3,11 @@ $ ->
     if $('#query').val().length > 0
       $('#filter_box').show()
       false
+      
+  if $('#first_name')[0]
+    if $('#first_name').val().length > 0
+      $('#advanced_filter_box').show()
+      false
   
   $('#advanced_search').live 'click', ->
     $('#search_filter_box').hide()

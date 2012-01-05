@@ -1,5 +1,6 @@
 <div id="search_filter_box" style="<%= 'display:none' %>">
   <%= form_tag params, method: :get do %>
+    <%= hidden_field_tag :search_type, "basic" %>
     <div class="ononeline">
       <div class="field">
         <label for="Search"><span class="title"><%= t('.search_title') %></span></label> 
