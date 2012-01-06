@@ -329,6 +329,7 @@ $('#check_all').live 'click', ->
     return false
     
   checked = $(this).prop('checked')
+  debug.log(checked)
   change_all_role_checkboxes(false) if !checked
   params = $(this).attr('data-params')  
   $('input.id_checkbox').prop('checked', checked)  
@@ -342,8 +343,8 @@ $('#check_all').live 'click', ->
         $('#people_table').find('tr:first').remove()
         $('#people_table').prepend(html)     
     else
-      if $('span.all_text', first_row)[0]?
-        first_row.remove()
+      if $('span#all_text', first_row)[0]?
+        first_row.hide()
 
 $('#roles_menu_div').live 'click', ->
   role_div = $(this).parent().find('.dropdown_1column')

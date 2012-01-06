@@ -139,7 +139,7 @@ en:
     all:
       page_selected_html: "All <b>%{count}</b> people on this page are selected."
       select_all_html: "Select all <b>%{count}</b> people in the directory."
-      all_selected_html: "All <b>%{count}</b> people in the directory is selected."
+      all_selected_html: "All <b>%{count}</b> people in the directory are selected."
     show:
       add_comments_here: 'Add comments here...'
       previous_comments: 'Previous Comments'
