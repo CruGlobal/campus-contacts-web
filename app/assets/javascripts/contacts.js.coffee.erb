@@ -164,8 +164,9 @@ $ ->
     form = $('#new_contact_assignment')
     from_id = $(this).closest('div').attr('data-org-id')
     to_id = $(this).attr('data-id')
+    keep_contact = $('#keep-contact-copy > input').is(':checked')
     old_action = form.attr('action')
-    form.attr('action', '/organizational_roles/move_to?from_id='+from_id+'&to_id='+to_id)
+    form.attr('action', '/organizational_roles/move_to?from_id='+from_id+'&to_id='+to_id+'&keep_contact='+keep_contact)
     $.rails.handleRemote(form)
     $('.id_checkbox:checked').each ->
       $(this).closest('tr').remove();
