@@ -13,7 +13,7 @@
       <div class="field">
         <label for="Role"><span class="title"><%= t('.role') %></span></label>
         <%= select_tag :role,  
-            options_from_collection_for_select(@roles, "i18n", "i18n", "#{params[:role]}"), include_blank: true %>
+            options_for_select(@roles.collect {|r| [r.to_s, r.to_s]}, "#{params[:role]}"), include_blank: true %>
       </div>
       <div class="field">
         <label for="Gender"><span class="title"><%= t('general.gender') %></span></label>
