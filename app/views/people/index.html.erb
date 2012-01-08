@@ -97,9 +97,11 @@
     <%= t('.no_people') %>
   </div>
 <% end %>
-<div class="searchstat">
-  <%= t('.displaying', start: @people.offset_value + 1, finish: @people.offset_value + @people.length, total: @people.total_count) %>
-</div>
+<% if @people.any? %>
+  <div class="searchstat">
+    <%= t('.displaying', start: @people.offset_value + 1, finish: @people.offset_value + @people.length, total: @people.total_count) %>
+  </div>
+<% end %>
 
 <div id="add_person_div" style="display:none" title="<%= t('.add_person') %>" class="fingerme">
   <%= render 'add_person', person: Person.new %>
