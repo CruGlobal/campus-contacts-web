@@ -33,6 +33,11 @@
     <p style="margin: 0 0 5px 0;"><%= t('.type_to_find_org', terminology: current_organization.terminology) %></p>
     <%= text_field_tag :org_name, '', class: 'org_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>
     <%= spinner('org_search') %>
+    <div id="keep-contact-copy">
+      <%= check_box_tag :keep_contact %>
+      <%= t('.keep_contact') %>
+    </div>
+    <br/>
     <div class="orgs_list" data-org-id="<%= current_organization.id %>">
       <%= render 'organizations/search', organizations: current_person.orgs_with_children %>
     </div>
