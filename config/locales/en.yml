@@ -472,6 +472,7 @@ en:
       responses_assigned_to: "All Contacts - Assigned to %{assigned_to}"
       unassigned_responses: "All Contacts - Unassigned"
       dnc_contacts: "All Contacts - 'Do Not Contact'"
+      completed_contacts: "All Contacts - Completed"
       friend_responses: "Contacts who are also my friends on Facebook"
       none_checked: "You need to select at least one contact."
       show_all: Show 'In Progress' contacts
