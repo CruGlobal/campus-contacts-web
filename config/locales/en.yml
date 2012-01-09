@@ -260,7 +260,6 @@ en:
       association_help: "When a contact responds to a survey, they are associated with the same team or movement as the keyword they responded to."
     edit:
       edit_survey: "Edit Survey"
-      
     new: 
       create_a_survey: "Create a Survey"
     form:
@@ -271,7 +270,7 @@ en:
       survey_associated_with: This survey will be associated with %{org}.
       title: Title
       title_tip: "This is what people will see as the header on the survey"
-    
+      terminology: "If you'd like this to be referred to as something other than a 'Survey', enter that here"
     questions:
       create:
         notice: 'Question was successfully created.'

@@ -45,6 +45,18 @@
     <div class="stepnumber">
       <%= image_tag("step3.png") %>
     </div>
+    <div class="stepcontent">
+      <div class="field">
+        <%= f.label :terminilogy, t('.terminology') %>
+        <%= f.text_area :terminology, rows: 5 %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="stepwrap rwidth">
+    <div class="stepnumber">
+      <%= image_tag("step4.png") %>
+    </div>
     <div class="stepcontent"> 
       <% if current_organization.show_sub_orgs? && current_organization.has_children? %>   
         <div class="field">

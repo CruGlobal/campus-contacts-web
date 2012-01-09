@@ -13,8 +13,10 @@ class Survey < ActiveRecord::Base
   has_one :keyword, :class_name => "SmsKeyword", :foreign_key => "survey_id", :dependent => :nullify
   
   # validation
-  validates_presence_of :title, :post_survey_message
+  validates_presence_of :title, :post_survey_message, :terminology
   validates_length_of :title, :maximum => 100, :allow_nil => true
+  
+  after_initialize :default_values
   
   def to_s
     title
@@ -40,6 +42,12 @@ class Survey < ActiveRecord::Base
         element.duplicate(new_survey)
       end
     end
+  end
+  
+  private
+  
+  def default_values
+    self.terminology ||= "Survey"
   end
   
 end
