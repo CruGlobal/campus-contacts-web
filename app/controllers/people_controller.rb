@@ -245,7 +245,7 @@ class PeopleController < ApplicationController
   end
   
   def all
-    fetch_people("") 
+    fetch_people 
     
     @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
      
@@ -301,7 +301,7 @@ class PeopleController < ApplicationController
  
   protected
   
-    def fetch_people(search_params)
+    def fetch_people(search_params = {})
       org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
       @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles)
       @q = @people_scope.joins(:primary_phone_number, :primary_email_address)
