@@ -162,12 +162,15 @@ en:
       search_placeholder: 'Search for the first name, last name or email.'
       search_title: 'Search'
       advanced_search: 'Toggle Advanced Search'
+      clear_search_form: 'Clear Search Form' 
     advanced_search:
       first_name: 'First Name'
       last_name: 'Last Name'
       role: 'Role'
       email: 'Email Address'
-      phone: 'Phone Number'      
+      phone: 'Phone Number'
+      basic_search: 'Toggle Basic Search'
+      clear_search_form: 'Clear Search Form'  
     form:
       facebook_url: "Facebook Profile Url:"
       facebook_url_tip: You can manually search facebook for this person's profile if they haven't already connected. Keep in mind that some people set their facebook privacy settings such that they won't show up in this search.
