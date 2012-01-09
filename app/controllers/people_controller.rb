@@ -2,7 +2,6 @@ require 'csv'
 class PeopleController < ApplicationController
   before_filter :ensure_current_org
   before_filter :authorize_merge, only: [:merge, :confirm_merge, :do_merge, :merge_preview]
-  before_filter :authorize_merge
   # GET /people
   # GET /people.xml
   def index

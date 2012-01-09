@@ -284,11 +284,11 @@ class ApplicationController < ActionController::Base
       @survey = @keyword ? @keyword.survey : Survey.find(params[:keyword])
     elsif params[:received_sms_id]
       sms_id = Base62.decode(params[:received_sms_id])
-      @sms = SmsSession.find_by_id(sms_id) || ReceivedSms.find_by_id(sms_id)
+      @sms = SmsSession.find_by_id(sms_id)
       if @sms
-        @keyword ||= @sms.sms_keyword || SmsKeyword.where(keyword: @sms.message.strip).first
+        @keyword ||= @sms.sms_keyword
+        @survey = @keyword.survey
       end
-      @survey = @keyword.survey
     elsif params[:survey_id] || params[:id]
       @survey = Survey.find_by_id(params[:survey_id] || params[:id])
     end
