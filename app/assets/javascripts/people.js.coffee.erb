@@ -15,11 +15,23 @@ $ ->
     $('#search_filter_box').hide()
     $('#advanced_filter_box').toggle()
     false
- 
-  $('#filter_link').click ->
+    
+  $('#basic_search').live 'click', ->
     $('#search_filter_box').toggle()
     $('#advanced_filter_box').hide()
-  
+    false
+ 
+  $('#filter_link').click ->
+    if !$('#search_filter_box').is(':visible') && !$('#advanced_filter_box').is(':visible')
+      $('#search_filter_box').show()
+      $('#advanced_filter_box').hide()
+    else if $('#search_filter_box').is(':visible') && !$('#advanced_filter_box').is(':visible')
+      $('#search_filter_box').hide()
+      $('#advanced_filter_box').hide()
+    else if !$('#search_filter_box').is(':visible') && $('#advanced_filter_box').is(':visible')
+      $('#search_filter_box').hide()
+      $('#advanced_filter_box').hide()
+      
   $('.person_row td:not(.checkbox_cell)').live 'click', ->
     unless $('a', this)[0]?
       tr = $(this).parent()
