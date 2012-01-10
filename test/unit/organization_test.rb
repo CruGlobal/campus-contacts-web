@@ -61,6 +61,14 @@ class OrganizationTest < ActiveSupport::TestCase
 =end
   end
 
+  test "self and children ids" do
+    org1 = Factory(:organization)
+    org2 = Factory(:organization, :parent => org1)
+
+    assert_equal org1.self_and_children_ids.sort{ |a, b| 1*(b <=> a) }, [org1.id, org2.id].sort{ |a, b| 1*(b <=> a) }, "Parent organization did not return correct self and children ids"
+    #[2, 3, 1].sort{ |a, b| 1*(b <=> a) } == [2, 1, 3].sort{ |a, b| 1*(b <=> a) }    
+  end
+
 
   test "add initial admin after creating an org" do
     person = Factory(:person)
