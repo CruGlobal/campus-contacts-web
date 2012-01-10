@@ -28,18 +28,30 @@ class OrganizationTest < ActiveSupport::TestCase
   should have_many(:groups)
 
   context "an organization" do
-    should "assert the truth" do
-      assert :true
-    end
 
     should "delete suborganizations when deleted" do
       org1 = Factory(:organization)
       org2 = Factory(:organization, :parent => org1)
+      org3 = Factory(:organization, :parent => org2)
 
-      assert_difference("Organization.count", -2) do 
+      assert_difference("Organization.count", -3, "Organizations were not deleted after parent was destroyed.") do 
         org1.destroy
       end
     end
+
+    should "have both name and terminology" do
+
+      assert_difference("Organization.count", 0, "An organization was created despite the absence of terminology") do
+        Organization.create(:name => "name")
+      end
+
+      assert_difference("Organization.count", 0, "An organization was created despite the absence of name") do
+        Organization.create(:terminology => "termi")
+      end
+      
+    end
+
+    
 
 =begin
     should "have at least one parent after creation" do
