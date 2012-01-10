@@ -1,12 +1,17 @@
 class GroupMembershipsController < ApplicationController
 
   def create
-    @group = current_organization.groups.find(params[:group_id])
-    @person = Person.find(params[:person_id])
+    @group = current_organization.groups.find(params[:group_id]) 
+    @persons = Person.find(params[:person_id].split(',').collect! {|n| n.to_i})
+
     return false unless has_permission
-    @group_membership = @group.group_memberships.find_or_initialize_by_person_id(params[:person_id])
-    @group_membership.role = params[:role]
-    @group_membership.save
+    @persons.each do |person|
+      @group_membership = @group.group_memberships.find_or_initialize_by_person_id(person.id)
+      @group_membership.role = params[:role]
+      @group_membership.save
+    end
+    
+    render :nothing => true
   end
   
   def destroy

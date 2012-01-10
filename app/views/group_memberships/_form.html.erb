@@ -10,6 +10,7 @@
   <%= form_tag search_group_group_memberships_path(@group), :id => 'member_search_form', :onsubmit => 'return false;' do %>
     <%= hidden_field_tag :show_all %>
     <%= hidden_field_tag :role %>
+    <%= hidden_field_tag :from_add_member_screen, "true" %>
     <%= text_field_tag :name, '', :id => 'member_search_name', :autocomplete => 'off' %>
     <%= spinner('member_search') %>
   <% end %>

@@ -181,7 +181,12 @@ $ ->
     $('#assign_to').val($(this).closest('li'))
     e.preventDefault()
     group = $('#assign_to').val($(this).closest('li').attr('data-group')).val()
-    person = $('#assign_to').val($(this).closest('li').attr('data-person')).val()
+    person = ""
+    
+    if $('.id_checkbox:checked').size() > 0
+      $('.id_checkbox:checked').each (index, element) =>
+        person += $(element).attr('value') + ","
+    
     add_another = false
     $('<a href="/groups/' + group  + '/group_memberships?person_id=' + person + '&role=member&add_another=' + add_another + '"data-method="post" data-remote="true"></a>')
     .appendTo('body')
