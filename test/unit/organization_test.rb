@@ -69,14 +69,6 @@ class OrganizationTest < ActiveSupport::TestCase
     #[2, 3, 1].sort{ |a, b| 1*(b <=> a) } == [2, 1, 3].sort{ |a, b| 1*(b <=> a) }    
   end
 
-
-  test "add initial admin after creating an org" do
-    person = Factory(:person)
-    assert_difference "OrganizationalRole.count", 1 do
-      Factory(:organization, person_id: person.id)
-    end
-  end
-
   test "self and children surveys" do
     org1 = Factory(:organization)
     org2 = Factory(:organization, :parent => org1)
@@ -85,6 +77,25 @@ class OrganizationTest < ActiveSupport::TestCase
 
     assert_equal org1.self_and_children_surveys.sort{ |a, b| 1*(b <=> a) }, [survey1, survey2].sort{ |a, b| 1*(b <=> a) }, "Parent organization did not return correct self and children surveys"
   end
+
+  test "self and children keywords" do
+    org1 = Factory(:organization)
+    org2 = Factory(:organization, :parent => org1)
+    keyword1 = Factory(:sms_keyword, :organization => org1)
+    keyword2 = Factory(:sms_keyword, :organization => org2)
+
+    assert_equal org1.self_and_children_keywords.sort{ |a, b| 1*(b <=> a) }, [keyword1, keyword2].sort{ |a, b| 1*(b <=> a) }, "Parent organization did not return correct self and children keywords"
+  end
+
+
+  test "add initial admin after creating an org" do
+    person = Factory(:person)
+    assert_difference "OrganizationalRole.count", 1 do
+      Factory(:organization, person_id: person.id)
+    end
+  end
+
+
   
   # Replace this with your real tests.
   test "move contact" do
