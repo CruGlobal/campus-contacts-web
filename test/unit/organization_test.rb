@@ -34,15 +34,11 @@ class OrganizationTest < ActiveSupport::TestCase
 
     should "delete suborganizations when deleted" do
       org1 = Factory(:organization)
-      org2 = Factory(:organization)
-      org2.parent = org1
+      org2 = Factory(:organization, :parent => org1)
 
-      assert_difference("Organization.count", -2) do
+      assert_difference("Organization.count", -2) do 
         org1.destroy
       end
-
-      #assert_nil Organization.find(org1.id), "Parent organization not destroyed"
-      #assert_nil Organization.find(org2.id), "Parent organization's sub-organizations not deleted"
     end
 
 =begin
