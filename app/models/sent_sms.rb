@@ -13,23 +13,37 @@ class SentSms < ActiveRecord::Base
     previous_separator = ''
     separator ||= /\s+/
     while match = separator.match(remaining_text)
+      puts match.inspect
       text_parts = remaining_text.split(match[0])
+      puts text_parts.inspect
       next_chunk = previous_separator + text_parts[0]
+      puts next_chunk.inspect
+      puts "#{new_text.length} + #{next_chunk.length}"
       if new_text.length + next_chunk.length > char_limit
-        too_big = true
-        break
+        # If the first chunk is already too big, we need to split on space
+        if next_chunk.length > char_limit
+          return SentSms.smart_split(text)
+        else
+          puts 'too big'
+          puts new_text.inspect
+          too_big = true
+          break
+        end
       else
         new_text += next_chunk
         previous_separator = match[0]
         remaining_text = text_parts[1..-1].join(' ')
+        # remaining_text = text.sub(new_text, '')
+        puts remaining_text
       end
+      puts
     end 
     unless too_big
       next_chunk = previous_separator + text 
       new_text += next_chunk if next_chunk.length + new_text.length <= char_limit
     end
     
-    [new_text.strip, text[new_text.length..-1].to_s.strip]
+    [new_text.strip, text[(new_text.length + 1)..-1].to_s.strip]
   end
   
   private

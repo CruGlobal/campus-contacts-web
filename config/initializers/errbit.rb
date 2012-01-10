@@ -3,4 +3,6 @@ Airbrake.configure do |config|
   config.host    = 'errors.uscm.org'
   config.port    = 80
   config.secure  = config.port == 443
+  config.ignore << "ApiErrors::AccountSetupRequiredError"
+  config.ignore << "ApiErrors::NoOrganizationError"
 end

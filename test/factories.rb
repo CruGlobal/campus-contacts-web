@@ -68,7 +68,7 @@ FactoryGirl.define do
     firstName 'John'
     lastName 'Doe'
     gender '1'
-    fb_uid "690860831"
+    fb_uid {"690860831#{Factory.next(:count)}"}
     birth_date {DateTime.strptime('12/18/1989', '%m/%d/%Y')}
   end
   
@@ -84,7 +84,7 @@ FactoryGirl.define do
   
   factory :authentication do
     provider "facebook"
-    uid "690860831"
+    uid {"690860831#{Factory.next(:count)}"}
     token "164949660195249|bd3f24d52b4baf9412141538.1-690860831|w79R36CalrEAY-9e9kp8fDWJ69A"
   end
   
@@ -98,6 +98,7 @@ FactoryGirl.define do
   factory :organization do
     name {"Organization #{Factory.next(:count)}"}
     terminology 'Organization'
+    show_sub_orgs true
   end
   
   factory :location do 
@@ -267,5 +268,10 @@ FactoryGirl.define do
     association :organization
     name        'member'
     i18n        'member'
+  end
+  
+  factory :infobase_user, class: Ccc::InfobaseUser do
+    association :user
+    type        'InfobaseUser'
   end
 end

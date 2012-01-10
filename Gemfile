@@ -71,6 +71,7 @@ group :development, :test do
   # gem 'turn', :require => false
   gem 'rails-footnotes', '>= 3.7'
   # gem 'translate-rails3', :require => 'translate'
+  gem 'ffaker'
 end
 
 group :development do

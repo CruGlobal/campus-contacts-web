@@ -20,7 +20,7 @@ class FriendTest < ActiveSupport::TestCase
     should "be able to insert friendship to redis" do
       friend1 = @person.friends.create(provider: "facebook", name: "Books", person_id: @person.personID.to_i, uid: "1")
       friend1.follow!(@person)
-      assert_equal(Friend.followers(@person).length, @person.friends.all.length)
+      assert_equal(Friend.followers(@person).length, 1)
       assert_equal(friend1.following?(@person), true)
     end
   end

@@ -165,8 +165,8 @@ class ApplicationController < ActionController::Base
     else
       if params[:locale]
         I18n.locale = params[:locale] 
-      # else
-        # I18n.locale = request.preferred_language_from(available)
+      else
+        I18n.locale = 'en'
       end
     end
   end
@@ -284,11 +284,11 @@ class ApplicationController < ActionController::Base
       @survey = @keyword ? @keyword.survey : Survey.find(params[:keyword])
     elsif params[:received_sms_id]
       sms_id = Base62.decode(params[:received_sms_id])
-      @sms = SmsSession.find_by_id(sms_id) || ReceivedSms.find_by_id(sms_id)
+      @sms = SmsSession.find_by_id(sms_id)
       if @sms
-        @keyword ||= @sms.sms_keyword || SmsKeyword.where(keyword: @sms.message.strip).first
+        @keyword ||= @sms.sms_keyword
+        @survey = @keyword.survey
       end
-      @survey = @keyword.survey
     elsif params[:survey_id] || params[:id]
       @survey = Survey.find_by_id(params[:survey_id] || params[:id])
     end
@@ -304,7 +304,8 @@ class ApplicationController < ActionController::Base
     get_survey
     if @keyword
       cookies[:keyword] = @keyword.keyword 
-    elsif @survey
+    end
+    if @survey
       cookies[:survey_id] = @survey.id
     else
       return false

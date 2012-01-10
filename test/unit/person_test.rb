@@ -29,6 +29,40 @@ class PersonTest < ActiveSupport::TestCase
     end
   end
   
+  context "person organizations and sub-organizations" do
+  
+    setup do
+      @person = Factory(:person)
+      @another_person = Factory(:person)
+    end
+    
+    should "not show children if show_sub_orgs is false" do
+      @org1 = Factory(:organization, person_id: @person.id, id: 1)
+      @org2 = Factory(:organization, show_sub_orgs: false, person_id: @person.id, id: 2, ancestry: "1")
+      @org3 = Factory(:organization, person_id: @person.id, id: 3, ancestry: "1/2")
+      @org4 = Factory(:organization, person_id: @another_person.id, id: 4, ancestry: "1/2/3")
+      orgs = @person.orgs_with_children
+      assert(orgs.include?(@org1), "root should be included, if Person is leader.")
+      assert(orgs.include?(@org2), "this should be included because parent shows sub orgs")
+      assert(!orgs.include?(@org3), "this should not be included since its parent does not show sub orgs.")
+      assert(orgs.include?(@org4), "this should be included since its parent belongs to Person and shows sub orgs.")
+      assert_equal(orgs.count, 3, "duplicate entries are present.")
+    end
+    
+    should "show multiple-generations of children as long as show_sub_orgs is true" do
+      @org1 = Factory(:organization, person_id: @person.id, id: 1)
+      @org2 = Factory(:organization, person_id: @another_person.id, id: 2, ancestry: "1")
+      @org3 = Factory(:organization, person_id: @another_person.id, id: 3, ancestry: "1/2")
+      @org4 = Factory(:organization, person_id: @another_person.id, id: 4, ancestry: "1/2/3")
+      orgs = @person.orgs_with_children
+      assert(orgs.include?(@org1), "root should be included, if Person is leader.")
+      assert(orgs.include?(@org2), "this should be included because parent shows sub orgs")
+      assert(orgs.include?(@org3), "this should be included because parent shows sub orgs")
+      assert(orgs.include?(@org4), "this should be included because parent shows sub orgs")
+    end
+    
+  end
+  
   context "a person" do
     setup do
       @person = Factory(:person)

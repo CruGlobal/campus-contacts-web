@@ -164,15 +164,30 @@ $ ->
     form = $('#new_contact_assignment')
     from_id = $(this).closest('div').attr('data-org-id')
     to_id = $(this).attr('data-id')
+    keep_contact = $('#keep-contact-copy > input').is(':checked')
     old_action = form.attr('action')
-    form.attr('action', '/organizational_roles/move_to?from_id='+from_id+'&to_id='+to_id)
+    form.attr('action', '/organizational_roles/move_to?from_id='+from_id+'&to_id='+to_id+'&keep_contact='+keep_contact)
     $.rails.handleRemote(form)
-    $('.id_checkbox:checked').each ->
-      $(this).closest('tr').remove();
+    if keep_contact == false
+      $('.id_checkbox:checked').each ->
+        $(this).closest('tr').remove();
     form.attr('action', old_action)
     $('#assign_search').dialog('destroy')
     if $('#contacts_controller.show')[0]
       setTimeout "document.location = '/contacts'", 1000
+  false
+  
+  $('#assign_search .group a').live 'click', (e)->
+    $('#assign_to').val($(this).closest('li'))
+    e.preventDefault()
+    group = $('#assign_to').val($(this).closest('li').attr('data-group')).val()
+    person = $('#assign_to').val($(this).closest('li').attr('data-person')).val()
+    add_another = false
+    $('<a href="/groups/' + group  + '/group_memberships?person_id=' + person + '&role=member&add_another=' + add_another + '"data-method="post" data-remote="true"></a>')
+    .appendTo('body')
+    .click()
+    .remove()
+    $('#assign_search').dialog('destroy')
   false
     
   $('#assign_search .leader_search_name').keyup ->
@@ -192,21 +207,39 @@ $ ->
       type: 'GET',
       complete: ->
         $('#spinner_org_search').hide()
+        
+  $('#assign_search .group_search_name').keyup ->
+    name = $(this).val()
+    $('#assign_search ul li').each ->
+      regex = new RegExp('.*' + name + '.*', 'i')
+      if regex.test($('.name', $(this)).text())
+        $(this).show()
+      else
+        $(this).hide()
 
         
   $('#assign_to_me, #assign_to_unassigned').live 'click', ->
     $('#assign_search .leader_search').hide()
     $('#assign_search .org_search').hide()
+    $('#assign_search .group_search').hide()
     $('#assign_search .assign_button').show()
     
   $('#assign_to_leader').live 'click', ->
     $('#assign_search .leader_search').show()
     $('#assign_search .org_search').hide()
+    $('#assign_search .group_search').hide()
     $('#assign_search .assign_button').hide()
     
   $('#assign_to_org').live 'click', ->
     $('#assign_search .leader_search').hide()
     $('#assign_search .org_search').show()
+    $('#assign_search .group_search').hide()
+    $('#assign_search .assign_button').hide()
+    
+  $('#assign_to_group').live 'click', ->
+    $('#assign_search .leader_search').hide()
+    $('#assign_search .org_search').hide()
+    $('#assign_search .group_search').show()
     $('#assign_search .assign_button').hide()
     
   $('.assign_to_radio').live 'click', -> 

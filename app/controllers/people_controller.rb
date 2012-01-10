@@ -2,12 +2,11 @@ require 'csv'
 class PeopleController < ApplicationController
   before_filter :ensure_current_org
   before_filter :authorize_merge, only: [:merge, :confirm_merge, :do_merge, :merge_preview]
-  before_filter :authorize_merge
   # GET /people
   # GET /people.xml
   def index
     authorize! :read, Person
-    fetch_people
+    fetch_people(params)
   
     @roles = current_organization.roles
 
@@ -302,14 +301,68 @@ class PeopleController < ApplicationController
  
   protected
   
-    def fetch_people
+    def fetch_people(search_params = {})
       org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
       @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles)
-      @q = @people_scope.includes(:primary_phone_number, :primary_email_address)
+      @q = @people_scope.joins(:primary_phone_number, :primary_email_address)
       @q = @q.where('organizational_roles.role_id' => params[:role_id]) if !params[:role_id].blank?
+      
+      sort_by = ['lastName asc', 'firstName asc']
+      
+      if search_params[:search_type] == "basic"
+        unless search_params[:query].blank?
+          if search_params[:search_type] == "basic"
+            @q = @q.select("ministry_person.*, email_addresses.*")
+                   .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID")
+                   .where("concat(firstName,' ',lastName) LIKE :search OR
+                           concat(lastName, ' ',firstName) LIKE :search OR
+                           emails.email LIKE :search", 
+                           {:search => "%#{search_params[:query]}%"})
+          end
+        end
+      else      
+        unless search_params[:role].blank?
+          @q = @q.select("ministry_person.*, roles.*")
+                 .joins("LEFT JOIN organizational_roles ON organizational_roles.person_id = ministry_person.personID")
+                 .joins("INNER JOIN roles ON roles.id = organizational_roles.role_id")
+                 .where("roles.i18n LIKE :search",
+                 {:search => "%#{search_params[:role]}%"})
+          sort_by.unshift("roles.i18n")
+        end
+        
+        unless search_params[:gender].blank?
+          @q = @q.where("gender = :search", {:search => "#{search_params[:gender]}"})
+          sort_by.unshift("gender")
+        end
+        
+        unless search_params[:email].blank?
+          @q = @q.select("ministry_person.*, email_addresses.*")
+                 .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID")  
+                 .where("emails.email LIKE :search", {:search => "%#{search_params[:email]}%"})
+          sort_by.unshift("emails.email")
+        end
+        
+        unless search_params[:phone].blank?
+          @q = @q.select("ministry_person.*, phone_numbers.*")
+                 .joins("LEFT JOIN phone_numbers AS phones ON phones.person_id = ministry_person.personID")
+                 .where("phones.number LIKE :search", {:search => "%#{search_params[:phone]}%"})
+          sort_by.unshift("phones.number")
+        end
+        
+        unless search_params[:first_name].blank?
+          @q = @q.where("firstName LIKE :search", {:search => "%#{search_params[:first_name]}%"}) 
+          sort_by.unshift("firstName asc") 
+        end
+        
+        unless search_params[:last_name].blank?
+          @q = @q.where("lastName LIKE :search", {:search => "%#{search_params[:last_name]}%"})
+          sort_by.unshift("lastName asc")
+        end
+      end
+      
       @q = @q.search(params[:q])
-      @q.sorts = ['lastName asc', 'firstName asc'] if @q.sorts.empty?
-      @all_people = @q.result(distinct: true)
+      @q.sorts = sort_by if @q.sorts.empty?
+      @all_people = @q.result(distinct: false)
       @people = @all_people.page(params[:page])
     end
     

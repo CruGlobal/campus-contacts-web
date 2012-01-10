@@ -1,0 +1,38 @@
+<div id="advanced_filter_box" style="<%= 'display:none' %>">
+  <%= form_tag params, method: :get do %>
+    <%= hidden_field_tag :search_type, "advanced" %>
+    <div class="ononeline">
+      <div class="field">
+        <label for="First Name"><span class="title"><%= t('.first_name') %></span></label> 
+        <%= text_field_tag :first_name, params[:first_name]  %>
+      </div>
+      <div class="field">
+        <label for="Last Name"><span class="title"><%= t('.last_name') %></span></label>
+        <%= text_field_tag :last_name, params[:last_name] %>
+      </div>
+      <div class="field">
+        <label for="Role"><span class="title"><%= t('.role') %></span></label>
+        <%= select_tag :role,  
+            options_for_select(@roles.collect {|r| [r.to_s, r.to_s]}, "#{params[:role]}"), include_blank: true %>
+      </div>
+      <div class="field">
+        <label for="Gender"><span class="title"><%= t('general.gender') %></span></label>
+        <%= radio_button_tag :gender, '1', params[:gender] == '1' %> <%= t('general.male') %>
+        <%= radio_button_tag :gender, '0', params[:gender] == '0' %> <%= t('general.female') %>
+        <%= radio_button_tag :gender, '', params[:gender] == '' %> <%= t('general.both') %><br>
+      </div>
+      <div class="field">
+        <label for="Email"><span class="title"><%= t('.email') %></span></label>
+        <%= text_field_tag :email, params[:email] %>
+      </div>
+      <div class="field">
+        <label for="Phone"><span class="title"><%= t('.phone') %></span></label>
+        <%= text_field_tag :phone, params[:phone] %>
+      </div>
+    </div>
+    <div class="actionbarinline">
+      <%= submit_tag t('general.search') %>
+      <%= link_to t('.clear_search_form'), '', onclick: "$(this).closest('form')[0].reset(); return false;" %>
+    </div>
+  <% end %>
+</div>

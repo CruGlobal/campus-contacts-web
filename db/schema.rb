@@ -1546,6 +1546,14 @@ ActiveRecord::Schema.define(:version => 20111222175718) do
   add_index "infobase_bookmarks", ["name"], :name => "index_infobase_bookmarks_on_name"
   add_index "infobase_bookmarks", ["user_id"], :name => "index_infobase_bookmarks_on_user_id"
 
+  create_table "infobase_users", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "type",       :default => "InfobaseAdminUser"
+    t.integer  "created_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "lat_long_by_zip_code", :force => true do |t|
     t.string  "zip"
     t.decimal "lat",  :precision => 15, :scale => 10
@@ -1683,10 +1691,10 @@ ActiveRecord::Schema.define(:version => 20111222175718) do
   add_index "mh_answers", ["short_value"], :name => "index_ma_answers_on_short_value"
 
   create_table "mh_conditions", :force => true do |t|
-    t.integer "question_sheet_id", :null => false
-    t.integer "trigger_id",        :null => false
-    t.string  "expression",        :null => false
-    t.integer "toggle_page_id",    :null => false
+    t.integer "question_sheet_id",                 :null => false
+    t.integer "trigger_id",                        :null => false
+    t.string  "expression",        :default => "", :null => false
+    t.integer "toggle_page_id",                    :null => false
     t.integer "toggle_id"
   end
 
@@ -1747,7 +1755,7 @@ ActiveRecord::Schema.define(:version => 20111222175718) do
   add_index "mh_elements", ["slug"], :name => "index_ma_elements_on_slug"
 
   create_table "mh_email_templates", :force => true do |t|
-    t.string   "name",       :limit => 1000, :null => false
+    t.string   "name",       :limit => 1000, :default => "", :null => false
     t.text     "content"
     t.boolean  "enabled"
     t.string   "subject"
@@ -1755,7 +1763,7 @@ ActiveRecord::Schema.define(:version => 20111222175718) do
     t.datetime "updated_at"
   end
 
-  add_index "mh_email_templates", ["name"], :name => "index_ma_email_templates_on_name", :length => {"name"=>767}
+  add_index "mh_email_templates", ["name"], :name => "index_ma_email_templates_on_name", :length => {"name"=>255}
 
   create_table "mh_friends", :force => true do |t|
     t.string   "name"
@@ -1836,7 +1844,7 @@ ActiveRecord::Schema.define(:version => 20111222175718) do
   end
 
   create_table "mh_question_sheets", :force => true do |t|
-    t.string  "label",              :limit => 60,                    :null => false
+    t.string  "label",              :limit => 60, :default => "",    :null => false
     t.boolean "archived",                         :default => false
     t.integer "questionnable_id"
     t.string  "questionnable_type"
@@ -1900,25 +1908,24 @@ ActiveRecord::Schema.define(:version => 20111222175718) do
     t.integer  "sent_teamID"
   end
 
+  add_index "ministry_activity", ["fk_targetAreaID", "strategy"], :name => "index_ministry_activity_on_fk_targetareaid_and_strategy", :unique => true
   add_index "ministry_activity", ["fk_targetAreaID"], :name => "index1"
   add_index "ministry_activity", ["fk_teamID"], :name => "index2"
   add_index "ministry_activity", ["periodBegin"], :name => "index3"
   add_index "ministry_activity", ["strategy"], :name => "index5"
 
   create_table "ministry_activity_history", :force => true do |t|
-    t.integer  "activity_id",                  :null => false
-    t.string   "from_status",    :limit => 2
-    t.string   "to_status",      :limit => 2
+    t.integer  "activity_id",                          :null => false
+    t.string   "from_status_deprecated", :limit => 2
+    t.string   "status",                 :limit => 2
     t.datetime "period_begin"
-    t.datetime "period_end"
-    t.string   "trans_username", :limit => 50
-    t.string   "fromStrategy"
-    t.string   "toStrategy"
+    t.datetime "period_end_deprecated"
+    t.string   "trans_username",         :limit => 50
   end
 
   add_index "ministry_activity_history", ["activity_id"], :name => "activity_id"
   add_index "ministry_activity_history", ["period_begin"], :name => "period_begin"
-  add_index "ministry_activity_history", ["to_status"], :name => "to_status"
+  add_index "ministry_activity_history", ["status"], :name => "to_status"
 
   create_table "ministry_address", :primary_key => "AddressID", :force => true do |t|
     t.datetime "startdate"
@@ -2050,7 +2057,7 @@ ActiveRecord::Schema.define(:version => 20111222175718) do
     t.string   "fax",                 :limit => 25
     t.string   "email",               :limit => 200
     t.string   "url",                 :limit => 100
-    t.string   "contactName",         :limit => 50
+    t.string   "contactName"
     t.string   "contactRelationship", :limit => 50
     t.string   "addressType",         :limit => 20
     t.datetime "dateCreated"
@@ -2318,8 +2325,8 @@ ActiveRecord::Schema.define(:version => 20111222175718) do
   end
 
   create_table "ministry_statistic", :primary_key => "StatisticID", :force => true do |t|
-    t.datetime "periodBegin"
-    t.datetime "periodEnd"
+    t.date     "periodBegin"
+    t.date     "periodEnd"
     t.integer  "exposures"
     t.integer  "exposuresViaMedia"
     t.integer  "evangelisticOneOnOne"
@@ -2351,6 +2358,7 @@ ActiveRecord::Schema.define(:version => 20111222175718) do
     t.string   "peopleGroup"
     t.integer  "holySpiritConversations"
     t.integer  "dollars_raised"
+    t.integer  "sp_year"
   end
 
   add_index "ministry_statistic", ["fk_Activity"], :name => "index1"
@@ -2415,6 +2423,7 @@ ActiveRecord::Schema.define(:version => 20111222175718) do
     t.integer  "eventKeyID"
     t.string   "type",                   :limit => 20
     t.string   "county"
+    t.boolean  "ongoing_special_event",                 :default => false
   end
 
   add_index "ministry_targetarea", ["country"], :name => "index4"
@@ -3054,7 +3063,6 @@ ActiveRecord::Schema.define(:version => 20111222175718) do
   end
 
   add_index "organizational_roles", ["organization_id", "role_id", "followup_status"], :name => "role_org_status"
-  add_index "organizational_roles", ["organization_id"], :name => "organization_id"
   add_index "organizational_roles", ["person_id", "organization_id", "role_id"], :name => "person_role_org", :unique => true
 
   create_table "organizations", :force => true do |t|
@@ -3101,7 +3109,7 @@ ActiveRecord::Schema.define(:version => 20111222175718) do
   end
 
   add_index "phone_numbers", ["carrier_id"], :name => "index_phone_numbers_on_carrier_id"
-  add_index "phone_numbers", ["person_id", "number"], :name => "index_phone_numbers_on_person_id_and_number", :unique => true
+  add_index "phone_numbers", ["person_id", "number"], :name => "index_phone_numbers_on_person_id_and_number"
 
   create_table "plugin_schema_info", :id => false, :force => true do |t|
     t.string  "plugin_name"
@@ -3792,56 +3800,56 @@ ActiveRecord::Schema.define(:version => 20111222175718) do
   create_table "sitrack_tracking", :force => true do |t|
     t.integer  "application_id"
     t.integer  "person_id"
-    t.string   "status",               :limit => 20
-    t.string   "internType",           :limit => 30
-    t.string   "tenure",               :limit => 50
-    t.string   "ssn",                  :limit => 50
-    t.integer  "teamLeader",           :limit => 1
-    t.string   "caringRegion",         :limit => 50
-    t.string   "passportNo",           :limit => 20
-    t.string   "asgYear",              :limit => 9
-    t.string   "asgTeam",              :limit => 50
-    t.string   "asgCity",              :limit => 50
-    t.string   "asgState",             :limit => 50
-    t.string   "asgCountry",           :limit => 50
-    t.string   "asgContinent",         :limit => 50
-    t.string   "asgSchool",            :limit => 90
-    t.string   "spouseName",           :limit => 50
+    t.string   "status",                :limit => 20
+    t.string   "internType",            :limit => 30
+    t.string   "tenure",                :limit => 50
+    t.string   "ssn",                   :limit => 50
+    t.integer  "teamLeader",            :limit => 1
+    t.string   "caringRegion",          :limit => 50
+    t.string   "passportNo",            :limit => 20
+    t.string   "asgYear",               :limit => 9
+    t.string   "asgTeam",               :limit => 50
+    t.string   "asgCity",               :limit => 50
+    t.string   "asgState",              :limit => 50
+    t.string   "asgCountry",            :limit => 50
+    t.string   "asgContinent",          :limit => 50
+    t.string   "asgSchool",             :limit => 90
+    t.string   "spouseName",            :limit => 50
     t.datetime "departureDate"
     t.datetime "terminationDate"
-    t.text     "notes",                :limit => 2147483647
+    t.text     "notes",                 :limit => 2147483647
     t.integer  "changedByPerson"
     t.datetime "appReadyDate"
-    t.string   "evaluator",            :limit => 50
+    t.string   "evaluator",             :limit => 50
     t.datetime "evalStartDate"
     t.datetime "preADate"
     t.datetime "medPsychDate"
     t.datetime "finalADate"
-    t.text     "placementComments",    :limit => 2147483647
+    t.text     "placementComments",     :limit => 2147483647
     t.datetime "expectReturnDate"
     t.datetime "confirmReturnDate"
-    t.string   "maidenName",           :limit => 50
-    t.string   "sendLane",             :limit => 20
+    t.string   "maidenName",            :limit => 50
+    t.string   "sendLane",              :limit => 20
     t.datetime "mpdEmailSent"
-    t.text     "kickoffNotes",         :limit => 2147483647
+    t.text     "kickoffNotes",          :limit => 2147483647
     t.datetime "addFormSent"
     t.datetime "updateFormSent"
-    t.string   "fieldCoach",           :limit => 50
+    t.string   "fieldCoach",            :limit => 50
     t.datetime "medPsychSent"
-    t.integer  "needsDebtCheck",       :limit => 1
+    t.integer  "needsDebtCheck",        :limit => 1
     t.datetime "acceptanceLetter"
     t.datetime "evalDocsRec"
-    t.integer  "oneCard",              :limit => 1
+    t.integer  "oneCard",               :limit => 1
     t.datetime "playbookSent"
-    t.string   "kickoffRoomate",       :limit => 50
-    t.string   "futurePlan",           :limit => 50
+    t.string   "kickoffRoomate",        :limit => 50
+    t.string   "futurePlan",            :limit => 50
     t.datetime "mpReceived"
     t.datetime "physicalSent"
     t.datetime "physicalReceived"
-    t.string   "evalType",             :limit => 10
+    t.string   "evalType",              :limit => 10
     t.datetime "preIKWSent"
-    t.string   "debt",                 :limit => 50
-    t.text     "restint",              :limit => 2147483647
+    t.string   "debt",                  :limit => 50
+    t.text     "restint",               :limit => 2147483647
     t.datetime "evalSummary"
     t.datetime "returnDate"
     t.datetime "effectiveChange"
@@ -3851,18 +3859,19 @@ ActiveRecord::Schema.define(:version => 20111222175718) do
     t.datetime "joinStaffForm"
     t.datetime "readyDate"
     t.datetime "additionalSalaryForm"
-    t.string   "miniPref",             :limit => 50
-    t.string   "birthCity",            :limit => 50
-    t.string   "birthState",           :limit => 50
-    t.string   "ikw_location",         :limit => 100
-    t.string   "summer_preference",    :limit => 100
-    t.string   "summer_assignment",    :limit => 100
+    t.string   "miniPref",              :limit => 50
+    t.string   "birthCity",             :limit => 50
+    t.string   "birthState",            :limit => 50
+    t.string   "ikw_location",          :limit => 100
+    t.string   "summer_preference",     :limit => 100
+    t.string   "summer_assignment",     :limit => 100
     t.string   "trainer"
-    t.text     "trainer_contact",      :limit => 16777215
+    t.text     "trainer_contact",       :limit => 16777215
     t.string   "vonage"
     t.string   "website"
     t.integer  "send_dept"
-    t.string   "regionOfOrigin",       :limit => 50
+    t.string   "regionOfOrigin",        :limit => 50
+    t.date     "background_check_date"
   end
 
   add_index "sitrack_tracking", ["application_id"], :name => "fk_applicationID"
@@ -3925,10 +3934,10 @@ ActiveRecord::Schema.define(:version => 20111222175718) do
     t.integer  "user_id"
     t.text     "explanation"
     t.string   "state"
-    t.string   "initial_response",               :limit => 140, :default => "Hi! Thanks for checking out Cru. Visit {{ link }} to get more involved."
+    t.string   "initial_response",               :limit => 145
     t.text     "post_survey_message_deprecated"
     t.string   "event_type"
-    t.string   "gateway",                                       :default => "",                                                                        :null => false
+    t.string   "gateway",                                       :default => "", :null => false
     t.integer  "survey_id"
   end
 
@@ -4746,7 +4755,7 @@ ActiveRecord::Schema.define(:version => 20111222175718) do
     t.string   "city",                               :limit => 50
     t.string   "state",                              :limit => 50
     t.string   "country",                            :limit => 60
-    t.string   "aoa",                                :limit => 50
+    t.string   "world_region",                       :limit => 50
     t.string   "display_location",                   :limit => 100
     t.string   "primary_partner",                    :limit => 100
     t.string   "secondary_partner",                  :limit => 100
@@ -4941,6 +4950,12 @@ ActiveRecord::Schema.define(:version => 20111222175718) do
   add_index "sp_users", ["person_id"], :name => "person_id"
   add_index "sp_users", ["ssm_id"], :name => "sp_users_ssm_id_index", :unique => true
 
+  create_table "sp_world_regions", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "staffsite_staffsitepref", :primary_key => "StaffSitePrefID", :force => true do |t|
     t.string "name",                :limit => 64
     t.string "displayName"
@@ -5077,6 +5092,9 @@ ActiveRecord::Schema.define(:version => 20111222175718) do
 
   add_foreign_key "organization_memberships", "ministry_person", :name => "organization_memberships_ibfk_1", :column => "person_id", :primary_key => "personID", :dependent => :delete
   add_foreign_key "organization_memberships", "organizations", :name => "organization_memberships_ibfk_2", :dependent => :delete
+
+  add_foreign_key "organizational_roles", "ministry_person", :name => "organizational_roles_ibfk_2", :column => "person_id", :primary_key => "personID", :dependent => :delete
+  add_foreign_key "organizational_roles", "organizations", :name => "organizational_roles_ibfk_1", :dependent => :delete
 
   add_foreign_key "phone_numbers", "ministry_person", :name => "phone_numbers_ibfk_1", :column => "person_id", :primary_key => "personID", :dependent => :delete
 

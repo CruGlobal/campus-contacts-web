@@ -7,6 +7,7 @@ module Ccc
     	set_table_name 'simplesecuritymanager_user'
     	has_one :sp_user, class_name: 'Ccc::SpUser'
     	has_one :mpd_user, class_name: 'Ccc::MpdUser', dependent: :destroy
+    	has_one :infobase_user, class_name: 'Ccc::InfobaseUser', dependent: :destroy
   		has_one :si_user, class_name: 'Ccc::SiUser', foreign_key: 'ssm_id'
       has_one :pr_user, class_name: 'Ccc::PrUser', dependent: :destroy, foreign_key: 'ssm_id'
   		has_many :sn_user_memberships, class_name: 'Ccc::SnUserMembership'
@@ -17,20 +18,26 @@ module Ccc
     		if other.mpd_user and mpd_user
       		mpd_user.merge(other.mpd_user)
     		elsif other.mpd_user
-     		 other.mpd_user.user_id = userID
+     		  other.mpd_user.update_attribute(:user_id, userID)
+    		end
+    		
+    		if other.infobase_user and infobase_user
+      		infobase_user.merge(other.infobase_user)
+    		elsif other.infobase_user
+     		  other.infobase_user.update_attribute(:user_id, userID)
     		end
   
 				if other.pr_user and pr_user
 					other.pr_user.destroy				
 				elsif other.pr_user
-					other.pr_user.ssm_id = userID
+     		  other.pr_user.update_attribute(:ssm_id, userID)
 				end
 				
 				if other.si_user and si_user
 					other.si_user.destroy				
 				elsif other.si_user
 					SiUser.where(["ssm_id = ? or created_by_id = ?", other.userID, other.userID]).each do |ua|
-						ua.update_attribute(:ssm_id, personID) if ua.ssm_id == other.userID
+						ua.update_attribute(:ssm_id, userID) if ua.ssm_id == other.userID
 						ua.update_attribute(:created_by_id, personID) if ua.created_by_id == other.userID
 					end
 				end

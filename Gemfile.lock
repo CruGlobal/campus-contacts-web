@@ -118,6 +118,7 @@ GEM
       multipart-post (~> 1.1.3)
       rack (>= 1.1.0, < 2)
     fastercsv (1.5.4)
+    ffaker (1.10.1)
     foreigner (1.1.1)
       activerecord (>= 3.0.0)
     formtastic (2.0.2)
@@ -327,6 +328,7 @@ DEPENDENCIES
   dynamic_form
   enforce_schema_rules
   factory_girl (~> 2.0.0.rc4)
+  ffaker
   foreigner
   http_accept_language
   i18n-js

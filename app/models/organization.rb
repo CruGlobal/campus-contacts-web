@@ -158,8 +158,11 @@ class Organization < ActiveRecord::Base
     OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: Role::CONTACT_ID).first.try(:destroy)
   end
 
-  def move_contact(person, to_org)
-    remove_contact(person)
+  def move_contact(person, to_org, keep_contact)  
+    if keep_contact == "false"
+      remove_contact(person)
+    end
+    
     to_org.add_contact(person)
     FollowupComment.where(organization_id: id, contact_id: person.id).update_all(organization_id: to_org.id)
   end

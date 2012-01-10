@@ -14,6 +14,8 @@ en:
       me: Me
       type_to_find_leader: Type to find a leader then click on the leader's name
       type_to_find_org: "Type to find a %{terminology} then click on the %{terminology}'s name"
+      type_to_find_group: Type to find a group then click on the group's name
+      keep_contact: "Check the box to leave a copy of the contact in the org."
     messages:
       question_too_long: "WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages."
   roles: 
@@ -128,6 +130,7 @@ en:
       gender: 'Gender'
       phone: 'Phone'
       email: 'Email'
+      filter: 'Search'
       year_in_school: 'Year in School'
       manage_roles: 'Manage Roles'
       send_sms: Send Text
@@ -138,7 +141,7 @@ en:
     all:
       page_selected_html: "All <b>%{count}</b> people on this page are selected."
       select_all_html: "Select all <b>%{count}</b> people in the directory."
-      all_selected_html: "All <b>%{count}</b> people in the directory is selected."
+      all_selected_html: "All <b>%{count}</b> people in the directory are selected."
     show:
       add_comments_here: 'Add comments here...'
       previous_comments: 'Previous Comments'
@@ -155,6 +158,16 @@ en:
       status: "Status"
       attach_rejoicable: 'Attach a Rejoicable'
       add_comment: 'Add Comment / Update Status'
+    search:
+      search_placeholder: 'Search for the first name, last name or email.'
+      search_title: 'Search'
+      advanced_search: 'Toggle Advanced Search'
+    advanced_search:
+      first_name: 'First Name'
+      last_name: 'Last Name'
+      role: 'Role'
+      email: 'Email Address'
+      phone: 'Phone Number'      
     form:
       facebook_url: "Facebook Profile Url:"
       facebook_url_tip: You can manually search facebook for this person's profile if they haven't already connected. Keep in mind that some people set their facebook privacy settings such that they won't show up in this search.
@@ -459,6 +472,7 @@ en:
       responses_assigned_to: "All Contacts - Assigned to %{assigned_to}"
       unassigned_responses: "All Contacts - Unassigned"
       dnc_contacts: "All Contacts - 'Do Not Contact'"
+      completed_contacts: "All Contacts - Completed"
       friend_responses: "Contacts who are also my friends on Facebook"
       none_checked: "You need to select at least one contact."
       show_all: Show 'In Progress' contacts
@@ -494,6 +508,7 @@ en:
       phone: Phone Number
       email: Email
       year: Year
+      detailed: Detailed
 
     thanks:
       message: Thank you for your interest.
