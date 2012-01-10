@@ -36,7 +36,7 @@ module ContactActions
             @roles = Hash[OrganizationalRole.active.where(organization_id: current_organization.id, role_id: Role::CONTACT_ID, person_id: @person).map {|r| [r.person_id, r]}]
             @answers = generate_answers([@person], current_organization, @questions)
           end
-          wants.json { render text: @person.to_hash_basic(current_organization) }
+          wants.json { render json: @person.to_hash_basic(current_organization) }                              
         end
         return
       else
