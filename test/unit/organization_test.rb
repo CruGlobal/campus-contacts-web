@@ -76,6 +76,15 @@ class OrganizationTest < ActiveSupport::TestCase
       Factory(:organization, person_id: person.id)
     end
   end
+
+  test "self and children surveys" do
+    org1 = Factory(:organization)
+    org2 = Factory(:organization, :parent => org1)
+    survey1 = Factory(:survey, :organization => org1)
+    survey2 = Factory(:survey, :organization => org2)
+
+    assert_equal org1.self_and_children_surveys.sort{ |a, b| 1*(b <=> a) }, [survey1, survey2].sort{ |a, b| 1*(b <=> a) }, "Parent organization did not return correct self and children surveys"
+  end
   
   # Replace this with your real tests.
   test "move contact" do
