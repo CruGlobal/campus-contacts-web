@@ -1,6 +1,8 @@
 FactoryGirl.define do
   sequence(:count) {|n| n}
   
+
+
   factory :group do
     name 'foo'
     location 'here'
@@ -267,5 +269,10 @@ FactoryGirl.define do
     association :organization
     name        'member'
     i18n        'member'
+  end
+
+  factory :role do
+    association :organization
+    name        {"role #{Factory.next(:count)}"}
   end
 end
