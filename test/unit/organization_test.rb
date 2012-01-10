@@ -87,6 +87,24 @@ class OrganizationTest < ActiveSupport::TestCase
     assert_equal org1.self_and_children_keywords.sort{ |a, b| 1*(b <=> a) }, [keyword1, keyword2].sort{ |a, b| 1*(b <=> a) }, "Parent organization did not return correct self and children keywords"
   end
 
+  test "self and children questions" do
+    org1 = Factory(:organization)
+    org2 = Factory(:organization, :parent => org1)
+    survey1 = Factory(:survey, :organization => org1)
+    survey2 = Factory(:survey, :organization => org2)
+
+    puts org1.self_and_children_questions
+
+    #assert_equal org1.self_and_children_keywords.sort{ |a, b| 1*(b <=> a) }, [keyword1, keyword2].sort{ |a, b| 1*(b <=> a) }, "Parent organization did not return correct self and children keywords"
+  end
+
+  test "terminology enum" do
+    org1 = Factory(:organization)
+    org2 = Factory(:organization, :parent => org1)
+
+    assert_equal org1.terminology_enum.sort{ |a, b| 1*(b <=> a) }, [org1.terminology, org2.terminology].uniq.sort{ |a, b| 1*(b <=> a) }, "Organization class did not return correct unique terminologies"
+  end
+
 
   test "add initial admin after creating an org" do
     person = Factory(:person)
