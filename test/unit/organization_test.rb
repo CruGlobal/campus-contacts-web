@@ -50,9 +50,6 @@ class OrganizationTest < ActiveSupport::TestCase
       end
       
     end
-
-    
-
 =begin
     should "have at least one parent after creation" do
       org = Factory(:organization)
@@ -87,7 +84,8 @@ class OrganizationTest < ActiveSupport::TestCase
     assert_equal org1.self_and_children_keywords.sort{ |a, b| 1*(b <=> a) }, [keyword1, keyword2].sort{ |a, b| 1*(b <=> a) }, "Parent organization did not return correct self and children keywords"
   end
 
-  test "self and children questions" do
+  
+  test "self and children questions" do #this test is not done
     org1 = Factory(:organization)
     org2 = Factory(:organization, :parent => org1)
     survey1 = Factory(:survey, :organization => org1)
@@ -105,6 +103,12 @@ class OrganizationTest < ActiveSupport::TestCase
     assert_equal org1.terminology_enum.sort{ |a, b| 1*(b <=> a) }, [org1.terminology, org2.terminology].uniq.sort{ |a, b| 1*(b <=> a) }, "Organization class did not return correct unique terminologies"
   end
 
+  test "roles" do
+    org1 = Factory(:organization)
+    role1 = Factory(:role, :organization => org1)
+
+    assert_equal org1.roles.sort{ |a, b| 1*(b <=> a) }, [role1].uniq.sort{ |a, b| 1*(b <=> a) }, "Organization class did not return correct roles"
+  end
 
   test "add initial admin after creating an org" do
     person = Factory(:person)
