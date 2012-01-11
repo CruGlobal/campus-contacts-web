@@ -112,6 +112,11 @@ class OrganizationTest < ActiveSupport::TestCase
     assert_equal org1.roles.sort{ |a, b| 1*(b <=> a) }, a.uniq.sort{ |a, b| 1*(b <=> a) }, "Organization class did not return correct roles"
   end
 
+  test "<=>(other)" do
+
+  end
+
+
   test "add initial admin after creating an org" do
     person = Factory(:person)
     assert_difference "OrganizationalRole.count", 1 do
@@ -120,9 +125,11 @@ class OrganizationTest < ActiveSupport::TestCase
   end
 
 
+
+
   
   # Replace this with your real tests.
-=begin
+
   test "move contact" do
     person = Factory(:person_with_things)
     contact = Factory(:person)
@@ -131,12 +138,12 @@ class OrganizationTest < ActiveSupport::TestCase
     org1.add_contact(contact)
     org1.add_admin(person)
     FollowupComment.create(contact_id: contact.id, commenter_id: person.id, organization_id: org1.id, comment: 'test', status: 'contacted')
-    org1.move_contact(contact, org2)
+    org1.move_contact(contact, org2, "false")
     assert_equal(0, org1.contacts.length)
     assert_equal(1, org2.contacts.length)
     assert_equal(0, FollowupComment.where(contact_id: contact.id, organization_id: org1.id).count)
     assert_equal(1, FollowupComment.where(contact_id: contact.id, organization_id: org2.id).count)
   end
-=end
+
   
 end
