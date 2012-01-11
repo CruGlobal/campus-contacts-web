@@ -27,35 +27,15 @@ class OrganizationTest < ActiveSupport::TestCase
   should have_many(:rejoicables)
   should have_many(:groups)
 
-  context "an organization" do
+  # begin methods testing
 
-    should "delete suborganizations when deleted" do
-      org1 = Factory(:organization)
-      org2 = Factory(:organization, :parent => org1)
-      org3 = Factory(:organization, :parent => org2)
+  test "test to_s()" do # Every model, in this application, should return .name of the record
+    org1 = Factory(:organization, :name => "Chupakabra")
+    assert_equal org1.to_s, "Chupakabra", "Organization did not return correct value on to_s method" 
+  end
 
-      assert_difference("Organization.count", -3, "Organizations were not deleted after parent was destroyed.") do 
-        org1.destroy
-      end
-    end
+  test "self and children" do
 
-    should "have both name and terminology" do
-
-      assert_difference("Organization.count", 0, "An organization was created despite the absence of terminology") do
-        Organization.create(:name => "name")
-      end
-
-      assert_difference("Organization.count", 0, "An organization was created despite the absence of name") do
-        Organization.create(:terminology => "termi")
-      end
-      
-    end
-=begin
-    should "have at least one parent after creation" do
-      org = Factory(:organization)
-      assert_not_nil org.parent
-    end
-=end
   end
 
   test "self and children ids" do
@@ -96,6 +76,10 @@ class OrganizationTest < ActiveSupport::TestCase
     #assert_equal org1.self_and_children_keywords.sort{ |a, b| 1*(b <=> a) }, [keyword1, keyword2].sort{ |a, b| 1*(b <=> a) }, "Parent organization did not return correct self and children keywords"
   end
 
+  test "unassigned_people" do
+
+  end
+
   test "terminology enum" do
     org1 = Factory(:organization)
     org2 = Factory(:organization, :parent => org1)
@@ -119,6 +103,93 @@ class OrganizationTest < ActiveSupport::TestCase
     assert_equal(org1<=>(org2), 1, "Organization class returned wrong results for <=> operator")
   end
 
+  test "validation method enum" do
+
+  end
+
+  test "name with keyword count" do
+
+  end
+
+  test "add_member(person_id)" do
+
+  end
+
+  test "add_leader(person)" do
+
+  end
+
+  test "add_contact(person)" do
+
+  end
+
+  test "add_admin(person)" do
+
+  end
+
+  test "add_involved(person)" do
+
+  end
+
+  test "remove_contact(person)" do
+
+  end
+
+  test "move_contact(person, to_org, keep_contact)" do
+
+  end
+
+  test "create_admin_user" do
+
+  end
+
+  test "notify_admin_of_request" do
+
+  end
+
+  test "notify_new_leader(person, added_by)" do
+  
+  end
+
+  # end method testing
+
+  # begin deeper tests
+
+  test "state machines test" do
+    # write in this block state machine tests
+  end
+
+  context "an organization" do
+
+    should "delete suborganizations when deleted" do
+      org1 = Factory(:organization)
+      org2 = Factory(:organization, :parent => org1)
+      org3 = Factory(:organization, :parent => org2)
+
+      assert_difference("Organization.count", -3, "Organizations were not deleted after parent was destroyed.") do 
+        org1.destroy
+      end
+    end
+
+    should "have both name and terminology" do
+
+      assert_difference("Organization.count", 0, "An organization was created despite the absence of terminology") do
+        Organization.create(:name => "name")
+      end
+
+      assert_difference("Organization.count", 0, "An organization was created despite the absence of name") do
+        Organization.create(:terminology => "termi")
+      end
+      
+    end
+
+    should "have at least one parent after creation" do
+      org = Factory(:organization)
+      puts org
+      puts Factory.attributes_for :organization
+      #assert_not_nil org.parent
+    end
+  end
 
   test "add initial admin after creating an org" do
     person = Factory(:person)
@@ -127,7 +198,7 @@ class OrganizationTest < ActiveSupport::TestCase
     end
   end
 
-
+  # end deeper tests
 
 
   
