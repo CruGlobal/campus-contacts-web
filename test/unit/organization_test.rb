@@ -155,15 +155,41 @@ class OrganizationTest < ActiveSupport::TestCase
   end
 
   test "remove_contact(person)" do
-
+    org1 = Factory(:organization)
+    person1 = Factory(:person)
+    org1.add_contact(person1)
+    assert_difference("OrganizationalRole.count", -1, "An organization was not destroyed") do
+      org1.remove_contact(person1)
+    end
   end
 
-  test "move_contact(person, to_org, keep_contact)" do
-
+  test "move_contact(person, to_org, keep_contact)" do # revise!
+    person = Factory(:person_with_things)
+    contact = Factory(:person)
+    org1 = Factory(:organization)
+    org2 = Factory(:organization)
+    org1.add_contact(contact)
+    org1.add_admin(person)
+    FollowupComment.create(contact_id: contact.id, commenter_id: person.id, organization_id: org1.id, comment: 'test', status: 'contacted')
+    org1.move_contact(contact, org2, "false")
+    assert_equal(0, org1.contacts.length)
+    assert_equal(1, org2.contacts.length)
+    assert_equal(0, FollowupComment.where(contact_id: contact.id, organization_id: org1.id).count)
+    assert_equal(1, FollowupComment.where(contact_id: contact.id, organization_id: org2.id).count)
   end
 
   test "create_admin_user" do
+    org1 = Factory(:organization)
+    person1 = Factory(:person)
 
+    assert_difference "OrganizationalRole.count", 0, "Organization method create_admin_uer created admin user despite absence of Organization person_id" do
+      org1.create_admin_user
+    end
+
+    org1.person_id = person1.id
+    org1.create_admin_user
+    om = OrganizationalRole.last
+    assert_equal om.organization.to_s + om.person.to_s + om.role_id.to_s, org1.to_s + person1.to_s + Role::ADMIN_ID.to_s, "Organization method create_admin_user does not correctly add admin"
   end
 
   test "notify_admin_of_request" do
@@ -224,23 +250,7 @@ class OrganizationTest < ActiveSupport::TestCase
   # end deeper tests
 
 
-  
-  # Replace this with your real tests.
-
-  test "move contact" do
-    person = Factory(:person_with_things)
-    contact = Factory(:person)
-    org1 = Factory(:organization)
-    org2 = Factory(:organization)
-    org1.add_contact(contact)
-    org1.add_admin(person)
-    FollowupComment.create(contact_id: contact.id, commenter_id: person.id, organization_id: org1.id, comment: 'test', status: 'contacted')
-    org1.move_contact(contact, org2, "false")
-    assert_equal(0, org1.contacts.length)
-    assert_equal(1, org2.contacts.length)
-    assert_equal(0, FollowupComment.where(contact_id: contact.id, organization_id: org1.id).count)
-    assert_equal(1, FollowupComment.where(contact_id: contact.id, organization_id: org2.id).count)
-  end
+ 
 
   
 end
