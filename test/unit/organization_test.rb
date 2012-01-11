@@ -115,7 +115,11 @@ class OrganizationTest < ActiveSupport::TestCase
   end
 
   test "add_member(person_id)" do
-
+    org1 = Factory(:organization)
+    person1 = Factory(:person)
+    org1.add_member(person1.id)
+    om = OrganizationMembership.last
+    assert_equal om.organization.to_s + om.person.to_s, org1.to_s + person1.to_s, "Organization method add_member does not return the right value"
   end
 
   test "add_leader(person)" do
