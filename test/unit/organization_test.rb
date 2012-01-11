@@ -119,23 +119,39 @@ class OrganizationTest < ActiveSupport::TestCase
     person1 = Factory(:person)
     org1.add_member(person1.id)
     om = OrganizationMembership.last
-    assert_equal om.organization.to_s + om.person.to_s, org1.to_s + person1.to_s, "Organization method add_member does not return the right value"
+    assert_equal om.organization.to_s + om.person.to_s, org1.to_s + person1.to_s, "Organization method add_member does not correctly add member"
   end
 
   test "add_leader(person)" do
-
+    org1 = Factory(:organization)
+    person1 = Factory(:person)
+    org1.add_leader(person1)
+    om = OrganizationalRole.last
+    assert_equal om.organization.to_s + om.person.to_s + om.role_id.to_s, org1.to_s + person1.to_s + Role::LEADER_ID.to_s, "Organization method add_member does not correctly add leader"
   end
 
   test "add_contact(person)" do
-
+    org1 = Factory(:organization)
+    person1 = Factory(:person)
+    org1.add_contact(person1)
+    om = OrganizationalRole.last
+    assert_equal om.organization.to_s + om.person.to_s + om.role_id.to_s, org1.to_s + person1.to_s + Role::CONTACT_ID.to_s, "Organization method add_member does not correctly add contact"
   end
 
   test "add_admin(person)" do
-
+    org1 = Factory(:organization)
+    person1 = Factory(:person)
+    org1.add_admin(person1)
+    om = OrganizationalRole.last
+    assert_equal om.organization.to_s + om.person.to_s + om.role_id.to_s, org1.to_s + person1.to_s + Role::ADMIN_ID.to_s, "Organization method add_member does not correctly add admin"
   end
 
   test "add_involved(person)" do
-
+    org1 = Factory(:organization)
+    person1 = Factory(:person)
+    org1.add_involved(person1)
+    om = OrganizationalRole.last
+    assert_equal om.organization.to_s + om.person.to_s + om.role_id.to_s, org1.to_s + person1.to_s + Role::INVOLVED_ID.to_s, "Organization method add_member does not correctly add involved"
   end
 
   test "remove_contact(person)" do
