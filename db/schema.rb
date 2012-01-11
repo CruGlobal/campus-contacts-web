@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111222175718) do
+ActiveRecord::Schema.define(:version => 20120109125846) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -1886,6 +1886,7 @@ ActiveRecord::Schema.define(:version => 20111222175718) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "post_survey_message"
+    t.string   "terminology"
   end
 
   add_index "mh_surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
