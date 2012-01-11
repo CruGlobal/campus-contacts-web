@@ -21,6 +21,8 @@
         <%= link_to(t('.show_all'), contacts_path(assigned_to: 'all'), :class => "headerlink") %>
       <% elsif params[:dnc] == 'true' %>
         <%= t('.dnc_contacts') %>
+      <% elsif params[:completed] == 'true' %>
+        <%= t('.completed_contacts') %>
       <% else %>
         <%= t('.unassigned_responses') %>
       <% end %>

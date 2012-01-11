@@ -52,14 +52,19 @@
     <ul class="pillmenu">
       <li><%= link_to(t('.add_person'), "", class: 'add_person') %></li>
     </ul>
+    <ul class="pillmenu">
+      <li><%= link_to(t('.filter'), '#', id: 'filter_link') %></li>
+    </ul>
     <% if can? :manage, current_organization %>
       <ul class="pillmenu">
         <li><%= link_to(t('general.delete'), bulk_delete_people_path, id: "bulk_delete") %></li>
       </ul>  
     <% end %>
-      <ul class="pillmenu">
-        <li><%= link_to(t('.vcard'), '', id: 'bulk_vcard_link' ) %></li>
-      </ul>        
+    <ul class="pillmenu">
+      <li><%= link_to(t('.vcard'), '', id: 'bulk_vcard_link' ) %></li>
+    </ul>     
+    <%= render 'search' %>
+    <%= render 'advanced_search' %>
   </div>
 <% end %>
 
@@ -92,9 +97,11 @@
     <%= t('.no_people') %>
   </div>
 <% end %>
-<div class="searchstat">
-  <%= t('.displaying', start: @people.offset_value + 1, finish: @people.offset_value + @people.length, total: @people.total_count) %>
-</div>
+<% if @people.any? %>
+  <div class="searchstat">
+    <%= t('.displaying', start: @people.offset_value + 1, finish: @people.offset_value + @people.length, total: @people.total_count) %>
+  </div>
+<% end %>
 
 <div id="add_person_div" style="display:none" title="<%= t('.add_person') %>" class="fingerme">
   <%= render 'add_person', person: Person.new %>

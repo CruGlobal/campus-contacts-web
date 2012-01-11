@@ -23,7 +23,7 @@ class ContactsController < ApplicationController
     elsif params[:completed] == 'true'
       @people = @organization.completed_contacts
     else
-      params[:assigned_to] ||= 'all'
+      params[:assigned_to] = nil if params[:assigned_to].blank?
       if params[:assigned_to]
         case params[:assigned_to]
         when 'all'
@@ -46,7 +46,9 @@ class ContactsController < ApplicationController
       end
       @people ||= Person.where("1=0")
     end
-    @people = @people.includes(:organizational_roles).where("organizational_roles.organization_id" => @organization.id)
+    unless @people.arel.to_sql.include?('JOIN organizational_roles')
+      @people = @people.includes(:organizational_roles).where("organizational_roles.organization_id" => @organization.id)
+    end
     if params[:q] && params[:q][:s].include?('mh_answer_sheets')
       @people = @people.joins({:answer_sheets => :survey}).where("mh_surveys.organization_id" => @organization.id)
     end
@@ -149,7 +151,7 @@ class ContactsController < ApplicationController
   end
   
   def mine
-    @people = Person.order('lastName, firstName').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.role_id' => Role::CONTACT_ID)
+    @people = Person.order('lastName, firstName').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.organization_id' => current_organization.id, 'organizational_roles.role_id' => Role::CONTACT_ID)
     if params[:status] == 'completed'
       @people = @people.where("organizational_roles.followup_status = 'completed'")
     else

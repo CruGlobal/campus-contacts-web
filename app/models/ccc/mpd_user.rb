@@ -8,11 +8,11 @@ class Ccc::MpdUser < ActiveRecord::Base
 
 
   def merge(other)
-			other.mpd_contacts.each { |ua| ua.update_attribute(:mpd_user_id, id) }
-			other.mpd_events.each { |ua| ua.update_attribute(:mpd_user_id, id) }
-			other.mpd_expenses.each { |ua| ua.update_attribute(:mpd_user_id, id) }
-			other.mpd_priorities.each { |ua| ua.update_attribute(:mpd_user_id, id) }
-			other.mpd_letters.each { |ua| ua.update_attribute(:mpd_user_id, id) }
+		other.mpd_contacts.each { |ua| ua.update_attribute(:mpd_user_id, id) }
+		other.mpd_events.each { |ua| ua.update_attribute(:mpd_user_id, id) }
+		other.mpd_expenses.each { |ua| ua.update_attribute(:mpd_user_id, id) }
+		other.mpd_priorities.each { |ua| ua.update_attribute(:mpd_user_id, id) }
+		other.mpd_letters.each { |ua| ua.update_attribute(:mpd_user_id, id) }
   end
   
 end

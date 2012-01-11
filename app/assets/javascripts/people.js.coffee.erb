@@ -1,5 +1,37 @@
 $ ->
+  if $('#query')[0]
+    if $('#query').val().length > 0
+      $('#search_filter_box').show()
+      false
+      
+  if $('#first_name')[0]
+    if $('#first_name').val().length > 0 || $('#last_name').val().length > 0 || $('#role').val().length > 0 ||
+    $('#gender_1').is(':checked') || $('#gender_2').is(':checked') || $('#gender_').is(':checked') ||
+    $('#email').val().length > 0 ||  $('#phone').val().length > 0
+      $('#advanced_filter_box').show()
+      false
   
+  $('#advanced_search').live 'click', ->
+    $('#search_filter_box').hide()
+    $('#advanced_filter_box').toggle()
+    false
+    
+  $('#basic_search').live 'click', ->
+    $('#search_filter_box').toggle()
+    $('#advanced_filter_box').hide()
+    false
+ 
+  $('#filter_link').click ->
+    if !$('#search_filter_box').is(':visible') && !$('#advanced_filter_box').is(':visible')
+      $('#search_filter_box').show()
+      $('#advanced_filter_box').hide()
+    else if $('#search_filter_box').is(':visible') && !$('#advanced_filter_box').is(':visible')
+      $('#search_filter_box').hide()
+      $('#advanced_filter_box').hide()
+    else if !$('#search_filter_box').is(':visible') && $('#advanced_filter_box').is(':visible')
+      $('#search_filter_box').hide()
+      $('#advanced_filter_box').hide()
+      
   $('.person_row td:not(.checkbox_cell)').live 'click', ->
     unless $('a', this)[0]?
       tr = $(this).parent()
@@ -329,6 +361,7 @@ $('#check_all').live 'click', ->
     return false
     
   checked = $(this).prop('checked')
+  debug.log(checked)
   change_all_role_checkboxes(false) if !checked
   params = $(this).attr('data-params')  
   $('input.id_checkbox').prop('checked', checked)  
@@ -342,8 +375,8 @@ $('#check_all').live 'click', ->
         $('#people_table').find('tr:first').remove()
         $('#people_table').prepend(html)     
     else
-      if $('span.all_text', first_row)[0]?
-        first_row.remove()
+      if $('span#all_text', first_row)[0]?
+        first_row.hide()
 
 $('#roles_menu_div').live 'click', ->
   role_div = $(this).parent().find('.dropdown_1column')

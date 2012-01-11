@@ -16,13 +16,18 @@ class OrganizationalRolesController < ApplicationController
     Organization.transaction do
       from_org = Organization.find(params[:from_id])
       to_org = Organization.find(params[:to_id])
+      keep_contact = params[:keep_contact]
+      
       unless from_org == to_org
         people = Person.find(params[:ids])
-    
-        # Remove them from the current org
-        ContactAssignment.where(person_id: params[:ids], organization_id: from_org.id).destroy_all
+        
+        # Remove them from the current org unless specified
+        if keep_contact == "false"
+          ContactAssignment.where(person_id: params[:ids], organization_id: from_org.id).destroy_all
+        end
+        
         people.each do |person|
-          from_org.move_contact(person, to_org)
+          from_org.move_contact(person, to_org, keep_contact)
         end
       end
     end
