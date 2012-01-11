@@ -110,5 +110,28 @@ class PeopleControllerTest < ActionController::TestCase
       end
     end
   end
+  
+  context "Search" do
+    setup do
+      @user = Factory(:user_with_auxs)
+      sign_in @user
+    end
+    
+    should "respond success with no parameters" do
+      get :index
+      assert_response(:success)
+    end
+    
+    should "respond success with basic search parameter" do
+      get :index, :search_type => "basic", :query => "John Doe"
+      assert_response(:success)
+    end
+    
+    should "respond success with advanced search parameters" do
+      get :index, :search_type => "advanced", :first_name => "John", :last_name => "Doe", :role => "1", :gender => "1", 
+          :email => "test@email.com", :phone => "123"
+      assert_response(:success)
+    end
+  end
 
 end
