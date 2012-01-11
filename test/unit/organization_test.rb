@@ -64,14 +64,13 @@ class OrganizationTest < ActiveSupport::TestCase
     assert_equal org1.self_and_children_keywords.sort{ |a, b| 1*(b <=> a) }, [keyword1, keyword2].sort{ |a, b| 1*(b <=> a) }, "Parent organization did not return correct self and children keywords"
   end
 
-  
   test "self and children questions" do #this test is not done
     org1 = Factory(:organization)
     org2 = Factory(:organization, :parent => org1)
     survey1 = Factory(:survey, :organization => org1)
     survey2 = Factory(:survey, :organization => org2)
 
-    puts org1.self_and_children_questions
+    #puts org1.self_and_children_questions
 
     #assert_equal org1.self_and_children_keywords.sort{ |a, b| 1*(b <=> a) }, [keyword1, keyword2].sort{ |a, b| 1*(b <=> a) }, "Parent organization did not return correct self and children keywords"
   end
@@ -108,7 +107,11 @@ class OrganizationTest < ActiveSupport::TestCase
   end
 
   test "name with keyword count" do
+    org1 = Factory(:organization)
+    keyword1 = Factory(:sms_keyword, :organization => org1)
+    #keyword2 = Factory(:sms_keyword, :organization => org2)
 
+    assert_equal org1.name_with_keyword_count, org1.name + " (#{SmsKeyword.count})", "Organization method name_with_keyword_count does not return right value"
   end
 
   test "add_member(person_id)" do
@@ -183,10 +186,10 @@ class OrganizationTest < ActiveSupport::TestCase
       
     end
 
-    should "have at least one parent after creation" do
+    should "have at least one parent after creation" do #this test is not yet done
       org = Factory(:organization)
-      puts org
-      puts Factory.attributes_for :organization
+      #puts org
+      #puts Factory.attributes_for :organization
       #assert_not_nil org.parent
     end
   end
