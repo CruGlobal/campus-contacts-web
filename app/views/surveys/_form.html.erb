@@ -48,7 +48,7 @@
     <div class="stepcontent">
       <div class="field">
         <%= f.label :terminilogy, t('.terminology') %>
-        <%= f.text_area :terminology, rows: 5 %>
+        <%= f.text_field :terminology %>
       </div>
     </div>
   </div>
@@ -62,7 +62,7 @@
         <div class="field">
           <label for="survey_organization">
             <%= raw(t('.association', this_term: current_organization.terminology, child_term: current_organization.children.first.terminology)) %> 
-            <%= tip(t('surveys.index.association_help')) %>
+            <%= tip(t('surveys.index_admin.association_help')) %>
           </label>
           <%= f.select :organization_id, ([current_organization] + current_organization.children).collect {|o| [o.to_s, o.id]} %>
         </div>

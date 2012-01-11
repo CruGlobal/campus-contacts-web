@@ -16,7 +16,7 @@ class Survey < ActiveRecord::Base
   validates_presence_of :title, :post_survey_message, :terminology
   validates_length_of :title, :maximum => 100, :allow_nil => true
   
-  after_initialize :default_values
+  default_value_for :terminology, "Survey"
   
   def to_s
     title
@@ -45,9 +45,5 @@ class Survey < ActiveRecord::Base
   end
   
   private
-  
-  def default_values
-    self.terminology ||= "Survey"
-  end
   
 end
