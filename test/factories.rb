@@ -275,6 +275,7 @@ FactoryGirl.define do
   factory :role do
     association :organization
     name        {"role #{Factory.next(:count)}"}
+  end
   
   factory :infobase_user, class: Ccc::InfobaseUser do
     association :user

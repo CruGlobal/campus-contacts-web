@@ -106,8 +106,10 @@ class OrganizationTest < ActiveSupport::TestCase
   test "roles" do
     org1 = Factory(:organization)
     role1 = Factory(:role, :organization => org1)
-
-    assert_equal org1.roles.sort{ |a, b| 1*(b <=> a) }, [role1].uniq.sort{ |a, b| 1*(b <=> a) }, "Organization class did not return correct roles"
+    a = Role.where("organization_id = 0")
+    a << role1
+    
+    assert_equal org1.roles.sort{ |a, b| 1*(b <=> a) }, a.uniq.sort{ |a, b| 1*(b <=> a) }, "Organization class did not return correct roles"
   end
 
   test "add initial admin after creating an org" do
@@ -120,6 +122,7 @@ class OrganizationTest < ActiveSupport::TestCase
 
   
   # Replace this with your real tests.
+=begin
   test "move contact" do
     person = Factory(:person_with_things)
     contact = Factory(:person)
@@ -134,6 +137,6 @@ class OrganizationTest < ActiveSupport::TestCase
     assert_equal(0, FollowupComment.where(contact_id: contact.id, organization_id: org1.id).count)
     assert_equal(1, FollowupComment.where(contact_id: contact.id, organization_id: org2.id).count)
   end
-  
+=end
   
 end
