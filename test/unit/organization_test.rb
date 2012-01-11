@@ -113,7 +113,10 @@ class OrganizationTest < ActiveSupport::TestCase
   end
 
   test "<=>(other)" do
+    org1 = Factory(:organization, :name => "Zulu")
+    org2 = Factory(:organization, :name => "Yack")
 
+    assert_equal(org1<=>(org2), 1, "Organization class returned wrong results for <=> operator")
   end
 
 

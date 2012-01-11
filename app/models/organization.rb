@@ -98,8 +98,8 @@ class Organization < ActiveRecord::Base
     name <=> other.name
   end
   
-  def validation_method_enum
-    ['relay']
+  def validation_method_enum # ???
+    ['relay'] 
   end
   
   def terminology_enum
