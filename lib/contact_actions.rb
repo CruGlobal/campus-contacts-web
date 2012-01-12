@@ -17,26 +17,26 @@ module ContactActions
       @person, @email, @phone = create_person(params[:person])
       if @person.save
 
-        @questions = current_organization.all_questions.where("#{SurveyElement.table_name}.hidden" => false)
+        @questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => false)
 
         save_survey_answers
   
-        FollowupComment.create_from_survey(current_organization, @person, current_organization.all_questions, @answer_sheets)
+        FollowupComment.create_from_survey(@organization, @person, @organization.all_questions, @answer_sheets)
 
-        create_contact_at_org(@person, current_organization)
+        create_contact_at_org(@person, @organization)
         if params[:assign_to_me] == 'true'
-          ContactAssignment.where(person_id: @person.id, organization_id: current_organization.id).destroy_all
-          ContactAssignment.create!(person_id: @person.id, organization_id: current_organization.id, assigned_to_id: current_person.id)
+          ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
+          ContactAssignment.create!(person_id: @person.id, organization_id: @organization.id, assigned_to_id: current_person.id)
         end
         respond_to do |wants|
           wants.html { redirect_to :back }
           wants.mobile { redirect_to :back }
           wants.js do
-            @assignments = ContactAssignment.where(person_id: @person.id, organization_id: current_organization.id).group_by(&:person_id)
-            @roles = Hash[OrganizationalRole.active.where(organization_id: current_organization.id, role_id: Role::CONTACT_ID, person_id: @person).map {|r| [r.person_id, r]}]
-            @answers = generate_answers([@person], current_organization, @questions)
+            @assignments = ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).group_by(&:person_id)
+            @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, role_id: Role::CONTACT_ID, person_id: @person).map {|r| [r.person_id, r]}]
+            @answers = generate_answers([@person], @organization, @questions)
           end
-          wants.json { render json: @person.to_hash_basic(current_organization) }                              
+          wants.json { render json: @person.to_hash_basic(@organization) }                              
         end
         return
       else
@@ -61,7 +61,7 @@ module ContactActions
   
   def save_survey_answers
     @answer_sheets = []
-    current_organization.surveys.each do |survey|
+    @organization.surveys.each do |survey|
       @answer_sheet = get_answer_sheet(survey, @person)
       question_set = QuestionSet.new(survey.questions, @answer_sheet)
       question_set.post(params[:answers], @answer_sheet)
