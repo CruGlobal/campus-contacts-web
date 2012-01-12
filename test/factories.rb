@@ -271,14 +271,14 @@ FactoryGirl.define do
     name        'member'
     i18n        'member'
   end
-  
-  factory :infobase_user, class: Ccc::InfobaseUser do
-    association :user
-    type        'InfobaseUser'
-  end
 
   factory :role do
     association :organization
     name        {"role #{Factory.next(:count)}"}
+  end
+  
+  factory :infobase_user, class: Ccc::InfobaseUser do
+    association :user
+    type        'InfobaseUser'
   end
 end
