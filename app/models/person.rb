@@ -80,9 +80,22 @@ class Person < ActiveRecord::Base
   end
   
   def orgs_with_children
-    organizations.collect {|top_org| top_org.parent ? (top_org.show_sub_orgs? ? top_org.children : [])
-      : ([top_org] + top_org.children)
-    }.flatten
+   organizations.collect {|org|
+     org.parent ? 
+       org.parent.show_sub_orgs? ? 
+         [org] + org.descendants
+       : 
+         [org] 
+     : 
+       org.show_sub_orgs? ?
+         [org] + org.descendants
+       :
+         [org]
+   }.flatten.uniq_by{ |o| o.id }
+  
+    #organizations.collect {|top_org| top_org.parent ? (top_org.show_sub_orgs? ? top_org.children + top_org.descendants : [])
+    #  : ([top_org])
+    #}.flatten
   end
   
   def phone_number

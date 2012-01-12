@@ -44,9 +44,15 @@ class PersonTest < ActiveSupport::TestCase
       orgs = @person.orgs_with_children
       assert(orgs.include?(@org1), "root should be included, if Person is leader.")
       assert(orgs.include?(@org2), "this should be included because parent shows sub orgs")
-      assert(!orgs.include?(@org3), "this should not be included since its parent does not show sub orgs.")
-      assert(orgs.include?(@org4), "this should be included since its parent belongs to Person and shows sub orgs.")
-      assert_equal(orgs.count, 3, "duplicate entries are present.")
+      assert(orgs.include?(@org3), "this should not be included because parent doesnt show sub orgs")
+      assert(orgs.include?(@org4), "this should be included because parent shows sub orgs")
+      assert_equal(orgs.count, 4, "duplicate entries are present.")
+      
+      other_orgs = @another_person.orgs_with_children
+      assert(!other_orgs.include?(@org1), "this should not be included")
+      assert(!other_orgs.include?(@org2), "this should not be included")
+      assert(!other_orgs.include?(@org3), "this should not be included")
+      assert(other_orgs.include?(@org4), "this should be included because other person has role")
     end
     
     should "show multiple-generations of children as long as show_sub_orgs is true" do
@@ -59,6 +65,30 @@ class PersonTest < ActiveSupport::TestCase
       assert(orgs.include?(@org2), "this should be included because parent shows sub orgs")
       assert(orgs.include?(@org3), "this should be included because parent shows sub orgs")
       assert(orgs.include?(@org4), "this should be included because parent shows sub orgs")
+      
+      other_orgs = @another_person.orgs_with_children
+      assert(!other_orgs.include?(@org1), "this should not be included")
+      assert(other_orgs.include?(@org2), "this should not be included")
+      assert(other_orgs.include?(@org3), "this should be included")
+      assert(other_orgs.include?(@org4), "this should be included")
+    end
+    
+    should "show multiple generations" do
+      @org1 = Factory(:organization, person_id: @another_person.id, id: 1)
+      @org2 = Factory(:organization, person_id: @person.id, id: 2, ancestry: "1")
+      @org3 = Factory(:organization, person_id: @another_person.id, id: 3, ancestry: "1/2")
+      @org4 = Factory(:organization, person_id: @another_person.id, id: 4, ancestry: "1/2/3")
+      orgs = @person.orgs_with_children
+      assert(!orgs.include?(@org1), "not included since Person is not leader")
+      assert(orgs.include?(@org2), "this should be included because parent shows sub orgs")
+      assert(orgs.include?(@org3), "this should be included because parent shows sub orgs")
+      assert(orgs.include?(@org4), "this should be included because parent shows sub orgs")
+      
+      other_orgs = @another_person.orgs_with_children
+      assert(other_orgs.include?(@org1), "this should be included")
+      assert(other_orgs.include?(@org2), "this should be included since parent shows sub orgs")
+      assert(other_orgs.include?(@org3), "this should be included")
+      assert(other_orgs.include?(@org4), "this should be included")
     end
     
   end
