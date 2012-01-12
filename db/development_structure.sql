@@ -7,10 +7,10 @@ CREATE TABLE `academic_departments` (
 CREATE TABLE `access_grants` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(255) DEFAULT NULL,
-  `identity` varchar(255) DEFAULT NULL,
+  `identity` int(11) DEFAULT NULL,
   `client_id` varchar(255) DEFAULT NULL,
   `redirect_uri` varchar(255) DEFAULT NULL,
-  `scope` varchar(255) DEFAULT NULL,
+  `scope` varchar(255) DEFAULT '',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `granted_at` datetime DEFAULT NULL,
@@ -20,14 +20,14 @@ CREATE TABLE `access_grants` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_access_grants_on_code` (`code`),
   KEY `index_access_grants_on_client_id` (`client_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `access_tokens` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(255) DEFAULT NULL,
-  `identity` varchar(255) DEFAULT NULL,
+  `identity` int(11) DEFAULT NULL,
   `client_id` varchar(255) DEFAULT NULL,
-  `scope` varchar(255) DEFAULT NULL,
+  `scope` varchar(255) DEFAULT '',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `expires_at` datetime DEFAULT NULL,
@@ -38,7 +38,23 @@ CREATE TABLE `access_tokens` (
   UNIQUE KEY `index_access_tokens_on_code` (`code`),
   KEY `index_access_tokens_on_client_id` (`client_id`),
   KEY `index_access_tokens_on_identity` (`identity`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `active_admin_comments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `resource_id` int(11) NOT NULL,
+  `resource_type` varchar(255) NOT NULL,
+  `author_id` int(11) DEFAULT NULL,
+  `author_type` varchar(255) DEFAULT NULL,
+  `body` text,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `namespace` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_admin_notes_on_resource_type_and_resource_id` (`resource_type`,`resource_id`),
+  KEY `index_active_admin_comments_on_namespace` (`namespace`),
+  KEY `index_active_admin_comments_on_author_type_and_author_id` (`author_type`,`author_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `activities` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -53,17 +69,101 @@ CREATE TABLE `activities` (
   UNIQUE KEY `index_activities_on_target_area_id_and_organization_id` (`target_area_id`,`organization_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `am_friends_people_deprecated` (
+  `friend_id` int(10) NOT NULL,
+  `person_id` int(10) NOT NULL,
+  PRIMARY KEY (`friend_id`,`person_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `am_group_links_deprecated` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `api` varchar(50) NOT NULL,
+  `url` varchar(500) NOT NULL,
+  `title` varchar(500) DEFAULT NULL,
+  `description` longtext,
+  `group_id` int(10) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `group_id` (`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `am_group_messages_deprecated` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `subject` varchar(500) DEFAULT NULL,
+  `body` longtext,
+  `created_on` datetime NOT NULL,
+  `group_id` int(10) NOT NULL,
+  `person_id` int(10) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `group_id` (`group_id`),
+  KEY `person_id` (`person_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `am_groups_deprecated` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `url_safe_name` varchar(255) NOT NULL,
+  `description` longtext,
+  `group_type` varchar(50) DEFAULT NULL,
+  `lookup_id` int(10) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `lookup_id` (`lookup_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `am_groups_people_deprecated` (
+  `person_id` int(10) NOT NULL,
+  `group_id` int(10) NOT NULL,
+  `created_on` datetime DEFAULT NULL,
+  PRIMARY KEY (`person_id`,`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `am_personal_links_deprecated` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `api` varchar(50) NOT NULL,
+  `url` varchar(500) NOT NULL,
+  `title` varchar(500) DEFAULT NULL,
+  `description` longtext,
+  `person_id` int(10) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `person_id` (`person_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `aoas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ap_signup_deprecated` (
+  `ambassadorPledgeID` int(10) NOT NULL AUTO_INCREMENT,
+  `pledgeDate` datetime DEFAULT NULL,
+  `fk_PersonID` int(10) NOT NULL,
+  PRIMARY KEY (`ambassadorPledgeID`),
+  KEY `fk_PersonID` (`fk_PersonID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `api_logs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `platform` varchar(255) DEFAULT NULL,
+  `action` varchar(255) DEFAULT NULL,
+  `identity` int(11) DEFAULT NULL,
+  `organization_id` int(11) DEFAULT NULL,
+  `error` text,
+  `url` text,
+  `access_token` varchar(255) DEFAULT NULL,
+  `remote_ip` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `platform_release` varchar(255) DEFAULT NULL,
+  `platform_product` varchar(255) DEFAULT NULL,
+  `app` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `auth_requests` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(255) DEFAULT NULL,
   `client_id` varchar(255) DEFAULT NULL,
-  `scope` varchar(255) DEFAULT NULL,
+  `scope` varchar(255) DEFAULT '',
   `redirect_uri` varchar(255) DEFAULT NULL,
   `state` varchar(255) DEFAULT NULL,
   `response_type` varchar(255) DEFAULT NULL,
@@ -76,7 +176,7 @@ CREATE TABLE `auth_requests` (
   PRIMARY KEY (`id`),
   KEY `index_auth_requests_on_code` (`code`),
   KEY `index_auth_requests_on_client_id` (`client_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=240 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `authentications` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -86,9 +186,8 @@ CREATE TABLE `authentications` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `token` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_authentications_on_provider_and_uid` (`provider`,`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `clients` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -98,16 +197,18 @@ CREATE TABLE `clients` (
   `link` varchar(255) DEFAULT NULL,
   `image_url` varchar(255) DEFAULT NULL,
   `redirect_uri` varchar(255) DEFAULT NULL,
-  `scope` varchar(255) DEFAULT NULL,
+  `scope` varchar(255) DEFAULT '',
   `notes` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `revoked` datetime DEFAULT NULL,
+  `organization_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_clients_on_code` (`code`),
   UNIQUE KEY `index_clients_on_display_name` (`display_name`),
-  UNIQUE KEY `index_clients_on_link` (`link`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `index_clients_on_link` (`link`),
+  KEY `index_clients_on_organization_id` (`organization_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `cms_assoc_filecategory` (
   `CmsFileID` varchar(64) NOT NULL,
@@ -135,7 +236,7 @@ CREATE TABLE `cms_cmsfile` (
   `dateAdded` datetime DEFAULT NULL,
   `dateModified` datetime DEFAULT NULL,
   `moderatedYet` char(1) DEFAULT NULL,
-  `summary` varchar(5000) DEFAULT NULL,
+  `summary` text,
   `quality` varchar(256) DEFAULT NULL,
   `expDate` datetime DEFAULT NULL,
   `lastAccessed` datetime DEFAULT NULL,
@@ -153,26 +254,6 @@ CREATE TABLE `cms_cmsfile` (
   KEY `index1` (`accessCount`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `communities` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  `website` varchar(255) DEFAULT NULL,
-  `fbpage` varchar(255) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  `school_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-CREATE TABLE `community_memberships` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `community_id` int(11) DEFAULT NULL,
-  `person_id` int(11) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 CREATE TABLE `contact_assignments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `assigned_to_id` int(11) DEFAULT NULL,
@@ -180,8 +261,11 @@ CREATE TABLE `contact_assignments` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `organization_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_contact_assignments_on_person_id_and_organization_id` (`person_id`,`organization_id`),
+  KEY `index_contact_assignments_on_assigned_to_id_and_organization_id` (`assigned_to_id`,`organization_id`),
+  KEY `index_contact_assignments_on_organization_id` (`organization_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `counties` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -198,7 +282,7 @@ CREATE TABLE `countries` (
   `closed` tinyint(1) DEFAULT '0',
   `iso_code` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=248 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `crs2_additional_expenses_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -216,6 +300,10 @@ CREATE TABLE `crs2_additional_expenses_item` (
   UNIQUE KEY `unique_registrant_type_expense` (`registrant_type_id`,`expense_id`),
   KEY `fk_additional_expenses_item_registrant_type_id` (`registrant_type_id`),
   KEY `fk_additional_expenses_item_expense_id` (`expense_id`),
+  KEY `FK385A9FF0BFB88996` (`registrant_type_id`),
+  KEY `FK385A9FF09F87976B` (`expense_id`),
+  CONSTRAINT `FK385A9FF09F87976B` FOREIGN KEY (`expense_id`) REFERENCES `crs2_expense` (`id`),
+  CONSTRAINT `FK385A9FF0BFB88996` FOREIGN KEY (`registrant_type_id`) REFERENCES `crs2_registrant_type` (`id`),
   CONSTRAINT `fk_additional_expenses_item_expense_id` FOREIGN KEY (`expense_id`) REFERENCES `crs2_expense` (`id`),
   CONSTRAINT `fk_additional_expenses_item_registrant_type_id` FOREIGN KEY (`registrant_type_id`) REFERENCES `crs2_registrant_type` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -231,6 +319,8 @@ CREATE TABLE `crs2_additional_info_item` (
   `conference_id` int(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_additional_info_item_conference_id` (`conference_id`),
+  KEY `FKC01086BD863D9D1F` (`conference_id`),
+  CONSTRAINT `FKC01086BD863D9D1F` FOREIGN KEY (`conference_id`) REFERENCES `crs2_conference` (`id`),
   CONSTRAINT `fk_additional_info_item_conference_id` FOREIGN KEY (`conference_id`) REFERENCES `crs2_conference` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -251,6 +341,10 @@ CREATE TABLE `crs2_answer` (
   UNIQUE KEY `unique_registrant_question_usage` (`registrant_id`,`question_usage_id`),
   KEY `fk_answer_registrant_id` (`registrant_id`),
   KEY `fk_answer_question_usage_id` (`question_usage_id`),
+  KEY `FK8F185E4FE86BBEBF` (`registrant_id`),
+  KEY `FK8F185E4F620BBCDE` (`question_usage_id`),
+  CONSTRAINT `FK8F185E4F620BBCDE` FOREIGN KEY (`question_usage_id`) REFERENCES `crs2_custom_questions_item` (`id`),
+  CONSTRAINT `FK8F185E4FE86BBEBF` FOREIGN KEY (`registrant_id`) REFERENCES `crs2_registrant` (`id`),
   CONSTRAINT `fk_answer_question_usage_id` FOREIGN KEY (`question_usage_id`) REFERENCES `crs2_custom_questions_item` (`id`),
   CONSTRAINT `fk_answer_registrant_id` FOREIGN KEY (`registrant_id`) REFERENCES `crs2_registrant` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -302,6 +396,10 @@ CREATE TABLE `crs2_conference` (
   UNIQUE KEY `unique_name` (`name`),
   KEY `fk_conference_url_base_id` (`url_base_id`),
   KEY `fk_conference_creator_id` (`creator_id`),
+  KEY `FK6669B32D7CD5005C` (`url_base_id`),
+  KEY `FK6669B32D4EC33E7E` (`creator_id`),
+  CONSTRAINT `FK6669B32D4EC33E7E` FOREIGN KEY (`creator_id`) REFERENCES `crs2_user` (`id`),
+  CONSTRAINT `FK6669B32D7CD5005C` FOREIGN KEY (`url_base_id`) REFERENCES `crs2_url_base` (`id`),
   CONSTRAINT `fk_conference_creator_id` FOREIGN KEY (`creator_id`) REFERENCES `crs2_user` (`id`),
   CONSTRAINT `fk_conference_url_base_id` FOREIGN KEY (`url_base_id`) REFERENCES `crs2_url_base` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -315,6 +413,8 @@ CREATE TABLE `crs2_configuration` (
   `default_url_base_id` int(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_configuration_default_url_base_id` (`default_url_base_id`),
+  KEY `FK15F201454608DB5E` (`default_url_base_id`),
+  CONSTRAINT `FK15F201454608DB5E` FOREIGN KEY (`default_url_base_id`) REFERENCES `crs2_url_base` (`id`),
   CONSTRAINT `fk_configuration_default_url_base_id` FOREIGN KEY (`default_url_base_id`) REFERENCES `crs2_url_base` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -333,6 +433,10 @@ CREATE TABLE `crs2_custom_questions_item` (
   UNIQUE KEY `unique_registrant_type_question` (`registrant_type_id`,`question_id`),
   KEY `fk_custom_questions_item_registrant_type_id` (`registrant_type_id`),
   KEY `fk_custom_questions_item_question_id` (`question_id`),
+  KEY `FK72AEFAA2BFB88996` (`registrant_type_id`),
+  KEY `FK72AEFAA2FE697289` (`question_id`),
+  CONSTRAINT `FK72AEFAA2BFB88996` FOREIGN KEY (`registrant_type_id`) REFERENCES `crs2_registrant_type` (`id`),
+  CONSTRAINT `FK72AEFAA2FE697289` FOREIGN KEY (`question_id`) REFERENCES `crs2_question` (`id`),
   CONSTRAINT `fk_custom_questions_item_question_id` FOREIGN KEY (`question_id`) REFERENCES `crs2_question` (`id`),
   CONSTRAINT `fk_custom_questions_item_registrant_type_id` FOREIGN KEY (`registrant_type_id`) REFERENCES `crs2_registrant_type` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -346,6 +450,8 @@ CREATE TABLE `crs2_custom_stylesheet` (
   `conference_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_custom_stylesheet_conference_id` (`conference_id`),
+  KEY `FKC81CDCAB863D9D1F` (`conference_id`),
+  CONSTRAINT `FKC81CDCAB863D9D1F` FOREIGN KEY (`conference_id`) REFERENCES `crs2_conference` (`id`),
   CONSTRAINT `fk_custom_stylesheet_conference_id` FOREIGN KEY (`conference_id`) REFERENCES `crs2_conference` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -361,6 +467,8 @@ CREATE TABLE `crs2_expense` (
   `disabled` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_expense_conference_id` (`conference_id`),
+  KEY `FK386A7BE7863D9D1F` (`conference_id`),
+  CONSTRAINT `FK386A7BE7863D9D1F` FOREIGN KEY (`conference_id`) REFERENCES `crs2_conference` (`id`),
   CONSTRAINT `fk_expense_conference_id` FOREIGN KEY (`conference_id`) REFERENCES `crs2_conference` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -376,6 +484,10 @@ CREATE TABLE `crs2_expense_selection` (
   UNIQUE KEY `unique_registrant_expense_usage` (`registrant_id`,`expense_usage_id`),
   KEY `fk_expense_selection_registrant_id` (`registrant_id`),
   KEY `fk_expense_selection_expense_usage_id` (`expense_usage_id`),
+  KEY `FKB9237334E86BBEBF` (`registrant_id`),
+  KEY `FKB9237334168AAE98` (`expense_usage_id`),
+  CONSTRAINT `FKB9237334168AAE98` FOREIGN KEY (`expense_usage_id`) REFERENCES `crs2_additional_expenses_item` (`id`),
+  CONSTRAINT `FKB9237334E86BBEBF` FOREIGN KEY (`registrant_id`) REFERENCES `crs2_registrant` (`id`),
   CONSTRAINT `fk_expense_selection_expense_usage_id` FOREIGN KEY (`expense_usage_id`) REFERENCES `crs2_additional_expenses_item` (`id`),
   CONSTRAINT `fk_expense_selection_registrant_id` FOREIGN KEY (`registrant_id`) REFERENCES `crs2_registrant` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -389,6 +501,8 @@ CREATE TABLE `crs2_module_usage` (
   `conference_id` int(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_module_usage_conference_id` (`conference_id`),
+  KEY `FK28233DF863D9D1F` (`conference_id`),
+  CONSTRAINT `FK28233DF863D9D1F` FOREIGN KEY (`conference_id`) REFERENCES `crs2_conference` (`id`),
   CONSTRAINT `fk_module_usage_conference_id` FOREIGN KEY (`conference_id`) REFERENCES `crs2_conference` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -443,6 +557,12 @@ CREATE TABLE `crs2_profile` (
   KEY `fk_profile_user_id` (`user_id`),
   KEY `fk_profile_ministry_person_id` (`ministry_person_id`),
   KEY `fk_profile_crs_person_id` (`crs_person_id`),
+  KEY `FK74043D38F3C73A7F` (`user_id`),
+  KEY `FK74043D38E20F2579` (`crs_person_id`),
+  KEY `FK74043D38E8E728C3` (`ministry_person_id`),
+  CONSTRAINT `FK74043D38E20F2579` FOREIGN KEY (`crs_person_id`) REFERENCES `crs2_person` (`id`),
+  CONSTRAINT `FK74043D38E8E728C3` FOREIGN KEY (`ministry_person_id`) REFERENCES `ministry_person` (`personID`),
+  CONSTRAINT `FK74043D38F3C73A7F` FOREIGN KEY (`user_id`) REFERENCES `crs2_user` (`id`),
   CONSTRAINT `fk_profile_crs_person_id` FOREIGN KEY (`crs_person_id`) REFERENCES `crs2_person` (`id`),
   CONSTRAINT `fk_profile_ministry_person_id` FOREIGN KEY (`ministry_person_id`) REFERENCES `ministry_person` (`personID`),
   CONSTRAINT `fk_profile_user_id` FOREIGN KEY (`user_id`) REFERENCES `crs2_user` (`id`)
@@ -458,6 +578,8 @@ CREATE TABLE `crs2_profile_question` (
   `registrant_type_id` int(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_profile_question_registrant_type_id` (`registrant_type_id`),
+  KEY `FK80688F0DBFB88996` (`registrant_type_id`),
+  CONSTRAINT `FK80688F0DBFB88996` FOREIGN KEY (`registrant_type_id`) REFERENCES `crs2_registrant_type` (`id`),
   CONSTRAINT `fk_profile_question_registrant_type_id` FOREIGN KEY (`registrant_type_id`) REFERENCES `crs2_registrant_type` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -474,6 +596,8 @@ CREATE TABLE `crs2_question` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_name_conference` (`name`,`conference_id`),
   KEY `fk_question_conference_id` (`conference_id`),
+  KEY `FK2C2FA37863D9D1F` (`conference_id`),
+  CONSTRAINT `FK2C2FA37863D9D1F` FOREIGN KEY (`conference_id`) REFERENCES `crs2_conference` (`id`),
   CONSTRAINT `fk_question_conference_id` FOREIGN KEY (`conference_id`) REFERENCES `crs2_conference` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -490,6 +614,8 @@ CREATE TABLE `crs2_question_option` (
   UNIQUE KEY `unique_option_question_value` (`option_question_id`,`value`),
   UNIQUE KEY `unique_option_question_name` (`option_question_id`,`name`),
   KEY `fk_question_option_option_question_id` (`option_question_id`),
+  KEY `FK5B6AEF7D5D2F9214` (`option_question_id`),
+  CONSTRAINT `FK5B6AEF7D5D2F9214` FOREIGN KEY (`option_question_id`) REFERENCES `crs2_question` (`id`),
   CONSTRAINT `fk_question_option_option_question_id` FOREIGN KEY (`option_question_id`) REFERENCES `crs2_question` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -515,6 +641,7 @@ CREATE TABLE `crs2_registrant` (
   `registration_id` int(20) DEFAULT NULL,
   `early_registration_override` varchar(255) DEFAULT NULL,
   `name_disabled` tinyint(1) DEFAULT NULL,
+  `orphan` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_profile_registrant_type` (`profile_id`,`registrant_type_id`),
   KEY `fk_registrant_registration_before_cancellation_id` (`registration_before_cancellation_id`),
@@ -523,6 +650,19 @@ CREATE TABLE `crs2_registrant` (
   KEY `fk_registrant_profile_id` (`profile_id`),
   KEY `fk_registrant_cancelled_by_id` (`cancelled_by_id`),
   KEY `fk_registrant_registration_id` (`registration_id`),
+  KEY `FKCB9B36BCBFB88996` (`registrant_type_id`),
+  KEY `FKCB9B36BC6F044A05` (`cancelled_by_id`),
+  KEY `FKCB9B36BC2442AF81` (`profile_id`),
+  KEY `FKCB9B36BC8FD067BB` (`registration_before_cancellation_id`),
+  KEY `FKCB9B36BC33BE6712` (`registrant_type_before_cancellation_id`),
+  KEY `FKCB9B36BCA7FD76BF` (`registration_id`),
+  KEY `index_crs2_registrant_on_status` (`status`),
+  CONSTRAINT `FKCB9B36BC2442AF81` FOREIGN KEY (`profile_id`) REFERENCES `crs2_profile` (`id`),
+  CONSTRAINT `FKCB9B36BC33BE6712` FOREIGN KEY (`registrant_type_before_cancellation_id`) REFERENCES `crs2_registrant_type` (`id`),
+  CONSTRAINT `FKCB9B36BC6F044A05` FOREIGN KEY (`cancelled_by_id`) REFERENCES `crs2_user` (`id`),
+  CONSTRAINT `FKCB9B36BC8FD067BB` FOREIGN KEY (`registration_before_cancellation_id`) REFERENCES `crs2_registration` (`id`),
+  CONSTRAINT `FKCB9B36BCA7FD76BF` FOREIGN KEY (`registration_id`) REFERENCES `crs2_registration` (`id`),
+  CONSTRAINT `FKCB9B36BCBFB88996` FOREIGN KEY (`registrant_type_id`) REFERENCES `crs2_registrant_type` (`id`),
   CONSTRAINT `fk_registrant_cancelled_by_id` FOREIGN KEY (`cancelled_by_id`) REFERENCES `crs2_user` (`id`),
   CONSTRAINT `fk_registrant_profile_id` FOREIGN KEY (`profile_id`) REFERENCES `crs2_profile` (`id`),
   CONSTRAINT `fk_registrant_registrant_type_before_cancellation_id` FOREIGN KEY (`registrant_type_before_cancellation_id`) REFERENCES `crs2_registrant_type` (`id`),
@@ -576,8 +716,13 @@ CREATE TABLE `crs2_registrant_type` (
   `require_full_payment` tinyint(1) DEFAULT NULL,
   `shut_off` tinyint(1) DEFAULT NULL,
   `shut_off_message` text,
+  `married_require_full_payment` bit(1) DEFAULT NULL,
+  `single_require_full_payment` bit(1) DEFAULT NULL,
+  `enable_rideshare` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_registrant_type_conference_id` (`conference_id`),
+  KEY `FKA936E6DD863D9D1F` (`conference_id`),
+  CONSTRAINT `FKA936E6DD863D9D1F` FOREIGN KEY (`conference_id`) REFERENCES `crs2_conference` (`id`),
   CONSTRAINT `fk_registrant_type_conference_id` FOREIGN KEY (`conference_id`) REFERENCES `crs2_conference` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -597,6 +742,10 @@ CREATE TABLE `crs2_registration` (
   `cancelled_by_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_registration_creator_id` (`creator_id`),
+  KEY `FK51AB168A6F044A05` (`cancelled_by_id`),
+  KEY `FK51AB168A4EC33E7E` (`creator_id`),
+  CONSTRAINT `FK51AB168A4EC33E7E` FOREIGN KEY (`creator_id`) REFERENCES `crs2_user` (`id`),
+  CONSTRAINT `FK51AB168A6F044A05` FOREIGN KEY (`cancelled_by_id`) REFERENCES `crs2_user` (`id`),
   CONSTRAINT `fk_registration_creator_id` FOREIGN KEY (`creator_id`) REFERENCES `crs2_user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -647,6 +796,26 @@ CREATE TABLE `crs2_transaction` (
   KEY `fk_transaction_authorizer_id` (`authorizer_id`),
   KEY `fk_transaction_conference_id` (`conference_id`),
   KEY `fk_transaction_registration_id` (`registration_id`),
+  KEY `FKA5E426ED744633B8` (`expense_selection_id`),
+  KEY `FKA5E426EDFBB004F2` (`payment_cancellation_id`),
+  KEY `FKA5E426ED4FA3400A` (`scholarship_charge_id`),
+  KEY `FKA5E426ED863D9D1F` (`conference_id`),
+  KEY `FKA5E426ED24360A3C` (`verified_by_id`),
+  KEY `FKA5E426ED6A74B681` (`paid_by_id`),
+  KEY `FKA5E426EDF3C73A7F` (`user_id`),
+  KEY `FKA5E426EDE86BBEBF` (`registrant_id`),
+  KEY `FKA5E426ED6E748998` (`charge_cancellation_id`),
+  KEY `FKA5E426EDA7FD76BF` (`registration_id`),
+  CONSTRAINT `FKA5E426ED24360A3C` FOREIGN KEY (`verified_by_id`) REFERENCES `crs2_user` (`id`),
+  CONSTRAINT `FKA5E426ED4FA3400A` FOREIGN KEY (`scholarship_charge_id`) REFERENCES `crs2_transaction` (`id`),
+  CONSTRAINT `FKA5E426ED6A74B681` FOREIGN KEY (`paid_by_id`) REFERENCES `crs2_transaction` (`id`),
+  CONSTRAINT `FKA5E426ED6E748998` FOREIGN KEY (`charge_cancellation_id`) REFERENCES `crs2_transaction` (`id`),
+  CONSTRAINT `FKA5E426ED744633B8` FOREIGN KEY (`expense_selection_id`) REFERENCES `crs2_expense_selection` (`id`),
+  CONSTRAINT `FKA5E426ED863D9D1F` FOREIGN KEY (`conference_id`) REFERENCES `crs2_conference` (`id`),
+  CONSTRAINT `FKA5E426EDA7FD76BF` FOREIGN KEY (`registration_id`) REFERENCES `crs2_registration` (`id`),
+  CONSTRAINT `FKA5E426EDE86BBEBF` FOREIGN KEY (`registrant_id`) REFERENCES `crs2_registrant` (`id`),
+  CONSTRAINT `FKA5E426EDF3C73A7F` FOREIGN KEY (`user_id`) REFERENCES `crs2_user` (`id`),
+  CONSTRAINT `FKA5E426EDFBB004F2` FOREIGN KEY (`payment_cancellation_id`) REFERENCES `crs2_transaction` (`id`),
   CONSTRAINT `fk_transaction_charge_cancellation_id` FOREIGN KEY (`charge_cancellation_id`) REFERENCES `crs2_transaction` (`id`),
   CONSTRAINT `fk_transaction_conference_id` FOREIGN KEY (`conference_id`) REFERENCES `crs2_conference` (`id`),
   CONSTRAINT `fk_transaction_expense_selection_id` FOREIGN KEY (`expense_selection_id`) REFERENCES `crs2_expense_selection` (`id`),
@@ -689,6 +858,10 @@ CREATE TABLE `crs2_user_role` (
   PRIMARY KEY (`id`),
   KEY `fk_user_rule_user_id` (`user_id`),
   KEY `fk_user_rule_conference_id` (`conference_id`),
+  KEY `FKD4130039863D9D1F` (`conference_id`),
+  KEY `FKD4130039F3C73A7F` (`user_id`),
+  CONSTRAINT `FKD4130039863D9D1F` FOREIGN KEY (`conference_id`) REFERENCES `crs2_conference` (`id`),
+  CONSTRAINT `FKD4130039F3C73A7F` FOREIGN KEY (`user_id`) REFERENCES `crs2_user` (`id`),
   CONSTRAINT `fk_user_rule_conference_id` FOREIGN KEY (`conference_id`) REFERENCES `crs2_conference` (`id`),
   CONSTRAINT `fk_user_rule_user_id` FOREIGN KEY (`user_id`) REFERENCES `crs2_user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -950,7 +1123,7 @@ CREATE TABLE `email_addresses` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_email_addresses_on_person_id_and_email` (`person_id`,`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1079 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `engine_schema_info` (
   `engine_name` varchar(255) DEFAULT NULL,
@@ -966,9 +1139,10 @@ CREATE TABLE `followup_comments` (
   `organization_id` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `comment_organization_id_contact_id` (`organization_id`,`contact_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `fsk_allocations` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -1180,7 +1354,7 @@ CREATE TABLE `hr_review360_review360` (
   `reviewedByEmail` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`Review360ID`),
   KEY `index1` (`fk_ReviewSessionID`)
-) ENGINE=MyISAM AUTO_INCREMENT=11826 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='InnoDB free: 9216 kB';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='InnoDB free: 9216 kB';
 
 CREATE TABLE `hr_review360_review360light` (
   `Review360LightID` int(10) NOT NULL AUTO_INCREMENT,
@@ -1232,6 +1406,692 @@ CREATE TABLE `hr_review360_reviewsessionlight` (
   `requestedByID` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`ReviewSessionLightID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `hr_si_application_2003_deprecated` (
+  `applicationID` int(10) NOT NULL AUTO_INCREMENT,
+  `locationA` int(11) DEFAULT NULL,
+  `locationAExplanation` varchar(90) DEFAULT NULL,
+  `locationB` int(11) DEFAULT NULL,
+  `locationBExplanation` varchar(90) DEFAULT NULL,
+  `locationC` int(11) DEFAULT NULL,
+  `locationCExplanation` varchar(90) DEFAULT NULL,
+  `availableMonth` varchar(2) DEFAULT NULL,
+  `availableYear` varchar(4) DEFAULT NULL,
+  `hasMinistryConflict` int(10) DEFAULT NULL,
+  `ministryConflictExplanation` mediumtext,
+  `hasSpecificLocation` int(10) DEFAULT NULL,
+  `specificLocationRecruiterName` varchar(50) DEFAULT NULL,
+  `teamMembers` mediumtext,
+  `isDating` int(10) DEFAULT NULL,
+  `datingLocation` mediumtext,
+  `hasCampusPartnership` int(10) DEFAULT NULL,
+  `isDatingStint` int(10) DEFAULT NULL,
+  `datingStintName` mediumtext,
+  `language1` varchar(50) DEFAULT NULL,
+  `language1YearsStudied` varchar(20) DEFAULT NULL,
+  `language1Fluency` int(10) DEFAULT NULL,
+  `language2` varchar(50) DEFAULT NULL,
+  `language2YearsStudied` varchar(20) DEFAULT NULL,
+  `language2Fluency` int(10) DEFAULT NULL,
+  `previousMinistryExperience` mediumtext,
+  `ministryTraining` mediumtext,
+  `evangelismAttitude` mediumtext,
+  `isEvangelismTrainable` int(10) DEFAULT NULL,
+  `participationExplanation` mediumtext,
+  `isFamiliarFourSpiritualLaws` int(10) DEFAULT NULL,
+  `hasExperienceFourSpiritualLaws` int(10) DEFAULT NULL,
+  `confidenceFourSpiritualLaws` int(10) DEFAULT NULL,
+  `isFamiliarLifeAtLarge` int(10) DEFAULT NULL,
+  `hasExperienceLifeAtLarge` int(10) DEFAULT NULL,
+  `confidenceLifeAtLarge` int(10) DEFAULT NULL,
+  `isFamiliarPersonalTestimony` int(10) DEFAULT NULL,
+  `hasExperiencePersonalTestimony` int(10) DEFAULT NULL,
+  `confidencePersonalTestimony` int(10) DEFAULT NULL,
+  `isFamiliarExplainingGospel` int(10) DEFAULT NULL,
+  `hasExperienceExplainingGospel` int(10) DEFAULT NULL,
+  `confidenceExplainingGospel` int(10) DEFAULT NULL,
+  `isFamiliarSharingFaith` int(10) DEFAULT NULL,
+  `hasExperienceSharingFaith` int(10) DEFAULT NULL,
+  `confidenceSharingFaith` int(10) DEFAULT NULL,
+  `isFamiliarHolySpiritBooklet` int(10) DEFAULT NULL,
+  `hasExperienceHolySpiritBooklet` int(10) DEFAULT NULL,
+  `confidenceHolySpiritBooklet` int(10) DEFAULT NULL,
+  `isFamiliarFollowUp` int(10) DEFAULT NULL,
+  `hasExperienceFollowUp` int(10) DEFAULT NULL,
+  `confidenceFollowUp` int(10) DEFAULT NULL,
+  `isFamiliarHelpGrowInFaith` int(10) DEFAULT NULL,
+  `hasExperienceHelpGrowInFaith` int(10) DEFAULT NULL,
+  `confidenceHelpGrowInFaith` int(10) DEFAULT NULL,
+  `isFamiliarTrainShareFaith` int(10) DEFAULT NULL,
+  `hasExperienceTrainShareFaith` int(10) DEFAULT NULL,
+  `confidenceTrainShareFaith` int(10) DEFAULT NULL,
+  `isFamiliarOtherReligions` int(10) DEFAULT NULL,
+  `hasExperienceOtherReligions` int(10) DEFAULT NULL,
+  `confidenceOtherReligions` int(10) DEFAULT NULL,
+  `leadershipPositions` mediumtext,
+  `hasLedDiscipleshipGroup` int(10) DEFAULT NULL,
+  `discipleshipGroupSize` varchar(50) DEFAULT NULL,
+  `leadershipEvaluation` mediumtext,
+  `conversionMonth` int(10) DEFAULT NULL,
+  `conversionYear` int(10) DEFAULT NULL,
+  `memberChurchDenomination` varchar(50) DEFAULT NULL,
+  `memberChurchDuration` varchar(50) DEFAULT NULL,
+  `attendingChurchDenomination` varchar(50) DEFAULT NULL,
+  `attendingChurchDuration` varchar(50) DEFAULT NULL,
+  `attendingChurchInvolvement` mediumtext,
+  `quietTimeQuantity` mediumtext,
+  `quietTimeDescription` mediumtext,
+  `explanationOfSalvation` mediumtext,
+  `explanationOfSpiritFilled` mediumtext,
+  `hasInvolvementSpeakingTongues` int(10) DEFAULT NULL,
+  `differenceIndwellingFilled` mediumtext,
+  `hasCrimeConviction` int(10) DEFAULT NULL,
+  `crimeConvictionExplanation` mediumtext,
+  `hasDrugUse` int(10) DEFAULT NULL,
+  `isTobaccoUser` int(10) DEFAULT NULL,
+  `isWillingChangeHabits` int(10) DEFAULT NULL,
+  `authorityResponseExplanation` mediumtext,
+  `alcoholUseFrequency` mediumtext,
+  `alcoholUseDecision` mediumtext,
+  `isWillingRefrainAlcohol` int(10) DEFAULT NULL,
+  `unwillingRefrainAlcoholExplanation` mediumtext,
+  `drugUseExplanation` mediumtext,
+  `tobaccoUseExplanation` mediumtext,
+  `isWillingAbstainTobacco` int(10) DEFAULT NULL,
+  `hasRequestedPhoneCall` int(10) DEFAULT NULL,
+  `contactPhoneNumber` varchar(50) DEFAULT NULL,
+  `contactBestTime` varchar(50) DEFAULT NULL,
+  `contactTimeZone` varchar(50) DEFAULT NULL,
+  `sexualInvolvementExplanation` mediumtext,
+  `hasSexualGuidelines` int(10) DEFAULT NULL,
+  `sexualGuidelineExplanation` mediumtext,
+  `isCurrentlyDating` int(10) DEFAULT NULL,
+  `currentlyDatingLocation` mediumtext,
+  `hasHomosexualInvolvement` int(10) DEFAULT NULL,
+  `homosexualInvolvementExplanation` mediumtext,
+  `hasRecentPornographicInvolvement` int(10) DEFAULT NULL,
+  `pornographicInvolvementMonth` int(10) DEFAULT NULL,
+  `pornographicInvolvementYear` int(10) DEFAULT NULL,
+  `pornographicInvolvementExplanation` mediumtext,
+  `hasRecentSexualImmorality` int(10) DEFAULT NULL,
+  `sexualImmoralityMonth` int(10) DEFAULT NULL,
+  `sexualImmoralityYear` int(10) DEFAULT NULL,
+  `sexualImmoralityExplanation` mediumtext,
+  `hasOtherDateSinceImmorality` int(10) DEFAULT NULL,
+  `singleImmoralityResultsExplanation` mediumtext,
+  `marriedImmoralityResultsExplanation` mediumtext,
+  `immoralityLifeChangeExplanation` mediumtext,
+  `immoralityCurrentStrugglesExplanation` mediumtext,
+  `additionalMoralComments` mediumtext,
+  `isAwareMustRaiseSupport` int(10) DEFAULT NULL,
+  `isInDebt` int(10) DEFAULT NULL,
+  `debtNature1` varchar(50) DEFAULT NULL,
+  `debtTotal1` varchar(50) DEFAULT NULL,
+  `debtMonthlyPayment1` varchar(50) DEFAULT NULL,
+  `debtNature2` varchar(50) DEFAULT NULL,
+  `debtTotal2` varchar(50) DEFAULT NULL,
+  `debtMonthlyPayment2` varchar(50) DEFAULT NULL,
+  `debtNature3` varchar(50) DEFAULT NULL,
+  `debtTotal3` varchar(50) DEFAULT NULL,
+  `debtMonthlyPayment3` varchar(50) DEFAULT NULL,
+  `hasOtherFinancialResponsibility` int(10) DEFAULT NULL,
+  `otherFinancialResponsibilityExplanation` mediumtext,
+  `debtPaymentPlan` mediumtext,
+  `debtPaymentTimeframe` mediumtext,
+  `developingPartnersExplanation` mediumtext,
+  `isWillingDevelopPartners` int(10) DEFAULT NULL,
+  `unwillingDevelopPartnersExplanation` mediumtext,
+  `isCommittedDevelopPartners` int(10) DEFAULT NULL,
+  `uncommittedDevelopPartnersExplanation` mediumtext,
+  `personalTestimonyGrowth` mediumtext,
+  `internshipParticipationExplanation` mediumtext,
+  `internshipObjectives` mediumtext,
+  `currentMinistryDescription` mediumtext,
+  `personalStrengthA` mediumtext,
+  `personalStrengthB` mediumtext,
+  `personalStrengthC` mediumtext,
+  `personalDevelopmentA` mediumtext,
+  `personalDevelopmentB` mediumtext,
+  `personalDevelopmentC` mediumtext,
+  `personalDescriptionA` mediumtext,
+  `personalDescriptionB` mediumtext,
+  `personalDescriptionC` mediumtext,
+  `familyRelationshipDescription` mediumtext,
+  `electronicSignature` varchar(90) DEFAULT NULL,
+  `ssn` varchar(50) DEFAULT NULL,
+  `fk_ssmUserID` int(10) DEFAULT NULL,
+  `fk_PersonID` int(10) NOT NULL,
+  `isPaid` tinyint(1) DEFAULT NULL,
+  `appFee` decimal(18,0) DEFAULT NULL,
+  `dateAppLastChanged` datetime DEFAULT NULL,
+  `dateAppStarted` datetime DEFAULT NULL,
+  `dateSubmitted` datetime DEFAULT NULL,
+  `isSubmitted` tinyint(1) DEFAULT NULL,
+  `appStatus` varchar(15) DEFAULT NULL,
+  `assignedToProject` int(11) DEFAULT NULL,
+  `finalProject` int(11) DEFAULT NULL,
+  `siYear` varchar(50) DEFAULT NULL,
+  `submitDate` datetime DEFAULT NULL,
+  `status` varchar(22) DEFAULT NULL,
+  `appType` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`applicationID`,`fk_PersonID`),
+  KEY `fk_ssmUserID` (`fk_ssmUserID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='InnoDB free: 532480 kB';
+
+CREATE TABLE `hr_si_application_2004_deprecated` (
+  `applicationID` int(10) NOT NULL AUTO_INCREMENT,
+  `locationA` int(11) DEFAULT NULL,
+  `locationAExplanation` varchar(90) DEFAULT NULL,
+  `locationB` int(11) DEFAULT NULL,
+  `locationBExplanation` varchar(90) DEFAULT NULL,
+  `locationC` int(11) DEFAULT NULL,
+  `locationCExplanation` varchar(90) DEFAULT NULL,
+  `availableMonth` varchar(2) DEFAULT NULL,
+  `availableYear` varchar(4) DEFAULT NULL,
+  `hasMinistryConflict` int(10) DEFAULT NULL,
+  `ministryConflictExplanation` mediumtext,
+  `hasSpecificLocation` int(10) DEFAULT NULL,
+  `specificLocationRecruiterName` varchar(50) DEFAULT NULL,
+  `teamMembers` mediumtext,
+  `isDating` int(10) DEFAULT NULL,
+  `datingLocation` mediumtext,
+  `hasCampusPartnership` int(10) DEFAULT NULL,
+  `isDatingStint` int(10) DEFAULT NULL,
+  `datingStintName` mediumtext,
+  `language1` varchar(50) DEFAULT NULL,
+  `language1YearsStudied` varchar(20) DEFAULT NULL,
+  `language1Fluency` int(10) DEFAULT NULL,
+  `language2` varchar(50) DEFAULT NULL,
+  `language2YearsStudied` varchar(20) DEFAULT NULL,
+  `language2Fluency` int(10) DEFAULT NULL,
+  `previousMinistryExperience` mediumtext,
+  `ministryTraining` mediumtext,
+  `evangelismAttitude` mediumtext,
+  `isEvangelismTrainable` int(10) DEFAULT NULL,
+  `participationExplanation` mediumtext,
+  `isFamiliarFourSpiritualLaws` int(10) DEFAULT NULL,
+  `hasExperienceFourSpiritualLaws` int(10) DEFAULT NULL,
+  `confidenceFourSpiritualLaws` int(10) DEFAULT NULL,
+  `isFamiliarLifeAtLarge` int(10) DEFAULT NULL,
+  `hasExperienceLifeAtLarge` int(10) DEFAULT NULL,
+  `confidenceLifeAtLarge` int(10) DEFAULT NULL,
+  `isFamiliarPersonalTestimony` int(10) DEFAULT NULL,
+  `hasExperiencePersonalTestimony` int(10) DEFAULT NULL,
+  `confidencePersonalTestimony` int(10) DEFAULT NULL,
+  `isFamiliarExplainingGospel` int(10) DEFAULT NULL,
+  `hasExperienceExplainingGospel` int(10) DEFAULT NULL,
+  `confidenceExplainingGospel` int(10) DEFAULT NULL,
+  `isFamiliarSharingFaith` int(10) DEFAULT NULL,
+  `hasExperienceSharingFaith` int(10) DEFAULT NULL,
+  `confidenceSharingFaith` int(10) DEFAULT NULL,
+  `isFamiliarHolySpiritBooklet` int(10) DEFAULT NULL,
+  `hasExperienceHolySpiritBooklet` int(10) DEFAULT NULL,
+  `confidenceHolySpiritBooklet` int(10) DEFAULT NULL,
+  `isFamiliarFollowUp` int(10) DEFAULT NULL,
+  `hasExperienceFollowUp` int(10) DEFAULT NULL,
+  `confidenceFollowUp` int(10) DEFAULT NULL,
+  `isFamiliarHelpGrowInFaith` int(10) DEFAULT NULL,
+  `hasExperienceHelpGrowInFaith` int(10) DEFAULT NULL,
+  `confidenceHelpGrowInFaith` int(10) DEFAULT NULL,
+  `isFamiliarTrainShareFaith` int(10) DEFAULT NULL,
+  `hasExperienceTrainShareFaith` int(10) DEFAULT NULL,
+  `confidenceTrainShareFaith` int(10) DEFAULT NULL,
+  `isFamiliarOtherReligions` int(10) DEFAULT NULL,
+  `hasExperienceOtherReligions` int(10) DEFAULT NULL,
+  `confidenceOtherReligions` int(10) DEFAULT NULL,
+  `leadershipPositions` mediumtext,
+  `hasLedDiscipleshipGroup` int(10) DEFAULT NULL,
+  `discipleshipGroupSize` varchar(50) DEFAULT NULL,
+  `leadershipEvaluation` mediumtext,
+  `conversionMonth` int(10) DEFAULT NULL,
+  `conversionYear` int(10) DEFAULT NULL,
+  `memberChurchDenomination` varchar(50) DEFAULT NULL,
+  `memberChurchDuration` varchar(50) DEFAULT NULL,
+  `attendingChurchDenomination` varchar(50) DEFAULT NULL,
+  `attendingChurchDuration` varchar(50) DEFAULT NULL,
+  `attendingChurchInvolvement` mediumtext,
+  `quietTimeQuantity` mediumtext,
+  `quietTimeDescription` mediumtext,
+  `explanationOfSalvation` mediumtext,
+  `explanationOfSpiritFilled` mediumtext,
+  `hasInvolvementSpeakingTongues` int(10) DEFAULT NULL,
+  `differenceIndwellingFilled` mediumtext,
+  `hasCrimeConviction` int(10) DEFAULT NULL,
+  `crimeConvictionExplanation` mediumtext,
+  `hasDrugUse` int(10) DEFAULT NULL,
+  `isTobaccoUser` int(10) DEFAULT NULL,
+  `isWillingChangeHabits` int(10) DEFAULT NULL,
+  `authorityResponseExplanation` mediumtext,
+  `alcoholUseFrequency` mediumtext,
+  `alcoholUseDecision` mediumtext,
+  `isWillingRefrainAlcohol` int(10) DEFAULT NULL,
+  `unwillingRefrainAlcoholExplanation` mediumtext,
+  `drugUseExplanation` mediumtext,
+  `tobaccoUseExplanation` mediumtext,
+  `isWillingAbstainTobacco` int(10) DEFAULT NULL,
+  `hasRequestedPhoneCall` int(10) DEFAULT NULL,
+  `contactPhoneNumber` varchar(50) DEFAULT NULL,
+  `contactBestTime` varchar(50) DEFAULT NULL,
+  `contactTimeZone` varchar(50) DEFAULT NULL,
+  `sexualInvolvementExplanation` mediumtext,
+  `hasSexualGuidelines` int(10) DEFAULT NULL,
+  `sexualGuidelineExplanation` mediumtext,
+  `isCurrentlyDating` int(10) DEFAULT NULL,
+  `currentlyDatingLocation` mediumtext,
+  `hasHomosexualInvolvement` int(10) DEFAULT NULL,
+  `homosexualInvolvementExplanation` mediumtext,
+  `hasRecentPornographicInvolvement` int(10) DEFAULT NULL,
+  `pornographicInvolvementMonth` int(10) DEFAULT NULL,
+  `pornographicInvolvementYear` int(10) DEFAULT NULL,
+  `pornographicInvolvementExplanation` mediumtext,
+  `hasRecentSexualImmorality` int(10) DEFAULT NULL,
+  `sexualImmoralityMonth` int(10) DEFAULT NULL,
+  `sexualImmoralityYear` int(10) DEFAULT NULL,
+  `sexualImmoralityExplanation` mediumtext,
+  `hasOtherDateSinceImmorality` int(10) DEFAULT NULL,
+  `singleImmoralityResultsExplanation` mediumtext,
+  `marriedImmoralityResultsExplanation` mediumtext,
+  `immoralityLifeChangeExplanation` mediumtext,
+  `immoralityCurrentStrugglesExplanation` mediumtext,
+  `additionalMoralComments` mediumtext,
+  `isAwareMustRaiseSupport` int(10) DEFAULT NULL,
+  `isInDebt` int(10) DEFAULT NULL,
+  `debtNature1` varchar(50) DEFAULT NULL,
+  `debtTotal1` varchar(50) DEFAULT NULL,
+  `debtMonthlyPayment1` varchar(50) DEFAULT NULL,
+  `debtNature2` varchar(50) DEFAULT NULL,
+  `debtTotal2` varchar(50) DEFAULT NULL,
+  `debtMonthlyPayment2` varchar(50) DEFAULT NULL,
+  `debtNature3` varchar(50) DEFAULT NULL,
+  `debtTotal3` varchar(50) DEFAULT NULL,
+  `debtMonthlyPayment3` varchar(50) DEFAULT NULL,
+  `hasOtherFinancialResponsibility` int(10) DEFAULT NULL,
+  `otherFinancialResponsibilityExplanation` mediumtext,
+  `debtPaymentPlan` mediumtext,
+  `debtPaymentTimeframe` mediumtext,
+  `developingPartnersExplanation` mediumtext,
+  `isWillingDevelopPartners` int(10) DEFAULT NULL,
+  `unwillingDevelopPartnersExplanation` mediumtext,
+  `isCommittedDevelopPartners` int(10) DEFAULT NULL,
+  `uncommittedDevelopPartnersExplanation` mediumtext,
+  `personalTestimonyGrowth` mediumtext,
+  `internshipParticipationExplanation` mediumtext,
+  `internshipObjectives` mediumtext,
+  `currentMinistryDescription` mediumtext,
+  `personalStrengthA` mediumtext,
+  `personalStrengthB` mediumtext,
+  `personalStrengthC` mediumtext,
+  `personalDevelopmentA` mediumtext,
+  `personalDevelopmentB` mediumtext,
+  `personalDevelopmentC` mediumtext,
+  `personalDescriptionA` mediumtext,
+  `personalDescriptionB` mediumtext,
+  `personalDescriptionC` mediumtext,
+  `familyRelationshipDescription` mediumtext,
+  `electronicSignature` varchar(90) DEFAULT NULL,
+  `ssn` varchar(50) DEFAULT NULL,
+  `fk_ssmUserID` int(10) DEFAULT NULL,
+  `fk_PersonID` int(11) DEFAULT NULL,
+  `isPaid` tinyint(1) DEFAULT NULL,
+  `appFee` decimal(18,0) DEFAULT NULL,
+  `dateAppLastChanged` datetime DEFAULT NULL,
+  `dateAppStarted` datetime DEFAULT NULL,
+  `dateSubmitted` datetime DEFAULT NULL,
+  `isSubmitted` tinyint(1) DEFAULT NULL,
+  `appStatus` varchar(15) DEFAULT NULL,
+  `assignedToProject` int(11) DEFAULT NULL,
+  `finalProject` int(11) DEFAULT NULL,
+  `siYear` varchar(50) DEFAULT NULL,
+  `submitDate` datetime DEFAULT NULL,
+  `status` varchar(22) DEFAULT NULL,
+  `appType` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`applicationID`),
+  KEY `fk_SIPersonID` (`fk_PersonID`),
+  KEY `fk_ssmUserID` (`fk_ssmUserID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='InnoDB free: 532480 kB';
+
+CREATE TABLE `hr_si_application_2005_deprecated` (
+  `applicationID` int(10) NOT NULL AUTO_INCREMENT,
+  `locationA` int(11) DEFAULT NULL,
+  `locationAExplanation` varchar(90) DEFAULT NULL,
+  `locationB` int(11) DEFAULT NULL,
+  `locationBExplanation` varchar(90) DEFAULT NULL,
+  `locationC` int(11) DEFAULT NULL,
+  `locationCExplanation` varchar(90) DEFAULT NULL,
+  `availableMonth` varchar(2) DEFAULT NULL,
+  `availableYear` varchar(4) DEFAULT NULL,
+  `hasMinistryConflict` int(10) DEFAULT NULL,
+  `ministryConflictExplanation` mediumtext,
+  `hasSpecificLocation` int(10) DEFAULT NULL,
+  `specificLocationRecruiterName` varchar(50) DEFAULT NULL,
+  `teamMembers` mediumtext,
+  `isDating` int(10) DEFAULT NULL,
+  `datingLocation` mediumtext,
+  `hasCampusPartnership` int(10) DEFAULT NULL,
+  `isDatingStint` int(10) DEFAULT NULL,
+  `datingStintName` mediumtext,
+  `language1` varchar(50) DEFAULT NULL,
+  `language1YearsStudied` varchar(20) DEFAULT NULL,
+  `language1Fluency` int(10) DEFAULT NULL,
+  `language2` varchar(50) DEFAULT NULL,
+  `language2YearsStudied` varchar(20) DEFAULT NULL,
+  `language2Fluency` int(10) DEFAULT NULL,
+  `previousMinistryExperience` mediumtext,
+  `ministryTraining` mediumtext,
+  `evangelismAttitude` mediumtext,
+  `isEvangelismTrainable` int(10) DEFAULT NULL,
+  `participationExplanation` mediumtext,
+  `isFamiliarFourSpiritualLaws` int(10) DEFAULT NULL,
+  `hasExperienceFourSpiritualLaws` int(10) DEFAULT NULL,
+  `confidenceFourSpiritualLaws` int(10) DEFAULT NULL,
+  `isFamiliarLifeAtLarge` int(10) DEFAULT NULL,
+  `hasExperienceLifeAtLarge` int(10) DEFAULT NULL,
+  `confidenceLifeAtLarge` int(10) DEFAULT NULL,
+  `isFamiliarPersonalTestimony` int(10) DEFAULT NULL,
+  `hasExperiencePersonalTestimony` int(10) DEFAULT NULL,
+  `confidencePersonalTestimony` int(10) DEFAULT NULL,
+  `isFamiliarExplainingGospel` int(10) DEFAULT NULL,
+  `hasExperienceExplainingGospel` int(10) DEFAULT NULL,
+  `confidenceExplainingGospel` int(10) DEFAULT NULL,
+  `isFamiliarSharingFaith` int(10) DEFAULT NULL,
+  `hasExperienceSharingFaith` int(10) DEFAULT NULL,
+  `confidenceSharingFaith` int(10) DEFAULT NULL,
+  `isFamiliarHolySpiritBooklet` int(10) DEFAULT NULL,
+  `hasExperienceHolySpiritBooklet` int(10) DEFAULT NULL,
+  `confidenceHolySpiritBooklet` int(10) DEFAULT NULL,
+  `isFamiliarFollowUp` int(10) DEFAULT NULL,
+  `hasExperienceFollowUp` int(10) DEFAULT NULL,
+  `confidenceFollowUp` int(10) DEFAULT NULL,
+  `isFamiliarHelpGrowInFaith` int(10) DEFAULT NULL,
+  `hasExperienceHelpGrowInFaith` int(10) DEFAULT NULL,
+  `confidenceHelpGrowInFaith` int(10) DEFAULT NULL,
+  `isFamiliarTrainShareFaith` int(10) DEFAULT NULL,
+  `hasExperienceTrainShareFaith` int(10) DEFAULT NULL,
+  `confidenceTrainShareFaith` int(10) DEFAULT NULL,
+  `isFamiliarOtherReligions` int(10) DEFAULT NULL,
+  `hasExperienceOtherReligions` int(10) DEFAULT NULL,
+  `confidenceOtherReligions` int(10) DEFAULT NULL,
+  `leadershipPositions` mediumtext,
+  `hasLedDiscipleshipGroup` int(10) DEFAULT NULL,
+  `discipleshipGroupSize` varchar(50) DEFAULT NULL,
+  `leadershipEvaluation` mediumtext,
+  `conversionMonth` int(10) DEFAULT NULL,
+  `conversionYear` int(10) DEFAULT NULL,
+  `memberChurchDenomination` varchar(75) DEFAULT NULL,
+  `memberChurchDuration` varchar(50) DEFAULT NULL,
+  `attendingChurchDenomination` varchar(50) DEFAULT NULL,
+  `attendingChurchDuration` varchar(50) DEFAULT NULL,
+  `attendingChurchInvolvement` mediumtext,
+  `quietTimeQuantity` mediumtext,
+  `quietTimeDescription` mediumtext,
+  `explanationOfSalvation` mediumtext,
+  `explanationOfSpiritFilled` mediumtext,
+  `hasInvolvementSpeakingTongues` int(10) DEFAULT NULL,
+  `differenceIndwellingFilled` mediumtext,
+  `hasCrimeConviction` int(10) DEFAULT NULL,
+  `crimeConvictionExplanation` mediumtext,
+  `hasDrugUse` int(10) DEFAULT NULL,
+  `isTobaccoUser` int(10) DEFAULT NULL,
+  `isWillingChangeHabits` int(10) DEFAULT NULL,
+  `authorityResponseExplanation` mediumtext,
+  `alcoholUseFrequency` mediumtext,
+  `alcoholUseDecision` mediumtext,
+  `isWillingRefrainAlcohol` int(10) DEFAULT NULL,
+  `unwillingRefrainAlcoholExplanation` mediumtext,
+  `drugUseExplanation` mediumtext,
+  `tobaccoUseExplanation` mediumtext,
+  `isWillingAbstainTobacco` int(10) DEFAULT NULL,
+  `hasRequestedPhoneCall` int(10) DEFAULT NULL,
+  `contactPhoneNumber` varchar(50) DEFAULT NULL,
+  `contactBestTime` varchar(50) DEFAULT NULL,
+  `contactTimeZone` varchar(50) DEFAULT NULL,
+  `sexualInvolvementExplanation` mediumtext,
+  `hasSexualGuidelines` int(10) DEFAULT NULL,
+  `sexualGuidelineExplanation` mediumtext,
+  `isCurrentlyDating` int(10) DEFAULT NULL,
+  `currentlyDatingLocation` mediumtext,
+  `hasHomosexualInvolvement` int(10) DEFAULT NULL,
+  `homosexualInvolvementExplanation` mediumtext,
+  `hasRecentPornographicInvolvement` int(10) DEFAULT NULL,
+  `pornographicInvolvementMonth` int(10) DEFAULT NULL,
+  `pornographicInvolvementYear` int(10) DEFAULT NULL,
+  `pornographicInvolvementExplanation` mediumtext,
+  `hasRecentSexualImmorality` int(10) DEFAULT NULL,
+  `sexualImmoralityMonth` int(10) DEFAULT NULL,
+  `sexualImmoralityYear` int(10) DEFAULT NULL,
+  `sexualImmoralityExplanation` mediumtext,
+  `hasOtherDateSinceImmorality` int(10) DEFAULT NULL,
+  `singleImmoralityResultsExplanation` mediumtext,
+  `marriedImmoralityResultsExplanation` mediumtext,
+  `immoralityLifeChangeExplanation` mediumtext,
+  `immoralityCurrentStrugglesExplanation` mediumtext,
+  `additionalMoralComments` mediumtext,
+  `isAwareMustRaiseSupport` int(10) DEFAULT NULL,
+  `isInDebt` int(10) DEFAULT NULL,
+  `debtNature1` varchar(50) DEFAULT NULL,
+  `debtTotal1` varchar(50) DEFAULT NULL,
+  `debtMonthlyPayment1` varchar(50) DEFAULT NULL,
+  `debtNature2` varchar(50) DEFAULT NULL,
+  `debtTotal2` varchar(50) DEFAULT NULL,
+  `debtMonthlyPayment2` varchar(50) DEFAULT NULL,
+  `debtNature3` varchar(50) DEFAULT NULL,
+  `debtTotal3` varchar(50) DEFAULT NULL,
+  `debtMonthlyPayment3` varchar(50) DEFAULT NULL,
+  `hasOtherFinancialResponsibility` int(10) DEFAULT NULL,
+  `otherFinancialResponsibilityExplanation` mediumtext,
+  `debtPaymentPlan` mediumtext,
+  `debtPaymentTimeframe` mediumtext,
+  `developingPartnersExplanation` mediumtext,
+  `isWillingDevelopPartners` int(10) DEFAULT NULL,
+  `unwillingDevelopPartnersExplanation` mediumtext,
+  `isCommittedDevelopPartners` int(10) DEFAULT NULL,
+  `uncommittedDevelopPartnersExplanation` mediumtext,
+  `personalTestimonyGrowth` mediumtext,
+  `internshipParticipationExplanation` mediumtext,
+  `internshipObjectives` mediumtext,
+  `currentMinistryDescription` mediumtext,
+  `personalStrengthA` mediumtext,
+  `personalStrengthB` mediumtext,
+  `personalStrengthC` mediumtext,
+  `personalDevelopmentA` mediumtext,
+  `personalDevelopmentB` mediumtext,
+  `personalDevelopmentC` mediumtext,
+  `personalDescriptionA` mediumtext,
+  `personalDescriptionB` mediumtext,
+  `personalDescriptionC` mediumtext,
+  `familyRelationshipDescription` mediumtext,
+  `electronicSignature` varchar(90) DEFAULT NULL,
+  `ssn` varchar(50) DEFAULT NULL,
+  `fk_ssmUserID` int(10) DEFAULT NULL,
+  `fk_PersonID` int(10) DEFAULT NULL,
+  `isPaid` tinyint(1) DEFAULT NULL,
+  `appFee` decimal(18,0) DEFAULT NULL,
+  `dateAppLastChanged` datetime DEFAULT NULL,
+  `dateAppStarted` datetime DEFAULT NULL,
+  `dateSubmitted` datetime DEFAULT NULL,
+  `isSubmitted` tinyint(1) DEFAULT NULL,
+  `appStatus` varchar(15) DEFAULT NULL,
+  `assignedToProject` int(10) DEFAULT NULL,
+  `finalProject` int(11) DEFAULT NULL,
+  `siYear` varchar(50) DEFAULT NULL,
+  `submitDate` datetime DEFAULT NULL,
+  `status` varchar(22) DEFAULT NULL,
+  `appType` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`applicationID`),
+  KEY `fk_SIPersonID` (`fk_PersonID`),
+  KEY `fk_ssmUserID` (`fk_ssmUserID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='InnoDB free: 532480 kB';
+
+CREATE TABLE `hr_si_application_2006_deprecated` (
+  `applicationID` int(10) NOT NULL AUTO_INCREMENT,
+  `locationA` int(11) DEFAULT NULL,
+  `locationAExplanation` varchar(90) DEFAULT NULL,
+  `locationB` int(11) DEFAULT NULL,
+  `locationBExplanation` varchar(90) DEFAULT NULL,
+  `locationC` int(11) DEFAULT NULL,
+  `locationCExplanation` varchar(90) DEFAULT NULL,
+  `availableMonth` varchar(2) DEFAULT NULL,
+  `availableYear` varchar(4) DEFAULT NULL,
+  `hasMinistryConflict` int(10) DEFAULT NULL,
+  `ministryConflictExplanation` mediumtext,
+  `hasSpecificLocation` int(10) DEFAULT NULL,
+  `specificLocationRecruiterName` varchar(50) DEFAULT NULL,
+  `teamMembers` mediumtext,
+  `isDating` int(10) DEFAULT NULL,
+  `datingLocation` mediumtext,
+  `hasCampusPartnership` int(10) DEFAULT NULL,
+  `isDatingStint` int(10) DEFAULT NULL,
+  `datingStintName` mediumtext,
+  `language1` varchar(50) DEFAULT NULL,
+  `language1YearsStudied` varchar(20) DEFAULT NULL,
+  `language1Fluency` int(10) DEFAULT NULL,
+  `language2` varchar(50) DEFAULT NULL,
+  `language2YearsStudied` varchar(20) DEFAULT NULL,
+  `language2Fluency` int(10) DEFAULT NULL,
+  `previousMinistryExperience` mediumtext,
+  `ministryTraining` mediumtext,
+  `evangelismAttitude` mediumtext,
+  `isEvangelismTrainable` int(10) DEFAULT NULL,
+  `participationExplanation` mediumtext,
+  `isFamiliarFourSpiritualLaws` int(10) DEFAULT NULL,
+  `hasExperienceFourSpiritualLaws` int(10) DEFAULT NULL,
+  `confidenceFourSpiritualLaws` int(10) DEFAULT NULL,
+  `isFamiliarLifeAtLarge` int(10) DEFAULT NULL,
+  `hasExperienceLifeAtLarge` int(10) DEFAULT NULL,
+  `confidenceLifeAtLarge` int(10) DEFAULT NULL,
+  `isFamiliarPersonalTestimony` int(10) DEFAULT NULL,
+  `hasExperiencePersonalTestimony` int(10) DEFAULT NULL,
+  `confidencePersonalTestimony` int(10) DEFAULT NULL,
+  `isFamiliarExplainingGospel` int(10) DEFAULT NULL,
+  `hasExperienceExplainingGospel` int(10) DEFAULT NULL,
+  `confidenceExplainingGospel` int(10) DEFAULT NULL,
+  `isFamiliarSharingFaith` int(10) DEFAULT NULL,
+  `hasExperienceSharingFaith` int(10) DEFAULT NULL,
+  `confidenceSharingFaith` int(10) DEFAULT NULL,
+  `isFamiliarHolySpiritBooklet` int(10) DEFAULT NULL,
+  `hasExperienceHolySpiritBooklet` int(10) DEFAULT NULL,
+  `confidenceHolySpiritBooklet` int(10) DEFAULT NULL,
+  `isFamiliarFollowUp` int(10) DEFAULT NULL,
+  `hasExperienceFollowUp` int(10) DEFAULT NULL,
+  `confidenceFollowUp` int(10) DEFAULT NULL,
+  `isFamiliarHelpGrowInFaith` int(10) DEFAULT NULL,
+  `hasExperienceHelpGrowInFaith` int(10) DEFAULT NULL,
+  `confidenceHelpGrowInFaith` int(10) DEFAULT NULL,
+  `isFamiliarTrainShareFaith` int(10) DEFAULT NULL,
+  `hasExperienceTrainShareFaith` int(10) DEFAULT NULL,
+  `confidenceTrainShareFaith` int(10) DEFAULT NULL,
+  `isFamiliarOtherReligions` int(10) DEFAULT NULL,
+  `hasExperienceOtherReligions` int(10) DEFAULT NULL,
+  `confidenceOtherReligions` int(10) DEFAULT NULL,
+  `leadershipPositions` mediumtext,
+  `hasLedDiscipleshipGroup` int(10) DEFAULT NULL,
+  `discipleshipGroupSize` varchar(50) DEFAULT NULL,
+  `leadershipEvaluation` mediumtext,
+  `conversionMonth` int(10) DEFAULT NULL,
+  `conversionYear` int(10) DEFAULT NULL,
+  `memberChurchDenomination` varchar(75) DEFAULT NULL,
+  `memberChurchDuration` varchar(50) DEFAULT NULL,
+  `attendingChurchDenomination` varchar(50) DEFAULT NULL,
+  `attendingChurchDuration` varchar(50) DEFAULT NULL,
+  `attendingChurchInvolvement` mediumtext,
+  `quietTimeQuantity` mediumtext,
+  `quietTimeDescription` mediumtext,
+  `explanationOfSalvation` mediumtext,
+  `explanationOfSpiritFilled` mediumtext,
+  `hasInvolvementSpeakingTongues` int(10) DEFAULT NULL,
+  `differenceIndwellingFilled` mediumtext,
+  `hasCrimeConviction` int(10) DEFAULT NULL,
+  `crimeConvictionExplanation` mediumtext,
+  `hasDrugUse` int(10) DEFAULT NULL,
+  `isTobaccoUser` int(10) DEFAULT NULL,
+  `isWillingChangeHabits` int(10) DEFAULT NULL,
+  `authorityResponseExplanation` mediumtext,
+  `alcoholUseFrequency` mediumtext,
+  `alcoholUseDecision` mediumtext,
+  `isWillingRefrainAlcohol` int(10) DEFAULT NULL,
+  `unwillingRefrainAlcoholExplanation` mediumtext,
+  `drugUseExplanation` mediumtext,
+  `tobaccoUseExplanation` mediumtext,
+  `isWillingAbstainTobacco` int(10) DEFAULT NULL,
+  `hasRequestedPhoneCall` int(10) DEFAULT NULL,
+  `contactPhoneNumber` varchar(50) DEFAULT NULL,
+  `contactBestTime` varchar(50) DEFAULT NULL,
+  `contactTimeZone` varchar(50) DEFAULT NULL,
+  `sexualInvolvementExplanation` mediumtext,
+  `hasSexualGuidelines` int(10) DEFAULT NULL,
+  `sexualGuidelineExplanation` mediumtext,
+  `isCurrentlyDating` int(10) DEFAULT NULL,
+  `currentlyDatingLocation` mediumtext,
+  `hasHomosexualInvolvement` int(10) DEFAULT NULL,
+  `homosexualInvolvementExplanation` mediumtext,
+  `hasRecentPornographicInvolvement` int(10) DEFAULT NULL,
+  `pornographicInvolvementMonth` int(10) DEFAULT NULL,
+  `pornographicInvolvementYear` int(10) DEFAULT NULL,
+  `pornographicInvolvementExplanation` mediumtext,
+  `hasRecentSexualImmorality` int(10) DEFAULT NULL,
+  `sexualImmoralityMonth` int(10) DEFAULT NULL,
+  `sexualImmoralityYear` int(10) DEFAULT NULL,
+  `sexualImmoralityExplanation` mediumtext,
+  `hasOtherDateSinceImmorality` int(10) DEFAULT NULL,
+  `singleImmoralityResultsExplanation` mediumtext,
+  `marriedImmoralityResultsExplanation` mediumtext,
+  `immoralityLifeChangeExplanation` mediumtext,
+  `immoralityCurrentStrugglesExplanation` mediumtext,
+  `additionalMoralComments` mediumtext,
+  `isAwareMustRaiseSupport` int(10) DEFAULT NULL,
+  `isInDebt` int(10) DEFAULT NULL,
+  `debtNature1` varchar(50) DEFAULT NULL,
+  `debtTotal1` varchar(50) DEFAULT NULL,
+  `debtMonthlyPayment1` varchar(50) DEFAULT NULL,
+  `debtNature2` varchar(50) DEFAULT NULL,
+  `debtTotal2` varchar(50) DEFAULT NULL,
+  `debtMonthlyPayment2` varchar(50) DEFAULT NULL,
+  `debtNature3` varchar(50) DEFAULT NULL,
+  `debtTotal3` varchar(50) DEFAULT NULL,
+  `debtMonthlyPayment3` varchar(50) DEFAULT NULL,
+  `hasOtherFinancialResponsibility` int(10) DEFAULT NULL,
+  `otherFinancialResponsibilityExplanation` mediumtext,
+  `debtPaymentPlan` mediumtext,
+  `debtPaymentTimeframe` mediumtext,
+  `developingPartnersExplanation` mediumtext,
+  `isWillingDevelopPartners` int(10) DEFAULT NULL,
+  `unwillingDevelopPartnersExplanation` mediumtext,
+  `isCommittedDevelopPartners` int(10) DEFAULT NULL,
+  `uncommittedDevelopPartnersExplanation` mediumtext,
+  `personalTestimonyGrowth` mediumtext,
+  `internshipParticipationExplanation` mediumtext,
+  `internshipObjectives` mediumtext,
+  `currentMinistryDescription` mediumtext,
+  `personalStrengthA` mediumtext,
+  `personalStrengthB` mediumtext,
+  `personalStrengthC` mediumtext,
+  `personalDevelopmentA` mediumtext,
+  `personalDevelopmentB` mediumtext,
+  `personalDevelopmentC` mediumtext,
+  `personalDescriptionA` mediumtext,
+  `personalDescriptionB` mediumtext,
+  `personalDescriptionC` mediumtext,
+  `familyRelationshipDescription` mediumtext,
+  `electronicSignature` varchar(90) DEFAULT NULL,
+  `ssn` varchar(50) DEFAULT NULL,
+  `fk_ssmUserID` int(10) DEFAULT NULL,
+  `fk_personID` int(10) DEFAULT NULL,
+  `isPaid` tinyint(1) DEFAULT NULL,
+  `appFee` decimal(18,0) DEFAULT NULL,
+  `dateAppLastChanged` datetime DEFAULT NULL,
+  `dateAppStarted` datetime DEFAULT NULL,
+  `dateSubmitted` datetime DEFAULT NULL,
+  `isSubmitted` tinyint(1) DEFAULT NULL,
+  `appStatus` varchar(15) DEFAULT NULL,
+  `assignedToProject` int(10) DEFAULT NULL,
+  `finalProject` int(10) DEFAULT NULL,
+  `siYear` varchar(50) DEFAULT NULL,
+  `submitDate` datetime DEFAULT NULL,
+  `status` varchar(22) DEFAULT NULL,
+  `appType` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`applicationID`),
+  KEY `IX_hr_si_Application_2006_1` (`fk_ssmUserID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='InnoDB free: 532480 kB';
 
 CREATE TABLE `hr_si_applications` (
   `applicationID` int(10) NOT NULL AUTO_INCREMENT,
@@ -1410,7 +2270,7 @@ CREATE TABLE `hr_si_applications` (
   KEY `locationA` (`locationA`),
   KEY `locationB` (`locationB`),
   KEY `locationC` (`locationC`)
-) ENGINE=MyISAM AUTO_INCREMENT=11285 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='InnoDB free: 532480 kB';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='InnoDB free: 532480 kB';
 
 CREATE TABLE `hr_si_payment` (
   `paymentID` int(10) NOT NULL AUTO_INCREMENT,
@@ -1431,7 +2291,7 @@ CREATE TABLE `hr_si_payment` (
   `paymentFor` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`paymentID`),
   KEY `fk_ApplicationID` (`fk_ApplicationID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3347 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `hr_si_project` (
   `SIProjectID` int(10) NOT NULL AUTO_INCREMENT,
@@ -1520,7 +2380,7 @@ CREATE TABLE `hr_si_project` (
   `maxNoStudentPFamilies` int(10) DEFAULT NULL,
   `maxNoStudentP` int(10) DEFAULT NULL,
   PRIMARY KEY (`SIProjectID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2415 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `hr_si_reference` (
   `referenceID` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -1664,7 +2524,559 @@ CREATE TABLE `hr_si_reference` (
   KEY `oldReferenceID` (`oldReferenceID`),
   KEY `fk_SIApplicationID` (`fk_SIApplicationID`),
   KEY `siYear` (`siYear`)
-) ENGINE=MyISAM AUTO_INCREMENT=24551 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='InnoDB free: 532480 kB';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='InnoDB free: 532480 kB';
+
+CREATE TABLE `hr_si_reference_2003_deprecated` (
+  `referenceID` int(10) NOT NULL AUTO_INCREMENT,
+  `formWorkflowStatus` varchar(1) DEFAULT NULL,
+  `createDate` datetime DEFAULT NULL,
+  `lastChangedDate` datetime DEFAULT NULL,
+  `lastChangedBy` varchar(30) DEFAULT NULL,
+  `isFormSubmitted` tinyint(1) DEFAULT NULL,
+  `formSubmittedDate` datetime DEFAULT NULL,
+  `referenceType` varchar(2) DEFAULT NULL,
+  `title` varchar(5) DEFAULT NULL,
+  `firstName` varchar(30) DEFAULT NULL,
+  `lastName` varchar(30) DEFAULT NULL,
+  `isStaff` tinyint(1) DEFAULT NULL,
+  `staffNumber` varchar(16) DEFAULT NULL,
+  `currentAddress1` varchar(35) DEFAULT NULL,
+  `currentAddress2` varchar(35) DEFAULT NULL,
+  `currentCity` varchar(35) DEFAULT NULL,
+  `currentState` varchar(6) DEFAULT NULL,
+  `currentZip` varchar(10) DEFAULT NULL,
+  `cellPhone` varchar(24) DEFAULT NULL,
+  `homePhone` varchar(24) DEFAULT NULL,
+  `workPhone` varchar(24) DEFAULT NULL,
+  `currentEmail` varchar(50) DEFAULT NULL,
+  `howKnown` varchar(64) DEFAULT NULL,
+  `howLongKnown` varchar(64) DEFAULT NULL,
+  `howWellKnown` int(10) DEFAULT NULL,
+  `howWellComm` int(10) DEFAULT NULL,
+  `_rg1` int(10) DEFAULT NULL,
+  `_rg2` int(10) DEFAULT NULL,
+  `_rg3` int(10) DEFAULT NULL,
+  `_rg4` int(10) DEFAULT NULL,
+  `_rg5` int(10) DEFAULT NULL,
+  `_rg1c` varchar(50) DEFAULT NULL,
+  `_rg2c` varchar(50) DEFAULT NULL,
+  `_rg3c` varchar(50) DEFAULT NULL,
+  `_rg4c` varchar(50) DEFAULT NULL,
+  `_rg5c` varchar(50) DEFAULT NULL,
+  `_rg6` longtext,
+  `_rg7` tinyint(1) DEFAULT NULL,
+  `_rg8` longtext,
+  `_rg9` longtext,
+  `_ro1` int(10) DEFAULT NULL,
+  `_ro2` int(10) DEFAULT NULL,
+  `_ro3` int(10) DEFAULT NULL,
+  `_ro4` int(10) DEFAULT NULL,
+  `_ro5` int(10) DEFAULT NULL,
+  `_ro6` int(10) DEFAULT NULL,
+  `_ro7` int(10) DEFAULT NULL,
+  `_ro1c` varchar(50) DEFAULT NULL,
+  `_ro2c` varchar(50) DEFAULT NULL,
+  `_ro3c` varchar(50) DEFAULT NULL,
+  `_ro4c` varchar(50) DEFAULT NULL,
+  `_ro5c` varchar(50) DEFAULT NULL,
+  `_ro6c` varchar(50) DEFAULT NULL,
+  `_ro7c` varchar(50) DEFAULT NULL,
+  `_ro8` longtext,
+  `_ro9` longtext,
+  `_ro10` longtext,
+  `_dd1` int(10) DEFAULT NULL,
+  `_dd2` int(10) DEFAULT NULL,
+  `_dd3` int(10) DEFAULT NULL,
+  `_dd4` int(10) DEFAULT NULL,
+  `_dd1c` varchar(50) DEFAULT NULL,
+  `_dd2c` varchar(50) DEFAULT NULL,
+  `_dd3c` varchar(50) DEFAULT NULL,
+  `_dd4c` varchar(50) DEFAULT NULL,
+  `_dd5` longtext,
+  `_dd6` longtext,
+  `_if1` int(10) DEFAULT NULL,
+  `_if2` int(10) DEFAULT NULL,
+  `_if3` int(10) DEFAULT NULL,
+  `_if4` int(10) DEFAULT NULL,
+  `_if1c` varchar(50) DEFAULT NULL,
+  `_if2c` varchar(50) DEFAULT NULL,
+  `_if3c` varchar(50) DEFAULT NULL,
+  `_if4c` varchar(50) DEFAULT NULL,
+  `_if5` longtext,
+  `_if6` longtext,
+  `_ch1` int(10) DEFAULT NULL,
+  `_ch2` int(10) DEFAULT NULL,
+  `_ch3` int(10) DEFAULT NULL,
+  `_ch4` int(10) DEFAULT NULL,
+  `_ch5` int(10) DEFAULT NULL,
+  `_ch1c` varchar(50) DEFAULT NULL,
+  `_ch2c` varchar(50) DEFAULT NULL,
+  `_ch3c` varchar(50) DEFAULT NULL,
+  `_ch4c` varchar(50) DEFAULT NULL,
+  `_ch5c` varchar(50) DEFAULT NULL,
+  `_ch6` longtext,
+  `_ch7` longtext,
+  `_ch8` longtext,
+  `_ew1` int(10) DEFAULT NULL,
+  `_ew2` int(10) DEFAULT NULL,
+  `_ew3` int(10) DEFAULT NULL,
+  `_ew4` int(10) DEFAULT NULL,
+  `_ew5` int(10) DEFAULT NULL,
+  `_ew1c` varchar(50) DEFAULT NULL,
+  `_ew2c` varchar(50) DEFAULT NULL,
+  `_ew3c` varchar(50) DEFAULT NULL,
+  `_ew4c` varchar(50) DEFAULT NULL,
+  `_ew5c` varchar(50) DEFAULT NULL,
+  `_ew6` longtext,
+  `_ew7` tinyint(1) DEFAULT NULL,
+  `_ew8` longtext,
+  `_ew9` tinyint(1) DEFAULT NULL,
+  `_ew10` longtext,
+  `_ms1` int(10) DEFAULT NULL,
+  `_ms2` int(10) DEFAULT NULL,
+  `_ms3` int(10) DEFAULT NULL,
+  `_ms4` int(10) DEFAULT NULL,
+  `_ms1c` varchar(50) DEFAULT NULL,
+  `_ms2c` varchar(50) DEFAULT NULL,
+  `_ms3c` varchar(50) DEFAULT NULL,
+  `_ms4c` varchar(50) DEFAULT NULL,
+  `_ms5` longtext,
+  `_ls1` int(10) DEFAULT NULL,
+  `_ls2` int(10) DEFAULT NULL,
+  `_ls3` int(10) DEFAULT NULL,
+  `_ls4` int(10) DEFAULT NULL,
+  `_ls5` int(10) DEFAULT NULL,
+  `_ls1c` varchar(50) DEFAULT NULL,
+  `_ls2c` varchar(50) DEFAULT NULL,
+  `_ls3c` varchar(50) DEFAULT NULL,
+  `_ls4c` varchar(50) DEFAULT NULL,
+  `_ls5c` varchar(50) DEFAULT NULL,
+  `_ls6` longtext,
+  `_ls7` longtext,
+  `_ls8` longtext,
+  `_re1` longtext,
+  `_re2` longtext,
+  `_re3` longtext,
+  `_re4` int(10) DEFAULT NULL,
+  `_re5` longtext,
+  `fk_SIApplicationID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`referenceID`),
+  KEY `fk_SIApplicationID` (`fk_SIApplicationID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='InnoDB free: 532480 kB';
+
+CREATE TABLE `hr_si_reference_2004_deprecated` (
+  `referenceID` int(10) NOT NULL AUTO_INCREMENT,
+  `formWorkflowStatus` varchar(1) DEFAULT NULL,
+  `createDate` datetime DEFAULT NULL,
+  `lastChangedDate` datetime DEFAULT NULL,
+  `lastChangedBy` varchar(30) DEFAULT NULL,
+  `isFormSubmitted` tinyint(1) DEFAULT NULL,
+  `formSubmittedDate` datetime DEFAULT NULL,
+  `referenceType` varchar(2) DEFAULT NULL,
+  `title` varchar(5) DEFAULT NULL,
+  `firstName` varchar(30) DEFAULT NULL,
+  `lastName` varchar(30) DEFAULT NULL,
+  `isStaff` tinyint(1) DEFAULT NULL,
+  `staffNumber` varchar(16) DEFAULT NULL,
+  `currentAddress1` varchar(35) DEFAULT NULL,
+  `currentAddress2` varchar(35) DEFAULT NULL,
+  `currentCity` varchar(35) DEFAULT NULL,
+  `currentState` varchar(6) DEFAULT NULL,
+  `currentZip` varchar(10) DEFAULT NULL,
+  `cellPhone` varchar(24) DEFAULT NULL,
+  `homePhone` varchar(24) DEFAULT NULL,
+  `workPhone` varchar(24) DEFAULT NULL,
+  `currentEmail` varchar(50) DEFAULT NULL,
+  `howKnown` varchar(64) DEFAULT NULL,
+  `howLongKnown` varchar(64) DEFAULT NULL,
+  `howWellKnown` int(10) DEFAULT NULL,
+  `howWellComm` int(10) DEFAULT NULL,
+  `_rg1` int(10) DEFAULT NULL,
+  `_rg2` int(10) DEFAULT NULL,
+  `_rg3` int(10) DEFAULT NULL,
+  `_rg4` int(10) DEFAULT NULL,
+  `_rg5` int(10) DEFAULT NULL,
+  `_rg1c` varchar(50) DEFAULT NULL,
+  `_rg2c` varchar(50) DEFAULT NULL,
+  `_rg3c` varchar(50) DEFAULT NULL,
+  `_rg4c` varchar(50) DEFAULT NULL,
+  `_rg5c` varchar(50) DEFAULT NULL,
+  `_rg6` longtext,
+  `_rg7` tinyint(1) DEFAULT NULL,
+  `_rg8` longtext,
+  `_rg9` longtext,
+  `_ro1` int(10) DEFAULT NULL,
+  `_ro2` int(10) DEFAULT NULL,
+  `_ro3` int(10) DEFAULT NULL,
+  `_ro4` int(10) DEFAULT NULL,
+  `_ro5` int(10) DEFAULT NULL,
+  `_ro6` int(10) DEFAULT NULL,
+  `_ro7` int(10) DEFAULT NULL,
+  `_ro1c` varchar(50) DEFAULT NULL,
+  `_ro2c` varchar(50) DEFAULT NULL,
+  `_ro3c` varchar(50) DEFAULT NULL,
+  `_ro4c` varchar(50) DEFAULT NULL,
+  `_ro5c` varchar(50) DEFAULT NULL,
+  `_ro6c` varchar(50) DEFAULT NULL,
+  `_ro7c` varchar(50) DEFAULT NULL,
+  `_ro8` longtext,
+  `_ro9` longtext,
+  `_ro10` longtext,
+  `_dd1` int(10) DEFAULT NULL,
+  `_dd2` int(10) DEFAULT NULL,
+  `_dd3` int(10) DEFAULT NULL,
+  `_dd4` int(10) DEFAULT NULL,
+  `_dd1c` varchar(50) DEFAULT NULL,
+  `_dd2c` varchar(50) DEFAULT NULL,
+  `_dd3c` varchar(50) DEFAULT NULL,
+  `_dd4c` varchar(50) DEFAULT NULL,
+  `_dd5` longtext,
+  `_dd6` longtext,
+  `_if1` int(10) DEFAULT NULL,
+  `_if2` int(10) DEFAULT NULL,
+  `_if3` int(10) DEFAULT NULL,
+  `_if4` int(10) DEFAULT NULL,
+  `_if1c` varchar(50) DEFAULT NULL,
+  `_if2c` varchar(50) DEFAULT NULL,
+  `_if3c` varchar(50) DEFAULT NULL,
+  `_if4c` varchar(50) DEFAULT NULL,
+  `_if5` longtext,
+  `_if6` longtext,
+  `_ch1` int(10) DEFAULT NULL,
+  `_ch2` int(10) DEFAULT NULL,
+  `_ch3` int(10) DEFAULT NULL,
+  `_ch4` int(10) DEFAULT NULL,
+  `_ch5` int(10) DEFAULT NULL,
+  `_ch1c` varchar(50) DEFAULT NULL,
+  `_ch2c` varchar(50) DEFAULT NULL,
+  `_ch3c` varchar(50) DEFAULT NULL,
+  `_ch4c` varchar(50) DEFAULT NULL,
+  `_ch5c` varchar(50) DEFAULT NULL,
+  `_ch6` longtext,
+  `_ch7` longtext,
+  `_ch8` longtext,
+  `_ew1` int(10) DEFAULT NULL,
+  `_ew2` int(10) DEFAULT NULL,
+  `_ew3` int(10) DEFAULT NULL,
+  `_ew4` int(10) DEFAULT NULL,
+  `_ew5` int(10) DEFAULT NULL,
+  `_ew1c` varchar(50) DEFAULT NULL,
+  `_ew2c` varchar(50) DEFAULT NULL,
+  `_ew3c` varchar(50) DEFAULT NULL,
+  `_ew4c` varchar(50) DEFAULT NULL,
+  `_ew5c` varchar(50) DEFAULT NULL,
+  `_ew6` longtext,
+  `_ew7` tinyint(1) DEFAULT NULL,
+  `_ew8` longtext,
+  `_ew9` tinyint(1) DEFAULT NULL,
+  `_ew10` longtext,
+  `_ms1` int(10) DEFAULT NULL,
+  `_ms2` int(10) DEFAULT NULL,
+  `_ms3` int(10) DEFAULT NULL,
+  `_ms4` int(10) DEFAULT NULL,
+  `_ms1c` varchar(50) DEFAULT NULL,
+  `_ms2c` varchar(50) DEFAULT NULL,
+  `_ms3c` varchar(50) DEFAULT NULL,
+  `_ms4c` varchar(50) DEFAULT NULL,
+  `_ms5` longtext,
+  `_ls1` int(10) DEFAULT NULL,
+  `_ls2` int(10) DEFAULT NULL,
+  `_ls3` int(10) DEFAULT NULL,
+  `_ls4` int(10) DEFAULT NULL,
+  `_ls5` int(10) DEFAULT NULL,
+  `_ls1c` varchar(50) DEFAULT NULL,
+  `_ls2c` varchar(50) DEFAULT NULL,
+  `_ls3c` varchar(50) DEFAULT NULL,
+  `_ls4c` varchar(50) DEFAULT NULL,
+  `_ls5c` varchar(50) DEFAULT NULL,
+  `_ls6` longtext,
+  `_ls7` longtext,
+  `_ls8` longtext,
+  `_re1` longtext,
+  `_re2` longtext,
+  `_re3` longtext,
+  `_re4` int(10) DEFAULT NULL,
+  `_re5` longtext,
+  `fk_SIApplicationID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`referenceID`),
+  KEY `fk_SIApplicationID` (`fk_SIApplicationID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='InnoDB free: 532480 kB';
+
+CREATE TABLE `hr_si_reference_2005_deprecated` (
+  `referenceID` int(10) NOT NULL AUTO_INCREMENT,
+  `formWorkflowStatus` varchar(1) DEFAULT NULL,
+  `createDate` datetime DEFAULT NULL,
+  `lastChangedDate` datetime DEFAULT NULL,
+  `lastChangedBy` varchar(30) DEFAULT NULL,
+  `isFormSubmitted` tinyint(1) DEFAULT NULL,
+  `formSubmittedDate` datetime DEFAULT NULL,
+  `referenceType` varchar(2) DEFAULT NULL,
+  `title` varchar(5) DEFAULT NULL,
+  `firstName` varchar(30) DEFAULT NULL,
+  `lastName` varchar(30) DEFAULT NULL,
+  `isStaff` tinyint(1) DEFAULT NULL,
+  `staffNumber` varchar(16) DEFAULT NULL,
+  `currentAddress1` varchar(35) DEFAULT NULL,
+  `currentAddress2` varchar(35) DEFAULT NULL,
+  `currentCity` varchar(35) DEFAULT NULL,
+  `currentState` varchar(6) DEFAULT NULL,
+  `currentZip` varchar(10) DEFAULT NULL,
+  `cellPhone` varchar(24) DEFAULT NULL,
+  `homePhone` varchar(24) DEFAULT NULL,
+  `workPhone` varchar(24) DEFAULT NULL,
+  `currentEmail` varchar(50) DEFAULT NULL,
+  `howKnown` varchar(64) DEFAULT NULL,
+  `howLongKnown` varchar(64) DEFAULT NULL,
+  `howWellKnown` int(10) DEFAULT NULL,
+  `howWellComm` int(10) DEFAULT NULL,
+  `_rg1` int(10) DEFAULT NULL,
+  `_rg2` int(10) DEFAULT NULL,
+  `_rg3` int(10) DEFAULT NULL,
+  `_rg4` int(10) DEFAULT NULL,
+  `_rg5` int(10) DEFAULT NULL,
+  `_rg1c` varchar(50) DEFAULT NULL,
+  `_rg2c` varchar(50) DEFAULT NULL,
+  `_rg3c` varchar(50) DEFAULT NULL,
+  `_rg4c` varchar(50) DEFAULT NULL,
+  `_rg5c` varchar(50) DEFAULT NULL,
+  `_rg6` longtext,
+  `_rg7` tinyint(1) DEFAULT NULL,
+  `_rg8` longtext,
+  `_rg9` longtext,
+  `_ro1` int(10) DEFAULT NULL,
+  `_ro2` int(10) DEFAULT NULL,
+  `_ro3` int(10) DEFAULT NULL,
+  `_ro4` int(10) DEFAULT NULL,
+  `_ro5` int(10) DEFAULT NULL,
+  `_ro6` int(10) DEFAULT NULL,
+  `_ro7` int(10) DEFAULT NULL,
+  `_ro1c` varchar(50) DEFAULT NULL,
+  `_ro2c` varchar(50) DEFAULT NULL,
+  `_ro3c` varchar(50) DEFAULT NULL,
+  `_ro4c` varchar(50) DEFAULT NULL,
+  `_ro5c` varchar(50) DEFAULT NULL,
+  `_ro6c` varchar(50) DEFAULT NULL,
+  `_ro7c` varchar(50) DEFAULT NULL,
+  `_ro8` longtext,
+  `_ro9` longtext,
+  `_ro10` longtext,
+  `_dd1` int(10) DEFAULT NULL,
+  `_dd2` int(10) DEFAULT NULL,
+  `_dd3` int(10) DEFAULT NULL,
+  `_dd4` int(10) DEFAULT NULL,
+  `_dd1c` varchar(50) DEFAULT NULL,
+  `_dd2c` varchar(50) DEFAULT NULL,
+  `_dd3c` varchar(50) DEFAULT NULL,
+  `_dd4c` varchar(50) DEFAULT NULL,
+  `_dd5` longtext,
+  `_dd6` longtext,
+  `_if1` int(10) DEFAULT NULL,
+  `_if2` int(10) DEFAULT NULL,
+  `_if3` int(10) DEFAULT NULL,
+  `_if4` int(10) DEFAULT NULL,
+  `_if1c` varchar(50) DEFAULT NULL,
+  `_if2c` varchar(50) DEFAULT NULL,
+  `_if3c` varchar(50) DEFAULT NULL,
+  `_if4c` varchar(50) DEFAULT NULL,
+  `_if5` longtext,
+  `_if6` longtext,
+  `_ch1` int(10) DEFAULT NULL,
+  `_ch2` int(10) DEFAULT NULL,
+  `_ch3` int(10) DEFAULT NULL,
+  `_ch4` int(10) DEFAULT NULL,
+  `_ch5` int(10) DEFAULT NULL,
+  `_ch1c` varchar(50) DEFAULT NULL,
+  `_ch2c` varchar(50) DEFAULT NULL,
+  `_ch3c` varchar(50) DEFAULT NULL,
+  `_ch4c` varchar(50) DEFAULT NULL,
+  `_ch5c` varchar(50) DEFAULT NULL,
+  `_ch6` longtext,
+  `_ch7` longtext,
+  `_ch8` longtext,
+  `_ew1` int(10) DEFAULT NULL,
+  `_ew2` int(10) DEFAULT NULL,
+  `_ew3` int(10) DEFAULT NULL,
+  `_ew4` int(10) DEFAULT NULL,
+  `_ew5` int(10) DEFAULT NULL,
+  `_ew1c` varchar(50) DEFAULT NULL,
+  `_ew2c` varchar(50) DEFAULT NULL,
+  `_ew3c` varchar(50) DEFAULT NULL,
+  `_ew4c` varchar(50) DEFAULT NULL,
+  `_ew5c` varchar(50) DEFAULT NULL,
+  `_ew6` longtext,
+  `_ew7` tinyint(1) DEFAULT NULL,
+  `_ew8` longtext,
+  `_ew9` tinyint(1) DEFAULT NULL,
+  `_ew10` longtext,
+  `_ms1` int(10) DEFAULT NULL,
+  `_ms2` int(10) DEFAULT NULL,
+  `_ms3` int(10) DEFAULT NULL,
+  `_ms4` int(10) DEFAULT NULL,
+  `_ms1c` varchar(50) DEFAULT NULL,
+  `_ms2c` varchar(50) DEFAULT NULL,
+  `_ms3c` varchar(50) DEFAULT NULL,
+  `_ms4c` varchar(50) DEFAULT NULL,
+  `_ms5` longtext,
+  `_ls1` int(10) DEFAULT NULL,
+  `_ls2` int(10) DEFAULT NULL,
+  `_ls3` int(10) DEFAULT NULL,
+  `_ls4` int(10) DEFAULT NULL,
+  `_ls5` int(10) DEFAULT NULL,
+  `_ls1c` varchar(50) DEFAULT NULL,
+  `_ls2c` varchar(50) DEFAULT NULL,
+  `_ls3c` varchar(50) DEFAULT NULL,
+  `_ls4c` varchar(50) DEFAULT NULL,
+  `_ls5c` varchar(50) DEFAULT NULL,
+  `_ls6` longtext,
+  `_ls7` longtext,
+  `_ls8` longtext,
+  `_re1` longtext,
+  `_re2` longtext,
+  `_re3` longtext,
+  `_re4` int(10) DEFAULT NULL,
+  `_re5` longtext,
+  `fk_SIApplicationID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`referenceID`),
+  KEY `fk_SIApplicationID` (`fk_SIApplicationID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='InnoDB free: 532480 kB';
+
+CREATE TABLE `hr_si_reference_2006_deprecated` (
+  `referenceID` int(10) NOT NULL AUTO_INCREMENT,
+  `formWorkflowStatus` varchar(1) DEFAULT NULL,
+  `createDate` datetime DEFAULT NULL,
+  `lastChangedDate` datetime DEFAULT NULL,
+  `lastChangedBy` varchar(30) DEFAULT NULL,
+  `isFormSubmitted` tinyint(1) DEFAULT NULL,
+  `formSubmittedDate` datetime DEFAULT NULL,
+  `referenceType` varchar(2) DEFAULT NULL,
+  `title` varchar(5) DEFAULT NULL,
+  `firstName` varchar(30) DEFAULT NULL,
+  `lastName` varchar(30) DEFAULT NULL,
+  `isStaff` tinyint(1) DEFAULT NULL,
+  `staffNumber` varchar(16) DEFAULT NULL,
+  `currentAddress1` varchar(35) DEFAULT NULL,
+  `currentAddress2` varchar(35) DEFAULT NULL,
+  `currentCity` varchar(35) DEFAULT NULL,
+  `currentState` varchar(6) DEFAULT NULL,
+  `currentZip` varchar(10) DEFAULT NULL,
+  `cellPhone` varchar(24) DEFAULT NULL,
+  `homePhone` varchar(24) DEFAULT NULL,
+  `workPhone` varchar(24) DEFAULT NULL,
+  `currentEmail` varchar(50) DEFAULT NULL,
+  `howKnown` varchar(64) DEFAULT NULL,
+  `howLongKnown` varchar(64) DEFAULT NULL,
+  `howWellKnown` int(10) DEFAULT NULL,
+  `howWellComm` int(10) DEFAULT NULL,
+  `_rg1` int(10) DEFAULT NULL,
+  `_rg2` int(10) DEFAULT NULL,
+  `_rg3` int(10) DEFAULT NULL,
+  `_rg4` int(10) DEFAULT NULL,
+  `_rg5` int(10) DEFAULT NULL,
+  `_rg1c` varchar(50) DEFAULT NULL,
+  `_rg2c` varchar(50) DEFAULT NULL,
+  `_rg3c` varchar(50) DEFAULT NULL,
+  `_rg4c` varchar(50) DEFAULT NULL,
+  `_rg5c` varchar(50) DEFAULT NULL,
+  `_rg6` longtext,
+  `_rg7` tinyint(1) DEFAULT NULL,
+  `_rg8` longtext,
+  `_rg9` longtext,
+  `_ro1` int(10) DEFAULT NULL,
+  `_ro2` int(10) DEFAULT NULL,
+  `_ro3` int(10) DEFAULT NULL,
+  `_ro4` int(10) DEFAULT NULL,
+  `_ro5` int(10) DEFAULT NULL,
+  `_ro6` int(10) DEFAULT NULL,
+  `_ro7` int(10) DEFAULT NULL,
+  `_ro1c` varchar(50) DEFAULT NULL,
+  `_ro2c` varchar(50) DEFAULT NULL,
+  `_ro3c` varchar(50) DEFAULT NULL,
+  `_ro4c` varchar(50) DEFAULT NULL,
+  `_ro5c` varchar(50) DEFAULT NULL,
+  `_ro6c` varchar(50) DEFAULT NULL,
+  `_ro7c` varchar(50) DEFAULT NULL,
+  `_ro8` longtext,
+  `_ro9` longtext,
+  `_ro10` longtext,
+  `_dd1` int(10) DEFAULT NULL,
+  `_dd2` int(10) DEFAULT NULL,
+  `_dd3` int(10) DEFAULT NULL,
+  `_dd4` int(10) DEFAULT NULL,
+  `_dd1c` varchar(50) DEFAULT NULL,
+  `_dd2c` varchar(50) DEFAULT NULL,
+  `_dd3c` varchar(50) DEFAULT NULL,
+  `_dd4c` varchar(50) DEFAULT NULL,
+  `_dd5` longtext,
+  `_dd6` longtext,
+  `_if1` int(10) DEFAULT NULL,
+  `_if2` int(10) DEFAULT NULL,
+  `_if3` int(10) DEFAULT NULL,
+  `_if4` int(10) DEFAULT NULL,
+  `_if1c` varchar(50) DEFAULT NULL,
+  `_if2c` varchar(50) DEFAULT NULL,
+  `_if3c` varchar(50) DEFAULT NULL,
+  `_if4c` varchar(50) DEFAULT NULL,
+  `_if5` longtext,
+  `_if6` longtext,
+  `_ch1` int(10) DEFAULT NULL,
+  `_ch2` int(10) DEFAULT NULL,
+  `_ch3` int(10) DEFAULT NULL,
+  `_ch4` int(10) DEFAULT NULL,
+  `_ch5` int(10) DEFAULT NULL,
+  `_ch1c` varchar(50) DEFAULT NULL,
+  `_ch2c` varchar(50) DEFAULT NULL,
+  `_ch3c` varchar(50) DEFAULT NULL,
+  `_ch4c` varchar(50) DEFAULT NULL,
+  `_ch5c` varchar(50) DEFAULT NULL,
+  `_ch6` longtext,
+  `_ch7` longtext,
+  `_ch8` longtext,
+  `_ew1` int(10) DEFAULT NULL,
+  `_ew2` int(10) DEFAULT NULL,
+  `_ew3` int(10) DEFAULT NULL,
+  `_ew4` int(10) DEFAULT NULL,
+  `_ew5` int(10) DEFAULT NULL,
+  `_ew1c` varchar(50) DEFAULT NULL,
+  `_ew2c` varchar(50) DEFAULT NULL,
+  `_ew3c` varchar(50) DEFAULT NULL,
+  `_ew4c` varchar(50) DEFAULT NULL,
+  `_ew5c` varchar(50) DEFAULT NULL,
+  `_ew6` longtext,
+  `_ew7` tinyint(1) DEFAULT NULL,
+  `_ew8` longtext,
+  `_ew9` tinyint(1) DEFAULT NULL,
+  `_ew10` longtext,
+  `_ms1` int(10) DEFAULT NULL,
+  `_ms2` int(10) DEFAULT NULL,
+  `_ms3` int(10) DEFAULT NULL,
+  `_ms4` int(10) DEFAULT NULL,
+  `_ms1c` varchar(50) DEFAULT NULL,
+  `_ms2c` varchar(50) DEFAULT NULL,
+  `_ms3c` varchar(50) DEFAULT NULL,
+  `_ms4c` varchar(50) DEFAULT NULL,
+  `_ms5` longtext,
+  `_ls1` int(10) DEFAULT NULL,
+  `_ls2` int(10) DEFAULT NULL,
+  `_ls3` int(10) DEFAULT NULL,
+  `_ls4` int(10) DEFAULT NULL,
+  `_ls5` int(10) DEFAULT NULL,
+  `_ls1c` varchar(50) DEFAULT NULL,
+  `_ls2c` varchar(50) DEFAULT NULL,
+  `_ls3c` varchar(50) DEFAULT NULL,
+  `_ls4c` varchar(50) DEFAULT NULL,
+  `_ls5c` varchar(50) DEFAULT NULL,
+  `_ls6` longtext,
+  `_ls7` longtext,
+  `_ls8` longtext,
+  `_re1` longtext,
+  `_re2` longtext,
+  `_re3` longtext,
+  `_re4` int(10) DEFAULT NULL,
+  `_re5` longtext,
+  `fk_SIApplicationID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`referenceID`),
+  KEY `IX_hr_si_Reference_2006` (`fk_SIApplicationID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='InnoDB free: 532480 kB';
 
 CREATE TABLE `hr_si_users` (
   `siUserID` int(10) NOT NULL AUTO_INCREMENT,
@@ -1673,7 +3085,7 @@ CREATE TABLE `hr_si_users` (
   `expirationDate` datetime DEFAULT NULL,
   PRIMARY KEY (`siUserID`),
   KEY `IX_hr_si_Users_fk_ssmUserID` (`fk_ssmUserID`)
-) ENGINE=InnoDB AUTO_INCREMENT=463 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `lat_long_by_zip_code` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1710,7 +3122,7 @@ CREATE TABLE `linczone_contacts` (
   `InfoGCM` char(1) DEFAULT 'F',
   `InfoWesley` char(1) DEFAULT 'F',
   PRIMARY KEY (`ContactID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1124 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `mail_delayed_jobs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1725,7 +3137,7 @@ CREATE TABLE `mail_delayed_jobs` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=529 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `mail_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1744,7 +3156,7 @@ CREATE TABLE `mail_groups` (
   PRIMARY KEY (`id`),
   KEY `index_mail_groups_on_group_id` (`group_id`),
   KEY `index_mail_groups_on_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `mail_members` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1755,7 +3167,7 @@ CREATE TABLE `mail_members` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_mail_members_on_group_id` (`group_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2069 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `mail_owners` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1765,7 +3177,7 @@ CREATE TABLE `mail_owners` (
   `updated_at` datetime DEFAULT NULL,
   `exception` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=508 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `mail_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1778,9 +3190,8 @@ CREATE TABLE `mail_users` (
   `admin` tinyint(1) DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `guid` (`guid`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `merge_audits` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1793,16 +3204,19 @@ CREATE TABLE `merge_audits` (
   PRIMARY KEY (`id`),
   KEY `mergeable` (`mergeable_id`,`mergeable_type`),
   KEY `merge_looser` (`merge_looser_id`,`merge_looser_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `mh_answer_sheets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `question_sheet_id` int(11) NOT NULL,
+  `question_sheet_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `completed_at` datetime DEFAULT NULL,
   `person_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+  `updated_at` datetime DEFAULT NULL,
+  `survey_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_mh_answer_sheets_on_question_sheet_id` (`question_sheet_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `mh_answers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1814,11 +3228,13 @@ CREATE TABLE `mh_answers` (
   `attachment_content_type` varchar(255) DEFAULT NULL,
   `attachment_file_name` varchar(255) DEFAULT NULL,
   `attachment_updated_at` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_ma_answers_on_short_value` (`short_value`),
   KEY `index_ma_answers_on_answer_sheet_id` (`answer_sheet_id`),
   KEY `index_ma_answers_on_question_id` (`question_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `mh_conditions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1830,27 +3246,28 @@ CREATE TABLE `mh_conditions` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `mh_education_history` (
+CREATE TABLE `mh_education_histories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `person_id` varchar(255) DEFAULT NULL,
-  `school_type` varchar(255) DEFAULT NULL,
+  `person_id` int(11) DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
   `concentration_id1` varchar(255) DEFAULT NULL,
   `concentration_name1` varchar(255) DEFAULT NULL,
+  `concentration_id2` varchar(255) DEFAULT NULL,
+  `concentration_name2` varchar(255) DEFAULT NULL,
+  `concentration_id3` varchar(255) DEFAULT NULL,
+  `concentration_name3` varchar(255) DEFAULT NULL,
   `year_id` varchar(255) DEFAULT NULL,
   `year_name` varchar(255) DEFAULT NULL,
   `degree_id` varchar(255) DEFAULT NULL,
   `degree_name` varchar(255) DEFAULT NULL,
   `school_id` varchar(255) DEFAULT NULL,
   `school_name` varchar(255) DEFAULT NULL,
+  `provider` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `provider` varchar(255) DEFAULT NULL,
-  `concentration_name2` varchar(255) DEFAULT NULL,
-  `concentration_name3` varchar(255) DEFAULT NULL,
-  `concentration_id2` varchar(255) DEFAULT NULL,
-  `concentration_id3` varchar(255) DEFAULT NULL,
+  `school_type` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `mh_elements` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1880,12 +3297,13 @@ CREATE TABLE `mh_elements` (
   `hide_label` tinyint(1) DEFAULT '0',
   `hide_option_labels` tinyint(1) DEFAULT '0',
   `max_length` int(11) DEFAULT NULL,
+  `web_only` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_ma_elements_on_slug` (`slug`),
   KEY `index_ma_elements_on_question_sheet_id_and_position_and_page_id` (`position`),
   KEY `index_ma_elements_on_conditional_id` (`conditional_id`),
   KEY `index_ma_elements_on_question_grid_id` (`question_grid_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `mh_email_templates` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1899,61 +3317,93 @@ CREATE TABLE `mh_email_templates` (
   KEY `index_ma_email_templates_on_name` (`name`(767))
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `mh_friend` (
+CREATE TABLE `mh_friends` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `uid` varchar(255) DEFAULT NULL,
   `provider` varchar(255) DEFAULT NULL,
+  `person_id` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `person_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2215 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `person_uid` (`person_id`,`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `mh_interest` (
+CREATE TABLE `mh_group_labelings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) DEFAULT NULL,
+  `group_label_id` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_mh_group_labelings_on_group_id_and_group_label_id` (`group_id`,`group_label_id`),
+  KEY `index_mh_group_labelings_on_group_label_id` (`group_label_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `mh_group_labels` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `organization_id` int(11) DEFAULT NULL,
+  `ancestry` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `group_labelings_count` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `index_mh_group_labels_on_organization_id` (`organization_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `mh_group_memberships` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) DEFAULT NULL,
+  `person_id` int(11) DEFAULT NULL,
+  `role` varchar(255) DEFAULT 'member',
+  `requested` tinyint(1) DEFAULT '0',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_group_memberships_on_group_id` (`group_id`),
+  KEY `index_group_memberships_on_person_id` (`person_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `mh_groups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `location` text,
+  `meets` varchar(255) DEFAULT NULL,
+  `meeting_day` int(11) DEFAULT NULL,
+  `start_time` int(11) DEFAULT NULL,
+  `end_time` int(11) DEFAULT NULL,
+  `organization_id` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `list_publicly` tinyint(1) DEFAULT '1',
+  `approve_join_requests` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `mh_interests` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `interest_id` varchar(255) DEFAULT NULL,
   `provider` varchar(255) DEFAULT NULL,
   `category` varchar(255) DEFAULT NULL,
+  `person_id` int(11) DEFAULT NULL,
   `interest_created_time` datetime DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `person_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `mh_location` (
+CREATE TABLE `mh_locations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `location_id` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `provider` varchar(255) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
   `person_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
-
-CREATE TABLE `mh_page_elements` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `page_id` int(11) DEFAULT NULL,
-  `element_id` int(11) DEFAULT NULL,
-  `position` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `hidden` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
-
-CREATE TABLE `mh_pages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `question_sheet_id` int(11) NOT NULL,
-  `label` varchar(100) NOT NULL,
-  `number` int(11) DEFAULT NULL,
-  `no_cache` tinyint(1) DEFAULT '0',
-  `hidden` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `mh_question_sheets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1963,7 +3413,7 @@ CREATE TABLE `mh_question_sheets` (
   `questionnable_type` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `questionnable` (`questionnable_id`,`questionnable_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `mh_references` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1984,11 +3434,35 @@ CREATE TABLE `mh_references` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `mh_survey_elements` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `survey_id` int(11) DEFAULT NULL,
+  `element_id` int(11) DEFAULT NULL,
+  `position` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `hidden` tinyint(1) DEFAULT '0',
+  `archived` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `mh_surveys` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `question_sheet_id` int(11) DEFAULT NULL,
+  `title` varchar(100) NOT NULL,
+  `organization_id` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `post_survey_message` text,
+  PRIMARY KEY (`id`),
+  KEY `index_mh_surveys_on_organization_id` (`organization_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
 CREATE TABLE `ministries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_activity` (
   `ActivityID` int(10) NOT NULL AUTO_INCREMENT,
@@ -2007,8 +3481,10 @@ CREATE TABLE `ministry_activity` (
   KEY `index1` (`fk_targetAreaID`),
   KEY `index2` (`fk_teamID`),
   KEY `index3` (`periodBegin`),
-  KEY `index5` (`strategy`)
-) ENGINE=InnoDB AUTO_INCREMENT=12227 DEFAULT CHARSET=utf8;
+  KEY `index5` (`strategy`),
+  KEY `FK2600F20F60761BBA` (`fk_targetAreaID`),
+  CONSTRAINT `FK2600F20F60761BBA` FOREIGN KEY (`fk_targetAreaID`) REFERENCES `ministry_targetarea` (`targetAreaID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_activity_history` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -2025,7 +3501,7 @@ CREATE TABLE `ministry_activity_history` (
   KEY `period_begin` (`period_begin`),
   KEY `toStrategy` (`toStrategy`),
   KEY `to_status` (`to_status`)
-) ENGINE=InnoDB AUTO_INCREMENT=20937 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_address` (
   `AddressID` int(10) NOT NULL AUTO_INCREMENT,
@@ -2040,7 +3516,7 @@ CREATE TABLE `ministry_address` (
   `zip` varchar(10) DEFAULT NULL,
   `country` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`AddressID`)
-) ENGINE=InnoDB AUTO_INCREMENT=44616 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_assoc_activitycontact` (
   `ActivityID` int(10) NOT NULL,
@@ -2053,7 +3529,9 @@ CREATE TABLE `ministry_assoc_dependents` (
   `DependentID` int(10) NOT NULL,
   `accountNo` varchar(11) NOT NULL,
   `dbioDummy` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`DependentID`,`accountNo`)
+  PRIMARY KEY (`DependentID`,`accountNo`),
+  KEY `FKAF8D4EBE8191B090` (`DependentID`),
+  CONSTRAINT `FKAF8D4EBE8191B090` FOREIGN KEY (`DependentID`) REFERENCES `ministry_dependent` (`DependentID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_assoc_otherministries` (
@@ -2076,7 +3554,7 @@ CREATE TABLE `ministry_authorization` (
   KEY `index1` (`fk_AuthorizedBy`),
   KEY `index2` (`fk_changeRequestID`),
   KEY `index3` (`fk_AuthorizationNote`)
-) ENGINE=InnoDB AUTO_INCREMENT=13894 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_changerequest` (
   `ChangeRequestID` int(10) NOT NULL AUTO_INCREMENT,
@@ -2089,7 +3567,7 @@ CREATE TABLE `ministry_changerequest` (
   `region` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`ChangeRequestID`),
   KEY `index1` (`fk_requestedBy`)
-) ENGINE=InnoDB AUTO_INCREMENT=16005 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_dependent` (
   `DependentID` int(10) NOT NULL AUTO_INCREMENT,
@@ -2099,7 +3577,7 @@ CREATE TABLE `ministry_dependent` (
   `birthdate` datetime DEFAULT NULL,
   `gender` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`DependentID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4249 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_fieldchange` (
   `FieldChangeID` int(10) NOT NULL AUTO_INCREMENT,
@@ -2108,7 +3586,7 @@ CREATE TABLE `ministry_fieldchange` (
   `newValue` varchar(255) DEFAULT NULL,
   `Fk_hasFieldChanges` int(10) DEFAULT NULL,
   PRIMARY KEY (`FieldChangeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=54075 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_involvement` (
   `involvementID` int(11) NOT NULL AUTO_INCREMENT,
@@ -2142,7 +3620,7 @@ CREATE TABLE `ministry_locallevel` (
   `hasMultiRegionalAccess` varchar(255) DEFAULT NULL,
   `dept_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`teamID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1132 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_missional_team_member` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -2151,7 +3629,7 @@ CREATE TABLE `ministry_missional_team_member` (
   `is_people_soft` tinyint(1) DEFAULT NULL,
   `is_leader` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5024 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_movement_contact` (
   `personID` int(11) DEFAULT NULL,
@@ -2162,16 +3640,18 @@ CREATE TABLE `ministry_movement_contact` (
 
 CREATE TABLE `ministry_newaddress` (
   `addressID` int(10) NOT NULL AUTO_INCREMENT,
-  `address1` varchar(255) DEFAULT NULL,
-  `address2` varchar(255) DEFAULT NULL,
+  `deprecated_startDate` varchar(25) DEFAULT NULL,
+  `deprecated_endDate` varchar(25) DEFAULT NULL,
+  `address1` varchar(55) DEFAULT NULL,
+  `address2` varchar(55) DEFAULT NULL,
   `address3` varchar(55) DEFAULT NULL,
   `address4` varchar(55) DEFAULT NULL,
   `city` varchar(50) DEFAULT NULL,
   `state` varchar(50) DEFAULT NULL,
   `zip` varchar(15) DEFAULT NULL,
   `country` varchar(64) DEFAULT NULL,
-  `homePhone` varchar(26) DEFAULT NULL,
-  `workPhone` varchar(250) DEFAULT NULL,
+  `homePhone` varchar(25) DEFAULT NULL,
+  `workPhone` varchar(25) DEFAULT NULL,
   `cellPhone` varchar(25) DEFAULT NULL,
   `fax` varchar(25) DEFAULT NULL,
   `email` varchar(200) DEFAULT NULL,
@@ -2201,8 +3681,10 @@ CREATE TABLE `ministry_newaddress` (
   KEY `fk_PersonID` (`fk_PersonID`),
   KEY `index_ministry_newAddress_on_addressType` (`addressType`),
   KEY `email` (`email`),
-  CONSTRAINT `ministry_newaddress_ibfk_1` FOREIGN KEY (`fk_PersonID`) REFERENCES `ministry_person` (`personID`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=693216 DEFAULT CHARSET=utf8;
+  KEY `FKAB431D54B5C286E8` (`fk_PersonID`),
+  CONSTRAINT `FKAB431D54B5C286E8` FOREIGN KEY (`fk_PersonID`) REFERENCES `ministry_person` (`personID`),
+  CONSTRAINT `ministry_newaddress_ibfk_1` FOREIGN KEY (`fk_PersonID`) REFERENCES `ministry_person` (`personID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_newaddress_restore` (
   `addressID` int(10) NOT NULL AUTO_INCREMENT,
@@ -2243,7 +3725,7 @@ CREATE TABLE `ministry_newaddress_restore` (
   KEY `fk_PersonID` (`fk_PersonID`),
   KEY `index_ministry_newaddress_restore_on_addressType` (`addressType`),
   KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=616413 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_noncccmin` (
   `NonCccMinID` int(10) NOT NULL AUTO_INCREMENT,
@@ -2265,7 +3747,7 @@ CREATE TABLE `ministry_noncccmin` (
   `fax` varchar(24) DEFAULT NULL,
   `note` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`NonCccMinID`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_note` (
   `NoteID` int(10) NOT NULL AUTO_INCREMENT,
@@ -2276,7 +3758,7 @@ CREATE TABLE `ministry_note` (
   `Fk_resignationLetter` varchar(64) DEFAULT NULL,
   `Fk_authorizationNote` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`NoteID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1150 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_person` (
   `personID` int(10) NOT NULL AUTO_INCREMENT,
@@ -2315,9 +3797,9 @@ CREATE TABLE `ministry_person` (
   `fk_StaffSiteProfileID` int(10) DEFAULT NULL,
   `fk_spouseID` int(10) DEFAULT NULL,
   `fk_childOf` int(10) DEFAULT NULL,
-  `birth_date` date DEFAULT NULL,
-  `date_became_christian` date DEFAULT NULL,
-  `graduation_date` date DEFAULT NULL,
+  `birth_date` datetime DEFAULT NULL,
+  `date_became_christian` datetime DEFAULT NULL,
+  `graduation_date` datetime DEFAULT NULL,
   `level_of_school` varchar(255) DEFAULT NULL,
   `staff_notes` varchar(255) DEFAULT NULL,
   `donor_number` varchar(11) DEFAULT NULL,
@@ -2337,7 +3819,7 @@ CREATE TABLE `ministry_person` (
   KEY `fk_ssmUserId` (`fk_ssmUserId`),
   KEY `campus` (`campus`),
   KEY `index_ministry_person_on_fb_uid` (`fb_uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1723628 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1079 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_regionalstat` (
   `RegionalStatID` int(10) NOT NULL AUTO_INCREMENT,
@@ -2358,7 +3840,7 @@ CREATE TABLE `ministry_regionalstat` (
   `fk_regionalTeamID` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`RegionalStatID`),
   KEY `fk_regionalTeamID` (`fk_regionalTeamID`)
-) ENGINE=InnoDB AUTO_INCREMENT=319 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_regionalteam` (
   `teamID` int(10) NOT NULL AUTO_INCREMENT,
@@ -2383,7 +3865,7 @@ CREATE TABLE `ministry_regionalteam` (
   `hrd` varchar(50) DEFAULT NULL,
   `spPhone` varchar(24) DEFAULT NULL,
   PRIMARY KEY (`teamID`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_staff` (
   `accountNo` varchar(11) NOT NULL,
@@ -2488,7 +3970,7 @@ CREATE TABLE `ministry_staff` (
   KEY `index5` (`region`),
   KEY `ministry_staff_person_id_index` (`person_id`),
   KEY `index_ministry_staff_on_firstName` (`firstName`)
-) ENGINE=InnoDB AUTO_INCREMENT=20563 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_staffchangerequest` (
   `ChangeRequestID` varchar(64) NOT NULL,
@@ -2536,14 +4018,14 @@ CREATE TABLE `ministry_statistic` (
   KEY `index1` (`fk_Activity`),
   KEY `index2` (`periodBegin`),
   KEY `index3` (`periodEnd`)
-) ENGINE=InnoDB AUTO_INCREMENT=74079 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_strategy` (
   `strategyID` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `abreviation` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`strategyID`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ministry_targetarea` (
   `targetAreaID` int(10) NOT NULL AUTO_INCREMENT,
@@ -2566,7 +4048,7 @@ CREATE TABLE `ministry_targetarea` (
   `altName` varchar(100) DEFAULT NULL,
   `isSecure` char(1) DEFAULT NULL,
   `isClosed` char(1) DEFAULT NULL,
-  `region` varchar(255) DEFAULT NULL,
+  `region` varchar(2) DEFAULT NULL,
   `mpta` varchar(30) DEFAULT NULL,
   `urlToLogo` varchar(255) DEFAULT NULL,
   `enrollment` varchar(10) DEFAULT NULL,
@@ -2606,7 +4088,70 @@ CREATE TABLE `ministry_targetarea` (
   KEY `index5` (`isSecure`),
   KEY `index6` (`region`),
   KEY `index7` (`isClosed`)
-) ENGINE=InnoDB AUTO_INCREMENT=22348 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ministry_targetarea_2009` (
+  `targetAreaID` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL,
+  `address1` varchar(35) DEFAULT NULL,
+  `address2` varchar(35) DEFAULT NULL,
+  `city` varchar(30) DEFAULT NULL,
+  `state` varchar(32) DEFAULT NULL,
+  `zip` varchar(10) DEFAULT NULL,
+  `country` varchar(64) DEFAULT NULL,
+  `phone` varchar(24) DEFAULT NULL,
+  `fax` varchar(24) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `abbrv` varchar(32) DEFAULT NULL,
+  `fice` varchar(32) DEFAULT NULL,
+  `mainCampusFice` varchar(32) DEFAULT NULL,
+  `isNoFiceOK` char(1) DEFAULT NULL,
+  `note` varchar(255) DEFAULT NULL,
+  `altName` varchar(100) DEFAULT NULL,
+  `isSecure` char(1) DEFAULT NULL,
+  `isClosed` char(1) DEFAULT NULL,
+  `region` varchar(2) DEFAULT NULL,
+  `mpta` varchar(30) DEFAULT NULL,
+  `urlToLogo` varchar(255) DEFAULT NULL,
+  `enrollment` varchar(10) DEFAULT NULL,
+  `monthSchoolStarts` varchar(10) DEFAULT NULL,
+  `monthSchoolStops` varchar(10) DEFAULT NULL,
+  `isSemester` char(1) DEFAULT NULL,
+  `isApproved` char(1) DEFAULT NULL,
+  `aoaPriority` varchar(10) DEFAULT NULL,
+  `aoa` varchar(100) DEFAULT NULL,
+  `ciaUrl` varchar(255) DEFAULT NULL,
+  `infoUrl` varchar(255) DEFAULT NULL,
+  `calendar` varchar(50) DEFAULT NULL,
+  `program1` varchar(50) DEFAULT NULL,
+  `program2` varchar(50) DEFAULT NULL,
+  `program3` varchar(50) DEFAULT NULL,
+  `program4` varchar(50) DEFAULT NULL,
+  `program5` varchar(50) DEFAULT NULL,
+  `emphasis` varchar(50) DEFAULT NULL,
+  `sex` varchar(50) DEFAULT NULL,
+  `institutionType` varchar(50) DEFAULT NULL,
+  `highestOffering` varchar(65) DEFAULT NULL,
+  `affiliation` varchar(50) DEFAULT NULL,
+  `carnegieClassification` varchar(100) DEFAULT NULL,
+  `irsStatus` varchar(50) DEFAULT NULL,
+  `establishedDate` int(10) DEFAULT NULL,
+  `tuition` int(10) DEFAULT NULL,
+  `modified` datetime DEFAULT NULL,
+  `eventType` varchar(2) DEFAULT NULL,
+  `eventKeyID` int(10) DEFAULT NULL,
+  `type` varchar(20) DEFAULT NULL,
+  `county` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`targetAreaID`),
+  KEY `index1` (`name`),
+  KEY `index2` (`isApproved`),
+  KEY `index3` (`state`),
+  KEY `index4` (`country`),
+  KEY `index5` (`isSecure`),
+  KEY `index6` (`region`),
+  KEY `index7` (`isClosed`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `mpd_contact_actions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -2702,10 +4247,6 @@ CREATE TABLE `mpd_letter_images` (
   `size` int(11) DEFAULT NULL,
   `width` int(11) DEFAULT NULL,
   `height` int(11) DEFAULT NULL,
-  `photo_file_name` varchar(255) DEFAULT NULL,
-  `photo_content_type` varchar(255) DEFAULT NULL,
-  `photo_file_size` int(11) DEFAULT NULL,
-  `photo_updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `mpd_letter_id` (`mpd_letter_id`),
   KEY `parent_id` (`parent_id`)
@@ -2723,6 +4264,7 @@ CREATE TABLE `mpd_letter_templates` (
 
 CREATE TABLE `mpd_letters` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mpd_user_id` int(11) DEFAULT NULL,
   `mpd_letter_template_id` int(11) DEFAULT NULL,
   `date` date DEFAULT NULL,
   `salutation` varchar(255) DEFAULT 'Dear [[SALUTATION]],',
@@ -2733,7 +4275,6 @@ CREATE TABLE `mpd_letters` (
   `acknowledge_section` text,
   `closing` varchar(255) DEFAULT 'Thank you,',
   `printed_name` varchar(255) DEFAULT NULL,
-  `mpd_user_id` int(11) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `mpd_letters_mpd_letter_template_id_index` (`mpd_letter_template_id`),
@@ -2818,7 +4359,7 @@ CREATE TABLE `nags` (
   `usersubject` text,
   `period` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `old_wsn_sp_wsnapplication` (
   `WsnApplicationID` int(10) NOT NULL AUTO_INCREMENT,
@@ -3066,7 +4607,7 @@ CREATE TABLE `old_wsn_sp_wsnapplication` (
   KEY `index8` (`status`),
   KEY `index9` (`wsnYear`),
   KEY `fk_personID` (`fk_personID`)
-) ENGINE=MyISAM AUTO_INCREMENT=32617 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `oncampus_orders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3090,7 +4631,7 @@ CREATE TABLE `oncampus_orders` (
   `produced_at` datetime DEFAULT NULL,
   `shipped_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `oncampus_uses` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3106,7 +4647,7 @@ CREATE TABLE `oncampus_uses` (
   `description` text NOT NULL,
   `feedback` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `organization_memberships` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3118,12 +4659,25 @@ CREATE TABLE `organization_memberships` (
   `updated_at` datetime DEFAULT NULL,
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
-  `role` varchar(255) DEFAULT NULL,
-  `followup_status` enum('uncontacted','attempted_contact','contacted','do_not_contact','completed') DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `index_organization_memberships_on_organization_id_and_person_id` (`organization_id`,`person_id`),
-  KEY `index_organization_memberships_on_followup_status` (`followup_status`)
-) ENGINE=InnoDB AUTO_INCREMENT=101598 DEFAULT CHARSET=latin1;
+  UNIQUE KEY `index_organization_memberships_on_organization_id_and_person_id` (`organization_id`,`person_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1076 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `organizational_roles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `person_id` int(11) DEFAULT NULL,
+  `role_id` int(11) DEFAULT NULL,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `organization_id` int(11) DEFAULT NULL,
+  `followup_status` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `person_role_org` (`person_id`,`organization_id`,`role_id`),
+  KEY `role_org_status` (`organization_id`,`role_id`,`followup_status`)
+) ENGINE=InnoDB AUTO_INCREMENT=1075 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `organizations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3136,10 +4690,27 @@ CREATE TABLE `organizations` (
   `terminology` varchar(255) DEFAULT NULL,
   `importable_id` int(11) DEFAULT NULL,
   `importable_type` varchar(255) DEFAULT NULL,
+  `show_sub_orgs` tinyint(1) NOT NULL DEFAULT '0',
+  `status` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_organizations_on_importable_type_and_importable_id` (`importable_type`,`importable_id`),
-  KEY `index_organizations_on_ancestry` (`ancestry`)
-) ENGINE=InnoDB AUTO_INCREMENT=5380 DEFAULT CHARSET=utf8;
+  KEY `index_organizations_on_ancestry` (`ancestry`),
+  KEY `index_organizations_on_name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `person_accesses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `national_access` tinyint(1) DEFAULT NULL,
+  `regional_access` tinyint(1) DEFAULT NULL,
+  `ics_access` tinyint(1) DEFAULT NULL,
+  `intern_access` tinyint(1) DEFAULT NULL,
+  `stint_access` tinyint(1) DEFAULT NULL,
+  `mtl_access` tinyint(1) DEFAULT NULL,
+  `person_id` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `phone_numbers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3150,14 +4721,249 @@ CREATE TABLE `phone_numbers` (
   `primary` tinyint(1) DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
+  `txt_to_email` varchar(255) DEFAULT NULL,
+  `carrier_id` int(11) DEFAULT NULL,
+  `email_updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `index_phone_numbers_on_person_id_and_number` (`person_id`,`number`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `index_phone_numbers_on_carrier_id` (`carrier_id`),
+  KEY `index_phone_numbers_on_person_id_and_number` (`person_id`,`number`)
+) ENGINE=InnoDB AUTO_INCREMENT=1077 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `plugin_schema_info` (
   `plugin_name` varchar(255) DEFAULT NULL,
   `version` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `pr_admins` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `person_id` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `pr_answer_sheet_question_sheets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `answer_sheet_id` int(11) DEFAULT NULL,
+  `question_sheet_id` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `pr_answer_sheets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `question_sheet_id` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `completed_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `pr_answers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `answer_sheet_id` int(11) NOT NULL,
+  `question_id` int(11) NOT NULL,
+  `value` text,
+  `short_value` varchar(255) DEFAULT NULL,
+  `attachment_file_size` int(11) DEFAULT NULL,
+  `attachment_content_type` varchar(255) DEFAULT NULL,
+  `attachment_file_name` varchar(255) DEFAULT NULL,
+  `attachment_updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_pr_answers_on_short_value` (`short_value`),
+  KEY `index_pr_answers_on_answer_sheet_id` (`answer_sheet_id`),
+  KEY `index_pr_answers_on_question_id` (`question_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `pr_conditions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `question_sheet_id` int(11) NOT NULL,
+  `trigger_id` int(11) NOT NULL,
+  `expression` varchar(255) NOT NULL,
+  `toggle_page_id` int(11) NOT NULL,
+  `toggle_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `pr_elements` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `kind` varchar(40) NOT NULL,
+  `style` varchar(40) DEFAULT NULL,
+  `label` varchar(1000) DEFAULT NULL,
+  `content` text,
+  `required` tinyint(1) DEFAULT NULL,
+  `slug` varchar(36) DEFAULT NULL,
+  `position` int(11) DEFAULT NULL,
+  `object_name` varchar(255) DEFAULT NULL,
+  `attribute_name` varchar(255) DEFAULT NULL,
+  `source` varchar(255) DEFAULT NULL,
+  `value_xpath` varchar(255) DEFAULT NULL,
+  `text_xpath` varchar(255) DEFAULT NULL,
+  `question_grid_id` int(11) DEFAULT NULL,
+  `cols` varchar(255) DEFAULT NULL,
+  `is_confidential` tinyint(1) DEFAULT NULL,
+  `total_cols` varchar(255) DEFAULT NULL,
+  `css_id` varchar(255) DEFAULT NULL,
+  `css_class` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `related_question_sheet_id` int(11) DEFAULT NULL,
+  `conditional_id` int(11) DEFAULT NULL,
+  `tooltip` text,
+  `hide_label` tinyint(1) DEFAULT '0',
+  `hide_option_labels` tinyint(1) DEFAULT '0',
+  `max_length` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_pr_elements_on_slug` (`slug`),
+  KEY `index_pr_elements_on_question_sheet_id_and_position_and_page_id` (`position`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `pr_email_templates` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(1000) NOT NULL,
+  `content` text,
+  `enabled` tinyint(1) DEFAULT NULL,
+  `subject` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_pr_email_templates_on_name` (`name`(767))
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `pr_page_elements` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `page_id` int(11) DEFAULT NULL,
+  `element_id` int(11) DEFAULT NULL,
+  `position` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `pr_pages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `question_sheet_id` int(11) NOT NULL,
+  `label` varchar(100) NOT NULL,
+  `number` int(11) DEFAULT NULL,
+  `no_cache` tinyint(1) DEFAULT '0',
+  `hidden` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `pr_personal_forms` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `person_id` int(11) DEFAULT NULL,
+  `question_sheet_id` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `pr_question_sheet_pr_infos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `question_sheet_id` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `form_type` varchar(255) DEFAULT 'review',
+  `summary_form_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `pr_question_sheets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `label` varchar(60) NOT NULL,
+  `archived` tinyint(1) DEFAULT '0',
+  `fake_deleted` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `pr_references` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `question_id` int(11) DEFAULT NULL,
+  `applicant_answer_sheet_id` int(11) DEFAULT NULL,
+  `email_sent_at` datetime DEFAULT NULL,
+  `relationship` varchar(255) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `submitted_at` datetime DEFAULT NULL,
+  `access_key` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `pr_reminders` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `person_id` int(11) DEFAULT NULL,
+  `label` varchar(255) DEFAULT NULL,
+  `note` varchar(255) DEFAULT NULL,
+  `reminder_date` date DEFAULT NULL,
+  `send_email` tinyint(1) DEFAULT '0',
+  `email_days_diff` int(11) DEFAULT '0',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `email_sent_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `pr_reviewers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `review_id` int(11) DEFAULT NULL,
+  `person_id` int(11) DEFAULT NULL,
+  `invitation_sent_at` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `access_key` varchar(255) DEFAULT NULL,
+  `submitted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `pr_reviews` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `subject_id` int(11) DEFAULT NULL,
+  `initiator_id` int(11) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `percent` int(11) DEFAULT NULL,
+  `due` date DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `purpose` varchar(255) DEFAULT NULL,
+  `question_sheet_id` int(11) DEFAULT NULL,
+  `completed_at` datetime DEFAULT NULL,
+  `show_summary_form_days` int(11) DEFAULT '14',
+  `fake_deleted` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `pr_sessions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `session_id` text,
+  `data` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `pr_summary_forms` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `person_id` int(11) DEFAULT NULL,
+  `review_id` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `pr_users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ssm_id` int(11) DEFAULT NULL,
+  `last_login` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `profile_pictures` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3172,7 +4978,7 @@ CREATE TABLE `profile_pictures` (
   `uploaded_date` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_profile_pictures_on_person_id` (`person_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=125 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `questionnaires` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3180,7 +4986,7 @@ CREATE TABLE `questionnaires` (
   `type` varchar(50) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `rails_admin_histories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3194,7 +5000,7 @@ CREATE TABLE `rails_admin_histories` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_histories_on_item_and_table_and_month_and_year` (`item`,`table`,`month`,`year`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `rails_crons` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3204,7 +5010,7 @@ CREATE TABLE `rails_crons` (
   `every` int(11) DEFAULT NULL,
   `concurrent` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `received_sms` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3215,15 +5021,18 @@ CREATE TABLE `received_sms` (
   `country` varchar(255) DEFAULT NULL,
   `person_id` varchar(255) DEFAULT NULL,
   `received_at` datetime DEFAULT NULL,
-  `followed_up` tinyint(1) DEFAULT '0',
-  `assigned_to_id` int(11) DEFAULT NULL,
-  `response_count` int(11) DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `interactive` tinyint(1) DEFAULT '0',
   `sms_keyword_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  `sms_session_id` int(11) DEFAULT NULL,
+  `state` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `zip` varchar(255) DEFAULT NULL,
+  `twilio_sid` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_received_sms_on_phone_number_and_message_and_received_at` (`phone_number`,`message`,`received_at`),
+  UNIQUE KEY `index_received_sms_on_twilio_sid` (`twilio_sid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `rejoicables` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3234,8 +5043,9 @@ CREATE TABLE `rejoicables` (
   `what` enum('spiritual_conversation','prayed_to_receive','gospel_presentation') DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `rideshare_event` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3244,7 +5054,7 @@ CREATE TABLE `rideshare_event` (
   `password` varchar(50) NOT NULL,
   `email_content` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `rideshare_ride` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3273,7 +5083,17 @@ CREATE TABLE `rideshare_ride` (
   KEY `fk_eventID` (`event_id`),
   KEY `fk_driverID` (`driver_ride_id`),
   KEY `fk_personID` (`person_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=567 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `roles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `organization_id` int(11) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `i18n` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `schema_migrations` (
   `version` varchar(255) NOT NULL,
@@ -3288,7 +5108,7 @@ CREATE TABLE `school_years` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sent_sms` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3297,11 +5117,15 @@ CREATE TABLE `sent_sms` (
   `reports` text,
   `moonshado_claimcheck` varchar(255) DEFAULT NULL,
   `sent_via` varchar(255) DEFAULT NULL,
-  `recieved_sms_id` int(11) DEFAULT NULL,
+  `received_sms_id` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  `twilio_sid` varchar(255) DEFAULT NULL,
+  `twilio_uri` varchar(255) DEFAULT NULL,
+  `separator` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_sent_sms_on_twilio_sid` (`twilio_sid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `si_answer_sheets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3516,12 +5340,186 @@ CREATE TABLE `simplesecuritymanager_user` (
   `updated_at` datetime DEFAULT NULL,
   `last_sign_in_at` datetime DEFAULT NULL,
   `locale` varchar(255) DEFAULT NULL,
+  `emailVerified` bit(1) DEFAULT NULL,
+  `lastFailure` datetime DEFAULT NULL,
+  `lastFailureCnt` int(11) DEFAULT NULL,
   PRIMARY KEY (`userID`),
   UNIQUE KEY `CK_simplesecuritymanager_user_username` (`username`),
   UNIQUE KEY `globallyUniqueID` (`globallyUniqueID`),
   UNIQUE KEY `index_simplesecuritymanager_user_on_email` (`email`),
   KEY `index_simplesecuritymanager_user_on_fb_user_id` (`fb_user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1535272 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1076 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `sitrack_application_all_deprecated` (
+  `applicationID` int(10) NOT NULL AUTO_INCREMENT,
+  `locationA` varchar(50) DEFAULT NULL,
+  `locationAExplanation` varchar(90) DEFAULT NULL,
+  `locationB` varchar(50) DEFAULT NULL,
+  `locationBExplanation` varchar(90) DEFAULT NULL,
+  `locationC` varchar(50) DEFAULT NULL,
+  `locationCExplanation` varchar(90) DEFAULT NULL,
+  `availableMonth` varchar(2) DEFAULT NULL,
+  `availableYear` varchar(4) DEFAULT NULL,
+  `hasMinistryConflict` int(10) DEFAULT NULL,
+  `ministryConflictExplanation` longtext,
+  `hasSpecificLocation` int(10) DEFAULT NULL,
+  `specificLocationRecruiterName` varchar(50) DEFAULT NULL,
+  `teamMembers` longtext,
+  `isDating` int(10) DEFAULT NULL,
+  `datingLocation` longtext,
+  `hasCampusPartnership` int(10) DEFAULT NULL,
+  `isDatingStint` int(10) DEFAULT NULL,
+  `datingStintName` longtext,
+  `language1` varchar(50) DEFAULT NULL,
+  `language1YearsStudied` varchar(20) DEFAULT NULL,
+  `language1Fluency` int(10) DEFAULT NULL,
+  `language2` varchar(50) DEFAULT NULL,
+  `language2YearsStudied` varchar(20) DEFAULT NULL,
+  `language2Fluency` int(10) DEFAULT NULL,
+  `previousMinistryExperience` longtext,
+  `ministryTraining` longtext,
+  `evangelismAttitude` longtext,
+  `isEvangelismTrainable` int(10) DEFAULT NULL,
+  `participationExplanation` longtext,
+  `isFamiliarFourSpiritualLaws` int(10) DEFAULT NULL,
+  `hasExperienceFourSpiritualLaws` int(10) DEFAULT NULL,
+  `confidenceFourSpiritualLaws` int(10) DEFAULT NULL,
+  `isFamiliarLifeAtLarge` int(10) DEFAULT NULL,
+  `hasExperienceLifeAtLarge` int(10) DEFAULT NULL,
+  `confidenceLifeAtLarge` int(10) DEFAULT NULL,
+  `isFamiliarPersonalTestimony` int(10) DEFAULT NULL,
+  `hasExperiencePersonalTestimony` int(10) DEFAULT NULL,
+  `confidencePersonalTestimony` int(10) DEFAULT NULL,
+  `isFamiliarExplainingGospel` int(10) DEFAULT NULL,
+  `hasExperienceExplainingGospel` int(10) DEFAULT NULL,
+  `confidenceExplainingGospel` int(10) DEFAULT NULL,
+  `isFamiliarSharingFaith` int(10) DEFAULT NULL,
+  `hasExperienceSharingFaith` int(10) DEFAULT NULL,
+  `confidenceSharingFaith` int(10) DEFAULT NULL,
+  `isFamiliarHolySpiritBooklet` int(10) DEFAULT NULL,
+  `hasExperienceHolySpiritBooklet` int(10) DEFAULT NULL,
+  `confidenceHolySpiritBooklet` int(10) DEFAULT NULL,
+  `isFamiliarFollowUp` int(10) DEFAULT NULL,
+  `hasExperienceFollowUp` int(10) DEFAULT NULL,
+  `confidenceFollowUp` int(10) DEFAULT NULL,
+  `isFamiliarHelpGrowInFaith` int(10) DEFAULT NULL,
+  `hasExperienceHelpGrowInFaith` int(10) DEFAULT NULL,
+  `confidenceHelpGrowInFaith` int(10) DEFAULT NULL,
+  `isFamiliarTrainShareFaith` int(10) DEFAULT NULL,
+  `hasExperienceTrainShareFaith` int(10) DEFAULT NULL,
+  `confidenceTrainShareFaith` int(10) DEFAULT NULL,
+  `isFamiliarOtherReligions` int(10) DEFAULT NULL,
+  `hasExperienceOtherReligions` int(10) DEFAULT NULL,
+  `confidenceOtherReligions` int(10) DEFAULT NULL,
+  `leadershipPositions` longtext,
+  `hasLedDiscipleshipGroup` int(10) DEFAULT NULL,
+  `discipleshipGroupSize` varchar(50) DEFAULT NULL,
+  `leadershipEvaluation` longtext,
+  `conversionMonth` int(10) DEFAULT NULL,
+  `conversionYear` int(10) DEFAULT NULL,
+  `memberChurchDenomination` varchar(75) DEFAULT NULL,
+  `memberChurchDuration` varchar(50) DEFAULT NULL,
+  `attendingChurchDenomination` varchar(50) DEFAULT NULL,
+  `attendingChurchDuration` varchar(50) DEFAULT NULL,
+  `attendingChurchInvolvement` longtext,
+  `quietTimeQuantity` longtext,
+  `quietTimeDescription` longtext,
+  `explanationOfSalvation` longtext,
+  `explanationOfSpiritFilled` longtext,
+  `hasInvolvementSpeakingTongues` int(10) DEFAULT NULL,
+  `differenceIndwellingFilled` longtext,
+  `hasCrimeConviction` int(10) DEFAULT NULL,
+  `crimeConvictionExplanation` longtext,
+  `hasDrugUse` int(10) DEFAULT NULL,
+  `isTobaccoUser` int(10) DEFAULT NULL,
+  `isWillingChangeHabits` int(10) DEFAULT NULL,
+  `authorityResponseExplanation` longtext,
+  `alcoholUseFrequency` longtext,
+  `alcoholUseDecision` longtext,
+  `isWillingRefrainAlcohol` int(10) DEFAULT NULL,
+  `unwillingRefrainAlcoholExplanation` longtext,
+  `drugUseExplanation` longtext,
+  `tobaccoUseExplanation` longtext,
+  `isWillingAbstainTobacco` int(10) DEFAULT NULL,
+  `hasRequestedPhoneCall` int(10) DEFAULT NULL,
+  `contactPhoneNumber` varchar(50) DEFAULT NULL,
+  `contactBestTime` varchar(50) DEFAULT NULL,
+  `contactTimeZone` varchar(50) DEFAULT NULL,
+  `sexualInvolvementExplanation` longtext,
+  `hasSexualGuidelines` int(10) DEFAULT NULL,
+  `sexualGuidelineExplanation` longtext,
+  `isCurrentlyDating` int(10) DEFAULT NULL,
+  `currentlyDatingLocation` longtext,
+  `hasHomosexualInvolvement` int(10) DEFAULT NULL,
+  `homosexualInvolvementExplanation` longtext,
+  `hasRecentPornographicInvolvement` int(10) DEFAULT NULL,
+  `pornographicInvolvementMonth` int(10) DEFAULT NULL,
+  `pornographicInvolvementYear` int(10) DEFAULT NULL,
+  `pornographicInvolvementExplanation` longtext,
+  `hasRecentSexualImmorality` int(10) DEFAULT NULL,
+  `sexualImmoralityMonth` int(10) DEFAULT NULL,
+  `sexualImmoralityYear` int(10) DEFAULT NULL,
+  `sexualImmoralityExplanation` longtext,
+  `hasOtherDateSinceImmorality` int(10) DEFAULT NULL,
+  `singleImmoralityResultsExplanation` longtext,
+  `marriedImmoralityResultsExplanation` longtext,
+  `immoralityLifeChangeExplanation` longtext,
+  `immoralityCurrentStrugglesExplanation` longtext,
+  `additionalMoralComments` longtext,
+  `isAwareMustRaiseSupport` int(10) DEFAULT NULL,
+  `isInDebt` int(10) DEFAULT NULL,
+  `debtNature1` varchar(50) DEFAULT NULL,
+  `debtTotal1` varchar(50) DEFAULT NULL,
+  `debtMonthlyPayment1` varchar(50) DEFAULT NULL,
+  `debtNature2` varchar(50) DEFAULT NULL,
+  `debtTotal2` varchar(50) DEFAULT NULL,
+  `debtMonthlyPayment2` varchar(50) DEFAULT NULL,
+  `debtNature3` varchar(50) DEFAULT NULL,
+  `debtTotal3` varchar(50) DEFAULT NULL,
+  `debtMonthlyPayment3` varchar(50) DEFAULT NULL,
+  `hasOtherFinancialResponsibility` int(10) DEFAULT NULL,
+  `otherFinancialResponsibilityExplanation` longtext,
+  `debtPaymentPlan` longtext,
+  `debtPaymentTimeframe` longtext,
+  `developingPartnersExplanation` longtext,
+  `isWillingDevelopPartners` int(10) DEFAULT NULL,
+  `unwillingDevelopPartnersExplanation` longtext,
+  `isCommittedDevelopPartners` int(10) DEFAULT NULL,
+  `uncommittedDevelopPartnersExplanation` longtext,
+  `personalTestimonyGrowth` longtext,
+  `internshipParticipationExplanation` longtext,
+  `internshipObjectives` longtext,
+  `currentMinistryDescription` longtext,
+  `personalStrengthA` longtext,
+  `personalStrengthB` longtext,
+  `personalStrengthC` longtext,
+  `personalDevelopmentA` longtext,
+  `personalDevelopmentB` longtext,
+  `personalDevelopmentC` longtext,
+  `personalDescriptionA` longtext,
+  `personalDescriptionB` longtext,
+  `personalDescriptionC` longtext,
+  `familyRelationshipDescription` longtext,
+  `electronicSignature` varchar(90) DEFAULT NULL,
+  `ssn` varchar(50) DEFAULT NULL,
+  `fk_ssmUserID` int(10) DEFAULT NULL,
+  `fk_personID` int(10) DEFAULT NULL,
+  `isPaid` tinyint(1) DEFAULT NULL,
+  `appFee` decimal(18,0) DEFAULT NULL,
+  `dateAppLastChanged` datetime DEFAULT NULL,
+  `dateAppStarted` datetime DEFAULT NULL,
+  `dateSubmitted` datetime DEFAULT NULL,
+  `isSubmitted` tinyint(1) DEFAULT NULL,
+  `appStatus` varchar(15) DEFAULT NULL,
+  `assignedToProject` int(10) DEFAULT NULL,
+  `finalProject` decimal(10,0) DEFAULT NULL,
+  `siYear` varchar(50) DEFAULT NULL,
+  `submitDate` datetime DEFAULT NULL,
+  `status` varchar(22) DEFAULT NULL,
+  `appType` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`applicationID`),
+  KEY `fk_PersonID` (`fk_personID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='InnoDB free: 532480 kB';
 
 CREATE TABLE `sitrack_children` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -3531,7 +5529,7 @@ CREATE TABLE `sitrack_children` (
   `person_id` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_personID` (`person_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sitrack_columns` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -3547,7 +5545,7 @@ CREATE TABLE `sitrack_columns` (
   `updated_at` datetime DEFAULT NULL,
   `maxlength` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=158 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sitrack_enum_values` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -3557,7 +5555,7 @@ CREATE TABLE `sitrack_enum_values` (
   `position` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_sitrack_enum_values_on_sitrack_column_id` (`sitrack_column_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sitrack_feeds` (
   `feed` varchar(50) NOT NULL,
@@ -3607,7 +5605,7 @@ CREATE TABLE `sitrack_forms` (
   `hr_si_application_id` int(11) NOT NULL,
   `additional_notes` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10592 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sitrack_mpd` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -3632,7 +5630,7 @@ CREATE TABLE `sitrack_mpd` (
   PRIMARY KEY (`id`),
   KEY `fk_personID` (`person_id`),
   KEY `fk_applicationID` (`application_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4199 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sitrack_queries` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -3643,7 +5641,7 @@ CREATE TABLE `sitrack_queries` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `owner` (`owner`)
-) ENGINE=InnoDB AUTO_INCREMENT=364 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sitrack_saved_criteria` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -3657,7 +5655,7 @@ CREATE TABLE `sitrack_saved_criteria` (
   PRIMARY KEY (`id`),
   KEY `owner_sitrack_SavedCriteria` (`owner`),
   KEY `index_sitrack_saved_criteria_on_saved` (`saved`)
-) ENGINE=InnoDB AUTO_INCREMENT=50677 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sitrack_session_values` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -3667,7 +5665,7 @@ CREATE TABLE `sitrack_session_values` (
   PRIMARY KEY (`id`),
   KEY `index_sitrack_session_values_on_attrib` (`attrib`),
   KEY `sitrack_session_id` (`sitrack_session_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=73652 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sitrack_sessions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3675,14 +5673,14 @@ CREATE TABLE `sitrack_sessions` (
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `index_sitrack_sessions_on_sitrack_user_id` (`sitrack_user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=276 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sitrack_tracking` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `application_id` int(10) DEFAULT NULL,
   `person_id` int(10) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL,
-  `internType` varchar(30) DEFAULT NULL,
+  `internType` varchar(20) DEFAULT NULL,
   `tenure` varchar(50) DEFAULT NULL,
   `ssn` varchar(50) DEFAULT NULL,
   `teamLeader` tinyint(3) DEFAULT NULL,
@@ -3761,7 +5759,7 @@ CREATE TABLE `sitrack_tracking` (
   KEY `tenure` (`tenure`),
   KEY `fk_applicationID` (`application_id`),
   KEY `fk_personID` (`person_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8730 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sitrack_users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -3773,7 +5771,7 @@ CREATE TABLE `sitrack_users` (
   `updated_by` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_sitrack_users_on_ssm_id` (`ssm_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=402 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sitrack_view_columns` (
   `sitrack_view_id` int(10) NOT NULL DEFAULT '0',
@@ -3783,7 +5781,7 @@ CREATE TABLE `sitrack_view_columns` (
   PRIMARY KEY (`id`),
   KEY `sitrack_view_id` (`sitrack_view_id`),
   KEY `sitrack_column_id` (`sitrack_column_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22474 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sitrack_views` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -3791,7 +5789,7 @@ CREATE TABLE `sitrack_views` (
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `uuid` (`sitrack_user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2600 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sms_carriers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3804,8 +5802,10 @@ CREATE TABLE `sms_carriers` (
   `sent_sms` int(11) DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
+  `cloudvox_name` varchar(255) DEFAULT NULL,
+  `data247_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `sms_keywords` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3819,10 +5819,25 @@ CREATE TABLE `sms_keywords` (
   `explanation` text,
   `state` varchar(255) DEFAULT NULL,
   `initial_response` varchar(140) DEFAULT 'Hi! Thanks for checking out Cru. Visit {{ link }} to get more involved.',
-  `post_survey_message` text,
+  `post_survey_message_deprecated` text,
   `event_type` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+  `gateway` varchar(255) NOT NULL DEFAULT '',
+  `survey_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_sms_keywords_on_survey_id` (`survey_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `sms_sessions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `phone_number` varchar(255) DEFAULT NULL,
+  `person_id` int(11) DEFAULT NULL,
+  `sms_keyword_id` int(11) DEFAULT NULL,
+  `interactive` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `session` (`phone_number`,`updated_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `sn_campus_involvements` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3841,15 +5856,7 @@ CREATE TABLE `sn_campus_involvements` (
   KEY `index_sn_campus_involvements_on_ministry_id` (`ministry_id`),
   KEY `index_sn_campus_involvements_on_campus_id` (`campus_id`),
   KEY `index_sn_campus_involvements_on_person_id` (`person_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1072 DEFAULT CHARSET=utf8;
-
-CREATE TABLE `sn_campus_ministry_group` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `group_id` int(11) DEFAULT NULL,
-  `campus_id` int(11) DEFAULT NULL,
-  `ministry_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_columns` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3866,7 +5873,7 @@ CREATE TABLE `sn_columns` (
   `source_column` varchar(255) DEFAULT NULL,
   `foreign_key` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_correspondence_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3908,7 +5915,7 @@ CREATE TABLE `sn_custom_attributes` (
   PRIMARY KEY (`id`),
   KEY `index_sn_custom_attributes_on_ministry_id` (`ministry_id`),
   KEY `index_sn_custom_attributes_on_type` (`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_custom_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3917,7 +5924,7 @@ CREATE TABLE `sn_custom_values` (
   `value` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_sn_custom_values_on_person_id_and_custom_attribute_id` (`person_id`,`custom_attribute_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_delayed_jobs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3932,7 +5939,7 @@ CREATE TABLE `sn_delayed_jobs` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_dorms` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3941,7 +5948,7 @@ CREATE TABLE `sn_dorms` (
   `created_at` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `campus_id` (`campus_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_email_templates` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3969,7 +5976,7 @@ CREATE TABLE `sn_emails` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_free_times` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3982,7 +5989,7 @@ CREATE TABLE `sn_free_times` (
   `css_class` varchar(255) DEFAULT NULL,
   `weight` decimal(4,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1288 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_group_involvements` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3990,11 +5997,9 @@ CREATE TABLE `sn_group_involvements` (
   `group_id` int(11) DEFAULT NULL,
   `level` varchar(255) DEFAULT NULL,
   `requested` tinyint(1) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `person_group` (`person_id`,`group_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_group_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4007,10 +6012,8 @@ CREATE TABLE `sn_group_types` (
   `unsuitability_leader` int(11) DEFAULT NULL,
   `unsuitability_coleader` int(11) DEFAULT NULL,
   `unsuitability_participant` int(11) DEFAULT NULL,
-  `collection_group_name` varchar(255) DEFAULT '{{campus}} interested in a {{group_type}}',
-  `has_collection_groups` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4031,13 +6034,11 @@ CREATE TABLE `sn_groups` (
   `day` int(11) DEFAULT NULL,
   `group_type_id` int(11) DEFAULT NULL,
   `needs_approval` tinyint(1) DEFAULT NULL,
-  `semester_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_sn_groups_on_ministry_id` (`ministry_id`),
   KEY `index_sn_groups_on_campus_id` (`campus_id`),
-  KEY `index_sn_groups_on_dorm_id` (`dorm_id`),
-  KEY `index_sn_groups_on_semester_id` (`semester_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+  KEY `index_sn_groups_on_dorm_id` (`dorm_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_imports` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4069,7 +6070,7 @@ CREATE TABLE `sn_involvement_histories` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `sn_ministries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4087,25 +6088,9 @@ CREATE TABLE `sn_ministries` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `ministries_count` int(11) DEFAULT NULL,
-  `lane` varchar(255) DEFAULT NULL,
-  `note` varchar(255) DEFAULT NULL,
-  `address2` varchar(255) DEFAULT NULL,
-  `isActive` varchar(255) DEFAULT NULL,
-  `hasMultiRegionalAccess` varchar(255) DEFAULT NULL,
-  `dept_id` varchar(255) DEFAULT NULL,
-  `status` varchar(255) DEFAULT NULL,
-  `strategy_id` int(11) DEFAULT NULL,
-  `legacy_regionalteam_id` int(11) DEFAULT NULL,
-  `legacy_locallevel_id` int(11) DEFAULT NULL,
-  `legacy_activity_id` int(11) DEFAULT NULL,
-  `type` varchar(255) DEFAULT NULL,
-  `lft` int(11) DEFAULT NULL,
-  `rgt` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_sn_ministries_on_parent_id` (`parent_id`),
-  KEY `index_sn_ministries_on_lft` (`lft`),
-  KEY `index_sn_ministries_on_rgt` (`rgt`)
-) ENGINE=InnoDB AUTO_INCREMENT=6904 DEFAULT CHARSET=utf8;
+  KEY `index_sn_ministries_on_parent_id` (`parent_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_ministry_campuses` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4115,7 +6100,7 @@ CREATE TABLE `sn_ministry_campuses` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `ministry_campus` (`ministry_id`,`campus_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13781 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_ministry_involvements` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4127,13 +6112,10 @@ CREATE TABLE `sn_ministry_involvements` (
   `ministry_role_id` int(11) DEFAULT NULL,
   `responsible_person_id` int(11) DEFAULT NULL,
   `last_history_update_date` date DEFAULT NULL,
-  `is_people_soft` tinyint(1) DEFAULT NULL,
-  `is_leader` tinyint(1) DEFAULT NULL,
-  `legacy_missional_team_member_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `person_ministry` (`person_id`,`ministry_id`),
   KEY `index_sn_ministry_involvements_on_ministry_id` (`ministry_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3924 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_ministry_role_permissions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4141,7 +6123,7 @@ CREATE TABLE `sn_ministry_role_permissions` (
   `ministry_role_id` int(11) DEFAULT NULL,
   `created_at` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=229 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_ministry_roles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4152,36 +6134,10 @@ CREATE TABLE `sn_ministry_roles` (
   `position` int(11) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
-  `involved` tinyint(1) DEFAULT '1',
+  `involved` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_sn_ministry_roles_on_ministry_id` (`ministry_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=146 DEFAULT CHARSET=utf8;
-
-CREATE TABLE `sn_news` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) DEFAULT NULL,
-  `message` text,
-  `group_id` int(11) DEFAULT NULL,
-  `ministry_id` int(11) DEFAULT NULL,
-  `person_id` int(11) DEFAULT NULL,
-  `sticky` tinyint(1) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  `staff` tinyint(1) DEFAULT NULL,
-  `students` tinyint(1) DEFAULT NULL,
-  `featured` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-
-CREATE TABLE `sn_news_comments` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `news_id` int(11) DEFAULT NULL,
-  `person_id` int(11) DEFAULT NULL,
-  `comment` text,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_permissions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4189,20 +6145,7 @@ CREATE TABLE `sn_permissions` (
   `controller` varchar(255) DEFAULT NULL,
   `action` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8;
-
-CREATE TABLE `sn_person_news` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `news_id` int(11) DEFAULT NULL,
-  `person_id` int(11) DEFAULT NULL,
-  `hidden` tinyint(1) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  `featured` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `index_sn_person_news_on_person_id` (`person_id`),
-  KEY `index_sn_person_news_on_news_id` (`news_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_searches` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4217,19 +6160,7 @@ CREATE TABLE `sn_searches` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=203 DEFAULT CHARSET=utf8;
-
-CREATE TABLE `sn_semesters` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `year_id` int(11) DEFAULT NULL,
-  `start_date` date DEFAULT NULL,
-  `desc` varchar(255) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `index_sn_semesters_on_year_id` (`year_id`),
-  KEY `index_sn_semesters_on_start_date` (`start_date`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_sessions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4240,7 +6171,7 @@ CREATE TABLE `sn_sessions` (
   PRIMARY KEY (`id`),
   KEY `index_sessions_on_session_id` (`session_id`),
   KEY `index_sessions_on_updated_at` (`updated_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=3793 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_timetables` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4250,7 +6181,7 @@ CREATE TABLE `sn_timetables` (
   PRIMARY KEY (`id`),
   KEY `person_id` (`person_id`),
   CONSTRAINT `sn_timetables_ibfk_1` FOREIGN KEY (`person_id`) REFERENCES `ministry_person` (`personID`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=99 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_training_answers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4262,7 +6193,7 @@ CREATE TABLE `sn_training_answers` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_sn_training_answers_on_person_id` (`person_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_training_categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4273,7 +6204,7 @@ CREATE TABLE `sn_training_categories` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_sn_training_categories_on_ministry_id` (`ministry_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_training_question_activations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4283,7 +6214,7 @@ CREATE TABLE `sn_training_question_activations` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_training_questions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4295,16 +6226,7 @@ CREATE TABLE `sn_training_questions` (
   PRIMARY KEY (`id`),
   KEY `index_sn_training_questions_on_ministry_id` (`ministry_id`),
   KEY `index_sn_training_questions_on_training_category_id` (`training_category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
-
-CREATE TABLE `sn_user_codes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
-  `code` varchar(255) DEFAULT NULL,
-  `pass` text,
-  PRIMARY KEY (`id`),
-  KEY `index_sn_user_codes_on_user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_user_group_permissions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4340,7 +6262,7 @@ CREATE TABLE `sn_view_columns` (
   PRIMARY KEY (`id`),
   KEY `index_sn_view_columns_on_view_id_and_column_id` (`view_id`,`column_id`),
   KEY `index_sn_view_columns_on_column_id` (`column_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=433 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sn_views` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4351,15 +6273,7 @@ CREATE TABLE `sn_views` (
   `default_view` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_sn_views_on_ministry_id` (`ministry_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8;
-
-CREATE TABLE `sn_years` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `desc` varchar(255) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_answer_sheet_question_sheets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4369,8 +6283,9 @@ CREATE TABLE `sp_answer_sheet_question_sheets` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_sp_answer_sheet_question_sheets_on_answer_sheet_id` (`answer_sheet_id`),
-  KEY `index_sp_answer_sheet_question_sheets_on_question_sheet_id` (`question_sheet_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5708 DEFAULT CHARSET=utf8;
+  KEY `index_sp_answer_sheet_question_sheets_on_question_sheet_id` (`question_sheet_id`),
+  CONSTRAINT `sp_answer_sheet_question_sheets_ibfk_1` FOREIGN KEY (`answer_sheet_id`) REFERENCES `sp_applications` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `sp_answer_sheets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4378,7 +6293,7 @@ CREATE TABLE `sp_answer_sheets` (
   `created_at` datetime NOT NULL,
   `completed_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `sp_answers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4391,10 +6306,18 @@ CREATE TABLE `sp_answers` (
   `attachment_file_name` varchar(255) DEFAULT NULL,
   `attachment_updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_sp_answers_on_answer_sheet_id` (`answer_sheet_id`),
-  KEY `index_sp_answers_on_question_id` (`question_id`),
   KEY `index_sp_answers_on_short_value` (`short_value`),
-  KEY `index_on_as_and_q` (`question_id`,`answer_sheet_id`)
+  KEY `index_sp_answers_on_answer_sheet_id` (`answer_sheet_id`),
+  KEY `index_sp_answers_on_question_id` (`question_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `sp_answers_deprecated` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `question_id` int(11) DEFAULT NULL,
+  `instance_id` int(11) DEFAULT NULL,
+  `answer` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `question_id` (`instance_id`,`question_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_application_moves` (
@@ -4406,7 +6329,7 @@ CREATE TABLE `sp_application_moves` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `sp_applications` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4437,10 +6360,8 @@ CREATE TABLE `sp_applications` (
   `previous_status` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_sp_applications_on_person_id` (`person_id`),
-  KEY `index_sp_applications_on_year` (`year`),
-  KEY `project_id` (`project_id`),
-  CONSTRAINT `sp_applications_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `sp_projects` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=57808 DEFAULT CHARSET=utf8;
+  KEY `index_sp_applications_on_year` (`year`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_conditions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4450,14 +6371,29 @@ CREATE TABLE `sp_conditions` (
   `toggle_page_id` int(11) NOT NULL,
   `toggle_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `sp_donations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `designation_number` int(11) NOT NULL,
-  `amount` double NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `people_id` varchar(255) DEFAULT NULL,
+  `donor_name` varchar(255) DEFAULT NULL,
+  `donation_date` date DEFAULT NULL,
+  `address1` varchar(255) DEFAULT NULL,
+  `address2` varchar(255) DEFAULT NULL,
+  `address3` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `state` varchar(255) DEFAULT NULL,
+  `zip` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `email_address` varchar(255) DEFAULT NULL,
+  `medium_type` varchar(255) DEFAULT NULL,
+  `donation_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `sp_donations_designation_number_index` (`designation_number`)
+  KEY `sp_donations_designation_number_index` (`designation_number`),
+  KEY `index_sp_donations_on_designation_number` (`designation_number`),
+  KEY `index_sp_donations_on_donation_date` (`donation_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_elements` (
@@ -4466,7 +6402,7 @@ CREATE TABLE `sp_elements` (
   `style` varchar(40) DEFAULT NULL,
   `label` text,
   `content` text,
-  `required` tinyint(1) DEFAULT NULL,
+  `required` tinyint(1) DEFAULT '0',
   `slug` varchar(36) DEFAULT NULL,
   `position` int(11) DEFAULT NULL,
   `object_name` varchar(255) DEFAULT NULL,
@@ -4490,8 +6426,29 @@ CREATE TABLE `sp_elements` (
   `max_length` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_sp_elements_on_slug` (`slug`),
-  KEY `index_sp_elements_on_question_sheet_id_and_position_and_page_id` (`position`)
-) ENGINE=InnoDB AUTO_INCREMENT=1727 DEFAULT CHARSET=utf8;
+  KEY `index_sp_elements_on_question_sheet_id_and_position_and_page_id` (`position`),
+  KEY `index_sp_elements_on_conditional_id` (`conditional_id`),
+  KEY `index_sp_elements_on_question_grid_id` (`question_grid_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `sp_elements_deprecated` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) DEFAULT NULL,
+  `type` varchar(50) DEFAULT NULL,
+  `text` text,
+  `is_required` tinyint(1) DEFAULT NULL,
+  `question_table` varchar(50) DEFAULT NULL,
+  `question_column` varchar(50) DEFAULT NULL,
+  `position` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `created_by_id` int(11) DEFAULT NULL,
+  `updated_by_id` int(11) DEFAULT NULL,
+  `dependency_id` int(11) DEFAULT NULL,
+  `max_length` int(11) NOT NULL DEFAULT '0',
+  `is_confidential` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_email_templates` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4503,7 +6460,7 @@ CREATE TABLE `sp_email_templates` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_sp_email_templates_on_name` (`name`(255))
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_evaluations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4524,7 +6481,7 @@ CREATE TABLE `sp_evaluations` (
   `eating` tinyint(1) DEFAULT '0',
   `comments` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16752 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_gospel_in_actions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4532,13 +6489,13 @@ CREATE TABLE `sp_gospel_in_actions` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `sp_ministry_focuses` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_ministry_focuses_projects` (
   `sp_project_id` int(11) NOT NULL DEFAULT '0',
@@ -4558,7 +6515,17 @@ CREATE TABLE `sp_page_elements` (
   KEY `element_id` (`element_id`),
   CONSTRAINT `sp_page_elements_ibfk_1` FOREIGN KEY (`page_id`) REFERENCES `sp_pages` (`id`) ON DELETE CASCADE,
   CONSTRAINT `sp_page_elements_ibfk_2` FOREIGN KEY (`element_id`) REFERENCES `sp_elements` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3843 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `sp_page_elements_deprecated` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `page_id` int(11) DEFAULT NULL,
+  `element_id` int(11) DEFAULT NULL,
+  `position` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_pages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4570,7 +6537,19 @@ CREATE TABLE `sp_pages` (
   PRIMARY KEY (`id`),
   KEY `page_number` (`question_sheet_id`,`number`),
   CONSTRAINT `sp_pages_ibfk_1` FOREIGN KEY (`question_sheet_id`) REFERENCES `sp_question_sheets` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=689 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `sp_pages_deprecated` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) DEFAULT NULL,
+  `url_name` varchar(50) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `created_by_id` int(11) DEFAULT NULL,
+  `updated_by_id` int(11) DEFAULT NULL,
+  `hidden` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_payments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4583,7 +6562,7 @@ CREATE TABLE `sp_payments` (
   `status` varchar(255) DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16141 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_project_gospel_in_actions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4591,12 +6570,8 @@ CREATE TABLE `sp_project_gospel_in_actions` (
   `project_id` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `gospel_in_action_id` (`gospel_in_action_id`),
-  KEY `project_id` (`project_id`),
-  CONSTRAINT `sp_project_gospel_in_actions_ibfk_1` FOREIGN KEY (`gospel_in_action_id`) REFERENCES `sp_gospel_in_actions` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `sp_project_gospel_in_actions_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `sp_projects` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `sp_project_versions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4688,14 +6663,14 @@ CREATE TABLE `sp_project_versions` (
   KEY `index_sp_project_versions_on_year` (`year`),
   KEY `index_sp_project_versions_on_primary_ministry_focus_id` (`primary_ministry_focus_id`),
   KEY `index_sp_project_versions_on_sp_project_id` (`sp_project_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=183777 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_projects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `pd_id` int(11) DEFAULT NULL,
   `apd_id` int(11) DEFAULT NULL,
   `opd_id` int(11) DEFAULT NULL,
-  `name` varchar(200) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
   `city` varchar(50) DEFAULT NULL,
   `state` varchar(50) DEFAULT NULL,
   `country` varchar(60) DEFAULT NULL,
@@ -4781,13 +6756,14 @@ CREATE TABLE `sp_projects` (
   `basic_info_question_sheet_id` int(11) DEFAULT NULL,
   `template_question_sheet_id` int(11) DEFAULT NULL,
   `project_specific_question_sheet_id` int(11) DEFAULT NULL,
+  `high_school` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `sp_projects_name_index` (`name`),
   KEY `primary_partner` (`primary_partner`),
   KEY `secondary_partner` (`secondary_partner`),
   KEY `project_status` (`project_status`),
   KEY `year` (`year`)
-) ENGINE=InnoDB AUTO_INCREMENT=718 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_question_options` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4797,14 +6773,14 @@ CREATE TABLE `sp_question_options` (
   `position` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=346 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_question_sheets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `label` varchar(1000) NOT NULL,
+  `label` varchar(60) NOT NULL,
   `archived` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=286 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_questionnaire_pages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4814,7 +6790,7 @@ CREATE TABLE `sp_questionnaire_pages` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_references` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4833,17 +6809,39 @@ CREATE TABLE `sp_references` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `is_staff` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `sp_references_deprecated` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `application_id` int(11) DEFAULT NULL,
+  `type` varchar(50) DEFAULT NULL,
+  `email_sent_at` datetime DEFAULT NULL,
+  `is_staff` tinyint(1) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `accountNo` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `submitted_at` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `created_by_id` int(11) DEFAULT NULL,
+  `updated_by_id` int(11) DEFAULT NULL,
+  `access_key` varchar(255) DEFAULT NULL,
+  `mail` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `question_id` (`question_id`),
-  CONSTRAINT `sp_references_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `sp_elements` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=108923 DEFAULT CHARSET=latin1;
+  KEY `application_id` (`application_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_roles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `role` varchar(50) DEFAULT NULL,
   `user_class` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_staff` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4852,11 +6850,8 @@ CREATE TABLE `sp_staff` (
   `type` varchar(100) NOT NULL DEFAULT '',
   `year` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `project_staff_type` (`project_id`,`type`,`year`),
-  KEY `person_id` (`person_id`),
-  CONSTRAINT `sp_staff_ibfk_1` FOREIGN KEY (`person_id`) REFERENCES `ministry_person` (`personID`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  CONSTRAINT `sp_staff_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `sp_projects` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6157 DEFAULT CHARSET=utf8;
+  KEY `project_staff_type` (`project_id`,`type`,`year`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_stats` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4884,7 +6879,7 @@ CREATE TABLE `sp_stats` (
   `launched_campuses` int(11) DEFAULT NULL,
   `movements_launched` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=348 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sp_student_quotes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4893,10 +6888,8 @@ CREATE TABLE `sp_student_quotes` (
   `name` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `project_id` (`project_id`),
-  CONSTRAINT `sp_student_quotes_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `sp_projects` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `sp_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4907,11 +6900,8 @@ CREATE TABLE `sp_users` (
   `type` varchar(255) DEFAULT NULL,
   `person_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `sp_users_ssm_id_index` (`ssm_id`),
-  KEY `person_id` (`person_id`),
-  CONSTRAINT `sp_users_ibfk_1` FOREIGN KEY (`person_id`) REFERENCES `ministry_person` (`personID`) ON DELETE CASCADE,
-  CONSTRAINT `sp_users_ibfk_2` FOREIGN KEY (`ssm_id`) REFERENCES `simplesecuritymanager_user` (`userID`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6409 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `sp_users_ssm_id_index` (`ssm_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `staffsite_staffsitepref` (
   `StaffSitePrefID` int(10) NOT NULL AUTO_INCREMENT,
@@ -4922,7 +6912,7 @@ CREATE TABLE `staffsite_staffsitepref` (
   PRIMARY KEY (`StaffSitePrefID`),
   KEY `index1` (`fk_StaffSiteProfile`),
   KEY `index2` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=48345 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `staffsite_staffsiteprofile` (
   `StaffSiteProfileID` int(10) NOT NULL AUTO_INCREMENT,
@@ -4938,14 +6928,14 @@ CREATE TABLE `staffsite_staffsiteprofile` (
   `passwordAnswer` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`StaffSiteProfileID`),
   KEY `index1` (`userName`)
-) ENGINE=InnoDB AUTO_INCREMENT=10355 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `states` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `state` varchar(100) DEFAULT NULL,
   `code` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `summer_placement_preferences` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4956,6 +6946,16 @@ CREATE TABLE `summer_placement_preferences` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `super_admins` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `site` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_super_admins_on_user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE `teams` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `organization_id` int(11) DEFAULT NULL,
@@ -4964,7 +6964,7 @@ CREATE TABLE `teams` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_teams_on_organization_id` (`organization_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `versions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4976,9 +6976,447 @@ CREATE TABLE `versions` (
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_versions_on_item_type_and_item_id` (`item_type`,`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `wsn_sp_answer_deprecated` (
+  `answerID` int(10) NOT NULL AUTO_INCREMENT,
+  `body` varchar(1000) DEFAULT NULL,
+  `fk_QuestionID` int(10) DEFAULT NULL,
+  `fk_WsnApplicationID` int(10) DEFAULT NULL,
+  PRIMARY KEY (`answerID`),
+  KEY `fk_WsnApplicationID` (`fk_QuestionID`,`fk_WsnApplicationID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO schema_migrations (version) VALUES ('');
+CREATE TABLE `wsn_sp_question_deprecated` (
+  `questionID` int(10) NOT NULL AUTO_INCREMENT,
+  `required` char(1) DEFAULT NULL,
+  `displayOrder` int(10) DEFAULT NULL,
+  `fk_WsnProjectID` int(10) DEFAULT NULL,
+  `fk_QuestionTextID` int(10) DEFAULT NULL,
+  PRIMARY KEY (`questionID`),
+  KEY `fk_WsnProjectID` (`fk_WsnProjectID`),
+  KEY `fk_QuestionTextID` (`fk_QuestionTextID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `wsn_sp_questiontext_deprecated` (
+  `questionTextID` int(10) NOT NULL AUTO_INCREMENT,
+  `body` varchar(250) DEFAULT NULL,
+  `answerType` varchar(50) DEFAULT NULL,
+  `status` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`questionTextID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `wsn_sp_reference_deprecated` (
+  `referenceID` int(10) NOT NULL AUTO_INCREMENT,
+  `formWorkflowStatus` varchar(1) DEFAULT NULL,
+  `createDate` datetime DEFAULT NULL,
+  `lastChangedDate` datetime DEFAULT NULL,
+  `lastChangedBy` varchar(30) DEFAULT NULL,
+  `isFormSubmitted` tinyint(1) DEFAULT NULL,
+  `formSubmittedDate` datetime DEFAULT NULL,
+  `referenceType` varchar(2) DEFAULT NULL,
+  `title` varchar(5) DEFAULT NULL,
+  `firstName` varchar(30) DEFAULT NULL,
+  `lastName` varchar(30) DEFAULT NULL,
+  `isStaff` tinyint(1) DEFAULT NULL,
+  `staffNumber` varchar(16) DEFAULT NULL,
+  `currentAddress1` varchar(50) DEFAULT NULL,
+  `currentAddress2` varchar(50) DEFAULT NULL,
+  `currentCity` varchar(35) DEFAULT NULL,
+  `currentState` varchar(6) DEFAULT NULL,
+  `currentZip` varchar(10) DEFAULT NULL,
+  `cellPhone` varchar(24) DEFAULT NULL,
+  `homePhone` varchar(24) DEFAULT NULL,
+  `workPhone` varchar(24) DEFAULT NULL,
+  `currentEmail` varchar(50) DEFAULT NULL,
+  `howKnown` varchar(64) DEFAULT NULL,
+  `howLongKnown` varchar(64) DEFAULT NULL,
+  `howWellKnown` varchar(64) DEFAULT NULL,
+  `sendMidEval` tinyint(1) DEFAULT NULL,
+  `_1a` int(10) DEFAULT NULL,
+  `_2a` int(10) DEFAULT NULL,
+  `_3a` int(10) DEFAULT NULL,
+  `_4a` int(10) DEFAULT NULL,
+  `_5a` int(10) DEFAULT NULL,
+  `_6a` int(10) DEFAULT NULL,
+  `_7a` int(10) DEFAULT NULL,
+  `_8a` int(10) DEFAULT NULL,
+  `_9a` int(10) DEFAULT NULL,
+  `_10a` int(10) DEFAULT NULL,
+  `_11a` int(10) DEFAULT NULL,
+  `_12a` int(10) DEFAULT NULL,
+  `_13a` int(10) DEFAULT NULL,
+  `_14a` int(10) DEFAULT NULL,
+  `_15a` int(10) DEFAULT NULL,
+  `_16a` int(10) DEFAULT NULL,
+  `_17a` int(10) DEFAULT NULL,
+  `_18a` int(10) DEFAULT NULL,
+  `_19a` int(10) DEFAULT NULL,
+  `_20a` int(10) DEFAULT NULL,
+  `_21a` int(10) DEFAULT NULL,
+  `_1sa` mediumtext,
+  `_2sa` mediumtext,
+  `_3sa` mediumtext,
+  `_4sa` mediumtext,
+  `_5sa` mediumtext,
+  `_6sa` mediumtext,
+  `_6sb` char(1) DEFAULT NULL,
+  `_6sc` mediumtext,
+  `_7sa` mediumtext,
+  `_8sa` mediumtext,
+  `closingRemarks` mediumtext,
+  `fk_WsnApplicationID` int(10) DEFAULT NULL,
+  PRIMARY KEY (`referenceID`),
+  KEY `fk_WsnApplicationID` (`fk_WsnApplicationID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='InnoDB free: 532480 kB';
+
+CREATE TABLE `wsn_sp_wsnapplication_deprecated` (
+  `WsnApplicationID` int(10) NOT NULL AUTO_INCREMENT,
+  `surferID` varchar(64) DEFAULT NULL,
+  `role` varchar(1) DEFAULT NULL,
+  `earliestAvailableDate` varchar(22) DEFAULT NULL,
+  `dateMustReturn` varchar(22) DEFAULT NULL,
+  `willingForDifferentProject` tinyint(1) DEFAULT '1',
+  `usCitizen` tinyint(1) DEFAULT '1',
+  `isApplicationComplete` tinyint(1) DEFAULT '0',
+  `projectPref1` int(11) DEFAULT NULL,
+  `projectPref2` int(11) DEFAULT NULL,
+  `projectPref3` int(11) DEFAULT NULL,
+  `projectPref4` int(11) DEFAULT NULL,
+  `projectPref5` int(11) DEFAULT NULL,
+  `applAccountNo` varchar(11) DEFAULT NULL,
+  `supportBalance` float DEFAULT NULL,
+  `insuranceReceived` tinyint(1) DEFAULT '0',
+  `waiverReceived` tinyint(1) DEFAULT '0',
+  `didGo` tinyint(1) DEFAULT '0',
+  `participantEvaluation` tinyint(1) DEFAULT '0',
+  `arrivalGatewayCityToLocation` varchar(22) DEFAULT NULL,
+  `locationToGatewayCityFlightNo` varchar(50) DEFAULT NULL,
+  `departLocationToGatewayCity` varchar(22) DEFAULT NULL,
+  `passportNo` varchar(25) DEFAULT NULL,
+  `passportCountry` varchar(50) DEFAULT NULL,
+  `passportIssueDate` varchar(22) DEFAULT NULL,
+  `passportExpirationDate` varchar(22) DEFAULT NULL,
+  `visaCountry` varchar(50) DEFAULT NULL,
+  `visaNo` varchar(50) DEFAULT NULL,
+  `visaType` varchar(50) DEFAULT NULL,
+  `visaIsMultipleEntry` tinyint(1) DEFAULT '0',
+  `visaIssueDate` varchar(22) DEFAULT NULL,
+  `visaExpirationDate` varchar(22) DEFAULT NULL,
+  `dateUpdated` varchar(22) DEFAULT NULL,
+  `isStaff` tinyint(1) DEFAULT '0',
+  `prevIsp` tinyint(1) DEFAULT '0',
+  `child` tinyint(1) DEFAULT '0',
+  `status` varchar(22) DEFAULT NULL,
+  `wsnYear` varchar(4) DEFAULT NULL,
+  `fk_isMember` int(11) DEFAULT NULL,
+  `participateImpact` tinyint(1) DEFAULT '0',
+  `participateDestino` tinyint(1) DEFAULT '0',
+  `participateEpic` tinyint(1) DEFAULT NULL,
+  `springBreakStart` datetime DEFAULT NULL,
+  `springBreakEnd` datetime DEFAULT NULL,
+  `isIntern` tinyint(1) DEFAULT '0',
+  `_1a` tinyint(1) DEFAULT '0',
+  `_1b` tinyint(1) DEFAULT '0',
+  `_1c` tinyint(1) DEFAULT '0',
+  `_1d` tinyint(1) DEFAULT '0',
+  `_1e` tinyint(1) DEFAULT '0',
+  `_1f` longtext,
+  `_2a` tinyint(1) DEFAULT NULL,
+  `_2b` longtext,
+  `_2c` tinyint(1) DEFAULT NULL,
+  `_3a` tinyint(1) DEFAULT NULL,
+  `_3b` tinyint(1) DEFAULT NULL,
+  `_3c` tinyint(1) DEFAULT NULL,
+  `_3d` tinyint(1) DEFAULT NULL,
+  `_3e` tinyint(1) DEFAULT NULL,
+  `_3f` tinyint(1) DEFAULT NULL,
+  `_3g` tinyint(1) DEFAULT NULL,
+  `_3h` longtext,
+  `_4a` tinyint(1) DEFAULT NULL,
+  `_4b` tinyint(1) DEFAULT NULL,
+  `_4c` tinyint(1) DEFAULT NULL,
+  `_4d` tinyint(1) DEFAULT NULL,
+  `_4e` tinyint(1) DEFAULT NULL,
+  `_4f` tinyint(1) DEFAULT NULL,
+  `_4g` tinyint(1) DEFAULT NULL,
+  `_4h` tinyint(1) DEFAULT NULL,
+  `_4i` longtext,
+  `_5a` tinyint(1) DEFAULT NULL,
+  `_5b` tinyint(1) DEFAULT NULL,
+  `_5c` tinyint(1) DEFAULT NULL,
+  `_5d` tinyint(1) DEFAULT NULL,
+  `_5e` longtext,
+  `_5f` tinyint(1) DEFAULT NULL,
+  `_5g` longtext,
+  `_5h` tinyint(1) DEFAULT NULL,
+  `_6` longtext,
+  `_7` longtext,
+  `_8a` longtext,
+  `_8b` longtext,
+  `_9` longtext,
+  `_10` longtext,
+  `_11a` tinyint(1) DEFAULT NULL,
+  `_11b` longtext,
+  `_12a` tinyint(1) DEFAULT NULL,
+  `_12b` longtext,
+  `_13a` tinyint(1) DEFAULT NULL,
+  `_13b` tinyint(1) DEFAULT NULL,
+  `_13c` tinyint(1) DEFAULT NULL,
+  `_14` longtext,
+  `_15` tinyint(1) DEFAULT NULL,
+  `_16` int(10) DEFAULT NULL,
+  `_17` int(10) DEFAULT NULL,
+  `_18` int(10) DEFAULT NULL,
+  `_19a` tinyint(1) DEFAULT NULL,
+  `_19b` tinyint(1) DEFAULT NULL,
+  `_19c` tinyint(1) DEFAULT NULL,
+  `_19d` tinyint(1) DEFAULT NULL,
+  `_19e` tinyint(1) DEFAULT NULL,
+  `_19f` varchar(255) DEFAULT NULL,
+  `_20a` longtext,
+  `_20b` longtext,
+  `_20c` longtext,
+  `_21a` tinyint(1) DEFAULT NULL,
+  `_21b` tinyint(1) DEFAULT NULL,
+  `_21c` tinyint(1) DEFAULT NULL,
+  `_21d` tinyint(1) DEFAULT NULL,
+  `_21e` tinyint(1) DEFAULT NULL,
+  `_21f` tinyint(1) DEFAULT NULL,
+  `_21g` tinyint(1) DEFAULT NULL,
+  `_21h` tinyint(1) DEFAULT NULL,
+  `_21i` longtext,
+  `_21j` char(1) DEFAULT NULL,
+  `_22a` tinyint(1) DEFAULT NULL,
+  `_22b` longtext,
+  `_23a` tinyint(1) DEFAULT NULL,
+  `_23b` longtext,
+  `_24a` tinyint(1) DEFAULT NULL,
+  `_24b` longtext,
+  `_25` longtext,
+  `_26a` tinyint(1) DEFAULT NULL,
+  `_26b` longtext,
+  `_27a` tinyint(1) DEFAULT NULL,
+  `_27b` longtext,
+  `_28a` tinyint(1) DEFAULT NULL,
+  `_28b` longtext,
+  `_29a` tinyint(1) DEFAULT NULL,
+  `_29b` longtext,
+  `_29c` tinyint(1) DEFAULT NULL,
+  `_29d` tinyint(1) DEFAULT NULL,
+  `_29e` longtext,
+  `_29f` longtext,
+  `_30` longtext,
+  `_31` longtext,
+  `_32` longtext,
+  `_33` longtext,
+  `_34` longtext,
+  `_35` longtext,
+  `isPaid` tinyint(1) DEFAULT NULL,
+  `isApplyingForStaffInternship` tinyint(1) DEFAULT NULL,
+  `createDate` datetime DEFAULT NULL,
+  `lastChangedDate` datetime DEFAULT NULL,
+  `lastChangedBy` int(11) DEFAULT NULL,
+  `isRecruited` tinyint(1) DEFAULT NULL,
+  `assignedToProject` int(11) DEFAULT NULL,
+  `electronicSignature` varchar(50) DEFAULT NULL,
+  `submittedDate` datetime DEFAULT NULL,
+  `assignedDate` datetime DEFAULT NULL,
+  `acceptedDate` datetime DEFAULT NULL,
+  `notAcceptedDate` datetime DEFAULT NULL,
+  `withdrawnDate` datetime DEFAULT NULL,
+  `preferredContactMethod` varchar(1) DEFAULT NULL,
+  `howOftenCheckEmail` varchar(30) DEFAULT NULL,
+  `otherClassDetails` varchar(30) DEFAULT NULL,
+  `participateOtherProjects` tinyint(1) DEFAULT NULL,
+  `campusHasStaffTeam` tinyint(1) DEFAULT NULL,
+  `campusHasStaffCoach` tinyint(1) DEFAULT NULL,
+  `campusHasMetroTeam` tinyint(1) DEFAULT NULL,
+  `campusHasOther` tinyint(1) DEFAULT NULL,
+  `campusHasOtherDetails` varchar(30) DEFAULT NULL,
+  `inSchoolNextFall` tinyint(1) DEFAULT NULL,
+  `participateCCC` tinyint(1) DEFAULT NULL,
+  `participateNone` tinyint(1) DEFAULT NULL,
+  `ciPhoneCallRequested` tinyint(1) DEFAULT NULL,
+  `ciPhoneNumber` varchar(24) DEFAULT NULL,
+  `ciBestTimeToCall` varchar(10) DEFAULT NULL,
+  `ciTimeZone` varchar(10) DEFAULT NULL,
+  `_26date` varchar(10) DEFAULT NULL,
+  `fk_personID` int(10) DEFAULT NULL,
+  PRIMARY KEY (`WsnApplicationID`),
+  KEY `index1` (`fk_isMember`),
+  KEY `index10` (`applAccountNo`),
+  KEY `index8` (`status`),
+  KEY `index9` (`wsnYear`),
+  KEY `fk_personID` (`fk_personID`),
+  KEY `status` (`status`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `wsn_sp_wsndonations_deprecated` (
+  `WsnDonationsID` int(10) NOT NULL AUTO_INCREMENT,
+  `accountno` varchar(11) DEFAULT NULL,
+  `monetary_amount` float NOT NULL,
+  PRIMARY KEY (`WsnDonationsID`),
+  KEY `accountno` (`accountno`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `wsn_sp_wsnevaluation_deprecated` (
+  `evalID` int(10) NOT NULL AUTO_INCREMENT,
+  `applicantNotified` tinyint(1) DEFAULT NULL,
+  `_Qual1` int(10) DEFAULT NULL,
+  `_Qual2` int(10) DEFAULT NULL,
+  `_Qual3` int(10) DEFAULT NULL,
+  `_Qual4` int(10) DEFAULT NULL,
+  `_Qual5` int(10) DEFAULT NULL,
+  `_Qual6` int(10) DEFAULT NULL,
+  `_Qual7` int(10) DEFAULT NULL,
+  `_Qual8` int(10) DEFAULT NULL,
+  `_DeQual1` tinyint(1) DEFAULT NULL,
+  `_DeQual2` tinyint(1) DEFAULT NULL,
+  `_DeQual3` tinyint(1) DEFAULT NULL,
+  `_DeQual4` tinyint(1) DEFAULT NULL,
+  `_DeQual5` tinyint(1) DEFAULT NULL,
+  `_DeQual6` tinyint(1) DEFAULT NULL,
+  `comment` varchar(2000) DEFAULT NULL,
+  `score` int(10) DEFAULT NULL,
+  `fk_WsnApplicationID` int(10) DEFAULT NULL,
+  `parent_dateCreated` datetime DEFAULT NULL,
+  `parent_haveDiscussed` tinyint(1) DEFAULT NULL,
+  `parent_advice` int(10) DEFAULT NULL,
+  `parent_adviceReason` varchar(2000) DEFAULT NULL,
+  `parent_name` varchar(100) DEFAULT NULL,
+  `parent_signature` varchar(100) DEFAULT NULL,
+  `parent_dateSigned` datetime DEFAULT NULL,
+  PRIMARY KEY (`evalID`),
+  KEY `IX_wsn_sp_WsnEvaluation` (`fk_WsnApplicationID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `wsn_sp_wsnproject_deprecated` (
+  `WsnProjectID` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `partnershipRegion` varchar(50) DEFAULT NULL,
+  `history` longtext,
+  `startDate` varchar(255) DEFAULT NULL,
+  `stopDate` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `country` varchar(255) DEFAULT NULL,
+  `details` longtext,
+  `status` varchar(255) DEFAULT NULL,
+  `destinationGatewayCity` varchar(255) DEFAULT NULL,
+  `departDateFromGateCity` varchar(255) DEFAULT NULL,
+  `arrivalDateAtLocation` varchar(255) DEFAULT NULL,
+  `locationGatewayCity` varchar(255) DEFAULT NULL,
+  `departureDateFromLocation` varchar(255) DEFAULT NULL,
+  `arrivalDateAtGatewayCity` varchar(255) DEFAULT NULL,
+  `flightBudget` varchar(255) DEFAULT NULL,
+  `GatewayCitytoLocationFlightNo` varchar(255) DEFAULT NULL,
+  `locationToGatewayCityFlightNo` varchar(255) DEFAULT NULL,
+  `inCountryContact` varchar(255) DEFAULT NULL,
+  `scholarshipAccountNo` varchar(255) DEFAULT NULL,
+  `operatingAccountNo` varchar(255) DEFAULT NULL,
+  `AOA` varchar(255) DEFAULT NULL,
+  `MPTA` varchar(255) DEFAULT NULL,
+  `staffCost` varchar(255) DEFAULT NULL,
+  `studentCost` varchar(255) DEFAULT NULL,
+  `insuranceFormsReceived` tinyint(1) DEFAULT NULL,
+  `CAPSFeePaid` tinyint(1) DEFAULT NULL,
+  `adminFeePaid` tinyint(1) DEFAULT NULL,
+  `storiesXX` varchar(255) DEFAULT NULL,
+  `stats` varchar(255) DEFAULT NULL,
+  `secure` tinyint(1) DEFAULT NULL,
+  `dateCreated` varchar(255) DEFAULT NULL,
+  `lastUpdate` varchar(255) DEFAULT NULL,
+  `maxNoStaff` int(10) DEFAULT NULL,
+  `maxNoStudents` int(10) DEFAULT NULL,
+  `projEvalCompleted` tinyint(1) DEFAULT NULL,
+  `evangelisticExposures` int(10) DEFAULT NULL,
+  `receivedChrist` int(10) DEFAULT NULL,
+  `jesusFilmExposures` int(10) DEFAULT NULL,
+  `jesusFilmReveivedChrist` int(10) DEFAULT NULL,
+  `coverageActivitiesExposures` int(10) DEFAULT NULL,
+  `coverageActivitiesDecisions` int(10) DEFAULT NULL,
+  `holySpiritDecisions` int(10) DEFAULT NULL,
+  `website` varchar(255) DEFAULT NULL,
+  `destinationAddress` varchar(255) DEFAULT NULL,
+  `destinationPhone` varchar(255) DEFAULT NULL,
+  `wsnYear` varchar(255) DEFAULT NULL,
+  `fk_IsCoord` int(10) DEFAULT NULL,
+  `fk_IsAPD` int(10) DEFAULT NULL,
+  `fk_IsPD` int(10) DEFAULT NULL,
+  `projectType` varchar(1) DEFAULT NULL,
+  `studentStartDate` datetime DEFAULT NULL,
+  `studentEndDate` datetime DEFAULT NULL,
+  `staffStartDate` datetime DEFAULT NULL,
+  `staffEndDate` datetime DEFAULT NULL,
+  `leadershipStartDate` datetime DEFAULT NULL,
+  `leadershipEndDate` datetime DEFAULT NULL,
+  `createDate` datetime DEFAULT NULL,
+  `lastChangedDate` datetime DEFAULT NULL,
+  `lastChangedBy` varchar(50) DEFAULT NULL,
+  `displayLocation` varchar(50) DEFAULT NULL,
+  `partnershipRegionOnly` tinyint(1) DEFAULT NULL,
+  `internCost` varchar(50) DEFAULT NULL,
+  `onHold` tinyint(1) DEFAULT NULL,
+  `maxNoStaffMale` int(10) DEFAULT NULL,
+  `maxNoStaffFemale` int(10) DEFAULT NULL,
+  `maxNoStaffCouples` int(10) DEFAULT NULL,
+  `maxNoStaffFamilies` int(10) DEFAULT NULL,
+  `maxNoInternAMale` int(10) DEFAULT NULL,
+  `maxNoInternAFemale` int(10) DEFAULT NULL,
+  `maxNoInternACouples` int(10) DEFAULT NULL,
+  `maxNoInternAFamilies` int(10) DEFAULT NULL,
+  `maxNoInternA` int(10) DEFAULT NULL,
+  `maxNoInternPMale` int(10) DEFAULT NULL,
+  `maxNoInternPFemale` int(10) DEFAULT NULL,
+  `maxNoInternPCouples` int(10) DEFAULT NULL,
+  `maxNoInternPFamilies` int(10) DEFAULT NULL,
+  `maxNoInternP` int(10) DEFAULT NULL,
+  `maxNoStudentAMale` int(10) DEFAULT NULL,
+  `maxNoStudentAFemale` int(10) DEFAULT NULL,
+  `maxNoStudentACouples` int(10) DEFAULT NULL,
+  `maxNoStudentAFamilies` int(10) DEFAULT NULL,
+  `maxNoStudentA` int(10) DEFAULT NULL,
+  `maxNoStudentPMale` int(10) DEFAULT NULL,
+  `maxNoStudentPFemale` int(10) DEFAULT NULL,
+  `maxNoStudentPCouples` int(10) DEFAULT NULL,
+  `maxNoStudentPFamilies` int(10) DEFAULT NULL,
+  `operatingBusinessUnit` varchar(255) DEFAULT NULL,
+  `operatingOperatingUnit` varchar(255) DEFAULT NULL,
+  `operatingDeptID` varchar(255) DEFAULT NULL,
+  `operatingProjectID` varchar(255) DEFAULT NULL,
+  `operatingDesignation` varchar(255) DEFAULT NULL,
+  `scholarshipBusinessUnit` varchar(255) DEFAULT NULL,
+  `scholarshipOperatingUnit` varchar(255) DEFAULT NULL,
+  `scholarshipDeptID` varchar(255) DEFAULT NULL,
+  `scholarshipProjectID` varchar(255) DEFAULT NULL,
+  `scholarshipDesignation` varchar(255) DEFAULT NULL,
+  `statesideContactName` varchar(45) DEFAULT NULL,
+  `statesideContactProjectRole` varchar(35) DEFAULT NULL,
+  `statesideContactPhone` varchar(20) DEFAULT NULL,
+  `statesideContactEmail` varchar(75) DEFAULT NULL,
+  `currentNoStudentAMale` int(11) DEFAULT NULL,
+  `currentNoStudentPMale` int(11) DEFAULT NULL,
+  `currentNoStudentAFemale` int(11) DEFAULT NULL,
+  `currentNoStudentPFemale` int(11) DEFAULT NULL,
+  `numApplicants` int(11) DEFAULT NULL,
+  PRIMARY KEY (`WsnProjectID`),
+  KEY `index1` (`fk_IsAPD`),
+  KEY `index2` (`fk_IsPD`),
+  KEY `index3` (`fk_IsCoord`),
+  KEY `index4` (`wsnYear`),
+  KEY `index5` (`status`),
+  KEY `index6` (`name`),
+  KEY `index7` (`partnershipRegion`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+CREATE TABLE `wsn_sp_wsnusers_deprecated` (
+  `wsnUserID` int(10) NOT NULL AUTO_INCREMENT,
+  `ssmUserName` varchar(200) DEFAULT NULL,
+  `role` varchar(50) DEFAULT NULL,
+  `expirationDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`wsnUserID`),
+  KEY `IX_wsn_sp_WsnUsers_fk_UserName` (`ssmUserName`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO schema_migrations (version) VALUES ('1');
 
@@ -5170,13 +7608,45 @@ INSERT INTO schema_migrations (version) VALUES ('20081023162920');
 
 INSERT INTO schema_migrations (version) VALUES ('20081023200331');
 
-INSERT INTO schema_migrations (version) VALUES ('20081125201327');
-
 INSERT INTO schema_migrations (version) VALUES ('20091211181230');
 
 INSERT INTO schema_migrations (version) VALUES ('20091219152836');
 
 INSERT INTO schema_migrations (version) VALUES ('20091228165906');
+
+INSERT INTO schema_migrations (version) VALUES ('20100101010101');
+
+INSERT INTO schema_migrations (version) VALUES ('20100101010102');
+
+INSERT INTO schema_migrations (version) VALUES ('20100101010103');
+
+INSERT INTO schema_migrations (version) VALUES ('20100101010104');
+
+INSERT INTO schema_migrations (version) VALUES ('20100101010105');
+
+INSERT INTO schema_migrations (version) VALUES ('20100101010106');
+
+INSERT INTO schema_migrations (version) VALUES ('20100101010107');
+
+INSERT INTO schema_migrations (version) VALUES ('20100101010108');
+
+INSERT INTO schema_migrations (version) VALUES ('20100101010109');
+
+INSERT INTO schema_migrations (version) VALUES ('20100101010110');
+
+INSERT INTO schema_migrations (version) VALUES ('20100101010111');
+
+INSERT INTO schema_migrations (version) VALUES ('20100101010112');
+
+INSERT INTO schema_migrations (version) VALUES ('20100101010113');
+
+INSERT INTO schema_migrations (version) VALUES ('20100101010114');
+
+INSERT INTO schema_migrations (version) VALUES ('20100101010115');
+
+INSERT INTO schema_migrations (version) VALUES ('20100101010116');
+
+INSERT INTO schema_migrations (version) VALUES ('20100101010117');
 
 INSERT INTO schema_migrations (version) VALUES ('20100107171648');
 
@@ -5222,31 +7692,9 @@ INSERT INTO schema_migrations (version) VALUES ('20100603154513');
 
 INSERT INTO schema_migrations (version) VALUES ('20100607155549');
 
-INSERT INTO schema_migrations (version) VALUES ('20100624184736');
-
-INSERT INTO schema_migrations (version) VALUES ('20100628192154');
-
-INSERT INTO schema_migrations (version) VALUES ('20100630042925');
-
 INSERT INTO schema_migrations (version) VALUES ('20100706181119');
 
-INSERT INTO schema_migrations (version) VALUES ('20100707011955');
-
-INSERT INTO schema_migrations (version) VALUES ('20100707012048');
-
-INSERT INTO schema_migrations (version) VALUES ('20100708013548');
-
-INSERT INTO schema_migrations (version) VALUES ('20100708013617');
-
-INSERT INTO schema_migrations (version) VALUES ('20100708032653');
-
-INSERT INTO schema_migrations (version) VALUES ('20100715180454');
-
-INSERT INTO schema_migrations (version) VALUES ('20100716141719');
-
 INSERT INTO schema_migrations (version) VALUES ('20100716144408');
-
-INSERT INTO schema_migrations (version) VALUES ('20100716190054');
 
 INSERT INTO schema_migrations (version) VALUES ('20100805202342');
 
@@ -5257,8 +7705,6 @@ INSERT INTO schema_migrations (version) VALUES ('20100812175727');
 INSERT INTO schema_migrations (version) VALUES ('20100812184800');
 
 INSERT INTO schema_migrations (version) VALUES ('20100813150554');
-
-INSERT INTO schema_migrations (version) VALUES ('20100816023643');
 
 INSERT INTO schema_migrations (version) VALUES ('20100816140646');
 
@@ -5274,19 +7720,9 @@ INSERT INTO schema_migrations (version) VALUES ('20100816190118');
 
 INSERT INTO schema_migrations (version) VALUES ('20100816195510');
 
-INSERT INTO schema_migrations (version) VALUES ('20100817164117');
-
-INSERT INTO schema_migrations (version) VALUES ('20100817164204');
-
-INSERT INTO schema_migrations (version) VALUES ('20100818015210');
-
 INSERT INTO schema_migrations (version) VALUES ('20100819212753');
 
 INSERT INTO schema_migrations (version) VALUES ('20100823140904');
-
-INSERT INTO schema_migrations (version) VALUES ('20100825065802');
-
-INSERT INTO schema_migrations (version) VALUES ('20100825073929');
 
 INSERT INTO schema_migrations (version) VALUES ('20100827183806');
 
@@ -5300,17 +7736,11 @@ INSERT INTO schema_migrations (version) VALUES ('20100906162449');
 
 INSERT INTO schema_migrations (version) VALUES ('20100909163315');
 
-INSERT INTO schema_migrations (version) VALUES ('20100909221737');
-
 INSERT INTO schema_migrations (version) VALUES ('20100913154619');
 
 INSERT INTO schema_migrations (version) VALUES ('20100919134728');
 
 INSERT INTO schema_migrations (version) VALUES ('20100919182919');
-
-INSERT INTO schema_migrations (version) VALUES ('20100920161617');
-
-INSERT INTO schema_migrations (version) VALUES ('20100923050109');
 
 INSERT INTO schema_migrations (version) VALUES ('20101004172601');
 
@@ -5328,6 +7758,12 @@ INSERT INTO schema_migrations (version) VALUES ('20101012132624');
 
 INSERT INTO schema_migrations (version) VALUES ('20101012150519');
 
+INSERT INTO schema_migrations (version) VALUES ('20101014173212');
+
+INSERT INTO schema_migrations (version) VALUES ('20101014173308');
+
+INSERT INTO schema_migrations (version) VALUES ('20101014173441');
+
 INSERT INTO schema_migrations (version) VALUES ('20101014203047');
 
 INSERT INTO schema_migrations (version) VALUES ('20101015145442');
@@ -5342,13 +7778,33 @@ INSERT INTO schema_migrations (version) VALUES ('20101020195920');
 
 INSERT INTO schema_migrations (version) VALUES ('20101021130331');
 
+INSERT INTO schema_migrations (version) VALUES ('20101021175843');
+
+INSERT INTO schema_migrations (version) VALUES ('20101022194704');
+
 INSERT INTO schema_migrations (version) VALUES ('20101022205210');
+
+INSERT INTO schema_migrations (version) VALUES ('20101025180423');
+
+INSERT INTO schema_migrations (version) VALUES ('20101025192733');
 
 INSERT INTO schema_migrations (version) VALUES ('20101029173730');
 
 INSERT INTO schema_migrations (version) VALUES ('20101031193907');
 
+INSERT INTO schema_migrations (version) VALUES ('20101102194148');
+
+INSERT INTO schema_migrations (version) VALUES ('20101104035846');
+
+INSERT INTO schema_migrations (version) VALUES ('20101104163102');
+
 INSERT INTO schema_migrations (version) VALUES ('20101104194010');
+
+INSERT INTO schema_migrations (version) VALUES ('20101107194722');
+
+INSERT INTO schema_migrations (version) VALUES ('20101107202622');
+
+INSERT INTO schema_migrations (version) VALUES ('20101109163305');
 
 INSERT INTO schema_migrations (version) VALUES ('20101111203113');
 
@@ -5356,9 +7812,27 @@ INSERT INTO schema_migrations (version) VALUES ('20101119200445');
 
 INSERT INTO schema_migrations (version) VALUES ('20101123130420');
 
+INSERT INTO schema_migrations (version) VALUES ('20101125185529');
+
 INSERT INTO schema_migrations (version) VALUES ('20101201143104');
 
+INSERT INTO schema_migrations (version) VALUES ('20101201212131');
+
+INSERT INTO schema_migrations (version) VALUES ('20101201221812');
+
+INSERT INTO schema_migrations (version) VALUES ('20101201221857');
+
+INSERT INTO schema_migrations (version) VALUES ('20101203042855');
+
 INSERT INTO schema_migrations (version) VALUES ('20101206001456');
+
+INSERT INTO schema_migrations (version) VALUES ('20101206153533');
+
+INSERT INTO schema_migrations (version) VALUES ('20101206165812');
+
+INSERT INTO schema_migrations (version) VALUES ('20101206201354');
+
+INSERT INTO schema_migrations (version) VALUES ('20101206204954');
 
 INSERT INTO schema_migrations (version) VALUES ('20101207133547');
 
@@ -5382,19 +7856,13 @@ INSERT INTO schema_migrations (version) VALUES ('20101219002322');
 
 INSERT INTO schema_migrations (version) VALUES ('20101221171037');
 
-INSERT INTO schema_migrations (version) VALUES ('20101222012646');
-
 INSERT INTO schema_migrations (version) VALUES ('20110108235747');
-
-INSERT INTO schema_migrations (version) VALUES ('20110111041701');
-
-INSERT INTO schema_migrations (version) VALUES ('20110111213242');
 
 INSERT INTO schema_migrations (version) VALUES ('20110112035320');
 
 INSERT INTO schema_migrations (version) VALUES ('20110112193620');
 
-INSERT INTO schema_migrations (version) VALUES ('20110112195341');
+INSERT INTO schema_migrations (version) VALUES ('20110112215420');
 
 INSERT INTO schema_migrations (version) VALUES ('20110427165631');
 
@@ -5450,17 +7918,7 @@ INSERT INTO schema_migrations (version) VALUES ('20110509154651');
 
 INSERT INTO schema_migrations (version) VALUES ('20110509154848');
 
-INSERT INTO schema_migrations (version) VALUES ('20110511192122');
-
-INSERT INTO schema_migrations (version) VALUES ('20110511193318');
-
 INSERT INTO schema_migrations (version) VALUES ('20110511200101');
-
-INSERT INTO schema_migrations (version) VALUES ('20110511201652');
-
-INSERT INTO schema_migrations (version) VALUES ('20110512152608');
-
-INSERT INTO schema_migrations (version) VALUES ('20110512152638');
 
 INSERT INTO schema_migrations (version) VALUES ('20110512210505');
 
@@ -5504,8 +7962,6 @@ INSERT INTO schema_migrations (version) VALUES ('20110606185355');
 
 INSERT INTO schema_migrations (version) VALUES ('20110607133333');
 
-INSERT INTO schema_migrations (version) VALUES ('20110614231828');
-
 INSERT INTO schema_migrations (version) VALUES ('20110615001945');
 
 INSERT INTO schema_migrations (version) VALUES ('20110615010025');
@@ -5517,6 +7973,114 @@ INSERT INTO schema_migrations (version) VALUES ('20110615165726');
 INSERT INTO schema_migrations (version) VALUES ('20110615191857');
 
 INSERT INTO schema_migrations (version) VALUES ('20110615200849');
+
+INSERT INTO schema_migrations (version) VALUES ('20110627203939');
+
+INSERT INTO schema_migrations (version) VALUES ('20110627204929');
+
+INSERT INTO schema_migrations (version) VALUES ('20110628155050');
+
+INSERT INTO schema_migrations (version) VALUES ('20110628210730');
+
+INSERT INTO schema_migrations (version) VALUES ('20110628230112');
+
+INSERT INTO schema_migrations (version) VALUES ('20110629054522');
+
+INSERT INTO schema_migrations (version) VALUES ('20110708031833');
+
+INSERT INTO schema_migrations (version) VALUES ('20110708033332');
+
+INSERT INTO schema_migrations (version) VALUES ('20110710014153');
+
+INSERT INTO schema_migrations (version) VALUES ('20110710052424');
+
+INSERT INTO schema_migrations (version) VALUES ('20110714125841');
+
+INSERT INTO schema_migrations (version) VALUES ('20110715161200');
+
+INSERT INTO schema_migrations (version) VALUES ('20110715170234');
+
+INSERT INTO schema_migrations (version) VALUES ('20110720115151');
+
+INSERT INTO schema_migrations (version) VALUES ('20110720165852');
+
+INSERT INTO schema_migrations (version) VALUES ('20110720170450');
+
+INSERT INTO schema_migrations (version) VALUES ('20110720174832');
+
+INSERT INTO schema_migrations (version) VALUES ('20110721134014');
+
+INSERT INTO schema_migrations (version) VALUES ('20110722141812');
+
+INSERT INTO schema_migrations (version) VALUES ('20110806180552');
+
+INSERT INTO schema_migrations (version) VALUES ('20110806182402');
+
+INSERT INTO schema_migrations (version) VALUES ('20110810182643');
+
+INSERT INTO schema_migrations (version) VALUES ('20110818145930');
+
+INSERT INTO schema_migrations (version) VALUES ('20110831011404');
+
+INSERT INTO schema_migrations (version) VALUES ('20110921140125');
+
+INSERT INTO schema_migrations (version) VALUES ('20111010163721');
+
+INSERT INTO schema_migrations (version) VALUES ('20111011102148');
+
+INSERT INTO schema_migrations (version) VALUES ('20111011102149');
+
+INSERT INTO schema_migrations (version) VALUES ('20111011140850');
+
+INSERT INTO schema_migrations (version) VALUES ('20111011195158');
+
+INSERT INTO schema_migrations (version) VALUES ('20111020171606');
+
+INSERT INTO schema_migrations (version) VALUES ('20111020174602');
+
+INSERT INTO schema_migrations (version) VALUES ('20111020183940');
+
+INSERT INTO schema_migrations (version) VALUES ('20111020183941');
+
+INSERT INTO schema_migrations (version) VALUES ('20111024182333');
+
+INSERT INTO schema_migrations (version) VALUES ('20111024194753');
+
+INSERT INTO schema_migrations (version) VALUES ('20111025181852');
+
+INSERT INTO schema_migrations (version) VALUES ('20111025181954');
+
+INSERT INTO schema_migrations (version) VALUES ('20111026223659');
+
+INSERT INTO schema_migrations (version) VALUES ('20111026223927');
+
+INSERT INTO schema_migrations (version) VALUES ('20111028144358');
+
+INSERT INTO schema_migrations (version) VALUES ('20111028185228');
+
+INSERT INTO schema_migrations (version) VALUES ('20111028194831');
+
+INSERT INTO schema_migrations (version) VALUES ('20111109023238');
+
+INSERT INTO schema_migrations (version) VALUES ('20111110195907');
+
+INSERT INTO schema_migrations (version) VALUES ('20111114151916');
+
+INSERT INTO schema_migrations (version) VALUES ('20111116164718');
+
+INSERT INTO schema_migrations (version) VALUES ('20111121165021');
+
+INSERT INTO schema_migrations (version) VALUES ('20111129201040');
+
+INSERT INTO schema_migrations (version) VALUES ('20111130140314');
+
+INSERT INTO schema_migrations (version) VALUES ('20111206144944');
+
+INSERT INTO schema_migrations (version) VALUES ('20111216190159');
+
+INSERT INTO schema_migrations (version) VALUES ('20111217155231');
+
+INSERT INTO schema_migrations (version) VALUES ('20111222175718');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 
