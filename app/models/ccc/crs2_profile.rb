@@ -8,19 +8,19 @@ class Ccc::Crs2Profile < ActiveRecord::Base
 
 
   def merge(other)
-		other.crs2_registrants.each do |ua|
-  		crs2_registrants.each do |cr|
-        if ua.registrant_type_id == cr.registrant_type_id
-          ua.update_column(:orphan, true)
-          ua.update_column(:profile_id, nil)
+		other.crs2_registrants.each do |other_registrant|
+  		crs2_registrants.each do |registrant|
+        if other_registrant.registrant_type_id == registrant.registrant_type_id
+          other_registrant.update_column(:orphan, true)
+          other_registrant.update_column(:profile_id, nil)
           break
         end
   		end
-  		ua.profile_id = id unless ua.orphan?
-			if ua.cancelled_by_id == other.user_id
-				ua.cancelled_by_id = user_id
+  		other_registrant.profile_id = id unless other_registrant.orphan?
+			if other_registrant.cancelled_by_id == other.user_id
+				other_registrant.cancelled_by_id = user_id
 			end
-  		ua.save(:validate => false)			
+  		other_registrant.save(:validate => false)			
 		end
 
 		other.crs2_person.try(:destroy)
@@ -32,7 +32,6 @@ class Ccc::Crs2Profile < ActiveRecord::Base
     
     other.reload
 		other.destroy 
-		other.crs2_user.destroy if other.crs2_user
 		
 		save
   end

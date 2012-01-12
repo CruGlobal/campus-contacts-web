@@ -15,25 +15,25 @@ module Ccc
 
 		module InstanceMethods
   		def merge(other)
-    		if other.mpd_user and mpd_user
+    		if other.mpd_user && mpd_user
       		mpd_user.merge(other.mpd_user)
     		elsif other.mpd_user
      		  other.mpd_user.update_attribute(:user_id, userID)
     		end
     		
-    		if other.infobase_user and infobase_user
+    		if other.infobase_user && infobase_user
       		infobase_user.merge(other.infobase_user)
     		elsif other.infobase_user
      		  other.infobase_user.update_attribute(:user_id, userID)
     		end
   
-				if other.pr_user and pr_user
+				if other.pr_user && pr_user
 					other.pr_user.destroy				
 				elsif other.pr_user
      		  other.pr_user.update_attribute(:ssm_id, userID)
 				end
 				
-				if other.si_user and si_user
+				if other.si_user && si_user
 					other.si_user.destroy				
 				elsif other.si_user
 					SiUser.where(["ssm_id = ? or created_by_id = ?", other.userID, other.userID]).each do |ua|
