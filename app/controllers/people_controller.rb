@@ -323,8 +323,9 @@ class PeopleController < ApplicationController
       else      
         unless search_params[:role].blank?
           @q = @q.select("ministry_person.*, roles.*")
-                 .joins("LEFT JOIN organizational_roles ON organizational_roles.person_id = ministry_person.personID")
-                 .joins("INNER JOIN roles ON roles.id = organizational_roles.role_id")
+                 .joins("LEFT JOIN organizational_roles AS org_roles ON 
+                 org_roles.person_id = ministry_person.personID")
+                 .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
                  .where("roles.id = :search",
                  {:search => "#{search_params[:role]}"})
           sort_by.unshift("roles.id")
