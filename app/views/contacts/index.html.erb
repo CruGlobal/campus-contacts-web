@@ -103,7 +103,7 @@
       <% @questions.each do |q| %>
         <th class="<%= dom_id(q) %>">
           <%= q.label %>
-          <%= link_to(image_tag("close.png", alt: t('nav.hide'), title: t('nav.hide')), hide_survey_question_path(@organization.surveys.first, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
+          <%= link_to(t('nav.hide'), hide_survey_question_path(@organization.surveys.first, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
         </th>
       <% end %>
       <% unless params[:dnc] %>
