@@ -511,6 +511,7 @@ en:
       email: Email
       year: Year
       detailed: Detailed
+      all: All (In Progress + Completed)
 
     thanks:
       message: Thank you for your interest.
