@@ -289,8 +289,8 @@ class ApplicationController < ActionController::Base
         @keyword ||= @sms.sms_keyword
         @survey = @keyword.survey
       end
-    elsif params[:survey_id] || params[:id]
-      @survey = Survey.find_by_id(params[:survey_id] || params[:id])
+    elsif params[:survey_id] || params[:id] || cookies[:survey_id]
+      @survey = Survey.find_by_id(params[:survey_id] || params[:id] || cookies[:survey_id])
     end
     if params[:keyword] || params[:received_sms_id] || params[:survey_id] || params[:id]
       unless @survey

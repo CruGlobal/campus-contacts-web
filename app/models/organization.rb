@@ -27,7 +27,7 @@ class Organization < ActiveRecord::Base
   has_many :no_activity_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.followup_status' => 'uncontacted'}
   has_many :rejoicables
   has_many :groups
-  has_many :surveys
+  has_many :surveys # duplicate of the above's "has_many :surveys, dependent: :destroy"
   Rejoicable::OPTIONS.each do |option|
     has_many :"#{option}_contacts", :through => :rejoicables, source: :person, conditions: {'rejoicables.what' => option}, uniq: true
   end
@@ -98,8 +98,8 @@ class Organization < ActiveRecord::Base
     name <=> other.name
   end
   
-  def validation_method_enum
-    ['relay']
+  def validation_method_enum # ???
+    ['relay'] 
   end
   
   def terminology_enum
