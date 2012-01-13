@@ -68,10 +68,12 @@ en:
     all_contacts: 'All Contacts'
     directory: 'Directory'
     surveys: "Surveys"
+    people: "People"
     keywords: "Keywords"
     roles: "Roles"
     back_to_dashboard: "Back To My Contacts"
     create_a_survey: Create a survey
+    
   general:
     survey: Survey
     mobile: Cell
