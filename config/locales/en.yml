@@ -513,7 +513,7 @@ en:
       email: Email
       year: Year
       detailed: Detailed
-      all: All (In Progress + Completed)
+      all: All 
 
     thanks:
       message: Thank you for your interest.
