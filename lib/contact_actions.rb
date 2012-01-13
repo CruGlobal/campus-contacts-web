@@ -1,6 +1,7 @@
 module ContactActions
   
   def create_contact
+    @organization ||= current_organization
     Person.transaction do
       params[:person] ||= {}
       params[:person][:email_address] ||= {}

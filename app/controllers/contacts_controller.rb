@@ -186,6 +186,7 @@ class ContactsController < ApplicationController
   end
   
   def create
+    @organization = current_organization
     create_contact
   end
   
