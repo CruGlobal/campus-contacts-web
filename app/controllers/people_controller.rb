@@ -52,6 +52,12 @@ class PeopleController < ApplicationController
   # end
 
   # GET /people/1/edit
+
+  def facebook_manual_link_paste
+    puts "params: " + params[:id].to_s
+    @person = Person.find(params[:id])
+  end
+
   def edit
     @person = current_organization.people.find(params[:id])
     authorize! :edit, @person
@@ -272,26 +278,49 @@ class PeopleController < ApplicationController
 
   def facebook_search
     url = params[:url]
-    # if a url exist in the param, then we're using FB's previous/next url to fetch the data
-    if url.nil?
-      # else, this is an initial search so we construct the url
-      url = "https://graph.facebook.com/search?q=#{params[:term]}&type=user&limit=24&access_token=#{session[:fb_token]}"
-    end
 
-    url = URI.escape(url)
-    response = RestClient.get url, { accept: :json}
-    result = JSON.parse(response)
-    data = Array.new
-    if result['data'].size > 0
-      # construct the json result - autocomplete only accepts an array
-      result['data'].each do |d|
-          data << { 'name' => d['name'] , 'id' => d['id'] }
+    if uri?(params[:term]) # if term is a url ...
+      id = get_fb_user_id_from_url(params[:term])
+      url = "https://graph.facebook.com/#{id}"
+
+      url = URI.escape(url)
+      response = RestClient.get url, { accept: :json}
+      result = JSON.parse(response)
+      data = Array.new
+
+      if !result.nil?
+
+        data << {'name' => result['name'], 'id' => result['id']}
+        data << {'name' => t('general.autocomplete_name_hint'), 'id' => nil}
+
+      else
+        data <<  {'name' => t('people.edit.no_results'), 'id' => nil }
       end
-      logger.debug result
-      # next result
-      data <<  {'name' => t('people.edit.more_facebook_matches'), 'id' => result['paging']['next'] } if data.length == 24
+
     else
-      data <<  {'name' => t('people.edit.no_results'), 'id' => nil }
+      # if a url exist in the param, then we're using FB's previous/next url to fetch the data
+      puts "HEHEHE!"
+      if url.nil?
+        # else, this is an initial search so we construct the url
+        url = "https://graph.facebook.com/search?q=#{params[:term]}&type=user&limit=24&access_token=#{session[:fb_token]}"
+      end
+
+      url = URI.escape(url)
+      response = RestClient.get url, { accept: :json}
+      result = JSON.parse(response)
+      data = Array.new
+      if result['data'].size > 0
+        # construct the json result - autocomplete only accepts an array
+        result['data'].each do |d|
+            data << { 'name' => d['name'] , 'id' => d['id'] }
+        end
+        logger.debug result
+        # next result
+        data <<  {'name' => t('people.edit.more_facebook_matches'), 'id' => result['paging']['next'] } if data.length == 24
+      else
+        data <<  {'name' => t('people.edit.no_results'), 'id' => nil }
+      end
+
     end
 
     respond_to do |format|
@@ -300,6 +329,31 @@ class PeopleController < ApplicationController
   end
  
   protected
+
+    def uri?(string)
+      string.include?("http://") || string.include?("https://") ? true : false
+    end
+
+
+=begin
+    def uri?(string)
+      uri = URI.parse(string)
+      %w( http https ).include?(uri.scheme)
+    rescue URI::BadURIError
+      false
+    end
+=end
+
+
+    def get_fb_user_id_from_url(string)
+      # e.g. https://graph.facebook.com/nmfdelacruz)
+      if string.include?("id=")
+        string.split('id=').last
+      else
+        string.split('/').last
+      end
+    end
+
   
     def fetch_people(search_params = {})
       org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id

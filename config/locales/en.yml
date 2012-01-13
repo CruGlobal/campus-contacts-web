@@ -109,7 +109,8 @@ en:
     adding: Adding...
     to: "To"
     subject: 'Subject'
-    autocomplete_name_hint: 'Type a name here:'
+    autocomplete_name_hint: 'Type a name or facebook profile url here:'
+    match_found: 'Match found'
   leaders:
     form:
       name_required: "Name, gender, and email fields are required to add a leader:"

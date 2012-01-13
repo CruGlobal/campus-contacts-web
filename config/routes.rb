@@ -79,6 +79,7 @@ Mh::Application.routes.draw do
       get :facebook_search
     end
     member do
+      get :facebook_manual_link_paste
       get :merge_preview
       get :involvement
     end
