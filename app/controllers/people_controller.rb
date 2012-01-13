@@ -53,11 +53,6 @@ class PeopleController < ApplicationController
 
   # GET /people/1/edit
 
-  def facebook_manual_link_paste
-    puts "params: " + params[:id].to_s
-    @person = Person.find(params[:id])
-  end
-
   def edit
     @person = current_organization.people.find(params[:id])
     authorize! :edit, @person
@@ -343,6 +338,7 @@ class PeopleController < ApplicationController
       false
     end
 =end
+
 
 
     def get_fb_user_id_from_url(string)
