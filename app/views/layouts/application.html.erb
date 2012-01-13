@@ -16,16 +16,6 @@
     <div id="rest">
       <div id="menutop" class="topmenu">
         <ul class="sf-menu sf-navbar mh-top">
-          <li class="<%= 'current' if request.path =~ connect_pattern %>">
-            <%= link_to(t('nav.surveys'), "/contacts") %>
-            <ul>
-
-              <% if can? :manage, current_organization %>
-                <li class="<%= 'current' if ['surveys','questions'].include?(controller.controller_name) %>"><%= link_to(t('nav.surveys'), index_admin_surveys_path, :class => "topset surveys") %></li>
-                <li class="<%= 'current' if params[:controller] == 'sms_keywords' %>"><%= link_to(t('nav.keywords'), sms_keywords_path, :class => "topset surveys") %></li>
-              <% end %>
-            </ul>
-          </li>
           <li class="<%= 'current' if request.path =~ care_pattern %>">
             <%= link_to(t('nav.people'), "/people") %>
             <ul>
@@ -34,7 +24,6 @@
               <li class="<%= 'current' if  params[:controller] == 'people' %>"><%= link_to(t('nav.directory'), "/people", :class => "topset directory") %></li>
             </ul>
           </li>
-
           <li class="<%= 'current' if request.path =~ group_pattern %>">
             <%= link_to(t('nav.groups'), "/groups") %>
             <ul>
@@ -44,6 +33,16 @@
             </ul>
           </li>
 
+          <li class="<%= 'current' if request.path =~ connect_pattern %>">
+            <%= link_to(t('nav.surveys'), index_admin_surveys_path) %>
+            <ul>
+
+              <% if can? :manage, current_organization %>
+                <li class="<%= 'current' if ['surveys','questions'].include?(controller.controller_name) %>"><%= link_to(t('nav.surveys'), index_admin_surveys_path, :class => "topset surveys") %></li>
+                <li class="<%= 'current' if params[:controller] == 'sms_keywords' %>"><%= link_to(t('nav.keywords'), sms_keywords_path, :class => "topset surveys") %></li>
+              <% end %>
+            </ul>
+          </li>
 
           <% if can? :manage, current_organization %>
             <li class="<%= 'current' if params[:controller] == 'organizations' %>">
