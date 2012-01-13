@@ -273,28 +273,31 @@ class PeopleController < ApplicationController
 
   def facebook_search
     url = params[:url]
+    data = Array.new
 
     if uri?(params[:term]) # if term is a url ...
       id = get_fb_user_id_from_url(params[:term])
       url = "https://graph.facebook.com/#{id}"
 
+      result = 1
       url = URI.escape(url)
-      response = RestClient.get url, { accept: :json}
-      result = JSON.parse(response)
-      data = Array.new
+      begin
+        response = RestClient.get url, { accept: :json}
+        result = JSON.parse(response)
+        data = Array.new
+      rescue
+        result = nil
+      end
 
       if !result.nil?
-
         data << {'name' => result['name'], 'id' => result['id']}
-        data << {'name' => t('general.autocomplete_name_hint'), 'id' => nil}
-
+        data << {'name' => t('general.match_found'), 'id' => nil}
       else
         data <<  {'name' => t('people.edit.no_results'), 'id' => nil }
       end
 
     else
       # if a url exist in the param, then we're using FB's previous/next url to fetch the data
-      puts "HEHEHE!"
       if url.nil?
         # else, this is an initial search so we construct the url
         url = "https://graph.facebook.com/search?q=#{params[:term]}&type=user&limit=24&access_token=#{session[:fb_token]}"
