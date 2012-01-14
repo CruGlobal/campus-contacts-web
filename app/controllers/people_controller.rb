@@ -304,7 +304,7 @@ class PeopleController < ApplicationController
     def fetch_people(search_params = {})
       org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
       @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles)
-      @q = @people_scope.joins(:primary_phone_number, :primary_email_address)
+      @q = @people_scope.includes(:primary_phone_number, :primary_email_address)
       @q = @q.where('organizational_roles.role_id' => params[:role_id]) if !params[:role_id].blank?
       
       sort_by = ['lastName asc', 'firstName asc']
