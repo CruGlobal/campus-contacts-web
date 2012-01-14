@@ -62,6 +62,8 @@ module ContactActions
   
   def save_survey_answers
     @answer_sheets = []
+    @organization ||= current_organization
+
     @organization.surveys.each do |survey|
       @answer_sheet = get_answer_sheet(survey, @person)
       question_set = QuestionSet.new(survey.questions, @answer_sheet)
