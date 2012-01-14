@@ -17,7 +17,7 @@ class ContactsController < ApplicationController
     @surveys = @organization.surveys
     @questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => false).flatten.uniq
     @hidden_questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => true).flatten.uniq
-    # @people = unassigned_people(@organization)
+    @people = unassigned_people(@organization)
     if params[:dnc] == 'true'
       @people = @organization.dnc_contacts
     elsif params[:completed] == 'true'
