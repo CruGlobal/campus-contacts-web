@@ -16,10 +16,23 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def facebook_mhub
     env["omniauth.auth"]['provider'] = 'facebook'
     begin
-      facebook_login
+      if session[:person_id]
+        logger.debug(session[:person_id])
+        @person = Person.find(session[:person_id])
+        unless @person.user
+          facebook_login(@person)
+        end
+      else
+        facebook_login  
+      end
       location = stored_location_for(:user)
       if location.present?
-        redirect_to location
+        if session[:person_id]
+          @survey = Survey.find(session[:survey_id])
+          render :template => "survey_responses/thanks", layout: 'mhub'
+        else
+          redirect_to location
+        end
       else
         render_404
       end
@@ -30,11 +43,19 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   
   protected
   
-  def facebook_login
+  def facebook_login(*args)
     omniauth = env["omniauth.auth"]
     @user = User.find_for_facebook_oauth(omniauth, current_user)
     session[:fb_token] = omniauth["credentials"]["token"]
     session["devise.facebook_data"] = omniauth
+    
+    unless args[0].nil?
+      #logger.debug(current_user)
+      fb_uid = @user.person.fb_uid
+      @user.person.delete
+      person = args[0]
+      person.update_attributes(:fk_ssmUserId => @user.id, :fb_uid => fb_uid)
+    end
  
     if @user && @user.persisted?
       sign_in(@user)
