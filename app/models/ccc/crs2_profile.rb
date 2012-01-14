@@ -31,8 +31,8 @@ class Ccc::Crs2Profile < ActiveRecord::Base
 	  end
     
     other.reload
-		other.destroy 
-		
+		other.destroy
+    other.user.destroy if other.user
 		save
   end
 end

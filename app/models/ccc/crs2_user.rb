@@ -21,7 +21,6 @@ class Ccc::Crs2User < ActiveRecord::Base
 
 		other.crs2_transactions.each { |ua| ua.update_attribute(:verified_by_id, id) }
 		
-		other.destroy
 		save
 	end
 
