@@ -22,7 +22,7 @@ module ApplicationHelper
       url.merge(hash)
     else
       parts = url.split('?')
-      url_params = (parts[1] + hash.map {|k,v| "#{k}=#{v}"}).join('&')
+      url_params = ([parts[1]] + hash.map {|k,v| "#{k}=#{v}"}).compact.join('&')
       [parts[0], url_params].join('?')
     end
   end
