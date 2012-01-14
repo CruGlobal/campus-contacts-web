@@ -83,12 +83,12 @@ class Person < ActiveRecord::Base
    organizations.collect {|org|
      org.parent ? 
        org.parent.show_sub_orgs? ? 
-         [org] + org.descendants
+         [org] + org.children
        : 
          [org] 
      : 
        org.show_sub_orgs? ?
-         [org] + org.descendants
+         [org] + org.children
        :
          [org]
    }.flatten.uniq_by{ |o| o.id }
