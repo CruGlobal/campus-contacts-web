@@ -3,102 +3,104 @@
 <% group_pattern = /groups/ %>
 <!DOCTYPE html>
 <html>
-<head>
-  <%= render 'shared/head' %>
-</head>
-<body id="<%= controller.controller_name %>_controller" class="<%= params[:action] %>">
-  <%= render 'fb_init' %>
-  
-  <div id="outer">
-  
-    <%= render 'shared/nav' %>
-    
-    <div id="rest">
-      <div id="menutop" class="topmenu">
-        <ul class="sf-menu sf-navbar mh-top">
-          <li class="<%= 'current' if request.path =~ care_pattern %>">
-            <%= link_to(t('nav.people'), "/people") %>
-            <ul>
-              <li class="<%= 'current' if request.fullpath == '/contacts/mine' %>"><%= link_to(t('nav.my_contacts'), "/contacts/mine", :class => "topset mycontacts") %></li>
-              <li class="<%= 'current' if  params[:controller] == 'contacts' && params[:action] == 'index' %>"><%= link_to(t('nav.all_contacts'), "/contacts", :class => "topset allcontacts") %></li>
-              <li class="<%= 'current' if  params[:controller] == 'people' %>"><%= link_to(t('nav.directory'), "/people", :class => "topset directory") %></li>
-            </ul>
-          </li>
-          <li class="<%= 'current' if request.path =~ group_pattern %>">
-            <%= link_to(t('nav.groups'), "/groups") %>
-            <ul>
-              <% if can? :manage, current_organization %>
-                <li class="<%= 'current' if  params[:controller] == 'groups' %>"><%= link_to(t('nav.groups'), "/groups", :class => "topset groups") %></li>
-              <% end %>
-            </ul>
-          </li>
+  <head>
+    <%= render 'shared/head' %>
+  </head>
+  <body id="<%= controller.controller_name %>_controller" class="<%= params[:action] %>">
+    <%= render 'fb_init' %>
 
-          <li class="<%= 'current' if request.path =~ connect_pattern %>">
-            <%= link_to(t('nav.surveys'), index_admin_surveys_path) %>
-            <ul>
+    <div id="outer">
 
-              <% if can? :manage, current_organization %>
-                <li class="<%= 'current' if ['surveys','questions'].include?(controller.controller_name) %>"><%= link_to(t('nav.surveys'), index_admin_surveys_path, :class => "topset surveys") %></li>
-                <li class="<%= 'current' if params[:controller] == 'sms_keywords' %>"><%= link_to(t('nav.keywords'), sms_keywords_path, :class => "topset surveys") %></li>
-              <% end %>
-            </ul>
-          </li>
+      <%= render 'shared/nav' %>
 
-          <% if can? :manage, current_organization %>
-            <li class="<%= 'current' if params[:controller] == 'organizations' %>">
-              <%= link_to(t('nav.organizations'), "/organizations") %>
+      <div id="rest">
+        <div id="menutop" class="topmenu">
+          <% if current_organization %>
+            <ul class="sf-menu sf-navbar mh-top">
+              <li class="<%= 'current' if request.path =~ care_pattern %>">
+              <%= link_to(t('nav.people'), "/people") %>
               <ul>
-                <li class="<%= 'current' if params[:controller] == 'organizations' %>"><%= link_to(t('nav.manage'), "/organizations", :class => "topset groups") %></li>
+                <li class="<%= 'current' if request.fullpath == '/contacts/mine' %>"><%= link_to(t('nav.my_contacts'), "/contacts/mine", :class => "topset mycontacts") %></li>
+                <li class="<%= 'current' if  params[:controller] == 'contacts' && params[:action] == 'index' %>"><%= link_to(t('nav.all_contacts'), "/contacts", :class => "topset allcontacts") %></li>
+                <li class="<%= 'current' if  params[:controller] == 'people' %>"><%= link_to(t('nav.directory'), "/people", :class => "topset directory") %></li>
               </ul>
-            </li>
-          <% end %>
-        </ul>
-      </div>
-      
+              </li>
+              <li class="<%= 'current' if request.path =~ group_pattern %>">
+              <%= link_to(t('nav.groups'), "/groups") %>
+              <ul>
+                <% if can? :manage, current_organization %>
+                  <li class="<%= 'current' if  params[:controller] == 'groups' %>"><%= link_to(t('nav.groups'), "/groups", :class => "topset groups") %></li>
+                <% end %>
+              </ul>
+              </li>
 
-      <div id="left">
-        
-        <div class="block">
-          <%= yield :sidebar %>
-        </div>
-      </div>
-  
-      <div id="main">    
-            
-        <div class="<%= params[:action] %> carea">
-          <% if flash && (flash[:error] || flash[:notice] || flash[:alert]) %>
-            <div class="flash" style="margin:10px;width:770px">
-              <% if flash[:error].present? || flash[:alert].present? %>
-                <div class="flash_message error">
-                  <p><%= flash[:error] || flash[:alert] %></p>
-                </div>
+              <li class="<%= 'current' if request.path =~ connect_pattern %>">
+              <%= link_to(t('nav.surveys'), index_admin_surveys_path) %>
+              <ul>
+
+                <% if can? :manage, current_organization %>
+                  <li class="<%= 'current' if ['surveys','questions'].include?(controller.controller_name) %>"><%= link_to(t('nav.surveys'), index_admin_surveys_path, :class => "topset surveys") %></li>
+                  <li class="<%= 'current' if params[:controller] == 'sms_keywords' %>"><%= link_to(t('nav.keywords'), sms_keywords_path, :class => "topset surveys") %></li>
+                <% end %>
+              </ul>
+              </li>
+
+              <% if can? :manage, current_organization %>
+                <li class="<%= 'current' if params[:controller] == 'organizations' %>">
+                <%= link_to(t('nav.organizations'), "/organizations") %>
+                <ul>
+                  <li class="<%= 'current' if params[:controller] == 'organizations' %>"><%= link_to(t('nav.manage'), "/organizations", :class => "topset groups") %></li>
+                </ul>
+                </li>
               <% end %>
-
-              <% if flash[:notice].present? %>
-                <div class="flash_message notice">
-                  <p><%= flash[:notice] %></p>
-                </div>
-              <% end %>
-            </div>
+            </ul>
           <% end %>
-                
-          <%= yield %>
         </div>
-      </div><!-- main -->
-      
-      <div class="clear"></div>
-    </div>
-    
-    <div class="footer">
-      <%= link_to 'FAQ', 'http://blog.missionhub.com/faqs/' %> |
-      Can't find it in the <%= link_to 'FAQ', 'http://blog.missionhub.com/faqs/' %>? <%= mail_to('support@missionhub.com', 'Shoot us an email', encode: 'javascript', replace_at: ' (at) ', replace_dot: ' (dot) ') %> |
-      <%= link_to(t('nav.terms'), '/terms') %> |
-      <%= link_to(t('nav.privacy'), '/privacy') %>
-    </div>
-    
-  </div><!-- outer -->
 
-</body>
+
+        <div id="left">
+
+          <div class="block">
+            <%= yield :sidebar %>
+          </div>
+        </div>
+
+        <div id="main">    
+
+          <div class="<%= params[:action] %> carea">
+            <% if flash && (flash[:error] || flash[:notice] || flash[:alert]) %>
+              <div class="flash" style="margin:10px;width:770px">
+                <% if flash[:error].present? || flash[:alert].present? %>
+                  <div class="flash_message error">
+                    <p><%= flash[:error] || flash[:alert] %></p>
+                  </div>
+                <% end %>
+
+                <% if flash[:notice].present? %>
+                  <div class="flash_message notice">
+                    <p><%= flash[:notice] %></p>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+
+            <%= yield %>
+          </div>
+        </div><!-- main -->
+
+        <div class="clear"></div>
+      </div>
+
+      <div class="footer">
+        <%= link_to 'FAQ', 'http://blog.missionhub.com/faqs/' %> |
+        Can't find it in the <%= link_to 'FAQ', 'http://blog.missionhub.com/faqs/' %>? <%= mail_to('support@missionhub.com', 'Shoot us an email', encode: 'javascript', replace_at: ' (at) ', replace_dot: ' (dot) ') %> |
+        <%= link_to(t('nav.terms'), '/terms') %> |
+        <%= link_to(t('nav.privacy'), '/privacy') %>
+      </div>
+
+    </div><!-- outer -->
+
+  </body>
 </html>
 
 
