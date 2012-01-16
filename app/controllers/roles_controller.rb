@@ -16,8 +16,8 @@ class RolesController < ApplicationController
 
   def create
     Role.transaction do
-      @role = current_organization.roles.build(params[:role])
-
+      @role = Role.new(params[:role])
+      @role.organization_id = current_organization.id
       if @role.save
         redirect_to roles_path
       else

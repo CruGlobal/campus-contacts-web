@@ -8,6 +8,7 @@ class Role < ActiveRecord::Base
 
   validates :i18n, uniqueness: true, allow_nil: true
   validates :name, presence: true, :if => Proc.new { |role| organization_id != 0 }
+  validates :organization_id, presence: true
   
   def self.leader_ids
     self.leaders.collect(&:id)
