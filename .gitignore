@@ -18,4 +18,3 @@ active-record-query-trace
 .project
 rails_best_practices_output.html
 .idea
-app/assets/javascripts/i18n/
