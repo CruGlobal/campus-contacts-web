@@ -176,6 +176,8 @@ Mh::Application.routes.draw do
       post :bulk_destroy
       post :send_vcard
       get :send_bulk_vcard
+      get :import_contacts
+      post :csv_import
     end
   end
   

@@ -488,6 +488,7 @@ en:
       unassigned: 'Unassigned'
       all: 'All'
       dnc: 'Do Not Contact'
+      import_contacts: 'Import Contacts'
       completed: 'Completed'
       in_progress: 'Assigned'
       no_activity: 'No Activity'

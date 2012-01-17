@@ -215,6 +215,41 @@ class ContactsController < ApplicationController
     end
     render nothing: true
   end
+
+  def import_contacts
+    @organization = current_organization
+  end
+
+  def csv_import
+
+    @parsed_file=CSV::Reader.parse(params[:dump][:file])
+
+    #@parsed_file=CSV::Reader.parse(params[:dump][:file])
+
+=begin
+    file = params[:dump][:file]
+      FCSV.new(file).each do |row|
+        puts row[0]
+        puts row[1]
+      end
+=end
+
+=begin
+    FasterCSV.foreach(params[:dump][:file]) do |row|
+       #c=CustomerInformation.new
+       #c.job_title = row[0]
+       #c.first_name = row[1]
+       #c.last_name = row[2]
+       #c.save
+       puts row[0]
+       puts row[1]
+     end
+
+     flash.now[:message]="CSV Import Successful,  #{n} new records added to database"
+
+=end
+
+  end
   
   protected
     
