@@ -13,7 +13,7 @@ class Api::ContactsController < ApiController
       @people = paginate_filter_sort_people(@people,@organization)      
       json_output = @people.collect {|person|  { person: person.to_hash_basic(@organization)}}
     end
-    final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
+    final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
     render json: final_output
   end
   
@@ -24,7 +24,7 @@ class Api::ContactsController < ApiController
     @people = @organization.all_contacts#.order('lastName, firstName')
     @people = paginate_filter_sort_people(@people, @organization)
     json_output = @people.collect {|person| {person: person.to_hash_basic(@organization)}}
-    final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
+    final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
     render json: final_output
   end
   
@@ -159,7 +159,7 @@ class Api::ContactsController < ApiController
     output = @api_json_header
     output[:contacts] = @people.collect {|person| {person: person.to_hash_basic(@organization)}}
 
-    final_output = Rails.env.production? ? output.to_json : JSON::pretty_generate(output)
+    final_output = Rails.env.production? ? JSON.fast_generate(output) : JSON::pretty_generate(output)
     
     render json: final_output
   end
@@ -203,7 +203,7 @@ class Api::ContactsController < ApiController
     @keys = @keywords.collect {|k| {name: k.keyword, keyword_id: k.id, questions: k.survey.questions.collect {|q| q.id}}}
 
     json_output = {keywords: @keys, questions: @all_questions.collect {|q| q.attributes.slice('id', 'kind', 'label', 'style', 'required')}, people: @people.collect {|person| {person: person.to_hash(@organization), form: (@answer_sheets[person].collect {|as| @questions[person][as].collect {|q| {q: q.id, a: q.display_response(as)}}}).flatten(2).uniq}}}
-    final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
+    final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
     render json: final_output
   end
   
@@ -241,7 +241,7 @@ class Api::ContactsController < ApiController
     json_output.merge!({surveys: @surveys, questions: @all_questions.collect {|q| q.attributes.slice('id', 'kind', 'label', 'style', 'required')}, people: @people.collect {|person| {person: person.to_hash(@organization), form: (@answer_sheets[person].collect {|as| @questions[person][as].collect {|q| {q: q.id, a: q.display_response(as)}}}).flatten(2).uniq}}})
     json_output[:contacts] = @people.collect {|person| {person: person.to_hash(@organization), form: (@answer_sheets[person].collect {|as| @questions[person][as].collect {|q| {q: q.id, a: q.display_response(as)}}}).flatten(2).uniq}}
     
-    final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
+    final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
     render json: final_output
   end
 

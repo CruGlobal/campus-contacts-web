@@ -141,6 +141,7 @@ GEM
       railties (~> 3.0)
       thor (~> 0.14)
     json (1.6.3)
+    json_pure (1.6.5)
     jwt (0.1.4)
       json (>= 1.2.4)
     kaminari (0.12.4)
@@ -333,6 +334,7 @@ DEPENDENCIES
   http_accept_language
   i18n-js
   jquery-rails
+  json_pure
   kaminari
   mini_fb
   mocha

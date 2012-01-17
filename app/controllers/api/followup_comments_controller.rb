@@ -26,7 +26,7 @@ class Api::FollowupCommentsController < ApiController
     contact_id = params[:id].present? ? params[:id] : 0
     @followup_comments = FollowupComment.includes(:rejoicables).where(contact_id: contact_id).where(organization_id: @organization.id).order("created_at DESC")
     json_output = @followup_comments.collect {|c| {followup_comment: {comment: c.to_hash, rejoicables: c.rejoicables.collect{|y| y.attributes.slice('id','what')}}}}
-    final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
+    final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
     render json: final_output
   end
   
@@ -45,7 +45,7 @@ class Api::FollowupCommentsController < ApiController
     @followup_comments = @followup_comments.order("created_at DESC")
         
     json_output[:followup_comments] = @followup_comments.collect {|c| {followup_comment: {comment: c.to_hash, rejoicables: c.rejoicables.collect{|y| y.attributes.slice('id','what')}}}}
-    final_output = Rails.env.production? ? json_output.to_json : JSON::pretty_generate(json_output)
+    final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
     render json: final_output
   end
   
