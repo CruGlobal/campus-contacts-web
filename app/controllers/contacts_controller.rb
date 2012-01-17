@@ -221,33 +221,16 @@ class ContactsController < ApplicationController
   end
 
   def csv_import
+    @organization = current_organization
 
-    @parsed_file=CSV::Reader.parse(params[:dump][:file])
+    CSV.foreach(params[:dump][:file].path.to_s) do |row|
+      params = {:person=>{:firstName=>row[0], :lastName=>row[1], :email_address=>{:email=>row[3], :primary=>"1", :_destroy=>"false"}, :phone_number=>{:number=>row[2], :location=>"mobile", :primary=>"1", :_destroy=>"false"}}}
+      create_contact_from_row(params)
+      #params = {"person"=>{"firstName"=>"row[0]", "lastName"=>"row[1]", "gender"=>"male", "email_address"=>{"email"=>row"[3]", "primary"=>"1", "_destroy"=>"false"}, "phone_number"=>{"number"=>row"[2]", "location"=>"mobile", "primary"=>"1", "_destroy"=>"false"}}}
+    end
 
-    #@parsed_file=CSV::Reader.parse(params[:dump][:file])
-
-=begin
-    file = params[:dump][:file]
-      FCSV.new(file).each do |row|
-        puts row[0]
-        puts row[1]
-      end
-=end
-
-=begin
-    FasterCSV.foreach(params[:dump][:file]) do |row|
-       #c=CustomerInformation.new
-       #c.job_title = row[0]
-       #c.first_name = row[1]
-       #c.last_name = row[2]
-       #c.save
-       puts row[0]
-       puts row[1]
-     end
-
-     flash.now[:message]="CSV Import Successful,  #{n} new records added to database"
-
-=end
+    flash.now[:message]="CSV Import Successful, new records added to database"
+    render :import_contacts
 
   end
   
@@ -278,4 +261,36 @@ class ContactsController < ApplicationController
       end
       answers
     end
+
+    def create_contact_from_row(params)
+
+      @organization ||= current_organization
+      Person.transaction do
+      puts "HELOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO! " + params[:person].to_s
+        params[:person] ||= {}
+        params[:person][:email_address] ||= {}
+        params[:person][:phone_number] ||= {}
+
+        @person, @email, @phone = create_person(params[:person])
+        if @person.save
+
+          @questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => false)
+
+          save_survey_answers
+    
+          FollowupComment.create_from_survey(@organization, @person, @organization.all_questions, @answer_sheets)
+
+          create_contact_at_org(@person, @organization)
+          if params[:assign_to_me] == 'true'
+            ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
+            ContactAssignment.create!(person_id: @person.id, organization_id: @organization.id, assigned_to_id: current_person.id)
+          end
+
+          return
+
+        end
+      end
+    end
+
+
 end
