@@ -4,7 +4,7 @@ class SessionsController < Devise::SessionsController
   layout :pick_layout
   
   def new
-    @survey = Survey.find(cookies[:survey_id]) unless cookies[:survey_id].nil?
+    @survey = Survey.find(cookies[:survey_id]).first unless cookies[:survey_id].nil?
     
     if @survey
       if @survey.login_option == 2 || @survey.login_option == 3
