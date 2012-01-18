@@ -178,6 +178,7 @@ Mh::Application.routes.draw do
       get :send_bulk_vcard
       get :import_contacts
       post :csv_import
+      get :download_sample_contacts_csv
     end
   end
   
