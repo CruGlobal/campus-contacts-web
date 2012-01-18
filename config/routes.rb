@@ -193,6 +193,9 @@ Mh::Application.routes.draw do
       get 'contacts/search' => 'contacts#search'
       resources :contacts do
         resource :photo
+        collection do
+          get :leaders
+        end
       end
       get "contact_assignments/list_leaders" => "contact_assignments#list_leaders"
       get "contact_assignments/list_organizations" => "contact_assignments#list_organizations"
