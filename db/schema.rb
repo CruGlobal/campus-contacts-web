@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120111194425) do
+ActiveRecord::Schema.define(:version => 20120118193956) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -3241,6 +3241,7 @@ ActiveRecord::Schema.define(:version => 20120111194425) do
     t.datetime "updated_at"
     t.text     "post_survey_message"
     t.string   "terminology",                        :default => "Survey"
+    t.integer  "login_option",                       :default => 0
   end
 
   add_index "mh_surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
@@ -4412,6 +4413,16 @@ ActiveRecord::Schema.define(:version => 20120111194425) do
   add_index "organizations", ["ancestry"], :name => "index_organizations_on_ancestry"
   add_index "organizations", ["importable_type", "importable_id"], :name => "index_organizations_on_importable_type_and_importable_id", :unique => true
   add_index "organizations", ["name"], :name => "index_organizations_on_name"
+
+  create_table "person_photos", :force => true do |t|
+    t.integer  "person_id"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "phone_numbers", :force => true do |t|
     t.string   "number"
