@@ -290,7 +290,7 @@ en:
       title: Title
       title_tip: "This is what people will see as the header on the survey"
       terminology: "If you'd like this to be referred to as something other than a 'Survey', enter that here"
-      login_option: "Choose a login option for your users before they take a survey"
+      login_option: "Choose a login option for your users"
       default_login_option: "Show Facebook login with an option to skip it"
       fb_only_login_option: "Require Facebook login"
       skip_fb_login_option: "Present an option at the end of the survey to connect via Facebook"
