@@ -33,5 +33,7 @@ Mh::Application.configure do
   config.dev_tweaks.autoload_rules do
     keep :xhr
   end
+  
+  Paperclip.options[:command_path] = "/usr/local/bin/"
 end
 
