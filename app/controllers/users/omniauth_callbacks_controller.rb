@@ -43,20 +43,14 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   
   protected
   
-  def facebook_login(*args)
+  def facebook_login(person = nil)
     omniauth = env["omniauth.auth"]
     @user = User.find_for_facebook_oauth(omniauth, current_user)
     session[:fb_token] = omniauth["credentials"]["token"]
     session["devise.facebook_data"] = omniauth
-    
-    unless args[0].nil?
-      #logger.debug(current_user)
-      fb_uid = @user.person.fb_uid
-      @user.person.delete
-      person = args[0]
-      person.update_attributes(:fk_ssmUserId => @user.id, :fb_uid => fb_uid)
-    end
- 
+
+    @user.person.merge(person) if person
+
     if @user && @user.persisted?
       sign_in(@user)
     else
