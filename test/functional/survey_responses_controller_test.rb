@@ -11,6 +11,37 @@ class SurveyResponsesControllerTest < ActionController::TestCase
     
   end
   
+  context "Redirect to correct login option" do
+    setup do
+      @organization = Factory(:organization)
+      @keyword = Factory.create(:approved_keyword, organization: @organization)
+      
+      @survey0 = Factory.create(:survey, login_option: 0)
+      @survey1 = Factory.create(:survey, login_option: 1)
+      @survey2 = Factory.create(:survey, login_option: 2)
+      @survey3 = Factory.create(:survey, login_option: 3)
+    end
+    
+    should "redirect to sign in if login option is 0" do
+      get :new, keyword: @keyword.keyword, survey: @survey0.id
+      assert_redirected_to "/users/sign_in"
+    end
+    
+    should "redirect to sign in if login option is 1" do
+      get :new, keyword: @keyword.keyword, survey: @survey1.id
+      assert_redirected_to "/users/sign_in"
+    end
+    
+    should "redirect to sign in if login option is 2" do
+      get :new, keyword: @keyword.keyword, survey: @survey2.id
+      assert_redirected_to "/users/sign_in"
+    end
+    
+    should "redirect to sign in if login option is 3" do
+      get :new, keyword: @keyword.keyword, survey: @survey3.id
+      assert_redirected_to "/users/sign_in"
+    end
+  end
   
   context "After logging in a person without orgs" do
     setup do

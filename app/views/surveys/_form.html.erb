@@ -57,6 +57,21 @@
     <div class="stepnumber">
       <%= image_tag("step4.png") %>
     </div>
+    <div class="stepcontent">
+      <div class="field">
+        <%= t('.login_option') %><br/>
+        <%= f.radio_button :login_option, 0, :checked => true %> <%= t('.default_login_option') %><br/>
+        <%= f.radio_button :login_option, 1 %> <%= t('.fb_only_login_option') %><br/>
+        <%= f.radio_button :login_option, 2 %> <%= t('.skip_fb_login_option') %><br/>
+        <%= f.radio_button :login_option, 3 %> <%= t('.no_fb_login_option') %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="stepwrap rwidth">
+    <div class="stepnumber">
+      <%= image_tag("step5.png") %>
+    </div>
     <div class="stepcontent"> 
       <% if current_organization.show_sub_orgs? && current_organization.has_children? %>   
         <div class="field">

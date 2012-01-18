@@ -3,6 +3,16 @@ class SessionsController < Devise::SessionsController
   skip_before_filter :check_url
   layout :pick_layout
   
+  def new
+    @survey = Survey.find(cookies[:survey_id]).first unless cookies[:survey_id].nil?
+    
+    if @survey
+      if @survey.login_option == 2 || @survey.login_option == 3
+        redirect_to "/s/#{cookies[:survey_id]}?nologin=true"
+      end
+    end
+  end
+  
   def destroy
     if session[:fb_token]
       split_token = session[:fb_token].split("|")
