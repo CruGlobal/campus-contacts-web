@@ -96,6 +96,7 @@ class User < ActiveRecord::Base
   end
   
   def merge(other)
+    User.connection.execute('SET foreign_key_checks = 0')
     User.transaction do
       person.merge(other.person) if person
 
@@ -115,6 +116,7 @@ class User < ActiveRecord::Base
       other.reload
       other.destroy
     end
+    User.connection.execute('SET foreign_key_checks = 1')
   end
   
   def has_role?(role_id, organization)

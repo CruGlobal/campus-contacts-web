@@ -248,4 +248,9 @@ class Api::ContactsController < ApiController
   def create_2
     create_contact
   end
+  
+  def leaders_2
+    render json: @organization.leaders.collect{ |p| { person: p.to_hash_basic } }
+  end
+  
 end
