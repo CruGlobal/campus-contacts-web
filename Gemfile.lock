@@ -89,6 +89,7 @@ GEM
       net-ssh-gateway (>= 1.1.0)
     chronic (0.6.6)
     client_side_validations (3.1.3)
+    cocaine (0.2.1)
     coffee-rails (3.1.1)
       coffee-script (>= 2.2.0)
       railties (~> 3.1.0)
@@ -190,6 +191,11 @@ GEM
     orm_adapter (0.0.5)
     paper_trail (2.5.0)
       rails (~> 3)
+    paperclip (2.4.5)
+      activerecord (>= 2.3.0)
+      activesupport (>= 2.3.2)
+      cocaine (>= 0.0.2)
+      mime-types
     polyamorous (0.5.0)
       activerecord (~> 3.0)
     polyglot (0.3.3)
@@ -344,6 +350,7 @@ DEPENDENCIES
   omniauth
   omniauth-facebook (~> 1.0.0.rc2)
   paper_trail (~> 2)
+  paperclip
   rack-offline
   railroady
   rails (= 3.1.3)

@@ -54,7 +54,8 @@ gem 'delegate_presenter'
 gem 'vpim', git: 'git://github.com/twinge/vpim.git'   # vcard maker
 gem 'i18n-js'                                         # allow i18n on js files 
 
-gem 'rest-client'
+gem 'rest-client'                                     # to make FB api requests
+gem 'paperclip'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
