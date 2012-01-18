@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120118141358) do
+ActiveRecord::Schema.define(:version => 20120111194425) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -3241,7 +3241,6 @@ ActiveRecord::Schema.define(:version => 20120118141358) do
     t.datetime "updated_at"
     t.text     "post_survey_message"
     t.string   "terminology",                        :default => "Survey"
-    t.integer  "login_option",                       :default => 0
   end
 
   add_index "mh_surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
@@ -3565,10 +3564,6 @@ ActiveRecord::Schema.define(:version => 20120118141358) do
     t.string   "ministry"
     t.string   "strategy",                      :limit => 20
     t.integer  "fb_uid",                        :limit => 8
-    t.string   "photo_file_name"
-    t.string   "photo_content_type"
-    t.integer  "photo_file_size"
-    t.datetime "photo_updated_at"
   end
 
   add_index "ministry_person", ["accountNo"], :name => "accountNo_ministry_Person"

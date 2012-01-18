@@ -38,10 +38,6 @@ class Person < ActiveRecord::Base
   has_many :received_sms, class_name: "ReceivedSms", foreign_key: "person_id"
   has_many :sms_sessions, inverse_of: :person
   
-  has_attached_file :photo, style: { medium: "300x300>", thumb: "100x100>" },
-                       path: "#{Rails.root}/public/uploads/contacts/:attachment/:id/:style/:filename",
-                       url: "uploads/contacts/:attachment/:id/:style/:filename"
-  
   scope :who_answered, lambda {|survey_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.survey_id' => survey_id)}
   validates_presence_of :firstName
   validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, allow_blank: true
@@ -519,7 +515,7 @@ class Person < ActiveRecord::Base
     hash = self.to_hash_assign(organization)
     hash['gender'] = gender
     hash['fb_id'] = fb_uid.to_s unless fb_uid.nil?
-    hash['picture'] = picture unless !photo.exists? and fb_uid.nil?
+    hash['picture'] = picture unless fb_uid.nil?
     status = organizational_roles.where(organization_id: organization.id).where('followup_status IS NOT NULL') unless organization.nil?
     hash['status'] = status.first.followup_status unless (status.nil? || status.empty?)
     hash['request_org_id'] = organization.id unless organization.nil?
@@ -560,11 +556,7 @@ class Person < ActiveRecord::Base
   end
   
   def picture
-    if photo.exists?
-      Rails.env.development? ? "http://local.missionhub.com/#{photo.url}" : "http://www.missionhub.com/#{photo.url}"
-    elsif fb_uid
-      "http://graph.facebook.com/#{fb_uid}/picture"
-    end
+    "http://graph.facebook.com/#{fb_uid}/picture"
   end
   
   def create_user!
