@@ -25,11 +25,11 @@ en:
     leader: Leader
     alumni: Alumni
     views:
-      organizational_roles: "Organizational Roles"
-      system_roles: "System Roles"
-      create_role: "Create new role"
-      edit_role: "Edit role"
-      delete_role: "Delete role"
+      organizational_roles: "Organizational Labels"
+      system_roles: "System Labels"
+      create_role: "Create new label"
+      edit_role: "Edit label"
+      delete_role: "Delete label"
       update: "Update"
       create: "Create"
       name: "Name"
@@ -70,7 +70,7 @@ en:
     surveys: "Surveys"
     people: "People"
     keywords: "Keywords"
-    roles: "Roles"
+    roles: "Labels"
     back_to_dashboard: "Back To My Contacts"
     create_a_survey: Create a survey
     
@@ -135,10 +135,10 @@ en:
       email: 'Email'
       filter: 'Search'
       year_in_school: 'Year in School'
-      manage_roles: 'Manage Roles'
+      manage_roles: 'Manage Labels'
       send_sms: Send Text
       send_email: Send Email
-      apply_roles: 'Apply Roles'
+      apply_roles: 'Apply Labels'
       no_people: "Sorry, there are no people involved here."
       displaying: "Displaying %{start} - %{finish} of %{total}"
     all:
@@ -169,7 +169,7 @@ en:
     advanced_search:
       first_name: 'First Name'
       last_name: 'Last Name'
-      role: 'Role'
+      role: 'Label'
       email: 'Email Address'
       phone: 'Phone Number'
       basic_search: 'Toggle Basic Search'
