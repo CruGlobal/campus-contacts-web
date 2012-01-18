@@ -132,7 +132,10 @@ class PeopleController < ApplicationController
         if params[:roles].present?
           role_ids = params[:roles].keys.map(&:to_i)
           params[:roles].keys.each do |role_id|
-            @person.organizational_roles.create(role_id: role_id, organization_id: current_organization.id)
+            begin
+              @person.organizational_roles.create(role_id: role_id, organization_id: current_organization.id)
+            rescue ActiveRecord::RecordNotUnique
+            end
           end
 
           # we need a valid email address to make a leader
