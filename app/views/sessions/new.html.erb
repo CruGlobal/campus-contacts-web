@@ -1,14 +1,24 @@
 <% if mhub? %>
   <center>
-    <%= t('.login_paragraph_mhub') %>
-    <br><br>
-    <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook_mhub), rel: 'external') %>
-    <br/>
-		<% if cookies[:survey_id] %>
-      <div class="info"><br/><br/>
-        <center><%= t('.dont_like_faceook') %> <%= link_to(t('.skip_facebook'), session[:return_to] ? add_params(session[:return_to], :nologin => true) : "/s/#{cookies[:survey_id]}?nologin=true") %></center>
-      </div>
+    <% if @survey.login_option == 0 %>
+      <%= t('.login_paragraph_mhub') %>
+      <br><br>
+      <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook_mhub), rel: 'external') %>
+      <br/>    
+      <% if cookies[:survey_id] %>
+        <div class="info"><br/><br/>
+          <center>
+            <%= t('.dont_like_faceook') %>
+            <%= link_to(t('.skip_facebook'), session[:return_to] ? add_params(session[:return_to], :nologin => true) : 
+            "/s/#{cookies[:survey_id]}?nologin=true") %>
+          </center>
+        </div>
 		<% end %>
+    <% elsif @survey.login_option == 1 %>
+      <%= t('.login_paragraph_mhub') %>
+      <br><br>
+      <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook_mhub), rel: 'external') %>
+    <% end %>
   </center>
 <% else %>
   <div class="splash login">

@@ -64,6 +64,7 @@ FactoryGirl.define do
     title {"Test survey #{Factory.next(:count)}"}
     association :organization
     post_survey_message "bye!"
+    login_option 0
   end
   
   factory :person do 

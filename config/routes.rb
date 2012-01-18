@@ -24,6 +24,7 @@ Mh::Application.routes.draw do
   resources :survey_responses, :only => [:show, :new, :create, :edit, :update] do
     collection do
       get :thanks
+      get :facebook
     end
   end
   

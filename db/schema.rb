@@ -3241,6 +3241,7 @@ ActiveRecord::Schema.define(:version => 20120118141358) do
     t.datetime "updated_at"
     t.text     "post_survey_message"
     t.string   "terminology",                        :default => "Survey"
+    t.integer  "login_option",                       :default => 0
   end
 
   add_index "mh_surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
