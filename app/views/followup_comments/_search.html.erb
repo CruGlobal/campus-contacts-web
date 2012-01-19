@@ -1,0 +1,14 @@
+<div id="comment_search_box" style="<%= 'display:none' %>">
+  <%= form_tag params, method: :get do %>
+    <div class="ononeline">
+      <div class="field">
+        <label for="Search"><span class="title"><%= t('.search_title') %></span></label> 
+        <%= text_field_tag :query, params[:query], placeholder: t('.search_placeholder') %>
+      </div>
+    </div>
+    <div class="actionbarinline">
+      <%= submit_tag t('general.search') %>
+      <%= link_to t('.clear_search_form'), '', onclick: "$(this).closest('form').get(0).reset(); return false;" %>
+    </div>
+  <% end %>
+</div>

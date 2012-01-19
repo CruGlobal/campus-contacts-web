@@ -67,6 +67,7 @@ en:
     my_contacts: 'My Contacts'
     all_contacts: 'All Contacts'
     directory: 'Directory'
+    my_comments: 'My Comments'
     surveys: "Surveys"
     people: "People"
     keywords: "Keywords"
@@ -193,6 +194,17 @@ en:
     involvement:
       conferences: Conferences
       summer_projects: Summer Projects
+  followup_comments:
+    index:
+      comments_title: 'Comments'
+      filter: 'Search'
+      first_name: 'First Name'
+      last_name: 'Last Name'
+      comment: 'Comment'
+      status: 'Status'
+    search:
+      search_title: 'Search'
+      search_placeholder: 'Enter your query here'
   sessions:
     destroy:
       signed_out: You've been signed out.
@@ -515,6 +527,7 @@ en:
       year: Year
       detailed: Detailed
       all: All 
+      comments: 'My Comments'
 
     thanks:
       message: Thank you for your interest.

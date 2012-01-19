@@ -42,7 +42,7 @@ Mh::Application.routes.draw do
   
   # resources :rejoicables
 
-  resources :followup_comments, :only => [:create, :destroy]
+  resources :followup_comments, :only => [:index, :create, :destroy]
 
   resources :contact_assignments, :only => [:create]
 
