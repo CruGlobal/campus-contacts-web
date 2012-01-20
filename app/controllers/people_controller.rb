@@ -34,6 +34,7 @@ class PeopleController < ApplicationController
   # GET /people/1.xml
   def show
     @person = Person.find(params[:id])
+    @assigned_tos = @person.assigned_tos.collect { |a| a.assigned_to.name }.to_sentence
     authorize!(:read, @person)
     if can? :manage, @person
       @organizational_role = OrganizationalRole.where(organization_id: current_organization, person_id: @person, role_id: Role::CONTACT_ID).first
