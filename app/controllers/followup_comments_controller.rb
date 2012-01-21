@@ -35,5 +35,6 @@ class FollowupCommentsController < ApplicationController
     end
 
     @comments = @comments.order(params[:q] && params[:q][:s] ? params[:q][:s] : ['created_at'])
+                         .page(params[:page])
   end
 end

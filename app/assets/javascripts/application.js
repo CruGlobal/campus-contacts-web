@@ -25,3 +25,4 @@
 //= require i18n
 //= require i18n/translations
 //= require followup_comments
+//= require clearform
