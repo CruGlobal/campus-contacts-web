@@ -153,11 +153,13 @@ $ ->
       $.fn.assignTo(leader)
     else
       $.rails.handleRemote($('#new_contact_assignment'))
-      unless $('#assign_to').val() == $('#my_id').val()        
+      unless $('#assign_to').val() == $('#my_id').val()
+        $.fn.load_leader_name($('#person_title').attr('data-id'))
         $('.id_checkbox:checked').each ->
           $(this).closest('tr').remove();
     $('#assign_search').dialog('destroy')
   false
+
   
   $('#assign_search .org a').live 'click', (e)->
     e.preventDefault()
@@ -422,18 +424,24 @@ $.fn.assignTo = (leader, skip_remote) ->
       $('.unassign_link', row).show()
       
     unless assigned_to.html() == leader_name
+      
       $('.count', leader).html(Number($('.count', leader).html()) + 1)
       if assigned_to.html() == ''
         $('#unassigned_count').html(Number($('#unassigned_count').html()) - 1)
+        
       else
         $('.leader a').each ->
           if $(this).text() == assigned_to.html() || (leader.hasClass('unassigned') && assigned_to.html() == '')
             count = $(this).closest('.leader').find('.count')
             count.html(Number(count.html()) - 1)
+            
       if leader.hasClass('unassigned') or leader.hasClass('dn')
         assigned_to.text('') 
+        
       else
         assigned_to.text(leader_name) 
+        #hide assigned to
+        $('#person_title').hide()
     # hide people assigned to someone other than the current or if we're moving to dnc
     assign_to = $('#new_contact_assignment').find("#assign_to").val()   
     if assign_to == "do_not_contact" || ($.params.assigned_to != 'all' && $.params.assigned_to != leader_name)
@@ -452,3 +460,6 @@ $.mh.saveContact = (add_more) ->
   $.rails.handleRemote(form)
   form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
   false
+    
+$.fn.load_leader_name = (id) ->
+  $('#person_title').show().load('/people/' + id + ' #assigned_leader') 
