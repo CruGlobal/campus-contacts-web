@@ -11,7 +11,10 @@ class GroupMembershipsController < ApplicationController
       @group_membership.save
     end
     
-    render :nothing => true
+    respond_to do |wants|
+      wants.html { render :nothing => true }
+      wants.js
+    end
   end
   
   def destroy
