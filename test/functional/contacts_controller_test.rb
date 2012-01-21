@@ -134,4 +134,9 @@ class ContactsControllerTest < ActionController::TestCase
       should redirect_to('/wizard') 
     end
   end
+
+  context "After uploading csv file" do
+    #:dump
+  end
+
 end

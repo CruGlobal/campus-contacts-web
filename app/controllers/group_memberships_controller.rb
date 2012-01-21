@@ -1,6 +1,7 @@
 class GroupMembershipsController < ApplicationController
 
   def create
+
     @group = current_organization.groups.find(params[:group_id]) 
     @persons = Person.find(params[:person_id].split(',').collect! {|n| n.to_i})
 
@@ -10,8 +11,12 @@ class GroupMembershipsController < ApplicationController
       @group_membership.role = params[:role]
       @group_membership.save
     end
-    
-    render :nothing => true
+
+
+    respond_to do |wants|
+      wants.html { render :nothing => true }
+      wants.js
+    end
   end
   
   def destroy
