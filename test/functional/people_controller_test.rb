@@ -108,6 +108,24 @@ class PeopleControllerTest < ActionController::TestCase
         xhr :post, :update_roles, { :role_ids => roles, :person_id => @person1.id }
         assert_response :success
       end
+      
+      should "update roles with include_old_roles as parameter" do
+        roles = []
+        (1..3).each { |index| roles << Role.create!(organization_id: 1, name: "member_#{index}", i18n: "member_#{index}") }
+        roles = roles.collect { |role| role.id }.join(',')
+        xhr :post, :update_roles, { :role_ids => roles, :person_id => @person1.id, :include_old_roles => "yes" }
+        assert_response :success
+      end
+      
+      should "try to update roles with duplicate roles" do
+        roles = []
+        (1..3).each { |index| roles << Role.create!(organization_id: 1, name: "member_#{index}", i18n: "member_#{index}") }
+        #duplicate the first role
+        roles << roles.first
+        roles = roles.collect { |role| role.id }.join(',')
+        xhr :post, :update_roles, { :role_ids => roles, :person_id => @person1.id, :include_old_roles => "yes" }
+        assert_response :success
+      end
     end
   end
   
