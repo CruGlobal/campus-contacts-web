@@ -1,7 +1,21 @@
 FactoryGirl.define do
   sequence(:count) {|n| n}
-  
 
+  def attachment(name, path, content_type = nil)
+    path_with_rails_root = "#{RAILS_ROOT}/#{path}"
+    uploaded_file = if content_type ActionController::TestUploadedFile.new(path_with_rails_root, content_type)
+                    else ActionController::TestUploadedFile.new(path_with_rails_root)
+                    end
+
+    add_attribute name, uploaded_file
+  end
+  
+=begin
+  factory :csv_file do
+    include ActionDispatch::TestProcess 
+    csv_file fixture_file_upload('/files/sample_contacts.csv', 'application/csv')
+  end
+=end
 
   factory :group do
     name 'foo'

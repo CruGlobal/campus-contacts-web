@@ -630,6 +630,7 @@ ActiveRecord::Schema.define(:version => 20120111194425) do
     t.text     "shut_off_message"
     t.binary   "married_require_full_payment",                 :limit => 255
     t.binary   "single_require_full_payment",                  :limit => 255
+    t.binary   "enable_rideshare",                             :limit => 255
   end
 
   add_index "crs2_registrant_type", ["conference_id"], :name => "FKA936E6DD863D9D1F"
@@ -1036,6 +1037,7 @@ ActiveRecord::Schema.define(:version => 20120111194425) do
   end
 
   add_index "fsk_fields_roles", ["field_id"], :name => "FK_fsk_fields_roles"
+  add_index "fsk_fields_roles", ["role_id"], :name => "fsk_fields_roles_ibfk_2"
 
   create_table "fsk_kit_categories", :force => true do |t|
     t.string   "name",         :limit => 50,                  :null => false
@@ -4963,6 +4965,9 @@ ActiveRecord::Schema.define(:version => 20120111194425) do
     t.datetime "updated_at"
     t.datetime "last_sign_in_at"
     t.string   "locale"
+    t.binary   "emailVerified",             :limit => 255
+    t.datetime "lastFailure"
+    t.integer  "lastFailureCnt"
   end
 
   add_index "simplesecuritymanager_user", ["email"], :name => "index_simplesecuritymanager_user_on_email", :unique => true
