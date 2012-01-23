@@ -1,0 +1,45 @@
+<% provide :sidebar do %>
+  <%= render 'contacts/leaders' %>
+<% end %>
+
+<div class="titlebar">  
+  <h1>
+    <%= image_tag("c_allcontacts.png") %>
+    <%= t('contacts.index.import_contacts') %>
+  </h1>
+</div>
+
+<br>
+
+<%= image_tag("sample_csv_to_be_imported.png") %>
+<br>
+<span class="name"><strong><%= link_to(t('contacts.import_contacts.download_sample_csv'), download_sample_contacts_csv_contacts_path) %></strong></span>
+
+<ul>
+  <li><%= t('contacts.import_contacts.instruction_4') %></li>
+  <li><%= t('contacts.import_contacts.instruction_1') %></li>
+  <li><%= t('contacts.import_contacts.instruction_2') %></li>
+  <li><%= t('contacts.import_contacts.instruction_3') %></li>
+</ul>
+
+<%= form_for :dump, :url=>{ :controller=>"contacts", :action=>"csv_import"}, :html => { :multipart => true } do |f| %>
+<table>
+ <tr>
+   <td>
+    <label for="dump_file">
+      <%= t('contacts.import_contacts.select_csv') %>
+      
+    </label>
+   </td>
+   <td >
+     <%= f.file_field :file %>
+   </td>
+ </tr>
+ <tr>
+   <td colspan='2'>
+     <%= submit_tag 'Submit' %>
+   </td>
+ </tr>
+</table>
+
+<% end %>

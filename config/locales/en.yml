@@ -493,6 +493,7 @@ en:
       unassigned: 'Unassigned'
       all: 'All'
       dnc: 'Do Not Contact'
+      import_contacts: 'Import Contacts'
       completed: 'Completed'
       in_progress: 'Assigned'
       no_activity: 'No Activity'
@@ -543,6 +544,19 @@ en:
       vcard_email_content: 'Attached in this email is a vcard containing the contact you selected'
       bulk_vcard_email_subject: 'Your request for contact information'      
       bulk_vcard_email_content: 'Attached to this email is a vcard containing the contacts you selected'
+    import_contacts:
+      success: "CSV Import Successful, new records added to database!"
+      error: "CSV Import unsuccessful and the cause is:"
+      instructions_label: "Instructions"
+      select_csv: "Select a CSV File :"
+      instruction_1: "Follow the order of the columns as illustrated above"
+      instruction_2: "First name should not be missing"
+      instruction_3: "Phone numbers and email addresses should have the right format"
+      instruction_4: "Headers should be present"
+      download_sample_csv: "Download sample CSV file"
+      cause_1: " First name is blank at row"
+      cause_2: " Invalid phone number at row"
+      cause_3: " Invalid email address at row"
   sms:
     keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
   survey:
