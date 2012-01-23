@@ -134,4 +134,18 @@ class ContactsControllerTest < ActionController::TestCase
       should redirect_to('/wizard') 
     end
   end
+  
+  context "Importing contacts" do
+    setup do
+      @user = Factory(:user_with_auxs)  #user with a person object
+      sign_in @user
+    end
+    
+    should "successfully import contacts" do
+      contacts_file = File.open(Rails.root.join("test/fixtures/sample_contacts.csv"))
+      file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
+      post :csv_import, { :dump => { :file => file } }
+      assert_response(:success)
+    end
+  end
 end
