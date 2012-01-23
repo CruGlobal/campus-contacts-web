@@ -194,6 +194,27 @@ $ ->
     .remove()
     $('#assign_search').dialog('destroy')
   false
+  
+  $('#assign_search .label a').live 'click', (e)->
+    $('#assign_to').val($(this).closest('li'))
+    e.preventDefault()
+    role = $('#assign_to').val($(this).closest('li').attr('data-role')).val()
+    
+    $('.id_checkbox:checked').each ->
+      person_id = $(this).val()
+        
+      $.ajax
+        type: 'POST',
+        url: '/people/update_roles',
+        data: 'role_ids='+role+'&person_id='+person_id
+      
+      unless role == '3'  
+        $(this).closest('tr').remove()
+        $('#unassigned_count').html(Number($('#unassigned_count').html()) - 1)
+    
+    $('#assign_search').dialog('destroy')
+    $.n('Successfully assigned labels.')
+  false
     
   $('#assign_search .leader_search_name').keyup ->
     name = $(this).val()
@@ -222,29 +243,48 @@ $ ->
       else
         $(this).hide()
 
+  $('#assign_search .label_search_name').keyup ->
+    name = $(this).val()
+    $('#assign_search ul li').each ->
+      regex = new RegExp('.*' + name + '.*', 'i')
+      if regex.test($('.name', $(this)).text())
+        $(this).show()
+      else
+        $(this).hide()
         
   $('#assign_to_me, #assign_to_unassigned').live 'click', ->
     $('#assign_search .leader_search').hide()
     $('#assign_search .org_search').hide()
     $('#assign_search .group_search').hide()
+    $('#assign_search .label_search').hide()
     $('#assign_search .assign_button').show()
     
   $('#assign_to_leader').live 'click', ->
     $('#assign_search .leader_search').show()
     $('#assign_search .org_search').hide()
     $('#assign_search .group_search').hide()
+    $('#assign_search .label_search').hide()
     $('#assign_search .assign_button').hide()
     
   $('#assign_to_org').live 'click', ->
     $('#assign_search .leader_search').hide()
     $('#assign_search .org_search').show()
     $('#assign_search .group_search').hide()
+    $('#assign_search .label_search').hide()
     $('#assign_search .assign_button').hide()
     
   $('#assign_to_group').live 'click', ->
     $('#assign_search .leader_search').hide()
     $('#assign_search .org_search').hide()
     $('#assign_search .group_search').show()
+    $('#assign_search .label_search').hide()
+    $('#assign_search .assign_button').hide()
+    
+  $('#assign_to_label').live 'click', ->
+    $('#assign_search .leader_search').hide()
+    $('#assign_search .org_search').hide()
+    $('#assign_search .group_search').hide()
+    $('#assign_search .label_search').show()
     $('#assign_search .assign_button').hide()
     
   $('.assign_to_radio').live 'click', -> 
