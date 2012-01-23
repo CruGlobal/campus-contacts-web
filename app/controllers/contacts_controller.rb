@@ -241,7 +241,7 @@ class ContactsController < ApplicationController
         break
       end
 
-      if row[2].to_s.gsub(/[a-z]/,'').length < 7 # if phone_number length < 7
+      if row[2].to_s.gsub(/[^\d]/,'').length < 7 # if phone_number length < 7
         flash_error = "#{t('contacts.import_contacts.cause_2')} #{n}"
         error = true
         break
