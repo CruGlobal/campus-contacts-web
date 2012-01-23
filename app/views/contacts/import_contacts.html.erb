@@ -9,37 +9,44 @@
   </h1>
 </div>
 
-<br>
+<div class="pad">
 
-<%= image_tag("sample_csv_to_be_imported.png") %>
-<br>
-<span class="name"><strong><%= link_to(t('contacts.import_contacts.download_sample_csv'), download_sample_contacts_csv_contacts_path) %></strong></span>
+  
+  <h3>Instructions</h3>
+  <p>You can easily import hundreds of contacts at one time by simply uploading a CSV (Comma Seperated) file. Microsoft Excel makes it easy to create a CSV file.</p>
+  
+  <p>All you need to do is a create a spreadsheet that looks like the sample below.<p>
+ 
+   <%= image_tag("sample_csv_to_be_imported.png") %>
+  
+  <ol class="instructions">
+    <li><span class="name"><strong><%= link_to(t('contacts.import_contacts.download_sample_csv'), download_sample_contacts_csv_contacts_path, :class => "icon showtext csv") %></strong> to get started</span>
+    <li>In your first row list the headings like it shows here: First Name, Last Name, Phone, Email</li>
+    <li>In the rows following the headings, just enter your contacts information. One thing to remember is that <strong>First Name is required</strong>.</li>
+    <li>In Excel, go to <strong>Save As</strong></li>
+    <li>From the drop down menu for <strong>File Type</strong>, choose <strong>CSV, Comma Separated</strong></li>
+  </ol>
+  
+ 
+  
+  
+  <ul style="display: none;">
+    <li><%= t('contacts.import_contacts.instruction_4') %></li>
+    <li><%= t('contacts.import_contacts.instruction_1') %></li>
+    <li><%= t('contacts.import_contacts.instruction_2') %></li>
+    <li><%= t('contacts.import_contacts.instruction_3') %></li>
+  </ul>
+  <br/>
 
-<ul>
-  <li><%= t('contacts.import_contacts.instruction_4') %></li>
-  <li><%= t('contacts.import_contacts.instruction_1') %></li>
-  <li><%= t('contacts.import_contacts.instruction_2') %></li>
-  <li><%= t('contacts.import_contacts.instruction_3') %></li>
-</ul>
-
-<%= form_for :dump, :url=>{ :controller=>"contacts", :action=>"csv_import"}, :html => { :multipart => true } do |f| %>
-<table>
- <tr>
-   <td>
-    <label for="dump_file">
-      <%= t('contacts.import_contacts.select_csv') %>
+  <div class="uploadfiles">
+    <h3>Upload Files</h3>
+    <%= form_for :dump, :url=>{ :controller=>"contacts", :action=>"csv_import"}, :html => { :multipart => true } do |f| %>
+  
       
-    </label>
-   </td>
-   <td >
-     <%= f.file_field :file %>
-   </td>
- </tr>
- <tr>
-   <td colspan='2'>
-     <%= submit_tag 'Submit' %>
-   </td>
- </tr>
-</table>
+    <%= f.file_field :file, :class=> "fileinput" %><br/>
+    <%= submit_tag 'Submit', :value=>"Import Contact" %>
+  </div>
+  
+</div>
 
 <% end %>
