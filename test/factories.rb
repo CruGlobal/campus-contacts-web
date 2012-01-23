@@ -205,6 +205,9 @@ FactoryGirl.define do
   end
   
   factory :contact_assignment do 
+    association :organization
+    association :assigned_to
+    association :person
   end
   
   factory :user_with_auxs, parent: :user do

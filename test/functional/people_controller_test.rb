@@ -133,5 +133,23 @@ class PeopleControllerTest < ActionController::TestCase
       assert_response(:success)
     end
   end
+  
+  context "Showing leaders the person is assigned to" do
+    setup do
+      user = Factory(:user_with_auxs)
+      sign_in user
+      @org1 = Factory(:organization)
+      @person1 = Factory(:person)
+      @person2 = Factory(:person)
+      Factory(:contact_assignment, organization: @org1, assigned_to: @person2, person: @person1)
+    end
+    
+    should "get the person assigned" do
+      get :show, { 'id' => @person1.id }
+      assert_response(:success)
+      assert_not_nil(assigns(:person).assigned_tos)
+      assert_not_nil(assigns(:assigned_tos))
+    end
+  end
 
 end

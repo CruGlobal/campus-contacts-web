@@ -7,13 +7,25 @@
   <%= hidden_field_tag :assign_to %>
   <%= render 'assign' %>
 <% end %>
-<div class="titlebar">
+<div class="titlebar" style="float:left">
   <h1>
     <%= image_tag("contact.png") %>
     <%= @person %>
     <%= link_to("Assign", "", class: 'assign headerlink', 'data-id' => @person.id) if can?(:manage, @person) %>
   </h1>
 </div>
+
+  <div class="titlebar" style="float:left;margin-bottom:0;" id="person_title" data-id="<%= @person.id %>">
+   
+    <h3 id="assigned_leader">
+    <% if @person.assigned_tos.any? %>
+      <%= t('.assigned_to', assigned_to: "#{@assigned_tos}") %>
+      <% end %>
+    </h3>
+    
+  </div>
+
+<div style="clear:both;margin:0;padding:0;line-height:0;"></div>
 
 <div class="pad">
   
