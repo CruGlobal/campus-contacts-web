@@ -208,12 +208,12 @@ $ ->
         url: '/people/update_roles',
         data: 'role_ids='+role+'&person_id='+person_id+'&include_old_roles=yes'
       
-      unless role == '3'  
-        $(this).closest('tr').remove()
-        $('#unassigned_count').html(Number($('#unassigned_count').html()) - 1)
+      if window.location.pathname == '/contacts'  
+        $('#main').load('/contacts .index.carea')
+        $('#left').load('/contacts .block')
     
     $('#assign_search').dialog('destroy')
-    $.n('Successfully assigned labels.')
+    $.n(t('contacts.role_assign_success'))
   false
     
   $('#assign_search .leader_search_name').keyup ->
