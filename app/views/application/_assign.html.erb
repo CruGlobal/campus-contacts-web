@@ -15,6 +15,8 @@
     <label for="assign_to_org"><%= current_organization.terminology %></label>
     <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_group', class: 'assign_to_radio' %>
     <label for="assign_to_group"><%= t('group') %></label>
+    <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_label', class: 'assign_to_radio' %>
+    <label for="assign_to_label"><%= t('label') %></label> 
     <%= radio_button_tag :assign_contact_to, 'do_not_contact', false, id: 'assign_to_dnc', class: 'assign_to_radio' %> 
     <label for="assign_to_dnc"><%= t('contacts.statuses.do_not_contact') %></label>  
   </div>
@@ -51,6 +53,21 @@
           <li class="group" data-group="<%= group.id %>" data-person="<%= @person.id %>">
             <span class="name">
               <%= link_to group.name, '#' %>
+            </span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <div class="label_search modalresults" style="display:none">
+    <p style="margin: 0 0 5px 0;"><%= t('.type_to_find_label') %></p>
+    <%= text_field_tag :label_name, '', class: 'label_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>
+    <div class="labels_list">
+      <ul>
+        <% current_organization.roles.each do |role| %>
+          <li class="label" data-role="<%= role.id %>">
+            <span class="name">
+              <%= link_to role.to_s, '#' %>
             </span>
           </li>
         <% end %>

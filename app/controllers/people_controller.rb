@@ -260,12 +260,20 @@ class PeopleController < ApplicationController
   def update_roles
     authorize! :manage, current_organization
     data = ""
-    role_ids = params[:role_ids].split(',')
+    
     person = Person.find(params[:person_id])
+    
+    if params[:include_old_roles] == 'yes'
+      role_ids = params[:role_ids].split(',') + person.organizational_roles.where(organization_id: current_organization.id).collect { |r| r.role.id.to_s }.join(',').split(',')
+    else
+      role_ids = params[:role_ids].split(',')
+    end
+    
     organizational_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.id }
+    
     OrganizationalRole.delete(organizational_roles)
 
-    role_ids.each_with_index do |role_id, index|
+    role_ids.uniq.each_with_index do |role_id, index|
        OrganizationalRole.create!(person_id: person.id, role_id: role_id, organization_id: current_organization.id) 
        data << "<span id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
        data << "style='margin-right:4px;'" if index < role_ids.length - 1

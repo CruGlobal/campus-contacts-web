@@ -15,6 +15,7 @@ en:
       type_to_find_leader: Type to find a leader then click on the leader's name
       type_to_find_org: "Type to find a %{terminology} then click on the %{terminology}'s name"
       type_to_find_group: Type to find a group then click on the group's name
+      type_to_find_label: "Type to find a label then click on the label's name"
       keep_contact: "Check the box to leave a copy of the contact in the org."
     messages:
       question_too_long: "WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages."
@@ -444,6 +445,7 @@ en:
         <p>%{added_by}</p>
 
   contacts:
+    role_assign_success: 'Successfully assigned labels.'
     assign: Assign
     unassign: 'Unassign'
     add_contact: "Add Contact"
