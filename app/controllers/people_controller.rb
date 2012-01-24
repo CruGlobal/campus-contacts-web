@@ -7,8 +7,17 @@ class PeopleController < ApplicationController
   def index
     authorize! :read, Person
     fetch_people(params)
-  
-    @roles = current_organization.roles
+    
+    current_user_roles = current_user.person
+                                     .organizational_roles
+                                     .where(:organization_id => current_organization)
+                                     .collect { |r| Role.find(r.role_id) }
+                                     
+    if current_user_roles.include? Role.find(1)                           
+      @roles = current_organization.roles
+    else
+      @roles = current_organization.roles.delete_if { |r| r == Role.find(1) }
+    end
 
     # respond_to do |format|
     #   format.html # index.html.erb
