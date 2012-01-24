@@ -143,6 +143,7 @@ $ ->
   $('#assign_search .assign_button').live 'click', ->
     leader = $('.leftmenu .leader[data-id=' + $('#assign_to').val() + ']')
     $.fn.assignTo(leader)
+    $.fn.load_leader_name($('#person_title').attr('data-id'))
     $('#assign_search').dialog('destroy')
     
   $('#assign_search .leader a').live 'click', (e)->
