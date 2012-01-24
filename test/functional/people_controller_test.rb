@@ -152,4 +152,41 @@ class PeopleControllerTest < ActionController::TestCase
     end
   end
 
+  context "Searching for Facebook users" do
+    setup do
+      @user = Factory(:user_with_auxs)  #user with a person object
+      sign_in @user
+    end
+
+    #flash[:checker] came from the people_controller facebook_search method
+
+    should "successfully search for facebook users when using '/http://www.facebook.com\//[a-z]' format" do
+      get :facebook_search, { :term =>"http://www.facebook.com/nmfdelacruz"}
+      assert_equal flash[:checker], 1, "Unsuccessfully searched for a user using Facebook profile url"
+    end
+
+    should "successfully search for facebook users when using '/http://www.facebook.com\/profile.php?id=/[0-9]'" do
+      get :facebook_search, { :term =>"http://www.facebook.com/nmfdelacruz"}
+      assert_equal flash[:checker], 1, "Unsuccessfully searched for a user using Facebook profile url"
+    end
+
+    should "unsuccessfully search for facebook users when url does not exist" do
+      get :facebook_search, { :term =>"http://www.facebook.com/nm34523fdelacruz"}
+      assert_equal flash[:checker], 0
+    end
+
+=begin These tests get errors because probably of facebook user authentication. RestClient::BadRequest: 400 Bad Request
+    should "successfully search for facebook users when using '/[a-z]/' (name string)  format" do
+      get :facebook_search, { :term =>"mark"}
+      assert_equal flash[:checker], 1, "Unsuccessfully searched for a user using Facebook profile url"
+    end
+
+    should "unsuccessfully search for facebook users when name does not exist" do
+      get :facebook_search, { :term =>"dj09345803oifjdlkjdl"}
+      assert_equal flash[:checker], 0
+    end
+=end
+
+  end
+
 end

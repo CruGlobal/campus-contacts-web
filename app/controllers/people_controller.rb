@@ -294,9 +294,13 @@ class PeopleController < ApplicationController
       end
 
       if !result.nil?
+        r = Array.new
+        r << result
+        flash[:checker] = r.count # for testing purposes
         data << {'name' => result['name'], 'id' => result['id']}
         data << {'name' => t('general.match_found'), 'id' => nil}
       else
+        flash[:checker] = 0 # for testing purposes
         data <<  {'name' => t('people.edit.no_results'), 'id' => nil }
       end
 
@@ -318,8 +322,12 @@ class PeopleController < ApplicationController
         end
         logger.debug result
         # next result
+        r = Array.new
+        r << result
+        flash[:checker] = r # for testing purposes
         data <<  {'name' => t('people.edit.more_facebook_matches'), 'id' => result['paging']['next'] } if data.length == 24
       else
+        flash[:checker] = 0 # for testing purposes
         data <<  {'name' => t('people.edit.no_results'), 'id' => nil }
       end
 
