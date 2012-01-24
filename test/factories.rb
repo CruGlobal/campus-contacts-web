@@ -218,6 +218,12 @@ FactoryGirl.define do
     association :person
   end
   
+  factory :followup_comment do
+    association :contact
+    association :organization
+    association :commenter
+  end
+  
   factory :contact_assignment do 
     association :organization
     association :assigned_to

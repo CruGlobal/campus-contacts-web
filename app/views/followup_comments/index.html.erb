@@ -1,0 +1,44 @@
+<%= render '/contacts/sidebar' %>
+
+<div class="titlebar">  
+  <h1>
+    <%= image_tag("c_survey.png") %>
+    <%= t('.comments_title') %>
+  </h1>
+</div>
+
+<div class="pagemenu">
+  <ul class="pillmenu">
+    <li><%= link_to(t('.filter'), '#', id: 'filter_link') %></li>
+  </ul>
+  <%= render 'search' %>
+</div>
+
+<table class="listing" cellpadding="0" cellspacing="0">
+  <tr>
+    <th>&nbsp;</th>
+    <th><%= sort_link @q, 'firstName', t('.first_name'), params %></th>
+    <th><%= sort_link @q, 'lastName', t('.last_name'), params %></th>
+    <th><%= t('.email') %></th>
+    <th><%= t('.phone_number') %></th>
+    <th><%= sort_link @q, 'comment', t('comment'), params %></th>
+    <th><%= sort_link @q, 'created_at', t('date_commented'), params %></th>
+    <th><%= sort_link @q, 'status', t('status'), params %></th>
+  </tr>
+  <tbody>
+    <% @comments.each do |comment| %>
+      <tr class="comment_row" data-id="<%= comment.contact.id %>">
+        <td>&nbsp;</td>
+        <td><%= comment.contact.firstName %></td>
+        <td><%= comment.contact.lastName %></td>
+        <td><%= comment.contact.email %></td>
+        <td><%= comment.contact.phone_number %></td>
+        <td><%= comment.comment %></td>
+        <td><%= l comment.created_at, :format => :date %></td>
+        <td><%= comment.status %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= paginate @comments %>
