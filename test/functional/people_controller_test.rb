@@ -126,6 +126,65 @@ class PeopleControllerTest < ActionController::TestCase
         xhr :post, :update_roles, { :role_ids => roles, :person_id => @person1.id, :include_old_roles => "yes" }
         assert_response :success
       end
+      
+    end
+  end
+  
+  context "When updating roles" do
+    setup do
+      @person = Factory(:person)
+    end
+    
+    context "When user is admin" do
+      setup do
+        @user = Factory(:user_with_auxs)
+        @org = Factory(:organization)
+        org_role = Factory(:organizational_role, organization: @org, person: @user.person, role: Role.admin)
+        
+        sign_in @user
+        @request.session[:current_organization_id] = @org.id
+      end
+      
+      should "include admin role in label selection" do
+        get :index
+        assert(assigns(:roles).include? Role.admin)
+      end
+      
+      should "update roles with include_old_roles as parameter" do
+        roles = []
+        (1..3).each { |index| roles << Role.create!(organization_id: @org.id, 
+        name: "member_#{index}", i18n: "member_#{index}") }
+        
+        roles = roles.collect { |role| role.id }.join(',')
+        xhr :post, :update_roles, { :role_ids => roles, :person_id => @person.id }
+        assert_response :success
+      end
+    end
+    
+    context "When user is leader" do
+      setup do
+        @user = Factory(:user_with_auxs)
+        @org = Factory(:organization)
+        org_role = Factory(:organizational_role, organization: @org, person: @user.person, role: Role.leader)
+        
+        sign_in @user
+        @request.session[:current_organization_id] = @org.id
+      end
+      
+      should "include admin role in label selection" do
+        get :index
+        assert(!(assigns(:roles).include? Role.admin))
+      end
+      
+      should "update roles with include_old_roles as parameter" do
+        roles = []
+        (1..3).each { |index| roles << Role.create!(organization_id: @org.id, 
+        name: "member_#{index}", i18n: "member_#{index}") }
+        
+        roles = roles.collect { |role| role.id }.join(',')
+        xhr :post, :update_roles, { :role_ids => roles, :person_id => @person.id }
+        assert_response :success
+      end    
     end
   end
   
