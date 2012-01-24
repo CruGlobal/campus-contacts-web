@@ -215,6 +215,61 @@ class ContactsController < ApplicationController
     end
     render nothing: true
   end
+
+  def import_contacts
+    @organization = current_organization
+  end
+
+  def csv_import
+    @organization = current_organization
+
+    n = 0
+    error = false
+    flash_error = nil
+    a = Array.new
+    CSV.foreach(params[:dump][:file].path.to_s) do |row|
+      if n == 0
+        n = n + 1
+        next
+      end
+      
+      n += 1
+
+      if !row[0].to_s.match /[a-z]/ # if firstName is blank
+        flash_error = "#{t('contacts.import_contacts.cause_1')} #{n}"
+        error = true
+        break
+      end
+
+      if row[2].to_s.gsub(/[^\d]/,'').length < 7 # if phone_number length < 7
+        flash_error = "#{t('contacts.import_contacts.cause_2')} #{n}"
+        error = true
+        break
+      end
+
+      if !row[3].to_s.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i) # if email has wrong formatting
+        flash_error = "#{t('contacts.import_contacts.cause_3')} #{n}"
+        error = true
+        break
+      end
+      a << {:person => {:firstName => row[0], :lastName => row[1], :email_address => {:email => row[3], :primary => "1", :_destroy => "false"}, :phone_number => {:number => row[2], :location => "mobile", :primary => "1", :_destroy => "false"}}}
+      
+    end
+
+    if !error
+      a.each do |p|
+        create_contact_from_row(p)
+      end
+
+      flash.now[:notice] = t('contacts.import_contacts.success')
+    end
+    flash.now[:error] = t('contacts.import_contacts.error') + flash_error if error
+    render :import_contacts
+  end
+
+  def download_sample_contacts_csv
+    send_file Rails.root.to_s + '/public' + '/files/sample_contacts.csv', :type=>"application/csv"#, :x_sendfile=>true
+  end
   
   protected
     
@@ -243,4 +298,26 @@ class ContactsController < ApplicationController
       end
       answers
     end
+
+    def create_contact_from_row(params)
+      @organization ||= current_organization
+      Person.transaction do
+        params[:person] ||= {}
+        params[:person][:email_address] ||= {}
+        params[:person][:phone_number] ||= {}
+
+        @person, @email, @phone = create_person(params[:person])
+        if @person.save
+
+          create_contact_at_org(@person, @organization)
+          if params[:assign_to_me] == 'true'
+            ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
+            ContactAssignment.create!(person_id: @person.id, organization_id: @organization.id, assigned_to_id: current_person.id)
+          end
+          return
+        end
+      end
+    end
+
+
 end
