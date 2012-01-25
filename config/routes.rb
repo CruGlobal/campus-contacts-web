@@ -11,7 +11,7 @@ Mh::Application.routes.draw do
       end
     end
   end
-  
+
   resources :groups do
     resources :group_labelings, :only => [:create, :destroy]
     resources :group_memberships, :only => [:create, :destroy] do
@@ -20,27 +20,27 @@ Mh::Application.routes.draw do
       end
     end
   end
-  
+
   resources :survey_responses, :only => [:show, :new, :create, :edit, :update] do
     collection do
       get :thanks
       get :facebook
     end
   end
-  
+
   resources :leaders, :only => [:new, :create, :update, :destroy] do
     collection do
       get :search
       put :add_person
     end
   end
-  
+
   resources :organizational_roles, :only => :update do
     collection do
       post :move_to
     end
   end
-  
+
   # resources :rejoicables
 
   resources :followup_comments, :only => [:create, :destroy]
@@ -64,7 +64,7 @@ Mh::Application.routes.draw do
       post :accept_twilio
     end
   end
-  
+
   resources :people, :only => [:show, :create, :edit, :update, :destroy, :index] do
     collection do
       get :export
@@ -73,7 +73,7 @@ Mh::Application.routes.draw do
       post :do_merge
       get :search_ids
       post :bulk_email
-      post :bulk_sms      
+      post :bulk_sms
       get :all
       post :update_roles
       post :bulk_delete
@@ -89,12 +89,12 @@ Mh::Application.routes.draw do
       # end
     end
   end
- 
+
   resources :roles, :only => [:create, :update, :destroy, :index, :new, :edit]
- 
+
   namespace :admin do
     resources :email_templates
-    resources :question_sheets do 
+    resources :question_sheets do
       member do
         post :archive
         post :unarchive
@@ -122,11 +122,11 @@ Mh::Application.routes.draw do
       end
     end
   end
-  
+
   # namespace :admin do
   #   resources :organizations
   # end
-  
+
   resources :organizations, :only => [:show, :new, :create, :edit, :update, :destroy, :index] do
     collection do
       get :search
@@ -134,7 +134,7 @@ Mh::Application.routes.draw do
       post :signup
     end
   end
-  
+
   resources :surveys, :only => [:new, :create, :edit, :update, :index, :destroy] do
     member do
       get :start
@@ -150,7 +150,7 @@ Mh::Application.routes.draw do
       collection do
         post :reorder
       end
-    end 
+    end
   end
 
   get "welcome/index"
@@ -162,24 +162,24 @@ Mh::Application.routes.draw do
     get "sign_out", to: "sessions#destroy"
   end
   match '/auth/facebook/logout' => 'application#facebook_logout', as: :facebook_logout
-  
+
   match "/application.manifest" => OFFLINE
-  
+
   post "sms/mo"
   get "sms/mo"
-  
+
   resources :contacts, :only => [:show, :create, :edit, :update, :destroy, :index] do
     collection do
       get :mine
       post :send_reminder
       put :create_from_survey
-      delete :destroy      
+      delete :destroy
       post :bulk_destroy
       post :send_vcard
       get :send_bulk_vcard
     end
   end
-  
+
   resources :vcards, :only => [:create] do
     collection do
       get :bulk_create
@@ -188,14 +188,15 @@ Mh::Application.routes.draw do
 
   namespace :api do
     scope '(/:version)', version: /v\d+?/ do  #module: :api
-      resources :people
+      resources :people do
+        collection do
+          get :leaders
+        end
+      end
       resources :friends
       get 'contacts/search' => 'contacts#search'
       resources :contacts do
         resource :photo
-        collection do
-          get :leaders
-        end
       end
       get "contact_assignments/list_leaders" => "contact_assignments#list_leaders"
       get "contact_assignments/list_organizations" => "contact_assignments#list_organizations"
@@ -211,11 +212,11 @@ Mh::Application.routes.draw do
   match 'wizard' => 'welcome#wizard', as: 'wizard'
   match 'terms' => 'welcome#terms', as: 'terms'
   match 'privacy' => 'welcome#privacy', as: 'privacy'
-  
+
   # SMS keyword state transitions
   match '/admin/sms_keywords/:id/t/:transition' => 'admin/sms_keywords#transition', as: 'sms_keyword_transition'
   match '/admin/sms_keywords/approve'
-  
+
   match '/admin/organizations/:id/t/:transition' => 'admin/organizations#transition', as: 'organization_transition'
   match '/admin/organizations/approve'
 
@@ -226,9 +227,9 @@ Mh::Application.routes.draw do
   get 's/:survey_id' => 'survey_responses#new', as: 'short_survey'
   get "/surveys/:keyword" => 'surveys#start'
   # mount RailsAdmin::Engine => "/admin"
-  
+
   get "welcome/tour"
-  
+
   # mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
   mount Resque::Server.new, at: "/resque"
 
@@ -239,7 +240,7 @@ Mh::Application.routes.draw do
   match "oauth/done" => "oauth#done"
   #make admin portion of oauth2 rack accessible
   mount Rack::OAuth2::Server::Admin =>"/oauth/admin"
-  
+
   # Monitor
   match "monitor/:action", controller: 'monitor'
 end
