@@ -7,6 +7,20 @@
     </div>
     <div class="stepcontent"> 
       <div class="field">
+        <label for="survey_login_paragraph">
+          <%= t('.login_paragraph') + ": " + t('.login_paragraph_tip') %>
+        </label>
+        <%= f.text_field :login_paragraph, :placeholder => t('.login_paragraph_placeholder') %>
+      </div>
+    </div>
+  </div>
+
+  <div class="stepwrap rwidth">
+    <div class="stepnumber">
+      <%= image_tag("step2.png") %>
+    </div>
+    <div class="stepcontent"> 
+      <div class="field">
         <label for="survey_title">
           <%= t('.title') + ": " + t('.title_tip') %>
         </label>
@@ -16,7 +30,7 @@
   </div>
   <!-- <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step2.png") %>
+      <%= image_tag("step3.png") %>
     </div>
     <div class="stepcontent">    
       <div class="field">
@@ -31,7 +45,7 @@
   
   <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step2.png") %>
+      <%= image_tag("step4.png") %>
     </div>
     <div class="stepcontent">
       <div class="field">
@@ -43,7 +57,7 @@
   
   <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step3.png") %>
+      <%= image_tag("step5.png") %>
     </div>
     <div class="stepcontent">
       <div class="field">
@@ -55,7 +69,7 @@
   
   <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step4.png") %>
+      <%= image_tag("step6.png") %>
     </div>
     <div class="stepcontent">
       <div class="field">
@@ -70,7 +84,7 @@
   
   <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step5.png") %>
+      <%= image_tag("step7.png") %>
     </div>
     <div class="stepcontent"> 
       <% if current_organization.show_sub_orgs? && current_organization.has_children? %>   

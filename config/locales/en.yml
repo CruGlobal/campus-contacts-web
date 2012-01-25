@@ -299,13 +299,16 @@ en:
     new: 
       create_a_survey: "Create a Survey"
     form:
+      login_paragraph_placeholder: "Login paragraph should be welcoming"
       title_placeholder: "Shorter titles are better"
       post_survey_placeholder: "Example: Thank you for your time! If you're interested in Cru, we meet at Moore Auditorium every Thursday @ 8PM"
       post_survey_message: 'What message would you like to show after the person has completed the survey?'
       association: "The %{this_term} you are currently requesting this keyword for has at least one %{child_term} under it.<br/> Select if you'd like to associate this keyword with the %{this_term} or a %{child_term} under this %{this_term}"
       survey_associated_with: This survey will be associated with %{org}.
       title: Title
+      login_paragraph: Login Paragraph
       title_tip: "This is what people will see as the header on the survey"
+      login_paragraph_tip: "This is what people will see as they reach the Facebook login page for a survey"
       terminology: "If you'd like this to be referred to as something other than a 'Survey', enter that here"
       login_option: "Choose a login option for your users"
       default_login_option: "Show Facebook login with an option to skip it"

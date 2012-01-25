@@ -1,7 +1,7 @@
 <% if mhub? %>
   <center>
     <% if !@survey || @survey.login_option == 0 %>
-      <%= t('.login_paragraph_mhub') %>
+      <%= @survey.login_paragraph.blank? ? t('.login_paragraph_mhub') : @survey.login_paragraph %>
       <br><br>
       <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook_mhub), rel: 'external') %>
       <br/>    
@@ -22,12 +22,7 @@
   </center>
 <% else %>
   <div class="splash login">
-    
-      
-    
       <div class="left width30">
-    
-    
         <div class="loginscreen" style="text-align: center;">
         <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook), rel: 'external') %>
         <p><a href="/"><%= t('.back') %></a></p>
