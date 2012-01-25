@@ -143,6 +143,7 @@ $ ->
   $('#assign_search .assign_button').live 'click', ->
     leader = $('.leftmenu .leader[data-id=' + $('#assign_to').val() + ']')
     $.fn.assignTo(leader)
+    $.fn.load_leader_name($('#person_title').attr('data-id'))
     $('#assign_search').dialog('destroy')
     
   $('#assign_search .leader a').live 'click', (e)->
@@ -153,11 +154,13 @@ $ ->
       $.fn.assignTo(leader)
     else
       $.rails.handleRemote($('#new_contact_assignment'))
-      unless $('#assign_to').val() == $('#my_id').val()        
+      unless $('#assign_to').val() == $('#my_id').val()
+        $.fn.load_leader_name($('#person_title').attr('data-id'))
         $('.id_checkbox:checked').each ->
           $(this).closest('tr').remove();
     $('#assign_search').dialog('destroy')
   false
+
   
   $('#assign_search .org a').live 'click', (e)->
     e.preventDefault()
@@ -194,6 +197,27 @@ $ ->
     .remove()
     $('#assign_search').dialog('destroy')
   false
+  
+  $('#assign_search .label a').live 'click', (e)->
+    $('#assign_to').val($(this).closest('li'))
+    e.preventDefault()
+    role = $('#assign_to').val($(this).closest('li').attr('data-role')).val()
+    
+    $('.id_checkbox:checked').each ->
+      person_id = $(this).val()
+        
+      $.ajax
+        type: 'POST',
+        url: '/people/update_roles',
+        data: 'role_ids='+role+'&person_id='+person_id+'&include_old_roles=yes'
+      
+      if window.location.pathname == '/contacts'  
+        $('#main').load('/contacts .index.carea')
+        $('#left').load('/contacts .block')
+    
+    $('#assign_search').dialog('destroy')
+    $.n(t('contacts.role_assign_success'))
+  false
     
   $('#assign_search .leader_search_name').keyup ->
     name = $(this).val()
@@ -222,29 +246,48 @@ $ ->
       else
         $(this).hide()
 
+  $('#assign_search .label_search_name').keyup ->
+    name = $(this).val()
+    $('#assign_search ul li').each ->
+      regex = new RegExp('.*' + name + '.*', 'i')
+      if regex.test($('.name', $(this)).text())
+        $(this).show()
+      else
+        $(this).hide()
         
   $('#assign_to_me, #assign_to_unassigned').live 'click', ->
     $('#assign_search .leader_search').hide()
     $('#assign_search .org_search').hide()
     $('#assign_search .group_search').hide()
+    $('#assign_search .label_search').hide()
     $('#assign_search .assign_button').show()
     
   $('#assign_to_leader').live 'click', ->
     $('#assign_search .leader_search').show()
     $('#assign_search .org_search').hide()
     $('#assign_search .group_search').hide()
+    $('#assign_search .label_search').hide()
     $('#assign_search .assign_button').hide()
     
   $('#assign_to_org').live 'click', ->
     $('#assign_search .leader_search').hide()
     $('#assign_search .org_search').show()
     $('#assign_search .group_search').hide()
+    $('#assign_search .label_search').hide()
     $('#assign_search .assign_button').hide()
     
   $('#assign_to_group').live 'click', ->
     $('#assign_search .leader_search').hide()
     $('#assign_search .org_search').hide()
     $('#assign_search .group_search').show()
+    $('#assign_search .label_search').hide()
+    $('#assign_search .assign_button').hide()
+    
+  $('#assign_to_label').live 'click', ->
+    $('#assign_search .leader_search').hide()
+    $('#assign_search .org_search').hide()
+    $('#assign_search .group_search').hide()
+    $('#assign_search .label_search').show()
     $('#assign_search .assign_button').hide()
     
   $('.assign_to_radio').live 'click', -> 
@@ -422,18 +465,24 @@ $.fn.assignTo = (leader, skip_remote) ->
       $('.unassign_link', row).show()
       
     unless assigned_to.html() == leader_name
+      
       $('.count', leader).html(Number($('.count', leader).html()) + 1)
       if assigned_to.html() == ''
         $('#unassigned_count').html(Number($('#unassigned_count').html()) - 1)
+        
       else
         $('.leader a').each ->
           if $(this).text() == assigned_to.html() || (leader.hasClass('unassigned') && assigned_to.html() == '')
             count = $(this).closest('.leader').find('.count')
             count.html(Number(count.html()) - 1)
+            
       if leader.hasClass('unassigned') or leader.hasClass('dn')
         assigned_to.text('') 
+        
       else
         assigned_to.text(leader_name) 
+        #hide assigned to
+        $('#person_title').hide()
     # hide people assigned to someone other than the current or if we're moving to dnc
     assign_to = $('#new_contact_assignment').find("#assign_to").val()   
     if assign_to == "do_not_contact" || ($.params.assigned_to != 'all' && $.params.assigned_to != leader_name)
@@ -452,3 +501,8 @@ $.mh.saveContact = (add_more) ->
   $.rails.handleRemote(form)
   form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
   false
+    
+$.fn.load_leader_name = (id) ->
+  $('#person_title').html('<img src="/assets/spinner.gif" />')
+  $('#person_title').show().load('/people/' + id + ' #assigned_leader')
+      

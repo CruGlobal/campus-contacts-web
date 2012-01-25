@@ -34,6 +34,7 @@ class PeopleController < ApplicationController
   # GET /people/1.xml
   def show
     @person = Person.find(params[:id])
+    @assigned_tos = @person.assigned_tos.collect { |a| a.assigned_to.name }.to_sentence
     authorize!(:read, @person)
     if can? :manage, @person
       @organizational_role = OrganizationalRole.where(organization_id: current_organization, person_id: @person, role_id: Role::CONTACT_ID).first
@@ -259,12 +260,20 @@ class PeopleController < ApplicationController
   def update_roles
     authorize! :manage, current_organization
     data = ""
-    role_ids = params[:role_ids].split(',')
+    
     person = Person.find(params[:person_id])
+    
+    if params[:include_old_roles] == 'yes'
+      role_ids = params[:role_ids].split(',') + person.organizational_roles.where(organization_id: current_organization.id).collect { |r| r.role.id.to_s }.join(',').split(',')
+    else
+      role_ids = params[:role_ids].split(',')
+    end
+    
     organizational_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.id }
+    
     OrganizationalRole.delete(organizational_roles)
 
-    role_ids.each_with_index do |role_id, index|
+    role_ids.uniq.each_with_index do |role_id, index|
        OrganizationalRole.create!(person_id: person.id, role_id: role_id, organization_id: current_organization.id) 
        data << "<span id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
        data << "style='margin-right:4px;'" if index < role_ids.length - 1
@@ -293,9 +302,13 @@ class PeopleController < ApplicationController
       end
 
       if !result.nil?
+        r = Array.new
+        r << result
+        flash[:checker] = r.count # for testing purposes
         data << {'name' => result['name'], 'id' => result['id']}
         data << {'name' => t('general.match_found'), 'id' => nil}
       else
+        flash[:checker] = 0 # for testing purposes
         data <<  {'name' => t('people.edit.no_results'), 'id' => nil }
       end
 
@@ -317,8 +330,12 @@ class PeopleController < ApplicationController
         end
         logger.debug result
         # next result
+        r = Array.new
+        r << result
+        flash[:checker] = r # for testing purposes
         data <<  {'name' => t('people.edit.more_facebook_matches'), 'id' => result['paging']['next'] } if data.length == 24
       else
+        flash[:checker] = 0 # for testing purposes
         data <<  {'name' => t('people.edit.no_results'), 'id' => nil }
       end
 

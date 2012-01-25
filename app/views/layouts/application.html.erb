@@ -1,5 +1,5 @@
 <% connect_pattern = /surveys|keywords|survey_responses/ %>
-<% care_pattern = /people|contacts/ %>
+<% care_pattern = /people|contacts|followup_comments/ %>
 <% group_pattern = /groups/ %>
 <!DOCTYPE html>
 <html>
@@ -20,9 +20,15 @@
               <li class="<%= 'current' if request.path =~ care_pattern %>">
               <%= link_to(t('nav.people'), "/people") %>
               <ul>
-                <li class="<%= 'current' if request.fullpath == '/contacts/mine' %>"><%= link_to(t('nav.my_contacts'), "/contacts/mine", :class => "topset mycontacts") %></li>
-                <li class="<%= 'current' if  params[:controller] == 'contacts' && params[:action] == 'index' %>"><%= link_to(t('nav.all_contacts'), "/contacts", :class => "topset allcontacts") %></li>
-                <li class="<%= 'current' if  params[:controller] == 'people' %>"><%= link_to(t('nav.directory'), "/people", :class => "topset directory") %></li>
+                <li class="<%= 'current' if request.fullpath == '/contacts/mine' %>">
+                  <%= link_to(t('nav.my_contacts'), "/contacts/mine", :class => "topset mycontacts") %>
+                </li>
+                <li class="<%= 'current' if  params[:controller] == 'contacts' && params[:action] == 'index' %>">
+                  <%= link_to(t('nav.all_contacts'), "/contacts", :class => "topset allcontacts") %>
+                </li>
+                <li class="<%= 'current' if  params[:controller] == 'people' %>">
+                  <%= link_to(t('nav.directory'), "/people", :class => "topset directory") %>
+                </li>
               </ul>
               </li>
               <li class="<%= 'current' if request.path =~ group_pattern %>">

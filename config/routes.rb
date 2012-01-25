@@ -43,7 +43,7 @@ Mh::Application.routes.draw do
 
   # resources :rejoicables
 
-  resources :followup_comments, :only => [:create, :destroy]
+  resources :followup_comments, :only => [:index, :create, :destroy]
 
   resources :contact_assignments, :only => [:create]
 
@@ -177,6 +177,9 @@ Mh::Application.routes.draw do
       post :bulk_destroy
       post :send_vcard
       get :send_bulk_vcard
+      get :import_contacts
+      post :csv_import
+      get :download_sample_contacts_csv
     end
   end
 

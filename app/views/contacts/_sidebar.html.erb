@@ -1,0 +1,23 @@
+<% provide :sidebar do %>
+  <ul class="leftmenu">
+    <% selected_class = "selected" %>
+    <% if params[:controller] == 'followup_comments' %>
+      <% selected_class = "" %>
+    <% end %>
+    <li class="<%= selected_class if params[:status] == 'all' %>">
+      <%= link_to(t('contacts.mine.all'), mine_contacts_path(status: 'all')) %>
+    </li>
+    <li class="<%= selected_class unless params[:status] == 'completed' || params[:status] == 'all' %>">
+      <%= link_to(t('contacts.mine.in_progress'), mine_contacts_path) %>
+    </li>
+    <li class="<%= selected_class if params[:status] == 'completed' %>">
+      <%= link_to(t('contacts.mine.completed'), mine_contacts_path(status: 'completed')) %>
+    </li>
+    <li class="<%= selected_class if params[:status] == 'detailed' %>">
+      <%= link_to(t('contacts.mine.detailed'), contacts_path(assigned_to: current_person.id, status: 'detailed')) %>
+    </li>
+    <li class="<%= 'selected' if params[:controller] == 'followup_comments' %>">
+      <%= link_to(t('contacts.mine.comments'), followup_comments_path) %>
+    </li>
+  </ul>
+<% end %>

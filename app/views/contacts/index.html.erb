@@ -66,6 +66,10 @@
         <li><%= link_to(t('.vcard'), '', id: 'bulk_vcard_link' ) %></li>
       </ul>
   </ul>
+
+  <ul class="pillmenu">
+    <li><%= link_to(t('contacts.index.import_contacts'), import_contacts_contacts_path) %></li>
+  </ul>
   
   <% if params[:dnc] == 'true' %>
     <ul class="pillmenu">

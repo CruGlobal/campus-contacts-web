@@ -108,6 +108,24 @@ class PeopleControllerTest < ActionController::TestCase
         xhr :post, :update_roles, { :role_ids => roles, :person_id => @person1.id }
         assert_response :success
       end
+      
+      should "update roles with include_old_roles as parameter" do
+        roles = []
+        (1..3).each { |index| roles << Role.create!(organization_id: 1, name: "member_#{index}", i18n: "member_#{index}") }
+        roles = roles.collect { |role| role.id }.join(',')
+        xhr :post, :update_roles, { :role_ids => roles, :person_id => @person1.id, :include_old_roles => "yes" }
+        assert_response :success
+      end
+      
+      should "try to update roles with duplicate roles" do
+        roles = []
+        (1..3).each { |index| roles << Role.create!(organization_id: 1, name: "member_#{index}", i18n: "member_#{index}") }
+        #duplicate the first role
+        roles << roles.first
+        roles = roles.collect { |role| role.id }.join(',')
+        xhr :post, :update_roles, { :role_ids => roles, :person_id => @person1.id, :include_old_roles => "yes" }
+        assert_response :success
+      end
     end
   end
   
@@ -132,6 +150,61 @@ class PeopleControllerTest < ActionController::TestCase
           :email => "test@email.com", :phone => "123"
       assert_response(:success)
     end
+  end
+  
+  context "Showing leaders the person is assigned to" do
+    setup do
+      user = Factory(:user_with_auxs)
+      sign_in user
+      @org1 = Factory(:organization)
+      @person1 = Factory(:person)
+      @person2 = Factory(:person)
+      Factory(:contact_assignment, organization: @org1, assigned_to: @person2, person: @person1)
+    end
+    
+    should "get the person assigned" do
+      get :show, { 'id' => @person1.id }
+      assert_response(:success)
+      assert_not_nil(assigns(:person).assigned_tos)
+      assert_not_nil(assigns(:assigned_tos))
+    end
+  end
+
+  context "Searching for Facebook users" do
+    setup do
+      @user = Factory(:user_with_auxs)  #user with a person object
+      sign_in @user
+    end
+
+    #flash[:checker] came from the people_controller facebook_search method
+
+    should "successfully search for facebook users when using '/http://www.facebook.com\//[a-z]' format" do
+      get :facebook_search, { :term =>"http://www.facebook.com/nmfdelacruz"}
+      assert_equal flash[:checker], 1, "Unsuccessfully searched for a user using Facebook profile url"
+    end
+
+    should "successfully search for facebook users when using '/http://www.facebook.com\/profile.php?id=/[0-9]'" do
+      get :facebook_search, { :term =>"http://www.facebook.com/nmfdelacruz"}
+      assert_equal flash[:checker], 1, "Unsuccessfully searched for a user using Facebook profile url"
+    end
+
+    should "unsuccessfully search for facebook users when url does not exist" do
+      get :facebook_search, { :term =>"http://www.facebook.com/nm34523fdelacruz"}
+      assert_equal flash[:checker], 0
+    end
+
+=begin These tests get errors because probably of facebook user authentication. RestClient::BadRequest: 400 Bad Request
+    should "successfully search for facebook users when using '/[a-z]/' (name string)  format" do
+      get :facebook_search, { :term =>"mark"}
+      assert_equal flash[:checker], 1, "Unsuccessfully searched for a user using Facebook profile url"
+    end
+
+    should "unsuccessfully search for facebook users when name does not exist" do
+      get :facebook_search, { :term =>"dj09345803oifjdlkjdl"}
+      assert_equal flash[:checker], 0
+    end
+=end
+
   end
 
 end

@@ -1,12 +1,9 @@
-<div id="search_filter_box" style="<%= 'display:none' %>">
+<div id="comment_search_box" style="<%= 'display:none' %>">
   <%= form_tag params, method: :get do %>
-    <%= hidden_field_tag :search_type, "basic" %>
     <div class="ononeline">
       <div class="field">
         <label for="Search"><span class="title"><%= t('.search_title') %></span></label> 
         <%= text_field_tag :query, params[:query], placeholder: t('.search_placeholder') %>
-        
-        <span id="advanced_search"><%= link_to t('.advanced_search'), '#' %></span><br />
       </div>
     </div>
     <div class="actionbarinline">

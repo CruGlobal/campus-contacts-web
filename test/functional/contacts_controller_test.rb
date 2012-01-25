@@ -98,6 +98,50 @@ class ContactsControllerTest < ActionController::TestCase
        xhr :post, :bulk_destroy, :ids => [@contact.id, @contact2.id]       
        assert_response :success        
     end
+  
+  end
+  
+  context "When retrieving roles depending on current user role" do
+    context "When user is admin" do
+      setup do
+        @user = Factory(:user_with_auxs)  #user with a person object
+        org = Factory(:organization)
+        Factory(:organizational_role, person: @user.person, role: Role.admin, organization: org)
+        sign_in @user
+        @request.session[:current_organization_id] = org.id
+      end
+      
+      should "get all roles" do
+        get :index
+        assert_response(:success)
+        assert(assigns(:roles_for_assign).include? Role.admin)
+        
+        get :mine
+        assert_response(:success)
+        assert(assigns(:roles_for_assign).include? Role.admin)
+      end
+    end
+    
+    context "When user is leader" do
+      setup do
+        @user = Factory(:user_with_auxs)
+        org = Factory(:organization)
+        Factory(:organizational_role, person: @user.person, role: Role.leader, organization: org)
+        sign_in @user
+        @request.session[:current_organization_id] = org.id
+      end
+      
+      should "not include admin role if user is not admin" do
+        get :index
+        assert_response(:success)
+        assert(!(assigns(:roles_for_assign).include? Role.admin))
+        
+        get :mine
+        assert_response(:success)
+        assert(!(assigns(:roles_for_assign).include? Role.admin))
+      end
+    end
+    
   end  
   
   context "After logging in a person without orgs" do
@@ -132,6 +176,52 @@ class ContactsControllerTest < ActionController::TestCase
         get :index
       end
       should redirect_to('/wizard') 
+    end
+  end
+  
+  context "Importing contacts" do
+    setup do
+      @user = Factory(:user_with_auxs)  #user with a person object
+      sign_in @user
+    end
+    
+    should "successfully import contacts" do
+      contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_contacts.csv"))
+      file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
+      post :csv_import, { :dump => { :file => file } }
+      person_count  = Person.count
+      assert_equal person_count, 2, "Upload of contacts csv file unsuccessful"
+      assert_response :success, "Upload of contacts csv file unsuccessful"
+    end
+
+    should "unsuccessfully import contacts when a row is missing First Name" do
+      #"sample_contacts_missing_firstname"
+      contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_contacts_missing_firstname.csv"))
+      file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
+      post :csv_import, { :dump => { :file => file } }
+      person_count  = Person.count
+      assert_equal person_count - 2, -1, "Upload of contacts csv file successful (should not be successful)."
+      assert_response :success, "Upload of contacts csv file unsuccessful"
+    end
+
+    should "unsuccessfully import contacts when a row has wrong phone number format" do
+      #"sample_contacts_missing_firstname"
+      contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_contacts_missing_firstname.csv"))
+      file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
+      post :csv_import, { :dump => { :file => file } }
+      person_count  = Person.count
+      assert_equal person_count - 2, -1, "Upload of contacts csv file successful (should not be successful)."
+      assert_response :success, "Upload of contacts csv file unsuccessful"
+    end
+
+    should "unsuccessfully import contacts when a row has wrong email format" do
+      #"sample_contacts_missing_firstname"
+      contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_contacts_missing_firstname.csv"))
+      file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
+      post :csv_import, { :dump => { :file => file } }
+      person_count  = Person.count
+      assert_equal person_count - 2, -1, "Upload of contacts csv file successful (should not be successful)."
+      assert_response :success, "Upload of contacts csv file unsuccessful"
     end
   end
 end

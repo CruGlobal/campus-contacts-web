@@ -51,7 +51,7 @@
     </div>
     <div class="actionbarinline">
       <%= submit_tag t('general.search') %>
-      <%= link_to t('.clear_search_form'), '', onclick: "$(this).closest('form')[0].reset(); return false;" %>
+      <%= link_to t('.clear_search_form'), '', onclick: "$('form').clearForm(); return false;" %>
     </div>
   <% end %>
 </div>
