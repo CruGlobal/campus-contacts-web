@@ -503,4 +503,6 @@ $.mh.saveContact = (add_more) ->
   false
     
 $.fn.load_leader_name = (id) ->
-  $('#person_title').show().load('/people/' + id + ' #assigned_leader') 
+  $('#person_title').html('<img src="/assets/spinner.gif" />')
+  $('#person_title').show().load('/people/' + id + ' #assigned_leader')
+      
