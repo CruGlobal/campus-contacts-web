@@ -529,6 +529,11 @@ en:
       bulk_vcard_email_message: 'Contacts information has been sent to '      
       contact_no_select_message: 'Please select atleast one contact.'      
       no_name_message: 'At a minimum you need to provide a first name.'
+      saved_searches: 'Saved Searches'
+      delete_this_search: "delete this search"
+      save_this_search: "save this search"
+      update_this_search: "update search name"
+      save_this_search_placeholder: "Name this search"
     mine:
       in_progress: 'In Progress'
       completed: 'Completed'

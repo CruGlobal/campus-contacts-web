@@ -9,6 +9,7 @@ class ContactsController < ApplicationController
   before_filter :authorize
   
   def index
+    @saved_contact_search = @person.user.saved_contact_searches.find(:first, :conditions => "full_path = '#{request.fullpath}'") || SavedContactSearch.new
     @organization = current_organization # params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : 
     unless @organization
       redirect_to user_root_path, error: t('contacts.index.which_org')
