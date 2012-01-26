@@ -19,6 +19,10 @@ class SavedContactSearchesController < ApplicationController
   end
 
   def destroy
+    saved_contact_search = SavedContactSearch.find(params[:id])
+    saved_contact_search.destroy
+
+    render :nothing => true 
   end
 
 end

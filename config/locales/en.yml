@@ -534,6 +534,7 @@ en:
       save_this_search: "save this search"
       update_this_search: "update search name"
       save_this_search_placeholder: "Name this search"
+      delete_confirm: "Are you sure you want to remove this search?"
     mine:
       in_progress: 'In Progress'
       completed: 'Completed'

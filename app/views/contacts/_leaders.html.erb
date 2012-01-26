@@ -37,7 +37,7 @@
   <li><hr /></li>
   <li><h3><%= t('contacts.index.saved_searches') %></h3></li>
   <% @person.user.saved_contact_searches.each do |s| %>
-    <li class="saved_search"><span class="name"><strong><%= link_to s.name, s.full_path %></strong></span></li>
+    <li class="saved_search"><span class="name"><strong><%= link_to s.name, s.full_path %></strong></span> <%= link_to('x', saved_contact_search_path(s), method: :delete, remote: true, class: 'delete_leader', :confirm => t('contacts.index.delete_confirm')) %> </li>
   <% end %>
 </ul>
 <%= render 'contacts/leader_form' %>
