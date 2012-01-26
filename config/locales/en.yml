@@ -324,6 +324,7 @@ en:
         dropdown: 'Dropdown (Choose one)'
         web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
         text_message_preview: Text Message Preview
+        toggle_advanced_options: Show Advanced Options
       multiple_choice_form:
         list_choices: 'List out the possible choices, one per line:'
       question:
@@ -340,7 +341,10 @@ en:
         add_question: Add a new question
         add_prev_question: Add a predefined or previously used question
         forced_tip: This question is required on every survey and will be pre-filled if they connect with facebook.
-      
+      advanced_options:
+        trigger_words: 'List one or more words or phrases that will trigger this notification if they appear in the
+        answer.<br/>Separate words and phrases with commas.'
+        leaders: 'Select one or more leaders to be notified when this question is answered in a certain way'
   sms_keywords:
     keyword_deleted: "Keyword has been deleted."
     index:
@@ -384,7 +388,7 @@ en:
     	  ready for use.'
       your_questions_help: "Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service."
       predefined_help: "Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided."
-
+  
   organization_mailer:
     notify_user:
       link_text: 'send us an email at support@missionhub.com'
@@ -443,7 +447,9 @@ en:
         <p>Visit %{link} to log in. Please don't share this link with anyone else.</p>
 
         <p>%{added_by}</p>
-
+  survey_mailer:
+    notify:
+      content: %{name} (%{number},%{email}) just replied to a survey with %{answer}.
   contacts:
     role_assign_success: 'Successfully assigned labels.'
     assign: Assign

@@ -41,7 +41,11 @@ class QuestionSet
   def save
     AnswerSheet.transaction do
       @questions.each do |question|
-        question.save_response(@answer_sheet)
+        if question.advanced_options == true
+          question.save_response(@answer_sheet, question)
+        else
+          question.save_response(@answer_sheet)
+        end
       end
     end
   end
