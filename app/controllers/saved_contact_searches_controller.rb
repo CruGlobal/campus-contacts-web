@@ -3,8 +3,8 @@ class SavedContactSearchesController < ApplicationController
   end
 
   def create
-    SavedContactSearch.create(:name => params[:saved_contact_search][:name], :full_path => params[:full_path], :user_id => params[:user_id])
-    redirect_to params[:full_path]
+    SavedContactSearch.create(params[:saved_contact_search])
+    redirect_to params[:saved_contact_search][:full_path]
   end
 
   def show
@@ -14,14 +14,13 @@ class SavedContactSearchesController < ApplicationController
   end
 
   def update
-    SavedContactSearch.find(params[:id]).update_attributes(:name => params[:saved_contact_search][:name])
-    redirect_to params[:full_path]
+    SavedContactSearch.find(params[:id]).update_attributes(params[:saved_contact_search])
+    redirect_to params[:saved_contact_search][:full_path]
   end
 
   def destroy
     saved_contact_search = SavedContactSearch.find(params[:id])
     saved_contact_search.destroy
-
     render :nothing => true 
   end
 

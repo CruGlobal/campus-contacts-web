@@ -91,15 +91,14 @@
 
   <%= form_for @saved_contact_search do |f| %>
     <% if !@saved_contact_search.id.nil? %>
-      
       <%= f.submit t('contacts.index.update_this_search') %>
     <% else %>
       <%= f.submit t('contacts.index.save_this_search') %>
     <% end %>
 
+    <%= hidden_field_tag 'saved_contact_search[user_id]', @person.user.id %>
+    <%= hidden_field_tag 'saved_contact_search[full_path]', request.fullpath %>
     <%= hidden_field_tag :id, @saved_contact_search.id %>
-    <%= hidden_field_tag :user_id, @person.user.id %>
-    <%= hidden_field_tag :full_path, request.fullpath %>
     <%= f.text_field :name, :placeholder => t('contacts.index.save_this_search_placeholder') %>
   <% end %>
 
