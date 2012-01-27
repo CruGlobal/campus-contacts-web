@@ -5,13 +5,14 @@
       <label><%= t('general.to') %></label>
       <div class="in"><ul class="to_list clearfix"><div class="clear"></div></ul></div>
     </div>
-    
+    <%= hidden_field_tag 'followup_comment[organization_id]', current_organization.id %>
+    <%= hidden_field_tag 'followup_comment[commenter_id]', current_user.id %>
     <div class="field_in subject">
       <label><%= t('general.subject') %></label> 
       <div class="in"><%= text_field_tag :subject %></div>
     </div>
     <div class="field">
-    <%= text_area_tag :body, '', cols: 80, rows: 10, id: 'bulk_send_body' %>
+    <%= text_area_tag :body, '', cols: 10, rows: 10, id: 'bulk_send_body' %>
 		<div id="char_counter"></div>
     </div>
   <% end %>
@@ -21,3 +22,4 @@
 	 </div>
 	</div>
 </div>
+
