@@ -76,3 +76,6 @@ $ ->
   .bind 'ajax:complete', ->
     $('.question_form')[0].reset()
     $('#question_type').change()
+    
+  $('#advanced_toggle').click ->
+    $('#advanced_options').toggle()

@@ -259,6 +259,22 @@ FactoryGirl.define do
     required      false
   end
   
+  factory :advanced_element, parent: :element do
+    kind             'TextField'
+    label            'Sample question'
+    style            'short'
+    advanced_options  true
+  end
+  
+  factory :question_leader do
+    association :element
+    association :person
+  end
+  
+  factory :question do
+    association :element
+  end
+  
   factory :choice_field, parent: :element do
     kind          'ChoiceField'
     label         'Which of the following are you interested in?'

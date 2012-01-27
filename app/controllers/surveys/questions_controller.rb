@@ -10,6 +10,7 @@ class Surveys::QuestionsController < ApplicationController
     @questions = @survey.questions
     @predefined_questions = @predefined.questions.uniq - @questions
     @other_questions = current_organization.all_questions.uniq - @predefined_questions
+    @leaders = current_organization.leaders
     respond_to do |wants|
       wants.html # index.html.erb
       wants.xml  { render xml: @questions }
@@ -58,6 +59,14 @@ class Surveys::QuestionsController < ApplicationController
     else
       type, style = params[:question_type].split(':')
       @question = type.constantize.create!(params[:question].merge(style: style))
+      
+      if params[:question][:advanced_options] == "1"
+        unless params[:leaders].nil?
+          params[:leaders].each do |l|
+            QuestionLeader.create!(:person_id => l, :element_id => @question.id)
+          end
+        end
+      end
     end
     
     # If this was an archived question, unarchive it. otherwise, add it
@@ -71,8 +80,8 @@ class Surveys::QuestionsController < ApplicationController
     respond_to do |wants|
       if !@question.new_record?
         wants.html do
-          flash[:notice] = t('questions.create.notice')
-          redirect_to(:back) 
+          #flash[:notice] = t('questions.create.notice')
+          #redirect_to(:back) 
         end
         wants.xml  { render xml: @question, status: :created, location: @question }
         wants.js
