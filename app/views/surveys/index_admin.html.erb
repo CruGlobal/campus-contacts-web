@@ -36,6 +36,7 @@
           <th><%= t("keywords.index.association") %> <%= tip(t('.association_help')) %></th>
         <% end %>
         <th><%= t("general.keyword") %></th>
+        <th><%= t('.link') %></th>
         <th class="controls">&nbsp;</th>
       </tr>
       <% @surveys.each do |survey| %>
@@ -46,6 +47,7 @@
             <td><%= survey.organization %></td>
           <% end %>
           <td><%= link_to(survey.keyword, edit_sms_keyword_path(survey.keyword)) if survey.keyword %></td>
+          <td><%= link_to(short_survey_url(survey.id, host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port'])), short_survey_url(survey.id, host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port'])), target: '_blank')%></td>
           <td class="controls">
             <%= link_to t("welcome.home.manage_questions"), survey_questions_path(survey) %>
             <%= link_to('', edit_survey_path(survey), :class => "icon edit tipit", :title => t('.edit_survey')) %>

@@ -293,6 +293,7 @@ en:
       delete_survey: "Delete survey"
       new: 'New Survey'
       edit_survey: Edit Survey
+      link: Link
       association_help: "When a contact responds to a survey, they are associated with the same team or movement as the keyword they responded to."
     edit:
       edit_survey: "Edit Survey"
