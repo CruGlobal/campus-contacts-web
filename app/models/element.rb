@@ -10,6 +10,9 @@ class Element < ActiveRecord::Base
   has_many :survey_elements, :dependent => :destroy
   has_many :surveys, :through => :survey_elements
   
+  has_many :question_leaders, :dependent => :destroy
+  has_many :leaders, through: :question_leaders, source: :person
+  
   # belongs_to :question_sheet
 
   validates_presence_of :kind, :style
