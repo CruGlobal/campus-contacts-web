@@ -1,6 +1,14 @@
 <%= form_for(@survey, validate: true, html: {id: 'survey_form'}) do |f| %>
   <%= error_messages_for :survey %>
-  
+
+  <div class="stepwrap rwidth">
+    <div class="stepcontent"> 
+      <div class="field">
+        <%= f.check_box :frozen %><%= t('.freeze') %>
+      </div>
+    </div>
+  </div>
+
   <div class="stepwrap rwidth">
     <div class="stepnumber">
       <%= image_tag("step1.png") %>
