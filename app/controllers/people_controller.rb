@@ -245,10 +245,19 @@ class PeopleController < ApplicationController
           from_email = current_person.primary_phone_number && current_person.primary_phone_number.email_address.present? ? 
                         current_person.primary_phone_number.email_address : current_person.email
           @sent_sms = SmsMailer.enqueue.text(person.primary_phone_number.email_address, "#{current_person.to_s} <#{from_email}>", params[:body])
+
         else
           # Otherwise send it as a text
           @sent_sms = SentSms.create!(message: params[:body], recipient: person.phone_number) # + ' Txt HELP for help STOP to quit'
         end
+
+        fc = FollowupComment.create(params[:followup_comment])
+        fc.contact_id = id
+        #fc.comment = Person.find(params[:followup_comment][:commenter_id]).to_s + " sent an email"
+        fc.comment = "Sent an SMS."
+        fc.status = person.organizational_roles.first.followup_status
+        fc.save
+
       end
     end
     
