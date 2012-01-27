@@ -224,7 +224,8 @@ class PeopleController < ApplicationController
       PeopleMailer.enqueue.bulk_message(person.email, current_person.email, params[:subject], params[:body]) if !person.email.blank?
       fc = FollowupComment.create(params[:followup_comment])
       fc.contact_id = id
-      fc.comment = User.find(params[:followup_comment][:commenter_id]).to_s + " sent an email"
+      #fc.comment = Person.find(params[:followup_comment][:commenter_id]).to_s + " sent an email"
+      fc.comment = "Sent an email."
       fc.status = person.organizational_roles.first.followup_status
       fc.save
     end

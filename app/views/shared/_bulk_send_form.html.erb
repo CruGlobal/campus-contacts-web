@@ -6,7 +6,7 @@
       <div class="in"><ul class="to_list clearfix"><div class="clear"></div></ul></div>
     </div>
     <%= hidden_field_tag 'followup_comment[organization_id]', current_organization.id %>
-    <%= hidden_field_tag 'followup_comment[commenter_id]', current_user.id %>
+    <%= hidden_field_tag 'followup_comment[commenter_id]', current_user.person.id %>
     <div class="field_in subject">
       <label><%= t('general.subject') %></label> 
       <div class="in"><%= text_field_tag :subject %></div>
