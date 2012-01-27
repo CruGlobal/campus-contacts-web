@@ -199,24 +199,41 @@ $ ->
   false
   
   $('#assign_search .label a').live 'click', (e)->
-    $('#assign_to').val($(this).closest('li'))
     e.preventDefault()
     role = $('#assign_to').val($(this).closest('li').attr('data-role')).val()
-    
-    $('.id_checkbox:checked').each ->
-      person_id = $(this).val()
+    alert window.location.pathname
+    if window.location.pathname == '/contacts'
+      $('.id_checkbox:checked').each ->
+        person_id = $(this).val()
+        $.ajax
+          type: 'POST',
+          url: '/people/update_roles',
+          data: 'role_ids='+role+'&person_id='+person_id+'&include_old_roles=yes',
+          success: alert "YEY"
         
-      $.ajax
-        type: 'POST',
-        url: '/people/update_roles',
-        data: 'role_ids='+role+'&person_id='+person_id+'&include_old_roles=yes'
-      
-      if window.location.pathname == '/contacts'  
         $('#main').load('/contacts .index.carea')
         $('#left').load('/contacts .block')
-    
-    $('#assign_search').dialog('destroy')
-    $.n(t('contacts.role_assign_success'))
+        
+      $('#assign_search').dialog('destroy')
+      $.n(t('contacts.role_assign_success'))
+    else if window.location.pathname == '/contacts/mine'
+      $('.id_checkbox:checked').each ->
+        person_id = $(this).val()
+        $.ajax
+          type: 'POST',
+          url: '/people/update_roles',
+          data: 'role_ids='+role+'&person_id='+person_id+'&include_old_roles=yes',
+          success: alert "YEY"
+        
+        $('#main').load('/contacts/mine .mine.carea')
+        $('#left').load('/contacts/mine .block')
+        
+      $('#assign_search').dialog('destroy')
+      $.n(t('contacts.role_assign_success'))
+    else
+      alert "WOOO"
+      $('#assign_search').dialog('destroy')
+      $.n(t('contacts.role_assign_success'))
   false
     
   $('#assign_search .leader_search_name').keyup ->
