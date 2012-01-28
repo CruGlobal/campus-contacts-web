@@ -188,12 +188,21 @@ class Question < Element
   end
   
   # save this question's @answers to database
-  def save_response(answer_sheet)
+  def save_response(answer_sheet, question = nil)
     unless @answers.nil?
       for answer in @answers
         if answer.is_a?(Answer)
           answer.answer_sheet_id = answer_sheet.id
           answer.save!
+          
+          unless question.nil?
+            question.trigger_words.split(",").each do |t|
+              if answer.value.include? t
+                send_notifications(question, answer_sheet.person, answer.value)
+              end
+            end
+          end
+          
         end
       end
     end
@@ -207,6 +216,18 @@ class Question < Element
     end
   rescue TypeError
     raise answer.inspect
+  end
+  
+  def send_notifications(question, person, answer, notify_via)
+    if question.notify_via == "Email"
+      SurveyMailer.enqueue.notify(question.leaders.collect(&:email).compact, person, answer)
+    elsif question.notify_via == "SMS"
+#     sent_via = @sms_params[:shortcode] == '75572' ? 'moonshado' : 'twilio'
+#     msg = "#{person.name} (#{person.phone_number}, #{person.email_address}) just replied to a survey with #{answer}"
+#     SentSms.create!(message: msg, recipient: phone_number, sent_via: sent_via, separator: separator)
+    else
+      SurveyMailer.enqueue.notify(question.leaders.collect(&:email).compact, person, answer)
+    end
   end
   
   # has any sort of non-empty response?
