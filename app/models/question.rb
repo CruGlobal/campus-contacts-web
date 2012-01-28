@@ -218,15 +218,24 @@ class Question < Element
     raise answer.inspect
   end
   
-  def send_notifications(question, person, answer, notify_via)
+  def send_notifications(question, person, answer)
+    Bitly.use_api_version_3
+    bitly = Bitly.new(APP_CONFIG['bitly_username'], APP_CONFIG['bitly_key'])
+    short_profile_link = bitly.shorten(Rails.application.routes.url_helpers.person_url(person.id, 
+    :host => APP_CONFIG['bitly_host'], :port => APP_CONFIG['bitly_port'], :only_path => false)).short_url
+    
+    msg = "#{person.name} (#{person.phone_number}, #{person.email}) just replied to a survey with #{answer}.
+    Profile link: #{short_profile_link}"
+    
     if question.notify_via == "Email"
-      SurveyMailer.enqueue.notify(question.leaders.collect(&:email).compact, person, answer)
+      SurveyMailer.enqueue.notify(question.leaders.collect(&:email).compact, msg)
     elsif question.notify_via == "SMS"
-#     sent_via = @sms_params[:shortcode] == '75572' ? 'moonshado' : 'twilio'
-#     msg = "#{person.name} (#{person.phone_number}, #{person.email_address}) just replied to a survey with #{answer}"
-#     SentSms.create!(message: msg, recipient: phone_number, sent_via: sent_via, separator: separator)
-    else
-      SurveyMailer.enqueue.notify(question.leaders.collect(&:email).compact, person, answer)
+     SentSms.create!(message: msg, recipient: phone_number)
+    else #send to SMS AND Email
+     question.leaders.each do |l|
+       SentSms.create!(message: msg, recipient: l.phone_number)
+     end
+     SurveyMailer.enqueue.notify(question.leaders.collect(&:email).compact, msg)
     end
   end
   
