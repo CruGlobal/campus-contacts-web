@@ -155,7 +155,8 @@ class Api::ContactsController < ApiController
     end
 
     @people = restrict_to_contact_role(@people,@organization)
-
+    @people = limit_and_offset_object(@people) if params[:start].present?
+    
     output = @api_json_header
     output[:contacts] = @people.collect {|person| {person: person.to_hash_basic(@organization)}}
 
