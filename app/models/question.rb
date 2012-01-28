@@ -219,9 +219,7 @@ class Question < Element
   end
   
   def send_notifications(question, person, answer)
-    Bitly.use_api_version_3
-    bitly = Bitly.new(APP_CONFIG['bitly_username'], APP_CONFIG['bitly_key'])
-    short_profile_link = bitly.shorten(Rails.application.routes.url_helpers.person_url(person.id, 
+    short_profile_link = BITLY_CLIENT.shorten(Rails.application.routes.url_helpers.person_url(person.id, 
     :host => APP_CONFIG['bitly_host'], :port => APP_CONFIG['bitly_port'], :only_path => false)).short_url
     
     msg = "#{person.name} (#{person.phone_number}, #{person.email}) just replied to a survey with #{answer}.
