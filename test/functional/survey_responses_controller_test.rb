@@ -117,25 +117,30 @@ class SurveyResponsesControllerTest < ActionController::TestCase
   end
   
   context "Answering a survey with notifications" do
-    setup "create a survey" do
+    setup do
       @user = Factory(:user_with_auxs)  #user with a person object
       sign_in @user
       @organization = Factory(:organization)
+      
       @survey = Factory(:survey, organization: @organization)
-    end
-    
-    should "create the survey elements with advanced options" do      
-      advanced_element = Factory(:advanced_element)
-      Factory(:question_leader, element: advanced_element, person: @user)
-      #create another user to be a leader
-      @another_user = Factory(:user_with_auxs)
-      Factory(:question_leader, element: advanced_element, person: @another_user)
+      @keyword = Factory(:approved_keyword, organization: @organization, survey: @survey)
+      @notify_q = Factory(:choice_field, advanced_options: true, notify_via: "Both", trigger_words: "Jesus")
+      @survey.questions << @notify_q
+      @questions = @survey.questions
+      assert_equal(@questions.count, 1)
     end
     
     should "respond success when answering survey" do
-      @respondent = Factory(:user_no_org)
-      post :create, 
+      @respondent = Factory.create(:user_no_org_with_facebook)
+      Factory.create(:authentication, user: @respondent)
+      @organization.add_contact(@respondent.person)
+      @answer_sheet = Factory(:answer_sheet, survey: @survey, person: @respondent.person)
+      @answer_to_choice = Factory(:answer_1, answer_sheet: @answer_sheet, question: @questions.first)
+      
+      post :create, { :survey_id => @survey.id, :person => { firstName: "Jane", lastName: "Deer", phone_number: "1234567890" }, :answers => @answer_to_choice.attributes }
+      assert_response(:success)
     end
+    
   end
 
 end
