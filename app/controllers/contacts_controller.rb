@@ -7,6 +7,7 @@ class ContactsController < ApplicationController
   before_filter :get_person
   before_filter :ensure_current_org
   before_filter :authorize
+  before_filter :roles_for_assign
   
   def index
     @organization = current_organization # params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : 
@@ -14,7 +15,6 @@ class ContactsController < ApplicationController
       redirect_to user_root_path, error: t('contacts.index.which_org')
       return false
     end
-    @roles_for_assign = roles_for_assign
     @surveys = @organization.surveys
     @questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => false).flatten.uniq
     @hidden_questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => true).flatten.uniq
@@ -153,7 +153,6 @@ class ContactsController < ApplicationController
   
   def mine
     @people = Person.order('lastName, firstName').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.organization_id' => current_organization.id, 'organizational_roles.role_id' => Role::CONTACT_ID)
-    @roles_for_assign = roles_for_assign
     if params[:status] == 'completed'
       @people = @people.where("organizational_roles.followup_status = 'completed'")
     elsif params[:status] == 'all'
@@ -320,18 +319,4 @@ class ContactsController < ApplicationController
         end
       end
     end
-    
-    def roles_for_assign
-      current_user_roles = current_user.person
-                                       .organizational_roles
-                                       .where(:organization_id => current_organization)
-                                       .collect { |r| Role.find(r.role_id) }
-                             
-      if current_user_roles.include? Role.find(1)
-        @roles_for_assign = current_organization.roles
-      else
-        @roles_for_assign = current_organization.roles.delete_if { |role| role == Role.find(1) }
-      end
-    end
-
 end

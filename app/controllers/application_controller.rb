@@ -312,4 +312,17 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def roles_for_assign
+    current_user_roles = current_user.person
+                                     .organizational_roles
+                                     .where(:organization_id => current_organization)
+                                     .collect { |r| Role.find(r.role_id) }
+                             
+    if current_user_roles.include? Role.find(1)
+      @roles_for_assign = current_organization.roles
+    else
+      @roles_for_assign = current_organization.roles.delete_if { |role| role == Role.find(1) }
+    end
+  end
+  
 end

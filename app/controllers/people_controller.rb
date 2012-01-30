@@ -2,6 +2,7 @@ require 'csv'
 class PeopleController < ApplicationController
   before_filter :ensure_current_org
   before_filter :authorize_merge, only: [:merge, :confirm_merge, :do_merge, :merge_preview]
+  before_filter :roles_for_assign
   # GET /people
   # GET /people.xml
   def index
@@ -39,7 +40,6 @@ class PeopleController < ApplicationController
   def show
     @person = Person.find(params[:id])
     @assigned_tos = @person.assigned_tos.collect { |a| a.assigned_to.name }.to_sentence
-    @roles_for_assign = roles_for_assign
     authorize!(:read, @person)
     if can? :manage, @person
       @organizational_role = OrganizationalRole.where(organization_id: current_organization, person_id: @person, role_id: Role::CONTACT_ID).first
@@ -463,18 +463,5 @@ class PeopleController < ApplicationController
                   .organizational_roles
                   .where(:organization_id => current_organization)
                   .collect { |r| Role.find(r.role_id) }
-    end
-    
-    def roles_for_assign
-      current_user_roles = current_user.person
-                                       .organizational_roles
-                                       .where(:organization_id => current_organization)
-                                       .collect { |r| Role.find(r.role_id) }
-                             
-      if current_user_roles.include? Role.find(1)
-        @roles_for_assign = current_organization.roles
-      else
-        @roles_for_assign = current_organization.roles.delete_if { |role| role == Role.find(1) }
-      end
     end
 end
