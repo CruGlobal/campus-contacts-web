@@ -1,4 +1,4 @@
-<% if !@survey.frozen %>
+<% if !@survey.frozen? %>
 
 <%= form_for(@person, url: @person.new_record? ? survey_responses_path : survey_response_path(@person), html: {method: @person.new_record? ? :post : :put, class: 'form', validate: true, 'data-ajax' => false}) do |f| %>
   <%= error_messages_for @person, @answer_sheet.person %>
@@ -62,5 +62,5 @@
 <% end %>
 
 <% else %>
-  <%= t('survey_responses.form.frozen') %>
+  <%= t('survey_responses.form.frozen', survey: @survey) %>
 <% end %>
