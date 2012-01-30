@@ -222,12 +222,6 @@ class PeopleController < ApplicationController
     to_ids.each do |id|
       person = Person.find_by_personID(id)
       PeopleMailer.enqueue.bulk_message(person.email, current_person.email, params[:subject], params[:body]) if !person.email.blank?
-      fc = FollowupComment.create(params[:followup_comment])
-      fc.contact_id = id
-      #fc.comment = Person.find(params[:followup_comment][:commenter_id]).to_s + " sent an email"
-      fc.comment = "Sent an email."
-      fc.status = person.organizational_roles.first.followup_status
-      fc.save
     end
     
     render :nothing => true
@@ -250,20 +244,28 @@ class PeopleController < ApplicationController
           # Otherwise send it as a text
           @sent_sms = SentSms.create!(message: params[:body], recipient: person.phone_number) # + ' Txt HELP for help STOP to quit'
         end
-
-        fc = FollowupComment.create(params[:followup_comment])
-        fc.contact_id = id
-        #fc.comment = Person.find(params[:followup_comment][:commenter_id]).to_s + " sent an email"
-        fc.comment = "Sent an SMS."
-        fc.status = person.organizational_roles.first.followup_status
-        fc.save
-
       end
     end
     
     render :nothing => true
   end
-  
+
+  def bulk_comment
+    authorize! :lead, current_organization
+    to_ids = params[:to].split(',').uniq
+
+    to_ids.each do |id|
+      person = Person.find_by_personID(id)
+      fc = FollowupComment.create(params[:followup_comment])
+      fc.contact_id = id
+      fc.comment = params[:body]
+      fc.status = person.organizational_roles.first.followup_status
+      fc.save
+    end
+    
+    render :nothing => true
+  end
+
   def all
     fetch_people 
     
