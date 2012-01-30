@@ -1,16 +1,4 @@
-<% if params[:from_add_member_screen] == "false" %>
-  <% unless params[:add_another] == 'true' %>
-    $("#member_search").dialog('close');
-  <% end %>
-  <% @persons.each do |person| %>
-    row = '<%= j(render('groups/person', person: person, group_membership: @group_membership)) %>'
-    if($('#<%= dom_id(person) %>')[0]) {
-      $('#<%= dom_id(person) %>').replaceWith(row)
-    } else {
-      $('#group_table').append(row)
-    }
-  <% end %>
-<% else %>
+<% if params[:from_add_member_screen] == "true" %>
    <% unless params[:add_another] == 'true' %>
      $("#member_search").dialog('close');
    <% end %>
@@ -20,4 +8,9 @@
    } else {
      $('#group_table').append(row)
    }
+<% else %>
+  <% unless params[:add_another] == 'true' %>
+    $("#member_search").dialog('close');
+  <% end %>
+  $.n('Contacts added to group successfully');
 <% end %>
