@@ -4,12 +4,13 @@ class GroupMembershipsController < ApplicationController
 
     @group = current_organization.groups.find(params[:group_id]) 
     if params[:from_add_member_screen] == "true"
+      return false unless has_permission
       @persons = Person.find(params[:person_id])
       @group_membership = @group.group_memberships.find_or_initialize_by_person_id(@persons.id)
       @group_membership.role = params[:role]
       @group_membership.save
     else
-      @persons = Person.find(params[:person_id].split(',').collect! {|n| n.to_i})
+      @persons = Person.find(params[:person_id].split(","))
       return false unless has_permission
       @persons.each do |person|
         @group_membership = @group.group_memberships.find_or_initialize_by_person_id(person.id)
