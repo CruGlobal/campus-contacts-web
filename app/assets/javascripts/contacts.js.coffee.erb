@@ -282,11 +282,14 @@ $ ->
     $('#assign_search .assign_button').show()
     
   $('#assign_to_leader').live 'click', ->
+    $('.leader_search_name').val("")
     $('#assign_search .leader_search').show()
     $('#assign_search .org_search').hide()
     $('#assign_search .group_search').hide()
     $('#assign_search .label_search').hide()
     $('#assign_search .assign_button').hide()
+    $('#assign_search ul li').each ->
+      $(this).show()
     
   $('#assign_to_org').live 'click', ->
     $('#assign_search .leader_search').hide()
