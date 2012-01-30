@@ -55,7 +55,6 @@ class PhoneNumber < ActiveRecord::Base
                   end
       end
       MergeAudit.create!(mergeable: self, merge_looser: other)
-      other.reload
       other.destroy
       save(validate: false)
     end
