@@ -2,7 +2,7 @@ class Surveys::QuestionsController < ApplicationController
   before_filter :find_survey_and_authorize
   before_filter :find_question, only: [:show, :edit, :update, :destroy]
   before_filter :get_predefined
-  before_filter :get_leaders, only: [:index, :show, :edit, :update]
+  before_filter :get_leaders
 
   # GET /questions
   # GET /questions.xml
@@ -159,5 +159,4 @@ class Surveys::QuestionsController < ApplicationController
     def get_leaders
       @leaders = current_organization.leaders
     end
-
 end

@@ -79,3 +79,8 @@ $ ->
     
   $('#advanced_toggle').click ->
     $('#advanced_options').toggle()
+    
+  $('#move_right').live 'click', ->
+   alert $('#leaders_').html()
+   alert $('#current_leaders_').html()
+   $('#leaders_').children().clone(true).appendTo('#current_leaders_').selectmenu('refresh')
