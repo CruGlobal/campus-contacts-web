@@ -140,7 +140,7 @@ en:
       manage_roles: 'Manage Labels'
       send_sms: Send Text
       send_email: Send Email
-      group_comment: Comment to Members
+      group_comment: Add Comment
       apply_roles: 'Apply Labels'
       no_people: "Sorry, there are no people involved here."
       displaying: "Displaying %{start} - %{finish} of %{total}"
