@@ -115,5 +115,27 @@ class SurveyResponsesControllerTest < ActionController::TestCase
     end
     
   end
+  
+  context "Answering a survey with notifications" do
+    setup "create a survey" do
+      @user = Factory(:user_with_auxs)  #user with a person object
+      sign_in @user
+      @organization = Factory(:organization)
+      @survey = Factory(:survey, organization: @organization)
+    end
+    
+    should "create the survey elements with advanced options" do      
+      advanced_element = Factory(:advanced_element)
+      Factory(:question_leader, element: advanced_element, person: @user)
+      #create another user to be a leader
+      @another_user = Factory(:user_with_auxs)
+      Factory(:question_leader, element: advanced_element, person: @another_user)
+    end
+    
+    should "respond success when answering survey" do
+      @respondent = Factory(:user_no_org)
+      post :create, 
+    end
+  end
 
 end
