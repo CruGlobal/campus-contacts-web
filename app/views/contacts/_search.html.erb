@@ -1,4 +1,4 @@
-<div id="filter_box" style="<%= 'display:none' %>">
+<div id="filter_box" style="<%#= 'display:none' %>">
   <%= form_tag params, method: :get do %>
     <%= hidden_field_tag :completed, params[:completed] if params[:completed].present? %>
     <%= hidden_field_tag :search, 1 %>
@@ -49,9 +49,27 @@
       </div>
     <% end %>
     </div>
-    <div class="actionbarinline">
+    <div class="actionbarinline">      
       <%= submit_tag t('general.search') %>
-      <%= link_to t('.clear_search_form'), '', onclick: "$('form').clearForm(); return false;" %>
+      <%#= link_to t('.clear_search_form'), '', onclick: "$('form').clearForm(); return false;" %>
     </div>
   <% end %>
+    <% if params[:search] == "1" && @people.length > 0 %>
+        <%= form_for @saved_contact_search do |f| %>
+          <%= link_to "Save Search","", :class=>"icon save showtext", :id=>"savesearchbtn", :style => "display: none;" %>
+          <div id="savesearchbox">
+          <%= hidden_field_tag 'saved_contact_search[user_id]', @person.user.id %>
+          <%= hidden_field_tag 'saved_contact_search[full_path]', request.fullpath %>
+          <%= hidden_field_tag :id, @saved_contact_search.id %>
+          <%= f.text_field :name, :placeholder => t('contacts.index.save_this_search_placeholder') %>
+          <% if !@saved_contact_search.id.nil? %>
+            <%= f.submit t('contacts.index.update_this_search'), :class => "littlesubmit" %>
+          <% else %>
+            <%= f.submit t('contacts.index.save_this_search'), :class => "littlesubmit" %>
+          <% end %>
+          </div>
+        <% end %>
+
+      <% end %>
+  
 </div>

@@ -581,6 +581,11 @@ input[type=submit], button[type=submit] {
   font-weight: bold; */
 }
 
+.littlesubmit {
+  padding: 5px !important;
+  width: 120px !important;
+}
+
 input[type=submit].smallbtn, 
 button[type=submit].smallbtn {
   font-size: 12px;
@@ -593,6 +598,24 @@ button[type=submit].smallbtn {
   width: 222px;
 }
 
+.new_saved_contact_search {
+  position: absolute;
+  margin-top: -36px;
+  margin-left: 165px;
+}
+
+#saved_contact_search_name {
+    width: 150px;
+}
+
+#savesearchbox {
+  line-height: 35px;
+}
+
+#savesearchbtn {
+  line-height: 35px;
+  height: 35px;
+}
 .rejoiceablebox {
   background: $white;
   border: 1px solid silver;
@@ -838,6 +861,7 @@ ul.pillmenu {
 .icon.star, .icon.star_empty:hover {  background-image: url("<%= asset_path('star.png') %>");}
 .icon.star_empty, .icon.star:hover,  {  background-image: url("<%= asset_path('star_empty.png') %>");}
 .icon.csv {background-image: url("<%= asset_path('csv.png') %>");}
+.icon.save {background-image: url("<%= asset_path('save.png') %>");}
 
 .showtext {text-indent: 0px; width: auto; background-position: 0% 50%; text-indent: 20px;}
 
