@@ -34,6 +34,23 @@ $ ->
     $.rails.handleRemote($(this))
     false
     
+  $('#savesearchbtn').live 'click', ->
+    $('#savesearchbox').dialog
+      resizable: false,
+      height: 200,
+      width: 400,
+      modal: true,
+      buttons: 
+        Save: ->          
+          $('#save_search_form').submit()
+          t('contacts.index.search_saved')
+          $(this).dialog('destroy')
+        Cancel: ->
+          $(this).dialog('destroy')
+    false
+
+
+
   $('.send_contact_info').live 'click', ->
     form = $('#send_contact_info_form')
     form.find('#person_id').val($(this).attr('data-person_id'))    
