@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120118193956) do
+ActiveRecord::Schema.define(:version => 20120127164524) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -590,7 +590,7 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
   create_table "crs2_registrant_type", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "version",                                                                                                    :null => false
+    t.integer  "version",                                                                                                  :null => false
     t.boolean  "accept_checks"
     t.boolean  "accept_credit_cards"
     t.boolean  "accept_ministry_account_transfers"
@@ -605,35 +605,35 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
     t.boolean  "childcare_available"
     t.date     "default_arrival_date"
     t.date     "default_departure_date"
-    t.text     "description",                                                                                                :null => false
+    t.text     "description",                                                                                              :null => false
     t.boolean  "is_child_type"
-    t.decimal  "married_commuter_cost",                                       :precision => 12, :scale => 2
-    t.decimal  "married_commuter_early_reg_discount",                         :precision => 12, :scale => 2
-    t.decimal  "married_commuter_full_payment_discount",                      :precision => 12, :scale => 2
+    t.decimal  "married_commuter_cost",                                     :precision => 12, :scale => 2
+    t.decimal  "married_commuter_early_reg_discount",                       :precision => 12, :scale => 2
+    t.decimal  "married_commuter_full_payment_discount",                    :precision => 12, :scale => 2
     t.datetime "married_discount_early_registration_deadline"
-    t.decimal  "married_onsite_cost",                                         :precision => 12, :scale => 2
-    t.decimal  "married_onsite_early_reg_discount",                           :precision => 12, :scale => 2
-    t.decimal  "married_onsite_full_payment_discount",                        :precision => 12, :scale => 2
-    t.decimal  "married_required_deposit",                                    :precision => 12, :scale => 2
-    t.string   "name",                                                                                       :default => "", :null => false
+    t.decimal  "married_onsite_cost",                                       :precision => 12, :scale => 2
+    t.decimal  "married_onsite_early_reg_discount",                         :precision => 12, :scale => 2
+    t.decimal  "married_onsite_full_payment_discount",                      :precision => 12, :scale => 2
+    t.decimal  "married_required_deposit",                                  :precision => 12, :scale => 2
+    t.string   "name",                                                                                     :default => "", :null => false
     t.boolean  "offer_childcare"
     t.text     "registration_complete_email"
-    t.decimal  "single_commuter_cost",                                        :precision => 12, :scale => 2
-    t.decimal  "single_commuter_early_reg_discount",                          :precision => 12, :scale => 2
-    t.decimal  "single_commuter_full_payment_discount",                       :precision => 12, :scale => 2
+    t.decimal  "single_commuter_cost",                                      :precision => 12, :scale => 2
+    t.decimal  "single_commuter_early_reg_discount",                        :precision => 12, :scale => 2
+    t.decimal  "single_commuter_full_payment_discount",                     :precision => 12, :scale => 2
     t.datetime "single_discount_early_registration_deadline"
-    t.decimal  "single_onsite_cost",                                          :precision => 12, :scale => 2
-    t.decimal  "single_onsite_early_reg_discount",                            :precision => 12, :scale => 2
-    t.decimal  "single_onsite_full_payment_discount",                         :precision => 12, :scale => 2
-    t.decimal  "single_required_deposit",                                     :precision => 12, :scale => 2
-    t.integer  "conference_id",                                                                                              :null => false
+    t.decimal  "single_onsite_cost",                                        :precision => 12, :scale => 2
+    t.decimal  "single_onsite_early_reg_discount",                          :precision => 12, :scale => 2
+    t.decimal  "single_onsite_full_payment_discount",                       :precision => 12, :scale => 2
+    t.decimal  "single_required_deposit",                                   :precision => 12, :scale => 2
+    t.integer  "conference_id",                                                                                            :null => false
     t.boolean  "defer_online_payment"
     t.boolean  "require_full_payment"
     t.boolean  "shut_off"
     t.text     "shut_off_message"
-    t.binary   "married_require_full_payment",                 :limit => 255
-    t.binary   "single_require_full_payment",                  :limit => 255
-    t.binary   "enable_rideshare",                             :limit => 255
+    t.binary   "married_require_full_payment",                 :limit => 1
+    t.binary   "single_require_full_payment",                  :limit => 1
+    t.binary   "enable_rideshare",                             :limit => 1
   end
 
   add_index "crs2_registrant_type", ["conference_id"], :name => "FKA936E6DD863D9D1F"
@@ -1038,7 +1038,6 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
   end
 
   add_index "fsk_fields_roles", ["field_id"], :name => "FK_fsk_fields_roles"
-  add_index "fsk_fields_roles", ["role_id"], :name => "fsk_fields_roles_ibfk_2"
 
   create_table "fsk_kit_categories", :force => true do |t|
     t.string   "name",         :limit => 50,                  :null => false
@@ -1251,7 +1250,7 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
   end
 
   create_table "hr_si_application_2003_deprecated", :id => false, :force => true do |t|
-    t.integer  "applicationID",                                                                                :null => false
+    t.integer  "applicationID",                                                                              :null => false
     t.integer  "locationA"
     t.string   "locationAExplanation",                    :limit => 90
     t.integer  "locationB"
@@ -1261,26 +1260,26 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
     t.string   "availableMonth",                          :limit => 2
     t.string   "availableYear",                           :limit => 4
     t.integer  "hasMinistryConflict"
-    t.text     "ministryConflictExplanation",             :limit => 2147483647
+    t.text     "ministryConflictExplanation",             :limit => 16777215
     t.integer  "hasSpecificLocation"
     t.string   "specificLocationRecruiterName",           :limit => 50
-    t.text     "teamMembers",                             :limit => 2147483647
+    t.text     "teamMembers",                             :limit => 16777215
     t.integer  "isDating"
-    t.text     "datingLocation",                          :limit => 2147483647
+    t.text     "datingLocation",                          :limit => 16777215
     t.integer  "hasCampusPartnership"
     t.integer  "isDatingStint"
-    t.text     "datingStintName",                         :limit => 2147483647
+    t.text     "datingStintName",                         :limit => 16777215
     t.string   "language1",                               :limit => 50
     t.string   "language1YearsStudied",                   :limit => 20
     t.integer  "language1Fluency"
     t.string   "language2",                               :limit => 50
     t.string   "language2YearsStudied",                   :limit => 20
     t.integer  "language2Fluency"
-    t.text     "previousMinistryExperience",              :limit => 2147483647
-    t.text     "ministryTraining",                        :limit => 2147483647
-    t.text     "evangelismAttitude",                      :limit => 2147483647
+    t.text     "previousMinistryExperience",              :limit => 16777215
+    t.text     "ministryTraining",                        :limit => 16777215
+    t.text     "evangelismAttitude",                      :limit => 16777215
     t.integer  "isEvangelismTrainable"
-    t.text     "participationExplanation",                :limit => 2147483647
+    t.text     "participationExplanation",                :limit => 16777215
     t.integer  "isFamiliarFourSpiritualLaws"
     t.integer  "hasExperienceFourSpiritualLaws"
     t.integer  "confidenceFourSpiritualLaws"
@@ -1311,61 +1310,61 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
     t.integer  "isFamiliarOtherReligions"
     t.integer  "hasExperienceOtherReligions"
     t.integer  "confidenceOtherReligions"
-    t.text     "leadershipPositions",                     :limit => 2147483647
+    t.text     "leadershipPositions",                     :limit => 16777215
     t.integer  "hasLedDiscipleshipGroup"
     t.string   "discipleshipGroupSize",                   :limit => 50
-    t.text     "leadershipEvaluation",                    :limit => 2147483647
+    t.text     "leadershipEvaluation",                    :limit => 16777215
     t.integer  "conversionMonth"
     t.integer  "conversionYear"
     t.string   "memberChurchDenomination",                :limit => 50
     t.string   "memberChurchDuration",                    :limit => 50
     t.string   "attendingChurchDenomination",             :limit => 50
     t.string   "attendingChurchDuration",                 :limit => 50
-    t.text     "attendingChurchInvolvement",              :limit => 2147483647
-    t.text     "quietTimeQuantity",                       :limit => 2147483647
-    t.text     "quietTimeDescription",                    :limit => 2147483647
-    t.text     "explanationOfSalvation",                  :limit => 2147483647
-    t.text     "explanationOfSpiritFilled",               :limit => 2147483647
+    t.text     "attendingChurchInvolvement",              :limit => 16777215
+    t.text     "quietTimeQuantity",                       :limit => 16777215
+    t.text     "quietTimeDescription",                    :limit => 16777215
+    t.text     "explanationOfSalvation",                  :limit => 16777215
+    t.text     "explanationOfSpiritFilled",               :limit => 16777215
     t.integer  "hasInvolvementSpeakingTongues"
-    t.text     "differenceIndwellingFilled",              :limit => 2147483647
+    t.text     "differenceIndwellingFilled",              :limit => 16777215
     t.integer  "hasCrimeConviction"
-    t.text     "crimeConvictionExplanation",              :limit => 2147483647
+    t.text     "crimeConvictionExplanation",              :limit => 16777215
     t.integer  "hasDrugUse"
     t.integer  "isTobaccoUser"
     t.integer  "isWillingChangeHabits"
-    t.text     "authorityResponseExplanation",            :limit => 2147483647
-    t.text     "alcoholUseFrequency",                     :limit => 2147483647
-    t.text     "alcoholUseDecision",                      :limit => 2147483647
+    t.text     "authorityResponseExplanation",            :limit => 16777215
+    t.text     "alcoholUseFrequency",                     :limit => 16777215
+    t.text     "alcoholUseDecision",                      :limit => 16777215
     t.integer  "isWillingRefrainAlcohol"
-    t.text     "unwillingRefrainAlcoholExplanation",      :limit => 2147483647
-    t.text     "drugUseExplanation",                      :limit => 2147483647
-    t.text     "tobaccoUseExplanation",                   :limit => 2147483647
+    t.text     "unwillingRefrainAlcoholExplanation",      :limit => 16777215
+    t.text     "drugUseExplanation",                      :limit => 16777215
+    t.text     "tobaccoUseExplanation",                   :limit => 16777215
     t.integer  "isWillingAbstainTobacco"
     t.integer  "hasRequestedPhoneCall"
     t.string   "contactPhoneNumber",                      :limit => 50
     t.string   "contactBestTime",                         :limit => 50
     t.string   "contactTimeZone",                         :limit => 50
-    t.text     "sexualInvolvementExplanation",            :limit => 2147483647
+    t.text     "sexualInvolvementExplanation",            :limit => 16777215
     t.integer  "hasSexualGuidelines"
-    t.text     "sexualGuidelineExplanation",              :limit => 2147483647
+    t.text     "sexualGuidelineExplanation",              :limit => 16777215
     t.integer  "isCurrentlyDating"
-    t.text     "currentlyDatingLocation",                 :limit => 2147483647
+    t.text     "currentlyDatingLocation",                 :limit => 16777215
     t.integer  "hasHomosexualInvolvement"
-    t.text     "homosexualInvolvementExplanation",        :limit => 2147483647
+    t.text     "homosexualInvolvementExplanation",        :limit => 16777215
     t.integer  "hasRecentPornographicInvolvement"
     t.integer  "pornographicInvolvementMonth"
     t.integer  "pornographicInvolvementYear"
-    t.text     "pornographicInvolvementExplanation",      :limit => 2147483647
+    t.text     "pornographicInvolvementExplanation",      :limit => 16777215
     t.integer  "hasRecentSexualImmorality"
     t.integer  "sexualImmoralityMonth"
     t.integer  "sexualImmoralityYear"
-    t.text     "sexualImmoralityExplanation",             :limit => 2147483647
+    t.text     "sexualImmoralityExplanation",             :limit => 16777215
     t.integer  "hasOtherDateSinceImmorality"
-    t.text     "singleImmoralityResultsExplanation",      :limit => 2147483647
-    t.text     "marriedImmoralityResultsExplanation",     :limit => 2147483647
-    t.text     "immoralityLifeChangeExplanation",         :limit => 2147483647
-    t.text     "immoralityCurrentStrugglesExplanation",   :limit => 2147483647
-    t.text     "additionalMoralComments",                 :limit => 2147483647
+    t.text     "singleImmoralityResultsExplanation",      :limit => 16777215
+    t.text     "marriedImmoralityResultsExplanation",     :limit => 16777215
+    t.text     "immoralityLifeChangeExplanation",         :limit => 16777215
+    t.text     "immoralityCurrentStrugglesExplanation",   :limit => 16777215
+    t.text     "additionalMoralComments",                 :limit => 16777215
     t.integer  "isAwareMustRaiseSupport"
     t.integer  "isInDebt"
     t.string   "debtNature1",                             :limit => 50
@@ -1378,34 +1377,34 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
     t.string   "debtTotal3",                              :limit => 50
     t.string   "debtMonthlyPayment3",                     :limit => 50
     t.integer  "hasOtherFinancialResponsibility"
-    t.text     "otherFinancialResponsibilityExplanation", :limit => 2147483647
-    t.text     "debtPaymentPlan",                         :limit => 2147483647
-    t.text     "debtPaymentTimeframe",                    :limit => 2147483647
-    t.text     "developingPartnersExplanation",           :limit => 2147483647
+    t.text     "otherFinancialResponsibilityExplanation", :limit => 16777215
+    t.text     "debtPaymentPlan",                         :limit => 16777215
+    t.text     "debtPaymentTimeframe",                    :limit => 16777215
+    t.text     "developingPartnersExplanation",           :limit => 16777215
     t.integer  "isWillingDevelopPartners"
-    t.text     "unwillingDevelopPartnersExplanation",     :limit => 2147483647
+    t.text     "unwillingDevelopPartnersExplanation",     :limit => 16777215
     t.integer  "isCommittedDevelopPartners"
-    t.text     "uncommittedDevelopPartnersExplanation",   :limit => 2147483647
-    t.text     "personalTestimonyGrowth",                 :limit => 2147483647
-    t.text     "internshipParticipationExplanation",      :limit => 2147483647
-    t.text     "internshipObjectives",                    :limit => 2147483647
-    t.text     "currentMinistryDescription",              :limit => 2147483647
-    t.text     "personalStrengthA",                       :limit => 2147483647
-    t.text     "personalStrengthB",                       :limit => 2147483647
-    t.text     "personalStrengthC",                       :limit => 2147483647
-    t.text     "personalDevelopmentA",                    :limit => 2147483647
-    t.text     "personalDevelopmentB",                    :limit => 2147483647
-    t.text     "personalDevelopmentC",                    :limit => 2147483647
-    t.text     "personalDescriptionA",                    :limit => 2147483647
-    t.text     "personalDescriptionB",                    :limit => 2147483647
-    t.text     "personalDescriptionC",                    :limit => 2147483647
-    t.text     "familyRelationshipDescription",           :limit => 2147483647
+    t.text     "uncommittedDevelopPartnersExplanation",   :limit => 16777215
+    t.text     "personalTestimonyGrowth",                 :limit => 16777215
+    t.text     "internshipParticipationExplanation",      :limit => 16777215
+    t.text     "internshipObjectives",                    :limit => 16777215
+    t.text     "currentMinistryDescription",              :limit => 16777215
+    t.text     "personalStrengthA",                       :limit => 16777215
+    t.text     "personalStrengthB",                       :limit => 16777215
+    t.text     "personalStrengthC",                       :limit => 16777215
+    t.text     "personalDevelopmentA",                    :limit => 16777215
+    t.text     "personalDevelopmentB",                    :limit => 16777215
+    t.text     "personalDevelopmentC",                    :limit => 16777215
+    t.text     "personalDescriptionA",                    :limit => 16777215
+    t.text     "personalDescriptionB",                    :limit => 16777215
+    t.text     "personalDescriptionC",                    :limit => 16777215
+    t.text     "familyRelationshipDescription",           :limit => 16777215
     t.string   "electronicSignature",                     :limit => 90
     t.string   "ssn",                                     :limit => 50
     t.integer  "fk_ssmUserID"
-    t.integer  "fk_PersonID",                                                                                  :null => false
+    t.integer  "fk_PersonID",                                                                                :null => false
     t.boolean  "isPaid"
-    t.decimal  "appFee",                                                        :precision => 18, :scale => 0
+    t.decimal  "appFee",                                                      :precision => 18, :scale => 0
     t.datetime "dateAppLastChanged"
     t.datetime "dateAppStarted"
     t.datetime "dateSubmitted"
@@ -1431,26 +1430,26 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
     t.string   "availableMonth",                          :limit => 2
     t.string   "availableYear",                           :limit => 4
     t.integer  "hasMinistryConflict"
-    t.text     "ministryConflictExplanation",             :limit => 2147483647
+    t.text     "ministryConflictExplanation",             :limit => 16777215
     t.integer  "hasSpecificLocation"
     t.string   "specificLocationRecruiterName",           :limit => 50
-    t.text     "teamMembers",                             :limit => 2147483647
+    t.text     "teamMembers",                             :limit => 16777215
     t.integer  "isDating"
-    t.text     "datingLocation",                          :limit => 2147483647
+    t.text     "datingLocation",                          :limit => 16777215
     t.integer  "hasCampusPartnership"
     t.integer  "isDatingStint"
-    t.text     "datingStintName",                         :limit => 2147483647
+    t.text     "datingStintName",                         :limit => 16777215
     t.string   "language1",                               :limit => 50
     t.string   "language1YearsStudied",                   :limit => 20
     t.integer  "language1Fluency"
     t.string   "language2",                               :limit => 50
     t.string   "language2YearsStudied",                   :limit => 20
     t.integer  "language2Fluency"
-    t.text     "previousMinistryExperience",              :limit => 2147483647
-    t.text     "ministryTraining",                        :limit => 2147483647
-    t.text     "evangelismAttitude",                      :limit => 2147483647
+    t.text     "previousMinistryExperience",              :limit => 16777215
+    t.text     "ministryTraining",                        :limit => 16777215
+    t.text     "evangelismAttitude",                      :limit => 16777215
     t.integer  "isEvangelismTrainable"
-    t.text     "participationExplanation",                :limit => 2147483647
+    t.text     "participationExplanation",                :limit => 16777215
     t.integer  "isFamiliarFourSpiritualLaws"
     t.integer  "hasExperienceFourSpiritualLaws"
     t.integer  "confidenceFourSpiritualLaws"
@@ -1481,61 +1480,61 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
     t.integer  "isFamiliarOtherReligions"
     t.integer  "hasExperienceOtherReligions"
     t.integer  "confidenceOtherReligions"
-    t.text     "leadershipPositions",                     :limit => 2147483647
+    t.text     "leadershipPositions",                     :limit => 16777215
     t.integer  "hasLedDiscipleshipGroup"
     t.string   "discipleshipGroupSize",                   :limit => 50
-    t.text     "leadershipEvaluation",                    :limit => 2147483647
+    t.text     "leadershipEvaluation",                    :limit => 16777215
     t.integer  "conversionMonth"
     t.integer  "conversionYear"
     t.string   "memberChurchDenomination",                :limit => 50
     t.string   "memberChurchDuration",                    :limit => 50
     t.string   "attendingChurchDenomination",             :limit => 50
     t.string   "attendingChurchDuration",                 :limit => 50
-    t.text     "attendingChurchInvolvement",              :limit => 2147483647
-    t.text     "quietTimeQuantity",                       :limit => 2147483647
-    t.text     "quietTimeDescription",                    :limit => 2147483647
-    t.text     "explanationOfSalvation",                  :limit => 2147483647
-    t.text     "explanationOfSpiritFilled",               :limit => 2147483647
+    t.text     "attendingChurchInvolvement",              :limit => 16777215
+    t.text     "quietTimeQuantity",                       :limit => 16777215
+    t.text     "quietTimeDescription",                    :limit => 16777215
+    t.text     "explanationOfSalvation",                  :limit => 16777215
+    t.text     "explanationOfSpiritFilled",               :limit => 16777215
     t.integer  "hasInvolvementSpeakingTongues"
-    t.text     "differenceIndwellingFilled",              :limit => 2147483647
+    t.text     "differenceIndwellingFilled",              :limit => 16777215
     t.integer  "hasCrimeConviction"
-    t.text     "crimeConvictionExplanation",              :limit => 2147483647
+    t.text     "crimeConvictionExplanation",              :limit => 16777215
     t.integer  "hasDrugUse"
     t.integer  "isTobaccoUser"
     t.integer  "isWillingChangeHabits"
-    t.text     "authorityResponseExplanation",            :limit => 2147483647
-    t.text     "alcoholUseFrequency",                     :limit => 2147483647
-    t.text     "alcoholUseDecision",                      :limit => 2147483647
+    t.text     "authorityResponseExplanation",            :limit => 16777215
+    t.text     "alcoholUseFrequency",                     :limit => 16777215
+    t.text     "alcoholUseDecision",                      :limit => 16777215
     t.integer  "isWillingRefrainAlcohol"
-    t.text     "unwillingRefrainAlcoholExplanation",      :limit => 2147483647
-    t.text     "drugUseExplanation",                      :limit => 2147483647
-    t.text     "tobaccoUseExplanation",                   :limit => 2147483647
+    t.text     "unwillingRefrainAlcoholExplanation",      :limit => 16777215
+    t.text     "drugUseExplanation",                      :limit => 16777215
+    t.text     "tobaccoUseExplanation",                   :limit => 16777215
     t.integer  "isWillingAbstainTobacco"
     t.integer  "hasRequestedPhoneCall"
     t.string   "contactPhoneNumber",                      :limit => 50
     t.string   "contactBestTime",                         :limit => 50
     t.string   "contactTimeZone",                         :limit => 50
-    t.text     "sexualInvolvementExplanation",            :limit => 2147483647
+    t.text     "sexualInvolvementExplanation",            :limit => 16777215
     t.integer  "hasSexualGuidelines"
-    t.text     "sexualGuidelineExplanation",              :limit => 2147483647
+    t.text     "sexualGuidelineExplanation",              :limit => 16777215
     t.integer  "isCurrentlyDating"
-    t.text     "currentlyDatingLocation",                 :limit => 2147483647
+    t.text     "currentlyDatingLocation",                 :limit => 16777215
     t.integer  "hasHomosexualInvolvement"
-    t.text     "homosexualInvolvementExplanation",        :limit => 2147483647
+    t.text     "homosexualInvolvementExplanation",        :limit => 16777215
     t.integer  "hasRecentPornographicInvolvement"
     t.integer  "pornographicInvolvementMonth"
     t.integer  "pornographicInvolvementYear"
-    t.text     "pornographicInvolvementExplanation",      :limit => 2147483647
+    t.text     "pornographicInvolvementExplanation",      :limit => 16777215
     t.integer  "hasRecentSexualImmorality"
     t.integer  "sexualImmoralityMonth"
     t.integer  "sexualImmoralityYear"
-    t.text     "sexualImmoralityExplanation",             :limit => 2147483647
+    t.text     "sexualImmoralityExplanation",             :limit => 16777215
     t.integer  "hasOtherDateSinceImmorality"
-    t.text     "singleImmoralityResultsExplanation",      :limit => 2147483647
-    t.text     "marriedImmoralityResultsExplanation",     :limit => 2147483647
-    t.text     "immoralityLifeChangeExplanation",         :limit => 2147483647
-    t.text     "immoralityCurrentStrugglesExplanation",   :limit => 2147483647
-    t.text     "additionalMoralComments",                 :limit => 2147483647
+    t.text     "singleImmoralityResultsExplanation",      :limit => 16777215
+    t.text     "marriedImmoralityResultsExplanation",     :limit => 16777215
+    t.text     "immoralityLifeChangeExplanation",         :limit => 16777215
+    t.text     "immoralityCurrentStrugglesExplanation",   :limit => 16777215
+    t.text     "additionalMoralComments",                 :limit => 16777215
     t.integer  "isAwareMustRaiseSupport"
     t.integer  "isInDebt"
     t.string   "debtNature1",                             :limit => 50
@@ -1548,34 +1547,34 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
     t.string   "debtTotal3",                              :limit => 50
     t.string   "debtMonthlyPayment3",                     :limit => 50
     t.integer  "hasOtherFinancialResponsibility"
-    t.text     "otherFinancialResponsibilityExplanation", :limit => 2147483647
-    t.text     "debtPaymentPlan",                         :limit => 2147483647
-    t.text     "debtPaymentTimeframe",                    :limit => 2147483647
-    t.text     "developingPartnersExplanation",           :limit => 2147483647
+    t.text     "otherFinancialResponsibilityExplanation", :limit => 16777215
+    t.text     "debtPaymentPlan",                         :limit => 16777215
+    t.text     "debtPaymentTimeframe",                    :limit => 16777215
+    t.text     "developingPartnersExplanation",           :limit => 16777215
     t.integer  "isWillingDevelopPartners"
-    t.text     "unwillingDevelopPartnersExplanation",     :limit => 2147483647
+    t.text     "unwillingDevelopPartnersExplanation",     :limit => 16777215
     t.integer  "isCommittedDevelopPartners"
-    t.text     "uncommittedDevelopPartnersExplanation",   :limit => 2147483647
-    t.text     "personalTestimonyGrowth",                 :limit => 2147483647
-    t.text     "internshipParticipationExplanation",      :limit => 2147483647
-    t.text     "internshipObjectives",                    :limit => 2147483647
-    t.text     "currentMinistryDescription",              :limit => 2147483647
-    t.text     "personalStrengthA",                       :limit => 2147483647
-    t.text     "personalStrengthB",                       :limit => 2147483647
-    t.text     "personalStrengthC",                       :limit => 2147483647
-    t.text     "personalDevelopmentA",                    :limit => 2147483647
-    t.text     "personalDevelopmentB",                    :limit => 2147483647
-    t.text     "personalDevelopmentC",                    :limit => 2147483647
-    t.text     "personalDescriptionA",                    :limit => 2147483647
-    t.text     "personalDescriptionB",                    :limit => 2147483647
-    t.text     "personalDescriptionC",                    :limit => 2147483647
-    t.text     "familyRelationshipDescription",           :limit => 2147483647
+    t.text     "uncommittedDevelopPartnersExplanation",   :limit => 16777215
+    t.text     "personalTestimonyGrowth",                 :limit => 16777215
+    t.text     "internshipParticipationExplanation",      :limit => 16777215
+    t.text     "internshipObjectives",                    :limit => 16777215
+    t.text     "currentMinistryDescription",              :limit => 16777215
+    t.text     "personalStrengthA",                       :limit => 16777215
+    t.text     "personalStrengthB",                       :limit => 16777215
+    t.text     "personalStrengthC",                       :limit => 16777215
+    t.text     "personalDevelopmentA",                    :limit => 16777215
+    t.text     "personalDevelopmentB",                    :limit => 16777215
+    t.text     "personalDevelopmentC",                    :limit => 16777215
+    t.text     "personalDescriptionA",                    :limit => 16777215
+    t.text     "personalDescriptionB",                    :limit => 16777215
+    t.text     "personalDescriptionC",                    :limit => 16777215
+    t.text     "familyRelationshipDescription",           :limit => 16777215
     t.string   "electronicSignature",                     :limit => 90
     t.string   "ssn",                                     :limit => 50
     t.integer  "fk_ssmUserID"
     t.integer  "fk_PersonID"
     t.boolean  "isPaid"
-    t.decimal  "appFee",                                                        :precision => 18, :scale => 0
+    t.decimal  "appFee",                                                      :precision => 18, :scale => 0
     t.datetime "dateAppLastChanged"
     t.datetime "dateAppStarted"
     t.datetime "dateSubmitted"
@@ -1602,26 +1601,26 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
     t.string   "availableMonth",                          :limit => 2
     t.string   "availableYear",                           :limit => 4
     t.integer  "hasMinistryConflict"
-    t.text     "ministryConflictExplanation",             :limit => 2147483647
+    t.text     "ministryConflictExplanation",             :limit => 16777215
     t.integer  "hasSpecificLocation"
     t.string   "specificLocationRecruiterName",           :limit => 50
-    t.text     "teamMembers",                             :limit => 2147483647
+    t.text     "teamMembers",                             :limit => 16777215
     t.integer  "isDating"
-    t.text     "datingLocation",                          :limit => 2147483647
+    t.text     "datingLocation",                          :limit => 16777215
     t.integer  "hasCampusPartnership"
     t.integer  "isDatingStint"
-    t.text     "datingStintName",                         :limit => 2147483647
+    t.text     "datingStintName",                         :limit => 16777215
     t.string   "language1",                               :limit => 50
     t.string   "language1YearsStudied",                   :limit => 20
     t.integer  "language1Fluency"
     t.string   "language2",                               :limit => 50
     t.string   "language2YearsStudied",                   :limit => 20
     t.integer  "language2Fluency"
-    t.text     "previousMinistryExperience",              :limit => 2147483647
-    t.text     "ministryTraining",                        :limit => 2147483647
-    t.text     "evangelismAttitude",                      :limit => 2147483647
+    t.text     "previousMinistryExperience",              :limit => 16777215
+    t.text     "ministryTraining",                        :limit => 16777215
+    t.text     "evangelismAttitude",                      :limit => 16777215
     t.integer  "isEvangelismTrainable"
-    t.text     "participationExplanation",                :limit => 2147483647
+    t.text     "participationExplanation",                :limit => 16777215
     t.integer  "isFamiliarFourSpiritualLaws"
     t.integer  "hasExperienceFourSpiritualLaws"
     t.integer  "confidenceFourSpiritualLaws"
@@ -1652,61 +1651,61 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
     t.integer  "isFamiliarOtherReligions"
     t.integer  "hasExperienceOtherReligions"
     t.integer  "confidenceOtherReligions"
-    t.text     "leadershipPositions",                     :limit => 2147483647
+    t.text     "leadershipPositions",                     :limit => 16777215
     t.integer  "hasLedDiscipleshipGroup"
     t.string   "discipleshipGroupSize",                   :limit => 50
-    t.text     "leadershipEvaluation",                    :limit => 2147483647
+    t.text     "leadershipEvaluation",                    :limit => 16777215
     t.integer  "conversionMonth"
     t.integer  "conversionYear"
     t.string   "memberChurchDenomination",                :limit => 75
     t.string   "memberChurchDuration",                    :limit => 50
     t.string   "attendingChurchDenomination",             :limit => 50
     t.string   "attendingChurchDuration",                 :limit => 50
-    t.text     "attendingChurchInvolvement",              :limit => 2147483647
-    t.text     "quietTimeQuantity",                       :limit => 2147483647
-    t.text     "quietTimeDescription",                    :limit => 2147483647
-    t.text     "explanationOfSalvation",                  :limit => 2147483647
-    t.text     "explanationOfSpiritFilled",               :limit => 2147483647
+    t.text     "attendingChurchInvolvement",              :limit => 16777215
+    t.text     "quietTimeQuantity",                       :limit => 16777215
+    t.text     "quietTimeDescription",                    :limit => 16777215
+    t.text     "explanationOfSalvation",                  :limit => 16777215
+    t.text     "explanationOfSpiritFilled",               :limit => 16777215
     t.integer  "hasInvolvementSpeakingTongues"
-    t.text     "differenceIndwellingFilled",              :limit => 2147483647
+    t.text     "differenceIndwellingFilled",              :limit => 16777215
     t.integer  "hasCrimeConviction"
-    t.text     "crimeConvictionExplanation",              :limit => 2147483647
+    t.text     "crimeConvictionExplanation",              :limit => 16777215
     t.integer  "hasDrugUse"
     t.integer  "isTobaccoUser"
     t.integer  "isWillingChangeHabits"
-    t.text     "authorityResponseExplanation",            :limit => 2147483647
-    t.text     "alcoholUseFrequency",                     :limit => 2147483647
-    t.text     "alcoholUseDecision",                      :limit => 2147483647
+    t.text     "authorityResponseExplanation",            :limit => 16777215
+    t.text     "alcoholUseFrequency",                     :limit => 16777215
+    t.text     "alcoholUseDecision",                      :limit => 16777215
     t.integer  "isWillingRefrainAlcohol"
-    t.text     "unwillingRefrainAlcoholExplanation",      :limit => 2147483647
-    t.text     "drugUseExplanation",                      :limit => 2147483647
-    t.text     "tobaccoUseExplanation",                   :limit => 2147483647
+    t.text     "unwillingRefrainAlcoholExplanation",      :limit => 16777215
+    t.text     "drugUseExplanation",                      :limit => 16777215
+    t.text     "tobaccoUseExplanation",                   :limit => 16777215
     t.integer  "isWillingAbstainTobacco"
     t.integer  "hasRequestedPhoneCall"
     t.string   "contactPhoneNumber",                      :limit => 50
     t.string   "contactBestTime",                         :limit => 50
     t.string   "contactTimeZone",                         :limit => 50
-    t.text     "sexualInvolvementExplanation",            :limit => 2147483647
+    t.text     "sexualInvolvementExplanation",            :limit => 16777215
     t.integer  "hasSexualGuidelines"
-    t.text     "sexualGuidelineExplanation",              :limit => 2147483647
+    t.text     "sexualGuidelineExplanation",              :limit => 16777215
     t.integer  "isCurrentlyDating"
-    t.text     "currentlyDatingLocation",                 :limit => 2147483647
+    t.text     "currentlyDatingLocation",                 :limit => 16777215
     t.integer  "hasHomosexualInvolvement"
-    t.text     "homosexualInvolvementExplanation",        :limit => 2147483647
+    t.text     "homosexualInvolvementExplanation",        :limit => 16777215
     t.integer  "hasRecentPornographicInvolvement"
     t.integer  "pornographicInvolvementMonth"
     t.integer  "pornographicInvolvementYear"
-    t.text     "pornographicInvolvementExplanation",      :limit => 2147483647
+    t.text     "pornographicInvolvementExplanation",      :limit => 16777215
     t.integer  "hasRecentSexualImmorality"
     t.integer  "sexualImmoralityMonth"
     t.integer  "sexualImmoralityYear"
-    t.text     "sexualImmoralityExplanation",             :limit => 2147483647
+    t.text     "sexualImmoralityExplanation",             :limit => 16777215
     t.integer  "hasOtherDateSinceImmorality"
-    t.text     "singleImmoralityResultsExplanation",      :limit => 2147483647
-    t.text     "marriedImmoralityResultsExplanation",     :limit => 2147483647
-    t.text     "immoralityLifeChangeExplanation",         :limit => 2147483647
-    t.text     "immoralityCurrentStrugglesExplanation",   :limit => 2147483647
-    t.text     "additionalMoralComments",                 :limit => 2147483647
+    t.text     "singleImmoralityResultsExplanation",      :limit => 16777215
+    t.text     "marriedImmoralityResultsExplanation",     :limit => 16777215
+    t.text     "immoralityLifeChangeExplanation",         :limit => 16777215
+    t.text     "immoralityCurrentStrugglesExplanation",   :limit => 16777215
+    t.text     "additionalMoralComments",                 :limit => 16777215
     t.integer  "isAwareMustRaiseSupport"
     t.integer  "isInDebt"
     t.string   "debtNature1",                             :limit => 50
@@ -1719,34 +1718,34 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
     t.string   "debtTotal3",                              :limit => 50
     t.string   "debtMonthlyPayment3",                     :limit => 50
     t.integer  "hasOtherFinancialResponsibility"
-    t.text     "otherFinancialResponsibilityExplanation", :limit => 2147483647
-    t.text     "debtPaymentPlan",                         :limit => 2147483647
-    t.text     "debtPaymentTimeframe",                    :limit => 2147483647
-    t.text     "developingPartnersExplanation",           :limit => 2147483647
+    t.text     "otherFinancialResponsibilityExplanation", :limit => 16777215
+    t.text     "debtPaymentPlan",                         :limit => 16777215
+    t.text     "debtPaymentTimeframe",                    :limit => 16777215
+    t.text     "developingPartnersExplanation",           :limit => 16777215
     t.integer  "isWillingDevelopPartners"
-    t.text     "unwillingDevelopPartnersExplanation",     :limit => 2147483647
+    t.text     "unwillingDevelopPartnersExplanation",     :limit => 16777215
     t.integer  "isCommittedDevelopPartners"
-    t.text     "uncommittedDevelopPartnersExplanation",   :limit => 2147483647
-    t.text     "personalTestimonyGrowth",                 :limit => 2147483647
-    t.text     "internshipParticipationExplanation",      :limit => 2147483647
-    t.text     "internshipObjectives",                    :limit => 2147483647
-    t.text     "currentMinistryDescription",              :limit => 2147483647
-    t.text     "personalStrengthA",                       :limit => 2147483647
-    t.text     "personalStrengthB",                       :limit => 2147483647
-    t.text     "personalStrengthC",                       :limit => 2147483647
-    t.text     "personalDevelopmentA",                    :limit => 2147483647
-    t.text     "personalDevelopmentB",                    :limit => 2147483647
-    t.text     "personalDevelopmentC",                    :limit => 2147483647
-    t.text     "personalDescriptionA",                    :limit => 2147483647
-    t.text     "personalDescriptionB",                    :limit => 2147483647
-    t.text     "personalDescriptionC",                    :limit => 2147483647
-    t.text     "familyRelationshipDescription",           :limit => 2147483647
+    t.text     "uncommittedDevelopPartnersExplanation",   :limit => 16777215
+    t.text     "personalTestimonyGrowth",                 :limit => 16777215
+    t.text     "internshipParticipationExplanation",      :limit => 16777215
+    t.text     "internshipObjectives",                    :limit => 16777215
+    t.text     "currentMinistryDescription",              :limit => 16777215
+    t.text     "personalStrengthA",                       :limit => 16777215
+    t.text     "personalStrengthB",                       :limit => 16777215
+    t.text     "personalStrengthC",                       :limit => 16777215
+    t.text     "personalDevelopmentA",                    :limit => 16777215
+    t.text     "personalDevelopmentB",                    :limit => 16777215
+    t.text     "personalDevelopmentC",                    :limit => 16777215
+    t.text     "personalDescriptionA",                    :limit => 16777215
+    t.text     "personalDescriptionB",                    :limit => 16777215
+    t.text     "personalDescriptionC",                    :limit => 16777215
+    t.text     "familyRelationshipDescription",           :limit => 16777215
     t.string   "electronicSignature",                     :limit => 90
     t.string   "ssn",                                     :limit => 50
     t.integer  "fk_ssmUserID"
     t.integer  "fk_PersonID"
     t.boolean  "isPaid"
-    t.decimal  "appFee",                                                        :precision => 18, :scale => 0
+    t.decimal  "appFee",                                                      :precision => 18, :scale => 0
     t.datetime "dateAppLastChanged"
     t.datetime "dateAppStarted"
     t.datetime "dateSubmitted"
@@ -1773,26 +1772,26 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
     t.string   "availableMonth",                          :limit => 2
     t.string   "availableYear",                           :limit => 4
     t.integer  "hasMinistryConflict"
-    t.text     "ministryConflictExplanation",             :limit => 2147483647
+    t.text     "ministryConflictExplanation",             :limit => 16777215
     t.integer  "hasSpecificLocation"
     t.string   "specificLocationRecruiterName",           :limit => 50
-    t.text     "teamMembers",                             :limit => 2147483647
+    t.text     "teamMembers",                             :limit => 16777215
     t.integer  "isDating"
-    t.text     "datingLocation",                          :limit => 2147483647
+    t.text     "datingLocation",                          :limit => 16777215
     t.integer  "hasCampusPartnership"
     t.integer  "isDatingStint"
-    t.text     "datingStintName",                         :limit => 2147483647
+    t.text     "datingStintName",                         :limit => 16777215
     t.string   "language1",                               :limit => 50
     t.string   "language1YearsStudied",                   :limit => 20
     t.integer  "language1Fluency"
     t.string   "language2",                               :limit => 50
     t.string   "language2YearsStudied",                   :limit => 20
     t.integer  "language2Fluency"
-    t.text     "previousMinistryExperience",              :limit => 2147483647
-    t.text     "ministryTraining",                        :limit => 2147483647
-    t.text     "evangelismAttitude",                      :limit => 2147483647
+    t.text     "previousMinistryExperience",              :limit => 16777215
+    t.text     "ministryTraining",                        :limit => 16777215
+    t.text     "evangelismAttitude",                      :limit => 16777215
     t.integer  "isEvangelismTrainable"
-    t.text     "participationExplanation",                :limit => 2147483647
+    t.text     "participationExplanation",                :limit => 16777215
     t.integer  "isFamiliarFourSpiritualLaws"
     t.integer  "hasExperienceFourSpiritualLaws"
     t.integer  "confidenceFourSpiritualLaws"
@@ -1823,61 +1822,61 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
     t.integer  "isFamiliarOtherReligions"
     t.integer  "hasExperienceOtherReligions"
     t.integer  "confidenceOtherReligions"
-    t.text     "leadershipPositions",                     :limit => 2147483647
+    t.text     "leadershipPositions",                     :limit => 16777215
     t.integer  "hasLedDiscipleshipGroup"
     t.string   "discipleshipGroupSize",                   :limit => 50
-    t.text     "leadershipEvaluation",                    :limit => 2147483647
+    t.text     "leadershipEvaluation",                    :limit => 16777215
     t.integer  "conversionMonth"
     t.integer  "conversionYear"
     t.string   "memberChurchDenomination",                :limit => 75
     t.string   "memberChurchDuration",                    :limit => 50
     t.string   "attendingChurchDenomination",             :limit => 50
     t.string   "attendingChurchDuration",                 :limit => 50
-    t.text     "attendingChurchInvolvement",              :limit => 2147483647
-    t.text     "quietTimeQuantity",                       :limit => 2147483647
-    t.text     "quietTimeDescription",                    :limit => 2147483647
-    t.text     "explanationOfSalvation",                  :limit => 2147483647
-    t.text     "explanationOfSpiritFilled",               :limit => 2147483647
+    t.text     "attendingChurchInvolvement",              :limit => 16777215
+    t.text     "quietTimeQuantity",                       :limit => 16777215
+    t.text     "quietTimeDescription",                    :limit => 16777215
+    t.text     "explanationOfSalvation",                  :limit => 16777215
+    t.text     "explanationOfSpiritFilled",               :limit => 16777215
     t.integer  "hasInvolvementSpeakingTongues"
-    t.text     "differenceIndwellingFilled",              :limit => 2147483647
+    t.text     "differenceIndwellingFilled",              :limit => 16777215
     t.integer  "hasCrimeConviction"
-    t.text     "crimeConvictionExplanation",              :limit => 2147483647
+    t.text     "crimeConvictionExplanation",              :limit => 16777215
     t.integer  "hasDrugUse"
     t.integer  "isTobaccoUser"
     t.integer  "isWillingChangeHabits"
-    t.text     "authorityResponseExplanation",            :limit => 2147483647
-    t.text     "alcoholUseFrequency",                     :limit => 2147483647
-    t.text     "alcoholUseDecision",                      :limit => 2147483647
+    t.text     "authorityResponseExplanation",            :limit => 16777215
+    t.text     "alcoholUseFrequency",                     :limit => 16777215
+    t.text     "alcoholUseDecision",                      :limit => 16777215
     t.integer  "isWillingRefrainAlcohol"
-    t.text     "unwillingRefrainAlcoholExplanation",      :limit => 2147483647
-    t.text     "drugUseExplanation",                      :limit => 2147483647
-    t.text     "tobaccoUseExplanation",                   :limit => 2147483647
+    t.text     "unwillingRefrainAlcoholExplanation",      :limit => 16777215
+    t.text     "drugUseExplanation",                      :limit => 16777215
+    t.text     "tobaccoUseExplanation",                   :limit => 16777215
     t.integer  "isWillingAbstainTobacco"
     t.integer  "hasRequestedPhoneCall"
     t.string   "contactPhoneNumber",                      :limit => 50
     t.string   "contactBestTime",                         :limit => 50
     t.string   "contactTimeZone",                         :limit => 50
-    t.text     "sexualInvolvementExplanation",            :limit => 2147483647
+    t.text     "sexualInvolvementExplanation",            :limit => 16777215
     t.integer  "hasSexualGuidelines"
-    t.text     "sexualGuidelineExplanation",              :limit => 2147483647
+    t.text     "sexualGuidelineExplanation",              :limit => 16777215
     t.integer  "isCurrentlyDating"
-    t.text     "currentlyDatingLocation",                 :limit => 2147483647
+    t.text     "currentlyDatingLocation",                 :limit => 16777215
     t.integer  "hasHomosexualInvolvement"
-    t.text     "homosexualInvolvementExplanation",        :limit => 2147483647
+    t.text     "homosexualInvolvementExplanation",        :limit => 16777215
     t.integer  "hasRecentPornographicInvolvement"
     t.integer  "pornographicInvolvementMonth"
     t.integer  "pornographicInvolvementYear"
-    t.text     "pornographicInvolvementExplanation",      :limit => 2147483647
+    t.text     "pornographicInvolvementExplanation",      :limit => 16777215
     t.integer  "hasRecentSexualImmorality"
     t.integer  "sexualImmoralityMonth"
     t.integer  "sexualImmoralityYear"
-    t.text     "sexualImmoralityExplanation",             :limit => 2147483647
+    t.text     "sexualImmoralityExplanation",             :limit => 16777215
     t.integer  "hasOtherDateSinceImmorality"
-    t.text     "singleImmoralityResultsExplanation",      :limit => 2147483647
-    t.text     "marriedImmoralityResultsExplanation",     :limit => 2147483647
-    t.text     "immoralityLifeChangeExplanation",         :limit => 2147483647
-    t.text     "immoralityCurrentStrugglesExplanation",   :limit => 2147483647
-    t.text     "additionalMoralComments",                 :limit => 2147483647
+    t.text     "singleImmoralityResultsExplanation",      :limit => 16777215
+    t.text     "marriedImmoralityResultsExplanation",     :limit => 16777215
+    t.text     "immoralityLifeChangeExplanation",         :limit => 16777215
+    t.text     "immoralityCurrentStrugglesExplanation",   :limit => 16777215
+    t.text     "additionalMoralComments",                 :limit => 16777215
     t.integer  "isAwareMustRaiseSupport"
     t.integer  "isInDebt"
     t.string   "debtNature1",                             :limit => 50
@@ -1890,34 +1889,34 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
     t.string   "debtTotal3",                              :limit => 50
     t.string   "debtMonthlyPayment3",                     :limit => 50
     t.integer  "hasOtherFinancialResponsibility"
-    t.text     "otherFinancialResponsibilityExplanation", :limit => 2147483647
-    t.text     "debtPaymentPlan",                         :limit => 2147483647
-    t.text     "debtPaymentTimeframe",                    :limit => 2147483647
-    t.text     "developingPartnersExplanation",           :limit => 2147483647
+    t.text     "otherFinancialResponsibilityExplanation", :limit => 16777215
+    t.text     "debtPaymentPlan",                         :limit => 16777215
+    t.text     "debtPaymentTimeframe",                    :limit => 16777215
+    t.text     "developingPartnersExplanation",           :limit => 16777215
     t.integer  "isWillingDevelopPartners"
-    t.text     "unwillingDevelopPartnersExplanation",     :limit => 2147483647
+    t.text     "unwillingDevelopPartnersExplanation",     :limit => 16777215
     t.integer  "isCommittedDevelopPartners"
-    t.text     "uncommittedDevelopPartnersExplanation",   :limit => 2147483647
-    t.text     "personalTestimonyGrowth",                 :limit => 2147483647
-    t.text     "internshipParticipationExplanation",      :limit => 2147483647
-    t.text     "internshipObjectives",                    :limit => 2147483647
-    t.text     "currentMinistryDescription",              :limit => 2147483647
-    t.text     "personalStrengthA",                       :limit => 2147483647
-    t.text     "personalStrengthB",                       :limit => 2147483647
-    t.text     "personalStrengthC",                       :limit => 2147483647
-    t.text     "personalDevelopmentA",                    :limit => 2147483647
-    t.text     "personalDevelopmentB",                    :limit => 2147483647
-    t.text     "personalDevelopmentC",                    :limit => 2147483647
-    t.text     "personalDescriptionA",                    :limit => 2147483647
-    t.text     "personalDescriptionB",                    :limit => 2147483647
-    t.text     "personalDescriptionC",                    :limit => 2147483647
-    t.text     "familyRelationshipDescription",           :limit => 2147483647
+    t.text     "uncommittedDevelopPartnersExplanation",   :limit => 16777215
+    t.text     "personalTestimonyGrowth",                 :limit => 16777215
+    t.text     "internshipParticipationExplanation",      :limit => 16777215
+    t.text     "internshipObjectives",                    :limit => 16777215
+    t.text     "currentMinistryDescription",              :limit => 16777215
+    t.text     "personalStrengthA",                       :limit => 16777215
+    t.text     "personalStrengthB",                       :limit => 16777215
+    t.text     "personalStrengthC",                       :limit => 16777215
+    t.text     "personalDevelopmentA",                    :limit => 16777215
+    t.text     "personalDevelopmentB",                    :limit => 16777215
+    t.text     "personalDevelopmentC",                    :limit => 16777215
+    t.text     "personalDescriptionA",                    :limit => 16777215
+    t.text     "personalDescriptionB",                    :limit => 16777215
+    t.text     "personalDescriptionC",                    :limit => 16777215
+    t.text     "familyRelationshipDescription",           :limit => 16777215
     t.string   "electronicSignature",                     :limit => 90
     t.string   "ssn",                                     :limit => 50
     t.integer  "fk_ssmUserID"
     t.integer  "fk_personID"
     t.boolean  "isPaid"
-    t.decimal  "appFee",                                                        :precision => 18, :scale => 0
+    t.decimal  "appFee",                                                      :precision => 18, :scale => 0
     t.datetime "dateAppLastChanged"
     t.datetime "dateAppStarted"
     t.datetime "dateSubmitted"
@@ -3248,6 +3247,8 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
     t.text     "post_survey_message"
     t.string   "terminology",                        :default => "Survey"
     t.integer  "login_option",                       :default => 0
+    t.string   "login_paragraph"
+    t.boolean  "frozen"
   end
 
   add_index "mh_surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
@@ -4537,7 +4538,7 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
     t.datetime "updated_at"
   end
 
-  add_index "pr_email_templates", ["name"], :name => "index_pr_email_templates_on_name", :length => {"name"=>255}
+  add_index "pr_email_templates", ["name"], :name => "index_pr_email_templates_on_name", :length => {"name"=>767}
 
   create_table "pr_page_elements", :force => true do |t|
     t.integer  "page_id"
@@ -4773,6 +4774,16 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
     t.datetime "updated_at"
   end
 
+  create_table "saved_contact_searches", :force => true do |t|
+    t.string   "name"
+    t.string   "full_path"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "saved_contact_searches", ["user_id"], :name => "index_saved_contact_searches_on_user_id"
+
   create_table "school_years", :force => true do |t|
     t.string   "name"
     t.string   "level"
@@ -4990,7 +5001,7 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
     t.datetime "updated_at"
     t.datetime "last_sign_in_at"
     t.string   "locale"
-    t.binary   "emailVerified",             :limit => 255
+    t.binary   "emailVerified",             :limit => 1
     t.datetime "lastFailure"
     t.integer  "lastFailureCnt"
   end
@@ -6565,17 +6576,17 @@ ActiveRecord::Schema.define(:version => 20120118193956) do
     t.integer  "_19a"
     t.integer  "_20a"
     t.integer  "_21a"
-    t.text     "_1sa",                :limit => 2147483647
-    t.text     "_2sa",                :limit => 2147483647
-    t.text     "_3sa",                :limit => 2147483647
-    t.text     "_4sa",                :limit => 2147483647
-    t.text     "_5sa",                :limit => 2147483647
-    t.text     "_6sa",                :limit => 2147483647
+    t.text     "_1sa",                :limit => 16777215
+    t.text     "_2sa",                :limit => 16777215
+    t.text     "_3sa",                :limit => 16777215
+    t.text     "_4sa",                :limit => 16777215
+    t.text     "_5sa",                :limit => 16777215
+    t.text     "_6sa",                :limit => 16777215
     t.string   "_6sb",                :limit => 1
-    t.text     "_6sc",                :limit => 2147483647
-    t.text     "_7sa",                :limit => 2147483647
-    t.text     "_8sa",                :limit => 2147483647
-    t.text     "closingRemarks",      :limit => 2147483647
+    t.text     "_6sc",                :limit => 16777215
+    t.text     "_7sa",                :limit => 16777215
+    t.text     "_8sa",                :limit => 16777215
+    t.text     "closingRemarks",      :limit => 16777215
     t.integer  "fk_WsnApplicationID"
   end
 
