@@ -3,6 +3,7 @@ class PeopleController < ApplicationController
   before_filter :ensure_current_org
   before_filter :authorize_merge, only: [:merge, :confirm_merge, :do_merge, :merge_preview]
   before_filter :roles_for_assign
+  before_filter :org_friends, only: [:show]
   # GET /people
   # GET /people.xml
   def index
@@ -463,5 +464,10 @@ class PeopleController < ApplicationController
                   .organizational_roles
                   .where(:organization_id => current_organization)
                   .collect { |r| Role.find(r.role_id) }
+    end
+    
+    def org_friends
+      friends_person = Person.find(params[:id]).friends.collect { |f| Person.find_by_fb_uid(f.uid).nil? ? [] : Person.find_by_fb_uid(f.uid) }
+      @org_friends = friends_person & current_organization.people
     end
 end

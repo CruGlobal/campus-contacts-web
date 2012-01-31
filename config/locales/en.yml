@@ -164,6 +164,7 @@ en:
       attach_rejoicable: 'Attach a Rejoicable'
       add_comment: 'Add Comment / Update Status'
       assigned_to: 'Assigned to: %{assigned_to}'
+      persons_friends: '%{person} Friends:'
     search:
       search_placeholder: 'Search for the first name, last name or email.'
       search_title: 'Search'
