@@ -76,6 +76,7 @@ group :development, :test do
   gem 'rails-footnotes', '>= 3.7'
   # gem 'translate-rails3', :require => 'translate'
   gem 'ffaker'
+  gem 'ruby-debug19', :require => 'ruby-debug'
 end
 
 group :development do
