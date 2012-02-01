@@ -76,11 +76,7 @@ class LeadersController < ApplicationController
       end
       @person = @new_person
     end
-    current_organization.add_leader(@person)
-        # Notify the new user if we're supposed to
-    if params[:notify] == '1'
-      current_organization.notify_new_leader(@person, current_person) 
-    end
+    current_organization.add_leader(@person, current_organization, current_person)
     render :create
   end
   

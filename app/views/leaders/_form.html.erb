@@ -4,9 +4,6 @@
   <% end %>
   <label for="leader_search_name"><%= t('.name_required') %></label>
   
-  
   <%= render 'people/person_form', :person => @person %>
-    
-  <%= check_box_tag :notify, 1, true %> <%= t('.notify') %><br/><br/>
   <%= submit_tag t('general.add'), :disable_with => t('general.adding') %>
 <% end %>
