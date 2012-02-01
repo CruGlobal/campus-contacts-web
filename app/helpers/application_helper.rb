@@ -76,4 +76,8 @@ module ApplicationHelper
       false
     end
   end
+  
+  def declare_ownership(name)
+    name.slice(-1, 1) == 's' ? "#{name}'" : "#{name}'s"
+  end
 end

@@ -265,5 +265,41 @@ class PeopleControllerTest < ActionController::TestCase
 =end
 
   end
-
+  
+  context "displaying a person's friends in their profile" do
+    setup do
+      #setup user, orgs
+      user = Factory(:user_with_auxs)
+      sign_in user
+      @org = Factory(:organization)
+      #setup the person, and non-friends
+      @person = Factory(:person_with_facebook_data)
+      assert_not_nil(@person.friends)
+      #create the person objects
+      @person1 = Factory(:person, fb_uid: 3248973)
+      @person2 = Factory(:person, fb_uid: 3343484)
+      #add them in the org
+      @org.add_contact(@person)
+      @org.add_contact(@person1)
+      @org.add_contact(@person2)
+      @request.session['current_organization_id'] = @org.id
+    end
+    
+    should "return the friends who are members of the same org as person" do
+      #simulate their friendship with @person
+      friend1 = Factory(:friend, person: @person)
+      friend2 = Factory(:friend, person: @person)
+      friend1.update_attributes(:uid => @person1.fb_uid)
+      friend2.update_attributes(:uid => @person2.fb_uid)
+      assert_not_nil(friend1.person)
+      assert_not_nil(friend2.person)
+      #profile view
+      get :show, { 'id' => @person.id }
+      #check the friends on the same org
+      assert_not_nil(assigns(:org_friends))
+      assert(assigns(:org_friends).include?@person1)
+      assert(assigns(:org_friends).include?@person2)
+      assert_equal(2, assigns(:org_friends).count)
+    end
+  end
 end

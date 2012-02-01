@@ -40,6 +40,7 @@ class PeopleController < ApplicationController
   def show
     @person = Person.find(params[:id])
     @assigned_tos = @person.assigned_tos.collect { |a| a.assigned_to.name }.to_sentence
+    @org_friends = Person.find(params[:id]).friends.collect { |f| Person.find_by_fb_uid(f.uid).nil? ? [] : Person.find_by_fb_uid(f.uid) } & current_organization.people
     authorize!(:read, @person)
     if can? :manage, @person
       @organizational_role = OrganizationalRole.where(organization_id: current_organization, person_id: @person, role_id: Role::CONTACT_ID).first

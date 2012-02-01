@@ -100,4 +100,17 @@
       </ul>
     </div>
   </div>
+  <div style="clear:both;"></div>
+  <div>
+    <% if @person.friends.any? %>
+      <p><b><%= t('.persons_friends',person: declare_ownership(@person.firstName)) %></b></p>
+      <% @org_friends.each do |friend| %>
+        <div style="float:left; margin-right: 5px;">
+          <%= link_to image_tag("https://graph.facebook.com/#{friend.fb_uid}/picture?type=square", alt: ''),
+          person_path(friend), target: '_blank' %>
+        </div>
+      <% end %>
+      <div style="clear:both;"></div>
+    <% end %>
+  </div>
 </div>
