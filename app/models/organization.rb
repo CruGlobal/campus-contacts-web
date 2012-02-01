@@ -119,7 +119,6 @@ class Organization < ActiveRecord::Base
       add_member(person_id)
       begin
         OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id_and_added_by_id(person_id, id, Role::LEADER_ID, current_person.id)
-        #current_organization.notify_new_leader(person, current_person)
       rescue => error
         @save_retry_count =  (@save_retry_count || 5)
         retry if( (@save_retry_count -= 1) > 0 )
