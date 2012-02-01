@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120127164524) do
+ActiveRecord::Schema.define(:version => 20120201201417) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -3247,6 +3247,7 @@ ActiveRecord::Schema.define(:version => 20120127164524) do
     t.text     "post_survey_message"
     t.string   "terminology",                        :default => "Survey"
     t.integer  "login_option",                       :default => 0
+    t.string   "login_paragraph"
     t.boolean  "frozen"
   end
 
@@ -4400,6 +4401,7 @@ ActiveRecord::Schema.define(:version => 20120127164524) do
     t.datetime "updated_at"
     t.integer  "organization_id"
     t.string   "followup_status"
+    t.integer  "added_by_id"
   end
 
   add_index "organizational_roles", ["organization_id", "role_id", "followup_status"], :name => "role_org_status"
@@ -4784,6 +4786,16 @@ ActiveRecord::Schema.define(:version => 20120127164524) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "saved_contact_searches", :force => true do |t|
+    t.string   "name"
+    t.string   "full_path"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "saved_contact_searches", ["user_id"], :name => "index_saved_contact_searches_on_user_id"
 
   create_table "school_years", :force => true do |t|
     t.string   "name"
@@ -5975,7 +5987,6 @@ ActiveRecord::Schema.define(:version => 20120127164524) do
   add_index "sp_donations", ["designation_number"], :name => "index_sp_donations_on_designation_number"
   add_index "sp_donations", ["designation_number"], :name => "sp_donations_designation_number_index"
   add_index "sp_donations", ["donation_date"], :name => "index_sp_donations_on_donation_date"
-  add_index "sp_donations", ["donation_id"], :name => "donation_id", :unique => true
 
   create_table "sp_elements", :force => true do |t|
     t.string   "kind",                      :limit => 40,                    :null => false
