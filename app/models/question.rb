@@ -228,7 +228,7 @@ class Question < Element
     if question.notify_via == "Email"
       SurveyMailer.enqueue.notify(question.leaders.collect(&:email).compact, msg)
     elsif question.notify_via == "SMS"
-     SentSms.create!(message: msg, recipient: phone_number)
+      SentSms.create!(message: msg, recipient: phone_number)
     else #send to SMS AND Email
      question.leaders.each do |l|
        SentSms.create!(message: msg, recipient: l.phone_number)
