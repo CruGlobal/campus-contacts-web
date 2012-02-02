@@ -76,7 +76,7 @@ class LeadersController < ApplicationController
       end
       @person = @new_person
     end
-    current_organization.add_leader(@person, current_organization, current_person)
+    current_organization.add_leader(@person, current_person)
     render :create
   end
   
