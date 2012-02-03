@@ -220,7 +220,7 @@ class Question < Element
   
   def send_notifications(question, person, answer)
     short_profile_link = BITLY_CLIENT.shorten(Rails.application.routes.url_helpers.person_url(person.id, 
-    :host => APP_CONFIG['bitly_host'], :port => APP_CONFIG['bitly_port'], :only_path => false)).short_url
+    :host => APP_CONFIG['bitly_host'] || 'www.missionhub.com', :port => APP_CONFIG['bitly_port'] || 80, :only_path => false)).short_url
     
     msg = "#{person.name} (#{person.phone_number}, #{person.email}) just replied to a survey with #{answer}.
     Profile link: #{short_profile_link}"
