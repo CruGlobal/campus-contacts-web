@@ -1,15 +1,15 @@
 require 'vpim/vcard'
 require 'vpim/book'
 require 'ccc/person'
- 
+
 class Person < ActiveRecord::Base
   include Ccc::Person
   set_table_name 'ministry_person'
   set_primary_key 'personID'
-  
+
   belongs_to :user, class_name: 'User', foreign_key: 'fk_ssmUserId'
   has_many :phone_numbers
-  
+
   has_one :primary_phone_number, class_name: "PhoneNumber", foreign_key: "person_id", conditions: {primary: true}
   has_many :locations
   has_one :latest_location, order: "updated_at DESC", class_name: 'Location'
@@ -26,28 +26,28 @@ class Person < ActiveRecord::Base
   has_many :assigned_contacts, through: :contact_assignments, source: :assigned_to
   has_one :current_address, class_name: "Address", foreign_key: "fk_PersonID", conditions: {addressType: 'current'}
   has_many :rejoicables, inverse_of: :created_by
-  
+
   has_many :organization_memberships, inverse_of: :person
   has_many :organizational_roles
   has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role::CONTACT_ID}", uniq: true
   has_many :roles, through: :organizational_roles
-  
+
   has_many :followup_comments, :class_name => "FollowupComment", :foreign_key => "commenter_id"
   has_many :comments_on_me, :class_name => "FollowupComment", :foreign_key => "contact_id"
-  
+
   has_many :received_sms, class_name: "ReceivedSms", foreign_key: "person_id"
   has_many :sms_sessions, inverse_of: :person
-  
+
   has_one :person_photo
-  
+
   scope :who_answered, lambda {|survey_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.survey_id' => survey_id)}
   validates_presence_of :firstName
   validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, allow_blank: true
-  
+
   accepts_nested_attributes_for :email_addresses, :reject_if => lambda { |a| a[:email].blank? }, allow_destroy: true  
   accepts_nested_attributes_for :phone_numbers, :reject_if => lambda { |a| a[:number].blank? }, allow_destroy: true  
   accepts_nested_attributes_for :current_address, allow_destroy: true  
-  
+
   before_save :stamp_changed
   before_create :stamp_created
 
@@ -69,40 +69,40 @@ class Person < ActiveRecord::Base
     # [preferredName.blank? ? firstName : preferredName.try(:strip), lastName.try(:strip)].join(' ')
     [firstName.to_s, lastName.to_s.strip].join(' ')
   end
-  
+
   def facebook_url
     if fb_uid.present?
       "http://www.facebook.com/profile.php?id=#{fb_uid}"
     end
   end
-  
+
   def leader_in?(org)
     return false unless org
     OrganizationalRole.where(person_id: id, role_id: Role.leader_ids, :organization_id => org.id).present?
   end
-  
+
   def orgs_with_children
-   organizations.collect {|org|
-     org.parent ? 
-       org.parent.show_sub_orgs? ? 
-         [org] + org.children
-       : 
-         [org] 
-     : 
-       org.show_sub_orgs? ?
-         [org] + org.children
-       :
-         [org]
-   }.flatten.uniq_by{ |o| o.id }
-  
+    organizations.collect {|org|
+      org.parent ? 
+        org.parent.show_sub_orgs? ? 
+        [org] + org.children
+      : 
+        [org] 
+      : 
+        org.show_sub_orgs? ?
+        [org] + org.children
+      :
+        [org]
+    }.flatten.uniq_by{ |o| o.id }
+
     #organizations.collect {|top_org| top_org.parent ? (top_org.show_sub_orgs? ? top_org.children + top_org.descendants : [])
     #  : ([top_org])
     #}.flatten
   end
-  
+
   def phone_number
     @phone_number = primary_phone_number.try(:number)
-    
+
     unless @phone_number
       if phone_numbers.present?
         @phone_number = phone_numbers.first.try(:number)
@@ -121,11 +121,11 @@ class Person < ActiveRecord::Base
     end
     @phone_number.to_s
   end
-  
+
   def pretty_phone_number
     primary_phone_number.try(:pretty_number)
   end
-  
+
   def phone_number=(val)
     if val.is_a?(Hash)
       self.phone_number = val[:number]
@@ -142,15 +142,15 @@ class Person < ActiveRecord::Base
     end
     val
   end
-  
+
   def name 
     [firstName, lastName].collect(&:to_s).join(' ') 
   end
-  
+
   # def firstName
   #   preferredName.blank? ? self[:firstName].try(:strip) : preferredName.try(:strip)
   # end
-  
+
   def self.create_from_facebook(data, authentication, response = nil)
     if response.nil?
       response = MiniFB.get(authentication['token'], authentication['uid'])
@@ -161,7 +161,7 @@ class Person < ActiveRecord::Base
     new_person.update_from_facebook(data, authentication, response)
     new_person
   end
-  
+
   def update_from_facebook(data, authentication, response = nil)
     begin
       response = MiniFB.get(authentication['token'], authentication['uid']) if response.nil?
@@ -191,7 +191,7 @@ class Person < ActiveRecord::Base
     save(validate: false)
     self
   end
-  
+
   def gender=(gender)
     if ['male','female'].include?(gender.to_s.downcase)
       self[:gender] = gender.downcase == 'male' ? '1' : '0'
@@ -199,7 +199,7 @@ class Person < ActiveRecord::Base
       self[:gender] = gender
     end
   end
-  
+
   def gender
     if ['1','0'].include?(self[:gender])
       self[:gender] == '1' ? 'male' : 'female'
@@ -207,7 +207,7 @@ class Person < ActiveRecord::Base
       self[:gender]
     end
   end
-  
+
   def email
     @email = primary_email_address.try(:email)
     unless @email
@@ -227,7 +227,7 @@ class Person < ActiveRecord::Base
     end
     @email.to_s
   end
-  
+
   def email=(val)
     return if val.blank?
     existing = email_addresses.where(email: val).first
@@ -242,15 +242,15 @@ class Person < ActiveRecord::Base
       email.save
     end
   end
-  
+
   def email_address=(hash)
     self.email = hash['email']
   end
-  
+
   def get_friends(authentication, response = nil)
     if friends.count == 0 
       if response.nil?
-         @friends = MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
+        @friends = MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
       else @friends = response
       end
       @friends["data"].each do |friend|
@@ -260,7 +260,7 @@ class Person < ActiveRecord::Base
     end
     @friends["data"].length  #return how many friend you got from facebook for testing
   end
-  
+
   def update_friends(authentication, response = nil)
     if response.nil?
       @friends = MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
@@ -271,38 +271,38 @@ class Person < ActiveRecord::Base
     @create = []
     @match = []
     @dbf = friends.reload
-           
+
     @friends.each do |friend|
-     @dbf.each do |dbf|
-       if dbf['uid'] == friend.id
-         @matching_friend = dbf if dbf['uid'] == friend.id
-         break
-       end
-       @matching_friend = nil
-     end
-     if @matching_friend
-       the_friend = friends.find_by_uid(@matching_friend.uid)
-       the_friend.update_attributes(name: friend['name']) unless @matching_friend.name.eql?(friend['name'])
-       @match.push(@matching_friend.uid)
-     elsif friends.find_by_uid(friend.id).nil? #uid's did not match && the DB is empty
-       the_friend = friends.create!(uid: friend['id'], name: friend['name'], person_id: personID.to_i, provider: "facebook")
-       @create.push(friend['id'])
-     end
-     the_friend.follow!(self) unless the_friend.following?(self)
-   end
-   @dbf = friends.reload
-   
-   @dbf.each do |dbf|
-     if !( @match.include?(dbf.uid) || @create.include?(dbf.uid) )
-       friend_to_delete = friends.select('id').where("uid = ?", dbf.uid).first
-       id_to_destroy = friend_to_delete['id'].to_i
-       Friend.destroy(id_to_destroy)
-       @removal.push(dbf.uid)
-     end
-   end
-   @removal.length + @create.length  #create way to test how many changes were made
+      @dbf.each do |dbf|
+        if dbf['uid'] == friend.id
+          @matching_friend = dbf if dbf['uid'] == friend.id
+          break
+        end
+        @matching_friend = nil
+      end
+      if @matching_friend
+        the_friend = friends.find_by_uid(@matching_friend.uid)
+        the_friend.update_attributes(name: friend['name']) unless @matching_friend.name.eql?(friend['name'])
+        @match.push(@matching_friend.uid)
+      elsif friends.find_by_uid(friend.id).nil? #uid's did not match && the DB is empty
+        the_friend = friends.create!(uid: friend['id'], name: friend['name'], person_id: personID.to_i, provider: "facebook")
+        @create.push(friend['id'])
+      end
+      the_friend.follow!(self) unless the_friend.following?(self)
+    end
+    @dbf = friends.reload
+
+    @dbf.each do |dbf|
+      if !( @match.include?(dbf.uid) || @create.include?(dbf.uid) )
+        friend_to_delete = friends.select('id').where("uid = ?", dbf.uid).first
+        id_to_destroy = friend_to_delete['id'].to_i
+        Friend.destroy(id_to_destroy)
+        @removal.push(dbf.uid)
+      end
+    end
+    @removal.length + @create.length  #create way to test how many changes were made
   end
-  
+
   def get_interests(authentication, response = nil)
     if response.nil?
       @interests = MiniFB.get(authentication['token'], authentication['uid'],type: "interests")
@@ -319,7 +319,7 @@ class Person < ActiveRecord::Base
     end
     interests.count
   end
-  
+
   def get_location(authentication, response = nil)
     if response.nil?
       @location = MiniFB.get(authentication['token'], authentication['uid']).location
@@ -327,7 +327,7 @@ class Person < ActiveRecord::Base
     end
     Location.find_or_create_by_location_id_and_name_and_person_id_and_provider(@location['id'], @location['name'], personID.to_i,"facebook") unless @location.nil?
   end
-  
+
   def get_education_history(authentication, response = nil)
     if response.nil?
       @education = MiniFB.get(authentication['token'], authentication['uid']).education
@@ -355,11 +355,25 @@ class Person < ActiveRecord::Base
       end
     end
   end  
-  
+
   def contact_friends(org)
     Person.where(fb_uid: friends.select(:uid).collect(&:uid)).joins(:organizational_roles).where('organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.organization_id' => org.id)
   end
-  
+
+  def smart_merge(other)
+    if user && other.user
+      user.merge(other.user)
+      return self
+    elsif other.user
+      other.merge(self)
+      return other
+    else
+      merge(other)
+      return self
+    end
+
+  end
+
   def merge(other)
     # Phone Numbers
     phone_numbers.each do |pn|
@@ -463,9 +477,9 @@ class Person < ActiveRecord::Base
     # SMS stuff
     other.received_sms.collect {|as| as.update_column(:person_id, id)}
     other.sms_sessions.collect {|as| as.update_column(:person_id, id)}
-    
-    
-    
+
+
+
     super
   end
 
@@ -475,14 +489,14 @@ class Person < ActiveRecord::Base
     hash['name'] = self.to_s.gsub(/\n/," ")
     hash
   end
-  
+
   def to_hash_micro_leader
-   hash = to_hash_mini
-   hash['picture'] = picture unless fb_uid.nil?
-   hash['num_contacts'] = assigned_contacts.count
-   hash 
+    hash = to_hash_mini
+    hash['picture'] = picture unless fb_uid.nil?
+    hash['num_contacts'] = assigned_contacts.count
+    hash 
   end
-  
+
   def to_hash_mini_leader(org_id)
     hash = to_hash_micro_leader
     hash['organizational_roles'] = []
@@ -498,7 +512,7 @@ class Person < ActiveRecord::Base
     end.compact
     hash
   end
-  
+
   def to_hash_assign(organization = nil)
     hash = self.to_hash_mini
     assign_hash = nil
@@ -512,7 +526,7 @@ class Person < ActiveRecord::Base
     hash['assignment'] = assign_hash unless assign_hash.nil?
     hash
   end
-  
+
   def to_hash_basic(organization = nil)
     hash = self.to_hash_assign(organization)
     hash['gender'] = gender
@@ -536,7 +550,7 @@ class Person < ActiveRecord::Base
     end.compact
     hash
   end
-  
+
   def to_hash(organization = nil)
     hash = self.to_hash_basic(organization)
     hash['first_name'] = firstName.to_s.gsub(/\n/," ")
@@ -551,12 +565,12 @@ class Person < ActiveRecord::Base
     hash['organization_membership'] = organizations.collect(&:self_and_children).flatten.collect {|org| {org_id: org.id, primary: (primary_organization == org).to_s, name: org.name}}
     hash
   end
-  
+
   def async_get_or_update_friends_and_interests(authentication)
     Resque.enqueue(Jobs::UpdateFB, self.id, authentication,'friends')
     Resque.enqueue(Jobs::UpdateFB, self.id, authentication,'interests')
   end
-  
+
   def picture
     if person_photo
       Rails.env.development? ? "http://local.missionhub.com/#{person_photo.image.url}" : "http://www.missionhub.com/#{person_photo.image.url}"
@@ -564,7 +578,7 @@ class Person < ActiveRecord::Base
       "http://graph.facebook.com/#{fb_uid}/picture"
     end
   end
-  
+
   def create_user!
     reload
     if email.present? && primary_email_address.valid?
@@ -591,7 +605,7 @@ class Person < ActiveRecord::Base
   # def updated_by() changedBy end
   def created_at() dateCreated end
   def created_by() createdBy end
-    
+
   def stamp_changed
     self.dateChanged = Time.now
     self.changedBy = ApplicationController.application_name
@@ -600,7 +614,7 @@ class Person < ActiveRecord::Base
     self.dateCreated = Time.now
     self.createdBy = ApplicationController.application_name
   end
-  
+
   def self.new_from_params(person_params = nil)
     person_params = person_params.with_indifferent_access || {}
     person_params[:email_address] ||= {}
@@ -609,8 +623,8 @@ class Person < ActiveRecord::Base
     email_address = person_params[:email_address][:email]
     if email_address.present?
       person = EmailAddress.find_by_email(email_address).try(:person) ||
-                Address.find_by_email(email_address).try(:person) ||
-                User.find_by_username(email_address).try(:person) 
+        Address.find_by_email(email_address).try(:person) ||
+        User.find_by_username(email_address).try(:person) 
     end
     person ||= Person.new(person_params.except(:email_address, :phone_number))
     email = (person.email_addresses.find_by_email(email_address) || person.email_addresses.new(email: email_address)) if email_address.present? 
@@ -623,7 +637,7 @@ class Person < ActiveRecord::Base
     end
     [person, email, phone]
   end
-  
+
   def do_not_contact(organizational_role_id)
     organizational_role = OrganizationalRole.find(organizational_role_id)
     organizational_role.followup_status = 'do_not_contact'
@@ -638,18 +652,18 @@ class Person < ActiveRecord::Base
   def assigned_organizational_roles(organizations)
     roles.where('organizational_roles.organization_id' => organizations)
   end
-  
+
   def self.vcard(ids)
     ids = Array.wrap(ids)
     book = Vpim::Book.new
     Person.includes(:current_address, :primary_phone_number, :primary_email_address).find(ids).each do |person|
-     book << person.vcard
+      book << person.vcard
     end
     book
   end
-  
+
   def vcard
-    
+
     card = Vpim::Vcard::Maker.make2 do |maker|
       maker.add_name do |name|
         name.prefix = ''
@@ -668,7 +682,7 @@ class Person < ActiveRecord::Base
           addr.country = current_address.country if current_address.country.present?
         end
       end
-      
+
       maker.birthday = birth_date if birth_date
       maker.add_tel(phone_number) if phone_number != ''
       if email != ''
@@ -678,6 +692,6 @@ class Person < ActiveRecord::Base
         end  
       end
     end
-        
+
   end  
 end

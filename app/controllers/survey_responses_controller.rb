@@ -76,13 +76,7 @@ class SurveyResponsesController < ApplicationController
         @person_from_email = EmailAddress.find_by_email(params[:person][:email]).try(:person) || Address.find_by_email(params[:person][:email]).try(:person)
         if @person
           if @person != @person_from_email
-            if @person.user && @person_from_email.user
-              @person_from_email.user.merge(@person.user)
-            elsif @person.user
-              @person.user.merge(@person_from_email.user)
-            else
-              @person_from_email.merge(@person)
-            end
+            @person = @person_from_email.smart_merge(@person)
           end
         else
           @person = @person_from_email
