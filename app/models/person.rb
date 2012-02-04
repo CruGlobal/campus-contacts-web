@@ -151,6 +151,10 @@ class Person < ActiveRecord::Base
   #   preferredName.blank? ? self[:firstName].try(:strip) : preferredName.try(:strip)
   # end
 
+  def self.find_from_facebook(data, authentication)
+    EmailAddress.find_by_email(data.email).try(:person) if data.email.present?
+  end
+
   def self.create_from_facebook(data, authentication, response = nil)
     if response.nil?
       response = MiniFB.get(authentication['token'], authentication['uid'])
@@ -221,7 +225,6 @@ class Person < ActiveRecord::Base
           new_record? ? email_addresses.new(:email => @email, :primary => true) : email_addresses.create(:email => @email, :primary => true) if @email
         rescue ActiveRecord::RecordNotUnique
           reload
-          return self.email
         end
       end
     end
@@ -375,6 +378,7 @@ class Person < ActiveRecord::Base
   end
 
   def merge(other)
+    return self if other.nil?
     # Phone Numbers
     phone_numbers.each do |pn|
       opn = other.phone_numbers.detect {|oa| oa.number == pn.number && oa.extension == pn.extension}
