@@ -378,7 +378,7 @@ class Person < ActiveRecord::Base
   end
 
   def merge(other)
-    return self if other.nil?
+    return self if other.nil? || other == self
     # Phone Numbers
     phone_numbers.each do |pn|
       opn = other.phone_numbers.detect {|oa| oa.number == pn.number && oa.extension == pn.extension}

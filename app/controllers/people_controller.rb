@@ -147,7 +147,7 @@ class PeopleController < ApplicationController
 
           # we need a valid email address to make a leader
           if role_ids.include?(Role::LEADER_ID) || role_ids.include?(Role::ADMIN_ID)
-            @new_person = @person.create_user! if @email.present? # create a user account if we have an email address
+            @new_person = @person.create_user! if @email.present? && @person.user.nil? # create a user account if we have an email address
             if @new_person && @new_person.save
               @person = @new_person
               current_organization.notify_new_leader(@person, current_person) 
