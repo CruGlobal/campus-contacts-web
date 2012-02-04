@@ -145,7 +145,9 @@ class ApplicationController < ActionController::Base
   end
   
   def current_person
-    current_user.person
+    @current_person = current_user.person if current_user
+    @current_person ||= Person.find_by_personID(session[:person_id])
+    @current_person
   end
   helper_method :current_person
   

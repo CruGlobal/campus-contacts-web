@@ -367,7 +367,7 @@ class Person < ActiveRecord::Base
       pn.merge(opn) if opn
     end
     other.phone_numbers.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
-    
+
     # Locations
     other.locations.each do |location|
       if location_ids.include?(location.id)
@@ -376,7 +376,7 @@ class Person < ActiveRecord::Base
         location.update_column(:person_id, id)
       end
     end
-    
+
     # Locations
     other.friends.each do |friend|
       if friend_ids.include?(friend.id)
@@ -387,7 +387,7 @@ class Person < ActiveRecord::Base
         rescue; end
       end
     end
-    
+
     # Interests
     other.interests.each do |i|
       if interest_ids.include?(i.id)
@@ -396,7 +396,7 @@ class Person < ActiveRecord::Base
         i.update_column(:person_id, id)
       end
     end
-    
+
     # Edudation Histories
     other.education_histories.each do |eh|
       if education_history_ids.include?(eh.id)
@@ -405,17 +405,17 @@ class Person < ActiveRecord::Base
         eh.update_column(:person_id, id)
       end
     end
-    
+
     # Followup Comments
     other.followup_comments.each do |fc|
       fc.update_column(:commenter_id, id)
     end
-    
+
     # Comments on me
     other.comments_on_me.each do |fc|
       fc.update_column(:contact_id, id)
     end
-    
+
     # Email Addresses
     email_addresses.each do |pn|
       opn = other.email_addresses.detect {|oa| oa.email == pn.email}
@@ -433,14 +433,14 @@ class Person < ActiveRecord::Base
         end
       end
     end
-    
+
     # Organization Memberships
     organization_memberships.each do |pn|
       opn = other.organization_memberships.detect {|oa| oa.organization_id == pn.organization_id}
       pn.merge(opn) if opn
     end
     other.organization_memberships.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
-    
+
     # Organizational Roles
     organizational_roles.each do |pn|
       opn = other.organizational_roles.detect {|oa| oa.organization_id == pn.organization_id}
@@ -453,13 +453,13 @@ class Person < ActiveRecord::Base
         role.destroy
       end
     end
-    
+
     # Answer Sheets
     other.answer_sheets.collect {|as| as.update_column(:person_id, id)}
-    
+
     # Contact Assignments
     other.contact_assignments.collect {|as| as.update_column(:assigned_to_id, id)}
-    
+
     # SMS stuff
     other.received_sms.collect {|as| as.update_column(:person_id, id)}
     other.sms_sessions.collect {|as| as.update_column(:person_id, id)}
