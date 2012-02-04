@@ -77,9 +77,11 @@ class SurveyResponsesController < ApplicationController
         if @person
           if @person != @person_from_email
             if @person.user && @person_from_email.user
+              @person_from_email.user.merge(@person.user)
+            elsif @person.user
               @person.user.merge(@person_from_email.user)
             else
-              @person.merge(@person_from_email)
+              @person_from_email.merge(@person)
             end
           end
         else
