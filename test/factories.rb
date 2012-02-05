@@ -263,7 +263,6 @@ FactoryGirl.define do
     kind             'TextField'
     label            'Sample question'
     style            'short'
-    advanced_options  true
   end
   
   factory :question_leader do

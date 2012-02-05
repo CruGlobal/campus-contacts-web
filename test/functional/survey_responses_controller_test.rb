@@ -124,7 +124,7 @@ class SurveyResponsesControllerTest < ActionController::TestCase
       
       @survey = Factory(:survey, organization: @organization)
       @keyword = Factory(:approved_keyword, organization: @organization, survey: @survey)
-      @notify_q = Factory(:choice_field, advanced_options: true, notify_via: "Both", trigger_words: "Jesus")
+      @notify_q = Factory(:choice_field, notify_via: "Both", trigger_words: "Jesus")
       @survey.questions << @notify_q
       @questions = @survey.questions
       assert_equal(@questions.count, 1)

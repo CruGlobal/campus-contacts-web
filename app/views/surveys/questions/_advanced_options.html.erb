@@ -1,4 +1,4 @@
-<div id="advanced_options" style="<%= 'display:none' unless q.advanced_options %>">
+<div id="advanced_options" style="<%= 'display:none' if q.trigger_words.blank? %>">
   <label><%= t('.leaders') %></label><br/>
   
   <%= select_tag 'leaders[]',

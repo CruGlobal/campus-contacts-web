@@ -60,11 +60,9 @@ class Surveys::QuestionsController < ApplicationController
       type, style = params[:question_type].split(':')
       @question = type.constantize.create!(params[:question].merge(style: style))
       
-      if params[:question][:advanced_options] == "1"
-        unless params[:leaders].nil?
-          params[:leaders].each do |l|
-            QuestionLeader.create!(:person_id => l, :element_id => @question.id)
-          end
+      unless params[:leaders].nil?
+        params[:leaders].each do |l|
+          QuestionLeader.create!(:person_id => l, :element_id => @question.id)
         end
       end
     end

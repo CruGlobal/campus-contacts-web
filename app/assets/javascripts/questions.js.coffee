@@ -79,6 +79,7 @@ $ ->
     
   $('#advanced_toggle').click ->
     $('#advanced_options').toggle()
+    false
     
   $('#move_right').live 'click', ->
    alert $('#leaders_').html()
