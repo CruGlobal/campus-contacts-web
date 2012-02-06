@@ -301,7 +301,6 @@ en:
     new: 
       create_a_survey: "Create a Survey"
     form:
-      login_paragraph_placeholder: "Login paragraph should be welcoming"
       title_placeholder: "Shorter titles are better"
       post_survey_placeholder: "Example: Thank you for your time! If you're interested in Cru, we meet at Moore Auditorium every Thursday @ 8PM"
       post_survey_message: 'What message would you like to show after the person has completed the survey?'

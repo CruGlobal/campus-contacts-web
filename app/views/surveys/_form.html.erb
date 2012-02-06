@@ -18,7 +18,7 @@
         <label for="survey_login_paragraph">
           <%= t('.login_paragraph') + ": " + t('.login_paragraph_tip') %>
         </label>
-        <%= f.text_field :login_paragraph, :placeholder => t('.login_paragraph_placeholder') %>
+        <%= f.text_area :login_paragraph, rows: 3, :placeholder =>  t('sessions.new.login_paragraph_mhub') %>
       </div>
     </div>
   </div>
@@ -58,7 +58,7 @@
     <div class="stepcontent">
       <div class="field">
         <%= f.label :post_survey_message, t('.post_survey_message') %>
-        <%= f.text_area :post_survey_message, rows: 5, :placeholder => t('.post_survey_placeholder') %>
+        <%= f.text_area :post_survey_message, rows: 3, :placeholder => t('.post_survey_placeholder') %>
       </div>
     </div>
   </div>
