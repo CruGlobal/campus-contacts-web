@@ -1,7 +1,7 @@
 <% if mhub? %>
   <center>
     <% if !@survey || @survey.login_option == 0 %>
-      <%= @survey.login_paragraph.blank? ? t('.login_paragraph_mhub') : @survey.login_paragraph %>
+      <%= @survey && @survey.login_paragraph.present? ?  @survey.login_paragraph : t('.login_paragraph_mhub') %>
       <br><br>
       <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook_mhub), rel: 'external') %>
       <br/>    
