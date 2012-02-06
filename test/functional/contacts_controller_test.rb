@@ -125,8 +125,9 @@ class ContactsControllerTest < ActionController::TestCase
     context "When user is leader" do
       setup do
         @user = Factory(:user_with_auxs)
+        @user2 = Factory(:user_with_auxs)
         org = Factory(:organization)
-        Factory(:organizational_role, person: @user.person, role: Role.leader, organization: org)
+        Factory(:organizational_role, person: @user.person, role: Role.leader, organization: org, :added_by_id => @user2.person.id)
         sign_in @user
         @request.session[:current_organization_id] = org.id
       end

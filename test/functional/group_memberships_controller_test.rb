@@ -55,8 +55,9 @@ class GroupMembershipsControllerTest < ActionController::TestCase
     context "user has no permissions" do
       setup do
         user = Factory(:user_with_auxs)
+        user2 = Factory(:user_with_auxs)
         sign_in user
-        @org.add_leader(user.person)
+        @org.add_leader(user.person, user2.person)
       end
       
       should "fail to assign a single user to a group" do
