@@ -447,7 +447,8 @@ class PeopleController < ApplicationController
       
       @q = @q.search(params[:q])
       @q.sorts = sort_by if @q.sorts.empty?
-      @all_people = @q.result(distinct: false)
+      @all_people = @q.result(distinct: false).order(params[:q] && params[:q][:s] ? params[:q][:s] : 
+      sort_by)
       @people = @all_people.page(params[:page])
     end
     
