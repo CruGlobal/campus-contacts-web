@@ -4,8 +4,8 @@ class Api::PhotosController < ApiController
 
   def create_2
     person = Person.find(params[:contact_id])
-    person.photo = params[:photo]
-    person.save
+    person.person_photo = PersonPhoto.create(image: params[:image])
+    
     render nothing: true
   end
   

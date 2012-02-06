@@ -2,13 +2,18 @@ require 'csv'
 class PeopleController < ApplicationController
   before_filter :ensure_current_org
   before_filter :authorize_merge, only: [:merge, :confirm_merge, :do_merge, :merge_preview]
+  before_filter :roles_for_assign
   # GET /people
   # GET /people.xml
   def index
     authorize! :read, Person
     fetch_people(params)
-  
-    @roles = current_organization.roles
+                                     
+    if current_user_roles.include? Role.find(1)                           
+      @roles = current_organization.roles
+    else
+      @roles = current_organization.roles.delete_if { |r| r == Role.find(1) }
+    end
 
     # respond_to do |format|
     #   format.html # index.html.erb
@@ -35,6 +40,7 @@ class PeopleController < ApplicationController
   def show
     @person = Person.find(params[:id])
     @assigned_tos = @person.assigned_tos.collect { |a| a.assigned_to.name }.to_sentence
+    @org_friends = Person.find(params[:id]).friends.collect { |f| Person.find_by_fb_uid(f.uid).nil? ? [] : Person.find_by_fb_uid(f.uid) } & current_organization.people
     authorize!(:read, @person)
     if can? :manage, @person
       @organizational_role = OrganizationalRole.where(organization_id: current_organization, person_id: @person, role_id: Role::CONTACT_ID).first
@@ -141,7 +147,7 @@ class PeopleController < ApplicationController
 
           # we need a valid email address to make a leader
           if role_ids.include?(Role::LEADER_ID) || role_ids.include?(Role::ADMIN_ID)
-            @new_person = @person.create_user! if @email.present? # create a user account if we have an email address
+            @new_person = @person.create_user! if @email.present? && @person.user.nil? # create a user account if we have an email address
             if @new_person && @new_person.save
               @person = @new_person
               current_organization.notify_new_leader(@person, current_person) 
@@ -258,7 +264,12 @@ class PeopleController < ApplicationController
   end
 
   def update_roles
-    authorize! :manage, current_organization
+    if current_user_roles.include? Role.find(1)
+      authorize! :manage, current_organization
+    else
+      authorize! :lead, current_organization
+    end
+    
     data = ""
     
     person = Person.find(params[:person_id])
@@ -447,5 +458,11 @@ class PeopleController < ApplicationController
     def authorize_merge
       authorize! :merge, Person
     end
-
+    
+    def current_user_roles
+      current_user.person
+                  .organizational_roles
+                  .where(:organization_id => current_organization)
+                  .collect { |r| Role.find(r.role_id) }
+    end
 end

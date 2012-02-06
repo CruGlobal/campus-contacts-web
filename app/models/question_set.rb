@@ -41,7 +41,11 @@ class QuestionSet
   def save
     AnswerSheet.transaction do
       @questions.each do |question|
-        question.save_response(@answer_sheet)
+        unless question.trigger_words.nil?
+          question.save_response(@answer_sheet, question)
+        else
+          question.save_response(@answer_sheet)
+        end
       end
     end
   end

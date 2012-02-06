@@ -8,7 +8,7 @@
       <% if @survey %>
         <div class="info"><br/><br/>
           <center>
-            <%= t('.dont_like_faceook') %>
+            <%= t('.dont_like_facebook') %>
             <%= link_to(t('.skip_facebook'), session[:return_to] ? add_params(session[:return_to], :nologin => true) : 
             "/s/#{@survey.id}?nologin=true") %>
           </center>

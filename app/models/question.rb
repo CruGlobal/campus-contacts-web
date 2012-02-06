@@ -188,12 +188,21 @@ class Question < Element
   end
   
   # save this question's @answers to database
-  def save_response(answer_sheet)
+  def save_response(answer_sheet, question = nil)
     unless @answers.nil?
       for answer in @answers
         if answer.is_a?(Answer)
           answer.answer_sheet_id = answer_sheet.id
           answer.save!
+          
+          unless question.nil?
+            question.trigger_words.split(",").each do |t|
+              if answer.value.include? t
+                send_notifications(question, answer_sheet.person, answer.value)
+              end
+            end
+          end
+          
         end
       end
     end
@@ -207,6 +216,38 @@ class Question < Element
     end
   rescue TypeError
     raise answer.inspect
+  end
+  
+  def send_notifications(question, person, answer)
+    msg = generate_notification_msg(person, answer, shorten_link(person.id))
+
+    if question.notify_via == "Email"
+      send_email_to_leaders(question.leaders, msg)
+    elsif question.notify_via == "SMS"
+      send_sms_to_leaders(question.leaders, msg)
+    else #send to SMS AND Email
+      send_sms_to_leaders(question.leaders, msg)
+      send_email_to_leaders(question.leaders, msg)
+    end
+  end
+
+  def send_sms_to_leaders(leaders, msg)
+    leaders.each do |l|
+      SentSms.create!(message: msg, recipient: l.phone_number)
+    end
+  end
+
+  def send_email_to_leaders(leaders, msg)
+    SurveyMailer.enqueue.notify(leaders.collect(&:email).compact, msg)
+  end
+
+  def shorten_link(id)
+    short_profile_link = BITLY_CLIENT.shorten(Rails.application.routes.url_helpers.person_url(id, 
+    :host => APP_CONFIG['bitly_host'] || 'www.missionhub.com', :port => APP_CONFIG['bitly_port'] || 80, :only_path => false)).short_url
+  end
+
+  def generate_notification_msg(person, answer, link)
+   "#{person.name} (#{person.phone_number}, #{person.email}) just replied to a survey with #{answer}. Profile link: #{link}"
   end
   
   # has any sort of non-empty response?

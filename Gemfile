@@ -57,6 +57,8 @@ gem 'i18n-js'                                         # allow i18n on js files
 gem 'rest-client'                                     # to make FB api requests
 gem "paperclip", :git => 'http://github.com/thoughtbot/paperclip.git'
 
+gem 'bitly'
+
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
@@ -74,6 +76,7 @@ group :development, :test do
   gem 'rails-footnotes', '>= 3.7'
   # gem 'translate-rails3', :require => 'translate'
   gem 'ffaker'
+  #gem 'ruby-debug19', :require => 'ruby-debug'
 end
 
 group :development do

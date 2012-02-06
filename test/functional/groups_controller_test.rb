@@ -19,6 +19,22 @@ class GroupsControllerTest < ActionController::TestCase
     assert_response :success
     assert_template :new
   end
+  
+  context "show group details" do
+    setup do
+      user = Factory(:user_with_auxs)
+      sign_in user
+      org = Factory(:organization)
+      org.add_leader(user.person)
+      request.session[:current_organization_id] = org.id
+      @group = Factory(:group, organization: org)
+    end
+    
+    should "get show" do
+      get :show, :id => @group.id
+      assert_response(:success)
+    end
+  end
   # 
   # test "should get edit" do
   #   get :edit

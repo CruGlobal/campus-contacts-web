@@ -2,6 +2,7 @@ class Surveys::QuestionsController < ApplicationController
   before_filter :find_survey_and_authorize
   before_filter :find_question, only: [:show, :edit, :update, :destroy]
   before_filter :get_predefined
+  before_filter :get_leaders
 
   # GET /questions
   # GET /questions.xml
@@ -58,6 +59,12 @@ class Surveys::QuestionsController < ApplicationController
     else
       type, style = params[:question_type].split(':')
       @question = type.constantize.create!(params[:question].merge(style: style))
+      
+      unless params[:leaders].nil?
+        params[:leaders].each do |l|
+          QuestionLeader.create!(:person_id => l, :element_id => @question.id)
+        end
+      end
     end
     
     # If this was an archived question, unarchive it. otherwise, add it
@@ -71,8 +78,8 @@ class Surveys::QuestionsController < ApplicationController
     respond_to do |wants|
       if !@question.new_record?
         wants.html do
-          flash[:notice] = t('questions.create.notice')
-          redirect_to(:back) 
+          #flash[:notice] = t('questions.create.notice')
+          #redirect_to(:back) 
         end
         wants.xml  { render xml: @question, status: :created, location: @question }
         wants.js
@@ -146,5 +153,8 @@ class Surveys::QuestionsController < ApplicationController
     def get_predefined
       @predefined = Survey.find(APP_CONFIG['predefined_survey'])
     end
-
+    
+    def get_leaders
+      @leaders = current_organization.leaders
+    end
 end

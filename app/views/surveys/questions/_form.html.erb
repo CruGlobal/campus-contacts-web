@@ -24,8 +24,10 @@
     <div class="multiple_choice_form" style="<%= (question.new_record? || question.kind == 'TextField') ? 'display:none' : '' %>">
       <%= render 'multiple_choice_form', f: f %>
     </div>
+    <%= render 'advanced_options', f: f, q: question %>
     <div class="submit_button" style="<%= question.new_record? ? 'display:none' : '' %>">
-      <%= f.check_box :web_only, id: "web_only_#{f.object.id}", class: 'web_only' %> <%= t('.web_only') %><br /><br />
+      <%= f.check_box :web_only, id: "web_only_#{f.object.id}", class: 'web_only' %> <%= t('.web_only') %><br /><br/>
+      <%= link_to t('toggle_advanced_options'), '#', id: 'advanced_toggle' %><br/>
       <%= f.submit %>
     </div>
   <% end %>

@@ -64,7 +64,13 @@ class User < ActiveRecord::Base
       if user.person 
         user.person.update_from_facebook(data, authentication)
       else
-        user.person = Person.create_from_facebook(data, authentication)
+        existing = Person.find_from_facebook(data, authentication)
+        if existing && existing.user
+          existing.user.merge(user)
+          user = existing.user
+        else
+          user.person = existing || Person.create_from_facebook(data, authentication)
+        end
       end
     end
     user

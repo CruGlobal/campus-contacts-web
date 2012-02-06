@@ -64,7 +64,7 @@
     <%= text_field_tag :label_name, '', class: 'label_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>
     <div class="labels_list">
       <ul>
-        <% current_organization.roles.each do |role| %>
+        <% @roles_for_assign.each do |role| %>
           <li class="label" data-role="<%= role.id %>">
             <span class="name">
               <%= link_to role.to_s, '#' %>

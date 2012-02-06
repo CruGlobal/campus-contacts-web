@@ -446,10 +446,9 @@ update_persons_roles = () ->
     role_ids.push(role_id)    
 
   checked_elements = $('.id_checkbox:checked')
-
+  
   checked_elements.each ->
     person_id = $(this).val()
- 
     $.ajax
       type: 'POST',
       url: '/people/update_roles',

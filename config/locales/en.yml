@@ -164,6 +164,7 @@ en:
       attach_rejoicable: 'Attach a Rejoicable'
       add_comment: 'Add Comment / Update Status'
       assigned_to: 'Assigned to: %{assigned_to}'
+      persons_friends: '%{person} Friends:'
     search:
       search_placeholder: 'Search for the first name, last name or email.'
       search_title: 'Search'
@@ -293,6 +294,7 @@ en:
       delete_survey: "Delete survey"
       new: 'New Survey'
       edit_survey: Edit Survey
+      link: Link
       association_help: "When a contact responds to a survey, they are associated with the same team or movement as the keyword they responded to."
     edit:
       edit_survey: "Edit Survey"
@@ -315,6 +317,7 @@ en:
       fb_only_login_option: "Require Facebook login"
       skip_fb_login_option: "Present an option at the end of the survey to connect via Facebook"
       no_fb_login_option: "No login"
+      freeze: "Tick checkbox to freeze survey"
     questions:
       create:
         notice: 'Question was successfully created.'
@@ -327,6 +330,7 @@ en:
         dropdown: 'Dropdown (Choose one)'
         web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
         text_message_preview: Text Message Preview
+        toggle_advanced_options: Show Advanced Options
       multiple_choice_form:
         list_choices: 'List out the possible choices, one per line:'
       question:
@@ -343,7 +347,10 @@ en:
         add_question: Add a new question
         add_prev_question: Add a predefined or previously used question
         forced_tip: This question is required on every survey and will be pre-filled if they connect with facebook.
-      
+      advanced_options:
+        trigger_words: 'List one or more words or phrases that will trigger this notification if they appear in the
+        answer.<br/>Separate words and phrases with commas.'
+        leaders: 'Select one or more leaders to be notified when this question is answered in a certain way'
   sms_keywords:
     keyword_deleted: "Keyword has been deleted."
     index:
@@ -387,7 +394,7 @@ en:
     	  ready for use.'
       your_questions_help: "Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service."
       predefined_help: "Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided."
-
+  
   organization_mailer:
     notify_user:
       link_text: 'send us an email at support@missionhub.com'
@@ -446,7 +453,9 @@ en:
         <p>Visit %{link} to log in. Please don't share this link with anyone else.</p>
 
         <p>%{added_by}</p>
-
+  survey_mailer:
+    notify:
+      content: %{name} (%{number},%{email}) just replied to a survey with %{answer}.
   contacts:
     role_assign_success: 'Successfully assigned labels.'
     assign: Assign
@@ -532,6 +541,12 @@ en:
       bulk_vcard_email_message: 'Contacts information has been sent to '      
       contact_no_select_message: 'Please select atleast one contact.'      
       no_name_message: 'At a minimum you need to provide a first name.'
+      saved_searches: 'Saved Searches'
+      delete_this_search: "delete this search"
+      save_this_search: "save this search"
+      update_this_search: "update search name"
+      save_this_search_placeholder: "Name this search"
+      delete_confirm: "Are you sure you want to remove this search?"
     mine:
       in_progress: 'In Progress'
       completed: 'Completed'
@@ -599,6 +614,8 @@ en:
       no_answers: "%{name} has not completed any surveys"
     edit:
       title: "Edit %{name}'s Survey Answers"
+    form:
+      frozen: "Sorry. The survey '%{survey}' is currently on hold."
   date:
     formats:
       default: "%m/%d/%Y"

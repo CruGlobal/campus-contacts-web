@@ -48,7 +48,7 @@ class FollowupComment < ActiveRecord::Base
       sheet = answer_sheets.detect {|as| q.display_response(as).present?}
       "#{q.label} #{q.display_response(sheet)}" if sheet
     end
-    comment = answers.compact.join("\n")
+    comment = answers.compact.uniq.join("\n")
     unless comment.blank?
       create!(contact_id: person.id, commenter_id: person.id, organization_id: organization.id, comment: comment, status: status, created_at: timestamp)
     end

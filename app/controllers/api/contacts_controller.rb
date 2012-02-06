@@ -3,20 +3,20 @@ class Api::ContactsController < ApiController
   include ContactActions
   oauth_required scope: "contacts"
   before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization, :get_api_json_header
-  
+
   def search_1
     @keywords = get_keywords
     json_output = []
     unless (@keywords.empty? || !params[:term].present?)
       @surveys = @keywords.collect(&:survey)
       @people = Person.who_answered(@surveys).where('CONCAT(`ministry_person`.`firstName`," ", `ministry_person`.`lastName`) LIKE ? OR `ministry_person`.`lastName` LIKE ? OR CONCAT(`ministry_person`.`preferredName`," ", `ministry_person`.`lastName`) LIKE ?',"%#{params[:term]}%","%#{params[:term]}%","%#{params[:term]}%")
-      @people = paginate_filter_sort_people(@people,@organization)      
+      @people = paginate_filter_sort_people(@people,@organization)
       json_output = @people.collect {|person|  { person: person.to_hash_basic(@organization)}}
     end
     final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
     render json: final_output
   end
-  
+
   def index_1
     @keywords = get_keywords
     json_output = []
@@ -27,15 +27,15 @@ class Api::ContactsController < ApiController
     final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
     render json: final_output
   end
-  
+
   def index_2
     @people = @organization.all_contacts
     @people = limit_and_offset_object(@people)
     @people = @people.includes(:contact_assignments).includes(:organizational_roles)
-    
+
     # Filter the response
     @filters = {}
-    if params[:filters].present?   
+    if params[:filters].present?
       # Build, format, and sanitize filters hash
       params[:filters].each do |key, value|
         if value.strip.length > 0
@@ -43,7 +43,7 @@ class Api::ContactsController < ApiController
           val.length == 1 ? @filters[key] = val.first :  @filters[key] = val
         end
       end
-      
+
       # Built In Filters
       if @filters.key? 'assigned_to'
         if @filters['assigned_to'] == 'none'
@@ -53,7 +53,7 @@ class Api::ContactsController < ApiController
           if (@filters['assigned_to'].kind_of?(Array))
             val = @filters['assigned_to'].first
           end
-          if (val == val.to_i.to_s && val.to_i > 0)  
+          if (val == val.to_i.to_s && val.to_i > 0)
             @people = @people.joins(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => val)
           end
         end
@@ -80,7 +80,7 @@ class Api::ContactsController < ApiController
       if @filters.key? 'status'
         @people = @people.where("organizational_roles.followup_status" => @filters['status'])
       end
-      
+
       # Dynamic Filtering
       @filters.each do |q_id, v|
         if (q_id == q_id.to_i.to_s && q_id.to_i >= 0) #looking for question ids
@@ -103,7 +103,7 @@ class Api::ContactsController < ApiController
           else
             conditions = ["#{Answer.table_name}.question_id = ?", q_id]
             answers_conditions = []
-            v.each do |k1, v1| 
+            v.each do |k1, v1|
               unless v1.blank?
                 answers_conditions << "#{Answer.table_name}.value like ?"
                 conditions << v1
@@ -111,26 +111,26 @@ class Api::ContactsController < ApiController
             end
             if answers_conditions.present?
               conditions[0] = conditions[0] + ' AND (' + answers_conditions.join(' OR ') + ')'
-              @people = @people.joins(:answer_sheets => :answers).where(conditions) 
+              @people = @people.joins(:answer_sheets => :answers).where(conditions)
             end
           end
         end
       end
     end
-    
+
     # Sorting
     if params[:order_by].present?
       ordering = params[:order_by].split('|').collect { |i| i = i.strip }
-      
+
       ordering.each do |sort|
         order = sort.split(',').collect { |i| i = i.strip }
         on = order.first
         order.length > 1 ? dir = order.second.downcase : dir = 'asc'
-        
+
         if dir != "asc" && dir != "desc"
           dir = 'asc'
         end
-        
+
         case on
         when 'first_name'
           @people = @people.order("`#{Person.table_name}`.`firstName` #{dir}")
@@ -150,20 +150,21 @@ class Api::ContactsController < ApiController
           @people = @people.includes(:answer_sheets).order("`mh_answer_sheets`.`created_at` #{dir}")
         end
       end
-    else 
+    else
       @people = @people.order("`#{OrganizationalRole.table_name}`.`created_at` desc")
     end
-    
+
     @people = restrict_to_contact_role(@people,@organization)
+    @people = limit_and_offset_object(@people) if params[:start].present?
     
     output = @api_json_header
     output[:contacts] = @people.collect {|person| {person: person.to_hash_basic(@organization)}}
 
     final_output = Rails.env.production? ? JSON.fast_generate(output) : JSON::pretty_generate(output)
-    
+
     render json: final_output
   end
-  
+
   def show_1
     @filled_out_surveys = {}
     @answer_sheets = {}
@@ -183,7 +184,7 @@ class Api::ContactsController < ApiController
         @answer_sheets[person] = person.answer_sheets.where(survey_id: @surveys)
         #push all of the question sheet ids onto an arroy so we can build the keywords answered by all people in the request
         @all_survey_ids << @answer_sheets[person].collect(&:survey_id) unless @answer_sheets[person].empty?
-        
+
         #get all of the questions for each person and answer sheet... three dimensional because I need to know
         # the person the answer is for and the answer_sheet
         @answer_sheets[person].each do |as|
@@ -193,7 +194,7 @@ class Api::ContactsController < ApiController
         end
       end
     end
-    
+
     #flatten and uniquize all of the questions & survey_ids for display
     @all_questions = @all_questions.flatten(2).uniq
     @all_survey_ids = @all_survey_ids.flatten(3).uniq
@@ -206,7 +207,7 @@ class Api::ContactsController < ApiController
     final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
     render json: final_output
   end
-  
+
   def show_2
     @answer_sheets = {}
     @surveys = {}
@@ -222,7 +223,7 @@ class Api::ContactsController < ApiController
         #find all of the answer sheets from this person that belong to this organization
         @answer_sheets[person] = person.answer_sheets.where(survey_id: @surveys)
         @all_survey_ids << @answer_sheets[person].collect(&:survey_id) unless @answer_sheets[person].empty?
-        
+
         #get all of the questions for each person and answer sheet... three dimensional because I need to know
         # the person the answer is for and the answer_sheet
         @answer_sheets[person].each do |as|
@@ -231,16 +232,16 @@ class Api::ContactsController < ApiController
         end
       end
     end
-    
+
     @all_questions.flatten!
-    
+
     @surveys = Survey.where(id: @all_survey_ids).collect {|s| {name: s.title, id: s.id, questions: s.questions.collect {|q| q.id}}}
-    
+
     json_output = @api_json_header
-    
+
     json_output.merge!({surveys: @surveys, questions: @all_questions.collect {|q| q.attributes.slice('id', 'kind', 'label', 'style', 'required')}, people: @people.collect {|person| {person: person.to_hash(@organization), form: (@answer_sheets[person].collect {|as| @questions[person][as].collect {|q| {q: q.id, a: q.display_response(as)}}}).flatten(2).uniq}}})
     json_output[:contacts] = @people.collect {|person| {person: person.to_hash(@organization), form: (@answer_sheets[person].collect {|as| @questions[person][as].collect {|q| {q: q.id, a: q.display_response(as)}}}).flatten(2).uniq}}
-    
+
     final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
     render json: final_output
   end
@@ -248,9 +249,5 @@ class Api::ContactsController < ApiController
   def create_2
     create_contact
   end
-  
-  def leaders_2
-    render json: @organization.leaders.collect{ |p| { person: p.to_hash_basic } }
-  end
-  
+
 end

@@ -19,7 +19,7 @@
       <li><%= link_to(t('.send_email'), nil, :id => "send_bulkemail_link") %></li>	
       <li><%= link_to(t('.send_sms'), nil, :id => "send_bulksms_link") %></li>			
     </ul>
-    <% if can? :manage, current_organization %>
+    <% if (can? :manage, current_organization) || (can? :lead, current_organization) %>
       <ul class="pillmenu">
         <li><%= link_to(t('.export'), export_people_path(params.except(:action, :controller, :utf8))) %></li>
       </ul>

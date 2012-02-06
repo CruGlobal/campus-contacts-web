@@ -76,3 +76,12 @@ $ ->
   .bind 'ajax:complete', ->
     $('.question_form')[0].reset()
     $('#question_type').change()
+    
+  $('#advanced_toggle').click ->
+    $('#advanced_options').toggle()
+    false
+    
+  $('#move_right').live 'click', ->
+   alert $('#leaders_').html()
+   alert $('#current_leaders_').html()
+   $('#leaders_').children().clone(true).appendTo('#current_leaders_').selectmenu('refresh')
