@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   has_many :sms_keywords
   has_many :access_tokens, :class_name => "Rack::OAuth2::Server::AccessToken", :foreign_key => "identity"
   has_many :access_grants, :class_name => "Rack::OAuth2::Server::AccessGrant", :foreign_key => "identity"
+  has_many :saved_contact_searches
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable,

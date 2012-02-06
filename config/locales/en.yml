@@ -474,6 +474,7 @@ en:
       reminder_prompt: "Some of your leaders have contacts that haven't been followed up! Let your leaders know!"
       show_more: "Show More Leaders"
     index:
+      search_saved: 'This search has been saved'
       vcard: 'Vcard'
       add_contact: Add a Contact
       clear_search_form: 'Clear Search Form'
@@ -541,9 +542,8 @@ en:
       contact_no_select_message: 'Please select atleast one contact.'      
       no_name_message: 'At a minimum you need to provide a first name.'
       saved_searches: 'Saved Searches'
-      delete_this_search: "delete this search"
-      save_this_search: "save this search"
-      update_this_search: "update search name"
+      delete_this_search: "Delete this search"
+      save_this_search: "Save this search"
       save_this_search_placeholder: "Name this search"
       delete_confirm: "Are you sure you want to remove this search?"
     mine:

@@ -1,5 +1,4 @@
 Mh::Application.routes.draw do
-
   resources :group_labels, :only => [:create, :destroy]
 
   ActiveAdmin.routes(self)
@@ -42,6 +41,8 @@ Mh::Application.routes.draw do
   end
 
   # resources :rejoicables
+
+  resources :saved_contact_searches#, :only => [:show, :create, :edit, :destroy, :index]
 
   resources :followup_comments, :only => [:index, :create, :destroy]
 

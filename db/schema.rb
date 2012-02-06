@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120127164524) do
+ActiveRecord::Schema.define(:version => 20120125165234) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -3148,7 +3148,6 @@ ActiveRecord::Schema.define(:version => 20120127164524) do
     t.integer  "sent_teamID"
   end
 
-  add_index "ministry_activity", ["fk_targetAreaID", "strategy"], :name => "index_ministry_activity_on_fk_targetareaid_and_strategy", :unique => true
   add_index "ministry_activity", ["fk_targetAreaID"], :name => "index1"
   add_index "ministry_activity", ["fk_teamID"], :name => "index2"
   add_index "ministry_activity", ["periodBegin"], :name => "index3"
@@ -4297,28 +4296,6 @@ ActiveRecord::Schema.define(:version => 20120127164524) do
   add_index "organizations", ["importable_type", "importable_id"], :name => "index_organizations_on_importable_type_and_importable_id", :unique => true
   add_index "organizations", ["name"], :name => "index_organizations_on_name"
 
-  create_table "person_accesses", :force => true do |t|
-    t.boolean  "national_access"
-    t.boolean  "regional_access"
-    t.boolean  "ics_access"
-    t.boolean  "intern_access"
-    t.boolean  "stint_access"
-    t.boolean  "mtl_access"
-    t.integer  "person_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "person_photos", :force => true do |t|
-    t.integer  "person_id"
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
-    t.datetime "image_updated_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "phone_numbers", :force => true do |t|
     t.string   "number"
     t.string   "extension"
@@ -4333,7 +4310,7 @@ ActiveRecord::Schema.define(:version => 20120127164524) do
   end
 
   add_index "phone_numbers", ["carrier_id"], :name => "index_phone_numbers_on_carrier_id"
-  add_index "phone_numbers", ["person_id", "number"], :name => "index_phone_numbers_on_person_id_and_number"
+  add_index "phone_numbers", ["person_id", "number"], :name => "index_phone_numbers_on_person_id_and_number", :unique => true
 
   create_table "plugin_schema_info", :id => false, :force => true do |t|
     t.string  "plugin_name"
@@ -4659,6 +4636,16 @@ ActiveRecord::Schema.define(:version => 20120127164524) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "saved_contact_searches", :force => true do |t|
+    t.string   "name"
+    t.string   "full_path"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "saved_contact_searches", ["user_id"], :name => "index_saved_contact_searches_on_user_id"
 
   create_table "school_years", :force => true do |t|
     t.string   "name"
@@ -6103,12 +6090,12 @@ ActiveRecord::Schema.define(:version => 20120127164524) do
     t.string   "project_contact_role",               :limit => 40
     t.string   "project_contact_phone",              :limit => 20
     t.string   "project_contact_email",              :limit => 100
-    t.integer  "max_student_men_applicants",                         :default => 70,    :null => false
-    t.integer  "max_student_women_applicants",                       :default => 70,    :null => false
+    t.integer  "max_student_men_applicants",                         :default => 70,   :null => false
+    t.integer  "max_student_women_applicants",                       :default => 70,   :null => false
     t.integer  "max_accepted_men"
     t.integer  "max_accepted_women"
-    t.integer  "ideal_staff_men",                                    :default => 0,     :null => false
-    t.integer  "ideal_staff_women",                                  :default => 0,     :null => false
+    t.integer  "ideal_staff_men",                                    :default => 0,    :null => false
+    t.integer  "ideal_staff_women",                                  :default => 0,    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "created_by_id"
@@ -6117,7 +6104,7 @@ ActiveRecord::Schema.define(:version => 20120127164524) do
     t.integer  "current_students_women",                             :default => 0
     t.integer  "current_applicants_men",                             :default => 0
     t.integer  "current_applicants_women",                           :default => 0
-    t.integer  "year",                                                                  :null => false
+    t.integer  "year",                                                                 :null => false
     t.integer  "coordinator_id"
     t.integer  "old_id"
     t.string   "project_status"
@@ -6151,7 +6138,6 @@ ActiveRecord::Schema.define(:version => 20120127164524) do
     t.integer  "basic_info_question_sheet_id"
     t.integer  "template_question_sheet_id"
     t.integer  "project_specific_question_sheet_id"
-    t.boolean  "high_school",                                        :default => false
   end
 
   add_index "sp_projects", ["name"], :name => "sp_projects_name_index", :unique => true
@@ -6783,14 +6769,6 @@ ActiveRecord::Schema.define(:version => 20120127164524) do
 
   add_foreign_key "ministry_newaddress", "ministry_person", :name => "ministry_newaddress_ibfk_1", :column => "fk_PersonID", :primary_key => "personID", :dependent => :delete
 
-  add_foreign_key "organization_memberships", "ministry_person", :name => "organization_memberships_ibfk_1", :column => "person_id", :primary_key => "personID", :dependent => :delete
-  add_foreign_key "organization_memberships", "organizations", :name => "organization_memberships_ibfk_2", :dependent => :delete
-
-  add_foreign_key "phone_numbers", "ministry_person", :name => "phone_numbers_ibfk_1", :column => "person_id", :primary_key => "personID", :dependent => :delete
-
-  add_foreign_key "received_sms", "ministry_person", :name => "received_sms_ibfk_1", :column => "person_id", :primary_key => "personID", :dependent => :nullify
-
-  add_foreign_key "sms_keywords", "organizations", :name => "sms_keywords_ibfk_2"
   add_foreign_key "sms_keywords", "simplesecuritymanager_user", :name => "sms_keywords_ibfk_1", :column => "user_id", :primary_key => "userID", :dependent => :nullify
 
   add_foreign_key "sn_timetables", "ministry_person", :name => "sn_timetables_ibfk_1", :column => "person_id", :primary_key => "personID", :dependent => :delete

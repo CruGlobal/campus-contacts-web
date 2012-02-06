@@ -35,6 +35,10 @@
   <li><span class="name"><strong><%= link_to(t('contacts.index.my_friends'), contacts_path(assigned_to: 'friends')) %></strong></span> (<%= current_person.contact_friends(current_organization).count %>)</li>
   <li class="dnc"><span class="name"><strong><%= link_to(t('contacts.index.dnc'), contacts_path(dnc: true)) %></strong></span> (<span id="dnc_count" class="count"><%= OrganizationalRole.dnc.where(organization_id: @organization.id).count %></span>)</li>
   <li><hr /></li>
+  <li><h3><%= t('contacts.index.saved_searches') %></h3></li>
+  <% @person.user.saved_contact_searches.each do |s| %>
+    <li class="saved_search"><span class="name"><strong><%= link_to s.name, s.full_path %></strong></span> <%= link_to('x', saved_contact_search_path(s), method: :delete, remote: true, class: 'delete_leader', :confirm => t('contacts.index.delete_confirm')) %> </li>
+  <% end %>
 </ul>
 <%= render 'contacts/leader_form' %>
 <%= render 'contacts/send_reminder_form' %>
