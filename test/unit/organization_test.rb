@@ -123,13 +123,14 @@ class OrganizationTest < ActiveSupport::TestCase
   end
 
   test "add_leader(person)" do
-    @user = Factory(:user_with_auxs)  #user with a person object
-    
+    user1 = Factory(:user_with_auxs)  #user with a person object
+    user2 = Factory(:user_with_auxs)
+
     org1 = Factory(:organization)
-    person1 = Factory(:person)
-    org1.add_leader(person1, @user.person)
+
+    org1.add_leader(user2.person, user1.person)
     om = OrganizationalRole.last
-    assert_equal om.organization.to_s + om.person.to_s + om.role_id.to_s, org1.to_s + person1.to_s + Role::LEADER_ID.to_s, "Organization method add_member does not correctly add leader"
+    assert_equal om.organization.to_s + om.person.to_s + om.role_id.to_s, org1.to_s + user2.person.to_s + Role::LEADER_ID.to_s, "Organization method add_member does not correctly add leader"
   end
 
   test "add_contact(person)" do
