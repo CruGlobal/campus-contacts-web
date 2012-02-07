@@ -38,6 +38,8 @@ class Person < ActiveRecord::Base
   has_many :received_sms, class_name: "ReceivedSms", foreign_key: "person_id"
   has_many :sms_sessions, inverse_of: :person
 
+  has_many :group_memberships
+
   has_one :person_photo
 
   scope :who_answered, lambda {|survey_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.survey_id' => survey_id)}
@@ -395,7 +397,6 @@ class Person < ActiveRecord::Base
       end
     end
 
-    # Locations
     other.friends.each do |friend|
       if friend_ids.include?(friend.id)
         friend.destroy
@@ -482,7 +483,8 @@ class Person < ActiveRecord::Base
     other.received_sms.collect {|as| as.update_column(:person_id, id)}
     other.sms_sessions.collect {|as| as.update_column(:person_id, id)}
 
-
+    # Group Memberships
+    other.group_memberships.collect {|gm| gm.update_column(:person_id, id)}
 
     super
   end
