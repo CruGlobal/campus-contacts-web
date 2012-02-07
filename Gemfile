@@ -47,7 +47,7 @@ gem 'airbrake'
 gem 'cancan'
 gem 'kaminari'
 gem 'whenever'
-gem "ransack"
+gem "ransack", '0.5.8'
 gem 'deadlock_retry'
 gem 'delegate_presenter'
 
