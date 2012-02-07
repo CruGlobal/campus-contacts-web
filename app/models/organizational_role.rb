@@ -10,6 +10,7 @@ class OrganizationalRole < ActiveRecord::Base
   scope :completed, where("followup_status = 'completed' AND role_id = #{Role::CONTACT_ID}")
   # scope :uncontacted, where("followup_status = 'uncontacted' AND role_id = #{Role::CONTACT_ID}")
   before_create :set_start_date, :set_contact_uncontacted
+  after_create :notify_new_leader
   after_save :set_end_date_if_deleted
   
   
@@ -32,6 +33,19 @@ class OrganizationalRole < ActiveRecord::Base
       end
     end
   end
+
+  def notify_new_leader
+    if role_id == Role::LEADER_ID
+      added_by = Person.find(added_by_id)
+      token = SecureRandom.hex(12)
+      self.person.user.remember_token = token
+      self.person.user.remember_token_expires_at = 1.month.from_now
+      self.person.user.save(validate: false)
+      LeaderMailer.added(self.person, added_by, self.organization, token).deliver
+    end
+  end
+
+
   private
     def set_start_date
       self.start_date = Date.today

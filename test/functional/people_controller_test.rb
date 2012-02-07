@@ -164,8 +164,9 @@ class PeopleControllerTest < ActionController::TestCase
     context "When user is leader" do
       setup do
         @user = Factory(:user_with_auxs)
+        user2 = Factory(:user_with_auxs)
         @org = Factory(:organization)
-        org_role = Factory(:organizational_role, organization: @org, person: @user.person, role: Role.leader)
+        org_role = Factory(:organizational_role, organization: @org, person: @user.person, role: Role.leader, :added_by_id => user2.person.id)
         
         sign_in @user
         @request.session[:current_organization_id] = @org.id

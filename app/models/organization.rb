@@ -114,11 +114,11 @@ class Organization < ActiveRecord::Base
       OrganizationMembership.find_or_create_by_person_id_and_organization_id(person_id, id) 
     end
 
-    def add_leader(person)
+    def add_leader(person, current_person)
       person_id = person.is_a?(Person) ? person.id : person
       add_member(person_id)
       begin
-        OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::LEADER_ID)
+        OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::LEADER_ID, :added_by_id => current_person.id)
       rescue => error
         @save_retry_count =  (@save_retry_count || 5)
         retry if( (@save_retry_count -= 1) > 0 )

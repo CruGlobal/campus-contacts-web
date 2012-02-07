@@ -61,8 +61,10 @@ class ApiV1RolesTest < ActionDispatch::IntegrationTest
     
     should "successfully update a person from leader to contact status" do
       path = "/api/roles/#{@user.person.id}"
-      @user.person.organizational_roles.first.update_attributes(role_id: Role::LEADER_ID)
-      put path, {'access_token' => @access_token3.code, role: "contact", org_id: @user3.person.primary_organization.id}
+      user2 = Factory(:user_with_auxs)
+      #@user.person.organizational_roles.first.update_attributes(role_id: Role::LEADER_ID)
+      Factory(:organizational_role, person: @user.person, role: Role.leader, organization: @user3.person.primary_organization, :added_by_id => user2.person.id)
+      put path, {'access_token' => @access_token3.code, role: Role.contact, org_id: @user3.person.primary_organization.id}
       @json = ActiveSupport::JSON.decode(@response.body)
       
       #weird error... gets updated in roles controller but does not report back as being changed here

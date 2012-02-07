@@ -24,8 +24,9 @@ class GroupsControllerTest < ActionController::TestCase
     setup do
       user = Factory(:user_with_auxs)
       sign_in user
+      user2 = Factory(:user_with_auxs)
       org = Factory(:organization)
-      org.add_leader(user.person)
+      org.add_leader(user.person, user2.person)
       request.session[:current_organization_id] = org.id
       @group = Factory(:group, organization: org)
     end
