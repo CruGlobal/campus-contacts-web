@@ -1,20 +1,13 @@
 development:
   adapter: mysql2
   database: missionhub_dev
-  username: 
+  username: root
+  password: root
   encoding: utf8
-
-staging:
-  development
   
 test:
   adapter: mysql2
   database: missionhub_test
-  username: 
-  encoding: utf8
-
-production:
-  adapter: mysql2
-  database: missionhub_prod
-  username: 
+  username: root
+  password: root
   encoding: utf8
