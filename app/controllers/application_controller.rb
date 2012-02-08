@@ -98,10 +98,11 @@ class ApplicationController < ActionController::Base
   
   def switch_to_user(user_id, save_old = false)
     session['old_user_id'] = save_old ? current_user.id : nil
-    session['fb_token'] = nil
-    session['current_organization_id'] = nil
-    session['warden.user.user.key'] = ["User", [user_id.to_i], nil]
-    session['wizard'] = nil
+    sign_in(:user, User.find(user_id))
+    #session['fb_token'] = nil
+    #session['current_organization_id'] = nil
+    #session['warden.user.user.key'] = ["User", [user_id.to_i], nil]
+    #session['wizard'] = nil
   end
   
   def current_user
