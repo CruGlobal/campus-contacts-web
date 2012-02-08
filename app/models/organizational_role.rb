@@ -34,7 +34,14 @@ class OrganizationalRole < ActiveRecord::Base
     end
   end
 
+  def create_user_for_person_if_not_existing
+    unless self.person.user
+      self.person.create_user!
+    end
+  end
+
   def notify_new_leader
+    create_user_for_person_if_not_existing
     if role_id == Role::LEADER_ID
       added_by = Person.find(added_by_id)
       token = SecureRandom.hex(12)
