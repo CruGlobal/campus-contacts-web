@@ -43,14 +43,17 @@ class OrganizationalRole < ActiveRecord::Base
   end
 
   def notify_new_leader
-    p = create_user_for_person_if_not_existing
-    if role_id == Role::LEADER_ID && !p.nil?
-      added_by = Person.find(added_by_id)
-      token = SecureRandom.hex(12)
-      p.user.remember_token = token
-      p.user.remember_token_expires_at = 1.month.from_now
-      p.user.save(validate: false)
-      LeaderMailer.added(self.person, added_by, self.organization, token).deliver
+
+    if role_id == Role::LEADER_ID
+      if !p.nil?
+        p = create_user_for_person_if_not_existing
+        added_by = Person.find(added_by_id)
+        token = SecureRandom.hex(12)
+        p.user.remember_token = token
+        p.user.remember_token_expires_at = 1.month.from_now
+        p.user.save(validate: false)
+        LeaderMailer.added(self.person, added_by, self.organization, token).deliver
+      end
     end
   end
 
