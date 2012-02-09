@@ -35,7 +35,7 @@ class OrganizationalRole < ActiveRecord::Base
   end
 
   def create_user_for_person_if_not_existing
-    unless self.person.user
+    if self.person.user.nil?
       return self.person.create_user!
     else
       return self.person
@@ -43,8 +43,8 @@ class OrganizationalRole < ActiveRecord::Base
   end
 
   def notify_new_leader
-    if role_id == Role::LEADER_ID
-      p = create_user_for_person_if_not_existing
+    p = create_user_for_person_if_not_existing
+    if role_id == Role::LEADER_ID && !p.nil?
       added_by = Person.find(added_by_id)
       token = SecureRandom.hex(12)
       p.user.remember_token = token
