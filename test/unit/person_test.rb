@@ -45,8 +45,8 @@ class PersonTest < ActiveSupport::TestCase
       assert(orgs.include?(@org1), "root should be included, if Person is leader.")
       assert(orgs.include?(@org2), "this should be included because parent shows sub orgs")
       assert(orgs.include?(@org3), "this should not be included because parent doesnt show sub orgs")
-      assert(orgs.include?(@org4), "this should be included because parent shows sub orgs")
-      assert_equal(orgs.count, 4, "duplicate entries are present.")
+      assert(!orgs.include?(@org4), "this should not be included")
+      assert_equal(orgs.count, 3, "duplicate entries are present.")
       
       other_orgs = @another_person.orgs_with_children
       assert(!other_orgs.include?(@org1), "this should not be included")
@@ -63,8 +63,8 @@ class PersonTest < ActiveSupport::TestCase
       orgs = @person.orgs_with_children
       assert(orgs.include?(@org1), "root should be included, if Person is leader.")
       assert(orgs.include?(@org2), "this should be included because parent shows sub orgs")
-      assert(orgs.include?(@org3), "this should be included because parent shows sub orgs")
-      assert(orgs.include?(@org4), "this should be included because parent shows sub orgs")
+      assert(!orgs.include?(@org3), "this should not be included since another person owns this org")
+      assert(!orgs.include?(@org4), "this should not be included since another person owns this org")
       
       other_orgs = @another_person.orgs_with_children
       assert(!other_orgs.include?(@org1), "this should not be included")
@@ -82,7 +82,7 @@ class PersonTest < ActiveSupport::TestCase
       assert(!orgs.include?(@org1), "not included since Person is not leader")
       assert(orgs.include?(@org2), "this should be included because parent shows sub orgs")
       assert(orgs.include?(@org3), "this should be included because parent shows sub orgs")
-      assert(orgs.include?(@org4), "this should be included because parent shows sub orgs")
+      assert(!orgs.include?(@org4), "this should not be included since another person owns this org")
       
       other_orgs = @another_person.orgs_with_children
       assert(other_orgs.include?(@org1), "this should be included")
