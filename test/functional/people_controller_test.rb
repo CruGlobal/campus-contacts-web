@@ -328,7 +328,7 @@ class PeopleControllerTest < ActionController::TestCase
     
     should "not attempt to email if contact doesnt have a valid email" do
       person = Factory(:person)
-      assert_nil(person.email)
+      assert(person.email, "")
       xhr :post, :update_roles, { :role_ids => @roles, :person_id => person.id }
       assert_response :success
       assert_equal(0, ActionMailer::Base.deliveries.count)

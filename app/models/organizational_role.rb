@@ -10,7 +10,7 @@ class OrganizationalRole < ActiveRecord::Base
   scope :completed, where("followup_status = 'completed' AND role_id = #{Role::CONTACT_ID}")
   # scope :uncontacted, where("followup_status = 'uncontacted' AND role_id = #{Role::CONTACT_ID}")
   before_create :set_start_date, :set_contact_uncontacted
-  after_create :notify_new_leader
+  after_create :notify_new_leader, :if => :role_is_leader
   after_save :set_end_date_if_deleted
   
   
@@ -33,6 +33,14 @@ class OrganizationalRole < ActiveRecord::Base
       end
     end
   end
+  
+  def role_is_leader
+    if role_id == Role::LEADER_ID
+      true
+    else
+      false
+    end
+  end
 
   def create_user_for_person_if_not_existing
     if self.person.user.nil?
@@ -43,18 +51,21 @@ class OrganizationalRole < ActiveRecord::Base
   end
 
   def notify_new_leader
-
-    if role_id == Role::LEADER_ID
-      if !p.nil?
-        p = create_user_for_person_if_not_existing
-        added_by = Person.find(added_by_id)
-        token = SecureRandom.hex(12)
-        p.user.remember_token = token
-        p.user.remember_token_expires_at = 1.month.from_now
-        p.user.save(validate: false)
-        LeaderMailer.added(self.person, added_by, self.organization, token).deliver
-      end
+    p = create_user_for_person_if_not_existing
+    if p.nil?
+      raise InvalidPersonAttributesError
+    else
+      added_by = Person.find(added_by_id)
+      token = SecureRandom.hex(12)
+      p.user.remember_token = token
+      p.user.remember_token_expires_at = 1.month.from_now
+      p.user.save(validate: false)
+      LeaderMailer.added(self.person, added_by, self.organization, token).deliver
     end
+  end
+  
+  class InvalidPersonAttributesError < StandardError
+  
   end
 
 
