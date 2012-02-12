@@ -274,26 +274,27 @@ class PeopleController < ApplicationController
     
     person = Person.find(params[:person_id])
 
-    if params[:include_old_roles] == 'yes'
-      role_ids = params[:role_ids].split(',') + person.organizational_roles.where(organization_id: current_organization.id).collect { |r| r.role.id.to_s }.join(',').split(',')
-    else
-      role_ids = params[:role_ids].split(',')
-    end
+      if params[:include_old_roles] == 'yes'
+        role_ids = params[:role_ids].split(',') + person.organizational_roles.where(organization_id: current_organization.id).collect { |r| r.role.id.to_s }.join(',').split(',')
+      else
+        role_ids = params[:role_ids].split(',')
+      end
 
+      puts "role_ids #{role_ids} #{role_ids.include?(Role::INVOLVED_ID.to_s)} #{role_ids.include?(Role::CONTACT_ID.to_s)}"
+      if (!person.email.present? || !person.primary_email_address.valid?) && role_ids.include?(Role::LEADER_ID.to_s)
+        data = I18n.t('people.index.error_message', person: person)
+      else
+        organizational_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.id }
 
-    
-    organizational_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.id }
+        OrganizationalRole.delete(organizational_roles)
+        role_ids.uniq.each_with_index do |role_id, index|
+           OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person.id, current_organization.id, role_id, :added_by_id => current_person.id)
 
-    OrganizationalRole.delete(organizational_roles)
-
-    role_ids.uniq.each_with_index do |role_id, index|
-       OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person.id, current_organization.id, role_id, :added_by_id => current_person.id)
-
-       data << "<span id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
-       data << "style='margin-right:4px;'" if index < role_ids.length - 1
-       data << ">#{Role.find(role_id).to_s}</span>"
-    end
-
+           data << "<span id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
+           data << "style='margin-right:4px;'" if index < role_ids.length - 1
+           data << ">#{Role.find(role_id).to_s}</span>"
+        end
+      end
     render :text => data
   end 
 

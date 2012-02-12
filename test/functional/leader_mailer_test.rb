@@ -14,7 +14,9 @@ class LeaderMailerTest < ActionMailer::TestCase
     end
 
     should "successfully email a Person (Contact), even though Person does not have a User, because a User is created for a Person (Contact that will be assigned as leader) if Person does not have a User" do
-      person1 = Factory(:person_with_things, email: 'neil@email.com')
+      person1 = Factory(:person_with_things)
+      person1.email = "neil@email.com"
+      person1.save
       user2 = Factory(:user_with_auxs, email: 'test2@uscm.org')
       org = Factory(:organization)
       Factory(:organizational_role, person: person1, role: Role.leader, organization: org, :added_by_id => user2.person.id)

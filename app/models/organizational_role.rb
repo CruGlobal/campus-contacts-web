@@ -35,20 +35,25 @@ class OrganizationalRole < ActiveRecord::Base
   end
 
   def create_user_for_person_if_not_existing
-    unless self.person.user
-      self.person.create_user!
+    if self.person.user.nil?
+      return self.person.create_user!
+    else
+      return self.person
     end
   end
 
   def notify_new_leader
-    create_user_for_person_if_not_existing
+
     if role_id == Role::LEADER_ID
-      added_by = Person.find(added_by_id)
-      token = SecureRandom.hex(12)
-      self.person.user.remember_token = token
-      self.person.user.remember_token_expires_at = 1.month.from_now
-      self.person.user.save(validate: false)
-      LeaderMailer.added(self.person, added_by, self.organization, token).deliver
+      if !p.nil?
+        p = create_user_for_person_if_not_existing
+        added_by = Person.find(added_by_id)
+        token = SecureRandom.hex(12)
+        p.user.remember_token = token
+        p.user.remember_token_expires_at = 1.month.from_now
+        p.user.save(validate: false)
+        LeaderMailer.added(self.person, added_by, self.organization, token).deliver
+      end
     end
   end
 
