@@ -8,6 +8,10 @@ class ContactsController < ApplicationController
   before_filter :ensure_current_org
   before_filter :authorize
   before_filter :roles_for_assign
+
+  rescue_from OrganizationalRole::InvalidPersonAttributesError do |exception|
+    #render 'update_leader_error'
+  end
   
   def index
     @saved_contact_search = @person.user.saved_contact_searches.find(:first, :conditions => "full_path = '#{request.fullpath}'") || SavedContactSearch.new
