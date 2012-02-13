@@ -288,7 +288,7 @@ class PeopleController < ApplicationController
     OrganizationalRole.delete(organizational_roles)
 
     role_ids.uniq.each_with_index do |role_id, index|
-       OrganizationalRole.create!(person_id: person.id, role_id: role_id, organization_id: current_organization.id) 
+       OrganizationalRole.create!(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) 
        data << "<span id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
        data << "style='margin-right:4px;'" if index < role_ids.length - 1
        data << ">#{Role.find(role_id).to_s}</span>"
