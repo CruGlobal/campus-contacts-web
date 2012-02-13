@@ -290,10 +290,11 @@ class PeopleController < ApplicationController
     role_ids.insert(role_ids.length-1, role_ids.delete_at(0))
 
     role_ids.uniq.each_with_index do |role_id, index|
-      OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person.id, current_organization.id, role_id, :added_by_id => current_person.id)
-      data << "<span id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
-      data << "style='margin-right:4px;'" if index < role_ids.length - 1
-      data << ">#{Role.find(role_id).to_s}</span>"
+
+       OrganizationalRole.create!(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) 
+       data << "<span id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
+       data << "style='margin-right:4px;'" if index < role_ids.length - 1
+       data << ">#{Role.find(role_id).to_s}</span>"
     end
 
     render :text => data
