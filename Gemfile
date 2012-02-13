@@ -55,7 +55,7 @@ gem 'vpim', git: 'git://github.com/twinge/vpim.git'   # vcard maker
 gem 'i18n-js'                                         # allow i18n on js files 
 
 gem 'rest-client'                                     # to make FB api requests
-gem "paperclip", :git => 'http://github.com/thoughtbot/paperclip.git'
+gem "paperclip", :git => 'git://github.com/thoughtbot/paperclip.git'
 
 gem 'bitly'
 
