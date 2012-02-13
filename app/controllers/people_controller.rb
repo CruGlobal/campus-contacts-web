@@ -284,14 +284,10 @@ class PeopleController < ApplicationController
     end
     
     organizational_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.id }
-    old_role_ids = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.role_id.to_s }    
+    
+    OrganizationalRole.delete(organizational_roles)
 
-    puts "role_ids #{role_ids}"
-    puts "old_role_ids #{old_role_ids}"
-    puts "difference #{old_role_ids - role_ids}" if old_role_ids.length > role_ids.length
-    puts "difference #{role_ids - old_role_ids}" if role_ids.length > old_role_ids.length
-
-    #OrganizationalRole.delete(organizational_roles)
+    role_ids.insert(role_ids.length-1, role_ids.delete_at(0))
 
     role_ids.uniq.each_with_index do |role_id, index|
       OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person.id, current_organization.id, role_id, :added_by_id => current_person.id)
