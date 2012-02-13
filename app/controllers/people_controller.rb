@@ -286,9 +286,13 @@ class PeopleController < ApplicationController
     organizational_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.id }
     
     OrganizationalRole.delete(organizational_roles)
-
-    role_ids.insert(role_ids.length-1, role_ids.delete_at(0))
-
+    
+    #we check if a leader role i assigned, and move it to the last spot on the array
+    if role_ids.include? Role.leader.id
+      role_ids.delete(Role.leader.id)
+      role_ids << Role.leader.id
+    end
+    
     role_ids.uniq.each_with_index do |role_id, index|
 
        OrganizationalRole.create!(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) 
