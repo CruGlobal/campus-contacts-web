@@ -75,6 +75,7 @@ Mh::Application.routes.draw do
       get :search_ids
       post :bulk_email
       post :bulk_sms
+      post :bulk_comment
       get :all
       post :update_roles
       post :bulk_delete
