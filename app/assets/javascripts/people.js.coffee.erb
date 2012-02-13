@@ -455,11 +455,13 @@ update_persons_roles = () ->
       data: 'role_ids='+role_ids+'&person_id='+person_id,
       success: (data) ->
         roles_user = "#roles_user_" + person_id
-        if data.indexOf("$.a") == -1 # hello
-          $(roles_user).html data
-          if checked_elements.last().val() == person_id
-            $("#apply_roles_spinner").hide()
-            $("#apply_roles_successful").show()
-            $("#apply_roles_successful").html("Roles have been applied.")
-        else
+        $(roles_user).html data
+      complete: ->
+        if checked_elements.last().val() == person_id
           $("#apply_roles_spinner").hide()
+          $("#apply_roles_successful").show()
+          $("#apply_roles_successful").html("Roles have been applied.")
+       error: ->
+          $("#apply_roles_spinner").hide()
+          $("#apply_roles_successful").hide()
+  

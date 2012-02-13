@@ -288,10 +288,12 @@ class PeopleController < ApplicationController
     OrganizationalRole.delete(organizational_roles)
     
     #we check if a leader role i assigned, and move it to the last spot on the array
-    if role_ids.include? Role.leader.id
-      role_ids.delete(Role.leader.id)
-      role_ids << Role.leader.id
+    if role_ids.include? Role::LEADER_ID.to_s
+      role_ids.delete(Role::LEADER_ID.to_s)
+      role_ids << Role::LEADER_ID.to_s
     end
+
+    puts "#{role_ids}"
     
     role_ids.uniq.each_with_index do |role_id, index|
 
