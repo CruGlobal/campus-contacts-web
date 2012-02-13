@@ -144,6 +144,7 @@ en:
       no_people: "Sorry, there are no people involved here."
       displaying: "Displaying %{start} - %{finish} of %{total}"
       error_message: "Error: %{person} does not have valid email to be leader"
+      error_message_without_person: "Error: Person does not have valid email to be leader"
     all:
       page_selected_html: "All <b>%{count}</b> people on this page are selected."
       select_all_html: "Select all <b>%{count}</b> people in the directory."
