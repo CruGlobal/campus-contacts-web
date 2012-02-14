@@ -148,6 +148,7 @@ class PeopleController < ApplicationController
               begin
                 @person.organizational_roles.create(role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id)
               rescue OrganizationalRole::InvalidPersonAttributesError
+
               end
             rescue ActiveRecord::RecordNotUnique
             end
@@ -158,7 +159,7 @@ class PeopleController < ApplicationController
             @new_person = @person.create_user! if @email.present? && @person.user.nil? # create a user account if we have an email address
             if @new_person && @new_person.save
               @person = @new_person
-              current_organization.notify_new_leader(@person, current_person) 
+              #current_organization.notify_new_leader(@person, current_person) 
             else
               @person.reload
               @email = @person.primary_email_address || @person.email_addresses.new
