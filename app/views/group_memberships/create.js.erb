@@ -12,5 +12,12 @@
   <% unless params[:add_another] == 'true' %>
     $("#member_search").dialog('close');
   <% end %>
+  row = '<%= j(render('groups/person', person: @persons.first, group_membership: @group_membership)) %>'
+  if($('#<%= dom_id(@persons.first) %>')[0]) {
+   $('#<%= dom_id(@persons.first) %>').replaceWith(row)
+  } else {
+   $('#group_table').append(row)
+  }
+
   $.n('Contacts added to group successfully');
 <% end %>
