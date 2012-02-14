@@ -11,7 +11,7 @@ $ ->
     if sms.length == 141
       inp = String.fromCharCode event.which
       if /[a-zA-Z0-9-_ ]/.test(inp)
-        alert(t('application.messages.sms_too_long'))
+        alert(t('application.messages.question_too_long'))
         # if $('.content', parent)[0]? and $('.content', parent).val().trim() != ''
         #   $('.content', parent).val($('.content', parent).val().substr(0,$('.content', parent).val().length - 1))
         # else
@@ -79,6 +79,13 @@ $ ->
     
   $('#advanced_toggle').click ->
     $('#advanced_options').toggle()
+    false
+      
+  $('#cancel_survey_question').live 'click', (e)->
+    e.preventDefault()
+    $('.inlineform').show()
+    $('#new_question_form').closest('.inlineform').hide()
+    $('#question_form').slideUp()
     false
     
   $('#move_right').live 'click', ->

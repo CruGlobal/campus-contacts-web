@@ -330,7 +330,7 @@ en:
         dropdown: 'Dropdown (Choose one)'
         web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
         text_message_preview: Text Message Preview
-        toggle_advanced_options: Show Advanced Options
+        toggle_advanced_options: Toggle Advanced Options
       multiple_choice_form:
         list_choices: 'List out the possible choices, one per line:'
       question:
