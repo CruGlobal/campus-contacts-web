@@ -3,9 +3,11 @@ class PeopleController < ApplicationController
   before_filter :ensure_current_org
   before_filter :authorize_merge, only: [:merge, :confirm_merge, :do_merge, :merge_preview]
   before_filter :roles_for_assign
+=begin
   rescue_from OrganizationalRole::InvalidPersonAttributesError do |exception|
     render 'update_leader_error'
   end
+=end
   # GET /people
   # GET /people.xml
   def index
@@ -143,7 +145,10 @@ class PeopleController < ApplicationController
           role_ids = params[:roles].keys.map(&:to_i)
           params[:roles].keys.each do |role_id|
             begin
-              @person.organizational_roles.create(role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id)
+              begin
+                @person.organizational_roles.create(role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id)
+              rescue OrganizationalRole::InvalidPersonAttributesError
+              end
             rescue ActiveRecord::RecordNotUnique
             end
           end
@@ -297,10 +302,16 @@ class PeopleController < ApplicationController
     
     role_ids.uniq.each_with_index do |role_id, index|
 
-       OrganizationalRole.create!(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) 
-       data << "<span id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
-       data << "style='margin-right:4px;'" if index < role_ids.length - 1
-       data << ">#{Role.find(role_id).to_s}</span>"
+      begin       
+        OrganizationalRole.create!(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) 
+      rescue OrganizationalRole::InvalidPersonAttributesError
+        render 'update_leader_error', :locals => { :person => person }
+        return
+      end
+
+      data << "<span id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
+      data << "style='margin-right:4px;'" if index < role_ids.length - 1
+      data << ">#{Role.find(role_id).to_s}</span>"
     end
 
     render :text => data
