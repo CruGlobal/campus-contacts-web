@@ -293,20 +293,25 @@ class PeopleController < ApplicationController
     
     OrganizationalRole.delete(organizational_roles)
     
+    #we check if a admin role i assigned, and move it to the last spot on the array
+    if role_ids.include? Role::ADMIN_ID.to_s
+      role_ids.delete(Role::ADMIN_ID.to_s)
+      role_ids << Role::ADMIN_ID.to_s
+    end
+
     #we check if a leader role i assigned, and move it to the last spot on the array
     if role_ids.include? Role::LEADER_ID.to_s
       role_ids.delete(Role::LEADER_ID.to_s)
       role_ids << Role::LEADER_ID.to_s
     end
 
-    puts "#{role_ids}"
-    
     role_ids.uniq.each_with_index do |role_id, index|
 
       begin       
         OrganizationalRole.create!(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) 
       rescue OrganizationalRole::InvalidPersonAttributesError
-        render 'update_leader_error', :locals => { :person => person }
+        render 'update_leader_error', :locals => { :person => person } if role_id == Role::LEADER_ID.to_s
+        render 'update_admin_error', :locals => { :person => person } if role_id == Role::ADMIN_ID.to_s
         return
       end
 
