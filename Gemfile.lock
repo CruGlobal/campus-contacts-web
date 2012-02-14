@@ -15,6 +15,16 @@ GIT
       sass (>= 3.1.0)
 
 GIT
+  remote: git://github.com/thoughtbot/paperclip.git
+  revision: f19393cfff75d083f51ef6f09d33ff3473244cd4
+  specs:
+    paperclip (2.6.0)
+      activerecord (>= 2.3.0)
+      activesupport (>= 2.3.2)
+      cocaine (>= 0.0.2)
+      mime-types
+
+GIT
   remote: git://github.com/twinge/carmen.git
   revision: 84d00d0319ff09ccff17c21d24e327806e665edb
   specs:
@@ -34,16 +44,6 @@ GIT
   revision: a26584128f95fcbe8e8f438e31d74b675e094a1f
   specs:
     vpim (11.9.6)
-
-GIT
-  remote: http://github.com/thoughtbot/paperclip.git
-  revision: 772c8e96d8fdd8293e3745138287e3a4e9181e20
-  specs:
-    paperclip (2.5.2)
-      activerecord (>= 2.3.0)
-      activesupport (>= 2.3.2)
-      cocaine (>= 0.0.2)
-      mime-types
 
 GEM
   remote: https://rubygems.org/
