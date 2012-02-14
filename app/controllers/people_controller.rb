@@ -143,7 +143,7 @@ class PeopleController < ApplicationController
           role_ids = params[:roles].keys.map(&:to_i)
           params[:roles].keys.each do |role_id|
             begin
-              @person.organizational_roles.create(role_id: role_id, organization_id: current_organization.id)
+              @person.organizational_roles.create(role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id)
             rescue ActiveRecord::RecordNotUnique
             end
           end
