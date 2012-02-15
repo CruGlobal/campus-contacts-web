@@ -365,6 +365,11 @@ class Person < ActiveRecord::Base
     Person.where(fb_uid: friends.select(:uid).collect(&:uid)).joins(:organizational_roles).where('organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.organization_id' => org.id)
   end
 
+  def remove_assigned_contacts(organization)
+    assigned_contact_ids = contact_assignments.collect{ |r| r.person_id }
+    ContactAssignment.where(person_id: assigned_contact_ids, organization_id: organization.id).destroy_all if assigned_contact_ids.count > 0
+  end
+
   def smart_merge(other)
     if user && other.user
       user.merge(other.user)
