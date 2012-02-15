@@ -4,7 +4,7 @@ $ ->
       $('#search_filter_box').show()
       false
       
-  if $('#first_name')[0]
+  if $('#advanced_filter_box')[0] && $('#first_name')[0]
     if $('#first_name').val().length > 0 || $('#last_name').val().length > 0 || $('#role').val().length > 0 ||
     $('#gender_1').is(':checked') || $('#gender_2').is(':checked') || $('#gender_').is(':checked') ||
     $('#email').val().length > 0 ||  $('#phone').val().length > 0
@@ -350,7 +350,56 @@ $('#send_bulksms_link').live 'click', ->
         $('#bulk_sms_message').val($('#bulk_send_body').val())        
         $(this).dialog('destroy')
   false        
+
+$('#send_bulkcomment_link').live 'click', ->
+  if $('.id_checkbox:checked').length == 0
+    alert("You didn't select any people to comment on")
+    return false
+  $('.to_list').html('')
+  ids = []
   
+  $('.id_checkbox:checked').each ->
+    id = $(this).val()
+    tr = $(this).parent().parent();
+    name = tr.attr('data-name')
+    ids.push(id)    
+    $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
+
+  if($('#all_selected_text').is(':visible'))    
+    $('.all_row').each ->
+      id = $(this).attr('data-id')
+      name = $(this).attr('data-name')
+      ids.push(id)      
+      $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')    
+
+  $('#bulk_send_dialog form').removeClass('bulk-email')
+  $('#bulk_send_dialog form').addClass('bulk-sms')
+  $('#bulk_send_dialog .subject').hide()
+  $('#char_counter').show()
+  $('#bulk_send_dialog #bulk_send_body').simplyCountable( { maxCount: 160 } )
+  $('#bulk_send_body').val($('#bulk_sms_message').val())  
+  $('#bulk_send_dialog').dialog
+    resizable: false,
+    height:444,
+    width:600,
+    modal: true,
+    title: 'Bulk Message',
+    open: (event, ui) ->
+      $('#bulk_send_dialog_message').hide()
+    
+      $(this).find('form').attr('action', '/people/bulk_comment')
+    close: (event, ui) ->
+      $('#bulk_sms_message').val($('#bulk_send_body').val())            
+    buttons: 
+      Send: ->
+        $(this).submitBulkSendDialog()
+        $('#bulk_sms_message').val($('#bulk_send_body').val())                
+        $.n('Comments posted')        
+      Cancel: ->
+        $('#bulk_sms_message').val($('#bulk_send_body').val())        
+        $(this).dialog('destroy')
+  false        
+
 $('#bulk_send_dialog form').live 'submit', ->
   false
 

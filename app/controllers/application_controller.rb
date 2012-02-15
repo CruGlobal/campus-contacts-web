@@ -98,10 +98,11 @@ class ApplicationController < ActionController::Base
   
   def switch_to_user(user_id, save_old = false)
     session['old_user_id'] = save_old ? current_user.id : nil
-    session['fb_token'] = nil
-    session['current_organization_id'] = nil
-    session['warden.user.user.key'] = ["User", [user_id.to_i], nil]
-    session['wizard'] = nil
+    sign_in(:user, User.find(user_id))
+    #session['fb_token'] = nil
+    #session['current_organization_id'] = nil
+    #session['warden.user.user.key'] = ["User", [user_id.to_i], nil]
+    #session['wizard'] = nil
   end
   
   def current_user
@@ -145,7 +146,9 @@ class ApplicationController < ActionController::Base
   end
   
   def current_person
-    current_user.person
+    @current_person = current_user.person if current_user
+    @current_person ||= Person.find_by_personID(session[:person_id]) if session[:person_id]
+    @current_person
   end
   helper_method :current_person
   
@@ -309,6 +312,19 @@ class ApplicationController < ActionController::Base
       cookies[:survey_id] = @survey.id
     else
       return false
+    end
+  end
+  
+  def roles_for_assign
+    current_user_roles = current_user.person
+                                     .organizational_roles
+                                     .where(:organization_id => current_organization)
+                                     .collect { |r| Role.find(r.role_id) }
+                             
+    if current_user_roles.include? Role.find(1)
+      @roles_for_assign = current_organization.roles
+    else
+      @roles_for_assign = current_organization.roles.delete_if { |role| role == Role.find(1) }
     end
   end
   

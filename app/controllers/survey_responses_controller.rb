@@ -5,18 +5,18 @@ class SurveyResponsesController < ApplicationController
   before_filter :prepare_for_mobile
   skip_before_filter :authenticate_user!, except: :update
   skip_before_filter :check_url
-  
+
   def new
     unless mhub? || Rails.env.test?
       redirect_to new_survey_response_url(params.merge(host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']))
       return false
     end
-    
+
     # If they haven't skipped facebook already, send them to the login page
     unless params[:nologin] == 'true'
       return unless authenticate_user! 
     end
-    
+
     # If they texted in, save their phone number
     if @sms
       if @person.new_record?
@@ -26,7 +26,7 @@ class SurveyResponsesController < ApplicationController
         @sms.update_attribute(:person_id, @person.id) unless @sms.person_id
       end
     end
-    
+
     if @survey
       @title = @survey.terminology 
       @answer_sheet = get_answer_sheet(@survey, @person)
@@ -38,20 +38,20 @@ class SurveyResponsesController < ApplicationController
       render_404 and return
     end
   end
-  
+
   def show
     @person = Person.find(params[:id])
     authorize! :followup, @person
   end
-  
+
   def edit
     @person = Person.find(params[:id])
     authorize! :followup, @person
   end
-  
+
   def update
     redirect_to :back and return false unless @person.id == params[:id].to_i
-    
+
     save_survey
 
     if @person.valid? && @answer_sheet.person.valid?
@@ -68,10 +68,26 @@ class SurveyResponsesController < ApplicationController
       end
     end
   end
-  
+
   def create
     Person.transaction do
-      @person = Person.create(params[:person])
+      @person = current_person # first try for a logged in person
+      if params[:person] && params[:person][:email].present?
+        @person_from_email = EmailAddress.find_by_email(params[:person][:email]).try(:person) || Address.find_by_email(params[:person][:email]).try(:person)
+        if @person
+          if @person != @person_from_email
+            @person = @person_from_email.smart_merge(@person)
+          end
+        else
+          @person = @person_from_email
+        end
+      end
+
+      if @person
+        @person.update_attributes(params[:person])
+      else
+        @person = Person.create(params[:person])
+      end
       if @person.valid?
         save_survey
         session[:person_id] = @person.id
@@ -104,19 +120,19 @@ class SurveyResponsesController < ApplicationController
       end
     end
   end
-  
+
   protected
-  
-    def save_survey
-      @person.update_attributes(params[:person]) if params[:person]
-      @answer_sheet = get_answer_sheet(@survey, @person)
-      question_set = QuestionSet.new(@survey.questions, @answer_sheet)
-      question_set.post(params[:answers], @answer_sheet)
-      question_set.save
-      @answer_sheet.update_attribute(:completed_at, Time.now)
-    end
-    
-    def get_person
-      @person = user_signed_in? ? current_user.person : Person.new
-    end
+
+  def save_survey
+    @person.update_attributes(params[:person]) if params[:person]
+    @answer_sheet = get_answer_sheet(@survey, @person)
+    question_set = QuestionSet.new(@survey.questions, @answer_sheet)
+    question_set.post(params[:answers], @answer_sheet)
+    question_set.save
+    @answer_sheet.update_attribute(:completed_at, Time.now)
+  end
+
+  def get_person
+    @person = current_person || Person.new
+  end
 end

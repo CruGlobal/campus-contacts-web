@@ -1,7 +1,9 @@
-<div id="advanced_options" style="display:none">
+<div id="advanced_options" style="<%= 'display:none' if q.trigger_words.blank? %>">
   <label><%= t('.leaders') %></label><br/>
-  <%= select_tag 'leaders[]', 
-  options_for_select(@leaders.collect {|l| [l.name, l.id] }), {:multiple => true, :size => 4 } %>
+  
+  <%= select_tag 'leaders[]',
+  options_for_select(@leaders.collect {|l| [l.name, l.id] }, :selected => q.leaders.collect {|l| l.id}), {:multiple => true, :size => 7 } %>
+  
   <br/>
   <%= f.label :trigger_words,(raw t('.trigger_words')) %><br/>
   <%= f.text_field :trigger_words %><br/>

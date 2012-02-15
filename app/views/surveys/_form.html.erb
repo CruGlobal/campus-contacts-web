@@ -1,9 +1,31 @@
 <%= form_for(@survey, validate: true, html: {id: 'survey_form'}) do |f| %>
   <%= error_messages_for :survey %>
-  
+
+  <div class="stepwrap rwidth">
+    <div class="stepcontent"> 
+      <div class="field">
+        <%= f.check_box :frozen %><%= t('.freeze') %>
+      </div>
+    </div>
+  </div>
+
   <div class="stepwrap rwidth">
     <div class="stepnumber">
       <%= image_tag("step1.png") %>
+    </div>
+    <div class="stepcontent"> 
+      <div class="field">
+        <label for="survey_login_paragraph">
+          <%= t('.login_paragraph') + ": " + t('.login_paragraph_tip') %>
+        </label>
+        <%= f.text_area :login_paragraph, rows: 3, :placeholder =>  t('sessions.new.login_paragraph_mhub') %>
+      </div>
+    </div>
+  </div>
+
+  <div class="stepwrap rwidth">
+    <div class="stepnumber">
+      <%= image_tag("step2.png") %>
     </div>
     <div class="stepcontent"> 
       <div class="field">
@@ -16,7 +38,7 @@
   </div>
   <!-- <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step2.png") %>
+      <%= image_tag("step3.png") %>
     </div>
     <div class="stepcontent">    
       <div class="field">
@@ -31,19 +53,19 @@
   
   <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step2.png") %>
+      <%= image_tag("step3.png") %>
     </div>
     <div class="stepcontent">
       <div class="field">
         <%= f.label :post_survey_message, t('.post_survey_message') %>
-        <%= f.text_area :post_survey_message, rows: 5, :placeholder => t('.post_survey_placeholder') %>
+        <%= f.text_area :post_survey_message, rows: 3, :placeholder => t('.post_survey_placeholder') %>
       </div>
     </div>
   </div>
   
   <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step3.png") %>
+      <%= image_tag("step4.png") %>
     </div>
     <div class="stepcontent">
       <div class="field">
@@ -55,7 +77,7 @@
   
   <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step4.png") %>
+      <%= image_tag("step5.png") %>
     </div>
     <div class="stepcontent">
       <div class="field">
@@ -70,7 +92,7 @@
   
   <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step5.png") %>
+      <%= image_tag("step6.png") %>
     </div>
     <div class="stepcontent"> 
       <% if current_organization.show_sub_orgs? && current_organization.has_children? %>   

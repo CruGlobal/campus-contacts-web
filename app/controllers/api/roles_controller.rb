@@ -7,7 +7,7 @@ class Api::RolesController < ApiController
     raise RolesPermissionsError if current_person.organizational_roles.where(organization_id: @organization.id, role_id: Role::ADMIN_ID).empty?
     raise NoRoleChangeMade unless Role.default.collect(&:i18n).include?(params[:role])
     @person = Person.find(params[:id])
-    @organization.send("add_#{params[:role]}".to_sym, @person)
+    @organization.send("add_#{params[:role]}".to_sym, @person, current_person)
     render json: '[]'
   end
 end

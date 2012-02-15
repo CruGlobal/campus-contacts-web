@@ -47,7 +47,7 @@ gem 'airbrake'
 gem 'cancan'
 gem 'kaminari'
 gem 'whenever'
-gem "ransack"
+gem "ransack", '0.5.8'
 gem 'deadlock_retry'
 gem 'delegate_presenter'
 
@@ -55,7 +55,7 @@ gem 'vpim', git: 'git://github.com/twinge/vpim.git'   # vcard maker
 gem 'i18n-js'                                         # allow i18n on js files 
 
 gem 'rest-client'                                     # to make FB api requests
-gem "paperclip", :git => 'http://github.com/thoughtbot/paperclip.git'
+gem "paperclip", :git => 'git://github.com/thoughtbot/paperclip.git'
 
 gem 'bitly'
 
@@ -76,6 +76,7 @@ group :development, :test do
   gem 'rails-footnotes', '>= 3.7'
   # gem 'translate-rails3', :require => 'translate'
   gem 'ffaker'
+  #gem 'ruby-debug19', :require => 'ruby-debug'
 end
 
 group :development do

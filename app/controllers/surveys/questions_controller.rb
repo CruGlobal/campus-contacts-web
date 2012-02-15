@@ -2,6 +2,7 @@ class Surveys::QuestionsController < ApplicationController
   before_filter :find_survey_and_authorize
   before_filter :find_question, only: [:show, :edit, :update, :destroy]
   before_filter :get_predefined
+  before_filter :get_leaders
 
   # GET /questions
   # GET /questions.xml
@@ -10,7 +11,6 @@ class Surveys::QuestionsController < ApplicationController
     @questions = @survey.questions
     @predefined_questions = @predefined.questions.uniq - @questions
     @other_questions = current_organization.all_questions.uniq - @predefined_questions
-    @leaders = current_organization.leaders
     respond_to do |wants|
       wants.html # index.html.erb
       wants.xml  { render xml: @questions }
@@ -60,11 +60,9 @@ class Surveys::QuestionsController < ApplicationController
       type, style = params[:question_type].split(':')
       @question = type.constantize.create!(params[:question].merge(style: style))
       
-      if params[:question][:advanced_options] == "1"
-        unless params[:leaders].nil?
-          params[:leaders].each do |l|
-            QuestionLeader.create!(:person_id => l, :element_id => @question.id)
-          end
+      unless params[:leaders].nil?
+        params[:leaders].each do |l|
+          QuestionLeader.create!(:person_id => l, :element_id => @question.id)
         end
       end
     end
@@ -155,5 +153,8 @@ class Surveys::QuestionsController < ApplicationController
     def get_predefined
       @predefined = Survey.find(APP_CONFIG['predefined_survey'])
     end
-
+    
+    def get_leaders
+      @leaders = current_organization.leaders
+    end
 end

@@ -219,22 +219,35 @@ class Question < Element
   end
   
   def send_notifications(question, person, answer)
-    short_profile_link = BITLY_CLIENT.shorten(Rails.application.routes.url_helpers.person_url(person.id, 
-    :host => APP_CONFIG['bitly_host'], :port => APP_CONFIG['bitly_port'], :only_path => false)).short_url
-    
-    msg = "#{person.name} (#{person.phone_number}, #{person.email}) just replied to a survey with #{answer}.
-    Profile link: #{short_profile_link}"
-    
+    msg = generate_notification_msg(person, answer, shorten_link(person.id))
+
     if question.notify_via == "Email"
-      SurveyMailer.enqueue.notify(question.leaders.collect(&:email).compact, msg)
+      send_email_to_leaders(question.leaders, msg)
     elsif question.notify_via == "SMS"
-     SentSms.create!(message: msg, recipient: phone_number)
+      send_sms_to_leaders(question.leaders, msg)
     else #send to SMS AND Email
-     question.leaders.each do |l|
-       SentSms.create!(message: msg, recipient: l.phone_number)
-     end
-     SurveyMailer.enqueue.notify(question.leaders.collect(&:email).compact, msg)
+      send_sms_to_leaders(question.leaders, msg)
+      send_email_to_leaders(question.leaders, msg)
     end
+  end
+
+  def send_sms_to_leaders(leaders, msg)
+    leaders.each do |l|
+      SentSms.create!(message: msg, recipient: l.phone_number)
+    end
+  end
+
+  def send_email_to_leaders(leaders, msg)
+    SurveyMailer.enqueue.notify(leaders.collect(&:email).compact, msg)
+  end
+
+  def shorten_link(id)
+    short_profile_link = BITLY_CLIENT.shorten(Rails.application.routes.url_helpers.person_url(id, 
+    :host => APP_CONFIG['bitly_host'] || 'www.missionhub.com', :port => APP_CONFIG['bitly_port'] || 80, :only_path => false)).short_url
+  end
+
+  def generate_notification_msg(person, answer, link)
+   "#{person.name} (#{person.phone_number}, #{person.email}) just replied to a survey with #{answer}. Profile link: #{link}"
   end
   
   # has any sort of non-empty response?

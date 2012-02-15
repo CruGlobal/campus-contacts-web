@@ -7,14 +7,15 @@ class ContactsController < ApplicationController
   before_filter :get_person
   before_filter :ensure_current_org
   before_filter :authorize
+  before_filter :roles_for_assign
   
   def index
+    @saved_contact_search = @person.user.saved_contact_searches.find(:first, :conditions => "full_path = '#{request.fullpath}'") || SavedContactSearch.new
     @organization = current_organization # params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : 
     unless @organization
       redirect_to user_root_path, error: t('contacts.index.which_org')
       return false
     end
-    @roles_for_assign = roles_for_assign
     @surveys = @organization.surveys
     @questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => false).flatten.uniq
     @hidden_questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => true).flatten.uniq
@@ -90,8 +91,10 @@ class ContactsController < ApplicationController
                            end
                          end
           else
-            @people = @people.joins(:answer_sheets)
-            @people = @people.joins("INNER JOIN `mh_answers` as a#{q_id} ON a#{q_id}.`answer_sheet_id` = `mh_answer_sheets`.`id`").where("a#{q_id}.question_id = ? AND a#{q_id}.value like ?", q_id, '%' + v + '%') unless v.strip.blank?
+            unless v.strip.blank?
+              @people = @people.joins(:answer_sheets)
+              @people = @people.joins("INNER JOIN `mh_answers` as a#{q_id} ON a#{q_id}.`answer_sheet_id` = `mh_answer_sheets`.`id`").where("a#{q_id}.question_id = ? AND a#{q_id}.value like ?", q_id, '%' + v + '%')
+            end
           end
         else
           conditions = ["#{Answer.table_name}.question_id = ?", q_id]
@@ -153,7 +156,6 @@ class ContactsController < ApplicationController
   
   def mine
     @people = Person.order('lastName, firstName').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.organization_id' => current_organization.id, 'organizational_roles.role_id' => Role::CONTACT_ID)
-    @roles_for_assign = roles_for_assign
     if params[:status] == 'completed'
       @people = @people.where("organizational_roles.followup_status = 'completed'")
     elsif params[:status] == 'all'
@@ -320,18 +322,4 @@ class ContactsController < ApplicationController
         end
       end
     end
-    
-    def roles_for_assign
-      current_user_roles = current_user.person
-                                       .organizational_roles
-                                       .where(:organization_id => current_organization)
-                                       .collect { |r| Role.find(r.role_id) }
-                             
-      if current_user_roles.include? Role.find(1)
-        @roles_for_assign = current_organization.roles
-      else
-        @roles_for_assign = current_organization.roles.delete_if { |role| role == Role.find(1) }
-      end
-    end
-
 end

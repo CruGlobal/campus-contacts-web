@@ -3,7 +3,7 @@ class SurveysController < ApplicationController
   before_filter :prepare_for_mobile, only: [:start, :stop, :index]
   skip_before_filter :authenticate_user!
   skip_before_filter :check_url
-  load_and_authorize_resource except: [:start, :stop]
+  load_and_authorize_resource except: [:start, :stop, :index]
   
   require 'api_helper'
   include ApiHelper

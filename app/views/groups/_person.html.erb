@@ -6,6 +6,6 @@
   <td><%= person.name %></td>
   <td class="email"><%= mail_to(person.email) if person.email.present? %></td>
   <td class="phone_number"><%= person.pretty_phone_number %></td>
-  <td><%= t(group_membership.role) %></td>
+  <td><%= t(group_membership.role) if group_membership.role.present? %></td>
   <td class="controls"><%= link_to(t('general.delete'), group_group_membership_path(@group, group_membership), :method => :delete, :remote => true, :class => "icon delete", :confirm => t('.remove_confirm', name: person)) %></td>
 </tr>

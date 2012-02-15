@@ -2,6 +2,7 @@ require 'csv'
 class PeopleController < ApplicationController
   before_filter :ensure_current_org
   before_filter :authorize_merge, only: [:merge, :confirm_merge, :do_merge, :merge_preview]
+  before_filter :roles_for_assign
   # GET /people
   # GET /people.xml
   def index
@@ -39,7 +40,7 @@ class PeopleController < ApplicationController
   def show
     @person = Person.find(params[:id])
     @assigned_tos = @person.assigned_tos.collect { |a| a.assigned_to.name }.to_sentence
-    @roles_for_assign = roles_for_assign
+    @org_friends = Person.find(params[:id]).friends.collect { |f| Person.find_by_fb_uid(f.uid).nil? ? [] : Person.find_by_fb_uid(f.uid) } & current_organization.people
     authorize!(:read, @person)
     if can? :manage, @person
       @organizational_role = OrganizationalRole.where(organization_id: current_organization, person_id: @person, role_id: Role::CONTACT_ID).first
@@ -146,7 +147,7 @@ class PeopleController < ApplicationController
 
           # we need a valid email address to make a leader
           if role_ids.include?(Role::LEADER_ID) || role_ids.include?(Role::ADMIN_ID)
-            @new_person = @person.create_user! if @email.present? # create a user account if we have an email address
+            @new_person = @person.create_user! if @email.present? && @person.user.nil? # create a user account if we have an email address
             if @new_person && @new_person.save
               @person = @new_person
               current_organization.notify_new_leader(@person, current_person) 
@@ -244,6 +245,7 @@ class PeopleController < ApplicationController
           from_email = current_person.primary_phone_number && current_person.primary_phone_number.email_address.present? ? 
                         current_person.primary_phone_number.email_address : current_person.email
           @sent_sms = SmsMailer.enqueue.text(person.primary_phone_number.email_address, "#{current_person.to_s} <#{from_email}>", params[:body])
+
         else
           # Otherwise send it as a text
           @sent_sms = SentSms.create!(message: params[:body], recipient: person.phone_number) # + ' Txt HELP for help STOP to quit'
@@ -253,7 +255,23 @@ class PeopleController < ApplicationController
     
     render :nothing => true
   end
-  
+
+  def bulk_comment
+    authorize! :lead, current_organization
+    to_ids = params[:to].split(',').uniq
+
+    to_ids.each do |id|
+      person = Person.find_by_personID(id)
+      fc = FollowupComment.create(params[:followup_comment])
+      fc.contact_id = id
+      fc.comment = params[:body]
+      fc.status = person.organizational_roles.first.followup_status
+      fc.save
+    end
+    
+    render :nothing => true
+  end
+
   def all
     fetch_people 
     
@@ -272,19 +290,22 @@ class PeopleController < ApplicationController
     data = ""
     
     person = Person.find(params[:person_id])
-    
+
     if params[:include_old_roles] == 'yes'
       role_ids = params[:role_ids].split(',') + person.organizational_roles.where(organization_id: current_organization.id).collect { |r| r.role.id.to_s }.join(',').split(',')
     else
       role_ids = params[:role_ids].split(',')
     end
+
+
     
     organizational_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.id }
-    
+
     OrganizationalRole.delete(organizational_roles)
 
     role_ids.uniq.each_with_index do |role_id, index|
-       OrganizationalRole.create!(person_id: person.id, role_id: role_id, organization_id: current_organization.id) 
+       OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person.id, current_organization.id, role_id, :added_by_id => current_person.id)
+
        data << "<span id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
        data << "style='margin-right:4px;'" if index < role_ids.length - 1
        data << ">#{Role.find(role_id).to_s}</span>"
@@ -446,7 +467,8 @@ class PeopleController < ApplicationController
       
       @q = @q.search(params[:q])
       @q.sorts = sort_by if @q.sorts.empty?
-      @all_people = @q.result(distinct: false)
+      @all_people = @q.result(distinct: false).order(params[:q] && params[:q][:s] ? params[:q][:s] : 
+      sort_by)
       @people = @all_people.page(params[:page])
     end
     
@@ -463,18 +485,5 @@ class PeopleController < ApplicationController
                   .organizational_roles
                   .where(:organization_id => current_organization)
                   .collect { |r| Role.find(r.role_id) }
-    end
-    
-    def roles_for_assign
-      current_user_roles = current_user.person
-                                       .organizational_roles
-                                       .where(:organization_id => current_organization)
-                                       .collect { |r| Role.find(r.role_id) }
-                             
-      if current_user_roles.include? Role.find(1)
-        @roles_for_assign = current_organization.roles
-      else
-        @roles_for_assign = current_organization.roles.delete_if { |role| role == Role.find(1) }
-      end
     end
 end

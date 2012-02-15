@@ -1,14 +1,14 @@
 <% if mhub? %>
   <center>
     <% if !@survey || @survey.login_option == 0 %>
-      <%= t('.login_paragraph_mhub') %>
+      <%= @survey && @survey.login_paragraph.present? ?  @survey.login_paragraph : t('.login_paragraph_mhub') %>
       <br><br>
       <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook_mhub), rel: 'external') %>
       <br/>    
       <% if @survey %>
         <div class="info"><br/><br/>
           <center>
-            <%= t('.dont_like_faceook') %>
+            <%= t('.dont_like_facebook') %>
             <%= link_to(t('.skip_facebook'), session[:return_to] ? add_params(session[:return_to], :nologin => true) : 
             "/s/#{@survey.id}?nologin=true") %>
           </center>
@@ -22,12 +22,7 @@
   </center>
 <% else %>
   <div class="splash login">
-    
-      
-    
       <div class="left width30">
-    
-    
         <div class="loginscreen" style="text-align: center;">
         <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook), rel: 'external') %>
         <p><a href="/"><%= t('.back') %></a></p>

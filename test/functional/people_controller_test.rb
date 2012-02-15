@@ -164,8 +164,9 @@ class PeopleControllerTest < ActionController::TestCase
     context "When user is leader" do
       setup do
         @user = Factory(:user_with_auxs)
+        user2 = Factory(:user_with_auxs)
         @org = Factory(:organization)
-        org_role = Factory(:organizational_role, organization: @org, person: @user.person, role: Role.leader)
+        org_role = Factory(:organizational_role, organization: @org, person: @user.person, role: Role.leader, :added_by_id => user2.person.id)
         
         sign_in @user
         @request.session[:current_organization_id] = @org.id
@@ -265,5 +266,72 @@ class PeopleControllerTest < ActionController::TestCase
 =end
 
   end
-
+  
+  context "displaying a person's friends in their profile" do
+    setup do
+      #setup user, orgs
+      user = Factory(:user_with_auxs)
+      sign_in user
+      @org = Factory(:organization)
+      #setup the person, and non-friends
+      @person = Factory(:person_with_facebook_data)
+      assert_not_nil(@person.friends)
+      #create the person objects
+      @person1 = Factory(:person, fb_uid: 3248973)
+      @person2 = Factory(:person, fb_uid: 3343484)
+      #add them in the org
+      @org.add_contact(@person)
+      @org.add_contact(@person1)
+      @org.add_contact(@person2)
+      @request.session['current_organization_id'] = @org.id
+    end
+    
+    should "return the friends who are members of the same org as person" do
+      #simulate their friendship with @person
+      friend1 = Factory(:friend, person: @person)
+      friend2 = Factory(:friend, person: @person)
+      friend1.update_attributes(:uid => @person1.fb_uid)
+      friend2.update_attributes(:uid => @person2.fb_uid)
+      assert_not_nil(friend1.person)
+      assert_not_nil(friend2.person)
+      #profile view
+      get :show, { 'id' => @person.id }
+      #check the friends on the same org
+      assert_not_nil(assigns(:org_friends))
+      assert(assigns(:org_friends).include?@person1)
+      assert(assigns(:org_friends).include?@person2)
+      assert_equal(2, assigns(:org_friends).count)
+    end
+  end
+  
+  context "Assigning a contact to leader" do
+    setup do
+      @user = Factory(:user_with_auxs)
+      @org = Factory(:organization)
+      org_role = Factory(:organizational_role, organization: @org, person: @user.person, role: Role.admin)
+        
+      sign_in @user
+      @request.session[:current_organization_id] = @org.id
+      
+      @roles = []
+      @roles << Role.leader
+      @roles = @roles.collect { |role| role.id }.join(',')
+    end
+    
+    should "update the contact's role to leader that has a valid email" do
+      person = Factory(:person, email: "test@mail.com")
+      xhr :post, :update_roles, { :role_ids => @roles, :person_id => person.id }
+      assert_response :success
+      assert_equal(person.id, OrganizationalRole.last.person_id)
+      assert_equal(1, ActionMailer::Base.deliveries.count)
+    end
+    
+    should "not attempt to email if contact doesnt have a valid email" do
+      person = Factory(:person)
+      assert_nil(person.email)
+      xhr :post, :update_roles, { :role_ids => @roles, :person_id => person.id }
+      assert_response :success
+      assert_equal(0, ActionMailer::Base.deliveries.count)
+    end
+  end
 end

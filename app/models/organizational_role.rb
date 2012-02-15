@@ -10,6 +10,7 @@ class OrganizationalRole < ActiveRecord::Base
   scope :completed, where("followup_status = 'completed' AND role_id = #{Role::CONTACT_ID}")
   # scope :uncontacted, where("followup_status = 'uncontacted' AND role_id = #{Role::CONTACT_ID}")
   before_create :set_start_date, :set_contact_uncontacted
+  after_create :notify_new_leader
   after_save :set_end_date_if_deleted
   
   
@@ -19,11 +20,9 @@ class OrganizationalRole < ActiveRecord::Base
       case
       when role_id == Role::CONTACT_ID && other.role_id != Role::CONTACT_ID
         MergeAudit.create!(mergeable: other, merge_looser: self)
-        self.reload
         self.destroy
       when other.role_id == Role::CONTACT_ID && role_id != Role::CONTACT_ID
         MergeAudit.create!(mergeable: self, merge_looser: other)
-        other.reload
         other.destroy
       when other.role_id == Role::CONTACT_ID && role_id == Role::CONTACT_ID
         # Both roles are contact, and we only need one contact role
@@ -34,6 +33,28 @@ class OrganizationalRole < ActiveRecord::Base
       end
     end
   end
+
+  def create_user_for_person_if_not_existing
+    if self.person.user.nil?
+      return self.person.create_user!
+    else
+      return self.person
+    end
+  end
+
+  def notify_new_leader
+    p = create_user_for_person_if_not_existing
+    if role_id == Role::LEADER_ID && !p.nil?
+      added_by = Person.find(added_by_id)
+      token = SecureRandom.hex(12)
+      p.user.remember_token = token
+      p.user.remember_token_expires_at = 1.month.from_now
+      p.user.save(validate: false)
+      LeaderMailer.added(self.person, added_by, self.organization, token).deliver
+    end
+  end
+
+
   private
     def set_start_date
       self.start_date = Date.today
