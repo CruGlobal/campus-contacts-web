@@ -158,6 +158,15 @@ class Organization < ActiveRecord::Base
       OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: Role::CONTACT_ID).first.try(:destroy)
     end
 
+    def remove_leader(person)
+      person_id = person.is_a?(Person) ? person.id : person
+      unless Person.find(person_id).organizational_roles.where("organization_id = ? AND role_id <> ?", id, Role::LEADER_ID).first
+        OrganizationMembership.where(person_id: person_id, organization_id: id).first.try(:destroy)
+      end
+      OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: Role::LEADER_ID).first.try(:destroy)
+      person.remove_assigned_contacts(self)
+    end
+
     def move_contact(person, to_org, keep_contact)  
       @followup_comments = followup_comments.where(contact_id: person.id)
       @rejoicables = rejoicables.where(person_id: person.id)
