@@ -17,7 +17,7 @@ class Api::PeopleController < ApiController
 
   def leaders_2
     output = @api_json_header
-    output[:leaders] = @organization.leaders.collect{|l| l.to_hash_micro_leader}
+    output[:leaders] = @organization.leaders.collect{|l| l.to_hash_micro_leader(@organization) }
     render json: output
   end
 end

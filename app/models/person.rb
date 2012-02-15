@@ -474,10 +474,10 @@ class Person < ActiveRecord::Base
     hash
   end
   
-  def to_hash_micro_leader
+  def to_hash_micro_leader(organization)
    hash = to_hash_mini
    hash['picture'] = picture unless fb_uid.nil?
-   hash['num_contacts'] = assigned_contacts.count
+   hash['num_contacts'] = contact_assignments.for_org(organization).count 
    hash 
   end
   
