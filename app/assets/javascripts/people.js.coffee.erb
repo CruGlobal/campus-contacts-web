@@ -136,6 +136,19 @@ $ ->
     if(fromViewingFBProfile)
       $('#people_controller.edit .ui-autocomplete').show();
       fromViewingFBProfile = false
+      
+  $('#merge_people').live 'click', ->
+    if $('.id_checkbox:checked').length > 2
+      alert "You can't select more than two people for this merge"
+      return false
+    else
+      $('.id_checkbox:checked').each ->
+        id = $(this).val()
+        tr = $(this).parent().parent();
+        alert tr.attr('data-name')
+      return false
+    end
+    
 
 $.fn.fbNameSearch = (url)->
   prevBtn = $("#fb_name_search_dialog").next(".ui-dialog-buttonpane").find('button')[1]

@@ -53,6 +53,9 @@
       <li><%= link_to(t('.add_person'), "", class: 'add_person') %></li>
     </ul>
     <ul class="pillmenu">
+      <li><%= link_to(t('.merge_people'), "", id: "merge_people") %></li>
+    </ul>
+    <ul class="pillmenu">
       <li><%= link_to(t('.filter'), '#', id: 'filter_link') %></li>
     </ul>
     <% if can? :manage, current_organization %>
@@ -62,7 +65,7 @@
     <% end %>
     <ul class="pillmenu">
       <li><%= link_to(t('.vcard'), '', id: 'bulk_vcard_link' ) %></li>
-    </ul>     
+    </ul>
     <%= render 'search' %>
     <%= render 'advanced_search' %>
   </div>
