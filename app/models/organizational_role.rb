@@ -12,6 +12,10 @@ class OrganizationalRole < ActiveRecord::Base
   before_create :set_start_date, :set_contact_uncontacted
   before_create :notify_new_leader, :if => :role_is_leader_or_admin
   after_save :set_end_date_if_deleted
+
+  scope :find_non_admin_and_non_leader_roles, {
+    :conditions => ["role_id != ? AND role_id != ?", Role::ADMIN_ID, Role::LEADER_ID]
+  }
   
   
   def merge(other)

@@ -289,6 +289,8 @@ class PeopleController < ApplicationController
       role_ids = params[:role_ids].split(',')
     end
     
+    #organizational_roles = person.organizational_roles.find_non_admin_and_non_leader_roles
+    #organizational_roles = organizational_roles.where(organization_id: current_organization.id).collect { |role| role.id }
     organizational_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.id }
     
     OrganizationalRole.delete(organizational_roles)
@@ -306,13 +308,15 @@ class PeopleController < ApplicationController
     end
 
     role_ids.uniq.each_with_index do |role_id, index|
-
-      begin       
-        OrganizationalRole.create!(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) 
-      rescue OrganizationalRole::InvalidPersonAttributesError
-        render 'update_leader_error', :locals => { :person => person } if role_id == Role::LEADER_ID.to_s
-        render 'update_admin_error', :locals => { :person => person } if role_id == Role::ADMIN_ID.to_s
-        return
+        begin
+          begin       
+            OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) 
+          rescue OrganizationalRole::InvalidPersonAttributesError
+          render 'update_leader_error', :locals => { :person => person } if role_id == Role::LEADER_ID.to_s
+          render 'update_admin_error', :locals => { :person => person } if role_id == Role::ADMIN_ID.to_s
+          return
+        rescue ActiveRecord::RecordNotUnique
+        end
       end
 
       data << "<span id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
