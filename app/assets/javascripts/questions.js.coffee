@@ -25,6 +25,8 @@ $ ->
     $('#new_question_form').closest('.inlineform').show()
     $('#question_form').slideDown()
     $('.advanced_options').hide()
+    $('.sms_length').html(0)
+    $('.sms_preview').html('')
     false
     
   $('#add_old_question_link').live 'click', ->
