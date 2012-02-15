@@ -308,18 +308,6 @@ class PeopleController < ApplicationController
       organizational_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.id if organizational_role_ids.include?(role.role_id.to_s) }
       OrganizationalRole.delete(organizational_roles)      
     end
-    
-    #we check if a admin role i assigned, and move it to the last spot on the array
-    if role_ids.include? Role::ADMIN_ID.to_s
-      role_ids.delete(Role::ADMIN_ID.to_s)
-      role_ids << Role::ADMIN_ID.to_s
-    end
-
-    #we check if a leader role i assigned, and move it to the last spot on the array
-    if role_ids.include? Role::LEADER_ID.to_s
-      role_ids.delete(Role::LEADER_ID.to_s)
-      role_ids << Role::LEADER_ID.to_s
-    end
 
     role_ids.uniq.each_with_index do |role_id, index|
         begin
