@@ -24,6 +24,7 @@ $ ->
     $('.inlineform').hide()
     $('#new_question_form').closest('.inlineform').show()
     $('#question_form').slideDown()
+    $('.advanced_options').hide()
     false
     
   $('#add_old_question_link').live 'click', ->
@@ -77,8 +78,9 @@ $ ->
     $('.question_form')[0].reset()
     $('#question_type').change()
     
-  $('#advanced_toggle').click ->
-    $('#advanced_options').toggle()
+  $('#advanced_toggle').live 'click', (e) ->
+    e.preventDefault()
+    $('.advanced_options').toggle()
     false
       
   $('#cancel_survey_question').live 'click', (e)->
