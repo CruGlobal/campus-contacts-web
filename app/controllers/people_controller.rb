@@ -167,11 +167,10 @@ class PeopleController < ApplicationController
               rescue OrganizationalRole::InvalidPersonAttributesError
 
                 @person.destroy
-                @phone.destroy if @phone
-=begin
-                @email.destroy if @email
-                @phone.destroy if @phone
-=end
+                @person = Person.new(params[:person])
+
+                flash.now[:error] = I18n.t('people.create.error_creating_leader_no_valid_email') if role_id == Role::LEADER_ID.to_s
+                flash.now[:error] = I18n.t('people.create.error_creating_admin_no_valid_email') if role_id == Role::ADMIN_ID.to_s
                 render 'add_person' and return
               end
             rescue ActiveRecord::RecordNotUnique
