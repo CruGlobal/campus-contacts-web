@@ -147,24 +147,34 @@ class PeopleController < ApplicationController
             begin
               begin
                 @person.organizational_roles.create(role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id)
+
+                # we need a valid email address to make a leader
+                if role_ids.include?(Role::LEADER_ID) || role_ids.include?(Role::ADMIN_ID)
+                  @new_person = @person.create_user! if @email.present? && @person.user.nil? # create a user account if we have an email address
+                  if @new_person && @new_person.save
+                    @person = @new_person
+                    #current_organization.notify_new_leader(@person, current_person) 
+=begin
+                  else
+                    @person.reload
+                    @email = @person.primary_email_address || @person.email_addresses.new
+                    @phone = @person.primary_phone_number || @person.phone_numbers.new
+                    render 'add_person' and return
+=end
+                  end
+                end
+
               rescue OrganizationalRole::InvalidPersonAttributesError
 
+                @person.destroy
+                @phone.destroy if @phone
+=begin
+                @email.destroy if @email
+                @phone.destroy if @phone
+=end
+                render 'add_person' and return
               end
             rescue ActiveRecord::RecordNotUnique
-            end
-          end
-
-          # we need a valid email address to make a leader
-          if role_ids.include?(Role::LEADER_ID) || role_ids.include?(Role::ADMIN_ID)
-            @new_person = @person.create_user! if @email.present? && @person.user.nil? # create a user account if we have an email address
-            if @new_person && @new_person.save
-              @person = @new_person
-              #current_organization.notify_new_leader(@person, current_person) 
-            else
-              @person.reload
-              @email = @person.primary_email_address || @person.email_addresses.new
-              @phone = @person.primary_phone_number || @person.phone_numbers.new
-              render 'add_person' and return
             end
           end
         else

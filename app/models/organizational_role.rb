@@ -16,11 +16,6 @@ class OrganizationalRole < ActiveRecord::Base
   scope :find_non_admin_and_non_leader_roles, {
     :conditions => ["role_id != ? AND role_id != ?", Role::ADMIN_ID, Role::LEADER_ID]
   }
-
-  scope :find_roles_by_role_ids,  lambda { |role_ids| {
-    :conditions => ["facebook_id = ?", fb_id]
-  } }
-  
   
   def merge(other)
     # We can have multiple roles, but if we're a contact that should be the only role
