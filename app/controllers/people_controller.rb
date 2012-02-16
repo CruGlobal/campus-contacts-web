@@ -3,6 +3,11 @@ class PeopleController < ApplicationController
   before_filter :ensure_current_org
   before_filter :authorize_merge, only: [:merge, :confirm_merge, :do_merge, :merge_preview]
   before_filter :roles_for_assign
+=begin
+  rescue_from OrganizationalRole::InvalidPersonAttributesError do |exception|
+    render 'update_leader_error'
+  end
+=end
   # GET /people
   # GET /people.xml
   def index
@@ -140,22 +145,35 @@ class PeopleController < ApplicationController
           role_ids = params[:roles].keys.map(&:to_i)
           params[:roles].keys.each do |role_id|
             begin
-              @person.organizational_roles.create(role_id: role_id, organization_id: current_organization.id)
-            rescue ActiveRecord::RecordNotUnique
-            end
-          end
+              begin
+                @person.organizational_roles.create(role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id)
 
-          # we need a valid email address to make a leader
-          if role_ids.include?(Role::LEADER_ID) || role_ids.include?(Role::ADMIN_ID)
-            @new_person = @person.create_user! if @email.present? && @person.user.nil? # create a user account if we have an email address
-            if @new_person && @new_person.save
-              @person = @new_person
-              current_organization.notify_new_leader(@person, current_person) 
-            else
-              @person.reload
-              @email = @person.primary_email_address || @person.email_addresses.new
-              @phone = @person.primary_phone_number || @person.phone_numbers.new
-              render 'add_person' and return
+                # we need a valid email address to make a leader
+                if role_ids.include?(Role::LEADER_ID) || role_ids.include?(Role::ADMIN_ID)
+                  @new_person = @person.create_user! if @email.present? && @person.user.nil? # create a user account if we have an email address
+                  if @new_person && @new_person.save
+                    @person = @new_person
+                    #current_organization.notify_new_leader(@person, current_person) 
+=begin
+                  else
+                    @person.reload
+                    @email = @person.primary_email_address || @person.email_addresses.new
+                    @phone = @person.primary_phone_number || @person.phone_numbers.new
+                    render 'add_person' and return
+=end
+                  end
+                end
+
+              rescue OrganizationalRole::InvalidPersonAttributesError
+
+                @person.destroy
+                @person = Person.new(params[:person])
+
+                flash.now[:error] = I18n.t('people.create.error_creating_leader_no_valid_email') if role_id == Role::LEADER_ID.to_s
+                flash.now[:error] = I18n.t('people.create.error_creating_admin_no_valid_email') if role_id == Role::ADMIN_ID.to_s
+                render 'add_person' and return
+              end
+            rescue ActiveRecord::RecordNotUnique
             end
           end
         else
@@ -296,19 +314,32 @@ class PeopleController < ApplicationController
     else
       role_ids = params[:role_ids].split(',')
     end
-
-
     
-    organizational_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.id }
+    organizational_role_ids = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.role_id.to_s }
 
-    OrganizationalRole.delete(organizational_roles)
+    #if role_ids.length (new roles) is less than old roles. i.e. there is a role that is going to be deleted
+    #The purpose of this code block is to avoid emailing (that a Person has just become a leader) a Person if he is already a leader before this roles update
+    if organizational_role_ids.length > role_ids.length
+      organizational_role_ids = organizational_role_ids - role_ids
+      organizational_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.id if organizational_role_ids.include?(role.role_id.to_s) }
+      OrganizationalRole.delete(organizational_roles)      
+    end
 
     role_ids.uniq.each_with_index do |role_id, index|
-       OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person.id, current_organization.id, role_id, :added_by_id => current_person.id)
+        begin
+          begin       
+            OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) 
+          rescue OrganizationalRole::InvalidPersonAttributesError
+          render 'update_leader_error', :locals => { :person => person } if role_id == Role::LEADER_ID.to_s
+          render 'update_admin_error', :locals => { :person => person } if role_id == Role::ADMIN_ID.to_s
+          return
+        rescue ActiveRecord::RecordNotUnique
+        end
+      end
 
-       data << "<span id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
-       data << "style='margin-right:4px;'" if index < role_ids.length - 1
-       data << ">#{Role.find(role_id).to_s}</span>"
+      data << "<span id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
+      data << "style='margin-right:4px;'" if index < role_ids.length - 1
+      data << ">#{Role.find(role_id).to_s}</span>"
     end
 
     render :text => data

@@ -122,6 +122,9 @@ en:
     search:
       not_in_system: 'If the person you are looking for is not already in the system click here to add them.'
   people:
+    create:
+      error_creating_leader_no_valid_email: "Error: Cannot create Person with leader role without a valid email"
+      error_creating_admin_no_valid_email: "Error: Cannot create Person with admin role without a valid email"
     person_form:
       add_phone_number: "Add Phone Number" 
       add_email_address: "Add Email Address" 
@@ -144,6 +147,9 @@ en:
       apply_roles: 'Apply Labels'
       no_people: "Sorry, there are no people involved here."
       displaying: "Displaying %{start} - %{finish} of %{total}"
+      error_message: "Error: %{person} does not have valid email to be leader"
+      error_message_update_leader_without_person: "Error: Person does not have valid email to be leader"
+      error_message_update_admin_without_person: "Error: Person does not have valid email to be admin"
     all:
       page_selected_html: "All <b>%{count}</b> people on this page are selected."
       select_all_html: "Select all <b>%{count}</b> people in the directory."

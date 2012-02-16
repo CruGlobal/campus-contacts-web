@@ -143,4 +143,48 @@ class LeadersControllerTest < ActionController::TestCase
     end
   end
 
+  context "Seaching for Persons to be assigned a leader role" do
+    setup do
+      @user = Factory(:user_with_auxs)
+      @org = Factory(:organization)
+      org_role = Factory(:organizational_role, organization: @org, person: @user.person, role: Role.admin)
+        
+      sign_in @user
+      @request.session[:current_organization_id] = @org.id
+      
+      @roles = []
+      @roles << Role.leader
+      @roles = @roles.collect { |role| role.id }.join(',')
+    end
+
+    should "successfully find a searched Person if Person has valid email" do
+      person = Factory(:person, firstName: "NeilMarion", email: "super_duper_unique_email@mail.com")
+      assert_equal(Person.count, 2)
+      xhr :get, :search, {"show_all"=>"", "name"=>"NeilMarion"}
+      assert_response :success
+    end
+
+    should "successfully not find a searched Person if Person has an invalid email" do
+
+    end
+
+    should "not attempt to email if contact doesnt have a valid email" do
+      person = Factory(:person)
+      mail_count = ActionMailer::Base.deliveries.count
+      assert(person.email, "")
+      xhr :post, :create, { :person_id => person.id }
+      assert_response :success
+      assert_equal(mail_count, ActionMailer::Base.deliveries.count)
+    end
+
+    should "update the contact's role to leader that has a valid email" do
+      person = Factory(:person, email: "super_duper_unique_email@mail.com")
+      xhr :post, :create, { :person_id => person.id }
+      assert_response :success
+      assert_equal(person.id, OrganizationalRole.last.person_id)
+      assert_equal("super_duper_unique_email@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s)
+    end
+
+  end
+
 end
