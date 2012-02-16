@@ -38,7 +38,7 @@ class OrganizationalRole < ActiveRecord::Base
   end
   
   def role_is_leader_or_admin
-    if role_id == Role::LEADER_ID || role_id == Role::ADMIN_ID
+    if (role_id == Role::LEADER_ID || role_id == Role::ADMIN_ID) && added_by_id
       true
     else
       false

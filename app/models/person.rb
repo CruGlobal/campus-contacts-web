@@ -509,7 +509,7 @@ class Person < ActiveRecord::Base
   end
 
   def to_hash_mini_leader(org_id)
-    hash = to_hash_micro_leader
+    hash = to_hash_micro_leader(Organization.find(org_id))
     hash['organizational_roles'] = []
     organizational_roles.includes(:role, :organization).where("role_id <> #{Role::CONTACT_ID}").uniq {|r| r.organization_id}.collect do |r| 
       if om = organization_memberships.where(organization_id: r.organization_id).first
