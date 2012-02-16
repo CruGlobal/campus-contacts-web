@@ -89,6 +89,7 @@ $ ->
     e.preventDefault()
     $('.inlineform').show()
     $('#new_question_form').closest('.inlineform').hide()
+    $('.question_form')[1].reset()
     $('#question_form').slideUp()
     false
     
