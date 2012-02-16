@@ -162,10 +162,14 @@ class PeopleController < ApplicationController
                     render 'add_person' and return
 =end
                   end
+
+                  if params.has_key?(:add_to_group)
+                    render json: @person and return
+                  end
+
                 end
 
               rescue OrganizationalRole::InvalidPersonAttributesError
-
                 @person.destroy
                 @person = Person.new(params[:person])
 
@@ -183,6 +187,7 @@ class PeopleController < ApplicationController
         if params.has_key?(:add_to_group)
           render json: @person
         else
+
           respond_to do |wants|
             wants.html { redirect_to :back }
             wants.mobile { redirect_to :back }
@@ -292,11 +297,12 @@ class PeopleController < ApplicationController
     
     person = Person.find(params[:person_id])
 
+    role_ids = params[:role_ids].split(',').map(&:to_i)
+
     if params[:include_old_roles] == 'yes'
-      role_ids = params[:role_ids].split(',') + person.organizational_roles.where(organization_id: current_organization.id).collect { |r| r.role.id.to_s }.join(',').split(',')
-    else
-      role_ids = params[:role_ids].split(',')
+      role_ids += person.organizational_roles.where(organization_id: current_organization.id).collect(&:id) 
     end
+
     
     organizational_role_ids = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.role_id.to_s }
 
@@ -305,7 +311,7 @@ class PeopleController < ApplicationController
     if organizational_role_ids.length > role_ids.length
       organizational_role_ids = organizational_role_ids - role_ids
       organizational_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.id if organizational_role_ids.include?(role.role_id.to_s) }
-      OrganizationalRole.delete(organizational_roles)      
+      OrganizationalRole.delete(organizational_roles)
     end
 
     role_ids.uniq.each_with_index do |role_id, index|
