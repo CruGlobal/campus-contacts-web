@@ -334,4 +334,49 @@ class PeopleControllerTest < ActionController::TestCase
       assert_equal(0, ActionMailer::Base.deliveries.count)
     end
   end
+  
+  context "Merging people" do
+    setup do
+      @user = Factory(:user_with_auxs)
+      @org = Factory(:organization)
+      sign_in @user
+      @request.session[:current_organization_id] = @org.id
+    end
+    
+    context "when the logged in user is admin" do
+      setup do
+        Factory(:organizational_role, organization: @org, person: @user.person, role: Role.admin)  
+      end
+      
+      should "have access to the merge facility" do
+        get :merge
+        assert_response(:success)
+        puts @request.body
+      end
+    end
+    
+    context "when the logged in user is a super admin" do
+      setup do
+        Factory(:super_admin, user: @user)
+      end
+      
+      should "have access to the merge facility" do
+        get :merge
+        assert_response(:success)
+        puts @request.body
+      end
+    end
+    
+    context "when the logged in user is a leader" do
+      setup do
+        Factory(:organizational_role, organization: @org, person: @user.person, role: Role.leader) 
+      end
+      
+      should "not be allowed to use the merge facility" do
+        get :merge
+        assert_response(:redirect)
+        assert_equal(flash[:error], "You are not permitted to access that feature")
+      end
+    end
+  end
 end

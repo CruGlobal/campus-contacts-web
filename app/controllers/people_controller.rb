@@ -71,7 +71,7 @@ class PeopleController < ApplicationController
   end
   
   def search_ids
-    if current_user.developer?
+    if current_user_super_admin?
       @people = Person.search_by_name(params[:q])
     else
       @people = current_organization.people.search_by_name(params[:q])
@@ -481,7 +481,12 @@ class PeopleController < ApplicationController
     end
     
     def authorize_merge
-      authorize! :merge, Person
+      if current_user_super_admin? || (current_organization.admins.include? current_user.person)
+        authorize! :merge, Person
+      else
+        redirect_to "/people"
+        flash[:error] = "You are not permitted to access that feature"
+      end
     end
     
     def current_user_roles
