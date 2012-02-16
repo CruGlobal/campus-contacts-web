@@ -71,7 +71,11 @@ class PeopleController < ApplicationController
   end
   
   def search_ids
-    @people = Person.search_by_name(params[:q])
+    if current_user.developer?
+      @people = Person.search_by_name(params[:q])
+    else
+      @people = current_organization.people.search_by_name(params[:q])
+    end
     respond_to do |wants|
       wants.json { render text: @people.collect(&:id).to_json }
     end
