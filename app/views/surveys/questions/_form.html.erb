@@ -27,7 +27,7 @@
     <%= render 'advanced_options', f: f, q: question %>
     <div class="submit_button" style="<%= question.new_record? ? 'display:none' : '' %>">
       <% if question.trigger_words.blank? %>
-        <%= link_to t('.toggle_advanced_options'), '#', id: 'advanced_toggle', :class => "toggle_link" %><br/><br />
+        <%= link_to t('.toggle_advanced_options'), '#', id: 'advanced_toggle' %><br/><br />
       <% end %>
       <%= f.submit %>
       <%= button_tag "Cancel", :id => "cancel_survey_question" %>
