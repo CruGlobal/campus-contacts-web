@@ -11,7 +11,7 @@ $ ->
     if sms.length == 141
       inp = String.fromCharCode event.which
       if /[a-zA-Z0-9-_ ]/.test(inp)
-        alert(t('application.messages.sms_too_long'))
+        alert(t('application.messages.question_too_long'))
         # if $('.content', parent)[0]? and $('.content', parent).val().trim() != ''
         #   $('.content', parent).val($('.content', parent).val().substr(0,$('.content', parent).val().length - 1))
         # else
@@ -24,6 +24,9 @@ $ ->
     $('.inlineform').hide()
     $('#new_question_form').closest('.inlineform').show()
     $('#question_form').slideDown()
+    $('.advanced_options').hide()
+    $('.sms_length').html(0)
+    $('.sms_preview').html('')
     false
     
   $('#add_old_question_link').live 'click', ->
@@ -77,8 +80,16 @@ $ ->
     $('.question_form')[0].reset()
     $('#question_type').change()
     
-  $('#advanced_toggle').click ->
-    $('#advanced_options').toggle()
+  $('#advanced_toggle').live 'click', (e) ->
+    e.preventDefault()
+    $('.advanced_options').toggle()
+    false
+      
+  $('#cancel_survey_question').live 'click', (e)->
+    e.preventDefault()
+    $('.inlineform').show()
+    $('#new_question_form').closest('.inlineform').hide()
+    $('#question_form').slideUp()
     false
     
   $('#move_right').live 'click', ->

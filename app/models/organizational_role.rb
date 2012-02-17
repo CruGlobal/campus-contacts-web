@@ -10,9 +10,12 @@ class OrganizationalRole < ActiveRecord::Base
   scope :completed, where("followup_status = 'completed' AND role_id = #{Role::CONTACT_ID}")
   # scope :uncontacted, where("followup_status = 'uncontacted' AND role_id = #{Role::CONTACT_ID}")
   before_create :set_start_date, :set_contact_uncontacted
-  after_create :notify_new_leader
+  before_create :notify_new_leader, :if => :role_is_leader_or_admin
   after_save :set_end_date_if_deleted
-  
+
+  scope :find_non_admin_and_non_leader_roles, {
+    :conditions => ["role_id != ? AND role_id != ?", Role::ADMIN_ID, Role::LEADER_ID]
+  }
   
   def merge(other)
     # We can have multiple roles, but if we're a contact that should be the only role
@@ -33,6 +36,14 @@ class OrganizationalRole < ActiveRecord::Base
       end
     end
   end
+  
+  def role_is_leader_or_admin
+    if (role_id == Role::LEADER_ID || role_id == Role::ADMIN_ID) && added_by_id
+      true
+    else
+      false
+    end
+  end
 
   def create_user_for_person_if_not_existing
     if self.person.user.nil?
@@ -44,7 +55,9 @@ class OrganizationalRole < ActiveRecord::Base
 
   def notify_new_leader
     p = create_user_for_person_if_not_existing
-    if role_id == Role::LEADER_ID && !p.nil?
+    if p.nil?
+      raise InvalidPersonAttributesError
+    else
       added_by = Person.find(added_by_id)
       token = SecureRandom.hex(12)
       p.user.remember_token = token
@@ -52,6 +65,10 @@ class OrganizationalRole < ActiveRecord::Base
       p.user.save(validate: false)
       LeaderMailer.added(self.person, added_by, self.organization, token).deliver
     end
+  end
+  
+  class InvalidPersonAttributesError < StandardError
+  
   end
 
 

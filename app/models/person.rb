@@ -365,6 +365,11 @@ class Person < ActiveRecord::Base
     Person.where(fb_uid: friends.select(:uid).collect(&:uid)).joins(:organizational_roles).where('organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.organization_id' => org.id)
   end
 
+  def remove_assigned_contacts(organization)
+    assigned_contact_ids = contact_assignments.collect{ |r| r.person_id }
+    ContactAssignment.where(person_id: assigned_contact_ids, organization_id: organization.id).destroy_all if assigned_contact_ids.count > 0
+  end
+
   def smart_merge(other)
     if user && other.user
       user.merge(other.user)
@@ -504,7 +509,7 @@ class Person < ActiveRecord::Base
   end
 
   def to_hash_mini_leader(org_id)
-    hash = to_hash_micro_leader
+    hash = to_hash_micro_leader(Organization.find(org_id))
     hash['organizational_roles'] = []
     organizational_roles.includes(:role, :organization).where("role_id <> #{Role::CONTACT_ID}").uniq {|r| r.organization_id}.collect do |r| 
       if om = organization_memberships.where(organization_id: r.organization_id).first

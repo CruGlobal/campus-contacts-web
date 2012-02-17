@@ -319,19 +319,58 @@ class PeopleControllerTest < ActionController::TestCase
     end
     
     should "update the contact's role to leader that has a valid email" do
-      person = Factory(:person, email: "test@mail.com")
-      xhr :post, :update_roles, { :role_ids => @roles, :person_id => person.id }
+      person = Factory(:person, email: "super_duper_unique_email@mail.com")
+      xhr :post, :update_roles, { :role_ids => @roles, :person_id => person.id, :added_by_id => @user.person.id }
       assert_response :success
       assert_equal(person.id, OrganizationalRole.last.person_id)
-      assert_equal(1, ActionMailer::Base.deliveries.count)
+      assert_equal("super_duper_unique_email@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s)
     end
     
     should "not attempt to email if contact doesnt have a valid email" do
       person = Factory(:person)
-      assert_nil(person.email)
-      xhr :post, :update_roles, { :role_ids => @roles, :person_id => person.id }
+      mail_count = ActionMailer::Base.deliveries.count
+      assert(person.email, "")
+      xhr :post, :update_roles, { :role_ids => @roles, :person_id => person.id, :added_by_id => @user.person.id }
       assert_response :success
-      assert_equal(0, ActionMailer::Base.deliveries.count)
+      assert_equal(mail_count, ActionMailer::Base.deliveries.count)
+    end
+    
+    context "person has existing roles" do
+      setup do
+        @existing_roles = []
+        @existing_roles << Role.contact
+        @existing_roles << Role.leader
+        @existing_roles = @existing_roles.collect { |role| role.id }.join(',')
+      end
+      
+      should "append the leader role if the person already has existing roles" do
+        person = Factory(:person, email: 'thisemailisalsounique@mail.com')
+        Factory(:organizational_role, person: person, role: Role.contact, organization: @org, :added_by_id => @user.person.id)
+        #check the persons roles
+        assert_equal(1, person.roles.count)
+        assert_equal(Role.contact, person.roles.last)
+        xhr :post, :update_roles, { :role_ids => @existing_roles, :person_id => person, :added_by_id => @user.person.id }
+        #assert that the leader role was not added
+        assert_response :success
+        assert_equal(2, person.roles.count)
+        assert(person.roles.include? Role.leader)
+        assert(person.roles.include? Role.contact)
+        assert_equal(person.id, OrganizationalRole.last.person_id)
+        assert_equal("thisemailisalsounique@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s)
+      end
+    
+      should "restore the person previous role if the person has an invalid email" do
+        person = Factory(:person)        
+        Factory(:organizational_role, person: person, role: Role.contact, organization: @org, :added_by_id => @user.person.id)
+        #check the persons roles
+        assert_equal(1, person.roles.count)
+        assert_equal(Role.contact, person.roles.last)
+        xhr :post, :update_roles, { :role_ids => @existing_roles, :person_id => person, :added_by_id => @user.person.id }
+        #assert that the leader role was not added
+        assert_response :success
+        assert_equal(1, person.roles.count)
+        assert_equal(Role.contact, person.roles.last)
+      end
     end
   end
   
