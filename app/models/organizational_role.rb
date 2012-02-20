@@ -63,7 +63,7 @@ class OrganizationalRole < ActiveRecord::Base
       p.user.remember_token = token
       p.user.remember_token_expires_at = 1.month.from_now
       p.user.save(validate: false)
-      LeaderMailer.added(self.person, added_by, self.organization, token).deliver
+      LeaderMailer.added(p, added_by, self.organization, token).deliver
     end
   end
   
