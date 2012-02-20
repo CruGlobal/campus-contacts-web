@@ -94,4 +94,14 @@ class SmsControllerTest < ActionController::TestCase
     end
   end
   
+  should "Test for email validation" do
+    assert_equal("herp@derp.com", @controller.send(:try_to_extract_email_from, "My email is herp@derp.com Thanks!"))
+    assert_equal("herp@derp.com", @controller.send(:try_to_extract_email_from, "herp@derp.com, I have a signature!"))
+    assert_equal("herp@derp.com", @controller.send(:try_to_extract_email_from, "herp@derp.com\nLINE BREAK ... IT DOWN!"))
+    assert_blank(@controller.send(:try_to_extract_email_from, ""))
+    assert_blank(@controller.send(:try_to_extract_email_from, "This message does not contain any email of some sort"))
+    
+    puts @controller.send(:try_to_extract_email_from, "myspacebarisbrokenbutmyemailisherp@derp.comthanks!")
+  end
+  
 end

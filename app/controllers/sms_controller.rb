@@ -143,6 +143,13 @@ class SmsController < ApplicationController
               # only checkbox fields can have more than one answer
               answer = question.style == 'checkbox' ? answers : answers.first
             end
+            
+            if question.attribute_name.present?
+              if question.attribute_name == 'email'
+                answer = try_to_extract_email_from(answer)
+              end
+            end
+            
             question.set_response(answer, @answer_sheet)
           end
         end
@@ -150,6 +157,10 @@ class SmsController < ApplicationController
         # Don't blow up on bad saves
         Airbrake.notify(e)
       end
+    end
+    
+    def try_to_extract_email_from(answer)
+      return answer.match(/\b([a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+?)(\.[a-zA-Z.]*)\b/).to_s
     end
     
     def next_question(survey, person)
