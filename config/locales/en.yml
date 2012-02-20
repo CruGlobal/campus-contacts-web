@@ -155,6 +155,7 @@ en:
       select_all_html: "Select all <b>%{count}</b> people in the directory."
       all_selected_html: "All <b>%{count}</b> people in the directory are selected."
     show:
+      updated_time_difference: "Updated %{time_diff} ago."
       add_comments_here: 'Add comments here...'
       previous_comments: 'Previous Comments'
       send_contact_info: "Email me %{name}'s info"

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120201201417) do
+ActiveRecord::Schema.define(:version => 20120220175325) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -3583,6 +3583,7 @@ ActiveRecord::Schema.define(:version => 20120201201417) do
     t.string   "ministry"
     t.string   "strategy",                      :limit => 20
     t.integer  "fb_uid",                        :limit => 8
+    t.datetime "date_attributes_updated"
   end
 
   add_index "ministry_person", ["accountNo"], :name => "accountNo_ministry_Person"
@@ -4796,10 +4797,10 @@ ActiveRecord::Schema.define(:version => 20120201201417) do
 
   create_table "saved_contact_searches", :force => true do |t|
     t.string   "name"
-    t.string   "full_path"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "full_path",  :limit => 200
   end
 
   add_index "saved_contact_searches", ["user_id"], :name => "index_saved_contact_searches_on_user_id"

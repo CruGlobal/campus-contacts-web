@@ -52,6 +52,12 @@ class Person < ActiveRecord::Base
 
   before_save :stamp_changed
   before_create :stamp_created
+  #after_update :update_date_attributes_updated
+
+  def update_date_attributes_updated
+    self.date_attributes_updated = DateTime.now.to_s(:db)
+    self.save
+  end
 
   def self.search_by_name(name, organization_ids = nil, scope = nil)
     return scope.where('1 = 0') unless name.present?
