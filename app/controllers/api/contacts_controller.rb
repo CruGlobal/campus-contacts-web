@@ -17,12 +17,29 @@ class Api::ContactsController < ApiController
     render json: final_output
   end
 
+  def search_2
+    @keywords = get_keywords
+    json_output = []
+    unless (@keywords.empty? || !params[:term].present?)
+      @surveys = @keywords.collect(&:survey)
+      @people = Person.who_answered(@surveys).where('CONCAT(`ministry_person`.`firstName`," ", `ministry_person`.`lastName`) LIKE ? OR `ministry_person`.`lastName` LIKE ? OR CONCAT(`ministry_person`.`preferredName`," ", `ministry_person`.`lastName`) LIKE ?',"%#{params[:term]}%","%#{params[:term]}%","%#{params[:term]}%")
+      @people = paginate_filter_sort_people(@people,@organization)
+    end
+
+    output = @api_json_header
+    output[:contacts] = @people.collect {|person| {person: person.to_hash_basic(@organization)}}
+
+    final_output = Rails.env.production? ? JSON.fast_generate(output) : JSON::pretty_generate(output)
+
+    render json: final_output
+  end
+
   def index_1
     @keywords = get_keywords
     json_output = []
     @surveys = @keywords.collect(&:survey)
     @people = @organization.all_contacts#.order('lastName, firstName')
-    @people = paginate_filter_sort_people(@people, @organization)
+    @people = paginate_filter_sort_people(@people, @organization)    
     json_output = @people.collect {|person| {person: person.to_hash_basic(@organization)}}
     final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
     render json: final_output
@@ -156,7 +173,7 @@ class Api::ContactsController < ApiController
 
     @people = restrict_to_contact_role(@people,@organization)
     @people = limit_and_offset_object(@people) if params[:start].present?
-    
+
     output = @api_json_header
     output[:contacts] = @people.collect {|person| {person: person.to_hash_basic(@organization)}}
 
