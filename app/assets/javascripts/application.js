@@ -26,3 +26,8 @@
 //= require i18n/translations
 //= require followup_comments
 //= require clearform
+
+$(function (){
+ $('#person_updated_from').datepicker();
+ $('#person_updated_to').datepicker();
+});

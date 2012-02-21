@@ -22,6 +22,13 @@
         <%= radio_button_tag :gender, '0', params[:gender] == '0' %> <%= t('general.female') %>
         <%= radio_button_tag :gender, '', params[:gender] == '' %> <%= t('general.both') %><br>
       </div>
+      <div>
+       <label for="contacts_updated"><span class="title"><%= t('general.contacts_updated_from') %></span></label>
+       <%= text_field_tag :person_updated_from %>
+        <%= t('general.dash') %>
+       <%= text_field_tag :person_updated_to %>
+      </div>
+
       <div class="field">
         <label for="status"><span class="title"><%= t('general.status') %></span></label>
         <%= select_tag :status, options_for_select(OrganizationMembership::FOLLOWUP_STATUSES.collect {|s| [s.titleize, s]}, params[:status]), include_blank: true %><br>
