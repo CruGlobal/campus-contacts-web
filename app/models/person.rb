@@ -505,6 +505,7 @@ class Person < ActiveRecord::Base
    hash = to_hash_mini
    hash['picture'] = picture unless fb_uid.nil?
    hash['num_contacts'] = contact_assignments.for_org(organization).count 
+   hash['fb_id'] = fb_uid.to_s unless fb_uid.nil?
    hash 
   end
 
