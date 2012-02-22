@@ -92,6 +92,16 @@ class PeopleController < ApplicationController
   
   def confirm_merge
     @people = 1.upto(4).collect {|i| Person.find_by_personID(params["person#{i}"]) if params["person#{i}"].present?}.compact
+
+    if !current_user_super_admin? && (current_organization.admins.include? current_user.person)
+      names = @people.collect(&:name)
+      if names.uniq.length != 1
+        #this means that one person doesn't have the same name with others
+        redirect_to merge_people_path(params.slice(:person1, :person2, :person3, :person4)), alert: "You can only merge people with the EXACT same first and last name. Go to the person's profile and edit their name to make them exactly the same and then try again."
+        return false
+      end
+    end
+    
     unless @people.length >= 2
       redirect_to merge_people_path(params.slice(:person1, :person2, :person3, :person4)), alert: "You must select at least 2 people to merge"
       return false

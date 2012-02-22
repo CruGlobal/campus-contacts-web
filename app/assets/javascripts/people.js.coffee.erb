@@ -48,8 +48,8 @@ $ ->
   $('#user_merge_form input.name').observe_field 1, ->
     $(this).triggerPersonSearch()
 
-  $('#user_merge_form input.person').triggerPersonLookup()
-  $('#user_merge_form input.name').triggerPersonSearch()
+  #$('#user_merge_form input.person').triggerPersonLookup()
+  #$('#user_merge_form input.name').triggerPersonSearch()
 
   $('#people_controller a.add_person').live 'click', ->
     $('#new_person')[0].reset()
@@ -137,12 +137,13 @@ $ ->
       $('#people_controller.edit .ui-autocomplete').show();
       fromViewingFBProfile = false
       
-  $('#merge_people').live 'click', ->
-    if $('.id_checkbox:checked').length > 2
-      alert "You can't select more than two people for this merge"
-      return false
-    end
-    
+  $('#merge_people').live 'click', (e) ->
+    e.preventDefault()  
+    if $('.id_checkbox:checked').length > 0
+      document.location.href = '/people/merge?person1=' + $('.id_checkbox:checked').first().val()
+    else
+      document.location.href = '/people/merge'
+  false
 
 $.fn.fbNameSearch = (url)->
   prevBtn = $("#fb_name_search_dialog").next(".ui-dialog-buttonpane").find('button')[1]
