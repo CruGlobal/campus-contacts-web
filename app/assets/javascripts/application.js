@@ -28,6 +28,6 @@
 //= require clearform
 
 $(function (){
- $('#person_updated_from').datepicker();
- $('#person_updated_to').datepicker();
+ $('#person_updated_from').datepicker({ dateFormat: 'dd-mm-yy' });
+ $('#person_updated_to').datepicker({ dateFormat: 'dd-mm-yy' });
 });

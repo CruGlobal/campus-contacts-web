@@ -118,8 +118,7 @@ class ContactsController < ApplicationController
       end
     end
     if params[:person_updated_from].present? && params[:person_updated_to].present?
-      #puts "===========+> #{params[:person_updated_from].to_date.to_s(:db)}"
-      @people = @people.find_by_person_updated_by_daterange(params[:person_updated_from].to_s.to_date.to_s(:db), params[:person_updated_to].to_s.to_date.to_s(:db))
+      @people = @people.find_by_person_updated_by_daterange(params[:person_updated_from], params[:person_updated_to])
     end
     @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
     # raise @q.sorts.inspect
