@@ -174,7 +174,7 @@ $ ->
       unless $('#assign_to').val() == $('#my_id').val()
         $.fn.load_leader_name($('#person_title').attr('data-id'))
         $('.id_checkbox:checked').each ->
-          $(this).closest('tr').remove();
+          $(this).closest('tr').remove()
     $('#assign_search').dialog('destroy')
   false
 
@@ -190,7 +190,7 @@ $ ->
     $.rails.handleRemote(form)
     if keep_contact == false
       $('.id_checkbox:checked').each ->
-        $(this).closest('tr').remove();
+        $(this).closest('tr').remove()
     form.attr('action', old_action)
     $('#assign_search').dialog('destroy')
     if $('#contacts_controller.show')[0]
@@ -218,7 +218,7 @@ $ ->
   $('#assign_search .label a').live 'click', (e)->
     e.preventDefault()
     role = $('#assign_to').val($(this).closest('li').attr('data-role')).val()
-    
+    show_success = true
     if window.location.pathname == '/contacts'
       $('.id_checkbox:checked').each ->
         person_id = $(this).val()
@@ -226,12 +226,13 @@ $ ->
           type: 'POST',
           url: '/people/update_roles',
           data: 'role_ids='+role+'&person_id='+person_id+'&include_old_roles=yes'
-        
+          error: show_success = false
         $('#main').load('/contacts .index.carea')
         $('#left').load('/contacts .block')
         
       $('#assign_search').dialog('destroy')
-      $.n('Successfully assigned label.')
+      if show_success
+        $.n('Successfully assigned label.')
     else if window.location.pathname == '/contacts/mine'
       $('.id_checkbox:checked').each ->
         person_id = $(this).val()
@@ -239,20 +240,23 @@ $ ->
           type: 'POST',
           url: '/people/update_roles',
           data: 'role_ids='+role+'&person_id='+person_id+'&include_old_roles=yes'
-        
+          error: show_success = false
         $('#main').load('/contacts/mine .mine.carea')
         $('#left').load('/contacts/mine .block')
         
       $('#assign_search').dialog('destroy')
-      $.n('Successfully assigned label.')
+      if show_success
+        $.n('Successfully assigned label.')
     else
       person_id = $('.assign.headerlink').attr('data-id')
       $.ajax
           type: 'POST',
           url: '/people/update_roles',
           data: 'role_ids='+role+'&person_id='+person_id+'&include_old_roles=yes'
+          error: show_success = false
       $('#assign_search').dialog('destroy')
-      $.n('Successfully assigned label to person.')
+      if show_success
+        $.n('Successfully assigned label.')
   false
     
   $('#assign_search .leader_search_name').keyup ->
@@ -380,7 +384,7 @@ $ ->
     $('#leader_search_form').show()
     $('#leader_search_name').val('')
     $("#leader_search_results").hide()
-    $('#new_leader_form').hide();
+    $('#new_leader_form').hide()
     el = $('#leader_search')
     el.dialog
       resizable: false,
@@ -407,7 +411,7 @@ $ ->
           $('#spinner_leader_search').hide()
         error: (xhr, status, error)->
           $.e(error)
-      response([]);
+      response([])
   $('.search_show_all_link').live 'click', ->
     $('#spinner_leader_search').show()
     $('#show_all').val('true')
@@ -421,7 +425,7 @@ $ ->
         $("#leader_search_results").show()
       complete: ->
         $('#spinner_leader_search').hide()
-    false;
+    false
     
   $('#comment_submit').live 'click', ->
     $(this).hide()
@@ -436,10 +440,10 @@ $ ->
     if num_selected  > 0
       if(confirm('Are you sure you want to delete ' + num_selected + ' contacts permanently?'))
         $('.id_checkbox:checked').each ->
-          $(this).closest('tr').fadeOut();
+          $(this).closest('tr').fadeOut()
 
         url = $(this).attr('href')
-        params = $('#new_contact_assignment').serialize();
+        params = $('#new_contact_assignment').serialize()
         $.post(url, params)
     
     else
@@ -528,8 +532,8 @@ $.fn.assignTo = (leader, skip_remote) ->
       unless skip_remote
         $.rails.handleRemote($('#new_contact_assignment'))
       
-      row.find('.id_checkbox').attr('checked', false);
-      row.hide();
+      row.find('.id_checkbox').attr('checked', false)
+      row.hide()
   $('#assign_to').val('')
   
 $.mh.saveContact = (add_more) ->
