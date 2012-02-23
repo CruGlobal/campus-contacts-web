@@ -85,7 +85,7 @@ $ ->
     params = form.serialize() + '&add_to_group=y'
     url = form.prop('action')
     $.post url, params, (data) ->
-      group_id = 1
+      group_id = window.location.pathname.split("/").reverse()[0]
       personId = data.person.personID
       $('<a href="/groups/' + group_id  + '/group_memberships?person_id=' + personId + '&role=member&add_another=' + add_another + '"data-method="post" data-remote="true"></a>')
       .appendTo('body')
