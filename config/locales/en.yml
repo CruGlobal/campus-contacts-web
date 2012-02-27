@@ -336,7 +336,8 @@ en:
         dropdown: 'Dropdown (Choose one)'
         web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
         text_message_preview: Text Message Preview
-        toggle_advanced_options: "Show Advanced Options"
+        show_advanced_options: "Show Advanced Options"
+        hide_advanced_options: "Hide Advanced Options"
       multiple_choice_form:
         list_choices: 'List out the possible choices, one per line:'
       question:

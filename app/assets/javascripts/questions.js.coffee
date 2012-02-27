@@ -83,10 +83,10 @@ $ ->
   $('#advanced_toggle').live 'click', (e) ->
     e.preventDefault()
     $('.advanced_options').toggle()
-    if $(this).text() == "Show Advanced Options"
-      $(this).text("Hide Advanced Options")
+    if $('.advanced_options').is(':visible')
+      $(this).text(t('surveys.questions.form.hide_advanced_options'))
     else
-      $(this).text("Show Advanced Options")
+      $(this).text(t('surveys.questions.form.show_advanced_options'))
     
       
   $('#cancel_survey_question').live 'click', (e)->
@@ -94,7 +94,6 @@ $ ->
     $('.inlineform').show()
     $('#new_question_form').closest('.inlineform').hide()
     $('.question_form')[0].reset()
-    $('#advanced_toggle').text("Show Advanced Options")
     $('.question_form')[1].reset()
     $('#question_form').slideUp()
     false
