@@ -290,7 +290,8 @@ $('#send_bulksms_link').live 'click', ->
   $('.to_list').html('')
   ids = []
   no_numbers = []
-  
+  $('#bulk_send_body').val('')
+
   $('.id_checkbox:checked').each ->
     id = $(this).val()
     tr = $(this).parent().parent();
@@ -322,7 +323,7 @@ $('#send_bulksms_link').live 'click', ->
   $('#bulk_send_dialog .subject').hide()
   $('#char_counter').show()
   $('#bulk_send_dialog #bulk_send_body').simplyCountable( { maxCount: 160 } )
-  $('#bulk_send_body').val($('#bulk_sms_message').val())  
+  # $('#bulk_send_body').val($('#bulk_sms_message').val())  
   $('#bulk_send_dialog').dialog
     resizable: false,
     height:444,
