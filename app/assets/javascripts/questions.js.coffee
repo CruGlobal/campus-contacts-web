@@ -94,6 +94,7 @@ $ ->
     $('.inlineform').show()
     $('#new_question_form').closest('.inlineform').hide()
     $('.question_form')[0].reset()
+    $('#advanced_toggle').text("Show Advanced Options")
     $('.question_form')[1].reset()
     $('#question_form').slideUp()
     false
