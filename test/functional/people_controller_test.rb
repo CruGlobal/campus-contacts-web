@@ -399,6 +399,7 @@ class PeopleControllerTest < ActionController::TestCase
           @person2 = Factory(:person, firstName: "Bruce", lastName: "Wayne")
           @person3 = Factory(:person, firstName: "Hal", lastName: "Jordan")
           @person4 = Factory(:person, firstName: "Clark", lastName: "Kent")
+          @person5 = Factory(:person, firstName: "clark", lastName: "kent")
         end
         
         should "fail to confirm_merge people when one of the 'mergees' have a different name" do
@@ -409,6 +410,11 @@ class PeopleControllerTest < ActionController::TestCase
         
         should "successfully confirm_merge peeps" do
           post :confirm_merge, { :person1 =>  @person1.id, :person2 => @person4.id }
+          assert_response(:success)
+        end
+        
+        should "successfully confirm_merge peeps with the same name but different casing" do
+          post :confirm_merge, { :person1 =>  @person1.id, :person2 => @person5.id }
           assert_response(:success)
         end
       end
