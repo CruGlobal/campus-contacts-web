@@ -78,7 +78,7 @@ $ ->
 
   $("#people_controller a#bulk_delete").live 'click', ->
     ids = []
-    $('.id_checkbox:checked').each ->
+    $('.id_checkbox:checked:visible').each ->
       ids.push($(this).val())
     if($('#all_selected_text').is(':visible'))    
       $('.all_row').each ->
