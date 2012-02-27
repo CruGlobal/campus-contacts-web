@@ -13,5 +13,7 @@
     <%= f.label :notify_via, t('.notify_via') %>
     <%= f.select :notify_via, ["SMS","Email","Both"] %>
   </div>
+  
+  <%= f.check_box :web_only, id: "web_only_#{f.object.id}", class: 'web_only' %> <%= t('.web_only') %><br /><br/>
 </div>
 

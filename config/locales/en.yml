@@ -336,7 +336,7 @@ en:
         dropdown: 'Dropdown (Choose one)'
         web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
         text_message_preview: Text Message Preview
-        toggle_advanced_options: Toggle Advanced Options
+        toggle_advanced_options: "Show Advanced Options"
       multiple_choice_form:
         list_choices: 'List out the possible choices, one per line:'
       question:
@@ -357,6 +357,7 @@ en:
         trigger_words: 'List one or more words or phrases that will trigger this notification if they appear in the
         answer.<br/>Separate words and phrases with commas.'
         leaders: 'Select one or more leaders to be notified when this question is answered in a certain way'
+        web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
   sms_keywords:
     keyword_deleted: "Keyword has been deleted."
     index:
