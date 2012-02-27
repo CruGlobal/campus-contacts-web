@@ -319,11 +319,9 @@ class PeopleController < ApplicationController
 
     #if role_ids.length (new roles) is less than old roles. i.e. there is a role that is going to be deleted
     #The purpose of this code block is to avoid emailing (that a Person has just become a leader) a Person if he is already a leader before this roles update
-    if organizational_role_ids.length > role_ids.length
-      organizational_role_ids = organizational_role_ids - role_ids
-      organizational_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.id if organizational_role_ids.include?(role.role_id.to_s) }
-      OrganizationalRole.delete(organizational_roles)      
-    end
+    organizational_role_ids = organizational_role_ids - role_ids
+    organizational_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.id if organizational_role_ids.include?(role.role_id.to_s) }
+    OrganizationalRole.delete(organizational_roles)      
 
     role_ids.uniq.each_with_index do |role_id, index|
         begin
