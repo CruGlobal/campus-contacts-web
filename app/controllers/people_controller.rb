@@ -321,7 +321,7 @@ class PeopleController < ApplicationController
     #The purpose of this code block is to avoid emailing (that a Person has just become a leader) a Person if he is already a leader before this roles update
     organizational_role_ids = organizational_role_ids - role_ids
     organizational_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.id if organizational_role_ids.include?(role.role_id.to_s) }
-    OrganizationalRole.delete(organizational_roles)      
+    OrganizationalRole.delete(organizational_roles)
 
     role_ids.uniq.each_with_index do |role_id, index|
         begin
