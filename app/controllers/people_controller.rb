@@ -213,6 +213,7 @@ class PeopleController < ApplicationController
   
     respond_to do |format|
       if @person.update_attributes(params[:person])
+        @person.update_date_attributes_updated
         format.html { redirect_to(@person, notice: 'Person was successfully updated.') }
         format.xml  { head :ok }
       else

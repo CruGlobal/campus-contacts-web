@@ -115,6 +115,8 @@ en:
     subject: 'Subject'
     autocomplete_name_hint: 'Type a name or facebook profile url here:'
     match_found: 'Match found'
+    contacts_updated_from: 'Contacts Updated From'
+    dash: ' - '
   leaders:
     form:
       name_required: "Name, gender, and email fields are required to add a leader:"
@@ -155,6 +157,7 @@ en:
       select_all_html: "Select all <b>%{count}</b> people in the directory."
       all_selected_html: "All <b>%{count}</b> people in the directory are selected."
     show:
+      updated_time_difference: "Updated %{time_diff} ago."
       add_comments_here: 'Add comments here...'
       previous_comments: 'Previous Comments'
       send_contact_info: "Email me %{name}'s info"

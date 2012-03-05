@@ -52,6 +52,16 @@ class Person < ActiveRecord::Base
 
   before_save :stamp_changed
   before_create :stamp_created
+  #after_update :update_date_attributes_updated
+
+  scope :find_by_person_updated_by_daterange, lambda { |date_from, date_to| {
+    :conditions => ["date_attributes_updated >= ? AND date_attributes_updated <= ? ", date_from, date_to]
+  } }
+
+  def update_date_attributes_updated
+    self.date_attributes_updated = DateTime.now.to_s(:db)
+    self.save
+  end
 
   def self.search_by_name(name, organization_ids = nil, scope = nil)
     return scope.where('1 = 0') unless name.present?

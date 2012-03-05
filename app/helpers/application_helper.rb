@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include ActionView::Helpers::DateHelper  
 
   def uri?(string)
     uri = URI.parse(string)
