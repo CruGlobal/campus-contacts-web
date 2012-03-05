@@ -21,6 +21,9 @@
   I18n.locale = "<%= I18n.locale %>";
 </script>
 <%#= stylesheet_link_tag 'smoothness/jquery-ui-1.8.7.custom' %>
+
+<%= stylesheet_link_tag "http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/redmond/jquery-ui.css", "application" %>
+
 <%= csrf_meta_tag %>
 <script type="text/javascript" charset="utf-8">
   $.params = <%= raw params.dup.keep_if {|k, v| v.is_a?(String) || v.is_a?(Numeric) || v.is_a?(Enumerable)}.to_json %>;
