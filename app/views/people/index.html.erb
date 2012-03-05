@@ -16,13 +16,15 @@
 <% if can?(:create, Person) || can?(:create, SmsMailer) %>
   <div class="pagemenu">
     <ul class="pillmenu">
-      <li><%= link_to(t('.send_email'), nil, :id => "send_bulkemail_link") %></li>	
-      <li><%= link_to(t('.send_sms'), nil, :id => "send_bulksms_link") %></li>			
+      <li>
+        <%= link_to('Send', '#', class: 'action_dropdown') %>
+        <ul style="display:none">
+          <li><%= link_to(t('.send_email'), nil, :id => "send_bulkemail_link") %></li>	
+          <li><%= link_to(t('.send_sms'), nil, :id => "send_bulksms_link") %></li>			
+        </ul>
+      </li>
     </ul>
     <% if (can? :manage, current_organization) || (can? :lead, current_organization) %>
-      <ul class="pillmenu">
-        <li><%= link_to(t('.export'), export_people_path(params.except(:action, :controller, :utf8))) %></li>
-      </ul>
       <ul id="menu" class="pillmenu">
         <li>
           <%= link_to(t('nav.roles'), '#', :id => 'roles_menu_div') %>
@@ -59,10 +61,16 @@
       <ul class="pillmenu">
         <li><%= link_to(t('general.delete'), bulk_delete_people_path, id: "bulk_delete") %></li>
       </ul>  
-    <% end %>
+    <% end %>  
     <ul class="pillmenu">
-      <li><%= link_to(t('.vcard'), '', id: 'bulk_vcard_link' ) %></li>
-    </ul>     
+      <li>
+        <%= link_to('Download', '#', class: 'action_dropdown') %>
+        <ul style="display:none">
+          <li><%= link_to(t('.export'), export_people_path(params.except(:action, :controller, :utf8))) %></li>
+          <li><%= link_to(t('.vcard'), '', id: 'bulk_vcard_link' ) %></li>
+        </ul>
+      </li>
+    </ul>
     <%= render 'search' %>
     <%= render 'advanced_search' %>
   </div>
