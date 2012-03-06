@@ -225,4 +225,13 @@ class ContactsControllerTest < ActionController::TestCase
       assert_response :success, "Upload of contacts csv file unsuccessful"
     end
   end
+
+=begin
+  context "Searching for Contacts/Persons" do
+    should "return contacts within the " do
+
+    end
+
+  end
+=end
 end
