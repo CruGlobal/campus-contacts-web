@@ -13,7 +13,15 @@ class GroupsController < ApplicationController
   end
 
   def show
+    @q = Person.where('1 <> 1').search(params[:q])
     @group = Present(@group)
+
+    if params[:q] && params[:q][:s]
+      @gm = @group.group_memberships.involved.includes(:person).people(params[:q][:s])
+    else
+      @gm = @group.group_memberships.involved.order('role').includes(:person)
+    end
+
     authorize! :read, @group
   end
 
