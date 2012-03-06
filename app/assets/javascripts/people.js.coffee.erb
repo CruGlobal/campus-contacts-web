@@ -140,7 +140,17 @@ $ ->
   $('#merge_people').live 'click', (e) ->
     e.preventDefault()  
     if $('.id_checkbox:checked').length > 0
-      document.location.href = '/people/merge?person1=' + $('.id_checkbox:checked').first().val()
+      people = []
+      $('.id_checkbox:checked').each ->
+        people.push($(this).val()) 
+      
+      person1 = people[0]
+      person2 = if people[1] == undefined then '' else people[1]
+      person3 = if people[2] == undefined then '' else people[2]
+      person4 = if people[3] == undefined then '' else people[3]
+      
+      document.location.href = '/people/merge?person1=' + person1 + 
+      '&person2=' + person2 + '&person3=' + person3 + '&person4=' + person4
     else
       document.location.href = '/people/merge'
   false
