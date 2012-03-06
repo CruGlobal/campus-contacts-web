@@ -310,6 +310,11 @@ en:
       edit_survey: "Edit Survey"
     new: 
       create_a_survey: "Create a Survey"
+      choose_keyword_explanation_html:
+        'Choosing a keyword for your community or event enables you to have people fill out your survey questions via the web, interactive texting,
+        and smartphones.  <strong>They will text your keyword to the number %{number}</strong> and your survey questions will appear on their device.  Note: The process of acquiring new keywords
+        requires manual intervention. Once you request your keyword expect to wait up to 24 hours before we notify you via email that your keyword is approved and
+    	  ready for use.'
     form:
       title_placeholder: "Shorter titles are better"
       post_survey_placeholder: "Example: Thank you for your time! If you're interested in Cru, we meet at Moore Auditorium every Thursday @ 8PM"
