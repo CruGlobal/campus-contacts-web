@@ -1,0 +1,12 @@
+<div class="titlebar">
+  <h1><%= t('.title') %></h1>
+</div>
+
+<%= form_tag '/organizations/update_settings', style: 'padding:20px', id: 'organization_settings_form' do %>
+   <div class="col1" style="float:left;width:300px">
+     <%= check_box_tag :show_year_in_school, params[:show_year_in_school], @show_year_in_school %>
+     <label><%= t('.year_in_school') %></label>
+     <br/><br/>
+     <%= submit_tag t('.submit') %>
+   </div>
+<% end %>

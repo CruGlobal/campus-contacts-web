@@ -53,10 +53,11 @@
 
               <% if can? :manage, current_organization %>
                 <li class="<%= 'current' if params[:controller] == 'organizations' %>">
-                <%= link_to(t('nav.organizations'), "/organizations") %>
-                <ul>
-                  <li class="<%= 'current' if params[:controller] == 'organizations' %>"><%= link_to(t('nav.manage'), "/organizations", :class => "topset groups") %></li>
-                </ul>
+                  <%= link_to(t('nav.organizations'), "/organizations") %>
+                  <ul>
+                    <li class="<%= 'current' if request.path == organizations_path %>"><%= link_to(t('nav.manage'), "/organizations", :class => "topset groups") %></li>
+                    <li class="<%= 'current' if request.path == '/organizations/settings' %>"><%= link_to(t('nav.settings'), "/organizations/settings", :class => "topset allcontacts") %></li>
+                  </ul>
                 </li>
               <% end %>
             </ul>

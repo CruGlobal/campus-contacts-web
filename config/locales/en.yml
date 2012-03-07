@@ -75,7 +75,7 @@ en:
     roles: "Labels"
     back_to_dashboard: "Back To My Contacts"
     create_a_survey: Create a survey
-    
+    settings: Settings
   general:
     survey: Survey
     mobile: Cell
@@ -904,3 +904,7 @@ en:
       title: Sign up your organization
       signup: Sign Up!
       your_org: Your Organization
+    settings:
+      title: Settings
+      year_in_school: Display year in school
+      submit: Update Settings

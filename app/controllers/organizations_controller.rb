@@ -67,6 +67,22 @@ class OrganizationsController < ApplicationController
     respond_with @organizations
   end
   
+  def settings
+    @show_year_in_school = current_organization.settings[:show_year_in_school] ||= false
+  end
+  
+  def update_settings
+    org = current_organization
+    org.settings[:show_year_in_school] = params[:show_year_in_school] == "on" ? true : false
+    if org.save
+      flash[:notice] = "Successfully updated org settings!"
+    else
+      flash[:error] = "An error occurred when trying to update org settings"
+    end
+
+    redirect_to '/organizations/settings'
+  end
+  
   protected
     def get_organization
       @organization = Organization.subtree_of(current_organization.root_id).find(params[:id])
