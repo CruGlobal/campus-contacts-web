@@ -48,8 +48,8 @@ $ ->
   $('#user_merge_form input.name').observe_field 1, ->
     $(this).triggerPersonSearch()
 
-  $('#user_merge_form input.person').triggerPersonLookup()
-  $('#user_merge_form input.name').triggerPersonSearch()
+  #$('#user_merge_form input.person').triggerPersonLookup()
+  #$('#user_merge_form input.name').triggerPersonSearch()
 
   $('#people_controller a.add_person').live 'click', ->
     $('#new_person')[0].reset()
@@ -136,6 +136,24 @@ $ ->
     if(fromViewingFBProfile)
       $('#people_controller.edit .ui-autocomplete').show();
       fromViewingFBProfile = false
+      
+  $('#merge_people').live 'click', (e) ->
+    e.preventDefault()  
+    if $('.id_checkbox:checked').length > 0
+      people = []
+      $('.id_checkbox:checked').each ->
+        people.push($(this).val()) 
+      
+      person1 = people[0]
+      person2 = if people[1] == undefined then '' else people[1]
+      person3 = if people[2] == undefined then '' else people[2]
+      person4 = if people[3] == undefined then '' else people[3]
+      
+      document.location.href = '/people/merge?person1=' + person1 + 
+      '&person2=' + person2 + '&person3=' + person3 + '&person4=' + person4
+    else
+      document.location.href = '/people/merge'
+  false
 
 $.fn.fbNameSearch = (url)->
   prevBtn = $("#fb_name_search_dialog").next(".ui-dialog-buttonpane").find('button')[1]

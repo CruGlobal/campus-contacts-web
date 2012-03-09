@@ -61,7 +61,12 @@
       <ul class="pillmenu">
         <li><%= link_to(t('general.delete'), bulk_delete_people_path, id: "bulk_delete") %></li>
       </ul>  
-    <% end %>  
+    <% end %>
+    <% if current_organization.admins.include? current_user.person %>
+      <ul class="pillmenu">
+        <li><%= link_to(t('.merge_people'), "", id: "merge_people") %></li>
+      </ul>
+    <% end %>
     <ul class="pillmenu">
       <li>
         <%= link_to('Download', '#', class: 'action_dropdown') %>

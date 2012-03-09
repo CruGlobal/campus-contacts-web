@@ -373,4 +373,89 @@ class PeopleControllerTest < ActionController::TestCase
       end
     end
   end
+  
+  context "Merging people" do
+    setup do
+      @user = Factory(:user_with_auxs)
+      @org = Factory(:organization)
+      sign_in @user
+      @request.session[:current_organization_id] = @org.id
+    end
+    
+    context "when the logged in user is admin" do
+      setup do
+        Factory(:organizational_role, organization: @org, person: @user.person, role: Role.admin)  
+      end
+      
+      should "have access to the merge facility" do
+        get :merge
+        assert_response(:success)
+        puts @request.body
+      end
+      
+      context "merge people" do
+        setup do
+          @person1 = Factory(:person, firstName: "Clark", lastName: "Kent")
+          @person2 = Factory(:person, firstName: "Bruce", lastName: "Wayne")
+          @person3 = Factory(:person, firstName: "Hal", lastName: "Jordan")
+          @person4 = Factory(:person, firstName: "Clark", lastName: "Kent")
+          @person5 = Factory(:person, firstName: "clark", lastName: "kent")
+        end
+        
+        should "fail to confirm_merge people when one of the 'mergees' have a different name" do
+          post :confirm_merge, { :person1 =>  @person1.id, :person2 => @person2.id, :person3 => @person4.id }
+          assert_response(:redirect)
+          assert_equal("You can only merge people with the EXACT same first and last name.<br/>Go to the person's profile and edit their name to make them exactly the same and then try again.", flash[:alert])
+        end
+        
+        should "successfully confirm_merge peeps" do
+          post :confirm_merge, { :person1 =>  @person1.id, :person2 => @person4.id }
+          assert_response(:success)
+        end
+        
+        should "successfully confirm_merge peeps with the same name but different casing" do
+          post :confirm_merge, { :person1 =>  @person1.id, :person2 => @person5.id }
+          assert_response(:success)
+        end
+      end
+    end
+    
+    context "when the logged in user is a super admin" do
+      setup do
+        Factory(:super_admin, user: @user)
+      end
+      
+      should "have access to the merge facility" do
+        get :merge
+        assert_response(:success)
+        puts @request.body
+      end
+      
+      context "merge people" do
+        setup do
+          @person1 = Factory(:person, firstName: "Tony", lastName: "Stark")
+          @person2 = Factory(:person, firstName: "Thor", lastName: "Odinson")
+          @person3 = Factory(:person, firstName: "Bruce", lastName: "Banner")
+          @person4 = Factory(:person, firstName: "Tony", lastName: "Stark")
+        end
+        
+        should "successfully confirm_merge peeps" do
+          post :confirm_merge, { :person1 =>  @person1.id, :person2 => @person2.id, :person3 => @person3.id, :person4 => @person4.id }
+          assert_response(:success)
+        end 
+      end
+    end
+    
+    context "when the logged in user is a leader" do
+      setup do
+        Factory(:organizational_role, organization: @org, person: @user.person, role: Role.leader) 
+      end
+      
+      should "not be allowed to use the merge facility" do
+        get :merge
+        assert_response(:redirect)
+        assert_equal(flash[:error], "You are not permitted to access that feature")
+      end
+    end
+  end
 end

@@ -328,4 +328,12 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def current_user_super_admin?
+    if SuperAdmin.all.collect(&:user_id).include? current_user.id
+      true
+    else
+      false
+    end
+  end
+  helper_method :current_user_super_admin?
 end
