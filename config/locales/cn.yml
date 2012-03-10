@@ -1,7 +1,3 @@
-# US English translations for Ruby on Rails
-#
-# Use this as the base for the locale file of your language.
-
 cn:
   application:
     add_contact: 
@@ -14,6 +10,11 @@ cn:
       me: Me
       type_to_find_leader: Type to find a leader then click on the leader's name
       type_to_find_org: "Type to find a %{terminology} then click on the %{terminology}'s name"
+      type_to_find_group: Type to find a group then click on the group's name
+      type_to_find_label: "Type to find a label then click on the label's name"
+      keep_contact: "Check the box to leave a copy of the contact in the org."
+    messages:
+      question_too_long: "WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages."
   roles: 
     admin: Admin
     contact: Contact
@@ -21,11 +22,11 @@ cn:
     leader: Leader
     alumni: Alumni
     views:
-      organizational_roles: "Organizational Roles"
-      system_roles: "System Roles"
-      create_role: "Create new role"
-      edit_role: "Edit role"
-      delete_role: "Delete role"
+      organizational_roles: "Organizational Labels"
+      system_roles: "System Labels"
+      create_role: "Create new label"
+      edit_role: "Edit label"
+      delete_role: "Delete label"
       update: "Update"
       create: "Create"
       name: "Name"
@@ -43,6 +44,11 @@ cn:
     prayed_to_receive: 'Prayed To Receive Christ' 
     gospel_presentation: 'Gospel Presentation'
   nav:
+    organizations: Organizations
+    manage: Manage
+    enter_survey_mode: "Enter Survey Mode"
+    use_keyword: 'Use Keyword: %{keyword}'
+    my_profile: My Profile
     groups: 'Groups'
     hide: 'Hide'
     view_details: "View details"
@@ -58,10 +64,26 @@ cn:
     my_contacts: 'My Contacts'
     all_contacts: 'All Contacts'
     directory: 'Directory'
-    keywords: "Surveys"
-    roles: "Roles"
+    my_comments: 'My Comments'
+    surveys: "Surveys"
+    people: "People"
+    keywords: "Keywords"
+    roles: "Labels"
     back_to_dashboard: "Back To My Contacts"
+    create_a_survey: Create a survey
+    
   general:
+    survey: Survey
+    mobile: Cell
+    home: Home
+    work: Work
+    address1: Address 1
+    address2: Address 2
+    city: City
+    state: State
+    country: Country
+    zip: Zip
+    alert: Alert
     save: 'Save'
     show: Show
     delete: Delete
@@ -69,11 +91,9 @@ cn:
     status: "Status"
     edit: "Edit"
     back: "Back"
-    remove: 'Remove'
     hide: 'hide'
     add_a_leader: 'Add a leader'
-    survey_text_tip_html: "To begin your survey, <strong>text %{keyword} to %{shortcode}.</strong>"
-    survey_web_tip_html: "For the web version of the survey, send people to <strong>http://mhub.cc/c/%{keyword}</strong>"
+    survey_web_tip_html: "For the web version of the survey, send people to <strong>%{link}/</strong>"
     male: Male
     female: Female
     both: Both
@@ -87,46 +107,131 @@ cn:
     search: 'Search'
     add: Add
     adding: Adding...
+    to: "To"
+    subject: 'Subject'
+    autocomplete_name_hint: 'Type a name or facebook profile url here:'
+    match_found: 'Match found'
   leaders:
     form:
-      name_required: "Name and email fields are required to add a leader:"
+      name_required: "Name, gender, and email fields are required to add a leader:"
       notify: "Notify this person that they've been added and send them a link to log in."
     search:
       not_in_system: 'If the person you are looking for is not already in the system click here to add them.'
-  people: 
+  people:
+    create:
+      error_creating_leader_no_valid_email: "Error: Cannot create Person with leader role without a valid email"
+      error_creating_admin_no_valid_email: "Error: Cannot create Person with admin role without a valid email"
+    person_form:
+      add_phone_number: "Add Phone Number" 
+      add_email_address: "Add Email Address" 
+    add_person:
+      add_person: Add a person to %{org}
     index:
+      add_person: Add Person
       export: "Export this list"
       directory_title: "Directory - %{org}"
       labels: 'Labels'
       gender: 'Gender'
       phone: 'Phone'
       email: 'Email'
+      filter: 'Search'
       year_in_school: 'Year in School'
-      manage_roles: 'Manage Roles'
+      manage_roles: 'Manage Labels'
       send_sms: Send Text
       send_email: Send Email
-      apply_roles: 'Apply Roles'
+      group_comment: Add Comment
+      apply_roles: 'Apply Labels'
       no_people: "Sorry, there are no people involved here."
-      displaying: "Displaying %{start} - %{finish} of %{totals}"
+      displaying: "Displaying %{start} - %{finish} of %{total}"
+      error_message: "Error: %{person} does not have valid email to be leader"
+      error_message_update_leader_without_person: "Error: Person does not have valid email to be leader"
+      error_message_update_admin_without_person: "Error: Person does not have valid email to be admin"
     all:
       page_selected_html: "All <b>%{count}</b> people on this page are selected."
       select_all_html: "Select all <b>%{count}</b> people in the directory."
-      all_selected_html: "All <b>%{count}</b> people in the directory is selected."
+      all_selected_html: "All <b>%{count}</b> people in the directory are selected."
     show:
-      edit_profile: 'Edit Profile'
+      add_comments_here: 'Add comments here...'
+      previous_comments: 'Previous Comments'
+      send_contact_info: "Email me %{name}'s info"
+      send_vcard_desc: 'This will create a vcard and send it to the email address you enter below.'
+      facebook_profile: 'Facebook Profile'
+      phone_number: 
+        one:   "Phone #:"
+        other: "Phone #s:"
+      email:
+        one:   "Email:"
+        other: "Emails:"
+      google_map: 'Google Map'
+      status: "Status"
+      attach_rejoicable: 'Attach a Rejoicable'
+      add_comment: 'Add Comment / Update Status'
+      assigned_to: 'Assigned to: %{assigned_to}'
+      persons_friends: '%{person} Friends:'
+    search:
+      search_placeholder: 'Search for the first name, last name or email.'
+      search_title: 'Search'
+      advanced_search: 'Toggle Advanced Search'
+      clear_search_form: 'Clear Search Form' 
+    advanced_search:
+      first_name: 'First Name'
+      last_name: 'Last Name'
+      role: 'Label'
+      email: 'Email Address'
+      phone: 'Phone Number'
+      basic_search: 'Toggle Basic Search'
+      clear_search_form: 'Clear Search Form'  
+    form:
+      facebook_url: "Facebook Profile Url:"
+      facebook_url_tip: You can manually search facebook for this person's profile if they haven't already connected. Keep in mind that some people set their facebook privacy settings such that they won't show up in this search.
     edit:
       editing: Editing
+      fb_name_search_dialog_title: Facebook Profile Search
+      fb_name_search_dialog_desc: Please wait while we fetch additional names. Once the result shows up, click on any of the names to retrieve their profile url.
+      fb_name_search_dialog_no_more: There are no more results. Click previous button to see the previous searched names.
+      fb_profile_link: link to profile on facebook
+      more_facebook_matches: "Click here to see more results"
+      no_results: "We couldn't find anyone on facebook with that name"
+    left_sidebar:
+      profile: "%{name}'s Profile"
+      edit_profile: "Edit %{name}'s Profile"
+      survey_answers: 'Survey Answers'
+      involvement: Involvement
+    involvement:
+      conferences: Conferences
+      summer_projects: Summer Projects
+  followup_comments:
+    index:
+      comments_title: 'Comments'
+      filter: 'Search'
+      first_name: 'First Name'
+      last_name: 'Last Name'
+      comment: 'Comment'
+      status: 'Status'
+      date_commented: 'Date'
+      email: 'Email'
+      phone_number: 'Phone Number'
+    search:
+      search_title: 'Search'
+      search_placeholder: 'Enter your query here'
   sessions:
+    destroy:
+      signed_out: You've been signed out.
     new:
       login_paragraph_html:
         To get started, you'll need to have a Facebook account. <br/>
-        Click the login link to the left and <strong>allow</strong> MHub to access your information. <br/>
+        Click the login link to the left and <strong>allow</strong> MissionHub to access your information. <br/>
         You'll be taken to the wizard if this is your first time accessing MissionHub.
       login_paragraph_mhub: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
       instructions: Instructions
       back: Back Home
       dont_like_facebook: Don't like Facebook?
       skip_facebook: Click here to skip Facebook login
+      start_survey: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
+      login_with_facebook: Please login with Facebook to get started 
+      login: Login
+      welcome: Welcome!
+      no_facebook: "Don't like Facebook? Click here to skip Facebook login"
   org_membership:
     confirm_delete: "Are you sure you want to dissociate yourself from %{org}"
   welcome:
@@ -137,19 +242,30 @@ cn:
       request_key: "Click here to request a keyword"
       get_started: "Get Started"
       request_key_help: "A Keyword is both the name of the survey and what the person would text to fill out the survey questions. For example, you would say, 'Text UFCRU to the number 75572.' UFCRU is the keyword."
+      headline_html: An online <span class="babyblue">follow-up system</span> with your audience in mind.
+      subheadline_html: Students text to connect. You empower follow-up from the web or a smart phone.
+      get_details_html: Get the Details & <a href="/welcome/tour" class="learnmore">Learn More</a> or %{link}
+      get_started: "Get Started"
     wizard:
-      welcome: Welcome
+      welcome: Welcome!
       verify_identity: Verify Your Identity
       request_keyword: Request a Keyword
       designate_leaders: Designate Leaders
       create_survey: Create Survey
+      request_a_keyword: Request a Keyword!
+      create_a_survey: Create a Survey!
       back: Back
       next: Next
       welcome_paragraph: "Welcome to MissionHub!<br><br> This setup wizard will help you get started and set up a keyword, which is an essential part of getting contacts into the system."
       verify_paragraph: "If you have a CCC Relay login account, please sign in to link your account. You only need to do this once. WARNING: If you logged into MissionHub using someone else's Facebook Account, Log Out now! Clicking verify will merge your information with theirs, creating a big mess."
-      verify_with_relay: "Verify With Relay"
-      not_found_paragraph: "At the current time MissionHub is being field tested with the US Campus Ministry. If you're not a part of the US Campus Ministry, sit tight! We plan to release to a larger audience soon. If you are part of the US Campus Ministry and are seeing this message, send us an email at support@missionhub.com and we'll help you out."
-      # not_found_paragraph: "We weren't able to find a record of you associated with any of the organizations or ministries using MissionHub."
+      not_found_paragraph: 
+        "<p>We weren't able to match you up with an organization currently using MissionHub. There are two likely causes:</p> 
+        <ol>
+        <li>A leader in your organization who can already log into MissionHub needs to add you to MissionHub.</li>
+        <li>Your facebook email address doesn't match the email that was entered for you when your leader added you.</li>
+        </ol>
+        <p>Please contact the person who told you about MissionHub and ask them to enter you with your facebook email address. If you are that person or need more help, shoot us an email at support@missionhub.com</p>"
+        
       keyword_paragraph: "A powerful feature of MissionHub is the ability for you to collect contacts through text messages. For this to work, you have to choose a keyword that is unique to your ministry that people will send messages to. With a keyword, you will be able to say, “Text <strong>your keyword</strong>  to 75572” at your next event or meeting."
       request_keyword_link: "Click here to request a keyword. We'll return you to this wizard when you're done."
       survey_paragraph:
@@ -163,36 +279,94 @@ cn:
       skip_step: "Skip this step"
     home:
       title_top: "Welcome to MissionHub!"
-      keywords: "Surveys"
+      surveys: "Surveys"
+      keywords: "Keywords"
       manage_questions: "Manage Survey Questions"
       edit_keyword: 'Edit Keyword'
       your_orgs: 'Your Organizational Involvements'
       edit_orgs: 'Edit your organizational involvements.'
+      delete_keyword_confirm: "Are you sure you want to delete this keyword?"
+      no_mobile: The mobile version of this page hasn't been built yet. Sorry.
       follow_up: 
         one:   '1 Person to Follow-up'
         other: '%{count} People to Follow-up'
       delete: "Delete"
-  questions:
-    create:
-      notice: 'Question was successfully created.'
-    form: 
-      what_question_type: What type of question would you like to ask?
-      short_answer: 'Short Answer'
-      multiple_choice: 'Multiple Choice'
-      checkboxes: 'Checkboxes'
-      dropdown: 'Dropdown'
-      web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
-    your_questions_help: "Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service."
-    predefined_help: "Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided."
-    archived_help: "Archived questions will no longer be included in the survey.  If no answers have ever been given to the question, the archived question will be deleted.  If you USE an archived question, the question will move to the YOUR QUESTIONS section and the previous answers will re-appear."
-  keywords:
+  surveys:
+    index_admin: 
+      confirm_delete: "Are you sure you want to delete this keyword?"
+      delete_survey: "Delete survey"
+      new: 'New Survey'
+      edit_survey: Edit Survey
+      link: Link
+      association_help: "When a contact responds to a survey, they are associated with the same team or movement as the keyword they responded to."
+    edit:
+      edit_survey: "Edit Survey"
+    new: 
+      create_a_survey: "Create a Survey"
+    form:
+      title_placeholder: "Shorter titles are better"
+      post_survey_placeholder: "Example: Thank you for your time! If you're interested in Cru, we meet at Moore Auditorium every Thursday @ 8PM"
+      post_survey_message: 'What message would you like to show after the person has completed the survey?'
+      association: "The %{this_term} you are currently requesting this keyword for has at least one %{child_term} under it.<br/> Select if you'd like to associate this keyword with the %{this_term} or a %{child_term} under this %{this_term}"
+      survey_associated_with: This survey will be associated with %{org}.
+      title: Title
+      login_paragraph: Login Paragraph
+      title_tip: "This is what people will see as the header on the survey"
+      login_paragraph_tip: "This is what people will see as they reach the Facebook login page for a survey"
+      terminology: "If you'd like this to be referred to as something other than a 'Survey', enter that here"
+      login_option: "Choose a login option for your users"
+      default_login_option: "Show Facebook login with an option to skip it"
+      fb_only_login_option: "Require Facebook login"
+      skip_fb_login_option: "Present an option at the end of the survey to connect via Facebook"
+      no_fb_login_option: "No login"
+      freeze: "Tick checkbox to freeze survey"
+    questions:
+      create:
+        notice: 'Question was successfully created.'
+      form: 
+        text_message_length: 'Text Message Length:'
+        what_question_type: What type of question would you like to ask?
+        short_answer: 'Short Answer (Free form response)'
+        multiple_choice: 'Radio buttons (Choose one)'
+        checkboxes: 'Checkboxes (Choose one or more)'
+        dropdown: 'Dropdown (Choose one)'
+        web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
+        text_message_preview: Text Message Preview
+        toggle_advanced_options: Toggle Advanced Options
+      multiple_choice_form:
+        list_choices: 'List out the possible choices, one per line:'
+      question:
+        confirm_delete: "Are you sure you want to remove '%{question}'?"
+        delete_tip: "If this question has been answered any contact, it will be archived. If no one has answered this question yet it will be deleted."
+      short_answer_form:
+        question: 'Question:'
+      index: 
+        manage: Manage Survey Questions
+        note: "Note: First and Last name will be automatically added to every survey. There's no need for you to add those."
+        predefined: Predefined Questions
+        your_questions: Your Questions (drag to sort)
+        previously_used: Previously Used Questions
+        add_question: Add a new question
+        add_prev_question: Add a predefined or previously used question
+        forced_tip: This question is required on every survey and will be pre-filled if they connect with facebook.
+      advanced_options:
+        trigger_words: 'List one or more words or phrases that will trigger this notification if they appear in the
+        answer.<br/>Separate words and phrases with commas.'
+        leaders: 'Select one or more leaders to be notified when this question is answered in a certain way'
+  sms_keywords:
+    keyword_deleted: "Keyword has been deleted."
     index:
       association: Associate Contacts With
-      association_help: "When a contact responds to a survey, they are associated with the same team or movement as the keyword they responded to."
+      request_keyword: Request a Keyword
+      create_survey_first: You need to create a survey before requesting a keyword.
+      delete_confirm: "Are you sure you want to delete this keyword?"
+      delete_tip: "Delete keyword"
     default_rejection_email:
       "Your keyword request has been denied"
     edit:
       heading: Editing Keyword
+      keywords: Keywords
+      to_begin_survey_html: To begin your survey, <strong>text %{keyword} to %{number}.</strong>
     flash:
       created: 'Keyword request was successfully submitted.'
       updated: 'Keyword was successfully updated.'
@@ -204,10 +378,46 @@ cn:
       keyword_why: "This is for our use only. The use description could include words like 'weekly meeting', 'outreach event', and other uses the keyword will have."
       explanation: 'Please explain what you plan to use this keyword for.'
       initial_response: "What response should we send back to people when they text in? <br/>If you want the person to complete a survey, the response MUST include {{ link }} (exactly like that, dont change that part of the response.)"
+      initial_response_default: 'Hi! Thanks for checking out %{org}. To get more involved, reply with "i" or click {{ link }} if you have a smartphone.'
       post_survey_why: "When someone texts in the keyword, this message will be sent to them and '{{link}}' will be replaced by a website address that will take them to an online survey for them to fill out. If they don't have internet, replying 'i' will send them all the questions via interactive text message."
-      post_survey_message: 'What message would you like to show after the person has completed the survey?'
-      chartfield: 'A keyword costs $7/month. Please enter a chart field to be billed for this keyword.'
-      association: "The %{this_term} you are currently requesting this keyword for has at leaset one %{child_term} under it.<br/> Select if you'd like to associate this keyword with the %{this_term} or a %{child_term} under this %{this_term}"
+      keyword_locked: Keywords can't be changed. You can delete this one and create a new one if necessary.
+      associated_survey_tip: "When a person texts in this keyword, they'll be presented with questions from the survey you select below."
+      note: 'Note: Processing requests may take up to 24 hours.'
+    show:
+      explanation: 'Explanation:'
+      keyword: 'Keyword:'
+      status: 'Status:'
+      
+    new:
+      choose_keyword_explanation_html:
+        'Choosing a keyword for your community or event enables you to have people fill out your survey questions via the web, interactive texting,
+        and smartphones.  <strong>They will text your keyword to the number %{number}</strong> and your survey questions will appear on their device.  Note: The process of acquiring new keywords
+        requires manual intervention. Once you request your keyword expect to wait up to 24 hours before we notify you via email that your keyword is approved and
+    	  ready for use.'
+      your_questions_help: "Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service."
+      predefined_help: "Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided."
+  
+  organization_mailer:
+    notify_user:
+      link_text: 'send us an email at support@missionhub.com'
+      body_html:
+        <p>Congratulations, your organization request has been approved!  Go to %{manage_link} to add your sub-organizations, and please don't forget to give us feedback on your MissionHub experience!<p>
+        <p>
+          If you have any questions, %{link}.
+        </p>
+        <p>
+          Thanks,<br/>
+          MissionHub Support Team
+        </p>
+    notify_user_of_denial:
+      body_html:
+        <p>We're sorry, but the information you provided does not allow us to meet your request for a MissionHub organization.  If you have further questions, or would like a clarification, please email support@missionhub.com.</p>
+
+        <p>
+          Thanks,<br/>
+          MissionHub Support Team
+        </p>
+        
   keyword_request_mailer:
     notify_user:
       link_text: 'send us an email at support@missionhub.com'
@@ -221,7 +431,7 @@ cn:
         </p>
     notify_user_of_denial:
       body_html:
-        <p>Your request for the keyword keyword has been declined. Keywords are typically declined for one of the following reasons:</p>
+        <p>Your request for the keyword %{keyword} has been declined. Keywords are typically declined for one of the following reasons:</p>
 
         <ul>
           <li>The keyword was too long. We recommend that you keep your keywords as short as possible, preferably under 10 characters.</li>
@@ -245,8 +455,11 @@ cn:
         <p>Visit %{link} to log in. Please don't share this link with anyone else.</p>
 
         <p>%{added_by}</p>
-
+  survey_mailer:
+    notify:
+      content: %{name} (%{number},%{email}) just replied to a survey with %{answer}.
   contacts:
+    role_assign_success: 'Successfully assigned labels.'
     assign: Assign
     unassign: 'Unassign'
     add_contact: "Add Contact"
@@ -263,10 +476,10 @@ cn:
     leaders:
       reminder_prompt: "Some of your leaders have contacts that haven't been followed up! Let your leaders know!"
       show_more: "Show More Leaders"
-    send_reminder_form:
-      to: "To"
-      subject: 'Subject'
     index:
+      search_saved: 'This search has been saved'
+      vcard: 'Vcard'
+      add_contact: Add a Contact
       clear_search_form: 'Clear Search Form'
       no_contacts: 'Sorry, there are no contacts here.'
       export: Export
@@ -302,8 +515,9 @@ cn:
       responses_assigned_to: "All Contacts - Assigned to %{assigned_to}"
       unassigned_responses: "All Contacts - Unassigned"
       dnc_contacts: "All Contacts - 'Do Not Contact'"
+      completed_contacts: "All Contacts - Completed"
       friend_responses: "Contacts who are also my friends on Facebook"
-      none_checked: "You didn't select any contacts to assign."
+      none_checked: "You need to select at least one contact."
       show_all: Show 'In Progress' contacts
       matching_seach: Matching the criteria you searched for
       which_org: 'You need to choose which organization you want to do folow-up from'
@@ -312,6 +526,7 @@ cn:
       unassigned: 'Unassigned'
       all: 'All'
       dnc: 'Do Not Contact'
+      import_contacts: 'Import Contacts'
       completed: 'Completed'
       in_progress: 'Assigned'
       no_activity: 'No Activity'
@@ -321,6 +536,19 @@ cn:
       assign_people:
         one: Assign 1 person
         other: "Assign %{count} people"
+      last_survey: 'Last Survey'
+      surveys: 'Surveys'
+      bulk_vcard_dialog_title: 'Bulk Vcard Options'
+      bulk_vcard_dialog_desc: 'We can send the contacts information to you via email or you can download it all in one zip package'
+      bulk_vcard_download_message: 'A .vcf file now containing all the contact information you requested is being downloaded.'
+      bulk_vcard_email_message: 'Contacts information has been sent to '      
+      contact_no_select_message: 'Please select atleast one contact.'      
+      no_name_message: 'At a minimum you need to provide a first name.'
+      saved_searches: 'Saved Searches'
+      delete_this_search: "Delete this search"
+      save_this_search: "Save this search"
+      save_this_search_placeholder: "Name this search"
+      delete_confirm: "Are you sure you want to remove this search?"
     mine:
       in_progress: 'In Progress'
       completed: 'Completed'
@@ -329,23 +557,15 @@ cn:
       phone: Phone Number
       email: Email
       year: Year
-    show:
-      add_comments_here: 'Add comments here...'
-      previous_comments: 'Previous Comments'
-      survey_answers: 'Survey Answers'
-      edit_contact_info: 'Edit Contact Info'
-      send_contact_info: 'Send Contact Info'      
-      facebook_profile: 'Facebook Profile'
-      phone_number: "Phone #:"
-      email: "Email:"
-      google_map: 'Google Map'
-      status: "Status"
-      attach_rejoicable: 'Attach a Rejoicable'
-      add_comment: 'Add Comment / Update Status'
+      detailed: Detailed
+      all: All 
+      comments: 'My Comments'
+
     thanks:
       message: Thank you for your interest.
       done: Done
       facebook: You have been logged out of Facebook.
+
     plain:
       exit_survey: 'Exit survey mode'
     form: 
@@ -358,11 +578,49 @@ cn:
       basic_information: Basic Information
       additional_information: Additional Information
       cancel: "Cancel and go back to profile"
+    mailer:
+      vcard_email_subject: 'Contact information'
+      vcard_email_content: 'Attached in this email is a vcard containing the contact you selected'
+      bulk_vcard_email_subject: 'Your request for contact information'      
+      bulk_vcard_email_content: 'Attached to this email is a vcard containing the contacts you selected'
+    import_contacts:
+      success: "CSV Import Successful, new records added to database!"
+      error: "CSV Import unsuccessful and the cause is:"
+      instructions_label: "Instructions"
+      select_csv: "Select a CSV File :"
+      instruction_1: "Follow the order of the columns as illustrated above"
+      instruction_2: "First name should not be missing"
+      instruction_3: "Phone numbers and email addresses should have the right format"
+      instruction_4: "Headers should be present"
+      download_sample_csv: "Download sample CSV file"
+      cause_1: " First name is blank at row"
+      cause_2: " Invalid phone number at row"
+      cause_3: " Invalid email address at row"
   sms:
     keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
+  survey:
+    drop_down_field: 
+      choose_one: "Choose One"
+  survey_responses:
+    new:
+      greeting_with_name: "Hi %{name}!"
+      greeting_no_name: Hi!
+    thanks:
+      thanks: "Thanks!"
+    facebook:
+      facebook_login: "You can connect your account to Facebook so we can know who you really are."
+      pick_keyword: "Pick a Keyword"
+    show: 
+      title: "%{name}'s Survey Answers"
+      edit_answers: "Edit Answers"
+      no_answers: "%{name} has not completed any surveys"
+    edit:
+      title: "Edit %{name}'s Survey Answers"
+    form:
+      frozen: "Sorry. The survey '%{survey}' is currently on hold."
   date:
     formats:
-      default: "%Y-%m-%d"
+      default: "%m/%d/%Y"
       short: "%b %d"
       long: "%B %d, %Y"
       time: "%l:%M %p"
@@ -383,6 +641,7 @@ cn:
       short: "%d %b %H:%M"
       long: "%B %d, %Y %H:%M"
       time_only: "%l:%M %p"
+      date: "%m/%d/%Y"
     am: "am"
     pm: "pm"
 
@@ -400,8 +659,8 @@ cn:
       separator: "."
       delimiter: ","
       precision: 3
-      significant: false
-      strip_insignificant_zeros: false
+      #significant: false
+      #strip_insignificant_zeros: false
 
     currency:
       format:
@@ -410,8 +669,8 @@ cn:
         separator: "."
         delimiter: ","
         precision: 2
-        significant: false
-        strip_insignificant_zeros: false
+        #significant: false
+        #strip_insignificant_zeros: false
 
     percentage:
       format:
@@ -602,12 +861,37 @@ cn:
       not_found: We couldn't find anyone in your %{terminology} with that name
       showing_count: "Showing %{length} of %{total}, keep typing or "
       show_all: 'show all'
+      add_new_person_group: Add a new person
   
   helpers:
     label:
       group:
         name: 'Group Name'
         start_time: 'From'
-        
+      organization:
+        terminology: Type
+      sms_keyword:
+        survey_id: Associated Survey
+    submit:
+      update: Update
   member: Member
   leader: Leader
+  organizations:
+    index:
+      add_sub_org: Add %{terminology} under this one
+      add_a_sub_org: Add new %{terminology}
+      add: Add
+    edit:
+      delete: Delete Organization
+      title: Edit %{org}
+      term_explain: Terminology is how you define this item, for example, Church, Organization, Ministry etc.
+      name_explain: A name is what you call something
+      back_to_orgs: Back to Organizations
+      delete_confirm: "Are you really really sure you want to delete this %{terminology}? There's no going back, and all the related data will be deleted!"
+      danger_zone: Danger Zone
+      danger_explanation: Deleting this Organization will also delete all sub organizations under this organization. Deleting an organization cannot be undone! Be certain that you want to delete this item before proceeding
+      show_sub_explain: Checking this box will cause sub-organizations you define under this level to show up in the navigation for people involved at the %{org} level. If this box is checked, Admins of %{org} will also be admins of levels under this one.
+    new:
+      title: Sign up your organization
+      signup: Sign Up!
+      your_org: Your Organization
