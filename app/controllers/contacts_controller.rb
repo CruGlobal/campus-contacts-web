@@ -3,6 +3,7 @@ require 'contact_actions'
 
 class ContactsController < ApplicationController
   include ContactActions
+  include ActionView::Helpers::DateHelper
   
   before_filter :get_person
   before_filter :ensure_current_org
@@ -116,6 +117,9 @@ class ContactsController < ApplicationController
         end
       end
     end
+    if params[:person_updated_from].present? && params[:person_updated_to].present?
+      @people = @people.find_by_person_updated_by_daterange(params[:person_updated_from], params[:person_updated_to])
+    end
     @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
     # raise @q.sorts.inspect
     @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? params[:q][:s] : ['lastName, firstName']).group('ministry_person.personID')
@@ -176,7 +180,7 @@ class ContactsController < ApplicationController
     @person.update_attributes(params[:person]) if params[:person]
     
     save_survey_answers
-
+    @person.update_date_attributes_updated
     if @person.valid? && (!@answer_sheet || (@answer_sheet.person.valid? &&
        (!@answer_sheet.person.primary_phone_number || @answer_sheet.person.primary_phone_number.valid?)))
       redirect_to survey_response_path(@person)

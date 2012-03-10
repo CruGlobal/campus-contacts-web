@@ -115,6 +115,8 @@ en:
     subject: 'Subject'
     autocomplete_name_hint: 'Type a name or facebook profile url here:'
     match_found: 'Match found'
+    contacts_updated_from: 'Contacts Updated From'
+    dash: ' - '
   leaders:
     form:
       name_required: "Name, gender, and email fields are required to add a leader:"
@@ -147,6 +149,7 @@ en:
       apply_roles: 'Apply Labels'
       no_people: "Sorry, there are no people involved here."
       displaying: "Displaying %{start} - %{finish} of %{total}"
+      merge_people: "Merge People"
       error_message: "Error: %{person} does not have valid email to be leader"
       error_message_update_leader_without_person: "Error: Person does not have valid email to be leader"
       error_message_update_admin_without_person: "Error: Person does not have valid email to be admin"
@@ -155,6 +158,7 @@ en:
       select_all_html: "Select all <b>%{count}</b> people in the directory."
       all_selected_html: "All <b>%{count}</b> people in the directory are selected."
     show:
+      updated_time_difference: "Updated %{time_diff} ago."
       add_comments_here: 'Add comments here...'
       previous_comments: 'Previous Comments'
       send_contact_info: "Email me %{name}'s info"
@@ -307,6 +311,11 @@ en:
       edit_survey: "Edit Survey"
     new: 
       create_a_survey: "Create a Survey"
+      choose_keyword_explanation_html:
+        'Choosing a keyword for your community or event enables you to have people fill out your survey questions via the web, interactive texting,
+        and smartphones.  <strong>They will text your keyword to the number %{number}</strong> and your survey questions will appear on their device.  Note: The process of acquiring new keywords
+        requires manual intervention. Once you request your keyword expect to wait up to 24 hours before we notify you via email that your keyword is approved and
+    	  ready for use.'
     form:
       title_placeholder: "Shorter titles are better"
       post_survey_placeholder: "Example: Thank you for your time! If you're interested in Cru, we meet at Moore Auditorium every Thursday @ 8PM"
@@ -336,7 +345,8 @@ en:
         dropdown: 'Dropdown (Choose one)'
         web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
         text_message_preview: Text Message Preview
-        toggle_advanced_options: Toggle Advanced Options
+        show_advanced_options: "Show Advanced Options"
+        hide_advanced_options: "Hide Advanced Options"
       multiple_choice_form:
         list_choices: 'List out the possible choices, one per line:'
       question:
@@ -357,6 +367,7 @@ en:
         trigger_words: 'List one or more words or phrases that will trigger this notification if they appear in the
         answer.<br/>Separate words and phrases with commas.'
         leaders: 'Select one or more leaders to be notified when this question is answered in a certain way'
+        web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
   sms_keywords:
     keyword_deleted: "Keyword has been deleted."
     index:

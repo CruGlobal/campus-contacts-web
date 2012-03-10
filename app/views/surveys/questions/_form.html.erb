@@ -26,9 +26,8 @@
     </div>
     <%= render 'advanced_options', f: f, q: question %>
     <div class="submit_button" style="<%= question.new_record? ? 'display:none' : '' %>">
-      <%= f.check_box :web_only, id: "web_only_#{f.object.id}", class: 'web_only' %> <%= t('.web_only') %><br /><br/>
       <% if question.trigger_words.blank? %>
-        <%= link_to t('.toggle_advanced_options'), '#', id: 'advanced_toggle' %><br/><br />
+        <%= link_to t('.show_advanced_options'), '#', id: 'advanced_toggle' %><br/><br />
       <% end %>
       <%= f.submit %>
       <%= button_tag "Cancel", :id => "cancel_survey_question" %>

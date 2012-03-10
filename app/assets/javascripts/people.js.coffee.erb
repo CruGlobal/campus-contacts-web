@@ -48,8 +48,8 @@ $ ->
   $('#user_merge_form input.name').observe_field 1, ->
     $(this).triggerPersonSearch()
 
-  $('#user_merge_form input.person').triggerPersonLookup()
-  $('#user_merge_form input.name').triggerPersonSearch()
+  #$('#user_merge_form input.person').triggerPersonLookup()
+  #$('#user_merge_form input.name').triggerPersonSearch()
 
   $('#people_controller a.add_person').live 'click', ->
     $('#new_person')[0].reset()
@@ -78,7 +78,7 @@ $ ->
 
   $("#people_controller a#bulk_delete").live 'click', ->
     ids = []
-    $('.id_checkbox:checked').each ->
+    $('.id_checkbox:checked:visible').each ->
       ids.push($(this).val())
     if($('#all_selected_text').is(':visible'))    
       $('.all_row').each ->
@@ -136,6 +136,24 @@ $ ->
     if(fromViewingFBProfile)
       $('#people_controller.edit .ui-autocomplete').show();
       fromViewingFBProfile = false
+      
+  $('#merge_people').live 'click', (e) ->
+    e.preventDefault()  
+    if $('.id_checkbox:checked').length > 0
+      people = []
+      $('.id_checkbox:checked').each ->
+        people.push($(this).val()) 
+      
+      person1 = people[0]
+      person2 = if people[1] == undefined then '' else people[1]
+      person3 = if people[2] == undefined then '' else people[2]
+      person4 = if people[3] == undefined then '' else people[3]
+      
+      document.location.href = '/people/merge?person1=' + person1 + 
+      '&person2=' + person2 + '&person3=' + person3 + '&person4=' + person4
+    else
+      document.location.href = '/people/merge'
+  false
 
 $.fn.fbNameSearch = (url)->
   prevBtn = $("#fb_name_search_dialog").next(".ui-dialog-buttonpane").find('button')[1]
@@ -290,7 +308,8 @@ $('#send_bulksms_link').live 'click', ->
   $('.to_list').html('')
   ids = []
   no_numbers = []
-  
+  $('#bulk_send_body').val('')
+
   $('.id_checkbox:checked').each ->
     id = $(this).val()
     tr = $(this).parent().parent();
@@ -322,7 +341,7 @@ $('#send_bulksms_link').live 'click', ->
   $('#bulk_send_dialog .subject').hide()
   $('#char_counter').show()
   $('#bulk_send_dialog #bulk_send_body').simplyCountable( { maxCount: 160 } )
-  $('#bulk_send_body').val($('#bulk_sms_message').val())  
+  # $('#bulk_send_body').val($('#bulk_sms_message').val())  
   $('#bulk_send_dialog').dialog
     resizable: false,
     height:444,
@@ -434,7 +453,7 @@ $('#roles_menu_div').live 'click', ->
     role_div.attr('style', '')
     $(this).attr('style', '')
   else
-    role_div.css('left', '44.8em')
+    role_div.css('left', '24.6em')
     $(this).attr('style', 'background: url("/assets/pillbg_over.png") repeat-x')
    
 $('#apply_roles').live 'click', -> 

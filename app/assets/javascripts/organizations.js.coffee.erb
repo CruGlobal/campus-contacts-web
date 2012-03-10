@@ -3,6 +3,7 @@ $ ->
     $(this).hide()
     $('#orgs').show()
     
+    
   $('.org_link').live 'ajax:before', ->
     col$ = $(this).closest('div')
     $('.org_link', col$).closest('li').removeClass('selected')
@@ -26,13 +27,21 @@ $ ->
       buttons: 
         Cancel: ->
           $(this).dialog('destroy')
+          $('#new_org form')[0].reset()
 
   $('#new_org .save').live 'click', ->
     form = $(this).closest('form')
     if $(this).hasClass('save_and_more')
       $('#add_another').val('true')
-    $.rails.handleRemote(form)
-    form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
+    if $('#organization_terminology').val() != "" && $('#organization_name').val() != ""
+      $.rails.handleRemote(form)
+      form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
+    else
+      if $('#organization_name').val() == ""
+        $('#organization_name').focus()
+      else
+        $('#organization_terminology').focus()
+      $.rails.handleRemote(form)
     false
     
     
