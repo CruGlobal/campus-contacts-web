@@ -18,9 +18,10 @@
     <ul class="pillmenu">
       <li>
         <%= link_to('Send', '#', class: 'action_dropdown') %>
-        <ul style="display:none">
+        <ul style="display:none; width:225px;">
           <li><%= link_to(t('.send_email'), nil, :id => "send_bulkemail_link") %></li>	
           <li><%= link_to(t('.send_sms'), nil, :id => "send_bulksms_link") %></li>			
+          <li><%= link_to t('.transfer_org'), "", :id => "transfer_org" %></li>
         </ul>
       </li>
     </ul>
@@ -84,26 +85,30 @@
 <%= form_tag people_path, id: 'people_form' do %>
   <% hidden_field_tag :ids %>
 <% end %>
-<table class="listing" cellpadding="0" cellspacing="0">
-  <tr>
-    <% if can?(:create, Person) || can?(:create, SmsMailer) %>
-      <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment',  'data-params' => 'page=' + (params[:page] ? params[:page] : '1') + '&role_id=' + (params[:role_id] ? params[:role_id] : '')   %></th>
-    <% end %>
-    <th><%= sort_link @q, :firstName, t('contacts.index.first_name') %></th>
-    <th><%= sort_link @q, :lastName, t('contacts.index.last_name') %></th>
-    <th><%= sort_link @q, 'organizational_roles.id', t('nav.roles') %></th>
-    <th><%= sort_link @q, :gender, t('.gender') %></th>
-    <th><%= sort_link @q, 'email_addresses.email', t('.email') %></th>
-    <th><%= sort_link @q, 'phone_numbers.number', t('.phone') %></th>
-    <th><%= sort_link @q, :yearInSchool, t('.year_in_school') %></th>
-    <th></th>
-  </tr>
-  <tbody id="people_table">
-    <% @people.each do |person| %>
-      <%= render 'person', person: person %>
-    <% end %>
-  </tbody>
-</table>
+<%= form_for ContactAssignment.new do |f| %>
+  <table class="listing" cellpadding="0" cellspacing="0">
+    <tr>
+      <% if can?(:create, Person) || can?(:create, SmsMailer) %>
+        <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment',  'data-params' => 'page=' + (params[:page] ? params[:page] : '1') + '&role_id=' + (params[:role_id] ? params[:role_id] : '')   %></th>
+      <% end %>
+      <th><%= sort_link @q, :firstName, t('contacts.index.first_name') %></th>
+      <th><%= sort_link @q, :lastName, t('contacts.index.last_name') %></th>
+      <th><%= sort_link @q, 'organizational_roles.id', t('nav.roles') %></th>
+      <th><%= sort_link @q, :gender, t('.gender') %></th>
+      <th><%= sort_link @q, 'email_addresses.email', t('.email') %></th>
+      <th><%= sort_link @q, 'phone_numbers.number', t('.phone') %></th>
+      <th><%= sort_link @q, :yearInSchool, t('.year_in_school') %></th>
+      <th></th>
+    </tr>
+    <tbody id="people_table">
+      <% @people.each do |person| %>
+        <%= render 'person', person: person %>
+      <% end %>
+    </tbody>
+  </table>
+  <%= render 'assign' %>
+<% end %>
+
 <%= paginate @people %>
 <% if @people.blank? %>
   <div class="contentpad no_contacts">

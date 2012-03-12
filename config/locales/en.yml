@@ -153,6 +153,7 @@ en:
       error_message: "Error: %{person} does not have valid email to be leader"
       error_message_update_leader_without_person: "Error: Person does not have valid email to be leader"
       error_message_update_admin_without_person: "Error: Person does not have valid email to be admin"
+      transfer_org: Transfer to another team/organization
     all:
       page_selected_html: "All <b>%{count}</b> people on this page are selected."
       select_all_html: "Select all <b>%{count}</b> people in the directory."

@@ -154,6 +154,15 @@ $ ->
     else
       document.location.href = '/people/merge'
   false
+  
+  $('#assign_org .org_search_name').observe_field 0.5, ->
+    name = $(this).val()
+    $('#spinner_org_search').show()
+    $.ajax
+      url: '/organizations/search.js?q='+name, 
+      type: 'GET',
+      complete: ->
+        $('#spinner_org_search').hide()
 
 $.fn.fbNameSearch = (url)->
   prevBtn = $("#fb_name_search_dialog").next(".ui-dialog-buttonpane").find('button')[1]
@@ -422,6 +431,41 @@ $('#send_bulkcomment_link').live 'click', ->
 $('#bulk_send_dialog form').live 'submit', ->
   false
 
+$('#transfer_org').live 'click', ->
+  if $('.id_checkbox:checked').length > 0
+    el = $('#assign_org')
+    el.dialog
+      resizable: false,
+      height:650,
+      width:600,
+      modal: true,
+      buttons: 
+        Cancel: ->
+          $(this).dialog('destroy')
+  else
+    $.a(t('contacts.index.none_checked'))
+  false
+  
+$('#assign_org .org a').live 'click', (e)->
+  e.preventDefault()
+  form = $('#new_contact_assignment')
+  from_id = $(this).closest('div').attr('data-org-id')
+  to_id = $(this).attr('data-id')
+  keep_contact = $('#keep-contact-copy > input').is(':checked')
+  old_action = form.attr('action')
+  form.attr('action', '/organizational_roles/move_to?from_id='+from_id+'&to_id='+to_id+'&keep_contact='+keep_contact)
+  $.rails.handleRemote(form)
+  if keep_contact == false
+    $('.id_checkbox:checked').each ->
+      $(this).closest('tr').remove()
+  form.attr('action', old_action)
+  $('#assign_org').dialog('destroy')
+  if $('#people_controller.show')[0]
+    setTimeout "document.location = '/people'", 1000
+false
+
+
+  
 $('#check_all').live 'click', ->
   first_row = $('#people_table').find('tr:first')
   text = first_row.text()
