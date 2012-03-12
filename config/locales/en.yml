@@ -209,6 +209,8 @@ en:
     involvement:
       conferences: Conferences
       summer_projects: Summer Projects
+    assign:
+      keep_contact: "Check the box to leave a copy of the contact in the org."
   followup_comments:
     index:
       comments_title: 'Comments'
