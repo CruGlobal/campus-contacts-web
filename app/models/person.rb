@@ -59,7 +59,9 @@ class Person < ActiveRecord::Base
   } }
 
   scope :order_by_highest_role, lambda { |order| {
+    :select => "ministry_person.*, MIN(roles.role_id)",
     :joins => :organizational_roles,
+    :group => "ministry_person.personID",
     :order => order
   } }
 
