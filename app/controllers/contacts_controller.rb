@@ -253,19 +253,18 @@ class ContactsController < ApplicationController
         break
       end
 
-      if row[2].to_s.gsub(/[^\d]/,'').length < 7 # if phone_number length < 7
+      if row[5].to_s.gsub(/[^\d]/,'').length < 7 && !row[5].empty? # if phone_number length < 7
         flash_error = "#{t('contacts.import_contacts.cause_2')} #{n}"
         error = true
         break
       end
 
-      if !row[3].to_s.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i) # if email has wrong formatting
+      if !row[4].to_s.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i) # if email has wrong formatting
         flash_error = "#{t('contacts.import_contacts.cause_3')} #{n}"
         error = true
         break
       end
-      a << {:person => {:firstName => row[0], :lastName => row[1], :email_address => {:email => row[3], :primary => "1", :_destroy => "false"}, :phone_number => {:number => row[2], :location => "mobile", :primary => "1", :_destroy => "false"}}}
-      
+      a << {:person => {:firstName => row[0], :lastName => row[1], :gender => row[3], :email_address => {:email => row[4], :primary => "1", :_destroy => "false"}, :phone_number => {:number => row[5], :location => "mobile", :primary => "1", :_destroy => "false"}, :current_address_attributes => { :address1 => row[6], :address2 => row[7], :city => row[8], :state => row[9], :zip => row[10]} }}
     end
 
     if !error
