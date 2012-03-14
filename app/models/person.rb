@@ -57,6 +57,13 @@ class Person < ActiveRecord::Base
     :conditions => ["date_attributes_updated >= ? AND date_attributes_updated <= ? ", date_from, date_to]
   } }
 
+  scope :order_by_highest_role, lambda { |order| {
+    :select => "ministry_person.*, MIN(roles.role_id)",
+    :joins => :organizational_roles,
+    :group => "ministry_person.personID",
+    :order => order
+  } }
+
   def update_date_attributes_updated
     self.date_attributes_updated = DateTime.now.to_s(:db)
     self.save

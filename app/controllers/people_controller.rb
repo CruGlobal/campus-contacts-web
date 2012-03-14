@@ -517,8 +517,13 @@ class PeopleController < ApplicationController
       
       @q = @q.search(params[:q])
       @q.sorts = sort_by if @q.sorts.empty?
-      @all_people = @q.result(distinct: false).order(params[:q] && params[:q][:s] ? params[:q][:s] : 
-      sort_by)
+      @all_people = @q.result(distinct: false).order(params[:q] && params[:q][:s] ? params[:q][:s] : sort_by)
+      if !params[:q].nil? && params[:q][:s].include?("role_id")
+        order = params[:q][:s].include?("asc") ? params[:q][:s].gsub("asc", "desc") : params[:q][:s].gsub("desc", "asc")
+        @all_people = @q.result(distinct: true).order_by_highest_role(order)
+        #@all_people = @all_people.reverse if params[:q][:s].include?("desc")
+      end
+      
       @people = @all_people.page(params[:page])
     end
     
