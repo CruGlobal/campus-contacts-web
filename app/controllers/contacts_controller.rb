@@ -237,7 +237,8 @@ class ContactsController < ApplicationController
 
     n = 0
     error = false
-    flash_error = nil
+    success = false
+    flash_error = ""
     a = Array.new
     CSV.foreach(params[:dump][:file].path.to_s) do |row|
       if n == 0
@@ -248,26 +249,27 @@ class ContactsController < ApplicationController
       n += 1
 
       if !row[0].to_s.match /[a-z]/ # if firstName is blank
-        flash_error = "#{t('contacts.import_contacts.cause_1')} #{n}"
+        flash_error = flash_error + "#{t('contacts.import_contacts.cause_1')} #{n},"
         error = true
-        break
+        next
       end
 
-      if row[5].to_s.gsub(/[^\d]/,'').length < 7 && !row[5].empty? # if phone_number length < 7
-        flash_error = "#{t('contacts.import_contacts.cause_2')} #{n}"
+      if row[5].to_s.gsub(/[^\d]/,'').length < 7 && !row[5].nil? # if phone_number length < 7
+        flash_error = flash_error + "#{t('contacts.import_contacts.cause_2')} #{n},"
         error = true
-        break
+        next
       end
 
       if !row[4].to_s.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i) # if email has wrong formatting
-        flash_error = "#{t('contacts.import_contacts.cause_3')} #{n}"
+        flash_error = flash_error + "#{t('contacts.import_contacts.cause_3')} #{n},"
         error = true
-        break
+        next
       end
       a << {:person => {:firstName => row[0], :lastName => row[1], :gender => row[3], :email_address => {:email => row[4], :primary => "1", :_destroy => "false"}, :phone_number => {:number => row[5], :location => "mobile", :primary => "1", :_destroy => "false"}, :current_address_attributes => { :address1 => row[6], :address2 => row[7], :city => row[8], :state => row[9], :zip => row[10]} }}
+      success = true
     end
 
-    if !error
+    if success
       a.each do |p|
         create_contact_from_row(p)
       end
