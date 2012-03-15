@@ -459,7 +459,7 @@ class PeopleController < ApplicationController
       org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
       @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles)
       @q = @people_scope.includes(:primary_phone_number, :primary_email_address)
-      @q = @q.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ?', params[:role], current_organization.id)  if !params[:role].blank?
+      @q = @q.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ?', params[:role], current_organization.id) unless params[:role].blank?
       sort_by = ['lastName asc', 'firstName asc']
       
       if search_params[:search_type] == "basic"
