@@ -39,10 +39,12 @@
                 <% end %>
               </ul>
               </li>
-
-              <li class="<%= 'current' if request.path =~ connect_pattern %>">
-              <%= link_to(t('nav.surveys'), index_admin_surveys_path) %>
-              <ul>
+              
+              <% if can? :manage, current_organization %>
+                <li class="<%= 'current' if request.path =~ connect_pattern %>">
+                  <%= link_to(t('nav.surveys'), index_admin_surveys_path) %>
+                <ul>
+              <% end %>
 
                 <% if can? :manage, current_organization %>
                   <li class="<%= 'current' if ['surveys','questions'].include?(controller.controller_name) %>"><%= link_to(t('nav.surveys'), index_admin_surveys_path, :class => "topset surveys") %></li>
