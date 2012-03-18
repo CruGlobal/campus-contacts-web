@@ -59,10 +59,10 @@ class Person < ActiveRecord::Base
   } }
 
   scope :order_by_highest_role, lambda { |order| {
-    :select => "ministry_person.*, MIN(roles.role_id)",
-    :joins => :organizational_roles,
+    :select => "ministry_person.*",
+    :joins => "JOIN organizational_roles ON ministry_person.personID = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id",
     :group => "ministry_person.personID",
-    :order => order
+    :order => "FIELD #{Role.i18n_field_plus_default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}"
   } }
 
   def update_date_attributes_updated
