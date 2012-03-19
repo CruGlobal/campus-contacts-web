@@ -2,7 +2,8 @@
   <li class="heading selected">
     <h3><%= t('people.index.labels') %></h3>
   </li>
-  <% current_organization.roles.each do |role| %>
+  <% r = current_organization.roles.default_roles_desc + current_organization.roles.non_default_roles_asc %>
+  <% r.each do |role| %>
     <% count = @people_scope.where('organizational_roles.role_id' => role.id).count %>
     <li style="<%= 'display:none' if count == 0 %>"><span class="name"><%= link_to(role, params.merge(:role_id => role.id)) %></span> (<%= count %>)</li>
   <% end %>

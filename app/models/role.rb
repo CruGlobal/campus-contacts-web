@@ -10,14 +10,14 @@ class Role < ActiveRecord::Base
   validates :name, presence: true, :if => Proc.new { |role| organization_id != 0 }
   validates :organization_id, presence: true
 
-  scope :default_roles_asc, lambda { {
-    :conditions => "i18n IN #{self.default_roles_for_field_string(self::DEFAULT_ROLES.reverse)}",
-    :order => "FIELD #{self.i18n_field_plus_default_roles_for_field_string(self::DEFAULT_ROLES.reverse)}",
-  } }
-
   scope :default_roles_desc, lambda { {
     :conditions => "i18n IN #{self.default_roles_for_field_string(self::DEFAULT_ROLES)}",
-    :order => "FIELD #{self.i18n_field_plus_default_roles_for_field_string(self::DEFAULT_ROLES)}",
+    :order => "FIELD #{self.i18n_field_plus_default_roles_for_field_string(self::DEFAULT_ROLES)}"
+  } }
+
+  scope :non_default_roles_asc, lambda { {
+    :conditions => "name NOT IN #{self.default_roles_for_field_string(self::DEFAULT_ROLES)}",
+    :order => "roles.name ASC"
   } }
   
   def self.leader_ids
