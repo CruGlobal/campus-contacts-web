@@ -507,10 +507,11 @@ class PeopleController < ApplicationController
       if !params[:q].nil? && params[:q][:s].include?("role_id")
         order = params[:q][:s].include?("asc") ? params[:q][:s].gsub("asc", "desc") : params[:q][:s].gsub("desc", "asc")
         @all_people = @q.result(distinct: false).order_by_highest_role(order)
+        @all_people = @all_people.all.uniq_by { |a| a.id }
         #@all_people = @all_people.reverse if params[:q][:s].include?("desc")
       end
       
-      @people = @all_people.page(params[:page])
+      @people = Kaminari.paginate_array(@all_people).page(params[:page])
     end
     
     def authorize_read
