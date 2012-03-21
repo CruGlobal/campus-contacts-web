@@ -148,7 +148,7 @@ es:
       go_home: 'Ir a mis contactos'
       request_key: "Haz clic para pedir una palabra clave"
       get_started: "Comenzar"
-      request_key_help: "La palabra clave es el nombre de la encuesta y también lo que la persona va escribir para llenar su encuesta. Por ejemplo, puedes decir, 'Escribe UFCRU al número 75572.' UFCRU es la palabra clave."
+      request_key_help: "La palabra clave es el nombre de la encuesta y también lo que la persona va escribir para llenar su encuesta. Por ejemplo, puedes decir, 'Escribe UFCRU al número 85005.' UFCRU es la palabra clave."
       headline_html: Un sistema de seguimiento <span class="babyblue">en línea</span> con tu audiencia en mente.
       subheadline_html: Escribir a estudiante para conectar. Tu seguimiento potencial desde la web o un teléfono inteligente.
       get_details_html: Obtener detalles& <a href="/welcome/tour" class="learnmore">Aprender más</a> or %{link}
@@ -166,7 +166,7 @@ es:
       verify_with_relay: "Verificar con Relé"
       not_found_paragraph: "En estos momentos MissionHub está siendo probado con el Ministerio Estudiantil de los Estados Unidos. Si no eres parte del Ministerio Estudiantil en Estados Unidos, no te preocupes! Tenemos el plan de lanzarlo pronto a una audiencia mayor. Si tu eres parte del Ministerio Estudiantil en Estados Unidos y estás viendo este mensaje, envíanos un correo a support@missionhub.com y te ayudaremos."
       # not_found_paragraph: "No pudimos encontrar un registro tuyo asociado con ninguna de las organizaciones o ministerios que utilizan MissionHub."
-      keyword_paragraph: "Una potente característica de MissionHub es la capacidad de coleccionar contactos a través de los mensajes de texto. Para que esto funcione, debes elegir una palabra clave que sea única para tu ministerio y que haga que las personas envíen mensajes de texto. Con una palabra clave, podrás decir ‚ÄúText <strong>tu palabra clave</strong>  al 75572‚Äù a tu reunión o evento siguiente."
+      keyword_paragraph: "Una potente característica de MissionHub es la capacidad de coleccionar contactos a través de los mensajes de texto. Para que esto funcione, debes elegir una palabra clave que sea única para tu ministerio y que haga que las personas envíen mensajes de texto. Con una palabra clave, podrás decir ‚ÄúText <strong>tu palabra clave</strong>  al 85005‚Äù a tu reunión o evento siguiente."
       request_keyword_link: "Haz Clic aquí para solicitar una palabra clave. Te regresaremos a este asistente cuando termines."
       survey_paragraph:
         "Ahora que has solicitado una palabra clave, vas a querer crear un par de preguntas para hacerle a las personas. Piensa a lo largo de las líneas en una encuesta corta o una tarjeta de contacto básico."
@@ -207,7 +207,7 @@ es:
     form:
       keyword: 'Palabra Clave'
       keyword_tip: "Esto es lo que las personas escribirán en su teléfono."
-      keyword_instruct: "- Una palabra clave es requerida para coleccionar contactos y encuestas vía texto, web y teléfono inteligente. <br/> - 'FSUCRU' es la palabra clave 'Escribe FSUCRU para 75572'.<br/>- Utiliza por lo menos 3 letras para tu palabra clave."
+      keyword_instruct: "- Una palabra clave es requerida para coleccionar contactos y encuestas vía texto, web y teléfono inteligente. <br/> - 'FSUCRU' es la palabra clave 'Escribe FSUCRU para 85005'.<br/>- Utiliza por lo menos 3 letras para tu palabra clave."
       keyword_why: "Esto para nuestro uso exclusivo. La descripción puede incluir el uso de palabras como 'reunión semanal', 'eventos de alcance', y otros usos que la palabra clave tendrá."
       explanation: 'Por favor explica para que va utilizar esta palabra clave.'
       initial_response: "¿Qué respuesta debemos devolver a las personas cuando nos escriben? <br/>Si quieres que la persona complete la encuesta, la respuesta DEBE incluir {{ link }} (exactamente así, no cambies esa parte de la respuesta.)"
