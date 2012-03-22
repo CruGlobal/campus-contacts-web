@@ -240,7 +240,6 @@ class ContactsController < ApplicationController
     success = false
     flash_error = ""
     a = Array.new
-    puts "=========> #{params[:dump][:file].path.to_s}"
     CSV.foreach(params[:dump][:file].path.to_s) do |row|
       if n == 0
         n = n + 1
