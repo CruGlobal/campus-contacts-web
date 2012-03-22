@@ -240,6 +240,7 @@ class ContactsController < ApplicationController
     success = false
     flash_error = ""
     a = Array.new
+    puts "=========> #{params[:dump][:file].path.to_s}"
     CSV.foreach(params[:dump][:file].path.to_s) do |row|
       if n == 0
         n = n + 1
@@ -281,7 +282,26 @@ class ContactsController < ApplicationController
   end
 
   def download_sample_contacts_csv
-    send_file Rails.root.to_s + '/public' + '/files/sample_contacts.csv', :type=>"application/csv"#, :x_sendfile=>true
+
+    csv_string = CSV.generate do |csv|
+      c = 0
+      CSV.foreach(Rails.root.to_s + "/public/files/sample_contacts.csv") do |row|
+        if c == 0
+          current_organization.surveys.flatten.uniq.each do |survey|
+            survey.all_questions.each do |q|
+              row << q.label
+            end
+          end
+        end
+        c = c + 1
+        csv << row
+      end
+    end
+
+
+
+    #send_file Rails.root.to_s + '/public' + '/files/sample_contacts.csv', :type=>"application/csv"#, :x_sendfile=>true
+    send_data csv_string, :type => 'text/csv; charset=UTF-8; header=present', :disposition => "attachment; filename=sample_contacts.csv"
   end
   
   protected
