@@ -240,8 +240,13 @@ class ContactsController < ApplicationController
     success = false
     flash_error = ""
     a = Array.new
+    c = Array.new
     CSV.foreach(params[:dump][:file].path.to_s) do |row|
       if n == 0
+        row[12..row.length-1].each do |r|
+          c << r.split(" :: ").first
+        end
+
         n = n + 1
         next
       end
@@ -265,7 +270,17 @@ class ContactsController < ApplicationController
         error = true
         next
       end
+      # surveys starts at row 12
       a << {:person => {:firstName => row[0], :lastName => row[1], :gender => row[3], :email_address => {:email => row[4], :primary => "1", :_destroy => "false"}, :phone_number => {:number => row[5], :location => "mobile", :primary => "1", :_destroy => "false"}, :current_address_attributes => { :address1 => row[6], :address2 => row[7], :city => row[8], :state => row[9], :country => row[10], :zip => row[11]} }}
+      b = Hash.new
+
+      l = 0
+      row[12..row.length-1].each do |r|
+        b[c[l]] = r
+        l = l + 1
+      end
+
+      a.last[:answers] = b
       success = true
     end
 
@@ -288,7 +303,7 @@ class ContactsController < ApplicationController
         if c == 0
           current_organization.surveys.flatten.uniq.each do |survey|
             survey.all_questions.each do |q|
-              row << q.label
+              row << "#{q.id} :: #{q.label}"
             end
           end
         end
@@ -296,8 +311,6 @@ class ContactsController < ApplicationController
         csv << row
       end
     end
-
-
 
     #send_file Rails.root.to_s + '/public' + '/files/sample_contacts.csv', :type=>"application/csv"#, :x_sendfile=>true
     send_data csv_string, :type => 'text/csv; charset=UTF-8; header=present', :disposition => "attachment; filename=sample_contacts.csv"
@@ -346,6 +359,20 @@ class ContactsController < ApplicationController
             ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
             ContactAssignment.create!(person_id: @person.id, organization_id: @organization.id, assigned_to_id: current_person.id)
           end
+
+
+          @answer_sheets = []
+          @organization ||= current_organization
+
+          @organization.surveys.each do |survey|
+            @answer_sheet = get_answer_sheet(survey, @person)
+            question_set = QuestionSet.new(survey.questions, @answer_sheet)
+            question_set.post(params[:answers], @answer_sheet)
+            question_set.save
+            @answer_sheets << @answer_sheet
+          end
+
+
           return
         end
       end
