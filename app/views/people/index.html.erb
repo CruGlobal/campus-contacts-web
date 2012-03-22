@@ -31,7 +31,7 @@
 
           <div class="dropdown_1column">
             <div class="col_1">
-              <%- @roles.each do |role| %>
+              <% (@roles.default_roles_desc + @roles.non_default_roles_asc).each do |role| %>
                 <div class="role_div_checkbox">
                   <span>
                     <%= check_box_tag 'role_ids[]', role.id, false, id: "role_ids_#{role.id}", class: 'role_id_checkbox' %> 
