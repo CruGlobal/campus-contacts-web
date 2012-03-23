@@ -58,7 +58,7 @@ gem 'rest-client'                                     # to make FB api requests
 gem "paperclip", :git => 'git://github.com/thoughtbot/paperclip.git'
 
 gem 'bitly'
-gem 'copycopter_client'
+#gem 'copycopter_client'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
