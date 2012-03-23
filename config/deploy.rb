@@ -38,7 +38,6 @@ set :scm, "git"
 
 set :user, 'deploy'
 
-
 task :staging do
   set :deploy_to, "/var/www/html/integration/#{application}"
   set :environment, 'staging'
@@ -65,6 +64,7 @@ task :production do
   set :deploy_to, "/var/www/#{application}"
   set :environment, 'production'
   set :rails_env, 'production'
+
   
   role :db, "10.10.11.166", primary: true
   role :web, "10.10.11.166", "10.10.11.167"
