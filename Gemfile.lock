@@ -111,6 +111,9 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.2.0)
+    copycopter_client (2.0.0)
+      i18n (>= 0.5.0)
+      json
     crack (0.3.1)
     dalli (1.1.4)
     deadlock_retry (1.1.2)
@@ -339,6 +342,7 @@ DEPENDENCIES
   client_side_validations
   coffee-rails (~> 3.1.0)
   coffee-script
+  copycopter_client
   crack
   dalli
   deadlock_retry
