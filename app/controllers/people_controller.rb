@@ -14,16 +14,12 @@ class PeopleController < ApplicationController
     authorize! :read, Person
     fetch_people(params)
                                      
-    if current_user_roles.include? Role.find(1)                           
+    if can? :manage, current_organization                         
       @roles = current_organization.roles
     else
-      @roles = current_organization.roles.delete_if { |r| r == Role.find(1) }
+      @roles = current_organization.roles.where("id != ?", Role::ADMIN_ID)
     end
 
-    # respond_to do |format|
-    #   format.html # index.html.erb
-    #   format.xml  { render xml: @people }
-    # end
   end
   
   def export
