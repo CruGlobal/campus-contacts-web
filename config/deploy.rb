@@ -79,7 +79,7 @@ deploy.task :restart, :roles => [:app], :except => {:no_release => true} do
     servers.map do |s|
       run "cd #{deploy_to}/current && echo '' > public/lb.html", :hosts => s.host
       run "touch #{current_path}/tmp/restart.txt", :hosts => s.host
-      sleep 120
+      sleep 60
       run "cd #{deploy_to}/current && echo 'ok' > public/lb.html", :hosts => s.host
     end
   else
