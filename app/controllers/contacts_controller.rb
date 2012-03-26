@@ -274,13 +274,28 @@ class ContactsController < ApplicationController
       a << {:person => {:firstName => row[0], :lastName => row[1], :gender => row[3], :email_address => {:email => row[4], :primary => "1", :_destroy => "false"}, :phone_number => {:number => row[5], :location => "mobile", :primary => "1", :_destroy => "false"}, :current_address_attributes => { :address1 => row[6], :address2 => row[7], :city => row[8], :state => row[9], :country => row[10], :zip => row[11]} }}
       b = Hash.new
 
+      #creating hash for answers
       l = 0
       row[12..row.length-1].each do |r|
+        #if with multiple answers
+        g = r.split(",").length
+        if g > 1
+          puts "=================> netbook"
+          q = Hash.new
+          for i in 0..g-1 do
+            q[i.to_s] = r.split(",")[i].strip
+          end
+          b[c[l]] = q
+          l = l + 1
+          next
+        end
+
         b[c[l]] = r
         l = l + 1
       end
 
       a.last[:answers] = b
+      puts a.last[:answers]
       success = true
     end
 
@@ -308,10 +323,11 @@ class ContactsController < ApplicationController
                 q.choices.each do |choice|
                   d = d + choice[1] + ", "
                 end
-                row << "#{q.id} :: #{q.label} (#{d})"
+                d[d.length-2..d.length-1] = ""
+                puts q.style
+                row << "#{q.id} :: #{q.label} #{t('survey_responses.edit.multiple_answers') if q.style == "checkbox"} (#{d})"
               rescue
                 row << "#{q.id} :: #{q.label}"
-                puts q.label
               end
             end
           end
@@ -380,7 +396,6 @@ class ContactsController < ApplicationController
             question_set.save
             @answer_sheets << @answer_sheet
           end
-
 
           return
         end

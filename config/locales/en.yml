@@ -632,6 +632,7 @@ en:
       no_answers: "%{name} has not completed any surveys"
     edit:
       title: "Edit %{name}'s Survey Answers"
+      multiple_answers: "One can have multiple answers. "
     form:
       frozen: "Sorry. The survey '%{survey}' is currently on hold."
   date:
