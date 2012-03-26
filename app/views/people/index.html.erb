@@ -90,7 +90,7 @@
     <th><%= sort_link @q, :gender, t('.gender') %></th>
     <th><%= sort_link @q, 'email_addresses.email', t('.email') %></th>
     <th><%= sort_link @q, 'phone_numbers.number', t('.phone') %></th>
-    <% if current_organization.settings[:show_year_in_school] %>
+    <% if (current_organization.settings[:show_year_in_school]) || (current_organization.settings[:show_year_in_school].nil?) %>
       <th><%= sort_link @q, :yearInSchool, t('.year_in_school') %></th>
     <% end %>
     <th></th>

@@ -68,7 +68,7 @@ class OrganizationsController < ApplicationController
   end
   
   def settings
-    @show_year_in_school = current_organization.settings[:show_year_in_school] ||= false
+    @show_year_in_school = current_organization.settings[:show_year_in_school]
   end
   
   def update_settings

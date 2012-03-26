@@ -906,5 +906,5 @@ en:
       your_org: Your Organization
     settings:
       title: Settings
-      year_in_school: Display year in school
+      year_in_school: Display 'Year in School' on the Directory Page
       submit: Update Settings

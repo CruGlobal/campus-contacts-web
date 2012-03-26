@@ -18,7 +18,7 @@
   <td><%= person.gender.to_s.titleize %></td>
   <td class="email"><%= mail_to(person.email) %></td>
   <td class="phone_number"><%= person.pretty_phone_number %></td>
-  <% if current_organization.settings[:show_year_in_school] %>
+  <% if (current_organization.settings[:show_year_in_school]) || (current_organization.settings[:show_year_in_school].nil?) %>
     <td><%= person.yearInSchool %></td>
   <% end %>
   <td class="controls">
