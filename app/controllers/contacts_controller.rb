@@ -303,7 +303,16 @@ class ContactsController < ApplicationController
         if c == 0
           current_organization.surveys.flatten.uniq.each do |survey|
             survey.all_questions.each do |q|
-              row << "#{q.id} :: #{q.label}"
+              begin
+                d = ""
+                q.choices.each do |choice|
+                  d = d + choice[1] + ", "
+                end
+                row << "#{q.id} :: #{q.label} (#{d})"
+              rescue
+                row << "#{q.id} :: #{q.label}"
+                puts q.label
+              end
             end
           end
         end
