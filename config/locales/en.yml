@@ -608,10 +608,12 @@ en:
       instruction_2: "First name should not be missing"
       instruction_3: "Phone numbers and email addresses should have the right format"
       instruction_4: "Headers should be present"
-      download_sample_csv: "Download sample CSV file"
+      download_template_csv: "Download template CSV file"
       cause_1: " First name is blank at row"
       cause_2: " Invalid phone number at row"
       cause_3: " Invalid email address at row"
+      tip_2: "In your first row list the headings like it shows here: <strong>FIRST NAME, LAST NAME, STATUS, GENDER, EMAIL, PHONE NUMBER, ADDRESS 1, ADDRESS 2, CITY, STATE, COUNTRY, ZIP</strong>"
+      
   sms:
     keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
   survey:
@@ -632,7 +634,7 @@ en:
       no_answers: "%{name} has not completed any surveys"
     edit:
       title: "Edit %{name}'s Survey Answers"
-      multiple_answers: "One can have multiple answers. "
+      multiple_answers: "Choose one or more. "
     form:
       frozen: "Sorry. The survey '%{survey}' is currently on hold."
   date:

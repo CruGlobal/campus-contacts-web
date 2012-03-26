@@ -280,7 +280,6 @@ class ContactsController < ApplicationController
         #if with multiple answers
         g = r.split(",").length
         if g > 1
-          puts "=================> netbook"
           q = Hash.new
           for i in 0..g-1 do
             q[i.to_s] = r.split(",")[i].strip

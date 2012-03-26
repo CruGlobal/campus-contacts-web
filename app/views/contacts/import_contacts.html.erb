@@ -18,11 +18,13 @@
   <p>All you need to do is a create a spreadsheet that looks like the sample below.<p>
  
    <%= image_tag("sample_csv_to_be_imported.png") %>
+   <%= image_tag("sample_csv_to_be_imported_surveys.png") %>
   
   <ol class="instructions">
-    <li><span class="name"><strong><%= link_to(t('contacts.import_contacts.download_sample_csv'), download_sample_contacts_csv_contacts_path, :class => "icon showtext csv") %></strong> to get started</span>
-    <li>In your first row list the headings like it shows here: FIRST NAME, LAST NAME, STATUS, GENDER, EMAIL, PHONE NUMBER, ADDRESS 1, ADDRESS 2, CITY, STATE, COUNTRY, ZIP</li>
+    <li><span class="name"><strong><%= link_to(t('contacts.import_contacts.template_sample_csv'), download_sample_contacts_csv_contacts_path, :class => "icon showtext csv") %></strong> to get started</span>
+    <li>In your first row list the headings like it shows here: <strong>FIRST NAME, LAST NAME, STATUS, GENDER, EMAIL, PHONE NUMBER, ADDRESS 1, ADDRESS 2, CITY, STATE, COUNTRY, ZIP</strong></li>
     <li>In the rows following the headings, just enter your contacts information. One thing to remember is that <strong>First Name is required</strong>.</li>
+    <li><strong>Surveys</strong> come after the <strong>"ZIP"</strong> column. Choices, if provided, for the question are enclosed in parentheses. <strong>Multiple answers</strong>, with <strong>'choose one or more'</strong>, must be separated with '<strong>,</strong>'</li>
     <li>In Excel, go to <strong>Save As</strong></li>
     <li>From the drop down menu for <strong>File Type</strong>, choose <strong>CSV, Comma Separated</strong></li>
   </ol>
