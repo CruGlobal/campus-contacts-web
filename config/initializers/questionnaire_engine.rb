@@ -1,3 +1,5 @@
+require  Rails.root.join('lib', 'questionnaire_engine', 'init')
+
 module Questionnaire
   # prefix for database tables
   mattr_accessor :table_name_prefix

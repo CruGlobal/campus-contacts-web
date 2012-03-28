@@ -46,6 +46,17 @@ GIT
   specs:
     vpim (11.9.6)
 
+GIT
+  remote: https://github.com/stevegraham/twilio-rb.git
+  revision: ac58b8674f064b31b4eb1ff39765e827aa92b99c
+  specs:
+    twilio-rb (2.1.3)
+      activesupport (>= 3.0.0)
+      builder (>= 2.1.2)
+      httparty (>= 0.6.1)
+      i18n (~> 0.5)
+      jwt (>= 0.1.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -62,7 +73,6 @@ GEM
       rack-cache (~> 1.1)
       rack-test (~> 0.6.1)
       sprockets (~> 2.1.2)
-    active_reload (0.6.1)
     activemodel (3.2.2)
       activesupport (= 3.2.2)
       builder (~> 3.0.0)
@@ -184,7 +194,7 @@ GEM
     multi_json (1.2.0)
     multi_xml (0.4.2)
     multipart-post (1.1.5)
-    mysql2 (0.2.18)
+    mysql2 (0.3.11)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
     net-sftp (2.0.5)
@@ -299,13 +309,6 @@ GEM
     treetop (1.4.10)
       polyglot
       polyglot (>= 0.3.1)
-    twilio-rb (2.1.3)
-      activesupport (>= 3.0.0)
-      builder (>= 2.1.2)
-      httparty (>= 0.6.1)
-      i18n (~> 0.5)
-      jwt (>= 0.1.3)
-      yajl-ruby (~> 1.0.0)
     tzinfo (0.3.32)
     uglifier (1.2.4)
       execjs (>= 0.3.0)
@@ -323,13 +326,11 @@ GEM
     whenever (0.7.3)
       activesupport (>= 2.3.4)
       chronic (~> 0.6.3)
-    yajl-ruby (1.0.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_reload
   activeadmin!
   acts_as_list
   airbrake
@@ -360,7 +361,7 @@ DEPENDENCIES
   kaminari
   mini_fb
   mocha
-  mysql2 (< 0.3)
+  mysql2 (~> 0.3.11)
   newrelic_rpm (= 3.1.1)
   nokogiri
   omniauth
@@ -386,7 +387,7 @@ DEPENDENCIES
   simplecov (>= 0.3.5)
   state_machine
   trumant-rack-oauth2-server!
-  twilio-rb
+  twilio-rb!
   uglifier (>= 1.0.3)
   unicorn
   valium

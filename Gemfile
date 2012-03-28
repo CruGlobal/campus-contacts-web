@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '=3.2.2'
 gem 'jquery-rails'
-gem 'mysql2', '< 0.3'
+gem 'mysql2', '~> 0.3.11'
 gem 'nokogiri'
 gem 'json_pure'
 gem 'redis'
@@ -24,7 +24,7 @@ gem 'carmen', git: 'git://github.com/twinge/carmen.git'
 gem 'ancestry'
 gem 'activeadmin', git: 'git://github.com/gregbell/active_admin.git'
 
-gem 'twilio-rb'
+gem 'twilio-rb', git: 'https://github.com/stevegraham/twilio-rb.git'
 gem "default_value_for"
 
 gem 'dalli'
@@ -70,7 +70,6 @@ group :development, :test do
   gem 'simplecov', '>= 0.3.5', require: false
   gem 'railroady'
   gem 'awesome_print'
-  gem 'active_reload'
   # Pretty printed test output
   # gem 'turn', :require => false
   gem 'rails-footnotes', '>= 3.7'
