@@ -1,3 +1,5 @@
+ require 'name_uniqueness_validator'
+
 class Organization < ActiveRecord::Base
   attr_accessor :person_id
 
