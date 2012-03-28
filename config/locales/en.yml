@@ -913,3 +913,5 @@ en:
       title: Sign up your organization
       signup: Sign Up!
       your_org: Your Organization
+    add_org:
+      name_not_unique: Name is not Unique

@@ -35,7 +35,7 @@ class Organization < ActiveRecord::Base
   default_value_for :show_sub_orgs, true
 
   validates_presence_of :name, :terminology#, :person_id
-  validates_uniqueness_of :name#, :scope => :ancestry
+  validates :name, :name_uniqueness => true
 
   @queue = :general
   after_create :create_admin_user, :notify_admin_of_request
