@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
-gem 'rails', '=3.2.0'
+gem 'rails', '=3.2.2'
 gem 'jquery-rails'
-gem 'mysql2', '0.3.8'
+gem 'mysql2', '< 0.3'
 gem 'nokogiri'
 gem 'json_pure'
 gem 'redis'
@@ -36,7 +36,6 @@ gem "state_machine"
 gem 'acts_as_list'
 gem 'dynamic_form'
 gem 'coffee-script'
-gem 'uglifier'
 gem 'trumant-rack-oauth2-server', git: 'git://github.com/twinge/rack-oauth2-server.git', branch: 'active_record'
 
 gem 'enforce_schema_rules'
