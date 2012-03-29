@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/ernie/ransack.git
+  revision: 82d2a806da8157954b8c58b41f769b5d1825efa5
+  specs:
+    ransack (0.6.0)
+      actionpack (~> 3.0)
+      activerecord (~> 3.0)
+      polyamorous (~> 0.5.0)
+
+GIT
   remote: git://github.com/gregbell/active_admin.git
   revision: bdcff35151f3d9b22adf215593258ce79e75d342
   specs:
@@ -255,10 +264,6 @@ GEM
       thor (~> 0.14.6)
     raindrops (0.8.0)
     rake (0.9.2.2)
-    ransack (0.5.8)
-      actionpack (~> 3.0)
-      activerecord (~> 3.0)
-      polyamorous (~> 0.5.0)
     rdoc (3.12)
       json (~> 1.4)
     redis (2.2.2)
@@ -373,7 +378,7 @@ DEPENDENCIES
   rails (= 3.2.2)
   rails-dev-tweaks
   rails-footnotes (>= 3.7)
-  ransack (= 0.5.8)
+  ransack!
   redis
   resque
   resque_mail_queue

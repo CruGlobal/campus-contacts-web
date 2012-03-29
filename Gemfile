@@ -46,7 +46,7 @@ gem 'airbrake'
 gem 'cancan'
 gem 'kaminari'
 gem 'whenever'
-gem "ransack", '0.5.8'
+gem "ransack", :git => "git://github.com/ernie/ransack.git"
 gem 'deadlock_retry'
 gem 'delegate_presenter'
 
