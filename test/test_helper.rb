@@ -8,7 +8,7 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
 require 'rack/oauth2/server'
 require 'rails/test_help'
-require 'shoulda/rails'
+require 'shoulda'
 # require 'ephemeral_response'
 require 'factory_girl'
 require 'api_test_helper'
