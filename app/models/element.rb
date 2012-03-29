@@ -5,7 +5,7 @@ class Element < ActiveRecord::Base
   belongs_to :question_grid, :class_name => "QuestionGrid", :foreign_key => "question_grid_id"
   belongs_to :choice_field, :class_name => "ChoiceField", :foreign_key => "conditional_id"
   
-  self.inheritance_column = :kind
+  #self.inheritance_column = :kind
   
   has_many :survey_elements, :dependent => :destroy
   has_many :surveys, :through => :survey_elements
