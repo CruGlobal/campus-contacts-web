@@ -1,16 +1,22 @@
 require 'test_helper'
 
-class Admin::OrganizationsControllerTest < ActionController::TestCase
+class OrganizationsControllerTest < ActionController::TestCase
   context "Creating organizations" do
     setup do
-      org_parent = Factory(:organization)
-      org_child = Factory(:organization, :name => "neilmarion", :parent => org1)
+      @user = Factory(:user_with_auxs)  #user with a person object
+      sign_in @user
+      @org_parent = Factory(:organization)
+      @org_parent.add_admin(@user.person)
+      @org_child = Factory(:organization, :name => "neilmarion", :parent => @org_parent)
     end
 
-    should "not create organization if its name is equal to one of its sibling" do
-      post :update, {:organization => {:parent_id =>"23", :name => "Bandana", :terminology => "Organization", :show_sub_orgs => "1"}}
-      assert_equal Organization.count, 2, "Created organization with the same name as its sibling."
-      assert_response :success
+    should "create a child org if it's name is unique, otherwise dont create a child org" do
+      xhr :post, :create, {:organization => {:parent_id => @org_parent.id, :name => "neilmarion", :terminology => "Organization", :show_sub_orgs => "1"}}
+      assert_equal 1, @org_parent.children.count
+      
+      xhr :post, :create, {:organization => {:parent_id => @org_parent.id, :name => "notneilmarion", :terminology => "Organization", :show_sub_orgs => "1"}}
+      assert_equal 2, @org_parent.children.count
+      assert @org_parent.children.collect {|c| c.name }.include? "notneilmarion"
     end
 
   end
