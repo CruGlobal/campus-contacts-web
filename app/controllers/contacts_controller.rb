@@ -238,10 +238,16 @@ class ContactsController < ApplicationController
 
     n = 0
     error = false
-    flash_error = nil
+    success = false
+    flash_error = ""
     a = Array.new
+    c = Array.new
     CSV.foreach(params[:dump][:file].path.to_s) do |row|
       if n == 0
+        row[12..row.length-1].each do |r|
+          c << r.split(" :: ").first
+        end
+
         n = n + 1
         next
       end
@@ -249,27 +255,51 @@ class ContactsController < ApplicationController
       n += 1
 
       if !row[0].to_s.match /[a-z]/ # if firstName is blank
-        flash_error = "#{t('contacts.import_contacts.cause_1')} #{n}"
+        flash_error = flash_error + "#{t('contacts.import_contacts.cause_1')} #{n},"
         error = true
-        break
+        next
       end
 
-      if row[2].to_s.gsub(/[^\d]/,'').length < 7 # if phone_number length < 7
-        flash_error = "#{t('contacts.import_contacts.cause_2')} #{n}"
+      if row[5].to_s.gsub(/[^\d]/,'').length < 7 && !row[5].nil? # if phone_number length < 7
+        flash_error = flash_error + "#{t('contacts.import_contacts.cause_2')} #{n},"
         error = true
-        break
+        next
       end
 
-      if !row[3].to_s.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i) # if email has wrong formatting
-        flash_error = "#{t('contacts.import_contacts.cause_3')} #{n}"
+      if !row[4].to_s.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i) # if email has wrong formatting
+        flash_error = flash_error + "#{t('contacts.import_contacts.cause_3')} #{n},"
         error = true
-        break
+        next
       end
-      a << {:person => {:firstName => row[0], :lastName => row[1], :email_address => {:email => row[3], :primary => "1", :_destroy => "false"}, :phone_number => {:number => row[2], :location => "mobile", :primary => "1", :_destroy => "false"}}}
-      
+      # surveys starts at row 12
+      a << {:person => {:firstName => row[0], :lastName => row[1], :gender => row[3], :email_address => {:email => row[4], :primary => "1", :_destroy => "false"}, :phone_number => {:number => row[5], :location => "mobile", :primary => "1", :_destroy => "false"}, :current_address_attributes => { :address1 => row[6], :address2 => row[7], :city => row[8], :state => row[9], :country => row[10], :zip => row[11]} }}
+      b = Hash.new
+
+      #creating hash for answers
+      l = 0
+      row[12..row.length-1].each do |r|
+        #if with multiple answers
+        g = r.split(",").length
+        if g > 1
+          q = Hash.new
+          for i in 0..g-1 do
+            q[i.to_s] = r.split(",")[i].strip
+          end
+          b[c[l]] = q
+          l = l + 1
+          next
+        end
+
+        b[c[l]] = r
+        l = l + 1
+      end
+
+      a.last[:answers] = b
+      puts a.last[:answers]
+      success = true
     end
 
-    if !error
+    if success
       a.each do |p|
         create_contact_from_row(p)
       end
@@ -281,7 +311,34 @@ class ContactsController < ApplicationController
   end
 
   def download_sample_contacts_csv
-    send_file Rails.root.to_s + '/public' + '/files/sample_contacts.csv', :type=>"application/csv"#, :x_sendfile=>true
+
+    csv_string = CSV.generate do |csv|
+      c = 0
+      CSV.foreach(Rails.root.to_s + "/public/files/sample_contacts.csv") do |row|
+        if c == 0
+          current_organization.surveys.flatten.uniq.each do |survey|
+            survey.all_questions.each do |q|
+              begin
+                d = ""
+                q.choices.each do |choice|
+                  d = d + choice[1] + ", "
+                end
+                d[d.length-2..d.length-1] = ""
+                puts q.style
+                row << "#{q.id} :: #{q.label} #{t('survey_responses.edit.multiple_answers') if q.style == "checkbox"} (#{d})"
+              rescue
+                row << "#{q.id} :: #{q.label}"
+              end
+            end
+          end
+        end
+        c = c + 1
+        csv << row
+      end
+    end
+
+    #send_file Rails.root.to_s + '/public' + '/files/sample_contacts.csv', :type=>"application/csv"#, :x_sendfile=>true
+    send_data csv_string, :type => 'text/csv; charset=UTF-8; header=present', :disposition => "attachment; filename=sample_contacts.csv"
   end
   
   protected
@@ -327,6 +384,19 @@ class ContactsController < ApplicationController
             ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
             ContactAssignment.create!(person_id: @person.id, organization_id: @organization.id, assigned_to_id: current_person.id)
           end
+
+
+          @answer_sheets = []
+          @organization ||= current_organization
+
+          @organization.surveys.each do |survey|
+            @answer_sheet = get_answer_sheet(survey, @person)
+            question_set = QuestionSet.new(survey.questions, @answer_sheet)
+            question_set.post(params[:answers], @answer_sheet)
+            question_set.save
+            @answer_sheets << @answer_sheet
+          end
+
           return
         end
       end
