@@ -1,0 +1,5 @@
+class NameUniquenessValidator < ActiveModel::EachValidator
+  def validate_each(object, attribute, value)
+    object.errors[attribute] << I18n.t('organizations.add_org.name_not_unique') if object.parent.children.any? {|c| c.name == object.name}
+  end
+end
