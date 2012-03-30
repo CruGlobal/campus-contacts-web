@@ -92,7 +92,7 @@ class OrganizationTest < ActiveSupport::TestCase
     a = Role.where("organization_id = 0")
     a << role1
     
-    assert_equal org1.roles.sort{ |a, b| 1*(b <=> a) }, a.uniq.sort{ |a, b| 1*(b <=> a) }, "Organization class did not return correct roles"
+    assert_equal org1.roles.sort{ |a, b| 1*(b <=> a) }, a.sort{ |a, b| 1*(b <=> a) }, "Organization class did not return correct roles"
   end
 
   test "<=>(other)" do

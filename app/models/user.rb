@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
          :rememberable, :trackable, :validatable, :omniauthable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :remember_me, :password
+  attr_accessible :email, :remember_me, :password, :username
   # alias_method :find_by_userID, :find_by_id
   def self.find_by_id(*args)
     find_by_userID(args)

@@ -1,4 +1,4 @@
-require  Rails.root.join('lib', 'questionnaire_engine', 'init')
+#require  Rails.root.join('lib', 'questionnaire_engine', 'init')
 
 module Questionnaire
   # prefix for database tables
