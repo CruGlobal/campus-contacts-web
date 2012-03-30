@@ -243,12 +243,14 @@ class ContactsController < ApplicationController
     c = Array.new
     CSV.foreach(params[:dump][:file].path.to_s) do |row|
       if n == 0
-        row[12..row.length-1].each do |r|
-          c << r.split(" :: ").first
-        end
+        if row.length >= 12
+          row[12..row.length-1].each do |r|
+            c << r.split(" :: ").first
+          end
 
-        n = n + 1
-        next
+          n = n + 1
+          next
+        end
       end
       
       n += 1
@@ -323,7 +325,6 @@ class ContactsController < ApplicationController
                   d = d + choice[1] + ", "
                 end
                 d[d.length-2..d.length-1] = ""
-                puts q.style
                 row << "#{q.id} :: #{q.label} #{t('survey_responses.edit.multiple_answers') if q.style == "checkbox"} (#{d})"
               rescue
                 row << "#{q.id} :: #{q.label}"
@@ -337,7 +338,7 @@ class ContactsController < ApplicationController
     end
 
     #send_file Rails.root.to_s + '/public' + '/files/sample_contacts.csv', :type=>"application/csv"#, :x_sendfile=>true
-    send_data csv_string, :type => 'text/csv; charset=UTF-8; header=present', :disposition => "attachment; filename=sample_contacts.csv"
+    send_data csv_string, :type => 'text/csv; charset=UTF-8; header=present', :disposition => "attachment; filename=/home/neilmarion/sample_contacts.csv"
   end
   
   protected
