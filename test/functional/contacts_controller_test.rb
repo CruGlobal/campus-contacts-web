@@ -184,6 +184,12 @@ class ContactsControllerTest < ActionController::TestCase
     setup do
       @user = Factory(:user_with_auxs)  #user with a person object
       sign_in @user
+
+      organization = Factory(:organization)
+      survey = Factory(:survey, organization: organization)
+      element = Factory(:choice_field)
+      question = Factory(:survey_element, survey: survey, element: element, position: 1, archived: true)
+
     end
     
     should "successfully import contacts" do
