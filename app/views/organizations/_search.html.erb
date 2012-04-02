@@ -1,6 +1,6 @@
 <ul>
   <% organizations.each do |org| %>
-    <%= render 'org_li', org: org %>
+    <%= render 'org_li', org: org if org.status == "active" %>
   <% end %>
 </ul>
 
