@@ -10,6 +10,9 @@ class Ccc::Crs2User < ActiveRecord::Base
 
 
 	def merge(other)
+    reload
+    other.reload
+
 		other.crs2_conferences.each { |ua| ua.update_attribute(:creator_id, id) }
 		other.crs2_user_roles.each { |ua| ua.update_attribute(:user_id, id) }
    	#other.crs2_registrants.each { |ua| ua.update_attribute(:cancelled_by_id, id) }

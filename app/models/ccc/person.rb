@@ -19,7 +19,7 @@ module Ccc
       has_many :pr_reminders, class_name: 'Ccc::PrReminder', dependent: :destroy
       has_many :pr_personal_forms, class_name: 'Ccc::PrPersonalForm', dependent: :destroy
 
-      has_many :sp_applications, class_name: 'Ccc::SpApplication', dependent: :destroy
+      has_many :sp_applications, class_name: 'Ccc::SpApplication'
       has_many :summer_projects, :class_name => "Ccc::SpProject", through: :sp_applications, source: :sp_project, conditions: "sp_applications.status IN('accepted_as_participant', 'accepted_as_student_staff')"
       has_many :sp_projects, class_name: 'Ccc::SpProject', foreign_key: :pd_id
       has_many :sp_project_apds, class_name: 'Ccc::SpProject', foreign_key: :apd_id
@@ -28,9 +28,9 @@ module Ccc
       has_one :sp_user, class_name: 'Ccc::SpUser'  #created by and ssm/person?
       has_many :sp_staff, class_name: 'Ccc::SpStaff', dependent: :destroy
       has_many :sp_application_moves, class_name: 'Ccc::SpApplicationMove', foreign_key: 'moved_by_person_id'
-      has_many :si_applies, class_name: 'Ccc::SiApply', dependent: :destroy, foreign_key: 'applicant_id'
+      has_many :si_applies, class_name: 'Ccc::SiApply', foreign_key: 'applicant_id'
       has_many :ministry_staff, class_name: 'Ccc::MinistryStaff', dependent: :destroy
-      has_many :hr_si_applications, class_name: 'Ccc::HrSiApplication', dependent: :destroy, foreign_key: 'fk_personID'
+      has_many :hr_si_applications, class_name: 'Ccc::HrSiApplication', foreign_key: 'fk_personID'
       has_many :sitrack_mpd, class_name: 'Ccc::SitrackMpd', dependent: :destroy
       has_many :sitrack_tracking, class_name: 'Ccc::SitrackTracking', dependent: :destroy
       has_many :sn_campus_involvements, class_name: 'Ccc::SnCampusInvolvement' # don't destroy if added_by_id
@@ -50,6 +50,7 @@ module Ccc
 
     module InstanceMethods
       def merge(other)
+        reload
         ::Person.transaction do
           attributes.each do |k, v|
             next if k == ::Person.primary_key
@@ -156,8 +157,12 @@ module Ccc
           other.profile_pictures.each { |ua| ua.update_attribute(:person_id, personID) }
           other.ministry_missional_team_members.each { |ua| ua.update_attribute(:personID, personID) }
           other.rideshare_rides.each {|ua| ua.update_attribute(:person_id, personID) }
-          other.sp_designation_numbers.each {|d| d.update_attribute(:person_id, personID) }
-
+          other.sp_designation_numbers.each do |d|
+            begin
+              d.update_attribute(:person_id, personID)
+            rescue ActiveRecord::RecordNotUnique
+            end
+          end
 
           MergeAudit.create!(mergeable: self, merge_looser: other)
           other.reload

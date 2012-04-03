@@ -8,6 +8,9 @@ class Ccc::Crs2Profile < ActiveRecord::Base
 
 
   def merge(other)
+    reload
+    other.reload
+
 		other.crs2_registrants.each do |other_registrant|
   		crs2_registrants.each do |registrant|
         if other_registrant.registrant_type_id == registrant.registrant_type_id
@@ -32,7 +35,7 @@ class Ccc::Crs2Profile < ActiveRecord::Base
     
     other.reload
 		other.destroy
-    other.crs2_user.destroy if other.crs2_user
+    other.crs2_user.destroy if other.crs2_user && other.crs2_user.id != user_id
 		save
   end
 end
