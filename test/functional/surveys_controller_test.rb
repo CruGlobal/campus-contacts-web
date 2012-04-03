@@ -44,6 +44,27 @@ class SurveysControllerTest < ActionController::TestCase
         get :start, id: @survey.id
         assert_redirected_to "http://mhub.cc:80/surveys/#{@survey.id}/start"
       end
+      
+      should "stop" do
+        get :stop
+        assert_response :redirect
+        assert_equal nil, cookies[:survey_mode]
+        assert_equal nil, cookies[:keyword]
+        assert_equal nil, cookies[:survey_id]
+      end
     end
   end
+  
+  should "get admin index" do
+    @user, @org = admin_user_login_with_org
+    get :index_admin
+    assert_not_nil assigns(:organization)
+  end
+  
+  should "render 404 if no user is logged in" do
+    get :index
+    assert_response :missing
+  end
+
+  
 end

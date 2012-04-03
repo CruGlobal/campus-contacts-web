@@ -9,10 +9,14 @@ class ContactsControllerTest < ActionController::TestCase
     end
   end
   
+  should "redirect when there is no current_organization" do
+    get :index
+    assert_response :redirect
+  end
+  
   context "After logging in a person with orgs" do
     setup do
-      @user = Factory(:user_with_auxs)  #user with a person object
-      sign_in @user
+      @user, org = admin_user_login_with_org
       @keyword = Factory.create(:sms_keyword)
     end
     
@@ -225,13 +229,4 @@ class ContactsControllerTest < ActionController::TestCase
       assert_response :success, "Upload of contacts csv file unsuccessful"
     end
   end
-
-=begin
-  context "Searching for Contacts/Persons" do
-    should "return contacts within the " do
-
-    end
-
-  end
-=end
 end

@@ -73,4 +73,30 @@ class GroupMembershipsControllerTest < ActionController::TestCase
       end
     end
   end
+  
+  context "search" do
+    setup do
+      @user, @org = admin_user_login_with_org
+      
+      p1 = Factory(:person, firstName: "Tony", lastName: "Stark")
+      p2 = Factory(:person, firstName: "Tony", lastName: "Banner")
+      
+      @org.add_contact(p1)
+      @org.add_contact(p2)
+    end
+    
+    should "search when show all is false" do     
+      xhr :get, :search, { :name => "Tony" }
+      assert_not_nil assigns(:people)
+      assert_not_nil assigns(:total)
+      assert_equal 2, assigns(:total)
+    end
+    
+    should "search when show all is true" do
+      xhr :get, :search, { :name => "Tony", :show_all => true }
+      assert_not_nil assigns(:people)
+      assert_not_nil assigns(:total)
+      assert_equal assigns(:total), assigns(:people).all.length
+    end
+  end
 end

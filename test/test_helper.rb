@@ -60,8 +60,7 @@ end
 
 def admin_user_login_with_org
   @user = Factory(:user_with_auxs)
-  @org = Factory(:organization)
-  @org.add_admin(@user.person)
+  @org = @user.person.organizations.first
   
   @request.session[:current_organization_id] = @org.id
   
