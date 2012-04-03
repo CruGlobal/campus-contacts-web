@@ -13,15 +13,15 @@ class PeopleController < ApplicationController
   def index
     authorize! :read, Person
     fetch_people(params)
-                                     
-    if can? :manage, current_organization                         
+
+    if can? :manage, current_organization
       @roles = current_organization.roles
     else
       @roles = current_organization.roles.where("id != ?", Role::ADMIN_ID)
     end
 
   end
-  
+
   def export
     index
     out = ""
@@ -65,12 +65,12 @@ class PeopleController < ApplicationController
     @person = current_organization.people.find(params[:id])
     authorize! :edit, @person
   end
-  
+
   def involvement
     @person = current_organization.people.find(params[:id])
     authorize! :edit, @person
   end
-  
+
   def search_ids
     if current_user_super_admin?
       @people = Person.search_by_name(params[:q])
@@ -81,15 +81,15 @@ class PeopleController < ApplicationController
       wants.json { render text: @people.collect(&:id).to_json }
     end
   end
-  
+
   def merge
     @people = 1.upto(4).collect {|i| Person.find_by_personID(params["person#{i}"]) if params["person#{i}"].present?}.compact
   end
-  
+
   def confirm_merge
     @people = 1.upto(4).collect {|i| Person.find_by_personID(params["person#{i}"]) if params["person#{i}"].present?}.compact
 
-    if !current_user_super_admin? && (current_organization.admins.include? current_user.person)
+    if !current_user_super_admin? && can?(:manage, current_organization)
       names = @people.collect { |n| n.name.downcase }
       if names.uniq.length != 1
         #this means that one person doesn't have the same name with others
@@ -97,7 +97,7 @@ class PeopleController < ApplicationController
         return false
       end
     end
-    
+
     unless @people.length >= 2
       redirect_to merge_people_path(params.slice(:person1, :person2, :person3, :person4)), alert: "You must select at least 2 people to merge"
       return false
@@ -114,9 +114,9 @@ class PeopleController < ApplicationController
         return false
       end
     end
-        
+
   end
-  
+
   def merge_preview
     render nothing and return false unless params[:id].to_i > 0
     @person = Person.find_by_personID(params[:id])
@@ -124,7 +124,7 @@ class PeopleController < ApplicationController
       wants.js {  }
     end
   end
-  
+
   def do_merge
     @keep = Person.find(params[:keep_id])
     params[:merge_ids].each do |id|
@@ -148,9 +148,9 @@ class PeopleController < ApplicationController
         render :nothing => true and return
       end
       @person, @email, @phone = create_person(params[:person])
-      
+
       if @person.save
-        
+
         if params[:roles].present?
           role_ids = params[:roles].keys.map(&:to_i)
           params[:roles].keys.each do |role_id|
@@ -193,7 +193,7 @@ class PeopleController < ApplicationController
         else
           current_organization.add_involved(@person)
         end
-        
+
         if params.has_key?(:add_to_group)
           render json: @person
         else
@@ -220,7 +220,7 @@ class PeopleController < ApplicationController
   def update
     @person = current_organization.people.find(params[:id])
     authorize! :edit, @person
-  
+
     respond_to do |format|
       if @person.update_attributes(params[:person])
         @person.update_date_attributes_updated
@@ -232,7 +232,7 @@ class PeopleController < ApplicationController
       end
     end
   end
-  
+
   def bulk_delete
     authorize! :manage, current_organization
     ids = params[:ids].to_s.split(',')
@@ -248,25 +248,25 @@ class PeopleController < ApplicationController
   def destroy
     @person = Person.find(params[:id])
     # @person.destroy
-  
+
     respond_to do |format|
       format.html { redirect_to(people_url) }
       format.xml  { head :ok }
     end
   end
-  
+
   def bulk_email
     authorize! :lead, current_organization
     to_ids = params[:to].split(',').uniq
-    
+
     to_ids.each do |id|
       person = Person.find_by_personID(id)
       PeopleMailer.enqueue.bulk_message(person.email, current_person.email, params[:subject], params[:body]) if !person.email.blank?
     end
-    
+
     render :nothing => true
   end
-  
+
   def bulk_sms
     authorize! :lead, current_organization
     to_ids = params[:to].split(',').uniq 
@@ -277,7 +277,7 @@ class PeopleController < ApplicationController
         if person.primary_phone_number.email_address.present?
           # Use email to sms if we have it
           from_email = current_person.primary_phone_number && current_person.primary_phone_number.email_address.present? ? 
-                        current_person.primary_phone_number.email_address : current_person.email
+            current_person.primary_phone_number.email_address : current_person.email
           @sent_sms = SmsMailer.enqueue.text(person.primary_phone_number.email_address, "#{current_person.to_s} <#{from_email}>", params[:body])
 
         else
@@ -286,7 +286,7 @@ class PeopleController < ApplicationController
         end
       end
     end
-    
+
     render :nothing => true
   end
 
@@ -302,15 +302,15 @@ class PeopleController < ApplicationController
       fc.status = person.organizational_roles.first.followup_status
       fc.save
     end
-    
+
     render :nothing => true
   end
 
   def all
     fetch_people 
-    
+
     @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
-     
+
     render :partial => 'all'
   end
 
@@ -320,9 +320,9 @@ class PeopleController < ApplicationController
     else
       authorize! :lead, current_organization
     end
-    
+
     data = ""
-    
+
     person = Person.find(params[:person_id])
 
     role_ids = params[:role_ids].split(',').map(&:to_i)
@@ -331,7 +331,7 @@ class PeopleController < ApplicationController
       role_ids += person.organizational_roles.where(organization_id: current_organization.id).collect(&:id) 
     end
 
-    
+
     organizational_role_ids = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.role_id.to_s }
 
     #if role_ids.length (new roles) is less than old roles. i.e. there is a role that is going to be deleted
@@ -345,13 +345,13 @@ class PeopleController < ApplicationController
     role_ids.insert(role_ids.length-1, role_ids.delete_at(0)) if role_ids[0] == Role::LEADER_ID
 
     role_ids.uniq.each_with_index do |role_id, index|
-        begin
-          begin       
-            OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) 
-          rescue OrganizationalRole::InvalidPersonAttributesError
-            render 'update_leader_error', :locals => { :person => person } if role_id == Role::LEADER_ID
-            render 'update_admin_error', :locals => { :person => person } if role_id == Role::ADMIN_ID
-            return
+      begin
+        begin       
+          OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) 
+        rescue OrganizationalRole::InvalidPersonAttributesError
+          render 'update_leader_error', :locals => { :person => person } if role_id == Role::LEADER_ID
+          render 'update_admin_error', :locals => { :person => person } if role_id == Role::ADMIN_ID
+          return
         rescue ActiveRecord::RecordNotUnique
         end
       end
@@ -407,7 +407,7 @@ class PeopleController < ApplicationController
       if result['data'].size > 0
         # construct the json result - autocomplete only accepts an array
         result['data'].each do |d|
-            data << { 'name' => d['name'] , 'id' => d['id'] }
+          data << { 'name' => d['name'] , 'id' => d['id'] }
         end
         logger.debug result
         # next result
@@ -426,12 +426,12 @@ class PeopleController < ApplicationController
       format.js { render json: params[:url].nil? ? data : result } # we don't need an array for the dialog search result anymore so we are fine in just passing along the result from FB
     end
   end
- 
+
   protected
 
-    def uri?(string)
-      string.include?("http://") || string.include?("https://") ? true : false
-    end
+  def uri?(string)
+    string.include?("http://") || string.include?("https://") ? true : false
+  end
 
 
 =begin
@@ -445,110 +445,110 @@ class PeopleController < ApplicationController
 
 
 
-    def get_fb_user_id_from_url(string)
-      # e.g. https://graph.facebook.com/nmfdelacruz)
-      if string.include?("id=")
-        string.split('id=').last
-      else
-        string.split('/').last
-      end
+  def get_fb_user_id_from_url(string)
+    # e.g. https://graph.facebook.com/nmfdelacruz)
+    if string.include?("id=")
+      string.split('id=').last
+    else
+      string.split('/').last
     end
+  end
 
-  
-    def fetch_people(search_params = {})
-      org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
-      @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles)
-      @q = @people_scope.includes(:primary_phone_number, :primary_email_address)
-      @q = @q.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ?', params[:role], current_organization.id) unless params[:role].blank?
-      sort_by = ['lastName asc', 'firstName asc']
-      
-      if search_params[:search_type] == "basic"
-        unless search_params[:query].blank?
-          if search_params[:search_type] == "basic"
-            @q = @q.select("ministry_person.*, email_addresses.*")
-                   .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID")
-                   .where("concat(firstName,' ',lastName) LIKE :search OR
+
+  def fetch_people(search_params = {})
+    org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
+    @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles)
+    @q = @people_scope.includes(:primary_phone_number, :primary_email_address)
+    @q = @q.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ?', params[:role], current_organization.id) unless params[:role].blank?
+    sort_by = ['lastName asc', 'firstName asc']
+
+    if search_params[:search_type] == "basic"
+      unless search_params[:query].blank?
+        if search_params[:search_type] == "basic"
+          @q = @q.select("ministry_person.*, email_addresses.*")
+          .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID")
+          .where("concat(firstName,' ',lastName) LIKE :search OR
                            concat(lastName, ' ',firstName) LIKE :search OR
                            emails.email LIKE :search", 
                            {:search => "%#{search_params[:query]}%"})
-          end
         end
-      else      
-        unless search_params[:role].blank?
-          @q = @q.select("ministry_person.*, roles.*")
-                 .joins("LEFT JOIN organizational_roles AS org_roles ON 
+      end
+    else      
+      unless search_params[:role].blank?
+        @q = @q.select("ministry_person.*, roles.*")
+        .joins("LEFT JOIN organizational_roles AS org_roles ON 
                  org_roles.person_id = ministry_person.personID")
                  .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
                  .where("roles.id = :search",
-                 {:search => "#{search_params[:role]}"})
-          sort_by.unshift("roles.id")
-        end
-        
-        unless search_params[:gender].blank?
-          @q = @q.where("gender = :search", {:search => "#{search_params[:gender]}"})
-          sort_by.unshift("gender")
-        end
-        
-        unless search_params[:email].blank?
-          @q = @q.select("ministry_person.*, email_addresses.*")
-                 .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID")  
-                 .where("emails.email LIKE :search", {:search => "%#{search_params[:email]}%"})
-          sort_by.unshift("emails.email")
-        end
-        
-        unless search_params[:phone].blank?
-          @q = @q.select("ministry_person.*, phone_numbers.*")
-                 .joins("LEFT JOIN phone_numbers AS phones ON phones.person_id = ministry_person.personID")
-                 .where("phones.number LIKE :search", {:search => "%#{search_params[:phone]}%"})
-          sort_by.unshift("phones.number")
-        end
-        
-        unless search_params[:first_name].blank?
-          @q = @q.where("firstName LIKE :search", {:search => "%#{search_params[:first_name]}%"}) 
-          sort_by.unshift("firstName asc") 
-        end
-        
-        unless search_params[:last_name].blank?
-          @q = @q.where("lastName LIKE :search", {:search => "%#{search_params[:last_name]}%"})
-          sort_by.unshift("lastName asc")
-        end
+                        {:search => "#{search_params[:role]}"})
+                 sort_by.unshift("roles.id")
       end
-      
-      @q = @q.search(params[:q])
-      @q.sorts = sort_by if @q.sorts.empty?
-      @all_people = @q.result(distinct: false).order(params[:q] && params[:q][:s] ? params[:q][:s] : sort_by)
-      if !params[:q].nil? && params[:q][:s].include?("role_id")
-        order = params[:q][:s].include?("asc") ? params[:q][:s].gsub("asc", "desc") : params[:q][:s].gsub("desc", "asc")
-        a = @q.result(distinct: false).order_by_highest_default_role(order)
-        if params[:q][:s].include?("asc")
-          a = a.reverse
-          a = a.uniq_by { |a| a.id }
-          a = a.reverse
-        end
-        @all_people = a + @q.result(distinct: false).order_alphabetically_by_non_default_role(order)
-        @all_people = @all_people.uniq_by { |a| a.id }
+
+      unless search_params[:gender].blank?
+        @q = @q.where("gender = :search", {:search => "#{search_params[:gender]}"})
+        sort_by.unshift("gender")
       end
-      
-      @people = Kaminari.paginate_array(@all_people).page(params[:page])
-    end
-    
-    def authorize_read
-      authorize! :read, Person
-    end
-    
-    def authorize_merge
-      if current_user_super_admin? || (current_organization.admins.include? current_user.person)
-        authorize! :merge, Person
-      else
-        redirect_to "/people"
-        flash[:error] = "You are not permitted to access that feature"
+
+      unless search_params[:email].blank?
+        @q = @q.select("ministry_person.*, email_addresses.*")
+        .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID")  
+        .where("emails.email LIKE :search", {:search => "%#{search_params[:email]}%"})
+        sort_by.unshift("emails.email")
+      end
+
+      unless search_params[:phone].blank?
+        @q = @q.select("ministry_person.*, phone_numbers.*")
+        .joins("LEFT JOIN phone_numbers AS phones ON phones.person_id = ministry_person.personID")
+        .where("phones.number LIKE :search", {:search => "%#{search_params[:phone]}%"})
+        sort_by.unshift("phones.number")
+      end
+
+      unless search_params[:first_name].blank?
+        @q = @q.where("firstName LIKE :search", {:search => "%#{search_params[:first_name]}%"}) 
+        sort_by.unshift("firstName asc") 
+      end
+
+      unless search_params[:last_name].blank?
+        @q = @q.where("lastName LIKE :search", {:search => "%#{search_params[:last_name]}%"})
+        sort_by.unshift("lastName asc")
       end
     end
-    
-    def current_user_roles
-      current_user.person
-                  .organizational_roles
-                  .where(:organization_id => current_organization)
-                  .collect { |r| Role.find(r.role_id) }
+
+    @q = @q.search(params[:q])
+    @q.sorts = sort_by if @q.sorts.empty?
+    @all_people = @q.result(distinct: false).order(params[:q] && params[:q][:s] ? params[:q][:s] : sort_by)
+    if !params[:q].nil? && params[:q][:s].include?("role_id")
+      order = params[:q][:s].include?("asc") ? params[:q][:s].gsub("asc", "desc") : params[:q][:s].gsub("desc", "asc")
+      a = @q.result(distinct: false).order_by_highest_default_role(order)
+      if params[:q][:s].include?("asc")
+        a = a.reverse
+        a = a.uniq_by { |a| a.id }
+        a = a.reverse
+      end
+      @all_people = a + @q.result(distinct: false).order_alphabetically_by_non_default_role(order)
+      @all_people = @all_people.uniq_by { |a| a.id }
     end
+
+    @people = Kaminari.paginate_array(@all_people).page(params[:page])
+  end
+
+  def authorize_read
+    authorize! :read, Person
+  end
+
+  def authorize_merge
+    if current_user_super_admin? || (current_organization.admins.include? current_user.person)
+      authorize! :merge, Person
+    else
+      redirect_to "/people"
+      flash[:error] = "You are not permitted to access that feature"
+    end
+  end
+
+  def current_user_roles
+    current_user.person
+    .organizational_roles
+    .where(:organization_id => current_organization)
+    .collect { |r| Role.find(r.role_id) }
+  end
 end
