@@ -458,4 +458,36 @@ class PeopleControllerTest < ActionController::TestCase
       end
     end
   end
+  
+  context "merging people" do
+    setup do
+      @user, @org = admin_user_login_with_org
+    end
+    
+    should "redirect when id = 0" do
+      get :merge_preview, { :id => 0 }
+      assert_response :success
+    end
+    
+    should "get merge preview when id != 0" do
+      p1 = Factory(:person)
+      get :merge_preview, { :id => p1.id }
+      assert_not_nil assigns(:person)
+    end
+    
+    should "try to merge people" do
+      p1 = Factory(:person)
+      p2 = Factory(:person)
+      p3 = Factory(:person)
+      
+      ids = []
+      ids << p2.id
+      ids << p3.id
+      
+      post :do_merge, { :keep_id => p1.id, :merge_ids => ids }
+      
+      assert_response :redirect
+      assert_equal "You've just merged #{ids.length + 1} people", flash[:notice]
+    end
+  end
 end
