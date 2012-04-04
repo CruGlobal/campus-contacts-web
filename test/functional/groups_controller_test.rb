@@ -44,6 +44,21 @@ class GroupsControllerTest < ActionController::TestCase
     end
   end
   
+  should "update group" do
+    @user, @org = admin_user_login_with_org
+    group = Factory(:group, organization: @org)
+    post :update, { :id => group.id, :group => { :name => "WAT" } }
+    assert_not_nil assigns(:group)
+    assert_response :redirect
+  end
+  
+  should "create group" do
+    @user, @org = admin_user_login_with_org
+    post :create, group: { :name => "Wat", :location => "Philippines", :meets => "weekly", :start_time => "21600", :end_time => "25200", :organization_id => @org.id }
+    assert_equal 1, @org.groups.count
+    assert_response :redirect
+  end
+  
   def set_up_group_at_sub_org
     @user = Factory(:user_with_auxs)
     sign_in @user

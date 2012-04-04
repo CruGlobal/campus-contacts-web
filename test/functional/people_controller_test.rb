@@ -515,7 +515,7 @@ class PeopleControllerTest < ActionController::TestCase
     
   end
   
-  should "should bulk delete" do
+  should "bulk delete" do
     @user, @org = admin_user_login_with_org
     c1 = Factory(:person)
     c2 = Factory(:person)
@@ -528,5 +528,19 @@ class PeopleControllerTest < ActionController::TestCase
     
     assert_equal 0, @org.contacts.count
     assert_equal " ", @response.body
+  end
+  
+  should "bulk comment" do
+    @user, @org = admin_user_login_with_org
+    c1 = Factory(:person)
+    c2 = Factory(:person)
+    
+    @org.add_contact(c1)
+    @org.add_contact(c2)
+    
+    xhr :post, :bulk_comment, { :to => "#{c1.id}, #{c2.id}", :body => "WAT!" }
+    
+    assert FollowupComment.where(:contact_id => c1.id)
+    assert FollowupComment.where(:contact_id => c2.id)
   end
 end
