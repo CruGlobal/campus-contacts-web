@@ -1,3 +1,5 @@
+ require 'name_uniqueness_validator'
+
 class Organization < ActiveRecord::Base
   attr_accessor :person_id
 
@@ -35,6 +37,7 @@ class Organization < ActiveRecord::Base
   default_value_for :show_sub_orgs, true
 
   validates_presence_of :name, :terminology#, :person_id
+  validates :name, :name_uniqueness => true
 
   @queue = :general
   after_create :create_admin_user, :notify_admin_of_request
@@ -225,4 +228,4 @@ class Organization < ActiveRecord::Base
       true
     end
 
-    end
+end
