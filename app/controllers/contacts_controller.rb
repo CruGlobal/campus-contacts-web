@@ -234,6 +234,10 @@ class ContactsController < ApplicationController
 
   def csv_import
     @organization = current_organization
+    flash_error = ""
+    flash_error_first_name = "#{t('contacts.import_contacts.cause_1')}"
+    flash_error_phone_no_format = "#{t('contacts.import_contacts.cause_2')}"
+    flash_error_email_format = "#{t('contacts.import_contacts.cause_3')}"
 
     n = 0
     error = false
@@ -255,20 +259,31 @@ class ContactsController < ApplicationController
       
       n += 1
 
+      num = 0
+      row.each do |ro|
+        break if !ro.nil?
+        num = num + 1
+      end
+      next if num == row.length
+
+
       if !row[0].to_s.match /[a-z]/ # if firstName is blank
-        flash_error = flash_error + "#{t('contacts.import_contacts.cause_1')} #{n},"
+        #flash_error = flash_error + "#{t('contacts.import_contacts.cause_1')} #{n},"
+        flash_error_first_name = flash_error_first_name + " #{n}, "
         error = true
         next
       end
 
       if row[5].to_s.gsub(/[^\d]/,'').length < 7 && !row[5].nil? # if phone_number length < 7
-        flash_error = flash_error + "#{t('contacts.import_contacts.cause_2')} #{n},"
+        #flash_error = flash_error + "#{t('contacts.import_contacts.cause_2')} #{n},"
+        flash_error_phone_no_format = flash_error_phone_no_format + " #{n}, "
         error = true
         next
       end
 
       if !row[4].to_s.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i) # if email has wrong formatting
-        flash_error = flash_error + "#{t('contacts.import_contacts.cause_3')} #{n},"
+        #flash_error = flash_error + "#{t('contacts.import_contacts.cause_3')} #{n},"
+        flash_error_email_format = flash_error_email_format + " #{n}, "
         error = true
         next
       end
@@ -280,7 +295,7 @@ class ContactsController < ApplicationController
       l = 0
       row[12..row.length-1].each do |r|
         #if with multiple answers
-        g = r.split(",").length
+        g = g.nil? ? 0 : r.split(",").length
         if g > 1
           q = Hash.new
           for i in 0..g-1 do
@@ -307,7 +322,11 @@ class ContactsController < ApplicationController
 
       flash.now[:notice] = t('contacts.import_contacts.success')
     end
-    flash.now[:error] = t('contacts.import_contacts.error') + flash_error if error
+    flash_error = flash_error_first_name.include?(",") ? flash_error_first_name + " <br/>": flash_error
+    flash_error = flash_error_phone_no_format.include?(",") ? flash_error + flash_error_phone_no_format + " <br/>" : flash_error
+    flash_error = flash_error_email_format.include?(",") ? flash_error + flash_error_email_format + " <br/>"  : flash_error
+    flash_error = t('contacts.import_contacts.error') + "<br/>" + flash_error
+    flash.now[:error] = flash_error.html_safe if error
     render :import_contacts
   end
 
