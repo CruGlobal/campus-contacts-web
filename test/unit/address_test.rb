@@ -41,6 +41,14 @@ class AddressTest < ActiveSupport::TestCase
     assert_not_nil Address.last.phone_number
     c = Address.new(:address1 => "Cebu City", :country => "Philippines", :zip => "6000", :addressType => "current", :fk_PersonID => Factory(:person).id, :cellPhone => "12312312412") 
     a.save   
-    assert_not_nil Address.last.phone_number    
+    assert_not_nil Address.last.phone_number
+  end
+  
+  should "return an array of numbers" do
+    a = Address.new(:address1 => "Cebu City", :country => "Philippines", :zip => "6000", :addressType => "current", :fk_PersonID => Factory(:person).id, :homePhone => "12312312412", :workPhone => "12312312412", :cellPhone => "12312312412")
+    a.save
+    
+    assert_not_nil Address.last.phone_numbers
+    assert_equal 3, Address.last.phone_numbers.count
   end
 end
