@@ -238,4 +238,13 @@ class PersonTest < ActiveSupport::TestCase
     end
     
   end
+  
+  should "check if person is leader in an org" do
+    user = Factory(:user_with_auxs)
+    org = Factory(:organization)
+    Factory(:organizational_role, organization: org, person: user.person, role: Role.leader)
+    wat = nil
+    assert user.person.leader_in?(org)
+    assert_equal false, user.person.leader_in?(wat)
+  end
 end
