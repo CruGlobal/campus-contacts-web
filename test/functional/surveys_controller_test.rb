@@ -66,5 +66,28 @@ class SurveysControllerTest < ActionController::TestCase
     assert_response :missing
   end
 
+  test "destroy" do
+    request.env["HTTP_REFERER"] = "localhost:3000"
+    @user, @org = admin_user_login_with_org
+    keyword = Factory(:approved_keyword, user: @user, organization: @org)
+    assert_equal 1, @org.surveys.count
+    post :destroy, { :id => @org.surveys.first.id }
+    assert_equal 0, @org.surveys.count
+  end
   
+  test "update" do
+    @user, @org = admin_user_login_with_org
+    keyword = Factory(:approved_keyword, user: @user, organization: @org)
+    put :update, { :id => @org.surveys.first.id, :survey => { :title => "wat" } }
+    assert_response :redirect
+    assert_equal "wat", @org.surveys.first.title
+  end
+  
+  test "create" do
+    @user, @org = admin_user_login_with_org
+    post :create, { :survey => {:title => "wat", :post_survey_message => "Yeah!", :login_option => 0 } }
+    assert_response :redirect
+    assert_equal 1, @org.surveys.count
+    assert_equal "wat", @org.surveys.first.title
+  end
 end
