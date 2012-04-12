@@ -543,4 +543,17 @@ class PeopleControllerTest < ActionController::TestCase
     assert FollowupComment.where(:contact_id => c1.id)
     assert FollowupComment.where(:contact_id => c2.id)
   end
+  
+    
+  test "export" do
+    @user, @org = admin_user_login_with_org
+    
+    3.times do
+      p = Factory(:person)
+      @org.add_contact(p)
+    end
+    
+    get :export
+    @controller.expects(:send_data).with("foo").returns(:success)
+  end
 end

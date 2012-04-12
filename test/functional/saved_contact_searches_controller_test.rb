@@ -11,4 +11,35 @@ class SavedContactSearchesControllerTest < ActionController::TestCase
     assert_response :success
   end
   
+  test "create" do
+    post :create, { :saved_contact_search => { :name => "Test", :full_path => "localhost:3000", :user_id => @user.id } }
+    assert_response :redirect
+    assert_equal 1, SavedContactSearch.count
+  end
+  
+  test "update" do
+    post :create, { :saved_contact_search => { :name => "Test", :full_path => "localhost:3000", :user_id => @user.id } }
+    assert_response :redirect
+    assert_equal 1, SavedContactSearch.count
+    
+    s = SavedContactSearch.last
+    
+    post :update, { :id => s.id, :saved_contact_search => { :name => "Wat", :full_path => "localhost:3000" } }
+    assert_response :redirect
+    
+    assert_equal "Wat", SavedContactSearch.last.name
+  end
+  
+  test "destroy" do
+    post :create, { :saved_contact_search => { :name => "Test", :full_path => "localhost:3000", :user_id => @user.id } }
+    assert_response :redirect
+    assert_equal 1, SavedContactSearch.count
+    
+    s = SavedContactSearch.last
+    
+    xhr :post, :destroy, { :id => s.id }
+    assert_equal " ", response.body
+    assert_equal 0, SavedContactSearch.count
+  end
+  
 end

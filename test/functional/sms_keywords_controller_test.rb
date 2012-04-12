@@ -18,7 +18,19 @@ class SmsKeywordsControllerTest < ActionController::TestCase
   end
   
   should "create new sms keyword" do
-    post :create, sms_keyword: { explanation: "Wat", state: "requested", initial_response: "Hi!" }
-    assert_response :success
+    post :create, { :sms_keyword => { :explanation => "Wat", :state => "requested", :initial_response => "Hi!" } }
+  end
+  
+  test "update" do
+    keyword = Factory(:sms_keyword, user: @user, organization: @org)
+    post :update, { :id => keyword.id, :sms_keyword => { :explanation => "hahaha" } }
+    assert_response :redirect
+    assert_equal "hahaha", SmsKeyword.last.explanation.to_s
+  end
+  
+  test "destroy" do
+    keyword = Factory(:sms_keyword, user: @user, organization: @org)
+    post :destroy, { :id => keyword.id }
+    assert_equal 0, SmsKeyword.count
   end
 end

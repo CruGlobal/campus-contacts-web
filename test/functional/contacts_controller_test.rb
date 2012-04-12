@@ -229,4 +229,25 @@ class ContactsControllerTest < ActionController::TestCase
       assert_response :success, "Upload of contacts csv file unsuccessful"
     end
   end
+  
+  test "send reminder" do
+    user1 = Factory(:user_with_auxs)
+    user2 = Factory(:user_with_auxs)
+    
+    user, org = admin_user_login_with_org
+    
+    Factory(:organizational_role, person: user1.person, organization: org, role: Role.leader)
+    Factory(:organizational_role, person: user2.person, organization: org, role: Role.leader)
+    
+    xhr :post, :send_reminder, { :to => "#{user1.person.id}, #{user2.person.id}" }
+    
+    assert_equal " ", response.body    
+    assert_equal 1, ActionMailer::Base.deliveries.count
+  end
+  
+  test "import contacts" do
+    user, org = admin_user_login_with_org
+    get :import_contacts
+    assert_not_nil assigns(:organization)
+  end
 end
