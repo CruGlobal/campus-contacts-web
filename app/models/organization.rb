@@ -41,6 +41,8 @@ class Organization < ActiveRecord::Base
 
   @queue = :general
   after_create :create_admin_user, :notify_admin_of_request
+  
+  serialize :settings, Hash
 
   state_machine :status, initial: :requested do
     state :requested
