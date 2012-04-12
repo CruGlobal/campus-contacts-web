@@ -66,9 +66,16 @@ class PeopleControllerTest < ActionController::TestCase
       end
       
       should "send bulk sms" do
+        p1 = PhoneNumber.new(:number => "123129312", :person_id => @person1.id)
+        assert p1.save
+        
+        p2 = PhoneNumber.new(:number => "123i90900", :person_id => @person2.id, :primary => true)
+        assert p2.save
+        
         xhr :post, :bulk_sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
         
         assert_response :success
+        assert_not_nil assigns(:sent_sms)
       end      
     
       should "update roles" do
@@ -554,6 +561,20 @@ class PeopleControllerTest < ActionController::TestCase
     end
     
     get :export
-    @controller.expects(:send_data).with("foo").returns(:success)
+    assert_response :success
+  end
+  
+  test "involvement" do
+    @user, @org = admin_user_login_with_org
+    get :involvement, { :id => @user.person.id }
+    
+    assert_not_nil assigns(:person)
+  end
+  
+  test "destroy" do
+    @user, @org = admin_user_login_with_org
+    person = Factory(:person)
+    post :destroy, { :id => person.id }
+    assert_response :redirect
   end
 end
