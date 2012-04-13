@@ -43,7 +43,7 @@
     </td>
   <% end %>
   <td>
-    <% if @surveys && @surveys[person.id] %>
+    <% if dates.present? %>
       <% @surveys[person.id].each do |keyword,date| %>
         <span title="<%= l(date, format: :date) if date %>" class="tipit"><%= keyword %></span><br/>
       <% end %>

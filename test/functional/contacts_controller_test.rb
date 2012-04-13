@@ -184,14 +184,20 @@ class ContactsControllerTest < ActionController::TestCase
     setup do
       @user = Factory(:user_with_auxs)  #user with a person object
       sign_in @user
+
+      organization = Factory(:organization)
+      survey = Factory(:survey, organization: organization)
+      element = Factory(:choice_field)
+      question = Factory(:survey_element, survey: survey, element: element, position: 1, archived: true)
+
     end
     
     should "successfully import contacts" do
       contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_contacts.csv"))
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
-      post :csv_import, { :dump => { :file => file } }
       person_count  = Person.count
-      assert_equal person_count, 2, "Upload of contacts csv file unsuccessful"
+      post :csv_import, { :dump => { :file => file } }
+      assert_equal Person.count, person_count + 1, "Upload of contacts csv file unsuccessful"
       assert_response :success, "Upload of contacts csv file unsuccessful"
     end
 
@@ -199,9 +205,10 @@ class ContactsControllerTest < ActionController::TestCase
       #"sample_contacts_missing_firstname"
       contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_contacts_missing_firstname.csv"))
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
-      post :csv_import, { :dump => { :file => file } }
       person_count  = Person.count
-      assert_equal person_count - 2, -1, "Upload of contacts csv file successful (should not be successful)."
+      post :csv_import, { :dump => { :file => file } }
+      assert_equal "CSV Import unsuccessful for some rows: Invalid email address at row 1, First name is blank at row 2,", flash[:error]
+      assert_equal Person.count, person_count, "Upload of contacts csv file successful (should not be successful)."
       assert_response :success, "Upload of contacts csv file unsuccessful"
     end
 
@@ -209,9 +216,10 @@ class ContactsControllerTest < ActionController::TestCase
       #"sample_contacts_missing_firstname"
       contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_contacts_missing_firstname.csv"))
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
-      post :csv_import, { :dump => { :file => file } }
       person_count  = Person.count
-      assert_equal person_count - 2, -1, "Upload of contacts csv file successful (should not be successful)."
+      post :csv_import, { :dump => { :file => file } }
+      assert_equal "CSV Import unsuccessful for some rows: Invalid email address at row 1, First name is blank at row 2,", flash[:error]
+      assert_equal Person.count, person_count, "Upload of contacts csv file successful (should not be successful)."
       assert_response :success, "Upload of contacts csv file unsuccessful"
     end
 
@@ -219,9 +227,10 @@ class ContactsControllerTest < ActionController::TestCase
       #"sample_contacts_missing_firstname"
       contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_contacts_missing_firstname.csv"))
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
-      post :csv_import, { :dump => { :file => file } }
       person_count  = Person.count
-      assert_equal person_count - 2, -1, "Upload of contacts csv file successful (should not be successful)."
+      post :csv_import, { :dump => { :file => file } }
+      assert_equal "CSV Import unsuccessful for some rows: Invalid email address at row 1, First name is blank at row 2,", flash[:error]
+      assert_equal Person.count, person_count, "Upload of contacts csv file successful (should not be successful)."
       assert_response :success, "Upload of contacts csv file unsuccessful"
     end
   end

@@ -134,6 +134,8 @@ Mh::Application.routes.draw do
       get :search
       get :thanks
       post :signup
+      get :settings
+      post :update_settings
     end
   end
 

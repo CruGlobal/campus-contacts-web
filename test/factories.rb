@@ -276,7 +276,7 @@ FactoryGirl.define do
   
   factory :choice_field, parent: :element do
     kind          'ChoiceField'
-    label         'Which of the following are you interested in?'
+    label         'Which of the following are you interested in? #{Factory.next(:count)}'
     style         'checkbox'
     content       "Prayer Group\nJesus"
     object_name ''
