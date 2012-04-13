@@ -287,7 +287,7 @@ class ContactsController < ApplicationController
         error = true
         next
       end
-      # surveys starts at row 12
+      # surveys starts at row  12
       a << {:person => {:firstName => row[0], :lastName => row[1], :gender => row[3], :email_address => {:email => row[4], :primary => "1", :_destroy => "false"}, :phone_number => {:number => row[5], :location => "mobile", :primary => "1", :_destroy => "false"}, :current_address_attributes => { :address1 => row[6], :address2 => row[7], :city => row[8], :state => row[9], :country => row[10], :zip => row[11]} }}
       b = Hash.new
 
