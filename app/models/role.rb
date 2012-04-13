@@ -9,6 +9,16 @@ class Role < ActiveRecord::Base
   validates :i18n, uniqueness: true, allow_nil: true
   validates :name, presence: true, :if => Proc.new { |role| organization_id != 0 }
   validates :organization_id, presence: true
+
+  scope :default_roles_desc, lambda { {
+    :conditions => "i18n IN #{self.default_roles_for_field_string(self::DEFAULT_ROLES)}",
+    :order => "FIELD #{self.i18n_field_plus_default_roles_for_field_string(self::DEFAULT_ROLES)}"
+  } }
+
+  scope :non_default_roles_asc, lambda { {
+    :conditions => "name NOT IN #{self.default_roles_for_field_string(self::DEFAULT_ROLES)}",
+    :order => "roles.name ASC"
+  } }
   
   def self.leader_ids
     self.leaders.collect(&:id)
@@ -33,10 +43,28 @@ class Role < ActiveRecord::Base
   def to_s
     organization_id == 0 ? I18n.t("roles.#{i18n}") : name
   end
+
+    def self.default_roles_for_field_string(roles)
+      roles_string = "("
+      roles.each do |r|
+        roles_string = roles_string + "\"" + r + "\"" + ","
+      end
+      roles_string[roles_string.length-1] = ")"
+      roles_string
+    end
+
+    def self.i18n_field_plus_default_roles_for_field_string(roles)
+      r = self.default_roles_for_field_string(roles)
+      r[0] = ""
+      r = "(roles.i18n," + r
+      r
+    end
   
   ADMIN_ID = admin.id
   LEADER_ID = leader.id
   CONTACT_ID = contact.id
   INVOLVED_ID = involved.id
+
+  DEFAULT_ROLES = ["admin", "leader", "involved", "alumni", "contact"] # in DSC ORDER by SUPERIORITY
   
 end

@@ -18,7 +18,7 @@
     <ul class="pillmenu">
       <li>
         <%= link_to('Send', '#', class: 'action_dropdown') %>
-        <ul style="display:none; width:225px;">
+        <ul style="display:none; width:235px;">
           <li><%= link_to(t('.send_email'), nil, :id => "send_bulkemail_link") %></li>	
           <li><%= link_to(t('.send_sms'), nil, :id => "send_bulksms_link") %></li>			
           <li><%= link_to t('.transfer_org'), "", :id => "transfer_org" %></li>
@@ -32,7 +32,7 @@
 
           <div class="dropdown_1column">
             <div class="col_1">
-              <%- @roles.each do |role| %>
+              <% (@roles.default_roles_desc + @roles.non_default_roles_asc).each do |role| %>
                 <div class="role_div_checkbox">
                   <span>
                     <%= check_box_tag 'role_ids[]', role.id, false, id: "role_ids_#{role.id}", class: 'role_id_checkbox' %> 
@@ -93,7 +93,8 @@
       <% end %>
       <th><%= sort_link @q, :firstName, t('contacts.index.first_name') %></th>
       <th><%= sort_link @q, :lastName, t('contacts.index.last_name') %></th>
-      <th><%= sort_link @q, 'organizational_roles.id', t('nav.roles') %></th>
+      
+	    <th><%= sort_link @q, 'role_id', t('nav.roles') %></th>
       <th><%= sort_link @q, :gender, t('.gender') %></th>
       <th><%= sort_link @q, 'email_addresses.email', t('.email') %></th>
       <th><%= sort_link @q, 'phone_numbers.number', t('.phone') %></th>

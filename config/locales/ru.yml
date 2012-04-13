@@ -131,7 +131,7 @@ ru:
       go_home: 'Перейти в Мои контакты'
       request_key: "Click here to request a keyword"
       get_started: "Начать"
-      request_key_help: "A Keyword is both the name of the survey and what the person would text to fill out the survey questions. For example, you would say, 'Text UFCRU to the number 75572.' UFCRU is the keyword."
+      request_key_help: "A Keyword is both the name of the survey and what the person would text to fill out the survey questions. For example, you would say, 'Text UFCRU to the number 85005.' UFCRU is the keyword."
     wizard:
       welcome: Добро пожаловать
       verify_identity: Подтвердите вашу личность
@@ -145,7 +145,7 @@ ru:
       verify_with_relay: "Verify With Relay"
       not_found_paragraph: "At the current time MissionHub is being field tested with the US Campus Ministry. If you're not a part of the US Campus Ministry, sit tight! We plan to release to a larger audience soon. If you are part of the US Campus Ministry and are seeing this message, send us an email at support@missionhub.com and we'll help you out."
       # not_found_paragraph: "We weren't able to find a record of you associated with any of the organizations or ministries using MissionHub."
-      keyword_paragraph: "A powerful feature of MissionHub is the ability for you to collect contacts through text messages. For this to work, you have to choose a keyword that is unique to your ministry that people will send messages to. With a keyword, you will be able to say, “Text <strong>your keyword</strong>  to 75572” at your next event or meeting."
+      keyword_paragraph: "A powerful feature of MissionHub is the ability for you to collect contacts through text messages. For this to work, you have to choose a keyword that is unique to your ministry that people will send messages to. With a keyword, you will be able to say, “Text <strong>your keyword</strong>  to 85005” at your next event or meeting."
       request_keyword_link: "Click here to request a keyword. We'll return you to this wizard when you're done."
       survey_paragraph:
         "Now that you've requested a keyword, you're going to want to create a set of questions to ask people. Think along the lines of a short survey or a 
@@ -195,7 +195,7 @@ ru:
     form:
       keyword: 'Keyword'
       keyword_tip: "This is what people will type into their phone."
-      keyword_instruct: "- A keyword is required to collect contacts and surveys via text, web and smartphones. <br/> - 'FSUCRU' is the keyword in 'Text FSUCRU to 75572'.<br/>- Use at least 3 letters for your keyword."
+      keyword_instruct: "- A keyword is required to collect contacts and surveys via text, web and smartphones. <br/> - 'FSUCRU' is the keyword in 'Text FSUCRU to 85005'.<br/>- Use at least 3 letters for your keyword."
       keyword_why: "This is for our use only. The use description could include words like 'weekly meeting', 'outreach event', and other uses the keyword will have."
       explanation: 'Please explain what you plan to use this keyword for.'
       initial_response: "What response should we send back to people when they text in? <br/>If you want the person to complete a survey, the response MUST include {{ link }} (exactly like that, dont change that part of the response.)"

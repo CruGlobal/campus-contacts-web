@@ -230,6 +230,7 @@ class ContactsController < ApplicationController
 
   def import_contacts
     @organization = current_organization
+    authorize! :manage, @organization
   end
 
   def csv_import

@@ -57,6 +57,20 @@ class Person < ActiveRecord::Base
     :conditions => ["date_attributes_updated >= ? AND date_attributes_updated <= ? ", date_from, date_to]
   } }
 
+  scope :order_by_highest_default_role, lambda { |order| {
+    :select => "ministry_person.*",
+    :joins => "JOIN organizational_roles ON ministry_person.personID = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id",
+    :conditions => "roles.i18n IN #{Role.default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}",
+    :order => "FIELD #{Role.i18n_field_plus_default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}"
+  } }
+
+  scope :order_alphabetically_by_non_default_role, lambda { |order| {
+    :select => "ministry_person.*",
+    :joins => "JOIN organizational_roles ON ministry_person.personID = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id",
+    :conditions => "roles.name NOT IN #{Role.default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}",
+    :order => "roles.name #{order.include?("asc") ? 'DESC' : 'ASC'}"
+  } }
+
   def update_date_attributes_updated
     self.date_attributes_updated = DateTime.now.to_s(:db)
     self.save
