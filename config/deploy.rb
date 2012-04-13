@@ -38,6 +38,17 @@ set :scm, "git"
 
 set :user, 'deploy'
 
+task :rack do
+  set :deploy_to, "/var/www/html/staging/#{application}"
+  set :environment, 'staging'
+  set :rails_env, 'staging'
+  
+  role :db, "108.171.184.122", primary: true
+  role :web, "108.171.184.122"
+  role :app, "108.171.184.122"
+  set :deploy_via, :remote_cache
+end
+
 task :staging do
   set :deploy_to, "/var/www/html/integration/#{application}"
   set :environment, 'staging'
