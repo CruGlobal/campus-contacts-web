@@ -64,7 +64,7 @@ gem 'bitly'
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
 group :development, :test do
-  gem 'shoulda'
+  gem 'shoulda', :require => false
   # gem 'ephemeral_response'
   gem 'mocha'
   gem 'factory_girl','~> 2.0.0.rc4'
