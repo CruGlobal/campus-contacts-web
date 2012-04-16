@@ -1,5 +1,5 @@
 class Group < ActiveRecord::Base
-  set_table_name 'mh_groups'
+  self.table_name = 'mh_groups'
   
   has_many :group_labelings, dependent: :destroy
   has_many :group_labels, through: :group_labelings

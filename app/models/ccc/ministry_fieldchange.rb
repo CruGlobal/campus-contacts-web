@@ -1,5 +1,5 @@
 class Ccc::MinistryFieldchange < ActiveRecord::Base
-  set_primary_key :FieldChangeID
-  set_table_name 'ministry_fieldchange'
+  self.primary_key = 'FieldChangeID'
+  self.table_name = 'ministry_fieldchange'
   
 end

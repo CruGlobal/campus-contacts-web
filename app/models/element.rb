@@ -1,7 +1,7 @@
 # Element represents a section, question or content element on the question sheet
 class Element < ActiveRecord::Base
   QUESTION_TYPES = %w{TextField ChoiceField DateField StateChooser ReferenceQuestion SchoolPicker AttachmentField PaymentQuestion}
-  set_table_name "mh_elements"
+  self.table_name = "mh_elements"
   belongs_to :question_grid, :class_name => "QuestionGrid", :foreign_key => "question_grid_id"
   belongs_to :choice_field, :class_name => "ChoiceField", :foreign_key => "conditional_id"
   

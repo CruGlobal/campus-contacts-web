@@ -1,5 +1,5 @@
 class Ccc::MinistryRegionalstat < ActiveRecord::Base
-  set_primary_key :RegionalStatID
-  set_table_name 'ministry_regionalstat'
+  self.primary_key = 'RegionalStatID'
+  self.table_name = 'ministry_regionalstat'
   
 end

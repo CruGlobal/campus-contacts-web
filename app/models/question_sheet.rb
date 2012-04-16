@@ -1,7 +1,7 @@
 require 'model_extensions'
 # QuestionSheet represents a particular form
 class QuestionSheet < ActiveRecord::Base
-  set_table_name "#{Questionnaire.table_name_prefix}#{self.table_name}"
+  self.table_name = "#{Questionnaire.table_name_prefix}#{self.table_name}"
   
   belongs_to :questionnable, :polymorphic => true
   has_many :pages, :dependent => :destroy, :order => 'number'

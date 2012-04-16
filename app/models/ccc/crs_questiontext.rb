@@ -1,5 +1,5 @@
 class Ccc::CrsQuestiontext < ActiveRecord::Base
-  set_primary_key :questionTextID
-  set_table_name 'crs_questiontext'
+  self.primary_key = 'questionTextID'
+  self.table_name = 'crs_questiontext'
   
 end

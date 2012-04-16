@@ -7,7 +7,7 @@
 # may want special handling for ChoiceFields to store both id/slug and text representations
 
 class Answer < ActiveRecord::Base
-  set_table_name "#{Questionnaire.table_name_prefix}#{self.table_name}"
+  self.table_name = "#{Questionnaire.table_name_prefix}#{self.table_name}"
   
   belongs_to :answer_sheet
   belongs_to :question, :class_name => "Element", :foreign_key => "question_id"

@@ -1,5 +1,5 @@
 class GroupMembership < ActiveRecord::Base
-  set_table_name 'mh_group_memberships'
+  self.table_name = 'mh_group_memberships'
   
   belongs_to :group
   belongs_to :person
