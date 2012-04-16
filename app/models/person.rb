@@ -61,7 +61,7 @@ class Person < ActiveRecord::Base
     :select => "ministry_person.*",
     :joins => "JOIN organizational_roles ON ministry_person.personID = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id",
     :conditions => "roles.i18n IN #{Role.default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}",
-    :order => "FIELD #{Role.i18n_field_plus_default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}"
+    :order => "FIELD#{Role.i18n_field_plus_default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}"
   } }
 
   scope :order_alphabetically_by_non_default_role, lambda { |order| {

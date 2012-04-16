@@ -12,7 +12,7 @@ class Role < ActiveRecord::Base
 
   scope :default_roles_desc, lambda { {
     :conditions => "i18n IN #{self.default_roles_for_field_string(self::DEFAULT_ROLES)}",
-    :order => "FIELD #{self.i18n_field_plus_default_roles_for_field_string(self::DEFAULT_ROLES)}"
+    :order => "FIELD#{self.i18n_field_plus_default_roles_for_field_string(self::DEFAULT_ROLES)}"
   } }
 
   scope :non_default_roles_asc, lambda { {
