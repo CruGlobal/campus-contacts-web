@@ -71,6 +71,12 @@ class Person < ActiveRecord::Base
     :order => "roles.name #{order.include?("asc") ? 'DESC' : 'ASC'}"
   } }
 
+  scope :find_friends_with_fb_uid, lambda { |id| {
+    :select => "ministry_person.*",
+    :joins => "JOIN mh_friends ON ministry_person.fb_uid = mh_friends.uid",
+    :conditions => "mh_friends.person_id = #{id}",
+  } }
+
   def update_date_attributes_updated
     self.date_attributes_updated = DateTime.now.to_s(:db)
     self.save
