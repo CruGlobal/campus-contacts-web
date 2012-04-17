@@ -610,17 +610,11 @@ en:
       instruction_2: "First name should not be missing"
       instruction_3: "Phone numbers and email addresses should have the right format"
       instruction_4: "Headers should be present"
-<<<<<<< HEAD
+
       download_template_csv: "Download template CSV file"
       cause_1: " First name is blank at row/s"
       cause_2: " Invalid phone number at row/s"
       cause_3: " Invalid email address at row/s"
-=======
-      download_sample_csv: "Download sample CSV file"
-      cause_1: " First name is blank at row"
-      cause_2: " Invalid phone number at row"
-      cause_3: " Invalid email address at row"
->>>>>>> e7ce90c9b90e105ceb21c9e87e8784a98c881ed0
       tip_2: "In your first row list the headings like it shows here: <strong>FIRST NAME, LAST NAME, STATUS, GENDER, EMAIL, PHONE NUMBER, ADDRESS 1, ADDRESS 2, CITY, STATE, COUNTRY, ZIP</strong>"
       
   sms:
