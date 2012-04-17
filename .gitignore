@@ -20,3 +20,4 @@ rails_best_practices_output.html
 .idea
 public/uploads/*
 tmp
+app/assets/javascripts/i18n/translations.js
