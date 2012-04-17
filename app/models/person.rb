@@ -73,7 +73,7 @@ class Person < ActiveRecord::Base
 
   scope :find_friends_with_fb_uid, lambda { |id| {
     :select => "ministry_person.*",
-    :joins => "JOIN mh_friends ON ministry_person.fb_uid = mh_friends.uid",
+    :joins => "LEFT JOIN mh_friends ON ministry_person.fb_uid = mh_friends.uid",
     :conditions => "mh_friends.person_id = #{id}",
   } }
 
