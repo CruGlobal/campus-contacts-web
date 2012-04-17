@@ -42,10 +42,10 @@ task :rack do
   set :deploy_to, "/var/www/html/staging/#{application}"
   set :environment, 'staging'
   set :rails_env, 'staging'
-  
-  role :db, "108.171.184.122", primary: true
-  role :web, "108.171.184.122"
-  role :app, "108.171.184.122"
+servers = ["108.166.87.221", "108.171.184.122"]
+  role :db, *servers, primary: true
+  role :web, *servers
+  role :app, *servers
   set :deploy_via, :remote_cache
 end
 

@@ -3,6 +3,8 @@
 require 'action_dispatch/middleware/session/dalli_store'
 if Rails.env.production?
   servers = ['10.10.11.166','10.10.11.167']
+elsif Rails.env.rackspace?
+  servers = ['10.179.150.27']
 else
   servers = ['127.0.0.1']
 end
