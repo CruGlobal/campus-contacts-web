@@ -33,7 +33,7 @@ Mh::Application.configure do
   config.assets.compress = true
   config.assets.compile = true
   config.assets.digest = true
-  config.assets.initialize_on_precompile = false
+  config.assets.initialize_on_precompile = true
 
   # Enable serving of images, stylesheets, and javascripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"
