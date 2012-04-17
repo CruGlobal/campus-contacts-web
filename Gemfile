@@ -52,7 +52,7 @@ gem 'deadlock_retry'
 gem 'delegate_presenter'
 
 gem 'vpim', git: 'git://github.com/twinge/vpim.git'   # vcard maker
-gem 'i18n-js'                                         # allow i18n on js files 
+gem 'i18n-js', git: 'git://github.com/fnando/i18n-js.git'     # allow i18n on js files 
 
 gem 'rest-client'                                     # to make FB api requests
 gem "paperclip", :git => 'git://github.com/thoughtbot/paperclip.git'
@@ -64,7 +64,7 @@ gem 'bitly'
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
 group :development, :test do
-  gem 'shoulda'
+  gem 'shoulda', :require => false
   # gem 'ephemeral_response'
   gem 'mocha'
   gem 'factory_girl','~> 2.0.0.rc4'

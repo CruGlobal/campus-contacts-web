@@ -18,7 +18,7 @@ en:
       type_to_find_label: "Type to find a label then click on the label's name"
       keep_contact: "Check the box to leave a copy of the contact in the org."
     messages:
-      question_too_long: "WARNING: This question exceeds the length limit for a CSV Import unsuccessfulsingle text and might be split up over multiple messages."
+      question_too_long: "WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages."
   roles: 
     admin: Admin
     contact: Contact
@@ -75,7 +75,7 @@ en:
     roles: "Labels"
     back_to_dashboard: "Back To My Contacts"
     create_a_survey: Create a survey
-    
+    settings: Settings
   general:
     survey: Survey
     mobile: Cell
@@ -603,17 +603,24 @@ en:
       bulk_vcard_email_content: 'Attached to this email is a vcard containing the contacts you selected'
     import_contacts:
       success: "CSV Import Successful, new records added to database!"
-      error: "CSV Import unsuccessful for some rows:"
+      error: "CSV Import unsuccessful and the cause is:"
       instructions_label: "Instructions"
       select_csv: "Select a CSV File :"
       instruction_1: "Follow the order of the columns as illustrated above"
       instruction_2: "First name should not be missing"
       instruction_3: "Phone numbers and email addresses should have the right format"
       instruction_4: "Headers should be present"
+<<<<<<< HEAD
       download_template_csv: "Download template CSV file"
       cause_1: " First name is blank at row/s"
       cause_2: " Invalid phone number at row/s"
       cause_3: " Invalid email address at row/s"
+=======
+      download_sample_csv: "Download sample CSV file"
+      cause_1: " First name is blank at row"
+      cause_2: " Invalid phone number at row"
+      cause_3: " Invalid email address at row"
+>>>>>>> e7ce90c9b90e105ceb21c9e87e8784a98c881ed0
       tip_2: "In your first row list the headings like it shows here: <strong>FIRST NAME, LAST NAME, STATUS, GENDER, EMAIL, PHONE NUMBER, ADDRESS 1, ADDRESS 2, CITY, STATE, COUNTRY, ZIP</strong>"
       
   sms:
@@ -916,3 +923,9 @@ en:
       title: Sign up your organization
       signup: Sign Up!
       your_org: Your Organization
+    add_org:
+      name_not_unique: Name is not Unique
+    settings:
+      title: Settings
+      year_in_school: Display 'Year in School' on the Directory Page
+      submit: Update Settings

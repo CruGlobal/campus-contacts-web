@@ -6,7 +6,7 @@ class Ccc::MinistryNewaddress < ActiveRecord::Base
   def merge(other)
     Ccc::MinistryNewaddress.transaction do
       # We're only interested if the other address has been updated more recently
-      if other.dateChanged && other.dateChanged > dateChanged
+      if other.dateChanged && dateChanged && other.dateChanged > dateChanged
         # if any part of they physical address is there, copy all of it
         physical_address = %w{address1 address2 address3 address4 city state zip country}
         if other.attributes.slice(*physical_address).any? {|k,v| v.present?}

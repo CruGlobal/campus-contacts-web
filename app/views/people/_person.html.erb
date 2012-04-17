@@ -18,7 +18,9 @@
   <td><%= person.gender.to_s.titleize %></td>
   <td class="email"><%= mail_to(person.email) %></td>
   <td class="phone_number"><%= person.pretty_phone_number %></td>
-  <td><%= person.yearInSchool %></td>
+  <% if (current_organization.settings[:show_year_in_school]) || (current_organization.settings[:show_year_in_school].nil?) %>
+    <td><%= person.yearInSchool %></td>
+  <% end %>
   <td class="controls">
     <%= link_to("Show", "/people/#{person.id}", :class => "icon magnify tipit", :title => t('nav.view_details')) %>
   </td>

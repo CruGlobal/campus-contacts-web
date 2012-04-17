@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120220175325) do
+ActiveRecord::Schema.define(:version => 20120307155057) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -4427,6 +4427,7 @@ ActiveRecord::Schema.define(:version => 20120220175325) do
     t.string   "importable_type"
     t.boolean  "show_sub_orgs",       :default => false, :null => false
     t.string   "status"
+    t.text     "settings"
   end
 
   add_index "organizations", ["ancestry"], :name => "index_organizations_on_ancestry"
