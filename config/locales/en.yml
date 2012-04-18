@@ -603,7 +603,7 @@ en:
       bulk_vcard_email_content: 'Attached to this email is a vcard containing the contacts you selected'
     import_contacts:
       success: "CSV Import Successful, new records added to database!"
-      error: "CSV Import unsuccessful and the cause is:"
+      error: "CSV Import unsuccessful for some rows:"
       instructions_label: "Instructions"
       select_csv: "Select a CSV File :"
       instruction_1: "Follow the order of the columns as illustrated above"
