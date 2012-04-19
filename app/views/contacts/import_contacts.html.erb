@@ -22,9 +22,10 @@
   
   <ol class="instructions">
     <li><span class="name"><strong><%= link_to(t('contacts.import_contacts.template_sample_csv'), download_sample_contacts_csv_contacts_path, :class => "icon showtext csv") %></strong> to get started</span>
-    <li>In your first row list the headings like it shows here: <strong>FIRST NAME, LAST NAME, STATUS, GENDER, EMAIL, PHONE NUMBER, ADDRESS 1, ADDRESS 2, CITY, STATE, COUNTRY, ZIP</strong></li>
-    <li>In the rows following the headings, just enter your contacts information. One thing to remember is that <strong>First Name is required</strong>.</li>
-    <li><strong>Surveys</strong> come after the <strong>"ZIP"</strong> column. Choices, if provided, for the question are enclosed in parentheses. <strong>Multiple answers</strong>, with <strong>'choose one or more'</strong>, must be separated with '<strong>,</strong>'</li>
+    <li>In your first row list the headings like it shows here: <strong>FIRST NAME, LAST NAME, STATUS, GENDER, EMAIL, PHONE, ADDRESS 1, ADDRESS 2, CITY, STATE, COUNTRY, ZIP.</strong>The order of the columns does not matter nor the inclution of all the said headings.</li>
+    <li>Header names (as enumerated above) must be strictly followed. Mispelled header names will cause an error.</li>
+    <li>In the rows following the headings, just enter your contacts information. One thing to remember is that <strong>First Name and email is required</strong>.</li>
+    <!-- <li><strong>Surveys</strong> come after the <strong>"ZIP"</strong> column. Choices, if provided, for the question are enclosed in parentheses. <strong>Multiple answers</strong>, with <strong>'choose one or more'</strong>, must be separated with '<strong>,</strong>'</li> -->
     <li>In Excel, go to <strong>Save As</strong></li>
     <li>From the drop down menu for <strong>File Type</strong>, choose <strong>CSV, Comma Separated</strong></li>
   </ol>

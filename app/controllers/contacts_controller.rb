@@ -269,16 +269,23 @@ class ContactsController < ApplicationController
         end
         break if wrong_headers_error # error found in header
 
+        if headers["first name"] == false || headers["email"] == false
+          wrong_headers_error = true
+          flash_error = "Column that contains 'first name' is not found. The said column is strictly required"
+          error = true
+          break #if first name column is not found in the csv file
+        end
+
+        puts headers
 
         #when row length is more than 12, there is a survey
         if row.length >= 12
           row[12..row.length-1].each do |r|
             c << r.split(" :: ").first
           end
-
-          n = n + 1
-          next
         end
+        n += 1
+        next
       end
       
       n += 1
@@ -292,29 +299,46 @@ class ContactsController < ApplicationController
       next if num == row.length
 
 
-      if !row[0].to_s.match /[a-z]/ # if firstName is blank
+      if !row[headers["first name"]].to_s.match /[a-z]/ # if firstName is blank
         #flash_error = flash_error + "#{t('contacts.import_contacts.cause_1')} #{n},"
         flash_error_first_name = flash_error_first_name + " #{n}, "
         error = true
         next
       end
 
-      if row[5].to_s.gsub(/[^\d]/,'').length < 7 && !row[5].nil? # if phone_number length < 7
+      if headers["phone"] && row[headers["phone"]].to_s.gsub(/[^\d]/,'').length < 7 && !row[headers["phone"]].nil? # if phone_number length < 7
         #flash_error = flash_error + "#{t('contacts.import_contacts.cause_2')} #{n},"
         flash_error_phone_no_format = flash_error_phone_no_format + " #{n}, "
         error = true
         next
       end
 
-      if !row[4].to_s.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i) # if email has wrong formatting
+      if !row[headers["email"]].to_s.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i) # if email has wrong formatting
         #flash_error = flash_error + "#{t('contacts.import_contacts.cause_3')} #{n},"
         flash_error_email_format = flash_error_email_format + " #{n}, "
         error = true
         next
       end
       # surveys starts at row  12
-      a << {:person => {:firstName => row[0], :lastName => row[1], :gender => row[3], :email_address => {:email => row[4], :primary => "1", :_destroy => "false"}, :phone_number => {:number => row[5], :location => "mobile", :primary => "1", :_destroy => "false"}, :current_address_attributes => { :address1 => row[6], :address2 => row[7], :city => row[8], :state => row[9], :country => row[10], :zip => row[11]} }}
+      person_hash = Hash.new
+      person_hash[:person] = Hash.new
+      person_hash[:person][:firstName] = row[headers["first name"]] if headers["first name"]
+      person_hash[:person][:lastName] = row[headers["last name"]] if headers["last name"]
+      person_hash[:person][:gender] = row[headers["gender"]] if headers["gender"]
+      person_hash[:person][:email_address] = {:email => row[headers["email"]], :primary => "1", :_destroy => "false"} if headers["email"]
+      person_hash[:person][:phone_number] = {:number => row[headers["phone"]], :location => "mobile", :primary => "1", :_destroy => "false"} if headers["phone"]
+      person_hash[:person][:current_address_attributes] = Hash.new
+      person_hash[:person][:current_address_attributes][:address1] = row[headers["address 1"]] if headers["address 1"]
+      person_hash[:person][:current_address_attributes][:address2] = row[headers["address 2"]] if headers["address 2"]
+      person_hash[:person][:current_address_attributes][:city] = row[headers["city"]] if headers["city"]
+      person_hash[:person][:current_address_attributes][:state] = row[headers["state"]] if headers["state"]
+      person_hash[:person][:current_address_attributes][:country] = row[headers["country"]] if headers["country"]
+      person_hash[:person][:current_address_attributes][:zip] = row[headers["zip"]] if headers["zip"]
+      #{:person => {:firstName => row[0], :lastName => row[1], :gender => row[3], :email_address => {:email => row[4], :primary => "1", :_destroy => "false"}, :phone_number => {:number => row[5], :location => "mobile", :primary => "1", :_destroy => "false"}, :current_address_attributes => { :address1 => row[6], :address2 => row[7], :city => row[8], :state => row[9], :country => row[10], :zip => row[11]} }}
+      a << person_hash
+=begin
       b = Hash.new
+
 
       #creating hash for answers
       l = 0
@@ -337,6 +361,7 @@ class ContactsController < ApplicationController
 
       a.last[:answers] = b
       puts a.last[:answers]
+=end
       success = true
     end
 
@@ -361,6 +386,8 @@ class ContactsController < ApplicationController
     csv_string = CSV.generate do |csv|
       c = 0
       CSV.foreach(Rails.root.to_s + "/public/files/sample_contacts.csv") do |row|
+=begin
+        #include in the sample csv the survey questions
         if c == 0
           current_organization.surveys.flatten.uniq.each do |survey|
             survey.all_questions.each do |q|
@@ -377,6 +404,7 @@ class ContactsController < ApplicationController
             end
           end
         end
+=end
         c = c + 1
         csv << row
       end
