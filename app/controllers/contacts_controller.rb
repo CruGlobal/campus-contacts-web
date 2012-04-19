@@ -241,13 +241,36 @@ class ContactsController < ApplicationController
     flash_error_email_format = "#{t('contacts.import_contacts.cause_3')}"
 
     n = 0
+    wrong_headers_error = false
     error = false
     success = false
     flash_error = ""
     a = Array.new
     c = Array.new
+    #headers hash - where we will place column numbers
+    headers = {"first name"	=> false, "last name"	=> false,	"status"	=> false,	"gender"	=> false,	"email"	=> false,	"phone"	=> false,	"address 1"	=> false, "address 2"	=> false, "city"	=> false, "state"	=> false, "country"	=> false, "zip"	=> false}
+
     CSV.foreach(params[:dump][:file].path.to_s) do |row|
+
+      #for csv file headers
       if n == 0
+        #determining which columns are headers (data) are placed
+        num = 0
+        row.each do |r|
+          if headers.keys.include?(r.downcase) && !r.nil?
+            headers[r.downcase] = num
+          else
+            wrong_headers_error = true
+            flash_error = "Wrong header at column #{num + 1}"
+            error = true
+            break
+          end
+          num += 1
+        end
+        break if wrong_headers_error # error found in header
+
+
+        #when row length is more than 12, there is a survey
         if row.length >= 12
           row[12..row.length-1].each do |r|
             c << r.split(" :: ").first
@@ -260,6 +283,7 @@ class ContactsController < ApplicationController
       
       n += 1
 
+      #ignoring a row that has no entries (blank row)
       num = 0
       row.each do |ro|
         break if !ro.nil?
@@ -323,11 +347,12 @@ class ContactsController < ApplicationController
 
       flash.now[:notice] = t('contacts.import_contacts.success')
     end
-    flash_error = flash_error_first_name.include?(",") ? flash_error_first_name + " <br/>": flash_error
+    flash_error = flash_error_first_name.include?(",") ? flash_error + flash_error_first_name + " <br/>": flash_error
     flash_error = flash_error_phone_no_format.include?(",") ? flash_error + flash_error_phone_no_format + " <br/>" : flash_error
     flash_error = flash_error_email_format.include?(",") ? flash_error + flash_error_email_format + " <br/>"  : flash_error
-    flash_error = t('contacts.import_contacts.error') + "<br/>" + flash_error
+    flash_error = t('contacts.import_contacts.error') + "<br/>" + flash_error unless wrong_headers_error
     flash.now[:error] = flash_error.html_safe if error
+
     render :import_contacts
   end
 
