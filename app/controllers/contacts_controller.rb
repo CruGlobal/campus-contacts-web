@@ -257,7 +257,7 @@ class ContactsController < ApplicationController
         #determining which columns are headers (data) are placed
         num = 0
         row.each do |r|
-          if headers.keys.include?(r.downcase) && !r.nil?
+          if !r.nil? && headers.keys.include?(r.downcase)
             headers[r.downcase] = num
           else
             wrong_headers_error = true
@@ -411,7 +411,7 @@ class ContactsController < ApplicationController
     end
 
     #send_file Rails.root.to_s + '/public' + '/files/sample_contacts.csv', :type=>"application/csv"#, :x_sendfile=>true
-    send_data csv_string, :type => 'text/csv; charset=UTF-8; header=present', :disposition => "attachment; filename=/home/neilmarion/sample_contacts.csv"
+    send_data csv_string, :type => 'text/csv; charset=UTF-8; header=present', :disposition => "attachment; filename=sample_contacts.csv"
   end
   
   protected
