@@ -53,3 +53,27 @@ task "phone_numbers" => :environment do
     end
   end
 end
+
+task "move_answers" => :environment do
+  bad_id = ENV['bad_id']
+  good_id = ENV['good_id']
+  bad = Element.find(bad_id)
+  good = Element.find(good_id)
+  # Copy answers over
+  bad.sheet_answers.each do |a|
+    Element.transaction do
+      begin
+        good.set_response(a.value, a.answer_sheet)
+      rescue ActiveRecord::RecordNotUnique
+      end
+    end
+  end
+
+  # For every survey the bad question was on, add the good question and remove the bad
+  bad.surveys.each do |survey|
+    survey.elements = survey.elements + [good] - [bad]
+    survey.save
+  end
+
+  bad.destroy
+end
