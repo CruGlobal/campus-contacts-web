@@ -248,7 +248,7 @@ class ContactsController < ApplicationController
     a = Array.new
     c = Array.new
     #headers hash - where we will place column numbers
-    headers = {"first name"	=> false, "last name"	=> false,	"status"	=> false,	"gender"	=> false,	"email"	=> false,	"phone"	=> false,	"address 1"	=> false, "address 2"	=> false, "city"	=> false, "state"	=> false, "country"	=> false, "zip"	=> false}
+    headers = {"first name"	=> false, "last name"	=> false,	"status"	=> false,	"gender"	=> false,	"what is your email address?"	=> false,	"phone number"	=> false,	"address 1"	=> false, "address 2"	=> false, "city"	=> false, "state"	=> false, "country"	=> false, "zip"	=> false}
 
     CSV.foreach(params[:dump][:file].path.to_s) do |row|
 
@@ -269,7 +269,7 @@ class ContactsController < ApplicationController
         end
         break if wrong_headers_error # error found in header
 
-        if headers["first name"] == false || headers["email"] == false
+        if headers["first name"] == false || headers["what is your email address"] == false
           wrong_headers_error = true
           flash_error = "Column that contains 'first name' is not found. The said column is strictly required"
           error = true
@@ -306,14 +306,14 @@ class ContactsController < ApplicationController
         next
       end
 
-      if headers["phone"] && row[headers["phone"]].to_s.gsub(/[^\d]/,'').length < 7 && !row[headers["phone"]].nil? # if phone_number length < 7
+      if headers["phone number"] && row[headers["phone number"]].to_s.gsub(/[^\d]/,'').length < 7 && !row[headers["phone number"]].nil? # if phone_number length < 7
         #flash_error = flash_error + "#{t('contacts.import_contacts.cause_2')} #{n},"
         flash_error_phone_no_format = flash_error_phone_no_format + " #{n}, "
         error = true
         next
       end
 
-      if !row[headers["email"]].to_s.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i) # if email has wrong formatting
+      if !row[headers["what is your email address?"]].to_s.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i) # if email has wrong formatting
         #flash_error = flash_error + "#{t('contacts.import_contacts.cause_3')} #{n},"
         flash_error_email_format = flash_error_email_format + " #{n}, "
         error = true
@@ -325,8 +325,8 @@ class ContactsController < ApplicationController
       person_hash[:person][:firstName] = row[headers["first name"]] if headers["first name"]
       person_hash[:person][:lastName] = row[headers["last name"]] if headers["last name"]
       person_hash[:person][:gender] = row[headers["gender"]] if headers["gender"]
-      person_hash[:person][:email_address] = {:email => row[headers["email"]], :primary => "1", :_destroy => "false"} if headers["email"]
-      person_hash[:person][:phone_number] = {:number => row[headers["phone"]], :location => "mobile", :primary => "1", :_destroy => "false"} if headers["phone"]
+      person_hash[:person][:email_address] = {:email => row[headers["what is your email address?"]], :primary => "1", :_destroy => "false"} if headers["what is your email address?"]
+      person_hash[:person][:phone_number] = {:number => row[headers["phone number"]], :location => "mobile", :primary => "1", :_destroy => "false"} if headers["phone number"]
       person_hash[:person][:current_address_attributes] = Hash.new
       person_hash[:person][:current_address_attributes][:address1] = row[headers["address 1"]] if headers["address 1"]
       person_hash[:person][:current_address_attributes][:address2] = row[headers["address 2"]] if headers["address 2"]
