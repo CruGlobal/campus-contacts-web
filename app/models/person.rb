@@ -265,7 +265,7 @@ class Person < ActiveRecord::Base
         existing.update_attribute(:primary, true)
       end
     else
-      email = primary_email_address || email_addresses.new
+      email = email_addresses.new
       email.email = val
       email.save
     end
