@@ -1,4 +1,6 @@
 Mh::Application.routes.draw do
+  resources :imports
+
   resources :group_labels, :only => [:create, :destroy]
 
   ActiveAdmin.routes(self)

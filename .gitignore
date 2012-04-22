@@ -13,6 +13,7 @@ unicorn.development.rb
 public/assets
 *.swp
 coverage.data
+config/s3.yml
 .sass-cache
 active-record-query-trace
 .project
