@@ -216,16 +216,13 @@ class PeopleControllerTest < ActionController::TestCase
     setup do
       user = Factory(:user_with_auxs)
       sign_in user
-      @org1 = Factory(:organization)
       @person1 = Factory(:person)
-      @person2 = Factory(:person)
-      Factory(:contact_assignment, organization: @org1, assigned_to: @person2, person: @person1)
+      Factory(:contact_assignment, organization: user.person.organizations.first, assigned_to: user.person, person: @person1)
     end
     
     should "get the person assigned" do
       get :show, { 'id' => @person1.id }
       assert_response(:success)
-      assert_not_nil(assigns(:person).assigned_tos)
       assert_not_nil(assigns(:assigned_tos))
     end
   end
@@ -297,10 +294,11 @@ class PeopleControllerTest < ActionController::TestCase
       #profile view
       get :show, { 'id' => @person.id }
       #check the friends on the same org
-      assert_not_nil(assigns(:org_friends))
-      assert(assigns(:org_friends).include?@person1)
-      assert(assigns(:org_friends).include?@person2)
-      assert_equal(2, assigns(:org_friends).count)
+      org_friends = assigns(:org_friends)
+      assert_not_nil(org_friends)
+      assert(org_friends.include?@person1)
+      assert(org_friends.include?@person2)
+      assert_equal(2, org_friends.length)
     end
   end
   
