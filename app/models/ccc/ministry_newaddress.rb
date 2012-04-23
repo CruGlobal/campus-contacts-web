@@ -1,6 +1,6 @@
 class Ccc::MinistryNewaddress < ActiveRecord::Base
-  set_primary_key :addressID
-  set_table_name 'ministry_newaddress'
+  self.primary_key = 'addressID'
+  self.table_name = 'ministry_newaddress'
   belongs_to :ministry_person, class_name: 'Person', foreign_key: :fk_PersonID
   
   def merge(other)

@@ -1,11 +1,6 @@
 require 'test_helper'
 
 class GroupsControllerTest < ActionController::TestCase
-  # test "should get index" do
-  #   get :index
-  #   assert_response :success
-  # end
-  # 
   test "should have permission to see a group in a sub-org" do
     set_up_group_at_sub_org
     get :show, id: @group.id
@@ -36,26 +31,33 @@ class GroupsControllerTest < ActionController::TestCase
       assert_response(:success)
     end
   end
-  # 
-  # test "should get edit" do
-  #   get :edit
-  #   assert_response :success
-  # end
-  # 
-  # test "should get update" do
-  #   get :update
-  #   assert_response :success
-  # end
-  # 
-  # test "should get destroy" do
-  #   get :destroy
-  #   assert_response :success
-  # end
-  # 
-  # test "should get create" do
-  #   get :create
-  #   assert_response :success
-  # end
+  
+  context "on index" do
+    setup do
+      @user, @org = admin_user_login_with_org
+      Factory(:group, organization: @org)
+    end
+    
+    should "get index" do
+      get :index
+      assert_not_nil assigns(:groups)
+    end
+  end
+  
+  should "update group" do
+    @user, @org = admin_user_login_with_org
+    group = Factory(:group, organization: @org)
+    post :update, { :id => group.id, :group => { :name => "WAT" } }
+    assert_not_nil assigns(:group)
+    assert_response :redirect
+  end
+  
+  should "create group" do
+    @user, @org = admin_user_login_with_org
+    post :create, group: { :name => "Wat", :location => "Philippines", :meets => "weekly", :start_time => "21600", :end_time => "25200", :organization_id => @org.id }
+    assert_equal 1, @org.groups.count
+    assert_response :redirect
+  end
   
   def set_up_group_at_sub_org
     @user = Factory(:user_with_auxs)

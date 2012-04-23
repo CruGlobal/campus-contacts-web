@@ -89,4 +89,31 @@ class FollowupCommentsControllerTest < ActionController::TestCase
     end
 
   end
+  
+  should "get index" do
+    @user, @org = admin_user_login_with_org
+    get :index
+  end
+  
+  should "create followup comment" do
+    request.env["HTTP_REFERER"] = "localhost:3000"
+    
+    @user, @org = admin_user_login_with_org
+    contact = Factory(:person)
+    
+    post :create, { :followup_comment => { :contact_id => contact.id, :commenter_id => @user.person.id, :comment => "Wat", :status => "uncontacted", :organization_id => @org.id }, :rejoicables => ["wat"] }
+    
+    assert_response :redirect
+  end
+  
+  should "create followup comment with rejoicable" do
+    request.env["HTTP_REFERER"] = "localhost:3000"
+    
+    @user, @org = admin_user_login_with_org
+    contact = Factory(:person)
+    
+    post :create, { :followup_comment => { :contact_id => contact.id, :commenter_id => @user.person.id, :comment => "Wat", :status => "uncontacted", :organization_id => @org.id }, :rejoicables => ["gospel_presentation"] }
+    
+    assert_response :redirect
+  end
 end

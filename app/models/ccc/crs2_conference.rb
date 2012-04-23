@@ -1,5 +1,5 @@
 class Ccc::Crs2Conference < ActiveRecord::Base
-  set_table_name 'crs2_conference'
+  self.table_name = 'crs2_conference'
   has_many :crs2_additional_info_items, class_name: 'Ccc::Crs2AdditionalInfoItem'
   belongs_to :crs2_user, class_name: 'Ccc::Crs2User', foreign_key: :creator_id
   belongs_to :crs2_url_base, class_name: 'Ccc::Crs2UrlBase', foreign_key: :url_base_id

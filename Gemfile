@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.1.3'
+gem 'rails', '=3.2.2'
 gem 'jquery-rails'
-gem 'mysql2', '0.3.8'
+gem 'mysql2', '~> 0.3.11'
 gem 'nokogiri'
 gem 'json_pure'
 gem 'redis'
@@ -24,7 +24,7 @@ gem 'carmen', git: 'git://github.com/twinge/carmen.git'
 gem 'ancestry'
 gem 'activeadmin', git: 'git://github.com/gregbell/active_admin.git'
 
-gem 'twilio-rb'
+gem 'twilio-rb', git: 'https://github.com/stevegraham/twilio-rb.git'
 gem "default_value_for"
 
 gem 'dalli'
@@ -36,7 +36,6 @@ gem "state_machine"
 gem 'acts_as_list'
 gem 'dynamic_form'
 gem 'coffee-script'
-gem 'uglifier'
 gem 'trumant-rack-oauth2-server', git: 'git://github.com/twinge/rack-oauth2-server.git', branch: 'active_record'
 
 gem 'enforce_schema_rules'
@@ -47,7 +46,7 @@ gem 'airbrake'
 gem 'cancan'
 gem 'kaminari'
 gem 'whenever'
-gem "ransack", '0.5.8'
+gem "ransack", :git => "git://github.com/ernie/ransack.git"
 gem 'deadlock_retry'
 gem 'delegate_presenter'
 
@@ -71,7 +70,6 @@ group :development, :test do
   gem 'simplecov', '>= 0.3.5', require: false
   gem 'railroady'
   gem 'awesome_print'
-  gem 'active_reload'
   # Pretty printed test output
   # gem 'turn', :require => false
   gem 'rails-footnotes', '>= 3.7'
@@ -91,9 +89,9 @@ end
 # Gems used only for assets and not required
 # in production environments by default.
 #gem 'sass-rails', "  ~> 3.1.0"
-gem 'sass-rails', "=3.1.5"
+gem 'sass-rails', "~>3.2.3"
 gem 'sass', '=3.1.14'
 group :assets do
-  gem 'coffee-rails', "~> 3.1.0"
-  gem 'uglifier'
+  gem 'coffee-rails', "~> 3.2.1"
+  gem 'uglifier', ">= 1.0.3"
 end

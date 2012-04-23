@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120307155057) do
+ActiveRecord::Schema.define(:version => 20120329201032) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -3254,8 +3254,8 @@ ActiveRecord::Schema.define(:version => 20120307155057) do
     t.text     "post_survey_message"
     t.string   "terminology",                        :default => "Survey"
     t.integer  "login_option",                       :default => 0
+    t.boolean  "is_frozen"
     t.string   "login_paragraph"
-    t.boolean  "frozen"
   end
 
   add_index "mh_surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
@@ -4798,10 +4798,10 @@ ActiveRecord::Schema.define(:version => 20120307155057) do
 
   create_table "saved_contact_searches", :force => true do |t|
     t.string   "name"
+    t.string   "full_path",  :limit => 4000
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "full_path",  :limit => 200
   end
 
   add_index "saved_contact_searches", ["user_id"], :name => "index_saved_contact_searches_on_user_id"

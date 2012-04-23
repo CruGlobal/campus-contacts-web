@@ -4,8 +4,8 @@ require 'ccc/person'
 
 class Person < ActiveRecord::Base
   include Ccc::Person
-  set_table_name 'ministry_person'
-  set_primary_key 'personID'
+  self.table_name = 'ministry_person'
+  self.primary_key = 'personID'
 
   belongs_to :user, class_name: 'User', foreign_key: 'fk_ssmUserId'
   has_many :phone_numbers

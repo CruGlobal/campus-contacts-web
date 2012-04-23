@@ -1,5 +1,5 @@
 class Location < ActiveRecord::Base
-  set_table_name 'mh_locations'
+  self.table_name = 'mh_locations'
   belongs_to :person
   validates_presence_of :person_id, :name, :provider, :location_id, on: :create, message: "can't be blank"
 

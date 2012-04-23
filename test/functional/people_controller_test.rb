@@ -36,27 +36,6 @@ class PeopleControllerTest < ActionController::TestCase
       @person = Factory(:user_with_auxs)  #user with a person object
       sign_in @person
     end
-    
-    # 
-    # test "should get index" do
-    #   get :index
-    #   assert_response :success
-    #   assert_not_nil assigns(:people)
-    # end
-    # 
-    # test "should get new" do
-    #   get :new
-    #   assert_response :success
-    # end
-    # 
-    # test "should create person" do
-    #   assert_difference('Person.count') do
-    #     post :create, person: @person.attributes
-    #   end
-    # 
-    #   assert_redirected_to person_path(assigns(:person))
-    # end
-    # 
 
     should "should show person" do
       get :show, id: @person.person.id
@@ -73,15 +52,6 @@ class PeopleControllerTest < ActionController::TestCase
       #put :update, id: @person.person.id, person: @person.attributes
       assert_redirected_to person_path(assigns(:person))
     end
-    
-    # 
-    # test "should destroy person" do
-    #   assert_difference('Person.count', -1) do
-    #     delete :destroy, id: @person.to_param
-    #   end
-    # 
-    #   assert_redirected_to people_path
-    # end
 
     context "bulk sending" do
       setup do
@@ -96,9 +66,16 @@ class PeopleControllerTest < ActionController::TestCase
       end
       
       should "send bulk sms" do
+        p1 = PhoneNumber.new(:number => "123129312", :person_id => @person1.id)
+        assert p1.save
+        
+        p2 = PhoneNumber.new(:number => "123i90900", :person_id => @person2.id, :primary => true)
+        assert p2.save
+        
         xhr :post, :bulk_sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
         
         assert_response :success
+        assert_not_nil assigns(:sent_sms)
       end      
     
       should "update roles" do
@@ -408,6 +385,11 @@ class PeopleControllerTest < ActionController::TestCase
           assert_equal("You can only merge people with the EXACT same first and last name.<br/>Go to the person's profile and edit their name to make them exactly the same and then try again.", flash[:alert])
         end
         
+        should "fail to confirm merge when only one person is selected" do
+          post :confirm_merge, { :person1 => @person1.id }
+          assert_response :redirect
+        end
+        
         should "successfully confirm_merge peeps" do
           post :confirm_merge, { :person1 =>  @person1.id, :person2 => @person4.id }
           assert_response(:success)
@@ -457,5 +439,142 @@ class PeopleControllerTest < ActionController::TestCase
         assert_equal(flash[:error], "You are not permitted to access that feature")
       end
     end
+  end
+  
+  context "merging people" do
+    setup do
+      @user, @org = admin_user_login_with_org
+    end
+    
+    should "redirect when id = 0" do
+      get :merge_preview, { :id => 0 }
+      assert_response :success
+    end
+    
+    should "get merge preview when id != 0" do
+      p1 = Factory(:person)
+      get :merge_preview, { :id => p1.id }
+      assert_not_nil assigns(:person)
+    end
+    
+    should "try to merge people" do
+      p1 = Factory(:person)
+      p2 = Factory(:person)
+      p3 = Factory(:person)
+      
+      ids = []
+      ids << p2.id
+      ids << p3.id
+      
+      post :do_merge, { :keep_id => p1.id, :merge_ids => ids }
+      
+      assert_response :redirect
+      assert_equal "You've just merged #{ids.length + 1} people", flash[:notice]
+    end
+  end
+  
+  context "searching ids" do
+    setup do
+      @user, @org = admin_user_login_with_org
+      @another_org = Factory(:organization)
+      c1 = Factory(:person, firstName: "Scott", lastName: "Munroe")
+      c2 = Factory(:person, firstName: "Scott", lastName: "Summers")
+      c3 = Factory(:person, firstName: "Scott", lastName: "Grey")
+      
+      @org.add_contact(c1)
+      @org.add_contact(c2)
+      @another_org.add_contact(c3)
+    end
+    
+    should "only search ids within the org if user is not super admin" do
+      xhr :get, :search_ids, { :q => "Scott" }
+      assert_equal 2, assigns(:people).count
+    end
+    
+    should "search all people when user is super admin" do
+      Factory(:super_admin, user: @user)
+      xhr :get, :search_ids, { :q => "Scott" }
+      assert_equal 3, assigns(:people).count
+    end
+  end
+  
+  context "creating a person" do
+    setup do
+      request.env["HTTP_REFERER"] = "localhost:3000"
+      @user, @org = admin_user_login_with_org
+    end
+    
+    should "create person" do
+      post :create, { :person => { :firstName => "Herp", :lastName => "Derp", :email_address => { :email => "herp@derp.com" }, :phone_number => { :number => "123918230912"} } }
+      
+      assert_not_nil assigns(:person)
+      assert_not_nil assigns(:email)
+      assert_not_nil assigns(:phone)
+      
+      assert_response :redirect
+    end
+    
+    should "render nothing when user has no name" do
+      post :create, { :person => { :firstName => "", :lastName => "Derp", :email_address => { :email => "herp@derp.com" }, :phone_number => { :number => "123918230912"} } }
+      
+      assert_equal " ", @response.body
+    end
+    
+  end
+  
+  should "bulk delete" do
+    @user, @org = admin_user_login_with_org
+    c1 = Factory(:person)
+    c2 = Factory(:person)
+    
+    @org.add_contact(c1)
+    @org.add_contact(c2)
+    
+    assert_equal 2, @org.contacts.count
+    xhr :post, :bulk_delete, { :ids => "#{c1.id}, #{c2.id}" }
+    
+    assert_equal 0, @org.contacts.count
+    assert_equal " ", @response.body
+  end
+  
+  should "bulk comment" do
+    @user, @org = admin_user_login_with_org
+    c1 = Factory(:person)
+    c2 = Factory(:person)
+    
+    @org.add_contact(c1)
+    @org.add_contact(c2)
+    
+    xhr :post, :bulk_comment, { :to => "#{c1.id}, #{c2.id}", :body => "WAT!" }
+    
+    assert FollowupComment.where(:contact_id => c1.id)
+    assert FollowupComment.where(:contact_id => c2.id)
+  end
+  
+    
+  test "export" do
+    @user, @org = admin_user_login_with_org
+    
+    3.times do
+      p = Factory(:person)
+      @org.add_contact(p)
+    end
+    
+    get :export
+    assert_response :success
+  end
+  
+  test "involvement" do
+    @user, @org = admin_user_login_with_org
+    get :involvement, { :id => @user.person.id }
+    
+    assert_not_nil assigns(:person)
+  end
+  
+  test "destroy" do
+    @user, @org = admin_user_login_with_org
+    person = Factory(:person)
+    post :destroy, { :id => person.id }
+    assert_response :redirect
   end
 end
