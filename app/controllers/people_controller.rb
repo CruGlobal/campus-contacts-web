@@ -17,7 +17,8 @@ class PeopleController < ApplicationController
     if can? :manage, current_organization
       @roles = current_organization.roles
     else
-      @roles = current_organization.roles.where("id != ?", Role::ADMIN_ID)
+      #@roles = current_organization.roles.where("id != ?", Role::ADMIN_ID)
+      @roles = current_organization.roles
     end
 
   end
