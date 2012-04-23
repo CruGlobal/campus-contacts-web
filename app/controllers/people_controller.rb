@@ -40,7 +40,7 @@ class PeopleController < ApplicationController
   # GET /people/1.xml
   def show
     @person = Person.find(params[:id])
-    @assigned_tos = @person.assigned_tos.collect { |a| a.assigned_to.name }.to_sentence
+    @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id).collect { |a| a.assigned_to.name }.to_sentence
     @org_friends = Person.find(params[:id]).friends.collect { |f| Person.find_by_fb_uid(f.uid).nil? ? [] : Person.find_by_fb_uid(f.uid) } & current_organization.people
     authorize!(:read, @person)
     if can? :manage, @person
