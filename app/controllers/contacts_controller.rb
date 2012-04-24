@@ -229,6 +229,7 @@ class ContactsController < ApplicationController
   end
 
   def import_contacts
+    @import = Import.new
     @organization = current_organization
     authorize! :manage, @organization
   end

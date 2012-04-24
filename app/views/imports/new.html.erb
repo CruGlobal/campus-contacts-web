@@ -21,7 +21,7 @@
    <%# image_tag("sample_csv_to_be_imported_surveys.png") %>
   
   <ol class="instructions">
-    <li><span class="name"><strong><%= link_to(t('contacts.import_contacts.template_sample_csv'), download_sample_contacts_csv_contacts_path, :class => "icon showtext csv") %></strong> to get started</span>
+    <li><span class="name"><strong><%= link_to(t('contacts.import_contacts.template_sample_csv'), download_sample_contacts_csv_imports_path, :class => "icon showtext csv") %></strong> to get started</span>
     <li>In your first row list the headings like it shows here: <strong>FIRST NAME, LAST NAME, STATUS, GENDER, WHAT IS YOUR EMAIL ADDRESS?, PHONE NUMBER, ADDRESS 1, ADDRESS 2, CITY, STATE, COUNTRY, ZIP.</strong>The order of the columns does not matter nor the inclusion of all the said headings.</li>
     <li>Header names (as enumerated above) must be strictly followed. Mispelled header names will cause an error.</li>
     <li>In the rows following the headings, just enter your contacts information. One thing to remember is that <strong>First Name and email is required</strong>.</li>
@@ -29,8 +29,6 @@
     <li>In Excel, go to <strong>Save As</strong></li>
     <li>From the drop down menu for <strong>File Type</strong>, choose <strong>CSV, Comma Separated</strong></li>
   </ol>
-  
- 
   
   
   <ul style="display: none;">

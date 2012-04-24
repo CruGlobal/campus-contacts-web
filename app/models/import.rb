@@ -14,6 +14,8 @@ class Import < ActiveRecord::Base
 
   before_save :parse_headers
 
+  HEADERS = {"First Name"	=> "firstName", "Last Name"	=> "lastName",	"Status"	=> "status",	"Gender"	=> "gender",	"Email Address"	=> "email",	"Phone Number"	=> "phone_number",	"Address 1"	=> "address1", "Address 2"	=> "address2", "City"	=> "city", "State"	=> "state", "Country"	=> "country", "Zip"	=> "zip"}
+
   def import
     # TODO: perform actual import
   end
@@ -25,6 +27,10 @@ class Import < ActiveRecord::Base
     errors
   end
 
+  class NilColumnHeader < StandardError
+
+  end
+
   private
 
   def parse_headers
@@ -33,6 +39,7 @@ class Import < ActiveRecord::Base
     unless tempfile.nil?
       csv = CSV.new(tempfile, :headers => :first_row)
       csv.shift
+      raise NilColumnHeader if csv.headers.include?(nil)
       self.headers = csv.headers
     end
   end

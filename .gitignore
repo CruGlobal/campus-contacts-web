@@ -22,3 +22,5 @@ rails_best_practices_output.html
 public/uploads/*
 tmp
 app/assets/javascripts/i18n/translations.js
+config/s3.yml
+mh

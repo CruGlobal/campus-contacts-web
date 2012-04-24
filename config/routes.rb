@@ -1,5 +1,10 @@
 Mh::Application.routes.draw do
-  resources :imports
+  resources :imports, :only => [:index, :show, :new, :create, :update, :destroy, :edit] do
+    collection do
+      get :download_sample_contacts_csv
+    end
+
+  end
 
   resources :group_labels, :only => [:create, :destroy]
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120307155057) do
+ActiveRecord::Schema.define(:version => 20120422020609) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -3189,6 +3189,22 @@ ActiveRecord::Schema.define(:version => 20120307155057) do
     t.boolean  "list_publicly",         :default => true
     t.boolean  "approve_join_requests", :default => true
   end
+
+  create_table "mh_imports", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "organization_id"
+    t.string   "upload_file_name"
+    t.string   "upload_content_type"
+    t.integer  "upload_file_size"
+    t.datetime "upload_updated_at"
+    t.text     "headers"
+    t.text     "header_mappings"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mh_imports", ["organization_id"], :name => "index_mh_imports_on_organization_id"
+  add_index "mh_imports", ["user_id", "organization_id"], :name => "user_org"
 
   create_table "mh_interests", :force => true do |t|
     t.string   "name"

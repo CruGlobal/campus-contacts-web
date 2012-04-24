@@ -70,7 +70,7 @@
   
   <% if can? :manage, current_organization %>
     <ul class="pillmenu">
-      <li><%= link_to(t('contacts.index.import_contacts'), import_contacts_contacts_path) %></li>
+      <li><%= link_to(t('contacts.index.import_contacts'), new_import_path) %></li>
     </ul>
   <% end %>
   
