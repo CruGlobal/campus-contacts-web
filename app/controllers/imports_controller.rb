@@ -29,9 +29,14 @@ class ImportsController < ApplicationController
   def update
     @import.update_attributes(params[:import])
     errors = @import.check_for_errors
+
     if errors.blank?
-      @import.import
-      redirect_to @import
+      @import.get_new_people.each do |new_people|
+        create_contact_from_row(new_people)
+      end
+      flash.now[:notice] = t('contacts.import_contacts.success')
+      render :show
+      #redirect_to @import
     else
      flash.now[:error] = errors.join('<br />').html_safe
      render :edit
@@ -56,7 +61,7 @@ class ImportsController < ApplicationController
 
   def nil_column_header
     init_org
-    flash.now[:error] = "Nil Header"
+    flash.now[:error] = t('contacts.import_contacts.blank_header')
     render :new
   end
 
@@ -70,4 +75,37 @@ class ImportsController < ApplicationController
     @organization = current_organization
     authorize! :manage, @organization
   end
+
+  def create_contact_from_row(params)
+    @organization ||= current_organization
+    Person.transaction do
+      params[:person] ||= {}
+      params[:person][:email_address] ||= {}
+      params[:person][:phone_number] ||= {}
+
+      @person, @email, @phone = create_person(params[:person])
+      if @person.save
+
+        create_contact_at_org(@person, @organization)
+        if params[:assign_to_me] == 'true'
+          ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
+          ContactAssignment.create!(person_id: @person.id, organization_id: @organization.id, assigned_to_id: current_person.id)
+        end
+
+        @answer_sheets = []
+        @organization ||= current_organization
+
+        @organization.surveys.each do |survey|
+          @answer_sheet = get_answer_sheet(survey, @person)
+          question_set = QuestionSet.new(survey.questions, @answer_sheet)
+          question_set.post(params[:answers], @answer_sheet)
+          question_set.save
+          @answer_sheets << @answer_sheet
+        end
+
+        return
+      end
+    end
+  end
+
 end

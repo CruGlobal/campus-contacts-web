@@ -2,14 +2,10 @@
   <%= render 'contacts/leaders' %>
 <% end %>
 
-
-
-
 <%= form_for @import do |f| %>
     <% @import.headers.each_with_index do |header, i| %>
-      <%= header %>: <%= select_tag "import[header_mappings][#{header}]", options_for_select(Import::HEADERS) %><br>
+      <%= header %>: <%= select_tag "import[header_mappings][#{i}]", options_for_select(Import::HEADERS) %><br>
     <% end %>
   <%= submit_tag 'Update', :value=>"Update" %>
 <% end %>
-
 

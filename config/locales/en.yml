@@ -616,6 +616,8 @@ en:
       cause_2: " Invalid phone number at row/s"
       cause_3: " Invalid email address at row/s"
       tip_2: "In your first row list the headings like it shows here: <strong>FIRST NAME, LAST NAME, STATUS, GENDER, EMAIL, PHONE NUMBER, ADDRESS 1, ADDRESS 2, CITY, STATE, COUNTRY, ZIP</strong>"
+      blank_header: "One of the CSV headers is blank"
+      present_firstname: "First name is required on import"
       
   sms:
     keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
