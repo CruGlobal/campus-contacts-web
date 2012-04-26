@@ -24,7 +24,7 @@ gem 'carmen', git: 'git://github.com/twinge/carmen.git'
 gem 'ancestry'
 gem 'activeadmin', git: 'git://github.com/gregbell/active_admin.git'
 
-gem 'twilio-rb', git: 'https://github.com/stevegraham/twilio-rb.git'
+gem 'twilio-rb', git: 'git://github.com/stevegraham/twilio-rb.git'
 gem "default_value_for"
 
 gem 'dalli'
