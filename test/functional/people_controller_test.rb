@@ -149,11 +149,6 @@ class PeopleControllerTest < ActionController::TestCase
         @request.session[:current_organization_id] = @org.id
       end
       
-      should "include admin role in label selection" do
-        get :index
-        assert(!(assigns(:roles).include? Role.admin))
-      end
-      
       should "update roles with include_old_roles as parameter" do
         roles = []
         (1..3).each { |index| roles << Role.create!(organization_id: @org.id, 
