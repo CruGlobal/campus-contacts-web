@@ -583,10 +583,10 @@ update_persons_roles = () ->
 
   $('#apply_roles_spinner').show()
   $("#apply_roles_successful").hide()
-
   $('.role_id_checkbox:checked').each ->
-    role_id = $(this).val()
-    role_ids.push(role_id)    
+    if $(this).is ':enabled' #added for MH 299
+      role_id = $(this).val()
+      role_ids.push(role_id)    
 
   checked_elements = $('.id_checkbox:checked')
   
