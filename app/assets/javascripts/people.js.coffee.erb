@@ -512,10 +512,16 @@ $('.role_link_checkbox').live 'click', ->
   update_persons_roles()
    
 $('.id_checkbox').live 'click', ->
+  #selected = new Array()
+  #$("#people_table tr td input:checked").each ->
+  #  selected.push $(this).attr("name")
+
   mark_as_checked = $(this).is ':checked'
   role_labels = get_role_labels($(this))
+  #change_role_checkboxes(role_labels, mark_as_checked, selected.length)
   change_role_checkboxes(role_labels, mark_as_checked)
-  change_all_role_checkboxes(true) if !mark_as_checked  
+  change_all_role_checkboxes(true) if !mark_as_checked
+  disable_role_checkboxes()
 
 check_selected_people = () ->
   checked = $('.id_checkbox:checked').length
@@ -530,16 +536,32 @@ check_selected_roles = () ->
 get_role_labels = (obj) ->   
   $('span.role_label', obj.closest('tr'))
 
-change_role_checkboxes = (role_labels, check) ->
+disable_role_checkboxes = () -> # disable role checkboxes that only SOME of contacts have
+  role_labels_array = []
+  union = []
+  intersection = []
+  i = 0
+  $('input.id_checkbox:checked').each ->
+    role_labels = get_role_labels($(this))
+    role_labels_array.push role_labels
+  while(i < role_labels_array.length)
+    alert("HELLO!")
+    i++
+
+change_role_checkboxes = (role_labels, check, n) ->
   role_labels.each ->
     role = $(this).attr('id').split('_')
-    checkbox = '#role_ids_' + role[1] 
+    checkbox = '#role_ids_' + role[1]
+    #alert("YAHOO!") if $(checkbox).is(':not(:checked)') && n > 1
     $(checkbox).attr checked: check 
 
 change_all_role_checkboxes = (check) ->
+  #n = 1
   $('input.id_checkbox:checked').each ->
     role_labels = get_role_labels($(this))
-    change_role_checkboxes(role_labels, check) 
+    #change_role_checkboxes(role_labels, check, n)
+    change_role_checkboxes(role_labels, check)
+    #n += 1
 
 update_checkbox_checkmark = (role_checkbox) ->
   if role_checkbox.is ':checked'
