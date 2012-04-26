@@ -1,5 +1,5 @@
 class Ccc::Crs2Transaction < ActiveRecord::Base
-  set_table_name 'crs2_transaction'
+  self.table_name = 'crs2_transaction'
   belongs_to :crs2_transaction, class_name: 'Ccc::Crs2Transaction', foreign_key: :charge_cancellation_id
   belongs_to :crs2_conference, class_name: 'Ccc::Crs2Conference', foreign_key: :conference_id
   belongs_to :crs2_expense_selection, class_name: 'Ccc::Crs2ExpenseSelection', foreign_key: :expense_selection_id

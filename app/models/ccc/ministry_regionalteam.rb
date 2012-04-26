@@ -1,5 +1,5 @@
 class Ccc::MinistryRegionalteam < ActiveRecord::Base
-  set_primary_key :teamID
-  set_table_name 'ministry_regionalteam'
+  self.primary_key = 'teamID'
+  self.table_name = 'ministry_regionalteam'
   
 end

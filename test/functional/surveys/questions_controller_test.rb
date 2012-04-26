@@ -2,9 +2,10 @@ require 'test_helper'
 
 class Surveys::QuestionsControllerTest < ActionController::TestCase
   setup do 
-    @user = Factory(:user_with_auxs) 
+    @user, @org = admin_user_login_with_org
     sign_in @user
-    @survey = Factory(:survey, organization: @user.person.primary_organization)
+    Factory(:approved_keyword, organization: @org, user: @user)
+    @survey = @org.surveys.first
   end
   
   test "should get index" do
@@ -12,4 +13,5 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
     get :index, survey_id: @survey.id 
     assert_response :success
   end
+  
 end

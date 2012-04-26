@@ -3,8 +3,8 @@ module Ccc
 		extend ActiveSupport::Concern
 
   	included do
-    	set_primary_key :userID
-    	set_table_name 'simplesecuritymanager_user'
+    	self.primary_key = 'userID'
+    	self.table_name = 'simplesecuritymanager_user'
     	has_one :sp_user, class_name: 'Ccc::SpUser'
     	has_one :mpd_user, class_name: 'Ccc::MpdUser', dependent: :destroy
     	has_one :infobase_user, class_name: 'Ccc::InfobaseUser', dependent: :destroy

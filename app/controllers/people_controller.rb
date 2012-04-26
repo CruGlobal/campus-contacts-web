@@ -120,7 +120,7 @@ class PeopleController < ApplicationController
   end
 
   def merge_preview
-    render nothing and return false unless params[:id].to_i > 0
+    render :nothing => true and return false unless params[:id].to_i > 0
     @person = Person.find_by_personID(params[:id])
     respond_to do |wants|
       wants.js {  }

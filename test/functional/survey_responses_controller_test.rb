@@ -143,4 +143,17 @@ class SurveyResponsesControllerTest < ActionController::TestCase
     
   end
 
+  test "show" do
+    @user, @org = admin_user_login_with_org
+    get :show, { :id => @user.person.id }
+    assert_response :success
+    assert_not_nil assigns(:person)
+  end
+  
+  test "edit" do
+    @user, @org = admin_user_login_with_org
+    get :edit, { :id => @user.person.id }
+    assert_response :success
+    assert_not_nil assigns(:person)
+  end
 end

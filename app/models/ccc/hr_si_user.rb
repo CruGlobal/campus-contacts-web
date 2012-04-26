@@ -1,4 +1,4 @@
 class Ccc::HrSiUser < ActiveRecord::Base
-  set_primary_key :siUserID
+  self.primary_key = 'siUserID'
   
 end

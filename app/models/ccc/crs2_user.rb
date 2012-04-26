@@ -1,5 +1,5 @@
 class Ccc::Crs2User < ActiveRecord::Base
-  set_table_name 'crs2_user'
+  self.table_name = 'crs2_user'
   has_many :crs2_conferences, class_name: 'Ccc::Crs2Conference', foreign_key: :creator_id
   has_one :crs2_profile, class_name: 'Ccc::Crs2Profile', foreign_key: :user_id
   has_many :crs2_registrants, class_name: 'Ccc::Crs2Registrant', foreign_key: :cancelled_by_id

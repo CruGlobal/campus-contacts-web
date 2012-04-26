@@ -44,6 +44,50 @@ class SurveysControllerTest < ActionController::TestCase
         get :start, id: @survey.id
         assert_redirected_to "http://mhub.cc:80/surveys/#{@survey.id}/start"
       end
+      
+      should "stop" do
+        get :stop
+        assert_response :redirect
+        assert_equal nil, cookies[:survey_mode]
+        assert_equal nil, cookies[:keyword]
+        assert_equal nil, cookies[:survey_id]
+      end
     end
+  end
+  
+  should "get admin index" do
+    @user, @org = admin_user_login_with_org
+    get :index_admin
+    assert_not_nil assigns(:organization)
+  end
+  
+  should "render 404 if no user is logged in" do
+    get :index
+    assert_response :missing
+  end
+
+  test "destroy" do
+    request.env["HTTP_REFERER"] = "localhost:3000"
+    @user, @org = admin_user_login_with_org
+    keyword = Factory(:approved_keyword, user: @user, organization: @org)
+    assert_equal 1, @org.surveys.count
+    post :destroy, { :id => @org.surveys.first.id }
+    assert_equal 0, @org.surveys.count
+  end
+  
+  test "update" do
+    @user, @org = admin_user_login_with_org
+    keyword = Factory(:approved_keyword, user: @user, organization: @org)
+    put :update, { :id => @org.surveys.first.id, :survey => { :title => "wat" } }
+    assert_response :redirect
+    assert_equal "wat", @org.surveys.first.title
+  end
+  
+  test "create" do
+    @user, @org = admin_user_login_with_org
+    post :create, { :survey => {:title => "wat", :post_survey_message => "Yeah!", :login_option => 0 } }
+    assert_response :redirect
+    assert_equal 1, @org.surveys.count
+    assert_equal "wat", @org.surveys.first.title
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120307155057) do
+ActiveRecord::Schema.define(:version => 20120418155652) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -3254,8 +3254,8 @@ ActiveRecord::Schema.define(:version => 20120307155057) do
     t.text     "post_survey_message"
     t.string   "terminology",                        :default => "Survey"
     t.integer  "login_option",                       :default => 0
+    t.boolean  "is_frozen"
     t.string   "login_paragraph"
-    t.boolean  "frozen"
   end
 
   add_index "mh_surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
@@ -4410,6 +4410,7 @@ ActiveRecord::Schema.define(:version => 20120307155057) do
     t.integer  "organization_id"
     t.string   "followup_status"
     t.integer  "added_by_id"
+    t.boolean  "primary"
   end
 
   add_index "organizational_roles", ["organization_id", "role_id", "followup_status"], :name => "role_org_status"
@@ -4798,10 +4799,10 @@ ActiveRecord::Schema.define(:version => 20120307155057) do
 
   create_table "saved_contact_searches", :force => true do |t|
     t.string   "name"
+    t.string   "full_path",  :limit => 4000
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "full_path",  :limit => 200
   end
 
   add_index "saved_contact_searches", ["user_id"], :name => "index_saved_contact_searches_on_user_id"
@@ -5975,6 +5976,16 @@ ActiveRecord::Schema.define(:version => 20120307155057) do
     t.integer "toggle_id"
   end
 
+  create_table "sp_designation_numbers", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "project_id"
+    t.string   "designation_number"
+    t.integer  "account_balance",    :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "year"
+  end
+
   create_table "sp_donations", :force => true do |t|
     t.integer "designation_number",                                :null => false
     t.decimal "amount",             :precision => 10, :scale => 2, :null => false
@@ -6249,7 +6260,7 @@ ActiveRecord::Schema.define(:version => 20120307155057) do
     t.string   "city",                               :limit => 50
     t.string   "state",                              :limit => 50
     t.string   "country",                            :limit => 60
-    t.string   "aoa",                                :limit => 50
+    t.string   "world_region",                       :limit => 50
     t.string   "display_location",                   :limit => 100
     t.string   "primary_partner",                    :limit => 100
     t.string   "secondary_partner",                  :limit => 100
@@ -6332,6 +6343,13 @@ ActiveRecord::Schema.define(:version => 20120307155057) do
     t.integer  "template_question_sheet_id"
     t.integer  "project_specific_question_sheet_id"
     t.boolean  "high_school",                                        :default => false
+    t.date     "pd_start_date"
+    t.date     "pd_end_date"
+    t.date     "pd_close_start_date"
+    t.date     "pd_close_end_date"
+    t.date     "student_staff_start_date"
+    t.date     "student_staff_end_date"
+    t.boolean  "background_checks_required",                         :default => false
   end
 
   add_index "sp_projects", ["name"], :name => "sp_projects_name_index", :unique => true
@@ -6460,6 +6478,12 @@ ActiveRecord::Schema.define(:version => 20120307155057) do
   end
 
   add_index "sp_users", ["ssm_id"], :name => "sp_users_ssm_id_index", :unique => true
+
+  create_table "sp_world_regions", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "staffsite_staffsitepref", :primary_key => "StaffSitePrefID", :force => true do |t|
     t.string "name",                :limit => 64
