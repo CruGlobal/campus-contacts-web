@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '=3.2.2'
+gem 'rails', '~> 3.2.2'
 gem 'jquery-rails'
 gem 'mysql2', '~> 0.3.11'
 gem 'nokogiri'
@@ -31,7 +31,7 @@ gem 'dalli'
 gem 'resque_mail_queue'
 
 gem 'valium'
-gem 'newrelic_rpm', '3.1.1'
+gem 'newrelic_rpm'#, '3.1.1'
 gem "state_machine"
 gem 'acts_as_list'
 gem 'dynamic_form'

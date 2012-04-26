@@ -199,10 +199,13 @@ class Organization < ActiveRecord::Base
     end 
 
     def notify_admin_of_request
-      if parent
-        update_column(:status, 'active')
-      else
-        OrganizationMailer.enqueue.notify_admin_of_request(self.id)
+      begin 
+        if parent
+          update_column(:status, 'active')
+        else
+          OrganizationMailer.enqueue.notify_admin_of_request(self.id)
+        end
+      rescue ActiveRecord::RecordNotFound
       end
     end
 

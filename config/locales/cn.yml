@@ -457,7 +457,7 @@ cn:
         <p>%{added_by}</p>
   survey_mailer:
     notify:
-      content: %{name} (%{number},%{email}) just replied to a survey with %{answer}.
+      content: '%{name} (%{number},%{email}) just replied to a survey with %{answer}.'
   contacts:
     role_assign_success: 'Successfully assigned labels.'
     assign: Assign

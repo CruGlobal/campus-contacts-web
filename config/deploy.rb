@@ -1,6 +1,7 @@
 # require 'new_relic/recipes'
 require "bundler/capistrano"
 require 'airbrake/capistrano'
+load 'deploy/assets'
 set :whenever_command, "bundle exec whenever"
 require "whenever/capistrano"
 # This defines a deployment "recipe" that you can feed to capistrano
