@@ -24,6 +24,7 @@ class ImportsController < ApplicationController
   end
 
   def edit
+    get_survey_questions
   end
 
   def update
@@ -38,8 +39,9 @@ class ImportsController < ApplicationController
       render :show
       #redirect_to @import
     else
-     flash.now[:error] = errors.join('<br />').html_safe
-     render :edit
+      flash.now[:error] = errors.join('<br />').html_safe
+      get_survey_questions
+      render :edit
     end
   end
 
@@ -74,6 +76,16 @@ class ImportsController < ApplicationController
   def init_org
     @organization = current_organization
     authorize! :manage, @organization
+  end
+
+  def get_survey_questions
+    @survey_questions = Hash.new
+    current_organization.surveys.each do |survey|
+      @survey_questions[survey.title] = Hash.new
+      survey.all_questions.each do |q|
+        @survey_questions[survey.title][q.label] = q.id
+      end
+    end
   end
 
   def create_contact_from_row(params)

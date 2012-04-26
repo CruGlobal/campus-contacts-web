@@ -14,8 +14,6 @@ class Import < ActiveRecord::Base
 
   before_save :parse_headers
 
-  HEADERS = {" " => nil, "First Name"	=> "firstName", "Last Name"	=> "lastName",	"Status"	=> "status",	"Gender"	=> "gender",	"Email Address"	=> "email",	"Phone Number"	=> "phone_number",	"Address 1"	=> "address1", "Address 2"	=> "address2", "City"	=> "city", "State"	=> "state", "Country"	=> "country", "Zip"	=> "zip"}
-
   def get_new_people # generates array of Person hashes
     new_people = Array.new
 
@@ -25,27 +23,30 @@ class Import < ActiveRecord::Base
     csv.each do |row|
       person_hash = Hash.new
       person_hash[:person] = Hash.new
-      person_hash[:person][:firstName] = row[header_mappings.invert[HEADERS["First Name"]].to_i] if header_mappings.values.include?(HEADERS["First Name"])
-      person_hash[:person][:lastName] = row[header_mappings.invert[HEADERS["Last Name"]].to_i] if header_mappings.values.include?(HEADERS["Last Name"])
-      person_hash[:person][:gender] = row[header_mappings.invert[HEADERS["Gender"]].to_i] if header_mappings.values.include?(HEADERS["Gender"])
-      person_hash[:person][:email_address] = {:email => row[header_mappings.invert[HEADERS["Email Address"]].to_i], :primary => "1", :_destroy => "false"} if header_mappings.values.include?(HEADERS["Email Address"])
-      person_hash[:person][:phone_number] = {:number => row[header_mappings.invert[HEADERS["Phone Number"]].to_i], :location => "mobile", :primary => "1", :_destroy => "false"} if header_mappings.values.include?(HEADERS["Phone Number"])
-      person_hash[:person][:current_address_attributes] = Hash.new
-      person_hash[:person][:current_address_attributes][:address1] = row[header_mappings.invert[HEADERS["Address 1"]].to_i] if header_mappings.values.include?(HEADERS["Address 1"])
-      person_hash[:person][:current_address_attributes][:address2] = row[header_mappings.invert[HEADERS["Address 2"]].to_i] if header_mappings.values.include?(HEADERS["Address 2"])
-      person_hash[:person][:current_address_attributes][:city] = row[header_mappings.invert[HEADERS["City"]].to_i] if header_mappings.values.include?(HEADERS["City"])
-      person_hash[:person][:current_address_attributes][:state] = row[header_mappings.invert[HEADERS["State"]].to_i] if header_mappings.values.include?(HEADERS["State"])
-      person_hash[:person][:current_address_attributes][:country] = row[header_mappings.invert[HEADERS["Country"]].to_i] if header_mappings.values.include?(HEADERS["Country"])
-      person_hash[:person][:current_address_attributes][:zip] = row[header_mappings.invert[HEADERS["Zip"]].to_i] if header_mappings.values.include?(HEADERS["Zip"])
+      person_hash[:person][:firstName] = row[header_mappings.invert[Element.where(:attribute_name => "firstName").first.id.to_s].to_i]
 
+      answers = Hash.new
+
+      header_mappings.keys.each do |k|
+        answers[header_mappings[k].to_i] = row[k.to_i]
+      end
+
+      person_hash[:answers] = answers
       new_people << person_hash
     end
 
-    new_people
+  new_people
+
   end
 
   def check_for_errors # validating csv
     errors = []
+
+    unless header_mappings.values.include?(Element.where( :attribute_name => "firstName").first.id.to_s) #since first name is required for every contact. Look for id of element where attribute_name = 'firstName' in the header_mappings.
+      return errors << I18n.t('contacts.import_contacts.present_firstname')
+    end
+
+=begin
 
     flash_error = ""
     flash_error_first_name = "#{I18n.t('contacts.import_contacts.cause_1')}"
@@ -80,6 +81,7 @@ class Import < ActiveRecord::Base
     errors << flash_error_phone_no_format.gsub(/,\s$/, '') if flash_error_phone_no_format.include?(',')
     errors << flash_error_email_format.gsub(/,\s$/, '') if flash_error_email_format.include?(',')
     errors.insert(0, I18n.t('contacts.import_contacts.error')) unless errors.blank?
+=end
   end
 
   class NilColumnHeader < StandardError
