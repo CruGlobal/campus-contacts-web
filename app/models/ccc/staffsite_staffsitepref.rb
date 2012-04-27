@@ -1,5 +1,5 @@
 class Ccc::StaffsiteStaffsitepref < ActiveRecord::Base
-  set_primary_key :StaffSitePrefID
-  set_table_name 'staffsite_staffsitepref'
+  self.primary_key = 'StaffSitePrefID'
+  self.table_name = 'staffsite_staffsitepref'
   
 end

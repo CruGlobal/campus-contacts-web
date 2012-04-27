@@ -1,6 +1,7 @@
 # require 'new_relic/recipes'
 require "bundler/capistrano"
 require 'airbrake/capistrano'
+load 'deploy/assets'
 set :whenever_command, "bundle exec whenever"
 require "whenever/capistrano"
 # This defines a deployment "recipe" that you can feed to capistrano
@@ -131,7 +132,7 @@ set :use_sudo, false
 # narrow the set of servers to a subset of a role by specifying options, which
 # must match the options given for the servers to select (like primary: true)
 
-after 'deploy:update_code', 'local_changes'
+before 'deploy:assets:precompile', 'local_changes'
 desc "Add linked files after deploy and set permissions"
 task :local_changes, roles: :app do
   run <<-CMD
@@ -162,17 +163,17 @@ task :long_deploy do
   # deploy.enable_web
 end
 # after "deploy:update", "newrelic:notice_deployment"
-before :"deploy:symlink", :"assets:precompile";
-namespace :assets do
-  task :precompile, roles: :web do
-    run "ln -s #{shared_path}/assets #{release_path}/public/assets"
-    run "cd #{release_path} && bundle exec rake assets:precompile RAILS_ENV=#{rails_env}"
-  end
+#before :"deploy:symlink", :"assets:precompile";
+#namespace :assets do
+  #task :precompile, roles: :web do
+    #run "ln -s #{shared_path}/assets #{release_path}/public/assets"
+    #run "cd #{release_path} && bundle exec rake assets:precompile RAILS_ENV=#{rails_env}"
+  #end
 
-  task :cleanup, :roles => :web do
-    run "cd #{current_path} && RAILS_ENV=production bundle exec rake assets:clean"
-  end
-end
+  #task :cleanup, :roles => :web do
+    #run "cd #{current_path} && RAILS_ENV=production bundle exec rake assets:clean"
+  #end
+#end
 
 if rails_env == 'production'
   after "deploy:symlink", "deploy:migrate"

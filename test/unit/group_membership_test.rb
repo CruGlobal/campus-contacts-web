@@ -1,7 +1,9 @@
 require 'test_helper'
 
 class GroupMembershipTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  should belong_to(:group)
+  should belong_to(:person)
+  should belong_to(:leader)
+  should belong_to(:member)
+  should belong_to(:involved)
 end

@@ -17,7 +17,8 @@ class PeopleController < ApplicationController
     if can? :manage, current_organization
       @roles = current_organization.roles
     else
-      @roles = current_organization.roles.where("id != ?", Role::ADMIN_ID)
+      #@roles = current_organization.roles.where("id != ?", Role::ADMIN_ID)
+      @roles = current_organization.roles
     end
 
   end
@@ -40,9 +41,10 @@ class PeopleController < ApplicationController
   # GET /people/1.xml
   def show
     @person = Person.find(params[:id])
-    @assigned_tos = @person.assigned_tos.collect { |a| a.assigned_to.name }.to_sentence
-    @org_friends = Person.find(params[:id]).friends.collect { |f| Person.find_by_fb_uid(f.uid).nil? ? [] : Person.find_by_fb_uid(f.uid) } & current_organization.people
+    @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id).collect { |a| a.assigned_to.name }.to_sentence
+    @org_friends = current_organization.people.find_friends_with_fb_uid(params[:id])
     authorize!(:read, @person)
+
     if can? :manage, @person
       @organizational_role = OrganizationalRole.where(organization_id: current_organization, person_id: @person, role_id: Role::CONTACT_ID).first
       @followup_comment = FollowupComment.new(organization: current_organization, commenter: current_person, contact: @person, status: @organizational_role.followup_status) if @organizational_role
@@ -118,7 +120,7 @@ class PeopleController < ApplicationController
   end
 
   def merge_preview
-    render nothing and return false unless params[:id].to_i > 0
+    render :nothing => true and return false unless params[:id].to_i > 0
     @person = Person.find_by_personID(params[:id])
     respond_to do |wants|
       wants.js {  }
