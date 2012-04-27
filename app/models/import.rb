@@ -45,43 +45,6 @@ class Import < ActiveRecord::Base
     unless header_mappings.values.include?(Element.where( :attribute_name => "firstName").first.id.to_s) #since first name is required for every contact. Look for id of element where attribute_name = 'firstName' in the header_mappings.
       return errors << I18n.t('contacts.import_contacts.present_firstname')
     end
-
-=begin
-
-    flash_error = ""
-    flash_error_first_name = "#{I18n.t('contacts.import_contacts.cause_1')}"
-    flash_error_phone_no_format = "#{I18n.t('contacts.import_contacts.cause_2')}"
-    flash_error_email_format = "#{I18n.t('contacts.import_contacts.cause_3')}"
-
-    unless header_mappings.values.include?(HEADERS["First Name"]) #since first name is required for every contact
-      return errors << I18n.t('contacts.import_contacts.present_firstname')
-    end
-
-    csv = CSV.readlines(upload.path)
-    csv.shift #skip headers
-
-    csv.each_with_index do |row, i| # every csv rows
-      next if is_row_blank?(row) # skip headers or skip blank row
-      # if firstName is blank
-      if !row[header_mappings.invert[HEADERS["First Name"]].to_i].to_s.match /[a-z]/ 
-        flash_error_first_name = flash_error_first_name + " #{i+2}, "
-      end
-      # row number of phone number in csv file
-      phone_r = header_mappings.invert[HEADERS["Phone Number"]].to_i
-      if header_mappings.values.include?(HEADERS["Phone Number"]) && row[phone_r].to_s.gsub(/[^\d]/,'').length < 7 && !row[phone_r].nil? # if phone_number length < 7
-        flash_error_phone_no_format = flash_error_phone_no_format + " #{i+2}, "
-      end
-       # if email has wrong formatting
-      if header_mappings.values.include?(HEADERS["Email Address"]) && !row[header_mappings.invert[HEADERS["Email Address"]].to_i].to_s.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
-        flash_error_email_format = flash_error_email_format + " #{i+2}, "
-      end
-    end
-
-    errors << flash_error_first_name.gsub(/,\s$/, '') if flash_error_first_name.include?(',')
-    errors << flash_error_phone_no_format.gsub(/,\s$/, '') if flash_error_phone_no_format.include?(',')
-    errors << flash_error_email_format.gsub(/,\s$/, '') if flash_error_email_format.include?(',')
-    errors.insert(0, I18n.t('contacts.import_contacts.error')) unless errors.blank?
-=end
   end
 
   class NilColumnHeader < StandardError
