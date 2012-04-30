@@ -37,7 +37,7 @@ class ImportsController < ApplicationController
       end
       flash.now[:notice] = t('contacts.import_contacts.success')
       #render :show
-      redirect_to :new
+      render :new
     else
       flash.now[:error] = errors.join('<br />').html_safe
       get_survey_questions
@@ -107,7 +107,16 @@ class ImportsController < ApplicationController
         @answer_sheets = []
         @organization ||= current_organization
 
-        @organization.surveys.each do |survey|
+        survey_keys = Array.new
+
+        params[:answers].keys.each do |key|
+          survey_keys << Element.find(key).surveys.first.id
+        end
+
+        survey_keys.uniq!
+
+        survey_keys.each do |key|
+          survey = Survey.find(key)
           @answer_sheet = get_answer_sheet(survey, @person)
           question_set = QuestionSet.new(survey.questions, @answer_sheet)
           question_set.post(params[:answers], @answer_sheet)

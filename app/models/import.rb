@@ -28,7 +28,7 @@ class Import < ActiveRecord::Base
       answers = Hash.new
 
       header_mappings.keys.each do |k|
-        answers[header_mappings[k].to_i] = row[k.to_i]
+        answers[header_mappings[k].to_i] = row[k.to_i] unless header_mappings[k] == ''
       end
 
       person_hash[:answers] = answers

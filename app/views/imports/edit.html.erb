@@ -12,7 +12,7 @@
 <%= form_for @import do |f| %>
     <% @import.headers.each_with_index do |header, i| %>
     <div class="stepwrap rwidth">
-      <%= header %>: <%= select_tag "import[header_mappings][#{i}]", grouped_options_for_select(@survey_questions) %><br>
+      <%= header %>: <%= select_tag "import[header_mappings][#{i}]", grouped_options_for_select(@survey_questions, @import.header_mappings.blank? ? "" : @import.header_mappings[i.to_s]  ), :include_blank => true %><br>
     </div>
     <% end %>
   <%= image_tag("step3.png") %><br/>
