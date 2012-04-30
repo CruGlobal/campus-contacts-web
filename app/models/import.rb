@@ -9,7 +9,7 @@ class Import < ActiveRecord::Base
   belongs_to :user
   belongs_to :organization
 
-  has_attached_file :upload, s3_credentials: 'config/s3.yml', s3_permissions: :private, bucket: 'dev',
+  has_attached_file :upload, s3_credentials: 'config/s3.yml', s3_permissions: :private,
                              path: 'mh/imports/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy
 
   before_save :parse_headers
@@ -58,17 +58,12 @@ class Import < ActiveRecord::Base
     return unless upload?
     tempfile = upload.queued_for_write[:original]
     unless tempfile.nil?
-      csv = CSV.new(tempfile, :headers => :first_row)
-=begin
-      puts upload.path
-      CSV.foreach("mh/imports/uploads/82/sample_(copy).csv") do |row|
-        self.headers = row
-        break
+      File.open(tempfile.path) do |f|
+        csv = CSV.new(f, :headers => :first_row)
+        csv.shift
+        raise NilColumnHeader if csv.headers.include?(nil)
+        self.headers = csv.headers
       end
-=end
-      csv.shift
-      raise NilColumnHeader if csv.headers.include?(nil)
-      self.headers = csv.headers
     end
   end
 
