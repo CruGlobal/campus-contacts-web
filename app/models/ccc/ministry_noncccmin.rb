@@ -1,5 +1,5 @@
 class Ccc::MinistryNoncccmin < ActiveRecord::Base
-  set_primary_key :NonCccMinID
-  set_table_name 'ministry_noncccmin'
+  self.primary_key = 'NonCccMinID'
+  self.table_name = 'ministry_noncccmin'
   
 end

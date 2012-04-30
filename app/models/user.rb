@@ -5,8 +5,8 @@ class User < ActiveRecord::Base
     include Ccc::SimplesecuritymanagerUser
   rescue LoadError; end
   WIZARD_STEPS = %w[welcome verify keyword survey leaders]
-  set_table_name 'simplesecuritymanager_user'
-  set_primary_key 'userID'
+  self.table_name = 'simplesecuritymanager_user'
+  self.primary_key = 'userID'
   
   has_one :person, foreign_key: 'fk_ssmUserId'
   has_many :authentications
@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
          :rememberable, :trackable, :validatable, :omniauthable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :remember_me, :password
+  attr_accessible :email, :remember_me, :password, :username
   # alias_method :find_by_userID, :find_by_id
   def self.find_by_id(*args)
     find_by_userID(args)

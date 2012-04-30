@@ -1,6 +1,6 @@
 require 'answer_sheet'
 class Ccc::PrPersonalForm < AnswerSheet
-  set_table_name "pr_personal_forms"
+  self.table_name = "pr_personal_forms"
 
   belongs_to :person
   belongs_to :question_sheet

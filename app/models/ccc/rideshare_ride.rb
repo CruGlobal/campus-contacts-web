@@ -1,5 +1,5 @@
 class Ccc::RideshareRide < ActiveRecord::Base
 	#belongs_to :person
-  set_table_name 'rideshare_ride'
+  self.table_name = 'rideshare_ride'
 
 end

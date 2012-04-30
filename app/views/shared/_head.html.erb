@@ -10,6 +10,7 @@
 
 <script type="text/javascript">if (window.location.hash == '#_=_')window.location.hash = '';</script>
 
+<%= stylesheet_link_tag "http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/redmond/jquery-ui.css" %>
 <%= stylesheet_link_tag '/stylesheets/smoothness/jquery-ui-1.8.7.custom.css' %>
 <%= stylesheet_link_tag 'application' %>
 <%= stylesheet_link_tag 'no_left_sidebar' if no_left_sidebar %>
@@ -21,8 +22,6 @@
   I18n.locale = "<%= I18n.locale %>";
 </script>
 <%#= stylesheet_link_tag 'smoothness/jquery-ui-1.8.7.custom' %>
-
-<%= stylesheet_link_tag "http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/redmond/jquery-ui.css", "application" %>
 
 <%= csrf_meta_tag %>
 <script type="text/javascript" charset="utf-8">

@@ -1,5 +1,5 @@
 class Ccc::MinistryAddres < ActiveRecord::Base
-  set_primary_key :AddressID
-  set_table_name 'ministry_address'
+  self.primary_key = 'AddressID'
+  self.table_name = 'ministry_address'
   
 end

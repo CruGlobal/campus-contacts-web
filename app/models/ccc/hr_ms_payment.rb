@@ -1,5 +1,5 @@
 class Ccc::HrMsPayment < ActiveRecord::Base
-  set_primary_key :paymentID
-  set_table_name 'hr_ms_payment'
+  self.primary_key = 'paymentID'
+  self.table_name = 'hr_ms_payment'
   
 end

@@ -1,5 +1,5 @@
 class EducationHistory < ActiveRecord::Base
-  set_table_name 'mh_education_histories'
+  self.table_name = 'mh_education_histories'
   belongs_to :person
   validates_presence_of :person_id, :school_id, :school_name, :provider, :school_type, on: :create, message: "can't be blank"
 

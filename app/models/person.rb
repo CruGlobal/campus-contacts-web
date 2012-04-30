@@ -4,8 +4,8 @@ require 'ccc/person'
 
 class Person < ActiveRecord::Base
   include Ccc::Person
-  set_table_name 'ministry_person'
-  set_primary_key 'personID'
+  self.table_name = 'ministry_person'
+  self.primary_key = 'personID'
 
   belongs_to :user, class_name: 'User', foreign_key: 'fk_ssmUserId'
   has_many :phone_numbers
@@ -69,6 +69,12 @@ class Person < ActiveRecord::Base
     :joins => "JOIN organizational_roles ON ministry_person.personID = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id",
     :conditions => "roles.name NOT IN #{Role.default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}",
     :order => "roles.name #{order.include?("asc") ? 'DESC' : 'ASC'}"
+  } }
+
+  scope :find_friends_with_fb_uid, lambda { |id| {
+    :select => "ministry_person.*",
+    :joins => "LEFT JOIN mh_friends ON ministry_person.fb_uid = mh_friends.uid",
+    :conditions => "mh_friends.person_id = #{id}",
   } }
 
   def update_date_attributes_updated

@@ -73,4 +73,52 @@ class GroupMembershipsControllerTest < ActionController::TestCase
       end
     end
   end
+  
+  context "search" do
+    setup do
+      @user, @org = admin_user_login_with_org
+      
+      p1 = Factory(:person, firstName: "Tony", lastName: "Stark")
+      p2 = Factory(:person, firstName: "Tony", lastName: "Banner")
+      
+      @org.add_contact(p1)
+      @org.add_contact(p2)
+    end
+    
+    should "search when show all is false" do     
+      xhr :get, :search, { :name => "Tony" }
+      assert_not_nil assigns(:people)
+      assert_not_nil assigns(:total)
+      assert_equal 2, assigns(:total)
+    end
+    
+    should "search when show all is true" do
+      xhr :get, :search, { :name => "Tony", :show_all => true }
+      assert_not_nil assigns(:people)
+      assert_not_nil assigns(:total)
+      assert_equal assigns(:total), assigns(:people).all.length
+    end
+    
+    should "render nothing when no param is found" do
+      xhr :get, :search
+      assert_equal " ", response.body
+    end
+  end
+  
+  test "destroy" do
+    user, org = admin_user_login_with_org
+    group = Factory(:group, organization: org)
+    person = Factory(:person)
+    request.session[:current_organization_id] = org.id 
+    
+    xhr :post, :create, { :group_id => group.id, :person_id => person.id, :role => "member", :from_add_member_screen => "true" }
+    assert_response :success
+    assert_equal 1, GroupMembership.count
+    
+    gm = GroupMembership.last
+    xhr :post, :destroy, { :id => gm.id, :group_id => group.id }
+    assert_not_nil assigns(:group)
+    assert_not_nil assigns(:group_membership)
+    assert_equal 0, GroupMembership.count
+  end
 end

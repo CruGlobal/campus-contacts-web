@@ -109,7 +109,11 @@ namespace :infobase do
           next unless team
           m = team.children.create!(attribs) 
           m.target_areas << target
-          m.save!
+          begin
+            m.save!
+          rescue => e
+            Rails.logger.info e.inspect
+          end
         end
       end
       

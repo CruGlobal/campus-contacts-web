@@ -1,6 +1,7 @@
 # require 'new_relic/recipes'
 require "bundler/capistrano"
 require 'airbrake/capistrano'
+#load 'deploy/assets'
 set :whenever_command, "bundle exec whenever"
 require "whenever/capistrano"
 # This defines a deployment "recipe" that you can feed to capistrano
@@ -90,7 +91,7 @@ deploy.task :restart, :roles => [:app], :except => {:no_release => true} do
     servers.map do |s|
       run "cd #{deploy_to}/current && echo '' > public/lb.html", :hosts => s.host
       run "touch #{current_path}/tmp/restart.txt", :hosts => s.host
-      sleep 60
+      #sleep 60
       run "cd #{deploy_to}/current && echo 'ok' > public/lb.html", :hosts => s.host
     end
   else
@@ -162,7 +163,7 @@ task :long_deploy do
   # deploy.enable_web
 end
 # after "deploy:update", "newrelic:notice_deployment"
-before :"deploy:symlink", :"assets:precompile";
+after :"local_changes", :"assets:precompile";
 namespace :assets do
   task :precompile, roles: :web do
     run "ln -s #{shared_path}/assets #{release_path}/public/assets"
