@@ -32,6 +32,7 @@ class Import < ActiveRecord::Base
       end
 
       person_hash[:answers] = answers
+      puts person_hash
       new_people << person_hash
     end
 
@@ -58,6 +59,13 @@ class Import < ActiveRecord::Base
     tempfile = upload.queued_for_write[:original]
     unless tempfile.nil?
       csv = CSV.new(tempfile, :headers => :first_row)
+=begin
+      puts upload.path
+      CSV.foreach("mh/imports/uploads/82/sample_(copy).csv") do |row|
+        self.headers = row
+        break
+      end
+=end
       csv.shift
       raise NilColumnHeader if csv.headers.include?(nil)
       self.headers = csv.headers

@@ -2,9 +2,23 @@
   <%= render 'contacts/leaders' %>
 <% end %>
 
+<div class="contentpad">
+<%= image_tag("step2.png") %><br/>
+
+<ol class="instructions">
+  <li><span class="name">Match your CSV headers to correspond with Person attributes or Survey questions. Remember that <strong>first name</strong> is required.</span>
+</ol>
+
 <%= form_for @import do |f| %>
     <% @import.headers.each_with_index do |header, i| %>
+    <div class="stepwrap rwidth">
       <%= header %>: <%= select_tag "import[header_mappings][#{i}]", grouped_options_for_select(@survey_questions) %><br>
+    </div>
     <% end %>
-  <%= submit_tag 'Update', :value=>"Update" %>
+  <%= image_tag("step3.png") %><br/>
+  <ol class="instructions">
+    <li><span class="name">Click <strong>import</strong> to import the people from your CSV file.</span>
+  </ol>
+  <%= submit_tag 'Import', :value=>"import" %>
 <% end %>
+</div>

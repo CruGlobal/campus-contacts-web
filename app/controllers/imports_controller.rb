@@ -36,8 +36,8 @@ class ImportsController < ApplicationController
         create_contact_from_row(new_people)
       end
       flash.now[:notice] = t('contacts.import_contacts.success')
-      render :show
-      #redirect_to @import
+      #render :show
+      redirect_to :new
     else
       flash.now[:error] = errors.join('<br />').html_safe
       get_survey_questions
