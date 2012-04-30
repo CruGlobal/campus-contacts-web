@@ -44,7 +44,11 @@ class Import < ActiveRecord::Base
     errors = []
 
     unless header_mappings.values.include?(Element.where( :attribute_name => "firstName").first.id.to_s) #since first name is required for every contact. Look for id of element where attribute_name = 'firstName' in the header_mappings.
-      return errors << I18n.t('contacts.import_contacts.present_firstname')
+      errors << I18n.t('contacts.import_contacts.present_firstname')
+    end
+
+    if header_mappings.values.length > header_mappings.values.uniq.length # if they don't have the same length that means the user has selected on at least two of the headers the same selected person attribute/survey question
+      return errors << I18n.t('contacts.import_contacts.duplicate_header_match')
     end
   end
 

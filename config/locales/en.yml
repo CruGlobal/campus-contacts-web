@@ -618,6 +618,7 @@ en:
       tip_2: "In your first row list the headings like it shows here: <strong>FIRST NAME, LAST NAME, STATUS, GENDER, EMAIL, PHONE NUMBER, ADDRESS 1, ADDRESS 2, CITY, STATE, COUNTRY, ZIP</strong>"
       blank_header: "One of the CSV headers is blank"
       present_firstname: "First name is required on import"
+      duplicate_header_match: "At least two of the headers has the same selected person attribute/survey question"
       
   sms:
     keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
