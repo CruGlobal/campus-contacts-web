@@ -54,37 +54,6 @@ class Import < ActiveRecord::Base
     if a.length > a.uniq.length # if they don't have the same length that means the user has selected on at least two of the headers the same selected person attribute/survey question
       return errors << I18n.t('contacts.import_contacts.duplicate_header_match')
     end
-
-=begin
-    flash_error = ""
-    flash_error_phone_no_format = "#{I18n.t('contacts.import_contacts.cause_2')}"
-    flash_error_email_format = "#{I18n.t('contacts.import_contacts.cause_3')}"
-
-    csv = CSV.readlines(upload.path)
-    csv.shift #skip headers
-
-    csv.each_with_index do |row, i| # every csv rows
-      next if is_row_blank?(row) # skip headers or skip blank row
-
-      # row number of phone number in csv file
-      if Element.where(:attribute_name => "phone_number")
-        phone_r = header_mappings.invert[Element.where(:attribute_name => "phone_number").id.to_s].to_i
-        if header_mappings.values.include?(Element.where(:attribute_name => "phone_number").id.to_s) && row[phone_r].to_s.gsub(/[^\d]/,'').length < 7 && !row[phone_r].nil? # if phone_number length < 7
-         flash_error_phone_no_format = flash_error_phone_no_format + " #{i+2}, "
-        end
-      end
-      # if email has wrong formatting
-      if Element.where(:attribute_name => "email")
-        if header_mappings.values.include?(Element.where(:attribute_name => "email").id.to_s) && !row[header_mappings.invert[Element.where(:attribute_name => "email").id.to_s].to_i].match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
-         flash_error_email_format = flash_error_email_format + " #{i+2}, "
-        end
-      end
-    end
-
-    errors << flash_error_phone_no_format.gsub(/,\s$/, '') if flash_error_phone_no_format.include?(',')
-    errors << flash_error_email_format.gsub(/,\s$/, '') if flash_error_email_format.include?(',')
-    errors.insert(0, I18n.t('contacts.import_contacts.error')) unless errors.blank?
-=end
   end
 
   class NilColumnHeader < StandardError
