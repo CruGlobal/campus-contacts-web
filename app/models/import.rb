@@ -12,10 +12,13 @@ class Import < ActiveRecord::Base
   has_attached_file :upload, s3_credentials: 'config/s3.yml', s3_permissions: :private,
                              path: 'mh/imports/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy
 
+  validates :upload, attachment_presence: true
+
   before_save :parse_headers
 
   def get_new_people # generates array of Person hashes
     new_people = Array.new
+    first_name_question = Element.where( :attribute_name => "firstName").first.id.to_s
 
     csv = CSV.readlines(upload.path)
     csv.shift #skip headers
@@ -23,7 +26,7 @@ class Import < ActiveRecord::Base
     csv.each do |row|
       person_hash = Hash.new
       person_hash[:person] = Hash.new
-      person_hash[:person][:firstName] = row[header_mappings.invert[Element.where(:attribute_name => "firstName").first.id.to_s].to_i]
+      person_hash[:person][:firstName] = row[header_mappings.invert[first_name_question].to_i]
 
       answers = Hash.new
 
@@ -36,24 +39,25 @@ class Import < ActiveRecord::Base
       new_people << person_hash
     end
 
-  new_people
+    new_people
 
   end
 
   def check_for_errors # validating csv
     errors = []
 
-    unless header_mappings.values.include?(Element.where( :attribute_name => "firstName").first.id.to_s) #since first name is required for every contact. Look for id of element where attribute_name = 'firstName' in the header_mappings.
+    #since first name is required for every contact. Look for id of element where attribute_name = 'firstName' in the header_mappings.
+    first_name_question = Element.where( :attribute_name => "firstName").first.id.to_s
+    unless header_mappings.values.include?(first_name_question) 
       errors << I18n.t('contacts.import_contacts.present_firstname')
     end
 
     a = header_mappings.values
-    puts a
     a.delete("")
-    puts a
     if a.length > a.uniq.length # if they don't have the same length that means the user has selected on at least two of the headers the same selected person attribute/survey question
       return errors << I18n.t('contacts.import_contacts.duplicate_header_match')
     end
+    errors
   end
 
   class NilColumnHeader < StandardError
@@ -69,8 +73,8 @@ class Import < ActiveRecord::Base
       File.open(tempfile.path) do |f|
         csv = CSV.new(f, :headers => :first_row)
         csv.shift
-        raise NilColumnHeader if csv.headers.include?(nil)
-        self.headers = csv.headers
+        self.headers = csv.headers.compact
+        raise NilColumnHeader if headers.empty?
       end
     end
   end

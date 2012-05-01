@@ -234,184 +234,17 @@ class ContactsController < ApplicationController
     authorize! :manage, @organization
   end
 
-  def csv_import
-    @organization = current_organization
-    flash_error = ""
-    flash_error_first_name = "#{t('contacts.import_contacts.cause_1')}"
-    flash_error_phone_no_format = "#{t('contacts.import_contacts.cause_2')}"
-    flash_error_email_format = "#{t('contacts.import_contacts.cause_3')}"
-
-    n = 0
-    wrong_headers_error = false
-    error = false
-    success = false
-    flash_error = ""
-    a = Array.new
-    c = Array.new
-    #headers hash - where we will place column numbers
-    headers = {"first name"	=> false, "last name"	=> false,	"status"	=> false,	"gender"	=> false,	"what is your email address?"	=> false,	"phone number"	=> false,	"address 1"	=> false, "address 2"	=> false, "city"	=> false, "state"	=> false, "country"	=> false, "zip"	=> false}
-
-    CSV.foreach(params[:dump][:file].path.to_s) do |row|
-
-      #for csv file headers
-      if n == 0
-        #determining which columns are headers (data) are placed
-        num = 0
-        row.each do |r|
-          if !r.nil? && headers.keys.include?(r.downcase)
-            headers[r.downcase] = num
-          else
-            wrong_headers_error = true
-            flash_error = "Wrong header at column #{num + 1}"
-            error = true
-            break
-          end
-          num += 1
-        end
-        break if wrong_headers_error # error found in header
-
-        if headers["first name"] == false || headers["what is your email address"] == false
-          wrong_headers_error = true
-          flash_error = "Column that contains 'first name' is not found. The said column is strictly required"
-          error = true
-          break #if first name column is not found in the csv file
-        end
-
-        puts headers
-
-        #when row length is more than 12, there is a survey
-        if row.length >= 12
-          row[12..row.length-1].each do |r|
-            c << r.split(" :: ").first
-          end
-        end
-        n += 1
-        next
-      end
-      
-      n += 1
-
-      #ignoring a row that has no entries (blank row)
-      num = 0
-      row.each do |ro|
-        break if !ro.nil?
-        num = num + 1
-      end
-      next if num == row.length
-
-
-      if !row[headers["first name"]].to_s.match /[a-z]/ # if firstName is blank
-        #flash_error = flash_error + "#{t('contacts.import_contacts.cause_1')} #{n},"
-        flash_error_first_name = flash_error_first_name + " #{n}, "
-        error = true
-        next
-      end
-
-      if headers["phone number"] && row[headers["phone number"]].to_s.gsub(/[^\d]/,'').length < 7 && !row[headers["phone number"]].nil? # if phone_number length < 7
-        #flash_error = flash_error + "#{t('contacts.import_contacts.cause_2')} #{n},"
-        flash_error_phone_no_format = flash_error_phone_no_format + " #{n}, "
-        error = true
-        next
-      end
-
-      if !row[headers["what is your email address?"]].to_s.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i) # if email has wrong formatting
-        #flash_error = flash_error + "#{t('contacts.import_contacts.cause_3')} #{n},"
-        flash_error_email_format = flash_error_email_format + " #{n}, "
-        error = true
-        next
-      end
-      # surveys starts at row  12
-      person_hash = Hash.new
-      person_hash[:person] = Hash.new
-      person_hash[:person][:firstName] = row[headers["first name"]] if headers["first name"]
-      person_hash[:person][:lastName] = row[headers["last name"]] if headers["last name"]
-      person_hash[:person][:gender] = row[headers["gender"]] if headers["gender"]
-      person_hash[:person][:email_address] = {:email => row[headers["what is your email address?"]], :primary => "1", :_destroy => "false"} if headers["what is your email address?"]
-      person_hash[:person][:phone_number] = {:number => row[headers["phone number"]], :location => "mobile", :primary => "1", :_destroy => "false"} if headers["phone number"]
-      person_hash[:person][:current_address_attributes] = Hash.new
-      person_hash[:person][:current_address_attributes][:address1] = row[headers["address 1"]] if headers["address 1"]
-      person_hash[:person][:current_address_attributes][:address2] = row[headers["address 2"]] if headers["address 2"]
-      person_hash[:person][:current_address_attributes][:city] = row[headers["city"]] if headers["city"]
-      person_hash[:person][:current_address_attributes][:state] = row[headers["state"]] if headers["state"]
-      person_hash[:person][:current_address_attributes][:country] = row[headers["country"]] if headers["country"]
-      person_hash[:person][:current_address_attributes][:zip] = row[headers["zip"]] if headers["zip"]
-      #{:person => {:firstName => row[0], :lastName => row[1], :gender => row[3], :email_address => {:email => row[4], :primary => "1", :_destroy => "false"}, :phone_number => {:number => row[5], :location => "mobile", :primary => "1", :_destroy => "false"}, :current_address_attributes => { :address1 => row[6], :address2 => row[7], :city => row[8], :state => row[9], :country => row[10], :zip => row[11]} }}
-      a << person_hash
-=begin
-      b = Hash.new
-
-
-      #creating hash for answers
-      l = 0
-      row[12..row.length-1].each do |r|
-        #if with multiple answers
-        g = g.nil? ? 0 : r.split(",").length
-        if g > 1
-          q = Hash.new
-          for i in 0..g-1 do
-            q[i.to_s] = r.split(",")[i].strip
-          end
-          b[c[l]] = q
-          l = l + 1
-          next
-        end
-
-        b[c[l]] = r
-        l = l + 1
-      end
-
-      a.last[:answers] = b
-      puts a.last[:answers]
-=end
-      success = true
-    end
-
-    if success
-      a.each do |p|
-        create_contact_from_row(p)
-      end
-
-      flash.now[:notice] = t('contacts.import_contacts.success')
-    end
-    flash_error = flash_error_first_name.include?(",") ? flash_error + flash_error_first_name + " <br/>": flash_error
-    flash_error = flash_error_phone_no_format.include?(",") ? flash_error + flash_error_phone_no_format + " <br/>" : flash_error
-    flash_error = flash_error_email_format.include?(",") ? flash_error + flash_error_email_format + " <br/>"  : flash_error
-    flash_error = t('contacts.import_contacts.error') + "<br/>" + flash_error unless wrong_headers_error
-    flash.now[:error] = flash_error.html_safe if error
-
-    render :import_contacts
-  end
 
   def download_sample_contacts_csv
 
     csv_string = CSV.generate do |csv|
       c = 0
       CSV.foreach(Rails.root.to_s + "/public/files/sample_contacts.csv") do |row|
-=begin
-        #include in the sample csv the survey questions
-        if c == 0
-          current_organization.surveys.flatten.uniq.each do |survey|
-            survey.all_questions.each do |q|
-              begin
-                d = ""
-                q.choices.each do |choice|
-                  d = d + choice[1] + ", "
-                end
-                d[d.length-2..d.length-1] = ""
-                row << "#{q.id} :: #{q.label} #{t('survey_responses.edit.multiple_answers') if q.style == "checkbox"} (#{d})"
-              rescue
-                row << "#{q.id} :: #{q.label}"
-              end
-            end
-          end
-        end
-=end
         c = c + 1
         csv << row
       end
     end
 
-    #send_file Rails.root.to_s + '/public' + '/files/sample_contacts.csv', :type=>"application/csv"#, :x_sendfile=>true
     send_data csv_string, :type => 'text/csv; charset=UTF-8; header=present', :disposition => "attachment; filename=sample_contacts.csv"
   end
   
@@ -443,36 +276,4 @@ class ContactsController < ApplicationController
       answers
     end
 
-    def create_contact_from_row(params)
-      @organization ||= current_organization
-      Person.transaction do
-        params[:person] ||= {}
-        params[:person][:email_address] ||= {}
-        params[:person][:phone_number] ||= {}
-
-        @person, @email, @phone = create_person(params[:person])
-        if @person.save
-
-          create_contact_at_org(@person, @organization)
-          if params[:assign_to_me] == 'true'
-            ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
-            ContactAssignment.create!(person_id: @person.id, organization_id: @organization.id, assigned_to_id: current_person.id)
-          end
-
-
-          @answer_sheets = []
-          @organization ||= current_organization
-
-          @organization.surveys.each do |survey|
-            @answer_sheet = get_answer_sheet(survey, @person)
-            question_set = QuestionSet.new(survey.questions, @answer_sheet)
-            question_set.post(params[:answers], @answer_sheet)
-            question_set.save
-            @answer_sheets << @answer_sheet
-          end
-
-          return
-        end
-      end
-    end
 end

@@ -19,6 +19,7 @@ class ImportsController < ApplicationController
     if @import.save
       redirect_to edit_import_path(@import)
     else
+      init_org
       render :new
     end
   end
@@ -32,16 +33,24 @@ class ImportsController < ApplicationController
     errors = @import.check_for_errors
 
     if errors.blank?
-      @import.get_new_people.each do |new_people|
-        create_contact_from_row(new_people)
+      Person.transaction do
+        @import.get_new_people.each do |new_person|
+          person = create_contact_from_row(new_person)
+          if person.errors.present?
+            errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
+          end
+        end
+        raise ActiveRecord::Rollback if errors.present?
       end
-      flash.now[:notice] = t('contacts.import_contacts.success')
-      #render :show
+    end
+
+    if errors.present?
+      flash.now[:error] = errors.join('<br />').html_safe
+      init_org
       render :new
     else
-      flash.now[:error] = errors.join('<br />').html_safe
-      get_survey_questions
-      render :edit
+      flash[:notice] = t('contacts.import_contacts.success')
+      redirect_to contacts_path and return
     end
   end
 
@@ -86,47 +95,39 @@ class ImportsController < ApplicationController
         @survey_questions[survey.title][q.label] = q.id
       end
     end
+    @survey_questions[I18n.t('surveys.questions.index.predefined')] = Survey.find(APP_CONFIG['predefined_survey']).questions.collect { |q| [q.label, q.id] }
   end
 
-  def create_contact_from_row(params)
-    @organization ||= current_organization
-    Person.transaction do
-      params[:person] ||= {}
-      params[:person][:email_address] ||= {}
-      params[:person][:phone_number] ||= {}
+  def create_contact_from_row(row)
 
-      @person, @email, @phone = create_person(params[:person])
-      if @person.save
+    person = Person.new
 
-        create_contact_at_org(@person, @organization)
-        if params[:assign_to_me] == 'true'
-          ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
-          ContactAssignment.create!(person_id: @person.id, organization_id: @organization.id, assigned_to_id: current_person.id)
-        end
+    survey_ids = SurveyElement.where(element_id: row[:answers].keys).pluck(:survey_id)
 
-        @answer_sheets = []
-        @organization ||= current_organization
+    question_sets = []
 
-        survey_keys = Array.new
-
-        params[:answers].keys.each do |key|
-          survey_keys << Element.find(key).surveys.first.id
-        end
-
-        survey_keys.uniq!
-
-        survey_keys.each do |key|
-          survey = Survey.find(key)
-          @answer_sheet = get_answer_sheet(survey, @person)
-          question_set = QuestionSet.new(survey.questions, @answer_sheet)
-          question_set.post(params[:answers], @answer_sheet)
-          question_set.save
-          @answer_sheets << @answer_sheet
-        end
-
-        return
-      end
+    current_organization.surveys.where(id: survey_ids.uniq).each do |survey|
+      answer_sheet = get_answer_sheet(survey, person)
+      question_set = QuestionSet.new(survey.questions, answer_sheet)
+      question_set.post(row[:answers], answer_sheet)
+      question_sets << question_set
     end
+
+    # Set values for predefined questions
+    answer_sheet = AnswerSheet.new(person: person)
+    predefined = Survey.find(APP_CONFIG['predefined_survey'])
+    predefined.elements.where('object_name is not null').each do |question|
+      question.set_response(row[:answers][question.id], answer_sheet)
+    end
+
+    person, email, phone = Person.find_existing_person(person)
+
+    if person.save
+      question_sets.map { |qs| qs.save }
+      create_contact_at_org(person, current_organization)
+    end
+
+    return person
   end
 
 end
