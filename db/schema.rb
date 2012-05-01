@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120402145111) do
+ActiveRecord::Schema.define(:version => 20120422020609) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -1833,6 +1833,22 @@ ActiveRecord::Schema.define(:version => 20120402145111) do
     t.boolean  "list_publicly",         :default => true
     t.boolean  "approve_join_requests", :default => true
   end
+
+  create_table "mh_imports", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "organization_id"
+    t.string   "upload_file_name"
+    t.string   "upload_content_type"
+    t.integer  "upload_file_size"
+    t.datetime "upload_updated_at"
+    t.text     "headers"
+    t.text     "header_mappings"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+  end
+
+  add_index "mh_imports", ["organization_id"], :name => "index_mh_imports_on_organization_id"
+  add_index "mh_imports", ["user_id", "organization_id"], :name => "user_org"
 
   create_table "mh_interests", :force => true do |t|
     t.string   "name"
@@ -4563,10 +4579,7 @@ ActiveRecord::Schema.define(:version => 20120402145111) do
     t.integer  "account_balance",    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "year"
   end
-
-  add_index "sp_designation_numbers", ["person_id", "project_id", "designation_number"], :name => "person_id"
 
   create_table "sp_donations", :force => true do |t|
     t.integer "designation_number",                                :null => false

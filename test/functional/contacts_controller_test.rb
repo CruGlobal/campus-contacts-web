@@ -211,7 +211,7 @@ class ContactsControllerTest < ActionController::TestCase
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
       person_count  = Person.count
       post :csv_import, { :dump => { :file => file } }
-      assert_equal "CSV Import unsuccessful and the cause is: Invalid email address at row 1, First name is blank at row 2,", flash[:error]
+      assert_equal "CSV Import unsuccessful for some rows:<br/> First name is blank at row/s 2,  <br/> Invalid email address at row/s 1,  <br/>", flash[:error]
       assert_equal Person.count, person_count, "Upload of contacts csv file successful (should not be successful)."
       assert_response :success, "Upload of contacts csv file unsuccessful"
     end
@@ -222,7 +222,8 @@ class ContactsControllerTest < ActionController::TestCase
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
       person_count  = Person.count
       post :csv_import, { :dump => { :file => file } }
-      assert_equal "CSV Import unsuccessful and the cause is: Invalid email address at row 1, First name is blank at row 2,", flash[:error]
+
+      assert_equal "CSV Import unsuccessful for some rows:<br/> First name is blank at row/s 2,  <br/> Invalid email address at row/s 1,  <br/>", flash[:error]
       assert_equal Person.count, person_count, "Upload of contacts csv file successful (should not be successful)."
       assert_response :success, "Upload of contacts csv file unsuccessful"
     end
@@ -233,7 +234,8 @@ class ContactsControllerTest < ActionController::TestCase
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
       person_count  = Person.count
       post :csv_import, { :dump => { :file => file } }
-      assert_equal "CSV Import unsuccessful and the cause is: Invalid email address at row 1, First name is blank at row 2,", flash[:error]
+
+      assert_equal "CSV Import unsuccessful for some rows:<br/> First name is blank at row/s 2,  <br/> Invalid email address at row/s 1,  <br/>", flash[:error]
       assert_equal Person.count, person_count, "Upload of contacts csv file successful (should not be successful)."
       assert_response :success, "Upload of contacts csv file unsuccessful"
     end

@@ -8,7 +8,7 @@ class Person < ActiveRecord::Base
   self.primary_key = 'personID'
 
   belongs_to :user, class_name: 'User', foreign_key: 'fk_ssmUserId'
-  has_many :phone_numbers
+  has_many :phone_numbers, autosave: true
 
   has_one :primary_phone_number, class_name: "PhoneNumber", foreign_key: "person_id", conditions: {primary: true}
   has_many :locations
@@ -16,7 +16,7 @@ class Person < ActiveRecord::Base
   has_many :friends
   has_many :interests
   has_many :education_histories
-  has_many :email_addresses
+  has_many :email_addresses, autosave: true
   has_one :primary_email_address, class_name: "EmailAddress", foreign_key: "person_id", conditions: {primary: true}
   has_one :primary_organization_membership, class_name: "OrganizationMembership", foreign_key: "person_id", conditions: {primary: true}
   has_one :primary_organization, through: :primary_organization_membership, source: :organization
@@ -44,10 +44,10 @@ class Person < ActiveRecord::Base
 
   scope :who_answered, lambda {|survey_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.survey_id' => survey_id)}
   validates_presence_of :firstName
-  validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, allow_blank: true
+  #validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, allow_blank: true
 
   accepts_nested_attributes_for :email_addresses, :reject_if => lambda { |a| a[:email].blank? }, allow_destroy: true  
-  accepts_nested_attributes_for :phone_numbers, :reject_if => lambda { |a| a[:number].blank? }, allow_destroy: true  
+  accepts_nested_attributes_for :phone_numbers, :reject_if => lambda { |a| a[:number].blank? }, allow_destroy: true
   accepts_nested_attributes_for :current_address, allow_destroy: true  
 
   before_save :stamp_changed
@@ -158,20 +158,20 @@ class Person < ActiveRecord::Base
   end
 
   def phone_number=(val)
+    p = nil
     if val.is_a?(Hash)
-      self.phone_number = val[:number]
+      p = self.phone_number = val[:number]
     else
       if val.to_s.strip.blank?
         primary_phone_number.try(:destroy)
       else
         unless phone_numbers.find_by_number(PhoneNumber.strip_us_country_code(val))
-          phone_number = primary_phone_number || phone_numbers.new
-          phone_number.number = val
-          phone_number.save
+          p = primary_phone_number || phone_numbers.new
+          p.number = val
         end
       end
     end
-    val
+    p
   end
 
   def name 
@@ -264,17 +264,16 @@ class Person < ActiveRecord::Base
 
   def email=(val)
     return if val.blank?
-    existing = email_addresses.where(email: val).first
-    if existing
-      unless existing.primary?
+    e = email_addresses.where(email: val).first
+    if e
+      unless e.primary?
         email_addresses.where(["email <> ?", val]).update_all(primary: false)
-        existing.update_attribute(:primary, true)
+        e.update_attribute(:primary, true)
       end
     else
-      email = email_addresses.new
-      email.email = val
-      email.save
+      e = email_addresses.new(email: val)
     end
+    e
   end
 
   def email_address=(hash)
@@ -660,23 +659,41 @@ class Person < ActiveRecord::Base
     person_params = person_params.with_indifferent_access || {}
     person_params[:email_address] ||= {}
     person_params[:phone_number] ||= {}
-    # try to find this person based on their email address
-    email_address = person_params[:email_address][:email]
-    if email_address.present?
-      person = EmailAddress.find_by_email(email_address).try(:person) ||
-        Address.find_by_email(email_address).try(:person) ||
-        User.find_by_username(email_address).try(:person) 
+
+    person = Person.new(person_params.except(:email_address, :phone_number))
+    person.email_address = person_params[:email_address]
+    person.phone_number = person_params[:phone_number]
+
+    find_existing_person(person)
+  end
+
+  def self.find_existing_person(person)
+    Rails.logger.ap(person)
+    other_person = email = phone = nil
+
+    # Start by looking for a person with the same email address (since that's our one true unique field)
+    person.email_addresses.each do |email_address|
+      if email_address.valid?
+        other_person = EmailAddress.find_by_email(email_address.email).try(:person) ||
+                       Address.where(email: email_address.email, addressType: 'current').first.try(:person) ||
+                       User.find_by_username(email_address.email).try(:person)
+        email = email_address if other_person
+      end
     end
-    person ||= Person.new(person_params.except(:email_address, :phone_number))
-    email = (person.email_addresses.find_by_email(email_address) || person.email_addresses.new(email: email_address)) if email_address.present? 
-    if person_params[:phone_number][:number].present?
-      phone = (person.phone_numbers.find_by_number(person_params[:phone_number][:number].gsub(/[^\d]/, '')) || person.phone_numbers.new(person_params.delete(:phone_number).except(:_destroy).merge(location: 'mobile'))) 
+
+    if other_person
+      person.phone_numbers.each do |phone_number|
+        if phone_number.number.present?
+          other_person.phone_numbers.create(phone_number.attributes.except('person_id','id'))
+        end
+      end
+      phone = other_person.phone_numbers.first
+      other_person.attributes = person.attributes.except('personID')
+    else
+      email = person.email_addresses.first
+      phone = person.phone_numbers.first
     end
-    unless person.new_record?
-      email.save if email
-      phone.save if phone
-    end
-    [person, email, phone]
+    [other_person || person, email, phone]
   end
 
   def do_not_contact(organizational_role_id)

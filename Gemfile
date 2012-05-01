@@ -55,6 +55,7 @@ gem 'i18n-js', git: 'git://github.com/fnando/i18n-js.git'     # allow i18n on js
 
 gem 'rest-client'                                     # to make FB api requests
 gem "paperclip", :git => 'git://github.com/thoughtbot/paperclip.git'
+gem 'aws-sdk', '~> 1.3.4'
 
 gem 'bitly'
 #gem 'copycopter_client'
