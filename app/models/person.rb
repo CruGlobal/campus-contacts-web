@@ -668,7 +668,6 @@ class Person < ActiveRecord::Base
   end
 
   def self.find_existing_person(person)
-    Rails.logger.ap(person)
     other_person = email = phone = nil
 
     # Start by looking for a person with the same email address (since that's our one true unique field)
