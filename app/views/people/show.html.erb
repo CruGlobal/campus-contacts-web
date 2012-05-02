@@ -104,9 +104,9 @@
   <div>
     <% if @person.friends.any? %>
       <p><b><%= t('.persons_friends',person: declare_ownership(@person.firstName)) %></b></p>
-      <% @org_friends.each do |friend| %>
+      <% @person.friends(current_organization).each do |friend| %>
         <div style="float:left; margin-right: 5px;">
-          <%= link_to image_tag("https://graph.facebook.com/#{friend.fb_uid}/picture?type=square", alt: ''), person_path(friend), target: '_blank', :title => friend %>
+          <%= link_to image_tag("https://graph.facebook.com/#{friend.uid}/picture?type=square", alt: ''), person_path(Person.where(fb_uid: friend.uid.to_i).first), target: '_blank', :title => friend %>
         </div>
       <% end %>
       <div style="clear:both;"></div>
