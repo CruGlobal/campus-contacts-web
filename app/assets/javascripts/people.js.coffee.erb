@@ -534,6 +534,7 @@ get_role_labels = (obj) ->
 disable_role_checkboxes = () -> # disable role checkboxes that only SOME of contacts have
   role_labels_array = []
   to_be_disabled = []
+  to_be_enabled = []
   checked_length = $('input.id_checkbox:checked').length
 
   $('input.id_checkbox:checked').each ->
@@ -553,11 +554,19 @@ disable_role_checkboxes = () -> # disable role checkboxes that only SOME of cont
       count++ if unique[i] == role_labels_array[j]
       j++
     to_be_disabled.push(unique[i]) if count < checked_length
+    to_be_enabled.push(unique[i]) if count == checked_length
     i++
   l = 0
   while(l < to_be_disabled.length)
     checkbox = '#role_ids_' + to_be_disabled[l]
     $(checkbox).attr disabled: true
+    $(checkbox).attr checked: false
+    l++
+  l = 0
+  while(l < to_be_enabled.length)
+    checkbox = '#role_ids_' + to_be_enabled[l]
+    $(checkbox).attr disabled: false
+    $(checkbox).attr checked: true
     l++
 
 
