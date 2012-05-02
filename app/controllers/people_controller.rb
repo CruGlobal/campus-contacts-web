@@ -328,13 +328,15 @@ class PeopleController < ApplicationController
     person = Person.find(params[:person_id])
 
     role_ids = params[:role_ids].split(',').map(&:to_i)
+    retain_role_ids = params[:retain_role_ids].split(',').map(&:to_i)
 
     if params[:include_old_roles] == 'yes'
       role_ids += person.organizational_roles.where(organization_id: current_organization.id).collect(&:id) 
     end
 
-
     organizational_role_ids = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.role_id.to_s }
+
+    puts organizational_role_ids
 
     #if role_ids.length (new roles) is less than old roles. i.e. there is a role that is going to be deleted
     #The purpose of this code block is to avoid emailing (that a Person has just become a leader) a Person if he is already a leader before this roles updateh
