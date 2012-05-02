@@ -625,7 +625,7 @@ update_persons_roles = () ->
     $.ajax
       type: 'POST',
       url: '/people/update_roles',
-      data: 'role_ids='+role_ids+'&retain_role_ids='+retain_role_ids+'&person_id='+person_id,
+      data: 'role_ids='+role_ids+'&retain_role_ids='+some_role_ids+'&person_id='+person_id,
       success: (data) ->
         roles_user = "#roles_user_" + person_id
         if data.indexOf("$.a") == -1 # hello

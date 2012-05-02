@@ -328,12 +328,26 @@ class PeopleController < ApplicationController
     person = Person.find(params[:person_id])
 
     role_ids = params[:role_ids].split(',').map(&:to_i)
-    retain_role_ids = params[:retain_role_ids].split(',').map(&:to_i)
+    #retain_role_ids = params[:retain_role_ids].split(',').map(&:to_i)
 
+=begin
     if params[:include_old_roles] == 'yes'
       role_ids += person.organizational_roles.where(organization_id: current_organization.id).collect(&:id) 
     end
+=end
 
+    new_roles = params[:role_ids].split(',').map(&:to_i)
+    old_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.role_id }
+    some_roles = params[:some_role_ids].split(',').map(&:to_i) # roles that only SOME persons have
+
+    new_roles = new_roles - some_roles #remove roles that SOME of the persons have. We should not touch them. They are disabled in the views anyway.
+
+    to_be_added_roles = new_roles - old_roles
+    to_be_removed_roles = old_roles - new_roles
+
+    
+
+=begin
     organizational_role_ids = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.role_id.to_s }
 
     puts organizational_role_ids
@@ -364,6 +378,8 @@ class PeopleController < ApplicationController
       data << "style='margin-right:4px;'" if index < role_ids.length - 1
       data << ">#{Role.find(role_id).to_s}</span>"
     end
+
+=end
 
     render :text => data
   end 
