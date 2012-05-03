@@ -82,7 +82,7 @@ class PeopleControllerTest < ActionController::TestCase
         roles = []
         (1..3).each { |index| roles << Role.create!(organization_id: 1, name: "member_#{index}", i18n: "member_#{index}") }
         roles = roles.collect { |role| role.id }.join(',')
-        xhr :post, :update_roles, { :role_ids => roles, :person_id => @person1.id }
+        xhr :post, :update_roles, { :role_ids => roles, :some_role_ids => "", :person_id => @person1.id }
         assert_response :success
       end
       
@@ -90,7 +90,7 @@ class PeopleControllerTest < ActionController::TestCase
         roles = []
         (1..3).each { |index| roles << Role.create!(organization_id: 1, name: "member_#{index}", i18n: "member_#{index}") }
         roles = roles.collect { |role| role.id }.join(',')
-        xhr :post, :update_roles, { :role_ids => roles, :person_id => @person1.id, :include_old_roles => "yes" }
+        xhr :post, :update_roles, { :role_ids => roles, :some_role_ids => "", :person_id => @person1.id, :include_old_roles => "yes" }
         assert_response :success
       end
       
@@ -100,7 +100,7 @@ class PeopleControllerTest < ActionController::TestCase
         #duplicate the first role
         roles << roles.first
         roles = roles.collect { |role| role.id }.join(',')
-        xhr :post, :update_roles, { :role_ids => roles, :person_id => @person1.id, :include_old_roles => "yes" }
+        xhr :post, :update_roles, { :role_ids => roles, :some_role_ids => "", :person_id => @person1.id, :include_old_roles => "yes" }
         assert_response :success
       end
       
@@ -133,7 +133,7 @@ class PeopleControllerTest < ActionController::TestCase
         name: "member_#{index}", i18n: "member_#{index}") }
         
         roles = roles.collect { |role| role.id }.join(',')
-        xhr :post, :update_roles, { :role_ids => roles, :person_id => @person.id }
+        xhr :post, :update_roles, { :role_ids => roles, :some_role_ids => "", :person_id => @person.id }
         assert_response :success
       end
     end
@@ -155,7 +155,7 @@ class PeopleControllerTest < ActionController::TestCase
         name: "member_#{index}", i18n: "member_#{index}") }
         
         roles = roles.collect { |role| role.id }.join(',')
-        xhr :post, :update_roles, { :role_ids => roles, :person_id => @person.id }
+        xhr :post, :update_roles, { :role_ids => roles, :some_role_ids => "", :person_id => @person.id }
         assert_response :success
       end    
     end
@@ -290,7 +290,7 @@ class PeopleControllerTest < ActionController::TestCase
     
     should "update the contact's role to leader that has a valid email" do
       person = Factory(:person, email: "super_duper_unique_email@mail.com")
-      xhr :post, :update_roles, { :role_ids => @roles, :person_id => person.id, :added_by_id => @user.person.id }
+      xhr :post, :update_roles, { :role_ids => @roles, :some_role_ids => "", :person_id => person.id, :added_by_id => @user.person.id }
       assert_response :success
       assert_equal(person.id, OrganizationalRole.last.person_id)
       assert_equal("super_duper_unique_email@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s)
@@ -300,7 +300,7 @@ class PeopleControllerTest < ActionController::TestCase
       person = Factory(:person)
       mail_count = ActionMailer::Base.deliveries.count
       assert(person.email, "")
-      xhr :post, :update_roles, { :role_ids => @roles, :person_id => person.id, :added_by_id => @user.person.id }
+      xhr :post, :update_roles, { :role_ids => @roles, :some_role_ids => "", :person_id => person.id, :added_by_id => @user.person.id }
       assert_response :success
       assert_equal(mail_count, ActionMailer::Base.deliveries.count)
     end
@@ -319,7 +319,7 @@ class PeopleControllerTest < ActionController::TestCase
         #check the persons roles
         assert_equal(1, person.roles.count)
         assert_equal(Role.contact, person.roles.last)
-        xhr :post, :update_roles, { :role_ids => @existing_roles, :person_id => person, :added_by_id => @user.person.id }
+        xhr :post, :update_roles, { :role_ids => @existing_roles, :some_role_ids => "", :person_id => person, :added_by_id => @user.person.id }
         #assert that the leader role was not added
         assert_response :success
         assert_equal(2, person.roles.count)
@@ -335,7 +335,7 @@ class PeopleControllerTest < ActionController::TestCase
         #check the persons roles
         assert_equal(1, person.roles.count)
         assert_equal(Role.contact, person.roles.last)
-        xhr :post, :update_roles, { :role_ids => @existing_roles, :person_id => person, :added_by_id => @user.person.id }
+        xhr :post, :update_roles, { :role_ids => @existing_roles, :some_role_ids => "", :person_id => person, :added_by_id => @user.person.id }
         #assert that the leader role was not added
         assert_response :success
         assert_equal(1, person.roles.count)

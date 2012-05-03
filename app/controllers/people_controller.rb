@@ -328,6 +328,7 @@ class PeopleController < ApplicationController
 
     role_ids = params[:role_ids].split(',').map(&:to_i)
 
+
     new_roles = params[:role_ids].split(',').map(&:to_i)
     old_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.role_id }
     some_roles = params[:some_role_ids].split(',').map(&:to_i) # roles that only SOME persons have
