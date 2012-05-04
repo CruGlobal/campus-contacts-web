@@ -29,7 +29,7 @@ $ ->
     $('.to_list li').each ->
       id = $(this).attr('data-id')
       ids.push(id)
-    $('#to').val(ids.join(','))
+    $('#reminder_email #to').val(ids.join(','))
     $('#reminder_email').dialog('destroy')
     $.rails.handleRemote($(this))
     false
