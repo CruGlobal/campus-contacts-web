@@ -109,63 +109,51 @@ class PeopleControllerTest < ActionController::TestCase
   
   context "When updating roles" do
     setup do
+      @user = Factory(:user_with_auxs)
+
       @person = Factory(:person)
       @person2 = Factory(:person, email: "person2@email.com")
       @person3 = Factory(:person, email: "person3@email.com")
-    end
-    
-    context "When user is admin" do
-      setup do
-        @user = Factory(:user_with_auxs)
-        @org = Factory(:organization)
-        org_role = Factory(:organizational_role, organization: @org, person: @user.person, role: Role.admin)
-        
-        sign_in @user
-        @request.session[:current_organization_id] = @org.id
-      end
+
+      @org = Factory(:organization)
       
-      should "include admin role in label selection" do
-        get :index
-        assert(assigns(:roles).include? Role.admin)
-      end
+      sign_in @user
+      @request.session[:current_organization_id] = @org.id
 
-      should "retain old roles of different users even if users have initially have a different set of roles" do
-        # illustration
-        # @person2 initially have roles [3]
-        # @person3 initially have roles [4]
-        # Apply role "2" to both of them
-        # @person2 and @person 3 should retain roles [3] and [4] respectively after PeopleController#update_roles
-
-        roles = []
-        (1..4).each { |index| roles << Role.create!(organization_id: @org.id, name: "role_#{index}", i18n: "role_#{index}") }
-
-        OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: @person2.id, role_id: 3, organization_id: @org.id, added_by_id: @user.person.id) # @person2 has role '1'
-        OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: @person3.id, role_id: 4, organization_id: @org.id, added_by_id: @user.person.id) # @person3 has role '2'
-
-        old_person_2_roles = @person2.organizational_roles.where(organization_id: @org.id).collect { |role| role.role_id }
-        old_person_3_roles = @person3.organizational_roles.where(organization_id: @org.id).collect { |role| role.role_id }
-
-        xhr :post, :update_roles, { :role_ids => "2, 3", :some_role_ids => "3, 4", :person_id => @person2.id }
-        xhr :post, :update_roles, { :role_ids => "2, 4", :some_role_ids => "3, 4", :person_id => @person3.id }
-
-        new_person_2_roles = @person2.organizational_roles.where(organization_id: @org.id).collect { |role| role.role_id }
-        new_person_3_roles = @person3.organizational_roles.where(organization_id: @org.id).collect { |role| role.role_id }
-
-        assert old_person_2_roles & new_person_2_roles # role 2 still has its old roles?
-        assert old_person_3_roles & new_person_3_roles # role 2 still has its old roles?
-      end
+      @roles = []
+      (1..4).each { |index| @roles << Role.create!(organization_id: @org.id, name: "role_#{index}", i18n: "role_#{index}") }
     end
-    
-    context "When user is leader" do
-      setup do
-        @user = Factory(:user_with_auxs)
-        user2 = Factory(:user_with_auxs)
-        @org = Factory(:organization)
-        org_role = Factory(:organizational_role, organization: @org, person: @user.person, role: Role.leader, :added_by_id => user2.person.id)
-        
-        sign_in @user
-        @request.session[:current_organization_id] = @org.id
-      end
+
+    should "add roles to a user" do 
+      OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: @person2.id, role_id: 3, organization_id: @org.id, added_by_id: @user.person.id) # @person2 has role '1'
+      assert_equal @person2.organizational_roles.count, 1
+      xhr :post, :update_roles, { :role_ids => "1, 2, 3", :some_role_ids => "", :person_id => @person2.id } # added 2 roles role[0] and role[1]
+      assert_equal @person2.organizational_roles, 3
+      puts @person2.organizational_roles
+    end
+
+    should "retain old roles of different users even if users have initially have a different set of roles" do
+      # Illustration:
+      # @person2 initially have roles [3]
+      # @person3 initially have roles [4]
+      # Apply role "2" to both of them
+      # @person2 and @person 3 should retain roles [3] and [4] respectively after PeopleController#update_roles
+
+      OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: @person2.id, role_id: 3, organization_id: @org.id, added_by_id: @user.person.id) # @person2 has role '1'
+      OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: @person3.id, role_id: 4, organization_id: @org.id, added_by_id: @user.person.id) # @person3 has role '2'
+
+      old_person_2_roles = @person2.organizational_roles.where(organization_id: @org.id).collect { |role| role.role_id }
+      old_person_3_roles = @person3.organizational_roles.where(organization_id: @org.id).collect { |role| role.role_id }
+
+      xhr :post, :update_roles, { :role_ids => "#{@roles[1].id}, #{@roles[2].id}", :some_role_ids => "#{@roles[2].id}, #{@roles[3].id}", :person_id => @person2.id }
+      xhr :post, :update_roles, { :role_ids => "#{@roles[1].id}, #{@roles[3].id}", :some_role_ids => "#{@roles[2].id}, #{@roles[3].id}", :person_id => @person3.id }
+
+      new_person_2_roles = @person2.organizational_roles.where(organization_id: @org.id).collect { |role| role.role_id }
+      new_person_3_roles = @person3.organizational_roles.where(organization_id: @org.id).collect { |role| role.role_id }
+
+      assert old_person_2_roles & new_person_2_roles # role 2 still has his old roles?
+      assert old_person_3_roles & new_person_3_roles # role 3 still has his old roles?
+
     end
   end
   
