@@ -75,7 +75,7 @@ class ApplicationController < ActionController::Base
   end
   
   def mhub?
-    @mhub = request.host.include?('mhub.cc') if @mhub.nil?
+    @mhub = request.host.include?(APP_CONFIG['public_host'] || 'mhub') if @mhub.nil?
     @mhub
   end
   helper_method :mhub?
