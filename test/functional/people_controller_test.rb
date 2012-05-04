@@ -110,6 +110,8 @@ class PeopleControllerTest < ActionController::TestCase
   context "When updating roles" do
     setup do
       @person = Factory(:person)
+      @person2 = Factory(:person, email: "person2@email.com")
+      @person3 = Factory(:person, email: "person3@email.com")
     end
     
     context "When user is admin" do
@@ -135,6 +137,32 @@ class PeopleControllerTest < ActionController::TestCase
         roles = roles.collect { |role| role.id }.join(',')
         xhr :post, :update_roles, { :role_ids => roles, :some_role_ids => "", :person_id => @person.id }
         assert_response :success
+      end
+
+      should "retain old roles of different users even if users have initially have a different set of roles" do
+        # illustration
+        # @person2 initially have roles [3]
+        # @person3 initially have roles [4]
+        # Apply role "2" to both of them
+        # @person2 and @person 3 should retain roles [3] and [4] respectively after PeopleController#update_roles
+
+        roles = []
+        (1..4).each { |index| roles << Role.create!(organization_id: @org.id, name: "role_#{index}", i18n: "role_#{index}") }
+
+        OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: @person2.id, role_id: 3, organization_id: @org.id, added_by_id: @user.person.id) # @person2 has role '1'
+        OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: @person3.id, role_id: 4, organization_id: @org.id, added_by_id: @user.person.id) # @person3 has role '2'
+
+        old_person_2_roles = @person2.organizational_roles.where(organization_id: @org.id).collect { |role| role.role_id }
+        old_person_3_roles = @person3.organizational_roles.where(organization_id: @org.id).collect { |role| role.role_id }
+
+        xhr :post, :update_roles, { :role_ids => "2, 3", :some_role_ids => "3, 4", :person_id => @person2.id }
+        xhr :post, :update_roles, { :role_ids => "2, 4", :some_role_ids => "3, 4", :person_id => @person3.id }
+
+        new_person_2_roles = @person2.organizational_roles.where(organization_id: @org.id).collect { |role| role.role_id }
+        new_person_3_roles = @person3.organizational_roles.where(organization_id: @org.id).collect { |role| role.role_id }
+
+        assert old_person_2_roles & new_person_2_roles # role 2 still has its old roles?
+        assert old_person_3_roles & new_person_3_roles # role 2 still has its old roles?
       end
     end
     
