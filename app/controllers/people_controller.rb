@@ -14,13 +14,7 @@ class PeopleController < ApplicationController
     authorize! :read, Person
     fetch_people(params)
 
-    if can? :manage, current_organization
-      @roles = current_organization.roles
-    else
-      #@roles = current_organization.roles.where("id != ?", Role::ADMIN_ID)
-      @roles = current_organization.roles
-    end
-
+    @roles = current_organization.roles # Admin or Leader, all roles will appear in 
   end
 
   def export

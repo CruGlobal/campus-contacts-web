@@ -128,16 +128,6 @@ class PeopleControllerTest < ActionController::TestCase
         get :index
         assert(assigns(:roles).include? Role.admin)
       end
-      
-      should "update roles with include_old_roles as parameter" do
-        roles = []
-        (1..3).each { |index| roles << Role.create!(organization_id: @org.id, 
-        name: "member_#{index}", i18n: "member_#{index}") }
-        
-        roles = roles.collect { |role| role.id }.join(',')
-        xhr :post, :update_roles, { :role_ids => roles, :some_role_ids => "", :person_id => @person.id }
-        assert_response :success
-      end
 
       should "retain old roles of different users even if users have initially have a different set of roles" do
         # illustration
@@ -176,16 +166,6 @@ class PeopleControllerTest < ActionController::TestCase
         sign_in @user
         @request.session[:current_organization_id] = @org.id
       end
-      
-      should "update roles with include_old_roles as parameter" do
-        roles = []
-        (1..3).each { |index| roles << Role.create!(organization_id: @org.id, 
-        name: "member_#{index}", i18n: "member_#{index}") }
-        
-        roles = roles.collect { |role| role.id }.join(',')
-        xhr :post, :update_roles, { :role_ids => roles, :some_role_ids => "", :person_id => @person.id }
-        assert_response :success
-      end    
     end
   end
   
