@@ -130,6 +130,7 @@ en:
     person_form:
       add_phone_number: "Add Phone Number" 
       add_email_address: "Add Email Address" 
+      preferred_name: 'Nickname'
     add_person:
       add_person: Add a person to %{org}
     index:

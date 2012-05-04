@@ -178,9 +178,9 @@ class Person < ActiveRecord::Base
     [firstName, lastName].collect(&:to_s).join(' ') 
   end
 
-  # def firstName
-  #   preferredName.blank? ? self[:firstName].try(:strip) : preferredName.try(:strip)
-  # end
+   def firstName
+     preferredName.blank? ? self[:firstName].try(:strip) : preferredName.try(:strip)
+   end
 
   def self.find_from_facebook(data, authentication)
     EmailAddress.find_by_email(data.email).try(:person) if data.email.present?

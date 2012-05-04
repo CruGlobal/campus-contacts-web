@@ -3,11 +3,7 @@ class PeopleController < ApplicationController
   before_filter :ensure_current_org
   before_filter :authorize_merge, only: [:merge, :confirm_merge, :do_merge, :merge_preview]
   before_filter :roles_for_assign
-=begin
-  rescue_from OrganizationalRole::InvalidPersonAttributesError do |exception|
-    render 'update_leader_error'
-  end
-=end
+
   # GET /people
   # GET /people.xml
   def index
