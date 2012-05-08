@@ -233,7 +233,7 @@ class Question < Element
   end
 
   def send_email_to_leaders(leaders, msg)
-    SurveyMailer.enqueue.notify(leaders.collect(&:email).compact, msg)
+    SurveyMailer.enqueue.notify(leaders.reject{|leader| leader unless leader.has_a_valid_email?}.collect(&:email).compact, msg)
   end
 
   def shorten_link(id)
