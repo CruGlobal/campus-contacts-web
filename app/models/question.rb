@@ -15,8 +15,6 @@ class Question < Element
   has_many :sheet_answers, :class_name => "Answer", :foreign_key => "question_id", :dependent => :destroy
 
   belongs_to :related_question_sheet, :class_name => "QuestionSheet", :foreign_key => "related_question_sheet_id"
-  
-  before_update :all_leaders_have_valid_email?
 
   # validates_inclusion_of :required, :in => [false, true]
   
