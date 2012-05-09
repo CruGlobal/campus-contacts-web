@@ -16,6 +16,8 @@ class Question < Element
 
   belongs_to :related_question_sheet, :class_name => "QuestionSheet", :foreign_key => "related_question_sheet_id"
   
+  before_update :all_leaders_have_valid_email?
+
   # validates_inclusion_of :required, :in => [false, true]
   
   validates_format_of :slug, :with => /^[a-z_][a-z0-9_]*$/, 
@@ -267,5 +269,13 @@ class Question < Element
   def multiple_answers_allowed?
     false
   end
+
+  private
+    def all_leaders_have_valid_email?
+      leaders.each do |leader|
+        errors.add(:leaders,"mello")
+        return false unless leader.has_a_valid_email?
+      end
+    end
 
 end

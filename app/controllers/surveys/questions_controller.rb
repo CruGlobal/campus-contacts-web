@@ -94,7 +94,37 @@ class Surveys::QuestionsController < ApplicationController
   # PUT /questions/1
   # PUT /questions/1.xml
   def update
+    error = false
     params[:question] ||= params[:choice_field] ||= params[:text_field]
+
+    new_leaders = params[:leaders]
+    old_leaders = Question.find(params[:id]).question_leaders.collect{ |ql| ql.person_id.to_s}
+
+    to_add = new_leaders - old_leaders
+    to_remove = old_leaders - new_leaders
+
+    #destroy question leaders
+    Question.find(params[:id]).question_leaders.each do |ql|
+      ql.destroy if to_remove.include? ql.person_id
+    end
+
+    #create question leaders
+    leaders_with_invalid_emails = Array.new
+    to_add.each do |ta|
+      leaders_with_invalid_emails << ta unless Person.find(ta).has_a_valid_email?
+    end
+
+    unless leaders_with_invalid_emails.blank?
+      respond_to do |wants|
+        wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(personId: leaders_with_invalid_emails).collect{|p| p.name}.join(', ') } }
+      end
+      return
+    else
+      to_add.each do |ta|
+        QuestionLeader.create!(:person_id => ta, :element_id => @question.id)
+      end
+    end
+
     respond_to do |wants|
       if @question.update_attributes(params[:question])
         wants.js {}
