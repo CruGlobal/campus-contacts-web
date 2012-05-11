@@ -568,6 +568,7 @@ en:
       save_this_search: "Save this search"
       save_this_search_placeholder: "Name this search"
       delete_confirm: "Are you sure you want to remove this search?"
+      type_above_field: "Start typing in the field above to search for somewhere to transfer these people to."
     mine:
       in_progress: 'In Progress'
       completed: 'Completed'
