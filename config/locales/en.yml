@@ -340,6 +340,9 @@ en:
     questions:
       create:
         notice: 'Question was successfully created.'
+      edit:
+        leader_invalid_email_with_name: "Chosen leader/s '%{leader_names}' have invalid email."
+        leader_invalid_email: "Chosen leader has an invalid email."
       form: 
         text_message_length: 'Text Message Length:'
         what_question_type: What type of question would you like to ask?
