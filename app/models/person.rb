@@ -750,5 +750,9 @@ class Person < ActiveRecord::Base
       end
     end
 
-  end  
+  end 
+
+  def has_a_valid_email?
+    return email.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
+  end 
 end
