@@ -2,6 +2,7 @@
   <% organizations.each do |org| %>
     <%= render 'org_li', org: org if org.status == "active" %>
   <% end %>
+  <%= t('contacts.index.type_above_field') if organizations.blank? %>
 </ul>
 
 <% if @total && @total > organizations.length %>

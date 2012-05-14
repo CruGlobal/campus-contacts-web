@@ -130,6 +130,7 @@ en:
     person_form:
       add_phone_number: "Add Phone Number" 
       add_email_address: "Add Email Address" 
+      preferred_name: 'Nickname'
     add_person:
       add_person: Add a person to %{org}
     index:
@@ -339,6 +340,9 @@ en:
     questions:
       create:
         notice: 'Question was successfully created.'
+      edit:
+        leader_invalid_email_with_name: "Chosen leader/s '%{leader_names}' have invalid email."
+        leader_invalid_email: "Chosen leader has an invalid email."
       form: 
         text_message_length: 'Text Message Length:'
         what_question_type: What type of question would you like to ask?
@@ -567,6 +571,7 @@ en:
       save_this_search: "Save this search"
       save_this_search_placeholder: "Name this search"
       delete_confirm: "Are you sure you want to remove this search?"
+      type_above_field: "Start typing in the field above to search for somewhere to transfer these people to."
     mine:
       in_progress: 'In Progress'
       completed: 'Completed'
