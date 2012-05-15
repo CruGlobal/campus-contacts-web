@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_user!, :except => [:facebook_logout]
   before_filter :set_login_cookie
   before_filter :check_su
+  before_filter :check_valid_subdomain
   before_filter :set_locale
   before_filter :check_url, except: :facebook_logout
   before_filter :export_i18n_messages
@@ -160,10 +161,20 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def available_locales
+    %w{en ru es}
+  end
+
+  def check_valid_subdomain
+    return if request.subdomains.first.blank?
+    unless (available_locales + %w[www local stage])
+      redirect_to request.host_with_port.sub(request.subdomains.first, 'www') and return false
+    end
+  end
+
   def set_locale
     # if the locale is in the subdomain, use that
-    available = %w{en ru es}
-    if available.include?(request.subdomains.first)
+    if available_locales.include?(request.subdomains.first)
       I18n.locale = request.subdomains.first
     else
       if params[:locale]
