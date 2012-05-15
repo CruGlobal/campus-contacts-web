@@ -168,7 +168,7 @@ class ApplicationController < ActionController::Base
   def check_valid_subdomain
     return if request.subdomains.first.blank?
     unless (available_locales + %w[www local stage]).include?(request.subdomains.first)
-      redirect_to request.host_with_port.sub(request.subdomains.first, 'www') and return false
+      redirect_to 'http://' + request.host_with_port.sub(request.subdomains.first, 'www') and return false
     end
   end
 
