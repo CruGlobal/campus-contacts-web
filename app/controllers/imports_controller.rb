@@ -35,6 +35,7 @@ class ImportsController < ApplicationController
     if errors.blank?
       Person.transaction do
         @import.get_new_people.each do |new_person|
+          puts "#{new_person}"
           person = create_contact_from_row(new_person)
           if person.errors.present?
             errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
