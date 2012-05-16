@@ -24,7 +24,8 @@ class ContactsController < ApplicationController
     @surveys = @organization.surveys
     @questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => false).flatten.uniq
     @hidden_questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => true).flatten.uniq
-    @people = unassigned_people(@organization)
+
+    params[:assigned_to] = 'all' unless params[:assigned_to] # make 'all default' on 'all contacts' tab instead of 'unassigned'
     if params[:dnc] == 'true'
       @people = @organization.dnc_contacts
     elsif params[:completed] == 'true'
