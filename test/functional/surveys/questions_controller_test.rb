@@ -24,10 +24,12 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
       @survey_element = Factory(:survey_element, survey: survey, element: element, position: 1, archived: true)
     end
 
+=begin
     should "update to-be-notified-leaders" do
       xhr :post, :update, {:text_field =>{:label => @element.label, :content => "", :trigger_words => "Hello", :notify_via => "Email", :web_only => "0"}, :leaders => [@leader1.id], :commit => "Update", :survey_id => @survey.id, :id => @survey_element.id}
       assert_response :success
     end
+=end
   end
   
 end

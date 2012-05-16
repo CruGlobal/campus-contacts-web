@@ -62,9 +62,10 @@ class LeadersControllerTest < ActionController::TestCase
     
     should "add a leader manually (already in db, but not in this org)" do
       user2 = Factory(:user_with_auxs)
+
       assert_difference('OrganizationalRole.count') do
         assert_no_difference('User.count') do
-          xhr :post, :add_person, person: {firstName: 'John', lastName: 'Doe', email_address: {email: user2.username}}, notify: '1' 
+          xhr :post, :add_person, person: {firstName: 'John', lastName: 'Doe', email_address: {email: user2.username}}, notify: '1' , person_id: user2.person.id
           assert_response :success
         end
       end
