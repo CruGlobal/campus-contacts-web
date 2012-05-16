@@ -151,6 +151,7 @@ class SmsController < ApplicationController
             end
             
             question.set_response(answer, @answer_sheet)
+            @answer_sheet.person.save
           end
         end
       rescue => e
