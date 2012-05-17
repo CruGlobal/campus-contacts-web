@@ -621,7 +621,7 @@ class Person < ActiveRecord::Base
 
   def create_user!
     reload
-    if email.present? && primary_email_address.valid?
+    if email.present? && has_a_valid_email? #!primary_email_address.nil? ? primary_email_address.valid? : false
       if user =  User.find_by_username(email)
         if user.person
           user.person.merge(self)
@@ -750,5 +750,9 @@ class Person < ActiveRecord::Base
       end
     end
 
-  end  
+  end 
+
+  def has_a_valid_email?
+    return email.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
+  end 
 end

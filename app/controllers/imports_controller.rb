@@ -102,7 +102,7 @@ class ImportsController < ApplicationController
 
     person = Person.new
 
-    survey_ids = SurveyElement.where(element_id: row[:answers].keys).pluck(:survey_id)
+    survey_ids = SurveyElement.where(element_id: row[:answers].keys).pluck(:survey_id) - [APP_CONFIG['predefined_survey']]
 
     question_sets = []
 

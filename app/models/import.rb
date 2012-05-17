@@ -21,7 +21,6 @@ class Import < ActiveRecord::Base
     first_name_question = Element.where( :attribute_name => "firstName").first.id.to_s
 
     csv = CSV.new(open(upload.expiring_url), :headers => :first_row)
-    csv.shift #skip headers
 
     csv.each do |row|
       person_hash = Hash.new
