@@ -220,14 +220,17 @@ class PersonTest < ActiveSupport::TestCase
     end    
 
     should "get organizational roles" do
-      (1..3).each do |index| 
-        default_role = Role.create!(organization_id: 0, name: "default_role_#{index}", i18n: "default_role_#{index}") 
-        role = Role.create!(organization_id: 1, name: "role_#{index}", i18n: "role_#{index}") 
-        @person.organizational_roles.create!(organization_id: 1, role_id: default_role.id)
-        @person.organizational_roles.create!(organization_id: 1, role_id: role.id)
+      org = Factory(:organization)
+      roles = Array.new
+      (1..3).each do |index|
+        roles << Role.create!(organization_id: org.id, name: "role_#{index}", i18n: "role_#{index}") 
+      end
+
+      roles.each do |role|
+        @person.organizational_roles.create!(organization_id: org.id, role_id: role.id)
       end
   
-      assert_equal(@person.assigned_organizational_roles(1).count, 6) 
+      assert_equal(@person.assigned_organizational_roles([org.id]).count, roles.count) 
     end
     
     should 'create and return vcard information of a person' do  
