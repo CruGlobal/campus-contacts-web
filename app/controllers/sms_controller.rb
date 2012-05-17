@@ -116,6 +116,10 @@ class SmsController < ApplicationController
           msg = question.label_with_choices
           separator = / [a-z]\)/
         end
+        if question.survey_elements.present?
+          question_no = get_question_no(survey, person) 
+          msg = "#{question_no} #{msg}"
+        end
         send_message(msg, phone_number, separator)
       end
       msg
@@ -158,6 +162,17 @@ class SmsController < ApplicationController
         # Don't blow up on bad saves
         Airbrake.notify(e)
       end
+    end
+    
+    def get_question_no(survey, person)
+      total = survey.questions.count
+      answer_sheet = get_answer_sheet(survey, person)
+      if answer_sheet.present?
+        count = answer_sheet.answers.count + 1
+      else
+        count = 1
+      end
+      "#{count}/#{total}"
     end
     
     def try_to_extract_email_from(answer)
