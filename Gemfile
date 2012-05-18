@@ -23,7 +23,6 @@ gem 'rubycas-client-rails', '~> 0.1.0'
 gem 'carmen', git: 'git://github.com/twinge/carmen.git'
 gem 'ancestry'
 gem 'activeadmin', git: 'git://github.com/gregbell/active_admin.git'
-gem 'mailcatcher'
 gem 'twilio-rb', git: 'git://github.com/stevegraham/twilio-rb.git'
 gem "default_value_for"
 
