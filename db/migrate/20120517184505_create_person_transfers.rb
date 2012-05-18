@@ -4,6 +4,7 @@ class CreatePersonTransfers < ActiveRecord::Migration
       t.integer :person_id
       t.integer :old_organization_id
       t.integer :new_organization_id
+      t.integer :transferred_by_id
       t.boolean :copy, :default => false
       t.boolean :notified, :default => false
 

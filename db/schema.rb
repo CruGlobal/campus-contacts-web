@@ -1888,6 +1888,7 @@ ActiveRecord::Schema.define(:version => 20120517184505) do
     t.integer  "person_id"
     t.integer  "old_organization_id"
     t.integer  "new_organization_id"
+    t.integer  "transferred_by_id"
     t.boolean  "copy",                :default => false
     t.boolean  "notified",            :default => false
     t.datetime "created_at",                             :null => false

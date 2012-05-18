@@ -22,7 +22,7 @@ class OrganizationalRolesController < ApplicationController
         people = Person.find(params[:ids])
 
         people.each do |person|
-          from_org.move_contact(person, to_org, keep_contact)
+          from_org.move_contact(person, to_org, keep_contact, current_person)
         end
       end
     end
