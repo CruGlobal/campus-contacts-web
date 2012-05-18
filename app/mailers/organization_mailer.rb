@@ -14,6 +14,12 @@ class OrganizationMailer < ActionMailer::Base
          subject: 'New organization request')
   end
   
+  def notify_person_transfer(to, intro, transfer_logs)
+    @transfer_logs = transfer_logs
+    @intro = intro
+    mail to: to, subject: "Contacts Transfer Notification"
+  end
+  
   def notify_user(org_id)
     @org = Organization.find(org_id)
     @admin = @org.admins.first
