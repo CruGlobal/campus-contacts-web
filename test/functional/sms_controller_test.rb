@@ -47,7 +47,7 @@ class SmsControllerTest < ActionController::TestCase
         @person.update_attribute(:firstName, 'Jesus')
         post :mo, @post_params.merge!({message: 'Christ', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
         assert_equal(assigns(:person).lastName, 'Christ')
-        assert_equal(assigns(:sent_sms).message, @keyword.questions.first.label_with_choices)
+        assert_equal(assigns(:sent_sms).message, "1/1 #{@keyword.questions.first.label_with_choices}")
       end
       
       should "convert a letter to a choice option" do
