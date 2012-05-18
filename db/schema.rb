@@ -129,20 +129,6 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
 
   add_index "authentications", ["uid", "provider"], :name => "uid_provider", :unique => true
 
-  create_table "client_applications", :force => true do |t|
-    t.string   "name"
-    t.string   "url"
-    t.string   "support_url"
-    t.string   "callback_url"
-    t.string   "key",          :limit => 40
-    t.string   "secret",       :limit => 40
-    t.integer  "user_id"
-    t.datetime "created_at",                 :null => false
-    t.datetime "updated_at",                 :null => false
-  end
-
-  add_index "client_applications", ["key"], :name => "index_client_applications_on_key", :unique => true
-
   create_table "clients", :force => true do |t|
     t.string   "code"
     t.string   "secret"
@@ -1379,7 +1365,7 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
     t.datetime "leadershipStartDate"
     t.datetime "leadershipEndDate"
     t.datetime "createDate"
-    t.binary   "lastChangedDate",               :limit => 8
+    t.binary   "lastChangedDate",               :limit => 255
     t.integer  "lastChangedBy"
     t.string   "displayLocation"
     t.boolean  "partnershipRegionOnly"
@@ -1587,30 +1573,30 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
   end
 
   create_table "linczone_contacts", :primary_key => "ContactID", :force => true do |t|
-    t.timestamp "EntryDate"
-    t.string    "FirstName",            :limit => 120
-    t.string    "LastName",             :limit => 120
-    t.string    "HomeAddress",          :limit => 200
-    t.string    "City",                 :limit => 20
-    t.string    "State",                :limit => 20
-    t.string    "Zip",                  :limit => 80
-    t.string    "Email",                :limit => 120
-    t.string    "HighSchool",           :limit => 120
-    t.string    "CampusName",           :limit => 200
-    t.string    "CampusID",             :limit => 80
-    t.string    "ReferrerFirstName",    :limit => 120
-    t.string    "ReferrerLastName",     :limit => 120
-    t.string    "ReferrerRelationship", :limit => 100
-    t.string    "ReferrerEmail",        :limit => 200
-    t.string    "InfoCCC",              :limit => 1,   :default => "F"
-    t.string    "InfoNav",              :limit => 1,   :default => "F"
-    t.string    "InfoIV",               :limit => 1,   :default => "F"
-    t.string    "InfoFCA",              :limit => 1,   :default => "F"
-    t.string    "InfoBSU",              :limit => 1,   :default => "F"
-    t.string    "InfoCACM",             :limit => 1,   :default => "F"
-    t.string    "InfoEFCA",             :limit => 1,   :default => "F"
-    t.string    "InfoGCM",              :limit => 1,   :default => "F"
-    t.string    "InfoWesley",           :limit => 1,   :default => "F"
+    t.datetime "EntryDate"
+    t.string   "FirstName",            :limit => 120
+    t.string   "LastName",             :limit => 120
+    t.string   "HomeAddress",          :limit => 200
+    t.string   "City",                 :limit => 20
+    t.string   "State",                :limit => 20
+    t.string   "Zip",                  :limit => 80
+    t.string   "Email",                :limit => 120
+    t.string   "HighSchool",           :limit => 120
+    t.string   "CampusName",           :limit => 200
+    t.string   "CampusID",             :limit => 80
+    t.string   "ReferrerFirstName",    :limit => 120
+    t.string   "ReferrerLastName",     :limit => 120
+    t.string   "ReferrerRelationship", :limit => 100
+    t.string   "ReferrerEmail",        :limit => 200
+    t.string   "InfoCCC",              :limit => 1,   :default => "F"
+    t.string   "InfoNav",              :limit => 1,   :default => "F"
+    t.string   "InfoIV",               :limit => 1,   :default => "F"
+    t.string   "InfoFCA",              :limit => 1,   :default => "F"
+    t.string   "InfoBSU",              :limit => 1,   :default => "F"
+    t.string   "InfoCACM",             :limit => 1,   :default => "F"
+    t.string   "InfoEFCA",             :limit => 1,   :default => "F"
+    t.string   "InfoGCM",              :limit => 1,   :default => "F"
+    t.string   "InfoWesley",           :limit => 1,   :default => "F"
   end
 
   create_table "mail_delayed_jobs", :force => true do |t|
@@ -2845,72 +2831,6 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
     t.string "period"
   end
 
-  create_table "oauth_access_grants", :force => true do |t|
-    t.integer  "resource_owner_id", :null => false
-    t.integer  "application_id",    :null => false
-    t.string   "token",             :null => false
-    t.integer  "expires_in",        :null => false
-    t.string   "redirect_uri",      :null => false
-    t.datetime "created_at",        :null => false
-    t.datetime "revoked_at"
-    t.string   "scopes"
-  end
-
-  add_index "oauth_access_grants", ["token"], :name => "index_oauth_access_grants_on_token", :unique => true
-
-  create_table "oauth_access_tokens", :force => true do |t|
-    t.integer  "resource_owner_id", :null => false
-    t.integer  "application_id",    :null => false
-    t.string   "token",             :null => false
-    t.string   "refresh_token"
-    t.integer  "expires_in"
-    t.datetime "revoked_at"
-    t.datetime "created_at",        :null => false
-    t.string   "scopes"
-  end
-
-  add_index "oauth_access_tokens", ["refresh_token"], :name => "index_oauth_access_tokens_on_refresh_token", :unique => true
-  add_index "oauth_access_tokens", ["resource_owner_id"], :name => "index_oauth_access_tokens_on_resource_owner_id"
-  add_index "oauth_access_tokens", ["token"], :name => "index_oauth_access_tokens_on_token", :unique => true
-
-  create_table "oauth_applications", :force => true do |t|
-    t.string   "name",         :null => false
-    t.string   "uid",          :null => false
-    t.string   "secret",       :null => false
-    t.string   "redirect_uri", :null => false
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-  end
-
-  add_index "oauth_applications", ["uid"], :name => "index_oauth_applications_on_uid", :unique => true
-
-  create_table "oauth_nonces", :force => true do |t|
-    t.string   "nonce"
-    t.integer  "timestamp"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  add_index "oauth_nonces", ["nonce", "timestamp"], :name => "index_oauth_nonces_on_nonce_and_timestamp", :unique => true
-
-  create_table "oauth_tokens", :force => true do |t|
-    t.integer  "user_id"
-    t.string   "type",                  :limit => 20
-    t.integer  "client_application_id"
-    t.string   "token",                 :limit => 40
-    t.string   "secret",                :limit => 40
-    t.string   "callback_url"
-    t.string   "verifier",              :limit => 20
-    t.string   "scope"
-    t.datetime "authorized_at"
-    t.datetime "invalidated_at"
-    t.datetime "expires_at"
-    t.datetime "created_at",                          :null => false
-    t.datetime "updated_at",                          :null => false
-  end
-
-  add_index "oauth_tokens", ["token"], :name => "index_oauth_tokens_on_token", :unique => true
-
   create_table "old_wsn_sp_wsnapplication", :primary_key => "WsnApplicationID", :force => true do |t|
     t.string   "oldPrimaryKey",                 :limit => 64
     t.string   "surferID",                      :limit => 64
@@ -3603,16 +3523,6 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
   end
 
   add_index "sent_sms", ["twilio_sid"], :name => "index_sent_sms_on_twilio_sid", :unique => true
-
-  create_table "sessions", :force => true do |t|
-    t.string   "session_id", :null => false
-    t.text     "data"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
-  add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "si_answer_sheets", :force => true do |t|
     t.integer  "question_sheet_id", :null => false
@@ -4680,10 +4590,7 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
     t.integer  "account_balance",    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "year"
   end
-
-  add_index "sp_designation_numbers", ["person_id", "project_id", "designation_number"], :name => "person_id"
 
   create_table "sp_donations", :force => true do |t|
     t.integer "designation_number",                                :null => false
