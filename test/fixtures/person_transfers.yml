@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  person_id: 1
+  old_organization_id: 1
+  new_organization_id: 1
+  copy: false
+  notified: false
+
+two:
+  person_id: 1
+  old_organization_id: 1
+  new_organization_id: 1
+  copy: false
+  notified: false
