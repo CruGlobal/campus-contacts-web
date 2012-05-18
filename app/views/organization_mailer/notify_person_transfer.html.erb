@@ -1,0 +1,19 @@
+<h1>Contacts Transfer Notification</h1>
+<p>
+  <%= @intro.to_s %><br/>
+</p>
+<p>
+  <ul>
+  <% @transfer_logs.each do |contact| %>
+    <li>
+      <b><%= contact.person.name %></b>
+      <%= "(#{contact.person.email})" if contact.person.email.present? %>
+      from <u><%= contact.old_organization.name %></u>
+      --
+      Transferred by:
+      <%= contact.transferred_by.name %>
+      <%= "(#{contact.transferred_by.email})" if contact.transferred_by.email.present? %>
+    </li>
+  <% end %>
+  </ul>
+</p>
