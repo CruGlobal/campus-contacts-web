@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120517184505) do
+ActiveRecord::Schema.define(:version => 20120518131853) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -1888,11 +1888,11 @@ ActiveRecord::Schema.define(:version => 20120517184505) do
     t.integer  "person_id"
     t.integer  "old_organization_id"
     t.integer  "new_organization_id"
-    t.integer  "transferred_by_id"
     t.boolean  "copy",                :default => false
     t.boolean  "notified",            :default => false
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
+    t.integer  "transferred_by_id"
   end
 
   create_table "mh_question_sheets", :force => true do |t|
