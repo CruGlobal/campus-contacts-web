@@ -156,7 +156,7 @@ class Surveys::QuestionsController < ApplicationController
     end
 
     def validate_then_create_chosen_leaders
-      new_leaders = params[:leaders]
+      new_leaders = params[:leaders] || []
       old_leaders = params[:id] ? Question.find(params[:id]).question_leaders.collect{ |ql| ql.person_id.to_s} : []
 
       to_add = new_leaders - old_leaders
