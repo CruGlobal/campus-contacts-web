@@ -1,6 +1,6 @@
 class Batch # < ActiveRecord::Base
   
-  def self.person_transfer
+  def self.person_transfer_notify
     
     queued_email = 0
     notify_entries = get_unnotified_logs
