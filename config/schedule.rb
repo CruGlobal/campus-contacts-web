@@ -20,9 +20,11 @@
 set :output, '/tmp/sync.log'
 
 job_type :rake,    "cd :path && RAILS_ENV=:environment /usr/local/bin/bundle exec /usr/local/bin/rake :task --silent :output"
+job_type :rails,    "cd :path && RAILS_ENV=:environment /usr/local/bin/bundle exec /usr/local/bin/rails :task --silent :output"
 
 every 4.hours do
   rake "infobase:sync"
+  rails "runner Batch.person_transfer_notify"
 end
 
 # Learn more: http://github.com/javan/whenever

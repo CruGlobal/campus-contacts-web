@@ -166,7 +166,7 @@ class OrganizationTest < ActiveSupport::TestCase
     end
   end
 
-  test "move_contact(person, to_org, keep_contact)" do # revise!
+  test "move_contact(person, to_org, keep_contact, current_user)" do # revise!
     person = Factory(:person_with_things)
     contact = Factory(:person)
     org1 = Factory(:organization)
@@ -174,7 +174,7 @@ class OrganizationTest < ActiveSupport::TestCase
     org1.add_contact(contact)
     org1.add_admin(person)
     FollowupComment.create(contact_id: contact.id, commenter_id: person.id, organization_id: org1.id, comment: 'test', status: 'contacted')
-    org1.move_contact(contact, org2, "false")
+    org1.move_contact(contact, org2, "false", person)
     assert_equal(0, org1.contacts.length)
     assert_equal(1, org2.contacts.length)
     assert_equal(0, FollowupComment.where(contact_id: contact.id, organization_id: org1.id).count)

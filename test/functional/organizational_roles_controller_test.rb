@@ -37,7 +37,7 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
       ids << @person2.id
       ids << @person3.id
       
-      xhr :post, :move_to, { :from_id => @org.id , :to_id => @another_org.id, :ids => ids, :keep_contact => true }
+      xhr :post, :move_to, { :from_id => @org.id , :to_id => @another_org.id, :ids => ids, :keep_contact => true, :current_admin => @user }
       assert @org.contacts.include? @person1
       assert @another_org.contacts.include? @person1
     end
