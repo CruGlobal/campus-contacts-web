@@ -687,7 +687,7 @@ class Person < ActiveRecord::Base
         end
       end
       phone = other_person.phone_numbers.first
-      other_person.attributes = person.attributes.except('personID')
+      other_person.attributes = person.attributes.except('personID').select {|_, v| v.present?}
     else
       email = person.email_addresses.first
       phone = person.phone_numbers.first
