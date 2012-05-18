@@ -121,6 +121,20 @@ class ContactsController < ApplicationController
     if params[:person_updated_from].present? && params[:person_updated_to].present?
       @people = @people.find_by_person_updated_by_daterange(params[:person_updated_from], params[:person_updated_to])
     end
+    #here
+
+    if params[:search_type].present? && params[:search_type] == "basic"
+      @people = @people.select("ministry_person.*, email_addresses.*")
+      .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID")
+      .where("concat(firstName,' ',lastName) LIKE :search OR
+                       concat(lastName, ' ',firstName) LIKE :search OR
+                       emails.email LIKE :search", 
+                       {:search => "%#{params[:query]}%"})
+    end
+
+
+
+
     @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
     # raise @q.sorts.inspect
     @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? params[:q][:s] : ['lastName, firstName']).group('ministry_person.personID')
