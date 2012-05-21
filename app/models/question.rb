@@ -142,7 +142,7 @@ class Question < Element
             raise "invalid date - " + value.inspect
           end
         end
-        object.send("#{attribute_name}=".to_sym, value)
+        object.send("#{attribute_name}=".to_sym, value) if object
       end
     else
       @answers ||= []

@@ -22,6 +22,7 @@ class Answer < ActiveRecord::Base
   def set(value, short_value = value)
     self.value = value
     self.short_value = truncate(short_value, :length => 225) # adds ... if truncated (but not if not)
+    save
   end
   
   def to_s

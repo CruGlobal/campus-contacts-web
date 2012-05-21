@@ -7,6 +7,9 @@ class Person < ActiveRecord::Base
   self.table_name = 'ministry_person'
   self.primary_key = 'personID'
 
+  has_many :person_transfers
+  has_one :transferred_by, class_name: "PersonTransfer", foreign_key: "transferred_by_id"
+  
   belongs_to :user, class_name: 'User', foreign_key: 'fk_ssmUserId'
   has_many :phone_numbers, autosave: true
 
@@ -621,7 +624,7 @@ class Person < ActiveRecord::Base
 
   def create_user!
     reload
-    if email.present? && primary_email_address.valid?
+    if email.present? && has_a_valid_email? #!primary_email_address.nil? ? primary_email_address.valid? : false
       if user =  User.find_by_username(email)
         if user.person
           user.person.merge(self)
@@ -687,7 +690,7 @@ class Person < ActiveRecord::Base
         end
       end
       phone = other_person.phone_numbers.first
-      other_person.attributes = person.attributes.except('personID')
+      other_person.attributes = person.attributes.except('personID').select {|_, v| v.present?}
     else
       email = person.email_addresses.first
       phone = person.phone_numbers.first
