@@ -105,8 +105,8 @@
     <% if @person.friends.any? %>
       <p><b><%= t('.persons_friends',person: declare_ownership(@person.firstName)) %></b></p>
 
-      <% leader_friends = @person.friends(Organization.find(10)).reject{|friend| a = Person.where(fb_uid: friend.uid.to_i).first
-        friend unless a.leader_in?(Organization.find(10))
+      <% leader_friends = @person.friends(current_organization).reject{|friend| a = Person.where(fb_uid: friend.uid.to_i).first
+        friend unless a.leader_in?(current_organization)
        } %>
 
       <% leader_friends.each do |friend| %>
