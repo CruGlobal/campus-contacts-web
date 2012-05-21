@@ -1,6 +1,7 @@
 <%= form_for(@sms_keyword, validate: true, html: {id: 'sms_keyword_form'}) do |f| %>
-  <%= error_messages_for :sms_keyword %>
-  
+  <% @sms_keyword.errors.full_messages.each do |msg| %>
+    <div class="error_alert"><%= msg %></div>
+  <% end %>
   <div class="stepwrap rwidth">
     <div class="stepnumber">
       <%= image_tag("step1.png") %>
@@ -10,7 +11,7 @@
         <div class="field">
           <label for="sms_keyword_<%= :keyword %>">
             <%= t('sms_keywords.form.keyword') + ": " + t('sms_keywords.form.keyword_tip') %>
-            <%= tip(t('sms_keywords.form.keyword_instruct')) %>
+            <div class="icon help tipit help_bubble_keyword " title="<%= t('sms_keywords.form.keyword_instruct') %>"></div>
           </label>
           <%= f.text_field :keyword, :placeholder => "Shorter keywords are better" %>
         </div>
@@ -33,7 +34,7 @@
       <div class="field">
         <label for="sms_keyword_initial_response">
           <%= raw(t('sms_keywords.form.initial_response')) %> 
-          <%= tip(t('sms_keywords.form.post_survey_why')) %>
+          <div class="icon help tipit help_bubble_keyword " title="<%= t('sms_keywords.form.post_survey_why') %>"></div>
         </label>
         <%= f.text_area :initial_response, rows: 3 %>
       </div>
@@ -48,8 +49,10 @@
     </div>
     <div class="stepcontent"> 
       <div class="field">
-        <%= f.label :survey_id,
-            raw(t('helpers.label.sms_keyword.survey_id') + ' ' + tip(t('.associated_survey_tip'))) %>
+        <label for="sms_keyword_associated_survey">
+          <%= raw(t('helpers.label.sms_keyword.survey_id')) %>
+          <div class="icon help tipit help_bubble_keyword " title="<%= t('.associated_survey_tip') %>"></div>
+        </label>
         <%= f.select :survey_id, 
             current_organization.self_and_children_surveys.collect {|s| [s, s.id]},
             include_blank: "Choose One"%>
