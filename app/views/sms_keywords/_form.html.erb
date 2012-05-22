@@ -16,6 +16,8 @@
         <label for="sms_keyword">
           <%=  t('sms_keywords.form.keyword') %>: <%= @sms_keyword.keyword %>
           <div class="icon help tipit help_bubble_keyword " title="<%= t('sms_keywords.form.keyword_locked') %>"></div>
+          <br/>
+          <br/>
         </label>
       <% end %>
       <label for="sms_keyword">
@@ -48,11 +50,11 @@
       <%= image_tag("step3.png") %>
     </div>
     <div class="stepcontent"> 
+      <label for="sms_keyword_associated_survey">
+        <%= raw(t('helpers.label.sms_keyword.survey_id')) %>
+        <div class="icon help tipit help_bubble_keyword " title="<%= t('.associated_survey_tip') %>"></div>
+      </label>
       <div class="field">
-        <label for="sms_keyword_associated_survey">
-          <%= raw(t('helpers.label.sms_keyword.survey_id')) %>
-          <div class="icon help tipit help_bubble_keyword " title="<%= t('.associated_survey_tip') %>"></div>
-        </label>
         <%= f.select :survey_id, 
             current_organization.self_and_children_surveys.collect {|s| [s, s.id]},
             include_blank: "Choose One"%>
