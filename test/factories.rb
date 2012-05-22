@@ -55,6 +55,7 @@ FactoryGirl.define do
     state "requested"
     initial_response "Hi there!"
     association :user
+    association :survey
   end
   
   factory :approved_keyword, parent: :sms_keyword do

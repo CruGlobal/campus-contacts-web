@@ -3,7 +3,8 @@ require 'test_helper'
 class KeywordRequestMailerTest < ActiveSupport::TestCase
   setup do
     user = Factory(:user_with_auxs)
-    @keyword = Factory(:sms_keyword, user: user, organization: user.person.organizations.first, keyword: "Wat")
+    survey = Factory(:survey)
+    @keyword = Factory(:sms_keyword, user: user, organization: user.person.organizations.first, keyword: "Wat", survey: survey)
   end
   
   test "new keyword request" do
