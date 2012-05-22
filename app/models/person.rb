@@ -706,7 +706,7 @@ class Person < ActiveRecord::Base
   end
 
   def friends_and_leaders(organization)
-    Friend.followers(self) & organization.leaders.collect(&:fb_uid).collect(&:to_s)
+    Friend.followers(self) & organization.leaders.collect { |l| l.fb_uid.to_s }
   end
 
   def assigned_organizational_roles(organizations)

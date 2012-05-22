@@ -105,15 +105,9 @@
     <% if @person.friends.any? %>
       <p><b><%= t('.persons_friends',person: declare_ownership(@person.firstName)) %></b></p>
 
-      <% leader_friends = @person.friends(current_organization).collect{|friend| a = Person.where(fb_uid: friend.uid.to_i).first
-        friend if a && a.leader_in?(current_organization)
-       } %>
-
-      <% leader_friends.compact! %>
-
-      <% leader_friends.each do |friend| %>
+      <% @person.friends_and_leaders(current_organization).each do |friend_uid| %>
         <div style="float:left; margin-right: 5px;">
-          <%= link_to image_tag("https://graph.facebook.com/#{friend.uid}/picture?type=square", alt: ''), person_path(Person.where(fb_uid: friend.uid.to_i).first), target: '_blank', :title => friend.name %>
+          <%= link_to image_tag("https://graph.facebook.com/#{friend_uid}/picture?type=square", alt: ''), person_path(Person.where(fb_uid: friend_uid).first), target: '_blank', :title => Person.where(fb_uid: friend_uid).first %>
         </div>
       <% end %>
       <div style="clear:both;"></div>
