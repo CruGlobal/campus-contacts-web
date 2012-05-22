@@ -102,14 +102,17 @@
   </div>
   <div style="clear:both;"></div>
   <div>
-    <% if @person.friends.any? %>
+    <% if friends = @person.friends_and_leaders(current_organization) %>
       <p><b><%= t('.persons_friends',person: declare_ownership(@person.firstName)) %></b></p>
 
-      <% @person.friends_and_leaders(current_organization).each do |friend_uid| %>
+      <% friends.each do |friend_uid| %>
         <div style="float:left; margin-right: 5px;">
-          <%= link_to image_tag("https://graph.facebook.com/#{friend_uid}/picture?type=square", alt: ''), person_path(Person.where(fb_uid: friend_uid).first), target: '_blank', :title => Person.where(fb_uid: friend_uid).first %>
+          <% Person.find_by_fb_uid(friend_uid).tap do |person| %>
+            <%= link_to image_tag("https://graph.facebook.com/#{friend_uid}/picture?type=square", alt: ''), person_path(person), target: '_blank', :title => person %>
+          <% end %>
         </div>
       <% end %>
+
       <div style="clear:both;"></div>
     <% end %>
   </div>
