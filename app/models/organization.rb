@@ -4,6 +4,7 @@ class Organization < ActiveRecord::Base
   attr_accessor :person_id
 
   has_ancestry
+  
   belongs_to :importable, polymorphic: true
   has_many :roles, inverse_of: :organization
   has_many :group_labels
@@ -29,7 +30,7 @@ class Organization < ActiveRecord::Base
   has_many :no_activity_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.followup_status' => 'uncontacted'}
   has_many :rejoicables
   has_many :groups
-  has_many :surveys # duplicate of the above's "has_many :surveys, dependent: :destroy"
+
   Rejoicable::OPTIONS.each do |option|
     has_many :"#{option}_contacts", :through => :rejoicables, source: :person, conditions: {'rejoicables.what' => option}, uniq: true
   end
@@ -172,7 +173,7 @@ class Organization < ActiveRecord::Base
       person.remove_assigned_contacts(self)
     end
 
-    def move_contact(person, to_org, keep_contact)  
+    def move_contact(person, to_org, keep_contact, current_admin = nil)  
       @followup_comments = followup_comments.where(contact_id: person.id)
       @rejoicables = rejoicables.where(person_id: person.id)
       if keep_contact == "false"
@@ -191,6 +192,12 @@ class Organization < ActiveRecord::Base
       end
 
       to_org.add_contact(person)
+      
+      # Save transfer log
+      val_copy = keep_contact == "false" ? false : true
+      val_transferred_by = current_admin.personID if current_admin.present?
+      PersonTransfer.create(person_id: person.id, old_organization_id: id, new_organization_id: to_org.id, transferred_by_id: val_transferred_by, copy: val_copy)
+      
       FollowupComment.where(organization_id: id, contact_id: person.id).update_all(organization_id: to_org.id)
     end
 

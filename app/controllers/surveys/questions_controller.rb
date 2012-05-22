@@ -54,17 +54,13 @@ class Surveys::QuestionsController < ApplicationController
   # POST /questions
   # POST /questions.xml
   def create
+
     if (params[:question_id])
       @question = Element.find(params[:question_id])
     else
+      return unless validate_then_create_chosen_leaders
       type, style = params[:question_type].split(':')
       @question = type.constantize.create!(params[:question].merge(style: style))
-      
-      unless params[:leaders].nil?
-        params[:leaders].each do |l|
-          QuestionLeader.create!(:person_id => l, :element_id => @question.id)
-        end
-      end
     end
     
     # If this was an archived question, unarchive it. otherwise, add it
@@ -95,6 +91,7 @@ class Surveys::QuestionsController < ApplicationController
   # PUT /questions/1.xml
   def update
     params[:question] ||= params[:choice_field] ||= params[:text_field]
+    validate_then_create_chosen_leaders
     respond_to do |wants|
       if @question.update_attributes(params[:question])
         wants.js {}
@@ -156,5 +153,36 @@ class Surveys::QuestionsController < ApplicationController
     
     def get_leaders
       @leaders = current_organization.leaders
+    end
+
+    def validate_then_create_chosen_leaders
+      new_leaders = params[:leaders] || []
+      old_leaders = params[:id] ? Question.find(params[:id]).question_leaders.collect{ |ql| ql.person_id.to_s} : []
+
+      to_add = new_leaders - old_leaders
+      to_remove = old_leaders - new_leaders
+
+      #destroy question leaders
+      Question.find(params[:id]).question_leaders.each do |ql|
+        ql.destroy if to_remove.include? ql.person_id
+      end if params[:id]
+
+      #create question leaders
+      leaders_with_invalid_emails = Array.new
+      to_add.each do |ta|
+        leaders_with_invalid_emails << ta unless Person.find(ta).has_a_valid_email?
+      end
+
+      unless leaders_with_invalid_emails.blank?
+        respond_to do |wants|
+          wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(personId: leaders_with_invalid_emails).collect{|p| p.name}.join(', ') } }
+        end
+        return false
+      else
+        to_add.each do |ta|
+          QuestionLeader.create!(:person_id => ta, :element_id => @question.id)
+        end
+      end
+      true
     end
 end

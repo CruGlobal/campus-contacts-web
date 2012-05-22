@@ -1,7 +1,7 @@
 class SurveyResponsesController < ApplicationController
-  prepend_before_filter :set_keyword_cookie, only: :new
   before_filter :get_person
   before_filter :get_survey, except: [:show, :edit]
+  before_filter :set_keyword_cookie, only: :new
   before_filter :prepare_for_mobile
   skip_before_filter :authenticate_user!, except: :update
   skip_before_filter :check_url

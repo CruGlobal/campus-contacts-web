@@ -15,7 +15,7 @@ class Question < Element
   has_many :sheet_answers, :class_name => "Answer", :foreign_key => "question_id", :dependent => :destroy
 
   belongs_to :related_question_sheet, :class_name => "QuestionSheet", :foreign_key => "related_question_sheet_id"
-  
+
   # validates_inclusion_of :required, :in => [false, true]
   
   validates_format_of :slug, :with => /^[a-z_][a-z0-9_]*$/, 
@@ -134,7 +134,7 @@ class Question < Element
         end
       end
       unless responses(app) == values
-        value = ActiveRecord::Base.connection.quote_string(values.first)
+        value = values.first
         if self.is_a?(DateField) && value.present?
           begin
             value = Date.strptime(value, (I18n.t 'date.formats.default'))
@@ -142,11 +142,8 @@ class Question < Element
             raise "invalid date - " + value.inspect
           end
         end
-        object.update_attribute(attribute_name, value) 
+        object.send("#{attribute_name}=".to_sym, value) if object
       end
-      # else
-      #   raise object_name.inspect + ' == ' + attribute_name.inspect
-      # end
     else
       @answers ||= []
       if multiple_answers_allowed?
@@ -170,13 +167,11 @@ class Question < Element
             answer = @mark_for_destroy.pop
           end
           answer.set(value)
-          answer.save!
           @answers << answer
         end
       else
         answer = Answer.find_by_question_id_and_answer_sheet_id(id, app.id) || Answer.new(:question_id => self.id, :answer_sheet_id => app.id)
         answer.set(values.first)
-        answer.save!
         @answers << answer
       end
     end
@@ -195,7 +190,7 @@ class Question < Element
           answer.answer_sheet_id = answer_sheet.id
           answer.save!
           
-          unless question.nil?
+          if question.present? && question.trigger_words.present?
             question.trigger_words.split(",").each do |t|
               if answer.value.include? t
                 send_notifications(question, answer_sheet.person, answer.value)
@@ -238,7 +233,7 @@ class Question < Element
   end
 
   def send_email_to_leaders(leaders, msg)
-    SurveyMailer.enqueue.notify(leaders.collect(&:email).compact, msg)
+    SurveyMailer.enqueue.notify(leaders.reject{|leader| leader unless leader.has_a_valid_email?}.collect(&:email).compact, msg)
   end
 
   def shorten_link(id)
@@ -272,5 +267,13 @@ class Question < Element
   def multiple_answers_allowed?
     false
   end
+
+  private
+    def all_leaders_have_valid_email?
+      leaders.each do |leader|
+        errors.add(:leaders,"mello")
+        return false unless leader.has_a_valid_email?
+      end
+    end
 
 end

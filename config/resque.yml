@@ -1,5 +1,5 @@
 development: localhost:6379
 staging: localhost:6379
-rackspace: 10.179.150.27:6379
+rackspace: redis:6379
 test: localhost:6379
 production: 10.10.11.166:6379

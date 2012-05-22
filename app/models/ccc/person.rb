@@ -48,127 +48,125 @@ module Ccc
       has_many :sp_designation_numbers, class_name: 'Ccc::SpDesignationNumber', dependent: :destroy
     end
 
-    module InstanceMethods
-      def merge(other)
-        reload
-        ::Person.transaction do
-          attributes.each do |k, v|
-            next if k == ::Person.primary_key
-            next if v == other.attributes[k]
-            self[k] = case
-                      when other.attributes[k].blank? then v
-                      when v.blank? then other.attributes[k]
+    def merge(other)
+      reload
+      ::Person.transaction do
+        attributes.each do |k, v|
+          next if k == ::Person.primary_key
+          next if v == other.attributes[k]
+          self[k] = case
+                    when other.attributes[k].blank? then v
+                    when v.blank? then other.attributes[k]
+                    else
+                      other_date = other.dateChanged || other.dateCreated
+                      this_date = dateChanged || dateCreated
+                      if other_date && this_date
+                        other_date > this_date ? other.attributes[k] : v
                       else
-                        other_date = other.dateChanged || other.dateCreated
-                        this_date = dateChanged || dateCreated
-                        if other_date && this_date
-                          other_date > this_date ? other.attributes[k] : v
-                        else
-                          v
-                        end
+                        v
                       end
-          end
-
-          # Addresses
-          ministry_newaddresses.each do |address|
-            other_address = other.ministry_newaddresses.detect {|oa| oa.addressType == address.addressType}
-            address.merge(other_address) if other_address
-          end
-          other.ministry_newaddresses do |address|
-            other_address = ministry_newaddresses.detect {|oa| oa.addressType == address.addressType}
-            address.update_attribute(:fk_PersonID, personID) unless address.frozen? || other_address
-          end
-
-          # CRS
-          other.crs_registrations.each { |ua| ua.update_attribute(:fk_PersonID, personID) }
-
-          if other.crs2_profile && crs2_profile
-            crs2_profile.merge(other.crs2_profile)
-          elsif other.crs2_profile
-            other.crs2_profile.update_column(:ministry_person_id, personID)
-          end
-
-
-          # Panorama
-          other.pr_reviewers.each { |ua| ua.update_column(:person_id, personID) }
-
-          PrReview.where(["subject_id = ? or initiator_id = ?", other.id, other.id]).each do |ua|
-            ua.update_attribute(:subject_id, personID) if ua.subject_id == other.id
-            ua.update_attribute(:initiator_id, personID) if ua.initiator_id == other.id
-          end
-
-          other.pr_admins.each { |ua| ua.update_attribute(:person_id, personID) }
-          other.pr_summary_forms.each { |ua| ua.update_attribute(:person_id, personID) }
-          other.pr_reminders.each { |ua| ua.update_attribute(:person_id, personID) }
-          other.pr_personal_forms.each { |ua| ua.update_attribute(:person_id, personID) }
-
-          # end Panorama
-
-          # Summer Project Tool
-          other.sp_applications.each { |ua| ua.update_attribute(:person_id, personID) }
-
-          SpProject.where(["pd_id = ? or apd_id = ? or opd_id = ? or coordinator_id = ?", other.id, other.id, other.id, other.id]).each do |ua|
-            ua.update_attribute(:pd_id, personID) if ua.pd_id == other.id
-            ua.update_attribute(:apd_id, personID) if ua.apd_id == other.id
-            ua.update_attribute(:opd_id, personID) if ua.opd_id == other.id
-            ua.update_attribute(:coordinator_id, personID) if ua.coordinator_id == other.id
-          end
-
-          if other.sp_user and sp_user
-            sp_user.merge(other.sp_user)
-          elsif other.sp_user
-            SpUser.where(["person_id = ? or ssm_id = ? or created_by_id = ?", other.id, other.fk_ssmUserId, other.fk_ssmUserId]).each do |ua|
-              ua.update_attribute(:person_id, personID) if ua.person_id == other.id
-              ua.update_attribute(:ssm_id, fk_ssmUserId) if ua.ssm_id == other.fk_ssmUserId
-              ua.update_attribute(:created_by_id, fk_ssmUserId) if ua.created_by_id == other.fk_ssmUserId
-            end
-          end
-
-          other.sp_staff.each { |ua| ua.update_attribute(:person_id, personID) }
-          other.sp_application_moves.each { |ua| ua.update_attribute(:moved_by_person_id, personID) }
-          # end Summer Project Tool
-
-          other.si_applies.each { |ua| ua.update_attribute(:applicant_id, personID) }
-
-          other.ministry_staff.each { |ua| ua.update_attribute(:person_id, personID) }
-
-          other.hr_si_applications.each do |ua|
-            ua.update_attribute(:fk_personID, personID)
-            ua.update_attribute(:fk_ssmUserID, fk_ssmUserId)
-          end
-
-          other.si_applies.each { |ua| ua.update_attribute(:applicant_id, personID) }
-          other.sitrack_mpd.each { |ua| ua.update_attribute(:person_id, personID) }
-          other.sitrack_tracking.each { |ua| ua.update_attribute(:person_id, personID) }
-
-          SnCampusInvolvement.where(["person_id = ? or added_by_id = ?", other.id, other.id]).each do |ua|
-            ua.update_attribute(:person_id, personID) if ua.person_id == other.id
-            ua.update_attribute(:added_by_id, personID) if ua.added_by_id == other.id
-          end
-
-          # SN
-          # other.sn_custom_values.each { |ua| ua.update_attribute(:person_id, personID) }
-          # other.sn_group_involvements.each { |ua| ua.update_attribute(:person_id, personID) }
-          # other.sn_ministry_involvements.each { |ua| ua.update_attribute(:person_id, personID) }
-          # other.sn_training_answers.each { |ua| ua.update_attribute(:person_id, personID) }
-          # other.sn_imports.each { |ua| ua.update_attribute(:person_id, personID) }
-          # other.sn_timetables.each { |ua| ua.update_attribute(:person_id, personID) }
-
-          other.profile_pictures.each { |ua| ua.update_attribute(:person_id, personID) }
-          other.ministry_missional_team_members.each { |ua| ua.update_attribute(:personID, personID) }
-          other.rideshare_rides.each {|ua| ua.update_attribute(:person_id, personID) }
-          other.sp_designation_numbers.each do |d|
-            begin
-              d.update_attribute(:person_id, personID)
-            rescue ActiveRecord::RecordNotUnique
-            end
-          end
-
-          MergeAudit.create!(mergeable: self, merge_looser: other)
-          other.reload
-          other.destroy
-          save(validate: false)
+                    end
         end
+
+        # Addresses
+        ministry_newaddresses.each do |address|
+          other_address = other.ministry_newaddresses.detect {|oa| oa.addressType == address.addressType}
+          address.merge(other_address) if other_address
+        end
+        other.ministry_newaddresses do |address|
+          other_address = ministry_newaddresses.detect {|oa| oa.addressType == address.addressType}
+          address.update_attribute(:fk_PersonID, personID) unless address.frozen? || other_address
+        end
+
+        # CRS
+        other.crs_registrations.each { |ua| ua.update_attribute(:fk_PersonID, personID) }
+
+        if other.crs2_profile && crs2_profile
+          crs2_profile.merge(other.crs2_profile)
+        elsif other.crs2_profile
+          other.crs2_profile.update_column(:ministry_person_id, personID)
+        end
+
+
+        # Panorama
+        other.pr_reviewers.each { |ua| ua.update_column(:person_id, personID) }
+
+        PrReview.where(["subject_id = ? or initiator_id = ?", other.id, other.id]).each do |ua|
+          ua.update_attribute(:subject_id, personID) if ua.subject_id == other.id
+          ua.update_attribute(:initiator_id, personID) if ua.initiator_id == other.id
+        end
+
+        other.pr_admins.each { |ua| ua.update_attribute(:person_id, personID) }
+        other.pr_summary_forms.each { |ua| ua.update_attribute(:person_id, personID) }
+        other.pr_reminders.each { |ua| ua.update_attribute(:person_id, personID) }
+        other.pr_personal_forms.each { |ua| ua.update_attribute(:person_id, personID) }
+
+        # end Panorama
+
+        # Summer Project Tool
+        other.sp_applications.each { |ua| ua.update_attribute(:person_id, personID) }
+
+        SpProject.where(["pd_id = ? or apd_id = ? or opd_id = ? or coordinator_id = ?", other.id, other.id, other.id, other.id]).each do |ua|
+          ua.update_attribute(:pd_id, personID) if ua.pd_id == other.id
+          ua.update_attribute(:apd_id, personID) if ua.apd_id == other.id
+          ua.update_attribute(:opd_id, personID) if ua.opd_id == other.id
+          ua.update_attribute(:coordinator_id, personID) if ua.coordinator_id == other.id
+        end
+
+        if other.sp_user and sp_user
+          sp_user.merge(other.sp_user)
+        elsif other.sp_user
+          SpUser.where(["person_id = ? or ssm_id = ? or created_by_id = ?", other.id, other.fk_ssmUserId, other.fk_ssmUserId]).each do |ua|
+            ua.update_attribute(:person_id, personID) if ua.person_id == other.id
+            ua.update_attribute(:ssm_id, fk_ssmUserId) if ua.ssm_id == other.fk_ssmUserId
+            ua.update_attribute(:created_by_id, fk_ssmUserId) if ua.created_by_id == other.fk_ssmUserId
+          end
+        end
+
+        other.sp_staff.each { |ua| ua.update_attribute(:person_id, personID) }
+        other.sp_application_moves.each { |ua| ua.update_attribute(:moved_by_person_id, personID) }
+        # end Summer Project Tool
+
+        other.si_applies.each { |ua| ua.update_attribute(:applicant_id, personID) }
+
+        other.ministry_staff.each { |ua| ua.update_attribute(:person_id, personID) }
+
+        other.hr_si_applications.each do |ua|
+          ua.update_attribute(:fk_personID, personID)
+          ua.update_attribute(:fk_ssmUserID, fk_ssmUserId)
+        end
+
+        other.si_applies.each { |ua| ua.update_attribute(:applicant_id, personID) }
+        other.sitrack_mpd.each { |ua| ua.update_attribute(:person_id, personID) }
+        other.sitrack_tracking.each { |ua| ua.update_attribute(:person_id, personID) }
+
+        SnCampusInvolvement.where(["person_id = ? or added_by_id = ?", other.id, other.id]).each do |ua|
+          ua.update_attribute(:person_id, personID) if ua.person_id == other.id
+          ua.update_attribute(:added_by_id, personID) if ua.added_by_id == other.id
+        end
+
+        # SN
+        # other.sn_custom_values.each { |ua| ua.update_attribute(:person_id, personID) }
+        # other.sn_group_involvements.each { |ua| ua.update_attribute(:person_id, personID) }
+        # other.sn_ministry_involvements.each { |ua| ua.update_attribute(:person_id, personID) }
+        # other.sn_training_answers.each { |ua| ua.update_attribute(:person_id, personID) }
+        # other.sn_imports.each { |ua| ua.update_attribute(:person_id, personID) }
+        # other.sn_timetables.each { |ua| ua.update_attribute(:person_id, personID) }
+
+        other.profile_pictures.each { |ua| ua.update_attribute(:person_id, personID) }
+        other.ministry_missional_team_members.each { |ua| ua.update_attribute(:personID, personID) }
+        other.rideshare_rides.each {|ua| ua.update_attribute(:person_id, personID) }
+        other.sp_designation_numbers.each do |d|
+          begin
+            d.update_attribute(:person_id, personID)
+          rescue ActiveRecord::RecordNotUnique
+          end
+        end
+
+        MergeAudit.create!(mergeable: self, merge_looser: other)
+        other.reload
+        other.destroy
+        save(validate: false)
       end
     end
   end
