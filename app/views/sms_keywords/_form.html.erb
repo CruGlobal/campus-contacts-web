@@ -1,27 +1,27 @@
 <%= form_for(@sms_keyword, validate: true, html: {id: 'sms_keyword_form'}) do |f| %>
-  <% @sms_keyword.errors.full_messages.each do |msg| %>
-    <div class="error_alert"><%= msg %></div>
-  <% end %>
   <div class="stepwrap rwidth">
     <div class="stepnumber">
       <%= image_tag("step1.png") %>
     </div>
     <div class="stepcontent"> 
       <% if @sms_keyword.new_record? %>
+        <label for="sms_keyword">
+          <%= t('sms_keywords.form.keyword') + ": " + t('sms_keywords.form.keyword_tip') %>
+          <div class="icon help tipit help_bubble_keyword " title="<%= t('sms_keywords.form.keyword_instruct') %>"></div>
+        </label>
         <div class="field">
-          <label for="sms_keyword_<%= :keyword %>">
-            <%= t('sms_keywords.form.keyword') + ": " + t('sms_keywords.form.keyword_tip') %>
-            <div class="icon help tipit help_bubble_keyword " title="<%= t('sms_keywords.form.keyword_instruct') %>"></div>
-          </label>
-          <%= f.text_field :keyword, :placeholder => "Shorter keywords are better" %>
+          <%= f.text_field :keyword, placeholder: "Shorter keywords are better" %>
         </div>
       <% else %>
-        <div class="keywordname tipthis" title="<%= t('sms_keywords.form.keyword_locked') %>">
+        <label for="sms_keyword">
           <%=  t('sms_keywords.form.keyword') %>: <%= @sms_keyword.keyword %>
-        </div>
+          <div class="icon help tipit help_bubble_keyword " title="<%= t('sms_keywords.form.keyword_locked') %>"></div>
+        </label>
       <% end %>
+      <label for="sms_keyword">
+        <%= t('sms_keywords.form.explanation') %>
+      </label>
       <div class="field">
-        <%= f.label :explanation, t('sms_keywords.form.explanation') %>
         <%= f.text_area :explanation, rows: 5, placeholder: t("keywords.form.keyword_why") %>
       </div>
     </div>
@@ -58,7 +58,7 @@
             include_blank: "Choose One"%>
       </div>
       <div class="actions">
-        <%= f.submit %> <%= t('sms_keywords.form.note') if @sms_keyword.new_record? %>
+        <%= f.submit id: 'sms_keyword_submit' %> <%= t('sms_keywords.form.note') if @sms_keyword.new_record? %>
       </div>
     </div>
   </div>
