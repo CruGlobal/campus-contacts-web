@@ -11,11 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(:version => 20120422020609) do
-=======
 ActiveRecord::Schema.define(:version => 20120518131853) do
->>>>>>> fa0868cf78c710ca0575bd7476231d55e470a83b
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -594,7 +590,7 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
   create_table "crs2_registrant_type", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "version",                                                                                                  :null => false
+    t.integer  "version",                                                                                                    :null => false
     t.boolean  "accept_checks"
     t.boolean  "accept_credit_cards"
     t.boolean  "accept_ministry_account_transfers"
@@ -609,35 +605,35 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
     t.boolean  "childcare_available"
     t.date     "default_arrival_date"
     t.date     "default_departure_date"
-    t.text     "description",                                                                                              :null => false
+    t.text     "description",                                                                                                :null => false
     t.boolean  "is_child_type"
-    t.decimal  "married_commuter_cost",                                     :precision => 12, :scale => 2
-    t.decimal  "married_commuter_early_reg_discount",                       :precision => 12, :scale => 2
-    t.decimal  "married_commuter_full_payment_discount",                    :precision => 12, :scale => 2
+    t.decimal  "married_commuter_cost",                                       :precision => 12, :scale => 2
+    t.decimal  "married_commuter_early_reg_discount",                         :precision => 12, :scale => 2
+    t.decimal  "married_commuter_full_payment_discount",                      :precision => 12, :scale => 2
     t.datetime "married_discount_early_registration_deadline"
-    t.decimal  "married_onsite_cost",                                       :precision => 12, :scale => 2
-    t.decimal  "married_onsite_early_reg_discount",                         :precision => 12, :scale => 2
-    t.decimal  "married_onsite_full_payment_discount",                      :precision => 12, :scale => 2
-    t.decimal  "married_required_deposit",                                  :precision => 12, :scale => 2
-    t.string   "name",                                                                                     :default => "", :null => false
+    t.decimal  "married_onsite_cost",                                         :precision => 12, :scale => 2
+    t.decimal  "married_onsite_early_reg_discount",                           :precision => 12, :scale => 2
+    t.decimal  "married_onsite_full_payment_discount",                        :precision => 12, :scale => 2
+    t.decimal  "married_required_deposit",                                    :precision => 12, :scale => 2
+    t.string   "name",                                                                                       :default => "", :null => false
     t.boolean  "offer_childcare"
     t.text     "registration_complete_email"
-    t.decimal  "single_commuter_cost",                                      :precision => 12, :scale => 2
-    t.decimal  "single_commuter_early_reg_discount",                        :precision => 12, :scale => 2
-    t.decimal  "single_commuter_full_payment_discount",                     :precision => 12, :scale => 2
+    t.decimal  "single_commuter_cost",                                        :precision => 12, :scale => 2
+    t.decimal  "single_commuter_early_reg_discount",                          :precision => 12, :scale => 2
+    t.decimal  "single_commuter_full_payment_discount",                       :precision => 12, :scale => 2
     t.datetime "single_discount_early_registration_deadline"
-    t.decimal  "single_onsite_cost",                                        :precision => 12, :scale => 2
-    t.decimal  "single_onsite_early_reg_discount",                          :precision => 12, :scale => 2
-    t.decimal  "single_onsite_full_payment_discount",                       :precision => 12, :scale => 2
-    t.decimal  "single_required_deposit",                                   :precision => 12, :scale => 2
-    t.integer  "conference_id",                                                                                            :null => false
+    t.decimal  "single_onsite_cost",                                          :precision => 12, :scale => 2
+    t.decimal  "single_onsite_early_reg_discount",                            :precision => 12, :scale => 2
+    t.decimal  "single_onsite_full_payment_discount",                         :precision => 12, :scale => 2
+    t.decimal  "single_required_deposit",                                     :precision => 12, :scale => 2
+    t.integer  "conference_id",                                                                                              :null => false
     t.boolean  "defer_online_payment"
     t.boolean  "require_full_payment"
     t.boolean  "shut_off"
     t.text     "shut_off_message"
-    t.binary   "married_require_full_payment",                 :limit => 1
-    t.binary   "single_require_full_payment",                  :limit => 1
-    t.binary   "enable_rideshare",                             :limit => 1
+    t.binary   "married_require_full_payment",                 :limit => 255
+    t.binary   "single_require_full_payment",                  :limit => 255
+    t.binary   "enable_rideshare",                             :limit => 255
   end
 
   add_index "crs2_registrant_type", ["conference_id"], :name => "FKA936E6DD863D9D1F"
@@ -1042,6 +1038,7 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
   end
 
   add_index "fsk_fields_roles", ["field_id"], :name => "FK_fsk_fields_roles"
+  add_index "fsk_fields_roles", ["role_id"], :name => "fsk_fields_roles_ibfk_2"
 
   create_table "fsk_kit_categories", :force => true do |t|
     t.string   "name",         :limit => 50,                  :null => false
@@ -1424,7 +1421,6 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
 
   add_index "hr_si_application_2003_deprecated", ["fk_ssmUserID"], :name => "fk_ssmUserID"
 
-<<<<<<< HEAD
   create_table "hr_si_application_2004_deprecated", :primary_key => "applicationID", :force => true do |t|
     t.integer  "locationA"
     t.string   "locationAExplanation",                    :limit => 90
@@ -2135,8 +2131,6 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
 
   add_index "hr_si_payment", ["fk_ApplicationID"], :name => "fk_ApplicationID"
 
-=======
->>>>>>> fa0868cf78c710ca0575bd7476231d55e470a83b
   create_table "hr_si_project", :primary_key => "SIProjectID", :force => true do |t|
     t.string   "name"
     t.string   "partnershipRegion",             :limit => 50
@@ -2191,11 +2185,7 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
     t.datetime "leadershipStartDate"
     t.datetime "leadershipEndDate"
     t.datetime "createDate"
-<<<<<<< HEAD
-    t.binary   "lastChangedDate",               :limit => 8
-=======
     t.binary   "lastChangedDate",               :limit => 255
->>>>>>> fa0868cf78c710ca0575bd7476231d55e470a83b
     t.integer  "lastChangedBy"
     t.string   "displayLocation"
     t.boolean  "partnershipRegionOnly"
@@ -3141,7 +3131,7 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
     t.datetime "updated_at"
   end
 
-  add_index "mh_email_templates", ["name"], :name => "index_ma_email_templates_on_name", :length => {"name"=>767}
+  add_index "mh_email_templates", ["name"], :name => "index_ma_email_templates_on_name", :length => {"name"=>255}
 
   create_table "mh_friends", :force => true do |t|
     t.string   "name"
@@ -3210,13 +3200,8 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
     t.datetime "upload_updated_at"
     t.text     "headers"
     t.text     "header_mappings"
-<<<<<<< HEAD
     t.datetime "created_at"
     t.datetime "updated_at"
-=======
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
->>>>>>> fa0868cf78c710ca0575bd7476231d55e470a83b
   end
 
   add_index "mh_imports", ["organization_id"], :name => "index_mh_imports_on_organization_id"
@@ -4603,7 +4588,7 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
     t.datetime "updated_at"
   end
 
-  add_index "pr_email_templates", ["name"], :name => "index_pr_email_templates_on_name", :length => {"name"=>767}
+  add_index "pr_email_templates", ["name"], :name => "index_pr_email_templates_on_name", :length => {"name"=>255}
 
   create_table "pr_page_elements", :force => true do |t|
     t.integer  "page_id"
@@ -5066,7 +5051,7 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
     t.datetime "updated_at"
     t.datetime "last_sign_in_at"
     t.string   "locale"
-    t.binary   "emailVerified",             :limit => 1
+    t.binary   "emailVerified",             :limit => 255
     t.datetime "lastFailure"
     t.integer  "lastFailureCnt"
   end
@@ -6018,18 +6003,6 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
     t.integer "toggle_id"
   end
 
-<<<<<<< HEAD
-=======
-  create_table "sp_designation_numbers", :force => true do |t|
-    t.integer  "person_id"
-    t.integer  "project_id"
-    t.string   "designation_number"
-    t.integer  "account_balance",    :default => 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
->>>>>>> fa0868cf78c710ca0575bd7476231d55e470a83b
   create_table "sp_donations", :force => true do |t|
     t.integer "designation_number",                                :null => false
     t.decimal "amount",             :precision => 10, :scale => 2, :null => false

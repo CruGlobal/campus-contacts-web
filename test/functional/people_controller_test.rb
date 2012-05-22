@@ -122,17 +122,7 @@ class PeopleControllerTest < ActionController::TestCase
 
       @roles = []
       (1..4).each { |index| @roles << Role.create!(organization_id: @org.id, name: "role_#{index}", i18n: "role_#{index}") }
-    end
 
-    should "add roles to a user" do 
-      puts "THE TEST"
-      OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: @person2.id, role_id: 3, organization_id: @org.id, added_by_id: @user.person.id) # @person2 has role '1'
-      assert_equal @person2.organizational_roles.count, 1
-      xhr :post, :update_roles, { :role_ids => "1, 2, 3", :some_role_ids => "", :person_id => @person2.id } # added 2 roles role[0] and role[1]
-      assert_response :success
-      assert_equal @person2.organizational_roles.count, 3
-      #puts @person2.organizational_roles
-      puts "THE TEST"
     end
 
     should "retain old roles of different users even if users have initially have a different set of roles" do
