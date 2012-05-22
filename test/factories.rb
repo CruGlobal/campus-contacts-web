@@ -65,14 +65,7 @@ FactoryGirl.define do
     state "active"
     initial_response "Hi there!"
     association :user
-    after_create do |x| 
-      survey = Factory(:survey, organization: x.organization)
-      x.update_attribute(:survey_id, survey.id)
-      element = Factory(:choice_field, label: 'foobar')
-      Factory(:survey_element, survey: survey, element: element, position: 1, archived: true)
-      element = Factory(:choice_field)
-      Factory(:survey_element, survey: survey, element: element, position: 2)
-    end
+    association :survey
   end
   
   factory :survey do
