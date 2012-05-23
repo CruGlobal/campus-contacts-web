@@ -499,6 +499,7 @@ en:
       reminder_prompt: "Some of your leaders have contacts that haven't been followed up! Let your leaders know!"
       show_more: "Show More Leaders"
     index:
+      edit_true: '&edit=true'
       search_saved: 'This search has been saved'
       vcard: 'Vcard'
       add_contact: Add a Contact
