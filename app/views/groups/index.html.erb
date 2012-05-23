@@ -16,11 +16,15 @@
   </ul>
     <div id="new_label" style="display:none" title="<%= t('.add_a_label') %>">
       <%= form_for GroupLabel.new, remote: true, validate: true do |f| %>
-        <div class="explain">
-          <p><%= t('.new_label_prompt') %>:</p>
+        <div class="item">
+          <div class="group_label">
+            <%= t('.new_label_prompt') %>:
+          </div>
+          <div class="field al_center">
+            <%= f.text_field :name, :autocomplete => 'off' %>
+            <%= spinner('new_label') %>
+          </div>
         </div>
-          <%= f.text_field :name, :autocomplete => 'off' %>
-          <%= spinner('new_label') %>
       <% end %>
     </div>
 <% end %>

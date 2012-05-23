@@ -39,6 +39,7 @@ class GroupsController < ApplicationController
   end
   
   def new
+    index
     @group = current_organization.groups.new
   end
 

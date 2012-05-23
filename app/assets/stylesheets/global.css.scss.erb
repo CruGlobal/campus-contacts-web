@@ -843,6 +843,7 @@ ul.pillmenu {
 .icon:hover {
 }
 
+.icon.help {  background-image: url("<%= asset_path('help.png') %>"); }
 .icon.magnify {  background-image: url("<%= asset_path('magnify.png') %>");}
 .icon.add {  background-image: url("<%= asset_path('add.png') %>");}
 .icon.unassign {  background-image: url("<%= asset_path('undo.png') %>");}
@@ -1689,7 +1690,7 @@ ul.leftmenu li.information {
 
 div.field_with_errors {
 	input, textarea {
-		border: 2px solid #C00 !important;
+		border: 1px solid #C00 !important;
   }
   label.message {
     display: block;
@@ -2043,6 +2044,7 @@ textarea, input[type=text], input[type=password] {
   line-height: 35px;
   .cancel {
     color: #999;
+    margin-left: 10px;
   }
 }
 
@@ -2184,5 +2186,78 @@ textarea, input[type=text], input[type=password] {
       clear: both;
       display: block;
     }
+  }
+}
+
+.error_space .message_msg {
+  color: #C00;
+}
+
+
+.group_form {
+  margin-left: 20px;
+  margin-top: -0px;
+  width: 300px;
+  .item {
+    margin-bottom: 10px;
+  	.group_label {
+  	  font-weight: bold;
+  		width: 300px;
+  	  vertical-align: top;
+  	  height: 17px;
+  	}
+  	.field {
+  	  vertical-align: top;
+  	  display: table;
+  	}
+  }
+}
+
+div.help_bubble {
+  margin: 0px 10px;
+  width: 16px;
+  height: 16px;
+  cursor: help;
+}
+
+div.help_bubble_keyword {
+  margin: -5px 0px -3px;
+  width: 16px;
+  height: 16px;
+  cursor: help;
+}
+
+div.help_bubble_group {
+  margin: -2px 0px -3px;
+  width: 16px;
+  height: 16px;
+  cursor: help;
+  float: right;
+}
+
+.fl_right { 
+  float: right;
+}
+
+.al_center {
+  text-align: center;
+}
+
+.item_half {
+  width: 40%;
+  float: left;
+  height: 50px;
+  display: block;
+  .group_label {
+    font-weight: bold;
+  }
+}
+
+.item_half_right {
+  width: 55%;
+  float: left;
+  height: 50px;
+  .group_label {
+    font-weight: bold;
   }
 }
