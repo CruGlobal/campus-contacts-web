@@ -13,6 +13,7 @@
 //= require questions
 //= require contacts
 //= require rails-validations
+//= require rails.validations.callbacks
 //= require sms_keywords.js.coffee
 //= require people.js.coffee
 //= require jquery.notifications-1.1
@@ -26,6 +27,7 @@
 //= require i18n/translations
 //= require followup_comments
 //= require clearform
+//= require global
 
 $(function (){
  $('#person_updated_from').datepicker({ dateFormat: 'dd-mm-yy' });
