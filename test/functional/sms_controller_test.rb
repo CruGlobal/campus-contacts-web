@@ -112,7 +112,7 @@ class SmsControllerTest < ActionController::TestCase
     assert_blank(@controller.send(:try_to_extract_email_from, ""))
     assert_blank(@controller.send(:try_to_extract_email_from, "This message does not contain any email of some sort"))
     
-    puts @controller.send(:try_to_extract_email_from, "myspacebarisbrokenbutmyemailisherp@derp.comthanks!")
+    @controller.send(:try_to_extract_email_from, "myspacebarisbrokenbutmyemailisherp@derp.comthanks!")
   end
   
 end

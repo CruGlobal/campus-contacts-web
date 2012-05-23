@@ -1,4 +1,4 @@
-<div id="filter_box" style="display:none">
+<div id="filter_box" style="<%= @style %>">
   <%= form_tag params, method: :get do %>
     <%= hidden_field_tag :completed, params[:completed] if params[:completed].present? %>
     <%= hidden_field_tag :search, 1 %>
@@ -56,22 +56,31 @@
         </div>
       <% end %>
     </div>
-    <div class="actionbarinline">      
-      <%= submit_tag t('general.search') %>
+    <div class="actionbarinline">
+      <table>
+        <tr>
+          <td>
+          <%= submit_tag t('general.search') %>
+          </td>
+          <td>
+          <% if params[:search] == "1" && @people.length > 0 %>
+            <%= button_to "Save Search","", :id=>"savesearchbtn" %>
+            <div id="savesearchbox" style="display:none" title="<%= t('contacts.index.save_this_search') %>" >
+              <%= form_for(@saved_contact_search, html: {id: 'save_search_form'}) do |f| %>
+                <%= hidden_field_tag 'saved_contact_search[user_id]', @person.user.id %>
+                <%= hidden_field_tag 'saved_contact_search[full_path]', request.fullpath %>
+                <%= hidden_field_tag :id, @saved_contact_search.id %>
+                <%= f.text_field :name, :placeholder => t('contacts.index.save_this_search_placeholder') %>
+              <% end %>
+            </div>
+
+          <% end %>
+          </td>
+        </tr>
+      </table>
       <%#= link_to t('.clear_search_form'), '', onclick: "$('form').clearForm(); return false;" %>
     </div>
   <% end %>
-  <% if params[:search] == "1" && @people.length > 0 %>
-    <%= link_to "Save Search","", :class=>"icon save showtext", :id=>"savesearchbtn", :style => "display: none;" %>
-    <div id="savesearchbox" style="display:none" title="<%= t('contacts.index.save_this_search') %>" >
-      <%= form_for(@saved_contact_search, html: {id: 'save_search_form'}) do |f| %>
-        <%= hidden_field_tag 'saved_contact_search[user_id]', @person.user.id %>
-        <%= hidden_field_tag 'saved_contact_search[full_path]', request.fullpath %>
-        <%= hidden_field_tag :id, @saved_contact_search.id %>
-        <%= f.text_field :name, :placeholder => t('contacts.index.save_this_search_placeholder') %>
-      <% end %>
-    </div>
 
-  <% end %>
 
 </div>
