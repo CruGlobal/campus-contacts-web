@@ -350,7 +350,6 @@ class PeopleControllerTest < ActionController::TestCase
       should "have access to the merge facility" do
         get :merge
         assert_response(:success)
-        @request.body
       end
       
       context "merge people" do
@@ -393,7 +392,6 @@ class PeopleControllerTest < ActionController::TestCase
       should "have access to the merge facility" do
         get :merge
         assert_response(:success)
-        @request.body
       end
       
       context "merge people" do

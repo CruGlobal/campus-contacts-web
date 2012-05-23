@@ -5,7 +5,15 @@ class SmsControllerTest < ActionController::TestCase
   context "Receiving an incoming SMS" do
     setup do 
       @carrier = Factory(:sms_carrier_sprint)
-      @keyword = Factory(:approved_keyword)
+      @survey = Factory(:survey)
+      @keyword = Factory(:approved_keyword, survey: @survey)
+      
+      element = Factory(:choice_field, label: 'foobar')
+      q1 = Factory(:survey_element, survey: @survey, element: element, position: 1, archived: true)
+      element = Factory(:choice_field)
+      q2 = Factory(:survey_element, survey: @survey, element: element, position: 2)
+      
+      
       @phone_number = '16304182108'
       @post_params = {message: @keyword.keyword, device_address: @phone_number, 
                       inbound_address: APP_CONFIG['sms_short_code'], country: 'US', carrier: @carrier.moonshado_name}
