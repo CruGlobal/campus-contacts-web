@@ -515,6 +515,7 @@ $('.id_checkbox').live 'click', ->
   change_role_checkboxes(role_labels, mark_as_checked)
   change_all_role_checkboxes(true) if !mark_as_checked
   disable_role_checkboxes()
+  enable_all_unchecked()
 
 check_selected_people = () ->
   checked = $('.id_checkbox:checked').length
@@ -532,6 +533,7 @@ get_role_labels = (obj) ->
 disable_role_checkboxes = () -> # disable role checkboxes that only SOME of contacts have
   role_labels_array = []
   to_be_disabled = []
+  to_be_enabled = []
   checked_length = $('input.id_checkbox:checked').length
 
   $('input.id_checkbox:checked').each ->
@@ -551,13 +553,37 @@ disable_role_checkboxes = () -> # disable role checkboxes that only SOME of cont
       count++ if unique[i] == role_labels_array[j]
       j++
     to_be_disabled.push(unique[i]) if count < checked_length
+    to_be_enabled.push(unique[i]) if count == checked_length
     i++
   l = 0
   while(l < to_be_disabled.length)
     checkbox = '#role_ids_' + to_be_disabled[l]
     $(checkbox).attr disabled: true
+    #$(checkbox).attr checked: false
     l++
 
+  l = 0
+  while(l < to_be_enabled.length)
+    checkbox = '#role_ids_' + to_be_enabled[l]
+    $(checkbox).attr disabled: false
+    $(checkbox).attr checked: true
+    l++
+
+  enable_and_uncheck_if_role_not_included_in_role_labels(role_labels_array)
+
+enable_all_unchecked = () ->
+  $('.role_id_checkbox:not(:checked)').each ->
+    $(this).attr disabled: false
+
+enable_and_uncheck_if_role_not_included_in_role_labels = (unique) ->
+  $('.role_id_checkbox:checked').each ->
+    l = 0
+    while(l < unique)
+      break if $(this).val() == unique[l]
+      l++
+    if l == unique.length
+      $(this).attr disabled: false
+      $(this).attr checked: false
 
 change_role_checkboxes = (role_labels, check, n) ->
   role_labels.each ->
@@ -578,13 +604,19 @@ update_checkbox_checkmark = (role_checkbox) ->
 
 update_persons_roles = () ->
   role_ids = []
+  some_role_ids = []
 
   $('#apply_roles_spinner').show()
   $("#apply_roles_successful").hide()
-
   $('.role_id_checkbox:checked').each ->
     role_id = $(this).val()
-    role_ids.push(role_id)    
+    role_ids.push(role_id)
+    #if $(this).is ':enabled' #added for MH 299
+    #  role_id = $(this).val()
+    #  role_ids.push(role_id)
+  $('.role_id_checkbox:not(:enabled)').each ->
+    some_role_ids.push($(this).val())
+  
 
   checked_elements = $('.id_checkbox:checked')
   
@@ -593,7 +625,7 @@ update_persons_roles = () ->
     $.ajax
       type: 'POST',
       url: '/people/update_roles',
-      data: 'role_ids='+role_ids+'&person_id='+person_id,
+      data: 'role_ids='+role_ids+'&some_role_ids='+some_role_ids+'&person_id='+person_id,
       success: (data) ->
         roles_user = "#roles_user_" + person_id
         if data.indexOf("$.a") == -1 # hello
