@@ -150,7 +150,7 @@ module ApplicationHelper
   end
   
   def tip(t)
-    image_tag('help.png', :title => t, :class => 'tip')
+    image_tag('qe/icons/question-balloon.png', :title => t, :class => 'tip')
   end
 
   def spinner(extra = nil)
