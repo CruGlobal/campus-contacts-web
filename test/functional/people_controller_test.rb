@@ -82,7 +82,7 @@ class PeopleControllerTest < ActionController::TestCase
         roles = []
         (1..3).each { |index| roles << Role.create!(organization_id: 1, name: "member_#{index}", i18n: "member_#{index}") }
         roles = roles.collect { |role| role.id }.join(',')
-        xhr :post, :update_roles, { :role_ids => roles, :person_id => @person1.id }
+        xhr :post, :update_roles, { :role_ids => roles, :some_role_ids => "", :person_id => @person1.id }
         assert_response :success
       end
       
@@ -90,7 +90,7 @@ class PeopleControllerTest < ActionController::TestCase
         roles = []
         (1..3).each { |index| roles << Role.create!(organization_id: 1, name: "member_#{index}", i18n: "member_#{index}") }
         roles = roles.collect { |role| role.id }.join(',')
-        xhr :post, :update_roles, { :role_ids => roles, :person_id => @person1.id, :include_old_roles => "yes" }
+        xhr :post, :update_roles, { :role_ids => roles, :some_role_ids => "", :person_id => @person1.id, :include_old_roles => "yes" }
         assert_response :success
       end
       
@@ -100,7 +100,7 @@ class PeopleControllerTest < ActionController::TestCase
         #duplicate the first role
         roles << roles.first
         roles = roles.collect { |role| role.id }.join(',')
-        xhr :post, :update_roles, { :role_ids => roles, :person_id => @person1.id, :include_old_roles => "yes" }
+        xhr :post, :update_roles, { :role_ids => roles, :some_role_ids => "", :person_id => @person1.id, :include_old_roles => "yes" }
         assert_response :success
       end
       
@@ -109,55 +109,45 @@ class PeopleControllerTest < ActionController::TestCase
   
   context "When updating roles" do
     setup do
+      @user = Factory(:user_with_auxs)
+
       @person = Factory(:person)
+      @person2 = Factory(:person, email: "person2@email.com")
+      @person3 = Factory(:person, email: "person3@email.com")
+
+      @org = Factory(:organization)
+      
+      sign_in @user
+      @request.session[:current_organization_id] = @org.id
+
+      @roles = []
+      (1..4).each { |index| @roles << Role.create!(organization_id: @org.id, name: "role_#{index}", i18n: "role_#{index}") }
+
     end
-    
-    context "When user is admin" do
-      setup do
-        @user = Factory(:user_with_auxs)
-        @org = Factory(:organization)
-        org_role = Factory(:organizational_role, organization: @org, person: @user.person, role: Role.admin)
-        
-        sign_in @user
-        @request.session[:current_organization_id] = @org.id
-      end
-      
-      should "include admin role in label selection" do
-        get :index
-        assert(assigns(:roles).include? Role.admin)
-      end
-      
-      should "update roles with include_old_roles as parameter" do
-        roles = []
-        (1..3).each { |index| roles << Role.create!(organization_id: @org.id, 
-        name: "member_#{index}", i18n: "member_#{index}") }
-        
-        roles = roles.collect { |role| role.id }.join(',')
-        xhr :post, :update_roles, { :role_ids => roles, :person_id => @person.id }
-        assert_response :success
-      end
-    end
-    
-    context "When user is leader" do
-      setup do
-        @user = Factory(:user_with_auxs)
-        user2 = Factory(:user_with_auxs)
-        @org = Factory(:organization)
-        org_role = Factory(:organizational_role, organization: @org, person: @user.person, role: Role.leader, :added_by_id => user2.person.id)
-        
-        sign_in @user
-        @request.session[:current_organization_id] = @org.id
-      end
-      
-      should "update roles with include_old_roles as parameter" do
-        roles = []
-        (1..3).each { |index| roles << Role.create!(organization_id: @org.id, 
-        name: "member_#{index}", i18n: "member_#{index}") }
-        
-        roles = roles.collect { |role| role.id }.join(',')
-        xhr :post, :update_roles, { :role_ids => roles, :person_id => @person.id }
-        assert_response :success
-      end    
+
+    should "retain old roles of different users even if users have initially have a different set of roles" do
+      # Illustration:
+      # @person2 initially have roles [3]
+      # @person3 initially have roles [4]
+      # Apply role "2" to both of them
+      # @person2 and @person 3 should retain roles [3] and [4] respectively after PeopleController#update_roles
+
+      OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: @person2.id, role_id: 3, organization_id: @org.id, added_by_id: @user.person.id) # @person2 has role '1'      
+
+      old_person_2_roles = @person2.organizational_roles.where(organization_id: @org.id).collect { |role| role.role_id }
+      old_person_3_roles = @person3.organizational_roles.where(organization_id: @org.id).collect { |role| role.role_id }
+
+      xhr :post, :update_roles, { :role_ids => "#{@roles[1].id}, #{@roles[2].id}", :some_role_ids => "#{@roles[2].id}, #{@roles[3].id}", :person_id => @person2.id }
+      assert_response :success
+      xhr :post, :update_roles, { :role_ids => "#{@roles[1].id}, #{@roles[3].id}", :some_role_ids => "#{@roles[2].id}, #{@roles[3].id}", :person_id => @person3.id }
+      assert_response :success
+
+      new_person_2_roles = @person2.organizational_roles.where(organization_id: @org.id).collect { |role| role.role_id }
+      new_person_3_roles = @person3.organizational_roles.where(organization_id: @org.id).collect { |role| role.role_id }
+
+      assert old_person_2_roles & new_person_2_roles # role 2 still has his old roles?
+      assert old_person_3_roles & new_person_3_roles # role 3 still has his old roles?
+
     end
   end
   
@@ -290,7 +280,7 @@ class PeopleControllerTest < ActionController::TestCase
     
     should "update the contact's role to leader that has a valid email" do
       person = Factory(:person, email: "super_duper_unique_email@mail.com")
-      xhr :post, :update_roles, { :role_ids => @roles, :person_id => person.id, :added_by_id => @user.person.id }
+      xhr :post, :update_roles, { :role_ids => @roles, :some_role_ids => "", :person_id => person.id, :added_by_id => @user.person.id }
       assert_response :success
       assert_equal(person.id, OrganizationalRole.last.person_id)
       assert_equal("super_duper_unique_email@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s)
@@ -300,7 +290,7 @@ class PeopleControllerTest < ActionController::TestCase
       person = Factory(:person)
       mail_count = ActionMailer::Base.deliveries.count
       assert(person.email, "")
-      xhr :post, :update_roles, { :role_ids => @roles, :person_id => person.id, :added_by_id => @user.person.id }
+      xhr :post, :update_roles, { :role_ids => @roles, :some_role_ids => "", :person_id => person.id, :added_by_id => @user.person.id }
       assert_response :success
       assert_equal(mail_count, ActionMailer::Base.deliveries.count)
     end
@@ -319,7 +309,7 @@ class PeopleControllerTest < ActionController::TestCase
         #check the persons roles
         assert_equal(1, person.roles.count)
         assert_equal(Role.contact, person.roles.last)
-        xhr :post, :update_roles, { :role_ids => @existing_roles, :person_id => person, :added_by_id => @user.person.id }
+        xhr :post, :update_roles, { :role_ids => @existing_roles, :some_role_ids => "", :person_id => person, :added_by_id => @user.person.id }
         #assert that the leader role was not added
         assert_response :success
         assert_equal(2, person.roles.count)
@@ -335,7 +325,7 @@ class PeopleControllerTest < ActionController::TestCase
         #check the persons roles
         assert_equal(1, person.roles.count)
         assert_equal(Role.contact, person.roles.last)
-        xhr :post, :update_roles, { :role_ids => @existing_roles, :person_id => person, :added_by_id => @user.person.id }
+        xhr :post, :update_roles, { :role_ids => @existing_roles, :some_role_ids => "", :person_id => person, :added_by_id => @user.person.id }
         #assert that the leader role was not added
         assert_response :success
         assert_equal(1, person.roles.count)

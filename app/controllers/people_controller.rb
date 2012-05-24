@@ -10,13 +10,7 @@ class PeopleController < ApplicationController
     authorize! :read, Person
     fetch_people(params)
 
-    if can? :manage, current_organization
-      @roles = current_organization.roles
-    else
-      #@roles = current_organization.roles.where("id != ?", Role::ADMIN_ID)
-      @roles = current_organization.roles
-    end
-
+    @roles = current_organization.roles # Admin or Leader, all roles will appear in the index div.role_div_checkboxes but checkobx of the admin role will be hidden 
   end
 
   def export
@@ -320,42 +314,39 @@ class PeopleController < ApplicationController
     end
 
     data = ""
-
     person = Person.find(params[:person_id])
 
     role_ids = params[:role_ids].split(',').map(&:to_i)
 
-    if params[:include_old_roles] == 'yes'
-      role_ids += person.organizational_roles.where(organization_id: current_organization.id).collect(&:id) 
+
+    new_roles = params[:role_ids].split(',').map(&:to_i)
+    old_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.role_id }
+    some_roles = params[:some_role_ids].split(',').map(&:to_i) # roles that only SOME persons have
+
+    new_roles = new_roles - some_roles #remove roles that SOME of the persons have. We should not touch them. They are disabled in the views anyway.
+
+    to_be_added_roles = new_roles - old_roles
+    to_be_removed_roles = old_roles - new_roles - some_roles
+
+    person.organizational_roles.where(organization_id: current_organization.id, role_id: to_be_removed_roles).each do |organizational_role|
+      organizational_role.destroy
     end
+    
+    all = to_be_added_roles | (new_roles & old_roles) | (old_roles & some_roles)
+    all.sort!
+    all.each_with_index do |role_id, index|    
+      begin       
+        OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) if to_be_added_roles.include?(role_id)
+      rescue OrganizationalRole::InvalidPersonAttributesError
+        render 'update_leader_error', :locals => { :person => person } if role_id == Role::LEADER_ID
+        render 'update_admin_error', :locals => { :person => person } if role_id == Role::ADMIN_ID
+        return
+      rescue ActiveRecord::RecordNotUnique
 
-
-    organizational_role_ids = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.role_id.to_s }
-
-    #if role_ids.length (new roles) is less than old roles. i.e. there is a role that is going to be deleted
-    #The purpose of this code block is to avoid emailing (that a Person has just become a leader) a Person if he is already a leader before this roles updateh
-    organizational_role_ids = organizational_role_ids - role_ids
-    organizational_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.id if organizational_role_ids.include?(role.role_id.to_s) }
-    OrganizationalRole.delete(organizational_roles)
-
-    # place admin and leader role ids at the end of the array
-    role_ids.insert(role_ids.length-1, role_ids.delete_at(0)) if role_ids[0] == Role::ADMIN_ID
-    role_ids.insert(role_ids.length-1, role_ids.delete_at(0)) if role_ids[0] == Role::LEADER_ID
-
-    role_ids.uniq.each_with_index do |role_id, index|
-      begin
-        begin       
-          OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) 
-        rescue OrganizationalRole::InvalidPersonAttributesError
-          render 'update_leader_error', :locals => { :person => person } if role_id == Role::LEADER_ID
-          render 'update_admin_error', :locals => { :person => person } if role_id == Role::ADMIN_ID
-          return
-        rescue ActiveRecord::RecordNotUnique
-        end
       end
 
       data << "<span id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
-      data << "style='margin-right:4px;'" if index < role_ids.length - 1
+      data << "style='margin-right:4px;'" if index < all.length - 1
       data << ">#{Role.find(role_id).to_s}</span>"
     end
 

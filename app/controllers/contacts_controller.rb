@@ -15,7 +15,8 @@ class ContactsController < ApplicationController
   end
   
   def index
-    @saved_contact_search = @person.user.saved_contact_searches.find(:first, :conditions => "full_path = '#{request.fullpath}'") || SavedContactSearch.new
+    @style = params[:edit] ? 'display:true' : 'display:none'
+    @saved_contact_search = @person.user.saved_contact_searches.find(:first, :conditions => "full_path = '#{request.fullpath.gsub(I18n.t('contacts.index.edit_true'),"")}'") || SavedContactSearch.new
     @organization = current_organization # params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : 
     unless @organization
       redirect_to user_root_path, error: t('contacts.index.which_org')
@@ -121,6 +122,20 @@ class ContactsController < ApplicationController
     if params[:person_updated_from].present? && params[:person_updated_to].present?
       @people = @people.find_by_person_updated_by_daterange(params[:person_updated_from], params[:person_updated_to])
     end
+    #here
+
+    if params[:search_type].present? && params[:search_type] == "basic"
+      @people = @people.select("ministry_person.*, email_addresses.*")
+      .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID")
+      .where("concat(firstName,' ',lastName) LIKE :search OR
+                       concat(lastName, ' ',firstName) LIKE :search OR
+                       emails.email LIKE :search", 
+                       {:search => "%#{params[:query]}%"})
+    end
+
+
+
+
     @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
     # raise @q.sorts.inspect
     @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? params[:q][:s] : ['lastName, firstName']).group('ministry_person.personID')
