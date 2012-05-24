@@ -33,7 +33,10 @@
         <th class="check"></th>
         <th><%= t("general.survey") %></th>
         <% if current_organization.show_sub_orgs? %>
-          <th><%= t("keywords.index.association") %> <%= tip(t('.association_help')) %></th>
+          <th>
+            <%= t("keywords.index.association") %>
+            <div class="icon help tipit help_bubble_keyword " title="<%= t('.association_help') %>"></div>
+          </th>
         <% end %>
         <th><%= t("general.keyword") %></th>
         <th><%= t('.link') %></th>
