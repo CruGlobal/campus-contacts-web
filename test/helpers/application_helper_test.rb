@@ -11,7 +11,7 @@ class ApplicationHelperTest < ActionView::TestCase
   end
   
   test "tip" do
-    assert_equal "<img alt=\"Question-balloon\" class=\"tip\" src=\"/images/qe/icons/question-balloon.png\" title=\"WAT\" />".html_safe,
+    assert_equal "<img alt=\"Question-balloon\" class=\"tip\" src=\"/images/help.png\" title=\"WAT\" />".html_safe,
     tip("WAT")
   end
   
