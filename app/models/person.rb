@@ -77,6 +77,12 @@ class Person < ActiveRecord::Base
     :conditions => "mh_friends.person_id = #{id}",
   } }
 
+  scope :search_by_name_or_email, lambda { |keyword| {
+    :select => "ministry_person.*",
+    :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID",
+    :conditions => "concat(firstName,' ',lastName) LIKE '%#{keyword}%' OR concat(lastName, ' ',firstName) LIKE '%#{keyword}%' OR emails.email LIKE '%#{keyword}%'"
+  } }
+
   def update_date_attributes_updated
     self.date_attributes_updated = DateTime.now.to_s(:db)
     self.save
@@ -96,6 +102,7 @@ class Person < ActiveRecord::Base
     scope = scope.where('organizational_roles.organization_id IN(?)', organization_ids).includes(:organizational_roles) if organization_ids
     scope
   end
+
   def to_s
     # [preferredName.blank? ? firstName : preferredName.try(:strip), lastName.try(:strip)].join(' ')
     [firstName.to_s, lastName.to_s.strip].join(' ')

@@ -124,12 +124,7 @@ class ContactsController < ApplicationController
     #here
 
     if params[:search_type].present? && params[:search_type] == "basic"
-      @people = @people.select("ministry_person.*, email_addresses.*")
-      .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID")
-      .where("concat(firstName,' ',lastName) LIKE :search OR
-                       concat(lastName, ' ',firstName) LIKE :search OR
-                       emails.email LIKE :search", 
-                       {:search => "%#{params[:query]}%"})
+      @people = @people.search_by_name_or_email(params[:query])
     end
 
 
@@ -175,6 +170,14 @@ class ContactsController < ApplicationController
         filename = @organization.to_s
         send_data(out, :filename => "#{filename} - Contacts.csv", :type => 'application/csv' )
       end
+    end
+  end
+
+  def search_by_name_and_email
+    people = @people = current_organization.contacts.search_by_name_or_email(params[:term])
+
+    respond_to do |wants|
+      wants.json { render text: people.collect{|person| "#{person.name}"}.to_json }
     end
   end
   
