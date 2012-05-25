@@ -1,0 +1,7 @@
+<%= form_tag contacts_path, method: :get do %>
+  <%= hidden_field_tag :search_type, "basic" %>
+  <%= text_field_tag :query, params[:query], placeholder: t('people.search.search_placeholder') %>
+  <div id="search_button">
+    <%= image_submit_tag("search.png") %>
+  </div>
+<% end %>

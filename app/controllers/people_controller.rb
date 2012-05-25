@@ -323,9 +323,6 @@ class PeopleController < ApplicationController
     old_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.role_id }
     some_roles = params[:some_role_ids].split(',').map(&:to_i) # roles that only SOME persons have
 
-    puts "new roles #{new_roles}"
-    puts "old roles #{old_roles}"
-
     new_roles = new_roles - some_roles #remove roles that SOME of the persons have. We should not touch them. They are disabled in the views anyway.
 
     to_be_added_roles = new_roles - old_roles
