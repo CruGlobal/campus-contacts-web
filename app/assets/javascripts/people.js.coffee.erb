@@ -11,6 +11,9 @@ $ ->
       $('#advanced_filter_box').show()
       false
   
+  $('.action_dropdown').live 'mouseenter', ->
+    $(this).click();
+  
   $('#advanced_search').live 'click', ->
     $('#search_filter_box').hide()
     $('#advanced_filter_box').toggle()
