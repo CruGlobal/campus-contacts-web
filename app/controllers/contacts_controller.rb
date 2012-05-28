@@ -124,7 +124,7 @@ class ContactsController < ApplicationController
     #here
 
     if params[:search_type].present? && params[:search_type] == "basic"
-      @people = @people.search_by_name_or_email(params[:query])
+      @people = @people.search_by_name_or_email(params[:query], current_organization.id)
     end
 
 
@@ -174,10 +174,11 @@ class ContactsController < ApplicationController
   end
 
   def search_by_name_and_email
-    people = @people = current_organization.contacts.search_by_name_or_email(params[:term])
+    people = current_organization.people.search_by_name_or_email(params[:term], current_organization.id).uniq
+    
 
     respond_to do |wants|
-      wants.json { render text: people.collect{|person| "#{person.name}"}.to_json }
+      wants.json { render text: people.collect{|person| {"label" => "#{person.name} (#{person.email})", "id" => person.id}}.to_json }
     end
   end
   

@@ -263,7 +263,7 @@ $ ->
     $( "#query" ).autocomplete
 	    source: '/contacts/search_by_name_and_email.json',
       select: (event, ui) ->
-        $.a(ui.item)
+        window.location = "/people/" + ui.item.id
 
     
   $('#assign_search .leader_search_name').keyup ->
@@ -412,7 +412,6 @@ $ ->
         data: form.serialize(), 
         type: 'GET',
         success: (data)->
-          $.a(data)
           $('#leader_search_results').html(data)
           $("#leader_search_results").show()
         complete: ->

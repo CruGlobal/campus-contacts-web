@@ -250,4 +250,25 @@ class PersonTest < ActiveSupport::TestCase
     assert user.person.leader_in?(org)
     assert_equal false, user.person.leader_in?(wat)
   end
+
+  should "should find people by name or meail given wildcard strings" do
+    org = Factory(:organization)
+    user = Factory(:user_with_auxs)
+    Factory(:organizational_role, organization: org, person: user.person, role: Role.leader)
+    person1 = Factory(:person, firstName: "Neil Marion", lastName: "dela Cruz", email: "ndc@email.com")
+    Factory(:organizational_role, organization: org, person: person1, role: Role.leader)
+    person2 = Factory(:person, firstName: "Johnny", lastName: "English", email: "english@email.com")
+    Factory(:organizational_role, organization: org, person: person2, role: Role.contact)
+    person3 = Factory(:person, firstName: "Johnny", lastName: "Bravo", email: "bravo@email.com")
+    Factory(:organizational_role, organization: org, person: person3, role: Role.contact)
+
+    a = org.people.search_by_name_or_email("neil marion", org.id)
+    assert_equal a.count, 1 # should be able to find a leader as well
+
+    a = org.people.search_by_name_or_email("ndc", org.id)
+    assert_equal a.count, 1 #should be able to find by an email address wildcard
+
+    a = org.people.search_by_name_or_email("hnny", org.id) # as in Johnny
+    assert_equal a.count, 2 #should be able to find contacts
+  end
 end
