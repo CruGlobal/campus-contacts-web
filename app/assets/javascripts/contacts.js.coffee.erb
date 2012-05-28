@@ -528,7 +528,7 @@ $.fn.assignTo = (leader, skip_remote) ->
         $('#person_title').hide()
     # hide people assigned to someone other than the current or if we're moving to dnc
     assign_to = $('#new_contact_assignment').find("#assign_to").val()   
-    if assign_to == "do_not_contact" || ($.params.assigned_to != 'all' && $.params.assigned_to != leader_name)
+    if assign_to == "do_not_contact" || ($.params.assigned_to != leader_name)
       unless skip_remote
         $.rails.handleRemote($('#new_contact_assignment'))
       

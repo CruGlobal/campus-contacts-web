@@ -293,6 +293,19 @@ ul.leftmenu {
     background: $blue;
     text-decoration: none;
   }
+  a.edit_search,
+  a.edit_search_label {
+    float: right;
+    background: #999 !important;
+    color: $white;
+    width: 12px;
+    height: 12px;
+    line-height: 9px;
+    margin-top: 6px;
+    text-align: center;
+    font-weight: bold !important;
+    padding: 0;
+  }
   .name {
     display: inline-block;
   }
@@ -607,8 +620,7 @@ button[type=submit].smallbtn {
 }
 
 #savesearchbtn {
-  line-height: 35px;
-  height: 35px;
+
 }
 .rejoiceablebox {
   background: $white;
@@ -843,7 +855,7 @@ ul.pillmenu {
 .icon:hover {
 }
 
-.icon.help {  background-image: url("<%= asset_path('help.png') %>"); }
+.icon.help {  background-image: url("<%= asset_path('qe/icons/question-balloon.png') %>"); }
 .icon.magnify {  background-image: url("<%= asset_path('magnify.png') %>");}
 .icon.add {  background-image: url("<%= asset_path('add.png') %>");}
 .icon.unassign {  background-image: url("<%= asset_path('undo.png') %>");}
@@ -2263,4 +2275,8 @@ div.help_bubble_group {
   .group_label {
     font-weight: bold;
   }
+}
+
+.form_no_sidebar {
+  margin-left: 200px;
 }
