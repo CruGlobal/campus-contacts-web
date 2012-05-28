@@ -191,6 +191,7 @@ Mh::Application.routes.draw do
       get :import_contacts
       post :csv_import
       get :download_sample_contacts_csv
+      get :search_by_name_and_email
     end
   end
 

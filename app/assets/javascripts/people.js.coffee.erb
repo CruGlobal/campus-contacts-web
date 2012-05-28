@@ -631,7 +631,7 @@ update_persons_roles = () ->
       data: 'role_ids='+role_ids+'&some_role_ids='+some_role_ids+'&person_id='+person_id,
       success: (data) ->
         roles_user = "#roles_user_" + person_id
-        if data.indexOf("$.a") == -1 # hello
+        if data.indexOf("$.a") == -1
           $(roles_user).html data
           $("#apply_roles_spinner").hide()
           $("#apply_roles_successful").show()
