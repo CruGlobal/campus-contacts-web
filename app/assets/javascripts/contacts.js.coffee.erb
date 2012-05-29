@@ -258,6 +258,13 @@ $ ->
       if show_success
         $.n('Successfully assigned label.')
   false
+
+  $('#search_autocomplete_field').live 'keyup', ->
+    $(this).autocomplete
+	    source: '/contacts/search_by_name_and_email.json',
+      select: (event, ui) ->
+        window.location = "/people/" + ui.item.id
+
     
   $('#assign_search .leader_search_name').keyup ->
     name = $(this).val()

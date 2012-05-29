@@ -29,6 +29,7 @@ class LeadersController < ApplicationController
         @people = @people.limit(10) 
         @total = scope.count
       end
+      @people
       render :layout => false
     else
       render :nothing => true
