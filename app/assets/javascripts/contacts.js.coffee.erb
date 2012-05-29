@@ -259,8 +259,8 @@ $ ->
         $.n('Successfully assigned label.')
   false
 
-  $('#query').keyup ->
-    $( "#query" ).autocomplete
+  $('#search_autocomplete_field').live 'keyup', ->
+    $(this).autocomplete
 	    source: '/contacts/search_by_name_and_email.json',
       select: (event, ui) ->
         window.location = "/people/" + ui.item.id
