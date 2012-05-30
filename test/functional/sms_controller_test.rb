@@ -71,6 +71,18 @@ class SmsControllerTest < ActionController::TestCase
         post :mo, @post_params.merge!({message: 'Jesus', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
         assert_equal(assigns(:answer_sheet).answers.first.value, 'Jesus') 
       end
+
+      should "send again a survey regarding person's email attribute if an existing email was sent" do
+        person = Factory(:person, email: "person@email.com")
+        @sms_session.update_attribute(:interactive, true)
+        @person.update_attributes(firstName: 'Jesus', lastName: 'Christ')
+        element = Factory(:email_element) 
+        Factory(:survey_element, survey: @keyword.survey, element: element, position: 1) # creating email survey question
+        post :mo, @post_params.merge!({message: '#{person.email}', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')}) # person answered an existing email
+        assert_equal(assigns(:sent_sms).message, @keyword.questions.first.with_label_should_be_unique_msg)
+        post :mo, @post_params.merge!({message: '#{person.email}', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})  # person answered an existing email once again
+        assert_equal(assigns(:sent_sms).message, @keyword.questions.first.with_label_should_be_unique_msg)
+      end
     end
     
     context "on first sms" do

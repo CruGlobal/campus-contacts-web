@@ -259,6 +259,8 @@ FactoryGirl.define do
     attribute_name 'firstName'
     required      false
   end
+
+
   
   factory :advanced_element, parent: :element do
     kind             'TextField'
@@ -282,6 +284,15 @@ FactoryGirl.define do
     content       "Prayer Group\nJesus"
     object_name ''
     attribute_name ''
+  end
+
+  factory :email_element, parent: :element do
+    kind          'TextField'
+    label         'What is your email?'
+    style         'short'
+    object_name   'person'
+    attribute_name 'email'
+    required      false
   end
   
   factory :survey_element do
