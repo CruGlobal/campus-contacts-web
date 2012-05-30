@@ -627,6 +627,7 @@ en:
       
   sms:
     keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
+    with_label_should_be_unique_msg: " (if already existing in the system, this question will be sent again)"
   survey:
     drop_down_field: 
       choose_one: "Choose One"
