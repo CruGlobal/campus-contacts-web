@@ -69,7 +69,7 @@ class FollowupCommentsControllerTest < ActionController::TestCase
         assert_equal(assigns(:comments).count, 1)
       end
       
-      should "search and return the correct number of comments from top org" do
+      should "search and return the correct number of comments from top org 2" do
         @request.session[:current_organization_id] = @sub_org.id
         get :index, { :query => "comment" }
         assert_response :success

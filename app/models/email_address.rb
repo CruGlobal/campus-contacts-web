@@ -4,6 +4,7 @@ class EmailAddress < ActiveRecord::Base
   validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
   before_validation :set_primary, on: :create
   after_destroy :set_new_primary
+  validates_uniqueness_of :email
   
   def to_s
     email

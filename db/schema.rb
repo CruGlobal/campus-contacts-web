@@ -129,6 +129,20 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
 
   add_index "authentications", ["uid", "provider"], :name => "uid_provider", :unique => true
 
+  create_table "client_applications", :force => true do |t|
+    t.string   "name"
+    t.string   "url"
+    t.string   "support_url"
+    t.string   "callback_url"
+    t.string   "key",          :limit => 40
+    t.string   "secret",       :limit => 40
+    t.integer  "user_id"
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+  end
+
+  add_index "client_applications", ["key"], :name => "index_client_applications_on_key", :unique => true
+
   create_table "clients", :force => true do |t|
     t.string   "code"
     t.string   "secret"
@@ -411,14 +425,6 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
   end
 
   add_index "crs2_custom_stylesheet", ["conference_id"], :name => "fk_custom_stylesheet_conference_id"
-
-  create_table "crs2_email_addresses", :force => true do |t|
-    t.string   "email"
-    t.integer  "person_id"
-    t.boolean  "primary",    :default => false, :null => false
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
-  end
 
   create_table "crs2_expense", :force => true do |t|
     t.datetime "created_at"
@@ -2792,6 +2798,16 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
   add_index "mpd_roles_users", ["role_id"], :name => "role_id"
   add_index "mpd_roles_users", ["user_id"], :name => "user_id"
 
+  create_table "mpd_sessions", :force => true do |t|
+    t.string   "session_id", :null => false
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mpd_sessions", ["session_id"], :name => "index_mpd_sessions_on_session_id"
+  add_index "mpd_sessions", ["updated_at"], :name => "index_mpd_sessions_on_updated_at"
+
   create_table "mpd_users", :force => true do |t|
     t.integer  "user_id"
     t.integer  "mpd_role_id"
@@ -2867,6 +2883,33 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
   end
 
   add_index "oauth_applications", ["uid"], :name => "index_oauth_applications_on_uid", :unique => true
+
+  create_table "oauth_nonces", :force => true do |t|
+    t.string   "nonce"
+    t.integer  "timestamp"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "oauth_nonces", ["nonce", "timestamp"], :name => "index_oauth_nonces_on_nonce_and_timestamp", :unique => true
+
+  create_table "oauth_tokens", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "type",                  :limit => 20
+    t.integer  "client_application_id"
+    t.string   "token",                 :limit => 40
+    t.string   "secret",                :limit => 40
+    t.string   "callback_url"
+    t.string   "verifier",              :limit => 20
+    t.string   "scope"
+    t.datetime "authorized_at"
+    t.datetime "invalidated_at"
+    t.datetime "expires_at"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
+  end
+
+  add_index "oauth_tokens", ["token"], :name => "index_oauth_tokens_on_token", :unique => true
 
   create_table "old_wsn_sp_wsnapplication", :primary_key => "WsnApplicationID", :force => true do |t|
     t.string   "oldPrimaryKey",                 :limit => 64
@@ -3560,6 +3603,16 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
   end
 
   add_index "sent_sms", ["twilio_sid"], :name => "index_sent_sms_on_twilio_sid", :unique => true
+
+  create_table "sessions", :force => true do |t|
+    t.string   "session_id", :null => false
+    t.text     "data"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
+  add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "si_answer_sheets", :force => true do |t|
     t.integer  "question_sheet_id", :null => false
@@ -4580,9 +4633,6 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
     t.datetime "updated_at"
   end
 
-  add_index "sp_application_moves", ["new_project_id"], :name => "new_project_id"
-  add_index "sp_application_moves", ["old_project_id"], :name => "old_project_id"
-
   create_table "sp_applications", :force => true do |t|
     t.integer  "person_id"
     t.integer  "project_id"
@@ -5236,9 +5286,6 @@ ActiveRecord::Schema.define(:version => 20120518131853) do
   add_foreign_key "sms_keywords", "simplesecuritymanager_user", :name => "sms_keywords_ibfk_1", :column => "user_id", :primary_key => "userID", :dependent => :nullify
 
   add_foreign_key "sn_timetables", "ministry_person", :name => "sn_timetables_ibfk_1", :column => "person_id", :primary_key => "personID", :dependent => :delete
-
-  add_foreign_key "sp_application_moves", "sp_projects", :name => "sp_application_moves_ibfk_1", :column => "old_project_id", :dependent => :delete
-  add_foreign_key "sp_application_moves", "sp_projects", :name => "sp_application_moves_ibfk_2", :column => "new_project_id", :dependent => :delete
 
   add_foreign_key "sp_applications", "sp_projects", :name => "sp_applications_ibfk_1", :column => "project_id", :dependent => :nullify
 
