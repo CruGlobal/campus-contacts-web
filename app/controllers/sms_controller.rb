@@ -116,7 +116,7 @@ class SmsController < ApplicationController
           msg = question.label_with_choices
           separator = / [a-z]\)/
         end
-        if question.survey_elements.present?
+        if question.survey_elements.present? && question.attribute_name != 'email'
           question_no = get_question_no(survey, person) 
           msg = "#{question_no} #{msg}"
         end
