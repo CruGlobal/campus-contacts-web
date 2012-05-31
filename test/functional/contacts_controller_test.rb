@@ -198,4 +198,35 @@ class ContactsControllerTest < ActionController::TestCase
     assert_equal " ", response.body    
     assert_equal 1, ActionMailer::Base.deliveries.count
   end
+
+  test "find people by name or meail given wildcard strings" do
+    user1 = Factory(:user_with_auxs)
+    user2 = Factory(:user_with_auxs)
+    
+    user, org = admin_user_login_with_org
+    Factory(:organizational_role, organization: org, person: user.person, role: Role.leader)
+    person1 = Factory(:person, firstName: "Neil Marion", lastName: "dela Cruz", email: "ndc@email.com")
+    Factory(:organizational_role, organization: org, person: person1, role: Role.contact)
+    person2 = Factory(:person, firstName: "Johnny", lastName: "English", email: "english@email.com")
+    Factory(:organizational_role, organization: org, person: person2, role: Role.contact)
+    person3 = Factory(:person, firstName: "Johnny", lastName: "Bravo", email: "bravo@email.com")
+    Factory(:organizational_role, organization: org, person: person3, role: Role.contact)
+    
+    xhr :get, :search_by_name_and_email, { :term => "Neil" } # should be able to find a leader as well
+    assert_response :success, response
+    res = ActiveSupport::JSON.decode(response.body)
+    assert_equal res[0]['id'], person1.id
+    assert_equal res[0]['label'], "#{person1.name} (#{person1.email})"
+
+    xhr :get, :search_by_name_and_email, { :term => "ndc" } #should be able to find by an email address wildcard
+    assert_response :success, response
+    res = ActiveSupport::JSON.decode(response.body)
+    assert_equal res[0]['id'], person1.id
+    assert_equal res[0]['label'], "#{person1.name} (#{person1.email})"
+
+    xhr :get, :search_by_name_and_email, { :term => "hnny" } #should be able to find contacts
+    assert_response :success, response
+    res = ActiveSupport::JSON.decode(response.body)
+    assert_equal res.count, 2
+  end
 end

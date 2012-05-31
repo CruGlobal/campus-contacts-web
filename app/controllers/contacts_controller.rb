@@ -122,6 +122,15 @@ class ContactsController < ApplicationController
     if params[:person_updated_from].present? && params[:person_updated_to].present?
       @people = @people.find_by_person_updated_by_daterange(params[:person_updated_from], params[:person_updated_to])
     end
+    #here
+
+    if params[:search_type].present? && params[:search_type] == "basic"
+      @people = @people.search_by_name_or_email(params[:query], current_organization.id)
+    end
+
+
+
+
     @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
     # raise @q.sorts.inspect
     @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? params[:q][:s] : ['lastName, firstName']).group('ministry_person.personID')
@@ -162,6 +171,15 @@ class ContactsController < ApplicationController
         filename = @organization.to_s
         send_data(out, :filename => "#{filename} - Contacts.csv", :type => 'application/csv' )
       end
+    end
+  end
+
+  def search_by_name_and_email
+    people = current_organization.people.search_by_name_or_email(params[:term], current_organization.id).uniq
+    
+
+    respond_to do |wants|
+      wants.json { render text: people.collect{|person| {"label" => "#{person.name} (#{person.email})", "id" => person.id}}.to_json }
     end
   end
   
