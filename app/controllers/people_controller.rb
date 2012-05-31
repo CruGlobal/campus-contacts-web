@@ -132,6 +132,14 @@ class PeopleController < ApplicationController
 
   def create
     authorize! :create, Person
+    p = Person.where(firstName: params[:person][:firstName], lastName: params[:person][:lastName])
+    p.inspect
+    unless p.blank?
+      params[:id] = p.first.id
+      update
+      return
+    end
+
     Person.transaction do
       params[:person] ||= {}
       params[:person][:email_address] ||= {}
@@ -218,9 +226,11 @@ class PeopleController < ApplicationController
         @person.update_date_attributes_updated
         format.html { redirect_to(@person, notice: 'Person was successfully updated.') }
         format.xml  { head :ok }
+        format.js
       else
         format.html { render action: "edit" }
         format.xml  { render xml: @person.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end

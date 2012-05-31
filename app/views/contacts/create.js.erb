@@ -1,7 +1,12 @@
-<% if params[:assign_to_me] == 'true' %>
-	$('#contacts_table').prepend("<%= j(render('contacts/my_contact', :person => @person)) %>")
+<% unless params[:update] %>
+  <% if params[:assign_to_me] == 'true' %>
+	  $('#contacts_table').prepend("<%= j(render('contacts/my_contact', :person => @person)) %>")
+  <% else %>
+	  $('#contacts_table').prepend("<%= j(render('contacts/contact', person: @person, answers: @answers, questions: @questions, assignments: @assignments)) %>")
+  <% end %>
 <% else %>
-	$('#contacts_table').prepend("<%= j(render('contacts/contact', person: @person, answers: @answers, questions: @questions, assignments: @assignments)) %>")
+  $.a("<%= t('contacts.create.success', name: Person.find(params[:id]).name) %>")
+  window.location = "/people/" + <%= params[:id] %>
 <% end %>
 <% unless params[:add_another] == 'true' %>
 	$('#add_contact_div').dialog('destroy')

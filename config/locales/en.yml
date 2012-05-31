@@ -481,6 +481,8 @@ en:
     notify:
       content: '%{name} (%{number},%{email}) just replied to a survey with %{answer}.'
   contacts:
+    create:
+      success: "Succesfully updated %{name}'s profile"
     role_assign_success: 'Successfully assigned labels.'
     assign: Assign
     unassign: 'Unassign'
