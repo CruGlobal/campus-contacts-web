@@ -1,4 +1,8 @@
-<% name = survey.present? ? "answers[#{survey.id}][#{checkbox_field.id}]" : "answers[#{checkbox_field.id}]" %>
+<% begin %>
+  <% name = survey.present? ? "answers[#{survey.id}][#{checkbox_field.id}]" : "answers[#{checkbox_field.id}]" %>
+<% rescue %>
+  <% name = "answers[#{checkbox_field.id}]" %>
+<% end %>
 <div id="<%= dom_id(checkbox_field) %>">
   <% css_class = 'checkbox ' -%>
   <% checkbox_field.choices.each_with_index do |choice, num| -%>
@@ -8,7 +12,7 @@
     -%>
     <%= hidden_field_tag "#{name}[#{num}]", '', :id => '' %>
     <div class="field field_check">
-    <%= check_box_tag("answers[#{survey.id}][#{checkbox_field.id}][#{num}]", choice[1],
+    <%= check_box_tag("#{name}[#{num}]", choice[1],
           checkbox_field.has_answer?(choice[1], answer_sheet), 
           :id => dom_id, 
           :class => css_class) %>
