@@ -30,6 +30,11 @@ class QuestionSet
         next if questions_indexed[question_id.to_i].nil? # the rare case where a question was removed after the app was opened.
         # update each question with the posted response
         questions_indexed[question_id.to_i].set_response(posted_values(response), answer_sheet)
+      else
+        answer = Answer.find_by_answer_sheet_id_and_question_id(answer_sheet.id,question_id)
+        if answer.present?
+          answer.destroy
+        end
       end
     end
   end

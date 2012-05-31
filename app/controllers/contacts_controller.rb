@@ -200,7 +200,7 @@ class ContactsController < ApplicationController
     
     @person.update_attributes(params[:person]) if params[:person]
     
-    save_survey_answers
+    update_survey_answers if params[:answers].present?
     @person.update_date_attributes_updated
     if @person.valid? && (!@answer_sheet || (@answer_sheet.person.valid? && (!@answer_sheet.person.primary_phone_number || @answer_sheet.person.primary_phone_number.valid?)))
       respond_to do |wants|

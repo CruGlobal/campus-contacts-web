@@ -103,7 +103,7 @@
   <div style="clear:both;"></div>
   <div>
     <% if friends = @person.friends_and_leaders(current_organization) %>
-      <p><b><%= t('.persons_friends',person: declare_ownership(@person.firstName)) %></b></p>
+      <p><b><%= @person.firstName.present? ? t('.persons_friends',person: declare_ownership(@person.firstName)) : "No Name Assigned" %></b></p>
 
       <% friends.each do |friend_uid| %>
         <div style="float:left; margin-right: 5px;">
