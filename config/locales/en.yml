@@ -483,6 +483,7 @@ en:
   contacts:
     create:
       success: "Succesfully updated %{name}'s profile"
+      email_taken: "Oops! This email address is already being used. Please email support@missionhub.com with the EMAIL address and NAME of the person whom you want to add the email to."
     role_assign_success: 'Successfully assigned labels.'
     assign: Assign
     unassign: 'Unassign'

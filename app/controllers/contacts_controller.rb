@@ -204,7 +204,6 @@ class ContactsController < ApplicationController
     @person.update_date_attributes_updated
     if @person.valid? && (!@answer_sheet || (@answer_sheet.person.valid? && (!@answer_sheet.person.primary_phone_number || @answer_sheet.person.primary_phone_number.valid?)))
       respond_to do |wants|
-        params[:add_another] = 'false'
         params[:update] = 'true'
         wants.js
         wants.html { redirect_to survey_response_path(@person) }
@@ -225,7 +224,7 @@ class ContactsController < ApplicationController
   def create
     @organization = current_organization
     p = Person.where(firstName: params[:person][:firstName], lastName: params[:person][:lastName])
-    p.inspect
+
     unless p.blank?
       params[:id] = p.first.id
       update

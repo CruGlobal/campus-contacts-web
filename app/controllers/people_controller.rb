@@ -226,6 +226,7 @@ class PeopleController < ApplicationController
         @person.update_date_attributes_updated
         format.html { redirect_to(@person, notice: 'Person was successfully updated.') }
         format.xml  { head :ok }
+        params[:update] = 'true'
         format.js
       else
         format.html { render action: "edit" }
