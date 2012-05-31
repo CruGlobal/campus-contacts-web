@@ -4,7 +4,7 @@
     <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
   </td>
   <td class="name"><%= person %></td>
-  <td class="phone"><%= person.pretty_phone_number %></td>
+  <td class="phone phone_number"><%= person.pretty_phone_number %></td>
   <td class="email"><%= person.email %></td>
   <td class="year"><%= person.yearInSchool %></td>
   
