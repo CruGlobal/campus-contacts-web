@@ -37,7 +37,8 @@
       <% if @person.phone_number.present? %>
         <p>
         <label><%= t('.phone_number', count: @person.phone_numbers.length) %></label>
-        <%= @person.phone_numbers_html %><br/>
+        <%= link_to @person.phone_numbers_html, "#", class: "send_sms_link", 'data-number' => @person.pretty_phone_number, 'data-id' => @person.id, 'data-name' => @person %>
+        <br/>
         </p>
       <% end %>
       <% if @person.email.present? %>
@@ -120,3 +121,6 @@
     <%= @person.date_attributes_updated ? t('.updated_time_difference', time_diff: distance_of_time_in_words(@person.date_attributes_updated.to_time, Time.now)) : t('.updated_time_difference', time_diff: distance_of_time_in_words(@person.dateChanged.to_time, Time.now)) %>
   </div>
 </div>
+
+
+<%= render 'shared/bulk_send_form' %>
