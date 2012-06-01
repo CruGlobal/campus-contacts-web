@@ -965,19 +965,38 @@ span.title {
     height: 85px;
     display: block;
   }
-  #roundwrap {
-    border-radius: 35px;
-    -moz-border-radius: 35px;
-    -webkit-border-radius: 35px;
+  .roundwrap {
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
     box-shadow: 0 0 8px #bbb inset;
 		-webkit-box-shadow: 0 0 8px #bbb inset;
     -moz-box-shadow: 0 0 8px #bbb inset;
 		padding: 25px;
+		&.video_space .inner_space {
+		  background: #4d4d4d;
+		  height: 350px;
+		  width: 100%;
+		  margin: 0 auto;
+      border-radius: 15px;
+      -moz-border-radius: 15px;
+      -webkit-border-radius: 15px;
+      box-shadow: 0 0 20px #222 inset;
+  		-webkit-box-shadow: 0 0 20px #222 inset;
+      -moz-box-shadow: 0 0 20px #222 inset;
+		}
   }
   .salespush {
     font-size: 22px;
     text-align: right;
     margin-top: 15px;
+  }
+  .video_salespush {
+    font-size: 22px;
+    text-align: right;
+    margin-top: -35px;
+    margin-right: -10px;
+    float: right;
   }
   .learnmore {
     text-transform: uppercase;
@@ -986,38 +1005,44 @@ span.title {
   }
   .getstartedbt {
     background: url("<%= asset_path("splash/btn_gsc.png") %>") no-repeat 0 0;
+    background-size: 225px 130px;
     color: #FFFFFF;
     display: inline-block;
     font-weight: bold;
-    height: 72px;
-    line-height: 62px;
-    padding-left: 29px;
-    text-align: left;
+    height: 50px;
+    text-align: center;
+    padding-right: 10px;
+    padding-top: 15px;
     text-transform: uppercase;
-    width: 220px;
+    width: 215px;
     overflow: hidden;
-    vertical-align: middle;
-  }
-  .getstartedbt:hover {
-    text-decoration: none;
-    background-position: -1px 100%;
+    vertical-align: middle;    
+    &:hover {
+      background-size: 225px 130px;
+      text-decoration: none;
+      background-position: -1px -66px;
+    }
   }
   h1.headlinetext {
     font-size: 29px;
     color: #0078AE;
     margin-bottom: 0px;
-    text-align: right;
+    &.video {
+      display: inline-block;
+    }
   }
   span.babyblue {
     color: #5794c0;
   }
   h4.subheadlinetext {
-    text-align: right;
     color: #B3B3B3;
     font-size: 21px;
     margin-top: 0px;
     margin-bottom: 10px;
     font-weight: normal;
+    &.video {
+      display: inline-block;
+    }
   }
 }
 
@@ -1031,6 +1056,14 @@ span.title {
 
 .right {
   float: right;
+}
+
+.aleft {
+  text-align: left;
+}
+
+.aright {
+  text-align: right;
 }
 
 .signup_org {
