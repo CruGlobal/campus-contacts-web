@@ -110,13 +110,13 @@ class SmsController < ApplicationController
     
     def send_next_survey_question(survey, person, phone_number)
       question = next_question(survey, person)
-      if question
-        msg = question.label
+      if question        
+        msg = question.attribute_name == "email" ? question.with_label_should_be_unique_msg : question.label
         if question.kind == 'ChoiceField'
           msg = question.label_with_choices
           separator = / [a-z]\)/
         end
-        if question.survey_elements.present?
+        if question.survey_elements.present? && question.attribute_name != 'email'
           question_no = get_question_no(survey, person) 
           msg = "#{question_no} #{msg}"
         end

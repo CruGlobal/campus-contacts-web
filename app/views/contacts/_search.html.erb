@@ -1,4 +1,4 @@
-<div id="filter_box" style="display:none">
+<div id="filter_box" style="<%= @style %>">
   <%= form_tag params, method: :get do %>
     <%= hidden_field_tag :completed, params[:completed] if params[:completed].present? %>
     <%= hidden_field_tag :search, 1 %>

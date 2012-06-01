@@ -1,3 +1,4 @@
+<% name = defined?(survey) ? "answers[#{survey.id}][#{checkbox_field.id}]" : "answers[#{checkbox_field.id}]" %>
 <div id="<%= dom_id(checkbox_field) %>">
   <% css_class = 'checkbox ' -%>
   <% checkbox_field.choices.each_with_index do |choice, num| -%>
@@ -5,9 +6,9 @@
        last_choice = (num == checkbox_field.choices.length - 1)
        css_class += checkbox_field.validation_class(answer_sheet) if last_choice
     -%>
-    <%= hidden_field_tag "answers[#{checkbox_field.id}][#{num}]", '', :id => '' %>
+    <%= hidden_field_tag "#{name}[#{num}]", '', :id => '' %>
     <div class="field field_check">
-    <%= check_box_tag("answers[#{checkbox_field.id}][#{num}]", choice[1],
+    <%= check_box_tag("#{name}[#{num}]", choice[1],
           checkbox_field.has_answer?(choice[1], answer_sheet), 
           :id => dom_id, 
           :class => css_class) %>
