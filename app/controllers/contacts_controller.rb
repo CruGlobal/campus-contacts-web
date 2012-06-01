@@ -223,14 +223,14 @@ class ContactsController < ApplicationController
   
   def create
     @organization = current_organization
-    p = Person.where(firstName: params[:person][:firstName], lastName: params[:person][:lastName])
-
-    unless p.blank?
-      params[:id] = p.first.id
+    person = Person.where(firstName: params[:person][:firstName], lastName: params[:person][:lastName])
+    if person.present?
+      params[:id] = person.first.id
+      params[:answers] = nil
       update
+    else
+      create_contact
     end
-
-    create_contact
   end
   
   def destroy
