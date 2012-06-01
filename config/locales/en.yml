@@ -127,6 +127,10 @@ en:
     create:
       error_creating_leader_no_valid_email: "Error: Cannot create Person with leader role without a valid email"
       error_creating_admin_no_valid_email: "Error: Cannot create Person with admin role without a valid email"
+      firstname_error: "<font color='red'>First name is required.</font>"
+      phone_number_error: "<font color='red'>Invalid phone number</font>"
+      email_taken: "<font color='red'>Oops! This email address is already being used. Please email <b>support@missionhub.com</b> with the EMAIL address and NAME of the person whom you want to add the email to.</font>"
+      email_error: "<font color='red'>Invalid email.</font>"
     person_form:
       add_phone_number: "Add Phone Number" 
       add_email_address: "Add Email Address" 

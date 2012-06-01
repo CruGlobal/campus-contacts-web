@@ -204,11 +204,15 @@ class PeopleController < ApplicationController
             wants.js
           end
         end
-      else
+      else 
         flash.now[:error] = ''
-        flash.now[:error] += 'First name is required.<br />' unless @person.firstName.present?
-        flash.now[:error] += 'Phone number is not valid.<br />' if @phone && !@phone.valid?
-        flash.now[:error] += 'Email address is not valid.<br />' unless @email && @email.valid?
+        flash.now[:error] += "#{t('people.create.firstname_error')}<br />" unless @person.firstName.present?
+        flash.now[:error] += "#{t('people.create.phone_number_error')}<br />" if @phone && !@phone.valid?
+        if @email && !@email.is_unique?
+          flash.now[:error] += "#{t('people.create.email_taken')}<br />" 
+        elsif @email && !@email.valid?
+          flash.now[:error] += "#{t('people.create.email_error')}<br />" 
+        end
         render 'add_person'
         return
       end
