@@ -312,7 +312,41 @@ $('#send_bulkemail_link').live 'click', ->
         $('#bulk_email_message').val($('#bulk_send_body').val())
         $(this).dialog('destroy')
   false        
-  
+
+$('.send_sms_link').live 'click', ->
+	ids = new Array()
+	id = $(this).attr('data-id')
+	name = $(this).attr('data-name')
+	number = $(this).attr('data-number')
+	ids.push(id)
+	element = '<li data-id="'.concat(id,'">',name,'<a href="" class="delete">x</a></li>')
+	$('.to_list').html(element)
+	$('#bulk_send_dialog form').addClass('bulk-sms')    
+	$('#bulk_send_dialog .subject').hide()
+	$('#char_counter').show()
+	$('#bulk_send_dialog #bulk_send_body').simplyCountable( { maxCount: 160 } )
+	$('#bulk_send_body').val('')
+	$('#bulk_send_dialog').dialog
+		resizable: false,
+		height:444,
+		width:600,
+		modal: true,
+		title: 'Send Text Message',
+		open: (event, ui) ->
+			$('#bulk_send_dialog_message').hide()
+			$(this).find('form').attr('action', '/people/bulk_sms')
+		close: (event, ui) ->
+			$('#bulk_sms_message').val($('#bulk_send_body').val())            
+		buttons: 
+			Send: ->
+				$(this).submitBulkSendDialog()
+				$('#bulk_sms_message').val($('#bulk_send_body').val())                
+				$.n('Text message sent')        
+			Cancel: ->
+				$('#bulk_sms_message').val($('#bulk_send_body').val())        
+				$(this).dialog('destroy')
+	false 
+	
 $('#send_bulksms_link').live 'click', ->
   if $('.id_checkbox:checked').length == 0
     alert("You didn't select any people to text")
