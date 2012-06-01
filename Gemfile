@@ -28,6 +28,7 @@ gem "default_value_for"
 
 gem 'dalli'
 gem 'resque_mail_queue'
+gem 'mailcatcher'
 
 gem 'valium'
 gem 'newrelic_rpm'#, '3.1.1'

@@ -23,7 +23,7 @@ module ContactActions
         save_survey_answers
   
         FollowupComment.create_from_survey(@organization, @person, @organization.all_questions, @answer_sheets)
-
+        NewPerson.create(person_id: @person.id, organization_id: @organization.id)
         create_contact_at_org(@person, @organization)
         if params[:assign_to_me] == 'true'
           ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
