@@ -244,6 +244,8 @@ cn:
       request_key_help: "A Keyword is both the name of the survey and what the person would text to fill out the survey questions. For example, you would say, 'Text UFCRU to the number 85005.' UFCRU is the keyword."
       headline_html: An online <span class="babyblue">follow-up system</span> with your audience in mind.
       subheadline_html: Students text to connect. You empower follow-up from the web or a smart phone.
+      video_headline_html: Got questions?
+      video_subheadline_html: We can help!
       get_details_html: Get the Details & <a href="/welcome/tour" class="learnmore">Learn More</a> or %{link}
       get_started: "Get Started"
     wizard:
