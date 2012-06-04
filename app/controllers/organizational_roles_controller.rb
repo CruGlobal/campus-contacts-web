@@ -6,21 +6,25 @@ class OrganizationalRolesController < ApplicationController
       person_id = @organizational_role.person_id
       organization_id = @organizational_role.organization_id
       
-      contact_assignments = ContactAssignment.where(person_id: person_id, organization_id: organization_id)
+      # Delete Contact Assignments
+      ContactAssignment.where(person_id: person_id, organization_id: organization_id).destroy_all
+      
+      # Delete Answer Sheets & Answers
       survey_ids = Survey.where(organization_id: organization_id).collect{|s| s.id}
       answer_sheets = AnswerSheet.where(survey_id: survey_ids, person_id: person_id)
       answer_sheets_ids = answer_sheets.collect{|a| a.id}
-      answers = Answer.where(answer_sheet_id: answer_sheets_ids)
+      Answer.where(answer_sheet_id: answer_sheets_ids).destroy_all
+      answer_sheets.destroy_all
       
+      # Delete Followup Comments
+      FollowupComment.where(contact_id: person_id, organization_id: organization_id).destroy_all
       
-      Rails.logger.info ""
-      Rails.logger.info "Delete #{contact_assignments.count} Contact Assignments"
-      Rails.logger.info "Delete #{answer_sheets.count} Answer Sheets"
-      Rails.logger.info "Delete #{answers.count} Answers"
-      Rails.logger.info ""
+      # Delete Group Membership
+      group_ids = Group.where(organization_id: organization_id).collect{|g| g.id}
+      GroupMembership.where(group_id: group_ids, person_id: person_id).destroy_all
       
     end
-    # @organizational_role.save
+    @organizational_role.save
     respond_to do |wants|
       wants.html
       wants.js {render nothing: true}
