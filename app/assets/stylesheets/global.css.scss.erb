@@ -1017,16 +1017,56 @@ span.title {
           background: #414141;
           padding: 8px 15px;
           font-size: 16px;
-          color: #fcfcfc;
+          color: #e0e0e0;
+          text-shadow: 1px 1px #111;
+          vertical-align: middle;
+          .video_icon {
+            float: left;
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            margin: -7px 2px 0 -10px;
+          }
         }
         .list {
           background: #7b7b7b;
-          padding: 8px 15px;
           font-size: 12px;
           color: #bacf76;
-          height: 370px;
+          height: 380px;
+          overflow-y: auto;
           font-size: 22px;
           text-align: center;
+          .video_entry {
+					  cursor: pointer;
+            border-bottom: 1px solid gray;
+            margin: 0;
+            height: 92px;
+						padding: 4px 8px;
+						&:hover {
+              background: #8c8c8c;
+						}
+						.preview {
+							border: 1px solid #e0e0e0;
+							width: 120px;
+							height: 90px;
+							float: left;
+							background: #000;
+						}
+						.title {
+							float: left;
+              text-shadow: 1px 1px #666;
+              width: 140px;
+              font-size: 14px;
+              text-align: left;
+              padding-left: 5px;
+						}
+						.youtube_video_id {
+						  display: none;
+						}
+						.description {
+						  display: none;
+						}
+          }
         }
       }
 		}

@@ -18,23 +18,24 @@
   <div class="inner_space">
     <div class="content">
       <div class="video_span">
-        VIDEO FOOTAGE
+        <iframe id="video_frame" width="567" height="330" src="" frameborder="0" allowfullscreen></iframe>
       </div>
       <div class="description">
         <div class="title">
-          Video Title - Video Title - Video Title
         </div>
-        Video Description Video Description Video Description Video Description Video Description
-        Video Description Video Description Video Description Video Description Video Description
-        Video Description Video Description Video Description Video Description Video Description
+        <div class="details">
+        </div>
       </div>
     </div>
     <div class="menu">
       <div class="head">
-        Easy Tutorial Video
+        <div class="video_icon">
+          <%= image_tag('video_icon.png')%>
+        </div>
+        Easy Tutorial Videos
       </div>
       <div class="list">
-        VIDEO LIST GOES HERE
+        <%= render partial: 'welcome/video_list'%>
       </div>
     </div>
   </div>
