@@ -27,7 +27,7 @@ function select_video_by_id(video_id){
 	video = $("#"+video_id+".video_entry");
 	id = video.children('.youtube_video_id').html();
 	frame = $("#video_frame");
-	video_url = "http://www.youtube.com/embed/"+id+"?showinfo=0&controls=0";
+	video_url = "http://www.youtube.com/embed/"+id+"?showinfo=0&autohide=1";
 	frame.attr("src", video_url);
 	description_space = $("#welcome_controller .inner_space .content .description");
 	description_space.children('.title').html(video.children('.title').html());
@@ -39,7 +39,7 @@ function select_video_by_position(video_position){
 	video = videos.eq(video_position);
 	id = video.children('.youtube_video_id').html();
 	frame = $("#video_frame");
-	video_url = "http://www.youtube.com/embed/"+id+"?showinfo=0&controls=0";
+	video_url = "http://www.youtube.com/embed/"+id+"?showinfo=0&autohide=1";
 	frame.attr("src", video_url);
 	description_space = $("#welcome_controller .inner_space .content .description");
 	description_space.children('.title').html(video.children('.title').html());
