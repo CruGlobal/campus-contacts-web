@@ -21,6 +21,7 @@ class Organization < ActiveRecord::Base
   has_many :followup_comments
   has_many :organizational_roles, inverse_of: :organization
   has_many :leaders, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role.leader_ids}, order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
+  has_many :only_leaders, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::LEADER_ID}, order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
   has_many :admins, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::ADMIN_ID}, order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
   has_many :all_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ?", Role::CONTACT_ID]
   has_many :contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.followup_status <> 'do_not_contact'", Role::CONTACT_ID]
