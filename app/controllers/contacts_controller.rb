@@ -184,15 +184,21 @@ class ContactsController < ApplicationController
   end
   
   def mine
-    @people = Person.order('lastName, firstName').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.organization_id' => current_organization.id, 'organizational_roles.role_id' => Role::CONTACT_ID)
+    fetch_mine
     if params[:status] == 'completed'
-      @people = @people.where("organizational_roles.followup_status = 'completed'")
-    elsif params[:status] == 'all'
-      
-    else
-      @people = @people.where("organizational_roles.followup_status <> 'completed'")
+      @all_people = @all_people.where("organizational_roles.followup_status = 'completed'")
+    elsif params[:status] != 'all'
+      @all_people = @all_people.where("organizational_roles.followup_status <> 'completed'")
     end
+    @people = Kaminari.paginate_array(@all_people).page(params[:page])
   end
+  
+  def mine_all
+    mine
+    @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
+    render :partial => 'contacts/mine_all'
+  end
+  
   
   def update
     @person = Person.find(params[:id])
@@ -270,6 +276,10 @@ class ContactsController < ApplicationController
   end
   
   protected
+  
+    def fetch_mine
+      @all_people = Person.order('lastName, firstName').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.organization_id' => current_organization.id, 'organizational_roles.role_id' => Role::CONTACT_ID)
+    end
     
     def get_person
       @person = user_signed_in? ? current_user.person : Person.new

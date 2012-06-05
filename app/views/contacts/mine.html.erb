@@ -30,7 +30,7 @@
 
   <table class="listing" cellpadding="0" cellspacing="0">
     <tr style="">
-      <th class="check"><%= check_box_tag 'check_all', '1', false, class: 'no_margin' %></th>
+      <th class="check"><%= check_box_tag 'check_all', '1', false, class: 'check_all_mine no_margin' %></th>
       <th class="name"><%= t('contacts.mine.name') %></th>
       <th class="phone"><%= t('contacts.mine.phone') %></th>
       <th class="email"><%= t('contacts.mine.email') %></th>
@@ -43,6 +43,7 @@
       <% end %>
     </tbody>
   </table>
+  <%= paginate @people %>
   <% if @people.blank? %>
     <div class="contentpad no_contacts">
       <%= t('contacts.index.no_contacts') %>
