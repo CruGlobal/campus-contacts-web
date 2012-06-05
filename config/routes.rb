@@ -182,6 +182,8 @@ Mh::Application.routes.draw do
   resources :contacts, :only => [:show, :create, :edit, :update, :destroy, :index] do
     collection do
       get :mine
+      get :mine_all
+      get :contacts_all
       post :send_reminder
       put :create_from_survey
       delete :destroy

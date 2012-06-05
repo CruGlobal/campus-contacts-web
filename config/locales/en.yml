@@ -162,7 +162,9 @@ en:
     all:
       page_selected_html: "All <b>%{count}</b> people on this page are selected."
       select_all_html: "Select all <b>%{count}</b> people in the directory."
+      select_all_html_mine: "Select all <b>%{count}</b> people in the your contacts."
       all_selected_html: "All <b>%{count}</b> people in the directory are selected."
+      all_selected_html_mine: "All <b>%{count}</b> people in your contacts are selected."
     show:
       updated_time_difference: "Updated %{time_diff} ago."
       add_comments_here: 'Add comments here...'
