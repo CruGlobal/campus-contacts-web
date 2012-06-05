@@ -493,8 +493,8 @@ $('.check_all_contacts').live 'click', ->
     
   if true || $('.pagination').length
     if $(this).is(':checked')    
-      $('#contacts_table').prepend('<tr><td colspan="6" align="center" style="background:none;">Fetching information...</td></tr>') 
-      $.get '/contacts/contacts_all?', (html) ->
+      $('#contacts_table').prepend('<tr><td colspan="99" align="center" style="background:none;">Fetching information...</td></tr>') 
+      $.get '/contacts/contacts_all?' + $(this).attr('data-status'), (html) ->
         $('#contacts_table').find('tr:first').remove()
         $('#contacts_table').prepend(html)    
     else

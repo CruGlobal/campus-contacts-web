@@ -15,6 +15,8 @@ class ContactsController < ApplicationController
   end
   
   def index
+    url = request.url.split('?')
+    @status = url[1].size > 1 ? url[1] : ''
     fetch_all_contacts
   
     respond_to do |wants|
@@ -57,6 +59,7 @@ class ContactsController < ApplicationController
   
   def contacts_all
     fetch_all_contacts
+    @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
     render partial: "contacts/contacts_all"
   end
 
