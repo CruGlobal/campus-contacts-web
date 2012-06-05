@@ -16,7 +16,7 @@ class ContactsController < ApplicationController
   
   def index
     url = request.url.split('?')
-    @status = url[1].size > 1 ? url[1] : ''
+    @status = url.size > 1 ? url[1] : ''
     fetch_all_contacts
   
     respond_to do |wants|
