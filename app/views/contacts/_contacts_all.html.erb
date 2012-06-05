@@ -1,0 +1,24 @@
+<tr id="all">
+	<td colspan="99" align="center">
+		<span id="all_text">
+			<%=raw t('people.all.page_selected_html', count: @people.size) %> 
+			<% count = 0 %>
+			<% @all_people.each {|ap| count += 0} %>
+			<%= Rails.logger.info ">>>>>>>>>>>>>>>>>> ALL: #{count}" %>
+			<%= Rails.logger.info ">>>>>>>>>>>>>>>>>> NOT: #{@people.count}" %>
+			<% if @all_people.count > @people.size %>
+			<a href="#" onclick="$('#all_text, #all_selected_text_mine').toggle(); $('.id_checkbox').attr('checked',true);"><%=raw t('people.all.select_all_html_mine', count: @all_people.size) %></a>
+			<% end %>
+		</span>
+		<span id="all_selected_text_mine" style="display:none">
+			<%=raw t('people.all.all_selected_html_mine', count: @all_people.size) %>
+		</span>
+	</td>
+</tr>
+
+<div class="hidden">
+  <% @filtered_people.each do |person| %>
+    <%= render 'contacts/contact', person: person, questions: @questions, answers: @answers, assignments: @assignments %>
+  	<%= render 'contacts/contact', person: person, extra: 'hidden' %>
+  <% end %>
+</div>
