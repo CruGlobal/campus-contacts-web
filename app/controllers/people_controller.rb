@@ -223,6 +223,17 @@ class PeopleController < ApplicationController
   # PUT /people/1.xml
   def update
     @person = current_organization.people.find(params[:id])
+		p = nil
+		if params[:person][:email_address]
+			email = params[:person][:email_address][:email]
+			p = Person.where(firstName: @person.firstName, lastName: @person.lastName).includes(:primary_email_address).where("email_addresses.email LIKE ?", email).where("personId NOT LIKE ?", params[:id])
+			@person.merge(p.first)
+		elsif params[:person][:email_addresses_attributes]
+			emails = params[:person][:email_addresses_attributes].collect{|x| x[1][:email]}
+			p = Person.where(firstName: @person.firstName, lastName: @person.lastName).where("personId NOT LIKE ?", params[:id]).includes(:primary_email_address).find(:all, :conditions => ["email_addresses.email IN (?)", emails])
+			@person.merge(p.first)
+		end
+
     authorize! :edit, @person
 
     respond_to do |format|
