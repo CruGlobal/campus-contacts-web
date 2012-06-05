@@ -47,7 +47,6 @@ module ContactActions
         if @email && !@email.is_unique?
           errors << "#{I18n.t('people.create.email_taken')}<br />" 
         elsif @email && !@email.valid?
-          puts "HELLO #{@email.is_unique?.inspect}"
           errors << "#{I18n.t('people.create.email_error')}<br />" 
         end
         
