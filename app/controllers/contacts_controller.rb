@@ -173,6 +173,10 @@ class ContactsController < ApplicationController
       end
     end
   end
+  
+  def contacts_all
+    render partial: "contacts/contacts_all"
+  end
 
   def search_by_name_and_email
     people = current_organization.people.search_by_name_or_email(params[:term], current_organization.id).uniq
@@ -185,9 +189,10 @@ class ContactsController < ApplicationController
   
   def mine
     fetch_mine
-    if params[:status] == 'completed'
+    @status = params[:status]
+    if @status == 'completed'
       @all_people = @all_people.where("organizational_roles.followup_status = 'completed'")
-    elsif params[:status] != 'all'
+    elsif @status != 'all'
       @all_people = @all_people.where("organizational_roles.followup_status <> 'completed'")
     end
     @people = Kaminari.paginate_array(@all_people).page(params[:page])

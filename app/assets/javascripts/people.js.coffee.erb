@@ -476,7 +476,25 @@ $('.check_all_mine').live 'click', ->
   if true || $('.pagination').length
     if $(this).is(':checked')    
       $('#contacts_table').prepend('<tr><td colspan="6" align="center" style="background:none;">Fetching information...</td></tr>') 
-      $.get '/contacts/mine_all?', (html) ->
+      $.get '/contacts/mine_all?status=' + $(this).attr('data-status'), (html) ->
+        $('#contacts_table').find('tr:first').remove()
+        $('#contacts_table').prepend(html)    
+    else
+      if text.indexOf('Fetching') == 0
+        first_row.remove()
+      if $('span#all_text', first_row)[0]?
+        first_row.hide()
+ 
+$('.check_all_contacts').live 'click', ->
+  first_row = $('#contacts_table').find('tr:first')
+  text = first_row.text()
+  if text.indexOf('Fetching') == 0
+    first_row.remove()
+    
+  if true || $('.pagination').length
+    if $(this).is(':checked')    
+      $('#contacts_table').prepend('<tr><td colspan="6" align="center" style="background:none;">Fetching information...</td></tr>') 
+      $.get '/contacts/contacts_all?', (html) ->
         $('#contacts_table').find('tr:first').remove()
         $('#contacts_table').prepend(html)    
     else
