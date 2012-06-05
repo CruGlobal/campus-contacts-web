@@ -969,25 +969,25 @@ span.title {
     border-radius: 15px;
     -moz-border-radius: 15px;
     -webkit-border-radius: 15px;
-    box-shadow: 0 0 8px #bbb inset;
-		-webkit-box-shadow: 0 0 8px #bbb inset;
-    -moz-box-shadow: 0 0 8px #bbb inset;
+    box-shadow: 0 0 40px #bbb inset;
+		-webkit-box-shadow: 0 0 40px #bbb inset;
+    -moz-box-shadow: 0 0 40px #bbb inset;
 		padding: 25px;
 		&.video_space .inner_space {
 		  letter-spacing: 0px;
 		  background: #5d5d5d;
-		  height: 420px;
+		  min-height: 420px;
 		  width: 95%;
-		  margin: 0 auto;
+		  margin: 20px auto 0;
       border-radius: 15px;
       -moz-border-radius: 15px;
       -webkit-border-radius: 15px;
       box-shadow: 0 0 20px #222 inset;
   		-webkit-box-shadow: 0 0 20px #222 inset;
       -moz-box-shadow: 0 0 20px #222 inset;
-      padding: 20px;
+      padding: 24px;
       .content {
-        width: 64%;
+        width: 564px;
         float: left;
         height: 100%;
         .video_span {
@@ -1002,30 +1002,35 @@ span.title {
           width: 97%;
           margin: 10px auto 0;
           color: #fcfcfc;
+          font-family: Arial;
           .title {
             color: #bacf76;
             font-size: 16px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            font-weight: bold;
           }
         }
       }
       .menu {
-        width: 35%;
+        width: 305px;
         float: right;
         height: 100%;
         .head {
           background: #414141;
-          padding: 8px 15px;
-          font-size: 16px;
+          padding: 0;
+          font-size: 14px;
           color: #e0e0e0;
+          line-height: 3em;
           text-shadow: 1px 1px #111;
           vertical-align: middle;
+          font-family: Arial;
+          font-weight: bold;
           .video_icon {
-            float: left;
             display: inline-block;
             width: 32px;
             height: 32px;
-            margin: -7px 2px 0 -10px;
+            vertical-align: middle;
+            margin: -5px 2px 0 8px;
           }
         }
         .list {
@@ -1036,12 +1041,18 @@ span.title {
           overflow-y: auto;
           font-size: 22px;
           text-align: center;
+          .video_entry:first-child {
+           padding-top: 16px; 
+          }
+          .video_entry:last-child {
+           padding-bottom: 16px; 
+          }
           .video_entry {
 					  cursor: pointer;
             border-bottom: 1px solid gray;
-            margin: 0;
+            margin: 0 0 0;
             height: 92px;
-						padding: 4px 8px;
+						padding: 8px 17px;
 						&:hover {
               background: #8c8c8c;
 						}
@@ -1051,12 +1062,12 @@ span.title {
 							height: 90px;
 							float: left;
 							background: #000;
+							margin-right: 10px;
 						}
 						.title {
-							float: left;
               text-shadow: 1px 1px #666;
-              width: 140px;
-              font-size: 14px;
+              font-size: 13px;
+              font-family: Arial;
               text-align: left;
               padding-left: 5px;
 						}
@@ -1110,6 +1121,7 @@ span.title {
   }
   h1.headlinetext {
     font-size: 29px;
+    padding-left: 10px;
     color: #0078AE;
     margin-bottom: 0px;
     &.video {
@@ -1122,6 +1134,7 @@ span.title {
   h4.subheadlinetext {
     color: #B3B3B3;
     font-size: 21px;
+    padding-left: 10px;
     margin-top: 0px;
     margin-bottom: 10px;
     font-weight: normal;
