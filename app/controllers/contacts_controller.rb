@@ -31,10 +31,10 @@ class ContactsController < ApplicationController
         out = ""
         @questions.select! { |q| !%w{firstName lastName phone_number email}.include?(q.attribute_name) }
         CSV.generate(out) do |rows|
-          rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('general.status'), t('general.gender'), t('contacts.index.phone_number'), t('people.index.email')] + @questions.collect {|q| q.label} + [t('contacts.index.last_survey')]
+          rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('general.status'), t('general.assigned_to'), t('general.gender'), t('contacts.index.phone_number'), t('people.index.email')] + @questions.collect {|q| q.label} + [t('contacts.index.last_survey')]
           @all_people.each do |person|
             if @roles[person.id]
-              answers = [person.firstName, person.lastName, @roles[person.id].followup_status.to_s.titleize, person.gender.to_s.titleize, person.pretty_phone_number, person.email]
+              answers = [person.firstName, person.lastName, @roles[person.id].followup_status.to_s.titleize, person.assigned_tos.collect{|a| Person.find(a.assigned_to_id).name}.join(','), person.gender.to_s.titleize, person.pretty_phone_number, person.email]
               dates = []
               @questions.each do |q|
                 answer = @all_answers[person.id][q.id]
