@@ -476,7 +476,7 @@ $('.check_all_mine').live 'click', ->
   if true || $('.pagination').length
     if $(this).is(':checked')    
       $('#contacts_table').prepend('<tr><td colspan="6" align="center" style="background:none;">Fetching information...</td></tr>') 
-      $.get '/contacts/mine_all?status=' + $(this).attr('data-status'), (html) ->
+      $.get '/contacts/mine_all?' + $(this).attr('data-status'), (html) ->
         $('#contacts_table').find('tr:first').remove()
         $('#contacts_table').prepend(html)    
     else

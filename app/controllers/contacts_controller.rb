@@ -16,7 +16,7 @@ class ContactsController < ApplicationController
   
   def index
     url = request.url.split('?')
-    @status = url.size > 1 ? url[1] : ''
+    @attr = url.size > 1 ? url[1] : ''
     fetch_all_contacts
   
     respond_to do |wants|
@@ -73,11 +73,12 @@ class ContactsController < ApplicationController
   end
   
   def mine
+    url = request.url.split('?')
+    @attr = url.size > 1 ? url[1] : ''
     fetch_mine
-    @status = params[:status]
-    if @status == 'completed'
+    if params[:status] == 'completed'
       @all_people = @all_people.where("organizational_roles.followup_status = 'completed'")
-    elsif @status != 'all'
+    elsif params[:status] != 'all'
       @all_people = @all_people.where("organizational_roles.followup_status <> 'completed'")
     end
     @people = Kaminari.paginate_array(@all_people).page(params[:page])
