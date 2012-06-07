@@ -86,8 +86,8 @@ class Person < ActiveRecord::Base
     :conditions => "org_roles.organization_id = #{org_id} AND concat(firstName,' ',lastName) LIKE '%#{keyword}%' OR concat(lastName, ' ',firstName) LIKE '%#{keyword}%' OR emails.email LIKE '%#{keyword}%'"
   } }
 
-  def self.assigned_tos(org)
-    self.assigned_tos.where(organization_id: org)
+  def assigned_tos_by_org(org)
+    assigned_tos.where(organization_id: org.id)
   end
 
   def update_date_attributes_updated
