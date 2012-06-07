@@ -1,19 +1,44 @@
-<div class="advanced_options" style="<%= 'display:none;' if q.trigger_words.blank? %> width: 300px;">
-  <div class="field">
+<% if q.trigger_words.blank? %>
+  <%= link_to t('.show_advanced_options'), '#', id: 'advanced_toggle' %><br/><br />
+<% end %>
+<div class="notify_advanced_options advanced_options" style="<%= 'display:none;' if q.trigger_words.blank? %>">
+  <div class="title">Automatically Notify Leaders</div>
+  <div class="label">
     <label><%= t('.leaders') %></label>
-  
+  </div>
+  <div class="fieldset">
     <%= select_tag 'leaders[]',
     options_for_select(@leaders.collect {|l| [l.name, l.id] }, :selected => q.leaders.collect {|l| l.id}), {:multiple => true, :size => 7 } %>
   </div>
-  <div class="field">
-    <%= f.label :trigger_words,(raw t('.trigger_words')) %>
+  <div class="label">
+    <%= f.label :trigger_words, raw(t('.trigger_words')) %>
+  </div>
+  <div class="fieldset">
     <%= f.text_field :trigger_words %>
   </div>
-  <div class="field">
+  <div class="label">
     <%= f.label :notify_via, t('.notify_via') %>
+  </div>
+  <div class="fieldset">
     <%= f.select :notify_via, ["SMS","Email","Both"] %>
   </div>
-  
+  <br/>
+  <div class="title">Automatically Assign Contacts</div>
+  <div class="label">
+    <label>Assign to:</label>
+  </div>
+  <div class="fieldset">
+    <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_leader', class: 'assign_to_radio' %> 
+    <label for="assign_to_leader"><%= t('leader') %></label>
+    <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_org', class: 'assign_to_radio' %> 
+    <label for="assign_to_org"><%= current_organization.terminology %></label>
+    <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_group', class: 'assign_to_radio' %>
+    <label for="assign_to_group"><%= t('group') %></label>
+    <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_label', class: 'assign_to_radio' %>
+    <label for="assign_to_label"><%= t('label') %></label> 
+  </div>
+  <br/>
   <%= f.check_box :web_only, id: "web_only_#{f.object.id}", class: 'web_only' %> <%= t('.web_only') %><br /><br/>
+  <br/>
 </div>
 

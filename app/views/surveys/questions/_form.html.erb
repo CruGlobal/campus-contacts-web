@@ -24,11 +24,10 @@
     <div class="multiple_choice_form" style="<%= (question.new_record? || question.kind == 'TextField') ? 'display:none' : '' %>">
       <%= render 'multiple_choice_form', f: f %>
     </div>
-    <%= render 'advanced_options', f: f, q: question %>
     <div class="submit_button" style="<%= question.new_record? ? 'display:none' : '' %>">
-      <% if question.trigger_words.blank? %>
-        <%= link_to t('.show_advanced_options'), '#', id: 'advanced_toggle' %><br/><br />
-      <% end %>
+      <div id="advance_notification">
+        <%= render 'advanced_options', f: f, q: question %>
+      </div>
       <%= f.submit %>
       <%= button_tag "Cancel", :id => "cancel_survey_question" %>
     </div>
