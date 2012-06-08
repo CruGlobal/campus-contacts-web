@@ -64,7 +64,7 @@ class ContactsController < ApplicationController
   end
 
   def search_by_name_and_email
-    people = current_organization.people.search_by_name_or_email(params[:term].strip, current_organization.id).uniq
+    people = current_organization.people.search_by_name_or_email(params[:term], current_organization.id).uniq
     
 
     respond_to do |wants|
