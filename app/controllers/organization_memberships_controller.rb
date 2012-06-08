@@ -125,10 +125,14 @@ class OrganizationMembershipsController < ApplicationController
   end
   
   def set_primary
+    Rails.logger.info ">>>>>>> current_person : #{current_person.inspect}"
     if @organization_membership = current_person.organization_memberships.find_by_organization_id(params[:id])
       @organization_membership.update_attribute(:primary, true)
-      session[:current_organization_id] = params[:id]
+    else
+      @organization_membership = OrganizationMembership.create(organization_id: params[:id], person_id: current_person.id)
+      @organization_membership.update_attribute(:primary, true)
     end
+    session[:current_organization_id] = params[:id]
     redirect_to request.referrer ? :back : '/contacts'
   end
   
