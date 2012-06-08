@@ -3,6 +3,7 @@ require 'vpim/book'
 require 'ccc/person'
 
 class Person < ActiveRecord::Base
+  
   include Ccc::Person
   self.table_name = 'ministry_person'
   self.primary_key = 'personID'

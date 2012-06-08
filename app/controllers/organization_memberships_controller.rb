@@ -125,7 +125,6 @@ class OrganizationMembershipsController < ApplicationController
   end
   
   def set_primary
-    Rails.logger.info ">>>>>>> current_person : #{current_person.inspect}"
     if @organization_membership = current_person.organization_memberships.find_by_organization_id(params[:id])
       @organization_membership.update_attribute(:primary, true)
     else
