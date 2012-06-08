@@ -4,4 +4,6 @@ class SurveyElement < ActiveRecord::Base
   belongs_to :survey
   belongs_to :element
   belongs_to :question, :conditions => "kind NOT IN('Paragraph', 'Section', 'QuestionGrid', 'QuestionGridWithTotal')", :foreign_key => 'element_id', :class_name => 'Element'
+  has_many :question_rules
+  has_many :rules, :through => :question_rules
 end
