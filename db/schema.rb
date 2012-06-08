@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120608153742) do
+ActiveRecord::Schema.define(:version => 20120608165037) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -1928,8 +1928,10 @@ ActiveRecord::Schema.define(:version => 20120608153742) do
     t.string   "name"
     t.string   "description"
     t.string   "action_method"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+    t.integer  "limit_per_survey", :default => 0
+    t.string   "rule_code"
   end
 
   create_table "mh_survey_elements", :force => true do |t|
