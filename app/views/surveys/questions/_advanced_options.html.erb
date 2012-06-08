@@ -2,6 +2,18 @@
   <%= link_to t('.show_advanced_options'), '#', id: 'advanced_toggle' %><br/><br />
 <% end %>
 <div class="notify_advanced_options advanced_options" style="<%= 'display:none;' if q.trigger_words.blank? %>">
+  <% survey_element = s.survey_elements.find_by_element_id(q.id) %>
+  <% if survey_element.present? && survey_element.rules.present? %>
+    <% survey_element.rules.each do |r| %>
+      <%= render 'display_rule', rule: r %>
+    <% end %>
+  <% end %>
+  <div class="title">Add New Rule</div>
+  <%= select_tag :rule, options_for_select(Rule.available_in_survey(s).collect {|r| [r.name, r.id]})%>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
   <div class="title">Automatically Notify Leaders</div>
   <div class="label">
     <label><%= t('.leaders') %></label>

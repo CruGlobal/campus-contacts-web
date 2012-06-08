@@ -26,7 +26,7 @@
     </div>
     <div class="submit_button" style="<%= question.new_record? ? 'display:none' : '' %>">
       <div id="advance_notification">
-        <%= render 'advanced_options', f: f, q: question %>
+        <%= render 'advanced_options', f: f, q: question, s: @survey %>
       </div>
       <%= f.submit %>
       <%= button_tag "Cancel", :id => "cancel_survey_question" %>

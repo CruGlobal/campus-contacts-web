@@ -12,6 +12,8 @@ class Survey < ActiveRecord::Base
   has_one :keyword, :dependent => :nullify
   has_one :keyword, :class_name => "SmsKeyword", :foreign_key => "survey_id", :dependent => :nullify
   
+  has_many :rules, :through => :survey_elements
+  
   # validation
   validates_presence_of :title, :post_survey_message, :terminology
   validates_length_of :title, :maximum => 100, :allow_nil => true
