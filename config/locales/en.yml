@@ -496,6 +496,7 @@ en:
       completed: Completed
     leader:
       delete_confirm: "Are you sure you want to remove %{person} as a leader?"
+      delete_confirm_with_instructions: "If you want to retain %{person} in your organization you must first assign them another role or label, click CANCEL, go to the Directory screen and 'Add Label' such as involved or alumni, then remove them as a leader. If you want to remove them completely from your organization, click OK."
     leader_form: 
       start_typing: "Start typing a name to find a person to make a leader:"
     leaders:
