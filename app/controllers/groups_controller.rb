@@ -3,7 +3,8 @@ class GroupsController < ApplicationController
   before_filter :leader_needed, :only => [:create, :new]
   
   def index
-    @groups = current_organization.groups
+    @groups = current_organization.groups.order(params[:q] && params[:q][:s] ? params[:q][:s] : ['name'])
+    @q = current_organization.groups.where('1 <> 1').search(params[:q])
     if params[:label].present?
       @label = current_organization.group_labels.find(params[:label])
       @groups = @groups.where('mh_group_labels.id' => params[:label]).joins(:group_labels)

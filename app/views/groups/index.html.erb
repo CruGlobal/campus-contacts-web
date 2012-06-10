@@ -59,7 +59,7 @@
       <th class="checkbox_cell">
         <%= check_box_tag 'check_all', true, false %>
       </th>
-      <th class="groupname"><%= t('.group_name') %></th>
+      <th class="groupname"><%= sort_link @q, :name, t('.group_name'), params %></th>
       <th></th>
       <th><%= t('.members') %></th>
       <th><%= t('.leaders') %></th>
