@@ -84,7 +84,11 @@ class SmsController < ApplicationController
     render text: @msg.to_s + "\n"
   end
   
-  protected 
+  protected
+    def sent_again?
+      
+    end
+
     def sms_params
       unless @sms_params
         if params['To'] # Twilio
@@ -110,8 +114,14 @@ class SmsController < ApplicationController
     
     def send_next_survey_question(survey, person, phone_number)
       question = next_question(survey, person)
-      if question        
-        msg = question.attribute_name == "email" ? question.with_label_should_be_unique_msg : question.label
+      if question
+        #finds out whether or not the question was already asked or not yet. If already asked and the question is for email then sent a message that tells email is already taken and user must input another unexisting email
+        msg = nil
+        begin
+          msg = question.attribute_name == "email" && SentSms.where(received_sms_id: person.received_sms.reverse[1].id).first.question_id == question.id ? question.email_should_be_unique_msg : question.label
+        rescue
+          msg = question.label
+        end
         if question.kind == 'ChoiceField'
           msg = question.label_with_choices
           separator = / [a-z]\)/
@@ -120,7 +130,7 @@ class SmsController < ApplicationController
           question_no = get_question_no(survey, person) 
           msg = "#{question_no} #{msg}"
         end
-        send_message(msg, phone_number, separator)
+        send_message(msg, phone_number, separator, question.id)
       end
       msg
     end
@@ -191,9 +201,9 @@ class SmsController < ApplicationController
       end
     end
     
-    def send_message(msg, phone_number, separator = nil)
+    def send_message(msg, phone_number, separator = nil, question_id = nil)
       sent_via = @sms_params[:shortcode] == '75572' ? 'moonshado' : 'twilio'
-      @sent_sms = SentSms.create!(message: msg, recipient: phone_number, received_sms_id: @received.try(:id), sent_via: sent_via, separator: separator)
+      @sent_sms = SentSms.create!(message: msg, recipient: phone_number, received_sms_id: @received.try(:id), sent_via: sent_via, separator: separator, question_id: question_id)
     end
 
 end

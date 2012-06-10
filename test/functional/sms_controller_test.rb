@@ -75,13 +75,37 @@ class SmsControllerTest < ActionController::TestCase
       should "send again a survey regarding person's email attribute if an existing email was sent" do
         person = Factory(:person, email: "person@email.com")
         @sms_session.update_attribute(:interactive, true)
-        @person.update_attributes(firstName: 'Jesus', lastName: 'Christ')
-        element = Factory(:email_element) 
-        Factory(:survey_element, survey: @keyword.survey, element: element, position: 1) # creating email survey question
-        post :mo, @post_params.merge!({message: '#{person.email}', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')}) # person answered an existing email
-        assert_equal(assigns(:sent_sms).message, @keyword.questions.first.with_label_should_be_unique_msg)
-        post :mo, @post_params.merge!({message: '#{person.email}', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})  # person answered an existing email once again
-        assert_equal(assigns(:sent_sms).message, @keyword.questions.first.with_label_should_be_unique_msg)
+        @person.update_attributes(firstName: 'Jesus', lastName: 'Christ', id: @person.id.to_i)
+        element = Factory(:email_element)
+
+        #element2 = Factory(:choice_field)
+      
+        #Factory(:survey_element, survey: @keyword.survey, element: element2, position: 2)
+        Factory(:survey_element, survey: @keyword.survey, element: element, position: 3) # creating email survey question
+        #puts @keyword.survey.questions.inspect
+        puts @person.inspect
+        #puts Question.all.collect{|x| x.label}.join('\n')
+
+        #puts SentSms.all.inspect
+        #puts ReceivedSms.all.inspect
+        post :mo, @post_params.merge!({message: person.email, timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')}) # person answered an existing email
+        Factory(:received_sms, @sms_params)
+        post :mo, @post_params.merge!({message: person.email, timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')}) # person answered an existing email
+=begin
+        puts "HELO"
+        puts SentSms.all.inspect
+        puts ReceivedSms.all.inspect
+        post :mo, @post_params.merge!({message: person.email, timestamp: "05/15/2012 20:25:31"}) # person answered an existing email
+        puts "HELO"
+=end
+        puts SentSms.all.inspect
+        #puts @person.received_sms.reverse[1].id
+        puts SentSms.where(received_sms_id: @person.received_sms.reverse[1].id).first.question_id
+        puts @keyword.survey.questions.inspect
+
+        #assert_equal(assigns(:sent_sms).message, @keyword.questions.first.email_should_be_unique_msg)
+        post :mo, @post_params.merge!({message: person.email, timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})  # person answered an existing email once again
+        assert_equal(assigns(:sent_sms).message, @keyword.questions[1].email_should_be_unique_msg)
       end
     end
     
