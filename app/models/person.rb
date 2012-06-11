@@ -86,6 +86,10 @@ class Person < ActiveRecord::Base
     :conditions => "org_roles.organization_id = #{org_id} AND concat(firstName,' ',lastName) LIKE '%#{keyword}%' OR concat(lastName, ' ',firstName) LIKE '%#{keyword}%' OR emails.email LIKE '%#{keyword}%'"
   } }
 
+  def has_similar_person_by_name_and_email?
+    Person.select("ministry_person.*").joins("LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID").where("ministry_person.personID != '#{personID}' AND ministry_person.firstName = '#{firstName}' AND ministry_person.lastName = '#{lastName}' AND emails.email = '#{email}'")
+  end
+
   def update_date_attributes_updated
     self.date_attributes_updated = DateTime.now.to_s(:db)
     self.save
@@ -764,5 +768,6 @@ class Person < ActiveRecord::Base
 
   def has_a_valid_email?
     return email.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
-  end 
+  end
+  
 end

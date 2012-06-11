@@ -1,7 +1,7 @@
 class SmsController < ApplicationController
   skip_before_filter :authenticate_user!, :verify_authenticity_token
   def mo
-    render nothing: true and return if sms_params[:message].blank?
+     render nothing: true and return if sms_params[:message].blank?
     begin
       # try to save the new message
       @received = ReceivedSms.create!(sms_params)
@@ -118,7 +118,16 @@ class SmsController < ApplicationController
         #finds out whether or not the question was already asked or not yet. If already asked and the question is for email then sent a message that tells email is already taken and user must input another unexisting email
         msg = nil
         begin
-          msg = question.attribute_name == "email" && SentSms.where(received_sms_id: person.received_sms.reverse[1].id).first.question_id == question.id ? question.email_should_be_unique_msg : question.label
+          if question.attribute_name == "email" && SentSms.where(received_sms_id: person.received_sms.reverse[1].id).first.question_id == question.id
+            if !person.received_sms.last.message.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
+              msg = question.email_invalid
+            else
+              msg = question.email_should_be_unique_msg
+            end
+          else
+            msg = question.label
+          end
+          #msg = question.attribute_name == "email" && SentSms.where(received_sms_id: person.received_sms.reverse[1].id).first.question_id == question.id ? question.email_should_be_unique_msg : question.label
         rescue
           msg = question.label
         end
@@ -169,6 +178,7 @@ class SmsController < ApplicationController
           end
         end
       rescue => e
+        puts "HELLO"
         # Don't blow up on bad saves
         Airbrake.notify(e)
       end

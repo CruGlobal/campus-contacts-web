@@ -628,7 +628,8 @@ en:
       
   sms:
     keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
-    email_should_be_unique_msg: "Email already used, try another email address"
+    email_should_be_unique_msg: "Email already used, try another email address."
+    email_invalid_msg: "Email is invalid, try again."
   survey:
     drop_down_field: 
       choose_one: "Choose One"
