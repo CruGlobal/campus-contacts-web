@@ -174,11 +174,12 @@ class SmsController < ApplicationController
             end
             
             question.set_response(answer, @answer_sheet)
+            @answer_sheet.person.merge(person.has_similar_person_by_name_and_email?) # merge person to person with the same firstName, lastName and email
+            question.set_response(answer, @answer_sheet)
             @answer_sheet.person.save
           end
         end
       rescue => e
-        puts "HELLO"
         # Don't blow up on bad saves
         Airbrake.notify(e)
       end

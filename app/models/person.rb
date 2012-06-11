@@ -87,7 +87,7 @@ class Person < ActiveRecord::Base
   } }
 
   def has_similar_person_by_name_and_email?
-    Person.select("ministry_person.*").joins("LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID").where("ministry_person.personID != '#{personID}' AND ministry_person.firstName = '#{firstName}' AND ministry_person.lastName = '#{lastName}' AND emails.email = '#{email}'")
+    Person.where(firstName: firstName, lastName: lastName).includes(:primary_email_address).where("email_addresses.email LIKE ?", email).where("personId NOT LIKE ?", personID).first
   end
 
   def update_date_attributes_updated
