@@ -1,7 +1,4 @@
 $('.inlineform').hide()
-if ($('#form_for_<%= @question.id %>')[0] != null) {
-  $('#form_for_<%= @question.id %>').closest('.inlineform').show()
-} else {
-  $('#question_form').append('<%= j(render('form', question: @question)) %>') 
-}
-$('#question_form').slideDown('fast');
+$('#question_form').fadeOut('fast')
+$('#question_form').html('<%= j(render('form', question: @question)) %>') 
+$('#question_form').slideDown('fast')

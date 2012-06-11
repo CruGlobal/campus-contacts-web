@@ -379,6 +379,9 @@ en:
       advanced_options:
         trigger_words: "List one or more words or phrases that will trigger this notification if they appear in the answer.<br/>(separate words and phrases with commas)"
         leaders: 'Select one or more leaders to be notified when this question is answered in a certain way'
+        autonotify_guide: 'This option will notify the selected leaders if the answer contains the listed keywords.'
+        autonotify_leader_label: 'Select one or more leaders to be notified:'
+        autonotify_keywords_label: 'List the words that will trigger the notification:<br/>(must be separated with commas)'
         web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
   sms_keywords:
     keyword_deleted: "Keyword has been deleted."

@@ -91,9 +91,10 @@ class Surveys::QuestionsController < ApplicationController
   # PUT /questions/1.xml
   def update
     params[:question] ||= params[:choice_field] ||= params[:text_field]
-    validate_then_create_chosen_leaders
+    Rails.logger.info ">>>>>>>>>>>>>> #{params[:trigger_words]}"
     respond_to do |wants|
       if @question.update_attributes(params[:question])
+        evaluate_option_autonotify
         wants.js {}
         wants.xml  { head :ok }
       else
@@ -154,6 +155,43 @@ class Surveys::QuestionsController < ApplicationController
     def get_leaders
       @leaders = current_organization.leaders
     end
+    
+    
+    def evaluate_option_autonotify
+      leaders = params[:leaders] || []
+
+      parameters = Hash.new
+      parameters['leaders'] = Array.new
+      invalid_emails = Array.new
+      
+      leaders.each do |leader|
+        Person.find(leader).has_a_valid_email? ? parameters['leaders'] << leader : invalid_emails << leader
+      end
+      
+      if invalid_emails.present?
+        respond_to do |wants|
+          wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(personId: invalid_emails).collect{|p| p.name}.join(', ') } }
+        end
+        return false
+      else
+        rule = Rule.find_by_rule_code("AUTONOTIFY")
+        triggers_array = Array.new
+        triggers = params[:trigger_words].split(',')
+        triggers.each do |t|
+          triggers_array << t.strip if t.strip.present?
+        end
+        triggers = triggers_array.join(", ")
+        if question_rule = QuestionRule.find_by_survey_element_id_and_rule_id(params[:id], rule.id)
+          question_rule.update_attribute('trigger_keywords',triggers)
+          question_rule.update_attribute('extra_parameters',parameters)
+        else
+          question_rule = QuestionRule.create(survey_element_id: params[:id], rule_id: rule.id, 
+            trigger_keywords: triggers, extra_parameters: parameters)
+        end
+      end
+      true
+    end
+
 
     def validate_then_create_chosen_leaders
       new_leaders = params[:leaders] || []
