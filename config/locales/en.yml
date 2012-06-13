@@ -382,6 +382,9 @@ en:
         autonotify_guide: 'This option will notify the selected leaders if the answer contains the listed keywords.'
         autonotify_leader_label: 'Select one or more leaders to be notified:'
         autonotify_keywords_label: 'List the words that will trigger the notification:<br/>(must be separated with commas)'
+        autoassign_guide: 'This option will assign the contacts to the selected Leader, Ministry, Group, or Label if the answer contains the listed keywords.'
+        autoassign_group_label: 'Choose where to assign contacts:'
+        autoassign_keywords_label: 'List the words that will trigger the assignment:<br/>(must be separated with commas)'
         web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
   sms_keywords:
     keyword_deleted: "Keyword has been deleted."

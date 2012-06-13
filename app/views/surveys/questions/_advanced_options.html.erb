@@ -13,7 +13,7 @@
   <% end %>
   
   <div class="rule_form" id="AUTONOTIFY">
-    <div class="title">Automatic Notification for Leader</div>
+    <div class="title">Automatic Notification for Leaders</div>
     <div class="settings">
       <div class="label">
         <%= t('.autonotify_guide') %>
@@ -35,45 +35,52 @@
       </div>
     </div>
   </div>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <div class="label">
-    <%= f.label :notify_via, t('.notify_via') %>
+  
+  <div class="rule_form" id="AUTONOTIFY">
+    <div class="title">Automatic Assignment of Contacts</div>
+    <div class="settings">
+      <div class="label">
+        <%= t('.autoassign_guide') %>
+      </div>    
+      <br/>
+      <div class="label">
+        <label><%= t('.autoassign_group_label') %></label>
+      </div>    
+      <div class="fieldset">
+        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_leader', class: 'assign_to_radio' %> 
+        <label for="assign_to_leader"><%= t('leader') %></label>
+        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_org', class: 'assign_to_radio' %> 
+        <label for="assign_to_org"><%= current_organization.terminology %></label>
+        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_group', class: 'assign_to_radio' %>
+        <label for="assign_to_group"><%= t('group') %></label>
+        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_label', class: 'assign_to_radio' %>
+        <label for="assign_to_label"><%= t('label') %></label> 
+      </div>
+      <div class="label">
+        <%= f.label :trigger_words, raw(t('.autoassign_keywords_label')) %>
+      </div>
+      <div class="fieldset">
+        <%= text_field_tag :trigger_words, notify_triggers %>
+      </div>
+    </div>
   </div>
-  <div class="fieldset">
-    <%= f.select :notify_via, ["SMS","Email","Both"] %>
+  
+  <div class="rule_form" id="AUTONOTIFY">
+    <div class="title">Other Options</div>
+    <div class="settings">
+      <div class="label">
+        <%= f.label :notify_via, t('.notify_via') %>
+      </div>    
+      <div class="fieldset">
+        <%= f.select :notify_via, ["SMS","Email","Both"] %>
+      </div>
+      <div class="label">
+       <%= f.check_box :web_only, id: "web_only_#{f.object.id}", class: 'web_only' %> <%= t('.web_only') %><br /><br/>
+      </div>
+      <div class="fieldset">
+        <%= text_field_tag :trigger_words, notify_triggers %>
+      </div>
+    </div>
   </div>
-  <br/>
-  <div class="title">Automatically Assign Contacts</div>
-  <div class="label">
-    <label>Assign to:</label>
-  </div>
-  <div class="fieldset">
-    <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_leader', class: 'assign_to_radio' %> 
-    <label for="assign_to_leader"><%= t('leader') %></label>
-    <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_org', class: 'assign_to_radio' %> 
-    <label for="assign_to_org"><%= current_organization.terminology %></label>
-    <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_group', class: 'assign_to_radio' %>
-    <label for="assign_to_group"><%= t('group') %></label>
-    <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_label', class: 'assign_to_radio' %>
-    <label for="assign_to_label"><%= t('label') %></label> 
-  </div>
-  <br/>
-  <%= f.check_box :web_only, id: "web_only_#{f.object.id}", class: 'web_only' %> <%= t('.web_only') %><br /><br/>
-  <br/>
 </div>
 
