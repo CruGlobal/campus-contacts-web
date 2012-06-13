@@ -8,4 +8,5 @@ jQuery(document).ready(function(){
 	$('select, input[type=text], input[type=password], input[type=email]').live('keypress', function(e){
 	    if(e.which == 13) return false;
 	});
+	
 })

@@ -132,6 +132,14 @@ class PeopleController < ApplicationController
 
   def create
     authorize! :create, Person
+    p = Person.where(firstName: params[:person][:firstName], lastName: params[:person][:lastName])
+    p.inspect
+    unless p.blank?
+      params[:id] = p.first.id
+      update
+      return
+    end
+
     Person.transaction do
       params[:person] ||= {}
       params[:person][:email_address] ||= {}
@@ -196,11 +204,15 @@ class PeopleController < ApplicationController
             wants.js
           end
         end
-      else
+      else 
         flash.now[:error] = ''
-        flash.now[:error] += 'First name is required.<br />' unless @person.firstName.present?
-        flash.now[:error] += 'Phone number is not valid.<br />' if @phone && !@phone.valid?
-        flash.now[:error] += 'Email address is not valid.<br />' unless @email && @email.valid?
+        flash.now[:error] += "#{t('people.create.firstname_error')}<br />" unless @person.firstName.present?
+        flash.now[:error] += "#{t('people.create.phone_number_error')}<br />" if @phone && !@phone.valid?
+        if @email && !@email.is_unique?
+          flash.now[:error] += "#{t('people.create.email_taken')}<br />" 
+        elsif @email && !@email.valid?
+          flash.now[:error] += "#{t('people.create.email_error')}<br />" 
+        end
         render 'add_person'
         return
       end
@@ -211,6 +223,17 @@ class PeopleController < ApplicationController
   # PUT /people/1.xml
   def update
     @person = current_organization.people.find(params[:id])
+		p = nil
+		if params[:person][:email_address]
+			email = params[:person][:email_address][:email]
+			p = Person.where(firstName: @person.firstName, lastName: @person.lastName).includes(:primary_email_address).where("email_addresses.email LIKE ?", email).where("personId NOT LIKE ?", params[:id])
+			@person.merge(p.first)
+		elsif params[:person][:email_addresses_attributes]
+			emails = params[:person][:email_addresses_attributes].collect{|x| x[1][:email]}
+			p = Person.where(firstName: @person.firstName, lastName: @person.lastName).where("personId NOT LIKE ?", params[:id]).includes(:primary_email_address).find(:all, :conditions => ["email_addresses.email IN (?)", emails])
+			@person.merge(p.first)
+		end
+
     authorize! :edit, @person
 
     respond_to do |format|
@@ -218,9 +241,12 @@ class PeopleController < ApplicationController
         @person.update_date_attributes_updated
         format.html { redirect_to(@person, notice: 'Person was successfully updated.') }
         format.xml  { head :ok }
+        params[:update] = 'true'
+        format.js
       else
         format.html { render action: "edit" }
         format.xml  { render xml: @person.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end

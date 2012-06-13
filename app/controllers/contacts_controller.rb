@@ -64,7 +64,7 @@ class ContactsController < ApplicationController
   end
 
   def search_by_name_and_email
-    people = current_organization.people.search_by_name_or_email(params[:term].strip, current_organization.id).uniq
+    people = current_organization.people.search_by_name_or_email(params[:term], current_organization.id).uniq
     
 
     respond_to do |wants|
@@ -99,9 +99,12 @@ class ContactsController < ApplicationController
     
     update_survey_answers if params[:answers].present?
     @person.update_date_attributes_updated
-    if @person.valid? && (!@answer_sheet || (@answer_sheet.person.valid? &&
-       (!@answer_sheet.person.primary_phone_number || @answer_sheet.person.primary_phone_number.valid?)))
-      redirect_to survey_response_path(@person)
+    if @person.valid? && (!@answer_sheet || (@answer_sheet.person.valid? && (!@answer_sheet.person.primary_phone_number || @answer_sheet.person.primary_phone_number.valid?)))
+      respond_to do |wants|
+        params[:update] = 'true'
+        wants.js
+        wants.html { redirect_to survey_response_path(@person) }
+      end
     else
       render :edit
     end
@@ -117,7 +120,14 @@ class ContactsController < ApplicationController
   
   def create
     @organization = current_organization
-    create_contact
+    person = Person.where(firstName: params[:person][:firstName], lastName: params[:person][:lastName])
+    if person.present?
+      params[:id] = person.first.id
+      params[:answers] = nil
+      update
+    else
+      create_contact
+    end
   end
   
   def destroy
