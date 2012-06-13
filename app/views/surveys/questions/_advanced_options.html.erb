@@ -1,41 +1,38 @@
-<% if q.trigger_words.blank? %>
-  <%= link_to t('.show_advanced_options'), '#', id: 'advanced_toggle' %><br/><br />
-<% end %>
-<div class="notify_advanced_options advanced_options" style="<%= 'display:none;' if q.trigger_words.blank? %>">
+<%= link_to t('.show_advanced_options'), '#', id: 'advanced_toggle' %>
+<br/>
+<br/>
+<div class="notify_advanced_options advanced_options hidden">
   <% survey_element = s.survey_elements.find_by_element_id(q.id) %>
   <% rule_notify = Rule.find_by_rule_code('AUTONOTIFY') %>
   <% if survey_element.present? && survey_element.rules.present? %>
     <% notify_leaders = survey_element.question_rules.find_by_rule_id(rule_notify.id).extra_parameters['leaders'] %>
     <% notify_triggers = survey_element.question_rules.find_by_rule_id(rule_notify.id).trigger_keywords %>
-    <% survey_element.rules.each do |r| %>
-      <%= render 'display_rule', rule: r %>
-    <% end %>
   <% else %>
     <% notify_leaders = [] %>
     <% notify_triggers = '' %>
   <% end %>
-  <div class="title">Add New Rule</div>
-  <%= select_tag :rule, options_for_select(Rule.available_in_survey(s).collect {|r| [r.name, r.id]})%>
   
   <div class="rule_form" id="AUTONOTIFY">
-    <div class="title">Automatic Assignment of Contact</div>
-    <div class="label">
-      <%= t('.autonotify_guide') %>
-    </div>    
-    <br/>
-    <div class="label">
-      <label><%= t('.autonotify_leader_label') %></label>
-    </div>    
-    <div class="fieldset">
-      <%= select_tag 'leaders[]',
-        options_for_select(@leaders.collect {|l| [l.name, l.id] }, :selected => notify_leaders),
-        {:multiple => true, :size => 7 } %>
-    </div>
-    <div class="label">
-      <%= f.label :trigger_words, raw(t('.autonotify_keywords_label')) %>
-    </div>
-    <div class="fieldset">
-      <%= text_field_tag :trigger_words, notify_triggers %>
+    <div class="title">Automatic Notification for Leader</div>
+    <div class="settings">
+      <div class="label">
+        <%= t('.autonotify_guide') %>
+      </div>    
+      <br/>
+      <div class="label">
+        <label><%= t('.autonotify_leader_label') %></label>
+      </div>    
+      <div class="fieldset">
+        <%= select_tag 'leaders[]',
+          options_for_select(@leaders.collect {|l| [l.name, l.id] }, :selected => notify_leaders),
+          {:multiple => true, :size => 7 } %>
+      </div>
+      <div class="label">
+        <%= f.label :trigger_words, raw(t('.autonotify_keywords_label')) %>
+      </div>
+      <div class="fieldset">
+        <%= text_field_tag :trigger_words, notify_triggers %>
+      </div>
     </div>
   </div>
   <br/>

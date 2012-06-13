@@ -28,8 +28,8 @@
       <div id="advance_notification">
         <%= render 'advanced_options', f: f, q: question, s: @survey %>
       </div>  
-      <%= f.submit %>
-      <%= button_tag "Cancel", :id => "cancel_survey_question" %>
+      <%= f.submit "Update", :id => "save_edit_survey_question" %>
+      <%= button_tag "Cancel", :id => "cancel_edit_survey_question" %>
     </div>
   <% end %>
 </div>

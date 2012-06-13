@@ -23,7 +23,7 @@ $ ->
   $('#add_question_link').live 'click', ->
     $('.inlineform').hide()
     $('#new_question_form').closest('.inlineform').show()
-    $('#question_form').slideDown()
+    $('#create_question_form').slideDown()
     $('.advanced_options').hide()
     $('.sms_length').html(0)
     $('.sms_preview').html('')
@@ -82,7 +82,7 @@ $ ->
     
   $('#advanced_toggle').live 'click', (e) ->
     e.preventDefault()
-    $('.advanced_options').toggle()
+    $('.advanced_options').slideToggle()
     if $('.advanced_options').is(':visible')
       $(this).text(t('surveys.questions.form.hide_advanced_options'))
     else

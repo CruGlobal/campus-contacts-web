@@ -1168,7 +1168,7 @@ span.title {
   padding: 8px;
   margin-top: 10px;
   margin-bottom: 10px;
-  width: 650px;
+  width: 735px;
   .right_col {
     width: 300px;
     float: right;
@@ -2319,6 +2319,7 @@ ul#ui-autocomplete {
 }
 
 .advanced_options {
+  
   width: 330px;
   div.title {
     font-size: 16px;
@@ -2338,6 +2339,23 @@ ul#ui-autocomplete {
   }
   
   div.rule_form {
-    border: 1px solid red;
+    padding: 5px;
+    .title {
+      display: inline-block;
+      cursor: pointer;
+    }
+    .settings {
+      display: none;
+    }
   }
+}
+
+#question_form {
+  width: 735px;
+}
+
+#loading, #saving {
+  font-size: 18px;
+  width: 735px;
+  text-align: center;
 }

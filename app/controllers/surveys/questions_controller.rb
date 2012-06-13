@@ -29,12 +29,7 @@ class Surveys::QuestionsController < ApplicationController
   # GET /questions/new
   # GET /questions/new.xml
   def new
-    @question = @survey.question_sheet.elements.new
-
-    respond_to do |wants|
-      wants.html # new.html.erb
-      wants.xml  { render xml: @question }
-    end
+    @survey = Survey.find(params[:survey_id])
   end
 
   # GET /questions/1/edit
@@ -91,7 +86,6 @@ class Surveys::QuestionsController < ApplicationController
   # PUT /questions/1.xml
   def update
     params[:question] ||= params[:choice_field] ||= params[:text_field]
-    Rails.logger.info ">>>>>>>>>>>>>> #{params[:trigger_words]}"
     respond_to do |wants|
       if @question.update_attributes(params[:question])
         evaluate_option_autonotify
@@ -159,13 +153,14 @@ class Surveys::QuestionsController < ApplicationController
     
     def evaluate_option_autonotify
       leaders = params[:leaders] || []
-
+      
       parameters = Hash.new
       parameters['leaders'] = Array.new
       invalid_emails = Array.new
+      survey_element_id = SurveyElement.find_by_survey_id_and_element_id(params[:survey_id], params[:id])
       
       leaders.each do |leader|
-        Person.find(leader).has_a_valid_email? ? parameters['leaders'] << leader : invalid_emails << leader
+        Person.find(leader).has_a_valid_email? ? parameters['leaders'] << leader.to_i : invalid_emails << leader.to_i
       end
       
       if invalid_emails.present?
@@ -181,11 +176,11 @@ class Surveys::QuestionsController < ApplicationController
           triggers_array << t.strip if t.strip.present?
         end
         triggers = triggers_array.join(", ")
-        if question_rule = QuestionRule.find_by_survey_element_id_and_rule_id(params[:id], rule.id)
+        if question_rule = QuestionRule.find_by_survey_element_id_and_rule_id(survey_element_id, rule.id)
           question_rule.update_attribute('trigger_keywords',triggers)
           question_rule.update_attribute('extra_parameters',parameters)
         else
-          question_rule = QuestionRule.create(survey_element_id: params[:id], rule_id: rule.id, 
+          question_rule = QuestionRule.create(survey_element_id: survey_element_id, rule_id: rule.id, 
             trigger_keywords: triggers, extra_parameters: parameters)
         end
       end
