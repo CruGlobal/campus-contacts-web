@@ -34,4 +34,10 @@ jQuery(document).ready(function(){
 	  $('#saving').slideDown();
 	})
 	
+	$('.assign_to_radio').live('click',function(){
+	  type = $(this).attr('data-label');
+	  $("#autoassign_suggestion .label label").html("Select " + type + ": ");
+	  $("#autoassign_suggestion").slideDown();
+	})
+	
 })

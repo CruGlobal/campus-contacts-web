@@ -7,9 +7,13 @@
   <% if survey_element.present? && survey_element.rules.present? %>
     <% notify_leaders = survey_element.question_rules.find_by_rule_id(rule_notify.id).extra_parameters['leaders'] %>
     <% notify_triggers = survey_element.question_rules.find_by_rule_id(rule_notify.id).trigger_keywords %>
+    <% assign_contact_to_type = '' %>
+    <% assignment_trigger_words = '' %>
   <% else %>
     <% notify_leaders = [] %>
     <% notify_triggers = '' %>
+    <% assign_contact_to_type = '' %>
+    <% assignment_trigger_words = '' %>
   <% end %>
   
   <div class="rule_form" id="AUTONOTIFY">
@@ -47,28 +51,30 @@
         <label><%= t('.autoassign_group_label') %></label>
       </div>    
       <div class="fieldset">
-        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_leader', class: 'assign_to_radio' %> 
+        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_leader', class: 'assign_to_radio', "data-label" => "Leader" %> 
         <label for="assign_to_leader"><%= t('leader') %></label>
-        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_org', class: 'assign_to_radio' %> 
+        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_org', class: 'assign_to_radio', "data-label" => "Organization" %> 
         <label for="assign_to_org"><%= current_organization.terminology %></label>
-        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_group', class: 'assign_to_radio' %>
+        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_group', class: 'assign_to_radio', "data-label" => "Group" %>
         <label for="assign_to_group"><%= t('group') %></label>
-        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_label', class: 'assign_to_radio' %>
+        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_label', class: 'assign_to_radio', "data-label" => "Label" %>
         <label for="assign_to_label"><%= t('label') %></label> 
       </div>
-      <div id="assign_to_leader" class="assign_window">
+      
+      <div id="autoassign_suggestion" class="autoassign_window">
         <div class="label">
-          <%= f.label :assign_to_leader, raw(t('.autoassign_leader_label')) %>
+          <%= f.label :autoassign_keyword, "Select #{'Leader' unless assign_contact_to_type.present?}:" %>
         </div>
         <div class="fieldset">
-          <%= text_field_tag :assign_to_leader, class: 'autosuggest_leader' %>
+          <%= text_field_tag :autoassign_keyword, "", id: 'autoassign_keyword' %>
         </div>
       </div>
+      
       <div class="label">
         <%= f.label :assignment_trigger_words, raw(t('.autoassign_keywords_label')) %>
       </div>
       <div class="fieldset">
-        <%= text_field_tag :assignment_trigger_words, notify_triggers %>
+        <%= text_field_tag :assignment_trigger_words, assignment_trigger_words %>
       </div>
     </div>
   </div>
