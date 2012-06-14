@@ -86,6 +86,15 @@ class Person < ActiveRecord::Base
     :conditions => "org_roles.organization_id = #{org_id} AND concat(firstName,' ',lastName) LIKE '%#{keyword}%' OR concat(lastName, ' ',firstName) LIKE '%#{keyword}%' OR emails.email LIKE '%#{keyword}%'"
   } }
 
+  scope :find_answer_sheets_order_them_by_updated_at_desc, lambda { |org| {
+    #SELECT * FROM missionhub_dev.ministry_person mp LEFT JOIN missionhub_dev.mh_answer_sheordets ass ON ass.person_id = mp.personID LEFT JOIN missionhub_dev.mh_surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = 10 ORDER BY ass.updated_at DESC;
+    :select => "ministry_person.*",
+    :joins => "LEFT JOIN mh_answer_sheets AS ass ON ass.person_id = ministry_person.personID LEFT JOIN missionhub_dev.mh_surveys AS ms ON ms.id = ass.survey_id",
+    :conditions => "ms.organization_id = #{org}",
+    :order => "ass.updated_at DESC",
+    :group => "ministry_person.personID"
+  } }
+
   def assigned_tos_by_org(org)
     assigned_tos.where(organization_id: org.id)
   end

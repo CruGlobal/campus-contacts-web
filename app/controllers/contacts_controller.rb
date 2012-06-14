@@ -214,7 +214,7 @@ class ContactsController < ApplicationController
         @people = @people.includes(:organizational_roles).where("organizational_roles.organization_id" => @organization.id)
       end
       if params[:q] && params[:q][:s].include?('mh_answer_sheets')
-        @people = @people.joins({:answer_sheets => :survey}).where("mh_surveys.organization_id" => @organization.id)
+        @people = @people.joins({:answer_sheets => :survey}).where("mh_surveys.organization_id" => @organization.id)#.order("mh_answer_sheets.updated_at desc")
       end
       if params[:survey].present?
         @people = @people.joins(:answer_sheets).where("mh_answer_sheets.survey_id" => params[:survey])
