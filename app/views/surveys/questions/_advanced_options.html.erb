@@ -56,11 +56,19 @@
         <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_label', class: 'assign_to_radio' %>
         <label for="assign_to_label"><%= t('label') %></label> 
       </div>
+      <div id="assign_to_leader" class="assign_window">
+        <div class="label">
+          <%= f.label :assign_to_leader, raw(t('.autoassign_leader_label')) %>
+        </div>
+        <div class="fieldset">
+          <%= text_field_tag :assign_to_leader, class: 'autosuggest_leader' %>
+        </div>
+      </div>
       <div class="label">
-        <%= f.label :trigger_words, raw(t('.autoassign_keywords_label')) %>
+        <%= f.label :assignment_trigger_words, raw(t('.autoassign_keywords_label')) %>
       </div>
       <div class="fieldset">
-        <%= text_field_tag :trigger_words, notify_triggers %>
+        <%= text_field_tag :assignment_trigger_words, notify_triggers %>
       </div>
     </div>
   </div>
@@ -76,9 +84,6 @@
       </div>
       <div class="label">
        <%= f.check_box :web_only, id: "web_only_#{f.object.id}", class: 'web_only' %> <%= t('.web_only') %><br /><br/>
-      </div>
-      <div class="fieldset">
-        <%= text_field_tag :trigger_words, notify_triggers %>
       </div>
     </div>
   </div>

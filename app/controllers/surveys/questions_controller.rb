@@ -157,7 +157,10 @@ class Surveys::QuestionsController < ApplicationController
       parameters = Hash.new
       parameters['leaders'] = Array.new
       invalid_emails = Array.new
-      survey_element_id = SurveyElement.find_by_survey_id_and_element_id(params[:survey_id], params[:id])
+      Rails.logger.info ">>>> #{params[:survey_id]}"
+      Rails.logger.info ">>>> #{params[:id]}"
+      survey_element_id = SurveyElement.find_by_survey_id_and_element_id(params[:survey_id], params[:id]).id
+      Rails.logger.info ">>>> #{survey_element_id}"
       
       leaders.each do |leader|
         Person.find(leader).has_a_valid_email? ? parameters['leaders'] << leader.to_i : invalid_emails << leader.to_i
