@@ -245,6 +245,9 @@ Mh::Application.routes.draw do
   get "/surveys/:keyword" => 'surveys#start'
   # mount RailsAdmin::Engine => "/admin"
 
+  # 
+  match 'autoassign_suggest' => 'surveys/questions#suggestion', as: 'question_suggestion'
+  
   get "welcome/tour"
 
   # mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'

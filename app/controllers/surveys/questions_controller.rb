@@ -132,6 +132,17 @@ class Surveys::QuestionsController < ApplicationController
     redirect_to :back
   end
   
+  def suggestion
+    type = params[:type]
+    keyword = params[:keyword]
+    survey = @survey
+    results = Array.new
+    results << type
+    results << keyword
+    results << survey.title
+    render json: results
+  end
+  
   private
     def find_question
       @question = @survey.elements.find(params[:id])

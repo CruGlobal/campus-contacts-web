@@ -35,9 +35,21 @@ jQuery(document).ready(function(){
 	})
 	
 	$('.assign_to_radio').live('click',function(){
-	  type = $(this).attr('data-label');
-	  $("#autoassign_suggestion .label label").html("Select " + type + ": ");
-	  $("#autoassign_suggestion").slideDown();
+	  type = $(this).val();
+	  $("#autoassign_suggestion .label label").html("Search " + type + ": ");
+	  $('#autoassign_autosuggest').attr('data-type', type);
+	})
+	
+	$('#autoassign_autosuggest').live('keyup',function(){
+	  keyword = $(this).val()
+	  type = $('.assign_to_radio').val()
+	  survey_id = $(this).attr('data-survey-id')
+    $(this).autocomplete({
+	    source: "/autoassign_suggest?survey_id="+survey_id+"&type="+type+"&keyword="+keyword,
+      select: function(event, ui){
+        $('#autoassign_selected_id').val(ui.item.id);
+      }
+    })
 	})
 	
 })

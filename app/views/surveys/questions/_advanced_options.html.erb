@@ -4,16 +4,21 @@
 <div class="notify_advanced_options advanced_options hidden">
   <% survey_element = s.survey_elements.find_by_element_id(q.id) %>
   <% rule_notify = Rule.find_by_rule_code('AUTONOTIFY') %>
+  <% rule_assign = Rule.find_by_rule_code('AUTOASSIGN') %>
+  <% notify_leaders = [] %>
+  <% notify_triggers = '' %>
+  <% assign_contact_to_type = 'Leader' %>
+  <% assignment_trigger_words = '' %>
+  
   <% if survey_element.present? && survey_element.rules.present? %>
-    <% notify_leaders = survey_element.question_rules.find_by_rule_id(rule_notify.id).extra_parameters['leaders'] %>
-    <% notify_triggers = survey_element.question_rules.find_by_rule_id(rule_notify.id).trigger_keywords %>
-    <% assign_contact_to_type = '' %>
-    <% assignment_trigger_words = '' %>
-  <% else %>
-    <% notify_leaders = [] %>
-    <% notify_triggers = '' %>
-    <% assign_contact_to_type = '' %>
-    <% assignment_trigger_words = '' %>
+    <% if survey_element.question_rules.find_by_rule_id(rule_notify.id).present? %>
+      <% notify_leaders = survey_element.question_rules.find_by_rule_id(rule_notify.id).extra_parameters['leaders'] %>
+      <% notify_triggers = survey_element.question_rules.find_by_rule_id(rule_notify.id).trigger_keywords %>
+    <% end %>
+    <% if survey_element.question_rules.find_by_rule_id(rule_assign.id).present? %>
+      <% assign_contact_to_type = survey_element.question_rules.find_by_rule_id(rule_assign.id).extra_parameters['type'] %>
+      <% assignment_trigger_words = survey_element.question_rules.find_by_rule_id(rule_assign.id).trigger_keywords %>
+    <% end %>
   <% end %>
   
   <div class="rule_form" id="AUTONOTIFY">
@@ -51,22 +56,28 @@
         <label><%= t('.autoassign_group_label') %></label>
       </div>    
       <div class="fieldset">
-        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_leader', class: 'assign_to_radio', "data-label" => "Leader" %> 
+        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_leader', class: 'assign_to_radio',
+          value: "Leader", checked: assign_contact_to_type == "Leader" ? true : false %> 
         <label for="assign_to_leader"><%= t('leader') %></label>
-        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_org', class: 'assign_to_radio', "data-label" => "Organization" %> 
+        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_ministry', class: 'assign_to_radio',
+          value: "Ministry", checked: assign_contact_to_type == "Ministry" ? true : false %> 
         <label for="assign_to_org"><%= current_organization.terminology %></label>
-        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_group', class: 'assign_to_radio', "data-label" => "Group" %>
+        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_group', class: 'assign_to_radio',
+          value: "Group", checked: assign_contact_to_type == "Group" ? true : false %>
         <label for="assign_to_group"><%= t('group') %></label>
-        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_label', class: 'assign_to_radio', "data-label" => "Label" %>
+        <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_label', class: 'assign_to_radio',
+          value: "Label", checked: assign_contact_to_type == "Label" ? true : false %>
         <label for="assign_to_label"><%= t('label') %></label> 
       </div>
       
       <div id="autoassign_suggestion" class="autoassign_window">
         <div class="label">
-          <%= f.label :autoassign_keyword, "Select #{'Leader' unless assign_contact_to_type.present?}:" %>
+          <%= f.label :autoassign_keyword, "Search #{assign_contact_to_type}:" %>
         </div>
         <div class="fieldset">
-          <%= text_field_tag :autoassign_keyword, "", id: 'autoassign_keyword' %>
+          <%= text_field_tag :autoassign_keyword, "", id: 'autoassign_autosuggest', 'data-survey-id'=>s.id %>
+          <br/>
+          <%= text_field_tag :autoassign_selected_id, "", id: 'autoassign_selected_id' %>
         </div>
       </div>
       
