@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120601090219) do
+ActiveRecord::Schema.define(:version => 20120608170021) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -4861,6 +4861,7 @@ ActiveRecord::Schema.define(:version => 20120601090219) do
     t.string   "twilio_sid"
     t.string   "twilio_uri"
     t.string   "separator"
+    t.integer  "question_id"
   end
 
   add_index "sent_sms", ["twilio_sid"], :name => "index_sent_sms_on_twilio_sid", :unique => true

@@ -268,8 +268,12 @@ class Question < Element
     false
   end
 
-  def with_label_should_be_unique_msg
-    label + I18n.t('sms.with_label_should_be_unique_msg')
+  def email_should_be_unique_msg
+    I18n.t('sms.email_should_be_unique_msg')
+  end
+
+  def email_invalid
+    I18n.t('sms.email_invalid_msg')
   end
 
   private
