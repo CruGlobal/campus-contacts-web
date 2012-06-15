@@ -172,7 +172,7 @@ class ContactsController < ApplicationController
       
       @style = params[:edit] ? 'display:true' : 'display:none'
       @saved_contact_search = @person.user.saved_contact_searches.find(:first, :conditions => "full_path = '#{request.fullpath.gsub(I18n.t('contacts.index.edit_true'),"")}'") || SavedContactSearch.new
-      @organization = current_organization # params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : 
+      @organization = Organization.find(20) #current_organization # params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : 
       unless @organization
         redirect_to user_root_path, error: t('contacts.index.which_org')
         return false
@@ -214,7 +214,7 @@ class ContactsController < ApplicationController
         @people = @people.includes(:organizational_roles).where("organizational_roles.organization_id" => @organization.id)
       end
       if params[:q] && params[:q][:s].include?('mh_answer_sheets')
-        @people = @people.joins({:answer_sheets => :survey}).where("mh_surveys.organization_id" => @organization.id)
+        @people = @people.joins({:answer_sheets => :survey}).where("mh_surveys.organization_id" => @organization.id).order('MAX(mh_answer_sheets.updated_at)')
       end
       if params[:survey].present?
         @people = @people.joins(:answer_sheets).where("mh_answer_sheets.survey_id" => params[:survey])
