@@ -6018,7 +6018,6 @@ ActiveRecord::Schema.define(:version => 20120608170021) do
     t.integer  "account_balance",    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "year"
   end
 
   add_index "sp_designation_numbers", ["person_id", "project_id", "designation_number"], :name => "person_id"
