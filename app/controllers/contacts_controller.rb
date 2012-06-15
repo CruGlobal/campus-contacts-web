@@ -172,7 +172,7 @@ class ContactsController < ApplicationController
       
       @style = params[:edit] ? 'display:true' : 'display:none'
       @saved_contact_search = @person.user.saved_contact_searches.find(:first, :conditions => "full_path = '#{request.fullpath.gsub(I18n.t('contacts.index.edit_true'),"")}'") || SavedContactSearch.new
-      @organization = Organization.find(20) #current_organization # params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : 
+      @organization = Organization.find(20) # params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : 
       unless @organization
         redirect_to user_root_path, error: t('contacts.index.which_org')
         return false
@@ -214,7 +214,7 @@ class ContactsController < ApplicationController
         @people = @people.includes(:organizational_roles).where("organizational_roles.organization_id" => @organization.id)
       end
       if params[:q] && params[:q][:s].include?('mh_answer_sheets')
-        @people = @people.joins({:answer_sheets => :survey}).where("mh_surveys.organization_id" => @organization.id).order('MAX(mh_answer_sheets.updated_at)')
+        @people = @people.joins(:answer_sheets => :survey).where('mh_surveys.organization_id' => @organization.id)
       end
       if params[:survey].present?
         @people = @people.joins(:answer_sheets).where("mh_answer_sheets.survey_id" => params[:survey])
@@ -277,7 +277,6 @@ class ContactsController < ApplicationController
       if params[:person_updated_from].present? && params[:person_updated_to].present?
         @people = @people.find_by_person_updated_by_daterange(params[:person_updated_from], params[:person_updated_to])
       end
-      #here
 
       if params[:search_type].present? && params[:search_type] == "basic"
         @people = @people.search_by_name_or_email(params[:query], current_organization.id)
@@ -292,7 +291,6 @@ class ContactsController < ApplicationController
       @all_people = @people
       @people = @people.page(params[:page])
     
-      
     end
   
     def fetch_mine
