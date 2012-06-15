@@ -87,7 +87,11 @@ class Person < ActiveRecord::Base
   } }
 
   def has_similar_person_by_name_and_email?
-    Person.where(firstName: firstName, lastName: lastName).includes(:primary_email_address).where("email_addresses.email LIKE ?", email).where("personId NOT LIKE ?", personID).first
+    Person.where(firstName: firstName, lastName: lastName).includes(:primary_email_address).where("email_addresses.email LIKE ?", email).where("personId != ?", personID).first
+  end
+
+  def has_similar_person_by_name_and_email?(email)
+    Person.where(firstName: firstName, lastName: lastName).includes(:primary_email_address).where("email_addresses.email LIKE ?", email).where("personId != ?", personID).first
   end
 
   def update_date_attributes_updated
