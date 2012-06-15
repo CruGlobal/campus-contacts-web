@@ -172,7 +172,7 @@ class ContactsController < ApplicationController
       
       @style = params[:edit] ? 'display:true' : 'display:none'
       @saved_contact_search = @person.user.saved_contact_searches.find(:first, :conditions => "full_path = '#{request.fullpath.gsub(I18n.t('contacts.index.edit_true'),"")}'") || SavedContactSearch.new
-      @organization = Organization.find(20) # params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : 
+      @organization = current_organization # params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : 
       unless @organization
         redirect_to user_root_path, error: t('contacts.index.which_org')
         return false
