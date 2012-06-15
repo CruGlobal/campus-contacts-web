@@ -1,7 +1,7 @@
 class SmsController < ApplicationController
   skip_before_filter :authenticate_user!, :verify_authenticity_token
   def mo
-    render nothing: true and return if sms_params[:message].blank?
+     render nothing: true and return if sms_params[:message].blank?
     begin
       # try to save the new message
       @received = ReceivedSms.create!(sms_params)
@@ -84,7 +84,11 @@ class SmsController < ApplicationController
     render text: @msg.to_s + "\n"
   end
   
-  protected 
+  protected
+    def sent_again?
+      
+    end
+
     def sms_params
       unless @sms_params
         if params['To'] # Twilio
@@ -110,8 +114,23 @@ class SmsController < ApplicationController
     
     def send_next_survey_question(survey, person, phone_number)
       question = next_question(survey, person)
-      if question        
-        msg = question.attribute_name == "email" ? question.with_label_should_be_unique_msg : question.label
+      if question
+        #finds out whether or not the question was already asked or not yet. If already asked and the question is for email then sent a message that tells email is already taken and user must input another unexisting email
+        msg = nil
+        begin
+          if question.attribute_name == "email" && SentSms.where(received_sms_id: person.received_sms.reverse[1].id).first.question_id == question.id
+            if !person.received_sms.last.message.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
+              msg = question.email_invalid
+            else
+              msg = question.email_should_be_unique_msg
+            end
+          else
+            msg = question.label
+          end
+          #msg = question.attribute_name == "email" && SentSms.where(received_sms_id: person.received_sms.reverse[1].id).first.question_id == question.id ? question.email_should_be_unique_msg : question.label
+        rescue
+          msg = question.label
+        end
         if question.kind == 'ChoiceField'
           msg = question.label_with_choices
           separator = / [a-z]\)/
@@ -120,7 +139,7 @@ class SmsController < ApplicationController
           question_no = get_question_no(survey, person) 
           msg = "#{question_no} #{msg}"
         end
-        send_message(msg, phone_number, separator)
+        send_message(msg, phone_number, separator, question.id)
       end
       msg
     end
@@ -155,10 +174,16 @@ class SmsController < ApplicationController
             end
             
             question.set_response(answer, @answer_sheet)
+            p = person.has_similar_person_by_name_and_email?(answer)
+            unless p.nil? # another person with the same firstName, lastName and email has been found
+              @answer_sheet.person.merge(p) # merge person to person with the same firstName, lastName and email
+              question.set_response(answer, @answer_sheet)
+            end
             @answer_sheet.person.save
           end
         end
       rescue => e
+        puts e.backtrace
         # Don't blow up on bad saves
         Airbrake.notify(e)
       end
@@ -191,9 +216,9 @@ class SmsController < ApplicationController
       end
     end
     
-    def send_message(msg, phone_number, separator = nil)
+    def send_message(msg, phone_number, separator = nil, question_id = nil)
       sent_via = @sms_params[:shortcode] == '75572' ? 'moonshado' : 'twilio'
-      @sent_sms = SentSms.create!(message: msg, recipient: phone_number, received_sms_id: @received.try(:id), sent_via: sent_via, separator: separator)
+      @sent_sms = SentSms.create!(message: msg, recipient: phone_number, received_sms_id: @received.try(:id), sent_via: sent_via, separator: separator, question_id: question_id)
     end
 
 end

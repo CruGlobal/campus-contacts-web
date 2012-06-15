@@ -90,6 +90,14 @@ class Person < ActiveRecord::Base
     assigned_tos.where(organization_id: org.id)
   end
 
+  def has_similar_person_by_name_and_email?
+    Person.where(firstName: firstName, lastName: lastName).includes(:primary_email_address).where("email_addresses.email LIKE ?", email).where("personId != ?", personID).first
+  end
+
+  def has_similar_person_by_name_and_email?(email)
+    Person.where(firstName: firstName, lastName: lastName).includes(:primary_email_address).where("email_addresses.email LIKE ?", email).where("personId != ?", personID).first
+  end
+
   def update_date_attributes_updated
     self.date_attributes_updated = DateTime.now.to_s(:db)
     self.save
@@ -768,5 +776,6 @@ class Person < ActiveRecord::Base
 
   def has_a_valid_email?
     return email.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
-  end 
+  end
+  
 end
