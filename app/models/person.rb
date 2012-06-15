@@ -87,11 +87,10 @@ class Person < ActiveRecord::Base
   } }
 
   scope :find_answer_sheets_order_them_by_updated_at_desc, lambda { |org| {
-    #SELECT * FROM missionhub_dev.ministry_person mp LEFT JOIN missionhub_dev.mh_answer_sheordets ass ON ass.person_id = mp.personID LEFT JOIN missionhub_dev.mh_surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = 10 ORDER BY ass.updated_at DESC;
-    :select => "ministry_person.*",
-    :joins => "LEFT JOIN mh_answer_sheets AS ass ON ass.person_id = ministry_person.personID LEFT JOIN missionhub_dev.mh_surveys AS ms ON ms.id = ass.survey_id",
+    :select => "ministry_person.*, MAX(ass.updated_at) AS latest_updated_at",
+    :joins => "LEFT JOIN mh_answer_sheets AS ass ON ass.person_id = ministry_person.personID LEFT JOIN mh_surveys AS ms ON ms.id = ass.survey_id",
     :conditions => "ms.organization_id = #{org}",
-    :order => "ass.updated_at DESC",
+    :order => "latest_updated_at DESC",
     :group => "ministry_person.personID"
   } }
 

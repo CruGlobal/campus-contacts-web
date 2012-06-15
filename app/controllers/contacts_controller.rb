@@ -277,7 +277,6 @@ class ContactsController < ApplicationController
       if params[:person_updated_from].present? && params[:person_updated_to].present?
         @people = @people.find_by_person_updated_by_daterange(params[:person_updated_from], params[:person_updated_to])
       end
-      #here
 
       if params[:search_type].present? && params[:search_type] == "basic"
         @people = @people.search_by_name_or_email(params[:query], current_organization.id)
@@ -292,7 +291,6 @@ class ContactsController < ApplicationController
       @all_people = @people
       @people = @people.page(params[:page])
     
-      
     end
   
     def fetch_mine
