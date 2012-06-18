@@ -182,6 +182,8 @@ Mh::Application.routes.draw do
   resources :contacts, :only => [:show, :create, :edit, :update, :destroy, :index] do
     collection do
       get :mine
+      get :mine_all
+      get :contacts_all
       post :send_reminder
       put :create_from_survey
       delete :destroy
@@ -191,6 +193,7 @@ Mh::Application.routes.draw do
       get :import_contacts
       post :csv_import
       get :download_sample_contacts_csv
+      get :search_by_name_and_email
     end
   end
 

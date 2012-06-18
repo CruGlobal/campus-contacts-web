@@ -151,6 +151,8 @@ es:
       request_key_help: "La palabra clave es el nombre de la encuesta y también lo que la persona va escribir para llenar su encuesta. Por ejemplo, puedes decir, 'Escribe UFCRU al número 85005.' UFCRU es la palabra clave."
       headline_html: Un sistema de seguimiento <span class="babyblue">en línea</span> con tu audiencia en mente.
       subheadline_html: Escribir a estudiante para conectar. Tu seguimiento potencial desde la web o un teléfono inteligente.
+      video_headline_html: Tiene preguntas?
+      video_subheadline_html: Podemos ayudarle!
       get_details_html: Obtener detalles& <a href="/welcome/tour" class="learnmore">Aprender más</a> or %{link}
       get_started: "Comenzar"
     wizard:
@@ -210,8 +212,8 @@ es:
       keyword_instruct: "- Una palabra clave es requerida para coleccionar contactos y encuestas vía texto, web y teléfono inteligente. <br/> - 'FSUCRU' es la palabra clave 'Escribe FSUCRU para 85005'.<br/>- Utiliza por lo menos 3 letras para tu palabra clave."
       keyword_why: "Esto para nuestro uso exclusivo. La descripción puede incluir el uso de palabras como 'reunión semanal', 'eventos de alcance', y otros usos que la palabra clave tendrá."
       explanation: 'Por favor explica para que va utilizar esta palabra clave.'
-      initial_response: "¿Qué respuesta debemos devolver a las personas cuando nos escriben? <br/>Si quieres que la persona complete la encuesta, la respuesta DEBE incluir {{ link }} (exactamente así, no cambies esa parte de la respuesta.)"
-      post_survey_why: "cuando alguien te envía un mensaje de texto, el mensaje será enviado ellos y '{{link}}' será sustituida por una dirección de sitio web que les llevará a una encuesta en línea para que la completen. Si no tienen Internet, contestando 'yo' les enviará a todas las preguntas a través de mensaje de texto interactivo."
+      initial_response: "¿Qué respuesta debemos devolver a las personas cuando nos escriben? <br/>Si quieres que la persona complete la encuesta, la respuesta DEBE incluir {{ link }}<br/>(exactamente así, no cambies esa parte de la respuesta.)"
+      post_survey_why: "cuando alguien te envía un mensaje de texto, el mensaje será enviado ellos y '{{link}}' será sustituida por una dirección de sitio web que les llevará a una encuesta en línea para que la completen. Si no tienen Internet, contestando 'yo' les enviará a todas las preguntas a través de mensaje de texto interactivo.<br/><br/>Si desea incluir un enlace a su sitio, no se incluyen aquí - incluirla en el mensaje posterior a la encuesta (paso 3 en el proceso de la encuesta Crear)"
       post_survey_message: 'Qué tipo de mensaje te gustaría mostrar después de que la persona haya completado la encuesta?'
       association: "El %{this_term} Usted está actualmente solicitando esta palabra clave para tener al menos una %{child_term} abajo de ella.<br/> Selecciona si quieres asociar esta palabra clave con %{this_term} o a %{child_term} abajo de ella %{this_term}"
       keyword_locked: La palabra clave no puede ser cambiada. Puedes eliminar esta y crear una nueva si es necesario.

@@ -17,6 +17,7 @@ class OrganizationTest < ActiveSupport::TestCase
   should have_many(:followup_comments)
   should have_many(:organizational_roles)
   should have_many(:leaders)
+  should have_many(:only_leaders)
   should have_many(:admins)
   should have_many(:all_contacts)
   should have_many(:contacts)
@@ -37,6 +38,18 @@ class OrganizationTest < ActiveSupport::TestCase
   test "self and children" do
 
   end
+
+	test "only_leaders should only return people with leader roles not people with admin roles but does not have leader roles" do
+    @org = Factory(:organization)
+    person1 = Factory(:person, :email => "person1@email.com")
+    person2 = Factory(:person, :email => "person2@email.com")
+    person3 = Factory(:person, :email => "person3@email.com")
+		Factory(:organizational_role, organization: @org, person: person1, role: Role.admin)
+		Factory(:organizational_role, organization: @org, person: person2, role: Role.leader)
+		Factory(:organizational_role, organization: @org, person: person3, role: Role.admin)
+		Factory(:organizational_role, organization: @org, person: person3, role: Role.leader)
+		@org.only_leaders.inspect
+	end
 
   test "self and children ids" do
     org1 = Factory(:organization)

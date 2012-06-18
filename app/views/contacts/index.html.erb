@@ -86,6 +86,7 @@
       <%= render partial: 'contacts/hidden_question', collection: @hidden_questions %>
     </ul>
   </div>
+  
   <%= render 'search' %>
 
 </div>
@@ -101,7 +102,7 @@
   <%= hidden_field_tag :assign_to %>
   <table class="listing" cellpadding="0" cellspacing="0">
     <tr>
-      <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment' %></th>
+      <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment', class: 'check_all_contacts', 'data-status' => @attr %></th>
       <th><%= sort_link @q, :firstName, t('.first_name'), params %></th>
       <th><%= sort_link @q, :lastName, t('.last_name'), params %></th>
       <th><%= sort_link @q, :followup_status, t('general.status'), params %></th>
@@ -118,7 +119,7 @@
         <th><%= t('.friends') %></th>
       <% end %>
       <th><%= t('.surveys') %></th>
-      <th><%= sort_link @q, 'mh_answer_sheets.updated_at', t('.last_survey'), params %></th>
+      <th><%= sort_link @q, 'MAX(mh_answer_sheets.created_at)', t('.last_survey'), params %></th>
       <th></th>
     </tr>
     <tbody id="contacts_table">

@@ -29,6 +29,7 @@ class LeadersController < ApplicationController
         @people = @people.limit(10) 
         @total = scope.count
       end
+      @people
       render :layout => false
     else
       render :nothing => true
@@ -107,6 +108,14 @@ class LeadersController < ApplicationController
   end
   
   def add_person
+    person = Person.where(firstName: params[:person][:firstName], lastName: params[:person][:lastName])
+    if person.present?
+      params[:id] = person.first.id
+      params[:update] = 'true'
+      update
+			return
+    end
+
     @person, @email, @phone = create_person(params[:person])
     @required_fields = {'First Name' => @person.firstName, 'Last Name' => @person.lastName, 'Gender' => @person.gender, 'Email' => @email.try(:email)}
     @person.valid?; @email.try(:valid?); @phone.try(:valid?)

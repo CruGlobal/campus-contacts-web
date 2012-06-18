@@ -3,6 +3,7 @@ require 'vpim/book'
 require 'ccc/person'
 
 class Person < ActiveRecord::Base
+  
   include Ccc::Person
   self.table_name = 'ministry_person'
   self.primary_key = 'personID'
@@ -80,6 +81,24 @@ class Person < ActiveRecord::Base
     :conditions => "mh_friends.person_id = #{id}",
   } }
 
+  scope :search_by_name_or_email, lambda { |keyword, org_id| {
+    :select => "ministry_person.*",
+    :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID LEFT JOIN organizational_roles AS org_roles ON ministry_person.personID = org_roles.person_id",
+    :conditions => "org_roles.organization_id = #{org_id} AND concat(firstName,' ',lastName) LIKE '%#{keyword}%' OR concat(lastName, ' ',firstName) LIKE '%#{keyword}%' OR emails.email LIKE '%#{keyword}%'"
+  } }
+
+  def assigned_tos_by_org(org)
+    assigned_tos.where(organization_id: org.id)
+  end
+
+  def has_similar_person_by_name_and_email?
+    Person.where(firstName: firstName, lastName: lastName).includes(:primary_email_address).where("email_addresses.email LIKE ?", email).where("personId != ?", personID).first
+  end
+
+  def has_similar_person_by_name_and_email?(email)
+    Person.where(firstName: firstName, lastName: lastName).includes(:primary_email_address).where("email_addresses.email LIKE ?", email).where("personId != ?", personID).first
+  end
+
   def update_date_attributes_updated
     self.date_attributes_updated = DateTime.now.to_s(:db)
     self.save
@@ -99,6 +118,7 @@ class Person < ActiveRecord::Base
     scope = scope.where('organizational_roles.organization_id IN(?)', organization_ids).includes(:organizational_roles) if organization_ids
     scope
   end
+
   def to_s
     # [preferredName.blank? ? firstName : preferredName.try(:strip), lastName.try(:strip)].join(' ')
     [firstName.to_s, lastName.to_s.strip].join(' ')
@@ -706,7 +726,7 @@ class Person < ActiveRecord::Base
   end
 
   def friends_and_leaders(organization)
-    Friend.followers(self) & organization.leaders.collect(&:fb_uid).collect(&:to_s)
+    Friend.followers(self) & organization.leaders.collect { |l| l.fb_uid.to_s }
   end
 
   def assigned_organizational_roles(organizations)
@@ -757,5 +777,6 @@ class Person < ActiveRecord::Base
 
   def has_a_valid_email?
     return email.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
-  end 
+  end
+  
 end

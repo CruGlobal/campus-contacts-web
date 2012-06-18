@@ -4,6 +4,7 @@ class EmailAddress < ActiveRecord::Base
   validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
   before_validation :set_primary, on: :create
   after_destroy :set_new_primary
+  validates_uniqueness_of :email, on: :create, message: "already taken"
   
   def to_s
     email
@@ -11,7 +12,7 @@ class EmailAddress < ActiveRecord::Base
   
   def merge(other)
     EmailAddress.transaction do
-      if other.primary? && other.updated_at > updated_at
+      if updated_at && other.primary? && other.updated_at > updated_at
         person.email_addresses.collect {|e| e.update_attribute(:primary, false)}
         new_primary = person.email_addresses.detect {|e| e.email == other.email}
         new_primary.update_attribute(:primary, true) if new_primary
@@ -20,6 +21,10 @@ class EmailAddress < ActiveRecord::Base
       other.reload
       other.destroy
     end
+  end
+
+  def is_unique?
+    EmailAddress.where(email: email).blank?
   end
   
   protected
@@ -46,4 +51,7 @@ class EmailAddress < ActiveRecord::Base
     end
     true
   end
+
+
+
 end

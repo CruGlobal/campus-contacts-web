@@ -23,7 +23,7 @@ module ContactActions
         save_survey_answers
   
         FollowupComment.create_from_survey(@organization, @person, @organization.all_questions, @answer_sheets)
-
+        NewPerson.create(person_id: @person.id, organization_id: @organization.id)
         create_contact_at_org(@person, @organization)
         if params[:assign_to_me] == 'true'
           ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
@@ -42,9 +42,14 @@ module ContactActions
         return
       else
         errors = []
-        errors << 'First name is required.' unless @person.firstName.present?
-        errors << 'Phone number is not valid.' if @phone && !@phone.valid?
-        errors << 'Email address is not valid.' if @email && !@email.valid?
+        errors << "#{I18n.t('people.create.firstname_error')}<br />" unless @person.firstName.present?
+        errors << "#{I18n.t('people.create.phone_number_error')}<br />" if @phone && !@phone.valid?
+        if @email && !@email.is_unique?
+          errors << "#{I18n.t('people.create.email_taken')}<br />" 
+        elsif @email && !@email.valid?
+          errors << "#{I18n.t('people.create.email_error')}<br />" 
+        end
+        
         respond_to do |wants|
           wants.js do 
             flash.now[:error] = errors.join('<br />')
@@ -59,7 +64,6 @@ module ContactActions
     end
   end
   
-  
   def save_survey_answers
     @answer_sheets = []
     @organization ||= current_organization
@@ -71,6 +75,31 @@ module ContactActions
       question_set.save
       @answer_sheets << @answer_sheet
     end
+    # Delete any answer_sheet with no answers
+    @answer_sheets.each do |as|
+      if as.reload.answers.blank?
+        as.destroy 
+        @answer_sheets -= [as]
+      end
+    end
+  end
+  
+  def update_survey_answers
+    @answer_sheets = []
+    @organization ||= current_organization
+    
+    params[:answers].each do |survey|
+      survey_id = survey[0]
+      fields = survey[1]
+      if survey = @organization.surveys.find(survey_id)
+        @answer_sheet = get_answer_sheet(survey, @person)
+        question_set = QuestionSet.new(survey.questions, @answer_sheet)
+        question_set.post(fields, @answer_sheet)
+        question_set.save
+        @answer_sheets << @answer_sheet
+      end
+    end
+    
     # Delete any answer_sheet with no answers
     @answer_sheets.each do |as|
       if as.reload.answers.blank?

@@ -268,6 +268,14 @@ class Question < Element
     false
   end
 
+  def email_should_be_unique_msg
+    I18n.t('sms.email_should_be_unique_msg')
+  end
+
+  def email_invalid
+    I18n.t('sms.email_invalid_msg')
+  end
+
   private
     def all_leaders_have_valid_email?
       leaders.each do |leader|

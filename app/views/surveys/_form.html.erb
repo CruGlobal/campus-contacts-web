@@ -13,11 +13,11 @@
     <div class="stepnumber">
       <%= image_tag("step1.png") %>
     </div>
-    <div class="stepcontent"> 
+    <div class="stepcontent">  
+      <label for="survey_label">
+        <%= t('.login_paragraph') + ": " + t('.login_paragraph_tip') %>
+      </label>
       <div class="field">
-        <label for="survey_login_paragraph">
-          <%= t('.login_paragraph') + ": " + t('.login_paragraph_tip') %>
-        </label>
         <%= f.text_area :login_paragraph, rows: 3, :placeholder =>  t('sessions.new.login_paragraph_mhub') %>
       </div>
     </div>
@@ -28,10 +28,10 @@
       <%= image_tag("step2.png") %>
     </div>
     <div class="stepcontent"> 
+      <label for="survey_label">
+        <%= t('.title') + ": " + t('.title_tip') %>
+      </label>
       <div class="field">
-        <label for="survey_title">
-          <%= t('.title') + ": " + t('.title_tip') %>
-        </label>
         <%= f.text_field :title, :placeholder => t('.title_placeholder') %>
       </div>
     </div>
@@ -56,8 +56,10 @@
       <%= image_tag("step3.png") %>
     </div>
     <div class="stepcontent">
+      <label for="survey_label">
+        <%= t('.post_survey_message') %>
+      </label>
       <div class="field">
-        <%= f.label :post_survey_message, t('.post_survey_message') %>
         <%= f.text_area :post_survey_message, rows: 3, :placeholder => t('.post_survey_placeholder') %>
       </div>
     </div>
@@ -68,8 +70,10 @@
       <%= image_tag("step4.png") %>
     </div>
     <div class="stepcontent">
+      <label for="survey_label">
+        <%= t('.terminology') %>
+      </label>
       <div class="field">
-        <%= f.label :terminilogy, t('.terminology') %>
         <%= f.text_field :terminology %>
       </div>
     </div>
@@ -80,8 +84,10 @@
       <%= image_tag("step5.png") %>
     </div>
     <div class="stepcontent">
+      <label for="survey_label">
+        <%= t('.login_option') %>
+      </label>
       <div class="field">
-        <%= t('.login_option') %><br/>
         <%= f.radio_button :login_option, 0, :checked => true %> <%= t('.default_login_option') %><br/>
         <%= f.radio_button :login_option, 1 %> <%= t('.fb_only_login_option') %><br/>
         <%= f.radio_button :login_option, 2 %> <%= t('.skip_fb_login_option') %><br/>
@@ -96,16 +102,18 @@
     </div>
     <div class="stepcontent"> 
       <% if current_organization.show_sub_orgs? && current_organization.has_children? %>   
+        <label for="survey_label">
+          <%= raw(t('.association', this_term: current_organization.terminology, child_term: current_organization.children.first.terminology)) %> 
+          <div class="icon help tipit help_bubble_keyword " title="<%= t('surveys.index_admin.association_help') %>"></div>
+        </label>
         <div class="field">
-          <label for="survey_organization">
-            <%= raw(t('.association', this_term: current_organization.terminology, child_term: current_organization.children.first.terminology)) %> 
-            <%= tip(t('surveys.index_admin.association_help')) %>
-          </label>
           <%= f.select :organization_id, ([current_organization] + current_organization.children).collect {|o| [o.to_s, o.id]} %>
         </div>
       <% else %>
         <div class="field">
-          <strong><%= t('.survey_associated_with', org: current_organization) %></strong>
+          <label for="survey_label">
+            <strong><%= t('.survey_associated_with', org: current_organization) %></strong>
+          </label>
         </div>
       <% end %>
       <div class="actions">

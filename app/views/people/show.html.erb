@@ -37,7 +37,8 @@
       <% if @person.phone_number.present? %>
         <p>
         <label><%= t('.phone_number', count: @person.phone_numbers.length) %></label>
-        <%= @person.phone_numbers_html %><br/>
+        <%= link_to @person.phone_numbers_html, "#", class: "send_sms_link", 'data-number' => @person.pretty_phone_number, 'data-id' => @person.id, 'data-name' => @person %>
+        <br/>
         </p>
       <% end %>
       <% if @person.email.present? %>
@@ -102,13 +103,17 @@
   </div>
   <div style="clear:both;"></div>
   <div>
-    <% if @person.friends.any? %>
-      <p><b><%= t('.persons_friends',person: declare_ownership(@person.firstName)) %></b></p>
-      <% @org_friends.each do |friend| %>
+    <% if friends = @person.friends_and_leaders(current_organization) %>
+      <p><b><%= @person.firstName.present? ? t('.persons_friends',person: declare_ownership(@person.firstName)) : "No Name Assigned" %></b></p>
+
+      <% friends.each do |friend_uid| %>
         <div style="float:left; margin-right: 5px;">
-          <%= link_to image_tag("https://graph.facebook.com/#{friend.fb_uid}/picture?type=square", alt: ''), person_path(friend), target: '_blank', :title => friend %>
+          <% Person.find_by_fb_uid(friend_uid).tap do |person| %>
+            <%= link_to image_tag("https://graph.facebook.com/#{friend_uid}/picture?type=square", alt: ''), person_path(person), target: '_blank', :title => person %>
+          <% end %>
         </div>
       <% end %>
+
       <div style="clear:both;"></div>
     <% end %>
   </div>
@@ -116,3 +121,6 @@
     <%= @person.date_attributes_updated ? t('.updated_time_difference', time_diff: distance_of_time_in_words(@person.date_attributes_updated.to_time, Time.now)) : t('.updated_time_difference', time_diff: distance_of_time_in_words(@person.dateChanged.to_time, Time.now)) %>
   </div>
 </div>
+
+
+<%= render 'shared/bulk_send_form' %>

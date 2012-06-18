@@ -27,7 +27,7 @@ class OrganizationMembership < ActiveRecord::Base
   end
   
   def primary=(val)
-    if val == true
+    if val == true && person.present?
       person.organization_memberships.update_all("`primary` = 0")
     end
     super

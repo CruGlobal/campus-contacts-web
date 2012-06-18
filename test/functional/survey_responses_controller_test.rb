@@ -48,7 +48,13 @@ class SurveyResponsesControllerTest < ActionController::TestCase
       @user = Factory(:user_no_org)  #user with a person object
       sign_in @user
       @organization = Factory(:organization)
-      @keyword = Factory.create(:approved_keyword, organization: @organization)
+      @survey = Factory(:survey)
+      @keyword = Factory.create(:approved_keyword, organization: @organization, survey: @survey)
+      
+      element = Factory(:choice_field, label: 'foobar')
+      q1 = Factory(:survey_element, survey: @survey, element: element, position: 1, archived: true)
+      element = Factory(:choice_field)
+      q2 = Factory(:survey_element, survey: @survey, element: element, position: 2)
     end
 
     context "new with received_sms_id from mobile" do

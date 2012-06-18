@@ -17,7 +17,7 @@ $ ->
       type: 'DELETE'
     false
     
-  $('#groups_controller.index a.add-label').live 'click', ->
+  $('#groups_controller.index a.add-label, #groups_controller.new a.add-label').live 'click', ->
     el = $('#new_label')
     el.dialog
       resizable: false,

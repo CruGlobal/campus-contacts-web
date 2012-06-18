@@ -14,7 +14,7 @@
   </li>
   <li>
     <ul id="leaders" class="indent expandable" data-height="244">
-      <% @organization.leaders.each do |person| %>
+      <% @organization.only_leaders.each do |person| %>
         <%= render 'contacts/leader', person: person %>
       <% end %>
     </ul>
@@ -38,7 +38,7 @@
   <% if current_user.saved_contact_searches.any? %>
     <li><h3><%= t('contacts.index.saved_searches') %></h3></li>
     <% current_user.saved_contact_searches.each do |s| %>
-      <li class="saved_search"><span class="name"><strong><%= link_to s.name, s.full_path %></strong></span> <%= link_to('x', saved_contact_search_path(s), method: :delete, remote: true, class: 'delete_leader', :confirm => t('contacts.index.delete_confirm')) %> </li>
+      <li class="saved_search"><span class="name"><strong><%= link_to s.name, s.full_path %></strong></span> <%= link_to('x', saved_contact_search_path(s), method: :delete, remote: true, class: 'delete_leader', :confirm => t('contacts.index.delete_confirm')) %><%= link_to(image_tag("edit.png"), s.full_path + t('contacts.index.edit_true'), class: 'edit_search') %></li>
     <% end %>
   <% end %>
 </ul>

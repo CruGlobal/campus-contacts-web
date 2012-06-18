@@ -225,7 +225,11 @@ module ApiHelper
     end
     
     output = get_api_json_header()
-    output[:error] = exception.to_hash
+    begin
+      output[:error] = exception.to_hash
+    rescue
+      output[:error] = exception.to_s
+    end
     
     render :json => output and return false
   end

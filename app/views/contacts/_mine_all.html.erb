@@ -1,0 +1,17 @@
+<tr id="all">
+	<td colspan="6" align="center">
+    <% @filtered_people.each do |person| %>
+  		<span class="all_row" data-id="<%= person.id %>" data-name="<%= person.firstName %> <%= person.lastName %>" data-email="<%= person.email %>" data-phone-number="<%= person.pretty_phone_number %>"></span>
+    <% end %>
+  
+		<span id="all_text">
+			<%=raw t('people.all.page_selected_html', count: @people.size) %> 
+			<% if @all_people.size > @people.size %>
+			<a href="#" onclick="$('#all_text, #all_selected_text').toggle();"><%=raw t('people.all.select_all_html_mine', count: @all_people.size) %></a>
+			<% end %>
+		</span>
+		<span id="all_selected_text" style="display:none">
+			<%=raw t('people.all.all_selected_html_mine', count: @all_people.size) %>
+		</span>
+	</td>
+</tr>

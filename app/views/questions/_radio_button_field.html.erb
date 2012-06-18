@@ -1,3 +1,4 @@
+<% name = defined?(survey) ? "answers[#{survey.id}][#{radio_button_field.id}]" : "answers[#{radio_button_field.id}]" %>
 <% css_class = 'radio ' -%>
 <% css_class += 'required' if radio_button_field.required? %>
 <div id="<%= dom_id(radio_button_field) %>">
@@ -7,7 +8,7 @@
          last_choice =  (num == radio_button_field.choices.length - 1)
          css_class += radio_button_field.validation_class(answer_sheet) if last_choice
          checked = radio_button_field.has_answer?(choice[1], answer_sheet) -%>
-      <%= radio_button_tag "answers[#{radio_button_field.id}]", choice[1], checked, 
+      <%= radio_button_tag name, choice[1], checked, 
             :id => dom_id, 
             :class => css_class %>
       <label class="choice" for="<%= dom_id %>"><%= choice[0] %></label>

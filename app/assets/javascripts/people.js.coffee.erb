@@ -11,6 +11,9 @@ $ ->
       $('#advanced_filter_box').show()
       false
   
+  $('.action_dropdown').live 'mouseenter', ->
+    $(this).click();
+  
   $('#advanced_search').live 'click', ->
     $('#search_filter_box').hide()
     $('#advanced_filter_box').toggle()
@@ -309,7 +312,41 @@ $('#send_bulkemail_link').live 'click', ->
         $('#bulk_email_message').val($('#bulk_send_body').val())
         $(this).dialog('destroy')
   false        
-  
+
+$('.send_sms_link').live 'click', ->
+	ids = new Array()
+	id = $(this).attr('data-id')
+	name = $(this).attr('data-name')
+	number = $(this).attr('data-number')
+	ids.push(id)
+	element = '<li data-id="'.concat(id,'">',name,'<a href="" class="delete">x</a></li>')
+	$('.to_list').html(element)
+	$('#bulk_send_dialog form').addClass('bulk-sms')    
+	$('#bulk_send_dialog .subject').hide()
+	$('#char_counter').show()
+	$('#bulk_send_dialog #bulk_send_body').simplyCountable( { maxCount: 160 } )
+	$('#bulk_send_body').val('')
+	$('#bulk_send_dialog').dialog
+		resizable: false,
+		height:444,
+		width:600,
+		modal: true,
+		title: 'Send Text Message',
+		open: (event, ui) ->
+			$('#bulk_send_dialog_message').hide()
+			$(this).find('form').attr('action', '/people/bulk_sms')
+		close: (event, ui) ->
+			$('#bulk_sms_message').val($('#bulk_send_body').val())            
+		buttons: 
+			Send: ->
+				$(this).submitBulkSendDialog()
+				$('#bulk_sms_message').val($('#bulk_send_body').val())                
+				$.n('Text message sent')        
+			Cancel: ->
+				$('#bulk_sms_message').val($('#bulk_send_body').val())        
+				$(this).dialog('destroy')
+	false 
+	
 $('#send_bulksms_link').live 'click', ->
   if $('.id_checkbox:checked').length == 0
     alert("You didn't select any people to text")
@@ -464,6 +501,42 @@ $('#assign_org .org a').live 'click', (e)->
     setTimeout "document.location = '/people'", 1000
 false
   
+$('.check_all_mine').live 'click', ->
+  first_row = $('#contacts_table').find('tr:first')
+  text = first_row.text()
+  if text.indexOf('Fetching') == 0
+    first_row.remove()
+    
+  if true || $('.pagination').length
+    if $(this).is(':checked')    
+      $('#contacts_table').prepend('<tr><td colspan="6" align="center" style="background:none;">Fetching information...</td></tr>') 
+      $.get '/contacts/mine_all?' + $(this).attr('data-status'), (html) ->
+        $('#contacts_table').find('tr:first').remove()
+        $('#contacts_table').prepend(html)    
+    else
+      if text.indexOf('Fetching') == 0
+        first_row.remove()
+      if $('span#all_text', first_row)[0]?
+        first_row.hide()
+ 
+$('.check_all_contacts').live 'click', ->
+  first_row = $('#contacts_table').find('tr:first')
+  text = first_row.text()
+  if text.indexOf('Fetching') == 0
+    first_row.remove()
+    
+  if true || $('.pagination').length
+    if $(this).is(':checked')    
+      $('#contacts_table').prepend('<tr><td colspan="99" align="center" style="background:none;">Fetching information...</td></tr>') 
+      $.get '/contacts/contacts_all?' + $(this).attr('data-status'), (html) ->
+        $('#contacts_table').find('tr:first').remove()
+        $('#contacts_table').prepend(html)    
+    else
+      if text.indexOf('Fetching') == 0
+        first_row.remove()
+      if $('span#all_text', first_row)[0]?
+        first_row.hide()
+  
 $('#check_all').live 'click', ->
   first_row = $('#people_table').find('tr:first')
   text = first_row.text()
@@ -515,6 +588,7 @@ $('.id_checkbox').live 'click', ->
   change_role_checkboxes(role_labels, mark_as_checked)
   change_all_role_checkboxes(true) if !mark_as_checked
   disable_role_checkboxes()
+  enable_all_unchecked()
 
 check_selected_people = () ->
   checked = $('.id_checkbox:checked').length
@@ -532,6 +606,7 @@ get_role_labels = (obj) ->
 disable_role_checkboxes = () -> # disable role checkboxes that only SOME of contacts have
   role_labels_array = []
   to_be_disabled = []
+  to_be_enabled = []
   checked_length = $('input.id_checkbox:checked').length
 
   $('input.id_checkbox:checked').each ->
@@ -551,13 +626,37 @@ disable_role_checkboxes = () -> # disable role checkboxes that only SOME of cont
       count++ if unique[i] == role_labels_array[j]
       j++
     to_be_disabled.push(unique[i]) if count < checked_length
+    to_be_enabled.push(unique[i]) if count == checked_length
     i++
   l = 0
   while(l < to_be_disabled.length)
     checkbox = '#role_ids_' + to_be_disabled[l]
     $(checkbox).attr disabled: true
+    #$(checkbox).attr checked: false
     l++
 
+  l = 0
+  while(l < to_be_enabled.length)
+    checkbox = '#role_ids_' + to_be_enabled[l]
+    $(checkbox).attr disabled: false
+    $(checkbox).attr checked: true
+    l++
+
+  enable_and_uncheck_if_role_not_included_in_role_labels(role_labels_array)
+
+enable_all_unchecked = () ->
+  $('.role_id_checkbox:not(:checked)').each ->
+    $(this).attr disabled: false
+
+enable_and_uncheck_if_role_not_included_in_role_labels = (unique) ->
+  $('.role_id_checkbox:checked').each ->
+    l = 0
+    while(l < unique)
+      break if $(this).val() == unique[l]
+      l++
+    if l == unique.length
+      $(this).attr disabled: false
+      $(this).attr checked: false
 
 change_role_checkboxes = (role_labels, check, n) ->
   role_labels.each ->
@@ -578,13 +677,19 @@ update_checkbox_checkmark = (role_checkbox) ->
 
 update_persons_roles = () ->
   role_ids = []
+  some_role_ids = []
 
   $('#apply_roles_spinner').show()
   $("#apply_roles_successful").hide()
-
   $('.role_id_checkbox:checked').each ->
     role_id = $(this).val()
-    role_ids.push(role_id)    
+    role_ids.push(role_id)
+    #if $(this).is ':enabled' #added for MH 299
+    #  role_id = $(this).val()
+    #  role_ids.push(role_id)
+  $('.role_id_checkbox:not(:enabled)').each ->
+    some_role_ids.push($(this).val())
+  
 
   checked_elements = $('.id_checkbox:checked')
   
@@ -593,10 +698,10 @@ update_persons_roles = () ->
     $.ajax
       type: 'POST',
       url: '/people/update_roles',
-      data: 'role_ids='+role_ids+'&person_id='+person_id,
+      data: 'role_ids='+role_ids+'&some_role_ids='+some_role_ids+'&person_id='+person_id,
       success: (data) ->
         roles_user = "#roles_user_" + person_id
-        if data.indexOf("$.a") == -1 # hello
+        if data.indexOf("$.a") == -1
           $(roles_user).html data
           $("#apply_roles_spinner").hide()
           $("#apply_roles_successful").show()

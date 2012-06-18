@@ -1,4 +1,5 @@
 <%= render 'sidebar' %>
+<%= render 'shared/bulk_send_form' %>
 
 <div class="titlebar">
   <h1><%= image_tag("contact.png") %><%= t('.my_contacts') %></h1>
@@ -10,11 +11,17 @@
 
   <div class="pagemenu">
     <ul class="pillmenu">
-      <li><%= check_box_tag 'check_all' %></li>
-    </ul>
-    <ul class="pillmenu">
       <li><%= link_to(t('contacts.assign'), "", id: 'assign_button', class: 'assign') %></li>
       <li><%= link_to(t('contacts.add_contact'), "", class: 'add_contact') %></li>
+    </ul>
+    <ul class="pillmenu">
+      <li>
+        <%= link_to('Send', '#', class: 'action_dropdown') %>
+        <ul style="display:none">
+          <li><%= link_to(t('people.index.send_email'), nil, :id => "send_bulkemail_link") %></li>	
+          <li><%= link_to(t('people.index.send_sms'), nil, :id => "send_bulksms_link") %></li>	
+        </ul>
+      </li>    		
     </ul>
     <!-- <ul class="pillmenu">
       <li><%= link_to("Show", "") %></li>
@@ -22,8 +29,8 @@
   </div>
 
   <table class="listing" cellpadding="0" cellspacing="0">
-    <tr style="display: none;">
-      <th class="check"></th>
+    <tr style="">
+      <th class="check"><%= check_box_tag 'check_all', '1', false, class: 'check_all_mine no_margin', 'data-status' => @attr %></th>
       <th class="name"><%= t('contacts.mine.name') %></th>
       <th class="phone"><%= t('contacts.mine.phone') %></th>
       <th class="email"><%= t('contacts.mine.email') %></th>
@@ -36,6 +43,7 @@
       <% end %>
     </tbody>
   </table>
+  <%= paginate @people %>
   <% if @people.blank? %>
     <div class="contentpad no_contacts">
       <%= t('contacts.index.no_contacts') %>

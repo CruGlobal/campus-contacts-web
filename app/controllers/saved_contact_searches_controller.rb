@@ -14,8 +14,12 @@ class SavedContactSearchesController < ApplicationController
   end
 
   def update
-    SavedContactSearch.find(params[:id]).update_attributes(params[:saved_contact_search])
-    redirect_to params[:saved_contact_search][:full_path]
+    begin
+      SavedContactSearch.find(params[:id]).update_attributes(params[:saved_contact_search])
+      redirect_to params[:saved_contact_search][:full_path]
+    rescue ActiveRecord::RecordNotFound # meaning, the saved_search has been deleted from the left side bar then the user decided to save it again
+      create
+    end
   end
 
   def destroy

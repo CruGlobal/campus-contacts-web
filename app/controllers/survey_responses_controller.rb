@@ -89,6 +89,7 @@ class SurveyResponsesController < ApplicationController
         @person = Person.create(params[:person])
       end
       if @person.valid?
+        NewPerson.create(person_id: @person.id, organization_id: @survey.organization.id)
         save_survey
         session[:person_id] = @person.id
         session[:survey_id] = @survey.id

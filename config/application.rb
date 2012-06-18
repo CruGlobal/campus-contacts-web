@@ -78,4 +78,5 @@ module Mh
       Rack::OAuth2::Server::Admin.set :scope, %w{read write}
     end
   end
+
 end
