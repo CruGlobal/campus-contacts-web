@@ -167,22 +167,19 @@ class SmsController < ApplicationController
     def get_question_no(survey, person)
       total = survey.questions.count
       answer_sheet = get_answer_sheet(survey, person)
-      count = answer_sheet.answers.count + 1
+      count = answer_sheet.answers.count
       survey.questions.where('attribute_name IS NOT NULL').each do |in_person_table|
-        case in_person_table.attribute_name
+        case in_person_table.attribute_name.strip
         when 'email'
           count += 1 if person.email.present?
         when 'phone_number'
           count += 1 if person.phone_number.present?
+        when ''
         else
           count += 1 if check_person_field_presence(person, in_person_table.attribute_name)
         end
       end
-      if count > total
-        "#{total}/#{total}"
-      else
-        "#{count}/#{total}"
-      end
+      "#{count + 1}/#{total}"
     end
     
     def check_person_field_presence(person, attribute_name)
