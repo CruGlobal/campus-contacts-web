@@ -130,6 +130,7 @@ class SurveyResponsesController < ApplicationController
     question_set = QuestionSet.new(@survey.questions, @answer_sheet)
     question_set.post(params[:answers], @answer_sheet)
     question_set.save
+    @answer_sheet.person.save
     @answer_sheet.update_attribute(:completed_at, Time.now)
   end
 
