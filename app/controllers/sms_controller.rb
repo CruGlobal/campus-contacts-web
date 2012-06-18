@@ -116,7 +116,7 @@ class SmsController < ApplicationController
           msg = question.label_with_choices
           separator = / [a-z]\)/
         end
-        if question.survey_elements.present?
+        unless person.firstName.blank? || person.lastName.blank?
           question_no = get_question_no(survey, person) 
           msg = "#{question_no} #{msg}"
         end
@@ -128,7 +128,7 @@ class SmsController < ApplicationController
     def save_survey_question(survey, person, answer)
       begin
         case
-        when person.firstName.blank?
+        when person.firstName.blank? 
           person.update_attribute(:firstName, answer)
         when person.lastName.blank?  
           person.update_attribute(:lastName, answer)
@@ -167,12 +167,26 @@ class SmsController < ApplicationController
     def get_question_no(survey, person)
       total = survey.questions.count
       answer_sheet = get_answer_sheet(survey, person)
-      if answer_sheet.present?
-        count = answer_sheet.answers.count + 1
-      else
-        count = 1
+      count = answer_sheet.answers.count + 1
+      survey.questions.where('attribute_name IS NOT NULL').each do |in_person_table|
+        case in_person_table.attribute_name
+        when 'email'
+          count += 1 if person.email.present?
+        when 'phone_number'
+          count += 1 if person.phone_number.present?
+        else
+          count += 1 if check_person_field_presence(person, in_person_table.attribute_name)
+        end
       end
       "#{count}/#{total}"
+    end
+    
+    def check_person_field_presence(person, attribute_name)
+      begin
+        Person.exists?(["personID = #{person.id} AND '#{attribute_name}' IS NOT NULL"])
+      rescue
+        false
+      end  
     end
     
     def try_to_extract_email_from(answer)
