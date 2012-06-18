@@ -178,7 +178,11 @@ class SmsController < ApplicationController
           count += 1 if check_person_field_presence(person, in_person_table.attribute_name)
         end
       end
-      "#{count}/#{total}"
+      if count > total
+        "#{total}/#{total}"
+      else
+        "#{count}/#{total}"
+      end
     end
     
     def check_person_field_presence(person, attribute_name)
