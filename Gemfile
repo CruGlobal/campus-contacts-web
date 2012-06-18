@@ -28,7 +28,6 @@ gem "default_value_for"
 
 gem 'dalli'
 gem 'resque_mail_queue'
-gem 'mailcatcher'
 
 gem 'valium'
 gem 'newrelic_rpm'#, '3.1.1'
@@ -67,6 +66,7 @@ group :development, :test do
   gem 'shoulda', :require => false
   # gem 'ephemeral_response'
   gem 'mocha'
+  gem 'mailcatcher'
   gem 'factory_girl','~> 2.0.0.rc4'
   gem 'simplecov', '>= 0.3.5', require: false
   gem 'railroady'
