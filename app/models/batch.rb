@@ -40,7 +40,7 @@ class Batch # < ActiveRecord::Base
           
           if admin.email.present?
             OrganizationMailer.enqueue.notify_person_transfer(admin.email, intro, new_contacts)
-            # OrganizationMailer.notify_new_people(admin.email, intro, new_contacts).deliver
+            # OrganizationMailer.notify_person_transfer(admin.email, intro, new_contacts).deliver
             new_contacts.update_all(notified: true)
             queued_email += 1
           end

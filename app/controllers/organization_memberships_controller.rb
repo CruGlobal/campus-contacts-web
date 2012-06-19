@@ -125,12 +125,22 @@ class OrganizationMembershipsController < ApplicationController
   end
   
   def set_primary
-    if @organization_membership = current_person.organization_memberships.find_by_organization_id(params[:id])
-      @organization_membership.update_attribute(:primary, true)
+    if @organizational_role = current_person.organizational_roles.find_by_organization_id(params[:id])
+      current_person.organizational_roles.update_all(:primary => false)
+      @organizational_role.update_attribute(:primary, true)
     else
-      @organization_membership = OrganizationMembership.create(organization_id: params[:id], person_id: current_person.id)
-      @organization_membership.update_attribute(:primary, true)
+      @organizational_role = OrganizationalRole.create(organization_id: params[:id], person_id: current_person.id, role_id: Role::CONTACT_ID)
+      current_person.organizational_roles.update_all(:primary => false)
+      @organizational_role.update_attribute(:primary, true)
     end
+    
+    Rails.logger.info ""
+    Rails.logger.info ""
+    Rails.logger.info ""
+    Rails.logger.info "#{@organizational_role.inspect}"
+    Rails.logger.info ""
+    Rails.logger.info ""
+    Rails.logger.info ""
     session[:current_organization_id] = params[:id]
     redirect_to request.referrer ? :back : '/contacts'
   end

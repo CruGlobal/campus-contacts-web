@@ -7,7 +7,7 @@
   <% if org.show_sub_orgs? && org.children.order('organizations.name').length > 0 %>
     <ul>
       <% org.children.order('organizations.name').each do |org| %>
-        <%= render 'application/org', org: org, primary: current_person.primary_organization == org, involved: current_person.organizations.include?(org) %>
+        <%= render 'application/org', org: org, primary: current_person.primary_org == org, involved: current_person.organizations.include?(org) %>
       <% end %>
     </ul>
   <% end %>

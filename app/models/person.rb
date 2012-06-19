@@ -24,6 +24,8 @@ class Person < ActiveRecord::Base
   has_one :primary_email_address, class_name: "EmailAddress", foreign_key: "person_id", conditions: {primary: true}
   has_one :primary_organization_membership, class_name: "OrganizationMembership", foreign_key: "person_id", conditions: {primary: true}
   has_one :primary_organization, through: :primary_organization_membership, source: :organization
+  has_one :primary_org_role, class_name: "OrganizationalRole", foreign_key: "person_id", conditions: {primary: true}
+  has_one :primary_org, through: :primary_org_role, source: :organization
   has_many :answer_sheets
   has_many :contact_assignments, class_name: "ContactAssignment", foreign_key: "assigned_to_id"
   has_many :assigned_tos, class_name: "ContactAssignment", foreign_key: "person_id"
