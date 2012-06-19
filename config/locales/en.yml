@@ -261,8 +261,8 @@ en:
       headline_html: An online <span class="babyblue">follow-up system</span> with your audience in mind.
       subheadline_html: Students text to connect. You empower follow-up from the web or a smart phone.
       get_details_html: Get the Details & <a href="/welcome/tour" class="learnmore">Learn More</a> or %{link}
-      get_details_html: Get the Details & <a href="/welcome/tour" class="learnmore">Learn More</a> or %{link}
       get_started: "Get Started"
+      learn_more: "Learn More "
     wizard:
       welcome: Welcome!
       verify_identity: Verify Your Identity

@@ -990,7 +990,11 @@ span.title {
   .learnmore {
     text-transform: uppercase;
     font-weight: bold;
-    text-decoration: underline;
+    font-size: 24px;
+    text-decoration: none;
+    &:hover {
+      opacity: 0.9;
+    }
   }
   .getstartedbt {
     background: url("<%= asset_path("splash/btn_gsc.png") %>") no-repeat 0 0;
@@ -999,10 +1003,9 @@ span.title {
     font-weight: bold;
     height: 72px;
     line-height: 62px;
-    padding-left: 29px;
-    text-align: left;
+    text-align: center;
     text-transform: uppercase;
-    width: 220px;
+    width: 215px;
     overflow: hidden;
     vertical-align: middle;
   }
