@@ -10,10 +10,8 @@ class Person < ActiveRecord::Base
 
   has_many :person_transfers
   has_one :transferred_by, class_name: "PersonTransfer", foreign_key: "transferred_by_id"
-  
   belongs_to :user, class_name: 'User', foreign_key: 'fk_ssmUserId'
   has_many :phone_numbers, autosave: true
-
   has_one :primary_phone_number, class_name: "PhoneNumber", foreign_key: "person_id", conditions: {primary: true}
   has_many :locations
   has_one :latest_location, order: "updated_at DESC", class_name: 'Location'
@@ -22,8 +20,6 @@ class Person < ActiveRecord::Base
   has_many :education_histories
   has_many :email_addresses, autosave: true
   has_one :primary_email_address, class_name: "EmailAddress", foreign_key: "person_id", conditions: {primary: true}
-  has_one :primary_organization_membership, class_name: "OrganizationMembership", foreign_key: "person_id", conditions: {primary: true}
-  has_one :primary_organization, through: :primary_organization_membership, source: :organization
   has_one :primary_org_role, class_name: "OrganizationalRole", foreign_key: "person_id", conditions: {primary: true}
   has_one :primary_org, through: :primary_org_role, source: :organization
   has_many :answer_sheets
@@ -61,7 +57,7 @@ class Person < ActiveRecord::Base
 
   scope :find_by_person_updated_by_daterange, lambda { |date_from, date_to| {
     :conditions => ["date_attributes_updated >= ? AND date_attributes_updated <= ? ", date_from, date_to]
-  } }
+  }}
 
   scope :order_by_highest_default_role, lambda { |order| {
     :select => "ministry_person.*",
@@ -247,6 +243,14 @@ class Person < ActiveRecord::Base
     self.fb_uid = authentication['uid']
     save(validate: false)
     self
+  end
+
+  def primary_organization=(org)
+    self.user.primary_organization_id = org.id
+  end
+
+  def primary_organization
+    Organization.find(self.user.primary_organization_id)
   end
 
   def gender=(gender)

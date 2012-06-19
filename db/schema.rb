@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120618144745) do
+ActiveRecord::Schema.define(:version => 20120619135454) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -3131,7 +3131,6 @@ ActiveRecord::Schema.define(:version => 20120618144745) do
     t.integer  "organization_id"
     t.string   "followup_status"
     t.integer  "added_by_id"
-    t.boolean  "primary",         :default => false
   end
 
   add_index "organizational_roles", ["organization_id", "role_id", "followup_status"], :name => "role_org_status"
@@ -3747,6 +3746,7 @@ ActiveRecord::Schema.define(:version => 20120618144745) do
     t.datetime "updated_at"
     t.datetime "last_sign_in_at"
     t.string   "locale"
+    t.text     "settings"
   end
 
   add_index "simplesecuritymanager_user", ["email"], :name => "index_simplesecuritymanager_user_on_email", :unique => true
