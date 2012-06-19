@@ -165,7 +165,7 @@ Mh::Application.routes.draw do
   end
 
   get "welcome/index"
-  get "welcome/tutorials"
+  match 'tutorials' => "welcome#tutorials"
   get "/test" => "welcome#test"
 
   devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks", sessions: "sessions" }

@@ -28,6 +28,7 @@
 //= require followup_comments
 //= require clearform
 //= require global
+//= require welcome
 
 $(function (){
  $('#person_updated_from').datepicker({ dateFormat: 'dd-mm-yy' });
