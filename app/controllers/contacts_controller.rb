@@ -45,7 +45,7 @@ class ContactsController < ApplicationController
                   answers << ''
                 end
               end
-              answers << I18n.l(dates.sort.last, format: :date) if dates.present?
+              answers << I18n.l(dates.sort.reverse.last, format: :date) if dates.present?
               rows << answers
             end
           end
@@ -329,7 +329,7 @@ class ContactsController < ApplicationController
         
         answers[answer_sheet.person_id] ||= {}
         questions.each do |q|
-          answers[answer_sheet.person_id][q.id] = [q.display_response(answer_sheet), answer_sheet.created_at] if q.display_response(answer_sheet).present?
+          answers[answer_sheet.person_id][q.id] = [q.display_response(answer_sheet), answer_sheet.updated_at] if q.display_response(answer_sheet).present?
         end
       end
       answers

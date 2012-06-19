@@ -139,7 +139,7 @@ class Question < Element
           begin
             value = Date.strptime(value, (I18n.t 'date.formats.default'))
           rescue
-            raise "invalid date - " + value.inspect
+            return value
           end
         end
         object.send("#{attribute_name}=".to_sym, value) if object
@@ -268,8 +268,12 @@ class Question < Element
     false
   end
 
-  def with_label_should_be_unique_msg
-    label + I18n.t('sms.with_label_should_be_unique_msg')
+  def email_should_be_unique_msg
+    I18n.t('sms.email_should_be_unique_msg')
+  end
+
+  def email_invalid
+    I18n.t('sms.email_invalid_msg')
   end
 
   private

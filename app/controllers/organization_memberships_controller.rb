@@ -128,8 +128,9 @@ class OrganizationMembershipsController < ApplicationController
     if @organizational_role = current_person.organizational_roles.find_by_organization_id(params[:id])
       current_person.organizational_roles.update_all(:primary => false)
       @organizational_role.update_attribute(:primary, true)
+      @organizational_role.update_attribute(:role_id, Role::LEADER_ID)
     else
-      @organizational_role = OrganizationalRole.create(organization_id: params[:id], person_id: current_person.id, role_id: Role::CONTACT_ID)
+      @organizational_role = OrganizationalRole.create(organization_id: params[:id], person_id: current_person.id, role_id: Role::LEADER_ID)
       current_person.organizational_roles.update_all(:primary => false)
       @organizational_role.update_attribute(:primary, true)
     end
