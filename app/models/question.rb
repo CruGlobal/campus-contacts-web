@@ -139,7 +139,7 @@ class Question < Element
           begin
             value = Date.strptime(value, (I18n.t 'date.formats.default'))
           rescue
-            raise "invalid date - " + value.inspect
+            return value
           end
         end
         object.send("#{attribute_name}=".to_sym, value) if object

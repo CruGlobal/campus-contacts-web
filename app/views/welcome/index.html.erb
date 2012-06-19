@@ -2,47 +2,6 @@
   <a href="/" id="logo"></a>
 </div>
 
-<div class="roundwrap video_space">
-  <h1 class="aleft headlinetext video">
-    <%= t('.video_headline_html') %>
-  </h1>
-  <br/>
-  <h4 class="aleft subheadlinetext video">
-    <%= t('.video_subheadline_html') %>
-  </h4>
-  
-  <div class="video_salespush">
-    <%= link_to(t('.get_started'), new_user_session_path, :class => "getstartedbt") %> 
-  </div>
-  
-  <div class="inner_space">
-    <div class="content">
-      <div class="video_span">
-        <iframe id="video_frame" width="560" height="330" src="" frameborder="0" allowfullscreen></iframe>
-      </div>
-      <div class="description">
-        <div class="title">
-        </div>
-        <div class="details">
-        </div>
-      </div>
-    </div>
-    <div class="menu">
-      <div class="head">
-        <div class="video_icon">
-          <%= image_tag('video_icon.png')%>
-        </div>
-        Easy Tutorial Videos
-      </div>
-      <div class="list">
-        <%= render partial: 'welcome/video_list'%>
-      </div>
-    </div>
-    <div class="clear"></div>
-  </div>
-
-</div>
-<br/>
 <div class="roundwrap">
 
   <h1 class="aright headlinetext">
@@ -59,7 +18,10 @@
       <a href="/welcome/tour"><%= image_tag("splash/box_right.jpg") %></a> 
     </div>
   </div>
-
+  
+  <div class="salespush">
+    <%= link_to(t('.learn_more'), tutorials_path, :class => "getstartedbt") %> 
+  </div>
 </div>
 
 

@@ -1,0 +1,38 @@
+<div id="logoline">
+  <a href="/" id="logo"></a>
+</div>
+
+
+<div id="roundwrap" class="video_space">
+  <h1 class="headlinetext">
+    <%= t('.video_headline_html') %>
+    <%= t('.video_subheadline_html') %>
+  </h1>
+  
+  <div class="inner_space">
+    <div class="content">
+      <div class="video_span">
+        <iframe id="video_frame" width="560" height="330" src="" frameborder="0" allowfullscreen></iframe>
+      </div>
+      <div class="description">
+        <div class="title">
+        </div>
+        <div class="details">
+        </div>
+      </div>
+    </div>
+    <div class="menu">
+      <div class="head">
+        <div class="video_icon">
+          <%= image_tag('video_icon.png')%>
+        </div>
+        Easy Tutorial Videos
+      </div>
+      <div class="list">
+        <%= render partial: 'welcome/video_list'%>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+
+</div>

@@ -934,14 +934,22 @@ span.title {
   padding: 10px;
 }
 
+.navlink {
+  color: #008dbc !important;
+  font-weight: normal;
+  padding: 7px 10px !important;
+  display: inline-block;
+  font-size: 14px;
+}
+
 .loginbt {
   background: url("<%= asset_path('topmenubgtall.png') %>") repeat-x scroll 0 0 transparent;
   color: white !important;
   font-weight: normal;
   border-radius: 5px;
-  padding: 5px 10px !important;
+  padding: 7px 14px !important;
   display: inline-block;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .instruct {
@@ -1097,7 +1105,11 @@ span.title {
   .learnmore {
     text-transform: uppercase;
     font-weight: bold;
-    text-decoration: underline;
+    font-size: 24px;
+    text-decoration: none;
+    &:hover {
+      opacity: 0.9;
+    }
   }
   .getstartedbt {
     background: url("<%= asset_path("splash/btn_gsc.png") %>") no-repeat 0 0;
@@ -1105,10 +1117,16 @@ span.title {
     color: #FFFFFF;
     display: inline-block;
     font-weight: bold;
+<<<<<<< HEAD
     height: 50px;
     text-align: center;
     padding-right: 10px;
     padding-top: 15px;
+=======
+    height: 72px;
+    line-height: 62px;
+    text-align: center;
+>>>>>>> MH-327v2
     text-transform: uppercase;
     width: 215px;
     overflow: hidden;
@@ -1961,7 +1979,7 @@ body#welcome_controller {
     margin-top: -90px;
     margin-left: 0px;
   }
-  .tour, .index, .privacy, .terms {
+  .tutorials, .tour, .index, .privacy, .terms {
     margin-top: 50px;
   }
 }
