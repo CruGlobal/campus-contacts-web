@@ -973,7 +973,7 @@ span.title {
     height: 85px;
     display: block;
   }
-  .roundwrap {
+  #roundwrap {
     border-radius: 15px;
     -moz-border-radius: 15px;
     -webkit-border-radius: 15px;
@@ -1113,29 +1113,20 @@ span.title {
   }
   .getstartedbt {
     background: url("<%= asset_path("splash/btn_gsc.png") %>") no-repeat 0 0;
-    background-size: 225px 130px;
     color: #FFFFFF;
     display: inline-block;
     font-weight: bold;
-<<<<<<< HEAD
-    height: 50px;
-    text-align: center;
-    padding-right: 10px;
-    padding-top: 15px;
-=======
     height: 72px;
     line-height: 62px;
     text-align: center;
->>>>>>> MH-327v2
     text-transform: uppercase;
     width: 215px;
     overflow: hidden;
-    vertical-align: middle;    
-    &:hover {
-      background-size: 225px 130px;
-      text-decoration: none;
-      background-position: -1px -66px;
-    }
+    vertical-align: middle;
+  }
+  .getstartedbt:hover {
+    text-decoration: none;
+    background-position: -1px 100%;
   }
   h1.headlinetext {
     font-size: 29px;
