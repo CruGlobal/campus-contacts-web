@@ -125,23 +125,8 @@ class OrganizationMembershipsController < ApplicationController
   end
   
   def set_primary
-    if @organizational_role = current_person.organizational_roles.find_by_organization_id(params[:id])
-      current_person.organizational_roles.update_all(:primary => false)
-      @organizational_role.update_attribute(:primary, true)
-      @organizational_role.update_attribute(:role_id, Role::LEADER_ID)
-    else
-      @organizational_role = OrganizationalRole.create(organization_id: params[:id], person_id: current_person.id, role_id: Role::LEADER_ID)
-      current_person.organizational_roles.update_all(:primary => false)
-      @organizational_role.update_attribute(:primary, true)
-    end
-    
-    Rails.logger.info ""
-    Rails.logger.info ""
-    Rails.logger.info ""
-    Rails.logger.info "#{@organizational_role.inspect}"
-    Rails.logger.info ""
-    Rails.logger.info ""
-    Rails.logger.info ""
+    org = Organization.find(params[:id])
+    current_person.primary_organization = org
     session[:current_organization_id] = params[:id]
     redirect_to request.referrer ? :back : '/contacts'
   end

@@ -202,10 +202,10 @@ class ApplicationController < ActionController::Base
       unless org
         org = person.primary_organization
         # If they're a contact at their primary org (shouldn't happen), look for another org where they have a different role
-        unless person.organizations.include?(org)
-          org = person.organizations.first
+        unless person.all_organization_and_children.include?(org)
+          person.primary_organization = person.organizations.first
         end
-        session[:current_organization_id] = org.try(:id)
+        session[:current_organization_id] = person.primary_organization.id
       end
       @current_organizations[person] = org
     end

@@ -132,21 +132,34 @@ class Person < ActiveRecord::Base
 
   def orgs_with_children
     organizations.collect {|org|
-      org.parent ? 
-        org.parent.show_sub_orgs? ? 
-        [org] + org.children
-      : 
-        [org] 
-      : 
-        org.show_sub_orgs? ?
-        [org] + org.children
-      :
-        [org]
+      if org.parent
+        org.parent.show_sub_orgs? ? [org] + org.children : [org] 
+      else
+        org.show_sub_orgs? ? [org] + org.children : [org]
+      end
     }.flatten.uniq_by{ |o| o.id }
-
-    #organizations.collect {|top_org| top_org.parent ? (top_org.show_sub_orgs? ? top_org.children + top_org.descendants : [])
-    #  : ([top_org])
-    #}.flatten
+  end
+  
+  def all_organization_and_children
+    orgs = Array.new
+    organizations.each do |org|
+      orgs << org
+      child_org = collect_all_child_organizations(org)
+      orgs += child_org
+    end
+    Organization.where(id: orgs.collect(&:id))
+  end
+  
+  def collect_all_child_organizations(org)
+    child_orgs = Array.new
+    if org.children.present?
+      org.children.each do |child_org|
+        child_orgs << child_org
+        other_child_org = collect_all_child_organizations(child_org)
+        child_orgs += other_child_org
+      end
+    end
+    child_orgs
   end
 
   def phone_number
@@ -247,10 +260,18 @@ class Person < ActiveRecord::Base
 
   def primary_organization=(org)
     self.user.primary_organization_id = org.id
+    self.user.save!
   end
 
   def primary_organization
-    Organization.find(self.user.primary_organization_id)
+    org_id = self.user.primary_organization_id
+    if org_id.present?
+      org = Organization.find(org_id)
+    else
+      org = self.organizations.first
+      self.primary_organization = org
+    end
+    org
   end
 
   def gender=(gender)
