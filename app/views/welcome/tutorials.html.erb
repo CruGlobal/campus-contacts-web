@@ -2,27 +2,44 @@
   <a href="/" id="logo"></a>
 </div>
 
-<div id="roundwrap">
 
-  <h1 class="headlinetext">
-    <%= t('.headline_html') %>
+<div id="roundwrap" class="video_space">
+  <h1 class="aleft headlinetext video">
+    <%= t('.video_headline_html') %>
   </h1>
-  <h4 class="subheadlinetext">
-    <%= t('.subheadline_html') %>
+  <br/>
+  <h4 class="aleft subheadlinetext video">
+    <%= t('.video_subheadline_html') %>
   </h4>
   
-  <div class="splashbanner">
-    <div class="slide slide1">
-      <a href="/welcome/tour"><%= image_tag("splash/box_left.jpg") %></a>
-      <a href="/welcome/tour"><%= image_tag("splash/box_mid.jpg") %></a>
-      <a href="/welcome/tour"><%= image_tag("splash/box_right.jpg") %></a> 
-    </div>
+  <div class="video_salespush">
+    <%= link_to(t('.get_started'), new_user_session_path, :class => "getstartedbt") %> 
   </div>
-
-  <div class="salespush">
-    <%= link_to(t('.learn_more'), welcome_tutorials_path, :class => "getstartedbt") %> 
+  
+  <div class="inner_space">
+    <div class="content">
+      <div class="video_span">
+        <iframe id="video_frame" width="560" height="330" src="" frameborder="0" allowfullscreen></iframe>
+      </div>
+      <div class="description">
+        <div class="title">
+        </div>
+        <div class="details">
+        </div>
+      </div>
+    </div>
+    <div class="menu">
+      <div class="head">
+        <div class="video_icon">
+          <%= image_tag('video_icon.png')%>
+        </div>
+        Easy Tutorial Videos
+      </div>
+      <div class="list">
+        <%= render partial: 'welcome/video_list'%>
+      </div>
+    </div>
+    <div class="clear"></div>
   </div>
 
 </div>
-
-

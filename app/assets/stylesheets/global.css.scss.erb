@@ -981,6 +981,114 @@ span.title {
 		-webkit-box-shadow: 0 0 8px #bbb inset;
     -moz-box-shadow: 0 0 8px #bbb inset;
 		padding: 25px;
+		&.video_space .inner_space {
+		  letter-spacing: 0px;
+		  background: #5d5d5d;
+		  min-height: 420px;
+		  width: 95%;
+		  margin: 20px auto 0;
+      border-radius: 15px;
+      -moz-border-radius: 15px;
+      -webkit-border-radius: 15px;
+      box-shadow: 0 0 20px #222 inset;
+  		-webkit-box-shadow: 0 0 20px #222 inset;
+      -moz-box-shadow: 0 0 20px #222 inset;
+      padding: 24px;
+      .content {
+        width: 564px;
+        float: left;
+        height: 100%;
+        .video_span {
+          background: #000000;
+          height: 330px;
+          color: #fcfcfc;
+          font-size: 32px;
+          text-align: center;
+          border: 2px solid #7b7b7b;
+        }
+        .description {
+          width: 97%;
+          margin: 10px auto 0;
+          color: #fcfcfc;
+          font-family: Arial;
+          .title {
+            color: #bacf76;
+            font-size: 16px;
+            margin-bottom: 15px;
+            font-weight: bold;
+          }
+        }
+      }
+      .menu {
+        width: 305px;
+        float: right;
+        height: 100%;
+        .head {
+          background: #414141;
+          padding: 0;
+          font-size: 14px;
+          color: #e0e0e0;
+          line-height: 3em;
+          text-shadow: 1px 1px #111;
+          vertical-align: middle;
+          font-family: Arial;
+          font-weight: bold;
+          .video_icon {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            vertical-align: middle;
+            margin: -5px 2px 0 8px;
+          }
+        }
+        .list {
+          background: #7b7b7b;
+          font-size: 12px;
+          color: #bacf76;
+          height: 380px;
+          overflow-y: auto;
+          font-size: 22px;
+          text-align: center;
+          .video_entry:first-child {
+           padding-top: 16px; 
+          }
+          .video_entry:last-child {
+           padding-bottom: 16px; 
+          }
+          .video_entry {
+					  cursor: pointer;
+            border-bottom: 1px solid gray;
+            margin: 0 0 0;
+            height: 92px;
+						padding: 8px 17px;
+						&:hover {
+              background: #8c8c8c;
+						}
+						.preview {
+							border: 1px solid #e0e0e0;
+							width: 120px;
+							height: 90px;
+							float: left;
+							background: #000;
+							margin-right: 10px;
+						}
+						.title {
+              text-shadow: 1px 1px #666;
+              font-size: 13px;
+              font-family: Arial;
+              text-align: left;
+              padding-left: 5px;
+						}
+						.youtube_video_id {
+						  display: none;
+						}
+						.description {
+						  display: none;
+						}
+          }
+        }
+      }
+		}
   }
   .salespush {
     font-size: 22px;
