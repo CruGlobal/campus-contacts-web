@@ -59,6 +59,7 @@ en:
     survey_mode_tip: "Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts."
     terms: 'Terms and Conditions'
     privacy: 'Privacy Policy'
+    help: "Resources and Help"
     login: "Log In"
     logout: "Sign Out"
     profile: 'My Profile'
@@ -259,6 +260,7 @@ en:
       request_key_help: "A Keyword is both the name of the survey and what the person would text to fill out the survey questions. For example, you would say, 'Text UFCRU to the number 85005.' UFCRU is the keyword."
       headline_html: An online <span class="babyblue">follow-up system</span> with your audience in mind.
       subheadline_html: Students text to connect. You empower follow-up from the web or a smart phone.
+      get_details_html: Get the Details & <a href="/welcome/tour" class="learnmore">Learn More</a> or %{link}
       get_details_html: Get the Details & <a href="/welcome/tour" class="learnmore">Learn More</a> or %{link}
       get_started: "Get Started"
     wizard:
