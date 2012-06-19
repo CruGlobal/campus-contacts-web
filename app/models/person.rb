@@ -259,19 +259,27 @@ class Person < ActiveRecord::Base
   end
 
   def primary_organization=(org)
-    self.user.primary_organization_id = org.id
-    self.user.save!
+    if org.present? && self.user
+      self.user.primary_organization_id = org.id
+      self.user.save!
+    else
+      false
+    end
   end
 
   def primary_organization
-    org_id = self.user.primary_organization_id
-    if org_id.present?
-      org = Organization.find(org_id)
+    if self.organizations.present?
+      org_id = self.user.primary_organization_id
+      if org_id.present?
+        org = Organization.find(org_id)
+      else    
+        org = self.organizations.first
+        self.primary_organization = org
+      end
+      org
     else
-      org = self.organizations.first
-      self.primary_organization = org
+      false
     end
-    org
   end
 
   def gender=(gender)
