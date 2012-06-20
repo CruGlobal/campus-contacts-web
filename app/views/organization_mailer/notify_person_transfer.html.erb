@@ -6,31 +6,31 @@
   <ul>
   <% sender = '' %>
   <% old_org = '' %>
-  <% @transfer_logs.each do |contact| %>
-    <% if sender.blank? || sender != contact.transferred_by.name %>
-      <% sender = contact.transferred_by.name %>
-      <% if contact != @transfer_logs.first %>
-        </li>
-      <% end %>
+  <% @transfer_logs.each do |contact| %>  
+    <% if old_org.blank? || old_org != contact['old_org_name'] %>
+      <% old_org = contact['old_org_name'] %>
       <li>
+        <b>From <%= contact['old_org_name'] %></b>
+      </li>
+    <% end %>
+    <% if sender.blank? || sender != contact['transferer_name'] %>
+      <% sender = contact['transferer_name'] %>
+      <ul>
         Transferred by
         <i>
           <%= sender %>
-          <%= "(#{contact.transferred_by.email})" if contact.transferred_by.email.present? %>
+          <%= "(#{contact['transferer_email']})" if contact['transferer_email'].present? %>
         </i>
-    <% end %>
-    <% if old_org.blank? || old_org != contact.old_organization.name %>
-      <% old_org = contact.old_organization.name %>
-      <ul>
-        <b>From <%= old_org %></b>
       </ul>
     <% end %>
     <ul>
+      <ul>
       - 
       <i>
-        <%= contact.person.name %>
-        <%= "(#{contact.person.email})" if contact.person.email.present? %>
+        <%= contact['contact_name'] %>
+        <%= "(#{contact['contact_email']})" if contact['contact_email'].present? %>
       </i>
+      </ul>
     </ul>
   <% end %>
   </ul>
