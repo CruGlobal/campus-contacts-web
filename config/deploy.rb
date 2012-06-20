@@ -137,10 +137,7 @@ task :local_changes, roles: :app do
     ln -s #{shared_path}/config/database.yml #{release_path}/config/database.yml &&
     ln -s #{shared_path}/config/config.yml #{release_path}/config/config.yml &&
     ln -s #{shared_path}/config/s3.yml #{release_path}/config/s3.yml &&
-    ln -s #{shared_path}/config/initializers/email.rb #{release_path}/config/initializers/email.rb &&
-    
-    rm -Rf #{release_path}/tmp && 
-    ln -s #{shared_path}/tmp #{release_path}/tmp 
+    ln -s #{shared_path}/config/initializers/email.rb #{release_path}/config/initializers/email.rb
   CMD
 end
 
