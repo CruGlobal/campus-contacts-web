@@ -25,6 +25,7 @@ job_type :rails,    "cd :path && RAILS_ENV=:environment /usr/local/bin/bundle ex
 every 4.hours do
   rake "infobase:sync"
   rails "runner Batch.person_transfer_notify"
+  rails "runner Batch.new_person_notify"
 end
 
 # Learn more: http://github.com/javan/whenever

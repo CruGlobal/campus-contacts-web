@@ -12,7 +12,7 @@ class EmailAddress < ActiveRecord::Base
   
   def merge(other)
     EmailAddress.transaction do
-      if other.primary? && other.updated_at > updated_at
+      if updated_at && other.primary? && other.updated_at > updated_at
         person.email_addresses.collect {|e| e.update_attribute(:primary, false)}
         new_primary = person.email_addresses.detect {|e| e.email == other.email}
         new_primary.update_attribute(:primary, true) if new_primary
