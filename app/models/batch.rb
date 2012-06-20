@@ -49,7 +49,7 @@ class Batch # < ActiveRecord::Base
           intro = "As the Admin of #{organization.name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, there are #{new_contacts.size} new contact#{'s' if new_contacts.size > 1} in your organization. Please login to missionhub.com as soon as possible to followup the contact#{'s' if new_contacts.size > 1}. Below is the list of new contacts:"
           
           if admin.email.present?
-            OrganizationMailer.enqueue.notify_person_transfer(admin.email, intro, new_contacts)
+            OrganizationMailer.enqueue.notify_new_people(admin.email, intro, new_contacts)
             # OrganizationMailer.notify_new_people(admin.email, intro, new_contacts).deliver
             new_contacts.update_all(notified: true)
             queued_email += 1
