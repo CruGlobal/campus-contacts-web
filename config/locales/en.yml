@@ -265,6 +265,7 @@ en:
       learn_more: "Learn More "
     tutorials:
       video_headline_html: "Got questions?"
+      get_started: "Get Started!"
       video_subheadline_html: "We can help!"
     wizard:
       welcome: Welcome!
