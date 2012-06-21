@@ -8,6 +8,7 @@ class Person < ActiveRecord::Base
   self.primary_key = 'personID'
 
   has_many :person_transfers
+  has_many :new_people
   has_one :transferred_by, class_name: "PersonTransfer", foreign_key: "transferred_by_id"
   
   belongs_to :user, class_name: 'User', foreign_key: 'fk_ssmUserId'
