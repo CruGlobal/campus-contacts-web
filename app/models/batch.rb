@@ -10,7 +10,7 @@ class Batch # < ActiveRecord::Base
       transferred_contacts = notify_entries.where(new_organization_id: organization.id).order('old_organization_id')
       if organization.admins.count > 0
         organization.admins.each do |admin|
-          intro = "As the Admin of #{organization.name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, you have been sent #{transferred_contacts.size} contact#{'s' if transferred_contacts.size > 1}. Please login to missionhub.com as soon as possible to followup the contact#{'s' if transferred_contacts.size > 1}. There may be more information about the contacts in the comment section of their individual profile. If not, you may want to contact the senders at their email address. Below are the contacts sen
+          intro = "As the Admin of #{organization.name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, you have been sent #{transferred_contacts.size} contact#{'s' if transferred_contacts.size > 1}. Please login to missionhub.com as soon as possible to followup the contact#{'s' if transferred_contacts.size > 1}. There may be more information about the contacts in the comment section of their individual profile. If not, you may want to contact the senders at their email address. Below are the contacts sent:"
           if admin.email.present?
             formated_transferred_contacts = Array.new
             transferred_contacts.each do |contact|
