@@ -3245,6 +3245,15 @@ ActiveRecord::Schema.define(:version => 20120608170021) do
     t.integer  "transferred_by_id"
   end
 
+  create_table "mh_question_rules", :force => true do |t|
+    t.integer  "survey_element_id"
+    t.integer  "rule_id"
+    t.string   "trigger_keywords"
+    t.string   "extra_parameters"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
   create_table "mh_question_sheets", :force => true do |t|
     t.string  "label",              :limit => 60,                    :null => false
     t.boolean "archived",                         :default => false
@@ -3269,6 +3278,16 @@ ActiveRecord::Schema.define(:version => 20120608170021) do
     t.string   "access_key"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "mh_rules", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "action_method"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+    t.integer  "limit_per_survey", :default => 0
+    t.string   "rule_code"
   end
 
   create_table "mh_survey_elements", :force => true do |t|
@@ -3576,8 +3595,8 @@ ActiveRecord::Schema.define(:version => 20120608170021) do
     t.string   "preferredName",                 :limit => 50
     t.string   "gender",                        :limit => 1
     t.string   "region",                        :limit => 5
-    t.boolean  "workInUS",                                            :default => true,  :null => false
-    t.boolean  "usCitizen",                                           :default => true,  :null => false
+    t.boolean  "workInUS",                                                                           :default => true,  :null => false
+    t.boolean  "usCitizen",                                                                          :default => true,  :null => false
     t.string   "citizenship",                   :limit => 50
     t.boolean  "isStaff"
     t.string   "title",                         :limit => 5
@@ -3589,7 +3608,7 @@ ActiveRecord::Schema.define(:version => 20120608170021) do
     t.string   "greekAffiliation",              :limit => 50
     t.string   "maritalStatus",                 :limit => 20
     t.string   "numberChildren",                :limit => 2
-    t.boolean  "isChild",                                             :default => false, :null => false
+    t.boolean  "isChild",                                                                            :default => false, :null => false
     t.text     "bio",                           :limit => 2147483647
     t.string   "image",                         :limit => 100
     t.string   "occupation",                    :limit => 50
@@ -3619,6 +3638,7 @@ ActiveRecord::Schema.define(:version => 20120608170021) do
     t.string   "strategy",                      :limit => 20
     t.integer  "fb_uid",                        :limit => 8
     t.datetime "date_attributes_updated"
+    t.decimal  "balance_daily",                                       :precision => 10, :scale => 2
   end
 
   add_index "ministry_person", ["accountNo"], :name => "accountNo_ministry_Person"

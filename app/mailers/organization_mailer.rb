@@ -15,7 +15,6 @@ class OrganizationMailer < ActionMailer::Base
   end
   
   def notify_person_transfer(to, intro, transfer_logs)
-    logs = transfer_logs
     @transfer_logs = transfer_logs
     @intro = intro
     mail to: to, subject: "Contacts Transfer Notification"
