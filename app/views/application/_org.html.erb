@@ -2,7 +2,7 @@
   <%= link_to(set_current_organization_membership_path(org), class: "orgname", title: "Go to #{org}") do  %><label><%= org %></label><% end %>
   <div class="orgactions">
     <%= link_to("", set_current_organization_membership_path(org), class: "icon magnify", title: "Go to #{org}") %>
-    <%= link_to("", set_primary_organization_membership_path(org), class: "icon #{primary ? 'star' : 'star_empty'}", title: "Set #{org} as your default") %>
+    <%= link_to("", set_primary_organization_membership_path(org), class: "icon #{primary ? 'star' : 'star_empty'}", title: "Set #{org} as your default organization") %>
   </div>
   <% if org.show_sub_orgs? && org.children.order('organizations.name').length > 0 %>
     <ul>

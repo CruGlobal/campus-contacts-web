@@ -27,7 +27,7 @@ class OrganizationMembership < ActiveRecord::Base
   end
   
   def primary=(val)
-    if val == true && person.present?
+    if val  && person.present?
       person.organization_memberships.update_all("`primary` = 0")
     end
     super
@@ -37,7 +37,7 @@ class OrganizationMembership < ActiveRecord::Base
   
     def set_primary
       if person
-        self.primary = (person.primary_organization ? false : true)
+        person.primary_organization = self.organization
       end
       true
     end
