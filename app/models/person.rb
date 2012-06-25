@@ -9,6 +9,7 @@ class Person < ActiveRecord::Base
   self.primary_key = 'personID'
 
   has_many :person_transfers
+  has_many :new_people
   has_one :transferred_by, class_name: "PersonTransfer", foreign_key: "transferred_by_id"
   belongs_to :user, class_name: 'User', foreign_key: 'fk_ssmUserId'
   has_many :phone_numbers, autosave: true
@@ -85,9 +86,12 @@ class Person < ActiveRecord::Base
     :conditions => "org_roles.organization_id = #{org_id} AND concat(firstName,' ',lastName) LIKE '%#{keyword}%' OR concat(lastName, ' ',firstName) LIKE '%#{keyword}%' OR emails.email LIKE '%#{keyword}%'"
   } }
 
-
   def assigned_tos_by_org(org)
     assigned_tos.where(organization_id: org.id)
+  end
+
+  def has_similar_person_by_name_and_email?
+    Person.where(firstName: firstName, lastName: lastName).includes(:primary_email_address).where("email_addresses.email LIKE ?", email).where("personId != ?", personID).first
   end
 
   def has_similar_person_by_name_and_email?(email)

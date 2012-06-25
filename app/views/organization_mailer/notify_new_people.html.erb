@@ -5,10 +5,9 @@
 <p>
   <ul>
 	  <% @new_people.each do |new_person| %>
-			<% person = Person.find(new_person.person_id)%>
 			<li>
-				<b><%= person.name %></b>
-				<%= "(#{person.email})" if person.email.present? %>
+				<b><%= new_person['person_name'] %></b>
+				<%= "(#{new_person['person_email']})" if new_person['person_email'].present? %>
 			</li>
 	  <% end %>
   </ul>

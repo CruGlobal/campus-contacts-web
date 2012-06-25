@@ -224,7 +224,7 @@ class ContactsController < ApplicationController
         @people = @people.includes(:organizational_roles).where("organizational_roles.organization_id" => @organization.id)
       end
       if params[:q] && params[:q][:s].include?('mh_answer_sheets')
-        @people = @people.joins({:answer_sheets => :survey}).where("mh_surveys.organization_id" => @organization.id)
+        @people = @people.joins(:answer_sheets => :survey).where('mh_surveys.organization_id' => @organization.id)
       end
       if params[:survey].present?
         @people = @people.joins(:answer_sheets).where("mh_answer_sheets.survey_id" => params[:survey])
@@ -287,7 +287,6 @@ class ContactsController < ApplicationController
       if params[:person_updated_from].present? && params[:person_updated_to].present?
         @people = @people.find_by_person_updated_by_daterange(params[:person_updated_from], params[:person_updated_to])
       end
-      #here
 
       if params[:search_type].present? && params[:search_type] == "basic"
         @people = @people.search_by_name_or_email(params[:query], current_organization.id)
@@ -302,7 +301,6 @@ class ContactsController < ApplicationController
       @all_people = @people
       @people = @people.page(params[:page])
     
-      
     end
   
     def fetch_mine
@@ -329,7 +327,7 @@ class ContactsController < ApplicationController
         
         answers[answer_sheet.person_id] ||= {}
         questions.each do |q|
-          answers[answer_sheet.person_id][q.id] = [q.display_response(answer_sheet), answer_sheet.updated_at] if q.display_response(answer_sheet).present?
+          answers[answer_sheet.person_id][q.id] = [q.display_response(answer_sheet), answer_sheet.updated_at]# if q.display_response(answer_sheet).present? or (q.attribute_name == "email" and q.object_name == 
         end
       end
       answers

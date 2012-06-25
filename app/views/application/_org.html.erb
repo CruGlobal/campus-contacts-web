@@ -5,7 +5,7 @@
     <%= link_to("", set_primary_organization_membership_path(org), class: "icon #{primary ? 'star' : 'star_empty'}", title: "Set #{org} as your default organization") %>
   </div>
   <% if org.show_sub_orgs? && org.children.order('organizations.name').length > 0 %>
-    <ul>
+    <ul class="sf-scrolling" items="8" interval="100">
       <% org.children.order('organizations.name').each do |org| %>
         <%= render 'application/org', org: org, primary: current_person.primary_organization == org, involved: current_person.organizations.include?(org) %>
       <% end %>

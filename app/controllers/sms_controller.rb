@@ -135,6 +135,7 @@ class SmsController < ApplicationController
           msg = question.label_with_choices
           separator = / [a-z]\)/
         end
+        
         unless person.firstName.blank? || person.lastName.blank?
           question_no = get_question_no(survey, person) 
           msg = "#{question_no} #{msg}"
