@@ -59,6 +59,7 @@ en:
     survey_mode_tip: "Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts."
     terms: 'Terms and Conditions'
     privacy: 'Privacy Policy'
+    help: "Resources and Help"
     login: "Log In"
     logout: "Sign Out"
     profile: 'My Profile'
@@ -267,6 +268,11 @@ en:
       video_subheadline_html: We can help!
       get_details_html: Get the Details & <a href="/welcome/tour" class="learnmore">Learn More</a> or %{link}
       get_started: "Get Started"
+      learn_more: "Learn More "
+    tutorials:
+      video_headline_html: "Got questions?"
+      get_started: "Get Started!"
+      video_subheadline_html: "We can help!"
     wizard:
       welcome: Welcome!
       verify_identity: Verify Your Identity

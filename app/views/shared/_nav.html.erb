@@ -46,8 +46,11 @@
       <% else %>
         <% unless params[:controller] == 'sessions' %>
           <li>
+            <%= link_to(t('nav.help'), "http://blog.missionhub.com/", :class => "navlink") %>
+          </li>
+          <li>
             <% if mhub? %>
-              <%= link_to('nav.login', user_omniauth_authorize_path(:facebook_mhub), :class => "loginbt") %>
+              <%= link_to(t('nav.login'), user_omniauth_authorize_path(:facebook_mhub), :class => "loginbt") %>
             <% else %>
               <%= link_to(t('nav.login'), new_user_session_path, :class => "loginbt") %>
             <% end %>

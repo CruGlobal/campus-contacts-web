@@ -25,7 +25,7 @@ function select_video_by_id(video_div){
 	info = $("#welcome_controller .inner_space .content .description");
 	info.children('.title').html(video_div.children('.title').html());
 	info.children('.details').html(video_div.children('.description').html());
-	$("#video_frame").attr("src", "http://www.youtube.com/embed/"+id+"?showinfo=0&autohide=1");
+	$("#video_frame").attr("src", "http://www.youtube.com/embed/"+id+"?showinfo=0&autohide=1&autoplay=1");
 }
 
 function select_video_by_position(video_position){
