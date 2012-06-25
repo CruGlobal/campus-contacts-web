@@ -15,7 +15,8 @@ $ ->
       speed:         0,
       pathLevels: 2,
       delay: 300
-    }) 
+    })
+  	$('.sf-scrolling').superscroll(); 
         
   $('input[type=checkbox].primary').live 'click', -> 
     fieldset = $(this).closest('.fieldset')
