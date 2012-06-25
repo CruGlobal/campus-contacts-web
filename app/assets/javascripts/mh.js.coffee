@@ -158,9 +158,13 @@ $.mh.logout = (url) ->
   else
     '/sign_out'
   if FB? && FB._userStatus != "unknown"
-    FB.logout((request) ->
+    #try
+    #  FB.logout((request) ->
+    #    document.location = next
+    #  )
+    #catch err
       document.location = next
-    ) 
+      
   else
     document.location = next
 
