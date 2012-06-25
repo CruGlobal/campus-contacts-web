@@ -18,7 +18,7 @@ require "whenever/capistrano"
 
 set :application, "mh"
 # set :repository, "http://svn.uscm.org/#{application}/trunk"
-set :repository,  "git@git.uscm.org:missionhub.git"
+set :repository,  "git://github.com/thelabtech/missionhub.git"
 # set :checkout, 'co'
 set :keep_releases, '3'
 
