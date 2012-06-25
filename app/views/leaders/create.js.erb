@@ -11,3 +11,7 @@ if (leaders.hasClass('showall')) {
 	leaders.css({height: leaders.attr("data-height"), overflow: 'hidden'})
 }
 $('.leaders_list ul').prepend('<li class="leader" data-id="<%= @person.id %>"><span class="name"><%= j(link_to(@person, '#')) %></span></li>')
+<% if params[:update] %>
+  $.a("<%= t('contacts.create.success', name: Person.find(params[:id]).name) %>")
+  window.location = "/people/" + <%= params[:id] %>
+<% end %>

@@ -4,7 +4,7 @@ class EmailAddress < ActiveRecord::Base
   validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
   before_validation :set_primary, on: :create
   after_destroy :set_new_primary
-  validates_uniqueness_of :email
+  validates_uniqueness_of :email, on: :create, message: "already taken"
   
   def to_s
     email
@@ -21,6 +21,10 @@ class EmailAddress < ActiveRecord::Base
       other.reload
       other.destroy
     end
+  end
+
+  def is_unique?
+    EmailAddress.where(email: email).blank?
   end
   
   protected
@@ -47,4 +51,7 @@ class EmailAddress < ActiveRecord::Base
     end
     true
   end
+
+
+
 end

@@ -75,7 +75,7 @@ class LeadersControllerTest < ActionController::TestCase
       assert_difference('OrganizationalRole.count') do
         assert_difference('User.count') do
           assert_difference('Person.count') do
-            xhr :post, :add_person, person: {firstName: 'John', lastName: 'Doe', gender: '1', email_address: {email: 'new_user@example.com'}, phone_number: {phone: '444-444-4444'}}, notify: '1' 
+            xhr :post, :add_person, person: {firstName: 'John1', lastName: 'Doe', gender: '1', email_address: {email: 'new_user@example.com'}, phone_number: {phone: '444-444-4444'}}, notify: '1' 
             assert_response :success 
             assert_equal(nil, flash[:error])
             assert_not_nil(assigns(:person).user, "New user didn't get created")
@@ -93,7 +93,7 @@ class LeadersControllerTest < ActionController::TestCase
     end
     
     should "validate email when adding a leader" do 
-      xhr :post, :add_person, person: {firstName: 'John', lastName: 'Doe', gender: '1', email_address: {email: 'Howie Koffman <howie.kauffman@facultycommons.org>'}, phone_number: {phone: '444-444-4444'}}, notify: '1' 
+      xhr :post, :add_person, person: {firstName: 'John1', lastName: 'Doe', gender: '1', email_address: {email: 'Howie Koffman <howie.kauffman@facultycommons.org>'}, phone_number: {phone: '444-444-4444'}}, notify: '1' 
       assert_response :success 
       assert_equal("Email Address isn't valid.<br />", flash[:error])
       assert_template 'leaders/new'

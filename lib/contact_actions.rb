@@ -42,9 +42,14 @@ module ContactActions
         return
       else
         errors = []
-        errors << 'First name is required.' unless @person.firstName.present?
-        errors << 'Phone number is not valid.' if @phone && !@phone.valid?
-        errors << 'Email address is not valid.' if @email && !@email.valid?
+        errors << "#{I18n.t('people.create.firstname_error')}<br />" unless @person.firstName.present?
+        errors << "#{I18n.t('people.create.phone_number_error')}<br />" if @phone && !@phone.valid?
+        if @email && !@email.is_unique?
+          errors << "#{I18n.t('people.create.email_taken')}<br />" 
+        elsif @email && !@email.valid?
+          errors << "#{I18n.t('people.create.email_error')}<br />" 
+        end
+        
         respond_to do |wants|
           wants.js do 
             flash.now[:error] = errors.join('<br />')

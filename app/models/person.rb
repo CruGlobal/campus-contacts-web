@@ -3,16 +3,15 @@ require 'vpim/book'
 require 'ccc/person'
 
 class Person < ActiveRecord::Base
+  
   include Ccc::Person
   self.table_name = 'ministry_person'
   self.primary_key = 'personID'
 
   has_many :person_transfers
   has_one :transferred_by, class_name: "PersonTransfer", foreign_key: "transferred_by_id"
-  
   belongs_to :user, class_name: 'User', foreign_key: 'fk_ssmUserId'
   has_many :phone_numbers, autosave: true
-
   has_one :primary_phone_number, class_name: "PhoneNumber", foreign_key: "person_id", conditions: {primary: true}
   has_many :locations
   has_one :latest_location, order: "updated_at DESC", class_name: 'Location'
@@ -21,8 +20,8 @@ class Person < ActiveRecord::Base
   has_many :education_histories
   has_many :email_addresses, autosave: true
   has_one :primary_email_address, class_name: "EmailAddress", foreign_key: "person_id", conditions: {primary: true}
-  has_one :primary_organization_membership, class_name: "OrganizationMembership", foreign_key: "person_id", conditions: {primary: true}
-  has_one :primary_organization, through: :primary_organization_membership, source: :organization
+  has_one :primary_org_role, class_name: "OrganizationalRole", foreign_key: "person_id", conditions: {primary: true}
+  has_one :primary_org, through: :primary_org_role, source: :organization
   has_many :answer_sheets
   has_many :contact_assignments, class_name: "ContactAssignment", foreign_key: "assigned_to_id"
   has_many :assigned_tos, class_name: "ContactAssignment", foreign_key: "person_id"
@@ -58,7 +57,7 @@ class Person < ActiveRecord::Base
 
   scope :find_by_person_updated_by_daterange, lambda { |date_from, date_to| {
     :conditions => ["date_attributes_updated >= ? AND date_attributes_updated <= ? ", date_from, date_to]
-  } }
+  }}
 
   scope :order_by_highest_default_role, lambda { |order| {
     :select => "ministry_person.*",
@@ -133,21 +132,34 @@ class Person < ActiveRecord::Base
 
   def orgs_with_children
     organizations.collect {|org|
-      org.parent ? 
-        org.parent.show_sub_orgs? ? 
-        [org] + org.children
-      : 
-        [org] 
-      : 
-        org.show_sub_orgs? ?
-        [org] + org.children
-      :
-        [org]
+      if org.parent
+        org.parent.show_sub_orgs? ? [org] + org.children : [org] 
+      else
+        org.show_sub_orgs? ? [org] + org.children : [org]
+      end
     }.flatten.uniq_by{ |o| o.id }
-
-    #organizations.collect {|top_org| top_org.parent ? (top_org.show_sub_orgs? ? top_org.children + top_org.descendants : [])
-    #  : ([top_org])
-    #}.flatten
+  end
+  
+  def all_organization_and_children
+    orgs = Array.new
+    organizations.each do |org|
+      orgs << org
+      child_org = collect_all_child_organizations(org)
+      orgs += child_org
+    end
+    Organization.where(id: orgs.collect(&:id))
+  end
+  
+  def collect_all_child_organizations(org)
+    child_orgs = Array.new
+    if org.children.present?
+      org.children.each do |child_org|
+        child_orgs << child_org
+        other_child_org = collect_all_child_organizations(child_org)
+        child_orgs += other_child_org
+      end
+    end
+    child_orgs
   end
 
   def phone_number
@@ -244,6 +256,30 @@ class Person < ActiveRecord::Base
     self.fb_uid = authentication['uid']
     save(validate: false)
     self
+  end
+
+  def primary_organization=(org)
+    if org.present? && self.user
+      self.user.primary_organization_id = org.id
+      self.user.save!
+    else
+      false
+    end
+  end
+
+  def primary_organization
+    if self.organizations.present?
+      org_id = self.user.primary_organization_id
+      if org_id.present?
+        org = Organization.find(org_id)
+      else    
+        org = self.organizations.first
+        self.primary_organization = org
+      end
+      org
+    else
+      false
+    end
   end
 
   def gender=(gender)

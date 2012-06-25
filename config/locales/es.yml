@@ -151,6 +151,8 @@ es:
       request_key_help: "La palabra clave es el nombre de la encuesta y también lo que la persona va escribir para llenar su encuesta. Por ejemplo, puedes decir, 'Escribe UFCRU al número 85005.' UFCRU es la palabra clave."
       headline_html: Un sistema de seguimiento <span class="babyblue">en línea</span> con tu audiencia en mente.
       subheadline_html: Escribir a estudiante para conectar. Tu seguimiento potencial desde la web o un teléfono inteligente.
+      video_headline_html: Tiene preguntas?
+      video_subheadline_html: Podemos ayudarle!
       get_details_html: Obtener detalles& <a href="/welcome/tour" class="learnmore">Aprender más</a> or %{link}
       get_started: "Comenzar"
     wizard:
