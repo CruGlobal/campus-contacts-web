@@ -328,9 +328,6 @@ class PeopleController < ApplicationController
     some_roles = old_roles if params[:include_old_roles] == "yes"
     to_be_added_roles = new_roles - old_roles
     to_be_removed_roles = old_roles - new_roles - some_roles
-    
-    puts to_be_added_roles.inspect
-    puts to_be_removed_roles.inspect
 
     person.organizational_roles.where(organization_id: current_organization.id, role_id: to_be_removed_roles).each do |organizational_role|
       organizational_role.destroy
