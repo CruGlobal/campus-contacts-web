@@ -351,6 +351,7 @@ class PeopleController < ApplicationController
 
     new_roles = new_roles - some_roles #remove roles that SOME of the persons have. We should not touch them. They are disabled in the views anyway.
 
+    some_roles = old_roles if params[:include_old_roles] == "yes"
     to_be_added_roles = new_roles - old_roles
     to_be_removed_roles = old_roles - new_roles - some_roles
 
