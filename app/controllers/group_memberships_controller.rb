@@ -71,7 +71,7 @@ class GroupMembershipsController < ApplicationController
     def has_permission
       return true if can?(:manage, current_organization)
       #return true if can?(:lead, current_organization)
-      return true if @group.leaders.include?(current_person)
+      return true if @group.organization.leaders.include?(current_person)
       return true if @group.list_publicly? && params[:role] == 'interested' && @person == current_person
       return true if @group.public_signup? && params[:role] == 'member' && @person == current_person
       return false

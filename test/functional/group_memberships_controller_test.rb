@@ -56,7 +56,8 @@ class GroupMembershipsControllerTest < ActionController::TestCase
       setup do
         user = Factory(:user_with_auxs)
         user2 = Factory(:user_with_auxs)
-        sign_in user
+        user3 = Factory(:user_with_auxs)
+        sign_in user3
         @org.add_leader(user.person, user2.person)
       end
       
