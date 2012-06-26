@@ -53,7 +53,7 @@ class Surveys::QuestionsController < ApplicationController
     if (params[:question_id])
       @question = Element.find(params[:question_id])
     else
-      return unless validate_then_create_chosen_leaders
+      # return unless validate_then_create_chosen_leaders
       type, style = params[:question_type].split(':')
       @question = type.constantize.create!(params[:question].merge(style: style))
     end
@@ -65,6 +65,9 @@ class Surveys::QuestionsController < ApplicationController
     else
       @survey.elements << @question
     end
+    
+    params[:id] = @question.id
+    evaluate_option_autonotify
 
     respond_to do |wants|
       if !@question.new_record?
@@ -168,10 +171,8 @@ class Surveys::QuestionsController < ApplicationController
       parameters = Hash.new
       parameters['leaders'] = Array.new
       invalid_emails = Array.new
-      Rails.logger.info ">>>> #{params[:survey_id]}"
-      Rails.logger.info ">>>> #{params[:id]}"
+      
       survey_element_id = SurveyElement.find_by_survey_id_and_element_id(params[:survey_id], params[:id]).id
-      Rails.logger.info ">>>> #{survey_element_id}"
       
       leaders.each do |leader|
         Person.find(leader).has_a_valid_email? ? parameters['leaders'] << leader.to_i : invalid_emails << leader.to_i
