@@ -4,13 +4,17 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def facebook
     begin
       facebook_login
-      redirect_to @user ? redirect_location(:user, @user) : '/'
+      redirect_to @user ? after_sign_in_path_for(@user) : '/'
     rescue NoEmailError
       flash[:error] = t('.email_required')
       redirect_to '/users/sign_in'
     rescue FailedFacebookCreateError
       redirect_to '/users/sign_in'
     end
+  end
+  
+  def after_sign_in_path_for(resource)
+    return request.referrer || request.env['omniauth.origin']
   end
   
   def facebook_mhub
