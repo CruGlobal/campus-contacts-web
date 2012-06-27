@@ -88,7 +88,7 @@ class Person < ActiveRecord::Base
   
   scope :get_and_order_by_latest_answer_sheet_answered, lambda { |order, org_id| {
     #"SELECT * FROM (SELECT * FROM missionhub_dev.ministry_person mp INNER JOIN missionhub_dev.organizational_roles ro ON mp.personID = ro.person_id WHERE ro.organization_id = #{@organization.id} AND (ro.role_id = 3 AND ro.followup_status <> 'do_not_contact')) mp LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM missionhub_dev.mh_answer_sheets ass INNER JOIN missionhub_dev.mh_surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{@organization.id}) ass ON ass.person_id = mp.personID GROUP BY mp.personID ORDER BY #{params[:q][:s].gsub('mh_answer_sheets', 'ass')}"
-    :joins => "LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM missionhub_dev.mh_answer_sheets ass INNER JOIN missionhub_dev.mh_surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{org_id}) ass ON ass.person_id = ministry_person.personID",
+    :joins => "LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM mh_answer_sheets ass INNER JOIN mh_surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{org_id}) ass ON ass.person_id = ministry_person.personID",
     :group => "ministry_person.personID",
     :order => "#{order.gsub('mh_answer_sheets', 'ass')}"
   } }
