@@ -4,7 +4,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def facebook
     begin
       facebook_login
-      redirect_to @user ? redirect_location(:user, @user) : '/'
+      redirect_to @user ? user_root_path : "/"
     rescue NoEmailError
       flash[:error] = t('.email_required')
       redirect_to '/users/sign_in'
