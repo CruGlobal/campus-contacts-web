@@ -36,11 +36,11 @@
   <ul class="pillmenu">
     <li><%= link_to(t('contacts.add_contact'), "", class: 'add_contact') %></li>
   </ul>
-  <ul class="pillmenu">
+  <ul class="pillmenu control_toggle">
     <li><%= link_to(t('contacts.assign'), "", class: 'assign') %></li>
     <li><%= link_to(t('contacts.unassign'), "", id: 'bulk_unassign') %></li>
   </ul>
-  <ul class="pillmenu">
+  <ul class="pillmenu control_toggle">
     <li>
       <%= link_to('Send', '#', class: 'action_dropdown') %>
       <ul style="display:none">
@@ -58,7 +58,7 @@
     <li><%= link_to(t('.filter'), '#', id: 'filter_link') %></li>
   </ul>
   
-  <ul class="pillmenu">
+  <ul class="pillmenu control_toggle">
     <li>
       <%= link_to('Download', '#', class: 'action_dropdown') %>
       <ul style="display:none">
