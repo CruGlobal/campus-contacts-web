@@ -11,7 +11,7 @@ gem 'http_accept_language'
 gem 'capistrano'
 gem 'rest-client'
 gem 'crack'
-gem 'resque'
+gem 'resque', '~> 1.20.0'
 gem 'foreigner'
 gem "devise", '1.5.1' #, git: "git://github.com/plataformatec/devise.git"
 gem 'omniauth'
