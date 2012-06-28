@@ -50,38 +50,6 @@ servers = ["108.171.184.122"]
   set :deploy_via, :remote_cache
 end
 
-#task :staging do
-  #set :deploy_to, "/var/www/html/integration/#{application}"
-  #set :environment, 'staging'
-  #set :rails_env, 'staging'
-  
-  #role :db, "172.16.1.25", primary: true
-  #role :web, "172.16.1.25"
-  #role :app, "172.16.1.25"
-  #set :deploy_via, :remote_cache
-#end
-
-task :fast do
-  set :deploy_to, "/var/www/#{application}"
-  set :environment, 'production'
-  set :rails_env, 'production'
-  
-  role :db, "10.10.11.167", primary: true
-  role :web, "10.10.11.167"
-  role :app, "10.10.11.167"
-  set :deploy_via, :remote_cache
-end
-  
-task :production do
-  set :deploy_to, "/var/www/html/production/#{application}"
-  set :environment, 'production'
-  set :rails_env, 'production'
-
-  
-  server "50.56.172.42", :web, :app, :db, primary: true
-  set :deploy_via, :remote_cache
-end
-
 
 deploy.task :restart, :roles => [:app], :except => {:no_release => true} do
   if rails_env == 'production'
