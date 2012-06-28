@@ -57,7 +57,7 @@ gem "paperclip", :git => 'git://github.com/thoughtbot/paperclip.git'
 gem 'aws-sdk'#, '~> 1.3.4'
 
 gem 'bitly'
-#gem 'copycopter_client'
+gem 'copycopter_client'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
