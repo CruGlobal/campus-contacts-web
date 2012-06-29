@@ -93,6 +93,7 @@ class Surveys::QuestionsController < ApplicationController
     respond_to do |wants|
       if @question.update_attributes(params[:question])
         evaluate_option_autonotify
+        evaluate_option_autoassign
         wants.js {}
         wants.xml  { head :ok }
       else
@@ -178,7 +179,28 @@ class Surveys::QuestionsController < ApplicationController
     end
     
     def evaluate_option_autoassign
+      rule = Rule.find_by_rule_code("AUTOASSIGN")
+      triggers_array = Array.new
+      triggers = params[:assignment_trigger_words].split(',')
+      triggers.each do |t|
+        triggers_array << t.strip if t.strip.present?
+      end
+      triggers = triggers_array.join(", ")
       
+      parameters = Hash.new
+      parameters['type'] = params[:assign_contact_to]
+      parameters['id'] = params[:autoassign_selected_id]
+      parameters['name'] = params[:autoassign_keyword]
+      
+      
+      survey_element_id = SurveyElement.find_by_survey_id_and_element_id(params[:survey_id], params[:id]).id
+      if question_rule = QuestionRule.find_by_survey_element_id_and_rule_id(survey_element_id, rule.id)
+        question_rule.update_attribute('trigger_keywords',triggers)
+        question_rule.update_attribute('extra_parameters',parameters)
+      else
+        question_rule = QuestionRule.create(survey_element_id: survey_element_id, rule_id: rule.id, 
+          trigger_keywords: triggers, extra_parameters: parameters)
+      end
     end
     
     def evaluate_option_autonotify
