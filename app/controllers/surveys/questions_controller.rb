@@ -137,13 +137,17 @@ class Surveys::QuestionsController < ApplicationController
   
   def suggestion
     type = params[:type]
-    keyword = params[:keyword]
+    keyword = params[:keyword].strip
     survey = @survey
-    results = Array.new
-    results << type
-    results << keyword
-    results << survey.title
-    render json: results
+    response = Array.new
+    if type == 'Leader'
+      results = @survey.organization.leaders.where("lastName LIKE '%#{keyword}%' OR firstName LIKE '%#{keyword}%'")
+      response = results.uniq.collect{|leader| {"label"=>"#{leader.name} (#{leader.email})", "id"=>leader.id}}
+    elsif type == 'Ministry'
+      results = @survey.organization.leaders.where("lastName LIKE '%#{keyword}%' OR firstName LIKE '%#{keyword}%'")
+      response = results.uniq.collect{|ministry| {"label"=>"#{leader.name} (#{leader.email})", "id"=>leader.id}}
+    end
+    render json: response
   end
   
   private
