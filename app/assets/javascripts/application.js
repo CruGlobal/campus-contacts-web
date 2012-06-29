@@ -8,7 +8,9 @@
 //= require jquery.one_finger_scroll.js
 //= require ba-debug-0.4.min.js
 //= require hoverIntent
+//= require jquery.touchwipe.1.1.1
 //= require superfish
+//= require superscroll
 //= require mh
 //= require questions
 //= require contacts
@@ -28,6 +30,7 @@
 //= require followup_comments
 //= require clearform
 //= require global
+//= require welcome
 
 $(function (){
  $('#person_updated_from').datepicker({ dateFormat: 'dd-mm-yy' });

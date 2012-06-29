@@ -15,7 +15,8 @@ $ ->
       speed:         0,
       pathLevels: 2,
       delay: 300
-    }) 
+    })
+  	$('.sf-scrolling').superscroll(); 
         
   $('input[type=checkbox].primary').live 'click', -> 
     fieldset = $(this).closest('.fieldset')
@@ -158,9 +159,13 @@ $.mh.logout = (url) ->
   else
     '/sign_out'
   if FB? && FB._userStatus != "unknown"
-    FB.logout((request) ->
+    #try
+    #  FB.logout((request) ->
+    #    document.location = next
+    #  )
+    #catch err
       document.location = next
-    ) 
+      
   else
     document.location = next
 

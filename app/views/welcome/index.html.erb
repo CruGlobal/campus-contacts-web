@@ -1,13 +1,12 @@
 <div id="logoline">
   <a href="/" id="logo"></a>
 </div>
-
 <div id="roundwrap">
 
-  <h1 class="headlinetext">
+  <h1 class="aright headlinetext">
     <%= t('.headline_html') %>
   </h1>
-  <h4 class="subheadlinetext">
+  <h4 class="aright subheadlinetext">
     <%= t('.subheadline_html') %>
   </h4>
   
@@ -18,11 +17,9 @@
       <a href="/welcome/tour"><%= image_tag("splash/box_right.jpg") %></a> 
     </div>
   </div>
-
   <div class="salespush">
-    <%= t('.get_details_html', link: link_to(t('.get_started'), new_user_session_path, :class => "getstartedbt")) %> 
+    <%= link_to(t('.learn_more'), tutorials_path, :class => "getstartedbt") %> 
   </div>
-
 </div>
 
 

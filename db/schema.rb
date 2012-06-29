@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120608165037) do
+ActiveRecord::Schema.define(:version => 20120619135454) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -3548,6 +3548,7 @@ ActiveRecord::Schema.define(:version => 20120608165037) do
     t.string   "twilio_sid"
     t.string   "twilio_uri"
     t.string   "separator"
+    t.integer  "question_id"
   end
 
   add_index "sent_sms", ["twilio_sid"], :name => "index_sent_sms_on_twilio_sid", :unique => true
@@ -3745,6 +3746,7 @@ ActiveRecord::Schema.define(:version => 20120608165037) do
     t.datetime "updated_at"
     t.datetime "last_sign_in_at"
     t.string   "locale"
+    t.text     "settings"
   end
 
   add_index "simplesecuritymanager_user", ["email"], :name => "index_simplesecuritymanager_user_on_email", :unique => true

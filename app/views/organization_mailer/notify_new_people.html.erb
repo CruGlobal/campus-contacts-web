@@ -1,0 +1,14 @@
+<h1>New Contact Notification</h1>
+<p>
+  <%=raw @intro.to_s %><br/>
+</p>
+<p>
+  <ul>
+	  <% @new_people.each do |new_person| %>
+			<li>
+				<b><%= new_person['person_name'] %></b>
+				<%= "(#{new_person['person_email']})" if new_person['person_email'].present? %>
+			</li>
+	  <% end %>
+  </ul>
+</p>

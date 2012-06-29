@@ -89,6 +89,7 @@ class SurveyResponsesController < ApplicationController
         @person = Person.create(params[:person])
       end
       if @person.valid?
+        NewPerson.create(person_id: @person.id, organization_id: @survey.organization.id)
         save_survey
         session[:person_id] = @person.id
         session[:survey_id] = @survey.id
@@ -129,6 +130,7 @@ class SurveyResponsesController < ApplicationController
     question_set = QuestionSet.new(@survey.questions, @answer_sheet)
     question_set.post(params[:answers], @answer_sheet)
     question_set.save
+    @answer_sheet.person.save
     @answer_sheet.update_attribute(:completed_at, Time.now)
   end
 

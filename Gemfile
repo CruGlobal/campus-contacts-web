@@ -13,7 +13,7 @@ gem 'http_accept_language'
 gem 'capistrano'
 gem 'rest-client'
 gem 'crack'
-gem 'resque'
+gem 'resque', '~> 1.20.0'
 gem 'foreigner'
 gem "devise", '1.5.1' #, git: "git://github.com/plataformatec/devise.git"
 gem 'omniauth'
@@ -59,7 +59,7 @@ gem "paperclip", :git => 'git://github.com/thoughtbot/paperclip.git'
 gem 'aws-sdk'#, '~> 1.3.4'
 
 gem 'bitly'
-#gem 'copycopter_client'
+gem 'copycopter_client'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
@@ -68,6 +68,7 @@ group :development, :test do
   gem 'shoulda', :require => false
   # gem 'ephemeral_response'
   gem 'mocha'
+  gem 'mailcatcher'
   gem 'factory_girl','~> 2.0.0.rc4'
   gem 'simplecov', '>= 0.3.5', require: false
   gem 'railroady'

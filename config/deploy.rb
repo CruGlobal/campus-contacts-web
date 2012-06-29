@@ -18,7 +18,7 @@ require "whenever/capistrano"
 
 set :application, "mh"
 # set :repository, "http://svn.uscm.org/#{application}/trunk"
-set :repository,  "git@git.uscm.org:missionhub.git"
+set :repository,  "git://github.com/thelabtech/missionhub.git"
 # set :checkout, 'co'
 set :keep_releases, '3'
 
@@ -47,40 +47,6 @@ servers = ["108.171.184.122"]
   role :db, servers.first, primary: true
   role :web, *servers
   role :app, *servers
-  set :deploy_via, :remote_cache
-end
-
-#task :staging do
-  #set :deploy_to, "/var/www/html/integration/#{application}"
-  #set :environment, 'staging'
-  #set :rails_env, 'staging'
-  
-  #role :db, "172.16.1.25", primary: true
-  #role :web, "172.16.1.25"
-  #role :app, "172.16.1.25"
-  #set :deploy_via, :remote_cache
-#end
-
-task :fast do
-  set :deploy_to, "/var/www/#{application}"
-  set :environment, 'production'
-  set :rails_env, 'production'
-  
-  role :db, "10.10.11.167", primary: true
-  role :web, "10.10.11.167"
-  role :app, "10.10.11.167"
-  set :deploy_via, :remote_cache
-end
-  
-task :production do
-  set :deploy_to, "/var/www/#{application}"
-  set :environment, 'production'
-  set :rails_env, 'production'
-
-  
-  role :db, "10.10.11.166", primary: true
-  role :web, "10.10.11.166", "10.10.11.167"
-  role :app, "10.10.11.166", "10.10.11.167"
   set :deploy_via, :remote_cache
 end
 
@@ -139,10 +105,7 @@ task :local_changes, roles: :app do
     ln -s #{shared_path}/config/database.yml #{release_path}/config/database.yml &&
     ln -s #{shared_path}/config/config.yml #{release_path}/config/config.yml &&
     ln -s #{shared_path}/config/s3.yml #{release_path}/config/s3.yml &&
-    ln -s #{shared_path}/config/initializers/email.rb #{release_path}/config/initializers/email.rb &&
-    
-    rm -Rf #{release_path}/tmp && 
-    ln -s #{shared_path}/tmp #{release_path}/tmp 
+    ln -s #{shared_path}/config/initializers/email.rb #{release_path}/config/initializers/email.rb
   CMD
 end
 

@@ -30,7 +30,7 @@
               <ul class="under">
                 <% current_person.organizations.order('organizations.name').each do |org| %>
                   <% if org.status == "active" %>                  
-                    <%= render 'application/org', org: org, primary: current_person.primary_organization == org, involved: true unless current_person.organizations.include?(org.parent) && org.parent.show_sub_orgs? %>
+                    <%= render 'application/org', org: org, primary: current_person.primary_organization == org %>
                   <% end %>
                 <% end %>
               </ul>
@@ -46,8 +46,11 @@
       <% else %>
         <% unless params[:controller] == 'sessions' %>
           <li>
+            <%= link_to(t('nav.help'), "http://blog.missionhub.com/", :class => "navlink") %>
+          </li>
+          <li>
             <% if mhub? %>
-              <%= link_to('nav.login', user_omniauth_authorize_path(:facebook_mhub), :class => "loginbt") %>
+              <%= link_to(t('nav.login'), user_omniauth_authorize_path(:facebook_mhub), :class => "loginbt") %>
             <% else %>
               <%= link_to(t('nav.login'), new_user_session_path, :class => "loginbt") %>
             <% end %>

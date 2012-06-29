@@ -41,7 +41,7 @@ module Mh
     # JavaScript files you want as :defaults (application.js is always included).
     # config.action_view.javascript_expansions[:defaults] = %w(prototype prototype_ujs)
 
-    config.rubycas.cas_base_url = 'https://signin.ccci.org/cas'
+    config.rubycas.cas_base_url = 'https://signin.relaysso.org/cas'
     config.rubycas.logger = Rails.logger
 
     # Configure the default encoding used in templates for Ruby 1.9.
@@ -55,7 +55,10 @@ module Mh
 
     # Enable the asset pipeline
     config.assets.enabled = true
-    
+
+    # Version of your assets, change this if you want to expire all your assets
+    config.assets.version = '1.0'
+
     config.after_initialize do
       # integrate with devise
       config.oauth.authenticator = lambda do |email, password|
@@ -63,14 +66,14 @@ module Mh
         user if user && user.valid_password?(password)
         user.id
       end
-      
+
       #if evaluates to true then access_token can be granted, also required to be true for EVERY api call
       config.oauth.permissions_authenticator = lambda do |identity|
         org_memberships = User.find(identity).person.organizational_roles.leaders
         return true if !org_memberships.empty?
         false
       end
-      
+
       config.oauth.param_authentication = true
       # config.oauth.authorization_types = %w{code}
       Rack::OAuth2::Server::Admin.set :client_id, "2"
@@ -78,4 +81,5 @@ module Mh
       Rack::OAuth2::Server::Admin.set :scope, %w{read write}
     end
   end
+
 end

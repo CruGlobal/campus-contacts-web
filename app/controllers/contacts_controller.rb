@@ -31,10 +31,10 @@ class ContactsController < ApplicationController
         out = ""
         @questions.select! { |q| !%w{firstName lastName phone_number email}.include?(q.attribute_name) }
         CSV.generate(out) do |rows|
-          rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('general.status'), t('general.gender'), t('contacts.index.phone_number'), t('people.index.email')] + @questions.collect {|q| q.label} + [t('contacts.index.last_survey')]
+          rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('general.status'), t('general.assigned_to'), t('general.gender'), t('contacts.index.phone_number'), t('people.index.email')] + @questions.collect {|q| q.label} + [t('contacts.index.last_survey')]
           @all_people.each do |person|
             if @roles[person.id]
-              answers = [person.firstName, person.lastName, @roles[person.id].followup_status.to_s.titleize, person.gender.to_s.titleize, person.pretty_phone_number, person.email]
+              answers = [person.firstName, person.lastName, @roles[person.id].followup_status.to_s.titleize, person.assigned_tos_by_org(current_organization).collect{|a| Person.find(a.assigned_to_id).name}.join(','), person.gender.to_s.titleize, person.pretty_phone_number, person.email]
               dates = []
               @questions.each do |q|
                 answer = @all_answers[person.id][q.id]
@@ -45,7 +45,7 @@ class ContactsController < ApplicationController
                   answers << ''
                 end
               end
-              answers << I18n.l(dates.sort.last, format: :date) if dates.present?
+              answers << I18n.l(dates.sort.reverse.last, format: :date) if dates.present?
               rows << answers
             end
           end
@@ -99,9 +99,12 @@ class ContactsController < ApplicationController
     
     update_survey_answers if params[:answers].present?
     @person.update_date_attributes_updated
-    if @person.valid? && (!@answer_sheet || (@answer_sheet.person.valid? &&
-       (!@answer_sheet.person.primary_phone_number || @answer_sheet.person.primary_phone_number.valid?)))
-      redirect_to survey_response_path(@person)
+    if @person.valid? && (!@answer_sheet || (@answer_sheet.person.valid? && (!@answer_sheet.person.primary_phone_number || @answer_sheet.person.primary_phone_number.valid?)))
+      respond_to do |wants|
+        params[:update] = 'true'
+        wants.js
+        wants.html { redirect_to survey_response_path(@person) }
+      end
     else
       render :edit
     end
@@ -117,7 +120,14 @@ class ContactsController < ApplicationController
   
   def create
     @organization = current_organization
-    create_contact
+    person = Person.where(firstName: params[:person][:firstName], lastName: params[:person][:lastName])
+    if person.present?
+      params[:id] = person.first.id
+      params[:answers] = nil
+      update
+    else
+      create_contact
+    end
   end
   
   def destroy
@@ -214,7 +224,7 @@ class ContactsController < ApplicationController
         @people = @people.includes(:organizational_roles).where("organizational_roles.organization_id" => @organization.id)
       end
       if params[:q] && params[:q][:s].include?('mh_answer_sheets')
-        @people = @people.joins({:answer_sheets => :survey}).where("mh_surveys.organization_id" => @organization.id)
+        @people = @people.joins(:answer_sheets => :survey).where('mh_surveys.organization_id' => @organization.id)
       end
       if params[:survey].present?
         @people = @people.joins(:answer_sheets).where("mh_answer_sheets.survey_id" => params[:survey])
@@ -277,7 +287,6 @@ class ContactsController < ApplicationController
       if params[:person_updated_from].present? && params[:person_updated_to].present?
         @people = @people.find_by_person_updated_by_daterange(params[:person_updated_from], params[:person_updated_to])
       end
-      #here
 
       if params[:search_type].present? && params[:search_type] == "basic"
         @people = @people.search_by_name_or_email(params[:query], current_organization.id)
@@ -292,7 +301,6 @@ class ContactsController < ApplicationController
       @all_people = @people
       @people = @people.page(params[:page])
     
-      
     end
   
     def fetch_mine
@@ -319,7 +327,7 @@ class ContactsController < ApplicationController
         
         answers[answer_sheet.person_id] ||= {}
         questions.each do |q|
-          answers[answer_sheet.person_id][q.id] = [q.display_response(answer_sheet), answer_sheet.created_at] if q.display_response(answer_sheet).present?
+          answers[answer_sheet.person_id][q.id] = [q.display_response(answer_sheet), answer_sheet.updated_at]# if q.display_response(answer_sheet).present? or (q.attribute_name == "email" and q.object_name == 
         end
       end
       answers
