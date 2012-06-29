@@ -68,7 +68,8 @@ class Surveys::QuestionsController < ApplicationController
     
     params[:id] = @question.id
     evaluate_option_autonotify
-
+    evaluate_option_autoassign
+    
     respond_to do |wants|
       if !@question.new_record?
         wants.html do
@@ -144,8 +145,16 @@ class Surveys::QuestionsController < ApplicationController
       results = @survey.organization.leaders.where("lastName LIKE '%#{keyword}%' OR firstName LIKE '%#{keyword}%'")
       response = results.uniq.collect{|leader| {"label"=>"#{leader.name} (#{leader.email})", "id"=>leader.id}}
     elsif type == 'Ministry'
-      results = @survey.organization.leaders.where("lastName LIKE '%#{keyword}%' OR firstName LIKE '%#{keyword}%'")
-      response = results.uniq.collect{|ministry| {"label"=>"#{leader.name} (#{leader.email})", "id"=>leader.id}}
+      results = current_person.all_organization_and_children.where("name LIKE '%#{keyword}%'")
+      response = results.uniq.collect{|ministry| {"label"=>"#{ministry.name}", "id"=>ministry.id}}
+    elsif type == 'Group'
+      if current_organization.present?
+        results = current_organization.groups.where("name LIKE '%#{keyword}%'")
+        response = results.uniq.collect{|group| {"label"=>"#{group.name} (#{group.location})", "id"=>group.id}}
+      end
+    elsif type == 'Label'
+      results = current_organization.roles.where("name LIKE '%#{keyword}%'")
+      response = results.uniq.collect{|label| {"label"=>"#{label.name}", "id"=>label.id}}
     end
     render json: response
   end
@@ -168,6 +177,9 @@ class Surveys::QuestionsController < ApplicationController
       @leaders = current_organization.leaders
     end
     
+    def evaluate_option_autoassign
+      
+    end
     
     def evaluate_option_autonotify
       leaders = params[:leaders] || []
