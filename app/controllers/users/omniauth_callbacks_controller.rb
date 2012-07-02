@@ -4,7 +4,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def facebook
     begin
       facebook_login
-      redirect_to @user ? user_root_path : "/"
+      redirect_to @user ? after_sign_out_path_for(@user) : "/"
     rescue NoEmailError
       flash[:error] = t('.email_required')
       redirect_to '/users/sign_in'
@@ -42,6 +42,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
   
   protected
+  
+  def after_sign_out_path_for(resource_or_scope)
+    params[:next] ? params[:next] : user_root_path
+  end
   
   def facebook_login(person = nil)
     omniauth = env["omniauth.auth"]
