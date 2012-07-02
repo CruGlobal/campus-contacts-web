@@ -6,12 +6,21 @@ class PeopleMailer < ActionMailer::Base
   #
   #   en.people_mailer.bulk_message.subject
   #
-  def bulk_message(to, from, subject, content)
-    @content = content
-
-    mail to: to, from: from, subject: subject
+  
+  
+  def notify_leaders_on_survey_answer(to, keyword, answer)
+    @keyword = keyword
+    @answer = answer
+    @answer_sheet = answer.answer_sheet
+    @person = answer.answer_sheet.person
+    @question = answer.question
+    mail to: to, subject: "Someone answered \"#{@keyword.titleize}\" in your survey"
   end
   
+  def bulk_message(to, from, subject, content)
+    @content = content
+    mail to: to, from: from, subject: subject
+  end
   
   def self.queue
       :bulk_email
