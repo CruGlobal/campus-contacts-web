@@ -48,30 +48,28 @@ class QuestionSet
       @questions.each do |question|
         question.save_response(@answer_sheet, question)
         answer = @answer_sheet.answers.find_by_question_id(question.id)
-        qrules = SurveyElement.find_by_element_id(question.id).question_rules
-        if qrules.present?
-          qrules.each do |qrule|
-            triggers = qrule.trigger_keywords.gsub(" ","").split(",")
-            code = qrule.rule.rule_code
+        question_rules = SurveyElement.find_by_element_id(question.id).question_rules
+        
+        if question_rules.present?
+          question_rules.each do |question_rule|
+            triggers = question_rule.trigger_keywords.gsub(" ","").split(",")
+            code = question_rule.rule.rule_code
+            
             case code
             when "AUTONOTIFY"
-              valid = false
               keyword_found = ""
               
               # Check if triggers exists
               triggers.each do |t|
-                if answer.value.downcase.index(t.downcase) != nil
-                  Rails.logger.info "### Trigger \"#{t}\" detected!"
-                  keyword_found = t
-                  valid = true
-                end
+                keyword_found = t unless answer.value.downcase.index(t.downcase) == nil
               end
             
               # Do the process
-              if valid
-                recipients = Person.find(:all, :conditions => "personID IN (#{qrule.extra_parameters['leaders'].join(',')})").collect{|p| "#{p.name} <#{p.email}>"}.join(", ")
-                Rails.logger.info "### Recipients: #{recipients}"
-                PeopleMailer.notify_leaders_on_survey_answer(recipients, keyword_found, answer).deliver
+              unless keyword_found.blank?
+                leaders = Person.find(question_rule.extra_parameters['leaders'])
+                recipients = leaders.collect{|p| "#{p.name} <#{p.email}>"}.join(", ")
+                PeopleMailer.enqueue.notify_leaders_on_survey_answer(recipients, keyword_found, answer)
+                # PeopleMailer.notify_leaders_on_survey_answer(recipients, keyword_found, answer).deliver
               end
             end
           end
