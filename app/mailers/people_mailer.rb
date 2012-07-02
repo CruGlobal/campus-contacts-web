@@ -8,12 +8,13 @@ class PeopleMailer < ActionMailer::Base
   #
   
   
-  def notify_leaders_on_survey_answer(to, keyword, answer)
+  def notify_on_survey_answer(to, question_rule, keyword, answer)
     @keyword = keyword
     @answer = answer
     @answer_sheet = answer.answer_sheet
     @person = answer.answer_sheet.person
     @question = answer.question
+    @question_rule = question_rule
     mail to: to, subject: "Someone answered \"#{@keyword.titleize}\" in your survey"
   end
   

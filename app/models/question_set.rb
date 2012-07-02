@@ -68,8 +68,8 @@ class QuestionSet
               unless keyword_found.blank?
                 leaders = Person.find(question_rule.extra_parameters['leaders'])
                 recipients = leaders.collect{|p| "#{p.name} <#{p.email}>"}.join(", ")
-                PeopleMailer.enqueue.notify_leaders_on_survey_answer(recipients, keyword_found, answer)
-                # PeopleMailer.notify_leaders_on_survey_answer(recipients, keyword_found, answer).deliver
+                PeopleMailer.enqueue.notify_on_survey_answer(recipients, question_rule, keyword_found, answer)
+                # PeopleMailer.notify_on_survey_answer(recipients, question_rule, keyword_found, answer).deliver
               end
             end
           end

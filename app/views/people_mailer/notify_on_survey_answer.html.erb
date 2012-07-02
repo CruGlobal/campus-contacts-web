@@ -8,7 +8,10 @@
   </p>
 <% end %>
 <p>
-  Survey: <b><%= @answer_sheet.survey.title %></b> of <i><%= @answer_sheet.survey.organization.name%></i><br/>
+  Survey: <b><%= @answer_sheet.survey.title %></b> of <i><%= @answer_sheet.survey.organization.name%> organization</i><br/>
+</p>
+<p>
+  Notification Triggers: <%= @question_rule.trigger_keywords %><br/>
 </p>
 <p>
   Question: <%= @question.label %><br/>
