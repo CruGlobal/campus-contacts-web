@@ -179,6 +179,11 @@ class Surveys::QuestionsController < ApplicationController
     end
     
     def evaluate_option_autoassign
+      parameters = Hash.new
+      parameters['type'] = params[:assign_contact_to]
+      parameters['id'] = params[:autoassign_selected_id]
+      parameters['name'] = params[:autoassign_keyword]
+      
       rule = Rule.find_by_rule_code("AUTOASSIGN")
       triggers_array = Array.new
       triggers = params[:assignment_trigger_words].split(',')
@@ -187,19 +192,15 @@ class Surveys::QuestionsController < ApplicationController
       end
       triggers = triggers_array.join(", ")
       
-      parameters = Hash.new
-      parameters['type'] = params[:assign_contact_to]
-      parameters['id'] = params[:autoassign_selected_id]
-      parameters['name'] = params[:autoassign_keyword]
-      
-      
-      survey_element_id = SurveyElement.find_by_survey_id_and_element_id(params[:survey_id], params[:id]).id
-      if question_rule = QuestionRule.find_by_survey_element_id_and_rule_id(survey_element_id, rule.id)
-        question_rule.update_attribute('trigger_keywords',triggers)
-        question_rule.update_attribute('extra_parameters',parameters)
-      else
-        question_rule = QuestionRule.create(survey_element_id: survey_element_id, rule_id: rule.id, 
-          trigger_keywords: triggers, extra_parameters: parameters)
+      if parameters['id'].present? && parameters['name'].present?
+        survey_element_id = SurveyElement.find_by_survey_id_and_element_id(params[:survey_id], params[:id]).id
+        if question_rule = QuestionRule.find_by_survey_element_id_and_rule_id(survey_element_id, rule.id)
+          question_rule.update_attribute('trigger_keywords',triggers)
+          question_rule.update_attribute('extra_parameters',parameters)
+        else
+          question_rule = QuestionRule.create(survey_element_id: survey_element_id, rule_id: rule.id, 
+            trigger_keywords: triggers, extra_parameters: parameters)
+        end
       end
     end
     
@@ -210,31 +211,32 @@ class Surveys::QuestionsController < ApplicationController
       parameters['leaders'] = Array.new
       invalid_emails = Array.new
       
-      survey_element_id = SurveyElement.find_by_survey_id_and_element_id(params[:survey_id], params[:id]).id
-      
-      leaders.each do |leader|
-        Person.find(leader).has_a_valid_email? ? parameters['leaders'] << leader.to_i : invalid_emails << leader.to_i
-      end
-      
-      if invalid_emails.present?
-        respond_to do |wants|
-          wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(personId: invalid_emails).collect{|p| p.name}.join(', ') } }
+      if leaders.present?
+        survey_element_id = SurveyElement.find_by_survey_id_and_element_id(params[:survey_id], params[:id]).id
+        leaders.each do |leader|
+          Person.find(leader).has_a_valid_email? ? parameters['leaders'] << leader.to_i : invalid_emails << leader.to_i
         end
-        return false
-      else
-        rule = Rule.find_by_rule_code("AUTONOTIFY")
-        triggers_array = Array.new
-        triggers = params[:trigger_words].split(',')
-        triggers.each do |t|
-          triggers_array << t.strip if t.strip.present?
-        end
-        triggers = triggers_array.join(", ")
-        if question_rule = QuestionRule.find_by_survey_element_id_and_rule_id(survey_element_id, rule.id)
-          question_rule.update_attribute('trigger_keywords',triggers)
-          question_rule.update_attribute('extra_parameters',parameters)
+      
+        if invalid_emails.present?
+          respond_to do |wants|
+            wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(personId: invalid_emails).collect{|p| p.name}.join(', ') } }
+          end
+          return false
         else
-          question_rule = QuestionRule.create(survey_element_id: survey_element_id, rule_id: rule.id, 
-            trigger_keywords: triggers, extra_parameters: parameters)
+          rule = Rule.find_by_rule_code("AUTONOTIFY")
+          triggers_array = Array.new
+          triggers = params[:trigger_words].split(',')
+          triggers.each do |t|
+            triggers_array << t.strip if t.strip.present?
+          end
+          triggers = triggers_array.join(", ")
+          if question_rule = QuestionRule.find_by_survey_element_id_and_rule_id(survey_element_id, rule.id)
+            question_rule.update_attribute('trigger_keywords',triggers)
+            question_rule.update_attribute('extra_parameters',parameters)
+          else
+            question_rule = QuestionRule.create(survey_element_id: survey_element_id, rule_id: rule.id, 
+              trigger_keywords: triggers, extra_parameters: parameters)
+          end
         end
       end
       true

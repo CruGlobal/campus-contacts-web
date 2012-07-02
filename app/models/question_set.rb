@@ -47,6 +47,35 @@ class QuestionSet
     AnswerSheet.transaction do
       @questions.each do |question|
         question.save_response(@answer_sheet, question)
+        answer = @answer_sheet.answers.find_by_question_id(question.id).value
+        qrules = SurveyElement.find_by_element_id(question.id).question_rules
+        qrules.each do |qrule|
+          triggers = qrule.trigger_keywords.gsub(" ","").split(",")
+          code = qrule.rule.rule_code
+          case code
+          when "AUTONOTIFY"
+            valid = false
+            Rails.logger.info ""
+            Rails.logger.info ""
+            Rails.logger.info "### Checking AUTONOTIFY"
+            Rails.logger.info "### Recipients: #{qrule.extra_parameters['leaders']}"
+            Rails.logger.info "### Triggers: #{triggers.inspect}"
+            Rails.logger.info "### Answer: \"#{answer}\""
+            triggers.each do |t|
+              if answer.downcase.index(t.downcase) != nil
+                Rails.logger.info "### Trigger \"#{t}\" detected!"
+                valid = true
+              end
+            end
+            if valid
+              Rails.logger.info "### Applying AUTONOTIFY Rule"
+            else
+              Rails.logger.info "### No triggers fired!"
+            end
+            Rails.logger.info ""
+            Rails.logger.info ""
+          end
+        end
       end
     end
   end
