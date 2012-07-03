@@ -369,6 +369,10 @@ en:
         text_message_preview: Text Message Preview
         show_advanced_options: "Show Advanced Options"
         hide_advanced_options: "Hide Advanced Options"
+        show_notification_options: "Show Notification Options"
+        hide_notification_options: "Hide Notification Options"
+        show_assignment_options: "Show Contact Assignment Options"
+        hide_assignment_options: "Hide Contact Assignment Options"
       multiple_choice_form:
         list_choices: 'List out the possible choices, one per line:'
       question:
@@ -386,9 +390,14 @@ en:
         add_prev_question: Add a predefined or previously used question
         forced_tip: This question is required on every survey and will be pre-filled if they connect with facebook.
       advanced_options:
-        trigger_words: 'List one or more words or phrases that will trigger this notification if they appear in the
-        answer.<br/>Separate words and phrases with commas.'
+        trigger_words: "List one or more words or phrases that will trigger this notification if they appear in the answer.<br/>(separate words and phrases with commas)"
         leaders: 'Select one or more leaders to be notified when this question is answered in a certain way'
+        autonotify_guide: 'This option will notify the selected leaders if the answer contains the listed keywords.'
+        autonotify_leader_label: 'Select one or more leaders to be notified:'
+        autonotify_keywords_label: 'List the words that will trigger the notification:<br/>(must be separated with commas)'
+        autoassign_guide: 'This option will assign the contacts to the selected Leader, Ministry, Group, or Label if the answer contains the listed keywords.'
+        autoassign_group_label: 'Choose where to assign contacts:'
+        autoassign_keywords_label: 'List the words that will trigger the assignment:<br/>(must be separated with commas)'
         web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
   sms_keywords:
     keyword_deleted: "Keyword has been deleted."

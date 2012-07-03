@@ -83,9 +83,20 @@
       </tbody>
     </table>
   </div>
-  
-  <div id="question_form" style="display:none">
+  <div id='loading' class="hidden">
+    <img src='/assets/loader.gif'>
+    <br/>
+    Loading Question
+  </div>
+  <div id='saving' class="hidden">
+    <img src='/assets/loader.gif'>
+    <br/>
+    Saving Changes
+  </div>
+  <div id="create_question_form" class="hidden">
     <%= render 'form', question: Question.new %>
+  </div>
+  <div id="question_form" class="hidden">
   </div>
   
   <script type="text/javascript" charset="utf-8">

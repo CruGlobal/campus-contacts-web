@@ -118,7 +118,8 @@ class Organization < ActiveRecord::Base
     end
 
     def add_member(person_id)
-      OrganizationMembership.find_or_create_by_person_id_and_organization_id(person_id, id) 
+      x = OrganizationMembership.find_or_create_by_person_id_and_organization_id(person_id, id) 
+      Rails.logger.info ">> #{x.inspect}"
     end
 
     def add_leader(person, current_person)
