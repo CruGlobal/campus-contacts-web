@@ -52,12 +52,12 @@ class QuestionSet
         
         if question_rules.present?
           question_rules.each do |question_rule|
-            triggers = question_rule.trigger_keywords.gsub(" ","").split(",")
+            triggers = question_rule.trigger_keywords.gsub(' ','').split(',')
             code = question_rule.rule.rule_code
             
             case code
-            when "AUTONOTIFY"
-              keyword_found = ""
+            when 'AUTONOTIFY'
+              keyword_found = ''
               
               # Check if triggers exists
               triggers.each do |t|
@@ -68,8 +68,47 @@ class QuestionSet
               unless keyword_found.blank?
                 leaders = Person.find(question_rule.extra_parameters['leaders'])
                 recipients = leaders.collect{|p| "#{p.name} <#{p.email}>"}.join(", ")
-                PeopleMailer.enqueue.notify_on_survey_answer(recipients, question_rule, keyword_found, answer)
-                # PeopleMailer.notify_on_survey_answer(recipients, question_rule, keyword_found, answer).deliver
+                # PeopleMailer.enqueue.notify_on_survey_answer(recipients, question_rule, keyword_found, answer)
+                PeopleMailer.notify_on_survey_answer(recipients, question_rule, keyword_found, answer).deliver
+              end
+            when 'AUTOASSIGN'
+              keyword_found = ''
+              
+              # Check if triggers exists
+              triggers.each do |t|
+                keyword_found = t unless answer.value.downcase.index(t.downcase) == nil
+              end
+            
+              # Do the process
+              unless keyword_found.blank?
+                organization = @answer_sheet.survey.organization
+                type = question_rule.extra_parameters['type'].downcase
+                assign_to_id = question_rule.extra_parameters['id']
+                person_id =  @answer_sheet.person.id
+                
+                Rails.logger.info ""
+                Rails.logger.info ""
+                Rails.logger.info "Assigning to #{type.upcase}: #{assign_to_id}"
+                
+                if type.present? && assign_to_id.present?
+                  case type
+                  when 'leader'
+                    Rails.logger.info "Running Leader Process"
+                    if Person.exists?(assign_to_id)
+                      @assign_to = Person.find(assign_to_id)        
+                      ContactAssignment.where(
+                        person_id: person_id, 
+                        organization_id: organization.id).destroy_all
+                      ContactAssignment.create(
+                        person_id: person_id, 
+                        organization_id: organization.id, 
+                        assigned_to_id: @assign_to.id)
+                    end
+                  end
+                end
+                
+                Rails.logger.info ""
+                Rails.logger.info ""
               end
             end
           end
