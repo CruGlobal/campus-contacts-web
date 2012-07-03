@@ -113,7 +113,13 @@ class QuestionSet
                       #   old_organization_id: organization.id,
                       #   new_organization_id: @assign_to.id,
                       #   transferred_by_id: person.id, copy: false)
-                      Rails.logger.info "Assign to #{@assign_to.inspect}"
+                    end
+                  when 'group'
+                    if Group.exists?(assign_to_id)
+                      @assign_to = Group.find(assign_to_id)   
+                      group_membership = @assign_to.group_memberships.find_or_initialize_by_person_id(person.id)
+                      group_membership.role = 'member'
+                      group_membership.save
                     end
                   end
                 end
