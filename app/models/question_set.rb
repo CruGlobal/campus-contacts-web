@@ -84,7 +84,7 @@ class QuestionSet
                 organization = @answer_sheet.survey.organization
                 type = question_rule.extra_parameters['type'].downcase
                 assign_to_id = question_rule.extra_parameters['id']
-                person_id =  @answer_sheet.person.id
+                person =  @answer_sheet.person
                 
                 Rails.logger.info ""
                 Rails.logger.info ""
@@ -97,12 +97,23 @@ class QuestionSet
                     if Person.exists?(assign_to_id)
                       @assign_to = Person.find(assign_to_id)        
                       ContactAssignment.where(
-                        person_id: person_id, 
+                        person_id: person.id, 
                         organization_id: organization.id).destroy_all
                       ContactAssignment.create(
-                        person_id: person_id, 
+                        person_id: person.id, 
                         organization_id: organization.id, 
                         assigned_to_id: @assign_to.id)
+                    end
+                  when 'ministry'
+                    if Organization.exists?(assign_to_id)
+                      @assign_to = Organization.find(assign_to_id)   
+                      @assign_to.add_contact(person)
+                      # PersonTransfer.create(
+                      #   person_id: person.id, 
+                      #   old_organization_id: organization.id,
+                      #   new_organization_id: @assign_to.id,
+                      #   transferred_by_id: person.id, copy: false)
+                      Rails.logger.info "Assign to #{@assign_to.inspect}"
                     end
                   end
                 end
