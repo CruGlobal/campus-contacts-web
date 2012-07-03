@@ -85,11 +85,6 @@ class QuestionSet
                 type = question_rule.extra_parameters['type'].downcase
                 assign_to_id = question_rule.extra_parameters['id']
                 person =  @answer_sheet.person
-                
-                Rails.logger.info ""
-                Rails.logger.info ""
-                Rails.logger.info "Assigning to #{type.upcase}: #{assign_to_id}"
-                
                 if type.present? && assign_to_id.present?
                   case type
                   when 'leader'
@@ -108,11 +103,6 @@ class QuestionSet
                     if Organization.exists?(assign_to_id)
                       @assign_to = Organization.find(assign_to_id)   
                       @assign_to.add_contact(person)
-                      # PersonTransfer.create(
-                      #   person_id: person.id, 
-                      #   old_organization_id: organization.id,
-                      #   new_organization_id: @assign_to.id,
-                      #   transferred_by_id: person.id, copy: false)
                     end
                   when 'group'
                     if Group.exists?(assign_to_id)
@@ -121,11 +111,27 @@ class QuestionSet
                       group_membership.role = 'member'
                       group_membership.save
                     end
+                  when 'label'
+                    if Role.exists?(assign_to_id)
+                      
+                      new_roles = [assign_to_id]
+                      old_roles = person.organizational_roles.where(organization_id: organization.id).collect { |role| role.role_id }
+                      roles_to_add = new_roles - old_roles
+                      roles_to_remove = old_roles - new_roles
+
+                      person.organizational_roles.where(organization_id: organization.id, role_id: roles_to_remove).destroy_all
+                    
+                      all_roles = roles_to_add | (new_roles & old_roles)
+                      all_roles.sort!.each do |role_id|    
+                        OrganizationalRole.find_or_create_by_person_id(
+                          person_id: person.id, 
+                          role_id: role_id, 
+                          organization_id: organization.id, 
+                          added_by_id: person.id) if roles_to_add.include?(role_id)
+                      end
+                    end
                   end
                 end
-                
-                Rails.logger.info ""
-                Rails.logger.info ""
               end
             end
           end
