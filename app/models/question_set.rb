@@ -68,9 +68,10 @@ class QuestionSet
               unless keyword_found.blank?
                 leaders = Person.find(question_rule.extra_parameters['leaders'])
                 recipients = leaders.collect{|p| "#{p.name} <#{p.email}>"}.join(", ")
-                # PeopleMailer.enqueue.notify_on_survey_answer(recipients, question_rule, keyword_found, answer)
-                PeopleMailer.notify_on_survey_answer(recipients, question_rule, keyword_found, answer).deliver
+                PeopleMailer.enqueue.notify_on_survey_answer(recipients, question_rule, keyword_found, answer)
+                # PeopleMailer.notify_on_survey_answer(recipients, question_rule, keyword_found, answer).deliver
               end
+              
             when 'AUTOASSIGN'
               keyword_found = ''
               
@@ -85,6 +86,7 @@ class QuestionSet
                 type = question_rule.extra_parameters['type'].downcase
                 assign_to_id = question_rule.extra_parameters['id']
                 person =  @answer_sheet.person
+                
                 if type.present? && assign_to_id.present?
                   case type
                   when 'leader'
