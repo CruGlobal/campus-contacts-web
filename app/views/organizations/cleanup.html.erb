@@ -1,0 +1,20 @@
+<div class="titlebar">
+  <h1><%= t('.title') %></h1>
+</div>
+
+<div class="pad">
+
+  <%= form_tag("/organizations/archive_contacts") do %>
+    <div>
+     <h3><% t('.instructions') %></h3>
+     <%= image_tag("step1.png") %>     
+     
+      <ul class="instructions">
+        <li><span class="name">Archive all contacts created before <%= text_field_tag :archive_contacts_before, Date.today.strftime("%Y-%m-%d") %> and<br>assign with the label "Archived Contacts before YYYY/MM/DD" with (YYYY/MM/DD) being the chosen date.</span>
+      </ul>
+    </div>
+
+    <%= submit_tag t('.submit'), :confirm => t('.confirm_archive') %>
+  <% end %>
+
+</div>

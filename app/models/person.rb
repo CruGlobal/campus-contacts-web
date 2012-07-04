@@ -59,6 +59,10 @@ class Person < ActiveRecord::Base
   scope :find_by_person_updated_by_daterange, lambda { |date_from, date_to| {
     :conditions => ["date_attributes_updated >= ? AND date_attributes_updated <= ? ", date_from, date_to]
   }}
+  
+  scope :find_by_date_created_before_date_given, lambda { |before_date| {
+    :conditions => ["dateCreated <= ?", before_date]
+  }}
 
   scope :order_by_highest_default_role, lambda { |order| {
     :select => "ministry_person.*",
