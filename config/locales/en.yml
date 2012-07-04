@@ -50,6 +50,7 @@ en:
   nav:
     organizations: Organizations
     manage: Manage
+    cleanup: Cleanup
     enter_survey_mode: "Enter Survey Mode"
     use_keyword: 'Use Keyword: %{keyword}'
     my_profile: My Profile
@@ -962,3 +963,11 @@ en:
       title: Settings
       year_in_school: Display 'Year in School' on the Directory Page
       submit: Update Settings
+    cleanup: 
+      title: "Contacts Cleanup"
+      submit: "Archive Contacts Now"
+      instructions: "Instructions"
+      archive_instructions: "Archive Contacts"
+      archive_notice: "%{no} contacts succesfully archived"
+      confirm_archive: "Are you sure you wanted to archive the desired contacts?"
+      

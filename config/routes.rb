@@ -143,6 +143,8 @@ Mh::Application.routes.draw do
       post :signup
       get :settings
       post :update_settings
+      get :cleanup
+      post :archive_contacts
     end
   end
 
