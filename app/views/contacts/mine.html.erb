@@ -11,10 +11,12 @@
 
   <div class="pagemenu">
     <ul class="pillmenu">
-      <li><%= link_to(t('contacts.assign'), "", id: 'assign_button', class: 'assign') %></li>
       <li><%= link_to(t('contacts.add_contact'), "", class: 'add_contact') %></li>
     </ul>
-    <ul class="pillmenu">
+    <ul class="pillmenu control_toggle">
+      <li><%= link_to(t('contacts.assign'), "", id: 'assign_button', class: 'assign') %></li>
+    </ul>
+    <ul class="pillmenu control_toggle">
       <li>
         <%= link_to('Send', '#', class: 'action_dropdown') %>
         <ul style="display:none">
