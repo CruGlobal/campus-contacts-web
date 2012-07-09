@@ -30,7 +30,10 @@ class ImportsController < ApplicationController
 
   def update
     @import.update_attributes(params[:import])
+    #puts @import.inspect
     errors = @import.check_for_errors
+    
+    #puts errors.inspect
 
     if errors.blank?
       Person.transaction do
@@ -115,7 +118,12 @@ class ImportsController < ApplicationController
 
     # Set values for predefined questions
     answer_sheet = AnswerSheet.new(person: person)
-    predefined = Survey.find(APP_CONFIG['predefined_survey'])
+    predefined =
+      begin
+        Survey.find(APP_CONFIG['predefined_survey'])
+      rescue
+        Survey.find(2)
+      end
     predefined.elements.where('object_name is not null').each do |question|
       question.set_response(row[:answers][question.id], answer_sheet)
     end

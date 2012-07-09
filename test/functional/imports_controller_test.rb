@@ -36,71 +36,39 @@ class ImportsControllerTest < ActionController::TestCase
     #assert_response :success
   end
 
-=begin  
+
 
   context "Importing contacts" do
     setup do
       @user = Factory(:user_with_auxs)  #user with a person object
       sign_in @user
 
-      organization = Factory(:organization)
-      survey = Factory(:survey, organization: organization)
-      element = Factory(:choice_field)
-      question = Factory(:survey_element, survey: survey, element: element, position: 1, archived: true)
-
+      @organization = Factory(:organization)
+      @survey = Factory(:survey, organization: @organization, id: 2)
+      @firstName_element = Factory(:firstName_element)
+      @lastName_element = Factory(:lastName_element)
+      @email_element = Factory(:email_element)
+      @firstName_question = Factory(:survey_element, survey: @survey, element: @firstName_element, position: 1, archived: true)
+      @lastName_question = Factory(:survey_element, survey: @survey, element: @lastName_element, position: 2, archived: true)
+      @email_question = Factory(:survey_element, survey: @survey, element: @email_element, position: 3, archived: true)
     end
     
-    should "successfully import contacts" do
-      contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_contacts.csv"))
-      file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
+    should "successfully create an import and upload contact" do
       person_count  = Person.count
-      post :csv_import, { :dump => { :file => file } }
+      contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv"))
+      file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
+      post :create, { :import => { :upload => file } }
+      assert_response 302
+      
+      #puts Import.all.inspect
+      #puts @survey.inspect
+      #puts Question.all.inspect
+      #puts @survey.elements.inspect      
+      
+      post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @email_element.id} }, :id => Import.first.id}
       assert_equal Person.count, person_count + 1, "Upload of contacts csv file unsuccessful"
-      assert_response :success, "Upload of contacts csv file unsuccessful"
-    end
-
-    should "unsuccessfully import contacts when a row is missing First Name" do
-      #"sample_contacts_missing_firstname"
-      contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_contacts_missing_firstname.csv"))
-      file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
-      person_count  = Person.count
-      post :csv_import, { :dump => { :file => file } }
-      assert_equal "CSV Import unsuccessful for some rows:<br/> First name is blank at row/s 2,  <br/> Invalid email address at row/s 1,  <br/>", flash[:error]
-      assert_equal Person.count, person_count, "Upload of contacts csv file successful (should not be successful)."
-      assert_response :success, "Upload of contacts csv file unsuccessful"
-    end
-
-    should "unsuccessfully import contacts when a row has wrong phone number format" do
-      #"sample_contacts_missing_firstname"
-      contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_contacts_missing_firstname.csv"))
-      file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
-      person_count  = Person.count
-      post :csv_import, { :dump => { :file => file } }
-
-      assert_equal "CSV Import unsuccessful for some rows:<br/> First name is blank at row/s 2,  <br/> Invalid email address at row/s 1,  <br/>", flash[:error]
-      assert_equal Person.count, person_count, "Upload of contacts csv file successful (should not be successful)."
-      assert_response :success, "Upload of contacts csv file unsuccessful"
-    end
-
-    should "unsuccessfully import contacts when a row has wrong email format" do
-      #"sample_contacts_missing_firstname"
-      contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_contacts_missing_firstname.csv"))
-      file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
-      person_count  = Person.count
-      post :csv_import, { :dump => { :file => file } }
-
-      assert_equal "CSV Import unsuccessful for some rows:<br/> First name is blank at row/s 2,  <br/> Invalid email address at row/s 1,  <br/>", flash[:error]
-      assert_equal Person.count, person_count, "Upload of contacts csv file successful (should not be successful)."
-      assert_response :success, "Upload of contacts csv file unsuccessful"
-    end
+      puts Person.count
+      puts person_count
+    end 
   end
-
-  test "import contacts" do
-    user, org = admin_user_login_with_org
-    get :import_contacts
-    assert_not_nil assigns(:organization)
-  end
-  
-=end
-
 end

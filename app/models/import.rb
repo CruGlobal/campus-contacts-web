@@ -34,7 +34,7 @@ class Import < ActiveRecord::Base
       end
 
       person_hash[:answers] = answers
-      puts person_hash
+      #puts person_hash
       new_people << person_hash
     end
 
