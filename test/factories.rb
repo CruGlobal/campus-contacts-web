@@ -285,6 +285,22 @@ FactoryGirl.define do
     object_name ''
     attribute_name ''
   end
+  
+  factory :firstName_element, parent: :element do
+    kind          'TextField'
+    label         'First name?'
+    style 'short'
+    object_name 'person'
+    attribute_name 'firstName'
+  end
+  
+    factory :lastName_element, parent: :element do
+    kind          'TextField'
+    label         'Last name?'
+    style 'short'
+    object_name 'person'
+    attribute_name 'lastName'
+  end
 
   factory :email_element, parent: :element do
     kind          'TextField'
