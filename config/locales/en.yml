@@ -970,4 +970,6 @@ en:
       archive_instructions: "Archive Contacts"
       archive_notice: "%{no} contacts succesfully archived"
       confirm_archive: "Are you sure you wanted to archive the desired contacts?"
-      
+  imports:
+    new:
+      wrong_file_format_error: "Uploaded wrong file format. File must be .csv"
