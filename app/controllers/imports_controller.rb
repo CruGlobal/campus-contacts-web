@@ -30,10 +30,7 @@ class ImportsController < ApplicationController
 
   def update
     @import.update_attributes(params[:import])
-    #puts @import.inspect
     errors = @import.check_for_errors
-    
-    #puts errors.inspect
 
     if errors.blank?
       Person.transaction do

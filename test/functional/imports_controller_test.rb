@@ -58,17 +58,10 @@ class ImportsControllerTest < ActionController::TestCase
       contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv"))
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
       post :create, { :import => { :upload => file } }
-      assert_response 302
-      
-      #puts Import.all.inspect
-      #puts @survey.inspect
-      #puts Question.all.inspect
-      #puts @survey.elements.inspect      
+      assert_response 302    
       
       post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @email_element.id} }, :id => Import.first.id}
       assert_equal Person.count, person_count + 1, "Upload of contacts csv file unsuccessful"
-      puts Person.count
-      puts person_count
     end 
   end
 end
