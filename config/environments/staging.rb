@@ -55,4 +55,6 @@ Mh::Application.configure do
     host: 'm.ccci.us'
   }
 
+  config.action_mailer.delivery_method = :sendmail
+
 end
