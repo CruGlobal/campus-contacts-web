@@ -953,3 +953,6 @@ en:
       title: Settings
       year_in_school: Display 'Year in School' on the Directory Page
       submit: Update Settings
+  imports:
+    new:
+      wrong_file_format_error: "Uploaded wrong file format. File must be .csv"

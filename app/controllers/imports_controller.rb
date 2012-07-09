@@ -16,10 +16,17 @@ class ImportsController < ApplicationController
   def create
     @import = current_user.imports.new(params[:import])
     @import.organization = current_organization
-    if @import.save
-      redirect_to edit_import_path(@import)
-    else
+    begin
+      if @import.save
+        redirect_to edit_import_path(@import)
+      else
+        init_org
+        render :new
+      end
+    rescue ArgumentError => e
+      flash.now[:error] = t('imports.new.wrong_file_format_error')
       init_org
+      @import = Import.new
       render :new
     end
   end
