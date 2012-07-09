@@ -4,7 +4,7 @@ class Ccc::SpUser < ActiveRecord::Base
   belongs_to :simplesecuritymanager_user, class_name: 'Ccc::SimplesecuritymanagerUser', foreign_key: :ssm_id
 
   def merge(other)
-		roles = %w{SPNationalCoordinator SpRegionalCoordinator SpDirector SpProjectStaff SpGeneralStaff}
+		roles = %w{SpNationalCoordinator SpDonationServices SpRegionalCoordinator SpDirector SpEvaluator SpProjectStaff SpGeneralStaff}
 		if other.type != nil && roles.index(other.type) < roles.index(type)
    		self.type = other.type
 		end	
