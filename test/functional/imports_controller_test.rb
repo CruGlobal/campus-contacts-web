@@ -62,6 +62,17 @@ class ImportsControllerTest < ActionController::TestCase
       
       post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @email_element.id} }, :id => Import.first.id}
       assert_equal Person.count, person_count + 1, "Upload of contacts csv file unsuccessful"
-    end 
+    end
+    
+    should "succesfully create an import and unsuccesfully upload contact because firstName heading is not specified by the user" do 
+      person_count  = Person.count
+      contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv"))
+      file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
+      post :create, { :import => { :upload => file } }
+      assert_response 302    
+      
+      post :update, { :import => { :header_mappings => {"0" => @lastName_element.id, "1" => @email_element.id} }, :id => Import.first.id}
+      assert_equal Person.count, person_count, "contact still uploaded despite there is no firstName header, which is required, specified by the user"
+    end
   end
 end
