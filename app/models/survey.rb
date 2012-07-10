@@ -11,6 +11,11 @@ class Survey < ActiveRecord::Base
   has_many :question_grids, :through => :survey_elements, :conditions => "kind = 'QuestionGrid'", :source => :element
   has_one :keyword, :dependent => :nullify
   has_one :keyword, :class_name => "SmsKeyword", :foreign_key => "survey_id", :dependent => :nullify
+
+  has_attached_file :logo, :styles => { :small => "100x" }, s3_credentials: 'config/s3.yml', s3_permissions: :private, storage: :s3,
+                             path: 'mh/surveys/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy
+  has_attached_file :css_file, s3_credentials: 'config/s3.yml', s3_permissions: :private, storage: :s3,
+                             path: 'mh/surveys/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy
   
   # validation
   validates_presence_of :title, :post_survey_message, :terminology

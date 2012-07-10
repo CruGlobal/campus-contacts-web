@@ -6,6 +6,7 @@
 //= require jquery.counter-1.0.min
 //= require jquery.observe_field.js
 //= require jquery.one_finger_scroll.js
+//= require colorpicker.js
 //= require ba-debug-0.4.min.js
 //= require hoverIntent
 //= require jquery.touchwipe.1.1.1
@@ -31,6 +32,7 @@
 //= require clearform
 //= require global
 //= require welcome
+//= require surveys
 
 $(function (){
  $('#person_updated_from').datepicker({ dateFormat: 'dd-mm-yy' });
