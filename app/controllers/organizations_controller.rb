@@ -84,9 +84,13 @@ class OrganizationsController < ApplicationController
       ta.organizational_roles.where(role_id: Role::CONTACT_ID, organization_id: current_organization.id).first.destroy
       OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: ta.id, role_id: new_role.id, organization_id: current_organization.id, added_by_id: current_user.person.id)
     end
-    
     flash[:notice] = t('organizations.cleanup.archive_notice', no: no)
-    redirect_to cleanup_organizations_path
+    #redirect_to cleanup_organizations_path
+    if to_archive.blank?
+      redirect_to cleanup_organizations_path
+    else
+      redirect_to people_path+"?role=#{new_role.id}"
+    end
   end
   
   def update_settings
