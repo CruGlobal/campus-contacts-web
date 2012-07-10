@@ -251,16 +251,27 @@ class Person < ActiveRecord::Base
       rescue ArgumentError; end
       self.gender = response.gender unless (response.gender.nil? && !gender.blank?)
       # save!
-      unless email_addresses.detect {|e| e.email == data['email']}
-        begin
-          email_addresses.find_or_create_by_email(data['email'].try(:strip)) if data['email'].try(:strip).present?
-        rescue ActiveRecord::RecordNotUnique
-          return self
+      
+      # Email Address
+      email_from_facebook = data['email'].try(:strip)
+      if email_from_facebook.present?
+        if email_addresses.exists?(email: email_from_facebook)
+          email_addresses.find_by_email(email_from_facebook)
+        else
+          if EmailAddress.exists?(email: email_from_facebook)
+            raise "Email is already registered by other user!"
+            # raise ActiveRecord::RecordNotUnique
+            return self
+          else
+            email_addresses.create(email: email_from_facebook)
+          end
         end
       end
+      
       async_get_or_update_friends_and_interests(authentication)
       get_location(authentication, response)
       get_education_history(authentication, response)
+      
     rescue MiniFB::FaceBookError => e
       Airbrake.notify(
         :error_class   => "MiniFB::FaceBookError",
