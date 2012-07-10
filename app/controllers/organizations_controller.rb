@@ -72,6 +72,7 @@ class OrganizationsController < ApplicationController
   end
   
   def cleanup
+    @date = Date.today.strftime("%Y-%m-%d")
     
   end
   

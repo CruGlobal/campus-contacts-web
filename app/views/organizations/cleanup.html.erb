@@ -10,7 +10,7 @@
      <%= image_tag("step1.png") %>     
      
       <ul class="instructions">
-        <li><span class="name">Archive all contacts created before <%= text_field_tag :archive_contacts_before, Date.today.strftime("%Y-%m-%d") %> and<br>assign with the label "Archived Contacts before YYYY/MM/DD" with (YYYY/MM/DD) being the chosen date.</span>
+        <li><span class="name"><%= t('.archive_inst_1') %> <%= text_field_tag :archive_contacts_before, @date %> <%= t('.archive_inst_2') %> <span id="archive_label_name_preview"><%= @date %></span>"</span>
       </ul>
     </div>
 

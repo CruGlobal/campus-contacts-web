@@ -961,4 +961,6 @@ en:
       archive_instructions: "Archive Contacts"
       archive_notice: "%{no} contacts succesfully archived"
       confirm_archive: "Are you sure you wanted to archive the desired contacts?"
+      archive_inst_1: 'Archive all contacts created before'
+      archive_inst_2: 'and assign with the label "Archived Contacts before'
       
