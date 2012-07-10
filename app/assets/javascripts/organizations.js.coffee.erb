@@ -44,4 +44,7 @@ $ ->
       $.rails.handleRemote(form)
     false
     
+  $('#archive_contacts_before').change ->
+    $('#archive_label_name_preview').html($(this).val())
+    
     
