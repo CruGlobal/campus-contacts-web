@@ -12,7 +12,7 @@ class Survey < ActiveRecord::Base
   has_one :keyword, :dependent => :nullify
   has_one :keyword, :class_name => "SmsKeyword", :foreign_key => "survey_id", :dependent => :nullify
 
-  has_attached_file :logo, :styles => { :small => "100x" }, s3_credentials: 'config/s3.yml', storage: :s3,
+  has_attached_file :logo, :styles => { :small => "300x" }, s3_credentials: 'config/s3.yml', storage: :s3,
                              path: 'surveys/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy
   has_attached_file :css_file, s3_credentials: 'config/s3.yml', storage: :s3,
                              path: 'surveys/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy
