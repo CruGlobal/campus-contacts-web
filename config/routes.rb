@@ -243,7 +243,7 @@ Mh::Application.routes.draw do
   # Map keyword responses with phone numbers
   match 'c/:keyword(/:received_sms_id)' => 'survey_responses#new', as: 'contact_form'
   match 'm/:received_sms_id' => 'survey_responses#new'
-  match 'l/:token/:user_id' => 'leaders#leader_sign_in'
+  match 'l/:token/:user_id' => 'leaders#leader_sign_in', as: 'leader_link'
   get 's/:survey_id' => 'survey_responses#new', as: 'short_survey'
   get "/surveys/:keyword" => 'surveys#start'
   # mount RailsAdmin::Engine => "/admin"
