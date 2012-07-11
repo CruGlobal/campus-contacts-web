@@ -12,4 +12,8 @@ class Ccc::SpProject < ActiveRecord::Base
     # change old coordinator_id to new coordinator_id 
   end
 
-end  
+  def to_s
+    name
+  end
+
+end
