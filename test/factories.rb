@@ -311,6 +311,15 @@ FactoryGirl.define do
     required      false
   end
   
+  factory :phone_element, parent: :element do
+    kind          'TextField'
+    label         'What is your phone number?'
+    style         'short'
+    object_name   'person'
+    attribute_name 'phone_number'
+    required      false
+  end
+  
   factory :survey_element do
     association   :survey
     association   :element
