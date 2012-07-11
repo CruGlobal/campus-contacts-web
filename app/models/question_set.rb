@@ -128,8 +128,7 @@ class QuestionSet
                         OrganizationalRole.find_or_create_by_person_id(
                           person_id: person.id, 
                           role_id: role_id, 
-                          organization_id: organization.id, 
-                          added_by_id: person.id) if roles_to_add.include?(role_id)
+                          organization_id: organization.id) if roles_to_add.include?(role_id)
                       end
                     end
                   end
