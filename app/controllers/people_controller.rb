@@ -132,13 +132,12 @@ class PeopleController < ApplicationController
 
   def create
     authorize! :create, Person
-    p = Person.where(firstName: params[:person][:firstName], lastName: params[:person][:lastName])
-    p.inspect
-    unless p.blank?
-      params[:id] = p.first.id
-      update
-      return
-    end
+    #p = Person.where(firstName: params[:person][:firstName], lastName: params[:person][:lastName])
+    #unless p.blank?
+      #params[:id] = p.first.id
+      #update
+      #return
+    #end
 
     Person.transaction do
       params[:person] ||= {}

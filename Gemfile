@@ -11,7 +11,7 @@ gem 'http_accept_language'
 gem 'capistrano'
 gem 'rest-client'
 gem 'crack'
-gem 'resque'
+gem 'resque', '~> 1.20.0'
 gem 'foreigner'
 gem "devise", '1.5.1' #, git: "git://github.com/plataformatec/devise.git"
 gem 'omniauth'
@@ -41,7 +41,7 @@ gem 'enforce_schema_rules'
 # gem 'sentient_user'
 gem 'paper_trail', '~> 2'
 gem 'unicorn'
-gem 'airbrake'
+gem 'airbrake_user_attributes'
 gem 'cancan'
 gem 'kaminari'
 gem 'whenever'
@@ -57,7 +57,7 @@ gem "paperclip", :git => 'git://github.com/thoughtbot/paperclip.git'
 gem 'aws-sdk'#, '~> 1.3.4'
 
 gem 'bitly'
-#gem 'copycopter_client'
+gem 'copycopter_client'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

@@ -16,6 +16,9 @@
 <% if can?(:create, Person) || can?(:create, SmsMailer) %>
   <div class="pagemenu">
     <ul class="pillmenu">
+      <li><%= link_to(t('.add_person'), "", class: 'add_person') %></li>
+    </ul>
+    <ul class="pillmenu control_toggle">
       <li>
         <%= link_to('Send', '#', class: 'action_dropdown') %>
         <ul style="display:none; width:235px;">
@@ -66,20 +69,17 @@
       </ul>
     <% end %>
     <ul class="pillmenu">
-      <li><%= link_to(t('.add_person'), "", class: 'add_person') %></li>
-    </ul>
-    <ul class="pillmenu">
       <li><%= link_to(t('.filter'), '#', id: 'filter_link') %></li>
     </ul>
     <% if can? :manage, current_organization %>
-      <ul class="pillmenu">
+      <ul class="pillmenu control_toggle">
         <li><%= link_to(t('general.delete'), bulk_delete_people_path, id: "bulk_delete") %></li>
       </ul>  
-      <ul class="pillmenu">
+      <ul class="pillmenu control_toggle">
         <li><%= link_to(t('.merge_people'), "", id: "merge_people") %></li>
       </ul>
     <% end %>
-    <ul class="pillmenu">
+    <ul class="pillmenu control_toggle">
       <li>
         <%= link_to('Download', '#', class: 'action_dropdown') %>
         <ul style="display:none">

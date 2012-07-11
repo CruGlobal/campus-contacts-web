@@ -16,10 +16,17 @@ class ImportsController < ApplicationController
   def create
     @import = current_user.imports.new(params[:import])
     @import.organization = current_organization
-    if @import.save
-      redirect_to edit_import_path(@import)
-    else
+    begin
+      if @import.save
+        redirect_to edit_import_path(@import)
+      else
+        init_org
+        render :new
+      end
+    rescue ArgumentError => e
+      flash.now[:error] = t('imports.new.wrong_file_format_error')
       init_org
+      @import = Import.new
       render :new
     end
   end
@@ -115,7 +122,12 @@ class ImportsController < ApplicationController
 
     # Set values for predefined questions
     answer_sheet = AnswerSheet.new(person: person)
-    predefined = Survey.find(APP_CONFIG['predefined_survey'])
+    predefined =
+      begin
+        Survey.find(APP_CONFIG['predefined_survey'])
+      rescue
+        Survey.find(2)
+      end
     predefined.elements.where('object_name is not null').each do |question|
       question.set_response(row[:answers][question.id], answer_sheet)
     end
