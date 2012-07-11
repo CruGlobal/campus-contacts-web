@@ -9,4 +9,13 @@ jQuery(document).ready(function(){
 	    if(e.which == 13) return false;
 	});
 	
+	toggle_contacts_control();
+	
 })
+
+function toggle_contacts_control(){
+  if($('.id_checkbox').is(':checked'))
+    $(".control_toggle").show();
+  else
+    $(".control_toggle").hide();
+}
