@@ -1,6 +1,6 @@
 class Rule < ActiveRecord::Base
   self.table_name = "mh_rules"
-  attr_accessible :action_method, :description, :name
+  attr_accessible :action_method, :description, :name, :limit_per_survey, :rule_code
   
   has_many :question_rules
   
