@@ -1,1 +1,23 @@
+<% provide :head do %>
+  <style>
+    <% if @survey.background_color.present? %>
+      body {background: <%= @survey.background_color %>}
+    <% end %>
+
+    <% if @survey.background_color.present? %>
+      body {color: <%= @survey.text_color %>}
+    <% end %>
+
+    <%= @survey.css if @survey.css.present? %>
+  </style>
+
+  <% if @survey.css_file %>
+    <link href="<%= @survey.css_file.url %>" media="screen" rel="stylesheet" type="text/css" />
+  <% end %>
+
+<% end %>
+<% if @survey.logo %>
+  <%= image_tag(@survey.logo.url(:small), class: 'logo') %>
+<% end %>
+
 <%= render partial: 'form' %>

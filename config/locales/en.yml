@@ -356,7 +356,7 @@ en:
       logo: 'Logo (we will wrap this is a div with the class "logo"):'
       background_color: 'Background Color:'
       text_color: 'Text Color:'
-      css_file: 'Upload your own custom css file:'
+      css_file: 'Upload your own custom css file (optional):'
       css: "Type in some custom css which will be embedded in a 'style' tag below all included css files"
     questions:
       create:
