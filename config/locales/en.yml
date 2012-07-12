@@ -977,7 +977,12 @@ en:
       archive_notice: "%{no} contacts succesfully archived"
       confirm_archive: "Are you sure you wanted to archive the desired contacts?"
       archive_inst_1: 'Archive all contacts created before'
-      archive_inst_2: 'and assign with the label "Archived Contacts before'
+      archive_inst_2: 'and assign with the label "Archived Contacts'
+      alumni_inst_1: 'Go to the '
+      alumni_inst_2: 'Directory'
+      alumni_inst_3: ' screen, select the leaders/involved people that have graduated from your ministry and label as "Alumni"?'
+      annual_inst: 'We recommend that you run this at least annually to keep screens less cluttered with old contacts/leaders.'
+      remove_leader_inst_1: "Remove leaders who have been inactive by not logging after date?"
   imports:
     new:
       wrong_file_format_error: "Uploaded wrong file format. File must be .csv"

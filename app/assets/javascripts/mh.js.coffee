@@ -8,15 +8,6 @@ $ ->
       link.removeClass('active')
       link.next('ul').hide()
     false
-  
-  if $.fn.superfish?
-    $('ul.sf-menu').superfish({ 
-      pathClass:  'current',
-      speed:         0,
-      pathLevels: 2,
-      delay: 300
-    })
-  	$('.sf-scrolling').superscroll(); 
         
   $('input[type=checkbox].primary').live 'click', -> 
     fieldset = $(this).closest('.fieldset')
@@ -125,7 +116,17 @@ $ ->
           helper_text = $('#drag_helper_text_one').html()
         else
           helper_text = $('#drag_helper_text_other').html().replace('0', length)
-        $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'));     
+        $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body')); 
+  
+  
+  if $.fn.superfish?
+    $('ul.sf-menu').superfish({ 
+      pathClass: 'current',
+      speed: 0,
+      pathLevels: 2,
+      delay: 300
+    })
+  	$('.sf-scrolling').superscroll();     
       
 window.t = (s) -> I18n.translate(s)    
 
