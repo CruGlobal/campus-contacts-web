@@ -1,20 +1,22 @@
 <div class="titlebar">
   <h1><%= t('.title') %></h1>
+  <%= t('.annual_inst') %>
 </div>
 
 <div class="pad">
-
+  <br><br>
   <%= form_tag("/organizations/archive_contacts") do %>
+    <%= image_tag("step1.png") %>     
     <div>
-     <h3><% t('.instructions') %></h3>
-     <%= image_tag("step1.png") %>     
-     
-      <ul class="instructions">
-        <li><span class="name"><%= t('.archive_inst_1') %> <%= text_field_tag :archive_contacts_before, @date %> <%= t('.archive_inst_2') %> <span id="archive_label_name_preview"><%= @date %></span>"</span>
-      </ul>
+      <span class="name"><%= t('.archive_inst_1') %> <%= text_field_tag :archive_contacts_before, @date %> <%= t('.archive_inst_2') %> <span id="archive_label_name_preview"><%= @date %></span>"</span>
     </div>
 
     <%= submit_tag t('.submit'), :confirm => t('.confirm_archive') %>
   <% end %>
+  <br><br>
+  <%= image_tag("step2.png") %>
+  <div>
+    <span class="name"><%= t('.alumni_inst_1') %><%= link_to t('.alumni_inst_2'), people_path %><%= t('.alumni_inst_3') %></span>
+  </div>
 
 </div>
