@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120628205036) do
+ActiveRecord::Schema.define(:version => 20120711080607) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -944,6 +944,121 @@ ActiveRecord::Schema.define(:version => 20120628205036) do
 
   add_index "followup_comments", ["organization_id", "contact_id"], :name => "comment_organization_id_contact_id"
 
+  create_table "fsk_allocations", :force => true do |t|
+    t.integer  "ssm_id"
+    t.integer  "region_id"
+    t.integer  "impact_allotment"
+    t.integer  "forerunner_allotment"
+    t.integer  "regional_allotment"
+    t.integer  "regionally_raised"
+    t.integer  "locally_raised"
+    t.string   "allocation_year",      :limit => 10
+    t.text     "national_notes",       :limit => 2147483647
+    t.text     "impact_notes",         :limit => 2147483647
+    t.text     "forerunner_notes",     :limit => 2147483647
+    t.text     "regional_notes",       :limit => 2147483647
+    t.text     "local_notes",          :limit => 2147483647
+    t.integer  "lock_version",                               :default => 0, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "agree_to_report"
+  end
+
+  add_index "fsk_allocations", ["ssm_id"], :name => "FK_fsk_allocations_simplesecuritymanager_user"
+
+  create_table "fsk_fields", :force => true do |t|
+    t.string "name", :limit => 50
+  end
+
+  create_table "fsk_fields_roles", :id => false, :force => true do |t|
+    t.integer "role_id",  :null => false
+    t.integer "field_id", :null => false
+  end
+
+  add_index "fsk_fields_roles", ["field_id"], :name => "FK_fsk_fields_roles"
+
+  create_table "fsk_kit_categories", :force => true do |t|
+    t.string   "name",         :limit => 50,                  :null => false
+    t.string   "description",  :limit => 2000
+    t.integer  "lock_version",                 :default => 0, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "fsk_line_items", :force => true do |t|
+    t.integer  "product_id",   :default => 0, :null => false
+    t.integer  "order_id",     :default => 0, :null => false
+    t.integer  "quantity",     :default => 0, :null => false
+    t.integer  "lock_version", :default => 0, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "fsk_line_items", ["order_id"], :name => "FK_fsk_line_items_fsk_orders"
+  add_index "fsk_line_items", ["product_id"], :name => "FK_fsk_line_items_fsk_products"
+
+  create_table "fsk_orders", :force => true do |t|
+    t.string   "location_name",      :limit => 128
+    t.datetime "updated_at"
+    t.integer  "allocation_id"
+    t.string   "contact_first_name", :limit => 30
+    t.string   "contact_last_name",  :limit => 30
+    t.string   "contact_phone",      :limit => 24
+    t.string   "contact_cell",       :limit => 24
+    t.string   "contact_email",      :limit => 50
+    t.string   "ship_first_name",    :limit => 30
+    t.string   "ship_address1",      :limit => 50
+    t.string   "ship_address2",      :limit => 50
+    t.string   "ship_city",          :limit => 30
+    t.string   "ship_state",         :limit => 6
+    t.string   "ship_zip",           :limit => 10
+    t.string   "ship_phone",         :limit => 24
+    t.integer  "total_kits"
+    t.string   "business_unit",      :limit => 20
+    t.string   "operating_unit",     :limit => 20
+    t.string   "dept_id",            :limit => 20
+    t.string   "project_id",         :limit => 10
+    t.string   "type",               :limit => 20
+    t.string   "order_year",         :limit => 10
+    t.integer  "ssm_id"
+    t.integer  "lock_version",                             :default => 0,     :null => false
+    t.datetime "created_at"
+    t.string   "ship_last_name"
+    t.boolean  "freeze_order",                             :default => false
+    t.text     "target_audience",    :limit => 2147483647
+    t.text     "how_used",           :limit => 2147483647
+  end
+
+  add_index "fsk_orders", ["ssm_id"], :name => "FK_fsk_orders_simplesecuritymanager_user"
+
+  create_table "fsk_products", :force => true do |t|
+    t.string   "name",            :limit => 100,        :default => "",     :null => false
+    t.text     "description",     :limit => 2147483647
+    t.string   "image_filename",  :limit => 1000
+    t.float    "price"
+    t.integer  "quantity",                              :default => 0,      :null => false
+    t.integer  "lock_version",                          :default => 0,      :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "kit_category_id"
+    t.string   "availability",    :limit => 20,         :default => "both", :null => false
+    t.integer  "box_quantity",                          :default => 100
+  end
+
+  add_index "fsk_products", ["kit_category_id"], :name => "FK_fsk_products_fsk_kit_categories"
+
+  create_table "fsk_roles", :force => true do |t|
+    t.string "name", :limit => 50
+  end
+
+  create_table "fsk_users", :force => true do |t|
+    t.integer "role_id", :default => 0, :null => false
+    t.integer "ssm_id",  :default => 0, :null => false
+  end
+
+  add_index "fsk_users", ["role_id"], :name => "FK_fsk_users_fsk_roles"
+  add_index "fsk_users", ["ssm_id"], :name => "FK_fsk_users_simplesecuritymanager_user"
+
   create_table "hr_ms_payment", :primary_key => "paymentID", :force => true do |t|
     t.datetime "paymentDate"
     t.float    "debit"
@@ -1848,6 +1963,15 @@ ActiveRecord::Schema.define(:version => 20120628205036) do
     t.integer  "transferred_by_id"
   end
 
+  create_table "mh_question_rules", :force => true do |t|
+    t.integer  "survey_element_id"
+    t.integer  "rule_id"
+    t.string   "trigger_keywords"
+    t.string   "extra_parameters"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
   create_table "mh_question_sheets", :force => true do |t|
     t.string  "label",              :limit => 60, :default => "",    :null => false
     t.boolean "archived",                         :default => false
@@ -1872,6 +1996,16 @@ ActiveRecord::Schema.define(:version => 20120628205036) do
     t.string   "access_key"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "mh_rules", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "action_method"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+    t.integer  "limit_per_survey", :default => 0
+    t.string   "rule_code"
   end
 
   create_table "mh_survey_elements", :force => true do |t|
@@ -1957,6 +2091,12 @@ ActiveRecord::Schema.define(:version => 20120628205036) do
     t.string   "state",     :limit => 6
     t.string   "zip",       :limit => 10
     t.string   "country",   :limit => 64
+  end
+
+  create_table "ministry_assoc_activitycontact", :id => false, :force => true do |t|
+    t.integer "ActivityID",                                 :null => false
+    t.string  "accountNo",  :limit => 11,                   :null => false
+    t.boolean "dbioDummy",                :default => true, :null => false
   end
 
   create_table "ministry_assoc_dependents", :id => false, :force => true do |t|
@@ -4482,6 +4622,7 @@ ActiveRecord::Schema.define(:version => 20120628205036) do
     t.integer  "account_balance",    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "year"
   end
 
   add_index "sp_designation_numbers", ["person_id", "project_id", "designation_number"], :name => "person_id"
@@ -5061,11 +5202,12 @@ ActiveRecord::Schema.define(:version => 20120628205036) do
   add_foreign_key "crs2_user_role", "crs2_conference", :name => "fk_user_rule_conference_id", :column => "conference_id"
   add_foreign_key "crs2_user_role", "crs2_user", :name => "fk_user_rule_user_id", :column => "user_id"
 
-  add_foreign_key "mail_groups", "mail_users", :name => "mail_groups_ibfk_1", :column => "user_id", :dependent => :nullify
+  add_foreign_key "fsk_fields_roles", "fsk_fields", :name => "fsk_fields_roles_ibfk_1", :column => "field_id"
+  add_foreign_key "fsk_fields_roles", "fsk_roles", :name => "fsk_fields_roles_ibfk_2", :column => "role_id"
 
   add_foreign_key "mail_groups", "mail_users", :name => "mail_groups_ibfk_1", :column => "user_id", :dependent => :nullify
 
-  add_foreign_key "ministry_activity", "ministry_targetarea", :name => "FK2600F20F60761BBA", :column => "fk_targetAreaID", :primary_key => "targetAreaID"
+  add_foreign_key "mh_surveys", "organizations", :name => "mh_surveys_ibfk_1", :dependent => :delete
 
   add_foreign_key "ministry_activity", "ministry_targetarea", :name => "ministry_activity_ibfk_2", :column => "fk_targetAreaID", :primary_key => "targetAreaID", :dependent => :nullify
 
