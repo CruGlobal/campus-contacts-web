@@ -34,7 +34,6 @@ class Import < ActiveRecord::Base
       end
 
       person_hash[:answers] = answers
-      puts person_hash
       new_people << person_hash
     end
 
@@ -72,7 +71,12 @@ class Import < ActiveRecord::Base
       File.open(tempfile.path) do |f|
         csv = CSV.new(f, :headers => :first_row)
         csv.shift
-        self.headers = csv.headers.compact
+        begin
+          raise NilColumnHeader if csv.headers && csv.headers.length - csv.headers.compact.length != 0 #if there is a nil headers
+          self.headers = csv.headers.compact
+        rescue
+          raise NilColumnHeader
+        end
         raise NilColumnHeader if headers.empty?
       end
     end
