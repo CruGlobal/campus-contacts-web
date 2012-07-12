@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120619135454) do
+ActiveRecord::Schema.define(:version => 20120711080607) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -7130,7 +7130,9 @@ ActiveRecord::Schema.define(:version => 20120619135454) do
   add_foreign_key "fsk_fields_roles", "fsk_fields", :name => "fsk_fields_roles_ibfk_1", :column => "field_id"
   add_foreign_key "fsk_fields_roles", "fsk_roles", :name => "fsk_fields_roles_ibfk_2", :column => "role_id"
 
-  add_foreign_key "ministry_activity", "ministry_targetarea", :name => "FK2600F20F60761BBA", :column => "fk_targetAreaID", :primary_key => "targetAreaID"
+  add_foreign_key "mail_groups", "mail_users", :name => "mail_groups_ibfk_1", :column => "user_id", :dependent => :nullify
+
+  add_foreign_key "mh_surveys", "organizations", :name => "mh_surveys_ibfk_1", :dependent => :delete
 
   add_foreign_key "ministry_assoc_dependents", "ministry_dependent", :name => "FKAF8D4EBE8191B090", :column => "DependentID", :primary_key => "DependentID"
 
