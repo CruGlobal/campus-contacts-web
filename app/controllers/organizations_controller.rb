@@ -80,6 +80,7 @@ class OrganizationsController < ApplicationController
     a = params[:archive_contacts_before].split('-')
     a[0], a[1] = a[1], a[0]
     a = a.join('-')
+    a = a.to_date.strftime("%Y-%m-%d")
     to_archive = current_organization.contacts.find_by_date_created_before_date_given(a)
     no = to_archive.count
     new_role = Role.find_or_create_by_organization_id_and_name(organization_id: current_organization.id, name: "Archived Before #{params[:archive_contacts_before]}", i18n: "Archived Before #{params[:archive_contacts_before]}") unless to_archive.blank?
@@ -97,7 +98,26 @@ class OrganizationsController < ApplicationController
   end
   
   def remove_leaders
-  
+    a = params[:date_leaders_not_logged_in_after].split('-')
+    a[0], a[1] = a[1], a[0]
+    a = a.join('-')
+    a = a.to_date.strftime("%Y-%m-%d")
+    puts a.inspect
+    to_remove = current_organization.leaders.find_by_last_login_date_before_date_given(a)
+    no = to_remove.count
+    to_remove.each do |ta| # destroying leader roles of persons
+      ta.organizational_roles.where(role_id: Role::LEADER_ID, organization_id: current_organization.id).first.destroy
+      ca = ta.contact_assignments.where(organization_id: current_organization.id).all
+      ca.collect(&:destroy)
+    end
+    flash[:notice] = t('organizations.cleanup.removal_notice', no: no)
+    #redirect_to cleanup_organizations_path
+    person_ids = to_remove.collect{ |l| l.personID }
+    if to_remove.blank?
+      redirect_to cleanup_organizations_path
+    else
+      redirect_to people_path+"?custom=1&ids=#{person_ids.join(',')}"
+    end
   end
   
   def update_settings

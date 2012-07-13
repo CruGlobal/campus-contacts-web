@@ -971,7 +971,8 @@ en:
       submit: Update Settings
     cleanup: 
       title: "Cleanup"
-      submit: "Archive Contacts Now"
+      archive_contacts_submit: "Archive Contacts Now"
+      remove_leaders_submit: "Remove Leaders Now"
       instructions: "Instructions"
       archive_instructions: "Archive Contacts"
       archive_notice: "%{no} contacts succesfully archived"
@@ -982,7 +983,9 @@ en:
       alumni_inst_2: 'Directory'
       alumni_inst_3: ' screen, select the leaders/involved people that have graduated from your ministry and label as "Alumni"?'
       annual_inst: 'We recommend that you run this at least annually to keep screens less cluttered with old contacts/leaders.'
-      remove_leader_inst_1: "Remove leaders who have been inactive by not logging after date?"
+      remove_leader_inst_1: "Remove leaders who have been inactive by not logging-in after "
+      removal_notice: "%{no} leaders succesfully removed."
+      confirm_remove_leaders: "Are you sure you wanted to archive the desired leaders?"
   imports:
     new:
       wrong_file_format_error: "Uploaded wrong file format. File must be .csv"
