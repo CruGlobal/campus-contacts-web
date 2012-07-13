@@ -264,7 +264,7 @@ class PeopleController < ApplicationController
   # # DELETE /people/1.xml
   def destroy
     @org_role = current_organization.organizational_roles.find_by_person_id(params[:id])
-    @org_role.destroy
+    @org_role.destroy if @org_role.present?
     render nothing: true
   end
 
