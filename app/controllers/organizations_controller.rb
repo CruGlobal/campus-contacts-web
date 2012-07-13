@@ -104,6 +104,7 @@ class OrganizationsController < ApplicationController
     a = a.to_date.strftime("%Y-%m-%d")
     puts a.inspect
     to_remove = current_organization.leaders.find_by_last_login_date_before_date_given(a)
+    puts to_remove.inspect
     no = to_remove.count
     to_remove.each do |ta| # destroying leader roles of persons
       ta.organizational_roles.where(role_id: Role::LEADER_ID, organization_id: current_organization.id).first.destroy
