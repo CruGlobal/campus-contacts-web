@@ -82,7 +82,7 @@ class OrganizationsController < ApplicationController
     a = a.join('-')
     to_archive = current_organization.contacts.find_by_date_created_before_date_given(a)
     no = to_archive.count
-    new_role = Role.find_or_create_by_organization_id_and_name(organization_id: current_organization.id, name: "Archived Contacts #{params[:archive_contacts_before]}", i18n: "Archived Contacts Before #{params[:archive_contacts_before]}") unless to_archive.blank?
+    new_role = Role.find_or_create_by_organization_id_and_name(organization_id: current_organization.id, name: "Archived Before #{params[:archive_contacts_before]}", i18n: "Archived Before #{params[:archive_contacts_before]}") unless to_archive.blank?
     to_archive.each do |ta| # destroying contact roles of persons and replacing them with the new created role for archiving
       ta.organizational_roles.where(role_id: Role::CONTACT_ID, organization_id: current_organization.id).first.destroy
       OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: ta.id, role_id: new_role.id, organization_id: current_organization.id, added_by_id: current_user.person.id)
