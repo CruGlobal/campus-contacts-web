@@ -8,7 +8,6 @@ class OrganizationalRolesController < ApplicationController
       
       # Delete Contact Assignments
       contact_assignments = ContactAssignment.where(person_id: person_id, organization_id: organization_id)
-      contact_assignments_count = contact_assignments.count
       contact_assignments.destroy_all
       
       # Delete Answer Sheets & Answers
@@ -16,33 +15,17 @@ class OrganizationalRolesController < ApplicationController
       answer_sheets = AnswerSheet.where(survey_id: survey_ids, person_id: person_id)
       answer_sheets_ids = answer_sheets.collect(&:id)
       answers = Answer.where(answer_sheet_id: answer_sheets_ids)
-      answers_count = answers.count
       answers.destroy_all
-      answer_sheets_count = answer_sheets.count
       answer_sheets.destroy_all
       
       # Delete Followup Comments
       followup_comments = FollowupComment.where(contact_id: person_id, organization_id: organization_id)
-      followup_comments_count = followup_comments.count
       followup_comments.destroy_all
       
       # Delete Group Membership
       group_ids = Group.where(organization_id: organization_id).collect(&:id)
       group_memberships = GroupMembership.where(group_id: group_ids, person_id: person_id)
-      group_memberships_count = group_memberships.count
       group_memberships.destroy_all
-      
-      Rails.logger.info ""
-      Rails.logger.info ""
-      Rails.logger.info ""
-      Rails.logger.info "Delete #{contact_assignments_count} Contact Assignments"
-      Rails.logger.info "Delete #{answers_count} Answers"
-      Rails.logger.info "Delete #{answer_sheets_count} Answer Sheets"
-      Rails.logger.info "Delete #{followup_comments_count} Followup Comments"
-      Rails.logger.info "Delete #{group_memberships_count} Group Memberships"
-      Rails.logger.info ""
-      Rails.logger.info ""
-      Rails.logger.info ""
       
     end
     @organizational_role.save
