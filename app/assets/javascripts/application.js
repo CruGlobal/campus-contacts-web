@@ -35,5 +35,4 @@
 $(function (){
  $('#person_updated_from').datepicker({ dateFormat: 'dd-mm-yy' });
  $('#person_updated_to').datepicker({ dateFormat: 'dd-mm-yy' });
- $('#archive_contacts_before').datepicker({ dateFormat: 'mm-dd-yy' });
 });

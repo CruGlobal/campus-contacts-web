@@ -145,6 +145,7 @@ Mh::Application.routes.draw do
       post :update_settings
       get :cleanup
       post :archive_contacts
+      post :remove_leaders
     end
   end
 
