@@ -119,17 +119,31 @@ class LeadersController < ApplicationController
     @person, @email, @phone = create_person(params[:person])
     @required_fields = {'First Name' => @person.firstName, 'Last Name' => @person.lastName, 'Gender' => @person.gender, 'Email' => @email.try(:email)}
     @person.valid?; @email.try(:valid?); @phone.try(:valid?)
+    
     error_message = ''
     unless @required_fields.values.all?(&:present?)
       @required_fields.each do |k,v|
         error_message += k + " is required.<br />" unless v.present?
       end
     end
-    error_message += "Email Address isn't valid.<br />" if @email && !@email.valid? 
+    
+    if @email.present? && !@email.valid?
+      if EmailAddress.exists?(email: @email.email)
+        error_message = ''
+        person_email = EmailAddress.find_by_email(@email.email).person
+        error_message += "'#{@email.email}' is already registered as #{person_email.name}.<br/>"
+        error_message += "<a href='/leaders?person_id=#{person_email.id}' data-method='post' data-remote='true' rel='nofollow'>Click here to assign #{person_email.name} as a Leader</a><br />"
+        person_email = nil
+      else
+        error_message += "Email Address isn't valid.<br />"
+      end
+    end
+    
     if error_message.present?
       flash.now[:error] = error_message
       render :new and return
     end
+    
     @person.email ||= @email.email
     @person.save!
     
