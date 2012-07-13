@@ -96,6 +96,10 @@ class OrganizationsController < ApplicationController
     end
   end
   
+  def remove_leaders
+  
+  end
+  
   def update_settings
     org = current_organization
     org.settings[:show_year_in_school] = params[:show_year_in_school] == "on" ? true : false
