@@ -12,9 +12,9 @@ class OrganizationalRolesController < ApplicationController
       contact_assignments.destroy_all
       
       # Delete Answer Sheets & Answers
-      survey_ids = Survey.where(organization_id: organization_id).collect{|s| s.id}
+      survey_ids = Survey.where(organization_id: organization_id).collect(&:id)
       answer_sheets = AnswerSheet.where(survey_id: survey_ids, person_id: person_id)
-      answer_sheets_ids = answer_sheets.collect{|a| a.id}
+      answer_sheets_ids = answer_sheets.collect(&:id)
       answers = Answer.where(answer_sheet_id: answer_sheets_ids)
       answers_count = answers.count
       answers.destroy_all
@@ -27,7 +27,7 @@ class OrganizationalRolesController < ApplicationController
       followup_comments.destroy_all
       
       # Delete Group Membership
-      group_ids = Group.where(organization_id: organization_id).collect{|g| g.id}
+      group_ids = Group.where(organization_id: organization_id).collect(&:id)
       group_memberships = GroupMembership.where(group_id: group_ids, person_id: person_id)
       group_memberships_count = group_memberships.count
       group_memberships.destroy_all
@@ -46,9 +46,9 @@ class OrganizationalRolesController < ApplicationController
       
     end
     @organizational_role.save
-    respond_to do |wants|
-      wants.html
-      wants.js {render nothing: true}
+    respond_to do |format|
+      format.html
+      format.js {render nothing: true}
     end
   end
   
