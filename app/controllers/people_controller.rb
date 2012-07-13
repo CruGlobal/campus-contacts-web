@@ -262,13 +262,9 @@ class PeopleController < ApplicationController
   # # DELETE /people/1
   # # DELETE /people/1.xml
   def destroy
-    @person = Person.find(params[:id])
-    # @person.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(people_url) }
-      format.xml  { head :ok }
-    end
+    @org_role = current_organization.organizational_roles.find_by_person_id(params[:id])
+    @org_role.destroy if @org_role.present?
+    render nothing: true
   end
 
   def bulk_email
