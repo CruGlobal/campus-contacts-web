@@ -277,7 +277,7 @@ class Person < ActiveRecord::Base
   end
 
   def primary_organization
-    org = organizations.find_by_id(org_id) if user.primary_organization_id.present?
+    org = organizations.find_by_id(user.primary_organization_id) if user.primary_organization_id.present?
     unless org
       org = organizations.first
 
