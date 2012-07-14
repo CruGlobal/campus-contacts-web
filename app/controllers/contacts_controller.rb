@@ -152,6 +152,7 @@ class ContactsController < ApplicationController
   def send_reminder
     to_ids = params[:to].split(',')
     leaders = current_organization.leaders.where(personID: to_ids)
+
     if leaders.present?
       ContactsMailer.enqueue.reminder(leaders.collect(&:email).compact, current_person.email, params[:subject], params[:body])
     end
