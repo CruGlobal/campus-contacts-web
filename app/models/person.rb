@@ -69,7 +69,7 @@ class Person < ActiveRecord::Base
   scope :find_by_date_created_before_date_given, lambda { |before_date| {
     :select => "ministry_person.*",
     :joins => "LEFT JOIN organizational_roles AS ors ON ministry_person.personID = ors.person_id",    
-    :conditions => ["ors.role_id = 3 AND ors.created_at <= ?", before_date]
+    :conditions => ["ors.role_id = ? AND ors.created_at <= ?", Role::INVOLVED_ID, before_date]
   }}
 
   scope :order_by_highest_default_role, lambda { |order| {
