@@ -37,7 +37,7 @@
     <span class="name">
       <%= link_to(t('contacts.index.in_progress'), contacts_path(assigned_to: 'progress')) %>
     </span>
-    (<%= @organization.inprogress_contacts_assignments.count %>)
+    (<%= @organization.inprogress_contacts.count %>)
   </li>
   <li>
     <span class="name">

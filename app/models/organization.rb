@@ -27,7 +27,6 @@ class Organization < ActiveRecord::Base
   has_many :contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.followup_status <> 'do_not_contact'", Role::CONTACT_ID]
   has_many :dnc_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.followup_status' => 'do_not_contact'}
   has_many :completed_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.followup_status' => 'completed'}
-  has_many :inprogress_contacts, through: :contact_assignments, source: :person
   has_many :no_activity_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.followup_status' => 'uncontacted'}
   has_many :rejoicables
   has_many :groups
@@ -97,9 +96,10 @@ class Organization < ActiveRecord::Base
       Person.joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{Person.table_name}.#{Person.primary_key} AND organizational_roles.organization_id = #{self.id} AND organizational_roles.role_id = '#{Role::CONTACT_ID}' AND followup_status <> 'do_not_contact' LEFT JOIN contact_assignments ON contact_assignments.person_id = #{Person.table_name}.#{Person.primary_key}  AND contact_assignments.organization_id = #{self.id}").where('contact_assignments.id' => nil)
     end
     
-    def inprogress_contacts_assignments
+    def inprogress_contacts
       leaders_id = only_leaders.collect(&:id)
-      contact_assignments.where(assigned_to_id: leaders_id)
+      people_id = contact_assignments.where(assigned_to_id: leaders_id).collect(&:person_id)
+      Person.includes(:organizational_roles).where("organizational_roles.organization_id" => id, "ministry_person.personID" => people_id)
     end
 
     def roles
