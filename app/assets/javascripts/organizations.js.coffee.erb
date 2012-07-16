@@ -1,4 +1,7 @@
 $ ->
+  $("#archive_contacts_before").datepicker dateFormat: "mm-dd-yy"
+  $("#date_leaders_not_logged_in_after").datepicker dateFormat: "mm-dd-yy"
+
   $('#add_sub_orgs').live 'click', ->
     $(this).hide()
     $('#orgs').show()

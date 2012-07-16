@@ -34,3 +34,8 @@
 //= require global
 //= require welcome
 //= require surveys
+
+$(function (){
+ $('#person_updated_from').datepicker({ dateFormat: 'dd-mm-yy' });
+ $('#person_updated_to').datepicker({ dateFormat: 'dd-mm-yy' });
+});

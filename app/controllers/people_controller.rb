@@ -9,7 +9,6 @@ class PeopleController < ApplicationController
   def index
     authorize! :read, Person
     fetch_people(params)
-
     @roles = current_organization.roles # Admin or Leader, all roles will appear in the index div.role_div_checkboxes but checkobx of the admin role will be hidden 
   end
 
@@ -263,13 +262,9 @@ class PeopleController < ApplicationController
   # # DELETE /people/1
   # # DELETE /people/1.xml
   def destroy
-    @person = Person.find(params[:id])
-    # @person.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(people_url) }
-      format.xml  { head :ok }
-    end
+    @org_role = current_organization.organizational_roles.find_by_person_id(params[:id])
+    @org_role.destroy if @org_role.present?
+    render nothing: true
   end
 
   def bulk_email
@@ -544,6 +539,7 @@ class PeopleController < ApplicationController
       @all_people = @all_people.uniq_by { |a| a.id }
     end
 
+    @all_people = @all_people.where(personId: params[:ids].split(',')) if params[:custom] 
     @people = Kaminari.paginate_array(@all_people).page(params[:page])
   end
 

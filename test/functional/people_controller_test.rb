@@ -556,6 +556,6 @@ class PeopleControllerTest < ActionController::TestCase
     @user, @org = admin_user_login_with_org
     person = Factory(:person)
     post :destroy, { :id => person.id }
-    assert_response :redirect
+    assert_response :success
   end
 end
