@@ -96,6 +96,11 @@ class Organization < ActiveRecord::Base
     def unassigned_people
       Person.joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{Person.table_name}.#{Person.primary_key} AND organizational_roles.organization_id = #{self.id} AND organizational_roles.role_id = '#{Role::CONTACT_ID}' AND followup_status <> 'do_not_contact' LEFT JOIN contact_assignments ON contact_assignments.person_id = #{Person.table_name}.#{Person.primary_key}  AND contact_assignments.organization_id = #{self.id}").where('contact_assignments.id' => nil)
     end
+    
+    def inprogress_contact_assignments
+      leaders_id = only_leaders.collect(&:id)
+      contact_assignments.where(assigned_to_id: leaders_id)
+    end
 
     def roles
       Role.where("organization_id = 0 or organization_id = #{id}")
