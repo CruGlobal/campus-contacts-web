@@ -24,6 +24,7 @@ class Organization < ActiveRecord::Base
   has_many :only_leaders, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::LEADER_ID}, order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
   has_many :admins, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::ADMIN_ID}, order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
   has_many :all_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ?", Role::CONTACT_ID]
+  
   has_many :contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.followup_status <> 'do_not_contact'", Role::CONTACT_ID]
   has_many :dnc_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.followup_status' => 'do_not_contact'}
   has_many :completed_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.followup_status' => 'completed'}

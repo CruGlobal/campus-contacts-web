@@ -23,7 +23,6 @@ class OrganizationTest < ActiveSupport::TestCase
   should have_many(:contacts)
   should have_many(:dnc_contacts)
   should have_many(:completed_contacts)
-  should have_many(:inprogress_contacts)
   should have_many(:no_activity_contacts)
   should have_many(:rejoicables)
   should have_many(:groups)
