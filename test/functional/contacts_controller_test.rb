@@ -185,18 +185,22 @@ class ContactsControllerTest < ActionController::TestCase
   end
   
   test "send reminder" do
+    Resque.reset!
     user1 = Factory(:user_with_auxs)
     user2 = Factory(:user_with_auxs)
     
     user, org = admin_user_login_with_org
-    
+
+    #org.add_leader(user1.person, user.person)
+    #org.add_leader(user2.person, user.person)
     Factory(:organizational_role, person: user1.person, organization: org, role: Role.leader)
     Factory(:organizational_role, person: user2.person, organization: org, role: Role.leader)
     
     xhr :post, :send_reminder, { :to => "#{user1.person.id}, #{user2.person.id}" }
     
-    assert_equal " ", response.body    
-    assert_equal 1, ActionMailer::Base.deliveries.count
+    assert_equal " ", response.body
+    assert_queued(ContactsMailer)
+    #assert_equal 1, ActionMailer::Base.deliveries.count
   end
 
   test "find people by name or meail given wildcard strings" do

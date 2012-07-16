@@ -117,6 +117,7 @@ FactoryGirl.define do
     name {"Organization #{Factory.next(:count)}"}
     terminology 'Organization'
     show_sub_orgs true
+    status 'active'
   end
   
   factory :location do 
