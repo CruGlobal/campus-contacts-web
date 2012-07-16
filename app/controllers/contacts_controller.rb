@@ -120,16 +120,16 @@ class ContactsController < ApplicationController
   
   def create
     @organization = current_organization
-    if params[:person].present?
-      person = Person.where(firstName: params[:person][:firstName], lastName: params[:person][:lastName])
-      if person.present?
-        params[:id] = person.first.id
-        params[:answers] = nil
-        update
-      else
+    #if params[:person].present?
+      #person = Person.where(firstName: params[:person][:firstName], lastName: params[:person][:lastName])
+      #if person.present?
+        #params[:id] = person.first.id
+        #params[:answers] = nil
+        #update
+      #else
         create_contact
-      end
-    end
+      #end
+    #end
   end
   
   def destroy
@@ -152,6 +152,7 @@ class ContactsController < ApplicationController
   def send_reminder
     to_ids = params[:to].split(',')
     leaders = current_organization.leaders.where(personID: to_ids)
+
     if leaders.present?
       ContactsMailer.enqueue.reminder(leaders.collect(&:email).compact, current_person.email, params[:subject], params[:body])
     end
@@ -205,7 +206,7 @@ class ContactsController < ApplicationController
           when 'all'
             @people = @organization.contacts
           when 'unassigned'
-            @people = unassigned_people(@organization)
+            @people = @organization.unassigned_contacts
           when 'progress'
             @people = @organization.inprogress_contacts
           when 'no_activity'
