@@ -31,7 +31,7 @@
     <span class="name">
       <%= link_to(t('contacts.index.unassigned'), contacts_path(assigned_to: 'unassigned')) %>
     </span>
-    (<span id="unassigned_count" class="count"><%= unassigned_people(@organization).count %></span>)
+    (<span id="unassigned_count" class="count"><%= @organization.unassigned_contacts.count %></span>)
   </li>
   <li>
     <span class="name">
