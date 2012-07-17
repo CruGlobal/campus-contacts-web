@@ -28,6 +28,7 @@
           <br/>
           <br/>
           <%= submit_tag t('.archive_contacts_submit'), :confirm => t('.confirm_archive') %>
+          <div class="icon help tipit help_bubble_keyword " title="<%= t('.contact_tips') %>"></div>
         </span>
       </div>
     </div>
@@ -56,8 +57,7 @@
             date_field: h(text_field_tag(:date_leaders_not_logged_in_after, @date))) %>
           <br/>
           <br/>
-          <%= submit_tag t('.remove_leaders_submit'), :confirm => t('.confirm_remove_leaders') %>
-          <div class="icon help tipit help_bubble_keyword " title="<%= t('.leader_tips') %>"></div>
+          <%= submit_tag t('.remove_leaders_submit'), :confirm => t('.confirm_remove_leaders') %> <div class="icon help tipit help_bubble_keyword " title="<%= t('.leader_tips') %>"></div>
         </span>
       </div>
     </div>
