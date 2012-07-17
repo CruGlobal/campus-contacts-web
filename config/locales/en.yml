@@ -53,6 +53,7 @@ en:
     enter_survey_mode: "Enter Survey Mode"
     use_keyword: 'Use Keyword: %{keyword}'
     my_profile: My Profile
+    my_profile_apostrophe: "'s Profile"
     groups: 'Groups'
     hide: 'Hide'
     view_details: "View details"
