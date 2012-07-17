@@ -977,16 +977,16 @@ en:
       archive_instructions: "Archive Contacts"
       archive_notice: "%{no} contacts succesfully archived"
       confirm_archive: "Are you sure you wanted to archive the desired contacts?"
-      archive_inst_1: 'Archive all contacts created before'
-      archive_inst_2: 'and assign with the label "Archived Before'
-      alumni_inst_1: 'Go to the '
-      alumni_inst_2: 'Directory'
-      alumni_inst_3: ' screen, select the leaders/involved people that have graduated from your ministry and label as "Alumni"?'
+      archive_inst: "Archive all contacts created before %{date_field} and assign with the label \"Archived Before %{archive_date}\"?"
+      alumni_inst: "Go to the %{link} screen, select the leaders/involved people that have graduated from your ministry and label as \"Alumni\"?"
+      alumni_inst_path: Directory
       annual_inst_1: "People are messy - and so are databases. Every year your database gets clogged up with people who may have come to a meeting once upon a time, or filled out a survey once, but never got involved and don't intend to. If you are a campus ministry, you will also have a good number of people who graduate from your ministry each year. How do you get your database trimmed up and ready for the fall?"
       annual_inst_2: "An Annual Clean Up can help. Simply walk through these steps once a year (or however often you want) and your Mission Hub Database will again be a well-oiled machine, ready to help you transform the world!"
-      remove_leader_inst_1: "Remove leaders who have been inactive by not logging-in after "
+      remove_leader_inst: "Remove leaders who have been inactive by not logging-in after %{date_field}"
       removal_notice: "%{no} leaders succesfully removed."
       confirm_remove_leaders: "Are you sure you wanted to archive the desired leaders?"
+      leader_tips: 'Add a new, unique question to your keyword at the beginning of this year and ask everyone to take the survey.  Even if all the other fields are full, their answer to that question will cause their record to be "UnArchived".'
+      contact_tips: 'Step #1 will move everyone who is marked "CONTACT" into an archived file if they are created earlier than the date specified.  You can modify the date as the default will take all contacts created today or earlier.<br><br>The contacts can be "UnArchived" manually by going to the Directory screen, click on the label you gave them and then add the label, “Contact” to person.<br><br>The contacts can be "UnArchived" manually by going to the Directory screen, click on the label you gave them and then add the label, “Contact” to person.<br><br>Tip from a leader : “Add a new, unique question to your keyword at the beginning of this year and ask everyone to take the survey.  Even if all the other fields are full, their answer to that question will cause their record to be "UnArchived".'
   imports:
     new:
       wrong_file_format_error: "Uploaded wrong file format. File must be .csv"
