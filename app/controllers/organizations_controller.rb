@@ -72,7 +72,7 @@ class OrganizationsController < ApplicationController
   end
   
   def cleanup
-    @date = Date.today.strftime("%m-%d-%Y")
+    @date = (Date.today-1).strftime("%m-%d-%Y")
     
   end
   
@@ -101,7 +101,7 @@ class OrganizationsController < ApplicationController
     a = params[:date_leaders_not_logged_in_after].split('-')
     a[0], a[1] = a[1], a[0]
     a = a.join('-')
-    a = a.to_date.strftime("%Y-%m-%d")
+    a = (a.to_date+1).strftime("%Y-%m-%d")
     puts a.inspect
     to_remove = current_organization.only_leaders.find_by_last_login_date_before_date_given(a)
     no = to_remove.count
