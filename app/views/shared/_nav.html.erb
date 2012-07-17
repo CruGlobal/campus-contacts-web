@@ -38,7 +38,7 @@
             <% end %>
           </li>
         <% end %>
-        <li><%= link_to(current_user.to_s + t('nav.my_profile_apostrophe'), person_path(current_person)) %></li>
+        <li><%= link_to(t('nav.my_profile', name: current_user.to_s), person_path(current_person)) %></li>
         <li>
           <%= link_to(t('nav.logout'), '#', onclick: "$.mh.logout()")  %> 
         </li>   
