@@ -27,6 +27,7 @@
     <div>
       <span class="name"><%= image_tag("step3.png", :height => "5%", :width => "5%") %>
       <%= t('.remove_leader_inst_1') %><%= text_field_tag :date_leaders_not_logged_in_after, @date %>? <%= submit_tag t('.remove_leaders_submit'), :confirm => t('.confirm_remove_leaders') %></span>
+      <tr><th><div class="icon help tipit help_bubble_keyword " title="<%= t('.leader_tips') %>"></div></th></tr>
     </div>
 
   <% end %>
