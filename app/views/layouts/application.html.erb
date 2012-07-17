@@ -59,7 +59,7 @@
                   <ul>
                     <li class="<%= 'current' if request.path == organizations_path %>"><%= link_to(t('nav.manage'), "/organizations", :class => "topset groups") %></li>
                     <li class="<%= 'current' if request.path == '/organizations/settings' %>"><%= link_to(t('nav.settings'), "/organizations/settings", :class => "topset allcontacts") %></li>
-                    <li class="<%= 'current' if request.path == cleanup_organizations_path %>"><%= link_to(t('nav.cleanup'), "/organizations/cleanup", :class => "topset allcontacts") %></li>
+                    <li class="<%= 'current' if request.path == cleanup_organizations_path %>"><%= link_to(t('nav.cleanup'), "/organizations/cleanup", :class => "topset cleanup") %></li>
                   </ul>
                 </li>
               <% end %>
