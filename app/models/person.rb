@@ -63,7 +63,7 @@ class Person < ActiveRecord::Base
   scope :find_by_last_login_date_before_date_given, lambda { |after_date| {
     :select => "ministry_person.*",
     :joins => "JOIN simplesecuritymanager_user AS ssm ON ssm.userID = ministry_person.fk_ssmUserId",
-    :conditions => ["ssm.current_sign_in_at <= ?", after_date]
+    :conditions => ["ssm.current_sign_in_at >= ?", after_date]
   }}
   
   scope :find_by_date_created_before_date_given, lambda { |before_date| {
