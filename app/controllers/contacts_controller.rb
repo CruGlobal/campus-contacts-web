@@ -120,16 +120,16 @@ class ContactsController < ApplicationController
   
   def create
     @organization = current_organization
-    if params[:person].present?
-      person = Person.where(firstName: params[:person][:firstName], lastName: params[:person][:lastName])
-      if person.present?
-        params[:id] = person.first.id
-        params[:answers] = nil
-        update
-      else
+    #if params[:person].present?
+      #person = Person.where(firstName: params[:person][:firstName], lastName: params[:person][:lastName])
+      #if person.present?
+        #params[:id] = person.first.id
+        #params[:answers] = nil
+        #update
+      #else
         create_contact
-      end
-    end
+      #end
+    #end
   end
   
   def destroy
@@ -152,6 +152,7 @@ class ContactsController < ApplicationController
   def send_reminder
     to_ids = params[:to].split(',')
     leaders = current_organization.leaders.where(personID: to_ids)
+
     if leaders.present?
       ContactsMailer.enqueue.reminder(leaders.collect(&:email).compact, current_person.email, params[:subject], params[:body])
     end
@@ -226,7 +227,7 @@ class ContactsController < ApplicationController
         @people = @people.includes(:organizational_roles).where("organizational_roles.organization_id" => @organization.id)
       end
       if params[:q] && params[:q][:s].include?('mh_answer_sheets')
-        @people = @people.joins(:answer_sheets => :survey).where('mh_surveys.organization_id' => @organization.id)
+        @people = current_organization.contacts.get_and_order_by_latest_answer_sheet_answered(params[:q][:s], current_organization.id)
       end
       if params[:survey].present?
         @people = @people.joins(:answer_sheets).where("mh_answer_sheets.survey_id" => params[:survey])
@@ -299,7 +300,7 @@ class ContactsController < ApplicationController
 
       @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
       # raise @q.sorts.inspect
-      @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? params[:q][:s] : ['lastName, firstName']).group('ministry_person.personID')
+      @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? "" : ['lastName, firstName']).group('ministry_person.personID')
       @all_people = @people
       @people = @people.page(params[:page])
     
@@ -329,7 +330,7 @@ class ContactsController < ApplicationController
         
         answers[answer_sheet.person_id] ||= {}
         questions.each do |q|
-          answers[answer_sheet.person_id][q.id] = [q.display_response(answer_sheet), answer_sheet.updated_at]# if q.display_response(answer_sheet).present? or (q.attribute_name == "email" and q.object_name == 
+          answers[answer_sheet.person_id][q.id] = [q.display_response(answer_sheet), answer_sheet.updated_at]# if q.display_response(answer_sheet).present?# or (q.attribute_name == "email" and q.object_name == 
         end
       end
       answers

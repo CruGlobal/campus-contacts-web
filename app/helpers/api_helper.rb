@@ -47,22 +47,28 @@ module ApiHelper
   end
  
   def organization_allowed?   
-    @valid_orgs = current_person.organizations.collect { |x| x.subtree.collect(&:id)}.flatten.uniq
-    @valid_keywords = SmsKeyword.where(:organization_id => @valid_orgs)
-
     if (params[:org].present? || params[:org_id].present?)
       raise ApiErrors::OrganizationNotIntegerError unless (is_int?(params[:org_id]) || is_int?(params[:org])) 
       org_id = params[:org].present? ? params[:org].to_i : params[:org_id].to_i
-      raise ApiErrors::OrgNotAllowedError unless @valid_orgs.include?(org_id)
+      raise ApiErrors::OrgNotAllowedError unless valid_org_ids.include?(org_id)
     elsif params[:keyword].present?
-      @valid_key_ids = @valid_keywords.collect(&:id)
+      @valid_key_ids = valid_keywords.collect(&:id)
       raise ApiErrors::OrgNotAllowedError unless @valid_key_ids.include?(params[:keyword])
     elsif params[:keyword_id].present?
       raise ApiErrors::KeywordNotIntegerError unless is_int?(params[:keyword_id]) 
-      @valid_key_names = @valid_keywords.collect(&:keyword)
+      @valid_key_names = valid_keywords.collect(&:keyword)
       raise ApiErrors::OrgNotAllowedError unless @valid_key_names.include?(params[:keyword])
     end
   true
+  end
+  
+  def valid_org_ids
+    # @valid_orgs ||= current_person.organizations.collect { |x| x.subtree.collect(&:id)}.flatten.uniq
+    @valid_orgs ||= current_person.orgs_with_children.collect(&:id)
+  end
+  
+  def valid_keywords
+    @valid_keywords ||= SmsKeyword.where(:organization_id => valid_org_ids)
   end
  
   def authorized_leader?

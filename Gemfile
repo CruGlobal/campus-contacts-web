@@ -63,6 +63,7 @@ gem 'copycopter_client'
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
 group :development, :test do
+  gem 'resque_unit'
   gem 'shoulda', :require => false
   # gem 'ephemeral_response'
   gem 'mocha'

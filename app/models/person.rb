@@ -32,7 +32,7 @@ class Person < ActiveRecord::Base
 
   has_many :organization_memberships, inverse_of: :person
   has_many :organizational_roles
-  has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role::CONTACT_ID}", uniq: true
+  has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role::CONTACT_ID} AND status = 'active'", uniq: true
   has_many :roles, through: :organizational_roles
 
   has_many :followup_comments, :class_name => "FollowupComment", :foreign_key => "commenter_id"
@@ -96,6 +96,13 @@ class Person < ActiveRecord::Base
     :select => "ministry_person.*",
     :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID LEFT JOIN organizational_roles AS org_roles ON ministry_person.personID = org_roles.person_id",
     :conditions => "org_roles.organization_id = #{org_id} AND concat(firstName,' ',lastName) LIKE '%#{keyword}%' OR concat(lastName, ' ',firstName) LIKE '%#{keyword}%' OR emails.email LIKE '%#{keyword}%'"
+  } }
+  
+  scope :get_and_order_by_latest_answer_sheet_answered, lambda { |order, org_id| {
+    #"SELECT * FROM (SELECT * FROM missionhub_dev.ministry_person mp INNER JOIN missionhub_dev.organizational_roles ro ON mp.personID = ro.person_id WHERE ro.organization_id = #{@organization.id} AND (ro.role_id = 3 AND ro.followup_status <> 'do_not_contact')) mp LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM missionhub_dev.mh_answer_sheets ass INNER JOIN missionhub_dev.mh_surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{@organization.id}) ass ON ass.person_id = mp.personID GROUP BY mp.personID ORDER BY #{params[:q][:s].gsub('mh_answer_sheets', 'ass')}"
+    :joins => "LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM mh_answer_sheets ass INNER JOIN mh_surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{org_id}) ass ON ass.person_id = ministry_person.personID",
+    :group => "ministry_person.personID",
+    :order => "#{order.gsub('mh_answer_sheets', 'ass')}"
   } }
 
   def assigned_tos_by_org(org)
@@ -275,27 +282,21 @@ class Person < ActiveRecord::Base
   end
 
   def primary_organization=(org)
-    if org.present? && self.user
-      self.user.primary_organization_id = org.id
-      self.user.save!
-    else
-      false
+    if org.present? && user
+      user.primary_organization_id = org.id
+      user.save!
     end
   end
 
   def primary_organization
-    if self.organizations.present?
-      org_id = self.user.primary_organization_id
-      if org_id.present?
-        org = Organization.find(org_id)
-      else    
-        org = self.organizations.first
-        self.primary_organization = org
-      end
-      org
-    else
-      false
+    org = organizations.find_by_id(user.primary_organization_id) if user.primary_organization_id.present?
+    unless org
+      org = organizations.first
+
+      # save this as the primary org
+      primary_organization = org
     end
+    org
   end
 
   def gender=(gender)

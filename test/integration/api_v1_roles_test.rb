@@ -35,7 +35,7 @@ class ApiV1RolesTest < ActionDispatch::IntegrationTest
       
       path = "/api/roles/#{@user.person.id}"
       @user3.person.organizational_roles.first.update_attributes(role_id: Role::CONTACT_ID)
-      put path, {'access_token' => @access_token3.code, role: "leader", org_id: @user3.person.primary_organization.id}
+      put path, {'access_token' => @access_token3.code, role: "leader", org_id: @user3.person.organizational_roles.first.id}
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal("24", @json['error']['code'], @json['error'])
     end
