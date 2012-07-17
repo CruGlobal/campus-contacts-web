@@ -1,33 +1,65 @@
 <div class="titlebar">
   <h1><%= t('.title') %></h1>
-  <p><%= t('.annual_inst_1') %></p>
-  <p><%= t('.annual_inst_2') %></p>
 </div>
 
-<div class="pad">
-  <br><br>
-  <%= form_tag("/organizations/archive_contacts") do %>
-        
-    <div>
-      <span class="name"><%= image_tag("step1.png", :height => "5%", :width => "5%") %><%= t('.archive_inst_1') %> <%= text_field_tag :archive_contacts_before, @date %> <%= t('.archive_inst_2') %> <span id="archive_label_name_preview"><%= @date %></span>"?  <%= submit_tag t('.archive_contacts_submit'), :confirm => t('.confirm_archive') %></span>
-    </div>
+<div class="pagemenu">
+  <ul class="pillmenu">
+    <li><%= link_to t('general.back'), :back %></li>
+  </ul>
+</div>
 
-    
+<div class="contentpad">
+  <p class="explanation1"> 
+    <%= t('.annual_inst_1') %>
+    <br/><br/>
+    <%= t('.annual_inst_2') %>
+  </p>
+  <br>
+  <%= form_tag("/organizations/archive_contacts") do %>
+    <div class="stepwrap rwidth">
+      <div class="stepnumber">
+        <%= image_tag("step1.png", class: 'cleanup_number') %>
+      </div>
+      <div class="stepcontent cleanup_content"> 
+        <span class="name">
+          <%=raw t('.archive_inst', 
+            date_field: h(text_field_tag(:archive_contacts_before, @date)),
+            archive_date: @date) %>
+          <br/>
+          <br/>
+          <%= submit_tag t('.archive_contacts_submit'), :confirm => t('.confirm_archive') %>
+        </span>
+      </div>
+    </div>
   <% end %>
-  <br><br>
   
-  <div>
-    <span class="name"><%= image_tag("step2.png", :height => "5%", :width => "5%") %>
-    <%= t('.alumni_inst_1') %><%= link_to t('.alumni_inst_2'), people_path, target: '_blank' %><%= t('.alumni_inst_3') %></span>
+  <div class="stepwrap rwidth">
+    <div class="stepnumber">
+      <%= image_tag("step2.png", class: 'cleanup_number') %>
+    </div>
+    <div class="stepcontent cleanup_content"> 
+      <span class="name">
+        <%=raw t('.alumni_inst', link: link_to(t('.alumni_inst_path'), people_path, target: '_blank')) %>
+      </span>
+    </div>
   </div>
   
-  <br><br>
   <%= form_tag("/organizations/remove_leaders") do %>
-        
-    <div>
-      <span class="name"><%= image_tag("step3.png", :height => "5%", :width => "5%") %>
-      <%= t('.remove_leader_inst_1') %><%= text_field_tag :date_leaders_not_logged_in_after, @date %>? <%= submit_tag t('.remove_leaders_submit'), :confirm => t('.confirm_remove_leaders') %></span>
-      <tr><th><div class="icon help tipit help_bubble_keyword " title="<%= t('.leader_tips') %>"></div></th></tr>
+  
+    <div class="stepwrap rwidth">
+      <div class="stepnumber">
+        <%= image_tag("step3.png", class: 'cleanup_number') %>
+      </div>
+      <div class="stepcontent cleanup_content"> 
+        <span class="name">
+          <%=raw t('.remove_leader_inst', 
+            date_field: h(text_field_tag(:date_leaders_not_logged_in_after, @date))) %>
+          <br/>
+          <br/>
+          <%= submit_tag t('.remove_leaders_submit'), :confirm => t('.confirm_remove_leaders') %>
+          <div class="icon help tipit help_bubble_keyword " title="<%= t('.leader_tips') %>"></div>
+        </span>
+      </div>
     </div>
 
   <% end %>
