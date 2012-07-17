@@ -977,8 +977,8 @@ en:
       archive_instructions: "Archive Contacts"
       archive_notice: "%{no} contacts succesfully archived"
       confirm_archive: "Are you sure you wanted to archive the desired contacts?"
-      archive_inst: "Archive all contacts created before %{date_field} and assign with the label \"Archived Before %{archive_date}\"?"
-      alumni_inst: "Go to the %{link} screen, select the leaders/involved people that have graduated from your ministry and label as \"Alumni\"?"
+      archive_inst: "Archive all contacts created before %{date_field} and assign with the label \"Archived Before %{archive_date}\""
+      alumni_inst: "Go to the %{link} screen, select the leaders/involved people that have graduated from your ministry and label as \"Alumni\""
       alumni_inst_path: Directory
       annual_inst_1: "People are messy - and so are databases. Every year your database gets clogged up with people who may have come to a meeting once upon a time, or filled out a survey once, but never got involved and don't intend to. If you are a campus ministry, you will also have a good number of people who graduate from your ministry each year. How do you get your database trimmed up and ready for the fall?"
       annual_inst_2: "An Annual Clean Up can help. Simply walk through these steps once a year (or however often you want) and your Mission Hub Database will again be a well-oiled machine, ready to help you transform the world!"

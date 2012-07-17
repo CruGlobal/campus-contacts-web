@@ -53,7 +53,7 @@
       <div class="stepcontent cleanup_content"> 
         <span class="name">
           <%=raw t('.remove_leader_inst', 
-            date_field: h(text_field_tag(:date_leaders_not_logged_in_after, @date))) %>
+            date_field: h(text_field_tag(:date_leaders_not_logged_in_after, @date_leaders))) %>
           <br/>
           <br/>
           <%= submit_tag t('.remove_leaders_submit'), :confirm => t('.confirm_remove_leaders') %> <div class="icon help tipit help_bubble_keyword " title="<%= t('.leader_tips') %>"></div>

@@ -73,7 +73,7 @@ class OrganizationsController < ApplicationController
   
   def cleanup
     @date = (Date.today-1).strftime("%m-%d-%Y")
-    @date_3mos_ago = (Date.today-91).strftime("%m-%d-%Y")
+    @date_leaders = (Date.today-91).strftime("%m-%d-%Y")
     
   end
   
