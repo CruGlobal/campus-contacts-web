@@ -81,7 +81,7 @@ class OrganizationsController < ApplicationController
     a = params[:archive_contacts_before].split('-')
     a[0], a[1] = a[1], a[0]
     a = a.join('-')
-    a = a.to_date.strftime("%Y-%m-%d")
+    a = (a.to_date+1).strftime("%Y-%m-%d")
     to_archive = current_organization.contacts.find_by_date_created_before_date_given(a)
     no = to_archive.count
     new_role = Role.find_or_create_by_organization_id_and_name(organization_id: current_organization.id, name: "Archived Before #{params[:archive_contacts_before]}", i18n: "Archived Before #{params[:archive_contacts_before]}") unless to_archive.blank?
