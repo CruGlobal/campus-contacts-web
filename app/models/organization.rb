@@ -66,6 +66,14 @@ class Organization < ActiveRecord::Base
       transition any => :inactive
     end
     end
+    
+    def is_root? # an org is considered root if it has no parents
+      ancestry.nil?
+    end
+    
+    def is_root_and_has_only_one_admin?
+      ancestry.nil? && admins.count == 1
+    end
 
     def to_s() name; end
 

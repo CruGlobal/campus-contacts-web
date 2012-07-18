@@ -12,6 +12,7 @@ class OrganizationalRole < ActiveRecord::Base
   before_create :set_start_date, :set_contact_uncontacted
   before_create :notify_new_leader, :if => :role_is_leader_or_admin
   after_save :set_end_date_if_deleted
+  before_destroy :check_if_only_remaining_admin_role_in_a_root_org
 
   scope :find_non_admin_and_non_leader_roles, {
     :conditions => ["role_id != ? AND role_id != ?", Role::ADMIN_ID, Role::LEADER_ID]
@@ -70,9 +71,17 @@ class OrganizationalRole < ActiveRecord::Base
   class InvalidPersonAttributesError < StandardError
   
   end
+  
+  class CannotDeleteRoleError < StandardError
+    
+  end
 
 
   private
+    def check_if_only_remaining_admin_role_in_a_root_org
+      raise CannotDeleteRoleError if role_id == Role::ADMIN_ID && organization.is_root_and_has_only_one_admin?
+    end
+  
     def set_start_date
       self.start_date = Date.today
       true
