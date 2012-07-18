@@ -23,8 +23,7 @@
       <div class="stepcontent cleanup_content"> 
         <span class="name">
           <%=raw t('.archive_inst', 
-            date_field: h(text_field_tag(:archive_contacts_before, @date)),
-            archive_date: @date) %>
+            date_field: h(text_field_tag(:archive_contacts_before, @date))) %><span id="archive_label_name_preview"><%= @date %></span>"
           <br/>
           <br/>
           <%= submit_tag t('.archive_contacts_submit'), :confirm => t('.confirm_archive') %>
