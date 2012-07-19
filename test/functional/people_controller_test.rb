@@ -149,6 +149,28 @@ class PeopleControllerTest < ActionController::TestCase
       assert old_person_3_roles & new_person_3_roles # role 3 still has his old roles?
 
     end
+    
+    context "removing admin role" do
+      setup do
+        @last_admin = Factory(:person, email: "person4@email.com")
+        @admin_organizational_role = Factory(:organizational_role, organization: @org, person: @last_admin)
+        @org.add_admin(@last_admin)
+      end
+      
+      should "not remove admin role from the last admin of a root org" do
+        assert_no_difference "OrganizationalRole.count" do
+          xhr :post, :update_roles, { :role_ids => [], :some_role_ids => "", :person_id => @last_admin.id }
+        end
+      end
+=begin
+      should "be able to remove admin role from the last admin of a child org" do
+        @org.update_attributes(ancestry: "10") #since every child orgs have ancestrys
+        assert_difference "OrganizationalRole.count" do
+          xhr :post, :update_roles, { :role_ids => [], :some_role_ids => "", :person_id => @last_admin.id }
+        end
+      end
+=end      
+    end
   end
   
   context "Search" do
