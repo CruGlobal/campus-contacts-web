@@ -48,6 +48,7 @@ en:
     prayed_to_receive: 'Prayed To Receive Christ' 
     gospel_presentation: 'Gospel Presentation'
   nav:
+    dashboard: Dashboard
     organizations: Organizations
     manage: Manage
     enter_survey_mode: "Enter Survey Mode"
