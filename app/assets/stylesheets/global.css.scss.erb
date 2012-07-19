@@ -209,6 +209,7 @@ a.headerlink:hover {
   a.topset.directory {background-position: 8px 4px;}
   a.topset.groups {background-position: 8px -97px;}
   a.topset.comments {background-position: 8px -45px;}
+  a.topset.cleanup {background-position: 8px -250px;}
 }
 
 img.tmenu {
@@ -263,6 +264,9 @@ ul.leftmenu {
       height: 24px;
     }
     > a {
+      font-weight: bold;
+    }
+    .name {
       font-weight: bold;
     }
   }
@@ -2517,7 +2521,17 @@ ul#ui-autocomplete {
 
 
 #archive_contacts_before, #date_leaders_not_logged_in_after{
-  width: 70px;
+  width: 100px;
+  text-align: center;
   background: $blue;
   color: $white;
+}
+
+.cleanup_number {
+  width: 70px;
+  height: 70px;
+}
+
+.cleanup_content {
+  min-height: 70px;
 }

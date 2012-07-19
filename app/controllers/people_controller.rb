@@ -348,9 +348,18 @@ class PeopleController < ApplicationController
     some_roles = old_roles if params[:include_old_roles] == "yes"
     to_be_added_roles = new_roles - old_roles
     to_be_removed_roles = old_roles - new_roles - some_roles
+    
+    if to_be_removed_roles.include? Role::ADMIN_ID && current_organization.is_root_and_has_only_one_admin?
+      render 'update_leader_error', :locals => { :person => person } if role_id == Role::LEADER_ID
+    end
 
     person.organizational_roles.where(organization_id: current_organization.id, role_id: to_be_removed_roles).each do |organizational_role|
-      organizational_role.destroy
+      begin
+        organizational_role.destroy
+      rescue OrganizationalRole::CannotDeleteRoleError
+        render 'cannot_delete_admin_error'
+        return
+      end
     end
     
     all = to_be_added_roles | (new_roles & old_roles) | (old_roles & some_roles)
