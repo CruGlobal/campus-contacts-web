@@ -83,7 +83,7 @@ class OrganizationalRole < ActiveRecord::Base
     end
     
     def check_if_admin_is_destroying_own_admin_role
-      raise CannotDestroyRoleError if destroyer && person_id == destroyer.id
+      raise CannotDestroyRoleError if role_id == Role::ADMIN_ID && destroyer && person_id == destroyer.id
     end
   
     def set_start_date
