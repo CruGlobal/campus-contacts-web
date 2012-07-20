@@ -3,5 +3,89 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 #dashboard_main {
-	padding: 0px 15px;
+	padding: 15px 15px;
+	
+	#dashboard_panels {
+		text-align: center;
+		vertical-align: top;
+		width: 930px;
+		margin: 0 auto;
+		
+		#dashboard_left {
+			float: left;
+			width: 340px;
+			
+			.dash_links {
+				border: 1px solid #ccc;
+				background: #F0F0F0;
+				-webkit-border-radius: 15px;
+				-moz-border-radius: 15px;
+				border-radius: 15px;
+				
+				.dash_link {
+					padding: 15px 10px;
+					height: 64px;
+					
+					.dash_icon {
+						width: 64px;
+						height: 64px;
+						float: left;
+						margin-right: 20px;
+					}
+					
+					.dash_content {
+						text-align: left;
+						height: 64px - 20px;
+						line-height: 22px;
+						vertical-align: middle;
+						padding: 10px;
+						
+						a {
+							font-size: 14px;
+							margin-top: 5px;
+						}
+			
+					}
+				}
+								
+				.dash_divider {
+					width: 95%;
+					margin: 0 auto;
+				}
+				
+			}
+		}
+	
+		#dashboard_right {
+			float: right;
+			width: 560px;
+			
+			#dash_content {
+				margin: 20px 0;
+				
+				.description {
+					float: left;
+					width: 65%;
+					padding: 0 0 20px 0;
+					text-align: left;
+					
+					.title {
+						font-weight: bold;
+						color: #0379AE;
+						font-size: 14px;
+					}
+					.date {
+						color: #0379AE;
+						font-size: 13px;
+						margin-bottom: 15px;
+					}
+					.info {
+						color: #666;
+						font-size: 13px;
+						text-align: justify;
+					}
+				}
+			}
+		}
+	}
 }

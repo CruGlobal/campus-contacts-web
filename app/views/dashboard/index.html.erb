@@ -1,2 +1,9 @@
-<h1>Dashboard#index</h1>
-<p>Find me in app/views/dashboard/index.html.erb</p>
+<div id="dashboard_panels">
+  <div id="dashboard_left">
+    <%= render partial: "left_pane" %>
+  </div>
+
+  <div id="dashboard_right">
+    <%= render partial: "right_pane" %>
+  </div>
+</div>
