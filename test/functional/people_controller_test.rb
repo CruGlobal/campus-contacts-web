@@ -150,7 +150,7 @@ class PeopleControllerTest < ActionController::TestCase
 
     end
     
-    context "removing admin role" do
+    context "removing an admin role" do
       setup do
         @last_admin = Factory(:person, email: "person4@email.com")
         @admin_organizational_role = Factory(:organizational_role, organization: @org, person: @last_admin)
