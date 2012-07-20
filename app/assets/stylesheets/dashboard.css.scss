@@ -8,22 +8,23 @@
 	#dashboard_panels {
 		text-align: center;
 		vertical-align: top;
-		width: 930px;
+		width: 900px;
 		margin: 0 auto;
 		
 		#dashboard_left {
 			float: left;
-			width: 340px;
+			width: 300px;
 			
 			.dash_links {
 				border: 1px solid #ccc;
 				background: #F0F0F0;
-				-webkit-border-radius: 15px;
-				-moz-border-radius: 15px;
-				border-radius: 15px;
+				-webkit-border-radius: 12px;
+				-moz-border-radius: 12px;
+				border-radius: 12px;
+				margin-bottom: 15px;
 				
 				.dash_link {
-					padding: 15px 10px;
+					padding: 10px 10px;
 					height: 64px;
 					
 					.dash_icon {
@@ -53,6 +54,42 @@
 					margin: 0 auto;
 				}
 				
+				&.lower_box {
+					padding: 0 0 10px;
+				}
+				
+				.lower_box_title {
+					padding: 10px;
+					font-size: 18px;
+					text-align: left;
+					color: #666;
+				}
+				
+				.lower_box_item {
+					padding: 0px 15px 4px;
+					height: 25px;
+					
+					.lower_box_count {
+						background: #008db7;
+						width: 20px;
+						height: 20px;
+						float: left;
+						padding: 3px;
+						font-size: 16px;
+						text-align: center;
+						vertical-align: middle;
+						color: #fff;
+						margin-right: 10px;
+					}
+					
+					.lower_box_link {
+						text-align: left;
+						padding: 4px;
+						a {
+							font-size: 14px;
+						}
+					}
+				}
 			}
 		}
 	
