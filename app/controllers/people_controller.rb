@@ -356,9 +356,6 @@ class PeopleController < ApplicationController
       rescue OrganizationalRole::CannotDestroyRoleError
         render 'cannot_delete_admin_error'
         return
-      rescue OrganizationalRole::CannotDestroyOwnAdminRoleError
-        render 'cannot_delete_own_admin_role_error'
-        return
       end
     end
     
