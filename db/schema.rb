@@ -1712,7 +1712,6 @@ ActiveRecord::Schema.define(:version => 20120720162850) do
     t.text     "context"
     t.string   "video",      :default => ""
     t.boolean  "visible",    :default => true
-    t.integer  "posted_by",  :default => 0
     t.datetime "created_at",                   :null => false
     t.datetime "updated_at",                   :null => false
   end

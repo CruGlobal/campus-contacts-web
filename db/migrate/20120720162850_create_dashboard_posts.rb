@@ -5,7 +5,6 @@ class CreateDashboardPosts < ActiveRecord::Migration
       t.text :context, default: ""
       t.string :video, default: ""
       t.boolean :visible, default: 1
-      t.integer :posted_by, default: 0
 
       t.timestamps
     end
