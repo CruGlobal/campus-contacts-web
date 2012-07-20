@@ -76,11 +76,6 @@ class OrganizationalRole < ActiveRecord::Base
   class CannotDestroyRoleError < StandardError
     
   end
-  
-  class CannotDestroyOwnAdminRoleError < StandardError
-    
-  end
-
 
   private
     def check_if_only_remaining_admin_role_in_a_root_org
@@ -88,7 +83,7 @@ class OrganizationalRole < ActiveRecord::Base
     end
     
     def check_if_admin_is_destroying_own_admin_role
-      raise CannotDestroyOwnAdminRoleError if destroyer && person_id == destroyer.id
+      raise CannotDestroyRoleError if destroyer && person_id == destroyer.id
     end
   
     def set_start_date

@@ -161,7 +161,6 @@ en:
       error_message_update_leader_without_person: "Error: Person does not have valid email to be leader"
       error_message_update_admin_without_person: "Error: Person does not have valid email to be admin"
       cannot_delete_admin_error: "As an ADMIN you cannot remove yourself! Please assign another individual as an ADMIN for this organization and then ask that \"new ADMIN\" to remove your ADMIN label."
-      cannot_delete_own_admin_role_error: "As an ADMIN you cannot remove yourself! Please assign another individual as an ADMIN for this organization and then ask that \"new ADMIN\" to remove your ADMIN label."
       transfer_org: Transfer to another team/organization
     all:
       page_selected_html: "All <b>%{count}</b> people on this page are selected."
