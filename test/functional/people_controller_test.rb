@@ -153,6 +153,7 @@ class PeopleControllerTest < ActionController::TestCase
     context "removing an admin role" do
       setup do
         @last_admin = Factory(:person, email: "person4@email.com")
+        @admin2 = Factory(:person, email: "person5@email.com")
         @admin_organizational_role = Factory(:organizational_role, organization: @org, person: @last_admin)
         @org.add_admin(@last_admin)
       end
@@ -162,14 +163,24 @@ class PeopleControllerTest < ActionController::TestCase
           xhr :post, :update_roles, { :role_ids => [], :some_role_ids => "", :person_id => @last_admin.id }
         end
       end
+      
 =begin
-      should "be able to remove admin role from the last admin of a child org" do
-        @org.update_attributes(ancestry: "10") #since every child orgs have ancestrys
-        assert_difference "OrganizationalRole.count" do
-          xhr :post, :update_roles, { :role_ids => [], :some_role_ids => "", :person_id => @last_admin.id }
+      should "not remove admin role from the last admin of an org with parent org with 'show_sub_orgs == false'" do
+        setup do
+          org_2 = Organization.create({"parent_id"=> @org.id, "name"=>"Org 2", "terminology"=>"Organization", "show_sub_orgs"=>"0"}) # org with show_sub_orgs == false
+          org_3 = Organization.create({"parent_id"=> org_2.id, "name"=>"Org 3", "terminology"=>"Organization", "show_sub_orgs"=>"1"})
+          @request.session[:current_organization_id] = org_3.id
+        end
+        
+        org_3.add_admin(@user.person) unless org_3.parent && org_3.parent.show_sub_orgs?
+        org_3.add_admin(@admin2)
+        #puts org_3.admins.count
+        @request.session['current_organization_id']  = org_3.id
+        assert_no_difference "OrganizationalRole.count" do
+          xhr :post, :update_roles, { :role_ids => [], :some_role_ids => "", :person_id => @user.person.id }
         end
       end
-=end      
+=end
     end
   end
   
