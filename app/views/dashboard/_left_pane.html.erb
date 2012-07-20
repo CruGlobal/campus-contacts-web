@@ -4,7 +4,7 @@
       <%= image_tag('dash_icon_contacts.png')%>
     </div>
     <div class="dash_content">
-      <%= link_to "See All Contacts", "#" %>
+      <%= link_to "See All Contacts", "/contacts" %>
       <br/>
       <%= link_to "Add New Contact", "#" %>
     </div>
@@ -17,9 +17,9 @@
       <%= image_tag('dash_icon_group.png')%>
     </div>
     <div class="dash_content">
-      <%= link_to "Create A New Group", "#" %>
+      <%= link_to "Create A New Group", "/groups/new" %>
       <br/>
-      <%= link_to "Manage Existing Groups", "#" %>
+      <%= link_to "Manage Existing Groups", "/groups" %>
     </div>
   </div>
   
@@ -42,21 +42,30 @@
     Here's what in your hub!
   </div>
   <div class="lower_box_item">
-    <div class="lower_box_count">3</div>
+    <div class="lower_box_count">
+      <%= current_person.primary_organization.present? ?
+        current_person.primary_organization.inprogress_contacts.count : 0 %>
+    </div>
     <div class="lower_box_link">
-      <%= link_to "Contacts in Progress", "#" %>
+      <%= link_to "Contacts in Progress", "/contacts?assigned_to=progress" %>
     </div>
   </div>
   <div class="lower_box_item">
-    <div class="lower_box_count">20</div>
+    <div class="lower_box_count">
+      <%= current_person.primary_organization.present? ?
+        current_person.primary_organization.surveys.count : 0 %>
+    </div>
     <div class="lower_box_link">
-      <%= link_to "Active Surveys", "#" %>
+      <%= link_to "Active Surveys", "/surveys" %>
     </div>
   </div>
   <div class="lower_box_item">
-    <div class="lower_box_count">4</div>
+    <div class="lower_box_count">
+      <%= current_person.primary_organization.present? ?
+        current_person.primary_organization.groups.count : 0 %>
+    </div>
     <div class="lower_box_link">
-      <%= link_to "Groups Under Your Leadership", "#" %>
+      <%= link_to "Groups Under Your Leadership", "/groups" %>
     </div>
   </div>
 </div>

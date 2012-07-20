@@ -18,9 +18,9 @@
 			.dash_links {
 				border: 1px solid #ccc;
 				background: #F0F0F0;
-				-webkit-border-radius: 12px;
-				-moz-border-radius: 12px;
-				border-radius: 12px;
+				-webkit-border-radius: 9px;
+				-moz-border-radius: 9px;
+				border-radius: 9px;
 				margin-bottom: 15px;
 				
 				.dash_link {
@@ -44,6 +44,11 @@
 						a {
 							font-size: 14px;
 							margin-top: 5px;
+							&:hover {
+								text-decoration: none;
+								opacity: 0.9;
+								cursor: pointer;
+							}
 						}
 			
 					}
@@ -71,11 +76,11 @@
 					
 					.lower_box_count {
 						background: #008db7;
-						width: 20px;
-						height: 20px;
+						width: 26px;
+						height: 22px;
 						float: left;
-						padding: 3px;
-						font-size: 16px;
+						padding: 4px 0 0 0;
+						font-size: 14px;
 						text-align: center;
 						vertical-align: middle;
 						color: #fff;
@@ -87,6 +92,11 @@
 						padding: 4px;
 						a {
 							font-size: 14px;
+							&:hover {
+								text-decoration: none;
+								opacity: 0.9;
+								cursor: pointer;
+							}
 						}
 					}
 				}
