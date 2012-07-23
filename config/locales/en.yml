@@ -51,6 +51,7 @@ en:
     organizations: Organizations
     manage: Manage
     cleanup: Cleanup
+    archive: Archived
     enter_survey_mode: "Enter Survey Mode"
     use_keyword: 'Use Keyword: %{keyword}'
     my_profile: My Profile
@@ -144,6 +145,7 @@ en:
       add_person: Add Person
       export: "Export this list"
       directory_title: "Directory - %{org}"
+      archived_directory_title: "Archived - %{org}"
       labels: 'Labels'
       gender: 'Gender'
       phone: 'Phone'

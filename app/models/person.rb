@@ -95,8 +95,8 @@ class Person < ActiveRecord::Base
 
   scope :search_by_name_or_email, lambda { |keyword, org_id| {
     :select => "ministry_person.*",
+    :conditions => "(org_roles.organization_id = #{org_id} AND concat(firstName,' ',lastName) LIKE '%#{keyword}%' OR concat(lastName, ' ',firstName) LIKE '%#{keyword}%' OR emails.email LIKE '%#{keyword}%') AND org_roles.deleted <> 1",
     :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID LEFT JOIN organizational_roles AS org_roles ON ministry_person.personID = org_roles.person_id",
-    :conditions => "(org_roles.organization_id = #{org_id} AND concat(firstName,' ',lastName) LIKE '%#{keyword}%' OR concat(lastName, ' ',firstName) LIKE '%#{keyword}%' OR emails.email LIKE '%#{keyword}%') AND org_roles.deleted <> 1"
   } }
   
   scope :get_and_order_by_latest_answer_sheet_answered, lambda { |order, org_id| {
@@ -104,6 +104,12 @@ class Person < ActiveRecord::Base
     :joins => "LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM mh_answer_sheets ass INNER JOIN mh_surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{org_id}) ass ON ass.person_id = ministry_person.personID",
     :group => "ministry_person.personID",
     :order => "#{order.gsub('mh_answer_sheets', 'ass')}"
+  } }
+  
+  scope :archived, lambda { { #this must always be preceded by Organization.people function
+    :conditions => "organizational_roles.deleted = 1",
+    :group => "ministry_person.personID",
+    :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID)"
   } }
 
   def assigned_tos_by_org(org)

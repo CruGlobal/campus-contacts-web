@@ -479,11 +479,22 @@ class PeopleController < ApplicationController
 
   def fetch_people(search_params = {})
     org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
-    @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles)
+    @people_scope = Person.where('organizational_roles.organization_id' => org_ids)#.includes(:organizational_roles)
+    #@people_scope = !params[:archived].nil? ? current_organization.people.archived : @people_scope.includes(:organizational_roles)
+    
+    if !params[:archived].nil?
+      @people_scope = Person.where(personID: current_organization.people.archived.collect{|x| x.personID}).includes(:organizational_roles)
+    else
+      @people_scope = @people_scope.includes(:organizational_roles)
+    end
+    
+    
     @q = @people_scope.includes(:primary_phone_number, :primary_email_address)
+    #when specific role is selected from the directory
     @q = @q.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ?', params[:role], current_organization.id) unless params[:role].blank?
     sort_by = ['lastName asc', 'firstName asc']
 
+    #for searching
     if search_params[:search_type] == "basic"
       unless search_params[:query].blank?
         if search_params[:search_type] == "basic"
