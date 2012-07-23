@@ -1,15 +1,15 @@
-<iframe width="560" height="315" src="http://www.youtube.com/embed/fWNaR-rxAic?controls=0&showinfo=0" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="http://www.youtube.com/embed/<%= @dashpost.video if @dashpost.video.present? %>?controls=0&showinfo=0" frameborder="0" allowfullscreen></iframe>
 <br/>
 <div id="dash_content">
   <div class="description">
     <div class="title">
-      New in this week on Mission Hub!
+      <%=raw @dashpost.title if @dashpost.present? %>
     </div>
     <div class="date">
-      January 13, 2012
+      <%= @dashpost.created_at.strftime("%B %d, %Y") if @dashpost.present? %>
     </div>
     <div class="info">
-      Aliquet integer ultrices auctor sed et porta turpis et in porttitor? Nec, phasellus non in ultricies amet magna sit scelerisque amet auctor platea, rhoncus auctor amet, sagittis magna turpis sociis ultrices ultrices ac a penatibus. Elementum turpis lorem in? Lectus, arcu porta!
+      <%= @dashpost.context if @dashpost.present? %>
     </div>
   </div>
     
