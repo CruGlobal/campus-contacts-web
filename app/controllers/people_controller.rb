@@ -358,13 +358,12 @@ class PeopleController < ApplicationController
     person.organizational_roles.where(organization_id: current_organization.id, role_id: to_be_removed_roles).each do |organizational_role|
       begin
         organizational_role.destroyer = current_person
-        organizational_role.destroy
+        #organizational_role.destroy
+        organizational_role.update_attributes({:deleted => true, :end_date => Date.today})
       rescue OrganizationalRole::CannotDestroyRoleError
         render 'cannot_delete_admin_error'
         return
       end
-      organizational_role.update_attributes({:deleted => true, :end_date => Date.today})
-      #organizational_role.destroy
     end
     
     all = to_be_added_roles | (new_roles & old_roles) | (old_roles & some_roles)
