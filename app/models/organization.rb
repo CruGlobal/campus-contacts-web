@@ -20,13 +20,13 @@ class Organization < ActiveRecord::Base
   has_many :all_questions, through: :surveys, source: :all_questions
   has_many :followup_comments
   has_many :organizational_roles, inverse_of: :organization
-  has_many :leaders, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role.leader_ids}, order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
-  has_many :only_leaders, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::LEADER_ID}, order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
-  has_many :admins, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::ADMIN_ID}, order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
-  has_many :all_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ?", Role::CONTACT_ID]
+  has_many :leaders, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role.leader_ids, 'organizational_roles.deleted' => false}, order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
+  has_many :only_leaders, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::LEADER_ID, 'organizational_roles.deleted' => false}, order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
+  has_many :admins, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::ADMIN_ID, 'organizational_roles.deleted' => false}, order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
+  has_many :all_contacts, through: :organizational_roles, source: :person, conditions: {"organizational_roles.role_id" => Role::CONTACT_ID, 'organizational_roles.deleted' => false}
   has_many :contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.followup_status <> 'do_not_contact' AND organizational_roles.deleted <> 1", Role::CONTACT_ID]
-  has_many :dnc_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.followup_status' => 'do_not_contact'}
-  has_many :completed_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.followup_status' => 'completed'}
+  has_many :dnc_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.followup_status' => 'do_not_contact', 'organizational_roles.deleted' => false}
+  has_many :completed_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.followup_status' => 'completed', 'organizational_roles.deleted' => false}
   has_many :inprogress_contacts, through: :contact_assignments, source: :person
   has_many :no_activity_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.followup_status' => 'uncontacted'}
   has_many :rejoicables
