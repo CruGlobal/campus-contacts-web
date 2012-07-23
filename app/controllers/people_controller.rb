@@ -254,7 +254,13 @@ class PeopleController < ApplicationController
     ids = params[:ids].to_s.split(',')
     if ids.present?
       current_organization.organization_memberships.where(:person_id => ids).destroy_all
-      current_organization.organizational_roles.where(:person_id => ids).destroy_all
+      current_organization.organizational_roles.where(:person_id => ids).each do |ors|
+        if(ors.role_id == Role::LEADER_ID)
+          ca = Person.find(person_id).contact_assignments.where(organization_id: current_organization.id).all
+          ca.collect(&:destroy)
+        end
+        ors.update_attributes({:deleted => true, :end_date => Date.today})
+      end
     end
     render nothing: true
   end
@@ -354,14 +360,16 @@ class PeopleController < ApplicationController
     to_be_removed_roles = old_roles - new_roles - some_roles
 
     person.organizational_roles.where(organization_id: current_organization.id, role_id: to_be_removed_roles).each do |organizational_role|
-      organizational_role.destroy
+      organizational_role.update_attributes({:deleted => true, :end_date => Date.today})
+      #organizational_role.destroy
     end
     
     all = to_be_added_roles | (new_roles & old_roles) | (old_roles & some_roles)
     all.sort!
     all.each_with_index do |role_id, index|    
       begin       
-        OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) if to_be_added_roles.include?(role_id)
+        ors = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) if to_be_added_roles.include?(role_id)
+        ors.update_attributes({:deleted => false, :end_date => ''}) unless ors.nil?
       rescue OrganizationalRole::InvalidPersonAttributesError
         render 'update_leader_error', :locals => { :person => person } if role_id == Role::LEADER_ID
         render 'update_admin_error', :locals => { :person => person } if role_id == Role::ADMIN_ID
