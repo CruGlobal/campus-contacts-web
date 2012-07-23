@@ -11,7 +11,7 @@ class OrganizationalRole < ActiveRecord::Base
   # scope :uncontacted, where("followup_status = 'uncontacted' AND role_id = #{Role::CONTACT_ID}")
   before_create :set_start_date, :set_contact_uncontacted
   before_create :notify_new_leader, :if => :role_is_leader_or_admin
-  after_save :set_end_date_if_deleted
+  #after_save :set_end_date_if_deleted
   before_destroy :check_if_only_remaining_admin_role_in_a_root_org, :check_if_admin_is_destroying_own_admin_role
   attr_accessor :destroyer #temporary variable to remember which Person is about to destroy this role
 
@@ -93,7 +93,7 @@ class OrganizationalRole < ActiveRecord::Base
     
     def set_end_date_if_deleted
       if changed.include?('deleted') && deleted?
-        udpate_attribute(:end_date, Date.today)
+        update_attribute(:end_date, Date.today)
       end
     end
     

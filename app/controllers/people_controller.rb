@@ -254,7 +254,13 @@ class PeopleController < ApplicationController
     ids = params[:ids].to_s.split(',')
     if ids.present?
       current_organization.organization_memberships.where(:person_id => ids).destroy_all
-      current_organization.organizational_roles.where(:person_id => ids).destroy_all
+      current_organization.organizational_roles.where(:person_id => ids).each do |ors|
+        if(ors.role_id == Role::LEADER_ID)
+          ca = Person.find(person_id).contact_assignments.where(organization_id: current_organization.id).all
+          ca.collect(&:destroy)
+        end
+        ors.update_attributes({:deleted => true, :end_date => Date.today})
+      end
     end
     render nothing: true
   end
@@ -357,13 +363,16 @@ class PeopleController < ApplicationController
         render 'cannot_delete_admin_error'
         return
       end
+      organizational_role.update_attributes({:deleted => true, :end_date => Date.today})
+      #organizational_role.destroy
     end
     
     all = to_be_added_roles | (new_roles & old_roles) | (old_roles & some_roles)
     all.sort!
     all.each_with_index do |role_id, index|    
       begin       
-        OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) if to_be_added_roles.include?(role_id)
+        ors = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) if to_be_added_roles.include?(role_id)
+        ors.update_attributes({:deleted => false, :end_date => ''}) unless ors.nil?
       rescue OrganizationalRole::InvalidPersonAttributesError
         render 'update_leader_error', :locals => { :person => person } if role_id == Role::LEADER_ID
         render 'update_admin_error', :locals => { :person => person } if role_id == Role::ADMIN_ID
@@ -473,11 +482,22 @@ class PeopleController < ApplicationController
 
   def fetch_people(search_params = {})
     org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
-    @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles)
+    @people_scope = Person.where('organizational_roles.organization_id' => org_ids)#.includes(:organizational_roles)
+    #@people_scope = !params[:archived].nil? ? current_organization.people.archived : @people_scope.includes(:organizational_roles)
+    
+    if !params[:archived].nil?
+      @people_scope = Person.where(personID: current_organization.people.archived.collect{|x| x.personID}).includes(:organizational_roles)
+    else
+      @people_scope = @people_scope.includes(:organizational_roles)
+    end
+    
+    
     @q = @people_scope.includes(:primary_phone_number, :primary_email_address)
+    #when specific role is selected from the directory
     @q = @q.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ?', params[:role], current_organization.id) unless params[:role].blank?
     sort_by = ['lastName asc', 'firstName asc']
 
+    #for searching
     if search_params[:search_type] == "basic"
       unless search_params[:query].blank?
         if search_params[:search_type] == "basic"
