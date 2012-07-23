@@ -31,7 +31,7 @@ class Person < ActiveRecord::Base
   has_many :rejoicables, inverse_of: :created_by
 
   has_many :organization_memberships, inverse_of: :person
-  has_many :organizational_roles
+  has_many :organizational_roles, conditions: {deleted: false}
   has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role::CONTACT_ID} AND status = 'active'", uniq: true
   has_many :roles, through: :organizational_roles
 
@@ -56,6 +56,7 @@ class Person < ActiveRecord::Base
   before_save :stamp_changed
   before_create :stamp_created
 
+  #scope :organizational_roles, where("end_date = ''")
   scope :find_by_person_updated_by_daterange, lambda { |date_from, date_to| {
     :conditions => ["date_attributes_updated >= ? AND date_attributes_updated <= ? ", date_from, date_to]
   }}
