@@ -302,6 +302,7 @@ class ContactsController < ApplicationController
       # raise @q.sorts.inspect
       @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? "" : ['lastName, firstName']).group('ministry_person.personID')
       @all_people = @people
+      @people_for_labels = Person.where('organizational_roles.organization_id' => current_organization.id).includes(:organizational_roles)
       @people = @people.page(params[:page])
     
     end
