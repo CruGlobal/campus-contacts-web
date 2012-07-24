@@ -479,7 +479,6 @@ class PeopleController < ApplicationController
 
   def fetch_people(search_params = {})
     org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
-    puts org_ids.inspect
     @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles)
     #@people_scope = !params[:archived].nil? ? current_organization.people.archived : @people_scope.includes(:organizational_roles)
     
