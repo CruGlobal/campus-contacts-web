@@ -5,11 +5,11 @@
 <%= render 'shared/bulk_send_form' %>
 
 <% provide :sidebar do %>
-  <%= render 'labels' unless params[:archived] %>
+  <%= render 'labels' %>
 <% end %>
 <div class="titlebar">  
   <h1><%= image_tag("c_directory.png") %>
-    <%= params[:archived].nil? ? t('.directory_title', org: current_organization) : t('.archived_directory_title', org: current_organization) %>
+    <%= t('.directory_title', org: current_organization) %>
     <%= " - #{Role.find_by_id(params[:role_id]).to_s.pluralize}" if params[:role_id].present? %>
   </h1>
 </div>
