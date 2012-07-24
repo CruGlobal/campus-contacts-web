@@ -7,4 +7,5 @@
     <li style="<%= 'display:none' if count == 0 %>"><span class="name"><%= link_to(role, :role => role.id) %></span> (<%= count %>)</li>
   <% end %>
   <li><span class="name"><%= link_to(t('contacts.index.all'), params.except(:role)) %></span> (<%= @people_scope.count %>)</li>
+  <li><span class="name"><%= link_to("Archived", people_path+"?archived=true") %></span> (<%= current_organization.people.archived.count.count %>)</li>
 </ul>
