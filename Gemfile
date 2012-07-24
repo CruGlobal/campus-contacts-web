@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-gem 'mailcatcher'
-
 gem 'rails', '~> 3.2.2'
 gem 'jquery-rails'
 gem 'mysql2', '~> 0.3.11'
