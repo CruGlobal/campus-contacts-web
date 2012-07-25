@@ -93,10 +93,30 @@ class Organization < ActiveRecord::Base
       @self_and_children_questions ||= self_and_children_surveys.collect(&:questions).flatten.uniq
     end
 
-    def unassigned_people
-      Person.joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{Person.table_name}.#{Person.primary_key} AND organizational_roles.organization_id = #{self.id} AND organizational_roles.role_id = '#{Role::CONTACT_ID}' AND followup_status <> 'do_not_contact' LEFT JOIN contact_assignments ON contact_assignments.person_id = #{Person.table_name}.#{Person.primary_key}  AND contact_assignments.organization_id = #{self.id}").where('contact_assignments.id' => nil)
+    def unassigned_contacts
+      person_table_pkey = "#{Person.table_name}.#{Person.primary_key}"
+      Person
+        .joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{person_table_pkey} 
+          AND organizational_roles.organization_id = #{id} 
+          AND organizational_roles.role_id = '#{Role::CONTACT_ID}' 
+          AND followup_status <> 'do_not_contact' 
+          LEFT JOIN contact_assignments ON contact_assignments.person_id = #{person_table_pkey} 
+          AND contact_assignments.organization_id = #{id}")
+        .where("contact_assignments.id IS NULL OR contact_assignments.assigned_to_id NOT IN (?)", only_leaders)
     end
-
+    
+    def inprogress_contacts
+      person_table_pkey = "#{Person.table_name}.#{Person.primary_key}"
+      Person
+        .joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{person_table_pkey} 
+          AND organizational_roles.organization_id = #{id} 
+          AND organizational_roles.role_id = '#{Role::CONTACT_ID}' 
+          AND followup_status <> 'do_not_contact' 
+          LEFT JOIN contact_assignments ON contact_assignments.person_id = #{person_table_pkey} 
+          AND contact_assignments.organization_id = #{id}")
+        .where("contact_assignments.assigned_to_id IN (?)", only_leaders)
+    end
+    
     def roles
       Role.where("organization_id = 0 or organization_id = #{id}")
     end

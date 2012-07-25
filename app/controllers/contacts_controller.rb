@@ -205,7 +205,7 @@ class ContactsController < ApplicationController
           when 'all'
             @people = @organization.contacts
           when 'unassigned'
-            @people = unassigned_people(@organization)
+            @people = @organization.unassigned_contacts
           when 'progress'
             @people = @organization.inprogress_contacts
           when 'no_activity'
