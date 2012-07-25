@@ -135,12 +135,8 @@ class Person < ActiveRecord::Base
     assigned_tos.where(organization_id: org.id)
   end
 
-  def has_similar_person_by_name_and_email?
-    Person.where(firstName: firstName, lastName: lastName).includes(:primary_email_address).where("email_addresses.email LIKE ?", email).where("personId != ?", personID).first
-  end
-
   def has_similar_person_by_name_and_email?(email)
-    Person.where(firstName: firstName, lastName: lastName).includes(:primary_email_address).where("email_addresses.email LIKE ?", email).where("personId != ?", personID).first
+    Person.includes(:primary_email_address).where(firstName: firstName, lastName: lastName, 'email_addresses.email' => email).where("personId != ?", personID).first
   end
 
   def update_date_attributes_updated
@@ -262,43 +258,42 @@ class Person < ActiveRecord::Base
      preferredName.blank? ? self[:firstName].try(:strip) : preferredName.try(:strip)
    end
 
-  def self.find_from_facebook(data, authentication)
+  def self.find_from_facebook(data)
     EmailAddress.find_by_email(data.email).try(:person) if data.email.present?
   end
 
   def self.create_from_facebook(data, authentication, response = nil)
-    if response.nil?
-      response = MiniFB.get(authentication['token'], authentication['uid'])
-    else
-      response = response
-    end
     new_person = Person.create(firstName: data['first_name'].try(:strip), lastName: data['last_name'].try(:strip))
-    new_person.update_from_facebook(data, authentication, response)
+    begin
+      if response.nil?
+        response = MiniFB.get(authentication['token'], authentication['uid'])
+      else
+        response = response
+      end
+      new_person.update_from_facebook(data, authentication, response)
+    rescue MiniFB::FaceBookError => e
+      Airbrake.notify(
+        :error_class   => "MiniFB::FaceBookError",
+        :error_message => "MiniFB::FaceBookError: #{e.message}",
+        :parameters    => {data: data, authentication: authentication, response: response}
+      )
+    end
     new_person
   end
 
   def update_from_facebook(data, authentication, response = nil)
     begin
-      response = MiniFB.get(authentication['token'], authentication['uid']) if response.nil?
+      response ||= MiniFB.get(authentication['token'], authentication['uid'])
       begin
         self.birth_date = DateTime.strptime(data['birthday'], '%m/%d/%Y') if birth_date.blank? && data['birthday'].present?
       rescue ArgumentError; end
       self.gender = response.gender unless (response.gender.nil? && !gender.blank?)
       # save!
-      
-      # Email Address
-      email_from_facebook = data['email'].try(:strip)
-      if email_from_facebook.present?
-        if email_addresses.exists?(email: email_from_facebook)
-          email_addresses.find_by_email(email_from_facebook)
-        else
-          if EmailAddress.exists?(email: email_from_facebook)
-            raise "Email is already registered by other user!"
-            # raise ActiveRecord::RecordNotUnique
-            return self
-          else
-            email_addresses.create(email: email_from_facebook)
-          end
+      unless email_addresses.detect {|e| e.email == data['email']}
+        begin
+          email_addresses.find_or_create_by_email(data['email'].strip) if data['email'].present?
+        rescue ActiveRecord::RecordNotUnique
+          return self
         end
       end
       
@@ -776,18 +771,22 @@ class Person < ActiveRecord::Base
     find_existing_person(person)
   end
 
-  def self.find_existing_person(person)
-    other_person = email = phone = nil
+  def self.find_existing_person_by_email(email_address)
+    return unless email_address
+
+    other_person = email = nil
 
     # Start by looking for a person with the same email address (since that's our one true unique field)
-    person.email_addresses.each do |email_address|
-      if email_address.valid?
-        other_person = EmailAddress.find_by_email(email_address.email).try(:person) ||
-                       Address.where(email: email_address.email, addressType: 'current').first.try(:person) ||
-                       User.find_by_username(email_address.email).try(:person)
-        email = email_address if other_person
-      end
+    if email_address.email.present?
+      other_person = EmailAddress.find_by_email(email_address.email).try(:person)
+      email = email_address
     end
+
+    other_person
+  end
+
+  def self.find_existing_person(person)
+    other_person = find_existing_person_by_email(person.email_addresses.first)
 
     if other_person
       person.phone_numbers.each do |phone_number|
@@ -796,11 +795,13 @@ class Person < ActiveRecord::Base
         end
       end
       phone = other_person.phone_numbers.first
+      email = other_person.email_addresses.first
       other_person.attributes = person.attributes.except('personID').select {|_, v| v.present?}
     else
       email = person.email_addresses.first
       phone = person.phone_numbers.first
     end
+
     [other_person || person, email, phone]
   end
 

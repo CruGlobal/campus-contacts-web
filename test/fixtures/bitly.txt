@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+Server: nginx
+Date: Wed, 25 Jul 2012 21:15:47 GMT
+Content-Type: application/json; charset=utf-8
+Connection: keep-alive
+MIME-Version: 1.0
+Content-Length: 204
+
+{ "status_code": 200, "status_txt": "OK", "data": { "long_url": "http:\/\/www.missionhub.com\/people\/7971", "url": "http:\/\/bit.ly\/QG64KU", "hash": "QG64KU", "global_hash": "QG64KV", "new_hash": 0 } }

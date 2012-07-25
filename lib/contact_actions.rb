@@ -2,6 +2,7 @@ module ContactActions
   
   def create_contact
     @organization ||= current_organization
+
     Person.transaction do
       params[:person] ||= {}
       params[:person][:email_address] ||= {}
@@ -15,20 +16,25 @@ module ContactActions
         end
         return
       end
-      @person, @email, @phone = create_person(params[:person])
+
+      @person, @email, @phone = Person.new_from_params(params[:person])
+
       if @person.save
 
         @questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => false)
 
         save_survey_answers
-  
-        FollowupComment.create_from_survey(@organization, @person, @organization.all_questions, @answer_sheets)
+
+        # Record that this person was created so we can notify leaders/admins
         NewPerson.create(person_id: @person.id, organization_id: @organization.id)
+
         create_contact_at_org(@person, @organization)
+
         if params[:assign_to_me] == 'true'
           ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
           ContactAssignment.create!(person_id: @person.id, organization_id: @organization.id, assigned_to_id: current_person.id)
         end
+
         respond_to do |wants|
           wants.html { redirect_to :back }
           wants.mobile { redirect_to :back }
@@ -37,19 +43,15 @@ module ContactActions
             @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, role_id: Role::CONTACT_ID, person_id: @person).map {|r| [r.person_id, r]}]
             @answers = generate_answers([@person], @organization, @questions)
           end
-          wants.json { render json: @person.to_hash_basic(@organization) }                              
+          wants.json { render json: @person.to_hash_basic(@organization) }
         end
         return
       else
         errors = []
-        errors << "#{I18n.t('people.create.firstname_error')}<br />" unless @person.firstName.present?
-        errors << "#{I18n.t('people.create.phone_number_error')}<br />" if @phone && !@phone.valid?
-        if @email && !@email.is_unique?
-          errors << "#{I18n.t('people.create.email_taken')}<br />" 
-        elsif @email && !@email.valid?
-          errors << "#{I18n.t('people.create.email_error')}<br />" 
-        end
-        
+        errors << "#{I18n.t('people.create.firstname_error')}" unless @person.firstName.present?
+        errors << "#{I18n.t('people.create.phone_number_error')}" if @phone && !@phone.valid?
+        errors << "#{I18n.t('people.create.email_error')}" if @email && !@email.valid?
+
         respond_to do |wants|
           wants.js do 
             flash.now[:error] = errors.join('<br />')
@@ -63,7 +65,7 @@ module ContactActions
       end
     end
   end
-  
+
   def save_survey_answers
     @answer_sheets = []
     @organization ||= current_organization
@@ -82,12 +84,14 @@ module ContactActions
         @answer_sheets -= [as]
       end
     end
+
+    FollowupComment.create_from_survey(@organization, @person, @organization.all_questions, @answer_sheets)
   end
-  
+
   def update_survey_answers
     @answer_sheets = []
     @organization ||= current_organization
-    
+
     params[:answers].each do |survey|
       survey_id = survey[0]
       fields = survey[1]
@@ -99,7 +103,7 @@ module ContactActions
         @answer_sheets << @answer_sheet
       end
     end
-    
+
     # Delete any answer_sheet with no answers
     @answer_sheets.each do |as|
       if as.reload.answers.blank?
