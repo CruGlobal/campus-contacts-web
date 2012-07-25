@@ -220,24 +220,32 @@ class Person < ActiveRecord::Base
      preferredName.blank? ? self[:firstName].try(:strip) : preferredName.try(:strip)
    end
 
-  def self.find_from_facebook(data, authentication)
+  def self.find_from_facebook(data)
     EmailAddress.find_by_email(data.email).try(:person) if data.email.present?
   end
 
   def self.create_from_facebook(data, authentication, response = nil)
-    if response.nil?
-      response = MiniFB.get(authentication['token'], authentication['uid'])
-    else
-      response = response
-    end
     new_person = Person.create(firstName: data['first_name'].try(:strip), lastName: data['last_name'].try(:strip))
-    new_person.update_from_facebook(data, authentication, response)
+    begin
+      if response.nil?
+        response = MiniFB.get(authentication['token'], authentication['uid'])
+      else
+        response = response
+      end
+      new_person.update_from_facebook(data, authentication, response)
+    rescue MiniFB::FaceBookError => e
+      Airbrake.notify(
+        :error_class   => "MiniFB::FaceBookError",
+        :error_message => "MiniFB::FaceBookError: #{e.message}",
+        :parameters    => {data: data, authentication: authentication, response: response}
+      )
+    end
     new_person
   end
 
   def update_from_facebook(data, authentication, response = nil)
     begin
-      response = MiniFB.get(authentication['token'], authentication['uid']) if response.nil?
+      response ||= MiniFB.get(authentication['token'], authentication['uid'])
       begin
         self.birth_date = DateTime.strptime(data['birthday'], '%m/%d/%Y') if birth_date.blank? && data['birthday'].present?
       rescue ArgumentError; end
@@ -245,7 +253,7 @@ class Person < ActiveRecord::Base
       # save!
       unless email_addresses.detect {|e| e.email == data['email']}
         begin
-          email_addresses.find_or_create_by_email(data['email'].try(:strip)) if data['email'].try(:strip).present?
+          email_addresses.find_or_create_by_email(data['email'].strip) if data['email'].present?
         rescue ActiveRecord::RecordNotUnique
           return self
         end

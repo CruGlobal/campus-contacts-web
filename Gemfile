@@ -78,6 +78,8 @@ group :development, :test do
   # gem 'translate-rails3', :require => 'translate'
   gem 'ffaker'
   #gem 'ruby-debug19', :require => 'ruby-debug'
+
+  gem 'webmock'#, '= 1.8.3'
 end
 
 group :development do

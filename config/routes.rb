@@ -165,6 +165,7 @@ Mh::Application.routes.draw do
   end
 
   get "welcome/index"
+  get "welcome/duplicate"
   match 'tutorials' => "welcome#tutorials"
   get "/test" => "welcome#test"
 
