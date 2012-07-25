@@ -79,6 +79,9 @@ group :development, :test do
   gem 'ffaker'
   #gem 'ruby-debug19', :require => 'ruby-debug'
 
+end
+
+group :test do
   gem 'webmock'#, '= 1.8.3'
 end
 
