@@ -425,6 +425,7 @@ $ ->
         error: (xhr, status, error)->
           $.e(error)
       response([])
+      
   $('.search_show_all_link').live 'click', ->
     $('#spinner_leader_search').show()
     $('#show_all').val('true')
@@ -438,6 +439,21 @@ $ ->
         $("#leader_search_results").show()
       complete: ->
         $('#spinner_leader_search').hide()
+    false
+    
+  $('.search_show_all_link_members').live 'click', ->
+    $('#spinner_member_search').show()
+    $('#show_all').val('true')
+    form = $('#member_search_form')
+    $.ajax
+      url: form.attr('action'),
+      data: form.serialize(),
+      type: 'GET',
+      success: (data)->
+        $('#member_search_results').html(data)
+        $("#member_search_results").show()
+      complete: ->
+        $('#spinner_member_search').hide()
     false
     
   $('#comment_submit').live 'click', ->
