@@ -28,9 +28,9 @@ en:
     views:
       organizational_roles: "Organizational Labels"
       system_roles: "System Labels"
-      create_role: "Create new label"
-      edit_role: "Edit label"
-      delete_role: "Delete label"
+      create_role: "Create New Label"
+      edit_role: "Edit Label"
+      delete_role: "Delete Label"
       update: "Update"
       create: "Create"
       name: "Name"
