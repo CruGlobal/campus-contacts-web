@@ -70,7 +70,7 @@ class Person < ActiveRecord::Base
   scope :find_by_date_created_before_date_given, lambda { |before_date| {
     :select => "ministry_person.*",
     :joins => "LEFT JOIN organizational_roles AS ors ON ministry_person.personID = ors.person_id",    
-    :conditions => ["ors.role_id = ? AND ors.created_at <= ?", Role::CONTACT_ID, before_date]
+    :conditions => ["ors.role_id = ? AND ors.created_at <= ? AND ors.archive_date IS NULL AND ors.deleted = 0", Role::CONTACT_ID, before_date]
   }}
 
   scope :order_by_highest_default_role, lambda { |order| {
@@ -105,12 +105,32 @@ class Person < ActiveRecord::Base
     :group => "ministry_person.personID",
     :order => "#{order.gsub('mh_answer_sheets', 'ass')}"
   } }
+
+  scope :archived, lambda { |org_id| { #this must always be preceded by Organization.people function
+    :conditions => "organizational_roles.archive_date IS NOT NULL AND organizational_roles.deleted = 0",
+    :group => "ministry_person.personID",
+    :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID AND orss.organization_id = #{org_id} AND orss.deleted = 0)"
+  } }
   
-  scope :archived, lambda { { #this must always be preceded by Organization.people function
+  scope :archived_not_included, lambda { { #this must always be preceded by Organization.people function
+    :conditions => "organizational_roles.archive_date IS NOT NULL AND organizational_roles.deleted = 0",
+    :group => "ministry_person.personID",
+    :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID)"
+  } }
+  
+  scope :deleted, lambda { { #this must always be preceded by Organization.people function
     :conditions => "organizational_roles.deleted = 1",
     :group => "ministry_person.personID",
     :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID)"
   } }
+  
+  def archive_contact_role(org)
+    organizational_roles.where(organization_id: org.id, role_id: Role::CONTACT_ID).first.update_attribute(:archive_date, Date.today)
+  end
+  
+  def archive_leader_role(org)
+    organizational_roles.where(organization_id: org.id, role_id: Role::LEADER_ID).first.update_attribute(:archive_date, Date.today)
+  end
 
   def assigned_tos_by_org(org)
     assigned_tos.where(organization_id: org.id)

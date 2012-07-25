@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120711080607) do
+ActiveRecord::Schema.define(:version => 20120724000933) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -4475,6 +4475,7 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
     t.integer  "organization_id"
     t.string   "followup_status"
     t.integer  "added_by_id"
+    t.datetime "archive_date"
   end
 
   add_index "organizational_roles", ["organization_id", "role_id", "followup_status"], :name => "role_org_status"

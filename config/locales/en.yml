@@ -142,6 +142,8 @@ en:
     add_person:
       add_person: Add a person to %{org}
     index:
+      archived_label: "Archived"
+      include_archived: "Include Archived"
       add_person: Add Person
       export: "Export this list"
       directory_title: "Directory - %{org}"

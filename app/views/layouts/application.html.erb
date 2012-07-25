@@ -29,9 +29,6 @@
                 <li class="<%= 'current' if  params[:controller] == 'people' && params[:archived].nil? %>">
                   <%= link_to(t('nav.directory'), "/people", :class => "topset directory") %>
                 </li>
-                <li class="<%= 'current' if  params[:controller] == 'people' && params[:archived] %>">
-                  <%= link_to(t('nav.archive'), "/people?archived=true", :class => "topset cleanup") %>
-                </li>
               </ul>
               </li>
               <li class="<%= 'current' if request.path =~ group_pattern %>">

@@ -5,11 +5,11 @@
 <%= render 'shared/bulk_send_form' %>
 
 <% provide :sidebar do %>
-  <%= render 'labels' unless params[:archived] %>
+  <%= render 'labels' %>
 <% end %>
 <div class="titlebar">  
   <h1><%= image_tag("c_directory.png") %>
-    <%= params[:archived].nil? ? t('.directory_title', org: current_organization) : t('.archived_directory_title', org: current_organization) %>
+    <%= t('.directory_title', org: current_organization) %>
     <%= " - #{Role.find_by_id(params[:role_id]).to_s.pluralize}" if params[:role_id].present? %>
   </h1>
 </div>
@@ -101,14 +101,14 @@
       <% if can?(:create, Person) || can?(:create, SmsMailer) %>
         <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment',  'data-params' => 'page=' + (params[:page] ? params[:page] : '1') + '&role_id=' + (params[:role_id] ? params[:role_id] : '')   %></th>
       <% end %>
-      <th><%= sort_link @q, :firstName, t('contacts.index.first_name') %></th>
-      <th><%= sort_link @q, :lastName, t('contacts.index.last_name') %></th>
-      <th><%= sort_link @q, 'role_id', t('nav.roles') %></th>
-      <th><%= sort_link @q, :gender, t('.gender') %></th>
-      <th><%= sort_link @q, 'email_addresses.email', t('.email') %></th>
-      <th><%= sort_link @q, 'phone_numbers.number', t('.phone') %></th>
+      <th><%= sort_link @q, :firstName, t('contacts.index.first_name'), params %></th>
+      <th><%= sort_link @q, :lastName, t('contacts.index.last_name'), params %></th>
+      <th><%= sort_link @q, 'role_id', t('nav.roles'), params %></th>
+      <th><%= sort_link @q, :gender, t('.gender'), params %></th>
+      <th><%= sort_link @q, 'email_addresses.email', t('.email'), params %></th>
+      <th><%= sort_link @q, 'phone_numbers.number', t('.phone'), params %></th>
       <% if (current_organization.settings[:show_year_in_school]) || (current_organization.settings[:show_year_in_school].nil?) %>
-        <th><%= sort_link @q, :yearInSchool, t('.year_in_school') %></th>
+        <th><%= sort_link @q, :yearInSchool, t('.year_in_school'), params %></th>
       <% end %>
       <th></th>
     </tr>
