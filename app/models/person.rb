@@ -106,10 +106,10 @@ class Person < ActiveRecord::Base
     :order => "#{order.gsub('mh_answer_sheets', 'ass')}"
   } }
 
-  scope :archived, lambda { { #this must always be preceded by Organization.people function
+  scope :archived, lambda { |org_id| { #this must always be preceded by Organization.people function
     :conditions => "organizational_roles.archive_date IS NOT NULL AND organizational_roles.deleted = 0",
     :group => "ministry_person.personID",
-    :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID AND orss.deleted = 0)"
+    :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID AND orss.organization_id = #{org_id} AND orss.deleted = 0)"
   } }
   
   scope :archived_not_included, lambda { { #this must always be preceded by Organization.people function
@@ -126,6 +126,10 @@ class Person < ActiveRecord::Base
   
   def archive_contact_role(org)
     organizational_roles.where(organization_id: org.id, role_id: Role::CONTACT_ID).first.update_attribute(:archive_date, Date.today)
+  end
+  
+  def archive_leader_role(org)
+    organizational_roles.where(organization_id: org.id, role_id: Role::LEADER_ID).first.update_attribute(:archive_date, Date.today)
   end
 
   def assigned_tos_by_org(org)
