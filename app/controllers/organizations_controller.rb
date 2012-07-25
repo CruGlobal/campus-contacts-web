@@ -93,7 +93,7 @@ class OrganizationsController < ApplicationController
     if to_archive.blank?
       redirect_to cleanup_organizations_path
     else
-      redirect_to people_path+"?archived=true"
+      redirect_to people_path+"?archived=true"#?archived_date=#{a}"
     end
   end
   

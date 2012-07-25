@@ -482,10 +482,6 @@ class PeopleController < ApplicationController
     @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles)
     #@people_scope = !params[:archived].nil? ? current_organization.people.archived : @people_scope.includes(:organizational_roles)
     
-    #if !params[:archived].nil?
-    #  @people_scope = Person.where(personID: current_organization.people.archived.collect{|x| x.personID}).includes(:organizational_roles)
-    #end
-    
     if params[:include_archived].nil?
       archived_not_included_ids = @people_scope.collect{|x| x.personID} - current_organization.people.archived.collect{|x| x.personID}
       @people_scope = @people_scope.where(personID: archived_not_included_ids)
@@ -493,7 +489,7 @@ class PeopleController < ApplicationController
     
     @q = @people_scope.includes(:primary_phone_number, :primary_email_address)
     #when specific role is selected from the directory
-    @q = @q.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ?', params[:role], current_organization.id) unless params[:role].blank?
+    @q = @q.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ? AND organizational_roles.deleted = 0', params[:role], current_organization.id) unless params[:role].blank?
     sort_by = ['lastName asc', 'firstName asc']
 
     #for searching
@@ -566,6 +562,7 @@ class PeopleController < ApplicationController
 
     @all_people = @all_people.where(personId: params[:ids].split(',')) if params[:custom]
     @all_people = @all_people.where(personId: current_organization.people.archived.collect{|x| x.personID}) if !params[:archived].nil?
+    #@all_people = @all_people.where(personId: current_organization.people.archived.where("organizational_roles.archive_date > ? AND organizational_roles.archive_date < ?", params[:archived_date], (params[:archived_date].to_date+1).strftime("%Y-%m-%d")).collect{|x| x.personID}) if !params[:archived_date].nil?
     @people = Kaminari.paginate_array(@all_people).page(params[:page])
   end
 

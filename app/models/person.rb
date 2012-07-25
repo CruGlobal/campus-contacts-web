@@ -70,7 +70,7 @@ class Person < ActiveRecord::Base
   scope :find_by_date_created_before_date_given, lambda { |before_date| {
     :select => "ministry_person.*",
     :joins => "LEFT JOIN organizational_roles AS ors ON ministry_person.personID = ors.person_id",    
-    :conditions => ["ors.role_id = ? AND ors.created_at <= ? AND ors.archive_date IS NULL", Role::CONTACT_ID, before_date]
+    :conditions => ["ors.role_id = ? AND ors.created_at <= ? AND ors.archive_date IS NULL AND ors.deleted = 0", Role::CONTACT_ID, before_date]
   }}
 
   scope :order_by_highest_default_role, lambda { |order| {
@@ -109,7 +109,7 @@ class Person < ActiveRecord::Base
   scope :archived, lambda { { #this must always be preceded by Organization.people function
     :conditions => "organizational_roles.archive_date IS NOT NULL AND organizational_roles.deleted = 0",
     :group => "ministry_person.personID",
-    :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID)"
+    :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID AND orss.deleted = 0)"
   } }
   
   scope :archived_not_included, lambda { { #this must always be preceded by Organization.people function
