@@ -724,6 +724,8 @@ class Person < ActiveRecord::Base
   end
 
   def self.find_existing_person_by_email(email_address)
+    return unless email_address
+
     other_person = email = nil
 
     # Start by looking for a person with the same email address (since that's our one true unique field)
