@@ -40,9 +40,7 @@ class ImportsControllerTest < ActionController::TestCase
 
   context "Importing contacts" do
     setup do
-      stub_request(:put, /https:\/\/s3\.amazonaws\.com\/local\.missionhub\.com\/mh\/imports\/uploads\/.*/)
-      stub_request(:get, /https:\/\/s3\.amazonaws\.com\/local\.missionhub\.com\/mh\/imports\/uploads\/.*/).
-        to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv")), status: 200)
+      stub_request(:put, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/)
 
       @user = Factory(:user_with_auxs)  #user with a person object
       sign_in @user
@@ -60,6 +58,8 @@ class ImportsControllerTest < ActionController::TestCase
     end
     
     should "unsuccesfully create an import if file is empty" do 
+      stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
+        to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_blank.csv")), status: 200)
       import_count = Import.count
       contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_blank.csv"))
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
@@ -69,6 +69,8 @@ class ImportsControllerTest < ActionController::TestCase
     end
     
     should "unsuccesfully create an import if headers (row 1) are not present" do 
+      stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
+        to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_2.csv")), status: 200)
       import_count = Import.count
       contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_2.csv"))
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
@@ -78,6 +80,8 @@ class ImportsControllerTest < ActionController::TestCase
     end
     
     should "unsuccesfully create an import if one of the headers is blank" do 
+      stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
+        to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_3.csv")), status: 200)
       import_count = Import.count
       contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_3.csv"))
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
@@ -87,6 +91,8 @@ class ImportsControllerTest < ActionController::TestCase
     end
     
     should "successfully create an import and upload contact" do
+      stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
+        to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv")), status: 200)
       assert_difference "Person.count" do
         contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv"))
         file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
@@ -98,6 +104,8 @@ class ImportsControllerTest < ActionController::TestCase
     end
     
     should "succesfully create an import and unsuccesfully upload contact because firstName heading is not specified by the user" do 
+      stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
+        to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv")), status: 200)
       person_count  = Person.count
       contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv"))
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
@@ -109,6 +117,8 @@ class ImportsControllerTest < ActionController::TestCase
     end
     
     should "successfully create an import but unsuccesfully upload a contact if one of the emails is invalid" do
+      stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
+        to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_4.csv")), status: 200)
       person_count  = Person.count
       contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_4.csv"))
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
@@ -120,6 +130,8 @@ class ImportsControllerTest < ActionController::TestCase
     end
     
     should "successfully create an import but unsuccesfully upload a contact if one of the phone numbersd is invalid" do
+      stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
+        to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_5.csv")), status: 200)
       person_count  = Person.count
       contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_5.csv"))
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
@@ -131,6 +143,8 @@ class ImportsControllerTest < ActionController::TestCase
     end
     
     should "successfully create an import but unsuccesfully upload a contact if at least two of the headers has the same selected person attribute/survey question" do
+      stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
+        to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_5.csv")), status: 200)
       person_count  = Person.count
       contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_5.csv"))
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
