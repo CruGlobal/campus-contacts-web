@@ -97,12 +97,8 @@ class Person < ActiveRecord::Base
     assigned_tos.where(organization_id: org.id)
   end
 
-  def has_similar_person_by_name_and_email?
-    Person.where(firstName: firstName, lastName: lastName).includes(:primary_email_address).where("email_addresses.email LIKE ?", email).where("personId != ?", personID).first
-  end
-
   def has_similar_person_by_name_and_email?(email)
-    Person.where(firstName: firstName, lastName: lastName).includes(:primary_email_address).where("email_addresses.email LIKE ?", email).where("personId != ?", personID).first
+    Person.includes(:primary_email_address).where(firstName: firstName, lastName: lastName, 'email_addresses.email' => email).where("personId != ?", personID).first
   end
 
   def update_date_attributes_updated
@@ -727,18 +723,20 @@ class Person < ActiveRecord::Base
     find_existing_person(person)
   end
 
-  def self.find_existing_person(person)
-    other_person = email = phone = nil
+  def self.find_existing_person_by_email(email_address)
+    other_person = email = nil
 
     # Start by looking for a person with the same email address (since that's our one true unique field)
-    person.email_addresses.each do |email_address|
-      if email_address.valid?
-        other_person = EmailAddress.find_by_email(email_address.email).try(:person) ||
-                       Address.where(email: email_address.email, addressType: 'current').first.try(:person) ||
-                       User.find_by_username(email_address.email).try(:person)
-        email = email_address if other_person
-      end
+    if email_address.email.present?
+      other_person = EmailAddress.find_by_email(email_address.email).try(:person)
+      email = email_address
     end
+
+    other_person
+  end
+
+  def self.find_existing_person(person)
+    other_person = find_existing_person_by_email(person.email_addresses.first)
 
     if other_person
       person.phone_numbers.each do |phone_number|
@@ -747,11 +745,13 @@ class Person < ActiveRecord::Base
         end
       end
       phone = other_person.phone_numbers.first
+      email = other_person.email_addresses.first
       other_person.attributes = person.attributes.except('personID').select {|_, v| v.present?}
     else
       email = person.email_addresses.first
       phone = person.phone_numbers.first
     end
+
     [other_person || person, email, phone]
   end
 
