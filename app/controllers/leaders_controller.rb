@@ -120,6 +120,8 @@ class LeadersController < ApplicationController
       end
     end
 
+    error_message += "Email Address isn't valid.<br />" if @email.present? && !@email.valid?
+
     if error_message.present?
       flash.now[:error] = error_message
       render :new and return
