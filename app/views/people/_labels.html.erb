@@ -6,7 +6,7 @@
     <% count = @people_scope.where('organizational_roles.role_id' => role.id).count %>
     <li style="<%= 'display:none' if count == 0 %>"><span class="name"><%= link_to(role, :role => role.id, :include_archived => params[:include_archived]) %></span> (<%= count %>)</li>
   <% end %>
-  <li><span class="name"><%= link_to(t('contacts.index.all'), people_path) %></span> (<%= @people_scope.count %>) <div id="include_archived_div"><%= t('people.index.include_archived') %><%= check_box_tag 'include_archived', t('people.index.include_archived'), params[:include_archived] %></div></li>
+  <li><span class="name"><%= link_to(t('contacts.index.all'), :include_archived => params[:include_archived]) %></span> (<%= @people_scope.count %>) <div id="include_archived_div"><%= t('people.index.include_archived') %><%= check_box_tag 'include_archived', t('people.index.include_archived'), params[:include_archived] %></div></li>
   <% if params[:include_archived] %>
     <li><span class="name"><%= link_to(t('people.index.archived_label'), :archived => true, :include_archived => params[:include_archived]) %></span> (<%= current_organization.people.archived(current_organization.id).count.count %>)</li>
   <% end %>
