@@ -113,9 +113,8 @@ class Person < ActiveRecord::Base
   } }
   
   scope :archived_not_included, lambda { { #this must always be preceded by Organization.people function
-    :conditions => "organizational_roles.archive_date IS NOT NULL AND organizational_roles.deleted = 0",
-    :group => "ministry_person.personID",
-    :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID)"
+    :conditions => "organizational_roles.archive_date IS NULL AND organizational_roles.deleted = 0",
+    :group => "ministry_person.personID"
   } }
   
   scope :deleted, lambda { { #this must always be preceded by Organization.people function
