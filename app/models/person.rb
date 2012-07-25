@@ -95,7 +95,7 @@ class Person < ActiveRecord::Base
 
   scope :search_by_name_or_email, lambda { |keyword, org_id| {
     :select => "ministry_person.*",
-    :conditions => "(org_roles.organization_id = #{org_id} AND concat(firstName,' ',lastName) LIKE '%#{keyword}%' OR concat(lastName, ' ',firstName) LIKE '%#{keyword}%' OR emails.email LIKE '%#{keyword}%') AND org_roles.deleted <> 1",
+    :conditions => "(org_roles.organization_id = #{org_id} AND (concat(firstName,' ',lastName) LIKE '%#{keyword}%' OR concat(lastName, ' ',firstName) LIKE '%#{keyword}%' OR emails.email LIKE '%#{keyword}%') AND org_roles.deleted <> 1 AND org_roles.archive_date IS NULL)",
     :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID LEFT JOIN organizational_roles AS org_roles ON ministry_person.personID = org_roles.person_id",
   } }
   
@@ -113,9 +113,8 @@ class Person < ActiveRecord::Base
   } }
   
   scope :archived_not_included, lambda { { #this must always be preceded by Organization.people function
-    :conditions => "organizational_roles.archive_date IS NOT NULL AND organizational_roles.deleted = 0",
-    :group => "ministry_person.personID",
-    :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID)"
+    :conditions => "organizational_roles.archive_date IS NULL AND organizational_roles.deleted = 0",
+    :group => "ministry_person.personID"
   } }
   
   scope :deleted, lambda { { #this must always be preceded by Organization.people function
