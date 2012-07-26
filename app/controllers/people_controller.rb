@@ -475,9 +475,9 @@ class PeopleController < ApplicationController
     #@people_scope = !params[:archived].nil? ? current_organization.people.archived : @people_scope.includes(:organizational_roles)
     
     if params[:include_archived].nil?
-      #archived_not_included_ids = @people_scope.collect{|x| x.personID} - current_organization.people.archived(current_organization.id).collect{|x| x.personID}
+      #archived_not_included_ids = @people_scope.collect(&:personID) - current_organization.people.archived(current_organization.id).collect(&:personID)
       #@people_scope = @people_scope.where(personID: archived_not_included_ids)
-      @people_scope = @people_scope.where(personID: @people_scope.archived_not_included.uniq.collect{|x| x.personID})
+      @people_scope = @people_scope.where(personID: @people_scope.archived_not_included.uniq.collect(&:personID))
     end
     
     @q = @people_scope.includes(:primary_phone_number, :primary_email_address)
