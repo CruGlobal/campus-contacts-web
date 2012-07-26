@@ -31,9 +31,11 @@ class Person < ActiveRecord::Base
   has_many :rejoicables, inverse_of: :created_by
 
   has_many :organization_memberships, inverse_of: :person
-  has_many :organizational_roles, conditions: {deleted: false}
-  has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role::CONTACT_ID} AND status = 'active'", uniq: true
+  has_many :organizational_roles, conditions: {deleted: false, archive_date: nil}
+  has_many :organizational_roles_including_archived, class_name: "OrganizationalRole", foreign_key: "person_id", conditions: {deleted: false}
+  has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role::CONTACT_ID} AND status = 'active' AND deleted = 0", uniq: true
   has_many :roles, through: :organizational_roles
+  has_many :roles_including_archived, through: :organizational_roles_including_archived, source: :role
 
   has_many :followup_comments, :class_name => "FollowupComment", :foreign_key => "commenter_id"
   has_many :comments_on_me, :class_name => "FollowupComment", :foreign_key => "contact_id"
@@ -814,8 +816,12 @@ class Person < ActiveRecord::Base
     Friend.followers(self) & organization.leaders.collect { |l| l.fb_uid.to_s }
   end
 
-  def assigned_organizational_roles(organizations)
-    roles.where('organizational_roles.organization_id' => organizations)
+  def assigned_organizational_roles(organization_id)
+    roles.where('organizational_roles.organization_id' => organization_id, 'organizational_roles.deleted' => 0)
+  end
+  
+  def assigned_organizational_roles_including_archived(organization_id)
+    roles_including_archived.where('organizational_roles.organization_id' => organization_id)
   end
 
   def self.vcard(ids)
