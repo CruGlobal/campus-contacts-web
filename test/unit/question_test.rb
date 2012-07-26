@@ -8,6 +8,7 @@ class QuestionTest < ActiveSupport::TestCase
   
   context "Send notifications" do
     setup do
+      stub_request(:get, /.*api\.bit\.ly.*/).to_return(File.new(Rails.root.join("test/fixtures/bitly.txt")))
       @element = Factory(:choice_field, label: 'foobar', notify_via: "Both", trigger_words: "my answer")
       @element2 = Factory(:choice_field, label: 'foobarbaz', notify_via: "Email", trigger_words: "my answer")
       @element3 = Factory(:choice_field, label: 'foo', notify_via: "SMS", trigger_words: "my answer")

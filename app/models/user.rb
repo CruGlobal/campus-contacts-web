@@ -1,5 +1,6 @@
 require 'errors/no_email_error'
 require 'errors/failed_facebook_create_error'
+require 'errors/facebook_duplicate_email_error'
 class User < ActiveRecord::Base
   begin
     include Ccc::SimplesecuritymanagerUser
@@ -29,7 +30,7 @@ class User < ActiveRecord::Base
     find_by_userID(args)
   end
   
-  def self.find_for_facebook_oauth(access_token, signed_in_resource=nil, attempts = 0)
+  def self.find_for_facebook_oauth(access_token, signed_in_resource=nil, attempts = 0, force = false)
     data = access_token['extra']['raw_info']
     unless data["email"].present?
       raise NoEmailError, access_token['extra'].inspect
@@ -46,6 +47,26 @@ class User < ActiveRecord::Base
       else
         authentication.delete if authentication
         user = signed_in_resource || User.where(username: data['email']).first
+        # If we don't have a user with a matching email username, look for a match from email_addresses table
+        # with the same first and last name
+        unless user
+          if existing = Person.find_from_facebook(data)
+            if existing.lastName.strip == data['last_name'].strip && 
+               (existing.firstName.to_s.strip == data['first_name'].strip || existing.preferredName.to_s.strip == data['first_name'].strip)
+              user = existing.user
+            else
+              # If first and last name don't match, there's probably some bad data
+              # If this person is logging in to fill out a survey, we want to handle this gracefully
+              if force
+                user = existing.user
+              else
+                raise FacebookDuplicateEmailError
+              end
+            end
+          end
+        end
+
+        # If all else fails, create a user
         unless user
           begin
             user = create!(email: data["email"], password: Devise.friendly_token[0,20]) 
@@ -68,7 +89,7 @@ class User < ActiveRecord::Base
       if user.person 
         user.person.update_from_facebook(data, authentication)
       else
-        existing = Person.find_from_facebook(data, authentication)
+        existing = Person.find_from_facebook(data)
         if existing && existing.user
           existing.user.merge(user)
           user = existing.user
