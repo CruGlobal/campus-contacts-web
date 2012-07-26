@@ -31,9 +31,11 @@ class Person < ActiveRecord::Base
   has_many :rejoicables, inverse_of: :created_by
 
   has_many :organization_memberships, inverse_of: :person
-  has_many :organizational_roles, conditions: {deleted: false}
-  has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role::CONTACT_ID} AND status = 'active'", uniq: true
+  has_many :organizational_roles, conditions: {deleted: false, archive_date: nil}
+  has_many :organizational_roles_including_archived, class_name: "OrganizationalRole", foreign_key: "person_id", conditions: {deleted: false}
+  has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role::CONTACT_ID} AND status = 'active' AND deleted = 0", uniq: true
   has_many :roles, through: :organizational_roles
+  has_many :roles_including_archived, through: :organizational_roles_including_archived, source: :role
 
   has_many :followup_comments, :class_name => "FollowupComment", :foreign_key => "commenter_id"
   has_many :comments_on_me, :class_name => "FollowupComment", :foreign_key => "contact_id"
@@ -73,20 +75,20 @@ class Person < ActiveRecord::Base
     :conditions => ["ors.role_id = ? AND ors.created_at <= ? AND ors.archive_date IS NULL AND ors.deleted = 0", Role::CONTACT_ID, before_date]
   }}
 
-  scope :order_by_highest_default_role, lambda { |order| {
+  scope :order_by_highest_default_role, lambda { |order, tables_already_joined = false| {
     :select => "ministry_person.*",
-    :joins => "JOIN organizational_roles ON ministry_person.personID = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id",
+    :joins => "#{'JOIN organizational_roles ON ministry_person.personID = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id' unless tables_already_joined}",
     :conditions => "roles.i18n IN #{Role.default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}",
     :order => "FIELD#{Role.i18n_field_plus_default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}"
   } }
 
-  scope :order_alphabetically_by_non_default_role, lambda { |order| {
+  scope :order_alphabetically_by_non_default_role, lambda { |order, tables_already_joined = false| {
     :select => "ministry_person.*",
-    :joins => "JOIN organizational_roles ON ministry_person.personID = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id",
+    :joins => "#{'JOIN organizational_roles ON ministry_person.personID = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id' unless tables_already_joined}",
     :conditions => "roles.name NOT IN #{Role.default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}",
     :order => "roles.name #{order.include?("asc") ? 'DESC' : 'ASC'}"
   } }
-
+  
   scope :find_friends_with_fb_uid, lambda { |id| {
     :select => "ministry_person.*",
     :joins => "LEFT JOIN mh_friends ON ministry_person.fb_uid = mh_friends.uid",
@@ -816,8 +818,12 @@ class Person < ActiveRecord::Base
     Friend.followers(self) & organization.leaders.collect { |l| l.fb_uid.to_s }
   end
 
-  def assigned_organizational_roles(organizations)
-    roles.where('organizational_roles.organization_id' => organizations)
+  def assigned_organizational_roles(organization_id)
+    roles.where('organizational_roles.organization_id' => organization_id, 'organizational_roles.deleted' => 0)
+  end
+  
+  def assigned_organizational_roles_including_archived(organization_id)
+    roles_including_archived.where('organizational_roles.organization_id' => organization_id)
   end
 
   def self.vcard(ids)

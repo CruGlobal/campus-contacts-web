@@ -254,12 +254,12 @@ class PeopleController < ApplicationController
     ids = params[:ids].to_s.split(',')
     if ids.present?
       current_organization.organization_memberships.where(:person_id => ids).destroy_all
-      current_organization.organizational_roles.where(:person_id => ids).each do |ors|
+      current_organization.organizational_roles.where(:person_id => ids, :archive_date => nil, :deleted => false).each do |ors|
         if(ors.role_id == Role::LEADER_ID)
-          ca = Person.find(person_id).contact_assignments.where(organization_id: current_organization.id).all
+          ca = Person.find(ors.person_id).contact_assignments.where(organization_id: current_organization.id).all
           ca.collect(&:destroy)
         end
-        ors.update_attributes({:deleted => true, :end_date => Date.today})
+        ors.update_attributes({:archive_date => Date.today})
       end
     end
     render nothing: true
@@ -473,7 +473,7 @@ class PeopleController < ApplicationController
 
   def fetch_people(search_params = {})
     org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
-    @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles)
+    @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles_including_archived)
     #@people_scope = !params[:archived].nil? ? current_organization.people.archived : @people_scope.includes(:organizational_roles)
     
     if params[:include_archived].nil?
@@ -508,6 +508,7 @@ class PeopleController < ApplicationController
                  .where("roles.id = :search",
                         {:search => "#{search_params[:role]}"})
                  sort_by.unshift("roles.id")
+        role_tables_joint = true
       end
 
       unless search_params[:gender].blank?
@@ -543,21 +544,21 @@ class PeopleController < ApplicationController
     @q = @q.search(params[:q])
     @q.sorts = sort_by if @q.sorts.empty?
     @all_people = @q.result(distinct: false).order(params[:q] && params[:q][:s] ? params[:q][:s] : sort_by)
-    if !params[:q].nil? && params[:q][:s].include?("role_id")
+    if params[:q].present? && params[:q][:s].include?("role_id")
       order = params[:q][:s].include?("asc") ? params[:q][:s].gsub("asc", "desc") : params[:q][:s].gsub("desc", "asc")
-      a = @q.result(distinct: false).order_by_highest_default_role(order)
+      a = @q.result(distinct: false).order_by_highest_default_role(order, role_tables_joint)
       if params[:q][:s].include?("asc")
         a = a.reverse
         a = a.uniq_by { |a| a.id }
         a = a.reverse
       end
-      @all_people = a + @q.result(distinct: false).order_alphabetically_by_non_default_role(order)
+      @all_people = a + @q.result(distinct: false).order_alphabetically_by_non_default_role(order, role_tables_joint)
       @all_people = @all_people.uniq_by { |a| a.id }
     end
 
     @all_people = @all_people.where(personId: params[:ids].split(',')) if params[:custom]
     @all_people = @all_people.where(personId: current_organization.people.archived(current_organization.id).collect{|x| x.personID}) if !params[:archived].nil?
-    #@all_people = @all_people.where(personId: current_organization.people.archived.where("organizational_roles.archive_date > ? AND organizational_roles.archive_date < ?", params[:archived_date], (params[:archived_date].to_date+1).strftime("%Y-%m-%d")).collect{|x| x.personID}) if !params[:archived_date].nil?
+    @all_people = @all_people.where(personId: current_organization.people.archived.where("organizational_roles.archive_date > ? AND organizational_roles.archive_date < ?", params[:archived_date], (params[:archived_date].to_date+1).strftime("%Y-%m-%d")).collect{|x| x.personID}) if !params[:archived_date].nil?
     @people = Kaminari.paginate_array(@all_people).page(params[:page])
   end
 
