@@ -10,7 +10,7 @@
   <td class="last_name"><%= person.lastName %></td>
   <td>
     <div id="roles_user_<%= person.id %>" class="roles_spaces">
-      <% (!params[:incude_archived].nil? ? (person.assigned_organizational_roles(current_organization.id).default_roles_desc + person.assigned_organizational_roles(current_organization.id).non_default_roles_asc) : (person.assigned_organizational_roles_including_archived(current_organization.id).default_roles_desc + person.assigned_organizational_roles_including_archived(current_organization.id).non_default_roles_asc)).each do |role| %>
+      <% (params[:incude_archived].nil? ? (person.assigned_organizational_roles(current_organization.id).default_roles_desc + person.assigned_organizational_roles(current_organization.id).non_default_roles_asc) : (person.assigned_organizational_roles_including_archived(current_organization.id).default_roles_desc + person.assigned_organizational_roles_including_archived(current_organization.id).non_default_roles_asc)).each do |role| %>
         <span id="<%= person.id%>_<%= role.id %>" class="role_label role_<%= role.id %>"><%= role %></span>
       <% end %>
     </div>
