@@ -369,7 +369,7 @@ class PeopleController < ApplicationController
     all.each_with_index do |role_id, index|    
       begin       
         ors = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) if to_be_added_roles.include?(role_id)
-        ors.update_attributes({:deleted => false, :end_date => ''}) unless ors.nil?
+        ors.update_attributes({:deleted => false, :end_date => '', :archive_date => nil}) unless ors.nil?
       rescue OrganizationalRole::InvalidPersonAttributesError
         render 'update_leader_error', :locals => { :person => person } if role_id == Role::LEADER_ID
         render 'update_admin_error', :locals => { :person => person } if role_id == Role::ADMIN_ID
