@@ -254,12 +254,12 @@ class PeopleController < ApplicationController
     ids = params[:ids].to_s.split(',')
     if ids.present?
       current_organization.organization_memberships.where(:person_id => ids).destroy_all
-      current_organization.organizational_roles.where(:person_id => ids).each do |ors|
+      current_organization.organizational_roles.where(:person_id => ids, :archive_date => nil, :deleted => false).each do |ors|
         if(ors.role_id == Role::LEADER_ID)
-          ca = Person.find(person_id).contact_assignments.where(organization_id: current_organization.id).all
+          ca = Person.find(ors.person_id).contact_assignments.where(organization_id: current_organization.id).all
           ca.collect(&:destroy)
         end
-        ors.update_attributes({:deleted => true, :end_date => Date.today})
+        ors.update_attributes({:archive_date => Date.today})
       end
     end
     render nothing: true
