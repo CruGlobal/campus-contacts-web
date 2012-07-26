@@ -499,14 +499,25 @@ class PeopleController < ApplicationController
       end
     else      
       unless search_params[:role].blank?
-        @q = @q.select("ministry_person.*, roles.*")
-        .joins("LEFT JOIN organizational_roles AS org_roles ON 
-                 org_roles.person_id = ministry_person.personID")
-                 .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
-                 .where("roles.id = :search",
-                        {:search => "#{search_params[:role]}"})
-                 sort_by.unshift("roles.id")
-        role_tables_joint = true
+        if params[:include_archived]
+          @q = @q.select("ministry_person.*, roles.*")
+          .joins("LEFT JOIN organizational_roles AS org_roles ON 
+                   org_roles.person_id = ministry_person.personID")
+                   .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
+                   .where("roles.id = :search",
+                          {:search => "#{search_params[:role]}"})
+                   sort_by.unshift("roles.id")
+          role_tables_joint = true
+        else
+          @q = @q.select("ministry_person.*, roles.*")
+          .joins("LEFT JOIN organizational_roles AS org_roles ON 
+                   org_roles.person_id = ministry_person.personID")
+                   .joins("INNER JOIN roles ON roles.id = org_roles.role_id").where("org_roles.archive_date" => nil)
+                   .where("roles.id = :search",
+                          {:search => "#{search_params[:role]}"})
+                   sort_by.unshift("roles.id")
+          role_tables_joint = true
+        end
       end
 
       unless search_params[:gender].blank?
