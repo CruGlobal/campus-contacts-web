@@ -73,20 +73,20 @@ class Person < ActiveRecord::Base
     :conditions => ["ors.role_id = ? AND ors.created_at <= ? AND ors.archive_date IS NULL AND ors.deleted = 0", Role::CONTACT_ID, before_date]
   }}
 
-  scope :order_by_highest_default_role, lambda { |order| {
+  scope :order_by_highest_default_role, lambda { |order, tables_already_joined = false| {
     :select => "ministry_person.*",
-    :joins => "JOIN organizational_roles ON ministry_person.personID = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id",
+    :joins => "#{'JOIN organizational_roles ON ministry_person.personID = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id' unless tables_already_joined}",
     :conditions => "roles.i18n IN #{Role.default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}",
     :order => "FIELD#{Role.i18n_field_plus_default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}"
   } }
 
-  scope :order_alphabetically_by_non_default_role, lambda { |order| {
+  scope :order_alphabetically_by_non_default_role, lambda { |order, tables_already_joined = false| {
     :select => "ministry_person.*",
-    :joins => "JOIN organizational_roles ON ministry_person.personID = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id",
+    :joins => "#{'JOIN organizational_roles ON ministry_person.personID = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id' unless tables_already_joined}",
     :conditions => "roles.name NOT IN #{Role.default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}",
     :order => "roles.name #{order.include?("asc") ? 'DESC' : 'ASC'}"
   } }
-
+  
   scope :find_friends_with_fb_uid, lambda { |id| {
     :select => "ministry_person.*",
     :joins => "LEFT JOIN mh_friends ON ministry_person.fb_uid = mh_friends.uid",
