@@ -27,6 +27,66 @@ class PersonTest < ActiveSupport::TestCase
     end
   end
   
+  context "get people functions" do
+    should "return a person that is updated within the specified date_rage" do
+      @person = Factory(:person, date_attributes_updated: "2012-07-25".to_date)
+      
+      results = Person.find_by_person_updated_by_daterange("2012-07-01".to_date, "2012-07-31".to_date)
+      assert(results.include?(@person), "results should include the updated person within the range")
+      
+      results = Person.find_by_person_updated_by_daterange("2012-07-20".to_date, "2012-07-01".to_date)
+      assert(!results.include?(@person), "results should not include the updated person after the given range")
+      
+      results = Person.find_by_person_updated_by_daterange("2012-07-28".to_date, "2012-07-31".to_date)
+      assert(!results.include?(@person), "results should not include the updated person before the given range")
+    end
+    should "return a person based on highest default roles" do
+      @org = Factory(:organization)
+      
+      @person1 = Factory(:person, firstName: 'Leader')
+      @org_role1 = Factory(:organizational_role, person: @person1, organization: @org1, role: Role.leader)
+      @person2 = Factory(:person, firstName: 'Contact')
+      @org_role2 = Factory(:organizational_role, person: @person2, organization: @org1, role: Role.contact)
+      @person3 = Factory(:person, firstName: 'Admin')
+      @org_role3 = Factory(:organizational_role, person: @person3, organization: @org1, role: Role.admin)
+      
+      results = Person.order_by_highest_default_role('role')
+      assert_equal(results[0], @person2, "first person of the results should be the contact")
+      assert_equal(results[1], @person1, "second person of the results should be the leader")
+      assert_equal(results[2], @person3, "third person of the results should be the admin")
+      
+      results = Person.order_by_highest_default_role('role asc')
+      assert_equal(results[0], @person3, "first person of the results should be the admin when order is ASC")
+      assert_equal(results[1], @person1, "second person of the results should be the leader when order is ASC")
+      assert_equal(results[2], @person2, "third person of the results should be the contact when order is ASC")
+    end
+    should "return a person based on alphabetical roles" do
+      @org = Factory(:organization)
+      
+      @person1 = Factory(:person, firstName: 'Leader')
+      @org_role1 = Factory(:organizational_role, person: @person1, organization: @org1, role: Role.leader)
+      @person2 = Factory(:person, firstName: 'Contact')
+      @org_role2 = Factory(:organizational_role, person: @person2, organization: @org1, role: Role.contact)
+      @person3 = Factory(:person, firstName: 'Admin')
+      @org_role5 = Factory(:organizational_role, person: @person3, organization: @org1, role: Role.admin)
+      
+      @person4 = Factory(:person, firstName: 'Reader')
+      @role4 = Factory(:role, organization: @org, name: 'Reader')
+      @org_role4 = Factory(:organizational_role, person: @person4, organization: @org1, role: @role4)
+      @person5 = Factory(:person, firstName: 'Visitor')
+      @role5 = Factory(:role, organization: @org, name: 'Visitor')
+      @org_role5 = Factory(:organizational_role, person: @person5, organization: @org1, role: @role5)
+      
+      results = Person.order_alphabetically_by_non_default_role('role')
+      assert_equal(results[0], @person4, "first person of the results should be the reader")
+      assert_equal(results[1], @person5, "second person of the results should be the visitor")
+      
+      results = Person.order_alphabetically_by_non_default_role('role asc')
+      assert_equal(results[0], @person5, "first person of the results should be the visitor when order is ASC")
+      assert_equal(results[1], @person4, "second person of the results should be the reader when order is ASC")
+    end
+  end
+  
   context "person organizations and sub-organizations" do
   
     setup do
