@@ -176,11 +176,12 @@ class SmsController < ApplicationController
             
             question.set_response(answer, @answer_sheet)
             p = person.has_similar_person_by_name_and_email?(answer)
-            unless p.nil? # another person with the same firstName, lastName and email has been found
-              @answer_sheet.person.merge(p) # merge person to person with the same firstName, lastName and email
+            if p # another person with the same firstName, lastName and email has been found
+              @answer_sheet.person = @answer_sheet.person.smart_merge(p) # merge person to person with the same firstName, lastName and email
+              @answer_sheet.save!
               question.set_response(answer, @answer_sheet)
             end
-            @answer_sheet.person.save
+            @answer_sheet.person.save!
           end
         end
       rescue => e

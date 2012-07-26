@@ -38,4 +38,8 @@ class WelcomeController < ApplicationController
   def privacy
     render layout: mhub? ? 'mhub' : 'splash'
   end
+
+  def duplicate
+    render layout: 'splash'
+  end
 end

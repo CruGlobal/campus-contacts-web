@@ -1,0 +1,2 @@
+class FacebookDuplicateEmailError < StandardError
+end
