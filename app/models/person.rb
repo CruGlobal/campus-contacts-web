@@ -126,11 +126,19 @@ class Person < ActiveRecord::Base
   } }
   
   def archive_contact_role(org)
-    organizational_roles.where(organization_id: org.id, role_id: Role::CONTACT_ID).first.update_attribute(:archive_date, Date.today)
+    begin
+      organizational_roles.where(organization_id: org.id, role_id: Role::CONTACT_ID).first.update_attribute(:archive_date, Date.today)
+    rescue
+    
+    end
   end
   
   def archive_leader_role(org)
-    organizational_roles.where(organization_id: org.id, role_id: Role::LEADER_ID).first.update_attribute(:archive_date, Date.today)
+    begin
+      organizational_roles.where(organization_id: org.id, role_id: Role::LEADER_ID).first.update_attribute(:archive_date, Date.today)
+    rescue
+    
+    end
   end
 
   def assigned_tos_by_org(org)
