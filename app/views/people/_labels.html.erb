@@ -23,10 +23,12 @@
   </li>
   <% if params[:include_archived] %>
     <li>
-      <span class="name">
-        <%= link_to(t('people.index.archived_label'), :archived => true, :include_archived => params[:include_archived]) %>
-      </span>
-      (<%= current_organization.people.archived(current_organization.id).count.count %>)
+      <% if (a = current_organization.people.archived(current_organization.id).count.count) != 0%>
+        <span class="name">
+          <%= link_to(t('people.index.archived_label'), :archived => true, :include_archived => params[:include_archived]) %>
+        </span>
+        (<%= a %>)
+      <% end %>
     </li>
   <% end %>
 </ul>

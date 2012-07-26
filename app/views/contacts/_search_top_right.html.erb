@@ -1,5 +1,8 @@
 <%= form_tag contacts_path, method: :get do %>
   <%= hidden_field_tag :search_type, "basic" %>
+  <% if params[:include_archived].present? %>
+    <%= hidden_field_tag :include_archived, true %>
+  <% end %>
   <%= text_field_tag :query, params[:query], placeholder: t('people.search.search_placeholder'), autocomplete: 'off', id: 'search_autocomplete_field' %>
   <div id="search_button">
     <%#= image_submit_tag("search.png") %>
