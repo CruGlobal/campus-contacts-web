@@ -10,6 +10,13 @@ $ ->
     $('#email').val().length > 0 ||  $('#phone').val().length > 0
       $('#advanced_filter_box').show()
       false
+      
+  $('#include_archived').live 'click', ->
+    if $(this).is(':checked')
+      document.location = '/people?include_archived=true'
+    else
+      document.location = '/people'
+    
   
   $('.action_dropdown').live 'mouseenter', ->
     $(this).click();

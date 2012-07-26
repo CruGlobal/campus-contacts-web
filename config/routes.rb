@@ -143,6 +143,9 @@ Mh::Application.routes.draw do
       post :signup
       get :settings
       post :update_settings
+      get :cleanup
+      post :archive_contacts
+      post :remove_leaders
     end
   end
 
@@ -165,6 +168,7 @@ Mh::Application.routes.draw do
   end
 
   get "welcome/index"
+  get "welcome/duplicate"
   match 'tutorials' => "welcome#tutorials"
   get "/test" => "welcome#test"
 

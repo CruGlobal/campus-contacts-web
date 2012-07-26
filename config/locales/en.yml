@@ -28,9 +28,9 @@ en:
     views:
       organizational_roles: "Organizational Labels"
       system_roles: "System Labels"
-      create_role: "Create new label"
-      edit_role: "Edit label"
-      delete_role: "Delete label"
+      create_role: "Create New Label"
+      edit_role: "Edit Label"
+      delete_role: "Delete Label"
       update: "Update"
       create: "Create"
       name: "Name"
@@ -50,6 +50,8 @@ en:
   nav:
     organizations: Organizations
     manage: Manage
+    cleanup: Cleanup
+    archive: Archived
     enter_survey_mode: "Enter Survey Mode"
     use_keyword: 'Use Keyword: %{keyword}'
     my_profile: '%{name} Profile'
@@ -140,9 +142,12 @@ en:
     add_person:
       add_person: Add a person to %{org}
     index:
+      archived_label: "Archived"
+      include_archived: "Include Archived"
       add_person: Add Person
       export: "Export this list"
       directory_title: "Directory - %{org}"
+      archived_directory_title: "Archived - %{org}"
       labels: 'Labels'
       gender: 'Gender'
       phone: 'Phone'
@@ -513,6 +518,7 @@ en:
     leader:
       delete_confirm: "Are you sure you want to remove %{person} as a leader?"
       delete_confirm_with_instructions: "If you want to retain %{person} in your organization you must first assign them another role or label, click CANCEL, go to the Directory screen and 'Add Label' such as involved or alumni, then remove them as a leader. If you want to remove them completely from your organization, click OK."
+      archive_confirm: "%{person} will be moved to archives."
     leader_form: 
       start_typing: "Start typing a name to find a person to make a leader:"
     leaders:
@@ -954,6 +960,24 @@ en:
       title: Settings
       year_in_school: Display 'Year in School' on the Directory Page
       submit: Update Settings
+    cleanup: 
+      title: "Cleanup"
+      archive_contacts_submit: "Archive Contacts Now"
+      remove_leaders_submit: "Remove Leaders Now"
+      instructions: "Instructions"
+      archive_instructions: "Archive Contacts"
+      archive_notice: "%{no} contacts succesfully archived"
+      confirm_archive: "Are you sure you wanted to archive the desired contacts?"
+      archive_inst: "Archive all contacts created before %{date_field}"
+      alumni_inst: "Go to the %{link} screen, select the leaders/involved people that have graduated from your ministry and label as \"Alumni\""
+      alumni_inst_path: Directory
+      annual_inst_1: "People are messy - and so are databases. Every year your database gets clogged up with people who may have come to a meeting once upon a time, or filled out a survey once, but never got involved and don't intend to. If you are a campus ministry, you will also have a good number of people who graduate from your ministry each year. How do you get your database trimmed up and ready for the fall?"
+      annual_inst_2: "An Annual Clean Up can help. Simply walk through these steps once a year (or however often you want) and your Mission Hub Database will again be a well-oiled machine, ready to help you transform the world!"
+      remove_leader_inst: "Archive leaders who have been inactive by not logging-in after %{date_field}"
+      removal_notice: "%{no} leaders succesfully removed."
+      confirm_remove_leaders: "Are you sure you wanted to archive the desired leaders?"
+      leader_tips: 'If the LEADER dooes not have another label (role) besides "leader", they will disappear from your organization. But they can be added again with the "Add Leader" button. The default date to determine inactive is a year from today but you can modify the date.'
+      contact_tips: 'Step #1 will move everyone who is marked "CONTACT" into an archived file if they are created earlier than the date specified.  You can modify the date as the default will take all contacts created today or earlier.<br><br>The contacts can be "UnArchived" manually by going to the Directory screen, click on the label you gave them and then add the label, “Contact” to person.<br><br>The contacts can be "UnArchived" manually by going to the Directory screen, click on the label you gave them and then add the label, “Contact” to person.<br><br>Tip from a leader : “Add a new, unique question to your keyword at the beginning of this year and ask everyone to take the survey.  Even if all the other fields are full, their answer to that question will cause their record to be "UnArchived".'
   imports:
     new:
       wrong_file_format_error: "Uploaded wrong file format. File must be .csv"

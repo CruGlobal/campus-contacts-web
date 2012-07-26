@@ -228,21 +228,24 @@ class PeopleControllerTest < ActionController::TestCase
       sign_in @user
     end
 
-    #flash[:checker] came from the people_controller facebook_search method
 
     should "successfully search for facebook users when using '/http://www.facebook.com\//[a-z]' format" do
+      stub_request(:get, "https://graph.facebook.com/nmfdelacruz").
+        to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/nmfdelacruz\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
       get :facebook_search, { :term =>"http://www.facebook.com/nmfdelacruz"}
-      assert_equal flash[:checker], 1, "Unsuccessfully searched for a user using Facebook profile url"
+      assert_equal(2, assigns(:data).length, "Unsuccessfully searched for a user using Facebook profile url")
     end
 
-    should "successfully search for facebook users when using '/http://www.facebook.com\/profile.php?id=/[0-9]'" do
-      get :facebook_search, { :term =>"http://www.facebook.com/nmfdelacruz"}
-      assert_equal flash[:checker], 1, "Unsuccessfully searched for a user using Facebook profile url"
-    end
+    #should "successfully search for facebook users when using '/http://www.facebook.com\/profile.php?id=/[0-9]'" do
+      #get :facebook_search, { :term =>"http://www.facebook.com/nmfdelacruz"}
+      #assert_equal @data.length, 1, "Unsuccessfully searched for a user using Facebook profile url"
+    #end
 
     should "unsuccessfully search for facebook users when url does not exist" do
+      stub_request(:get, "https://graph.facebook.com/nm34523fdelacruz").
+        to_return(status: 404)
       get :facebook_search, { :term =>"http://www.facebook.com/nm34523fdelacruz"}
-      assert_equal flash[:checker], 0
+      assert_equal(1, assigns(:data).length)
     end
 
 =begin These tests get errors because probably of facebook user authentication. RestClient::BadRequest: 400 Bad Request

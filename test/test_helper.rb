@@ -13,6 +13,7 @@ require 'shoulda'
 require 'factory_girl'
 require 'api_test_helper'
 require File.dirname(__FILE__) + "/factories"
+require 'webmock/test_unit'
 
 # EphemeralResponse.activate
 # 

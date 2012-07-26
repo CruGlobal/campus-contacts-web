@@ -64,8 +64,10 @@ class ContactsController < ApplicationController
   end
 
   def search_by_name_and_email
-    people = current_organization.people.search_by_name_or_email(params[:term], current_organization.id).uniq
     
+    people = params[:include_archived] ?
+      current_organization.people.search_by_name_or_email(params[:term], current_organization.id).uniq :
+      current_organization.people.search_by_name_or_email(params[:term], current_organization.id).uniq.archived_not_included
 
     respond_to do |wants|
       wants.json { render text: people.collect{|person| {"label" => "#{person.name} (#{person.email})", "id" => person.id}}.to_json }
@@ -206,7 +208,7 @@ class ContactsController < ApplicationController
           when 'all'
             @people = @organization.contacts
           when 'unassigned'
-            @people = unassigned_people(@organization)
+            @people = @organization.unassigned_contacts
           when 'progress'
             @people = @organization.inprogress_contacts
           when 'no_activity'

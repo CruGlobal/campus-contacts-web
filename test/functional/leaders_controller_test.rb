@@ -62,10 +62,11 @@ class LeadersControllerTest < ActionController::TestCase
     
     should "add a leader manually (already in db, but not in this org)" do
       user2 = Factory(:user_with_auxs)
+      user2.person.update_attribute(:email, 'test@example.com')
 
       assert_difference('OrganizationalRole.count') do
         assert_no_difference('User.count') do
-          xhr :post, :add_person, person: {firstName: 'John', lastName: 'Doe', email_address: {email: user2.username}}, notify: '1' , person_id: user2.person.id
+          xhr :post, :add_person, person: {firstName: 'John', lastName: 'Doe', email_address: {email: user2.person.email_addresses.first.email}}, notify: '1' #, person_id: user2.person.id
           assert_response :success
         end
       end
@@ -137,7 +138,7 @@ class LeadersControllerTest < ActionController::TestCase
       user2 = Factory(:user_with_auxs)
       user3 = Factory(:user_with_auxs)
       @user.person.primary_organization.add_leader(user2.person, user3.person)
-      assert_difference('OrganizationalRole.count', -1) do
+      assert_difference('OrganizationalRole.where("archive_date" => nil).count', -1) do
         xhr :get,  :destroy, id: user2.person.id
         assert_response :success
       end

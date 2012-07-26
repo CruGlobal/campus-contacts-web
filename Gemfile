@@ -22,7 +22,7 @@ gem 'rubycas-client', '~> 2.2.1'
 gem 'rubycas-client-rails', '~> 0.1.0'
 gem 'carmen', git: 'git://github.com/twinge/carmen.git'
 gem 'ancestry'
-gem 'activeadmin', git: 'git://github.com/gregbell/active_admin.git'
+gem 'activeadmin'#, git: 'git://github.com/gregbell/active_admin.git'
 gem 'twilio-rb', git: 'git://github.com/stevegraham/twilio-rb.git'
 gem "default_value_for"
 
@@ -78,6 +78,12 @@ group :development, :test do
   # gem 'translate-rails3', :require => 'translate'
   gem 'ffaker'
   #gem 'ruby-debug19', :require => 'ruby-debug'
+  gem 'autotest-rails'
+
+end
+
+group :test do
+  gem 'webmock'#, '= 1.8.3'
 end
 
 group :development do
