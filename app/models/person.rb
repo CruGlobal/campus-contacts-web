@@ -126,7 +126,7 @@ class Person < ActiveRecord::Base
   } }
   
   def archive_contact_role(org)
-    begin
+    begin # there are org contacts having nil contact roles for some reason
       organizational_roles.where(organization_id: org.id, role_id: Role::CONTACT_ID).first.update_attribute(:archive_date, Date.today)
     rescue
     
