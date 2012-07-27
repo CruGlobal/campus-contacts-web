@@ -53,13 +53,13 @@ class GroupMembershipsController < ApplicationController
   
   def search
     if params[:name].present?
-      scope = Person.search_by_name(params[:name], current_organization.id)
-      @people = scope.includes(:user)
+      results = Person.search_by_name(params[:name], current_organization.id).person_with_email
+      @people = results.includes(:user)
       if params[:show_all].to_s == 'true'
-        @total = @people.all.length
+        @total = @people.count
       else
+        @total = results.count
         @people = @people.limit(10) 
-        @total = scope.count
       end
       render :layout => false
     else

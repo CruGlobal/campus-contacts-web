@@ -55,7 +55,7 @@ class Person < ActiveRecord::Base
 
   before_save :stamp_changed
   before_create :stamp_created
-
+  
   scope :find_by_person_updated_by_daterange, lambda { |date_from, date_to| {
     :conditions => ["date_attributes_updated >= ? AND date_attributes_updated <= ? ", date_from, date_to]
   }}
@@ -95,6 +95,10 @@ class Person < ActiveRecord::Base
 
   def assigned_tos_by_org(org)
     assigned_tos.where(organization_id: org.id)
+  end
+
+  def self.person_with_email
+    self.includes(:primary_email_address).where('email_addresses.email IS NOT NULL')
   end
 
   def has_similar_person_by_name_and_email?(email)

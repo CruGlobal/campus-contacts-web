@@ -911,7 +911,8 @@ en:
       add_a_leader: 'Add a leader'
     search:
       not_found: We couldn't find anyone in your %{terminology} with that name
-      showing_count: "Showing %{length} of %{total}, keep typing or "
+      showing_count: "Showing %{length} of %{total} records, keep typing or "
+      showing_count_complete: "Showing %{length} records."
       show_all: 'show all'
       add_new_person_group: Add a new person
   
