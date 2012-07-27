@@ -97,10 +97,6 @@ class Person < ActiveRecord::Base
     assigned_tos.where(organization_id: org.id)
   end
 
-  def self.person_with_email
-    self.includes(:primary_email_address).where('email_addresses.email IS NOT NULL')
-  end
-
   def has_similar_person_by_name_and_email?(email)
     Person.includes(:primary_email_address).where(firstName: firstName, lastName: lastName, 'email_addresses.email' => email).where("personId != ?", personID).first
   end
@@ -120,6 +116,23 @@ class Person < ActiveRecord::Base
     else
       conditions = ["(preferredName like ? OR firstName like ?) AND lastName like ?", first, first, last]
     end
+    scope = scope.where(conditions)
+    scope = scope.where('organizational_roles.organization_id IN(?)', organization_ids).includes(:organizational_roles) if organization_ids
+    scope
+  end
+
+  def self.search_by_name_with_email_present(name, organization_ids = nil, scope = nil)
+    return scope.where('1 = 0') unless name.present?
+    scope ||= Person
+    query = name.strip.split(' ')
+    first, last = query[0].to_s + '%', query[1].to_s + '%'
+    if last == '%'
+      conditions = ["preferredName like ? OR firstName like ? OR lastName like ?", first, first, first]
+    else
+      conditions = ["(preferredName like ? OR firstName like ?) AND lastName like ?", first, first, last]
+    end
+    scope = scope.includes(:primary_email_address)
+    scope = scope.where('email_addresses.email IS NOT NULL')
     scope = scope.where(conditions)
     scope = scope.where('organizational_roles.organization_id IN(?)', organization_ids).includes(:organizational_roles) if organization_ids
     scope

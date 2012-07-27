@@ -53,7 +53,7 @@ class GroupMembershipsController < ApplicationController
   
   def search
     if params[:name].present?
-      results = Person.search_by_name(params[:name], current_organization.id).person_with_email
+      results = Person.search_by_name_with_email_present(params[:name], current_organization.id)
       @people = results.includes(:user)
       if params[:show_all].to_s == 'true'
         @total = @people.count
