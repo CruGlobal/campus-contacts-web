@@ -25,3 +25,4 @@ mh
 config/s3.yml
 NERD_tree_3
 config/locales/copycopter.yml
+dump.rdb
