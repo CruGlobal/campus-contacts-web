@@ -86,7 +86,7 @@ class OrganizationsController < ApplicationController
     no = 0
     to_archive.each do |ta| # destroying contact roles of persons and replacing them with the new created role for archiving
       ta.archive_contact_role(current_organization)
-      no+=1
+      no+=1 if ta.is_archived?(current_organization)
     end
     flash[:notice] = t('organizations.cleanup.archive_notice', no: no)
     #redirect_to cleanup_organizations_path
@@ -102,9 +102,7 @@ class OrganizationsController < ApplicationController
     a[0], a[1] = a[1], a[0]
     a = a.join('-')
     a = (a.to_date+1).strftime("%Y-%m-%d")
-    puts a.inspect
     to_remove = current_organization.only_leaders.find_by_last_login_date_before_date_given(a)
-    no = to_remove.count
     to_remove.each do |ta| # destroying leader roles of persons
       #ta.organizational_roles.where(role_id: Role::LEADER_ID, organization_id: current_organization.id).first.destroy
       ta.archive_leader_role(current_organization)
