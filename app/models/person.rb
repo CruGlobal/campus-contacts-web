@@ -114,6 +114,11 @@ class Person < ActiveRecord::Base
     :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID AND orss.organization_id = #{org_id} AND orss.deleted = 0)"
   } }
   
+  scope :archived_included, lambda { { #this must always be preceded by Organization.people function
+    :conditions => "organizational_roles.deleted = 0",
+    :group => "ministry_person.personID"
+  } }
+  
   scope :archived_not_included, lambda { { #this must always be preceded by Organization.people function
     :conditions => "organizational_roles.archive_date IS NULL AND organizational_roles.deleted = 0",
     :group => "ministry_person.personID"
@@ -139,6 +144,11 @@ class Person < ActiveRecord::Base
     rescue
     
     end
+  end
+  
+  def is_archived?(org)
+    return true if organizational_roles.blank?
+    false
   end
 
   def assigned_tos_by_org(org)
