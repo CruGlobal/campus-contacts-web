@@ -71,7 +71,6 @@ class OrganizationalRole < ActiveRecord::Base
   
   end
 
-
   private
     def set_start_date
       self.start_date = Date.today
