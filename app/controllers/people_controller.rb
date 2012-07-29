@@ -259,7 +259,7 @@ class PeopleController < ApplicationController
           ca = Person.find(ors.person_id).contact_assignments.where(organization_id: current_organization.id).all
           ca.collect(&:destroy)
         end
-        ors.update_attributes({:archive_date => Date.today})
+        ors.archive
       end
     end
     render nothing: true
@@ -360,8 +360,7 @@ class PeopleController < ApplicationController
     to_be_removed_roles = old_roles - new_roles - some_roles
 
     person.organizational_roles.where(organization_id: current_organization.id, role_id: to_be_removed_roles).each do |organizational_role|
-      organizational_role.update_attributes({:archive_date => Date.today})
-      #organizational_role.destroy
+      organizational_role.archive #instead of organizational_role.destroy
     end
     
     all = to_be_added_roles | (new_roles & old_roles) | (old_roles & some_roles)

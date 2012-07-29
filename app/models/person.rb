@@ -132,7 +132,7 @@ class Person < ActiveRecord::Base
   
   def archive_contact_role(org)
     begin
-      organizational_roles.where(organization_id: org.id, role_id: Role::CONTACT_ID).first.update_attribute(:archive_date, Date.today)
+      organizational_roles.where(organization_id: org.id, role_id: Role::CONTACT_ID).first.archive
     rescue
     
     end
@@ -140,7 +140,7 @@ class Person < ActiveRecord::Base
   
   def archive_leader_role(org)
     begin
-      organizational_roles.where(organization_id: org.id, role_id: Role::LEADER_ID).first.update_attribute(:archive_date, Date.today)
+      organizational_roles.where(organization_id: org.id, role_id: Role::LEADER_ID).first.archive
     rescue
     
     end

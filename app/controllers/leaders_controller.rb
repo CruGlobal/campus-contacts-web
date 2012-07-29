@@ -48,7 +48,7 @@ class LeadersController < ApplicationController
     roles = OrganizationalRole.find_all_by_person_id_and_organization_id_and_role_id_and_archive_date(@person.id, current_organization.id, Role.leader_ids, nil)
     if roles
       roles.each do |r|
-        r.update_attribute(:archive_date, Date.today)
+        r.archive
       end
       # make any contacts assigned to this person go back to unassinged
       @contacts = @person.contact_assignments.where(organization_id: current_organization.id).all
