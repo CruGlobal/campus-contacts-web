@@ -1,23 +1,29 @@
 <% if @total > 0 %>
   <ul>
-    <% original_total = @people.length %>
-    <% @people = @people.select {|p| p.email.present?} %>
     <% @people.each do |person| %>
-      <li><%= link_to("#{person} (#{person.user.try(:username)})", group_group_memberships_path(group_id: params[:group_id], role: params[:role], person_id: person.id, from_add_member_screen: "true"), method: :post, remote: true) %></li>
+      <li>
+        <%= link_to("#{person} (#{person.primary_email_address})", group_group_memberships_path(group_id: params[:group_id], role: params[:role], person_id: person.id, from_add_member_screen: "true"), method: :post, remote: true) %>
+      </li>
     <% end %>
   </ul>
-  <% if @total > original_total %>
+  <% if @total > @people.length %>
     <span style="font-size: 11px;">
-      <%= t('.showing_count', length: @people.length, total: @total) %>
+      <%= t('.showing_count', length: @people.count, total: @total) %>
       <%= link_to(t('.show_all'), '#', :class => 'search_show_all_link_members') %>
     </span>
-    <br/>
+  <% else %>
+    <span style="font-size: 11px;">
+      <%= t('.showing_count_complete', length: @people.count) %>
+    </span>
   <% end %>
-  
+  <br/>
+  <br/>
 <% else %>
   <p>
     <%= t('.not_found', terminology: current_organization.terminology.downcase) %>
   </p>
 <% end %>
 
-<%= link_to(t('.add_new_person_group'), '#', :id => 'add_new_person_group_button', :class => 'add_new_person_group inlinebutton') %>
+<%= link_to(t('.add_new_person_group'), '#', 
+  :id => 'add_new_person_group_button', 
+  :class => 'add_new_person_group inlinebutton') %>
