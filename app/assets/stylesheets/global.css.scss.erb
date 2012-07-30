@@ -1892,6 +1892,7 @@ div.field_with_errors div.ui-effects-wrapper {
   background: #F0F0F0;
   padding: 15px 15px 10px 15px;
   border-radius: 10px;
+  min-height: 75px;
   .stepnumber {
     float: left;
   }
@@ -2072,7 +2073,8 @@ span.all_text {
   }
 .flash .error, .flash .error-list {
   border: 1px solid #993624;
-  background: #cc4831 url("<%= image_path('error.png') %>") no-repeat 10px center; }
+  background: #cc4831 url('<%= image_path("error.png") %>') no-repeat 10px center; 
+}
 .flash .warning {
   border: 1px solid #bb9004;
   color: #000;
@@ -2111,6 +2113,10 @@ textarea, input[type=text], input[type=password] {
   textarea, input[type=text], input[type=password] {
     width: 600px;
   }
+}
+
+#survey_background_color, #survey_text_color {
+  width: 200px!important;
 }
 
 .formtastic {

@@ -3,6 +3,7 @@
 <head>
   <%= render 'shared/head' %>
   <%= stylesheet_link_tag 'plain' %>
+  <%= yield :head %>
 </head>
 <body id="<%= controller.controller_name %>_controller">
   <%= render 'fb_init' %>

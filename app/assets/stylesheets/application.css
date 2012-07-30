@@ -1,11 +1,11 @@
 /*
- * FIXME: Introduce SCSS & Sprockets
  *= require contacts
- *= require people 
+ *= require people
  *= require global
  *= require jquery.qtip
  *= require superfish
  *= require superfish-navbar
  *= require superscroll
  *= require jquery.notifications
+ *= require excolor
 */
