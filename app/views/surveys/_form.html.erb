@@ -18,7 +18,7 @@
         <%= t('.login_paragraph') + ": " + t('.login_paragraph_tip') %>
       </label>
       <div class="field">
-        <%= f.text_area :login_paragraph, rows: 3, value: t('sessions.new.login_paragraph_mhub') %>
+        <%= f.text_area :login_paragraph, rows: 3, value: @survey.login_paragraph.present? ? @survey.login_paragraph : t('sessions.new.login_paragraph_mhub') %>
       </div>
     </div>
   </div>
