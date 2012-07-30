@@ -184,6 +184,48 @@ class PersonTest < ActiveSupport::TestCase
     
   end
   
+  context "collect_all_child_organizations function" do
+    should "return child orgs" do
+      @person = Factory(:person)
+      @org = Factory(:organization, id: 1)
+      @org1 = Factory(:organization, id: 2, ancestry: "1")
+      @org2 = Factory(:organization, id: 3, ancestry: "1")
+      @org3 = Factory(:organization, id: 4, ancestry: "1/2")
+      
+      results = @person.collect_all_child_organizations(@org)
+      assert(results.include?(@org1), "Organization1 should be included")
+      assert(results.include?(@org2), "Organization2 should be included")
+      assert(results.include?(@org3), "Organization3 should be included")
+    end
+  end
+  
+  context "getting the phone number" do
+    setup do
+      @person = Factory(:person)
+    end
+    should "should return the phone_number if it exists" do
+      mobile_number = @person.phone_numbers.create(number: '1111111111', location: 'mobile')
+      assert_equal(@person.phone_number, '1111111111', 'this should return the mobile number')
+    end
+    should "should return the cellPhone from address if it exists and phone_number exists" do
+      address = Address.create(cellPhone: '2222222222', fk_PersonID: @person.id, addressType: 'current')
+      assert_equal(@person.phone_number, '2222222222', 'this should return the cellPhone number')
+    end
+    should "should return the homePhone from address if it exists and phone_number exists" do
+      address = Address.create(homePhone: '3333333333', fk_PersonID: @person.id, addressType: 'current')
+      assert_equal(@person.phone_number, '3333333333', 'this should return the homePhone number')
+    end
+    should "should return the workPhone from address if it exists and phone_number exists" do
+      address = Address.create(workPhone: '4444444444', fk_PersonID: @person.id, addressType: 'current')
+      assert_equal(@person.phone_number, '4444444444', 'this should return the workPhone number')
+    end
+    should "should return the existing if record already exists" do
+      address1 = @person.phone_numbers.create(number: '4444444444', location: 'mobile')
+      address2 = Address.create(workPhone: '4444444444', fk_PersonID: @person.id, addressType: 'current')
+      assert_equal(@person.phone_number, '4444444444', 'this should return the workPhone number')
+    end
+  end
+  
   context "a person" do
     setup do
       @person = Factory(:person)
