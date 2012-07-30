@@ -260,7 +260,7 @@ class PeopleController < ApplicationController
           ca = Person.find(ors.person_id).contact_assignments.where(organization_id: current_organization.id).all
           ca.collect(&:destroy)
         end
-        ors.update_attributes({:archive_date => Date.today})
+        ors.archive
       end
     end
     render nothing: true
