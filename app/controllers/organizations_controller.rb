@@ -90,7 +90,7 @@ class OrganizationsController < ApplicationController
     end
     flash[:notice] = t('organizations.cleanup.archive_notice', no: no)
     #redirect_to cleanup_organizations_path
-    if to_archive.blank?
+    if no == 0
       redirect_to cleanup_organizations_path
     else
       redirect_to people_path+"?archived=true&include_archived=true"
