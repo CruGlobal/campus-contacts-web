@@ -1,4 +1,4 @@
-<iframe width="560" height="315" src="http://www.youtube.com/embed/<%= @dashpost.video if @dashpost.video.present? %>?controls=0&showinfo=0" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="http://www.youtube.com/embed/<%= @dashpost.video if @dashpost.present? && @dashpost.video.present? %>?controls=0&showinfo=0" frameborder="0" allowfullscreen></iframe>
 <br/>
 <div id="dash_content">
   <div class="description">
