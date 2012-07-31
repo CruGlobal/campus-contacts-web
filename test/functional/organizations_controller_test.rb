@@ -148,7 +148,7 @@ class OrganizationsControllerTest < ActionController::TestCase
     
     should "archive contacts with the chosen time" do
       #deliberately change the create date of @contact3 contact role
-      @contact3.organizational_roles.where(role_id: Role::CONTACT_ID).first.update_attributes({created_at: (Date.today+5).strftime("%m-%d-%Y")})
+      @contact3.organizational_roles.where(role_id: Role::CONTACT_ID).first.update_attributes({created_at: (Date.today+5).strftime("%Y-%m-%d")})
       post :archive_contacts, { :archive_contacts_before => Date.today.strftime("%m-%d-%Y") }
       assert_equal @org.people.archived(@org.id).count.count, 2
     end
