@@ -83,14 +83,14 @@ class OrganizationsController < ApplicationController
     a = a.join('-')
     a = (a.to_date+1).strftime("%Y-%m-%d")
     to_archive = current_organization.contacts.find_by_date_created_before_date_given(a)
-    no = to_archive.count
+    no = 0
     to_archive.each do |ta| # destroying contact roles of persons and replacing them with the new created role for archiving
       ta.archive_contact_role(current_organization)
       no+=1 if ta.is_archived?(current_organization)
     end
     flash[:notice] = t('organizations.cleanup.archive_notice', no: no)
     #redirect_to cleanup_organizations_path
-    if to_archive.blank?
+    if no == 0
       redirect_to cleanup_organizations_path
     else
       redirect_to people_path+"?archived=true&include_archived=true"
