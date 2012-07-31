@@ -987,7 +987,7 @@ en:
       remove_leaders_submit: "Remove Leaders Now"
       instructions: "Instructions"
       archive_instructions: "Archive Contacts"
-      archive_notice: "%{no} contacts succesfully archived"
+      archive_notice: "%{no} contacts successfully archived"
       confirm_archive: "Are you sure you wanted to archive the desired contacts?"
       archive_inst: "Archive all contacts created before %{date_field}"
       alumni_inst: "Go to the %{link} screen, select the leaders/involved people that have graduated from your ministry and label as \"Alumni\""
