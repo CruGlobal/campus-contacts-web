@@ -539,21 +539,6 @@ class PeopleControllerTest < ActionController::TestCase
     
   end
   
-  should "bulk delete" do
-    @user, @org = admin_user_login_with_org
-    c1 = Factory(:person)
-    c2 = Factory(:person)
-    
-    @org.add_contact(c1)
-    @org.add_contact(c2)
-    
-    assert_equal 2, @org.contacts.count
-    xhr :post, :bulk_delete, { :ids => "#{c1.id}, #{c2.id}" }
-    
-    assert_equal 0, @org.contacts.count
-    assert_equal " ", @response.body
-  end
-  
   should "bulk comment" do
     @user, @org = admin_user_login_with_org
     c1 = Factory(:person)
@@ -593,5 +578,44 @@ class PeopleControllerTest < ActionController::TestCase
     person = Factory(:person)
     post :destroy, { :id => person.id }
     assert_response :success
+  end
+  
+  context "bulk deleting people" do
+    setup do
+      @user, @org = admin_user_login_with_org
+    end
+    
+    should "bulk delete" do
+      @user, @org = admin_user_login_with_org
+      c1 = Factory(:person)
+      c2 = Factory(:person)
+      
+      @org.add_contact(c1)
+      @org.add_contact(c2)
+      
+      assert_equal 2, @org.contacts.count
+      xhr :post, :bulk_delete, { :ids => "#{c1.id}, #{c2.id}" }
+      
+      assert_equal 0, @org.contacts.count
+      assert_equal I18n.t('people.bulk_delete.deleting_people_success'), @response.body
+    end
+    
+    should "not bulk delete all the admins in the org" do
+      @user, @org = admin_user_login_with_org
+      c1 = Factory(:person, firstName: "Genny")
+      c2 = Factory(:person)
+      
+      Factory(:organizational_role, person: c1, role: Role.admin, organization: @org)
+      
+      @org.add_contact(c1)
+      @org.add_contact(c2)
+      
+      init_admin_count = @org.admins.count
+      
+      xhr :post, :bulk_delete, { :ids => "#{@user.person.personID}, #{c1.personID}, #{c2.personID}" }
+      
+      assert_equal init_admin_count, @org.admins.count
+      assert_equal I18n.t('people.bulk_delete.cannot_delete_admin_error', names: "#{@user.person.name}, #{c1.name}"), @response.body
+    end
   end
 end

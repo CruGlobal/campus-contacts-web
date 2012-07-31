@@ -252,7 +252,13 @@ class PeopleController < ApplicationController
   def bulk_delete
     authorize! :manage, current_organization
     ids = params[:ids].to_s.split(',')
-
+    
+    
+    if i = attempting_to_delete_all_the_admins_in_the_org?(ids)
+      render :text => I18n.t('people.bulk_delete.cannot_delete_admin_error', names: Person.find(i).collect(&:name).join(", "))
+      return
+    end
+    
     if ids.present?
       current_organization.organization_memberships.where(:person_id => ids).destroy_all
       current_organization.organizational_roles.where(:person_id => ids, :archive_date => nil, :deleted => false).each do |ors|
@@ -263,7 +269,12 @@ class PeopleController < ApplicationController
         ors.archive
       end
     end
-    render nothing: true
+    
+    
+    render :text => I18n.t('people.bulk_delete.deleting_people_success')
+    #respond_to do |format|
+    #  format.js
+    #end
   end
   # 
   # # DELETE /people/1
@@ -472,6 +483,13 @@ class PeopleController < ApplicationController
   end
 
   protected
+  
+  def attempting_to_delete_all_the_admins_in_the_org?(ids)
+    admin_ids = current_organization.admins.collect(&:personID)
+    i = admin_ids & ids.collect(&:to_i)
+    return i if (admin_ids - i).blank?
+    false
+  end
 
   def uri?(string)
     string.include?("http://") || string.include?("https://") ? true : false
