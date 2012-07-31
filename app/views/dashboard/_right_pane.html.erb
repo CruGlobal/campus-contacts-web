@@ -1,0 +1,19 @@
+<iframe width="560" height="315" src="http://www.youtube.com/embed/<%= @dashpost.video if @dashpost.video.present? %>?controls=0&showinfo=0" frameborder="0" allowfullscreen></iframe>
+<br/>
+<div id="dash_content">
+  <div class="description">
+    <div class="title">
+      <%=raw @dashpost.title if @dashpost.present? %>
+    </div>
+    <div class="date">
+      <%= @dashpost.created_at.strftime("%B %d, %Y") if @dashpost.present? %>
+    </div>
+    <div class="info">
+      <%= @dashpost.context if @dashpost.present? %>
+    </div>
+  </div>
+  <div class="social_buttons">
+    <div class="fb-like" data-href="https://www.facebook.com/missionhub" data-send="true" data-layout="button_count" data-width="120" data-show-faces="false" data-font="arial"></div>
+  </div>
+    
+</div>

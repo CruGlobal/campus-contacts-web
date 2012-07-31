@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  title: MyString
+  context: MyText
+  video: MyString
+  visible: false
+  posted_by: 1
+
+two:
+  title: MyString
+  context: MyText
+  video: MyString
+  visible: false
+  posted_by: 1

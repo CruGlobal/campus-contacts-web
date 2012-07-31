@@ -1,4 +1,6 @@
 Mh::Application.routes.draw do
+  get "dashboard/index"
+
   resources :imports, :only => [:index, :show, :new, :create, :update, :destroy, :edit] do
     collection do
       get :download_sample_contacts_csv
@@ -166,7 +168,8 @@ Mh::Application.routes.draw do
       end
     end
   end
-
+  
+  match "/dashboard" => "dashboard#index"
   get "welcome/index"
   get "welcome/duplicate"
   match 'tutorials' => "welcome#tutorials"
