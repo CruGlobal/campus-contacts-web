@@ -10,9 +10,14 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       redirect_to '/users/sign_in'
     rescue FailedFacebookCreateError
       redirect_to '/users/sign_in'
+    rescue FacebookDuplicateEmailError => e
+      Airbrake.notify(e,
+        :parameters => env["omniauth.auth"]
+      )
+      redirect_to '/welcome/duplicate'
     end
   end
-  
+
   def facebook_mhub
     env["omniauth.auth"]['provider'] = 'facebook'
     begin
@@ -23,7 +28,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
           facebook_login(@person)
         end
       else
-        facebook_login  
+        facebook_login(nil, true)
       end
       location = stored_location_for(:user)
       if location.present?
@@ -47,9 +52,9 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     params[:next] ? params[:next] : user_root_path
   end
   
-  def facebook_login(person = nil)
+  def facebook_login(person = nil, force = false)
     omniauth = env["omniauth.auth"]
-    @user = User.find_for_facebook_oauth(omniauth, current_user)
+    @user = User.find_for_facebook_oauth(omniauth, current_user, 0, force)
     session[:fb_token] = omniauth["credentials"]["token"]
     session["devise.facebook_data"] = omniauth
 

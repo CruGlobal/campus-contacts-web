@@ -1,9 +1,9 @@
 ENV["RAILS_ENV"] = "test"
-#require 'simplecov'
-#SimpleCov.start 'rails' do
- #add_filter "vendor"
- #merge_timeout 36000
-#end
+# require 'simplecov'
+# SimpleCov.start 'rails' do
+ # add_filter "vendor"
+ # merge_timeout 36000
+# end
 
 require File.expand_path('../../config/environment', __FILE__)
 require 'rack/oauth2/server'
@@ -13,6 +13,7 @@ require 'shoulda'
 require 'factory_girl'
 require 'api_test_helper'
 require File.dirname(__FILE__) + "/factories"
+require 'webmock/test_unit'
 
 # EphemeralResponse.activate
 # 

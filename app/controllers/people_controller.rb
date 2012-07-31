@@ -387,25 +387,21 @@ class PeopleController < ApplicationController
       id = get_fb_user_id_from_url(params[:term])
       url = "https://graph.facebook.com/#{id}"
 
-      result = 1
       url = URI.escape(url)
       begin
-        response = RestClient.get url, { accept: :json}
-        result = JSON.parse(response)
-        data = Array.new
-      rescue
-        result = nil
+        @json = JSON.parse(RestClient.get(url, { accept: :json}))
+      rescue RestClient::ResourceNotFound
+        @json = nil
+        @data = []
       end
 
-      if !result.nil?
-        r = Array.new
-        r << result
-        flash[:checker] = r.count # for testing purposes
-        data << {'name' => result['name'], 'id' => result['id']}
-        data << {'name' => t('general.match_found'), 'id' => nil}
+      if @json
+        #flash[:checker] = r.count # for testing purposes
+        @data = [{'name' => @json['name'], 'id' => @json['id']},
+                {'name' => t('general.match_found'), 'id' => nil}]
       else
-        flash[:checker] = 0 # for testing purposes
-        data <<  {'name' => t('people.edit.no_results'), 'id' => nil }
+        #flash[:checker] = 0 # for testing purposes
+        @data = [{'name' => t('people.edit.no_results'), 'id' => nil }]
       end
 
     else
@@ -416,29 +412,25 @@ class PeopleController < ApplicationController
       end
 
       url = URI.escape(url)
-      response = RestClient.get url, { accept: :json}
-      result = JSON.parse(response)
-      data = Array.new
-      if result['data'].size > 0
+      @json = JSON.parse(RestClient.get url, { accept: :json})
+
+      @data = []
+
+      if @json['data'].size > 0
         # construct the json result - autocomplete only accepts an array
-        result['data'].each do |d|
-          data << { 'name' => d['name'] , 'id' => d['id'] }
+        @json['data'].each do |d|
+          @data << { 'name' => d['name'] , 'id' => d['id'] }
         end
-        logger.debug result
-        # next result
-        r = Array.new
-        r << result
-        flash[:checker] = r # for testing purposes
-        data <<  {'name' => t('people.edit.more_facebook_matches'), 'id' => result['paging']['next'] } if data.length == 24
+
+        @data <<  {'name' => t('people.edit.more_facebook_matches'), 'id' => @json['paging']['next'] } if data.length == 24
       else
-        flash[:checker] = 0 # for testing purposes
-        data <<  {'name' => t('people.edit.no_results'), 'id' => nil }
+        @data <<  {'name' => t('people.edit.no_results'), 'id' => nil }
       end
 
     end
 
     respond_to do |format|
-      format.js { render json: params[:url].nil? ? data : result } # we don't need an array for the dialog search result anymore so we are fine in just passing along the result from FB
+      format.js { render json: params[:url].nil? ? @data : @json } # we don't need an array for the dialog search result anymore so we are fine in just passing along the result from FB
     end
   end
 
@@ -497,6 +489,7 @@ class PeopleController < ApplicationController
                  .where("roles.id = :search",
                         {:search => "#{search_params[:role]}"})
                  sort_by.unshift("roles.id")
+        role_tables_joint = true
       end
 
       unless search_params[:gender].blank?
@@ -534,13 +527,13 @@ class PeopleController < ApplicationController
     @all_people = @q.result(distinct: false).order(params[:q] && params[:q][:s] ? params[:q][:s] : sort_by)
     if !params[:q].nil? && params[:q][:s].include?("role_id")
       order = params[:q][:s].include?("asc") ? params[:q][:s].gsub("asc", "desc") : params[:q][:s].gsub("desc", "asc")
-      a = @q.result(distinct: false).order_by_highest_default_role(order)
+      a = @q.result(distinct: false).order_by_highest_default_role(order, role_tables_joint)
       if params[:q][:s].include?("asc")
         a = a.reverse
         a = a.uniq_by { |a| a.id }
         a = a.reverse
       end
-      @all_people = a + @q.result(distinct: false).order_alphabetically_by_non_default_role(order)
+      @all_people = a + @q.result(distinct: false).order_alphabetically_by_non_default_role(order, role_tables_joint)
       @all_people = @all_people.uniq_by { |a| a.id }
     end
 
