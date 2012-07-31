@@ -99,19 +99,15 @@ class OrganizationsController < ApplicationController
   end
   
   def archive_leaders
-    a = params[:date_leaders_not_logged_in_after].split('-')
-    a[0], a[1] = a[1], a[0]
-    a = a.join('-')
-    a = (a.to_date+1).strftime("%Y-%m-%d")
-    to_remove = current_organization.only_leaders.find_by_last_login_date_before_date_given(a)
-    no = to_remove.count
+    date_given = (Date.strptime(params[:date_leaders_not_logged_in_after], "%m-%d-%Y") + 1.day).strftime('%Y-%m-%d')
+    to_remove = current_organization.only_leaders.find_by_last_login_date_before_date_given(date_given)
     to_remove.each do |ta| # destroying leader roles of persons
       #ta.organizational_roles.where(role_id: Role::LEADER_ID, organization_id: current_organization.id).first.destroy
       ta.archive_leader_role(current_organization)
       ca = ta.contact_assignments.where(organization_id: current_organization.id).all
       ca.collect(&:destroy)
     end
-    flash[:notice] = t('organizations.cleanup.removal_notice', no: no)
+    flash[:notice] = t('organizations.cleanup.removal_notice', no: to_remove.count)
     #redirect_to cleanup_organizations_path
     person_ids = to_remove.collect{ |l| l.personID }
     if to_remove.blank?
