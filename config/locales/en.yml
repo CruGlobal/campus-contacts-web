@@ -227,6 +227,9 @@ en:
       summer_projects: Summer Projects
     assign:
       keep_contact: "Check the box to leave a copy of the contact in the org."
+    bulk_delete:
+      deleting_people_success: "People were successfully deleted!"
+      cannot_delete_admin_error: "You cannot delete <b>%{names}</b> since you are going to delete all the admins in this organization!"
   followup_comments:
     index:
       comments_title: 'Comments'
