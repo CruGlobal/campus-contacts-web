@@ -596,8 +596,7 @@ class PeopleController < ApplicationController
       @all_people = a + @q.result(distinct: false).order_alphabetically_by_non_default_role(order, role_tables_joint)
       @all_people = @all_people.uniq_by { |a| a.id }
     end
-
-    @all_people = @all_people.where(personID: params[:ids].split(',')) if params[:custom]        
+    
     #Person.archived_not_included query must be fixed so that we don't have to query from db twice such as the line above
     @all_people = @all_people.where(personID: current_organization.people.archived.where("organizational_roles.archive_date > ? AND organizational_roles.archive_date < ?", params[:archived_date], (params[:archived_date].to_date+1).strftime("%Y-%m-%d")).collect{|x| x.personID}) unless params[:archived_date].blank?
     #Person.archived_not_included query must be fixed so that we don't have to query from db twice such as the line above
