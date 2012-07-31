@@ -252,6 +252,7 @@ class PeopleController < ApplicationController
   def bulk_delete
     authorize! :manage, current_organization
     ids = params[:ids].to_s.split(',')
+
     if ids.present?
       current_organization.organization_memberships.where(:person_id => ids).destroy_all
       current_organization.organizational_roles.where(:person_id => ids, :archive_date => nil, :deleted => false).each do |ors|
@@ -360,7 +361,7 @@ class PeopleController < ApplicationController
     to_be_removed_roles = old_roles - new_roles - some_roles
 
     person.organizational_roles.where(organization_id: current_organization.id, role_id: to_be_removed_roles).each do |organizational_role|
-      organizational_role.archive #instead of organizational_role.destroy
+      return unless delete_role(organizational_role)
     end
     
     all = to_be_added_roles | (new_roles & old_roles) | (old_roles & some_roles)
@@ -384,6 +385,40 @@ class PeopleController < ApplicationController
 
     render :text => data
   end 
+  
+  def delete_role(ors)
+    begin
+      ors.check_if_only_remaining_admin_role_in_a_root_org
+      ors.check_if_admin_is_destroying_own_admin_role(current_person)
+      ors.update_attributes({:archive_date => Date.today})
+    rescue OrganizationalRole::CannotDestroyRoleError
+      render 'cannot_delete_admin_error'
+      return false
+    end
+  end
+  
+  def all_admins_being_deleted?(ors_ids)
+    begin
+      a = Set.new current_organization.admins.collect(&:personID)
+      b = Set.new ors_ids
+      raise OrganizationalRole::CannotDestroyRoleError if a.subset? b
+    rescue OrganizationalRole::CannotDestroyRoleError
+      return false
+    end
+  end
+  
+  def can_roles_be_deleted?(orss)
+    orss.each do |ors|
+      begin
+        ors.check_if_only_remaining_admin_role_in_a_root_org
+        ors.check_if_admin_is_destroying_own_admin_role(current_person)
+        ors.update_attributes({:archive_date => Date.today})
+      rescue OrganizationalRole::CannotDestroyRoleError
+        render 'cannot_delete_admin_error'
+        return false
+      end
+    end
+  end
 
   def facebook_search
     url = params[:url]
@@ -561,8 +596,7 @@ class PeopleController < ApplicationController
       @all_people = a + @q.result(distinct: false).order_alphabetically_by_non_default_role(order, role_tables_joint)
       @all_people = @all_people.uniq_by { |a| a.id }
     end
-
-    @all_people = @all_people.where(personID: params[:ids].split(',')) if params[:custom]        
+    
     #Person.archived_not_included query must be fixed so that we don't have to query from db twice such as the line above
     @all_people = @all_people.where(personID: current_organization.people.archived.where("organizational_roles.archive_date > ? AND organizational_roles.archive_date < ?", params[:archived_date], (params[:archived_date].to_date+1).strftime("%Y-%m-%d")).collect{|x| x.personID}) unless params[:archived_date].blank?
     #Person.archived_not_included query must be fixed so that we don't have to query from db twice such as the line above

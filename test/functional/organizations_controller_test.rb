@@ -148,7 +148,7 @@ class OrganizationsControllerTest < ActionController::TestCase
     
     should "archive contacts with the chosen time" do
       #deliberately change the create date of @contact3 contact role
-      @contact3.organizational_roles.where(role_id: Role::CONTACT_ID).first.update_attributes({created_at: (Date.today+1).strftime("%m-%d-%Y")})
+      @contact3.organizational_roles.where(role_id: Role::CONTACT_ID).first.update_attributes({created_at: (Date.today+5).strftime("%Y-%m-%d")})
       post :archive_contacts, { :archive_contacts_before => Date.today.strftime("%m-%d-%Y") }
       assert_equal @org.people.archived(@org.id).count.count, 2
     end
@@ -162,4 +162,38 @@ class OrganizationsControllerTest < ActionController::TestCase
     end
     
   end
+
+  context "Archiving leaders" do
+    setup do
+      @leader1 = Factory(:user_with_auxs)
+      Factory(:organizational_role, organization: @org, person: @leader1.person, role: Role.leader)
+      @leader2 = Factory(:user_with_auxs)
+      Factory(:organizational_role, organization: @org, person: @leader2.person, role: Role.leader)
+      @leader3 = Factory(:user_with_auxs)
+      Factory(:organizational_role, organization: @org, person: @leader3.person, role: Role.leader)
+    end
+    
+    should "archive leaders" do
+      post :archive_leaders, { :date_leaders_not_logged_in_after => Date.today.strftime("%m-%d-%Y") }
+      assert_equal @org.people.archived(@org.id).count.count, 3
+      
+    end
+    
+    should "not delete leader roles" do
+      assert_no_difference('OrganizationalRole.count') do
+        post :archive_leaders, { :date_leaders_not_logged_in_after => Date.today.strftime("%m-%d-%Y") }
+      end
+    end
+    
+    should "not include leaders in archive with some roles not yet archived" do
+      #deliberately add a non-contact role to @contact 3
+      #@leader2.update_attributes({current_sign_in_at: Date.today})
+      Factory(:organizational_role, organization: @org, person: @leader2.person, role: Role.involved)
+      post :archive_leaders, { :date_leaders_not_logged_in_after => Date.today.strftime("%m-%d-%Y") }
+      #only 2 contacts will be included in archived since @contact3 has 2 roles and contact is the only role archived
+      assert_equal @org.people.archived(@org.id).count.count, 2
+      
+    end
+  end
+
 end

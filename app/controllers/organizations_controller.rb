@@ -98,12 +98,13 @@ class OrganizationsController < ApplicationController
     end
   end
   
-  def remove_leaders
+  def archive_leaders
     a = params[:date_leaders_not_logged_in_after].split('-')
     a[0], a[1] = a[1], a[0]
     a = a.join('-')
     a = (a.to_date+1).strftime("%Y-%m-%d")
     to_remove = current_organization.only_leaders.find_by_last_login_date_before_date_given(a)
+    no = to_remove.count
     to_remove.each do |ta| # destroying leader roles of persons
       #ta.organizational_roles.where(role_id: Role::LEADER_ID, organization_id: current_organization.id).first.destroy
       ta.archive_leader_role(current_organization)
@@ -116,7 +117,7 @@ class OrganizationsController < ApplicationController
     if to_remove.blank?
       redirect_to cleanup_organizations_path
     else
-      redirect_to people_path+"?custom=1&ids=#{person_ids.join(',')}"
+      redirect_to people_path+"?archived=true&include_archived=true"
     end
   end
   
