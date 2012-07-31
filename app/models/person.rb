@@ -108,11 +108,15 @@ class Person < ActiveRecord::Base
     :order => "#{order.gsub('mh_answer_sheets', 'ass')}"
   } }
 
-  scope :archived, lambda { |org_id| { 
+  scope :get_archived, lambda { |org_id| { 
     :conditions => "organizational_roles.archive_date IS NOT NULL AND organizational_roles.deleted = 0",
     :group => "ministry_person.personID",
     :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID AND orss.organization_id = #{org_id} AND orss.deleted = 0)"
   } }
+  
+  def self.archived(org_id)
+    self.get_archived(org_id).collect()
+  end
   
   scope :archived_included, lambda { { 
     :conditions => "organizational_roles.deleted = 0",

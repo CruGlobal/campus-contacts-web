@@ -137,7 +137,7 @@ class OrganizationsControllerTest < ActionController::TestCase
     
     should "archive contacts" do
       post :archive_contacts, { :archive_contacts_before => Date.today.strftime("%m-%d-%Y") }
-      assert_equal @org.people.archived(@org.id).count.count, 3
+      assert_equal @org.people.archived(@org.id).count, 3
     end
     
     should "not delete contact roles" do
@@ -150,7 +150,7 @@ class OrganizationsControllerTest < ActionController::TestCase
       #deliberately change the create date of @contact3 contact role
       @contact3.organizational_roles.where(role_id: Role::CONTACT_ID).first.update_attributes({created_at: (Date.today+5).strftime("%Y-%m-%d")})
       post :archive_contacts, { :archive_contacts_before => Date.today.strftime("%m-%d-%Y") }
-      assert_equal @org.people.archived(@org.id).count.count, 2
+      assert_equal @org.people.archived(@org.id).count, 2
     end
     
     should "not include contacts in archive with some roles not yet archived" do
@@ -158,7 +158,7 @@ class OrganizationsControllerTest < ActionController::TestCase
       Factory(:organizational_role, organization: @org, person: @contact3, role: Role.involved)
       post :archive_contacts, { :archive_contacts_before => Date.today.strftime("%m-%d-%Y") }
       #only 2 contacts will be included in archived since @contact3 has 2 roles and contact is the only role archived
-      assert_equal @org.people.archived(@org.id).count.count, 2
+      assert_equal @org.people.archived(@org.id).count, 2
     end
     
   end
@@ -175,7 +175,7 @@ class OrganizationsControllerTest < ActionController::TestCase
     
     should "archive leaders" do
       post :archive_leaders, { :date_leaders_not_logged_in_after => Date.today.strftime("%m-%d-%Y") }
-      assert_equal @org.people.archived(@org.id).count.count, 3
+      assert_equal @org.people.archived(@org.id).count, 3
       
     end
     
@@ -191,7 +191,7 @@ class OrganizationsControllerTest < ActionController::TestCase
       Factory(:organizational_role, organization: @org, person: @leader2.person, role: Role.involved)
       post :archive_leaders, { :date_leaders_not_logged_in_after => Date.today.strftime("%m-%d-%Y") }
       #only 2 contacts will be included in archived since @contact3 has 2 roles and contact is the only role archived
-      assert_equal @org.people.archived(@org.id).count.count, 2
+      assert_equal @org.people.archived(@org.id).count, 2
       
     end
   end

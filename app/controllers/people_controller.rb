@@ -594,7 +594,7 @@ class PeopleController < ApplicationController
     end
 
     #if !params[:archived].blank? && params[:include_archived].blank?
-    @q = @q.where(personID: current_organization.people.archived(current_organization.id).uniq.collect(&:personID)) unless params[:archived].blank?
+    @q = @q.where(personID: current_organization.people.archived(current_organization.id).collect(&:personID)) unless params[:archived].blank?
 
     @q = @q.search(params[:q])
     @q.sorts = sort_by if @q.sorts.empty?

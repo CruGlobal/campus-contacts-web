@@ -20,7 +20,7 @@
       <%= link_to(t('contacts.index.all'), :include_archived => params[:include_archived]) %>
     </span>
     (<%= @people_scope.count %>)
-    <% if current_organization.people.archived(current_organization.id).count.count > 0 %>
+    <% if current_organization.people.archived(current_organization.id).count > 0 %>
     <div id="include_archived_div">
       <%= t('people.index.include_archived') %>
       <%= check_box_tag 'include_archived', t('people.index.include_archived'), params[:include_archived] %>
@@ -32,6 +32,6 @@
     <span class="name">
       <%= link_to(t('people.index.archived_label'), :archived => true, :include_archived => params[:include_archived]) %>
     </span>
-    (<%= current_organization.people.archived(current_organization.id).count.count %>)
+    (<%= current_organization.people.archived(current_organization.id).count %>)
   </li>
 </ul>
