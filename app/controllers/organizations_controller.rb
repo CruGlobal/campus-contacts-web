@@ -97,7 +97,7 @@ class OrganizationsController < ApplicationController
     end
   end
   
-  def remove_leaders
+  def archive_leaders
     a = params[:date_leaders_not_logged_in_after].split('-')
     a[0], a[1] = a[1], a[0]
     a = a.join('-')
@@ -116,7 +116,7 @@ class OrganizationsController < ApplicationController
     if to_remove.blank?
       redirect_to cleanup_organizations_path
     else
-      redirect_to people_path+"?custom=1&ids=#{person_ids.join(',')}"
+      redirect_to people_path+"?archived=true&include_archived=true"
     end
   end
   
