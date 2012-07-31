@@ -85,6 +85,10 @@ $ ->
       position: 
         my: 'top right',  
         at: 'bottom left'
+    $('.tipitright[title]').qtip
+      position: 
+        my: 'top left',  
+        at: 'bottom right'
     $('.tipit2[title]').qtip
       position: 
         my: 'top right',  

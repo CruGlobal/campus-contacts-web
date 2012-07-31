@@ -260,7 +260,7 @@ class PeopleController < ApplicationController
           ca = Person.find(ors.person_id).contact_assignments.where(organization_id: current_organization.id).all
           ca.collect(&:destroy)
         end
-        ors.update_attributes({:archive_date => Date.today})
+        ors.archive
       end
     end
     render nothing: true
@@ -506,7 +506,7 @@ class PeopleController < ApplicationController
   def fetch_people(search_params = {})
     org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
     @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles_including_archived)
-    @people_scope = @people_scope.where(personID: @people_scope.archived_not_included.uniq.collect(&:personID)) if params[:include_archived].blank?    
+    @people_scope = @people_scope.where(personID: @people_scope.archived_not_included.uniq.collect(&:personID)) if params[:include_archived].blank? && params[:archived].blank?
     #Person.archived_not_included query must be fixed so that we don't have to query from db twice such as the line above
     
     @q = @people_scope.includes(:primary_phone_number, :primary_email_address)
@@ -579,6 +579,9 @@ class PeopleController < ApplicationController
       end
     end
 
+    #if !params[:archived].blank? && params[:include_archived].blank?
+    @q = @q.where(personID: current_organization.people.archived(current_organization.id).uniq.collect(&:personID)) unless params[:archived].blank?
+
     @q = @q.search(params[:q])
     @q.sorts = sort_by if @q.sorts.empty?
     @all_people = @q.result(distinct: false).order(params[:q] && params[:q][:s] ? params[:q][:s] : sort_by)
@@ -594,8 +597,7 @@ class PeopleController < ApplicationController
       @all_people = @all_people.uniq_by { |a| a.id }
     end
 
-    @all_people = @all_people.where(personID: params[:ids].split(',')) if params[:custom]    
-    @all_people = @all_people.where(personID: current_organization.archived(current_organization.id).uniq.collect(&:personID)) unless params[:archived].blank?
+    @all_people = @all_people.where(personID: params[:ids].split(',')) if params[:custom]        
     #Person.archived_not_included query must be fixed so that we don't have to query from db twice such as the line above
     @all_people = @all_people.where(personID: current_organization.people.archived.where("organizational_roles.archive_date > ? AND organizational_roles.archive_date < ?", params[:archived_date], (params[:archived_date].to_date+1).strftime("%Y-%m-%d")).collect{|x| x.personID}) unless params[:archived_date].blank?
     #Person.archived_not_included query must be fixed so that we don't have to query from db twice such as the line above

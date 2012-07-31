@@ -108,23 +108,23 @@ class Person < ActiveRecord::Base
     :order => "#{order.gsub('mh_answer_sheets', 'ass')}"
   } }
 
-  scope :archived, lambda { |org_id| { #this must always be preceded by Organization.people function
+  scope :archived, lambda { |org_id| { 
     :conditions => "organizational_roles.archive_date IS NOT NULL AND organizational_roles.deleted = 0",
     :group => "ministry_person.personID",
     :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID AND orss.organization_id = #{org_id} AND orss.deleted = 0)"
   } }
   
-  scope :archived_included, lambda { { #this must always be preceded by Organization.people function
+  scope :archived_included, lambda { { 
     :conditions => "organizational_roles.deleted = 0",
     :group => "ministry_person.personID"
   } }
   
-  scope :archived_not_included, lambda { { #this must always be preceded by Organization.people function
+  scope :archived_not_included, lambda { { 
     :conditions => "organizational_roles.archive_date IS NULL AND organizational_roles.deleted = 0",
     :group => "ministry_person.personID"
   } }
   
-  scope :deleted, lambda { { #this must always be preceded by Organization.people function
+  scope :deleted, lambda { { 
     :conditions => "organizational_roles.deleted = 1",
     :group => "ministry_person.personID",
     :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID)"
@@ -132,7 +132,7 @@ class Person < ActiveRecord::Base
   
   def archive_contact_role(org)
     begin
-      organizational_roles.where(organization_id: org.id, role_id: Role::CONTACT_ID).first.update_attribute(:archive_date, Date.today)
+      organizational_roles.where(organization_id: org.id, role_id: Role::CONTACT_ID).first.archive
     rescue
     
     end
@@ -140,7 +140,7 @@ class Person < ActiveRecord::Base
   
   def archive_leader_role(org)
     begin
-      organizational_roles.where(organization_id: org.id, role_id: Role::LEADER_ID).first.update_attribute(:archive_date, Date.today)
+      organizational_roles.where(organization_id: org.id, role_id: Role::LEADER_ID).first.archive
     rescue
     
     end
