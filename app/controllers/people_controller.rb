@@ -533,7 +533,7 @@ class PeopleController < ApplicationController
   def fetch_people(search_params = {})
     org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
     @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles_including_archived)
-    @people_scope = @people_scope.where(personID: @people_scope.archived_not_included.uniq.collect(&:personID)) if params[:include_archived].blank? && params[:archived].blank?
+    @people_scope = @people_scope.where(personID: @people_scope.archived_not_included.collect(&:personID)) if params[:include_archived].blank? && params[:archived].blank?
     #Person.archived_not_included query must be fixed so that we don't have to query from db twice such as the line above
     
     @q = @people_scope.includes(:primary_phone_number, :primary_email_address)
