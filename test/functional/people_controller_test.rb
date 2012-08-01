@@ -657,12 +657,26 @@ class PeopleControllerTest < ActionController::TestCase
     
     should "return contacts when Contact link is clicked" do
       xhr :get, :index, { :role => Role::CONTACT_ID }
-      assert !(assigns(:all_people).collect{|x| x.personID} & [@contact1.person.personID, @contact1.person.personID, @contact1.person.personID]).blank?
+      assert_equal assigns(:all_people).collect{|x| x.personID}, [@contact1.person.personID, @contact2.person.personID, @contact3.person.personID].sort { |x, y| x <=> y }
     end
     
     should "return involveds when Involved link is clicked" do
       xhr :get, :index, { :role => Role::INVOLVED_ID }
       assert_equal assigns(:all_people).collect{|x| x.personID}, [@involved1.person.personID]
+    end
+    
+    should "return involveds when Involved link is clicked" do
+      xhr :get, :index, { :role => Role::INVOLVED_ID }
+      assert_equal assigns(:all_people).collect{|x| x.personID}, [@involved1.person.personID]
+    end
+    
+    should "return archiveds when Archived link is clicked" do
+      @contact1.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
+      @contact2.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
+      @contact3.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
+    
+      xhr :get, :index, { :archived => true }
+      assert_equal assigns(:all_people).collect{|x| x.personID}, [@contact1.person.personID, @contact2.person.personID, @contact3.person.personID].sort { |x, y| x <=> y }
     end
   end
 end
