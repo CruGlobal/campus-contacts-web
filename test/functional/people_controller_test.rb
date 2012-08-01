@@ -678,5 +678,23 @@ class PeopleControllerTest < ActionController::TestCase
       xhr :get, :index, { :archived => true }
       assert_equal assigns(:all_people).collect{|x| x.personID}, [@contact1.person.personID, @contact2.person.personID, @contact3.person.personID].sort { |x, y| x <=> y }
     end
+    
+    should "only return unarchived people when 'Include Archived' checkbox isn't checked'" do
+      @contact1.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
+      @contact2.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
+      @leader1.person.organizational_roles.where(role_id: Role::LEADER_ID).first.archive
+      
+      xhr :get, :index
+      assert_equal assigns(:all_people).collect{|x| x.personID}, [@admin1.person.personID, @contact3.person.personID, @involved1.person.personID].sort { |x, y| x <=> y }
+    end
+    
+    should "return all people (even unarchived ones) when 'Include Archived' checkbox is checked'" do
+      @contact1.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
+      @contact2.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
+      @leader1.person.organizational_roles.where(role_id: Role::LEADER_ID).first.archive
+      
+      xhr :get, :index, { :include_archived => true }
+      assert_equal assigns(:all_people).collect{|x| x.personID}, [@admin1.person.personID, @leader1.person.personID, @contact1.person.personID, @contact2.person.personID, @contact3.person.personID, @involved1.person.personID].sort { |x, y| x <=> y }
+    end
   end
 end
