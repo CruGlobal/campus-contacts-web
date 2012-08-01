@@ -226,6 +226,55 @@ class PersonTest < ActiveSupport::TestCase
     end
   end
   
+  context "getting archived people" do
+    setup do
+      @org1 = Factory(:organization)
+      @org2 = Factory(:organization)
+      
+      @person1 = Factory(:person)
+      @person2 = Factory(:person)
+      @person3 = Factory(:person)
+      @person4 = Factory(:person)
+      @org_role1 = Factory(:organizational_role, person: @person1,
+        organization: @org1, role: Role.contact, archive_date: Date.today)
+      @org_role2 = Factory(:organizational_role, person: @person2, 
+        organization: @org1, role: Role.contact)
+      @org_role3 = Factory(:organizational_role, person: @person3, 
+        organization: @org1, role: Role.contact, deleted: 1)
+      @org_role4 = Factory(:organizational_role, person: @person4, 
+        organization: @org2, role: Role.contact)
+    end
+    should "return all included person that has active role" do
+      results = @org1.people.archived_included
+      assert_equal(results.count, 2)
+    end
+    should "not return a deleted person" do
+      results = @org1.people.archived_included
+      assert(!results.include?(@person3), "Person 3 should not be included")
+    end
+    should "not return person from other org" do
+      results = @org1.people.archived_included
+      assert(!results.include?(@person4), "Person 3 should not be included")
+    end
+    should "return all not included person that has active role" do
+      results = @org1.people.archived_not_included
+      assert_equal(results.count, 1)
+    end
+    should "not return a person with archive_date" do
+      results = @org1.people.archived_not_included
+      assert(!results.include?(@person1), "Person 1 should not be included")
+    end
+    should "return all deleted person" do
+      results = @org1.people.deleted
+      assert_equal(results.count, 1)
+    end
+    should "not return not deleted person" do
+      results = @org1.people.get_deleted
+      assert(!results.include?(@person1), "Person 1 should not be included")
+      assert(!results.include?(@person2), "Person 2 should not be included")
+    end
+  end
+  
   context "a person" do
     setup do
       @person = Factory(:person)
