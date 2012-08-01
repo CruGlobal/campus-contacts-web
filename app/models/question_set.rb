@@ -47,6 +47,96 @@ class QuestionSet
     AnswerSheet.transaction do
       @questions.each do |question|
         question.save_response(@answer_sheet, question)
+        answer = @answer_sheet.answers.find_by_question_id(question.id)
+        question_rules = SurveyElement.find_by_element_id(question.id).question_rules
+        
+        if question_rules.present?
+          question_rules.each do |question_rule|
+            triggers = question_rule.trigger_keywords.gsub(' ','').split(',')
+            code = question_rule.rule.rule_code
+            
+            case code
+            when 'AUTONOTIFY'
+              keyword_found = ''
+              
+              # Check if triggers exists
+              triggers.each do |t|
+                keyword_found = t unless answer.value.downcase.index(t.downcase) == nil
+              end
+            
+              # Do the process
+              unless keyword_found.blank?
+                leaders = Person.find(question_rule.extra_parameters['leaders'])
+                recipients = leaders.collect{|p| "#{p.name} <#{p.email}>"}.join(", ")
+                PeopleMailer.enqueue.notify_on_survey_answer(recipients, question_rule, keyword_found, answer)
+                # PeopleMailer.notify_on_survey_answer(recipients, question_rule, keyword_found, answer).deliver
+              end
+              
+            when 'AUTOASSIGN'
+              keyword_found = ''
+              
+              # Check if triggers exists
+              triggers.each do |t|
+                keyword_found = t unless answer.value.downcase.index(t.downcase) == nil
+              end
+            
+              # Do the process
+              unless keyword_found.blank?
+                organization = @answer_sheet.survey.organization
+                type = question_rule.extra_parameters['type'].downcase
+                assign_to_id = question_rule.extra_parameters['id']
+                person =  @answer_sheet.person
+                
+                if type.present? && assign_to_id.present?
+                  case type
+                  when 'leader'
+                    Rails.logger.info "Running Leader Process"
+                    if Person.exists?(assign_to_id)
+                      @assign_to = Person.find(assign_to_id)        
+                      ContactAssignment.where(
+                        person_id: person.id, 
+                        organization_id: organization.id).destroy_all
+                      ContactAssignment.create(
+                        person_id: person.id, 
+                        organization_id: organization.id, 
+                        assigned_to_id: @assign_to.id)
+                    end
+                  when 'ministry'
+                    if Organization.exists?(assign_to_id)
+                      @assign_to = Organization.find(assign_to_id)   
+                      @assign_to.add_contact(person)
+                    end
+                  when 'group'
+                    if Group.exists?(assign_to_id)
+                      @assign_to = Group.find(assign_to_id)   
+                      group_membership = @assign_to.group_memberships.find_or_initialize_by_person_id(person.id)
+                      group_membership.role = 'member'
+                      group_membership.save
+                    end
+                  when 'label'
+                    if Role.exists?(assign_to_id)
+                      
+                      new_roles = [assign_to_id]
+                      old_roles = person.organizational_roles.where(organization_id: organization.id).collect { |role| role.role_id }
+                      roles_to_add = new_roles - old_roles
+                      roles_to_remove = old_roles - new_roles
+
+                      person.organizational_roles.where(organization_id: organization.id, role_id: roles_to_remove).destroy_all
+                    
+                      all_roles = roles_to_add | (new_roles & old_roles)
+                      all_roles.sort!.each do |role_id|    
+                        OrganizationalRole.find_or_create_by_person_id(
+                          person_id: person.id, 
+                          role_id: role_id, 
+                          organization_id: organization.id) if roles_to_add.include?(role_id)
+                      end
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
       end
     end
   end

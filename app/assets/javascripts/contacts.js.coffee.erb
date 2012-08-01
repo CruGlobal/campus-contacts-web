@@ -370,6 +370,14 @@ $ ->
     
   $('#contacts_controller .controls a.delete').live 'click', (e)->
     $(this).closest('tr').fadeOut()
+    
+    # Deduct 'do not contact' total records
+    $("#dnc_count").html $("#dnc_count").html() - 1  if $(this).hasClass("dnc")
+      
+    # Change paging count
+    tmp = $(".searchstat").html().split(/-|of/)
+    $(".searchstat").html tmp[0] + " - " + (tmp[1] - 1) + " of " + (tmp[2] - 1)
+    
     if $('#leaders')[0]?
       $('.id_checkbox', $(this).closest('tr')).prop('checked', true)
       $.fn.assignTo($('.leader.dnc'), true)

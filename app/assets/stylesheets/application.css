@@ -6,6 +6,7 @@
  *= require superfish
  *= require superfish-navbar
  *= require superscroll
+ *= require dashboard
  *= require jquery.notifications
  *= require excolor
 */

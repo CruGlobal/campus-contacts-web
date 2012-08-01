@@ -30,6 +30,7 @@
 //= require i18n/translations
 //= require followup_comments
 //= require clearform
+//= require survey
 //= require global
 //= require welcome
 //= require surveys

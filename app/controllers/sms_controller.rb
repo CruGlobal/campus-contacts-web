@@ -15,7 +15,7 @@ class SmsController < ApplicationController
     @sms_session = SmsSession.where(sms_params.slice(:phone_number)).order('updated_at desc')
     # See if this is a sticky session ( prior sms in the past XX minutes )
     unless message.split(' ').first.downcase == 'i'
-      @sms_session = @sms_session.where(["updated_at > ?", 1.hour.ago])
+      @sms_session = @sms_session.where(["updated_at > ?", 10.minutes.ago])
     end
     @sms_session = @sms_session.first
     

@@ -122,6 +122,7 @@ $ ->
           helper_text = $('#drag_helper_text_other').html().replace('0', length)
         $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body')); 
   
+  
   if $.fn.superfish?
     $('ul.sf-menu').superfish({ 
       pathClass: 'current',

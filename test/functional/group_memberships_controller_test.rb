@@ -56,7 +56,8 @@ class GroupMembershipsControllerTest < ActionController::TestCase
       setup do
         user = Factory(:user_with_auxs)
         user2 = Factory(:user_with_auxs)
-        sign_in user
+        user3 = Factory(:user_with_auxs)
+        sign_in user3
         @org.add_leader(user.person, user2.person)
       end
       
@@ -77,26 +78,30 @@ class GroupMembershipsControllerTest < ActionController::TestCase
   context "search" do
     setup do
       @user, @org = admin_user_login_with_org
+      @group = Factory(:group, organization: @org)
       
-      p1 = Factory(:person, firstName: "Tony", lastName: "Stark")
-      p2 = Factory(:person, firstName: "Tony", lastName: "Banner")
-      
-      @org.add_contact(p1)
-      @org.add_contact(p2)
+      @p1 = Factory(:person, firstName: "Tony", lastName: "Stark")
+      @p2 = Factory(:person, firstName: "Tony", lastName: "Banner")
+      @p3 = Factory(:person, firstName: "Tony", lastName: "Banner")
+      @p1.email_addresses.create(email: 'p1@example.com')
+      @p2.email_addresses.create(email: 'p2@example.com')
+      @org.add_contact(@p1)
+      @org.add_contact(@p2)
+      @org.add_contact(@p3)
     end
     
-    should "search when show all is false" do     
-      xhr :get, :search, { :name => "Tony" }
+    should "search when show all is false" do
+      xhr :get, :search, { :name => "Tony", :role => "member", :group_id => @group.id }
       assert_not_nil assigns(:people)
       assert_not_nil assigns(:total)
       assert_equal 2, assigns(:total)
     end
     
     should "search when show all is true" do
-      xhr :get, :search, { :name => "Tony", :show_all => true }
+      xhr :get, :search, { :name => "Tony", :show_all => true, :role => "member", :group_id => @group.id }
       assert_not_nil assigns(:people)
       assert_not_nil assigns(:total)
-      assert_equal assigns(:total), assigns(:people).all.length
+      assert_equal assigns(:total), assigns(:people).length
     end
     
     should "render nothing when no param is found" do

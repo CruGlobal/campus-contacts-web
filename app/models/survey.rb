@@ -17,6 +17,8 @@ class Survey < ActiveRecord::Base
   has_attached_file :css_file, s3_credentials: 'config/s3.yml', storage: :s3,
                              path: 'surveys/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy
   
+  has_many :rules, :through => :survey_elements
+  
   # validation
   validates_presence_of :title, :post_survey_message, :terminology
   validates_length_of :title, :maximum => 100, :allow_nil => true

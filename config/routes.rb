@@ -1,4 +1,6 @@
 Mh::Application.routes.draw do
+  get "dashboard/index"
+
   resources :imports, :only => [:index, :show, :new, :create, :update, :destroy, :edit] do
     collection do
       get :download_sample_contacts_csv
@@ -166,7 +168,8 @@ Mh::Application.routes.draw do
       end
     end
   end
-
+  
+  match "/dashboard" => "dashboard#index"
   get "welcome/index"
   get "welcome/duplicate"
   match 'tutorials' => "welcome#tutorials"
@@ -250,6 +253,9 @@ Mh::Application.routes.draw do
   get "/surveys/:keyword" => 'surveys#start'
   # mount RailsAdmin::Engine => "/admin"
 
+  # 
+  match 'autoassign_suggest' => 'surveys/questions#suggestion', as: 'question_suggestion'
+  
   get "welcome/tour"
 
   # mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
