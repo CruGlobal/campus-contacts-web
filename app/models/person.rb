@@ -118,21 +118,33 @@ class Person < ActiveRecord::Base
     self.get_archived(org_id).collect()
   end
   
-  scope :archived_included, lambda { { 
+  scope :get_archived_included, lambda { { 
     :conditions => "organizational_roles.deleted = 0",
     :group => "ministry_person.personID"
   } }
   
-  scope :archived_not_included, lambda { { 
+  def self.archived_included
+    self.get_archived_included.collect()
+  end
+  
+  scope :get_archived_not_included, lambda { { 
     :conditions => "organizational_roles.archive_date IS NULL AND organizational_roles.deleted = 0",
     :group => "ministry_person.personID"
   } }
   
-  scope :deleted, lambda { { 
+  def self.archived_not_included
+    self.get_archived_not_included.collect()
+  end
+  
+  scope :get_deleted, lambda { { 
     :conditions => "organizational_roles.deleted = 1",
     :group => "ministry_person.personID",
     :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID)"
   } }
+  
+  def self.deleted
+    self.get_deleted.collect()
+  end
   
   def archive_contact_role(org)
     begin

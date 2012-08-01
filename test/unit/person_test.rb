@@ -226,6 +226,166 @@ class PersonTest < ActiveSupport::TestCase
     end
   end
   
+  context "getting archived people" do
+    setup do
+      @org1 = Factory(:organization)
+      @org2 = Factory(:organization)
+      
+      @person1 = Factory(:person)
+      @person2 = Factory(:person)
+      @person3 = Factory(:person)
+      @person4 = Factory(:person)
+      @org_role1 = Factory(:organizational_role, person: @person1,
+        organization: @org1, role: Role.contact, archive_date: Date.today)
+      @org_role2 = Factory(:organizational_role, person: @person2, 
+        organization: @org1, role: Role.contact)
+      @org_role3 = Factory(:organizational_role, person: @person3, 
+        organization: @org1, role: Role.contact, deleted: 1)
+      @org_role4 = Factory(:organizational_role, person: @person4, 
+        organization: @org2, role: Role.contact)
+    end
+    should "return all included person that has active role" do
+      results = @org1.people.archived_included
+      assert_equal(results.count, 2)
+    end
+    should "not return a deleted person" do
+      results = @org1.people.archived_included
+      assert(!results.include?(@person3), "Person 3 should not be included")
+    end
+    should "not return person from other org" do
+      results = @org1.people.archived_included
+      assert(!results.include?(@person4), "Person 3 should not be included")
+    end
+    should "return all not included person that has active role" do
+      results = @org1.people.archived_not_included
+      assert_equal(results.count, 1)
+    end
+    should "not return a person with archive_date" do
+      results = @org1.people.archived_not_included
+      assert(!results.include?(@person1), "Person 1 should not be included")
+    end
+    should "return all deleted person" do
+      results = @org1.people.deleted
+      assert_equal(results.count, 1)
+    end
+    should "not return not deleted person" do
+      results = @org1.people.get_deleted
+      assert(!results.include?(@person1), "Person 1 should not be included")
+      assert(!results.include?(@person2), "Person 2 should not be included")
+    end
+  end
+  
+  context "removing contact assignment" do
+    setup do
+      @leader1 = Factory(:person)
+      @leader2 = Factory(:person)
+      @leader3 = Factory(:person)
+      @org1 = Factory(:organization)
+      @org2 = Factory(:organization)
+      @person1 = Factory(:person)
+      @person2 = Factory(:person)
+      @person3 = Factory(:person)
+      
+      @assignment1 = Factory(:contact_assignment, organization: @org1, person: @person1, assigned_to: @leader1)
+      @assignment2 = Factory(:contact_assignment, organization: @org1, person: @person2, assigned_to: @leader1)
+      @assignment3 = Factory(:contact_assignment, organization: @org1, person: @person3, assigned_to: @leader2)
+      @assignment4 = Factory(:contact_assignment, organization: @org2, person: @person1, assigned_to: @leader1)
+    end
+    should "delete assigned contacts" do
+      @leader1.remove_assigned_contacts(@org1)
+      assert(!ContactAssignment.all.include?(@assignment1), "This assignment should be deleted")
+      assert(!ContactAssignment.all.include?(@assignment2), "This assignment should be deleted")
+    end
+    should "not delete assigned contacts to other leader" do
+      @leader1.remove_assigned_contacts(@org1)
+      assert(ContactAssignment.all.include?(@assignment3), "This assignment should not be deleted")
+    end
+    should "not delete assigned contacts from other org" do
+      @leader1.remove_assigned_contacts(@org1)
+      assert(ContactAssignment.all.include?(@assignment4), "This assignment should not be deleted")
+    end
+    should "not delete any assignments if no one is assigned to a leader" do
+      @leader3.remove_assigned_contacts(@org1)
+      initial_assignment_count = ContactAssignment.count
+      assert_equal(initial_assignment_count, ContactAssignment.count)
+    end
+  end
+  
+  context "merging a contact" do
+    setup do
+      @contact = Factory(:person)
+      @org = Factory(:organization)
+      
+      @person = Factory(:person)
+      @person_phone1 = @person.phone_numbers.create(number: '1111111', location: 'mobile')
+      @person_location1 = @person.locations.create(provider: "provider", name: "Location1", location_id: "1")
+      @person_friend1 = @person.friends.create(provider: "provider", name: "Friend1", uid: "1")
+      @person_interest1 = @person.interests.create(provider: "provider", name: "Interest1",
+        interest_id: "1", category: "category")
+      @person_education1 = @person.education_histories.create(school_type: "HighSchool", provider: "provider", 
+        school_name: "SchoolName1", school_id: "1")
+      @person_followup1 = @person.followup_comments.create(contact_id: @contact.id, comment: "Comment1", 
+        organization_id: @org.id)
+      @person_comment1 = @person.comments_on_me.create(commenter_id: @contact.id, comment: "Comment1", 
+        organization_id: @org.id)
+      @person_email1 = @person.email_addresses.create(email: 'person@email.com')
+      
+      @other = Factory(:person)
+      @other_phone1 = @other.phone_numbers.create(number: '3333333', location: 'mobile')
+      @other_location1 = @other.locations.create(provider: "provider", name: "Location2", location_id: "2")
+      @other_friend1 = @other.friends.create(provider: "provider", name: "Friend2", uid: "2")
+      @other_interest1 = @other.interests.create(provider: "provider", name: "Interest2",
+        interest_id: "2", category: "category")
+      @other_education1 = @other.education_histories.create(school_type: "HighSchool", provider: "provider", 
+        school_name: "SchoolName2", school_id: "2")
+      @other_followup1 = @other.followup_comments.create(contact_id: @contact.id, comment: "Comment2", 
+        organization_id: @org.id)
+      @other_comment1 = @other.comments_on_me.create(commenter_id: @contact.id, comment: "Comment2", 
+        organization_id: @org.id)
+      @other_email1 = @other.email_addresses.create(email: 'other@email.com')
+    end
+    should "merge the phone numbers" do
+      @person.merge(@other)
+      assert(@person.phone_numbers.include?(@person_phone1), "Person still have its phone number")
+      assert(@person.phone_numbers.include?(@other_phone1), "Person should aquire other person's phone number data")
+    end
+    should "merge the locations" do
+      @person.merge(@other)
+      assert(@person.locations.include?(@person_location1), "Person still have its location")
+      assert(@person.locations.include?(@other_location1), "Person should aquire other person's location data")
+    end
+    should "merge the friends" do
+      @person.merge(@other)
+      assert(@person.friends.include?(@person_friend1), "Person still have its friend")
+      assert(@person.friends.include?(@other_friend1), "Person should aquire other person's friend data")
+    end
+    should "merge the interests" do
+      @person.merge(@other)
+      assert(@person.interests.include?(@person_interest1), "Person still have its interest")
+      assert(@person.interests.include?(@other_interest1), "Person should aquire other person's interest data")
+    end
+    should "merge the educational history" do
+      @person.merge(@other)
+      assert(@person.education_histories.include?(@person_education1), "Person still have its education history")
+      assert(@person.education_histories.include?(@other_education1), "Person should aquire other person's education history data")
+    end
+    should "merge the followup comments" do
+      @person.merge(@other)
+      assert_equal(@person_followup1.commenter_id, @person.personID, "Person still have its followup comment")
+      assert_equal(@other_followup1.commenter_id, @person.personID, "Person should aquire other person's followup comment data")
+    end
+    should "merge the comments from other people" do
+      @person.merge(@other)
+      assert_equal(@person_comment1.contact_id, @person.personID, "Person still have its comments from other people")
+      assert_equal(@other_comment1.contact_id, @person.personID, "Person should aquire other person's comments from other people data")
+    end
+    should "merge the email address" do
+      @person.merge(@other)
+      assert(@person.email_addresses.include?(@person_email1), "Person still have its email address")
+      assert(@person.email_addresses.include?(@other_email1), "Person should aquire other person's email address data")
+    end
+  end
+  
   context "a person" do
     setup do
       @person = Factory(:person)

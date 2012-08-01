@@ -620,4 +620,49 @@ class PeopleControllerTest < ActionController::TestCase
       assert_equal @org.admins.count, init_admin_count
     end
   end
+  
+  context "Clicking on the label links at '/people'" do
+    setup do
+      @user = Factory(:user_with_auxs)
+      @org = Factory(:organization)
+      sign_in @user
+      @request.session[:current_organization_id] = @org.id
+    
+      @admin1 = Factory(:user_with_auxs)
+      Factory(:organizational_role, organization: @org, person: @admin1.person, role: Role.admin)
+    
+      @leader1 = Factory(:user_with_auxs)
+      Factory(:organizational_role, organization: @org, person: @leader1.person, role: Role.leader)
+      
+      @contact1 = Factory(:user_with_auxs)
+      Factory(:organizational_role, organization: @org, person: @contact1.person, role: Role.contact)
+      @contact2 = Factory(:user_with_auxs)
+      Factory(:organizational_role, organization: @org, person: @contact2.person, role: Role.contact)
+      @contact3 = Factory(:user_with_auxs)
+      Factory(:organizational_role, organization: @org, person: @contact3.person, role: Role.contact)
+      
+      @involved1 = Factory(:user_with_auxs)
+      Factory(:organizational_role, organization: @org, person: @involved1.person, role: Role.involved)
+    end
+    
+    should "return admins when Admin link is clicked" do
+      xhr :get, :index, { :role => Role::ADMIN_ID }
+      assert_equal assigns(:all_people).collect{|x| x.personID}, [@admin1.person.personID]
+    end
+    
+    should "return leaders when Leader link is clicked" do
+      xhr :get, :index, { :role => Role::LEADER_ID }
+      assert_equal assigns(:all_people).collect{|x| x.personID}, [@leader1.person.personID]
+    end
+    
+    should "return contacts when Contact link is clicked" do
+      xhr :get, :index, { :role => Role::CONTACT_ID }
+      assert !(assigns(:all_people).collect{|x| x.personID} & [@contact1.person.personID, @contact1.person.personID, @contact1.person.personID]).blank?
+    end
+    
+    should "return involveds when Involved link is clicked" do
+      xhr :get, :index, { :role => Role::INVOLVED_ID }
+      assert_equal assigns(:all_people).collect{|x| x.personID}, [@involved1.person.personID]
+    end
+  end
 end

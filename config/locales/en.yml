@@ -59,7 +59,7 @@ en:
     groups: 'Groups'
     hide: 'Hide'
     view_details: "View details"
-    survey_mode_tip: "Survey mode allows for other f to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts."
+    survey_mode_tip: "Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts."
     terms: 'Terms and Conditions'
     privacy: 'Privacy Policy'
     help: "Resources and Help"
@@ -1002,3 +1002,5 @@ en:
   imports:
     new:
       wrong_file_format_error: "Uploaded wrong file format. File must be .csv"
+
+
