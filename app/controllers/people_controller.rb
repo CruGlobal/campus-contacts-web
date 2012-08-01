@@ -9,7 +9,6 @@ class PeopleController < ApplicationController
   def index
     authorize! :read, Person
     fetch_people(params)
-
     @roles = current_organization.roles # Admin or Leader, all roles will appear in the index div.role_div_checkboxes but checkobx of the admin role will be hidden 
   end
 
@@ -253,11 +252,33 @@ class PeopleController < ApplicationController
   def bulk_delete
     authorize! :manage, current_organization
     ids = params[:ids].to_s.split(',')
+    
+    if i = attempting_to_delete_all_the_admins_in_the_org?(ids)
+      render :text => I18n.t('people.bulk_delete.cannot_delete_admin_error', names: Person.find(i).collect(&:name).join(", "))
+      return
+    end
+    
+    if attempting_to_delete_current_user_self_as_admin?(ids)
+      render :text => I18n.t('people.index.cannot_delete_admin_error')
+      return
+    end
+    
     if ids.present?
       current_organization.organization_memberships.where(:person_id => ids).destroy_all
-      current_organization.organizational_roles.where(:person_id => ids).destroy_all
+      current_organization.organizational_roles.where(:person_id => ids, :archive_date => nil, :deleted => false).each do |ors|
+        if(ors.role_id == Role::LEADER_ID)
+          ca = Person.find(ors.person_id).contact_assignments.where(organization_id: current_organization.id).all
+          ca.collect(&:destroy)
+        end
+        ors.archive
+      end
     end
-    render nothing: true
+    
+    
+    render :text => I18n.t('people.bulk_delete.deleting_people_success')
+    #respond_to do |format|
+    #  format.js
+    #end
   end
   # 
   # # DELETE /people/1
@@ -355,14 +376,15 @@ class PeopleController < ApplicationController
     to_be_removed_roles = old_roles - new_roles - some_roles
 
     person.organizational_roles.where(organization_id: current_organization.id, role_id: to_be_removed_roles).each do |organizational_role|
-      organizational_role.destroy
+      return unless delete_role(organizational_role)
     end
     
     all = to_be_added_roles | (new_roles & old_roles) | (old_roles & some_roles)
     all.sort!
     all.each_with_index do |role_id, index|    
       begin       
-        OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) if to_be_added_roles.include?(role_id)
+        ors = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) if to_be_added_roles.include?(role_id)
+        ors.update_attributes({:deleted => false, :end_date => '', :archive_date => nil}) unless ors.nil?
       rescue OrganizationalRole::InvalidPersonAttributesError
         render 'update_leader_error', :locals => { :person => person } if role_id == Role::LEADER_ID
         render 'update_admin_error', :locals => { :person => person } if role_id == Role::ADMIN_ID
@@ -378,6 +400,40 @@ class PeopleController < ApplicationController
 
     render :text => data
   end 
+  
+  def delete_role(ors)
+    begin
+      ors.check_if_only_remaining_admin_role_in_a_root_org
+      ors.check_if_admin_is_destroying_own_admin_role(current_person)
+      ors.update_attributes({:archive_date => Date.today})
+    rescue OrganizationalRole::CannotDestroyRoleError
+      render 'cannot_delete_admin_error'
+      return false
+    end
+  end
+  
+  def all_admins_being_deleted?(ors_ids)
+    begin
+      a = Set.new current_organization.admins.collect(&:personID)
+      b = Set.new ors_ids
+      raise OrganizationalRole::CannotDestroyRoleError if a.subset? b
+    rescue OrganizationalRole::CannotDestroyRoleError
+      return false
+    end
+  end
+  
+  def can_roles_be_deleted?(orss)
+    orss.each do |ors|
+      begin
+        ors.check_if_only_remaining_admin_role_in_a_root_org
+        ors.check_if_admin_is_destroying_own_admin_role(current_person)
+        ors.update_attributes({:archive_date => Date.today})
+      rescue OrganizationalRole::CannotDestroyRoleError
+        render 'cannot_delete_admin_error'
+        return false
+      end
+    end
+  end
 
   def facebook_search
     url = params[:url]
@@ -435,6 +491,18 @@ class PeopleController < ApplicationController
   end
 
   protected
+  
+  def attempting_to_delete_all_the_admins_in_the_org?(ids)
+    admin_ids = current_organization.admins.collect(&:personID)
+    i = admin_ids & ids.collect(&:to_i)
+    return i if (admin_ids - i).blank?
+    false
+  end
+  
+  def attempting_to_delete_current_user_self_as_admin?(ids)
+    return true unless ([current_person.personID] & ids.collect(&:to_i)).blank?
+    false
+  end
 
   def uri?(string)
     string.include?("http://") || string.include?("https://") ? true : false
@@ -464,11 +532,16 @@ class PeopleController < ApplicationController
 
   def fetch_people(search_params = {})
     org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
-    @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles)
+    @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles_including_archived)
+    @people_scope = @people_scope.where(personID: @people_scope.archived_not_included.uniq.collect(&:personID)) if params[:include_archived].blank? && params[:archived].blank?
+    #Person.archived_not_included query must be fixed so that we don't have to query from db twice such as the line above
+    
     @q = @people_scope.includes(:primary_phone_number, :primary_email_address)
-    @q = @q.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ?', params[:role], current_organization.id) unless params[:role].blank?
+    #when specific role is selected from the directory
+    @q = @q.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ? AND organizational_roles.deleted = 0', params[:role], current_organization.id) unless params[:role].blank?
     sort_by = ['lastName asc', 'firstName asc']
 
+    #for searching
     if search_params[:search_type] == "basic"
       unless search_params[:query].blank?
         if search_params[:search_type] == "basic"
@@ -482,14 +555,25 @@ class PeopleController < ApplicationController
       end
     else      
       unless search_params[:role].blank?
-        @q = @q.select("ministry_person.*, roles.*")
-        .joins("LEFT JOIN organizational_roles AS org_roles ON 
-                 org_roles.person_id = ministry_person.personID")
-                 .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
-                 .where("roles.id = :search",
-                        {:search => "#{search_params[:role]}"})
-                 sort_by.unshift("roles.id")
-        role_tables_joint = true
+        if params[:include_archived]
+          @q = @q.select("ministry_person.*, roles.*")
+          .joins("LEFT JOIN organizational_roles AS org_roles ON 
+                   org_roles.person_id = ministry_person.personID")
+                   .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
+                   .where("roles.id = :search",
+                          {:search => "#{search_params[:role]}"})
+                   sort_by.unshift("roles.id")
+          role_tables_joint = true
+        else
+          @q = @q.select("ministry_person.*, roles.*")
+          .joins("LEFT JOIN organizational_roles AS org_roles ON 
+                   org_roles.person_id = ministry_person.personID")
+                   .joins("INNER JOIN roles ON roles.id = org_roles.role_id").where("org_roles.archive_date" => nil)
+                   .where("roles.id = :search",
+                          {:search => "#{search_params[:role]}"})
+                   sort_by.unshift("roles.id")
+          role_tables_joint = true
+        end
       end
 
       unless search_params[:gender].blank?
@@ -522,10 +606,13 @@ class PeopleController < ApplicationController
       end
     end
 
+    #if !params[:archived].blank? && params[:include_archived].blank?
+    @q = @q.where(personID: current_organization.people.archived(current_organization.id).collect(&:personID)) unless params[:archived].blank?
+
     @q = @q.search(params[:q])
     @q.sorts = sort_by if @q.sorts.empty?
     @all_people = @q.result(distinct: false).order(params[:q] && params[:q][:s] ? params[:q][:s] : sort_by)
-    if !params[:q].nil? && params[:q][:s].include?("role_id")
+    if params[:q].present? && params[:q][:s].include?("role_id")
       order = params[:q][:s].include?("asc") ? params[:q][:s].gsub("asc", "desc") : params[:q][:s].gsub("desc", "asc")
       a = @q.result(distinct: false).order_by_highest_default_role(order, role_tables_joint)
       if params[:q][:s].include?("asc")
@@ -536,7 +623,10 @@ class PeopleController < ApplicationController
       @all_people = a + @q.result(distinct: false).order_alphabetically_by_non_default_role(order, role_tables_joint)
       @all_people = @all_people.uniq_by { |a| a.id }
     end
-
+    
+    #Person.archived_not_included query must be fixed so that we don't have to query from db twice such as the line above
+    @all_people = @all_people.where(personID: current_organization.people.archived.where("organizational_roles.archive_date > ? AND organizational_roles.archive_date < ?", params[:archived_date], (params[:archived_date].to_date+1).strftime("%Y-%m-%d")).collect{|x| x.personID}) unless params[:archived_date].blank?
+    #Person.archived_not_included query must be fixed so that we don't have to query from db twice such as the line above
     @people = Kaminari.paginate_array(@all_people).page(params[:page])
   end
 

@@ -209,6 +209,7 @@ a.headerlink:hover {
   a.topset.directory {background-position: 8px 4px;}
   a.topset.groups {background-position: 8px -97px;}
   a.topset.comments {background-position: 8px -45px;}
+  a.topset.cleanup {background-position: 8px -250px;}
 }
 
 img.tmenu {
@@ -468,6 +469,9 @@ div.wizard {
   .checkbox_cell {
     width: 50px;
   }
+  .spacer_cell {
+    width: 20px;
+  }
 }
 
 a.hide {
@@ -724,7 +728,13 @@ button[type=submit].smallbtn {
 
 .pagemenu {
   background: $light-blue;
-  padding: 10px 14px 8px;
+  padding: 10px 15px;
+  div.part_title {
+    font-size: 18px;
+    font-weight: bold;
+    display: inline-table;
+    padding: 0 15px 0 0;
+  }
 }
 
 ul.pillmenu {
@@ -2468,4 +2478,79 @@ ul#ui-autocomplete {
 
 .hidden {
   display: none;
+}
+
+.advanced_options {
+  
+  width: 340px;
+  div.title {
+    font-size: 16px;
+    margin: 0px 0px 5px;
+  }
+  div.label {
+    label {
+      font-weight: normal;
+    }
+    margin: 0px 10px;
+  }
+  div.fieldset {
+    margin: 3px 15px 15px;
+    select {
+      width: 290px;
+    }
+  }
+  
+  div.rule_form {
+    margin-left: 10px;
+    .title {
+      font-size: 14px;
+      font-weight: bold;
+      display: inline-block;
+      cursor: pointer;
+    }
+    .settings {
+      display: none;
+      border: 1px solid #aaa;
+      margin-bottom: 10px;
+      border-top: none;
+    }
+    .label label {
+      font-weight: bold;
+    }
+  }
+}
+
+#question_form {
+  width: 735px;
+}
+
+#loading, #saving {
+  font-size: 18px;
+  width: 735px;
+  text-align: center;
+}
+
+#autoassign_selected_id {
+  display: none;
+}
+
+#archive_contacts_before, #date_leaders_not_logged_in_after{
+  width: 100px;
+  text-align: center;
+  background: $blue;
+  color: $white;
+}
+
+.cleanup_number {
+  width: 70px;
+  height: 70px;
+}
+
+.cleanup_content {
+  min-height: 70px;
+}
+
+#include_archived_div {
+  padding-left: 20px;
+  padding-bottom: 10px;
 }

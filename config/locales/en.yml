@@ -28,9 +28,9 @@ en:
     views:
       organizational_roles: "Organizational Labels"
       system_roles: "System Labels"
-      create_role: "Create new label"
-      edit_role: "Edit label"
-      delete_role: "Delete label"
+      create_role: "Create New Label"
+      edit_role: "Edit Label"
+      delete_role: "Delete Label"
       update: "Update"
       create: "Create"
       name: "Name"
@@ -50,13 +50,15 @@ en:
   nav:
     organizations: Organizations
     manage: Manage
+    cleanup: Cleanup
+    archive: Archived
     enter_survey_mode: "Enter Survey Mode"
     use_keyword: 'Use Keyword: %{keyword}'
     my_profile: '%{name} Profile'
     groups: 'Groups'
     hide: 'Hide'
     view_details: "View details"
-    survey_mode_tip: "Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts."
+    survey_mode_tip: "Survey mode allows for other f to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts."
     terms: 'Terms and Conditions'
     privacy: 'Privacy Policy'
     help: "Resources and Help"
@@ -140,9 +142,13 @@ en:
     add_person:
       add_person: Add a person to %{org}
     index:
+      include_archived_tips: "You may click this check box to include all of the Archived individuals in your Directory listing and note that their labels will display in the color green to allow you to quickly identify which individuals have been archived and what their labels were at the time they were archived. <br><br> If you want to only see the archived individuals, then please click on the word \"Archived(x)\" on the left side-panel. <br><br> You can move any individual from the Archived display back to the active display by simply adding any label to that individual."
+      archived_label: "Archived"
+      include_archived: "Include Archived"
       add_person: Add Person
       export: "Export this list"
       directory_title: "Directory - %{org}"
+      archived_directory_title: "Archived - %{org}"
       labels: 'Labels'
       gender: 'Gender'
       phone: 'Phone'
@@ -160,6 +166,7 @@ en:
       error_message: "Error: %{person} does not have valid email to be leader"
       error_message_update_leader_without_person: "Error: Person does not have valid email to be leader"
       error_message_update_admin_without_person: "Error: Person does not have valid email to be admin"
+      cannot_delete_admin_error: "As an ADMIN you cannot remove yourself! Please assign another individual as an ADMIN for this organization and then ask that \"new ADMIN\" to remove your ADMIN label."
       transfer_org: Transfer to another team/organization
     all:
       page_selected_html: "All <b>%{count}</b> people on this page are selected."
@@ -220,6 +227,9 @@ en:
       summer_projects: Summer Projects
     assign:
       keep_contact: "Check the box to leave a copy of the contact in the org."
+    bulk_delete:
+      deleting_people_success: "People were successfully deleted!"
+      cannot_delete_admin_error: "You cannot delete <b>%{names}</b> since you are going to delete all the admins in this organization!"
   followup_comments:
     index:
       comments_title: 'Comments'
@@ -518,6 +528,7 @@ en:
     leader:
       delete_confirm: "Are you sure you want to remove %{person} as a leader?"
       delete_confirm_with_instructions: "If you want to retain %{person} in your organization you must first assign them another role or label, click CANCEL, go to the Directory screen and 'Add Label' such as involved or alumni, then remove them as a leader. If you want to remove them completely from your organization, click OK."
+      archive_confirm: "%{person} will be moved to archives."
     leader_form: 
       start_typing: "Start typing a name to find a person to make a leader:"
     leaders:
@@ -959,6 +970,24 @@ en:
       title: Settings
       year_in_school: Display 'Year in School' on the Directory Page
       submit: Update Settings
+    cleanup: 
+      title: "Cleanup"
+      archive_contacts_submit: "Archive Contacts Now"
+      remove_leaders_submit: "Remove Leaders Now"
+      instructions: "Instructions"
+      archive_instructions: "Archive Contacts"
+      archive_notice: "%{no} contacts successfully archived"
+      confirm_archive: "Are you sure you wanted to archive the desired contacts?"
+      archive_inst: "Archive all contacts created before %{date_field}"
+      alumni_inst: "Go to the %{link} screen, select the leaders/involved people that have graduated from your ministry and label as \"Alumni\""
+      alumni_inst_path: Directory
+      annual_inst_1: "People are messy - and so are databases. Every year your database gets clogged up with people who may have come to a meeting once upon a time, or filled out a survey once, but never got involved and don't intend to. If you are a campus ministry, you will also have a good number of people who graduate from your ministry each year. How do you get your database trimmed up and ready for the fall?"
+      annual_inst_2: "An Annual Clean Up can help. Simply walk through these steps once a year (or however often you want) and your Mission Hub Database will again be a well-oiled machine, ready to help you transform the world!"
+      remove_leader_inst: "Archive leaders who have been inactive by not logging-in after %{date_field}"
+      removal_notice: "%{no} leaders successfully archived."
+      confirm_remove_leaders: "Are you sure you want to remove the desired leaders? Note that if any of these leaders have no other labels, then they will also be \"archived\" after removing their \"Leader\" label!"
+      leader_tips: 'If the LEADER does not have another label besides "leader", they will disappear from your Directory and become part of the Archived individuals. But they can be added again with either the "Add Leader" button or by checking the "Include Archived" box and giving them any label. <br><br><br> The default date to determine inactive is 3 months earlier than today but you can modify the date.'
+      contact_tips: 'Step #1 will move everyone who is marked "CONTACT" into an archived location if they are created earlier than the date specified. <br><br>You can modify the date as the default will take all contacts created today or earlier. <br><br>The contacts can be "UnArchived" manually by going to the Directory screen, click on the "Include Archived" check-box, and add any label to individual. <br><br>Tip from a leader : Add a new, unique question to your keyword at the beginning of this year and ask everyone to take the survey. Even if all the other fields are full, their answer to that question will cause their record to be "UnArchived". '
   imports:
     new:
       wrong_file_format_error: "Uploaded wrong file format. File must be .csv"

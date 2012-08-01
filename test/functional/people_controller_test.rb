@@ -149,6 +149,39 @@ class PeopleControllerTest < ActionController::TestCase
       assert old_person_3_roles & new_person_3_roles # role 3 still has his old roles?
 
     end
+    
+    context "removing an admin role" do
+      setup do
+        @last_admin = Factory(:person, email: "person4@email.com")
+        @admin2 = Factory(:person, email: "person5@email.com")
+        @admin_organizational_role = Factory(:organizational_role, organization: @org, person: @last_admin)
+        @org.add_admin(@last_admin)
+      end
+      
+      should "not remove admin role from the last admin of a root org" do
+        assert_no_difference "OrganizationalRole.count" do
+          xhr :post, :update_roles, { :role_ids => [], :some_role_ids => "", :person_id => @last_admin.id }
+        end
+      end
+      
+=begin
+      should "not remove admin role from the last admin of an org with parent org with 'show_sub_orgs == false'" do
+        setup do
+          org_2 = Organization.create({"parent_id"=> @org.id, "name"=>"Org 2", "terminology"=>"Organization", "show_sub_orgs"=>"0"}) # org with show_sub_orgs == false
+          org_3 = Organization.create({"parent_id"=> org_2.id, "name"=>"Org 3", "terminology"=>"Organization", "show_sub_orgs"=>"1"})
+          @request.session[:current_organization_id] = org_3.id
+        end
+        
+        org_3.add_admin(@user.person) unless org_3.parent && org_3.parent.show_sub_orgs?
+        org_3.add_admin(@admin2)
+        #puts org_3.admins.count
+        @request.session['current_organization_id']  = org_3.id
+        assert_no_difference "OrganizationalRole.count" do
+          xhr :post, :update_roles, { :role_ids => [], :some_role_ids => "", :person_id => @user.person.id }
+        end
+      end
+=end
+    end
   end
   
   context "Search" do
@@ -506,21 +539,6 @@ class PeopleControllerTest < ActionController::TestCase
     
   end
   
-  should "bulk delete" do
-    @user, @org = admin_user_login_with_org
-    c1 = Factory(:person)
-    c2 = Factory(:person)
-    
-    @org.add_contact(c1)
-    @org.add_contact(c2)
-    
-    assert_equal 2, @org.contacts.count
-    xhr :post, :bulk_delete, { :ids => "#{c1.id}, #{c2.id}" }
-    
-    assert_equal 0, @org.contacts.count
-    assert_equal " ", @response.body
-  end
-  
   should "bulk comment" do
     @user, @org = admin_user_login_with_org
     c1 = Factory(:person)
@@ -560,5 +578,46 @@ class PeopleControllerTest < ActionController::TestCase
     person = Factory(:person)
     post :destroy, { :id => person.id }
     assert_response :redirect
+  end
+  
+  context "bulk deleting people" do
+    setup do
+      @user, @org = admin_user_login_with_org
+      
+      @c1 = Factory(:person, firstName: "Genny")
+      @c2 = Factory(:person)
+      
+      @org.add_contact(@c1)
+      @org.add_contact(@c2)
+    end
+    
+    should "bulk delete" do
+      
+      
+      assert_equal 2, @org.contacts.count
+      xhr :post, :bulk_delete, { :ids => "#{@c1.id}, #{@c2.id}" }
+      
+      assert_equal 0, @org.contacts.count
+      assert_equal I18n.t('people.bulk_delete.deleting_people_success'), @response.body
+    end
+    
+    should "not bulk delete all the admins in the org" do
+      Factory(:organizational_role, person: @c1, role: Role.admin, organization: @org)
+      init_admin_count = @org.admins.count
+      
+      xhr :post, :bulk_delete, { :ids => "#{@user.person.personID}, #{@c1.personID}, #{@c2.personID}" }
+      
+      assert_equal init_admin_count, @org.admins.count
+      assert_equal I18n.t('people.bulk_delete.cannot_delete_admin_error', names: "#{@user.person.name}, #{@c1.name}"), @response.body
+    end
+    
+    should "not be able to delete logged-in-admin's self as admin" do
+      Factory(:organizational_role, person: @c1, role: Role.admin, organization: @org)
+      init_admin_count = @org.admins.count
+      xhr :post, :bulk_delete, { :ids => "#{@user.person.personID}" }
+      
+      assert_equal @user.person.organizational_roles.collect(&:role_id), [Role::ADMIN_ID]
+      assert_equal @org.admins.count, init_admin_count
+    end
   end
 end

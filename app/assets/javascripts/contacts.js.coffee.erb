@@ -258,8 +258,12 @@ $ ->
   false
 
   $('#search_autocomplete_field').live 'keyup', ->
+    inc = ""
+    if document.URL.indexOf("include_archived") isnt -1
+      inc = "?include_archived=true"
+    
     $(this).autocomplete
-	    source: '/contacts/search_by_name_and_email.json',
+	    source: '/contacts/search_by_name_and_email.json'+inc,
       select: (event, ui) ->
         window.location = "/people/" + ui.item.id
 

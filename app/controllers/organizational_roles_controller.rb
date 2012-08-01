@@ -1,10 +1,19 @@
 class OrganizationalRolesController < ApplicationController
   def update
     @organizational_role = OrganizationalRole.find(params[:id])
-    @organizational_role.followup_status = params[:status]
+    @organizational_role.followup_status = params[:status] #set contact role as "do_not_contact"
+    
     if params[:status] == 'do_not_contact'
       person_id = @organizational_role.person_id
       organization_id = @organizational_role.organization_id
+      
+      Person.find(person_id).organizational_roles.where(organization_id: current_organization.id).each do |ors|
+        if(ors.role_id == Role::LEADER_ID)
+          ca = Person.find(person_id).contact_assignments.where(organization_id: current_organization.id).all
+          ca.collect(&:destroy)
+        end
+        ors.update_attributes({:archive_date => Date.today})
+      end
       
       # Delete Contact Assignments
       ContactAssignment.where(person_id: person_id, organization_id: organization_id).destroy_all

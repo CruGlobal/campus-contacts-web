@@ -31,10 +31,12 @@ class Person < ActiveRecord::Base
   has_many :rejoicables, inverse_of: :created_by
 
   has_many :organization_memberships, inverse_of: :person
-  has_many :organizational_roles
-  has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role::CONTACT_ID} AND status = 'active'", uniq: true
+  has_many :organizational_roles, conditions: {deleted: false, archive_date: nil}
   has_many :roles, through: :organizational_roles
-
+  has_many :organizational_roles_including_archived, class_name: "OrganizationalRole", foreign_key: "person_id", conditions: {deleted: false}
+  has_many :roles_including_archived, through: :organizational_roles_including_archived, source: :role
+  has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role::CONTACT_ID} AND status = 'active' AND deleted = 0", uniq: true
+  
   has_many :followup_comments, :class_name => "FollowupComment", :foreign_key => "commenter_id"
   has_many :comments_on_me, :class_name => "FollowupComment", :foreign_key => "contact_id"
 
@@ -56,8 +58,21 @@ class Person < ActiveRecord::Base
   before_save :stamp_changed
   before_create :stamp_created
 
+  #scope :organizational_roles, where("end_date = ''")
   scope :find_by_person_updated_by_daterange, lambda { |date_from, date_to| {
     :conditions => ["date_attributes_updated >= ? AND date_attributes_updated <= ? ", date_from, date_to]
+  }}
+  
+  scope :find_by_last_login_date_before_date_given, lambda { |after_date| {
+    :select => "ministry_person.*",
+    :joins => "JOIN simplesecuritymanager_user AS ssm ON ssm.userID = ministry_person.fk_ssmUserId",
+    :conditions => ["ssm.current_sign_in_at <= ? OR (ssm.current_sign_in_at IS NULL AND ssm.created_at <= ?)", after_date, after_date]
+  }}
+  
+  scope :find_by_date_created_before_date_given, lambda { |before_date| {
+    :select => "ministry_person.*",
+    :joins => "LEFT JOIN organizational_roles AS ors ON ministry_person.personID = ors.person_id",    
+    :conditions => ["ors.role_id = ? AND ors.created_at <= ? AND ors.archive_date IS NULL AND ors.deleted = 0", Role::CONTACT_ID, before_date]
   }}
 
   scope :order_by_highest_default_role, lambda { |order, tables_already_joined = false| {
@@ -73,7 +88,7 @@ class Person < ActiveRecord::Base
     :conditions => "roles.name NOT IN #{Role.default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}",
     :order => "roles.name #{order.include?("asc") ? 'DESC' : 'ASC'}"
   } }
-
+  
   scope :find_friends_with_fb_uid, lambda { |id| {
     :select => "ministry_person.*",
     :joins => "LEFT JOIN mh_friends ON ministry_person.fb_uid = mh_friends.uid",
@@ -82,8 +97,8 @@ class Person < ActiveRecord::Base
 
   scope :search_by_name_or_email, lambda { |keyword, org_id| {
     :select => "ministry_person.*",
+    :conditions => "(org_roles.organization_id = #{org_id} AND (concat(firstName,' ',lastName) LIKE '%#{keyword}%' OR concat(lastName, ' ',firstName) LIKE '%#{keyword}%' OR emails.email LIKE '%#{keyword}%') AND org_roles.deleted <> 1)",
     :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID LEFT JOIN organizational_roles AS org_roles ON ministry_person.personID = org_roles.person_id",
-    :conditions => "org_roles.organization_id = #{org_id} AND concat(firstName,' ',lastName) LIKE '%#{keyword}%' OR concat(lastName, ' ',firstName) LIKE '%#{keyword}%' OR emails.email LIKE '%#{keyword}%'"
   } }
   
   scope :get_and_order_by_latest_answer_sheet_answered, lambda { |order, org_id| {
@@ -92,6 +107,53 @@ class Person < ActiveRecord::Base
     :group => "ministry_person.personID",
     :order => "#{order.gsub('mh_answer_sheets', 'ass')}"
   } }
+
+  scope :get_archived, lambda { |org_id| { 
+    :conditions => "organizational_roles.archive_date IS NOT NULL AND organizational_roles.deleted = 0",
+    :group => "ministry_person.personID",
+    :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID AND orss.organization_id = #{org_id} AND orss.deleted = 0)"
+  } }
+  
+  def self.archived(org_id)
+    self.get_archived(org_id).collect()
+  end
+  
+  scope :archived_included, lambda { { 
+    :conditions => "organizational_roles.deleted = 0",
+    :group => "ministry_person.personID"
+  } }
+  
+  scope :archived_not_included, lambda { { 
+    :conditions => "organizational_roles.archive_date IS NULL AND organizational_roles.deleted = 0",
+    :group => "ministry_person.personID"
+  } }
+  
+  scope :deleted, lambda { { 
+    :conditions => "organizational_roles.deleted = 1",
+    :group => "ministry_person.personID",
+    :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID)"
+  } }
+  
+  def archive_contact_role(org)
+    begin
+      organizational_roles.where(organization_id: org.id, role_id: Role::CONTACT_ID).first.archive
+    rescue
+    
+    end
+  end
+  
+  def archive_leader_role(org)
+    begin
+      organizational_roles.where(organization_id: org.id, role_id: Role::LEADER_ID).first.archive
+    rescue
+    
+    end
+  end
+  
+  def is_archived?(org)
+    return true if organizational_roles.blank?
+    false
+  end
 
   def assigned_tos_by_org(org)
     assigned_tos.where(organization_id: org.id)
@@ -776,8 +838,17 @@ class Person < ActiveRecord::Base
     Friend.followers(self) & organization.leaders.collect { |l| l.fb_uid.to_s }
   end
 
-  def assigned_organizational_roles(organizations)
-    roles.where('organizational_roles.organization_id' => organizations)
+  def assigned_organizational_roles(organization_id)
+    roles.where('organizational_roles.organization_id' => organization_id, 'organizational_roles.deleted' => 0)
+  end
+  
+  def assigned_organizational_roles_including_archived(organization_id)
+    roles_including_archived.where('organizational_roles.organization_id' => organization_id, 'organizational_roles.deleted' => 0)
+  end
+  
+  def is_role_archived?(org_id, role_id)
+    return false if organizational_roles_including_archived.where(organization_id: org_id, role_id: role_id).first.archive_date.blank?
+    true
   end
 
   def self.vcard(ids)
