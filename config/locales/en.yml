@@ -48,6 +48,7 @@ en:
     prayed_to_receive: 'Prayed To Receive Christ' 
     gospel_presentation: 'Gospel Presentation'
   nav:
+    dashboard: Dashboard
     organizations: Organizations
     manage: Manage
     cleanup: Cleanup
@@ -58,7 +59,7 @@ en:
     groups: 'Groups'
     hide: 'Hide'
     view_details: "View details"
-    survey_mode_tip: "Survey mode allows for other f to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts."
+    survey_mode_tip: "Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts."
     terms: 'Terms and Conditions'
     privacy: 'Privacy Policy'
     help: "Resources and Help"
@@ -385,6 +386,10 @@ en:
         text_message_preview: Text Message Preview
         show_advanced_options: "Show Advanced Options"
         hide_advanced_options: "Hide Advanced Options"
+        show_notification_options: "Show Notification Options"
+        hide_notification_options: "Hide Notification Options"
+        show_assignment_options: "Show Contact Assignment Options"
+        hide_assignment_options: "Hide Contact Assignment Options"
       multiple_choice_form:
         list_choices: 'List out the possible choices, one per line:'
       question:
@@ -402,9 +407,14 @@ en:
         add_prev_question: Add a predefined or previously used question
         forced_tip: This question is required on every survey and will be pre-filled if they connect with facebook.
       advanced_options:
-        trigger_words: 'List one or more words or phrases that will trigger this notification if they appear in the
-        answer.<br/>Separate words and phrases with commas.'
+        trigger_words: "List one or more words or phrases that will trigger this notification if they appear in the answer.<br/>(separate words and phrases with commas)"
         leaders: 'Select one or more leaders to be notified when this question is answered in a certain way'
+        autonotify_guide: 'This option will notify the selected leaders if the answer contains the listed keywords.'
+        autonotify_leader_label: 'Select one or more leaders to be notified:'
+        autonotify_keywords_label: 'List the words that will trigger the notification:<br/>(must be separated with commas)'
+        autoassign_guide: 'This option will assign the contacts to the selected Leader, Ministry, Group, or Label if the answer contains the listed keywords.'
+        autoassign_group_label: 'Choose where to assign contacts:'
+        autoassign_keywords_label: 'List the words that will trigger the assignment:<br/>(must be separated with commas)'
         web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
   sms_keywords:
     keyword_deleted: "Keyword has been deleted."
@@ -928,7 +938,8 @@ en:
       add_a_leader: 'Add a leader'
     search:
       not_found: We couldn't find anyone in your %{terminology} with that name
-      showing_count: "Showing %{length} of %{total}, keep typing or "
+      showing_count: "Showing %{length} of %{total} records, keep typing or "
+      showing_count_complete: "Showing %{length} records."
       show_all: 'show all'
       add_new_person_group: Add a new person
   
@@ -991,3 +1002,5 @@ en:
   imports:
     new:
       wrong_file_format_error: "Uploaded wrong file format. File must be .csv"
+
+

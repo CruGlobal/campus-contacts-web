@@ -120,23 +120,13 @@ class PeopleController < ApplicationController
     @keep = Person.find(params[:keep_id])
     params[:merge_ids].each do |id|
       person = Person.find(id)
-      if @keep.user && person.user
-        @keep.user.merge(person.user)
-      else
-        @keep.merge(person)
-      end
+      @keep = @keep.smart_merge(person)
     end
     redirect_to merge_people_path, notice: "You've just merged #{params[:merge_ids].length + 1} people"
   end
 
   def create
     authorize! :create, Person
-    #p = Person.where(firstName: params[:person][:firstName], lastName: params[:person][:lastName])
-    #unless p.blank?
-      #params[:id] = p.first.id
-      #update
-      #return
-    #end
 
     Person.transaction do
       params[:person] ||= {}
@@ -161,14 +151,6 @@ class PeopleController < ApplicationController
                   @new_person = @person.create_user! if @email.present? && @person.user.nil? # create a user account if we have an email address
                   if @new_person && @new_person.save
                     @person = @new_person
-                    #current_organization.notify_new_leader(@person, current_person) 
-=begin
-                  else
-                    @person.reload
-                    @email = @person.primary_email_address || @person.email_addresses.new
-                    @phone = @person.primary_phone_number || @person.phone_numbers.new
-                    render 'add_person' and return
-=end
                   end
 
                   if params.has_key?(:add_to_group)
@@ -221,16 +203,19 @@ class PeopleController < ApplicationController
   # PUT /people/1.xml
   def update
     @person = current_organization.people.find(params[:id])
-		p = nil
+
+    # Handle duplicate emails
+    emails = []
 		if params[:person][:email_address]
-			email = params[:person][:email_address][:email]
-			p = Person.where(firstName: @person.firstName, lastName: @person.lastName).includes(:primary_email_address).where("email_addresses.email LIKE ?", email).where("personId NOT LIKE ?", params[:id])
-			@person.merge(p.first)
+      emails = [params[:person][:email_address]]
 		elsif params[:person][:email_addresses_attributes]
-			emails = params[:person][:email_addresses_attributes].collect{|x| x[1][:email]}
-			p = Person.where(firstName: @person.firstName, lastName: @person.lastName).where("personId NOT LIKE ?", params[:id]).includes(:primary_email_address).find(:all, :conditions => ["email_addresses.email IN (?)", emails])
-			@person.merge(p.first)
+			emails = params[:person][:email_addresses_attributes].collect{|_, v| v[:email]}
 		end
+    emails.each do |email|
+      p = @person.has_similar_person_by_name_and_email?(email)
+			@person = @person.smart_merge(p) if p
+    end
+
 
     authorize! :edit, @person
 
