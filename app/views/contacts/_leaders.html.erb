@@ -121,7 +121,7 @@
         </span>
         <%= link_to('x', saved_contact_search_path(s),
           method: :delete, remote: true, class: 'delete_leader', 
-          confirm: t('contacts.index.delete_confirm')) %>
+          confirm: t('contacts.index.delete_search_confirm')) %>
         <%= link_to(image_tag("edit.png"),
           s.full_path + t('contacts.index.edit_true'), class: 'edit_search') %>
       </li>
