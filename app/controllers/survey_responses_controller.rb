@@ -50,7 +50,7 @@ class SurveyResponsesController < ApplicationController
   end
 
   def update
-    @title = @survey.terminology
+    @title = @survey.terminology if @survey
     redirect_to :back and return false unless @person.id == params[:id].to_i
 
     save_survey
