@@ -581,7 +581,7 @@ en:
       all_responses: "All Contacts"
       in_progress_responses: "All Contacts - Assigned"
       no_activity_responses: "All Contacts - No Activity"
-      responses_assigned_to: "All Contacts - Assigned to %{assigned_to}"
+      responses_assigned_to: "Assigned to %{assigned_to}"
       unassigned_responses: "All Contacts - Unassigned"
       dnc_contacts: "All Contacts - 'Do Not Contact'"
       completed_contacts: "All Contacts - Completed"

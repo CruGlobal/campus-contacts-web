@@ -109,11 +109,13 @@ class ContactsControllerTest < ActionController::TestCase
       @contact3 = Factory(:person)
       @contact4 = Factory(:person)
       @contact5 = Factory(:person)
+      @user.person.organizations.first.add_leader(@user.person, @user.person)
       @user.person.organizations.first.add_contact(@contact1)
       @user.person.organizations.first.add_contact(@contact2)
       @user.person.organizations.first.add_contact(@contact3)
       @user.person.organizations.first.add_contact(@contact4)
       @user.person.organizations.first.add_contact(@contact5)
+      
     
       xhr :get, :index, {:role => Role::ADMIN_ID}
       assert_equal assigns(:header).upcase, "Admin".upcase
@@ -145,6 +147,8 @@ class ContactsControllerTest < ActionController::TestCase
       assert_equal assigns(:header), "Do Not Contact"
       xhr :get, :index, {:search => "1"}
       assert_equal assigns(:header), "Matching the criteria you searched for"
+      xhr :get, :index, {:assigned_to => @user.person.personID}
+      assert_equal assigns(:header), "Assigned to #{@user.person.name}"
     end
   
   end

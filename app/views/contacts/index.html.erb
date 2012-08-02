@@ -8,12 +8,9 @@
 <div class="titlebar">  
   <h1>
     <%= image_tag("c_allcontacts.png") %>
-    <% if @assigned_to %>
-      <%= "#{t('.responses_assigned_to', assigned_to: @assigned_to)}"  %>
-      <%= link_to(t('.show_all'), contacts_path(assigned_to: 'all'), :class => "headerlink") %>
-    <% elsif @header %>
-      <%= t('.all_responses') %><%= "- #{@header}" %>
-    <% end %>
+    <%= t('.all_responses') %>
+    <%= "- #{@header}" %>
+    <%= link_to(t('.show_all'), contacts_path(assigned_to: 'all'), :class => "headerlink") if @assigned_to %>
   </h1>
 </div>
 

@@ -228,7 +228,7 @@ class ContactsController < ApplicationController
             @header = I18n.t("rejoicables.#{params[:assigned_to]}")
           else
             if params[:assigned_to].present? && @assigned_to = Person.find_by_personID(params[:assigned_to])
-              @header = I18n.t('contacts.index.unassigned')
+              @header = I18n.t('contacts.index.responses_assigned_to', assigned_to: @assigned_to)
               @people = Person.includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
             end
           end
