@@ -102,6 +102,48 @@ class ContactsControllerTest < ActionController::TestCase
        xhr :post, :bulk_destroy, :ids => [@contact.id, @contact2.id]       
        assert_response :success        
     end
+    
+    should "Have a header for every params[:assigned_to]" do
+      @contact1 = Factory(:person)
+      @contact2 = Factory(:person)
+      @contact3 = Factory(:person)
+      @contact4 = Factory(:person)
+      @contact5 = Factory(:person)
+      @user.person.organizations.first.add_contact(@contact1)
+      @user.person.organizations.first.add_contact(@contact2)
+      @user.person.organizations.first.add_contact(@contact3)
+      @user.person.organizations.first.add_contact(@contact4)
+      @user.person.organizations.first.add_contact(@contact5)
+    
+      xhr :get, :index, {:role => Role::ADMIN_ID}
+      assert_equal assigns(:header), "Admin"
+      xhr :get, :index, {:role => Role::LEADER_ID}
+      assert_equal assigns(:header), "Leader"
+      xhr :get, :index, {:role => Role::CONTACT_ID}
+      assert_equal assigns(:header), "Contact"
+      xhr :get, :index, {:role => Role::INVOLVED_ID}
+      assert_equal assigns(:header), "Involved"
+      xhr :get, :index, {:assigned_to => "unassigned"}
+      assert_equal assigns(:header), "Unassigned"
+      xhr :get, :index, {:assigned_to => "progress"}
+      assert_equal assigns(:header), "Assigned"
+      xhr :get, :index, {:completed => true}
+      assert_equal assigns(:header), "Completed"
+      xhr :get, :index, {:assigned_to => nil}
+      assert_equal assigns(:header), "Completed"
+      xhr :get, :index, {:assigned_to => "no_activity"}
+      assert_equal assigns(:header), "No Activity"
+      xhr :get, :index, {:assigned_to => "spiritual_conversation"}
+      assert_equal assigns(:header), "Spiritual Conversation"
+      xhr :get, :index, {:assigned_to => "prayed_to_receive"}
+      assert_equal assigns(:header), "Prayer to Receive"
+      xhr :get, :index, {:assigned_to => "gospel_presentation"}
+      assert_equal assigns(:header), "Gospel Presentation"
+      xhr :get, :index, {:assigned_to => "friends"}
+      assert_equal assigns(:header), "Contacts who are also my friends on Facebook"
+      xhr :get, :index, {:dnc => "true"}
+      assert_equal assigns(:header), "Do not contact"
+    end
   
   end
   
