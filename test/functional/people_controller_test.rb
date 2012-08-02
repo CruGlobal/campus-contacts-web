@@ -665,11 +665,6 @@ class PeopleControllerTest < ActionController::TestCase
       assert_equal assigns(:all_people).collect{|x| x.personID}, [@involved1.person.personID]
     end
     
-    should "return involveds when Involved link is clicked" do
-      xhr :get, :index, { :role => Role::INVOLVED_ID }
-      assert_equal assigns(:all_people).collect{|x| x.personID}, [@involved1.person.personID]
-    end
-    
     should "return archiveds when Archived link is clicked" do
       @contact1.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
       @contact2.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
@@ -695,6 +690,43 @@ class PeopleControllerTest < ActionController::TestCase
       
       xhr :get, :index, { :include_archived => true }
       assert_equal assigns(:all_people).collect{|x| x.personID}, [@admin1.person.personID, @leader1.person.personID, @contact1.person.personID, @contact2.person.personID, @contact3.person.personID, @involved1.person.personID].sort { |x, y| x <=> y }
+    end
+  end
+  
+  context "Updating a person" do
+    setup do
+      @user = Factory(:user_with_auxs)
+      @org = Factory(:organization)
+      sign_in @user
+      @request.session[:current_organization_id] = @org.id
+    
+      @person1 = Factory(:person, firstName: "Jon", lastName: "Snow")
+      Factory(:organizational_role, organization: @org, person: @person1, role: Role.contact)
+      @email1 = Factory(:email_address, person: @person1, email: "person1@email.com", primary: true)
+      @person2 = Factory(:person, firstName: "Jon", lastName: "Snow")
+      @email2 = Factory(:email_address, person: @person2, email: "person2@email.com", primary: true)
+      Factory(:organizational_role, organization: @org, person: @person2, role: Role.contact)
+      @person3 = Factory(:person)
+      @email3 = Factory(:email_address, person: @person3, email: "person3@email.com", primary: true)
+      Factory(:organizational_role, organization: @org, person: @person3, role: Role.contact)
+    end
+  
+    should "merge people when there are email duplicates (current email address edited)" do
+      #xhr :put, :update, {:person => {:email_address => {:email => "person2@email.com", :primary => 1 }}, :id => @person1.personID}
+      assert_difference("Person.count", -1) do
+        xhr :put, :update, {:person => { :email_addresses_attributes =>{"0" => { :email => "person2@email.com", :primary => "1", "_destroy"=>"false", :id => @email1.id}}}, :id => @person1.personID}
+        assert_blank Person.where(personID: @person2.personID)
+        assert @person1.email_addresses.include? @email2
+      end
+    end
+    
+    should "merge people when there are email duplicates (added new email address)" do
+      
+      assert_difference("Person.count", -1) do
+        xhr :put, :update, {:person => {:email_address => {:email => "person2@email.com", :primary => 1 }}, :id => @person1.personID}
+        assert_blank Person.where(personID: @person2.personID)
+        assert @person1.email_addresses.include? @email2
+      end
     end
   end
 end

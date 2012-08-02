@@ -17,6 +17,8 @@ FactoryGirl.define do
   end
 =end
 
+
+
   factory :group do
     name 'foo'
     location 'here'
@@ -361,5 +363,10 @@ FactoryGirl.define do
   
   factory :super_admin do
     association :user
+  end
+  
+  factory :email_address do
+    email     "email#{Factory.next(:count)}@email.com"
+    association :person
   end
 end
