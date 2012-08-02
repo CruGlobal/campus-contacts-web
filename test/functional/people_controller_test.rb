@@ -711,8 +711,7 @@ class PeopleControllerTest < ActionController::TestCase
       Factory(:organizational_role, organization: @org, person: @person3, role: Role.contact)
     end
   
-    should "merge people when there are email duplicates (current email address edited)" do
-      #xhr :put, :update, {:person => {:email_address => {:email => "person2@email.com", :primary => 1 }}, :id => @person1.personID}
+    should "merge people when there are email duplicates (current email address edited)" do      
       assert_difference("Person.count", -1) do
         xhr :put, :update, {:person => { :email_addresses_attributes =>{"0" => { :email => "person2@email.com", :primary => "1", "_destroy"=>"false", :id => @email1.id}}}, :id => @person1.personID}
         assert_blank Person.where(personID: @person2.personID)
