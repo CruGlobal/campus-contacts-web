@@ -172,7 +172,7 @@ class Person < ActiveRecord::Base
   end
 
   def has_similar_person_by_name_and_email?(email)
-    Person.joins(:primary_email_address).where(firstName: firstName, lastName: lastName, 'email_addresses.email' => email).where("personId != ?", personID).first
+    Person.joins(:email_addresses).where(firstName: firstName, lastName: lastName, 'email_addresses.email' => email).where("personId != ?", personID).first
   end
 
   def update_date_attributes_updated
