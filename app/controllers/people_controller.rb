@@ -207,7 +207,7 @@ class PeopleController < ApplicationController
     # Handle duplicate emails
     emails = []
 		if params[:person][:email_address]
-      emails = [params[:person][:email_address]]
+      emails = [params[:person][:email_address][:email]]
 		elsif params[:person][:email_addresses_attributes]
 			emails = params[:person][:email_addresses_attributes].collect{|_, v| v[:email]}
 		end
