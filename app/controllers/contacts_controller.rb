@@ -184,7 +184,7 @@ class ContactsController < ApplicationController
   protected
   
     def fetch_all_contacts
-      
+      @header = nil
       @style = params[:edit] ? 'display:true' : 'display:none'
       @saved_contact_search = @person.user.saved_contact_searches.find(:first, :conditions => "full_path = '#{request.fullpath.gsub(I18n.t('contacts.index.edit_true'),"")}'") || SavedContactSearch.new
       @organization = current_organization # params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : 
@@ -196,11 +196,15 @@ class ContactsController < ApplicationController
       @questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => false).flatten.uniq
       @hidden_questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => true).flatten.uniq
 
-      params[:assigned_to] = 'all' unless params[:assigned_to] && params[:role] # make 'all default' on 'all contacts' tab instead of 'unassigned'
+      params[:assigned_to] = 'all' if !params[:assigned_to].present?# make 'all default' on 'all contacts' tab instead of 'unassigned'
       if params[:dnc] == 'true'
         @people = @organization.dnc_contacts
+        @header = I18n.t('contacts.index.dnc')
       elsif params[:completed] == 'true'
+        @header = I18n.t('contacts.index.completed')
         @people = @organization.completed_contacts
+      elsif params[:search]  
+        @header = I18n.t('contacts.index.matching_seach')
       else
         params[:assigned_to] = nil if params[:assigned_to].blank?
         if params[:assigned_to]
@@ -209,16 +213,22 @@ class ContactsController < ApplicationController
             @people = @organization.contacts
           when 'unassigned'
             @people = @organization.unassigned_contacts
+            @header = I18n.t('contacts.index.unassigned')
           when 'progress'
             @people = @organization.inprogress_contacts
+            @header = I18n.t('contacts.index.in_progress')
           when 'no_activity'
             @people = @organization.no_activity_contacts
+            @header = I18n.t('contacts.index.no_activity')
           when 'friends'
             @people = current_person.contact_friends(@organization)
+            @header = I18n.t('contacts.index.friend_responses')
           when *Rejoicable::OPTIONS
             @people = @organization.send(:"#{params[:assigned_to]}_contacts")
+            @header = I18n.t("rejoicables.#{params[:assigned_to]}")
           else
             if params[:assigned_to].present? && @assigned_to = Person.find_by_personID(params[:assigned_to])
+              @header = I18n.t('contacts.index.unassigned')
               @people = Person.includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
             end
           end
@@ -226,7 +236,7 @@ class ContactsController < ApplicationController
         @people ||= Person.where("1=0")
       end
       unless @people.arel.to_sql.include?('JOIN organizational_roles')
-        @people = @people.includes(:organizational_roles).where("organizational_roles.organization_id" => @organization.id)
+        @header = "#{Role.find(params[:role]).i18n}" if params[:role]
       end
       if params[:q] && params[:q][:s].include?('mh_answer_sheets')
         @people = current_organization.contacts.get_and_order_by_latest_answer_sheet_answered(params[:q][:s], current_organization.id)

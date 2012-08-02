@@ -8,26 +8,13 @@
 <div class="titlebar">  
   <h1>
     <%= image_tag("c_allcontacts.png") %>
-    <% case params[:assigned_to] %>
-    <% when 'all' %>
-      <%= t('.all_responses') %>
-    <% when 'progress' %>
-      <%= t('.in_progress_responses') %>
-    <% when 'friends' %>
-      <%= t('.friend_responses') %>
-    <% else %>
-      <% if @assigned_to.present? %>
-        <%= t('.responses_assigned_to', assigned_to: @assigned_to) %>
-        <%= link_to(t('.show_all'), contacts_path(assigned_to: 'all'), :class => "headerlink") %>
-      <% elsif params[:dnc] == 'true' %>
-        <%= t('.dnc_contacts') %>
-      <% elsif params[:completed] == 'true' %>
-        <%= t('.completed_contacts') %>
-      <% else %>
-        <%= t('.unassigned_responses') %>
-      <% end %>
+    <%= t('.all_responses') %>
+    <% if @assigned_to %>
+      <%= "- #{t('.responses_assigned_to', assigned_to: @assigned_to)}"  %>
+      <%= link_to(t('.show_all'), contacts_path(assigned_to: 'all'), :class => "headerlink") %>
+    <% elsif @header %>
+      <%= "- #{@header}" %>
     <% end %>
-    <%= t('.matching_seach') if params[:search] %>
   </h1>
 </div>
 
