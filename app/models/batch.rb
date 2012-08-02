@@ -25,13 +25,14 @@ class Batch # < ActiveRecord::Base
               formated_transferred_contacts << transfer_log
             end
     
-            # OrganizationMailer.enqueue.notify_person_transfer(admin.email, intro, formated_transferred_contacts)
-            OrganizationMailer.notify_person_transfer(admin.email, intro, formated_transferred_contacts).deliver
+            OrganizationMailer.enqueue.notify_person_transfer(admin.email, intro, formated_transferred_contacts)
+            # OrganizationMailer.notify_person_transfer(admin.email, intro, formated_transferred_contacts).deliver
             transferred_contacts.update_all(notified: true)
             queued_email += 1
           end
         end
       else
+        transferred_contacts.update_all(notified: true)
         no_admin += 1
       end
     end
@@ -62,12 +63,15 @@ class Batch # < ActiveRecord::Base
               new_contact_log['person_email'] = new_person.person.email
               formated_new_contacts << new_contact_log
             end
-            # OrganizationMailer.enqueue.notify_new_people(admin.email, intro, formated_new_contacts)
-            OrganizationMailer.notify_new_people(admin.email, intro, formated_new_contacts).deliver
+            OrganizationMailer.enqueue.notify_new_people(admin.email, intro, formated_new_contacts)
+            # OrganizationMailer.notify_new_people(admin.email, intro, formated_new_contacts).deliver
             new_contacts.update_all(notified: true)
             queued_email += 1
           end
         end
+      else
+        new_contacts.update_all(notified: true)
+        no_admin += 1
       end
     end
     puts "#{no_admin} Contacts Transfered to an Organization which has to Admin to Notify."
