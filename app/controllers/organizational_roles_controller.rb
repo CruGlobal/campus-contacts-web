@@ -12,7 +12,6 @@ class OrganizationalRolesController < ApplicationController
           ca = Person.find(person_id).contact_assignments.where(organization_id: current_organization.id).all
           ca.collect(&:destroy)
         end
-        ors.update_attributes({:archive_date => Date.today})
       end
       
       # Delete Contact Assignments
