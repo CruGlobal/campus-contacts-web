@@ -233,25 +233,4 @@ class ContactsControllerTest < ActionController::TestCase
     res = ActiveSupport::JSON.decode(response.body)
     assert_equal res.count, 2
   end
-  
-  context "deleting a contact" do
-    setup do
-      @user = Factory(:user_no_org)  #user with a person object
-      @organization = Factory(:organization)
-      @organization_membership = Factory(:organization_membership, person: @user.person, organization: @organization)
-      @organizational_role = Factory(:organizational_role, person: @user.person, organization: @organization, :role => Role.contact)
-      @person = Factory(:person)
-      Factory(:organizational_role, person: @person, organization: @organization, :role => Role.contact)
-      sign_in @user
-    end
-    
-    should "make its organizational_role.followup_status = 'do_not_contact'" do
-      assert_difference("OrganizationalRole.where(:followup_status => 'do_not_contact').count", 1) do
-        xhr :put, :update, {:status => "do_not_contact", :id => @person.personID}
-      end
-      
-      assert_equal 1, @organization.dnc_contacts
-      assert_not_nil @organization.dnc_contacts.where(personID: @person.personID)
-    end
-  end
 end
