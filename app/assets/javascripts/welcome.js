@@ -11,6 +11,7 @@ jQuery(document).ready(function(){
 		select_video_by_id($(this));
 	});
 	
+	click_url();
 })
 
 function show_video_preview(){
@@ -35,4 +36,11 @@ function select_video_by_position(video_position){
 	info.children('.title').html(video.children('.title').html());
 	info.children('.details').html(video.children('.description').html());
 	$("#video_frame").attr("src", "http://www.youtube.com/embed/"+id+"?showinfo=0&autohide=1");
+}
+
+function click_url(){
+  click_id = $.url(window.location.href).param("click")
+  if(click_id){
+    $('#'+click_id).click()
+  }
 }
