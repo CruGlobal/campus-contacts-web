@@ -50,22 +50,24 @@
       <%= link_to "Contacts in Progress", "/contacts?assigned_to=progress" %>
     </div>
   </div>
-  <div class="lower_box_item">
-    <div class="lower_box_count">
-      <%= current_person.primary_organization.present? ?
-        current_person.primary_organization.surveys.count : 0 %>
+  <% if can? :manage, current_organization %>
+    <div class="lower_box_item">
+      <div class="lower_box_count">
+        <%= current_person.primary_organization.present? ?
+          current_person.primary_organization.surveys.count : 0 %>
+      </div>
+      <div class="lower_box_link">
+        <%= link_to "Active Surveys", "/surveys/index_admin" %>
+      </div>
     </div>
-    <div class="lower_box_link">
-      <%= link_to "Active Surveys", "/surveys/index_admin" %>
+    <div class="lower_box_item">
+      <div class="lower_box_count">
+        <%= current_person.primary_organization.present? ?
+          current_person.primary_organization.groups.count : 0 %>
+      </div>
+      <div class="lower_box_link">
+        <%= link_to "Groups Under Your Leadership", "/groups" %>
+      </div>
     </div>
-  </div>
-  <div class="lower_box_item">
-    <div class="lower_box_count">
-      <%= current_person.primary_organization.present? ?
-        current_person.primary_organization.groups.count : 0 %>
-    </div>
-    <div class="lower_box_link">
-      <%= link_to "Groups Under Your Leadership", "/groups" %>
-    </div>
-  </div>
+  <% end %>
 </div>
