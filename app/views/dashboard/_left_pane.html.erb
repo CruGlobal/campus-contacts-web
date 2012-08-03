@@ -22,7 +22,7 @@
       <%= link_to "Manage Existing Groups", "/groups" %>
     </div>
   </div>
-  
+  <!--
   <hr class="dash_divider"/>
   
   <div class="dash_link">
@@ -35,7 +35,7 @@
       <%= link_to "Send Email Message", "#" %>
     </div>
   </div>
-  
+  -->
 </div>
 <div class="dash_links lower_box">
   <div class="lower_box_title">
@@ -54,6 +54,15 @@
     <div class="lower_box_item">
       <div class="lower_box_count">
         <%= current_person.primary_organization.present? ?
+          current_person.primary_organization.active_keywords.count : 0 %>
+      </div>
+      <div class="lower_box_link">
+        <%= link_to "Active Keywords", "/sms_keywords" %>
+      </div>
+    </div>
+    <div class="lower_box_item">
+      <div class="lower_box_count">
+        <%= current_person.primary_organization.present? ?
           current_person.primary_organization.surveys.count : 0 %>
       </div>
       <div class="lower_box_link">
@@ -67,6 +76,15 @@
       </div>
       <div class="lower_box_link">
         <%= link_to "Groups Under Your Leadership", "/groups" %>
+      </div>
+    </div>
+    <div class="lower_box_item">
+      <div class="lower_box_count">
+        <%= current_person.primary_organization.present? ?
+          current_person.primary_organization.children.count : 0 %>
+      </div>
+      <div class="lower_box_link">
+        <%= link_to "Sub-organizations of #{current_organization}", "/organizations" %>
       </div>
     </div>
   <% end %>
