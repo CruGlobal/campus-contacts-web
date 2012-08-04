@@ -118,6 +118,10 @@ class Person < ActiveRecord::Base
     self.get_archived(org_id).collect()
   end
   
+  def self.people_for_labels(org)
+    Person.where('organizational_roles.organization_id' => org.id).includes(:organizational_roles)
+  end
+  
   scope :get_archived_included, lambda { { 
     :conditions => "organizational_roles.deleted = 0",
     :group => "ministry_person.personID"
