@@ -71,6 +71,7 @@ class SurveyResponsesController < ApplicationController
   end
 
   def create
+    @title = @survey.terminology
     Person.transaction do
       @person = current_person # first try for a logged in person
       if params[:person] && params[:person][:email].present?

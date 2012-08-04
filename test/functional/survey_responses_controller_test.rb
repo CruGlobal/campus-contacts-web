@@ -111,6 +111,8 @@ class SurveyResponsesControllerTest < ActionController::TestCase
       setup do
         @request.host = 'mhub.cc'
         post :create, id: @user.person.id, format: 'mobile', person: {firstName: ''}, keyword: @keyword.keyword
+        assert_not_nil assigns(:title)
+        assert_equal assigns(:title), @survey.terminology
       end
       should render_template('new')
     end
