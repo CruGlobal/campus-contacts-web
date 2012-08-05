@@ -268,6 +268,8 @@ class ApplicationController < ActionController::Base
     step = current_user.next_wizard_step(current_organization)
     if step
       '/wizard?step=' + step
+    else
+      '/'
     end
   end
   helper_method :wizard_path
