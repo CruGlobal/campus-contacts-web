@@ -1,0 +1,5 @@
+<% name = defined?(survey) ? "answers[#{survey.id}][#{date_field.id}]" : "answers[#{date_field.id}]" %>
+<%= calendar_date_select_tag name, date_field.format_date_response(answer_sheet),
+      :class => 'text ' + date_field.validation_class(@answer_sheet),
+      :id => dom_id(date_field) %> (MM/DD/YYYY)
+
