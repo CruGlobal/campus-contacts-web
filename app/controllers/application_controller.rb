@@ -257,7 +257,8 @@ class ApplicationController < ActionController::Base
       if (!current_organization || current_person.organizations.include?(current_organization)) && wizard_path
         return wizard_path 
       else
-        return '/dashboard'
+        #return '/dashboard'
+        return '/contacts/mine'
       end
     end
   end

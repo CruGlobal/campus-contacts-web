@@ -22,7 +22,7 @@
               <% answer = question.display_response(answer_sheet) %>
               <div class="field">
               	<label><%= raw question.label %></label>
-              	<%= render :partial => 'questions/' + question.ptemplate, object: question, locals: {col: nil, answer_sheet: answer_sheet, survey: survey} %>
+              	<%= render :partial => 'survey/' + question.ptemplate, object: question, locals: {col: nil, answer_sheet: answer_sheet, survey: survey} %>
               </div>
             <% end %>
           <% end %>
