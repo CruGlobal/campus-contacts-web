@@ -203,8 +203,9 @@ class ContactsController < ApplicationController
       elsif params[:completed] == 'true'
         @header = I18n.t('contacts.index.completed')
         @people = @organization.completed_contacts
-      elsif params[:search]  
+      elsif params[:search]
         @header = I18n.t('contacts.index.matching_seach')
+        @people = @organization.contacts
       else
         params[:assigned_to] = nil if params[:assigned_to].blank?
         if params[:assigned_to]

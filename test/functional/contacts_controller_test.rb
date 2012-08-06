@@ -281,4 +281,20 @@ class ContactsControllerTest < ActionController::TestCase
     res = ActiveSupport::JSON.decode(response.body)
     assert_equal res.count, 2
   end
+  
+  context "Searching for contacts using 'Saved Searches'" do
+    setup do
+      @user = Factory(:user_with_auxs)
+      sign_in @user
+      
+      @contact1 = Factory(:person, firstName: "Neil", lastName: "delaCruz")
+      @user.person.organizations.first.add_contact(@contact1)
+    end
+  
+    should "search for contacts" do
+      xhr :get, :index, {:search => "1", :firstName => "Neil", :lastName => "delaCruz"}
+      puts assigns(:people).inspect
+    end
+  
+  end
 end
