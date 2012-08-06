@@ -257,6 +257,7 @@ class ApplicationController < ActionController::Base
       if (!current_organization || current_person.organizations.include?(current_organization)) && wizard_path
         return wizard_path 
       else
+        #return '/dashboard'
         return '/contacts/mine'
       end
     end
@@ -267,6 +268,8 @@ class ApplicationController < ActionController::Base
     step = current_user.next_wizard_step(current_organization)
     if step
       '/wizard?step=' + step
+    else
+      '/'
     end
   end
   helper_method :wizard_path

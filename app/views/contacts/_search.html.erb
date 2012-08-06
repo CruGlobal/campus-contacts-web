@@ -52,7 +52,7 @@
               <label class="choice"></label>
             </div>
           <% end %>
-          <%= render :partial => 'questions/' + q.ptemplate, :object => q, :locals => {:col => nil, :answer_sheet => @answer_sheet} %>
+          <%= render :partial => 'survey/' + q.ptemplate, :object => q, :locals => {:col => nil, :answer_sheet => @answer_sheet} %>
         </div>
       <% end %>
     </div>

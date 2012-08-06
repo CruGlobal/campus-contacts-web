@@ -1,0 +1,71 @@
+<div class="dash_links">
+  <div class="dash_link">
+    <div class="dash_icon">
+      <%= image_tag('dashicon_contact.png')%>
+    </div>
+    <div class="dash_content">
+      <%= link_to "See All Contacts", "/contacts" %>
+      <br/>
+      <%= link_to "Add New Contact", "#" %>
+    </div>
+  </div>
+  
+  <hr class="dash_divider"/>
+  
+  <div class="dash_link">
+    <div class="dash_icon">
+      <%= image_tag('dashicon_group.png')%>
+    </div>
+    <div class="dash_content">
+      <%= link_to "Create A New Group", "/groups/new" %>
+      <br/>
+      <%= link_to "Manage Existing Groups", "/groups" %>
+    </div>
+  </div>
+  
+  <hr class="dash_divider"/>
+  
+  <div class="dash_link">
+    <div class="dash_icon">
+      <%= image_tag('dashicon_mail.png')%>
+    </div>
+    <div class="dash_content">
+      <%= link_to "Send Text Message", "#" %>
+      <br/>
+      <%= link_to "Send Email Message", "#" %>
+    </div>
+  </div>
+  
+</div>
+<div class="dash_links lower_box">
+  <div class="lower_box_title">
+    Here's what in your hub!
+  </div>
+  <div class="lower_box_item">
+    <div class="lower_box_count">
+      <%= current_person.primary_organization.present? ?
+        current_person.primary_organization.inprogress_contacts.count : 0 %>
+    </div>
+    <div class="lower_box_link">
+      <%= link_to "Contacts in Progress", "/contacts?assigned_to=progress" %>
+    </div>
+  </div>
+  <div class="lower_box_item">
+    <div class="lower_box_count">
+      <%= current_person.primary_organization.present? ?
+        current_person.primary_organization.surveys.count : 0 %>
+    </div>
+    <div class="lower_box_link">
+      <%= link_to "Active Surveys", "/surveys" %>
+    </div>
+  </div>
+  <div class="lower_box_item">
+    <div class="lower_box_count">
+      <%= current_person.primary_organization.present? ?
+        current_person.primary_organization.groups.count : 0 %>
+    </div>
+    <div class="lower_box_link">
+      <%= link_to "Groups Under Your Leadership", "/groups" %>
+    </div>
+  </div>
+</div>

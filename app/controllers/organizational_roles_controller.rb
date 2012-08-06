@@ -1,33 +1,46 @@
 class OrganizationalRolesController < ApplicationController
   def update
     @organizational_role = OrganizationalRole.find(params[:id])
-    @organizational_role.followup_status = params[:status]
+    @organizational_role.followup_status = params[:status] #set contact role as "do_not_contact"
+    
     if params[:status] == 'do_not_contact'
       person_id = @organizational_role.person_id
       organization_id = @organizational_role.organization_id
       
+      Person.find(person_id).organizational_roles.where(organization_id: current_organization.id).each do |ors|
+        if(ors.role_id == Role::LEADER_ID)
+          ca = Person.find(person_id).contact_assignments.where(organization_id: current_organization.id).all
+          ca.collect(&:destroy)
+        end
+        ors.update_attributes({:archive_date => Date.today})
+      end
+      
       # Delete Contact Assignments
-      ContactAssignment.where(person_id: person_id, organization_id: organization_id).destroy_all
+      contact_assignments = ContactAssignment.where(person_id: person_id, organization_id: organization_id)
+      contact_assignments.destroy_all
       
       # Delete Answer Sheets & Answers
-      survey_ids = Survey.where(organization_id: organization_id).collect{|s| s.id}
+      survey_ids = Survey.where(organization_id: organization_id).collect(&:id)
       answer_sheets = AnswerSheet.where(survey_id: survey_ids, person_id: person_id)
-      answer_sheets_ids = answer_sheets.collect{|a| a.id}
-      Answer.where(answer_sheet_id: answer_sheets_ids).destroy_all
+      answer_sheets_ids = answer_sheets.collect(&:id)
+      answers = Answer.where(answer_sheet_id: answer_sheets_ids)
+      answers.destroy_all
       answer_sheets.destroy_all
       
       # Delete Followup Comments
-      FollowupComment.where(contact_id: person_id, organization_id: organization_id).destroy_all
+      followup_comments = FollowupComment.where(contact_id: person_id, organization_id: organization_id)
+      followup_comments.destroy_all
       
       # Delete Group Membership
-      group_ids = Group.where(organization_id: organization_id).collect{|g| g.id}
-      GroupMembership.where(group_id: group_ids, person_id: person_id).destroy_all
+      group_ids = Group.where(organization_id: organization_id).collect(&:id)
+      group_memberships = GroupMembership.where(group_id: group_ids, person_id: person_id)
+      group_memberships.destroy_all
       
     end
     @organizational_role.save
-    respond_to do |wants|
-      wants.html
-      wants.js {render nothing: true}
+    respond_to do |format|
+      format.html
+      format.js {render nothing: true}
     end
   end
   

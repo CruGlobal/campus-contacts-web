@@ -10,8 +10,17 @@
   <td class="last_name"><%= person.lastName %></td>
   <td>
     <div id="roles_user_<%= person.id %>" class="roles_spaces">
-      <% (person.assigned_organizational_roles(current_organization.id).default_roles_desc + person.assigned_organizational_roles(current_organization.id).non_default_roles_asc).each do |role| %>
-        <span id="<%= person.id%>_<%= role.id %>" class="role_label role_<%= role.id %>"><%= role %></span>
+      <% roles = if params[:include_archived] || params[:archived] %>
+        <% (person.assigned_organizational_roles_including_archived(current_organization.id).default_roles_desc + person.assigned_organizational_roles_including_archived(current_organization.id).non_default_roles_asc) %>
+      <% else %>
+        <% (person.assigned_organizational_roles(current_organization.id).default_roles_desc + person.assigned_organizational_roles(current_organization.id).non_default_roles_asc) %>
+      <% end %>
+      <% roles.each do |role| %>
+        <% unless person.is_role_archived?(current_organization.id, role.id) %>
+          <span id="<%= person.id%>_<%= role.id %>" class="role_label role_<%= role.id %>"><%= role %></span>
+        <% else %>
+          <span id="<%= person.id%>_<%= role.id %>" class="role_label_archived role_<%= role.id %>"><%= role %></span>
+        <% end %>
       <% end %>
     </div>
   </td>

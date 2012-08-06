@@ -53,13 +53,13 @@ class GroupMembershipsController < ApplicationController
   
   def search
     if params[:name].present?
-      scope = Person.search_by_name(params[:name], current_organization.id)
-      @people = scope.includes(:user)
+      results = Person.search_by_name_with_email_present(params[:name], current_organization.id)
+      @people = results.includes(:user)
       if params[:show_all].to_s == 'true'
-        @total = @people.all.length
+        @total = @people.count
       else
+        @total = results.count
         @people = @people.limit(10) 
-        @total = scope.count
       end
       render :layout => false
     else
@@ -71,7 +71,7 @@ class GroupMembershipsController < ApplicationController
     def has_permission
       return true if can?(:manage, current_organization)
       #return true if can?(:lead, current_organization)
-      return true if @group.leaders.include?(current_person)
+      return true if @group.organization.leaders.include?(current_person)
       return true if @group.list_publicly? && params[:role] == 'interested' && @person == current_person
       return true if @group.public_signup? && params[:role] == 'member' && @person == current_person
       return false

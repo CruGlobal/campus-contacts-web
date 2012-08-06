@@ -209,6 +209,7 @@ a.headerlink:hover {
   a.topset.directory {background-position: 8px 4px;}
   a.topset.groups {background-position: 8px -97px;}
   a.topset.comments {background-position: 8px -45px;}
+  a.topset.cleanup {background-position: 8px -250px;}
 }
 
 img.tmenu {
@@ -263,6 +264,9 @@ ul.leftmenu {
       height: 24px;
     }
     > a {
+      font-weight: bold;
+    }
+    .name {
       font-weight: bold;
     }
   }
@@ -464,6 +468,9 @@ div.wizard {
   }
   .checkbox_cell {
     width: 50px;
+  }
+  .spacer_cell {
+    width: 20px;
   }
 }
 
@@ -721,7 +728,13 @@ button[type=submit].smallbtn {
 
 .pagemenu {
   background: $light-blue;
-  padding: 10px 14px 8px;
+  padding: 10px 15px;
+  div.part_title {
+    font-size: 18px;
+    font-weight: bold;
+    display: inline-table;
+    padding: 0 15px 0 0;
+  }
 }
 
 ul.pillmenu {
@@ -1889,6 +1902,7 @@ div.field_with_errors div.ui-effects-wrapper {
   background: #F0F0F0;
   padding: 15px 15px 10px 15px;
   border-radius: 10px;
+  min-height: 75px;
   .stepnumber {
     float: left;
   }
@@ -2069,7 +2083,8 @@ span.all_text {
   }
 .flash .error, .flash .error-list {
   border: 1px solid #993624;
-  background: #cc4831 url("<%= image_path('error.png') %>") no-repeat 10px center; }
+  background: #cc4831 url('<%= image_path("error.png") %>') no-repeat 10px center; 
+}
 .flash .warning {
   border: 1px solid #bb9004;
   color: #000;
@@ -2108,6 +2123,10 @@ textarea, input[type=text], input[type=password] {
   textarea, input[type=text], input[type=password] {
     width: 600px;
   }
+}
+
+#survey_background_color, #survey_text_color {
+  width: 200px!important;
 }
 
 .formtastic {
@@ -2513,4 +2532,26 @@ ul#ui-autocomplete {
 
 #autoassign_selected_id {
   display: none;
+}
+
+
+#archive_contacts_before, #date_leaders_not_logged_in_after{
+  width: 100px;
+  text-align: center;
+  background: $blue;
+  color: $white;
+}
+
+.cleanup_number {
+  width: 70px;
+  height: 70px;
+}
+
+.cleanup_content {
+  min-height: 70px;
+}
+
+#include_archived_div {
+  padding-left: 20px;
+  padding-bottom: 10px;
 }

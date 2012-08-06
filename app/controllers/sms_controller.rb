@@ -15,7 +15,7 @@ class SmsController < ApplicationController
     @sms_session = SmsSession.where(sms_params.slice(:phone_number)).order('updated_at desc')
     # See if this is a sticky session ( prior sms in the past XX minutes )
     unless message.split(' ').first.downcase == 'i'
-      @sms_session = @sms_session.where(["updated_at > ?", 1.hour.ago])
+      @sms_session = @sms_session.where(["updated_at > ?", 10.minutes.ago])
     end
     @sms_session = @sms_session.first
     
@@ -176,11 +176,12 @@ class SmsController < ApplicationController
             
             question.set_response(answer, @answer_sheet)
             p = person.has_similar_person_by_name_and_email?(answer)
-            unless p.nil? # another person with the same firstName, lastName and email has been found
-              @answer_sheet.person.merge(p) # merge person to person with the same firstName, lastName and email
+            if p # another person with the same firstName, lastName and email has been found
+              @answer_sheet.person = @answer_sheet.person.smart_merge(p) # merge person to person with the same firstName, lastName and email
+              @answer_sheet.save!
               question.set_response(answer, @answer_sheet)
             end
-            @answer_sheet.person.save
+            @answer_sheet.person.save!
           end
         end
       rescue => e

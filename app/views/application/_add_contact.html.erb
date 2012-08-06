@@ -22,7 +22,7 @@
           <% next if ['email','phone'].include?(question.slug) %>
           <div class="field">
           	<label><%= raw question.label %></label>
-          	<%= render :partial => 'questions/' + question.ptemplate, :object => question, :locals => {:col => nil, :answer_sheet => @answer_sheet} %>
+          	<%= render :partial => 'survey/' + question.ptemplate, :object => question, :locals => {:col => nil, :answer_sheet => @answer_sheet} %>
           </div>
         <% end %>
       </div>

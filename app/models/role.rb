@@ -6,6 +6,7 @@ class Role < ActiveRecord::Base
   scope :default, where(organization_id: 0)
 	scope :leaders, where(i18n: %w[leader admin])
 
+
   validates :i18n, uniqueness: true, allow_nil: true
   validates :name, presence: true, :if => Proc.new { |role| organization_id != 0 }
   validates :organization_id, presence: true
@@ -38,6 +39,10 @@ class Role < ActiveRecord::Base
   
   def self.involved
     Role.find_or_create_by_i18n_and_organization_id('involved', 0)
+  end
+  
+  def self.alumni
+    Role.find_or_create_by_i18n_and_organization_id('alumni', 0)
   end
   
   def to_s

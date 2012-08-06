@@ -20,15 +20,15 @@ class Organization < ActiveRecord::Base
   has_many :all_questions, through: :surveys, source: :all_questions
   has_many :followup_comments
   has_many :organizational_roles, inverse_of: :organization
-  has_many :leaders, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role.leader_ids}, order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
-  has_many :only_leaders, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::LEADER_ID}, order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
-  has_many :admins, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::ADMIN_ID}, order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
-  has_many :all_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ?", Role::CONTACT_ID]
-  has_many :contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.followup_status <> 'do_not_contact'", Role::CONTACT_ID]
-  has_many :dnc_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.followup_status' => 'do_not_contact'}
-  has_many :completed_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.followup_status' => 'completed'}
+  has_many :leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id IN (?) AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role.leader_ids, 0], order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
+  has_many :only_leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role::LEADER_ID, 0], order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
+  has_many :admins, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role::ADMIN_ID, 0], order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
+  has_many :all_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role::CONTACT_ID, 0]
+  has_many :contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status <> 'do_not_contact' AND organizational_roles.deleted = 0", Role::CONTACT_ID]
+  has_many :dnc_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status = ?", Role::CONTACT_ID, 0, 'do_not_contact']
+  has_many :completed_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status = ?", Role::CONTACT_ID, 0, 'completed']
   has_many :inprogress_contacts, through: :contact_assignments, source: :person
-  has_many :no_activity_contacts, through: :organizational_roles, source: :person, conditions: {'organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.followup_status' => 'uncontacted'}
+  has_many :no_activity_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status = ?", Role::CONTACT_ID, 0, 'uncontacted']
   has_many :rejoicables
   has_many :groups
 
@@ -66,6 +66,14 @@ class Organization < ActiveRecord::Base
       transition any => :inactive
     end
     end
+    
+    def is_root? # an org is considered root if it has no parents
+      ancestry.nil?
+    end
+    
+    def is_root_and_has_only_one_admin?
+      (ancestry.nil? || !parent.show_sub_orgs ) && admins.count == 1
+    end
 
     def to_s() name; end
 
@@ -93,10 +101,30 @@ class Organization < ActiveRecord::Base
       @self_and_children_questions ||= self_and_children_surveys.collect(&:questions).flatten.uniq
     end
 
-    def unassigned_people
-      Person.joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{Person.table_name}.#{Person.primary_key} AND organizational_roles.organization_id = #{self.id} AND organizational_roles.role_id = '#{Role::CONTACT_ID}' AND followup_status <> 'do_not_contact' LEFT JOIN contact_assignments ON contact_assignments.person_id = #{Person.table_name}.#{Person.primary_key}  AND contact_assignments.organization_id = #{self.id}").where('contact_assignments.id' => nil)
+    def unassigned_contacts
+      person_table_pkey = "#{Person.table_name}.#{Person.primary_key}"
+      Person
+        .joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{person_table_pkey} 
+          AND organizational_roles.organization_id = #{id} 
+          AND organizational_roles.role_id = '#{Role::CONTACT_ID}' 
+          AND followup_status <> 'do_not_contact' 
+          LEFT JOIN contact_assignments ON contact_assignments.person_id = #{person_table_pkey} 
+          AND contact_assignments.organization_id = #{id}")
+        .where("contact_assignments.id IS NULL OR contact_assignments.assigned_to_id NOT IN (?)", only_leaders)
     end
-
+    
+    def inprogress_contacts
+      person_table_pkey = "#{Person.table_name}.#{Person.primary_key}"
+      Person
+        .joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{person_table_pkey} 
+          AND organizational_roles.organization_id = #{id} 
+          AND organizational_roles.role_id = '#{Role::CONTACT_ID}' 
+          AND followup_status <> 'do_not_contact' 
+          LEFT JOIN contact_assignments ON contact_assignments.person_id = #{person_table_pkey} 
+          AND contact_assignments.organization_id = #{id}")
+        .where("contact_assignments.assigned_to_id IN (?)", only_leaders)
+    end
+    
     def roles
       Role.where("organization_id = 0 or organization_id = #{id}")
     end

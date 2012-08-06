@@ -149,6 +149,39 @@ class PeopleControllerTest < ActionController::TestCase
       assert old_person_3_roles & new_person_3_roles # role 3 still has his old roles?
 
     end
+    
+    context "removing an admin role" do
+      setup do
+        @last_admin = Factory(:person, email: "person4@email.com")
+        @admin2 = Factory(:person, email: "person5@email.com")
+        @admin_organizational_role = Factory(:organizational_role, organization: @org, person: @last_admin)
+        @org.add_admin(@last_admin)
+      end
+      
+      should "not remove admin role from the last admin of a root org" do
+        assert_no_difference "OrganizationalRole.count" do
+          xhr :post, :update_roles, { :role_ids => [], :some_role_ids => "", :person_id => @last_admin.id }
+        end
+      end
+      
+=begin
+      should "not remove admin role from the last admin of an org with parent org with 'show_sub_orgs == false'" do
+        setup do
+          org_2 = Organization.create({"parent_id"=> @org.id, "name"=>"Org 2", "terminology"=>"Organization", "show_sub_orgs"=>"0"}) # org with show_sub_orgs == false
+          org_3 = Organization.create({"parent_id"=> org_2.id, "name"=>"Org 3", "terminology"=>"Organization", "show_sub_orgs"=>"1"})
+          @request.session[:current_organization_id] = org_3.id
+        end
+        
+        org_3.add_admin(@user.person) unless org_3.parent && org_3.parent.show_sub_orgs?
+        org_3.add_admin(@admin2)
+        #puts org_3.admins.count
+        @request.session['current_organization_id']  = org_3.id
+        assert_no_difference "OrganizationalRole.count" do
+          xhr :post, :update_roles, { :role_ids => [], :some_role_ids => "", :person_id => @user.person.id }
+        end
+      end
+=end
+    end
   end
   
   context "Search" do
@@ -195,21 +228,24 @@ class PeopleControllerTest < ActionController::TestCase
       sign_in @user
     end
 
-    #flash[:checker] came from the people_controller facebook_search method
 
     should "successfully search for facebook users when using '/http://www.facebook.com\//[a-z]' format" do
+      stub_request(:get, "https://graph.facebook.com/nmfdelacruz").
+        to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/nmfdelacruz\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
       get :facebook_search, { :term =>"http://www.facebook.com/nmfdelacruz"}
-      assert_equal flash[:checker], 1, "Unsuccessfully searched for a user using Facebook profile url"
+      assert_equal(2, assigns(:data).length, "Unsuccessfully searched for a user using Facebook profile url")
     end
 
-    should "successfully search for facebook users when using '/http://www.facebook.com\/profile.php?id=/[0-9]'" do
-      get :facebook_search, { :term =>"http://www.facebook.com/nmfdelacruz"}
-      assert_equal flash[:checker], 1, "Unsuccessfully searched for a user using Facebook profile url"
-    end
+    #should "successfully search for facebook users when using '/http://www.facebook.com\/profile.php?id=/[0-9]'" do
+      #get :facebook_search, { :term =>"http://www.facebook.com/nmfdelacruz"}
+      #assert_equal @data.length, 1, "Unsuccessfully searched for a user using Facebook profile url"
+    #end
 
     should "unsuccessfully search for facebook users when url does not exist" do
+      stub_request(:get, "https://graph.facebook.com/nm34523fdelacruz").
+        to_return(status: 404)
       get :facebook_search, { :term =>"http://www.facebook.com/nm34523fdelacruz"}
-      assert_equal flash[:checker], 0
+      assert_equal(1, assigns(:data).length)
     end
 
 =begin These tests get errors because probably of facebook user authentication. RestClient::BadRequest: 400 Bad Request
@@ -503,21 +539,6 @@ class PeopleControllerTest < ActionController::TestCase
     
   end
   
-  should "bulk delete" do
-    @user, @org = admin_user_login_with_org
-    c1 = Factory(:person)
-    c2 = Factory(:person)
-    
-    @org.add_contact(c1)
-    @org.add_contact(c2)
-    
-    assert_equal 2, @org.contacts.count
-    xhr :post, :bulk_delete, { :ids => "#{c1.id}, #{c2.id}" }
-    
-    assert_equal 0, @org.contacts.count
-    assert_equal " ", @response.body
-  end
-  
   should "bulk comment" do
     @user, @org = admin_user_login_with_org
     c1 = Factory(:person)
@@ -556,6 +577,155 @@ class PeopleControllerTest < ActionController::TestCase
     @user, @org = admin_user_login_with_org
     person = Factory(:person)
     post :destroy, { :id => person.id }
-    assert_response :redirect
+    assert_response :success
+  end
+  
+  context "bulk deleting people" do
+    setup do
+      @user, @org = admin_user_login_with_org
+      
+      @c1 = Factory(:person, firstName: "Genny")
+      @c2 = Factory(:person)
+      
+      @org.add_contact(@c1)
+      @org.add_contact(@c2)
+    end
+    
+    should "bulk delete" do
+      
+      
+      assert_equal 2, @org.contacts.count
+      xhr :post, :bulk_delete, { :ids => "#{@c1.id}, #{@c2.id}" }
+      
+      assert_equal 0, @org.contacts.count
+      assert_equal I18n.t('people.bulk_delete.deleting_people_success'), @response.body
+    end
+    
+    should "not bulk delete all the admins in the org" do
+      Factory(:organizational_role, person: @c1, role: Role.admin, organization: @org)
+      init_admin_count = @org.admins.count
+      
+      xhr :post, :bulk_delete, { :ids => "#{@user.person.personID}, #{@c1.personID}, #{@c2.personID}" }
+      
+      assert_equal init_admin_count, @org.admins.count
+      assert_equal I18n.t('people.bulk_delete.cannot_delete_admin_error', names: "#{@user.person.name}, #{@c1.name}"), @response.body
+    end
+    
+    should "not be able to delete logged-in-admin's self as admin" do
+      Factory(:organizational_role, person: @c1, role: Role.admin, organization: @org)
+      init_admin_count = @org.admins.count
+      xhr :post, :bulk_delete, { :ids => "#{@user.person.personID}" }
+      
+      assert_equal @user.person.organizational_roles.collect(&:role_id), [Role::ADMIN_ID]
+      assert_equal @org.admins.count, init_admin_count
+    end
+  end
+  
+  context "Clicking on the label links at '/people'" do
+    setup do
+      @user = Factory(:user_with_auxs)
+      @org = Factory(:organization)
+      sign_in @user
+      @request.session[:current_organization_id] = @org.id
+    
+      @admin1 = Factory(:user_with_auxs)
+      Factory(:organizational_role, organization: @org, person: @admin1.person, role: Role.admin)
+    
+      @leader1 = Factory(:user_with_auxs)
+      Factory(:organizational_role, organization: @org, person: @leader1.person, role: Role.leader)
+      
+      @contact1 = Factory(:user_with_auxs)
+      Factory(:organizational_role, organization: @org, person: @contact1.person, role: Role.contact)
+      @contact2 = Factory(:user_with_auxs)
+      Factory(:organizational_role, organization: @org, person: @contact2.person, role: Role.contact)
+      @contact3 = Factory(:user_with_auxs)
+      Factory(:organizational_role, organization: @org, person: @contact3.person, role: Role.contact)
+      
+      @involved1 = Factory(:user_with_auxs)
+      Factory(:organizational_role, organization: @org, person: @involved1.person, role: Role.involved)
+    end
+    
+    should "return admins when Admin link is clicked" do
+      xhr :get, :index, { :role => Role::ADMIN_ID }
+      assert_equal assigns(:all_people).collect{|x| x.personID}, [@admin1.person.personID]
+    end
+    
+    should "return leaders when Leader link is clicked" do
+      xhr :get, :index, { :role => Role::LEADER_ID }
+      assert_equal assigns(:all_people).collect{|x| x.personID}, [@leader1.person.personID]
+    end
+    
+    should "return contacts when Contact link is clicked" do
+      xhr :get, :index, { :role => Role::CONTACT_ID }
+      assert_equal assigns(:all_people).collect{|x| x.personID}, [@contact1.person.personID, @contact2.person.personID, @contact3.person.personID].sort { |x, y| x <=> y }
+    end
+    
+    should "return involveds when Involved link is clicked" do
+      xhr :get, :index, { :role => Role::INVOLVED_ID }
+      assert_equal assigns(:all_people).collect{|x| x.personID}, [@involved1.person.personID]
+    end
+    
+    should "return archiveds when Archived link is clicked" do
+      @contact1.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
+      @contact2.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
+      @contact3.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
+    
+      xhr :get, :index, { :archived => true }
+      assert_equal assigns(:all_people).collect{|x| x.personID}, [@contact1.person.personID, @contact2.person.personID, @contact3.person.personID].sort { |x, y| x <=> y }
+    end
+    
+    should "only return unarchived people when 'Include Archived' checkbox isn't checked'" do
+      @contact1.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
+      @contact2.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
+      @leader1.person.organizational_roles.where(role_id: Role::LEADER_ID).first.archive
+      
+      xhr :get, :index
+      assert_equal assigns(:all_people).collect{|x| x.personID}, [@admin1.person.personID, @contact3.person.personID, @involved1.person.personID].sort { |x, y| x <=> y }
+    end
+    
+    should "return all people (even unarchived ones) when 'Include Archived' checkbox is checked'" do
+      @contact1.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
+      @contact2.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
+      @leader1.person.organizational_roles.where(role_id: Role::LEADER_ID).first.archive
+      
+      xhr :get, :index, { :include_archived => true }
+      assert_equal assigns(:all_people).collect{|x| x.personID}, [@admin1.person.personID, @leader1.person.personID, @contact1.person.personID, @contact2.person.personID, @contact3.person.personID, @involved1.person.personID].sort { |x, y| x <=> y }
+    end
+  end
+  
+  context "Updating a person" do
+    setup do
+      @user = Factory(:user_with_auxs)
+      @org = Factory(:organization)
+      sign_in @user
+      @request.session[:current_organization_id] = @org.id
+    
+      @person1 = Factory(:person, firstName: "Jon", lastName: "Snow")
+      Factory(:organizational_role, organization: @org, person: @person1, role: Role.contact)
+      @email1 = Factory(:email_address, person: @person1, email: "person1@email.com", primary: true)
+      @person2 = Factory(:person, firstName: "Jon", lastName: "Snow")
+      @email2 = Factory(:email_address, person: @person2, email: "person2@email.com", primary: true)
+      Factory(:organizational_role, organization: @org, person: @person2, role: Role.contact)
+      @person3 = Factory(:person)
+      @email3 = Factory(:email_address, person: @person3, email: "person3@email.com", primary: true)
+      Factory(:organizational_role, organization: @org, person: @person3, role: Role.contact)
+    end
+  
+    should "merge people when there are email duplicates (current email address edited)" do      
+      assert_difference("Person.count", -1) do
+        xhr :put, :update, {:person => { :email_addresses_attributes =>{"0" => { :email => "person2@email.com", :primary => "1", "_destroy"=>"false", :id => @email1.id}}}, :id => @person1.personID}
+        assert_blank Person.where(personID: @person2.personID)
+        assert @person1.email_addresses.include? @email2
+      end
+    end
+    
+    should "merge people when there are email duplicates (added new email address)" do
+      
+      assert_difference("Person.count", -1) do
+        xhr :put, :update, {:person => {:email_address => {:email => "person2@email.com", :primary => 1 }}, :id => @person1.personID}
+        assert_blank Person.where(personID: @person2.personID)
+        assert @person1.email_addresses.include? @email2
+      end
+    end
   end
 end

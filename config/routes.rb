@@ -1,4 +1,6 @@
 Mh::Application.routes.draw do
+  get "dashboard/index"
+
   resources :imports, :only => [:index, :show, :new, :create, :update, :destroy, :edit] do
     collection do
       get :download_sample_contacts_csv
@@ -143,6 +145,9 @@ Mh::Application.routes.draw do
       post :signup
       get :settings
       post :update_settings
+      get :cleanup
+      post :archive_contacts
+      post :archive_leaders
     end
   end
 
@@ -163,8 +168,10 @@ Mh::Application.routes.draw do
       end
     end
   end
-
+  
+  match "/dashboard" => "dashboard#index"
   get "welcome/index"
+  get "welcome/duplicate"
   match 'tutorials' => "welcome#tutorials"
   get "/test" => "welcome#test"
 
@@ -241,7 +248,7 @@ Mh::Application.routes.draw do
   # Map keyword responses with phone numbers
   match 'c/:keyword(/:received_sms_id)' => 'survey_responses#new', as: 'contact_form'
   match 'm/:received_sms_id' => 'survey_responses#new'
-  match 'l/:token/:user_id' => 'leaders#leader_sign_in'
+  match 'l/:token/:user_id' => 'leaders#leader_sign_in', as: 'leader_link'
   get 's/:survey_id' => 'survey_responses#new', as: 'short_survey'
   get "/surveys/:keyword" => 'surveys#start'
   # mount RailsAdmin::Engine => "/admin"

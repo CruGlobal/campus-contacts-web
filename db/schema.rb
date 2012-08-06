@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120711080607) do
+ActiveRecord::Schema.define(:version => 20120724000933) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -191,7 +191,7 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
   add_index "cms_cmsfile", ["accessCount"], :name => "index1"
 
   create_table "cms_viewcategoryidfiles", :id => false, :force => true do |t|
-    t.integer  "CmsFileID"
+    t.integer  "CmsFileID",                     :default => 0, :null => false
     t.string   "mime",          :limit => 128
     t.string   "title",         :limit => 256
     t.integer  "accessCount"
@@ -212,21 +212,21 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
     t.string   "submitter",     :limit => 256
     t.string   "contact",       :limit => 256
     t.integer  "rating"
-    t.string   "CmsCategoryID", :limit => 64
+    t.string   "CmsCategoryID", :limit => 64,                  :null => false
   end
 
   create_table "cms_viewfileidcategories", :id => false, :force => true do |t|
-    t.integer "CmsCategoryID"
+    t.integer "CmsCategoryID",                  :default => 0, :null => false
     t.integer "parentCategory"
     t.string  "catName",        :limit => 256
     t.string  "catDesc",        :limit => 2000
     t.string  "path",           :limit => 2000
     t.string  "pathid",         :limit => 2000
-    t.string  "CmsFileID",      :limit => 64
+    t.string  "CmsFileID",      :limit => 64,                  :null => false
   end
 
   create_table "cms_viewfilesandcategories", :id => false, :force => true do |t|
-    t.integer  "CmsFileID"
+    t.integer  "CmsFileID",                      :default => 0, :null => false
     t.string   "mime",           :limit => 128
     t.string   "title",          :limit => 256
     t.integer  "accessCount"
@@ -247,7 +247,7 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
     t.string   "submitter",      :limit => 256
     t.string   "contact",        :limit => 256
     t.integer  "rating"
-    t.integer  "CmsCategoryID"
+    t.integer  "CmsCategoryID",                  :default => 0, :null => false
     t.integer  "parentCategory"
     t.string   "catName",        :limit => 256
     t.string   "catDesc",        :limit => 2000
@@ -1365,7 +1365,7 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
     t.datetime "leadershipStartDate"
     t.datetime "leadershipEndDate"
     t.datetime "createDate"
-    t.binary   "lastChangedDate",               :limit => 8
+    t.binary   "lastChangedDate",               :limit => 255
     t.integer  "lastChangedBy"
     t.string   "displayLocation"
     t.boolean  "partnershipRegionOnly"
@@ -1573,30 +1573,30 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
   end
 
   create_table "linczone_contacts", :primary_key => "ContactID", :force => true do |t|
-    t.timestamp "EntryDate"
-    t.string    "FirstName",            :limit => 120
-    t.string    "LastName",             :limit => 120
-    t.string    "HomeAddress",          :limit => 200
-    t.string    "City",                 :limit => 20
-    t.string    "State",                :limit => 20
-    t.string    "Zip",                  :limit => 80
-    t.string    "Email",                :limit => 120
-    t.string    "HighSchool",           :limit => 120
-    t.string    "CampusName",           :limit => 200
-    t.string    "CampusID",             :limit => 80
-    t.string    "ReferrerFirstName",    :limit => 120
-    t.string    "ReferrerLastName",     :limit => 120
-    t.string    "ReferrerRelationship", :limit => 100
-    t.string    "ReferrerEmail",        :limit => 200
-    t.string    "InfoCCC",              :limit => 1,   :default => "F"
-    t.string    "InfoNav",              :limit => 1,   :default => "F"
-    t.string    "InfoIV",               :limit => 1,   :default => "F"
-    t.string    "InfoFCA",              :limit => 1,   :default => "F"
-    t.string    "InfoBSU",              :limit => 1,   :default => "F"
-    t.string    "InfoCACM",             :limit => 1,   :default => "F"
-    t.string    "InfoEFCA",             :limit => 1,   :default => "F"
-    t.string    "InfoGCM",              :limit => 1,   :default => "F"
-    t.string    "InfoWesley",           :limit => 1,   :default => "F"
+    t.datetime "EntryDate"
+    t.string   "FirstName",            :limit => 120
+    t.string   "LastName",             :limit => 120
+    t.string   "HomeAddress",          :limit => 200
+    t.string   "City",                 :limit => 20
+    t.string   "State",                :limit => 20
+    t.string   "Zip",                  :limit => 80
+    t.string   "Email",                :limit => 120
+    t.string   "HighSchool",           :limit => 120
+    t.string   "CampusName",           :limit => 200
+    t.string   "CampusID",             :limit => 80
+    t.string   "ReferrerFirstName",    :limit => 120
+    t.string   "ReferrerLastName",     :limit => 120
+    t.string   "ReferrerRelationship", :limit => 100
+    t.string   "ReferrerEmail",        :limit => 200
+    t.string   "InfoCCC",              :limit => 1,   :default => "F"
+    t.string   "InfoNav",              :limit => 1,   :default => "F"
+    t.string   "InfoIV",               :limit => 1,   :default => "F"
+    t.string   "InfoFCA",              :limit => 1,   :default => "F"
+    t.string   "InfoBSU",              :limit => 1,   :default => "F"
+    t.string   "InfoCACM",             :limit => 1,   :default => "F"
+    t.string   "InfoEFCA",             :limit => 1,   :default => "F"
+    t.string   "InfoGCM",              :limit => 1,   :default => "F"
+    t.string   "InfoWesley",           :limit => 1,   :default => "F"
   end
 
   create_table "mail_delayed_jobs", :force => true do |t|
@@ -1705,6 +1705,15 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
     t.string  "expression",        :default => "", :null => false
     t.integer "toggle_page_id",                    :null => false
     t.integer "toggle_id"
+  end
+
+  create_table "mh_dashboard_posts", :force => true do |t|
+    t.string   "title",      :default => ""
+    t.text     "context"
+    t.string   "video",      :default => ""
+    t.boolean  "visible",    :default => true
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
   end
 
   create_table "mh_education_histories", :force => true do |t|
@@ -1945,15 +1954,26 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
   end
 
   create_table "mh_surveys", :force => true do |t|
-    t.string   "title",               :limit => 100, :default => "",       :null => false
+    t.string   "title",                 :limit => 100, :default => "",       :null => false
     t.integer  "organization_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "post_survey_message"
-    t.string   "terminology",                        :default => "Survey"
-    t.integer  "login_option",                       :default => 0
+    t.string   "terminology",                          :default => "Survey"
+    t.integer  "login_option",                         :default => 0
     t.boolean  "is_frozen"
     t.text     "login_paragraph"
+    t.string   "logo_file_name"
+    t.string   "logo_content_type"
+    t.integer  "logo_file_size"
+    t.datetime "logo_updated_at"
+    t.string   "css_file_file_name"
+    t.string   "css_file_content_type"
+    t.integer  "css_file_file_size"
+    t.datetime "css_file_updated_at"
+    t.text     "css"
+    t.string   "background_color"
+    t.string   "text_color"
   end
 
   add_index "mh_surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
@@ -2189,8 +2209,8 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
     t.string   "preferredName",                 :limit => 50
     t.string   "gender",                        :limit => 1
     t.string   "region",                        :limit => 5
-    t.boolean  "workInUS",                                                                           :default => true,  :null => false
-    t.boolean  "usCitizen",                                                                          :default => true,  :null => false
+    t.boolean  "workInUS",                                            :default => true,  :null => false
+    t.boolean  "usCitizen",                                           :default => true,  :null => false
     t.string   "citizenship",                   :limit => 50
     t.boolean  "isStaff"
     t.string   "title",                         :limit => 5
@@ -2202,7 +2222,7 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
     t.string   "greekAffiliation",              :limit => 50
     t.string   "maritalStatus",                 :limit => 20
     t.string   "numberChildren",                :limit => 2
-    t.boolean  "isChild",                                                                            :default => false, :null => false
+    t.boolean  "isChild",                                             :default => false, :null => false
     t.text     "bio",                           :limit => 2147483647
     t.string   "image",                         :limit => 100
     t.string   "occupation",                    :limit => 50
@@ -2232,7 +2252,6 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
     t.string   "strategy",                      :limit => 20
     t.integer  "fb_uid",                        :limit => 8
     t.datetime "date_attributes_updated"
-    t.decimal  "balance_daily",                                       :precision => 10, :scale => 2
   end
 
   add_index "ministry_person", ["accountNo"], :name => "accountNo_ministry_Person"
@@ -2505,7 +2524,7 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
   add_index "ministry_targetarea", ["state"], :name => "index3"
 
   create_table "ministry_viewdependentsstaff", :id => false, :force => true do |t|
-    t.string  "accountNo",                :limit => 15
+    t.string  "accountNo",                :limit => 15,                    :null => false
     t.string  "firstName",                :limit => 30
     t.string  "middleInitial",            :limit => 1
     t.string  "lastName",                 :limit => 30
@@ -2582,15 +2601,15 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
     t.integer "fk_teamID"
     t.string  "isSecure",                 :limit => 1
     t.string  "isSupported",              :limit => 1
-    t.integer "DependentID"
+    t.integer "DependentID",                                               :null => false
     t.string  "fianceeAccountno",         :limit => 11
-    t.string  "removedFromPeopleSoft",    :limit => 1
+    t.string  "removedFromPeopleSoft",    :limit => 1,    :default => "N"
     t.string  "primaryEmpLocDesc",        :limit => 128
   end
 
   create_table "ministry_viewnoncccmintargetarea", :id => false, :force => true do |t|
-    t.string  "NonCccMinID",       :limit => 64
-    t.integer "TargetAreaID"
+    t.string  "NonCccMinID",       :limit => 64,                 :null => false
+    t.integer "TargetAreaID",                     :default => 0, :null => false
     t.string  "name",              :limit => 100
     t.string  "address1",          :limit => 35
     t.string  "address2",          :limit => 35
@@ -2626,7 +2645,7 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
     t.string   "name",            :limit => 100
     t.string   "url"
     t.string   "facebook"
-    t.integer  "ActivityID"
+    t.integer  "ActivityID",                     :default => 0, :null => false
     t.string   "status",          :limit => 2
     t.datetime "periodBegin"
     t.string   "strategy",        :limit => 2
@@ -2636,17 +2655,17 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
   end
 
   create_table "ministry_viewstaffdependents", :id => false, :force => true do |t|
-    t.integer  "DependentID"
+    t.integer  "DependentID",               :default => 0, :null => false
     t.string   "firstName",   :limit => 80
     t.string   "middleName",  :limit => 80
     t.string   "lastName",    :limit => 80
     t.datetime "birthdate"
     t.string   "gender",      :limit => 1
-    t.string   "accountNo",   :limit => 11
+    t.string   "accountNo",   :limit => 11,                :null => false
   end
 
   create_table "ministry_viewtargetareanoncccmin", :id => false, :force => true do |t|
-    t.integer "NonCccMinID"
+    t.integer "NonCccMinID",                :default => 0, :null => false
     t.string  "ministry",     :limit => 50
     t.string  "firstName",    :limit => 30
     t.string  "lastName",     :limit => 30
@@ -2664,7 +2683,7 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
     t.string  "pager",        :limit => 24
     t.string  "fax",          :limit => 24
     t.string  "note"
-    t.string  "TargetAreaID", :limit => 64
+    t.string  "TargetAreaID", :limit => 64,                :null => false
   end
 
   create_table "mpd_contact_actions", :force => true do |t|
@@ -3131,6 +3150,7 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
     t.integer  "organization_id"
     t.string   "followup_status"
     t.integer  "added_by_id"
+    t.datetime "archive_date"
   end
 
   add_index "organizational_roles", ["organization_id", "role_id", "followup_status"], :name => "role_org_status"
@@ -4622,6 +4642,29 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
     t.datetime "updated_at"
   end
 
+  create_table "sp_donations", :force => true do |t|
+    t.integer "designation_number",                                :null => false
+    t.decimal "amount",             :precision => 10, :scale => 2, :null => false
+    t.string  "people_id"
+    t.string  "donor_name"
+    t.date    "donation_date"
+    t.string  "address1"
+    t.string  "address2"
+    t.string  "address3"
+    t.string  "city"
+    t.string  "state"
+    t.string  "zip"
+    t.string  "phone"
+    t.string  "email_address"
+    t.string  "medium_type"
+    t.string  "donation_id"
+  end
+
+  add_index "sp_donations", ["designation_number"], :name => "index_sp_donations_on_designation_number"
+  add_index "sp_donations", ["designation_number"], :name => "sp_donations_designation_number_index"
+  add_index "sp_donations", ["donation_date"], :name => "index_sp_donations_on_donation_date"
+  add_index "sp_donations", ["donation_id"], :name => "donation_id", :unique => true
+
   create_table "sp_elements", :force => true do |t|
     t.string   "kind",                      :limit => 40,                    :null => false
     t.string   "style",                     :limit => 40
@@ -4742,6 +4785,97 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
 
   add_index "sp_project_gospel_in_actions", ["gospel_in_action_id"], :name => "gospel_in_action_id"
   add_index "sp_project_gospel_in_actions", ["project_id"], :name => "project_id"
+
+  create_table "sp_project_versions", :force => true do |t|
+    t.integer  "pd_id"
+    t.integer  "apd_id"
+    t.integer  "opd_id"
+    t.string   "name",                         :limit => 50
+    t.string   "city",                         :limit => 50
+    t.string   "state",                        :limit => 50
+    t.string   "country",                      :limit => 60
+    t.string   "aoa",                          :limit => 50
+    t.string   "display_location",             :limit => 100
+    t.string   "primary_partner",              :limit => 100
+    t.string   "secondary_partner",            :limit => 100
+    t.boolean  "partner_region_only"
+    t.string   "report_stats_to",              :limit => 50
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.integer  "weeks"
+    t.integer  "primary_ministry_focus_id"
+    t.boolean  "job"
+    t.text     "description"
+    t.string   "operating_business_unit",      :limit => 50
+    t.string   "operating_operating_unit",     :limit => 50
+    t.string   "operating_department",         :limit => 50
+    t.string   "operating_project",            :limit => 50
+    t.string   "operating_designation",        :limit => 50
+    t.string   "scholarship_business_unit",    :limit => 50
+    t.string   "scholarship_operating_unit",   :limit => 50
+    t.string   "scholarship_department",       :limit => 50
+    t.string   "scholarship_project",          :limit => 50
+    t.string   "scholarship_designation",      :limit => 50
+    t.integer  "staff_cost"
+    t.integer  "intern_cost"
+    t.integer  "student_cost"
+    t.string   "departure_city",               :limit => 60
+    t.datetime "date_of_departure"
+    t.string   "destination_city",             :limit => 60
+    t.datetime "date_of_return"
+    t.text     "in_country_contact"
+    t.string   "project_contact_name",         :limit => 50
+    t.string   "project_contact_role",         :limit => 40
+    t.string   "project_contact_phone",        :limit => 20
+    t.string   "project_contact_email",        :limit => 100
+    t.integer  "max_student_men_applicants",                   :default => 0,    :null => false
+    t.integer  "max_student_women_applicants",                 :default => 0,    :null => false
+    t.integer  "housing_capacity_men"
+    t.integer  "housing_capacity_women"
+    t.integer  "ideal_staff_men",                              :default => 0,    :null => false
+    t.integer  "ideal_staff_women",                            :default => 0,    :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.integer  "current_students_men",                         :default => 0
+    t.integer  "current_students_women",                       :default => 0
+    t.integer  "current_applicants_men",                       :default => 0
+    t.integer  "current_applicants_women",                     :default => 0
+    t.integer  "year"
+    t.integer  "coordinator_id"
+    t.integer  "old_id"
+    t.string   "project_status"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.string   "url",                          :limit => 1024
+    t.string   "url_title"
+    t.string   "ds_project_code",              :limit => 50
+    t.integer  "sp_project_id"
+    t.boolean  "show_on_website",                              :default => true
+    t.datetime "apply_by_date"
+    t.integer  "version"
+    t.boolean  "use_provided_application",                     :default => true
+    t.string   "tertiary_partner"
+    t.date     "staff_start_date"
+    t.date     "staff_end_date"
+    t.string   "project_contact2_name"
+    t.string   "project_contact2_role"
+    t.string   "project_contact2_phone"
+    t.string   "project_contact2_email"
+  end
+
+  add_index "sp_project_versions", ["aoa"], :name => "index_sp_project_versions_on_aoa"
+  add_index "sp_project_versions", ["city"], :name => "index_sp_project_versions_on_city"
+  add_index "sp_project_versions", ["country"], :name => "index_sp_project_versions_on_country"
+  add_index "sp_project_versions", ["end_date"], :name => "index_sp_project_versions_on_end_date"
+  add_index "sp_project_versions", ["name"], :name => "index_sp_project_versions_on_name"
+  add_index "sp_project_versions", ["primary_ministry_focus_id"], :name => "index_sp_project_versions_on_primary_ministry_focus_id"
+  add_index "sp_project_versions", ["primary_partner"], :name => "index_sp_project_versions_on_primary_partner"
+  add_index "sp_project_versions", ["secondary_partner"], :name => "index_sp_project_versions_on_secondary_partner"
+  add_index "sp_project_versions", ["sp_project_id"], :name => "index_sp_project_versions_on_sp_project_id"
+  add_index "sp_project_versions", ["start_date"], :name => "index_sp_project_versions_on_start_date"
+  add_index "sp_project_versions", ["year"], :name => "index_sp_project_versions_on_year"
 
   create_table "sp_projects", :force => true do |t|
     t.integer  "pd_id"
@@ -5093,6 +5227,12 @@ ActiveRecord::Schema.define(:version => 20120711080607) do
   add_foreign_key "ministry_missional_team_member", "ministry_person", :name => "ministry_missional_team_member_ibfk_1", :column => "personID", :primary_key => "personID", :dependent => :delete
 
   add_foreign_key "ministry_newaddress", "ministry_person", :name => "ministry_newaddress_ibfk_1", :column => "fk_PersonID", :primary_key => "personID", :dependent => :delete
+
+  add_foreign_key "organization_memberships", "ministry_person", :name => "organization_memberships_ibfk_1", :column => "person_id", :primary_key => "personID", :dependent => :delete
+  add_foreign_key "organization_memberships", "organizations", :name => "organization_memberships_ibfk_2", :dependent => :delete
+
+  add_foreign_key "organizational_roles", "ministry_person", :name => "organizational_roles_ibfk_2", :column => "person_id", :primary_key => "personID", :dependent => :delete
+  add_foreign_key "organizational_roles", "organizations", :name => "organizational_roles_ibfk_1", :dependent => :delete
 
   add_foreign_key "phone_numbers", "ministry_person", :name => "phone_numbers_ibfk_1", :column => "person_id", :primary_key => "personID", :dependent => :delete
 

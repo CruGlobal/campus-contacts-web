@@ -27,6 +27,99 @@ class PersonTest < ActiveSupport::TestCase
     end
   end
   
+  context "get people functions" do
+    should "return people that are updated within the specified date_rage" do
+      @person = Factory(:person, date_attributes_updated: "2012-07-25".to_date)
+      
+      results = Person.find_by_person_updated_by_daterange("2012-07-01".to_date, "2012-07-31".to_date)
+      assert(results.include?(@person), "results should include the updated person within the range")
+      
+      results = Person.find_by_person_updated_by_daterange("2012-07-20".to_date, "2012-07-01".to_date)
+      assert(!results.include?(@person), "results should not include the updated person after the given range")
+      
+      results = Person.find_by_person_updated_by_daterange("2012-07-28".to_date, "2012-07-31".to_date)
+      assert(!results.include?(@person), "results should not include the updated person before the given range")
+    end
+    should "return people based on highest default roles" do
+      @org = Factory(:organization)
+      
+      @person1 = Factory(:person, firstName: 'Leader')
+      @person2 = Factory(:person, firstName: 'Contact')
+      @person3 = Factory(:person, firstName: 'Admin')
+      @org_role1 = Factory(:organizational_role, person: @person1, organization: @org1, role: Role.leader)
+      @org_role2 = Factory(:organizational_role, person: @person2, organization: @org1, role: Role.contact)
+      @org_role3 = Factory(:organizational_role, person: @person3, organization: @org1, role: Role.admin)
+      
+      results = Person.order_by_highest_default_role('role')
+      assert_equal(results[0].firstName, 'Contact', "first person of the results should be the contact")
+      assert_equal(results[1].firstName, 'Leader', "second person of the results should be the leader")
+      assert_equal(results[2].firstName, 'Admin', "third person of the results should be the admin")
+      
+      results = Person.order_by_highest_default_role('role asc')
+      assert_equal(results[0].firstName, 'Admin', "first person of the results should be the admin when order is ASC")
+      assert_equal(results[1].firstName, 'Leader', "second person of the results should be the leader when order is ASC")
+      assert_equal(results[2].firstName, 'Contact', "third person of the results should be the contact when order is ASC")
+    end
+    should "return people based on alphabetical roles" do
+      @org = Factory(:organization)
+      
+      @person1 = Factory(:person, firstName: 'Leader')
+      @person2 = Factory(:person, firstName: 'Contact')
+      @person3 = Factory(:person, firstName: 'Admin')
+      @org_role1 = Factory(:organizational_role, person: @person1, organization: @org1, role: Role.leader)
+      @org_role2 = Factory(:organizational_role, person: @person2, organization: @org1, role: Role.contact)
+      @org_role5 = Factory(:organizational_role, person: @person3, organization: @org1, role: Role.admin)
+      
+      @person4 = Factory(:person, firstName: 'Reader')
+      @person5 = Factory(:person, firstName: 'Visitor')
+      @role4 = Factory(:role, organization: @org, name: 'Reader')
+      @role5 = Factory(:role, organization: @org, name: 'Visitor')
+      @org_role4 = Factory(:organizational_role, person: @person4, organization: @org1, role: @role4)
+      @org_role5 = Factory(:organizational_role, person: @person5, organization: @org1, role: @role5)
+      
+      results = Person.order_alphabetically_by_non_default_role('role')
+      assert_equal(results[0].firstName, 'Reader', "first person of the results should be the reader")
+      assert_equal(results[1].firstName, 'Visitor', "second person of the results should be the visitor")
+      
+      results = Person.order_alphabetically_by_non_default_role('role asc')
+      assert_equal(results[0].firstName, 'Visitor', "first person of the results should be the visitor when order is ASC")
+      assert_equal(results[1].firstName, 'Reader', "second person of the results should be the reader when order is ASC")
+    end
+    should "return people based on last answered survey" do
+      @org = Factory(:organization)
+      @survey = Factory(:survey)
+      
+      @person1 = Factory(:person, firstName: 'First Answer')
+      @person2 = Factory(:person, firstName: 'Second Answer')
+      @person3 = Factory(:person, firstName: 'Last Answer')
+      @answer_sheet1 = Factory(:answer_sheet, person: @person1, survey: @survey, updated_at: "2012-07-01".to_date)
+      @answer_sheet2 = Factory(:answer_sheet, person: @person1, survey: @survey, updated_at: "2012-07-02".to_date)
+      @answer_sheet3 = Factory(:answer_sheet, person: @person1, survey: @survey, updated_at: "2012-07-03".to_date)
+      
+      results = Person.get_and_order_by_latest_answer_sheet_answered('', @org.id)
+      assert_equal(results[0].firstName, 'First Answer', "first result should be the first person who answered")
+      assert_equal(results[1].firstName, 'Second Answer', "second result should be the second person who answered")
+      assert_equal(results[2].firstName, 'Last Answer', "third result should be the last person who answered")
+      
+      
+    end
+    should "return people assigned to an org" do
+      @org1 = Factory(:organization, name: 'Org 1')
+      @org2 = Factory(:organization, name: 'Org 2')
+      @leader = Factory(:person, firstName: 'Leader')
+      @person = Factory(:person)
+      
+      @assignment1 = Factory(:contact_assignment, organization: @org1, person: @person, assigned_to: @leader)
+      @assignment2 = Factory(:contact_assignment, organization: @org2, person: @person, assigned_to: @leader)
+      
+      results = @person.assigned_tos_by_org(@org1)
+      assert(results.include?(@assignment1), "results should include contact_assignment for org 1")
+      
+      results = @person.assigned_tos_by_org(@org2)
+      assert(results.include?(@assignment2), "results should include contact_assignment for org 2")
+    end
+  end
+  
   context "person organizations and sub-organizations" do
   
     setup do
@@ -89,6 +182,208 @@ class PersonTest < ActiveSupport::TestCase
       assert(other_orgs.include?(@org4), "this should be included")
     end
     
+  end
+  
+  context "collect_all_child_organizations function" do
+    should "return child orgs" do
+      @person = Factory(:person)
+      @org = Factory(:organization, id: 1)
+      @org1 = Factory(:organization, id: 2, ancestry: "1")
+      @org2 = Factory(:organization, id: 3, ancestry: "1")
+      @org3 = Factory(:organization, id: 4, ancestry: "1/2")
+      
+      results = @person.collect_all_child_organizations(@org)
+      assert(results.include?(@org1), "Organization1 should be included")
+      assert(results.include?(@org2), "Organization2 should be included")
+      assert(results.include?(@org3), "Organization3 should be included")
+    end
+  end
+  
+  context "getting the phone number" do
+    setup do
+      @person = Factory(:person)
+    end
+    should "should return the phone_number if it exists" do
+      mobile_number = @person.phone_numbers.create(number: '1111111111', location: 'mobile')
+      assert_equal(@person.phone_number, '1111111111', 'this should return the mobile number')
+    end
+    should "should return the cellPhone from address if it exists and phone_number exists" do
+      address = Address.create(cellPhone: '2222222222', fk_PersonID: @person.id, addressType: 'current')
+      assert_equal(@person.phone_number, '2222222222', 'this should return the cellPhone number')
+    end
+    should "should return the homePhone from address if it exists and phone_number exists" do
+      address = Address.create(homePhone: '3333333333', fk_PersonID: @person.id, addressType: 'current')
+      assert_equal(@person.phone_number, '3333333333', 'this should return the homePhone number')
+    end
+    should "should return the workPhone from address if it exists and phone_number exists" do
+      address = Address.create(workPhone: '4444444444', fk_PersonID: @person.id, addressType: 'current')
+      assert_equal(@person.phone_number, '4444444444', 'this should return the workPhone number')
+    end
+    should "should return the existing if record already exists" do
+      address1 = @person.phone_numbers.create(number: '4444444444', location: 'mobile')
+      address2 = Address.create(workPhone: '4444444444', fk_PersonID: @person.id, addressType: 'current')
+      assert_equal(@person.phone_number, '4444444444', 'this should return the workPhone number')
+    end
+  end
+  
+  context "getting archived people" do
+    setup do
+      @org1 = Factory(:organization)
+      @org2 = Factory(:organization)
+      
+      @person1 = Factory(:person)
+      @person2 = Factory(:person)
+      @person3 = Factory(:person)
+      @person4 = Factory(:person)
+      @org_role1 = Factory(:organizational_role, person: @person1,
+        organization: @org1, role: Role.contact, archive_date: Date.today)
+      @org_role2 = Factory(:organizational_role, person: @person2, 
+        organization: @org1, role: Role.contact)
+      @org_role3 = Factory(:organizational_role, person: @person3, 
+        organization: @org1, role: Role.contact, deleted: 1)
+      @org_role4 = Factory(:organizational_role, person: @person4, 
+        organization: @org2, role: Role.contact)
+    end
+    should "return all included person that has active role" do
+      results = @org1.people.archived_included
+      assert_equal(results.count, 2)
+    end
+    should "not return a deleted person" do
+      results = @org1.people.archived_included
+      assert(!results.include?(@person3), "Person 3 should not be included")
+    end
+    should "not return person from other org" do
+      results = @org1.people.archived_included
+      assert(!results.include?(@person4), "Person 3 should not be included")
+    end
+    should "return all not included person that has active role" do
+      results = @org1.people.archived_not_included
+      assert_equal(results.count, 1)
+    end
+    should "not return a person with archive_date" do
+      results = @org1.people.archived_not_included
+      assert(!results.include?(@person1), "Person 1 should not be included")
+    end
+    should "return all deleted person" do
+      results = @org1.people.deleted
+      assert_equal(results.count, 1)
+    end
+    should "not return not deleted person" do
+      results = @org1.people.get_deleted
+      assert(!results.include?(@person1), "Person 1 should not be included")
+      assert(!results.include?(@person2), "Person 2 should not be included")
+    end
+  end
+  
+  context "removing contact assignment" do
+    setup do
+      @leader1 = Factory(:person)
+      @leader2 = Factory(:person)
+      @leader3 = Factory(:person)
+      @org1 = Factory(:organization)
+      @org2 = Factory(:organization)
+      @person1 = Factory(:person)
+      @person2 = Factory(:person)
+      @person3 = Factory(:person)
+      
+      @assignment1 = Factory(:contact_assignment, organization: @org1, person: @person1, assigned_to: @leader1)
+      @assignment2 = Factory(:contact_assignment, organization: @org1, person: @person2, assigned_to: @leader1)
+      @assignment3 = Factory(:contact_assignment, organization: @org1, person: @person3, assigned_to: @leader2)
+      @assignment4 = Factory(:contact_assignment, organization: @org2, person: @person1, assigned_to: @leader1)
+    end
+    should "delete assigned contacts" do
+      @leader1.remove_assigned_contacts(@org1)
+      assert(!ContactAssignment.all.include?(@assignment1), "This assignment should be deleted")
+      assert(!ContactAssignment.all.include?(@assignment2), "This assignment should be deleted")
+    end
+    should "not delete assigned contacts to other leader" do
+      @leader1.remove_assigned_contacts(@org1)
+      assert(ContactAssignment.all.include?(@assignment3), "This assignment should not be deleted")
+    end
+    should "not delete assigned contacts from other org" do
+      @leader1.remove_assigned_contacts(@org1)
+      assert(ContactAssignment.all.include?(@assignment4), "This assignment should not be deleted")
+    end
+    should "not delete any assignments if no one is assigned to a leader" do
+      @leader3.remove_assigned_contacts(@org1)
+      initial_assignment_count = ContactAssignment.count
+      assert_equal(initial_assignment_count, ContactAssignment.count)
+    end
+  end
+  
+  context "merging a contact" do
+    setup do
+      @contact = Factory(:person)
+      @org = Factory(:organization)
+      
+      @person = Factory(:person)
+      @person_phone1 = @person.phone_numbers.create(number: '1111111', location: 'mobile')
+      @person_location1 = @person.locations.create(provider: "provider", name: "Location1", location_id: "1")
+      @person_friend1 = @person.friends.create(provider: "provider", name: "Friend1", uid: "1")
+      @person_interest1 = @person.interests.create(provider: "provider", name: "Interest1",
+        interest_id: "1", category: "category")
+      @person_education1 = @person.education_histories.create(school_type: "HighSchool", provider: "provider", 
+        school_name: "SchoolName1", school_id: "1")
+      @person_followup1 = @person.followup_comments.create(contact_id: @contact.id, comment: "Comment1", 
+        organization_id: @org.id)
+      @person_comment1 = @person.comments_on_me.create(commenter_id: @contact.id, comment: "Comment1", 
+        organization_id: @org.id)
+      @person_email1 = @person.email_addresses.create(email: 'person@email.com')
+      
+      @other = Factory(:person)
+      @other_phone1 = @other.phone_numbers.create(number: '3333333', location: 'mobile')
+      @other_location1 = @other.locations.create(provider: "provider", name: "Location2", location_id: "2")
+      @other_friend1 = @other.friends.create(provider: "provider", name: "Friend2", uid: "2")
+      @other_interest1 = @other.interests.create(provider: "provider", name: "Interest2",
+        interest_id: "2", category: "category")
+      @other_education1 = @other.education_histories.create(school_type: "HighSchool", provider: "provider", 
+        school_name: "SchoolName2", school_id: "2")
+      @other_followup1 = @other.followup_comments.create(contact_id: @contact.id, comment: "Comment2", 
+        organization_id: @org.id)
+      @other_comment1 = @other.comments_on_me.create(commenter_id: @contact.id, comment: "Comment2", 
+        organization_id: @org.id)
+      @other_email1 = @other.email_addresses.create(email: 'other@email.com')
+    end
+    should "merge the phone numbers" do
+      @person.merge(@other)
+      assert(@person.phone_numbers.include?(@person_phone1), "Person still have its phone number")
+      assert(@person.phone_numbers.include?(@other_phone1), "Person should aquire other person's phone number data")
+    end
+    should "merge the locations" do
+      @person.merge(@other)
+      assert(@person.locations.include?(@person_location1), "Person still have its location")
+      assert(@person.locations.include?(@other_location1), "Person should aquire other person's location data")
+    end
+    should "merge the friends" do
+      @person.merge(@other)
+      assert(@person.friends.include?(@person_friend1), "Person still have its friend")
+      assert(@person.friends.include?(@other_friend1), "Person should aquire other person's friend data")
+    end
+    should "merge the interests" do
+      @person.merge(@other)
+      assert(@person.interests.include?(@person_interest1), "Person still have its interest")
+      assert(@person.interests.include?(@other_interest1), "Person should aquire other person's interest data")
+    end
+    should "merge the educational history" do
+      @person.merge(@other)
+      assert(@person.education_histories.include?(@person_education1), "Person still have its education history")
+      assert(@person.education_histories.include?(@other_education1), "Person should aquire other person's education history data")
+    end
+    should "merge the followup comments" do
+      @person.merge(@other)
+      assert_equal(@person_followup1.commenter_id, @person.personID, "Person still have its followup comment")
+      assert_equal(@other_followup1.commenter_id, @person.personID, "Person should aquire other person's followup comment data")
+    end
+    should "merge the comments from other people" do
+      @person.merge(@other)
+      assert_equal(@person_comment1.contact_id, @person.personID, "Person still have its comments from other people")
+      assert_equal(@other_comment1.contact_id, @person.personID, "Person should aquire other person's comments from other people data")
+    end
+    should "merge the email address" do
+      @person.merge(@other)
+      assert(@person.email_addresses.include?(@person_email1), "Person still have its email address")
+      assert(@person.email_addresses.include?(@other_email1), "Person should aquire other person's email address data")
+    end
   end
   
   context "a person" do

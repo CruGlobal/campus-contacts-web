@@ -64,8 +64,10 @@ class ContactsController < ApplicationController
   end
 
   def search_by_name_and_email
-    people = current_organization.people.search_by_name_or_email(params[:term], current_organization.id).uniq
     
+    people = params[:include_archived] ?
+      current_organization.people.search_by_name_or_email(params[:term], current_organization.id).uniq :
+      current_organization.people.search_by_name_or_email(params[:term], current_organization.id).uniq.archived_not_included
 
     respond_to do |wants|
       wants.json { render text: people.collect{|person| {"label" => "#{person.name} (#{person.email})", "id" => person.id}}.to_json }
@@ -120,14 +122,16 @@ class ContactsController < ApplicationController
   
   def create
     @organization = current_organization
-    person = Person.where(firstName: params[:person][:firstName], lastName: params[:person][:lastName])
-    if person.present?
-      params[:id] = person.first.id
-      params[:answers] = nil
-      update
-    else
-      create_contact
-    end
+    #if params[:person].present?
+      #person = Person.where(firstName: params[:person][:firstName], lastName: params[:person][:lastName])
+      #if person.present?
+        #params[:id] = person.first.id
+        #params[:answers] = nil
+        #update
+      #else
+        create_contact
+      #end
+    #end
   end
   
   def destroy
@@ -150,6 +154,7 @@ class ContactsController < ApplicationController
   def send_reminder
     to_ids = params[:to].split(',')
     leaders = current_organization.leaders.where(personID: to_ids)
+
     if leaders.present?
       ContactsMailer.enqueue.reminder(leaders.collect(&:email).compact, current_person.email, params[:subject], params[:body])
     end
@@ -203,7 +208,7 @@ class ContactsController < ApplicationController
           when 'all'
             @people = @organization.contacts
           when 'unassigned'
-            @people = unassigned_people(@organization)
+            @people = @organization.unassigned_contacts
           when 'progress'
             @people = @organization.inprogress_contacts
           when 'no_activity'
@@ -224,7 +229,7 @@ class ContactsController < ApplicationController
         @people = @people.includes(:organizational_roles).where("organizational_roles.organization_id" => @organization.id)
       end
       if params[:q] && params[:q][:s].include?('mh_answer_sheets')
-        @people = @people.joins(:answer_sheets => :survey).where('mh_surveys.organization_id' => @organization.id)
+        @people = current_organization.contacts.get_and_order_by_latest_answer_sheet_answered(params[:q][:s], current_organization.id)
       end
       if params[:survey].present?
         @people = @people.joins(:answer_sheets).where("mh_answer_sheets.survey_id" => params[:survey])
@@ -297,8 +302,9 @@ class ContactsController < ApplicationController
 
       @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
       # raise @q.sorts.inspect
-      @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? params[:q][:s] : ['lastName, firstName']).group('ministry_person.personID')
+      @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? "" : ['lastName, firstName']).group('ministry_person.personID')
       @all_people = @people
+      @people_for_labels = Person.people_for_labels(current_organization)
       @people = @people.page(params[:page])
     
     end
@@ -327,7 +333,7 @@ class ContactsController < ApplicationController
         
         answers[answer_sheet.person_id] ||= {}
         questions.each do |q|
-          answers[answer_sheet.person_id][q.id] = [q.display_response(answer_sheet), answer_sheet.updated_at]# if q.display_response(answer_sheet).present? or (q.attribute_name == "email" and q.object_name == 
+          answers[answer_sheet.person_id][q.id] = [q.display_response(answer_sheet), answer_sheet.updated_at]# if q.display_response(answer_sheet).present?# or (q.attribute_name == "email" and q.object_name == 
         end
       end
       answers

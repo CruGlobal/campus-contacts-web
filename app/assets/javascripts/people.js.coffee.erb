@@ -10,6 +10,13 @@ $ ->
     $('#email').val().length > 0 ||  $('#phone').val().length > 0
       $('#advanced_filter_box').show()
       false
+      
+  $('#include_archived').live 'click', ->
+    if $(this).is(':checked')
+      document.location = '/people?include_archived=true'
+    else
+      document.location = '/people'
+    
   
   $('.action_dropdown').live 'mouseenter', ->
     $(this).click();
@@ -90,12 +97,16 @@ $ ->
     num_selected = ids.length
     if num_selected  > 0
       if(confirm('Are you sure you want to delete ' + num_selected + ' people permanently?'))
-        $('.id_checkbox:checked').each ->
-          $(this).closest('tr').fadeOut();
-        $('#ids').val(ids.join(','))
-        url = $(this).attr('href')
-        params = $('#people_form').serialize();
-        $.post(url, params)
+        $.ajax
+          type: 'POST',
+          url: '/people/bulk_delete',
+          data: 'ids='+ids,
+          success: (data) ->
+            if data.indexOf("success") != -1 #there might be a better way of doing this other than just basing the success on the returned data
+              $('.id_checkbox:checked').each ->
+                $(this).closest('tr').fadeOut();
+            else
+              $.a(data)
     false
   
   fromViewingFBProfile = false  

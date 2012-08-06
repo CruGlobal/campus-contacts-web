@@ -18,7 +18,7 @@
         <%= t('.login_paragraph') + ": " + t('.login_paragraph_tip') %>
       </label>
       <div class="field">
-        <%= f.text_area :login_paragraph, rows: 3, :placeholder =>  t('sessions.new.login_paragraph_mhub') %>
+        <%= f.text_area :login_paragraph, rows: 3, value: @survey.login_paragraph.present? ? @survey.login_paragraph : t('sessions.new.login_paragraph_mhub') %>
       </div>
     </div>
   </div>
@@ -116,6 +116,46 @@
           </label>
         </div>
       <% end %>
+    </div>
+  </div>
+
+  <div class="stepwrap rwidth">
+    <div class="stepnumber">
+      <%= image_tag("step7.png") %>
+    </div>
+    <div class="stepcontent">
+      <div>
+        <strong><%= t('.customize_look') %></strong>
+        <br /><br />
+      </div>
+      <%= f.label :logo, t('.logo') %>
+      <div class="field">
+        <%= f.file_field :logo %>
+      </div>
+
+      <%= f.label :background_color, t('.background_color') %>
+      <div class="field">
+        <%= f.text_field :background_color %>
+      </div>
+
+      <%= f.label :text_color, t('.text_color') %>
+      <div class="field">
+        <%= f.text_field :text_color %>
+      </div>
+
+
+      <%= f.label :css_file, t('.css_file') %>
+      <div class="field">
+        <%= f.file_field :css_file %>
+      </div>
+
+      <%= f.label :css, t('.css') %>
+      <div class="field">
+        <%= f.text_area :css %>
+      </div>
+
+
+
       <div class="actions">
         <%= f.submit %>
       </div>

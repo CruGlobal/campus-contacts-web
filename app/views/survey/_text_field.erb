@@ -1,0 +1,5 @@
+<% name = defined?(survey) ? "answers[#{survey.id}][#{text_field.id}]" : "answers[#{text_field.id}]" %>
+<%= text_field_tag name, text_field.response(answer_sheet), 
+      :id => dom_id(text_field),
+      :maxlength => text_field.max_length.to_i > 0 ? text_field.max_length : 255 %>
+

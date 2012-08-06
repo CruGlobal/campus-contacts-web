@@ -1,8 +1,8 @@
 # Be sure to restart your server when you modify this file.
 
 require 'action_dispatch/middleware/session/dalli_store'
-if Rails.env.rackspace?
-  servers = ['10.179.150.27']
+if Rails.env.production?
+  servers = ['10.180.4.101', '10.180.4.111']
 else
   servers = ['127.0.0.1']
 end

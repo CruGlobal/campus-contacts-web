@@ -28,18 +28,17 @@
             <% if current_person.organizations.length > 1 || current_person.organizations.detect(&:show_sub_orgs?) %>
               <%= link_to(current_organization, '/contacts') %>
               <ul class="under">
-                <% current_person.organizations.order('organizations.name').each do |org| %>
-                  <% if org.status == "active" %>                  
-                    <%= render 'application/org', org: org, primary: current_person.primary_organization == org %>
-                  <% end %>
-                <% end %>
+                <%= render partial: 'application/org', collection: current_person.organizations.order('organizations.name') %>
+                <%# current_person.organizations.order('organizations.name').each do |org| %>
+                  <%#= render 'application/org', org: org %>
+                <%# end %>
               </ul>
             <% else %>
               <%= link_to(current_organization, user_root_path) %>
             <% end %>
           </li>
         <% end %>
-        <li><%= link_to(t('nav.my_profile'), person_path(current_person)) %></li>
+        <li><%= link_to(t('nav.my_profile', name: current_user.to_s), person_path(current_person)) %></li>
         <li>
           <%= link_to(t('nav.logout'), '#', onclick: "$.mh.logout()")  %> 
         </li>   
