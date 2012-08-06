@@ -98,10 +98,13 @@ class SurveyResponsesController < ApplicationController
           create_contact_at_org(@person, @survey.organization)
           FollowupComment.create_from_survey(@survey.organization, @person, @survey.questions, @answer_sheet)
           respond_to do |wants|
-            if @survey.login_option == 2
+            if !cookies[:survey_mode] && @survey.login_option == 2
               wants.html { render :facebook, layout: 'mhub' }
               wants.mobile { render :facebook, layout: 'mhub' }
             else
+              # If we saved successfully, destroy the session
+              session[:person_id] = nil
+              session[:survey_id] = nil
               wants.html { render :thanks, layout: 'mhub'}
               wants.mobile { render :thanks }
             end
