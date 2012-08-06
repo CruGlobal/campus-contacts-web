@@ -293,8 +293,8 @@ class ContactsControllerTest < ActionController::TestCase
   
     should "search for contacts" do
       xhr :get, :index, {:search => "1", :firstName => "Neil", :lastName => "delaCruz"}
-      puts assigns(:people).inspect
+      assert_response :success
     end
-  
+    #more tests to come
   end
 end
