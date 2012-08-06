@@ -68,7 +68,7 @@ class SurveysController < ApplicationController
       return false
     end
     cookies[:survey_mode] = 1
-    redirect_to sign_out_url(next: short_survey_url(@survey.id))
+    redirect_to short_survey_url(@survey.id)
   end
   
   # Exit survey mode

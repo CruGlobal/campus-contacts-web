@@ -13,8 +13,9 @@ class SurveyResponsesController < ApplicationController
     end
 
     # If they haven't skipped facebook already, send them to the login page
-    unless params[:nologin] == 'true'
-      return unless authenticate_user! 
+    # Also skip login if we're in survey mode
+    unless cookies[:survey_mode] || params[:nologin] == 'true'
+      return unless authenticate_user!
     end
 
     # If they texted in, save their phone number
