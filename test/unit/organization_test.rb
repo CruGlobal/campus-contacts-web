@@ -90,6 +90,33 @@ class OrganizationTest < ActiveSupport::TestCase
   test "unassigned_people" do
 
   end
+  
+  context "retrieving active keywords" do
+    setup do
+      @person = Factory(:person)
+      @org1 = Factory(:organization)
+      @org2 = Factory(:organization)
+      @keyword1 = Factory(:sms_keyword, :organization => @org1, state: 'active')
+      @keyword2 = Factory(:sms_keyword, :organization => @org1, state: 'active')
+      @keyword3 = Factory(:sms_keyword, :organization => @org2, state: 'active')
+      @keyword4 = Factory(:sms_keyword, :organization => @org1)
+      @keyword5 = Factory(:sms_keyword, :organization => @org2)
+    end
+    should "return the organization keywords" do
+      results = @org1.active_keywords
+      assert_equal(results.count, 2, "The resuts should be = 2")
+      assert(results.include?(@keyword1), "This should be returned")
+      assert(results.include?(@keyword2), "This should be returned")
+    end
+    should "not return not active keyword" do
+      results = @org1.active_keywords
+      assert(!results.include?(@keyword4), "This not should be returned")
+    end
+    should "not return active keyword of other org" do
+      results = @org1.active_keywords
+      assert(!results.include?(@keyword3), "This not should be returned")
+    end
+  end
 
   test "terminology enum" do
     org1 = Factory(:organization)

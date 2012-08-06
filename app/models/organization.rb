@@ -85,6 +85,10 @@ class Organization < ActiveRecord::Base
     #   Survey.where(organization_id: child_ids)
     # end
 
+    def active_keywords
+      keywords.where(state: 'active')
+    end
+
     def self_and_children_ids
       @self_and_children_ids ||= [id] + child_ids
     end
