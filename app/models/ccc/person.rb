@@ -167,6 +167,7 @@ module Ccc
         other.reload
         other.destroy
         save(validate: false)
+        self
       end
     end
   end

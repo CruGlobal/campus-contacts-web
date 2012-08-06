@@ -157,6 +157,7 @@ Mh::Application.routes.draw do
     end
     collection do
       get :index_admin
+      get :stop
     end
     resources :questions, controller: "surveys/questions" do
       member do

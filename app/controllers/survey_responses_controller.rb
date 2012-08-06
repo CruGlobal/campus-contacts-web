@@ -14,7 +14,7 @@ class SurveyResponsesController < ApplicationController
 
     # If they haven't skipped facebook already, send them to the login page
     # Also skip login if we're in survey mode
-    unless cookies[:survey_mode] || params[:nologin] == 'true'
+    unless cookies[:survey_mode] == '1' || params[:nologin] == 'true'
       return unless authenticate_user!
     end
 
@@ -98,7 +98,7 @@ class SurveyResponsesController < ApplicationController
           create_contact_at_org(@person, @survey.organization)
           FollowupComment.create_from_survey(@survey.organization, @person, @survey.questions, @answer_sheet)
           respond_to do |wants|
-            if !cookies[:survey_mode] && @survey.login_option == 2
+            if !(cookies[:survey_mode] == '1') && @survey.login_option == 2
               wants.html { render :facebook, layout: 'mhub' }
               wants.mobile { render :facebook, layout: 'mhub' }
             else
