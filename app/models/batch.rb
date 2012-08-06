@@ -16,13 +16,19 @@ class Batch # < ActiveRecord::Base
           if admin.email.present?
             formated_transferred_contacts = Array.new
             transferred_contacts.each do |contact|
-              transfer_log = Hash.new
-              transfer_log['transferer_name'] = contact.transferred_by.name
-              transfer_log['transferer_email'] = contact.transferred_by.email
-              transfer_log['old_org_name'] = contact.old_organization.name
-              transfer_log['contact_name'] = contact.person.name
-              transfer_log['contact_email'] = contact.person.email
-              formated_transferred_contacts << transfer_log
+              begin
+                transfer_log = Hash.new
+                transfer_log['transferer_name'] = contact.transferred_by.name
+                transfer_log['transferer_email'] = contact.transferred_by.email
+                transfer_log['old_org_name'] = contact.old_organization.name
+                transfer_log['contact_name'] = contact.person.name
+                transfer_log['contact_email'] = contact.person.email
+                formated_transferred_contacts << transfer_log
+              rescue => e
+                # something wrong with that person (probably missing)
+                Rails.env.production? ? Airbrake.notify(e) : (raise e)
+              end
+
             end
     
             # OrganizationMailer.enqueue.notify_person_transfer(admin.email, intro, formated_transferred_contacts)
@@ -57,10 +63,15 @@ class Batch # < ActiveRecord::Base
           if admin.email.present?
             formated_new_contacts = Array.new
             new_contacts.each do |new_person|
-              new_contact_log = Hash.new
-              new_contact_log['person_name'] = new_person.person.name
-              new_contact_log['person_email'] = new_person.person.email
-              formated_new_contacts << new_contact_log
+              begin
+                new_contact_log = Hash.new
+                new_contact_log['person_name'] = new_person.person.name
+                new_contact_log['person_email'] = new_person.person.email
+                formated_new_contacts << new_contact_log
+              rescue => e
+                # something wrong with that person (probably missing)
+                Rails.env.production? ? Airbrake.notify(e) : (raise e)
+              end
             end
             # OrganizationMailer.enqueue.notify_new_people(admin.email, intro, formated_new_contacts)
             OrganizationMailer.notify_new_people(admin.email, intro, formated_new_contacts).deliver
