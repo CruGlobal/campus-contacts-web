@@ -93,7 +93,7 @@
       <th><%= sort_link @q, 'phone_numbers.number', t('.phone_number'), params %></th>
       <% @questions.each do |q| %>
         <th class="<%= dom_id(q) %>">
-          <%= q.label %>
+          <%= q.slug.present? ? q.slug : q.label %>
           <%= link_to("(#{t('nav.hide')})", hide_survey_question_path(@organization.surveys.first, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
         </th>
       <% end %>

@@ -397,6 +397,8 @@ en:
         delete_tip: "If this question has been answered any contact, it will be archived. If no one has answered this question yet it will be deleted."
       short_answer_form:
         question: 'Question:'
+        column_header: 'Column Header'
+        column_header_hint: 'This is what will display at the top of the column when looking at contacts later'
       index: 
         manage: Manage Survey Questions
         note: "Note: First and Last name will be automatically added to every survey. There's no need for you to add those."
@@ -572,9 +574,9 @@ en:
         
         %{name}
       filter: 'Search'
-      first_name: 'First Name'
-      last_name: 'Last Name'
-      phone_number: 'Phone Number'
+      first_name: 'First'
+      last_name: 'Last'
+      phone_number: 'Phone'
       leaders: Leaders
       assign_to: "Assign To:"
       assigned_to: "Assigned To"
