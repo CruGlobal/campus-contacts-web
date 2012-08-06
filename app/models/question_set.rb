@@ -50,7 +50,7 @@ class QuestionSet
         answer = @answer_sheet.answers.find_by_question_id(question.id)
         question_rules = SurveyElement.find_by_element_id(question.id).question_rules
         
-        if question_rules.present?
+        if answer.present? && question_rules.present?
           question_rules.each do |question_rule|
             triggers = question_rule.trigger_keywords.gsub(' ','').split(',')
             code = question_rule.rule.rule_code
@@ -69,7 +69,6 @@ class QuestionSet
                 leaders = Person.find(question_rule.extra_parameters['leaders'])
                 recipients = leaders.collect{|p| "#{p.name} <#{p.email}>"}.join(", ")
                 PeopleMailer.enqueue.notify_on_survey_answer(recipients, question_rule, keyword_found, answer)
-                # PeopleMailer.notify_on_survey_answer(recipients, question_rule, keyword_found, answer).deliver
               end
               
             when 'AUTOASSIGN'

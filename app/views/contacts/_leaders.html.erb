@@ -9,14 +9,14 @@
   </div>
 <% end %>
 <ul class="leftmenu">
-  <li class="heading selected">
+<!--   <li class="heading selected">
     <h3><%= t('people.index.labels') %></h3>
   </li>
   <li>
     <ul id="label" class="indent expandable" data-height="244">
       <% roles = current_organization.roles.default_roles_desc + current_organization.roles.non_default_roles_asc %>
       <% roles.each do |role| %>
-        <% count = @people_for_labels.where('organizational_roles.role_id' => role.id).count %>
+        <% count = Person.people_for_labels(current_organization).where('organizational_roles.role_id' => role.id).count %>
         <li style="<%= 'display:none' if count == 0 %>">
           <span class="name">
             <%= link_to(role, :role => role.id) %>
@@ -28,7 +28,7 @@
         <span class="name">
           <%= link_to(t('contacts.index.all'), params.except(:role)) %>
         </span>
-        (<%= @people_for_labels.count %>)
+        (<%= Person.people_for_labels(current_organization).count %>)
       </li>
     </ul>
     <a href="#leaders" class="moredown" style="display:none">
@@ -36,7 +36,8 @@
         <strong>+</strong> <%= t('.show_more') %>
       </span>
     </a>
-  </li>
+    </li>
+    -->
   <li class="heading selected">
     <% if can? :create, Person %>
       <%= link_to(raw(t('contacts.index.add') + " " + image_tag('add.png')), '#', class: 'add-leader listaction') %>

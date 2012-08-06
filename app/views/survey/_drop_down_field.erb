@@ -1,5 +1,4 @@
-
-  <% name = defined?(survey) ? "answers[#{survey.id}][#{drop_down_field.id}]" : "answers[#{drop_down_field.id}]" %>
+<% name = defined?(survey) ? "answers[#{survey.id}][#{drop_down_field.id}]" : "answers[#{drop_down_field.id}]" %>
 <%= select_tag name, 
       options_for_select([["Choose One", '']] + drop_down_field.choices, drop_down_field.response(answer_sheet).to_s), 
       :class => 'select ' + drop_down_field.validation_class(answer_sheet), 
