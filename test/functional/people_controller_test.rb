@@ -712,6 +712,47 @@ class PeopleControllerTest < ActionController::TestCase
       xhr :get, :index, {"q"=>{"s"=>"lastName asc"}}
       assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name]
     end
+    
+    context "sorting people by their roles" do
+      # Order of default roles (desc order)
+      # Admin, Leader, Involved, Alumni, Contact
+      # Non-default roles will be ordered alphabetically
+      setup do
+        @alumni1 = Factory(:user_with_auxs)
+        @alumni1.person.update_attributes({firstName: "G", lastName: "G"})
+        Factory(:organizational_role, organization: @org, person: @alumni1.person, role: Role.alumni)
+        Factory(:organizational_role, organization: @org, person: @admin1.person, role: Role.leader) # add roles to admin
+        Factory(:organizational_role, organization: @org, person: @admin1.person, role: Role.alumni) # add roles to admin
+        Factory(:organizational_role, organization: @org, person: @leader1.person, role: Role.involved) # add roles to leader
+        Factory(:organizational_role, organization: @org, person: @involved1.person, role: Role.alumni) # add roles to inolved
+      end
+      
+      should "return people sorted by their roles (default roles)" do
+        xhr :get, :index, {"q"=>{"s"=>"role_id desc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @involved1.person.name, @alumni1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name]
+        xhr :get, :index, {"q"=>{"s"=>"role_id asc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@contact1.person.name, @contact2.person.name, @contact3.person.name, @alumni1.person.name, @involved1.person.name, @leader1.person.name, @admin1.person.name]
+      end
+      
+      should "return people sorted by their roles (with non-default roles)" do
+        @a_role = Factory(:role, organization: @org, name: 'a_role')
+        @b_role = Factory(:role, organization: @org, name: 'b_role')
+        @c_role = Factory(:role, organization: @org, name: 'c_role')
+        
+        @a_role_person = Factory(:person, firstName: 'H', lastName: 'H')
+        Factory(:organizational_role, organization: @org, person: @a_role_person, role: @a_role)
+        @b_role_person = Factory(:person, firstName: 'I', lastName: 'I')
+        Factory(:organizational_role, organization: @org, person: @b_role_person, role: @b_role)
+        @c_role_person = Factory(:person, firstName: 'J', lastName: 'J')
+        Factory(:organizational_role, organization: @org, person: @c_role_person, role: @c_role)
+        
+      
+        xhr :get, :index, {"q"=>{"s"=>"role_id desc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @involved1.person.name, @alumni1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @c_role_person.name, @b_role_person.name, @a_role_person.name]
+        xhr :get, :index, {"q"=>{"s"=>"role_id asc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@contact1.person.name, @contact2.person.name, @contact3.person.name, @alumni1.person.name, @involved1.person.name, @leader1.person.name, @admin1.person.name, @a_role_person.name, @b_role_person.name, @c_role_person.name]
+      end
+    end
   end
   
   context "Updating a person" do
