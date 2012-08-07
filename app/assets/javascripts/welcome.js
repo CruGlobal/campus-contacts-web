@@ -44,3 +44,16 @@ function click_url(){
     $('#'+click_id).click()
   }
 }
+
+function send_message_guide_more(){
+  $('#send_message_guide').dialog({
+    height: 500,
+    buttons: {
+      'Close': function(){
+        $(this).dialog('close')
+      }
+    }
+  })
+  $('#send_message_guide').dialog({position: 'center'})
+  $('#send_message_guide_video').fadeIn()
+}
