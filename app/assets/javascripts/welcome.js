@@ -49,7 +49,7 @@ function send_message_guide_more(){
   $('#send_message_guide').dialog({
     height: 500,
     buttons: {
-      Cancel: function(){
+      'Close': function(){
         $(this).dialog('close')
       }
     }
