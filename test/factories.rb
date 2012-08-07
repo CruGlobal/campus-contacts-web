@@ -384,4 +384,14 @@ FactoryGirl.define do
     notified false
   end
   
+  factory :rule do
+    name  'Automatic Assignment of Contact'
+    rule_code   'AUTOASSIGN'
+  end
+  
+  factory :question_rule do
+    association :rule
+    association :survey_element
+  end
+  
 end
