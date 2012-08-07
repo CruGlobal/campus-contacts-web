@@ -753,6 +753,28 @@ class PeopleControllerTest < ActionController::TestCase
         assert_equal assigns(:all_people).collect(&:name), [@contact1.person.name, @contact2.person.name, @contact3.person.name, @alumni1.person.name, @involved1.person.name, @leader1.person.name, @admin1.person.name, @a_role_person.name, @b_role_person.name, @c_role_person.name]
       end
     end
+    
+    context "sorting people by their gender" do
+      setup do
+        @leader1.person.update_attributes({gender: "male"})
+        @admin1.person.update_attributes({gender: "male"})
+        @contact1.person.update_attributes({gender: "male"})
+        @contact2.person.update_attributes({gender: "female"})
+        @contact3.person.update_attributes({gender: "female"})
+        @involved1.person.update_attributes({gender: ""})
+      end
+      
+      should "sort asc" do
+        xhr :get, :index, {"q"=>{"s"=>"gender desc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name]
+        
+      end
+      
+      should "sort desc" do
+        xhr :get, :index, {"q"=>{"s"=>"gender asc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@involved1.person.name, @contact2.person.name, @contact3.person.name, @admin1.person.name, @leader1.person.name, @contact1.person.name]
+      end
+    end
   end
   
   context "Updating a person" do
