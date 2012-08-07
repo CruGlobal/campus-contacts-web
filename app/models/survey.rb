@@ -48,13 +48,15 @@ class Survey < ActiveRecord::Base
     rule_id = Rule.find_by_rule_code('AUTOASSIGN')
     rules = question_rules.where(rule_id: rule_id)
     rules.each do |rule|
-      if rule.extra_parameters['type'].downcase == type.downcase
-        if id.present?
-          if rule.extra_parameters['id'].to_s == id.to_s
+      if rule.extra_parameters.present?
+        if rule.extra_parameters['type'].downcase == type.downcase
+          if id.present?
+            if rule.extra_parameters['id'].to_s == id.to_s
+              return true
+            end
+          else
             return true
           end
-        else
-          return true
         end
       end
     end
