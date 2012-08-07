@@ -274,7 +274,7 @@ class Person < ActiveRecord::Base
   
   def roles_by_org_id(org_id)
     unless @roles_by_org_id 
-      @roles_by_org_id = Hash[OrganizationalRole.connection.select_all("select organization_id, group_concat(role_id) as role_ids from organizational_roles where person_id = #{p.id} group by organization_id").collect { |row| [row['organization_id'], row['role_ids'].split(',').map(&:to_i) ]}]
+      @roles_by_org_id = Hash[OrganizationalRole.connection.select_all("select organization_id, group_concat(role_id) as role_ids from organizational_roles where person_id = #{id} group by organization_id").collect { |row| [row['organization_id'], row['role_ids'].split(',').map(&:to_i) ]}]
     end
     @roles_by_org_id[org_id]
   end
@@ -285,7 +285,7 @@ class Person < ActiveRecord::Base
     (o ? o.children : organizations).order('name').each do |org|
       # collect roles associated with each org
       @org_ids[org.id] ||= {}
-      @org_ids[org.id]['roles'] ||= (roles_by_org_id(org_id) + parent_roles).uniq
+      @org_ids[org.id]['roles'] ||= (roles_by_org_id(org.id) + Array.wrap(parent_roles)).uniq
       orgs[org.id] = (org.show_sub_orgs? ? org_tree_node(org, @org_ids[org.id]['roles']) : {})
     end
     orgs

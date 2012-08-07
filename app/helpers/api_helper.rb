@@ -63,7 +63,6 @@ module ApiHelper
   end
   
   def valid_org_ids
-    raise 'hi'
     # @valid_orgs ||= current_person.organizations.collect { |x| x.subtree.collect(&:id)}.flatten.uniq
     @valid_org_ids ||= current_person.org_ids.keys
   end

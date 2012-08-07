@@ -22,7 +22,7 @@ class OrganizationalRole < ActiveRecord::Base
   after_destroy :clear_person_org_cache
 
   def clear_person_org_cache
-    person.clear_org_cache
+    person.clear_org_cache if person
   end
   
   def merge(other)
