@@ -49,7 +49,6 @@ class Surveys::QuestionsController < ApplicationController
   # POST /questions
   # POST /questions.xml
   def create
-
     if (params[:question_id])
       @question = Element.find(params[:question_id])
     else
@@ -186,7 +185,7 @@ class Surveys::QuestionsController < ApplicationController
       
       rule = Rule.find_by_rule_code("AUTOASSIGN")
       triggers_array = Array.new
-      triggers = params[:assignment_trigger_words].split(',')
+      triggers = params[:assignment_trigger_words].present? ? params[:assignment_trigger_words].split(',') : []
       triggers.each do |t|
         triggers_array << t.strip if t.strip.present?
       end

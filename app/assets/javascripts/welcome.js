@@ -46,13 +46,13 @@ function click_url(){
 }
 
 function send_message_guide_more(){
+  custom_buttons = {}
+  custom_buttons[t('dashboard.close')] = function(){
+    $(this).dialog('close')
+  }
   $('#send_message_guide').dialog({
     height: 500,
-    buttons: {
-      'Close': function(){
-        $(this).dialog('close')
-      }
-    }
+    buttons: custom_buttons
   })
   $('#send_message_guide').dialog({position: 'center'})
   $('#send_message_guide_video').fadeIn()
