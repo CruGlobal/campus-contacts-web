@@ -84,6 +84,21 @@ class ContactsControllerTest < ActionController::TestCase
         assert_not_empty contact.organizational_roles.where(role_id: Role.contact.id), "Contact role of contact not unarchived"
         assert_not_empty @org.contacts.joins(:email_addresses).where(firstName: "Jon", lastName: "Snow", "email_addresses.email" => "jonsnow@email.com")
       end
+      
+      should "remove the being 'archived' Contact role of a Person when it is going to be created again (using existing firstName, lastName and email) in 'All Contacts' tab" do
+        contact = Factory(:person, firstName: "Jon", lastName: "Snow")
+        email = Factory(:email_address, email: "jonsnow@email.com", person: contact)
+        Factory(:organizational_role, role: Role.contact, person: contact, organization: @org)
+        assert_not_empty contact.organizational_roles.where(role_id: Role.contact.id)
+        assert_not_empty @org.contacts.joins(:email_addresses).where(firstName: "Jon", lastName: "Snow", "email_addresses.email" => "jonsnow@email.com")
+        #archive contact role
+        contact.organizational_roles.where(role_id: Role.contact.id).first.archive
+        assert_empty contact.organizational_roles.where(role_id: Role.contact.id)
+        assert_empty @org.contacts.joins(:email_addresses).where(firstName: "Jon", lastName: "Snow", "email_addresses.email" => "jonsnow@email.com")
+        xhr :post, :create, {:person => {:firstName => "Jon", :lastName => "Snow", :gender =>"male", :email_address => {:email => "jonsnow@email.com", :primary => 1}}}
+        assert_not_empty contact.organizational_roles.where(role_id: Role.contact.id), "Contact role of contact not unarchived"
+        assert_not_empty @org.contacts.joins(:email_addresses).where(firstName: "Jon", lastName: "Snow", "email_addresses.email" => "jonsnow@email.com")
+      end
     end
     
     context "on index page" do

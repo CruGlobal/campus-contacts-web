@@ -28,9 +28,9 @@ module ContactActions
         NewPerson.create(person_id: @person.id, organization_id: @organization.id)
 
         create_contact_at_org(@person, @organization)
+        @person.unachive_contact_role(@organization)
 
         if params[:assign_to_me] == 'true'
-          @person.unachive_contact_role(@organization)
           ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
           ContactAssignment.create!(person_id: @person.id, organization_id: @organization.id, assigned_to_id: current_person.id)
         end
