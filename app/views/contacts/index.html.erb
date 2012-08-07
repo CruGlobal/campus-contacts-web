@@ -130,3 +130,7 @@
 <div id="add_contact_div" style="display:none" title="<%= t('.add_contact') %>" class="fingerme">
   <%= render 'add_contact', person: Person.new %>
 </div>
+<input type="button" value="Show Message Guide" id="show_message_guide_button" style="display:none">
+<div id="send_message_guide" style="display:none">
+  <%= render 'shared/send_message_guide' %>
+</div>
