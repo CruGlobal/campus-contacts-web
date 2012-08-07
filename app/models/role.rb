@@ -22,27 +22,27 @@ class Role < ActiveRecord::Base
   } }
   
   def self.leader_ids
-    self.leaders.collect(&:id)
+    @leader_ids ||= self.leaders.collect(&:id)
   end
   
   def self.admin
-    Role.find_or_create_by_i18n_and_organization_id('admin', 0)
+    @admin ||= Role.find_or_create_by_i18n_and_organization_id('admin', 0)
   end
   
   def self.leader
-    Role.find_or_create_by_i18n_and_organization_id('leader', 0)
+    @leader ||= Role.find_or_create_by_i18n_and_organization_id('leader', 0)
   end
   
   def self.contact
-    Role.find_or_create_by_i18n_and_organization_id('contact', 0)
+    @contact ||= Role.find_or_create_by_i18n_and_organization_id('contact', 0)
   end
   
   def self.involved
-    Role.find_or_create_by_i18n_and_organization_id('involved', 0)
+    @involved ||= Role.find_or_create_by_i18n_and_organization_id('involved', 0)
   end
   
   def self.alumni
-    Role.find_or_create_by_i18n_and_organization_id('alumni', 0)
+    @alumni ||= Role.find_or_create_by_i18n_and_organization_id('alumni', 0)
   end
   
   def to_s
