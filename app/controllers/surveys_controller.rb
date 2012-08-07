@@ -76,7 +76,7 @@ class SurveysController < ApplicationController
     cookies[:survey_mode] = nil
     cookies[:keyword] = nil
     cookies[:survey_id] = nil
-    redirect_to sign_out_url
+    redirect_to(request.referrer ? :back : 'http://www.missionhub.com')
   end
   
     

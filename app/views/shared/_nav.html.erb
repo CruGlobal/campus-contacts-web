@@ -13,28 +13,25 @@
           <% if current_organization.surveys.present? %>
             <li>
               <% if current_organization.surveys.length == 1 %>
-                <%= link_to(t('nav.enter_survey_mode'), start_survey_url(current_organization.surveys.first, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), :class => "tipit", :title => t('nav.survey_mode_tip'))%>
+                <%= link_to(t('nav.enter_survey_mode'), start_survey_url(current_organization.surveys.first, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), id: 'survey_keywords_mode_link', :class => "tipit", :title => t('nav.survey_mode_tip'))%>
               <% else %>
                 <%= link_to(t('nav.enter_survey_mode'), '#', id: 'survey_keywords_mode_link')%>
-                <ul>
-                  <% current_organization.surveys.each do |survey| %>
-                    <li><div><%= link_to(t('nav.use_keyword', keyword: survey.title), start_survey_url(survey, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), id: 'select_keyword')%></div></li>
-                  <% end %>
-                </ul>
               <% end %>
+              <ul>
+                <% current_organization.surveys.each do |survey| %>
+                  <li><div><%= link_to(t('nav.use_keyword', keyword: survey.title), start_survey_url(survey, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), id: 'select_keyword')%></div></li>
+                <% end %>
+                <li><div><%= link_to(t('nav.exit_survey_mode'), stop_surveys_url(host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), id: 'select_keyword')%></div></li>
+              </ul>
             </li>
           <% end %>
           <li>
-            <% if current_person.organizations.length > 1 || current_person.organizations.detect(&:show_sub_orgs?) %>
-              <%= link_to(current_organization, '/contacts') %>
+            <%= link_to(current_organization, '/contacts') %>
+            <% if current_person.organization_objects.length > 1 %>
               <ul class="under">
-                <%= render partial: 'application/org', collection: current_person.organizations.order('organizations.name') %>
-                <%# current_person.organizations.order('organizations.name').each do |org| %>
-                  <%#= render 'application/org', org: org %>
-                <%# end %>
+                <%= render_org_tree(current_person.organization_tree) %>
+                <%#= render partial: 'application/org', collection: current_person.organizations.order('organizations.name') %>
               </ul>
-            <% else %>
-              <%= link_to(current_organization, user_root_path) %>
             <% end %>
           </li>
         <% end %>

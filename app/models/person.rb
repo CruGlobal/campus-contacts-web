@@ -8,6 +8,9 @@ class Person < ActiveRecord::Base
   self.table_name = 'ministry_person'
   self.primary_key = 'personID'
 
+  serialize :organization_tree_cache, JSON
+  serialize :org_ids_cache, JSON
+
   has_many :person_transfers
   has_many :new_people
   has_one :transferred_by, class_name: "PersonTransfer", foreign_key: "transferred_by_id"
@@ -54,6 +57,8 @@ class Person < ActiveRecord::Base
   accepts_nested_attributes_for :email_addresses, :reject_if => lambda { |a| a[:email].blank? }, allow_destroy: true  
   accepts_nested_attributes_for :phone_numbers, :reject_if => lambda { |a| a[:number].blank? }, allow_destroy: true
   accepts_nested_attributes_for :current_address, allow_destroy: true  
+
+  attr_reader :org_ids
 
   before_save :stamp_changed
   before_create :stamp_created
@@ -184,6 +189,7 @@ class Person < ActiveRecord::Base
     self.save
   end
 
+
   def self.search_by_name(name, organization_ids = nil, scope = nil)
     return scope.where('1 = 0') unless name.present?
     scope ||= Person
@@ -230,6 +236,37 @@ class Person < ActiveRecord::Base
   def leader_in?(org)
     return false unless org
     OrganizationalRole.where(person_id: id, role_id: Role.leader_ids, :organization_id => org.id).present?
+  end
+  def organization_objects
+    organization_tree # make sure the tree is built
+    @organization_objects ||= Hash[org_ids_cache.zip(Organization.find(org_ids_cache))]
+  end
+
+  def organization_tree
+    unless organization_tree_cache.present?
+      self.organization_tree_cache = org_tree_node
+      self.org_ids_cache = @org_ids
+      save(validate: false)
+    end
+    organization_tree_cache
+  end
+
+  def organization_from_id(org_id)
+    begin
+      organization_objects[org_id.to_i]
+    rescue
+      raise org_id.inspect
+    end
+  end
+
+  def org_tree_node(o = nil)
+    orgs = {}
+    @org_ids ||= []
+    (o ? o.children : organizations).each do |org|
+      @org_ids << org.id
+      orgs[org.id] = (org.show_sub_orgs? ? org_tree_node(org) : {})
+    end
+    orgs
   end
 
   def orgs_with_children

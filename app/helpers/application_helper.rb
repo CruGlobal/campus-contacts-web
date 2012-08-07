@@ -35,6 +35,17 @@ module ApplicationHelper
       [parts[0], url_params].join('?')
     end
   end
+
+  def render_org_tree(org_tree)
+    ret = ''
+    org_tree.each do |org_id, children|
+      logger.debug(org_id)
+      org = current_person.organization_from_id(org_id)
+      raise org_id.inspect unless org
+      ret += render(partial: 'application/org', locals: {org: org, children: children})
+    end
+    ret.html_safe
+  end
   
   def site_name
     mhub? ? '' : 'MissionHub'
