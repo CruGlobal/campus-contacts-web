@@ -122,16 +122,8 @@ class ContactsController < ApplicationController
   
   def create
     @organization = current_organization
-    #if params[:person].present?
-      #person = Person.where(firstName: params[:person][:firstName], lastName: params[:person][:lastName])
-      #if person.present?
-        #params[:id] = person.first.id
-        #params[:answers] = nil
-        #update
-      #else
-        create_contact
-      #end
-    #end
+    create_contact
+    
   end
   
   def destroy

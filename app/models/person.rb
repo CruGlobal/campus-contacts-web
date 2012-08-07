@@ -150,9 +150,13 @@ class Person < ActiveRecord::Base
     self.get_deleted.collect()
   end
   
+  def unachive_contact_role(org)
+    OrganizationalRole.where(organization_id: org.id, role_id: Role::CONTACT_ID, person_id: personID).first.unarchive
+  end
+  
   def archive_contact_role(org)
     begin
-      organizational_roles.where(organization_id: org.id, role_id: Role::CONTACT_ID).first.archive
+      OrganizationalRole.where(organization_id: org.id, role_id: Role::CONTACT_ID, person_id: personID).first.archive
     rescue
     
     end
@@ -160,7 +164,7 @@ class Person < ActiveRecord::Base
   
   def archive_leader_role(org)
     begin
-      organizational_roles.where(organization_id: org.id, role_id: Role::LEADER_ID).first.archive
+      OrganizationalRole.where(organization_id: org.id, role_id: Role::LEADER_ID, person_id: personID).first.archive
     rescue
     
     end

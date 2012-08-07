@@ -20,7 +20,6 @@ module ContactActions
       @person, @email, @phone = Person.new_from_params(params[:person])
 
       if @person.save
-
         @questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => false)
 
         save_survey_answers
@@ -31,6 +30,7 @@ module ContactActions
         create_contact_at_org(@person, @organization)
 
         if params[:assign_to_me] == 'true'
+          @person.unachive_contact_role(@organization)
           ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
           ContactAssignment.create!(person_id: @person.id, organization_id: @organization.id, assigned_to_id: current_person.id)
         end
