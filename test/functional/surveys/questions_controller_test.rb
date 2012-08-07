@@ -8,13 +8,17 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
     @survey = @org.surveys.first
     @predefined_survey = Factory(:survey, organization: @org)
     APP_CONFIG['predefined_survey'] = @predefined_survey.id
+    
   end
   
-  #test "should get index" do
-  #  APP_CONFIG['predefined_survey'] = Factory(:survey).id
-  #  get :index, survey_id: @survey.id 
-  #  assert_response :success
-  #end
+  test "should get index" do
+    element = Factory(:choice_field, label: 'foobar', attribute_name: 'phone_number')
+    Factory(:survey_element, survey: @org.surveys.first, element: element, position: 1, archived: true)
+  
+    APP_CONFIG['predefined_survey'] = Factory(:survey).id
+    get :index, survey_id: @survey.id 
+    assert_response :success
+  end
 
   #context "When updating a question" do
   #  setup do
@@ -43,7 +47,7 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
     should "be able to select a predefined or previously used question" do
       puts @org.surveys.inspect
     
-      xhr :post, :create, { :question_id => @q1.id, :survey_id => @org.surveys.first.id}
+      xhr :post, :create, { :question_id => @q2.element.id, :survey_id => @org.surveys.first.id}
       assert_response :success
     end
   end
