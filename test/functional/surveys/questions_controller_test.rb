@@ -45,8 +45,6 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
     end
     
     should "be able to select a predefined or previously used question" do
-      puts @org.surveys.inspect
-    
       xhr :post, :create, { :question_id => @q2.element.id, :survey_id => @org.surveys.first.id}
       assert_response :success
     end
