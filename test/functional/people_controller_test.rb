@@ -629,20 +629,26 @@ class PeopleControllerTest < ActionController::TestCase
       @request.session[:current_organization_id] = @org.id
     
       @admin1 = Factory(:user_with_auxs)
+      @admin1.person.update_attributes({firstName: "A", lastName: "A"})
       Factory(:organizational_role, organization: @org, person: @admin1.person, role: Role.admin)
     
       @leader1 = Factory(:user_with_auxs)
+      @leader1.person.update_attributes({firstName: "B", lastName: "B"})
       Factory(:organizational_role, organization: @org, person: @leader1.person, role: Role.leader)
       
       @contact1 = Factory(:user_with_auxs)
       Factory(:organizational_role, organization: @org, person: @contact1.person, role: Role.contact)
+      @contact1.person.update_attributes({firstName: "C", lastName: "C"})
       @contact2 = Factory(:user_with_auxs)
       Factory(:organizational_role, organization: @org, person: @contact2.person, role: Role.contact)
+      @contact2.person.update_attributes({firstName: "D", lastName: "D"})
       @contact3 = Factory(:user_with_auxs)
       Factory(:organizational_role, organization: @org, person: @contact3.person, role: Role.contact)
+      @contact3.person.update_attributes({firstName: "E", lastName: "E"})
       
       @involved1 = Factory(:user_with_auxs)
       Factory(:organizational_role, organization: @org, person: @involved1.person, role: Role.involved)
+      @involved1.person.update_attributes({firstName: "F", lastName: "F"})
     end
     
     should "return admins when Admin link is clicked" do
@@ -690,6 +696,21 @@ class PeopleControllerTest < ActionController::TestCase
       
       xhr :get, :index, { :include_archived => true }
       assert_equal assigns(:all_people).collect{|x| x.personID}, [@admin1.person.personID, @leader1.person.personID, @contact1.person.personID, @contact2.person.personID, @contact3.person.personID, @involved1.person.personID].sort { |x, y| x <=> y }
+    end
+    
+    should "return people sorted alphabetically by firstName" do
+      
+      xhr :get, :index, {"q"=>{"s"=>"firstName desc"}}
+      assert_equal assigns(:all_people).collect(&:name), [@involved1.person.name, @contact3.person.name, @contact2.person.name, @contact1.person.name, @leader1.person.name, @admin1.person.name]
+      
+      xhr :get, :index, {"q"=>{"s"=>"firstName asc"}}
+      assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name]
+      
+      xhr :get, :index, {"q"=>{"s"=>"lastName desc"}}
+      assert_equal assigns(:all_people).collect(&:name), [@involved1.person.name, @contact3.person.name, @contact2.person.name, @contact1.person.name, @leader1.person.name, @admin1.person.name]
+      
+      xhr :get, :index, {"q"=>{"s"=>"lastName asc"}}
+      assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name]
     end
   end
   
