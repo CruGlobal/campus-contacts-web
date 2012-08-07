@@ -58,8 +58,6 @@ class Person < ActiveRecord::Base
   accepts_nested_attributes_for :phone_numbers, :reject_if => lambda { |a| a[:number].blank? }, allow_destroy: true
   accepts_nested_attributes_for :current_address, allow_destroy: true  
 
-  attr_reader :org_ids
-
   before_save :stamp_changed
   before_create :stamp_created
   
@@ -238,8 +236,19 @@ class Person < ActiveRecord::Base
     OrganizationalRole.where(person_id: id, role_id: Role.leader_ids, :organization_id => org.id).present?
   end
   def organization_objects
-    organization_tree # make sure the tree is built
-    @organization_objects ||= Hash[org_ids_cache.zip(Organization.find(org_ids_cache))]
+    @organization_objects ||= Hash[Organization.find(org_ids.keys).collect {|o| [o.id, o]}]
+  end
+
+  def org_ids
+    unless org_ids_cache
+      organization_tree # make sure the tree is built
+    end
+    org_ids_cache
+  end
+
+  def clear_org_cache
+    update_column(:organization_tree_cache, nil)
+    update_column(:org_ids_cache, nil)
   end
 
   def organization_tree
@@ -254,20 +263,35 @@ class Person < ActiveRecord::Base
   def organization_from_id(org_id)
     begin
       organization_objects[org_id.to_i]
-    rescue
-      raise org_id.inspect
+    #rescue
+      #raise org_id.inspect
     end
   end
 
   def org_tree_node(o = nil)
     orgs = {}
-    @org_ids ||= []
-    (o ? o.children : organizations).each do |org|
-      @org_ids << org.id
+    @org_ids ||= {}
+    (o ? o.children : organizations).order('name').each do |org|
+      # collect roles associated with each org
+      @org_ids[org.id] ||= {}
+      @org_ids[org.id]['roles'] ||= OrganizationalRole.where(organization_id: org.id, person_id: id).pluck(:role_id)
       orgs[org.id] = (org.show_sub_orgs? ? org_tree_node(org) : {})
     end
     orgs
   end
+
+  def admin_of_org_ids
+    @admin_of_org_ids ||= org_ids.select {|org_id, values| values['roles'].include?(Role.admin.id)}.keys.map(&:to_i)
+  end
+
+  def leader_of_org_ids
+    @leader_of_org_ids ||= org_ids.select {|org_id, values| (values['roles'] & Role.leader_ids).present?}.keys.map(&:to_i)
+  end
+
+  def admin_or_leader?
+    (admin_of_org_ids + leader_of_org_ids).present?
+  end
+
 
   def orgs_with_children
     organizations.collect {|org|

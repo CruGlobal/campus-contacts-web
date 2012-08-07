@@ -32,6 +32,19 @@ class Organization < ActiveRecord::Base
   has_many :rejoicables
   has_many :groups
 
+  after_create :clear_people_org_caches
+  after_destroy :clear_people_org_caches
+
+  def clear_people_org_caches
+    # If the parent of this org shows sub-orgs, we need to clear cache
+    if parent.show_sub_orgs?
+      OrganizationalRole.where(organization_id: parent.id).includes(:person).collect(&:person).each do |person|
+        person.clear_org_cache
+      end
+    end
+  end
+
+
   Rejoicable::OPTIONS.each do |option|
     has_many :"#{option}_contacts", :through => :rejoicables, source: :person, conditions: {'rejoicables.what' => option}, uniq: true
   end

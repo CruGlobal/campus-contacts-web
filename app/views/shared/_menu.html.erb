@@ -3,9 +3,9 @@
 <% group_pattern = /groups/ %>
 <% if current_organization %>
   <ul class="sf-menu sf-navbar mh-top">
-    <li class="<%= 'current' if request.path == '/dashboard' %>">
+   <!-- <li class="<%= 'current' if request.path == '/dashboard' %>">
       <%= link_to(t('nav.dashboard'), "/dashboard") %>
-    </li>
+      </li> -->
     <li class="<%= 'current' if request.path =~ care_pattern %>">
     <%= link_to(t('nav.people'), "/people") %>
     <ul>

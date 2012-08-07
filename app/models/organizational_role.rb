@@ -17,6 +17,13 @@ class OrganizationalRole < ActiveRecord::Base
   scope :find_non_admin_and_non_leader_roles, {
     :conditions => ["role_id != ? AND role_id != ?", Role::ADMIN_ID, Role::LEADER_ID]
   }
+
+  after_create :clear_person_org_cache
+  after_destroy :clear_person_org_cache
+
+  def clear_person_org_cache
+    person.clear_org_cache
+  end
   
   def merge(other)
     # We can have multiple roles, but if we're a contact that should be the only role

@@ -196,7 +196,7 @@ class ApplicationController < ActionController::Base
     @current_organizations ||= {}
     unless @current_organizations[person]
       if session[:current_organization_id]
-        org = Organization.find_by_id(session[:current_organization_id]) 
+        org = person.organization_from_id(session[:current_organization_id]) 
         # org = nil unless org && (person.organizations.include?(org) || person.organizations.include?(org.parent))
       end
       unless org

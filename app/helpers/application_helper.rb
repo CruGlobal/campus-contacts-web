@@ -41,6 +41,7 @@ module ApplicationHelper
     org_tree.each do |org_id, children|
       logger.debug(org_id)
       org = current_person.organization_from_id(org_id)
+      raise org_id.inspect unless org_id.to_i == org.id
       raise org_id.inspect unless org
       ret += render(partial: 'application/org', locals: {org: org, children: children})
     end
