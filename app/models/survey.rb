@@ -38,6 +38,29 @@ class Survey < ActiveRecord::Base
   #   (elements + elements.collect(&:all_elements)).flatten
   # end
   
+  def question_rules
+    question_ids = questions.collect(&:id)
+    element_ids = SurveyElement.where(element_id: question_ids).collect(&:id)
+    question_rules = QuestionRule.where(survey_element_id: element_ids)
+  end
+  
+  def has_assign_rule(type, id = nil)
+    rule_id = Rule.find_by_rule_code('AUTOASSIGN')
+    rules = question_rules.where(rule_id: rule_id)
+    rules.each do |rule|
+      if rule.extra_parameters['type'].downcase == type.downcase
+        if id.present?
+          if rule.extra_parameters['id'].to_s == id.to_s
+            return true
+          end
+        else
+          return true
+        end
+      end
+    end
+    return false
+  end
+  
   def duplicate
     new_survey = Survey.new(self.attributes)
     new_survey.organization_id = organization_id
