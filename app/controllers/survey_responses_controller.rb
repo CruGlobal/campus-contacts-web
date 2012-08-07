@@ -56,7 +56,9 @@ class SurveyResponsesController < ApplicationController
     save_survey
 
     if @person.valid? && @answer_sheet.person.valid?
-      create_contact_at_org(@person, @survey.organization)
+      unless @answer_sheet.survey.has_assign_rule('ministry')
+        create_contact_at_org(@person, @survey.organization)
+      end
       respond_to do |wants|
         wants.html { render :thanks, layout: 'mhub'}
         wants.mobile { render :thanks }
@@ -95,8 +97,10 @@ class SurveyResponsesController < ApplicationController
         session[:person_id] = @person.id
         session[:survey_id] = @survey.id
         if @person.valid? && @answer_sheet.person.valid?
-          create_contact_at_org(@person, @survey.organization)
-          FollowupComment.create_from_survey(@survey.organization, @person, @survey.questions, @answer_sheet)
+          unless @answer_sheet.survey.has_assign_rule('ministry')
+            create_contact_at_org(@person, @survey.organization)
+            FollowupComment.create_from_survey(@survey.organization, @person, @survey.questions, @answer_sheet)
+          end
           respond_to do |wants|
             if !(cookies[:survey_mode] == '1') && @survey.login_option == 2
               wants.html { render :facebook, layout: 'mhub' }

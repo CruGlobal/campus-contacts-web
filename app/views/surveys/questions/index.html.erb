@@ -32,12 +32,12 @@
   <table border="0" cellspacing="0" cellpadding="0" class="yourquestions fakesort">
     <tbody>
       <tr>
-        <td class="questiontitle"><%= Element.find_by_attribute_name('firstName').label %></td>
+        <td class="questiontitle"><%= Element.find_by_attribute_name('firstName').present? ? Element.find_by_attribute_name('firstName').label : "First Name:" %></td>
         <td></td>
         <td><span class="icon lock tiplight" title="<%= t('.forced_tip') %>"></span></td>
       </tr>
       <tr>
-        <td class="questiontitle"><%= Element.find_by_attribute_name('lastName').label %></td>
+        <td class="questiontitle"><%= Element.find_by_attribute_name('lastName').present? ? Element.find_by_attribute_name('lastName').label : "Last Name:" %></td>
         <td><span class="icon_holder"></span></td>
         <td><span class="icon lock tiplight" title="<%= t('.forced_tip') %>"></span></td>
       </tr>

@@ -61,6 +61,21 @@ $ ->
   #$('#user_merge_form input.person').triggerPersonLookup()
   #$('#user_merge_form input.name').triggerPersonSearch()
 
+  $('#show_message_guide_button').live 'click', ->
+    custom_buttons = {}
+    custom_buttons[t('dashboard.learn_more')] = ->
+      send_message_guide_more()
+    custom_buttons[t('dashboard.close')] = ->
+      $(this).dialog('close')
+    $('#send_message_guide').dialog
+      resizable: false,
+      height:200,
+      width:520,
+      modal: true,
+      title: "Send Text/Email Message"
+      buttons: custom_buttons
+    false
+
   $('#people_controller a.add_person').live 'click', ->
     $('#new_person')[0].reset()
     $('#add_person_div').dialog
