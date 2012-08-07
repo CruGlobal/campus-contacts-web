@@ -5,7 +5,6 @@ class Batch # < ActiveRecord::Base
     queued_email = 0
     no_admin = 0
     notify_entries = get_unnotified_transfers
-    puts "#{notify_entries.count} Contacts Transfer Notification to be processed"
     receiving_orgs = notify_entries.group('new_organization_id')
     receiving_orgs.each do |o|
       organization = Organization.find(o.new_organization_id)
@@ -17,8 +16,7 @@ class Batch # < ActiveRecord::Base
               formated_transferred_contacts = Array.new
               transferred_contacts.each do |contact|
                 begin
-                  if contact.present? && contact.person.present? && 
-                    contact.transferred_by.present? && contact.old_organization.present?
+                  if contact.present? && contact.person.present? && contact.transferred_by.present? && contact.old_organization.present?
                     transfer_log = Hash.new
                     transfer_log['transferer_name'] = contact.transferred_by.name
                     transfer_log['transferer_email'] = contact.transferred_by.email
@@ -35,7 +33,6 @@ class Batch # < ActiveRecord::Base
               intro = "As the Admin of #{organization.name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, you have been sent #{formated_transferred_contacts.size} contact#{'s' if formated_transferred_contacts.size > 1}. Please login to missionhub.com as soon as possible to followup the contact#{'s' if formated_transferred_contacts.size > 1}. There may be more information about the contacts in the comment section of their individual profile. If not, you may want to contact the senders at their email address. Below are the contacts sent:"
     
               OrganizationMailer.enqueue.notify_person_transfer(admin.email, intro, formated_transferred_contacts)
-              # OrganizationMailer.notify_person_transfer(admin.email, intro, formated_transferred_contacts).deliver
               transferred_contacts.update_all(notified: true)
               queued_email += 1
             end
@@ -45,8 +42,6 @@ class Batch # < ActiveRecord::Base
         end
       end
     end
-    puts "#{no_admin} Contacts Transfered to an Organization which has to Admin to Notify"
-    puts "#{queued_email} Contacts Transfer Notification email(s) queued"
   end
   
   def self.new_person_notify
@@ -54,7 +49,6 @@ class Batch # < ActiveRecord::Base
     queued_email = 0
     no_admin = 0
     notify_entries = get_unnotified_new_contacts
-    puts "#{notify_entries.count} New Contacts Notification to be processed"
     
     receiving_orgs = notify_entries.group('organization_id')
     receiving_orgs.each do |o|
@@ -82,7 +76,6 @@ class Batch # < ActiveRecord::Base
               intro = "As the Admin of #{organization.name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, there are #{formated_new_contacts.size} new contact#{'s' if formated_new_contacts.size > 1} in your organization. Please login to missionhub.com as soon as possible to followup the contact#{'s' if formated_new_contacts.size > 1}. Below is the list of new contacts:"
             
               OrganizationMailer.enqueue.notify_new_people(admin.email, intro, formated_new_contacts)
-              # OrganizationMailer.notify_new_people(admin.email, intro, formated_new_contacts).deliver
               new_contacts.update_all(notified: true)
               queued_email += 1
             end
@@ -92,8 +85,6 @@ class Batch # < ActiveRecord::Base
         end
       end
     end
-    puts "#{no_admin} Contacts Transfered to an Organization which has to Admin to Notify"
-    puts "#{queued_email} New Contacts Notification email(s) queued"
   end
   
   def self.get_unnotified_transfers

@@ -369,4 +369,19 @@ FactoryGirl.define do
     email     "email#{Factory.next(:count)}@email.com"
     association :person
   end
+  
+  factory :person_transfer do
+    association :person
+    association :old_organization, factory: :organization
+    association :new_organization, factory: :organization
+    association :transferred_by, factory: :person
+    notified false
+  end
+  
+  factory :new_person do
+    association :person
+    association :organization
+    notified false
+  end
+  
 end
