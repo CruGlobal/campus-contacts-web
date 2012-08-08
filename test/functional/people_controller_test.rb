@@ -721,9 +721,6 @@ class PeopleControllerTest < ActionController::TestCase
       # Admin, Leader, Involved, Alumni, Contact
       # Non-default roles will be ordered alphabetically
       setup do
-        @alumni1 = Factory(:user_with_auxs)
-        @alumni1.person.update_attributes({firstName: "G", lastName: "G"})
-        Factory(:organizational_role, organization: @org, person: @alumni1.person, role: Role.alumni)
         Factory(:organizational_role, organization: @org, person: @admin1.person, role: Role.leader) # add roles to admin
         Factory(:organizational_role, organization: @org, person: @admin1.person, role: Role.alumni) # add roles to admin
         Factory(:organizational_role, organization: @org, person: @leader1.person, role: Role.involved) # add roles to leader
@@ -732,9 +729,9 @@ class PeopleControllerTest < ActionController::TestCase
       
       should "return people sorted by their roles (default roles)" do
         xhr :get, :index, {"q"=>{"s"=>"role_id desc"}}
-        assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @involved1.person.name, @alumni1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name]
+        assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @involved1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name]
         xhr :get, :index, {"q"=>{"s"=>"role_id asc"}}
-        assert_equal assigns(:all_people).collect(&:name), [@contact1.person.name, @contact2.person.name, @contact3.person.name, @alumni1.person.name, @involved1.person.name, @leader1.person.name, @admin1.person.name]
+        assert_equal assigns(:all_people).collect(&:name), [@contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name, @leader1.person.name, @admin1.person.name]
       end
       
       should "return people sorted by their roles (with non-default roles)" do
@@ -751,9 +748,9 @@ class PeopleControllerTest < ActionController::TestCase
         
       
         xhr :get, :index, {"q"=>{"s"=>"role_id desc"}}
-        assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @involved1.person.name, @alumni1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @c_role_person.name, @b_role_person.name, @a_role_person.name]
+        assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @involved1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @c_role_person.name, @b_role_person.name, @a_role_person.name]
         xhr :get, :index, {"q"=>{"s"=>"role_id asc"}}
-        assert_equal assigns(:all_people).collect(&:name), [@contact1.person.name, @contact2.person.name, @contact3.person.name, @alumni1.person.name, @involved1.person.name, @leader1.person.name, @admin1.person.name, @a_role_person.name, @b_role_person.name, @c_role_person.name]
+        assert_equal assigns(:all_people).collect(&:name), [@contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name, @leader1.person.name, @admin1.person.name, @a_role_person.name, @b_role_person.name, @c_role_person.name]
       end
     end
     
