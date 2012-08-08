@@ -1,4 +1,6 @@
 class OrganizationalRolesController < ApplicationController
+  cache_sweeper :organization_sweeper, only: [:update, :destroy, :create]
+
   def update
     @organizational_role = OrganizationalRole.find(params[:id])
     @organizational_role.followup_status = params[:status] #set contact role as "do_not_contact"
