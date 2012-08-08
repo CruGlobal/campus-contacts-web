@@ -331,7 +331,8 @@ FactoryGirl.define do
   
   factory :answer do
     association :answer_sheet
-    association :choice_field
+    # association :choice_field
+    association :question, factory: :element
   end
   
   factory :answer_1, class: :answer do

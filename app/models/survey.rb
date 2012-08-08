@@ -51,12 +51,26 @@ class Survey < ActiveRecord::Base
       if rule.extra_parameters.present?
         if rule.extra_parameters['type'].downcase == type.downcase
           if id.present?
-            if rule.extra_parameters['id'].to_s == id.to_s
-              return true
-            end
+            return true if rule.extra_parameters['id'].to_s == id.to_s
           else
-            return true
+            return rule.extra_parameters['id']
           end
+        end
+      end
+    end
+    return false
+  end
+  
+  def has_assign_rule_applied(answer_sheet, type)
+    rule_id = Rule.find_by_rule_code('AUTOASSIGN')
+    rules = question_rules.where(rule_id: rule_id)
+    rules.each do |rule|
+      element = rule.survey_element.element if rule.survey_element.present?
+      answer = answer_sheet.answers.find_by_question_id(element.id) if element.present?
+      triggers = rule.trigger_keywords.split(', ')
+      if triggers.present? && element.present? && answer.present? && rule.extra_parameters.present?
+        if rule.extra_parameters['type'].downcase == type.downcase
+          return true if triggers.include?(answer.value)
         end
       end
     end
