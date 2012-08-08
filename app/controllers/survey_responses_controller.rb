@@ -56,7 +56,7 @@ class SurveyResponsesController < ApplicationController
     save_survey
 
     if @person.valid? && @answer_sheet.person.valid?
-      unless @answer_sheet.survey.has_assign_rule('ministry')
+      unless @answer_sheet.survey.has_assign_rule_applied(@answer_sheet, 'ministry')
         create_contact_at_org(@person, @survey.organization)
       end
       respond_to do |wants|
@@ -97,7 +97,7 @@ class SurveyResponsesController < ApplicationController
         session[:person_id] = @person.id
         session[:survey_id] = @survey.id
         if @person.valid? && @answer_sheet.person.valid?
-          unless @answer_sheet.survey.has_assign_rule('ministry')
+          unless @answer_sheet.survey.has_assign_rule_applied(@answer_sheet, 'ministry')
             create_contact_at_org(@person, @survey.organization)
             FollowupComment.create_from_survey(@survey.organization, @person, @survey.questions, @answer_sheet)
           end

@@ -47,7 +47,7 @@ class SurveyTest < ActiveSupport::TestCase
       @survey_element = Factory(:survey_element, survey: @survey, element: @element, position: 1)
       @question_rule = Factory(:question_rule, rule: @rule, survey_element: @survey_element, extra_parameters: @extra)
       result = @survey.has_assign_rule('group')
-      assert_equal(result, true, 'should return true')
+      assert_equal(result, "300", 'should return extra_parameter[:id]')
     end
     should "return false if it dont have autoassign question_rule type='ministry'" do
       @survey_element = Factory(:survey_element, survey: @survey, element: @element, position: 1)
@@ -76,6 +76,67 @@ class SurveyTest < ActiveSupport::TestCase
       @survey_element = Factory(:survey_element, survey: @survey, element: @element, position: 1)
       @question_rule = Factory(:question_rule, rule: @rule, survey_element: @survey_element, extra_parameters: "")
       result = @survey.has_assign_rule('group')
+      assert_equal(result, false, 'should return false')
+    end
+  end
+  
+  
+  context "checking survey if it have applied automated assignment rule to an answer" do
+    setup do
+      @person = Factory(:person)
+      @survey = Factory(:survey)
+      @rule = Factory(:rule)
+      @element = Factory(:element)
+      @answer_sheet = Factory(:answer_sheet, person: @person, survey: @survey)
+      @extra = Hash.new
+      @extra['type'] = 'group'
+      @extra['id'] = '300'
+      @triggers = 'yes, sure, ok'
+    end
+    should "return true if it has autoassign question_rule type = 'group' and triggered" do
+      @answer = Factory(:answer, answer_sheet: @answer_sheet, question: @element, value: 'ok')
+      @survey_element = Factory(:survey_element, survey: @survey, element: @element, position: 1)
+      @question_rule = Factory(:question_rule, rule: @rule, survey_element: @survey_element, 
+        extra_parameters: @extra, trigger_keywords: @triggers)
+      result = @survey.has_assign_rule_applied(@answer_sheet, 'group')
+      assert_equal(result, true, 'should return true')
+    end
+    should "return false if it has autoassign question_rule type = 'group' but not triggered" do
+      @answer = Factory(:answer, answer_sheet: @answer_sheet, question: @element, value: 'fine')
+      @survey_element = Factory(:survey_element, survey: @survey, element: @element, position: 1)
+      @question_rule = Factory(:question_rule, rule: @rule, survey_element: @survey_element, 
+        extra_parameters: @extra, trigger_keywords: @triggers)
+      result = @survey.has_assign_rule_applied(@answer_sheet, 'group')
+      assert_equal(result, false, 'should return false')
+    end
+    should "return false if it has autoassign question_rule type = 'group' but triggers is blank" do
+      @answer = Factory(:answer, answer_sheet: @answer_sheet, question: @element, value: 'ok')
+      @survey_element = Factory(:survey_element, survey: @survey, element: @element, position: 1)
+      @question_rule = Factory(:question_rule, rule: @rule, survey_element: @survey_element, 
+        extra_parameters: @extra, trigger_keywords: '')
+      result = @survey.has_assign_rule_applied(@answer_sheet, 'group')
+      assert_equal(result, false, 'should return false')
+    end
+    should "return false if it has autoassign question_rule type = 'group' but no answer yet" do
+      @survey_element = Factory(:survey_element, survey: @survey, element: @element, position: 1)
+      @question_rule = Factory(:question_rule, rule: @rule, survey_element: @survey_element, 
+        extra_parameters: @extra, trigger_keywords: @triggers)
+      result = @survey.has_assign_rule_applied(@answer_sheet, 'group')
+      assert_equal(result, false, 'should return false')
+    end
+    should "return false if it has autoassign question_rule type = 'group' but survey element is missing" do
+      @answer = Factory(:answer, answer_sheet: @answer_sheet, question: @element, value: 'ok')
+      @question_rule = Factory(:question_rule, rule: @rule, survey_element: @survey_element, 
+        extra_parameters: @extra, trigger_keywords: @triggers)
+      result = @survey.has_assign_rule_applied(@answer_sheet, 'group')
+      assert_equal(result, false, 'should return false')
+    end
+    should "return false if it has autoassign question_rule type = 'group' but extra parameters is blank" do
+      @answer = Factory(:answer, answer_sheet: @answer_sheet, question: @element, value: 'ok')
+      @survey_element = Factory(:survey_element, survey: @survey, element: @element, position: 1)
+      @question_rule = Factory(:question_rule, rule: @rule, survey_element: @survey_element, 
+        extra_parameters: '', trigger_keywords: @triggers)
+      result = @survey.has_assign_rule_applied(@answer_sheet, 'group')
       assert_equal(result, false, 'should return false')
     end
   end
