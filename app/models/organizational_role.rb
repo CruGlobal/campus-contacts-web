@@ -79,6 +79,10 @@ class OrganizationalRole < ActiveRecord::Base
     update_attributes({:archive_date => Date.today})
   end
   
+  def unarchive
+    update_attributes({:archive_date => nil})
+  end
+  
   class InvalidPersonAttributesError < StandardError
   
   end
