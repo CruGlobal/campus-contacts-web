@@ -37,10 +37,13 @@ class Organization < ActiveRecord::Base
 
   def clear_people_org_caches
     # If the parent of this org shows sub-orgs, we need to clear cache
-    if parent && parent.show_sub_orgs?
-      OrganizationalRole.where(organization_id: parent.id).includes(:person).collect(&:person).each do |person|
-        person.clear_org_cache
+    begin
+      if ancestry.present? && parent.show_sub_orgs?
+        OrganizationalRole.where(organization_id: parent.id).includes(:person).collect(&:person).each do |person|
+          person.clear_org_cache
+        end
       end
+    rescue ActiveRecord::RecordNotFound
     end
   end
 

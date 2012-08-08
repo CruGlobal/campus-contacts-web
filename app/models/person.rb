@@ -259,7 +259,10 @@ class Person < ActiveRecord::Base
     unless organization_tree_cache.present?
       self.organization_tree_cache = org_tree_node
       self.org_ids_cache = @org_ids
-      save(validate: false)
+      begin
+        save(validate: false)
+      rescue ActiveRecord::ReadOnlyRecord
+      end
     end
     organization_tree_cache
   end
@@ -285,7 +288,7 @@ class Person < ActiveRecord::Base
     (o ? o.children : organizations).order('name').each do |org|
       # collect roles associated with each org
       @org_ids[org.id] ||= {}
-      @org_ids[org.id]['roles'] ||= (roles_by_org_id(org.id) + Array.wrap(parent_roles)).uniq
+      @org_ids[org.id]['roles'] ||= (Array.wrap(roles_by_org_id(org.id))).uniq #  + Array.wrap(parent_roles)
       orgs[org.id] = (org.show_sub_orgs? ? org_tree_node(org, @org_ids[org.id]['roles']) : {})
     end
     orgs
@@ -811,7 +814,7 @@ class Person < ActiveRecord::Base
     @organizational_roles_hash ||= org_ids.collect { |org_id, values| 
                                      values['roles'].select { |role_id| 
                                        role_id != Role.contact.id
-                                     }.collect { |role| 
+                                     }.collect { |role_id| 
                                        {org_id: org_id, role: Role.find(role_id).i18n, name: organization_from_id(org_id).name, primary: primary_organization.id == org_id ? 'true' : 'false'} 
                                      }
                                    }.flatten

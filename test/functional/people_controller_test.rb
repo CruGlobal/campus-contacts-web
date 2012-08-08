@@ -160,7 +160,7 @@ class PeopleControllerTest < ActionController::TestCase
       
       should "not remove admin role from the last admin of a root org" do
         assert_no_difference "OrganizationalRole.count" do
-          xhr :post, :update_roles, { :role_ids => [], :some_role_ids => "", :person_id => @last_admin.id }
+          xhr :post, :update_roles, { :role_ids => '', :some_role_ids => "", :person_id => @last_admin.id }
         end
       end
       
@@ -686,7 +686,7 @@ class PeopleControllerTest < ActionController::TestCase
       @leader1.person.organizational_roles.where(role_id: Role::LEADER_ID).first.archive
       
       xhr :get, :index
-      assert_equal assigns(:all_people).collect{|x| x.personID}, [@admin1.person.personID, @contact3.person.personID, @involved1.person.personID].sort { |x, y| x <=> y }
+      assert_equal([@admin1.person.personID, @contact3.person.personID, @involved1.person.personID].sort, assigns(:all_people).collect{|x| x.personID})
     end
     
     should "return all people (even unarchived ones) when 'Include Archived' checkbox is checked'" do
