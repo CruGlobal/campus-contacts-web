@@ -288,14 +288,14 @@ class Person < ActiveRecord::Base
     (o ? o.children : organizations).order('name').each do |org|
       # collect roles associated with each org
       @org_ids[org.id] ||= {}
-      @org_ids[org.id]['roles'] ||= (Array.wrap(roles_by_org_id(org.id))).uniq #  + Array.wrap(parent_roles)
+      @org_ids[org.id]['roles'] ||= (Array.wrap(roles_by_org_id(org.id)) + Array.wrap(parent_roles)).uniq
       orgs[org.id] = (org.show_sub_orgs? ? org_tree_node(org, @org_ids[org.id]['roles']) : {})
     end
     orgs
   end
 
   def admin_of_org_ids
-    @admin_of_org_ids ||= org_ids.select {|org_id, values| values['roles'].include?(Role.admin.id)}.keys
+    @admin_of_org_ids ||= org_ids.select {|org_id, values| values['roles'] && values['roles'].include?(Role.admin.id)}.keys
   end
 
   def leader_of_org_ids
