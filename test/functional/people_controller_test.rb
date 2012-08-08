@@ -265,9 +265,10 @@ class PeopleControllerTest < ActionController::TestCase
   context "displaying a person's friends in their profile" do
     setup do
       #setup user, orgs
-      user = Factory(:user_with_auxs)
-      sign_in user
       @org = Factory(:organization)
+      user = Factory(:user_with_auxs)
+      Factory(:organizational_role, organization: @org, person: user.person, role: Role.admin)
+      sign_in user
       #setup the person, and non-friends
       @person = Factory(:person_with_facebook_data)
       assert_not_nil(@person.friends)
@@ -294,8 +295,8 @@ class PeopleControllerTest < ActionController::TestCase
       #check the friends on the same org
       org_friends = assigns(:org_friends)
       assert_not_nil(org_friends)
-      assert(org_friends.include?@person1)
-      assert(org_friends.include?@person2)
+      assert(org_friends.include?(@person1),"should include person1")
+      assert(org_friends.include?(@person2),"should include person2")
       assert_equal(2, org_friends.length)
     end
   end
@@ -624,7 +625,9 @@ class PeopleControllerTest < ActionController::TestCase
   context "Clicking on the label links at '/people'" do
     setup do
       @user = Factory(:user_with_auxs)
-      @org = Factory(:organization)
+      @org0 = Factory(:organization, id: 1)
+      @org = Factory(:organization, id: 2, ancestry: "1")
+      Factory(:organizational_role, organization: @org0, person: @user.person, role: Role.admin)
       sign_in @user
       @request.session[:current_organization_id] = @org.id
     
@@ -802,6 +805,7 @@ class PeopleControllerTest < ActionController::TestCase
     setup do
       @user = Factory(:user_with_auxs)
       @org = Factory(:organization)
+      Factory(:organizational_role, organization: @org, person: @user.person, role: Role.admin)
       sign_in @user
       @request.session[:current_organization_id] = @org.id
     
