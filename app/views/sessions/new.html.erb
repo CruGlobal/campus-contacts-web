@@ -1,11 +1,11 @@
 <% if mhub? %>
   <center>
-    <% if !@survey || @survey.login_option == 0 %>
+    <% if !@survey || [0, 1].include?(@survey.login_option) %>
       <%= @survey && @survey.login_paragraph.present? ?  @survey.login_paragraph : t('.login_paragraph_mhub') %>
       <br><br>
       <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook_mhub), rel: 'external') %>
       <br/>    
-      <% if @survey %>
+      <% if @survey.login_option == 0 %>
         <div class="info"><br/><br/>
           <center>
             <%= t('.dont_like_facebook') %>
@@ -14,10 +14,6 @@
           </center>
         </div>
       <% end %>
-    <% elsif @survey.login_option == 1 %>
-      <%= @survey.login_paragraph.present? ? @survey.login_paragraph : t('.login_paragraph_mhub') %>
-      <br><br>
-      <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook_mhub), rel: 'external') %>
     <% end %>
   </center>
 <% else %>
