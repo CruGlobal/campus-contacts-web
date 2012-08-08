@@ -51,6 +51,7 @@ class SurveyResponsesController < ApplicationController
   end
 
   def update
+    @title = @survey.terminology if @survey
     redirect_to :back and return false unless @person.id == params[:id].to_i
 
     save_survey
@@ -73,6 +74,7 @@ class SurveyResponsesController < ApplicationController
   end
 
   def create
+    @title = @survey.terminology
     Person.transaction do
       @person = current_person # first try for a logged in person
       if params[:person] && params[:person][:email].present?
