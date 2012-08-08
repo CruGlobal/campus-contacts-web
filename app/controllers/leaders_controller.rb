@@ -1,5 +1,6 @@
 class LeadersController < ApplicationController
   respond_to :html, :js
+  cache_sweeper :organization_sweeper, only: [:create, :destroy, :update]
   
   def leader_sign_in
     # Reconcile the person comeing from a leader link with the link itself.
