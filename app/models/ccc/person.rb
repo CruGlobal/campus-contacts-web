@@ -166,7 +166,11 @@ module Ccc
         MergeAudit.create!(mergeable: self, merge_looser: other)
         other.reload
         other.destroy
-        save(validate: false)
+        begin
+          save(validate: false)
+        rescue ActiveRecord::ReadOnlyRecord
+
+        end
         self
       end
     end
