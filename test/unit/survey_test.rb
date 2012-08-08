@@ -47,25 +47,25 @@ class SurveyTest < ActiveSupport::TestCase
       @survey_element = Factory(:survey_element, survey: @survey, element: @element, position: 1)
       @question_rule = Factory(:question_rule, rule: @rule, survey_element: @survey_element, extra_parameters: @extra)
       result = @survey.has_assign_rule('group')
-      assert_equal(result, "300", 'should return extra_parameter[:id]')
+      assert_equal("300", result, 'should return extra_parameter[:id]')
     end
     should "return false if it dont have autoassign question_rule type='ministry'" do
       @survey_element = Factory(:survey_element, survey: @survey, element: @element, position: 1)
       @question_rule = Factory(:question_rule, rule: @rule, survey_element: @survey_element, extra_parameters: @extra)
       result = @survey.has_assign_rule('ministry')
-      assert_equal(result, false, 'should return false')
+      assert_equal(false, result, 'should return false')
     end
     should "return false if it indicates id and it dont have autoassign question_rule type='ministry' and id='100'" do
       @survey_element = Factory(:survey_element, survey: @survey, element: @element, position: 1)
       @question_rule = Factory(:question_rule, rule: @rule, survey_element: @survey_element, extra_parameters: @extra)
       result = @survey.has_assign_rule('ministry',100)
-      assert_equal(result, false, 'should return false')
+      assert_equal(false, result, 'should return false')
     end
     should "return true if it indicates id and it have autoassign question_rule type='group' and id='300'" do
       @survey_element = Factory(:survey_element, survey: @survey, element: @element, position: 1)
       @question_rule = Factory(:question_rule, rule: @rule, survey_element: @survey_element, extra_parameters: @extra)
       result = @survey.has_assign_rule('group',300)
-      assert_equal(result, true, 'should return true')
+      assert_equal(true, result, 'should return true')
     end
     should "return false if no rules found" do
       @survey_element = Factory(:survey_element, survey: @survey, element: @element, position: 1)

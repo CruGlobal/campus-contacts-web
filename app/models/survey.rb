@@ -44,14 +44,15 @@ class Survey < ActiveRecord::Base
     question_rules = QuestionRule.where(survey_element_id: element_ids)
   end
   
-  def has_assign_rule(type, id = nil)
-    rule_id = Rule.find_by_rule_code('AUTOASSIGN')
+  def has_assign_rule(type, extra_id = nil)
+    rule_id = rules.find_by_rule_code('AUTOASSIGN').try(:id)
+    return false unless rule_id
     rules = question_rules.where(rule_id: rule_id)
     rules.each do |rule|
       if rule.extra_parameters.present?
         if rule.extra_parameters['type'].downcase == type.downcase
-          if id.present?
-            return true if rule.extra_parameters['id'].to_s == id.to_s
+          if extra_id.present?
+            return true if rule.extra_parameters['id'].to_s == extra_id.to_s
           else
             return rule.extra_parameters['id']
           end
@@ -62,7 +63,7 @@ class Survey < ActiveRecord::Base
   end
   
   def has_assign_rule_applied(answer_sheet, type)
-    rule_id = Rule.find_by_rule_code('AUTOASSIGN')
+    rule_id = rules.find_by_rule_code('AUTOASSIGN')
     rules = question_rules.where(rule_id: rule_id)
     rules.each do |rule|
       element = rule.survey_element.element if rule.survey_element.present?
