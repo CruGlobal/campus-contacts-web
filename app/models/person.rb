@@ -295,11 +295,11 @@ class Person < ActiveRecord::Base
   end
 
   def admin_of_org_ids
-    @admin_of_org_ids ||= org_ids.select {|org_id, values| values['roles'] && values['roles'].include?(Role.admin.id)}.keys
+    @admin_of_org_ids ||= org_ids.select {|org_id, values| Array.wrap(values['roles']).include?(Role.admin.id)}.keys
   end
 
   def leader_of_org_ids
-    @leader_of_org_ids ||= org_ids.select {|org_id, values| (values['roles'] & Role.leader_ids).present?}.keys
+    @leader_of_org_ids ||= org_ids.select {|org_id, values| (Array.wrap(values['roles']) & Role.leader_ids).present?}.keys
   end
 
   def admin_or_leader?
