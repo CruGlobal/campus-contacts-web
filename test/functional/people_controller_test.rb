@@ -819,7 +819,7 @@ class PeopleControllerTest < ActionController::TestCase
   
     should "merge people when there are email duplicates (current email address edited)" do      
       assert_difference("Person.count", -1) do
-        xhr :put, :update, {:person => { :email_addresses_attributes =>{"0" => { :email => "person2@email.com", :primary => "1", "_destroy"=>"false", :id => @email1.id}}}, :id => @person1.personID}
+        put :update, {:person => { :email_addresses_attributes =>{"0" => { :email => "person2@email.com", :primary => "1", :id => @email1.id}}}, :id => @person1.personID}
         assert_blank Person.where(personID: @person2.personID)
         assert @person1.email_addresses.include? @email2
       end
@@ -828,7 +828,7 @@ class PeopleControllerTest < ActionController::TestCase
     should "merge people when there are email duplicates (added new email address)" do
       
       assert_difference("Person.count", -1) do
-        xhr :put, :update, {:person => {:email_address => {:email => "person2@email.com", :primary => 1 }}, :id => @person1.personID}
+        put :update, {:person => {:email_address => {:email => "person2@email.com", :primary => 1 }}, :id => @person1.personID}
         assert_blank Person.where(personID: @person2.personID)
         assert @person1.email_addresses.include? @email2
       end
