@@ -51,7 +51,7 @@ function send_message_guide_more(){
     $(this).dialog('close')
   }
   $('#send_message_guide').dialog({
-    height: 500,
+    height: 530,
     buttons: custom_buttons
   })
   $('#send_message_guide').dialog({position: 'center'})

@@ -13,7 +13,7 @@ class SurveysControllerTest < ActionController::TestCase
       @request.host = 'mhub.cc' 
       @survey = Factory(:survey)
       get :start, id: @survey.id 
-      assert_redirected_to "http://mhub.cc/sign_out?next=http%3A%2F%2Fmhub.cc%2Fs%2F#{@survey.id}"
+      assert_redirected_to "http://mhub.cc/s/#{@survey.id}"
     end
     
     context "start survey no matter what the login option" do

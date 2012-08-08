@@ -153,9 +153,13 @@ class Person < ActiveRecord::Base
     self.get_deleted.collect()
   end
   
+  def unachive_contact_role(org)
+    OrganizationalRole.where(organization_id: org.id, role_id: Role::CONTACT_ID, person_id: personID).first.unarchive
+  end
+  
   def archive_contact_role(org)
     begin
-      organizational_roles.where(organization_id: org.id, role_id: Role::CONTACT_ID).first.archive
+      OrganizationalRole.where(organization_id: org.id, role_id: Role::CONTACT_ID, person_id: personID).first.archive
     rescue
     
     end
@@ -163,7 +167,7 @@ class Person < ActiveRecord::Base
   
   def archive_leader_role(org)
     begin
-      organizational_roles.where(organization_id: org.id, role_id: Role::LEADER_ID).first.archive
+      OrganizationalRole.where(organization_id: org.id, role_id: Role::LEADER_ID, person_id: personID).first.archive
     rescue
     
     end
@@ -259,7 +263,10 @@ class Person < ActiveRecord::Base
     unless organization_tree_cache.present?
       self.organization_tree_cache = org_tree_node
       self.org_ids_cache = @org_ids
-      save(validate: false)
+      begin
+        save(validate: false)
+      rescue ActiveRecord::ReadOnlyRecord
+      end
     end
     organization_tree_cache
   end
@@ -285,18 +292,18 @@ class Person < ActiveRecord::Base
     (o ? o.children : organizations).order('name').each do |org|
       # collect roles associated with each org
       @org_ids[org.id] ||= {}
-      @org_ids[org.id]['roles'] ||= (roles_by_org_id(org.id) + Array.wrap(parent_roles)).uniq
+      @org_ids[org.id]['roles'] ||= (Array.wrap(roles_by_org_id(org.id)) + Array.wrap(parent_roles)).uniq
       orgs[org.id] = (org.show_sub_orgs? ? org_tree_node(org, @org_ids[org.id]['roles']) : {})
     end
     orgs
   end
 
   def admin_of_org_ids
-    @admin_of_org_ids ||= org_ids.select {|org_id, values| values['roles'].include?(Role.admin.id)}.keys
+    @admin_of_org_ids ||= org_ids.select {|org_id, values| Array.wrap(values['roles']).include?(Role.admin.id)}.keys
   end
 
   def leader_of_org_ids
-    @leader_of_org_ids ||= org_ids.select {|org_id, values| (values['roles'] & Role.leader_ids).present?}.keys
+    @leader_of_org_ids ||= org_ids.select {|org_id, values| (Array.wrap(values['roles']) & Role.leader_ids).present?}.keys
   end
 
   def admin_or_leader?
@@ -811,7 +818,7 @@ class Person < ActiveRecord::Base
     @organizational_roles_hash ||= org_ids.collect { |org_id, values| 
                                      values['roles'].select { |role_id| 
                                        role_id != Role.contact.id
-                                     }.collect { |role| 
+                                     }.collect { |role_id| 
                                        {org_id: org_id, role: Role.find(role_id).i18n, name: organization_from_id(org_id).name, primary: primary_organization.id == org_id ? 'true' : 'false'} 
                                      }
                                    }.flatten
