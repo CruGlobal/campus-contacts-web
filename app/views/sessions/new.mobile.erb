@@ -49,7 +49,7 @@
             <div class="info">
               <center><%= link_to(image_tag('fb_login_small.png'), user_omniauth_authorize_path(mhub? ? :facebook_mhub : :facebook), rel: 'external', alt: t('.login_with_facebook')) %></center>
             </div>
-            <% if @survey.login_option == 0 %>
+            <% if @survey && @survey.login_option == 0 %>
               <div class="info"><br/><br/>
                 <center><%= link_to(t('.no_facebook'), session[:return_to] ? add_params(session[:return_to], :nologin => true) : "/s/#{cookies[:survey_id]}?nologin=true") %></center>
               </div>

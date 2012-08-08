@@ -5,7 +5,7 @@
       <br><br>
       <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook_mhub), rel: 'external') %>
       <br/>    
-      <% if @survey.login_option == 0 %>
+      <% if @survey && @survey.login_option == 0 %>
         <div class="info"><br/><br/>
           <center>
             <%= t('.dont_like_facebook') %>
