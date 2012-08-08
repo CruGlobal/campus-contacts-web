@@ -1,4 +1,3 @@
-<%# cache(user_signed_in? ? ['global_nav', "#{current_user.id}", current_organization.try(:id)] : 'global_nav', expires_in: 15.minutes) do %>
 <div id="global">
   
   <%= link_to("", "/", id: "logo") %>
@@ -28,10 +27,11 @@
           <li>
             <%= link_to(current_organization, '/contacts') %>
             <% if current_person.organization_objects.length > 1 %>
-              <ul class="under">
-                <%= render_org_tree(current_person.organization_tree) %>
-                <%#= render partial: 'application/org', collection: current_person.organizations.order('organizations.name') %>
-              </ul>
+              <% cache(['org_nav', current_person.id]) do %>
+                <ul class="under">
+                  <%= render_org_tree(current_person.organization_tree) %>
+                </ul>
+              <% end %>
             <% end %>
           </li>
         <% end %>
@@ -58,4 +58,3 @@
   
   
 </div>
-<%# end %>

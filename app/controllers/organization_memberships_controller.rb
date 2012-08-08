@@ -128,6 +128,7 @@ class OrganizationMembershipsController < ApplicationController
     org = Organization.find(params[:id])
     current_person.primary_organization = org
     session[:current_organization_id] = params[:id]
+    expire_fragment("org_nav/#{current_person.id}")
     redirect_to request.referrer ? :back : '/contacts'
   end
   
