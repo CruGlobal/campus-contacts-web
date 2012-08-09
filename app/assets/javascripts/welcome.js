@@ -48,7 +48,7 @@ function click_url(){
 function send_message_guide_more(){
   custom_buttons = {}
   custom_buttons[t('dashboard.close')] = function(){
-    $(this).dialog('close')
+    $(this).dialog('destroy')
   }
   $('#send_message_guide').dialog({
     height: 530,
