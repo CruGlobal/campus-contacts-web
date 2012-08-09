@@ -188,6 +188,13 @@ class PeopleControllerTest < ActionController::TestCase
     setup do
       @user = Factory(:user_with_auxs)
       sign_in @user
+      
+      @unarchived_contact2 = Factory(:person, firstName: "Brynden", lastName: "Tully")
+      Factory(:organizational_role, organization: @user.person.organizations.first, person: @unarchived_contact1, role: Role.contact)
+      
+      @archived_contact1 = Factory(:person, firstName: "Edmure", lastName: "Tully")
+      Factory(:organizational_role, organization: @user.person.organizations.first, person: @archived_contact1, role: Role.contact)
+      @archived_contact1.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive #archive his one and only role
     end
     
     should "respond success with no parameters" do
@@ -205,6 +212,17 @@ class PeopleControllerTest < ActionController::TestCase
           :email => "test@email.com", :phone => "123"
       assert_response(:success)
     end
+    
+    should "not be able to search for archived contacts if 'Include Archvied' checkbox is not checked" do
+      get :index, {:search_type => "basic", :query => "Edmure Tully"}
+      assert !assigns(:all_people).include?(@archived_contact1)
+    end
+    
+    should "be able to search for archived contacts if 'Include Archvied' checkbox is checked" do
+      get :index, {:search_type => "basic", :include_archived => "true", :query => "Edmure Tully"}
+      assert assigns(:all_people).include?(@archived_contact1)
+    end
+    
   end
   
   context "Showing leaders the person is assigned to" do
