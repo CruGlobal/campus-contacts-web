@@ -796,6 +796,50 @@ class PeopleControllerTest < ActionController::TestCase
         assert_equal assigns(:all_people).collect(&:name), [@involved1.person.name, @contact2.person.name, @contact3.person.name, @admin1.person.name, @leader1.person.name, @contact1.person.name]
       end
     end
+    
+    context "sorting people by their year in school" do
+      setup do
+        @leader1.person.update_attributes({yearInSchool: "2009"})
+        @admin1.person.update_attributes({yearInSchool: "2010"})
+        @contact1.person.update_attributes({yearInSchool: "2008"})
+        @contact2.person.update_attributes({yearInSchool: "2007"})
+        @contact3.person.update_attributes({yearInSchool: "2006"})
+        @involved1.person.update_attributes({yearInSchool: "2005"})
+      end
+      
+      should "sort desc" do
+        xhr :get, :index, {"q"=>{"s"=>"yearInSchool desc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name]
+        
+      end
+      
+      should "sort asc" do
+        xhr :get, :index, {"q"=>{"s"=>"yearInSchool asc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@involved1.person.name, @contact3.person.name, @contact2.person.name, @contact1.person.name, @leader1.person.name, @admin1.person.name]
+      end
+    end
+    
+    context "sorting people by their phone number" do
+      setup do
+        Factory(:phone_number, person: @leader1.person, primary: true, number: "2222222222")
+        Factory(:phone_number, person: @admin1.person, primary: true, number: "111111111")
+        Factory(:phone_number, person: @contact1.person, primary: true, number: "333333333")
+        Factory(:phone_number, person: @contact2.person, primary: true, number: "444444444")
+        Factory(:phone_number, person: @contact3.person, primary: true, number: "555555555")
+        Factory(:phone_number, person: @involved1.person, primary: true, number: "666666666")
+      end
+      
+      should "sort desc" do
+        xhr :get, :index, {"q"=>{"s"=>"phone_numbers.number desc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@involved1.person.name, @contact3.person.name, @contact2.person.name, @contact1.person.name, @leader1.person.name, @admin1.person.name]
+      end
+      
+      should "sort asc" do
+        xhr :get, :index, {"q"=>{"s"=>"phone_numbers.number asc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name]
+        
+      end
+    end
   end
   
   context "Updating a person" do

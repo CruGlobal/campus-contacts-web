@@ -323,6 +323,10 @@ FactoryGirl.define do
     required      false
   end
   
+  factory :phone_number do
+    association :person
+  end
+  
   factory :survey_element do
     association   :survey
     association   :element
