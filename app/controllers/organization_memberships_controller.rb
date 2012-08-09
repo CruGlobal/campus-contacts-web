@@ -121,7 +121,7 @@ class OrganizationMembershipsController < ApplicationController
     if orgs_i_have_access_to.include?(org.id)
       session[:current_organization_id] = params[:id]
     end
-    redirect_to request.referrer ? :back : '/contacts'
+    redirect_to request.referrer ? request.referrer.split('?').first : '/contacts'
   end
   
   def set_primary

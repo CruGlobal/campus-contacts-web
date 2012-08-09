@@ -331,7 +331,7 @@ en:
   dashboard:
     learn_more: "Learn More"
     close: "Close"
-    send_message_guide: 'To text or email, select the contacts you would like to communicate to by clicking the checkbox before their name or names. You can also email or text a search group by clicking on search, choosing your field and running the search. Then, click on all the contacts and click on "Send" and compose your email/text.'
+    send_message_guide: "To send a text or email, click the box next to the contacts you'd like to message. You can also use the search function to find contacts quickly. <br/><br/>After selecting the contacts, click the \"Send\" button to compose your message."
     send_message_video_guide: 'Click on the video below see how to do this.'
   surveys:
     index_admin: 
