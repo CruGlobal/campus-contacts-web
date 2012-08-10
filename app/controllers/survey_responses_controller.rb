@@ -137,11 +137,16 @@ class SurveyResponsesController < ApplicationController
   def save_survey
     @person.update_attributes(params[:person]) if params[:person]
     @answer_sheet = get_answer_sheet(@survey, @person)
-    question_set = QuestionSet.new(@survey.questions, @answer_sheet)
-    question_set.post(params[:answers], @answer_sheet)
-    question_set.save
-    @answer_sheet.person.save
-    @answer_sheet.update_attribute(:completed_at, Time.now)
+    if !params[:answers].present? || (params[:answers] && params[:answers].values.reject{|x| x.nil? || x.empty?}.blank?) # if a person has blank answers in a survey, destroy!
+      @answer_sheet.destroy
+    else 
+      question_set = QuestionSet.new(@survey.questions, @answer_sheet)
+      question_set.post(params[:answers], @answer_sheet)
+      question_set.save
+      @answer_sheet.person.save
+      @answer_sheet.update_attribute(:completed_at, Time.now)
+    end
+    
   end
 
   def get_person
