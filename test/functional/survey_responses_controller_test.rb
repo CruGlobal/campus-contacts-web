@@ -190,6 +190,14 @@ class SurveyResponsesControllerTest < ActionController::TestCase
       end
         
     end
+    
+    should "not create an answer sheet when a surveyee is a new Person and answered just blanks in the survey question fields" do
+      assert_no_difference "AnswerSheet.count" do
+        xhr :put, :create, {:survey_id => @survey.id, :answers => { @question.id => ""}, :person => {:firstName => "Karl", :lastName => "Pilkington"}}
+        assert_response(:success)
+      end
+        
+    end
   
   end
 
