@@ -1,9 +1,6 @@
 class Batch # < ActiveRecord::Base
   
   def self.person_transfer_notify
-    
-    queued_email = 0
-    no_admin = 0
     notify_entries = get_unnotified_transfers
     receiving_orgs = notify_entries.group('new_organization_id')
     
@@ -33,20 +30,19 @@ class Batch # < ActiveRecord::Base
             
             intro = "As the Admin of #{organization.name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, you have been sent #{formated_transferred_contacts.size} contact#{'s' if formated_transferred_contacts.size > 1}. Please login to missionhub.com as soon as possible to followup the contact#{'s' if formated_transferred_contacts.size > 1}. There may be more information about the contacts in the comment section of their individual profile. If not, you may want to contact the senders at their email address. Below are the contacts sent:"
 
-            #OrganizationMailer.enqueue.notify_person_transfer(admin.email, intro, formated_transferred_contacts)
-            OrganizationMailer.notify_person_transfer(admin.email, intro, formated_transferred_contacts).deliver
+            OrganizationMailer.enqueue.notify_person_transfer(admin.email, intro, formated_transferred_contacts)
+            # OrganizationMailer.notify_person_transfer(admin.email, intro, formated_transferred_contacts).deliver
             transferred_contacts.update_all(notified: true)
-            queued_email += 1
           end
+        else
+          error = "Root parent organization #{organization.name}(ID#{organization.id}) do not have admin with valid email."
+          Rails.env.production? ? Airbrake.notify(error) : (raise error)
         end
       end
     end
   end
   
   def self.new_person_notify
-    
-    queued_email = 0
-    no_admin = 0
     notify_entries = get_unnotified_new_contacts
     
     receiving_orgs = notify_entries.group('organization_id')
@@ -74,9 +70,12 @@ class Batch # < ActiveRecord::Base
             intro = "As the Admin of #{organization.name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, there are #{formated_new_contacts.size} new contact#{'s' if formated_new_contacts.size > 1} in your organization. Please login to missionhub.com as soon as possible to followup the contact#{'s' if formated_new_contacts.size > 1}. Below is the list of new contacts:"
           
             OrganizationMailer.enqueue.notify_new_people(admin.email, intro, formated_new_contacts)
+            # OrganizationMailer.notify_new_people(admin.email, intro, formated_new_contacts).deliver
             new_contacts.update_all(notified: true)
-            queued_email += 1
           end
+        else
+          error = "Root parent organization #{organization.name}(ID#{organization.id}) do not have admin with valid email."
+          Rails.env.production? ? Airbrake.notify(error) : (raise error)
         end
       end
     end

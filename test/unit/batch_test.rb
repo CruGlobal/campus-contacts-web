@@ -64,7 +64,7 @@ class PersonTest < ActiveSupport::TestCase
       assert_equal(transfer1.notified, true, "notified should be true")
       assert_equal(transfer2.notified, true, "notified should be true")
     end
-    should "not notify person_transfer from org with admin without email" do
+    should "not notify person_transfer from org with admin without email and raise an error" do
       @admin = Factory(:person)
       @admin_role = Factory(:organizational_role, person: @admin, organization: @org2, role: Role.admin)
       
@@ -73,21 +73,23 @@ class PersonTest < ActiveSupport::TestCase
       transfer2 = Factory(:person_transfer, person: @person2, new_organization: @org2, 
         old_organization: @org1, transferred_by: @admin)
         
-      results = Batch.person_transfer_notify
+      exception = assert_raise RuntimeError do
+        results = Batch.person_transfer_notify
+      end
       transfer1.reload
       transfer2.reload
       assert_equal(transfer1.notified, false, "notified should be false")
       assert_equal(transfer2.notified, false, "notified should be false")
     end
-    should "not notify person_transfer from org without admin" do
-      @admin = Factory(:person)
-      @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
+    should "not notify person_transfer from org without admin and raise an error" do
       transfer1 = Factory(:person_transfer, person: @person1, new_organization: @org2, 
         old_organization: @org1, transferred_by: @admin)
       transfer2 = Factory(:person_transfer, person: @person2, new_organization: @org2, 
         old_organization: @org1, transferred_by: @admin)
         
-      results = Batch.person_transfer_notify
+      exception = assert_raise RuntimeError do
+        results = Batch.person_transfer_notify
+      end
       transfer1.reload
       transfer2.reload
       assert_equal(transfer1.notified, false, "notified should be false")
@@ -166,24 +168,28 @@ class PersonTest < ActiveSupport::TestCase
       assert_equal(newperson1.notified, true, "notified should be true")
       assert_equal(newperson2.notified, true, "notified should be true")
     end
-    should "not notify new_person from org with admin without email" do
+    should "not notify new_person from org with admin without email and raise an error" do
       @admin = Factory(:person)
       @admin_role = Factory(:organizational_role, person: @admin, organization: @org1, role: Role.admin)
       
       newperson1 = Factory(:new_person, person: @person1, organization: @org1)
       newperson2 = Factory(:new_person, person: @person2, organization: @org1)
       
-      results = Batch.new_person_notify
+      exception = assert_raise RuntimeError do
+        results = Batch.new_person_notify
+      end
       newperson1.reload
       newperson2.reload
       assert_equal(newperson1.notified, false, "notified should be true")
       assert_equal(newperson2.notified, false, "notified should be true")
     end
-    should "not notify new_person from org without admin" do
+    should "not notify new_person from org without admin and raise an error" do
       newperson1 = Factory(:new_person, person: @person1, organization: @org1)
       newperson2 = Factory(:new_person, person: @person2, organization: @org1)
       
-      results = Batch.new_person_notify
+      exception = assert_raise RuntimeError do
+        results = Batch.new_person_notify
+      end
       newperson1.reload
       newperson2.reload
       assert_equal(newperson1.notified, false, "notified should be false")
