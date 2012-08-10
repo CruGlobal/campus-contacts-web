@@ -81,6 +81,7 @@ class PersonTest < ActiveSupport::TestCase
     end
     should "not notify person_transfer from org without admin" do
       @admin = Factory(:person)
+      @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
       transfer1 = Factory(:person_transfer, person: @person1, new_organization: @org2, 
         old_organization: @org1, transferred_by: @admin)
       transfer2 = Factory(:person_transfer, person: @person2, new_organization: @org2, 
@@ -92,7 +93,7 @@ class PersonTest < ActiveSupport::TestCase
       assert_equal(transfer1.notified, false, "notified should be false")
       assert_equal(transfer2.notified, false, "notified should be false")
     end
-    should "not notify person_transfer with invalid peron" do
+    should "not notify person_transfer with invalid person" do
       @admin = Factory(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
       @admin_role = Factory(:organizational_role, person: @admin, organization: @org2, role: Role.admin)
