@@ -329,4 +329,45 @@ class ContactsControllerTest < ActionController::TestCase
     end
     #more tests to come
   end
+  
+  context "Searching for people using search_autocomplete_field" do
+    setup do
+      @user = Factory(:user_with_auxs)
+      sign_in @user
+      
+      @archived_contact1 = Factory(:person, firstName: "Edmure", lastName: "Tully")
+      Factory(:organizational_role, organization: @user.person.organizations.first, person: @archived_contact1, role: Role.contact)
+      @archived_contact1.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive #archive his one and only role
+      
+      @unarchived_contact1 = Factory(:person, firstName: "Brynden", lastName: "Tully")
+      Factory(:organizational_role, organization: @user.person.organizations.first, person: @unarchived_contact1, role: Role.contact)
+      Factory(:email_address, email: "bryndentully@email.com", person: @unarchived_contact1, primary: true)
+    end
+    
+    should "not be able to search for archived contacts if 'Include Archvied' checkbox is not checked" do
+      get :search_by_name_and_email, {:term => "Edmure Tully"}
+      assert !assigns(:people).include?(@archived_contact1)
+    end
+    
+    should "be able to search for archived contacts if 'Include Archvied' checkbox is checked" do
+      get :search_by_name_and_email, {:include_archived => "true", :term => "Edmure Tully"}
+      assert assigns(:people).include?(@archived_contact1)
+    end
+    
+    should "be able to search by email address" do
+      get :search_by_name_and_email, {:term => "Brynden Tully"}
+      assert assigns(:people).include?(@unarchived_contact1)
+    end
+    
+    should "be able to search by wildcard" do
+      get :search_by_name_and_email, {:include_archived => "true", :term => "tully"}
+      assert assigns(:people).include?(@archived_contact1), "archived contact not found"
+      assert assigns(:people).include?(@unarchived_contact1), "unarchived contact not found"
+    end
+    
+    should "not be able to search for anything" do
+      get :search_by_name_and_email, {:include_archived => "true", :term => "none"}
+      assert_empty assigns(:people)
+    end
+  end
 end

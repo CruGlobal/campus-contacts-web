@@ -189,8 +189,9 @@ class PeopleControllerTest < ActionController::TestCase
       @user = Factory(:user_with_auxs)
       sign_in @user
       
-      @unarchived_contact2 = Factory(:person, firstName: "Brynden", lastName: "Tully")
+      @unarchived_contact1 = Factory(:person, firstName: "Brynden", lastName: "Tully")
       Factory(:organizational_role, organization: @user.person.organizations.first, person: @unarchived_contact1, role: Role.contact)
+      Factory(:email_address, email: "bryndentully@email.com", person: @unarchived_contact1, primary: true)
       
       @archived_contact1 = Factory(:person, firstName: "Edmure", lastName: "Tully")
       Factory(:organizational_role, organization: @user.person.organizations.first, person: @archived_contact1, role: Role.contact)
@@ -215,12 +216,30 @@ class PeopleControllerTest < ActionController::TestCase
     
     should "not be able to search for archived contacts if 'Include Archvied' checkbox is not checked" do
       get :index, {:search_type => "basic", :query => "Edmure Tully"}
+      assert_response(:success)
       assert !assigns(:all_people).include?(@archived_contact1)
     end
     
     should "be able to search for archived contacts if 'Include Archvied' checkbox is checked" do
       get :index, {:search_type => "basic", :include_archived => "true", :query => "Edmure Tully"}
+      assert_response(:success)
       assert assigns(:all_people).include?(@archived_contact1)
+    end
+    
+    should "be able to search by email address" do
+      get :index, {:search_type => "basic", :include_archived => "true", :query => "bryndentully@email.com"}
+      assert assigns(:people).include?(@unarchived_contact1)
+    end
+    
+    should "be able to search by wildcard" do
+      get :index, {:search_type => "basic", :include_archived => "true", :query => "tully"}
+      assert assigns(:people).include?(@archived_contact1), "archived contact not found"
+      assert assigns(:people).include?(@unarchived_contact1), "unarchived contact not found"
+    end
+    
+    should "not be able to search for anything" do
+      get :index, {:search_type => "basic", :include_archived => "true", :query => "none"}
+      assert_empty assigns(:people)
     end
     
   end
