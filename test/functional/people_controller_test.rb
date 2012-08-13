@@ -164,23 +164,20 @@ class PeopleControllerTest < ActionController::TestCase
         end
       end
       
-=begin
-      should "not remove admin role from the last admin of an org with parent org with 'show_sub_orgs == false'" do
-        setup do
-          org_2 = Organization.create({"parent_id"=> @org.id, "name"=>"Org 2", "terminology"=>"Organization", "show_sub_orgs"=>"0"}) # org with show_sub_orgs == false
-          org_3 = Organization.create({"parent_id"=> org_2.id, "name"=>"Org 3", "terminology"=>"Organization", "show_sub_orgs"=>"1"})
-          @request.session[:current_organization_id] = org_3.id
-        end
+
+      should "not remove admin role from the last admin of an org with parent org with 'show_sub_orgs == false'" do        
+        org_2 = Organization.create({"parent_id"=> @org.id, "name"=>"Org 2", "terminology"=>"Organization", "show_sub_orgs"=>"0"}) # org with show_sub_orgs == false
+        org_3 = Organization.create({"parent_id"=> org_2.id, "name"=>"Org 3", "terminology"=>"Organization", "show_sub_orgs"=>"1"})
+        @user_neil = Factory(:user_with_auxs)
+        org_3.add_admin(@user_neil)
+        sign_in @user_neil
+        @request.session[:current_organization_id] = org_3.id
         
-        org_3.add_admin(@user.person) unless org_3.parent && org_3.parent.show_sub_orgs?
-        org_3.add_admin(@admin2)
-        #puts org_3.admins.count
-        @request.session['current_organization_id']  = org_3.id
         assert_no_difference "OrganizationalRole.count" do
-          xhr :post, :update_roles, { :role_ids => [], :some_role_ids => "", :person_id => @user.person.id }
+          xhr :post, :update_roles, { :role_ids => "1", :some_role_ids => "", :person_id => @user_neil.person.id }
         end
       end
-=end
+
     end
   end
   
@@ -913,6 +910,33 @@ class PeopleControllerTest < ActionController::TestCase
         assert_blank Person.where(personID: @person2.personID)
         assert @person1.email_addresses.include? @email2
       end
+    end
+  end
+  
+  context "Updating a person" do
+    setup do
+      @user, @org = admin_user_login_with_org
+      @contact1 = Factory(:person, firstName: "Brandon", lastName: "Stark")
+      @email_address = Factory(:email_address, person: @contact1, email: "brandonstark@email.com")
+      @contact2 = Factory(:person, firstName: "Rickon", lastName: "Stark")
+      @user.person.organizations.first.add_contact(@contact1)
+      @user.person.organizations.first.add_contact(@contact2)
+    end
+  
+    should "update a person" do
+      put :update, id: @user.person.id, person: {firstName: 'David', lastName: 'Ang',  :current_address_attributes => { :address1 => "#41 Sgt. Esguerra Ave", :country => "Philippines"} }
+      assert_redirected_to person_path(assigns(:person))
+    end
+    
+    should "not be able to update a person" do
+      @email_address2 = Factory(:email_address, person: @contact2, email: "rickonstark@email.com")
+      put :update, id: @contact2.id, person: {firstName: 'Rickon', lastName: 'Stark', :email_addresses_attributes => {"0" => {:email => "brandonstark@email.com", :primary => "1", :id => @email_address2.id}} }
+      #assert_redirected_to person_path(assigns(:person))
+    end
+
+    should "not be able to update a person when email is already taken" do
+      put :update, id: @contact2.id, person: {firstName: 'Rickon', lastName: 'Stark', :email_address => {:email => "brandonstark@email.com", "primary"=>"1"} }
+      assert_empty @contact2.email_addresses
     end
   end
 end

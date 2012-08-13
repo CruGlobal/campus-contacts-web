@@ -588,7 +588,6 @@ class PeopleController < ApplicationController
       end
     end
 
-    #if !params[:archived].blank? && params[:include_archived].blank?
     @q = @q.where(personID: current_organization.people.archived(current_organization.id).collect(&:personID)) unless params[:archived].blank?
 
     @q = @q.search(params[:q])
@@ -606,9 +605,7 @@ class PeopleController < ApplicationController
       @all_people = @all_people.uniq_by { |a| a.id }
     end
     
-    #Person.archived_not_included query must be fixed so that we don't have to query from db twice such as the line above
     @all_people = @all_people.where(personID: current_organization.people.archived.where("organizational_roles.archive_date > ? AND organizational_roles.archive_date < ?", params[:archived_date], (params[:archived_date].to_date+1).strftime("%Y-%m-%d")).collect{|x| x.personID}) unless params[:archived_date].blank?
-    #Person.archived_not_included query must be fixed so that we don't have to query from db twice such as the line above
     @people = Kaminari.paginate_array(@all_people).page(params[:page])
   end
 
