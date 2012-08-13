@@ -554,6 +554,8 @@ class PeopleControllerTest < ActionController::TestCase
     setup do
       request.env["HTTP_REFERER"] = "localhost:3000"
       @user, @org = admin_user_login_with_org
+      
+      Factory(:email_address, email: "robstark@email.com")
     end
     
     should "create person" do
@@ -565,13 +567,43 @@ class PeopleControllerTest < ActionController::TestCase
       
       assert_response :redirect
     end
-    
+
     should "render nothing when user has no name" do
       post :create, { :person => { :firstName => "", :lastName => "Derp", :email_address => { :email => "herp@derp.com" }, :phone_number => { :number => "123918230912"} } }
-      
       assert_equal " ", @response.body
     end
     
+    should "render not be able to create a person with an email already existing" do
+      assert_no_difference "Person.count" do
+        post :create, { :person => { :firstName => "", :lastName => "Derp", :email_address => { :email => "robstark@email.com" }} }
+      end
+    end
+    
+=begin
+    should "not create a person with admin role without a valid email" do
+      assert_no_difference "Person.count" do
+        post :create, {:person=> { :firstName =>"Waymar", :lastName =>"Royce", :gender =>"male", :email_address =>{:email =>"", :primary =>"1"}}, :roles =>{"1"=> Role.admin.id}}
+      end
+    end
+
+    should "not create a person with leader role without a valid email" do
+      assert_no_difference "Person.count" do
+        post :create, {:person=> { :firstName =>"Waymar", :lastName =>"Royce", :gender =>"male", :email_address =>{:email =>"", :primary =>"1"}}, :roles =>{"1"=> Role.leader.id}}
+      end
+    end
+=end
+
+    should "create a person with admin role with a valid email" do
+      assert_difference "Person.count", 1 do
+        post :create, {:person=> { :firstName =>"Waymar", :lastName =>"Royce", :gender =>"male", :email_address =>{:email =>"wayarroyce@email.com", :primary =>"1"}}, :roles =>{"1"=> Role.admin.id}}
+      end
+    end
+    
+    should "create a person with leader role with a valid email" do
+      assert_difference "Person.count", 1 do
+        post :create, {:person=> { :firstName =>"Waymar", :lastName =>"Royce", :gender =>"male", :email_address =>{:email =>"wayarroyce@email.com", :primary =>"1"}}, :roles =>{"1"=> Role.leader.id}}
+      end
+    end
   end
   
   should "bulk comment" do

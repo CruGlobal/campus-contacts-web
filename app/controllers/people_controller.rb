@@ -166,7 +166,11 @@ class PeopleController < ApplicationController
 
                 flash.now[:error] = I18n.t('people.create.error_creating_leader_no_valid_email') if role_id == Role::LEADER_ID.to_s
                 flash.now[:error] = I18n.t('people.create.error_creating_admin_no_valid_email') if role_id == Role::ADMIN_ID.to_s
-                render 'add_person' and return
+                
+                respond_to do |format|
+                  format.js { render 'add_person' }
+                  return
+                end
               end
             rescue ActiveRecord::RecordNotUnique
             end
@@ -186,6 +190,7 @@ class PeopleController < ApplicationController
           end
         end
       else 
+        puts "HELLO"
         flash.now[:error] = ''
         flash.now[:error] += "#{t('people.create.firstname_error')}<br />" unless @person.firstName.present?
         flash.now[:error] += "#{t('people.create.phone_number_error')}<br />" if @phone && !@phone.valid?
