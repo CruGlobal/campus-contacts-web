@@ -150,6 +150,15 @@ class PeopleControllerTest < ActionController::TestCase
 
     end
     
+    should "archive roles when trying to remove them (instead of deleting them in the database)" do
+      Factory(:organizational_role, organization: @user.person.organizations.first, person: @person2, role: Role.contact)
+      Factory(:organizational_role, organization: @user.person.organizations.first, person: @person2, role: Role.involved)
+      
+      assert_difference "OrganizationalRole.where(person_id: #{@person2.id}, organization_id: #{@user.person.organizations.first.id}, archive_date: nil).count", -1 do
+        xhr :post, :update_roles, { :role_ids => "#{Role.contact.id}", :some_role_ids => "", :person_id => @person2.id }
+      end
+    end
+    
     context "removing an admin role" do
       setup do
         @last_admin = Factory(:person, email: "person4@email.com")
@@ -160,10 +169,9 @@ class PeopleControllerTest < ActionController::TestCase
       
       should "not remove admin role from the last admin of a root org" do
         assert_no_difference "OrganizationalRole.count" do
-          xhr :post, :update_roles, { :role_ids => '', :some_role_ids => "", :person_id => @last_admin.id }
+          xhr :post, :update_roles, { :role_ids => "", :some_role_ids => "", :person_id => @last_admin.id }
         end
       end
-      
 
       should "not remove admin role from the last admin of an org with parent org with 'show_sub_orgs == false'" do        
         org_2 = Organization.create({"parent_id"=> @org.id, "name"=>"Org 2", "terminology"=>"Organization", "show_sub_orgs"=>"0"}) # org with show_sub_orgs == false
@@ -174,7 +182,7 @@ class PeopleControllerTest < ActionController::TestCase
         @request.session[:current_organization_id] = org_3.id
         
         assert_no_difference "OrganizationalRole.count" do
-          xhr :post, :update_roles, { :role_ids => "1", :some_role_ids => "", :person_id => @user_neil.person.id }
+          xhr :post, :update_roles, { :role_ids => "", :some_role_ids => "", :person_id => @user_neil.person.id }
         end
       end
 
@@ -270,10 +278,24 @@ class PeopleControllerTest < ActionController::TestCase
       assert_equal(2, assigns(:data).length, "Unsuccessfully searched for a user using Facebook profile url")
     end
 
-    #should "successfully search for facebook users when using '/http://www.facebook.com\/profile.php?id=/[0-9]'" do
-      #get :facebook_search, { :term =>"http://www.facebook.com/nmfdelacruz"}
-      #assert_equal @data.length, 1, "Unsuccessfully searched for a user using Facebook profile url"
-    #end
+=begin
+    should "successfully search for facebook users when using '/http://www.facebook.com\//[a-z]' format" do
+      stub_request(:get, "http://www.facebook.com/profile.php?id=100000289242843").
+        to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/profile.php?id=100000289242843\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
+      get :facebook_search, { :term =>"http://www.facebook.com/profile.php?id=100000289242843"}
+      assert_equal(2, assigns(:data).length, "Unsuccessfully searched for a user using Facebook profile url")
+    end
+=end
+
+=begin
+    should "successfully search for facebook users when using '/http://www.facebook.com\/profile.php?id=/[0-9]'" do
+      stub_request(:get, "http://www.facebook.com/profile.php?id=100000289242843").
+        with(:headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
+        to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/nmfdelacruz\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
+      get :facebook_search, { :term =>"http://www.facebook.com/profile.php?id=100000289242843"}
+      assert_equal @data.length, 1, "Unsuccessfully searched for a user using Facebook profile url"
+    end
+=end
 
     should "unsuccessfully search for facebook users when url does not exist" do
       stub_request(:get, "https://graph.facebook.com/nm34523fdelacruz").
@@ -765,6 +787,13 @@ class PeopleControllerTest < ActionController::TestCase
       
       xhr :get, :index, { :include_archived => true }
       assert_equal assigns(:all_people).collect{|x| x.personID}, [@admin1.person.personID, @leader1.person.personID, @contact1.person.personID, @contact2.person.personID, @contact3.person.personID, @involved1.person.personID].sort { |x, y| x <=> y }
+    end
+    
+    should "return all admin even with archived roles when 'Include ARchived' checkbox is checked" do
+      Factory(:organizational_role, organization: @org, person: @admin1.person, role: Role.contact)
+      @admin1.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
+      xhr :get, :index, { :include_archived => true, :role => Role.admin.id }
+      assert_equal assigns(:all_people).collect{|x| x.personID}, [@admin1.person.personID].sort { |x, y| x <=> y }
     end
     
     should "return people sorted alphabetically by firstName" do

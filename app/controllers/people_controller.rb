@@ -190,9 +190,8 @@ class PeopleController < ApplicationController
           end
         end
       else 
-        puts "HELLO"
         flash.now[:error] = ''
-        flash.now[:error] += "#{t('people.create.firstname_error')}<br />" unless @person.firstName.present?
+        #flash.now[:error] += "#{t('people.create.firstname_error')}<br />" unless @person.firstName.present?
         flash.now[:error] += "#{t('people.create.phone_number_error')}<br />" if @phone && !@phone.valid?
         if @email && !@email.is_unique?
           flash.now[:error] += "#{t('people.create.email_taken')}<br />" 
@@ -331,14 +330,6 @@ class PeopleController < ApplicationController
     render :nothing => true
   end
 
-  def all
-    fetch_people 
-
-    @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
-
-    render :partial => 'all'
-  end
-
   def update_roles
     if current_user_roles.include? Role.admin
       authorize! :manage, current_organization
@@ -396,29 +387,6 @@ class PeopleController < ApplicationController
     rescue OrganizationalRole::CannotDestroyRoleError
       render 'cannot_delete_admin_error'
       return false
-    end
-  end
-  
-  def all_admins_being_deleted?(ors_ids)
-    begin
-      a = Set.new current_organization.admins.collect(&:personID)
-      b = Set.new ors_ids
-      raise OrganizationalRole::CannotDestroyRoleError if a.subset? b
-    rescue OrganizationalRole::CannotDestroyRoleError
-      return false
-    end
-  end
-  
-  def can_roles_be_deleted?(orss)
-    orss.each do |ors|
-      begin
-        ors.check_if_only_remaining_admin_role_in_a_root_org
-        ors.check_if_admin_is_destroying_own_admin_role(current_person)
-        ors.update_attributes({:archive_date => Date.today})
-      rescue OrganizationalRole::CannotDestroyRoleError
-        render 'cannot_delete_admin_error'
-        return false
-      end
     end
   end
 
