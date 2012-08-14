@@ -146,7 +146,6 @@ class PeopleController < ApplicationController
             begin
               begin
                 @person.organizational_roles.create(role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id)
-
                 # we need a valid email address to make a leader
                 if role_ids.include?(Role::LEADER_ID) || role_ids.include?(Role::ADMIN_ID)
                   @new_person = @person.create_user! if @email.present? && @person.user.nil? # create a user account if we have an email address
@@ -157,20 +156,17 @@ class PeopleController < ApplicationController
                   if params.has_key?(:add_to_group)
                     render json: @person and return
                   end
-
                 end
 
               rescue OrganizationalRole::InvalidPersonAttributesError
                 @person.destroy
                 @person = Person.new(params[:person])
-
                 flash.now[:error] = I18n.t('people.create.error_creating_leader_no_valid_email') if role_id == Role::LEADER_ID.to_s
                 flash.now[:error] = I18n.t('people.create.error_creating_admin_no_valid_email') if role_id == Role::ADMIN_ID.to_s
-                
-                render 'add_person'
-                return
+                params[:error] = 'true'
               end
             rescue ActiveRecord::RecordNotUnique
+            
             end
           end
         else
@@ -180,7 +176,6 @@ class PeopleController < ApplicationController
         if params.has_key?(:add_to_group)
           render json: @person
         else
-
           respond_to do |wants|
             wants.html { redirect_to :back }
             wants.mobile { redirect_to :back }
@@ -196,8 +191,7 @@ class PeopleController < ApplicationController
         elsif @email && !@email.valid?
           flash.now[:error] += "#{t('people.create.email_error')}<br />" 
         end
-        render 'add_person'
-        return
+        params[:error] = 'true'
       end
     end
   end

@@ -278,44 +278,31 @@ class PeopleControllerTest < ActionController::TestCase
       assert_equal(2, assigns(:data).length, "Unsuccessfully searched for a user using Facebook profile url")
     end
 
-=begin
-    should "successfully search for facebook users when using '/http://www.facebook.com\//[a-z]' format" do
-      stub_request(:get, "http://www.facebook.com/profile.php?id=100000289242843").
-        to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/profile.php?id=100000289242843\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
+    should "successfully search for facebook users when using '/http://www.facebook.com\/profile.php?id=/[0-9]'" do
+      stub_request(:get, "https://graph.facebook.com/100000289242843").to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/profile.php?id=100000289242843\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
       get :facebook_search, { :term =>"http://www.facebook.com/profile.php?id=100000289242843"}
       assert_equal(2, assigns(:data).length, "Unsuccessfully searched for a user using Facebook profile url")
     end
-=end
-
-=begin
-    should "successfully search for facebook users when using '/http://www.facebook.com\/profile.php?id=/[0-9]'" do
-      stub_request(:get, "http://www.facebook.com/profile.php?id=100000289242843").
-        with(:headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
-        to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/nmfdelacruz\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
-      get :facebook_search, { :term =>"http://www.facebook.com/profile.php?id=100000289242843"}
-      assert_equal @data.length, 1, "Unsuccessfully searched for a user using Facebook profile url"
-    end
-=end
 
     should "unsuccessfully search for facebook users when url does not exist" do
-      stub_request(:get, "https://graph.facebook.com/nm34523fdelacruz").
-        to_return(status: 404)
+      stub_request(:get, "https://graph.facebook.com/nm34523fdelacruz").to_return(status: 404)
       get :facebook_search, { :term =>"http://www.facebook.com/nm34523fdelacruz"}
       assert_equal(1, assigns(:data).length)
     end
 
-=begin These tests get errors because probably of facebook user authentication. RestClient::BadRequest: 400 Bad Request
+=begin
     should "successfully search for facebook users when using '/[a-z]/' (name string)  format" do
-      get :facebook_search, { :term =>"mark"}
-      assert_equal flash[:checker], 1, "Unsuccessfully searched for a user using Facebook profile url"
+      stub_request(:get, "https://graph.facebook.com/search?access_token=&limit=24&q=9gag").to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/nmfdelacruz\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
+      get :facebook_search, { :term =>"9gag"}
+      assert_equal(1, assigns(:data).length)
     end
 
     should "unsuccessfully search for facebook users when name does not exist" do
+      stub_request(:get, "https://graph.facebook.com/search?access_token=&limit=24&q=dj09345803oifjdlkjdl&type=user").to_return(status: 404)
       get :facebook_search, { :term =>"dj09345803oifjdlkjdl"}
-      assert_equal flash[:checker], 0
+      assert_equal(0, assigns(:data).length)
     end
 =end
-
   end
   
   context "displaying a person's friends in their profile" do
@@ -601,7 +588,6 @@ class PeopleControllerTest < ActionController::TestCase
       end
     end
 
-=begin    
     should "not create a person with an invalid phone_number" do
       assert_no_difference "Person.count" do
         post :create, { :person => { :firstName => "Hello", :lastName => "Derp", :phone_number => { :number => "asdofhjasdlkfja"} } }
@@ -626,7 +612,6 @@ class PeopleControllerTest < ActionController::TestCase
         post :create, {:person=> { :firstName =>"Waymar", :lastName =>"Royce", :gender =>"male", :email_address =>{:email =>"", :primary =>"1"}}, :roles =>{"1"=> Role.leader.id}}
       end
     end
-=end
 
     should "create a person with admin role with a valid email" do
       assert_difference "Person.count", 1 do
