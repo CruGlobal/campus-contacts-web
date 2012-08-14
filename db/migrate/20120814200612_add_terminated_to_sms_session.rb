@@ -1,5 +1,5 @@
 class AddTerminatedToSmsSession < ActiveRecord::Migration
   def change
-    add_column :sms_sessions, :terminated, :boolean, null: false, default: false
+    add_column :sms_sessions, :ended, :boolean, null: false, default: false
   end
 end
