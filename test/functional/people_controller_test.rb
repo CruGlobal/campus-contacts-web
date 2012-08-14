@@ -600,8 +600,21 @@ class PeopleControllerTest < ActionController::TestCase
         post :create, { :person => { :firstName => "", :lastName => "Derp", :email_address => { :email => "robstark@email.com" }} }
       end
     end
+
+=begin    
+    should "not create a person with an invalid phone_number" do
+      assert_no_difference "Person.count" do
+        post :create, { :person => { :firstName => "Hello", :lastName => "Derp", :phone_number => { :number => "asdofhjasdlkfja"} } }
+      end
+    end
     
-=begin
+    should "not create a person with an invalid email_address" do
+      assert_no_difference "Person.count" do
+        post :create, { :person => { :firstName => "Rob", :lastName => "Derp", :email_address => { :email => "robstarkemail.com" }} }
+      end
+    end
+    
+
     should "not create a person with admin role without a valid email" do
       assert_no_difference "Person.count" do
         post :create, {:person=> { :firstName =>"Waymar", :lastName =>"Royce", :gender =>"male", :email_address =>{:email =>"", :primary =>"1"}}, :roles =>{"1"=> Role.admin.id}}

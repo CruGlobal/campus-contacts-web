@@ -167,10 +167,8 @@ class PeopleController < ApplicationController
                 flash.now[:error] = I18n.t('people.create.error_creating_leader_no_valid_email') if role_id == Role::LEADER_ID.to_s
                 flash.now[:error] = I18n.t('people.create.error_creating_admin_no_valid_email') if role_id == Role::ADMIN_ID.to_s
                 
-                respond_to do |format|
-                  format.js { render 'add_person' }
-                  return
-                end
+                render 'add_person'
+                return
               end
             rescue ActiveRecord::RecordNotUnique
             end
@@ -329,6 +327,8 @@ class PeopleController < ApplicationController
 
     render :nothing => true
   end
+
+
 
   def update_roles
     if current_user_roles.include? Role.admin
