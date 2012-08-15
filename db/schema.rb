@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120814200612) do
+ActiveRecord::Schema.define(:version => 20120815204804) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -976,7 +976,6 @@ ActiveRecord::Schema.define(:version => 20120814200612) do
   end
 
   add_index "fsk_fields_roles", ["field_id"], :name => "FK_fsk_fields_roles"
-  add_index "fsk_fields_roles", ["role_id"], :name => "fsk_fields_roles_ibfk_2"
 
   create_table "fsk_kit_categories", :force => true do |t|
     t.string   "name",         :limit => 50,                  :null => false
@@ -1359,7 +1358,7 @@ ActiveRecord::Schema.define(:version => 20120814200612) do
   end
 
   add_index "hr_si_applications", ["apply_id"], :name => "apply_id"
-  add_index "hr_si_applications", ["fk_personID"], :name => "fk_PersonID"
+  add_index "hr_si_applications", ["fk_personID"], :name => "fk_personID"
   add_index "hr_si_applications", ["locationA"], :name => "locationA"
   add_index "hr_si_applications", ["locationB"], :name => "locationB"
   add_index "hr_si_applications", ["locationC"], :name => "locationC"
@@ -1440,7 +1439,7 @@ ActiveRecord::Schema.define(:version => 20120814200612) do
     t.datetime "leadershipStartDate"
     t.datetime "leadershipEndDate"
     t.datetime "createDate"
-    t.binary   "lastChangedDate",               :limit => 255
+    t.binary   "lastChangedDate",               :limit => 8
     t.integer  "lastChangedBy"
     t.string   "displayLocation"
     t.boolean  "partnershipRegionOnly"
@@ -1648,30 +1647,30 @@ ActiveRecord::Schema.define(:version => 20120814200612) do
   end
 
   create_table "linczone_contacts", :primary_key => "ContactID", :force => true do |t|
-    t.datetime "EntryDate"
-    t.string   "FirstName",            :limit => 120
-    t.string   "LastName",             :limit => 120
-    t.string   "HomeAddress",          :limit => 200
-    t.string   "City",                 :limit => 20
-    t.string   "State",                :limit => 20
-    t.string   "Zip",                  :limit => 80
-    t.string   "Email",                :limit => 120
-    t.string   "HighSchool",           :limit => 120
-    t.string   "CampusName",           :limit => 200
-    t.string   "CampusID",             :limit => 80
-    t.string   "ReferrerFirstName",    :limit => 120
-    t.string   "ReferrerLastName",     :limit => 120
-    t.string   "ReferrerRelationship", :limit => 100
-    t.string   "ReferrerEmail",        :limit => 200
-    t.string   "InfoCCC",              :limit => 1,   :default => "F"
-    t.string   "InfoNav",              :limit => 1,   :default => "F"
-    t.string   "InfoIV",               :limit => 1,   :default => "F"
-    t.string   "InfoFCA",              :limit => 1,   :default => "F"
-    t.string   "InfoBSU",              :limit => 1,   :default => "F"
-    t.string   "InfoCACM",             :limit => 1,   :default => "F"
-    t.string   "InfoEFCA",             :limit => 1,   :default => "F"
-    t.string   "InfoGCM",              :limit => 1,   :default => "F"
-    t.string   "InfoWesley",           :limit => 1,   :default => "F"
+    t.timestamp "EntryDate"
+    t.string    "FirstName",            :limit => 120
+    t.string    "LastName",             :limit => 120
+    t.string    "HomeAddress",          :limit => 200
+    t.string    "City",                 :limit => 20
+    t.string    "State",                :limit => 20
+    t.string    "Zip",                  :limit => 80
+    t.string    "Email",                :limit => 120
+    t.string    "HighSchool",           :limit => 120
+    t.string    "CampusName",           :limit => 200
+    t.string    "CampusID",             :limit => 80
+    t.string    "ReferrerFirstName",    :limit => 120
+    t.string    "ReferrerLastName",     :limit => 120
+    t.string    "ReferrerRelationship", :limit => 100
+    t.string    "ReferrerEmail",        :limit => 200
+    t.string    "InfoCCC",              :limit => 1,   :default => "F"
+    t.string    "InfoNav",              :limit => 1,   :default => "F"
+    t.string    "InfoIV",               :limit => 1,   :default => "F"
+    t.string    "InfoFCA",              :limit => 1,   :default => "F"
+    t.string    "InfoBSU",              :limit => 1,   :default => "F"
+    t.string    "InfoCACM",             :limit => 1,   :default => "F"
+    t.string    "InfoEFCA",             :limit => 1,   :default => "F"
+    t.string    "InfoGCM",              :limit => 1,   :default => "F"
+    t.string    "InfoWesley",           :limit => 1,   :default => "F"
   end
 
   create_table "mail_delayed_jobs", :force => true do |t|
@@ -2344,6 +2343,7 @@ ActiveRecord::Schema.define(:version => 20120814200612) do
   add_index "ministry_person", ["firstName"], :name => "firstname_ministry_Person"
   add_index "ministry_person", ["fk_ssmUserId"], :name => "fk_ssmUserId"
   add_index "ministry_person", ["lastName"], :name => "lastname_ministry_Person"
+  add_index "ministry_person", ["org_ids_cache"], :name => "index_ministry_person_on_org_ids_cache", :length => {"org_ids_cache"=>255}
   add_index "ministry_person", ["region"], :name => "region_ministry_Person"
 
   create_table "ministry_regionalstat", :primary_key => "RegionalStatID", :force => true do |t|
@@ -3449,7 +3449,7 @@ ActiveRecord::Schema.define(:version => 20120814200612) do
     t.integer  "created_by_id"
     t.integer  "organization_id"
     t.integer  "followup_comment_id"
-    t.string   "what",                :limit => 0
+    t.string   "what",                :limit => 22
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
@@ -4068,7 +4068,7 @@ ActiveRecord::Schema.define(:version => 20120814200612) do
     t.boolean  "interactive",    :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "terminated",     :default => false, :null => false
+    t.boolean  "ended",          :default => false, :null => false
   end
 
   add_index "sms_sessions", ["phone_number", "updated_at"], :name => "session"

@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class OrganizationsControllerTest < ActionController::TestCase
-  context "Creating organizations" do
+  context "Organizations" do
     setup do
       @user = Factory(:user_with_auxs)  #user with a person object
       sign_in @user
@@ -10,13 +10,34 @@ class OrganizationsControllerTest < ActionController::TestCase
       @org_child = Factory(:organization, :name => "neilmarion", :parent => @org_parent)
     end
 
-    should "create a child org if it's name is unique, otherwise dont create a child org" do
-      xhr :post, :create, {:organization => {:parent_id => @org_parent.id, :name => "neilmarion", :terminology => "Organization", :show_sub_orgs => "1"}}
-      assert_equal 1, @org_parent.children.count
-      
-      xhr :post, :create, {:organization => {:parent_id => @org_parent.id, :name => "notneilmarion", :terminology => "Organization", :show_sub_orgs => "1"}}
-      assert_equal 2, @org_parent.children.count
-      assert @org_parent.children.collect {|c| c.name }.include? "notneilmarion"
+    context "creating" do
+      should "create a child org if it's name is unique, otherwise dont create a child org" do
+        xhr :post, :create, {:organization => {:parent_id => @org_parent.id, :name => "neilmarion", :terminology => "Organization", :show_sub_orgs => "1"}}
+        assert_equal 1, @org_parent.children.count
+
+        xhr :post, :create, {:organization => {:parent_id => @org_parent.id, :name => "notneilmarion", :terminology => "Organization", :show_sub_orgs => "1"}}
+        assert_equal 2, @org_parent.children.count
+        assert @org_parent.children.collect {|c| c.name }.include? "notneilmarion"
+      end
+
+      should "clear cache of anyone who should see this org in their nav menu" do
+        OrganizationsController.any_instance.expects(:expire_fragment).with("org_nav/#{@user.person.id}")
+
+        xhr :post, :create, {:organization => {:parent_id => @org_parent.id, :name => "notneilmarion", :terminology => "Organization", :show_sub_orgs => "1"}}
+      end
+    end
+
+    context 'deleting' do
+      should "clear cache of anyone who has a role in a parent of this org" do
+        @org_grandchild = Factory(:organization, :name => "foo", :parent => @org_child)
+        OrganizationsController.any_instance.expects(:expire_fragment).with("org_nav/#{@user.person.id}")
+        post :destroy, id: @org_grandchild.id
+      end
+
+      should "clear cache of anyone who has a role in a parent of this org" do
+        OrganizationsController.any_instance.expects(:expire_fragment).with("org_nav/#{@user.person.id}")
+        post :destroy, id: @org_parent.id
+      end
     end
 
   end
