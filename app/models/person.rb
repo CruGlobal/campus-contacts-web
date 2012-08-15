@@ -818,7 +818,7 @@ class Person < ActiveRecord::Base
     @organizational_roles_hash ||= org_ids.collect { |org_id, values| 
                                      values['roles'].select { |role_id| 
                                        role_id != Role.contact.id
-                                     }.collect { |role_id| Role.find_by_id(role_id) }.collect { |role|
+                                     }.collect { |role_id| Role.find_by_id(role_id) }.compact.collect { |role|
                                        {org_id: org_id, role: role.i18n, name: organization_from_id(org_id).name, primary: primary_organization.id == org_id ? 'true' : 'false'} 
                                      }
                                    }.flatten
