@@ -130,8 +130,8 @@ en:
       not_in_system: 'If the person you are looking for is not already in the system click here to add them.'
   people:
     create:
-      error_creating_leader_no_valid_email: "Error: Cannot create Person with leader role without a valid email"
-      error_creating_admin_no_valid_email: "Error: Cannot create Person with admin role without a valid email"
+      error_creating_leader_no_valid_email: "<font color='red'>Cannot create Person with leader role without a valid email</font>"
+      error_creating_admin_no_valid_email: "<font color='red'>Cannot create Person with admin role without a valid email</font>"
       firstname_error: "<font color='red'>First name is required.</font>"
       phone_number_error: "<font color='red'>Invalid phone number</font>"
       email_taken: "<font color='red'>Oops! This email address is already being used. Please email <b>support@missionhub.com</b> with the EMAIL address and NAME of the person whom you want to add the email to.</font>"
@@ -682,6 +682,7 @@ en:
     keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
     email_should_be_unique_msg: "Email already used, try another email address."
     email_invalid_msg: "Email is invalid, try again."
+    no_survey: "There isn't a survey associated with that keyword"
   survey:
     drop_down_field: 
       choose_one: "Choose One"

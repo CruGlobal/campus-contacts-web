@@ -65,12 +65,12 @@ class ContactsController < ApplicationController
 
   def search_by_name_and_email
     
-    people = params[:include_archived] ?
+    @people = params[:include_archived] ?
       current_organization.people.search_by_name_or_email(params[:term], current_organization.id).uniq :
       current_organization.people.search_by_name_or_email(params[:term], current_organization.id).uniq.archived_not_included
 
     respond_to do |wants|
-      wants.json { render text: people.collect{|person| {"label" => "#{person.name} (#{person.email})", "id" => person.id}}.to_json }
+      wants.json { render text: @people.collect{|person| {"label" => "#{person.name} (#{person.email})", "id" => person.id}}.to_json }
     end
   end
   
@@ -98,7 +98,6 @@ class ContactsController < ApplicationController
     authorize!(:update, @person)
     
     @person.update_attributes(params[:person]) if params[:person]
-    
     update_survey_answers if params[:answers].present?
     @person.update_date_attributes_updated
     if @person.valid? && (!@answer_sheet || (@answer_sheet.person.valid? && (!@answer_sheet.person.primary_phone_number || @answer_sheet.person.primary_phone_number.valid?)))
@@ -108,7 +107,7 @@ class ContactsController < ApplicationController
         wants.html { redirect_to survey_response_path(@person) }
       end
     else
-      render :edit
+      redirect_to survey_response_path(params[:id])
     end
   end
   
@@ -151,26 +150,6 @@ class ContactsController < ApplicationController
       ContactsMailer.enqueue.reminder(leaders.collect(&:email).compact, current_person.email, params[:subject], params[:body])
     end
     render nothing: true
-  end
-
-  def import_contacts
-    @import = Import.new
-    @organization = current_organization
-    authorize! :manage, @organization
-  end
-
-
-  def download_sample_contacts_csv
-
-    csv_string = CSV.generate do |csv|
-      c = 0
-      CSV.foreach(Rails.root.to_s + "/public/files/sample_contacts.csv") do |row|
-        c = c + 1
-        csv << row
-      end
-    end
-
-    send_data csv_string, :type => 'text/csv; charset=UTF-8; header=present', :disposition => "attachment; filename=sample_contacts.csv"
   end
   
   protected
@@ -266,6 +245,8 @@ class ContactsController < ApplicationController
                              case question.attribute_name
                              when 'email'
                                @people = @people.includes(:email_addresses).where("#{EmailAddress.table_name}.email like ?", '%' + v + '%') unless v.strip.blank?
+                             when 'phone_number'
+                               @people = @people.includes(:phone_numbers).where("#{PhoneNumber.table_name}.number like ?", '%' + v + '%') unless v.strip.blank?
                              else
                                @people = @people.where("#{Person.table_name}.#{question.attribute_name} like ?", '%' + v + '%') unless v.strip.blank?
                              end

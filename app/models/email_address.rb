@@ -5,6 +5,7 @@ class EmailAddress < ActiveRecord::Base
   before_validation :set_primary, on: :create
   after_destroy :set_new_primary
   validates_uniqueness_of :email, on: :create, message: "already taken"
+  validates_uniqueness_of :email, on: :update, message: "already taken"
   
   def to_s
     email

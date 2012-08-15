@@ -72,8 +72,10 @@ class SmsController < ApplicationController
       
       # Look for an active keyword for this message
       keyword = SmsKeyword.find_by_keyword(message.split(' ').first.downcase)
-      if !keyword || !keyword.active? || !keyword.survey
-        @msg = t('sms.keyword_inactive')
+      if !keyword || !keyword.active?
+        @msg = I18n.t('sms.keyword_inactive')
+      elsif !keyword.survey
+        @msg = t('sms.no_survey')
       else
         @sms_session = SmsSession.create!(person_id: person.id, sms_keyword_id: keyword.id, phone_number: sms_params[:phone_number])
         @msg =  keyword.initial_response.sub(/\{\{\s*link\s*\}\}/, "http://mhub.cc/m/#{Base62.encode(@sms_session.id)}")

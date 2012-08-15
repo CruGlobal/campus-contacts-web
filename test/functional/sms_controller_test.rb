@@ -45,6 +45,13 @@ class SmsControllerTest < ActionController::TestCase
         assert_equal(assigns(:msg), 'What is your first name?')
       end
       
+      should "send reply 'i' even though there are trailing strings separated from by ' '" do
+        Factory(:received_sms, @sms_params)
+        post :mo, @post_params.merge(message: 'i jim.walker jim.walker', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
+        assert_equal(assigns(:sms_session).interactive, true)
+        assert_equal(assigns(:msg), 'What is your first name?')
+      end
+      
       should "save response to interactive sms" do
         Factory(:person, email: "person@email.com") #existing email
         @sms_session.update_attribute(:interactive, true)
@@ -72,7 +79,7 @@ class SmsControllerTest < ActionController::TestCase
         @sms_session.update_attribute(:interactive, true)
         @person.update_attributes(firstName: 'Jesus', lastName: 'Christ')
         post :mo, @post_params.merge!({message: 'Jesus', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
-        assert_equal(assigns(:answer_sheet).answers.first.value, 'Jesus') 
+        assert_equal(assigns(:answer_sheet).answers.first.value, 'Jesus')
       end
 
 =begin

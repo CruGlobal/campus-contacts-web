@@ -150,6 +150,15 @@ class PeopleControllerTest < ActionController::TestCase
 
     end
     
+    should "archive roles when trying to remove them (instead of deleting them in the database)" do
+      Factory(:organizational_role, organization: @user.person.organizations.first, person: @person2, role: Role.contact)
+      Factory(:organizational_role, organization: @user.person.organizations.first, person: @person2, role: Role.involved)
+      
+      assert_difference "OrganizationalRole.where(person_id: #{@person2.id}, organization_id: #{@user.person.organizations.first.id}, archive_date: nil).count", -1 do
+        xhr :post, :update_roles, { :role_ids => "#{Role.contact.id}", :some_role_ids => "", :person_id => @person2.id }
+      end
+    end
+    
     context "removing an admin role" do
       setup do
         @last_admin = Factory(:person, email: "person4@email.com")
@@ -160,27 +169,23 @@ class PeopleControllerTest < ActionController::TestCase
       
       should "not remove admin role from the last admin of a root org" do
         assert_no_difference "OrganizationalRole.count" do
-          xhr :post, :update_roles, { :role_ids => '', :some_role_ids => "", :person_id => @last_admin.id }
+          xhr :post, :update_roles, { :role_ids => "", :some_role_ids => "", :person_id => @last_admin.id }
         end
       end
-      
-=begin
-      should "not remove admin role from the last admin of an org with parent org with 'show_sub_orgs == false'" do
-        setup do
-          org_2 = Organization.create({"parent_id"=> @org.id, "name"=>"Org 2", "terminology"=>"Organization", "show_sub_orgs"=>"0"}) # org with show_sub_orgs == false
-          org_3 = Organization.create({"parent_id"=> org_2.id, "name"=>"Org 3", "terminology"=>"Organization", "show_sub_orgs"=>"1"})
-          @request.session[:current_organization_id] = org_3.id
-        end
+
+      should "not remove admin role from the last admin of an org with parent org with 'show_sub_orgs == false'" do        
+        org_2 = Organization.create({"parent_id"=> @org.id, "name"=>"Org 2", "terminology"=>"Organization", "show_sub_orgs"=>"0"}) # org with show_sub_orgs == false
+        org_3 = Organization.create({"parent_id"=> org_2.id, "name"=>"Org 3", "terminology"=>"Organization", "show_sub_orgs"=>"1"})
+        @user_neil = Factory(:user_with_auxs)
+        org_3.add_admin(@user_neil)
+        sign_in @user_neil
+        @request.session[:current_organization_id] = org_3.id
         
-        org_3.add_admin(@user.person) unless org_3.parent && org_3.parent.show_sub_orgs?
-        org_3.add_admin(@admin2)
-        #puts org_3.admins.count
-        @request.session['current_organization_id']  = org_3.id
         assert_no_difference "OrganizationalRole.count" do
-          xhr :post, :update_roles, { :role_ids => [], :some_role_ids => "", :person_id => @user.person.id }
+          xhr :post, :update_roles, { :role_ids => "", :some_role_ids => "", :person_id => @user_neil.person.id }
         end
       end
-=end
+
     end
   end
   
@@ -189,8 +194,9 @@ class PeopleControllerTest < ActionController::TestCase
       @user = Factory(:user_with_auxs)
       sign_in @user
       
-      @unarchived_contact2 = Factory(:person, firstName: "Brynden", lastName: "Tully")
+      @unarchived_contact1 = Factory(:person, firstName: "Brynden", lastName: "Tully")
       Factory(:organizational_role, organization: @user.person.organizations.first, person: @unarchived_contact1, role: Role.contact)
+      Factory(:email_address, email: "bryndentully@email.com", person: @unarchived_contact1, primary: true)
       
       @archived_contact1 = Factory(:person, firstName: "Edmure", lastName: "Tully")
       Factory(:organizational_role, organization: @user.person.organizations.first, person: @archived_contact1, role: Role.contact)
@@ -215,12 +221,30 @@ class PeopleControllerTest < ActionController::TestCase
     
     should "not be able to search for archived contacts if 'Include Archvied' checkbox is not checked" do
       get :index, {:search_type => "basic", :query => "Edmure Tully"}
+      assert_response(:success)
       assert !assigns(:all_people).include?(@archived_contact1)
     end
     
     should "be able to search for archived contacts if 'Include Archvied' checkbox is checked" do
       get :index, {:search_type => "basic", :include_archived => "true", :query => "Edmure Tully"}
+      assert_response(:success)
       assert assigns(:all_people).include?(@archived_contact1)
+    end
+    
+    should "be able to search by email address" do
+      get :index, {:search_type => "basic", :include_archived => "true", :query => "bryndentully@email.com"}
+      assert assigns(:people).include?(@unarchived_contact1)
+    end
+    
+    should "be able to search by wildcard" do
+      get :index, {:search_type => "basic", :include_archived => "true", :query => "tully"}
+      assert assigns(:people).include?(@archived_contact1), "archived contact not found"
+      assert assigns(:people).include?(@unarchived_contact1), "unarchived contact not found"
+    end
+    
+    should "not be able to search for anything" do
+      get :index, {:search_type => "basic", :include_archived => "true", :query => "none"}
+      assert_empty assigns(:people)
     end
     
   end
@@ -254,30 +278,31 @@ class PeopleControllerTest < ActionController::TestCase
       assert_equal(2, assigns(:data).length, "Unsuccessfully searched for a user using Facebook profile url")
     end
 
-    #should "successfully search for facebook users when using '/http://www.facebook.com\/profile.php?id=/[0-9]'" do
-      #get :facebook_search, { :term =>"http://www.facebook.com/nmfdelacruz"}
-      #assert_equal @data.length, 1, "Unsuccessfully searched for a user using Facebook profile url"
-    #end
+    should "successfully search for facebook users when using '/http://www.facebook.com\/profile.php?id=/[0-9]'" do
+      stub_request(:get, "https://graph.facebook.com/100000289242843").to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/profile.php?id=100000289242843\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
+      get :facebook_search, { :term =>"http://www.facebook.com/profile.php?id=100000289242843"}
+      assert_equal(2, assigns(:data).length, "Unsuccessfully searched for a user using Facebook profile url")
+    end
 
     should "unsuccessfully search for facebook users when url does not exist" do
-      stub_request(:get, "https://graph.facebook.com/nm34523fdelacruz").
-        to_return(status: 404)
+      stub_request(:get, "https://graph.facebook.com/nm34523fdelacruz").to_return(status: 404)
       get :facebook_search, { :term =>"http://www.facebook.com/nm34523fdelacruz"}
       assert_equal(1, assigns(:data).length)
     end
 
-=begin These tests get errors because probably of facebook user authentication. RestClient::BadRequest: 400 Bad Request
+=begin
     should "successfully search for facebook users when using '/[a-z]/' (name string)  format" do
-      get :facebook_search, { :term =>"mark"}
-      assert_equal flash[:checker], 1, "Unsuccessfully searched for a user using Facebook profile url"
+      stub_request(:get, "https://graph.facebook.com/search?access_token=&limit=24&q=9gag").to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/nmfdelacruz\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
+      get :facebook_search, { :term =>"9gag"}
+      assert_equal(1, assigns(:data).length)
     end
 
     should "unsuccessfully search for facebook users when name does not exist" do
+      stub_request(:get, "https://graph.facebook.com/search?access_token=&limit=24&q=dj09345803oifjdlkjdl&type=user").to_return(status: 404)
       get :facebook_search, { :term =>"dj09345803oifjdlkjdl"}
-      assert_equal flash[:checker], 0
+      assert_equal(0, assigns(:data).length)
     end
 =end
-
   end
   
   context "displaying a person's friends in their profile" do
@@ -538,6 +563,8 @@ class PeopleControllerTest < ActionController::TestCase
     setup do
       request.env["HTTP_REFERER"] = "localhost:3000"
       @user, @org = admin_user_login_with_org
+      
+      Factory(:email_address, email: "robstark@email.com")
     end
     
     should "create person" do
@@ -549,13 +576,54 @@ class PeopleControllerTest < ActionController::TestCase
       
       assert_response :redirect
     end
-    
+
     should "render nothing when user has no name" do
       post :create, { :person => { :firstName => "", :lastName => "Derp", :email_address => { :email => "herp@derp.com" }, :phone_number => { :number => "123918230912"} } }
-      
       assert_equal " ", @response.body
     end
     
+    should "render not be able to create a person with an email already existing" do
+      assert_no_difference "Person.count" do
+        post :create, { :person => { :firstName => "", :lastName => "Derp", :email_address => { :email => "robstark@email.com" }} }
+      end
+    end
+
+    should "not create a person with an invalid phone_number" do
+      assert_no_difference "Person.count" do
+        post :create, { :person => { :firstName => "Hello", :lastName => "Derp", :phone_number => { :number => "asdofhjasdlkfja"} } }
+      end
+    end
+    
+    should "not create a person with an invalid email_address" do
+      assert_no_difference "Person.count" do
+        post :create, { :person => { :firstName => "Rob", :lastName => "Derp", :email_address => { :email => "robstarkemail.com" }} }
+      end
+    end
+    
+
+    should "not create a person with admin role without a valid email" do
+      assert_no_difference "Person.count" do
+        post :create, {:person=> { :firstName =>"Waymar", :lastName =>"Royce", :gender =>"male", :email_address =>{:email =>"", :primary =>"1"}}, :roles =>{"1"=> Role.admin.id}}
+      end
+    end
+
+    should "not create a person with leader role without a valid email" do
+      assert_no_difference "Person.count" do
+        post :create, {:person=> { :firstName =>"Waymar", :lastName =>"Royce", :gender =>"male", :email_address =>{:email =>"", :primary =>"1"}}, :roles =>{"1"=> Role.leader.id}}
+      end
+    end
+
+    should "create a person with admin role with a valid email" do
+      assert_difference "Person.count", 1 do
+        post :create, {:person=> { :firstName =>"Waymar", :lastName =>"Royce", :gender =>"male", :email_address =>{:email =>"wayarroyce@email.com", :primary =>"1"}}, :roles =>{"1"=> Role.admin.id}}
+      end
+    end
+    
+    should "create a person with leader role with a valid email" do
+      assert_difference "Person.count", 1 do
+        post :create, {:person=> { :firstName =>"Waymar", :lastName =>"Royce", :gender =>"male", :email_address =>{:email =>"wayarroyce@email.com", :primary =>"1"}}, :roles =>{"1"=> Role.leader.id}}
+      end
+    end
   end
   
   should "bulk comment" do
@@ -717,6 +785,13 @@ class PeopleControllerTest < ActionController::TestCase
       
       xhr :get, :index, { :include_archived => true }
       assert_equal assigns(:all_people).collect{|x| x.personID}, [@admin1.person.personID, @leader1.person.personID, @contact1.person.personID, @contact2.person.personID, @contact3.person.personID, @involved1.person.personID].sort { |x, y| x <=> y }
+    end
+    
+    should "return all admin even with archived roles when 'Include ARchived' checkbox is checked" do
+      Factory(:organizational_role, organization: @org, person: @admin1.person, role: Role.contact)
+      @admin1.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
+      xhr :get, :index, { :include_archived => true, :role => Role.admin.id }
+      assert_equal assigns(:all_people).collect{|x| x.personID}, [@admin1.person.personID].sort { |x, y| x <=> y }
     end
     
     should "return people sorted alphabetically by firstName" do
@@ -894,6 +969,33 @@ class PeopleControllerTest < ActionController::TestCase
         assert_blank Person.where(personID: @person2.personID)
         assert @person1.email_addresses.include? @email2
       end
+    end
+  end
+  
+  context "Updating a person" do
+    setup do
+      @user, @org = admin_user_login_with_org
+      @contact1 = Factory(:person, firstName: "Brandon", lastName: "Stark")
+      @email_address = Factory(:email_address, person: @contact1, email: "brandonstark@email.com")
+      @contact2 = Factory(:person, firstName: "Rickon", lastName: "Stark")
+      @user.person.organizations.first.add_contact(@contact1)
+      @user.person.organizations.first.add_contact(@contact2)
+    end
+  
+    should "update a person" do
+      put :update, id: @user.person.id, person: {firstName: 'David', lastName: 'Ang',  :current_address_attributes => { :address1 => "#41 Sgt. Esguerra Ave", :country => "Philippines"} }
+      assert_redirected_to person_path(assigns(:person))
+    end
+    
+    should "not be able to update a person" do
+      @email_address2 = Factory(:email_address, person: @contact2, email: "rickonstark@email.com")
+      put :update, id: @contact2.id, person: {firstName: 'Rickon', lastName: 'Stark', :email_addresses_attributes => {"0" => {:email => "brandonstark@email.com", :primary => "1", :id => @email_address2.id}} }
+      #assert_redirected_to person_path(assigns(:person))
+    end
+
+    should "not be able to update a person when email is already taken" do
+      put :update, id: @contact2.id, person: {firstName: 'Rickon', lastName: 'Stark', :email_address => {:email => "brandonstark@email.com", "primary"=>"1"} }
+      assert_empty @contact2.email_addresses
     end
   end
 end
