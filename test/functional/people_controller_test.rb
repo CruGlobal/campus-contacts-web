@@ -177,7 +177,7 @@ class PeopleControllerTest < ActionController::TestCase
         org_2 = Organization.create({"parent_id"=> @org.id, "name"=>"Org 2", "terminology"=>"Organization", "show_sub_orgs"=>"0"}) # org with show_sub_orgs == false
         org_3 = Organization.create({"parent_id"=> org_2.id, "name"=>"Org 3", "terminology"=>"Organization", "show_sub_orgs"=>"1"})
         @user_neil = Factory(:user_with_auxs)
-        org_3.add_admin(@user_neil)
+        org_3.add_admin(@user_neil.person)
         sign_in @user_neil
         @request.session[:current_organization_id] = org_3.id
         

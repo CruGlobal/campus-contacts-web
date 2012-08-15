@@ -56,7 +56,7 @@ class SmsController < ApplicationController
           @msg = survey.post_survey_message.present? ? survey.post_survey_message : t('contacts.thanks.message')
           # Mark answer_sheet as complete
           @answer_sheet.update_attribute(:completed_at, Time.now)
-          @sms_session.update_attributes(terminated: true)
+          @sms_session.update_attributes(ended: true)
 
           send_message(@msg, @received.phone_number)
         end
