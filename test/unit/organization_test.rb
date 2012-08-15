@@ -28,6 +28,36 @@ class OrganizationTest < ActiveSupport::TestCase
   should have_many(:groups)
 
   # begin methods testing
+  
+  context "get all leaders" do
+    setup do
+      @org1 = Factory(:organization)
+      @org2 = Factory(:organization)
+      @person = Factory(:person)
+      @leader1 = Factory(:person, email: 'leader1@email.com')
+      @leader2 = Factory(:person, email: 'leader2@email.com')
+      @leader3 = Factory(:person, email: 'leader3@email.com')
+      @contact = Factory(:person)
+      Factory(:organizational_role, person: @contact, role: Role.contact, organization: @org1, :added_by_id => @person.id)
+      Factory(:organizational_role, person: @leader1, role: Role.leader, organization: @org1, :added_by_id => @person.id)
+      Factory(:organizational_role, person: @leader2, role: Role.leader, organization: @org1, :added_by_id => @person.id)
+      Factory(:organizational_role, person: @leader3, role: Role.leader, organization: @org2, :added_by_id => @person.id)
+    end
+    should "return all leader of an org" do
+      results = @org1.leaders
+      assert_equal(2, results.count, "leaders returned should be 2")
+      assert(results.include?(@leader1), "should should be returned")
+      assert(results.include?(@leader2), "should should be returned")
+    end
+    should "not return leaders from other org" do
+      results = @org1.leaders
+      assert(!results.include?(@leader3), "should not should be returned")
+    end
+    should "not return non-leaders organizational role" do
+      results = @org1.leaders
+      assert(!results.include?(@contact), "should not should be returned")
+    end
+  end
 
   context "parent_organization method" do
     setup do
