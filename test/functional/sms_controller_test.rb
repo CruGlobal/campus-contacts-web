@@ -51,6 +51,13 @@ class SmsControllerTest < ActionController::TestCase
         assert_equal(assigns(:sms_session).interactive, true)
         assert_equal(assigns(:msg), 'What is your first name?')
       end
+
+      should 'add contact to org as soon as they reply with "i"' do
+        Factory(:received_sms, @sms_params)
+        assert_difference('OrganizationalRole.count') do
+          post :mo, @post_params.merge(message: 'i', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
+        end
+      end
       
       should "save response to interactive sms" do
         Factory(:person, email: "person@email.com") #existing email

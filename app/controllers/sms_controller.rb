@@ -43,7 +43,7 @@ class SmsController < ApplicationController
         survey = keyword.survey
         if !@sms_session.interactive? # they just texted in 'i'
           # We're getting into a sticky session
-          @sms_session.sms_keyword.organization.add_contact(@person)
+          survey.organization.add_contact(@person)
           @sms_session.update_attributes(interactive: true)
         else
           # Find the person, save the answer, send the next question
