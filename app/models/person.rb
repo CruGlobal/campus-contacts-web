@@ -240,7 +240,7 @@ class Person < ActiveRecord::Base
     OrganizationalRole.where(person_id: id, role_id: Role.leader_ids, :organization_id => org.id).present?
   end
   def organization_objects
-    @organization_objects ||= Hash[Organization.order('name').find_by_id(org_ids.keys).collect {|o| [o.id, o]}]
+    @organization_objects ||= Hash[Organization.order('name').find_all_by_id(org_ids.keys).collect {|o| [o.id, o]}]
   end
 
   def org_ids
