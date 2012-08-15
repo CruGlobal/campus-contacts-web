@@ -509,6 +509,7 @@ class PeopleController < ApplicationController
           .joins("LEFT JOIN organizational_roles AS org_roles ON 
                    org_roles.person_id = ministry_person.personID")
                    .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
+                   .where("org_roles.organization_id" => current_organization.id)
                    .where("roles.id = :search",
                           {:search => "#{search_params[:role]}"})
                    sort_by.unshift("roles.id")
@@ -517,7 +518,8 @@ class PeopleController < ApplicationController
           @q = @q.select("ministry_person.*, roles.*")
           .joins("LEFT JOIN organizational_roles AS org_roles ON 
                    org_roles.person_id = ministry_person.personID")
-                   .joins("INNER JOIN roles ON roles.id = org_roles.role_id").where("org_roles.archive_date" => nil)
+                   .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
+                   .where("org_roles.archive_date" => nil, "org_roles.organization_id" => current_organization.id)
                    .where("roles.id = :search",
                           {:search => "#{search_params[:role]}"})
                    sort_by.unshift("roles.id")
