@@ -27,8 +27,7 @@ class Batch # < ActiveRecord::Base
                 Rails.env.production? ? Airbrake.notify(e) : (raise e)
               end
             end
-            
-            intro = "As the Admin of #{organization.name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, you have been sent #{formated_transferred_contacts.size} contact#{'s' if formated_transferred_contacts.size > 1}. Please login to missionhub.com as soon as possible to followup the contact#{'s' if formated_transferred_contacts.size > 1}. There may be more information about the contacts in the comment section of their individual profile. If not, you may want to contact the senders at their email address. Below are the contacts sent:"
+            intro = I18n.t('batch.person_transfer_message', org_name: organization.name, contacts_count: formated_transferred_contacts.size)
 
             OrganizationMailer.enqueue.notify_person_transfer(admin.email, intro, formated_transferred_contacts)
             # OrganizationMailer.notify_person_transfer(admin.email, intro, formated_transferred_contacts).deliver
@@ -67,7 +66,7 @@ class Batch # < ActiveRecord::Base
                 Rails.env.production? ? Airbrake.notify(e) : (raise e)
               end
             end
-            intro = "As the Admin of #{organization.name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, there are #{formated_new_contacts.size} new contact#{'s' if formated_new_contacts.size > 1} in your organization. Please login to missionhub.com as soon as possible to followup the contact#{'s' if formated_new_contacts.size > 1}. Below is the list of new contacts:"
+            intro = I18n.t('batch.new_person_message', org_name: organization.name, contacts_count: new_contacts.size)
           
             OrganizationMailer.enqueue.notify_new_people(admin.email, intro, formated_new_contacts)
             # OrganizationMailer.notify_new_people(admin.email, intro, formated_new_contacts).deliver
