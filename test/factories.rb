@@ -289,6 +289,13 @@ FactoryGirl.define do
     attribute_name ''
   end
   
+  factory :some_question, class: :element do
+    kind          'TextField'
+    label         'Are you alright?'
+    style         'short'
+    content       "Are you alright?"
+  end
+  
   factory :firstName_element, parent: :element do
     kind          'TextField'
     label         'First name?'
@@ -311,6 +318,15 @@ FactoryGirl.define do
     style         'short'
     object_name   'person'
     attribute_name 'email'
+    required      false
+  end
+  
+  factory :gender_element, parent: :element do
+    kind          'TextField'
+    label         'What is your gender?'
+    style         'short'
+    object_name   'person'
+    attribute_name 'gender'
     required      false
   end
   
