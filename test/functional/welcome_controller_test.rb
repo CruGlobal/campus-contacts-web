@@ -54,4 +54,14 @@ class WelcomeControllerTest < ActionController::TestCase
     get :privacy
     assert_template "layouts/splash"
   end
+  
+  should "get correct template for tutorials" do
+    get :tutorials
+    assert_template "layouts/splash"
+  end
+  
+  should "get correct template for duplicate" do
+    get :duplicate
+    assert_template "layouts/splash"
+  end
 end

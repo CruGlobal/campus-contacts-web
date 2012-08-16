@@ -61,6 +61,12 @@ class SurveysControllerTest < ActionController::TestCase
     assert_not_nil assigns(:organization)
   end
   
+  should "get index" do
+    @user, @org = admin_user_login_with_org
+    get :index
+    assert_not_nil assigns(:organization)
+  end
+  
   should "render 404 if no user is logged in" do
     get :index
     assert_response :missing
@@ -83,11 +89,26 @@ class SurveysControllerTest < ActionController::TestCase
     assert_equal "wat", @org.surveys.first.title
   end
   
+  test "update fail" do
+    @user, @org = admin_user_login_with_org
+    keyword = Factory(:approved_keyword, user: @user, organization: @org)
+    put :update, { :id => @org.surveys.first.id, :survey => { :title => "" } }
+    assert_template :edit
+  end
+  
   test "create" do
     @user, @org = admin_user_login_with_org
     post :create, { :survey => {:title => "wat", :post_survey_message => "Yeah!", :login_option => 0 } }
     assert_response :redirect
     assert_equal 1, @org.surveys.count
     assert_equal "wat", @org.surveys.first.title
+  end
+  
+  test "create fail" do
+    @user, @org = admin_user_login_with_org
+    
+    assert_no_difference "Survey.count" do
+      post :create, { :survey => { } }
+    end
   end
 end
