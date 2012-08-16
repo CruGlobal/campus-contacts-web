@@ -46,6 +46,24 @@ class PersonTest < ActiveSupport::TestCase
       assert_equal(transfer1.notified, true, "notified should be true")
       assert_equal(transfer2.notified, true, "notified should be true")
     end
+    should "not notify person_transfer with deleted org" do
+      @admin = Factory(:person)
+      @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
+      @admin_role = Factory(:organizational_role, person: @admin, organization: @org1, role: Role.admin)
+      
+      transfer1 = Factory(:person_transfer, person: @person1, new_organization_id: 99999, 
+        old_organization: @org1, transferred_by: @admin)
+      transfer2 = Factory(:person_transfer, person: @person2, new_organization: @org2, 
+        old_organization: @org1, transferred_by: @admin)
+        
+      assert_equal(false, transfer1.notified, "notified should be false")
+      assert_equal(false, transfer2.notified, "notified should be false")
+      results = Batch.person_transfer_notify
+      transfer1.reload
+      transfer2.reload
+      assert_equal(false, transfer1.notified, "notified should be false")
+      assert_equal(true, transfer2.notified, "notified should be true")
+    end
     should "not notify person_transfer with 'notified' = true" do
       @admin = Factory(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
@@ -151,6 +169,22 @@ class PersonTest < ActiveSupport::TestCase
       newperson2.reload
       assert_equal(newperson1.notified, true, "notified should be true")
       assert_equal(newperson2.notified, true, "notified should be true")
+    end
+    should "not notify new_person with deleted org" do
+      @admin = Factory(:person)
+      @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
+      @admin_role = Factory(:organizational_role, person: @admin, organization: @org1, role: Role.admin)
+      
+      newperson1 = Factory(:new_person, person: @person1, organization: @org1)
+      newperson2 = Factory(:new_person, person: @person2, organization_id: 99999)
+      
+      assert_equal(newperson1.notified, false, "notified should be false")
+      assert_equal(newperson2.notified, false, "notified should be false")
+      results = Batch.new_person_notify
+      newperson1.reload
+      newperson2.reload
+      assert_equal(newperson1.notified, true, "notified should be true")
+      assert_equal(newperson2.notified, false, "notified should be false")
     end
     should "not notify new_person with 'notified' = true" do
       @admin = Factory(:person)
