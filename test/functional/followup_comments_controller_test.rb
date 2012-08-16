@@ -116,4 +116,13 @@ class FollowupCommentsControllerTest < ActionController::TestCase
     
     assert_response :redirect
   end
+  
+  should "be able to destroy followup_comments" do
+    @user, @org = admin_user_login_with_org
+    person3 = Factory(:person)
+    comment = Factory(:followup_comment, organization: @org, contact: person3, commenter: @user.person)
+    assert_difference "FollowupComment.count", -1 do
+      xhr :delete, :destroy, {:id => comment.id}
+    end
+  end
 end
