@@ -37,9 +37,6 @@ class Batch # < ActiveRecord::Base
           error = "Root parent organization #{organization.name}(ID#{organization.id}) do not have admin with valid email."
           Rails.env.production? ? Airbrake.notify(error) : (raise error)
         end
-      else
-        transferred_contacts.update_all(notified: true)
-        no_admin += 1
       end
     end
   end
@@ -80,9 +77,6 @@ class Batch # < ActiveRecord::Base
           error = "Root parent organization #{organization.name}(ID#{organization.id}) do not have admin with valid email."
           Rails.env.production? ? Airbrake.notify(error) : (raise error)
         end
-      else
-        new_contacts.update_all(notified: true)
-        no_admin += 1
       end
     end
   end
