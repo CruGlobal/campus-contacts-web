@@ -39,6 +39,42 @@ class OrganizationsControllerTest < ActionController::TestCase
         post :destroy, id: @org_parent.id
       end
     end
+    
+    context "updating" do
+      should "update" do
+        xhr :put, :update, {:organization => {:name =>"Organization One", :terminology => "Organization", :show_sub_orgs => "1"}, :id => @org_parent.id}
+        assert_response :redirect
+      end
+      
+      should "fail updating" do
+        xhr :put, :update, {:organization => {:name =>"", :terminology => "Organization", :show_sub_orgs => "1"}, :id => @org_parent.id}
+        assert_response :success
+      end
+    end
+    
+    context "settings" do
+      should "load settigns page" do
+        xhr :put, :settings
+        assert_response :success
+      end
+      
+      should "update settings" do
+        xhr :post, :update_settings, {:show_year_in_school =>"on"}
+        assert_response :redirect
+      end
+      
+      should "fail update settings" do
+        org = Factory.build(:organization, name: nil)
+        org.save(:validate => false)
+        user = Factory(:user_with_auxs)
+        org.add_admin(user.person)
+        sign_in user
+        @request.session[:current_organization_id] = org.id
+        
+        xhr :post, :update_settings, { :show_year_in_school =>"on" }
+        assert_response :redirect
+      end
+    end
 
   end
 
@@ -156,6 +192,11 @@ class OrganizationsControllerTest < ActionController::TestCase
       Factory(:organizational_role, organization: @org, person: @contact3, role: Role.contact)
     end
     
+    should "redirect to cleanup page" do
+      xhr :get, :cleanup
+      assert_response :success
+    end
+    
     should "archive contacts" do
       post :archive_contacts, { :archive_contacts_before => Date.today.strftime("%m-%d-%Y") }
       assert_equal @org.people.archived(@org.id).count, 3
@@ -180,6 +221,12 @@ class OrganizationsControllerTest < ActionController::TestCase
       post :archive_contacts, { :archive_contacts_before => Date.today.strftime("%m-%d-%Y") }
       #only 2 contacts will be included in archived since @contact3 has 2 roles and contact is the only role archived
       assert_equal @org.people.archived(@org.id).count, 2
+    end
+    
+    should "redirect to cleanup page when there were no contacts archived" do
+      post :archive_contacts, { :archive_contacts_before => (Date.today-30).strftime("%m-%d-%Y") }
+      assert_equal @org.people.archived(@org.id).count, 0
+      assert_redirected_to cleanup_organizations_path
     end
     
   end
@@ -213,7 +260,12 @@ class OrganizationsControllerTest < ActionController::TestCase
       post :archive_leaders, { :date_leaders_not_logged_in_after => Date.today.strftime("%m-%d-%Y") }
       #only 2 contacts will be included in archived since @contact3 has 2 roles and contact is the only role archived
       assert_equal @org.people.archived(@org.id).count, 2
-      
+    end
+    
+    should "redirect to cleanup page when there were no leaders archived" do
+      post :archive_leaders, { :date_leaders_not_logged_in_after => (Date.today-30).strftime("%m-%d-%Y") }
+      assert_equal @org.people.archived(@org.id).count, 0
+      assert_redirected_to cleanup_organizations_path
     end
   end
 
