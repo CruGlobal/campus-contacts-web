@@ -11,11 +11,19 @@ class OrganizationalRole < ActiveRecord::Base
   # scope :uncontacted, where("followup_status = 'uncontacted' AND role_id = #{Role::CONTACT_ID}")
   before_create :set_start_date, :set_contact_uncontacted
   before_create :notify_new_leader, :if => :role_is_leader_or_admin
-  after_save :set_end_date_if_deleted
+  #before_destroy :check_if_only_remaining_admin_role_in_a_root_org, :check_if_admin_is_destroying_own_admin_role
+  #attr_accessor :destroyer #temporary variable to remember which Person is about to destroy this role
 
   scope :find_non_admin_and_non_leader_roles, {
     :conditions => ["role_id != ? AND role_id != ?", Role::ADMIN_ID, Role::LEADER_ID]
   }
+
+  #after_create :clear_person_org_cache
+  #after_destroy :clear_person_org_cache
+
+  #def clear_person_org_cache
+    #person.clear_org_cache if person
+  #end
   
   def merge(other)
     # We can have multiple roles, but if we're a contact that should be the only role
@@ -67,12 +75,32 @@ class OrganizationalRole < ActiveRecord::Base
     end
   end
   
+  def archive
+    update_attributes({:archive_date => Date.today})
+  end
+  
+  def unarchive
+    update_attributes({:archive_date => nil})
+  end
+  
   class InvalidPersonAttributesError < StandardError
   
   end
-
+  
+  class CannotDestroyRoleError < StandardError
+    
+  end
+  
+  def check_if_only_remaining_admin_role_in_a_root_org
+    raise CannotDestroyRoleError if role_id == Role::ADMIN_ID && organization.is_root_and_has_only_one_admin?
+  end
+  
+  def check_if_admin_is_destroying_own_admin_role(destroyer)
+    raise CannotDestroyRoleError if role_id == Role::ADMIN_ID && destroyer && person_id == destroyer.id
+  end
 
   private
+  
     def set_start_date
       self.start_date = Date.today
       true
@@ -80,7 +108,7 @@ class OrganizationalRole < ActiveRecord::Base
     
     def set_end_date_if_deleted
       if changed.include?('deleted') && deleted?
-        udpate_attribute(:end_date, Date.today)
+        update_attribute(:end_date, Date.today)
       end
     end
     

@@ -18,6 +18,18 @@ class ContactsControllerTest < ActionController::TestCase
     setup do
       @user, org = admin_user_login_with_org
       @keyword = Factory.create(:sms_keyword)
+      @user.person.organizations.first.add_leader(@user.person, @user.person)
+      @org = org
+    end
+    
+    should "be able to show a person" do
+      xhr :get, :show, {:id => @user.person.id}
+      assert_response :redirect
+    end
+    
+    should "be able to edit a person" do
+      xhr :get, :edit, {:id => @user.person.id}
+      assert_response :redirect
     end
     
     context "creating a new contact manually" do
@@ -67,6 +79,36 @@ class ContactsControllerTest < ActionController::TestCase
                       }
         assert_response :success, @response.body 
       end
+      
+      should "remove the being 'archived' Contact role of a Person when it is going to be created again (using existing firstName, lastName and email) in 'My Contacts' tab (:assign_to_me => true)" do
+        contact = Factory(:person, firstName: "Jon", lastName: "Snow")
+        email = Factory(:email_address, email: "jonsnow@email.com", person: contact)
+        Factory(:organizational_role, role: Role.contact, person: contact, organization: @org)
+        assert_not_empty contact.organizational_roles.where(role_id: Role.contact.id)
+        assert_not_empty @org.contacts.joins(:email_addresses).where(firstName: "Jon", lastName: "Snow", "email_addresses.email" => "jonsnow@email.com")
+        #archive contact role
+        contact.organizational_roles.where(role_id: Role.contact.id).first.archive
+        assert_empty contact.organizational_roles.where(role_id: Role.contact.id)
+        assert_empty @org.contacts.joins(:email_addresses).where(firstName: "Jon", lastName: "Snow", "email_addresses.email" => "jonsnow@email.com")
+        xhr :post, :create, {:assign_to_me => "true", :person => {:firstName => "Jon", :lastName => "Snow", :gender =>"male", :email_address => {:email => "jonsnow@email.com", :primary => 1}}}
+        assert_not_empty contact.organizational_roles.where(role_id: Role.contact.id), "Contact role of contact not unarchived"
+        assert_not_empty @org.contacts.joins(:email_addresses).where(firstName: "Jon", lastName: "Snow", "email_addresses.email" => "jonsnow@email.com")
+      end
+      
+      should "remove the being 'archived' Contact role of a Person when it is going to be created again (using existing firstName, lastName and email) in 'All Contacts' tab" do
+        contact = Factory(:person, firstName: "Jon", lastName: "Snow")
+        email = Factory(:email_address, email: "jonsnow@email.com", person: contact)
+        Factory(:organizational_role, role: Role.contact, person: contact, organization: @org)
+        assert_not_empty contact.organizational_roles.where(role_id: Role.contact.id)
+        assert_not_empty @org.contacts.joins(:email_addresses).where(firstName: "Jon", lastName: "Snow", "email_addresses.email" => "jonsnow@email.com")
+        #archive contact role
+        contact.organizational_roles.where(role_id: Role.contact.id).first.archive
+        assert_empty contact.organizational_roles.where(role_id: Role.contact.id)
+        assert_empty @org.contacts.joins(:email_addresses).where(firstName: "Jon", lastName: "Snow", "email_addresses.email" => "jonsnow@email.com")
+        xhr :post, :create, {:person => {:firstName => "Jon", :lastName => "Snow", :gender =>"male", :email_address => {:email => "jonsnow@email.com", :primary => 1}}}
+        assert_not_empty contact.organizational_roles.where(role_id: Role.contact.id), "Contact role of contact not unarchived"
+        assert_not_empty @org.contacts.joins(:email_addresses).where(firstName: "Jon", lastName: "Snow", "email_addresses.email" => "jonsnow@email.com")
+      end
     end
     
     context "on index page" do
@@ -86,6 +128,14 @@ class ContactsControllerTest < ActionController::TestCase
       assert_equal(assigns(:person).id, @contact.id)
     end
     
+    should "update an invalid contact's info'" do
+      @contact = Factory.build(:person_without_name) 
+      @contact.save(validate: false)
+      @user.person.organizations.first.add_contact(@contact)
+      put :update, id: @contact.personID, person: {lastName: 'Jake'}
+      assert_redirected_to survey_response_path(@contact)
+    end
+    
     should "remove a contact from an organization" do   
        @contact = Factory(:person)
        @user.person.organizations.first.add_contact(@contact)         
@@ -101,6 +151,54 @@ class ContactsControllerTest < ActionController::TestCase
        
        xhr :post, :bulk_destroy, :ids => [@contact.id, @contact2.id]       
        assert_response :success        
+    end
+    
+    should "Have a header for every params[:assigned_to]" do
+      @contact1 = Factory(:person)
+      @contact2 = Factory(:person)
+      @contact3 = Factory(:person)
+      @contact4 = Factory(:person)
+      @contact5 = Factory(:person)
+      @user.person.organizations.first.add_leader(@user.person, @user.person)
+      @user.person.organizations.first.add_contact(@contact1)
+      @user.person.organizations.first.add_contact(@contact2)
+      @user.person.organizations.first.add_contact(@contact3)
+      @user.person.organizations.first.add_contact(@contact4)
+      @user.person.organizations.first.add_contact(@contact5)
+      
+    
+      xhr :get, :index, {:role => Role::ADMIN_ID}
+      assert_equal assigns(:header).upcase, "Admin".upcase
+      xhr :get, :index, {:role => Role::LEADER_ID}
+      assert_equal assigns(:header).upcase, "Leader".upcase
+      xhr :get, :index, {:role => Role::CONTACT_ID}
+      assert_equal assigns(:header).upcase, "Contact".upcase
+      xhr :get, :index, {:role => Role::INVOLVED_ID}
+      assert_equal assigns(:header).upcase, "Involved".upcase
+      xhr :get, :index, {:assigned_to => "unassigned"}
+      assert_equal assigns(:header), "Unassigned"
+      xhr :get, :index, {:assigned_to => "progress"}
+      assert_equal assigns(:header), "Assigned"
+      xhr :get, :index, {:completed => "true"}
+      assert_equal assigns(:header), "Completed"
+      xhr :get, :index, {:assigned_to => nil}
+      assert_nil assigns(:header)
+      xhr :get, :index, {:assigned_to => "no_activity"}
+      assert_equal assigns(:header), "No Activity"
+      xhr :get, :index, {:assigned_to => "spiritual_conversation"}
+      assert_equal assigns(:header), "Spiritual Conversation"
+      xhr :get, :index, {:assigned_to => "prayed_to_receive"}
+      assert_equal assigns(:header), "Prayed To Receive Christ"
+      xhr :get, :index, {:assigned_to => "gospel_presentation"}
+      assert_equal assigns(:header), "Gospel Presentation"
+      xhr :get, :index, {:assigned_to => "friends"}
+      assert_equal assigns(:header), "Contacts who are also my friends on Facebook"
+      xhr :get, :index, {:dnc => "true"}
+      assert_equal assigns(:header), "Do Not Contact"
+      xhr :get, :index, {:search => "1"}
+      assert_equal assigns(:header), "Matching the criteria you searched for"
+      xhr :get, :index, {:assigned_to => @user.person.personID}
+      assert_equal assigns(:header), "Assigned to #{@user.person.name}"
     end
   
   end
@@ -232,5 +330,182 @@ class ContactsControllerTest < ActionController::TestCase
     assert_response :success, response
     res = ActiveSupport::JSON.decode(response.body)
     assert_equal res.count, 2
+  end
+  
+  context "Searching for contacts using 'Saved Searches'" do
+    setup do
+      @user = Factory(:user_with_auxs)
+      sign_in @user
+      
+      @contact1 = Factory(:person, firstName: "Neil", lastName: "delaCruz")
+      @user.person.organizations.first.add_contact(@contact1)
+    end
+  
+    should "search for contacts" do
+      xhr :get, :index, {:search => "1", :firstName => "Neil", :lastName => "delaCruz"}
+      assert_response :success
+    end
+    #more tests to come
+  end
+  
+  context "Searching for people using search_autocomplete_field" do
+    setup do
+      @user = Factory(:user_with_auxs)
+      sign_in @user
+      
+      @archived_contact1 = Factory(:person, firstName: "Edmure", lastName: "Tully")
+      Factory(:organizational_role, organization: @user.person.organizations.first, person: @archived_contact1, role: Role.contact)
+      @archived_contact1.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive #archive his one and only role
+      
+      @unarchived_contact1 = Factory(:person, firstName: "Brynden", lastName: "Tully")
+      Factory(:organizational_role, organization: @user.person.organizations.first, person: @unarchived_contact1, role: Role.contact)
+      Factory(:email_address, email: "bryndentully@email.com", person: @unarchived_contact1, primary: true)
+    end
+    
+    should "not be able to search for archived contacts if 'Include Archvied' checkbox is not checked" do
+      get :search_by_name_and_email, {:term => "Edmure Tully"}
+      assert !assigns(:people).include?(@archived_contact1)
+    end
+    
+    should "be able to search for archived contacts if 'Include Archvied' checkbox is checked" do
+      get :search_by_name_and_email, {:include_archived => "true", :term => "Edmure Tully"}
+      assert assigns(:people).include?(@archived_contact1)
+    end
+    
+    should "be able to search by email address" do
+      get :search_by_name_and_email, {:term => "Brynden Tully"}
+      assert assigns(:people).include?(@unarchived_contact1)
+    end
+    
+    should "be able to search by wildcard" do
+      get :search_by_name_and_email, {:include_archived => "true", :term => "tully"}
+      assert assigns(:people).include?(@archived_contact1), "archived contact not found"
+      assert assigns(:people).include?(@unarchived_contact1), "unarchived contact not found"
+    end
+    
+    should "not be able to search for anything" do
+      get :search_by_name_and_email, {:include_archived => "true", :term => "none"}
+      assert_empty assigns(:people)
+    end
+  end
+  
+  context "exporting contacts" do
+    setup do
+      @user, org = admin_user_login_with_org
+      @contact1 = Factory(:person)
+      @contact2 = Factory(:person)
+      Factory(:organizational_role, role: Role.contact, organization: org, person: @contact1) #make them contacts in the org
+      Factory(:organizational_role, role: Role.contact, organization: org, person: @contact2) #make them contacts in the org
+      
+      @survey = Factory(:survey, organization: org) #create survey
+      @keyword = Factory(:approved_keyword, organization: org, survey: @survey) #create keyword
+      @notify_q = Factory(:choice_field, notify_via: "Both", trigger_words: "Jesus") #create question
+      @email_q = Factory(:email_element)
+      @survey.questions << @notify_q
+      @survey.questions << @email_q
+      @questions = @survey.questions
+      assert_equal(@questions.count, 2)
+      
+      
+      @answer_sheet = Factory(:answer_sheet, survey: @survey, person: @contact1)
+      @answer = Factory(:answer, answer_sheet: @answer_sheet, question: @notify_q, value: "Jesus", short_value: "Jesus")
+    end
+  
+    should "export" do
+      xhr :get, :index, {:assigned_to => "all", :format => "csv"}
+      assert_response :success
+    end
+  
+  end
+  
+  context "retrieving contacts" do
+    setup do
+      @user, org = admin_user_login_with_org
+      @contact1 = Factory(:person)
+      @contact2 = Factory(:person)
+      Factory(:organizational_role, role: Role.contact, organization: org, person: @contact1) #make them contacts in the org
+      Factory(:organizational_role, role: Role.contact, organization: org, person: @contact2) #make them contacts in the org
+      
+      @survey = Factory(:survey, organization: org) #create survey
+      @keyword = Factory(:approved_keyword, organization: org, survey: @survey) #create keyword
+      @notify_q = Factory(:choice_field, notify_via: "Both", trigger_words: "Jesus") #create question
+      @email_q = Factory(:email_element)
+      @phone_q = Factory(:phone_element)
+      @gender_q = Factory(:gender_element)
+      @some_q = Factory(:some_question)
+      #puts @some_q.object_name.present?
+      #puts @some_q.inspect
+      @survey.questions << @notify_q
+      @survey.questions << @email_q
+      @survey.questions << @phone_q
+      @survey.questions << @gender_q
+      @survey.questions << @some_q
+      @questions = @survey.questions
+      assert_equal(@questions.count, 5)
+      
+      @answer_sheet = Factory(:answer_sheet, survey: @survey, person: @contact1)
+      @answer = Factory(:answer, answer_sheet: @answer_sheet, question: @notify_q, value: "Jesus", short_value: "Jesus")
+    end
+    
+    should "retrieve 'mine' contacts" do
+      xhr :get, :mine, {:status => "completed"}
+      assert_response :success
+    end
+    
+    should "retrieve contacts with survey answers" do
+      xhr :get, :index, {:search => 1, :answers => {"#{@notify_q.id}" => {"1" => 1, "2" => 2}, "#{@email_q.id}" => "email@email.com", "#{@some_q.id}" => "hello", "#{@phone_q.id}" => "12311311231231", "#{@gender_q.id}" => "male"}}
+      assert_response :success
+    end
+    
+    should "retrive contacts according to latest answer sheets answered" do
+    
+      xhr :get, :index, {:search => 1, "q"=>{"s"=>"MAX(mh_answer_sheets.updated_at) asc"}}
+      assert_response :success
+    end
+    
+    should "retrive contacts according to surveys answered" do
+      xhr :get, :index, {:search => 1, :survey => @survey.id}
+      assert_response :success
+    end
+    
+    should "retrive contacts searching by firstName" do
+      xhr :get, :index, {:search => 1, :first_name => "Neil"}
+      assert_response :success
+    end
+    
+    should "retrive contacts searching by lastName" do
+      xhr :get, :index, {:search => 1, :last_name => "dela Cruz"}
+      assert_response :success
+    end
+    
+    should "retrive contacts searching by email" do
+      xhr :get, :index, {:search => 1, :email => "email@email.com"}
+      assert_response :success
+    end
+    
+    should "retrive contacts searching by phone_number" do
+      xhr :get, :index, {:search => 1, :phone_number => "2034982303948"}
+      assert_response :success
+    end
+    
+    should "retrive contacts searching by gender" do
+      xhr :get, :index, {:search => 1, :gender => "Male"}
+      assert_response :success
+    end
+    
+    should "retrive contacts searching by status" do
+      xhr :get, :index, {:search => 1, :status => "uncontacted"}
+      assert_response :success
+    end
+    
+    should "retrive contacts searching by date updated" do
+      xhr :get, :index, {:search => 1, :person_updated_from => "05-08-2012", :person_updated_to => "05-08-2012"}
+      assert_response :success
+    end
+    
+    should "retrive contacts searching by basic search_type" do
+      xhr :get, :index, {:search => 1, :search_type => "basic"}
+      assert_response :success
+    end
   end
 end

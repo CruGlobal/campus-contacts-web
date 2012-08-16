@@ -61,7 +61,8 @@ class Api::FollowupCommentsController < ApiController
         raise FollowupCommentPermissionsError unless comment.commenter_id == current_person.id
       elsif role[i] == 'admin'
         raise FollowupCommentPermissionsError unless comment.organization_id == @organization.id
-      else raise FollowupCommentPermissionsError
+      else
+        raise FollowupCommentPermissionsError
       end
     end
     

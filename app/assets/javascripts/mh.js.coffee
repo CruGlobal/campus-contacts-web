@@ -85,6 +85,10 @@ $ ->
       position: 
         my: 'top right',  
         at: 'bottom left'
+    $('.tipitright[title]').qtip
+      position: 
+        my: 'top left',  
+        at: 'bottom right'
     $('.tipit2[title]').qtip
       position: 
         my: 'top right',  
@@ -117,6 +121,7 @@ $ ->
         else
           helper_text = $('#drag_helper_text_other').html().replace('0', length)
         $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body')); 
+  
   
   if $.fn.superfish?
     $('ul.sf-menu').superfish({ 

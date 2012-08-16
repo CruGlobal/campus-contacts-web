@@ -54,7 +54,7 @@
             <div class="content">
             <p><%= t('.danger_explanation') %></p>
             <hr/>
-            <p style="margin-top: 15px;"><%= link_to(t('.delete'), organization_path(@organization), method: :delete, class: 'delete cleangray', confirm: t('.delete_confirm', terminology: @organization.terminology))%></p>
+            <p style="margin-top: 15px;"><%= link_to(t('.delete'), organization_path(@organization), method: :delete, class: 'delete cleangray', data: { confirm: t('.delete_confirm', terminology: @organization.terminology) })%></p>
             </div>
       
       </div>

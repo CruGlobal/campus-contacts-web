@@ -9,8 +9,8 @@ class Ability
     user ||= User.new # guest user (not logged in)
     if user && user.person
       # admin_of_org_ids = user.person.organizations.where('organizational_roles.role_id' => admin_role.id).collect {|org| org.show_sub_orgs? ? org.self_and_children_ids : org.id}.flatten
-      admin_of_org_ids = user.person.organizations.where('organizational_roles.role_id' => admin_role.id).collect {|org| org.subtree_ids}.flatten
-      leader_of_org_ids = user.person.organizations.where('organizational_roles.role_id' => Role.leader_ids).collect {|org| org.subtree_ids}.flatten
+      admin_of_org_ids = user.person.admin_of_org_ids #user.person.organizations.where('organizational_roles.role_id' => admin_role.id).collect {|org| org.subtree_ids}.flatten
+      leader_of_org_ids = user.person.leader_of_org_ids #user.person.organizations.where('organizational_roles.role_id' => Role.leader_ids).collect {|org| org.subtree_ids}.flatten
 
       # can :manage, Organization, id: user.person.organizational_roles.where(role_id: admin_role.id).collect(&:organization_id)
       can :manage, Organization, id: admin_of_org_ids
@@ -27,7 +27,7 @@ class Ability
       can :manage, QuestionSheet, organization_id: admin_of_org_ids
       
       # Gotta be an admin somewhere to see keyword options
-      unless user.person.organizational_roles.where(role_id: admin_role.id).present?
+      unless admin_of_org_ids.present?
         cannot :manage, SmsKeyword
         cannot :manage, Survey
         cannot :manage, QuestionSheet
@@ -38,11 +38,12 @@ class Ability
       end
       
       # involved members can see other people's info
-      can :read, Person, organizational_roles: {organization_id: user.person.organizational_roles.where(role_id: [admin_role.id, leader_role.id, involved_role.id]).value_of(:organization_id)}
-      can :read, PersonPresenter, organizational_roles: {organization_id: user.person.organizational_roles.where(role_id: [admin_role.id, leader_role.id, involved_role.id]).value_of(:organization_id)}
+      involved_org_ids = user.person.organizational_roles.where(role_id: [admin_role.id, leader_role.id, involved_role.id]).pluck(:organization_id)
+      can :read, Person, organizational_roles: {organization_id: involved_org_ids}
+      can :read, PersonPresenter, organizational_roles: { organization_id: involved_org_ids }
       
       # leaders and admins can edit other ppl's info
-      if user.person.organizational_roles.where(role_id: [admin_role.id, leader_role.id]).present?
+      if user.person.admin_or_leader?
         can :create, SmsMailer
         can :create, Person
         can :create, PersonPresenter

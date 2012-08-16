@@ -2,3 +2,8 @@
   <label><%= t('.question') %></label>
   <%= f.text_field :label, id: "label_#{f.object.id}", class: 'label' %>
 </div>
+<div class="field">
+  <label><%= t('.column_header') %></label>
+  <%= f.text_field :slug, id: "slug_#{f.object.id}", class: 'slug', maxlength: 36 %>
+  <%= tip(t('.column_header_hint')) %>
+</div>

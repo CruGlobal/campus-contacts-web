@@ -6,6 +6,8 @@
 //= require jquery.counter-1.0.min
 //= require jquery.observe_field.js
 //= require jquery.one_finger_scroll.js
+//= require jquery.url
+//= require colorpicker.js
 //= require ba-debug-0.4.min.js
 //= require hoverIntent
 //= require jquery.touchwipe.1.1.1
@@ -29,5 +31,8 @@
 //= require i18n/translations
 //= require followup_comments
 //= require clearform
+//= require survey
 //= require global
 //= require welcome
+//= require surveys
+

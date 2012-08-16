@@ -138,8 +138,6 @@ a.headerlink:hover {
 	text-decoration: none;
 }
 
-
-
 #outer {
   max-width: $maxpagewidth;
   min-width: $minpagewidth;
@@ -209,6 +207,7 @@ a.headerlink:hover {
   a.topset.directory {background-position: 8px 4px;}
   a.topset.groups {background-position: 8px -97px;}
   a.topset.comments {background-position: 8px -45px;}
+  a.topset.cleanup {background-position: 8px -250px;}
 }
 
 img.tmenu {
@@ -468,6 +467,9 @@ div.wizard {
   .checkbox_cell {
     width: 50px;
   }
+  .spacer_cell {
+    width: 20px;
+  }
 }
 
 a.hide {
@@ -724,7 +726,13 @@ button[type=submit].smallbtn {
 
 .pagemenu {
   background: $light-blue;
-  padding: 10px 14px 8px;
+  padding: 10px 15px;
+  div.part_title {
+    font-size: 18px;
+    font-weight: bold;
+    display: inline-table;
+    padding: 0 15px 0 0;
+  }
 }
 
 ul.pillmenu {
@@ -1314,7 +1322,7 @@ span.title {
   padding: 8px;
   margin-top: 10px;
   margin-bottom: 10px;
-  width: 800px;
+  width: 735px;
   .right_col {
     width: 300px;
     float: right;
@@ -1892,6 +1900,7 @@ div.field_with_errors div.ui-effects-wrapper {
   background: #F0F0F0;
   padding: 15px 15px 10px 15px;
   border-radius: 10px;
+  min-height: 75px;
   .stepnumber {
     float: left;
   }
@@ -2072,7 +2081,8 @@ span.all_text {
   }
 .flash .error, .flash .error-list {
   border: 1px solid #993624;
-  background: #cc4831 url("<%= image_path('error.png') %>") no-repeat 10px center; }
+  background: #cc4831 url('<%= image_path("error.png") %>') no-repeat 10px center; 
+}
 .flash .warning {
   border: 1px solid #bb9004;
   color: #000;
@@ -2111,6 +2121,10 @@ textarea, input[type=text], input[type=password] {
   textarea, input[type=text], input[type=password] {
     width: 600px;
   }
+}
+
+#survey_background_color, #survey_text_color {
+  width: 200px!important;
 }
 
 .formtastic {
@@ -2461,5 +2475,89 @@ ul#ui-autocomplete {
 }
 
 .hidden {
+  display: none;
+}
+
+.advanced_options {
+  
+  width: 340px;
+  div.title {
+    font-size: 16px;
+    margin: 0px 0px 5px;
+  }
+  div.label {
+    label {
+      font-weight: normal;
+    }
+    margin: 0px 10px;
+  }
+  div.fieldset {
+    margin: 3px 15px 15px;
+    select {
+      width: 290px;
+    }
+  }
+  
+  div.rule_form {
+    margin-left: 10px;
+    .title {
+      font-size: 14px;
+      font-weight: bold;
+      display: inline-block;
+      cursor: pointer;
+    }
+    .settings {
+      display: none;
+      border: 1px solid #aaa;
+      margin-bottom: 10px;
+      border-top: none;
+    }
+    .label label {
+      font-weight: bold;
+    }
+  }
+}
+
+#question_form {
+  width: 735px;
+}
+
+#loading, #saving {
+  font-size: 18px;
+  width: 735px;
+  text-align: center;
+}
+
+#autoassign_selected_id {
+  display: none;
+}
+
+
+#archive_contacts_before, #date_leaders_not_logged_in_after{
+  width: 100px;
+  text-align: center;
+  background: $blue;
+  color: $white;
+}
+
+.cleanup_number {
+  width: 70px;
+  height: 70px;
+}
+
+#login_paragraph {
+  color: red;
+}
+
+.cleanup_content {
+  min-height: 70px;
+}
+
+#include_archived_div {
+  padding-left: 20px;
+  padding-bottom: 10px;
+}
+
+.ui-dialog-titlebar-close {
   display: none;
 }

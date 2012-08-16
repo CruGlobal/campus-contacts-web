@@ -23,7 +23,7 @@ $ ->
   $('#add_question_link').live 'click', ->
     $('.inlineform').hide()
     $('#new_question_form').closest('.inlineform').show()
-    $('#question_form').slideDown()
+    $('#create_question_form').slideDown()
     $('.advanced_options').hide()
     $('.sms_length').html(0)
     $('.sms_preview').html('')
@@ -82,13 +82,28 @@ $ ->
     
   $('#advanced_toggle').live 'click', (e) ->
     e.preventDefault()
-    $('.advanced_options').toggle()
+    $('.advanced_options').slideToggle()
     if $('.advanced_options').is(':visible')
       $(this).text(t('surveys.questions.form.hide_advanced_options'))
     else
       $(this).text(t('surveys.questions.form.show_advanced_options'))
-    
-      
+
+  $('#notify_advanced_toggle').live 'click', (e) ->
+    e.preventDefault()
+    $('.notify_advanced_options').toggle()
+    if $('.notify_advanced_options').is(':visible')
+      $(this).text(t('surveys.questions.form.hide_notification_options'))
+    else
+      $(this).text(t('surveys.questions.form.show_notification_options'))
+
+  $('#assignment_advanced_toggle').live 'click', (e) ->
+    e.preventDefault()
+    $('.assignment_advanced_options').toggle()
+    if $('.assignment_advanced_options').is(':visible')
+      $(this).text(t('surveys.questions.form.hide_assignment_options'))
+    else
+      $(this).text(t('surveys.questions.form.show_assignment_options'))
+	
   $('#cancel_survey_question').live 'click', (e)->
     e.preventDefault()
     $('.inlineform').show()

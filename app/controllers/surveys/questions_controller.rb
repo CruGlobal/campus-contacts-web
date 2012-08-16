@@ -29,12 +29,7 @@ class Surveys::QuestionsController < ApplicationController
   # GET /questions/new
   # GET /questions/new.xml
   def new
-    @question = @survey.question_sheet.elements.new
-
-    respond_to do |wants|
-      wants.html # new.html.erb
-      wants.xml  { render xml: @question }
-    end
+    @survey = Survey.find(params[:survey_id])
   end
 
   # GET /questions/1/edit
@@ -54,11 +49,10 @@ class Surveys::QuestionsController < ApplicationController
   # POST /questions
   # POST /questions.xml
   def create
-
     if (params[:question_id])
       @question = Element.find(params[:question_id])
     else
-      return unless validate_then_create_chosen_leaders
+      # return unless validate_then_create_chosen_leaders
       type, style = params[:question_type].split(':')
       @question = type.constantize.create!(params[:question].merge(style: style))
     end
@@ -70,7 +64,11 @@ class Surveys::QuestionsController < ApplicationController
     else
       @survey.elements << @question
     end
-
+    
+    params[:id] = @question.id
+    evaluate_option_autonotify
+    evaluate_option_autoassign
+    
     respond_to do |wants|
       if !@question.new_record?
         wants.html do
@@ -91,9 +89,10 @@ class Surveys::QuestionsController < ApplicationController
   # PUT /questions/1.xml
   def update
     params[:question] ||= params[:choice_field] ||= params[:text_field]
-    validate_then_create_chosen_leaders
     respond_to do |wants|
       if @question.update_attributes(params[:question])
+        evaluate_option_autonotify
+        evaluate_option_autoassign
         wants.js {}
         wants.xml  { head :ok }
       else
@@ -137,6 +136,29 @@ class Surveys::QuestionsController < ApplicationController
     redirect_to :back
   end
   
+  def suggestion
+    type = params[:type]
+    keyword = params[:keyword].strip
+    survey = @survey
+    response = Array.new
+    if type == 'Leader'
+      results = @survey.organization.leaders.where("lastName LIKE '%#{keyword}%' OR firstName LIKE '%#{keyword}%'")
+      response = results.uniq.collect{|leader| {"label"=>"#{leader.name} (#{leader.email})", "id"=>leader.id}}
+    elsif type == 'Ministry'
+      results = current_person.all_organization_and_children.where("name LIKE '%#{keyword}%'")
+      response = results.uniq.collect{|ministry| {"label"=>"#{ministry.name}", "id"=>ministry.id}}
+    elsif type == 'Group'
+      if current_organization.present?
+        results = current_organization.groups.where("name LIKE '%#{keyword}%'")
+        response = results.uniq.collect{|group| {"label"=>"#{group.name} (#{group.location})", "id"=>group.id}}
+      end
+    elsif type == 'Label'
+      results = current_organization.roles.where("name LIKE '%#{keyword}%'")
+      response = results.uniq.collect{|label| {"label"=>"#{label.name}", "id"=>label.id}}
+    end
+    render json: response
+  end
+  
   private
     def find_question
       @question = @survey.elements.find(params[:id])
@@ -154,6 +176,71 @@ class Surveys::QuestionsController < ApplicationController
     def get_leaders
       @leaders = current_organization.leaders
     end
+    
+    def evaluate_option_autoassign
+      parameters = Hash.new
+      parameters['type'] = params[:assign_contact_to]
+      parameters['id'] = params[:autoassign_selected_id]
+      parameters['name'] = params[:autoassign_keyword]
+      
+      rule = Rule.find_by_rule_code("AUTOASSIGN")
+      triggers_array = Array.new
+      triggers = params[:assignment_trigger_words].present? ? params[:assignment_trigger_words].split(',') : []
+      triggers.each do |t|
+        triggers_array << t.strip if t.strip.present?
+      end
+      triggers = triggers_array.join(", ")
+      
+      if parameters['id'].present? && parameters['name'].present?
+        survey_element_id = SurveyElement.find_by_survey_id_and_element_id(params[:survey_id], params[:id]).id
+        if question_rule = QuestionRule.find_by_survey_element_id_and_rule_id(survey_element_id, rule.id)
+          question_rule.update_attribute('trigger_keywords',triggers)
+          question_rule.update_attribute('extra_parameters',parameters)
+        else
+          question_rule = QuestionRule.create(survey_element_id: survey_element_id, rule_id: rule.id, 
+            trigger_keywords: triggers, extra_parameters: parameters)
+        end
+      end
+    end
+    
+    def evaluate_option_autonotify
+      leaders = params[:leaders] || []
+      
+      parameters = Hash.new
+      parameters['leaders'] = Array.new
+      invalid_emails = Array.new
+      
+      if leaders.present?
+        survey_element_id = SurveyElement.find_by_survey_id_and_element_id(params[:survey_id], params[:id]).id
+        leaders.each do |leader|
+          Person.find(leader).has_a_valid_email? ? parameters['leaders'] << leader.to_i : invalid_emails << leader.to_i
+        end
+      
+        if invalid_emails.present?
+          respond_to do |wants|
+            wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(personId: invalid_emails).collect{|p| p.name}.join(', ') } }
+          end
+          return false
+        else
+          rule = Rule.find_by_rule_code("AUTONOTIFY")
+          triggers_array = Array.new
+          triggers = params[:trigger_words].split(',')
+          triggers.each do |t|
+            triggers_array << t.strip if t.strip.present?
+          end
+          triggers = triggers_array.join(", ")
+          if question_rule = QuestionRule.find_by_survey_element_id_and_rule_id(survey_element_id, rule.id)
+            question_rule.update_attribute('trigger_keywords',triggers)
+            question_rule.update_attribute('extra_parameters',parameters)
+          else
+            question_rule = QuestionRule.create(survey_element_id: survey_element_id, rule_id: rule.id, 
+              trigger_keywords: triggers, extra_parameters: parameters)
+          end
+        end
+      end
+      true
+    end
+
 
     def validate_then_create_chosen_leaders
       new_leaders = params[:leaders] || []

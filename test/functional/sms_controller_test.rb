@@ -9,11 +9,11 @@ class SmsControllerTest < ActionController::TestCase
       @keyword = Factory(:approved_keyword, survey: @survey)
       
       element = Factory(:choice_field, label: 'foobar')
-      q1 = Factory(:survey_element, survey: @survey, element: element, position: 1, archived: true)
+      @q1 = Factory(:survey_element, survey: @survey, element: element, position: 1, archived: true)
       element = Factory(:choice_field)
-      q2 = Factory(:survey_element, survey: @survey, element: element, position: 2)
+      @q2 = Factory(:survey_element, survey: @survey, element: element, position: 2)
       element = Factory(:email_element)
-      q3 = Factory(:survey_element, survey: @survey, element: element, position: 3)
+      @q3 = Factory(:survey_element, survey: @survey, element: element, position: 3)
 
       @phone_number = '16304182108'
       @post_params = {message: @keyword.keyword, device_address: @phone_number, 
@@ -45,6 +45,20 @@ class SmsControllerTest < ActionController::TestCase
         assert_equal(assigns(:msg), 'What is your first name?')
       end
       
+      should "send reply 'i' even though there are trailing strings separated from by ' '" do
+        Factory(:received_sms, @sms_params)
+        post :mo, @post_params.merge(message: 'i jim.walker jim.walker', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
+        assert_equal(assigns(:sms_session).interactive, true)
+        assert_equal(assigns(:msg), 'What is your first name?')
+      end
+
+      should 'add contact to org as soon as they reply with "i"' do
+        Factory(:received_sms, @sms_params)
+        assert_difference('OrganizationalRole.count') do
+          post :mo, @post_params.merge(message: 'i', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
+        end
+      end
+      
       should "save response to interactive sms" do
         Factory(:person, email: "person@email.com") #existing email
         @sms_session.update_attribute(:interactive, true)
@@ -52,13 +66,24 @@ class SmsControllerTest < ActionController::TestCase
         assert_equal(assigns(:person).firstName, 'Jesus')
         assert_equal(assigns(:msg), 'What is your last name?')
       end
-      
+
       should "send the first survey question after first and last name are present" do
         @sms_session.update_attribute(:interactive, true)
         @person.update_attribute(:firstName, 'Jesus')
         post :mo, @post_params.merge!({message: 'Christ', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
         assert_equal(assigns(:person).lastName, 'Christ')
         assert_equal(assigns(:sent_sms).message, "1/2 #{@keyword.questions.first.label_with_choices}")
+      end
+
+      should "send thank you message after last question is answered" do
+        Factory(:person, email: "person@email.com") #existing email
+        @sms_session.update_attribute(:interactive, true)
+        @person.update_attributes(firstName: 'Jesus', lastName: 'Christ')
+        # remove extra questions
+        @survey.survey_elements.delete(@q2, @q3)
+
+        post :mo, @post_params.merge!({message: 'Jesus', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
+        assert_equal(assigns(:msg), 'bye!')
       end
       
       should "convert a letter to a choice option" do
@@ -72,7 +97,7 @@ class SmsControllerTest < ActionController::TestCase
         @sms_session.update_attribute(:interactive, true)
         @person.update_attributes(firstName: 'Jesus', lastName: 'Christ')
         post :mo, @post_params.merge!({message: 'Jesus', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
-        assert_equal(assigns(:answer_sheet).answers.first.value, 'Jesus') 
+        assert_equal(assigns(:answer_sheet).answers.first.value, 'Jesus')
       end
 
 =begin

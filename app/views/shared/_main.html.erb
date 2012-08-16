@@ -1,0 +1,19 @@
+<div class="<%= params[:action] %> carea">
+  <% if flash && (flash[:error] || flash[:notice] || flash[:alert]) %>
+    <div class="flash" style="margin:10px;width:770px">
+      <% if flash[:error].present? || flash[:alert].present? %>
+        <div class="flash_message error">
+          <p><%= flash[:error] || flash[:alert] %></p>
+        </div>
+      <% end %>
+
+      <% if flash[:notice].present? %>
+        <div class="flash_message notice">
+          <p><%= flash[:notice] %></p>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= yield %>
+</div>

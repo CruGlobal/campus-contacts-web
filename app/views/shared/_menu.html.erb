@@ -1,0 +1,61 @@
+<% connect_pattern = /surveys|keywords|survey_responses/ %>
+<% care_pattern = /people|contacts|followup_comments/ %>
+<% group_pattern = /groups/ %>
+<% if current_organization %>
+  <ul class="sf-menu sf-navbar mh-top">
+    <li class="<%= 'current' if request.path == '/dashboard' %>">
+      <%= link_to(t('nav.dashboard'), "/dashboard") %>
+      </li>
+    <li class="<%= 'current' if request.path =~ care_pattern %>">
+    <%= link_to(t('nav.people'), "/people") %>
+    <ul>
+      <li class="<%= 'current' if request.fullpath == '/contacts/mine' %>">
+        <%= link_to(t('nav.my_contacts'), "/contacts/mine", :class => "topset mycontacts") %>
+      </li>
+      <li class="<%= 'current' if  params[:controller] == 'contacts' && params[:action] == 'index' %>">
+        <%= link_to(t('nav.all_contacts'), "/contacts", :class => "topset allcontacts") %>
+      </li>
+      <li class="<%= 'current' if  params[:controller] == 'people' && params[:archived].nil? %>">
+        <%= link_to(t('nav.directory'), "/people", :class => "topset directory") %>
+      </li>
+    </ul>
+    </li>
+    <li class="<%= 'current' if request.path =~ group_pattern %>">
+    <%= link_to(t('nav.groups'), "/groups") %>
+    <ul>
+      <% if can? :manage, current_organization %>
+        <li class="<%= 'current' if  params[:controller] == 'groups' %>"><%= link_to(t('nav.groups'), "/groups", :class => "topset groups") %></li>
+      <% end %>
+    </ul>
+    </li>
+    
+    <% if can? :manage, current_organization %>
+      <li class="<%= 'current' if request.path =~ connect_pattern %>">
+        <%= link_to(t('nav.surveys'), index_admin_surveys_path) %>
+      <ul>
+    <% end %>
+
+      <% if can? :manage, current_organization %>
+        <li class="<%= 'current' if ['surveys','questions'].include?(controller.controller_name) %>"><%= link_to(t('nav.surveys'), index_admin_surveys_path, :class => "topset surveys") %></li>
+        <li class="<%= 'current' if params[:controller] == 'sms_keywords' %>"><%= link_to(t('nav.keywords'), sms_keywords_path, :class => "topset surveys") %></li>
+      <% end %>
+    </ul>
+    </li>
+
+    <% if can? :manage, current_organization %>
+      <li class="<%= 'current' if params[:controller] == 'organizations' %>">
+        <%= link_to(t('nav.organizations'), "/organizations") %>
+        <ul>
+          <li class="<%= 'current' if request.path == organizations_path %>"><%= link_to(t('nav.manage'), "/organizations", :class => "topset groups") %></li>
+          <li class="<%= 'current' if request.path == '/organizations/settings' %>"><%= link_to(t('nav.settings'), "/organizations/settings", :class => "topset allcontacts") %></li>
+          <li class="<%= 'current' if request.path == cleanup_organizations_path %>"><%= link_to(t('nav.cleanup'), "/organizations/cleanup", :class => "topset cleanup") %></li>
+        </ul>
+      </li>
+    <% end %>
+    
+    <div id="menu_search">
+      <%= render 'contacts/search_top_right' %>
+    </div>
+
+  </ul>
+<% end %>

@@ -1,5 +1,6 @@
 class LeadersController < ApplicationController
   respond_to :html, :js
+  cache_sweeper :organization_sweeper, only: [:create, :destroy, :update]
   
   def leader_sign_in
     # Reconcile the person comeing from a leader link with the link itself.
@@ -45,16 +46,19 @@ class LeadersController < ApplicationController
 
   def destroy
     @person = Person.find(params[:id])
-    roles = OrganizationalRole.find_all_by_person_id_and_organization_id_and_role_id(@person.id, current_organization.id, Role.leader_ids)
+    roles = OrganizationalRole.find_all_by_person_id_and_organization_id_and_role_id_and_archive_date(@person.id, current_organization.id, Role.leader_ids, nil)
     if roles
-      roles.collect(&:destroy)
+      roles.each do |r|
+        r.archive
+      end
       # make any contacts assigned to this person go back to unassinged
       @contacts = @person.contact_assignments.where(organization_id: current_organization.id).all
       @contacts.collect(&:destroy)
       # If this person doesn't have any other roles in the org, destroy the membership too
-      if OrganizationalRole.find_all_by_person_id_and_organization_id(@person.id, current_organization.id).empty?
-        OrganizationMembership.find_by_person_id_and_organization_id(@person.id, current_organization.id).try(:destroy)
-      end
+      #if OrganizationalRole.find_all_by_person_id_and_organization_id(@person.id, current_organization.id).empty?
+      #  OrganizationMembership.find_by_person_id_and_organization_id(@person.id, current_organization.id).try(:destroy)
+      #end
+      #no one is deleted in the org anymore rather they are archived
     end
   end
 
