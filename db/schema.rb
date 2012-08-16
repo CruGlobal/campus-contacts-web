@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120814200612) do
+ActiveRecord::Schema.define(:version => 20120815204804) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -3669,6 +3669,7 @@ ActiveRecord::Schema.define(:version => 20120814200612) do
   add_index "ministry_person", ["firstName"], :name => "firstname_ministry_Person"
   add_index "ministry_person", ["fk_ssmUserId"], :name => "fk_ssmUserId"
   add_index "ministry_person", ["lastName"], :name => "lastname_ministry_Person"
+  add_index "ministry_person", ["org_ids_cache"], :name => "index_ministry_person_on_org_ids_cache", :length => {"org_ids_cache"=>255}
   add_index "ministry_person", ["region"], :name => "region_ministry_Person"
 
   create_table "ministry_regionalstat", :primary_key => "RegionalStatID", :force => true do |t|
