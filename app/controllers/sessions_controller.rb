@@ -5,7 +5,9 @@ class SessionsController < Devise::SessionsController
   
   def new
     @survey = Survey.find(cookies[:survey_id]) unless cookies[:survey_id].nil?
+    @title = nil
     if @survey
+      @title = @survey.terminology
       if @survey.login_option == 2 || @survey.login_option == 3
         redirect_to "/s/#{cookies[:survey_id]}?nologin=true"
       end

@@ -25,19 +25,22 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         logger.debug(session[:person_id])
         @person = Person.find(session[:person_id])
         unless @person.user
-          facebook_login(@person)
+          @person = facebook_login(@person)
+          session[:person_id] = @person.id
         end
       else
         facebook_login(nil, true)
       end
+
+      if session[:person_id]
+        @survey = Survey.find(session[:survey_id])
+        render :template => "survey_responses/thanks", layout: 'mhub'
+        return
+      end
+
       location = stored_location_for(:user)
       if location.present?
-        if session[:person_id]
-          @survey = Survey.find(session[:survey_id])
-          render :template => "survey_responses/thanks", layout: 'mhub'
-        else
-          redirect_to location
-        end
+        redirect_to location
       else
         render_404
       end
@@ -58,7 +61,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     session[:fb_token] = omniauth["credentials"]["token"]
     session["devise.facebook_data"] = omniauth
 
-    @user.person.merge(person) if person
+    person = @user.person.merge(person) if person
 
     if @user && @user.persisted?
       sign_in(@user)
@@ -76,5 +79,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         raise NoEmailError
       end
     end
+
+    person
   end
 end

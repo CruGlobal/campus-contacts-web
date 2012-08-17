@@ -20,12 +20,13 @@ class SurveysController < ApplicationController
     if current_user
       @organization = current_person.organizations.find_by_id(params[:org_id]) || current_organization
       @surveys = @organization ? @organization.self_and_children_surveys : nil
+      
+      respond_to do |wants|
+        wants.html { render 'index_admin' }
+        wants.mobile
+      end
     else
       return render_404
-    end
-    respond_to do |wants|
-      wants.html { render layout: 'mhub' }
-      wants.mobile
     end
   end
   
@@ -54,10 +55,11 @@ class SurveysController < ApplicationController
   end
   
   def create
-    if @survey = current_organization.surveys.create(params[:survey])
+    @survey = current_organization.surveys.create(params[:survey])
+    if @survey.save
       redirect_to index_admin_surveys_path
     else
-      render :new
+      redirect_to new_survey_path
     end
   end
   
@@ -68,7 +70,7 @@ class SurveysController < ApplicationController
       return false
     end
     cookies[:survey_mode] = 1
-    redirect_to sign_out_url(next: short_survey_url(@survey.id))
+    redirect_to short_survey_url(@survey.id)
   end
   
   # Exit survey mode
@@ -76,7 +78,7 @@ class SurveysController < ApplicationController
     cookies[:survey_mode] = nil
     cookies[:keyword] = nil
     cookies[:survey_id] = nil
-    redirect_to sign_out_url
+    redirect_to(request.referrer ? :back : 'http://www.missionhub.com')
   end
   
     

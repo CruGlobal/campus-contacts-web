@@ -14,6 +14,7 @@ class SessionsControllerTest < ActionController::TestCase
     should "respond success for non mhub login" do
       get :new
       assert_nil(assigns(:survey))
+      assert_nil(assigns(:title))
       assert_response(:success)
     end
     
@@ -21,6 +22,8 @@ class SessionsControllerTest < ActionController::TestCase
       @request.cookies['survey_id'] = @survey0.id
       get :new
       assert_not_nil(assigns(:survey))
+      assert_not_nil(assigns(:title))
+      assert_equal assigns(:title), @survey0.terminology
       assert_equal(assigns(:survey).id, @survey0.id)
       assert_response(:success)
     end
@@ -29,6 +32,8 @@ class SessionsControllerTest < ActionController::TestCase
       @request.cookies['survey_id'] = @survey1.id
       get :new
       assert_not_nil(assigns(:survey))
+      assert_not_nil(assigns(:title))
+      assert_equal assigns(:title), @survey1.terminology
       assert_equal(assigns(:survey).id, @survey1.id)
       assert_response(:success)
     end
@@ -37,6 +42,8 @@ class SessionsControllerTest < ActionController::TestCase
       @request.cookies['survey_id'] = @survey2.id
       get :new
       assert_not_nil(assigns(:survey))
+      assert_not_nil(assigns(:title))
+      assert_equal assigns(:title), @survey2.terminology
       assert_equal(assigns(:survey).id, @survey2.id)
       assert_response(:redirect)
       assert_redirected_to "/s/#{@survey2.id}?nologin=true"
@@ -46,6 +53,8 @@ class SessionsControllerTest < ActionController::TestCase
       @request.cookies['survey_id'] = @survey3.id
       get :new
       assert_not_nil(assigns(:survey))
+      assert_not_nil(assigns(:title))
+      assert_equal assigns(:title), @survey3.terminology
       assert_equal(assigns(:survey).id, @survey3.id)
       assert_response(:redirect)
       assert_redirected_to "/s/#{@survey3.id}?nologin=true"

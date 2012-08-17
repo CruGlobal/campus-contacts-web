@@ -64,7 +64,7 @@ module ApiHelper
   
   def valid_org_ids
     # @valid_orgs ||= current_person.organizations.collect { |x| x.subtree.collect(&:id)}.flatten.uniq
-    @valid_orgs ||= current_person.orgs_with_children.collect(&:id)
+    @valid_org_ids ||= current_person.org_ids.keys
   end
   
   def valid_keywords

@@ -29,34 +29,43 @@
 				      <%- end -%>
 					 </div>
 				  </div>
-			<%- end -%>
-			<%- if true -%>
+			<% end %>
+			<% if true %>
 				 <div data-role="header">
 				   <div data-role="header" role="banner">
 				     <h1 style='font-family:helvetica'><!-- class="mh-login" --><%#= image_tag("mh-logo-full.png", :style =>"width: 135px;") %><%= t('.login') %></h1>
 				   </div>
 				</div>
-			<%- end -%>
-	      <div data-role="content">
-			<% title t('.welcome') %>
-			<div class="info">
-				<span style='text-align:center; width:100%;display:block;font-family:helvetica'>
-          <% if mhub? %>
-            <%= t('.start_survey') %>
-          <% else %>
-            <%= t('.login_with_facebook') %>
+			<% end %>
+	    <div data-role="content">
+        <% title t('.welcome') %>
+        <% if mhub? %>
+          <% if !@survey || [0, 1].include?(@survey.login_option) %>
+            <div class="info">
+              <span style='text-align:center; width:100%;display:block;font-family:helvetica'>
+                <%= @survey && @survey.login_paragraph.present? ?  @survey.login_paragraph : t('.login_paragraph_mhub') %>
+              </span><br>
+            </div>
+            <div class="info">
+              <center><%= link_to(image_tag('fb_login_small.png'), user_omniauth_authorize_path(mhub? ? :facebook_mhub : :facebook), rel: 'external', alt: t('.login_with_facebook')) %></center>
+            </div>
+            <% if @survey && @survey.login_option == 0 %>
+              <div class="info"><br/><br/>
+                <center><%= link_to(t('.no_facebook'), session[:return_to] ? add_params(session[:return_to], :nologin => true) : "/s/#{cookies[:survey_id]}?nologin=true") %></center>
+              </div>
+            <% end %>
           <% end %>
-        </span><br>
-			</div>
-			<div class="info">
-				<center><%= link_to(image_tag('fb_login_small.png'), user_omniauth_authorize_path(mhub? ? :facebook_mhub : :facebook), rel: 'external', alt: t('.login_with_facebook')) %></center>
-			</div>
-			<% if mhub? && cookies[:survey_id] %>
-  			<div class="info"><br/><br/>
-          <center><%= link_to(t('.no_facebook'), session[:return_to] ? add_params(session[:return_to], :nologin => true) : "/s/#{cookies[:survey_id]}?nologin=true") %></center>
-  			</div>
-  		<% end %>
-		 </div>
+        <% else %>
+          <div class="info">
+            <span style='text-align:center; width:100%;display:block;font-family:helvetica'>
+                <%= t('.login_with_facebook') %>
+            </span><br>
+          </div>
+          <div class="info">
+            <center><%= link_to(image_tag('fb_login_small.png'), user_omniauth_authorize_path(mhub? ? :facebook_mhub : :facebook), rel: 'external', alt: t('.login_with_facebook')) %></center>
+          </div>
+        <% end %>
+		  </div>
 	  </div>
   </body>
 </html>

@@ -8,6 +8,9 @@ class Person < ActiveRecord::Base
   self.table_name = 'ministry_person'
   self.primary_key = 'personID'
 
+  serialize :organization_tree_cache, JSON
+  serialize :org_ids_cache, JSON
+
   has_many :person_transfers
   has_many :new_people
   has_one :transferred_by, class_name: "PersonTransfer", foreign_key: "transferred_by_id"
@@ -150,9 +153,13 @@ class Person < ActiveRecord::Base
     self.get_deleted.collect()
   end
   
+  def unachive_contact_role(org)
+    OrganizationalRole.where(organization_id: org.id, role_id: Role::CONTACT_ID, person_id: personID).first.unarchive
+  end
+  
   def archive_contact_role(org)
     begin
-      organizational_roles.where(organization_id: org.id, role_id: Role::CONTACT_ID).first.archive
+      OrganizationalRole.where(organization_id: org.id, role_id: Role::CONTACT_ID, person_id: personID).first.archive
     rescue
     
     end
@@ -160,7 +167,7 @@ class Person < ActiveRecord::Base
   
   def archive_leader_role(org)
     begin
-      organizational_roles.where(organization_id: org.id, role_id: Role::LEADER_ID).first.archive
+      OrganizationalRole.where(organization_id: org.id, role_id: Role::LEADER_ID, person_id: personID).first.archive
     rescue
     
     end
@@ -183,6 +190,7 @@ class Person < ActiveRecord::Base
     self.date_attributes_updated = DateTime.now.to_s(:db)
     self.save
   end
+
 
   def self.search_by_name(name, organization_ids = nil, scope = nil)
     return scope.where('1 = 0') unless name.present?
@@ -231,6 +239,77 @@ class Person < ActiveRecord::Base
     return false unless org
     OrganizationalRole.where(person_id: id, role_id: Role.leader_ids, :organization_id => org.id).present?
   end
+  def organization_objects
+    @organization_objects ||= Hash[Organization.order('name').find_all_by_id(org_ids.keys).collect {|o| [o.id, o]}]
+  end
+
+  def org_ids
+    unless @org_ids
+      unless org_ids_cache
+        organization_tree # make sure the tree is built
+      end
+      @org_ids = {}
+      org_ids_cache.collect {|org_id, values| @org_ids[org_id.to_i] = values}
+    end
+    @org_ids
+  end
+
+  def clear_org_cache
+    update_column(:organization_tree_cache, nil)
+    update_column(:org_ids_cache, nil)
+  end
+
+  def organization_tree
+    unless organization_tree_cache.present?
+      self.organization_tree_cache = org_tree_node
+      self.org_ids_cache = @org_ids
+      begin
+        save(validate: false)
+      rescue ActiveRecord::ReadOnlyRecord
+      end
+    end
+    organization_tree_cache
+  end
+
+  def organization_from_id(org_id)
+    begin
+      organization_objects[org_id.to_i]
+    #rescue
+      #raise org_id.inspect
+    end
+  end
+  
+  def roles_by_org_id(org_id)
+    unless @roles_by_org_id 
+      @roles_by_org_id = Hash[OrganizationalRole.connection.select_all("select organization_id, group_concat(role_id) as role_ids from organizational_roles where person_id = #{id} group by organization_id").collect { |row| [row['organization_id'], row['role_ids'].split(',').map(&:to_i) ]}]
+    end
+    @roles_by_org_id[org_id]
+  end
+
+  def org_tree_node(o = nil, parent_roles = [])
+    orgs = {}
+    @org_ids ||= {}
+    (o ? o.children : organizations).order('name').each do |org|
+      # collect roles associated with each org
+      @org_ids[org.id] ||= {}
+      @org_ids[org.id]['roles'] ||= (Array.wrap(roles_by_org_id(org.id)) + Array.wrap(parent_roles)).uniq
+      orgs[org.id] = (org.show_sub_orgs? ? org_tree_node(org, @org_ids[org.id]['roles']) : {})
+    end
+    orgs
+  end
+
+  def admin_of_org_ids
+    @admin_of_org_ids ||= org_ids.select {|org_id, values| Array.wrap(values['roles']).include?(Role.admin.id)}.keys
+  end
+
+  def leader_of_org_ids
+    @leader_of_org_ids ||= org_ids.select {|org_id, values| (Array.wrap(values['roles']) & Role.leader_ids).present?}.keys
+  end
+
+  def admin_or_leader?
+    (admin_of_org_ids + leader_of_org_ids).present?
+  end
+
 
   def orgs_with_children
     organizations.collect {|org|
@@ -378,14 +457,17 @@ class Person < ActiveRecord::Base
   end
 
   def primary_organization
-    org = organizations.find_by_id(user.primary_organization_id) if user.primary_organization_id.present?
-    unless org
-      org = organizations.first
+    unless @primary_organization
+      org = organizations.find_by_id(user.primary_organization_id) if user && user.primary_organization_id.present?
+      unless org
+        org = organizations.first
 
-      # save this as the primary org
-      primary_organization = org
+        # save this as the primary org
+        primary_organization = org
+      end
+      @primary_organization = org
     end
-    org
+    @primary_organization
   end
 
   def gender=(gender)
@@ -699,18 +781,8 @@ class Person < ActiveRecord::Base
   end
 
   def to_hash_mini_leader(org_id)
-    hash = to_hash_micro_leader(Organization.find(org_id))
-    hash['organizational_roles'] = []
-    organizational_roles.includes(:role, :organization).where("role_id <> #{Role::CONTACT_ID}").uniq {|r| r.organization_id}.collect do |r| 
-      if om = organization_memberships.where(organization_id: r.organization_id).first
-        hash['organizational_roles'] << {org_id: r.organization_id, role: r.role.i18n, name: r.organization.name, primary: om.primary? ? 'true' : 'false'}
-        if r.organization.show_sub_orgs?
-          r.organization.children.each do |o|
-            hash['organizational_roles'] << {org_id: o.id, role: r.role.i18n, name: o.name, primary: 'false'}
-          end
-        end
-      end
-    end.compact
+    hash = to_hash_micro_leader(organization_from_id(org_id))
+    hash['organizational_roles'] = organizational_roles_hash
     hash
   end
 
@@ -738,18 +810,18 @@ class Person < ActiveRecord::Base
     hash['request_org_id'] = organization.id unless organization.nil?
     hash['first_contact_date'] = answer_sheets.first.created_at.utc.to_s unless answer_sheets.empty?
     hash['date_surveyed'] = answer_sheets.last.created_at.utc.to_s unless answer_sheets.empty?
-    hash['organizational_roles'] = []
-    organizational_roles.includes(:role, :organization).where("role_id <> #{Role::CONTACT_ID}").uniq {|r| r.organization_id}.collect do |r| 
-      if om = organization_memberships.where(organization_id: r.organization_id).first
-        hash['organizational_roles'] << {org_id: r.organization_id, role: r.role.i18n, name: r.organization.name, primary: om.primary? ? 'true' : 'false'}
-        if r.organization.show_sub_orgs?
-          r.organization.children.each do |o|
-            hash['organizational_roles'] << {org_id: o.id, role: r.role.i18n, name: o.name, primary: 'false'}
-          end
-        end
-      end
-    end.compact
+    hash['organizational_roles'] = organizational_roles_hash
     hash
+  end
+  
+  def organizational_roles_hash
+    @organizational_roles_hash ||= org_ids.collect { |org_id, values| 
+                                     values['roles'].select { |role_id| 
+                                       role_id != Role.contact.id
+                                     }.collect { |role_id| Role.find_by_id(role_id) }.compact.collect { |role|
+                                       {org_id: org_id, role: role.i18n, name: organization_from_id(org_id).name, primary: primary_organization.id == org_id ? 'true' : 'false'} 
+                                     }
+                                   }.flatten
   end
 
   def to_hash(organization = nil)
@@ -759,11 +831,11 @@ class Person < ActiveRecord::Base
     hash['phone_number'] = primary_phone_number.number if primary_phone_number
     hash['email_address'] = primary_email_address.to_s if primary_email_address
     hash['birthday'] = birth_date.to_s
-    hash['interests'] = Interest.get_interests_hash(id)
-    hash['education'] = EducationHistory.get_education_history_hash(id)
-    hash['location'] = latest_location.to_hash if latest_location
+    # hash['interests'] = Interest.get_interests_hash(id)
+    # hash['education'] = EducationHistory.get_education_history_hash(id)
+    #hash['location'] = latest_location.to_hash if latest_location
     hash['locale'] = user.try(:locale) ? user.locale : ""
-    hash['organization_membership'] = organizations.collect(&:self_and_children).flatten.collect {|org| {org_id: org.id, primary: (primary_organization == org).to_s, name: org.name}}
+    hash['organization_membership'] = organization_objects.collect {|org_id, org| {org_id: org_id, primary: (primary_organization.id == org.id).to_s, name: org.name}}
     hash
   end
 

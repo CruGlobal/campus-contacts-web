@@ -13,8 +13,9 @@ class SurveyResponsesController < ApplicationController
     end
 
     # If they haven't skipped facebook already, send them to the login page
-    unless params[:nologin] == 'true'
-      return unless authenticate_user! 
+    # Also skip login if we're in survey mode
+    unless cookies[:survey_mode] == '1' || params[:nologin] == 'true'
+      return unless authenticate_user!
     end
 
     # If they texted in, save their phone number
@@ -50,12 +51,15 @@ class SurveyResponsesController < ApplicationController
   end
 
   def update
+    @title = @survey.terminology if @survey
     redirect_to :back and return false unless @person.id == params[:id].to_i
 
     save_survey
 
     if @person.valid? && @answer_sheet.person.valid?
-      create_contact_at_org(@person, @survey.organization)
+      unless @answer_sheet.survey.has_assign_rule_applied(@answer_sheet, 'ministry')
+        create_contact_at_org(@person, @survey.organization)
+      end
       respond_to do |wants|
         wants.html { render :thanks, layout: 'mhub'}
         wants.mobile { render :thanks }
@@ -70,11 +74,12 @@ class SurveyResponsesController < ApplicationController
   end
 
   def create
+    @title = @survey.terminology
     Person.transaction do
       @person = current_person # first try for a logged in person
       if params[:person] && params[:person][:email].present?
         @person_from_email = EmailAddress.find_by_email(params[:person][:email]).try(:person) || Address.find_by_email(params[:person][:email]).try(:person)
-        if @person
+        if @person && @person_from_email
           if @person != @person_from_email
             @person = @person_from_email.smart_merge(@person)
           end
@@ -94,13 +99,18 @@ class SurveyResponsesController < ApplicationController
         session[:person_id] = @person.id
         session[:survey_id] = @survey.id
         if @person.valid? && @answer_sheet.person.valid?
-          create_contact_at_org(@person, @survey.organization)
-          FollowupComment.create_from_survey(@survey.organization, @person, @survey.questions, @answer_sheet)
+          unless @answer_sheet.survey.has_assign_rule_applied(@answer_sheet, 'ministry')
+            create_contact_at_org(@person, @survey.organization)
+            FollowupComment.create_from_survey(@survey.organization, @person, @survey.questions, @answer_sheet)
+          end
           respond_to do |wants|
-            if @survey.login_option == 2
+            if !(cookies[:survey_mode] == '1') && @survey.login_option == 2
               wants.html { render :facebook, layout: 'mhub' }
               wants.mobile { render :facebook, layout: 'mhub' }
             else
+              # If we saved successfully, destroy the session
+              session[:person_id] = nil
+              session[:survey_id] = nil
               wants.html { render :thanks, layout: 'mhub'}
               wants.mobile { render :thanks }
             end

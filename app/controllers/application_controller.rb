@@ -136,7 +136,7 @@ class ApplicationController < ActionController::Base
     if session[:mobile_param]
       session[:mobile_param] == "1"
     else
-      request.user_agent =~ /Mobile|webOS/
+      request.user_agent =~ /Mobile|webOS|Android/
     end
   end
   helper_method :mobile_device?
@@ -196,7 +196,7 @@ class ApplicationController < ActionController::Base
     @current_organizations ||= {}
     unless @current_organizations[person]
       if session[:current_organization_id]
-        org = Organization.find_by_id(session[:current_organization_id]) 
+        org = person.organization_from_id(session[:current_organization_id]) 
         # org = nil unless org && (person.organizations.include?(org) || person.organizations.include?(org.parent))
       end
       unless org
@@ -255,9 +255,10 @@ class ApplicationController < ActionController::Base
       render_404
     else
       if (!current_organization || current_person.organizations.include?(current_organization)) && wizard_path
-        return wizard_path 
+        return wizard_path
       else
         return '/dashboard'
+        #return '/contacts/mine'
       end
     end
   end

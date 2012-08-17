@@ -143,6 +143,26 @@ class LeadersControllerTest < ActionController::TestCase
         assert_response :success
       end
     end
+    
+    should "not be able to sign in leader" do
+      get :leader_sign_in
+      #assert_redirected_to user_root_path
+      assert_response :redirect
+    end
+=begin
+    should "reconcile the person comeing from a leader link with the link itself" do
+      @user1, @org = admin_user_login_with_org
+    
+    
+      token = SecureRandom.hex(12)
+      @user.remember_token = token
+      @user.remember_token_expires_at = 1.month.from_now
+      @user.save(validate: false)
+      get :leader_sign_in, token: token, user_id: @user.id
+      #assert_redirected_to '/wizard?step=survey'
+    end
+    
+=end
   end
 
   context "Seaching for Persons to be assigned a leader role" do

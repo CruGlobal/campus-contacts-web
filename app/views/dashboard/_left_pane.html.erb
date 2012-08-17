@@ -6,7 +6,7 @@
     <div class="dash_content">
       <%= link_to "See All Contacts", "/contacts" %>
       <br/>
-      <%= link_to "Add New Contact", "#" %>
+      <%= link_to "Add New Contact", "/contacts?click=contacts_add_button" %>
     </div>
   </div>
   
@@ -22,7 +22,6 @@
       <%= link_to "Manage Existing Groups", "/groups" %>
     </div>
   </div>
-  
   <hr class="dash_divider"/>
   
   <div class="dash_link">
@@ -30,12 +29,11 @@
       <%= image_tag('dashicon_mail.png')%>
     </div>
     <div class="dash_content">
-      <%= link_to "Send Text Message", "#" %>
+      <%= link_to "Send Text Message", "/contacts?click=show_message_guide_button" %>
       <br/>
-      <%= link_to "Send Email Message", "#" %>
+      <%= link_to "Send Email Message", "/contacts?click=show_message_guide_button" %>
     </div>
   </div>
-  
 </div>
 <div class="dash_links lower_box">
   <div class="lower_box_title">
@@ -50,22 +48,42 @@
       <%= link_to "Contacts in Progress", "/contacts?assigned_to=progress" %>
     </div>
   </div>
-  <div class="lower_box_item">
-    <div class="lower_box_count">
-      <%= current_person.primary_organization.present? ?
-        current_person.primary_organization.surveys.count : 0 %>
+  <% if can? :manage, current_organization %>
+    <div class="lower_box_item">
+      <div class="lower_box_count">
+        <%= current_person.primary_organization.present? ?
+          current_person.primary_organization.active_keywords.count : 0 %>
+      </div>
+      <div class="lower_box_link">
+        <%= link_to "Active Keywords", "/sms_keywords" %>
+      </div>
     </div>
-    <div class="lower_box_link">
-      <%= link_to "Active Surveys", "/surveys" %>
+    <div class="lower_box_item">
+      <div class="lower_box_count">
+        <%= current_person.primary_organization.present? ?
+          current_person.primary_organization.surveys.count : 0 %>
+      </div>
+      <div class="lower_box_link">
+        <%= link_to "Active Surveys", "/surveys/index_admin" %>
+      </div>
     </div>
-  </div>
-  <div class="lower_box_item">
-    <div class="lower_box_count">
-      <%= current_person.primary_organization.present? ?
-        current_person.primary_organization.groups.count : 0 %>
+    <div class="lower_box_item">
+      <div class="lower_box_count">
+        <%= current_person.primary_organization.present? ?
+          current_person.primary_organization.groups.count : 0 %>
+      </div>
+      <div class="lower_box_link">
+        <%= link_to "Groups Under Your Leadership", "/groups" %>
+      </div>
     </div>
-    <div class="lower_box_link">
-      <%= link_to "Groups Under Your Leadership", "/groups" %>
+    <div class="lower_box_item">
+      <div class="lower_box_count">
+        <%= current_person.primary_organization.present? ?
+          current_person.primary_organization.children.count : 0 %>
+      </div>
+      <div class="lower_box_link">
+        <%= link_to "Sub-organizations of #{current_organization}", "/organizations" %>
+      </div>
     </div>
-  </div>
+  <% end %>
 </div>

@@ -35,6 +35,36 @@ module ApplicationHelper
       [parts[0], url_params].join('?')
     end
   end
+
+  def render_org_tree(org_tree)
+    ret = ''
+    org_tree.each do |org_id, children|
+      org = current_person.organization_from_id(org_id)
+      next unless org # Just in case there's some bad data
+      ret += render(partial: 'application/org', locals: {org: org, children: children})
+    end
+    ret.html_safe
+  end
+
+
+  #def org_nav(org, children)
+    #ret = ''
+    #(current_user.primary_organization_id == org.id).tap do |primary| %>
+    #ret +=<li <% if primary %>class="primary" title="This is your primary organization"<% end %>>
+      #<%= link_to(set_current_organization_membership_path(org), class: "orgname", title: "Go to #{org}") do  %><label><%= org %></label><% end %>
+      #<div class="orgactions">
+        #<%= link_to("", set_current_organization_membership_path(org), class: "icon magnify", title: "Go to #{org}") %>
+        #<%= link_to("", set_primary_organization_membership_path(org), class: "icon #{primary ? 'star' : 'star_empty'}", title: "Set #{org} as your default organization") %>
+      #</div>
+      #<% if children.present? %>
+        #<ul class="sf-scrolling" items="8" interval="100">
+          #<%= render_org_tree(children) %>
+        #</ul>
+      #<% end %>
+      #</li>
+    #end
+    #ret
+  #end
   
   def site_name
     mhub? ? '' : 'MissionHub'

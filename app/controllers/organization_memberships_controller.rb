@@ -121,13 +121,14 @@ class OrganizationMembershipsController < ApplicationController
     if orgs_i_have_access_to.include?(org.id)
       session[:current_organization_id] = params[:id]
     end
-    redirect_to request.referrer ? :back : '/contacts'
+    redirect_to request.referrer ? request.referrer.split('?').first : '/contacts'
   end
   
   def set_primary
     org = Organization.find(params[:id])
     current_person.primary_organization = org
     session[:current_organization_id] = params[:id]
+    expire_fragment("org_nav/#{current_person.id}")
     redirect_to request.referrer ? :back : '/contacts'
   end
   

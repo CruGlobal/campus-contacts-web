@@ -65,12 +65,12 @@ class ContactsController < ApplicationController
 
   def search_by_name_and_email
     
-    people = params[:include_archived] ?
+    @people = params[:include_archived] ?
       current_organization.people.search_by_name_or_email(params[:term], current_organization.id).uniq :
       current_organization.people.search_by_name_or_email(params[:term], current_organization.id).uniq.archived_not_included
 
     respond_to do |wants|
-      wants.json { render text: people.collect{|person| {"label" => "#{person.name} (#{person.email})", "id" => person.id}}.to_json }
+      wants.json { render text: @people.collect{|person| {"label" => "#{person.name} (#{person.email})", "id" => person.id}}.to_json }
     end
   end
   
@@ -98,7 +98,6 @@ class ContactsController < ApplicationController
     authorize!(:update, @person)
     
     @person.update_attributes(params[:person]) if params[:person]
-    
     update_survey_answers if params[:answers].present?
     @person.update_date_attributes_updated
     if @person.valid? && (!@answer_sheet || (@answer_sheet.person.valid? && (!@answer_sheet.person.primary_phone_number || @answer_sheet.person.primary_phone_number.valid?)))
@@ -108,7 +107,7 @@ class ContactsController < ApplicationController
         wants.html { redirect_to survey_response_path(@person) }
       end
     else
-      render :edit
+      redirect_to survey_response_path(params[:id])
     end
   end
   
@@ -122,16 +121,8 @@ class ContactsController < ApplicationController
   
   def create
     @organization = current_organization
-    #if params[:person].present?
-      #person = Person.where(firstName: params[:person][:firstName], lastName: params[:person][:lastName])
-      #if person.present?
-        #params[:id] = person.first.id
-        #params[:answers] = nil
-        #update
-      #else
-        create_contact
-      #end
-    #end
+    create_contact
+    
   end
   
   def destroy
@@ -160,31 +151,11 @@ class ContactsController < ApplicationController
     end
     render nothing: true
   end
-
-  def import_contacts
-    @import = Import.new
-    @organization = current_organization
-    authorize! :manage, @organization
-  end
-
-
-  def download_sample_contacts_csv
-
-    csv_string = CSV.generate do |csv|
-      c = 0
-      CSV.foreach(Rails.root.to_s + "/public/files/sample_contacts.csv") do |row|
-        c = c + 1
-        csv << row
-      end
-    end
-
-    send_data csv_string, :type => 'text/csv; charset=UTF-8; header=present', :disposition => "attachment; filename=sample_contacts.csv"
-  end
   
   protected
   
     def fetch_all_contacts
-      
+      @header = nil
       @style = params[:edit] ? 'display:true' : 'display:none'
       @saved_contact_search = @person.user.saved_contact_searches.find(:first, :conditions => "full_path = '#{request.fullpath.gsub(I18n.t('contacts.index.edit_true'),"")}'") || SavedContactSearch.new
       @organization = current_organization # params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : 
@@ -196,11 +167,16 @@ class ContactsController < ApplicationController
       @questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => false).flatten.uniq
       @hidden_questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => true).flatten.uniq
 
-      params[:assigned_to] = 'all' unless params[:assigned_to] # make 'all default' on 'all contacts' tab instead of 'unassigned'
+      params[:assigned_to] = 'all' if !params[:assigned_to].present?# make 'all default' on 'all contacts' tab instead of 'unassigned'
       if params[:dnc] == 'true'
         @people = @organization.dnc_contacts
+        @header = I18n.t('contacts.index.dnc')
       elsif params[:completed] == 'true'
+        @header = I18n.t('contacts.index.completed')
         @people = @organization.completed_contacts
+      elsif params[:search]
+        @header = I18n.t('contacts.index.matching_seach')
+        @people = @organization.contacts
       else
         params[:assigned_to] = nil if params[:assigned_to].blank?
         if params[:assigned_to]
@@ -209,16 +185,22 @@ class ContactsController < ApplicationController
             @people = @organization.contacts
           when 'unassigned'
             @people = @organization.unassigned_contacts
+            @header = I18n.t('contacts.index.unassigned')
           when 'progress'
             @people = @organization.inprogress_contacts
+            @header = I18n.t('contacts.index.in_progress')
           when 'no_activity'
             @people = @organization.no_activity_contacts
+            @header = I18n.t('contacts.index.no_activity')
           when 'friends'
             @people = current_person.contact_friends(@organization)
+            @header = I18n.t('contacts.index.friend_responses')
           when *Rejoicable::OPTIONS
             @people = @organization.send(:"#{params[:assigned_to]}_contacts")
+            @header = I18n.t("rejoicables.#{params[:assigned_to]}")
           else
             if params[:assigned_to].present? && @assigned_to = Person.find_by_personID(params[:assigned_to])
+              @header = I18n.t('contacts.index.responses_assigned_to', assigned_to: @assigned_to)
               @people = Person.includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
             end
           end
@@ -226,7 +208,7 @@ class ContactsController < ApplicationController
         @people ||= Person.where("1=0")
       end
       unless @people.arel.to_sql.include?('JOIN organizational_roles')
-        @people = @people.includes(:organizational_roles).where("organizational_roles.organization_id" => @organization.id)
+        @header = "#{Role.find(params[:role]).i18n}" if params[:role]
       end
       if params[:q] && params[:q][:s].include?('mh_answer_sheets')
         @people = current_organization.contacts.get_and_order_by_latest_answer_sheet_answered(params[:q][:s], current_organization.id)
@@ -263,6 +245,8 @@ class ContactsController < ApplicationController
                              case question.attribute_name
                              when 'email'
                                @people = @people.includes(:email_addresses).where("#{EmailAddress.table_name}.email like ?", '%' + v + '%') unless v.strip.blank?
+                             when 'phone_number'
+                               @people = @people.includes(:phone_numbers).where("#{PhoneNumber.table_name}.number like ?", '%' + v + '%') unless v.strip.blank?
                              else
                                @people = @people.where("#{Person.table_name}.#{question.attribute_name} like ?", '%' + v + '%') unless v.strip.blank?
                              end

@@ -1,6 +1,6 @@
 <li class="leader <%= 'selected' if params[:assigned_to].to_i == person.id %>" data-id="<%= person.id %>">
   <% if can? :manage, @organization %>
-    <%= link_to('x', leader_path(person.id), method: :delete, remote: true, class: 'delete_leader', :confirm => t('.archive_confirm', person: person)) %>
+    <%= link_to('x', leader_path(person.id), method: :delete, remote: true, class: 'delete_leader', data: { confirm: t('.archive_confirm', person: person) }) %>
   <% end %>
   <span class="name"><%= link_to(person, contacts_path(assigned_to: person.id)) %></span> (<span class="count"><%= person.contact_assignments.for_org(@organization).count %></span>)
 </li>

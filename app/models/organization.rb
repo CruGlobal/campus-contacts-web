@@ -76,7 +76,34 @@ class Organization < ActiveRecord::Base
     end
 
     def to_s() name; end
-
+    
+    def parent_organization
+      org = Organization.find(ancestry.split('/').last) if ancestry.present?
+      return org if org.present?
+    end
+    
+    def parent_organization_admins
+      if parent_organization.present?
+        parent_admins = parent_organization.admins 
+        return parent_admins.present? ? parent_admins : parent_organization.parent_organization_admins
+      end
+    end
+    
+    def all_possible_admins
+      admins.present? ? admins : parent_organization_admins
+    end
+    
+    def all_possible_admins_with_email
+      all_admins = all_possible_admins
+      if all_admins.present?
+        admins_with_email = Array.new
+        all_admins.each do |admin|
+          admins_with_email << admin if admin.email.present?
+        end
+        return admins_with_email
+      end
+    end
+    
     def self_and_children
       [self] + children
     end
@@ -84,6 +111,10 @@ class Organization < ActiveRecord::Base
     # def children_surveys
     #   Survey.where(organization_id: child_ids)
     # end
+
+    def active_keywords
+      keywords.where(state: 'active')
+    end
 
     def self_and_children_ids
       @self_and_children_ids ||= [id] + child_ids

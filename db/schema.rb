@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120724000933) do
+ActiveRecord::Schema.define(:version => 20120815204804) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -986,6 +986,7 @@ ActiveRecord::Schema.define(:version => 20120724000933) do
     t.datetime "updated_at"
   end
 
+  add_index "email_addresses", ["email"], :name => "index_email_addresses_on_email", :unique => true
   add_index "email_addresses", ["person_id", "email"], :name => "index_email_addresses_on_person_id_and_email", :unique => true
 
   create_table "engine_schema_info", :id => false, :force => true do |t|
@@ -3063,6 +3064,15 @@ ActiveRecord::Schema.define(:version => 20120724000933) do
     t.integer "toggle_id"
   end
 
+  create_table "mh_dashboard_posts", :force => true do |t|
+    t.string   "title",      :default => ""
+    t.text     "context"
+    t.string   "video",      :default => ""
+    t.boolean  "visible",    :default => true
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
+  end
+
   create_table "mh_education_histories", :force => true do |t|
     t.integer  "person_id"
     t.string   "type"
@@ -3649,6 +3659,8 @@ ActiveRecord::Schema.define(:version => 20120724000933) do
     t.string   "strategy",                      :limit => 20
     t.integer  "fb_uid",                        :limit => 8
     t.datetime "date_attributes_updated"
+    t.text     "organization_tree_cache"
+    t.text     "org_ids_cache"
   end
 
   add_index "ministry_person", ["accountNo"], :name => "accountNo_ministry_Person"
@@ -3657,6 +3669,7 @@ ActiveRecord::Schema.define(:version => 20120724000933) do
   add_index "ministry_person", ["firstName"], :name => "firstname_ministry_Person"
   add_index "ministry_person", ["fk_ssmUserId"], :name => "fk_ssmUserId"
   add_index "ministry_person", ["lastName"], :name => "lastname_ministry_Person"
+  add_index "ministry_person", ["org_ids_cache"], :name => "index_ministry_person_on_org_ids_cache", :length => {"org_ids_cache"=>255}
   add_index "ministry_person", ["region"], :name => "region_ministry_Person"
 
   create_table "ministry_regionalstat", :primary_key => "RegionalStatID", :force => true do |t|
@@ -4813,7 +4826,7 @@ ActiveRecord::Schema.define(:version => 20120724000933) do
     t.integer  "created_by_id"
     t.integer  "organization_id"
     t.integer  "followup_comment_id"
-    t.string   "what",                :limit => 0
+    t.string   "what",                :limit => 22
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
@@ -5567,6 +5580,7 @@ ActiveRecord::Schema.define(:version => 20120724000933) do
     t.boolean  "interactive",    :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "ended",          :default => false, :null => false
   end
 
   add_index "sms_sessions", ["phone_number", "updated_at"], :name => "session"

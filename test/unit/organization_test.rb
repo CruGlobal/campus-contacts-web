@@ -29,6 +29,136 @@ class OrganizationTest < ActiveSupport::TestCase
 
   # begin methods testing
 
+  context "parent_organization method" do
+    setup do
+      @org1 = Factory(:organization, id: '1')
+      @org2 = Factory(:organization, id: '2', ancestry: '1')
+      @org3 = Factory(:organization, id: '3', ancestry: '1/2')
+    end
+    should "return the ancestor of the org" do
+      assert_equal(@org2, @org3.parent_organization, "org2 should be the parent of org3")
+    end
+    should "return nil if org do not have ancestor" do
+      assert_nil(@org1.parent_organization, "org1 should not have parent org")
+    end
+  end
+
+  context "parent_organization_admins method" do
+    setup do
+      @person1 = Factory(:person, :email => "person1@email.com")
+      @person2 = Factory(:person, :email => "person2@email.com")
+      @person3 = Factory(:person, :email => "person3@email.com")
+      @person4 = Factory(:person, :email => "person4@email.com")
+      @org1 = Factory(:organization, id: '1')
+      @org2 = Factory(:organization, id: '2', ancestry: '1')
+      @org3 = Factory(:organization, id: '3', ancestry: '1/2')
+    end
+    should "return the admins of org2" do
+      Factory(:organizational_role, organization: @org2, person: @person1, role: Role.admin)
+      Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
+      results = @org3.parent_organization_admins
+      assert_equal(2, results.count, "when org3 dont have admin")
+      assert(results.include?(@person1), "person1 should be returned")
+      assert(results.include?(@person2), "person2 should be returned")
+    end
+    should "return the admins of org1 if @org2 dont have admins" do
+      Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
+      results = @org3.parent_organization_admins
+      assert_equal(1, results.count, "when org3 and org2 dont have admin")
+      assert(results.include?(@person1), "person1 should be returned")
+    end
+  end
+
+  context "all_possible_admins method" do
+    setup do
+      @person1 = Factory(:person, :email => "person1@email.com")
+      @person2 = Factory(:person, :email => "person2@email.com")
+      @person3 = Factory(:person, :email => "person3@email.com")
+      @person4 = Factory(:person, :email => "person4@email.com")
+      @org1 = Factory(:organization, id: '1')
+      @org2 = Factory(:organization, id: '2', ancestry: '1')
+      @org3 = Factory(:organization, id: '3', ancestry: '1/2')
+    end
+    should "return the admins of org3" do
+      Factory(:organizational_role, organization: @org3, person: @person1, role: Role.admin)
+      Factory(:organizational_role, organization: @org3, person: @person2, role: Role.admin)
+      results = @org3.all_possible_admins
+      assert_equal(2, results.count, "when org3 have admins")
+      assert(results.include?(@person1), "person1 should be returned")
+      assert(results.include?(@person2), "person2 should be returned")
+    end
+    should "return the admins of org2" do
+      Factory(:organizational_role, organization: @org2, person: @person1, role: Role.admin)
+      Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
+      Factory(:organizational_role, organization: @org2, person: @person3, role: Role.admin)
+      results = @org3.all_possible_admins
+      assert_equal(3, results.count, "when org3 dont have admin")
+      assert(results.include?(@person1), "person1 should be returned")
+      assert(results.include?(@person2), "person2 should be returned")
+      assert(results.include?(@person3), "person3 should be returned")
+    end
+    should "return the admins of org1" do
+      Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
+      Factory(:organizational_role, organization: @org1, person: @person2, role: Role.admin)
+      results = @org3.all_possible_admins
+      assert_equal(2, results.count, "when org3 and org2 dont have admin")
+      assert(results.include?(@person1), "person1 should be returned")
+      assert(results.include?(@person2), "person2 should be returned")
+    end
+    should "return null" do
+      results = @org3.all_possible_admins
+      assert_nil(results, "when org3 and org2 and org1 dont have admins")
+    end
+  end
+
+  context "all_possible_admins_with_email method" do
+    setup do
+      @person1 = Factory(:person, :email => "person1@email.com")
+      @person2 = Factory(:person, :email => "person2@email.com")
+      @person3 = Factory(:person)
+      @person4 = Factory(:person)
+      @org1 = Factory(:organization, id: '1')
+      @org2 = Factory(:organization, id: '2', ancestry: '1')
+      @org3 = Factory(:organization, id: '3', ancestry: '1/2')
+    end
+    should "return the admins with email of org3" do
+      Factory(:organizational_role, organization: @org3, person: @person1, role: Role.admin)
+      Factory(:organizational_role, organization: @org3, person: @person3, role: Role.admin)
+      results = @org3.all_possible_admins_with_email
+      assert_equal(1, results.count, "when org3 have admins")
+      assert(results.include?(@person1), "person1 should be returned")
+    end
+    should "return the admins of org2" do
+      Factory(:organizational_role, organization: @org2, person: @person1, role: Role.admin)
+      Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
+      Factory(:organizational_role, organization: @org2, person: @person3, role: Role.admin)
+      results = @org3.all_possible_admins_with_email
+      assert_equal(2, results.count, "when org3 dont have admin")
+      assert(results.include?(@person1), "person1 should be returned")
+      assert(results.include?(@person2), "person2 should be returned")
+    end
+    should "return the admins of org1" do
+      Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
+      Factory(:organizational_role, organization: @org1, person: @person2, role: Role.admin)
+      Factory(:organizational_role, organization: @org1, person: @person3, role: Role.admin)
+      Factory(:organizational_role, organization: @org1, person: @person4, role: Role.admin)
+      results = @org3.all_possible_admins_with_email
+      assert_equal(2, results.count, "when org3 and org2 dont have admin")
+      assert(results.include?(@person1), "person1 should be returned")
+      assert(results.include?(@person2), "person2 should be returned")
+    end
+    should "return null" do
+      results = @org3.all_possible_admins_with_email
+      assert_nil(results, "when org3 and org2 and org1 dont have admins")
+    end
+    should "return null if no admin has email" do
+      Factory(:organizational_role, organization: @org3, person: @person3, role: Role.admin)
+      Factory(:organizational_role, organization: @org3, person: @person4, role: Role.admin)
+      results = @org3.all_possible_admins_with_email
+      assert_equal(0, results.count, "when org3 and org2 and org1 dont have admins")
+    end
+  end
+
   test "test to_s()" do # Every model, in this application, should return .name of the record
     org1 = Factory(:organization, :name => "Chupakabra")
     assert_equal org1.to_s, "Chupakabra", "Organization did not return correct value on to_s method" 
@@ -89,6 +219,33 @@ class OrganizationTest < ActiveSupport::TestCase
 
   test "unassigned_people" do
 
+  end
+  
+  context "retrieving active keywords" do
+    setup do
+      @person = Factory(:person)
+      @org1 = Factory(:organization)
+      @org2 = Factory(:organization)
+      @keyword1 = Factory(:sms_keyword, :organization => @org1, state: 'active')
+      @keyword2 = Factory(:sms_keyword, :organization => @org1, state: 'active')
+      @keyword3 = Factory(:sms_keyword, :organization => @org2, state: 'active')
+      @keyword4 = Factory(:sms_keyword, :organization => @org1)
+      @keyword5 = Factory(:sms_keyword, :organization => @org2)
+    end
+    should "return the organization keywords" do
+      results = @org1.active_keywords
+      assert_equal(results.count, 2, "The resuts should be = 2")
+      assert(results.include?(@keyword1), "This should be returned")
+      assert(results.include?(@keyword2), "This should be returned")
+    end
+    should "not return not active keyword" do
+      results = @org1.active_keywords
+      assert(!results.include?(@keyword4), "This not should be returned")
+    end
+    should "not return active keyword of other org" do
+      results = @org1.active_keywords
+      assert(!results.include?(@keyword3), "This not should be returned")
+    end
   end
 
   test "terminology enum" do
@@ -225,13 +382,17 @@ class OrganizationTest < ActiveSupport::TestCase
 
   context "an organization" do
 
-    should "delete suborganizations when deleted" do
+    should "delete suborganizations when deleted (root organizations cannot be deleted)" do
+      # it seems like there comes a problem when you are destroying an organization in which its predecessor tree is more than 2 levels deep
+    
       org1 = Factory(:organization)
       org2 = Factory(:organization, :parent => org1)
       org3 = Factory(:organization, :parent => org2)
+      org4 = Factory(:organization, :parent => org3)
+      org5 = Factory(:organization, :parent => org4)
 
       assert_difference("Organization.count", -3, "Organizations were not deleted after parent was destroyed.") do 
-        org1.destroy
+        org4.destroy
       end
     end
 

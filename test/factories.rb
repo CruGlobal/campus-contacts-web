@@ -289,6 +289,13 @@ FactoryGirl.define do
     attribute_name ''
   end
   
+  factory :some_question, class: :element do
+    kind          'TextField'
+    label         'Are you alright?'
+    style         'short'
+    content       "Are you alright?"
+  end
+  
   factory :firstName_element, parent: :element do
     kind          'TextField'
     label         'First name?'
@@ -314,6 +321,15 @@ FactoryGirl.define do
     required      false
   end
   
+  factory :gender_element, parent: :element do
+    kind          'TextField'
+    label         'What is your gender?'
+    style         'short'
+    object_name   'person'
+    attribute_name 'gender'
+    required      false
+  end
+  
   factory :phone_element, parent: :element do
     kind          'TextField'
     label         'What is your phone number?'
@@ -321,6 +337,10 @@ FactoryGirl.define do
     object_name   'person'
     attribute_name 'phone_number'
     required      false
+  end
+  
+  factory :phone_number do
+    association :person
   end
   
   factory :survey_element do
@@ -331,7 +351,8 @@ FactoryGirl.define do
   
   factory :answer do
     association :answer_sheet
-    association :choice_field
+    # association :choice_field
+    association :question, factory: :element
   end
   
   factory :answer_1, class: :answer do
@@ -369,4 +390,29 @@ FactoryGirl.define do
     email     "email#{Factory.next(:count)}@email.com"
     association :person
   end
+  
+  factory :person_transfer do
+    association :person
+    association :old_organization, factory: :organization
+    association :new_organization, factory: :organization
+    association :transferred_by, factory: :person
+    notified false
+  end
+  
+  factory :new_person do
+    association :person
+    association :organization
+    notified false
+  end
+  
+  factory :rule do
+    name  'Automatic Assignment of Contact'
+    rule_code   'AUTOASSIGN'
+  end
+  
+  factory :question_rule do
+    association :rule
+    association :survey_element
+  end
+  
 end

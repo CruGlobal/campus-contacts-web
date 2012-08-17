@@ -91,6 +91,8 @@ class SurveyResponsesControllerTest < ActionController::TestCase
       setup do
         @request.host = 'mhub.cc' 
         put :update, id: @user.person.id, format: 'mobile', keyword: @keyword.keyword
+        assert_not_nil assigns(:title)
+        assert_equal assigns(:title), @survey.terminology
       end
       should render_template('thanks')
     end
@@ -99,6 +101,8 @@ class SurveyResponsesControllerTest < ActionController::TestCase
       setup do
         @request.host = 'mhub.cc'
         put :update, id: @user.person.id, format: 'mobile', person: {firstName: ''}, keyword: @keyword.keyword
+        assert_not_nil assigns(:title)
+        assert_equal assigns(:title), @survey.terminology
       end
       should render_template('new')
     end
@@ -107,6 +111,8 @@ class SurveyResponsesControllerTest < ActionController::TestCase
       setup do
         @request.host = 'mhub.cc'
         post :create, id: @user.person.id, format: 'mobile', person: {firstName: ''}, keyword: @keyword.keyword
+        assert_not_nil assigns(:title)
+        assert_equal assigns(:title), @survey.terminology
       end
       should render_template('new')
     end
@@ -147,6 +153,21 @@ class SurveyResponsesControllerTest < ActionController::TestCase
       assert_response(:success)
     end
     
+=begin
+    should "merge people when sent params has an email that is existing in the db" do
+      @respondent = Factory.create(:user_no_org_with_facebook)
+      Factory.create(:authentication, user: @respondent)
+      @email = Factory(:email_address, person: @respondent.person)
+      @organization.add_contact(@respondent.person)
+      @answer_sheet = Factory(:answer_sheet, survey: @survey, person: @respondent.person)
+      @answer_to_choice = Factory(:answer_1, answer_sheet: @answer_sheet, question: @questions.first)
+      
+      stub_request(:get, "http://api.bit.ly/v3/shorten?apiKey=R_1b6fbe0b4987dc3801ddb9f812d60f84&login=vincentpaca&longUrl=http://local.missionhub.com:7888/people/#{@respondent.person.id}").to_return(:status => 200, :body => "", :headers => {})
+      
+      post :create, { :survey_id => @survey.id, :person => { firstName: @respondent.person.firstName, lastName: @respondent.person.lastName, phone_number: "1234567890", email: @email.email}, :answers => @answer_to_choice.attributes }
+      assert_response(:success)
+    end
+=end
   end
 
   test "show" do

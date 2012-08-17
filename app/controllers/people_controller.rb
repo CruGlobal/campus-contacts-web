@@ -3,6 +3,7 @@ class PeopleController < ApplicationController
   before_filter :ensure_current_org
   before_filter :authorize_merge, only: [:merge, :confirm_merge, :do_merge, :merge_preview]
   before_filter :roles_for_assign
+  cache_sweeper :organization_sweeper, only: [:create, :update, :update_roles]
 
   # GET /people
   # GET /people.xml
@@ -145,7 +146,6 @@ class PeopleController < ApplicationController
             begin
               begin
                 @person.organizational_roles.create(role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id)
-
                 # we need a valid email address to make a leader
                 if role_ids.include?(Role::LEADER_ID) || role_ids.include?(Role::ADMIN_ID)
                   @new_person = @person.create_user! if @email.present? && @person.user.nil? # create a user account if we have an email address
@@ -156,18 +156,17 @@ class PeopleController < ApplicationController
                   if params.has_key?(:add_to_group)
                     render json: @person and return
                   end
-
                 end
 
               rescue OrganizationalRole::InvalidPersonAttributesError
                 @person.destroy
                 @person = Person.new(params[:person])
-
                 flash.now[:error] = I18n.t('people.create.error_creating_leader_no_valid_email') if role_id == Role::LEADER_ID.to_s
                 flash.now[:error] = I18n.t('people.create.error_creating_admin_no_valid_email') if role_id == Role::ADMIN_ID.to_s
-                render 'add_person' and return
+                params[:error] = 'true'
               end
             rescue ActiveRecord::RecordNotUnique
+            
             end
           end
         else
@@ -177,7 +176,6 @@ class PeopleController < ApplicationController
         if params.has_key?(:add_to_group)
           render json: @person
         else
-
           respond_to do |wants|
             wants.html { redirect_to :back }
             wants.mobile { redirect_to :back }
@@ -186,15 +184,14 @@ class PeopleController < ApplicationController
         end
       else 
         flash.now[:error] = ''
-        flash.now[:error] += "#{t('people.create.firstname_error')}<br />" unless @person.firstName.present?
+        #flash.now[:error] += "#{t('people.create.firstname_error')}<br />" unless @person.firstName.present?
         flash.now[:error] += "#{t('people.create.phone_number_error')}<br />" if @phone && !@phone.valid?
         if @email && !@email.is_unique?
           flash.now[:error] += "#{t('people.create.email_taken')}<br />" 
         elsif @email && !@email.valid?
           flash.now[:error] += "#{t('people.create.email_error')}<br />" 
         end
-        render 'add_person'
-        return
+        params[:error] = 'true'
       end
     end
   end
@@ -325,16 +322,10 @@ class PeopleController < ApplicationController
     render :nothing => true
   end
 
-  def all
-    fetch_people 
 
-    @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
-
-    render :partial => 'all'
-  end
 
   def update_roles
-    if current_user_roles.include? Role.find(1)
+    if current_user_roles.include? Role.admin
       authorize! :manage, current_organization
     else
       authorize! :lead, current_organization
@@ -390,29 +381,6 @@ class PeopleController < ApplicationController
     rescue OrganizationalRole::CannotDestroyRoleError
       render 'cannot_delete_admin_error'
       return false
-    end
-  end
-  
-  def all_admins_being_deleted?(ors_ids)
-    begin
-      a = Set.new current_organization.admins.collect(&:personID)
-      b = Set.new ors_ids
-      raise OrganizationalRole::CannotDestroyRoleError if a.subset? b
-    rescue OrganizationalRole::CannotDestroyRoleError
-      return false
-    end
-  end
-  
-  def can_roles_be_deleted?(orss)
-    orss.each do |ors|
-      begin
-        ors.check_if_only_remaining_admin_role_in_a_root_org
-        ors.check_if_admin_is_destroying_own_admin_role(current_person)
-        ors.update_attributes({:archive_date => Date.today})
-      rescue OrganizationalRole::CannotDestroyRoleError
-        render 'cannot_delete_admin_error'
-        return false
-      end
     end
   end
 
@@ -587,7 +555,6 @@ class PeopleController < ApplicationController
       end
     end
 
-    #if !params[:archived].blank? && params[:include_archived].blank?
     @q = @q.where(personID: current_organization.people.archived(current_organization.id).collect(&:personID)) unless params[:archived].blank?
 
     @q = @q.search(params[:q])
@@ -605,9 +572,7 @@ class PeopleController < ApplicationController
       @all_people = @all_people.uniq_by { |a| a.id }
     end
     
-    #Person.archived_not_included query must be fixed so that we don't have to query from db twice such as the line above
     @all_people = @all_people.where(personID: current_organization.people.archived.where("organizational_roles.archive_date > ? AND organizational_roles.archive_date < ?", params[:archived_date], (params[:archived_date].to_date+1).strftime("%Y-%m-%d")).collect{|x| x.personID}) unless params[:archived_date].blank?
-    #Person.archived_not_included query must be fixed so that we don't have to query from db twice such as the line above
     @people = Kaminari.paginate_array(@all_people).page(params[:page])
   end
 

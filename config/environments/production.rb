@@ -26,7 +26,13 @@ Mh::Application.configure do
 
   # Use a different cache store in production
   # config.cache_store = :mem_cache_store
-  config.cache_store = :dalli_store,  { :namespace => 'MissionHubCache', :expire_after => 1.day, :compress => true }
+  if Rails.env.production?
+    cache_servers = ['10.180.4.101', '10.180.4.111']
+  else
+    cache_servers = ['127.0.0.1']
+  end
+
+  config.cache_store = :dalli_store, cache_servers,  { :namespace => 'MissionHubCache', :expire_after => 1.day, :compress => true }
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this

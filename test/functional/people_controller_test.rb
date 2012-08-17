@@ -150,6 +150,15 @@ class PeopleControllerTest < ActionController::TestCase
 
     end
     
+    should "archive roles when trying to remove them (instead of deleting them in the database)" do
+      Factory(:organizational_role, organization: @user.person.organizations.first, person: @person2, role: Role.contact)
+      Factory(:organizational_role, organization: @user.person.organizations.first, person: @person2, role: Role.involved)
+      
+      assert_difference "OrganizationalRole.where(person_id: #{@person2.id}, organization_id: #{@user.person.organizations.first.id}, archive_date: nil).count", -1 do
+        xhr :post, :update_roles, { :role_ids => "#{Role.contact.id}", :some_role_ids => "", :person_id => @person2.id }
+      end
+    end
+    
     context "removing an admin role" do
       setup do
         @last_admin = Factory(:person, email: "person4@email.com")
@@ -160,27 +169,23 @@ class PeopleControllerTest < ActionController::TestCase
       
       should "not remove admin role from the last admin of a root org" do
         assert_no_difference "OrganizationalRole.count" do
-          xhr :post, :update_roles, { :role_ids => [], :some_role_ids => "", :person_id => @last_admin.id }
+          xhr :post, :update_roles, { :role_ids => "", :some_role_ids => "", :person_id => @last_admin.id }
         end
       end
-      
-=begin
-      should "not remove admin role from the last admin of an org with parent org with 'show_sub_orgs == false'" do
-        setup do
-          org_2 = Organization.create({"parent_id"=> @org.id, "name"=>"Org 2", "terminology"=>"Organization", "show_sub_orgs"=>"0"}) # org with show_sub_orgs == false
-          org_3 = Organization.create({"parent_id"=> org_2.id, "name"=>"Org 3", "terminology"=>"Organization", "show_sub_orgs"=>"1"})
-          @request.session[:current_organization_id] = org_3.id
-        end
+
+      should "not remove admin role from the last admin of an org with parent org with 'show_sub_orgs == false'" do        
+        org_2 = Organization.create({"parent_id"=> @org.id, "name"=>"Org 2", "terminology"=>"Organization", "show_sub_orgs"=>"0"}) # org with show_sub_orgs == false
+        org_3 = Organization.create({"parent_id"=> org_2.id, "name"=>"Org 3", "terminology"=>"Organization", "show_sub_orgs"=>"1"})
+        @user_neil = Factory(:user_with_auxs)
+        org_3.add_admin(@user_neil.person)
+        sign_in @user_neil
+        @request.session[:current_organization_id] = org_3.id
         
-        org_3.add_admin(@user.person) unless org_3.parent && org_3.parent.show_sub_orgs?
-        org_3.add_admin(@admin2)
-        #puts org_3.admins.count
-        @request.session['current_organization_id']  = org_3.id
         assert_no_difference "OrganizationalRole.count" do
-          xhr :post, :update_roles, { :role_ids => [], :some_role_ids => "", :person_id => @user.person.id }
+          xhr :post, :update_roles, { :role_ids => "", :some_role_ids => "", :person_id => @user_neil.person.id }
         end
       end
-=end
+
     end
   end
   
@@ -188,6 +193,14 @@ class PeopleControllerTest < ActionController::TestCase
     setup do
       @user = Factory(:user_with_auxs)
       sign_in @user
+      
+      @unarchived_contact1 = Factory(:person, firstName: "Brynden", lastName: "Tully")
+      Factory(:organizational_role, organization: @user.person.organizations.first, person: @unarchived_contact1, role: Role.contact)
+      Factory(:email_address, email: "bryndentully@email.com", person: @unarchived_contact1, primary: true)
+      
+      @archived_contact1 = Factory(:person, firstName: "Edmure", lastName: "Tully")
+      Factory(:organizational_role, organization: @user.person.organizations.first, person: @archived_contact1, role: Role.contact)
+      @archived_contact1.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive #archive his one and only role
     end
     
     should "respond success with no parameters" do
@@ -205,6 +218,35 @@ class PeopleControllerTest < ActionController::TestCase
           :email => "test@email.com", :phone => "123"
       assert_response(:success)
     end
+    
+    should "not be able to search for archived contacts if 'Include Archvied' checkbox is not checked" do
+      get :index, {:search_type => "basic", :query => "Edmure Tully"}
+      assert_response(:success)
+      assert !assigns(:all_people).include?(@archived_contact1)
+    end
+    
+    should "be able to search for archived contacts if 'Include Archvied' checkbox is checked" do
+      get :index, {:search_type => "basic", :include_archived => "true", :query => "Edmure Tully"}
+      assert_response(:success)
+      assert assigns(:all_people).include?(@archived_contact1)
+    end
+    
+    should "be able to search by email address" do
+      get :index, {:search_type => "basic", :include_archived => "true", :query => "bryndentully@email.com"}
+      assert assigns(:people).include?(@unarchived_contact1)
+    end
+    
+    should "be able to search by wildcard" do
+      get :index, {:search_type => "basic", :include_archived => "true", :query => "tully"}
+      assert assigns(:people).include?(@archived_contact1), "archived contact not found"
+      assert assigns(:people).include?(@unarchived_contact1), "unarchived contact not found"
+    end
+    
+    should "not be able to search for anything" do
+      get :index, {:search_type => "basic", :include_archived => "true", :query => "none"}
+      assert_empty assigns(:people)
+    end
+    
   end
   
   context "Showing leaders the person is assigned to" do
@@ -236,38 +278,40 @@ class PeopleControllerTest < ActionController::TestCase
       assert_equal(2, assigns(:data).length, "Unsuccessfully searched for a user using Facebook profile url")
     end
 
-    #should "successfully search for facebook users when using '/http://www.facebook.com\/profile.php?id=/[0-9]'" do
-      #get :facebook_search, { :term =>"http://www.facebook.com/nmfdelacruz"}
-      #assert_equal @data.length, 1, "Unsuccessfully searched for a user using Facebook profile url"
-    #end
+    should "successfully search for facebook users when using '/http://www.facebook.com\/profile.php?id=/[0-9]'" do
+      stub_request(:get, "https://graph.facebook.com/100000289242843").to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/profile.php?id=100000289242843\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
+      get :facebook_search, { :term =>"http://www.facebook.com/profile.php?id=100000289242843"}
+      assert_equal(2, assigns(:data).length, "Unsuccessfully searched for a user using Facebook profile url")
+    end
 
     should "unsuccessfully search for facebook users when url does not exist" do
-      stub_request(:get, "https://graph.facebook.com/nm34523fdelacruz").
-        to_return(status: 404)
+      stub_request(:get, "https://graph.facebook.com/nm34523fdelacruz").to_return(status: 404)
       get :facebook_search, { :term =>"http://www.facebook.com/nm34523fdelacruz"}
       assert_equal(1, assigns(:data).length)
     end
 
-=begin These tests get errors because probably of facebook user authentication. RestClient::BadRequest: 400 Bad Request
+=begin
     should "successfully search for facebook users when using '/[a-z]/' (name string)  format" do
-      get :facebook_search, { :term =>"mark"}
-      assert_equal flash[:checker], 1, "Unsuccessfully searched for a user using Facebook profile url"
+      stub_request(:get, "https://graph.facebook.com/search?access_token=&limit=24&q=9gag").to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/nmfdelacruz\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
+      get :facebook_search, { :term =>"9gag"}
+      assert_equal(1, assigns(:data).length)
     end
 
     should "unsuccessfully search for facebook users when name does not exist" do
+      stub_request(:get, "https://graph.facebook.com/search?access_token=&limit=24&q=dj09345803oifjdlkjdl&type=user").to_return(status: 404)
       get :facebook_search, { :term =>"dj09345803oifjdlkjdl"}
-      assert_equal flash[:checker], 0
+      assert_equal(0, assigns(:data).length)
     end
 =end
-
   end
   
   context "displaying a person's friends in their profile" do
     setup do
       #setup user, orgs
-      user = Factory(:user_with_auxs)
-      sign_in user
       @org = Factory(:organization)
+      user = Factory(:user_with_auxs)
+      Factory(:organizational_role, organization: @org, person: user.person, role: Role.admin)
+      sign_in user
       #setup the person, and non-friends
       @person = Factory(:person_with_facebook_data)
       assert_not_nil(@person.friends)
@@ -294,8 +338,8 @@ class PeopleControllerTest < ActionController::TestCase
       #check the friends on the same org
       org_friends = assigns(:org_friends)
       assert_not_nil(org_friends)
-      assert(org_friends.include?@person1)
-      assert(org_friends.include?@person2)
+      assert(org_friends.include?(@person1),"should include person1")
+      assert(org_friends.include?(@person2),"should include person2")
       assert_equal(2, org_friends.length)
     end
   end
@@ -519,6 +563,8 @@ class PeopleControllerTest < ActionController::TestCase
     setup do
       request.env["HTTP_REFERER"] = "localhost:3000"
       @user, @org = admin_user_login_with_org
+      
+      Factory(:email_address, email: "robstark@email.com")
     end
     
     should "create person" do
@@ -530,13 +576,54 @@ class PeopleControllerTest < ActionController::TestCase
       
       assert_response :redirect
     end
-    
+
     should "render nothing when user has no name" do
       post :create, { :person => { :firstName => "", :lastName => "Derp", :email_address => { :email => "herp@derp.com" }, :phone_number => { :number => "123918230912"} } }
-      
       assert_equal " ", @response.body
     end
     
+    should "render not be able to create a person with an email already existing" do
+      assert_no_difference "Person.count" do
+        post :create, { :person => { :firstName => "", :lastName => "Derp", :email_address => { :email => "robstark@email.com" }} }
+      end
+    end
+
+    should "not create a person with an invalid phone_number" do
+      assert_no_difference "Person.count" do
+        post :create, { :person => { :firstName => "Hello", :lastName => "Derp", :phone_number => { :number => "asdofhjasdlkfja"} } }
+      end
+    end
+    
+    should "not create a person with an invalid email_address" do
+      assert_no_difference "Person.count" do
+        post :create, { :person => { :firstName => "Rob", :lastName => "Derp", :email_address => { :email => "robstarkemail.com" }} }
+      end
+    end
+    
+
+    should "not create a person with admin role without a valid email" do
+      assert_no_difference "Person.count" do
+        post :create, {:person=> { :firstName =>"Waymar", :lastName =>"Royce", :gender =>"male", :email_address =>{:email =>"", :primary =>"1"}}, :roles =>{"1"=> Role.admin.id}}
+      end
+    end
+
+    should "not create a person with leader role without a valid email" do
+      assert_no_difference "Person.count" do
+        post :create, {:person=> { :firstName =>"Waymar", :lastName =>"Royce", :gender =>"male", :email_address =>{:email =>"", :primary =>"1"}}, :roles =>{"1"=> Role.leader.id}}
+      end
+    end
+
+    should "create a person with admin role with a valid email" do
+      assert_difference "Person.count", 1 do
+        post :create, {:person=> { :firstName =>"Waymar", :lastName =>"Royce", :gender =>"male", :email_address =>{:email =>"wayarroyce@email.com", :primary =>"1"}}, :roles =>{"1"=> Role.admin.id}}
+      end
+    end
+    
+    should "create a person with leader role with a valid email" do
+      assert_difference "Person.count", 1 do
+        post :create, {:person=> { :firstName =>"Waymar", :lastName =>"Royce", :gender =>"male", :email_address =>{:email =>"wayarroyce@email.com", :primary =>"1"}}, :roles =>{"1"=> Role.leader.id}}
+      end
+    end
   end
   
   should "bulk comment" do
@@ -624,25 +711,33 @@ class PeopleControllerTest < ActionController::TestCase
   context "Clicking on the label links at '/people'" do
     setup do
       @user = Factory(:user_with_auxs)
-      @org = Factory(:organization)
+      @org0 = Factory(:organization, id: 1)
+      @org = Factory(:organization, id: 2, ancestry: "1")
+      Factory(:organizational_role, organization: @org0, person: @user.person, role: Role.admin)
       sign_in @user
       @request.session[:current_organization_id] = @org.id
     
       @admin1 = Factory(:user_with_auxs)
+      @admin1.person.update_attributes({firstName: "A", lastName: "A"})
       Factory(:organizational_role, organization: @org, person: @admin1.person, role: Role.admin)
     
       @leader1 = Factory(:user_with_auxs)
+      @leader1.person.update_attributes({firstName: "B", lastName: "B"})
       Factory(:organizational_role, organization: @org, person: @leader1.person, role: Role.leader)
       
       @contact1 = Factory(:user_with_auxs)
       Factory(:organizational_role, organization: @org, person: @contact1.person, role: Role.contact)
+      @contact1.person.update_attributes({firstName: "C", lastName: "C"})
       @contact2 = Factory(:user_with_auxs)
       Factory(:organizational_role, organization: @org, person: @contact2.person, role: Role.contact)
+      @contact2.person.update_attributes({firstName: "D", lastName: "D"})
       @contact3 = Factory(:user_with_auxs)
       Factory(:organizational_role, organization: @org, person: @contact3.person, role: Role.contact)
+      @contact3.person.update_attributes({firstName: "E", lastName: "E"})
       
       @involved1 = Factory(:user_with_auxs)
       Factory(:organizational_role, organization: @org, person: @involved1.person, role: Role.involved)
+      @involved1.person.update_attributes({firstName: "F", lastName: "F"})
     end
     
     should "return admins when Admin link is clicked" do
@@ -680,7 +775,7 @@ class PeopleControllerTest < ActionController::TestCase
       @leader1.person.organizational_roles.where(role_id: Role::LEADER_ID).first.archive
       
       xhr :get, :index
-      assert_equal assigns(:all_people).collect{|x| x.personID}, [@admin1.person.personID, @contact3.person.personID, @involved1.person.personID].sort { |x, y| x <=> y }
+      assert_equal([@admin1.person.personID, @contact3.person.personID, @involved1.person.personID].sort, assigns(:all_people).collect{|x| x.personID})
     end
     
     should "return all people (even unarchived ones) when 'Include Archived' checkbox is checked'" do
@@ -691,12 +786,160 @@ class PeopleControllerTest < ActionController::TestCase
       xhr :get, :index, { :include_archived => true }
       assert_equal assigns(:all_people).collect{|x| x.personID}, [@admin1.person.personID, @leader1.person.personID, @contact1.person.personID, @contact2.person.personID, @contact3.person.personID, @involved1.person.personID].sort { |x, y| x <=> y }
     end
+    
+    should "return all admin even with archived roles when 'Include ARchived' checkbox is checked" do
+      Factory(:organizational_role, organization: @org, person: @admin1.person, role: Role.contact)
+      @admin1.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
+      xhr :get, :index, { :include_archived => true, :role => Role.admin.id }
+      assert_equal assigns(:all_people).collect{|x| x.personID}, [@admin1.person.personID].sort { |x, y| x <=> y }
+    end
+    
+    should "return people sorted alphabetically by firstName" do
+      
+      xhr :get, :index, {"q"=>{"s"=>"firstName desc"}}
+      assert_equal assigns(:all_people).collect(&:name), [@involved1.person.name, @contact3.person.name, @contact2.person.name, @contact1.person.name, @leader1.person.name, @admin1.person.name]
+      
+      xhr :get, :index, {"q"=>{"s"=>"firstName asc"}}
+      assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name]
+      
+      xhr :get, :index, {"q"=>{"s"=>"lastName desc"}}
+      assert_equal assigns(:all_people).collect(&:name), [@involved1.person.name, @contact3.person.name, @contact2.person.name, @contact1.person.name, @leader1.person.name, @admin1.person.name]
+      
+      xhr :get, :index, {"q"=>{"s"=>"lastName asc"}}
+      assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name]
+    end
+    
+    context "sorting people by their roles" do
+      # Order of default roles (desc order)
+      # Admin, Leader, Involved, Alumni, Contact
+      # Non-default roles will be ordered alphabetically
+      setup do
+        Factory(:organizational_role, organization: @org, person: @admin1.person, role: Role.leader) # add roles to admin
+        Factory(:organizational_role, organization: @org, person: @admin1.person, role: Role.alumni) # add roles to admin
+        Factory(:organizational_role, organization: @org, person: @leader1.person, role: Role.involved) # add roles to leader
+        Factory(:organizational_role, organization: @org, person: @involved1.person, role: Role.alumni) # add roles to inolved
+      end
+      
+      should "return people sorted by their roles (default roles)" do
+        xhr :get, :index, {"q"=>{"s"=>"role_id desc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @involved1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name]
+        xhr :get, :index, {"q"=>{"s"=>"role_id asc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name, @leader1.person.name, @admin1.person.name]
+      end
+      
+      should "return people sorted by their roles (with non-default roles)" do
+        @a_role = Factory(:role, organization: @org, name: 'a_role')
+        @b_role = Factory(:role, organization: @org, name: 'b_role')
+        @c_role = Factory(:role, organization: @org, name: 'c_role')
+        
+        @a_role_person = Factory(:person, firstName: 'H', lastName: 'H')
+        Factory(:organizational_role, organization: @org, person: @a_role_person, role: @a_role)
+        @b_role_person = Factory(:person, firstName: 'I', lastName: 'I')
+        Factory(:organizational_role, organization: @org, person: @b_role_person, role: @b_role)
+        @c_role_person = Factory(:person, firstName: 'J', lastName: 'J')
+        Factory(:organizational_role, organization: @org, person: @c_role_person, role: @c_role)
+        
+      
+        xhr :get, :index, {"q"=>{"s"=>"role_id desc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @involved1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @c_role_person.name, @b_role_person.name, @a_role_person.name]
+        xhr :get, :index, {"q"=>{"s"=>"role_id asc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name, @leader1.person.name, @admin1.person.name, @a_role_person.name, @b_role_person.name, @c_role_person.name]
+      end
+    end
+    
+    context "sorting people by their email" do
+      setup do
+        Factory(:email_address, person: @leader1.person, email: "a@email.com")
+        Factory(:email_address, person: @admin1.person, email: "b@email.com")
+        Factory(:email_address, person: @contact1.person, email: "c@email.com")
+        Factory(:email_address, person: @contact2.person, email: "d@email.com")
+        Factory(:email_address, person: @contact3.person, email: "e@email.com")
+      end
+      
+      should "sort asc" do
+        xhr :get, :index, {"q"=>{"s"=>"email_addresses.email asc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@involved1.person.name, @leader1.person.name, @admin1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name]
+        
+      end
+      
+      should "sort desc" do
+        xhr :get, :index, {"q"=>{"s"=>"email_addresses.email desc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@contact3.person.name, @contact2.person.name, @contact1.person.name, @admin1.person.name, @leader1.person.name, @involved1.person.name]
+      end
+    end
+    
+    context "sorting people by their gender" do
+      setup do
+        @leader1.person.update_attributes({gender: "male"})
+        @admin1.person.update_attributes({gender: "male"})
+        @contact1.person.update_attributes({gender: "male"})
+        @contact2.person.update_attributes({gender: "female"})
+        @contact3.person.update_attributes({gender: "female"})
+        @involved1.person.update_attributes({gender: ""})
+      end
+      
+      should "sort desc" do
+        xhr :get, :index, {"q"=>{"s"=>"gender desc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name]
+        
+      end
+      
+      should "sort asc" do
+        xhr :get, :index, {"q"=>{"s"=>"gender asc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@involved1.person.name, @contact2.person.name, @contact3.person.name, @admin1.person.name, @leader1.person.name, @contact1.person.name]
+      end
+    end
+    
+    context "sorting people by their year in school" do
+      setup do
+        @leader1.person.update_attributes({yearInSchool: "2009"})
+        @admin1.person.update_attributes({yearInSchool: "2010"})
+        @contact1.person.update_attributes({yearInSchool: "2008"})
+        @contact2.person.update_attributes({yearInSchool: "2007"})
+        @contact3.person.update_attributes({yearInSchool: "2006"})
+        @involved1.person.update_attributes({yearInSchool: "2005"})
+      end
+      
+      should "sort desc" do
+        xhr :get, :index, {"q"=>{"s"=>"yearInSchool desc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name]
+        
+      end
+      
+      should "sort asc" do
+        xhr :get, :index, {"q"=>{"s"=>"yearInSchool asc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@involved1.person.name, @contact3.person.name, @contact2.person.name, @contact1.person.name, @leader1.person.name, @admin1.person.name]
+      end
+    end
+    
+    context "sorting people by their phone number" do
+      setup do
+        Factory(:phone_number, person: @leader1.person, primary: true, number: "2222222222")
+        Factory(:phone_number, person: @admin1.person, primary: true, number: "111111111")
+        Factory(:phone_number, person: @contact1.person, primary: true, number: "333333333")
+        Factory(:phone_number, person: @contact2.person, primary: true, number: "444444444")
+        Factory(:phone_number, person: @contact3.person, primary: true, number: "555555555")
+        Factory(:phone_number, person: @involved1.person, primary: true, number: "666666666")
+      end
+      
+      should "sort desc" do
+        xhr :get, :index, {"q"=>{"s"=>"phone_numbers.number desc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@involved1.person.name, @contact3.person.name, @contact2.person.name, @contact1.person.name, @leader1.person.name, @admin1.person.name]
+      end
+      
+      should "sort asc" do
+        xhr :get, :index, {"q"=>{"s"=>"phone_numbers.number asc"}}
+        assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name]
+        
+      end
+    end
   end
   
   context "Updating a person" do
     setup do
       @user = Factory(:user_with_auxs)
       @org = Factory(:organization)
+      Factory(:organizational_role, organization: @org, person: @user.person, role: Role.admin)
       sign_in @user
       @request.session[:current_organization_id] = @org.id
     
@@ -713,7 +956,7 @@ class PeopleControllerTest < ActionController::TestCase
   
     should "merge people when there are email duplicates (current email address edited)" do      
       assert_difference("Person.count", -1) do
-        xhr :put, :update, {:person => { :email_addresses_attributes =>{"0" => { :email => "person2@email.com", :primary => "1", "_destroy"=>"false", :id => @email1.id}}}, :id => @person1.personID}
+        put :update, {:person => { :email_addresses_attributes =>{"0" => { :email => "person2@email.com", :primary => "1", :id => @email1.id}}}, :id => @person1.personID}
         assert_blank Person.where(personID: @person2.personID)
         assert @person1.email_addresses.include? @email2
       end
@@ -722,10 +965,37 @@ class PeopleControllerTest < ActionController::TestCase
     should "merge people when there are email duplicates (added new email address)" do
       
       assert_difference("Person.count", -1) do
-        xhr :put, :update, {:person => {:email_address => {:email => "person2@email.com", :primary => 1 }}, :id => @person1.personID}
+        put :update, {:person => {:email_address => {:email => "person2@email.com", :primary => 1 }}, :id => @person1.personID}
         assert_blank Person.where(personID: @person2.personID)
         assert @person1.email_addresses.include? @email2
       end
+    end
+  end
+  
+  context "Updating a person" do
+    setup do
+      @user, @org = admin_user_login_with_org
+      @contact1 = Factory(:person, firstName: "Brandon", lastName: "Stark")
+      @email_address = Factory(:email_address, person: @contact1, email: "brandonstark@email.com")
+      @contact2 = Factory(:person, firstName: "Rickon", lastName: "Stark")
+      @user.person.organizations.first.add_contact(@contact1)
+      @user.person.organizations.first.add_contact(@contact2)
+    end
+  
+    should "update a person" do
+      put :update, id: @user.person.id, person: {firstName: 'David', lastName: 'Ang',  :current_address_attributes => { :address1 => "#41 Sgt. Esguerra Ave", :country => "Philippines"} }
+      assert_redirected_to person_path(assigns(:person))
+    end
+    
+    should "not be able to update a person" do
+      @email_address2 = Factory(:email_address, person: @contact2, email: "rickonstark@email.com")
+      put :update, id: @contact2.id, person: {firstName: 'Rickon', lastName: 'Stark', :email_addresses_attributes => {"0" => {:email => "brandonstark@email.com", :primary => "1", :id => @email_address2.id}} }
+      #assert_redirected_to person_path(assigns(:person))
+    end
+
+    should "not be able to update a person when email is already taken" do
+      put :update, id: @contact2.id, person: {firstName: 'Rickon', lastName: 'Stark', :email_address => {:email => "brandonstark@email.com", "primary"=>"1"} }
+      assert_empty @contact2.email_addresses
     end
   end
 end

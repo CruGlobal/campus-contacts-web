@@ -1,14 +1,12 @@
-<% unless params[:update] %>
+<% unless params[:error].present? %>
   $('#people_table').prepend("<%= j(render('person', person: @person)) %>")
+  <% unless params[:add_another] == 'true' %>
+    $('#add_person_div').dialog('destroy')
+  <% end %>
+  $('#<%= dom_id(@person) %>').effect('highlight')
+  <% @email = EmailAddress.new %>
+  <% @phone = PhoneNumber.new %>
+  $('#add_person_div').html('<%= j(render('add_person', person: Person.new)) %>')
 <% else %>
-  $.a("<%= t('contacts.create.success', name: Person.find(params[:id]).name) %>")
-  window.location = "/people/" + <%= params[:id] %>
-	$('#add_person_div').dialog('destroy')
+  $('#add_person_div').html('<%= j(render('add_person', person: @person)) %>')
 <% end %>
-<% unless params[:add_another] == 'true' %>
-	$('#add_person_div').dialog('destroy')
-<% end %>
-$('#<%= dom_id(@person) %>').effect('highlight')
-<% @email = EmailAddress.new %>
-<% @phone = PhoneNumber.new %>
-$('#add_person_div').html('<%= j(render('add_person', person: Person.new)) %>')
