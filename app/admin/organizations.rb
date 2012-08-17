@@ -1,4 +1,8 @@
 ActiveAdmin.register Organization do
+  controller do
+    cache_sweeper :organization_sweeper, only: [:update, :destroy, :create, :approve]
+  end
+  
   filter :name
   filter :terminology
   filter :status, :as => :select, :collection => %w[requested active denied inactive]
