@@ -31,6 +31,22 @@ class RolesControllerTest < ActionController::TestCase
       assert_response :success
     end
 
+    context ", creating a role" do
+      should "create a role" do
+        assert_difference('Role.count') do
+          post :create, :role => { "name" => "role one", "i18n" => "role one" }
+        end
+        assert_redirected_to roles_path
+      end
+      
+      should "not create a role with missing required fields" do
+        assert_no_difference('Role.count') do
+          post :create
+        end
+        assert_template "roles/new"
+      end
+    end
+
     should "create a role" do
       assert_difference('Role.count') do
         post :create, :role => { "name" => "role one", "i18n" => "role one" }
@@ -42,11 +58,18 @@ class RolesControllerTest < ActionController::TestCase
       get :edit, :id => @test_role.id 
       assert_response :success
     end
-
-    should "update a role" do
-      put :update, :id => @test_role.id, :role => { "i18n" => "role two" }
-      assert_equal 'role two', assigns(:role).i18n
-      assert_redirected_to roles_path
+    
+    context ", updating a role" do
+      should "update a role" do
+        put :update, :id => @test_role.id, :role => { "i18n" => "role two" }
+        assert_equal 'role two', assigns(:role).i18n
+        assert_redirected_to roles_path
+      end
+      
+      should "not update a role with missing required fields" do
+        put :update, :id => @test_role.id, :role => { "name" => nil }
+        assert_template "roles/edit"
+      end
     end
 
     should "destroy a role" do
