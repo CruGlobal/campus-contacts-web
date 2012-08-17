@@ -706,6 +706,19 @@ class PeopleControllerTest < ActionController::TestCase
       assert_equal @user.person.organizational_roles.collect(&:role_id), [Role::ADMIN_ID]
       assert_equal @org.admins.count, init_admin_count
     end
+    
+    should "be able to delete bulk a person in a child organization" do
+      org_2 = Organization.create({"parent_id"=> @org.id, "name"=>"Org 2", "terminology"=>"Organization", "show_sub_orgs"=>"1"}) # org with show_sub_orgs == false      
+      @user = Factory(:user_with_auxs)
+      @request.session[:current_organization_id] = org_2.id
+      
+      contact = Factory(:person)
+      Factory(:organizational_role, role: Role.contact, organization: org_2, person: contact)
+      
+      assert_difference "Organization.find(#{org_2.id}).contacts.count", -1 do
+        xhr :post, :bulk_delete, { :ids => "#{contact.personID}" }
+      end
+    end
   end
   
   context "Clicking on the label links at '/people'" do

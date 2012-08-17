@@ -71,6 +71,10 @@ class Organization < ActiveRecord::Base
       ancestry.nil?
     end
     
+    def is_child?
+      !ancestry.nil?
+    end
+    
     def is_root_and_has_only_one_admin?
       (ancestry.nil? || !parent.show_sub_orgs ) && admins.count == 1
     end
@@ -139,6 +143,7 @@ class Organization < ActiveRecord::Base
           AND organizational_roles.organization_id = #{id} 
           AND organizational_roles.role_id = '#{Role::CONTACT_ID}' 
           AND followup_status <> 'do_not_contact' 
+          AND archive_date IS NOT NULL
           LEFT JOIN contact_assignments ON contact_assignments.person_id = #{person_table_pkey} 
           AND contact_assignments.organization_id = #{id}")
         .where("contact_assignments.id IS NULL OR contact_assignments.assigned_to_id NOT IN (?)", only_leaders)
