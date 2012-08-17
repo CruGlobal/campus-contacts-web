@@ -382,13 +382,17 @@ class OrganizationTest < ActiveSupport::TestCase
 
   context "an organization" do
 
-    should "delete suborganizations when deleted" do
+    should "delete suborganizations when deleted (root organizations cannot be deleted)" do
+      # it seems like there comes a problem when you are destroying an organization in which its predecessor tree is more than 2 levels deep
+    
       org1 = Factory(:organization)
       org2 = Factory(:organization, :parent => org1)
       org3 = Factory(:organization, :parent => org2)
+      org4 = Factory(:organization, :parent => org3)
+      org5 = Factory(:organization, :parent => org4)
 
       assert_difference("Organization.count", -3, "Organizations were not deleted after parent was destroyed.") do 
-        org1.destroy
+        org4.destroy
       end
     end
 
