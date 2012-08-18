@@ -81,9 +81,9 @@ class ContactAssignmentsControllerTest < ActionController::TestCase
       
       xhr :post, :create, { :assign_to => "do_not_contact", :ids => [contact1, contact2], :org_id => @org.id }        
       
-      assert_nil ContactAssignment.where(person_id: contact1.id, organization_id: @org.id)
-      assert_equal "do_not_contact", OrganizationalRole.find_by_person_id_and_organization_id_and_role_id(contact1.id, @org.id, Role::CONTACT_ID).followup_status
+      assert_nil ContactAssignment.find_by_person_id_and_organization_id(contact1.id, @org.id)
       assert_nil OrganizationalRole.find_by_person_id_and_organization_id_and_role_id(contact2.id, @org.id, Role::CONTACT_ID)
+      assert_equal "do_not_contact", OrganizationalRole.find_by_person_id_and_organization_id_and_role_id(contact1.id, @org.id, Role::CONTACT_ID).followup_status
       assert assigns(:reload_sidebar)
     end
     
