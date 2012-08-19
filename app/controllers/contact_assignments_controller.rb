@@ -6,8 +6,8 @@ class ContactAssignmentsController < ApplicationController
     if params[:assign_to].present?      
       if params[:assign_to] == "do_not_contact"                
         params[:ids].each do |id|
-          om = OrganizationalRole.where(:person_id => id, :organization_id => @organization.id, :role_id => Role::CONTACT_ID).first
-          Person.find(id).do_not_contact(om.id)
+          om = OrganizationalRole.find_by_person_id_and_organization_id_and_role_id(id, @organization.id, Role::CONTACT_ID)
+          Person.find(id).do_not_contact(om.id) if om.present?
         end
         @reload_sidebar = true        
       else            
