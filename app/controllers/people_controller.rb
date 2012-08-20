@@ -206,6 +206,7 @@ class PeopleController < ApplicationController
     emails.each do |email|
       p = @person.has_similar_person_by_name_and_email?(email)
 			@person = @person.smart_merge(p) if p
+      @person.reload
     end
 
 
