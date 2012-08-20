@@ -182,10 +182,11 @@ class SmsController < ApplicationController
           if p # another person with the same firstName, lastName and email has been found
             @answer_sheet.person = @answer_sheet.person.smart_merge(p) # merge person to person with the same firstName, lastName and email
             @answer_sheet.save!
+            @answer_sheet.reload
             question.set_response(answer, @answer_sheet)
           end
           begin
-            @answer_sheet.person.save!
+            @answer_sheet.person.save(validate: false)
           rescue ActiveRecord::ReadOnlyRecord
             # wtf
           end
