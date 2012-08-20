@@ -91,7 +91,7 @@ class GroupMembershipsControllerTest < ActionController::TestCase
       xhr :get, :search, { :name => "Tony", :role => "member", :group_id => @group.id }
       assert_not_nil assigns(:people)
       assert_not_nil assigns(:total)
-      assert_equal 2, assigns(:total)
+      assert_equal 3, assigns(:total)
     end
 
     should "search when show all is true" do

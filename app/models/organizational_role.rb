@@ -62,16 +62,16 @@ class OrganizationalRole < ActiveRecord::Base
   end
 
   def notify_new_leader
-    p = create_user_for_person_if_not_existing
-    if p.nil?
+    self.person = create_user_for_person_if_not_existing
+    if person.nil?
       raise InvalidPersonAttributesError
     else
       added_by = Person.find(added_by_id)
       token = SecureRandom.hex(12)
-      p.user.remember_token = token
-      p.user.remember_token_expires_at = 1.month.from_now
-      p.user.save(validate: false)
-      LeaderMailer.added(p, added_by, self.organization, token).deliver
+      person.user.remember_token = token
+      person.user.remember_token_expires_at = 1.month.from_now
+      person.user.save(validate: false)
+      LeaderMailer.added(person, added_by, self.organization, token).deliver
     end
   end
   
