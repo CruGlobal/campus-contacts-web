@@ -9,7 +9,7 @@ class Survey < ActiveRecord::Base
   has_many :archived_questions, :through => :survey_elements, :source => :question, :order => 'position', :conditions => "#{SurveyElement.table_name}.archived = 1", :order => "#{SurveyElement.table_name}.position"
   has_many :all_questions, :through => :survey_elements, :source => :question, :order => 'position', :order => "#{SurveyElement.table_name}.position"
   has_many :question_grids, :through => :survey_elements, :conditions => "kind = 'QuestionGrid'", :source => :element
-  has_one :keyword, :dependent => :nullify
+  #has_one :keyword, :dependent => :nullify
   has_one :keyword, :class_name => "SmsKeyword", :foreign_key => "survey_id", :dependent => :nullify
 
   has_attached_file :logo, :styles => { :small => "300x" }, s3_credentials: 'config/s3.yml', storage: :s3,
