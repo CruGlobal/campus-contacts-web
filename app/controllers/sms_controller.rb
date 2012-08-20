@@ -184,7 +184,11 @@ class SmsController < ApplicationController
             @answer_sheet.save!
             question.set_response(answer, @answer_sheet)
           end
-          @answer_sheet.person.save!
+          begin
+            @answer_sheet.person.save!
+          rescue ActiveRecord::ReadOnlyRecord
+            # wtf
+          end
         end
       end
     rescue => e
