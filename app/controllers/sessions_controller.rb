@@ -27,7 +27,14 @@ class SessionsController < Devise::SessionsController
   protected
   
   def after_sign_out_path_for(resource_or_scope)
-    params[:next] ? params[:next] : user_root_path
+    case
+    when params[:next]
+      params[:next]
+    when current_user
+      user_root_path
+    else
+      root_path
+    end
   end
   
   def pick_layout
