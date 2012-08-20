@@ -224,7 +224,7 @@ module ApiHelper
     else
       output_message = '{"error": {"message":"An unknown error has occurred.", "code":"99"}}'
       if Rails.env.production?
-        Airbrake.notify(exception)
+        #Airbrake.notify(exception)
       else
         raise exception
       end
