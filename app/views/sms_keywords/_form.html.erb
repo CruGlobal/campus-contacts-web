@@ -1,4 +1,5 @@
 <%= form_for(@sms_keyword, validate: true, html: {id: 'sms_keyword_form'}) do |f| %>
+  <%= error_messages_for :sms_keyword %>
   <div class="stepwrap rwidth">
     <div class="stepnumber">
       <%= image_tag("step1.png") %>
