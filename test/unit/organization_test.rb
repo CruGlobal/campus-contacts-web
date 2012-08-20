@@ -391,7 +391,7 @@ class OrganizationTest < ActiveSupport::TestCase
       org4 = Factory(:organization, :parent => org3)
       org5 = Factory(:organization, :parent => org4)
 
-      assert_difference("Organization.count", -3, "Organizations were not deleted after parent was destroyed.") do 
+      assert_difference("Organization.count", -2, "Organizations were not deleted after parent was destroyed.") do 
         org4.destroy
       end
     end
