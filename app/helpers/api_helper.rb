@@ -224,7 +224,7 @@ module ApiHelper
     else
       output_message = '{"error": {"message":"An unknown error has occurred.", "code":"99"}}'
       if Rails.env.production?
-        #Airbrake.notify(exception)
+        Airbrake.notify(exception)
       else
         raise exception
       end
@@ -258,11 +258,11 @@ module ApiHelper
       apiLog[:identity] = Rack::OAuth2::Server.get_access_token(current_access_token).identity if params[:access_token]
       apiLog[:remote_ip] = request.remote_ip
 
-      Airbrake.notify(exception,
-        :error_class => "Api Error",
-        :error_message => exception.message,
-        :parameters => apiLog
-      ) unless exception.nil?
+      #Airbrake.notify(exception,
+        #:error_class => "Api Error",
+        #:error_message => exception.message,
+        #:parameters => apiLog
+      #) unless exception.nil?
       ApiLog.create(apiLog)
     rescue Exception => e
       raise_or_hoptoad(e)
