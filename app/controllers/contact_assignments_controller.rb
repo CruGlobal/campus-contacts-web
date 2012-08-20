@@ -8,7 +8,7 @@ class ContactAssignmentsController < ApplicationController
         params[:ids].each do |id|
           om = OrganizationalRole.find_by_person_id_and_organization_id_and_role_id(id, @organization.id, Role::CONTACT_ID)
           Person.find(id).do_not_contact(om.id) if om.present?
-        end
+        end if params[:ids].present?
         @reload_sidebar = true        
       else            
         @assign_to = Person.find(params[:assign_to])        
@@ -19,7 +19,7 @@ class ContactAssignmentsController < ApplicationController
             ca = ContactAssignment.find_by_organization_id_and_person_id(@organization.id, id)
             ca.update_attribute(:assigned_to_id, @assign_to.id) if ca
           end
-        end
+        end if params[:ids].present?
       end
     else
       
