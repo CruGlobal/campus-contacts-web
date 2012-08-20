@@ -142,29 +142,24 @@ class PeopleController < ApplicationController
 
         if params[:roles].present?
           role_ids = params[:roles].keys.map(&:to_i)
-          params[:roles].keys.each do |role_id|
+          # we need a valid email address to make a leader
+          if role_ids.include?(Role::LEADER_ID) || role_ids.include?(Role::ADMIN_ID)
+            @new_person = @person.create_user! if @email.present? && @person.user.nil? # create a user account if we have an email address
+            if @new_person && @new_person.save
+              @person = @new_person
+            end
+          end
+
+          role_ids.each do |role_id|
             begin
-              begin
-                @person.organizational_roles.create(role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id)
-                # we need a valid email address to make a leader
-                if role_ids.include?(Role::LEADER_ID) || role_ids.include?(Role::ADMIN_ID)
-                  @new_person = @person.create_user! if @email.present? && @person.user.nil? # create a user account if we have an email address
-                  if @new_person && @new_person.save
-                    @person = @new_person
-                  end
-
-                  if params.has_key?(:add_to_group)
-                    render json: @person and return
-                  end
-                end
-
-              rescue OrganizationalRole::InvalidPersonAttributesError
-                @person.destroy
-                @person = Person.new(params[:person])
-                flash.now[:error] = I18n.t('people.create.error_creating_leader_no_valid_email') if role_id == Role::LEADER_ID.to_s
-                flash.now[:error] = I18n.t('people.create.error_creating_admin_no_valid_email') if role_id == Role::ADMIN_ID.to_s
-                params[:error] = 'true'
-              end
+              @person.organizational_roles.create(role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id)
+            rescue OrganizationalRole::InvalidPersonAttributesError
+              @person.destroy
+              @person = Person.new(params[:person])
+              flash.now[:error] = I18n.t('people.create.error_creating_leader_no_valid_email') if role_id == Role::LEADER_ID.to_s
+              flash.now[:error] = I18n.t('people.create.error_creating_admin_no_valid_email') if role_id == Role::ADMIN_ID.to_s
+              params[:error] = 'true'
+              render and return
             rescue ActiveRecord::RecordNotUnique
             
             end
