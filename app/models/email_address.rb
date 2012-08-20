@@ -18,7 +18,11 @@ class EmailAddress < ActiveRecord::Base
         new_primary = person.email_addresses.detect {|e| e.email == other.email}
         new_primary.update_attribute(:primary, true) if new_primary
       end
-      MergeAudit.create!(mergeable: self, merge_looser: other)
+      begin
+        MergeAudit.create!(mergeable: self, merge_looser: other)
+      rescue ActiveRecord::RecordNotFound
+        # ???
+      end
       other.reload
       other.destroy
     end
