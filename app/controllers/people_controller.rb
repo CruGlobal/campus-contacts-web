@@ -385,9 +385,8 @@ class PeopleController < ApplicationController
 
     if uri?(params[:term]) # if term is a url ...
       id = get_fb_user_id_from_url(params[:term])
-      url = "https://graph.facebook.com/#{id}"
+      url = URI.escape("https://graph.facebook.com/#{id}")
 
-      url = URI.escape(url)
       begin
         @json = JSON.parse(RestClient.get(url, { accept: :json}))
       rescue RestClient::ResourceNotFound
@@ -408,11 +407,16 @@ class PeopleController < ApplicationController
       # if a url exist in the param, then we're using FB's previous/next url to fetch the data
       if url.nil?
         # else, this is an initial search so we construct the url
-        url = "https://graph.facebook.com/search?q=#{params[:term]}&type=user&limit=24&access_token=#{session[:fb_token]}"
+        term = "\"#{params[:term]}\""
+        url = URI.escape("https://graph.facebook.com/search?q=#{term}&type=user&limit=24&access_token=#{session[:fb_token]}")
       end
 
-      url = URI.escape(url)
-      @json = JSON.parse(RestClient.get url, { accept: :json})
+      begin
+        resp = RestClient.get url, { accept: :json}
+        @json = JSON.parse(resp)
+      rescue
+        raise resp.inspect
+      end
 
       @data = []
 
