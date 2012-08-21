@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120815204804) do
+ActiveRecord::Schema.define(:version => 20120821154652) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -411,6 +411,14 @@ ActiveRecord::Schema.define(:version => 20120815204804) do
   end
 
   add_index "crs2_custom_stylesheet", ["conference_id"], :name => "fk_custom_stylesheet_conference_id"
+
+  create_table "crs2_email_addresses", :force => true do |t|
+    t.string   "email"
+    t.integer  "person_id"
+    t.boolean  "primary",    :default => false, :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
 
   create_table "crs2_expense", :force => true do |t|
     t.datetime "created_at"
@@ -964,7 +972,7 @@ ActiveRecord::Schema.define(:version => 20120815204804) do
     t.datetime "updated_at"
   end
 
-  add_index "email_addresses", ["email"], :name => "index_email_addresses_on_email"
+  add_index "email_addresses", ["email"], :name => "email"
   add_index "email_addresses", ["person_id"], :name => "person_id"
 
   create_table "engine_schema_info", :id => false, :force => true do |t|
@@ -1767,6 +1775,7 @@ ActiveRecord::Schema.define(:version => 20120815204804) do
     t.boolean  "web_only",                                :default => false
     t.string   "trigger_words"
     t.string   "notify_via"
+    t.boolean  "hidden",                                  :default => false, :null => false
   end
 
   add_index "mh_elements", ["conditional_id"], :name => "index_ma_elements_on_conditional_id"
@@ -1852,8 +1861,8 @@ ActiveRecord::Schema.define(:version => 20120815204804) do
     t.datetime "upload_updated_at"
     t.text     "headers"
     t.text     "header_mappings"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
   end
 
   add_index "mh_imports", ["organization_id"], :name => "index_mh_imports_on_organization_id"
@@ -2209,8 +2218,8 @@ ActiveRecord::Schema.define(:version => 20120815204804) do
     t.string   "preferredName",                 :limit => 50
     t.string   "gender",                        :limit => 1
     t.string   "region",                        :limit => 5
-    t.boolean  "workInUS",                                            :default => true,  :null => false
-    t.boolean  "usCitizen",                                           :default => true,  :null => false
+    t.boolean  "workInUS",                                                                           :default => true,  :null => false
+    t.boolean  "usCitizen",                                                                          :default => true,  :null => false
     t.string   "citizenship",                   :limit => 50
     t.boolean  "isStaff"
     t.string   "title",                         :limit => 5
@@ -2222,7 +2231,7 @@ ActiveRecord::Schema.define(:version => 20120815204804) do
     t.string   "greekAffiliation",              :limit => 50
     t.string   "maritalStatus",                 :limit => 20
     t.string   "numberChildren",                :limit => 2
-    t.boolean  "isChild",                                             :default => false, :null => false
+    t.boolean  "isChild",                                                                            :default => false, :null => false
     t.text     "bio",                           :limit => 2147483647
     t.string   "image",                         :limit => 100
     t.string   "occupation",                    :limit => 50
@@ -2252,6 +2261,7 @@ ActiveRecord::Schema.define(:version => 20120815204804) do
     t.string   "strategy",                      :limit => 20
     t.integer  "fb_uid",                        :limit => 8
     t.datetime "date_attributes_updated"
+    t.decimal  "balance_daily",                                       :precision => 10, :scale => 2
     t.text     "organization_tree_cache"
     t.text     "org_ids_cache"
   end
@@ -2355,7 +2365,7 @@ ActiveRecord::Schema.define(:version => 20120815204804) do
     t.string  "jobCode",                  :limit => 6
     t.string  "accountCode",              :limit => 25
     t.string  "compFreq",                 :limit => 1
-    t.string  "compRate",                 :limit => 20
+    t.decimal "compRate",                                 :precision => 9, :scale => 2
     t.string  "compChngAmt",              :limit => 21
     t.string  "jobTitle",                 :limit => 80
     t.string  "deptName",                 :limit => 30
@@ -2527,7 +2537,7 @@ ActiveRecord::Schema.define(:version => 20120815204804) do
   add_index "ministry_targetarea", ["state"], :name => "index3"
 
   create_table "ministry_viewdependentsstaff", :id => false, :force => true do |t|
-    t.string  "accountNo",                :limit => 15,                    :null => false
+    t.string  "accountNo",                :limit => 15,                                                  :null => false
     t.string  "firstName",                :limit => 30
     t.string  "middleInitial",            :limit => 1
     t.string  "lastName",                 :limit => 30
@@ -2571,7 +2581,7 @@ ActiveRecord::Schema.define(:version => 20120815204804) do
     t.string  "jobCode",                  :limit => 6
     t.string  "accountCode",              :limit => 25
     t.string  "compFreq",                 :limit => 1
-    t.string  "compRate",                 :limit => 20
+    t.decimal "compRate",                                 :precision => 9, :scale => 2
     t.string  "compChngAmt",              :limit => 21
     t.string  "jobTitle",                 :limit => 80
     t.string  "deptName",                 :limit => 30
@@ -2604,9 +2614,9 @@ ActiveRecord::Schema.define(:version => 20120815204804) do
     t.integer "fk_teamID"
     t.string  "isSecure",                 :limit => 1
     t.string  "isSupported",              :limit => 1
-    t.integer "DependentID",                                               :null => false
+    t.integer "DependentID",                                                                             :null => false
     t.string  "fianceeAccountno",         :limit => 11
-    t.string  "removedFromPeopleSoft",    :limit => 1,    :default => "N"
+    t.string  "removedFromPeopleSoft",    :limit => 1,                                  :default => "N"
     t.string  "primaryEmpLocDesc",        :limit => 128
   end
 
@@ -2834,16 +2844,6 @@ ActiveRecord::Schema.define(:version => 20120815204804) do
   add_index "mpd_roles_users", ["role_id"], :name => "role_id"
   add_index "mpd_roles_users", ["user_id"], :name => "user_id"
 
-  create_table "mpd_sessions", :force => true do |t|
-    t.string   "session_id", :null => false
-    t.text     "data"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "mpd_sessions", ["session_id"], :name => "index_mpd_sessions_on_session_id"
-  add_index "mpd_sessions", ["updated_at"], :name => "index_mpd_sessions_on_updated_at"
-
   create_table "mpd_users", :force => true do |t|
     t.integer  "user_id"
     t.integer  "mpd_role_id"
@@ -2880,6 +2880,45 @@ ActiveRecord::Schema.define(:version => 20120815204804) do
     t.text   "usersubject"
     t.string "period"
   end
+
+  create_table "oauth_access_grants", :force => true do |t|
+    t.integer  "resource_owner_id", :null => false
+    t.integer  "application_id",    :null => false
+    t.string   "token",             :null => false
+    t.integer  "expires_in",        :null => false
+    t.string   "redirect_uri",      :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "revoked_at"
+    t.string   "scopes"
+  end
+
+  add_index "oauth_access_grants", ["token"], :name => "index_oauth_access_grants_on_token", :unique => true
+
+  create_table "oauth_access_tokens", :force => true do |t|
+    t.integer  "resource_owner_id", :null => false
+    t.integer  "application_id",    :null => false
+    t.string   "token",             :null => false
+    t.string   "refresh_token"
+    t.integer  "expires_in"
+    t.datetime "revoked_at"
+    t.datetime "created_at",        :null => false
+    t.string   "scopes"
+  end
+
+  add_index "oauth_access_tokens", ["refresh_token"], :name => "index_oauth_access_tokens_on_refresh_token", :unique => true
+  add_index "oauth_access_tokens", ["resource_owner_id"], :name => "index_oauth_access_tokens_on_resource_owner_id"
+  add_index "oauth_access_tokens", ["token"], :name => "index_oauth_access_tokens_on_token", :unique => true
+
+  create_table "oauth_applications", :force => true do |t|
+    t.string   "name",         :null => false
+    t.string   "uid",          :null => false
+    t.string   "secret",       :null => false
+    t.string   "redirect_uri", :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "oauth_applications", ["uid"], :name => "index_oauth_applications_on_uid", :unique => true
 
   create_table "old_wsn_sp_wsnapplication", :primary_key => "WsnApplicationID", :force => true do |t|
     t.string   "oldPrimaryKey",                 :limit => 64
@@ -3769,6 +3808,7 @@ ActiveRecord::Schema.define(:version => 20120815204804) do
     t.datetime "updated_at"
     t.datetime "last_sign_in_at"
     t.string   "locale"
+    t.integer  "checked_guid",              :limit => 1,   :default => 0,     :null => false
     t.text     "settings"
   end
 
@@ -4061,7 +4101,7 @@ ActiveRecord::Schema.define(:version => 20120815204804) do
     t.string   "initial_response",               :limit => 145
     t.text     "post_survey_message_deprecated"
     t.string   "event_type"
-    t.string   "gateway",                                       :default => "", :null => false
+    t.string   "gateway",                                       :default => "twilio", :null => false
     t.integer  "survey_id"
   end
 
@@ -4597,6 +4637,9 @@ ActiveRecord::Schema.define(:version => 20120815204804) do
     t.datetime "updated_at"
   end
 
+  add_index "sp_application_moves", ["new_project_id"], :name => "new_project_id"
+  add_index "sp_application_moves", ["old_project_id"], :name => "old_project_id"
+
   create_table "sp_applications", :force => true do |t|
     t.integer  "person_id"
     t.integer  "project_id"
@@ -4646,6 +4689,8 @@ ActiveRecord::Schema.define(:version => 20120815204804) do
     t.datetime "updated_at"
     t.integer  "year"
   end
+
+  add_index "sp_designation_numbers", ["person_id", "project_id", "designation_number"], :name => "person_id"
 
   create_table "sp_donations", :force => true do |t|
     t.integer "designation_number",                                :null => false
@@ -5224,6 +5269,8 @@ ActiveRecord::Schema.define(:version => 20120815204804) do
   add_foreign_key "crs2_user_role", "crs2_conference", :name => "fk_user_rule_conference_id", :column => "conference_id"
   add_foreign_key "crs2_user_role", "crs2_user", :name => "fk_user_rule_user_id", :column => "user_id"
 
+  add_foreign_key "email_addresses", "ministry_person", :name => "email_addresses_ibfk_1", :column => "person_id", :primary_key => "personID", :dependent => :delete
+
   add_foreign_key "mail_groups", "mail_users", :name => "mail_groups_ibfk_1", :column => "user_id", :dependent => :nullify
 
   add_foreign_key "mh_surveys", "organizations", :name => "mh_surveys_ibfk_1", :dependent => :delete
@@ -5246,10 +5293,13 @@ ActiveRecord::Schema.define(:version => 20120815204804) do
   add_foreign_key "received_sms", "ministry_person", :name => "received_sms_ibfk_1", :column => "person_id", :primary_key => "personID", :dependent => :nullify
 
   add_foreign_key "sms_keywords", "mh_surveys", :name => "sms_keywords_ibfk_3", :column => "survey_id", :dependent => :nullify
-  add_foreign_key "sms_keywords", "organizations", :name => "sms_keywords_ibfk_2"
+  add_foreign_key "sms_keywords", "organizations", :name => "sms_keywords_ibfk_4", :dependent => :delete
   add_foreign_key "sms_keywords", "simplesecuritymanager_user", :name => "sms_keywords_ibfk_1", :column => "user_id", :primary_key => "userID", :dependent => :nullify
 
   add_foreign_key "sn_timetables", "ministry_person", :name => "sn_timetables_ibfk_1", :column => "person_id", :primary_key => "personID", :dependent => :delete
+
+  add_foreign_key "sp_application_moves", "sp_projects", :name => "sp_application_moves_ibfk_1", :column => "old_project_id", :dependent => :delete
+  add_foreign_key "sp_application_moves", "sp_projects", :name => "sp_application_moves_ibfk_2", :column => "new_project_id", :dependent => :delete
 
   add_foreign_key "sp_applications", "sp_projects", :name => "sp_applications_ibfk_1", :column => "project_id", :dependent => :nullify
 

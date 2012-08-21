@@ -40,7 +40,7 @@
       </li>
     <% end %>
     
-    <% @survey.questions.each do |question| %>
+    <% @survey.questions.where(hidden: false).each do |question| %>
       <% case question.slug %>
       <% when 'email' %>
         <% if @person.email.blank? %>

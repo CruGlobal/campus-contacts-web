@@ -422,6 +422,7 @@ en:
         autoassign_group_label: 'Choose where to assign contacts:'
         autoassign_keywords_label: 'List the words that will trigger the assignment:<br/>(must be separated with commas)'
         web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
+        hidden: "Don't show this question on the survey"
   sms_keywords:
     keyword_deleted: "Keyword has been deleted."
     index:
