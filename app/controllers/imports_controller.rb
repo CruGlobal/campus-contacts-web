@@ -109,11 +109,14 @@ class ImportsController < ApplicationController
 
     person = Person.new
 
-    survey_ids = SurveyElement.where(element_id: row[:answers].keys).pluck(:survey_id) - [APP_CONFIG['predefined_survey']]
+    unless @surveys_for_import
+      @survey_ids ||= SurveyElement.where(element_id: row[:answers].keys).pluck(:survey_id) - [APP_CONFIG['predefined_survey']]
+      @surveys_for_import = current_organization.surveys.where(id: @survey_ids.uniq)
+    end
 
     question_sets = []
 
-    current_organization.surveys.where(id: survey_ids.uniq).each do |survey|
+    @surveys_for_import.each do |survey|
       answer_sheet = get_answer_sheet(survey, person)
       question_set = QuestionSet.new(survey.questions, answer_sheet)
       question_set.post(row[:answers], answer_sheet)
