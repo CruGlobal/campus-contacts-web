@@ -1,4 +1,5 @@
 class GroupsController < ApplicationController
+  before_filter :ensure_current_org
   before_filter :get_group
   before_filter :leader_needed, :only => [:create, :new]
   
