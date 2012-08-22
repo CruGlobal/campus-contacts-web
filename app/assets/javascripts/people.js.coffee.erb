@@ -123,6 +123,29 @@ $ ->
             else
               $.a(data)
     false
+    
+  $("#people_controller a#bulk_archive").live 'click', ->
+    ids = []
+    $('.id_checkbox:checked:visible').each ->
+      ids.push($(this).val())
+    if($('#all_selected_text').is(':visible'))    
+      $('.all_row').each ->
+        ids.push($(this).attr('data-id'))
+        
+    num_selected = ids.length
+    if num_selected  > 0
+      if(confirm('Are you sure you want to archive ' + num_selected + ' people?'))
+        $.ajax
+          type: 'POST',
+          url: '/people/bulk_archive',
+          data: 'ids='+ids,
+          success: (data) ->
+            if data.indexOf("success") != -1 #there might be a better way of doing this other than just basing the success on the returned data
+              $('.id_checkbox:checked').each ->
+                $(this).closest('tr').fadeOut();
+            else
+              $.a(data)
+    false
   
   fromViewingFBProfile = false  
   if $('#facebook_name_search')[0]?
