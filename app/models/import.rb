@@ -45,7 +45,7 @@ class Import < ActiveRecord::Base
     errors = []
 
     #since first name is required for every contact. Look for id of element where attribute_name = 'firstName' in the header_mappings.
-    first_name_question = Element.where( :attribute_name => "firstName").first.id.to_s
+    first_name_question = Element.where(:attribute_name => "firstName").first.id.to_s
     unless header_mappings.values.include?(first_name_question) 
       errors << I18n.t('contacts.import_contacts.present_firstname')
     end

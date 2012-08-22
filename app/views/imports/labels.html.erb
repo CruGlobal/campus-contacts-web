@@ -1,0 +1,18 @@
+<% provide :sidebar do %>
+  <%= render 'contacts/leaders' %>
+<% end %>
+
+<div class="contentpad import">
+  <div class='import_header'>
+    <div class='import_step'>
+      <%= image_tag("step3.png") %>
+    </div>
+    <div class='import_info'>
+      Label New Contacts
+    </div>
+  </div>
+  <p>
+    You are almost ready to upload <%= @import_count %> new contacts. 
+    <br/>
+    Just select any labels from the list below that you would like to apply to these new contacts, and then click Import Now.</p>
+</div>

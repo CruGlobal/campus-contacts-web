@@ -1,0 +1,31 @@
+.import {
+	.import_label {
+		width: 90px;
+		display: inline-block;
+	}
+	.import_field {
+		display: inline-block;
+	}
+	.import_header {
+		height: 60px;
+		.import_step {
+			width: 60px;
+			float: left;
+			img {
+				width: 50px;
+				height: 50px;
+			}
+		}
+		.import_info  {
+			float: left;
+			margin-top: 14px;
+			font-family: Tahoma, Arial;
+			color: #333;
+			font-size: 21px;
+			font-weight: bold;
+		}
+	}
+	.stepwrap {
+		min-height: 30px;
+	}
+}

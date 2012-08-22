@@ -1,6 +1,6 @@
 class ImportsController < ApplicationController
-  before_filter :get_import, only: [:show, :edit, :update, :destroy]
-  before_filter :init_org, only: [:index, :show, :edit, :update, :new]
+  before_filter :get_import, only: [:show, :edit, :update, :destroy, :labels]
+  before_filter :init_org, only: [:index, :show, :edit, :update, :new, :labels]
   rescue_from Import::NilColumnHeader, with: :nil_column_header
 
   def index
@@ -34,12 +34,20 @@ class ImportsController < ApplicationController
   def edit
     get_survey_questions
   end
+  
+  def labels
+    raise @import.check_for_errors
+  end
 
   def update
     @import.update_attributes(params[:import])
     errors = @import.check_for_errors
-
-    if errors.blank?
+    
+    if errors.present?
+      flash.now[:error] = errors.join('<br />').html_safe
+      init_org
+      render :new
+    else
       Person.transaction do
         @import.get_new_people.each do |new_person|
           person = create_contact_from_row(new_person)
@@ -49,13 +57,7 @@ class ImportsController < ApplicationController
         end
         raise ActiveRecord::Rollback if errors.present?
       end
-    end
-
-    if errors.present?
-      flash.now[:error] = errors.join('<br />').html_safe
-      init_org
-      render :new
-    else
+      
       flash[:notice] = t('contacts.import_contacts.success')
       redirect_to contacts_path and return
     end

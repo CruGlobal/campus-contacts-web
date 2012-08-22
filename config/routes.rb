@@ -1,12 +1,12 @@
 Mh::Application.routes.draw do
   get "dashboard/index"
 
-  resources :imports, :only => [:index, :show, :new, :create, :update, :destroy, :edit] do
+  resources :imports, :only => [:show, :new, :create, :update, :destroy, :edit] do
     collection do
       get :download_sample_contacts_csv
     end
-
   end
+  match 'imports/:id/labels' => 'imports#labels'
 
   resources :group_labels, :only => [:create, :destroy]
 
