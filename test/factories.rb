@@ -17,7 +17,20 @@ FactoryGirl.define do
   end
 =end
 
+  factory :group_membership do
+    association :group
+    association :person
+    role 'member'
+  end
 
+  factory :group_label do
+    name "group #{Factory.next(:count)}"
+  end
+  
+  factory :group_labeling do
+    association :group
+    association :group_label
+  end
 
   factory :group do
     name 'foo'

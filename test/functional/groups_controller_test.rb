@@ -15,6 +15,21 @@ class GroupsControllerTest < ActionController::TestCase
     assert_template :new
   end
   
+  
+  
+  context "Editing a group" do
+    should "edit" do
+      @user, @org = admin_user_login_with_org
+      @group = Factory(:group, organization: @org)
+      get :edit, { :id => @group.id }
+    end
+    
+    should "not edit when group is not existing" do
+      @user, @org = admin_user_login_with_org
+      get :edit, { :id => 100 }
+    end
+  end
+  
   context "show group details" do
     setup do
       user = Factory(:user_with_auxs)
@@ -24,11 +39,46 @@ class GroupsControllerTest < ActionController::TestCase
       org.add_leader(user.person, user2.person)
       request.session[:current_organization_id] = org.id
       @group = Factory(:group, organization: org)
+      
+      @contact1 = Factory(:person, firstName: "C", lastName: "C")
+      Factory(:organizational_role, organization: org, person: @contact1, role: Role.contact)
+      @contact2 = Factory(:person, firstName: "D", lastName: "D")
+      Factory(:organizational_role, organization: org, person: @contact2, role: Role.contact)
+      @contact3 = Factory(:person, firstName: "E", lastName: "E")
+      Factory(:organizational_role, organization: org, person: @contact3, role: Role.contact)
+
+      Factory(:group_membership, group: @group, person: @contact1)
+      Factory(:group_membership, group: @group, person: @contact2)
+      Factory(:group_membership, group: @group, person: @contact3, role: "leader")
     end
     
     should "get show" do
       get :show, :id => @group.id
       assert_response(:success)
+    end
+    
+    should "get show with sorting by firstName asc" do
+      get :show, { :q =>{:s => "firstName asc"}, :id => @group.id}
+      assert_response(:success)
+      assert_equal assigns(:gm).collect{|x| x.id}, [@contact1.group_memberships.first.id, @contact2.group_memberships.first.id, @contact3.group_memberships.first.id]
+    end
+    
+    should "get show with sorting by firstName desc" do
+      get :show, { :q =>{:s => "firstName desc"}, :id => @group.id}
+      assert_response(:success)
+      assert_equal assigns(:gm).collect{|x| x.id}, [@contact3.group_memberships.first.id, @contact2.group_memberships.first.id, @contact1.group_memberships.first.id]
+    end
+    
+    should "get show with sorting by role desc" do
+      get :show, { :q =>{:s => "role desc"}, :id => @group.id}
+      assert_response(:success)
+      assert_equal assigns(:gm).collect{|x| x.id}, [@contact1.group_memberships.first.id, @contact2.group_memberships.first.id, @contact3.group_memberships.first.id]
+    end
+    
+    should "get show with sorting by role asc" do
+      get :show, { :q =>{:s => "role asc"}, :id => @group.id}
+      assert_response(:success)
+      assert_equal assigns(:gm).collect{|x| x.id}, [@contact3.group_memberships.first.id, @contact1.group_memberships.first.id, @contact2.group_memberships.first.id]
     end
   end
   
@@ -36,10 +86,23 @@ class GroupsControllerTest < ActionController::TestCase
     setup do
       @user, @org = admin_user_login_with_org
       Factory(:group, organization: @org)
+      @label = Factory(:group_label, organization: @user.person.organizations.first)
+      @group = Factory(:group, organization: @user.person.organizations.first)
     end
     
     should "get index" do
       get :index
+      assert_not_nil assigns(:groups)
+    end
+    
+    should "get index with through labels with groups" do
+      Factory(:group_labeling, group: @group, group_label: @label)
+      get :index, { :label => @label.id }
+      assert_equal assigns(:groups).collect(&:id), [@group.id]
+    end
+    
+    should "not get index when label id is not existing" do
+      get :index, { :label => @label.id + 1}
       assert_not_nil assigns(:groups)
     end
   end
@@ -57,6 +120,22 @@ class GroupsControllerTest < ActionController::TestCase
     post :create, group: { :name => "Wat", :location => "Philippines", :meets => "weekly", :start_time => "21600", :end_time => "25200", :organization_id => @org.id }
     assert_equal 1, @org.groups.count
     assert_response :redirect
+  end
+  
+  should "destroy group" do
+    @user, @org = admin_user_login_with_org
+    @group = Factory(:group, organization: @org)
+      
+    @contact1 = Factory(:person, firstName: "C", lastName: "C")
+    Factory(:organizational_role, organization: @org, person: @contact1, role: Role.contact)
+    Factory(:group_membership, group: @group, person: @contact1)
+    
+    assert_difference "Group.count", -1 do
+      assert_difference "GroupMembership.count", -1 do
+        post :destroy, { :id => @group.id}
+      end
+    end
+    assert_redirected_to groups_path
   end
   
   def set_up_group_at_sub_org

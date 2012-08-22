@@ -7,8 +7,12 @@ class GroupsController < ApplicationController
     @groups = current_organization.groups.order(params[:q] && params[:q][:s] ? params[:q][:s] : ['name'])
     @q = current_organization.groups.where('1 <> 1').search(params[:q])
     if params[:label].present?
-      @label = current_organization.group_labels.find(params[:label])
-      @groups = @groups.where('mh_group_labels.id' => params[:label]).joins(:group_labels)
+      begin
+        @label = current_organization.group_labels.find(params[:label])
+        @groups = @groups.where('mh_group_labels.id' => params[:label]).joins(:group_labels)
+      rescue ActiveRecord::RecordNotFound
+        flash[:error] = "Label not found"
+      end
     else
       @groups = @groups.includes(:group_labels)
     end
@@ -63,7 +67,12 @@ class GroupsController < ApplicationController
   protected 
   
     def get_group
-      @group = current_organization.groups.find(params[:id]) if params[:id]
+      begin
+        @group = current_organization.groups.find(params[:id]) if params[:id]
+      rescue ActiveRecord::RecordNotFound
+        @group = nil
+        flash[:error] = "Group not found"
+      end
     end
     
     def leader_needed
