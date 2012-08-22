@@ -95,9 +95,9 @@ en:
     alert: Alert
     save: 'Save'
     show: Show
-    delete: Delete
+    delete: Delete all checked
     remove: Remove
-    archive: Archive
+    archive: Archive all checked
     keyword: "Keyword"
     status: "Status"
     edit: "Edit"
