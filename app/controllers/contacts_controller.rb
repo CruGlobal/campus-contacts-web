@@ -289,6 +289,7 @@ class ContactsController < ApplicationController
       @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? "" : ['lastName, firstName']).group('ministry_person.personID')
       @all_people = @people
       @people_for_labels = Person.people_for_labels(current_organization)
+      @people = @people.includes(:organizational_roles)
       @people = @people.page(params[:page])
     
     end
