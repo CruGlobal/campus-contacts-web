@@ -1,18 +1,32 @@
 <div id="fb-root"></div>
 <script>
-  $(function () {
+  $(function() {
     window.fbAsyncInit = function() {
-      FB.init({
-        appId      : '169839456413947', // App ID
-        channelURL : '//<%= request.host_with_port %>/channel.html', // Channel File
-        status     : true, // check login status
-        cookie     : true, // enable cookies to allow the server to access the session
-        oauth      : true, // enable OAuth 2.0
-        xfbml      : true  // parse XFBML
+    FB.init({
+      <% if mhub? %>
+        appId      : '<%= APP_CONFIG['fb_app_id_mhub'] %>', // App ID
+      <% else %>
+        appId      : '<%= APP_CONFIG['fb_app_id'] %>', // App ID
+      <% end %>
+      channelURL : '//<%= request.host_with_port %>/channel.html', // Channel File
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      oauth      : true, // enable OAuth 2.0
+      xfbml      : true  // parse XFBML
+    });
+    $.mh.fb = FB;
+    <% if @facebook_logout %>
+      // Try to log the user out of facebook
+      FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+          var uid = response.authResponse.userID;
+          var accessToken = response.authResponse.accessToken;
+          FB.logout();
+        }
       });
-      $.mh.fb = FB;
-    };
-  });
+    <% end %>
+  };
+});
   // Load the SDK Asynchronously
   (function(d){
      var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}

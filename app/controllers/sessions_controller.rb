@@ -4,13 +4,17 @@ class SessionsController < Devise::SessionsController
   layout :pick_layout
   
   def new
-    @survey = Survey.find(cookies[:survey_id]) unless cookies[:survey_id].nil?
+    @survey = Survey.find(cookies[:survey_id]) if cookies[:survey_id].present?
     @title = nil
     if @survey
       @title = @survey.terminology
       if @survey.login_option == 2 || @survey.login_option == 3
         redirect_to "/s/#{cookies[:survey_id]}?nologin=true"
       end
+    end
+    @facebook_logout = true
+    if user_signed_in?
+      sign_out
     end
   end
   
