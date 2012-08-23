@@ -1,4 +1,17 @@
 .import {
+	.label_list {
+		border: 1px solid #CCC;
+		height: 230px;
+		width: 300px;
+		overflow-x: hidden;
+		overflow-y: scroll;
+		margin: 10px;
+	}
+	.label_item {
+		border-bottom: 1px solid #CCC;
+		padding: 4px;
+		background: #FCFCFC;
+	}
 	.import_label {
 		width: 90px;
 		display: inline-block;

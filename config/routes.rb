@@ -4,6 +4,7 @@ Mh::Application.routes.draw do
   resources :imports, :only => [:show, :new, :create, :update, :destroy, :edit] do
     collection do
       get :download_sample_contacts_csv
+      post :import
     end
   end
   match 'imports/:id/labels' => 'imports#labels'

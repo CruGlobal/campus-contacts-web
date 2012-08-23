@@ -36,7 +36,9 @@ class ImportsController < ApplicationController
   end
   
   def labels
-    raise @import.check_for_errors
+    @import_count =  @import.get_new_people.count
+    @roles = current_organization.roles
+    # raise @import.inspect
   end
 
   def update
@@ -48,19 +50,23 @@ class ImportsController < ApplicationController
       init_org
       render :new
     else
-      Person.transaction do
-        @import.get_new_people.each do |new_person|
-          person = create_contact_from_row(new_person)
-          if person.errors.present?
-            errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
-          end
-        end
-        raise ActiveRecord::Rollback if errors.present?
-      end
+      # Person.transaction do
+      #   @import.get_new_people.each do |new_person|
+      #     person = create_contact_from_row(new_person)
+      #     if person.errors.present?
+      #       errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
+      #     end
+      #   end
+      #   raise ActiveRecord::Rollback if errors.present?
+      # end
       
-      flash[:notice] = t('contacts.import_contacts.success')
-      redirect_to contacts_path and return
+      # flash[:notice] = t('contacts.import_contacts.success')
+      redirect_to :action => :labels
     end
+  end
+  
+  def import
+    raise params.inspect
   end
 
   def destroy

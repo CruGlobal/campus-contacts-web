@@ -13,7 +13,7 @@
   </div>
   <p>Match your CSV headers to correspond with Person attributes or Survey questions. Remember that <strong>first name</strong> is required.</p>
 
-<%= form_for @import do |f| %>
+  <%= form_for @import do |f| %>
     <% @import.headers.each_with_index do |header, i| %>
     <div class="stepwrap rwidth">
       <div class='import_label'>
@@ -24,6 +24,6 @@
       </div>
     </div>
     <% end %>
-  <%= submit_tag 'Continue', :value=>"Continue" %>
-<% end %>
+    <%= submit_tag 'Continue', :value=>"Continue" %>
+  <% end %>
 </div>

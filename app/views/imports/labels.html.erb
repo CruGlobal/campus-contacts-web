@@ -12,7 +12,27 @@
     </div>
   </div>
   <p>
-    You are almost ready to upload <%= @import_count %> new contacts. 
-    <br/>
-    Just select any labels from the list below that you would like to apply to these new contacts, and then click Import Now.</p>
+    <%= t('contacts.index.import_step3_body1', count: @import_count) %>
+  </p>
+  <p>
+    <%= t('contacts.index.import_step3_body2') %>
+  </p>
+  
+  <div class="stepwrap rwidth manage-labels">
+    <%= form_tag controller: 'imports', action: 'import' do |f| %>
+      <%= check_box_tag :use_labels, 1, true %>
+      <%= t('contacts.index.import_labels_checkbox') %>
+      <div class="label_list">
+        <% (@roles.default_roles_desc + @roles.non_default_roles_asc).each do |role| %>
+          <div class="label_item">
+            <%= check_box_tag "labels[]", role.id, false, id: "label_box_#{role.id}" %>
+            <%= role.name %>
+          </div>
+        <% end %>
+      </div>
+      <br/>
+      <br/>
+      <%= submit_tag 'Import Now', :value=>"Import Now" %>
+    <% end %>
+  </div>
 </div>

@@ -1,5 +1,11 @@
 $ ->   
 
+  $('.import .manage-labels #use_labels').live 'click', ->
+    if $(this).is(':checked')
+      $(this).siblings('.label_list').slideDown()
+    else
+      $(this).siblings('.label_list').slideUp()
+
   $('.action_dropdown').live 'click', -> 
     link = $(this)
     link.toggleClass('active')
