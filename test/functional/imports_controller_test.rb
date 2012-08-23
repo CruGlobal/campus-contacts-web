@@ -40,8 +40,8 @@ class ImportsControllerTest < ActionController::TestCase
       
       
       @survey2 = Factory(:survey, organization: @organization)
-      @question = Factory(:choice_field, notify_via: "Both", trigger_words: "Jesus")
-      @survey.questions << @question
+      @question = Factory(:some_question)
+      @survey2.questions << @question
     end
     
     should "unsuccesfully create an import if file is empty" do 
@@ -184,7 +184,7 @@ class ImportsControllerTest < ActionController::TestCase
     end
 =end
 
-=begin
+#=begin
     should "successfully create an import and upload contact with non-predefined surveys" do
       stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
         to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_7.csv")), status: 200)
@@ -194,9 +194,8 @@ class ImportsControllerTest < ActionController::TestCase
         post :create, { :import => { :upload => file } }
         assert_response :redirect
         
-        post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @email_element.id, "4" => @question.id} }, :id => Import.first.id}
-      
+        post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "3" => @email_element.id, "4" => @question.id} }, :id => Import.first.id}
     end
-=end
+#=end
   end
 end
