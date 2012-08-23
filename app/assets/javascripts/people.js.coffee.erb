@@ -111,7 +111,7 @@ $ ->
         
     num_selected = ids.length
     if num_selected  > 0
-      if(confirm('Are you sure you want to delete ' + num_selected + ' people permanently?'))
+      if(confirm('Are you sure you want to delete ' + num_selected + ' person(s) permanently?'))
         $.ajax
           type: 'POST',
           url: '/people/bulk_delete',
@@ -134,7 +134,7 @@ $ ->
         
     num_selected = ids.length
     if num_selected  > 0
-      if(confirm('Are you sure you want to archive ' + num_selected + ' people?'))
+      if(confirm('Are you sure you want to archive ' + num_selected + ' person(s)?'))
         $.ajax
           type: 'POST',
           url: '/people/bulk_archive',
