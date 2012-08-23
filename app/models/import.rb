@@ -15,6 +15,10 @@ class Import < ActiveRecord::Base
   validates :upload, attachment_presence: true
 
   before_save :parse_headers
+  
+  def label_name
+    created_at.strftime("%Y-%B-%d-%H:%M-import")
+  end
 
   def get_new_people # generates array of Person hashes
     new_people = Array.new
