@@ -174,7 +174,7 @@ class Person < ActiveRecord::Base
   end
   
   def is_archived?(org)
-    return true if organizational_roles.blank?
+    return true if organizational_roles.where(organization_id: org.id).blank?
     false
   end
 

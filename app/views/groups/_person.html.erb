@@ -3,7 +3,7 @@
     <%#= image_tag('grippy.png', class: 'handle' ) %>
     <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
   </td>
-  <td><%= person.name %></td>
+  <td class="<%= 'archived_person_name' if person.is_archived?(current_organization) %>"><%= person.name %></td>
   <td class="email"><%= mail_to(person.email) if person.email.present? %></td>
   <td class="phone_number"><%= person.pretty_phone_number %></td>
   <td><%= t(group_membership.role) if group_membership.role.present? %></td>

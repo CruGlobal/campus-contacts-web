@@ -909,8 +909,8 @@ en:
       members: Involved
       leaders: Leaders
       add_group: 'Add a group'
-      labels: Labels
-      add: Add
+      labels: Group Labels
+      add: Add 
       assign_to_label:
         one: '1 Group'
         other: '%{count} Groups' 
@@ -932,6 +932,7 @@ en:
       delete_group: 'Delete this group'
       edit_group: 'Edit Group'
       confirm_delete_group: Are you sure you want to delete this group?
+      name: 'Name'
     form:
       location_tip: 'For your location, type an address that you would expect to work if you did a search on a Google Map (i.e. "1600 Pennsylvania Ave, Washington, DC 20006")'
       list_publicly_tip: "If this option is selected, this group will be visible to the general public when they do a search. (Public search doesn't exist yet, but will at some point)"
