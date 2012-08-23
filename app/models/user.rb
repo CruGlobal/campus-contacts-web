@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   self.table_name = 'simplesecuritymanager_user'
   self.primary_key = 'userID'
   
-  store :settings, accessors: [:primary_organization_id]
+  store :settings, accessors: [:primary_organization_id, :time_zone]
   
   has_one :person, foreign_key: 'fk_ssmUserId'
   has_many :authentications
