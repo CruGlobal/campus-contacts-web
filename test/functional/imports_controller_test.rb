@@ -37,6 +37,11 @@ class ImportsControllerTest < ActionController::TestCase
       @lastName_question = Factory(:survey_element, survey: @survey, element: @lastName_element, position: 2, archived: true)
       @email_question = Factory(:survey_element, survey: @survey, element: @email_element, position: 3, archived: true)
       @phone_question = Factory(:survey_element, survey: @survey, element: @phone_element, position: 4, archived: true)
+      
+      
+      @survey2 = Factory(:survey, organization: @organization)
+      @question = Factory(:choice_field, notify_via: "Both", trigger_words: "Jesus")
+      @survey.questions << @question
     end
     
     should "unsuccesfully create an import if file is empty" do 
@@ -164,16 +169,33 @@ class ImportsControllerTest < ActionController::TestCase
       post :edit, { :id => Import.last.id }
       assert_template "imports/edit"
     end
+
 =begin
     should "successfully destroy an import" do
       stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv")), status: 200)
-      stub_request(:head, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv")), status: 200)
       
       contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv"))
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
       post :create, { :import => { :upload => file } }
+      
+      stub_request(:delete, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv")), status: 200)
       post :destroy, {:id => Import.last.id}
       assert_response :redirect
+    end
+=end
+
+=begin
+    should "successfully create an import and upload contact with non-predefined surveys" do
+      stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
+        to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_7.csv")), status: 200)
+      
+        contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_7.csv"))
+        file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
+        post :create, { :import => { :upload => file } }
+        assert_response :redirect
+        
+        post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @email_element.id, "4" => @question.id} }, :id => Import.first.id}
+      
     end
 =end
   end
