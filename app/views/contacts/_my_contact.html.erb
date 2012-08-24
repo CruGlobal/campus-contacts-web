@@ -4,9 +4,9 @@
     <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
   </td>
   <td class="name">
-    <%= person %>
+    <%= person.name %>
     <% if person.organizational_roles.where('organizational_roles.organization_id' => current_organization.id).blank? %>
-      <span class="archived_group_label">&nbsp<%= t('general.archived') %>&nbsp</span>
+      <span>&nbsp&nbsp&nbsp</span><span class="archived_group_label">&nbsp<%= t('general.archived') %>&nbsp</span>
     <% end %>
   </td>
   
