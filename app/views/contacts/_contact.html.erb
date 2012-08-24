@@ -8,11 +8,15 @@
     <% end %>
     <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
   </td>
-  <% @class = person.organizational_roles.where('organizational_roles.organization_id' => current_organization.id).blank? ? "archived_person_name" : "name" %>
-  <td class="<%= @class %>"><%= person.firstName %></td>
-  <td class="<%= @class %>"><%= person.lastName %></td>
+  <td class="firstName"><%= person.firstName %></td>
+  <td class="lastName"><%= person.lastName %></td>
   <% if contact_role %>
-    <td><%= contact_role.followup_status.to_s.titleize %></td>
+    <td>
+      <%= contact_role.followup_status.to_s.titleize %>
+      <% if person.organizational_roles.where('organizational_roles.organization_id' => current_organization.id).blank? %>
+        <span class="archived_group_label">&nbsp<%= t('general.archived') %>&nbsp</span>
+      <% end %>
+    </td>
   <% end %>
   <td><%= person.gender.to_s.titleize %></td>
   <td class="phone_number"><%= person.pretty_phone_number %></td>
