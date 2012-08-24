@@ -248,6 +248,7 @@ class Person < ActiveRecord::Base
       unless org_ids_cache
         organization_tree # make sure the tree is built
       end
+      # convert org ids to integers (there has to be a better way, but i couldn't think of it)
       @org_ids = {}
       org_ids_cache.collect {|org_id, values| @org_ids[org_id.to_i] = values}
     end

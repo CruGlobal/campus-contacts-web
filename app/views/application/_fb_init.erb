@@ -15,7 +15,7 @@
       xfbml      : true  // parse XFBML
     });
     $.mh.fb = FB;
-    <% if @facebook_logout %>
+    <% if @facebook_logout || flash[:facebook_logout] %>
       // Try to log the user out of facebook
       FB.getLoginStatus(function(response) {
         if (response.status === 'connected') {
