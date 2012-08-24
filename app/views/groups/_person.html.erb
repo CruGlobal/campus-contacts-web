@@ -8,7 +8,7 @@
   <td class="phone_number"><%= person.pretty_phone_number %></td>
   <td><%= t(group_membership.role) if group_membership.role.present? %>
     <% if person.is_archived?(current_organization) %>
-      <span class="archived_group_label"> (archived) </span>
+      <span class="archived_group_label">&nbsp<%= t('general.archived') %>&nbsp</span>
     <% end %>
   </td>
   <td class="controls"><%= link_to(t('general.delete'), group_group_membership_path(@group, group_membership), :method => :delete, :remote => true, :class => "icon delete", :confirm => t('.remove_confirm', name: person)) %></td>

@@ -81,6 +81,7 @@ en:
     create_a_survey: Create a survey
     settings: Settings
   general:
+    archived: "archived"
     assigned_to:  "Assigned to"
     survey: Survey
     mobile: Cell

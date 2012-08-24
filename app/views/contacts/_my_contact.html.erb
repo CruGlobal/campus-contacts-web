@@ -6,7 +6,7 @@
   <td class="name">
     <%= person %>
     <% if person.is_archived?(current_organization) %>
-      <span class="archived_group_label"> (archived) </span>
+      <span class="archived_group_label">&nbsp<%= t('general.archived') %>&nbsp</span>
     <% end %>
   </td>
   
