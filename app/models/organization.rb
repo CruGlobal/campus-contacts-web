@@ -68,7 +68,7 @@ class Organization < ActiveRecord::Base
     end
     
     def is_root? # an org is considered root if it has no parents
-      ancestry.nil?
+      ancestry.nil? || !parent.show_sub_orgs
     end
     
     def is_child?
@@ -87,9 +87,11 @@ class Organization < ActiveRecord::Base
     end
     
     def parent_organization_admins
-      if parent_organization.present?
-        parent_admins = parent_organization.admins 
-        return parent_admins.present? ? parent_admins : parent_organization.parent_organization_admins
+      #returns own admins plus the all the admins of all the ancestor organizations
+      if ancestry.nil? || !parent.show_sub_orgs
+        return admins
+      else
+        return parent.parent_organization_admins + admins
       end
     end
     

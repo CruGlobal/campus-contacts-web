@@ -49,10 +49,22 @@ class OrganizationTest < ActiveSupport::TestCase
       @person2 = Factory(:person, :email => "person2@email.com")
       @person3 = Factory(:person, :email => "person3@email.com")
       @person4 = Factory(:person, :email => "person4@email.com")
+      @person5 = Factory(:person, :email => "person5@email.com")
+      @person6 = Factory(:person, :email => "person6@email.com")
       @org1 = Factory(:organization, id: '1')
       @org2 = Factory(:organization, id: '2', ancestry: '1')
       @org3 = Factory(:organization, id: '3', ancestry: '1/2')
+      @org4 = Factory(:organization, id: '4', ancestry: '1/2/3', show_sub_orgs: false)
+      @org5 = Factory(:organization, id: '5', ancestry: '1/2/3/4')
+      @org6 = Factory(:organization, id: '6', ancestry: '1/2/3/4/5')
     end
+    
+    should "return the admins of org1" do
+      Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
+      Factory(:organizational_role, organization: @org1, person: @person2, role: Role.admin)
+      assert_equal @org1.parent_organization_admins, [@person1, @person2]
+    end
+    
     should "return the admins of org2" do
       Factory(:organizational_role, organization: @org2, person: @person1, role: Role.admin)
       Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
@@ -61,6 +73,41 @@ class OrganizationTest < ActiveSupport::TestCase
       assert(results.include?(@person1), "person1 should be returned")
       assert(results.include?(@person2), "person2 should be returned")
     end
+    
+    should "return the admins of org3" do
+      Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
+      Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
+      Factory(:organizational_role, organization: @org3, person: @person3, role: Role.admin)
+      assert_equal @org3.parent_organization_admins, [@person1, @person2, @person3]
+    end
+    
+    should "return the admins of org4" do
+      Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
+      Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
+      Factory(:organizational_role, organization: @org3, person: @person3, role: Role.admin)
+      Factory(:organizational_role, organization: @org4, person: @person4, role: Role.admin)
+      assert_equal @org4.parent_organization_admins, [@person1, @person2, @person3, @person4]
+    end
+    
+    should "return the admins of org5" do
+      Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
+      Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
+      Factory(:organizational_role, organization: @org3, person: @person3, role: Role.admin)
+      Factory(:organizational_role, organization: @org4, person: @person4, role: Role.admin)
+      Factory(:organizational_role, organization: @org5, person: @person5, role: Role.admin)
+      assert_equal @org5.parent_organization_admins, [@person5]
+    end
+    
+    should "return the admins of org6" do
+      Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
+      Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
+      Factory(:organizational_role, organization: @org3, person: @person3, role: Role.admin)
+      Factory(:organizational_role, organization: @org4, person: @person4, role: Role.admin)
+      Factory(:organizational_role, organization: @org5, person: @person5, role: Role.admin)
+      Factory(:organizational_role, organization: @org6, person: @person6, role: Role.admin)
+      assert_equal @org6.parent_organization_admins, [@person5, @person6]
+    end
+    
     should "return the admins of org1 if @org2 dont have admins" do
       Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
       results = @org3.parent_organization_admins
@@ -107,7 +154,7 @@ class OrganizationTest < ActiveSupport::TestCase
     end
     should "return null" do
       results = @org3.all_possible_admins
-      assert_nil(results, "when org3 and org2 and org1 dont have admins")
+      assert_blank(results, "when org3 and org2 and org1 dont have admins")
     end
   end
 
@@ -417,6 +464,10 @@ class OrganizationTest < ActiveSupport::TestCase
     assert_difference "OrganizationalRole.count", 1 do
       Factory(:organization, person_id: person.id)
     end
+  end
+  
+  context "getting the admins of an org" do
+  
   end
   
   context "Testing the uniqueness of an orgs children" do
