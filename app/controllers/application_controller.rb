@@ -190,10 +190,11 @@ class ApplicationController < ActionController::Base
      SimplesIdeias::I18n.export! if Rails.env.development?
   end
   
-  def current_organization
+  def current_organization(person = nil)
     person ||= current_person if user_signed_in?
     return nil unless person
-    unless @current_organization
+    @current_organizations ||= {}
+    unless @current_organizations[person]
       if session[:current_organization_id]
         org = person.organization_from_id(session[:current_organization_id]) 
         # org = nil unless org && (person.organizations.include?(org) || person.organizations.include?(org.parent))
@@ -209,9 +210,9 @@ class ApplicationController < ActionController::Base
           session[:current_organization_id] = nil
         end
       end
-      @current_organization = org
+      @current_organizations[person] = org
     end
-    @current_organization
+    @current_organizations[person]
   end
   helper_method :current_organization
 

@@ -131,7 +131,7 @@ class LeadersControllerTest < ActionController::TestCase
       @user.remember_token_expires_at = 1.month.from_now
       @user.save(validate: false)
       get :leader_sign_in, token: token, user_id: @user.id
-      assert_redirected_to '/wizard?step=survey'
+      assert_redirected_to '/dashboard'
     end
 
     should "should remove a leader" do
