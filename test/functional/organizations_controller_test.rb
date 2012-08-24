@@ -28,7 +28,7 @@ class OrganizationsControllerTest < ActionController::TestCase
     end
 
     context 'deleting' do
-      should "clear cache of anyone who has a role in a parent of this org" do
+      should "clear cache of anyone who has a role in a grandparent of this org" do
         @org_grandchild = Factory(:organization, :name => "foo", :parent => @org_child)
         OrganizationsController.any_instance.expects(:expire_fragment).with("org_nav/#{@user.person.id}")
         post :destroy, id: @org_grandchild.id

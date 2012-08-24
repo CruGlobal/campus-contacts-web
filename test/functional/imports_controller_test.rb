@@ -165,6 +165,8 @@ class ImportsControllerTest < ActionController::TestCase
       
       contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv"))
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
+      predefined_survey = Factory(:survey)
+      APP_CONFIG['predefined_survey'] = predefined_survey.id
       post :create, { :import => { :upload => file } }
       post :edit, { :id => Import.last.id }
       assert_template "imports/edit"
