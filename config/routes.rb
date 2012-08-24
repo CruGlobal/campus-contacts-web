@@ -102,7 +102,11 @@ Mh::Application.routes.draw do
     end
   end
 
-  resources :roles, :only => [:create, :update, :destroy, :index, :new, :edit]
+  resources :roles, :only => [:create, :update, :destroy, :index, :new, :edit] do
+    collection do
+      post :create_now
+    end
+  end
 
   namespace :admin do
     resources :email_templates

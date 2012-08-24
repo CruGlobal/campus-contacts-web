@@ -18,22 +18,28 @@
     <%= t('contacts.index.import_step3_body2') %>
   </p>
   
-  <div class="stepwrap rwidth manage-labels">
+  <div class="stepwrap rwidth manage_labels">
     <%= form_tag controller: 'imports', action: 'import' do |f| %>
       <%= check_box_tag :use_labels, 1, true %>
       <%= t('contacts.index.import_labels_checkbox') %>
-      <div class="label_list">
-        <div class="label_item">
-          <%= check_box_tag "labels[]", 0, true, id: "label_box_0" %>
-          <%= @import.label_name %>
+      <div class="label_space">
+        <div class="label_list">
+          <%= render partial: 'imports/label', locals: {role_id: 0, role_name: @import.label_name, checked: true}%>
+          <% (@roles.default_roles_desc + @roles.non_default_roles_asc).each do |role| %>
+            <%= render partial: 'imports/label', locals: {role_id: role.id, role_name: role.name, checked: false}%>
+          <% end %>
         </div>
-        <% (@roles.default_roles_desc + @roles.non_default_roles_asc).each do |role| %>
-          <div class="label_item">
-            <%= check_box_tag "labels[]", role.id, false, id: "label_box_#{role.id}" %>
-            <%= role.name %>
+        <div class="label_new">
+          <%= text_field_tag 'new_label_field', '', placeholder: t('contacts.index.import_new_label') %>
+          <%= button_tag 'Save Label', :id => 'new_label_button' %>
+          <br/>
+          <div id="new_label_message">
           </div>
-        <% end %>
+        </div>
       </div>
+      <br/>
+      <br/>
+      <br/>
       <br/>
       <br/>
       <%= submit_tag 'Import Now', :value=>"Import Now" %>

@@ -1,0 +1,11 @@
+if(<%= @status %>){
+  $('.import .manage_labels .label_space .label_list').append("<%= escape_javascript(render partial: 'imports/label', locals: {role_id: @new_role.id, role_name: @new_role.name, checked: true}) if @new_role.present? %>")
+  $('.label_list').prop({scrollTop:$('.label_list').prop('scrollHeight')})
+  $('.import .manage_labels #new_label_field').val('')
+  $('.import .manage_labels #new_label_message').html("")
+}else{
+  $('.import .manage_labels #new_label_message').html("<%= escape_javascript(@msg_alert) %>")
+}
+$(".import .manage_labels #new_label_button").attr('disabled',false)
+$('.import .manage_labels #new_label_field').removeClass('loading')
+$('.import .manage_labels #new_label_field').focus()
