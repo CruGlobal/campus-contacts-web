@@ -19,7 +19,7 @@
   </p>
   
   <div class="stepwrap rwidth manage_labels">
-    <%= form_tag controller: 'imports', action: 'import' do |f| %>
+    <%= form_tag controller: 'imports', action: 'import', id: @import.id do |f| %>
       <%= check_box_tag :use_labels, 1, true %>
       <%= t('contacts.index.import_labels_checkbox') %>
       <div class="label_space">

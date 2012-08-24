@@ -319,7 +319,6 @@ class PeopleController < ApplicationController
   end
 
 
-
   def update_roles
     if current_user_roles.include? Role.admin
       authorize! :manage, current_organization

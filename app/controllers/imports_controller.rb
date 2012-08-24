@@ -1,6 +1,6 @@
 class ImportsController < ApplicationController
-  before_filter :get_import, only: [:show, :edit, :update, :destroy, :labels]
-  before_filter :init_org, only: [:index, :show, :edit, :update, :new, :labels]
+  before_filter :get_import, only: [:show, :edit, :update, :destroy, :labels, :import]
+  before_filter :init_org, only: [:index, :show, :edit, :update, :new, :labels, :import]
   rescue_from Import::NilColumnHeader, with: :nil_column_header
 
   def index
@@ -66,7 +66,33 @@ class ImportsController < ApplicationController
   end
   
   def import
-    raise params.inspect
+    errors = @import.check_for_errors
+    if errors.present?
+      flash.now[:error] = errors.join('<br />').html_safe
+      init_org
+      render :new
+    else
+      Person.transaction do
+        @import.get_new_people.each do |new_person|
+          person = create_contact_from_row(new_person)
+          if person.errors.present?
+            errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
+          else 
+            if params[:use_labels].present? && params[:use_labels] == '1' && params[:labels].present?
+              params[:labels].each do |role_id|
+                role = Role.create(organization_id: current_organization.id, name: @import.label_name) if role_id == '0'
+                role_id = role.id if role.present?
+                OrganizationalRole.create(person_id: person.id, organization_id: current_organization.id, role_id: role_id, added_by_id: current_user.person.id)
+              end
+            end
+          end
+        end
+        raise ActiveRecord::Rollback if errors.present?
+      end
+      flash[:notice] = t('contacts.import_contacts.success')
+      init_org
+      redirect_to action: :new
+    end
   end
 
   def destroy
