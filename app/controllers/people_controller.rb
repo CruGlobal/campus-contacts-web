@@ -470,7 +470,7 @@ class PeopleController < ApplicationController
   protected
   
   def attempting_to_delete_or_archive_all_the_admins_in_the_org?(ids)
-    admin_ids = current_organization.admins.collect(&:personID)
+    admin_ids = current_organization.parent_organization_admins.collect(&:personID)
     i = admin_ids & ids.collect(&:to_i)
     return i if (admin_ids - i).blank?
     false
