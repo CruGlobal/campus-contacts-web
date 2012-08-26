@@ -85,7 +85,6 @@ class SmsController < ApplicationController
       @sent_sms = send_message(@msg, sms_params[:phone_number])
     end
     #render text: @msg.to_s + "\n"
-    logger.ap  @sent_sms.to_twilio
     render xml: @sent_sms.to_twilio
   end
 
