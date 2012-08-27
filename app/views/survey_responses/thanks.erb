@@ -3,9 +3,6 @@
   <center><h4><%= @survey.post_survey_message.present? ? @survey.post_survey_message : t('contacts.thanks.message') %></h4></center>
 	<br><br>
 
-  <% if mhub? && user_signed_in? %>
-    <%= render 'fb_logout' %>
-  <% end %>
 	<div id="countdown">
 		<center>
 		  <% if cookies[:survey_mode].present? %>

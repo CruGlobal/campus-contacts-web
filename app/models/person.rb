@@ -293,7 +293,7 @@ class Person < ActiveRecord::Base
     (o ? o.children : organizations).order('name').each do |org|
       # collect roles associated with each org
       @org_ids[org.id] ||= {}
-      @org_ids[org.id]['roles'] ||= (Array.wrap(roles_by_org_id(org.id)) + Array.wrap(parent_roles)).uniq
+      @org_ids[org.id]['roles'] = (Array.wrap(roles_by_org_id(org.id)) + Array.wrap(parent_roles)).uniq
       orgs[org.id] = (org.show_sub_orgs? ? org_tree_node(org, @org_ids[org.id]['roles']) : {})
     end
     orgs
