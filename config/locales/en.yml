@@ -256,6 +256,7 @@ en:
     destroy:
       signed_out: You've been signed out.
     new:
+      waiting_for_logout: Waiting for previous user to be logged out of facebook. If this message doesn't go away within 15 seconds, try reloading the page.
       login_paragraph_html:
         To get started, you'll need to have a Facebook account. <br/>
         Click the login link to the left and <strong>allow</strong> MissionHub to access your information. <br/>

@@ -25,10 +25,9 @@
 
 			        <div data-role="header" role="banner" data-backbtn="false">
 			          <h1 class="ui-title" tabindex="0" role="heading"><%=h yield(:title) %></h1>
-						    <% if current_user && !params[:button].present? %>
-          		    <%= link_to t('nav.logout'), '#', onclick: "$.mh.logout()", "data-role" => "button", rel: "external"%>
-
-		            <%- end -%>
+                <% if cookies[:survey_mode].present? && cookies[:survey_id].present? %>
+                  <%= link_to(t('nav.logout'), sign_out_url(next: start_survey_url(cookies[:survey_id])), "data-role" => "button", rel: "external")  %>
+                <% end %>
 			        </div>
 				  </div>
 			  </div>

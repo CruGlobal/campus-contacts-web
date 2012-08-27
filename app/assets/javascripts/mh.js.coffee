@@ -130,9 +130,10 @@ $ ->
       pathLevels: 2,
       delay: 300
     })
-  	$('.sf-scrolling').superscroll();     
-      
-window.t = (s) -> I18n.translate(s)    
+    if $('.sf-scrolling')[0]
+      $('.sf-scrolling').superscroll()
+
+window.t = (s) -> I18n.translate(s)
 
 $.a = (msg, title) -> 
   unless $('#alert_dialog')[0]?
