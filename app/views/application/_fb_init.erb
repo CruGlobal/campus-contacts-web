@@ -23,6 +23,8 @@
           var accessToken = response.authResponse.accessToken;
           FB.logout();
         }
+        $('#waiting').hide();
+        $('#facebook_button').show();
       });
     <% end %>
   };

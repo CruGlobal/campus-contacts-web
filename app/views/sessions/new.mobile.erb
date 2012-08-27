@@ -16,27 +16,11 @@
   <body>
     <%= render 'fb_init' %>
 		<div data-role="page">
-			<%- unless true -%>
-				<div data-role="header">
-		    		<div class="current" id="home">
-				      <%- if show_title? -%>
-				        <div data-role="header" role="banner">
-				          <%= link_to "Back", nil, "data-role" => "button" unless params[:controller] == 'welcome' %>
-				          <h1 class="ui-title" tabindex="0" role="heading"><%=h yield(:title) %></h1>
-				          <%= link_to "Full Site", root_url(mobile: 0), "data-role" => "button", rel: "external"%>
-				          <!-- <%= yield(:toolbar) %> -->
-				        </div>
-				      <%- end -%>
-					 </div>
-				  </div>
-			<% end %>
-			<% if true %>
-				 <div data-role="header">
-				   <div data-role="header" role="banner">
-				     <h1 style='font-family:helvetica'><!-- class="mh-login" --><%#= image_tag("mh-logo-full.png", :style =>"width: 135px;") %><%= t('.login') %></h1>
-				   </div>
-				</div>
-			<% end %>
+       <div data-role="header">
+         <div data-role="header" role="banner">
+           <h1 style='font-family:helvetica'><%= t('.login') %></h1>
+         </div>
+      </div>
 	    <div data-role="content">
         <% title t('.welcome') %>
         <% if mhub? %>
@@ -47,7 +31,12 @@
               </span><br>
             </div>
             <div class="info">
-              <center><%= link_to(image_tag('fb_login_small.png'), user_omniauth_authorize_path(mhub? ? :facebook_mhub : :facebook), rel: 'external', alt: t('.login_with_facebook')) %></center>
+              <center>
+                <%= link_to(image_tag('fb_login_small.png'), user_omniauth_authorize_path(mhub? ? :facebook_mhub : :facebook), id: 'facebook_button', rel: 'external', alt: t('.login_with_facebook'), style: cookies[:survey_mode].present? ? 'display:none' : '' ) %>
+                <% if cookies[:survey_mode].present? %>
+                  <span id="waiting"><%= t('.waiting_for_logout') %></span>
+                <% end %>
+              </center>
             </div>
             <% if @survey && @survey.login_option == 0 %>
               <div class="info"><br/><br/>
