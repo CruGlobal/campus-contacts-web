@@ -25,11 +25,11 @@ class SmsController < ApplicationController
       @sms_session.update_attribute(:interactive, false) if @sms_session
       @msg = 'You have been unsubscribed from MHub SMS alerts. You will receive no more messages.'
       @sent_sms = send_message(@msg, sms_params[:phone_number])
-      render text: @msg + "\n" and return
+      render xml: @sent_sms.to_twilio and return
     when 'help'
       @msg = 'MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to http://mhub.cc/terms for more help.'
       @sent_sms = send_message(@msg, sms_params[:phone_number])
-      render text: @msg + "\n" and return
+      render xml: @sent_sms.to_twilio and return
     when ''
       render nothing: true and return
     end
