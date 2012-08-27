@@ -61,10 +61,11 @@ class SentSms < ActiveRecord::Base
     END
   end
 
-  private
   def queue_sms
     async(:send_sms)
   end
+
+  private
 
   def send_sms
     #case sent_via 
@@ -84,17 +85,19 @@ class SentSms < ActiveRecord::Base
       #next_message = SentSms.new(attributes.merge(:message => split_message[1]))
       #self.message = split_message[0]
     #end
-    sms = Twilio::SMS.create(:to => recipient, :body => message.strip, :from => from)
-    self.twilio_sid = sms.sid
-    self.twilio_uri = sms.uri
+    SentSms.smart_split(message, separator).each do |message|
+      Twilio::SMS.create(:to => recipient, :body => message.strip, :from => from)
+    end
+    #self.twilio_sid = sms.sid
+    #self.twilio_uri = sms.uri
     #else
     #raise "Not sure how to send this sms: sent_via = #{sent_via}"
     #end
-    save
-    if next_message
-      sleep(2)
-      next_message.save
-    end
+    #save
+    #if next_message
+      #sleep(2)
+      #next_message.save
+    #end
     # Log count sent through this carrier (just for fun)
     # if received_sms && received_sms.carrier_name.present?
     #   carrier = SmsCarrier.find_or_create_by_moonshado_name(received_sms.carrier_name) 
