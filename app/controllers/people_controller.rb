@@ -609,7 +609,7 @@ class PeopleController < ApplicationController
   end
 
   def authorize_merge
-    if current_user_super_admin? || (current_organization.admins.include? current_user.person)
+    if current_user_super_admin? || (current_organization.parent_organization_admins.include? current_user.person)
       authorize! :merge, Person
     else
       redirect_to "/people"
