@@ -384,6 +384,11 @@ FactoryGirl.define do
     name        'member'
     i18n        'member'
   end
+  
+  factory :import do
+    association :user
+    association :organization
+  end
 
   factory :role do
     association :organization

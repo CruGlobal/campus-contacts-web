@@ -613,6 +613,7 @@ en:
       add_label_exists: 'Label is already in the list!'
       add_label_success: 'New label successfully added!'
       add_label_failed: 'Failed to save label. Please try again.'
+      add_label_empty: 'Cannot save blank label. Please try again.'
       import_new_label: 'Add New Label'
       import_contacts: 'Import Contacts'
       import_contacts2: 'Setup Your CSV Headers'

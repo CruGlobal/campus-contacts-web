@@ -47,6 +47,12 @@ class RolesControllerTest < ActionController::TestCase
       end
     end
 
+    should "create a role using ajax" do
+      assert_difference('Role.count') do
+        xhr :post, :create_now, :name => "role one"
+      end
+    end
+
     should "create a role" do
       assert_difference('Role.count') do
         post :create, :role => { "name" => "role one", "i18n" => "role one" }
