@@ -20,6 +20,11 @@ class PeopleMailerTest < ActiveSupport::TestCase
       content = ActionMailer::Base.deliveries.last
     end
     
+    should "send notification if answer is hash" do
+      PeopleMailer.notify_on_survey_answer("Sample <sample@email.com>", @question_rule, "Keyword", @answer.attributes).deliver
+      content = ActionMailer::Base.deliveries.last
+    end
+    
   end
   
   test "bulk message" do
