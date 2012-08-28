@@ -42,6 +42,8 @@ class ImportsControllerTest < ActionController::TestCase
       @survey2 = Factory(:survey, organization: @organization)
       @question = Factory(:some_question)
       @survey2.questions << @question
+      
+      APP_CONFIG['predefined_survey'] = 2
     end
     
     should "unsuccesfully create an import if file is empty" do 
@@ -186,18 +188,21 @@ class ImportsControllerTest < ActionController::TestCase
     end
 =end
 
-#=begin
     should "successfully create an import and upload contact with non-predefined surveys" do
       stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
         to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_7.csv")), status: 200)
+      
+        
       
         contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_7.csv"))
         file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
         post :create, { :import => { :upload => file } }
         assert_response :redirect
         
-        post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "3" => @email_element.id, "4" => @question.id} }, :id => Import.first.id}
+        assert_difference "AnswerSheet.count", 1 do
+          post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "3" => @email_element.id, "4" => @question.id} }, :id => Import.first.id}
+          assert_equal Person.last.answer_sheets.first.answers.first.value, "I just met you"
+        end
     end
-#=end
   end
 end
