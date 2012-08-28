@@ -144,8 +144,6 @@ class ImportsController < ApplicationController
       create_contact_at_org(person, current_organization)
     end
 
-    @neil = person.answer_sheets
-
     return person
   end
 
