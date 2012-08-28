@@ -832,9 +832,9 @@ class Person < ActiveRecord::Base
     hash['phone_number'] = primary_phone_number.number if primary_phone_number
     hash['email_address'] = primary_email_address.to_s if primary_email_address
     hash['birthday'] = birth_date.to_s
-    # hash['interests'] = Interest.get_interests_hash(id)
-    # hash['education'] = EducationHistory.get_education_history_hash(id)
-    #hash['location'] = latest_location.to_hash if latest_location
+    hash['interests'] = Interest.get_interests_hash(id)
+    hash['education'] = EducationHistory.get_education_history_hash(id)
+    hash['location'] = latest_location.to_hash if latest_location
     hash['locale'] = user.try(:locale) ? user.locale : ""
     hash['organization_membership'] = organization_objects.collect {|org_id, org| {org_id: org_id, primary: (primary_organization.id == org.id).to_s, name: org.name}}
     hash
