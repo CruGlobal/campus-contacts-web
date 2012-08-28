@@ -3,17 +3,14 @@
   <center><h4><%= @survey.post_survey_message.present? ? @survey.post_survey_message : t('contacts.thanks.message') %></h4></center>
 	<br><br>
 
-  <% if mhub? && user_signed_in? %>
-    <%= render 'fb_logout' %>
-  <% end %>
 	<div id="countdown">
 		<center>
 		  <% if cookies[:survey_mode].present? %>
 		    <% survey_url = start_survey_url(@survey) %>
   		    <% if user_signed_in? %>
-    			<h4><%= t('contacts.thanks.facebook')%></h4>
-    			<br><br>
-    			<h3><%= link_to(t('contacts.thanks.done'), '#', onclick: "$.mh.logout('#{survey_url}')", data: {ajax: false}) %></h3>
+            <h4><%= t('contacts.thanks.facebook')%></h4>
+            <br><br>
+            <h3><%= link_to(t('contacts.thanks.done'), sign_out_url(next: survey_url), data: {ajax: false}) %></h3>
     	    <% else %>
   			   <h3><%= link_to(t('contacts.thanks.done'), survey_url, data: {ajax: false}) %></h3>
   	       <% end %>

@@ -89,7 +89,7 @@ class PhoneNumber < ActiveRecord::Base
           PhoneNumber.connection.update("update phone_numbers set carrier_id = #{carrier.id}, txt_to_email = '#{email}', email_updated_at = '#{Time.now.to_s(:db)}' where number = '#{number}'")
         rescue => e
           # cloudvox didn't like the number
-          raise_or_hoptoad(e,
+          Airbrake.notify(e,
             :error_class => "Cloudvox Error",
             :error_message => "Error getting carrier from cloudvox",
             :parameters => {:cloudvox => xml.inspect}

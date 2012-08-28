@@ -202,7 +202,7 @@ class ApplicationController < ActionController::Base
       unless org
         if org = person.primary_organization
           # If they're a contact at their primary org (shouldn't happen), look for another org where they have a different role
-          unless person.all_organization_and_children.include?(org)
+          if person.org_ids[org.id].blank? || person.org_ids[org.id] == [Role::CONTACT_ID]
             person.primary_organization = person.organizations.first
           end
           session[:current_organization_id] = person.primary_organization.id
@@ -215,6 +215,11 @@ class ApplicationController < ActionController::Base
     @current_organizations[person]
   end
   helper_method :current_organization
+
+  def authenticate_user!
+    flash[:facebook_logout] = flash[:facebook_logout]
+    super
+  end
   
   # Fake login
   # def authenticate_user!
@@ -254,12 +259,12 @@ class ApplicationController < ActionController::Base
     if mhub?
       render_404
     else
-      if (!current_organization || current_person.organizations.include?(current_organization)) && wizard_path
-        return wizard_path
-      else
+      #if (!current_organization || current_person.organizations.include?(current_organization)) && wizard_path
+        #return wizard_path
+      #else
         return '/dashboard'
         #return '/contacts/mine'
-      end
+      #end
     end
   end
   helper_method :user_root_path

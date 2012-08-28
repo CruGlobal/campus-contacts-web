@@ -231,13 +231,45 @@ class PeopleController < ApplicationController
     authorize! :manage, current_organization
     ids = params[:ids].to_s.split(',')
     
-    if i = attempting_to_delete_all_the_admins_in_the_org?(ids)
+    if i = attempting_to_delete_or_archive_all_the_admins_in_the_org?(ids)
       render :text => I18n.t('people.bulk_delete.cannot_delete_admin_error', names: Person.find(i).collect(&:name).join(", "))
       return
     end
     
-    if attempting_to_delete_current_user_self_as_admin?(ids)
+    if attempting_to_delete_or_archive_current_user_self_as_admin?(ids)
       render :text => I18n.t('people.index.cannot_delete_admin_error')
+      return
+    end
+    
+    if ids.present?
+      current_organization.organization_memberships.where(:person_id => ids).destroy_all
+      current_organization.organizational_roles.where(:person_id => ids, :deleted => false).each do |ors|
+        if(ors.role_id == Role::LEADER_ID)
+          ca = Person.find(ors.person_id).contact_assignments.where(organization_id: current_organization.id).all
+          ca.collect(&:destroy)
+        end
+        ors.delete
+      end
+    end
+    
+    
+    render :text => I18n.t('people.bulk_delete.deleting_people_success')
+    #respond_to do |format|
+    #  format.js
+    #end
+  end
+  
+  def bulk_archive
+    authorize! :manage, current_organization
+    ids = params[:ids].to_s.split(',')
+    
+    if i = attempting_to_delete_or_archive_all_the_admins_in_the_org?(ids)
+      render :text => I18n.t('people.bulk_archive.cannot_archive_admin_error', names: Person.find(i).collect(&:name).join(", "))
+      return
+    end
+    
+    if attempting_to_delete_or_archive_current_user_self_as_admin?(ids)
+      render :text => I18n.t('people.index.cannot_archive_admin_error')
       return
     end
     
@@ -252,11 +284,7 @@ class PeopleController < ApplicationController
       end
     end
     
-    
-    render :text => I18n.t('people.bulk_delete.deleting_people_success')
-    #respond_to do |format|
-    #  format.js
-    #end
+    render :text => I18n.t('people.bulk_archive.archiving_people_success')
   end
   # 
   # # DELETE /people/1
@@ -283,8 +311,7 @@ class PeopleController < ApplicationController
     authorize! :lead, current_organization
     to_ids = params[:to].split(',').uniq 
 
-    to_ids.each do |id|
-      person = Person.find_by_personID(id)
+    Person.find(to_ids).each do |person|
       if person.primary_phone_number
         if person.primary_phone_number.email_address.present?
           # Use email to sms if we have it
@@ -295,6 +322,7 @@ class PeopleController < ApplicationController
         else
           # Otherwise send it as a text
           @sent_sms = SentSms.create!(message: params[:body], recipient: person.phone_number) # + ' Txt HELP for help STOP to quit'
+          @sent_sms.queue_sms
         end
       end
     end
@@ -440,14 +468,14 @@ class PeopleController < ApplicationController
 
   protected
   
-  def attempting_to_delete_all_the_admins_in_the_org?(ids)
-    admin_ids = current_organization.admins.collect(&:personID)
+  def attempting_to_delete_or_archive_all_the_admins_in_the_org?(ids)
+    admin_ids = current_organization.parent_organization_admins.collect(&:personID)
     i = admin_ids & ids.collect(&:to_i)
     return i if (admin_ids - i).blank?
     false
   end
   
-  def attempting_to_delete_current_user_self_as_admin?(ids)
+  def attempting_to_delete_or_archive_current_user_self_as_admin?(ids)
     return true unless ([current_person.personID] & ids.collect(&:to_i)).blank?
     false
   end

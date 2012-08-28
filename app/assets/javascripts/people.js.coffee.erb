@@ -111,10 +111,33 @@ $ ->
         
     num_selected = ids.length
     if num_selected  > 0
-      if(confirm('Are you sure you want to delete ' + num_selected + ' people permanently?'))
+      if(confirm('Are you sure you want to delete ' + num_selected + ' person(s) permanently?'))
         $.ajax
           type: 'POST',
           url: '/people/bulk_delete',
+          data: 'ids='+ids,
+          success: (data) ->
+            if data.indexOf("success") != -1 #there might be a better way of doing this other than just basing the success on the returned data
+              $('.id_checkbox:checked').each ->
+                $(this).closest('tr').fadeOut();
+            else
+              $.a(data)
+    false
+    
+  $("#people_controller a#bulk_archive").live 'click', ->
+    ids = []
+    $('.id_checkbox:checked:visible').each ->
+      ids.push($(this).val())
+    if($('#all_selected_text').is(':visible'))    
+      $('.all_row').each ->
+        ids.push($(this).attr('data-id'))
+        
+    num_selected = ids.length
+    if num_selected  > 0
+      if(confirm('Are you sure you want to archive ' + num_selected + ' person(s)?'))
+        $.ajax
+          type: 'POST',
+          url: '/people/bulk_archive',
           data: 'ids='+ids,
           success: (data) ->
             if data.indexOf("success") != -1 #there might be a better way of doing this other than just basing the success on the returned data

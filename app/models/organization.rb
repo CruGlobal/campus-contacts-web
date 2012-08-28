@@ -68,7 +68,11 @@ class Organization < ActiveRecord::Base
     end
     
     def is_root? # an org is considered root if it has no parents
-      ancestry.nil?
+      ancestry.nil? || !parent.show_sub_orgs
+    end
+    
+    def is_child?
+      !ancestry.nil?
     end
     
     def is_root_and_has_only_one_admin?
@@ -83,9 +87,11 @@ class Organization < ActiveRecord::Base
     end
     
     def parent_organization_admins
-      if parent_organization.present?
-        parent_admins = parent_organization.admins 
-        return parent_admins.present? ? parent_admins : parent_organization.parent_organization_admins
+      #returns own admins plus the all the admins of all the ancestor organizations
+      if ancestry.nil? || !parent.show_sub_orgs
+        return admins
+      else
+        return parent.parent_organization_admins + admins
       end
     end
     
@@ -139,6 +145,7 @@ class Organization < ActiveRecord::Base
           AND organizational_roles.organization_id = #{id} 
           AND organizational_roles.role_id = '#{Role::CONTACT_ID}' 
           AND followup_status <> 'do_not_contact' 
+          AND archive_date IS NOT NULL
           LEFT JOIN contact_assignments ON contact_assignments.person_id = #{person_table_pkey} 
           AND contact_assignments.organization_id = #{id}")
         .where("contact_assignments.id IS NULL OR contact_assignments.assigned_to_id NOT IN (?)", only_leaders)
@@ -178,7 +185,6 @@ class Organization < ActiveRecord::Base
 
     def add_member(person_id)
       x = OrganizationMembership.find_or_create_by_person_id_and_organization_id(person_id, id) 
-      Rails.logger.info ">> #{x.inspect}"
     end
 
     def add_leader(person, current_person)

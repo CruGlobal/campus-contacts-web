@@ -679,20 +679,28 @@ class PeopleControllerTest < ActionController::TestCase
     end
     
     should "bulk delete" do
-      
-      
       assert_equal 2, @org.contacts.count
-      xhr :post, :bulk_delete, { :ids => "#{@c1.id}, #{@c2.id}" }
+      assert_difference "OrganizationalRole.where(organization_id: #{@user.person.organizations.first.id}, deleted: true).count", 2 do
+        xhr :post, :bulk_delete, { :ids => "#{@c1.id}, #{@c2.id}" }
+      end
       
       assert_equal 0, @org.contacts.count
       assert_equal I18n.t('people.bulk_delete.deleting_people_success'), @response.body
     end
     
+    should "not bulk delete when contact ids in the params aren't existing" do
+      assert_equal 2, @org.contacts.count
+      assert_no_difference "OrganizationalRole.where(organization_id: #{@user.person.organizations.first.id}, deleted: true).count" do
+        xhr :post, :bulk_delete, { :ids => "#{@c1.id-10}, #{@c2.id+10}" }
+      end
+    end
+    
     should "not bulk delete all the admins in the org" do
       Factory(:organizational_role, person: @c1, role: Role.admin, organization: @org)
       init_admin_count = @org.admins.count
-      
-      xhr :post, :bulk_delete, { :ids => "#{@user.person.personID}, #{@c1.personID}, #{@c2.personID}" }
+      assert_no_difference "OrganizationalRole.where(organization_id: #{@user.person.organizations.first.id}, deleted: true, role_id: #{Role.admin.id}).count" do
+        xhr :post, :bulk_delete, { :ids => "#{@user.person.personID}, #{@c1.personID}, #{@c2.personID}" }
+      end
       
       assert_equal init_admin_count, @org.admins.count
       assert_equal I18n.t('people.bulk_delete.cannot_delete_admin_error', names: "#{@user.person.name}, #{@c1.name}"), @response.body
@@ -701,10 +709,71 @@ class PeopleControllerTest < ActionController::TestCase
     should "not be able to delete logged-in-admin's self as admin" do
       Factory(:organizational_role, person: @c1, role: Role.admin, organization: @org)
       init_admin_count = @org.admins.count
-      xhr :post, :bulk_delete, { :ids => "#{@user.person.personID}" }
+      assert_no_difference "OrganizationalRole.where(organization_id: #{@user.person.organizations.first.id}, deleted: true, role_id: #{Role.admin.id}).count" do
+        xhr :post, :bulk_delete, { :ids => "#{@user.person.personID}" }
+      end
+      assert_equal @user.person.organizational_roles.collect(&:role_id), [Role::ADMIN_ID]
+      assert_equal @org.admins.count, init_admin_count
+    end
+  end
+  
+  context "bulk archiving people" do
+    setup do
+      @user, @org = admin_user_login_with_org
+      
+      @c1 = Factory(:person, firstName: "Genny")
+      @c2 = Factory(:person)
+      
+      @org.add_contact(@c1)
+      @org.add_contact(@c2)
+    end
+    
+    should "bulk archive" do
+      assert_equal 2, @org.contacts.count
+      xhr :post, :bulk_archive, { :ids => "#{@c1.id}, #{@c2.id}" }
+      
+      assert_equal 0, @org.contacts.count
+      assert_equal I18n.t('people.bulk_archive.archiving_people_success'), @response.body
+    end
+    
+    should "not bulk archive when contact ids in the params aren't existing" do
+      assert_equal 2, @org.contacts.count
+      assert_no_difference "OrganizationalRole.where(organization_id: #{@user.person.organizations.first.id}).where('archive_date IS NOT NULL').count" do
+        xhr :post, :bulk_archive, { :ids => "#{@c1.id-10}, #{@c2.id+10}" }
+      end
+    end
+    
+    should "not bulk archive all the admins in the org" do
+      Factory(:organizational_role, person: @c1, role: Role.admin, organization: @org)
+      init_admin_count = @org.admins.count
+      
+      xhr :post, :bulk_archive, { :ids => "#{@user.person.personID}, #{@c1.personID}, #{@c2.personID}" }
+      
+      assert_equal init_admin_count, @org.admins.count
+      assert_equal I18n.t('people.bulk_archive.cannot_archive_admin_error', names: "#{@user.person.name}, #{@c1.name}"), @response.body
+    end
+    
+    should "not be able to delete logged-in-admin's self as admin" do
+      Factory(:organizational_role, person: @c1, role: Role.admin, organization: @org)
+      init_admin_count = @org.admins.count
+      xhr :post, :bulk_archive, { :ids => "#{@user.person.personID}" }
       
       assert_equal @user.person.organizational_roles.collect(&:role_id), [Role::ADMIN_ID]
       assert_equal @org.admins.count, init_admin_count
+    end
+    
+    should "be able to delete bulk a person in a child organization" do
+      org_2 = Organization.create({"parent_id"=> @org.id, "name"=>"Org 2", "terminology"=>"Organization", "show_sub_orgs"=>"1"}) # org with show_sub_orgs == false      
+      @user = Factory(:user_with_auxs)
+      org_2.add_admin(@user.person)
+      @request.session[:current_organization_id] = org_2.id
+      
+      contact = Factory(:person)
+      Factory(:organizational_role, role: Role.contact, organization: org_2, person: contact)
+      
+      assert_difference "Organization.find(#{org_2.id}).contacts.count", -1 do
+        xhr :post, :bulk_delete, { :ids => "#{contact.personID}" }
+      end
     end
   end
   

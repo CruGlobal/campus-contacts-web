@@ -174,7 +174,7 @@ class Person < ActiveRecord::Base
   end
   
   def is_archived?(org)
-    return true if organizational_roles.blank?
+    return true if organizational_roles.where(organization_id: org.id).blank?
     false
   end
 
@@ -248,6 +248,7 @@ class Person < ActiveRecord::Base
       unless org_ids_cache
         organization_tree # make sure the tree is built
       end
+      # convert org ids to integers (there has to be a better way, but i couldn't think of it)
       @org_ids = {}
       org_ids_cache.collect {|org_id, values| @org_ids[org_id.to_i] = values}
     end
@@ -292,7 +293,7 @@ class Person < ActiveRecord::Base
     (o ? o.children : organizations).order('name').each do |org|
       # collect roles associated with each org
       @org_ids[org.id] ||= {}
-      @org_ids[org.id]['roles'] ||= (Array.wrap(roles_by_org_id(org.id)) + Array.wrap(parent_roles)).uniq
+      @org_ids[org.id]['roles'] = (Array.wrap(roles_by_org_id(org.id)) + Array.wrap(parent_roles)).uniq
       orgs[org.id] = (org.show_sub_orgs? ? org_tree_node(org, @org_ids[org.id]['roles']) : {})
     end
     orgs
