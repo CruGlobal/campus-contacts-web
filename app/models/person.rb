@@ -38,7 +38,7 @@ class Person < ActiveRecord::Base
   has_many :roles, through: :organizational_roles
   has_many :organizational_roles_including_archived, class_name: "OrganizationalRole", foreign_key: "person_id", conditions: {deleted: false}
   has_many :roles_including_archived, through: :organizational_roles_including_archived, source: :role
-  has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role::CONTACT_ID} AND status = 'active' AND deleted = 0", uniq: true
+  has_many :organizations, through: :organizational_roles, conditions: ["role_id IN(?) AND status = 'active' AND deleted = 0", Role.involved_ids], uniq: true
   
   has_many :followup_comments, :class_name => "FollowupComment", :foreign_key => "commenter_id"
   has_many :comments_on_me, :class_name => "FollowupComment", :foreign_key => "contact_id"
