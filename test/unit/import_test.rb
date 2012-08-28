@@ -22,5 +22,5 @@ class ImportTest < ActiveSupport::TestCase
   #       @import = Factory(:import, user: @user, organization: @org, upload: file)
   #       puts @import.inspect
   #     end
-  end
+  # end
 end
