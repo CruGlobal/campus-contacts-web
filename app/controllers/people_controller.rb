@@ -311,8 +311,7 @@ class PeopleController < ApplicationController
     authorize! :lead, current_organization
     to_ids = params[:to].split(',').uniq 
 
-    to_ids.each do |id|
-      person = Person.find_by_personID(id)
+    Person.find(to_ids).each do |person|
       if person.primary_phone_number
         if person.primary_phone_number.email_address.present?
           # Use email to sms if we have it
@@ -323,6 +322,7 @@ class PeopleController < ApplicationController
         else
           # Otherwise send it as a text
           @sent_sms = SentSms.create!(message: params[:body], recipient: person.phone_number) # + ' Txt HELP for help STOP to quit'
+          @sent_sms.queue_sms
         end
       end
     end
