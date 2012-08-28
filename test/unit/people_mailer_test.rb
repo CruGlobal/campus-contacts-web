@@ -16,13 +16,21 @@ class PeopleMailerTest < ActiveSupport::TestCase
     end
     
     should "send notification" do
-      PeopleMailer.notify_on_survey_answer("Sample <sample@email.com>", @question_rule, "Keyword", @answer).deliver
+      PeopleMailer.notify_on_survey_answer("Sample <sample@email.com>", @question_rule, "Testing1", @answer).deliver
       content = ActionMailer::Base.deliveries.last
+      assert_equal "Someone answered \"Testing1\" in your survey", content.subject
     end
     
     should "send notification if answer is hash" do
-      PeopleMailer.notify_on_survey_answer("Sample <sample@email.com>", @question_rule, "Keyword", @answer.attributes).deliver
+      PeopleMailer.notify_on_survey_answer("Sample <sample@email.com>", @question_rule, "Testing2", @answer.attributes).deliver
       content = ActionMailer::Base.deliveries.last
+      assert_equal "Someone answered \"Testing2\" in your survey", content.subject
+    end
+    
+    should "send notification if question_rule is hash" do
+      PeopleMailer.notify_on_survey_answer("Sample <sample@email.com>", @question_rule.attributes, "Testing3", @answer).deliver
+      content = ActionMailer::Base.deliveries.last
+      assert_equal "Someone answered \"Testing3\" in your survey", content.subject
     end
     
   end
