@@ -5,8 +5,8 @@ class Batch # < ActiveRecord::Base
     receiving_orgs = notify_entries.group('new_organization_id')
     
     receiving_orgs.each do |o|
-      organization = Organization.find(o.new_organization_id)
-      if organization.present?
+      if Organization.exists?(o.new_organization_id)
+        organization = Organization.find(o.new_organization_id)
         transferred_contacts = notify_entries.where(new_organization_id: organization.id).order('old_organization_id')
         admins = organization.all_possible_admins_with_email
         if admins.present?
@@ -46,8 +46,8 @@ class Batch # < ActiveRecord::Base
     
     receiving_orgs = notify_entries.group('organization_id')
     receiving_orgs.each do |o|
-      organization = Organization.find(o.organization_id)
-      if organization.present?
+      if Organization.exists?(o.organization_id)
+        organization = Organization.find(o.organization_id)
         new_contacts = notify_entries.where(organization_id: organization.id).order('organization_id')
         admins = organization.all_possible_admins_with_email
         if admins.present?
