@@ -60,6 +60,7 @@ class SurveyResponsesController < ApplicationController
       unless @answer_sheet.survey.has_assign_rule_applied(@answer_sheet, 'ministry')
         create_contact_at_org(@person, @survey.organization)
       end
+      destroy_answer_sheet_when_answers_are_all_blank
       respond_to do |wants|
         wants.html { render :thanks, layout: 'mhub'}
         wants.mobile { render :thanks }
@@ -103,6 +104,7 @@ class SurveyResponsesController < ApplicationController
             create_contact_at_org(@person, @survey.organization)
             FollowupComment.create_from_survey(@survey.organization, @person, @survey.questions, @answer_sheet)
           end
+          destroy_answer_sheet_when_answers_are_all_blank
           respond_to do |wants|
             if @survey.login_option == 2
               wants.html { render :facebook, layout: 'mhub' }
@@ -142,6 +144,11 @@ class SurveyResponsesController < ApplicationController
     question_set.save
     @answer_sheet.person.save
     @answer_sheet.update_attribute(:completed_at, Time.now)
+    
+  end
+  
+  def destroy_answer_sheet_when_answers_are_all_blank
+    @answer_sheet.destroy if !params[:answers].present? || (params[:answers] && params[:answers].values.reject{|x| x.nil? || x.empty?}.blank?) # if a person has blank answers in a survey, destroy!
   end
 
   def get_person

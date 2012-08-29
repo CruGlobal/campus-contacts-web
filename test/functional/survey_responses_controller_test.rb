@@ -148,7 +148,6 @@ class SurveyResponsesControllerTest < ActionController::TestCase
       @organization.add_contact(@respondent.person)
       @answer_sheet = Factory(:answer_sheet, survey: @survey, person: @respondent.person)
       @answer_to_choice = Factory(:answer_1, answer_sheet: @answer_sheet, question: @questions.first)
-      
       post :create, { :survey_id => @survey.id, :person => { firstName: "Jane", lastName: "Deer", phone_number: "1234567890" }, :answers => @answer_to_choice.attributes }
       assert_response(:success)
     end
@@ -168,6 +167,53 @@ class SurveyResponsesControllerTest < ActionController::TestCase
       assert_response(:success)
     end
 =end
+  end
+  
+  context "Answerring a survey" do
+    setup do
+      @user = Factory(:user_with_auxs)  #user with a person object
+      sign_in @user
+      @organization = Factory(:organization)
+      
+      @survey = Factory(:survey, organization: @organization)
+      @question = Factory(:text_field)
+      @survey.questions << @question
+      @questions = @survey.questions
+      assert_equal(@questions.count, 1)
+      
+      @survey2 = Factory(:survey, organization: @organization)
+    end
+    
+    should "not create an answer sheet when a surveyee answered just blanks in the survey question fields" do
+      assert_difference "AnswerSheet.count", 1 do
+        xhr :get, :new, {:survey_id => @survey.id}
+      end
+      assert_difference "AnswerSheet.count", -1 do
+        xhr :put, :update, {:survey_id => @survey.id, :answers => { @question.id => ""}, :id => @user.person.personID}
+        assert_response(:success)
+      end
+        
+    end
+    
+    should "not create an answer sheet when a surveyee has just answered a survey without any questions" do
+      assert_difference "AnswerSheet.count", 1 do
+        xhr :get, :new, {:survey_id => @survey2.id}
+      end
+      assert_difference "AnswerSheet.count", -1 do
+        xhr :put, :update, {:survey_id => @survey2.id, :id => @user.person.personID}
+        assert_response(:success)
+      end
+        
+    end
+    
+    should "not create an answer sheet when a surveyee is a new Person and answered just blanks in the survey question fields" do
+      assert_no_difference "AnswerSheet.count" do
+        xhr :put, :create, {:survey_id => @survey.id, :answers => { @question.id => ""}, :person => {:firstName => "Karl", :lastName => "Pilkington"}}
+        assert_response(:success)
+      end
+        
+    end
+  
   end
 
   test "show" do

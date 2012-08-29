@@ -532,6 +532,43 @@ class PeopleControllerTest < ActionController::TestCase
       assert_response :redirect
       assert_equal "You've just merged #{ids.length + 1} people", flash[:notice]
     end
+    
+    should "not merge people if not an admin in the organization" do
+      contact1 = Factory(:person)
+      contact2 = Factory(:person)
+      leader1 = Factory
+      
+      leader1 = Factory(:user_with_auxs)
+      Factory(:organizational_role, organization: @org, person: leader1.person, role: Role.leader)
+      
+      @org.add_contact(contact1)
+      @org.add_contact(contact2)
+      
+      sign_in leader1
+      
+      post :do_merge, { :keep_id => contact1.id, :merge_ids => [contact2.id] }
+      assert_equal "You are not permitted to access that feature", flash[:error]
+      assert_redirected_to "/people"
+    end
+    
+    should "merge people on a child organization" do
+      @org_child = Factory(:organization, :name => "neilmarion", :parent => @user.person.organizations.first)
+      contact1 = Factory(:person)
+      contact2 = Factory(:person)
+      
+      ids = []
+      ids << contact1.id
+      ids << contact2.id
+      
+      @org_child.add_contact(contact1)
+      @org_child.add_contact(contact2)
+      
+      @request.session[:current_organization_id] = @org_child.id
+      assert_difference "Person.all.count", -1 do
+        post :do_merge, { :keep_id => contact1.id, :merge_ids => [contact2.id] }
+      end
+      assert_equal "You've just merged #{ids.length} people", flash[:notice]
+    end
   end
   
   context "searching ids" do
