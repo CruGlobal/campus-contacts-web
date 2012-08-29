@@ -309,6 +309,7 @@ FactoryGirl.define do
     object_name ''
     attribute_name ''
     content       "How soon is now?"
+  end
 
   factory :some_question, class: :element do
     kind          'TextField'
