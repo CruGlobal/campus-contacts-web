@@ -10,7 +10,7 @@ class Surveys::QuestionsController < ApplicationController
     session[:wizard] = false
     @questions = @survey.questions
     @predefined_questions = @predefined.questions.uniq - @questions
-    @other_questions = current_organization.all_questions.uniq - @predefined_questions
+    @other_questions = current_organization.all_questions.uniq - @predefined.questions.uniq - @survey.questions
     respond_to do |wants|
       wants.html # index.html.erb
       wants.xml  { render xml: @questions }
