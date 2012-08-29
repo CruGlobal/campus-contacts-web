@@ -26,7 +26,11 @@
         <div class="label_list">
           <%= render partial: 'imports/label', locals: {role_id: 0, role_name: @import.label_name, checked: true}%>
           <% (@roles.default_roles_desc + @roles.non_default_roles_asc).each do |role| %>
-            <%= render partial: 'imports/label', locals: {role_id: role.id, role_name: role.name, checked: false}%>
+            <% if role.name == 'Contact' %>
+              <%= render partial: 'imports/label', locals: {role_id: '', role_name: role.name, checked: true, disabled: true}%>
+            <% else %>
+              <%= render partial: 'imports/label', locals: {role_id: role.id, role_name: role.name}%>
+              <% end %>
           <% end %>
         </div>
         <div class="label_new">
