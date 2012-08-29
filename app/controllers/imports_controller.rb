@@ -80,7 +80,7 @@ class ImportsController < ApplicationController
           else 
             if params[:use_labels].present? && params[:use_labels] == '1' && params[:labels].present?
               params[:labels].each do |role_id|
-                role = Role.create(organization_id: current_organization.id, name: @import.label_name) if role_id == '0'
+                role = Role.find_or_create_by_organization_id_and_name(current_organization.id, @import.label_name) if role_id == '0'
                 role_id = role.id if role.present?
                 OrganizationalRole.create(person_id: person.id, organization_id: current_organization.id, role_id: role_id, added_by_id: current_user.person.id)
               end
