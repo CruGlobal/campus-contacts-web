@@ -17,7 +17,7 @@ class Import < ActiveRecord::Base
   before_save :parse_headers
   
   def label_name
-    created_at.strftime("%Y-%B-%d-%H:%M-Import")
+    created_at.strftime("Import-%Y-%m-%d")
   end
 
   def get_new_people # generates array of Person hashes
