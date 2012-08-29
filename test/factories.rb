@@ -318,6 +318,15 @@ FactoryGirl.define do
     content       "Are you alright?"
   end
   
+  factory :yearInSchool_element, class: :element do
+    kind          'TextField'
+    label         'Year in school?'
+    style         'short'
+    content       "Year in school?"
+    object_name   'person'
+    attribute_name 'yearInSchool'
+  end
+  
   factory :firstName_element, parent: :element do
     kind          'TextField'
     label         'First name?'
