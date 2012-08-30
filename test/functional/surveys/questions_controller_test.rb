@@ -42,10 +42,12 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
       @q1 = Factory(:survey_element, survey: @org.surveys.first, element: element, position: 1, archived: true)
       element = Factory(:choice_field)
       @q2 = Factory(:survey_element, survey: @org.surveys.first, element: element, position: 2)
+      element = Factory(:choice_field)
+      @q3 = Factory(:survey_element, element: element)
     end
     
     should "be able to select a predefined or previously used question" do
-      xhr :post, :create, { :question_id => @q2.element.id, :survey_id => @org.surveys.first.id}
+      xhr :post, :create, { :question_id => @q3.element.id, :survey_id => @org.surveys.first.id}
       assert_response :success
     end
   end
