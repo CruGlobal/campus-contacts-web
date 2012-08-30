@@ -28,9 +28,7 @@ class Batch # < ActiveRecord::Base
               end
             end
             intro = I18n.t('batch.person_transfer_message', org_name: organization.name, contacts_count: formated_transferred_contacts.size)
-            
-            OrganizationMailer.enqueue.notify_person_transfer(admin.email, intro, formated_transferred_contacts)
-            # OrganizationMailer.notify_person_transfer(admin.email, intro, formated_transferred_contacts).deliver
+            OrganizationMailer.notify_person_transfer(admin.email, intro, formated_transferred_contacts).deliver
             transferred_contacts.update_all(notified: true)
           end
         else
@@ -68,9 +66,7 @@ class Batch # < ActiveRecord::Base
             end
             
             intro = I18n.t('batch.new_person_message', org_name: organization.name, contacts_count: new_contacts.size)
-            
-            OrganizationMailer.enqueue.notify_new_people(admin.email, intro, formated_new_contacts)
-            # OrganizationMailer.notify_new_people(admin.email, intro, formated_new_contacts).deliver
+            OrganizationMailer.notify_new_people(admin.email, intro, formated_new_contacts).deliver
             new_contacts.update_all(notified: true)
           end
         else

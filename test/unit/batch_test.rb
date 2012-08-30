@@ -53,8 +53,8 @@ class PersonTest < ActiveSupport::TestCase
       
       transfer1 = Factory(:person_transfer, person: @person1, new_organization_id: 99999, 
         old_organization: @org1, transferred_by: @admin)
-      transfer2 = Factory(:person_transfer, person: @person2, new_organization: @org2, 
-        old_organization: @org1, transferred_by: @admin)
+      transfer2 = Factory(:person_transfer, person: @person2, new_organization: @org1, 
+        old_organization: @org2, transferred_by: @admin)
         
       assert_equal(false, transfer1.notified, "notified should be false")
       assert_equal(false, transfer2.notified, "notified should be false")
