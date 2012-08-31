@@ -3,7 +3,7 @@
     <%= render partial: 'shared/label', locals: {role_id: 0, role_name: @import.label_name, checked: true} if @import.present? %>
     <% (current_organization.roles.default_roles_desc + current_organization.roles.non_default_roles_asc).each do |role| %>
       <% if role.name == 'Contact' %>
-        <%= render partial: 'shared/label', locals: {role_id: '', role_name: role.name, checked: true, disabled: true}%>
+        <%= render partial: 'shared/label', locals: {role_id: role.id, role_name: role.name, checked: true, disabled: true}%>
       <% else %>
         <%= render partial: 'shared/label', locals: {role_id: role.id, role_name: role.name}%>
         <% end %>

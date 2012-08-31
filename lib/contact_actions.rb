@@ -18,7 +18,7 @@ module ContactActions
       end
 
       @person, @email, @phone = Person.new_from_params(params[:person])
-
+      
       if @person.save
         if params[:labels].present?
           params[:labels].each do |role_id|
