@@ -4,3 +4,17 @@ test:
   username: mh_test
   password: mh_test
   encoding: utf8
+  
+development:
+  adapter: mysql2
+  database: mh_test
+  username: mh_test
+  password: mh_test
+  encoding: utf8
+  
+production:
+  adapter: mysql2
+  database: mh_test
+  username: mh_test
+  password: mh_test
+  encoding: utf8
