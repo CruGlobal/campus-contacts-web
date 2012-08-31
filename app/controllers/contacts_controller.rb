@@ -92,7 +92,6 @@ class ContactsController < ApplicationController
     render :partial => 'contacts/mine_all'
   end
   
-  
   def update
     @person = Person.find(params[:id])
     authorize!(:update, @person)

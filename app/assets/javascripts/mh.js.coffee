@@ -6,7 +6,7 @@ $ ->
     else
       $(this).siblings('.label_space').slideUp()
       
-  $('.import .manage_labels #new_label_button').live 'click', ->
+  $('#new_label_button').live 'click', ->
     if $.trim($(this).siblings('#new_label_field').val()) != ""
       $(this).attr('disabled',true)
       $(this).siblings('#new_label_field').addClass('loading')

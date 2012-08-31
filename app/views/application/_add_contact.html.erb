@@ -2,22 +2,44 @@
     <p><%= t('.add_contact', org: current_organization) %></p>
     <p><%= t('.survey_mode_instructions') %></p>
   </div>
-
-  <div id="add_contact_form">
-    <%= form_for person, url: contacts_path, method: :post, remote: true do |f| %>
-      <% if flash[:error] %>
-        <div class="flash error"><%= raw flash[:error] %></div>
-      <% end %>
-      <%= hidden_field_tag :add_another %>
-      <% if params[:action] == 'mine' %>
-        <%= hidden_field_tag :assign_to_me, true, id: 'assign_new_contact_to_me' %>
-      <% else %>
-        <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
-        <%= hidden_field_tag :dnc, params[:dnc] %>
-      <% end %>
-      <%= render 'people/person_form', person: person %>
+  <%= form_for person, url: contacts_path, method: :post, remote: true do |f| %>
+    <div id="add_contact_form">
+      <div class="form_group_label">
+        <%= t('.title_bio') %>
+      </div>
+      <div class="form_group_fields">
+        <% if flash[:error] %>
+          <div class="flash error"><%= raw flash[:error] %></div>
+        <% end %>
+        
+        <%= hidden_field_tag :add_another %>
+        
+        <% if params[:action] == 'mine' %>
+          <%= hidden_field_tag :assign_to_me, true, id: 'assign_new_contact_to_me' %>
+        <% else %>
+          <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
+          <%= hidden_field_tag :dnc, params[:dnc] %>
+        <% end %>
+        
+        <%= render 'people/person_form', person: person %>
+      </div>
+      <div class="form_group_label">
+        <%= t('.title_label') %>
+        <span class='form_group_optional'>
+          <%= t('.title_optional') %>
+        </span>
+      </div>
+      <div class="form_group_fields">
+        <%= render partial: 'shared/label_fields' %>
+      </div>
+      <div class="form_group_label">
+        <%= t('.title_surveys') %>
+        <span class='form_group_optional'>
+          <%= t('.title_optional') %>
+        </span>
+      </div>
       
-      <div class="user_defined_contact_fields">
+      <div class="form_group_fields user_defined_contact_fields">
         <% current_organization.questions.uniq {|q| q.label}.each do |question| %>
           <% next if ['email','phone'].include?(question.slug) %>
           <div class="field">
@@ -26,20 +48,6 @@
           </div>
         <% end %>
       </div>
-
-    <% end %>
-    
-    <%# if current_organization.keywords.length > 0 %>
-      <!-- <br/><br/> -->
-      <!-- <%# if current_organization.keywords.length > 1 %>
-        <%# current_organization.keywords.each do |keyword| %>
-          <%#= link_to raw("Enter Survey Mode for " + "<strong>" + "#{keyword.keyword}" + "</strong>"), facebook_logout_url(next: contact_form_url(keyword.keyword)), id: "show_keywords", class: "inlinebutton" %><br/>
-        <%# end %>
-      <%# else %>
-        <%# keyword = current_organization.keywords.first %>
-        <%#= link_to raw("Enter Survey Mode for " + "<strong>" + "#{keyword.keyword}" + "</strong>"), facebook_logout_url(next: contact_form_url(keyword.keyword)), id: "show_keywords", class: "inlinebutton" %><br/>
-      <%# end %>
-    
-      <p>Survey mode allows you to see how the survey will look for your contacts.</p> -->
-    <%# end %>
-  </div>
+      
+    </div>
+  <% end %>
