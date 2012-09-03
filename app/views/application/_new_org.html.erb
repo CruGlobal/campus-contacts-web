@@ -1,5 +1,4 @@
 <% (current_user.primary_organization_id == org.id).tap do |primary| %>
-  
   <div class="org_nav_item">
     <div class="org_control <%= 'tree_no_child' unless children.present? %>" child_div="children_org_<%= org.id %>" id="org_control_<%= org.id %>"></div>
     <div class="org_star tipitmiddle <%= 'primary' if primary %>" url='<%= set_primary_organization_membership_path(org) %>' title="Set <%= org %> as your default organization"></div>
