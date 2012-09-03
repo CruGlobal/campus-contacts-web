@@ -107,7 +107,9 @@ class ImportsController < ApplicationController
 
   def create_contact_from_row(row)
 
-    person = Person.new
+    person = Person.create(row[:person])
+    
+
 
     unless @surveys_for_import
       @survey_ids ||= SurveyElement.where(element_id: row[:answers].keys).pluck(:survey_id) - [APP_CONFIG['predefined_survey']]
