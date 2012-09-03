@@ -118,7 +118,7 @@ class ImportsControllerTest < ActionController::TestCase
       assert_equal Person.count, person_count
     end
     
-    should "successfully create an import but unsuccesfully upload a contact if one of the phone numbersd is invalid" do
+    should "successfully create an import but unsuccesfully upload a contact if one of the phone numbers is invalid" do
       stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
         to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_5.csv")), status: 200)
       person_count  = Person.count
@@ -201,6 +201,7 @@ class ImportsControllerTest < ActionController::TestCase
         
         assert_difference "AnswerSheet.count", 1 do
           post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "3" => @email_element.id, "4" => @question.id} }, :id => Import.first.id}
+          #post :import, { :use_labels => "0", :id => Import.first.id}
           assert_equal Person.last.answer_sheets.first.answers.first.value, "I just met you"
         end
     end

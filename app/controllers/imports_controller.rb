@@ -40,15 +40,7 @@ class ImportsController < ApplicationController
     errors = @import.check_for_errors
 
     if errors.blank?
-      Person.transaction do
-        @import.get_new_people.each do |new_person|
-          person = create_contact_from_row(new_person)
-          if person.errors.present?
-            errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
-          end
-        end
-        raise ActiveRecord::Rollback if errors.present?
-      end
+      @import.async_import_contacts
     end
 
     if errors.present?
@@ -103,48 +95,6 @@ class ImportsController < ApplicationController
       end
     end
     @survey_questions[I18n.t('surveys.questions.index.predefined')] = Survey.find(APP_CONFIG['predefined_survey']).questions.collect { |q| [q.label, q.id] }
-  end
-
-  def create_contact_from_row(row)
-
-    person = Person.create(row[:person])
-    
-
-
-    unless @surveys_for_import
-      @survey_ids ||= SurveyElement.where(element_id: row[:answers].keys).pluck(:survey_id) - [APP_CONFIG['predefined_survey']]
-      @surveys_for_import = current_organization.surveys.where(id: @survey_ids.uniq)
-    end
-
-    question_sets = []
-
-    @surveys_for_import.each do |survey|
-      answer_sheet = get_answer_sheet(survey, person)
-      question_set = QuestionSet.new(survey.questions, answer_sheet)
-      question_set.post(row[:answers], answer_sheet)
-      question_sets << question_set
-    end
-
-    # Set values for predefined questions
-    answer_sheet = AnswerSheet.new(person: person)
-    predefined =
-      begin
-        Survey.find(APP_CONFIG['predefined_survey'])
-      rescue
-        Survey.find(2)
-      end
-    predefined.elements.where('object_name is not null').each do |question|
-      question.set_response(row[:answers][question.id], answer_sheet)
-    end
-
-    person, email, phone = Person.find_existing_person(person)
-
-    if person.save
-      question_sets.map { |qs| qs.save }
-      create_contact_at_org(person, current_organization)
-    end
-
-    return person
   end
 
 end
