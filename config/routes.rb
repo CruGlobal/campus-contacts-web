@@ -64,8 +64,6 @@ Mh::Application.routes.draw do
     end
   end
 
-  resources :communities
-
   resources :ministries
 
   resources :sms_keywords, :only => [:new, :create, :edit, :update, :destroy, :index] do
