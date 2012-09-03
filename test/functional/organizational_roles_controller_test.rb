@@ -27,7 +27,7 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
       @another_org = Factory(:organization)
     end
     
-    should "move the people from one org to another org" do
+    should "move the people (contact roles) from one org to another org (keep contact)" do
       @org.add_contact(@person1)
       @org.add_contact(@person2)
       @org.add_contact(@person3)
@@ -37,9 +37,62 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
       ids << @person2.id
       ids << @person3.id
       
-      xhr :post, :move_to, { :from_id => @org.id , :to_id => @another_org.id, :ids => ids, :keep_contact => true, :current_admin => @user }
-      assert @org.contacts.include? @person1
-      assert @another_org.contacts.include? @person1
+      xhr :post, :move_to, { :from_id => @org.id , :to_id => @another_org.id, :ids => ids, :keep_contact => "true", :current_admin => @user }
+      assert_equal ids, @org.contacts.collect(&:id)
+      assert_equal ids, @another_org.contacts.collect(&:id)
+    end
+    
+    should "move the people (contact roles) from one org to another org (do not keep contact)" do
+      @org.add_contact(@person1)
+      @org.add_contact(@person2)
+      @org.add_contact(@person3)
+      
+      ids = []
+      ids << @person1.id
+      ids << @person2.id
+      ids << @person3.id
+      
+      xhr :post, :move_to, { :from_id => @org.id , :to_id => @another_org.id, :ids => ids, :keep_contact => "false", :current_admin => @user }
+      assert_equal [], @org.contacts.collect(&:id)
+      assert_equal ids, @another_org.contacts.collect(&:id)
+    end
+    
+    should "move the people (involved roles) from one org to another org (do not keep contact)" do
+      @org.add_involved(@person1)
+      @org.add_involved(@person2)
+      @org.add_involved(@person3)
+      
+      ids = []
+      ids << @person1.id
+      ids << @person2.id
+      ids << @person3.id
+      
+      xhr :post, :move_to, { :from_id => @org.id , :to_id => @another_org.id, :ids => ids, :keep_contact => "false", :current_admin => @user }
+      # for MH-448
+      #assert_equal [], @org.people.includes(:organizational_roles).where("organizational_roles.role_id" => Role.involved.id).collect(&:id)
+      #assert_equal ids, @another_org.people.includes(:organizational_roles).where("organizational_roles.role_id" => Role.involved.id).collect(&:id)
+    end
+    
+    should "move the people (contact role + other roles) from one org to another org (do not keep contact)" do
+      @org.add_involved(@person1)
+      @org.add_involved(@person2)
+      @org.add_involved(@person3)
+      
+      @org.add_contact(@person1)
+      @org.add_contact(@person2)
+      @org.add_contact(@person3)
+      
+      ids = []
+      ids << @person1.id
+      ids << @person2.id
+      ids << @person3.id
+      
+      xhr :post, :move_to, { :from_id => @org.id , :to_id => @another_org.id, :ids => ids, :keep_contact => "false", :current_admin => @user }
+      # for MH-448
+      #assert_equal [], @org.contacts.collect(&:id)
+      #assert_equal ids, @another_org.contacts.collect(&:id)
+      #assert_equal [], @org.people.includes(:organizational_roles).where("organizational_roles.role_id" => Role.involved.id).collect(&:id)
+      #assert_equal ids, @another_org.people.includes(:organizational_roles).where("organizational_roles.role_id" => Role.involved.id).collect(&:id)
     end
   end
   

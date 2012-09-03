@@ -301,7 +301,7 @@ class PeopleController < ApplicationController
 
     to_ids.each do |id|
       person = Person.find_by_personID(id)
-      PeopleMailer.enqueue.bulk_message(person.email, current_person.email, params[:subject], params[:body]) if !person.email.blank?
+      PeopleMailer.enqueue.bulk_message(person.email, current_person.email, params[:subject], params[:body]) if person.present? && person.email.present?
     end
 
     render :nothing => true

@@ -508,4 +508,22 @@ class ContactsControllerTest < ActionController::TestCase
       assert_response :success
     end
   end
+  
+  context "Creating contacts" do
+    setup do
+      @user, org = admin_user_login_with_org
+      @predefined_survey = Factory(:survey, organization: @org)
+      APP_CONFIG['predefined_survey'] = @predefined_survey.id
+      @yearInSchool_question = Factory(:yearInSchool_element)
+      @predefined_survey.questions << @yearInSchool_question
+    end
+    
+    should "create an org with answered predefined survey" do
+      assert_difference "Person.count", 1 do
+        xhr :post, :create, {:person => {:firstName => "James", :lastName => "Ingram", :gender => "male"}, :answers => {"#{@yearInSchool_question.id}"=>"4th"}  }
+      end
+      
+      assert_equal "4th", Person.where(firstName: "James", lastName: "Ingram").first.yearInSchool
+    end
+  end
 end

@@ -416,7 +416,7 @@ en:
         note: "Note: First and Last name will be automatically added to every survey. There's no need for you to add those."
         predefined: Predefined Questions
         your_questions: Your Questions (drag to sort)
-        previously_used: Previously Used Questions
+        previously_used: Previously Used Custom Questions
         add_question: Add a new question
         add_prev_question: Add a predefined or previously used question
         forced_tip: This question is required on every survey and will be pre-filled if they connect with facebook.
