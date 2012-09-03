@@ -5,5 +5,7 @@ class DashboardControllerTest < ActionController::TestCase
   #   get :index
   #   assert_response :success
   # end
+  
+  #hello
 
 end
