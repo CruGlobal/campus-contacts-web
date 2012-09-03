@@ -52,4 +52,69 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
     end
   end
   
+  context "show" do
+    setup do
+      @user, org = admin_user_login_with_org
+      @survey = Factory(:survey, organization: org) #create survey
+      @question = Factory(:some_question)
+      @survey.questions << @question
+      assert_equal(@survey.questions.count, 1)
+    end
+    
+    should "show" do
+      xhr :get, :show, {:id => @question.id, :survey_id => @survey.id}
+      assert_not_nil assigns(:question)
+      assert_response :success
+    end
+  end
+  
+  context "new" do
+    setup do
+      @user, org = admin_user_login_with_org
+      @survey = Factory(:survey, organization: org) #create survey
+      @question = Factory(:some_question)
+      @survey.questions << @question
+      assert_equal(@survey.questions.count, 1)
+    end
+    
+    should "new" do
+      xhr :get, :new, {:survey_id => @survey.id}
+      assert_response :success
+    end
+  end
+  
+  context "reorder" do
+    setup do
+      @user, org = admin_user_login_with_org
+      @survey = Factory(:survey, organization: org) #create survey
+      @question_1 = Factory(:some_question)
+      @question_2 = Factory(:some_question)
+      @survey.questions << @question_1
+      @survey.questions << @question_2
+      assert_equal(@survey.questions.count, 2)
+    end
+    
+    should "reorder" do
+      a = []
+      a << @question_2.id
+      a << @question_1.id
+      xhr :post, :reorder, {:questions => a, :survey_id => @survey.id}
+      assert_response :success
+    end
+  end
+  
+  context "create" do
+    setup do
+      @user, org = admin_user_login_with_org
+      @survey = Factory(:survey, organization: org) #create survey
+    end
+    
+    should "create" do
+      assert_difference "Question.count" do
+        xhr :post, :create, {:question_type => "ChoiceField:radio", :question => {:label => "", :slug => "", :content => "Verge\r\nBarge\r\nTarge", :notify_via => "SMS", :web_only => "0", :hidden => "0"}, :survey_id => @survey.id}
+        assert_response :success
+      end
+    end
+  end
+  
 end
