@@ -64,7 +64,6 @@ Mh::Application.routes.draw do
     end
   end
 
-  resources :schools, :only => :index
   resources :communities
 
   resources :ministries
