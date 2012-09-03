@@ -3,7 +3,7 @@ class NameUniquenessValidator < ActiveModel::EachValidator
     if object.class.to_s.underscore == 'organization' && object.parent_id
       begin
         parent = Organization.find(object.parent_id)
-        object.errors[attribute] << I18n.t('organizations.add_org.name_not_unique') if parent.children.any? {|c| c.name == object.name}
+        object.errors[attribute] << I18n.t('organizations.add_org.name_not_unique') if parent.children.any? {|c| c.id != object.id && c.name == object.name}
       rescue => e
         Rails.logger.info e.inspect
       end

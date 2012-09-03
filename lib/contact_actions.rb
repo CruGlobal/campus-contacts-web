@@ -75,9 +75,11 @@ module ContactActions
       question_set = QuestionSet.new(survey.questions, @answer_sheet)
       question_set.post(params[:answers], @answer_sheet)
       question_set.save
+      @answer_sheet.person.save
       @answer_sheets << @answer_sheet
     end
     # Delete any answer_sheet with no answers
+
     @answer_sheets.each do |as|
       if as.reload.answers.blank?
         as.destroy 
@@ -95,11 +97,13 @@ module ContactActions
     params[:answers].each do |survey|
       survey_id = survey[0]
       fields = survey[1]
+
       if survey = @organization.surveys.find(survey_id)
         @answer_sheet = get_answer_sheet(survey, @person)
         question_set = QuestionSet.new(survey.questions, @answer_sheet)
         question_set.post(fields, @answer_sheet)
         question_set.save
+        @answer_sheet.person.save
         @answer_sheets << @answer_sheet
       end
     end
@@ -111,6 +115,8 @@ module ContactActions
         @answer_sheets -= [as]
       end
     end
+    
+    
   end
 
 end

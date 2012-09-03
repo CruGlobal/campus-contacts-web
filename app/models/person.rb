@@ -38,7 +38,7 @@ class Person < ActiveRecord::Base
   has_many :roles, through: :organizational_roles
   has_many :organizational_roles_including_archived, class_name: "OrganizationalRole", foreign_key: "person_id", conditions: {deleted: false}
   has_many :roles_including_archived, through: :organizational_roles_including_archived, source: :role
-  has_many :organizations, through: :organizational_roles, conditions: "role_id <> #{Role::CONTACT_ID} AND status = 'active' AND deleted = 0", uniq: true
+  has_many :organizations, through: :organizational_roles, conditions: ["role_id IN(?) AND status = 'active' AND deleted = 0 AND organizational_roles.archive_date is null ", Role.involved_ids], uniq: true
   
   has_many :followup_comments, :class_name => "FollowupComment", :foreign_key => "commenter_id"
   has_many :comments_on_me, :class_name => "FollowupComment", :foreign_key => "contact_id"
@@ -174,7 +174,7 @@ class Person < ActiveRecord::Base
   end
   
   def is_archived?(org)
-    return true if organizational_roles.blank?
+    return true if organizational_roles.where(organization_id: org.id).blank?
     false
   end
 
@@ -248,6 +248,7 @@ class Person < ActiveRecord::Base
       unless org_ids_cache
         organization_tree # make sure the tree is built
       end
+      # convert org ids to integers (there has to be a better way, but i couldn't think of it)
       @org_ids = {}
       org_ids_cache.collect {|org_id, values| @org_ids[org_id.to_i] = values}
     end
@@ -292,7 +293,7 @@ class Person < ActiveRecord::Base
     (o ? o.children : organizations).order('name').each do |org|
       # collect roles associated with each org
       @org_ids[org.id] ||= {}
-      @org_ids[org.id]['roles'] ||= (Array.wrap(roles_by_org_id(org.id)) + Array.wrap(parent_roles)).uniq
+      @org_ids[org.id]['roles'] = (Array.wrap(roles_by_org_id(org.id)) + Array.wrap(parent_roles)).uniq
       orgs[org.id] = (org.show_sub_orgs? ? org_tree_node(org, @org_ids[org.id]['roles']) : {})
     end
     orgs
@@ -831,9 +832,9 @@ class Person < ActiveRecord::Base
     hash['phone_number'] = primary_phone_number.number if primary_phone_number
     hash['email_address'] = primary_email_address.to_s if primary_email_address
     hash['birthday'] = birth_date.to_s
-    # hash['interests'] = Interest.get_interests_hash(id)
-    # hash['education'] = EducationHistory.get_education_history_hash(id)
-    #hash['location'] = latest_location.to_hash if latest_location
+    hash['interests'] = Interest.get_interests_hash(id)
+    hash['education'] = EducationHistory.get_education_history_hash(id)
+    hash['location'] = latest_location.to_hash if latest_location
     hash['locale'] = user.try(:locale) ? user.locale : ""
     hash['organization_membership'] = organization_objects.collect {|org_id, org| {org_id: org_id, primary: (primary_organization.id == org.id).to_s, name: org.name}}
     hash

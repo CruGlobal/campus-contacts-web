@@ -98,6 +98,7 @@ class ContactsController < ApplicationController
     authorize!(:update, @person)
     
     @person.update_attributes(params[:person]) if params[:person]
+
     update_survey_answers if params[:answers].present?
     @person.update_date_attributes_updated
     if @person.valid? && (!@answer_sheet || (@answer_sheet.person.valid? && (!@answer_sheet.person.primary_phone_number || @answer_sheet.person.primary_phone_number.valid?)))
@@ -289,12 +290,14 @@ class ContactsController < ApplicationController
       @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? "" : ['lastName, firstName']).group('ministry_person.personID')
       @all_people = @people
       @people_for_labels = Person.people_for_labels(current_organization)
+      @people = @people.includes(:organizational_roles)
       @people = @people.page(params[:page])
     
     end
   
     def fetch_mine
-      @all_people = Person.order('lastName, firstName').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.organization_id' => current_organization.id, 'organizational_roles.role_id' => Role::CONTACT_ID)
+      #@all_people = Person.order('lastName, firstName').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.organization_id' => current_organization.id, 'organizational_roles.role_id' => Role::CONTACT_ID)
+      @all_people = Person.order('lastName, firstName').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id)
     end
     
     def get_person

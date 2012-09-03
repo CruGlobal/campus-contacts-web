@@ -22,8 +22,8 @@ class ImportsController < ApplicationController
       else
         init_org
         render :new
-      end
-    rescue ArgumentError => e
+      end      
+    rescue ArgumentError
       flash.now[:error] = t('imports.new.wrong_file_format_error')
       init_org
       @import = Import.new
@@ -63,7 +63,7 @@ class ImportsController < ApplicationController
 
   def destroy
     @import.destroy
-    redirect_to contacts_path
+    #redirect_to contacts_path
   end
 
   def download_sample_contacts_csv

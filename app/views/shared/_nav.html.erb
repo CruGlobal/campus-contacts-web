@@ -42,7 +42,13 @@
       <% else %>
         <% unless params[:controller] == 'sessions' %>
           <li>
-            <%= link_to(t('nav.help'), "http://blog.missionhub.com/", :class => "navlink") %>
+          	<%= link_to('Updates & Support', "http://blog.missionhub.com/", :class => "navlink") %>
+          </li>
+          <li>
+          	<%= link_to('FAQ', "http://blog.missionhub.com/faq", :class => "navlink") %>
+          </li>
+          <li>
+            <%= link_to('Learn More', tutorials_path, :class => "navlink") %>
           </li>
           <li>
             <% if mhub? %>

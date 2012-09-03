@@ -24,6 +24,10 @@ class Role < ActiveRecord::Base
   def self.leader_ids
     @leader_ids ||= self.leaders.collect(&:id)
   end
+
+  def self.involved_ids
+    @involved_ids ||= self.where(i18n: %w[leader admin involved]).pluck(:id)
+  end
   
   def self.admin
     @admin ||= Role.find_or_create_by_i18n_and_organization_id('admin', 0)

@@ -38,7 +38,7 @@ $white: #fff;
 
 /* Divs */
 $maxpagewidth: 11000px;
-$minpagewidth: 960px;
+$minpagewidth: 978px;
 
 @mixin clearlist {
   list-style: none;
@@ -141,7 +141,7 @@ a.headerlink:hover {
 #outer {
   max-width: $maxpagewidth;
   min-width: $minpagewidth;
-  padding: 0 15px;
+  padding: 0 12px;
   margin: 0 auto;
 }
 
@@ -933,10 +933,27 @@ span.title {
   background: #e5e5e5;
   border-radius: 0 0 8px 8px;
 }
+
+.footerSplash {
+  text-align: center;
+  color: #B3B3B3;
+  margin: 0;
+  padding-top: 30px;
+}
 /* SPLASH PAGE */
 
 .storeicons {
-  float: left;
+	margin: 0 auto;
+	width: 478px;
+}
+
+.footerText {
+	margin: 30px 0;
+	color: #808284;
+}
+
+.storeicons a#storeIphone {
+	margin-right: 30px;
 }
 
 .splash.login {
@@ -953,11 +970,22 @@ span.title {
   font-size: 14px;
 }
 
+/*
 .loginbt {
   background: url("<%= asset_path('topmenubgtall.png') %>") repeat-x scroll 0 0 transparent;
   color: white !important;
   font-weight: normal;
   border-radius: 5px;
+  padding: 7px 14px !important;
+  display: inline-block;
+  font-size: 14px;
+}
+*/
+
+.loginbt {
+  background-color: #CCE4EF;
+  color: #0379AE !important;
+  font-weight: bold;
   padding: 7px 14px !important;
   display: inline-block;
   font-size: 14px;
@@ -974,16 +1002,22 @@ span.title {
 }
 
 .splash {
-  width: 991px !important;
+  width: 978px !important;
   #logoline {
-    margin: 0 25px;
+    margin: 0;
   }
   #logoline #logo {
-    background: url("<%= asset_path("logo_bg.png") %>") no-repeat 0 50%;
-    width: 247px;
-    height: 85px;
+    background: url("<%= asset_path("logo_222x55.png") %>") no-repeat;
+    width: 222px;
+    height: 55px;
     display: block;
   }
+  #squarewrap {
+  	width: 978px;
+  	height: 489px;
+  	background: url("<%= asset_path("splash/people978x489.jpg") %>") no-repeat;
+  }
+  
   #roundwrap {
     border-radius: 15px;
     -moz-border-radius: 15px;
@@ -1101,10 +1135,12 @@ span.title {
       }
 		}
   }
+  
   .salespush {
-    font-size: 22px;
-    text-align: right;
-    margin-top: 15px;
+    font-size: 32px;
+    text-align: left;
+    margin-top: 30px;
+    margin-left: 84px;
   }
   .video_salespush {
     font-size: 22px;
@@ -1123,29 +1159,70 @@ span.title {
     }
   }
   .getstartedbt {
-    background: url("<%= asset_path("splash/btn_gsc.png") %>") no-repeat 0 0;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     color: #FFFFFF;
     display: inline-block;
     font-weight: bold;
-    height: 57px;
+    height: 64px;
     text-align: center;
-    padding-right: 10px;
-    padding-top: 15px;
+    padding-top: 20px;
     text-transform: uppercase;
-    width: 215px;
+    width: 306px;
     overflow: hidden;
     vertical-align: middle;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border-color: #c5c5c5;
+	border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25);
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	background-color: #da4f49;
+	*background-color: #bd362f;
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ee5f5b), to(#bd362f));
+	background-image: -webkit-linear-gradient(top, #ee5f5b, #bd362f);
+	background-image: -o-linear-gradient(top, #ee5f5b, #bd362f);
+	background-image: linear-gradient(to bottom, #ee5f5b, #bd362f);
+	background-image: -moz-linear-gradient(top, #ee5f5b, #bd362f);
+	background-repeat: repeat-x;
+	border-color: #bd362f #bd362f #802420;
+	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+	filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffee5f5b', endColorstr='#ffbd362f', GradientType=0);
+	filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+	opacity: 0.9;
   }
   .getstartedbt:hover {
     text-decoration: none;
-    background-position: -1px 100%;
+    background-color: #bd362f;
+    *background-color: #a9302a;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ee5f5b), to(#6e1f1b));
+	background-image: -webkit-linear-gradient(top, #ee5f5b, #6e1f1b);
+	background-image: -o-linear-gradient(top, #ee5f5b, #6e1f1b);
+	background-image: linear-gradient(to bottom, #ee5f5b, #6e1f1b);
+	background-image: -moz-linear-gradient(top, #ee5f5b, #6e1f1b);
+	background-repeat: repeat-x;
+	border-color: #bd362f #bd362f #802420;
+	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+	filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffee5f5b', endColorstr='#ff6e1f1b', GradientType=0);
+	filter: progid:dximagetransform.microsoft.gradient(enabled=false);
   }
   h1.headlinetext {
-    font-size: 29px;
-    padding-left: 10px;
-    color: #0078AE;
+  	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-size: 32px;
+    line-height: 32px;
+    margin-left: 84px;
+    padding-top: 112px;
+    color: #fff;
     margin-bottom: 0px;
-    text-align: right;
+    text-align: left;
+    text-transform: uppercase;
+  }
+  h1.headlinetextTutorial {
+    margin: 0;
+    padding: 0;
+    font-size: 32px;
+    line-height: 32px;
+    color: #0078AE;
+    text-align: left;
     &.alignleft {
       text-align: left;
     }
@@ -1154,13 +1231,15 @@ span.title {
     color: #5794c0;
   }
   h4.subheadlinetext {
-    color: #B3B3B3;
+    color: #fff;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-size: 21px;
-    padding-left: 10px;
-    margin-top: 0px;
+    line-height: 21px;
+    margin-left: 84px;
+    margin-top: 30px;
     margin-bottom: 10px;
     font-weight: normal;
-    text-align: right;
+    text-align: left;
     &.video {
       display: inline-block;
     }
@@ -1982,11 +2061,11 @@ body#welcome_controller {
   
   #logo {
     position: absolute;
-    margin-top: -90px;
+    margin-top: -67px;
     margin-left: 0px;
   }
   .tutorials, .tour, .index, .privacy, .terms {
-    margin-top: 50px;
+    margin-top: 0;
   }
 }
 
@@ -2557,4 +2636,12 @@ ul#ui-autocomplete {
 
 .ui-dialog-titlebar-close {
   display: none;
+}
+
+.archived_person_name {
+  background: #c5da6e
+}
+
+.archived_group_label {
+  background: #c5da6e
 }

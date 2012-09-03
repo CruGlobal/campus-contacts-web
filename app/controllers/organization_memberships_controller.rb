@@ -13,28 +13,28 @@ class OrganizationMembershipsController < ApplicationController
   # GET /organization_memberships/1
   # GET /organization_memberships/1.xml
   def show
-    @organization_membershipship = current_person.organization_memberships.find(params[:id])
+    @organization_membership = current_person.organization_memberships.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render xml: @organization_membershipship }
+      format.xml  { render xml: @organization_membership }
     end
   end
 
   # GET /organization_memberships/1/edit
   def edit
-    @organization_membershipship = current_person.organization_memberships.find(params[:id])
+    @organization_membership = current_person.organization_memberships.find(params[:id])
   end
 
   # POST /organization_memberships
   # POST /organization_memberships.xml
   def create
-    @organization_membershipship = current_person.organization_memberships.new(organization_id: params[:organization_id])
+    @organization_membership = current_person.organization_memberships.new(organization_id: params[:organization_id])
 
     respond_to do |format|
-      if @organization_membershipship.save
+      if @organization_membership.save
         format.html do 
-          @org = @organization_membershipship.organization 
+          @org = @organization_membership.organization 
           # if @org.root.requires_validation?
           #   case @org.root.validation_method
           #   when 'relay'
@@ -44,10 +44,10 @@ class OrganizationMembershipsController < ApplicationController
             redirect_to(session[:return_to].present? ? session[:return_to] : :back, notice: 'Organization membership was successfully created.') 
           # end
         end
-        format.xml  { render xml: @organization_membershipship, status: :created, location: @organization_membershipship }
+        format.xml  { render xml: @organization_membership, status: :created, location: @organization_membershipship }
       else
         format.html { render action: "new" }
-        format.xml  { render xml: @organization_membershipship.errors, status: :unprocessable_entity }
+        format.xml  { render xml: @organization_membership.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -55,15 +55,15 @@ class OrganizationMembershipsController < ApplicationController
   # PUT /organization_memberships/1
   # PUT /organization_memberships/1.xml
   def update
-    @organization_membershipship = current_person.organization_memberships.find(params[:id])
+    @organization_membership = current_person.organization_memberships.find(params[:id])
 
     respond_to do |format|
-      if @organization_membershipship.update_attributes(params[:organization_membershipship])
-        format.html { redirect_to(@organization_membershipship, notice: 'Organization membership was successfully updated.') }
+      if @organization_membership.update_attributes(params[:organization_membership])
+        format.html { redirect_to(@organization_membership, notice: 'Organization membership was successfully updated.') }
         format.xml  { head :ok }
       else
         format.html { render action: "edit" }
-        format.xml  { render xml: @organization_membershipship.errors, status: :unprocessable_entity }
+        format.xml  { render xml: @organization_membership.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -71,8 +71,8 @@ class OrganizationMembershipsController < ApplicationController
   # DELETE /organization_memberships/1
   # DELETE /organization_memberships/1.xml
   def destroy
-    @organization_membershipship = current_person.organization_memberships.find(params[:id])
-    @organization_membershipship.destroy
+    @organization_membership = current_person.organization_memberships.find(params[:id])
+    @organization_membership.destroy
 
     respond_to do |format|
       format.html { redirect_to(person_organization_memberships_path(current_person)) }

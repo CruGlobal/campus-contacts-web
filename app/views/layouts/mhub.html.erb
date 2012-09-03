@@ -13,7 +13,9 @@
         <div class="gmwrap">
           <ul class="sf-menu">
             <li class="item">
-              <%= link_to(t('nav.logout'), '#', onclick: "$.mh.logout(#{cookies[:survey_mode].present? && cookies[:survey_id].present? ? '\'' + start_survey_url(cookies[:survey_id]) + '\'' : ''})")  %> 
+              <% if cookies[:survey_mode].present? && cookies[:survey_id].present? %>
+                <%= link_to(t('nav.logout'), sign_out_url(next: start_survey_url(cookies[:survey_id])))  %>
+              <% end %>
             </li>   
           </ul>
         </div>

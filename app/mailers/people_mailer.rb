@@ -10,11 +10,11 @@ class PeopleMailer < ActionMailer::Base
   
   def notify_on_survey_answer(to, question_rule, keyword, answer)
     @keyword = keyword
-    @answer = answer
-    @answer_sheet = answer.answer_sheet
-    @person = answer.answer_sheet.person
-    @question = answer.question
-    @question_rule = question_rule
+    @answer = answer.instance_of?(Hash) ? Answer.find(answer['id']) : answer
+    @answer_sheet = @answer.answer_sheet
+    @person = Person.last #answer.answer_sheet.person
+    @question = @answer.question
+    @question_rule = question_rule.instance_of?(Hash) ? QuestionRule.find(question_rule['id']) : question_rule
     mail to: to, subject: "Someone answered \"#{@keyword.titleize}\" in your survey"
   end
   

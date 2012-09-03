@@ -302,11 +302,29 @@ FactoryGirl.define do
     attribute_name ''
   end
   
+  factory :text_field, parent: :element do
+    kind          'TextField'
+    label         'How soon is now?'
+    style 'short'
+    object_name ''
+    attribute_name ''
+    content       "How soon is now?"
+  end
+
   factory :some_question, class: :element do
     kind          'TextField'
     label         'Are you alright?'
     style         'short'
     content       "Are you alright?"
+  end
+  
+  factory :yearInSchool_element, class: :element do
+    kind          'TextField'
+    label         'Year in school?'
+    style         'short'
+    content       "Year in school?"
+    object_name   'person'
+    attribute_name 'yearInSchool'
   end
   
   factory :firstName_element, parent: :element do

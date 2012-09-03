@@ -88,6 +88,7 @@ Mh::Application.routes.draw do
       get :all
       post :update_roles
       post :bulk_delete
+      post :bulk_archive
       get :facebook_search
     end
     member do

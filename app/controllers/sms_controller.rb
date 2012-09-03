@@ -1,5 +1,5 @@
 class SmsController < ApplicationController
-  skip_before_filter :authenticate_user!, :verify_authenticity_token
+  skip_before_filter :authenticate_user!, :verify_authenticity_token, :check_valid_subdomain
   def mo
     render nothing: true and return if sms_params[:message].blank?
     begin
@@ -24,12 +24,12 @@ class SmsController < ApplicationController
     when 'stop'
       @sms_session.update_attribute(:interactive, false) if @sms_session
       @msg = 'You have been unsubscribed from MHub SMS alerts. You will receive no more messages.'
-      send_message(@msg, sms_params[:phone_number])
-      render text: @msg + "\n" and return
+      @sent_sms = send_message(@msg, sms_params[:phone_number])
+      render xml: @sent_sms.to_twilio and return
     when 'help'
       @msg = 'MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to http://mhub.cc/terms for more help.'
-      send_message(@msg, sms_params[:phone_number])
-      render text: @msg + "\n" and return
+      @sent_sms = send_message(@msg, sms_params[:phone_number])
+      render xml: @sent_sms.to_twilio and return
     when ''
       render nothing: true and return
     end
@@ -58,7 +58,7 @@ class SmsController < ApplicationController
           @answer_sheet.update_attribute(:completed_at, Time.now)
           @sms_session.update_attributes(ended: true)
 
-          send_message(@msg, @received.phone_number)
+          @sent_sms = send_message(@msg, @received.phone_number)
         end
       end
     else
@@ -82,9 +82,10 @@ class SmsController < ApplicationController
         @msg =  keyword.initial_response.sub(/\{\{\s*link\s*\}\}/, "http://mhub.cc/m/#{Base62.encode(@sms_session.id)}")
         @received.update_attributes(sms_keyword_id: keyword.id, person_id: person.id, sms_session_id: @sms_session.id)
       end
-      send_message(@msg, sms_params[:phone_number])
+      @sent_sms = send_message(@msg, sms_params[:phone_number])
     end
-    render text: @msg.to_s + "\n"
+    #render text: @msg.to_s + "\n"
+    render xml: @sent_sms.to_twilio
   end
 
   protected
@@ -143,7 +144,7 @@ class SmsController < ApplicationController
         question_no = get_question_no(survey, person) 
         msg = "#{question_no} #{msg}"
       end
-      send_message(msg, phone_number, separator, question.id)
+      @sent_sms = send_message(msg, phone_number, separator, question.id)
     end
     msg
   end

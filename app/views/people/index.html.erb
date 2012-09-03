@@ -74,7 +74,13 @@
     </ul>
     <% if can? :manage, current_organization %>
       <ul class="pillmenu control_toggle">
-        <li><%= link_to(t('general.delete'), bulk_delete_people_path, id: "bulk_delete") %></li>
+        <li>
+          <%= link_to('Remove', '#', class: 'action_dropdown') %>
+          <ul style="display:none; width:235px;">
+            <li><%= link_to(t('general.delete'), bulk_delete_people_path, id: "bulk_delete") %></li>
+            <li><%= link_to(t('general.archive'), bulk_archive_people_path, id: "bulk_archive") %></li>
+          </ul>
+        </li>
       </ul>  
       <ul class="pillmenu control_toggle">
         <li><%= link_to(t('.merge_people'), "", id: "merge_people") %></li>
