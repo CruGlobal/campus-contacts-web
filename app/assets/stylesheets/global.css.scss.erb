@@ -2646,8 +2646,17 @@ ul#ui-autocomplete {
   background: #c5da6e
 }
 
+ul.sf-menu {
+  ul {
+    margin-right: -1px;
+  }
+}
 ul.under_tree {
-  min-width: 350px;
+  width: 350px;
+  max-height: 450px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 1px solid #d9d9d9;
   .org_nav_item {
     padding: 5px 5px;
     background: #f0f0f0;
@@ -2657,7 +2666,7 @@ ul.under_tree {
     .org_name {
       display: inline-block;
       margin: 2px 0px 0px 1px;
-      width: 250px;
+      width: 200px;
       .plain_name {
         padding: 2px 4px;
         background: none;
