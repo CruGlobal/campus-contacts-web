@@ -1,4 +1,8 @@
 $ ->   
+  $('.org_control').not('.tree_no_child').each ->
+    if $("." + $(this).attr('id')).not('.tree_no_child').size() > 1
+      $("." + $(this).attr('id')).not('.tree_no_child').last().addClass('tree_no_child')
+      
   $('.org_control').live 'click', ->
     child_div = $('#' + $(this).attr('child_div'))
     child_div.toggle()
