@@ -28,8 +28,8 @@
             <%= link_to(current_organization, '/contacts') %>
             <% if current_person.organization_objects.length > 1 %>
               <% cache(['org_nav', current_person.id]) do %>
-                <ul class="under">
-                  <%= render_org_tree(current_person.organization_tree) %>
+                <ul class="under_tree">
+                  <%= new_render_org_tree(current_person.organization_tree) %>
                 </ul>
               <% end %>
             <% end %>

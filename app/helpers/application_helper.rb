@@ -46,6 +46,16 @@ module ApplicationHelper
     ret.html_safe
   end
 
+  def new_render_org_tree(org_tree)
+    ret = ''
+    org_tree.each do |org_id, children|
+      org = current_person.organization_from_id(org_id)
+      next unless org # Just in case there's some bad data
+      ret += render(partial: 'application/new_org', locals: {org: org, children: children})
+    end
+    ret.html_safe
+  end
+
 
   #def org_nav(org, children)
     #ret = ''

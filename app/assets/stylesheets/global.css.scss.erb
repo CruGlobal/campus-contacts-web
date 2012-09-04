@@ -2645,3 +2645,69 @@ ul#ui-autocomplete {
 .archived_group_label {
   background: #c5da6e
 }
+
+ul.sf-menu {
+  ul {
+    margin-right: -1px;
+  }
+}
+ul.under_tree {
+  width: 350px;
+  max-height: 450px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 1px solid #d9d9d9;
+  .org_nav_item {
+    padding: 5px 5px;
+    background: #f0f0f0;
+    text-align: left;
+    vertical-align: top;
+    line-height: 16px;
+    .org_name {
+      display: inline-block;
+      margin: 2px 0px 0px 1px;
+      width: 200px;
+      .plain_name {
+        padding: 2px 4px;
+        background: none;
+        &:hover {
+          text-decoration: none;
+          background: none;
+        }
+      }
+    }
+    .org_control {
+      float: left;
+      display: inline-block;
+      margin: 3px 4px -3px;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      background: url('bullet_arrow_right.png');
+      &.tree_open {
+        background: url('bullet_arrow_down.png');
+      }
+      &.tree_no_child {
+        background: url('');
+      }
+    }
+    .org_star {
+      float: left;
+      display: inline-block;
+      margin: 3px 0px -3px;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      background: url('star_gray.png');
+      &.primary {
+        background: url('star.png');
+      }
+    }
+  }
+  .org_nav_children {
+    display: none;
+    padding-left: 20px;
+    background: #f0f0f0;
+    text-align: left;
+  }
+}
