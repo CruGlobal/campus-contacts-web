@@ -107,13 +107,121 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
     setup do
       @user, org = admin_user_login_with_org
       @survey = Factory(:survey, organization: org) #create survey
+      @question_3 = Factory(:some_question)
+      @survey.questions << @question_3
+      @survey.survey_elements.where(element_id: @question_3.id).first.update_attributes({archived: true})
     end
     
     should "create" do
-      assert_difference "Question.count" do
+      assert_difference "Question.count", 1 do
         xhr :post, :create, {:question_type => "ChoiceField:radio", :question => {:label => "", :slug => "", :content => "Verge\r\nBarge\r\nTarge", :notify_via => "SMS", :web_only => "0", :hidden => "0"}, :survey_id => @survey.id}
         assert_response :success
       end
+    end
+    
+    should "create from existing archived question" do
+      assert_no_difference "Question.count" do
+        assert_no_difference "Survey.find(#{@survey.id}).survey_elements.count", 1 do
+          xhr :post, :create, {:question_id => @question_3.id, :survey_id => @survey.id}
+          assert_response :success
+        end
+      end
+    end
+  end
+  
+  context "update" do
+    setup do
+      @user, org = admin_user_login_with_org
+      @survey = Factory(:survey, organization: org) #create survey
+      @question = Factory(:some_question)
+      @survey.questions << @question
+      @survey.survey_elements.where(element_id: @question.id).first.update_attributes({archived: true})
+    end
+    
+    should "update" do
+      xhr :put, :update, {:choice_field => {:label => "Favorite color?", :slug => "", :content => "Verge\r\nBarge\r\nTarge", :notify_via => "SMS", :web_only => "0", :hidden => "0"}, :survey_id => @survey.id, :id => @question.id}
+      assert_equal "Favorite color?", Element.find(@question.id).label
+      assert_response :success
+    end
+    
+    should "not update with the wrong question kind" do
+      xhr :put, :update, {:choice_field => {:label => "Favorite color?", :slug => "", :content => "Verge\r\nBarge\r\nTarge", :notify_via => "SMS", :web_only => "0", :hidden => "0"}, :survey_id => @survey.id, :id => @question.id}
+      #assert_equal @question.label, Element.find(@question.id).label
+      assert_response :success
+    end
+  end
+  
+  context "destroy" do
+    setup do
+      @user, @org = admin_user_login_with_org
+      @survey = Factory(:survey, organization: @org) #create survey
+      @question = Factory(:some_question)
+      @survey.questions << @question
+    end
+    
+    should "destroy" do
+      assert_difference "Survey.find(#{@survey.id}).survey_elements.count", -1 do
+        xhr :post, :destroy, {:survey_id => @survey.id, :id => @question.id}
+        assert_response :success
+      end
+    end
+    
+    should "destroy on surveys count > 1" do
+      @survey_2 = Factory(:survey, organization: @org) #create survey
+      @survey_2.questions << @question
+      
+      xhr :post, :destroy, {:survey_id => @survey_2.id, :id => @question.id}
+      assert_response :success
+    end
+  end
+  
+  context "hide & unhide" do
+    setup do
+      @user, org = admin_user_login_with_org
+      @survey = Factory(:survey, organization: org) #create survey
+      @question = Factory(:some_question)
+      @survey.questions << @question
+    end
+    
+    should "hide" do
+      xhr :put, :hide, {:survey_id => @survey.id, :id => @question.id}
+      assert_response :success
+    end
+    
+    should "unhide" do
+      request.env["HTTP_REFERER"] = "localhost:3000"
+      @question.update_attributes({:hidden => true})
+      xhr :put, :unhide, {:survey_id => @survey.id, :id => @question.id}
+      assert_response :redirect
+    end
+  end
+  
+  context "Suggestions" do
+    setup do
+      @user, org = admin_user_login_with_org
+      @survey = Factory(:survey, organization: org) #create survey
+      @question = Factory(:some_question)
+      @survey.questions << @question
+    end
+    
+    should "find leader suggestions" do
+      xhr :get, :suggestion, {:survey_id => @survey.id, :type => "Leader", :keyword => "Neil", :term => "Neil"}
+      assert_response :success
+    end
+    
+    should "find ministry suggestions" do
+      xhr :get, :suggestion, {:survey_id => @survey.id, :type => "Ministry", :keyword => "Minstry", :term => "Minstry"}
+      assert_response :success
+    end
+    
+    should "find group suggestions" do
+      xhr :get, :suggestion, {:survey_id => @survey.id, :type => "Group", :keyword => "Group", :term => "Group"}
+      assert_response :success
+    end
+    
+    should "find label suggestions" do
+      xhr :get, :suggestion, {:survey_id => @survey.id, :type => "Label", :keyword => "Neil", :term => "Neil"}
+      assert_response :success
     end
   end
   
