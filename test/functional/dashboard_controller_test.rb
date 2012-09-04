@@ -11,5 +11,4 @@ class DashboardControllerTest < ActionController::TestCase
     assert_not_nil assigns(:dashpost)
     assert_response :success
   end
-
 end
