@@ -208,7 +208,7 @@ class ContactsController < ApplicationController
         @people ||= Person.where("1=0")
       end
       unless @people.arel.to_sql.include?('JOIN organizational_roles')
-        @header = "#{Role.find(params[:role]).i18n}" if params[:role]
+        @header = "#{Role.find(params[:role]).i18n}" if params[:role].present?
       end
       if params[:q] && params[:q][:s].include?('mh_answer_sheets')
         @people = current_organization.contacts.get_and_order_by_latest_answer_sheet_answered(params[:q][:s], current_organization.id)
