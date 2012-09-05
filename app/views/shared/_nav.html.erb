@@ -28,8 +28,8 @@
             <%= link_to(current_organization, '/contacts') %>
             <% if current_person.organization_objects.length > 1 %>
               <% cache(['org_nav', current_person.id]) do %>
-                <ul class="under">
-                  <%= render_org_tree(current_person.organization_tree) %>
+                <ul class="under_tree">
+                  <%= new_render_org_tree(current_person.organization_tree) %>
                 </ul>
               <% end %>
             <% end %>
@@ -42,7 +42,13 @@
       <% else %>
         <% unless params[:controller] == 'sessions' %>
           <li>
-            <%= link_to(t('nav.help'), "http://blog.missionhub.com/", :class => "navlink") %>
+          	<%= link_to('Updates & Support', "http://blog.missionhub.com/", :class => "navlink") %>
+          </li>
+          <li>
+          	<%= link_to('FAQ', "http://blog.missionhub.com/faq", :class => "navlink") %>
+          </li>
+          <li>
+            <%= link_to('Learn More', tutorials_path, :class => "navlink") %>
           </li>
           <li>
             <% if mhub? %>

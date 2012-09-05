@@ -65,6 +65,12 @@ class PeopleControllerTest < ActionController::TestCase
         assert_response :success
       end
       
+      should "not send bulk email to unknown person" do
+        xhr :post, :bulk_email, { :to => "999999", :subject => "functional test", :body => "test email body" }
+        
+        assert_response :success
+      end
+      
       should "send bulk sms" do
         p1 = PhoneNumber.new(:number => "123129312", :person_id => @person1.id)
         assert p1.save

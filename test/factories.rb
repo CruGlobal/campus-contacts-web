@@ -17,6 +17,12 @@ FactoryGirl.define do
   end
 =end
 
+  factory :dashboard_post do
+    title "Gangnam Style #{Factory.next(:count)}"
+    context "Music Video"
+    video "http://www.youtube.com/watch?v=9bZkp7q19f0"
+  end
+
   factory :group_membership do
     association :group
     association :person
@@ -316,6 +322,15 @@ FactoryGirl.define do
     label         'Are you alright?'
     style         'short'
     content       "Are you alright?"
+  end
+  
+  factory :yearInSchool_element, class: :element do
+    kind          'TextField'
+    label         'Year in school?'
+    style         'short'
+    content       "Year in school?"
+    object_name   'person'
+    attribute_name 'yearInSchool'
   end
   
   factory :firstName_element, parent: :element do

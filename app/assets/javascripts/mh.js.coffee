@@ -1,4 +1,17 @@
 $ ->   
+  $('.org_control').not('.tree_no_child').each ->
+    if $("." + $(this).attr('id')).not('.tree_no_child').size() > 1
+      $("." + $(this).attr('id')).not('.tree_no_child').last().addClass('tree_no_child')
+      
+  $('.org_control').live 'click', ->
+    child_div = $('#' + $(this).attr('child_div'))
+    child_div.toggle()
+    if child_div.is(':visible')
+      $(this).addClass('tree_open')
+    else
+      $(this).removeClass('tree_open')
+  $('.org_star').live 'click', ->
+    document.location = $(this).attr('url')
 
   $('.import .manage_labels #use_labels').live 'click', ->
     if $(this).is(':checked')
@@ -107,6 +120,10 @@ $ ->
       position: 
         my: 'top left',  
         at: 'bottom right'
+    $('.tipitmiddle[title]').qtip
+      position: 
+        my: 'top middle',  
+        at: 'bottom middle'
     $('.tipit2[title]').qtip
       position: 
         my: 'top right',  

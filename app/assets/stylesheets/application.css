@@ -2,7 +2,6 @@
  *= require contacts
  *= require people
  *= require import
- *= require global
  *= require jquery.qtip
  *= require superfish
  *= require superfish-navbar
@@ -10,4 +9,5 @@
  *= require dashboard
  *= require jquery.notifications
  *= require excolor
+ *= require global
 */

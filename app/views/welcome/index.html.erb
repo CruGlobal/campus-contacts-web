@@ -1,24 +1,24 @@
 <div id="logoline">
   <a href="/" id="logo"></a>
 </div>
-<div id="roundwrap">
+<div id="squarewrap">
 
   <h1 class="aright headlinetext">
-    <%= t('.headline_html') %>
+  	Never lose<br />
+  	a contact again
   </h1>
   <h4 class="aright subheadlinetext">
-    <%= t('.subheadline_html') %>
+  	We&#39;re here to make it easier<br />
+  	for you to care for the people<br />
+  	who need you most.
   </h4>
   
-  <div class="splashbanner">
-    <div class="slide slide1">
-      <a href="/welcome/tour"><%= image_tag("splash/box_left.jpg") %></a>
-      <a href="/welcome/tour"><%= image_tag("splash/box_mid.jpg") %></a>
-      <a href="/welcome/tour"><%= image_tag("splash/box_right.jpg") %></a> 
-    </div>
-  </div>
   <div class="salespush">
-    <%= link_to(t('.learn_more'), tutorials_path, :class => "getstartedbt") %> 
+    <% if mhub? %>
+	  <%= link_to('Get Started', user_omniauth_authorize_path(:facebook_mhub), :class => "getstartedbt btn-danger") %>
+	<% else %>
+	  <%= link_to('Get Started', new_user_session_path, :class => "getstartedbt btn-danger") %>
+	<% end %>
   </div>
 </div>
 

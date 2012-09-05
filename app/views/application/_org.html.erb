@@ -1,14 +1,17 @@
 <% (current_user.primary_organization_id == org.id).tap do |primary| %>
-<li <% if primary %>class="primary" title="This is your primary organization"<% end %>>
-  <%= link_to(set_current_organization_membership_path(org), class: "orgname", title: "Go to #{org}") do  %><label><%= org %></label><% end %>
-  <div class="orgactions">
-    <%= link_to("", set_current_organization_membership_path(org), class: "icon magnify", title: "Go to #{org}") %>
-    <%= link_to("", set_primary_organization_membership_path(org), class: "icon #{primary ? 'star' : 'star_empty'}", title: "Set #{org} as your default organization") %>
-  </div>
-  <% if children.present? %>
-    <ul class="sf-scrolling" items="8" interval="100">
-      <%= render_org_tree(children) %>
-    </ul>
-  <% end %>
-</li>
+  <li class="<%= 'primary' if primary %>" title="<%= 'This is your primary organization' if primary %>">
+    <%= link_to(set_current_organization_membership_path(org),
+      class: "orgname", title: "Go to #{org}") do  %>
+      <label><%= org %></label>
+    <% end %>
+    <div class="orgactions">
+      <%= link_to("", set_current_organization_membership_path(org), class: "icon magnify", title: "Go to #{org}") %>
+      <%= link_to("", set_primary_organization_membership_path(org), class: "icon #{primary ? 'star' : 'star_empty'}", title: "Set #{org} as your default organization") %>
+    </div>
+    <% if children.present? %>
+      <ul class="sf-scrolling" items="8" interval="100">
+        <%= render_org_tree(children) %>
+      </ul>
+    <% end %>
+  </li>
 <% end %>
