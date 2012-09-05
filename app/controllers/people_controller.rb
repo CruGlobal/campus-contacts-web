@@ -231,12 +231,12 @@ class PeopleController < ApplicationController
     authorize! :manage, current_organization
     ids = params[:ids].to_s.split(',')
     
-    if i = attempting_to_delete_or_archive_all_the_admins_in_the_org?(ids)
+    if i = current_organization.attempting_to_delete_or_archive_all_the_admins_in_the_org?(ids)
       render :text => I18n.t('people.bulk_delete.cannot_delete_admin_error', names: Person.find(i).collect(&:name).join(", "))
       return
     end
     
-    if attempting_to_delete_or_archive_current_user_self_as_admin?(ids)
+    if current_organization.attempting_to_delete_or_archive_current_user_self_as_admin?(ids, current_person)
       render :text => I18n.t('people.index.cannot_delete_admin_error')
       return
     end
@@ -263,12 +263,12 @@ class PeopleController < ApplicationController
     authorize! :manage, current_organization
     ids = params[:ids].to_s.split(',')
     
-    if i = attempting_to_delete_or_archive_all_the_admins_in_the_org?(ids)
+    if i = current_organization.attempting_to_delete_or_archive_all_the_admins_in_the_org?(ids)
       render :text => I18n.t('people.bulk_archive.cannot_archive_admin_error', names: Person.find(i).collect(&:name).join(", "))
       return
     end
     
-    if attempting_to_delete_or_archive_current_user_self_as_admin?(ids)
+    if current_organization.attempting_to_delete_or_archive_current_user_self_as_admin?(ids, current_person)
       render :text => I18n.t('people.index.cannot_archive_admin_error')
       return
     end
@@ -468,18 +468,6 @@ class PeopleController < ApplicationController
   end
 
   protected
-  
-  def attempting_to_delete_or_archive_all_the_admins_in_the_org?(ids)
-    admin_ids = current_organization.parent_organization_admins.collect(&:personID)
-    i = admin_ids & ids.collect(&:to_i)
-    return i if (admin_ids - i).blank?
-    false
-  end
-  
-  def attempting_to_delete_or_archive_current_user_self_as_admin?(ids)
-    return true unless ([current_person.personID] & ids.collect(&:to_i)).blank?
-    false
-  end
 
   def uri?(string)
     string.include?("http://") || string.include?("https://") ? true : false
