@@ -225,10 +225,15 @@ class Organization < ActiveRecord::Base
 
     def remove_contact(person)
       person_id = person.is_a?(Person) ? person.id : person
-      unless Person.find(person_id).organizational_roles.where("organization_id = ? AND role_id <> ?", id, Role::CONTACT_ID).first
-        OrganizationMembership.where(person_id: person_id, organization_id: id).first.try(:destroy)
+      Person.find(person_id).organizational_roles.where("organization_id = ?", id).each do |ors|
+        if(ors.role_id == Role::LEADER_ID)
+          ca = Person.find(ors.person_id).contact_assignments.where(organization_id: id).all
+          ca.collect(&:destroy)
+        end
+        ors.destroy
       end
-      OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: Role::CONTACT_ID).first.try(:destroy)
+      
+      OrganizationMembership.where(person_id: person_id, organization_id: id).first.try(:destroy)
     end
 
     def remove_leader(person)
@@ -289,6 +294,18 @@ class Organization < ActiveRecord::Base
       person.user.remember_token_expires_at = 1.month.from_now
       person.user.save(validate: false)
       LeaderMailer.added(person, added_by, self, token).deliver
+    end
+    
+    def attempting_to_delete_or_archive_all_the_admins_in_the_org?(ids)
+      admin_ids = parent_organization_admins.collect(&:personID)
+      i = admin_ids & ids.collect(&:to_i)
+      return i if (admin_ids - i).blank?
+      false
+    end
+  
+    def attempting_to_delete_or_archive_current_user_self_as_admin?(ids, current_person)
+      return true unless ([current_person.personID] & ids.collect(&:to_i)).blank?
+      false
     end
 
     private

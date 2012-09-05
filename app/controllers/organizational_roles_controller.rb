@@ -53,13 +53,27 @@ class OrganizationalRolesController < ApplicationController
       keep_contact = params[:keep_contact]
       
       unless from_org == to_org
-        people = Person.find(params[:ids])
+        ids = params[:ids].to_s.split(',')
+        people = Person.find(ids)
 
+        if keep_contact == "false"
+          if from_org.attempting_to_delete_or_archive_current_user_self_as_admin?(people.collect(&:id), current_person)
+            render :text => I18n.t('organizational_roles.cannot_delete_self_as_admin_error')
+            return
+          elsif i = from_org.attempting_to_delete_or_archive_all_the_admins_in_the_org?(people.collect(&:id))
+            render :text => I18n.t('organizational_roles.cannot_delete_admin_error', names: Person.find(i).collect(&:name).join(", "))
+            return
+          end
+        end
+        
         people.each do |person|
           from_org.move_contact(person, to_org, keep_contact, current_person)
         end
+        render :text => I18n.t('organizational_roles.moving_people_success')
+        return
       end
     end
-    render nothing: true
+    
+    render :text => I18n.t('organizational_roles.moving_to_same_org')
   end
 end

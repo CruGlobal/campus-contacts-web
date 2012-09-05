@@ -183,16 +183,27 @@ $ ->
     from_id = $(this).closest('div').attr('data-org-id')
     to_id = $(this).attr('data-id')
     keep_contact = $('#keep-contact-copy > input').is(':checked')
-    old_action = form.attr('action')
-    form.attr('action', '/organizational_roles/move_to?from_id='+from_id+'&to_id='+to_id+'&keep_contact='+keep_contact)
-    $.rails.handleRemote(form)
-    if keep_contact == false
-      $('.id_checkbox:checked').each ->
-        $(this).closest('tr').remove()
-    form.attr('action', old_action)
+    
+    ids = []
+    $('.id_checkbox:checked:visible').each ->
+      ids.push($(this).val())
+    if($('#all_selected_text').is(':visible'))    
+      $('.all_row').each ->
+        ids.push($(this).attr('data-id'))
+  
     $('#assign_search').dialog('destroy')
-    if $('#contacts_controller.show')[0]
-      setTimeout "document.location = '/contacts'", 1000
+    $.ajax
+      type: 'POST'
+      url: '/organizational_roles/move_to'
+      data: 'from_id='+from_id+'&to_id='+to_id+'&keep_contact='+keep_contact+'&ids='+ids
+      success: (data) ->
+        if data.indexOf("success") != -1
+          if keep_contact == false
+            $.a(data)
+            $('.id_checkbox:checked').each ->
+              $(this).closest('tr').fadeOut();
+        else
+          $.a(data)
   false
   
   $('#assign_search .group a').live 'click', (e)->
