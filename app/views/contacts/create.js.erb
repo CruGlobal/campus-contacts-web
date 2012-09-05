@@ -16,4 +16,9 @@ $('#<%= dom_id(@person) %>').effect('highlight')
 $('.no_contacts').hide()
 <% @email = EmailAddress.new %>
 <% @phone = PhoneNumber.new %>
-$('#add_contact_div').html('<%= j(render('add_contact', person: Person.new)) %>')
+$('#add_contact_div').html("<%= j(render('add_contact', person: Person.new)) %>")
+
+$('#new_person').find('input[type=text], textarea').not('.default').val('')
+$('#new_person').find('input[type=checkbox], checkbox').not('.default').removeAttr('checked')
+$('#new_person').find('input[type=radio], radio').not('.default').removeAttr('checked')
+$('#new_person').find('select').not('.default').val(0)
