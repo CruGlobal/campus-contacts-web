@@ -98,6 +98,7 @@ en:
     country: Country
     zip: Zip
     alert: Alert
+    role: Label
     save: 'Save'
     show: Show
     delete: Delete all checked
