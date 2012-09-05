@@ -554,7 +554,9 @@ $('.check_all_mine').live 'click', ->
   first_row = $('#contacts_table').find('tr:first')
   text = first_row.text()
   if text.indexOf('Fetching') == 0
-    first_row.remove()
+    $(this).attr('checked', true)  
+    $('input.id_checkbox').attr('checked', true)  
+    return false
     
   if true || $('.pagination').length
     if $(this).is(':checked')    
@@ -563,16 +565,15 @@ $('.check_all_mine').live 'click', ->
         $('#contacts_table').find('tr:first').remove()
         $('#contacts_table').prepend(html)    
     else
-      if text.indexOf('Fetching') == 0
-        first_row.remove()
-      if $('span#all_text', first_row)[0]?
-        first_row.hide()
+      first_row.remove()
  
 $('.check_all_contacts').live 'click', ->
   first_row = $('#contacts_table').find('tr:first')
   text = first_row.text()
   if text.indexOf('Fetching') == 0
-    first_row.remove()
+    $(this).attr('checked', true)  
+    $('input.id_checkbox').attr('checked', true)  
+    return false
     
   if true || $('.pagination').length
     if $(this).is(':checked')    
@@ -581,23 +582,24 @@ $('.check_all_contacts').live 'click', ->
         $('#contacts_table').find('tr:first').remove()
         $('#contacts_table').prepend(html)    
     else
-      if text.indexOf('Fetching') == 0
-        first_row.remove()
-      if $('span#all_text', first_row)[0]?
-        first_row.hide()
+      first_row.remove()
   
 $('#check_all').live 'click', ->
   first_row = $('#people_table').find('tr:first')
   text = first_row.text()
   if text.indexOf('Fetching') == 0
+    $(this).attr('checked', true)  
+    $('input.id_checkbox').attr('checked', true)  
     return false
-    
-  checked = $(this).prop('checked')
-  debug.log(checked)
-  change_all_role_checkboxes(false) if !checked
-  params = $(this).attr('data-params')  
+  
+  checked = $(this).is(':checked')  
+  if checked
+    change_all_role_checkboxes(true)
+  else
+    change_all_role_checkboxes(false)
   $('input.id_checkbox').prop('checked', checked)  
-  change_all_role_checkboxes(true) if checked
+  
+  params = $(this).attr('data-params')  
   
   # only show option to select more if there are more than 1 page 
   if $('.pagination').length
