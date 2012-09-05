@@ -12,6 +12,12 @@ class PeopleController < ApplicationController
     fetch_people(params)
     @roles = current_organization.roles # Admin or Leader, all roles will appear in the index div.role_div_checkboxes but checkobx of the admin role will be hidden 
   end
+  
+  def all
+    fetch_people(params)
+    @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
+    render :partial => 'all'
+  end
 
   def export
     index
