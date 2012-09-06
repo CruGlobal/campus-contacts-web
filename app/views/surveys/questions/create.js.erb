@@ -1,2 +1,6 @@
-$('#questions').append("<%= j(render('question', question: @question)) %>")
-$('#saving').slideUp()
+<% unless params[:error] %>
+  $('#questions').append("<%= j(render('question', question: @question)) %>")
+  $('#saving').slideUp()
+<% else %>
+  $.a('<%=  params[:error] %>')
+<% end %>

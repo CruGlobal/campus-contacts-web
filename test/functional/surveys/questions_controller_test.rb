@@ -14,7 +14,7 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
   test "should get index" do
     element = Factory(:choice_field, label: 'foobar', attribute_name: 'phone_number')
     Factory(:survey_element, survey: @org.surveys.first, element: element, position: 1, archived: true)
-  
+
     APP_CONFIG['predefined_survey'] = Factory(:survey).id
     get :index, survey_id: @survey.id 
     assert_response :success
@@ -47,6 +47,13 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
     end
     
     should "be able to select a predefined or previously used question" do
+      xhr :post, :create, { :question_id => @q3.element.id, :survey_id => @org.surveys.first.id}
+      assert_response :success
+    end
+	
+    should "not be able to add the same Question twice in a survey" do
+      xhr :post, :create, { :question_id => @q3.element.id, :survey_id => @org.surveys.first.id}
+      assert_response :success
       xhr :post, :create, { :question_id => @q3.element.id, :survey_id => @org.surveys.first.id}
       assert_response :success
     end

@@ -389,6 +389,7 @@ en:
     questions:
       create:
         notice: 'Question was successfully created.'
+        duplicate_error: "You have already added that question. You cannot assign a question twice in a survey!"
       edit:
         leader_invalid_email_with_name: "Chosen leader/s '%{leader_names}' have invalid email."
         leader_invalid_email: "Chosen leader has an invalid email."

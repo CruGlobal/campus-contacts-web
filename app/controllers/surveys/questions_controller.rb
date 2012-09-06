@@ -62,7 +62,16 @@ class Surveys::QuestionsController < ApplicationController
       pe = SurveyElement.where(survey_id: @survey.id, element_id: @question.id).first
       pe.update_attribute(:archived, false)
     else
-      @survey.elements << @question
+      begin
+        @survey.elements << @question
+      rescue ActiveRecord::RecordInvalid => e
+         params[:error] = I18n.t('surveys.questions.create.duplicate_error')
+         respond_to do |wants|
+          wants.js
+         end
+         
+         return
+      end
     end
     
     params[:id] = @question.id
