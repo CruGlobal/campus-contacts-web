@@ -284,7 +284,7 @@ FactoryGirl.define do
 
 
   
-  factory :advanced_element, parent: :element do
+  factory :advanced_element do
     kind             'TextField'
     label            'Sample question'
     style            'short'
@@ -299,7 +299,7 @@ FactoryGirl.define do
     association :element
   end
   
-  factory :choice_field, parent: :element do
+  factory :choice_field do
     kind          'ChoiceField'
     label         'Which of the following are you interested in? #{Factory.next(:count)}'
     style         'checkbox'
@@ -308,23 +308,113 @@ FactoryGirl.define do
     attribute_name ''
   end
   
-  factory :text_field, parent: :element do
-    kind          'TextField'
-    label         'How soon is now?'
-    style 'short'
+  factory :school_picker do
+    kind          'SchoolPicker'
+    label         'Select a school'
+    style         'checkbox'
+    content       "Prayer Group\nJesus"
     object_name ''
     attribute_name ''
-    content       "How soon is now?"
+  end
+  
+  factory :state_chooser do
+    kind          'StateChooser'
+    label         'Select a school'
+    style         'checkbox'
+    content       "Prayer Group\nJesus"
+    object_name ''
+    attribute_name ''
+  end
+  
+  factory :reference_question do
+    kind          'ReferenceQuestion'
+    label         'Select a school'
+    style         'checkbox'
+    content       "Prayer Group\nJesus"
+    object_name ''
+    attribute_name ''
   end
 
-  factory :some_question, class: :element do
+  factory :some_question do
     kind          'TextField'
     label         'Are you alright?'
     style         'short'
     content       "Are you alright?"
   end
   
-  factory :yearInSchool_element, class: :element do
+  factory :project_preference do
+    kind          'ProjectPreference'
+    label         'Select a school'
+    style         'checkbox'
+    content       "Prayer Group\nJesus"
+    object_name ''
+    attribute_name ''
+  end
+  
+  
+  factory :text_field do
+    kind          'TextField'
+    label         'How soon is now?'
+    style         'short'
+    object_name ''
+    attribute_name ''
+    content       "How soon is now?"
+  end
+  
+  factory :question_grid do
+    kind          'QuestionGrid'
+    label         'How soon is now?'
+    style         'question_grid'
+    object_name ''
+    attribute_name ''
+    content       "How soon is now?"
+  end
+  factory :question_grid_with_total do
+    kind          'QuestionGridWithTotal'
+    label         'How soon is now?'
+    style         'question_grid'
+    object_name ''
+    attribute_name ''
+    content       "How soon is now?"
+  end
+  
+  factory :section do
+    kind          'Section'
+    label         'Where?'
+    style 'section'
+    object_name ''
+    attribute_name ''
+    content       "How soon is now?"
+  end
+  
+  factory :date_field do
+    kind          'DateField'
+    label         'When?'
+    style 'date_field'
+    object_name ''
+    attribute_name ''
+    content       "How soon is now?"
+  end
+  
+  factory :file_field do
+    kind          'FileField'
+    label         'Upload?'
+    style 'file_field'
+    object_name ''
+    attribute_name ''
+    content       "How soon is now?"
+  end
+  
+  factory :paragraph do
+    kind          'Paragraph'
+    label         'How soon is now?'
+    style 'short'
+    object_name ''
+    attribute_name ''
+    content       "How soon is now?"
+  end
+  
+  factory :yearInSchool_element do
     kind          'TextField'
     label         'Year in school?'
     style         'short'
@@ -333,7 +423,7 @@ FactoryGirl.define do
     attribute_name 'yearInSchool'
   end
   
-  factory :firstName_element, parent: :element do
+  factory :firstName_element do
     kind          'TextField'
     label         'First name?'
     style 'short'
@@ -341,7 +431,7 @@ FactoryGirl.define do
     attribute_name 'firstName'
   end
   
-    factory :lastName_element, parent: :element do
+    factory :lastName_element do
     kind          'TextField'
     label         'Last name?'
     style 'short'
@@ -349,7 +439,7 @@ FactoryGirl.define do
     attribute_name 'lastName'
   end
 
-  factory :email_element, parent: :element do
+  factory :email_element do
     kind          'TextField'
     label         'What is your email?'
     style         'short'
@@ -358,7 +448,7 @@ FactoryGirl.define do
     required      false
   end
   
-  factory :gender_element, parent: :element do
+  factory :gender_element do
     kind          'TextField'
     label         'What is your gender?'
     style         'short'
@@ -367,7 +457,7 @@ FactoryGirl.define do
     required      false
   end
   
-  factory :phone_element, parent: :element do
+  factory :phone_element do
     kind          'TextField'
     label         'What is your phone number?'
     style         'short'
