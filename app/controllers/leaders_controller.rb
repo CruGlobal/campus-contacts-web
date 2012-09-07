@@ -77,6 +77,7 @@ class LeadersController < ApplicationController
         # we need a valid email address to make a leader
         @email = @person.primary_email_address || @person.email_addresses.new
         @phone = @person.primary_phone_number || @person.phone_numbers.new
+        flash[:error] = I18n.t('leaders.create.no_user_account')
         render :edit and return
       end
       @person = @new_person
