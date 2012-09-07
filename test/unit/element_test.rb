@@ -47,108 +47,108 @@ class ElementTest < ActiveSupport::TestCase
     end
   end
   
-  context "duplicate function" do
-    setup do
-      @element_to_duplicate = Factory(:element, kind: 'TextField', style: 'text_field')
-      @old_question = Element.find(@element_to_duplicate.id)
-      @other_survey = Factory(:survey)
-    end
-    should "copy the element and return the new duplicate element" do
-      @new_question = @old_question.duplicate(@other_survey)
-      assert @new_question
-      assert_equal @new_question, Element.last
-    end
-    should "copy the element with parent QuestionGrid and return the new duplicate element" do
-      @parent = Factory(:element, kind: 'QuestionGrid', style: 'question_grid')
-      @parent_question = Element.find(@parent)
-      
-      @new_question = @old_question.duplicate(@other_survey, @parent_question)
-      assert @new_question
-      assert_equal @parent.id, @new_question.question_grid_id
-    end
-    should "copy the element with parent QuestionGridWithTotal and return the new duplicate element" do
-      @parent = Factory(:element, kind: 'QuestionGridWithTotal', style: 'question_grid')
-      @parent_question = Element.find(@parent)
-      
-      @new_question = @old_question.duplicate(@other_survey, @parent_question)
-      assert @new_question
-      assert_equal @parent.id, @new_question.question_grid_id
-    end
-    should "copy the element with parent ChoiceField and return the new duplicate element" do
-      @parent = Factory(:element, kind: 'ChoiceField', style: 'choice_field')
-      @parent_question = Element.find(@parent)
-      
-      @new_question = @old_question.duplicate(@other_survey, @parent_question)
-      assert @new_question
-      assert_equal @parent.id, @new_question.conditional_id
-    end
-  end
-  
-  context "reuseable? function" do
-    should "return true if element is a QuestionGrid" do
-      @element = Factory(:question_grid)
-      assert @element.reuseable?
-    end
-    should "return true if element is a QuestionGridWithTotal" do
-      @element = Factory(:question_grid_with_total)
-      assert @element.reuseable?
-    end
-    should "return false if element is a ChoiceField" do
-      @element = Factory(:choice_field)
-      assert (@element.reuseable?)
-    end
-  end
-  
-  context "set_defaults function" do
-    should "set default content for choice field" do
-      @element = Factory(:choice_field, content: '')
-      assert_equal "Choice One\nChoice Two\nChoice Three", @element.content
-    end
-    should "set default content for paragraph" do
-      @element = Factory(:paragraph, content: '')
-      assert_equal "Lorem ipsum...", @element.content
-    end
-    should "set default style for text field" do
-      @element = Factory(:text_field, style: '')
-      assert_equal "essay", @element.style
-    end
-    should "set default style for date field" do
-      @element = Factory(:date_field, style: '')
-      assert_equal "date", @element.style
-    end
-    should "set default style for paragraph" do
-      @element = Factory(:paragraph, style: '')
-      assert_equal "paragraph", @element.style
-    end
-    should "set default style for section" do
-      @element = Factory(:section, style: '')
-      assert_equal "section", @element.style
-    end
-    should "set default style for paragraph" do
-      @element = Factory(:choice_field, style: '')
-      assert_equal "checkbox", @element.style
-    end
-    should "set default style for question grid" do
-      @element = Factory(:question_grid, style: '')
-      assert_equal "grid", @element.style
-    end
-    should "set default style for question grid with total" do
-      @element = Factory(:question_grid_with_total, style: '')
-      assert_equal "grid_with_total", @element.style
-    end
-    should "set default style for state chooser" do
-      @element = Factory(:state_chooser, style: '')
-      assert_equal "state_chooser", @element.style
-    end
-    should "set default style for reference question" do
-      @element = Factory(:reference_question, style: '')
-      assert_equal "peer", @element.style
-    end
-    should "set default style for some_question" do
-      @element = Factory(:phone_element, style: '')
-      assert_equal "element", @element.style
-    end
-  end
+  # context "duplicate function" do
+  #   setup do
+  #     @element_to_duplicate = Factory(:element, kind: 'TextField', style: 'text_field')
+  #     @old_question = Element.find(@element_to_duplicate.id)
+  #     @other_survey = Factory(:survey)
+  #   end
+  #   should "copy the element and return the new duplicate element" do
+  #     @new_question = @old_question.duplicate(@other_survey)
+  #     assert @new_question
+  #     assert_equal @new_question, Element.last
+  #   end
+  #   should "copy the element with parent QuestionGrid and return the new duplicate element" do
+  #     @parent = Factory(:element, kind: 'QuestionGrid', style: 'question_grid')
+  #     @parent_question = Element.find(@parent)
+  #     
+  #     @new_question = @old_question.duplicate(@other_survey, @parent_question)
+  #     assert @new_question
+  #     assert_equal @parent.id, @new_question.question_grid_id
+  #   end
+  #   should "copy the element with parent QuestionGridWithTotal and return the new duplicate element" do
+  #     @parent = Factory(:element, kind: 'QuestionGridWithTotal', style: 'question_grid')
+  #     @parent_question = Element.find(@parent)
+  #     
+  #     @new_question = @old_question.duplicate(@other_survey, @parent_question)
+  #     assert @new_question
+  #     assert_equal @parent.id, @new_question.question_grid_id
+  #   end
+  #   should "copy the element with parent ChoiceField and return the new duplicate element" do
+  #     @parent = Factory(:element, kind: 'ChoiceField', style: 'choice_field')
+  #     @parent_question = Element.find(@parent)
+  #     
+  #     @new_question = @old_question.duplicate(@other_survey, @parent_question)
+  #     assert @new_question
+  #     assert_equal @parent.id, @new_question.conditional_id
+  #   end
+  # end
+  # 
+  # context "reuseable? function" do
+  #   should "return true if element is a QuestionGrid" do
+  #     @element = Factory(:question_grid)
+  #     assert @element.reuseable?
+  #   end
+  #   should "return true if element is a QuestionGridWithTotal" do
+  #     @element = Factory(:question_grid_with_total)
+  #     assert @element.reuseable?
+  #   end
+  #   should "return false if element is a ChoiceField" do
+  #     @element = Factory(:choice_field)
+  #     assert (@element.reuseable?)
+  #   end
+  # end
+  # 
+  # context "set_defaults function" do
+  #   should "set default content for choice field" do
+  #     @element = Factory(:choice_field, content: '')
+  #     assert_equal "Choice One\nChoice Two\nChoice Three", @element.content
+  #   end
+  #   should "set default content for paragraph" do
+  #     @element = Factory(:paragraph, content: '')
+  #     assert_equal "Lorem ipsum...", @element.content
+  #   end
+  #   should "set default style for text field" do
+  #     @element = Factory(:text_field, style: '')
+  #     assert_equal "essay", @element.style
+  #   end
+  #   should "set default style for date field" do
+  #     @element = Factory(:date_field, style: '')
+  #     assert_equal "date", @element.style
+  #   end
+  #   should "set default style for paragraph" do
+  #     @element = Factory(:paragraph, style: '')
+  #     assert_equal "paragraph", @element.style
+  #   end
+  #   should "set default style for section" do
+  #     @element = Factory(:section, style: '')
+  #     assert_equal "section", @element.style
+  #   end
+  #   should "set default style for paragraph" do
+  #     @element = Factory(:choice_field, style: '')
+  #     assert_equal "checkbox", @element.style
+  #   end
+  #   should "set default style for question grid" do
+  #     @element = Factory(:question_grid, style: '')
+  #     assert_equal "grid", @element.style
+  #   end
+  #   should "set default style for question grid with total" do
+  #     @element = Factory(:question_grid_with_total, style: '')
+  #     assert_equal "grid_with_total", @element.style
+  #   end
+  #   should "set default style for state chooser" do
+  #     @element = Factory(:state_chooser, style: '')
+  #     assert_equal "state_chooser", @element.style
+  #   end
+  #   should "set default style for reference question" do
+  #     @element = Factory(:reference_question, style: '')
+  #     assert_equal "peer", @element.style
+  #   end
+  #   should "set default style for some_question" do
+  #     @element = Factory(:phone_element, style: '')
+  #     assert_equal "element", @element.style
+  #   end
+  # end
   
   
 end

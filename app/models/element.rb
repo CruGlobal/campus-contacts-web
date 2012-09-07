@@ -72,12 +72,11 @@ class Element < ActiveRecord::Base
   
   # copy an item and all it's children
   def duplicate(survey, parent = nil)
-    new_element = self.class.new(self.attributes.except('id','kind'))
-    
+    new_element = self.class.new(self.attributes)
     case parent.class.to_s
-    when 'ChoiceField'
+    when ChoiceField
       new_element.conditional_id = parent.id
-    when 'QuestionGrid', 'QuestionGridWithTotal'
+    when QuestionGrid, QuestionGridWithTotal
       new_element.question_grid_id = parent.id
     end
     new_element.save(:validate => false)
@@ -106,29 +105,29 @@ class Element < ActiveRecord::Base
   
   protected
   def set_defaults
-    unless self.content.present?
+    if self.content.blank?
       case self.class.to_s
-        when "ChoiceField" then self.content = "Choice One\nChoice Two\nChoice Three"
-        when "Paragraph" then self.content = "Lorem ipsum..." 
+        when "ChoiceField" then self.content ||= "Choice One\nChoice Two\nChoice Three"
+        when "Paragraph" then self.content ||="Lorem ipsum..." 
       end 
     end
 
-    unless self.style.present?
+    if self.style.blank?
       case self.class.to_s
-      when 'TextField' then self.style = 'essay'
-      when "DateField" then self.style = "date"
-      when "FileField" then self.style = "file"
-      when "Paragraph" then self.style = "paragraph"
-      when "Section" then self.style = "section"
+      when 'TextField' then self.style ||= 'essay'
+      when "DateField" then self.style ||= "date"
+      when "FileField" then self.style ||= "file"
+      when "Paragraph" then self.style ||= "paragraph"
+      when "Section" then self.style ||= "section"
       when "ChoiceField" then self.style = "checkbox"
-      when "QuestionGrid" then self.style = "grid"
-      when "QuestionGridWithTotal" then self.style = "grid_with_total"
-      when "SchoolPicker" then self.style = "school_picker"
-      when "ProjectPreference" then self.style = "project_preference"
-      when "StateChooser" then self.style = "state_chooser"
-      when "ReferenceQuestion" then self.style = "peer"
+      when "QuestionGrid" then self.style ||= "grid"
+      when "QuestionGridWithTotal" then self.style ||= "grid_with_total"
+      when "SchoolPicker" then self.style ||= "school_picker"
+      when "ProjectPreference" then self.style ||= "project_preference"
+      when "StateChooser" then self.style ||= "state_chooser"
+      when "ReferenceQuestion" then self.style ||= "peer"
       else
-        self.style = self.class.to_s.underscore
+        self.style ||= self.class.to_s.underscore
       end 
     end
   end
