@@ -144,6 +144,10 @@ class ElementTest < ActiveSupport::TestCase
       @element = Factory(:reference_question, style: '')
       assert_equal "peer", @element.style
     end
+    should "set default style for some_question" do
+      @element = Factory(:phone_element, style: '')
+      assert_equal "element", @element.style
+    end
   end
   
   
