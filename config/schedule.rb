@@ -22,8 +22,11 @@ set :output, '/tmp/sync.log'
 job_type :rake,    "cd :path && RAILS_ENV=:environment /usr/local/bin/bundle exec /usr/local/bin/rake :task --silent :output"
 job_type :rails,    "cd :path && RAILS_ENV=:environment /usr/local/bin/bundle exec /usr/local/bin/rails :task --silent :output"
 
-every 1.day do
+every 4.hours do
   rake "infobase:sync"
+end
+
+every 1.day do
   rails "runner Batch.person_transfer_notify"
   #rails "runner Batch.new_person_notify"
 end
