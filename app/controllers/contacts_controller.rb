@@ -221,16 +221,24 @@ class ContactsController < ApplicationController
         @people = @people.joins(:answer_sheets).where("mh_answer_sheets.survey_id" => params[:survey])
       end
       if params[:first_name].present?
-        @people = @people.where("firstName like ? OR preferredName like ?", '%' + params[:first_name].strip + '%', '%' + params[:first_name].strip + '%')
+        v = params[:first_name].strip
+        term = (v.first == v.last && v.last == '"') ? v[1..-2] : "%#{v}%"
+        @people = @people.where("firstName like ? OR preferredName like ?", term, term)
       end
       if params[:last_name].present?
-        @people = @people.where("lastName like ?", '%' + params[:last_name].strip + '%')
+        v = params[:last_name].strip
+        term = (v.first == v.last && v.last == '"') ? v[1..-2] : "%#{v}%"
+        @people = @people.where("lastName like ?", term)
       end
       if params[:email].present?
-        @people = @people.includes(:primary_email_address).where("email_addresses.email like ?", '%' + params[:email].strip + '%')
+        v = params[:email].strip
+        term = (v.first == v.last && v.last == '"') ? v[1..-2] : "%#{v}%"
+        @people = @people.includes(:primary_email_address).where("email_addresses.email like ?", term)
       end
       if params[:phone_number].present?
-        @people = @people.where("phone_numbers.number like ?", '%' + PhoneNumber.strip_us_country_code(params[:phone_number]) + '%')
+        v = PhoneNumber.strip_us_country_code(params[:phone_number])
+        term = (v.first == v.last && v.last == '"') ? v[1..-2] : "%#{v}%"
+        @people = @people.where("phone_numbers.number like ?", term)
       end
       if params[:gender].present?
         @people = @people.where("gender = ?", params[:gender].strip)
@@ -242,17 +250,24 @@ class ContactsController < ApplicationController
         params[:answers].each do |q_id, v|
           question = Element.find(q_id)
           if v.is_a?(String)
+            if question.is_a?(TextField)
+              # do an exact search if the term is wrapped with quotes
+              term = (v.first == v.last && v.last == '"') ? v[1..-2] : "%#{v}%"
+            else
+              term = v
+            end
+
             # If this question is assigned to a column, we need to handle that differently
             if question.object_name.present?
               table_name = case question.object_name
                            when 'person'
                              case question.attribute_name
                              when 'email'
-                               @people = @people.includes(:email_addresses).where("#{EmailAddress.table_name}.email like ?", '%' + v + '%') unless v.strip.blank?
+                               @people = @people.includes(:email_addresses).where("#{EmailAddress.table_name}.email like ?", term) unless v.strip.blank?
                              when 'phone_number'
-                               @people = @people.includes(:phone_numbers).where("#{PhoneNumber.table_name}.number like ?", '%' + v + '%') unless v.strip.blank?
+                               @people = @people.includes(:phone_numbers).where("#{PhoneNumber.table_name}.number like ?", term) unless v.strip.blank?
                              else
-                               @people = @people.where("#{Person.table_name}.#{question.attribute_name} like ?", '%' + v + '%') unless v.strip.blank?
+                               @people = @people.where("#{Person.table_name}.#{question.attribute_name} like ?", term) unless v.strip.blank?
                              end
                            end
             else
@@ -266,8 +281,13 @@ class ContactsController < ApplicationController
             answers_conditions = []
             v.each do |k1, v1| 
               unless v1.strip.blank?
-                answers_conditions << "#{Answer.table_name}.value like ?"
-                conditions << v1
+                if question.is_a?(TextField)
+                  answers_conditions << "#{Answer.table_name}.value like ?"
+                  conditions << "%#{v1}%"
+                else
+                  answers_conditions << "#{Answer.table_name}.value = ?"
+                  conditions << v1
+                end
               end
             end
             if answers_conditions.present?
