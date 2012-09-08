@@ -283,7 +283,7 @@ class ContactsController < ApplicationController
               unless v1.strip.blank?
                 if question.is_a?(TextField)
                   answers_conditions << "#{Answer.table_name}.value like ?"
-                  conditions << "%#{v1}%"
+                  conditions << (v1.first == v1.last && v1.last == '"') ? v1[1..-2] : "%#{v1}%"
                 else
                   answers_conditions << "#{Answer.table_name}.value = ?"
                   conditions << v1
