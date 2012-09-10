@@ -519,6 +519,7 @@ $('#bulk_send_dialog form').live 'submit', ->
 
 $('#transfer_org').live 'click', ->
   if $('.id_checkbox:checked').length > 0
+    $('#keep_contact').attr checked: true 
     el = $('#assign_org')
     el.dialog
       resizable: false,

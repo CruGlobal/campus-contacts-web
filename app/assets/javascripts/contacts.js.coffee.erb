@@ -358,6 +358,7 @@ $ ->
     
   $("a.assign").live 'click', ->
     if $('.id_checkbox:checked').length > 0
+      $('#keep_contact').attr checked: true 
       $('#assign_to_me').click()
       el = $('#assign_search')
       el.dialog
