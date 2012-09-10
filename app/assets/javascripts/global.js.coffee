@@ -1,6 +1,6 @@
 $ ->
 
-  $('.id_checkbox, .check_all, .check_all_contacts, .check_all_mine').live 'click', ->
+  $('.id_checkbox, #check_all, .check_all_contacts, .check_all_mine').live 'click', ->
     toggle_contacts_control()
     
   $("#person_updated_from").datepicker dateFormat: "dd-mm-yy"

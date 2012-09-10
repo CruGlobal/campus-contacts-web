@@ -1,4 +1,8 @@
 $ ->
+  $(document).on 'keypress', '#contact_search_form input', (e)->
+    if (e.keyCode == $.ui.keyCode.ENTER)
+      $('#contact_search_form').submit()
+
   $('.friends_count').live 'click', ->
     false
   $('.to_list a.delete').live 'click', ->

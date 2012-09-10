@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120821154652) do
+ActiveRecord::Schema.define(:version => 20120905172032) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -3039,6 +3039,8 @@ ActiveRecord::Schema.define(:version => 20120821154652) do
     t.integer  "survey_id"
   end
 
+  add_index "mh_answer_sheets", ["person_id", "survey_id"], :name => "person_id_survey_id"
+
   create_table "mh_answers", :force => true do |t|
     t.integer  "answer_sheet_id",         :null => false
     t.integer  "question_id",             :null => false
@@ -3310,6 +3312,8 @@ ActiveRecord::Schema.define(:version => 20120821154652) do
     t.boolean  "hidden",     :default => false
     t.boolean  "archived",   :default => false
   end
+
+  add_index "mh_survey_elements", ["survey_id", "element_id"], :name => "survey_id_element_id"
 
   create_table "mh_surveys", :force => true do |t|
     t.string   "title",                 :limit => 100,                       :null => false
@@ -3667,7 +3671,7 @@ ActiveRecord::Schema.define(:version => 20120821154652) do
   add_index "ministry_person", ["accountNo"], :name => "accountNo_ministry_Person"
   add_index "ministry_person", ["campus"], :name => "campus"
   add_index "ministry_person", ["fb_uid"], :name => "index_ministry_person_on_fb_uid"
-  add_index "ministry_person", ["firstName"], :name => "firstname_ministry_Person"
+  add_index "ministry_person", ["firstName", "lastName"], :name => "firstName_lastName"
   add_index "ministry_person", ["fk_ssmUserId"], :name => "fk_ssmUserId"
   add_index "ministry_person", ["lastName"], :name => "lastname_ministry_Person"
   add_index "ministry_person", ["org_ids_cache"], :name => "index_ministry_person_on_org_ids_cache", :length => {"org_ids_cache"=>255}
@@ -4550,6 +4554,7 @@ ActiveRecord::Schema.define(:version => 20120821154652) do
   end
 
   add_index "phone_numbers", ["carrier_id"], :name => "index_phone_numbers_on_carrier_id"
+  add_index "phone_numbers", ["number"], :name => "index_phone_numbers_on_number"
   add_index "phone_numbers", ["person_id", "number"], :name => "index_phone_numbers_on_person_id_and_number"
 
   create_table "plugin_schema_info", :id => false, :force => true do |t|

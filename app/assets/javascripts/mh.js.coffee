@@ -13,6 +13,24 @@ $ ->
   $('.org_star').live 'click', ->
     document.location = $(this).attr('url')
 
+  $('.import .manage_labels #use_labels').live 'click', ->
+    if $(this).is(':checked')
+      $(this).siblings('.label_space').slideDown()
+    else
+      $(this).siblings('.label_space').slideUp()
+      
+  $('#new_label_button').live 'click', ->
+    if $.trim($(this).siblings('#new_label_field').val()) != ""
+      $(this).attr('disabled',true)
+      $(this).siblings('#new_label_field').addClass('loading')
+      $.ajax
+        type: 'POST',
+        url: '/roles/create_now',
+        data: 'name='+$(this).siblings('#new_label_field').val()
+    false
+        
+    
+
   $('.action_dropdown').live 'click', -> 
     link = $(this)
     link.toggleClass('active')

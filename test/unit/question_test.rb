@@ -42,4 +42,6 @@ class QuestionTest < ActiveSupport::TestCase
       assert @question.send_email_to_leaders(@question.leaders, msg)
     end
   end
+  
+  
 end

@@ -12,6 +12,12 @@ class PeopleController < ApplicationController
     fetch_people(params)
     @roles = current_organization.roles # Admin or Leader, all roles will appear in the index div.role_div_checkboxes but checkobx of the admin role will be hidden 
   end
+  
+  def all
+    fetch_people(params)
+    @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
+    render :partial => 'all'
+  end
 
   def export
     index
@@ -347,7 +353,6 @@ class PeopleController < ApplicationController
   end
 
 
-
   def update_roles
     if current_user_roles.include? Role.admin
       authorize! :manage, current_organization
@@ -524,6 +529,7 @@ class PeopleController < ApplicationController
           .joins("LEFT JOIN organizational_roles AS org_roles ON 
                    org_roles.person_id = ministry_person.personID")
                    .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
+                   .where("org_roles.organization_id" => current_organization.id)
                    .where("roles.id = :search",
                           {:search => "#{search_params[:role]}"})
                    sort_by.unshift("roles.id")
@@ -532,7 +538,8 @@ class PeopleController < ApplicationController
           @q = @q.select("ministry_person.*, roles.*")
           .joins("LEFT JOIN organizational_roles AS org_roles ON 
                    org_roles.person_id = ministry_person.personID")
-                   .joins("INNER JOIN roles ON roles.id = org_roles.role_id").where("org_roles.archive_date" => nil)
+                   .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
+                   .where("org_roles.archive_date" => nil, "org_roles.organization_id" => current_organization.id)
                    .where("roles.id = :search",
                           {:search => "#{search_params[:role]}"})
                    sort_by.unshift("roles.id")

@@ -301,7 +301,7 @@ class ContactsControllerTest < ActionController::TestCase
     #assert_equal 1, ActionMailer::Base.deliveries.count
   end
 
-  test "find people by name or meail given wildcard strings" do
+  test "find people by name or email given wildcard strings" do
     user1 = Factory(:user_with_auxs)
     user2 = Factory(:user_with_auxs)
     
@@ -313,6 +313,8 @@ class ContactsControllerTest < ActionController::TestCase
     Factory(:organizational_role, organization: org, person: person2, role: Role.contact)
     person3 = Factory(:person, firstName: "Johnny", lastName: "Bravo", email: "bravo@email.com")
     Factory(:organizational_role, organization: org, person: person3, role: Role.contact)
+    person4 = Factory(:person, firstName: "Neil", lastName: "O'neil", email: "neiloneil@email.com")
+    Factory(:organizational_role, organization: org, person: person4, role: Role.contact)
     
     xhr :get, :search_by_name_and_email, { :term => "Neil" } # should be able to find a leader as well
     assert_response :success, response
@@ -330,6 +332,12 @@ class ContactsControllerTest < ActionController::TestCase
     assert_response :success, response
     res = ActiveSupport::JSON.decode(response.body)
     assert_equal res.count, 2
+    
+    xhr :get, :search_by_name_and_email, { :term => "O'neil" } # should be able to find a person even a wildcard has non-alpha characters
+    assert_response :success, response
+    res = ActiveSupport::JSON.decode(response.body)
+    assert_equal res[0]['id'], person4.id
+    assert_equal res[0]['label'], "#{person4.name} (#{person4.email})"
   end
   
   context "Searching for contacts using 'Saved Searches'" do

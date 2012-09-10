@@ -92,7 +92,6 @@ class ContactsController < ApplicationController
     render :partial => 'contacts/mine_all'
   end
   
-  
   def update
     @person = Person.find(params[:id])
     authorize!(:update, @person)
@@ -209,25 +208,37 @@ class ContactsController < ApplicationController
         @people ||= Person.where("1=0")
       end
       unless @people.arel.to_sql.include?('JOIN organizational_roles')
-        @header = "#{Role.find(params[:role]).i18n}" if params[:role]
+        @header = "#{Role.find(params[:role]).i18n}" if params[:role].present?
       end
       if params[:q] && params[:q][:s].include?('mh_answer_sheets')
         @people = current_organization.contacts.get_and_order_by_latest_answer_sheet_answered(params[:q][:s], current_organization.id)
+      end
+      if params[:role].present?
+        org_roles = OrganizationalRole.where(person_id: @people.collect(&:id), role_id: params[:role])
+        @people = Person.where(personID: org_roles.collect(&:person_id)).uniq
       end
       if params[:survey].present?
         @people = @people.joins(:answer_sheets).where("mh_answer_sheets.survey_id" => params[:survey])
       end
       if params[:first_name].present?
-        @people = @people.where("firstName like ? OR preferredName like ?", '%' + params[:first_name].strip + '%', '%' + params[:first_name].strip + '%')
+        v = params[:first_name].strip
+        term = (v.first == v.last && v.last == '"') ? v[1..-2] : "%#{v}%"
+        @people = @people.where("firstName like ? OR preferredName like ?", term, term)
       end
       if params[:last_name].present?
-        @people = @people.where("lastName like ?", '%' + params[:last_name].strip + '%')
+        v = params[:last_name].strip
+        term = (v.first == v.last && v.last == '"') ? v[1..-2] : "%#{v}%"
+        @people = @people.where("lastName like ?", term)
       end
       if params[:email].present?
-        @people = @people.includes(:primary_email_address).where("email_addresses.email like ?", '%' + params[:email].strip + '%')
+        v = params[:email].strip
+        term = (v.first == v.last && v.last == '"') ? v[1..-2] : "%#{v}%"
+        @people = @people.includes(:primary_email_address).where("email_addresses.email like ?", term)
       end
       if params[:phone_number].present?
-        @people = @people.where("phone_numbers.number like ?", '%' + PhoneNumber.strip_us_country_code(params[:phone_number]) + '%')
+        v = PhoneNumber.strip_us_country_code(params[:phone_number])
+        term = (v.first == v.last && v.last == '"') ? v[1..-2] : "%#{v}%"
+        @people = @people.where("phone_numbers.number like ?", term)
       end
       if params[:gender].present?
         @people = @people.where("gender = ?", params[:gender].strip)
@@ -239,23 +250,30 @@ class ContactsController < ApplicationController
         params[:answers].each do |q_id, v|
           question = Element.find(q_id)
           if v.is_a?(String)
+            if question.is_a?(TextField)
+              # do an exact search if the term is wrapped with quotes
+              term = (v.first == v.last && v.last == '"') ? v[1..-2] : "%#{v}%"
+            else
+              term = v
+            end
+
             # If this question is assigned to a column, we need to handle that differently
             if question.object_name.present?
               table_name = case question.object_name
                            when 'person'
                              case question.attribute_name
                              when 'email'
-                               @people = @people.includes(:email_addresses).where("#{EmailAddress.table_name}.email like ?", '%' + v + '%') unless v.strip.blank?
+                               @people = @people.includes(:email_addresses).where("#{EmailAddress.table_name}.email like ?", term) unless v.strip.blank?
                              when 'phone_number'
-                               @people = @people.includes(:phone_numbers).where("#{PhoneNumber.table_name}.number like ?", '%' + v + '%') unless v.strip.blank?
+                               @people = @people.includes(:phone_numbers).where("#{PhoneNumber.table_name}.number like ?", term) unless v.strip.blank?
                              else
-                               @people = @people.where("#{Person.table_name}.#{question.attribute_name} like ?", '%' + v + '%') unless v.strip.blank?
+                               @people = @people.where("#{Person.table_name}.#{question.attribute_name} like ?", term) unless v.strip.blank?
                              end
                            end
             else
               unless v.strip.blank?
                 @people = @people.joins(:answer_sheets)
-                @people = @people.joins("INNER JOIN `mh_answers` as a#{q_id} ON a#{q_id}.`answer_sheet_id` = `mh_answer_sheets`.`id`").where("a#{q_id}.question_id = ? AND a#{q_id}.value like ?", q_id, '%' + v + '%')
+                @people = @people.joins("INNER JOIN `mh_answers` as a#{q_id} ON a#{q_id}.`answer_sheet_id` = `mh_answer_sheets`.`id`").where("a#{q_id}.question_id = ? AND a#{q_id}.value like ?", q_id, term)
               end
             end
           else
@@ -263,8 +281,13 @@ class ContactsController < ApplicationController
             answers_conditions = []
             v.each do |k1, v1| 
               unless v1.strip.blank?
-                answers_conditions << "#{Answer.table_name}.value like ?"
-                conditions << v1
+                if question.is_a?(TextField)
+                  answers_conditions << "#{Answer.table_name}.value like ?"
+                  conditions << (v1.first == v1.last && v1.last == '"') ? v1[1..-2] : "%#{v1}%"
+                else
+                  answers_conditions << "#{Answer.table_name}.value = ?"
+                  conditions << v1
+                end
               end
             end
             if answers_conditions.present?

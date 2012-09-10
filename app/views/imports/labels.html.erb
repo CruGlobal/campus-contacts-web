@@ -1,0 +1,31 @@
+<% provide :sidebar do %>
+  <%= render 'contacts/leaders' %>
+<% end %>
+
+<div class="contentpad import">
+  <div class='import_header'>
+    <div class='import_step'>
+      <%= image_tag("step3.png") %>
+    </div>
+    <div class='import_info'>
+      Label New Contacts
+    </div>
+  </div>
+  <p>
+    <%= t('contacts.index.import_step3_body1', count: @import_count) %>
+  </p>
+  <p>
+    <%= t('contacts.index.import_step3_body2') %>
+  </p>
+  
+  <div class="stepwrap rwidth manage_labels">
+    <%= form_tag controller: 'imports', action: 'import', id: @import.id do |f| %>
+      <%= t('contacts.index.import_labels_checkbox') %>
+      <%= check_box_tag :use_labels, 1, true %>
+      <%= render partial: 'shared/label_fields' %>
+      <br/>
+      <br/>
+      <%= submit_tag 'Import Now', :value=>"Import Now" %>
+    <% end %>
+  </div>
+</div>

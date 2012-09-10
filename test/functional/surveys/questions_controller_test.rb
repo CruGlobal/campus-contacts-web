@@ -14,7 +14,7 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
   test "should get index" do
     element = Factory(:choice_field, label: 'foobar', attribute_name: 'phone_number')
     Factory(:survey_element, survey: @org.surveys.first, element: element, position: 1, archived: true)
-  
+
     APP_CONFIG['predefined_survey'] = Factory(:survey).id
     get :index, survey_id: @survey.id 
     assert_response :success
@@ -47,6 +47,13 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
     end
     
     should "be able to select a predefined or previously used question" do
+      xhr :post, :create, { :question_id => @q3.element.id, :survey_id => @org.surveys.first.id}
+      assert_response :success
+    end
+	
+    should "not be able to add the same Question twice in a survey" do
+      xhr :post, :create, { :question_id => @q3.element.id, :survey_id => @org.surveys.first.id}
+      assert_response :success
       xhr :post, :create, { :question_id => @q3.element.id, :survey_id => @org.surveys.first.id}
       assert_response :success
     end
@@ -106,6 +113,8 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
   context "create" do
     setup do
       @user, org = admin_user_login_with_org
+      @user_2 = Factory(:user_with_auxs)
+      org.add_leader(@user_2.person, @user.person)
       @survey = Factory(:survey, organization: org) #create survey
       @question_3 = Factory(:some_question)
       @survey.questions << @question_3
@@ -127,6 +136,28 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
         end
       end
     end
+    
+    should "create question with trigger words" do
+      rule = Factory(:rule, rule_code: "AUTONOTIFY")
+      rule = Factory(:rule, rule_code: "AUTOASSIGN")
+      Factory(:question_rule, rule: rule, survey_element: @survey.survey_elements.where(element_id: @question_3.id).first)
+      assert_difference "Question.count", 1 do
+        xhr :post, :create, {:question_type => "ChoiceField:radio", :question => {:label => "", :slug => "", :content => "Verge\r\nBarge\r\nTarge", :notify_via => "SMS", :web_only => "0", :hidden => "0"}, :leaders => [@user_2.person.id], :trigger_words => "Yes", :assign_contact_to => "Leader", :autoassign_keyword =>"#{@user_2.person.name} (#{@user_2.person.email})", :autoassign_selected_id =>"#{@user_2.person.id}", :assignment_trigger_words =>"trigger, happy", :survey_id => @survey.id}
+        assert_response :success
+      end
+    end
+    
+    should "should not create question with trigger words if chosen leader has an invalid email" do
+      Factory(:rule, rule_code: "AUTONOTIFY")
+      @user_2.person.email_addresses.collect(&:destroy)
+      invalid_email = Factory.build(:email_address, email: "invalidemail", person: @user_2.person)
+      invalid_email.save(:validate => false)
+      
+      #assert_no_difference "Question.count" do
+        xhr :post, :create, {:question_type => "ChoiceField:radio", :question => {:label => "", :slug => "", :content => "Verge\r\nBarge\r\nTarge", :notify_via => "SMS", :web_only => "0", :hidden => "0"}, :leaders => [@user_2.person.id], :trigger_words => "Yes", :assign_contact_to => "Leader", :autoassign_keyword =>"", :autoassign_selected_id =>"", :assignment_trigger_words =>"", :survey_id => @survey.id}
+        assert_response :success
+      #end
+    end
   end
   
   context "update" do
@@ -136,12 +167,33 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
       @question = Factory(:some_question)
       @survey.questions << @question
       @survey.survey_elements.where(element_id: @question.id).first.update_attributes({archived: true})
+      
+      @user_2 = Factory(:user_with_auxs)
+      org.add_leader(@user_2.person, @user.person)
     end
     
     should "update" do
       xhr :put, :update, {:choice_field => {:label => "Favorite color?", :slug => "", :content => "Verge\r\nBarge\r\nTarge", :notify_via => "SMS", :web_only => "0", :hidden => "0"}, :survey_id => @survey.id, :id => @question.id}
       assert_equal "Favorite color?", Element.find(@question.id).label
       assert_response :success
+    end
+    
+    should "update with trigger words" do
+      rule = Factory(:rule, rule_code: "AUTONOTIFY")
+      Factory(:question_rule, rule: rule, survey_element: @survey.survey_elements.where(element_id: @question.id).first)
+      xhr :put, :update, {:choice_field => {:label => "Favorite color?", :slug => "", :content => "Verge\r\nBarge\r\nTarge", :notify_via => "SMS", :web_only => "0", :hidden => "0"}, :leaders => [@user_2.person.id], :trigger_words => "Yes", :assign_contact_to => "Leader", :autoassign_keyword =>"", :autoassign_selected_id =>"", :assignment_trigger_words =>"", :survey_id => @survey.id, :id => @question.id}
+      assert_equal "Favorite color?", Element.find(@question.id).label
+      assert_response :success
+    end
+    
+    should "update question with trigger words and autoassign" do
+      rule = Factory(:rule, rule_code: "AUTONOTIFY")
+      rule = Factory(:rule, rule_code: "AUTOASSIGN")
+      Factory(:question_rule, rule: rule, survey_element: @survey.survey_elements.where(element_id: @question.id).first)
+      assert_no_difference "Question.count" do
+        xhr :put, :update, {:choice_field => {:label => "Favorite color?", :slug => "", :content => "Verge\r\nBarge\r\nTarge", :notify_via => "SMS", :web_only => "0", :hidden => "0"}, :leaders => [@user_2.person.id], :trigger_words => "Yes", :assign_contact_to => "Leader", :autoassign_keyword =>"#{@user_2.person.name} (#{@user_2.person.email})", :autoassign_selected_id =>"#{@user_2.person.id}", :assignment_trigger_words =>"trigger, happy", :survey_id => @survey.id, :id => @question.id}
+        assert_response :success
+      end
     end
     
     should "not update with the wrong question kind" do

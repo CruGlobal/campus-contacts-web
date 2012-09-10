@@ -62,11 +62,20 @@ class Surveys::QuestionsController < ApplicationController
       pe = SurveyElement.where(survey_id: @survey.id, element_id: @question.id).first
       pe.update_attribute(:archived, false)
     else
-      @survey.elements << @question
+      begin
+        @survey.elements << @question
+      rescue ActiveRecord::RecordInvalid => e
+         params[:error] = I18n.t('surveys.questions.create.duplicate_error')
+         respond_to do |wants|
+          wants.js
+         end
+         
+         return
+      end
     end
     
     params[:id] = @question.id
-    evaluate_option_autonotify
+    return unless evaluate_option_autonotify # to avoid double render
     evaluate_option_autoassign
     
     respond_to do |wants|
@@ -241,35 +250,34 @@ class Surveys::QuestionsController < ApplicationController
       true
     end
 
+    #def validate_then_create_chosen_leaders
+    #  new_leaders = params[:leaders] || []
+    #  old_leaders = params[:id] ? Question.find(params[:id]).question_leaders.collect{ |ql| ql.person_id.to_s} : []
 
-    def validate_then_create_chosen_leaders
-      new_leaders = params[:leaders] || []
-      old_leaders = params[:id] ? Question.find(params[:id]).question_leaders.collect{ |ql| ql.person_id.to_s} : []
-
-      to_add = new_leaders - old_leaders
-      to_remove = old_leaders - new_leaders
+    #  to_add = new_leaders - old_leaders
+    #  to_remove = old_leaders - new_leaders
 
       #destroy question leaders
-      Question.find(params[:id]).question_leaders.each do |ql|
-        ql.destroy if to_remove.include? ql.person_id
-      end if params[:id]
+    #  Question.find(params[:id]).question_leaders.each do |ql|
+    #    ql.destroy if to_remove.include? ql.person_id
+    #  end if params[:id]
 
       #create question leaders
-      leaders_with_invalid_emails = Array.new
-      to_add.each do |ta|
-        leaders_with_invalid_emails << ta unless Person.find(ta).has_a_valid_email?
-      end
+    #  leaders_with_invalid_emails = Array.new
+    #  to_add.each do |ta|
+    #    leaders_with_invalid_emails << ta unless Person.find(ta).has_a_valid_email?
+    #  end
 
-      unless leaders_with_invalid_emails.blank?
-        respond_to do |wants|
-          wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(personId: leaders_with_invalid_emails).collect{|p| p.name}.join(', ') } }
-        end
-        return false
-      else
-        to_add.each do |ta|
-          QuestionLeader.create!(:person_id => ta, :element_id => @question.id)
-        end
-      end
-      true
-    end
+    #  unless leaders_with_invalid_emails.blank?
+    #    respond_to do |wants|
+    #      wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(personId: leaders_with_invalid_emails).collect{|p| p.name}.join(', ') } }
+    #    end
+    #    return false
+    #  else
+    #    to_add.each do |ta|
+    #      QuestionLeader.create!(:person_id => ta, :element_id => @question.id)
+    #    end
+    #  end
+    #  true
+    #end
 end
