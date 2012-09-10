@@ -3,7 +3,7 @@
     <div class="flash error"><strong><%= raw flash[:error] %></strong></div>
   <% end %>
   <br/>
-  <label for="leader_search_name"><%= t('.name_required') %></label>
+  <label for="leader_search_name"><font color="red"><%= t('.name_required') %></font></label>
   
   <%= render 'people/person_form', :person => @person %>
   <%= submit_tag t('general.add'), :disable_with => t('general.adding') %>
