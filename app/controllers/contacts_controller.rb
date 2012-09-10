@@ -213,6 +213,9 @@ class ContactsController < ApplicationController
       if params[:q] && params[:q][:s].include?('mh_answer_sheets')
         @people = current_organization.contacts.get_and_order_by_latest_answer_sheet_answered(params[:q][:s], current_organization.id)
       end
+      if params[:q] && params[:q][:s].include?('followup_status')
+        @people = current_organization.contacts.order_by_followup_status(params[:q][:s])
+      end
       if params[:role].present?
         org_roles = OrganizationalRole.where(person_id: @people.collect(&:id), role_id: params[:role])
         @people = Person.where(personID: org_roles.collect(&:person_id)).uniq

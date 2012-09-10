@@ -20,7 +20,7 @@ class ContactsControllerTest < ActionController::TestCase
       @keyword = Factory.create(:sms_keyword)
       @user.person.organizations.first.add_leader(@user.person, @user.person)
       @org = org
-    end
+    end 
     
     should "be able to show a person" do
       xhr :get, :show, {:id => @user.person.id}
@@ -532,6 +532,33 @@ class ContactsControllerTest < ActionController::TestCase
       end
       
       assert_equal "4th", Person.where(firstName: "James", lastName: "Ingram").first.yearInSchool
+    end
+  end
+  
+  context "Sorting contacts" do
+    setup do
+      @user, org = admin_user_login_with_org
+      
+      @person1 = Factory(:person)
+      @role1 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person1)
+      @role1.update_attributes({followup_status: "uncontacted"})
+      @person2 = Factory(:person)
+      @role2 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person2)
+      @role2.update_attributes({followup_status: "attempted_contact"})
+      @person3 = Factory(:person)
+      @role3 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person3)
+      @role3.update_attributes({followup_status: "contacted"})
+    end
+	
+    should "sort by status asc" do
+      xhr :get, :index, {:assigned_to => "all", :q =>{:s => "followup_status asc"}}
+      assert_equal [@person2.id, @person3.id, @person1.id], assigns(:people).collect(&:id)
+      
+    end
+    
+    should "sort by status desc" do
+      xhr :get, :index, {:assigned_to => "all", :q =>{:s => "followup_status desc"}}
+      assert_equal [@person1.id, @person3.id, @person2.id], assigns(:people).collect(&:id)
     end
   end
 end
