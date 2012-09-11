@@ -72,11 +72,12 @@ class Import < ActiveRecord::Base
   def do_import(labels = [], current_organization_id, current_user_id)
     current_organization = Organization.find(current_organization_id)
     current_user = User.find(current_user_id)
+    import_errors = []
     Person.transaction do
       get_new_people.each do |new_person|
         person = create_contact_from_row(new_person, current_organization)
         if person.errors.present?
-          errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
+          import_errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
         else
           labels.each do |role_id|
             role = Role.find_or_create_by_organization_id_and_name(current_organization.id, label_name) if role_id == '0'
@@ -85,8 +86,16 @@ class Import < ActiveRecord::Base
           end
         end
       end
-      raise ActiveRecord::Rollback if errors.present?
+      if errors.present?
+        # send failure email
+        ImportMailer.import_failed(current_user, import_errors).deliver
+        raise ActiveRecord::Rollback
+      else
+        # Send success email
+        ImportMailer.import_successful(current_user).deliver
+      end
     end
+
   end
   
   def create_contact_from_row(row, current_organization)
