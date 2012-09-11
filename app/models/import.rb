@@ -1,6 +1,8 @@
 require 'csv'
 require 'open-uri'
+require 'contact_methods'
 class Import < ActiveRecord::Base
+  include ContactMethods
   self.table_name = 'mh_imports'
 
   @queue = :general
@@ -63,14 +65,14 @@ class Import < ActiveRecord::Base
     errors
   end
   
-  def queue_import_contacts(labels = [])
-    async(:do_import, labels)
+  def queue_import_contacts(labels = [], current_organization, current_user)
+    async(:do_import, labels, current_organization, current_user)
   end
   
-  def do_import(labels = [])
+  def do_import(labels = [], current_organization, current_user)
     Person.transaction do
       get_new_people.each do |new_person|
-        person = create_contact_from_row(new_person)
+        person = create_contact_from_row(new_person, current_organization)
         if person.errors.present?
           errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
         else
@@ -85,7 +87,7 @@ class Import < ActiveRecord::Base
     end
   end
   
-  def create_contact_from_row(row)
+  def create_contact_from_row(row, current_organization)
     person = Person.create(row[:person])
     
     unless @surveys_for_import

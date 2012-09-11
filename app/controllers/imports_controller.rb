@@ -56,9 +56,9 @@ class ImportsController < ApplicationController
   def import
     init_org
     if params[:use_labels] == '1' && params[:labels].present?
-      @import.queue_import_contacts(params[:labels])
+      @import.queue_import_contacts(params[:labels], current_organization, current_user)
     else
-      @import.queue_import_contacts
+      @import.queue_import_contacts([], current_organization, current_user)
     end
     
     flash[:notice] = t('contacts.import_contacts.success')

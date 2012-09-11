@@ -1,5 +1,7 @@
+require 'contact_methods'
 class ApplicationController < ActionController::Base
   extend DelegatePresenter::ApplicationController
+  include ContactMethods
   before_filter :authenticate_user!, :except => [:facebook_logout]
   before_filter :set_login_cookie
   before_filter :check_su
@@ -240,20 +242,6 @@ class ApplicationController < ActionController::Base
     @unassigned_people ||= organization.unassigned_people
   end
   helper_method :unassigned_people
-  
-  def get_answer_sheet(survey, person)
-    answer_sheet = AnswerSheet.where(person_id: person.id, survey_id: survey.id).first || 
-                   AnswerSheet.create!(person_id: person.id, survey_id: survey.id)
-    answer_sheet.reload
-    answer_sheet
-  end
-  
-  def create_contact_at_org(person, organization)
-    # if someone already has a status in an org, we shouldn't add them as a contact
-    raise 'no person' unless person
-    raise 'no org' unless organization
-    organization.add_contact(person)
-  end
   
   def user_root_path
     if mhub?
