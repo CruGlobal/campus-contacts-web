@@ -38,26 +38,34 @@ class ImportsController < ApplicationController
   def labels
     @import_count =  @import.get_new_people.count
     @roles = current_organization.roles
-    # raise @import.inspect
   end
 
   def update
     @import.update_attributes(params[:import])
     errors = @import.check_for_errors
 
-    if errors.blank?
-      @import.async_import_contacts
-    end
-    
     if errors.present?
       flash.now[:error] = errors.join('<br />').html_safe
       init_org
       render :new
     else
-      flash[:notice] = t('contacts.import_contacts.success')
       redirect_to :action => :labels
     end
   end
+
+  def import
+    init_org
+    if params[:use_labels] == '1' && params[:labels].present?
+      @import.queue_import_contacts(params[:labels])
+    else
+      @import.queue_import_contacts
+    end
+    
+    flash[:notice] = t('contacts.import_contacts.success')
+    
+    redirect_to controller: :contacts
+  end
+  
 
   def destroy
     @import.destroy

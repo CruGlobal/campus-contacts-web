@@ -63,16 +63,22 @@ class Import < ActiveRecord::Base
     errors
   end
   
-  def async_import_contacts
-    async(:do_import)
+  def queue_import_contacts(labels = [])
+    async(:do_import, labels)
   end
   
-  def do_import
+  def do_import(labels = [])
     Person.transaction do
       get_new_people.each do |new_person|
         person = create_contact_from_row(new_person)
         if person.errors.present?
           errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
+        else
+          labels.each do |role_id|
+            role = Role.find_or_create_by_organization_id_and_name(current_organization.id, @import.label_name) if role_id == '0'
+            role_id = role.id if role.present?
+            OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person.id, current_organization.id, role_id, added_by_id: current_user.person.id) if role_id.present?
+          end
         end
       end
       raise ActiveRecord::Rollback if errors.present?
