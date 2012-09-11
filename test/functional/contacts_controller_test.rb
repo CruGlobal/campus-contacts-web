@@ -20,7 +20,7 @@ class ContactsControllerTest < ActionController::TestCase
       @keyword = Factory.create(:sms_keyword)
       @user.person.organizations.first.add_leader(@user.person, @user.person)
       @org = org
-    end
+    end 
     
     should "be able to show a person" do
       xhr :get, :show, {:id => @user.person.id}
@@ -301,7 +301,7 @@ class ContactsControllerTest < ActionController::TestCase
     #assert_equal 1, ActionMailer::Base.deliveries.count
   end
 
-  test "find people by name or meail given wildcard strings" do
+  test "find people by name or email given wildcard strings" do
     user1 = Factory(:user_with_auxs)
     user2 = Factory(:user_with_auxs)
     
@@ -313,6 +313,8 @@ class ContactsControllerTest < ActionController::TestCase
     Factory(:organizational_role, organization: org, person: person2, role: Role.contact)
     person3 = Factory(:person, firstName: "Johnny", lastName: "Bravo", email: "bravo@email.com")
     Factory(:organizational_role, organization: org, person: person3, role: Role.contact)
+    person4 = Factory(:person, firstName: "Neil", lastName: "O'neil", email: "neiloneil@email.com")
+    Factory(:organizational_role, organization: org, person: person4, role: Role.contact)
     
     xhr :get, :search_by_name_and_email, { :term => "Neil" } # should be able to find a leader as well
     assert_response :success, response
@@ -330,6 +332,12 @@ class ContactsControllerTest < ActionController::TestCase
     assert_response :success, response
     res = ActiveSupport::JSON.decode(response.body)
     assert_equal res.count, 2
+    
+    xhr :get, :search_by_name_and_email, { :term => "O'neil" } # should be able to find a person even a wildcard has non-alpha characters
+    assert_response :success, response
+    res = ActiveSupport::JSON.decode(response.body)
+    assert_equal res[0]['id'], person4.id
+    assert_equal res[0]['label'], "#{person4.name} (#{person4.email})"
   end
   
   context "Searching for contacts using 'Saved Searches'" do
@@ -524,6 +532,33 @@ class ContactsControllerTest < ActionController::TestCase
       end
       
       assert_equal "4th", Person.where(firstName: "James", lastName: "Ingram").first.yearInSchool
+    end
+  end
+  
+  context "Sorting contacts" do
+    setup do
+      @user, org = admin_user_login_with_org
+      
+      @person1 = Factory(:person)
+      @role1 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person1)
+      @role1.update_attributes({followup_status: "uncontacted"})
+      @person2 = Factory(:person)
+      @role2 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person2)
+      @role2.update_attributes({followup_status: "attempted_contact"})
+      @person3 = Factory(:person)
+      @role3 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person3)
+      @role3.update_attributes({followup_status: "contacted"})
+    end
+	
+    should "sort by status asc" do
+      xhr :get, :index, {:assigned_to => "all", :q =>{:s => "followup_status asc"}}
+      assert_equal [@person2.id, @person3.id, @person1.id], assigns(:people).collect(&:id)
+      
+    end
+    
+    should "sort by status desc" do
+      xhr :get, :index, {:assigned_to => "all", :q =>{:s => "followup_status desc"}}
+      assert_equal [@person1.id, @person3.id, @person2.id], assigns(:people).collect(&:id)
     end
   end
 end

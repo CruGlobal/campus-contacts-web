@@ -1,12 +1,13 @@
 Mh::Application.routes.draw do
   get "dashboard/index"
 
-  resources :imports, :only => [:index, :show, :new, :create, :update, :destroy, :edit] do
+  resources :imports, :only => [:show, :new, :create, :update, :destroy, :edit] do
     collection do
       get :download_sample_contacts_csv
+      post :import
     end
-
   end
+  match 'imports/:id/labels' => 'imports#labels'
 
   resources :group_labels, :only => [:create, :destroy]
 
@@ -64,9 +65,6 @@ Mh::Application.routes.draw do
     end
   end
 
-  resources :schools, :only => :index
-  resources :communities
-
   resources :ministries
 
   resources :sms_keywords, :only => [:new, :create, :edit, :update, :destroy, :index] do
@@ -102,37 +100,15 @@ Mh::Application.routes.draw do
     end
   end
 
-  resources :roles, :only => [:create, :update, :destroy, :index, :new, :edit]
+  resources :roles, :only => [:create, :update, :destroy, :index, :new, :edit] do
+    collection do
+      post :create_now
+    end
+  end
 
   namespace :admin do
     resources :email_templates
-    resources :question_sheets do
-      member do
-        post :archive
-        post :unarchive
-        post :duplicate
-      end
-      resources :pages,                               # pages/
-                controller: :question_pages do         # question_sheet_pages_path(),
-                collection do
-                  post :reorder
-                end
-                member do
-                  get :show_panel
-                end
-        resources :elements do
-                  collection do
-                    post :reorder
-                  end
-                  member do
-                    get :remove_from_grid
-                    post :use_existing
-                    post :drop
-                    post :duplicate
-                  end
-                end
-      end
-    end
+    
   end
 
   # namespace :admin do

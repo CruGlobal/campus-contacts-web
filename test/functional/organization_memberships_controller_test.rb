@@ -72,7 +72,7 @@ class OrganizationMembershipsControllerTest < ActionController::TestCase
   
     should "set_current" do
       get :set_current, { :id => @new_org.id }
-      assert_redirected_to contacts_path
+      assert_redirected_to dashboard_path
       assert_equal @request.session[:current_organization_id], @new_org.id.to_s
     end
   end

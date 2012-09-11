@@ -17,6 +17,12 @@ FactoryGirl.define do
   end
 =end
 
+  factory :dashboard_post do
+    title "Gangnam Style #{Factory.next(:count)}"
+    context "Music Video"
+    video "http://www.youtube.com/watch?v=9bZkp7q19f0"
+  end
+
   factory :group_membership do
     association :group
     association :person
@@ -401,6 +407,11 @@ FactoryGirl.define do
     association :organization
     name        'member'
     i18n        'member'
+  end
+  
+  factory :import do
+    association :user
+    association :organization
   end
 
   factory :role do

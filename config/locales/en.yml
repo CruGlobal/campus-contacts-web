@@ -6,6 +6,10 @@ en:
   application:
     add_contact: 
       add_contact: Add a contact to %{org}
+      title_bio: Bio
+      title_label: Labels
+      title_surveys: Survey
+      title_optional: (Optional)
       survey_mode_instructions: If the person you are adding is standing next to you, click "Enter Survey Mode" from the top right corner of your screen.
       save_and_close: 'Save and close'
       save_and_add: 'Save and add another'
@@ -94,6 +98,7 @@ en:
     country: Country
     zip: Zip
     alert: Alert
+    role: Label
     save: 'Save'
     show: Show
     delete: Delete all checked
@@ -384,6 +389,7 @@ en:
     questions:
       create:
         notice: 'Question was successfully created.'
+        duplicate_error: "You have already added that question. You cannot assign a question twice in a survey!"
       edit:
         leader_invalid_email_with_name: "Chosen leader/s '%{leader_names}' have invalid email."
         leader_invalid_email: "Chosen leader has an invalid email."
@@ -610,7 +616,17 @@ en:
       unassigned: 'Unassigned'
       all: 'All'
       dnc: 'Do Not Contact'
+      add_label_exists: 'Label is already in the list!'
+      add_label_success: 'New label successfully added!'
+      add_label_failed: 'Failed to save label. Please try again.'
+      add_label_empty: 'Cannot save blank label. Please try again.'
+      import_new_label: 'Add New Label'
       import_contacts: 'Import Contacts'
+      import_contacts2: 'Setup Your CSV Headers'
+      import_contacts3: 'Label New Contacts'
+      import_labels_checkbox: 'I would like to apply labels to my new contacts.'
+      import_step3_body1: 'You are almost ready to upload %{count} new contacts.'
+      import_step3_body2: 'Just select any labels from the list below that you would like to apply to these new contacts, and then click Import Now.'
       completed: 'Completed'
       in_progress: 'Assigned'
       no_activity: 'No Activity'

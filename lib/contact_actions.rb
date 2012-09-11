@@ -18,10 +18,15 @@ module ContactActions
       end
 
       @person, @email, @phone = Person.new_from_params(params[:person])
-
+      
       if @person.save
+        if params[:labels].present?
+          params[:labels].each do |role_id|
+            OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(@person.id, current_organization.id, role_id, added_by_id: current_user.person.id) if role_id.present?
+          end
+        end
+        
         @questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => false)
-
         save_survey_answers
 
         # Record that this person was created so we can notify leaders/admins

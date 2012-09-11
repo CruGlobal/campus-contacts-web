@@ -16,6 +16,10 @@ class Import < ActiveRecord::Base
   validates :upload, attachment_presence: true
 
   before_save :parse_headers
+  
+  def label_name
+    created_at.strftime("Import-%Y-%m-%d")
+  end
 
   def get_new_people # generates array of Person hashes
     new_people = Array.new
@@ -46,7 +50,7 @@ class Import < ActiveRecord::Base
     errors = []
 
     #since first name is required for every contact. Look for id of element where attribute_name = 'firstName' in the header_mappings.
-    first_name_question = Element.where( :attribute_name => "firstName").first.id.to_s
+    first_name_question = Element.where(:attribute_name => "firstName").first.id.to_s
     unless header_mappings.values.include?(first_name_question) 
       errors << I18n.t('contacts.import_contacts.present_firstname')
     end

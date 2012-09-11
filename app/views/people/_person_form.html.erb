@@ -15,7 +15,8 @@
   <div class="sfield">
     <div class="ls"><%= pf.label :gender, t('general.gender') %>:</div>
     <div class="rs">
-      <%= pf.radio_button :gender, 'male' %> <label for="person_gender_male"><%= t('general.male') %></label> <br/>
+      <%= pf.radio_button :gender, 'male' %> <label for="person_gender_male"><%= t('general.male') %></label>
+      &nbsp;&nbsp;&nbsp;&nbsp;
       <%= pf.radio_button :gender, 'female' %> <label for="person_gender_female"><%= t('general.female') %> </label>
     </div>
   </div>
@@ -69,19 +70,8 @@
   </div>
   
   <div class="sfield">
-    <div class="ls"></div>
-    <div class="rs">
-      <div class="sidebyside leftalign">
-        <div class="element">
-          <%= af.label :state, t('general.state') %>:<br/>
-          <%= af.select :state, Carmen::states('US'), include_blank: true %>
-        </div>
-        <div class="element">
-          <%= af.label :zip, t('general.zip') %>:<br/>
-          <%= af.text_field :zip, :class => "field_zip" %>
-        </div>
-      </div>
-    </div>
+    <div class="ls"><%= af.label :city, t('general.state') %>:</div>
+    <div class="rs"><%= af.select :state, Carmen::states('US'), include_blank: true %></div>
   </div>
   
   <div class="sfield">
@@ -90,6 +80,11 @@
       <% Carmen.priority_countries = %w(US CA) %>
       <%= af.select :country, Carmen::countries(:locale => I18n.locale) %>
     </div>
+  </div>
+  
+  <div class="sfield">
+    <div class="ls"><%= af.label :city, t('general.zip') %>:</div>
+    <div class="rs"><%= af.text_field :zip, :class => "field_zip" %></div>
   </div>
   <% end %>
 </div>

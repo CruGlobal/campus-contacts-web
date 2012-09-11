@@ -1,6 +1,6 @@
 class ImportsController < ApplicationController
-  before_filter :get_import, only: [:show, :edit, :update, :destroy]
-  before_filter :init_org, only: [:index, :show, :edit, :update, :new]
+  before_filter :get_import, only: [:show, :edit, :update, :destroy, :labels, :import]
+  before_filter :init_org, only: [:index, :show, :edit, :update, :new, :labels, :import]
   rescue_from Import::NilColumnHeader, with: :nil_column_header
 
   def index
@@ -34,6 +34,12 @@ class ImportsController < ApplicationController
   def edit
     get_survey_questions
   end
+  
+  def labels
+    @import_count =  @import.get_new_people.count
+    @roles = current_organization.roles
+    # raise @import.inspect
+  end
 
   def update
     @import.update_attributes(params[:import])
@@ -42,14 +48,14 @@ class ImportsController < ApplicationController
     if errors.blank?
       @import.async_import_contacts
     end
-
+    
     if errors.present?
       flash.now[:error] = errors.join('<br />').html_safe
       init_org
       render :new
     else
       flash[:notice] = t('contacts.import_contacts.success')
-      redirect_to contacts_path and return
+      redirect_to :action => :labels
     end
   end
 

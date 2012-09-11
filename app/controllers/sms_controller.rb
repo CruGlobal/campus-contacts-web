@@ -1,13 +1,13 @@
 class SmsController < ApplicationController
   skip_before_filter :authenticate_user!, :verify_authenticity_token, :check_valid_subdomain
   def mo
-    render nothing: true and return if sms_params[:message].blank?
+    render xml: blank_response and return if sms_params[:message].blank?
     begin
       # try to save the new message
       @received = ReceivedSms.create!(sms_params)
     rescue ActiveRecord::RecordNotUnique
       # the mysql index just saved us from a duplicate message 
-      render nothing: true and return 
+      render xml: blank_response and return 
     end
     # Process incoming text
     message = sms_params[:message]
@@ -31,7 +31,7 @@ class SmsController < ApplicationController
       @sent_sms = send_message(@msg, sms_params[:phone_number])
       render xml: @sent_sms.to_twilio and return
     when ''
-      render nothing: true and return
+      render xml: blank_response and return
     end
 
     # If it is, check for interactive texting
@@ -245,6 +245,10 @@ class SmsController < ApplicationController
   def send_message(msg, phone_number, separator = nil, question_id = nil)
     sent_via = @sms_params[:shortcode] == '75572' ? 'moonshado' : 'twilio'
     @sent_sms = SentSms.create!(message: msg, recipient: phone_number, received_sms_id: @received.try(:id), sent_via: sent_via, separator: separator, question_id: question_id)
+  end
+
+  def blank_response
+    '<Response></Response>'
   end
 
 end
