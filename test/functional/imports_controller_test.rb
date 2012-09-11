@@ -55,8 +55,10 @@ class ImportsControllerTest < ActionController::TestCase
         file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
         post :create, { :import => { :upload => file } }
         assert_response :redirect
-        
         post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @email_element.id} }, :id => Import.first.id}
+        assert_response :redirect
+        post :import, { :use_labels => "0", :id => Import.first.id}
+        Import.last.do_import([], @org, @user)
       end
     end
     
@@ -299,7 +301,8 @@ class ImportsControllerTest < ActionController::TestCase
         
         assert_difference "AnswerSheet.count", 1 do
           post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "3" => @email_element.id, "4" => @question.id} }, :id => Import.first.id}
-          #post :import, { :use_labels => "0", :id => Import.first.id}
+          post :import, { :use_labels => "0", :id => Import.first.id}
+          Import.last.do_import([], @org, @user)
           assert_equal Person.last.answer_sheets.first.answers.first.value, "I just met you"
         end
     end
