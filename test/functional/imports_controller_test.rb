@@ -127,7 +127,26 @@ class ImportsControllerTest < ActionController::TestCase
       assert_equal Person.count, person_count + 1
     end
     
-
+    should "upload & import contacts if use_labels is false" do
+      stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
+        to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv")), status: 200)
+      contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv"))
+      file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
+      post :create, { :import => { :upload => file } }
+      assert_response :redirect
+      
+      post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @email_element.id} }, :id => Import.first.id}
+      assert_equal Import.first.header_mappings['0'].to_i, @firstName_element.id
+      assert_equal Import.first.header_mappings['1'].to_i, @lastName_element.id
+      assert_equal Import.first.header_mappings['2'].to_i, @email_element.id
+      person_count  = Person.count
+      
+      assert_response :redirect
+      # "use_labels"=>"1", "labels"=>["0", "5", "145"], "new_label_field"=>"", "commit"=>"Import Now", "id"=>"13"
+      post :import, { :use_labels => "0", :id => Import.first.id}
+      assert_equal Person.count, person_count + 1
+    end
+    
     should "upload & use existing label & import contacts if use_labels is true" do
       stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
         to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv")), status: 200)
@@ -172,7 +191,7 @@ class ImportsControllerTest < ActionController::TestCase
       assert new_person.organizational_roles.exists?(role_id: new_role.id), 'imported person should have the default role'
       assert_response :redirect
     end
-=end
+    
     should "succesfully create an import and unsuccesfully upload contact because firstName heading is not specified by the user" do 
       stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
         to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv")), status: 200)
