@@ -101,6 +101,13 @@ $ ->
     
   true
 
+  
+  toggle_contacts_control = ->
+    if $(".id_checkbox").is(":checked")
+      $(".control_toggle").show()
+    else
+      $(".control_toggle").hide()
+      
   $("#people_controller a#bulk_delete").live 'click', ->
     ids = []
     $('.id_checkbox:checked:visible').each ->
@@ -112,17 +119,23 @@ $ ->
     num_selected = ids.length
     if num_selected  > 0
       if(confirm('Are you sure you want to delete ' + num_selected + ' person(s) permanently?'))
+        show_loader()
         $.ajax
           type: 'POST',
           url: '/people/bulk_delete',
           data: 'ids='+ids,
           success: (data) ->
+            hide_loader()
             if data.indexOf("success") != -1 #there might be a better way of doing this other than just basing the success on the returned data
               $('.id_checkbox:checked').each ->
                 $(this).closest('tr').fadeOut();
+                $(this).closest('tr').remove();
+              toggle_contacts_control()
             else
               $.a(data)
     false
+  
+  
     
   $("#people_controller a#bulk_archive").live 'click', ->
     ids = []
@@ -135,14 +148,18 @@ $ ->
     num_selected = ids.length
     if num_selected  > 0
       if(confirm('Are you sure you want to archive ' + num_selected + ' person(s)?'))
+        show_loader()
         $.ajax
           type: 'POST',
           url: '/people/bulk_archive',
           data: 'ids='+ids,
           success: (data) ->
+            hide_loader()
             if data.indexOf("success") != -1 #there might be a better way of doing this other than just basing the success on the returned data
               $('.id_checkbox:checked').each ->
                 $(this).closest('tr').fadeOut();
+                $(this).closest('tr').remove();
+              toggle_contacts_control()
             else
               $.a(data)
     false
