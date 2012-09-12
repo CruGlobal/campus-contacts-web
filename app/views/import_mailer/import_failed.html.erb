@@ -1,0 +1,7 @@
+<p>The CSV file that you uploaded included some rows that we couldn't import. Below is a list of issued encountered:</p>
+
+<ul>
+  <% @errors.each do |error| %>
+    <li><%= error %></li>
+  <% end %>
+</ul>

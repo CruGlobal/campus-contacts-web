@@ -1,8 +1,11 @@
 require 'csv'
 require 'open-uri'
+require 'contact_methods'
 class Import < ActiveRecord::Base
+  include ContactMethods
   self.table_name = 'mh_imports'
 
+  @queue = :general
   serialize :headers
   serialize :header_mappings
 
@@ -61,6 +64,78 @@ class Import < ActiveRecord::Base
     end
     errors
   end
+  
+  def queue_import_contacts(labels = [], current_organization, current_user)
+    async(:do_import, labels, current_organization.id, current_user.id)
+  end
+  
+  def do_import(labels = [], current_organization_id, current_user_id)
+    current_organization = Organization.find(current_organization_id)
+    current_user = User.find(current_user_id)
+    import_errors = []
+    Person.transaction do
+      get_new_people.each do |new_person|
+        person = create_contact_from_row(new_person, current_organization)
+        if person.errors.present?
+          import_errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
+        else
+          labels.each do |role_id|
+            role = Role.find_or_create_by_organization_id_and_name(current_organization.id, label_name) if role_id == '0'
+            role_id = role.id if role.present?
+            OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person.id, current_organization.id, role_id, added_by_id: current_user.person.id) if role_id.present?
+          end
+        end
+      end
+      if errors.present?
+        # send failure email
+        ImportMailer.import_failed(current_user, import_errors).deliver
+        raise ActiveRecord::Rollback
+      else
+        # Send success email
+        ImportMailer.import_successful(current_user).deliver
+      end
+    end
+
+  end
+  
+  def create_contact_from_row(row, current_organization)
+    person = Person.create(row[:person])
+    
+    unless @surveys_for_import
+      @survey_ids ||= SurveyElement.where(element_id: row[:answers].keys).pluck(:survey_id) - [APP_CONFIG['predefined_survey']]
+      @surveys_for_import = current_organization.surveys.where(id: @survey_ids.uniq)
+    end
+
+    question_sets = []
+
+    @surveys_for_import.each do |survey|
+      answer_sheet = get_answer_sheet(survey, person)
+      question_set = QuestionSet.new(survey.questions, answer_sheet)
+      question_set.post(row[:answers], answer_sheet)
+      question_sets << question_set
+    end
+
+    # Set values for predefined questions
+    answer_sheet = AnswerSheet.new(person: person)
+    predefined =
+      begin
+        Survey.find(APP_CONFIG['predefined_survey'])
+      rescue
+        Survey.find(2)
+      end
+    predefined.elements.where('object_name is not null').each do |question|
+      question.set_response(row[:answers][question.id], answer_sheet)
+    end
+
+    person, email, phone = Person.find_existing_person(person)
+
+    if person.save
+      question_sets.map { |qs| qs.save }
+      create_contact_at_org(person, current_organization)
+    end
+
+    return person
+  end
 
   class NilColumnHeader < StandardError
 
@@ -93,4 +168,5 @@ class Import < ActiveRecord::Base
     end
     true
   end
+  
 end

@@ -145,7 +145,8 @@ class Organization < ActiveRecord::Base
           AND organizational_roles.organization_id = #{id} 
           AND organizational_roles.role_id = '#{Role::CONTACT_ID}' 
           AND followup_status <> 'do_not_contact' 
-          AND archive_date IS NOT NULL
+          AND followup_status <> 'completed' 
+          AND archive_date IS NULL
           LEFT JOIN contact_assignments ON contact_assignments.person_id = #{person_table_pkey} 
           AND contact_assignments.organization_id = #{id}")
         .where("contact_assignments.id IS NULL OR contact_assignments.assigned_to_id NOT IN (?)", only_leaders)
@@ -158,6 +159,8 @@ class Organization < ActiveRecord::Base
           AND organizational_roles.organization_id = #{id} 
           AND organizational_roles.role_id = '#{Role::CONTACT_ID}' 
           AND followup_status <> 'do_not_contact' 
+          AND followup_status <> 'completed' 
+          AND archive_date IS NULL
           LEFT JOIN contact_assignments ON contact_assignments.person_id = #{person_table_pkey} 
           AND contact_assignments.organization_id = #{id}")
         .where("contact_assignments.assigned_to_id IN (?)", only_leaders)

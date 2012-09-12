@@ -72,7 +72,7 @@
     <span class="name">
       <%= link_to(t('contacts.index.completed'), contacts_path(completed: true)) %>
     </span>
-    (<%= @organization.organizational_roles.completed.count %>)
+    (<%= @organization.completed_contacts.count %>)
   </li>
   <li>
     <span class="name">
