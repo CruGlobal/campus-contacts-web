@@ -558,6 +558,8 @@ $('#assign_org .org a').live 'click', (e)->
           $.a(data)
           $('.id_checkbox:checked').each ->
             $(this).closest('tr').fadeOut();
+        else
+          $.a(data)
         if $('#people_controller.show')[0]
           setTimeout "document.location = '/people'", 1000
       else
