@@ -138,11 +138,11 @@ class SmsControllerTest < ActionController::TestCase
       timestamp = Time.now.strftime('%m/%d/%Y %H:%M:%S')
       post :mo, @post_params.merge!({message: @keyword.keyword, timestamp: timestamp})
       assert_response :success, @response.body
-      assert_not_equal(@response.body, ' ')
+      assert_not_equal(@response.body, '<Response></Response>')
 
       post :mo, @post_params.merge!({message: @keyword.keyword, timestamp: timestamp})
       assert_response :success, @response.body
-      assert_equal(@response.body, ' ')
+      assert_equal(@response.body, '<Response></Response>')
     end
 
     should "have response when user sends stop" do

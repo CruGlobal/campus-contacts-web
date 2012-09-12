@@ -38,62 +38,34 @@ class ImportsController < ApplicationController
   def labels
     @import_count =  @import.get_new_people.count
     @roles = current_organization.roles
-    # raise @import.inspect
   end
 
   def update
     @import.update_attributes(params[:import])
     errors = @import.check_for_errors
-    
+
     if errors.present?
       flash.now[:error] = errors.join('<br />').html_safe
       init_org
       render :new
     else
-      # Person.transaction do
-      #   @import.get_new_people.each do |new_person|
-      #     person = create_contact_from_row(new_person)
-      #     if person.errors.present?
-      #       errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
-      #     end
-      #   end
-      #   raise ActiveRecord::Rollback if errors.present?
-      # end
-      
-      # flash[:notice] = t('contacts.import_contacts.success')
       redirect_to :action => :labels
     end
   end
-  
+
   def import
-    errors = @import.check_for_errors
-    if errors.present?
-      flash.now[:error] = errors.join('<br />').html_safe
-      init_org
-      render :new
+    init_org
+    if params[:use_labels] == '1' && params[:labels].present?
+      @import.queue_import_contacts(params[:labels], current_organization, current_user)
     else
-      Person.transaction do
-        @import.get_new_people.each do |new_person|
-          person = create_contact_from_row(new_person)
-          if person.errors.present?
-            errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
-          else 
-            if params[:use_labels].present? && params[:use_labels] == '1' && params[:labels].present?
-              params[:labels].each do |role_id|
-                role = Role.find_or_create_by_organization_id_and_name(current_organization.id, @import.label_name) if role_id == '0'
-                role_id = role.id if role.present?
-                OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person.id, current_organization.id, role_id, added_by_id: current_user.person.id) if role_id.present?
-              end
-            end
-          end
-        end
-        raise ActiveRecord::Rollback if errors.present?
-      end
-      flash[:notice] = t('contacts.import_contacts.success')
-      init_org
-      redirect_to controller: :contacts
+      @import.queue_import_contacts([], current_organization, current_user)
     end
+    
+    flash[:notice] = t('contacts.import_contacts.success')
+    
+    redirect_to controller: :contacts
   end
+  
 
   def destroy
     @import.destroy
@@ -137,46 +109,6 @@ class ImportsController < ApplicationController
       end
     end
     @survey_questions[I18n.t('surveys.questions.index.predefined')] = Survey.find(APP_CONFIG['predefined_survey']).questions.collect { |q| [q.label, q.id] }
-  end
-
-  def create_contact_from_row(row)
-
-    person = Person.new
-
-    unless @surveys_for_import
-      @survey_ids ||= SurveyElement.where(element_id: row[:answers].keys).pluck(:survey_id) - [APP_CONFIG['predefined_survey']]
-      @surveys_for_import = current_organization.surveys.where(id: @survey_ids.uniq)
-    end
-
-    question_sets = []
-
-    @surveys_for_import.each do |survey|
-      answer_sheet = get_answer_sheet(survey, person)
-      question_set = QuestionSet.new(survey.questions, answer_sheet)
-      question_set.post(row[:answers], answer_sheet)
-      question_sets << question_set
-    end
-
-    # Set values for predefined questions
-    answer_sheet = AnswerSheet.new(person: person)
-    predefined =
-      begin
-        Survey.find(APP_CONFIG['predefined_survey'])
-      rescue
-        Survey.find(2)
-      end
-    predefined.elements.where('object_name is not null').each do |question|
-      question.set_response(row[:answers][question.id], answer_sheet)
-    end
-
-    person, email, phone = Person.find_existing_person(person)
-
-    if person.save
-      question_sets.map { |qs| qs.save }
-      create_contact_at_org(person, current_organization)
-    end
-
-    return person
   end
 
 end

@@ -26,11 +26,7 @@ Mh::Application.configure do
 
   # Use a different cache store in production
   # config.cache_store = :mem_cache_store
-  if Rails.env.production?
-    cache_servers = ['10.180.4.101', '10.180.4.111']
-  else
-    cache_servers = ['127.0.0.1']
-  end
+  cache_servers = ['10.180.4.101', '10.180.4.111']
 
   config.cache_store = :dalli_store, cache_servers,  { :namespace => 'MissionHubCache', :expire_after => 1.day, :compress => true }
 
@@ -58,7 +54,7 @@ Mh::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
-  config.action_mailer.delivery_method = :sendmail
+  config.action_mailer.delivery_method = :smtp
 
   config.action_mailer.default_url_options = {
     host: 'missionhub.com'

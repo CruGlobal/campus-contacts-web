@@ -78,7 +78,8 @@ class SentSms < ActiveRecord::Base
     else
       # If the recipient is in the US, use the shortcode, otherwise use the long number
       # from = recipient.first == '1' ? SmsKeyword::SHORT : SmsKeyword::LONG
-      from = SmsKeyword::SHORT
+      #from = SmsKeyword::SHORT
+      from = SmsKeyword::LONG
     end
     #if message.length > 160
       #split_message = SentSms.smart_split(message, separator)

@@ -687,7 +687,7 @@ en:
       bulk_vcard_email_subject: 'Your request for contact information'      
       bulk_vcard_email_content: 'Attached to this email is a vcard containing the contacts you selected'
     import_contacts:
-      success: "CSV Import Successful, new records added to database!"
+      success: "Your CSV upload is now being processed. You will receive an email when it finishes."
       error: "CSV Import unsuccessful for some rows:"
       instructions_label: "Instructions"
       select_csv: "Select a CSV File :"

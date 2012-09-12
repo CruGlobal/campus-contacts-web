@@ -43,7 +43,7 @@ task :staging do
   set :deploy_to, "/var/www/html/staging/#{application}"
   set :environment, 'staging'
   set :rails_env, 'staging'
-servers = ["108.171.184.122"]
+servers = ["108.171.185.106"]
   role :db, servers.first, primary: true
   role :web, *servers
   role :app, *servers
@@ -105,7 +105,7 @@ task :local_changes, roles: :app do
     ln -s #{shared_path}/config/database.yml #{release_path}/config/database.yml &&
     ln -s #{shared_path}/config/config.yml #{release_path}/config/config.yml &&
     ln -s #{shared_path}/config/s3.yml #{release_path}/config/s3.yml &&
-    ln -s #{shared_path}/config/initializers/email.rb #{release_path}/config/initializers/email.rb
+    ln -s #{shared_path}/config/initializers/smtp.rb #{release_path}/config/initializers/smtp.rb
   CMD
 end
 

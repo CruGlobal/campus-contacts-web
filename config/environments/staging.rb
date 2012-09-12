@@ -55,6 +55,6 @@ Mh::Application.configure do
     host: 'stage.missionhub.com'
   }
 
-  config.action_mailer.delivery_method = :sendmail
+  config.action_mailer.delivery_method = :smtp
 
 end
