@@ -107,6 +107,7 @@ class LeadersController < ApplicationController
       @required_fields.each do |k,v|
         flash.now[:error] += k + " is required.<br />" unless v.present?
       end
+      flash.now[:error] = "<font color='red'>" + flash.now[:error] + "</font>"
       render :edit and return
     end
     create and return
@@ -128,7 +129,7 @@ class LeadersController < ApplicationController
     error_message += "Email Address isn't valid.<br />" if @email.present? && !@email.valid?
 
     if error_message.present?
-      flash.now[:error] = error_message
+      flash.now[:error] = "<font color='red'>" + error_message + "</font>"
       render :new and return
     end
 
