@@ -65,13 +65,13 @@ class Import < ActiveRecord::Base
     errors
   end
   
-  def queue_import_contacts(labels = [], current_organization, current_user)
-    async(:do_import, labels, current_organization.id, current_user.id)
+  def queue_import_contacts(labels = [])
+    async(:do_import, labels)
   end
   
-  def do_import(labels = [], current_organization_id, current_user_id)
-    current_organization = Organization.find(current_organization_id)
-    current_user = User.find(current_user_id)
+  def do_import(labels = [])
+    current_organization = Organization.find(organization_id)
+    current_user = User.find(user_id)
     import_errors = []
     Person.transaction do
       get_new_people.each do |new_person|
