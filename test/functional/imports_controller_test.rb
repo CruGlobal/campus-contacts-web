@@ -108,7 +108,7 @@ class ImportsControllerTest < ActionController::TestCase
       assert_equal Import.first.header_mappings['2'].to_i, @email_element.id
       assert_response :redirect
     end
-=begin
+    
     should "upload & import contacts if use_labels is false" do
       stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
         to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv")), status: 200)
@@ -146,6 +146,7 @@ class ImportsControllerTest < ActionController::TestCase
       assert_response :redirect
       # "use_labels"=>"1", "labels"=>["0", "5", "145"], "new_label_field"=>"", "commit"=>"Import Now", "id"=>"13"
       post :import, { :use_labels => "0", :id => Import.first.id}
+      Import.first.do_import([])
       assert_equal Person.count, person_count + 1
     end
     
@@ -163,8 +164,8 @@ class ImportsControllerTest < ActionController::TestCase
       assert_equal Import.first.header_mappings['2'].to_i, @email_element.id
       person_count  = Person.count
       assert_response :redirect
-      
       post :import, { :use_labels => "1", :id => Import.first.id, :labels => [@default_role.id]}
+      Import.first.do_import([@default_role.id])
       assert_equal Person.count, person_count + 1
       new_person = Person.last
       assert new_person.organizational_roles.exists?(role_id: @default_role.id), 'imported person should have specified role'
@@ -187,6 +188,7 @@ class ImportsControllerTest < ActionController::TestCase
       assert_response :redirect
       
       post :import, { :use_labels => "1", :id => Import.first.id, :labels => [0]}
+      Import.first.do_import([0])
       assert_equal Person.count, person_count + 1
       new_person = Person.last
       new_role = Role.find_by_name(Import.first.label_name)
@@ -262,7 +264,7 @@ class ImportsControllerTest < ActionController::TestCase
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
       post :create, { :import => { :upload => file } }
     end
-=end
+    
     should "edit import file" do
       stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
         to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv")), status: 200)
@@ -275,6 +277,7 @@ class ImportsControllerTest < ActionController::TestCase
       post :edit, { :id => Import.last.id }
       assert_template "imports/edit"
     end
+=end
 
 =begin
     should "successfully destroy an import" do
