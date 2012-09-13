@@ -136,6 +136,8 @@ en:
       notify: "Notify this person that they've been added and send them a link to log in."
     search:
       not_in_system: 'If the person you are looking for is not already in the system click here to add them.'
+    create:
+      no_user_account: "<font color='red'>Required email information missing to add this person as a Leader.</font>"
   people:
     create:
       error_creating_leader_no_valid_email: "<font color='red'>Cannot create Person with leader role without a valid email</font>"

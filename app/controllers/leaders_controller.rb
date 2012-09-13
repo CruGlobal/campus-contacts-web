@@ -77,6 +77,7 @@ class LeadersController < ApplicationController
         # we need a valid email address to make a leader
         @email = @person.primary_email_address || @person.email_addresses.new
         @phone = @person.primary_phone_number || @person.phone_numbers.new
+        flash[:error] = I18n.t('leaders.create.no_user_account')
         render :edit and return
       end
       @person = @new_person
@@ -106,6 +107,7 @@ class LeadersController < ApplicationController
       @required_fields.each do |k,v|
         flash.now[:error] += k + " is required.<br />" unless v.present?
       end
+      flash.now[:error] = "<font color='red'>" + flash.now[:error] + "</font>"
       render :edit and return
     end
     create and return
@@ -127,7 +129,7 @@ class LeadersController < ApplicationController
     error_message += "Email Address isn't valid.<br />" if @email.present? && !@email.valid?
 
     if error_message.present?
-      flash.now[:error] = error_message
+      flash.now[:error] = "<font color='red'>" + error_message + "</font>"
       render :new and return
     end
 

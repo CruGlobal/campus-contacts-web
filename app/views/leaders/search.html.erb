@@ -1,8 +1,8 @@
 <ul>
   <% original_total = @people.length %>
-  <% @people = @people.select {|p| p.email.present?} %>
+  <%# @people = @people.select {|p| p.email.present?} %>
   <% @people.each do |person| %>
-    <li><%= link_to("#{person} (#{person.user.try(:username)})", leaders_path(person_id: person.id), method: :post, remote: true) %></li>
+    <li><%= link_to("#{person} (#{person.try(:email)})", leaders_path(person_id: person.id), method: :post, remote: true) %></li>
   <% end %>
 </ul>
 <% if @total > original_total %>
