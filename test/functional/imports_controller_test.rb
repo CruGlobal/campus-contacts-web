@@ -103,6 +103,7 @@ class ImportsControllerTest < ActionController::TestCase
       post :create, { :import => { :upload => file } }
       assert_response :redirect
       post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @email_element.id} }, :id => Import.first.id}
+      Import.last.do_import([])
       assert_equal Import.first.header_mappings['0'].to_i, @firstName_element.id
       assert_equal Import.first.header_mappings['1'].to_i, @lastName_element.id
       assert_equal Import.first.header_mappings['2'].to_i, @email_element.id
@@ -206,6 +207,7 @@ class ImportsControllerTest < ActionController::TestCase
       assert_response :redirect    
       
       post :update, { :import => { :header_mappings => {"0" => @lastName_element.id, "1" => @email_element.id} }, :id => Import.first.id}
+      Import.last.do_import([])
       assert_equal Person.count, person_count, "contact still uploaded despite there is no firstName header, which is required, specified by the user"
     end
     
@@ -233,6 +235,7 @@ class ImportsControllerTest < ActionController::TestCase
       assert_response :redirect
       
       post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @phone_element.id, "3" => @email_element.id} }, :id => Import.first.id}
+      Import.last.do_import([])
       assert_equal Person.count, person_count
     end
     
@@ -246,6 +249,7 @@ class ImportsControllerTest < ActionController::TestCase
       assert_response :redirect
       
       post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @firstName_element.id, "2" => @phone_element.id, "3" => @email_element.id} }, :id => Import.first.id}
+      Import.last.do_import([])
       assert_equal Person.count, person_count
     end
     
