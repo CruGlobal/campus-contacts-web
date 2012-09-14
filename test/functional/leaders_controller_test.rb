@@ -89,14 +89,14 @@ class LeadersControllerTest < ActionController::TestCase
     should "require gender, first name, last name and email when adding a leader" do 
       xhr :post, :add_person, person: {firstName: '', lastName: '', email_address: {email: ''}, phone_number: {phone: ''}}, notify: '1' 
       assert_response :success 
-      assert_equal('First Name is required.<br />Last Name is required.<br />Gender is required.<br />Email is required.<br />', flash[:error])
+      assert_equal("<font color='red'>First Name is required.<br />Last Name is required.<br />Gender is required.<br />Email is required.<br /></font>", flash[:error])
       assert_template 'leaders/new'
     end
     
     should "validate email when adding a leader" do 
       xhr :post, :add_person, person: {firstName: 'John1', lastName: 'Doe', gender: '1', email_address: {email: 'Howie Koffman <howie.kauffman@facultycommons.org>'}, phone_number: {phone: '444-444-4444'}}, notify: '1' 
       assert_response :success 
-      assert_equal("Email Address isn't valid.<br />", flash[:error])
+      assert_equal("<font color='red'>Email Address isn't valid.<br /></font>", flash[:error])
       assert_template 'leaders/new'
     end
     
@@ -121,7 +121,7 @@ class LeadersControllerTest < ActionController::TestCase
       person.update_column(:gender, nil)
       xhr :put, :update, id: person.id, person: {firstName: '', lastName: '', email_address: {email: ''}, phone_number: {phone: ''}}, notify: '1' 
       assert_response :success 
-      assert_equal('Please fill in all fields<br />First Name is required.<br />Last Name is required.<br />Gender is required.<br />Email is required.<br />', flash[:error])
+      assert_equal("<font color='red'>Please fill in all fields<br />First Name is required.<br />Last Name is required.<br />Gender is required.<br />Email is required.<br /></font>", flash[:error])
       assert_template 'leaders/edit'
     end
     
