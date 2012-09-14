@@ -9,7 +9,7 @@ class SurveysController < ApplicationController
   include ApiHelper
   
   def index_admin
-    @organization = current_person.organizations.find_by_id(params[:org_id]) || current_organization
+    @organization = current_person.organization_from_id(params[:org_id]) || current_organization
     authorize! :manage, @organization
     @surveys = @organization.surveys
   end
@@ -18,7 +18,7 @@ class SurveysController < ApplicationController
     # authenticate_user! unless params[:access_token] && params[:org_id]
     @title = "Pick A Survey"
     if current_user
-      @organization = current_person.organizations.find_by_id(params[:org_id]) || current_organization
+      @organization = current_person.organization_from_id(params[:org_id]) || current_organization
       @surveys = @organization ? @organization.self_and_children_surveys : nil
       
       respond_to do |wants|
