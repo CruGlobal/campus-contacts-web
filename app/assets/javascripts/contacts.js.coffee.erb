@@ -368,7 +368,9 @@ $ ->
   $('#contacts_controller #bulk_unassign').live 'click', ->
     if $('.id_checkbox:checked').length > 0 && $('#leaders')[0]?
       $.fn.assignTo($('.leader.unassigned'))
-      $('.id_checkbox:checked').closest('tr').fadeOut()
+      $('.id_checkbox:checked').each ->
+        $(this).parents('tr').children('.assigned_to').html("")
+      
     $('#check_all').prop('checked', false)
     false
     
@@ -570,7 +572,6 @@ $.fn.assignTo = (leader, skip_remote) ->
         $.rails.handleRemote($('#new_contact_assignment'))
       
       row.find('.id_checkbox').attr('checked', false)
-      row.hide()
   $('#assign_to').val('')
   
 $.mh.saveContact = (add_more) ->
