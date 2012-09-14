@@ -86,7 +86,7 @@ class Import < ActiveRecord::Base
           end
         end
       end
-      if errors.present?
+      if import_errors.present?
         # send failure email
         ImportMailer.import_failed(current_user, import_errors).deliver
         raise ActiveRecord::Rollback
