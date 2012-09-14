@@ -47,27 +47,6 @@ class ImportsControllerTest < ActionController::TestCase
       APP_CONFIG['predefined_survey'] = 2
     end
     
-    should "not import contact if email is invalid" do
-      stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
-        to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_8.csv")), status: 200)
-      contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_8.csv"))
-      file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
-      post :create, { :import => { :upload => file } }
-      assert_response :redirect
-      
-      post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @email_element.id} }, :id => Import.first.id}
-      assert_equal Import.first.header_mappings['0'].to_i, @firstName_element.id
-      assert_equal Import.first.header_mappings['1'].to_i, @lastName_element.id
-      assert_equal Import.first.header_mappings['2'].to_i, @email_element.id
-      person_count  = Person.count
-      
-      assert_response :redirect
-      post :import, { :use_labels => "0", :id => Import.first.id}
-      assert_response :redirect
-      Import.last.do_import([])
-      assert_equal person_count, Person.count
-    end
-    
     should "successfully create an import and upload contact" do
       stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
         to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv")), status: 200)
@@ -240,6 +219,7 @@ class ImportsControllerTest < ActionController::TestCase
       assert_response :redirect
       
       post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @phone_element.id, "3" => @email_element.id} }, :id => Import.first.id}
+      Import.first.do_import([])
       assert_equal Person.count, person_count
     end
     
