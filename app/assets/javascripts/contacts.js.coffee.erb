@@ -571,6 +571,8 @@ $.fn.assignTo = (leader, skip_remote) ->
         $.rails.handleRemote($('#new_contact_assignment'))
       
       row.find('.id_checkbox').attr('checked', false)
+      $('tbody#contacts_table tr').not('.contact_row').hide()
+      $('ul.control_toggle').hide()
       if $('.leader.selected').size() > 0
         row.hide() 
         disp_string = $('.searchstat').html().trim()
