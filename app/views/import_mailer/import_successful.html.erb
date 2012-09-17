@@ -1,1 +1,13 @@
-MissionHub has finished processing the csv file you uploaded.
+<html lang="en">
+<head>
+</head>
+<body>
+  <h3>Hi <%= @user.username %>! MissionHub has finished processing the csv file you uploaded.</h3>
+  These are the contacts that you have imported:
+  <ul>
+    <% @names.each do |name| %>
+      <li><%= name %></li>
+    <% end %>
+  </ul>
+</body>
+</html>

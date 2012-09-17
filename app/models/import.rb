@@ -73,9 +73,11 @@ class Import < ActiveRecord::Base
     current_organization = Organization.find(organization_id)
     current_user = User.find(user_id)
     import_errors = []
+    names = []
     Person.transaction do
       get_new_people.each do |new_person|
         person = create_contact_from_row(new_person, current_organization)
+        names << person.name
         if person.errors.present?
           import_errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
         else
@@ -92,7 +94,7 @@ class Import < ActiveRecord::Base
         raise ActiveRecord::Rollback
       else
         # Send success email
-        ImportMailer.import_successful(current_user).deliver
+        ImportMailer.import_successful(current_user, names).deliver
       end
     end
 
