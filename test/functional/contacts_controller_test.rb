@@ -300,44 +300,60 @@ class ContactsControllerTest < ActionController::TestCase
     assert_queued(ContactsMailer)
     #assert_equal 1, ActionMailer::Base.deliveries.count
   end
+  
+  context "Search by name or email" do
+    setup do
+      @user1 = Factory(:user_with_auxs)
+      @user2 = Factory(:user_with_auxs)
+      
+      @user, @org = admin_user_login_with_org
+      Factory(:organizational_role, organization: @org, person: @user.person, role: Role.leader)
+      @person1 = Factory(:person, firstName: "Neil Marion", lastName: "dela Cruz", email: "ndc@email.com")
+      Factory(:organizational_role, organization: @org, person: @person1, role: Role.contact)
+      @person2 = Factory(:person, firstName: "Johnny", lastName: "English", email: "english@email.com")
+      Factory(:organizational_role, organization: @org, person: @person2, role: Role.contact)
+      @person3 = Factory(:person, firstName: "Johnny", lastName: "Bravo", email: "bravo@email.com")
+      Factory(:organizational_role, organization: @org, person: @person3, role: Role.contact)
+      @person4 = Factory(:person, firstName: "Neil", lastName: "O'neil", email: "neiloneil@email.com")
+      Factory(:organizational_role, organization: @org, person: @person4, role: Role.contact)
+    end
+  
 
-  test "find people by name or email given wildcard strings" do
-    user1 = Factory(:user_with_auxs)
-    user2 = Factory(:user_with_auxs)
-    
-    user, org = admin_user_login_with_org
-    Factory(:organizational_role, organization: org, person: user.person, role: Role.leader)
-    person1 = Factory(:person, firstName: "Neil Marion", lastName: "dela Cruz", email: "ndc@email.com")
-    Factory(:organizational_role, organization: org, person: person1, role: Role.contact)
-    person2 = Factory(:person, firstName: "Johnny", lastName: "English", email: "english@email.com")
-    Factory(:organizational_role, organization: org, person: person2, role: Role.contact)
-    person3 = Factory(:person, firstName: "Johnny", lastName: "Bravo", email: "bravo@email.com")
-    Factory(:organizational_role, organization: org, person: person3, role: Role.contact)
-    person4 = Factory(:person, firstName: "Neil", lastName: "O'neil", email: "neiloneil@email.com")
-    Factory(:organizational_role, organization: org, person: person4, role: Role.contact)
-    
-    xhr :get, :search_by_name_and_email, { :term => "Neil" } # should be able to find a leader as well
-    assert_response :success, response
-    res = ActiveSupport::JSON.decode(response.body)
-    assert_equal res[0]['id'], person1.id
-    assert_equal res[0]['label'], "#{person1.name} (#{person1.email})"
+    should "find people by name or email given wildcard strings" do
+      
+      
+      xhr :get, :search_by_name_and_email, { :term => "Neil" } # should be able to find a leader as well
+      assert_response :success, response
+      res = ActiveSupport::JSON.decode(response.body)
+      assert_equal res[0]['id'], @person1.id
+      assert_equal res[0]['label'], "#{@person1.name} (#{@person1.email})"
 
-    xhr :get, :search_by_name_and_email, { :term => "ndc" } #should be able to find by an email address wildcard
-    assert_response :success, response
-    res = ActiveSupport::JSON.decode(response.body)
-    assert_equal res[0]['id'], person1.id
-    assert_equal res[0]['label'], "#{person1.name} (#{person1.email})"
+      xhr :get, :search_by_name_and_email, { :term => "ndc" } #should be able to find by an email address wildcard
+      assert_response :success, response
+      res = ActiveSupport::JSON.decode(response.body)
+      assert_equal res[0]['id'], @person1.id
+      assert_equal res[0]['label'], "#{@person1.name} (#{@person1.email})"
 
-    xhr :get, :search_by_name_and_email, { :term => "hnny" } #should be able to find contacts
-    assert_response :success, response
-    res = ActiveSupport::JSON.decode(response.body)
-    assert_equal res.count, 2
+      xhr :get, :search_by_name_and_email, { :term => "hnny" } #should be able to find contacts
+      assert_response :success, response
+      res = ActiveSupport::JSON.decode(response.body)
+      assert_equal res.count, 2
+      
+      xhr :get, :search_by_name_and_email, { :term => "O'neil" } # should be able to find a person even a wildcard has non-alpha characters
+      assert_response :success, response
+      res = ActiveSupport::JSON.decode(response.body)
+      assert_equal res[0]['id'], @person4.id
+      assert_equal res[0]['label'], "#{@person4.name} (#{@person4.email})"
+    end
     
-    xhr :get, :search_by_name_and_email, { :term => "O'neil" } # should be able to find a person even a wildcard has non-alpha characters
-    assert_response :success, response
-    res = ActiveSupport::JSON.decode(response.body)
-    assert_equal res[0]['id'], person4.id
-    assert_equal res[0]['label'], "#{person4.name} (#{person4.email})"
+    should "strip trailing whitespaces of search terms" do
+      xhr :get, :search_by_name_and_email, { :term => "Neil     " }
+      assert_response :success, response
+      res = ActiveSupport::JSON.decode(response.body)
+      assert_equal res[0]['id'], @person1.id
+      assert_equal res[0]['label'], "#{@person1.name} (#{@person1.email})"
+    end
+  
   end
   
   context "Searching for contacts using 'Saved Searches'" do
