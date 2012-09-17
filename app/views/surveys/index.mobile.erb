@@ -1,4 +1,4 @@
-<% provide :title, t('.pick_keyword') %>
+<% provide :title, t('.title', org: @organization) %>
 
 <div data-role="controlgroup">
   <% @surveys.each do |survey| %>

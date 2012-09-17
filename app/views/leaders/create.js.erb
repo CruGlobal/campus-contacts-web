@@ -1,16 +1,8 @@
 $("#leader_search").dialog('close');
 var leaders = $('#leaders');
-leaders.prepend('<%= j(render('contacts/leader', person: @person)) %>')
+leaders.prepend("<%= j(render('contacts/leader', person: @person)) %>")
 $.fn.activateLeaderDroppable();
-leaders.css({height: 'auto'})
-leaders.attr("data-original-height", leaders.height())
-if (leaders.hasClass('showall')) {
-  // leaders.attr('data-height', leaders.height())
-	leaders.css({height: leaders.attr("data-original-height"), overflow: 'hidden'})
-}	else {
-	leaders.css({height: leaders.attr("data-height"), overflow: 'hidden'})
-}
-$('.leaders_list ul').prepend('<li class="leader" data-id="<%= @person.id %>"><span class="name"><%= j(link_to(@person, '#')) %></span></li>')
+$('.leaders_list ul').prepend("<li class='leader' data-id='<%= @person.id %>'><span class='name'><%= j(link_to(@person, '#')) %></span></li>")
 <% if params[:update] %>
   $.a("<%= t('contacts.create.success', name: Person.find(params[:id]).name) %>")
   window.location = "/people/" + <%= params[:id] %>

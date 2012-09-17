@@ -371,12 +371,39 @@ class OrganizationTest < ActiveSupport::TestCase
   test "add_leader(person)" do
     user1 = Factory(:user_with_auxs)  #user with a person object
     user2 = Factory(:user_with_auxs)
+    org = Factory(:organization)
 
-    org1 = Factory(:organization)
+    org.add_leader(user1.person, user2.person)
+    org_role = OrganizationalRole.last
+    
+    assert_equal org.id, org_role.organization_id, "The last role should have the org"
+    assert_equal user1.person.id, org_role.person_id, "The last role should have the person"
+    assert_equal user2.person.id, org_role.added_by_id, "The last role should have the person who adds the leader"
+    assert_equal Role::LEADER_ID, org_role.role_id, "The last role should have the leader role id"
+  end
 
-    org1.add_leader(user2.person, user1.person)
-    om = OrganizationalRole.last
-    assert_equal om.organization.to_s + om.person.to_s + om.role_id.to_s, org1.to_s + user2.person.to_s + Role::LEADER_ID.to_s, "Organization method add_member does not correctly add leader"
+  test "using add_leader(person) in deleted leader" do
+    user1 = Factory(:user_with_auxs)  #user with a person object
+    user2 = Factory(:user_with_auxs)
+    user3 = Factory(:user_with_auxs)
+    org = Factory(:organization)
+    
+    # Add Leader
+    org.add_leader(user1.person, user2.person)
+    org_role = OrganizationalRole.last
+    
+    # Archive Leader
+    org_role.archive
+    
+    # Add Leader Again
+    org.add_leader(user1.person, user3.person)
+    org_role = OrganizationalRole.last
+    
+    assert_equal org.id, org_role.organization_id, "The last role should have the org"
+    assert_equal user1.person.id, org_role.person_id, "The last role should have the person"
+    assert_equal user3.person.id, org_role.added_by_id, "The last role should have the other person who adds the leader"
+    assert_equal Role::LEADER_ID, org_role.role_id, "The last role should have the leader role id"
+    
   end
 
   test "add_contact(person)" do
