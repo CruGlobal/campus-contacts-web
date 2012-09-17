@@ -366,10 +366,14 @@ $ ->
     false
 
   $('#contacts_controller #bulk_unassign').live 'click', ->
-    if $('.id_checkbox:checked').length > 0 && $('#leaders')[0]?
+    checked_count = $('.id_checkbox:checked').length
+    if checked_count > 0 && $('#leaders')[0]?
       $.fn.assignTo($('.leader.unassigned'))
       $('.id_checkbox:checked').each ->
         $(this).parents('tr').children('.assigned_to').html("")
+      msg = "You have successfully unassigned " + checked_count + " contacts."
+      $('.carea').prepend("<div class='flash' style='margin:10px;'><div class='flash_message notice'><p>"+msg+"</p></div></div>")
+      $('.flash').delay(3000).slideUp()
     $('#check_all').prop('checked', false)
     false
     
