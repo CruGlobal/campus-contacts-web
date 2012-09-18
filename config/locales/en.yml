@@ -136,6 +136,8 @@ en:
       notify: "Notify this person that they've been added and send them a link to log in."
     search:
       not_in_system: 'If the person you are looking for is not already in the system click here to add them.'
+    create:
+      no_user_account: "<font color='red'>Required email information missing to add this person as a Leader.</font>"
   people:
     create:
       error_creating_leader_no_valid_email: "<font color='red'>Cannot create Person with leader role without a valid email</font>"
@@ -347,6 +349,8 @@ en:
     send_message_guide: "To send a text or email, click the box next to the contacts you'd like to message. You can also use the search function to find contacts quickly. <br/><br/>After selecting the contacts, click the \"Send\" button to compose your message."
     send_message_video_guide: 'Click on the video below see how to do this.'
   surveys:
+    index:
+      title: "Surveys for %{org}"
     index_admin: 
       confirm_delete: "Are you sure you want to delete this keyword?"
       delete_survey: "Delete survey"

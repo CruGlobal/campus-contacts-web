@@ -65,13 +65,13 @@ class Import < ActiveRecord::Base
     errors
   end
   
-  def queue_import_contacts(labels = [], current_organization, current_user)
-    async(:do_import, labels, current_organization.id, current_user.id)
+  def queue_import_contacts(labels = [])
+    async(:do_import, labels)
   end
   
-  def do_import(labels = [], current_organization_id, current_user_id)
-    current_organization = Organization.find(current_organization_id)
-    current_user = User.find(current_user_id)
+  def do_import(labels = [])
+    current_organization = Organization.find(organization_id)
+    current_user = User.find(user_id)
     import_errors = []
     Person.transaction do
       get_new_people.each do |new_person|
@@ -80,13 +80,13 @@ class Import < ActiveRecord::Base
           import_errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
         else
           labels.each do |role_id|
-            role = Role.find_or_create_by_organization_id_and_name(current_organization.id, label_name) if role_id == '0'
+            role = Role.find_or_create_by_organization_id_and_name(current_organization.id, label_name) if role_id.to_i == 0
             role_id = role.id if role.present?
             OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person.id, current_organization.id, role_id, added_by_id: current_user.person.id) if role_id.present?
           end
         end
       end
-      if errors.present?
+      if import_errors.present?
         # send failure email
         ImportMailer.import_failed(current_user, import_errors).deliver
         raise ActiveRecord::Rollback
