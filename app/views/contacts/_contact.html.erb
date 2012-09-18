@@ -30,7 +30,7 @@
         <% if answer = answers[person.id][q.id] %>
           <% date = answer.last %>
           <span title="<%= l(date, format: :date) if date %>" class="tipit"><%= answer.first %></span>
-          <% dates << date %>
+          <% dates << date if date.present? %>
         <% else %>
           <%= person.yearInSchool if q.attribute_name == "yearInSchool" %>
         <% end %>
