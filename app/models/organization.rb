@@ -194,7 +194,11 @@ class Organization < ActiveRecord::Base
       person_id = person.is_a?(Person) ? person.id : person
       add_member(person_id)
       begin
-        OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::LEADER_ID, :added_by_id => current_person.id)
+        org_leader = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::LEADER_ID, :added_by_id => current_person.id)
+        unless org_leader.archive_date.nil?
+          org_leader.update_attributes({:added_by_id => current_person.id, :archive_date => nil})
+          org_leader.notify_new_leader
+        end
       rescue => error
         @save_retry_count =  (@save_retry_count || 5)
         retry if( (@save_retry_count -= 1) > 0 )
