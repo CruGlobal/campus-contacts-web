@@ -1,13 +1,18 @@
-<html lang="en">
+<html>
 <head>
 </head>
 <body>
   <h3>Hi <%= @user.username %>! MissionHub has finished processing the csv file you uploaded.</h3>
   These are the contacts that you have imported:
-  <ul>
-    <% @names.each do |name| %>
-      <li><%= name %></li>
+  
+  <table class="imported_listing">
+    <% @table.each do |row| %>
+      <tr>
+        <% row.each do |col| %>
+          <td><%= col %></td>
+        <% end %>
+      </tr>
     <% end %>
-  </ul>
+  </table>
 </body>
 </html>

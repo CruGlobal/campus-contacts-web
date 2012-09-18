@@ -148,6 +148,7 @@ class ImportsControllerTest < ActionController::TestCase
       # "use_labels"=>"1", "labels"=>["0", "5", "145"], "new_label_field"=>"", "commit"=>"Import Now", "id"=>"13"
       post :import, { :use_labels => "0", :id => Import.first.id}
       Import.first.do_import([])
+      puts assigns(:table).inspect
       assert_equal Person.count, person_count + 1
     end
     
@@ -166,7 +167,7 @@ class ImportsControllerTest < ActionController::TestCase
       person_count  = Person.count
       assert_response :redirect
       post :import, { :use_labels => "1", :id => Import.first.id, :labels => [@default_role.id]}
-      Import.first.do_import([@default_role.id])
+      Import.last.do_import([@default_role.id])
       assert_equal Person.count, person_count + 1
       new_person = Person.last
       assert new_person.organizational_roles.exists?(role_id: @default_role.id), 'imported person should have specified role'
@@ -313,6 +314,21 @@ class ImportsControllerTest < ActionController::TestCase
           Import.last.do_import([])
           assert_equal Person.last.answer_sheets.first.answers.first.value, "I just met you"
         end
+    end
+    
+    should "successfully create an import and upload contact and create a table" do
+      stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
+        to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_9.csv")), status: 200)
+      assert_difference "Person.count", 2 do
+        contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_9.csv"))
+        file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
+        post :create, { :import => { :upload => file } }
+        assert_response :redirect
+        post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @phone_element.id, "3" => @email_element.id, "4" => @question.id} }, :id => Import.first.id}
+        assert_response :redirect
+        post :import, { :use_labels => "0", :id => Import.first.id}
+        Import.last.do_import([])
+      end
     end
   end
 end
