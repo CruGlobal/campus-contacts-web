@@ -153,6 +153,18 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
       assert_equal [], @org.only_leaders.collect(&:id)
       assert_equal [@user_2.person.id], @another_org.contacts.collect(&:id)
     end
+    
+    should "completely move an archived person to an org (do not keep contact)" do
+      @archived_contact1 = Factory(:person, firstName: "Edmure", lastName: "Tully")
+      Factory(:organizational_role, organization: @user.person.organizations.first, person: @archived_contact1, role: Role.contact)
+      @archived_contact1.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive #archive his one and only role
+      
+      ids = [@archived_contact1.id]
+      
+      xhr :post, :move_to, { :from_id => @org.id , :to_id => @another_org.id, :ids => ids.join(','), :keep_contact => "false", :current_admin => @user }
+      assert !@org.people.collect(&:id).include?(@archived_contact1.id)
+      assert_equal ids, @another_org.contacts.collect(&:id)
+    end
   end
   
   context "deleting a contact" do
