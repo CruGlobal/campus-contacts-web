@@ -232,7 +232,7 @@ class Organization < ActiveRecord::Base
 
     def remove_contact(person)
       person_id = person.is_a?(Person) ? person.id : person
-      Person.find(person_id).organizational_roles.where("organization_id = ?", id).each do |ors|
+      OrganizationalRole.where(person_id: person_id, organization_id: id).each do |ors|
         if(ors.role_id == Role::LEADER_ID)
           ca = Person.find(ors.person_id).contact_assignments.where(organization_id: id).all
           ca.collect(&:destroy)
