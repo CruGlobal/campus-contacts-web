@@ -155,9 +155,13 @@ class Import < ActiveRecord::Base
     answered_survey_ids = SurveyElement.where(element_id: @answered_question_ids).pluck(:survey_id).uniq
     #answer_sheet_ids = AnswerSheet.where(survey_id: answered_survey_ids)
     
-    
     @table = []
-    @table << Element.find(@answered_question_ids).collect(&:label)
+    title = []
+    @answered_question_ids.each do |a|
+      title << Element.find(a).label
+    end
+    
+    @table << title
         
     Person.find(new_person_ids).each do |p|
       answers = []
