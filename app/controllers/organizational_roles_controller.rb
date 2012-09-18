@@ -69,7 +69,7 @@ class OrganizationalRolesController < ApplicationController
         people.each do |person|
           from_org.move_contact(person, to_org, keep_contact, current_person)
         end
-        render :text => I18n.t('organizational_roles.moving_people_success')
+        render :text => keep_contact == "false" ? I18n.t('organizational_roles.moving_people_success') : I18n.t('organizational_roles.copy_people_success')
         return
       end
     end

@@ -1048,5 +1048,6 @@ en:
     cannot_delete_self_as_admin_error: "As an ADMIN you cannot remove yourself! Please assign another individual as an ADMIN for this organization and then ask that \"new ADMIN\" to remove your ADMIN label."
     moving_to_same_org: "You are just moving people to the same org they are from!"
     moving_people_success: "People were successfully moved!"
+    copy_people_success: "People were successfully copied!"
 
 
