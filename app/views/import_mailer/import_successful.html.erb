@@ -1,8 +1,28 @@
-<html>
+<html lang="en">
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <style type="text/css" media="screen">
+
+    .imported_listing {
+      width: 100%;
+      th {
+        text-align: left;
+        background: #c7dff0;
+        padding: 4px 2px 3px 2px;
+        vertical-align: top;
+      }
+      tr td{
+        border-bottom: 1px solid silver;
+        padding: 3px 2px;
+        font-size: 12px;
+      }
+    }
+
+  </style>
 </head>
 <body>
   <h3>Hi <%= @user.username %>! MissionHub has finished processing the csv file you uploaded.</h3>
+  
   These are the contacts that you have imported:
   
   <table class="imported_listing">
