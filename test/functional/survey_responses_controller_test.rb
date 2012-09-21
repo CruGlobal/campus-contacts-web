@@ -213,6 +213,13 @@ class SurveyResponsesControllerTest < ActionController::TestCase
       end
         
     end
+    
+    should "fail survey" do
+      #assert_no_difference "AnswerSheet.count" do
+        xhr :put, :create, {:survey_id => @survey.id, :person => {:firstName => "Karl", :lastName => "Pilkington", :phone_number => "karl"}}
+        #assert_response(:success)
+      #end
+    end
   
   end
 
