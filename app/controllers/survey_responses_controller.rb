@@ -3,7 +3,7 @@ class SurveyResponsesController < ApplicationController
   before_filter :get_survey, except: [:show, :edit]
   before_filter :set_keyword_cookie, only: :new
   before_filter :prepare_for_mobile
-  skip_before_filter :authenticate_user!, except: :update
+  skip_before_filter :authenticate_user!#, except: :update
   skip_before_filter :check_url
 
   def new
@@ -53,6 +53,11 @@ class SurveyResponsesController < ApplicationController
   def update
     @title = @survey.terminology if @survey
     redirect_to :back and return false unless @person.id == params[:id].to_i
+
+    if @person && params[:person] && !params[:person][:phone_number].blank?
+      @person.phone_numbers.collect(&:destroy)
+      @person.reload
+    end
 
     save_survey
 
