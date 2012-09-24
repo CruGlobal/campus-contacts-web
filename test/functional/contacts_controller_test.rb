@@ -200,6 +200,48 @@ class ContactsControllerTest < ActionController::TestCase
       xhr :get, :index, {:assigned_to => @user.person.personID}
       assert_equal assigns(:header), "Assigned to #{@user.person.name}"
     end
+    
+    should "get in_progress contacts ONLY" do
+      @contact1 = Factory(:person)
+      @contact2 = Factory(:person)
+      @contact3 = Factory(:person)
+      @contact4 = Factory(:person)
+      @contact5 = Factory(:person)
+      @user.person.organizations.first.add_leader(@user.person, @user.person)
+      @user.person.organizations.first.add_contact(@contact1)
+      @user.person.organizations.first.add_contact(@contact2)
+      @user.person.organizations.first.add_contact(@contact3)
+      @user.person.organizations.first.add_contact(@contact4)
+      @user.person.organizations.first.add_contact(@contact5)
+      
+      Factory(:contact_assignment, person: @contact1, organization: @org, assigned_to: @user.person)
+      Factory(:contact_assignment, person: @contact2, organization: @org, assigned_to: @user.person)
+      Factory(:contact_assignment, person: @contact3, organization: @org, assigned_to: @user.person)
+      Factory(:contact_assignment, person: @contact4, organization: @org, assigned_to: @user.person)
+      Factory(:contact_assignment, person: @contact5, organization: @org, assigned_to: @user.person)
+      
+      @contact5.organizational_roles.first.update_attributes({:deleted => 1})
+      xhr :get, :index, {:assigned_to => "progress"}
+      assert_equal assigns(:all_people).collect(&:id).sort, [@contact1.id, @contact2.id, @contact3.id, @contact4.id]
+    end
+    
+    should "get unassigned contacts ONLY" do
+      @contact1 = Factory(:person)
+      @contact2 = Factory(:person)
+      @contact3 = Factory(:person)
+      @contact4 = Factory(:person)
+      @contact5 = Factory(:person)
+      @user.person.organizations.first.add_leader(@user.person, @user.person)
+      @user.person.organizations.first.add_contact(@contact1)
+      @user.person.organizations.first.add_contact(@contact2)
+      @user.person.organizations.first.add_contact(@contact3)
+      @user.person.organizations.first.add_contact(@contact4)
+      @user.person.organizations.first.add_contact(@contact5)
+      
+      @contact5.organizational_roles.first.update_attributes({:deleted => 1})
+      xhr :get, :index, {:assigned_to => "unassigned"}
+      assert_equal assigns(:all_people).collect(&:id).sort, [@contact1.id, @contact2.id, @contact3.id, @contact4.id]
+    end
   
   end
   
@@ -469,6 +511,8 @@ class ContactsControllerTest < ActionController::TestCase
       
       @answer_sheet = Factory(:answer_sheet, survey: @survey, person: @contact1)
       @answer = Factory(:answer, answer_sheet: @answer_sheet, question: @notify_q, value: "Jesus", short_value: "Jesus")
+      
+      @phone_number = Factory(:phone_number, person: @contact1, number: "09167788889", primary: true)
     end
     
     should "retrieve 'mine' contacts" do
@@ -508,7 +552,14 @@ class ContactsControllerTest < ActionController::TestCase
     end
     
     should "retrive contacts searching by phone_number" do
-      xhr :get, :index, {:search => 1, :phone_number => "2034982303948"}
+      xhr :get, :index, {:search => 1, :phone_number => "09167788889"}
+      assert_equal [@contact1], assigns(:people)
+      assert_response :success
+    end
+    
+    should "retrive contacts searching by phone_number wildcard" do
+      xhr :get, :index, {:search => 1, :phone_number => "88889"}
+      assert_equal [@contact1], assigns(:people)
       assert_response :success
     end
     

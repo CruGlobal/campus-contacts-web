@@ -207,6 +207,8 @@ class PeopleControllerTest < ActionController::TestCase
       @archived_contact1 = Factory(:person, firstName: "Edmure", lastName: "Tully")
       Factory(:organizational_role, organization: @user.person.organizations.first, person: @archived_contact1, role: Role.contact)
       @archived_contact1.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive #archive his one and only role
+      
+      @phone_number = Factory(:phone_number, person: @unarchived_contact1, number: "09167788889", primary: true)
     end
     
     should "respond success with no parameters" do
@@ -251,6 +253,20 @@ class PeopleControllerTest < ActionController::TestCase
     should "not be able to search for anything" do
       get :index, {:search_type => "basic", :include_archived => "true", :query => "none"}
       assert_empty assigns(:people)
+    end
+    
+    should "search by phone number" do
+      get :index, :search_type => "advanced", :first_name => "", :last_name => "", :role => "", :gender => "", 
+          :email => "", :phone => "09167788889"
+      assert_equal [@unarchived_contact1], assigns(:people)
+      assert_response(:success)
+    end
+    
+    should "search by phone number wildcard" do
+      get :index, :search_type => "advanced", :first_name => "", :last_name => "", :role => "", :gender => "", 
+          :email => "", :phone => "88889"
+      assert_equal [@unarchived_contact1], assigns(:people)
+      assert_response(:success)
     end
     
   end
