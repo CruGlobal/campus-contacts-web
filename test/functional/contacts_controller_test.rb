@@ -511,6 +511,8 @@ class ContactsControllerTest < ActionController::TestCase
       
       @answer_sheet = Factory(:answer_sheet, survey: @survey, person: @contact1)
       @answer = Factory(:answer, answer_sheet: @answer_sheet, question: @notify_q, value: "Jesus", short_value: "Jesus")
+      
+      @phone_number = Factory(:phone_number, person: @contact1, number: "09167788889", primary: true)
     end
     
     should "retrieve 'mine' contacts" do
@@ -550,7 +552,14 @@ class ContactsControllerTest < ActionController::TestCase
     end
     
     should "retrive contacts searching by phone_number" do
-      xhr :get, :index, {:search => 1, :phone_number => "2034982303948"}
+      xhr :get, :index, {:search => 1, :phone_number => "09167788889"}
+      assert_equal [@contact1], assigns(:people)
+      assert_response :success
+    end
+    
+    should "retrive contacts searching by phone_number wildcard" do
+      xhr :get, :index, {:search => 1, :phone_number => "88889"}
+      assert_equal [@contact1], assigns(:people)
       assert_response :success
     end
     
