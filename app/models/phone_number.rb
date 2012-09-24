@@ -4,7 +4,7 @@ class PhoneNumber < ActiveRecord::Base
   belongs_to :carrier, class_name: 'SmsCarrier', foreign_key: 'carrier_id'
   
   belongs_to :person
-  validates_presence_of :number, message: "can't be blank"
+  validates_presence_of :number, message: "can't be blank or invalid"
   
   before_create :set_primary
   before_save :clear_carrier_if_number_changed
