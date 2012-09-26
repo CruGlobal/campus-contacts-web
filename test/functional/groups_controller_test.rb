@@ -60,25 +60,25 @@ class GroupsControllerTest < ActionController::TestCase
     should "get show with sorting by firstName asc" do
       get :show, { :q =>{:s => "firstName asc"}, :id => @group.id}
       assert_response(:success)
-      assert_equal assigns(:gm).collect{|x| x.id}, [@contact1.group_memberships.first.id, @contact2.group_memberships.first.id, @contact3.group_memberships.first.id]
+      assert_equal assigns(:people).collect{|x| x.id}, [@contact1.id, @contact2.id, @contact3.id]
     end
     
     should "get show with sorting by firstName desc" do
       get :show, { :q =>{:s => "firstName desc"}, :id => @group.id}
       assert_response(:success)
-      assert_equal assigns(:gm).collect{|x| x.id}, [@contact3.group_memberships.first.id, @contact2.group_memberships.first.id, @contact1.group_memberships.first.id]
+      assert_equal assigns(:people).collect{|x| x.id}, [@contact3.id, @contact2.id, @contact1.id]
     end
     
     should "get show with sorting by role desc" do
       get :show, { :q =>{:s => "role desc"}, :id => @group.id}
       assert_response(:success)
-      assert_equal assigns(:gm).collect{|x| x.id}, [@contact1.group_memberships.first.id, @contact2.group_memberships.first.id, @contact3.group_memberships.first.id]
+      assert_equal assigns(:people).collect{|x| x.id}, [@contact1.id, @contact2.id, @contact3.id]
     end
     
     should "get show with sorting by role asc" do
       get :show, { :q =>{:s => "role asc"}, :id => @group.id}
       assert_response(:success)
-      assert_equal assigns(:gm).collect{|x| x.id}, [@contact3.group_memberships.first.id, @contact1.group_memberships.first.id, @contact2.group_memberships.first.id]
+      assert_equal assigns(:people).collect{|x| x.id}, [@contact3.id, @contact1.id, @contact2.id]
     end
   end
   

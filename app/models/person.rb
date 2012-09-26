@@ -124,6 +124,12 @@ class Person < ActiveRecord::Base
     :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID AND orss.organization_id = #{org_id} AND orss.deleted = 0)"
   } }
   
+  scope :get_from_group, lambda { |group_id| {
+    :select => "ministry_person.*",
+    :joins => "LEFT JOIN #{GroupMembership.table_name} AS gm ON gm.person_id = ministry_person.personID",
+    :conditions => ["gm.group_id = ?", group_id]
+  } }
+  
   def self.archived(org_id)
     self.get_archived(org_id).collect()
   end

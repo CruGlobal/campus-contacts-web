@@ -20,6 +20,7 @@ class Organization < ActiveRecord::Base
   has_many :all_questions, through: :surveys, source: :all_questions
   has_many :followup_comments
   has_many :organizational_roles, inverse_of: :organization
+  has_many :non_deleted_people, through: :organizational_roles, source: :person, conditions: ["organizational_roles.deleted = ?", 0], uniq: true
   has_many :leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id IN (?) AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role.leader_ids, 0], order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
   has_many :only_leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role::LEADER_ID, 0], order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
   has_many :admins, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role::ADMIN_ID, 0], order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
