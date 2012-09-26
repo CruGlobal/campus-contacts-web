@@ -41,8 +41,6 @@ class PeopleController < ApplicationController
     @org_friends = current_organization.people.find_friends_with_fb_uid(params[:id])
     authorize!(:read, @person)
 
-    puts "HELLO!"
-
     if can? :manage, @person
       @organizational_role = OrganizationalRole.where(organization_id: current_organization, person_id: @person, role_id: Role::CONTACT_ID).first
       @followup_comment = FollowupComment.new(organization: current_organization, commenter: current_person, contact: @person, status: @organizational_role.followup_status) if @organizational_role
