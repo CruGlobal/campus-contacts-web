@@ -1,3 +1,7 @@
+#menutop {
+  border-bottom: 1px solid #0379AE;
+}
+
 .clearfix:after {
 	content: ".";
 	display: block;
@@ -741,13 +745,16 @@ ul.pillmenu {
 ul.pillmenu {
   height: 24px;
   display: inline-block;
-  border: 1px solid #808080;
+  border: 1px solid #808284;
   margin-right: 8px;
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
-  background: url('<%= asset_path('pillbg.png') %>') repeat-x;
+  background-color: #ffffff;
   overflow: hidden;
+  &:hover {
+    border: 1px solid #0379AE;
+  }
   li {
     border-right: 1px solid #666;
     border-left: 1px solid #fff;
@@ -765,7 +772,7 @@ ul.pillmenu {
       display: block;
     }
     a:hover, a.active {
-      background: url('<%= asset_path('pillbg_over.png') %>') repeat-x;
+    	background-color: #C7DFF0;
       text-decoration: none;
     }
     a.active {
@@ -805,12 +812,12 @@ ul.pillmenu {
 .pillbutton,
 .pillbutton:visited {
   display: inline-block;
-  border: 1px solid #808080;
+  border: 1px solid #0379AE;
   margin-right: 8px;
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
-  background: url('<%= asset_path('pillbg.png') %>') repeat-x;
+	background-color: #C7DFF0;
   overflow: hidden;
   padding: 0 7px;
   line-height: 20px;
@@ -821,8 +828,9 @@ ul.pillmenu {
 }
 
 .pillbutton:hover {
-	background: url('<%= asset_path('pillbg_over.png') %>') repeat-x;
+	background-color: #C7DFF0;
   text-decoration: none;
+  border: 1px solid #0379AE;
 }
 
 #menu_search {
