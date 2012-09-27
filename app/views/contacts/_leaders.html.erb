@@ -80,6 +80,28 @@
     </span>
     (<%= @organization.contacts.count %>)
   </li>
+  <li class="heading selected">
+    <h3><%= t('people.index.labels') %></h3>
+  </li>
+  <li>
+    <ul id="leaders" class="indent expandable" data-height="244">
+      <% (current_organization.roles.default_roles_desc + current_organization.roles.non_default_roles_asc).each do |role| %>
+        <% 
+          if params[:include_archived]
+            count = @people_scope.where('organizational_roles.role_id' => role.id).count
+          else
+            count = @people_scope.where('organizational_roles.role_id' => role.id, 'organizational_roles.archive_date' => nil).count
+          end 
+        %>
+        <li class="leader" style="<%= 'display:none' if count == 0 %>">
+          <span class="name">
+            <%= link_to(role, :role => role.id, :include_archived => params[:include_archived]) %>
+          </span>
+          (<%= count %>)
+        </li>
+      <% end %>
+    </ul>
+  </li>
   <li><hr /></li>
   <li>
     <span class="name">

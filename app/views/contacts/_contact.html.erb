@@ -16,8 +16,8 @@
       <% if person.organizational_roles.where('organizational_roles.organization_id' => current_organization.id).blank? %>
         <span class="archived_group_label">&nbsp<%= t('general.archived') %>&nbsp</span>
       <% end %>
-    <% end %>
-  </td>
+      <% end %>
+    </td>
   <td><%= person.gender.to_s.titleize %></td>
   <td class="phone_number"><%= person.pretty_phone_number %></td>
   <td>
@@ -55,18 +55,6 @@
       
     </td>
   <% end %>
-  <% unless params[:dnc].present? %>
-    <td id="assigned_to_<%= person.id %>" class="assigned_to"><%= assigned_to = (assignments[person.id] || []).first.try(:assigned_to) %></td>
-    <td>
-      <% friends = person.friends_and_leaders(current_organization) %> 
-      <% if friends.length > 0 %>
-        <% friend_leaders = Person.where(fb_uid: friends).order("lastName, preferredName, firstName") %>
-        <%= link_to(friend_leaders.length, '', class: 'friends_count tipthis', title: friend_leaders.collect {|f| "#{f}<br>"} ) %>
-      <% else %>
-      0
-      <% end %>
-    </td>
-  <% end %>
   <td>
     <% if dates.present? %>
       <% @surveys[person.id].each do |keyword,date| %>
@@ -75,7 +63,11 @@
     <% end %>
   </td>
   <td><%= l(dates.sort.last, :format => :date) if dates.present? %></td>
-  <td class="controls">
+  <td class="controls" align="right"> 
+    <%- assigned_to = (assignments[person.id] || []).first.try(:assigned_to) %>
+    <span class="unassign_link" style="<%= 'display:none' unless assigned_to || params[:dnc] %>">
+      <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign tipit", :title => "#{t('contacts.index.unassign_contact')} from #{assigned_to}") %>
+    </span>    
     <%= link_to(t('nav.view_details'), person_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
     <% if params[:dnc] == 'true' %>
       <%= link_to(t('contacts.index.delete_contact'), person_path(person), :method => :delete, :remote => true, :class => "icon delete dnc tipit", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.destroy_confirm')) %>      
@@ -83,9 +75,6 @@
       <% if contact_role %>
         <%= link_to(t('contacts.index.delete_contact'), organizational_role_path(:id => contact_role.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), data: { confirm: t('contacts.index.delete_confirm') }) %>
       <% end %>
-    <% end %>    
-    <span class="unassign_link" style="<%= 'display:none' unless assigned_to || params[:dnc] %>">
-      <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign tipit", :title => t('contacts.index.unassign_contact')) %>
-    </span>    
+    <% end %>   
   </td>
 </tr>

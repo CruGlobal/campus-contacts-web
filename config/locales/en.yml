@@ -157,7 +157,7 @@ en:
       archived_label: "Archived"
       include_archived: "Include Archived"
       add_person: Add Person
-      export: "Export this list"
+      export: "Export CSV"
       directory_title: "Directory - %{org}"
       archived_directory_title: "Archived - %{org}"
       labels: 'Labels'
@@ -572,11 +572,11 @@ en:
     index:
       edit_true: '&edit=true'
       search_saved: 'This search has been saved'
-      vcard: 'Vcard'
+      vcard: 'Export Vcard'
       add_contact: Add a Contact
       clear_search_form: 'Clear Search Form'
       no_contacts: 'Sorry, there are no contacts here.'
-      export: Export
+      export: 'Export CSV'
       add_question_back: Click on a question to add it back to the page 
       unassign_contact: "Unassign contact"
       delete_contact: "Delete this contact"

@@ -147,10 +147,6 @@
           <%= link_to("(#{t('nav.hide')})", hide_survey_question_path(@organization.surveys.first, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
         </th>
       <% end %>
-      <% unless params[:dnc] %>
-        <th><%= t('.assigned_to') %></th>
-        <th><%= t('.friends') %></th>
-      <% end %>
       <th><%= t('.surveys') %></th>
       <th><%= sort_link @q, 'MAX(mh_answer_sheets.updated_at)', t('.last_survey'), params %></th>
       <th></th>
