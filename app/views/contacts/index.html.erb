@@ -31,7 +31,7 @@
   <% if (can? :manage, current_organization) || (can? :lead, current_organization) %>
     <ul class="pillmenu">
       <li>
-        <%= link_to(t('nav.roles'), '#', class: 'action_dropdown') %>  
+        <%= link_to("#{t('nav.roles')} ▾", '#', class: 'action_dropdown') %>  
         <ul style="display:none; width:235px;" id='label_menu'>
           <li>
             <% (current_organization.roles.default_roles_desc + current_organization.roles.non_default_roles_asc).each do |role| %>
@@ -90,7 +90,7 @@
   
   <ul class="pillmenu control_toggle">
     <li>
-      <%= link_to('More', '#', class: 'action_dropdown') %>
+      <%= link_to('More ▾', '#', class: 'action_dropdown') %>
       <ul style="display:none">
         <li><%= link_to(t('.merge_people'), "", id: "merge_people") %></li>
         <li><%= link_to(t('.export'), params.merge(format: 'csv')) %></li>
