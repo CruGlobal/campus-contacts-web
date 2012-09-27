@@ -10,16 +10,32 @@
   </td>
   <td class="firstName"><%= person.firstName %></td>
   <td class="lastName"><%= person.lastName %></td>
-  <% if contact_role %>
-    <td>
+  <td>
+    <% if contact_role %>
       <%= contact_role.followup_status.to_s.titleize %>
       <% if person.organizational_roles.where('organizational_roles.organization_id' => current_organization.id).blank? %>
         <span class="archived_group_label">&nbsp<%= t('general.archived') %>&nbsp</span>
       <% end %>
-    </td>
-  <% end %>
+    <% end %>
+  </td>
   <td><%= person.gender.to_s.titleize %></td>
   <td class="phone_number"><%= person.pretty_phone_number %></td>
+  <td>
+    <div id="roles_user_<%= person.id %>" class="roles_spaces">
+      <% roles = if params[:include_archived] || params[:archived] %>
+        <% (person.assigned_organizational_roles_including_archived(current_organization.id).default_roles_desc + person.assigned_organizational_roles_including_archived(current_organization.id).non_default_roles_asc) %>
+      <% else %>
+        <% (person.assigned_organizational_roles(current_organization.id).default_roles_desc + person.assigned_organizational_roles(current_organization.id).non_default_roles_asc) %>
+      <% end %>
+      <% roles.each do |role| %>
+        <% unless person.is_role_archived?(current_organization.id, role.id) %>
+          <span id="<%= person.id%>_<%= role.id %>" class="role_label role_<%= role.id %>"><%= role %></span>
+        <% else %>
+          <span id="<%= person.id%>_<%= role.id %>" class="role_label_archived role_<%= role.id %>"><%= role %></span>
+        <% end %>
+      <% end %>
+    </div>
+  </td>
   <% dates = [] %>
   <% questions.uniq.each do |q| %>
     <td class="<%= dom_id(q) %>">

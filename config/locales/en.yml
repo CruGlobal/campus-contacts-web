@@ -101,9 +101,9 @@ en:
     role: Label
     save: 'Save'
     show: Show
-    delete: Delete all checked
+    delete: Delete
     remove: Remove
-    archive: Archive all checked
+    archive: Archive
     keyword: "Keyword"
     status: "Status"
     edit: "Edit"
@@ -120,7 +120,7 @@ en:
     last_name: Last Name
     email: Email
     phone: Phone
-    send_email: 'Send Email'
+    send_email: 'Email'
     search: 'Search'
     add: Add
     adding: Adding...
@@ -167,8 +167,8 @@ en:
       filter: 'Search'
       year_in_school: 'Year in School'
       manage_roles: 'Manage Labels'
-      send_sms: Send Text
-      send_email: Send Email
+      send_sms: Text
+      send_email: Email
       group_comment: Add Comment
       apply_roles: 'Apply Labels'
       no_people: "Sorry, there are no people involved here."
