@@ -2,24 +2,24 @@
 
 /*** adding the class mh-top in addition to sf-menu creates an all-horizontal nav-bar menu ***/
 .mh-top {
-	background:		url("<%= asset_path("topmenubgtall.png") %>") repeat-x 0 0 #e5e5e5;
-	height:			88px;
+	background:		#0379ae;
+	height:			64px;
 	padding-bottom:	0em;
 	position:		relative;
-	float: none;
-  border-radius: 9px 9px 0 0;
-  font-family: Tahoma, Arial;
-  font-size: 14px;
-  margin-bottom: 0px;
-  z-index: 0;
+	float: 			left;
+	border-radius: 	0;
+	font-family: 	Tahoma, Arial;
+	font-size: 		12px;
+	margin-bottom: 	0px;
+	z-index: 		0;
 }
 .mh-top li {
 	background: none;
 	position:		static;
 	border: none;
-	height: 48px;
-	line-height: 48px;
-	font-size: 14px;
+	height: 64px;
+	line-height: 64px;
+	font-size: 12px;
 }
 
 .mh-top li:first-child {
@@ -28,7 +28,7 @@
 
 .mh-top a {
 	border-top:		none;
-	padding: 0 1.5em;
+	/*padding: 0 1.5em;*/
 }
 .mh-top li ul {
 	width:			44em; /*IE6 soils itself without this*/
@@ -108,7 +108,7 @@ ul.mh-top ul li.sfHover ul {
 
 .mh-top li:hover ul, .mh-top li.sfHover ul {
 left: 0px;
-top: 48px;
+top: 64px;
 z-index: 99;
 }
 

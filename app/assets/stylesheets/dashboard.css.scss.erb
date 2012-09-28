@@ -3,13 +3,97 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 #dashboard_main {
-	padding: 15px 15px;
+	padding: 0;
+	
+	h1 {
+		margin-bottom: 40px;
+		font-family: Georgia;
+		font-size: 21px;
+		font-style: italic;
+		font-weight: normal;
+		color: #808284;
+	}
 	
 	#dashboard_panels {
 		text-align: center;
 		vertical-align: top;
-		width: 900px;
+		width: 816px;
 		margin: 0 auto;
+		
+		#panel_separator {
+			display: block;
+			float: left;
+			width: 272px;
+			
+			#panel_bg {
+				height: 280px;
+				border-left: 1px solid #eaf1f6;
+				border-right: 1px solid #eaf1f6;
+			}
+		}
+		
+		.dash_panel {
+			float: left;
+			width: 144px;
+			margin: 0 64px;
+			
+				.dash_title {
+					margin: 0 auto 30px auto;
+					display: block;
+					background: url("<%= asset_path('dash_brackets.png') %>");
+					width: 116px;
+					height: 33px;
+					font-family: Georgia;
+					font-size: 14px;
+					font-style: italic;
+					color: #3594be;
+				}
+				
+				.dash_image {
+					margin: 0 auto 36px auto;
+					display: block;
+					width: 144px;
+					height: 160px;
+				}
+				
+				.dash_buttons {
+					margin: 0 auto;
+					width: 144px;
+					
+					a.button {
+						padding: 0.53em 0;
+						margin: 0;
+						display: block;
+						width: 142px;
+						border: 1px solid #0379ae;
+						color: #ffffff;
+						font-family: Helvetica;
+						font-style: bold;
+						font-size: 21px;
+						background-color: #3594be;
+						vertical-align: middle;
+						text-decoration: none;
+						-moz-box-shadow: 1px 1px 5px 0px #555;
+						-webkit-box-shadow: 1px 1px 5px 0px #555;
+						box-shadow: 0 1px 5px 0px #555;
+						text-shadow: 0 -1px 1px #555;
+					}
+					
+					a.button:hover {
+						background-color: #c5d96e;
+						border: 1px solid #94a353;
+					}
+					
+					.whatsthis {
+						position: relative;
+						top: -2.8em;
+						left: 13em;
+						height: 8px;
+						width: 8px;
+						color: #0379ae;
+					}
+				}
+		}
 		
 		#dashboard_left {
 			float: left;

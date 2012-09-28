@@ -1,0 +1,12 @@
+<div class="dash_title">
+	Messaging<br/>Contacts
+</div>
+<div class="dash_image">
+	<%= image_tag("dash_messaging.png") %>
+</div>
+<div class="dash_buttons">
+	<%= link_to("TEXT", "/contacts?click=show_message_guide_button", :class => "button") %>
+	<div class="whatsthis">[<%= link_to("?", "#", :title => "Help text") %>]</div>
+	<%= link_to("EMAIL", "/contacts?click=show_message_guide_button", :class => "button") %>
+	<div class="whatsthis">[<%= link_to("?", "#", :title => "Help text") %>]</div>
+</div>

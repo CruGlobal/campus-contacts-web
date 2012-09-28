@@ -2,6 +2,9 @@
 <% care_pattern = /people|contacts|followup_comments/ %>
 <% group_pattern = /groups/ %>
 <% if current_organization %>
+
+  <%= link_to("", "/", id: "logoInvert") %>
+  
   <ul class="sf-menu sf-navbar mh-top">
     <li class="<%= 'current' if request.path == '/dashboard' %>">
       <%= link_to(t('nav.dashboard'), "/dashboard") %>
@@ -52,10 +55,10 @@
         </ul>
       </li>
     <% end %>
-    
-    <div id="menu_search">
-      <%= render 'contacts/search_top_right' %>
-    </div>
-
   </ul>
+  
+  <div id="menu_search">
+    <%= render 'contacts/search_top_right' %>
+  </div>
+  
 <% end %>

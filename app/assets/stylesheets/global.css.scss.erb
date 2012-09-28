@@ -148,8 +148,8 @@ a.headerlink:hover {
 #global {
   text-align: right;
   font-size: 11px;
-  margin-top: 20px;
-  margin-bottom: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   height: 40px;
   line-height: 28px;
   .item {
@@ -166,6 +166,14 @@ a.headerlink:hover {
     border-left: none;
   }
 }
+
+/*
+.nav_app {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+*/
+
 #menugroups {
   background: url("<%= asset_path('topmenubgtall.png') %>") repeat-x scroll 0 0 transparent;
   border-radius: 8px 8px 0 0;
@@ -193,6 +201,17 @@ a.headerlink:hover {
   }
 }
 
+#gandalfthewhite {
+	background: #ffffff;
+	height: 104px;
+	border-bottom: 1px solid #0379ae;
+}
+
+.topmenu {
+	margin-bottom: 40px;
+	height: 64px;
+	background: #0379ae;
+}
 
 .topmenu {
   a.topset {
@@ -227,6 +246,15 @@ img.tmenu {
   width: 166px;
   height: 41px;
   margin-bottom: 10px;
+  margin-left: 15px;
+}
+
+#logoInvert {
+  background: url('<%= asset_path('logoInvert.png') %>') no-repeat;
+  float: left;
+  width: 162px;
+  height: 41px;
+  margin-top: 0.8em;
   margin-left: 15px;
 }
 
@@ -828,12 +856,21 @@ ul.pillmenu {
 #menu_search {
   vertical-align: middle;
   text-align: right;
-  padding: 13px 10px 0px;
+  padding: 1.4em 10px 0px;
 }
 
 #menu_search #search_button {
   float: right;
   margin: -4px 0px 0px 5px;
+}
+
+#menu_search #advanced_search {
+	margin-right: 0.6em;
+	font-size: 10px;
+	
+	 a {
+	 	color: #ffffff;
+	 }
 }
 
 
@@ -925,13 +962,17 @@ span.title {
 
 
 .footer {
-  border-top: 2px solid silver;
-  text-align: right;
-  color: #B3B3B3;
-  margin: 15px 0px;
+  border-top: 1px solid #0379ae;
+  text-align: center;
+  color: #808284;
+  margin: 40px 0px 15px 0px;
   padding: 15px;
-  background: #e5e5e5;
-  border-radius: 0 0 8px 8px;
+  background: #eaf1f6;
+  border-radius: 0;
+}
+
+.footer span {
+  padding: 0 1.5em;
 }
 
 .footerSplash {
