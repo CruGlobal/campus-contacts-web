@@ -264,15 +264,6 @@ class PersonTest < ActiveSupport::TestCase
       results = @org1.people.archived_not_included
       assert(!results.include?(@person1), "Person 1 should not be included")
     end
-    should "return all deleted person" do
-      results = @org1.people.deleted
-      assert_equal(results.count, 1)
-    end
-    should "not return not deleted person" do
-      results = @org1.people.get_deleted
-      assert(!results.include?(@person1), "Person 1 should not be included")
-      assert(!results.include?(@person2), "Person 2 should not be included")
-    end
   end
   
   context "removing contact assignment" do
