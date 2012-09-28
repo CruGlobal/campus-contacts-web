@@ -447,6 +447,9 @@ div.wizard {
     background: #c7dff0;
     padding: 4px 2px 3px 2px;
 		vertical-align: top;
+		&.hidden_questions {
+		  text-align: center;
+		}
   }
   .check {
     width: 30px;
@@ -462,7 +465,7 @@ div.wizard {
     background: #f5ffc4;
   }
   td.controls {
-    width: 60px;
+    width: 90px;
 		white-space:nowrap;
   }
   td.name {
@@ -853,6 +856,11 @@ ul.pillmenu {
   ul#hidden_questions {
     margin: 0;
     padding: 0;
+    list-style: none;
+  }
+  &#hidden_questions_div {
+    margin: 0;
+    padding: 10px;
     list-style: none;
   }
   li {

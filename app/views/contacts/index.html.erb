@@ -101,11 +101,6 @@
     </li>
   </ul>
   
-  
-  <ul class="pillmenu">
-    <li><%= link_to(t('.hidden_questions'), '#', id: 'hidden_questions_link') %></li>
-  </ul>
-  
   <% if params[:dnc] == 'true' %>
     <ul class="pillmenu">
       <li><%= link_to(t('.bulk_delete'), bulk_destroy_contacts_path, id: "bulk_delete") %></li>
@@ -133,7 +128,7 @@
   <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
   <%= hidden_field_tag :assign_to %>
   <table class="listing" cellpadding="0" cellspacing="0">
-    <tr>
+    <tr id="table_header">
       <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment', class: 'check_all_contacts', 'data-status' => @attr %></th>
       <th><%= sort_link @q, :firstName, t('.first_name'), params %></th>
       <th><%= sort_link @q, :lastName, t('.last_name'), params %></th>
@@ -149,7 +144,7 @@
       <% end %>
       <th><%= t('.surveys') %></th>
       <th><%= sort_link @q, 'MAX(mh_answer_sheets.updated_at)', t('.last_survey'), params %></th>
-      <th></th>
+      <th class="hidden_questions"><%= link_to "Hidden Questions ▾", "#", id: 'hidden_questions_link' %></th>
     </tr>
     <tbody id="contacts_table">
       <% @people.each do |person| %>
@@ -172,7 +167,6 @@
     <%= "Displaying #{@people.offset_value + 1} - #{@people.offset_value + @people.length} of #{@people.total_count}" %>
   </div>
 <% end %>
-
 <div id="add_contact_div" style="display:none" title="<%= t('.add_contact') %>" class="fingerme">
   <%= render 'add_contact', person: Person.new %>
 </div>

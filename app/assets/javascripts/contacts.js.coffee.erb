@@ -504,7 +504,9 @@ $ ->
     $('.' + $(this).attr('data-class')).fadeOut()
   
   $('#hidden_questions_link').live 'click', ->
-    $('#hidden_questions_div').slideToggle()
+    position = parseInt($('#table_header').position().top) + parseInt($('#table_header').height())
+    $('#hidden_questions_div').css('top': position)
+    $('#hidden_questions_div').toggle()
     false
  
   $.fn.activateDncDroppable()
