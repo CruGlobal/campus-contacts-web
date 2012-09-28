@@ -12,7 +12,16 @@ jQuery(document).ready(function(){
 	});
 	
 	click_url();
+	hide_loader();
 })
+
+function show_loader(){
+  $('#global_loader').show()
+}
+
+function hide_loader(){
+  $('#global_loader').hide()
+}
 
 function show_video_preview(){
 	$("#welcome_controller .video_entry").each(function(){

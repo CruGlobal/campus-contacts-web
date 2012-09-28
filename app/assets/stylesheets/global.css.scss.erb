@@ -1003,15 +1003,6 @@ span.title {
 
 .splash {
   width: 978px !important;
-  #logoline {
-    margin: 0;
-  }
-  #logoline #logo {
-    background: url("<%= asset_path("logo_222x55.png") %>") no-repeat;
-    width: 222px;
-    height: 55px;
-    display: block;
-  }
   #squarewrap {
   	width: 978px;
   	height: 489px;
@@ -1165,7 +1156,7 @@ span.title {
     font-weight: bold;
     height: 64px;
     text-align: center;
-    padding-top: 20px;
+    padding-top: 0.7em;
     text-transform: uppercase;
     width: 306px;
     overflow: hidden;
@@ -2050,18 +2041,12 @@ div.pagination {
 }
 
 body#welcome_controller {
-/*  background: url("<%= asset_path("bluebg.jpg") %>") repeat-x 0 0 #0078ae; */
   .splash {
     background: #fff;
   }
   
-  #global #logo {
-    display: none;
-  }
-  
   #logo {
-    position: absolute;
-    margin-top: -67px;
+    margin-top: 0px;
     margin-left: 0px;
   }
   .tutorials, .tour, .index, .privacy, .terms {
@@ -2711,4 +2696,9 @@ ul.under_tree {
     background: #f0f0f0;
     text-align: left;
   }
+}
+
+#global_loader {
+  display: inline-block;
+  margin: -3px 0px -3px 5px;
 }
