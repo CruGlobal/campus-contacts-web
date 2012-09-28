@@ -29,6 +29,24 @@ class OrganizationTest < ActiveSupport::TestCase
 
   # begin methods testing
   
+  context "get all people" do
+    setup do
+      @org1 = Factory(:organization)
+      @person1 = Factory(:person)
+      @person2 = Factory(:person)
+      @person3 = Factory(:person)
+      
+      Factory(:organizational_role, person: @person2, role: Role.contact, organization: @org1, :added_by_id => @person1.id, deleted: 1)
+      Factory(:organizational_role, person: @person2, role: Role.involved, organization: @org1, :added_by_id => @person1.id, deleted: 1)
+      Factory(:organizational_role, person: @person3, role: Role.contact, organization: @org1, :added_by_id => @person1.id)
+      Factory(:organizational_role, person: @person3, role: Role.involved, organization: @org1, :added_by_id => @person1.id)
+    end
+    
+    should "only get people with some roles not yet deleted" do
+      assert_equal [@person3], @org1.people
+    end
+  end
+  
   context "get all leaders" do
     setup do
       @org1 = Factory(:organization)
