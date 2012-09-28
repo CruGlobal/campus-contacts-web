@@ -12,6 +12,9 @@
     <%= t('.directory_title', org: current_organization) %>
     <%= " - #{Role.find_by_id(params[:role]).to_s.pluralize}" if params[:role].present? %>
     <%= " - #{t('nav.archive')}" if params[:archived].present? %>
+    <div id='global_loader'>
+      <%= image_tag 'loader.gif'%>
+    </div>
   </h1>
 </div>
 <% if can?(:create, Person) || can?(:create, SmsMailer) %>
