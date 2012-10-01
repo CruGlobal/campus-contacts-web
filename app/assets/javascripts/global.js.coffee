@@ -8,3 +8,23 @@ $ ->
 
   $("select, input[type=text], input[type=password], input[type=email]").live "keypress", (e) ->
     false if e.which is 13
+    
+  $('#bulk_send_text_dialog .multiselect').chosen()
+  $('#bulk_send_text_dialog').dialog
+    resizable: false,
+    height:444,
+    width:600,
+    modal: true,
+    autoOpen: false,
+    title: 'Send Text Message',
+    open: (event, ui) ->
+      $(this).find('form').attr('action', '/people/bulk_sms')
+    close: (event, ui) ->
+      $('#bulk_sms_message').val($('#bulk_send_body').val())            
+    buttons: 
+      Send: ->
+        $(this).submitBulkSendTextDialog()      
+      Cancel: ->
+        $(this).dialog('close')
+      
+

@@ -280,6 +280,13 @@ $.fn.triggerPersonLookup = ->
         $('.merge.' + css_class).show()
         $("#spinner_" + css_class).hide()
         
+$.fn.submitBulkSendTextDialog = ->
+  ids = $('#bulk_send_text_dialog #send_text_to').val()
+  $('#bulk_send_text_dialog #to').val(ids.join(','))
+  $.rails.handleRemote($("#bulk_send_text_dialog form"))
+  $.n('Text message sent')        
+  $('#bulk_send_text_dialog').dialog('close')
+     
 $.fn.submitBulkSendDialog = ->
   ids = []
   $('.to_list li').each ->
@@ -395,7 +402,27 @@ $('.send_sms_link').live 'click', ->
 				$('#bulk_sms_message').val($('#bulk_send_body').val())        
 				$(this).dialog('destroy')
 	false 
-	
+
+$('#send_bulksms_link_new').live 'click', ->
+  ids = []
+  $('.id_checkbox:checked').each ->
+    id = $(this).attr('data-id')
+    if $(this).attr('data-number').length > 0
+      ids.push(id)    
+    
+  $('#bulk_send_text_dialog #bulk_send_body').val('')
+  $('#bulk_send_text_dialog #send_text_to').val(ids)
+  $('#bulk_send_text_dialog #send_text_to').trigger("liszt:updated")  
+  $('#bulk_send_text_dialog').dialog('open')    
+  $('#bulk_send_text_dialog #char_counter').show()
+  $('#bulk_send_text_dialog #bulk_send_body').simplyCountable({ 
+    maxCount: 160,
+    counter: '#bulk_send_text_dialog #char_counter'
+  })
+  $('#bulk_send_text_dialog #bulk_send_body').focus()
+  false
+
+
 $('#send_bulksms_link').live 'click', ->
   if $('.id_checkbox:checked').length == 0
     alert("You didn't select any people to text")

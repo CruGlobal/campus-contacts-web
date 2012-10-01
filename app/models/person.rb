@@ -156,6 +156,11 @@ class Person < ActiveRecord::Base
     :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID)"
   } }
   
+  def select_name
+    "#{firstName} #{lastName} #{'-' if lastName.present? || firstName.present?} #{pretty_phone_number}"
+  end
+
+  
   def self.deleted
     self.get_deleted.collect()
   end
