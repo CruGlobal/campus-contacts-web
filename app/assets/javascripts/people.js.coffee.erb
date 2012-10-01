@@ -405,10 +405,19 @@ $('.send_sms_link').live 'click', ->
 
 $('#send_bulksms_link_new').live 'click', ->
   ids = []
+  fails = []
   $('.id_checkbox:checked').each ->
     id = $(this).attr('data-id')
-    if $(this).attr('data-number').length > 0
-      ids.push(id)    
+    if $(this).attr('data-number') && $(this).attr('data-number').length > 0
+      ids.push(id) 
+    else
+      fails.push($(this).attr('data-name'))
+      
+  if fails.length > 0
+    $('#bulk_send_text_error').show()
+    $('#bulk_send_text_error #bulk_send_text_message').html("The following contacts do not have a valid phone number: " + fails.join(', '))
+  else
+    $('#bulk_send_text_error').hide()
     
   $('#bulk_send_text_dialog #bulk_send_body').val('')
   $('#bulk_send_text_dialog #send_text_to').val(ids)

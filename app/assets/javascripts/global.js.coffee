@@ -13,13 +13,15 @@ $ ->
   $('#bulk_send_text_dialog').dialog
     resizable: false,
     height:444,
-    width:600,
+    width:730,
     modal: true,
     autoOpen: false,
     title: 'Send Text Message',
     open: (event, ui) ->
+      $("body").css("overflow", "hidden")
       $(this).find('form').attr('action', '/people/bulk_sms')
     close: (event, ui) ->
+      $("body").css("overflow", "auto")
       $('#bulk_sms_message').val($('#bulk_send_body').val())            
     buttons: 
       Send: ->

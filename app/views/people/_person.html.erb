@@ -2,8 +2,6 @@
   
   <% if can?(:create, Person) || can?(:create, SmsMailer) %>
     <td nowrap="nowrap" class="checkbox_cell">
-      <%#= image_tag('grippy.png', class: 'handle') %>
-      <%-# check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
       <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox' %>
     </td>
   <% end %>

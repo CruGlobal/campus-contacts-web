@@ -7,7 +7,7 @@
       <%= image_tag('grippy.png', class: 'handle' ) %>
     <% end %>
     <%-# check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
-    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox' %>
+    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox', 'data-name' => "#{person.firstName} #{person.lastName}"%>
   </td>
   <td class="firstName"><%= person.firstName %></td>
   <td class="lastName"><%= person.lastName %></td>

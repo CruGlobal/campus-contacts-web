@@ -2,7 +2,9 @@
 	<td colspan="99" align="center">
 		<span id="all_text">
       <% @filtered_people.each do |person| %>
-    		<span class="all_row" data-id="<%= person.id %>" data-name="<%= person.firstName %> <%= person.lastName %>" data-email="<%= person.email %>" data-phone-number="<%= person.pretty_phone_number %>"></span>
+    		<span class="all_row" data-id="<%= person.id %>" data-name="<%= person.firstName %> <%= person.lastName %>" data-email="<%= person.email %>" data-phone-number="<%= person.pretty_phone_number %>">
+    		  <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox', 'data-name' => "#{person.firstName} #{person.lastName}", style: 'display:none;'%>
+    		</span>
       <% end %>
     
 			<%=raw t('people.all.page_selected_html', count: @people.length) %>
