@@ -159,6 +159,10 @@ class Person < ActiveRecord::Base
   def select_name
     "#{firstName} #{lastName} #{'-' if lastName.present? || firstName.present?} #{pretty_phone_number}"
   end
+  
+  def select_name_email
+    "#{firstName} #{lastName} #{'-' if lastName.present? || firstName.present?} #{email}"
+  end
 
   
   def self.deleted

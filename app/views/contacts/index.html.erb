@@ -5,6 +5,7 @@
 <%= render 'shared/bulk_vcard_dialog' %>  
 <%= render 'shared/bulk_send_form' %>
 <%= render 'shared/bulk_send_text' %>
+<%= render 'shared/bulk_send_email' %>
 
 <div class="titlebar">  
   <h1>
@@ -76,7 +77,7 @@
   <ul class='divider'></ul>
   
   <ul class="pillmenu control_toggle">
-    <li><%= link_to(t('people.index.send_email'), nil, :id => "send_bulkemail_link") %></li>
+    <li><%= link_to(t('people.index.send_email'), nil, :id => "send_bulkemail_link_new") %></li>
   </ul>
   
   <ul class="pillmenu control_toggle">

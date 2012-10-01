@@ -281,11 +281,17 @@ $.fn.triggerPersonLookup = ->
         $("#spinner_" + css_class).hide()
         
 $.fn.submitBulkSendTextDialog = ->
-  ids = $('#bulk_send_text_dialog #send_text_to').val()
-  $('#bulk_send_text_dialog #to').val(ids.join(','))
-  $.rails.handleRemote($("#bulk_send_text_dialog form"))
-  $.n('Text message sent')        
+  if $('.bulk-msg').hasClass('bulk-text')
+    $('#bulk_send_text_dialog #to').val($('#bulk_send_text_dialog #send_text_to').val().join(','))
+    msg = "Text Successfully Sent"
+  else
+    $('#bulk_send_text_dialog #to').val($('#bulk_send_text_dialog #send_email_to').val().join(','))
+    msg = "Email Successfully Sent"
+
+  $.rails.handleRemote($("#bulk_send_text_dialog form"))  
+  $.n(msg)        
   $('#bulk_send_text_dialog').dialog('close')
+  $('.id_checkbox, .check_all_contacts').attr('checked',false)
      
 $.fn.submitBulkSendDialog = ->
   ids = []
@@ -296,6 +302,83 @@ $.fn.submitBulkSendDialog = ->
   $.rails.handleRemote($("#bulk_send_dialog form"))
   $('#bulk_send_dialog').dialog('destroy')
         
+        
+$('#send_bulkemail_link_new').live 'click', ->
+  $('#send_text_to_chzn').hide()
+  $('#send_email_to_chzn').show()
+  $('.bulk-msg').addClass('bulk-email')
+  $('.bulk-msg').removeClass('bulk-text')
+  $('.bulk-msg').attr('action', '/people/bulk_email')
+  $('#bulk_send_text_dialog').dialog({title: 'Send Email'})
+  
+  ids = []
+  fails = []
+  $('.id_checkbox:checked').each ->
+    id = $(this).attr('data-id')
+    if $(this).attr('data-email') && $(this).attr('data-email').length > 0
+      ids.push(id) 
+    else
+      fails.push($(this).attr('data-name'))
+      
+  if fails.length > 0
+    $('#bulk_send_text_error').show()
+    $('#bulk_send_text_error #bulk_send_text_message').html("The following contacts do not have a valid email: " + fails.join(', '))
+  else
+    $('#bulk_send_text_error').hide()
+  
+  $('#bulk_send_text_dialog #bulk_send_body').val('')
+  $('#bulk_send_text_dialog #send_email_to').val(ids)
+  $('#bulk_send_text_dialog #send_email_to').trigger("liszt:updated")  
+  $('#bulk_send_text_dialog #send_text_to').val('')
+  $('#bulk_send_text_dialog #send_text_to').trigger("liszt:updated")  
+  $('#bulk_send_text_dialog').dialog('open')   
+  $('#bulk_send_text_dialog #bulk_send_body').simplyCountable({ 
+    maxCount: 999999,
+    counter: '#bulk_send_text_dialog #char_counter'
+  }) 
+  $('#bulk_send_text_dialog #char_counter').hide()
+  $('#bulk_send_text_dialog #bulk_send_body').focus()
+  false
+  
+
+$('#send_bulksms_link_new').live 'click', ->
+  $('#send_text_to_chzn').show()
+  $('#send_email_to_chzn').hide()
+  $('.bulk-msg').addClass('bulk-text')
+  $('.bulk-msg').removeClass('bulk-email')
+  $('.bulk-msg').attr('action', '/people/bulk_sms')
+  $('#bulk_send_text_dialog').dialog({title: 'Send Text'})
+  
+  ids = []
+  fails = []
+  $('.id_checkbox:checked').each ->
+    id = $(this).attr('data-id')
+    if $(this).attr('data-number') && $(this).attr('data-number').length > 0
+      ids.push(id) 
+    else
+      fails.push($(this).attr('data-name'))
+      
+  if fails.length > 0
+    $('#bulk_send_text_error').show()
+    $('#bulk_send_text_error #bulk_send_text_message').html("The following contacts do not have a valid phone number: " + fails.join(', '))
+  else
+    $('#bulk_send_text_error').hide()
+    
+  $('#bulk_send_text_dialog #bulk_send_body').val('')
+  $('#bulk_send_text_dialog #send_text_to').val(ids)
+  $('#bulk_send_text_dialog #send_text_to').trigger("liszt:updated")  
+  $('#bulk_send_text_dialog #send_email_to').val('')
+  $('#bulk_send_text_dialog #send_email_to').trigger("liszt:updated")  
+  $('#bulk_send_text_dialog').dialog('open')    
+  $('#bulk_send_text_dialog #char_counter').show()
+  $('#bulk_send_text_dialog #bulk_send_body').simplyCountable({ 
+    maxCount: 160,
+    counter: '#bulk_send_text_dialog #char_counter'
+  })
+  $('#bulk_send_text_dialog #char_counter').show()
+  $('#bulk_send_text_dialog #bulk_send_body').focus()
+  false
+
 $('#send_bulkemail_link').live 'click', -> 
   if $('.id_checkbox:checked').length == 0
     alert("You didn't select any people to email")
@@ -402,34 +485,6 @@ $('.send_sms_link').live 'click', ->
 				$('#bulk_sms_message').val($('#bulk_send_body').val())        
 				$(this).dialog('destroy')
 	false 
-
-$('#send_bulksms_link_new').live 'click', ->
-  ids = []
-  fails = []
-  $('.id_checkbox:checked').each ->
-    id = $(this).attr('data-id')
-    if $(this).attr('data-number') && $(this).attr('data-number').length > 0
-      ids.push(id) 
-    else
-      fails.push($(this).attr('data-name'))
-      
-  if fails.length > 0
-    $('#bulk_send_text_error').show()
-    $('#bulk_send_text_error #bulk_send_text_message').html("The following contacts do not have a valid phone number: " + fails.join(', '))
-  else
-    $('#bulk_send_text_error').hide()
-    
-  $('#bulk_send_text_dialog #bulk_send_body').val('')
-  $('#bulk_send_text_dialog #send_text_to').val(ids)
-  $('#bulk_send_text_dialog #send_text_to').trigger("liszt:updated")  
-  $('#bulk_send_text_dialog').dialog('open')    
-  $('#bulk_send_text_dialog #char_counter').show()
-  $('#bulk_send_text_dialog #bulk_send_body').simplyCountable({ 
-    maxCount: 160,
-    counter: '#bulk_send_text_dialog #char_counter'
-  })
-  $('#bulk_send_text_dialog #bulk_send_body').focus()
-  false
 
 
 $('#send_bulksms_link').live 'click', ->

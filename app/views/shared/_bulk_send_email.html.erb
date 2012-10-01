@@ -1,0 +1,23 @@
+<div id="bulk_send_email_dialog" style="display:none" title="Send Bulk Text Message">
+  <%= form_tag "", class: 'bulk-sms' do %>
+    <div class="field">
+      <label><%= t('general.recipients') %></label>
+      <%= hidden_field_tag :to %>
+      <%= select_tag :send_text_to, options_from_collection_for_select(@all_people_with_email, :id, :select_name_email), multiple: true, id: 'send_text_to', class: 'multiselect', style: "width: 690px;", 'data-placeholder' => "Choose Contacts..."  %>
+      <%= hidden_field_tag 'followup_comment[organization_id]', current_organization.id %>
+      <%= hidden_field_tag 'followup_comment[commenter_id]', current_user.person.id %>
+    </div>
+    <div class="field">
+      <label><%= t('general.message') %></label>
+      <%= text_area_tag :body, '', id: 'bulk_send_body', style: 'width: 680px; height: 60px;' %>
+		  <div id="char_counter"></div>
+    </div>
+  <% end %>
+  
+  <div id="bulk_send_email_error" class="flash" style="display: none;">
+    <div id="bulk_send_email_message" class="flash_message notice alignleft" style="padding: 5px 5px 5px 40px; min-height: 30px;">
+      SAMPLE
+    </div>
+  </div>
+</div>
+

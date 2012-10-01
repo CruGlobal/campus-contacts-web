@@ -60,7 +60,8 @@ class ContactsController < ApplicationController
       end
     end
     @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
-    @all_people_with_phone_numbers = @all_people.find_all{|person| person.pretty_phone_number.present? }
+    @all_people_with_phone_number = @all_people.find_all{|person| person.pretty_phone_number.present? }
+    @all_people_with_email = @all_people.find_all{|person| person.email.present? }
   end
   
   def contacts_all
