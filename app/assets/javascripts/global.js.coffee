@@ -12,7 +12,7 @@ $ ->
   $('.multiselect_text').chosen()
   $('.multiselect_email').chosen()
   
-  $('#bulk_send_text_dialog').dialog
+  $('#bulk_send_msg_dialog').dialog
     resizable: false,
     height:444,
     width:730,

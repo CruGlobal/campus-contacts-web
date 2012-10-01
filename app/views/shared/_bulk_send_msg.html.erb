@@ -1,4 +1,4 @@
-<div id="bulk_send_text_dialog" style="display:none" title="Send Bulk Text Message">
+<div id="bulk_send_msg_dialog" style="display:none" title="Send Bulk Text Message">
   <%= form_tag "", class: 'bulk-msg' do %>
     <div class="field">
       <label><%= t('general.recipients') %></label>
@@ -15,8 +15,8 @@
     </div>
   <% end %>
   
-  <div id="bulk_send_text_error" class="flash" style="display: none;">
-    <div id="bulk_send_text_message" class="flash_message notice alignleft" style="padding: 5px 5px 5px 40px; min-height: 30px;">
+  <div id="bulk_send_msg_error" class="flash" style="display: none;">
+    <div id="bulk_send_msg_message" class="flash_message notice alignleft" style="padding: 5px 5px 5px 40px; min-height: 30px;">
       SAMPLE
     </div>
   </div>

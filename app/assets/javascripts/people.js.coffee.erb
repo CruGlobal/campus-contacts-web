@@ -282,15 +282,15 @@ $.fn.triggerPersonLookup = ->
         
 $.fn.submitBulkSendTextDialog = ->
   if $('.bulk-msg').hasClass('bulk-text')
-    $('#bulk_send_text_dialog #to').val($('#bulk_send_text_dialog #send_text_to').val().join(','))
+    $('#bulk_send_msg_dialog #to').val($('#bulk_send_msg_dialog #send_text_to').val().join(','))
     msg = "Text Successfully Sent"
   else
-    $('#bulk_send_text_dialog #to').val($('#bulk_send_text_dialog #send_email_to').val().join(','))
+    $('#bulk_send_msg_dialog #to').val($('#bulk_send_msg_dialog #send_email_to').val().join(','))
     msg = "Email Successfully Sent"
 
-  $.rails.handleRemote($("#bulk_send_text_dialog form"))  
+  $.rails.handleRemote($("#bulk_send_msg_dialog form"))  
   $.n(msg)        
-  $('#bulk_send_text_dialog').dialog('close')
+  $('#bulk_send_msg_dialog').dialog('close')
   $('.id_checkbox, .check_all_contacts').attr('checked',false)
      
 $.fn.submitBulkSendDialog = ->
@@ -309,7 +309,7 @@ $('#send_bulkemail_link_new').live 'click', ->
   $('.bulk-msg').addClass('bulk-email')
   $('.bulk-msg').removeClass('bulk-text')
   $('.bulk-msg').attr('action', '/people/bulk_email')
-  $('#bulk_send_text_dialog').dialog({title: 'Send Email'})
+  $('#bulk_send_msg_dialog').dialog({title: 'Send Email'})
   
   ids = []
   fails = []
@@ -321,23 +321,23 @@ $('#send_bulkemail_link_new').live 'click', ->
       fails.push($(this).attr('data-name'))
       
   if fails.length > 0
-    $('#bulk_send_text_error').show()
-    $('#bulk_send_text_error #bulk_send_text_message').html("The following contacts do not have a valid email: " + fails.join(', '))
+    $('#bulk_send_msg_error').show()
+    $('#bulk_send_msg_error #bulk_send_msg_message').html("The following contacts do not have a valid email: " + fails.join(', '))
   else
-    $('#bulk_send_text_error').hide()
+    $('#bulk_send_msg_error').hide()
   
-  $('#bulk_send_text_dialog #bulk_send_body').val('')
-  $('#bulk_send_text_dialog #send_email_to').val(ids)
-  $('#bulk_send_text_dialog #send_email_to').trigger("liszt:updated")  
-  $('#bulk_send_text_dialog #send_text_to').val('')
-  $('#bulk_send_text_dialog #send_text_to').trigger("liszt:updated")  
-  $('#bulk_send_text_dialog').dialog('open')   
-  $('#bulk_send_text_dialog #bulk_send_body').simplyCountable({ 
+  $('#bulk_send_msg_dialog #bulk_send_body').val('')
+  $('#bulk_send_msg_dialog #send_email_to').val(ids)
+  $('#bulk_send_msg_dialog #send_email_to').trigger("liszt:updated")  
+  $('#bulk_send_msg_dialog #send_text_to').val('')
+  $('#bulk_send_msg_dialog #send_text_to').trigger("liszt:updated")  
+  $('#bulk_send_msg_dialog').dialog('open')   
+  $('#bulk_send_msg_dialog #bulk_send_body').simplyCountable({ 
     maxCount: 999999,
-    counter: '#bulk_send_text_dialog #char_counter'
+    counter: '#bulk_send_msg_dialog #char_counter'
   }) 
-  $('#bulk_send_text_dialog #char_counter').hide()
-  $('#bulk_send_text_dialog #bulk_send_body').focus()
+  $('#bulk_send_msg_dialog #char_counter').hide()
+  $('#bulk_send_msg_dialog #bulk_send_body').focus()
   false
   
 
@@ -347,7 +347,7 @@ $('#send_bulksms_link_new').live 'click', ->
   $('.bulk-msg').addClass('bulk-text')
   $('.bulk-msg').removeClass('bulk-email')
   $('.bulk-msg').attr('action', '/people/bulk_sms')
-  $('#bulk_send_text_dialog').dialog({title: 'Send Text'})
+  $('#bulk_send_msg_dialog').dialog({title: 'Send Text'})
   
   ids = []
   fails = []
@@ -359,24 +359,24 @@ $('#send_bulksms_link_new').live 'click', ->
       fails.push($(this).attr('data-name'))
       
   if fails.length > 0
-    $('#bulk_send_text_error').show()
-    $('#bulk_send_text_error #bulk_send_text_message').html("The following contacts do not have a valid phone number: " + fails.join(', '))
+    $('#bulk_send_msg_error').show()
+    $('#bulk_send_msg_error #bulk_send_msg_message').html("The following contacts do not have a valid phone number: " + fails.join(', '))
   else
-    $('#bulk_send_text_error').hide()
+    $('#bulk_send_msg_error').hide()
     
-  $('#bulk_send_text_dialog #bulk_send_body').val('')
-  $('#bulk_send_text_dialog #send_text_to').val(ids)
-  $('#bulk_send_text_dialog #send_text_to').trigger("liszt:updated")  
-  $('#bulk_send_text_dialog #send_email_to').val('')
-  $('#bulk_send_text_dialog #send_email_to').trigger("liszt:updated")  
-  $('#bulk_send_text_dialog').dialog('open')    
-  $('#bulk_send_text_dialog #char_counter').show()
-  $('#bulk_send_text_dialog #bulk_send_body').simplyCountable({ 
+  $('#bulk_send_msg_dialog #bulk_send_body').val('')
+  $('#bulk_send_msg_dialog #send_text_to').val(ids)
+  $('#bulk_send_msg_dialog #send_text_to').trigger("liszt:updated")  
+  $('#bulk_send_msg_dialog #send_email_to').val('')
+  $('#bulk_send_msg_dialog #send_email_to').trigger("liszt:updated")  
+  $('#bulk_send_msg_dialog').dialog('open')    
+  $('#bulk_send_msg_dialog #char_counter').show()
+  $('#bulk_send_msg_dialog #bulk_send_body').simplyCountable({ 
     maxCount: 160,
-    counter: '#bulk_send_text_dialog #char_counter'
+    counter: '#bulk_send_msg_dialog #char_counter'
   })
-  $('#bulk_send_text_dialog #char_counter').show()
-  $('#bulk_send_text_dialog #bulk_send_body').focus()
+  $('#bulk_send_msg_dialog #char_counter').show()
+  $('#bulk_send_msg_dialog #bulk_send_body').focus()
   false
 
 $('#send_bulkemail_link').live 'click', -> 
