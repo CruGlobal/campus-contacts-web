@@ -15,9 +15,6 @@
       <li class="<%= 'current' if  params[:controller] == 'contacts' && params[:action] == 'index' %>">
         <%= link_to(t('nav.all_contacts'), "/contacts", :class => "topset allcontacts") %>
       </li>
-      <li class="<%= 'current' if  params[:controller] == 'people' && params[:archived].nil? %>">
-        <%= link_to(t('nav.directory'), "/people", :class => "topset directory") %>
-      </li>
     </ul>
     </li>
     <li class="<%= 'current' if request.path =~ group_pattern %>">
