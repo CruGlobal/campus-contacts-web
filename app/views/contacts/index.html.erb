@@ -5,9 +5,8 @@
 <%= render 'shared/bulk_vcard_dialog' %>  
 <%= render 'shared/bulk_send_form' %>
 
-<div class="titlebar">  
+<div class="titlebar titlebarmod">  
   <h1>
-    <%= image_tag("c_allcontacts.png") %>
     <%= t('.all_responses') %>
     <%= "- #{@header}" %>
     <%= link_to(t('.show_all'), contacts_path(assigned_to: 'all'), :class => "headerlink") if @assigned_to %>

@@ -7,8 +7,8 @@
 <% provide :sidebar do %>
   <%= render 'labels' %>
 <% end %>
-<div class="titlebar">  
-  <h1><%= image_tag("c_directory.png") %>
+<div class="titlebar titlebarmod">  
+  <h1>
     <%= t('.directory_title', org: current_organization) %>
     <%= " - #{Role.find_by_id(params[:role]).to_s.pluralize}" if params[:role].present? %>
     <%= " - #{t('nav.archive')}" if params[:archived].present? %>

@@ -98,6 +98,11 @@ img {
     color: #333333;
     font-size: 21px;
     margin: 0;
+    /*
+    position: absolute;
+  	top: 4.9em;
+  	left: 1em;
+  	*/
   }
   h3 {
     font-family: $font-base;
@@ -113,6 +118,13 @@ img {
     font-size: 12px;
     float: right;
   }
+}
+
+.titlebarmod {
+	position: absolute;
+  	top: 8em;
+  	left: 0;
+  	padding: 7.5px 14px;
 }
 
 .headerlink {
@@ -148,9 +160,31 @@ a.headerlink:hover {
 #global {
   text-align: right;
   font-size: 11px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
   height: 40px;
+  line-height: 28px;
+  .item {
+    display: inline-block;
+    border-left: 1px solid $blue;
+    height: 28px;
+    line-height: 18px;
+    >a {
+      padding: 5px;
+      text-decoration: none;
+    }
+  }
+  .item:first-child {
+    border-left: none;
+  }
+}
+
+#globalNav {
+  text-align: right;
+  font-size: 11px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  height: 32px;
   line-height: 28px;
   .item {
     display: inline-block;
@@ -215,10 +249,12 @@ a.headerlink:hover {
 
 .topmenu {
   a.topset {
+    /*
     background-image: url("<%= asset_path("iconslice.png") %>") !important;
     background-position: 8px 100px;
     background-repeat: no-repeat;
     padding-left: 30px;
+    */
   }
   a.topset.allcontacts {background-position: 8px -198px;}
   a.topset.surveys {background-position: 8px -45px;}
@@ -243,7 +279,7 @@ img.tmenu {
 #logo {
   background: url('<%= asset_path('logo.png') %>') no-repeat;
   float: left;
-  width: 166px;
+  width: 162px;
   height: 41px;
   margin-bottom: 10px;
   margin-left: 15px;
@@ -1234,6 +1270,7 @@ span.title {
     font-size: 32px;
     line-height: 32px;
     margin-left: 84px;
+    margin-top: 0;
     padding-top: 112px;
     color: #fff;
     margin-bottom: 0px;
@@ -2670,6 +2707,7 @@ ul.sf-menu {
   }
 }
 ul.under_tree {
+  right: 1px;
   width: 350px;
   max-height: 450px;
   overflow-x: hidden;

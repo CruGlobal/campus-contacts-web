@@ -35,8 +35,7 @@
 }
 .sf-menu li:hover ul,
 .sf-menu li.sfHover ul {
-	right:			-0px;
-	top:			2.5em; /* match top ul list item height */
+	top:			2.45em; /* match top ul list item height */
 	z-index:		99;
 }
 ul.sf-menu li:hover li ul,
@@ -61,21 +60,20 @@ ul.sf-menu li li li.sfHover ul {
 /*** DEMO SKIN ***/
 .sf-menu {
 	float:			left;
-	margin-bottom:	1em;
+	margin-bottom:	0em;
 }
 
 
 .sf-menu a {
 	border-left:	0px solid #fff;
 	border-top:		0px solid #CFDEFF;
-	padding: 		.75em 1em .75em 1.5em;
+	padding: 		.65em 1em .65em 1.5em;
 	text-decoration:none;
 }
 
 .sf-menu li a {padding-left: 1em;}
 
 .sf-menu li ul a {
-	padding-left: 1.5em;
 }
 
 .sf-menu a, .sf-menu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
@@ -134,7 +132,7 @@ ul.sf-menu li li li.sfHover ul {
 	background:		url('<%= asset_path('arrows-blue.png') %>') no-repeat -10px -100px; /* 8-bit indexed alpha png. IE6 gets solid image only */
 }
 a > .sf-sub-indicator {  /* give all except IE6 the correct values */
-	top:			.8em;
+	top:			.7em;
 	background-position: 0 -100px; /* use translucent arrow for modern browsers*/
 }
 /* apply hovers to modern browsers */

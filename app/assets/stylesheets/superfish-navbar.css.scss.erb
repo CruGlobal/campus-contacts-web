@@ -23,7 +23,7 @@
 }
 
 .mh-top li:first-child {
-  margin-left: 10px;
+  margin-left: 32px;
 }
 
 .mh-top a {
@@ -38,7 +38,7 @@
 	position:		relative;
 	height: 40px;
 	line-height: 40px;
-	font-size: 11px;
+	font-size: 12px;
 }
 
 .mh-top li li ul {
@@ -63,7 +63,11 @@
   padding-bottom: 0px;
 }
 
-#menutop .mh-top li li a {color: #000; line-height: 30px; margin-top: 5px;}
+#menutop .mh-top li li a {
+	color: #808284;
+	line-height: 30px;
+	margin-top: 5px;
+}
 
 
 .mh-top li.current {
@@ -89,7 +93,7 @@ ul.mh-top ul li.sfHover li,
 	background-repeat: no-repeat;
 	background-color: #fff;
 	border-radius: 5px;
-	font-size: 11px;
+	font-size: 12px;
 	font-weight: normal;
 }
 
@@ -107,9 +111,8 @@ ul.mh-top ul li.sfHover ul {
 }
 
 .mh-top li:hover ul, .mh-top li.sfHover ul {
-left: 0px;
-top: 64px;
-z-index: 99;
+	top: 64px;
+	z-index: 99;
 }
 
 ul.mh-top .current ul ul {
@@ -156,4 +159,8 @@ ul.mh-top .current ul ul {
   background-image: url("<%= asset_path("groupselected.png") %>");
   background-repeat: no-repeat;
   background-position: 50% 100%;
+}
+
+.mh-top li.sfHover ul li:first-child {
+	margin-left: 0;
 }

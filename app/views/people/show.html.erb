@@ -9,7 +9,6 @@
 <% end %>
 <div class="titlebar" style="float:left">
   <h1>
-    <%= image_tag("contact.png") %>
     <%= @person %>
     <%= link_to("Assign", "", class: 'assign headerlink', 'data-id' => @person.id) if can?(:manage, @person) %>
   </h1>
