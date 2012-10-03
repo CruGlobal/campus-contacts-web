@@ -93,11 +93,15 @@
     <li>
       <%= link_to('More ▾', '#', class: 'action_dropdown') %>
       <ul style="display:none">
-        <li><%= link_to(t('.merge_people'), "", id: "merge_people") %></li>
+        <% if can? :manage, current_organization %>
+          <li><%= link_to(t('.merge_people'), "", id: "merge_people") %></li>
+        <% end %>
         <li><%= link_to(t('.export'), params.merge(format: 'csv')) %></li>
         <li><%= link_to(t('.vcard'), '', id: 'bulk_vcard_link' ) %></li>
-        <li><%= link_to(t('general.delete'), bulk_delete_people_path, id: "bulk_delete") %></li>
-        <li><%= link_to(t('general.archive'), bulk_archive_people_path, id: "bulk_archive") %></li>
+        <% if can? :manage, current_organization %>
+          <li><%= link_to(t('general.delete'), bulk_delete_people_path, id: "bulk_delete") %></li>
+          <li><%= link_to(t('general.archive'), bulk_archive_people_path, id: "bulk_archive") %></li>
+        <% end %>
       </ul>
     </li>
   </ul>

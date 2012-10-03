@@ -1,43 +1,4 @@
-<% if @organization.leaders.detect {|p| p.contact_assignments.for_org(@organization).count > 0} %>
-  <div class="top_left_notice">
-    <%= t('.reminder_prompt') %>
-    <center>
-      <a class="pillbutton" href="#" id="send_reminder_link" style="margin-top: 6px;">
-        <%= t('contacts.index.send_reminder') %>
-      </a>
-    </center>
-  </div>
-<% end %>
 <ul class="leftmenu">
-<!--   <li class="heading selected">
-    <h3><%= t('people.index.labels') %></h3>
-  </li>
-  <li>
-    <ul id="label" class="indent expandable" data-height="244">
-      <% roles = current_organization.roles.default_roles_desc + current_organization.roles.non_default_roles_asc %>
-      <% roles.each do |role| %>
-        <% count = Person.people_for_labels(current_organization).where('organizational_roles.role_id' => role.id).count %>
-        <li style="<%= 'display:none' if count == 0 %>">
-          <span class="name">
-            <%= link_to(role, :role => role.id) %>
-          </span>
-          (<%= count %>)
-        </li>
-      <% end %>
-      <li>
-        <span class="name">
-          <%= link_to(t('contacts.index.all'), params.except(:role)) %>
-        </span>
-        (<%= Person.people_for_labels(current_organization).count %>)
-      </li>
-    </ul>
-    <a href="#leaders" class="moredown" style="display:none">
-      <span>
-        <strong>+</strong> <%= t('.show_more') %>
-      </span>
-    </a>
-    </li>
-    -->
   <li class="heading selected">
     <% if can? :create, Person %>
       <%= link_to(raw(t('contacts.index.add') + " " + image_tag('add.png')), '#', class: 'add-leader listaction') %>
