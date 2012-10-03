@@ -164,6 +164,7 @@ en:
       directory_title: "Directory - %{org}"
       archived_directory_title: "Archived - %{org}"
       labels: 'Labels'
+      statistics: 'Statistics'
       gender: 'Gender'
       phone: 'Phone'
       email: 'Email'
