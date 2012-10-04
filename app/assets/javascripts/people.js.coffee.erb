@@ -101,7 +101,7 @@ $ ->
     
   true
 
-  $("#people_controller a#bulk_delete").live 'click', ->
+  $("#people_controller a#bulk_delete, #contacts_controller a#bulk_delete").live 'click', ->
     ids = []
     $('.id_checkbox:checked:visible').each ->
       ids.push($(this).val())
@@ -118,13 +118,13 @@ $ ->
           data: 'ids='+ids,
           success: (data) ->
             if data.indexOf("success") != -1 #there might be a better way of doing this other than just basing the success on the returned data
-              $('.id_checkbox:checked').each ->
-                $(this).closest('tr').fadeOut();
+              $('.id_checkbox:checked:visible').each ->
+                $(this).closest('tr').remove();
             else
               $.a(data)
     false
     
-  $("#people_controller a#bulk_archive").live 'click', ->
+  $("#people_controller a#bulk_archive, #contacts_controller a#bulk_archive").live 'click', ->
     ids = []
     $('.id_checkbox:checked:visible').each ->
       ids.push($(this).val())
