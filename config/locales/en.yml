@@ -84,6 +84,7 @@ en:
     back_to_dashboard: "Back To My Contacts"
     create_a_survey: Create a survey
     settings: Settings
+    cru: "Cru"
   general:
     archived: "Archived"
     assigned_to:  "Assigned to"
@@ -209,7 +210,8 @@ en:
       search_placeholder: 'Search for the first name, last name or email.'
       search_title: 'Search'
       advanced_search: 'Toggle Advanced Search'
-      clear_search_form: 'Clear Search Form' 
+      advanced_search_link: 'Advanced Search'
+      clear_search_form: 'Clear Search Form'
     advanced_search:
       first_name: 'First Name'
       last_name: 'Last Name'
@@ -348,6 +350,24 @@ en:
     close: "Close"
     send_message_guide: "To send a text or email, click the box next to the contacts you'd like to message. You can also use the search function to find contacts quickly. <br/><br/>After selecting the contacts, click the \"Send\" button to compose your message."
     send_message_video_guide: 'Click on the video below see how to do this.'
+    header_text: 'Make It Easier To Care For The People Who Need You Most'
+    panel_storing: 'Storing Contacts'
+    panel_managing: 'Managing Contacts'
+    panel_messaging: 'Messaging Contacts'
+    button_add: 'ADD'
+    button_import: 'IMPORT'
+    button_group: 'GROUP'
+    button_label: 'LABEL'
+    button_assign: 'ASSIGN'
+    button_text: 'TEXT'
+    button_email: 'EMAIL'
+    help_add: 'Add help'
+    help_import: 'Import help'
+    help_group: 'Group help'
+    help_label: 'Label help'
+    help_assign: 'Assign help'
+    help_text: 'Text help'
+    help_email: 'Email help'
   surveys:
     index:
       title: "Surveys for %{org}"
@@ -1043,5 +1063,3 @@ en:
   batch:
     new_person_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, there are new contacts in your organization. Please login to missionhub.com as soon as possible to followup the contacts. Below is the list of %{contacts_count} new contacts:"
     person_transfer_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, you have been sent new contacts. Please login to missionhub.com as soon as possible to followup the contacts. There may be more information about the contacts in the comment section of their individual profile. If not, you may want to contact the senders at their email address. Below is the list of %{contacts_count} contacts sent:"
-
-

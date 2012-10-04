@@ -1,12 +1,14 @@
 <div class="dash_title">
-	Messaging<br/>Contacts
+	<span>
+		<%= t('dashboard.panel_messaging') %>
+	</span>
 </div>
 <div class="dash_image">
 	<%= image_tag("dash_messaging.png") %>
 </div>
 <div class="dash_buttons">
-	<%= link_to("TEXT", "/contacts?click=show_message_guide_button", :class => "button") %>
-	<div class="whatsthis">[<%= link_to("?", "#", :title => "Help text") %>]</div>
-	<%= link_to("EMAIL", "/contacts?click=show_message_guide_button", :class => "button") %>
-	<div class="whatsthis">[<%= link_to("?", "#", :title => "Help text") %>]</div>
+	<%= link_to(t('dashboard.button_text'), "/contacts?click=show_message_guide_button", :class => "button") %>
+	<div class="whatsthis">[<%= link_to("?", "#", :title => t('dashboard.help_text')) %>]</div>
+	<%= link_to(t('dashboard.button_email'), "/contacts?click=show_message_guide_button", :class => "button") %>
+	<div class="whatsthis">[<%= link_to("?", "#", :title => t('dashboard.help_email')) %>]</div>
 </div>

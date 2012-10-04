@@ -234,7 +234,8 @@ Mh::Application.routes.draw do
   # 
   match 'autoassign_suggest' => 'surveys/questions#suggestion', as: 'question_suggestion'
   
-  get "welcome/tour"
+  #get "welcome/tour"
+  match "welcome/tour" => 'welcome#tutorials'
 
   # mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
   mount Resque::Server.new, at: "/resque"

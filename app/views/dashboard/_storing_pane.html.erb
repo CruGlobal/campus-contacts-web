@@ -1,12 +1,14 @@
 <div class="dash_title">
-	Storing<br/>Contacts
+	<span>
+		<%= t('dashboard.panel_storing') %>
+	</span>
 </div>
 <div class="dash_image">
 	<%= image_tag("dash_storing.png") %>
 </div>
 <div class="dash_buttons">
-	<%= link_to("ADD", "/contacts?click=contacts_add_button", :class => "button") %>
-	<div class="whatsthis">[<%= link_to("?", "#", :title => "Help text") %>]</div>
-	<%= link_to("IMPORT", "/imports/new", :class => "button") %>
-	<div class="whatsthis">[<%= link_to("?", "#", :title => "Help text") %>]</div>
+	<%= link_to(t('dashboard.button_add'), "/contacts?click=contacts_add_button", :class => "button") %>
+	<div class="whatsthis">[<%= link_to("?", "#", :title => t('dashboard.help_add')) %>]</div>
+	<%= link_to(t('dashboard.button_import'), "/imports/new", :class => "button") %>
+	<div class="whatsthis">[<%= link_to("?", "#", :title => t('dashboard.help_import')) %>]</div>
 </div>
