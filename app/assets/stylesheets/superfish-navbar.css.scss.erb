@@ -1,6 +1,5 @@
-
-
 /*** adding the class mh-top in addition to sf-menu creates an all-horizontal nav-bar menu ***/
+
 .mh-top {
 	background:		#0379ae;
 	height:			64px;
@@ -24,6 +23,12 @@
 
 .mh-top li:first-child {
   margin-left: 32px;
+}
+
+.mh-top li:first-child:hover {
+	background-image: url("<%= asset_path("whitebar.png") %>");
+	background-repeat: no-repeat;
+	background-position: 50% 0%;
 }
 
 .mh-top a {
@@ -68,33 +73,23 @@
 	margin-top: 0;
 }
 
-
 .mh-top li.current {
-	/*background:		none;*/
-	/* font-weight: bold; */
-	
 	background-image: url("<%= asset_path("whitebar.png") %>");
 	background-repeat: no-repeat;
 	background-position: 50% 0%;
-	
-}
-.mh-top li.current:hover {
-	/*background:		none;*/
-	/* font-weight: bold; */
-	
-	background-image: url("<%= asset_path("whitebar.png") %>");
-	background-repeat: no-repeat;
-	background-position: 50% 0%;
-	
 }
 
+.mh-top li.current:hover {
+	background-image: url("<%= asset_path("whitebar.png") %>");
+	background-repeat: no-repeat;
+	background-position: 50% 0%;
+}
 
 .mh-top li:hover,
 .mh-top li.sfHover,
 .mh-top li li.current,
 .mh-top a:focus, .mh-top a:hover, .mh-top a:active {
 	background:		none;
-	/*background-color: #3594be;*/
 }
 .mh-top ul li:hover,
 .mh-top ul li.sfHover,
@@ -109,7 +104,6 @@ ul.mh-top ul li.sfHover li,
 	background:		inherit;
 	background-repeat: no-repeat;
 	background-color: #fff;
-	border-radius: 5px;
 	font-size: 12px;
 	font-weight: normal;
 }
