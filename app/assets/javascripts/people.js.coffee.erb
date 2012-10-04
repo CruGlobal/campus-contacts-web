@@ -118,7 +118,7 @@ $ ->
           data: 'ids='+ids,
           success: (data) ->
             if data.indexOf("success") != -1 #there might be a better way of doing this other than just basing the success on the returned data
-              $('.id_checkbox:checked:visible').each ->
+              $('.id_checkbox:checked').each ->
                 $(this).closest('tr').remove();
             else
               $.a(data)
@@ -142,7 +142,7 @@ $ ->
           success: (data) ->
             if data.indexOf("success") != -1 #there might be a better way of doing this other than just basing the success on the returned data
               $('.id_checkbox:checked').each ->
-                $(this).closest('tr').fadeOut();
+                $(this).closest('tr').remove();
             else
               $.a(data)
     false
