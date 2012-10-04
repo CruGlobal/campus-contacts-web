@@ -178,6 +178,7 @@ en:
       no_people: "Sorry, there are no people involved here."
       displaying: "Displaying %{start} - %{finish} of %{total}"
       merge_people: "Merge People"
+      merge_contacts: "Merge Contacts"
       error_message: "Error: %{person} does not have valid email to be leader"
       error_message_update_leader_without_person: "Error: Person does not have valid email to be leader"
       error_message_update_admin_without_person: "Error: Person does not have valid email to be admin"
