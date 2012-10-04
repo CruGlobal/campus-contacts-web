@@ -622,6 +622,7 @@ en:
       which_org: 'You need to choose which organization you want to do folow-up from'
       add: 'Add'
       hidden_questions: 'Hidden Questions'
+      archived: 'Archived'
       unassigned: 'Unassigned'
       all: 'All'
       dnc: 'Do Not Contact'

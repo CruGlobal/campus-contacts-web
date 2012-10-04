@@ -89,6 +89,12 @@
     </span>
     (<%= current_person.contact_friends(current_organization).count %>)
   </li>
+  <li>
+    <span class="name">
+      <%= link_to(t('people.index.archived_label'), :archived => true, :include_archived => params[:include_archived]) %>
+    </span>
+    (<%= current_organization.people.archived(current_organization.id).count %>)
+  </li>
   <li class="dnc">
     <span class="name">
       <%= link_to(t('contacts.index.dnc'), contacts_path(dnc: true)) %>

@@ -187,6 +187,9 @@ class ContactsController < ApplicationController
       elsif params[:search]
         @header = I18n.t('contacts.index.matching_seach')
         @people = @organization.contacts
+      elsif params[:archived].present? && params[:archived] == 'true'
+        @header = I18n.t('contacts.index.archived')
+        @people = Person.where(personID: current_organization.people.archived(current_organization.id).collect(&:personID))
       elsif params[:role] && Role.exists?(id: params[:role])
         @role = Role.find(params[:role])
         @people = @people_scope.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ? AND organizational_roles.deleted = 0', @role.id, current_organization.id)
@@ -332,8 +335,6 @@ class ContactsController < ApplicationController
       if params[:search_type].present? && params[:search_type] == "basic"
         @people = @people.search_by_name_or_email(params[:query], current_organization.id)
       end
-
-
 
 
       @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
