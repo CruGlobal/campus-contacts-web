@@ -17,10 +17,6 @@ class ContactsController < ApplicationController
   def index
     url = request.url.split('?')
     @attr = url.size > 1 ? url[1] : ''
-    
-    org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
-    @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles_including_archived)
-    @people_scope = @people_scope.where(personID: @people_scope.archived_not_included.collect(&:personID)) if params[:include_archived].blank? && params[:archived].blank?
     fetch_all_contacts
   
     respond_to do |wants|
@@ -174,6 +170,14 @@ class ContactsController < ApplicationController
       @hidden_questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => true).flatten.uniq
 
       params[:assigned_to] = 'all' if !params[:assigned_to].present?# make 'all default' on 'all contacts' tab instead of 'unassigned'
+      
+      org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
+      
+      @people_scope = Person.where('organizational_roles.organization_id' => org_ids).where("organizational_roles.role_id <> #{Role::CONTACT_ID} OR (organizational_roles.role_id = #{Role::CONTACT_ID} AND organizational_roles.followup_status <> 'do_not_contact')").includes(:organizational_roles_including_archived)
+      @people_scope = @people_scope.where(personID: @people_scope.archived_not_included.collect(&:personID)) if params[:include_archived].blank? && params[:archived].blank?
+      @people_scope = @people_scope.includes(:primary_phone_number, :primary_email_address)
+      sort_by = ['lastName asc', 'firstName asc']
+      
       if params[:dnc] == 'true'
         @people = @organization.dnc_contacts
         @header = I18n.t('contacts.index.dnc')
@@ -183,6 +187,28 @@ class ContactsController < ApplicationController
       elsif params[:search]
         @header = I18n.t('contacts.index.matching_seach')
         @people = @organization.contacts
+      elsif params[:role] && Role.exists?(id: params[:role])
+        @role = Role.find(params[:role])
+        @people = @people_scope.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ? AND organizational_roles.deleted = 0', @role.id, current_organization.id)
+        if params[:include_archived]
+          @people = @people.select("ministry_person.*, roles.*")
+                    .joins("LEFT JOIN organizational_roles AS org_roles ON 
+                      org_roles.person_id = ministry_person.personID")
+                    .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
+                    .where("org_roles.organization_id" => current_organization.id)
+                    .where("roles.id = #{@role.id}")
+                    sort_by.unshift("roles.id").uniq
+        else
+          @people = @people.select("ministry_person.*, roles.*")
+                    .joins("LEFT JOIN organizational_roles AS org_roles ON 
+                      org_roles.person_id = ministry_person.personID")
+                    .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
+                    .where("org_roles.archive_date" => nil, "org_roles.organization_id" => current_organization.id) 
+                    .where("roles.id = #{@role.id}")
+                    sort_by.unshift("roles.id").uniq
+                    
+        end
+        @header = @role.i18n
       else
         params[:assigned_to] = nil if params[:assigned_to].blank?
         if params[:assigned_to]
@@ -213,18 +239,11 @@ class ContactsController < ApplicationController
         end
         @people ||= Person.where("1=0")
       end
-      unless @people.arel.to_sql.include?('JOIN organizational_roles')
-        @header = "#{Role.find(params[:role]).i18n}" if params[:role].present?
-      end
       if params[:q] && params[:q][:s].include?('mh_answer_sheets')
         @people = current_organization.contacts.get_and_order_by_latest_answer_sheet_answered(params[:q][:s], current_organization.id)
       end
       if params[:q] && params[:q][:s].include?('followup_status')
         @people = current_organization.contacts.order_by_followup_status(params[:q][:s])
-      end
-      if params[:role].present?
-        org_roles = OrganizationalRole.where(person_id: @people.collect(&:id), role_id: params[:role])
-        @people = Person.where(personID: org_roles.collect(&:person_id)).uniq
       end
       if params[:survey].present?
         @people = @people.joins(:answer_sheets).where("mh_answer_sheets.survey_id" => params[:survey])
