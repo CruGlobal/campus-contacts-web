@@ -339,7 +339,8 @@ class ContactsController < ApplicationController
 
       @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
       # raise @q.sorts.inspect
-      @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? params[:q][:s] : ['lastName, firstName']).group('ministry_person.personID')
+      @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? params[:q][:s].gsub('mh_answer_sheets','ass') : ['lastName, firstName']).group('ministry_person.personID')
+      
       @all_people = @people
       @people_for_labels = Person.people_for_labels(current_organization)
       @people = @people.includes(:organizational_roles)
