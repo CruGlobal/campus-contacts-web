@@ -1,7 +1,3 @@
-<% provide :sidebar do %>
-  <%= render 'contacts/leaders' %>
-<% end %>
-
 <div class="titlebar titlebarmod">  
   <h1>
     <%= t('contacts.index.import_contacts') %>
@@ -9,37 +5,37 @@
 </div>
 
 <div class="pad">
-
-  
-  <h3>Instructions</h3>
-  <p>You can easily import hundreds of contacts at one time by simply uploading a CSV (Comma Seperated) file. Microsoft Excel makes it easy to create a CSV file.</p>
-  <p>All you need to do is a create a spreadsheet.<p>
-  
-  <ol class="instructions">
-    <li><span class="name"><strong><%= link_to(t('contacts.import_contacts.template_sample_csv'), download_sample_contacts_csv_imports_path, :class => "icon showtext csv") %></strong> to get started</span>
-    <li>In your first row list the headings. It could be: <strong>FIRST NAME, LAST NAME, EMAIL ADDRESS, PHONE NUMBER</strong> or any name you desire. </li>
-    <li>In Excel, go to <strong>Save As</strong></li>
-    <li>From the drop down menu for <strong>File Type</strong>, choose <strong>CSV, Comma Separated</strong></li>
-  </ol>
-  
-  
-  <ul style="display: none;">
-    <li><%= t('contacts.import_contacts.instruction_4') %></li>
-    <li><%= t('contacts.import_contacts.instruction_1') %></li>
-    <li><%= t('contacts.import_contacts.instruction_2') %></li>
-    <li><%= t('contacts.import_contacts.instruction_3') %></li>
-  </ul>
-  <br/>
-
-  <div class="uploadfiles">
-    <h3>Upload Files</h3>
-    <%= form_for :import, :url=>{ :controller=>"imports", :action=>"create"}, :html => { :multipart => true } do |f| %>
-  
-      
-    <%= f.file_field :upload, :class=> "fileinput" %><br/>
-    <%= submit_tag 'Submit', :value=>"Import Contacts" %>
-  </div>
-  
+	<h1 class="title">Step 1 of 3 - Upload a File</h1>
+	<%= link_to("Help Me", "#", :class => "helpme") %>
+	<div class="container">
+		<div class="content">
+			<p>You can easily import hundreds of contacts at once by uploading a CSV (comma-seperated value) file. Microsoft Excel makes it easy to create a CSV file from a spreadsheet.</p>
+			
+			<ol class="instructions">
+				<li><span class="name">Download and open <%= link_to(t('contacts.import_contacts.template_sample_csv'), download_sample_contacts_csv_imports_path) %> to get started.</span>
+				<li>Use the first row of the database to list your headings (First Name, Last Name, Email, etc.). </li>
+				<li>In Excel, chose <strong>Save As</strong>.</li>
+				<li>From the drop down menu for <strong>File Type</strong>, choose <strong>CSV, Comma Separated</strong>.</li>
+			</ol>
+			
+			<p>Click the <strong>Choose File</strong> button and locate your new CSV file, then click the <strong>Upload</strong> button to continue.</p>
+			
+			<ul style="display: none;">
+				<li><%= t('contacts.import_contacts.instruction_4') %></li>
+				<li><%= t('contacts.import_contacts.instruction_1') %></li>
+				<li><%= t('contacts.import_contacts.instruction_2') %></li>
+				<li><%= t('contacts.import_contacts.instruction_3') %></li>
+			</ul>
+			<br/>
+		</div>
+		
+		<div class="uploadfiles uploadimports">
+			<div class="uploadform">
+				<%= form_for :import, :url=>{ :controller=>"imports", :action=>"create"}, :html => { :multipart => true } do |f| %>
+					<%= f.file_field :upload, :class=> "fileinput" %><%= submit_tag 'Submit', :value=>"Upload" %>
+			</div>
+		</div>
+	</div>
 </div>
 
 <% end %>

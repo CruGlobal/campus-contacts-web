@@ -10,6 +10,7 @@ class ImportsController < ApplicationController
   end
 
   def new
+  	render layout: 'import'
     @import = Import.new
   end
 
