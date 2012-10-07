@@ -55,6 +55,7 @@
 <ul class="pillmenu control_toggle">
   <li><%= link_to(t('contacts.assign'), "", class: 'assign') %></li>
 </ul>
+
 <ul class='divider'></ul>
 
 <ul class="pillmenu control_toggle">
@@ -94,6 +95,8 @@
   </ul>  
 <% end %>
 
+<%= render 'search' %>
+
 <div id="hidden_questions_div" style="display:none">
   <%= t('.add_question_back') %>
   <ul id="hidden_questions">
@@ -101,4 +104,3 @@
   </ul>
 </div>
 
-<%= render 'search' %>
