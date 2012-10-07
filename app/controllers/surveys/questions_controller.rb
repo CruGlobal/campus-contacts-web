@@ -1,5 +1,5 @@
 class Surveys::QuestionsController < ApplicationController
-  before_filter :find_survey_and_authorize
+  before_filter :find_survey_and_authorize, except: [:hide, :unhide]
   before_filter :find_question, only: [:show, :edit, :update, :destroy]
   before_filter :get_predefined
   before_filter :get_leaders
@@ -130,6 +130,7 @@ class Surveys::QuestionsController < ApplicationController
   end
 
   def hide
+    @survey = Survey.find(params[:survey_id])
     @question = Element.find(params[:id])
     @organization = @survey.organization
     @organization.survey_elements.each do |pe|
@@ -138,6 +139,7 @@ class Surveys::QuestionsController < ApplicationController
   end
 
   def unhide
+    @survey = Survey.find(params[:survey_id])
     @organization = @survey.organization
     @organization.survey_elements.each do |pe|
       pe.update_attribute(:hidden, false) if pe.element_id == params[:id].to_i
