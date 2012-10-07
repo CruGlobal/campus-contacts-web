@@ -35,7 +35,7 @@
       <th><%= sort_link @q, :lastName, t('.last_name'), params %></th>
       <th><%= sort_link @q, :followup_status, t('general.status'), params %></th>
       <th><%= sort_link @q, :gender, t('general.gender'), params %></th>
-      <th><%= sort_link @q, 'phone_numbers.number', t('.phone_number'), params %></th>
+      <th style='min-width:100px;'><%= sort_link @q, 'phone_numbers.number', t('.phone_number'), params %></th>
       <th><%= sort_link @q, 'role_id', t('nav.roles'), params %></th>
       <% @questions.each do |q| %>
         <th class="<%= dom_id(q) %>">
@@ -43,7 +43,7 @@
           <%= link_to("(#{t('nav.hide')})", hide_survey_question_path(@organization.surveys.first, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
         </th>
       <% end %>
-      <th><%= t('.surveys') %></th>
+      <th style='min-width:150px;'><%= t('.surveys') %></th>
       <th><%= sort_link @q, 'MAX(mh_answer_sheets.updated_at)', t('.last_survey'), params %></th>
       <th class="hidden_questions"><%= link_to "Hidden Questions ▾", "#", id: 'hidden_questions_link' %></th>
     </tr>
