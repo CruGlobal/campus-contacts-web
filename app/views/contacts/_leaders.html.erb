@@ -56,7 +56,7 @@
         %>
         <li class="leader" style="<%= 'display:none' if count == 0 %>">
           <span class="name">
-            <%= link_to(role, :role => role.id, :include_archived => params[:include_archived]) %>
+            <%= link_to(role, controller: 'contacts', :role => role.id, :include_archived => params[:include_archived]) %>
           </span>
           (<%= count %>)
         </li>
@@ -91,7 +91,7 @@
   </li>
   <li>
     <span class="name">
-      <%= link_to(t('people.index.archived_label'), :archived => true, :include_archived => params[:include_archived]) %>
+      <%= link_to(t('people.index.archived_label'), controller: 'contacts', :archived => true, :include_archived => params[:include_archived]) %>
     </span>
     (<%= current_organization.people.archived(current_organization.id).count %>)
   </li>
