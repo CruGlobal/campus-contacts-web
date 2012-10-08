@@ -11,7 +11,7 @@ $ ->
       $('#advanced_filter_box').show()
       false
       
-  $('#include_archived').live 'click', ->
+  $('#people_controller #include_archived').live 'click', ->
     if $(this).is(':checked')
       document.location = '/people?include_archived=true'
     else

@@ -2,6 +2,13 @@ $ ->
   $(document).on 'keypress', '#contact_search_form input', (e)->
     if (e.keyCode == $.ui.keyCode.ENTER)
       $('#contact_search_form').submit()
+      
+      
+  $('#contacts_controller #include_archived').live 'click', ->
+    if $(this).is(':checked')
+      document.location = '/contacts?include_archived=true'
+    else
+      document.location = '/contacts'
 
   $('.friends_count').live 'click', ->
     false

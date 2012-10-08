@@ -174,7 +174,9 @@ class ContactsController < ApplicationController
       org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
       
       @people_scope = Person.where('organizational_roles.organization_id' => org_ids).where("organizational_roles.role_id <> #{Role::CONTACT_ID} OR (organizational_roles.role_id = #{Role::CONTACT_ID} AND organizational_roles.followup_status <> 'do_not_contact')").includes(:organizational_roles_including_archived)
+      
       @people_scope = @people_scope.where(personID: @people_scope.archived_not_included.collect(&:personID)) if params[:include_archived].blank? && params[:archived].blank?
+      
       @people_scope = @people_scope.includes(:primary_phone_number, :primary_email_address)
       sort_by = ['lastName asc', 'firstName asc']
       
@@ -193,7 +195,7 @@ class ContactsController < ApplicationController
       elsif params[:role] && Role.exists?(id: params[:role])
         @role = Role.find(params[:role])
         @people = @people_scope.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ? AND organizational_roles.deleted = 0', @role.id, current_organization.id)
-        if params[:include_archived]
+        if params[:include_archived].present? && params[:include_archived] == 'true'
           @people = @people.select("ministry_person.*, roles.*")
                     .joins("LEFT JOIN organizational_roles AS org_roles ON 
                       org_roles.person_id = ministry_person.personID")
@@ -217,7 +219,11 @@ class ContactsController < ApplicationController
         if params[:assigned_to]
           case params[:assigned_to]
           when 'all'
-            @people = @organization.contacts
+            if params[:include_archived].present? && params[:include_archived] == 'true'
+              @people = @organization.contacts_with_archived
+            else
+              @people = @organization.contacts
+            end
           when 'unassigned'
             @people = @organization.unassigned_contacts
             @header = I18n.t('contacts.index.unassigned')
