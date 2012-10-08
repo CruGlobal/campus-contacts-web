@@ -6,7 +6,7 @@
   <%= text_field_tag :query, params[:query], placeholder: t('people.search.search_placeholder'), autocomplete: 'off', id: 'search_autocomplete_field' %>
   <div id="search_button">
     <div id="advanced_search">
-      <%= link_to(t('general.adv_search'), '#', class: 'filter_link') %>
+      <%= link_to(t('general.adv_search'), {controller: 'contacts', click: 'advanced_search_button'}, class: 'filter_link', id: 'advanced_search_button') %>
     </div>
     <%#= image_submit_tag("search.png") %>
   </div>

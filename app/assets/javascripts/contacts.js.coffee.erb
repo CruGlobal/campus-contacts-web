@@ -122,8 +122,10 @@ $ ->
           field.prop('checked', true)
         else
           field.val(v)
-
-  $('.filter_link').click -> 
+          
+  $('#contacts_controller.index .filter_link').attr('href','#')
+  
+  $('#contacts_controller.index .filter_link').click -> 
     $('#filter_box').toggle()
     false
     

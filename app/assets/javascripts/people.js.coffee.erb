@@ -21,7 +21,7 @@ $ ->
   $('.action_dropdown').live 'mouseenter', ->
     $(this).click();
   
-  $('#advanced_search').live 'click', ->
+  $('#people_controller.index #advanced_search').live 'click', ->
     $('#search_filter_box').hide()
     $('#advanced_filter_box').toggle()
     false
@@ -31,7 +31,7 @@ $ ->
     $('#advanced_filter_box').hide()
     false
  
-  $('.filter_link').click ->
+  $('#people_controller.index .filter_link').click ->
     if !$('#search_filter_box').is(':visible') && !$('#advanced_filter_box').is(':visible')
       $('#search_filter_box').show()
       $('#advanced_filter_box').hide()
