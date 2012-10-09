@@ -107,19 +107,47 @@ class GroupsControllerTest < ActionController::TestCase
     end
   end
   
-  should "update group" do
-    @user, @org = admin_user_login_with_org
-    group = Factory(:group, organization: @org)
-    post :update, { :id => group.id, :group => { :name => "WAT" } }
-    assert_not_nil assigns(:group)
-    assert_response :redirect
+  context "updating group" do
+
+    setup do
+      @user, @org = admin_user_login_with_org
+    end
+  
+    should "update group" do
+      group = Factory(:group, organization: @org)
+      post :update, { :id => group.id, :group => { :name => "WAT" } }
+      assert_not_nil assigns(:group)
+      assert_response :redirect
+    end
+    
+    should "not update group" do
+      request.env["HTTP_REFERER"] = "/groups/new"
+      group = Factory(:group, organization: @org)
+      post :update, { :id => group.id, :group => { :name => "" } }
+      assert_response :redirect
+    end
+  
   end
   
-  should "create group" do
-    @user, @org = admin_user_login_with_org
-    post :create, group: { :name => "Wat", :location => "Philippines", :meets => "weekly", :start_time => "21600", :end_time => "25200", :organization_id => @org.id }
-    assert_equal 1, @org.groups.count
-    assert_response :redirect
+  context "creating group" do
+  
+    setup do
+      @user, @org = admin_user_login_with_org
+    end
+  
+    should "create group" do
+      post :create, group: { :name => "Wat", :location => "Philippines", :meets => "weekly", :start_time => "21600", :end_time => "25200", :organization_id => @org.id }
+      assert_equal 1, @org.groups.count
+      assert_response :redirect
+    end
+    
+    should "not create group" do
+      assert_no_difference "Group.count" do
+        post :create, group: { :name => "", :location => "Philippines", :meets => "weekly", :start_time => "21600", :end_time => "25200", :organization_id => @org.id }
+        assert_response :success
+      end
+    end
+  
   end
   
   should "destroy group" do
