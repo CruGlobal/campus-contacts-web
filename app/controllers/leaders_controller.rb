@@ -63,6 +63,7 @@ class LeadersController < ApplicationController
   end
 
   def create
+    @organization = current_organization
     if @person
       @notify = params[:notify] == '1'
     else
