@@ -11,6 +11,11 @@ class SmsKeywordsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:keywords)
   end
   
+  should "accept twilio" do
+    request.env["HTTP_REFERER"] = new_sms_keyword_path
+    post :accept_twilio
+  end
+  
   should "get new" do
     get :new
     assert_response :success

@@ -68,10 +68,10 @@ class ImportsController < ApplicationController
   end
   
 
-  def destroy
-    @import.destroy
-    #redirect_to contacts_path
-  end
+  #def destroy
+  #  @import.destroy
+  #  #redirect_to contacts_path
+  #end
 
   def download_sample_contacts_csv
     csv_string = CSV.generate do |csv|
