@@ -2,5 +2,6 @@
   <% if can? :manage, @organization %>
     <%= link_to('x', leader_path(person.id), method: :delete, remote: true, class: 'delete_leader', data: { confirm: t('.archive_confirm', person: person) }) %>
   <% end %>
-  <span class="name"><%= link_to(person, contacts_path(assigned_to: person.id)) %></span> (<span class="count"><%= person.contact_assignments.for_org(@organization).count %></span>)
+  <span class="name"><%= link_to(person, contacts_path(assigned_to: person.id)) %></span> 
+  (<span class="count"><%= Person.includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => person.id).count %></span>)
 </li>
