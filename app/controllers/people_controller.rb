@@ -248,7 +248,6 @@ class PeopleController < ApplicationController
     end
     
     if ids.present?
-      current_organization.organization_memberships.where(:person_id => ids).destroy_all
       current_organization.organizational_roles.where(:person_id => ids, :deleted => false).each do |ors|
         if(ors.role_id == Role::LEADER_ID)
           ca = Person.find(ors.person_id).contact_assignments.where(organization_id: current_organization.id).all
@@ -280,7 +279,6 @@ class PeopleController < ApplicationController
     end
     
     if ids.present?
-      current_organization.organization_memberships.where(:person_id => ids).destroy_all
       current_organization.organizational_roles.where(:person_id => ids, :archive_date => nil, :deleted => false).each do |ors|
         if(ors.role_id == Role::LEADER_ID)
           ca = Person.find(ors.person_id).contact_assignments.where(organization_id: current_organization.id).all

@@ -13,7 +13,6 @@ class PersonTest < ActiveSupport::TestCase
   should have_many(:education_histories)
   should have_many(:email_addresses)
   should have_many(:organizations)
-  should have_many(:organization_memberships)
   should have_many(:answer_sheets)
   should have_many(:contact_assignments)
   should have_many(:assigned_tos)

@@ -35,7 +35,7 @@
 
       <div class="field">
         <label for="status"><span class="title"><%= t('general.status') %></span></label>
-        <%= select_tag :status, options_for_select(OrganizationMembership::FOLLOWUP_STATUSES.collect {|s| [s.titleize, s]}, params[:status]), include_blank: true %><br>
+        <%= select_tag :status, options_for_select(OrganizationalRole::FOLLOWUP_STATUSES.collect {|s| [s.titleize, s]}, params[:status]), include_blank: true %><br>
       </div>
       <div class="field">
         <label for="status"><span class="title"><%= t('general.survey') %></span></label>

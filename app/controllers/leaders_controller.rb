@@ -54,11 +54,6 @@ class LeadersController < ApplicationController
       # make any contacts assigned to this person go back to unassinged
       @contacts = @person.contact_assignments.where(organization_id: current_organization.id).all
       @contacts.collect(&:destroy)
-      # If this person doesn't have any other roles in the org, destroy the membership too
-      #if OrganizationalRole.find_all_by_person_id_and_organization_id(@person.id, current_organization.id).empty?
-      #  OrganizationMembership.find_by_person_id_and_organization_id(@person.id, current_organization.id).try(:destroy)
-      #end
-      #no one is deleted in the org anymore rather they are archived
     end
   end
 

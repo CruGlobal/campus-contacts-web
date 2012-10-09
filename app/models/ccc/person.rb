@@ -44,7 +44,6 @@ module Ccc
       has_many :rideshare_rides, class_name: 'Ccc::RideshareRide', foreign_key: :person_id, dependent: :destroy
       has_many :profile_pictures, class_name: 'Ccc::ProfilePicture', dependent: :destroy
       has_many :ministry_missional_team_members, class_name: 'Ccc::MinistryMissionalTeamMember', dependent: :destroy, foreign_key: 'personID'
-      has_many :organization_memberships, class_name: 'Ccc::OrganizationMembership', dependent: :destroy
       has_many :sp_designation_numbers, class_name: 'Ccc::SpDesignationNumber', dependent: :destroy
     end
 

@@ -43,7 +43,7 @@ class FollowupComment < ActiveRecord::Base
     timestamp ||= Time.now
     answer_sheets = Array.wrap(answer_sheet)
     answer_sheets.each {|as| as.reload}
-    status ||= OrganizationMembership::FOLLOWUP_STATUSES.first
+    status ||= OrganizationalRole::FOLLOWUP_STATUSES.first
     answers = questions.collect do |q| 
       sheet = answer_sheets.detect {|as| q.display_response(as).present?}
       "#{q.label} #{q.display_response(sheet)}" if sheet
