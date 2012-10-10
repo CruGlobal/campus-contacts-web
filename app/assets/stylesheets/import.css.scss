@@ -117,7 +117,7 @@
 			border-top: 25px solid #eaf1f6;
 				
 				.content {
-					padding: 0 3em;
+					padding: 1em 3em;
 					font-family: Georgia;
 					font-size: 14px;
 					font-style: italic;
@@ -127,33 +127,87 @@
 						margin: 2em 0;
 						font-size: 12px;
 					}
+					
 				}
 				
-				.uploadimports {
-					padding: 0;
+				table {
 					width: 100%;
-					border-radius: 0;
+					text-align: left;
+					
+					th, td {
+						padding: 0.5em 2em;
+						width: 30%;
+					}
+					
+					th:last-child, td:last-child {
+						width: 40%;
+					}
+					
+					tr:first-child {
+						background: #eaf1f6;
+					}
+					
+					tr {
+						border-bottom: 1px solid #eaf1f6;
+					}
+				}
+				
+				.importform {
+					overflow: hidden;
+					padding: 0.8em;
 					background: #eaf1f6;
 					
-					.uploadform {
-						padding: 1em;
-						
-						.fileinput {
-							margin: 0 5px 0 0;
-							padding: 5px;
-							border: none;
-							-moz-border-radius: 0;
-							border-radius: 0;
-							width: 65%;
-						}
-						
-						input[type="submit"] {
-							float: right;
-							background: #fff;
-							border-radius: 8px;
-							border: 1px solid #808284;
-						}
+					input[type="file"] {
+						float: left;
+						padding: 0.5em;
+						background: #fff;
 					}
+					
+					input[type="submit"] {
+						float: right;
+						background: #fff;
+						border-radius: 8px;
+						border: 1px solid #808284;
+					}
+					
+					input[type="submit"]:hover {
+						background: #eee;
+					}
+					
+					.cancel {
+						float: right;
+						margin: 2px 5px 2px 0;
+						padding: 7px 0;
+						display: block;
+						width: 150px;
+						background: #fff;
+						text-align: center;
+						color: #222;
+						border-radius: 8px;
+						border: 1px solid #808284;
+						font: bold 11px "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+					}
+					
+					.cancel:hover {
+						text-decoration: none;
+						background: #eee;
+					}
+				}
+				
+				#new_label_button {
+					background: #fff;
+					border-radius: 8px;
+					border: 1px solid #808284;
+				}
+				
+				#new_label_button:hover {
+					background: #eee;
+				}
+				
+				.labelform {
+					margin: 0 1em;
+					padding: 1em;
+					border-top: 1px solid #808284;
 				}
 		}
 }

@@ -4,14 +4,14 @@
   </h1>
 </div>
 
-<div class="pad">
+<div>
 	<h1 class="title">Step 1 of 3 - Upload a File</h1>
 	<%= link_to("Help Me", "#", :class => "helpme") %>
 	<div class="container">
 		<div class="content">
 			<p>You can easily import hundreds of contacts at once by uploading a CSV (comma-seperated value) file. Microsoft Excel makes it easy to create a CSV file from a spreadsheet.</p>
 			
-			<ol class="instructions">
+			<ol>
 				<li><span class="name">Download and open <%= link_to(t('contacts.import_contacts.template_sample_csv'), download_sample_contacts_csv_imports_path) %> to get started.</span>
 				<li>Use the first row of the database to list your headings (First Name, Last Name, Email, etc.). </li>
 				<li>In Excel, chose <strong>Save As</strong>.</li>
@@ -29,13 +29,10 @@
 			<br/>
 		</div>
 		
-		<div class="uploadfiles uploadimports">
-			<div class="uploadform">
-				<%= form_for :import, :url=>{ :controller=>"imports", :action=>"create"}, :html => { :multipart => true } do |f| %>
-					<%= f.file_field :upload, :class=> "fileinput" %><%= submit_tag 'Submit', :value=>"Upload" %>
-			</div>
+		<div class="importform">
+			<%= form_for :import, :url=>{ :controller=>"imports", :action=>"create"}, :html => { :multipart => true } do |f| %>
+				<%= f.file_field :upload %><%= submit_tag 'Submit', :value=>"Upload" %>
+			<% end %>
 		</div>
 	</div>
 </div>
-
-<% end %>

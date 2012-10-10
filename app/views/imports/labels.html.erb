@@ -1,31 +1,25 @@
-<% provide :sidebar do %>
-  <%= render 'contacts/leaders' %>
-<% end %>
+<div class="titlebar titlebarmod">  
+  <h1>
+    <%= t('contacts.index.import_contacts') %>
+  </h1>
+</div>
 
-<div class="contentpad import">
-  <div class='import_header'>
-    <div class='import_step'>
-      <%= image_tag("step3.png") %>
-    </div>
-    <div class='import_info'>
-      Label New Contacts
-    </div>
-  </div>
-  <p>
-    <%= t('contacts.index.import_step3_body1', count: @import_count) %>
-  </p>
-  <p>
-    <%= t('contacts.index.import_step3_body2') %>
-  </p>
-  
-  <div class="stepwrap rwidth manage_labels">
-    <%= form_tag controller: 'imports', action: 'import', id: @import.id do |f| %>
-      <%= t('contacts.index.import_labels_checkbox') %>
-      <%= check_box_tag :use_labels, 1, true %>
-      <%= render partial: 'shared/label_fields' %>
-      <br/>
-      <br/>
-      <%= submit_tag 'Import Now', :value=>"Import Now" %>
-    <% end %>
-  </div>
+<div>
+	<h1 class="title">Step 3 of 3 - Add New Contacts to Groups</h1>
+	<%= link_to("Help Me", "#", :class => "helpme") %>
+	<div class="container">
+		<div class="content">
+			<p><%= t('contacts.index.import_step3_body1', count: @import_count) %>! Use the list below to select any groups which should include these new contacts, then click the <strong>Import</strong> button.</p>
+		</div>
+		<div class="labelform">
+			<%= form_tag controller: 'imports', action: 'import', id: @import.id do |f| %>
+				<%= check_box_tag :use_labels, 1, true %>
+				<%= t('contacts.index.import_labels_checkbox') %>
+				<%= render partial: 'shared/label_fields' %>
+		</div>
+		<div class="importform">
+				<%= submit_tag 'Import Now', :value=>"Import" %><%= link_to("Cancel", "/imports/new", :class => "cancel") %>
+			<% end %>
+		</div>
+	</div>
 </div>

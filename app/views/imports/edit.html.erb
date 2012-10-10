@@ -1,29 +1,42 @@
-<% provide :sidebar do %>
-  <%= render 'contacts/leaders' %>
-<% end %>
+<div class="titlebar titlebarmod">  
+  <h1>
+    <%= t('contacts.index.import_contacts') %>
+  </h1>
+</div>
 
-<div class="contentpad import">
-  <div class='import_header'>
-    <div class='import_step'>
-      <%= image_tag("step2.png") %>
-    </div>
-    <div class='import_info'>
-      <%= t('contacts.index.import_contacts2') %>
-    </div>
-  </div>
-  <p>Match your CSV headers to correspond with Person attributes or Survey questions. Remember that <strong>first name</strong> is required.</p>
-
-  <%= form_for @import do |f| %>
-    <% @import.headers.each_with_index do |header, i| %>
-    <div class="stepwrap rwidth">
-      <div class='import_label'>
-        <%= header %>:
-      </div>
-      <div class='import_field'>
-        <%= select_tag "import[header_mappings][#{i}]", grouped_options_for_select(@survey_questions, @import.header_mappings.blank? ? "" : @import.header_mappings[i.to_s]  ), :include_blank => true %><br>
-      </div>
-    </div>
-    <% end %>
-    <%= submit_tag 'Continue', :value=>"Continue" %>
-  <% end %>
+<div>
+	<h1 class="title">Step 2 of 3 - Match Columns</h1>
+	<%= link_to("Help Me", "#", :class => "helpme") %>
+	<div class="container">
+		<div class="content">
+			<p class="singleinstruction">Match the headers from your CSV file with the corresponding Person attributes or Survey questions in MissionHub. <strong>First Name</strong> is required.</p>
+		</div>
+		<table>
+			<tr>
+				<th>Column</th>
+				<th>Preview</th>
+				<th>Match</th>
+			</tr>
+	
+			<%= form_for @import do |f| %>
+				<% @import.headers.each_with_index do |header, i| %>
+					<tr>
+						<td>
+							<%= header %>:
+						</td>
+						<td>
+							Preview
+						</td>
+						<td>
+							<%= select_tag "import[header_mappings][#{i}]", grouped_options_for_select(@survey_questions, @import.header_mappings.blank? ? "" : @import.header_mappings[i.to_s]  ), :include_blank => true %>
+						</td>
+					</tr>
+				<% end %>
+		
+		</table>
+		<div class="importform">
+				<%= submit_tag 'Continue', :value=>"Continue" %><%= link_to("Cancel", "/imports/new", :class => "cancel") %>
+			<% end %>
+		</div>
+	</div>
 </div>

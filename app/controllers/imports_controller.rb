@@ -34,11 +34,13 @@ class ImportsController < ApplicationController
 
   def edit
     get_survey_questions
+    render layout: 'import'
   end
   
   def labels
     @import_count =  @import.get_new_people.count
     @roles = current_organization.roles
+    render layout: 'import'
   end
 
   def update
