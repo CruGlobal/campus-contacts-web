@@ -1,3 +1,5 @@
+<%= javascript_include_tag "importContacts" %>
+
 <div class="titlebar titlebarmod">  
   <h1>
     <%= t('contacts.index.import_contacts') %>
@@ -29,6 +31,21 @@
 						</td>
 						<td>
 							<%= select_tag "import[header_mappings][#{i}]", grouped_options_for_select(@survey_questions, @import.header_mappings.blank? ? "" : @import.header_mappings[i.to_s]  ), :include_blank => true %>
+							
+							<div class="matchSelect" id="select_<%= i %>">
+								<span class="selectTitle">Sample</span>
+								<div class="selectQuestions" style="display:none;">
+									<% @survey_questions.each_key do |s| %>
+										<ul class="surveyQuestions">
+											<span class="surveyHeader"><%= s %></span>
+											<% @survey_questions[s].each do |v| %>
+												<li><%= v[0] %></li>
+											<% end %>
+										</ul>
+									<% end %>
+									<div class="newQuestion"><span class="plus">+</span>Create a Survey Question for this Column</div>
+								</div>
+							</div>
 						</td>
 					</tr>
 				<% end %>
