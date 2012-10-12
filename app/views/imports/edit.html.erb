@@ -33,8 +33,13 @@
 							<%= select_tag "import[header_mappings][#{i}]", grouped_options_for_select(@survey_questions, @import.header_mappings.blank? ? "" : @import.header_mappings[i.to_s]  ), :include_blank => true %>
 							
 							<div class="matchSelect" id="select_<%= i %>">
-								<span class="selectTitle">Sample</span>
+								<div class="selectTitleBg">
+									<span class="selectTitle">Select Match</span>
+								</div>
 								<div class="selectQuestions" style="display:none;">
+									<div class="noMatch">
+										<span>No Match</span>
+									</div>
 									<% @survey_questions.each_key do |s| %>
 										<ul class="surveyQuestions">
 											<span class="surveyHeader"><%= s %></span>
@@ -43,7 +48,9 @@
 											<% end %>
 										</ul>
 									<% end %>
-									<div class="newQuestion"><span class="plus">+</span>Create a Survey Question for this Column</div>
+									<div class="newQuestion">
+										<span class="plus">+</span>Create a Survey Question for this Column
+									</div>
 								</div>
 							</div>
 						</td>
@@ -56,4 +63,8 @@
 			<% end %>
 		</div>
 	</div>
+</div>
+
+<div id="new_question_div" style="display:none" title="Create Survey Question For Column">
+	<%= render 'import_add_question' %>
 </div>

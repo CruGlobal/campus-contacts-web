@@ -79,6 +79,11 @@
 	margin: 0 auto;
 	width: 574px;
 	
+		select {
+			display: none;
+			width: 245px;
+		}
+	
 		h1.title {
 			float: left;
 			font-family: Georgia;
@@ -137,7 +142,7 @@
 					th, td {
 						padding: 0.5em 2em;
 						width: 30%;
-						vertical-align: top;
+						vertical-align: middle;
 					}
 					
 					th:last-child, td:last-child {
@@ -153,22 +158,28 @@
 					}
 					
 					.matchSelect {
-						
-						white-space: nowrap;
+						width: 229px;
+						height: 22px;
 						background-color: #fff;
-						background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ddd), to(#fff));
-						background-image: -webkit-linear-gradient(top, #ddd, #fff);
-						background-image: -moz-linear-gradient(top, #ddd, #fff);
-						background-image: -ms-linear-gradient(top, #ddd, #fff);
-						background-image: -o-linear-gradient(top, #ddd, #fff);
+						background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eaf1f6), to(#fff));
+						background-image: -webkit-linear-gradient(top, #eaf1f6, #fff);
+						background-image: -moz-linear-gradient(top, #eaf1f6, #fff);
+						background-image: -ms-linear-gradient(top, #eaf1f6, #fff);
+						background-image: -o-linear-gradient(top, #eaf1f6, #fff);
 						
-						.selectTitle {
+						.selectTitleBg {
 							display: block;
-							padding: 0.25em 1em;
+							padding: 0.25em 2.9em 0.25em 1em;
 							background: url('<%= asset_path('selectbox.png') %>') no-repeat right;
-							width: 203px;
 							border: 1px solid #c7dff0;
 							cursor: default;
+						
+							.selectTitle {
+								display: block;
+								overflow: hidden;
+								white-space: nowrap;
+								color: #808284;
+							}
 							
 						}
 						
@@ -177,8 +188,36 @@
 							margin-top: 1em;
 							margin-left: -3.5em;
 							padding: 1em;
+							width: 245px;
+							height: 245px;
+							overflow-y: scroll;
 							background: #fff;
 							border: 1px solid #c7dff0;
+							
+							.noMatch {
+								margin: 0 0 1em 0;
+								cursor: default;
+							
+								height: 20px;
+								line-height: 20px;
+								
+								span {
+									padding: 0.45em 0;
+								}
+								
+								.none {
+									padding: 0.2em 0.6em;
+									margin-right: 0.25em;
+									background: #808284;
+									color: #fff;
+									font-weight: bold;
+								}
+							
+							}
+							
+							.noMatch:hover {
+								background: #c7dff0;
+							}
 							
 								.surveyQuestions {
 									list-style: none;
@@ -202,6 +241,7 @@
 								}
 							
 							.newQuestion {
+								cursor: default;						
 							
 								height: 20px;
 								line-height: 20px;

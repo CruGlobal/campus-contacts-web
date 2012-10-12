@@ -1,0 +1,37 @@
+$(document).ready ->
+  $(".selectTitleBg").live "click", (e) ->
+    e.preventDefault()
+    $(this).siblings(".selectQuestions").toggle()
+
+  $(".surveyItem, .noMatch").live "click", (e) ->
+    e.preventDefault()
+    selectedItem = $(this).text()
+    $(this).parents(".matchSelect").find(".selectTitle").text selectedItem
+    $(".selectQuestions").hide()
+
+  $("html").click (e) ->
+    $(".selectQuestions").hide()  unless $(e.target).is(".selectTitleBg, .selectTitle")
+
+
+#	$("a").live("click", function(e) {
+#		e.preventDefault();
+#		alert("Create new question");
+#	});
+
+  $('.newQuestion').live 'click', ->
+#    $('#new_person')[0].reset()
+    $('#new_question_div').dialog
+      resizable: false,
+      height:444,
+      width:600,
+      modal: true,
+      buttons: [
+        text: 'Done',
+        click: -> 
+#          $.mh.saveContact(false)
+      ,
+        text: 'Cancel',
+        click: ->
+          $(this).dialog('destroy')
+      ]
+    false
