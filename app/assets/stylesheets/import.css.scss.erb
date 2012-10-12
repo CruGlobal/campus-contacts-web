@@ -155,25 +155,27 @@
 					.matchSelect {
 						
 						white-space: nowrap;
+						background-color: #fff;
+						background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ddd), to(#fff));
+						background-image: -webkit-linear-gradient(top, #ddd, #fff);
+						background-image: -moz-linear-gradient(top, #ddd, #fff);
+						background-image: -ms-linear-gradient(top, #ddd, #fff);
+						background-image: -o-linear-gradient(top, #ddd, #fff);
 						
 						.selectTitle {
 							display: block;
 							padding: 0.25em 1em;
-							width: 75%;
+							background: url('<%= asset_path('selectbox.png') %>') no-repeat right;
+							width: 203px;
 							border: 1px solid #c7dff0;
 							cursor: default;
-							background-color: #fff;
-							background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ddd), to(#fff));
-							background-image: -webkit-linear-gradient(top, #ddd, #fff);
-							background-image: -moz-linear-gradient(top, #ddd, #fff);
-							background-image: -ms-linear-gradient(top, #ddd, #fff);
-							background-image: -o-linear-gradient(top, #ddd, #fff);
+							
 						}
 						
 						.selectQuestions {
 							position: absolute;
 							margin-top: 1em;
-							margin-left: -7.7em;
+							margin-left: -3.5em;
 							padding: 1em;
 							background: #fff;
 							border: 1px solid #c7dff0;

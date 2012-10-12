@@ -5,7 +5,7 @@ $(document).ready(function() {
 		$(this).siblings(".selectQuestions").toggle();
 	});
 	
-	$("li").live("click", function(e) {
+	$(".surveyItem").live("click", function(e) {
 		e.preventDefault();
 		var selectedItem = $(this).text();
 		$(this).parents(".matchSelect").find(".selectTitle").text(selectedItem);
