@@ -205,9 +205,10 @@ class PeopleController < ApplicationController
     # Handle duplicate emails
     emails = []
 		if params[:person][:email_address]
+      params[:person][:email_address][:email].strip!
       emails = [params[:person][:email_address][:email]]
 		elsif params[:person][:email_addresses_attributes]
-			emails = params[:person][:email_addresses_attributes].collect{|_, v| v[:email]}
+			emails = params[:person][:email_addresses_attributes].collect{|_, v| v[:email].strip!; v[:email]}
 		end
     emails.each do |email|
       p = @person.has_similar_person_by_name_and_email?(email)
