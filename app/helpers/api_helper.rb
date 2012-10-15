@@ -149,7 +149,7 @@ module ApiHelper
     allowed_sorting_fields = ["time","status"]
     allowed_sorting_directions = ["asc", "desc"]
     allowed_filter_fields = ["gender", "status"]
-    allowed_status = OrganizationMembership::FOLLOWUP_STATUSES + %w[finished not_finished]
+    allowed_status = OrganizationalRole::FOLLOWUP_STATUSES + %w[finished not_finished]
     @sorting_fields = []
     
     people = limit_and_offset_object(people)

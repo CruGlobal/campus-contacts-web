@@ -135,7 +135,7 @@ class OrganizationsController < ApplicationController
   
   protected
     def get_organization
-      @organization = Organization.subtree_of(current_organization.root_id).find(params[:id])
+      @organization = Organization.subtree_of(current_organization.root_id).first
       authorize! :manage, @organization
     end
 end

@@ -10,7 +10,6 @@ class Organization < ActiveRecord::Base
   has_many :group_labels
   has_many :activities, dependent: :destroy
   has_many :target_areas, through: :activities
-  has_many :organization_memberships, dependent: :destroy
   has_many :people, through: :organizational_roles, conditions: ["organizational_roles.deleted = 0"], uniq: true
   has_many :contact_assignments
   has_many :keywords, class_name: 'SmsKeyword'
@@ -189,13 +188,8 @@ class Organization < ActiveRecord::Base
       "#{name} (#{keywords.count})"
     end
 
-    def add_member(person_id)
-      x = OrganizationMembership.find_or_create_by_person_id_and_organization_id(person_id, id) 
-    end
-
     def add_leader(person, current_person)
       person_id = person.is_a?(Person) ? person.id : person
-      add_member(person_id)
       begin
         org_leader = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::LEADER_ID, :added_by_id => current_person.id)
         unless org_leader.archive_date.nil?
@@ -211,7 +205,6 @@ class Organization < ActiveRecord::Base
 
     def add_contact(person)
       person_id = person.is_a?(Person) ? person.id : person
-      add_member(person_id)
       begin
         OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::CONTACT_ID)
       rescue => error
@@ -223,29 +216,21 @@ class Organization < ActiveRecord::Base
 
     def add_admin(person)
       person_id = person.is_a?(Person) ? person.id : person
-      add_member(person_id)
       OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::ADMIN_ID)
     end
 
     def add_involved(person)
       person_id = person.is_a?(Person) ? person.id : person
-      add_member(person_id)
       OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::INVOLVED_ID)
     end
 
     def remove_contact(person)
       person_id = person.is_a?(Person) ? person.id : person
-      unless Person.find(person_id).organizational_roles.where("organization_id = ? AND role_id <> ?", id, Role::CONTACT_ID).first
-        OrganizationMembership.where(person_id: person_id, organization_id: id).first.try(:destroy)
-      end
       OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: Role::CONTACT_ID).first.try(:destroy)
     end
 
     def remove_leader(person)
       person_id = person.is_a?(Person) ? person.id : person
-      unless Person.find(person_id).organizational_roles.where("organization_id = ? AND role_id <> ?", id, Role::LEADER_ID).first
-        OrganizationMembership.where(person_id: person_id, organization_id: id).first.try(:destroy)
-      end
       OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: Role::LEADER_ID).first.try(:destroy)
       person.remove_assigned_contacts(self)
     end
