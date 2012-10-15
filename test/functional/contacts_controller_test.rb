@@ -311,7 +311,6 @@ class ContactsControllerTest < ActionController::TestCase
     setup do
       @user = Factory(:user_no_org)  #user with a person object
       @organization = Factory(:organization)
-      @organization_membership = Factory(:organization_membership, person: @user.person, organization: @organization)
       @organizational_role = Factory(:organizational_role, person: @user.person, organization: @organization, :role => Role.contact)
       sign_in @user
     end

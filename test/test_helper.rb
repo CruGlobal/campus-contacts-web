@@ -1,10 +1,10 @@
 ENV["RAILS_ENV"] = "test"
-   require 'simplecov'
-   SimpleCov.start 'rails' do
-    add_filter "vendor"
-    add_filter 'app/controllers/api'
-    merge_timeout 36000
-   end
+# require 'simplecov'
+# SimpleCov.start 'rails' do
+# add_filter "vendor"
+# add_filter 'app/controllers/api'
+# merge_timeout 36000
+# end
 
 require File.expand_path('../../config/environment', __FILE__)
 require 'rack/oauth2/server'

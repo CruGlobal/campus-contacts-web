@@ -1,4 +1,5 @@
 class OrganizationalRole < ActiveRecord::Base
+  FOLLOWUP_STATUSES = ['uncontacted','attempted_contact','contacted','do_not_contact','completed']
   belongs_to :person
   belongs_to :role
   belongs_to :organization
@@ -118,7 +119,7 @@ class OrganizationalRole < ActiveRecord::Base
     
     def set_contact_uncontacted
       if role_id == Role::CONTACT_ID
-        self.followup_status = OrganizationMembership::FOLLOWUP_STATUSES.first
+        self.followup_status = OrganizationalRole::FOLLOWUP_STATUSES.first
       end
       true
     end

@@ -205,9 +205,10 @@ class PeopleController < ApplicationController
     # Handle duplicate emails
     emails = []
 		if params[:person][:email_address]
+      params[:person][:email_address][:email].strip!
       emails = [params[:person][:email_address][:email]]
 		elsif params[:person][:email_addresses_attributes]
-			emails = params[:person][:email_addresses_attributes].collect{|_, v| v[:email]}
+			emails = params[:person][:email_addresses_attributes].collect{|_, v| v[:email].strip!; v[:email]}
 		end
     emails.each do |email|
       p = @person.has_similar_person_by_name_and_email?(email)
@@ -248,7 +249,6 @@ class PeopleController < ApplicationController
     end
     
     if ids.present?
-      current_organization.organization_memberships.where(:person_id => ids).destroy_all
       current_organization.organizational_roles.where(:person_id => ids, :deleted => false).each do |ors|
         if(ors.role_id == Role::LEADER_ID)
           ca = Person.find(ors.person_id).contact_assignments.where(organization_id: current_organization.id).all
@@ -280,7 +280,6 @@ class PeopleController < ApplicationController
     end
     
     if ids.present?
-      current_organization.organization_memberships.where(:person_id => ids).destroy_all
       current_organization.organizational_roles.where(:person_id => ids, :archive_date => nil, :deleted => false).each do |ors|
         if(ors.role_id == Role::LEADER_ID)
           ca = Person.find(ors.person_id).contact_assignments.where(organization_id: current_organization.id).all

@@ -62,4 +62,22 @@ class OrganizationalRolesController < ApplicationController
     end
     render nothing: true
   end
+  
+  
+  def set_current
+    org = Organization.find(params[:id])
+    orgs_i_have_access_to = current_person.organizations.collect {|o| o.subtree_ids}.flatten
+    if orgs_i_have_access_to.include?(org.id)
+      session[:current_organization_id] = params[:id]
+    end
+    redirect_to '/dashboard'
+  end
+  
+  def set_primary
+    org = Organization.find(params[:id])
+    current_person.primary_organization = org
+    session[:current_organization_id] = params[:id]
+    expire_fragment("org_nav/#{current_person.id}")
+    redirect_to request.referrer ? :back : '/contacts'
+  end
 end
