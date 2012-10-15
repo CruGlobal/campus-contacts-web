@@ -227,9 +227,6 @@ class ContactsController < ApplicationController
           when 'unassigned'
             @people = @organization.unassigned_contacts
             @header = I18n.t('contacts.index.unassigned')
-          when 'progress'
-            @people = @organization.inprogress_contacts
-            @header = I18n.t('contacts.index.in_progress')
           when 'no_activity'
             @people = @organization.no_activity_contacts
             @header = I18n.t('contacts.index.no_activity')
