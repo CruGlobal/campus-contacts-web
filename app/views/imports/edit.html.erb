@@ -1,70 +1,72 @@
-<%= javascript_include_tag "importContacts" %>
-
-<div class="titlebar titlebarmod">  
-  <h1>
-    <%= t('contacts.index.import_contacts') %>
-  </h1>
-</div>
-
-<div>
-	<h1 class="title">Step 2 of 3 - Match Columns</h1>
-	<%= link_to("Help Me", "#", :class => "helpme") %>
-	<div class="container">
-		<div class="content">
-			<p class="singleinstruction">Match the headers from your CSV file with the corresponding Person attributes or Survey questions in MissionHub. <strong>First Name</strong> is required.</p>
-		</div>
-		<table>
-			<tr>
-				<th>Column</th>
-				<th>Preview</th>
-				<th>Match</th>
-			</tr>
+<div class="inside_container">
+	<%= javascript_include_tag "importContacts" %>
 	
-			<%= form_for @import do |f| %>
-				<% @import.headers.each_with_index do |header, i| %>
-					<tr>
-						<td>
-							<%= header %>:
-						</td>
-						<td>
-							Preview
-						</td>
-						<td>
-							<%= select_tag "import[header_mappings][#{i}]", grouped_options_for_select(@survey_questions, @import.header_mappings.blank? ? "" : @import.header_mappings[i.to_s]  ), :include_blank => true %>
-							
-							<div class="matchSelect" id="select_<%= i %>">
-								<div class="selectTitleBg">
-									<span class="selectTitle">Select Match</span>
-								</div>
-								<div class="selectQuestions" style="display:none;">
-									<div class="noMatch">
-										<span>No Match</span>
-									</div>
-									<% @survey_questions.each_key do |s| %>
-										<ul class="surveyQuestions">
-											<span class="surveyHeader"><%= s %></span>
-											<% @survey_questions[s].each do |v| %>
-												<li class="surveyItem"><%= v[0] %></li>
-											<% end %>
-										</ul>
-									<% end %>
-									<div class="newQuestion">
-										<span class="plus">+</span>Create a Survey Question for this Column
-									</div>
-								</div>
-							</div>
-						</td>
-					</tr>
-				<% end %>
+	<div class="titlebar titlebarmod">  
+	  <h1>
+		<%= t('contacts.index.import_contacts') %>
+	  </h1>
+	</div>
+	
+	<div>
+		<h1 class="title">Step 2 of 3 - Match Columns</h1>
+		<%= link_to("Help Me", "#", :class => "helpme") %>
+		<div class="container">
+			<div class="content">
+				<p class="singleinstruction">Match the headers from your CSV file with the corresponding Person attributes or Survey questions in MissionHub. <strong>First Name</strong> is required.</p>
+			</div>
+			<table>
+				<tr>
+					<th>Column</th>
+					<th>Preview</th>
+					<th>Match</th>
+				</tr>
 		
-		</table>
-		<div class="importform">
-				<%= submit_tag 'Continue', :value=>"Continue" %><%= link_to("Cancel", "/imports/new", :class => "cancel") %>
-			<% end %>
+				<%= form_for @import do |f| %>
+					<% @import.headers.each_with_index do |header, i| %>
+						<tr>
+							<td>
+								<%= header %>:
+							</td>
+							<td>
+								Preview
+							</td>
+							<td>
+								<%= select_tag "import[header_mappings][#{i}]", grouped_options_for_select(@survey_questions, @import.header_mappings.blank? ? "" : @import.header_mappings[i.to_s]  ), :include_blank => true %>
+								
+								<div class="matchSelect" id="select_<%= i %>">
+									<div class="selectTitleBg">
+										<span class="selectTitle">Select Match</span>
+									</div>
+									<div class="selectQuestions" style="display:none;">
+										<div class="noMatch">
+											<span>No Match</span>
+										</div>
+										<% @survey_questions.each_key do |s| %>
+											<ul class="surveyQuestions">
+												<span class="surveyHeader"><%= s %></span>
+												<% @survey_questions[s].each do |v| %>
+													<li class="surveyItem"><%= v[0] %></li>
+												<% end %>
+											</ul>
+										<% end %>
+										<div class="newQuestion">
+											<span class="plus">+</span>Create a Survey Question for this Column
+										</div>
+									</div>
+								</div>
+							</td>
+						</tr>
+					<% end %>
+			
+			</table>
+			<div class="importform">
+					<%= submit_tag 'Continue', :value=>"Continue" %><%= link_to("Cancel", "/imports/new", :class => "cancel") %>
+				<% end %>
+			</div>
 		</div>
 	</div>
-</div>
-
-<div id="new_question_div" style="display:none" title="Create Survey Question For Column">
-	<%= render 'import_add_question' %>
+	
+	<div id="new_question_div" style="display:none" title="Create Survey Question For Column">
+		<%= render 'import_add_question' %>
+	</div>
 </div>

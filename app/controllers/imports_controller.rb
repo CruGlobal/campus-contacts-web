@@ -10,8 +10,8 @@ class ImportsController < ApplicationController
   end
 
   def new
-  	render layout: 'import'
     @import = Import.new
+    render layout: 'import'
   end
 
   def create
@@ -22,13 +22,13 @@ class ImportsController < ApplicationController
         redirect_to edit_import_path(@import)
       else
         init_org
-        render :new
+        render :new, :layout => 'import' 
       end      
     rescue ArgumentError
       flash.now[:error] = t('imports.new.wrong_file_format_error')
       init_org
       @import = Import.new
-      render :new
+      render :new, :layout => 'import'
     end
   end
 
@@ -50,7 +50,7 @@ class ImportsController < ApplicationController
     if errors.present?
       flash.now[:error] = errors.join('<br />').html_safe
       init_org
-      render :new
+      render :new, :layout => 'import'
     else
       redirect_to :action => :labels
     end

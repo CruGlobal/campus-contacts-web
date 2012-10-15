@@ -453,7 +453,8 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-dialog .ui-dialog-content { position: relative; border: 0; padding: 1em 2em; background: none; overflow: auto; zoom: 1; }
 .ui-dialog .ui-dialog-buttonpane { text-align: left; border-width: 1px 0 0 0; background-image: none; margin: .5em 0 0 0; padding: .3em 1em .5em .4em; background-color: #eaf1f6; }
 .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset { float: right; }
-.ui-dialog .ui-dialog-buttonpane button { margin: .5em .4em .5em 0; cursor: pointer; -moz-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; border: 1px solid #808284; color: #222; background: #fff; }
+.ui-dialog .ui-dialog-buttonpane button { margin: .65em .8em .5em 0; padding: 0; cursor: pointer; -moz-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; border: 1px solid #808284; color: #222; background: #fff; }
+.ui-dialog .ui-dialog-buttonpane button:hover { background: #eaf1f6; border-color: #0379ae; }
 .ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
 .ui-draggable .ui-dialog-titlebar { cursor: move; }
 /*
