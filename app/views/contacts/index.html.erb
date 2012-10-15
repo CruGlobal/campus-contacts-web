@@ -11,7 +11,6 @@
     <%= image_tag("c_allcontacts.png") %>
     <%= t('.all_responses') %>
     <%= "- #{@header}" %>
-    <%= link_to(t('.show_all'), contacts_path(assigned_to: 'all'), :class => "headerlink") if @assigned_to %>
   </h1>
 </div>
 
