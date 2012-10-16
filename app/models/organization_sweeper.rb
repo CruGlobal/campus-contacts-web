@@ -5,9 +5,9 @@ class OrganizationSweeper < ActionController::Caching::Sweeper
     expire_cache_for(object)
   end
  
-  def after_update(object)
-    expire_cache_for(object)
-  end
+  # def after_update(object)
+  #   expire_cache_for(object)
+  # end
  
   def after_destroy(object)
     expire_cache_for(object)
@@ -17,7 +17,10 @@ class OrganizationSweeper < ActionController::Caching::Sweeper
   def expire_cache_for(object)
     case object
     when Organization
-      Person.where('org_ids_cache like :org OR org_ids_cache like :parent', org: "%\"#{object.id}\"%", parent: "%\"#{object.parent_id}\"%").map {|p| expire_cache_for_person(p) }
+      OrganizationalRole.where("organization_id = ? OR organization_id = ?", object.id, object.parent_id).each do |role|
+        expire_cache_for_person(role.person)
+      end
+      # Person.where('org_ids_cache like :org OR org_ids_cache like :parent', org: "%\"#{object.id}\"%", parent: "%\"#{object.parent_id}\"%").map {|p| expire_cache_for_person(p) }
       # If the parent of this org shows sub-orgs, we need to clear cache
       #begin
         #if object.ancestry.present? && object.parent.show_sub_orgs?

@@ -1,4 +1,6 @@
 class Ccc::PrReviewer < AnswerSheet
+  establish_connection :uscm
+
   before_create :generate_access_key
   self.table_name = "pr_reviewers"
   belongs_to :review, class_name: "Ccc::PrReview"

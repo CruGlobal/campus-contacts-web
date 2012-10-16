@@ -1,4 +1,6 @@
 class Ccc::MpdUser < ActiveRecord::Base
+  establish_connection :uscm
+
 	self.table_name = 'mpd_users'
 	has_many :mpd_contacts, class_name: 'Ccc::MpdContact', dependent: :destroy
 	has_many :mpd_events, class_name: 'Ccc::MpdEvent', dependent: :destroy
