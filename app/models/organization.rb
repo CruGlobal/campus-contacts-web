@@ -8,8 +8,8 @@ class Organization < ActiveRecord::Base
   belongs_to :importable, polymorphic: true
   has_many :roles, inverse_of: :organization
   has_many :group_labels
-  has_many :activities, dependent: :destroy
-  has_many :target_areas, through: :activities
+  #has_many :activities, dependent: :destroy
+  #has_many :target_areas, through: :activities
   has_many :people, through: :organizational_roles, conditions: ["organizational_roles.deleted = 0"], uniq: true
   has_many :contact_assignments
   has_many :keywords, class_name: 'SmsKeyword'

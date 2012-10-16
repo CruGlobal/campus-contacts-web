@@ -805,6 +805,8 @@ class Person < ActiveRecord::Base
       rescue ActiveRecord::ReadOnlyRecord
 
       end
+
+      reload
       self
 
     end
