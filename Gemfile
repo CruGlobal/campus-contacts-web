@@ -25,6 +25,7 @@ gem 'ancestry'
 gem 'activeadmin', '~> 0.4.4' #, git: 'git://github.com/gregbell/active_admin.git'
 gem 'twilio-rb', git: 'git://github.com/stevegraham/twilio-rb.git'
 gem "default_value_for"
+gem 'turbo-sprockets-rails3'
 
 gem 'dalli'
 gem 'resque_mail_queue'

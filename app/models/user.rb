@@ -2,9 +2,6 @@ require 'errors/no_email_error'
 require 'errors/failed_facebook_create_error'
 require 'errors/facebook_duplicate_email_error'
 class User < ActiveRecord::Base
-  begin
-    include Ccc::SimplesecuritymanagerUser
-  rescue LoadError; end
   WIZARD_STEPS = %w[welcome verify keyword survey leaders]
   self.table_name = 'simplesecuritymanager_user'
   self.primary_key = 'userID'
@@ -140,8 +137,6 @@ class User < ActiveRecord::Base
       
       # Sms Keywords
       other.sms_keywords.collect {|oa| oa.update_attribute(:user_id, id)}
-      
-      super
       
       MergeAudit.create!(mergeable: self, merge_looser: other)
       other.reload

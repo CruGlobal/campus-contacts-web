@@ -1,10 +1,8 @@
 require 'vpim/vcard'
 require 'vpim/book'
-require 'ccc/person'
 
 class Person < ActiveRecord::Base
   
-  include Ccc::Person
   self.table_name = 'ministry_person'
   self.primary_key = 'personID'
 
@@ -31,6 +29,7 @@ class Person < ActiveRecord::Base
   has_many :assigned_tos, class_name: "ContactAssignment", foreign_key: "person_id"
   has_many :assigned_contacts, through: :contact_assignments, source: :assigned_to
   has_one :current_address, class_name: "Address", foreign_key: "fk_PersonID", conditions: {addressType: 'current'}
+  has_many :addresses, class_name: 'Address', foreign_key: :fk_PersonID, dependent: :destroy
   has_many :rejoicables, inverse_of: :created_by
 
   has_many :organization_memberships, inverse_of: :person
@@ -671,105 +670,145 @@ class Person < ActiveRecord::Base
 
   def merge(other)
     return self if other.nil? || other == self
-    # Phone Numbers
-    phone_numbers.each do |pn|
-      opn = other.phone_numbers.detect {|oa| oa.number == pn.number && oa.extension == pn.extension}
-      pn.merge(opn) if opn
-    end
-    other.phone_numbers.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
-
-    # Locations
-    other.locations.each do |location|
-      if location_ids.include?(location.id)
-        location.destroy
-      else
-        location.update_column(:person_id, id)
+    reload
+    ::Person.transaction do
+      attributes.each do |k, v|
+        next if k == ::Person.primary_key
+        next if v == other.attributes[k]
+        self[k] = case
+                  when other.attributes[k].blank? then v
+                  when v.blank? then other.attributes[k]
+                  else
+                    other_date = other.dateChanged || other.dateCreated
+                    this_date = dateChanged || dateCreated
+                    if other_date && this_date
+                      other_date > this_date ? other.attributes[k] : v
+                    else
+                      v
+                    end
+                  end
       end
-    end
 
-    other.friends.each do |friend|
-      if friend_ids.include?(friend.id)
-        friend.destroy
-      else
-        begin
-          friend.update_column(:person_id, id) 
-        rescue; end
+      # Addresses
+      addresses.each do |address|
+        other_address = other.addresses.detect {|oa| oa.addressType == address.addressType}
+        address.merge(other_address) if other_address
       end
-    end
-
-    # Interests
-    other.interests.each do |i|
-      if interest_ids.include?(i.id)
-        i.destroy
-      else
-        i.update_column(:person_id, id)
+      other.addresses do |address|
+        other_address = addresses.detect {|oa| oa.addressType == address.addressType}
+        address.update_attribute(:fk_PersonID, personID) unless address.frozen? || other_address
       end
-    end
-
-    # Edudation Histories
-    other.education_histories.each do |eh|
-      if education_history_ids.include?(eh.id)
-        eh.destroy
-      else
-        eh.update_column(:person_id, id)
+      # Phone Numbers
+      phone_numbers.each do |pn|
+        opn = other.phone_numbers.detect {|oa| oa.number == pn.number && oa.extension == pn.extension}
+        pn.merge(opn) if opn
       end
-    end
+      other.phone_numbers.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
 
-    # Followup Comments
-    other.followup_comments.each do |fc|
-      fc.update_column(:commenter_id, id)
-    end
-
-    # Comments on me
-    other.comments_on_me.each do |fc|
-      fc.update_column(:contact_id, id)
-    end
-
-    # Email Addresses
-    email_addresses.each do |pn|
-      opn = other.email_addresses.detect {|oa| oa.email == pn.email}
-      pn.merge(opn) if opn
-    end
-    emails = email_addresses.collect(&:email)
-    other.email_addresses.each do |pn| 
-      if emails.include?(pn.email)
-        pn.destroy
-      else
-        begin
-          pn.update_attribute(:person_id, id) unless pn.frozen?
-        rescue ActiveRecord::RecordNotUnique
-          pn.destroy
+      # Locations
+      other.locations.each do |location|
+        if location_ids.include?(location.id)
+          location.destroy
+        else
+          location.update_column(:person_id, id)
         end
       end
-    end
-    
-    # Organizational Roles
-    organizational_roles.each do |pn|
-      opn = other.organizational_roles.detect {|oa| oa.organization_id == pn.organization_id}
-      pn.merge(opn) if opn
-    end
-    other.organizational_roles.each do |role| 
-      begin
-        role.update_attribute(:person_id, id) unless role.frozen?
-      rescue ActiveRecord::RecordNotUnique
-        role.destroy
+
+      other.friends.each do |friend|
+        if friend_ids.include?(friend.id)
+          friend.destroy
+        else
+          begin
+            friend.update_column(:person_id, id) 
+          rescue; end
+        end
       end
+
+      # Interests
+      other.interests.each do |i|
+        if interest_ids.include?(i.id)
+          i.destroy
+        else
+          i.update_column(:person_id, id)
+        end
+      end
+
+      # Edudation Histories
+      other.education_histories.each do |eh|
+        if education_history_ids.include?(eh.id)
+          eh.destroy
+        else
+          eh.update_column(:person_id, id)
+        end
+      end
+
+      # Followup Comments
+      other.followup_comments.each do |fc|
+        fc.update_column(:commenter_id, id)
+      end
+
+      # Comments on me
+      other.comments_on_me.each do |fc|
+        fc.update_column(:contact_id, id)
+      end
+
+      # Email Addresses
+      email_addresses.each do |pn|
+        opn = other.email_addresses.detect {|oa| oa.email == pn.email}
+        pn.merge(opn) if opn
+      end
+      emails = email_addresses.collect(&:email)
+      other.email_addresses.each do |pn| 
+        if emails.include?(pn.email)
+          pn.destroy
+        else
+          begin
+            pn.update_attribute(:person_id, id) unless pn.frozen?
+          rescue ActiveRecord::RecordNotUnique
+            pn.destroy
+          end
+        end
+      end
+      
+      # Organizational Roles
+      organizational_roles.each do |pn|
+        opn = other.organizational_roles.detect {|oa| oa.organization_id == pn.organization_id}
+        pn.merge(opn) if opn
+      end
+      other.organizational_roles.each do |role| 
+        begin
+          role.update_attribute(:person_id, id) unless role.frozen?
+        rescue ActiveRecord::RecordNotUnique
+          role.destroy
+        end
+      end
+
+      # Answer Sheets
+      other.answer_sheets.collect {|as| as.update_column(:person_id, id)}
+
+      # Contact Assignments
+      other.contact_assignments.collect {|as| as.update_column(:assigned_to_id, id)}
+
+      # SMS stuff
+      other.received_sms.collect {|as| as.update_column(:person_id, id)}
+      other.sms_sessions.collect {|as| as.update_column(:person_id, id)}
+
+      # Group Memberships
+      other.group_memberships.collect {|gm| gm.update_column(:person_id, id)}
+
+      MergeAudit.create!(mergeable: self, merge_looser: other)
+      other.reload
+      other.destroy
+      begin
+        save(validate: false)
+      rescue ActiveRecord::ReadOnlyRecord
+
+      end
+
+      reload
+      self
+
     end
-
-    # Answer Sheets
-    other.answer_sheets.collect {|as| as.update_column(:person_id, id)}
-
-    # Contact Assignments
-    other.contact_assignments.collect {|as| as.update_column(:assigned_to_id, id)}
-
-    # SMS stuff
-    other.received_sms.collect {|as| as.update_column(:person_id, id)}
-    other.sms_sessions.collect {|as| as.update_column(:person_id, id)}
-
-    # Group Memberships
-    other.group_memberships.collect {|gm| gm.update_column(:person_id, id)}
-
-    super
   end
 
   def to_hash_mini

@@ -1,4 +1,6 @@
 class Activity < ActiveRecord::Base
+  establish_connection :uscm
+
   belongs_to :target_area
   belongs_to :organization
 
