@@ -1,10 +1,8 @@
 require 'vpim/vcard'
 require 'vpim/book'
-require 'ccc/person'
 
 class Person < ActiveRecord::Base
   
-  include Ccc::Person
   self.table_name = 'ministry_person'
   self.primary_key = 'personID'
 
@@ -31,6 +29,7 @@ class Person < ActiveRecord::Base
   has_many :assigned_tos, class_name: "ContactAssignment", foreign_key: "person_id"
   has_many :assigned_contacts, through: :contact_assignments, source: :assigned_to
   has_one :current_address, class_name: "Address", foreign_key: "fk_PersonID", conditions: {addressType: 'current'}
+  has_many :addresses, class_name: 'Address', foreign_key: :fk_PersonID, dependent: :destroy
   has_many :rejoicables, inverse_of: :created_by
 
   has_many :organization_memberships, inverse_of: :person
@@ -691,12 +690,12 @@ class Person < ActiveRecord::Base
       end
 
       # Addresses
-      ministry_newaddresses.each do |address|
-        other_address = other.ministry_newaddresses.detect {|oa| oa.addressType == address.addressType}
+      addresses.each do |address|
+        other_address = other.addresses.detect {|oa| oa.addressType == address.addressType}
         address.merge(other_address) if other_address
       end
-      other.ministry_newaddresses do |address|
-        other_address = ministry_newaddresses.detect {|oa| oa.addressType == address.addressType}
+      other.addresses do |address|
+        other_address = addresses.detect {|oa| oa.addressType == address.addressType}
         address.update_attribute(:fk_PersonID, personID) unless address.frozen? || other_address
       end
       # Phone Numbers
