@@ -1,7 +1,60 @@
+constructArray = (string) ->
+  string = string.toLowerCase()
+  string = string.replace(/[^a-zA-Z0-9 ]+/g, "").replace("/ {2,}/", " ")
+  string = string.split(" ")
+  results = new Array()
+  i = 0
+  while i < string.length
+    results = results.concat(string[i].split("_"))
+    i++
+  results
+
+compare = (userString, mhubString) ->
+  userArray = constructArray(userString)
+  mhubArray = constructArray(mhubString)
+  matchArray = _.intersection(userArray, mhubArray)
+  match = matchArray.length / mhubArray.length
+  if match >= 0.75
+    true
+  else
+    false
+
 $(document).ready ->
+    
+  userQuestions = []
+  mhubQuestions = []
+  matchQuestions = []
+  
+  $("table tr td:first-child").each ->
+    userQuestions.push $(this).text().replace(/:/gi, "").toLowerCase()
+
+  $(".selectQuestions:first .surveyQuestions .surveyItem").each ->
+    mhubQuestions.push $(this).text()
+
+  i = 0
+
+  while i < userQuestions.length
+    matchFound = false
+    ii = 0
+    
+    while ii < mhubQuestions.length
+      if compare(userQuestions[i], mhubQuestions[ii]) is true
+        matchFound = true
+        break
+      ii++
+    if matchFound is true
+      matchQuestions.push mhubQuestions[ii]
+    else
+      matchQuestions.push "Select Match"
+    i++
+  i = 0
+  
+  $(".selectTitle").each (i) ->
+    $(this).text(matchQuestions[i])
+    
   $(".selectTitleBg").live "click", (e) ->
     e.preventDefault()
-    $(this).siblings(".selectQuestions").toggle()
+    $(this).siblings(".selectQuestions").toggle().scrollTop(0)
 
   $(".surveyItem, .noMatch").live "click", (e) ->
     e.preventDefault()
@@ -12,14 +65,7 @@ $(document).ready ->
   $("html").click (e) ->
     $(".selectQuestions").hide()  unless $(e.target).is(".selectTitleBg, .selectTitle")
 
-
-#	$("a").live("click", function(e) {
-#		e.preventDefault();
-#		alert("Create new question");
-#	});
-
   $('.newQuestion').live 'click', ->
-#    $('#new_person')[0].reset()
     $('#new_question_div').dialog
       resizable: false,
       height:444,
@@ -27,8 +73,7 @@ $(document).ready ->
       modal: true,
       buttons: [
         text: 'Done',
-        click: -> 
-#          $.mh.saveContact(false)
+        click: ->
       ,
         text: 'Cancel',
         click: ->

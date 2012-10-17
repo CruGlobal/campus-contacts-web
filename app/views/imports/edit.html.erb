@@ -1,4 +1,5 @@
 <div class="inside_container">
+	<%= javascript_include_tag "underscore-1.4.2" %>
 	<%= javascript_include_tag "importContacts" %>
 	
 	<div class="titlebar titlebarmod">  
@@ -23,13 +24,9 @@
 		
 				<%= form_for @import do |f| %>
 					<% @import.headers.each_with_index do |header, i| %>
-						<tr>
-							<td>
-								<%= header %>:
-							</td>
-							<td>
-								Preview
-							</td>
+						<tr id="row_<%= i %>">
+							<td><%= header %>:</td>
+							<td>Preview</td>
 							<td>
 								<%= select_tag "import[header_mappings][#{i}]", grouped_options_for_select(@survey_questions, @import.header_mappings.blank? ? "" : @import.header_mappings[i.to_s]  ), :include_blank => true %>
 								
@@ -53,6 +50,9 @@
 											<span class="plus">+</span>Create a Survey Question for this Column
 										</div>
 									</div>
+								</div>
+								<div class="matchEdit">
+									<%= link_to("Edit", "#", :class => "editMatch") %>
 								</div>
 							</td>
 						</tr>
