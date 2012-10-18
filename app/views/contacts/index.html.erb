@@ -101,7 +101,7 @@
         <th><%= t('.friends') %></th>
       <% end %>
       <th><%= t('.surveys') %></th>
-      <th><%= sort_link @q, 'MAX(mh_answer_sheets.updated_at)', t('.last_survey'), params %></th>
+      <th><%= sort_link @q, 'MAX(answer_sheets.updated_at)', t('.last_survey'), params %></th>
       <th></th>
     </tr>
     <tbody id="contacts_table">

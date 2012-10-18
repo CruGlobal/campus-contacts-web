@@ -3,7 +3,6 @@ require 'vpim/book'
 
 class Person < ActiveRecord::Base
   
-  self.table_name = 'ministry_person'
   self.primary_key = 'personID'
 
   serialize :organization_tree_cache, JSON
@@ -66,66 +65,66 @@ class Person < ActiveRecord::Base
   }}
   
   scope :find_by_last_login_date_before_date_given, lambda { |after_date| {
-    :select => "ministry_person.*",
-    :joins => "JOIN simplesecuritymanager_user AS ssm ON ssm.userID = ministry_person.fk_ssmUserId",
+    :select => "people.*",
+    :joins => "JOIN users AS ssm ON ssm.userID = people.fk_ssmUserId",
     :conditions => ["ssm.current_sign_in_at <= ? OR (ssm.current_sign_in_at IS NULL AND ssm.created_at <= ?)", after_date, after_date]
   }}
   
   scope :find_by_date_created_before_date_given, lambda { |before_date| {
-    :select => "ministry_person.*",
-    :joins => "LEFT JOIN organizational_roles AS ors ON ministry_person.personID = ors.person_id",    
+    :select => "people.*",
+    :joins => "LEFT JOIN organizational_roles AS ors ON people.personID = ors.person_id",    
     :conditions => ["ors.role_id = ? AND ors.created_at <= ? AND ors.archive_date IS NULL AND ors.deleted = 0", Role::CONTACT_ID, before_date]
   }}
 
   scope :order_by_highest_default_role, lambda { |order, tables_already_joined = false| {
-    :select => "ministry_person.*",
-    :joins => "#{'JOIN organizational_roles ON ministry_person.personID = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id' unless tables_already_joined}",
+    :select => "people.*",
+    :joins => "#{'JOIN organizational_roles ON people.personID = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id' unless tables_already_joined}",
     :conditions => "roles.i18n IN #{Role.default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}",
     :order => "FIELD#{Role.i18n_field_plus_default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}"
   } }
   
   scope :order_by_followup_status, lambda { |order| {
-    :select => "ministry_person.*",
-    #:joins => "#{'JOIN organizational_roles ON ministry_person.personID = organizational_roles.person_id'}",
+    :select => "people.*",
+    #:joins => "#{'JOIN organizational_roles ON people.personID = organizational_roles.person_id'}",
     :conditions => ["organizational_roles.role_id = ?", Role::CONTACT_ID],
     :order => "organizational_roles.#{order}"
   } }
 
   scope :order_alphabetically_by_non_default_role, lambda { |order, tables_already_joined = false| {
-    :select => "ministry_person.*",
-    :joins => "#{'JOIN organizational_roles ON ministry_person.personID = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id' unless tables_already_joined}",
+    :select => "people.*",
+    :joins => "#{'JOIN organizational_roles ON people.personID = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id' unless tables_already_joined}",
     :conditions => "roles.name NOT IN #{Role.default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}",
     :order => "roles.name #{order.include?("asc") ? 'DESC' : 'ASC'}"
   } }
   
   scope :find_friends_with_fb_uid, lambda { |id| {
-    :select => "ministry_person.*",
-    :joins => "LEFT JOIN mh_friends ON ministry_person.fb_uid = mh_friends.uid",
-    :conditions => "mh_friends.person_id = #{id}",
+    :select => "people.*",
+    :joins => "LEFT JOIN friends ON people.fb_uid = friends.uid",
+    :conditions => "friends.person_id = #{id}",
   } }
 
   scope :search_by_name_or_email, lambda { |keyword, org_id| {
-    :select => "ministry_person.*",
+    :select => "people.*",
     :conditions => ["(org_roles.organization_id = #{org_id} AND (concat(firstName,' ',lastName) LIKE ? OR concat(lastName, ' ',firstName) LIKE ? OR emails.email LIKE ?) AND org_roles.deleted <> 1)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
-    :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID LEFT JOIN organizational_roles AS org_roles ON ministry_person.personID = org_roles.person_id"
+    :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = people.personID LEFT JOIN organizational_roles AS org_roles ON people.personID = org_roles.person_id"
   } }
   
   scope :get_and_order_by_latest_answer_sheet_answered, lambda { |order, org_id| {
-    #"SELECT * FROM (SELECT * FROM missionhub_dev.ministry_person mp INNER JOIN missionhub_dev.organizational_roles ro ON mp.personID = ro.person_id WHERE ro.organization_id = #{@organization.id} AND (ro.role_id = 3 AND ro.followup_status <> 'do_not_contact')) mp LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM missionhub_dev.mh_answer_sheets ass INNER JOIN missionhub_dev.mh_surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{@organization.id}) ass ON ass.person_id = mp.personID GROUP BY mp.personID ORDER BY #{params[:q][:s].gsub('mh_answer_sheets', 'ass')}"
-    :joins => "LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM mh_answer_sheets ass INNER JOIN mh_surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{org_id}) ass ON ass.person_id = ministry_person.personID",
-    :group => "ministry_person.personID",
-    :order => "#{order.gsub('mh_answer_sheets', 'ass')}"
+    #"SELECT * FROM (SELECT * FROM missionhub_dev.people mp INNER JOIN missionhub_dev.organizational_roles ro ON mp.personID = ro.person_id WHERE ro.organization_id = #{@organization.id} AND (ro.role_id = 3 AND ro.followup_status <> 'do_not_contact')) mp LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM missionhub_dev.answer_sheets ass INNER JOIN missionhub_dev.surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{@organization.id}) ass ON ass.person_id = mp.personID GROUP BY mp.personID ORDER BY #{params[:q][:s].gsub('answer_sheets', 'ass')}"
+    :joins => "LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM answer_sheets ass INNER JOIN surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{org_id}) ass ON ass.person_id = people.personID",
+    :group => "people.personID",
+    :order => "#{order.gsub('answer_sheets', 'ass')}"
   } }
 
   scope :get_archived, lambda { |org_id| { 
     :conditions => "organizational_roles.archive_date IS NOT NULL AND organizational_roles.deleted = 0",
-    :group => "ministry_person.personID",
-    :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID AND orss.organization_id = #{org_id} AND orss.deleted = 0)"
+    :group => "people.personID",
+    :having => "COUNT(*) = (SELECT COUNT(*) FROM people AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = people.personID AND orss.organization_id = #{org_id} AND orss.deleted = 0)"
   } }
   
   scope :get_from_group, lambda { |group_id| {
-    :select => "ministry_person.*",
-    :joins => "LEFT JOIN #{GroupMembership.table_name} AS gm ON gm.person_id = ministry_person.personID",
+    :select => "people.*",
+    :joins => "LEFT JOIN #{GroupMembership.table_name} AS gm ON gm.person_id = people.personID",
     :conditions => ["gm.group_id = ?", group_id]
   } }
   
@@ -139,7 +138,7 @@ class Person < ActiveRecord::Base
   
   scope :get_archived_included, lambda { { 
     :conditions => "organizational_roles.deleted = 0",
-    :group => "ministry_person.personID"
+    :group => "people.personID"
   } }
   
   def self.archived_included
@@ -148,7 +147,7 @@ class Person < ActiveRecord::Base
   
   scope :get_archived_not_included, lambda { { 
     :conditions => "organizational_roles.archive_date IS NULL AND organizational_roles.deleted = 0",
-    :group => "ministry_person.personID"
+    :group => "people.personID"
   } }
   
   def self.archived_not_included
@@ -157,8 +156,8 @@ class Person < ActiveRecord::Base
   
   scope :get_deleted, lambda { { 
     :conditions => "organizational_roles.deleted = 1",
-    :group => "ministry_person.personID",
-    :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID)"
+    :group => "people.personID",
+    :having => "COUNT(*) = (SELECT COUNT(*) FROM people AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = people.personID)"
   } }
   
   def self.deleted

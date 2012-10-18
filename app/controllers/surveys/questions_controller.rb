@@ -151,18 +151,18 @@ class Surveys::QuestionsController < ApplicationController
     survey = @survey
     response = Array.new
     if type == 'Leader'
-      results = @survey.organization.leaders.where("lastName LIKE '%#{keyword}%' OR firstName LIKE '%#{keyword}%'")
+      results = @survey.organization.leaders.where("lastName LIKE ? OR firstName LIKE ?", "%#{keyword}%", "%#{keyword}%")
       response = results.uniq.collect{|leader| {"label"=>"#{leader.name} (#{leader.email})", "id"=>leader.id}}
     elsif type == 'Ministry'
-      results = current_person.all_organization_and_children.where("name LIKE '%#{keyword}%'")
+      results = current_person.all_organization_and_children.where("name LIKE ?", "%#{keyword}%")
       response = results.uniq.collect{|ministry| {"label"=>"#{ministry.name}", "id"=>ministry.id}}
     elsif type == 'Group'
       if current_organization.present?
-        results = current_organization.groups.where("name LIKE '%#{keyword}%'")
+        results = current_organization.groups.where("name LIKE ?", "%#{keyword}%")
         response = results.uniq.collect{|group| {"label"=>"#{group.name} (#{group.location})", "id"=>group.id}}
       end
     elsif type == 'Label'
-      results = current_organization.roles.where("name LIKE '%#{keyword}%'")
+      results = current_organization.roles.where("name LIKE ?", "%#{keyword}%")
       response = results.uniq.collect{|label| {"label"=>"#{label.name}", "id"=>label.id}}
     end
     render json: response

@@ -525,8 +525,8 @@ class PeopleController < ApplicationController
     if search_params[:search_type] == "basic"
       unless search_params[:query].blank?
         if search_params[:search_type] == "basic"
-          @q = @q.select("ministry_person.*, email_addresses.*")
-          .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID")
+          @q = @q.select("people.*, email_addresses.*")
+          .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = people.personID")
           .where("concat(firstName,' ',lastName) LIKE :search OR
                            concat(lastName, ' ',firstName) LIKE :search OR
                            emails.email LIKE :search", 
@@ -536,9 +536,9 @@ class PeopleController < ApplicationController
     else      
       unless search_params[:role].blank?
         if params[:include_archived]
-          @q = @q.select("ministry_person.*, roles.*")
+          @q = @q.select("people.*, roles.*")
           .joins("LEFT JOIN organizational_roles AS org_roles ON 
-                   org_roles.person_id = ministry_person.personID")
+                   org_roles.person_id = people.personID")
                    .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
                    .where("org_roles.organization_id" => current_organization.id)
                    .where("roles.id = :search",
@@ -546,9 +546,9 @@ class PeopleController < ApplicationController
                    sort_by.unshift("roles.id")
           role_tables_joint = true
         else
-          @q = @q.select("ministry_person.*, roles.*")
+          @q = @q.select("people.*, roles.*")
           .joins("LEFT JOIN organizational_roles AS org_roles ON 
-                   org_roles.person_id = ministry_person.personID")
+                   org_roles.person_id = people.personID")
                    .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
                    .where("org_roles.archive_date" => nil, "org_roles.organization_id" => current_organization.id)
                    .where("roles.id = :search",
@@ -564,15 +564,15 @@ class PeopleController < ApplicationController
       end
 
       unless search_params[:email].blank?
-        @q = @q.select("ministry_person.*, email_addresses.*")
-        .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID")  
+        @q = @q.select("people.*, email_addresses.*")
+        .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = people.personID")  
         .where("emails.email LIKE :search", {:search => "%#{search_params[:email]}%"})
         sort_by.unshift("emails.email")
       end
 
       unless search_params[:phone].blank?
-        @q = @q.select("ministry_person.*, phone_numbers.*")
-        .joins("LEFT JOIN phone_numbers AS phones ON phones.person_id = ministry_person.personID")
+        @q = @q.select("people.*, phone_numbers.*")
+        .joins("LEFT JOIN phone_numbers AS phones ON phones.person_id = people.personID")
         .where("phones.number LIKE :search", {:search => "%#{search_params[:phone]}%"})
         sort_by.unshift("phones.number")
       end

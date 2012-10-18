@@ -712,12 +712,12 @@ class PeopleControllerTest < ActionController::TestCase
     assert_response :success
   end
   
-  test "involvement" do
-    @user, @org = admin_user_login_with_org
-    get :involvement, { :id => @user.person.id }
+  #test "involvement" do
+    #@user, @org = admin_user_login_with_org
+    #get :involvement, { :id => @user.person.id }
     
-    assert_not_nil assigns(:person)
-  end
+    #assert_not_nil assigns(:person)
+  #end
   
   test "destroy" do
     @user, @org = admin_user_login_with_org

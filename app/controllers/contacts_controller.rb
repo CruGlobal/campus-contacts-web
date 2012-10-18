@@ -210,7 +210,7 @@ class ContactsController < ApplicationController
       unless @people.arel.to_sql.include?('JOIN organizational_roles')
         @header = "#{Role.find(params[:role]).i18n}" if params[:role].present?
       end
-      if params[:q] && params[:q][:s].include?('mh_answer_sheets')
+      if params[:q] && params[:q][:s].include?('answer_sheets')
         @people = current_organization.contacts.get_and_order_by_latest_answer_sheet_answered(params[:q][:s], current_organization.id)
       end
       if params[:q] && params[:q][:s].include?('followup_status')
@@ -221,7 +221,7 @@ class ContactsController < ApplicationController
         @people = Person.where(personID: org_roles.collect(&:person_id)).uniq
       end
       if params[:survey].present?
-        @people = @people.joins(:answer_sheets).where("mh_answer_sheets.survey_id" => params[:survey])
+        @people = @people.joins(:answer_sheets).where("answer_sheets.survey_id" => params[:survey])
       end
       if params[:first_name].present?
         v = params[:first_name].strip
@@ -276,7 +276,7 @@ class ContactsController < ApplicationController
             else
               unless v.strip.blank?
                 @people = @people.joins(:answer_sheets)
-                @people = @people.joins("INNER JOIN `mh_answers` as a#{q_id} ON a#{q_id}.`answer_sheet_id` = `mh_answer_sheets`.`id`").where("a#{q_id}.question_id = ? AND a#{q_id}.value like ?", q_id, term)
+                @people = @people.joins("INNER JOIN `answers` as a#{q_id} ON a#{q_id}.`answer_sheet_id` = `answer_sheets`.`id`").where("a#{q_id}.question_id = ? AND a#{q_id}.value like ?", q_id, term)
               end
             end
           else
@@ -313,7 +313,7 @@ class ContactsController < ApplicationController
 
       @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
       # raise @q.sorts.inspect
-      @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? "" : ['lastName, firstName']).group('ministry_person.personID')
+      @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? "" : ['lastName, firstName']).group('people.personID')
       @all_people = @people
       @people_for_labels = Person.people_for_labels(current_organization)
       @people = @people.includes(:organizational_roles)

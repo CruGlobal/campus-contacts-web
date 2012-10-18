@@ -3,7 +3,6 @@ require 'open-uri'
 require 'contact_methods'
 class Import < ActiveRecord::Base
   include ContactMethods
-  self.table_name = 'mh_imports'
 
   @queue = :general
   serialize :headers
