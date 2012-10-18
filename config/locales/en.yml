@@ -161,6 +161,7 @@ en:
       include_archived: "Include Archived"
       add_person: Add Person
       export: "Export CSV"
+      vcard: "Export Vcard"
       directory_title: "Directory - %{org}"
       archived_directory_title: "Archived - %{org}"
       labels: 'Labels'
