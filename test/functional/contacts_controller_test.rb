@@ -526,7 +526,7 @@ class ContactsControllerTest < ActionController::TestCase
     
     should "retrive contacts according to latest answer sheets answered" do
     
-      xhr :get, :index, {:search => 1, "q"=>{"s"=>"MAX(mh_answer_sheets.updated_at) asc"}}
+      xhr :get, :index, {:search => 1, "q"=>{"s"=>"MAX(answer_sheets.updated_at) asc"}}
       assert_response :success
     end
     

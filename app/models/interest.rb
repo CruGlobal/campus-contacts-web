@@ -1,5 +1,4 @@
 class Interest < ActiveRecord::Base
-  self.table_name = 'mh_interests'
   belongs_to :person
   validates_presence_of :person_id, :name, :provider, :interest_id, :category, on: :create, message: "can't be blank"
 

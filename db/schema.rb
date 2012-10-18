@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120905172032) do
+ActiveRecord::Schema.define(:version => 20121017144708) do
 
   create_table "academic_departments", :force => true do |t|
     t.string "name"
@@ -77,6 +77,75 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
   end
 
   add_index "activities", ["target_area_id", "organization_id"], :name => "index_activities_on_target_area_id_and_organization_id", :unique => true
+
+  create_table "addresses", :primary_key => "addressID", :force => true do |t|
+    t.string   "address1"
+    t.string   "address2"
+    t.string   "address3",            :limit => 55
+    t.string   "address4",            :limit => 55
+    t.string   "city",                :limit => 50
+    t.string   "state",               :limit => 50
+    t.string   "zip",                 :limit => 15
+    t.string   "country",             :limit => 64
+    t.string   "homePhone",           :limit => 26
+    t.string   "workPhone",           :limit => 250
+    t.string   "cellPhone",           :limit => 25
+    t.string   "fax",                 :limit => 25
+    t.string   "email",               :limit => 200
+    t.string   "url",                 :limit => 100
+    t.string   "contactName"
+    t.string   "contactRelationship", :limit => 50
+    t.string   "addressType",         :limit => 20
+    t.datetime "dateCreated"
+    t.datetime "dateChanged"
+    t.string   "createdBy",           :limit => 50
+    t.string   "changedBy",           :limit => 50
+    t.integer  "fk_PersonID"
+    t.string   "email2",              :limit => 200
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.string   "facebook_link"
+    t.string   "myspace_link"
+    t.string   "title"
+    t.string   "dorm"
+    t.string   "room"
+    t.string   "preferredPhone",      :limit => 25
+    t.string   "phone1_type",                        :default => "cell"
+    t.string   "phone2_type",                        :default => "home"
+    t.string   "phone3_type",                        :default => "work"
+  end
+
+  add_index "addresses", ["addressType", "fk_PersonID"], :name => "unique_person_addressType", :unique => true
+  add_index "addresses", ["addressType"], :name => "index_ministry_newAddress_on_addressType"
+  add_index "addresses", ["email"], :name => "email"
+  add_index "addresses", ["fk_PersonID"], :name => "fk_PersonID"
+
+  create_table "answer_sheets", :force => true do |t|
+    t.datetime "created_at",   :null => false
+    t.datetime "completed_at"
+    t.integer  "person_id"
+    t.datetime "updated_at"
+    t.integer  "survey_id"
+  end
+
+  add_index "answer_sheets", ["person_id", "survey_id"], :name => "person_id_survey_id"
+
+  create_table "answers", :force => true do |t|
+    t.integer  "answer_sheet_id",         :null => false
+    t.integer  "question_id",             :null => false
+    t.text     "value"
+    t.string   "short_value"
+    t.integer  "attachment_file_size"
+    t.string   "attachment_content_type"
+    t.string   "attachment_file_name"
+    t.datetime "attachment_updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "answers", ["answer_sheet_id"], :name => "index_ma_answers_on_answer_sheet_id"
+  add_index "answers", ["question_id"], :name => "index_ma_answers_on_question_id"
+  add_index "answers", ["short_value"], :name => "index_ma_answers_on_short_value"
 
   create_table "aoas", :force => true do |t|
     t.string "name"
@@ -956,6 +1025,74 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
     t.string  "sortNames",   :limit => 1000
   end
 
+  create_table "dashboard_posts", :force => true do |t|
+    t.string   "title",      :default => ""
+    t.text     "context"
+    t.string   "video",      :default => ""
+    t.boolean  "visible",    :default => true
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
+  end
+
+  create_table "education_histories", :force => true do |t|
+    t.integer  "person_id"
+    t.string   "type"
+    t.string   "concentration_id1"
+    t.string   "concentration_name1"
+    t.string   "concentration_id2"
+    t.string   "concentration_name2"
+    t.string   "concentration_id3"
+    t.string   "concentration_name3"
+    t.string   "year_id"
+    t.string   "year_name"
+    t.string   "degree_id"
+    t.string   "degree_name"
+    t.string   "school_id"
+    t.string   "school_name"
+    t.string   "provider"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "school_type"
+  end
+
+  create_table "elements", :force => true do |t|
+    t.string   "kind",                      :limit => 40, :default => "",    :null => false
+    t.string   "style",                     :limit => 40
+    t.text     "label"
+    t.text     "content"
+    t.boolean  "required"
+    t.string   "slug",                      :limit => 36
+    t.integer  "position"
+    t.string   "object_name"
+    t.string   "attribute_name"
+    t.string   "source"
+    t.string   "value_xpath"
+    t.string   "text_xpath"
+    t.integer  "question_grid_id"
+    t.string   "cols"
+    t.boolean  "is_confidential"
+    t.string   "total_cols"
+    t.string   "css_id"
+    t.string   "css_class"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "related_question_sheet_id"
+    t.integer  "conditional_id"
+    t.text     "tooltip"
+    t.boolean  "hide_label",                              :default => false
+    t.boolean  "hide_option_labels",                      :default => false
+    t.integer  "max_length"
+    t.boolean  "web_only",                                :default => false
+    t.string   "trigger_words"
+    t.string   "notify_via"
+    t.boolean  "hidden",                                  :default => false, :null => false
+  end
+
+  add_index "elements", ["conditional_id"], :name => "index_ma_elements_on_conditional_id"
+  add_index "elements", ["position"], :name => "index_ma_elements_on_question_sheet_id_and_position_and_page_id"
+  add_index "elements", ["question_grid_id"], :name => "index_ma_elements_on_question_grid_id"
+  add_index "elements", ["slug"], :name => "index_ma_elements_on_slug"
+
   create_table "email_addresses", :force => true do |t|
     t.string   "email"
     t.integer  "person_id"
@@ -984,6 +1121,64 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
   end
 
   add_index "followup_comments", ["organization_id", "contact_id"], :name => "comment_organization_id_contact_id"
+
+  create_table "friends", :force => true do |t|
+    t.string   "name"
+    t.string   "uid"
+    t.string   "provider"
+    t.integer  "person_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "friends", ["person_id", "uid"], :name => "person_uid", :unique => true
+
+  create_table "group_labelings", :force => true do |t|
+    t.integer  "group_id"
+    t.integer  "group_label_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "group_labelings", ["group_id", "group_label_id"], :name => "index_mh_group_labelings_on_group_id_and_group_label_id", :unique => true
+  add_index "group_labelings", ["group_label_id"], :name => "index_mh_group_labelings_on_group_label_id"
+
+  create_table "group_labels", :force => true do |t|
+    t.string   "name"
+    t.integer  "organization_id"
+    t.string   "ancestry"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "group_labelings_count", :default => 0
+  end
+
+  add_index "group_labels", ["organization_id"], :name => "index_mh_group_labels_on_organization_id"
+
+  create_table "group_memberships", :force => true do |t|
+    t.integer  "group_id"
+    t.integer  "person_id"
+    t.string   "role",       :default => "member"
+    t.boolean  "requested",  :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "group_memberships", ["group_id"], :name => "index_group_memberships_on_group_id"
+  add_index "group_memberships", ["person_id"], :name => "index_group_memberships_on_person_id"
+
+  create_table "groups", :force => true do |t|
+    t.string   "name"
+    t.text     "location"
+    t.string   "meets"
+    t.integer  "meeting_day"
+    t.integer  "start_time"
+    t.integer  "end_time"
+    t.integer  "organization_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "list_publicly",         :default => true
+    t.boolean  "approve_join_requests", :default => true
+  end
 
   create_table "hr_ms_payment", :primary_key => "paymentID", :force => true do |t|
     t.datetime "paymentDate"
@@ -1365,7 +1560,7 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
     t.datetime "leadershipStartDate"
     t.datetime "leadershipEndDate"
     t.datetime "createDate"
-    t.binary   "lastChangedDate",               :limit => 8
+    t.binary   "lastChangedDate",               :limit => 255
     t.integer  "lastChangedBy"
     t.string   "displayLocation"
     t.boolean  "partnershipRegionOnly"
@@ -1549,6 +1744,22 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
 
   add_index "hr_si_users", ["fk_ssmUserID"], :name => "IX_hr_si_Users_fk_ssmUserID"
 
+  create_table "imports", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "organization_id"
+    t.string   "upload_file_name"
+    t.string   "upload_content_type"
+    t.integer  "upload_file_size"
+    t.datetime "upload_updated_at"
+    t.text     "headers"
+    t.text     "header_mappings"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+  end
+
+  add_index "imports", ["organization_id"], :name => "index_mh_imports_on_organization_id"
+  add_index "imports", ["user_id", "organization_id"], :name => "user_org"
+
   create_table "infobase_bookmarks", :force => true do |t|
     t.integer "user_id"
     t.string  "name",    :limit => 64
@@ -1566,6 +1777,17 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
     t.datetime "updated_at"
   end
 
+  create_table "interests", :force => true do |t|
+    t.string   "name"
+    t.string   "interest_id"
+    t.string   "provider"
+    t.string   "category"
+    t.integer  "person_id"
+    t.datetime "interest_created_time"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "lat_long_by_zip_code", :force => true do |t|
     t.string  "zip"
     t.decimal "lat",  :precision => 15, :scale => 10
@@ -1573,30 +1795,39 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
   end
 
   create_table "linczone_contacts", :primary_key => "ContactID", :force => true do |t|
-    t.timestamp "EntryDate"
-    t.string    "FirstName",            :limit => 120
-    t.string    "LastName",             :limit => 120
-    t.string    "HomeAddress",          :limit => 200
-    t.string    "City",                 :limit => 20
-    t.string    "State",                :limit => 20
-    t.string    "Zip",                  :limit => 80
-    t.string    "Email",                :limit => 120
-    t.string    "HighSchool",           :limit => 120
-    t.string    "CampusName",           :limit => 200
-    t.string    "CampusID",             :limit => 80
-    t.string    "ReferrerFirstName",    :limit => 120
-    t.string    "ReferrerLastName",     :limit => 120
-    t.string    "ReferrerRelationship", :limit => 100
-    t.string    "ReferrerEmail",        :limit => 200
-    t.string    "InfoCCC",              :limit => 1,   :default => "F"
-    t.string    "InfoNav",              :limit => 1,   :default => "F"
-    t.string    "InfoIV",               :limit => 1,   :default => "F"
-    t.string    "InfoFCA",              :limit => 1,   :default => "F"
-    t.string    "InfoBSU",              :limit => 1,   :default => "F"
-    t.string    "InfoCACM",             :limit => 1,   :default => "F"
-    t.string    "InfoEFCA",             :limit => 1,   :default => "F"
-    t.string    "InfoGCM",              :limit => 1,   :default => "F"
-    t.string    "InfoWesley",           :limit => 1,   :default => "F"
+    t.datetime "EntryDate"
+    t.string   "FirstName",            :limit => 120
+    t.string   "LastName",             :limit => 120
+    t.string   "HomeAddress",          :limit => 200
+    t.string   "City",                 :limit => 20
+    t.string   "State",                :limit => 20
+    t.string   "Zip",                  :limit => 80
+    t.string   "Email",                :limit => 120
+    t.string   "HighSchool",           :limit => 120
+    t.string   "CampusName",           :limit => 200
+    t.string   "CampusID",             :limit => 80
+    t.string   "ReferrerFirstName",    :limit => 120
+    t.string   "ReferrerLastName",     :limit => 120
+    t.string   "ReferrerRelationship", :limit => 100
+    t.string   "ReferrerEmail",        :limit => 200
+    t.string   "InfoCCC",              :limit => 1,   :default => "F"
+    t.string   "InfoNav",              :limit => 1,   :default => "F"
+    t.string   "InfoIV",               :limit => 1,   :default => "F"
+    t.string   "InfoFCA",              :limit => 1,   :default => "F"
+    t.string   "InfoBSU",              :limit => 1,   :default => "F"
+    t.string   "InfoCACM",             :limit => 1,   :default => "F"
+    t.string   "InfoEFCA",             :limit => 1,   :default => "F"
+    t.string   "InfoGCM",              :limit => 1,   :default => "F"
+    t.string   "InfoWesley",           :limit => 1,   :default => "F"
+  end
+
+  create_table "locations", :force => true do |t|
+    t.string   "location_id"
+    t.string   "name"
+    t.string   "provider"
+    t.integer  "person_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "mail_delayed_jobs", :force => true do |t|
@@ -1674,33 +1905,6 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
   add_index "merge_audits", ["merge_looser_id", "merge_looser_type"], :name => "merge_looser"
   add_index "merge_audits", ["mergeable_id", "mergeable_type"], :name => "mergeable"
 
-  create_table "mh_answer_sheets", :force => true do |t|
-    t.datetime "created_at",   :null => false
-    t.datetime "completed_at"
-    t.integer  "person_id"
-    t.datetime "updated_at"
-    t.integer  "survey_id"
-  end
-
-  add_index "mh_answer_sheets", ["person_id", "survey_id"], :name => "person_id_survey_id"
-
-  create_table "mh_answers", :force => true do |t|
-    t.integer  "answer_sheet_id",         :null => false
-    t.integer  "question_id",             :null => false
-    t.text     "value"
-    t.string   "short_value"
-    t.integer  "attachment_file_size"
-    t.string   "attachment_content_type"
-    t.string   "attachment_file_name"
-    t.datetime "attachment_updated_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "mh_answers", ["answer_sheet_id"], :name => "index_ma_answers_on_answer_sheet_id"
-  add_index "mh_answers", ["question_id"], :name => "index_ma_answers_on_question_id"
-  add_index "mh_answers", ["short_value"], :name => "index_ma_answers_on_short_value"
-
   create_table "mh_conditions", :force => true do |t|
     t.integer "question_sheet_id",                 :null => false
     t.integer "trigger_id",                        :null => false
@@ -1708,74 +1912,6 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
     t.integer "toggle_page_id",                    :null => false
     t.integer "toggle_id"
   end
-
-  create_table "mh_dashboard_posts", :force => true do |t|
-    t.string   "title",      :default => ""
-    t.text     "context"
-    t.string   "video",      :default => ""
-    t.boolean  "visible",    :default => true
-    t.datetime "created_at",                   :null => false
-    t.datetime "updated_at",                   :null => false
-  end
-
-  create_table "mh_education_histories", :force => true do |t|
-    t.integer  "person_id"
-    t.string   "type"
-    t.string   "concentration_id1"
-    t.string   "concentration_name1"
-    t.string   "concentration_id2"
-    t.string   "concentration_name2"
-    t.string   "concentration_id3"
-    t.string   "concentration_name3"
-    t.string   "year_id"
-    t.string   "year_name"
-    t.string   "degree_id"
-    t.string   "degree_name"
-    t.string   "school_id"
-    t.string   "school_name"
-    t.string   "provider"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "school_type"
-  end
-
-  create_table "mh_elements", :force => true do |t|
-    t.string   "kind",                      :limit => 40, :default => "",    :null => false
-    t.string   "style",                     :limit => 40
-    t.text     "label"
-    t.text     "content"
-    t.boolean  "required"
-    t.string   "slug",                      :limit => 36
-    t.integer  "position"
-    t.string   "object_name"
-    t.string   "attribute_name"
-    t.string   "source"
-    t.string   "value_xpath"
-    t.string   "text_xpath"
-    t.integer  "question_grid_id"
-    t.string   "cols"
-    t.boolean  "is_confidential"
-    t.string   "total_cols"
-    t.string   "css_id"
-    t.string   "css_class"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "related_question_sheet_id"
-    t.integer  "conditional_id"
-    t.text     "tooltip"
-    t.boolean  "hide_label",                              :default => false
-    t.boolean  "hide_option_labels",                      :default => false
-    t.integer  "max_length"
-    t.boolean  "web_only",                                :default => false
-    t.string   "trigger_words"
-    t.string   "notify_via"
-    t.boolean  "hidden",                                  :default => false, :null => false
-  end
-
-  add_index "mh_elements", ["conditional_id"], :name => "index_ma_elements_on_conditional_id"
-  add_index "mh_elements", ["position"], :name => "index_ma_elements_on_question_sheet_id_and_position_and_page_id"
-  add_index "mh_elements", ["question_grid_id"], :name => "index_ma_elements_on_question_grid_id"
-  add_index "mh_elements", ["slug"], :name => "index_ma_elements_on_slug"
 
   create_table "mh_email_templates", :force => true do |t|
     t.string   "name",       :limit => 1000, :default => "", :null => false
@@ -1787,137 +1923,6 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
   end
 
   add_index "mh_email_templates", ["name"], :name => "index_ma_email_templates_on_name", :length => {"name"=>255}
-
-  create_table "mh_friends", :force => true do |t|
-    t.string   "name"
-    t.string   "uid"
-    t.string   "provider"
-    t.integer  "person_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "mh_friends", ["person_id", "uid"], :name => "person_uid", :unique => true
-
-  create_table "mh_group_labelings", :force => true do |t|
-    t.integer  "group_id"
-    t.integer  "group_label_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "mh_group_labelings", ["group_id", "group_label_id"], :name => "index_mh_group_labelings_on_group_id_and_group_label_id", :unique => true
-  add_index "mh_group_labelings", ["group_label_id"], :name => "index_mh_group_labelings_on_group_label_id"
-
-  create_table "mh_group_labels", :force => true do |t|
-    t.string   "name"
-    t.integer  "organization_id"
-    t.string   "ancestry"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "group_labelings_count", :default => 0
-  end
-
-  add_index "mh_group_labels", ["organization_id"], :name => "index_mh_group_labels_on_organization_id"
-
-  create_table "mh_group_memberships", :force => true do |t|
-    t.integer  "group_id"
-    t.integer  "person_id"
-    t.string   "role",       :default => "member"
-    t.boolean  "requested",  :default => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "mh_group_memberships", ["group_id"], :name => "index_group_memberships_on_group_id"
-  add_index "mh_group_memberships", ["person_id"], :name => "index_group_memberships_on_person_id"
-
-  create_table "mh_groups", :force => true do |t|
-    t.string   "name"
-    t.text     "location"
-    t.string   "meets"
-    t.integer  "meeting_day"
-    t.integer  "start_time"
-    t.integer  "end_time"
-    t.integer  "organization_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "list_publicly",         :default => true
-    t.boolean  "approve_join_requests", :default => true
-  end
-
-  create_table "mh_imports", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "organization_id"
-    t.string   "upload_file_name"
-    t.string   "upload_content_type"
-    t.integer  "upload_file_size"
-    t.datetime "upload_updated_at"
-    t.text     "headers"
-    t.text     "header_mappings"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
-  end
-
-  add_index "mh_imports", ["organization_id"], :name => "index_mh_imports_on_organization_id"
-  add_index "mh_imports", ["user_id", "organization_id"], :name => "user_org"
-
-  create_table "mh_interests", :force => true do |t|
-    t.string   "name"
-    t.string   "interest_id"
-    t.string   "provider"
-    t.string   "category"
-    t.integer  "person_id"
-    t.datetime "interest_created_time"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "mh_locations", :force => true do |t|
-    t.string   "location_id"
-    t.string   "name"
-    t.string   "provider"
-    t.integer  "person_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "mh_new_people", :force => true do |t|
-    t.integer  "person_id"
-    t.integer  "organization_id"
-    t.boolean  "notified",        :default => false
-    t.datetime "created_at",                         :null => false
-    t.datetime "updated_at",                         :null => false
-  end
-
-  create_table "mh_person_transfers", :force => true do |t|
-    t.integer  "person_id"
-    t.integer  "old_organization_id"
-    t.integer  "new_organization_id"
-    t.boolean  "copy",                :default => false
-    t.boolean  "notified",            :default => false
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
-    t.integer  "transferred_by_id"
-  end
-
-  create_table "mh_question_rules", :force => true do |t|
-    t.integer  "survey_element_id"
-    t.integer  "rule_id"
-    t.string   "trigger_keywords"
-    t.string   "extra_parameters"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
-  end
-
-  create_table "mh_question_sheets", :force => true do |t|
-    t.string  "label",              :limit => 60, :default => "",    :null => false
-    t.boolean "archived",                         :default => false
-    t.integer "questionnable_id"
-    t.string  "questionnable_type"
-  end
-
-  add_index "mh_question_sheets", ["questionnable_id", "questionnable_type"], :name => "questionnable"
 
   create_table "mh_references", :force => true do |t|
     t.integer  "question_id"
@@ -1935,53 +1940,6 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "mh_rules", :force => true do |t|
-    t.string   "name"
-    t.string   "description"
-    t.string   "action_method"
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
-    t.integer  "limit_per_survey", :default => 0
-    t.string   "rule_code"
-  end
-
-  create_table "mh_survey_elements", :force => true do |t|
-    t.integer  "survey_id"
-    t.integer  "element_id"
-    t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "hidden",     :default => false
-    t.boolean  "archived",   :default => false
-  end
-
-  add_index "mh_survey_elements", ["survey_id", "element_id"], :name => "survey_id_element_id"
-
-  create_table "mh_surveys", :force => true do |t|
-    t.string   "title",                 :limit => 100, :default => "",       :null => false
-    t.integer  "organization_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "post_survey_message"
-    t.string   "terminology",                          :default => "Survey"
-    t.integer  "login_option",                         :default => 0
-    t.boolean  "is_frozen"
-    t.text     "login_paragraph"
-    t.string   "logo_file_name"
-    t.string   "logo_content_type"
-    t.integer  "logo_file_size"
-    t.datetime "logo_updated_at"
-    t.string   "css_file_file_name"
-    t.string   "css_file_content_type"
-    t.integer  "css_file_file_size"
-    t.datetime "css_file_updated_at"
-    t.text     "css"
-    t.string   "background_color"
-    t.string   "text_color"
-  end
-
-  add_index "mh_surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
 
   create_table "ministries", :force => true do |t|
     t.string "name"
@@ -2135,48 +2093,6 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
   add_index "ministry_movement_contact", ["personID", "ActivityID"], :name => "both"
   add_index "ministry_movement_contact", ["personID"], :name => "personID"
 
-  create_table "ministry_newaddress", :primary_key => "addressID", :force => true do |t|
-    t.string   "address1"
-    t.string   "address2"
-    t.string   "address3",            :limit => 55
-    t.string   "address4",            :limit => 55
-    t.string   "city",                :limit => 50
-    t.string   "state",               :limit => 50
-    t.string   "zip",                 :limit => 15
-    t.string   "country",             :limit => 64
-    t.string   "homePhone",           :limit => 26
-    t.string   "workPhone",           :limit => 250
-    t.string   "cellPhone",           :limit => 25
-    t.string   "fax",                 :limit => 25
-    t.string   "email",               :limit => 200
-    t.string   "url",                 :limit => 100
-    t.string   "contactName"
-    t.string   "contactRelationship", :limit => 50
-    t.string   "addressType",         :limit => 20
-    t.datetime "dateCreated"
-    t.datetime "dateChanged"
-    t.string   "createdBy",           :limit => 50
-    t.string   "changedBy",           :limit => 50
-    t.integer  "fk_PersonID"
-    t.string   "email2",              :limit => 200
-    t.datetime "start_date"
-    t.datetime "end_date"
-    t.string   "facebook_link"
-    t.string   "myspace_link"
-    t.string   "title"
-    t.string   "dorm"
-    t.string   "room"
-    t.string   "preferredPhone",      :limit => 25
-    t.string   "phone1_type",                        :default => "cell"
-    t.string   "phone2_type",                        :default => "home"
-    t.string   "phone3_type",                        :default => "work"
-  end
-
-  add_index "ministry_newaddress", ["addressType", "fk_PersonID"], :name => "unique_person_addressType", :unique => true
-  add_index "ministry_newaddress", ["addressType"], :name => "index_ministry_newAddress_on_addressType"
-  add_index "ministry_newaddress", ["email"], :name => "email"
-  add_index "ministry_newaddress", ["fk_PersonID"], :name => "fk_PersonID"
-
   create_table "ministry_noncccmin", :primary_key => "NonCccMinID", :force => true do |t|
     t.string "ministry",    :limit => 50
     t.string "firstName",   :limit => 30
@@ -2205,71 +2121,6 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
     t.string   "Fk_resignationLetter", :limit => 64
     t.string   "Fk_authorizationNote", :limit => 64
   end
-
-  create_table "ministry_person", :primary_key => "personID", :force => true do |t|
-    t.string   "accountNo",                     :limit => 11
-    t.string   "lastName",                      :limit => 50
-    t.string   "firstName",                     :limit => 50
-    t.string   "middleName",                    :limit => 50
-    t.string   "preferredName",                 :limit => 50
-    t.string   "gender",                        :limit => 1
-    t.string   "region",                        :limit => 5
-    t.boolean  "workInUS",                                                                           :default => true,  :null => false
-    t.boolean  "usCitizen",                                                                          :default => true,  :null => false
-    t.string   "citizenship",                   :limit => 50
-    t.boolean  "isStaff"
-    t.string   "title",                         :limit => 5
-    t.string   "campus",                        :limit => 128
-    t.string   "universityState",               :limit => 5
-    t.string   "yearInSchool",                  :limit => 20
-    t.string   "major",                         :limit => 70
-    t.string   "minor",                         :limit => 70
-    t.string   "greekAffiliation",              :limit => 50
-    t.string   "maritalStatus",                 :limit => 20
-    t.string   "numberChildren",                :limit => 2
-    t.boolean  "isChild",                                                                            :default => false, :null => false
-    t.text     "bio",                           :limit => 2147483647
-    t.string   "image",                         :limit => 100
-    t.string   "occupation",                    :limit => 50
-    t.string   "blogfeed",                      :limit => 200
-    t.datetime "cruCommonsInvite"
-    t.datetime "cruCommonsLastLogin"
-    t.datetime "dateCreated"
-    t.datetime "dateChanged"
-    t.string   "createdBy",                     :limit => 50
-    t.string   "changedBy",                     :limit => 50
-    t.integer  "fk_ssmUserId"
-    t.integer  "fk_StaffSiteProfileID"
-    t.integer  "fk_spouseID"
-    t.integer  "fk_childOf"
-    t.date     "birth_date"
-    t.date     "date_became_christian"
-    t.date     "graduation_date"
-    t.string   "level_of_school"
-    t.string   "staff_notes"
-    t.string   "donor_number",                  :limit => 11
-    t.string   "url",                           :limit => 2000
-    t.string   "isSecure",                      :limit => 1
-    t.integer  "primary_campus_involvement_id"
-    t.integer  "mentor_id"
-    t.string   "lastAttended",                  :limit => 20
-    t.string   "ministry"
-    t.string   "strategy",                      :limit => 20
-    t.integer  "fb_uid",                        :limit => 8
-    t.datetime "date_attributes_updated"
-    t.decimal  "balance_daily",                                       :precision => 10, :scale => 2
-    t.text     "organization_tree_cache"
-    t.text     "org_ids_cache"
-  end
-
-  add_index "ministry_person", ["accountNo"], :name => "accountNo_ministry_Person"
-  add_index "ministry_person", ["campus"], :name => "campus"
-  add_index "ministry_person", ["fb_uid"], :name => "index_ministry_person_on_fb_uid"
-  add_index "ministry_person", ["firstName", "lastName"], :name => "firstName_lastName"
-  add_index "ministry_person", ["fk_ssmUserId"], :name => "fk_ssmUserId"
-  add_index "ministry_person", ["lastName"], :name => "lastname_ministry_Person"
-  add_index "ministry_person", ["org_ids_cache"], :name => "index_ministry_person_on_org_ids_cache", :length => {"org_ids_cache"=>255}
-  add_index "ministry_person", ["region"], :name => "region_ministry_Person"
 
   create_table "ministry_regionalstat", :primary_key => "RegionalStatID", :force => true do |t|
     t.datetime "periodBegin"
@@ -2887,6 +2738,14 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
     t.string "period"
   end
 
+  create_table "new_people", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "organization_id"
+    t.boolean  "notified",        :default => false
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+  end
+
   create_table "old_wsn_sp_wsnapplication", :primary_key => "WsnApplicationID", :force => true do |t|
     t.string   "oldPrimaryKey",                 :limit => 64
     t.string   "surferID",                      :limit => 64
@@ -3184,6 +3043,71 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
   add_index "organizations", ["importable_type", "importable_id"], :name => "index_organizations_on_importable_type_and_importable_id", :unique => true
   add_index "organizations", ["name"], :name => "index_organizations_on_name"
 
+  create_table "people", :primary_key => "personID", :force => true do |t|
+    t.string   "accountNo",                     :limit => 11
+    t.string   "lastName",                      :limit => 50
+    t.string   "firstName",                     :limit => 50
+    t.string   "middleName",                    :limit => 50
+    t.string   "preferredName",                 :limit => 50
+    t.string   "gender",                        :limit => 1
+    t.string   "region",                        :limit => 5
+    t.boolean  "workInUS",                                                                           :default => true,  :null => false
+    t.boolean  "usCitizen",                                                                          :default => true,  :null => false
+    t.string   "citizenship",                   :limit => 50
+    t.boolean  "isStaff"
+    t.string   "title",                         :limit => 5
+    t.string   "campus",                        :limit => 128
+    t.string   "universityState",               :limit => 5
+    t.string   "yearInSchool",                  :limit => 20
+    t.string   "major",                         :limit => 70
+    t.string   "minor",                         :limit => 70
+    t.string   "greekAffiliation",              :limit => 50
+    t.string   "maritalStatus",                 :limit => 20
+    t.string   "numberChildren",                :limit => 2
+    t.boolean  "isChild",                                                                            :default => false, :null => false
+    t.text     "bio",                           :limit => 2147483647
+    t.string   "image",                         :limit => 100
+    t.string   "occupation",                    :limit => 50
+    t.string   "blogfeed",                      :limit => 200
+    t.datetime "cruCommonsInvite"
+    t.datetime "cruCommonsLastLogin"
+    t.datetime "dateCreated"
+    t.datetime "dateChanged"
+    t.string   "createdBy",                     :limit => 50
+    t.string   "changedBy",                     :limit => 50
+    t.integer  "fk_ssmUserId"
+    t.integer  "fk_StaffSiteProfileID"
+    t.integer  "fk_spouseID"
+    t.integer  "fk_childOf"
+    t.date     "birth_date"
+    t.date     "date_became_christian"
+    t.date     "graduation_date"
+    t.string   "level_of_school"
+    t.string   "staff_notes"
+    t.string   "donor_number",                  :limit => 11
+    t.string   "url",                           :limit => 2000
+    t.string   "isSecure",                      :limit => 1
+    t.integer  "primary_campus_involvement_id"
+    t.integer  "mentor_id"
+    t.string   "lastAttended",                  :limit => 20
+    t.string   "ministry"
+    t.string   "strategy",                      :limit => 20
+    t.integer  "fb_uid",                        :limit => 8
+    t.datetime "date_attributes_updated"
+    t.decimal  "balance_daily",                                       :precision => 10, :scale => 2
+    t.text     "organization_tree_cache"
+    t.text     "org_ids_cache"
+  end
+
+  add_index "people", ["accountNo"], :name => "accountNo_ministry_Person"
+  add_index "people", ["campus"], :name => "campus"
+  add_index "people", ["fb_uid"], :name => "index_ministry_person_on_fb_uid"
+  add_index "people", ["firstName", "lastName"], :name => "firstName_lastName"
+  add_index "people", ["fk_ssmUserId"], :name => "fk_ssmUserId"
+  add_index "people", ["lastName"], :name => "lastname_ministry_Person"
+  add_index "people", ["org_ids_cache"], :name => "index_ministry_person_on_org_ids_cache", :length => {"org_ids_cache"=>255}
+  add_index "people", ["region"], :name => "region_ministry_Person"
+
   create_table "person_accesses", :force => true do |t|
     t.boolean  "national_access"
     t.boolean  "regional_access"
@@ -3204,6 +3128,17 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
     t.datetime "image_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "person_transfers", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "old_organization_id"
+    t.integer  "new_organization_id"
+    t.boolean  "copy",                :default => false
+    t.boolean  "notified",            :default => false
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+    t.integer  "transferred_by_id"
   end
 
   create_table "phone_numbers", :force => true do |t|
@@ -3445,6 +3380,24 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
     t.datetime "updated_at"
   end
 
+  create_table "question_rules", :force => true do |t|
+    t.integer  "survey_element_id"
+    t.integer  "rule_id"
+    t.string   "trigger_keywords"
+    t.string   "extra_parameters"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  create_table "question_sheets", :force => true do |t|
+    t.string  "label",              :limit => 60, :default => "",    :null => false
+    t.boolean "archived",                         :default => false
+    t.integer "questionnable_id"
+    t.string  "questionnable_type"
+  end
+
+  add_index "question_sheets", ["questionnable_id", "questionnable_type"], :name => "questionnable"
+
   create_table "questionnaires", :force => true do |t|
     t.string   "title",      :limit => 200
     t.string   "type",       :limit => 50
@@ -3546,6 +3499,16 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
     t.string   "i18n"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "rules", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "action_method"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+    t.integer  "limit_per_survey", :default => 0
+    t.string   "rule_code"
   end
 
   create_table "saved_contact_searches", :force => true do |t|
@@ -3745,44 +3708,6 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
   end
 
   add_index "si_users", ["ssm_id"], :name => "ssm_id"
-
-  create_table "simplesecuritymanager_user", :primary_key => "userID", :force => true do |t|
-    t.string   "globallyUniqueID",          :limit => 80
-    t.string   "username",                  :limit => 200,                    :null => false
-    t.string   "password",                  :limit => 80
-    t.string   "passwordQuestion",          :limit => 200
-    t.string   "passwordAnswer",            :limit => 200
-    t.datetime "lastFailure"
-    t.integer  "lastFailureCnt"
-    t.datetime "lastLogin"
-    t.datetime "createdOn"
-    t.boolean  "emailVerified",                            :default => false, :null => false
-    t.string   "remember_token"
-    t.datetime "remember_token_expires_at"
-    t.boolean  "developer"
-    t.string   "facebook_hash"
-    t.string   "facebook_username"
-    t.integer  "fb_user_id",                :limit => 8
-    t.string   "password_plain"
-    t.string   "password_reset_key"
-    t.string   "email"
-    t.string   "encrypted_password"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                            :default => 0
-    t.datetime "current_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "last_sign_in_at"
-    t.string   "locale"
-    t.text     "settings"
-  end
-
-  add_index "simplesecuritymanager_user", ["email"], :name => "index_simplesecuritymanager_user_on_email", :unique => true
-  add_index "simplesecuritymanager_user", ["fb_user_id"], :name => "index_simplesecuritymanager_user_on_fb_user_id"
-  add_index "simplesecuritymanager_user", ["globallyUniqueID"], :name => "globallyUniqueID", :unique => true
-  add_index "simplesecuritymanager_user", ["username"], :name => "CK_simplesecuritymanager_user_username", :unique => true
 
   create_table "sitrack_children", :force => true do |t|
     t.string   "name",        :limit => 50
@@ -5036,6 +4961,43 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
 
   add_index "super_admins", ["user_id"], :name => "index_super_admins_on_user_id"
 
+  create_table "survey_elements", :force => true do |t|
+    t.integer  "survey_id"
+    t.integer  "element_id"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "hidden",     :default => false
+    t.boolean  "archived",   :default => false
+  end
+
+  add_index "survey_elements", ["survey_id", "element_id"], :name => "survey_id_element_id"
+
+  create_table "surveys", :force => true do |t|
+    t.string   "title",                 :limit => 100, :default => "",       :null => false
+    t.integer  "organization_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "post_survey_message"
+    t.string   "terminology",                          :default => "Survey"
+    t.integer  "login_option",                         :default => 0
+    t.boolean  "is_frozen"
+    t.text     "login_paragraph"
+    t.string   "logo_file_name"
+    t.string   "logo_content_type"
+    t.integer  "logo_file_size"
+    t.datetime "logo_updated_at"
+    t.string   "css_file_file_name"
+    t.string   "css_file_content_type"
+    t.integer  "css_file_file_size"
+    t.datetime "css_file_updated_at"
+    t.text     "css"
+    t.string   "background_color"
+    t.string   "text_color"
+  end
+
+  add_index "surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
+
   create_table "teams", :force => true do |t|
     t.integer  "organization_id"
     t.string   "name"
@@ -5044,6 +5006,44 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
   end
 
   add_index "teams", ["organization_id"], :name => "index_teams_on_organization_id"
+
+  create_table "users", :primary_key => "userID", :force => true do |t|
+    t.string   "globallyUniqueID",          :limit => 80
+    t.string   "username",                  :limit => 200,                    :null => false
+    t.string   "password",                  :limit => 80
+    t.string   "passwordQuestion",          :limit => 200
+    t.string   "passwordAnswer",            :limit => 200
+    t.datetime "lastFailure"
+    t.integer  "lastFailureCnt"
+    t.datetime "lastLogin"
+    t.datetime "createdOn"
+    t.boolean  "emailVerified",                            :default => false, :null => false
+    t.string   "remember_token"
+    t.datetime "remember_token_expires_at"
+    t.boolean  "developer"
+    t.string   "facebook_hash"
+    t.string   "facebook_username"
+    t.integer  "fb_user_id",                :limit => 8
+    t.string   "password_plain"
+    t.string   "password_reset_key"
+    t.string   "email"
+    t.string   "encrypted_password"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",                            :default => 0
+    t.datetime "current_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "last_sign_in_at"
+    t.string   "locale"
+    t.text     "settings"
+  end
+
+  add_index "users", ["email"], :name => "index_simplesecuritymanager_user_on_email", :unique => true
+  add_index "users", ["fb_user_id"], :name => "index_simplesecuritymanager_user_on_fb_user_id"
+  add_index "users", ["globallyUniqueID"], :name => "globallyUniqueID", :unique => true
+  add_index "users", ["username"], :name => "CK_simplesecuritymanager_user_username", :unique => true
 
   create_table "versions", :force => true do |t|
     t.string   "item_type",  :null => false
@@ -5055,6 +5055,8 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
   end
 
   add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
+
+  add_foreign_key "addresses", "people", :name => "addresses_ibfk_1", :column => "fk_PersonID", :primary_key => "personID", :dependent => :delete
 
   add_foreign_key "crs2_additional_expenses_item", "crs2_expense", :name => "fk_additional_expenses_item_expense_id", :column => "expense_id"
   add_foreign_key "crs2_additional_expenses_item", "crs2_registrant_type", :name => "fk_additional_expenses_item_registrant_type_id", :column => "registrant_type_id"
@@ -5082,7 +5084,7 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
 
   add_foreign_key "crs2_profile", "crs2_person", :name => "fk_profile_crs_person_id", :column => "crs_person_id"
   add_foreign_key "crs2_profile", "crs2_user", :name => "fk_profile_user_id", :column => "user_id"
-  add_foreign_key "crs2_profile", "ministry_person", :name => "fk_profile_ministry_person_id", :primary_key => "personID"
+  add_foreign_key "crs2_profile", "people", :name => "fk_profile_ministry_person_id", :column => "ministry_person_id", :primary_key => "personID"
 
   add_foreign_key "crs2_profile_question", "crs2_registrant_type", :name => "fk_profile_question_registrant_type_id", :column => "registrant_type_id"
 
@@ -5116,24 +5118,20 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
 
   add_foreign_key "mail_groups", "mail_users", :name => "mail_groups_ibfk_1", :column => "user_id", :dependent => :nullify
 
-  add_foreign_key "mh_surveys", "organizations", :name => "mh_surveys_ibfk_1", :dependent => :delete
-
   add_foreign_key "ministry_activity", "ministry_targetarea", :name => "ministry_activity_ibfk_2", :column => "fk_targetAreaID", :primary_key => "targetAreaID", :dependent => :nullify
 
   add_foreign_key "ministry_missional_team_member", "ministry_locallevel", :name => "ministry_missional_team_member_ibfk_2", :column => "teamID", :primary_key => "teamID", :dependent => :delete
-  add_foreign_key "ministry_missional_team_member", "ministry_person", :name => "ministry_missional_team_member_ibfk_1", :column => "personID", :primary_key => "personID", :dependent => :delete
+  add_foreign_key "ministry_missional_team_member", "people", :name => "ministry_missional_team_member_ibfk_1", :column => "personID", :primary_key => "personID", :dependent => :delete
 
-  add_foreign_key "ministry_newaddress", "ministry_person", :name => "ministry_newaddress_ibfk_1", :column => "fk_PersonID", :primary_key => "personID", :dependent => :delete
+  add_foreign_key "phone_numbers", "people", :name => "phone_numbers_ibfk_1", :primary_key => "personID", :dependent => :delete
 
-  add_foreign_key "phone_numbers", "ministry_person", :name => "phone_numbers_ibfk_1", :column => "person_id", :primary_key => "personID", :dependent => :delete
+  add_foreign_key "received_sms", "people", :name => "received_sms_ibfk_1", :primary_key => "personID", :dependent => :nullify
 
-  add_foreign_key "received_sms", "ministry_person", :name => "received_sms_ibfk_1", :column => "person_id", :primary_key => "personID", :dependent => :nullify
-
-  add_foreign_key "sms_keywords", "mh_surveys", :name => "sms_keywords_ibfk_3", :column => "survey_id", :dependent => :nullify
   add_foreign_key "sms_keywords", "organizations", :name => "sms_keywords_ibfk_2"
-  add_foreign_key "sms_keywords", "simplesecuritymanager_user", :name => "sms_keywords_ibfk_1", :column => "user_id", :primary_key => "userID", :dependent => :nullify
+  add_foreign_key "sms_keywords", "surveys", :name => "sms_keywords_ibfk_3", :dependent => :nullify
+  add_foreign_key "sms_keywords", "users", :name => "sms_keywords_ibfk_1", :primary_key => "userID", :dependent => :nullify
 
-  add_foreign_key "sn_timetables", "ministry_person", :name => "sn_timetables_ibfk_1", :column => "person_id", :primary_key => "personID", :dependent => :delete
+  add_foreign_key "sn_timetables", "people", :name => "sn_timetables_ibfk_1", :primary_key => "personID", :dependent => :delete
 
   add_foreign_key "sp_applications", "sp_projects", :name => "sp_applications_ibfk_1", :column => "project_id", :dependent => :nullify
 
@@ -5147,12 +5145,14 @@ ActiveRecord::Schema.define(:version => 20120905172032) do
 
   add_foreign_key "sp_references", "sp_elements", :name => "sp_references_ibfk_1", :column => "question_id"
 
-  add_foreign_key "sp_staff", "ministry_person", :name => "sp_staff_ibfk_1", :column => "person_id", :primary_key => "personID", :dependent => :delete
+  add_foreign_key "sp_staff", "people", :name => "sp_staff_ibfk_1", :primary_key => "personID", :dependent => :delete
   add_foreign_key "sp_staff", "sp_projects", :name => "sp_staff_ibfk_2", :column => "project_id", :dependent => :delete
 
   add_foreign_key "sp_student_quotes", "sp_projects", :name => "sp_student_quotes_ibfk_1", :column => "project_id", :dependent => :delete
 
-  add_foreign_key "sp_users", "ministry_person", :name => "sp_users_ibfk_1", :column => "person_id", :primary_key => "personID", :dependent => :delete
-  add_foreign_key "sp_users", "simplesecuritymanager_user", :name => "sp_users_ibfk_2", :column => "ssm_id", :primary_key => "userID", :dependent => :delete
+  add_foreign_key "sp_users", "people", :name => "sp_users_ibfk_1", :primary_key => "personID", :dependent => :delete
+  add_foreign_key "sp_users", "users", :name => "sp_users_ibfk_2", :column => "ssm_id", :primary_key => "userID", :dependent => :delete
+
+  add_foreign_key "surveys", "organizations", :name => "surveys_ibfk_1", :dependent => :delete
 
 end
