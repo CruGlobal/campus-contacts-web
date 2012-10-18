@@ -54,7 +54,7 @@ en:
   nav:
     dashboard: Dashboard
     organizations: Organizations
-    manage: Manage
+    manage: Organizations
     cleanup: Cleanup
     archive: Archived
     enter_survey_mode: "Enter Survey Mode"
@@ -361,13 +361,6 @@ en:
     button_assign: 'ASSIGN'
     button_text: 'TEXT'
     button_email: 'EMAIL'
-    help_add: 'Add help'
-    help_import: 'Import help'
-    help_group: 'Group help'
-    help_label: 'Label help'
-    help_assign: 'Assign help'
-    help_text: 'Text help'
-    help_email: 'Email help'
   surveys:
     index:
       title: "Surveys for %{org}"

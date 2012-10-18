@@ -85,7 +85,7 @@
 		}
 	
 		select {
-			display: none;
+			/*display: none;*/
 			width: 245px;
 		}
 	
@@ -163,6 +163,7 @@
 					}
 					
 					.matchEdit {
+						display: none;
 						float: right;
 						padding-top: 0.25em;
 					}
@@ -200,7 +201,7 @@
 							margin-left: -5.9em;
 							padding: 1em;
 							width: 245px;
-							height: 245px;
+							max-height: 245px;
 							overflow-y: scroll;
 							background: #fff;
 							border: 1px solid #c7dff0;
@@ -331,7 +332,8 @@
 				}
 				
 				#new_label_button:hover {
-					background: #eee;
+					background: #c7dff0;
+					border-color: #0379ae;
 				}
 				
 				.labelform {

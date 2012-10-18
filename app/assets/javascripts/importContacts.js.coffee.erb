@@ -65,7 +65,9 @@ $(document).ready ->
   $("html").click (e) ->
     $(".selectQuestions").hide()  unless $(e.target).is(".selectTitleBg, .selectTitle")
 
-  $('.newQuestion').live 'click', ->
+  $('.newQuestion').live 'click', (e) ->
+    e.preventDefault()
+    clickedElement = $(this).parents(".matchSelect").attr("id")
     $('#new_question_div').dialog
       resizable: false,
       height:444,
@@ -74,6 +76,26 @@ $(document).ready ->
       buttons: [
         text: 'Done',
         click: ->
+          $("#" + clickedElement).siblings(".matchEdit").css("display", "block")
+          $(this).dialog('destroy')
+      ,
+        text: 'Cancel',
+        click: ->
+          $(this).dialog('destroy')
+      ]
+    false
+
+  $('.editMatch').live 'click', (e) ->
+    e.preventDefault()
+    $('#new_question_div').dialog
+      resizable: false,
+      height:444,
+      width:600,
+      modal: true,
+      buttons: [
+        text: 'Done',
+        click: ->
+          $(this).dialog('destroy')
       ,
         text: 'Cancel',
         click: ->

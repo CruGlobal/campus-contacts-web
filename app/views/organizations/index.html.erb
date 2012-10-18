@@ -1,26 +1,29 @@
 <% root_org = current_organization %>
-<div class="titlebar">
-  <h1>Organizations</h1>
-  <p>From this screen you can edit, delete or rearrange your organizations. Clicking "Add new organization"<br/>will do a quick add by name. To edit more details, permissions and other info, select "edit" from the item's<br/>name on the list.</p>
+<div class="titlebar titlebarmod">
+	<h1>Organizations</h1>
 </div>
+
+<div style="padding: 0 20px;">
+	<p>From this screen you can edit, delete or rearrange your organizations. Clicking "Add new organization"<br/>will do a quick add by name. To edit more details, permissions and other info, select "edit" from the item's<br/>name on the list.</p>
   
-<h2><%= root_org %> <small><%= link_to(t('general.edit'), edit_organization_path(root_org)) %></small></h2>
-
-<% if root_org.children.length == 0 %>
-  <br/><%= link_to(t('.add_sub_org', terminology: root_org.terminology.pluralize), '#', id: 'add_sub_orgs') %>
-<% end %>
-<div class="orgwrap">
-<div id="orgs" style="<%= 'display:none' if root_org.children.length == 0 %>">
-  <%= render 'org_column', parent: root_org %>
-  <div class="org_column" id="spinner_column" style="display:none">
-    <a class="org_new">+ </a>
-    <ul>
-      <li><%= image_tag('spinner.gif') %></li>
-    </ul>
-  </div>
-</div>
-</div>
-
-<div id="new_org" style="display:none" title="<%= t('.add') %>" class="fingerme">
-  <%= render 'add_org', organization: Organization.new %>
+	<h2><%= root_org %> <small><%= link_to(t('general.edit'), edit_organization_path(root_org)) %></small></h2>
+	
+	<% if root_org.children.length == 0 %>
+	  <br/><%= link_to(t('.add_sub_org', terminology: root_org.terminology.pluralize), '#', id: 'add_sub_orgs') %>
+	<% end %>
+	<div class="orgwrap">
+	<div id="orgs" style="<%= 'display:none' if root_org.children.length == 0 %>">
+	  <%= render 'org_column', parent: root_org %>
+	  <div class="org_column" id="spinner_column" style="display:none">
+		<a class="org_new">+ </a>
+		<ul>
+		  <li><%= image_tag('spinner.gif') %></li>
+		</ul>
+	  </div>
+	</div>
+	</div>
+	
+	<div id="new_org" style="display:none" title="<%= t('.add') %>" class="fingerme">
+	  <%= render 'add_org', organization: Organization.new %>
+	</div>
 </div>
