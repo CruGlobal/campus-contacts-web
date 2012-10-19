@@ -16,7 +16,7 @@ class Friend < ActiveRecord::Base
       friends = friends.collect(&:to_hash)
     else friends = friends.collect {|x| x.to_hash.slice(*valid_fields)}
     end
-    person = Person.find_by_personID(person_id)
+    person = Person.find_by_id(person_id)
     hash = { person: {name: person.to_s, id: person.id }, friends: friends }
   end
 

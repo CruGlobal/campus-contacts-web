@@ -77,9 +77,9 @@ class GroupMembershipsControllerTest < ActionController::TestCase
       @user, @org = admin_user_login_with_org
       @group = Factory(:group, organization: @org)
 
-      @p1 = Factory(:person, firstName: "Tony", lastName: "Stark")
-      @p2 = Factory(:person, firstName: "Tony", lastName: "Banner")
-      @p3 = Factory(:person, firstName: "Tony", lastName: "Banner")
+      @p1 = Factory(:person, first_name: "Tony", last_name: "Stark")
+      @p2 = Factory(:person, first_name: "Tony", last_name: "Banner")
+      @p3 = Factory(:person, first_name: "Tony", last_name: "Banner")
       @p1.email_addresses.create(email: 'p1@example.com')
       @p2.email_addresses.create(email: 'p2@example.com')
       @org.add_contact(@p1)

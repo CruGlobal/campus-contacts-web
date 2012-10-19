@@ -40,11 +40,11 @@ class GroupsControllerTest < ActionController::TestCase
       request.session[:current_organization_id] = org.id
       @group = Factory(:group, organization: org)
       
-      @contact1 = Factory(:person, firstName: "C", lastName: "C")
+      @contact1 = Factory(:person, first_name: "C", last_name: "C")
       Factory(:organizational_role, organization: org, person: @contact1, role: Role.contact)
-      @contact2 = Factory(:person, firstName: "D", lastName: "D")
+      @contact2 = Factory(:person, first_name: "D", last_name: "D")
       Factory(:organizational_role, organization: org, person: @contact2, role: Role.contact)
-      @contact3 = Factory(:person, firstName: "E", lastName: "E")
+      @contact3 = Factory(:person, first_name: "E", last_name: "E")
       Factory(:organizational_role, organization: org, person: @contact3, role: Role.contact)
 
       Factory(:group_membership, group: @group, person: @contact1)
@@ -57,14 +57,14 @@ class GroupsControllerTest < ActionController::TestCase
       assert_response(:success)
     end
     
-    should "get show with sorting by firstName asc" do
-      get :show, { :q =>{:s => "firstName asc"}, :id => @group.id}
+    should "get show with sorting by first_name asc" do
+      get :show, { :q =>{:s => "first_name asc"}, :id => @group.id}
       assert_response(:success)
       assert_equal assigns(:people).collect{|x| x.id}, [@contact1.id, @contact2.id, @contact3.id]
     end
     
-    should "get show with sorting by firstName desc" do
-      get :show, { :q =>{:s => "firstName desc"}, :id => @group.id}
+    should "get show with sorting by first_name desc" do
+      get :show, { :q =>{:s => "first_name desc"}, :id => @group.id}
       assert_response(:success)
       assert_equal assigns(:people).collect{|x| x.id}, [@contact3.id, @contact2.id, @contact1.id]
     end
@@ -154,7 +154,7 @@ class GroupsControllerTest < ActionController::TestCase
     @user, @org = admin_user_login_with_org
     @group = Factory(:group, organization: @org)
       
-    @contact1 = Factory(:person, firstName: "C", lastName: "C")
+    @contact1 = Factory(:person, first_name: "C", last_name: "C")
     Factory(:organizational_role, organization: @org, person: @contact1, role: Role.contact)
     Factory(:group_membership, group: @group, person: @contact1)
     

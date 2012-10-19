@@ -19,7 +19,7 @@
       // Try to log the user out of facebook
       FB.getLoginStatus(function(response) {
         if (response.status === 'connected') {
-          var uid = response.authResponse.userID;
+          var uid = response.authResponse.id;
           var accessToken = response.authResponse.accessToken;
           FB.logout();
         }

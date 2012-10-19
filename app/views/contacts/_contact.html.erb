@@ -8,8 +8,8 @@
     <% end %>
     <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
   </td>
-  <td class="firstName"><%= person.firstName %></td>
-  <td class="lastName"><%= person.lastName %></td>
+  <td class="first_name"><%= person.first_name %></td>
+  <td class="last_name"><%= person.last_name %></td>
   <% if contact_role %>
     <td>
       <%= contact_role.followup_status.to_s.titleize %>
@@ -32,7 +32,7 @@
           <span title="<%= l(date, format: :date) if date %>" class="tipit"><%= answer.first %></span>
           <% dates << date if date.present? %>
         <% else %>
-          <%= person.yearInSchool if q.attribute_name == "yearInSchool" %>
+          <%= person.year_in_school if q.attribute_name == "year_in_school" %>
         <% end %>
       <% end %>
       
@@ -44,7 +44,7 @@
     <td>
       <% friends = person.friends_and_leaders(current_organization) %> 
       <% if friends.length > 0 %>
-        <% friend_leaders = Person.where(fb_uid: friends).order("lastName, preferredName, firstName") %>
+        <% friend_leaders = Person.where(fb_uid: friends).order("last_name, first_name") %>
         <%= link_to(friend_leaders.length, '', class: 'friends_count tipthis', title: friend_leaders.collect {|f| "#{f}<br>"} ) %>
       <% else %>
       0

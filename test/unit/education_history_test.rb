@@ -14,7 +14,7 @@ class EducationHistoryTest < ActiveSupport::TestCase
     end
     
     should "be able to add a school" do
-      school1 = @person.education_histories.create(school_type: "High School", provider: "facebook", school_name: "Test School", person_id: @person.personID.to_i, school_id: "1")
+      school1 = @person.education_histories.create(school_type: "High School", provider: "facebook", school_name: "Test School", person_id: @person.id.to_i, school_id: "1")
       assert school1.valid?
     end
     

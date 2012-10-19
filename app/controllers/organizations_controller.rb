@@ -111,7 +111,7 @@ class OrganizationsController < ApplicationController
       end
       
       flash[:notice] = t('organizations.cleanup.removal_notice', no: leaders_count)
-      person_ids = leaders.collect(&:personID)
+      person_ids = leaders.collect(&:id)
     end
     
     if leaders.blank?

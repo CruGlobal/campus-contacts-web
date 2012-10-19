@@ -59,7 +59,7 @@
       <% elsif @person.url.present? %>      
       <p><%= link_to(t('.facebook_profile'), @person.url, target: '_blank') %></p>      
       <% end %>
-      <p><%= link_to(t('.send_contact_info', name: @person.firstName), '#', class: 'send_contact_info', 'data-person_id' => @person.id ) %></p>      
+      <p><%= link_to(t('.send_contact_info', name: @person.first_name), '#', class: 'send_contact_info', 'data-person_id' => @person.id ) %></p>      
       <%= render :partial => 'shared/send_contact_info_dialog', :locals => { person: @person } %>
     </div>
   </div>
@@ -104,7 +104,7 @@
   <div style="clear:both;"></div>
   <div>
     <% if friends = @person.friends_and_leaders(current_organization) %>
-      <p><b><%= @person.firstName.present? ? t('.persons_friends',person: declare_ownership(@person.firstName)) : "No Name Assigned" %></b></p>
+      <p><b><%= @person.first_name.present? ? t('.persons_friends',person: declare_ownership(@person.first_name)) : "No Name Assigned" %></b></p>
 
       <% friends.each do |friend_uid| %>
         <div style="float:left; margin-right: 5px;">
@@ -118,7 +118,7 @@
     <% end %>
   </div>
   <div>
-    <%= @person.date_attributes_updated ? t('.updated_time_difference', time_diff: distance_of_time_in_words(@person.date_attributes_updated.to_time, Time.now)) : t('.updated_time_difference', time_diff: distance_of_time_in_words(@person.dateChanged.to_time, Time.now)) %>
+    <%= @person.date_attributes_updated ? t('.updated_time_difference', time_diff: distance_of_time_in_words(@person.date_attributes_updated.to_time, Time.now)) : t('.updated_time_difference', time_diff: distance_of_time_in_words(@person.updated_at.to_time, Time.now)) %>
   </div>
 </div>
 

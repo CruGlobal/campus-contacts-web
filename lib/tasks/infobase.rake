@@ -93,7 +93,7 @@ namespace :infobase do
 
       # If we didn't find a corresponding person in MH, create one
       unless mh_person
-        mh_person = Person.create!(ccc_person.attributes.except('personID', 'dateCreated', 'dateChanged', 'fk_ssmUserId', 'fk_StaffSiteProfileID', 'fk_spouseID', 'fk_childOf', 'primary_campus_involvement_id', 'mentor_id'))
+        mh_person = Person.create!(ccc_person.attributes.except('personID', 'created_at', 'dateChanged', 'fk_ssmUserId', 'fk_StaffSiteProfileID', 'fk_spouseID', 'fk_childOf', 'primary_campus_involvement_id', 'mentor_id'))
         mh_person.user = user || User.create!(username: ccc_person.user.username, password: Time.now.to_i)
 
         # copy over email and phone data
@@ -153,7 +153,7 @@ namespace :infobase do
       # Find all the students active in the system in the past year, and add them to this movement
       # Person.where(["dateChanged > ? AND (isStaff is null OR isStaff = 0) AND campus = ?", 1.year.ago, target.name]).each do |person|
       #   unless OrganizationMembership.where(organization_id: m.id, person_id: person.id).present?
-      #     OrganizationMembership.create!(organization_id: m.id, person_id: person.id, validated: 1, start_date: person.dateCreated)
+      #     OrganizationMembership.create!(organization_id: m.id, person_id: person.id, validated: 1, start_date: person.created_at)
       #   end
       # end
       

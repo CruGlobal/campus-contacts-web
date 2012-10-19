@@ -140,7 +140,7 @@ class SmsController < ApplicationController
         separator = / [a-z]\)/
       end
 
-      unless person.firstName.blank? || person.lastName.blank?
+      unless person.first_name.blank? || person.last_name.blank?
         question_no = get_question_no(survey, person) 
         msg = "#{question_no} #{msg}"
       end
@@ -152,10 +152,10 @@ class SmsController < ApplicationController
   def save_survey_question(survey, person, answer)
     begin
       case
-      when person.firstName.blank? 
-        person.update_attribute(:firstName, answer)
-      when person.lastName.blank?  
-        person.update_attribute(:lastName, answer)
+      when person.first_name.blank? 
+        person.update_attribute(:first_name, answer)
+      when person.last_name.blank?  
+        person.update_attribute(:last_name, answer)
       else
         question = next_question(survey, person)
         @answer_sheet = get_answer_sheet(survey, person)
@@ -180,8 +180,8 @@ class SmsController < ApplicationController
 
           question.set_response(answer, @answer_sheet)
           p = person.has_similar_person_by_name_and_email?(answer)
-          if p # another person with the same firstName, lastName and email has been found
-            @answer_sheet.person = @answer_sheet.person.smart_merge(p) # merge person to person with the same firstName, lastName and email
+          if p # another person with the same first_name, last_name and email has been found
+            @answer_sheet.person = @answer_sheet.person.smart_merge(p) # merge person to person with the same first_name, last_name and email
             @answer_sheet.save!
             @answer_sheet.reload
             question.set_response(answer, @answer_sheet)
@@ -220,7 +220,7 @@ class SmsController < ApplicationController
 
   def check_person_field_presence(person, attribute_name)
     begin
-      Person.exists?(["personID = #{person.id} AND '#{attribute_name}' IS NOT NULL"])
+      Person.exists?(["id = #{person.id} AND '#{attribute_name}' IS NOT NULL"])
     rescue
       false
     end  
@@ -232,9 +232,9 @@ class SmsController < ApplicationController
 
   def next_question(survey, person)
     case
-    when person.firstName.blank?
+    when person.first_name.blank?
       Question.new(label: "What is your first name?")
-    when person.lastName.blank?  
+    when person.last_name.blank?  
       Question.new(label: "What is your last name?")
     else
       @answer_sheet = get_answer_sheet(survey, person)
