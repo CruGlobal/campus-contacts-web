@@ -1,0 +1,28 @@
+<div id="add_org_form">
+  <%= t('.crs_import_instructions') %>
+  <%= form_for organization, url: organizations_path, method: :post, validate: true do |f| %>
+    <% if flash[:error] %>
+      <div class="flash error"><%= raw flash[:error] %></div>
+    <% end %>
+    <%= f.hidden_field :parent_id %>
+    <div class="customform">
+      <div class="sfield">
+        <div class="ls">
+          <%= label_tag :url, t('.url') %>
+        </div>
+        <div class="rs">
+          <%= text_field_tag :url %>
+        </div>
+      </div>
+      <div class="sfield">
+        <div class="ls">
+          <%= label_tag :admin_password, t('.admin_password') %>
+        </div>
+        <div class="rs">
+          <%= password_field_tag :admin_password %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
