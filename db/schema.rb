@@ -13,6 +13,23 @@
 
 ActiveRecord::Schema.define(:version => 20121017144708) do
 
+  create_table "access_grants", :force => true do |t|
+    t.string   "code"
+    t.integer  "identity"
+    t.string   "client_id"
+    t.string   "redirect_uri"
+    t.string   "scope",        :default => ""
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "granted_at"
+    t.datetime "expires_at"
+    t.string   "access_token"
+    t.datetime "revoked"
+  end
+
+  add_index "access_grants", ["client_id"], :name => "index_access_grants_on_client_id"
+  add_index "access_grants", ["code"], :name => "index_access_grants_on_code", :unique => true
+
   create_table "access_tokens", :force => true do |t|
     t.string   "code"
     t.integer  "identity"
@@ -29,6 +46,21 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
   add_index "access_tokens", ["client_id"], :name => "index_access_tokens_on_client_id"
   add_index "access_tokens", ["code"], :name => "index_access_tokens_on_code", :unique => true
   add_index "access_tokens", ["identity"], :name => "index_access_tokens_on_identity"
+
+  create_table "active_admin_comments", :force => true do |t|
+    t.integer  "resource_id",   :null => false
+    t.string   "resource_type", :null => false
+    t.integer  "author_id"
+    t.string   "author_type"
+    t.text     "body"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "namespace"
+  end
+
+  add_index "active_admin_comments", ["author_type", "author_id"], :name => "index_active_admin_comments_on_author_type_and_author_id"
+  add_index "active_admin_comments", ["namespace"], :name => "index_active_admin_comments_on_namespace"
+  add_index "active_admin_comments", ["resource_type", "resource_id"], :name => "index_admin_notes_on_resource_type_and_resource_id"
 
   create_table "activities", :force => true do |t|
     t.integer  "target_area_id"
@@ -533,6 +565,20 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
   add_index "phone_numbers", ["number"], :name => "index_phone_numbers_on_number"
   add_index "phone_numbers", ["person_id", "number"], :name => "index_phone_numbers_on_person_id_and_number"
 
+  create_table "profile_pictures", :force => true do |t|
+    t.integer "person_id"
+    t.integer "parent_id"
+    t.integer "size"
+    t.integer "height"
+    t.integer "width"
+    t.string  "content_type"
+    t.string  "filename"
+    t.string  "thumbnail"
+    t.date    "uploaded_date"
+  end
+
+  add_index "profile_pictures", ["person_id"], :name => "index_profile_pictures_on_person_id"
+
   create_table "question_leaders", :force => true do |t|
     t.integer  "person_id"
     t.integer  "element_id"
@@ -548,6 +594,28 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
   end
+
+  create_table "question_sheets", :force => true do |t|
+    t.string  "label",              :limit => 60, :default => "",    :null => false
+    t.boolean "archived",                         :default => false
+    t.integer "questionnable_id"
+    t.string  "questionnable_type"
+  end
+
+  add_index "question_sheets", ["questionnable_id", "questionnable_type"], :name => "questionnable"
+
+  create_table "rails_admin_histories", :force => true do |t|
+    t.string   "message"
+    t.string   "username"
+    t.integer  "item"
+    t.string   "table"
+    t.integer  "month",      :limit => 2
+    t.integer  "year",       :limit => 8
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rails_admin_histories", ["item", "table", "month", "year"], :name => "index_histories_on_item_and_table_and_month_and_year"
 
   create_table "received_sms", :force => true do |t|
     t.string   "phone_number"
