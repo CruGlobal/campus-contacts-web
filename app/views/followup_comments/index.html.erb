@@ -17,8 +17,8 @@
 <table class="listing" cellpadding="0" cellspacing="0">
   <tr>
     <th>&nbsp;</th>
-    <th><%= sort_link @q, 'firstName', t('.first_name'), params %></th>
-    <th><%= sort_link @q, 'lastName', t('.last_name'), params %></th>
+    <th><%= sort_link @q, 'first_name', t('.first_name'), params %></th>
+    <th><%= sort_link @q, 'last_name', t('.last_name'), params %></th>
     <th><%= t('.email') %></th>
     <th><%= t('.phone_number') %></th>
     <th><%= sort_link @q, 'comment', t('comment'), params %></th>
@@ -29,8 +29,8 @@
     <% @comments.each do |comment| %>
       <tr class="comment_row" data-id="<%= comment.contact.id %>">
         <td>&nbsp;</td>
-        <td><%= comment.contact.firstName %></td>
-        <td><%= comment.contact.lastName %></td>
+        <td><%= comment.contact.first_name %></td>
+        <td><%= comment.contact.last_name %></td>
         <td><%= comment.contact.email %></td>
         <td><%= comment.contact.phone_number %></td>
         <td><%= comment.comment %></td>

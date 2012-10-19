@@ -25,7 +25,7 @@ class PeopleController < ApplicationController
     CSV.generate(out) do |rows|
       rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('people.index.gender'), t('people.index.email'), t('people.index.phone'), t('people.index.year_in_school')]
       @all_people.each do |person|
-        rows << [person.firstName, person.lastName, person.gender, person.email, person.pretty_phone_number, person.yearInSchool]
+        rows << [person.first_name, person.last_name, person.gender, person.email, person.pretty_phone_number, person.year_in_school]
       end
     end
     filename = current_organization.to_s
@@ -52,7 +52,7 @@ class PeopleController < ApplicationController
   # GET /people/new
   # def new
   #   names = params[:name].to_s.split(' ')
-  #   @person = Person.new(:firstName => names[0], :lastName => names[1..-1].join(' '))
+  #   @person = Person.new(:first_name => names[0], :last_name => names[1..-1].join(' '))
   #   @email = @person.email_addresses.new
   #   @phone = @person.phone_numbers.new
   # end
@@ -81,11 +81,11 @@ class PeopleController < ApplicationController
   end
 
   def merge
-    @people = 1.upto(4).collect {|i| Person.find_by_personID(params["person#{i}"]) if params["person#{i}"].present?}.compact
+    @people = 1.upto(4).collect {|i| Person.find_by_id(params["person#{i}"]) if params["person#{i}"].present?}.compact
   end
 
   def confirm_merge
-    @people = 1.upto(4).collect {|i| Person.find_by_personID(params["person#{i}"]) if params["person#{i}"].present?}.compact
+    @people = 1.upto(4).collect {|i| Person.find_by_id(params["person#{i}"]) if params["person#{i}"].present?}.compact
 
     if !current_user_super_admin? && can?(:manage, current_organization)
       names = @people.collect { |n| n.name.downcase }
@@ -117,7 +117,7 @@ class PeopleController < ApplicationController
 
   def merge_preview
     render :nothing => true and return false unless params[:id].to_i > 0
-    @person = Person.find_by_personID(params[:id])
+    @person = Person.find_by_id(params[:id])
     respond_to do |wants|
       wants.js {  }
     end
@@ -139,7 +139,7 @@ class PeopleController < ApplicationController
       params[:person] ||= {}
       params[:person][:email_address] ||= {}
       params[:person][:phone_number] ||= {}
-      unless params[:person][:firstName].present?# && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
+      unless params[:person][:first_name].present?# && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
         render :nothing => true and return
       end
       @person, @email, @phone = create_person(params[:person])
@@ -185,7 +185,7 @@ class PeopleController < ApplicationController
         end
       else 
         flash.now[:error] = ''
-        #flash.now[:error] += "#{t('people.create.firstname_error')}<br />" unless @person.firstName.present?
+        #flash.now[:error] += "#{t('people.create.first_name_error')}<br />" unless @person.first_name.present?
         flash.now[:error] += "#{t('people.create.phone_number_error')}<br />" if @phone && !@phone.valid?
         if @email && !@email.is_unique?
           flash.now[:error] += "#{t('people.create.email_taken')}<br />" 
@@ -305,7 +305,7 @@ class PeopleController < ApplicationController
     to_ids = params[:to].split(',').uniq
 
     to_ids.each do |id|
-      person = Person.find_by_personID(id)
+      person = Person.find_by_id(id)
       PeopleMailer.enqueue.bulk_message(person.email, current_person.email, params[:subject], params[:body]) if person.present? && person.email.present?
     end
 
@@ -340,7 +340,7 @@ class PeopleController < ApplicationController
     to_ids = params[:to].split(',').uniq
 
     to_ids.each do |id|
-      person = Person.find_by_personID(id)
+      person = Person.find_by_id(id)
       fc = FollowupComment.create(params[:followup_comment])
       fc.contact_id = id
       fc.comment = params[:body]
@@ -474,14 +474,14 @@ class PeopleController < ApplicationController
   protected
   
   def attempting_to_delete_or_archive_all_the_admins_in_the_org?(ids)
-    admin_ids = current_organization.parent_organization_admins.collect(&:personID)
+    admin_ids = current_organization.parent_organization_admins.collect(&:id)
     i = admin_ids & ids.collect(&:to_i)
     return i if (admin_ids - i).blank?
     false
   end
   
   def attempting_to_delete_or_archive_current_user_self_as_admin?(ids)
-    return true unless ([current_person.personID] & ids.collect(&:to_i)).blank?
+    return true unless ([current_person.id] & ids.collect(&:to_i)).blank?
     false
   end
 
@@ -514,21 +514,21 @@ class PeopleController < ApplicationController
   def fetch_people(search_params = {})
     org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
     @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles_including_archived)
-    @people_scope = @people_scope.where(personID: @people_scope.archived_not_included.collect(&:personID)) if params[:include_archived].blank? && params[:archived].blank?
+    @people_scope = @people_scope.where(id: @people_scope.archived_not_included.collect(&:id)) if params[:include_archived].blank? && params[:archived].blank?
     
     @q = @people_scope.includes(:primary_phone_number, :primary_email_address)
     #when specific role is selected from the directory
     @q = @q.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ? AND organizational_roles.deleted = 0', params[:role], current_organization.id) unless params[:role].blank?
-    sort_by = ['lastName asc', 'firstName asc']
+    sort_by = ['last_name asc', 'first_name asc']
 
     #for searching
     if search_params[:search_type] == "basic"
       unless search_params[:query].blank?
         if search_params[:search_type] == "basic"
           @q = @q.select("people.*, email_addresses.*")
-          .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = people.personID")
-          .where("concat(firstName,' ',lastName) LIKE :search OR
-                           concat(lastName, ' ',firstName) LIKE :search OR
+          .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = people.id")
+          .where("concat(first_name,' ',last_name) LIKE :search OR
+                           concat(last_name, ' ',first_name) LIKE :search OR
                            emails.email LIKE :search", 
                            {:search => "%#{search_params[:query]}%"})
         end
@@ -538,7 +538,7 @@ class PeopleController < ApplicationController
         if params[:include_archived]
           @q = @q.select("people.*, roles.*")
           .joins("LEFT JOIN organizational_roles AS org_roles ON 
-                   org_roles.person_id = people.personID")
+                   org_roles.person_id = people.id")
                    .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
                    .where("org_roles.organization_id" => current_organization.id)
                    .where("roles.id = :search",
@@ -548,7 +548,7 @@ class PeopleController < ApplicationController
         else
           @q = @q.select("people.*, roles.*")
           .joins("LEFT JOIN organizational_roles AS org_roles ON 
-                   org_roles.person_id = people.personID")
+                   org_roles.person_id = people.id")
                    .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
                    .where("org_roles.archive_date" => nil, "org_roles.organization_id" => current_organization.id)
                    .where("roles.id = :search",
@@ -565,30 +565,30 @@ class PeopleController < ApplicationController
 
       unless search_params[:email].blank?
         @q = @q.select("people.*, email_addresses.*")
-        .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = people.personID")  
+        .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = people.id")  
         .where("emails.email LIKE :search", {:search => "%#{search_params[:email]}%"})
         sort_by.unshift("emails.email")
       end
 
       unless search_params[:phone].blank?
         @q = @q.select("people.*, phone_numbers.*")
-        .joins("LEFT JOIN phone_numbers AS phones ON phones.person_id = people.personID")
+        .joins("LEFT JOIN phone_numbers AS phones ON phones.person_id = people.id")
         .where("phones.number LIKE :search", {:search => "%#{search_params[:phone]}%"})
         sort_by.unshift("phones.number")
       end
 
       unless search_params[:first_name].blank?
-        @q = @q.where("firstName LIKE :search", {:search => "%#{search_params[:first_name]}%"}) 
-        sort_by.unshift("firstName asc") 
+        @q = @q.where("first_name LIKE :search", {:search => "%#{search_params[:first_name]}%"}) 
+        sort_by.unshift("first_name asc") 
       end
 
       unless search_params[:last_name].blank?
-        @q = @q.where("lastName LIKE :search", {:search => "%#{search_params[:last_name]}%"})
-        sort_by.unshift("lastName asc")
+        @q = @q.where("last_name LIKE :search", {:search => "%#{search_params[:last_name]}%"})
+        sort_by.unshift("last_name asc")
       end
     end
 
-    @q = @q.where(personID: current_organization.people.archived(current_organization.id).collect(&:personID)) unless params[:archived].blank?
+    @q = @q.where(id: current_organization.people.archived(current_organization.id).collect(&:id)) unless params[:archived].blank?
 
     @q = @q.search(params[:q])
     @q.sorts = sort_by if @q.sorts.empty?
@@ -605,7 +605,7 @@ class PeopleController < ApplicationController
       @all_people = @all_people.uniq_by { |a| a.id }
     end
     
-    @all_people = @all_people.where(personID: current_organization.people.archived.where("organizational_roles.archive_date > ? AND organizational_roles.archive_date < ?", params[:archived_date], (params[:archived_date].to_date+1).strftime("%Y-%m-%d")).collect{|x| x.personID}) unless params[:archived_date].blank?
+    @all_people = @all_people.where(id: current_organization.people.archived.where("organizational_roles.archive_date > ? AND organizational_roles.archive_date < ?", params[:archived_date], (params[:archived_date].to_date+1).strftime("%Y-%m-%d")).collect{|x| x.id}) unless params[:archived_date].blank?
     @people = Kaminari.paginate_array(@all_people).page(params[:page])
   end
 

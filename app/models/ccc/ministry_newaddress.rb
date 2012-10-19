@@ -1,9 +1,9 @@
 class Ccc::MinistryNewaddress < ActiveRecord::Base
   establish_connection :uscm
 
-  self.primary_key = 'addressID'
+  self.primary_key = 'id'
   self.table_name = 'ministry_newaddress'
-  belongs_to :ministry_person, class_name: 'Person', foreign_key: :fk_PersonID
+  belongs_to :ministry_person, class_name: 'Person', foreign_key: :person_id
   
   def merge(other)
     Ccc::MinistryNewaddress.transaction do
@@ -17,9 +17,9 @@ class Ccc::MinistryNewaddress < ActiveRecord::Base
           end
         end
         # Now copy the rest as long as they're not blank
-        other.attributes.except(*(%w{addressID dateCreated fk_PersonID} + physical_address))
+        other.attributes.except(*(%w{id created_at person_id} + physical_address))
         attributes.each do |k, v|
-          next if %w{addressID dateCreated fk_PersonID}.include?(k)
+          next if %w{id created_at person_id}.include?(k)
           next if v == other.attributes[k]
           self[k] = case
                     when other.attributes[k].blank? then v

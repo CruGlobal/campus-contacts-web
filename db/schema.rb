@@ -11,7 +11,24 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121017144708) do
+ActiveRecord::Schema.define(:version => 20121018152314) do
+
+  create_table "access_grants", :force => true do |t|
+    t.string   "code"
+    t.integer  "identity"
+    t.string   "client_id"
+    t.string   "redirect_uri"
+    t.string   "scope",        :default => ""
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "granted_at"
+    t.datetime "expires_at"
+    t.string   "access_token"
+    t.datetime "revoked"
+  end
+
+  add_index "access_grants", ["client_id"], :name => "index_access_grants_on_client_id"
+  add_index "access_grants", ["code"], :name => "index_access_grants_on_code", :unique => true
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -74,47 +91,28 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
 
   add_index "activities", ["target_area_id", "organization_id"], :name => "index_activities_on_target_area_id_and_organization_id", :unique => true
 
-  create_table "addresses", :primary_key => "addressID", :force => true do |t|
+  create_table "addresses", :force => true do |t|
     t.string   "address1"
     t.string   "address2"
-    t.string   "address3",            :limit => 55
-    t.string   "address4",            :limit => 55
-    t.string   "city",                :limit => 50
-    t.string   "state",               :limit => 50
-    t.string   "zip",                 :limit => 15
-    t.string   "country",             :limit => 64
-    t.string   "homePhone",           :limit => 26
-    t.string   "workPhone",           :limit => 250
-    t.string   "cellPhone",           :limit => 25
-    t.string   "fax",                 :limit => 25
-    t.string   "email",               :limit => 200
-    t.string   "url",                 :limit => 100
-    t.string   "contactName"
-    t.string   "contactRelationship", :limit => 50
-    t.string   "addressType",         :limit => 20
-    t.datetime "dateCreated"
-    t.datetime "dateChanged"
-    t.string   "createdBy",           :limit => 50
-    t.string   "changedBy",           :limit => 50
-    t.integer  "fk_PersonID"
-    t.string   "email2",              :limit => 200
+    t.string   "address3",     :limit => 55
+    t.string   "address4",     :limit => 55
+    t.string   "city",         :limit => 50
+    t.string   "state",        :limit => 50
+    t.string   "zip",          :limit => 15
+    t.string   "country",      :limit => 64
+    t.string   "address_type", :limit => 20
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "person_id"
     t.datetime "start_date"
     t.datetime "end_date"
-    t.string   "facebook_link"
-    t.string   "myspace_link"
-    t.string   "title"
     t.string   "dorm"
     t.string   "room"
-    t.string   "preferredPhone",      :limit => 25
-    t.string   "phone1_type",                        :default => "cell"
-    t.string   "phone2_type",                        :default => "home"
-    t.string   "phone3_type",                        :default => "work"
   end
 
-  add_index "addresses", ["addressType", "fk_PersonID"], :name => "unique_person_addressType", :unique => true
-  add_index "addresses", ["addressType"], :name => "index_ministry_newAddress_on_addressType"
-  add_index "addresses", ["email"], :name => "email"
-  add_index "addresses", ["fk_PersonID"], :name => "fk_PersonID"
+  add_index "addresses", ["address_type", "person_id"], :name => "unique_person_addressType", :unique => true
+  add_index "addresses", ["address_type"], :name => "index_ministry_newAddress_on_addressType"
+  add_index "addresses", ["person_id"], :name => "fk_PersonID"
 
   create_table "answer_sheets", :force => true do |t|
     t.datetime "created_at",   :null => false
@@ -296,7 +294,7 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
     t.datetime "updated_at"
   end
 
-  add_index "email_addresses", ["email"], :name => "index_email_addresses_on_email"
+  add_index "email_addresses", ["email"], :name => "email"
   add_index "email_addresses", ["person_id"], :name => "person_id"
 
   create_table "followup_comments", :force => true do |t|
@@ -426,6 +424,20 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
     t.datetime "updated_at",                         :null => false
   end
 
+  create_table "organization_memberships", :force => true do |t|
+    t.integer  "organization_id"
+    t.integer  "person_id"
+    t.boolean  "primary",         :default => false
+    t.boolean  "validated",       :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.date     "start_date"
+    t.date     "end_date"
+  end
+
+  add_index "organization_memberships", ["organization_id", "person_id"], :name => "index_organization_memberships_on_organization_id_and_person_id", :unique => true
+  add_index "organization_memberships", ["person_id"], :name => "person_id"
+
   create_table "organizational_roles", :force => true do |t|
     t.integer  "person_id"
     t.integer  "role_id"
@@ -462,70 +474,38 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
   add_index "organizations", ["importable_type", "importable_id"], :name => "index_organizations_on_importable_type_and_importable_id", :unique => true
   add_index "organizations", ["name"], :name => "index_organizations_on_name"
 
-  create_table "people", :primary_key => "personID", :force => true do |t|
+  create_table "people", :force => true do |t|
     t.string   "accountNo",                     :limit => 11
-    t.string   "lastName",                      :limit => 50
-    t.string   "firstName",                     :limit => 50
-    t.string   "middleName",                    :limit => 50
-    t.string   "preferredName",                 :limit => 50
+    t.string   "last_name",                     :limit => 50
+    t.string   "first_name",                    :limit => 50
+    t.string   "middle_name",                   :limit => 50
     t.string   "gender",                        :limit => 1
-    t.string   "region",                        :limit => 5
-    t.boolean  "workInUS",                                                                           :default => true,  :null => false
-    t.boolean  "usCitizen",                                                                          :default => true,  :null => false
-    t.string   "citizenship",                   :limit => 50
-    t.boolean  "isStaff"
-    t.string   "title",                         :limit => 5
-    t.string   "campus",                        :limit => 128
-    t.string   "universityState",               :limit => 5
-    t.string   "yearInSchool",                  :limit => 20
+    t.string   "year_in_school",                :limit => 20
     t.string   "major",                         :limit => 70
     t.string   "minor",                         :limit => 70
-    t.string   "greekAffiliation",              :limit => 50
-    t.string   "maritalStatus",                 :limit => 20
-    t.string   "numberChildren",                :limit => 2
-    t.boolean  "isChild",                                                                            :default => false, :null => false
-    t.text     "bio",                           :limit => 2147483647
-    t.string   "image",                         :limit => 100
-    t.string   "occupation",                    :limit => 50
-    t.string   "blogfeed",                      :limit => 200
-    t.datetime "cruCommonsInvite"
-    t.datetime "cruCommonsLastLogin"
-    t.datetime "dateCreated"
-    t.datetime "dateChanged"
-    t.string   "createdBy",                     :limit => 50
-    t.string   "changedBy",                     :limit => 50
-    t.integer  "fk_ssmUserId"
-    t.integer  "fk_StaffSiteProfileID"
-    t.integer  "fk_spouseID"
-    t.integer  "fk_childOf"
+    t.string   "greek_affiliation",             :limit => 50
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
     t.date     "birth_date"
     t.date     "date_became_christian"
     t.date     "graduation_date"
     t.string   "level_of_school"
     t.string   "staff_notes"
-    t.string   "donor_number",                  :limit => 11
-    t.string   "url",                           :limit => 2000
-    t.string   "isSecure",                      :limit => 1
     t.integer  "primary_campus_involvement_id"
     t.integer  "mentor_id"
-    t.string   "lastAttended",                  :limit => 20
-    t.string   "ministry"
-    t.string   "strategy",                      :limit => 20
     t.integer  "fb_uid",                        :limit => 8
     t.datetime "date_attributes_updated"
-    t.decimal  "balance_daily",                                       :precision => 10, :scale => 2
     t.text     "organization_tree_cache"
     t.text     "org_ids_cache"
   end
 
   add_index "people", ["accountNo"], :name => "accountNo_ministry_Person"
-  add_index "people", ["campus"], :name => "campus"
   add_index "people", ["fb_uid"], :name => "index_ministry_person_on_fb_uid"
-  add_index "people", ["firstName", "lastName"], :name => "firstName_lastName"
-  add_index "people", ["fk_ssmUserId"], :name => "fk_ssmUserId"
-  add_index "people", ["lastName"], :name => "lastname_ministry_Person"
+  add_index "people", ["first_name", "last_name"], :name => "firstName_lastName"
+  add_index "people", ["last_name"], :name => "lastname_ministry_Person"
   add_index "people", ["org_ids_cache"], :name => "index_ministry_person_on_org_ids_cache", :length => {"org_ids_cache"=>255}
-  add_index "people", ["region"], :name => "region_ministry_Person"
+  add_index "people", ["user_id"], :name => "fk_ssmUserId"
 
   create_table "person_photos", :force => true do |t|
     t.integer  "person_id"
@@ -722,7 +702,7 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
     t.string   "initial_response",               :limit => 145
     t.text     "post_survey_message_deprecated"
     t.string   "event_type"
-    t.string   "gateway",                                       :default => "", :null => false
+    t.string   "gateway",                                       :default => "twilio", :null => false
     t.integer  "survey_id"
   end
 
@@ -741,11 +721,6 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
   end
 
   add_index "sms_sessions", ["phone_number", "updated_at"], :name => "session"
-
-  create_table "states", :force => true do |t|
-    t.string "state", :limit => 100
-    t.string "code",  :limit => 10
-  end
 
   create_table "super_admins", :force => true do |t|
     t.integer  "user_id"
@@ -793,25 +768,14 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
 
   add_index "surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
 
-  create_table "users", :primary_key => "userID", :force => true do |t|
-    t.string   "globallyUniqueID",          :limit => 80
-    t.string   "username",                  :limit => 200,                    :null => false
+  create_table "users", :force => true do |t|
+    t.string   "username",                  :limit => 200,                :null => false
     t.string   "password",                  :limit => 80
-    t.string   "passwordQuestion",          :limit => 200
-    t.string   "passwordAnswer",            :limit => 200
-    t.datetime "lastFailure"
-    t.integer  "lastFailureCnt"
     t.datetime "lastLogin"
     t.datetime "createdOn"
-    t.boolean  "emailVerified",                            :default => false, :null => false
     t.string   "remember_token"
     t.datetime "remember_token_expires_at"
     t.boolean  "developer"
-    t.string   "facebook_hash"
-    t.string   "facebook_username"
-    t.integer  "fb_user_id",                :limit => 8
-    t.string   "password_plain"
-    t.string   "password_reset_key"
     t.string   "email"
     t.string   "encrypted_password"
     t.datetime "remember_created_at"
@@ -823,38 +787,20 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
     t.datetime "updated_at"
     t.datetime "last_sign_in_at"
     t.string   "locale"
-    t.integer  "checked_guid",              :limit => 1,   :default => 0,     :null => false
     t.text     "settings"
   end
 
   add_index "users", ["email"], :name => "index_simplesecuritymanager_user_on_email", :unique => true
-  add_index "users", ["fb_user_id"], :name => "index_simplesecuritymanager_user_on_fb_user_id"
-  add_index "users", ["globallyUniqueID"], :name => "globallyUniqueID", :unique => true
   add_index "users", ["username"], :name => "CK_simplesecuritymanager_user_username", :unique => true
 
-  create_table "versions", :force => true do |t|
-    t.string   "item_type",  :null => false
-    t.integer  "item_id",    :null => false
-    t.string   "event",      :null => false
-    t.string   "whodunnit"
-    t.text     "object"
-    t.datetime "created_at"
-  end
+  add_foreign_key "answers", "elements", :name => "answers_ibfk_1", :column => "question_id"
 
-  add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
-
-  add_foreign_key "addresses", "people", :name => "addresses_ibfk_1", :column => "fk_PersonID", :primary_key => "personID", :dependent => :delete
+  add_foreign_key "organization_memberships", "organizations", :name => "organization_memberships_ibfk_2", :dependent => :delete
 
   add_foreign_key "organizational_roles", "organizations", :name => "organizational_roles_ibfk_1", :dependent => :delete
-  add_foreign_key "organizational_roles", "people", :name => "organizational_roles_ibfk_2", :primary_key => "personID", :dependent => :delete
 
-  add_foreign_key "phone_numbers", "ministry_person", :name => "phone_numbers_ibfk_1", :column => "person_id", :primary_key => "personID", :dependent => :delete
-
-  add_foreign_key "received_sms", "ministry_person", :name => "received_sms_ibfk_1", :column => "person_id", :primary_key => "personID", :dependent => :nullify
-
-  add_foreign_key "sms_keywords", "mh_surveys", :name => "sms_keywords_ibfk_3", :column => "survey_id", :dependent => :nullify
-  add_foreign_key "sms_keywords", "organizations", :name => "sms_keywords_ibfk_2"
-  add_foreign_key "sms_keywords", "simplesecuritymanager_user", :name => "sms_keywords_ibfk_1", :column => "user_id", :primary_key => "userID", :dependent => :nullify
+  add_foreign_key "sms_keywords", "organizations", :name => "sms_keywords_ibfk_4", :dependent => :delete
+  add_foreign_key "sms_keywords", "surveys", :name => "sms_keywords_ibfk_3", :dependent => :nullify
 
   add_foreign_key "surveys", "organizations", :name => "surveys_ibfk_1", :dependent => :delete
 

@@ -151,7 +151,7 @@ class Surveys::QuestionsController < ApplicationController
     survey = @survey
     response = Array.new
     if type == 'Leader'
-      results = @survey.organization.leaders.where("lastName LIKE ? OR firstName LIKE ?", "%#{keyword}%", "%#{keyword}%")
+      results = @survey.organization.leaders.where("last_name LIKE ? OR first_name LIKE ?", "%#{keyword}%", "%#{keyword}%")
       response = results.uniq.collect{|leader| {"label"=>"#{leader.name} (#{leader.email})", "id"=>leader.id}}
     elsif type == 'Ministry'
       results = current_person.all_organization_and_children.where("name LIKE ?", "%#{keyword}%")
@@ -227,7 +227,7 @@ class Surveys::QuestionsController < ApplicationController
       
         if invalid_emails.present?
           respond_to do |wants|
-            wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(personId: invalid_emails).collect{|p| p.name}.join(', ') } }
+            wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(id: invalid_emails).collect{|p| p.name}.join(', ') } }
           end
           return false
         else
@@ -270,7 +270,7 @@ class Surveys::QuestionsController < ApplicationController
 
     #  unless leaders_with_invalid_emails.blank?
     #    respond_to do |wants|
-    #      wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(personId: leaders_with_invalid_emails).collect{|p| p.name}.join(', ') } }
+    #      wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(id: leaders_with_invalid_emails).collect{|p| p.name}.join(', ') } }
     #    end
     #    return false
     #  else

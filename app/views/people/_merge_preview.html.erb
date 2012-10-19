@@ -1,18 +1,16 @@
 <% if person %>
-  <strong>Person ID: <%= person.personID %></strong><br/>
-  First Name: <%= person.firstName %><br/>
-  Last Name: <%= person.lastName %><br/>
-  Preferred Name: <%= person.preferredName %><br/>
+  <strong>Person ID: <%= person.id %></strong><br/>
+  First Name: <%= person.first_name %><br/>
+  Last Name: <%= person.last_name %><br/>
   Gender: <%= person.gender %><br/>
   Campus: <%= person.campus %><br/>
   Birthday: <%= l(person.birth_date) if person.birth_date %><br/>
-  Preferred Name: <%= person.preferredName %><br/>
-  Person Created: <%= l(person.dateCreated) if person.dateCreated %><br/>
-  Person Updated: <%= l(person.dateChanged) if person.dateChanged %>
+  Person Created: <%= l(person.created_at) if person.created_at %><br/>
+  Person Updated: <%= l(person.updated_at) if person.updated_at %>
   <% user = person.user %>
   <% if user %>
   <hr>
-  User ID: <%= user.userID %><br/>
+  User ID: <%= user.id %><br/>
   Username: <%= user.username %><br/>
   Guid: <%= user.globallyUniqueID %><br/>
   User Created: <%= l(user.createdOn || user.created_at) if user.createdOn || user.created_at %><br/>

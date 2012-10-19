@@ -2,7 +2,7 @@
 	<td colspan="99" align="center">
 		<span id="all_text">
       <% @filtered_people.each do |person| %>
-    		<span class="all_row" data-id="<%= person.id %>" data-name="<%= person.firstName %> <%= person.lastName %>" data-email="<%= person.email %>" data-phone-number="<%= person.pretty_phone_number %>"></span>
+    		<span class="all_row" data-id="<%= person.id %>" data-name="<%= person.first_name %> <%= person.last_name %>" data-email="<%= person.email %>" data-phone-number="<%= person.pretty_phone_number %>"></span>
       <% end %>
     
 			<%=raw t('people.all.page_selected_html', count: @people.length) %>

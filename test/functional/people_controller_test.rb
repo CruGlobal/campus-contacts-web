@@ -48,7 +48,7 @@ class PeopleControllerTest < ActionController::TestCase
     end
 
     should "should update person" do
-      put :update, id: @person.person.id, person: {firstName: 'David', lastName: 'Ang',  :current_address_attributes => { :address1 => "#41 Sgt. Esguerra Ave", :country => "Philippines"} }
+      put :update, id: @person.person.id, person: {first_name: 'David', last_name: 'Ang',  :current_address_attributes => { :address1 => "#41 Sgt. Esguerra Ave", :country => "Philippines"} }
       #put :update, id: @person.person.id, person: @person.attributes
       assert_redirected_to person_path(assigns(:person))
     end
@@ -200,11 +200,11 @@ class PeopleControllerTest < ActionController::TestCase
       @user = Factory(:user_with_auxs)
       sign_in @user
       
-      @unarchived_contact1 = Factory(:person, firstName: "Brynden", lastName: "Tully")
+      @unarchived_contact1 = Factory(:person, first_name: "Brynden", last_name: "Tully")
       Factory(:organizational_role, organization: @user.person.organizations.first, person: @unarchived_contact1, role: Role.contact)
       Factory(:email_address, email: "bryndentully@email.com", person: @unarchived_contact1, primary: true)
       
-      @archived_contact1 = Factory(:person, firstName: "Edmure", lastName: "Tully")
+      @archived_contact1 = Factory(:person, first_name: "Edmure", last_name: "Tully")
       Factory(:organizational_role, organization: @user.person.organizations.first, person: @archived_contact1, role: Role.contact)
       @archived_contact1.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive #archive his one and only role
       
@@ -456,11 +456,11 @@ class PeopleControllerTest < ActionController::TestCase
       
       context "merge people" do
         setup do
-          @person1 = Factory(:person, firstName: "Clark", lastName: "Kent")
-          @person2 = Factory(:person, firstName: "Bruce", lastName: "Wayne")
-          @person3 = Factory(:person, firstName: "Hal", lastName: "Jordan")
-          @person4 = Factory(:person, firstName: "Clark", lastName: "Kent")
-          @person5 = Factory(:person, firstName: "clark", lastName: "kent")
+          @person1 = Factory(:person, first_name: "Clark", last_name: "Kent")
+          @person2 = Factory(:person, first_name: "Bruce", last_name: "Wayne")
+          @person3 = Factory(:person, first_name: "Hal", last_name: "Jordan")
+          @person4 = Factory(:person, first_name: "Clark", last_name: "Kent")
+          @person5 = Factory(:person, first_name: "clark", last_name: "kent")
         end
         
         should "fail to confirm_merge people when one of the 'mergees' have a different name" do
@@ -498,10 +498,10 @@ class PeopleControllerTest < ActionController::TestCase
       
       context "merge people" do
         setup do
-          @person1 = Factory(:person, firstName: "Tony", lastName: "Stark")
-          @person2 = Factory(:person, firstName: "Thor", lastName: "Odinson")
-          @person3 = Factory(:person, firstName: "Bruce", lastName: "Banner")
-          @person4 = Factory(:person, firstName: "Tony", lastName: "Stark")
+          @person1 = Factory(:person, first_name: "Tony", last_name: "Stark")
+          @person2 = Factory(:person, first_name: "Thor", last_name: "Odinson")
+          @person3 = Factory(:person, first_name: "Bruce", last_name: "Banner")
+          @person4 = Factory(:person, first_name: "Tony", last_name: "Stark")
         end
         
         should "successfully confirm_merge peeps" do
@@ -597,9 +597,9 @@ class PeopleControllerTest < ActionController::TestCase
     setup do
       @user, @org = admin_user_login_with_org
       @another_org = Factory(:organization)
-      c1 = Factory(:person, firstName: "Scott", lastName: "Munroe")
-      c2 = Factory(:person, firstName: "Scott", lastName: "Summers")
-      c3 = Factory(:person, firstName: "Scott", lastName: "Grey")
+      c1 = Factory(:person, first_name: "Scott", last_name: "Munroe")
+      c2 = Factory(:person, first_name: "Scott", last_name: "Summers")
+      c3 = Factory(:person, first_name: "Scott", last_name: "Grey")
       
       @org.add_contact(c1)
       @org.add_contact(c2)
@@ -627,7 +627,7 @@ class PeopleControllerTest < ActionController::TestCase
     end
     
     should "create person" do
-      post :create, { :person => { :firstName => "Herp", :lastName => "Derp", :email_address => { :email => "herp@derp.com" }, :phone_number => { :number => "123918230912"} } }
+      post :create, { :person => { :first_name => "Herp", :last_name => "Derp", :email_address => { :email => "herp@derp.com" }, :phone_number => { :number => "123918230912"} } }
       
       assert_not_nil assigns(:person)
       assert_not_nil assigns(:email)
@@ -637,50 +637,50 @@ class PeopleControllerTest < ActionController::TestCase
     end
 
     should "render nothing when user has no name" do
-      post :create, { :person => { :firstName => "", :lastName => "Derp", :email_address => { :email => "herp@derp.com" }, :phone_number => { :number => "123918230912"} } }
+      post :create, { :person => { :first_name => "", :last_name => "Derp", :email_address => { :email => "herp@derp.com" }, :phone_number => { :number => "123918230912"} } }
       assert_equal " ", @response.body
     end
     
     should "render not be able to create a person with an email already existing" do
       assert_no_difference "Person.count" do
-        post :create, { :person => { :firstName => "", :lastName => "Derp", :email_address => { :email => "robstark@email.com" }} }
+        post :create, { :person => { :first_name => "", :last_name => "Derp", :email_address => { :email => "robstark@email.com" }} }
       end
     end
 
     should "not create a person with an invalid phone_number" do
       assert_no_difference "Person.count" do
-        post :create, { :person => { :firstName => "Hello", :lastName => "Derp", :phone_number => { :number => "asdofhjasdlkfja"} } }
+        post :create, { :person => { :first_name => "Hello", :last_name => "Derp", :phone_number => { :number => "asdofhjasdlkfja"} } }
       end
     end
     
     should "not create a person with an invalid email_address" do
       assert_no_difference "Person.count" do
-        post :create, { :person => { :firstName => "Rob", :lastName => "Derp", :email_address => { :email => "robstarkemail.com" }} }
+        post :create, { :person => { :first_name => "Rob", :last_name => "Derp", :email_address => { :email => "robstarkemail.com" }} }
       end
     end
     
 
     should "not create a person with admin role without a valid email" do
       assert_no_difference "Person.count" do
-        post :create, {:person=> { :firstName =>"Waymar", :lastName =>"Royce", :gender =>"male", :email_address =>{:email =>"", :primary =>"1"}}, :roles =>{"1"=> Role.admin.id}}
+        post :create, {:person=> { :first_name =>"Waymar", :last_name =>"Royce", :gender =>"male", :email_address =>{:email =>"", :primary =>"1"}}, :roles =>{"1"=> Role.admin.id}}
       end
     end
 
     should "not create a person with leader role without a valid email" do
       assert_no_difference "Person.count" do
-        post :create, {:person=> { :firstName =>"Waymar", :lastName =>"Royce", :gender =>"male", :email_address =>{:email =>"", :primary =>"1"}}, :roles =>{"1"=> Role.leader.id}}
+        post :create, {:person=> { :first_name =>"Waymar", :last_name =>"Royce", :gender =>"male", :email_address =>{:email =>"", :primary =>"1"}}, :roles =>{"1"=> Role.leader.id}}
       end
     end
 
     should "create a person with admin role with a valid email" do
       assert_difference "Person.count", 1 do
-        post :create, {:person=> { :firstName =>"Waymar", :lastName =>"Royce", :gender =>"male", :email_address =>{:email =>"wayarroyce@email.com", :primary =>"1"}}, :roles =>{"1"=> Role.admin.id}}
+        post :create, {:person=> { :first_name =>"Waymar", :last_name =>"Royce", :gender =>"male", :email_address =>{:email =>"wayarroyce@email.com", :primary =>"1"}}, :roles =>{"1"=> Role.admin.id}}
       end
     end
     
     should "create a person with leader role with a valid email" do
       assert_difference "Person.count", 1 do
-        post :create, {:person=> { :firstName =>"Waymar", :lastName =>"Royce", :gender =>"male", :email_address =>{:email =>"wayarroyce@email.com", :primary =>"1"}}, :roles =>{"1"=> Role.leader.id}}
+        post :create, {:person=> { :first_name =>"Waymar", :last_name =>"Royce", :gender =>"male", :email_address =>{:email =>"wayarroyce@email.com", :primary =>"1"}}, :roles =>{"1"=> Role.leader.id}}
       end
     end
   end
@@ -730,7 +730,7 @@ class PeopleControllerTest < ActionController::TestCase
     setup do
       @user, @org = admin_user_login_with_org
       
-      @c1 = Factory(:person, firstName: "Genny")
+      @c1 = Factory(:person, first_name: "Genny")
       @c2 = Factory(:person)
       
       @org.add_contact(@c1)
@@ -758,7 +758,7 @@ class PeopleControllerTest < ActionController::TestCase
       Factory(:organizational_role, person: @c1, role: Role.admin, organization: @org)
       init_admin_count = @org.admins.count
       assert_no_difference "OrganizationalRole.where(organization_id: #{@user.person.organizations.first.id}, deleted: true, role_id: #{Role.admin.id}).count" do
-        xhr :post, :bulk_delete, { :ids => "#{@user.person.personID}, #{@c1.personID}, #{@c2.personID}" }
+        xhr :post, :bulk_delete, { :ids => "#{@user.person.id}, #{@c1.id}, #{@c2.id}" }
       end
       
       assert_equal init_admin_count, @org.admins.count
@@ -769,7 +769,7 @@ class PeopleControllerTest < ActionController::TestCase
       Factory(:organizational_role, person: @c1, role: Role.admin, organization: @org)
       init_admin_count = @org.admins.count
       assert_no_difference "OrganizationalRole.where(organization_id: #{@user.person.organizations.first.id}, deleted: true, role_id: #{Role.admin.id}).count" do
-        xhr :post, :bulk_delete, { :ids => "#{@user.person.personID}" }
+        xhr :post, :bulk_delete, { :ids => "#{@user.person.id}" }
       end
       assert_equal @user.person.organizational_roles.collect(&:role_id), [Role::ADMIN_ID]
       assert_equal @org.admins.count, init_admin_count
@@ -780,7 +780,7 @@ class PeopleControllerTest < ActionController::TestCase
     setup do
       @user, @org = admin_user_login_with_org
       
-      @c1 = Factory(:person, firstName: "Genny")
+      @c1 = Factory(:person, first_name: "Genny")
       @c2 = Factory(:person)
       
       @org.add_contact(@c1)
@@ -806,7 +806,7 @@ class PeopleControllerTest < ActionController::TestCase
       Factory(:organizational_role, person: @c1, role: Role.admin, organization: @org)
       init_admin_count = @org.admins.count
       
-      xhr :post, :bulk_archive, { :ids => "#{@user.person.personID}, #{@c1.personID}, #{@c2.personID}" }
+      xhr :post, :bulk_archive, { :ids => "#{@user.person.id}, #{@c1.id}, #{@c2.id}" }
       
       assert_equal init_admin_count, @org.admins.count
       assert_equal I18n.t('people.bulk_archive.cannot_archive_admin_error', names: "#{@user.person.name}, #{@c1.name}"), @response.body
@@ -815,7 +815,7 @@ class PeopleControllerTest < ActionController::TestCase
     should "not be able to delete logged-in-admin's self as admin" do
       Factory(:organizational_role, person: @c1, role: Role.admin, organization: @org)
       init_admin_count = @org.admins.count
-      xhr :post, :bulk_archive, { :ids => "#{@user.person.personID}" }
+      xhr :post, :bulk_archive, { :ids => "#{@user.person.id}" }
       
       assert_equal @user.person.organizational_roles.collect(&:role_id), [Role::ADMIN_ID]
       assert_equal @org.admins.count, init_admin_count
@@ -831,7 +831,7 @@ class PeopleControllerTest < ActionController::TestCase
       Factory(:organizational_role, role: Role.contact, organization: org_2, person: contact)
       
       assert_difference "Organization.find(#{org_2.id}).contacts.count", -1 do
-        xhr :post, :bulk_delete, { :ids => "#{contact.personID}" }
+        xhr :post, :bulk_delete, { :ids => "#{contact.id}" }
       end
     end
   end
@@ -846,46 +846,46 @@ class PeopleControllerTest < ActionController::TestCase
       @request.session[:current_organization_id] = @org.id
     
       @admin1 = Factory(:user_with_auxs)
-      @admin1.person.update_attributes({firstName: "A", lastName: "A"})
+      @admin1.person.update_attributes({first_name: "A", last_name: "A"})
       Factory(:organizational_role, organization: @org, person: @admin1.person, role: Role.admin)
     
       @leader1 = Factory(:user_with_auxs)
-      @leader1.person.update_attributes({firstName: "B", lastName: "B"})
+      @leader1.person.update_attributes({first_name: "B", last_name: "B"})
       Factory(:organizational_role, organization: @org, person: @leader1.person, role: Role.leader)
       
       @contact1 = Factory(:user_with_auxs)
       Factory(:organizational_role, organization: @org, person: @contact1.person, role: Role.contact)
-      @contact1.person.update_attributes({firstName: "C", lastName: "C"})
+      @contact1.person.update_attributes({first_name: "C", last_name: "C"})
       @contact2 = Factory(:user_with_auxs)
       Factory(:organizational_role, organization: @org, person: @contact2.person, role: Role.contact)
-      @contact2.person.update_attributes({firstName: "D", lastName: "D"})
+      @contact2.person.update_attributes({first_name: "D", last_name: "D"})
       @contact3 = Factory(:user_with_auxs)
       Factory(:organizational_role, organization: @org, person: @contact3.person, role: Role.contact)
-      @contact3.person.update_attributes({firstName: "E", lastName: "E"})
+      @contact3.person.update_attributes({first_name: "E", last_name: "E"})
       
       @involved1 = Factory(:user_with_auxs)
       Factory(:organizational_role, organization: @org, person: @involved1.person, role: Role.involved)
-      @involved1.person.update_attributes({firstName: "F", lastName: "F"})
+      @involved1.person.update_attributes({first_name: "F", last_name: "F"})
     end
     
     should "return admins when Admin link is clicked" do
       xhr :get, :index, { :role => Role::ADMIN_ID }
-      assert_equal assigns(:all_people).collect{|x| x.personID}, [@admin1.person.personID]
+      assert_equal assigns(:all_people).collect{|x| x.id}, [@admin1.person.id]
     end
     
     should "return leaders when Leader link is clicked" do
       xhr :get, :index, { :role => Role::LEADER_ID }
-      assert_equal assigns(:all_people).collect{|x| x.personID}, [@leader1.person.personID]
+      assert_equal assigns(:all_people).collect{|x| x.id}, [@leader1.person.id]
     end
     
     should "return contacts when Contact link is clicked" do
       xhr :get, :index, { :role => Role::CONTACT_ID }
-      assert_equal assigns(:all_people).collect{|x| x.personID}, [@contact1.person.personID, @contact2.person.personID, @contact3.person.personID].sort { |x, y| x <=> y }
+      assert_equal assigns(:all_people).collect{|x| x.id}, [@contact1.person.id, @contact2.person.id, @contact3.person.id].sort { |x, y| x <=> y }
     end
     
     should "return involveds when Involved link is clicked" do
       xhr :get, :index, { :role => Role::INVOLVED_ID }
-      assert_equal assigns(:all_people).collect{|x| x.personID}, [@involved1.person.personID]
+      assert_equal assigns(:all_people).collect{|x| x.id}, [@involved1.person.id]
     end
     
     should "return archiveds when Archived link is clicked" do
@@ -894,7 +894,7 @@ class PeopleControllerTest < ActionController::TestCase
       @contact3.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
     
       xhr :get, :index, { :archived => true }
-      assert_equal assigns(:all_people).collect{|x| x.personID}, [@contact1.person.personID, @contact2.person.personID, @contact3.person.personID].sort { |x, y| x <=> y }
+      assert_equal assigns(:all_people).collect{|x| x.id}, [@contact1.person.id, @contact2.person.id, @contact3.person.id].sort { |x, y| x <=> y }
     end
     
     should "only return unarchived people when 'Include Archived' checkbox isn't checked'" do
@@ -903,7 +903,7 @@ class PeopleControllerTest < ActionController::TestCase
       @leader1.person.organizational_roles.where(role_id: Role::LEADER_ID).first.archive
       
       xhr :get, :index
-      assert_equal([@admin1.person.personID, @contact3.person.personID, @involved1.person.personID].sort, assigns(:all_people).collect{|x| x.personID})
+      assert_equal([@admin1.person.id, @contact3.person.id, @involved1.person.id].sort, assigns(:all_people).collect{|x| x.id})
     end
     
     should "return all people (even unarchived ones) when 'Include Archived' checkbox is checked'" do
@@ -912,28 +912,28 @@ class PeopleControllerTest < ActionController::TestCase
       @leader1.person.organizational_roles.where(role_id: Role::LEADER_ID).first.archive
       
       xhr :get, :index, { :include_archived => true }
-      assert_equal assigns(:all_people).collect{|x| x.personID}, [@admin1.person.personID, @leader1.person.personID, @contact1.person.personID, @contact2.person.personID, @contact3.person.personID, @involved1.person.personID].sort { |x, y| x <=> y }
+      assert_equal assigns(:all_people).collect{|x| x.id}, [@admin1.person.id, @leader1.person.id, @contact1.person.id, @contact2.person.id, @contact3.person.id, @involved1.person.id].sort { |x, y| x <=> y }
     end
     
     should "return all admin even with archived roles when 'Include ARchived' checkbox is checked" do
       Factory(:organizational_role, organization: @org, person: @admin1.person, role: Role.contact)
       @admin1.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
       xhr :get, :index, { :include_archived => true, :role => Role.admin.id }
-      assert_equal assigns(:all_people).collect{|x| x.personID}, [@admin1.person.personID].sort { |x, y| x <=> y }
+      assert_equal assigns(:all_people).collect{|x| x.id}, [@admin1.person.id].sort { |x, y| x <=> y }
     end
     
-    should "return people sorted alphabetically by firstName" do
+    should "return people sorted alphabetically by first_name" do
       
-      xhr :get, :index, {"q"=>{"s"=>"firstName desc"}}
+      xhr :get, :index, {"q"=>{"s"=>"first_name desc"}}
       assert_equal assigns(:all_people).collect(&:name), [@involved1.person.name, @contact3.person.name, @contact2.person.name, @contact1.person.name, @leader1.person.name, @admin1.person.name]
       
-      xhr :get, :index, {"q"=>{"s"=>"firstName asc"}}
+      xhr :get, :index, {"q"=>{"s"=>"first_name asc"}}
       assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name]
       
-      xhr :get, :index, {"q"=>{"s"=>"lastName desc"}}
+      xhr :get, :index, {"q"=>{"s"=>"last_name desc"}}
       assert_equal assigns(:all_people).collect(&:name), [@involved1.person.name, @contact3.person.name, @contact2.person.name, @contact1.person.name, @leader1.person.name, @admin1.person.name]
       
-      xhr :get, :index, {"q"=>{"s"=>"lastName asc"}}
+      xhr :get, :index, {"q"=>{"s"=>"last_name asc"}}
       assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name]
     end
     
@@ -960,11 +960,11 @@ class PeopleControllerTest < ActionController::TestCase
         @b_role = Factory(:role, organization: @org, name: 'b_role')
         @c_role = Factory(:role, organization: @org, name: 'c_role')
         
-        @a_role_person = Factory(:person, firstName: 'H', lastName: 'H')
+        @a_role_person = Factory(:person, first_name: 'H', last_name: 'H')
         Factory(:organizational_role, organization: @org, person: @a_role_person, role: @a_role)
-        @b_role_person = Factory(:person, firstName: 'I', lastName: 'I')
+        @b_role_person = Factory(:person, first_name: 'I', last_name: 'I')
         Factory(:organizational_role, organization: @org, person: @b_role_person, role: @b_role)
-        @c_role_person = Factory(:person, firstName: 'J', lastName: 'J')
+        @c_role_person = Factory(:person, first_name: 'J', last_name: 'J')
         Factory(:organizational_role, organization: @org, person: @c_role_person, role: @c_role)
         
       
@@ -1020,22 +1020,22 @@ class PeopleControllerTest < ActionController::TestCase
     
     context "sorting people by their year in school" do
       setup do
-        @leader1.person.update_attributes({yearInSchool: "2009"})
-        @admin1.person.update_attributes({yearInSchool: "2010"})
-        @contact1.person.update_attributes({yearInSchool: "2008"})
-        @contact2.person.update_attributes({yearInSchool: "2007"})
-        @contact3.person.update_attributes({yearInSchool: "2006"})
-        @involved1.person.update_attributes({yearInSchool: "2005"})
+        @leader1.person.update_attributes({year_in_school: "2009"})
+        @admin1.person.update_attributes({year_in_school: "2010"})
+        @contact1.person.update_attributes({year_in_school: "2008"})
+        @contact2.person.update_attributes({year_in_school: "2007"})
+        @contact3.person.update_attributes({year_in_school: "2006"})
+        @involved1.person.update_attributes({year_in_school: "2005"})
       end
       
       should "sort desc" do
-        xhr :get, :index, {"q"=>{"s"=>"yearInSchool desc"}}
+        xhr :get, :index, {"q"=>{"s"=>"year_in_school desc"}}
         assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name]
         
       end
       
       should "sort asc" do
-        xhr :get, :index, {"q"=>{"s"=>"yearInSchool asc"}}
+        xhr :get, :index, {"q"=>{"s"=>"year_in_school asc"}}
         assert_equal assigns(:all_people).collect(&:name), [@involved1.person.name, @contact3.person.name, @contact2.person.name, @contact1.person.name, @leader1.person.name, @admin1.person.name]
       end
     end
@@ -1071,10 +1071,10 @@ class PeopleControllerTest < ActionController::TestCase
       sign_in @user
       @request.session[:current_organization_id] = @org.id
     
-      @person1 = Factory(:person, firstName: "Jon", lastName: "Snow")
+      @person1 = Factory(:person, first_name: "Jon", last_name: "Snow")
       Factory(:organizational_role, organization: @org, person: @person1, role: Role.contact)
       @email1 = Factory(:email_address, person: @person1, email: "person1@email.com", primary: true)
-      @person2 = Factory(:person, firstName: "Jon", lastName: "Snow")
+      @person2 = Factory(:person, first_name: "Jon", last_name: "Snow")
       @email2 = Factory(:email_address, person: @person2, email: "person2@email.com", primary: true)
       Factory(:organizational_role, organization: @org, person: @person2, role: Role.contact)
       @person3 = Factory(:person)
@@ -1084,8 +1084,8 @@ class PeopleControllerTest < ActionController::TestCase
   
     should "merge people when there are email duplicates (current email address edited)" do      
       assert_difference("Person.count", -1) do
-        put :update, {:person => { :email_addresses_attributes =>{"0" => { :email => "person2@email.com", :primary => "1", :id => @email1.id}}}, :id => @person1.personID}
-        assert_blank Person.where(personID: @person2.personID)
+        put :update, {:person => { :email_addresses_attributes =>{"0" => { :email => "person2@email.com", :primary => "1", :id => @email1.id}}}, :id => @person1.id}
+        assert_blank Person.where(id: @person2.id)
         assert @person1.email_addresses.include? @email2
       end
     end
@@ -1093,8 +1093,8 @@ class PeopleControllerTest < ActionController::TestCase
     should "merge people when there are email duplicates (added new email address)" do
       
       assert_difference("Person.count", -1) do
-        put :update, {:person => {:email_address => {:email => "person2@email.com", :primary => 1 }}, :id => @person1.personID}
-        assert_blank Person.where(personID: @person2.personID)
+        put :update, {:person => {:email_address => {:email => "person2@email.com", :primary => 1 }}, :id => @person1.id}
+        assert_blank Person.where(id: @person2.id)
         assert @person1.email_addresses.include? @email2
       end
     end
@@ -1103,26 +1103,26 @@ class PeopleControllerTest < ActionController::TestCase
   context "Updating a person" do
     setup do
       @user, @org = admin_user_login_with_org
-      @contact1 = Factory(:person, firstName: "Brandon", lastName: "Stark")
+      @contact1 = Factory(:person, first_name: "Brandon", last_name: "Stark")
       @email_address = Factory(:email_address, person: @contact1, email: "brandonstark@email.com")
-      @contact2 = Factory(:person, firstName: "Rickon", lastName: "Stark")
+      @contact2 = Factory(:person, first_name: "Rickon", last_name: "Stark")
       @user.person.organizations.first.add_contact(@contact1)
       @user.person.organizations.first.add_contact(@contact2)
     end
   
     should "update a person" do
-      put :update, id: @user.person.id, person: {firstName: 'David', lastName: 'Ang',  :current_address_attributes => { :address1 => "#41 Sgt. Esguerra Ave", :country => "Philippines"} }
+      put :update, id: @user.person.id, person: {first_name: 'David', last_name: 'Ang',  :current_address_attributes => { :address1 => "#41 Sgt. Esguerra Ave", :country => "Philippines"} }
       assert_redirected_to person_path(assigns(:person))
     end
     
     should "not be able to update a person" do
       @email_address2 = Factory(:email_address, person: @contact2, email: "rickonstark@email.com")
-      put :update, id: @contact2.id, person: {firstName: 'Rickon', lastName: 'Stark', :email_addresses_attributes => {"0" => {:email => "brandonstark@email.com", :primary => "1", :id => @email_address2.id}} }
+      put :update, id: @contact2.id, person: {first_name: 'Rickon', last_name: 'Stark', :email_addresses_attributes => {"0" => {:email => "brandonstark@email.com", :primary => "1", :id => @email_address2.id}} }
       #assert_redirected_to person_path(assigns(:person))
     end
 
     should "not be able to update a person when email is already taken" do
-      put :update, id: @contact2.id, person: {firstName: 'Rickon', lastName: 'Stark', :email_address => {:email => "brandonstark@email.com", "primary"=>"1"} }
+      put :update, id: @contact2.id, person: {first_name: 'Rickon', last_name: 'Stark', :email_address => {:email => "brandonstark@email.com", "primary"=>"1"} }
       assert_empty @contact2.email_addresses
     end
   end

@@ -10,7 +10,7 @@ class UserTest < ActiveSupport::TestCase
   
   test "alias method find by id" do
     u = Factory(:user)
-    assert_equal User.find_by_id(u.id), User.find_by_userID(u.id)
+    assert_equal User.find_by_id(u.id), User.find_by_id(u.id)
   end
   
   test "has role" do

@@ -39,9 +39,9 @@ end
   
 task "phone_numbers" => :environment do
   # Copy phone numbers from ministry_newaddress to phone_numbers table
-  sql = "select homePhone, cellPhone, workPhone, fk_personID from ministry_newaddress a where a.addressType = 'current'"
+  sql = "select homePhone, cellPhone, workPhone, person_id from ministry_newaddress a where a.address_type = 'current'"
   ActiveRecord::Base.connection.select_all(sql).each do |row|
-    person = Person.find_by_personID(row['fk_personID'])
+    person = Person.find_by_id(row['person_id'])
     if person
       {'homePhone' => 'home', 'cellPhone' => 'mobile', 'workPhone' => 'work'}.each do |column, location|
         num = row[column]
