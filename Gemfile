@@ -37,6 +37,7 @@ gem 'acts_as_list'
 gem 'dynamic_form'
 gem 'coffee-script'
 gem 'trumant-rack-oauth2-server', git: 'git://github.com/twinge/rack-oauth2-server.git', branch: 'active_record'
+gem 'rails_autolink'
 
 gem 'enforce_schema_rules'
 # gem 'sentient_user'
