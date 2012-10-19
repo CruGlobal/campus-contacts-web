@@ -244,7 +244,7 @@ class Person < ActiveRecord::Base
       end
       # convert org ids to integers (there has to be a better way, but i couldn't think of it)
       @org_ids = {}
-      org_ids_cache.collect {|org_id, values| @org_ids[org_id.to_i] = values}
+      org_ids_cache.collect {|org_id, values| @org_ids[org_id.to_i] = values} if org_ids_cache.present?
     end
     @org_ids
   end
@@ -345,16 +345,6 @@ class Person < ActiveRecord::Base
       if phone_numbers.present?
         @phone_number = phone_numbers.first.try(:number)
         phone_numbers.first.update_attribute(:primary, true)
-      elsif current_address
-        @phone_number = current_address.cellPhone.strip if current_address.cellPhone.present?
-        @phone_number ||= current_address.homePhone.strip if current_address.homePhone.present?
-        @phone_number ||= current_address.workPhone.strip if current_address.workPhone.present?
-        begin
-          new_record? ? phone_numbers.new(number: @phone_number, primary: true) : phone_numbers.create(number: @phone_number, primary: true) if @phone_number.present?
-        rescue ActiveRecord::RecordNotUnique
-          reload
-          return self.phone_number
-        end
       end
     end
     @phone_number.to_s
@@ -484,7 +474,6 @@ class Person < ActiveRecord::Base
         @email = email_addresses.first.try(:email)
         email_addresses.first.update_attribute(:primary, true) unless new_record?
       else
-        @email ||= current_address.try(:email)
         @email ||= user.try(:username) || user.try(:email)
         begin
           new_record? ? email_addresses.new(:email => @email, :primary => true) : email_addresses.create(:email => @email, :primary => true) if @email
