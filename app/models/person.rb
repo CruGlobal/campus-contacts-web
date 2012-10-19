@@ -244,7 +244,7 @@ class Person < ActiveRecord::Base
       end
       # convert org ids to integers (there has to be a better way, but i couldn't think of it)
       @org_ids = {}
-      org_ids_cache.collect {|org_id, values| @org_ids[org_id.to_i] = values}
+      org_ids_cache.collect {|org_id, values| @org_ids[org_id.to_i] = values} if org_ids_cache.present?
     end
     @org_ids
   end
