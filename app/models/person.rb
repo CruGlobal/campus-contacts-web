@@ -484,7 +484,6 @@ class Person < ActiveRecord::Base
         @email = email_addresses.first.try(:email)
         email_addresses.first.update_attribute(:primary, true) unless new_record?
       else
-        @email ||= current_address.try(:email)
         @email ||= user.try(:username) || user.try(:email)
         begin
           new_record? ? email_addresses.new(:email => @email, :primary => true) : email_addresses.create(:email => @email, :primary => true) if @email
