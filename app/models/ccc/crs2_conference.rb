@@ -16,4 +16,20 @@ class Ccc::Crs2Conference < ActiveRecord::Base
   def to_s
     name
   end
+
+  def self.get_id_from_url(url)
+    regex = /conferenceId=(\d*)/
+    match = regex.match(url)
+    if match
+      match[1]
+    end
+  end
+
+  def self.find_from_url_and_password(url, password)
+    conference_id = Ccc::Crs2Conference.get_id_from_url(url)
+    if conference_id
+      Ccc::Crs2Conference.where(id: conference_id, admin_password: password).first
+    end
+  end
 end
+
