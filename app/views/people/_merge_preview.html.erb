@@ -12,8 +12,7 @@
   <hr>
   User ID: <%= user.id %><br/>
   Username: <%= user.username %><br/>
-  Guid: <%= user.globallyUniqueID %><br/>
-  User Created: <%= l(user.createdOn || user.created_at) if user.createdOn || user.created_at %><br/>
+  User Created: <%= l(user.created_at) if user.created_at %><br/>
   User Updated: <%= l(user.updated_at) if user.updated_at %><br/>
   <% end %>
 <% else %>
