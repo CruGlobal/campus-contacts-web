@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121020162838) do
+ActiveRecord::Schema.define(:version => 20121020193612) do
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -262,9 +262,11 @@ ActiveRecord::Schema.define(:version => 20121020162838) do
     t.string   "trigger_words"
     t.string   "notify_via"
     t.boolean  "hidden",                                  :default => false, :null => false
+    t.integer  "crs_question_id"
   end
 
   add_index "elements", ["conditional_id"], :name => "index_ma_elements_on_conditional_id"
+  add_index "elements", ["crs_question_id"], :name => "index_elements_on_crs_question_id"
   add_index "elements", ["position"], :name => "index_ma_elements_on_question_sheet_id_and_position_and_page_id"
   add_index "elements", ["question_grid_id"], :name => "index_ma_elements_on_question_grid_id"
   add_index "elements", ["slug"], :name => "index_ma_elements_on_slug"
@@ -738,13 +740,13 @@ ActiveRecord::Schema.define(:version => 20121020162838) do
   add_index "survey_elements", ["survey_id", "element_id"], :name => "survey_id_element_id"
 
   create_table "surveys", :force => true do |t|
-    t.string   "title",                 :limit => 100, :default => "",       :null => false
+    t.string   "title",                  :limit => 100, :default => "",       :null => false
     t.integer  "organization_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "post_survey_message"
-    t.string   "terminology",                          :default => "Survey"
-    t.integer  "login_option",                         :default => 0
+    t.string   "terminology",                           :default => "Survey"
+    t.integer  "login_option",                          :default => 0
     t.boolean  "is_frozen"
     t.text     "login_paragraph"
     t.string   "logo_file_name"
@@ -758,8 +760,10 @@ ActiveRecord::Schema.define(:version => 20121020162838) do
     t.text     "css"
     t.string   "background_color"
     t.string   "text_color"
+    t.integer  "crs_registrant_type_id"
   end
 
+  add_index "surveys", ["crs_registrant_type_id"], :name => "index_surveys_on_crs_registrant_type_id"
   add_index "surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
 
   create_table "users", :force => true do |t|

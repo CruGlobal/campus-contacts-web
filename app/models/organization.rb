@@ -31,6 +31,7 @@ class Organization < ActiveRecord::Base
   has_many :no_activity_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status = ?", Role::CONTACT_ID, 0, 'uncontacted']
   has_many :rejoicables
   has_many :groups
+  belongs_to :conference, class_name: 'Ccc::Crs2Conference', foreign_key: 'conference_id'
 
   Rejoicable::OPTIONS.each do |option|
     has_many :"#{option}_contacts", :through => :rejoicables, source: :person, conditions: {'rejoicables.what' => option}, uniq: true
@@ -192,6 +193,12 @@ class Organization < ActiveRecord::Base
     "#{name} (#{keywords.count})"
   end
 
+  def add_role(person, role_id)
+    person_id = person.is_a?(Person) ? person.id : person
+    OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, role_id)
+  end
+
+
   def add_leader(person, current_person)
     person_id = person.is_a?(Person) ? person.id : person
     begin
@@ -208,9 +215,8 @@ class Organization < ActiveRecord::Base
   end
 
   def add_contact(person)
-    person_id = person.is_a?(Person) ? person.id : person
     begin
-      OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::CONTACT_ID)
+      add_role(person, Role::CONTACT_ID)
     rescue => error
       @save_retry_count =  (@save_retry_count || 5)
       retry if( (@save_retry_count -= 1) > 0 )
@@ -219,13 +225,11 @@ class Organization < ActiveRecord::Base
   end
 
   def add_admin(person)
-    person_id = person.is_a?(Person) ? person.id : person
-    OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::ADMIN_ID)
+    add_role(person, Role::ADMIN_ID)
   end
 
   def add_involved(person)
-    person_id = person.is_a?(Person) ? person.id : person
-    OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::INVOLVED_ID)
+    add_role(person, Role::INVOLVED_ID)
   end
 
   def remove_contact(person)
@@ -290,14 +294,16 @@ class Organization < ActiveRecord::Base
     LeaderMailer.added(person, added_by, self, token).deliver
   end
 
-  def queue_import_from_conference
-    async(:import_from_conference) if conference_id
+  def queue_import_from_conference(user)
+    async(:import_from_conference, user.id)
   end
 
   private
 
-  def import_from_conference
-    
+  def import_from_conference(user_id)
+    user = User.find(user_id)
+
+    CrsImport.new(self, user).import
   end
 
   def notify_user
