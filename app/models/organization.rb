@@ -9,9 +9,8 @@ class Organization < ActiveRecord::Base
   has_many :roles, inverse_of: :organization
   has_many :group_labels
   has_many :activities, dependent: :destroy
-  has_many :target_areas, through: :activities
-  has_many :organization_memberships, dependent: :destroy
-  has_many :people, through: :organizational_roles
+  has_many :target_areas, through: :activities, class_name: 'TargetArea'
+  has_many :people, through: :organizational_roles, conditions: ["organizational_roles.deleted = 0"], uniq: true
   has_many :contact_assignments
   has_many :keywords, class_name: 'SmsKeyword'
   has_many :surveys, dependent: :destroy
@@ -20,9 +19,10 @@ class Organization < ActiveRecord::Base
   has_many :all_questions, through: :surveys, source: :all_questions
   has_many :followup_comments
   has_many :organizational_roles, inverse_of: :organization
-  has_many :leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id IN (?) AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role.leader_ids, 0], order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
-  has_many :only_leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role::LEADER_ID, 0], order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
-  has_many :admins, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role::ADMIN_ID, 0], order: "ministry_person.lastName, ministry_person.preferredName, ministry_person.firstName", uniq: true
+  has_many :non_deleted_people, through: :organizational_roles, source: :person, conditions: ["organizational_roles.deleted = ?", 0], uniq: true
+  has_many :leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id IN (?) AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role.leader_ids, 0], order: "people.last_name, people.first_name", uniq: true
+  has_many :only_leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role::LEADER_ID, 0], order: "people.last_name, people.first_name", uniq: true
+  has_many :admins, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role::ADMIN_ID, 0], order: "people.last_name, people.first_name", uniq: true
   has_many :all_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role::CONTACT_ID, 0]
   has_many :contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status <> 'do_not_contact' AND organizational_roles.deleted = 0", Role::CONTACT_ID]
   has_many :contacts_with_archived, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.followup_status <> 'do_not_contact' AND organizational_roles.deleted = 0", Role::CONTACT_ID]
@@ -114,6 +114,10 @@ class Organization < ActiveRecord::Base
     def self_and_children
       [self] + children
     end
+    
+    def self_and_descendant_ids
+      [id] + descendant_ids
+    end
 
     # def children_surveys
     #   Survey.where(organization_id: child_ids)
@@ -189,13 +193,8 @@ class Organization < ActiveRecord::Base
       "#{name} (#{keywords.count})"
     end
 
-    def add_member(person_id)
-      x = OrganizationMembership.find_or_create_by_person_id_and_organization_id(person_id, id) 
-    end
-
     def add_leader(person, current_person)
       person_id = person.is_a?(Person) ? person.id : person
-      add_member(person_id)
       begin
         org_leader = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::LEADER_ID, :added_by_id => current_person.id)
         unless org_leader.archive_date.nil?
@@ -211,7 +210,6 @@ class Organization < ActiveRecord::Base
 
     def add_contact(person)
       person_id = person.is_a?(Person) ? person.id : person
-      add_member(person_id)
       begin
         OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::CONTACT_ID)
       rescue => error
@@ -223,29 +221,21 @@ class Organization < ActiveRecord::Base
 
     def add_admin(person)
       person_id = person.is_a?(Person) ? person.id : person
-      add_member(person_id)
       OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::ADMIN_ID)
     end
 
     def add_involved(person)
       person_id = person.is_a?(Person) ? person.id : person
-      add_member(person_id)
       OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::INVOLVED_ID)
     end
 
     def remove_contact(person)
       person_id = person.is_a?(Person) ? person.id : person
-      unless Person.find(person_id).organizational_roles.where("organization_id = ? AND role_id <> ?", id, Role::CONTACT_ID).first
-        OrganizationMembership.where(person_id: person_id, organization_id: id).first.try(:destroy)
-      end
       OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: Role::CONTACT_ID).first.try(:destroy)
     end
 
     def remove_leader(person)
       person_id = person.is_a?(Person) ? person.id : person
-      unless Person.find(person_id).organizational_roles.where("organization_id = ? AND role_id <> ?", id, Role::LEADER_ID).first
-        OrganizationMembership.where(person_id: person_id, organization_id: id).first.try(:destroy)
-      end
       OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: Role::LEADER_ID).first.try(:destroy)
       person.remove_assigned_contacts(self)
     end
@@ -272,7 +262,7 @@ class Organization < ActiveRecord::Base
       
       # Save transfer log
       val_copy = keep_contact == "false" ? false : true
-      val_transferred_by = current_admin.personID if current_admin.present?
+      val_transferred_by = current_admin.id if current_admin.present?
       PersonTransfer.create(person_id: person.id, old_organization_id: id, new_organization_id: to_org.id, transferred_by_id: val_transferred_by, copy: val_copy)
       
       FollowupComment.where(organization_id: id, contact_id: person.id).update_all(organization_id: to_org.id)

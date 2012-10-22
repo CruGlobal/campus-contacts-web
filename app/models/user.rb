@@ -2,16 +2,12 @@ require 'errors/no_email_error'
 require 'errors/failed_facebook_create_error'
 require 'errors/facebook_duplicate_email_error'
 class User < ActiveRecord::Base
-  begin
-    include Ccc::SimplesecuritymanagerUser
-  rescue LoadError; end
   WIZARD_STEPS = %w[welcome verify keyword survey leaders]
-  self.table_name = 'simplesecuritymanager_user'
-  self.primary_key = 'userID'
+  self.primary_key = 'id'
   
   store :settings, accessors: [:primary_organization_id]
   
-  has_one :person, foreign_key: 'fk_ssmUserId'
+  has_one :person, foreign_key: 'user_id'
   has_many :authentications
   has_many :sms_keywords
   has_many :access_tokens, :class_name => "Rack::OAuth2::Server::AccessToken", :foreign_key => "identity"
@@ -25,10 +21,6 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :remember_me, :password, :username
-  # alias_method :find_by_userID, :find_by_id
-  def self.find_by_id(*args)
-    find_by_userID(args)
-  end
   
   def self.find_for_facebook_oauth(access_token, signed_in_resource=nil, attempts = 0, force = false)
     data = access_token['extra']['raw_info']
@@ -51,8 +43,7 @@ class User < ActiveRecord::Base
         # with the same first and last name
         unless user
           if existing = Person.find_from_facebook(data)
-            if existing.lastName.strip == data['last_name'].strip && 
-               (existing.firstName.to_s.strip == data['first_name'].strip || existing.preferredName.to_s.strip == data['first_name'].strip)
+            if existing.last_name.strip == data['last_name'].strip && existing.first_name.to_s.strip == data['first_name'].strip
               user = existing.user
             else
               # If first and last name don't match, there's probably some bad data
@@ -140,8 +131,6 @@ class User < ActiveRecord::Base
       
       # Sms Keywords
       other.sms_keywords.collect {|oa| oa.update_attribute(:user_id, id)}
-      
-      super
       
       MergeAudit.create!(mergeable: self, merge_looser: other)
       other.reload

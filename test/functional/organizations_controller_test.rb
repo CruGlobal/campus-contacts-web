@@ -33,7 +33,7 @@ class OrganizationsControllerTest < ActionController::TestCase
         OrganizationsController.any_instance.expects(:expire_fragment).with("org_nav/#{@user.person.id}")
         post :destroy, id: @org_grandchild.id
       end
-
+    
       should "clear cache of anyone who has a role in a parent of this org" do
         OrganizationsController.any_instance.expects(:expire_fragment).with("org_nav/#{@user.person.id}")
         post :destroy, id: @org_parent.id

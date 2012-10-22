@@ -111,7 +111,7 @@ class OrganizationsController < ApplicationController
       end
       
       flash[:notice] = t('organizations.cleanup.removal_notice', no: leaders_count)
-      person_ids = leaders.collect(&:personID)
+      person_ids = leaders.collect(&:id)
     end
     
     if leaders.blank?
@@ -135,7 +135,7 @@ class OrganizationsController < ApplicationController
   
   protected
     def get_organization
-      @organization = Organization.subtree_of(current_organization.root_id).find(params[:id])
+      @organization = Organization.subtree_of(current_organization.root_id).first
       authorize! :manage, @organization
     end
 end

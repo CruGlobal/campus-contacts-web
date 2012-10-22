@@ -69,13 +69,13 @@ $ ->
     $('#add_person_group_div').show()
     $('#new_member_form').show()
     name = $('#member_search_name').val().split(' ')
-    $('#person_firstName').val(name[0])
-    $('#person_lastName').val(name[1])
+    $('#person_first_name').val(name[0])
+    $('#person_last_name').val(name[1])
     false
 
   $('#add_person_group_div .save').live 'click', ->
     form = $(this).closest('form')
-    if $('#person_firstName', form).val() == '' #or ($('#person_email_address_email', form).val() == '' &&$('#person_phone_number_number', form).val() == '')
+    if $('#person_first_name', form).val() == '' #or ($('#person_email_address_email', form).val() == '' &&$('#person_phone_number_number', form).val() == '')
       alert('At a minimum you need to provide a first name.')
       return false
 
@@ -86,8 +86,8 @@ $ ->
     url = form.prop('action')
     $.post url, params, (data) ->
       group_id = window.location.pathname.split("/").reverse()[0]
-      personId = data.person.personID
-      $('<a href="/groups/' + group_id  + '/group_memberships?person_id=' + personId + '&role=member&add_another=' + add_another + '"data-method="post" data-remote="true"></a>')
+      id = data.person.id
+      $('<a href="/groups/' + group_id  + '/group_memberships?person_id=' + id + '&role=member&add_another=' + add_another + '"data-method="post" data-remote="true"></a>')
       .appendTo('body')
       .click()
       .remove()

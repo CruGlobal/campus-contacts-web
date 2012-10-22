@@ -84,7 +84,7 @@ module ApiHelper
     person_ids.each_with_index do |x,i|
       person_ids[i] = User.find(oauth.identity).person.id.to_s if x == "me"
     end
-    people = Person.where(:personID => person_ids)
+    people = Person.where(:id => person_ids)
     raise ApiErrors::NoDataReturned if people.empty?
     people
   end
@@ -149,7 +149,7 @@ module ApiHelper
     allowed_sorting_fields = ["time","status"]
     allowed_sorting_directions = ["asc", "desc"]
     allowed_filter_fields = ["gender", "status"]
-    allowed_status = OrganizationMembership::FOLLOWUP_STATUSES + %w[finished not_finished]
+    allowed_status = OrganizationalRole::FOLLOWUP_STATUSES + %w[finished not_finished]
     @sorting_fields = []
     
     people = limit_and_offset_object(people)

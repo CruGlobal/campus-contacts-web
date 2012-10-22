@@ -1,4 +1,6 @@
 class Ccc::SpUser < ActiveRecord::Base
+  establish_connection :uscm
+
   self.inheritance_column = 'fake'
   belongs_to :ministry_person, class_name: 'Person', foreign_key: :person_id
   belongs_to :simplesecuritymanager_user, class_name: 'Ccc::SimplesecuritymanagerUser', foreign_key: :ssm_id

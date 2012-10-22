@@ -17,12 +17,12 @@ def setup_api_env
   @user2 = Factory.create(:user_no_org_with_facebook)
   Factory.create(:authentication, user: @user2, uid: "1234")
   @temp_org.add_contact(@user2.person)
-  @user2.person.update_attributes(firstName: "Test", lastName: "Useroo")
+  @user2.person.update_attributes(first_name: "Test", last_name: "Useroo")
   
   @user3 = Factory.create(:user_no_org_with_facebook)
   Factory.create(:authentication, user: @user3, uid: "123456")
   @temp_org.add_admin(@user3.person)
-  @user3.person.update_attributes(firstName: "Another Test", lastName: "Usereeeee")  
+  @user3.person.update_attributes(first_name: "Another Test", last_name: "Usereeeee")  
     
   #create contact assignments
   @contact_assignment1 = Factory.create(:contact_assignment, assigned_to_id: @user.person.id, person_id: @user2.person.id, organization_id: @temp_org.id)
@@ -35,8 +35,8 @@ def setup_api_env
   #setup question sheets, questions, and an answer sheet for user1 and user2
   @survey = Factory(:survey, organization: @temp_org)
   @keyword = Factory(:approved_keyword, organization: @temp_org, survey: @survey)
-  @firstNameQ = Factory(:element)
-  @survey.elements << @firstNameQ  
+  @first_nameQ = Factory(:element)
+  @survey.elements << @first_nameQ  
   @questions = @survey.questions
   @answer_sheet = Factory(:answer_sheet, survey: @survey, person: @user.person)
   @answer_sheet2 = Factory(:answer_sheet, survey: @survey, person: @user2.person)
@@ -121,8 +121,8 @@ end
 
   def person_full_test(json_person,user,user2)
     person_basic_test(json_person,user,user2)
-    assert_equal(json_person['first_name'], user.person.firstName)
-    assert_equal(json_person['last_name'], user.person.lastName)
+    assert_equal(json_person['first_name'], user.person.first_name)
+    assert_equal(json_person['last_name'], user.person.last_name)
     assert_equal(json_person['locale'], user.locale.nil? ? "" : user.locale)
     assert_equal(json_person['birthday'], user.person.birth_date.to_s)
     #assert_equal(json_person['education'][0]['school']['name'], "Test High School")

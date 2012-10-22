@@ -39,7 +39,7 @@ class LeadersController < ApplicationController
 
   def new
     names = params[:name].to_s.split(' ')
-    @person = Person.new(:firstName => names[0], :lastName => names[1..-1].join(' '))
+    @person = Person.new(:first_name => names[0], :last_name => names[1..-1].join(' '))
     @email = @person.email_addresses.new
     @phone = @person.phone_numbers.new
   end
@@ -54,11 +54,6 @@ class LeadersController < ApplicationController
       # make any contacts assigned to this person go back to unassinged
       @contacts = @person.contact_assignments.where(organization_id: current_organization.id).all
       @contacts.collect(&:destroy)
-      # If this person doesn't have any other roles in the org, destroy the membership too
-      #if OrganizationalRole.find_all_by_person_id_and_organization_id(@person.id, current_organization.id).empty?
-      #  OrganizationMembership.find_by_person_id_and_organization_id(@person.id, current_organization.id).try(:destroy)
-      #end
-      #no one is deleted in the org anymore rather they are archived
     end
   end
 
@@ -101,7 +96,7 @@ class LeadersController < ApplicationController
       @person.save
       @person.update_attributes(params[:person])
     end
-    @required_fields = {'First Name' => @person.firstName, 'Last Name' => @person.lastName, 'Gender' => @person.gender, 'Email' => @email.try(:email)}
+    @required_fields = {'First Name' => @person.first_name, 'Last Name' => @person.last_name, 'Gender' => @person.gender, 'Email' => @email.try(:email)}
     @person.valid?; @email.try(:valid?); @phone.try(:valid?)
     unless @required_fields.values.all?(&:present?)
       flash.now[:error] = "Please fill in all fields<br />"
@@ -117,7 +112,7 @@ class LeadersController < ApplicationController
   def add_person
 
     @person, @email, @phone = create_person(params[:person])
-    @required_fields = {'First Name' => @person.firstName, 'Last Name' => @person.lastName, 'Gender' => @person.gender, 'Email' => @email.try(:email)}
+    @required_fields = {'First Name' => @person.first_name, 'Last Name' => @person.last_name, 'Gender' => @person.gender, 'Email' => @email.try(:email)}
     @person.valid?; @email.try(:valid?); @phone.try(:valid?)
 
     error_message = ''

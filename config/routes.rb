@@ -48,6 +48,10 @@ Mh::Application.routes.draw do
     collection do
       post :move_to
     end
+    member do
+      get :set_current
+      get :set_primary
+    end
   end
 
   # resources :rejoicables
@@ -57,13 +61,6 @@ Mh::Application.routes.draw do
   resources :followup_comments, :only => [:index, :create, :destroy]
 
   resources :contact_assignments, :only => [:create]
-
-  resources :organization_memberships, :only => [:show, :create, :edit, :update, :destroy, :index] do
-    member do
-      get :set_current
-      get :set_primary
-    end
-  end
 
   resources :ministries
 
@@ -96,11 +93,6 @@ Mh::Application.routes.draw do
     member do
       get :merge_preview
       get :involvement
-    end
-    resources :organization_memberships, :only => [:show, :create, :edit, :update, :destroy, :index] do
-      # member do
-      #   get :validate
-      # end
     end
   end
 

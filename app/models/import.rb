@@ -3,7 +3,6 @@ require 'open-uri'
 require 'contact_methods'
 class Import < ActiveRecord::Base
   include ContactMethods
-  self.table_name = 'mh_imports'
 
   @queue = :general
   serialize :headers
@@ -25,14 +24,14 @@ class Import < ActiveRecord::Base
 
   def get_new_people # generates array of Person hashes
     new_people = Array.new
-    first_name_question = Element.where( :attribute_name => "firstName").first.id.to_s
+    first_name_question = Element.where( :attribute_name => "first_name").first.id.to_s
 
     csv = CSV.new(open(upload.expiring_url), :headers => :first_row)
 
     csv.each do |row|
       person_hash = Hash.new
       person_hash[:person] = Hash.new
-      person_hash[:person][:firstName] = row[header_mappings.invert[first_name_question].to_i]
+      person_hash[:person][:first_name] = row[header_mappings.invert[first_name_question].to_i]
 
       answers = Hash.new
 
@@ -51,10 +50,10 @@ class Import < ActiveRecord::Base
   def check_for_errors # validating csv
     errors = []
 
-    #since first name is required for every contact. Look for id of element where attribute_name = 'firstName' in the header_mappings.
-    first_name_question = Element.where(:attribute_name => "firstName").first.id.to_s
+    #since first name is required for every contact. Look for id of element where attribute_name = 'first_name' in the header_mappings.
+    first_name_question = Element.where(:attribute_name => "first_name").first.id.to_s
     unless header_mappings.values.include?(first_name_question) 
-      errors << I18n.t('contacts.import_contacts.present_firstname')
+      errors << I18n.t('contacts.import_contacts.present_first_name')
     end
 
     a = header_mappings.values

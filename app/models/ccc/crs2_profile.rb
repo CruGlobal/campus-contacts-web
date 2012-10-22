@@ -1,4 +1,6 @@
 class Ccc::Crs2Profile < ActiveRecord::Base
+  establish_connection :uscm
+
   self.table_name = 'crs2_profile'
 	set_inheritance_column 'fake'
   belongs_to :crs2_person, class_name: 'Ccc::Crs2Person', foreign_key: :crs_person_id

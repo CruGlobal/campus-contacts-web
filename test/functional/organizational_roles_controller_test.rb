@@ -110,7 +110,7 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
       xhr :put, :update, {:status => "do_not_contact", :id => @role.id}
       assert_equal a+1, OrganizationalRole.where(:followup_status => 'do_not_contact').count
       assert_equal [@contact], @organization.dnc_contacts
-      assert_not_empty @organization.dnc_contacts.where(personID: @contact.personID)
+      assert_not_empty @organization.dnc_contacts.where(id: @contact.id)
     end
   end
 end

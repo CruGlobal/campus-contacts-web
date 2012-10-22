@@ -7,7 +7,7 @@
 #   Mayor.create(name: 'Daley', city: cities.first)
 
 def create_person
-  p = Person.create!(firstName: Faker::Name.first_name, lastName: Faker::Name.last_name)
+  p = Person.create!(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name)
   p.phone_numbers.create!(number: Faker::PhoneNumber.phone_number, location: 'mobile')
   email = Faker::Internet.email
   p.email_addresses.create!(email: email)

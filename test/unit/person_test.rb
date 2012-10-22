@@ -2,8 +2,8 @@ require 'test_helper'
 
 class PersonTest < ActiveSupport::TestCase
   should belong_to(:user)
-  should validate_presence_of(:firstName)
-  # should validate_presence_of(:lastName)
+  should validate_presence_of(:first_name)
+  # should validate_presence_of(:last_name)
   should have_one(:primary_phone_number)
   should have_one(:primary_email_address)
   should have_many(:phone_numbers)
@@ -13,7 +13,6 @@ class PersonTest < ActiveSupport::TestCase
   should have_many(:education_histories)
   should have_many(:email_addresses)
   should have_many(:organizations)
-  should have_many(:organization_memberships)
   should have_many(:answer_sheets)
   should have_many(:contact_assignments)
   should have_many(:assigned_tos)
@@ -22,7 +21,7 @@ class PersonTest < ActiveSupport::TestCase
   context "create a person from params" do
     should "not fail if there's no phone number when adding a person who already exists" do
       Factory(:user_with_auxs, email: 'test@uscm.org')
-      person, email, phone = Person.new_from_params({"email_address" => {"email" => "test@uscm.org"},"firstName" => "Test","lastName" => "Test","phone_number" => {"number" => ""}})
+      person, email, phone = Person.new_from_params({"email_address" => {"email" => "test@uscm.org"},"first_name" => "Test","last_name" => "Test","phone_number" => {"number" => ""}})
       assert_nil(phone)
     end
   end
@@ -43,70 +42,70 @@ class PersonTest < ActiveSupport::TestCase
     should "return people based on highest default roles" do
       @org = Factory(:organization)
       
-      @person1 = Factory(:person, firstName: 'Leader')
-      @person2 = Factory(:person, firstName: 'Contact')
-      @person3 = Factory(:person, firstName: 'Admin')
+      @person1 = Factory(:person, first_name: 'Leader')
+      @person2 = Factory(:person, first_name: 'Contact')
+      @person3 = Factory(:person, first_name: 'Admin')
       @org_role1 = Factory(:organizational_role, person: @person1, organization: @org1, role: Role.leader)
       @org_role2 = Factory(:organizational_role, person: @person2, organization: @org1, role: Role.contact)
       @org_role3 = Factory(:organizational_role, person: @person3, organization: @org1, role: Role.admin)
       
       results = Person.order_by_highest_default_role('role')
-      assert_equal(results[0].firstName, 'Contact', "first person of the results should be the contact")
-      assert_equal(results[1].firstName, 'Leader', "second person of the results should be the leader")
-      assert_equal(results[2].firstName, 'Admin', "third person of the results should be the admin")
+      assert_equal(results[0].first_name, 'Contact', "first person of the results should be the contact")
+      assert_equal(results[1].first_name, 'Leader', "second person of the results should be the leader")
+      assert_equal(results[2].first_name, 'Admin', "third person of the results should be the admin")
       
       results = Person.order_by_highest_default_role('role asc')
-      assert_equal(results[0].firstName, 'Admin', "first person of the results should be the admin when order is ASC")
-      assert_equal(results[1].firstName, 'Leader', "second person of the results should be the leader when order is ASC")
-      assert_equal(results[2].firstName, 'Contact', "third person of the results should be the contact when order is ASC")
+      assert_equal(results[0].first_name, 'Admin', "first person of the results should be the admin when order is ASC")
+      assert_equal(results[1].first_name, 'Leader', "second person of the results should be the leader when order is ASC")
+      assert_equal(results[2].first_name, 'Contact', "third person of the results should be the contact when order is ASC")
     end
     should "return people based on alphabetical roles" do
       @org = Factory(:organization)
       
-      @person1 = Factory(:person, firstName: 'Leader')
-      @person2 = Factory(:person, firstName: 'Contact')
-      @person3 = Factory(:person, firstName: 'Admin')
+      @person1 = Factory(:person, first_name: 'Leader')
+      @person2 = Factory(:person, first_name: 'Contact')
+      @person3 = Factory(:person, first_name: 'Admin')
       @org_role1 = Factory(:organizational_role, person: @person1, organization: @org1, role: Role.leader)
       @org_role2 = Factory(:organizational_role, person: @person2, organization: @org1, role: Role.contact)
       @org_role5 = Factory(:organizational_role, person: @person3, organization: @org1, role: Role.admin)
       
-      @person4 = Factory(:person, firstName: 'Reader')
-      @person5 = Factory(:person, firstName: 'Visitor')
+      @person4 = Factory(:person, first_name: 'Reader')
+      @person5 = Factory(:person, first_name: 'Visitor')
       @role4 = Factory(:role, organization: @org, name: 'Reader')
       @role5 = Factory(:role, organization: @org, name: 'Visitor')
       @org_role4 = Factory(:organizational_role, person: @person4, organization: @org1, role: @role4)
       @org_role5 = Factory(:organizational_role, person: @person5, organization: @org1, role: @role5)
       
       results = Person.order_alphabetically_by_non_default_role('role')
-      assert_equal(results[0].firstName, 'Reader', "first person of the results should be the reader")
-      assert_equal(results[1].firstName, 'Visitor', "second person of the results should be the visitor")
+      assert_equal(results[0].first_name, 'Reader', "first person of the results should be the reader")
+      assert_equal(results[1].first_name, 'Visitor', "second person of the results should be the visitor")
       
       results = Person.order_alphabetically_by_non_default_role('role asc')
-      assert_equal(results[0].firstName, 'Visitor', "first person of the results should be the visitor when order is ASC")
-      assert_equal(results[1].firstName, 'Reader', "second person of the results should be the reader when order is ASC")
+      assert_equal(results[0].first_name, 'Visitor', "first person of the results should be the visitor when order is ASC")
+      assert_equal(results[1].first_name, 'Reader', "second person of the results should be the reader when order is ASC")
     end
     should "return people based on last answered survey" do
       @org = Factory(:organization)
       @survey = Factory(:survey)
       
-      @person1 = Factory(:person, firstName: 'First Answer')
-      @person2 = Factory(:person, firstName: 'Second Answer')
-      @person3 = Factory(:person, firstName: 'Last Answer')
+      @person1 = Factory(:person, first_name: 'First Answer')
+      @person2 = Factory(:person, first_name: 'Second Answer')
+      @person3 = Factory(:person, first_name: 'Last Answer')
       @answer_sheet1 = Factory(:answer_sheet, person: @person1, survey: @survey, updated_at: "2012-07-01".to_date)
       @answer_sheet2 = Factory(:answer_sheet, person: @person1, survey: @survey, updated_at: "2012-07-02".to_date)
       @answer_sheet3 = Factory(:answer_sheet, person: @person1, survey: @survey, updated_at: "2012-07-03".to_date)
       
       results = Person.get_and_order_by_latest_answer_sheet_answered('', @org.id)
-      assert_equal(results[0].firstName, 'First Answer', "first result should be the first person who answered")
-      assert_equal(results[1].firstName, 'Second Answer', "second result should be the second person who answered")
-      assert_equal(results[2].firstName, 'Last Answer', "third result should be the last person who answered")
+      assert_equal(results[0].first_name, 'First Answer', "first result should be the first person who answered")
+      assert_equal(results[1].first_name, 'Second Answer', "second result should be the second person who answered")
+      assert_equal(results[2].first_name, 'Last Answer', "third result should be the last person who answered")
       
       
     end
     should "return people assigned to an org" do
       @org1 = Factory(:organization, name: 'Org 1')
       @org2 = Factory(:organization, name: 'Org 2')
-      @leader = Factory(:person, firstName: 'Leader')
+      @leader = Factory(:person, first_name: 'Leader')
       @person = Factory(:person)
       
       @assignment1 = Factory(:contact_assignment, organization: @org1, person: @person, assigned_to: @leader)
@@ -207,23 +206,6 @@ class PersonTest < ActiveSupport::TestCase
       mobile_number = @person.phone_numbers.create(number: '1111111111', location: 'mobile')
       assert_equal(@person.phone_number, '1111111111', 'this should return the mobile number')
     end
-    should "should return the cellPhone from address if it exists and phone_number exists" do
-      address = Address.create(cellPhone: '2222222222', fk_PersonID: @person.id, addressType: 'current')
-      assert_equal(@person.phone_number, '2222222222', 'this should return the cellPhone number')
-    end
-    should "should return the homePhone from address if it exists and phone_number exists" do
-      address = Address.create(homePhone: '3333333333', fk_PersonID: @person.id, addressType: 'current')
-      assert_equal(@person.phone_number, '3333333333', 'this should return the homePhone number')
-    end
-    should "should return the workPhone from address if it exists and phone_number exists" do
-      address = Address.create(workPhone: '4444444444', fk_PersonID: @person.id, addressType: 'current')
-      assert_equal(@person.phone_number, '4444444444', 'this should return the workPhone number')
-    end
-    should "should return the existing if record already exists" do
-      address1 = @person.phone_numbers.create(number: '4444444444', location: 'mobile')
-      address2 = Address.create(workPhone: '4444444444', fk_PersonID: @person.id, addressType: 'current')
-      assert_equal(@person.phone_number, '4444444444', 'this should return the workPhone number')
-    end
   end
   
   context "getting archived people" do
@@ -263,15 +245,6 @@ class PersonTest < ActiveSupport::TestCase
     should "not return a person with archive_date" do
       results = @org1.people.archived_not_included
       assert(!results.include?(@person1), "Person 1 should not be included")
-    end
-    should "return all deleted person" do
-      results = @org1.people.deleted
-      assert_equal(results.count, 1)
-    end
-    should "not return not deleted person" do
-      results = @org1.people.get_deleted
-      assert(!results.include?(@person1), "Person 1 should not be included")
-      assert(!results.include?(@person2), "Person 2 should not be included")
     end
   end
   
@@ -371,13 +344,13 @@ class PersonTest < ActiveSupport::TestCase
     end
     should "merge the followup comments" do
       @person.merge(@other)
-      assert_equal(@person_followup1.commenter_id, @person.personID, "Person still have its followup comment")
-      assert_equal(@other_followup1.commenter_id, @person.personID, "Person should aquire other person's followup comment data")
+      assert_equal(@person_followup1.commenter_id, @person.id, "Person still have its followup comment")
+      assert_equal(@other_followup1.commenter_id, @person.id, "Person should aquire other person's followup comment data")
     end
     should "merge the comments from other people" do
       @person.merge(@other)
-      assert_equal(@person_comment1.contact_id, @person.personID, "Person still have its comments from other people")
-      assert_equal(@other_comment1.contact_id, @person.personID, "Person should aquire other person's comments from other people data")
+      assert_equal(@person_comment1.contact_id, @person.id, "Person still have its comments from other people")
+      assert_equal(@other_comment1.contact_id, @person.id, "Person should aquire other person's comments from other people data")
     end
     should "merge the email address" do
       @person.merge(@other)
@@ -425,8 +398,8 @@ class PersonTest < ActiveSupport::TestCase
         assert_not_equal(@friend2.name,"Todd Gross","Make sure that Todd's local DB name change went through")
       
         @friend.destroy  #delete Pez from the local DB
-        friend1 = @person.friends.create(provider: "facebook", :uid =>"1", name: "Test User", person_id: @person.personID.to_i)
-        friend2 = @person.friends.create(provider: "facebook", :uid =>"2", name: "Test User", person_id: @person.personID.to_i)
+        friend1 = @person.friends.create(provider: "facebook", :uid =>"1", name: "Test User", person_id: @person.id.to_i)
+        friend2 = @person.friends.create(provider: "facebook", :uid =>"2", name: "Test User", person_id: @person.id.to_i)
         x = @person.update_friends(@authentication, TestFBResponses::FRIENDS)
         assert_equal(3, x, "Make sure that three changes took place... 2 deletions and 1 addition")
       
@@ -548,11 +521,11 @@ class PersonTest < ActiveSupport::TestCase
     org = Factory(:organization)
     user = Factory(:user_with_auxs)
     Factory(:organizational_role, organization: org, person: user.person, role: Role.leader)
-    person1 = Factory(:person, firstName: "Neil Marion", lastName: "dela Cruz", email: "ndc@email.com")
+    person1 = Factory(:person, first_name: "Neil Marion", last_name: "dela Cruz", email: "ndc@email.com")
     Factory(:organizational_role, organization: org, person: person1, role: Role.leader)
-    person2 = Factory(:person, firstName: "Johnny", lastName: "English", email: "english@email.com")
+    person2 = Factory(:person, first_name: "Johnny", last_name: "English", email: "english@email.com")
     Factory(:organizational_role, organization: org, person: person2, role: Role.contact)
-    person3 = Factory(:person, firstName: "Johnny", lastName: "Bravo", email: "bravo@email.com")
+    person3 = Factory(:person, first_name: "Johnny", last_name: "Bravo", email: "bravo@email.com")
     Factory(:organizational_role, organization: org, person: person3, role: Role.contact)
 
     a = org.people.search_by_name_or_email("neil marion", org.id)

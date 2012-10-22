@@ -79,7 +79,8 @@
         </td>
         <td><%= link_to(group.name, group) %></td>
         <td><% if !group.list_publicly %><%= image_tag('lock.gif', class: 'privategroup' ) %><% end %></td>
-        <td><%= group.involved.count %> <% total_involved += group.involved.count %></td>
+        <% involved_count = current_organization.people.get_from_group(group.id).collect(&:name).count %>
+        <td><%= involved_count %> <% total_involved += involved_count %></td>
         <td><%= group_p.leaders_names %> <% total_leaders += group.leaders.length %></td>
         <td class="labels"><%= group_p.labels %></td>
         <td class="controls">

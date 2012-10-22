@@ -5,8 +5,8 @@
       <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox' %>
     </td>
   <% end %>
-  <td class="first_name"><%= person.firstName %></td>
-  <td class="last_name"><%= person.lastName %></td>
+  <td class="first_name"><%= person.first_name %></td>
+  <td class="last_name"><%= person.last_name %></td>
   <td>
     <div id="roles_user_<%= person.id %>" class="roles_spaces">
       <% roles = if params[:include_archived] || params[:archived] %>
@@ -27,7 +27,7 @@
   <td class="email"><%= mail_to(person.email) %></td>
   <td class="phone_number"><%= person.pretty_phone_number %></td>
   <% if (current_organization.settings[:show_year_in_school]) || (current_organization.settings[:show_year_in_school].nil?) %>
-    <td><%= person.yearInSchool %></td>
+    <td><%= person.year_in_school %></td>
   <% end %>
   <td class="controls">
     <%= link_to("Show", "/people/#{person.id}", :class => "icon magnify tipit", :title => t('nav.view_details')) %>

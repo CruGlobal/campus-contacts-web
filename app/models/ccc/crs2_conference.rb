@@ -1,4 +1,6 @@
 class Ccc::Crs2Conference < ActiveRecord::Base
+  establish_connection :uscm
+
   self.table_name = 'crs2_conference'
   has_many :crs2_additional_info_items, class_name: 'Ccc::Crs2AdditionalInfoItem'
   belongs_to :crs2_user, class_name: 'Ccc::Crs2User', foreign_key: :creator_id

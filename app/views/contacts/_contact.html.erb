@@ -9,16 +9,16 @@
     <%-# check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
     <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox', 'data-name' => "#{person.firstName} #{person.lastName}", 'data-email'=>person.email%>
   </td>
-  <td class="firstName"><%= person.firstName %></td>
-  <td class="lastName"><%= person.lastName %></td>
+  <td class="first_name"><%= person.first_name %></td>
+  <td class="last_name"><%= person.last_name %></td>
   <td>
     <% if contact_role %>
       <%= contact_role.followup_status.to_s.titleize %>
       <% if person.organizational_roles.where('organizational_roles.organization_id' => current_organization.id).blank? %>
         <span class="archived_group_label">&nbsp<%= t('general.archived') %>&nbsp</span>
       <% end %>
-      <% end %>
-    </td>
+    <% end %>
+  </td>
   <td><%= person.gender.to_s.titleize %></td>
   <td class="phone_number"><%= person.pretty_phone_number %></td>
   <td>
@@ -49,7 +49,7 @@
           <span title="<%= l(date, format: :date) if date %>" class="tipit"><%= answer.first %></span>
           <% dates << date if date.present? %>
         <% else %>
-          <%= person.yearInSchool if q.attribute_name == "yearInSchool" %>
+          <%= person.year_in_school if q.attribute_name == "year_in_school" %>
         <% end %>
       <% end %>
       

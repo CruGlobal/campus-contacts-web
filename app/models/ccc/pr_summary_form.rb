@@ -1,4 +1,6 @@
 class Ccc::PrSummaryForm < AnswerSheet
+  establish_connection :uscm
+
   belongs_to :review, class_name: 'Ccc::PrReview'
   #belongs_to :person
   self.table_name = "pr_summary_forms"

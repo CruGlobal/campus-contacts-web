@@ -1,4 +1,6 @@
 class Ccc::Crs2CustomQuestionsItem < ActiveRecord::Base
+  establish_connection :uscm
+
   self.table_name = 'crs2_custom_questions_item'
   has_many :crs2_answers, class_name: 'Ccc::Crs2Answer'
   belongs_to :crs2_question, class_name: 'Ccc::Crs2Question', foreign_key: :question_id

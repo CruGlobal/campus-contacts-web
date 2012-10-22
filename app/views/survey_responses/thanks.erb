@@ -1,6 +1,6 @@
 <% provide :title, t('.thanks') %>
 <div class="info">
-  <center><h4><%= @survey.post_survey_message.present? ? @survey.post_survey_message : t('contacts.thanks.message') %></h4></center>
+  <center><h4><%= @survey.post_survey_message.present? ? give_link(auto_link(@survey.post_survey_message)) : t('contacts.thanks.message') %></h4></center>
 	<br><br>
 
 	<div id="countdown">

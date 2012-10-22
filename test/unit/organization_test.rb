@@ -6,7 +6,6 @@ class OrganizationTest < ActiveSupport::TestCase
   should have_many(:group_labels)
   should have_many(:activities)
   should have_many(:target_areas)
-  should have_many(:organization_memberships)
   should have_many(:people)
   should have_many(:contact_assignments)
   should have_many(:keywords)
@@ -28,6 +27,24 @@ class OrganizationTest < ActiveSupport::TestCase
   should have_many(:groups)
 
   # begin methods testing
+  
+  context "get all people" do
+    setup do
+      @org1 = Factory(:organization)
+      @person1 = Factory(:person)
+      @person2 = Factory(:person)
+      @person3 = Factory(:person)
+      
+      Factory(:organizational_role, person: @person2, role: Role.contact, organization: @org1, :added_by_id => @person1.id, deleted: 1)
+      Factory(:organizational_role, person: @person2, role: Role.involved, organization: @org1, :added_by_id => @person1.id, deleted: 1)
+      Factory(:organizational_role, person: @person3, role: Role.contact, organization: @org1, :added_by_id => @person1.id)
+      Factory(:organizational_role, person: @person3, role: Role.involved, organization: @org1, :added_by_id => @person1.id)
+    end
+    
+    should "only get people with some roles not yet deleted" do
+      assert_equal [@person3], @org1.people
+    end
+  end
   
   context "get all leaders" do
     setup do
@@ -358,14 +375,6 @@ class OrganizationTest < ActiveSupport::TestCase
     #keyword2 = Factory(:sms_keyword, :organization => org2)
 
     assert_equal org1.name_with_keyword_count, org1.name + " (#{SmsKeyword.count})", "Organization method name_with_keyword_count does not return right value"
-  end
-
-  test "add_member(person_id)" do
-    org1 = Factory(:organization)
-    person1 = Factory(:person)
-    org1.add_member(person1.id)
-    om = OrganizationMembership.last
-    assert_equal om.organization.to_s + om.person.to_s, org1.to_s + person1.to_s, "Organization method add_member does not correctly add member"
   end
 
   test "add_leader(person)" do
