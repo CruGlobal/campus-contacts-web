@@ -9,7 +9,11 @@ constructArray = (string) ->
     i++
   results
 
-compare = (userString, mhubString) ->
+compare = (userString, mhubString, matchQuestions) ->
+  match = undefined
+  matchArray = undefined
+  mhubArray = undefined
+  userArray = undefined
   userArray = constructArray(userString)
   mhubArray = constructArray(mhubString)
   matchArray = _.intersection(userArray, mhubArray)
@@ -17,7 +21,17 @@ compare = (userString, mhubString) ->
   if match >= 0.75
     true
   else
-    false
+    i = 0
+    while i < userArray.length
+      secondMatch = false
+      ii = 0
+      while ii < mhubArray.length
+        if mhubArray[ii].indexOf(userArray[i]) isnt -1 and matchQuestions.indexOf(mhubString) is -1
+          secondMatch = true
+          break
+        ii++
+      i++
+    secondMatch
 
 $(document).ready ->
     
@@ -38,19 +52,20 @@ $(document).ready ->
     ii = 0
     
     while ii < mhubQuestions.length
-      if compare(userQuestions[i], mhubQuestions[ii]) is true
+      if compare(userQuestions[i], mhubQuestions[ii], matchQuestions) is true
         matchFound = true
         break
       ii++
     if matchFound is true
       matchQuestions.push mhubQuestions[ii]
     else
-      matchQuestions.push "Select Match"
+      matchQuestions.push "Create new question"
     i++
   i = 0
   
   $(".selectTitle").each (i) ->
     $(this).text(matchQuestions[i])
+    $(this).parents(".matchSelect").siblings(".matchEdit").css "display", "block"  if $(this).text() is "Create new question"
     
   $(".selectTitleBg").live "click", (e) ->
     e.preventDefault()

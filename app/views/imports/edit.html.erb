@@ -1,6 +1,20 @@
 <div class="inside_container">
 	<%= javascript_include_tag "underscore-1.4.2" %>
-	<%= javascript_include_tag "importContacts" %>
+	<%= javascript_tag do %>
+  		surveyTitles = new Array();
+  		mhubQuestions = new Array();
+  		userQuestions = new Array();
+  		<% @survey_questions.each_key do |s| %>
+			surveyTitles.push('<%= s %>');
+			<% @survey_questions[s].each do |v| %>
+				mhubQuestions.push('<%= v[0] %>');
+			<% end %>
+		<% end %>
+		<% @import.headers.each_with_index do |header| %>
+			userQuestions.push('<%= header %>'.replace(/:/gi, "").toLowerCase());
+		<% end %>
+	<% end %>
+	<%= javascript_include_tag "import-contacts" %>
 	
 	<div class="titlebar titlebarmod">  
 	  <h1>
@@ -32,7 +46,7 @@
 								
 								<div class="matchSelect" id="select_<%= i %>">
 									<div class="selectTitleBg">
-										<span class="selectTitle">Select Match</span>
+										<span class="selectTitle"></span>
 									</div>
 									<div class="selectQuestions" style="display:none;">
 										<div class="noMatch">
