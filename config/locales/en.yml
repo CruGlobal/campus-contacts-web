@@ -561,7 +561,9 @@ en:
     unassign: 'Unassign'
     add_contact: "Add Contact"
     update_notice_title: "New All Contacts Options"
-    update_notice_content: "We’re rolling out changes to make using MissionHub even easier. With all of the Directory features now accessible via All Contacts, you can easily manage your contacts from one page.<br/><br/>Learn about the new look on our blog."
+    update_notice_content: "We’re rolling out changes to make using MissionHub even easier. With all of the Directory features now accessible via All Contacts, you can easily manage your contacts from one page."
+    update_notice_link: "Learn about the new look on our blog."
+    update_notice_link_url: 'http://blog.missionhub.com/2012/10/16/new-all-contacts/'
     update_notice_toggle: "Do not show this notice again"
     statuses:
       uncontacted: Uncontacted
