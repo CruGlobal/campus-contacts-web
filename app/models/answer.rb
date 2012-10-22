@@ -25,7 +25,7 @@ class Answer < ActiveRecord::Base
   end
   
   def to_s
-    self.value
+    value || ''
   end
   
   def set_value_from_filename
