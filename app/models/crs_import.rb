@@ -63,7 +63,7 @@ class CrsImport
             end
 
             # Import registrants
-            registrant_type.registrants.each do |registrant|
+            registrant_type.registrants.where(status: 'Complete').each do |registrant|
               # Find or create missionhub person
               person = Person.where(crs_profile_id: registrant.profile_id).first
 
@@ -150,6 +150,15 @@ class CrsImport
                 end
               end
 
+            end
+
+            # Remove cancellations
+            registrant_type.registrants.where(status: 'Cancelled').each do |registrant|
+              person = Person.where(crs_profile_id: registrant.profile_id).first
+              if person
+                @org.remove_contact(person)
+                @org.remove_role_from_person(person)
+              end
             end
           end
 

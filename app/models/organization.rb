@@ -198,6 +198,10 @@ class Organization < ActiveRecord::Base
     OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id).first_or_create!
   end
 
+  def remove_role_from_person(person, role_id)
+    person_id = person.is_a?(Person) ? person.id : person
+    OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id).destroy_all
+  end
 
   def add_leader(person, current_person)
     person_id = person.is_a?(Person) ? person.id : person
