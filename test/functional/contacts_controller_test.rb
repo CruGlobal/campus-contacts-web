@@ -599,6 +599,19 @@ class ContactsControllerTest < ActionController::TestCase
       
       assert_equal "4th", Person.where(firstName: "James", lastName: "Ingram").first.yearInSchool
     end
+    
+    should "retain all the roles if there's a merge (creating contact with the same firstName, lastName and email with an existing person in the db) during create contacts" do
+      @org_child = Factory(:organization, :name => "neilmarion", :parent => @user.person.organizations.first, :show_sub_orgs => 1)
+      @request.session[:current_organization_id] = @org_child.id
+      
+      puts @request.session[:current_organization_id].inspect
+      puts @org_child.id
+      assert_no_difference "Person.count" do
+        xhr :post, :create, {:person => {:firstName => "Bulaon", :lastName => @user.person.lastName, :email_address => {:email => @user.person.email, :primary => 1}}, :labels => [Role.leader.id] }
+      end
+      
+      puts @user.person.organizational_roles.collect(&:role_id).inspect
+    end
   end
   
   context "Sorting contacts" do
