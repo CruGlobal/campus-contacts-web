@@ -90,7 +90,7 @@ $ ->
   
   $('#add_person_div .save').live 'click', ->
     form = $(this).closest('form')
-    if $('#person_firstName', form).val() == '' #or ($('#person_email_address_email', form).val() == '' &&$('#person_phone_number_number', form).val() == '')
+    if $('#person_first_name', form).val() == '' #or ($('#person_email_address_email', form).val() == '' &&$('#person_phone_number_number', form).val() == '')
       alert('At a minimum you need to provide a first name.')
       return false
     if $(this).hasClass('save_and_more')

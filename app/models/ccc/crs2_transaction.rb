@@ -1,4 +1,6 @@
 class Ccc::Crs2Transaction < ActiveRecord::Base
+  establish_connection :uscm
+
   self.table_name = 'crs2_transaction'
   set_inheritance_column 'fake'
   belongs_to :crs2_transaction, class_name: 'Ccc::Crs2Transaction', foreign_key: :charge_cancellation_id

@@ -1,4 +1,6 @@
 class Ccc::PrReminder < ActiveRecord::Base
+  establish_connection :uscm
+
   self.table_name = "pr_reminders"
   validates_presence_of :label
   belongs_to :person

@@ -1,4 +1,6 @@
 class Ccc::PrReview < ActiveRecord::Base
+  establish_connection :uscm
+
   belongs_to :subject, class_name: "Person"
   belongs_to :initiator, class_name: "Person"
   belongs_to :question_sheet

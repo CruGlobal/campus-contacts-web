@@ -100,7 +100,7 @@ class SurveyResponsesControllerTest < ActionController::TestCase
     context "when posting an update with bad parameters" do
       setup do
         @request.host = 'mhub.cc'
-        put :update, id: @user.person.id, format: 'mobile', person: {firstName: ''}, keyword: @keyword.keyword
+        put :update, id: @user.person.id, format: 'mobile', person: {first_name: ''}, keyword: @keyword.keyword
         assert_not_nil assigns(:title)
         assert_equal assigns(:title), @survey.terminology
       end
@@ -110,7 +110,7 @@ class SurveyResponsesControllerTest < ActionController::TestCase
     context "when posting create with missing info" do
       setup do
         @request.host = 'mhub.cc'
-        post :create, id: @user.person.id, format: 'mobile', person: {firstName: ''}, keyword: @keyword.keyword
+        post :create, id: @user.person.id, format: 'mobile', person: {first_name: ''}, keyword: @keyword.keyword
         assert_not_nil assigns(:title)
         assert_equal assigns(:title), @survey.terminology
       end
@@ -148,7 +148,7 @@ class SurveyResponsesControllerTest < ActionController::TestCase
       @organization.add_contact(@respondent.person)
       @answer_sheet = Factory(:answer_sheet, survey: @survey, person: @respondent.person)
       @answer_to_choice = Factory(:answer_1, answer_sheet: @answer_sheet, question: @questions.first)
-      post :create, { :survey_id => @survey.id, :person => { firstName: "Jane", lastName: "Deer", phone_number: "1234567890" }, :answers => @answer_to_choice.attributes }
+      post :create, { :survey_id => @survey.id, :person => { first_name: "Jane", last_name: "Deer", phone_number: "1234567890" }, :answers => @answer_to_choice.attributes }
       assert_response(:success)
     end
     
@@ -163,7 +163,7 @@ class SurveyResponsesControllerTest < ActionController::TestCase
       
       stub_request(:get, "http://api.bit.ly/v3/shorten?apiKey=R_1b6fbe0b4987dc3801ddb9f812d60f84&login=vincentpaca&longUrl=http://local.missionhub.com:7888/people/#{@respondent.person.id}").to_return(:status => 200, :body => "", :headers => {})
       
-      post :create, { :survey_id => @survey.id, :person => { firstName: @respondent.person.firstName, lastName: @respondent.person.lastName, phone_number: "1234567890", email: @email.email}, :answers => @answer_to_choice.attributes }
+      post :create, { :survey_id => @survey.id, :person => { first_name: @respondent.person.first_name, last_name: @respondent.person.last_name, phone_number: "1234567890", email: @email.email}, :answers => @answer_to_choice.attributes }
       assert_response(:success)
     end
 =end
@@ -189,7 +189,7 @@ class SurveyResponsesControllerTest < ActionController::TestCase
         xhr :get, :new, {:survey_id => @survey.id}
       end
       assert_difference "AnswerSheet.count", -1 do
-        xhr :put, :update, {:survey_id => @survey.id, :answers => { @question.id => ""}, :id => @user.person.personID}
+        xhr :put, :update, {:survey_id => @survey.id, :answers => { @question.id => ""}, :id => @user.person.id}
         assert_response(:success)
       end
         
@@ -200,7 +200,7 @@ class SurveyResponsesControllerTest < ActionController::TestCase
         xhr :get, :new, {:survey_id => @survey2.id}
       end
       assert_difference "AnswerSheet.count", -1 do
-        xhr :put, :update, {:survey_id => @survey2.id, :id => @user.person.personID}
+        xhr :put, :update, {:survey_id => @survey2.id, :id => @user.person.id}
         assert_response(:success)
       end
         
@@ -208,7 +208,7 @@ class SurveyResponsesControllerTest < ActionController::TestCase
     
     should "not create an answer sheet when a surveyee is a new Person and answered just blanks in the survey question fields" do
       assert_no_difference "AnswerSheet.count" do
-        xhr :put, :create, {:survey_id => @survey.id, :answers => { @question.id => ""}, :person => {:firstName => "Karl", :lastName => "Pilkington"}}
+        xhr :put, :create, {:survey_id => @survey.id, :answers => { @question.id => ""}, :person => {:first_name => "Karl", :last_name => "Pilkington"}}
         assert_response(:success)
       end
         

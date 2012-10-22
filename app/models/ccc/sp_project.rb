@@ -1,4 +1,6 @@
 class Ccc::SpProject < ActiveRecord::Base
+  establish_connection :uscm
+
 	#belongs_to :person
   has_many :sp_applications, class_name: 'Ccc::SpApplication'
   has_many :sp_project_gospel_in_actions, class_name: 'Ccc::SpProjectGospelInAction'

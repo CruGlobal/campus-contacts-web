@@ -7,7 +7,7 @@ module ContactActions
       params[:person] ||= {}
       params[:person][:email_address] ||= {}
       params[:person][:phone_number] ||= {}
-      unless params[:person][:firstName].present?# && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
+      unless params[:person][:first_name].present?# && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
         respond_to do |wants|
           wants.html { render :nothing => true }
           wants.json do 
@@ -53,7 +53,7 @@ module ContactActions
         return
       else
         errors = []
-        errors << "#{I18n.t('people.create.firstname_error')}" unless @person.firstName.present?
+        errors << "#{I18n.t('people.create.first_name_error')}" unless @person.first_name.present?
         errors << "#{I18n.t('people.create.phone_number_error')}" if @phone && !@phone.valid?
         errors << "#{I18n.t('people.create.email_error')}" if @email && !@email.valid?
 

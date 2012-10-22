@@ -29,12 +29,12 @@ class ContactsController < ApplicationController
         @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, role_id: Role::CONTACT_ID, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r]}]
         @all_answers = generate_answers(@all_people, @organization, @questions)
         out = ""
-        @questions.select! { |q| !%w{firstName lastName phone_number email}.include?(q.attribute_name) }
+        @questions.select! { |q| !%w{first_name last_name phone_number email}.include?(q.attribute_name) }
         CSV.generate(out) do |rows|
           rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('general.status'), t('general.assigned_to'), t('general.gender'), t('contacts.index.phone_number'), t('people.index.email')] + @questions.collect {|q| q.label} + [t('contacts.index.last_survey')]
           @all_people.each do |person|
             if @roles[person.id]
-              answers = [person.firstName, person.lastName, @roles[person.id].followup_status.to_s.titleize, person.assigned_tos_by_org(current_organization).collect{|a| Person.find(a.assigned_to_id).name}.join(','), person.gender.to_s.titleize, person.pretty_phone_number, person.email]
+              answers = [person.first_name, person.last_name, @roles[person.id].followup_status.to_s.titleize, person.assigned_tos_by_org(current_organization).collect{|a| Person.find(a.assigned_to_id).name}.join(','), person.gender.to_s.titleize, person.pretty_phone_number, person.email]
               dates = []
               @questions.each do |q|
                 answer = @all_answers[person.id][q.id]
@@ -144,7 +144,7 @@ class ContactsController < ApplicationController
   
   def send_reminder
     to_ids = params[:to].split(',')
-    leaders = current_organization.leaders.where(personID: to_ids)
+    leaders = current_organization.leaders.where(id: to_ids)
 
     if leaders.present?
       ContactsMailer.enqueue.reminder(leaders.collect(&:email).compact, current_person.email, params[:subject], params[:body])
@@ -199,7 +199,7 @@ class ContactsController < ApplicationController
             @people = @organization.send(:"#{params[:assigned_to]}_contacts")
             @header = I18n.t("rejoicables.#{params[:assigned_to]}")
           else
-            if params[:assigned_to].present? && @assigned_to = Person.find_by_personID(params[:assigned_to])
+            if params[:assigned_to].present? && @assigned_to = Person.find_by_id(params[:assigned_to])
               @header = I18n.t('contacts.index.responses_assigned_to', assigned_to: @assigned_to)
               @people = Person.includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
             end
@@ -210,7 +210,7 @@ class ContactsController < ApplicationController
       unless @people.arel.to_sql.include?('JOIN organizational_roles')
         @header = "#{Role.find(params[:role]).i18n}" if params[:role].present?
       end
-      if params[:q] && params[:q][:s].include?('mh_answer_sheets')
+      if params[:q] && params[:q][:s].include?('answer_sheets')
         @people = current_organization.contacts.get_and_order_by_latest_answer_sheet_answered(params[:q][:s], current_organization.id)
       end
       if params[:q] && params[:q][:s].include?('followup_status')
@@ -218,20 +218,20 @@ class ContactsController < ApplicationController
       end
       if params[:role].present?
         org_roles = OrganizationalRole.where(person_id: @people.collect(&:id), role_id: params[:role])
-        @people = Person.where(personID: org_roles.collect(&:person_id)).uniq
+        @people = Person.where(id: org_roles.collect(&:person_id)).uniq
       end
       if params[:survey].present?
-        @people = @people.joins(:answer_sheets).where("mh_answer_sheets.survey_id" => params[:survey])
+        @people = @people.joins(:answer_sheets).where("answer_sheets.survey_id" => params[:survey])
       end
       if params[:first_name].present?
         v = params[:first_name].strip
         term = (v.first == v.last && v.last == '"') ? v[1..-2] : "%#{v}%"
-        @people = @people.where("firstName like ? OR preferredName like ?", term, term)
+        @people = @people.where("first_name like ?", term)
       end
       if params[:last_name].present?
         v = params[:last_name].strip
         term = (v.first == v.last && v.last == '"') ? v[1..-2] : "%#{v}%"
-        @people = @people.where("lastName like ?", term)
+        @people = @people.where("last_name like ?", term)
       end
       if params[:email].present?
         v = params[:email].strip
@@ -276,7 +276,7 @@ class ContactsController < ApplicationController
             else
               unless v.strip.blank?
                 @people = @people.joins(:answer_sheets)
-                @people = @people.joins("INNER JOIN `mh_answers` as a#{q_id} ON a#{q_id}.`answer_sheet_id` = `mh_answer_sheets`.`id`").where("a#{q_id}.question_id = ? AND a#{q_id}.value like ?", q_id, term)
+                @people = @people.joins("INNER JOIN `answers` as a#{q_id} ON a#{q_id}.`answer_sheet_id` = `answer_sheets`.`id`").where("a#{q_id}.question_id = ? AND a#{q_id}.value like ?", q_id, term)
               end
             end
           else
@@ -313,7 +313,7 @@ class ContactsController < ApplicationController
 
       @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
       # raise @q.sorts.inspect
-      @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? "" : ['lastName, firstName']).group('ministry_person.personID')
+      @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? "" : ['last_name, first_name']).group('people.id')
       @all_people = @people
       @people_for_labels = Person.people_for_labels(current_organization)
       @people = @people.includes(:organizational_roles)
@@ -322,8 +322,8 @@ class ContactsController < ApplicationController
     end
   
     def fetch_mine
-      #@all_people = Person.order('lastName, firstName').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.organization_id' => current_organization.id, 'organizational_roles.role_id' => Role::CONTACT_ID)
-      @all_people = Person.order('lastName, firstName').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id)
+      #@all_people = Person.order('last_name, first_name').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.organization_id' => current_organization.id, 'organizational_roles.role_id' => Role::CONTACT_ID)
+      @all_people = Person.order('last_name, first_name').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id)
     end
     
     def get_person

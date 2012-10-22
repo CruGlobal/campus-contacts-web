@@ -3,7 +3,7 @@ class Jobs::UpdateFB
   
   def self.perform(person_id,auth,action)
     authentication = auth['authentication']
-    person = Person.find_by_personID(person_id)
+    person = Person.find_by_id(person_id)
     if person
       case action
       when 'friends'

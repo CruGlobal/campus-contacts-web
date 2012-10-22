@@ -36,7 +36,7 @@ namespace :infobase do
 
     # make all regions the second level under the new ministries structure
     regions = {}
-    Organization.connection.select_all("select * from ministry_regionalteam where region <> ''").each do |region|
+    Ccc::Person.connection.select_all("select * from ministry_regionalteam where region <> ''").each do |region|
       attribs = {name: region['name'], terminology: 'Region', importable_id: region['teamID'], importable_type: 'Ccc::Region'}
       r = Organization.where(importable_id: region['teamID'], importable_type: 'Ccc::Region').first
       r ? r.update_attributes(attribs) : campus.children.create!(attribs)
@@ -47,7 +47,7 @@ namespace :infobase do
     puts "Done regions.  Insert local level."
 
     # ministry local level goes next
-    Organization.connection.select_all("select * from ministry_locallevel").each do |level|
+    Ccc::Person.connection.select_all("select * from ministry_locallevel").each do |level|
       m = Organization.where(importable_id: level['teamID'], importable_type: 'Ccc::MinistryLocallevel').first
       attribs = {name: level['name'], terminology: 'Missional Team', importable_id: level['teamID'], importable_type: 'Ccc::MinistryLocallevel', show_sub_orgs: true, status: 'active'}
       if m
@@ -72,11 +72,44 @@ namespace :infobase do
     # team_leader_role_id = Organization.find(1).ministry_roles.find_by_name("Missional Team Leader").id
     puts "Adding team members"
     i = 0
-    Organization.connection.select_all("select * from ministry_missional_team_member").each do |mtm|
+    Ccc::Person.connection.select_all("select * from ministry_missional_team_member").each do |mtm|
       # personID, teamID
       team = team_id_to_ministry[mtm['teamID']]
       next unless team
-      team.add_admin(mtm['personID'])
+
+      # If this person doesn't already exist in missionhub, we need to create them
+      # We'll try to match on FB authentication, then username
+      ccc_person = Ccc::Person.find(mtm['personID'])
+      next unless ccc_person.user
+
+      ccc_authentication = ccc_person.user.authentications.where(provider: 'facebook').first
+      authentication = Authentication.where(ccc_authentication.attributes.slice('provider', 'uid')).first if ccc_authentication
+      if authentication
+        mh_person = authentication.user.person
+      else
+        user = User.find_by_username(ccc_person.user.username)
+        mh_person = user.person if user
+      end
+
+      # If we didn't find a corresponding person in MH, create one
+      unless mh_person
+        mh_person = Person.create!(ccc_person.attributes.except('personID', 'created_at', 'dateChanged', 'fk_ssmUserId', 'fk_StaffSiteProfileID', 'fk_spouseID', 'fk_childOf', 'primary_campus_involvement_id', 'mentor_id'))
+        mh_person.user = user || User.create!(username: ccc_person.user.username, password: Time.now.to_i)
+
+        # copy over email and phone data
+        ccc_person.email_addresses.each do |email_address|
+          mh_person.email = email_address.email unless mh_person.email_addresses.detect {|e| email_address.email == e.email} || EmailAddress.where(email: email_address.email).first
+        end
+
+        ccc_person.phone_numbers.each do |phone|
+          mh_person.phone_number = phone.number unless mh_person.phone_numbers.detect {|p| p.number == phone.number}
+        end
+
+        mh_person.save!
+      end
+
+      team.add_admin(mh_person)
+
       i += 1
       puts i if i % 1000 == 0
     end
@@ -120,7 +153,7 @@ namespace :infobase do
       # Find all the students active in the system in the past year, and add them to this movement
       # Person.where(["dateChanged > ? AND (isStaff is null OR isStaff = 0) AND campus = ?", 1.year.ago, target.name]).each do |person|
       #   unless OrganizationMembership.where(organization_id: m.id, person_id: person.id).present?
-      #     OrganizationMembership.create!(organization_id: m.id, person_id: person.id, validated: 1, start_date: person.dateCreated)
+      #     OrganizationMembership.create!(organization_id: m.id, person_id: person.id, validated: 1, start_date: person.created_at)
       #   end
       # end
       

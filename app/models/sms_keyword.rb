@@ -12,7 +12,7 @@ class SmsKeyword < ActiveRecord::Base
   
   belongs_to :user
   belongs_to :survey
-  has_many :questions, :through => :survey, :order => 'mh_survey_elements.position'
+  has_many :questions, :through => :survey, :order => 'survey_elements.position'
   has_many :archived_questions, :through => :survey
   
   belongs_to :event, polymorphic: true

@@ -1,5 +1,4 @@
 class Friend < ActiveRecord::Base
-  self.table_name = 'mh_friends'
   belongs_to :person
   validates_presence_of :person_id, :name, :provider, :uid, on: :create, message: "can't be blank"
   
@@ -17,7 +16,7 @@ class Friend < ActiveRecord::Base
       friends = friends.collect(&:to_hash)
     else friends = friends.collect {|x| x.to_hash.slice(*valid_fields)}
     end
-    person = Person.find_by_personID(person_id)
+    person = Person.find_by_id(person_id)
     hash = { person: {name: person.to_s, id: person.id }, friends: friends }
   end
 

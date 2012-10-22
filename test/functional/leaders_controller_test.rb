@@ -66,7 +66,7 @@ class LeadersControllerTest < ActionController::TestCase
 
       assert_difference('OrganizationalRole.count') do
         assert_no_difference('User.count') do
-          xhr :post, :add_person, person: {firstName: 'John', lastName: 'Doe', email_address: {email: user2.person.email_addresses.first.email}}, notify: '1' #, person_id: user2.person.id
+          xhr :post, :add_person, person: {first_name: 'John', last_name: 'Doe', email_address: {email: user2.person.email_addresses.first.email}}, notify: '1' #, person_id: user2.person.id
           assert_response :success
         end
       end
@@ -76,7 +76,7 @@ class LeadersControllerTest < ActionController::TestCase
       assert_difference('OrganizationalRole.count') do
         assert_difference('User.count') do
           assert_difference('Person.count') do
-            xhr :post, :add_person, person: {firstName: 'John1', lastName: 'Doe', gender: '1', email_address: {email: 'new_user@example.com'}, phone_number: {phone: '444-444-4444'}}, notify: '1' 
+            xhr :post, :add_person, person: {first_name: 'John1', last_name: 'Doe', gender: '1', email_address: {email: 'new_user@example.com'}, phone_number: {phone: '444-444-4444'}}, notify: '1' 
             assert_response :success 
             assert_equal(nil, flash[:error])
             assert_not_nil(assigns(:person).user, "New user didn't get created")
@@ -87,14 +87,14 @@ class LeadersControllerTest < ActionController::TestCase
     end
     
     should "require gender, first name, last name and email when adding a leader" do 
-      xhr :post, :add_person, person: {firstName: '', lastName: '', email_address: {email: ''}, phone_number: {phone: ''}}, notify: '1' 
+      xhr :post, :add_person, person: {first_name: '', last_name: '', email_address: {email: ''}, phone_number: {phone: ''}}, notify: '1' 
       assert_response :success 
       assert_equal("<font color='red'>First Name is required.<br />Last Name is required.<br />Gender is required.<br />Email is required.<br /></font>", flash[:error])
       assert_template 'leaders/new'
     end
     
     should "validate email when adding a leader" do 
-      xhr :post, :add_person, person: {firstName: 'John1', lastName: 'Doe', gender: '1', email_address: {email: 'Howie Koffman <howie.kauffman@facultycommons.org>'}, phone_number: {phone: '444-444-4444'}}, notify: '1' 
+      xhr :post, :add_person, person: {first_name: 'John1', last_name: 'Doe', gender: '1', email_address: {email: 'Howie Koffman <howie.kauffman@facultycommons.org>'}, phone_number: {phone: '444-444-4444'}}, notify: '1' 
       assert_response :success 
       assert_equal("<font color='red'>Email Address isn't valid.<br /></font>", flash[:error])
       assert_template 'leaders/new'
@@ -107,7 +107,7 @@ class LeadersControllerTest < ActionController::TestCase
       person.save(validate: false)
       assert_difference('OrganizationalRole.count') do
         assert_difference('User.count') do
-          xhr :put, :update, id: person.id, person: {firstName: 'John', lastName: 'Doe', email_address: {email: 'good_email@example.com'}, phone_number: {phone: '444-444-4444'}}, notify: '1' 
+          xhr :put, :update, id: person.id, person: {first_name: 'John', last_name: 'Doe', email_address: {email: 'good_email@example.com'}, phone_number: {phone: '444-444-4444'}}, notify: '1' 
           assert_response :success
           assert_equal(nil, assigns(:required_fields).detect(&:blank?))
           assert_not_nil(assigns(:new_person))
@@ -119,7 +119,7 @@ class LeadersControllerTest < ActionController::TestCase
     should "require gender, first name, last name and email when updating a leader" do 
       person = Factory(:person)
       person.update_column(:gender, nil)
-      xhr :put, :update, id: person.id, person: {firstName: '', lastName: '', email_address: {email: ''}, phone_number: {phone: ''}}, notify: '1' 
+      xhr :put, :update, id: person.id, person: {first_name: '', last_name: '', email_address: {email: ''}, phone_number: {phone: ''}}, notify: '1' 
       assert_response :success 
       assert_equal("<font color='red'>Please fill in all fields<br />First Name is required.<br />Last Name is required.<br />Gender is required.<br />Email is required.<br /></font>", flash[:error])
       assert_template 'leaders/edit'
@@ -180,7 +180,7 @@ class LeadersControllerTest < ActionController::TestCase
     end
 
     should "successfully find a searched Person if Person has valid email" do
-      person = Factory(:person, firstName: "NeilMarion", email: "super_duper_unique_email@mail.com")
+      person = Factory(:person, first_name: "NeilMarion", email: "super_duper_unique_email@mail.com")
       assert_equal(Person.count, 2)
       xhr :get, :search, {"show_all"=>"", "name"=>"NeilMarion"}
       assert_response :success

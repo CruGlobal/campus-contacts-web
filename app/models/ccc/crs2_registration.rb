@@ -1,4 +1,6 @@
 class Ccc::Crs2Registration < ActiveRecord::Base
+  establish_connection :uscm
+
   self.table_name = 'crs2_registration'
 	set_inheritance_column 'fake'
   has_many :crs2_registrants, class_name: 'Ccc::Crs2Registrant'

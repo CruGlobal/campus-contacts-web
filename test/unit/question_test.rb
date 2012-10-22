@@ -2,8 +2,6 @@ require 'test_helper'
 
 class QuestionTest < ActiveSupport::TestCase
   should belong_to(:related_question_sheet)
-  should have_many(:conditions)
-  should have_many(:dependents)
   should have_many(:sheet_answers)
   
   context "Send notifications" do
@@ -12,7 +10,7 @@ class QuestionTest < ActiveSupport::TestCase
       @element = Factory(:choice_field, label: 'foobar', notify_via: "Both", trigger_words: "my answer")
       @element2 = Factory(:choice_field, label: 'foobarbaz', notify_via: "Email", trigger_words: "my answer")
       @element3 = Factory(:choice_field, label: 'foo', notify_via: "SMS", trigger_words: "my answer")
-      @person = Factory(:person, firstName: "Herp", lastName: "Derp", email: "herp_derp@gmail.com", phone_number: "101011011")
+      @person = Factory(:person, first_name: "Herp", last_name: "Derp", email: "herp_derp@gmail.com", phone_number: "101011011")
       @question = Question.new
     end
 

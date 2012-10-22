@@ -9,7 +9,7 @@ class GroupsController < ApplicationController
     if params[:label].present?
       begin
         @label = current_organization.group_labels.find(params[:label])
-        @groups = @groups.where('mh_group_labels.id' => params[:label]).joins(:group_labels)
+        @groups = @groups.where('group_labels.id' => params[:label]).joins(:group_labels)
       rescue ActiveRecord::RecordNotFound
         flash[:error] = "Label not found"
       end

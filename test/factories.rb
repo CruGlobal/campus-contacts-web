@@ -104,16 +104,16 @@ FactoryGirl.define do
   end
   
   factory :person do 
-    firstName 'John'
-    lastName 'Doe'
+    first_name 'John'
+    last_name 'Doe'
     gender '1'
     fb_uid {"690860831#{Factory.next(:count)}"}
     birth_date {DateTime.strptime('12/18/1989', '%m/%d/%Y')}
   end
   
   factory :person_without_name, parent: :person do
-    firstName ''
-    lastName ''
+    first_name ''
+    last_name ''
   end
   
   factory :user do
@@ -278,7 +278,7 @@ FactoryGirl.define do
     label         'First Name'
     style         'short'
     object_name   'person'
-    attribute_name 'firstName'
+    attribute_name 'first_name'
     required      false
   end
 
@@ -324,29 +324,29 @@ FactoryGirl.define do
     content       "Are you alright?"
   end
   
-  factory :yearInSchool_element, class: :element do
+  factory :year_in_school_element, class: :element do
     kind          'TextField'
     label         'Year in school?'
     style         'short'
     content       "Year in school?"
     object_name   'person'
-    attribute_name 'yearInSchool'
+    attribute_name 'year_in_school'
   end
   
-  factory :firstName_element, parent: :element do
+  factory :first_name_element, parent: :element do
     kind          'TextField'
     label         'First name?'
     style 'short'
     object_name 'person'
-    attribute_name 'firstName'
+    attribute_name 'first_name'
   end
   
-    factory :lastName_element, parent: :element do
+    factory :last_name_element, parent: :element do
     kind          'TextField'
     label         'Last name?'
     style 'short'
     object_name 'person'
-    attribute_name 'lastName'
+    attribute_name 'last_name'
   end
 
   factory :email_element, parent: :element do

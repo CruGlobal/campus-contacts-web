@@ -1,5 +1,4 @@
 class Survey < ActiveRecord::Base
-  self.table_name = 'mh_surveys'
   belongs_to :organization
   
   has_many :survey_elements, :dependent => :destroy, :order => :position

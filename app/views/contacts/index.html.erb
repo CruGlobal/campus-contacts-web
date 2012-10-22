@@ -86,8 +86,8 @@
   <table class="listing" cellpadding="0" cellspacing="0">
     <tr>
       <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment', class: 'check_all_contacts', 'data-status' => @attr %></th>
-      <th><%= sort_link @q, :firstName, t('.first_name'), params %></th>
-      <th><%= sort_link @q, :lastName, t('.last_name'), params %></th>
+      <th><%= sort_link @q, :first_name, t('.first_name'), params %></th>
+      <th><%= sort_link @q, :last_name, t('.last_name'), params %></th>
       <th><%= sort_link @q, :followup_status, t('general.status'), params %></th>
       <th><%= sort_link @q, :gender, t('general.gender'), params %></th>
       <th><%= sort_link @q, 'phone_numbers.number', t('.phone_number'), params %></th>
@@ -102,7 +102,7 @@
         <th><%= t('.friends') %></th>
       <% end %>
       <th><%= t('.surveys') %></th>
-      <th><%= sort_link @q, 'MAX(mh_answer_sheets.updated_at)', t('.last_survey'), params %></th>
+      <th><%= sort_link @q, 'MAX(answer_sheets.updated_at)', t('.last_survey'), params %></th>
       <th></th>
     </tr>
     <tbody id="contacts_table">

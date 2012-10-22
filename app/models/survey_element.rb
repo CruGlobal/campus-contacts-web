@@ -1,5 +1,4 @@
 class SurveyElement < ActiveRecord::Base
-  self.table_name = "mh_survey_elements"
   acts_as_list :scope => :survey_id
   belongs_to :survey
   belongs_to :element

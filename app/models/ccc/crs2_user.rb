@@ -1,4 +1,6 @@
 class Ccc::Crs2User < ActiveRecord::Base
+  establish_connection :uscm
+
   self.table_name = 'crs2_user'
   has_many :crs2_conferences, class_name: 'Ccc::Crs2Conference', foreign_key: :creator_id
   has_one :crs2_profile, class_name: 'Ccc::Crs2Profile', foreign_key: :user_id

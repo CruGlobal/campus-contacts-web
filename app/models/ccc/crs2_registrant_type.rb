@@ -1,4 +1,6 @@
 class Ccc::Crs2RegistrantType < ActiveRecord::Base
+  establish_connection :uscm
+
   self.table_name = 'crs2_registrant_type'
   has_many :crs2_additional_expenses_items, class_name: 'Ccc::Crs2AdditionalExpensesItem'
   has_many :crs2_custom_questions_items, class_name: 'Ccc::Crs2CustomQuestionsItem'
