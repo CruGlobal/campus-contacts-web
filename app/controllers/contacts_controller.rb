@@ -191,22 +191,22 @@ class ContactsController < ApplicationController
         @people = @organization.contacts
       elsif params[:archived].present? && params[:archived] == 'true'
         @header = I18n.t('contacts.index.archived')
-        @people = Person.where(personID: current_organization.people.archived(current_organization.id).collect(&:personID))
+        @people = Person.where(id: current_organization.people.archived(current_organization.id).collect(&:id))
       elsif params[:role] && Role.exists?(id: params[:role])
         @role = Role.find(params[:role])
         @people = @people_scope.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ? AND organizational_roles.deleted = 0', @role.id, current_organization.id)
         if params[:include_archived].present? && params[:include_archived] == 'true'
-          @people = @people.select("ministry_person.*, roles.*")
+          @people = @people.select("people.*, roles.*")
                     .joins("LEFT JOIN organizational_roles AS org_roles ON 
-                      org_roles.person_id = ministry_person.personID")
+                      org_roles.person_id = people.id")
                     .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
                     .where("org_roles.organization_id" => current_organization.id)
                     .where("roles.id = #{@role.id}")
                     sort_by.unshift("roles.id").uniq
         else
-          @people = @people.select("ministry_person.*, roles.*")
+          @people = @people.select("people.*, roles.*")
                     .joins("LEFT JOIN organizational_roles AS org_roles ON 
-                      org_roles.person_id = ministry_person.personID")
+                      org_roles.person_id = people.id")
                     .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
                     .where("org_roles.archive_date" => nil, "org_roles.organization_id" => current_organization.id) 
                     .where("roles.id = #{@role.id}")
