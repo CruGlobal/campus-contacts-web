@@ -175,7 +175,7 @@ class ContactsController < ApplicationController
       
       @people_scope = Person.where('organizational_roles.organization_id' => org_ids).where("organizational_roles.role_id <> #{Role::CONTACT_ID} OR (organizational_roles.role_id = #{Role::CONTACT_ID} AND organizational_roles.followup_status <> 'do_not_contact')").includes(:organizational_roles_including_archived)
       
-      @people_scope = @people_scope.where(personID: @people_scope.archived_not_included.collect(&:personID)) if params[:include_archived].blank? && params[:archived].blank?
+      @people_scope = @people_scope.where(id: @people_scope.archived_not_included.collect(&:id)) if params[:include_archived].blank? && params[:archived].blank?
       
       @people_scope = @people_scope.includes(:primary_phone_number, :primary_email_address)
       sort_by = ['lastName asc', 'firstName asc']

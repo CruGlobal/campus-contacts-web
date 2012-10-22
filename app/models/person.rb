@@ -156,11 +156,11 @@ class Person < ActiveRecord::Base
   } }
   
   def select_name
-    "#{firstName} #{lastName} #{'-' if lastName.present? || firstName.present?} #{pretty_phone_number}"
+    "#{first_name} #{last_name} #{'-' if last_name.present? || first_name.present?} #{pretty_phone_number}"
   end
   
   def select_name_email
-    "#{firstName} #{lastName} #{'-' if lastName.present? || firstName.present?} #{email}"
+    "#{first_name} #{last_name} #{'-' if last_name.present? || first_name.present?} #{email}"
   end
 
   
