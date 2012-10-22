@@ -487,7 +487,7 @@ class Person < ActiveRecord::Base
 
   def email=(val)
     return if val.blank?
-    e = email_addresses.where(email: val).first
+    e = email_addresses.detect { |email| email.email == val }
     if e
       unless e.primary?
         email_addresses.where(["email <> ?", val]).update_all(primary: false)
@@ -900,23 +900,28 @@ class Person < ActiveRecord::Base
 
     find_existing_person(person)
   end
+  def self.find_existing_person_by_name_and_phone(opts = {})
+    opts[:number] = PhoneNumber.strip_us_country_code(opts[:number])
+    return unless opts.slice(:first_name, :last_name, :number).all? {|_, v| v.present?}
 
-  def self.find_existing_person_by_email(email_address)
+    Person.where(first_name: opts[:first_name], last_name: opts[:last_name], 'phone_numbers.number' => opts[:number]).
+           joins(:phone_numbers).first
+  end
+
+  def self.find_existing_person_by_email(email)
+    return unless email.present?
+    (EmailAddress.find_by_email(email) ||
+      User.find_by_username(email) ||
+      User.find_by_email(email)).try(:person)
+  end
+
+  def self.find_existing_person_by_email_address(email_address)
     return unless email_address
-
-    other_person = email = nil
-
-    # Start by looking for a person with the same email address (since that's our one true unique field)
-    if email_address.email.present?
-      other_person = EmailAddress.find_by_email(email_address.email).try(:person)
-      email = email_address
-    end
-
-    other_person
+    find_existing_person_by_email(email_address.email)
   end
 
   def self.find_existing_person(person)
-    other_person = find_existing_person_by_email(person.email_addresses.first)
+    other_person = find_existing_person_by_email_address(person.email_addresses.first)
 
     if other_person
       person.phone_numbers.each do |phone_number|

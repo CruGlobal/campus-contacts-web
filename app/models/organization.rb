@@ -193,9 +193,9 @@ class Organization < ActiveRecord::Base
     "#{name} (#{keywords.count})"
   end
 
-  def add_role(person, role_id)
+  def add_role_to_person(person, role_id)
     person_id = person.is_a?(Person) ? person.id : person
-    OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, role_id)
+    OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id).first_or_create!
   end
 
 
@@ -216,7 +216,7 @@ class Organization < ActiveRecord::Base
 
   def add_contact(person)
     begin
-      add_role(person, Role::CONTACT_ID)
+      add_role_to_person(person, Role::CONTACT_ID)
     rescue => error
       @save_retry_count =  (@save_retry_count || 5)
       retry if( (@save_retry_count -= 1) > 0 )
@@ -225,11 +225,11 @@ class Organization < ActiveRecord::Base
   end
 
   def add_admin(person)
-    add_role(person, Role::ADMIN_ID)
+    add_role_to_person(person, Role::ADMIN_ID)
   end
 
   def add_involved(person)
-    add_role(person, Role::INVOLVED_ID)
+    add_role_to_person(person, Role::INVOLVED_ID)
   end
 
   def remove_contact(person)

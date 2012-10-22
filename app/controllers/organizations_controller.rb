@@ -69,7 +69,7 @@ class OrganizationsController < ApplicationController
         @organization.name = conference.name
         @organization.save!
       end
-      @organization.queue_import_from_conference
+      @organization.queue_import_from_conference(current_user)
       flash[:notice] = t('organizations.add_org_from_crs.conference_is_importing')
       render and return
     else
