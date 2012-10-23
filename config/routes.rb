@@ -117,6 +117,7 @@ Mh::Application.routes.draw do
       get :cleanup
       post :archive_contacts
       post :archive_leaders
+      post :create_from_crs
     end
   end
 

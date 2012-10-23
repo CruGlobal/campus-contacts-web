@@ -998,6 +998,8 @@ en:
       add_sub_org: Add %{terminology} under this one
       add_a_sub_org: Add new %{terminology}
       add: Add
+      crs_import_link: "Import a conference from the Conference Registration Tool"
+      crs_import_tip: 'The Conference Registration Tool is another tool created by CRU that you can use to manage conferences.'
     edit:
       delete: Delete Organization
       title: Edit %{org}
@@ -1014,6 +1016,14 @@ en:
       your_org: Your Organization
     add_org:
       name_not_unique: Name is not Unique
+    add_org_from_crs:
+      crs_import_instructions: This feature allows you to import all of the registrants from a conference into MissionHub as contacts. A new Sub-Organization will be created with the same name as the conference. This is a one-time import. Once you import people, any new registrants will not be imported later. Also, any changes you make to information on MissionHub will not be reflected back to CRS.
+      url: 'Enter a URL that you would send to people to register for a conference (%{link})'
+      admin_password: 'Enter your conference Admin Password'
+      example: Example
+      conference_is_importing: 'Your conference data is now being imported. We will send you an email when the import is complete.'
+      bad_url: 'The url you entered was not a valid conference registration url. Please check the example and try again.'
+      bad_password: 'The password you entered is not the Admin Password for the conference corresponding to the url you entered.'
     settings:
       title: Settings
       year_in_school: Display 'Year in School' on the Directory Page
@@ -1043,5 +1053,4 @@ en:
   batch:
     new_person_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, there are new contacts in your organization. Please login to missionhub.com as soon as possible to followup the contacts. Below is the list of %{contacts_count} new contacts:"
     person_transfer_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, you have been sent new contacts. Please login to missionhub.com as soon as possible to followup the contacts. There may be more information about the contacts in the comment section of their individual profile. If not, you may want to contact the senders at their email address. Below is the list of %{contacts_count} contacts sent:"
-
 

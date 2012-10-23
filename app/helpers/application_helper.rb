@@ -49,7 +49,7 @@ module ApplicationHelper
 
   def give_link(text)
     if text.include?('https://give.cru.org/') && text.include?('Desig')
-      text.sub('Desig', "mhub_id=#{current_person.id}&Desig")
+      text.sub('Desig', "id_type=missionhub&id_value=#{current_person.id}&Desig")
     else
       text
     end.html_safe
