@@ -187,13 +187,10 @@ class ContactsController < ApplicationController
       elsif params[:completed] == 'true'
         @header = I18n.t('contacts.index.completed')
         @people = @organization.completed_contacts
-      elsif params[:search]
-        @header = I18n.t('contacts.index.matching_seach')
-        @people = @organization.contacts
       elsif params[:archived].present? && params[:archived] == 'true'
         @header = I18n.t('contacts.index.archived')
         @people = Person.where(id: current_organization.people.archived(current_organization.id).collect(&:id))
-      elsif params[:role] && Role.exists?(id: params[:role])
+      elsif params[:search] || (params[:role] && Role.exists?(id: params[:role]))
         @role = Role.find(params[:role])
         @people = @people_scope.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ? AND organizational_roles.deleted = 0', @role.id, current_organization.id)
         if params[:include_archived].present? && params[:include_archived] == 'true'
@@ -214,7 +211,7 @@ class ContactsController < ApplicationController
                     sort_by.unshift("roles.id").uniq
                     
         end
-        @header = @role.i18n
+        @header = params[:search] ? I18n.t('contacts.index.matching_seach') : @role.i18n
       else
         params[:assigned_to] = nil if params[:assigned_to].blank?
         if params[:assigned_to]
@@ -257,10 +254,6 @@ class ContactsController < ApplicationController
       end
       if params[:q] && params[:q][:s].include?('followup_status')
         @people = current_organization.contacts.order_by_followup_status(params[:q][:s])
-      end
-      if params[:role].present?
-        org_roles = OrganizationalRole.where(person_id: @people.collect(&:id), role_id: params[:role])
-        @people = Person.where(id: org_roles.collect(&:person_id)).uniq
       end
       if params[:survey].present?
         @people = @people.joins(:answer_sheets).where("answer_sheets.survey_id" => params[:survey])
