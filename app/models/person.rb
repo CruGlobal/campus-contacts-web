@@ -109,7 +109,26 @@ class Person < ActiveRecord::Base
     :joins => "LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM answer_sheets ass INNER JOIN surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{org_id}) ass ON ass.person_id = people.id",
     :group => "people.id",
     :order => "#{order.gsub('answer_sheets', 'ass')}"
-  } }
+  }}
+  
+  def completed_answer_sheets(organization)
+    answer_sheets.where("survey_id IN (?)", organization.surveys.collect(&:id)).order('updated_at DESC')
+  end
+  
+  def latest_answer_sheet(organization)
+    completed_answer_sheets(organization).first
+  end
+  
+  def answered_surveys_hash(organization)
+    surveys = Array.new
+    completed_answer_sheets(organization).each do |answer_sheet|
+      survey = Hash.new
+      survey['keyword'] = answer_sheet.survey.title
+      survey['date'] = answer_sheet.updated_at
+      surveys << survey
+    end
+    return surveys
+  end
 
   scope :get_archived, lambda { |org_id| { 
     :conditions => "organizational_roles.archive_date IS NOT NULL AND organizational_roles.deleted = 0",

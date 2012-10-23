@@ -166,8 +166,9 @@ class ContactsController < ApplicationController
         return false
       end
       @surveys = @organization.surveys
-      @questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => false).flatten.uniq
-      @hidden_questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => true).flatten.uniq
+      @all_questions = @organization.all_questions.flatten.uniq
+      @questions = @organization.all_questions.where("survey_elements.hidden" => false).flatten.uniq
+      @hidden_questions = @organization.all_questions.where("survey_elements.hidden" => true).flatten.uniq
 
       params[:assigned_to] = 'all' if !params[:assigned_to].present?# make 'all default' on 'all contacts' tab instead of 'unassigned'
       
