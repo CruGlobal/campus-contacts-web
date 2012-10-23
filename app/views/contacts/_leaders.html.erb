@@ -63,7 +63,7 @@
         %>
         <li class="leader" style="<%= 'display:none' if count == 0 %>">
           <span class="name">
-            <%= link_to(role, controller: 'contacts', :role => role.id, :include_archived => params[:include_archived]) %>
+            <%= link_to("#{role.name}", controller: 'contacts', :role => role.id, :include_archived => params[:include_archived]) %>
           </span>
           (<%= count %>)
         </li>
