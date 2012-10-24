@@ -56,21 +56,6 @@
       
     </td>
   <% end %>
-<<<<<<< HEAD
-  <% unless params[:dnc].present? %>
-    <td id="assigned_to_<%= person.id %>" class="assigned_to"><%= assigned_to = (assignments[person.id] || []).first.try(:assigned_to) %></td>
-    <td>
-      <% friends = person.friends_and_leaders(current_organization) %> 
-      <% if friends.length > 0 %>
-        <% friend_leaders = Person.where(fb_uid: friends).order("last_name, first_name") %>
-        <%= link_to(friend_leaders.length, '', class: 'friends_count tipthis', title: friend_leaders.collect {|f| "#{f}<br>"} ) %>
-      <% else %>
-      0
-      <% end %>
-    </td>
-  <% end %>
-=======
->>>>>>> MH-465
   <td>
     <% if dates.present? %>
       <% @surveys[person.id].each do |keyword,date| %>
