@@ -97,6 +97,10 @@ class ImportsController < ApplicationController
 
   def init_org
     @organization = current_organization
+    org_ids = params[:subs] == 'true' ? @organization.self_and_children_ids : @organization.id
+    @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles_including_archived)
+    @people_scope = @people_scope.where(personID: @people_scope.archived_not_included.collect(&:personID)) if params[:include_archived].blank? && params[:archived].blank?
+    
     authorize! :manage, @organization
   end
 

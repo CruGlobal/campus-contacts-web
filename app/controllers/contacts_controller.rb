@@ -55,6 +55,8 @@ class ContactsController < ApplicationController
       end
     end
     @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
+    @all_people_with_phone_number = @all_people.find_all{|person| person.pretty_phone_number.present? }
+    @all_people_with_email = @all_people.find_all{|person| person.email.present? }
   end
   
   def contacts_all
@@ -168,6 +170,16 @@ class ContactsController < ApplicationController
       @hidden_questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => true).flatten.uniq
 
       params[:assigned_to] = 'all' if !params[:assigned_to].present?# make 'all default' on 'all contacts' tab instead of 'unassigned'
+      
+      org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
+      
+      @people_scope = Person.where('organizational_roles.organization_id' => org_ids).where("organizational_roles.role_id <> #{Role::CONTACT_ID} OR (organizational_roles.role_id = #{Role::CONTACT_ID} AND organizational_roles.followup_status <> 'do_not_contact')").includes(:organizational_roles_including_archived)
+      
+      @people_scope = @people_scope.where(personID: @people_scope.archived_not_included.collect(&:personID)) if params[:include_archived].blank? && params[:archived].blank?
+      
+      @people_scope = @people_scope.includes(:primary_phone_number, :primary_email_address)
+      sort_by = ['lastName asc', 'firstName asc']
+      
       if params[:dnc] == 'true'
         @people = @organization.dnc_contacts
         @header = I18n.t('contacts.index.dnc')
@@ -177,18 +189,44 @@ class ContactsController < ApplicationController
       elsif params[:search]
         @header = I18n.t('contacts.index.matching_seach')
         @people = @organization.contacts
+      elsif params[:archived].present? && params[:archived] == 'true'
+        @header = I18n.t('contacts.index.archived')
+        @people = Person.where(personID: current_organization.people.archived(current_organization.id).collect(&:personID))
+      elsif params[:role] && Role.exists?(id: params[:role])
+        @role = Role.find(params[:role])
+        @people = @people_scope.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ? AND organizational_roles.deleted = 0', @role.id, current_organization.id)
+        if params[:include_archived].present? && params[:include_archived] == 'true'
+          @people = @people.select("ministry_person.*, roles.*")
+                    .joins("LEFT JOIN organizational_roles AS org_roles ON 
+                      org_roles.person_id = ministry_person.personID")
+                    .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
+                    .where("org_roles.organization_id" => current_organization.id)
+                    .where("roles.id = #{@role.id}")
+                    sort_by.unshift("roles.id").uniq
+        else
+          @people = @people.select("ministry_person.*, roles.*")
+                    .joins("LEFT JOIN organizational_roles AS org_roles ON 
+                      org_roles.person_id = ministry_person.personID")
+                    .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
+                    .where("org_roles.archive_date" => nil, "org_roles.organization_id" => current_organization.id) 
+                    .where("roles.id = #{@role.id}")
+                    sort_by.unshift("roles.id").uniq
+                    
+        end
+        @header = @role.i18n
       else
         params[:assigned_to] = nil if params[:assigned_to].blank?
         if params[:assigned_to]
           case params[:assigned_to]
           when 'all'
-            @people = @organization.contacts
+            if params[:include_archived].present? && params[:include_archived] == 'true'
+              @people = @organization.contacts_with_archived
+            else
+              @people = @organization.contacts
+            end
           when 'unassigned'
             @people = @organization.unassigned_contacts
             @header = I18n.t('contacts.index.unassigned')
-          when 'progress'
-            @people = @organization.inprogress_contacts
-            @header = I18n.t('contacts.index.in_progress')
           when 'no_activity'
             @people = @organization.no_activity_contacts
             @header = I18n.t('contacts.index.no_activity')
@@ -207,19 +245,24 @@ class ContactsController < ApplicationController
         end
         @people ||= Person.where("1=0")
       end
+      
       unless @people.arel.to_sql.include?('JOIN organizational_roles')
         @header = "#{Role.find(params[:role]).i18n}" if params[:role].present?
       end
+      
       if params[:q] && params[:q][:s].include?('answer_sheets')
         @people = current_organization.contacts.get_and_order_by_latest_answer_sheet_answered(params[:q][:s], current_organization.id)
       end
+      
       if params[:q] && params[:q][:s].include?('followup_status')
         @people = current_organization.contacts.order_by_followup_status(params[:q][:s])
       end
+      
       if params[:role].present?
         org_roles = OrganizationalRole.where(person_id: @people.collect(&:id), role_id: params[:role])
         @people = Person.where(id: org_roles.collect(&:person_id)).uniq
       end
+      
       if params[:survey].present?
         @people = @people.joins(:answer_sheets).where("answer_sheets.survey_id" => params[:survey])
       end
@@ -309,11 +352,11 @@ class ContactsController < ApplicationController
       end
 
 
-
-
       @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
       # raise @q.sorts.inspect
-      @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? "" : ['last_name, first_name']).group('people.id')
+      
+      @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass') : ['last_name, first_name']).group('people.id')
+      
       @all_people = @people
       @people_for_labels = Person.people_for_labels(current_organization)
       @people = @people.includes(:organizational_roles)

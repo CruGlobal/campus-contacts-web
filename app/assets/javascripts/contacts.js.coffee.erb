@@ -2,6 +2,13 @@ $ ->
   $(document).on 'keypress', '#contact_search_form input', (e)->
     if (e.keyCode == $.ui.keyCode.ENTER)
       $('#contact_search_form').submit()
+      
+      
+  $('#contacts_controller #include_archived').live 'click', ->
+    if $(this).is(':checked')
+      document.location = '/contacts?include_archived=true'
+    else
+      document.location = '/contacts'
 
   $('.friends_count').live 'click', ->
     false
@@ -122,8 +129,10 @@ $ ->
           field.prop('checked', true)
         else
           field.val(v)
-
-  $('#filter_link').click -> 
+          
+  $('#contacts_controller.index .filter_link').attr('href','#')
+  
+  $('#contacts_controller.index .filter_link').click -> 
     $('#filter_box').toggle()
     false
     
@@ -472,21 +481,6 @@ $ ->
     $('#rejoicable_fields').slideToggle()
     false
     
-  $("#contacts_controller a#bulk_delete").live 'click', ->
-    num_selected = $('.id_checkbox:checked:visible').length
-    if num_selected  > 0
-      if(confirm('Are you sure you want to delete ' + num_selected + ' contacts permanently?'))
-        $('.id_checkbox:checked').each ->
-          $(this).closest('tr').fadeOut()
-
-        url = $(this).attr('href')
-        params = $('#new_contact_assignment').serialize()
-        $.post(url, params)
-    
-    else
-      $.a(t('contacts.index.none_checked'))
-    false    
-    
   $('.contact_row td:not(.checkbox_cell)').live 'click', ->
     unless $('a', this)[0]?
       tr = $(this).parent()
@@ -504,7 +498,9 @@ $ ->
     $('.' + $(this).attr('data-class')).fadeOut()
   
   $('#hidden_questions_link').live 'click', ->
-    $('#hidden_questions_div').slideToggle()
+    position = parseInt($('#table_header').position().top) + parseInt($('#table_header').height())
+    $('#hidden_questions_div').css('top': position)
+    $('#hidden_questions_div').toggle()
     false
  
   $.fn.activateDncDroppable()

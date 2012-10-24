@@ -3,6 +3,7 @@
  *= require people
  *= require import
  *= require jquery.qtip
+ *= require jquery.chosen
  *= require superfish
  *= require superfish-navbar
  *= require superscroll

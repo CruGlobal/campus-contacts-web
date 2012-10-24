@@ -177,8 +177,6 @@ class ContactsControllerTest < ActionController::TestCase
       assert_equal assigns(:header).upcase, "Involved".upcase
       xhr :get, :index, {:assigned_to => "unassigned"}
       assert_equal assigns(:header), "Unassigned"
-      xhr :get, :index, {:assigned_to => "progress"}
-      assert_equal assigns(:header), "Assigned"
       xhr :get, :index, {:completed => "true"}
       assert_equal assigns(:header), "Completed"
       xhr :get, :index, {:assigned_to => nil}
@@ -199,30 +197,6 @@ class ContactsControllerTest < ActionController::TestCase
       assert_equal assigns(:header), "Matching the criteria you searched for"
       xhr :get, :index, {:assigned_to => @user.person.id}
       assert_equal assigns(:header), "Assigned to #{@user.person.name}"
-    end
-    
-    should "get in_progress contacts ONLY" do
-      @contact1 = Factory(:person)
-      @contact2 = Factory(:person)
-      @contact3 = Factory(:person)
-      @contact4 = Factory(:person)
-      @contact5 = Factory(:person)
-      @user.person.organizations.first.add_leader(@user.person, @user.person)
-      @user.person.organizations.first.add_contact(@contact1)
-      @user.person.organizations.first.add_contact(@contact2)
-      @user.person.organizations.first.add_contact(@contact3)
-      @user.person.organizations.first.add_contact(@contact4)
-      @user.person.organizations.first.add_contact(@contact5)
-      
-      Factory(:contact_assignment, person: @contact1, organization: @org, assigned_to: @user.person)
-      Factory(:contact_assignment, person: @contact2, organization: @org, assigned_to: @user.person)
-      Factory(:contact_assignment, person: @contact3, organization: @org, assigned_to: @user.person)
-      Factory(:contact_assignment, person: @contact4, organization: @org, assigned_to: @user.person)
-      Factory(:contact_assignment, person: @contact5, organization: @org, assigned_to: @user.person)
-      
-      @contact5.organizational_roles.first.update_attributes({:deleted => 1})
-      xhr :get, :index, {:assigned_to => "progress"}
-      assert_equal assigns(:all_people).collect(&:id).sort, [@contact1.id, @contact2.id, @contact3.id, @contact4.id]
     end
     
     should "get unassigned contacts ONLY" do

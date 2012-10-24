@@ -155,6 +155,15 @@ class Person < ActiveRecord::Base
     :having => "COUNT(*) = (SELECT COUNT(*) FROM people AS mpp JOIN organizational_roles orss ON mpp.id = orss.person_id WHERE mpp.id = people.id)"
   } }
   
+  def select_name
+    "#{firstName} #{lastName} #{'-' if lastName.present? || firstName.present?} #{pretty_phone_number}"
+  end
+  
+  def select_name_email
+    "#{firstName} #{lastName} #{'-' if lastName.present? || firstName.present?} #{email}"
+  end
+
+  
   def self.deleted
     self.get_deleted.collect()
   end
