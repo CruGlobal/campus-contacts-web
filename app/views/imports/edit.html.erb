@@ -2,13 +2,21 @@
 	<%= javascript_include_tag "underscore-1.4.2" %>
 	<%= javascript_tag do %>
   		surveyTitles = new Array();
+  		surveyLengths = new Array();
   		mhubQuestions = new Array();
   		userQuestions = new Array();
+  		surveyData = new Array();
+		surveys = new Array();
   		<% @survey_questions.each_key do |s| %>
 			surveyTitles.push('<%= s %>');
+			surveyData.push("<%= s %>");
 			<% @survey_questions[s].each do |v| %>
 				mhubQuestions.push('<%= v[0] %>');
+				surveys.push("<%= v[0] %>");
 			<% end %>
+			surveyLengths.push(surveys.length);
+			surveyData.push(surveys);
+			surveys = [];
 		<% end %>
 		<% @import.headers.each_with_index do |header| %>
 			userQuestions.push('<%= header %>'.replace(/:/gi, "").toLowerCase());
@@ -52,14 +60,16 @@
 										<div class="noMatch">
 											<span>No Match</span>
 										</div>
-										<% @survey_questions.each_key do |s| %>
-											<ul class="surveyQuestions">
-												<span class="surveyHeader"><%= s %></span>
-												<% @survey_questions[s].each do |v| %>
-													<li class="surveyItem"><%= v[0] %></li>
-												<% end %>
-											</ul>
-										<% end %>
+										<div class="surveyContainer">
+											<% @survey_questions.each_key do |s| %>
+												<ul class="surveyQuestions">
+													<span class="surveyHeader"><%= s %></span>
+													<% @survey_questions[s].each do |v| %>
+														<li class="surveyItem"><%= v[0] %></li>
+													<% end %>
+												</ul>
+											<% end %>
+										</div>
 										<div class="newQuestion">
 											<span class="plus">+</span>Create a Survey Question for this Column
 										</div>
