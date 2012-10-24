@@ -15,6 +15,7 @@ require 'factory_girl'
 require 'api_test_helper'
 require File.dirname(__FILE__) + "/factories"
 require 'webmock/test_unit'
+require "strip_attributes/shoulda"
 
 # EphemeralResponse.activate
 # 
@@ -37,6 +38,10 @@ class ActiveSupport::TestCase
   Role.leader
   Role.contact
   Role.involved
+end
+
+class Test::Unit::TestCase
+  extend StripAttributes::Shoulda::Macros
 end
 
 class ActionController::TestCase

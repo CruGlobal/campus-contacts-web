@@ -6,6 +6,8 @@ class EmailAddress < ActiveRecord::Base
   after_destroy :set_new_primary
   validates_uniqueness_of :email, on: :create, message: "already taken"
   validates_uniqueness_of :email, on: :update, message: "already taken"
+  strip_attributes :only => :email
+  #before_validation :strip_blanks
   
   def to_s
     email
@@ -55,6 +57,10 @@ class EmailAddress < ActiveRecord::Base
       end
     end
     true
+  end
+  
+  def strip_blanks
+    self.email = self.email.strip
   end
 
 
