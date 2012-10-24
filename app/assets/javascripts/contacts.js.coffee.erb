@@ -136,6 +136,22 @@ $ ->
     $('#filter_box').toggle()
     false
     
+  $('#update_notice_div').dialog
+    resizable: false,
+    height: 200,
+    width: 490,
+    modal: true,
+    title: t('contacts.update_notice_title')
+    buttons: [
+      text: 'Close',
+      click: ->
+        if $('#update_notice_toggle').is(':checked')  
+          $.ajax
+            type: 'GET',
+            url: '/people/hide_update_notice'
+        $(this).dialog('destroy')
+    ]
+    
   $('#contacts_controller a.add_contact').live 'click', ->
     $('#new_person')[0].reset()
     $('#add_contact_div').dialog

@@ -18,6 +18,13 @@ class PeopleController < ApplicationController
     @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
     render :partial => 'all'
   end
+  
+  def hide_update_notice
+    person = current_user
+    person.settings[:hide_update_notice] = true
+    person.save
+    render nothing: true and return
+  end
 
   def export
     index

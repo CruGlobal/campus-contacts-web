@@ -84,6 +84,56 @@ class PersonTest < ActiveSupport::TestCase
       assert_equal(results[0].first_name, 'Visitor', "first person of the results should be the visitor when order is ASC")
       assert_equal(results[1].first_name, 'Reader', "second person of the results should be the reader when order is ASC")
     end
+    
+    
+  context "person's survey functions" do
+    setup do
+      @org = Factory(:organization)
+      
+      @survey1 = Factory(:survey, organization: @org)
+      @survey2 = Factory(:survey, organization: @org)
+      @survey3 = Factory(:survey, organization: @org)
+      @survey4 = Factory(:survey, organization: @org)
+      
+      @person1 = Factory(:person, first_name: 'First Person')
+      @person2 = Factory(:person, first_name: 'Second Person')
+      
+      @answer_sheet1 = Factory(:answer_sheet, person: @person1, survey: @survey1, updated_at: "2012-07-02".to_date)
+      @answer_sheet2 = Factory(:answer_sheet, person: @person1, survey: @survey2, updated_at: "2012-07-01".to_date)
+      @answer_sheet3 = Factory(:answer_sheet, person: @person1, survey: @survey3, updated_at: "2012-07-03".to_date)
+      @answer_sheet4 = Factory(:answer_sheet, person: @person2, survey: @survey4, updated_at: "2012-07-03".to_date)
+    end
+    
+    should "return all answer_sheets of a person in completed_answer_sheets function" do
+      results = @person1.completed_answer_sheets(@org)
+      assert_equal(results[0], @answer_sheet3, "first result should be the 3rd answer sheet")
+      assert_equal(results[1], @answer_sheet1, "second result should be the 1st answer sheet")
+      assert_equal(results[2], @answer_sheet2, "third result should be the 2nd answer sheet")
+    end
+    
+    should "not return an answer_sheets which is not answered by the person in completed_answer_sheets function" do
+      results = @person1.completed_answer_sheets(@org)
+      assert !results.include?(@answer_sheet4)
+    end
+    
+    should "return the latest answer_sheet of a person in latest_answer_sheet function" do
+      results = @person1.latest_answer_sheet(@org)
+      assert_equal(results, @answer_sheet3, "should be the 3rd answer sheet")
+    end
+    
+    should "not return the latest answer_sheet of other person in latest_answer_sheet function" do
+      result = @person1.latest_answer_sheet(@org)
+      assert_not_equal result, @answer_sheet4
+    end
+    
+    should "return all answered surveys hash of a person in answered_surveys_hash function" do
+      results = @person1.answered_surveys_hash(@org)
+      assert_equal(results[0]['keyword'], @survey3.title, "first result should be the 3rd survey's title")
+      assert_equal(results[1]['keyword'], @survey1.title, "second result should be the 1st survey's title")
+      assert_equal(results[2]['keyword'], @survey2.title, "third result should be the 2nd survey's title")
+    end
+  end
+    
     should "return people based on last answered survey" do
       @org = Factory(:organization)
       @survey = Factory(:survey)

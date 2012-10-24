@@ -78,6 +78,7 @@ Mh::Application.routes.draw do
       get :merge
       post :confirm_merge
       post :do_merge
+      get :hide_update_notice
       get :search_ids
       post :bulk_email
       post :bulk_sms

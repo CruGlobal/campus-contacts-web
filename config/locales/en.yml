@@ -161,6 +161,7 @@ en:
       include_archived: "Include Archived"
       add_person: Add Person
       export: "Export CSV"
+      vcard: "Export Vcard"
       directory_title: "Directory - %{org}"
       archived_directory_title: "Archived - %{org}"
       labels: 'Labels'
@@ -559,6 +560,11 @@ en:
     assign: Assign
     unassign: 'Unassign'
     add_contact: "Add Contact"
+    update_notice_title: "New All Contacts Options"
+    update_notice_content: "We’re rolling out changes to make using MissionHub even easier. With all of the Directory features now accessible via All Contacts, you can easily manage your contacts from one page."
+    update_notice_link: "Learn about the new look on our blog."
+    update_notice_link_url: 'http://blog.missionhub.com/2012/10/16/new-all-contacts/'
+    update_notice_toggle: "Do not show this notice again"
     statuses:
       uncontacted: Uncontacted
       attempted_contact: Attempted Contact
@@ -1044,7 +1050,7 @@ en:
       confirm_archive: "Are you sure you wanted to archive the desired contacts?"
       archive_inst: "Archive all contacts created before %{date_field}"
       alumni_inst: "Go to the %{link} screen, select the leaders/involved people that have graduated from your ministry and label as \"Alumni\""
-      alumni_inst_path: Directory
+      alumni_inst_path: "All Contacts"
       annual_inst_1: "People are messy - and so are databases. Every year your database gets clogged up with people who may have come to a meeting once upon a time, or filled out a survey once, but never got involved and don't intend to. If you are a campus ministry, you will also have a good number of people who graduate from your ministry each year. How do you get your database trimmed up and ready for the fall?"
       annual_inst_2: "An Annual Clean Up can help. Simply walk through these steps once a year (or however often you want) and your Mission Hub Database will again be a well-oiled machine, ready to help you transform the world!"
       remove_leader_inst: "Archive leaders who have been inactive by not logging-in after %{date_field}"
