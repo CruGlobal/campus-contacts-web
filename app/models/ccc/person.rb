@@ -105,8 +105,8 @@ class Ccc::Person < ActiveRecord::Base
     greekAffiliation
   end
 
-  def yearInSchool
-    year_in_school
+  def year_in_school
+    yearInSchool
   end
 
   def merge(other)
