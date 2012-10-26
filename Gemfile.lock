@@ -430,7 +430,7 @@ DEPENDENCIES
   railroady
   rails (~> 3.2.2)
   rails-dev-tweaks
-  rails-footnotes (>= 3.7)
+  rails-footnotes
   rails_autolink
   ransack!
   redis

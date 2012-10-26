@@ -77,7 +77,6 @@ group :development, :test do
   gem 'awesome_print'
   # Pretty printed test output
   # gem 'turn', :require => false
-  gem 'rails-footnotes', '>= 3.7'
   # gem 'translate-rails3', :require => 'translate'
   gem 'ffaker'
   #gem 'ruby-debug19', :require => 'ruby-debug'
@@ -91,6 +90,7 @@ end
 
 group :development do
   gem 'rails-dev-tweaks'
+  gem 'rails-footnotes'
 end
 
 group :performance do
