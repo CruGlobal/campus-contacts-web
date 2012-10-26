@@ -3,6 +3,21 @@ $ ->
     if $('#query').val().length > 0
       $('#search_filter_box').show()
       false
+    
+  $('#labels_dialog').dialog
+    resizable: false,
+    height: 450,
+    autoOpen: false,
+    width: 350,
+    modal: true,
+    title: "Labels",
+    buttons: 
+      Close: ->
+        $(this).dialog('close')
+    
+  $('#add_label_button').live 'click', (e)->
+    $('#labels_dialog').dialog('open')
+    e.preventDefault()
       
   if $('#advanced_filter_box')[0] && $('#first_name')[0]
     if $('#first_name').val().length > 0 || $('#last_name').val().length > 0 || (($('#role').val().length) > 0 && (window.location.search.indexOf('advanced')) > 1) ||
