@@ -1,12 +1,13 @@
 <div class="inside_container">
 	<%= javascript_include_tag "underscore-1.4.2" %>
+	<%= javascript_include_tag "jquery.simplyCountable" %>
 	<%= javascript_tag do %>
-  		surveyTitles = new Array();
-  		surveyLengths = new Array();
-  		mhubQuestions = new Array();
-  		userQuestions = new Array();
-  		surveyData = new Array();
-		surveys = new Array();
+  		var surveyTitles = new Array();
+  		var surveyLengths = new Array();
+  		var mhubQuestions = new Array();
+  		var userQuestions = new Array();
+  		var surveyData = new Array();
+		var surveys = new Array();
   		<% @survey_questions.each_key do |s| %>
 			surveyTitles.push('<%= s %>');
 			surveyData.push("<%= s %>");
@@ -58,7 +59,7 @@
 									</div>
 									<div class="selectQuestions" style="display:none;">
 										<div class="noMatch">
-											<span>No Match</span>
+											<span>Do not import data</span>
 										</div>
 										<div class="surveyContainer">
 											<% @survey_questions.each_key do |s| %>
@@ -76,7 +77,7 @@
 									</div>
 								</div>
 								<div class="matchEdit">
-									<%= link_to("Edit", "#", :class => "editMatch") %>
+									<%= link_to("Edit", "#", :class => "editMatch", :id => "edit_#{i}") %>
 								</div>
 							</td>
 						</tr>
