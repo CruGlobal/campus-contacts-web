@@ -190,7 +190,7 @@ class ContactsController < ApplicationController
       elsif params[:archived].present? && params[:archived] == 'true'
         @header = I18n.t('contacts.index.archived')
         @people = Person.where(id: current_organization.people.archived(current_organization.id).collect(&:id))
-      elsif params[:role] || (params[:search] && params[:role])
+      elsif params[:role].present? || (params[:search].present? && params[:role].present?)
         if @role = Role.find(params[:role])
           @people = @people_scope.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ? AND organizational_roles.deleted = 0', @role.id, current_organization.id)
           if params[:include_archived].present? && params[:include_archived] == 'true'
