@@ -24,6 +24,9 @@ class ContactsController < ApplicationController
         @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, person_id: @people.collect(&:id)).map {|r| [r.person_id, r]}]
         @assignments = ContactAssignment.includes(:assigned_to).where(person_id: @people.collect(&:id), organization_id: @organization.id).group_by(&:person_id)
         @answers = generate_answers(@people, @organization, @questions)
+        @filtered_people = @all_people - @people
+        @all_people_with_phone_number = @all_people.where('phone_numbers.number is not NULL')
+        @all_people_with_email = @all_people.where('email_addresses.email is not NULL')
       end
       wants.csv do
         @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r]}]
@@ -38,7 +41,7 @@ class ContactsController < ApplicationController
               dates = []
               @questions.each do |q|
                 answer = @all_answers[person.id][q.id]
-                if answer
+                if answers
                   answers << answer.first
                   dates << answer.last
                 else
@@ -54,9 +57,6 @@ class ContactsController < ApplicationController
         send_data(out, :filename => "#{filename} - Contacts.csv", :type => 'application/csv' )
       end
     end
-    @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
-    @all_people_with_phone_number = @all_people.find_all{|person| person.pretty_phone_number.present? }
-    @all_people_with_email = @all_people.find_all{|person| person.email.present? }
   end
   
   def contacts_all
@@ -160,25 +160,20 @@ class ContactsController < ApplicationController
       @header = nil
       @style = params[:edit] ? 'display:true' : 'display:none'
       @saved_contact_search = @person.user.saved_contact_searches.find(:first, :conditions => "full_path = '#{request.fullpath.gsub(I18n.t('contacts.index.edit_true'),"")}'") || SavedContactSearch.new
-      @organization = current_organization # params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : 
-      unless @organization
-        redirect_to user_root_path, error: t('contacts.index.which_org')
-        return false
-      end
+      @organization = Organization.where(id: current_organization.id).includes(:surveys, :groups, :questions).first
       @surveys = @organization.surveys
       @all_questions = @organization.all_questions.flatten.uniq
       @questions = @organization.all_questions.where("survey_elements.hidden" => false).flatten.uniq
-      @hidden_questions = @organization.all_questions.where("survey_elements.hidden" => true).flatten.uniq
+      @hidden_questions = @all_questions - @questions
 
       params[:assigned_to] = 'all' if !params[:assigned_to].present?# make 'all default' on 'all contacts' tab instead of 'unassigned'
       
       org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
       
-      @people_scope = Person.where('organizational_roles.organization_id' => org_ids).where("organizational_roles.role_id <> #{Role::CONTACT_ID} OR (organizational_roles.role_id = #{Role::CONTACT_ID} AND organizational_roles.followup_status <> 'do_not_contact')").includes(:organizational_roles_including_archived)
+      @people_scope = Person.where('organizational_roles.organization_id' => org_ids).where("organizational_roles.role_id <> #{Role::CONTACT_ID} OR (organizational_roles.role_id = #{Role::CONTACT_ID} AND organizational_roles.followup_status <> 'do_not_contact')").joins(:organizational_roles_including_archived)
       
       @people_scope = @people_scope.where(id: @people_scope.archived_not_included.collect(&:id)) if params[:include_archived].blank? && params[:archived].blank?
       
-      @people_scope = @people_scope.includes(:primary_phone_number, :primary_email_address)
       sort_by = ['lastName asc', 'firstName asc']
       
       if params[:dnc] == 'true'
@@ -350,7 +345,9 @@ class ContactsController < ApplicationController
       @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
       # raise @q.sorts.inspect
       
-      @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass') : ['last_name, first_name']).group('people.id')
+      @people = @people.includes(:primary_phone_number, :primary_email_address).
+                  order(params[:q] && params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass') : ['last_name, first_name']).
+                  group('people.id')
       
       @all_people = @people
       @people_for_labels = Person.people_for_labels(current_organization)
@@ -378,7 +375,7 @@ class ContactsController < ApplicationController
         answers[person.id] = {}
       end
       @surveys = {}
-      AnswerSheet.where(survey_id: organization.survey_ids, person_id: people.collect(&:id)).includes(:answers, {:person => :primary_email_address}).each do |answer_sheet|
+      AnswerSheet.includes(:survey).where(survey_id: organization.survey_ids, person_id: people.collect(&:id)).includes({:person => :primary_email_address}).each do |answer_sheet|
         @surveys[answer_sheet.person_id] ||= {}
         @surveys[answer_sheet.person_id][answer_sheet.survey] = answer_sheet.completed_at
         

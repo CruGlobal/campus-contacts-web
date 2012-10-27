@@ -497,19 +497,19 @@ class Person < ActiveRecord::Base
 
   def email
     @email = primary_email_address.try(:email)
-    unless @email
-      if email_addresses.present?
-        @email = email_addresses.first.try(:email)
-        email_addresses.first.update_attribute(:primary, true) unless new_record?
-      else
-        @email ||= user.try(:username) || user.try(:email)
-        begin
-          new_record? ? email_addresses.new(:email => @email, :primary => true) : email_addresses.create(:email => @email, :primary => true) if @email
-        rescue ActiveRecord::RecordNotUnique
-          reload
-        end
-      end
-    end
+    # unless @email
+    #   if email_addresses.present?
+    #     @email = email_addresses.first.try(:email)
+    #     email_addresses.first.update_attribute(:primary, true) unless new_record?
+    #   else
+    #     @email ||= user.try(:username) || user.try(:email)
+    #     begin
+    #       new_record? ? email_addresses.new(:email => @email, :primary => true) : email_addresses.create(:email => @email, :primary => true) if @email
+    #     rescue ActiveRecord::RecordNotUnique
+    #       reload
+    #     end
+    #   end
+    # end
     @email.to_s
   end
 

@@ -66,31 +66,26 @@ gem 'copycopter_client'
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
 group :development, :test do
-  gem 'resque_unit'
-  gem 'shoulda', :require => false
-  # gem 'ephemeral_response'
-  gem 'mocha'
-  gem 'mailcatcher'
-  gem 'factory_girl','~> 2.0.0.rc4'
-  gem 'simplecov', '>= 0.3.5', require: false
-  gem 'railroady'
   gem 'awesome_print'
-  # Pretty printed test output
-  # gem 'turn', :require => false
-  # gem 'translate-rails3', :require => 'translate'
-  gem 'ffaker'
-  #gem 'ruby-debug19', :require => 'ruby-debug'
-  gem 'autotest-rails'
-
 end
 
 group :test do
   gem 'webmock'#, '= 1.8.3'
+  gem 'factory_girl','~> 2.0.0.rc4'
+  gem 'simplecov', '>= 0.3.5', require: false
+  gem 'autotest-rails'
+  gem 'resque_unit'
+  gem 'shoulda', :require => false
+  gem 'mocha'
+  gem 'ffaker'
 end
 
 group :development do
   gem 'rails-dev-tweaks'
   gem 'rails-footnotes'
+  gem 'bullet'
+  gem 'mailcatcher'
+  gem 'railroady'
 end
 
 group :performance do
