@@ -517,12 +517,9 @@ class Person < ActiveRecord::Base
     return if val.blank?
     e = email_addresses.detect { |email| email.email == val }
     if e
-      unless e.primary?
-        email_addresses.where(["email <> ?", val]).update_all(primary: false)
-        e.update_attribute(:primary, true)
-      end
+      e.primary = true
     else
-      e = email_addresses.new(email: val)
+      e = email_addresses.new(email: val, primary: true)
     end
     e
   end

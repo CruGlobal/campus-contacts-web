@@ -41,7 +41,7 @@ class ContactsController < ApplicationController
               dates = []
               @questions.each do |q|
                 answer = @all_answers[person.id][q.id]
-                if answers
+                if answer
                   answers << answer.first
                   dates << answer.last
                 else

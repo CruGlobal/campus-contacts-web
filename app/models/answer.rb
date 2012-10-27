@@ -9,7 +9,7 @@
 class Answer < ActiveRecord::Base
   
   belongs_to :answer_sheet, inverse_of: :answers
-  belongs_to :question, :class_name => "Element", :foreign_key => "question_id", inverse_of: :answers
+  belongs_to :question, :class_name => "Element", :foreign_key => "question_id"
   
 #  validates_presence_of :value
   validates_length_of :short_value, :maximum => 255, :allow_nil => true  
