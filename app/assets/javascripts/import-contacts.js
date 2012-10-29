@@ -124,6 +124,28 @@ $(document).ready(function() {
 			{
 				text: 'Done',
 				click: function() {
+					if ($('#create_new').attr('checked')) {
+						var new_survey_name = $('#survey_name').val();
+						console.log(new_survey_name);
+					}
+					else {
+						var old_survey_name = $('#select_survey').find(':selected').text();
+						console.log(old_survey_name);
+					}
+					var question_type = $('#question_type').find(':selected').val();
+					console.log(question_type);
+					if (question_type !== '') {
+						if (question_type === 'text_field_short') {
+							var short_answer_question = $('#short_answer_question').val();
+							console.log(short_answer_question);
+						}
+						else {
+							var multiple_choice_question = $('#multiple_choice_question').val();
+							console.log(multiple_choice_question);
+							var multiple_choice_options = $('#multiple_choice_options').val();
+							console.log(multiple_choice_options);
+						}
+					}
 					$(this).dialog('destroy');
 				}
 			}, {

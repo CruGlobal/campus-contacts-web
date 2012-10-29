@@ -8,11 +8,11 @@
 				<input type="checkbox" checked="checked" id="create_new" name="create_new" value="Create New Survey for Question"><label>Create New Survey for Question</label>
 				<div id="survey_new">
 					<label>Name of New Survey:</label>
-					<input type="text" name="survey_name">
+					<input type="text" id="survey_name" name="survey_name">
 				</div>
 				<div id="survey_old" style="display:none;">
 					<label>Select Survey for Question</label>
-					<select id="select_survey" name="select_survey">
+					<select id="select_survey" id="select_survey" name="select_survey">
 						<option value=""></option>
 					</select>
 				</div>
@@ -55,7 +55,7 @@
 					<br/>
 					<label>List out the possible choices, one per line:</label>
 					<br/>
-					<textarea name="multiple_choice_options" rows="5"></textarea>
+					<textarea id="multiple_choice_options" name="multiple_choice_options" rows="5"></textarea>
 				</div>
 			</div>
 		</div>
