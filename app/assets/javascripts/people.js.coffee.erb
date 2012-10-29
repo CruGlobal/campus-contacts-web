@@ -708,6 +708,9 @@ $('#check_all').live 'click', ->
     else
       if $('span#all_text', first_row)[0]?
         first_row.hide()
+  change_all_role_checkboxes(true) if checked
+  disable_role_checkboxes()
+  enable_all_unchecked()
 
 $('#roles_menu_div').live 'click', ->
   role_div = $(this).parent().find('.dropdown_1column')
