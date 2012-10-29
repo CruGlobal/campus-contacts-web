@@ -85,6 +85,7 @@ en:
     create_a_survey: Create a survey
     settings: Settings
   general:
+    roles_applied: "Labels have been applied."
     adv_search: "Advanced Search"
     archived: "Archived"
     assigned_to:  "Assigned to"

@@ -853,14 +853,12 @@ update_persons_roles = () ->
           $(roles_user).html data
           $("#apply_roles_spinner").hide()
           $("#apply_roles_successful").show()
-          $("#apply_roles_successful").html("Roles have been applied.")
+          $("#apply_roles_successful").html(t('general.roles_applied'))
+          setTimeout (->
+            $("#apply_roles_successful").hide()
+          ), 5000
         else
           $("#apply_roles_spinner").hide()
           $("#apply_roles_successful").hide()
-      #complete: ->
-      #  if checked_elements.last().val() == person_id
-      #    $("#apply_roles_spinner").hide()
-      #    $("#apply_roles_successful").show()
-      #    $("#apply_roles_successful").html("Roles have been applied.")
 
   
