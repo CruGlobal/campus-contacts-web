@@ -346,7 +346,7 @@ class ContactsController < ApplicationController
       # raise @q.sorts.inspect
       
       @people = @people.includes(:primary_phone_number, :primary_email_address).
-                  order(params[:q] && params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass') : ['last_name, first_name']).
+                  order(params[:q] && params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass').gsub('followup_status','organizational_roles.followup_status') : ['last_name, first_name']).
                   group('people.id')
       
       @all_people = @people
