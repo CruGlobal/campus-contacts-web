@@ -10,7 +10,7 @@
   <h1>
     <%= image_tag("c_allcontacts.png") %>
     <%= t('.all_responses') %>
-    <%= "- #{@header}" %>
+    <%= "#{'-' if @header.present?} #{@header}" %>
   </h1>
 </div>
 
