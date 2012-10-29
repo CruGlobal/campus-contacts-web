@@ -251,7 +251,7 @@ class ContactsController < ApplicationController
       end
       
       if params[:q] && params[:q][:s].include?('followup_status')
-        @people = current_organization.contacts.order_by_followup_status(params[:q][:s])
+        @people = @people.joins(:organizational_roles).order_by_followup_status(params[:q][:s])
       end
       if params[:survey].present?
         @people = @people.joins(:answer_sheets).where("answer_sheets.survey_id" => params[:survey])
