@@ -66,7 +66,7 @@
   </td>
   <td class="controls" align="right"> 
     <%- assigned_to = (assignments[person.id] || []).first.try(:assigned_to) %>
-    <span class="unassign_link" style="<%= 'display:none' unless assigned_to || params[:dnc] %>">
+    <span class="unassign_link" style="<%= 'display:none' unless assigned_to.present? || params[:dnc].present? %>">
       <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign tipit", :title => "#{t('contacts.index.unassign_contact')} from #{assigned_to}") %>
     </span>    
     <%= link_to(t('nav.view_details'), person_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
