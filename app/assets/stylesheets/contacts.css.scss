@@ -22,3 +22,16 @@
     padding: 5px 10px 15px;
   }
 }
+
+#hidden_questions_div {
+	border: 1px solid red;
+	position: absolute;
+	right: 12px;
+	width: 400px;
+	background: white;
+	padding: 10px;
+	width: 450px;
+	border: 1px solid #999;
+	border-image: initial;
+	box-shadow: #BBB 0px 2px 5px;
+}

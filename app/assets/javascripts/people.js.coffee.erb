@@ -11,7 +11,7 @@ $ ->
       $('#advanced_filter_box').show()
       false
       
-  $('#include_archived').live 'click', ->
+  $('#people_controller #include_archived').live 'click', ->
     if $(this).is(':checked')
       document.location = '/people?include_archived=true'
     else
@@ -21,7 +21,7 @@ $ ->
   $('.action_dropdown').live 'mouseenter', ->
     $(this).click();
   
-  $('#advanced_search').live 'click', ->
+  $('#people_controller.index #advanced_search').live 'click', ->
     $('#search_filter_box').hide()
     $('#advanced_filter_box').toggle()
     false
@@ -31,7 +31,7 @@ $ ->
     $('#advanced_filter_box').hide()
     false
  
-  $('#filter_link').click ->
+  $('#people_controller.index .filter_link').click ->
     if !$('#search_filter_box').is(':visible') && !$('#advanced_filter_box').is(':visible')
       $('#search_filter_box').show()
       $('#advanced_filter_box').hide()
@@ -101,14 +101,7 @@ $ ->
     
   true
 
-  
-  toggle_contacts_control = ->
-    if $(".id_checkbox").is(":checked")
-      $(".control_toggle").show()
-    else
-      $(".control_toggle").hide()
-      
-  $("#people_controller a#bulk_delete").live 'click', ->
+  $("#people_controller a#bulk_delete, #contacts_controller a#bulk_delete").live 'click', ->
     ids = []
     $('.id_checkbox:checked:visible').each ->
       ids.push($(this).val())
@@ -128,16 +121,14 @@ $ ->
             hide_loader()
             if data.indexOf("success") != -1 #there might be a better way of doing this other than just basing the success on the returned data
               $('.id_checkbox:checked').each ->
-                $(this).closest('tr').fadeOut();
                 $(this).closest('tr').remove();
-              toggle_contacts_control()
             else
               $.a(data)
     false
   
   
     
-  $("#people_controller a#bulk_archive").live 'click', ->
+  $("#people_controller a#bulk_archive, #contacts_controller a#bulk_archive").live 'click', ->
     ids = []
     $('.id_checkbox:checked:visible').each ->
       ids.push($(this).val())
@@ -157,9 +148,7 @@ $ ->
             hide_loader()
             if data.indexOf("success") != -1 #there might be a better way of doing this other than just basing the success on the returned data
               $('.id_checkbox:checked').each ->
-                $(this).closest('tr').fadeOut();
                 $(this).closest('tr').remove();
-              toggle_contacts_control()
             else
               $.a(data)
     false
@@ -297,6 +286,19 @@ $.fn.triggerPersonLookup = ->
         $('.merge.' + css_class).show()
         $("#spinner_" + css_class).hide()
         
+$.fn.submitBulkSendTextDialog = ->
+  if $('.bulk-msg').hasClass('bulk-text')
+    $('#bulk_send_msg_dialog #to').val($('#bulk_send_msg_dialog #send_text_to').val().join(','))
+    msg = "Text Successfully Sent"
+  else
+    $('#bulk_send_msg_dialog #to').val($('#bulk_send_msg_dialog #send_email_to').val().join(','))
+    msg = "Email Successfully Sent"
+
+  $.rails.handleRemote($("#bulk_send_msg_dialog form"))  
+  $.n(msg)        
+  $('#bulk_send_msg_dialog').dialog('close')
+  $('.id_checkbox, .check_all_contacts').attr('checked',false)
+     
 $.fn.submitBulkSendDialog = ->
   ids = []
   $('.to_list li').each ->
@@ -306,6 +308,83 @@ $.fn.submitBulkSendDialog = ->
   $.rails.handleRemote($("#bulk_send_dialog form"))
   $('#bulk_send_dialog').dialog('destroy')
         
+        
+$('#send_bulkemail_link_new').live 'click', ->
+  $('#send_text_to_chzn').hide()
+  $('#send_email_to_chzn').show()
+  $('.bulk-msg').addClass('bulk-email')
+  $('.bulk-msg').removeClass('bulk-text')
+  $('.bulk-msg').attr('action', '/people/bulk_email')
+  $('#bulk_send_msg_dialog').dialog({title: 'Send Email'})
+  
+  ids = []
+  fails = []
+  $('.id_checkbox:checked').each ->
+    id = $(this).attr('data-id')
+    if $(this).attr('data-email') && $(this).attr('data-email').length > 0
+      ids.push(id) 
+    else
+      fails.push($(this).attr('data-name'))
+      
+  if fails.length > 0
+    $('#bulk_send_msg_error').show()
+    $('#bulk_send_msg_error #bulk_send_msg_message').html("The following contacts do not have a valid email: " + fails.join(', '))
+  else
+    $('#bulk_send_msg_error').hide()
+  
+  $('#bulk_send_msg_dialog #bulk_send_body').val('')
+  $('#bulk_send_msg_dialog #send_email_to').val(ids)
+  $('#bulk_send_msg_dialog #send_email_to').trigger("liszt:updated")  
+  $('#bulk_send_msg_dialog #send_text_to').val('')
+  $('#bulk_send_msg_dialog #send_text_to').trigger("liszt:updated")  
+  $('#bulk_send_msg_dialog').dialog('open')   
+  $('#bulk_send_msg_dialog #bulk_send_body').simplyCountable({ 
+    maxCount: 999999,
+    counter: '#bulk_send_msg_dialog #char_counter'
+  }) 
+  $('#bulk_send_msg_dialog #char_counter').hide()
+  $('#bulk_send_msg_dialog #bulk_send_body').focus()
+  false
+  
+
+$('#send_bulksms_link_new').live 'click', ->
+  $('#send_text_to_chzn').show()
+  $('#send_email_to_chzn').hide()
+  $('.bulk-msg').addClass('bulk-text')
+  $('.bulk-msg').removeClass('bulk-email')
+  $('.bulk-msg').attr('action', '/people/bulk_sms')
+  $('#bulk_send_msg_dialog').dialog({title: 'Send Text'})
+  
+  ids = []
+  fails = []
+  $('.id_checkbox:checked').each ->
+    id = $(this).attr('data-id')
+    if $(this).attr('data-number') && $(this).attr('data-number').length > 0
+      ids.push(id) 
+    else
+      fails.push($(this).attr('data-name'))
+      
+  if fails.length > 0
+    $('#bulk_send_msg_error').show()
+    $('#bulk_send_msg_error #bulk_send_msg_message').html("The following contacts do not have a valid phone number: " + fails.join(', '))
+  else
+    $('#bulk_send_msg_error').hide()
+    
+  $('#bulk_send_msg_dialog #bulk_send_body').val('')
+  $('#bulk_send_msg_dialog #send_text_to').val(ids)
+  $('#bulk_send_msg_dialog #send_text_to').trigger("liszt:updated")  
+  $('#bulk_send_msg_dialog #send_email_to').val('')
+  $('#bulk_send_msg_dialog #send_email_to').trigger("liszt:updated")  
+  $('#bulk_send_msg_dialog').dialog('open')    
+  $('#bulk_send_msg_dialog #char_counter').show()
+  $('#bulk_send_msg_dialog #bulk_send_body').simplyCountable({ 
+    maxCount: 160,
+    counter: '#bulk_send_msg_dialog #char_counter'
+  })
+  $('#bulk_send_msg_dialog #char_counter').show()
+  $('#bulk_send_msg_dialog #bulk_send_body').focus()
+  false
+
 $('#send_bulkemail_link').live 'click', -> 
   if $('.id_checkbox:checked').length == 0
     alert("You didn't select any people to email")
@@ -412,7 +491,8 @@ $('.send_sms_link').live 'click', ->
 				$('#bulk_sms_message').val($('#bulk_send_body').val())        
 				$(this).dialog('destroy')
 	false 
-	
+
+
 $('#send_bulksms_link').live 'click', ->
   if $('.id_checkbox:checked').length == 0
     alert("You didn't select any people to text")

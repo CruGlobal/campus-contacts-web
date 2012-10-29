@@ -109,7 +109,26 @@ class Person < ActiveRecord::Base
     :joins => "LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM answer_sheets ass INNER JOIN surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{org_id}) ass ON ass.person_id = people.id",
     :group => "people.id",
     :order => "#{order.gsub('answer_sheets', 'ass')}"
-  } }
+  }}
+  
+  def completed_answer_sheets(organization)
+    answer_sheets.where("survey_id IN (?)", organization.surveys.collect(&:id)).order('updated_at DESC')
+  end
+  
+  def latest_answer_sheet(organization)
+    completed_answer_sheets(organization).first
+  end
+  
+  def answered_surveys_hash(organization)
+    surveys = Array.new
+    completed_answer_sheets(organization).each do |answer_sheet|
+      survey = Hash.new
+      survey['keyword'] = answer_sheet.survey.title
+      survey['date'] = answer_sheet.updated_at
+      surveys << survey
+    end
+    return surveys
+  end
 
   scope :get_archived, lambda { |org_id| { 
     :conditions => "organizational_roles.archive_date IS NOT NULL AND organizational_roles.deleted = 0",
@@ -154,6 +173,15 @@ class Person < ActiveRecord::Base
     :group => "people.id",
     :having => "COUNT(*) = (SELECT COUNT(*) FROM people AS mpp JOIN organizational_roles orss ON mpp.id = orss.person_id WHERE mpp.id = people.id)"
   } }
+  
+  def select_name
+    "#{first_name} #{last_name} #{'-' if last_name.present? || first_name.present?} #{pretty_phone_number}"
+  end
+  
+  def select_name_email
+    "#{first_name} #{last_name} #{'-' if last_name.present? || first_name.present?} #{email}"
+  end
+
   
   def self.deleted
     self.get_deleted.collect()
@@ -469,32 +497,29 @@ class Person < ActiveRecord::Base
 
   def email
     @email = primary_email_address.try(:email)
-    unless @email
-      if email_addresses.present?
-        @email = email_addresses.first.try(:email)
-        email_addresses.first.update_attribute(:primary, true) unless new_record?
-      else
-        @email ||= user.try(:username) || user.try(:email)
-        begin
-          new_record? ? email_addresses.new(:email => @email, :primary => true) : email_addresses.create(:email => @email, :primary => true) if @email
-        rescue ActiveRecord::RecordNotUnique
-          reload
-        end
-      end
-    end
+    # unless @email
+    #   if email_addresses.present?
+    #     @email = email_addresses.first.try(:email)
+    #     email_addresses.first.update_attribute(:primary, true) unless new_record?
+    #   else
+    #     @email ||= user.try(:username) || user.try(:email)
+    #     begin
+    #       new_record? ? email_addresses.new(:email => @email, :primary => true) : email_addresses.create(:email => @email, :primary => true) if @email
+    #     rescue ActiveRecord::RecordNotUnique
+    #       reload
+    #     end
+    #   end
+    # end
     @email.to_s
   end
 
   def email=(val)
     return if val.blank?
-    e = email_addresses.where(email: val).first
+    e = email_addresses.detect { |email| email.email == val }
     if e
-      unless e.primary?
-        email_addresses.where(["email <> ?", val]).update_all(primary: false)
-        e.update_attribute(:primary, true)
-      end
+      e.primary = true
     else
-      e = email_addresses.new(email: val)
+      e = email_addresses.new(email: val, primary: true)
     end
     e
   end
@@ -900,23 +925,28 @@ class Person < ActiveRecord::Base
 
     find_existing_person(person)
   end
+  def self.find_existing_person_by_name_and_phone(opts = {})
+    opts[:number] = PhoneNumber.strip_us_country_code(opts[:number])
+    return unless opts.slice(:first_name, :last_name, :number).all? {|_, v| v.present?}
 
-  def self.find_existing_person_by_email(email_address)
+    Person.where(first_name: opts[:first_name], last_name: opts[:last_name], 'phone_numbers.number' => opts[:number]).
+           joins(:phone_numbers).first
+  end
+
+  def self.find_existing_person_by_email(email)
+    return unless email.present?
+    (EmailAddress.find_by_email(email) ||
+      User.find_by_username(email) ||
+      User.find_by_email(email)).try(:person)
+  end
+
+  def self.find_existing_person_by_email_address(email_address)
     return unless email_address
-
-    other_person = email = nil
-
-    # Start by looking for a person with the same email address (since that's our one true unique field)
-    if email_address.email.present?
-      other_person = EmailAddress.find_by_email(email_address.email).try(:person)
-      email = email_address
-    end
-
-    other_person
+    find_existing_person_by_email(email_address.email)
   end
 
   def self.find_existing_person(person)
-    other_person = find_existing_person_by_email(person.email_addresses.first)
+    other_person = find_existing_person_by_email_address(person.email_addresses.first)
 
     if other_person
       person.phone_numbers.each do |phone_number|

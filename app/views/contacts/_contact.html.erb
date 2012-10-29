@@ -6,20 +6,38 @@
     <% else %>
       <%= image_tag('grippy.png', class: 'handle' ) %>
     <% end %>
-    <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
+    <%-# check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
+    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email%>
   </td>
-  <td class="first_name"><%= person.first_name %></td>
-  <td class="last_name"><%= person.last_name %></td>
-  <% if contact_role %>
-    <td>
+  <td class="firstName"><%= person.first_name %></td>
+  <td class="lastName"><%= person.last_name %></td>
+  <td>
+    <% if contact_role %>
       <%= contact_role.followup_status.to_s.titleize %>
       <% if person.organizational_roles.where('organizational_roles.organization_id' => current_organization.id).blank? %>
         <span class="archived_group_label">&nbsp<%= t('general.archived') %>&nbsp</span>
       <% end %>
-    </td>
-  <% end %>
+    <% end %>
+  </td>
   <td><%= person.gender.to_s.titleize %></td>
   <td class="phone_number"><%= person.pretty_phone_number %></td>
+  <td>
+    <div id="roles_user_<%= person.id %>" class="roles_spaces">
+      <% roles = if params[:include_archived] || params[:archived] %>
+        <% (person.assigned_organizational_roles_including_archived(current_organization.id).default_roles_desc + person.assigned_organizational_roles_including_archived(current_organization.id).non_default_roles_asc) %>
+      <% else %>
+        <% (person.assigned_organizational_roles(current_organization.id).default_roles_desc + person.assigned_organizational_roles(current_organization.id).non_default_roles_asc) %>
+      <% end %>
+      <% roles.each do |role| %>
+        <% unless person.is_role_archived?(current_organization.id, role.id) %>
+          <span id="<%= person.id%>_<%= role.id %>" class="role_label role_<%= role.id %>"><%= role %></span>
+        <% else %>
+          <span id="<%= person.id%>_<%= role.id %>" class="role_label_archived role_<%= role.id %>"><%= role %></span>
+        <% end %>
+      <% end %>
+    </div>
+  </td>
+  
   <% dates = [] %>
   <% questions.uniq.each do |q| %>
     <td class="<%= dom_id(q) %>">
@@ -30,36 +48,27 @@
         <% if answer = answers[person.id][q.id] %>
           <% date = answer.last %>
           <span title="<%= l(date, format: :date) if date %>" class="tipit"><%= answer.first %></span>
-          <% dates << date if date.present? %>
         <% else %>
           <%= person.year_in_school if q.attribute_name == "year_in_school" %>
         <% end %>
       <% end %>
-      
-      
     </td>
   <% end %>
-  <% unless params[:dnc].present? %>
-    <td id="assigned_to_<%= person.id %>" class="assigned_to"><%= assigned_to = (assignments[person.id] || []).first.try(:assigned_to) %></td>
-    <td>
-      <% friends = person.friends_and_leaders(current_organization) %> 
-      <% if friends.length > 0 %>
-        <% friend_leaders = Person.where(fb_uid: friends).order("last_name, first_name") %>
-        <%= link_to(friend_leaders.length, '', class: 'friends_count tipthis', title: friend_leaders.collect {|f| "#{f}<br>"} ) %>
-      <% else %>
-      0
-      <% end %>
-    </td>
-  <% end %>
+  
   <td>
-    <% if dates.present? %>
-      <% @surveys[person.id].each do |keyword,date| %>
-        <span title="<%= l(date, format: :date) if date %>" class="tipit"><%= keyword %></span><br/>
-      <% end %>
+    <% person.answered_surveys_hash(current_organization).each do |survey| %>
+      <span title="<%= l(survey['date'], format: :date) %>" class="tipit"><%= survey['keyword'] %></span><br/>
     <% end %>
   </td>
-  <td><%= l(dates.sort.last, :format => :date) if dates.present? %></td>
-  <td class="controls">
+  <td>
+    <% last_survey = person.latest_answer_sheet(current_organization) %>
+    <%= l(last_survey.created_at, :format => :date) if last_survey.present? %>
+  </td>
+  <td class="controls" align="right"> 
+    <%- assigned_to = (assignments[person.id] || []).first.try(:assigned_to) %>
+    <span class="unassign_link" style="<%= 'display:none' unless assigned_to || params[:dnc] %>">
+      <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign tipit", :title => "#{t('contacts.index.unassign_contact')} from #{assigned_to}") %>
+    </span>    
     <%= link_to(t('nav.view_details'), person_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
     <% if params[:dnc] == 'true' %>
       <%= link_to(t('contacts.index.delete_contact'), person_path(person), :method => :delete, :remote => true, :class => "icon delete dnc tipit", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.destroy_confirm')) %>      
@@ -67,9 +76,6 @@
       <% if contact_role %>
         <%= link_to(t('contacts.index.delete_contact'), organizational_role_path(:id => contact_role.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), data: { confirm: t('contacts.index.delete_confirm') }) %>
       <% end %>
-    <% end %>    
-    <span class="unassign_link" style="<%= 'display:none' unless assigned_to || params[:dnc] %>">
-      <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign tipit", :title => t('contacts.index.unassign_contact')) %>
-    </span>    
+    <% end %>   
   </td>
 </tr>

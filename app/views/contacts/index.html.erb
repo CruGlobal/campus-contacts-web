@@ -4,74 +4,18 @@
 
 <%= render 'shared/bulk_vcard_dialog' %>  
 <%= render 'shared/bulk_send_form' %>
+<%= render 'shared/bulk_send_msg' %>
 
 <div class="titlebar">  
   <h1>
     <%= image_tag("c_allcontacts.png") %>
     <%= t('.all_responses') %>
     <%= "- #{@header}" %>
-    <%= link_to(t('.show_all'), contacts_path(assigned_to: 'all'), :class => "headerlink") if @assigned_to %>
   </h1>
 </div>
 
 <div class="pagemenu">
-  
-  <ul class="pillmenu">
-    <li><%= link_to(t('contacts.add_contact'), "", class: 'add_contact', id: 'contacts_add_button') %></li>
-  </ul>
-  <ul class="pillmenu control_toggle">
-    <li><%= link_to(t('contacts.assign'), "", class: 'assign') %></li>
-    <li><%= link_to(t('contacts.unassign'), "", id: 'bulk_unassign') %></li>
-  </ul>
-  <ul class="pillmenu control_toggle">
-    <li>
-      <%= link_to('Send', '#', class: 'action_dropdown') %>
-      <ul style="display:none">
-        <li><%= link_to(t('people.index.send_email'), nil, :id => "send_bulkemail_link") %></li>	
-        <li><%= link_to(t('people.index.send_sms'), nil, :id => "send_bulksms_link") %></li>	
-      </ul>
-    </li>    		
-  </ul>
-  
-  <ul class="pillmenu">
-    <li><%= link_to(t('.hidden_questions'), '#', id: 'hidden_questions_link') %></li>
-  </ul>
-  
-  <ul class="pillmenu">
-    <li><%= link_to(t('.filter'), '#', id: 'filter_link') %></li>
-  </ul>
-  
-  <ul class="pillmenu control_toggle">
-    <li>
-      <%= link_to('Download', '#', class: 'action_dropdown') %>
-      <ul style="display:none">
-        <li><%= link_to(t('.export'), params.merge(format: 'csv')) %></li>
-        <li><%= link_to(t('.vcard'), '', id: 'bulk_vcard_link' ) %></li>
-      </ul>
-    </li>
-  </ul>
-  
-  <% if can? :manage, current_organization %>
-    <ul class="pillmenu">
-      <li><%= link_to(t('contacts.index.import_contacts'), new_import_path) %></li>
-    </ul>
-  <% end %>
-  
-  <% if params[:dnc] == 'true' %>
-    <ul class="pillmenu">
-      <li><%= link_to(t('.bulk_delete'), bulk_destroy_contacts_path, id: "bulk_delete") %></li>
-    </ul>  
-  <% end %>
-  
-  <div id="hidden_questions_div" style="display:none">
-    <%= t('.add_question_back') %>
-    <ul id="hidden_questions">
-      <%= render partial: 'contacts/hidden_question', collection: @hidden_questions %>
-    </ul>
-  </div>
-  
-  <%= render 'search' %>
-
+  <%= render partial: 'menu' %>
 </div>
 
 <%= form_tag("", :id => "move_to_dnc", :method => :put) do %>
@@ -84,26 +28,23 @@
   <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
   <%= hidden_field_tag :assign_to %>
   <table class="listing" cellpadding="0" cellspacing="0">
-    <tr>
+    <tr id="table_header">
       <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment', class: 'check_all_contacts', 'data-status' => @attr %></th>
       <th><%= sort_link @q, :first_name, t('.first_name'), params %></th>
       <th><%= sort_link @q, :last_name, t('.last_name'), params %></th>
       <th><%= sort_link @q, :followup_status, t('general.status'), params %></th>
       <th><%= sort_link @q, :gender, t('general.gender'), params %></th>
-      <th><%= sort_link @q, 'phone_numbers.number', t('.phone_number'), params %></th>
+      <th style='min-width:100px;'><%= sort_link @q, 'phone_numbers.number', t('.phone_number'), params %></th>
+      <th><%= sort_link @q, 'role_id', t('nav.roles'), params %></th>
       <% @questions.each do |q| %>
         <th class="<%= dom_id(q) %>">
           <%= q.slug.present? ? q.slug : q.label %>
           <%= link_to("(#{t('nav.hide')})", hide_survey_question_path(@organization.surveys.first, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
         </th>
       <% end %>
-      <% unless params[:dnc] %>
-        <th><%= t('.assigned_to') %></th>
-        <th><%= t('.friends') %></th>
-      <% end %>
       <th><%= t('.surveys') %></th>
       <th><%= sort_link @q, 'MAX(answer_sheets.updated_at)', t('.last_survey'), params %></th>
-      <th></th>
+      <th class="hidden_questions"><%= link_to "Hidden Questions ▾", "#", id: 'hidden_questions_link' %></th>
     </tr>
     <tbody id="contacts_table">
       <% @people.each do |person| %>
@@ -126,10 +67,14 @@
     <%= "Displaying #{@people.offset_value + 1} - #{@people.offset_value + @people.length} of #{@people.total_count}" %>
   </div>
 <% end %>
-
 <div id="add_contact_div" style="display:none" title="<%= t('.add_contact') %>" class="fingerme">
   <%= render 'add_contact', person: Person.new %>
 </div>
+<%- unless current_user.settings[:hide_update_notice] == true %>
+  <div id="update_notice_div">
+    <%= render partial: 'update_notice' %>
+  </div>
+<%- end %>
 <input type="button" value="Show Message Guide" id="show_message_guide_button" style="display:none">
 <div id="send_message_guide" style="display:none">
   <%= render 'shared/send_message_guide' %>

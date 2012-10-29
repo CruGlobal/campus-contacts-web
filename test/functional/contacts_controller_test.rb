@@ -80,6 +80,27 @@ class ContactsControllerTest < ActionController::TestCase
         assert_response :success, @response.body 
       end
       
+      should "create a person even though inserted email has trailing spaces" do
+      
+        assert_difference "Person.count" do
+          xhr :post, :create, {
+                          "person" => {
+                            "email_address" => {
+                              "email" => "trboothshoomy@email.com ",
+                            },
+                            "first_name" => "Tyler",
+                            "gender" => "male",
+                            "last_name" => "Booth",
+                            "phone_number" => {
+                              "number" => "479-283-4946",
+                            }
+                          }
+                        }
+                        
+          end
+        assert_response :success, @response.body 
+      end
+      
       should "remove the being 'archived' Contact role of a Person when it is going to be created again (using existing first_name, last_name and email) in 'My Contacts' tab (:assign_to_me => true)" do
         contact = Factory(:person, first_name: "Jon", last_name: "Snow")
         email = Factory(:email_address, email: "jonsnow@email.com", person: contact)
@@ -177,8 +198,6 @@ class ContactsControllerTest < ActionController::TestCase
       assert_equal assigns(:header).upcase, "Involved".upcase
       xhr :get, :index, {:assigned_to => "unassigned"}
       assert_equal assigns(:header), "Unassigned"
-      xhr :get, :index, {:assigned_to => "progress"}
-      assert_equal assigns(:header), "Assigned"
       xhr :get, :index, {:completed => "true"}
       assert_equal assigns(:header), "Completed"
       xhr :get, :index, {:assigned_to => nil}
@@ -199,30 +218,6 @@ class ContactsControllerTest < ActionController::TestCase
       assert_equal assigns(:header), "Matching the criteria you searched for"
       xhr :get, :index, {:assigned_to => @user.person.id}
       assert_equal assigns(:header), "Assigned to #{@user.person.name}"
-    end
-    
-    should "get in_progress contacts ONLY" do
-      @contact1 = Factory(:person)
-      @contact2 = Factory(:person)
-      @contact3 = Factory(:person)
-      @contact4 = Factory(:person)
-      @contact5 = Factory(:person)
-      @user.person.organizations.first.add_leader(@user.person, @user.person)
-      @user.person.organizations.first.add_contact(@contact1)
-      @user.person.organizations.first.add_contact(@contact2)
-      @user.person.organizations.first.add_contact(@contact3)
-      @user.person.organizations.first.add_contact(@contact4)
-      @user.person.organizations.first.add_contact(@contact5)
-      
-      Factory(:contact_assignment, person: @contact1, organization: @org, assigned_to: @user.person)
-      Factory(:contact_assignment, person: @contact2, organization: @org, assigned_to: @user.person)
-      Factory(:contact_assignment, person: @contact3, organization: @org, assigned_to: @user.person)
-      Factory(:contact_assignment, person: @contact4, organization: @org, assigned_to: @user.person)
-      Factory(:contact_assignment, person: @contact5, organization: @org, assigned_to: @user.person)
-      
-      @contact5.organizational_roles.first.update_attributes({:deleted => 1})
-      xhr :get, :index, {:assigned_to => "progress"}
-      assert_equal assigns(:all_people).collect(&:id).sort, [@contact1.id, @contact2.id, @contact3.id, @contact4.id]
     end
     
     should "get unassigned contacts ONLY" do
