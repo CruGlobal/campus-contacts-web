@@ -157,7 +157,7 @@ en:
     add_person:
       add_person: Add a person to %{org}
     index:
-      include_archived_tips: "You may click this check box to include all of the Archived individuals in your Directory listing and note that their labels will display in the color green to allow you to quickly identify which individuals have been archived and what their labels were at the time they were archived. <br><br> If you want to only see the archived individuals, then please click on the word \"Archived(x)\" on the left side-panel. <br><br> You can move any individual from the Archived display back to the active display by simply adding any label to that individual."
+      include_archived_tips: "You may click this checkbox to include all of your Archived individuals in your All Contacts listing. Notice Archived individuals now have green labels.<br/><br/>If you want to only see <b>archived individuals</b>, click on \"Archived\" on the bottom, left side-panel.<br/><br/>Contacts can be <b>unarchived</b> by adding any label. You need to add each label you wish to return to that contact."
       archived_label: "Archived"
       include_archived: "Include Archived"
       add_person: Add Person
