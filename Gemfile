@@ -101,3 +101,13 @@ group :assets do
   gem 'coffee-rails', "~> 3.2.1"
   gem 'uglifier', ">= 1.0.3"
 end
+
+group :capistrano do 
+  # Shared capistrano recipes
+  gem 'pd-cap-recipes', :git => 'git://github.com/PagerDuty/pd-cap-recipes.git'
+
+  # extra dependencies for some tasks
+  #gem 'git', '1.2.5'
+  #gem 'cap_gun'
+  #gem 'grit'
+end
