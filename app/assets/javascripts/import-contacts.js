@@ -16,6 +16,19 @@ $(document).ready(function() {
 	var matchQuestions = new Array();
 	var dataToBackend = new Object();
 	
+	
+// 	var newfunction = function (userData, mhubData, surveys, lengths, matches) {
+// 		var question = new Object();
+// 		var Questions = new Object();
+// 		var survey = new Object();
+// 		var Surveys = new Object();
+// 		
+// 		
+// 	}
+	
+	
+	
+	
 	for (i = 0; i < userQuestions.length; i++) {
 		var matchFound = false;
 		
@@ -33,8 +46,7 @@ $(document).ready(function() {
 		}
 	}
 	
-	dataToBackend = constructObject(userQuestions, mhubQuestions, surveyTitles, surveyLengths, matchQuestions)
-	console.log(dataToBackend);
+	dataToBackend = constructObject(userQuestions, mhubQuestions, surveyTitles, surveyLengths, matchQuestions);
 	
 	refreshData(matchQuestions, surveyData);
 	
@@ -84,6 +96,8 @@ $(document).ready(function() {
 		
 		resetForm('#new_question_form');
 		
+		var questionId = $(this).parents('.matchSelect').attr('id').split('_')[1];
+		
 		var clickedElement = '';
 		
 		clickedElement = $(this).parents(".matchSelect").attr("id");
@@ -115,6 +129,8 @@ $(document).ready(function() {
 		
 		resetForm('#new_question_form');
 		
+		var questionId = $(this).attr('id').split('_')[1];
+		
 		$('#new_question_div').dialog({
 			resizable: false,
 			height: 444,
@@ -126,24 +142,24 @@ $(document).ready(function() {
 				click: function() {
 					if ($('#create_new').attr('checked')) {
 						var new_survey_name = $('#survey_name').val();
-						console.log(new_survey_name);
+						surveyTitles.push(new_survey_name);
+						surveyLengths[surveyTitles.length - 1] = 1;
+						console.log(surveyLengths);
 					}
 					else {
 						var old_survey_name = $('#select_survey').find(':selected').text();
-						console.log(old_survey_name);
+						var index = surveyTitles.indexOf(old_survey_name);
 					}
 					var question_type = $('#question_type').find(':selected').val();
-					console.log(question_type);
 					if (question_type !== '') {
 						if (question_type === 'text_field_short') {
 							var short_answer_question = $('#short_answer_question').val();
-							console.log(short_answer_question);
+							$('#select_' + questionId).find('.selectTitle').text(short_answer_question);
 						}
 						else {
 							var multiple_choice_question = $('#multiple_choice_question').val();
-							console.log(multiple_choice_question);
 							var multiple_choice_options = $('#multiple_choice_options').val();
-							console.log(multiple_choice_options);
+							$('#select_' + questionId).find('.selectTitle').text(multiple_choice_question);
 						}
 					}
 					$(this).dialog('destroy');
@@ -188,11 +204,15 @@ $(document).ready(function() {
 		var questionType = $(this).val();
 		if (questionType === "text_field_short") {
 			$('#question_short_answer').show();
+			$('#preview_short').show();
 			$('#question_multiple_choice').hide();
+			$('#preview_multiple').hide();
 		}
 		else {
 			$('#question_multiple_choice').show();
+			$('#preview_multiple').show();
 			$('#question_short_answer').hide();
+			$('#preview_short').hide();
 		}
 	});
 	$('#short_answer_question').keyup(function() {
@@ -333,9 +353,55 @@ var constructObject = function (userData, mhubData, surveys, lengths, matches) {
 	var index = '';
 	var holder = new Object();
 	var surveyData = new Array();
+	var questions = new Object();
 	var results = new Object();
+
+	console.log(matches);
+
+	var question = new Object();
+	var questionGroup = new Object();
+	var survey = new Object();
+	var surveyGroup = new Object();
 	
 	surveyData = origData(surveys, lengths, mhubData);
+	
+	for (var x = 0; x < surveyData.length; x++) {
+		survey = {};
+		if (surveyData[x] instanceof Array === false) {
+			survey.title = surveyData[x];
+			questionGroup = {};
+			for (var xx = 0; xx < surveyData[x + 1].length; xx++) {
+				question = {};
+				var currentQuestion = surveyData[x + 1][xx];
+				question.text = currentQuestion;
+				for (var xxx = 0; xxx < matches.length; xxx++) {
+					var matchCheck = currentQuestion.indexOf(matches[xxx]);
+					if (matchCheck !== -1) {
+						question.action = "MATCH";
+						question.match = userData[xxx];
+						break;
+					}
+				}
+				if (!question.action) {
+					question.action = "NEW";
+				}
+				questionGroup[xx] = question;
+			}
+			survey.questions = questionGroup;
+			if (x === 0) {
+				surveyGroup[x] = survey;
+			}
+			else {
+				surveyGroup[x - 1] = survey;
+			}
+		}
+	}
+	
+	console.log(surveyGroup);
+	
+	
+	
+	
 	
 // 	console.log(userData);
 // 	console.log(mhubData);
@@ -370,6 +436,8 @@ var constructObject = function (userData, mhubData, surveys, lengths, matches) {
 		}
 		results[i] = holder;
 	}
+	
+	//console.log(results);
 	
 	return results;
 }
