@@ -426,7 +426,15 @@ class Person < ActiveRecord::Base
       )
     end
     self.fb_uid = authentication['uid']
-    save(validate: false)
+    begin
+      save(validate: false)
+    rescue => e
+      Airbrake.notify(
+        :error_class   => e.class,
+        :error_message => e.message,
+        :parameters    => {data: data, authentication: authentication, response: response}
+      )
+    end
     self
   end
 
