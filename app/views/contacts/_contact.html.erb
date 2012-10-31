@@ -1,4 +1,9 @@
 <% contact_role = @roles[person.id] if @roles %>
+<% roles = if params[:include_archived] || params[:archived] %>
+  <% (person.assigned_organizational_roles_including_archived(current_organization.id).default_roles_desc + person.assigned_organizational_roles_including_archived(current_organization.id).non_default_roles_asc) %>
+<% else %>
+  <% (person.assigned_organizational_roles(current_organization.id).default_roles_desc + person.assigned_organizational_roles(current_organization.id).non_default_roles_asc) %>
+<% end %>
 <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row <%= extra if defined?(extra) %>" data-name="<%= person.name %>" data-email="<%= person.email %>">
   <td nowrap="nowrap" class="checkbox_cell">
     <% if contact_role %>
@@ -7,7 +12,7 @@
       <%= image_tag('grippy.png', class: 'handle' ) %>
     <% end %>
     <%-# check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
-    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email%>
+    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email, 'data-roles' => "#{roles.collect(&:id).join(',')}"%>
   </td>
   <td class="firstName"><%= person.first_name %></td>
   <td class="lastName"><%= person.last_name %></td>
@@ -23,11 +28,6 @@
   <td class="phone_number"><%= person.pretty_phone_number %></td>
   <td>
     <div id="roles_user_<%= person.id %>" class="roles_spaces">
-      <% roles = if params[:include_archived] || params[:archived] %>
-        <% (person.assigned_organizational_roles_including_archived(current_organization.id).default_roles_desc + person.assigned_organizational_roles_including_archived(current_organization.id).non_default_roles_asc) %>
-      <% else %>
-        <% (person.assigned_organizational_roles(current_organization.id).default_roles_desc + person.assigned_organizational_roles(current_organization.id).non_default_roles_asc) %>
-      <% end %>
       <% roles.each do |role| %>
         <% unless person.is_role_archived?(current_organization.id, role.id) %>
           <span id="<%= person.id%>_<%= role.id %>" class="role_label role_<%= role.id %>"><%= role %></span>
