@@ -17,7 +17,7 @@ class OrganizationSweeper < ActionController::Caching::Sweeper
   def expire_cache_for(object)
     case object
     when Organization
-      OrganizationalRole.where("organization_id = ? OR organization_id = ?", object.id, object.parent_id).each do |role|
+      OrganizationalRole.involved.where("organization_id IN(?) OR organization_id = ?", object.self_and_descendant_ids, object.parent_id).each do |role|
         expire_cache_for_person(role.person)
       end
       # Person.where('org_ids_cache like :org OR org_ids_cache like :parent', org: "%\"#{object.id}\"%", parent: "%\"#{object.parent_id}\"%").map {|p| expire_cache_for_person(p) }

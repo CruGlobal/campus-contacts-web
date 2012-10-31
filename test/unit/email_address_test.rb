@@ -4,6 +4,7 @@ class EmailAddressTest < ActiveSupport::TestCase
   # Replace this with your real tests.
   should belong_to(:person)
   should validate_presence_of(:email)
+  should_strip_attributes :email
   # should validate_presence_of(:person_id)
 
   context "an email address" do

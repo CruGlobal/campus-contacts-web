@@ -21,7 +21,7 @@ class Question < Element
   # however, "Choose Many" (checkbox) questions have multiple answers in a single response
   
   attr_accessor :answers
-  
+
   # @answers = nil            # one or more answers in response to this question
   # @mark_for_destroy = nil   # when something is unchecked, there are less answers to the question than before
   

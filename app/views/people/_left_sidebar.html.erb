@@ -1,7 +1,7 @@
 <ul class="leftmenu">
-  <li class="<%= 'selected' if current_page?(person_path(@person)) %>"><%= link_to(t('.profile', name: @person.firstName), person_path(@person)) %></li>
+  <li class="<%= 'selected' if current_page?(person_path(@person)) %>"><%= link_to(t('.profile', name: @person.first_name), person_path(@person)) %></li>
   <% if can? :edit, @person %>
-    <li class="<%= 'selected' if current_page?(edit_person_path(@person)) %>"><%= link_to(t('.edit_profile', name: @person.firstName), edit_person_path(@person)) %></li>
-    <li class="<%= 'selected' if current_page?(survey_response_path(@person)) %>"><%= link_to(t('.survey_answers', name: @person.firstName), survey_response_path(@person)) %></li>
+    <li class="<%= 'selected' if current_page?(edit_person_path(@person)) %>"><%= link_to(t('.edit_profile', name: @person.first_name), edit_person_path(@person)) %></li>
+    <li class="<%= 'selected' if current_page?(survey_response_path(@person)) %>"><%= link_to(t('.survey_answers', name: @person.first_name), survey_response_path(@person)) %></li>
   <% end %>
 </ul>

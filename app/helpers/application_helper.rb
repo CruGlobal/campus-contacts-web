@@ -47,6 +47,14 @@ module ApplicationHelper
     ret.html_safe
   end
 
+  def give_link(text)
+    if text.include?('https://give.cru.org/') && text.include?('Desig')
+      text.sub('Desig', "id_type=missionhub&id_value=#{current_person.id}&Desig")
+    else
+      text
+    end.html_safe
+  end
+
 
   #def org_nav(org, children)
     #ret = ''

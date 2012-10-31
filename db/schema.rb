@@ -11,11 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121017144708) do
-
-  create_table "academic_departments", :force => true do |t|
-    t.string "name"
-  end
+ActiveRecord::Schema.define(:version => 20121020193612) do
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -106,9 +102,6 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
     t.string   "email2",               :limit => 200
     t.datetime "start_date"
     t.datetime "end_date"
-    t.string   "facebook_link"
-    t.string   "myspace_link"
-    t.string   "title"
     t.string   "dorm"
     t.string   "room"
     t.string   "preferredPhone",       :limit => 25
@@ -1111,9 +1104,11 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
     t.string   "trigger_words"
     t.string   "notify_via"
     t.boolean  "hidden",                                  :default => false, :null => false
+    t.integer  "crs_question_id"
   end
 
   add_index "elements", ["conditional_id"], :name => "index_ma_elements_on_conditional_id"
+  add_index "elements", ["crs_question_id"], :name => "index_elements_on_crs_question_id"
   add_index "elements", ["position"], :name => "index_ma_elements_on_question_sheet_id_and_position_and_page_id"
   add_index "elements", ["question_grid_id"], :name => "index_ma_elements_on_question_grid_id"
   add_index "elements", ["slug"], :name => "index_ma_elements_on_slug"
@@ -1128,11 +1123,6 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
 
   add_index "email_addresses", ["email"], :name => "email"
   add_index "email_addresses", ["person_id"], :name => "person_id"
-
-  create_table "engine_schema_info", :id => false, :force => true do |t|
-    t.string  "engine_name"
-    t.integer "version"
-  end
 
   create_table "followup_comments", :force => true do |t|
     t.integer  "contact_id"
@@ -3184,32 +3174,24 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
     t.datetime "updated_at"
   end
 
-  create_table "mail_delayed_jobs", :force => true do |t|
-    t.integer  "priority",   :default => 0
-    t.integer  "attempts",   :default => 0
-    t.text     "handler"
-    t.text     "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
-    t.string   "locked_by"
+  create_table "merge_audits", :force => true do |t|
+    t.integer  "mergeable_id"
+    t.string   "mergeable_type"
+    t.integer  "merge_looser_id"
+    t.string   "merge_looser_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "mail_groups", :force => true do |t|
-    t.string   "group_id"
-    t.string   "group_name"
-    t.string   "group_description"
-    t.string   "email_permission",   :default => "Domain"
-    t.text     "email_query"
-    t.boolean  "exists_on_google",   :default => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "update_interval",    :default => "Daily"
-    t.string   "contact_id"
-    t.integer  "user_id"
-    t.text     "owners_email_query"
+  add_index "merge_audits", ["merge_looser_id", "merge_looser_type"], :name => "merge_looser"
+  add_index "merge_audits", ["mergeable_id", "mergeable_type"], :name => "mergeable"
+
+  create_table "new_people", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "organization_id"
+    t.boolean  "notified",        :default => false
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
   end
 
   add_index "mail_groups", ["group_id"], :name => "index_mail_groups_on_group_id"
@@ -4364,18 +4346,19 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
     t.boolean  "show_sub_orgs",       :default => false, :null => false
     t.string   "status"
     t.text     "settings"
+    t.integer  "conference_id"
   end
 
   add_index "organizations", ["ancestry"], :name => "index_organizations_on_ancestry"
+  add_index "organizations", ["conference_id"], :name => "index_organizations_on_conference_id"
   add_index "organizations", ["importable_type", "importable_id"], :name => "index_organizations_on_importable_type_and_importable_id", :unique => true
   add_index "organizations", ["name"], :name => "index_organizations_on_name"
 
-  create_table "people", :primary_key => "personID", :force => true do |t|
+  create_table "people", :force => true do |t|
     t.string   "accountNo",                     :limit => 11
-    t.string   "lastName",                      :limit => 50
-    t.string   "firstName",                     :limit => 50
-    t.string   "middleName",                    :limit => 50
-    t.string   "preferredName",                 :limit => 50
+    t.string   "last_name",                     :limit => 50
+    t.string   "first_name",                    :limit => 50
+    t.string   "middle_name",                   :limit => 50
     t.string   "gender",                        :limit => 1
     t.string   "region",                        :limit => 5
     t.boolean  "workInUS",                                            :default => true,  :null => false
@@ -6057,54 +6040,73 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
     t.string   "subject"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "user_id"
+    t.date     "birth_date"
+    t.date     "date_became_christian"
+    t.date     "graduation_date"
+    t.string   "level_of_school"
+    t.string   "staff_notes"
+    t.integer  "primary_campus_involvement_id"
+    t.integer  "mentor_id"
+    t.integer  "fb_uid",                        :limit => 8
+    t.datetime "date_attributes_updated"
+    t.text     "organization_tree_cache"
+    t.text     "org_ids_cache"
+    t.integer  "crs_profile_id"
+    t.integer  "sp_person_id"
+    t.integer  "si_person_id"
+    t.integer  "pr_person_id"
   end
 
-  add_index "sp_email_templates", ["name"], :name => "index_sp_email_templates_on_name", :length => {"name"=>255}
+  add_index "people", ["accountNo"], :name => "accountNo_ministry_Person"
+  add_index "people", ["campus"], :name => "campus"
+  add_index "people", ["crs_profile_id"], :name => "index_people_on_crs_profile_id"
+  add_index "people", ["fb_uid"], :name => "index_ministry_person_on_fb_uid"
+  add_index "people", ["first_name", "last_name"], :name => "firstName_lastName"
+  add_index "people", ["last_name"], :name => "lastname_ministry_Person"
+  add_index "people", ["org_ids_cache"], :name => "index_ministry_person_on_org_ids_cache", :length => {"org_ids_cache"=>255}
+  add_index "people", ["pr_person_id"], :name => "index_people_on_pr_person_id"
+  add_index "people", ["si_person_id"], :name => "index_people_on_si_person_id"
+  add_index "people", ["sp_person_id"], :name => "index_people_on_sp_person_id"
+  add_index "people", ["user_id"], :name => "fk_ssmUserId"
 
-  create_table "sp_evaluations", :force => true do |t|
-    t.integer "application_id",                        :null => false
-    t.integer "spiritual_maturity", :default => 0
-    t.integer "teachability",       :default => 0
-    t.integer "leadership",         :default => 0
-    t.integer "stability",          :default => 0
-    t.integer "good_evangelism",    :default => 0
-    t.integer "reason",             :default => 0
-    t.integer "social_maturity",    :default => 0
-    t.integer "ccc_involvement",    :default => 0
-    t.boolean "charismatic",        :default => false
-    t.boolean "morals",             :default => false
-    t.boolean "drugs",              :default => false
-    t.boolean "bad_evangelism",     :default => false
-    t.boolean "authority",          :default => false
-    t.boolean "eating",             :default => false
-    t.text    "comments"
-  end
-
-  create_table "sp_gospel_in_actions", :force => true do |t|
-    t.string   "name"
+  create_table "person_photos", :force => true do |t|
+    t.integer  "person_id"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "sp_ministry_focuses", :force => true do |t|
-    t.string "name"
+  create_table "person_transfers", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "old_organization_id"
+    t.integer  "new_organization_id"
+    t.boolean  "copy",                :default => false
+    t.boolean  "notified",            :default => false
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+    t.integer  "transferred_by_id"
   end
 
-  create_table "sp_ministry_focuses_projects", :id => false, :force => true do |t|
-    t.integer "sp_project_id",        :default => 0, :null => false
-    t.integer "sp_ministry_focus_id", :default => 0, :null => false
-  end
-
-  create_table "sp_page_elements", :force => true do |t|
-    t.integer  "page_id"
-    t.integer  "element_id"
-    t.integer  "position"
+  create_table "phone_numbers", :force => true do |t|
+    t.string   "number"
+    t.string   "extension"
+    t.integer  "person_id"
+    t.string   "location",         :default => "mobile"
+    t.boolean  "primary",          :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "txt_to_email"
+    t.integer  "carrier_id"
+    t.datetime "email_updated_at"
   end
 
-  add_index "sp_page_elements", ["element_id"], :name => "element_id"
-  add_index "sp_page_elements", ["page_id"], :name => "page_id"
+  add_index "phone_numbers", ["carrier_id"], :name => "index_phone_numbers_on_carrier_id"
+  add_index "phone_numbers", ["number"], :name => "index_phone_numbers_on_number"
+  add_index "phone_numbers", ["person_id", "number"], :name => "index_phone_numbers_on_person_id_and_number"
 
   create_table "sp_page_elements_deprecated", :force => true do |t|
     t.integer  "page_id"
@@ -6122,7 +6124,7 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
     t.boolean "hidden",                           :default => false
   end
 
-  add_index "sp_pages", ["question_sheet_id", "number"], :name => "page_number"
+  add_index "profile_pictures", ["person_id"], :name => "index_profile_pictures_on_person_id"
 
   create_table "sp_pages_deprecated", :force => true do |t|
     t.string   "title",         :limit => 50
@@ -6140,16 +6142,23 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
     t.string   "amount"
     t.string   "payment_account_no"
     t.datetime "created_at"
-    t.string   "auth_code"
-    t.string   "status"
     t.datetime "updated_at"
   end
 
-  create_table "sp_project_gospel_in_actions", :force => true do |t|
-    t.integer  "gospel_in_action_id"
-    t.integer  "project_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "question_rules", :force => true do |t|
+    t.integer  "survey_element_id"
+    t.integer  "rule_id"
+    t.string   "trigger_keywords"
+    t.string   "extra_parameters"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  create_table "question_sheets", :force => true do |t|
+    t.string  "label",              :limit => 60, :default => "",    :null => false
+    t.boolean "archived",                         :default => false
+    t.integer "questionnable_id"
+    t.string  "questionnable_type"
   end
 
   create_table "sp_project_versions", :force => true do |t|
@@ -6336,18 +6345,24 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
     t.boolean  "high_school",                                        :default => false
   end
 
-  add_index "sp_projects", ["name"], :name => "sp_projects_name_index", :unique => true
-  add_index "sp_projects", ["primary_partner"], :name => "primary_partner"
-  add_index "sp_projects", ["project_status"], :name => "project_status"
-  add_index "sp_projects", ["secondary_partner"], :name => "secondary_partner"
-  add_index "sp_projects", ["year"], :name => "year"
+  add_index "rails_admin_histories", ["item", "table", "month", "year"], :name => "index_histories_on_item_and_table_and_month_and_year"
 
-  create_table "sp_question_options", :force => true do |t|
-    t.integer  "question_id"
-    t.string   "option",      :limit => 50
-    t.string   "value",       :limit => 50
-    t.integer  "position"
+  create_table "received_sms", :force => true do |t|
+    t.string   "phone_number"
+    t.string   "carrier"
+    t.string   "shortcode"
+    t.string   "message"
+    t.string   "country"
+    t.integer  "person_id"
+    t.datetime "received_at"
     t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "sms_keyword_id"
+    t.integer  "sms_session_id"
+    t.string   "state"
+    t.string   "city"
+    t.string   "zip"
+    t.string   "twilio_sid"
   end
 
   create_table "sp_question_sheets", :force => true do |t|
@@ -6355,27 +6370,21 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
     t.boolean "archived",               :default => false
   end
 
-  create_table "sp_questionnaire_pages", :force => true do |t|
-    t.integer  "questionnaire_id"
-    t.integer  "page_id"
-    t.integer  "position"
+  create_table "rejoicables", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "created_by_id"
+    t.integer  "organization_id"
+    t.integer  "followup_comment_id"
+    t.string   "what",                :limit => 22
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "deleted_at"
   end
 
-  create_table "sp_references", :force => true do |t|
-    t.integer  "question_id"
-    t.integer  "applicant_answer_sheet_id"
-    t.datetime "email_sent_at"
-    t.string   "relationship"
-    t.string   "title"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "phone"
-    t.string   "email"
-    t.string   "status"
-    t.datetime "submitted_at"
-    t.string   "access_key"
+  create_table "roles", :force => true do |t|
+    t.integer  "organization_id"
+    t.string   "name"
+    t.string   "i18n"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "is_staff",                  :default => false
@@ -6456,9 +6465,11 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
     t.integer  "ssm_id"
     t.datetime "last_login"
     t.datetime "created_at"
-    t.integer  "created_by_id"
-    t.string   "type"
-    t.integer  "person_id"
+    t.datetime "updated_at"
+    t.string   "twilio_sid"
+    t.string   "twilio_uri"
+    t.string   "separator"
+    t.integer  "question_id"
   end
 
   add_index "sp_users", ["ssm_id"], :name => "sp_users_ssm_id_index", :unique => true
@@ -6486,19 +6497,21 @@ ActiveRecord::Schema.define(:version => 20121017144708) do
     t.string  "passwordAnswer",   :limit => 64
   end
 
-  add_index "staffsite_staffsiteprofile", ["userName"], :name => "index1"
+  add_index "sms_keywords", ["organization_id"], :name => "organization_id"
+  add_index "sms_keywords", ["survey_id"], :name => "index_sms_keywords_on_survey_id"
+  add_index "sms_keywords", ["user_id"], :name => "user_id"
 
-  create_table "states", :force => true do |t|
-    t.string "state", :limit => 100
-    t.string "code",  :limit => 10
-  end
-
-  create_table "summer_placement_preferences", :force => true do |t|
+  create_table "sms_sessions", :force => true do |t|
+    t.string   "phone_number"
     t.integer  "person_id"
-    t.datetime "submitted_at"
+    t.integer  "sms_keyword_id"
+    t.boolean  "interactive",    :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "ended",          :default => false, :null => false
   end
+
+  add_index "sms_sessions", ["phone_number", "updated_at"], :name => "session"
 
   create_table "super_admins", :force => true do |t|
     t.integer  "user_id"

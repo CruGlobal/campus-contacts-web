@@ -6,8 +6,8 @@ class Ccc::Person < ActiveRecord::Base
 
   establish_connection :uscm
 
-  belongs_to :user, class_name: 'Ccc::SimplesecuritymanagerUser', foreign_key: 'fk_ssmUserId'
-  has_many :crs_registrations, class_name: 'Ccc::CrsRegistration', foreign_key: :fk_PersonID, dependent: :destroy
+  belongs_to :user, class_name: 'Ccc::SimplesecuritymanagerUser', foreign_key: 'user_id'
+  has_many :crs_registrations, class_name: 'Ccc::CrsRegistration', foreign_key: :person_id, dependent: :destroy
 
   has_one :crs2_profile, class_name: 'Ccc::Crs2Profile', foreign_key: :ministry_person_id, dependent: :destroy
   has_many :crs2_registrants, through: :crs2_profile
@@ -51,6 +51,63 @@ class Ccc::Person < ActiveRecord::Base
   has_many :phone_numbers, autosave: true
   has_many :email_addresses, autosave: true
   has_one :primary_phone_number, class_name: "PhoneNumber", foreign_key: "person_id", conditions: {primary: true}
+  has_one :current_address, class_name: "Ccc::MinistryNewaddress", foreign_key: "fk_PersonID", conditions: {addressType: 'current'}
+
+
+  def email
+    @email = primary_email_address.try(:email)
+    @email ||= email_addresses.first.try(:email) if email_addresses.present?
+    @email ||= (user.username || user.email) if user
+    @email ||= current_address.email if current_address
+    @email
+  end
+
+  def all_phone_numbers
+    numbers = phone_numbers.collect(&:number)
+    if current_address
+      numbers << current_address.homePhone if current_address.homePhone.present?
+      numbers << current_address.workPhone if current_address.workPhone.present?
+      numbers << current_address.cellPhone if current_address.cellPhone.present?
+    end
+    numbers
+  end
+
+  def all_email_addresses
+    emails = email_addresses.collect(&:email)
+    if current_address && current_address.email.present?
+      emails << current_address.email
+    end
+    if user
+      emails << user.username
+      emails << user.email if user.email.present?
+    end
+    emails
+  end
+
+
+  def preferred_or_first
+    preferredName || firstName
+  end
+
+  def last_name
+    lastName
+  end
+
+  def middle_name
+    middleName
+  end
+
+  def gender_as_int
+    gender
+  end
+
+  def greek_affiliation
+    greekAffiliation
+  end
+
+  def year_in_school
+    yearInSchool
+  end
 
   def merge(other)
     reload
@@ -62,8 +119,8 @@ class Ccc::Person < ActiveRecord::Base
                   when other.attributes[k].blank? then v
                   when v.blank? then other.attributes[k]
                   else
-                    other_date = other.dateChanged || other.dateCreated
-                    this_date = dateChanged || dateCreated
+                    other_date = other.dateChanged || other.created_at
+                    this_date = dateChanged || created_at
                     if other_date && this_date
                       other_date > this_date ? other.attributes[k] : v
                     else
@@ -99,16 +156,16 @@ class Ccc::Person < ActiveRecord::Base
 
       # Addresses
       ministry_newaddresses.each do |address|
-        other_address = other.ministry_newaddresses.detect {|oa| oa.addressType == address.addressType}
+        other_address = other.ministry_newaddresses.detect {|oa| oa.address_type == address.address_type}
         address.merge(other_address) if other_address
       end
       other.ministry_newaddresses do |address|
-        other_address = ministry_newaddresses.detect {|oa| oa.addressType == address.addressType}
-        address.update_attribute(:fk_PersonID, personID) unless address.frozen? || other_address
+        other_address = ministry_newaddresses.detect {|oa| oa.address_type == address.address_type}
+        address.update_attribute(:person_id, personID) unless address.frozen? || other_address
       end
 
       # CRS
-      other.crs_registrations.each { |ua| ua.update_attribute(:fk_PersonID, personID) }
+      other.crs_registrations.each { |ua| ua.update_attribute(:person_id, personID) }
 
       if other.crs2_profile && crs2_profile
         crs2_profile.merge(other.crs2_profile)
@@ -145,10 +202,10 @@ class Ccc::Person < ActiveRecord::Base
       if other.sp_user and sp_user
         sp_user.merge(other.sp_user)
       elsif other.sp_user
-        SpUser.where(["person_id = ? or ssm_id = ? or created_by_id = ?", other.id, other.fk_ssmUserId, other.fk_ssmUserId]).each do |ua|
+        SpUser.where(["person_id = ? or ssm_id = ? or created_by_id = ?", other.id, other.user_id, other.user_id]).each do |ua|
           ua.update_attribute(:person_id, personID) if ua.person_id == other.id
-          ua.update_attribute(:ssm_id, fk_ssmUserId) if ua.ssm_id == other.fk_ssmUserId
-          ua.update_attribute(:created_by_id, fk_ssmUserId) if ua.created_by_id == other.fk_ssmUserId
+          ua.update_attribute(:ssm_id, user_id) if ua.ssm_id == other.user_id
+          ua.update_attribute(:created_by_id, user_id) if ua.created_by_id == other.user_id
         end
       end
 
@@ -162,7 +219,7 @@ class Ccc::Person < ActiveRecord::Base
 
       other.hr_si_applications.each do |ua|
         ua.update_attribute(:fk_personID, personID)
-        ua.update_attribute(:fk_ssmUserID, fk_ssmUserId)
+        ua.update_attribute(:user_id, user_id)
       end
 
       other.si_applies.each { |ua| ua.update_attribute(:applicant_id, personID) }

@@ -70,12 +70,15 @@ Mh::Application.routes.draw do
     end
   end
 
-  resources :people, :only => [:show, :create, :edit, :update, :destroy, :index] do
+  match "/people" => "contacts#index"
+  match "/old_directory" => "people#index"
+  resources :people, :only => [:show, :create, :edit, :update, :destroy] do
     collection do
       get :export
       get :merge
       post :confirm_merge
       post :do_merge
+      get :hide_update_notice
       get :search_ids
       post :bulk_email
       post :bulk_sms
@@ -85,6 +88,7 @@ Mh::Application.routes.draw do
       post :bulk_delete
       post :bulk_archive
       get :facebook_search
+      get :index
     end
     member do
       get :merge_preview
@@ -117,6 +121,7 @@ Mh::Application.routes.draw do
       get :cleanup
       post :archive_contacts
       post :archive_leaders
+      post :create_from_crs
     end
   end
 

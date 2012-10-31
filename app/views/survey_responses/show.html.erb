@@ -15,9 +15,10 @@
       <ul>
         <% answer_sheet = @person.answer_sheets.detect {|as| survey.id == as.survey_id} %>
         <% survey.all_questions.each do |q| %>
-          <% answer = q.display_response(answer_sheet) %>
-          <% if answer.present? %>
-            <li><%= q.label %><%= ':' unless q.label[-1] =~ /\.;:\?/ %> <%= answer %></li>
+          <% q.display_response(answer_sheet).tap do |answer| %>
+            <% if answer.present? %>
+              <li><%= q.label %><%= ':' unless q.label[-1] =~ /\.;:\?/ %> <%= answer %></li>
+            <% end %>
           <% end %>
         <% end %>
       </ul>

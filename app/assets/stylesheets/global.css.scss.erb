@@ -1,3 +1,7 @@
+#menutop {
+  border-bottom: 1px solid #0379AE;
+}
+
 .clearfix:after {
 	content: ".";
 	display: block;
@@ -512,6 +516,9 @@ div.wizard {
     background: #c7dff0;
     padding: 4px 2px 3px 2px;
 		vertical-align: top;
+		&.hidden_questions {
+		  text-align: center;
+		}
   }
   .check {
     width: 30px;
@@ -527,7 +534,7 @@ div.wizard {
     background: #f5ffc4;
   }
   td.controls {
-    width: 60px;
+    width: 90px;
 		white-space:nowrap;
   }
   td.name {
@@ -802,8 +809,11 @@ ul.pillmenu {
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
-  background: url('<%= asset_path('pillbg.png') %>') repeat-x;
+  background-color: #ffffff;
   overflow: hidden;
+  &:hover {
+    border: 1px solid #0379AE;
+  }
   li {
     border-right: 1px solid #666;
     border-left: 1px solid #fff;
@@ -822,11 +832,8 @@ ul.pillmenu {
       background: #fff;
     }
     a:hover, a.active {
-      background: #eaf1f6;
+      background-color: #C7DFF0;
       text-decoration: none;
-    }
-    a.active {
-      box-shadow: inset 0 2px 4px #999;
     }
   }
   li:first-child {
@@ -862,12 +869,12 @@ ul.pillmenu {
 .pillbutton,
 .pillbutton:visited {
   display: inline-block;
-  border: 1px solid #808080;
+  border: 1px solid #0379AE;
   margin-right: 8px;
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
-  background: url('<%= asset_path('pillbg.png') %>') repeat-x;
+	background-color: #C7DFF0;
   overflow: hidden;
   padding: 0 7px;
   line-height: 20px;
@@ -878,8 +885,9 @@ ul.pillmenu {
 }
 
 .pillbutton:hover {
-	background: url('<%= asset_path('pillbg_over.png') %>') repeat-x;
+	background-color: #C7DFF0;
   text-decoration: none;
+  border: 1px solid #0379AE;
 }
 
 #menu_search {
@@ -914,6 +922,11 @@ ul.pillmenu {
   ul#hidden_questions {
     margin: 0;
     padding: 0;
+    list-style: none;
+  }
+  &#hidden_questions_div {
+    margin: 0;
+    padding: 10px;
     list-style: none;
   }
   li {
@@ -2767,6 +2780,21 @@ ul.under_tree {
   margin: -3px 0px -3px 5px;
 }
 
-.ui-widget-content .explain {
-	color: #808284;
+ul.divider {
+  margin: 0px 4px 2px -3px;
+  border: none;
+  display: inline-block;
+  width: 3px;
+  padding: 0;
+  height: 22px;
+  background: url('MH_DotDivider.png') no-repeat;
+}
+
+#advanced_search {
+  padding: 7px 0px;  
+}
+
+#global_loader {
+  display: inline-block;
+  margin: -3px 0px -3px 5px;
 }

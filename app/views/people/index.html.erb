@@ -111,14 +111,14 @@
       <% if can?(:create, Person) || can?(:create, SmsMailer) %>
         <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment',  'data-params' => 'page=' + (params[:page] ? params[:page] : '1') + '&role_id=' + (params[:role_id] ? params[:role_id] : '')   %></th>
       <% end %>
-      <th><%= sort_link @q, :firstName, t('contacts.index.first_name'), params %></th>
-      <th><%= sort_link @q, :lastName, t('contacts.index.last_name'), params %></th>
+      <th><%= sort_link @q, :first_name, t('contacts.index.first_name'), params %></th>
+      <th><%= sort_link @q, :last_name, t('contacts.index.last_name'), params %></th>
       <th><%= sort_link @q, 'role_id', t('nav.roles'), params %></th>
       <th><%= sort_link @q, :gender, t('.gender'), params %></th>
       <th><%= sort_link @q, 'email_addresses.email', t('.email'), params %></th>
       <th><%= sort_link @q, 'phone_numbers.number', t('.phone'), params %></th>
       <% if (current_organization.settings[:show_year_in_school]) || (current_organization.settings[:show_year_in_school].nil?) %>
-        <th><%= sort_link @q, :yearInSchool, t('.year_in_school'), params %></th>
+        <th><%= sort_link @q, :year_in_school, t('.year_in_school'), params %></th>
       <% end %>
       <th></th>
     </tr>

@@ -4,6 +4,7 @@ class OrganizationalRole < ActiveRecord::Base
   belongs_to :role
   belongs_to :organization
   scope :leaders, where(role_id: Role.leader_ids)
+  scope :involved, where(role_id: Role.involved_ids)
   scope :active, where(deleted: false)
   scope :contact, where("role_id = #{Role::CONTACT_ID}")
   # scope :not_dnc, where("followup_status <> 'do_not_contact' AND role_id = #{Role::CONTACT_ID}")
