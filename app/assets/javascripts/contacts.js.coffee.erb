@@ -233,11 +233,13 @@ $ ->
         person += $(element).attr('value') + ","
     
     add_another = false
-    $('<a href="/groups/' + group  + '/group_memberships?person_id=' + person + '&role=member&add_another=' + add_another + '"data-method="post" data-remote="true"></a>')
+    $('<a href="/groups/' + group  + '/group_memberships?person_id=' + person + '&role=member&render_in_contacts=true&add_another=' + add_another + '" data-method="post" data-remote="true"></a>')
     .appendTo('body')
     .click()
     .remove()
     $('#assign_search').dialog('destroy')
+    $('#global_loader').show()
+    $('.id_checkbox:checked').prop('checked',false)
   false
   
   $('#assign_search .label a').live 'click', (e)->
