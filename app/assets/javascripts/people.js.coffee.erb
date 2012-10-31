@@ -666,20 +666,29 @@ $('.check_all_mine').live 'click', ->
  
 $('.check_all_contacts').live 'click', ->
   first_row = $('#contacts_table').find('tr:first')
-  text = first_row.text()
-  if text.indexOf('Fetching') == 0
+  if first_row.text().indexOf('Fetching') == 0
     $(this).attr('checked', true)  
-    $('input.id_checkbox').attr('checked', true)  
+    $('.id_checkbox').prop('checked', true)  
     return false
+  
+  checked = $(this).is(':checked')  
+  if checked
+    change_all_role_checkboxes(true)
+  else
+    change_all_role_checkboxes(false)
+  $('.id_checkbox').prop('checked', checked)  
     
   if true || $('.pagination').length
-    if $(this).is(':checked')    
+    if checked
       $('#contacts_table').prepend('<tr><td colspan="99" align="center" style="background:none;">Fetching information...</td></tr>') 
       $.get '/contacts/contacts_all?' + $(this).attr('data-status'), (html) ->
         $('#contacts_table').find('tr:first').remove()
         $('#contacts_table').prepend(html)    
     else
       first_row.remove()
+  change_all_role_checkboxes(true) if $(this).is(':checked')
+  disable_role_checkboxes()
+  enable_all_unchecked()
   
 $('#check_all').live 'click', ->
   first_row = $('#people_table').find('tr:first')
