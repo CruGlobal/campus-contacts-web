@@ -4,11 +4,6 @@
     <%= hidden_field_tag :include_archived, true %>
   <% end %>
   <%= text_field_tag :query, params[:query], placeholder: t('people.search.search_placeholder'), autocomplete: 'off', id: 'search_autocomplete_field' %>
-  <div id="search_button">
-    <div id="advanced_search">
-      <%= link_to(t('general.adv_search'), {controller: 'contacts', click: 'advanced_search_button'}, class: 'filter_link', id: 'advanced_search_button') %>
-    </div>
-    <%#= image_submit_tag("search.png") %>
-  </div>
+  <%#= image_submit_tag("search.png") %>
 <% end %>
-<span id="advanced_search"><%= link_to(t('people.search.advanced_search_link'), "/contacts?click=filter_link") %></span>
+<span id="advanced_search"><%= link_to(t('general.adv_search'), {controller: 'contacts', click: 'advanced_search_button'}, class: 'filter_link', id: 'advanced_search_button') %></span>

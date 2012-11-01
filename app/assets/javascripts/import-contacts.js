@@ -1,4 +1,5 @@
 var __NEW_QUESTION__ = "Create new question";
+var __NO_IMPORT__ = "Do not import data";
 
 $(document).ready(function() {
 	// Data arrays created in script in views/imports/edit.html.erb
@@ -9,30 +10,16 @@ $(document).ready(function() {
 	// - surveyData:	Contains the survey titles and questions
 	// - surveys:		Collects survey questions
 	
-	var i = '';
-	var ii = '';
-	var matchFound = '';
+	// Initialize variables
 	var htmlResults = '';
 	var matchQuestions = new Array();
-	var dataToBackend = new Object();
+	var dataCollection = new Object();
 	
-	
-// 	var newfunction = function (userData, mhubData, surveys, lengths, matches) {
-// 		var question = new Object();
-// 		var Questions = new Object();
-// 		var survey = new Object();
-// 		var Surveys = new Object();
-// 		
-// 		
-// 	}
-	
-	
-	
-	
-	for (i = 0; i < userQuestions.length; i++) {
+	// Perform comparison of User & MHub data & generate array of matches
+	// Functions: compare(userString, mhubString, matchQuestions)
+	for (var i = 0; i < userQuestions.length; i++) {
 		var matchFound = false;
-		
-		for (ii = 0; ii < mhubQuestions.length; ii++) {
+		for (var ii = 0; ii < mhubQuestions.length; ii++) {
 			if (compare(userQuestions[i], mhubQuestions[ii], matchQuestions) === true) {
 				matchFound = true;
 				break;
@@ -46,41 +33,56 @@ $(document).ready(function() {
 		}
 	}
 	
-	dataToBackend = constructObject(userQuestions, mhubQuestions, surveyTitles, surveyLengths, matchQuestions);
+	// Construct object with all data
+	dataCollection = constructObject(userQuestions, mhubQuestions, surveyTitles, surveyLengths, matchQuestions);
 	
-	refreshData(matchQuestions, surveyData);
+	foobar = dataCollection;
+	// console.log(dataCollection);
 	
-	$(".surveyContainer").html(generateHtml(surveyData));
-  
-	$(".selectTitle").each(function(index) {
-		$(this).text(matchQuestions[index]);
-		if ($(this).text() === __NEW_QUESTION__) {
-			$(this).parents(".matchSelect").siblings(".matchEdit").css("display", "block");
-		}
-	});
-  
+	// Generate HTML list & matches
+	regenerate(dataCollection, '');
+	
+
+	
+	// When select box is clicked options are set to show
 	$(".selectTitleBg").live("click", function(e) {
 		e.preventDefault();
 		
 		$(this).siblings(".selectQuestions").toggle().scrollTop(0);
 	});
 	
+	// --------------------------------------------------	
+	
+	refreshData(matchQuestions, surveyData);
+	
+	// $(".surveyContainer").html(generateHtml(surveyData));
+	
 	$(".surveyItem, .noMatch").live("click", function(e) {
 		e.preventDefault();
 		
-		var originalData = origData(surveyTitles, surveyLengths, mhubQuestions);
-		var selectedItem = '';
-		var previousItem = '';
-		var newMatches = new Array();
+		var oldItem = $(this).parents(".matchSelect").find(".selectTitle");
+		var oldText = oldItem.text();
+		var oldInfo = oldItem.attr("id").split("_");
+		var oldSurvey = oldInfo[1];
+		var oldQuestion = oldInfo[3];
 		
-		selectedItem = $(this).text();
-		previousItem = $(this).parents(".matchSelect").find(".selectTitle").text();
-		$(this).parents(".matchSelect").find(".selectTitle").text(selectedItem);
-		$('.selectTitle').each(function(i) {
-			newMatches.push($(this).text());
-		});
-		refreshData(newMatches, originalData);
-		$(".surveyContainer").html(generateHtml(originalData));
+		dataCollection[oldSurvey]["questions"][oldQuestion].action = "NONE";
+		dataCollection[oldSurvey]["questions"][oldQuestion].match = "NONE";
+		
+		var newItem = $(this);
+		var newText = newItem.text();
+		if (newText !== __NO_IMPORT__) {
+			var newInfo = newItem.attr("id").split("_");
+			var newSurvey = newInfo[1];
+			var newQuestion = newInfo[3];
+			var newMatch = $(this).parents('.matchSelect').attr('id').split('_')[1];
+			
+			dataCollection[newSurvey]["questions"][newQuestion].action = "MATCH";
+			dataCollection[newSurvey]["questions"][newQuestion].match = userQuestions[newMatch];
+		}
+		
+		// Generate HTML list & matches
+		regenerate(dataCollection, newText);
 		
 		$(".selectQuestions").hide();
 	});
@@ -144,7 +146,7 @@ $(document).ready(function() {
 						var new_survey_name = $('#survey_name').val();
 						surveyTitles.push(new_survey_name);
 						surveyLengths[surveyTitles.length - 1] = 1;
-						console.log(surveyLengths);
+						// console.log(surveyLengths);
 					}
 					else {
 						var old_survey_name = $('#select_survey').find(':selected').text();
@@ -223,24 +225,10 @@ $(document).ready(function() {
 	});
 });
 
-constructArray = function(string) {
-	var i = '';
-	var results = new Array();
-	
-	string = string.toLowerCase();
-	string = string.replace(/[^a-zA-Z0-9 ]+/g, "").replace("/ {2,}/", " ");
-	string = string.split(" ");
-	
-	for (i = 0; i < string.length; i++) {
-		results = results.concat(string[i].split("_"));
-	}
-	
-	return results;
-};
-
+// Function:	compare
+// Definition:	Compares userString & mhubString & generates array of matches
+// Uses:		constructArray
 var compare = function(userString, mhubString, matchQuestions) {
-	var i = '';
-	var ii = '';
 	var firstMatch = '';
 	var secondMatch = '';
 	var mhubCheck = '';
@@ -258,9 +246,9 @@ var compare = function(userString, mhubString, matchQuestions) {
 		return true;
 	}
 	else {
-		for (i = 0; i < userArray.length; i++) {
+		for (var i = 0; i < userArray.length; i++) {
 			secondMatch = false;
-    		for (ii = 0; ii < mhubArray.length; ii++) {
+    		for (var ii = 0; ii < mhubArray.length; ii++) {
     			mhubCheck = mhubArray[ii].indexOf(userArray[i]);
 	    		matchCheck = matchQuestions.indexOf(mhubString);
     			if (mhubCheck !== -1 && matchCheck === -1) {
@@ -272,6 +260,123 @@ var compare = function(userString, mhubString, matchQuestions) {
 		return secondMatch;
 	}
 };
+
+// Function:	constructArray
+// Definition:	Builds array from string input
+constructArray = function(string) {
+	var results = new Array();
+	
+	string = string.toLowerCase();
+	string = string.replace(/[^a-zA-Z0-9 ]+/g, "").replace("/ {2,}/", " ");
+	string = string.split(" ");
+	
+	for (var i = 0; i < string.length; i++) {
+		results = results.concat(string[i].split("_"));
+	}
+	
+	return results;
+};
+
+// Function:	generateList
+// Definition:	Builds html string for select list
+var generateList = function(data) {
+	var htmlResults = '';
+	
+	for (var key in data) {
+		var obj1 = data[key];
+		for (var prop1 in obj1) {
+			if (prop1 === 'title') {
+				htmlResults = htmlResults + '<ul class="surveyQuestions"><span class="surveyHeader">' + obj1[prop1] + '</span>';
+			}
+			else if (prop1 === 'questions') {
+				var obj2 = obj1[prop1];
+				for (var prop2 in obj2) {
+					var obj3 = obj2[prop2];
+					for (var prop3 in obj3) {
+						if (prop3 === 'action') {
+							if (obj3[prop3] === 'NONE') {
+								htmlResults = htmlResults + '<li class="surveyItem" id="survey_' + key + '_question_' + prop2 + '">' + obj3['text'] + '</li>';
+							}
+						}
+					}
+				}
+				htmlResults = htmlResults + '</ul>';
+			}
+		}
+	}
+	return htmlResults;
+}
+
+// Function:	findItem
+// Definition:	Locates info about item in object
+var findItem = function(data, item, type, output) {
+	var itemResults = new Array();
+	
+	for (var key in data) {
+		var obj1 = data[key];
+		for (var prop1 in obj1) {
+			if (prop1 === "questions") {
+				var obj2 = obj1[prop1];
+				for (var prop2 in obj2) {
+					var obj3 = obj2[prop2];
+					for (var prop3 in obj3) {
+						if (prop3 === type) {
+							if (obj3[prop3] === item) {
+								itemResults = [key, prop2, obj3[output]];
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return itemResults;
+}
+
+// Function:	regenerate
+// Definition:	Regenerate HTML & update matches
+
+var regenerate = function (data, checkImport) {
+	// Generate HTML list
+	$(".surveyContainer").html(generateList(data));
+	
+	// Set the text & id of the matched elements
+	$(".selectTitle").each(function(index) {
+		var question = userQuestions[index];
+		var questionInfo = findItem(data, question, "match", "text");
+		
+		if (questionInfo[2]) {
+			$(this).text(questionInfo[2]);
+			$(this).attr("id", "survey_" + questionInfo[0] + "_question_" + questionInfo[1]);
+		}
+		else if (checkImport === __NO_IMPORT__) {
+			$(this).text(__NO_IMPORT__);
+		}
+		else {
+			$(this).text(__NEW_QUESTION__);
+			$(this).parents(".matchSelect").siblings(".matchEdit").css("display", "block");
+		}
+	});
+}
+
+var generateHtml = function (data) {
+	var htmlResults = '';
+	
+	for (var i = 0; i < data.length; i++) {
+		if (data[i] instanceof Array === false) {
+			htmlResults = htmlResults + '<ul class="surveyQuestions"><span class="surveyHeader">' + data[i] + '</span>';
+		}
+		else {
+			for (var ii = 0; ii < data[i].length; ii++) {
+				htmlResults = htmlResults + '<li class="surveyItem">' + data[i][ii] + '</li>';
+			}
+		}
+		if (data[i] instanceof Array === true) {
+			htmlResults = htmlResults + '</ul>';
+		}
+	}
+	return htmlResults;
+}
 
 var refreshData = function(matches, surveys) {
 	var i = '';
@@ -295,27 +400,6 @@ var refreshData = function(matches, surveys) {
 			}
 		}
 	}
-}
-
-var generateHtml = function (data) {
-	var i = '';
-	var ii = '';
-	var htmlResults = '';
-	
-	for (i = 0; i < data.length; i++) {
-		if (data[i] instanceof Array === false) {
-			htmlResults = htmlResults + '<ul class="surveyQuestions"><span class="surveyHeader">' + data[i] + '</span>';
-		}
-		else {
-			for (ii = 0; ii < data[i].length; ii++) {
-				htmlResults = htmlResults + '<li class="surveyItem">' + data[i][ii] + '</li>';
-			}
-		}
-		if (data[i] instanceof Array === true) {
-			htmlResults = htmlResults + '</ul>';
-		}
-	}
-	return htmlResults;
 }
 
 var origData = function (titles, lengths, questions) {
@@ -356,7 +440,7 @@ var constructObject = function (userData, mhubData, surveys, lengths, matches) {
 	var questions = new Object();
 	var results = new Object();
 
-	console.log(matches);
+	// console.log(matches);
 
 	var question = new Object();
 	var questionGroup = new Object();
@@ -383,7 +467,8 @@ var constructObject = function (userData, mhubData, surveys, lengths, matches) {
 					}
 				}
 				if (!question.action) {
-					question.action = "NEW";
+					question.action = "NONE";
+					question.match = "NONE";
 				}
 				questionGroup[xx] = question;
 			}
@@ -392,12 +477,10 @@ var constructObject = function (userData, mhubData, surveys, lengths, matches) {
 				surveyGroup[x] = survey;
 			}
 			else {
-				surveyGroup[x - 1] = survey;
+				surveyGroup[(x/2)] = survey;
 			}
 		}
 	}
-	
-	console.log(surveyGroup);
 	
 	
 	
@@ -439,54 +522,5 @@ var constructObject = function (userData, mhubData, surveys, lengths, matches) {
 	
 	//console.log(results);
 	
-	return results;
+	return surveyGroup;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
