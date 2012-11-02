@@ -4,7 +4,8 @@ include ApiTestHelper
 class ApiV1FriendsTest < ActionDispatch::IntegrationTest
   context "the api" do
     setup do
-      setup_api_env()
+      setup_api_env
+      3.times { |i| Friend.new(i, 'Foo', @user.person) }
     end
     should "be able to get person friends" do
       path = "/api/friends/#{@user.person.id}"

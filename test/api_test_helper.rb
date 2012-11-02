@@ -6,7 +6,6 @@ module ApiTestHelper
 
 def setup_api_env
   @temp_org = Factory(:organization)
-  Friend.destroy_all
   
   @user = Factory.create(:user_no_org_with_facebook)
   Factory.create(:authentication, user: @user)

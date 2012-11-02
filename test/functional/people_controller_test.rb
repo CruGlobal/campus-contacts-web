@@ -349,12 +349,8 @@ class PeopleControllerTest < ActionController::TestCase
     
     should "return the friends who are members of the same org as person" do
       #simulate their friendship with @person
-      friend1 = Factory(:friend, person: @person)
-      friend2 = Factory(:friend, person: @person)
-      friend1.update_attributes(:uid => @person1.fb_uid)
-      friend2.update_attributes(:uid => @person2.fb_uid)
-      assert_not_nil(friend1.person)
-      assert_not_nil(friend2.person)
+      friend1 = Friend.new(@person1.fb_uid, @person1.name, @person)
+      friend2 = Friend.new(@person2.fb_uid, @person1.name, @person)
       #profile view
       get :show, { 'id' => @person.id }
       #check the friends on the same org

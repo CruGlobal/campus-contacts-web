@@ -8,7 +8,6 @@ class PersonTest < ActiveSupport::TestCase
   should have_one(:primary_email_address)
   should have_many(:phone_numbers)
   should have_many(:locations)
-  should have_many(:friends)
   should have_many(:interests)
   should have_many(:education_histories)
   should have_many(:email_addresses)
@@ -342,7 +341,7 @@ class PersonTest < ActiveSupport::TestCase
       @person = Factory(:person)
       @person_phone1 = @person.phone_numbers.create(number: '1111111', location: 'mobile')
       @person_location1 = @person.locations.create(provider: "provider", name: "Location1", location_id: "1")
-      @person_friend1 = @person.friends.create(provider: "provider", name: "Friend1", uid: "1")
+      @person_friend1 = Friend.new("1", 'Friend1', @person, 'provider')
       @person_interest1 = @person.interests.create(provider: "provider", name: "Interest1",
                                                    interest_id: "1", category: "category")
       @person_education1 = @person.education_histories.create(school_type: "HighSchool", provider: "provider", 
@@ -356,7 +355,7 @@ class PersonTest < ActiveSupport::TestCase
       @other = Factory(:person)
       @other_phone1 = @other.phone_numbers.create(number: '3333333', location: 'mobile')
       @other_location1 = @other.locations.create(provider: "provider", name: "Location2", location_id: "2")
-      @other_friend1 = @other.friends.create(provider: "provider", name: "Friend2", uid: "2")
+      @other_friend1 = Friend.new("2", 'Friend2', @other, 'provider')
       @other_interest1 = @other.interests.create(provider: "provider", name: "Interest2",
                                                  interest_id: "2", category: "category")
       @other_education1 = @other.education_histories.create(school_type: "HighSchool", provider: "provider", 
@@ -369,18 +368,18 @@ class PersonTest < ActiveSupport::TestCase
     end
     should "merge the phone numbers" do
       @person.merge(@other)
-      assert(@person.phone_numbers.include?(@person_phone1), "Person still have its phone number")
+      assert(@person.phone_numbers.include?(@person_phone1), "Person should still have its phone number")
       assert(@person.phone_numbers.include?(@other_phone1), "Person should aquire other person's phone number data")
     end
     should "merge the locations" do
       @person.merge(@other)
-      assert(@person.locations.include?(@person_location1), "Person still have its location")
+      assert(@person.locations.include?(@person_location1), "Person should still have its location")
       assert(@person.locations.include?(@other_location1), "Person should aquire other person's location data")
     end
     should "merge the friends" do
       @person.merge(@other)
-      assert(@person.friends.include?(@person_friend1), "Person still have its friend")
-      assert(@person.friends.include?(@other_friend1), "Person should aquire other person's friend data")
+      assert(Friend.followers(@person).include?(@person_friend1.uid), "Person should still have its friend")
+      assert(Friend.followers(@person).include?(@other_friend1.uid), "Person should aquire other person's friend data")
     end
     should "merge the interests" do
       @person.merge(@other)
@@ -434,44 +433,21 @@ class PersonTest < ActiveSupport::TestCase
     end
 
     context "get friendships" do
-      should "get & update friends" do
+      should "get friends" do
         #make sure # of friends from MiniFB = # written into DB
         @x = @person.get_friends(@authentication, TestFBResponses::FRIENDS)
-        assert_equal(@x,@person.friends.all.length )
+        assert_equal(@x, @person.friend_uids.length )
+      end
 
-        #Pez's UID 
-        @friend = @person.friends.find_by_uid(5108015)
-        assert_equal(@friend.name, "David Pezzoli","Make sure that Pez is in the local friends DB now")
-        #Todd's UID
-        @friend2 = @person.friends.find_by_uid(514392571)
-        @friend2.name = "Not Todd Gross"
-        assert_not_equal(@friend2.name,"Todd Gross","Make sure that Todd's local DB name change went through")
-
-        @friend.destroy  #delete Pez from the local DB
-        friend1 = @person.friends.create(provider: "facebook", :uid =>"1", name: "Test User", person_id: @person.id.to_i)
-        friend2 = @person.friends.create(provider: "facebook", :uid =>"2", name: "Test User", person_id: @person.id.to_i)
+      should "update friends" do
+        friend1 = Friend.new('1', 'Test User', @person)
         x = @person.update_friends(@authentication, TestFBResponses::FRIENDS)
-        assert_equal(3, x, "Make sure that three changes took place... 2 deletions and 1 addition")
 
-        friend1 = @person.friends.find_by_uid("1")
-        friend2 = @person.friends.find_by_uid("2")
-        assert_nil(friend1, "Make sure that test friend 1 was deleted")
-        assert_nil(friend2, "Make sure that test friend 2 was deleted")
+        # Make sure new friends get deleted
+        assert(!@person.friend_uids.include?(friend1.uid))
 
-        @friend = @person.friends.find_by_uid(5108015)
-        assert_equal(@friend.name,"David Pezzoli", "Make sure that Pez was readded")
-
-        @friend2.reload
-        assert_equal(@friend2.name, "Todd Gross", "Make sure that Todd's name was updated")
       end
 
-      should "insert friendship to redis database" do
-        @person.get_friends(@authentication, TestFBResponses::FRIENDS)
-        assert_equal(Friend.followers(@person).length, @person.friends.all.length)
-
-        @person.update_friends(@authentication, TestFBResponses::FRIENDS)
-        assert_equal(Friend.followers(@person).length, @person.friends.all.length)
-      end
     end
 
     should "not create a duplicate email when adding an email they already have" do
