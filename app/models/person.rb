@@ -394,39 +394,11 @@ class Person < ActiveRecord::Base
     p
   end
 
-  def address1=(val)
-    self.current_address ||= build_current_address
-    current_address.address1 = val
-  end
 
-  def city=(val)
-    self.current_address ||= build_current_address
-    current_address.city = val
-  end
+  delegate :address1, :address1=, :city, :city=, :state, :state=, :zip, :zip=, :country, :country=, :dorm, :dorm=, :room, :room=, to: :current_address
 
-  def state=(val)
-    self.current_address ||= build_current_address
-    current_address.state = val
-  end
-
-  def zip=(val)
-    self.current_address ||= build_current_address
-    current_address.zip = val
-  end
-
-  def country=(val)
-    self.current_address ||= build_current_address
-    current_address.country = val
-  end
-
-  def dorm=(val)
-    self.current_address ||= build_current_address
-    current_address.dorm = val
-  end
-
-  def room=(val)
-    self.current_address ||= build_current_address
-    current_address.room = val
+  def current_address
+    self['current_address'] ||= build_current_address
   end
 
   def name
