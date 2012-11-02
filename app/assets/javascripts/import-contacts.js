@@ -55,80 +55,116 @@ $(document).ready(function() {
 		}
 	});
 
-	$('.surveyItem').live('click', function(e) {
+	// When survey item or no match is selected HTML is updated
+	$('.surveyItem, .noMatch').live('click', function(e) {
 		e.preventDefault();
+		
+		var clickedElement = $(e.target);
+		var clickedClass = $(e.target).attr('class');
+		var oldElement = clickedElement.parents('.matchSelect').find('.selectTitle').attr('id').split('_')[0];
 		
 		var oldItem = '';
 		var oldText = '';
 		var oldInfo = '';
+		var oldType = '';
 		var oldSurvey = '';
 		var oldQuestion = '';
 		
 		var newItem = '';
 		var newText = '';
 		var newInfo = '';
+		var newType = '';
 		var newSurvey = '';
 		var newQuestion = '';
 		
 		var userMatch = '';
 		
-		var oldItem = $(this).parents('.matchSelect').find('.selectTitle');
-		var oldText = oldItem.text();
-		var oldInfo = oldItem.attr('id').split('_');
-		var oldSurvey = oldInfo[1];
-		var oldQuestion = oldInfo[3];
-		
-		var newItem = $(this);
-		var newText = newItem.text();
-		var newInfo = newItem.attr('id').split('_');
-		var newSurvey = newInfo[1];
-		var newQuestion = newInfo[3];
-		
 		var userMatch = $(this).parents('.matchSelect').attr('id').split('_')[1];
 		
-		mhubCollection[oldSurvey]['questions'][oldQuestion].action = 'NONE';
-		mhubCollection[oldSurvey]['questions'][oldQuestion].match = 'NONE';
+		// If old element is 'Do not import'
+		if (oldElement === 'none') {
+			if (clickClass === 'noMatch' || clickClass === 'noImport') {
+				// Nothing
+			}
+			else if (clickClass === 'surveyItem') {
+				var newItem = $(this);
+				var newText = newItem.text();
+				var newInfo = newItem.attr('id').split('_');
+				var newType = newInfo[0];
+				var newSurvey = newInfo[1];
+				var newQuestion = newInfo[3];
+				
+				if (newType === 'survey') {
+					mhubCollection[newSurvey]['questions'][newQuestion].action = 'MATCH';
+					userCollection[userMatch].action = 'MATCH';
+				}
+				else if (newType === 'newsurvey') {
+					mhubCollection[newSurvey]['questions'][newQuestion].action = 'NEWQUESTION';
+					userCollection[userMatch].action = 'NEWSURVEY';
+				}
+			}
+		}
 		
-		mhubCollection[newSurvey]['questions'][newQuestion].action = 'MATCH';
-		mhubCollection[newSurvey]['questions'][newQuestion].match = userQuestions[userMatch];
-		
-		userCollection[userMatch]['match'].survey = newSurvey;
-		userCollection[userMatch]['match'].question = newQuestion;
-		userCollection[userMatch]['match'].text = newText;
-		
-		// Generate HTML matches & list
-		generateMatches(userCollection);
-		generateList(mhubCollection);
-		
-		$('.selectQuestions').hide();
-	});
-	
-	$('.noMatch').live('click', function(e) {
-		e.preventDefault();
-		
-		var oldItem = '';
-		var oldText = '';
-		var oldInfo = '';
-		var oldSurvey = '';
-		var oldQuestion = '';
-		
-		var userMatch = '';
-		
-		var oldItem = $(this).parents('.matchSelect').find('.selectTitle');
-		var oldText = oldItem.text();
-		var oldInfo = oldItem.attr('id').split('_');
-		var oldSurvey = oldInfo[1];
-		var oldQuestion = oldInfo[3];
-		
-		var userMatch = $(this).parents('.matchSelect').attr('id').split('_')[1];
-		
-		mhubCollection[oldSurvey]['questions'][oldQuestion].action = 'NONE';
-		mhubCollection[oldSurvey]['questions'][oldQuestion].match = 'NONE';
-		
-		userCollection[userMatch].action = 'NONE';
-		userCollection[userMatch]['match'].survey = 'NONE';
-		userCollection[userMatch]['match'].question = 'NONE';
-		userCollection[userMatch]['match'].text = 'NONE';
+		if (oldElement === 'none' || oldElement === 'new') {
+			if (clickedElement.is('.surveyItem')) {
+				var newItem = $(this);
+				var newText = newItem.text();
+				var newInfo = newItem.attr('id').split('_');
+				var newSurvey = newInfo[1];
+				var newQuestion = newInfo[3];
+				
+				mhubCollection[newSurvey]['questions'][newQuestion].action = 'MATCH';
+				mhubCollection[newSurvey]['questions'][newQuestion].match = userQuestions[userMatch];
+				
+				userCollection[userMatch].action = 'MATCH';
+				userCollection[userMatch]['match'].survey = newSurvey;
+				userCollection[userMatch]['match'].question = newQuestion;
+				userCollection[userMatch]['match'].text = newText;
+			}
+			else if (clickedElement.is('.noMatch') || clickedElement.is('.noImport')) {
+				userCollection[userMatch].action = 'NONE';
+				userCollection[userMatch]['match'].survey = 'NONE';
+				userCollection[userMatch]['match'].question = 'NONE';
+				userCollection[userMatch]['match'].text = 'NONE';
+			}
+		}
+		else if (oldElement === 'survey' || oldElement === 'newsurvey') {
+			var oldItem = $(this).parents('.matchSelect').find('.selectTitle');
+			var oldText = oldItem.text();
+			var oldInfo = oldItem.attr('id').split('_');
+			var oldSurvey = oldInfo[1];
+			var oldQuestion = oldInfo[3];
+			
+			if (oldElement === 'survey') {
+				mhubCollection[oldSurvey]['questions'][oldQuestion].action = 'NONE';
+			}
+			else if (oldElement === 'newsurvey') {
+				mhubCollection[oldSurvey]['questions'][oldQuestion].action = 'NEWQUESTION';
+			}
+			
+			mhubCollection[oldSurvey]['questions'][oldQuestion].match = 'NONE';
+			
+			if (clickedElement.is('.surveyItem')) {
+				var newItem = $(this);
+				var newText = newItem.text();
+				var newInfo = newItem.attr('id').split('_');
+				var newSurvey = newInfo[1];
+				var newQuestion = newInfo[3];
+				
+				mhubCollection[newSurvey]['questions'][newQuestion].action = 'MATCH';
+				mhubCollection[newSurvey]['questions'][newQuestion].match = userQuestions[userMatch];
+				
+				userCollection[userMatch]['match'].survey = newSurvey;
+				userCollection[userMatch]['match'].question = newQuestion;
+				userCollection[userMatch]['match'].text = newText;
+			}
+			else if (clickedElement.is('.noMatch') || clickedElement.is('.noImport')) {
+				userCollection[userMatch].action = 'NONE';
+				userCollection[userMatch]['match'].survey = 'NONE';
+				userCollection[userMatch]['match'].question = 'NONE';
+				userCollection[userMatch]['match'].text = 'NONE';
+			}
+		}
 		
 		// Generate HTML matches & list
 		generateMatches(userCollection);
@@ -186,29 +222,160 @@ $(document).ready(function() {
 			{
 				text: 'Done',
 				click: function() {
-					if ($('#create_new').attr('checked')) {
-						var new_survey_name = $('#survey_name').val();
-						surveyTitles.push(new_survey_name);
-						surveyLengths[surveyTitles.length - 1] = 1;
-						// console.log(surveyLengths);
-					}
-					else {
-						var old_survey_name = $('#select_survey').find(':selected').text();
-						var index = surveyTitles.indexOf(old_survey_name);
-					}
-					var question_type = $('#question_type').find(':selected').val();
-					if (question_type !== '') {
-						if (question_type === 'text_field_short') {
-							var short_answer_question = $('#short_answer_question').val();
-							$('#select_' + questionId).find('.selectTitle').text(short_answer_question);
+					var newForm = $('#new_question_form');
+					
+					var newSurveyCheck = '';
+					var newSurveyName = '';
+					var newQuestionType = '';
+					var newShort = '';
+					var newMultiple = '';
+					var newMultipleOptions = '';
+					
+					var oldSurveyName = '';
+					
+					var newSurveyCheck = newForm.find('#create_new');
+					
+					if (newSurveyCheck.is(':checked')) {
+						newSurveyName = newForm.find('#survey_name').val();
+						if (newSurveyName === '') {
+							alert('Please enter a survey name');
+							newForm.find('#survey_name').focus();
 						}
 						else {
-							var multiple_choice_question = $('#multiple_choice_question').val();
-							var multiple_choice_options = $('#multiple_choice_options').val();
-							$('#select_' + questionId).find('.selectTitle').text(multiple_choice_question);
+							newQuestionType = newForm.find('#question_type').find(':selected').val();
+							if (newQuestionType === '') {
+								alert('Please select a question type');
+								newForm.find('#question_type').focus();
+							}
+							else if (newQuestionType === 'text_field_short') {
+								newShort = newForm.find('#short_answer_question').val();
+								if (newShort === '') {
+									alert('Please enter a question');
+									newForm.find('#short_answer_question').focus();
+								}
+								else {
+									var mhubObjectLocation = '';
+									var mhubObjectQuestion = new Object();
+									var mhubObjectHolder = new Object();
+									
+									var userObjectLocation = '';
+									var userObjectMatch = new Object();
+									var userObjectHolder = new Object();
+									
+									mhubObjectLocation = collectionSize(mhubCollection);
+									
+									mhubObjectQuestion.action = 'NEWQUESTION';
+									mhubObjectQuestion.match = userQuestions[questionId];
+									mhubObjectQuestion.text = newShort;
+									mhubObjectHolder.action = 'NEW';
+									mhubObjectHolder.title = newSurveyName;
+									mhubObjectHolder.questions = new Object();
+									mhubObjectHolder.questions[0] = mhubObjectQuestion;
+									
+									mhubCollection[mhubObjectLocation] = mhubObjectHolder;
+									
+									userObjectLocation = collectionSize(userCollection);
+									
+									userObjectMatch.question = 0;
+									userObjectMatch.survey = mhubObjectLocation;
+									userObjectMatch.text = newShort;
+									userObjectHolder.action = 'NEWSURVEY';
+									userObjectHolder.text = userQuestions[questionId];
+									userObjectHolder.match = userObjectMatch;
+									
+									userCollection[questionId] = userObjectHolder;
+									
+									// Generate HTML matches & list
+									generateMatches(userCollection);
+									generateList(mhubCollection);
+									
+									$(this).dialog('destroy');
+								}
+							}
+							else {
+								newMultiple = newForm.find('#multiple_choice_question').val();
+								if (newMultiple === '') {
+									alert('Please enter a question');
+									newForm.find('#multiple_choice_question').focus();
+								}
+								else {
+									newMultipleOptions = newForm.find('#multiple_choice_options').val();
+									if (newMultipleOptions === '') {
+										alert('Please enter at least one option');
+										newForm.find('#multiple_choice_options').focus();
+									}
+									else {
+										console.log(newSurveyCheck);
+										console.log(newSurveyName);
+										console.log(oldSurveyName);
+										console.log(newQuestionType);
+										console.log(newShort);
+										console.log(newMultiple);
+										console.log(newMultipleOptions);
+										
+										$(this).dialog('destroy');
+									}
+								}
+							}
 						}
 					}
-					$(this).dialog('destroy');
+					else {
+						oldSurveyName = newForm.find('#select_survey').find(':selected').text();
+						if (oldSurveyName === '') {
+							alert('Please select a survey');
+							newForm.find('#select_survey').focus();
+						}
+						else {
+							newQuestionType = newForm.find('#question_type').find(':selected').val();
+							if (newQuestionType === '') {
+								alert('Please select a question type');
+								newForm.find('#question_type').focus();
+							}
+							else if (newQuestionType === 'text_field_short') {
+								newShort = newForm.find('#short_answer_question').val();
+								if (newShort === '') {
+									alert('Please enter a question');
+									newForm.find('#short_answer_question').focus();
+								}
+								else {
+									console.log(newSurveyCheck);
+									console.log(newSurveyName);
+									console.log(oldSurveyName);
+									console.log(newQuestionType);
+									console.log(newShort);
+									console.log(newMultiple);
+									console.log(newMultipleOptions);
+									
+									$(this).dialog('destroy');
+								}
+							}
+							else {
+								newMultiple = newForm.find('#multiple_choice_question').val();
+								if (newMultiple === '') {
+									alert('Please enter a question');
+									newForm.find('#multiple_choice_question').focus();
+								}
+								else {
+									newMultipleOptions = newForm.find('#multiple_choice_options').val();
+									if (newMultipleOptions === '') {
+										alert('Please enter at least one option');
+										newForm.find('#multiple_choice_options').focus();
+									}
+									else {
+										console.log(newSurveyCheck);
+										console.log(newSurveyName);
+										console.log(oldSurveyName);
+										console.log(newQuestionType);
+										console.log(newShort);
+										console.log(newMultiple);
+										console.log(newMultipleOptions);
+										
+										$(this).dialog('destroy');
+									}
+								}
+							}
+						}
+					}
 				}
 			}, {
 				text: 'Cancel',
@@ -221,7 +388,7 @@ $(document).ready(function() {
 		false;
 	});
 	
-	// ----- Create new question form scripts ----- //
+	// New question form scripts
 	$('#short_answer_question').simplyCountable({
 		counter:		'#short_counter',
 		countDirection:	'up'
@@ -268,6 +435,8 @@ $(document).ready(function() {
 		$('#multiple_choice_preview').text($(this).val());
 	});
 });
+
+// -------------------------------------------------------------------------------------
 
 // Function:	compare
 // Definition:	Compares userString & mhubString & generates array of matches
@@ -339,7 +508,13 @@ var generateList = function(data) {
 					for (var prop3 in obj3) {
 						if (prop3 === 'action') {
 							if (obj3[prop3] === 'NONE') {
-								htmlResults = htmlResults + '<li class="surveyItem" id="survey_' + key + '_question_' + prop2 + '">' + obj3['text'] + '</li>';
+								htmlResults = htmlResults + '<li class="surveyItem" id="none_' + key + '_' + prop2 + '">' + obj3['text'] + '</li>';
+							}
+							else if (obj3[prop3] === 'MATCH') {
+								// Do nothing
+							}
+							else if (obj3[prop3] === 'NEW') {
+								htmlResults = htmlResults + '<li class="surveyItem" id="new_' + key + '_' + prop2 + '">' + obj3['text'] + '</li>';
 							}
 						}
 					}
@@ -368,22 +543,25 @@ var generateMatches = function (data) {
 			newId = '';
 			if (prop1 === 'action') {
 				var obj2 = obj1[prop1];
+				if (obj2 === 'NOIMPORT') {
+					newText = __NO_IMPORT__;
+					newId = 'noimport_' + key;
+					checkAction = newId.split('_')[0];
+					checkNew = false;
+					break;
+				}
 				if (obj2 === 'MATCH') {
 					newText = obj1['match'].text;
-					newId = 'survey_' + obj1['match'].survey + '_question_' + obj1['match'].question;
-					checkAction = 'match';
+					newId = 'match_' + obj1['match'].survey + '_' + obj1['match'].question;
+					checkAction = newId.split('_')[0];
+					checkNew = obj1['match'].newquestion;
 					break;
 				}
 				else if (obj2 === 'NEW') {
 					newText = __NEW_QUESTION__;
 					newId = 'new_' + key;
-					checkAction = 'new';
-					break;
-				}
-				else if (obj2 === 'NONE') {
-					newText = __NO_IMPORT__;
-					newId = 'none_' + key;
-					checkAction = 'none';
+					checkAction = newId.split('_')[0];
+					checkNew = false;
 					break;
 				}
 			}
@@ -395,6 +573,9 @@ var generateMatches = function (data) {
 		$(this).text(newData[index][0]);
 		$(this).attr('id', newData[index][1]);
 		if (newData[index][2] === 'new') {
+			$(this).parents('.matchSelect').siblings('.matchEdit').show();
+		}
+		else if (newData[index][2] === 'match' && newData[index][3] === true) {
 			$(this).parents('.matchSelect').siblings('.matchEdit').show();
 		}
 		else {
@@ -419,6 +600,7 @@ var constructMhubObject = function (userData, mhubData, surveys, lengths, matche
 		survey = {};
 		if (surveyData[i] instanceof Array === false) {
 			survey.title = surveyData[i];
+			survey.action = "NONE";
 			questionGroup = {};
 			for (var ii = 0; ii < surveyData[i + 1].length; ii++) {
 				question = {};
@@ -492,6 +674,7 @@ var constructUserObject = function (userData, mhubCollection, matches) {
 			matchInfo.survey = questionInfo[0];
 			matchInfo.question = questionInfo[1];
 			matchInfo.text = questionInfo[2];
+			matchInfo.newquestion = false;
 			question.match = matchInfo;
 		}
 		else {
@@ -499,6 +682,7 @@ var constructUserObject = function (userData, mhubCollection, matches) {
 			matchInfo.survey = 'NONE';
 			matchInfo.question = 'NONE';
 			matchInfo.text = 'NONE';
+			matchInfo.newquestion = false;
 			question.match = matchInfo;
 		}
 		questionGroup[i] = question;
@@ -531,6 +715,19 @@ var findItem = function(data, item, type, output) {
 		}
 	}
 	return itemResults;
+}
+
+// Function:	collectionSize
+// Definition:	Returns size of object
+var collectionSize = function(obj) {
+	var size = 0;
+	var key = '';
+	for (key in obj) {
+		if (obj.hasOwnProperty(key)) {
+			size++;
+		}
+	}
+	return size;
 }
 
 
