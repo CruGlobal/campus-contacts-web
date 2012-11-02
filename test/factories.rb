@@ -127,13 +127,6 @@ FactoryGirl.define do
     token "164949660195249|bd3f24d52b4baf9412141538.1-690860831|w79R36CalrEAY-9e9kp8fDWJ69A"
   end
   
-  factory :friend do
-    
-    name "Test Friend #{Factory.next(:count)}"
-    uid {Factory.next(:count)}
-    provider "facebook"
-  end
-  
   factory :organization do
     name {"Organization #{Factory.next(:count)}"}
     terminology 'Organization'
@@ -206,7 +199,7 @@ FactoryGirl.define do
   
   factory :person_with_facebook_data, parent: :person do
     after_create do |f| 
-      3.times {Factory(:friend, person: f)}
+      3.times { |i| Friend.new(i, 'foo', f)}
       Factory(:education_history_highschool, person: f)
       Factory(:education_history_college, person: f)
       Factory(:education_history_gradschool, person: f)
@@ -217,7 +210,7 @@ FactoryGirl.define do
   
    factory :person_with_things, parent: :person do 
      after_create do |f| 
-       3.times {Factory(:friend, person: f)}
+       3.times { |i| Friend.new(i, "Foo#{i}").follow!(f) }
        Factory(:education_history_highschool, person: f)
        Factory(:education_history_college, person: f)
        Factory(:education_history_gradschool, person: f)

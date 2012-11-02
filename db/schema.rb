@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121020193612) do
+ActiveRecord::Schema.define(:version => 20121102181250) do
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -279,7 +279,7 @@ ActiveRecord::Schema.define(:version => 20121020193612) do
     t.datetime "updated_at"
   end
 
-  add_index "email_addresses", ["email"], :name => "index_email_addresses_on_email"
+  add_index "email_addresses", ["email"], :name => "email"
   add_index "email_addresses", ["person_id"], :name => "person_id"
 
   create_table "followup_comments", :force => true do |t|
@@ -295,7 +295,7 @@ ActiveRecord::Schema.define(:version => 20121020193612) do
 
   add_index "followup_comments", ["organization_id", "contact_id"], :name => "comment_organization_id_contact_id"
 
-  create_table "friends", :force => true do |t|
+  create_table "friends_deprecated", :force => true do |t|
     t.string   "name"
     t.string   "uid"
     t.string   "provider"
@@ -304,7 +304,7 @@ ActiveRecord::Schema.define(:version => 20121020193612) do
     t.datetime "updated_at"
   end
 
-  add_index "friends", ["person_id", "uid"], :name => "person_uid", :unique => true
+  add_index "friends_deprecated", ["person_id", "uid"], :name => "person_uid", :unique => true
 
   create_table "group_labelings", :force => true do |t|
     t.integer  "group_id"
@@ -467,10 +467,10 @@ ActiveRecord::Schema.define(:version => 20121020193612) do
     t.string   "first_name",                    :limit => 50
     t.string   "middle_name",                   :limit => 50
     t.string   "gender",                        :limit => 1
-    t.string   "campus",                        :limit => 128
     t.string   "year_in_school",                :limit => 20
     t.string   "major",                         :limit => 70
     t.string   "minor",                         :limit => 70
+    t.string   "campus",                        :limit => 70
     t.string   "greek_affiliation",             :limit => 50
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -493,7 +493,6 @@ ActiveRecord::Schema.define(:version => 20121020193612) do
   end
 
   add_index "people", ["accountNo"], :name => "accountNo_ministry_Person"
-  add_index "people", ["campus"], :name => "campus"
   add_index "people", ["crs_profile_id"], :name => "index_people_on_crs_profile_id"
   add_index "people", ["fb_uid"], :name => "index_ministry_person_on_fb_uid"
   add_index "people", ["first_name", "last_name"], :name => "firstName_lastName"
@@ -699,7 +698,7 @@ ActiveRecord::Schema.define(:version => 20121020193612) do
     t.string   "initial_response",               :limit => 145
     t.text     "post_survey_message_deprecated"
     t.string   "event_type"
-    t.string   "gateway",                                       :default => "", :null => false
+    t.string   "gateway",                                       :default => "twilio", :null => false
     t.integer  "survey_id"
   end
 
@@ -792,9 +791,13 @@ ActiveRecord::Schema.define(:version => 20121020193612) do
   add_index "users", ["email"], :name => "index_simplesecuritymanager_user_on_email", :unique => true
   add_index "users", ["username"], :name => "CK_simplesecuritymanager_user_username", :unique => true
 
+  add_foreign_key "answers", "elements", :name => "answers_ibfk_1", :column => "question_id"
+
+  add_foreign_key "organization_memberships", "organizations", :name => "organization_memberships_ibfk_2", :dependent => :delete
+
   add_foreign_key "organizational_roles", "organizations", :name => "organizational_roles_ibfk_1", :dependent => :delete
 
-  add_foreign_key "sms_keywords", "organizations", :name => "sms_keywords_ibfk_2"
+  add_foreign_key "sms_keywords", "organizations", :name => "sms_keywords_ibfk_4", :dependent => :delete
   add_foreign_key "sms_keywords", "surveys", :name => "sms_keywords_ibfk_3", :dependent => :nullify
 
   add_foreign_key "surveys", "organizations", :name => "surveys_ibfk_1", :dependent => :delete

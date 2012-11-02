@@ -14,7 +14,6 @@ class Person < ActiveRecord::Base
   has_one :primary_phone_number, class_name: "PhoneNumber", foreign_key: "person_id", conditions: {primary: true}
   has_many :locations
   has_one :latest_location, order: "updated_at DESC", class_name: 'Location'
-  has_many :friends
   has_many :interests
   has_many :education_histories
   has_many :email_addresses, autosave: true
@@ -92,11 +91,7 @@ class Person < ActiveRecord::Base
     :order => "roles.name #{order.include?("asc") ? 'DESC' : 'ASC'}"
   } }
   
-  scope :find_friends_with_fb_uid, lambda { |id| {
-    :select => "people.*",
-    :joins => "LEFT JOIN friends ON people.fb_uid = friends.uid",
-    :conditions => "friends.person_id = #{id}",
-  } }
+  scope :find_friends_with_fb_uid, lambda { |person| { conditions: {fb_uid: Friend.followers(person)} } }
 
   scope :search_by_name_or_email, lambda { |keyword, org_id| {
     :select => "people.*",
@@ -399,7 +394,7 @@ class Person < ActiveRecord::Base
     p
   end
 
-  def name 
+  def name
     [first_name, last_name].collect(&:to_s).join(' ') 
   end
 
@@ -537,59 +532,28 @@ class Person < ActiveRecord::Base
   end
 
   def get_friends(authentication, response = nil)
-    if friends.count == 0 
-      if response.nil?
-        @friends = MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
-      else @friends = response
+    if friends.length == 0 
+      response ||= MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
+      @friends = response['data']
+
+      @friends.each do |friend|
+        Friend.new(friend['id'], friend['name'], self)
       end
-      @friends["data"].each do |friend|
-        the_friend = friends.create(uid: friend['id'], name: friend['name'], person_id: id.to_i, provider: "facebook")
-        the_friend.follow!(self) unless the_friend.following?(self)
-      end
+      @friends.length  #return how many friend you got from facebook for testing
     end
-    @friends["data"].length  #return how many friend you got from facebook for testing
   end
 
   def update_friends(authentication, response = nil)
-    if response.nil?
-      @friends = MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
-    else @friends = response
-    end
-    @friends = @friends["data"]
-    @removal = []
-    @create = []
-    @match = []
-    @dbf = friends.reload
+    response ||= MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
+    @fb_friends = response["data"]
 
-    @friends.each do |friend|
-      @dbf.each do |dbf|
-        if dbf['uid'] == friend.id
-          @matching_friend = dbf if dbf['uid'] == friend.id
-          break
-        end
-        @matching_friend = nil
-      end
-      if @matching_friend
-        the_friend = friends.find_by_uid(@matching_friend.uid)
-        the_friend.update_attributes(name: friend['name']) unless @matching_friend.name.eql?(friend['name'])
-        @match.push(@matching_friend.uid)
-      elsif friends.find_by_uid(friend.id).nil? #uid's did not match && the DB is empty
-        the_friend = friends.create!(uid: friend['id'], name: friend['name'], person_id: id.to_i, provider: "facebook")
-        @create.push(friend['id'])
-      end
-      the_friend.follow!(self) unless the_friend.following?(self)
+    @fb_friends.each do |fb_friend|
+      Friend.new(fb_friend['id'], fb_friend['name'], self)
     end
-    @dbf = friends.reload
 
-    @dbf.each do |dbf|
-      if !( @match.include?(dbf.uid) || @create.include?(dbf.uid) )
-        friend_to_delete = friends.select('id').where("uid = ?", dbf.uid).first
-        id_to_destroy = friend_to_delete['id'].to_i
-        Friend.destroy(id_to_destroy)
-        @removal.push(dbf.uid)
-      end
+    (Friend.followers(self) - @fb_friends.collect {|f| f['id'] }).each do |uid|
+      Friend.unfollow(self, uid)
     end
-    @removal.length + @create.length  #create way to test how many changes were made
   end
 
   def get_interests(authentication, response = nil)
@@ -640,13 +604,13 @@ class Person < ActiveRecord::Base
             e.degree_name = education.degree.try(:name) ? education.degree.name : e.degree_name
           end
           save(validate: false)
-        end 
+        end
       end
     end
-  end  
+  end
 
   def contact_friends(org)
-    Person.where(fb_uid: friends.select(:uid).collect(&:uid)).joins(:organizational_roles).where('organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.organization_id' => org.id)
+    org.people.find_friends_with_fb_uid(self)
   end
 
   def remove_assigned_contacts(organization)
@@ -666,6 +630,15 @@ class Person < ActiveRecord::Base
       return self
     end
 
+  end
+
+
+  def friends
+    Person.where(fb_uid: friend_uids)
+  end
+
+  def friend_uids
+    Friend.followers(self)
   end
 
   def merge(other)
@@ -714,14 +687,9 @@ class Person < ActiveRecord::Base
         end
       end
 
-      other.friends.each do |friend|
-        if friend_ids.include?(friend.id)
-          friend.destroy
-        else
-          begin
-            friend.update_column(:person_id, id) 
-          rescue; end
-        end
+      Friend.followers(other).each do |uid|
+        friend = Friend.new(uid, nil, self)
+        friend.unfollow(other)
       end
 
       # Interests
@@ -868,6 +836,10 @@ class Person < ActiveRecord::Base
                                        {org_id: org_id, role: role.i18n, name: organization_from_id(org_id).name, primary: primary_organization.id == org_id ? 'true' : 'false'} 
                                      }
                                    }.flatten
+  rescue NoMethodError
+    self.organization_tree_cache = nil
+    self.org_ids_cache = nil
+    retry
   end
 
   def to_hash(organization = nil)
