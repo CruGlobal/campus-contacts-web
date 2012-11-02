@@ -24,7 +24,7 @@ class Person < ActiveRecord::Base
   has_many :contact_assignments, class_name: "ContactAssignment", foreign_key: "assigned_to_id"
   has_many :assigned_tos, class_name: "ContactAssignment", foreign_key: "person_id"
   has_many :assigned_contacts, through: :contact_assignments, source: :assigned_to
-  has_one :current_address, class_name: "Address", foreign_key: "person_id", conditions: {address_type: 'current'}
+  has_one :current_address, class_name: "Address", foreign_key: "person_id", conditions: {address_type: 'current'}, autosave: true
   has_many :addresses, class_name: 'Address', foreign_key: :person_id, dependent: :destroy
   has_many :rejoicables, inverse_of: :created_by
 
@@ -392,6 +392,41 @@ class Person < ActiveRecord::Base
       end
     end
     p
+  end
+
+  def address1=(val)
+    self.current_address ||= build_current_address
+    current_address.address1 = val
+  end
+
+  def city=(val)
+    self.current_address ||= build_current_address
+    current_address.city = val
+  end
+
+  def state=(val)
+    self.current_address ||= build_current_address
+    current_address.state = val
+  end
+
+  def zip=(val)
+    self.current_address ||= build_current_address
+    current_address.zip = val
+  end
+
+  def country=(val)
+    self.current_address ||= build_current_address
+    current_address.country = val
+  end
+
+  def dorm=(val)
+    self.current_address ||= build_current_address
+    current_address.dorm = val
+  end
+
+  def room=(val)
+    self.current_address ||= build_current_address
+    current_address.room = val
   end
 
   def name
