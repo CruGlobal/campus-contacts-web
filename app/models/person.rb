@@ -395,10 +395,10 @@ class Person < ActiveRecord::Base
   end
 
 
-  delegate :address1, :address1=, :city, :city=, :state, :state=, :zip, :zip=, :country, :country=, :dorm, :dorm=, :room, :room=, to: :current_address
+  delegate :address1, :address1=, :city, :city=, :state, :state=, :zip, :zip=, :country, :country=, :dorm, :dorm=, :room, :room=, to: :current_or_blank_address
 
-  def current_address
-    self['current_address'] ||= build_current_address
+  def current_or_blank_address
+    self.current_address ||= build_current_address
   end
 
   def name
