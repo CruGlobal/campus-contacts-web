@@ -195,7 +195,9 @@ class Organization < ActiveRecord::Base
 
   def add_role_to_person(person, role_id)
     person_id = person.is_a?(Person) ? person.id : person
-    OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id).first_or_create!
+    role = OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id).first_or_create!
+    role.update_attributes(end_date: nil, archive_date: nil, deleted: 0)
+    role
   end
 
   def remove_role_from_person(person, role_id)

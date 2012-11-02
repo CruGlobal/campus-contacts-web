@@ -79,9 +79,11 @@ class Import < ActiveRecord::Base
           import_errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
         else
           labels.each do |role_id|
-            role = Role.find_or_create_by_organization_id_and_name(current_organization.id, label_name) if role_id.to_i == 0
-            role_id = role.id if role.present?
-            OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person.id, current_organization.id, role_id, added_by_id: current_user.person.id) if role_id.present?
+            if role_id.to_i == 0
+              role = Role.find_or_create_by_organization_id_and_name(current_organization.id, label_name)
+              role_id = role.id
+            end
+            current_organization.add_role_to_person(person, role_id)
           end
         end
       end
@@ -98,7 +100,7 @@ class Import < ActiveRecord::Base
   end
   
   def create_contact_from_row(row, current_organization)
-    person = Person.create(row[:person])
+    person = Person.create!(row[:person])
     
     unless @surveys_for_import
       @survey_ids ||= SurveyElement.where(element_id: row[:answers].keys).pluck(:survey_id) - [APP_CONFIG['predefined_survey']]
