@@ -498,8 +498,8 @@ class Person < ActiveRecord::Base
   end
 
   def gender
-    if ['1','0'].include?(self[:gender])
-      self[:gender] == '1' ? 'male' : 'female'
+    if ['1','0'].include?(self[:gender].to_s)
+      self[:gender].to_s == '1' ? 'Male' : 'Female'
     else
       self[:gender]
     end
