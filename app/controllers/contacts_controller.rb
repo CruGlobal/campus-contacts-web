@@ -149,7 +149,9 @@ class ContactsController < ApplicationController
       
       org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
       
-      @people_scope = Person.where('organizational_roles.organization_id' => org_ids).where("organizational_roles.role_id <> #{Role::CONTACT_ID} OR (organizational_roles.role_id = #{Role::CONTACT_ID} AND organizational_roles.followup_status <> 'do_not_contact')").joins(:organizational_roles_including_archived)
+      @people_scope = Person.where('organizational_roles.organization_id' => org_ids)
+                            .where("organizational_roles.role_id <> #{Role::CONTACT_ID} OR (organizational_roles.role_id = #{Role::CONTACT_ID} AND organizational_roles.followup_status <> 'do_not_contact')")
+                            .includes(:organizational_roles_including_archived)
       
       @people_scope = @people_scope.where('organizational_roles.archive_date' => nil, 'organizational_roles.deleted' => 0) if params[:include_archived].blank? && params[:archived].blank?
       
@@ -169,12 +171,12 @@ class ContactsController < ApplicationController
           @people = @people_scope.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ? AND organizational_roles.deleted = 0', @role.id, current_organization.id)
           if params[:include_archived].present? && params[:include_archived] == 'true'
             @people = @people
-                      .joins("INNER JOIN roles ON roles.id = organizational_roles.role_id")
+                      .joins(:roles)
                       .where("roles.id = #{@role.id}")
                       sort_by.unshift("roles.id").uniq
           else
             @people = @people
-                      .joins("INNER JOIN roles ON roles.id = organizational_roles.role_id")
+                      .joins(:roles)
                       .where("organizational_roles.archive_date" => nil) 
                       .where("roles.id = #{@role.id}")
                       sort_by.unshift("roles.id").uniq
@@ -210,7 +212,7 @@ class ContactsController < ApplicationController
           else
             if params[:assigned_to].present? && @assigned_to = Person.find_by_id(params[:assigned_to])
               @header = I18n.t('contacts.index.responses_assigned_to', assigned_to: @assigned_to)
-              @people = Person.includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
+              @people = Person.joins(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
             end
           end
         end
@@ -225,7 +227,7 @@ class ContactsController < ApplicationController
       end
       
       if params[:q] && params[:q][:s].include?('followup_status')
-        @people = @people.joins(:organizational_roles).order_by_followup_status(params[:q][:s])
+        @people = @people.order_by_followup_status(params[:q][:s])
       end
       if params[:survey].present?
         @people = @people.joins(:answer_sheets).where("answer_sheets.survey_id" => params[:survey])
@@ -243,12 +245,12 @@ class ContactsController < ApplicationController
       if params[:email].present?
         v = params[:email].strip
         term = (v.first == v.last && v.last == '"') ? v[1..-2] : "%#{v}%"
-        @people = @people.includes(:primary_email_address).where("email_addresses.email like ?", term)
+        @people = @people.joins(:email_addresses).where("email_addresses.email like ?", term)
       end
       if params[:phone_number].present?
         v = PhoneNumber.strip_us_country_code(params[:phone_number])
         term = (v.first == v.last && v.last == '"') ? v[1..-2] : "%#{v}%"
-        @people = @people.where("phone_numbers.number like ?", term)
+        @people = @people.joins(:phone_numbers).where("phone_numbers.number like ?", term)
       end
       if params[:gender].present?
         @people = @people.where("gender = ?", params[:gender].strip)
@@ -273,9 +275,9 @@ class ContactsController < ApplicationController
                            when 'person'
                              case question.attribute_name
                              when 'email'
-                               @people = @people.includes(:email_addresses).where("#{EmailAddress.table_name}.email like ?", term) unless v.strip.blank?
+                               @people = @people.joins(:email_addresses).where("#{EmailAddress.table_name}.email like ?", term) unless v.strip.blank?
                              when 'phone_number'
-                               @people = @people.includes(:phone_numbers).where("#{PhoneNumber.table_name}.number like ?", term) unless v.strip.blank?
+                               @people = @people.joins(:phone_numbers).where("#{PhoneNumber.table_name}.number like ?", term) unless v.strip.blank?
                              else
                                @people = @people.where("#{Person.table_name}.#{question.attribute_name} like ?", term) unless v.strip.blank?
                              end
@@ -325,7 +327,6 @@ class ContactsController < ApplicationController
       
       @all_people = @people
       @people_for_labels = Person.people_for_labels(current_organization)
-      @people = @people.includes(:organizational_roles)
       @people = @people.page(params[:page])
     
     end

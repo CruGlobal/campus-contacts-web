@@ -146,16 +146,16 @@ class Organization < ActiveRecord::Base
   def unassigned_contacts
     person_table_pkey = "#{Person.table_name}.#{Person.primary_key}"
     Person
-    .joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{person_table_pkey} 
-        AND organizational_roles.organization_id = #{id} 
-        AND organizational_roles.role_id = '#{Role::CONTACT_ID}' 
-        AND followup_status <> 'do_not_contact' 
-        AND followup_status <> 'completed' 
-        AND archive_date IS NULL
-        AND deleted = 0
-        LEFT JOIN contact_assignments ON contact_assignments.person_id = #{person_table_pkey} 
-        AND contact_assignments.organization_id = #{id}")
-        .where("contact_assignments.id IS NULL OR contact_assignments.assigned_to_id NOT IN (?)", only_leaders)
+    .joins("INNER JOIN organizational_roles org_roles ON org_roles.person_id = #{person_table_pkey} 
+        AND org_roles.organization_id = #{id} 
+        AND org_roles.role_id = '#{Role::CONTACT_ID}' 
+        AND org_roles.followup_status <> 'do_not_contact' 
+        AND org_roles.followup_status <> 'completed' 
+        AND org_roles.archive_date IS NULL
+        AND org_roles.deleted = 0
+        LEFT JOIN contact_assignments ca ON ca.person_id = #{person_table_pkey} 
+        AND ca.organization_id = #{id}")
+        .where("ca.id IS NULL OR ca.assigned_to_id NOT IN (?)", only_leaders)
   end
 
   def inprogress_contacts
