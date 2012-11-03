@@ -160,7 +160,7 @@ class OrganizationsController < ApplicationController
   protected
   def get_organization
     if params[:id]
-      @organization = Organization.subtree_of(current_organization.root_id).find(params[:id])
+      @organization = Organization.find(params[:id])
     else
       @organization = Organization.subtree_of(current_organization.root_id).first
     end

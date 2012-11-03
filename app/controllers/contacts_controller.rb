@@ -1,4 +1,3 @@
-require 'csv'
 require 'contact_actions'
 
 class ContactsController < ApplicationController
@@ -21,40 +20,20 @@ class ContactsController < ApplicationController
   
     respond_to do |wants|
       wants.html do
-        @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, person_id: @people.collect(&:id)).map {|r| [r.person_id, r]}]
-        @assignments = ContactAssignment.includes(:assigned_to).where(person_id: @people.collect(&:id), organization_id: @organization.id).group_by(&:person_id)
+        #@roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, person_id: @people.collect(&:id)).map {|r| [r.person_id, r]}]
+        @assignments = ContactAssignment.includes(:assigned_to).where(person_id: @people.pluck('people.id'), organization_id: @organization.id).group_by(&:person_id)
         @answers = generate_answers(@people, @organization, @questions)
-        @filtered_people = @all_people - @people
+        #@filtered_people = @all_people - @people
         @all_people_with_phone_number = @all_people.where('phone_numbers.number is not NULL')
         @all_people_with_email = @all_people.where('email_addresses.email is not NULL')
       end
       wants.csv do
         @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r]}]
         @all_answers = generate_answers(@all_people, @organization, @questions)
-        out = ""
         @questions.select! { |q| !%w{first_name last_name phone_number email}.include?(q.attribute_name) }
-        CSV.generate(out) do |rows|
-          rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('general.status'), t('general.assigned_to'), t('general.gender'), t('contacts.index.phone_number'), t('people.index.email')] + @questions.collect {|q| q.label} + [t('contacts.index.last_survey')]
-          @all_people.each do |person|
-            if @roles[person.id]
-              answers = [person.first_name, person.last_name, @roles[person.id].followup_status.to_s.titleize, person.assigned_tos_by_org(current_organization).collect{|a| Person.find(a.assigned_to_id).name}.join(','), person.gender.to_s.titleize, person.pretty_phone_number, person.email]
-              dates = []
-              @questions.each do |q|
-                answer = @all_answers[person.id][q.id]
-                if answer
-                  answers << answer.first
-                  dates << answer.last
-                else
-                  answers << ''
-                end
-              end
-              answers << I18n.l(dates.sort.reverse.last, format: :date) if dates.present?
-              rows << answers
-            end
-          end
-        end
         filename = @organization.to_s
-        send_data(out, :filename => "#{filename} - Contacts.csv", :type => 'application/csv' )
+        csv = ContactsCsvGenerator.generate(@roles, @all_answers, @questions, @all_people, @organization)
+        send_data(csv, :filename => "#{filename} - Contacts.csv", :type => 'application/csv' )
       end
     end
   end
@@ -172,7 +151,7 @@ class ContactsController < ApplicationController
       
       @people_scope = Person.where('organizational_roles.organization_id' => org_ids).where("organizational_roles.role_id <> #{Role::CONTACT_ID} OR (organizational_roles.role_id = #{Role::CONTACT_ID} AND organizational_roles.followup_status <> 'do_not_contact')").joins(:organizational_roles_including_archived)
       
-      @people_scope = @people_scope.where(id: @people_scope.archived_not_included.collect(&:id)) if params[:include_archived].blank? && params[:archived].blank?
+      @people_scope = @people_scope.where('organizational_roles.archive_date' => nil, 'organizational_roles.deleted' => 0) if params[:include_archived].blank? && params[:archived].blank?
       
       sort_by = ['lastName asc', 'firstName asc']
       
@@ -340,7 +319,7 @@ class ContactsController < ApplicationController
       @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
       # raise @q.sorts.inspect
       
-      @people = @people.includes(:primary_phone_number, :primary_email_address).
+      @people = @people.includes(:primary_phone_number, :primary_email_address, :contact_role).
                   order(params[:q] && params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass').gsub('followup_status','organizational_roles.followup_status') : ['last_name, first_name']).
                   group('people.id')
       
@@ -366,11 +345,12 @@ class ContactsController < ApplicationController
     
     def generate_answers(people, organization, questions)
       answers = {}
-      people.each do |person|
-        answers[person.id] = {}
+      people_ids = people.pluck('people.id')
+      people_ids.each do |id|
+        answers[id] = {}
       end
       @surveys = {}
-      AnswerSheet.includes(:survey).where(survey_id: organization.survey_ids, person_id: people.collect(&:id)).includes({:person => :primary_email_address}).each do |answer_sheet|
+      AnswerSheet.includes(:survey).where(survey_id: organization.survey_ids, person_id: people_ids).includes({:person => :primary_email_address}).each do |answer_sheet|
         @surveys[answer_sheet.person_id] ||= {}
         @surveys[answer_sheet.person_id][answer_sheet.survey] = answer_sheet.completed_at
         

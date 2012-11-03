@@ -30,6 +30,7 @@ class Person < ActiveRecord::Base
 
   has_many :organization_memberships, inverse_of: :person
   has_many :organizational_roles, conditions: {deleted: false, archive_date: nil}
+  has_one :contact_role, class_name: 'OrganizationalRole'
   has_many :roles, through: :organizational_roles
   has_many :organizational_roles_including_archived, class_name: "OrganizationalRole", foreign_key: "person_id", conditions: {deleted: false}
   has_many :roles_including_archived, through: :organizational_roles_including_archived, source: :role

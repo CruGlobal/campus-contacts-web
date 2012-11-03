@@ -420,15 +420,15 @@ class PersonTest < ActiveSupport::TestCase
     context "has a gender which" do
       should "be set correctly for male case" do 
         @person.gender = "Male"
-        assert_equal(@person.gender, "male")
+        assert_equal(@person.gender, "Male")
         @person.gender = '1'
-        assert_equal(@person.gender,"male")
+        assert_equal(@person.gender,"Male")
       end
       should "be set correctly for female case" do
         @person.gender = "Female"
-        assert_equal(@person.gender,"female")
+        assert_equal(@person.gender,"Female")
         @person.gender = '0'
-        assert_equal(@person.gender,"female")
+        assert_equal(@person.gender,"Female")
       end
     end
 
@@ -508,7 +508,7 @@ class PersonTest < ActiveSupport::TestCase
       person = Person.create_from_facebook(data_hash,@authentication, TestFBResponses::FULL)
       assert(person.locations.first.name.is_a? String)
       assert(person.education_histories.first.school_name.is_a? String)
-      assert(['male', 'female'].include?(person.gender))
+      assert(['Male', 'Female'].include?(person.gender))
       assert_equal(person.email, "mattrw89@gmail.com", "See if person has correct email address")
     end    
 
