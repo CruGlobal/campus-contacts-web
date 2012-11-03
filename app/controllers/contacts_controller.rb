@@ -24,8 +24,8 @@ class ContactsController < ApplicationController
         @assignments = ContactAssignment.includes(:assigned_to).where(person_id: @people.pluck('people.id'), organization_id: @organization.id).group_by(&:person_id)
         @answers = generate_answers(@people, @organization, @questions)
         #@filtered_people = @all_people - @people
-        @all_people_with_phone_number = @all_people.where('phone_numbers.number is not NULL')
-        @all_people_with_email = @all_people.where('email_addresses.email is not NULL')
+        #@all_people_with_phone_number = @all_people.where('phone_numbers.number is not NULL')
+        #@all_people_with_email = @all_people.where('email_addresses.email is not NULL')
       end
       wants.csv do
         @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r]}]
