@@ -151,7 +151,7 @@ class ContactsController < ApplicationController
       
       @people_scope = Person.where('organizational_roles.organization_id' => org_ids)
                             .where("organizational_roles.role_id <> #{Role::CONTACT_ID} OR (organizational_roles.role_id = #{Role::CONTACT_ID} AND organizational_roles.followup_status <> 'do_not_contact')")
-                            .includes(:organizational_roles_including_archived)
+                            .joins(:organizational_roles_including_archived)
       
       @people_scope = @people_scope.where('organizational_roles.archive_date' => nil, 'organizational_roles.deleted' => 0) if params[:include_archived].blank? && params[:archived].blank?
       
