@@ -1,5 +1,6 @@
 var __NEW_QUESTION__ = 'Create new question';
 var __NO_IMPORT__ = 'Do not import data';
+var __PREDEFINED_SURVEY__ = 'Predefined Questions';
 
 $(document).ready(function() {
 	// Data arrays created in script in views/imports/edit.html.erb
@@ -82,7 +83,7 @@ $(document).ready(function() {
 		var userMatch = '';
 		
 		var newElement = $(e.target);
-		var newClass = $(e.target).attr('class');
+		var newClass = newElement.attr('class');
 		var oldElement = newElement.parents('.matchSelect').find('.selectTitle').attr('id').split('_')[0];
 		var userMatch = $(this).parents('.matchSelect').attr('id').split('_')[1];
 		
@@ -184,45 +185,22 @@ $(document).ready(function() {
 		$('.selectQuestions').hide();
 	});
 	
-	$('.newQuestion').live('click', function(e) {
+	$('.newQuestion, .editMatch').live('click', function(e) {
 		e.preventDefault();
 		
 		resetForm('#new_question_form');
 		
-		var questionId = $(this).parents('.matchSelect').attr('id').split('_')[1];
+		var targetElement = $(e.target);
+		var targetClass = targetElement.attr('class');
 		
-		var newElement = '';
-		
-		newElement = $(this).parents(".matchSelect").attr("id");
-		$('#new_question_div').dialog({
-			resizable: false,
-			height: 444,
-			width: 600,
-			modal: true,
-			buttons: [
-			{
-				text: 'Done',
-				click: function() {
-					$("#" + newElement).siblings(".matchEdit").css("display", "block");
-					$(this).dialog('destroy');
-				}
-			}, {
-				text: 'Cancel',
-				click: function() {
-					$(this).dialog('destroy');
-				}
-			}
-			]
-		});
-		false;
-	});
-	
-	$('.editMatch').live('click', function(e) {
-		e.preventDefault();
-		
-		resetForm('#new_question_form');
-		
-		var questionId = $(this).attr('id').split('_')[1];
+		if (targetClass === 'editMatch') {
+			var questionId = $(this).attr('id').split('_')[1];
+			var questionAction = $(this).parents('.matchEdit').siblings('.matchSelect').find('.selectTitle').attr('id').split('_')[0];
+			console.log(questionAction);
+		}
+		else {
+			var questionId = $(this).parents('.matchSelect').attr('id').split('_')[1];
+		}
 		
 		$('#new_question_div').dialog({
 			resizable: false,
@@ -394,13 +372,42 @@ $(document).ready(function() {
 									newForm.find('#short_answer_question').focus();
 								}
 								else {
-									console.log(newSurveyCheck);
-									console.log(newSurveyName);
-									console.log(oldSurveyName);
-									console.log(newQuestionType);
-									console.log(newShort);
-									console.log(newMultiple);
-									console.log(newMultipleOptions);
+									var mhubObjectSurvey = '';
+									var mhubObjectLocation = '';
+									var mhubObjectQuestion = new Object();
+									var mhubObjectHolder = new Object();
+									
+									var userObjectLocation = '';
+									var userObjectMatch = new Object();
+									var userObjectHolder = new Object();
+									
+									mhubObjectSurvey = findSurvey(mhubCollection, oldSurveyName);
+									mhubObjectLocation = collectionSize(mhubCollection[mhubObjectSurvey]['questions']);
+									
+									mhubObjectQuestion.action = 'MATCH';
+									mhubObjectQuestion.match = userQuestions[questionId];
+									mhubObjectQuestion.text = newShort;
+									mhubObjectQuestion.newquestion = true;
+									mhubObjectQuestion.type = 'SHORT';
+									
+									mhubCollection[mhubObjectSurvey]['questions'][mhubObjectLocation] = mhubObjectQuestion;
+									
+									userObjectLocation = collectionSize(userCollection);
+									
+									userObjectMatch.question = mhubObjectLocation;
+									userObjectMatch.survey = mhubObjectSurvey;
+									userObjectMatch.text = newShort;
+									userObjectMatch.newquestion = true;
+									
+									userObjectHolder.text = userQuestions[questionId];
+									userObjectHolder.action = 'MATCH';
+									userObjectHolder.match = userObjectMatch;
+									
+									userCollection[questionId] = userObjectHolder;
+									
+									// Generate HTML matches & list
+									generateMatches(userCollection);
+									generateList(mhubCollection);
 									
 									$(this).dialog('destroy');
 								}
@@ -418,13 +425,51 @@ $(document).ready(function() {
 										newForm.find('#multiple_choice_options').focus();
 									}
 									else {
-										console.log(newSurveyCheck);
-										console.log(newSurveyName);
-										console.log(oldSurveyName);
-										console.log(newQuestionType);
-										console.log(newShort);
-										console.log(newMultiple);
-										console.log(newMultipleOptions);
+										var mhubObjectSurvey = '';
+										var mhubObjectLocation = '';
+										var mhubObjectQuestion = new Object();
+										var mhubObjectHolder = new Object();
+										
+										var userObjectLocation = '';
+										var userObjectMatch = new Object();
+										var userObjectHolder = new Object();
+										
+										mhubObjectSurvey = findSurvey(mhubCollection, oldSurveyName);
+										mhubObjectLocation = collectionSize(mhubCollection[mhubObjectSurvey]['questions']);
+										
+										mhubObjectQuestion.action = 'MATCH';
+										mhubObjectQuestion.match = userQuestions[questionId];
+										mhubObjectQuestion.text = newMultiple;
+										mhubObjectQuestion.newquestion = true;
+										if (newQuestionType === 'choice_field_radio') {
+											mhubObjectQuestion.type = 'RADIO';
+										}
+										else if (newQuestionType === 'choice_field_checkbox') {
+											mhubObjectQuestion.type = 'CHECKBOX';
+										}
+										else if (newQuestionType === 'choice_field_dropdown') {
+											mhubObjectQuestion.type = 'DROPDOWN';
+										}
+										mhubObjectQuestion.options = newMultipleOptions;
+										
+										mhubCollection[mhubObjectSurvey]['questions'][mhubObjectLocation] = mhubObjectQuestion;
+										
+										userObjectLocation = collectionSize(userCollection);
+										
+										userObjectMatch.question = mhubObjectLocation;
+										userObjectMatch.survey = mhubObjectSurvey;
+										userObjectMatch.text = newMultiple;
+										userObjectMatch.newquestion = true;
+										
+										userObjectHolder.text = userQuestions[questionId];
+										userObjectHolder.action = 'MATCH';
+										userObjectHolder.match = userObjectMatch;
+										
+										userCollection[questionId] = userObjectHolder;
+										
+										// Generate HTML matches & list
+										generateMatches(userCollection);
+										generateList(mhubCollection);
 										
 										$(this).dialog('destroy');
 									}
@@ -436,6 +481,7 @@ $(document).ready(function() {
 			}, {
 				text: 'Cancel',
 				click: function() {
+					resetForm('#new_question_form');
 					$(this).dialog('destroy');
 				}
 			}
@@ -462,7 +508,9 @@ $(document).ready(function() {
 			var i = '';
 			var survey_options = '<option value=""></option>';
 			for (i = 0; i < surveyTitles.length; i++) {
-				var survey_options = survey_options + '<option value="survey_' + i + '">' + surveyTitles[i] + '</option>';
+				if (surveyTitles[i] !== __PREDEFINED_SURVEY__) {
+					var survey_options = survey_options + '<option value="survey_' + i + '">' + surveyTitles[i] + '</option>';
+				}
 			}
 			$('#survey_old').show();
 			$('#survey_old select').html(survey_options);
@@ -773,6 +821,25 @@ var findItem = function(data, item, type, output) {
 	return itemResults;
 }
 
+// Function:	findSurvey
+// Definition:	Locates info about survey in object
+var findSurvey = function(data, survey) {
+	var itemResults = new Array();
+	
+	for (var key in data) {
+		var obj1 = data[key];
+		for (var prop1 in obj1) {
+			if (prop1 === "title") {
+				if (obj1[prop1] === survey) {
+					var surveyLocation = key;
+					break;
+				}
+			}
+		}
+	}
+	return surveyLocation;
+}
+
 // Function:	collectionSize
 // Definition:	Returns size of object
 var collectionSize = function(obj) {
@@ -786,17 +853,8 @@ var collectionSize = function(obj) {
 	return size;
 }
 
-
-
-
-
-
-
-
-
-
-
-
+// Function:	resetForm
+// Definition:	Set form elements back to original state
 var resetForm = function (formId) {
 	$(formId).find('#create_new').attr('checked','checked');
 	$(formId).find('#survey_new').show();
