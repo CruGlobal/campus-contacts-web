@@ -4,13 +4,10 @@ class Api::FriendsController < ApiController
   
   def show_1
     json_output = get_people.collect { |p|
-    raise Friend.get_friends_from_person_id(p).inspect
       friends = Friend.get_friends_from_person_id(p).collect(&:to_hash)
       hash = { person: {name: p.to_s, id: p.id }, friends: friends }
     }
 
-    raise json_output.inspect
-    
     final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
     render json: final_output
   end
