@@ -56,12 +56,12 @@ $(document).ready(function() {
 	});
 
 	// When survey item or no match is selected HTML is updated
-	$('.surveyItem, .noMatch').live('click', function(e) {
+	$('.surveyItem, .noMatch, .noImport').live('click', function(e) {
 		e.preventDefault();
 		
-		var clickedElement = $(e.target);
-		var clickedClass = $(e.target).attr('class');
-		var oldElement = clickedElement.parents('.matchSelect').find('.selectTitle').attr('id').split('_')[0];
+		var newElement = '';
+		var newClass = '';
+		var oldElement = '';
 		
 		var oldItem = '';
 		var oldText = '';
@@ -69,6 +69,7 @@ $(document).ready(function() {
 		var oldType = '';
 		var oldSurvey = '';
 		var oldQuestion = '';
+		var oldCheck = '';
 		
 		var newItem = '';
 		var newText = '';
@@ -76,93 +77,103 @@ $(document).ready(function() {
 		var newType = '';
 		var newSurvey = '';
 		var newQuestion = '';
+		var newCheck = '';
 		
 		var userMatch = '';
 		
+		var newElement = $(e.target);
+		var newClass = $(e.target).attr('class');
+		var oldElement = newElement.parents('.matchSelect').find('.selectTitle').attr('id').split('_')[0];
 		var userMatch = $(this).parents('.matchSelect').attr('id').split('_')[1];
 		
-		// If old element is 'Do not import'
-		if (oldElement === 'none') {
-			if (clickClass === 'noMatch' || clickClass === 'noImport') {
-				// Nothing
-			}
-			else if (clickClass === 'surveyItem') {
+		if (oldElement === 'match') {
+			// Collect old element info
+			var oldItem = $(this).parents('.matchSelect').find('.selectTitle');
+			var oldText = oldItem.text();
+			var oldInfo = oldItem.attr('id').split('_');
+			var oldType = oldInfo[0];
+			var oldSurvey = oldInfo[1];
+			var oldQuestion = oldInfo[2];
+			var oldCheck = oldInfo[3];
+			
+			// Set old element action to none
+			mhubCollection[oldSurvey]['questions'][oldQuestion].action = 'NONE';
+			mhubCollection[oldSurvey]['questions'][oldQuestion].match = 'NONE';
+			
+			if (newClass === 'surveyItem') {
+				// Collect new element info
 				var newItem = $(this);
 				var newText = newItem.text();
 				var newInfo = newItem.attr('id').split('_');
 				var newType = newInfo[0];
 				var newSurvey = newInfo[1];
-				var newQuestion = newInfo[3];
+				var newQuestion = newInfo[2];
+				var newCheck = newInfo[3];
 				
-				if (newType === 'survey') {
-					mhubCollection[newSurvey]['questions'][newQuestion].action = 'MATCH';
-					userCollection[userMatch].action = 'MATCH';
-				}
-				else if (newType === 'newsurvey') {
-					mhubCollection[newSurvey]['questions'][newQuestion].action = 'NEWQUESTION';
-					userCollection[userMatch].action = 'NEWSURVEY';
-				}
-			}
-		}
-		
-		if (oldElement === 'none' || oldElement === 'new') {
-			if (clickedElement.is('.surveyItem')) {
-				var newItem = $(this);
-				var newText = newItem.text();
-				var newInfo = newItem.attr('id').split('_');
-				var newSurvey = newInfo[1];
-				var newQuestion = newInfo[3];
-				
+				// Set new element action to match
 				mhubCollection[newSurvey]['questions'][newQuestion].action = 'MATCH';
 				mhubCollection[newSurvey]['questions'][newQuestion].match = userQuestions[userMatch];
-				
 				userCollection[userMatch].action = 'MATCH';
-				userCollection[userMatch]['match'].survey = newSurvey;
 				userCollection[userMatch]['match'].question = newQuestion;
+				userCollection[userMatch]['match'].survey = newSurvey;
 				userCollection[userMatch]['match'].text = newText;
+				if (newCheck === 'true') {
+					userCollection[userMatch]['match'].newquestion = true;
+				}
+				else {
+					userCollection[userMatch]['match'].newquestion = false;
+				}
 			}
-			else if (clickedElement.is('.noMatch') || clickedElement.is('.noImport')) {
-				userCollection[userMatch].action = 'NONE';
-				userCollection[userMatch]['match'].survey = 'NONE';
-				userCollection[userMatch]['match'].question = 'NONE';
+			else if (newClass === 'noMatch' || newClass === 'noImport') {
+				// Set new element action to none
+				userCollection[userMatch].action = 'NOIMPORT';
 				userCollection[userMatch]['match'].text = 'NONE';
 			}
 		}
-		else if (oldElement === 'survey' || oldElement === 'newsurvey') {
-			var oldItem = $(this).parents('.matchSelect').find('.selectTitle');
-			var oldText = oldItem.text();
-			var oldInfo = oldItem.attr('id').split('_');
-			var oldSurvey = oldInfo[1];
-			var oldQuestion = oldInfo[3];
-			
-			if (oldElement === 'survey') {
-				mhubCollection[oldSurvey]['questions'][oldQuestion].action = 'NONE';
-			}
-			else if (oldElement === 'newsurvey') {
-				mhubCollection[oldSurvey]['questions'][oldQuestion].action = 'NEWQUESTION';
-			}
-			
-			mhubCollection[oldSurvey]['questions'][oldQuestion].match = 'NONE';
-			
-			if (clickedElement.is('.surveyItem')) {
+		else if (oldElement === 'new') {
+			if (newClass === 'surveyItem') {
+				// Collect new element info
 				var newItem = $(this);
 				var newText = newItem.text();
 				var newInfo = newItem.attr('id').split('_');
+				var newType = newInfo[0];
 				var newSurvey = newInfo[1];
-				var newQuestion = newInfo[3];
+				var newQuestion = newInfo[2];
 				
+				// Set new element action to match
 				mhubCollection[newSurvey]['questions'][newQuestion].action = 'MATCH';
 				mhubCollection[newSurvey]['questions'][newQuestion].match = userQuestions[userMatch];
-				
-				userCollection[userMatch]['match'].survey = newSurvey;
+				userCollection[userMatch].action = 'MATCH';
 				userCollection[userMatch]['match'].question = newQuestion;
+				userCollection[userMatch]['match'].survey = newSurvey;
 				userCollection[userMatch]['match'].text = newText;
 			}
-			else if (clickedElement.is('.noMatch') || clickedElement.is('.noImport')) {
-				userCollection[userMatch].action = 'NONE';
-				userCollection[userMatch]['match'].survey = 'NONE';
-				userCollection[userMatch]['match'].question = 'NONE';
+			else if (newClass === 'noMatch' || newClass === 'noImport') {
+				// Set new element action to none
+				userCollection[userMatch].action = 'NOIMPORT';
 				userCollection[userMatch]['match'].text = 'NONE';
+			}
+		}
+		else if (oldElement === 'noimport') {
+			if (newClass === 'surveyItem') {
+				// Collect new element info
+				var newItem = $(this);
+				var newText = newItem.text();
+				var newInfo = newItem.attr('id').split('_');
+				var newType = newInfo[0];
+				var newSurvey = newInfo[1];
+				var newQuestion = newInfo[2];
+				
+				// Set new element action to match
+				mhubCollection[newSurvey]['questions'][newQuestion].action = 'MATCH';
+				mhubCollection[newSurvey]['questions'][newQuestion].match = userQuestions[userMatch];
+				userCollection[userMatch].action = 'MATCH';
+				userCollection[userMatch]['match'].question = newQuestion;
+				userCollection[userMatch]['match'].survey = newSurvey;
+				userCollection[userMatch]['match'].text = newText;
+			}
+			else if (newClass === 'noMatch' || newClass === 'noImport') {
+				// No task
 			}
 		}
 		
@@ -180,9 +191,9 @@ $(document).ready(function() {
 		
 		var questionId = $(this).parents('.matchSelect').attr('id').split('_')[1];
 		
-		var clickedElement = '';
+		var newElement = '';
 		
-		clickedElement = $(this).parents(".matchSelect").attr("id");
+		newElement = $(this).parents(".matchSelect").attr("id");
 		$('#new_question_div').dialog({
 			resizable: false,
 			height: 444,
@@ -192,7 +203,7 @@ $(document).ready(function() {
 			{
 				text: 'Done',
 				click: function() {
-					$("#" + clickedElement).siblings(".matchEdit").css("display", "block");
+					$("#" + newElement).siblings(".matchEdit").css("display", "block");
 					$(this).dialog('destroy');
 				}
 			}, {
@@ -237,6 +248,7 @@ $(document).ready(function() {
 					
 					if (newSurveyCheck.is(':checked')) {
 						newSurveyName = newForm.find('#survey_name').val();
+						surveyTitles.push(newSurveyName);
 						if (newSurveyName === '') {
 							alert('Please enter a survey name');
 							newForm.find('#survey_name').focus();
@@ -264,9 +276,11 @@ $(document).ready(function() {
 									
 									mhubObjectLocation = collectionSize(mhubCollection);
 									
-									mhubObjectQuestion.action = 'NEWQUESTION';
+									mhubObjectQuestion.action = 'MATCH';
 									mhubObjectQuestion.match = userQuestions[questionId];
 									mhubObjectQuestion.text = newShort;
+									mhubObjectQuestion.newquestion = true;
+									mhubObjectQuestion.type = 'SHORT';
 									mhubObjectHolder.action = 'NEW';
 									mhubObjectHolder.title = newSurveyName;
 									mhubObjectHolder.questions = new Object();
@@ -279,8 +293,10 @@ $(document).ready(function() {
 									userObjectMatch.question = 0;
 									userObjectMatch.survey = mhubObjectLocation;
 									userObjectMatch.text = newShort;
-									userObjectHolder.action = 'NEWSURVEY';
+									userObjectMatch.newquestion = true;
+									
 									userObjectHolder.text = userQuestions[questionId];
+									userObjectHolder.action = 'MATCH';
 									userObjectHolder.match = userObjectMatch;
 									
 									userCollection[questionId] = userObjectHolder;
@@ -305,13 +321,53 @@ $(document).ready(function() {
 										newForm.find('#multiple_choice_options').focus();
 									}
 									else {
-										console.log(newSurveyCheck);
-										console.log(newSurveyName);
-										console.log(oldSurveyName);
-										console.log(newQuestionType);
-										console.log(newShort);
-										console.log(newMultiple);
-										console.log(newMultipleOptions);
+										var mhubObjectLocation = '';
+										var mhubObjectQuestion = new Object();
+										var mhubObjectHolder = new Object();
+										
+										var userObjectLocation = '';
+										var userObjectMatch = new Object();
+										var userObjectHolder = new Object();
+										
+										mhubObjectLocation = collectionSize(mhubCollection);
+										
+										mhubObjectQuestion.action = 'MATCH';
+										mhubObjectQuestion.match = userQuestions[questionId];
+										mhubObjectQuestion.text = newMultiple;
+										mhubObjectQuestion.newquestion = true;
+										if (newQuestionType === 'choice_field_radio') {
+											mhubObjectQuestion.type = 'RADIO';
+										}
+										else if (newQuestionType === 'choice_field_checkbox') {
+											mhubObjectQuestion.type = 'CHECKBOX';
+										}
+										else if (newQuestionType === 'choice_field_dropdown') {
+											mhubObjectQuestion.type = 'DROPDOWN';
+										}
+										mhubObjectQuestion.options = newMultipleOptions;
+										
+										mhubObjectHolder.action = 'NEW';
+										mhubObjectHolder.title = newSurveyName;
+										mhubObjectHolder.questions = new Object();
+										mhubObjectHolder.questions[0] = mhubObjectQuestion;
+										
+										mhubCollection[mhubObjectLocation] = mhubObjectHolder;
+										
+										userObjectLocation = collectionSize(userCollection);
+										
+										userObjectMatch.question = 0;
+										userObjectMatch.survey = mhubObjectLocation;
+										userObjectMatch.text = newMultiple;
+										userObjectMatch.newquestion = true;
+										userObjectHolder.text = userQuestions[questionId];
+										userObjectHolder.action = 'MATCH';
+										userObjectHolder.match = userObjectMatch;
+										
+										userCollection[questionId] = userObjectHolder;
+										
+										// Generate HTML matches & list
+										generateMatches(userCollection);
+										generateList(mhubCollection);
 										
 										$(this).dialog('destroy');
 									}
@@ -508,13 +564,13 @@ var generateList = function(data) {
 					for (var prop3 in obj3) {
 						if (prop3 === 'action') {
 							if (obj3[prop3] === 'NONE') {
-								htmlResults = htmlResults + '<li class="surveyItem" id="none_' + key + '_' + prop2 + '">' + obj3['text'] + '</li>';
+								htmlResults = htmlResults + '<li class="surveyItem" id="none_' + key + '_' + prop2 + '_' + obj3['newquestion'] + '">' + obj3['text'] + '</li>';
 							}
 							else if (obj3[prop3] === 'MATCH') {
 								// Do nothing
 							}
 							else if (obj3[prop3] === 'NEW') {
-								htmlResults = htmlResults + '<li class="surveyItem" id="new_' + key + '_' + prop2 + '">' + obj3['text'] + '</li>';
+								htmlResults = htmlResults + '<li class="surveyItem" id="new_' + key + '_' + prop2 + '_' + obj3['newquestion'] + '">' + obj3['text'] + '</li>';
 							}
 						}
 					}
@@ -547,12 +603,12 @@ var generateMatches = function (data) {
 					newText = __NO_IMPORT__;
 					newId = 'noimport_' + key;
 					checkAction = newId.split('_')[0];
-					checkNew = false;
+					checkNew = obj1['match'].newquestion;
 					break;
 				}
 				if (obj2 === 'MATCH') {
 					newText = obj1['match'].text;
-					newId = 'match_' + obj1['match'].survey + '_' + obj1['match'].question;
+					newId = 'match_' + obj1['match'].survey + '_' + obj1['match'].question + '_' + obj1['match'].newquestion;
 					checkAction = newId.split('_')[0];
 					checkNew = obj1['match'].newquestion;
 					break;
@@ -561,12 +617,12 @@ var generateMatches = function (data) {
 					newText = __NEW_QUESTION__;
 					newId = 'new_' + key;
 					checkAction = newId.split('_')[0];
-					checkNew = false;
+					checkNew = obj1['match'].newquestion;
 					break;
 				}
 			}
 		}
-		newData.push([newText, newId, checkAction]);
+		newData.push([newText, newId, checkAction, checkNew]);
 	}
 	
 	$('.selectTitle').each(function(index) {
@@ -581,7 +637,6 @@ var generateMatches = function (data) {
 		else {
 			$(this).parents('.matchSelect').siblings('.matchEdit').hide();
 		}
-		
 	});
 }
 
@@ -606,6 +661,7 @@ var constructMhubObject = function (userData, mhubData, surveys, lengths, matche
 				question = {};
 				var currentQuestion = surveyData[i + 1][ii];
 				question.text = currentQuestion;
+				question.newquestion = false;
 				for (var iii = 0; iii < matches.length; iii++) {
 					var matchCheck = currentQuestion.indexOf(matches[iii]);
 					if (matchCheck !== -1) {
