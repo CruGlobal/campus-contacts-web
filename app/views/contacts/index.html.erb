@@ -3,8 +3,8 @@
 <% end %>
 
 <%= render 'shared/bulk_vcard_dialog' %>  
-<%#= render 'shared/bulk_send_form' %>
-<%#= render 'shared/bulk_send_msg' %>
+<%= render 'shared/bulk_send_form' %>
+<%= render 'shared/bulk_send_msg' %>
 
 <div class="titlebar">  
   <h1>
@@ -46,7 +46,7 @@
         </th>
       <% end %>
       <th><%= t('.surveys') %></th>
-      <th><%= t('.last_survey') %> <%#sort_link @q, 'MAX(answer_sheets.updated_at)', t('.last_survey'), params %></th>
+      <th><%= sort_link @q, 'MAX(answer_sheets.updated_at)', t('.last_survey'), params %></th>
       <th class="hidden_questions"><%= link_to "Hidden Questions ▾", "#", id: 'hidden_questions_link' %></th>
     </tr>
     <tbody id="contacts_table">
