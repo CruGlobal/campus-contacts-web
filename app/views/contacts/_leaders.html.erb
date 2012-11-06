@@ -33,7 +33,7 @@
     <span class="name">
       <%= link_to(t('contacts.index.all'), contacts_path(assigned_to: 'all')) %>
     </span>
-    (<%= @organization.contacts.count %>)
+    (<%= @organization.all_people.count %>)
     <% if current_organization.people.archived(current_organization.id).count > 0 %>
     <div id="include_archived_div">
       <%= t('people.index.include_archived') %>
