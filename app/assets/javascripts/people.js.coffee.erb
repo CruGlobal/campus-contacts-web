@@ -312,6 +312,7 @@ $.fn.submitBulkSendDialog = ->
 $('#send_bulkemail_link_new').live 'click', ->
   $('#send_text_to_chzn').hide()
   $('#send_email_to_chzn').show()
+  $('#subject_div').show()
   $('.bulk-msg').addClass('bulk-email')
   $('.bulk-msg').removeClass('bulk-text')
   $('.bulk-msg').attr('action', '/people/bulk_email')
@@ -350,6 +351,7 @@ $('#send_bulkemail_link_new').live 'click', ->
 $('#send_bulksms_link_new').live 'click', ->
   $('#send_text_to_chzn').show()
   $('#send_email_to_chzn').hide()
+  $('#subject_div').hide()
   $('.bulk-msg').addClass('bulk-text')
   $('.bulk-msg').removeClass('bulk-email')
   $('.bulk-msg').attr('action', '/people/bulk_sms')
