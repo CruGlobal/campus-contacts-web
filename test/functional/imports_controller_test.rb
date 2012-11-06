@@ -128,6 +128,7 @@ class ImportsControllerTest < ActionController::TestCase
       # "use_labels"=>"1", "labels"=>["0", "5", "145"], "new_label_field"=>"", "commit"=>"Import Now", "id"=>"13"
       post :import, { :use_labels => "0", :id => Import.first.id}
       Import.first.do_import([])
+      puts assigns(:table).inspect
       assert_equal Person.count, person_count + 1
     end
     
@@ -146,7 +147,7 @@ class ImportsControllerTest < ActionController::TestCase
       person_count  = Person.count
       assert_response :redirect
       post :import, { :use_labels => "1", :id => Import.first.id, :labels => [@default_role.id]}
-      Import.first.do_import([@default_role.id])
+      Import.last.do_import([@default_role.id])
       assert_equal Person.count, person_count + 1
       new_person = Person.last
       assert new_person.organizational_roles.exists?(role_id: @default_role.id), 'imported person should have specified role'

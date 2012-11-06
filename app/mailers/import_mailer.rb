@@ -1,8 +1,9 @@
 class ImportMailer < ActionMailer::Base
   default from: "support@missionhub.com"
 
-  def import_successful(user)
+  def import_successful(user, table)
     @user = user
+    @table = table
     mail to: user.person.email, subject: "Import complete"
   end
 
