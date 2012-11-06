@@ -22,8 +22,13 @@
           <%= t('.assigned_to', assigned_to: "#{@assigned_tos}") %>
         <% end %>
       </div>
+      <br/>
+      <div class="title">Labels:</div>
       <div class="assigned_labels">
-        <div class="assigned_label">leader</div>
+        <% roles = (@person.assigned_organizational_roles(current_organization.id).default_roles_desc + @person.assigned_organizational_roles(current_organization.id).non_default_roles_asc) %>
+        <% roles.each do |role| %>
+          <span class="assigned_label"><%= role %></span>
+        <% end %>
       </div>
     </div>
   </div>
