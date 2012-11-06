@@ -48,6 +48,10 @@ Mh::Application.routes.draw do
     collection do
       post :move_to
     end
+    member do
+      get :set_current
+      get :set_primary
+    end
   end
 
   # resources :rejoicables
@@ -58,13 +62,6 @@ Mh::Application.routes.draw do
 
   resources :contact_assignments, :only => [:create]
 
-  resources :organization_memberships, :only => [:show, :create, :edit, :update, :destroy, :index] do
-    member do
-      get :set_current
-      get :set_primary
-    end
-  end
-
   resources :ministries
 
   resources :sms_keywords, :only => [:new, :create, :edit, :update, :destroy, :index] do
@@ -73,12 +70,15 @@ Mh::Application.routes.draw do
     end
   end
 
-  resources :people, :only => [:show, :create, :edit, :update, :destroy, :index] do
+  match "/people" => "contacts#index"
+  match "/old_directory" => "people#index"
+  resources :people, :only => [:show, :create, :edit, :update, :destroy] do
     collection do
       get :export
       get :merge
       post :confirm_merge
       post :do_merge
+      get :hide_update_notice
       get :search_ids
       post :bulk_email
       post :bulk_sms
@@ -88,15 +88,11 @@ Mh::Application.routes.draw do
       post :bulk_delete
       post :bulk_archive
       get :facebook_search
+      get :index
     end
     member do
       get :merge_preview
       get :involvement
-    end
-    resources :organization_memberships, :only => [:show, :create, :edit, :update, :destroy, :index] do
-      # member do
-      #   get :validate
-      # end
     end
   end
 
@@ -125,6 +121,7 @@ Mh::Application.routes.draw do
       get :cleanup
       post :archive_contacts
       post :archive_leaders
+      post :create_from_crs
     end
   end
 

@@ -118,9 +118,9 @@ class ApplicationController < ActionController::Base
         organization = token.client.organization || Organization.find(params[:org_id])
         session[:current_organization_id] ||= organization.id
         if params[:user_id]
-          @current_user ||= token.client.organization.admins.where(:fk_ssmUserID => params[:user_id]).first.user
+          @current_user ||= token.client.organization.admins.where(:user_id => params[:user_id]).first.user
         else
-          @current_user ||= token.client.organization.admins.where("fk_ssmUserID is not null").first.user
+          @current_user ||= token.client.organization.admins.where("user_id is not null").first.user
         end
       end
       @current_user
@@ -150,7 +150,7 @@ class ApplicationController < ActionController::Base
   
   def current_person
     @current_person = current_user.person if current_user
-    @current_person ||= Person.find_by_personID(session[:person_id]) if session[:person_id]
+    @current_person ||= Person.find_by_id(session[:person_id]) if session[:person_id]
     @current_person
   end
   helper_method :current_person

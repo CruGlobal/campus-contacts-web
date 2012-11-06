@@ -155,7 +155,7 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
     end
     
     should "completely move an archived person to an org (do not keep contact)" do
-      @archived_contact1 = Factory(:person, firstName: "Edmure", lastName: "Tully")
+      @archived_contact1 = Factory(:person, first_name: "Edmure", last_name: "Tully")
       Factory(:organizational_role, organization: @user.person.organizations.first, person: @archived_contact1, role: Role.contact)
       @archived_contact1.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive #archive his one and only role
       
@@ -181,7 +181,7 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
       xhr :put, :update, {:status => "do_not_contact", :id => @role.id}
       assert_equal a+1, OrganizationalRole.where(:followup_status => 'do_not_contact').count
       assert_equal [@contact], @organization.dnc_contacts
-      assert_not_empty @organization.dnc_contacts.where(personID: @contact.personID)
+      assert_not_empty @organization.dnc_contacts.where(id: @contact.id)
     end
   end
 end

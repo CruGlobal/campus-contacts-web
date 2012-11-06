@@ -29,8 +29,8 @@ class ApiV2ContactsTest < ActionDispatch::IntegrationTest
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json['contacts'].length,2)
       @json['contacts'].each do |person|
-        assert_equal(person['person']['gender'],'male')
-        assert_not_equal(person['person']['gender'],'female')
+        assert_equal(person['person']['gender'],'Male')
+        assert_not_equal(person['person']['gender'],'Female')
       end
     end
     
@@ -49,8 +49,8 @@ class ApiV2ContactsTest < ActionDispatch::IntegrationTest
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json['contacts'].length,2)
       @json['contacts'].each do |person|
-        assert_equal(person['person']['gender'],'female')
-        assert_not_equal(person['person']['gender'],'male')
+        assert_equal(person['person']['gender'],'Female')
+        assert_not_equal(person['person']['gender'],'Male')
       end
     end
     

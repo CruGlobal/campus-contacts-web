@@ -58,7 +58,7 @@
         <th class="checkbox_cell">
           <%= check_box_tag 'check_all', true, false %>
         </th>
-        <th><%= sort_link @q, :firstName, t('.name'), params %></th>
+        <th><%= sort_link @q, :first_name, t('.name'), params %></th>
         <th><%= t('.email') %></th>
         <th><%= t('.phone') %></th>
         <th><%= sort_link @q, :role, t('.role'), params %></th>
@@ -66,8 +66,8 @@
       </tr>
     </thead>
     <tbody id="group_table">
-      <% @gm.each do |gm| %>
-        <%= render 'person', person: gm.person, group_membership: gm %>
+      <% @people.each do |person| %>
+        <%= render 'person', person: person, group_membership: person.group_memberships.where(group_id: @group.id).first %>
       <% end %>
     </tbody>
   </table>

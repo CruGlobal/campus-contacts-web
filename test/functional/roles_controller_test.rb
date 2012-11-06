@@ -45,6 +45,26 @@ class RolesControllerTest < ActionController::TestCase
         end
         assert_template "roles/new"
       end
+      
+      should "not create a role if it's already created in the organization (same name and org)" do
+        role = Factory(:role, organization: @organization)
+        
+        assert_no_difference 'Role.count' do
+          post :create_now, { :name => role.name }
+        end
+        
+        assert_equal I18n.t('contacts.index.add_label_exists'), assigns(:msg_alert)
+        
+      end
+      
+      should "not create a role if name params is absent" do
+        assert_no_difference 'Role.count' do
+          post :create_now
+        end
+        
+        assert_equal I18n.t('contacts.index.add_label_empty'), assigns(:msg_alert)
+        
+      end
     end
 
     should "create a role using ajax" do

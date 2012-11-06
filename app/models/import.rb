@@ -3,7 +3,6 @@ require 'open-uri'
 require 'contact_methods'
 class Import < ActiveRecord::Base
   include ContactMethods
-  self.table_name = 'mh_imports'
 
   @queue = :general
   serialize :headers
@@ -25,14 +24,14 @@ class Import < ActiveRecord::Base
 
   def get_new_people # generates array of Person hashes
     new_people = Array.new
-    first_name_question = Element.where( :attribute_name => "firstName").first.id.to_s
+    first_name_question = Element.where( :attribute_name => "first_name").first.id.to_s
 
     csv = CSV.new(open(upload.expiring_url), :headers => :first_row)
 
     csv.each do |row|
       person_hash = Hash.new
       person_hash[:person] = Hash.new
-      person_hash[:person][:firstName] = row[header_mappings.invert[first_name_question].to_i]
+      person_hash[:person][:first_name] = row[header_mappings.invert[first_name_question].to_i]
 
       answers = Hash.new
 
@@ -51,10 +50,10 @@ class Import < ActiveRecord::Base
   def check_for_errors # validating csv
     errors = []
 
-    #since first name is required for every contact. Look for id of element where attribute_name = 'firstName' in the header_mappings.
-    first_name_question = Element.where(:attribute_name => "firstName").first.id.to_s
+    #since first name is required for every contact. Look for id of element where attribute_name = 'first_name' in the header_mappings.
+    first_name_question = Element.where(:attribute_name => "first_name").first.id.to_s
     unless header_mappings.values.include?(first_name_question) 
-      errors << I18n.t('contacts.import_contacts.present_firstname')
+      errors << I18n.t('contacts.import_contacts.present_first_name')
     end
 
     a = header_mappings.values
@@ -80,9 +79,11 @@ class Import < ActiveRecord::Base
           import_errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
         else
           labels.each do |role_id|
-            role = Role.find_or_create_by_organization_id_and_name(current_organization.id, label_name) if role_id.to_i == 0
-            role_id = role.id if role.present?
-            OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person.id, current_organization.id, role_id, added_by_id: current_user.person.id) if role_id.present?
+            if role_id.to_i == 0
+              role = Role.find_or_create_by_organization_id_and_name(current_organization.id, label_name)
+              role_id = role.id
+            end
+            current_organization.add_role_to_person(person, role_id)
           end
         end
       end
@@ -99,7 +100,7 @@ class Import < ActiveRecord::Base
   end
   
   def create_contact_from_row(row, current_organization)
-    person = Person.create(row[:person])
+    person = Person.create!(row[:person])
     
     unless @surveys_for_import
       @survey_ids ||= SurveyElement.where(element_id: row[:answers].keys).pluck(:survey_id) - [APP_CONFIG['predefined_survey']]

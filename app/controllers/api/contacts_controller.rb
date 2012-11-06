@@ -9,7 +9,7 @@ class Api::ContactsController < ApiController
     json_output = []
     unless (@keywords.empty? || !params[:term].present?)
       @surveys = @keywords.collect(&:survey)
-      @people = Person.who_answered(@surveys).where('CONCAT(`ministry_person`.`firstName`," ", `ministry_person`.`lastName`) LIKE ? OR `ministry_person`.`lastName` LIKE ? OR CONCAT(`ministry_person`.`preferredName`," ", `ministry_person`.`lastName`) LIKE ?',"%#{params[:term]}%","%#{params[:term]}%","%#{params[:term]}%")
+      @people = Person.who_answered(@surveys).where('CONCAT(`people`.`first_name`," ", `people`.`last_name`) LIKE ? OR `people`.`last_name` LIKE ?',"%#{params[:term]}%","%#{params[:term]}%")
       @people = paginate_filter_sort_people(@people,@organization)
       json_output = @people.collect {|person|  { person: person.to_hash_basic(@organization)}}
     end
@@ -22,7 +22,7 @@ class Api::ContactsController < ApiController
     json_output = []
     unless (@keywords.empty? || !params[:term].present?)
       @surveys = @keywords.collect(&:survey)
-      @people = Person.who_answered(@surveys).where('CONCAT(`ministry_person`.`firstName`," ", `ministry_person`.`lastName`) LIKE ? OR `ministry_person`.`lastName` LIKE ? OR CONCAT(`ministry_person`.`preferredName`," ", `ministry_person`.`lastName`) LIKE ?',"%#{params[:term]}%","%#{params[:term]}%","%#{params[:term]}%")
+      @people = Person.who_answered(@surveys).where('CONCAT(`people`.`first_name`," ", `people`.`last_name`) LIKE ? OR `people`.`last_name` LIKE ?',"%#{params[:term]}%","%#{params[:term]}%")
       @people = paginate_filter_sort_people(@people,@organization)
     end
 
@@ -38,7 +38,7 @@ class Api::ContactsController < ApiController
     @keywords = get_keywords
     json_output = []
     @surveys = @keywords.collect(&:survey)
-    @people = @organization.all_contacts#.order('lastName, firstName')
+    @people = @organization.all_people#.order('last_name, first_name')
     @people = paginate_filter_sort_people(@people, @organization)    
     json_output = @people.collect {|person| {person: person.to_hash_basic(@organization)}}
     final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
@@ -46,7 +46,7 @@ class Api::ContactsController < ApiController
   end
 
   def index_2
-    @people = @organization.all_contacts
+    @people = @organization.all_people
     @people = limit_and_offset_object(@people)
     @people = @people.includes(:contact_assignments).includes(:organizational_roles)
 
@@ -76,13 +76,13 @@ class Api::ContactsController < ApiController
         end
       end
       if @filters.key? 'name'
-        @people = @people.where('CONCAT(`ministry_person`.`firstName`," ", `ministry_person`.`lastName`) LIKE ? OR `ministry_person`.`lastName` LIKE ? OR CONCAT(`ministry_person`.`preferredName`," ", `ministry_person`.`lastName`) LIKE ?',"%#{@filters['name']}%","%#{@filters['name']}%","%#{@filters['name']}%")
+        @people = @people.where('CONCAT(`people`.`first_name`," ", `people`.`last_name`) LIKE ? OR `people`.`last_name` LIKE ?',"%#{@filters['name']}%","%#{@filters['name']}%")
       end
       if @filters.key? 'first_name'
-        @people = @people.where("firstName like ? OR preferredName like ?", '%' + @filters['first_name'] + '%', '%' + @filters['first_name'] + '%')
+        @people = @people.where("first_name like ?", '%' + @filters['first_name'] + '%')
       end
       if @filters.key? 'last_name'
-        @people = @people.where("lastName like ?", '%' + @filters['last_name'] + '%')
+        @people = @people.where("last_name like ?", '%' + @filters['last_name'] + '%')
       end
       if @filters.key? 'email'
         @people = @people.includes(:primary_email_address).where("email_addresses.email like ?", '%' + @filters['email'] + '%')
@@ -115,7 +115,7 @@ class Api::ContactsController < ApiController
               end
             else
               @people = @people.joins(:answer_sheets)
-              @people = @people.joins("INNER JOIN `mh_answers` as a#{q_id} ON a#{q_id}.`answer_sheet_id` = `mh_answer_sheets`.`id`").where("a#{q_id}.question_id = ? AND a#{q_id}.value like ?", q_id, '%' + v + '%') unless v.blank?
+              @people = @people.joins("INNER JOIN `answers` as a#{q_id} ON a#{q_id}.`answer_sheet_id` = `answer_sheets`.`id`").where("a#{q_id}.question_id = ? AND a#{q_id}.value like ?", q_id, '%' + v + '%') unless v.blank?
             end
           else
             conditions = ["#{Answer.table_name}.question_id = ?", q_id]
@@ -150,9 +150,9 @@ class Api::ContactsController < ApiController
 
         case on
         when 'first_name'
-          @people = @people.order("`#{Person.table_name}`.`firstName` #{dir}")
+          @people = @people.order("`#{Person.table_name}`.`first_name` #{dir}")
         when 'last_name'
-          @people = @people.order("`#{Person.table_name}`.`lastName` #{dir}")
+          @people = @people.order("`#{Person.table_name}`.`last_name` #{dir}")
         when 'phone'
           @people = @people.includes(:primary_phone_number).order("`#{PhoneNumber.table_name}`.`number` #{dir}")
         when 'email'
@@ -164,7 +164,7 @@ class Api::ContactsController < ApiController
         when 'date_created'
           @people = @people.order("`#{OrganizationalRole.table_name}`.`created_at` #{dir}")
         when 'date_surveyed'
-          @people = @people.includes(:answer_sheets).order("`mh_answer_sheets`.`created_at` #{dir}")
+          @people = @people.includes(:answer_sheets).order("`answer_sheets`.`created_at` #{dir}")
         end
       end
     else

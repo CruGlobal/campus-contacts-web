@@ -2,13 +2,13 @@ class GroupMembershipsController < ApplicationController
 
   def create
     @group = current_organization.groups.find(params[:group_id]) 
+    @inContacts = params[:render_in_contacts].present?
     if params[:from_add_member_screen] == "true"
       @persons = Person.find(params[:person_id])
       if has_permission
         @group_membership = @group.group_memberships.find_or_initialize_by_person_id(@persons.id)
         @group_membership.role = params[:role]
         @group_membership.save
-
         respond_to do |wants|
           wants.html { render :nothing => true }
           wants.js

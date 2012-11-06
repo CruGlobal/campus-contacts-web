@@ -1,25 +1,19 @@
 require 'vpim/vcard'
 require 'vpim/book'
-require 'ccc/person'
 
 class Person < ActiveRecord::Base
   
-  include Ccc::Person
-  self.table_name = 'ministry_person'
-  self.primary_key = 'personID'
-
   serialize :organization_tree_cache, JSON
   serialize :org_ids_cache, JSON
 
   has_many :person_transfers
   has_many :new_people
   has_one :transferred_by, class_name: "PersonTransfer", foreign_key: "transferred_by_id"
-  belongs_to :user, class_name: 'User', foreign_key: 'fk_ssmUserId'
+  belongs_to :user, class_name: 'User', foreign_key: 'user_id'
   has_many :phone_numbers, autosave: true
   has_one :primary_phone_number, class_name: "PhoneNumber", foreign_key: "person_id", conditions: {primary: true}
   has_many :locations
   has_one :latest_location, order: "updated_at DESC", class_name: 'Location'
-  has_many :friends
   has_many :interests
   has_many :education_histories
   has_many :email_addresses, autosave: true
@@ -30,11 +24,13 @@ class Person < ActiveRecord::Base
   has_many :contact_assignments, class_name: "ContactAssignment", foreign_key: "assigned_to_id"
   has_many :assigned_tos, class_name: "ContactAssignment", foreign_key: "person_id"
   has_many :assigned_contacts, through: :contact_assignments, source: :assigned_to
-  has_one :current_address, class_name: "Address", foreign_key: "fk_PersonID", conditions: {addressType: 'current'}
+  has_one :current_address, class_name: "Address", foreign_key: "person_id", conditions: {address_type: 'current'}, autosave: true
+  has_many :addresses, class_name: 'Address', foreign_key: :person_id, dependent: :destroy
   has_many :rejoicables, inverse_of: :created_by
 
   has_many :organization_memberships, inverse_of: :person
   has_many :organizational_roles, conditions: {deleted: false, archive_date: nil}
+  has_one :contact_role, class_name: 'OrganizationalRole'
   has_many :roles, through: :organizational_roles
   has_many :organizational_roles_including_archived, class_name: "OrganizationalRole", foreign_key: "person_id", conditions: {deleted: false}
   has_many :roles_including_archived, through: :organizational_roles_including_archived, source: :role
@@ -51,77 +47,95 @@ class Person < ActiveRecord::Base
   has_one :person_photo
 
   scope :who_answered, lambda {|survey_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.survey_id' => survey_id)}
-  validates_presence_of :firstName
+  validates_presence_of :first_name
   #validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, allow_blank: true
 
   accepts_nested_attributes_for :email_addresses, :reject_if => lambda { |a| a[:email].blank? }, allow_destroy: true  
   accepts_nested_attributes_for :phone_numbers, :reject_if => lambda { |a| a[:number].blank? }, allow_destroy: true
   accepts_nested_attributes_for :current_address, allow_destroy: true  
 
-  before_save :stamp_changed
-  before_create :stamp_created
-  
   #scope :organizational_roles, where("end_date = ''")
   scope :find_by_person_updated_by_daterange, lambda { |date_from, date_to| {
     :conditions => ["date_attributes_updated >= ? AND date_attributes_updated <= ? ", date_from, date_to]
   }}
   
   scope :find_by_last_login_date_before_date_given, lambda { |after_date| {
-    :select => "ministry_person.*",
-    :joins => "JOIN simplesecuritymanager_user AS ssm ON ssm.userID = ministry_person.fk_ssmUserId",
+    :select => "people.*",
+    :joins => "JOIN users AS ssm ON ssm.id = people.user_id",
     :conditions => ["ssm.current_sign_in_at <= ? OR (ssm.current_sign_in_at IS NULL AND ssm.created_at <= ?)", after_date, after_date]
   }}
   
   scope :find_by_date_created_before_date_given, lambda { |before_date| {
-    :select => "ministry_person.*",
-    :joins => "LEFT JOIN organizational_roles AS ors ON ministry_person.personID = ors.person_id",    
+    :select => "people.*",
+    :joins => "LEFT JOIN organizational_roles AS ors ON people.id = ors.person_id",    
     :conditions => ["ors.role_id = ? AND ors.created_at <= ? AND ors.archive_date IS NULL AND ors.deleted = 0", Role::CONTACT_ID, before_date]
   }}
 
   scope :order_by_highest_default_role, lambda { |order, tables_already_joined = false| {
-    :select => "ministry_person.*",
-    :joins => "#{'JOIN organizational_roles ON ministry_person.personID = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id' unless tables_already_joined}",
+    :select => "people.*",
+    :joins => "#{'JOIN organizational_roles ON people.id = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id' unless tables_already_joined}",
     :conditions => "roles.i18n IN #{Role.default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}",
     :order => "FIELD#{Role.i18n_field_plus_default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}"
   } }
   
   scope :order_by_followup_status, lambda { |order| {
-    :select => "ministry_person.*",
-    #:joins => "#{'JOIN organizational_roles ON ministry_person.personID = organizational_roles.person_id'}",
+    :select => "people.*",
+    #:joins => "#{'JOIN organizational_roles ON people.id = organizational_roles.person_id'}",
     :conditions => ["organizational_roles.role_id = ?", Role::CONTACT_ID],
     :order => "organizational_roles.#{order}"
   } }
 
   scope :order_alphabetically_by_non_default_role, lambda { |order, tables_already_joined = false| {
-    :select => "ministry_person.*",
-    :joins => "#{'JOIN organizational_roles ON ministry_person.personID = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id' unless tables_already_joined}",
+    :select => "people.*",
+    :joins => "#{'JOIN organizational_roles ON people.id = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id' unless tables_already_joined}",
     :conditions => "roles.name NOT IN #{Role.default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}",
     :order => "roles.name #{order.include?("asc") ? 'DESC' : 'ASC'}"
   } }
   
-  scope :find_friends_with_fb_uid, lambda { |id| {
-    :select => "ministry_person.*",
-    :joins => "LEFT JOIN mh_friends ON ministry_person.fb_uid = mh_friends.uid",
-    :conditions => "mh_friends.person_id = #{id}",
-  } }
+  scope :find_friends_with_fb_uid, lambda { |person| { conditions: {fb_uid: Friend.followers(person)} } }
 
   scope :search_by_name_or_email, lambda { |keyword, org_id| {
-    :select => "ministry_person.*",
-    :conditions => ["(org_roles.organization_id = #{org_id} AND (concat(firstName,' ',lastName) LIKE ? OR concat(lastName, ' ',firstName) LIKE ? OR emails.email LIKE ?) AND org_roles.deleted <> 1)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
-    :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = ministry_person.personID LEFT JOIN organizational_roles AS org_roles ON ministry_person.personID = org_roles.person_id"
+    :select => "people.*",
+    :conditions => ["(org_roles.organization_id = #{org_id} AND (concat(first_name,' ',last_name) LIKE ? OR concat(last_name, ' ',first_name) LIKE ? OR emails.email LIKE ?) AND org_roles.deleted <> 1)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
+    :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = people.id LEFT JOIN organizational_roles AS org_roles ON people.id = org_roles.person_id"
   } }
   
   scope :get_and_order_by_latest_answer_sheet_answered, lambda { |order, org_id| {
-    #"SELECT * FROM (SELECT * FROM missionhub_dev.ministry_person mp INNER JOIN missionhub_dev.organizational_roles ro ON mp.personID = ro.person_id WHERE ro.organization_id = #{@organization.id} AND (ro.role_id = 3 AND ro.followup_status <> 'do_not_contact')) mp LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM missionhub_dev.mh_answer_sheets ass INNER JOIN missionhub_dev.mh_surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{@organization.id}) ass ON ass.person_id = mp.personID GROUP BY mp.personID ORDER BY #{params[:q][:s].gsub('mh_answer_sheets', 'ass')}"
-    :joins => "LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM mh_answer_sheets ass INNER JOIN mh_surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{org_id}) ass ON ass.person_id = ministry_person.personID",
-    :group => "ministry_person.personID",
-    :order => "#{order.gsub('mh_answer_sheets', 'ass')}"
-  } }
+    #"SELECT * FROM (SELECT * FROM missionhub_dev.people mp INNER JOIN missionhub_dev.organizational_roles ro ON mp.id = ro.person_id WHERE ro.organization_id = #{@organization.id} AND (ro.role_id = 3 AND ro.followup_status <> 'do_not_contact')) mp LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM missionhub_dev.answer_sheets ass INNER JOIN missionhub_dev.surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{@organization.id}) ass ON ass.person_id = mp.id GROUP BY mp.id ORDER BY #{params[:q][:s].gsub('answer_sheets', 'ass')}"
+    :joins => "LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM answer_sheets ass INNER JOIN surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{org_id}) ass ON ass.person_id = people.id",
+    :group => "people.id",
+    :order => "#{order.gsub('answer_sheets', 'ass')}"
+  }}
+  
+  def completed_answer_sheets(organization)
+    answer_sheets.where("survey_id IN (?)", organization.surveys.collect(&:id)).order('updated_at DESC')
+  end
+  
+  def latest_answer_sheet(organization)
+    completed_answer_sheets(organization).first
+  end
+  
+  def answered_surveys_hash(organization)
+    surveys = Array.new
+    completed_answer_sheets(organization).each do |answer_sheet|
+      survey = Hash.new
+      survey['keyword'] = answer_sheet.survey.title
+      survey['date'] = answer_sheet.updated_at
+      surveys << survey
+    end
+    return surveys
+  end
 
   scope :get_archived, lambda { |org_id| { 
     :conditions => "organizational_roles.archive_date IS NOT NULL AND organizational_roles.deleted = 0",
-    :group => "ministry_person.personID",
-    :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID AND orss.organization_id = #{org_id} AND orss.deleted = 0)"
+    :group => "people.id",
+    :having => "COUNT(*) = (SELECT COUNT(*) FROM people AS mpp JOIN organizational_roles orss ON mpp.id = orss.person_id WHERE mpp.id = people.id AND orss.organization_id = #{org_id} AND orss.deleted = 0)"
+  } }
+  
+  scope :get_from_group, lambda { |group_id| {
+    :select => "people.*",
+    :joins => "LEFT JOIN #{GroupMembership.table_name} AS gm ON gm.person_id = people.id",
+    :conditions => ["gm.group_id = ?", group_id]
   } }
   
   def self.archived(org_id)
@@ -134,7 +148,7 @@ class Person < ActiveRecord::Base
   
   scope :get_archived_included, lambda { { 
     :conditions => "organizational_roles.deleted = 0",
-    :group => "ministry_person.personID"
+    :group => "people.id"
   } }
   
   def self.archived_included
@@ -143,7 +157,7 @@ class Person < ActiveRecord::Base
   
   scope :get_archived_not_included, lambda { { 
     :conditions => "organizational_roles.archive_date IS NULL AND organizational_roles.deleted = 0",
-    :group => "ministry_person.personID"
+    :group => "people.id"
   } }
   
   def self.archived_not_included
@@ -152,21 +166,30 @@ class Person < ActiveRecord::Base
   
   scope :get_deleted, lambda { { 
     :conditions => "organizational_roles.deleted = 1",
-    :group => "ministry_person.personID",
-    :having => "COUNT(*) = (SELECT COUNT(*) FROM ministry_person AS mpp JOIN organizational_roles orss ON mpp.personID = orss.person_id WHERE mpp.personID = ministry_person.personID)"
+    :group => "people.id",
+    :having => "COUNT(*) = (SELECT COUNT(*) FROM people AS mpp JOIN organizational_roles orss ON mpp.id = orss.person_id WHERE mpp.id = people.id)"
   } }
+  
+  def select_name
+    "#{first_name} #{last_name} #{'-' if last_name.present? || first_name.present?} #{pretty_phone_number}"
+  end
+  
+  def select_name_email
+    "#{first_name} #{last_name} #{'-' if last_name.present? || first_name.present?} #{email}"
+  end
+
   
   def self.deleted
     self.get_deleted.collect()
   end
   
   def unachive_contact_role(org)
-    OrganizationalRole.where(organization_id: org.id, role_id: Role::CONTACT_ID, person_id: personID).first.unarchive
+    OrganizationalRole.where(organization_id: org.id, role_id: Role::CONTACT_ID, person_id: id).first.unarchive
   end
   
   def archive_contact_role(org)
     begin
-      OrganizationalRole.where(organization_id: org.id, role_id: Role::CONTACT_ID, person_id: personID).first.archive
+      OrganizationalRole.where(organization_id: org.id, role_id: Role::CONTACT_ID, person_id: id).first.archive
     rescue
     
     end
@@ -174,7 +197,7 @@ class Person < ActiveRecord::Base
   
   def archive_leader_role(org)
     begin
-      OrganizationalRole.where(organization_id: org.id, role_id: Role::LEADER_ID, person_id: personID).first.archive
+      OrganizationalRole.where(organization_id: org.id, role_id: Role::LEADER_ID, person_id: id).first.archive
     rescue
     
     end
@@ -190,7 +213,7 @@ class Person < ActiveRecord::Base
   end
 
   def has_similar_person_by_name_and_email?(email)
-    Person.joins(:primary_email_address).where(firstName: firstName, lastName: lastName, 'email_addresses.email' => email).where("personId != ?", personID).first
+    Person.joins(:primary_email_address).where(first_name: first_name, last_name: last_name, 'email_addresses.email' => email).where("people.id != ?", id).first
   end
 
   def update_date_attributes_updated
@@ -205,9 +228,9 @@ class Person < ActiveRecord::Base
     query = name.strip.split(' ')
     first, last = query[0].to_s + '%', query[1].to_s + '%'
     if last == '%'
-      conditions = ["preferredName like ? OR firstName like ? OR lastName like ?", first, first, first]
+      conditions = ["first_name like ? OR last_name like ?", first, first]
     else
-      conditions = ["(preferredName like ? OR firstName like ?) AND lastName like ?", first, first, last]
+      conditions = ["first_name like ? AND last_name like ?", first, last]
     end
     scope = scope.where(conditions)
     scope = scope.where('organizational_roles.organization_id IN(?)', organization_ids).includes(:organizational_roles) if organization_ids
@@ -215,25 +238,13 @@ class Person < ActiveRecord::Base
   end
 
   def self.search_by_name_with_email_present(name, organization_ids = nil, scope = nil)
-    return scope.where('1 = 0') unless name.present?
-    scope ||= Person
-    query = name.strip.split(' ')
-    first, last = query[0].to_s + '%', query[1].to_s + '%'
-    if last == '%'
-      conditions = ["preferredName like ? OR firstName like ? OR lastName like ?", first, first, first]
-    else
-      conditions = ["(preferredName like ? OR firstName like ?) AND lastName like ?", first, first, last]
-    end
-    scope = scope.includes(:primary_email_address)
-    scope = scope.where('email_addresses.email IS NOT NULL')
-    scope = scope.where(conditions)
-    scope = scope.where('organizational_roles.organization_id IN(?)', organization_ids).includes(:organizational_roles) if organization_ids
-    scope
+    search_by_name(name, organization_ids, scope).
+      includes(:primary_email_address).
+      where('email_addresses.email IS NOT NULL')
   end
 
   def to_s
-    # [preferredName.blank? ? firstName : preferredName.try(:strip), lastName.try(:strip)].join(' ')
-    [firstName.to_s, lastName.to_s.strip].join(' ')
+    [first_name.to_s, last_name.to_s.strip].join(' ')
   end
 
   def facebook_url
@@ -257,7 +268,7 @@ class Person < ActiveRecord::Base
       end
       # convert org ids to integers (there has to be a better way, but i couldn't think of it)
       @org_ids = {}
-      org_ids_cache.collect {|org_id, values| @org_ids[org_id.to_i] = values}
+      org_ids_cache.collect {|org_id, values| @org_ids[org_id.to_i] = values} if org_ids_cache.present?
     end
     @org_ids
   end
@@ -358,16 +369,6 @@ class Person < ActiveRecord::Base
       if phone_numbers.present?
         @phone_number = phone_numbers.first.try(:number)
         phone_numbers.first.update_attribute(:primary, true)
-      elsif current_address
-        @phone_number = current_address.cellPhone.strip if current_address.cellPhone.present?
-        @phone_number ||= current_address.homePhone.strip if current_address.homePhone.present?
-        @phone_number ||= current_address.workPhone.strip if current_address.workPhone.present?
-        begin
-          new_record? ? phone_numbers.new(number: @phone_number, primary: true) : phone_numbers.create(number: @phone_number, primary: true) if @phone_number.present?
-        rescue ActiveRecord::RecordNotUnique
-          reload
-          return self.phone_number
-        end
       end
     end
     @phone_number.to_s
@@ -394,20 +395,23 @@ class Person < ActiveRecord::Base
     p
   end
 
-  def name 
-    [firstName, lastName].collect(&:to_s).join(' ') 
+
+  delegate :address1, :address1=, :city, :city=, :state, :state=, :zip, :zip=, :country, :country=, :dorm, :dorm=, :room, :room=, to: :current_or_blank_address
+
+  def current_or_blank_address
+    self.current_address ||= build_current_address
   end
 
-   def firstName
-     preferredName.blank? ? self[:firstName].try(:strip) : preferredName.try(:strip)
-   end
+  def name
+    [first_name, last_name].collect(&:to_s).join(' ') 
+  end
 
   def self.find_from_facebook(data)
     EmailAddress.find_by_email(data.email).try(:person) if data.email.present?
   end
 
   def self.create_from_facebook(data, authentication, response = nil)
-    new_person = Person.create(firstName: data['first_name'].try(:strip), lastName: data['last_name'].try(:strip))
+    new_person = Person.create(first_name: data['first_name'].try(:strip), last_name: data['last_name'].try(:strip))
     begin
       if response.nil?
         response = MiniFB.get(authentication['token'], authentication['uid'])
@@ -453,7 +457,15 @@ class Person < ActiveRecord::Base
       )
     end
     self.fb_uid = authentication['uid']
-    save(validate: false)
+    begin
+      save(validate: false)
+    rescue => e
+      Airbrake.notify(
+        :error_class   => e.class,
+        :error_message => e.message,
+        :parameters    => {data: data, authentication: authentication, response: response}
+      )
+    end
     self
   end
 
@@ -487,8 +499,8 @@ class Person < ActiveRecord::Base
   end
 
   def gender
-    if ['1','0'].include?(self[:gender])
-      self[:gender] == '1' ? 'male' : 'female'
+    if ['1','0'].include?(self[:gender].to_s)
+      self[:gender].to_s == '1' ? 'Male' : 'Female'
     else
       self[:gender]
     end
@@ -496,33 +508,29 @@ class Person < ActiveRecord::Base
 
   def email
     @email = primary_email_address.try(:email)
-    unless @email
-      if email_addresses.present?
-        @email = email_addresses.first.try(:email)
-        email_addresses.first.update_attribute(:primary, true) unless new_record?
-      else
-        @email ||= current_address.try(:email)
-        @email ||= user.try(:username) || user.try(:email)
-        begin
-          new_record? ? email_addresses.new(:email => @email, :primary => true) : email_addresses.create(:email => @email, :primary => true) if @email
-        rescue ActiveRecord::RecordNotUnique
-          reload
-        end
-      end
-    end
+    # unless @email
+    #   if email_addresses.present?
+    #     @email = email_addresses.first.try(:email)
+    #     email_addresses.first.update_attribute(:primary, true) unless new_record?
+    #   else
+    #     @email ||= user.try(:username) || user.try(:email)
+    #     begin
+    #       new_record? ? email_addresses.new(:email => @email, :primary => true) : email_addresses.create(:email => @email, :primary => true) if @email
+    #     rescue ActiveRecord::RecordNotUnique
+    #       reload
+    #     end
+    #   end
+    # end
     @email.to_s
   end
 
   def email=(val)
     return if val.blank?
-    e = email_addresses.where(email: val).first
+    e = email_addresses.detect { |email| email.email == val }
     if e
-      unless e.primary?
-        email_addresses.where(["email <> ?", val]).update_all(primary: false)
-        e.update_attribute(:primary, true)
-      end
+      e.primary = true
     else
-      e = email_addresses.new(email: val)
+      e = email_addresses.new(email: val, primary: true)
     end
     e
   end
@@ -532,59 +540,28 @@ class Person < ActiveRecord::Base
   end
 
   def get_friends(authentication, response = nil)
-    if friends.count == 0 
-      if response.nil?
-        @friends = MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
-      else @friends = response
+    if friends.length == 0 
+      response ||= MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
+      @friends = response['data']
+
+      @friends.each do |friend|
+        Friend.new(friend['id'], friend['name'], self)
       end
-      @friends["data"].each do |friend|
-        the_friend = friends.create(uid: friend['id'], name: friend['name'], person_id: personID.to_i, provider: "facebook")
-        the_friend.follow!(self) unless the_friend.following?(self)
-      end
+      @friends.length  #return how many friend you got from facebook for testing
     end
-    @friends["data"].length  #return how many friend you got from facebook for testing
   end
 
   def update_friends(authentication, response = nil)
-    if response.nil?
-      @friends = MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
-    else @friends = response
-    end
-    @friends = @friends["data"]
-    @removal = []
-    @create = []
-    @match = []
-    @dbf = friends.reload
+    response ||= MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
+    @fb_friends = response["data"]
 
-    @friends.each do |friend|
-      @dbf.each do |dbf|
-        if dbf['uid'] == friend.id
-          @matching_friend = dbf if dbf['uid'] == friend.id
-          break
-        end
-        @matching_friend = nil
-      end
-      if @matching_friend
-        the_friend = friends.find_by_uid(@matching_friend.uid)
-        the_friend.update_attributes(name: friend['name']) unless @matching_friend.name.eql?(friend['name'])
-        @match.push(@matching_friend.uid)
-      elsif friends.find_by_uid(friend.id).nil? #uid's did not match && the DB is empty
-        the_friend = friends.create!(uid: friend['id'], name: friend['name'], person_id: personID.to_i, provider: "facebook")
-        @create.push(friend['id'])
-      end
-      the_friend.follow!(self) unless the_friend.following?(self)
+    @fb_friends.each do |fb_friend|
+      Friend.new(fb_friend['id'], fb_friend['name'], self)
     end
-    @dbf = friends.reload
 
-    @dbf.each do |dbf|
-      if !( @match.include?(dbf.uid) || @create.include?(dbf.uid) )
-        friend_to_delete = friends.select('id').where("uid = ?", dbf.uid).first
-        id_to_destroy = friend_to_delete['id'].to_i
-        Friend.destroy(id_to_destroy)
-        @removal.push(dbf.uid)
-      end
+    (Friend.followers(self) - @fb_friends.collect {|f| f['id'] }).each do |uid|
+      Friend.unfollow(self, uid)
     end
-    @removal.length + @create.length  #create way to test how many changes were made
   end
 
   def get_interests(authentication, response = nil)
@@ -593,7 +570,7 @@ class Person < ActiveRecord::Base
     else @interests = response
     end
     @interests["data"].each do |interest|
-      interests.find_or_initialize_by_interest_id_and_person_id_and_provider(interest['id'], personID.to_i, "facebook") do |i|
+      interests.find_or_initialize_by_interest_id_and_person_id_and_provider(interest['id'], id.to_i, "facebook") do |i|
         i.provider = "facebook"
         i.category = interest['category']
         i.name = interest['name']
@@ -609,7 +586,7 @@ class Person < ActiveRecord::Base
       @location = MiniFB.get(authentication['token'], authentication['uid']).location
     else @location = response.location
     end
-    Location.find_or_create_by_location_id_and_name_and_person_id_and_provider(@location['id'], @location['name'], personID.to_i,"facebook") unless @location.nil?
+    Location.find_or_create_by_location_id_and_name_and_person_id_and_provider(@location['id'], @location['name'], id.to_i,"facebook") unless @location.nil?
   end
 
   def get_education_history(authentication, response = nil)
@@ -619,7 +596,7 @@ class Person < ActiveRecord::Base
     end
     unless @education.nil?
       @education.each do |education|
-        education_histories.find_or_initialize_by_school_id_and_person_id_and_provider(education.school.try(:id), personID.to_i, "facebook") do |e|
+        education_histories.find_or_initialize_by_school_id_and_person_id_and_provider(education.school.try(:id), id.to_i, "facebook") do |e|
           e.year_id = education.year.try(:id) ? education.year.id : e.year_id
           e.year_name = education.year.try(:name) ? education.year.name : e.year_name
           e.school_type = education.try(:type) ? education.type : e.school_type
@@ -635,13 +612,13 @@ class Person < ActiveRecord::Base
             e.degree_name = education.degree.try(:name) ? education.degree.name : e.degree_name
           end
           save(validate: false)
-        end 
+        end
       end
     end
-  end  
+  end
 
   def contact_friends(org)
-    Person.where(fb_uid: friends.select(:uid).collect(&:uid)).joins(:organizational_roles).where('organizational_roles.role_id' => Role::CONTACT_ID, 'organizational_roles.organization_id' => org.id)
+    org.people.find_friends_with_fb_uid(self)
   end
 
   def remove_assigned_contacts(organization)
@@ -663,119 +640,156 @@ class Person < ActiveRecord::Base
 
   end
 
+
+  def friends
+    Person.where(fb_uid: friend_uids)
+  end
+
+  def friend_uids
+    Friend.followers(self)
+  end
+
   def merge(other)
     return self if other.nil? || other == self
-    # Phone Numbers
-    phone_numbers.each do |pn|
-      opn = other.phone_numbers.detect {|oa| oa.number == pn.number && oa.extension == pn.extension}
-      pn.merge(opn) if opn
-    end
-    other.phone_numbers.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
-
-    # Locations
-    other.locations.each do |location|
-      if location_ids.include?(location.id)
-        location.destroy
-      else
-        location.update_column(:person_id, id)
+    reload
+    ::Person.transaction do
+      attributes.each do |k, v|
+        next if k == ::Person.primary_key
+        next if v == other.attributes[k]
+        self[k] = case
+                  when other.attributes[k].blank? then v
+                  when v.blank? then other.attributes[k]
+                  else
+                    other_date = other.updated_at || other.created_at
+                    this_date = updated_at || created_at
+                    if other_date && this_date
+                      other_date > this_date ? other.attributes[k] : v
+                    else
+                      v
+                    end
+                  end
       end
-    end
 
-    other.friends.each do |friend|
-      if friend_ids.include?(friend.id)
-        friend.destroy
-      else
-        begin
-          friend.update_column(:person_id, id) 
-        rescue; end
+      # Addresses
+      addresses.each do |address|
+        other_address = other.addresses.detect {|oa| oa.address_type == address.address_type}
+        address.merge(other_address) if other_address
       end
-    end
-
-    # Interests
-    other.interests.each do |i|
-      if interest_ids.include?(i.id)
-        i.destroy
-      else
-        i.update_column(:person_id, id)
+      other.addresses do |address|
+        other_address = addresses.detect {|oa| oa.address_type == address.address_type}
+        address.update_attribute(:person_id, id) unless address.frozen? || other_address
       end
-    end
-
-    # Edudation Histories
-    other.education_histories.each do |eh|
-      if education_history_ids.include?(eh.id)
-        eh.destroy
-      else
-        eh.update_column(:person_id, id)
+      # Phone Numbers
+      phone_numbers.each do |pn|
+        opn = other.phone_numbers.detect {|oa| oa.number == pn.number && oa.extension == pn.extension}
+        pn.merge(opn) if opn
       end
-    end
+      other.phone_numbers.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
 
-    # Followup Comments
-    other.followup_comments.each do |fc|
-      fc.update_column(:commenter_id, id)
-    end
-
-    # Comments on me
-    other.comments_on_me.each do |fc|
-      fc.update_column(:contact_id, id)
-    end
-
-    # Email Addresses
-    email_addresses.each do |pn|
-      opn = other.email_addresses.detect {|oa| oa.email == pn.email}
-      pn.merge(opn) if opn
-    end
-    emails = email_addresses.collect(&:email)
-    other.email_addresses.each do |pn| 
-      if emails.include?(pn.email)
-        pn.destroy
-      else
-        begin
-          pn.update_attribute(:person_id, id) unless pn.frozen?
-        rescue ActiveRecord::RecordNotUnique
-          pn.destroy
+      # Locations
+      other.locations.each do |location|
+        if location_ids.include?(location.id)
+          location.destroy
+        else
+          location.update_column(:person_id, id)
         end
       end
-    end
 
-    # Organization Memberships
-    organization_memberships.each do |pn|
-      opn = other.organization_memberships.detect {|oa| oa.organization_id == pn.organization_id}
-      pn.merge(opn) if opn
-    end
-    other.organization_memberships.each {|pn| pn.update_attribute(:person_id, id) unless pn.frozen?}
-
-    # Organizational Roles
-    organizational_roles.each do |pn|
-      opn = other.organizational_roles.detect {|oa| oa.organization_id == pn.organization_id}
-      pn.merge(opn) if opn
-    end
-    other.organizational_roles.each do |role| 
-      begin
-        role.update_attribute(:person_id, id) unless role.frozen?
-      rescue ActiveRecord::RecordNotUnique
-        role.destroy
+      Friend.followers(other).each do |uid|
+        friend = Friend.new(uid, nil, self)
+        friend.unfollow(other)
       end
+
+      # Interests
+      other.interests.each do |i|
+        if interest_ids.include?(i.id)
+          i.destroy
+        else
+          i.update_column(:person_id, id)
+        end
+      end
+
+      # Edudation Histories
+      other.education_histories.each do |eh|
+        if education_history_ids.include?(eh.id)
+          eh.destroy
+        else
+          eh.update_column(:person_id, id)
+        end
+      end
+
+      # Followup Comments
+      other.followup_comments.each do |fc|
+        fc.update_column(:commenter_id, id)
+      end
+
+      # Comments on me
+      other.comments_on_me.each do |fc|
+        fc.update_column(:contact_id, id)
+      end
+
+      # Email Addresses
+      email_addresses.each do |pn|
+        opn = other.email_addresses.detect {|oa| oa.email == pn.email}
+        pn.merge(opn) if opn
+      end
+      emails = email_addresses.collect(&:email)
+      other.email_addresses.each do |pn| 
+        if emails.include?(pn.email)
+          pn.destroy
+        else
+          begin
+            pn.update_attribute(:person_id, id) unless pn.frozen?
+          rescue ActiveRecord::RecordNotUnique
+            pn.destroy
+          end
+        end
+      end
+      
+      # Organizational Roles
+      organizational_roles.each do |pn|
+        opn = other.organizational_roles.detect {|oa| oa.organization_id == pn.organization_id}
+        pn.merge(opn) if opn
+      end
+      other.organizational_roles.each do |role| 
+        begin
+          role.update_attribute(:person_id, id) unless role.frozen?
+        rescue ActiveRecord::RecordNotUnique
+          role.destroy
+        end
+      end
+
+      # Answer Sheets
+      other.answer_sheets.collect {|as| as.update_column(:person_id, id)}
+
+      # Contact Assignments
+      other.contact_assignments.collect {|as| as.update_column(:assigned_to_id, id)}
+
+      # SMS stuff
+      other.received_sms.collect {|as| as.update_column(:person_id, id)}
+      other.sms_sessions.collect {|as| as.update_column(:person_id, id)}
+
+      # Group Memberships
+      other.group_memberships.collect {|gm| gm.update_column(:person_id, id)}
+
+      MergeAudit.create!(mergeable: self, merge_looser: other)
+      other.reload
+      other.destroy
+      begin
+        save(validate: false)
+      rescue ActiveRecord::ReadOnlyRecord
+
+      end
+
+      reload
+      self
+
     end
-
-    # Answer Sheets
-    other.answer_sheets.collect {|as| as.update_column(:person_id, id)}
-
-    # Contact Assignments
-    other.contact_assignments.collect {|as| as.update_column(:assigned_to_id, id)}
-
-    # SMS stuff
-    other.received_sms.collect {|as| as.update_column(:person_id, id)}
-    other.sms_sessions.collect {|as| as.update_column(:person_id, id)}
-
-    # Group Memberships
-    other.group_memberships.collect {|gm| gm.update_column(:person_id, id)}
-
-    super
   end
 
   def to_hash_mini
     hash = {}
-    hash['id'] = self.personID
+    hash['id'] = self.id
     hash['name'] = self.to_s.gsub(/\n/," ")
     hash
   end
@@ -830,12 +844,16 @@ class Person < ActiveRecord::Base
                                        {org_id: org_id, role: role.i18n, name: organization_from_id(org_id).name, primary: primary_organization.id == org_id ? 'true' : 'false'} 
                                      }
                                    }.flatten
+  rescue NoMethodError
+    self.organization_tree_cache = nil
+    self.org_ids_cache = nil
+    retry
   end
 
   def to_hash(organization = nil)
     hash = self.to_hash_basic(organization)
-    hash['first_name'] = firstName.to_s.gsub(/\n/," ")
-    hash['last_name'] = lastName.to_s.gsub(/\n/," ")
+    hash['first_name'] = first_name.to_s.gsub(/\n/," ")
+    hash['last_name'] = last_name.to_s.gsub(/\n/," ")
     hash['phone_number'] = primary_phone_number.number if primary_phone_number
     hash['email_address'] = primary_email_address.to_s if primary_email_address
     hash['birthday'] = birth_date.to_s
@@ -882,19 +900,7 @@ class Person < ActiveRecord::Base
     end
   end
 
-  def updated_at() dateChanged end
-  # def updated_by() changedBy end
-  def created_at() dateCreated end
   def created_by() createdBy end
-
-  def stamp_changed
-    self.dateChanged = Time.now
-    self.changedBy = ApplicationController.application_name
-  end
-  def stamp_created
-    self.dateCreated = Time.now
-    self.createdBy = ApplicationController.application_name
-  end
 
   def self.new_from_params(person_params = nil)
     person_params = person_params.with_indifferent_access || {}
@@ -907,23 +913,28 @@ class Person < ActiveRecord::Base
 
     find_existing_person(person)
   end
+  def self.find_existing_person_by_name_and_phone(opts = {})
+    opts[:number] = PhoneNumber.strip_us_country_code(opts[:number])
+    return unless opts.slice(:first_name, :last_name, :number).all? {|_, v| v.present?}
 
-  def self.find_existing_person_by_email(email_address)
+    Person.where(first_name: opts[:first_name], last_name: opts[:last_name], 'phone_numbers.number' => opts[:number]).
+           joins(:phone_numbers).first
+  end
+
+  def self.find_existing_person_by_email(email)
+    return unless email.present?
+    (EmailAddress.find_by_email(email) ||
+      User.find_by_username(email) ||
+      User.find_by_email(email)).try(:person)
+  end
+
+  def self.find_existing_person_by_email_address(email_address)
     return unless email_address
-
-    other_person = email = nil
-
-    # Start by looking for a person with the same email address (since that's our one true unique field)
-    if email_address.email.present?
-      other_person = EmailAddress.find_by_email(email_address.email).try(:person)
-      email = email_address
-    end
-
-    other_person
+    find_existing_person_by_email(email_address.email)
   end
 
   def self.find_existing_person(person)
-    other_person = find_existing_person_by_email(person.email_addresses.first)
+    other_person = find_existing_person_by_email_address(person.email_addresses.first)
 
     if other_person
       person.phone_numbers.each do |phone_number|
@@ -933,7 +944,7 @@ class Person < ActiveRecord::Base
       end
       phone = other_person.phone_numbers.first
       email = other_person.email_addresses.first
-      other_person.attributes = person.attributes.except('personID').select {|_, v| v.present?}
+      other_person.attributes = person.attributes.except('id').select {|_, v| v.present?}
     else
       email = person.email_addresses.first
       phone = person.phone_numbers.first
@@ -980,8 +991,8 @@ class Person < ActiveRecord::Base
     card = Vpim::Vcard::Maker.make2 do |maker|
       maker.add_name do |name|
         name.prefix = ''
-        name.given = firstName
-        name.family = lastName
+        name.given = first_name
+        name.family = last_name
       end
 
       if current_address

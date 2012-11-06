@@ -1,5 +1,5 @@
 class Surveys::QuestionsController < ApplicationController
-  before_filter :find_survey_and_authorize
+  before_filter :find_survey_and_authorize, except: [:hide, :unhide]
   before_filter :find_question, only: [:show, :edit, :update, :destroy]
   before_filter :get_predefined
   before_filter :get_leaders
@@ -130,6 +130,7 @@ class Surveys::QuestionsController < ApplicationController
   end
 
   def hide
+    @survey = Survey.find(params[:survey_id])
     @question = Element.find(params[:id])
     @organization = @survey.organization
     @organization.survey_elements.each do |pe|
@@ -138,6 +139,7 @@ class Surveys::QuestionsController < ApplicationController
   end
 
   def unhide
+    @survey = Survey.find(params[:survey_id])
     @organization = @survey.organization
     @organization.survey_elements.each do |pe|
       pe.update_attribute(:hidden, false) if pe.element_id == params[:id].to_i
@@ -151,18 +153,18 @@ class Surveys::QuestionsController < ApplicationController
     survey = @survey
     response = Array.new
     if type == 'Leader'
-      results = @survey.organization.leaders.where("lastName LIKE '%#{keyword}%' OR firstName LIKE '%#{keyword}%'")
+      results = @survey.organization.leaders.where("last_name LIKE ? OR first_name LIKE ?", "%#{keyword}%", "%#{keyword}%")
       response = results.uniq.collect{|leader| {"label"=>"#{leader.name} (#{leader.email})", "id"=>leader.id}}
     elsif type == 'Ministry'
-      results = current_person.all_organization_and_children.where("name LIKE '%#{keyword}%'")
+      results = current_person.all_organization_and_children.where("name LIKE ?", "%#{keyword}%")
       response = results.uniq.collect{|ministry| {"label"=>"#{ministry.name}", "id"=>ministry.id}}
     elsif type == 'Group'
       if current_organization.present?
-        results = current_organization.groups.where("name LIKE '%#{keyword}%'")
+        results = current_organization.groups.where("name LIKE ?", "%#{keyword}%")
         response = results.uniq.collect{|group| {"label"=>"#{group.name} (#{group.location})", "id"=>group.id}}
       end
     elsif type == 'Label'
-      results = current_organization.roles.where("name LIKE '%#{keyword}%'")
+      results = current_organization.roles.where("name LIKE ?", "%#{keyword}%")
       response = results.uniq.collect{|label| {"label"=>"#{label.name}", "id"=>label.id}}
     end
     render json: response
@@ -227,7 +229,7 @@ class Surveys::QuestionsController < ApplicationController
       
         if invalid_emails.present?
           respond_to do |wants|
-            wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(personId: invalid_emails).collect{|p| p.name}.join(', ') } }
+            wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(id: invalid_emails).collect{|p| p.name}.join(', ') } }
           end
           return false
         else
@@ -270,7 +272,7 @@ class Surveys::QuestionsController < ApplicationController
 
     #  unless leaders_with_invalid_emails.blank?
     #    respond_to do |wants|
-    #      wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(personId: leaders_with_invalid_emails).collect{|p| p.name}.join(', ') } }
+    #      wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(id: leaders_with_invalid_emails).collect{|p| p.name}.join(', ') } }
     #    end
     #    return false
     #  else

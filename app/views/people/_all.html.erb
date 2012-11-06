@@ -1,7 +1,7 @@
 <tr id="all">
 	<td colspan="8" align="center">
 		<% @filtered_people.each do |person| %>
-			<span class="all_row" data-id="<%= person.id %>" data-name="<%= person.firstName %> <%= person.lastName %>" data-email="<%= person.email %>" data-phone-number="<%= person.pretty_phone_number %>"></span>
+			<span class="all_row" data-id="<%= person.id %>" data-name="<%= person.first_name %> <%= person.last_name %>" data-email="<%= person.email %>" data-phone-number="<%= person.pretty_phone_number %>"></span>
 		<% end %>
 	
 		<span id="all_text">

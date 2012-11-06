@@ -1,4 +1,6 @@
 class Ccc::InfobaseUser < ActiveRecord::Base
+  establish_connection :uscm
+
   TYPES = %w[InfobaseUser InfobaseHrUser InfobaseAdminUser]
   belongs_to :user
 

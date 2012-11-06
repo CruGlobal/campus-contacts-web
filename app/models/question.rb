@@ -10,8 +10,6 @@
 
 class Question < Element
   include ActionController::RecordIdentifier # dom_id
-  has_many :conditions, :class_name => "Condition", :foreign_key => "toggle_id", :dependent => :nullify
-  has_many :dependents, :class_name => "Condition", :foreign_key => "trigger_id", :dependent => :nullify
   has_many :sheet_answers, :class_name => "Answer", :foreign_key => "question_id", :dependent => :destroy
 
   belongs_to :related_question_sheet, :class_name => "QuestionSheet", :foreign_key => "related_question_sheet_id"
@@ -23,7 +21,7 @@ class Question < Element
   # however, "Choose Many" (checkbox) questions have multiple answers in a single response
   
   attr_accessor :answers
-  
+
   # @answers = nil            # one or more answers in response to this question
   # @mark_for_destroy = nil   # when something is unchecked, there are less answers to the question than before
   
