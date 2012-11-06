@@ -11,7 +11,6 @@
     <h1>
       <%= image_tag("contact.png") %>
       <%= @person %>
-      <%= link_to("Assign", "", class: 'assign headerlink', 'data-id' => @person.id) if can?(:manage, @person) %>
     </h1>
   </div>
 
@@ -23,7 +22,7 @@
         <% end %>
       </div>
       <br/>
-      <div class="title">Labels:</div>
+      <div class="title"><%= t('nav.roles')%>:</div>
       <div class="assigned_labels">
         <% roles = (@person.assigned_organizational_roles(current_organization.id).default_roles_desc + @person.assigned_organizational_roles(current_organization.id).non_default_roles_asc) %>
         <% roles.each do |role| %>
@@ -79,6 +78,7 @@
         <span class="statusline">
           <%= t('.status') %>: 
           <%= f.select :status, OrganizationalRole::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]} %>
+          <%= link_to("Assign", "", class: 'assign headerlink', 'data-id' => @person.id) if can?(:manage, @person) %>
           <%= link_to(t('.label_button'), "", class: 'headerlink', id: 'add_label_button') if can?(:manage, @person) %>
         </span>
         <div class="commentbox">
@@ -132,12 +132,25 @@
 
 <%= render 'shared/bulk_send_form' %>
 <div id="labels_dialog">
-  <b>Assigned Labels</b>
+  <b>Assign Labels</b>
+  <p style="margin: 0 0 5px 0;"><%= t('.type_to_find_label') %></p>
+  <%= text_field_tag :label_name, '', class: 'label_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>
+  <div class="labels_list">
+    <ul>
+      <% @roles_for_assign.each do |role| %>
+        <li class="label" data-role="<%= role.id %>">
+          <span class="name">
+            <%= link_to role.to_s, '#' %>
+          </span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
   <p>
     <ul>
-    <% @person.assigned_organizational_roles(current_organization.id).each do |role| %>
-      <li><%= role.name %></li>
-    <% end%>
+      <% @person.assigned_organizational_roles(current_organization.id).each do |role| %>
+        <li><%= role.name %></li>
+      <% end %>
     </ul>
   </p>
 </div>
