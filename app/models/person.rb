@@ -837,17 +837,24 @@ class Person < ActiveRecord::Base
   end
   
   def organizational_roles_hash
+    @retries = 0
+    logger.debug("\n\n===========called=============\n\n")
+    roles = {}
     @organizational_roles_hash ||= org_ids.collect { |org_id, values| 
                                      values['roles'].select { |role_id| 
                                        role_id != Role.contact.id
-                                     }.collect { |role_id| Role.find_by_id(role_id) }.compact.collect { |role|
+                                     }.collect { |role_id| 
+                                       roles[role_id] ||= Role.find_by_id(role_id)
+                                     }.compact.collect { |role|
                                        {org_id: org_id, role: role.i18n, name: organization_from_id(org_id).name, primary: primary_organization.id == org_id ? 'true' : 'false'} 
                                      }
                                    }.flatten
   rescue NoMethodError
     self.organization_tree_cache = nil
     self.org_ids_cache = nil
-    retry
+    @org_ids = nil
+    @retries += 1
+    retry if @retries == 1
   end
 
   def to_hash(organization = nil)
