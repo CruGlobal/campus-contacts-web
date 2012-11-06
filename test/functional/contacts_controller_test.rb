@@ -80,6 +80,27 @@ class ContactsControllerTest < ActionController::TestCase
         assert_response :success, @response.body 
       end
       
+      should "create a person even though inserted email has trailing spaces" do
+      
+        assert_difference "Person.count" do
+          xhr :post, :create, {
+                          "person" => {
+                            "email_address" => {
+                              "email" => "trboothshoomy@email.com ",
+                            },
+                            "first_name" => "Tyler",
+                            "gender" => "male",
+                            "last_name" => "Booth",
+                            "phone_number" => {
+                              "number" => "479-283-4946",
+                            }
+                          }
+                        }
+                        
+          end
+        assert_response :success, @response.body 
+      end
+      
       should "remove the being 'archived' Contact role of a Person when it is going to be created again (using existing first_name, last_name and email) in 'My Contacts' tab (:assign_to_me => true)" do
         contact = Factory(:person, first_name: "Jon", last_name: "Snow")
         email = Factory(:email_address, email: "jonsnow@email.com", person: contact)

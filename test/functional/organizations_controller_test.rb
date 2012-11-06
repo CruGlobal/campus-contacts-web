@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class OrganizationsControllerTest < ActionController::TestCase
+
   context "Organizations" do
     setup do
       @user = Factory(:user_with_auxs)  #user with a person object
@@ -27,18 +28,18 @@ class OrganizationsControllerTest < ActionController::TestCase
       end
     end
 
-    context 'deleting' do
-      should "clear cache of anyone who has a role in a grandparent of this org" do
-        @org_grandchild = Factory(:organization, :name => "foo", :parent => @org_child)
-        OrganizationsController.any_instance.expects(:expire_fragment).with("org_nav/#{@user.person.id}")
-        post :destroy, id: @org_grandchild.id
-      end
+    #context 'deleting' do
+      #should "clear cache of anyone who has a role in a grandparent of this org" do
+        #@org_grandchild = Factory(:organization, :name => "foo", :parent => @org_child)
+        #OrganizationsController.any_instance.expects(:expire_fragment).with("org_nav/#{@user.person.id}")
+        #post :destroy, id: @org_grandchild.id
+      #end
     
-      should "clear cache of anyone who has a role in a parent of this org" do
-        OrganizationsController.any_instance.expects(:expire_fragment).with("org_nav/#{@user.person.id}")
-        post :destroy, id: @org_parent.id
-      end
-    end
+      #should "clear cache of anyone who has a role in a parent of this org" do
+        #OrganizationsController.any_instance.expects(:expire_fragment).with("org_nav/#{@user.person.id}")
+        #post :destroy, id: @org_parent.id
+      #end
+    #end
     
     context "updating" do
       should "update" do
@@ -58,9 +59,25 @@ class OrganizationsControllerTest < ActionController::TestCase
         assert_response :success
       end
       
-      should "update settings" do
-        xhr :post, :update_settings, {:show_year_in_school =>"on"}
-        assert_response :redirect
+      should "assign false as the default value for the check box" do
+        get :settings
+        assert(!assigns(:show_year_in_school))
+      end
+      
+      should "successfully update org settings" do
+        post :update_settings, { :show_year_in_school => "on" }
+        assert_response(:redirect)
+        assert("Successfully updated org settings!",flash[:notice])
+        get :settings
+        assert(assigns(:show_year_in_school))
+      end
+      
+      should "update the settings" do
+        post :update_settings, { :show_year_in_school => "off" }
+        assert_response(:redirect)
+        assert("Successfully updated org settings!",flash[:notice])
+        get :settings
+        assert(!assigns(:show_year_in_school))
       end
       
       should "fail update settings" do
@@ -77,7 +94,42 @@ class OrganizationsControllerTest < ActionController::TestCase
     end
 
   end
-
+  #context "when updating org settings" do
+    #setup do
+      #@user = Factory(:user_with_auxs)
+      #sign_in @user
+    #end
+    
+    #context "and the org settings hash is empty" do
+      #setup do
+        #@org = Factory(:organization)
+        #Factory(:organizational_role, organization: @org, person: @user.person, role: Role.admin)
+        
+        #@request.session[:current_organization_id] = @org.id
+      #end
+      
+      #should "assign false as the default value for the check box" do
+        #get :settings
+        #assert(!assigns(:show_year_in_school))
+      #end
+      
+      #should "successfully update org settings" do
+        #post :update_settings, { :show_year_in_school => "on" }
+        #assert_response(:redirect)
+        #assert("Successfully updated org settings!",flash[:notice])
+        #get :settings
+        #assert(assigns(:show_year_in_school))
+      #end
+      
+      #should "update the settings" do
+        #post :update_settings, { :show_year_in_school => "off" }
+        #assert_response(:redirect)
+        #assert("Successfully updated org settings!",flash[:notice])
+        #get :settings
+        #assert(!assigns(:show_year_in_school))
+      #end
+    #end
+  #end
 
   # setup do
   #   @organization = organizations(:one)

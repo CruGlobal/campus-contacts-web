@@ -200,8 +200,6 @@ $ ->
       $.rails.handleRemote($('#new_contact_assignment'))
       unless $('#assign_to').val() == $('#my_id').val()
         $.fn.load_leader_name($('#person_title').attr('data-id'))
-        $('.id_checkbox:checked').each ->
-          $(this).closest('tr').remove()
     $('#assign_search').dialog('destroy')
   false
 
@@ -235,11 +233,13 @@ $ ->
         person += $(element).attr('value') + ","
     
     add_another = false
-    $('<a href="/groups/' + group  + '/group_memberships?person_id=' + person + '&role=member&add_another=' + add_another + '"data-method="post" data-remote="true"></a>')
+    $('<a href="/groups/' + group  + '/group_memberships?person_id=' + person + '&role=member&render_in_contacts=true&add_another=' + add_another + '" data-method="post" data-remote="true"></a>')
     .appendTo('body')
     .click()
     .remove()
     $('#assign_search').dialog('destroy')
+    $('#global_loader').show()
+    $('.id_checkbox:checked').prop('checked',false)
   false
   
   $('#assign_search .label a').live 'click', (e)->
@@ -582,7 +582,6 @@ $.fn.assignTo = (leader, skip_remote) ->
         $.rails.handleRemote($('#new_contact_assignment'))
       
       row.find('.id_checkbox').attr('checked', false)
-      row.hide()
   $('#assign_to').val('')
   
 $.mh.saveContact = (add_more) ->

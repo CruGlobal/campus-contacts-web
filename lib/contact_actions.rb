@@ -46,7 +46,7 @@ module ContactActions
           wants.js do
             @assignments = ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).group_by(&:person_id)
             @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, role_id: Role::CONTACT_ID, person_id: @person).map {|r| [r.person_id, r]}]
-            @answers = generate_answers([@person], @organization, @questions)
+            @answers = generate_answers(Person.where(id: @person.id), @organization, @questions)
           end
           wants.json { render json: @person.to_hash_basic(@organization) }
         end

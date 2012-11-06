@@ -1,4 +1,3 @@
-require 'csv'
 require 'contact_actions'
 
 class ContactsController < ApplicationController
@@ -21,42 +20,22 @@ class ContactsController < ApplicationController
   
     respond_to do |wants|
       wants.html do
-        @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, person_id: @people.collect(&:id)).map {|r| [r.person_id, r]}]
-        @assignments = ContactAssignment.includes(:assigned_to).where(person_id: @people.collect(&:id), organization_id: @organization.id).group_by(&:person_id)
+        #@roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, person_id: @people.collect(&:id)).map {|r| [r.person_id, r]}]
+        @assignments = ContactAssignment.includes(:assigned_to).where(person_id: @people.pluck('people.id'), organization_id: @organization.id).group_by(&:person_id)
         @answers = generate_answers(@people, @organization, @questions)
+        #@filtered_people = @all_people - @people
+        @all_people_with_phone_number = @all_people.includes(:primary_phone_number).where('phone_numbers.number is not NULL')
+        @all_people_with_email = @all_people.includes(:primary_email_address).where('email_addresses.email is not NULL')
       end
       wants.csv do
         @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r]}]
         @all_answers = generate_answers(@all_people, @organization, @questions)
-        out = ""
         @questions.select! { |q| !%w{first_name last_name phone_number email}.include?(q.attribute_name) }
-        CSV.generate(out) do |rows|
-          rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('general.status'), t('general.assigned_to'), t('general.gender'), t('contacts.index.phone_number'), t('people.index.email')] + @questions.collect {|q| q.label} + [t('contacts.index.last_survey')]
-          @all_people.each do |person|
-            if @roles[person.id]
-              answers = [person.first_name, person.last_name, @roles[person.id].followup_status.to_s.titleize, person.assigned_tos_by_org(current_organization).collect{|a| Person.find(a.assigned_to_id).name}.join(','), person.gender.to_s.titleize, person.pretty_phone_number, person.email]
-              dates = []
-              @questions.each do |q|
-                answer = @all_answers[person.id][q.id]
-                if answer
-                  answers << answer.first
-                  dates << answer.last
-                else
-                  answers << ''
-                end
-              end
-              answers << I18n.l(dates.sort.reverse.last, format: :date) if dates.present?
-              rows << answers
-            end
-          end
-        end
         filename = @organization.to_s
-        send_data(out, :filename => "#{filename} - Contacts.csv", :type => 'application/csv' )
+        csv = ContactsCsvGenerator.generate(@roles, @all_answers, @questions, @all_people, @organization)
+        send_data(csv, :filename => "#{filename} - Contacts.csv", :type => 'application/csv' )
       end
     end
-    @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
-    @all_people_with_phone_number = @all_people.find_all{|person| person.pretty_phone_number.present? }
-    @all_people_with_email = @all_people.find_all{|person| person.email.present? }
   end
   
   def contacts_all
@@ -160,25 +139,21 @@ class ContactsController < ApplicationController
       @header = nil
       @style = params[:edit] ? 'display:true' : 'display:none'
       @saved_contact_search = @person.user.saved_contact_searches.find(:first, :conditions => "full_path = '#{request.fullpath.gsub(I18n.t('contacts.index.edit_true'),"")}'") || SavedContactSearch.new
-      @organization = current_organization # params[:org_id].present? ? Organization.find_by_id(params[:org_id]) : 
-      unless @organization
-        redirect_to user_root_path, error: t('contacts.index.which_org')
-        return false
-      end
+      @organization = Organization.where(id: current_organization.id).includes(:surveys, :groups, :questions).first
       @surveys = @organization.surveys
       @all_questions = @organization.all_questions.flatten.uniq
       @questions = @organization.all_questions.where("survey_elements.hidden" => false).flatten.uniq
-      @hidden_questions = @organization.all_questions.where("survey_elements.hidden" => true).flatten.uniq
+      @hidden_questions = @all_questions - @questions
 
-      params[:assigned_to] = 'all' if !params[:assigned_to].present?# make 'all default' on 'all contacts' tab instead of 'unassigned'
+      params[:assigned_to] = 'all' if !params[:assigned_to].present?
       
       org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
+      @people_scope = Person.where('organizational_roles.organization_id' => org_ids)
+                            .where("organizational_roles.role_id <> #{Role::CONTACT_ID} OR (organizational_roles.role_id = #{Role::CONTACT_ID} AND organizational_roles.followup_status <> 'do_not_contact')")
+                            .joins(:organizational_roles_including_archived)
       
-      @people_scope = Person.where('organizational_roles.organization_id' => org_ids).where("organizational_roles.role_id <> #{Role::CONTACT_ID} OR (organizational_roles.role_id = #{Role::CONTACT_ID} AND organizational_roles.followup_status <> 'do_not_contact')").includes(:organizational_roles_including_archived)
+      @people_scope = @people_scope.where('organizational_roles.archive_date' => nil, 'organizational_roles.deleted' => 0) if params[:include_archived].blank? && params[:archived].blank?
       
-      @people_scope = @people_scope.where(id: @people_scope.archived_not_included.collect(&:id)) if params[:include_archived].blank? && params[:archived].blank?
-      
-      @people_scope = @people_scope.includes(:primary_phone_number, :primary_email_address)
       sort_by = ['lastName asc', 'firstName asc']
       
       if params[:dnc] == 'true'
@@ -190,23 +165,18 @@ class ContactsController < ApplicationController
       elsif params[:archived].present? && params[:archived] == 'true'
         @header = I18n.t('contacts.index.archived')
         @people = Person.where(id: current_organization.people.archived(current_organization.id).collect(&:id))
-      elsif params[:role] || (params[:search] && params[:role])
+      elsif params[:role].present? || (params[:search].present? && params[:role].present?)
         if @role = Role.find(params[:role])
           @people = @people_scope.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ? AND organizational_roles.deleted = 0', @role.id, current_organization.id)
           if params[:include_archived].present? && params[:include_archived] == 'true'
-            @people = @people.select("people.*, roles.*")
-                      .joins("LEFT JOIN organizational_roles AS org_roles ON 
-                        org_roles.person_id = people.id")
-                      .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
-                      .where("org_roles.organization_id" => current_organization.id)
+            @people = @people
+                      .joins(:roles)
                       .where("roles.id = #{@role.id}")
                       sort_by.unshift("roles.id").uniq
           else
-            @people = @people.select("people.*, roles.*")
-                      .joins("LEFT JOIN organizational_roles AS org_roles ON 
-                        org_roles.person_id = people.id")
-                      .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
-                      .where("org_roles.archive_date" => nil, "org_roles.organization_id" => current_organization.id) 
+            @people = @people
+                      .joins(:roles)
+                      .where("organizational_roles.archive_date" => nil) 
                       .where("roles.id = #{@role.id}")
                       sort_by.unshift("roles.id").uniq
                     
@@ -217,14 +187,13 @@ class ContactsController < ApplicationController
         @header = I18n.t('contacts.index.matching_seach')
         @people = @people_scope
       else
-        params[:assigned_to] = nil if params[:assigned_to].blank?
         if params[:assigned_to]
           case params[:assigned_to]
           when 'all'
             if params[:include_archived].present? && params[:include_archived] == 'true'
-              @people = @organization.contacts_with_archived
+              @people = @organization.all_people_with_archived
             else
-              @people = @organization.contacts
+              @people = @organization.all_people
             end
           when 'unassigned'
             @people = @organization.unassigned_contacts
@@ -241,14 +210,11 @@ class ContactsController < ApplicationController
           else
             if params[:assigned_to].present? && @assigned_to = Person.find_by_id(params[:assigned_to])
               @header = I18n.t('contacts.index.responses_assigned_to', assigned_to: @assigned_to)
-              @people = Person.includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
+              @people = Person.joins(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
             end
           end
         end
         @people ||= Person.where("1=0")
-      end
-      unless @people.arel.to_sql.include?('JOIN organizational_roles')
-        @header = "#{Role.find(params[:role]).i18n}" if params[:role].present?
       end
       
       if params[:q] && params[:q][:s].include?('answer_sheets')
@@ -256,7 +222,7 @@ class ContactsController < ApplicationController
       end
       
       if params[:q] && params[:q][:s].include?('followup_status')
-        @people = current_organization.contacts.order_by_followup_status(params[:q][:s])
+        @people = @people.order_by_followup_status(params[:q][:s])
       end
       if params[:survey].present?
         @people = @people.joins(:answer_sheets).where("answer_sheets.survey_id" => params[:survey])
@@ -274,12 +240,12 @@ class ContactsController < ApplicationController
       if params[:email].present?
         v = params[:email].strip
         term = (v.first == v.last && v.last == '"') ? v[1..-2] : "%#{v}%"
-        @people = @people.includes(:primary_email_address).where("email_addresses.email like ?", term)
+        @people = @people.joins(:email_addresses).where("email_addresses.email like ?", term)
       end
       if params[:phone_number].present?
         v = PhoneNumber.strip_us_country_code(params[:phone_number])
         term = (v.first == v.last && v.last == '"') ? v[1..-2] : "%#{v}%"
-        @people = @people.where("phone_numbers.number like ?", term)
+        @people = @people.joins(:phone_numbers).where("phone_numbers.number like ?", term)
       end
       if params[:gender].present?
         @people = @people.where("gender = ?", params[:gender].strip)
@@ -304,9 +270,9 @@ class ContactsController < ApplicationController
                            when 'person'
                              case question.attribute_name
                              when 'email'
-                               @people = @people.includes(:email_addresses).where("#{EmailAddress.table_name}.email like ?", term) unless v.strip.blank?
+                               @people = @people.joins(:email_addresses).where("#{EmailAddress.table_name}.email like ?", term) unless v.strip.blank?
                              when 'phone_number'
-                               @people = @people.includes(:phone_numbers).where("#{PhoneNumber.table_name}.number like ?", term) unless v.strip.blank?
+                               @people = @people.joins(:phone_numbers).where("#{PhoneNumber.table_name}.number like ?", term) unless v.strip.blank?
                              else
                                @people = @people.where("#{Person.table_name}.#{question.attribute_name} like ?", term) unless v.strip.blank?
                              end
@@ -349,12 +315,12 @@ class ContactsController < ApplicationController
 
       @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
       # raise @q.sorts.inspect
-      
-      @people = @people.includes(:primary_phone_number, :primary_email_address).order(params[:q] && params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass') : ['last_name, first_name']).group('people.id')
-      
+      if params[:q]
+        @people = @people.includes(:primary_phone_number, :primary_email_address, :contact_role).
+                    order(params[:q] && params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass').gsub('followup_status','organizational_roles.followup_status') : ['last_name, first_name']).group('people.id')
+      end
       @all_people = @people
       @people_for_labels = Person.people_for_labels(current_organization)
-      @people = @people.includes(:organizational_roles)
       @people = @people.page(params[:page])
     
     end
@@ -374,11 +340,12 @@ class ContactsController < ApplicationController
     
     def generate_answers(people, organization, questions)
       answers = {}
-      people.each do |person|
-        answers[person.id] = {}
+      people_ids = people.pluck('people.id')
+      people_ids.each do |id|
+        answers[id] = {}
       end
       @surveys = {}
-      AnswerSheet.where(survey_id: organization.survey_ids, person_id: people.collect(&:id)).includes(:answers, {:person => :primary_email_address}).each do |answer_sheet|
+      AnswerSheet.includes(:survey).where(survey_id: organization.survey_ids, person_id: people_ids).includes({:person => :primary_email_address}).each do |answer_sheet|
         @surveys[answer_sheet.person_id] ||= {}
         @surveys[answer_sheet.person_id][answer_sheet.survey] = answer_sheet.completed_at
         

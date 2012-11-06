@@ -8,7 +8,7 @@
 
 class Answer < ActiveRecord::Base
   
-  belongs_to :answer_sheet
+  belongs_to :answer_sheet, inverse_of: :answers
   belongs_to :question, :class_name => "Element", :foreign_key => "question_id"
   
 #  validates_presence_of :value

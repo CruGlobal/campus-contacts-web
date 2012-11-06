@@ -33,8 +33,8 @@ class Api::ContactsControllerTest < ActionController::TestCase
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,2)
       @json.each do |person|
-        assert_equal(person['person']['gender'],'male')
-        assert_not_equal(person['person']['gender'],'female')
+        assert_equal(person['person']['gender'],'Male')
+        assert_not_equal(person['person']['gender'],'Female')
       end
     end
     
@@ -45,15 +45,15 @@ class Api::ContactsControllerTest < ActionController::TestCase
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,0)
       
-      @user.person.update_attributes(gender: 'female')
-      @user2.person.update_attributes(gender: 'female')
+      @user.person.update_attributes(gender: 'Female')
+      @user2.person.update_attributes(gender: 'Female')
       get :index, {filters: 'gender', values: 'female'}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,2)
       @json.each do |person|
-        assert_equal(person['person']['gender'],'female')
-        assert_not_equal(person['person']['gender'],'male')
+        assert_equal(person['person']['gender'],'Female')
+        assert_not_equal(person['person']['gender'],'Male')
       end
     end
     

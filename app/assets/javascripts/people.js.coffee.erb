@@ -679,22 +679,38 @@ $('.check_all_mine').live 'click', ->
     else
       first_row.remove()
  
+$('#fetch_all_contacts_link').live 'click', ->
+  $('#all_text, #all_selected_text').toggle()
+  $('.id_checkbox').attr('checked',true)
+  change_all_role_checkboxes(true)
+  disable_role_checkboxes()
+  enable_all_unchecked()
+ 
 $('.check_all_contacts').live 'click', ->
   first_row = $('#contacts_table').find('tr:first')
-  text = first_row.text()
-  if text.indexOf('Fetching') == 0
+  if first_row.text().indexOf('Fetching') == 0
     $(this).attr('checked', true)  
-    $('input.id_checkbox').attr('checked', true)  
+    $('.id_checkbox').prop('checked', true)  
     return false
+  
+  checked = $(this).is(':checked')  
+  if checked
+    change_all_role_checkboxes(true)
+  else
+    change_all_role_checkboxes(false)
+  $('.id_checkbox').prop('checked', checked)  
     
   if true || $('.pagination').length
-    if $(this).is(':checked')    
+    if checked
       $('#contacts_table').prepend('<tr><td colspan="99" align="center" style="background:none;">Fetching information...</td></tr>') 
       $.get '/contacts/contacts_all?' + $(this).attr('data-status'), (html) ->
         $('#contacts_table').find('tr:first').remove()
         $('#contacts_table').prepend(html)    
     else
       first_row.remove()
+  change_all_role_checkboxes(true) if $(this).is(':checked')
+  disable_role_checkboxes()
+  enable_all_unchecked()
   
 $('#check_all').live 'click', ->
   first_row = $('#people_table').find('tr:first')
@@ -723,6 +739,9 @@ $('#check_all').live 'click', ->
     else
       if $('span#all_text', first_row)[0]?
         first_row.hide()
+  change_all_role_checkboxes(true) if checked
+  disable_role_checkboxes()
+  enable_all_unchecked()
 
 $('#roles_menu_div').live 'click', ->
   role_div = $(this).parent().find('.dropdown_1column')
@@ -826,11 +845,19 @@ change_role_checkboxes = (role_labels, check, n) ->
     role = $(this).attr('id').split('_')
     checkbox = '#role_ids_' + role[1]
     $(checkbox).attr checked: check 
+    
+change_role_checkboxes_by_ids = (ids, check) ->
+  for id in ids.split(',')
+    checkbox = '#role_ids_' + id
+    $(checkbox).attr checked: check 
 
 change_all_role_checkboxes = (check) ->
   $('input.id_checkbox:checked').each ->
-    role_labels = get_role_labels($(this))
-    change_role_checkboxes(role_labels, check)
+    if $(this).hasClass('not_displayed')
+      change_role_checkboxes_by_ids($(this).attr('data-roles'), check)
+    else
+      role_labels = get_role_labels($(this))
+      change_role_checkboxes(role_labels, check)
 
 update_checkbox_checkmark = (role_checkbox) ->
   if role_checkbox.is ':checked'
@@ -868,14 +895,12 @@ update_persons_roles = () ->
           $(roles_user).html data
           $("#apply_roles_spinner").hide()
           $("#apply_roles_successful").show()
-          $("#apply_roles_successful").html("Roles have been applied.")
+          $("#apply_roles_successful").html(t('general.roles_applied'))
+          setTimeout (->
+            $("#apply_roles_successful").hide()
+          ), 5000
         else
           $("#apply_roles_spinner").hide()
           $("#apply_roles_successful").hide()
-      #complete: ->
-      #  if checked_elements.last().val() == person_id
-      #    $("#apply_roles_spinner").hide()
-      #    $("#apply_roles_successful").show()
-      #    $("#apply_roles_successful").html("Roles have been applied.")
 
   

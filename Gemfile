@@ -26,6 +26,7 @@ gem 'activeadmin', '~> 0.4.4' #, git: 'git://github.com/gregbell/active_admin.gi
 gem 'twilio-rb', git: 'git://github.com/stevegraham/twilio-rb.git'
 gem "default_value_for"
 gem 'turbo-sprockets-rails3'
+gem "strip_attributes"
 
 gem 'dalli'
 gem 'resque_mail_queue'
@@ -65,31 +66,26 @@ gem 'copycopter_client'
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
 group :development, :test do
-  gem 'resque_unit'
-  gem 'shoulda', :require => false
-  # gem 'ephemeral_response'
-  gem 'mocha'
-  gem 'mailcatcher'
-  gem 'factory_girl','~> 2.0.0.rc4'
-  gem 'simplecov', '>= 0.3.5', require: false
-  gem 'railroady'
   gem 'awesome_print'
-  # Pretty printed test output
-  # gem 'turn', :require => false
-  gem 'rails-footnotes', '>= 3.7'
-  # gem 'translate-rails3', :require => 'translate'
-  gem 'ffaker'
-  #gem 'ruby-debug19', :require => 'ruby-debug'
-  gem 'autotest-rails'
-
 end
 
 group :test do
   gem 'webmock'#, '= 1.8.3'
+  gem 'factory_girl','~> 2.0.0.rc4'
+  gem 'simplecov', '>= 0.3.5', require: false
+  gem 'autotest-rails'
+  gem 'resque_unit'
+  gem 'shoulda', :require => false
+  gem 'mocha'
+  gem 'ffaker'
 end
 
 group :development do
   gem 'rails-dev-tweaks'
+  gem 'rails-footnotes'
+  gem 'bullet'
+  gem 'mailcatcher'
+  gem 'railroady'
 end
 
 group :performance do
@@ -104,4 +100,14 @@ gem 'sass', '=3.1.14'
 group :assets do
   gem 'coffee-rails', "~> 3.2.1"
   gem 'uglifier', ">= 1.0.3"
+end
+
+group :capistrano do 
+  # Shared capistrano recipes
+  gem 'pd-cap-recipes', :git => 'git://github.com/PagerDuty/pd-cap-recipes.git'
+
+  # extra dependencies for some tasks
+  #gem 'git', '1.2.5'
+  #gem 'cap_gun'
+  #gem 'grit'
 end

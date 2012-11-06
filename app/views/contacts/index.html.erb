@@ -10,7 +10,10 @@
   <h1>
     <%= image_tag("c_allcontacts.png") %>
     <%= t('.all_responses') %>
-    <%= "- #{@header}" %>
+    <%= "#{'-' if @header.present?} #{@header}" %>
+    <div id='global_loader'>
+      <%= image_tag 'loader.gif'%>
+    </div>
   </h1>
 </div>
 
@@ -29,7 +32,7 @@
   <%= hidden_field_tag :assign_to %>
   <table class="listing" cellpadding="0" cellspacing="0">
     <tr id="table_header">
-      <th class="checkbox_cell"><%= check_box_tag 'check_all', true, false, 'data-target' => '#new_contact_assignment', class: 'check_all_contacts', 'data-status' => @attr %></th>
+      <th class="checkbox_cell"><%= check_box_tag 'check_all_contacts', true, false, 'data-target' => '#new_contact_assignment', class: 'check_all_contacts', 'data-status' => @attr %></th>
       <th><%= sort_link @q, :first_name, t('.first_name'), params %></th>
       <th><%= sort_link @q, :last_name, t('.last_name'), params %></th>
       <th><%= sort_link @q, :followup_status, t('general.status'), params %></th>
@@ -79,3 +82,4 @@
 <div id="send_message_guide" style="display:none">
   <%= render 'shared/send_message_guide' %>
 </div>
+

@@ -170,6 +170,7 @@ class CrsImport
       end
     else
       CrsImportMailer.failed(@org, email_address).deliver if email_address
+      raise
     end
     nil
   end

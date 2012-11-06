@@ -38,7 +38,7 @@ class Api::ContactsController < ApiController
     @keywords = get_keywords
     json_output = []
     @surveys = @keywords.collect(&:survey)
-    @people = @organization.all_contacts#.order('last_name, first_name')
+    @people = @organization.all_people#.order('last_name, first_name')
     @people = paginate_filter_sort_people(@people, @organization)    
     json_output = @people.collect {|person| {person: person.to_hash_basic(@organization)}}
     final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
@@ -46,7 +46,7 @@ class Api::ContactsController < ApiController
   end
 
   def index_2
-    @people = @organization.all_contacts
+    @people = @organization.all_people
     @people = limit_and_offset_object(@people)
     @people = @people.includes(:contact_assignments).includes(:organizational_roles)
 
