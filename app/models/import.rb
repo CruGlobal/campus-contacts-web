@@ -72,9 +72,13 @@ class Import < ActiveRecord::Base
     current_organization = Organization.find(organization_id)
     current_user = User.find(user_id)
     import_errors = []
+    names = []
+    new_person_ids = []
     Person.transaction do
       get_new_people.each do |new_person|
         person = create_contact_from_row(new_person, current_organization)
+        new_person_ids << person.id
+        names << person.name
         if person.errors.present?
           import_errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
         else
@@ -93,10 +97,10 @@ class Import < ActiveRecord::Base
         raise ActiveRecord::Rollback
       else
         # Send success email
-        ImportMailer.import_successful(current_user).deliver
+        table = create_table(new_person_ids)
+        ImportMailer.import_successful(current_user, table).deliver
       end
     end
-
   end
   
   def create_contact_from_row(row, current_organization)
@@ -143,6 +147,40 @@ class Import < ActiveRecord::Base
   end
 
   private
+  
+  def create_table(new_person_ids)
+    @answered_question_ids = header_mappings.values.reject{ |c| c.empty? }.collect(&:to_i)
+    #puts answered_question_ids.inspect
+    predefined_question_ids = Survey.find(APP_CONFIG['predefined_survey']).elements.collect(&:id)
+    #puts Survey.find(APP_CONFIG['predefined_survey']).elements.inspect
+    answered_survey_ids = SurveyElement.where(element_id: @answered_question_ids).pluck(:survey_id).uniq
+    #answer_sheet_ids = AnswerSheet.where(survey_id: answered_survey_ids)
+    
+    @table = []
+    title = []
+    @answered_question_ids.each do |a|
+      title << Element.find(a).label
+    end
+    
+    @table << title
+        
+    Person.find(new_person_ids).each do |p|
+      answers = []
+      answer_sheet_ids = p.answer_sheets.where(survey_id: answered_survey_ids).collect(&:id)
+      @answered_question_ids.each do |a|
+      
+        if predefined_question_ids.include? a
+          answers << p.send(Element.find(a).attribute_name)
+        else
+          a = Answer.where(question_id: a, answer_sheet_id: answer_sheet_ids).first.nil? ? "" : Answer.where(question_id: a, answer_sheet_id: answer_sheet_ids).first.value
+          
+          answers << a
+        end
+      end
+      @table << answers
+    end
+    @table
+  end
 
   def parse_headers
     return unless upload?

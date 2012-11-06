@@ -235,13 +235,19 @@ class Organization < ActiveRecord::Base
     add_role_to_person(person, Role::ADMIN_ID)
   end
 
-  def add_involved(person)
-    add_role_to_person(person, Role::INVOLVED_ID)
-  end
-
   def remove_contact(person)
     person_id = person.is_a?(Person) ? person.id : person
-    OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: Role::CONTACT_ID).first.try(:destroy)
+    OrganizationalRole.where(person_id: person_id, organization_id: id).each do |ors|
+      if(ors.role_id == Role::LEADER_ID)
+        ca = Person.find(ors.person_id).contact_assignments.where(organization_id: id).all
+        ca.collect(&:destroy)
+      end
+      ors.destroy
+    end
+  end
+    
+  def add_involved(person)
+    add_role_to_person(person, Role::INVOLVED_ID)
   end
 
   def remove_leader(person)
@@ -299,6 +305,18 @@ class Organization < ActiveRecord::Base
     person.user.remember_token_expires_at = 1.month.from_now
     person.user.save(validate: false)
     LeaderMailer.added(person, added_by, self, token).deliver
+  end
+  
+  def attempting_to_delete_or_archive_all_the_admins_in_the_org?(ids)
+    admin_ids = parent_organization_admins.collect(&:id)
+    i = admin_ids & ids.collect(&:to_i)
+    return i if (admin_ids - i).blank?
+    false
+  end
+
+  def attempting_to_delete_or_archive_current_user_self_as_admin?(ids, current_person)
+    return true unless ([current_person.id] & ids.collect(&:to_i)).blank?
+    false
   end
 
   def queue_import_from_conference(user)
