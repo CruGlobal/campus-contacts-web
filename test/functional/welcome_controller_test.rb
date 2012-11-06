@@ -45,6 +45,11 @@ class WelcomeControllerTest < ActionController::TestCase
     assert_template "layouts/splash"
   end
   
+  should "get correct template for tour" do
+    get :tour
+    assert_template "layouts/splash"
+  end
+  
   should "get correct template for privacy" do
     get :privacy
     assert_template "layouts/splash"
