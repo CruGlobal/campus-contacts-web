@@ -29,12 +29,12 @@ class ImportsControllerTest < ActionController::TestCase
       @user, @organization = admin_user_login_with_org
 
       @survey = Factory(:survey, organization: @organization, id: 2)
-      @firstName_element = Factory(:firstName_element)
-      @lastName_element = Factory(:lastName_element)
+      @first_name_element = Factory(:first_name_element)
+      @last_name_element = Factory(:last_name_element)
       @email_element = Factory(:email_element)
       @phone_element = Factory(:phone_element)
-      @firstName_question = Factory(:survey_element, survey: @survey, element: @firstName_element, position: 1, archived: true)
-      @lastName_question = Factory(:survey_element, survey: @survey, element: @lastName_element, position: 2, archived: true)
+      @first_name_question = Factory(:survey_element, survey: @survey, element: @first_name_element, position: 1, archived: true)
+      @last_name_question = Factory(:survey_element, survey: @survey, element: @last_name_element, position: 2, archived: true)
       @email_question = Factory(:survey_element, survey: @survey, element: @email_element, position: 3, archived: true)
       @phone_question = Factory(:survey_element, survey: @survey, element: @phone_element, position: 4, archived: true)
       
@@ -55,7 +55,7 @@ class ImportsControllerTest < ActionController::TestCase
         file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
         post :create, { :import => { :upload => file } }
         assert_response :redirect
-        post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @email_element.id} }, :id => Import.first.id}
+        post :update, { :import => { :header_mappings => {"0" => @first_name_element.id, "1" => @last_name_element.id, "2" => @email_element.id} }, :id => Import.first.id}
         assert_response :redirect
         post :import, { :use_labels => "0", :id => Import.first.id}
         Import.last.do_import([])
@@ -102,10 +102,10 @@ class ImportsControllerTest < ActionController::TestCase
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
       post :create, { :import => { :upload => file } }
       assert_response :redirect
-      post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @email_element.id} }, :id => Import.first.id}
+      post :update, { :import => { :header_mappings => {"0" => @first_name_element.id, "1" => @last_name_element.id, "2" => @email_element.id} }, :id => Import.first.id}
       Import.last.do_import([])
-      assert_equal Import.first.header_mappings['0'].to_i, @firstName_element.id
-      assert_equal Import.first.header_mappings['1'].to_i, @lastName_element.id
+      assert_equal Import.first.header_mappings['0'].to_i, @first_name_element.id
+      assert_equal Import.first.header_mappings['1'].to_i, @last_name_element.id
       assert_equal Import.first.header_mappings['2'].to_i, @email_element.id
       assert_response :redirect
     end
@@ -118,29 +118,9 @@ class ImportsControllerTest < ActionController::TestCase
       post :create, { :import => { :upload => file } }
       assert_response :redirect
       
-      post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @email_element.id} }, :id => Import.first.id}
-      assert_equal Import.first.header_mappings['0'].to_i, @firstName_element.id
-      assert_equal Import.first.header_mappings['1'].to_i, @lastName_element.id
-      assert_equal Import.first.header_mappings['2'].to_i, @email_element.id
-      person_count  = Person.count
-      
-      assert_response :redirect
-      # "use_labels"=>"1", "labels"=>["0", "5", "145"], "new_label_field"=>"", "commit"=>"Import Now", "id"=>"13"
-      post :import, { :use_labels => "0", :id => Import.first.id}
-      assert_equal Person.count, person_count + 1
-    end
-    
-    should "upload & import contacts if use_labels is false" do
-      stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
-        to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv")), status: 200)
-      contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv"))
-      file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
-      post :create, { :import => { :upload => file } }
-      assert_response :redirect
-      
-      post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @email_element.id} }, :id => Import.first.id}
-      assert_equal Import.first.header_mappings['0'].to_i, @firstName_element.id
-      assert_equal Import.first.header_mappings['1'].to_i, @lastName_element.id
+      post :update, { :import => { :header_mappings => {"0" => @first_name_element.id, "1" => @last_name_element.id, "2" => @email_element.id} }, :id => Import.first.id}
+      assert_equal Import.first.header_mappings['0'].to_i, @first_name_element.id
+      assert_equal Import.first.header_mappings['1'].to_i, @last_name_element.id
       assert_equal Import.first.header_mappings['2'].to_i, @email_element.id
       person_count  = Person.count
       
@@ -160,9 +140,9 @@ class ImportsControllerTest < ActionController::TestCase
       post :create, { :import => { :upload => file } }
       assert_response :redirect
       
-      post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @email_element.id} }, :id => Import.first.id}
-      assert_equal Import.first.header_mappings['0'].to_i, @firstName_element.id
-      assert_equal Import.first.header_mappings['1'].to_i, @lastName_element.id
+      post :update, { :import => { :header_mappings => {"0" => @first_name_element.id, "1" => @last_name_element.id, "2" => @email_element.id} }, :id => Import.first.id}
+      assert_equal Import.first.header_mappings['0'].to_i, @first_name_element.id
+      assert_equal Import.first.header_mappings['1'].to_i, @last_name_element.id
       assert_equal Import.first.header_mappings['2'].to_i, @email_element.id
       person_count  = Person.count
       assert_response :redirect
@@ -182,9 +162,9 @@ class ImportsControllerTest < ActionController::TestCase
       post :create, { :import => { :upload => file } }
       assert_response :redirect
       
-      post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @email_element.id} }, :id => Import.first.id}
-      assert_equal Import.first.header_mappings['0'].to_i, @firstName_element.id
-      assert_equal Import.first.header_mappings['1'].to_i, @lastName_element.id
+      post :update, { :import => { :header_mappings => {"0" => @first_name_element.id, "1" => @last_name_element.id, "2" => @email_element.id} }, :id => Import.first.id}
+      assert_equal Import.first.header_mappings['0'].to_i, @first_name_element.id
+      assert_equal Import.first.header_mappings['1'].to_i, @last_name_element.id
       assert_equal Import.first.header_mappings['2'].to_i, @email_element.id
       person_count  = Person.count
       assert_response :redirect
@@ -198,7 +178,7 @@ class ImportsControllerTest < ActionController::TestCase
       assert_response :redirect
     end
     
-    should "succesfully create an import and unsuccesfully upload contact because firstName heading is not specified by the user" do 
+    should "succesfully create an import and unsuccesfully upload contact because first_name heading is not specified by the user" do 
       stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
         to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv")), status: 200)
       person_count  = Person.count
@@ -207,9 +187,9 @@ class ImportsControllerTest < ActionController::TestCase
       post :create, { :import => { :upload => file } }
       assert_response :redirect    
       
-      post :update, { :import => { :header_mappings => {"0" => @lastName_element.id, "1" => @email_element.id} }, :id => Import.first.id}
+      post :update, { :import => { :header_mappings => {"0" => @last_name_element.id, "1" => @email_element.id} }, :id => Import.first.id}
       Import.last.do_import([])
-      assert_equal Person.count, person_count, "contact still uploaded despite there is no firstName header, which is required, specified by the user"
+      assert_equal Person.count, person_count, "contact still uploaded despite there is no first_name header, which is required, specified by the user"
     end
     
     should "successfully create an import but unsuccesfully upload a contact if one of the emails is invalid" do
@@ -221,7 +201,7 @@ class ImportsControllerTest < ActionController::TestCase
       post :create, { :import => { :upload => file } }
       assert_response :redirect
       
-      post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @phone_element.id, "3" => @email_element.id} }, :id => Import.first.id}
+      post :update, { :import => { :header_mappings => {"0" => @first_name_element.id, "1" => @last_name_element.id, "2" => @phone_element.id, "3" => @email_element.id} }, :id => Import.first.id}
       Import.first.do_import([])
       assert_equal Person.count, person_count
     end
@@ -235,7 +215,7 @@ class ImportsControllerTest < ActionController::TestCase
       post :create, { :import => { :upload => file } }
       assert_response :redirect
       
-      post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @phone_element.id, "3" => @email_element.id} }, :id => Import.first.id}
+      post :update, { :import => { :header_mappings => {"0" => @first_name_element.id, "1" => @last_name_element.id, "2" => @phone_element.id, "3" => @email_element.id} }, :id => Import.first.id}
       Import.last.do_import([])
       assert_equal Person.count, person_count
     end
@@ -249,7 +229,7 @@ class ImportsControllerTest < ActionController::TestCase
       post :create, { :import => { :upload => file } }
       assert_response :redirect
       
-      post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @firstName_element.id, "2" => @phone_element.id, "3" => @email_element.id} }, :id => Import.first.id}
+      post :update, { :import => { :header_mappings => {"0" => @first_name_element.id, "1" => @first_name_element.id, "2" => @phone_element.id, "3" => @email_element.id} }, :id => Import.first.id}
       Import.last.do_import([])
       assert_equal Person.count, person_count
     end
@@ -270,6 +250,7 @@ class ImportsControllerTest < ActionController::TestCase
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
       post :create, { :import => { :upload => file } }
     end
+=end
     
     should "edit import file" do
       stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
@@ -283,7 +264,7 @@ class ImportsControllerTest < ActionController::TestCase
       post :edit, { :id => Import.last.id }
       assert_template "imports/edit"
     end
-=end
+
 
 =begin
     should "successfully destroy an import" do
@@ -309,26 +290,25 @@ class ImportsControllerTest < ActionController::TestCase
         assert_response :redirect
         
         assert_difference "AnswerSheet.count", 1 do
-          post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "3" => @email_element.id, "4" => @question.id} }, :id => Import.first.id}
+          post :update, { :import => { :header_mappings => {"0" => @first_name_element.id, "1" => @last_name_element.id, "3" => @email_element.id, "4" => @question.id} }, :id => Import.first.id}
           post :import, { :use_labels => "0", :id => Import.first.id}
           Import.last.do_import([])
           assert_equal Person.last.answer_sheets.first.answers.first.value, "I just met you"
         end
     end
     
-    should "successfully create an import and upload contact and create a table" do
+    should "successfully create an import and redirect to labels" do
       stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
-        to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_9.csv")), status: 200)
-      assert_difference "Person.count", 2 do
-        contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_9.csv"))
+        to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_7.csv")), status: 200)
+      
+        contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_7.csv"))
         file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
         post :create, { :import => { :upload => file } }
         assert_response :redirect
-        post :update, { :import => { :header_mappings => {"0" => @firstName_element.id, "1" => @lastName_element.id, "2" => @phone_element.id, "3" => @email_element.id, "4" => @question.id} }, :id => Import.first.id}
-        assert_response :redirect
-        post :import, { :use_labels => "0", :id => Import.first.id}
-        Import.last.do_import([])
-      end
+        
+        post :update, { :import => { :header_mappings => {"0" => @first_name_element.id, "1" => @last_name_element.id, "3" => @email_element.id, "4" => @question.id} }, :id => Import.first.id}
+        assert_redirected_to "/imports/#{Import.last.id}/labels"
+        get :labels, {:id => Import.last.id}
     end
   end
 end

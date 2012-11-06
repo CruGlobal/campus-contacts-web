@@ -1,0 +1,27 @@
+<div id="add_org_from_conference_wrapper">
+  <%= t('.crs_import_instructions') %>
+  <%= form_for organization, url: create_from_crs_organizations_path, method: :post, remote: true, validate: true do |f| %>
+    <% if flash[:error] %>
+      <div class="flash error" style="color:red;margin:2px"><%= raw flash[:error] %></div>
+    <% end %>
+    <div class="customform">
+      <div class="sfield">
+        <div class="ls">
+          <%= label_tag :url, t('.url', link: link_to(t('.example'), image_path('crs_url.png'), target: '_blank')).html_safe %>
+        </div>
+        <div class="rs">
+          <%= text_field_tag :url, params[:url] %>
+        </div>
+      </div>
+      <div class="sfield">
+        <div class="ls">
+          <%= label_tag :admin_password, t('.admin_password') %>
+        </div>
+        <div class="rs">
+          <%= password_field_tag :admin_password %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+

@@ -39,15 +39,6 @@
   <div class="lower_box_title">
     Here's what in your hub!
   </div>
-  <div class="lower_box_item">
-    <div class="lower_box_count">
-      <%= current_person.primary_organization.present? ?
-        current_person.primary_organization.inprogress_contacts.count : 0 %>
-    </div>
-    <div class="lower_box_link">
-      <%= link_to "Contacts in Progress", "/contacts?assigned_to=progress" %>
-    </div>
-  </div>
   <% if can? :manage, current_organization %>
     <div class="lower_box_item">
       <div class="lower_box_count">

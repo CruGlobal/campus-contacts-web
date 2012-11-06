@@ -9,7 +9,7 @@ class GroupsController < ApplicationController
     if params[:label].present?
       begin
         @label = current_organization.group_labels.find(params[:label])
-        @groups = @groups.where('mh_group_labels.id' => params[:label]).joins(:group_labels)
+        @groups = @groups.where('group_labels.id' => params[:label]).joins(:group_labels)
       rescue ActiveRecord::RecordNotFound
         flash[:error] = "Label not found"
       end
@@ -23,9 +23,9 @@ class GroupsController < ApplicationController
     @group = Present(@group)
 
     if params[:q] && params[:q][:s]
-      @gm = @group.group_memberships.involved.includes(:person).people(params[:q][:s])
+      @people = current_organization.non_deleted_people.get_from_group(@group.id).includes(:group_memberships).uniq.order(params[:q][:s])
     else
-      @gm = @group.group_memberships.involved.order('role').includes(:person)
+      @people = current_organization.non_deleted_people.get_from_group(@group.id).includes(:group_memberships).uniq
     end
 
     authorize! :read, @group

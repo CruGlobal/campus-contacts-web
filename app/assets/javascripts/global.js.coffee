@@ -1,8 +1,4 @@
 $ ->
-
-  $('.id_checkbox, #check_all, .check_all_contacts, .check_all_mine').live 'click', ->
-    toggle_contacts_control()
-    
   $("#person_updated_from").datepicker dateFormat: "dd-mm-yy"
   $("#person_updated_to").datepicker dateFormat: "dd-mm-yy"
   $('#archive_contacts_before').datepicker dateFormat: "dd-mm-yy"
@@ -12,12 +8,23 @@ $ ->
 
   $("select, input[type=text], input[type=password], input[type=email]").live "keypress", (e) ->
     false if e.which is 13
-
-  toggle_contacts_control()
+    
+  $('.multiselect_text').chosen()
+  $('.multiselect_email').chosen()
   
-  
-toggle_contacts_control = ->
-  if $(".id_checkbox").is(":checked")
-    $(".control_toggle").show()
-  else
-    $(".control_toggle").hide()
+  $('#bulk_send_msg_dialog').dialog
+    resizable: false,
+    height:444,
+    width:730,
+    modal: true,
+    autoOpen: false,
+    open: (event, ui) ->
+      $("body").css("overflow", "hidden")
+    close: (event, ui) ->
+      $("body").css("overflow", "auto")
+      $('#bulk_sms_message').val($('#bulk_send_body').val())            
+    buttons: 
+      Send: ->
+        $(this).submitBulkSendTextDialog()      
+      Cancel: ->
+        $(this).dialog('close')

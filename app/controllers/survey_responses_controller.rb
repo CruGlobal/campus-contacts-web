@@ -79,7 +79,7 @@ class SurveyResponsesController < ApplicationController
     Person.transaction do
       @person = current_person # first try for a logged in person
       if params[:person] && params[:person][:email].present?
-        @person_from_email = EmailAddress.find_by_email(params[:person][:email]).try(:person) || Address.find_by_email(params[:person][:email]).try(:person)
+        @person_from_email = EmailAddress.where(email: params[:person][:email]).first.try(:person) 
         if @person && @person_from_email
           if @person != @person_from_email
             @person = @person_from_email.smart_merge(@person)

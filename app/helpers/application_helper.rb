@@ -12,15 +12,6 @@ module ApplicationHelper
     "<span class=\"tiplight\" title=\"#{h(tip)}\" style=\"float: none;\"></span>".html_safe
   end
   
-  def print_tree(tree)
-    return '' unless tree.present?
-    ret = '<ul>'
-    tree.sort.each do |sub|
-      ret += "<li>#{link_to(sub.name, person_organization_memberships_path(current_person, organization_id: sub.id), method: :post)} #{print_tree(sub.children)}</li>"
-    end
-    (ret + '</ul>').html_safe
-  end
-  
   def spinner(extra = nil)
     e = extra ? "spinner_#{extra}" : 'spinner'
     image_tag('spinner.gif', id: e, style: 'display:none', class: 'spinner')
@@ -54,6 +45,14 @@ module ApplicationHelper
       ret += render(partial: 'application/new_org', locals: {org: org, children: children})
     end
     ret.html_safe
+  end
+
+  def give_link(text)
+    if text.include?('https://give.cru.org/') && text.include?('Desig')
+      text.sub('Desig', "id_type=missionhub&id_value=#{current_person.id}&Desig")
+    else
+      text
+    end.html_safe
   end
 
 

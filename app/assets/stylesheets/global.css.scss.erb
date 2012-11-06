@@ -1,3 +1,7 @@
+#menutop {
+  border-bottom: 1px solid #0379AE;
+}
+
 .clearfix:after {
 	content: ".";
 	display: block;
@@ -272,9 +276,9 @@ ul.leftmenu {
     padding-right: 15px;
   }
   li.selected {
-    background: $light-gray;
+    background: $light-blue;
     > a {
-      background: $light-gray;
+      background: $light-blue;
     }
   }
   a.delete_leader,
@@ -443,6 +447,9 @@ div.wizard {
     background: #c7dff0;
     padding: 4px 2px 3px 2px;
 		vertical-align: top;
+		&.hidden_questions {
+		  text-align: center;
+		}
   }
   .check {
     width: 30px;
@@ -458,7 +465,7 @@ div.wizard {
     background: #f5ffc4;
   }
   td.controls {
-    width: 60px;
+    width: 90px;
 		white-space:nowrap;
   }
   td.name {
@@ -741,13 +748,16 @@ ul.pillmenu {
 ul.pillmenu {
   height: 24px;
   display: inline-block;
-  border: 1px solid #808080;
+  border: 1px solid #808284;
   margin-right: 8px;
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
-  background: url('<%= asset_path('pillbg.png') %>') repeat-x;
+  background-color: #ffffff;
   overflow: hidden;
+  &:hover {
+    border: 1px solid #0379AE;
+  }
   li {
     border-right: 1px solid #666;
     border-left: 1px solid #fff;
@@ -765,11 +775,8 @@ ul.pillmenu {
       display: block;
     }
     a:hover, a.active {
-      background: url('<%= asset_path('pillbg_over.png') %>') repeat-x;
+    	background-color: #C7DFF0;
       text-decoration: none;
-    }
-    a.active {
-      box-shadow: inset 0 2px 4px #999;
     }
   }
   li:first-child {
@@ -805,12 +812,12 @@ ul.pillmenu {
 .pillbutton,
 .pillbutton:visited {
   display: inline-block;
-  border: 1px solid #808080;
+  border: 1px solid #0379AE;
   margin-right: 8px;
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
-  background: url('<%= asset_path('pillbg.png') %>') repeat-x;
+	background-color: #C7DFF0;
   overflow: hidden;
   padding: 0 7px;
   line-height: 20px;
@@ -821,8 +828,9 @@ ul.pillmenu {
 }
 
 .pillbutton:hover {
-	background: url('<%= asset_path('pillbg_over.png') %>') repeat-x;
+	background-color: #C7DFF0;
   text-decoration: none;
+  border: 1px solid #0379AE;
 }
 
 #menu_search {
@@ -848,6 +856,11 @@ ul.pillmenu {
   ul#hidden_questions {
     margin: 0;
     padding: 0;
+    list-style: none;
+  }
+  &#hidden_questions_div {
+    margin: 0;
+    padding: 10px;
     list-style: none;
   }
   li {
@@ -1003,28 +1016,17 @@ span.title {
 
 .splash {
   width: 978px !important;
-  #logoline {
-    margin: 0;
-  }
-  #logoline #logo {
-    background: url("<%= asset_path("logo_222x55.png") %>") no-repeat;
-    width: 222px;
-    height: 55px;
-    display: block;
-  }
   #squarewrap {
   	width: 978px;
   	height: 489px;
   	background: url("<%= asset_path("splash/people978x489.jpg") %>") no-repeat;
   }
   
+  #tutorialwrap {
+  	width: 978px;
+  }
+  
   #roundwrap {
-    border-radius: 15px;
-    -moz-border-radius: 15px;
-    -webkit-border-radius: 15px;
-    box-shadow: 0 0 40px #bbb inset;
-		-webkit-box-shadow: 0 0 40px #bbb inset;
-    -moz-box-shadow: 0 0 40px #bbb inset;
 		padding: 25px;
 		&.video_space .inner_space {
 		  letter-spacing: 0px;
@@ -1032,12 +1034,6 @@ span.title {
 		  min-height: 420px;
 		  width: 95%;
 		  margin: 20px auto 0;
-      border-radius: 15px;
-      -moz-border-radius: 15px;
-      -webkit-border-radius: 15px;
-      box-shadow: 0 0 20px #222 inset;
-  		-webkit-box-shadow: 0 0 20px #222 inset;
-      -moz-box-shadow: 0 0 20px #222 inset;
       padding: 24px;
       .content {
         width: 564px;
@@ -1165,7 +1161,7 @@ span.title {
     font-weight: bold;
     height: 64px;
     text-align: center;
-    padding-top: 20px;
+    padding-top: 0.7em;
     text-transform: uppercase;
     width: 306px;
     overflow: hidden;
@@ -2050,18 +2046,12 @@ div.pagination {
 }
 
 body#welcome_controller {
-/*  background: url("<%= asset_path("bluebg.jpg") %>") repeat-x 0 0 #0078ae; */
   .splash {
     background: #fff;
   }
   
-  #global #logo {
-    display: none;
-  }
-  
   #logo {
-    position: absolute;
-    margin-top: -67px;
+    margin-top: 0px;
     margin-left: 0px;
   }
   .tutorials, .tour, .index, .privacy, .terms {
@@ -2713,5 +2703,30 @@ ul.under_tree {
   }
 }
 
+#global_loader {
+  display: inline-block;
+  margin: -3px 0px -3px 5px;
+}
 
+ul.divider {
+  margin: 0px 4px 2px -3px;
+  border: none;
+  display: inline-block;
+  width: 3px;
+  padding: 0;
+  height: 22px;
+  background: url('MH_DotDivider.png') no-repeat;
+}
 
+#advanced_search {
+  padding: 7px 0px;  
+}
+
+#global_loader {
+  display: inline-block;
+  margin: -3px 0px -3px 5px;
+}
+
+#ui-datepicker-div {
+  display: none;
+}

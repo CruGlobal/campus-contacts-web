@@ -63,22 +63,22 @@ class SmsControllerTest < ActionController::TestCase
         Factory(:person, email: "person@email.com") #existing email
         @sms_session.update_attribute(:interactive, true)
         post :mo, @post_params.merge!({message: 'Jesus', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
-        assert_equal(assigns(:person).firstName, 'Jesus')
+        assert_equal(assigns(:person).first_name, 'Jesus')
         assert_equal(assigns(:msg), 'What is your last name?')
       end
 
       should "send the first survey question after first and last name are present" do
         @sms_session.update_attribute(:interactive, true)
-        @person.update_attribute(:firstName, 'Jesus')
+        @person.update_attribute(:first_name, 'Jesus')
         post :mo, @post_params.merge!({message: 'Christ', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
-        assert_equal(assigns(:person).lastName, 'Christ')
+        assert_equal(assigns(:person).last_name, 'Christ')
         assert_equal(assigns(:sent_sms).message, "1/2 #{@keyword.questions.first.label_with_choices}")
       end
 
       should "send thank you message after last question is answered" do
         Factory(:person, email: "person@email.com") #existing email
         @sms_session.update_attribute(:interactive, true)
-        @person.update_attributes(firstName: 'Jesus', lastName: 'Christ')
+        @person.update_attributes(first_name: 'Jesus', last_name: 'Christ')
         # remove extra questions
         @survey.survey_elements.delete(@q2, @q3)
 
@@ -88,14 +88,14 @@ class SmsControllerTest < ActionController::TestCase
 
       should "convert a letter to a choice option" do
         @sms_session.update_attribute(:interactive, true)
-        @person.update_attributes(firstName: 'Jesus', lastName: 'Christ')
+        @person.update_attributes(first_name: 'Jesus', last_name: 'Christ')
         post :mo, @post_params.merge!({message: 'a', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
         assert_equal(assigns(:answer_sheet).answers.first.value, 'Prayer Group')
       end
 
       should "save an option typed in" do
         @sms_session.update_attribute(:interactive, true)
-        @person.update_attributes(firstName: 'Jesus', lastName: 'Christ')
+        @person.update_attributes(first_name: 'Jesus', last_name: 'Christ')
         post :mo, @post_params.merge!({message: 'Jesus', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
         assert_equal(assigns(:answer_sheet).answers.first.value, 'Jesus')
       end
@@ -103,7 +103,7 @@ class SmsControllerTest < ActionController::TestCase
 =begin
       should "send again a survey regarding person's email attribute if an existing email was sent" do
         @sms_session.update_attribute(:interactive, true)
-        @person.update_attributes(firstName: 'Jesus', lastName: 'Christ', id: @person.id.to_i)
+        @person.update_attributes(first_name: 'Jesus', last_name: 'Christ', id: @person.id.to_i)
         #r = ReceivedSms.create(person_id: @person.id, sms_keyword_id: @keyword.id, sms_session_id: @sms_session.id)
         post :mo, @post_params.merge!({message: @person2.email, timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')}) # person answered an existing email
         post :mo, @post_params.merge!({message: @person2.email, timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')}) # person answered an existing email
