@@ -1,4 +1,7 @@
 class PeopleMailer < ActionMailer::Base
+  include ActionView::Helpers::TagHelper
+  include ActionView::Helpers::TextHelper
+
   default from: "support@missionhub.com"
 
   # Subject can be set in your I18n file at config/locales/en.yml
@@ -19,8 +22,8 @@ class PeopleMailer < ActionMailer::Base
   end
   
   def bulk_message(to, from, subject, content)
-    @content = content
-    mail to: to, from: from, subject: subject
+    @content = simple_format(content)
+    mail to: to, from: from, subject: subject, content_type: "text/html"
   end
   
   def self.queue
