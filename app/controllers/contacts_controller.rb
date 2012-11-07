@@ -319,9 +319,9 @@ class ContactsController < ApplicationController
         @people = @people.includes(:primary_phone_number, :primary_email_address, :contact_role).
                     order(params[:q] && params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass').gsub('followup_status','organizational_roles.followup_status') : ['last_name, first_name']).group('people.id')
       end
-      @all_people = @people
+      @all_people = @people.group('people.id')
       @people_for_labels = Person.people_for_labels(current_organization)
-      @people = @people.page(params[:page])
+      @people = @all_people.page(params[:page])
     
     end
   
