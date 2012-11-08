@@ -1,3 +1,7 @@
+.stop-scrolling {
+  height: 100%;
+  overflow: hidden;
+}
 
 #label_menu {
   .greyborder_top {
@@ -208,4 +212,38 @@ ul.ui-autocomplete li:last-child img, ul.ui-autocomplete li:last-child span {
       padding: 3px 5px 2px;
     }
   }
+}
+
+
+#labels_dialog {
+  .title {
+    font-size: 16px;
+    padding: 10px 0px;
+  }
+  .labels_list {
+    border: 1px solid #CCC;
+    height: 260px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    margin: 7px;
+    .label_item {
+      border-bottom: 1px solid #CCC;
+      padding: 4px;
+      background: #FCFCFC;
+    }
+  }
+  .actions {
+    text-align: center;
+  }
+}
+
+.person_headerlink {
+  background: white;
+  font-weight: normal;
+  border: 1px solid silver;
+  border-radius: 3px 3px 3px 3px;
+  -moz-border-radius: 3px 3px 3px 3px;
+  -webkit-border-radius: 3px 3px 3px 3px;
+  display: inline-block;
+  padding: 4px 8px;
 }

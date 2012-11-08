@@ -24,6 +24,7 @@ class ContactAssignmentsController < ApplicationController
             ca.update_attribute(:assigned_to_id, @assign_to.id) if ca
           end
         end if params[:ids].present?
+        @reload_sidebar = true
       end
     else
       

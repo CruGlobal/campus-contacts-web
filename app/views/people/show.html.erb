@@ -14,11 +14,11 @@
     </h1>
   </div>
 
-  <div class="titlebar" style="float:left;margin-bottom:0;" id="person_title" data-id="<%= @person.id %>">
+  <div class="titlebar" style="float:left;margin-bottom:0;" id="person_header" data-id="<%= @person.id %>">
     <div id="person_info">
       <div class="title">
         <% if @person.assigned_tos.any? %>
-          <%= t('.assigned_to', assigned_to: "#{@assigned_tos}") %>
+          <%== t('.assigned_to', assigned_to: "<span class='assigned_to'>#{@assigned_tos}</span>") %>
         <% end %>
       </div>
       <br/>
@@ -78,8 +78,8 @@
         <span class="statusline">
           <%= t('.status') %>: 
           <%= f.select :status, OrganizationalRole::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]} %>
-          <%= link_to("Assign", "", class: 'assign headerlink', 'data-id' => @person.id) if can?(:manage, @person) %>
-          <%= link_to(t('.label_button'), "", class: 'headerlink', id: 'add_label_button') if can?(:manage, @person) %>
+          <%= link_to("Assign", "", class: 'assign person_headerlink', 'data-id' => @person.id) if can?(:manage, @person) %>
+          <%= link_to(t('.label_button'), "", class: 'person_headerlink', id: 'add_label_button') if can?(:manage, @person) %>
         </span>
         <div class="commentbox">
           <div class="textarea">
@@ -132,27 +132,21 @@
 
 <%= render 'shared/bulk_send_form' %>
 <div id="labels_dialog">
-  <b>Assign Labels</b>
-  <p style="margin: 0 0 5px 0;"><%= t('.type_to_find_label') %></p>
-  <%= text_field_tag :label_name, '', class: 'label_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>
-  <div class="labels_list">
-    <ul>
+  <div class='title'>Labels for <%= @person %></div>
+  <%= form_tag update_all_organizational_roles_path(id: @person.id), remote: true do %>
+    <div class="labels_list">
       <% @roles_for_assign.each do |role| %>
-        <li class="label" data-role="<%= role.id %>">
-          <span class="name">
-            <%= link_to role.to_s, '#' %>
-          </span>
-        </li>
+        <% if roles.include?(role) %>
+          <%= render partial: 'shared/label', locals: {role_id: role.id, role_name: role.name, checked: true}%>
+        <% else %>
+          <%= render partial: 'shared/label', locals: {role_id: role.id, role_name: role.name}%>
+        <% end %>
       <% end %>
-    </ul>
-  </div>
-  <p>
-    <ul>
-      <% @person.assigned_organizational_roles(current_organization.id).each do |role| %>
-        <li><%= role.name %></li>
-      <% end %>
-    </ul>
-  </p>
+    </div>
+    <div class='actions'>
+      <%= submit_tag 'Apply' %>
+    </div>
+  <% end %>
 </div>
 
 

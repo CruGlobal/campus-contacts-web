@@ -275,7 +275,7 @@ $ ->
       if show_success
         $.n('Successfully assigned label.')
     else
-      person_id = $('.assign.headerlink').attr('data-id')
+      person_id = $('.assign.person_headerlink').attr('data-id')
       $.ajax
           type: 'POST',
           url: '/people/update_roles',
@@ -383,8 +383,14 @@ $ ->
         height:650,
         width:600,
         modal: true,
+        open: (event, ui) ->
+          $("body").css({ overflow: 'hidden' })
+          $('.ui-widget-overlay').width('100%');
+        close: (event, ui) ->
+          $("body").css({ overflow: 'inherit' })
         buttons: 
           Cancel: ->
+            $(this).dialog('close')
             $(this).dialog('destroy')
     else
       $.a(t('contacts.index.none_checked'))
