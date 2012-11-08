@@ -1,4 +1,3 @@
-$('#labels_dialog').dialog('close')
 $('#person_info .assigned_labels').html('')
 <% @new_label_set.each do |label| %>
   $('#person_info .assigned_labels').append("<span class='assigned_label'><%= label %></span>&nbsp;")

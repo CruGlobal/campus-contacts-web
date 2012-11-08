@@ -188,6 +188,7 @@ $ ->
     leader = $('.leftmenu .leader[data-id=' + $('#assign_to').val() + ']')
     $.fn.assignTo(leader)
     $.fn.load_leader_name($('#person_title').attr('data-id'))
+    $('#assign_search').dialog('close')
     $('#assign_search').dialog('destroy')
     
   $('#assign_search .leader a').live 'click', (e)->
@@ -200,6 +201,7 @@ $ ->
       $.rails.handleRemote($('#new_contact_assignment'))
       unless $('#assign_to').val() == $('#my_id').val()
         $.fn.load_leader_name($('#person_title').attr('data-id'))
+    $('#assign_search').dialog('close')
     $('#assign_search').dialog('destroy')
   false
 
@@ -217,6 +219,7 @@ $ ->
       $('.id_checkbox:checked').each ->
         $(this).closest('tr').remove()
     form.attr('action', old_action)
+    $('#assign_search').dialog('close')
     $('#assign_search').dialog('destroy')
     if $('#contacts_controller.show')[0]
       setTimeout "document.location = '/contacts'", 1000
@@ -237,6 +240,7 @@ $ ->
     .appendTo('body')
     .click()
     .remove()
+    $('#assign_search').dialog('close')
     $('#assign_search').dialog('destroy')
     $('#global_loader').show()
     $('.id_checkbox:checked').prop('checked',false)
@@ -257,6 +261,7 @@ $ ->
         $('#main').load('/contacts .index.carea')
         $('#left').load('/contacts .block')
         
+      $('#assign_search').dialog('close')
       $('#assign_search').dialog('destroy')
       if show_success
         $.n('Successfully assigned label.')
@@ -271,6 +276,7 @@ $ ->
         $('#main').load('/contacts/mine .mine.carea')
         $('#left').load('/contacts/mine .block')
         
+      $('#assign_search').dialog('close')
       $('#assign_search').dialog('destroy')
       if show_success
         $.n('Successfully assigned label.')
@@ -281,6 +287,7 @@ $ ->
           url: '/people/update_roles',
           data: 'role_ids='+role+'&person_id='+person_id+'&include_old_roles=yes'
           error: show_success = false
+      $('#assign_search').dialog('close')
       $('#assign_search').dialog('destroy')
       if show_success
         $.n('Successfully assigned label.')
