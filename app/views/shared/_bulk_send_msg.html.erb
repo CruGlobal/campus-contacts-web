@@ -8,6 +8,10 @@
       <%= hidden_field_tag 'followup_comment[organization_id]', current_organization.id %>
       <%= hidden_field_tag 'followup_comment[commenter_id]', current_user.person.id %>
     </div>
+    <div class="field_in subject" id="subject_div">
+      <label><%= t('general.subject') %></label> 
+      <div class="in"><%= text_field_tag :subject %></div>
+    </div>
     <div class="field">
       <label><%= t('general.message') %></label>
       <%= text_area_tag :body, '', id: 'bulk_send_body', style: 'width: 680px; height: 60px;' %>
