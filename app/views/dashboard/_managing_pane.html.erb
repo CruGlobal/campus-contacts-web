@@ -7,7 +7,40 @@
 	<%= image_tag("dash_managing.png") %>
 </div>
 <div class="dash_buttons">
-	<%= link_to(t('dashboard.button_group'), "/groups", :class => "button") %>
-	<%= link_to(t('dashboard.button_label'), "/people", :class => "button") %>
-	<%= link_to(t('dashboard.button_assign'), "/people", :class => "button") %>
+	<%= link_to("/contacts", :class => "button") do %>
+		<div>
+			<%= image_tag("dash_button_icon_view.png") %>
+			<div>
+				<p>
+					<span class="primary"><%= t('dashboard.button_view') %></span>
+					<br/>
+					<span class="secondary"><%= t('dashboard.button_view_sub') %></span>
+				</p>
+			</div>
+		</div>
+	<% end %>
+	<%= link_to("/contacts", :class => "button") do %>
+		<div>
+			<%= image_tag("dash_button_icon_label.png") %>
+			<div>
+				<p>
+					<span class="primary"><%= t('dashboard.button_label') %></span>
+					<br/>
+					<span class="secondary">(<%= t('dashboard.button_label_sub') %>)</span>
+				</p>
+			</div>
+		</div>
+	<% end %>
+	<%= link_to("/contacts", :class => "button") do %>
+		<div>
+			<%= image_tag("dash_button_icon_assign.png") %>
+			<div>
+				<p>
+					<span class="primary"><%= t('dashboard.button_assign') %></span>
+					<br/>
+					<span class="secondary"><%= t('dashboard.button_assign_sub') %></span>
+				</p>
+			</div>
+		</div>
+	<% end %>
 </div>

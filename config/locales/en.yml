@@ -362,12 +362,19 @@ en:
     panel_managing: 'Managing Contacts'
     panel_messaging: 'Messaging Contacts'
     button_add: 'ADD'
+    button_add_sub: 'A CONTACT'
     button_import: 'IMPORT'
-    button_group: 'GROUP'
+    button_import_sub: 'CONTACTS'
+    button_view: 'VIEW'
+    button_view_sub: 'ALL CONTACTS'
     button_label: 'LABEL'
+    button_label_sub: 'CREATE LISTS'
     button_assign: 'ASSIGN'
+    button_assign_sub: 'FOR FOLLOWUP'
     button_text: 'TEXT'
+    button_text_sub: 'SEND'
     button_email: 'EMAIL'
+    button_email_sub: 'SEND'
   surveys:
     index:
       title: "Surveys for %{org}"

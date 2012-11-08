@@ -44,8 +44,14 @@ $(document).ready(function() {
 	// When select box is clicked options are set to show at top position
 	$('.selectTitleBg').live('click', function(e) {
 		e.preventDefault();
-		$('.selectQuestions').hide();
-		$(this).siblings('.selectQuestions').toggle().scrollTop(0);
+		var selectBox = $(this).siblings('.selectQuestions');
+		if (selectBox.is(":visible")) {
+			$('.selectQuestions').hide();	
+		}
+		else {
+			$('.selectQuestions').hide();
+			$(this).siblings('.selectQuestions').toggle().scrollTop(0);
+		}		
 		var checkAction = $(this).find('.selectTitle').attr('id').split('_')[3];
  		if (checkAction === 'true') {
  			$(this).siblings('.selectQuestions').find('.newQuestion').hide();

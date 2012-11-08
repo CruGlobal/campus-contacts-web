@@ -7,6 +7,29 @@
 	<%= image_tag("dash_messaging.png") %>
 </div>
 <div class="dash_buttons">
-	<%= link_to(t('dashboard.button_text'), "/contacts?click=show_message_guide_button", :class => "button") %>
-	<%= link_to(t('dashboard.button_email'), "/contacts?click=show_message_guide_button", :class => "button") %>
+	<%= link_to("/contacts?click=show_message_guide_button", :class => "button") do %>
+		<div>
+			<%= image_tag("dash_button_icon_text.png") %>
+			<div class="mod">
+				<p>
+					<span class="primary"><%= t('dashboard.button_text_sub') %></span>
+					<br/>
+					<span class="secondary"><%= t('dashboard.button_text') %></span>
+				</p>
+			</div>
+		</div>
+	<% end %>
+	<%= link_to("/contacts?click=show_message_guide_button", :class => "button") do %>
+		<div>
+			<%= image_tag("dash_button_icon_email.png") %>
+			<div class="mod">
+				<p>
+					<span class="primary"><%= t('dashboard.button_email_sub') %></span>
+					<br/>
+					<span class="secondary"><%= t('dashboard.button_email') %></span>
+				</p>
+			</div>
+		</div>
+	<% end %>
 </div>
+<%= link_to("Help Me", "http://blog.missionhub.com", :target => "_blank", :class => "helpme") %>
