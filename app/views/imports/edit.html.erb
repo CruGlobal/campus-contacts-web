@@ -4,24 +4,33 @@
 	<%= javascript_tag do %>
   		var surveyTitles = new Array();
   		var surveyLengths = new Array();
+  		var surveyGroups = new Array();
   		var mhubQuestions = new Array();
   		var userQuestions = new Array();
-  		var surveyData = new Array();
 		var surveys = new Array();
+		var surveyData = new Array();
   		<% @survey_questions.each_key do |s| %>
 			surveyTitles.push('<%= s %>');
-			surveyData.push("<%= s %>");
 			<% @survey_questions[s].each do |v| %>
-				mhubQuestions.push('<%= v[0] %>');
 				surveys.push("<%= v[0] %>");
 			<% end %>
 			surveyLengths.push(surveys.length);
-			surveyData.push(surveys);
+			surveyGroups.push(surveys);
 			surveys = [];
 		<% end %>
 		<% @import.headers.each_with_index do |header| %>
 			userQuestions.push('<%= header %>'.replace(/:/gi, ""));
 		<% end %>
+		surveyTitles.reverse();
+		surveyLengths.reverse();
+		surveyGroups.reverse();
+		for (var i = 0; i < surveyTitles.length; i++) {
+			surveyData.push(surveyTitles[i]);
+			surveyData.push(surveyGroups[i]);
+			for (var ii = 0; ii < surveyGroups[i].length; ii++) {
+				mhubQuestions.push(surveyGroups[i][ii]);
+			}
+		}
 	<% end %>
 	<%= javascript_include_tag "import-contacts" %>
 	
@@ -51,8 +60,6 @@
 							<td><%= header %>:</td>
 							<td>Preview</td>
 							<td>
-								<%= select_tag "import[header_mappings][#{i}]", grouped_options_for_select(@survey_questions, @import.header_mappings.blank? ? "" : @import.header_mappings[i.to_s]  ), :include_blank => true %>
-								
 								<div class="matchSelect" id="select_<%= i %>">
 									<div class="selectTitleBg">
 										<span class="selectTitle"></span>

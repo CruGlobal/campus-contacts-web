@@ -1,23 +1,22 @@
+// Data arrays created in script in views/imports/edit.html.erb
+// - surveyTitles:	Contains the titles of each survey
+// - surveyLengths:	Contains length of each survey
+// - surveyGroups:	Contains the survey questions
+// - mhubQuestions:	Contains the questions of all MissionHub surveys
+// - userQuestions: Contains the questions of the imported data
+// - surveyData:	Contains all of the survey titles and questions
+
+// Define global variables
 var __NEW_QUESTION__ = 'Create new question';
 var __NO_IMPORT__ = 'Do not import data';
 var __PREDEFINED_SURVEY__ = 'Predefined Questions';
 
+// Main function ran on document ready
 $(document).ready(function() {
-	// Data arrays created in script in views/imports/edit.html.erb
-	// - surveyTitles:	Contains the titles of each survey
-	// - surveyLengths:	Contains length of each survey
-	// - mhubQuestions:	Contains the questions of all MissionHub surveys
-	// - userQuestions: Contains the questions of the imported data
-	// - surveyData:	Contains the survey titles and questions
-	// - surveys:		Collects survey questions
-	
 	// Initialize variables
-	var htmlResults = '';
 	var matchQuestions = new Array();
-	var dataCollection = new Object();
 	
 	// Perform comparison of User & MHub data & generate array of matches
-	// Functions: compare(userString, mhubString, matchQuestions)
 	for (var i = 0; i < userQuestions.length; i++) {
 		var matchFound = false;
 		for (var ii = 0; ii < mhubQuestions.length; ii++) {
@@ -45,8 +44,12 @@ $(document).ready(function() {
 	// When select box is clicked options are set to show at top position
 	$('.selectTitleBg').live('click', function(e) {
 		e.preventDefault();
-		
+		$('.selectQuestions').hide();
 		$(this).siblings('.selectQuestions').toggle().scrollTop(0);
+		var checkAction = $(this).find('.selectTitle').attr('id').split('_')[3];
+ 		if (checkAction === 'true') {
+ 			$(this).siblings('.selectQuestions').find('.newQuestion').hide();
+ 		}
 	});
 	
 	// Hides all select data when anywhere else is clicked
@@ -60,9 +63,11 @@ $(document).ready(function() {
 	$('.surveyItem, .noMatch, .noImport').live('click', function(e) {
 		e.preventDefault();
 		
+		// Initialize variables
 		var newElement = '';
 		var newClass = '';
 		var oldElement = '';
+		var userMatch = '';
 		
 		var oldItem = '';
 		var oldText = '';
@@ -80,22 +85,20 @@ $(document).ready(function() {
 		var newQuestion = '';
 		var newCheck = '';
 		
-		var userMatch = '';
-		
-		var newElement = $(e.target);
-		var newClass = newElement.attr('class');
-		var oldElement = newElement.parents('.matchSelect').find('.selectTitle').attr('id').split('_')[0];
-		var userMatch = $(this).parents('.matchSelect').attr('id').split('_')[1];
+		newElement = $(e.target);
+		newClass = newElement.attr('class');
+		oldElement = newElement.parents('.matchSelect').find('.selectTitle').attr('id').split('_')[0];
+		userMatch = $(this).parents('.matchSelect').attr('id').split('_')[1];
 		
 		if (oldElement === 'match') {
 			// Collect old element info
-			var oldItem = $(this).parents('.matchSelect').find('.selectTitle');
-			var oldText = oldItem.text();
-			var oldInfo = oldItem.attr('id').split('_');
-			var oldType = oldInfo[0];
-			var oldSurvey = oldInfo[1];
-			var oldQuestion = oldInfo[2];
-			var oldCheck = oldInfo[3];
+			oldItem = $(this).parents('.matchSelect').find('.selectTitle');
+			oldText = oldItem.text();
+			oldInfo = oldItem.attr('id').split('_');
+			oldType = oldInfo[0];
+			oldSurvey = oldInfo[1];
+			oldQuestion = oldInfo[2];
+			oldCheck = oldInfo[3];
 			
 			// Set old element action to none
 			mhubCollection[oldSurvey]['questions'][oldQuestion].action = 'NONE';
@@ -103,13 +106,13 @@ $(document).ready(function() {
 			
 			if (newClass === 'surveyItem') {
 				// Collect new element info
-				var newItem = $(this);
-				var newText = newItem.text();
-				var newInfo = newItem.attr('id').split('_');
-				var newType = newInfo[0];
-				var newSurvey = newInfo[1];
-				var newQuestion = newInfo[2];
-				var newCheck = newInfo[3];
+				newItem = $(this);
+				newText = newItem.text();
+				newInfo = newItem.attr('id').split('_');
+				newType = newInfo[0];
+				newSurvey = newInfo[1];
+				newQuestion = newInfo[2];
+				newCheck = newInfo[3];
 				
 				// Set new element action to match
 				mhubCollection[newSurvey]['questions'][newQuestion].action = 'MATCH';
@@ -134,12 +137,12 @@ $(document).ready(function() {
 		else if (oldElement === 'new') {
 			if (newClass === 'surveyItem') {
 				// Collect new element info
-				var newItem = $(this);
-				var newText = newItem.text();
-				var newInfo = newItem.attr('id').split('_');
-				var newType = newInfo[0];
-				var newSurvey = newInfo[1];
-				var newQuestion = newInfo[2];
+				newItem = $(this);
+				newText = newItem.text();
+				newInfo = newItem.attr('id').split('_');
+				newType = newInfo[0];
+				newSurvey = newInfo[1];
+				newQuestion = newInfo[2];
 				
 				// Set new element action to match
 				mhubCollection[newSurvey]['questions'][newQuestion].action = 'MATCH';
@@ -158,12 +161,12 @@ $(document).ready(function() {
 		else if (oldElement === 'noimport') {
 			if (newClass === 'surveyItem') {
 				// Collect new element info
-				var newItem = $(this);
-				var newText = newItem.text();
-				var newInfo = newItem.attr('id').split('_');
-				var newType = newInfo[0];
-				var newSurvey = newInfo[1];
-				var newQuestion = newInfo[2];
+				newItem = $(this);
+				newText = newItem.text();
+				newInfo = newItem.attr('id').split('_');
+				newType = newInfo[0];
+				newSurvey = newInfo[1];
+				newQuestion = newInfo[2];
 				
 				// Set new element action to match
 				mhubCollection[newSurvey]['questions'][newQuestion].action = 'MATCH';
@@ -173,54 +176,76 @@ $(document).ready(function() {
 				userCollection[userMatch]['match'].survey = newSurvey;
 				userCollection[userMatch]['match'].text = newText;
 			}
-			else if (newClass === 'noMatch' || newClass === 'noImport') {
-				// No task
-			}
 		}
 		
 		// Generate HTML matches & list
 		generateMatches(userCollection);
 		generateList(mhubCollection);
 		
+		// Hide the select dropdown box
 		$('.selectQuestions').hide();
 	});
 	
 	$('.newQuestion, .editMatch').live('click', function(e) {
 		e.preventDefault();
 		
+		// Reset the dialog form fields
 		resetForm('#new_question_form');
 		
-		var targetElement = $(e.target);
-		var targetClass = targetElement.attr('class');
+		// Initialize variables
+		var targetElement = '';
+		var targetClass = '';
+		
+		var questionId = '';
+		var questionAction = '';
+		
+		var prevSurvey = '';
+		var prevQuestion = '';
+		var prevText = '';
+		var prevTitle = '';
+		var prevAction = '';
+		var prevType = '';
+		var prevOptions = '';
+		
+		var newSurvey = '';
+		var newQuestion = '';
+		var newText = '';
+		var newTitle = '';
+		var newAction = '';
+		var newType = '';
+		var newOptions = '';
+		
+		var newForm = '';
+		var newSurveyCheck = '';
+		
+		// Set clicked element information
+		targetElement = $(e.target);
+		targetClass = targetElement.attr('class');
 		
 		if (targetClass === 'editMatch') {
-			var questionId = $(this).attr('id').split('_')[1];
-			var questionAction = $(this).parents('.matchEdit').siblings('.matchSelect').find('.selectTitle').attr('id').split('_')[0];
+			questionId = $(this).attr('id').split('_')[1];
+			questionAction = $(this).parents('.matchEdit').siblings('.matchSelect').find('.selectTitle').attr('id').split('_')[0];
 		}
 		else {
-			var questionId = $(this).parents('.matchSelect').attr('id').split('_')[1];
+			questionId = $(this).parents('.matchSelect').attr('id').split('_')[1];
 		}
 		if (questionAction === 'match') {
-			var prevSurvey = '';
-			var prevQuestion = '';
-			var prevText = '';
-			var prevTitle = '';
-			var prevAction = '';
-			var prevType = '';
-			var prevOptions = '';
+			// Collect previous new survey/question information
+			prevSurvey = userCollection[questionId]['match'].survey;
+			prevQuestion = userCollection[questionId]['match'].question;
+			prevText = userCollection[questionId]['match'].text;
+			prevTitle = mhubCollection[prevSurvey].title;
+			prevAction = mhubCollection[prevSurvey].action;
+			prevType = mhubCollection[prevSurvey].questions[prevQuestion].type;
 			
-			var prevSurvey = userCollection[questionId]['match'].survey;
-			var prevQuestion = userCollection[questionId]['match'].question;
-			var prevText = userCollection[questionId]['match'].text;
-			var prevTitle = mhubCollection[prevSurvey].title;
-			var prevAction = mhubCollection[prevSurvey].action;
-			var prevType = mhubCollection[prevSurvey].questions[prevQuestion].type;
 			if (prevType !== 'SHORT') {
-				var prevOptions = mhubCollection[prevSurvey].questions[prevQuestion].options;
+				prevOptions = mhubCollection[prevSurvey].questions[prevQuestion].options;
 			}
 			
+			// Populate the form with previous new question information
 			populateForm('#new_question_form', prevSurvey, prevQuestion, prevText, prevTitle, prevAction, prevType, prevOptions);
 			
+			// Open dialog box with new survey/question form
 			$('#new_question_div').dialog({
 				resizable: false,
 				height: 444,
@@ -230,25 +255,22 @@ $(document).ready(function() {
 				{
 					text: 'Done',
 					click: function() {
-						var newSurvey = '';
-						var newQuestion = '';
-						var newText = '';
-						var newTitle = '';
-						var newAction = '';
-						var newType = '';
-						var newOptions = '';
-					
-						var newForm = $('#new_question_form');					
-						var newSurveyCheck = newForm.find('#create_new');
+						newForm = $('#new_question_form');					
+						newSurveyCheck = newForm.find('#create_new');
 						
+						// Determine question action
 						if (newSurveyCheck.is(':checked')) {
 							newAction = 'NEW';
 						}
 						else {
 							newAction = 'NONE';
 						}
+						
+						// New survey check
 						if (prevAction === 'NEW') {
+							// Check if new action is same as previous action
 							if (prevAction === newAction) {
+								// Collect new survey/question information
 								newTitle = newForm.find('#survey_name').val();
 								newType = newForm.find('#question_type').val();
 								if (newType === 'text_field_short') {
@@ -265,30 +287,34 @@ $(document).ready(function() {
 									else if (newType === 'choice_field_dropdown') {
 										newType = 'DROPDOWN';
 									}
-									
 									newText = newForm.find('#multiple_choice_question').val();
 									newOptions = newForm.find('#multiple_choice_options').val();
 								}
 								
+								// Update data collections
 								userCollection[questionId]['match'].text = newText;
-								
 								mhubCollection[prevSurvey].title = newTitle;
 								mhubCollection[prevSurvey].questions[prevQuestion].text = newText;
 								mhubCollection[prevSurvey].questions[prevQuestion].type = newType;
 								mhubCollection[prevSurvey].questions[prevQuestion].options = newOptions;
 								
+								// Update surveyTitles array with new survey title
 								surveyTitles[prevSurvey] = newTitle;
 								
 								// Generate HTML matches & list
 								generateMatches(userCollection);
 								generateList(mhubCollection);
 								
+								// Destroy the dialog
 								$(this).dialog('destroy');
 								
 							}
+							// If new action is not the same as previous action
 							else {
+								// Delete the previously created survey from data collection
 								delete mhubCollection[prevSurvey];
 								
+								// Collect new survey/question information
 								newTitle = newForm.find('#select_survey').find(':selected').text();
 								if (newTitle === prevTitle) {
 									alert('I thought you wanted to select an existing survey. Please select a pre-existing survey or click on the new survey box.');
@@ -314,18 +340,13 @@ $(document).ready(function() {
 										newText = newForm.find('#multiple_choice_question').val();
 										newOptions = newForm.find('#multiple_choice_options').val();
 									}
+									newSurvey = findSurvey(mhubCollection, newTitle);
+									newQuestion = collectionSize(mhubCollection[newSurvey]['questions']);
 									
-									var mhubObjectSurvey = '';
-									var mhubObjectLocation = '';
+									// Update data collections
 									var mhubObjectQuestion = new Object();
-									var mhubObjectHolder = new Object();
-									
-									var userObjectLocation = '';
 									var userObjectMatch = new Object();
 									var userObjectHolder = new Object();
-									
-									mhubObjectSurvey = findSurvey(mhubCollection, newTitle);
-									mhubObjectLocation = collectionSize(mhubCollection[mhubObjectSurvey]['questions']);
 									
 									mhubObjectQuestion.action = 'MATCH';
 									mhubObjectQuestion.match = userQuestions[questionId];
@@ -334,12 +355,10 @@ $(document).ready(function() {
 									mhubObjectQuestion.newquestion = true;
 									mhubObjectQuestion.type = newType;
 									
-									mhubCollection[mhubObjectSurvey]['questions'][mhubObjectLocation] = mhubObjectQuestion;
+									mhubCollection[newSurvey]['questions'][newQuestion] = mhubObjectQuestion;
 									
-									userObjectLocation = collectionSize(userCollection);
-									
-									userObjectMatch.question = mhubObjectLocation;
-									userObjectMatch.survey = mhubObjectSurvey;
+									userObjectMatch.question = newQuestion;
+									userObjectMatch.survey = newSurvey;
 									userObjectMatch.text = newText;
 									userObjectMatch.newquestion = true;
 									
@@ -349,6 +368,7 @@ $(document).ready(function() {
 									
 									userCollection[questionId] = userObjectHolder;
 									
+									// Update surveyTitles array with new survey title
 									for (var i = 0; i < surveyTitles.length; i++) {
 										var index = surveyTitles[i].indexOf(prevTitle);
 										if (index !== -1) {
@@ -361,15 +381,16 @@ $(document).ready(function() {
 									generateMatches(userCollection);
 									generateList(mhubCollection);
 									
+									// Destroy the dialog
 									$(this).dialog('destroy');
 								}
 							}
 						}
 						else {
-							// Previous action is NONE & previous action is equal to new action
+							// Previous action is NONE & previous action is the same as new action
 							if (prevAction === newAction) {
+								// Collect new survey/question information
 								newTitle = newForm.find('#select_survey').find(':selected').text();
-								
 								newType = newForm.find('#question_type').val();
 								if (newType === 'text_field_short') {
 									newType = 'SHORT';
@@ -389,28 +410,29 @@ $(document).ready(function() {
 									newText = newForm.find('#multiple_choice_question').val();
 									newOptions = newForm.find('#multiple_choice_options').val();
 								}
-								
 								newSurvey = findSurvey(mhubCollection, newTitle);
 								
+								// Check if new survey is the same as old survey
 								if (newSurvey === prevSurvey) {
-									userCollection[questionId]['match'].text = newText;
-								
+									// Update data collections
+									userCollection[questionId]['match'].text = newText;								
 									mhubCollection[prevSurvey].questions[prevQuestion].text = newText;
 									mhubCollection[prevSurvey].questions[prevQuestion].type = newType;
 									mhubCollection[prevSurvey].questions[prevQuestion].options = newOptions;	
 								}
 								else {
+									// Collect new survey/question information
 									newQuestion = collectionSize(mhubCollection[newSurvey]['questions']);
 									
-									// Remove old info																	
+									// Delete the previously created survey from data collection																
 									delete mhubCollection[prevSurvey].questions[prevQuestion];
 									
-									// Add new info
+									// Update data collections
+									var mhubObjectQuestion = new Object();
+									
 									userCollection[questionId]['match'].text = newText;
 									userCollection[questionId]['match'].survey = newSurvey;
 									userCollection[questionId]['match'].question = newQuestion;
-									
-									var mhubObjectQuestion = new Object();
 									
 									mhubObjectQuestion.action = 'MATCH';
 									mhubObjectQuestion.match = userQuestions[questionId];
@@ -426,10 +448,12 @@ $(document).ready(function() {
 								generateMatches(userCollection);
 								generateList(mhubCollection);
 								
+								// Destroy the dialog
 								$(this).dialog('destroy');
 							}
-							// Previous action is NONE & previous action is not equal to new action
+							// Previous action is NONE & previous action is not the same as new action
 							else {
+								// Collect new survey/question information
 								newTitle = newForm.find('#survey_name').val();
 								newType = newForm.find('#question_type').val();
 								if (newType === 'text_field_short') {
@@ -446,24 +470,24 @@ $(document).ready(function() {
 									else if (newType === 'choice_field_dropdown') {
 										newType = 'DROPDOWN';
 									}
-									
 									newText = newForm.find('#multiple_choice_question').val();
 									newOptions = newForm.find('#multiple_choice_options').val();
 								}
 								
-								// Remove old info
+								// Delete the previously created survey from data collection
 								delete mhubCollection[prevSurvey].questions[prevQuestion];
 								
-								// Add new info
+								// Collect new survey/question information
 								newSurvey = collectionSize(mhubCollection);
 								newQuestion = 0;
+								
+								// Update data collections
+								var mhubObjectQuestion = new Object();
+								var mhubObjectHolder = new Object();
 								
 								userCollection[questionId]['match'].text = newText;
 								userCollection[questionId]['match'].survey = newSurvey;
 								userCollection[questionId]['match'].question = newQuestion;
-
-								var mhubObjectQuestion = new Object();
-								var mhubObjectHolder = new Object();
 								
 								mhubObjectQuestion.action = 'MATCH';
 								mhubObjectQuestion.match = userQuestions[questionId];
@@ -478,12 +502,14 @@ $(document).ready(function() {
 								
 								mhubCollection[newSurvey] = mhubObjectHolder;
 								
+								// Update surveyTitles array with new survey title
 								surveyTitles.push(newTitle);
 								
 								// Generate HTML matches & list
 								generateMatches(userCollection);
 								generateList(mhubCollection);
 								
+								// Destroy the dialog
 								$(this).dialog('destroy');
 							}
 						}
@@ -499,6 +525,7 @@ $(document).ready(function() {
 			});
 		}
 		else {
+			// Open dialog box with new survey/question form
 			$('#new_question_div').dialog({
 				resizable: false,
 				height: 444,
@@ -507,268 +534,177 @@ $(document).ready(function() {
 				buttons: [
 				{
 					text: 'Done',
-					click: function() {
-						var newSurveyCheck = '';
-						var newSurveyName = '';
-						var newQuestionType = '';
-						var newShort = '';
-						var newMultiple = '';
-						var newMultipleOptions = '';
-						
-						var oldSurveyName = '';
-						
+					click: function() {						
 						var newForm = $('#new_question_form');					
 						var newSurveyCheck = newForm.find('#create_new');
 						
+						// Check if new survey
 						if (newSurveyCheck.is(':checked')) {
-							newSurveyName = newForm.find('#survey_name').val();
-							surveyTitles.push(newSurveyName);
-							if (newSurveyName === '') {
+							// Collect new survey/question information
+							newTitle = newForm.find('#survey_name').val();
+							if (newTitle === '') {
 								alert('Please enter a survey name');
 								newForm.find('#survey_name').focus();
 							}
 							else {
-								newQuestionType = newForm.find('#question_type').find(':selected').val();
-								if (newQuestionType === '') {
+								newType = newForm.find('#question_type').find(':selected').val();
+								if (newType === '') {
 									alert('Please select a question type');
 									newForm.find('#question_type').focus();
 								}
-								else if (newQuestionType === 'text_field_short') {
-									newShort = newForm.find('#short_answer_question').val();
-									if (newShort === '') {
+								else {
+									if (newType === 'text_field_short') {
+									newType = 'SHORT';
+									newText = newForm.find('#short_answer_question').val();
+									}
+									else {
+										if (newType === 'choice_field_radio') {
+											newType = 'RADIO';
+										}
+										else if (newType === 'choice_field_checkbox') {
+											newType = 'CHECKBOXES';
+										}
+										else if (newType === 'choice_field_dropdown') {
+											newType = 'DROPDOWN';
+										}
+										newText = newForm.find('#multiple_choice_question').val();
+										newOptions = newForm.find('#multiple_choice_options').val();
+									}
+									if (newType === 'SHORT' && newText === '') {
 										alert('Please enter a question');
 										newForm.find('#short_answer_question').focus();
 									}
+									else if (newType !== 'SHORT' && newText === '') {
+										alert('Please enter a question');
+										newForm.find('#multiple_choice_question').focus();
+									}
+									else if (newType !== 'SHORT' && newOptions === '') {
+										alert('Please enter at least one option');
+										newForm.find('#multiple_choice_options').focus();
+									}
 									else {
-										var mhubObjectLocation = '';
+										newSurvey = collectionSize(mhubCollection);
+										newQuestion = 0;
+										
+										// Update data collections
 										var mhubObjectQuestion = new Object();
 										var mhubObjectHolder = new Object();
-										
-										var userObjectLocation = '';
 										var userObjectMatch = new Object();
 										var userObjectHolder = new Object();
 										
-										mhubObjectLocation = collectionSize(mhubCollection);
-										
-										mhubObjectQuestion.action = 'MATCH';
-										mhubObjectQuestion.match = userQuestions[questionId];
-										mhubObjectQuestion.text = newShort;
-										mhubObjectQuestion.newquestion = true;
-										mhubObjectQuestion.type = 'SHORT';
-										mhubObjectHolder.action = 'NEW';
-										mhubObjectHolder.title = newSurveyName;
-										mhubObjectHolder.questions = new Object();
-										mhubObjectHolder.questions[0] = mhubObjectQuestion;
-										
-										mhubCollection[mhubObjectLocation] = mhubObjectHolder;
-										
-										userObjectLocation = collectionSize(userCollection);
-										
-										userObjectMatch.question = 0;
-										userObjectMatch.survey = mhubObjectLocation;
-										userObjectMatch.text = newShort;
+										userObjectMatch.question = newQuestion;
+										userObjectMatch.survey = newSurvey;
+										userObjectMatch.text = newText;
 										userObjectMatch.newquestion = true;
-										
 										userObjectHolder.text = userQuestions[questionId];
 										userObjectHolder.action = 'MATCH';
 										userObjectHolder.match = userObjectMatch;
-										
 										userCollection[questionId] = userObjectHolder;
+										
+										mhubObjectQuestion.action = 'MATCH';
+										mhubObjectQuestion.match = userQuestions[questionId];
+										mhubObjectQuestion.text = newText;
+										mhubObjectQuestion.newquestion = true;
+										mhubObjectQuestion.type = newType;
+										mhubObjectQuestion.options = newOptions;
+										
+										mhubObjectHolder.action = 'NEW';
+										mhubObjectHolder.title = newTitle;
+										mhubObjectHolder.questions = new Object();
+										mhubObjectHolder.questions[0] = mhubObjectQuestion;
+										
+										mhubCollection[newSurvey] = mhubObjectHolder;
+										
+										// Update surveyTitles array with new survey title
+										surveyTitles.push(newTitle);
 										
 										// Generate HTML matches & list
 										generateMatches(userCollection);
 										generateList(mhubCollection);
 										
+										// Destroy the dialog
 										$(this).dialog('destroy');
-									}
-								}
-								else {
-									newMultiple = newForm.find('#multiple_choice_question').val();
-									if (newMultiple === '') {
-										alert('Please enter a question');
-										newForm.find('#multiple_choice_question').focus();
-									}
-									else {
-										newMultipleOptions = newForm.find('#multiple_choice_options').val();
-										if (newMultipleOptions === '') {
-											alert('Please enter at least one option');
-											newForm.find('#multiple_choice_options').focus();
-										}
-										else {
-											var mhubObjectLocation = '';
-											var mhubObjectQuestion = new Object();
-											var mhubObjectHolder = new Object();
-											
-											var userObjectLocation = '';
-											var userObjectMatch = new Object();
-											var userObjectHolder = new Object();
-											
-											mhubObjectLocation = collectionSize(mhubCollection);
-											
-											mhubObjectQuestion.action = 'MATCH';
-											mhubObjectQuestion.match = userQuestions[questionId];
-											mhubObjectQuestion.text = newMultiple;
-											mhubObjectQuestion.newquestion = true;
-											if (newQuestionType === 'choice_field_radio') {
-												mhubObjectQuestion.type = 'RADIO';
-											}
-											else if (newQuestionType === 'choice_field_checkbox') {
-												mhubObjectQuestion.type = 'CHECKBOX';
-											}
-											else if (newQuestionType === 'choice_field_dropdown') {
-												mhubObjectQuestion.type = 'DROPDOWN';
-											}
-											mhubObjectQuestion.options = newMultipleOptions;
-											
-											mhubObjectHolder.action = 'NEW';
-											mhubObjectHolder.title = newSurveyName;
-											mhubObjectHolder.questions = new Object();
-											mhubObjectHolder.questions[0] = mhubObjectQuestion;
-											
-											mhubCollection[mhubObjectLocation] = mhubObjectHolder;
-											
-											userObjectLocation = collectionSize(userCollection);
-											
-											userObjectMatch.question = 0;
-											userObjectMatch.survey = mhubObjectLocation;
-											userObjectMatch.text = newMultiple;
-											userObjectMatch.newquestion = true;
-											userObjectHolder.text = userQuestions[questionId];
-											userObjectHolder.action = 'MATCH';
-											userObjectHolder.match = userObjectMatch;
-											
-											userCollection[questionId] = userObjectHolder;
-											
-											// Generate HTML matches & list
-											generateMatches(userCollection);
-											generateList(mhubCollection);
-											
-											$(this).dialog('destroy');
-										}
 									}
 								}
 							}
 						}
-						else {
-							oldSurveyName = newForm.find('#select_survey').find(':selected').text();
-							if (oldSurveyName === '') {
+						else {							
+							// Collect old survey/new question information
+							prevTitle = newForm.find('#select_survey').find(':selected').text();
+							
+							if (prevTitle === '') {
 								alert('Please select a survey');
 								newForm.find('#select_survey').focus();
 							}
 							else {
-								newQuestionType = newForm.find('#question_type').find(':selected').val();
-								if (newQuestionType === '') {
+								newType = newForm.find('#question_type').find(':selected').val();
+								if (newType === '') {
 									alert('Please select a question type');
 									newForm.find('#question_type').focus();
 								}
-								else if (newQuestionType === 'text_field_short') {
-									newShort = newForm.find('#short_answer_question').val();
-									if (newShort === '') {
+								else {
+									if (newType === 'text_field_short') {
+									newType = 'SHORT';
+									newText = newForm.find('#short_answer_question').val();
+									}
+									else {
+										if (newType === 'choice_field_radio') {
+											newType = 'RADIO';
+										}
+										else if (newType === 'choice_field_checkbox') {
+											newType = 'CHECKBOXES';
+										}
+										else if (newType === 'choice_field_dropdown') {
+											newType = 'DROPDOWN';
+										}
+										newText = newForm.find('#multiple_choice_question').val();
+										newOptions = newForm.find('#multiple_choice_options').val();
+									}
+									if (newType === 'SHORT' && newText === '') {
 										alert('Please enter a question');
 										newForm.find('#short_answer_question').focus();
 									}
+									else if (newType !== 'SHORT' && newText === '') {
+										alert('Please enter a question');
+										newForm.find('#multiple_choice_question').focus();
+									}
+									else if (newType !== 'SHORT' && newOptions === '') {
+										alert('Please enter at least one option');
+										newForm.find('#multiple_choice_options').focus();
+									}
 									else {
-										var mhubObjectSurvey = '';
-										var mhubObjectLocation = '';
+										prevSurvey = findSurvey(mhubCollection, prevTitle);
+										newQuestion = collectionSize(mhubCollection[prevSurvey]['questions']);
+										
+										// Update data collections
 										var mhubObjectQuestion = new Object();
 										var mhubObjectHolder = new Object();
-										
-										var userObjectLocation = '';
 										var userObjectMatch = new Object();
 										var userObjectHolder = new Object();
 										
-										mhubObjectSurvey = findSurvey(mhubCollection, oldSurveyName);
-										mhubObjectLocation = collectionSize(mhubCollection[mhubObjectSurvey]['questions']);
-										
-										mhubObjectQuestion.action = 'MATCH';
-										mhubObjectQuestion.match = userQuestions[questionId];
-										mhubObjectQuestion.text = newShort;
-										mhubObjectQuestion.newquestion = true;
-										mhubObjectQuestion.type = 'SHORT';
-										
-										mhubCollection[mhubObjectSurvey]['questions'][mhubObjectLocation] = mhubObjectQuestion;
-										
-										userObjectLocation = collectionSize(userCollection);
-										
-										userObjectMatch.question = mhubObjectLocation;
-										userObjectMatch.survey = mhubObjectSurvey;
-										userObjectMatch.text = newShort;
+										userObjectMatch.question = newQuestion;
+										userObjectMatch.survey = prevSurvey;
 										userObjectMatch.newquestion = true;
-										
+										userObjectMatch.text = newText;
 										userObjectHolder.text = userQuestions[questionId];
 										userObjectHolder.action = 'MATCH';
 										userObjectHolder.match = userObjectMatch;
-										
 										userCollection[questionId] = userObjectHolder;
+										
+										mhubObjectQuestion.action = 'MATCH';
+										mhubObjectQuestion.match = userQuestions[questionId];
+										mhubObjectQuestion.text = newText;
+										mhubObjectQuestion.newquestion = true;
+										mhubObjectQuestion.type = newType;
+										mhubObjectQuestion.options = newOptions;
+										mhubCollection[prevSurvey]['questions'][newQuestion] = mhubObjectQuestion;
 										
 										// Generate HTML matches & list
 										generateMatches(userCollection);
 										generateList(mhubCollection);
 										
+										// Destroy the dialog
 										$(this).dialog('destroy');
-									}
-								}
-								else {
-									newMultiple = newForm.find('#multiple_choice_question').val();
-									if (newMultiple === '') {
-										alert('Please enter a question');
-										newForm.find('#multiple_choice_question').focus();
-									}
-									else {
-										newMultipleOptions = newForm.find('#multiple_choice_options').val();
-										if (newMultipleOptions === '') {
-											alert('Please enter at least one option');
-											newForm.find('#multiple_choice_options').focus();
-										}
-										else {
-											var mhubObjectSurvey = '';
-											var mhubObjectLocation = '';
-											var mhubObjectQuestion = new Object();
-											var mhubObjectHolder = new Object();
-											
-											var userObjectLocation = '';
-											var userObjectMatch = new Object();
-											var userObjectHolder = new Object();
-											
-											mhubObjectSurvey = findSurvey(mhubCollection, oldSurveyName);
-											mhubObjectLocation = collectionSize(mhubCollection[mhubObjectSurvey]['questions']);
-											
-											mhubObjectQuestion.action = 'MATCH';
-											mhubObjectQuestion.match = userQuestions[questionId];
-											mhubObjectQuestion.text = newMultiple;
-											mhubObjectQuestion.newquestion = true;
-											if (newQuestionType === 'choice_field_radio') {
-												mhubObjectQuestion.type = 'RADIO';
-											}
-											else if (newQuestionType === 'choice_field_checkbox') {
-												mhubObjectQuestion.type = 'CHECKBOX';
-											}
-											else if (newQuestionType === 'choice_field_dropdown') {
-												mhubObjectQuestion.type = 'DROPDOWN';
-											}
-											mhubObjectQuestion.options = newMultipleOptions;
-											
-											mhubCollection[mhubObjectSurvey]['questions'][mhubObjectLocation] = mhubObjectQuestion;
-											
-											userObjectLocation = collectionSize(userCollection);
-											
-											userObjectMatch.question = mhubObjectLocation;
-											userObjectMatch.survey = mhubObjectSurvey;
-											userObjectMatch.text = newMultiple;
-											userObjectMatch.newquestion = true;
-											
-											userObjectHolder.text = userQuestions[questionId];
-											userObjectHolder.action = 'MATCH';
-											userObjectHolder.match = userObjectMatch;
-											
-											userCollection[questionId] = userObjectHolder;
-											
-											// Generate HTML matches & list
-											generateMatches(userCollection);
-											generateList(mhubCollection);
-											
-											$(this).dialog('destroy');
-										}
 									}
 								}
 							}
@@ -915,7 +851,6 @@ var generateList = function(data) {
 			}
 		}
 	}
-	// return htmlResults;
 	
 	$('.surveyContainer').html(htmlResults);
 }
