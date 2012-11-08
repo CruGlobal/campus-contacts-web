@@ -47,7 +47,7 @@ namespace :infobase do
     puts "Done regions.  Insert local level."
 
     # ministry local level goes next
-    Ccc::Person.connection.select_all("select * from ministry_locallevel").each do |level|
+    Ccc::Person.connection.select_all("select * from ministry_locallevel where isActive = 'T'").each do |level|
       m = Organization.where(importable_id: level['teamID'], importable_type: 'Ccc::MinistryLocallevel').first
       attribs = {name: level['name'], terminology: 'Missional Team', importable_id: level['teamID'], importable_type: 'Ccc::MinistryLocallevel', show_sub_orgs: true, status: 'active'}
       if m
