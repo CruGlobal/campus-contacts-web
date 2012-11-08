@@ -596,7 +596,7 @@ class ContactsControllerTest < ActionController::TestCase
     end
   end
   
-  context "Sorting contacts" do
+  context "Sorting contact status" do
     setup do
       @user, org = admin_user_login_with_org
       
@@ -620,6 +620,42 @@ class ContactsControllerTest < ActionController::TestCase
     should "sort by status desc" do
       xhr :get, :index, {:assigned_to => "all", :q =>{:s => "followup_status desc"}}
       assert_equal [@person1.id, @person3.id, @person2.id], assigns(:people).collect(&:id)
+    end
+  end
+  
+  context "Sorting contact phone_numbers" do
+    setup do
+      @user, org = admin_user_login_with_org
+      
+      @person1 = Factory(:person)
+      @role1 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person1)
+      @phone_number1 = Factory(:phone_number, person: @person1, number: "09167788881", primary: true)
+      
+      @person2 = Factory(:person)
+      @role1 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person2)
+      @phone_number2 = Factory(:phone_number, person: @person2, number: "09167788882", primary: true)
+      
+      @person3 = Factory(:person)
+      @role1 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person3)
+      @phone_number3 = Factory(:phone_number, person: @person3, number: "09167788883", primary: true)
+      
+      @person4 = Factory(:person)
+      @role1 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person4)
+    end
+	
+    should "sort by phone_number should include person without phone_numbers" do
+      xhr :get, :index, {:assigned_to => "all", :q =>{:s => "phone_numbers.number asc"}}
+      assert_equal 4, assigns(:people).size
+    end
+	
+    should "sort by phone_number asc" do
+      xhr :get, :index, {:assigned_to => "all", :q =>{:s => "phone_numbers.number asc"}}
+      assert_equal [@person4.id, @person1.id, @person2.id, @person3.id], assigns(:people).collect(&:id)
+    end
+    
+    should "sort by phone_number desc" do
+      xhr :get, :index, {:assigned_to => "all", :q =>{:s => "phone_numbers.number desc"}}
+      assert_equal [@person3.id, @person2.id, @person1.id, @person4.id], assigns(:people).collect(&:id)
     end
   end
 end
