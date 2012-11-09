@@ -317,8 +317,8 @@ class ContactsController < ApplicationController
       # raise @q.sorts.inspect
       if params[:q]
         order_query = params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass').gsub('followup_status','organizational_roles.followup_status').gsub('role_id','organizational_roles.role_id') : ['last_name, first_name'] 
-        if params[:q][:s].index('phone_numbers')
-          @people = @people.joins("LEFT JOIN `phone_numbers` ON `phone_numbers`.`person_id` = `people`.`id`").includes(:primary_phone_number, :primary_email_address, :contact_role).order(order_query)
+        if params[:q][:s].index('phone_numbers.number')
+          @people = @people.joins("LEFT JOIN `phone_numbers` ON `phone_numbers`.`person_id` = `people`.`id` AND `phone_numbers`.`primary` = 1").includes(:primary_phone_number, :primary_email_address, :contact_role).order(order_query)
         else
           @people = @people.includes(:primary_phone_number, :primary_email_address, :contact_role).order(order_query)
         end
