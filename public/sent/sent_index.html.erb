@@ -10,14 +10,79 @@
 		<div class="container">
 			<div class="content">
 				<form>
-					<div class="table_info">
+					<table class="header_table">
+						<tr>
+							<th><input type="checkbox" name="select_all" value="select_all"></th>
+							<th>First Name</th>
+							<th>Last Name</th>
+							<th>Assigned To</th>
+							<th>Graduation Date</th>
+						</tr>
+					</table>
+					<div class="transfer_info">
 						<table>
 							<tr>
-								<th><input type="checkbox" name="select_all" value="select_all"></th>
-								<th>First Name</th>
-								<th>Last Name</th>
-								<th>Assigned To</th>
-								<th>Graduation Date</th>
+								<td><input type="checkbox" name="contact" value="contact_1"></td>
+								<td>Jonathan</td>
+								<td>Whitney</td>
+								<td>Keynote</td>
+								<td>5/5/2005</td>
+							</tr>
+							<tr>
+								<td><input type="checkbox" name="contact" value="contact_1"></td>
+								<td>Jonathan</td>
+								<td>Whitney</td>
+								<td>Keynote</td>
+								<td>5/5/2005</td>
+							</tr>
+							<tr>
+								<td><input type="checkbox" name="contact" value="contact_1"></td>
+								<td>Jonathan</td>
+								<td>Whitney</td>
+								<td>Keynote</td>
+								<td>5/5/2005</td>
+							</tr>
+							<tr>
+								<td><input type="checkbox" name="contact" value="contact_1"></td>
+								<td>Jonathan</td>
+								<td>Whitney</td>
+								<td>Keynote</td>
+								<td>5/5/2005</td>
+							</tr>
+							<tr>
+								<td><input type="checkbox" name="contact" value="contact_1"></td>
+								<td>Jonathan</td>
+								<td>Whitney</td>
+								<td>Keynote</td>
+								<td>5/5/2005</td>
+							</tr>
+							<tr>
+								<td><input type="checkbox" name="contact" value="contact_1"></td>
+								<td>Jonathan</td>
+								<td>Whitney</td>
+								<td>Keynote</td>
+								<td>5/5/2005</td>
+							</tr>
+							<tr>
+								<td><input type="checkbox" name="contact" value="contact_1"></td>
+								<td>Jonathan</td>
+								<td>Whitney</td>
+								<td>Keynote</td>
+								<td>5/5/2005</td>
+							</tr>
+							<tr>
+								<td><input type="checkbox" name="contact" value="contact_1"></td>
+								<td>Jonathan</td>
+								<td>Whitney</td>
+								<td>Keynote</td>
+								<td>5/5/2005</td>
+							</tr>
+							<tr>
+								<td><input type="checkbox" name="contact" value="contact_1"></td>
+								<td>Jonathan</td>
+								<td>Whitney</td>
+								<td>Keynote</td>
+								<td>5/5/2005</td>
 							</tr>
 							<tr>
 								<td><input type="checkbox" name="contact" value="contact_1"></td>
@@ -28,7 +93,7 @@
 							</tr>
 						</table>
 					</div>
-					<div class="other_info">
+					<div class="transfer_actions actions_92">
 						<div class="info_left">
 							<div class="select_option">
 								<input type="checkbox" name="select_all" value="select_all">
@@ -45,7 +110,7 @@
 						</div>
 						<div class="info_right">
 							<input id="add_another_contact" name="add_another_contact" type="text" placeholder="Add another contact to this list" /><br/>
-							<input class="button" type="reset" value="Cancel" /><input class="button" name="transfer_contacts" type="submit" value="Transfer" />
+							<a href="#" id="cancel_transfer" class="action_button">Cancel</a><input id="begin_transfer" class="action_button" type="submit" value="Transfer" />
 						</div>
 					</div>
 				</form>

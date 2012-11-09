@@ -9,10 +9,14 @@
 		<div class="container">
 			<div class="content">
 				<div class="transfer_results">
-					<img /><span class="message">There was a problem with your transfer.</span>
+					<div class="transfer_message with_error">
+						<img src="http://local.missionhub.com:7888/assets/warning_light.png" /><p class="with_image">There was a problem with your transfer.</p>
+					</div>
 				</div>
-				<div class="other_info">
-					<input class="button" type="reset" value="Re-Start Transfer" /><input class="button" name="transfer_contacts" type="submit" value="Return to Dashboard" />
+				<div class="transfer_actions actions_48">
+					<div class="info_right info_full">
+						<input id="re_start_transfer" class="action_button" type="submit" value="Re-Start Transfer" /><a href="#" id="return_dashboard" class="action_button">Return to Dashboard</a>
+					</div>
 				</div>
 			</div>
 		</div>

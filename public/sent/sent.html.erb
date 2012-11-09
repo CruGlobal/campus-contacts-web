@@ -8512,14 +8512,79 @@
 				<div class="container">
 					<div class="content">
 						<form>
-							<div class="table_info">
+							<table class="header_table">
+								<tr>
+									<th><input type="checkbox" name="select_all" value="select_all"></th>
+									<th>First Name</th>
+									<th>Last Name</th>
+									<th>Assigned To</th>
+									<th>Graduation Date</th>
+								</tr>
+							</table>
+							<div class="transfer_info">
 								<table>
 									<tr>
-										<th><input type="checkbox" name="select_all" value="select_all"></th>
-										<th>First Name</th>
-										<th>Last Name</th>
-										<th>Assigned To</th>
-										<th>Graduation Date</th>
+										<td><input type="checkbox" name="contact" value="contact_1"></td>
+										<td>Jonathan</td>
+										<td>Whitney</td>
+										<td>Keynote</td>
+										<td>5/5/2005</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" name="contact" value="contact_1"></td>
+										<td>Jonathan</td>
+										<td>Whitney</td>
+										<td>Keynote</td>
+										<td>5/5/2005</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" name="contact" value="contact_1"></td>
+										<td>Jonathan</td>
+										<td>Whitney</td>
+										<td>Keynote</td>
+										<td>5/5/2005</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" name="contact" value="contact_1"></td>
+										<td>Jonathan</td>
+										<td>Whitney</td>
+										<td>Keynote</td>
+										<td>5/5/2005</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" name="contact" value="contact_1"></td>
+										<td>Jonathan</td>
+										<td>Whitney</td>
+										<td>Keynote</td>
+										<td>5/5/2005</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" name="contact" value="contact_1"></td>
+										<td>Jonathan</td>
+										<td>Whitney</td>
+										<td>Keynote</td>
+										<td>5/5/2005</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" name="contact" value="contact_1"></td>
+										<td>Jonathan</td>
+										<td>Whitney</td>
+										<td>Keynote</td>
+										<td>5/5/2005</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" name="contact" value="contact_1"></td>
+										<td>Jonathan</td>
+										<td>Whitney</td>
+										<td>Keynote</td>
+										<td>5/5/2005</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" name="contact" value="contact_1"></td>
+										<td>Jonathan</td>
+										<td>Whitney</td>
+										<td>Keynote</td>
+										<td>5/5/2005</td>
 									</tr>
 									<tr>
 										<td><input type="checkbox" name="contact" value="contact_1"></td>
@@ -8530,7 +8595,7 @@
 									</tr>
 								</table>
 							</div>
-							<div class="other_info">
+							<div class="transfer_actions actions_92">
 								<div class="info_left">
 									<div class="select_option">
 										<input type="checkbox" name="select_all" value="select_all">
@@ -8547,7 +8612,7 @@
 								</div>
 								<div class="info_right">
 									<input id="add_another_contact" name="add_another_contact" type="text" placeholder="Add another contact to this list" /><br/>
-									<input class="button" type="reset" value="Cancel" /><input class="button" name="transfer_contacts" type="submit" value="Transfer" />
+									<a href="#" id="cancel_transfer" class="action_button">Cancel</a><input id="begin_transfer" class="action_button" type="submit" value="Transfer" />
 								</div>
 							</div>
 						</form>
@@ -8569,10 +8634,14 @@
 				<div class="container">
 					<div class="content">
 						<div class="transfer_results">
-							<span class="message">Your contact transfer was successful!</span>
+							<div class="transfer_message">
+								<p>Your contact transfer was successful!</p>
+							</div>
 						</div>
-						<div class="other_info">
-							<input class="button" name="transfer_contacts" type="submit" value="Ok" />
+						<div class="transfer_actions actions_48">
+							<div class="info_right info_full">
+								<a href="#" id="ok_transfer" class="action_button">Ok</a>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -8592,10 +8661,14 @@
 				<div class="container">
 					<div class="content">
 						<div class="transfer_results">
-							<img /><span class="message">There was a problem with your transfer.</span>
+							<div class="transfer_message with_error">
+								<img src="http://local.missionhub.com:7888/assets/warning_light.png" /><p class="with_image">There was a problem with your transfer.</p>
+							</div>
 						</div>
-						<div class="other_info">
-							<input class="button" type="reset" value="Re-Start Transfer" /><input class="button" name="transfer_contacts" type="submit" value="Return to Dashboard" />
+						<div class="transfer_actions actions_48">
+							<div class="info_right info_full">
+								<input id="re_start_transfer" class="action_button" type="submit" value="Re-Start Transfer" /><a href="#" id="return_dashboard" class="action_button">Return to Dashboard</a>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -8619,5 +8692,3 @@
 
   </body>
 </html>
-
-
