@@ -84,6 +84,12 @@ class Person < ActiveRecord::Base
     :conditions => ["organizational_roles.role_id = ?", Role::CONTACT_ID],
     :order => "organizational_roles.#{order}"
   } }
+  
+  scope :order_by_primary_phone_number, lambda { |order| {
+    :select => "people.*",
+    :joins => "LEFT JOIN `phone_numbers` ON `phone_numbers`.`person_id` = `people`.`id` AND `phone_numbers`.`primary` = 1",
+    :order => "phone_numbers.number #{order.include?("asc") ? 'ASC' : 'DESC'}"
+  } }
 
   scope :order_alphabetically_by_non_default_role, lambda { |order, tables_already_joined = false| {
     :select => "people.*",

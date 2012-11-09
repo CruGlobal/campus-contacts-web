@@ -224,6 +224,11 @@ class ContactsController < ApplicationController
       if params[:q] && params[:q][:s].include?('followup_status')
         @people = @people.order_by_followup_status(params[:q][:s])
       end
+      
+      if params[:q] && params[:q][:s].include?('phone_numbers.number')
+        @people = @people.order_by_primary_phone_number(params[:q][:s])
+      end
+      
       if params[:survey].present?
         @people = @people.joins(:answer_sheets).where("answer_sheets.survey_id" => params[:survey])
       end
@@ -317,11 +322,7 @@ class ContactsController < ApplicationController
       # raise @q.sorts.inspect
       if params[:q]
         order_query = params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass').gsub('followup_status','organizational_roles.followup_status').gsub('role_id','organizational_roles.role_id') : ['last_name, first_name'] 
-        if params[:q][:s].index('phone_numbers.number')
-          @people = @people.joins("LEFT JOIN `phone_numbers` ON `phone_numbers`.`person_id` = `people`.`id` AND `phone_numbers`.`primary` = 1").includes(:primary_phone_number, :primary_email_address, :contact_role).order(order_query)
-        else
-          @people = @people.includes(:primary_phone_number, :primary_email_address, :contact_role).order(order_query)
-        end
+        @people = @people.includes(:primary_phone_number, :primary_email_address, :contact_role).order(order_query)
       end
       @all_people = @people.group('people.id')
       @people_for_labels = Person.people_for_labels(current_organization)
