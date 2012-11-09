@@ -58,7 +58,7 @@
 					<% @import.headers.each_with_index do |header, i| %>
 						<tr id="row_<%= i %>">
 							<td><%= header %>:</td>
-							<td>Preview</td>
+							<td><%= @import.preview[i]%></td>
 							<td>
 								<div class="matchSelect" id="select_<%= i %>">
 									<div class="selectTitleBg">
