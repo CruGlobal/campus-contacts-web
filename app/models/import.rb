@@ -18,7 +18,7 @@ class Import < ActiveRecord::Base
   validates :upload, attachment_presence: true
 
   before_save :parse_headers
-  
+
   def label_name
     created_at.strftime("Import-%Y-%m-%d")
   end
@@ -26,6 +26,7 @@ class Import < ActiveRecord::Base
   def get_new_people # generates array of Person hashes
     new_people = Array.new
     first_name_question = Element.where( :attribute_name => "first_name").first.id.to_s
+    email_question = Element.where( :attribute_name => "email").first.id.to_s
 
     csv = CSV.new(open(upload.expiring_url), :headers => :first_row)
 
@@ -33,6 +34,7 @@ class Import < ActiveRecord::Base
       person_hash = Hash.new
       person_hash[:person] = Hash.new
       person_hash[:person][:first_name] = row[header_mappings.invert[first_name_question].to_i]
+      person_hash[:person][:email] = row[header_mappings.invert[email_question].to_i]
 
       answers = Hash.new
 
@@ -53,7 +55,7 @@ class Import < ActiveRecord::Base
 
     #since first name is required for every contact. Look for id of element where attribute_name = 'first_name' in the header_mappings.
     first_name_question = Element.where(:attribute_name => "first_name").first.id.to_s
-    unless header_mappings.values.include?(first_name_question) 
+    unless header_mappings.values.include?(first_name_question)
       errors << I18n.t('contacts.import_contacts.present_first_name')
     end
 
@@ -64,11 +66,11 @@ class Import < ActiveRecord::Base
     end
     errors
   end
-  
+
   def queue_import_contacts(labels = [])
     async(:do_import, labels)
   end
-  
+
   def do_import(labels = [])
     current_organization = Organization.find(organization_id)
     current_user = User.find(user_id)
@@ -103,10 +105,11 @@ class Import < ActiveRecord::Base
       end
     end
   end
-  
+
   def create_contact_from_row(row, current_organization)
-    person = Person.create!(row[:person])
-    
+    person, email, phone = Person.find_existing_person(Person.new(row[:person]))
+    person.save
+
     unless @surveys_for_import
       @survey_ids ||= SurveyElement.where(element_id: row[:answers].keys).pluck(:survey_id) - [APP_CONFIG['predefined_survey']]
       @surveys_for_import = current_organization.surveys.where(id: @survey_ids.uniq)
@@ -123,17 +126,10 @@ class Import < ActiveRecord::Base
 
     # Set values for predefined questions
     answer_sheet = AnswerSheet.new(person: person)
-    predefined =
-      begin
-        Survey.find(APP_CONFIG['predefined_survey'])
-      rescue
-        Survey.find(2)
-      end
+    predefined = Survey.find(APP_CONFIG['predefined_survey'])
     predefined.elements.where('object_name is not null').each do |question|
       question.set_response(row[:answers][question.id], answer_sheet)
     end
-
-    person, email, phone = Person.find_existing_person(person)
 
     if person.save
       question_sets.map { |qs| qs.save }
@@ -148,7 +144,7 @@ class Import < ActiveRecord::Base
   end
 
   private
-  
+
   def create_table(new_person_ids)
     @answered_question_ids = header_mappings.values.reject{ |c| c.empty? }.collect(&:to_i)
     #puts answered_question_ids.inspect
@@ -156,25 +152,25 @@ class Import < ActiveRecord::Base
     #puts Survey.find(APP_CONFIG['predefined_survey']).elements.inspect
     answered_survey_ids = SurveyElement.where(element_id: @answered_question_ids).pluck(:survey_id).uniq
     #answer_sheet_ids = AnswerSheet.where(survey_id: answered_survey_ids)
-    
+
     @table = []
     title = []
     @answered_question_ids.each do |a|
       title << Element.find(a).label
     end
-    
+
     @table << title
-        
+
     Person.find(new_person_ids).each do |p|
       answers = []
       answer_sheet_ids = p.answer_sheets.where(survey_id: answered_survey_ids).collect(&:id)
       @answered_question_ids.each do |a|
-      
+
         if predefined_question_ids.include? a
           answers << p.send(Element.find(a).attribute_name)
         else
           a = Answer.where(question_id: a, answer_sheet_id: answer_sheet_ids).first.nil? ? "" : Answer.where(question_id: a, answer_sheet_id: answer_sheet_ids).first.value
-          
+
           answers << a
         end
       end
@@ -216,5 +212,5 @@ class Import < ActiveRecord::Base
     end
     true
   end
-  
+
 end

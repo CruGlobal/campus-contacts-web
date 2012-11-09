@@ -638,12 +638,14 @@ class ContactsControllerTest < ActionController::TestCase
       @person3 = Factory(:person)
       @role1 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person3)
       @phone_number3 = Factory(:phone_number, person: @person3, number: "09167788883", primary: true)
+      @phone_number4 = Factory(:phone_number, person: @person3, number: "09167788884", primary: false)
       
       @person4 = Factory(:person)
       @role1 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person4)
+      @phone_number5 = Factory(:phone_number, person: @person3, number: "09167788885", primary: false)
     end
 	
-    should "sort by phone_number should include person without phone_numbers" do
+    should "sort by phone_number should include person without primary_phone_numbers" do
       xhr :get, :index, {:assigned_to => "all", :q =>{:s => "phone_numbers.number asc"}}
       assert_equal 4, assigns(:people).size
     end
