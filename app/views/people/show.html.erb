@@ -16,10 +16,8 @@
 
   <div class="titlebar" style="float:left;margin-bottom:0;" id="person_header" data-id="<%= @person.id %>">
     <div id="person_info">
-      <div class="title">
-        <% if @person.assigned_tos.any? %>
-          <%== t('.assigned_to', assigned_to: "<span class='assigned_to'>#{@assigned_tos}</span>") %>
-        <% end %>
+      <div class="title assigned_to_leader">
+        <%= t('.assigned_to', assigned_to: "#{@assigned_tos}") if @assigned_tos.present? %>
       </div>
       <br/>
       <div class="title"><%= t('nav.roles')%>:</div>

@@ -27,7 +27,7 @@ class ContactAssignmentsController < ApplicationController
         @reload_sidebar = true
       end
     else
-      
+      @reload_sidebar = true
     end
     
     # proceed only if we're not bulk assinging contacts to the DNC list 

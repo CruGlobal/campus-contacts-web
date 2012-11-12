@@ -1,1 +1,5 @@
-$('#person_info .title .assigned_to').html("<%= @assign_to %>")
+<% if @assign_to.present? %>
+  $('#person_info .title.assigned_to_leader').html('<%= I18n.t("people.show.assigned_to", assigned_to: "#{@assign_to}") %>')
+<% else %>
+  $('#person_info .title.assigned_to_leader').html('')
+<% end %>
