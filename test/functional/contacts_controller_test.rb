@@ -594,6 +594,16 @@ class ContactsControllerTest < ActionController::TestCase
       
       assert_equal "4th", Person.where(first_name: "James", last_name: "Ingram").first.year_in_school
     end
+    
+    should "retain all the roles if there's a merge (creating contact with the same firstName, lastName and email with an existing person in the db) during create contacts" do
+      @org_child = Factory(:organization, :name => "neilmarion", :parent => @user.person.organizations.first, :show_sub_orgs => 1)
+      @request.session[:current_organization_id] = @org_child.id
+      
+      assert_no_difference "Person.count" do
+        xhr :post, :create, {:person => {:first_name => @user.person.first_name, :last_name => @user.person.last_name, :email_address => {:email => @user.person.email, :primary => 1}}, :labels => [Role.leader.id.to_s, Role.contact.id.to_s] }
+      end
+  
+    end
   end
   
   context "Sorting contact status" do
@@ -620,6 +630,50 @@ class ContactsControllerTest < ActionController::TestCase
     should "sort by status desc" do
       xhr :get, :index, {:assigned_to => "all", :q =>{:s => "followup_status desc"}}
       assert_equal [@person1.id, @person3.id, @person2.id], assigns(:people).collect(&:id)
+    end
+  end
+  
+  context "People list" do
+    setup do
+      @user, org = admin_user_login_with_org
+      @contact1 = Factory(:person)
+      @contact2 = Factory(:person)
+      @contact3 = Factory(:person)
+      @contact4 = Factory(:person)
+      @contact5 = Factory(:person)
+      
+      org.add_contact(@contact1)
+      org.add_contact(@contact2)
+      org.add_contact(@contact3)
+      org.add_contact(@contact4)
+      org.add_contact(@contact5)
+    end
+    
+    should "not display contacts multiple times" do
+      xhr :get, :index, {:assigned_to => "all"}
+      assert_equal 1, assigns(:all_people).where(id: @contact1.id).count.count
+      assert_equal 1, assigns(:all_people).where(id: @contact2.id).count.count
+      assert_equal 1, assigns(:all_people).where(id: @contact3.id).count.count
+      assert_equal 1, assigns(:all_people).where(id: @contact4.id).count.count
+      assert_equal 1, assigns(:all_people).where(id: @contact5.id).count.count
+    end
+    
+    should "not display contacts multiple times when by searching phone_numbers" do
+      @phone_number1 = Factory(:phone_number, person: @contact1, number: "09167788881", primary: true) # included
+      @phone_number2 = Factory(:phone_number, person: @contact2, number: "09177788882", primary: false)
+      @phone_number2 = Factory(:phone_number, person: @contact2, number: "09177788883", primary: true)
+      @phone_number3 = Factory(:phone_number, person: @contact3, number: "09177788884", primary: false)
+      @phone_number3 = Factory(:phone_number, person: @contact3, number: "09167788885", primary: true) # included
+      @phone_number4 = Factory(:phone_number, person: @contact4, number: "09167788886", primary: true) # included
+      @phone_number4 = Factory(:phone_number, person: @contact4, number: "09167788887", primary: false)
+      @phone_number4 = Factory(:phone_number, person: @contact5, number: "09167788888", primary: false) # included
+      
+      xhr :get, :index, {:search => "1", :phone_number => '0916'}
+      assert_equal 1, assigns(:all_people).where(id: @contact1.id).count.count
+      assert_equal 1, assigns(:all_people).where(id: @contact3.id).count.count
+      assert_equal 1, assigns(:all_people).where(id: @contact4.id).count.count
+      assert_equal 1, assigns(:all_people).where(id: @contact5.id).count.count
+      assert !assigns(:all_people).include?(@contact2)
     end
   end
   

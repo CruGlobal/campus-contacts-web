@@ -184,4 +184,30 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
       assert_not_empty @organization.dnc_contacts.where(id: @contact.id)
     end
   end
+  
+  context "set_current" do
+    setup do
+      @user, @organization = admin_user_login_with_org
+      @org_child = Factory(:organization, :name => "neilmarion", :parent => @organization)
+    end
+  
+    should "set_current" do
+      assert_equal @organization.id, session[:current_organization_id]
+      xhr :get, :set_current, :id => @org_child.id
+      assert_equal @org_child.id.to_s, session[:current_organization_id]
+    end
+  end
+  
+  context "set_primary" do
+    setup do
+      @user, @organization = admin_user_login_with_org
+      @org_child = Factory(:organization, :name => "neilmarion", :parent => @organization)
+    end
+  
+    should "set_primary" do
+      assert_equal @organization.id, session[:current_organization_id]
+      xhr :get, :set_primary, :id => @org_child.id
+      assert_equal @org_child.id.to_s, session[:current_organization_id]
+    end
+  end
 end
