@@ -26,6 +26,12 @@ class OrganizationsControllerTest < ActionController::TestCase
 
         xhr :post, :create, {:organization => {:parent_id => @org_parent.id, :name => "notneilmarion", :terminology => "Organization", :show_sub_orgs => "1"}}
       end
+      
+      #context "from crs" do
+      #  should "create from crs" do
+          #Ccc::Crs2Conference.create(admin_password: "hello", begin_date: Date.today, creator_id: 2, end_date: Date.today + 30, registration_ends_at: Date.today + 10, registration_starts_at: Date.today + 1, version: 1)
+      #  end
+      #end
     end
 
     #context 'deleting' do
