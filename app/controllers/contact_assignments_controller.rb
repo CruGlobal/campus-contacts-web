@@ -1,6 +1,10 @@
 class ContactAssignmentsController < ApplicationController
   def create
     @organization = params[:org_id].present? ? Organization.find(params[:org_id]) : current_organization
+    org_ids = params[:subs] == 'true' ? @organization.self_and_children_ids : @organization.id
+    @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles_including_archived)
+    @people_scope = @people_scope.where(id: @people_scope.archived_not_included.collect(&:id)) if params[:include_archived].blank? && params[:archived].blank?
+    
     # @keyword = SmsKeyword.find(params[:keyword])
     ContactAssignment.where(person_id: params[:ids], organization_id: @organization.id).destroy_all unless ENV["RAILS_ENV"] == "test"
     if params[:assign_to].present?      

@@ -34,7 +34,7 @@ class ContactsControllerTest < ActionController::TestCase
     
     context "creating a new contact manually" do
       should "create a person with only an email address" do
-        xhr :post, :create, {"assigned_to" => "all", "dnc" => "", "person" => {"email_address" => {"email" => "test@uscm.org"},"firstName" => "Test","lastName" => "Test",  "phone_number" => {"number" => ""}}}
+        xhr :post, :create, {"assigned_to" => "all", "dnc" => "", "person" => {"email_address" => {"email" => "test@uscm.org"},"first_name" => "Test","last_name" => "Test",  "phone_number" => {"number" => ""}}}
         assert_response :success, @response.body
       end
     
@@ -49,9 +49,9 @@ class ContactsControllerTest < ActionController::TestCase
                             "email" => "trbooth@uark.edu",
                             "primary" => "0"
                           },
-                          "firstName" => "Tyler",
+                          "first_name" => "Tyler",
                           "gender" => "male",
-                          "lastName" => "Booth",
+                          "last_name" => "Booth",
                           "phone_number" => {
                             "_destroy" => "false",
                             "location" => "mobile",
@@ -69,9 +69,9 @@ class ContactsControllerTest < ActionController::TestCase
                           "email_address" => {
                             "email" => "trbooth@asdf",
                           },
-                          "firstName" => "Tyler",
+                          "first_name" => "Tyler",
                           "gender" => "male",
-                          "lastName" => "Booth",
+                          "last_name" => "Booth",
                           "phone_number" => {
                             "number" => "479-283-4946",
                           }
@@ -80,34 +80,55 @@ class ContactsControllerTest < ActionController::TestCase
         assert_response :success, @response.body 
       end
       
-      should "remove the being 'archived' Contact role of a Person when it is going to be created again (using existing firstName, lastName and email) in 'My Contacts' tab (:assign_to_me => true)" do
-        contact = Factory(:person, firstName: "Jon", lastName: "Snow")
-        email = Factory(:email_address, email: "jonsnow@email.com", person: contact)
-        Factory(:organizational_role, role: Role.contact, person: contact, organization: @org)
-        assert_not_empty contact.organizational_roles.where(role_id: Role.contact.id)
-        assert_not_empty @org.contacts.joins(:email_addresses).where(firstName: "Jon", lastName: "Snow", "email_addresses.email" => "jonsnow@email.com")
-        #archive contact role
-        contact.organizational_roles.where(role_id: Role.contact.id).first.archive
-        assert_empty contact.organizational_roles.where(role_id: Role.contact.id)
-        assert_empty @org.contacts.joins(:email_addresses).where(firstName: "Jon", lastName: "Snow", "email_addresses.email" => "jonsnow@email.com")
-        xhr :post, :create, {:assign_to_me => "true", :person => {:firstName => "Jon", :lastName => "Snow", :gender =>"male", :email_address => {:email => "jonsnow@email.com", :primary => 1}}}
-        assert_not_empty contact.organizational_roles.where(role_id: Role.contact.id), "Contact role of contact not unarchived"
-        assert_not_empty @org.contacts.joins(:email_addresses).where(firstName: "Jon", lastName: "Snow", "email_addresses.email" => "jonsnow@email.com")
+      should "create a person even though inserted email has trailing spaces" do
+      
+        assert_difference "Person.count" do
+          xhr :post, :create, {
+                          "person" => {
+                            "email_address" => {
+                              "email" => "trboothshoomy@email.com ",
+                            },
+                            "first_name" => "Tyler",
+                            "gender" => "male",
+                            "last_name" => "Booth",
+                            "phone_number" => {
+                              "number" => "479-283-4946",
+                            }
+                          }
+                        }
+                        
+          end
+        assert_response :success, @response.body 
       end
       
-      should "remove the being 'archived' Contact role of a Person when it is going to be created again (using existing firstName, lastName and email) in 'All Contacts' tab" do
-        contact = Factory(:person, firstName: "Jon", lastName: "Snow")
+      should "remove the being 'archived' Contact role of a Person when it is going to be created again (using existing first_name, last_name and email) in 'My Contacts' tab (:assign_to_me => true)" do
+        contact = Factory(:person, first_name: "Jon", last_name: "Snow")
         email = Factory(:email_address, email: "jonsnow@email.com", person: contact)
         Factory(:organizational_role, role: Role.contact, person: contact, organization: @org)
         assert_not_empty contact.organizational_roles.where(role_id: Role.contact.id)
-        assert_not_empty @org.contacts.joins(:email_addresses).where(firstName: "Jon", lastName: "Snow", "email_addresses.email" => "jonsnow@email.com")
+        assert_not_empty @org.contacts.joins(:email_addresses).where(first_name: "Jon", last_name: "Snow", "email_addresses.email" => "jonsnow@email.com")
         #archive contact role
         contact.organizational_roles.where(role_id: Role.contact.id).first.archive
         assert_empty contact.organizational_roles.where(role_id: Role.contact.id)
-        assert_empty @org.contacts.joins(:email_addresses).where(firstName: "Jon", lastName: "Snow", "email_addresses.email" => "jonsnow@email.com")
-        xhr :post, :create, {:person => {:firstName => "Jon", :lastName => "Snow", :gender =>"male", :email_address => {:email => "jonsnow@email.com", :primary => 1}}}
+        assert_empty @org.contacts.joins(:email_addresses).where(first_name: "Jon", last_name: "Snow", "email_addresses.email" => "jonsnow@email.com")
+        xhr :post, :create, {:assign_to_me => "true", :person => {:first_name => "Jon", :last_name => "Snow", :gender =>"male", :email_address => {:email => "jonsnow@email.com", :primary => 1}}}
         assert_not_empty contact.organizational_roles.where(role_id: Role.contact.id), "Contact role of contact not unarchived"
-        assert_not_empty @org.contacts.joins(:email_addresses).where(firstName: "Jon", lastName: "Snow", "email_addresses.email" => "jonsnow@email.com")
+        assert_not_empty @org.contacts.joins(:email_addresses).where(first_name: "Jon", last_name: "Snow", "email_addresses.email" => "jonsnow@email.com")
+      end
+      
+      should "remove the being 'archived' Contact role of a Person when it is going to be created again (using existing first_name, last_name and email) in 'All Contacts' tab" do
+        contact = Factory(:person, first_name: "Jon", last_name: "Snow")
+        email = Factory(:email_address, email: "jonsnow@email.com", person: contact)
+        Factory(:organizational_role, role: Role.contact, person: contact, organization: @org)
+        assert_not_empty contact.organizational_roles.where(role_id: Role.contact.id)
+        assert_not_empty @org.contacts.joins(:email_addresses).where(first_name: "Jon", last_name: "Snow", "email_addresses.email" => "jonsnow@email.com")
+        #archive contact role
+        contact.organizational_roles.where(role_id: Role.contact.id).first.archive
+        assert_empty contact.organizational_roles.where(role_id: Role.contact.id)
+        assert_empty @org.contacts.joins(:email_addresses).where(first_name: "Jon", last_name: "Snow", "email_addresses.email" => "jonsnow@email.com")
+        xhr :post, :create, {:person => {:first_name => "Jon", :last_name => "Snow", :gender =>"male", :email_address => {:email => "jonsnow@email.com", :primary => 1}}}
+        assert_not_empty contact.organizational_roles.where(role_id: Role.contact.id), "Contact role of contact not unarchived"
+        assert_not_empty @org.contacts.joins(:email_addresses).where(first_name: "Jon", last_name: "Snow", "email_addresses.email" => "jonsnow@email.com")
       end
     end
     
@@ -123,7 +144,7 @@ class ContactsControllerTest < ActionController::TestCase
     should "update a contact's info" do
       @contact = Factory(:person)
       @user.person.organizations.first.add_contact(@contact)
-      put :update, id: @contact.id, person: {firstName: 'Frank'}
+      put :update, id: @contact.id, person: {first_name: 'Frank'}
       assert_redirected_to survey_response_path(@contact)
       assert_equal(assigns(:person).id, @contact.id)
     end
@@ -132,7 +153,7 @@ class ContactsControllerTest < ActionController::TestCase
       @contact = Factory.build(:person_without_name) 
       @contact.save(validate: false)
       @user.person.organizations.first.add_contact(@contact)
-      put :update, id: @contact.personID, person: {lastName: 'Jake'}
+      put :update, id: @contact.id, person: {last_name: 'Jake'}
       assert_redirected_to survey_response_path(@contact)
     end
     
@@ -177,8 +198,6 @@ class ContactsControllerTest < ActionController::TestCase
       assert_equal assigns(:header).upcase, "Involved".upcase
       xhr :get, :index, {:assigned_to => "unassigned"}
       assert_equal assigns(:header), "Unassigned"
-      xhr :get, :index, {:assigned_to => "progress"}
-      assert_equal assigns(:header), "Assigned"
       xhr :get, :index, {:completed => "true"}
       assert_equal assigns(:header), "Completed"
       xhr :get, :index, {:assigned_to => nil}
@@ -197,32 +216,8 @@ class ContactsControllerTest < ActionController::TestCase
       assert_equal assigns(:header), "Do Not Contact"
       xhr :get, :index, {:search => "1"}
       assert_equal assigns(:header), "Matching the criteria you searched for"
-      xhr :get, :index, {:assigned_to => @user.person.personID}
+      xhr :get, :index, {:assigned_to => @user.person.id}
       assert_equal assigns(:header), "Assigned to #{@user.person.name}"
-    end
-    
-    should "get in_progress contacts ONLY" do
-      @contact1 = Factory(:person)
-      @contact2 = Factory(:person)
-      @contact3 = Factory(:person)
-      @contact4 = Factory(:person)
-      @contact5 = Factory(:person)
-      @user.person.organizations.first.add_leader(@user.person, @user.person)
-      @user.person.organizations.first.add_contact(@contact1)
-      @user.person.organizations.first.add_contact(@contact2)
-      @user.person.organizations.first.add_contact(@contact3)
-      @user.person.organizations.first.add_contact(@contact4)
-      @user.person.organizations.first.add_contact(@contact5)
-      
-      Factory(:contact_assignment, person: @contact1, organization: @org, assigned_to: @user.person)
-      Factory(:contact_assignment, person: @contact2, organization: @org, assigned_to: @user.person)
-      Factory(:contact_assignment, person: @contact3, organization: @org, assigned_to: @user.person)
-      Factory(:contact_assignment, person: @contact4, organization: @org, assigned_to: @user.person)
-      Factory(:contact_assignment, person: @contact5, organization: @org, assigned_to: @user.person)
-      
-      @contact5.organizational_roles.first.update_attributes({:deleted => 1})
-      xhr :get, :index, {:assigned_to => "progress"}
-      assert_equal assigns(:all_people).collect(&:id).sort, [@contact1.id, @contact2.id, @contact3.id, @contact4.id]
     end
     
     should "get unassigned contacts ONLY" do
@@ -311,7 +306,6 @@ class ContactsControllerTest < ActionController::TestCase
     setup do
       @user = Factory(:user_no_org)  #user with a person object
       @organization = Factory(:organization)
-      @organization_membership = Factory(:organization_membership, person: @user.person, organization: @organization)
       @organizational_role = Factory(:organizational_role, person: @user.person, organization: @organization, :role => Role.contact)
       sign_in @user
     end
@@ -350,13 +344,13 @@ class ContactsControllerTest < ActionController::TestCase
       
       @user, @org = admin_user_login_with_org
       Factory(:organizational_role, organization: @org, person: @user.person, role: Role.leader)
-      @person1 = Factory(:person, firstName: "Neil Marion", lastName: "dela Cruz", email: "ndc@email.com")
+      @person1 = Factory(:person, first_name: "Neil Marion", last_name: "dela Cruz", email: "ndc@email.com")
       Factory(:organizational_role, organization: @org, person: @person1, role: Role.contact)
-      @person2 = Factory(:person, firstName: "Johnny", lastName: "English", email: "english@email.com")
+      @person2 = Factory(:person, first_name: "Johnny", last_name: "English", email: "english@email.com")
       Factory(:organizational_role, organization: @org, person: @person2, role: Role.contact)
-      @person3 = Factory(:person, firstName: "Johnny", lastName: "Bravo", email: "bravo@email.com")
+      @person3 = Factory(:person, first_name: "Johnny", last_name: "Bravo", email: "bravo@email.com")
       Factory(:organizational_role, organization: @org, person: @person3, role: Role.contact)
-      @person4 = Factory(:person, firstName: "Neil", lastName: "O'neil", email: "neiloneil@email.com")
+      @person4 = Factory(:person, first_name: "Neil", last_name: "O'neil", email: "neiloneil@email.com")
       Factory(:organizational_role, organization: @org, person: @person4, role: Role.contact)
     end
   
@@ -403,12 +397,12 @@ class ContactsControllerTest < ActionController::TestCase
       @user = Factory(:user_with_auxs)
       sign_in @user
       
-      @contact1 = Factory(:person, firstName: "Neil", lastName: "delaCruz")
+      @contact1 = Factory(:person, first_name: "Neil", last_name: "delaCruz")
       @user.person.organizations.first.add_contact(@contact1)
     end
   
     should "search for contacts" do
-      xhr :get, :index, {:search => "1", :firstName => "Neil", :lastName => "delaCruz"}
+      xhr :get, :index, {:search => "1", :first_name => "Neil", :last_name => "delaCruz"}
       assert_response :success
     end
     #more tests to come
@@ -419,11 +413,11 @@ class ContactsControllerTest < ActionController::TestCase
       @user = Factory(:user_with_auxs)
       sign_in @user
       
-      @archived_contact1 = Factory(:person, firstName: "Edmure", lastName: "Tully")
+      @archived_contact1 = Factory(:person, first_name: "Edmure", last_name: "Tully")
       Factory(:organizational_role, organization: @user.person.organizations.first, person: @archived_contact1, role: Role.contact)
       @archived_contact1.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive #archive his one and only role
       
-      @unarchived_contact1 = Factory(:person, firstName: "Brynden", lastName: "Tully")
+      @unarchived_contact1 = Factory(:person, first_name: "Brynden", last_name: "Tully")
       Factory(:organizational_role, organization: @user.person.organizations.first, person: @unarchived_contact1, role: Role.contact)
       Factory(:email_address, email: "bryndentully@email.com", person: @unarchived_contact1, primary: true)
     end
@@ -527,7 +521,7 @@ class ContactsControllerTest < ActionController::TestCase
     
     should "retrive contacts according to latest answer sheets answered" do
     
-      xhr :get, :index, {:search => 1, "q"=>{"s"=>"MAX(mh_answer_sheets.updated_at) asc"}}
+      xhr :get, :index, {:search => 1, "q"=>{"s"=>"MAX(answer_sheets.updated_at) asc"}}
       assert_response :success
     end
     
@@ -536,12 +530,12 @@ class ContactsControllerTest < ActionController::TestCase
       assert_response :success
     end
     
-    should "retrive contacts searching by firstName" do
+    should "retrive contacts searching by first_name" do
       xhr :get, :index, {:search => 1, :first_name => "Neil"}
       assert_response :success
     end
     
-    should "retrive contacts searching by lastName" do
+    should "retrive contacts searching by last_name" do
       xhr :get, :index, {:search => 1, :last_name => "dela Cruz"}
       assert_response :success
     end
@@ -589,20 +583,30 @@ class ContactsControllerTest < ActionController::TestCase
       @user, org = admin_user_login_with_org
       @predefined_survey = Factory(:survey, organization: @org)
       APP_CONFIG['predefined_survey'] = @predefined_survey.id
-      @yearInSchool_question = Factory(:yearInSchool_element)
-      @predefined_survey.questions << @yearInSchool_question
+      @year_in_school_question = Factory(:year_in_school_element)
+      @predefined_survey.questions << @year_in_school_question
     end
     
     should "create an org with answered predefined survey" do
       assert_difference "Person.count", 1 do
-        xhr :post, :create, {:person => {:firstName => "James", :lastName => "Ingram", :gender => "male"}, :answers => {"#{@yearInSchool_question.id}"=>"4th"}  }
+        xhr :post, :create, {:person => {:first_name => "James", :last_name => "Ingram", :gender => "male"}, :answers => {"#{@year_in_school_question.id}"=>"4th"}  }
       end
       
-      assert_equal "4th", Person.where(firstName: "James", lastName: "Ingram").first.yearInSchool
+      assert_equal "4th", Person.where(first_name: "James", last_name: "Ingram").first.year_in_school
+    end
+    
+    should "retain all the roles if there's a merge (creating contact with the same firstName, lastName and email with an existing person in the db) during create contacts" do
+      @org_child = Factory(:organization, :name => "neilmarion", :parent => @user.person.organizations.first, :show_sub_orgs => 1)
+      @request.session[:current_organization_id] = @org_child.id
+      
+      assert_no_difference "Person.count" do
+        xhr :post, :create, {:person => {:first_name => @user.person.first_name, :last_name => @user.person.last_name, :email_address => {:email => @user.person.email, :primary => 1}}, :labels => [Role.leader.id.to_s, Role.contact.id.to_s] }
+      end
+  
     end
   end
   
-  context "Sorting contacts" do
+  context "Sorting contact status" do
     setup do
       @user, org = admin_user_login_with_org
       
@@ -626,6 +630,88 @@ class ContactsControllerTest < ActionController::TestCase
     should "sort by status desc" do
       xhr :get, :index, {:assigned_to => "all", :q =>{:s => "followup_status desc"}}
       assert_equal [@person1.id, @person3.id, @person2.id], assigns(:people).collect(&:id)
+    end
+  end
+  
+  context "People list" do
+    setup do
+      @user, org = admin_user_login_with_org
+      @contact1 = Factory(:person)
+      @contact2 = Factory(:person)
+      @contact3 = Factory(:person)
+      @contact4 = Factory(:person)
+      @contact5 = Factory(:person)
+      
+      org.add_contact(@contact1)
+      org.add_contact(@contact2)
+      org.add_contact(@contact3)
+      org.add_contact(@contact4)
+      org.add_contact(@contact5)
+    end
+    
+    should "not display contacts multiple times" do
+      xhr :get, :index, {:assigned_to => "all"}
+      assert_equal 1, assigns(:all_people).where(id: @contact1.id).count.count
+      assert_equal 1, assigns(:all_people).where(id: @contact2.id).count.count
+      assert_equal 1, assigns(:all_people).where(id: @contact3.id).count.count
+      assert_equal 1, assigns(:all_people).where(id: @contact4.id).count.count
+      assert_equal 1, assigns(:all_people).where(id: @contact5.id).count.count
+    end
+    
+    should "not display contacts multiple times when by searching phone_numbers" do
+      @phone_number1 = Factory(:phone_number, person: @contact1, number: "09167788881", primary: true) # included
+      @phone_number2 = Factory(:phone_number, person: @contact2, number: "09177788882", primary: false)
+      @phone_number2 = Factory(:phone_number, person: @contact2, number: "09177788883", primary: true)
+      @phone_number3 = Factory(:phone_number, person: @contact3, number: "09177788884", primary: false)
+      @phone_number3 = Factory(:phone_number, person: @contact3, number: "09167788885", primary: true) # included
+      @phone_number4 = Factory(:phone_number, person: @contact4, number: "09167788886", primary: true) # included
+      @phone_number4 = Factory(:phone_number, person: @contact4, number: "09167788887", primary: false)
+      @phone_number4 = Factory(:phone_number, person: @contact5, number: "09167788888", primary: false) # included
+      
+      xhr :get, :index, {:search => "1", :phone_number => '0916'}
+      assert_equal 1, assigns(:all_people).where(id: @contact1.id).count.count
+      assert_equal 1, assigns(:all_people).where(id: @contact3.id).count.count
+      assert_equal 1, assigns(:all_people).where(id: @contact4.id).count.count
+      assert_equal 1, assigns(:all_people).where(id: @contact5.id).count.count
+      assert !assigns(:all_people).include?(@contact2)
+    end
+  end
+  
+  context "Sorting contact phone_numbers" do
+    setup do
+      @user, org = admin_user_login_with_org
+      
+      @person1 = Factory(:person)
+      @role1 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person1)
+      @phone_number1 = Factory(:phone_number, person: @person1, number: "09167788881", primary: true)
+      
+      @person2 = Factory(:person)
+      @role1 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person2)
+      @phone_number2 = Factory(:phone_number, person: @person2, number: "09167788882", primary: true)
+      
+      @person3 = Factory(:person)
+      @role1 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person3)
+      @phone_number3 = Factory(:phone_number, person: @person3, number: "09167788883", primary: true)
+      @phone_number4 = Factory(:phone_number, person: @person3, number: "09167788884", primary: false)
+      
+      @person4 = Factory(:person)
+      @role1 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person4)
+      @phone_number5 = Factory(:phone_number, person: @person3, number: "09167788885", primary: false)
+    end
+	
+    should "sort by phone_number should include person without primary_phone_numbers" do
+      xhr :get, :index, {:assigned_to => "all", :q =>{:s => "phone_numbers.number asc"}}
+      assert_equal 4, assigns(:people).size
+    end
+	
+    should "sort by phone_number asc" do
+      xhr :get, :index, {:assigned_to => "all", :q =>{:s => "phone_numbers.number asc"}}
+      assert_equal [@person4.id, @person1.id, @person2.id, @person3.id], assigns(:people).collect(&:id)
+    end
+    
+    should "sort by phone_number desc" do
+      xhr :get, :index, {:assigned_to => "all", :q =>{:s => "phone_numbers.number desc"}}
+      assert_equal [@person3.id, @person2.id, @person1.id, @person4.id], assigns(:people).collect(&:id)
     end
   end
 end

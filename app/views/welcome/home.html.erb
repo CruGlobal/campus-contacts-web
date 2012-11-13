@@ -1,11 +1,9 @@
 <h1><%= t("welcome.index.title_top")%></h1>
 
 <h2><%= t('welcome.home.your_orgs') %></h2>
-<% current_person.organization_memberships.each do |membership| %>
+<% current_person.organizational_roles.each do |membership| %>
   <% org = membership.organization %>
-  <h3><%= org.name %>
-  <%= link_to(t('general.remove'), organization_membership_path(membership), 
-                                            method: :delete, remote: true, confirm: t('org_membership.confirm_delete', org: org.to_s)) %></h3>
+  <h3><%= org.name %></h3>
   <% if can? :manage, SmsKeyword %>
     <%= link_to(t("welcome.home.follow_up", count: unassigned_people(org).count), contacts_path(org_id: org)) %>
     <h3><%= t("welcome.home.keywords") %></h3>

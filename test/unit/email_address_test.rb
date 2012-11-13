@@ -4,6 +4,7 @@ class EmailAddressTest < ActiveSupport::TestCase
   # Replace this with your real tests.
   should belong_to(:person)
   should validate_presence_of(:email)
+  should_strip_attributes :email
   # should validate_presence_of(:person_id)
 
   context "an email address" do
@@ -27,6 +28,11 @@ class EmailAddressTest < ActiveSupport::TestCase
       email1.destroy
       email2.reload
       assert(email2.primary?, "second email should be primary")
+    end
+
+    should "consider these email addresses valid" do
+      assert(EmailAddress.new(email: 'laurel.marshall.88@gmail.com').valid?)
+      assert(EmailAddress.new(email: 'alex--jacob@hotmail.com').valid?)
     end
   end
 end

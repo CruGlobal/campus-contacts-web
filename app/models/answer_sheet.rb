@@ -1,5 +1,4 @@
 class AnswerSheet < ActiveRecord::Base
-  self.table_name = "mh_answer_sheets"
 
   belongs_to :person
   belongs_to :survey

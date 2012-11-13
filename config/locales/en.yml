@@ -85,6 +85,8 @@ en:
     create_a_survey: Create a survey
     settings: Settings
   general:
+    roles_applied: "Labels have been applied."
+    adv_search: "Advanced Search"
     archived: "Archived"
     assigned_to:  "Assigned to"
     survey: Survey
@@ -101,9 +103,9 @@ en:
     role: Label
     save: 'Save'
     show: Show
-    delete: Delete all checked
+    delete: Delete
     remove: Remove
-    archive: Archive all checked
+    archive: Archive
     keyword: "Keyword"
     status: "Status"
     edit: "Edit"
@@ -120,11 +122,13 @@ en:
     last_name: Last Name
     email: Email
     phone: Phone
-    send_email: 'Send Email'
+    send_email: 'Email'
     search: 'Search'
     add: Add
     adding: Adding...
     to: "To"
+    recipients: "Recipients:"
+    message: "Message:"
     subject: 'Subject'
     autocomplete_name_hint: 'Type a name or facebook profile url here:'
     match_found: 'Match found'
@@ -153,27 +157,30 @@ en:
     add_person:
       add_person: Add a person to %{org}
     index:
-      include_archived_tips: "You may click this check box to include all of the Archived individuals in your Directory listing and note that their labels will display in the color green to allow you to quickly identify which individuals have been archived and what their labels were at the time they were archived. <br><br> If you want to only see the archived individuals, then please click on the word \"Archived(x)\" on the left side-panel. <br><br> You can move any individual from the Archived display back to the active display by simply adding any label to that individual."
+      include_archived_tips: "You may click this checkbox to include all of your Archived individuals in your All Contacts listing. Notice Archived individuals now have green labels.<br/><br/>If you want to only see <b>archived individuals</b>, click on \"Archived\" on the bottom, left side-panel.<br/><br/>Contacts can be <b>unarchived</b> by adding any label. You need to add each label you wish to return to that contact."
       archived_label: "Archived"
       include_archived: "Include Archived"
       add_person: Add Person
-      export: "Export this list"
+      export: "Export CSV"
+      vcard: "Export Vcard"
       directory_title: "Directory - %{org}"
       archived_directory_title: "Archived - %{org}"
       labels: 'Labels'
+      statistics: 'Statistics'
       gender: 'Gender'
       phone: 'Phone'
       email: 'Email'
       filter: 'Search'
       year_in_school: 'Year in School'
       manage_roles: 'Manage Labels'
-      send_sms: Send Text
-      send_email: Send Email
+      send_sms: Text
+      send_email: Email
       group_comment: Add Comment
       apply_roles: 'Apply Labels'
       no_people: "Sorry, there are no people involved here."
       displaying: "Displaying %{start} - %{finish} of %{total}"
       merge_people: "Merge People"
+      merge_contacts: "Merge Contacts"
       error_message: "Error: %{person} does not have valid email to be leader"
       error_message_update_leader_without_person: "Error: Person does not have valid email to be leader"
       error_message_update_admin_without_person: "Error: Person does not have valid email to be admin"
@@ -383,7 +390,7 @@ en:
       fb_only_login_option: "Require Facebook login"
       skip_fb_login_option: "Present an option at the end of the survey to connect via Facebook"
       no_fb_login_option: "No login"
-      freeze: "Check this box to freeze the survey. Once a survey is frozen, you will be able to see responses thave have already come in, but no one new will be able to complete the survey."
+      freeze: "Check this box to freeze the survey. Once a survey is frozen, you will be able to see responses that have already come in, but no one new will be able to complete the survey."
       customize_look: 'Optional - FOR ADVANCED USERS ONLY - Customize how the survey will look:'
       logo: 'Logo (we will wrap this is a div with the class "logo"):'
       background_color: 'Background Color:'
@@ -554,6 +561,11 @@ en:
     assign: Assign
     unassign: 'Unassign'
     add_contact: "Add Contact"
+    update_notice_title: "New All Contacts Options"
+    update_notice_content: "We’re rolling out changes to make using MissionHub even easier. With all of the Directory features now accessible via All Contacts, you can easily manage your contacts from one page."
+    update_notice_link: "Learn about the new look on our blog."
+    update_notice_link_url: 'http://blog.missionhub.com/2012/10/16/new-all-contacts/'
+    update_notice_toggle: "Do not show this notice again"
     statuses:
       uncontacted: Uncontacted
       attempted_contact: Attempted Contact
@@ -572,11 +584,11 @@ en:
     index:
       edit_true: '&edit=true'
       search_saved: 'This search has been saved'
-      vcard: 'Vcard'
+      vcard: 'Export Vcard'
       add_contact: Add a Contact
       clear_search_form: 'Clear Search Form'
       no_contacts: 'Sorry, there are no contacts here.'
-      export: Export
+      export: 'Export CSV'
       add_question_back: Click on a question to add it back to the page 
       unassign_contact: "Unassign contact"
       delete_contact: "Delete this contact"
@@ -611,12 +623,13 @@ en:
       dnc_contacts: "All Contacts - 'Do Not Contact'"
       completed_contacts: "All Contacts - Completed"
       friend_responses: "Contacts who are also my friends on Facebook"
-      none_checked: "You need to select at least one contact."
+      none_checked: "Sorry, you need to select a Contact before this function will work."
       show_all: Show 'In Progress' contacts
       matching_seach: Matching the criteria you searched for
       which_org: 'You need to choose which organization you want to do folow-up from'
       add: 'Add'
       hidden_questions: 'Hidden Questions'
+      archived: 'Archived'
       unassigned: 'Unassigned'
       all: 'All'
       dnc: 'Do Not Contact'
@@ -998,6 +1011,8 @@ en:
       add_sub_org: Add %{terminology} under this one
       add_a_sub_org: Add new %{terminology}
       add: Add
+      crs_import_link: "Import a conference from the Conference Registration Tool"
+      crs_import_tip: 'The Conference Registration Tool is another tool created by CRU that you can use to manage conferences.'
     edit:
       delete: Delete Organization
       title: Edit %{org}
@@ -1014,6 +1029,14 @@ en:
       your_org: Your Organization
     add_org:
       name_not_unique: Name is not Unique
+    add_org_from_crs:
+      crs_import_instructions: This feature allows you to import all of the registrants from a conference into MissionHub as contacts. A new Sub-Organization will be created with the same name as the conference. This is a one-time import. Once you import people, any new registrants will not be imported later. Also, any changes you make to information on MissionHub will not be reflected back to CRS.
+      url: 'Enter a URL that you would send to people to register for a conference (%{link})'
+      admin_password: 'Enter your conference Admin Password'
+      example: Example
+      conference_is_importing: 'Your conference data is now being imported. We will send you an email when the import is complete.'
+      bad_url: 'The url you entered was not a valid conference registration url. Please check the example and try again.'
+      bad_password: 'The password you entered is not the Admin Password for the conference corresponding to the url you entered.'
     settings:
       title: Settings
       year_in_school: Display 'Year in School' on the Directory Page
@@ -1028,7 +1051,7 @@ en:
       confirm_archive: "Are you sure you wanted to archive the desired contacts?"
       archive_inst: "Archive all contacts created before %{date_field}"
       alumni_inst: "Go to the %{link} screen, select the leaders/involved people that have graduated from your ministry and label as \"Alumni\""
-      alumni_inst_path: Directory
+      alumni_inst_path: "All Contacts"
       annual_inst_1: "People are messy - and so are databases. Every year your database gets clogged up with people who may have come to a meeting once upon a time, or filled out a survey once, but never got involved and don't intend to. If you are a campus ministry, you will also have a good number of people who graduate from your ministry each year. How do you get your database trimmed up and ready for the fall?"
       annual_inst_2: "An Annual Clean Up can help. Simply walk through these steps once a year (or however often you want) and your Mission Hub Database will again be a well-oiled machine, ready to help you transform the world!"
       remove_leader_inst: "Archive leaders who have been inactive by not logging-in after %{date_field}"
@@ -1043,5 +1066,10 @@ en:
   batch:
     new_person_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, there are new contacts in your organization. Please login to missionhub.com as soon as possible to followup the contacts. Below is the list of %{contacts_count} new contacts:"
     person_transfer_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, you have been sent new contacts. Please login to missionhub.com as soon as possible to followup the contacts. There may be more information about the contacts in the comment section of their individual profile. If not, you may want to contact the senders at their email address. Below is the list of %{contacts_count} contacts sent:"
-
+  organizational_roles:
+    cannot_delete_admin_error: "You cannot remove <b>%{names}</b> since you are going to remove all the admins in this organization!"
+    cannot_delete_self_as_admin_error: "As an ADMIN you cannot remove yourself! Please assign another individual as an ADMIN for this organization and then ask that \"new ADMIN\" to remove your ADMIN label."
+    moving_to_same_org: "You are just moving people to the same org they are from!"
+    moving_people_success: "People were successfully moved!"
+    copy_people_success: "People were successfully copied!"
 

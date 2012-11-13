@@ -10,8 +10,6 @@
 
 class Question < Element
   include ActionController::RecordIdentifier # dom_id
-  has_many :conditions, :class_name => "Condition", :foreign_key => "toggle_id", :dependent => :nullify
-  has_many :dependents, :class_name => "Condition", :foreign_key => "trigger_id", :dependent => :nullify
   has_many :sheet_answers, :class_name => "Answer", :foreign_key => "question_id", :dependent => :destroy
 
   belongs_to :related_question_sheet, :class_name => "QuestionSheet", :foreign_key => "related_question_sheet_id"
@@ -21,20 +19,20 @@ class Question < Element
   # a question has one response per AnswerSheet (that is, an instance of a user filling out the question)
   # generally the response is a single answer
   # however, "Choose Many" (checkbox) questions have multiple answers in a single response
-  
+
   attr_accessor :answers
-  
+
   # @answers = nil            # one or more answers in response to this question
   # @mark_for_destroy = nil   # when something is unchecked, there are less answers to the question than before
-  
-  
+
+
   # a question is disabled if there is a condition, and that condition evaluates to false
   # could set multiple conditions to influence this question, in which case all must be met
   # def active?
   #   # find first condition that doesn't pass (nil if all pass)
   #   self.conditions.find(:all).find { |c| !c.evaluate? }.nil?  # true if all pass
   # end
-  
+
   # def conditions_attributes=(new_conditions)
   #   conditions.collect(&:destroy)
   #   conditions.reload
@@ -43,27 +41,27 @@ class Question < Element
   #     expression = new_conditions[i]["expression"]
   #     trigger_id = new_conditions[i]["trigger_id"].to_i
   #     unless expression.blank? || !page.questions.collect(&:id).include?(trigger_id) || conditions.collect(&:trigger_id).include?(trigger_id)
-  #       conditions.create(:question_sheet_id => question_sheet_id, :trigger_id => trigger_id, 
+  #       conditions.create(:question_sheet_id => question_sheet_id, :trigger_id => trigger_id,
   #                         :expression => expression, :toggle_page_id => page_id,
-  #                         :toggle_id => self.id) 
+  #                         :toggle_id => self.id)
   #     end
   #   end
   # end
-  
+
   # element view provides the element label with required indicator
   def default_label?
     true
   end
-  
+
   # css class names for javascript-based validation
   def validation_class(answer_sheet)
     if self.required?(answer_sheet)
-      ' required ' 
+      ' required '
     else
       ''
     end
   end
-  
+
   # just in case something slips through client-side validation?
   # def valid_response?
   #   if self.required? && !self.has_response? then
@@ -73,20 +71,20 @@ class Question < Element
   #     true
   #   end
   # end
-  
+
   # just in case something slips through client-side validation?
   # def valid_response_for_answer_sheet?(answers)
-  #    return true if !self.required? 
+  #    return true if !self.required?
   #    answer  = answers.detect {|a| a.question_id == self.id}
   #    return answer && answer.value.present?
-  #    # raise answer.inspect 
+  #    # raise answer.inspect
   #  end
-  
+
   # shortcut to return first answer
   def response(app)
     responses(app).first.to_s
   end
-  
+
   def display_response(app)
     r = responses(app)
     if r.blank?
@@ -95,7 +93,7 @@ class Question < Element
       r.join(", ")
     end
   end
-  
+
   def responses(app)
     return [] unless app
     # try to find answer from external object
@@ -104,14 +102,14 @@ class Question < Element
       if obj.nil? or eval("obj." + attribute_name + ".nil?")
         []
       else
-        [eval("obj." + attribute_name)] 
+        [eval("obj." + attribute_name)]
       end
     else
       app.answers_by_question[id] || []
       # Answer.where(:answer_sheet_id => app.id, :question_id => self.id)
     end
   end
-  
+
   # set answers from posted response
   def set_response(values, app)
     values = Array.wrap(values)
@@ -144,11 +142,11 @@ class Question < Element
           # reject: skip over responses that are unchanged
           unless values.reject! {|value| value == @answers[index].value}
             # remove any answers that don't match the posted values
-            @mark_for_destroy << @answers[index]   # destroy from database later 
+            @mark_for_destroy << @answers[index]   # destroy from database later
             @answers.delete_at(index)
           end
         end
-    
+
         # insert any new answers
         for value in values
           if @mark_for_destroy.empty?
@@ -167,12 +165,12 @@ class Question < Element
       end
     end
   end
-  
+
   def save_file(answer_sheet, file)
     @answers.collect(&:destroy) if @answers
     answer = Answer.create!(:question_id => self.id, :answer_sheet_id => answer_sheet.id, :attachment => file)
   end
-  
+
   # save this question's @answers to database
   def save_response(answer_sheet, question = nil)
     unless @answers.nil?
@@ -180,7 +178,7 @@ class Question < Element
         if answer.is_a?(Answer)
           answer.answer_sheet_id = answer_sheet.id
           answer.save!
-          
+
           if question.present? && question.trigger_words.present?
             question.trigger_words.split(",").each do |t|
               if answer.value.include? t
@@ -188,11 +186,11 @@ class Question < Element
               end
             end
           end
-          
+
         end
       end
     end
-    
+
     # remove others
     unless @mark_for_destroy.nil?
       for answer in @mark_for_destroy
@@ -203,7 +201,7 @@ class Question < Element
   rescue TypeError
     raise answer.inspect
   end
-  
+
   def send_notifications(question, person, answer)
     msg = generate_notification_msg(person, answer, shorten_link(person.id))
 
@@ -228,14 +226,14 @@ class Question < Element
   end
 
   def shorten_link(id)
-    short_profile_link = BITLY_CLIENT.shorten(Rails.application.routes.url_helpers.person_url(id, 
+    short_profile_link = BITLY_CLIENT.shorten(Rails.application.routes.url_helpers.person_url(id,
     :host => APP_CONFIG['bitly_host'] || 'www.missionhub.com', :port => APP_CONFIG['bitly_port'] || 80, :only_path => false)).short_url
   end
 
   def generate_notification_msg(person, answer, link)
    "#{person.name} (#{person.phone_number}, #{person.email}) just replied to a survey with #{answer}. Profile link: #{link}"
   end
-  
+
   # has any sort of non-empty response?
   def has_response?(answer_sheet = nil)
     if answer_sheet.present?
@@ -246,15 +244,15 @@ class Question < Element
     return false if answers.length == 0
     answers.each do |answer|   # loop through Answers
       value = answer.is_a?(Answer) ? answer.value : answer
-      return true if (value.is_a?(FalseClass) && value === false) || value.present? 
+      return true if (value.is_a?(FalseClass) && value === false) || value.present?
     end
     return false
   end
-  
+
   def required?(answer_sheet = nil)
     super() || (!answer_sheet.nil? && !choice_field.nil? && choice_field.has_answer?('1', answer_sheet))
   end
-  
+
   def multiple_answers_allowed?
     false
   end

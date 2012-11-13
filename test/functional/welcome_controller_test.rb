@@ -40,13 +40,13 @@ class WelcomeControllerTest < ActionController::TestCase
     end
   end
   
-  should "get correct template for tour" do
-    get :tour
+  should "get correct template for terms" do
+    get :terms
     assert_template "layouts/splash"
   end
   
-  should "get correct template for terms" do
-    get :terms
+  should "get correct template for tour" do
+    get :tour
     assert_template "layouts/splash"
   end
   

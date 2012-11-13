@@ -15,8 +15,6 @@
     <label for="assign_to_org"><%= current_organization.terminology %></label>
     <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_group', class: 'assign_to_radio' %>
     <label for="assign_to_group"><%= t('group') %></label>
-    <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_label', class: 'assign_to_radio' %>
-    <label for="assign_to_label"><%= t('label') %></label> 
     <%= radio_button_tag :assign_contact_to, 'do_not_contact', false, id: 'assign_to_dnc', class: 'assign_to_radio' %> 
     <label for="assign_to_dnc"><%= t('contacts.statuses.do_not_contact') %></label>  
   </div>
@@ -36,7 +34,7 @@
     <%= text_field_tag :org_name, '', class: 'org_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>
     <%= spinner('org_search') %>
     <div id="keep-contact-copy">
-      <%= check_box_tag :keep_contact %>
+      <%= check_box_tag :keep_contact, 1, true %>
       <%= t('.keep_contact') %>
     </div>
     <br/>

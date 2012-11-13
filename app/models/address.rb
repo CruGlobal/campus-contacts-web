@@ -1,22 +1,8 @@
 class Address < ActiveRecord::Base
-  self.table_name =				"ministry_newaddress"
-	self.primary_key = 			"addressID"
 	
-	validates_presence_of :addressType
+	validates_presence_of :address_type
 	
-	belongs_to :person, foreign_key: "fk_PersonID"
-	
-	before_save :stamp
-	
-	def home_phone; homePhone; end
-	def cell_phone; cellPhone; end
-	def work_phone; workPhone; end
-	
-  #set dateChanged and changedBy
-  def stamp
-    self.dateChanged = Time.now
-    self.changedBy = ApplicationController.application_name
-  end
+	belongs_to :person, foreign_key: "person_id"
 	
 	def display_html
 	  ret_val = address1 || ''
@@ -35,19 +21,35 @@ class Address < ActiveRecord::Base
 	 "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=#{address}"
 	end
 	
-	def phone_number
-    phone = (self.homePhone && !self.homePhone.empty?) ? self.homePhone : self.cellPhone
-    phone = (phone && !phone.empty?) ? phone : self.workPhone
-    phone
-	end
-	
-	def phone_numbers
-	  unless @phone_numbers 
-	    @phone_numbers = []
-	    @phone_numbers << home_phone + ' (home)' unless home_phone.blank?
-	    @phone_numbers << cell_phone + ' (cell)' unless cell_phone.blank?
-	    @phone_numbers << work_phone + ' (work)' unless work_phone.blank?
+  def merge(other)
+    Ccc::MinistryNewaddress.transaction do
+      # We're only interested if the other address has been updated more recently
+      if other.updated_at && updated_at && other.updated_at > updated_at
+        # if any part of they physical address is there, copy all of it
+        physical_address = %w{address1 address2 address3 address4 city state zip country}
+        if other.attributes.slice(*physical_address).any? {|k,v| v.present?}
+          other.attributes.slice(*physical_address).each do |k, v|
+            self[k] = v
+          end
+        end
+        # Now copy the rest as long as they're not blank
+        other.attributes.except(*(%w{id created_at person_id} + physical_address))
+        attributes.each do |k, v|
+          next if %w{id created_at person_id}.include?(k)
+          next if v == other.attributes[k]
+          self[k] = case
+                    when other.attributes[k].blank? then v
+                    when v.blank? then other.attributes[k]
+                    else
+                      other.updated_at > updated_at ? other.attributes[k] : v
+                    end
+        end
+        self['changedBy'] = 'MERGE'
+      end
+      MergeAudit.create!(mergeable: self, merge_looser: other)
+      other.reload
+      other.destroy
+      save(validate: false)
     end
-  	@phone_numbers
-	end
+  end
 end

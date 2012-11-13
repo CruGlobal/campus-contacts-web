@@ -61,7 +61,7 @@ class Users::OmniauthCallbacksControllerTest < ActionController::TestCase
 
     should "merge gracefully if email is assigned to a person with the same name" do
       user2 = Factory(:user_with_auxs)
-      user2.person.update_attributes(email: 'test@example.com', firstName: 'Fred')
+      user2.person.update_attributes(email: 'test@example.com', first_name: 'Fred')
 
       assert_no_difference("User.count") do
         get :facebook

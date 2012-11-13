@@ -1,9 +1,10 @@
 ENV["RAILS_ENV"] = "test"
-  # require 'simplecov'
-  # SimpleCov.start 'rails' do
-  #  add_filter "vendor"
-  #  merge_timeout 36000
-  # end
+ # require 'simplecov'
+ # SimpleCov.start 'rails' do
+ #   add_filter "vendor"
+ #   add_filter 'app/controllers/api'
+ #   merge_timeout 36000
+ # end
 
 require File.expand_path('../../config/environment', __FILE__)
 require 'rack/oauth2/server'
@@ -14,6 +15,7 @@ require 'factory_girl'
 require 'api_test_helper'
 require File.dirname(__FILE__) + "/factories"
 require 'webmock/test_unit'
+require "strip_attributes/shoulda"
 
 # EphemeralResponse.activate
 # 
@@ -36,6 +38,10 @@ class ActiveSupport::TestCase
   Role.leader
   Role.contact
   Role.involved
+end
+
+class Test::Unit::TestCase
+  extend StripAttributes::Shoulda::Macros
 end
 
 class ActionController::TestCase

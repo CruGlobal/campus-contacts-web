@@ -3,7 +3,6 @@ require 'open-uri'
 require 'contact_methods'
 class Import < ActiveRecord::Base
   include ContactMethods
-  self.table_name = 'mh_imports'
 
   @queue = :general
   serialize :headers
@@ -18,21 +17,23 @@ class Import < ActiveRecord::Base
   validates :upload, attachment_presence: true
 
   before_save :parse_headers
-  
+
   def label_name
     created_at.strftime("Import-%Y-%m-%d")
   end
 
   def get_new_people # generates array of Person hashes
     new_people = Array.new
-    first_name_question = Element.where( :attribute_name => "firstName").first.id.to_s
+    first_name_question = Element.where( :attribute_name => "first_name").first.id.to_s
+    email_question = Element.where( :attribute_name => "email").first.id.to_s
 
     csv = CSV.new(open(upload.expiring_url), :headers => :first_row)
 
     csv.each do |row|
       person_hash = Hash.new
       person_hash[:person] = Hash.new
-      person_hash[:person][:firstName] = row[header_mappings.invert[first_name_question].to_i]
+      person_hash[:person][:first_name] = row[header_mappings.invert[first_name_question].to_i]
+      person_hash[:person][:email] = row[header_mappings.invert[email_question].to_i]
 
       answers = Hash.new
 
@@ -51,10 +52,10 @@ class Import < ActiveRecord::Base
   def check_for_errors # validating csv
     errors = []
 
-    #since first name is required for every contact. Look for id of element where attribute_name = 'firstName' in the header_mappings.
-    first_name_question = Element.where(:attribute_name => "firstName").first.id.to_s
-    unless header_mappings.values.include?(first_name_question) 
-      errors << I18n.t('contacts.import_contacts.present_firstname')
+    #since first name is required for every contact. Look for id of element where attribute_name = 'first_name' in the header_mappings.
+    first_name_question = Element.where(:attribute_name => "first_name").first.id.to_s
+    unless header_mappings.values.include?(first_name_question)
+      errors << I18n.t('contacts.import_contacts.present_first_name')
     end
 
     a = header_mappings.values
@@ -64,25 +65,31 @@ class Import < ActiveRecord::Base
     end
     errors
   end
-  
+
   def queue_import_contacts(labels = [])
     async(:do_import, labels)
   end
-  
+
   def do_import(labels = [])
     current_organization = Organization.find(organization_id)
     current_user = User.find(user_id)
     import_errors = []
+    names = []
+    new_person_ids = []
     Person.transaction do
       get_new_people.each do |new_person|
         person = create_contact_from_row(new_person, current_organization)
+        new_person_ids << person.id
+        names << person.name
         if person.errors.present?
           import_errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
         else
           labels.each do |role_id|
-            role = Role.find_or_create_by_organization_id_and_name(current_organization.id, label_name) if role_id.to_i == 0
-            role_id = role.id if role.present?
-            OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person.id, current_organization.id, role_id, added_by_id: current_user.person.id) if role_id.present?
+            if role_id.to_i == 0
+              role = Role.find_or_create_by_organization_id_and_name(current_organization.id, label_name)
+              role_id = role.id
+            end
+            current_organization.add_role_to_person(person, role_id)
           end
         end
       end
@@ -92,15 +99,16 @@ class Import < ActiveRecord::Base
         raise ActiveRecord::Rollback
       else
         # Send success email
-        ImportMailer.import_successful(current_user).deliver
+        table = create_table(new_person_ids)
+        ImportMailer.import_successful(current_user, table).deliver
       end
     end
-
   end
-  
+
   def create_contact_from_row(row, current_organization)
-    person = Person.create(row[:person])
-    
+    person, email, phone = Person.find_existing_person(Person.new(row[:person]))
+    person.save
+
     unless @surveys_for_import
       @survey_ids ||= SurveyElement.where(element_id: row[:answers].keys).pluck(:survey_id) - [APP_CONFIG['predefined_survey']]
       @surveys_for_import = current_organization.surveys.where(id: @survey_ids.uniq)
@@ -117,17 +125,10 @@ class Import < ActiveRecord::Base
 
     # Set values for predefined questions
     answer_sheet = AnswerSheet.new(person: person)
-    predefined =
-      begin
-        Survey.find(APP_CONFIG['predefined_survey'])
-      rescue
-        Survey.find(2)
-      end
+    predefined = Survey.find(APP_CONFIG['predefined_survey'])
     predefined.elements.where('object_name is not null').each do |question|
       question.set_response(row[:answers][question.id], answer_sheet)
     end
-
-    person, email, phone = Person.find_existing_person(person)
 
     if person.save
       question_sets.map { |qs| qs.save }
@@ -142,6 +143,40 @@ class Import < ActiveRecord::Base
   end
 
   private
+
+  def create_table(new_person_ids)
+    @answered_question_ids = header_mappings.values.reject{ |c| c.empty? }.collect(&:to_i)
+    #puts answered_question_ids.inspect
+    predefined_question_ids = Survey.find(APP_CONFIG['predefined_survey']).elements.collect(&:id)
+    #puts Survey.find(APP_CONFIG['predefined_survey']).elements.inspect
+    answered_survey_ids = SurveyElement.where(element_id: @answered_question_ids).pluck(:survey_id).uniq
+    #answer_sheet_ids = AnswerSheet.where(survey_id: answered_survey_ids)
+
+    @table = []
+    title = []
+    @answered_question_ids.each do |a|
+      title << Element.find(a).label
+    end
+
+    @table << title
+
+    Person.find(new_person_ids).each do |p|
+      answers = []
+      answer_sheet_ids = p.answer_sheets.where(survey_id: answered_survey_ids).collect(&:id)
+      @answered_question_ids.each do |a|
+
+        if predefined_question_ids.include? a
+          answers << p.send(Element.find(a).attribute_name)
+        else
+          a = Answer.where(question_id: a, answer_sheet_id: answer_sheet_ids).first.nil? ? "" : Answer.where(question_id: a, answer_sheet_id: answer_sheet_ids).first.value
+
+          answers << a
+        end
+      end
+      @table << answers
+    end
+    @table
+  end
 
   def parse_headers
     return unless upload?
@@ -168,5 +203,5 @@ class Import < ActiveRecord::Base
     end
     true
   end
-  
+
 end

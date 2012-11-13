@@ -2,6 +2,13 @@ $ ->
   $(document).on 'keypress', '#contact_search_form input', (e)->
     if (e.keyCode == $.ui.keyCode.ENTER)
       $('#contact_search_form').submit()
+      
+      
+  $('#contacts_controller #include_archived').live 'click', ->
+    if $(this).is(':checked')
+      document.location = '/contacts?include_archived=true'
+    else
+      document.location = '/contacts'
 
   $('.friends_count').live 'click', ->
     false
@@ -122,10 +129,28 @@ $ ->
           field.prop('checked', true)
         else
           field.val(v)
-
-  $('#filter_link').click -> 
+          
+  $('#contacts_controller.index .filter_link').attr('href','#')
+  
+  $('#contacts_controller.index .filter_link').click -> 
     $('#filter_box').toggle()
     false
+    
+  $('#update_notice_div').dialog
+    resizable: false,
+    height: 200,
+    width: 490,
+    modal: true,
+    title: t('contacts.update_notice_title')
+    buttons: [
+      text: 'Close',
+      click: ->
+        if $('#update_notice_toggle').is(':checked')  
+          $.ajax
+            type: 'GET',
+            url: '/people/hide_update_notice'
+        $(this).dialog('destroy')
+    ]
     
   $('#contacts_controller a.add_contact').live 'click', ->
     $('#new_person')[0].reset()
@@ -175,8 +200,6 @@ $ ->
       $.rails.handleRemote($('#new_contact_assignment'))
       unless $('#assign_to').val() == $('#my_id').val()
         $.fn.load_leader_name($('#person_title').attr('data-id'))
-        $('.id_checkbox:checked').each ->
-          $(this).closest('tr').remove()
     $('#assign_search').dialog('destroy')
   false
 
@@ -187,16 +210,29 @@ $ ->
     from_id = $(this).closest('div').attr('data-org-id')
     to_id = $(this).attr('data-id')
     keep_contact = $('#keep-contact-copy > input').is(':checked')
-    old_action = form.attr('action')
-    form.attr('action', '/organizational_roles/move_to?from_id='+from_id+'&to_id='+to_id+'&keep_contact='+keep_contact)
-    $.rails.handleRemote(form)
-    if keep_contact == false
-      $('.id_checkbox:checked').each ->
-        $(this).closest('tr').remove()
-    form.attr('action', old_action)
+    
+    ids = []
+    $('.id_checkbox:checked:visible').each ->
+      ids.push($(this).val())
+    if($('#all_selected_text').is(':visible'))    
+      $('.all_row').each ->
+        ids.push($(this).attr('data-id'))
+  
     $('#assign_search').dialog('destroy')
-    if $('#contacts_controller.show')[0]
-      setTimeout "document.location = '/contacts'", 1000
+    $.ajax
+      type: 'POST'
+      url: '/organizational_roles/move_to'
+      data: 'from_id='+from_id+'&to_id='+to_id+'&keep_contact='+keep_contact+'&ids='+ids
+      success: (data) ->
+        if data.indexOf("success") != -1
+          if keep_contact == false
+            $.a(data)
+            $('.id_checkbox:checked').each ->
+              $(this).closest('tr').fadeOut();
+          else
+            $.a(data)
+        else
+          $.a(data)
   false
   
   $('#assign_search .group a').live 'click', (e)->
@@ -210,11 +246,13 @@ $ ->
         person += $(element).attr('value') + ","
     
     add_another = false
-    $('<a href="/groups/' + group  + '/group_memberships?person_id=' + person + '&role=member&add_another=' + add_another + '"data-method="post" data-remote="true"></a>')
+    $('<a href="/groups/' + group  + '/group_memberships?person_id=' + person + '&role=member&render_in_contacts=true&add_another=' + add_another + '" data-method="post" data-remote="true"></a>')
     .appendTo('body')
     .click()
     .remove()
     $('#assign_search').dialog('destroy')
+    $('#global_loader').show()
+    $('.id_checkbox:checked').prop('checked',false)
   false
   
   $('#assign_search .label a').live 'click', (e)->
@@ -351,6 +389,7 @@ $ ->
     
   $("a.assign").live 'click', ->
     if $('.id_checkbox:checked').length > 0
+      $('#keep_contact').attr checked: true 
       $('#assign_to_me').click()
       el = $('#assign_search')
       el.dialog
@@ -472,21 +511,6 @@ $ ->
     $('#rejoicable_fields').slideToggle()
     false
     
-  $("#contacts_controller a#bulk_delete").live 'click', ->
-    num_selected = $('.id_checkbox:checked:visible').length
-    if num_selected  > 0
-      if(confirm('Are you sure you want to delete ' + num_selected + ' contacts permanently?'))
-        $('.id_checkbox:checked').each ->
-          $(this).closest('tr').fadeOut()
-
-        url = $(this).attr('href')
-        params = $('#new_contact_assignment').serialize()
-        $.post(url, params)
-    
-    else
-      $.a(t('contacts.index.none_checked'))
-    false    
-    
   $('.contact_row td:not(.checkbox_cell)').live 'click', ->
     unless $('a', this)[0]?
       tr = $(this).parent()
@@ -504,7 +528,9 @@ $ ->
     $('.' + $(this).attr('data-class')).fadeOut()
   
   $('#hidden_questions_link').live 'click', ->
-    $('#hidden_questions_div').slideToggle()
+    position = parseInt($('#table_header').position().top) + parseInt($('#table_header').height())
+    $('#hidden_questions_div').css('top': position)
+    $('#hidden_questions_div').toggle()
     false
  
   $.fn.activateDncDroppable()
@@ -570,12 +596,11 @@ $.fn.assignTo = (leader, skip_remote) ->
         $.rails.handleRemote($('#new_contact_assignment'))
       
       row.find('.id_checkbox').attr('checked', false)
-      row.hide()
   $('#assign_to').val('')
   
 $.mh.saveContact = (add_more) ->
   form = $('#new_person')
-  if $('#person_firstName', form).val() == ''
+  if $('#person_first_name', form).val() == ''
     $.a(t('contacts.index.no_name_message'))
     return false
   if add_more
