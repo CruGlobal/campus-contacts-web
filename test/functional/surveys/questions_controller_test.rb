@@ -52,10 +52,15 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
     end
 	
     should "not be able to add the same Question twice in a survey" do
-      xhr :post, :create, { :question_id => @q3.element.id, :survey_id => @org.surveys.first.id}
-      assert_response :success
-      xhr :post, :create, { :question_id => @q3.element.id, :survey_id => @org.surveys.first.id}
-      assert_response :success
+      assert_difference "SurveyElement.count" do
+        xhr :post, :create, { :question_id => @q3.element.id, :survey_id => @org.surveys.first.id}
+        assert_response :success
+      end
+      
+      assert_no_difference "SurveyElement.count" do
+        xhr :post, :create, { :question_id => @q3.element.id, :survey_id => @org.surveys.first.id}
+        assert_response :success
+      end
     end
   end
   
