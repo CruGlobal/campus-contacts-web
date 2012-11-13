@@ -314,7 +314,7 @@ class Person < ActiveRecord::Base
   def org_tree_node(o = nil, parent_roles = [])
     orgs = {}
     @org_ids ||= {}
-    (o ? o.children : root_organizations).order('name').each do |org|
+    (o ? o.children : organizations).order('name').each do |org|
       # collect roles associated with each org
       @org_ids[org.id] ||= {}
       @org_ids[org.id]['roles'] = (Array.wrap(roles_by_org_id(org.id)) + Array.wrap(parent_roles)).uniq
@@ -1034,10 +1034,6 @@ class Person < ActiveRecord::Base
 
   def has_a_valid_email?
     return email.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
-  end
-
-  def root_organizations
-    organizations.where(ancestry: nil)
   end
 
 end
