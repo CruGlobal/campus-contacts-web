@@ -7,7 +7,6 @@
 	
 	<div>
 		<h1 class="title">Step 1 of 3 - Upload a File</h1>
-		<%= link_to("Help Me", "http://blog.missionhub.com", :class => "helpme", :target => "_blank") %>
 		<div class="container">
 			<div class="content">
 				<p>You can easily import hundreds of contacts at once by uploading a CSV (comma-seperated value) file. Microsoft Excel makes it easy to create a CSV file from a spreadsheet.</p>
@@ -27,7 +26,6 @@
 					<li><%= t('contacts.import_contacts.instruction_2') %></li>
 					<li><%= t('contacts.import_contacts.instruction_3') %></li>
 				</ul>
-				<br/>
 			</div>
 			
 			<div class="importform">
@@ -37,4 +35,10 @@
 			</div>
 		</div>
 	</div>
+	<div class='bottom_area'>
+  	<%= link_to("Help Me", "http://blog.missionhub.com", :class => "helpme", :target => "_blank") %>
+  	<div class='sub_info'>
+  	  <%= t('contacts.import_contacts.help_info') %>
+  	</div>
+  </div>
 </div>

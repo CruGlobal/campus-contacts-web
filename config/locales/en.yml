@@ -730,6 +730,7 @@ en:
       instruction_2: "First name should not be missing"
       instruction_3: "Phone numbers and email addresses should have the right format"
       instruction_4: "Headers should be present"
+      help_info: "I still don't understand."
 
       download_template_csv: "Download template CSV file"
       cause_1: " First name is blank at row/s"
