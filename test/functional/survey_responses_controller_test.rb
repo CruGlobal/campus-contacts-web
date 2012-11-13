@@ -215,10 +215,10 @@ class SurveyResponsesControllerTest < ActionController::TestCase
     end
     
     should "be able to update phone number to correct phone number when first input is wrong" do
-      #assert_difference "Person.count" do
-        xhr :put, :create, {:survey_id => @survey.id, :person => {:firstName => "Karl", :lastName => "Pilkington", :phone_number => "karl"}}
-      #end
-      xhr :put, :update, {:survey_id => @survey.id, :id => Person.last.personID, :person => {:phone_number => "123456789"}}
+      
+      xhr :put, :create, {:survey_id => @survey.id, :person => {:first_name => "Karl", :last_name => "Pilkington", :phone_number => "karl"}}
+    
+      xhr :put, :update, {:survey_id => @survey.id, :id => Person.last.id, :person => {:phone_number => "123456789"}}
       assert_equal "123456789", Person.last.phone_numbers.first.number
       
       assert_response(:success)

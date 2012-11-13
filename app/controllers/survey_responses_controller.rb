@@ -66,6 +66,8 @@ class SurveyResponsesController < ApplicationController
         create_contact_at_org(@person, @survey.organization)
       end
       destroy_answer_sheet_when_answers_are_all_blank
+      session[:person_id] = nil
+      session[:survey_id] = nil
       respond_to do |wants|
         wants.html { render :thanks, layout: 'mhub'}
         wants.mobile { render :thanks }
