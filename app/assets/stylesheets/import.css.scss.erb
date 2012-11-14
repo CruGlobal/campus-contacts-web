@@ -79,271 +79,287 @@
 	margin: 0 auto;
 	width: 790px;
 	
-		.inside_container {
-			margin: 0 auto;
-			width: 574px;
-		}
+  #import_upload {
+    width: 300px;
+  }
+
+	.inside_container {
+		margin: 0 auto;
+		width: 600px;
+	}
+
+	select {
+		/*display: none;*/
+		width: 245px;
+	}
+
+	h1.title {
+		float: left;
+		font-family: Georgia;
+		font-size: 24px;
+		font-style: italic;
+		font-weight: normal;
+		color: #808284;
+	}
 	
-		select {
-			/*display: none;*/
-			width: 245px;
-		}
+	.helpme {
+		margin: 0;
+		padding: 0.5em 1em;
+		display: inline-block;
+		background: #fff2a2;
+		border: 1px solid #ffeb74;
+		-moz-border-radius: 4px;
+		border-radius: 4px;
+		font-weight: bold;
+		color: #222;
+	}
 	
-		h1.title {
-			float: left;
-			font-family: Georgia;
-			font-size: 24px;
+	.bottom_area {
+	  padding: 0px 5px;
+	  text-align: right;
+	  margin-top: 10px;
+	  .sub_info {
+	    display: inline-block;
+  		font-family: Georgia;
+			font-size: 12px;
 			font-style: italic;
 			font-weight: normal;
 			color: #808284;
-		}
-		
-		.helpme {
-			margin-top: 1.2em;
-			margin-right: 1em;
-			padding: 0.5em 1em;
-			float: right;
-			display: block;
-			background: #fff2a2;
-			border: 1px solid #ffeb74;
-			-moz-border-radius: 4px;
-			border-radius: 4px;
-			font-weight: bold;
-			color: #222;
-		}
-		
-		.helpme:hover {
-			text-decoration: none;
-			background: #ffeb74;
-		}
-		
-		.helpme:active {
-			background: #fff2a2;
-		}
+			margin-top: 3px;
+	  }
+	}
 	
-		.container {
-			clear: both;
-			border: 1px solid #eaf1f6;
-			border-top: 25px solid #eaf1f6;
+	.helpme:hover {
+		text-decoration: none;
+		background: #ffeb74;
+	}
+	
+	.helpme:active {
+		background: #fff2a2;
+	}
+
+	.container {
+		clear: both;
+		border: 1px solid #eaf1f6;
+		border-top: 25px solid #eaf1f6;
+		
+		.content {
+			padding: 15px 50px;
+			font-family: Georgia;
+			font-size: 14px;
+			font-style: italic;
+			color: #808284;
+			
+			ol {
+				margin: 2em 0;
+				font-size: 12px;
+			}	
+		}
+		
+		table {
+			table-layout: fixed;
+			width: 600px;
+			text-align: left;
+			
+			th, td {
+				padding: 0.5em 20px;
+				vertical-align: middle;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+			
+			th:last-child, td:last-child {
+				width: 50%;
+			}
+			
+			tr:first-child {
+				background: #eaf1f6;
+			}
+			
+			tr {
+				border-bottom: 1px solid #eaf1f6;
+			}
+			
+			.matchEdit {
+				display: none;
+				float: right;
+				padding-top: 0.25em;
+			}
+			
+			.matchSelect {
+				float: left;
+				width: 230px;
+				height: 22px;
+				background-color: #fff;
+				background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eaf1f6), to(#fff));
+				background-image: -webkit-linear-gradient(top, #eaf1f6, #fff);
+				background-image: -moz-linear-gradient(top, #eaf1f6, #fff);
+				background-image: -ms-linear-gradient(top, #eaf1f6, #fff);
+				background-image: -o-linear-gradient(top, #eaf1f6, #fff);
 				
-				.content {
-					padding: 1em 3em;
-					font-family: Georgia;
-					font-size: 14px;
-					font-style: italic;
-					color: #808284;
-					
-					ol {
-						margin: 2em 0;
-						font-size: 12px;
-					}
-					
-				}
+				.selectTitleBg {
+					display: block;
+					padding: 0.25em 2.9em 0.25em 1em;
+					background: url('<%= asset_path('selectbox.png') %>') no-repeat right;
+					border: 1px solid #c7dff0;
+					cursor: default;
 				
-				table {
-					table-layout: fixed;
-					width: 574px;
-					text-align: left;
-					
-					th, td {
-						padding: 0.5em 2em;
-						vertical-align: middle;
+					.selectTitle {
+						display: block;
 						overflow: hidden;
 						white-space: nowrap;
+						color: #808284;
 					}
 					
-					th:last-child, td:last-child {
-						width: 50%;
-					}
-					
-					tr:first-child {
-						background: #eaf1f6;
-					}
-					
-					tr {
-						border-bottom: 1px solid #eaf1f6;
-					}
-					
-					.matchEdit {
-						display: none;
-						float: right;
-						padding-top: 0.25em;
-					}
-					
-					.matchSelect {
-						float: left;
-						width: 200px;
-						height: 22px;
-						background-color: #fff;
-						background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eaf1f6), to(#fff));
-						background-image: -webkit-linear-gradient(top, #eaf1f6, #fff);
-						background-image: -moz-linear-gradient(top, #eaf1f6, #fff);
-						background-image: -ms-linear-gradient(top, #eaf1f6, #fff);
-						background-image: -o-linear-gradient(top, #eaf1f6, #fff);
-						
-						.selectTitleBg {
-							display: block;
-							padding: 0.25em 2.9em 0.25em 1em;
-							background: url('<%= asset_path('selectbox.png') %>') no-repeat right;
-							border: 1px solid #c7dff0;
-							cursor: default;
-						
-							.selectTitle {
-								display: block;
-								overflow: hidden;
-								white-space: nowrap;
-								color: #808284;
-							}
-							
-						}
-						
-						.selectQuestions {
-							position: absolute;
-							margin-top: 1em;
-							margin-left: -5.9em;
-							padding: 1em;
-							width: 245px;
-							max-height: 245px;
-							overflow-y: scroll;
-							background: #fff;
-							border: 1px solid #c7dff0;
-							
-							.noMatch {
-								margin: 0 0 1em 0;
-								cursor: default;
-							
-								height: 20px;
-								line-height: 20px;
-								
-								span {
-									padding: 0.45em 0;
-								}
-								
-								.none {
-									padding: 0.2em 0.6em;
-									margin-right: 0.25em;
-									background: #808284;
-									color: #fff;
-									font-weight: bold;
-								}
-							
-							}
-							
-							.noMatch:hover {
-								background: #c7dff0;
-							}
-							
-								.surveyQuestions {
-									list-style: none;
-									margin: 0 0 1em 0;
-									padding: 0;
-									cursor: default;
-									
-										.surveyHeader {
-											color: #808284;
-											font-weight: bold;
-										}
-										
-										li {
-											padding:  0.25em 1em;
-										}
-										
-										li:hover {
-											background: #c7dff0;
-										}
-										
-								}
-							
-							.newQuestion {
-								cursor: default;						
-							
-								height: 20px;
-								line-height: 20px;
-								
-								span {
-									padding: 0.45em 0;
-								}
-								
-								.plus {
-									padding: 0.2em 0.45em;
-									margin-right: 0.25em;
-									background: #808284;
-									color: #fff;
-									font-weight: bold;
-								}
-							
-							}
-							
-							.newQuestion:hover {
-								background: #c7dff0;
-							}
-								
-						}
-						
-					}
 				}
 				
-				.importform {
-					overflow: hidden;
-					padding: 0.8em;
-					background: #eaf1f6;
-					
-					input[type="file"] {
-						float: left;
-						padding: 0.5em;
-						background: #fff;
-					}
-					
-					input[type="submit"] {
-						float: right;
-						background: #fff;
-						border-radius: 4px;
-						border: 1px solid #808284;
-					}
-					
-					input[type="submit"]:hover {
-						background: #c7dff0;
-						border-color: #0379ae;
-					}
-					
-					.cancel {
-						float: right;
-						margin: 2px 5px 2px 0;
-						padding: 7px 0;
-						display: block;
-						width: 150px;
-						background: #fff;
-						text-align: center;
-						color: #222;
-						border-radius: 4px;
-						border: 1px solid #808284;
-						font: bold 11px "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
-					}
-					
-					.cancel:hover {
-						text-decoration: none;
-						background: #c7dff0;
-						border-color: #0379ae;
-					}
-				}
-				
-				#new_label_button {
-					background: #fff;
-					border-radius: 4px;
-					border: 1px solid #808284;
-				}
-				
-				#new_label_button:hover {
-					background: #c7dff0;
-					border-color: #0379ae;
-				}
-				
-				.labelform {
-					margin: 0 1em;
+				.selectQuestions {
+					position: absolute;
+					margin-top: 0;
+					margin-left: -241px;
 					padding: 1em;
-					border-top: 1px solid #808284;
+					width: 445px;
+					max-height: 245px;
+					overflow-y: scroll;
+					background: #fff;
+					border: 1px solid #c7dff0;
+					
+					.noMatch {
+						margin: 0 0 1em 0;
+						cursor: default;
+					
+						height: 20px;
+						line-height: 20px;
+						
+						span {
+							padding: 0.45em 0;
+						}
+						
+						.none {
+							padding: 0.2em 0.6em;
+							margin-right: 0.25em;
+							background: #808284;
+							color: #fff;
+							font-weight: bold;
+						}
+					
+					}
+					
+					.noMatch:hover {
+						background: #c7dff0;
+					}
+					
+						.surveyQuestions {
+							list-style: none;
+							margin: 0 0 1em 0;
+							padding: 0;
+							cursor: default;
+							
+								.surveyHeader {
+									color: #808284;
+									font-weight: bold;
+								}
+								
+								li {
+									padding:  0.25em 1em;
+								}
+								
+								li:hover {
+									background: #c7dff0;
+								}
+								
+						}
+					
+					.newQuestion {
+						cursor: default;						
+					
+						height: 20px;
+						line-height: 20px;
+						
+						span {
+							padding: 0.45em 0;
+						}
+						
+						.plus {
+							padding: 0.2em 0.45em;
+							margin-right: 0.25em;
+							background: #808284;
+							color: #fff;
+							font-weight: bold;
+						}
+					
+					}
+					
+					.newQuestion:hover {
+						background: #c7dff0;
+					}
+						
 				}
+				
+			}
 		}
+		
+		.importform {
+			overflow: hidden;
+			padding: 0.8em;
+			background: #eaf1f6;
+			
+			input[type="file"] {
+				float: left;
+				padding: 0.5em;
+				background: #fff;
+			}
+			
+			input[type="submit"] {
+				float: right;
+				background: #fff;
+				border-radius: 4px;
+				border: 1px solid #808284;
+			}
+			
+			input[type="submit"]:hover {
+				background: #c7dff0;
+				border-color: #0379ae;
+			}
+			
+			.cancel {
+				float: right;
+				margin: 2px 5px 2px 0;
+				padding: 7px 0;
+				display: block;
+				width: 150px;
+				background: #fff;
+				text-align: center;
+				color: #222;
+				border-radius: 4px;
+				border: 1px solid #808284;
+				font: bold 11px "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+			}
+			
+			.cancel:hover {
+				text-decoration: none;
+				background: #c7dff0;
+				border-color: #0379ae;
+			}
+		}
+		
+		#new_label_button {
+			background: #fff;
+			border-radius: 4px;
+			border: 1px solid #808284;
+		}
+		
+		#new_label_button:hover {
+			background: #c7dff0;
+			border-color: #0379ae;
+		}
+		
+		.labelform {
+			margin: 0 1em;
+			padding: 1em;
+			border-top: 1px solid #808284;
+		}
+	}
 }
 
 #new_question_form {
