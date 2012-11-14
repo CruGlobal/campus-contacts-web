@@ -2,7 +2,7 @@ require 'vpim/vcard'
 require 'vpim/book'
 
 class Person < ActiveRecord::Base
-  
+
   serialize :organization_tree_cache, JSON
   serialize :org_ids_cache, JSON
 
@@ -35,7 +35,7 @@ class Person < ActiveRecord::Base
   has_many :organizational_roles_including_archived, class_name: "OrganizationalRole", foreign_key: "person_id", conditions: {deleted: false}
   has_many :roles_including_archived, through: :organizational_roles_including_archived, source: :role
   has_many :organizations, through: :organizational_roles, conditions: ["role_id IN(?) AND status = 'active' AND deleted = 0 AND organizational_roles.archive_date is null ", Role.involved_ids], uniq: true
-  
+
   has_many :followup_comments, :class_name => "FollowupComment", :foreign_key => "commenter_id"
   has_many :comments_on_me, :class_name => "FollowupComment", :foreign_key => "contact_id"
 
@@ -50,24 +50,24 @@ class Person < ActiveRecord::Base
   validates_presence_of :first_name
   #validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, allow_blank: true
 
-  accepts_nested_attributes_for :email_addresses, :reject_if => lambda { |a| a[:email].blank? }, allow_destroy: true  
+  accepts_nested_attributes_for :email_addresses, :reject_if => lambda { |a| a[:email].blank? }, allow_destroy: true
   accepts_nested_attributes_for :phone_numbers, :reject_if => lambda { |a| a[:number].blank? }, allow_destroy: true
-  accepts_nested_attributes_for :current_address, allow_destroy: true  
+  accepts_nested_attributes_for :current_address, allow_destroy: true
 
   #scope :organizational_roles, where("end_date = ''")
   scope :find_by_person_updated_by_daterange, lambda { |date_from, date_to| {
     :conditions => ["date_attributes_updated >= ? AND date_attributes_updated <= ? ", date_from, date_to]
   }}
-  
+
   scope :find_by_last_login_date_before_date_given, lambda { |after_date| {
     :select => "people.*",
     :joins => "JOIN users AS ssm ON ssm.id = people.user_id",
     :conditions => ["ssm.current_sign_in_at <= ? OR (ssm.current_sign_in_at IS NULL AND ssm.created_at <= ?)", after_date, after_date]
   }}
-  
+
   scope :find_by_date_created_before_date_given, lambda { |before_date| {
     :select => "people.*",
-    :joins => "LEFT JOIN organizational_roles AS ors ON people.id = ors.person_id",    
+    :joins => "LEFT JOIN organizational_roles AS ors ON people.id = ors.person_id",
     :conditions => ["ors.role_id = ? AND ors.created_at <= ? AND ors.archive_date IS NULL AND ors.deleted = 0", Role::CONTACT_ID, before_date]
   }}
 
@@ -77,14 +77,14 @@ class Person < ActiveRecord::Base
     :conditions => "roles.i18n IN #{Role.default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}",
     :order => "FIELD#{Role.i18n_field_plus_default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}"
   } }
-  
+
   scope :order_by_followup_status, lambda { |order| {
     :select => "people.*",
     #:joins => "#{'JOIN organizational_roles ON people.id = organizational_roles.person_id'}",
     :conditions => ["organizational_roles.role_id = ?", Role::CONTACT_ID],
     :order => "organizational_roles.#{order}"
   } }
-  
+
   scope :order_by_primary_phone_number, lambda { |order| {
     :select => "people.*",
     :joins => "LEFT JOIN `phone_numbers` ON `phone_numbers`.`person_id` = `people`.`id` AND `phone_numbers`.`primary` = 1",
@@ -97,7 +97,7 @@ class Person < ActiveRecord::Base
     :conditions => "roles.name NOT IN #{Role.default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}",
     :order => "roles.name #{order.include?("asc") ? 'DESC' : 'ASC'}"
   } }
-  
+
   scope :find_friends_with_fb_uid, lambda { |person| { conditions: {fb_uid: Friend.followers(person)} } }
 
   scope :search_by_name_or_email, lambda { |keyword, org_id| {
@@ -105,22 +105,22 @@ class Person < ActiveRecord::Base
     :conditions => ["(org_roles.organization_id = #{org_id} AND (concat(first_name,' ',last_name) LIKE ? OR concat(last_name, ' ',first_name) LIKE ? OR emails.email LIKE ?) AND org_roles.deleted <> 1)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
     :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = people.id LEFT JOIN organizational_roles AS org_roles ON people.id = org_roles.person_id"
   } }
-  
+
   scope :get_and_order_by_latest_answer_sheet_answered, lambda { |order, org_id| {
     #"SELECT * FROM (SELECT * FROM missionhub_dev.people mp INNER JOIN missionhub_dev.organizational_roles ro ON mp.id = ro.person_id WHERE ro.organization_id = #{@organization.id} AND (ro.role_id = 3 AND ro.followup_status <> 'do_not_contact')) mp LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM missionhub_dev.answer_sheets ass INNER JOIN missionhub_dev.surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{@organization.id}) ass ON ass.person_id = mp.id GROUP BY mp.id ORDER BY #{params[:q][:s].gsub('answer_sheets', 'ass')}"
     :joins => "LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM answer_sheets ass INNER JOIN surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{org_id}) ass ON ass.person_id = people.id",
     :group => "people.id",
     :order => "#{order.gsub('answer_sheets', 'ass')}"
   }}
-  
+
   def completed_answer_sheets(organization)
     answer_sheets.where("survey_id IN (?)", organization.surveys.collect(&:id)).order('updated_at DESC')
   end
-  
+
   def latest_answer_sheet(organization)
     completed_answer_sheets(organization).first
   end
-  
+
   def answered_surveys_hash(organization)
     surveys = Array.new
     completed_answer_sheets(organization).each do |answer_sheet|
@@ -132,83 +132,83 @@ class Person < ActiveRecord::Base
     return surveys
   end
 
-  scope :get_archived, lambda { |org_id| { 
+  scope :get_archived, lambda { |org_id| {
     :conditions => "organizational_roles.archive_date IS NOT NULL AND organizational_roles.deleted = 0",
     :group => "people.id",
     :having => "COUNT(*) = (SELECT COUNT(*) FROM people AS mpp JOIN organizational_roles orss ON mpp.id = orss.person_id WHERE mpp.id = people.id AND orss.organization_id = #{org_id} AND orss.deleted = 0)"
   } }
-  
+
   scope :get_from_group, lambda { |group_id| {
     :select => "people.*",
     :joins => "LEFT JOIN #{GroupMembership.table_name} AS gm ON gm.person_id = people.id",
     :conditions => ["gm.group_id = ?", group_id]
   } }
-  
+
   def self.archived(org_id)
     self.get_archived(org_id).collect()
   end
-  
+
   def self.people_for_labels(org)
     Person.where('organizational_roles.organization_id' => org.id).includes(:organizational_roles)
   end
-  
-  scope :get_archived_included, lambda { { 
+
+  scope :get_archived_included, lambda { {
     :conditions => "organizational_roles.deleted = 0",
     :group => "people.id"
   } }
-  
+
   def self.archived_included
     self.get_archived_included.collect()
   end
-  
-  scope :get_archived_not_included, lambda { { 
+
+  scope :get_archived_not_included, lambda { {
     :conditions => "organizational_roles.archive_date IS NULL AND organizational_roles.deleted = 0",
     :group => "people.id"
   } }
-  
+
   def self.archived_not_included
     self.get_archived_not_included.collect()
   end
-  
-  scope :get_deleted, lambda { { 
+
+  scope :get_deleted, lambda { {
     :conditions => "organizational_roles.deleted = 1",
     :group => "people.id",
     :having => "COUNT(*) = (SELECT COUNT(*) FROM people AS mpp JOIN organizational_roles orss ON mpp.id = orss.person_id WHERE mpp.id = people.id)"
   } }
-  
+
   def select_name
     "#{first_name} #{last_name} #{'-' if last_name.present? || first_name.present?} #{pretty_phone_number}"
   end
-  
+
   def select_name_email
     "#{first_name} #{last_name} #{'-' if last_name.present? || first_name.present?} #{email}"
   end
 
-  
+
   def self.deleted
     self.get_deleted.collect()
   end
-  
+
   def unachive_contact_role(org)
     OrganizationalRole.where(organization_id: org.id, role_id: Role::CONTACT_ID, person_id: id).first.unarchive
   end
-  
+
   def archive_contact_role(org)
     begin
       OrganizationalRole.where(organization_id: org.id, role_id: Role::CONTACT_ID, person_id: id).first.archive
     rescue
-    
+
     end
   end
-  
+
   def archive_leader_role(org)
     begin
       OrganizationalRole.where(organization_id: org.id, role_id: Role::LEADER_ID, person_id: id).first.archive
     rescue
-    
+
     end
   end
-  
+
   def is_archived?(org)
     return true if organizational_roles.where(organization_id: org.id).blank?
     false
@@ -303,9 +303,9 @@ class Person < ActiveRecord::Base
       #raise org_id.inspect
     end
   end
-  
+
   def roles_by_org_id(org_id)
-    unless @roles_by_org_id 
+    unless @roles_by_org_id
       @roles_by_org_id = Hash[OrganizationalRole.connection.select_all("select organization_id, group_concat(role_id) as role_ids from organizational_roles where person_id = #{id} group by organization_id").collect { |row| [row['organization_id'], row['role_ids'].split(',').map(&:to_i) ]}]
     end
     @roles_by_org_id[org_id]
@@ -314,7 +314,7 @@ class Person < ActiveRecord::Base
   def org_tree_node(o = nil, parent_roles = [])
     orgs = {}
     @org_ids ||= {}
-    (o ? o.children : topmost_organizations).order('name').each do |org|
+    (o ? o.children : organizations).order('name').each do |org|
       # collect roles associated with each org
       @org_ids[org.id] ||= {}
       @org_ids[org.id]['roles'] = (Array.wrap(roles_by_org_id(org.id)) + Array.wrap(parent_roles)).uniq
@@ -339,13 +339,13 @@ class Person < ActiveRecord::Base
   def orgs_with_children
     organizations.collect {|org|
       if org.parent
-        org.parent.show_sub_orgs? ? [org] + org.children : [org] 
+        org.parent.show_sub_orgs? ? [org] + org.children : [org]
       else
         org.show_sub_orgs? ? [org] + org.children : [org]
       end
     }.flatten.uniq_by{ |o| o.id }
   end
-  
+
   def all_organization_and_children
     orgs = Array.new
     organizations.each do |org|
@@ -355,7 +355,7 @@ class Person < ActiveRecord::Base
     end
     Organization.where(id: orgs.collect(&:id))
   end
-  
+
   def collect_all_child_organizations(org)
     child_orgs = Array.new
     if org.children.present?
@@ -409,7 +409,7 @@ class Person < ActiveRecord::Base
   end
 
   def name
-    [first_name, last_name].collect(&:to_s).join(' ') 
+    [first_name, last_name].collect(&:to_s).join(' ')
   end
 
   def self.find_from_facebook(data)
@@ -450,11 +450,11 @@ class Person < ActiveRecord::Base
           return self
         end
       end
-      
+
       async_get_or_update_friends_and_interests(authentication)
       get_location(authentication, response)
       get_education_history(authentication, response)
-      
+
     rescue MiniFB::FaceBookError => e
       Airbrake.notify(
         :error_class   => "MiniFB::FaceBookError",
@@ -546,7 +546,7 @@ class Person < ActiveRecord::Base
   end
 
   def get_friends(authentication, response = nil)
-    if friends.length == 0 
+    if friends.length == 0
       response ||= MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
       @friends = response['data']
 
@@ -740,7 +740,7 @@ class Person < ActiveRecord::Base
         pn.merge(opn) if opn
       end
       emails = email_addresses.collect(&:email)
-      other.email_addresses.each do |pn| 
+      other.email_addresses.each do |pn|
         if emails.include?(pn.email)
           pn.destroy
         else
@@ -751,13 +751,13 @@ class Person < ActiveRecord::Base
           end
         end
       end
-      
+
       # Organizational Roles
       organizational_roles.each do |pn|
         opn = other.organizational_roles.detect {|oa| oa.organization_id == pn.organization_id}
         pn.merge(opn) if opn
       end
-      other.organizational_roles.each do |role| 
+      other.organizational_roles.each do |role|
         begin
           role.update_attribute(:person_id, id) unless role.frozen?
         rescue ActiveRecord::RecordNotUnique
@@ -799,13 +799,13 @@ class Person < ActiveRecord::Base
     hash['name'] = self.to_s.gsub(/\n/," ")
     hash
   end
-  
+
   def to_hash_micro_leader(organization)
    hash = to_hash_mini
    hash['picture'] = picture unless fb_uid.nil?
-   hash['num_contacts'] = contact_assignments.for_org(organization).count 
+   hash['num_contacts'] = contact_assignments.for_org(organization).count
    hash['fb_id'] = fb_uid.to_s unless fb_uid.nil?
-   hash 
+   hash
   end
 
   def to_hash_mini_leader(org_id)
@@ -841,18 +841,18 @@ class Person < ActiveRecord::Base
     hash['organizational_roles'] = organizational_roles_hash
     hash
   end
-  
+
   def organizational_roles_hash
     @retries = 0
     logger.debug("\n\n===========called=============\n\n")
     roles = {}
-    @organizational_roles_hash ||= org_ids.collect { |org_id, values| 
-                                     values['roles'].select { |role_id| 
+    @organizational_roles_hash ||= org_ids.collect { |org_id, values|
+                                     values['roles'].select { |role_id|
                                        role_id != Role.contact.id
-                                     }.collect { |role_id| 
+                                     }.collect { |role_id|
                                        roles[role_id] ||= Role.find_by_id(role_id)
                                      }.compact.collect { |role|
-                                       {org_id: org_id, role: role.i18n, name: organization_from_id(org_id).name, primary: primary_organization.id == org_id ? 'true' : 'false'} 
+                                       {org_id: org_id, role: role.i18n, name: organization_from_id(org_id).name, primary: primary_organization.id == org_id ? 'true' : 'false'}
                                      }
                                    }.flatten
   rescue NoMethodError
@@ -980,11 +980,11 @@ class Person < ActiveRecord::Base
   def assigned_organizational_roles(organization_id)
     roles.where('organizational_roles.organization_id' => organization_id, 'organizational_roles.deleted' => 0)
   end
-  
+
   def assigned_organizational_roles_including_archived(organization_id)
     roles_including_archived.where('organizational_roles.organization_id' => organization_id, 'organizational_roles.deleted' => 0)
   end
-  
+
   def is_role_archived?(org_id, role_id)
     return false if organizational_roles_including_archived.where(organization_id: org_id, role_id: role_id).first.archive_date.blank?
     true
@@ -1026,26 +1026,14 @@ class Person < ActiveRecord::Base
         maker.add_email(email) do |email|
           email.preferred = true
           email.location = 'home'
-        end  
+        end
       end
     end
 
-  end 
+  end
 
   def has_a_valid_email?
     return email.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
   end
-  
-  def topmost_organizations
-    ancestries = []
-    organizations.each do |org|
-      if org.ancestry?
-        ancestries += org.ancestry.split('/')
-      else
-        ancestries += [org.id]
-      end
-    end
-    Organization.where(id: ancestries.collect(&:to_i))
-  end
-  
+
 end
