@@ -564,4 +564,14 @@ class PersonTest < ActiveSupport::TestCase
     a = org.people.search_by_name_or_email("hnny", org.id) # as in Johnny
     assert_equal a.count, 2 #should be able to find contacts
   end
+  
+  context "merging 2 same admin persons in an org with an implied admin should" do
+    should "not loose its admin abilities in that org" do
+      user = Factory(:user_with_auxs)
+      child_org = Factory(:organization, :name => "neilmarion", :parent => user.person.organizations.first, :show_sub_orgs => true)
+      Factory(:organizational_role, organization: child_org, person: user.person, role: Role.contact)
+      Factory(:organizational_role, organization: child_org, person: user.person, role: Role.leader)
+      assert_equal user.person.admin_of_org_ids.sort, [user.person.organizations.first.id, child_org.id].sort
+    end
+  end
 end
