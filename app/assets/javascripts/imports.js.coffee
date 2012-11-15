@@ -35,7 +35,13 @@ $ ->
     $('#create_question_dialog').dialog('option', 'position', 'center');
     $('#create_question_dialog').dialog('open')
           
-        
+  $('#create_survey_toggle').live 'change', ->
+    if $(this).is(':checked')
+      $('#survey_content #new_survey').show()
+      $('#survey_content #old_survey').hide()
+    else
+      $('#survey_content #new_survey').hide()
+      $('#survey_content #old_survey').show()
   
   $('.import_column_survey_select').live 'change', ->
     if $(this).val() == ''
