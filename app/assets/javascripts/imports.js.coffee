@@ -42,6 +42,23 @@ $ ->
     else
       $('#survey_content #new_survey').hide()
       $('#survey_content #old_survey').show()
+      
+  $("#question_category").live 'change', ->
+    questionType = $(this).val()
+    $('#length_counter').text(countCharacters(questionType))
+    if questionType is "TextField"
+      $("#survey_question_set").show()
+      $('#import_survey_question_options_set').hide()
+      $('#length_counter').text(countCharacters('TextField'))
+    else if questionType is "ChoiceField"
+      $("#survey_question_set").show()
+      $('#import_survey_question_options_set').show()
+    else
+      $("#survey_question_set").hide()
+
+  $('#question_field, #question_options_field').live 'keyup', ->
+    $('#length_counter').text(countCharacters($("#question_category").val()))
+    $('#question_preview').html($('#question_field').val() + "<br/>" + $('#question_options_field').val())
   
   $('.import_column_survey_select').live 'change', ->
     if $(this).val() == ''
@@ -58,5 +75,13 @@ $ ->
 parseCamelCase = (val) ->
   val.replace /[a-z][A-Z]/g, (str, offset) ->
     str[0] + " " + str[1].toLowerCase()
+    
+countCharacters = (type) ->
+  if type is 'TextField'
+    return $('#question_field').val().length
+  else
+    total = $('#question_field').val().length + $('#question_options_field').val().length
+    total += 1 if $('#question_options_field').val().length > 0
+    return total
 
   
