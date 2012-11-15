@@ -46,19 +46,20 @@
 			<div class="content">
 				<p class="singleinstruction">Match the headers from your CSV file with the corresponding Person attributes or Survey questions in MissionHub. <strong>First Name</strong> is required.</p>
 			</div>
-			<table>
+			<table id="import_column_question">
 				<tr>
 					<th>Column</th>
 					<th>Preview</th>
 					<th>Match</th>
 				</tr>
-		
 				<%= form_for @import do |f| %>
 					<% @import.headers.each_with_index do |header, i| %>
-						<tr id="row_<%= i %>">
-							<td><%= header %>:</td>
-							<td><%= @import.preview[i]%></td>
-							<td>
+						<tr id="<%= i %>" class='import_row'>
+							<td class='column_header'><%= header %>:</td>
+							<td class='column_preview'><%= @import.preview[i]%></td>
+							<td class='column_question customform ui-widget'>
+							  <%= select_tag "survey_question", grouped_options_for_select(@survey_questions, selected_key = '', prompt = 'Create New Question'), class: 'import_column_survey_select', id: "import_column_survey_select_#{i}", data_id: i %>
+								<%= link_to("Edit", "#", :class => "column_edit hidden", :id => "column_edit_#{i}") %>
 								<div class="matchSelect" id="select_<%= i %>">
 									<div class="selectTitleBg">
 										<span class="selectTitle"></span>
