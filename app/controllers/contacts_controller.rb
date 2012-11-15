@@ -218,12 +218,17 @@ class ContactsController < ApplicationController
       end
       
       if params[:q] && params[:q][:s].include?('answer_sheets')
-        @people = current_organization.contacts.get_and_order_by_latest_answer_sheet_answered(params[:q][:s], current_organization.id)
+        @people = @people.get_and_order_by_latest_answer_sheet_answered(params[:q][:s], current_organization.id)
       end
       
       if params[:q] && params[:q][:s].include?('followup_status')
         @people = @people.order_by_followup_status(params[:q][:s])
       end
+      
+      if params[:q] && params[:q][:s].include?('phone_numbers.number')
+        @people = @people.order_by_primary_phone_number(params[:q][:s])
+      end
+      
       if params[:survey].present?
         @people = @people.joins(:answer_sheets).where("answer_sheets.survey_id" => params[:survey])
       end
@@ -267,16 +272,16 @@ class ContactsController < ApplicationController
             # If this question is assigned to a column, we need to handle that differently
             if question.object_name.present?
               table_name = case question.object_name
-                           when 'person'
-                             case question.attribute_name
-                             when 'email'
-                               @people = @people.joins(:email_addresses).where("#{EmailAddress.table_name}.email like ?", term) unless v.strip.blank?
-                             when 'phone_number'
-                               @people = @people.joins(:phone_numbers).where("#{PhoneNumber.table_name}.number like ?", term) unless v.strip.blank?
-                             else
-                               @people = @people.where("#{Person.table_name}.#{question.attribute_name} like ?", term) unless v.strip.blank?
-                             end
-                           end
+               when 'person'
+                 case question.attribute_name
+                 when 'email'
+                   @people = @people.joins(:email_addresses).where("#{EmailAddress.table_name}.email like ?", term) unless v.strip.blank?
+                 when 'phone_number'
+                   @people = @people.joins(:phone_numbers).where("#{PhoneNumber.table_name}.number like ?", term) unless v.strip.blank?
+                 else
+                   @people = @people.where("#{Person.table_name}.#{question.attribute_name} like ?", term) unless v.strip.blank?
+                 end
+               end
             else
               unless v.strip.blank?
                 @people = @people.joins(:answer_sheets)
@@ -316,8 +321,8 @@ class ContactsController < ApplicationController
       @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
       # raise @q.sorts.inspect
       if params[:q]
-        @people = @people.includes(:primary_phone_number, :primary_email_address, :contact_role).
-                    order(params[:q] && params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass').gsub('followup_status','organizational_roles.followup_status') : ['last_name, first_name']).group('people.id')
+        order_query = params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass').gsub('followup_status','organizational_roles.followup_status').gsub('role_id','organizational_roles.role_id') : ['last_name, first_name'] 
+        @people = @people.includes(:primary_phone_number, :primary_email_address, :contact_role).order(order_query)
       end
       @all_people = @people.group('people.id')
       @people_for_labels = Person.people_for_labels(current_organization)
