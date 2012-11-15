@@ -59,7 +59,7 @@
 							<td class='column_preview'><%= @import.preview[i]%></td>
 							<td class='column_question customform ui-widget'>
 							  <%= select_tag "survey_question", grouped_options_for_select(@survey_questions, selected_key = '', prompt = 'Create New Question'), class: 'import_column_survey_select', id: "import_column_survey_select_#{i}", data_id: i %>
-								<%= link_to("Edit", "#", :class => "column_edit hidden", :id => "column_edit_#{i}") %>
+								<%= link_to("Edit", "", class: "column_edit_link hidden", id: "column_edit_#{i}", data_id: i) %>
 								<div class="matchSelect" id="select_<%= i %>">
 									<div class="selectTitleBg">
 										<span class="selectTitle"></span>
@@ -98,5 +98,9 @@
 	
 	<div id="new_question_div" style="display:none" title="Create Survey Question For Column">
 		<%= render 'import_add_question' %>
+	</div>
+	
+	<div id="create_question_dialog" style="display:none" title="Create Survey Question For Column">
+		<%= render 'add_survey_question' %> 
 	</div>
 </div>

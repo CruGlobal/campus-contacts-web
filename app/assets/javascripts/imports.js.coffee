@@ -14,6 +14,26 @@ $ ->
         if match_question
           select_field.val($(this).val()) unless $(this).is(':disabled')
       select_field.trigger('change')
+      
+  	$('#create_question_dialog').dialog
+  		resizable: false,
+  		height: 444,
+  		width: 600,
+  		modal: true,
+  		autoOpen: false,
+      open: (event, ui) ->
+        $("body").css("overflow", "hidden")
+        $('.ui-widget-overlay').width($('body').width())
+      close: (event, ui) ->
+        $("body").css("overflow", "auto")
+      buttons: 
+        Cancel: ->
+          $(this).dialog('close')
+      
+  $('.column_edit_link').live 'click', (e)->
+    e.preventDefault()
+    $('#create_question_dialog').dialog('option', 'position', 'center');
+    $('#create_question_dialog').dialog('open')
           
         
   
