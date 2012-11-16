@@ -369,7 +369,7 @@ class Person < ActiveRecord::Base
   end
 
   def phone_number
-    @phone_number = primary_phone_number.try(:number)
+    @phone_number = phone_numbers.detect(&:primary?).try(:number)
 
     unless @phone_number
       if phone_numbers.present?
@@ -392,10 +392,11 @@ class Person < ActiveRecord::Base
       if val.to_s.strip.blank?
         primary_phone_number.try(:destroy)
       else
-        unless phone_numbers.find_by_number(PhoneNumber.strip_us_country_code(val))
+        if new_record? || (p = phone_numbers.find_by_number(PhoneNumber.strip_us_country_code(val))).blank?
           p = primary_phone_number || phone_numbers.new
           p.number = val
         end
+        p.primary = true
       end
     end
     p
@@ -930,7 +931,7 @@ class Person < ActiveRecord::Base
     return unless opts.slice(:first_name, :last_name, :number).all? {|_, v| v.present?}
 
     Person.where(first_name: opts[:first_name], last_name: opts[:last_name], 'phone_numbers.number' => opts[:number]).
-           joins(:phone_numbers).first
+           includes(:phone_numbers).first
   end
 
   def self.find_existing_person_by_email(email)
