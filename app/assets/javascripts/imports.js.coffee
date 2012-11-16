@@ -27,6 +27,8 @@ $ ->
       close: (event, ui) ->
         $("body").css("overflow", "auto")
       buttons: 
+        Save: ->
+          $('#import_survey_form').submit()
         Cancel: ->
           $(this).dialog('close')
       

@@ -1,0 +1,5 @@
+if(<%= @success %>){
+  $('#import_error_message').text('')
+}else{
+  $('#import_error_message').text("<%== @message %>")
+}
