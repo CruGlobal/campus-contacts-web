@@ -17,11 +17,12 @@ class SurveyResponsesController < ApplicationController
     unless params[:nologin] == 'true'
       return unless authenticate_user!
     end
-
     # If they texted in, save their phone number
     if @sms
       if @person.new_record?
-        @person.phone_numbers.new(:number => @sms.phone_number)
+        @person.phone_number = @sms.phone_number
+        @person.first_name = @sms.person.first_name
+        @person.last_name = @sms.person.last_name
       else
         @person.phone_numbers.create!(number: @sms.phone_number, location: 'mobile') unless @person.phone_numbers.detect {|p| p.number_with_country_code == @sms.phone_number}
         @sms.update_attribute(:person_id, @person.id) unless @sms.person_id
@@ -29,7 +30,7 @@ class SurveyResponsesController < ApplicationController
     end
 
     if @survey
-      @title = @survey.terminology 
+      @title = @survey.terminology
       @answer_sheet = get_answer_sheet(@survey, @person)
       respond_to do |wants|
         wants.html { render :layout => 'mhub'}
@@ -79,13 +80,21 @@ class SurveyResponsesController < ApplicationController
     Person.transaction do
       @person = current_person # first try for a logged in person
       if params[:person] && params[:person][:email].present?
-        @person_from_email = EmailAddress.where(email: params[:person][:email]).first.try(:person) 
-        if @person && @person_from_email
-          if @person != @person_from_email
-            @person = @person_from_email.smart_merge(@person)
-          end
+        # See if we can match someone by email
+        existing_person = EmailAddress.where(email: params[:person][:email]).first.try(:person)
+      end
+      if params[:person] && params[:person][:phone_number].present?
+        # See if we can match someone by name and phone number
+        existing_person = Person.find_existing_person_by_name_and_phone(number: params[:person][:phone_number],
+                                                                        first_name: params[:person][:first_name],
+                                                                        last_name: params[:person][:last_name])
+      end
+
+      if existing_person
+        if @person
+          @person = existing_person.smart_merge(@person) unless @person == existing_person
         else
-          @person = @person_from_email
+          @person = existing_person
         end
       end
 
@@ -144,9 +153,9 @@ class SurveyResponsesController < ApplicationController
     question_set.save
     @answer_sheet.person.save
     @answer_sheet.update_attribute(:completed_at, Time.now)
-    
+
   end
-  
+
   def destroy_answer_sheet_when_answers_are_all_blank
     @answer_sheet.destroy if !params[:answers].present? || (params[:answers] && params[:answers].values.reject{|x| x.nil? || x.empty?}.blank?) # if a person has blank answers in a survey, destroy!
   end
