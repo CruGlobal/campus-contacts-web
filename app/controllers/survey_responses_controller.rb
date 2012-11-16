@@ -79,15 +79,19 @@ class SurveyResponsesController < ApplicationController
     @title = @survey.terminology
     Person.transaction do
       @person = current_person # first try for a logged in person
-      if params[:person] && params[:person][:email].present?
-        # See if we can match someone by email
-        existing_person = EmailAddress.where(email: params[:person][:email]).first.try(:person)
-      end
-      if params[:person] && params[:person][:phone_number].present?
-        # See if we can match someone by name and phone number
-        existing_person = Person.find_existing_person_by_name_and_phone(number: params[:person][:phone_number],
-                                                                        first_name: params[:person][:first_name],
-                                                                        last_name: params[:person][:last_name])
+      if params[:person] 
+        if params[:person][:email].present?
+          # See if we can match someone by email
+          existing_person = EmailAddress.where(email: params[:person][:email]).first.try(:person)
+        end
+
+        params[:person][:phone_number] = @sms.phone_number if params[:person][:phone_number].blank? && @sms.present?
+        if params[:person][:phone_number].present?
+          # See if we can match someone by name and phone number
+          existing_person = Person.find_existing_person_by_name_and_phone(number: params[:person][:phone_number],
+                                                                          first_name: params[:person][:first_name],
+                                                                          last_name: params[:person][:last_name])
+        end
       end
 
       if existing_person
