@@ -1,39 +1,4 @@
 <div class="inside_container">
-	<%= javascript_include_tag "underscore-1.4.2" %>
-	<%= javascript_include_tag "jquery.simplyCountable" %>
-	<%= javascript_tag do %>
-  		var surveyTitles = new Array();
-  		var surveyLengths = new Array();
-  		var surveyGroups = new Array();
-  		var mhubQuestions = new Array();
-  		var userQuestions = new Array();
-		var surveys = new Array();
-		var surveyData = new Array();
-  		<% @survey_questions.each_key do |s| %>
-			surveyTitles.push('<%= s %>');
-			<% @survey_questions[s].each do |v| %>
-				surveys.push("<%= v[0] %>");
-			<% end %>
-			surveyLengths.push(surveys.length);
-			surveyGroups.push(surveys);
-			surveys = [];
-		<% end %>
-		<% @import.headers.each_with_index do |header| %>
-			userQuestions.push('<%= header %>'.replace(/:/gi, ""));
-		<% end %>
-		surveyTitles.reverse();
-		surveyLengths.reverse();
-		surveyGroups.reverse();
-		for (var i = 0; i < surveyTitles.length; i++) {
-			surveyData.push(surveyTitles[i]);
-			surveyData.push(surveyGroups[i]);
-			for (var ii = 0; ii < surveyGroups[i].length; ii++) {
-				mhubQuestions.push(surveyGroups[i][ii]);
-			}
-		}
-	<% end %>
-	<%= javascript_include_tag "import-contacts" %>
-	
 	<div class="titlebar titlebarmod">  
 	  <h1>
 		<%= t('contacts.index.import_contacts') %>
@@ -60,30 +25,6 @@
 							<td class='column_question customform ui-widget'>
 							  <%= select_tag "survey_question", grouped_options_for_select(@survey_questions, selected_key = '', prompt = 'Create New Question'), class: 'import_column_survey_select', id: "import_column_survey_select_#{i}", data_id: i %>
 								<%= link_to("Edit", "", class: "column_edit_link hidden", id: "column_edit_#{i}", data_id: i) %>
-								<div class="matchSelect" id="select_<%= i %>">
-									<div class="selectTitleBg">
-										<span class="selectTitle"></span>
-									</div>
-									<div class="selectQuestions" style="display:none;">
-										<div class="noMatch"><span class="noImport">Do not import data</span></div>
-										<div class="surveyContainer">
-											<% @survey_questions.each_key do |s| %>
-												<ul class="surveyQuestions">
-													<span class="surveyHeader"><%= s %></span>
-													<% @survey_questions[s].each do |v| %>
-														<li class="surveyItem"><%= v[0] %></li>
-													<% end %>
-												</ul>
-											<% end %>
-										</div>
-										<div class="newQuestion">
-											<span class="plus">+</span>Create a Survey Question for this Column
-										</div>
-									</div>
-								</div>
-								<div class="matchEdit">
-									<%= link_to("Edit", "#", :class => "editMatch", :id => "edit_#{i}") %>
-								</div>
 							</td>
 						</tr>
 					<% end %>

@@ -32,6 +32,19 @@ $ ->
       
   $('.column_edit_link').live 'click', (e)->
     e.preventDefault()
+    current_value = $("#import_column_survey_select_"+$(this).attr('data_id')).val()
+    if current_value is ""
+      $('#create_survey_toggle').attr('checked','checked')
+      $('#survey_content #new_survey').show()
+      $('#survey_content #old_survey').hide()
+      $('#survey_question_set').hide()
+      $('#survey_name_field').val('')
+      $('#select_survey_field').val('')
+      $('#question_field').val('')
+      $('#question_category').val('')
+      $('#question_options_field').val('')
+      $('#length_counter').text('0')
+      $('#question_preview').html('')
     $('#create_question_dialog').dialog('option', 'position', 'center');
     $('#create_question_dialog').dialog('open')
           
