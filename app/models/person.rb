@@ -844,7 +844,6 @@ class Person < ActiveRecord::Base
 
   def organizational_roles_hash
     @retries = 0
-    logger.debug("\n\n===========called=============\n\n")
     roles = {}
     @organizational_roles_hash ||= org_ids.collect { |org_id, values|
                                      values['roles'].select { |role_id|

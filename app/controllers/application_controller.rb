@@ -10,9 +10,9 @@ class ApplicationController < ActionController::Base
   before_filter :check_url, except: :facebook_logout
   before_filter :export_i18n_messages
   before_filter :set_newrelic_params
-  
+
   rescue_from CanCan::AccessDenied, with: :access_denied
-  protect_from_forgery  
+  protect_from_forgery
 
   def facebook_logout
     redirect_url = params[:next] ? params[:next] : root_url
@@ -34,13 +34,13 @@ class ApplicationController < ActionController::Base
   end
 
   protected
-  
+
   def set_newrelic_params
     if user_signed_in?
       NewRelic::Agent.add_custom_parameters(:user_id => current_user.id, :username => current_user.username, :person_id => current_person.try(:id), :name => current_person.to_s)
     end
   end
-  
+
   def set_login_cookie
     if user_signed_in?
       cookies['logged_in'] = true unless cookies['logged_in']
@@ -48,20 +48,20 @@ class ApplicationController < ActionController::Base
       cookies['logged_in'] = nil if cookies['logged_in']
     end
   end
-  
+
   def raise_or_hoptoad(e, options = {})
-    if Rails.env.production? 
+    if Rails.env.production?
       Airbrake.notify(e, options)
     else
       raise e
     end
   end
   helper_method :raise_or_hoptoad
-  
+
   def check_url
     render_404 if mhub?
   end
-  
+
   def render_404(nologin = false)
     if cookies[:keyword] && SmsKeyword.find_by_keyword(cookies[:keyword])
       url = "/c/#{cookies[:keyword]}"
@@ -76,17 +76,17 @@ class ApplicationController < ActionController::Base
     end
     return false
   end
-  
+
   def mhub?
     @mhub = request.host.include?(APP_CONFIG['public_host'] || 'mhub') if @mhub.nil?
     @mhub
   end
   helper_method :mhub?
-  
+
   def self.application_name
     'MH'
   end
-  
+
   def check_su
     # Act as another user
     if params[:user_id] && params[:su] && current_user.developer?
@@ -98,7 +98,7 @@ class ApplicationController < ActionController::Base
     end
     redirect_to params.except(:user_id, :su, :exit) and return false if redirect
   end
-  
+
   def switch_to_user(user_id, save_old = false)
     session['old_user_id'] = save_old ? current_user.id : nil
     sign_in(:user, User.find(user_id))
@@ -107,7 +107,7 @@ class ApplicationController < ActionController::Base
     #session['warden.user.user.key'] = ["User", [user_id.to_i], nil]
     #session['wizard'] = nil
   end
-  
+
   def current_user
     # check for access token, then do it the devise way
     if current_access_token
@@ -128,12 +128,12 @@ class ApplicationController < ActionController::Base
       super # devise user
     end
   end
-  
+
   def current_access_token
     @access_token ||= params['access_token'] || request.env['oauth.access_token']
   end
   helper_method :current_access_token
-  
+
   def mobile_device?
     if session[:mobile_param]
       session[:mobile_param] == "1"
@@ -147,14 +147,14 @@ class ApplicationController < ActionController::Base
     session[:mobile_param] = params[:mobile] if params[:mobile]
     request.format = :mobile if mobile_device?
   end
-  
+
   def current_person
     @current_person = current_user.person if current_user
     @current_person ||= Person.find_by_id(session[:person_id]) if session[:person_id]
     @current_person
   end
   helper_method :current_person
-  
+
   def get_guid_from_ticket(ticket)
     begin
       ticket.response.to_s.match(/ssoGuid>([A-Z0-9\-]*)/)[1]
@@ -162,9 +162,9 @@ class ApplicationController < ActionController::Base
       raise e.message + ' -- ' + ticket.response.inspect
     end
   end
-  
+
   def available_locales
-    %w{en ru es}
+    %w{en ru es fr}
   end
 
   def check_valid_subdomain
@@ -180,25 +180,25 @@ class ApplicationController < ActionController::Base
       I18n.locale = request.subdomains.first
     else
       if params[:locale]
-        I18n.locale = params[:locale] 
+        I18n.locale = params[:locale]
       else
         I18n.locale = 'en'
       end
     end
   end
-  
+
   def export_i18n_messages
      # generates the Javascript translation file
      SimplesIdeias::I18n.export! if Rails.env.development?
   end
-  
+
   def current_organization(person = nil)
     person ||= current_person if user_signed_in?
     return nil unless person
     @current_organizations ||= {}
     unless @current_organizations[person]
       if session[:current_organization_id]
-        org = person.organization_from_id(session[:current_organization_id]) 
+        org = person.organization_from_id(session[:current_organization_id])
         # org = nil unless org && (person.organizations.include?(org) || person.organizations.include?(org.parent))
       end
       unless org
@@ -222,27 +222,27 @@ class ApplicationController < ActionController::Base
     flash[:facebook_logout] = flash[:facebook_logout]
     super
   end
-  
+
   # Fake login
   # def authenticate_user!
   #   true
   # end
-  # 
+  #
   # def user_signed_in?
   #   true
   # end
-  # 
+  #
   # def current_user
   #   @current_user ||= User.find(42655)
   #   session[:user_id] = @current_user.id
   #   @current_user
   # end
-  
+
   def unassigned_people(organization)
     @unassigned_people ||= organization.unassigned_people
   end
   helper_method :unassigned_people
-  
+
   def user_root_path
     if mhub?
       render_404
@@ -256,7 +256,7 @@ class ApplicationController < ActionController::Base
     end
   end
   helper_method :user_root_path
-  
+
   def wizard_path
     step = current_user.next_wizard_step(current_organization)
     if step
@@ -264,33 +264,33 @@ class ApplicationController < ActionController::Base
     end
   end
   helper_method :wizard_path
-  
+
   def create_person(person_params)
     Person.new_from_params(person_params)
   end
-  
+
   def ensure_current_org
     unless current_organization
       redirect_to '/wizard' and return false
     end
   end
-  
+
   def access_denied
     render 'application/access_denied'
     return false
   end
-  
+
   def is_leader?
     current_user.has_role?(Role::LEADER_ID, current_organization) || is_admin?
   end
-  
+
   def is_admin?
     current_user.has_role?(Role::ADMIN_ID, current_organization)
   end
-    
+
   def get_survey
     if params[:keyword]
-      @keyword ||= SmsKeyword.where(keyword: params[:keyword]).first 
+      @keyword ||= SmsKeyword.where(keyword: params[:keyword]).first
       @survey = @keyword ? @keyword.survey : Survey.find(params[:keyword])
     elsif params[:received_sms_id]
       sms_id = Base62.decode(params[:received_sms_id])
@@ -304,16 +304,16 @@ class ApplicationController < ActionController::Base
     end
     if params[:keyword] || params[:received_sms_id] || params[:survey_id] || params[:id]
       unless @survey
-        render_404 
+        render_404
         return false
       end
     end
   end
-  
+
   def set_keyword_cookie
     get_survey
     if @keyword
-      cookies[:keyword] = @keyword.keyword 
+      cookies[:keyword] = @keyword.keyword
     end
     if @survey
       cookies[:survey_id] = @survey.id
@@ -321,20 +321,20 @@ class ApplicationController < ActionController::Base
       return false
     end
   end
-  
+
   def roles_for_assign
     current_user_roles = current_user.person
                                      .organizational_roles
                                      .where(:organization_id => current_organization)
                                      .collect { |r| Role.find(r.role_id) }
-                             
+
     if current_user_roles.include? Role.find(1)
       @roles_for_assign = current_organization.roles
     else
       @roles_for_assign = current_organization.roles.delete_if { |role| role == Role.find(1) }
     end
   end
-  
+
   def current_user_super_admin?
     if SuperAdmin.all.collect(&:user_id).include? current_user.id
       true
