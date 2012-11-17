@@ -62,7 +62,7 @@ gem 'aws-sdk'#, '~> 1.3.4'
 gem 'bitly'
 gem 'copycopter_client'
 
-gem 'active_model_serializers', git: 'git://github.com/josevalim/active_model_serializers.git'
+gem 'active_model_serializers'#, git: 'git://github.com/josevalim/active_model_serializers.git'
 gem 'versionist', git: 'git://github.com/twinge/versionist.git', branch: 'multiple_versioning_strategies'
 
 # Bundle gems for the local environment. Make sure to

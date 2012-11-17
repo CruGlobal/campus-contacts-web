@@ -23,8 +23,7 @@ class Api3::V3::BaseController < ApplicationController
         return false
       end
       unless current_user
-        render json: {errors: ["The organization associated with this API secret must have at least one admin, 
-                                or you must pass in an oauth access token for a user with access to this org."]},
+        render json: {errors: ["The organization associated with this API secret must have at least one admin, or you must pass in an oauth access token for a user with access to this org."]},
                status: :unauthorized,
                callback: params[:callback]
         return false
@@ -36,14 +35,18 @@ class Api3::V3::BaseController < ApplicationController
         if oauth_access_token
           @current_user = User.from_access_token(oauth_access_token)
         else
-          @current_user = current_organization.admins.first
+          @current_user = current_organization.admins.first.try(:user)
         end
       end
       @current_user
     end
 
     def current_organization
-      @current_organization ||= Client.find_secret(params[:secret]).try(:organization)
+      unless @current_organization
+        api_org = Rack::OAuth2::Server::Client.find_by_secret(params[:secret]).try(:organization)
+        @current_organization = params[:organization_id] ? api_org.subtree.find(params[:organization_id]) : api_org
+      end
+      @current_organization
     end
 
     def oauth_access_token
