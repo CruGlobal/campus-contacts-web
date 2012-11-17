@@ -207,6 +207,12 @@ Mh::Application.routes.draw do
     end
   end
 
+  namespace :api3 do
+    api_version(module: "V3", header: "API-VERSION", value: "v3", parameter: "version", path: 'v3') do
+      
+    end
+  end
+
   root to: "welcome#index"
 #  match 'home' => 'welcome#home', as: 'user_root' ---- LOOK FOR THIS IN application_controller.rb
   match 'wizard' => 'welcome#wizard', as: 'wizard'

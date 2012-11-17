@@ -203,7 +203,7 @@ class Organization < ActiveRecord::Base
 
   def remove_role_from_person(person, role_id)
     person_id = person.is_a?(Person) ? person.id : person
-    OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id).destroy_all
+    OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id).each { |r| r.update_attributes(deleted: true) }
   end
 
   def add_leader(person, current_person)
@@ -235,24 +235,29 @@ class Organization < ActiveRecord::Base
     add_role_to_person(person, Role::ADMIN_ID)
   end
 
-  def remove_contact(person)
+  def remove_person(person)
     person_id = person.is_a?(Person) ? person.id : person
-    OrganizationalRole.where(person_id: person_id, organization_id: id).each do |ors|
+    organizational_roles.where(person_id: person_id).each do |ors|
       if(ors.role_id == Role::LEADER_ID)
-        ca = Person.find(ors.person_id).contact_assignments.where(organization_id: id).all
+        # remove contact assignments if this was a leader
+        Person.find(ors.person_id).contact_assignments.where(organization_id: id).all
         ca.collect(&:destroy)
       end
-      ors.destroy
+      remove_role_from_person(person, ors.role_id)
     end
   end
-    
+
+  def remove_contact(person)
+    remove_role_from_person(person, Role::CONTACT_ID)
+  end
+
   def add_involved(person)
     add_role_to_person(person, Role::INVOLVED_ID)
   end
 
   def remove_leader(person)
-    person_id = person.is_a?(Person) ? person.id : person
-    OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: Role::LEADER_ID).first.try(:destroy)
+    person = person.is_a?(Person) ? person : Person.find(person)
+    remove_role_from_person(person, Role::LEADER_ID)
     person.remove_assigned_contacts(self)
   end
 

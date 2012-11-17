@@ -23,6 +23,13 @@ GIT
       i18n
 
 GIT
+  remote: git://github.com/josevalim/active_model_serializers.git
+  revision: 9f5e1b1776b67e2a601b0205fbba705a0cde55e6
+  specs:
+    active_model_serializers (0.5.2)
+      activemodel (>= 3.0)
+
+GIT
   remote: git://github.com/stevegraham/twilio-rb.git
   revision: 8ddf121ca5746a1ec3aed94af69ab470680fd0ae
   specs:
@@ -58,6 +65,15 @@ GIT
     trumant-rack-oauth2-server (2.2.1.1)
       rack (~> 1.1)
       rails (>= 2.3.11)
+
+GIT
+  remote: git://github.com/twinge/versionist.git
+  revision: 1c546e743871c0e8aba7262b3a2a25f4e90c7173
+  branch: multiple_versioning_strategies
+  specs:
+    versionist (0.3.1)
+      rails (~> 3.0)
+      yard (~> 0.7)
 
 GIT
   remote: git://github.com/twinge/vpim.git
@@ -403,11 +419,13 @@ GEM
     whenever (0.7.3)
       activesupport (>= 2.3.4)
       chronic (~> 0.6.3)
+    yard (0.8.3)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_model_serializers!
   activeadmin (~> 0.4.4)
   acts_as_list
   airbrake_user_attributes
@@ -478,6 +496,7 @@ DEPENDENCIES
   uglifier (>= 1.0.3)
   unicorn
   valium
+  versionist!
   vpim!
   webmock
   whenever

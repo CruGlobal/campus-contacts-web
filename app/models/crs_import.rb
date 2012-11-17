@@ -157,7 +157,7 @@ class CrsImport
               person = Person.where(crs_profile_id: registrant.profile_id).first
               if person
                 @org.remove_contact(person)
-                @org.remove_role_from_person(person)
+                @org.remove_role_from_person(person, role.id)
               end
             end
           end

@@ -3,7 +3,7 @@ require 'contact_actions'
 class ContactsController < ApplicationController
   include ContactActions
   include ActionView::Helpers::DateHelper
-  
+
   before_filter :get_person
   before_filter :ensure_current_org
   before_filter :authorize
@@ -12,12 +12,12 @@ class ContactsController < ApplicationController
   rescue_from OrganizationalRole::InvalidPersonAttributesError do |exception|
     #render 'update_leader_error'
   end
-  
+
   def index
     url = request.url.split('?')
     @attr = url.size > 1 ? url[1] : ''
     fetch_all_contacts
-  
+
     respond_to do |wants|
       wants.html do
         #@roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, person_id: @people.collect(&:id)).map {|r| [r.person_id, r]}]
@@ -37,7 +37,7 @@ class ContactsController < ApplicationController
       end
     end
   end
-  
+
   def contacts_all
     fetch_all_contacts
     @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
@@ -45,7 +45,7 @@ class ContactsController < ApplicationController
   end
 
   def search_by_name_and_email
-    
+
     @people = params[:include_archived] ?
       current_organization.people.search_by_name_or_email(params[:term].strip, current_organization.id).uniq :
       current_organization.people.search_by_name_or_email(params[:term].strip, current_organization.id).uniq.archived_not_included
@@ -54,7 +54,7 @@ class ContactsController < ApplicationController
       wants.json { render text: @people.collect{|person| {"label" => "#{person.name} (#{person.email})", "id" => person.id}}.to_json }
     end
   end
-  
+
   def mine
     url = request.url.split('?')
     @attr = url.size > 1 ? url[1] : ''
@@ -66,17 +66,17 @@ class ContactsController < ApplicationController
     end
     @people = Kaminari.paginate_array(@all_people).page(params[:page])
   end
-  
+
   def mine_all
     mine
     @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
     render :partial => 'contacts/mine_all'
   end
-  
+
   def update
     @person = Person.find(params[:id])
     authorize!(:update, @person)
-    
+
     @person.update_attributes(params[:person]) if params[:person]
 
     update_survey_answers if params[:answers].present?
@@ -91,38 +91,38 @@ class ContactsController < ApplicationController
       redirect_to survey_response_path(params[:id])
     end
   end
-  
+
   def show
     redirect_to person_path(params[:id])
   end
-  
+
   def edit
     redirect_to survey_response_path(params[:id])
   end
-  
+
   def create
     @organization = current_organization
     create_contact
-    
+
   end
-  
+
   def destroy
     contact = Person.find(params[:id])
     authorize! :manage, contact
-    current_organization.remove_contact(contact)
+    current_organization.remove_person(contact)
 
-    render :nothing => true      
+    render :nothing => true
   end
-  
+
   def bulk_destroy
     authorize! :manage, current_organization
     Person.find(params[:ids]).each do |contact|
-      current_organization.remove_contact(contact)
+      current_organization.remove_person(contact)
     end
 
-    render :nothing => true    
+    render :nothing => true
   end
-  
+
   def send_reminder
     to_ids = params[:to].split(',')
     leaders = current_organization.leaders.where(id: to_ids)
@@ -132,9 +132,9 @@ class ContactsController < ApplicationController
     end
     render nothing: true
   end
-  
+
   protected
-  
+
     def fetch_all_contacts
       @header = nil
       @style = params[:edit] ? 'display:true' : 'display:none'
@@ -146,16 +146,16 @@ class ContactsController < ApplicationController
       @hidden_questions = @all_questions - @questions
 
       params[:assigned_to] = 'all' if !params[:assigned_to].present?
-      
+
       org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
       @people_scope = Person.where('organizational_roles.organization_id' => org_ids)
                             .where("organizational_roles.role_id <> #{Role::CONTACT_ID} OR (organizational_roles.role_id = #{Role::CONTACT_ID} AND organizational_roles.followup_status <> 'do_not_contact')")
                             .joins(:organizational_roles_including_archived)
-      
+
       @people_scope = @people_scope.where('organizational_roles.archive_date' => nil, 'organizational_roles.deleted' => 0) if params[:include_archived].blank? && params[:archived].blank?
-      
+
       sort_by = ['lastName asc', 'firstName asc']
-      
+
       if params[:dnc] == 'true'
         @people = @organization.dnc_contacts
         @header = I18n.t('contacts.index.dnc')
@@ -176,10 +176,10 @@ class ContactsController < ApplicationController
           else
             @people = @people
                       .joins(:roles)
-                      .where("organizational_roles.archive_date" => nil) 
+                      .where("organizational_roles.archive_date" => nil)
                       .where("roles.id = #{@role.id}")
                       sort_by.unshift("roles.id").uniq
-                    
+
           end
           @header = params[:search] ? I18n.t('contacts.index.matching_seach') : @role.i18n
         end
@@ -216,19 +216,19 @@ class ContactsController < ApplicationController
         end
         @people ||= Person.where("1=0")
       end
-      
+
       if params[:q] && params[:q][:s].include?('answer_sheets')
         @people = @people.get_and_order_by_latest_answer_sheet_answered(params[:q][:s], current_organization.id)
       end
-      
+
       if params[:q] && params[:q][:s].include?('followup_status')
         @people = @people.order_by_followup_status(params[:q][:s])
       end
-      
+
       if params[:q] && params[:q][:s].include?('phone_numbers.number')
         @people = @people.order_by_primary_phone_number(params[:q][:s])
       end
-      
+
       if params[:survey].present?
         @people = @people.joins(:answer_sheets).where("answer_sheets.survey_id" => params[:survey])
       end
@@ -291,7 +291,7 @@ class ContactsController < ApplicationController
           else
             conditions = ["#{Answer.table_name}.question_id = ?", q_id]
             answers_conditions = []
-            v.each do |k1, v1| 
+            v.each do |k1, v1|
               unless v1.strip.blank?
                 if question.is_a?(TextField)
                   answers_conditions << "#{Answer.table_name}.value like ?"
@@ -304,7 +304,7 @@ class ContactsController < ApplicationController
             end
             if answers_conditions.present?
               conditions[0] = conditions[0] + ' AND (' + answers_conditions.join(' OR ') + ')'
-              @people = @people.joins(:answer_sheets => :answers).where(conditions) 
+              @people = @people.joins(:answer_sheets => :answers).where(conditions)
             end
           end
         end
@@ -321,28 +321,28 @@ class ContactsController < ApplicationController
       @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
       # raise @q.sorts.inspect
       if params[:q]
-        order_query = params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass').gsub('followup_status','organizational_roles.followup_status').gsub('role_id','organizational_roles.role_id') : ['last_name, first_name'] 
+        order_query = params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass').gsub('followup_status','organizational_roles.followup_status').gsub('role_id','organizational_roles.role_id') : ['last_name, first_name']
         @people = @people.includes(:primary_phone_number, :primary_email_address, :contact_role).order(order_query)
       end
       @all_people = @people.group('people.id')
       @people_for_labels = Person.people_for_labels(current_organization)
       @people = @all_people.page(params[:page])
-    
+
     end
-  
+
     def fetch_mine
       #@all_people = Person.order('last_name, first_name').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.organization_id' => current_organization.id, 'organizational_roles.role_id' => Role::CONTACT_ID)
       @all_people = Person.order('last_name, first_name').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id)
     end
-    
+
     def get_person
       @person = user_signed_in? ? current_user.person : Person.new
     end
-    
+
     def authorize
       authorize! :manage_contacts, current_organization
     end
-    
+
     def generate_answers(people, organization, questions)
       answers = {}
       people_ids = people.pluck('people.id')
@@ -353,10 +353,10 @@ class ContactsController < ApplicationController
       AnswerSheet.includes(:survey).where(survey_id: organization.survey_ids, person_id: people_ids).includes({:person => :primary_email_address}).each do |answer_sheet|
         @surveys[answer_sheet.person_id] ||= {}
         @surveys[answer_sheet.person_id][answer_sheet.survey] = answer_sheet.completed_at
-        
+
         answers[answer_sheet.person_id] ||= {}
         questions.each do |q|
-          answers[answer_sheet.person_id][q.id] = [q.display_response(answer_sheet), answer_sheet.updated_at]# if q.display_response(answer_sheet).present?# or (q.attribute_name == "email" and q.object_name == 
+          answers[answer_sheet.person_id][q.id] = [q.display_response(answer_sheet), answer_sheet.updated_at]# if q.display_response(answer_sheet).present?# or (q.attribute_name == "email" and q.object_name ==
         end
       end
       answers
