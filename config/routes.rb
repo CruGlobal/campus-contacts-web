@@ -104,7 +104,7 @@ Mh::Application.routes.draw do
 
   namespace :admin do
     resources :email_templates
-    
+
   end
 
   # namespace :admin do
@@ -143,7 +143,7 @@ Mh::Application.routes.draw do
       end
     end
   end
-  
+
   match "/dashboard" => "dashboard#index"
   get "welcome/index"
   get "welcome/duplicate"
@@ -211,6 +211,7 @@ Mh::Application.routes.draw do
     api_version(module: "V3", header: "API-VERSION", value: "v3", parameter: "version", path: 'v3') do
       resources :people
       resources :surveys
+      resources :organizations
     end
   end
 
@@ -235,9 +236,9 @@ Mh::Application.routes.draw do
   get "/surveys/:keyword" => 'surveys#start'
   # mount RailsAdmin::Engine => "/admin"
 
-  # 
+  #
   match 'autoassign_suggest' => 'surveys/questions#suggestion', as: 'question_suggestion'
-  
+
   get "welcome/tour"
 
   # mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'

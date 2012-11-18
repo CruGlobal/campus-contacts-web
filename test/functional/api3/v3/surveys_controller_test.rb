@@ -10,7 +10,7 @@ class Api3::V3::SurveysControllerTest < ActionController::TestCase
   end
 
   context '.index' do
-    should 'return a list of ppl' do
+    should 'return a list of surveys' do
       get :index, secret: @client.secret
       assert_response :success
       json = JSON.parse(response.body)
