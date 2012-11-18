@@ -455,10 +455,9 @@ class ContactsControllerTest < ActionController::TestCase
       @contact1 = Factory(:person)
       Factory(:organizational_role, role: Role.contact, organization: org, person: @contact1)
       @contact2 = Factory(:person)
-      Factory(:organizational_role, role: Role.contact, organization: org, person: @contact2)
-      @admin1 = Factory(:person)
-      Factory(:organizational_role, role: Role.admin, organization: org, person: @admin1)
-      
+      Factory(:organizational_role, role: Role.contact, organization: org, person: @contact1) #make them contacts in the org
+      Factory(:organizational_role, role: Role.contact, organization: org, person: @contact2) #make them contacts in the org
+
       @survey = Factory(:survey, organization: org) #create survey
       @keyword = Factory(:approved_keyword, organization: org, survey: @survey) #create keyword
       @notify_q = Factory(:choice_field, notify_via: "Both", trigger_words: "Jesus") #create question
