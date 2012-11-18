@@ -4,18 +4,13 @@ class Api3::V3::PeopleController < Api3::V3::BaseController
   def index
     order = params[:order] || 'last_name, first_name'
 
-    list = people.order(order)
-    list = list.includes(:email_addresses) if includes.include?('email_addresses')
-    list = list.includes(:phone_numbers) if includes.include?('phone_numbers')
-    list = list.limit(params[:limit]) if params[:limit]
-    list = list.offset(params[:offset]) if params[:offset]
-    render json: list,
-           callback: params[:callback],
-           scope: includes
+    list = add_includes_and_filters(people, order: order)
+
+    render standard_response(list)
   end
 
   def show
-    render json: @person, callback: params[:callback], scope: includes
+    render standard_response(@person)
   end
 
   def create
@@ -30,33 +25,25 @@ class Api3::V3::PeopleController < Api3::V3::BaseController
         current_organization.add_role_to_person(person, role_id)
       end
 
-      render json: person,
-             status: :created,
-             callback: params[:callback]
+      render standard_response(person, :created)
     else
-      render json: {errors: person.errors.full_messages},
-             status: :bad_request,
-             callback: params[:callback]
+      render error_response(person.errors.full_messages)
     end
   end
 
   def update
     if @person.update_attributes(params[:person])
-      render json: @person,
-             callback: params[:callback]
+      render standard_response(@person)
     else
-      render json: {errors: @person.errors.full_messages},
-             status: :bad_request,
-             callback: params[:callback]
+      render error_response(person.errors.full_messages)
     end
 
   end
 
   def destroy
     current_organization.remove_person(@person)
-    render json: @person,
-       callback: params[:callback]
 
+    render standard_response(@person)
   end
 
   private
@@ -66,11 +53,13 @@ class Api3::V3::PeopleController < Api3::V3::BaseController
   end
 
   def get_person
-    @person = people.find(params[:id])
+    @person = add_includes_and_filters(people)
+                .find(params[:id])
+
   end
 
-  # let the api use add additional relationships to this call
-  def includes
-    params[:include].to_s.split(',')
+  def available_includes
+    [:email_addresses, :phone_numbers]
   end
+
 end

@@ -12,7 +12,7 @@ class Api3::V3::PeopleControllerTest < ActionController::TestCase
     should 'return a list of ppl' do
       get :index, secret: @client.secret
       json = JSON.parse(response.body)
-      assert_equal 1, json['people'].length
+      assert_equal 1, json['people'].length, json.inspect
     end
   end
 

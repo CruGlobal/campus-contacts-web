@@ -65,5 +65,39 @@ class Api3::V3::BaseController < ApplicationController
     def render_404
       render nothing: true, status: 404
     end
+
+    def add_includes_and_filters(resource, options = {})
+      available_includes.each do |rel|
+        resource = resource.includes(rel.to_sym) if includes.include?(rel.to_s)
+      end
+      resource = resource.limit(params[:limit]) if params[:limit]
+      resource = resource.offset(params[:offset]) if params[:offset]
+      resource.order(options[:order]) if options[:order]
+      resource
+    end
+
+    # let the api use add additional relationships to this call
+    def includes
+      @includes ||= params[:include].to_s.split(',')
+    end
+
+    # Each controller should override this method
+    def available_includes
+      []
+    end
+
+    def standard_response(object, status = :success)
+      {json: object,
+       status: status,
+       callback: params[:callback],
+       scope: includes}
+    end
+
+    def error_response(errors)
+      {json: {errors: errors},
+       status: :bad_request,
+       callback: params[:callback]}
+
+    end
 end
 
