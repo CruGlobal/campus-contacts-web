@@ -62,6 +62,7 @@ class SurveyResponsesController < ApplicationController
         create_contact_at_org(@person, @survey.organization)
       end
       destroy_answer_sheet_when_answers_are_all_blank
+      @current_person = @eperson
       respond_to do |wants|
         wants.html { render :thanks, layout: 'mhub'}
         wants.mobile { render :thanks }
@@ -79,7 +80,7 @@ class SurveyResponsesController < ApplicationController
     @title = @survey.terminology
     Person.transaction do
       @person = current_person # first try for a logged in person
-      if params[:person] 
+      if params[:person]
         if params[:person][:email].present?
           # See if we can match someone by email
           existing_person = EmailAddress.where(email: params[:person][:email]).first.try(:person)
