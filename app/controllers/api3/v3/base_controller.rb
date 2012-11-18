@@ -86,18 +86,5 @@ class Api3::V3::BaseController < ApplicationController
       []
     end
 
-    def standard_response(object, status = :success)
-      {json: object,
-       status: status,
-       callback: params[:callback],
-       scope: includes}
-    end
-
-    def error_response(errors)
-      {json: {errors: errors},
-       status: :bad_request,
-       callback: params[:callback]}
-
-    end
 end
 

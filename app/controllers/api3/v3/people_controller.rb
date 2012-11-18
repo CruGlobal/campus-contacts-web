@@ -6,11 +6,15 @@ class Api3::V3::PeopleController < Api3::V3::BaseController
 
     list = add_includes_and_filters(people, order: order)
 
-    render standard_response(list)
+    render json: list,
+           callback: params[:callback],
+           scope: includes
   end
 
   def show
-    render standard_response(@person)
+    render json: @person,
+           callback: params[:callback],
+           scope: includes
   end
 
   def create
@@ -25,17 +29,26 @@ class Api3::V3::PeopleController < Api3::V3::BaseController
         current_organization.add_role_to_person(person, role_id)
       end
 
-      render standard_response(person, :created)
+      render json: person,
+             status: :created,
+             callback: params[:callback],
+             scope: includes
     else
-      render error_response(person.errors.full_messages)
+      render json: {errors: person.errors.full_messages},
+             status: :bad_request,
+             callback: params[:callback]
     end
   end
 
   def update
     if @person.update_attributes(params[:person])
-      render standard_response(@person)
+      render json: @person,
+             callback: params[:callback],
+             scope: includes
     else
-      render error_response(person.errors.full_messages)
+      render json: {errors: person.errors.full_messages},
+             status: :bad_request,
+             callback: params[:callback]
     end
 
   end
@@ -43,7 +56,9 @@ class Api3::V3::PeopleController < Api3::V3::BaseController
   def destroy
     current_organization.remove_person(@person)
 
-    render standard_response(@person)
+    render json: @person,
+           callback: params[:callback],
+           scope: includes
   end
 
   private

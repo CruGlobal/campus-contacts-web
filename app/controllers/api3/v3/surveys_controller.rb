@@ -6,28 +6,41 @@ class Api3::V3::SurveysController < Api3::V3::BaseController
 
     list = add_includes_and_filters(surveys, order: order)
 
-    render standard_response(list)
+    render json: list,
+           callback: params[:callback],
+           scope: includes
   end
 
   def show
-    render standard_response(@survey)
+    render json: @survey,
+           callback: params[:callback],
+           scope: includes
   end
 
   def create
     survey = surveys.new(params[:survey])
 
     if survey.save
-      render standard_response(survey, :created)
+      render json: survey,
+             status: :created,
+             callback: params[:callback],
+             scope: includes
     else
-      render error_response(survey.errors.full_messages)
+      render json: {errors: survey.errors.full_messages},
+             status: :bad_request,
+             callback: params[:callback]
     end
   end
 
   def update
     if @survey.update_attributes(params[:survey])
-      render standard_response(@survey)
+      render json: @survey,
+             callback: params[:callback],
+             scope: includes
     else
-      render error_response(survey.errors.full_messages)
+      render json: {errors: survey.errors.full_messages},
+             status: :bad_request,
+             callback: params[:callback]
     end
 
   end
@@ -35,7 +48,9 @@ class Api3::V3::SurveysController < Api3::V3::BaseController
   def destroy
     @survey.destroy
 
-    render standard_response(@survey)
+    render json: @survey,
+           callback: params[:callback],
+           scope: includes
   end
 
   private
