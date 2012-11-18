@@ -108,6 +108,7 @@ class SurveyResponsesController < ApplicationController
       else
         @person = Person.create(params[:person])
       end
+      @current_person = @person
       if @person.valid?
         NewPerson.create(person_id: @person.id, organization_id: @survey.organization.id)
         save_survey
