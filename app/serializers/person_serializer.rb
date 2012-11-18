@@ -6,8 +6,10 @@ class PersonSerializer < ActiveModel::Serializer
   has_many :phone_numbers, :email_addresses
 
   def include_associations!
-    include! :phone_numbers if scope.include?('phone_numbers')
-    include! :email_addresses if scope.include?('email_addresses')
+    if scope.is_a? Array
+      include! :phone_numbers if scope.include?('phone_numbers')
+      include! :email_addresses if scope.include?('email_addresses')
+    end
   end
 
 end

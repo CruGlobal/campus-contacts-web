@@ -449,5 +449,12 @@ FactoryGirl.define do
     association :rule
     association :survey_element
   end
+
+  factory :client, class: Rack::OAuth2::Server::Client do
+    association :organization
+    secret 'mfp'
+    display_name 'foo'
+    link 'bar'
+  end
   
 end

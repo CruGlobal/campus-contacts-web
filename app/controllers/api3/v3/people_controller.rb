@@ -25,7 +25,7 @@ class Api3::V3::PeopleController < Api3::V3::BaseController
 
       # add roles in current org
       role_ids = params[:roles].split(',') if params[:roles]
-      role_ids = [Role::CONTACT_ID] if roles.blank?
+      role_ids = [Role::CONTACT_ID] if role_ids.blank?
       role_ids.each do |role_id|
         current_organization.add_role_to_person(person, role_id)
       end
@@ -54,6 +54,9 @@ class Api3::V3::PeopleController < Api3::V3::BaseController
 
   def destroy
     current_organization.remove_person(@person)
+    render json: @person,
+       callback: params[:callback]
+
   end
 
   private
