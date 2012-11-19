@@ -2,9 +2,9 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    if user.developer?
-      can :all, :all
-    else
+    #if user.developer?
+      #can :all, :all
+    #else
       roles = Role.default.all
       leader_role = roles.detect {|r| r.i18n == 'leader'}
       admin_role = roles.detect {|r| r.i18n == 'admin'}
@@ -59,7 +59,7 @@ class Ability
 
         can :manage, Group, organization_id: leader_of_org_ids
         can :manage, GroupPresenter, organization_id: leader_of_org_ids
-      end
+      #end
 
     end
     #
