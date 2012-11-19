@@ -453,9 +453,11 @@ class ContactsControllerTest < ActionController::TestCase
     setup do
       @user, org = admin_user_login_with_org
       @contact1 = Factory(:person)
+      Factory(:organizational_role, role: Role.contact, organization: org, person: @contact1)
       @contact2 = Factory(:person)
-      Factory(:organizational_role, role: Role.contact, organization: org, person: @contact1) #make them contacts in the org
-      Factory(:organizational_role, role: Role.contact, organization: org, person: @contact2) #make them contacts in the org
+      Factory(:organizational_role, role: Role.contact, organization: org, person: @contact2)
+      @admin1 = Factory(:person)
+      Factory(:organizational_role, role: Role.admin, organization: org, person: @admin1)
       
       @survey = Factory(:survey, organization: org) #create survey
       @keyword = Factory(:approved_keyword, organization: org, survey: @survey) #create keyword
@@ -471,8 +473,16 @@ class ContactsControllerTest < ActionController::TestCase
       @answer = Factory(:answer, answer_sheet: @answer_sheet, question: @notify_q, value: "Jesus", short_value: "Jesus")
     end
   
-    should "export" do
+    should "export all people" do
       xhr :get, :index, {:assigned_to => "all", :format => "csv"}
+      assert_equal(assigns(:all_people).count.count, 3)
+      assert_response :success
+    end
+  
+    should "export selected people only" do
+      xhr :get, :index, {:assigned_to => "all", :format => "csv", only_ids: @contact1.id.to_s}
+      assert assigns(:all_people).include?(@contact1)
+      assert_equal(assigns(:all_people).count.count, 1)
       assert_response :success
     end
   

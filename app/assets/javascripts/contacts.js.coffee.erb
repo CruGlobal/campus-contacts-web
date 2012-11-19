@@ -2,7 +2,13 @@ $ ->
   $(document).on 'keypress', '#contact_search_form input', (e)->
     if (e.keyCode == $.ui.keyCode.ENTER)
       $('#contact_search_form').submit()
-      
+
+  $('#bulk_export_link').live 'click', (e)->
+    e.preventDefault()
+    ids = []
+    $('.id_checkbox:checked').each ->
+      ids.push($(this).attr('data-id'))
+    document.location = $(this).attr('href')+"&only_ids="+ids.join(',')
       
   $('#contacts_controller #include_archived').live 'click', ->
     if $(this).is(':checked')
