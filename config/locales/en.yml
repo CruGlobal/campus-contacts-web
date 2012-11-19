@@ -208,6 +208,7 @@ en:
         other: "Emails:"
       google_map: 'Google Map'
       status: "Status"
+      label_button: "Labels"
       attach_rejoicable: 'Attach a Rejoicable'
       add_comment: 'Add Comment / Update Status'
       assigned_to: 'Assigned to: %{assigned_to}'

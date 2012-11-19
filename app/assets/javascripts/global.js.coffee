@@ -19,9 +19,10 @@ $ ->
     modal: true,
     autoOpen: false,
     open: (event, ui) ->
-      $("body").css("overflow", "hidden")
+      $("body").css({ overflow: 'hidden' })
+      $('.ui-widget-overlay').width('100%');
     close: (event, ui) ->
-      $("body").css("overflow", "auto")
+      $("body").css({ overflow: 'inherit' })
       $('#bulk_sms_message').val($('#bulk_send_body').val())            
     buttons: 
       Send: ->

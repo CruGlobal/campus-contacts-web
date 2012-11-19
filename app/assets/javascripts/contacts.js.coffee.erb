@@ -22,7 +22,7 @@ $ ->
     li = $(this).closest('li')
     li.remove()
     false
-    
+  
   $('#send_reminder_link').live 'click', -> 
     $('.to_list').html('')
     ids = []
@@ -194,6 +194,7 @@ $ ->
     leader = $('.leftmenu .leader[data-id=' + $('#assign_to').val() + ']')
     $.fn.assignTo(leader)
     $.fn.load_leader_name($('#person_title').attr('data-id'))
+    $('#assign_search').dialog('close')
     $('#assign_search').dialog('destroy')
     
   $('#assign_search .leader a').live 'click', (e)->
@@ -206,6 +207,7 @@ $ ->
       $.rails.handleRemote($('#new_contact_assignment'))
       unless $('#assign_to').val() == $('#my_id').val()
         $.fn.load_leader_name($('#person_title').attr('data-id'))
+    $('#assign_search').dialog('close')
     $('#assign_search').dialog('destroy')
   false
 
@@ -216,14 +218,13 @@ $ ->
     from_id = $(this).closest('div').attr('data-org-id')
     to_id = $(this).attr('data-id')
     keep_contact = $('#keep-contact-copy > input').is(':checked')
-    
     ids = []
     $('.id_checkbox:checked:visible').each ->
       ids.push($(this).val())
     if($('#all_selected_text').is(':visible'))    
       $('.all_row').each ->
         ids.push($(this).attr('data-id'))
-  
+    $('#assign_search').dialog('close')
     $('#assign_search').dialog('destroy')
     $.ajax
       type: 'POST'
@@ -256,6 +257,7 @@ $ ->
     .appendTo('body')
     .click()
     .remove()
+    $('#assign_search').dialog('close')
     $('#assign_search').dialog('destroy')
     $('#global_loader').show()
     $('.id_checkbox:checked').prop('checked',false)
@@ -276,6 +278,7 @@ $ ->
         $('#main').load('/contacts .index.carea')
         $('#left').load('/contacts .block')
         
+      $('#assign_search').dialog('close')
       $('#assign_search').dialog('destroy')
       if show_success
         $.n('Successfully assigned label.')
@@ -290,16 +293,18 @@ $ ->
         $('#main').load('/contacts/mine .mine.carea')
         $('#left').load('/contacts/mine .block')
         
+      $('#assign_search').dialog('close')
       $('#assign_search').dialog('destroy')
       if show_success
         $.n('Successfully assigned label.')
     else
-      person_id = $('.assign.headerlink').attr('data-id')
+      person_id = $('.assign.person_headerlink').attr('data-id')
       $.ajax
           type: 'POST',
           url: '/people/update_roles',
           data: 'role_ids='+role+'&person_id='+person_id+'&include_old_roles=yes'
           error: show_success = false
+      $('#assign_search').dialog('close')
       $('#assign_search').dialog('destroy')
       if show_success
         $.n('Successfully assigned label.')
@@ -403,8 +408,14 @@ $ ->
         height:650,
         width:600,
         modal: true,
+        open: (event, ui) ->
+          $("body").css({ overflow: 'hidden' })
+          $('.ui-widget-overlay').width('100%');
+        close: (event, ui) ->
+          $("body").css({ overflow: 'inherit' })
         buttons: 
           Cancel: ->
+            $(this).dialog('close')
             $(this).dialog('destroy')
     else
       $.a(t('contacts.index.none_checked'))
