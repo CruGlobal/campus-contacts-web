@@ -9,10 +9,10 @@ FactoryGirl.define do
 
     add_attribute name, uploaded_file
   end
-  
+
 =begin
   factory :csv_file do
-    include ActionDispatch::TestProcess 
+    include ActionDispatch::TestProcess
     csv_file fixture_file_upload('/files/sample_contacts.csv', 'application/csv')
   end
 =end
@@ -32,7 +32,7 @@ FactoryGirl.define do
   factory :group_label do
     name "group #{Factory.next(:count)}"
   end
-  
+
   factory :group_labeling do
     association :group
     association :group_label
@@ -44,13 +44,13 @@ FactoryGirl.define do
     meets 'sporadically'
     association :organization
   end
-  
+
   factory :sms_session do
     phone_number '15555555555'
     # association :person
     # association :sms_keyword
   end
-  
+
   factory :received_sms do
     phone_number '15555555555'
     carrier      'sprint'
@@ -58,18 +58,18 @@ FactoryGirl.define do
     message      'test'
     country      'US'
   end
-  
+
   factory :sms_carrier do
     moonshado_name 'fake'
   end
-  
+
   factory :sms_carrier_sprint, parent: :sms_carrier do
     name 'Sprint'
     moonshado_name 'sprint'
     email 'messaging.sprintpcs.com'
   end
-  
-  factory :sms_keyword do 
+
+  factory :sms_keyword do
     keyword {"test#{Factory.next(:count)}"}
     association :organization
     explanation "haoeu"
@@ -78,7 +78,7 @@ FactoryGirl.define do
     association :user
     association :survey
   end
-  
+
   factory :approved_keyword, parent: :sms_keyword do
     keyword 'approved'
     association :organization
@@ -86,7 +86,7 @@ FactoryGirl.define do
     state "active"
     initial_response "Hi there!"
     association :user
-    after_create do |x| 
+    after_create do |x|
       survey = Factory(:survey, organization: x.organization)
       x.update_attribute(:survey_id, survey.id)
       element = Factory(:choice_field, label: 'foobar')
@@ -95,51 +95,51 @@ FactoryGirl.define do
       Factory(:survey_element, survey: survey, element: element, position: 2)
     end
   end
-  
+
   factory :survey do
     title {"Test survey #{Factory.next(:count)}"}
     association :organization
     post_survey_message "bye!"
     login_option 0
   end
-  
-  factory :person do 
+
+  factory :person do
     first_name 'John'
     last_name 'Doe'
     gender '1'
     fb_uid {"690860831#{Factory.next(:count)}"}
     birth_date {DateTime.strptime('12/18/1989', '%m/%d/%Y')}
   end
-  
+
   factory :person_without_name, parent: :person do
     first_name ''
     last_name ''
   end
-  
+
   factory :user do
     email {"test#{Factory.next(:count)}@example.com"}
     password 'asdfasdf'
   end
-  
+
   factory :authentication do
     provider "facebook"
     uid {"690860831#{Factory.next(:count)}"}
     token "164949660195249|bd3f24d52b4baf9412141538.1-690860831|w79R36CalrEAY-9e9kp8fDWJ69A"
   end
-  
+
   factory :organization do
     name {"Organization #{Factory.next(:count)}"}
     terminology 'Organization'
     show_sub_orgs true
     status 'active'
   end
-  
-  factory :location do 
+
+  factory :location do
     name "Orlando, FL"
     location_id 1
     provider "facebook"
   end
-  
+
   factory :education_history_highschool, class: EducationHistory do
     school_name "Test High School"
     school_id "3"
@@ -147,8 +147,8 @@ FactoryGirl.define do
     year_id "4"
     year_name "2008"
     provider "facebook"
-  end  
-  
+  end
+
   factory :education_history_college, class: EducationHistory do
     school_name "Test University"
     school_id "1"
@@ -163,7 +163,7 @@ FactoryGirl.define do
     concentration_id3 "84"
     concentration_name3 "Test Major 3"
   end
-  
+
   factory :education_history_gradschool, class: EducationHistory do
     school_name "Test University 2"
     school_id "2"
@@ -180,25 +180,25 @@ FactoryGirl.define do
     degree_id "1"
     degree_name "Masters"
   end
-  
+
   factory :interest, class: Interest do
     interest_id "#{Factory.next(:count)}"
     name "Test Interest #{Factory.next(:count)}"
     provider "facebook"
     category "Test Category"
   end
-    
+
   factory :access_token, class: Rack::OAuth2::Server::AccessToken do
     code "9d68af577f8a4c9076752c9699d2ac2ace64f9dcb407897f754439096cedbfca"
     scope "userinfo contacts followup_comments contact_assignment roles organization_info"
   end
-  
+
   factory :user_with_authentication, parent: :user do
     after_create { |a| Factory(:authentication, user: a)}
   end
-  
+
   factory :person_with_facebook_data, parent: :person do
-    after_create do |f| 
+    after_create do |f|
       3.times { |i| Friend.new(i, 'foo', f)}
       Factory(:education_history_highschool, person: f)
       Factory(:education_history_college, person: f)
@@ -207,9 +207,9 @@ FactoryGirl.define do
       Factory(:location, person: f)
     end
   end
-  
-   factory :person_with_things, parent: :person do 
-     after_create do |f| 
+
+   factory :person_with_things, parent: :person do
+     after_create do |f|
        3.times { |i| Friend.new(i, "Foo#{i}").follow!(f) }
        Factory(:education_history_highschool, person: f)
        Factory(:education_history_college, person: f)
@@ -221,51 +221,51 @@ FactoryGirl.define do
        org.add_admin(f)
     end
   end
-  
-  factory :organizational_role do 
+
+  factory :organizational_role do
     association :organization
     association :person
     association :role
     followup_status "attempted_contact"
   end
-  
-  factory :organization_membership do 
+
+  factory :organization_membership do
     association :organization
     association :person
   end
-  
+
   factory :followup_comment do
     association :contact
     association :organization
     association :commenter
   end
-  
-  factory :contact_assignment do 
+
+  factory :contact_assignment do
     association :organization
     association :assigned_to
     association :person
   end
-  
+
   factory :user_with_auxs, parent: :user do
-    after_create do |a| 
+    after_create do |a|
       Factory(:person_with_things, user: a)
       Factory(:authentication, user: a)
     end
   end
-  
+
   factory :user_no_org_with_facebook, parent: :user do
     after_create do |a|
       Factory(:person_with_facebook_data, user: a)
     end
   end
-  
+
   factory :user_no_org, parent: :user do
-    after_create do |a| 
+    after_create do |a|
       Factory(:person, user: a)
       Factory(:authentication, user: a)
     end
   end
-  
+
   factory :element do
     kind          'TextField'
     label         'First Name'
@@ -276,22 +276,22 @@ FactoryGirl.define do
   end
 
 
-  
+
   factory :advanced_element, parent: :element do
     kind             'TextField'
     label            'Sample question'
     style            'short'
   end
-  
+
   factory :question_leader do
     association :element
     association :person
   end
-  
+
   factory :question do
     association :element
   end
-  
+
   factory :choice_field, parent: :element do
     kind          'ChoiceField'
     label         'Which of the following are you interested in? #{Factory.next(:count)}'
@@ -300,7 +300,13 @@ FactoryGirl.define do
     object_name ''
     attribute_name ''
   end
-  
+
+  factory :choice_field_question, class: :element do
+    kind          'ChoiceField'
+    label         'School? #{Factory.next(:count)}'
+    style         'checkbox'
+  end
+
   factory :text_field, parent: :element do
     kind          'TextField'
     label         'How soon is now?'
@@ -316,7 +322,7 @@ FactoryGirl.define do
     style         'short'
     content       "Are you alright?"
   end
-  
+
   factory :year_in_school_element, class: :element do
     kind          'TextField'
     label         'Year in school?'
@@ -325,7 +331,16 @@ FactoryGirl.define do
     object_name   'person'
     attribute_name 'year_in_school'
   end
-  
+
+  factory :campus_element, class: :element do
+    kind          'ChoiceField'
+    label         'Year in school?'
+    style         'checkbox'
+    content       "Year in school?"
+    object_name   'person'
+    attribute_name 'campus'
+  end
+
   factory :first_name_element, parent: :element do
     kind          'TextField'
     label         'First name?'
@@ -333,7 +348,7 @@ FactoryGirl.define do
     object_name 'person'
     attribute_name 'first_name'
   end
-  
+
     factory :last_name_element, parent: :element do
     kind          'TextField'
     label         'Last name?'
@@ -350,7 +365,7 @@ FactoryGirl.define do
     attribute_name 'email'
     required      false
   end
-  
+
   factory :gender_element, parent: :element do
     kind          'TextField'
     label         'What is your gender?'
@@ -359,7 +374,7 @@ FactoryGirl.define do
     attribute_name 'gender'
     required      false
   end
-  
+
   factory :phone_element, parent: :element do
     kind          'TextField'
     label         'What is your phone number?'
@@ -368,29 +383,29 @@ FactoryGirl.define do
     attribute_name 'phone_number'
     required      false
   end
-  
+
   factory :phone_number do
     association :person
   end
-  
+
   factory :survey_element do
     association   :survey
     association   :element
     position        1
   end
-  
+
   factory :answer do
     association :answer_sheet
     # association :choice_field
     association :question, factory: :element
   end
-  
+
   factory :answer_1, class: :answer do
     value "Jesus"
     short_value "Jesus"
     association :answer_sheet
   end
-  
+
   factory :answer_sheet do
     association :survey
     association :person
@@ -401,7 +416,7 @@ FactoryGirl.define do
     name        'member'
     i18n        'member'
   end
-  
+
   factory :import do
     association :user
     association :organization
@@ -411,21 +426,21 @@ FactoryGirl.define do
     association :organization
     name        {"role #{Factory.next(:count)}"}
   end
-  
+
   factory :infobase_user, class: Ccc::InfobaseUser do
     association :user
     type        'InfobaseUser'
   end
-  
+
   factory :super_admin do
     association :user
   end
-  
+
   factory :email_address do
     email     "email#{Factory.next(:count)}@email.com"
     association :person
   end
-  
+
   factory :person_transfer do
     association :person
     association :old_organization, factory: :organization
@@ -433,21 +448,21 @@ FactoryGirl.define do
     association :transferred_by, factory: :person
     notified false
   end
-  
+
   factory :new_person do
     association :person
     association :organization
     notified false
   end
-  
+
   factory :rule do
     name  'Automatic Assignment of Contact'
     rule_code   'AUTOASSIGN'
   end
-  
+
   factory :question_rule do
     association :rule
     association :survey_element
   end
-  
+
 end
