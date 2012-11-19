@@ -1,4 +1,4 @@
-class Api3::V3::SurveysController < Api3::V3::BaseController
+class Apis::V3::SurveysController < Apis::V3::BaseController
   before_filter :get_survey, only: [:show, :update, :destroy]
 
   def index
