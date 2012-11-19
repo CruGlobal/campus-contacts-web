@@ -32,6 +32,7 @@ class ContactsController < ApplicationController
         @all_answers = generate_answers(@all_people, @organization, @questions)
         @questions.select! { |q| !%w{first_name last_name phone_number email}.include?(q.attribute_name) }
         filename = @organization.to_s
+        @all_people = @all_people.where('people.id IN (:ids)', ids: params[:only_ids].split(',')) if params[:only_ids].present?
         csv = ContactsCsvGenerator.generate(@roles, @all_answers, @questions, @all_people, @organization)
         send_data(csv, :filename => "#{filename} - Contacts.csv", :type => 'application/csv' )
       end

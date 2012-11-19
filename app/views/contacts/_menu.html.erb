@@ -79,7 +79,7 @@
       <% if can? :manage, current_organization %>
         <li><%= link_to(t('people.index.merge_contacts'), "", id: "merge_people") %></li>
       <% end %>
-      <li><%= link_to(t('people.index.export'), params.merge(format: 'csv')) %></li>
+      <li><%= link_to(t('people.index.export'), params.merge(format: 'csv'), id: 'bulk_export_link') %></li>
       <li><%= link_to(t('people.index.vcard'), '', id: 'bulk_vcard_link' ) %></li>
       <% if can? :manage, current_organization %>
         <li><%= link_to(t('general.delete'), bulk_delete_people_path, id: "bulk_delete") %></li>
