@@ -47,6 +47,7 @@ Mh::Application.routes.draw do
   resources :organizational_roles, :only => :update do
     collection do
       post :move_to
+      post :update_all
     end
     member do
       get :set_current

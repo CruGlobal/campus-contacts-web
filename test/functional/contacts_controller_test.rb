@@ -455,8 +455,9 @@ class ContactsControllerTest < ActionController::TestCase
       @contact1 = Factory(:person)
       Factory(:organizational_role, role: Role.contact, organization: org, person: @contact1)
       @contact2 = Factory(:person)
-      Factory(:organizational_role, role: Role.contact, organization: org, person: @contact1) #make them contacts in the org
-      Factory(:organizational_role, role: Role.contact, organization: org, person: @contact2) #make them contacts in the org
+      Factory(:organizational_role, role: Role.contact, organization: org, person: @contact2)
+      @admin1 = Factory(:person)
+      Factory(:organizational_role, role: Role.admin, organization: org, person: @admin1)
 
       @survey = Factory(:survey, organization: org) #create survey
       @keyword = Factory(:approved_keyword, organization: org, survey: @survey) #create keyword
@@ -471,20 +472,20 @@ class ContactsControllerTest < ActionController::TestCase
       @answer_sheet = Factory(:answer_sheet, survey: @survey, person: @contact1)
       @answer = Factory(:answer, answer_sheet: @answer_sheet, question: @notify_q, value: "Jesus", short_value: "Jesus")
     end
-  
+
     should "export all people" do
       xhr :get, :index, {:assigned_to => "all", :format => "csv"}
       assert_equal(assigns(:all_people).count.count, 3)
       assert_response :success
     end
-  
+
     should "export selected people only" do
       xhr :get, :index, {:assigned_to => "all", :format => "csv", only_ids: @contact1.id.to_s}
       assert assigns(:all_people).include?(@contact1)
       assert_equal(assigns(:all_people).count.count, 1)
       assert_response :success
     end
-  
+
   end
 
   context "retrieving contacts" do
@@ -604,7 +605,7 @@ class ContactsControllerTest < ActionController::TestCase
       assert_equal "4th", Person.where(first_name: "James", last_name: "Ingram").first.year_in_school
     end
 
-    should "retain all the roles if there's a merge (creating contact with the same firstName, lastName and email with an existing person in the db) during create contacts" do
+    should "retain all the roles if there's a merge (creating contact with the same first_name, last_name and email with an existing person in the db) during create contacts" do
       @org_child = Factory(:organization, :name => "neilmarion", :parent => @user.person.organizations.first, :show_sub_orgs => 1)
       @request.session[:current_organization_id] = @org_child.id
 
@@ -721,6 +722,54 @@ class ContactsControllerTest < ActionController::TestCase
     should "sort by phone_number desc" do
       xhr :get, :index, {:assigned_to => "all", :q =>{:s => "phone_numbers.number desc"}}
       assert_equal [@person3.id, @person2.id, @person1.id, @person4.id], assigns(:people).collect(&:id)
+    end
+  end
+
+  context "Searching for contacts" do
+    setup do
+      @user, @org = admin_user_login_with_org
+
+      @survey = Factory(:survey, organization: @org)
+      @question = Factory(:choice_field_question, content: "SUSD\nUSD") #create question
+      @survey.questions << @question
+
+      @predefined_survey = Factory(:survey, organization: @org)
+      APP_CONFIG['predefined_survey'] = @predefined_survey.id
+      @campus_question = Factory(:campus_element, content: "SUSD\nUSD")
+      @predefined_survey.questions << @campus_question
+
+      @contact1 = Factory(:person)
+      @contact2 = Factory(:person)
+      @org.add_contact(@contact1)
+      @org.add_contact(@contact2)
+    end
+
+    should "not search by survey answers by wildcard strings if question is non-fill in the blank question (non-predefined survey)" do
+      @answer_sheet1 = Factory(:answer_sheet, survey: @survey, person: @contact1)
+      Factory(:answer, answer_sheet: @answer_sheet1, question: @question, value: "DSU", short_value: "DSU")
+
+      @answer_sheet2 = Factory(:answer_sheet, survey: @survey, person: @contact2)
+      Factory(:answer, answer_sheet: @answer_sheet2, question: @question, value: "SDSU", short_value: "SDSU")
+
+      xhr :get, :index, {:search => "1", "assigned_to"=>"all", "first_name"=>"", "last_name"=>"", "phone_number"=>"", "person_updated_from"=>"", "person_updated_to"=>"", "status"=>"", "survey"=>"", "answers"=>{"#{@question.id}" => "DSU"}, "commit"=>"Search"}
+
+      assert_equal 1, assigns(:all_people).count.count
+      assert assigns(:people).include? @contact1
+      assert assigns(:people).include?(@contact2) == false
+    end
+
+    should "not search by survey answers by wildcard strings if question is non-fill in the blank question (predefined survey)" do
+      xhr :post, :create, {:person => {:first_name => "Eloisa", :last_name => "Bongalbal", :gender => "female"}, :answers => {"#{@campus_question.id}"=>"DSU"}  }
+      assert_equal "DSU", Person.where(first_name: "Eloisa", last_name: "Bongalbal").first.campus
+
+      xhr :post, :create, {:person => {:first_name => "Neil", :last_name => "dela Cruz", :gender => "male"}, :answers => {"#{@campus_question.id}"=>"SDSU"}  }
+      assert_equal "SDSU", Person.where(first_name: "Neil", last_name: "dela Cruz").first.campus
+
+      xhr :get, :index, {:search => "1", "assigned_to"=>"all", "first_name"=>"", "last_name"=>"", "phone_number"=>"", "person_updated_from"=>"", "person_updated_to"=>"", "status"=>"", "survey"=>"", "answers"=>{"#{@campus_question.id}" => "DSU"}, "commit"=>"Search"}
+
+      assert_equal 1, assigns(:all_people).count.count
+      assert assigns(:people).include? Person.where(first_name: "Eloisa", last_name: "Bongalbal").first
+      assert assigns(:people).include?(Person.where(first_name: "Neil", last_name: "dela Cruz").first) == false
     end
   end
 end
