@@ -1,4 +1,4 @@
-class Api3::V3::OrganizationsController < Api3::V3::BaseController
+class Apis::V3::OrganizationsController < Apis::V3::BaseController
   before_filter :get_organization, only: [:show, :update, :destroy]
 
   def index

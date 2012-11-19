@@ -208,7 +208,7 @@ Mh::Application.routes.draw do
     end
   end
 
-  namespace :api3 do
+  namespace :apis do
     api_version(module: "V3", header: "API-VERSION", value: "v3", parameter: "version", path: 'v3') do
       resources :people
       resources :surveys

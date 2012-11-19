@@ -1,4 +1,4 @@
-class Api3::V3::PeopleController < Api3::V3::BaseController
+class Apis::V3::PeopleController < Apis::V3::BaseController
   before_filter :get_person, only: [:show, :update, :destroy]
 
   def index

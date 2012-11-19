@@ -1,4 +1,4 @@
-class Api3::V3::BaseController < ApplicationController
+class Apis::V3::BaseController < ApplicationController
   skip_before_filter :set_login_cookie
   skip_before_filter :check_su
   skip_before_filter :check_valid_subdomain

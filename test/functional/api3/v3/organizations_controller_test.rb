@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Api3::V3::OrganizationsControllerTest < ActionController::TestCase
+class Apis::V3::OrganizationsControllerTest < ActionController::TestCase
   setup do
     request.env['HTTP_ACCEPT'] = 'application/json'
     @client = Factory(:client)
