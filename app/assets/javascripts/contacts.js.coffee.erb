@@ -422,9 +422,14 @@ $ ->
     false
 
   $('#contacts_controller #bulk_unassign').live 'click', ->
-    if $('.id_checkbox:checked').length > 0 && $('#leaders')[0]?
+    checked_count = $('.id_checkbox:checked').length
+    if checked_count > 0 && $('#leaders')[0]?
       $.fn.assignTo($('.leader.unassigned'))
-      $('.id_checkbox:checked').closest('tr').fadeOut()
+      $('.id_checkbox:checked').each ->
+        $(this).parents('tr').children('.assigned_to').html("")
+      msg = "You have successfully unassigned " + checked_count + " contacts."
+      $('.carea').prepend("<div class='flash' style='margin:10px;'><div class='flash_message notice'><p>"+msg+"</p></div></div>")
+      $('.flash').delay(3000).slideUp()
     $('#check_all').prop('checked', false)
     false
     
@@ -613,6 +618,18 @@ $.fn.assignTo = (leader, skip_remote) ->
         $.rails.handleRemote($('#new_contact_assignment'))
       
       row.find('.id_checkbox').attr('checked', false)
+      if $('.leader.selected').size() > 0
+        row.hide() 
+        disp_string = $('.searchstat').html().trim()
+        disp_total = parseInt(disp_string.split(' of ')[1]) - 1
+        disp_over = parseInt(disp_string.split(' - ')[1].split(' of ')[0]) - 1
+        disp_num = disp_string.split(' - ')[0].split(' ')[1]
+        
+        if disp_total <= 0 || disp_over <= 0
+          $('.searchstat').html("")
+        else
+          $('.searchstat').html("Displaying " + disp_num + " - " + disp_over + " of " + disp_total)
+          
   $('#assign_to').val('')
   
 $.mh.saveContact = (add_more) ->
