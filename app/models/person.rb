@@ -26,7 +26,7 @@ class Person < ActiveRecord::Base
   has_many :assigned_contacts, through: :contact_assignments, source: :assigned_to
   has_one :current_address, class_name: "Address", foreign_key: "person_id", conditions: {address_type: 'current'}, autosave: true
   has_many :addresses, class_name: 'Address', foreign_key: :person_id, dependent: :destroy
-  has_many :rejoicables, inverse_of: :created_by
+  has_many :rejoicables, inverse_of: :person
 
   has_many :organization_memberships, inverse_of: :person
   has_many :organizational_roles, conditions: {deleted: false, archive_date: nil}

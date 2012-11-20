@@ -8,13 +8,13 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
 
     render json: list,
            callback: params[:callback],
-           scope: includes
+           scope: {include: includes, organization: current_organization}
   end
 
   def show
     render json: @person,
            callback: params[:callback],
-           scope: includes
+           scope: {include: includes, organization: current_organization}
   end
 
   def create
@@ -32,7 +32,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
       render json: person,
              status: :created,
              callback: params[:callback],
-             scope: includes
+             scope: {include: includes, organization: current_organization}
     else
       render json: {errors: person.errors.full_messages},
              status: :bad_request,
@@ -44,7 +44,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
     if @person.update_attributes(params[:person])
       render json: @person,
              callback: params[:callback],
-             scope: includes
+             scope: {include: includes, organization: current_organization}
     else
       render json: {errors: person.errors.full_messages},
              status: :bad_request,
@@ -58,7 +58,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
 
     render json: @person,
            callback: params[:callback],
-           scope: includes
+           scope: {include: includes, organization: current_organization}
   end
 
   private
