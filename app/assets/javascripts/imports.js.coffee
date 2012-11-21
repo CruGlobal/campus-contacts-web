@@ -32,6 +32,12 @@ $ ->
         Cancel: ->
           $(this).dialog('close')
       
+  $('#use_labels').live 'change', ->
+    if $(this).is(':checked') 
+      $('.label_space').show()
+    else
+      $('.label_space').hide()
+      
   $('.column_edit_link').live 'click', (e)->
     e.preventDefault()
     current_value = $("#import_column_survey_select_"+$(this).attr('data_id')).val()

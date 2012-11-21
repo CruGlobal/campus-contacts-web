@@ -7,12 +7,11 @@
 	
 	<div>
 		<h1 class="title">Step 3 of 3 - Add New Contacts to Groups</h1>
-		<%= link_to("Help Me", "http://blog.missionhub.com", :class => "helpme", :target => "_blank") %>
 		<div class="container">
 			<div class="content">
 				<p><%= t('contacts.index.import_step3_body1', count: @import_count) %>! Use the list below to select any groups which should include these new contacts, then click the <strong>Import</strong> button.</p>
 			</div>
-			<div class="labelform">
+			<div class="labelform" id="import_label_space">
 				<%= form_tag controller: 'imports', action: 'import', id: @import.id do |f| %>
 					<%= check_box_tag :use_labels, 1, true %>
 					<%= t('contacts.index.import_labels_checkbox') %>
