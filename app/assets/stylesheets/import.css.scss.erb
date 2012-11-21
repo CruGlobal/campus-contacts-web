@@ -85,7 +85,7 @@
 
 	.inside_container {
 		margin: 0 auto;
-		width: 600px;
+		width: 620px;
 	}
 
 	select {
@@ -144,7 +144,7 @@
 		border-top: 25px solid #eaf1f6;
 		
 		.content {
-			padding: 15px 50px;
+			padding: 25px 50px;
 			font-family: Georgia;
 			font-size: 14px;
 			font-style: italic;
@@ -158,11 +158,11 @@
 		
 		table {
 			table-layout: fixed;
-			width: 600px;
+			width: 100%;
 			text-align: left;
 			
 			th, td {
-				padding: 0.5em 20px;
+				padding: 5px 15px;
 				vertical-align: middle;
 				overflow: hidden;
 				white-space: nowrap;
@@ -170,6 +170,10 @@
 			
 			th:last-child, td:last-child {
 				width: 50%;
+			}
+			
+			th:first-child, td:first-child {
+				width: 80px;
 			}
 			
 			tr:first-child {
@@ -378,10 +382,6 @@
 		float: right;
 		width: 40%;
 	}
-}
-
-.import_column_survey_select {
-  width: 200px;
 }
 
 #import_survey_question {
