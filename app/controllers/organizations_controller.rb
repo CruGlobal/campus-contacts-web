@@ -166,7 +166,7 @@ class OrganizationsController < ApplicationController
       current_organization.api_client.assign_code_and_secret
       current_organization.api_client.save!
     else
-      current_organization.create_api_client(link: organization_path(current_organization),
+      current_organization.create_api_client(link: organization_url(current_organization),
                                              display_name: current_organization.to_s)
     end
     redirect_to api_organizations_path

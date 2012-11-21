@@ -204,7 +204,7 @@ class Organization < ActiveRecord::Base
 
   def remove_role_from_person(person, role_id)
     person_id = person.is_a?(Person) ? person.id : person
-    OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id).each { |r| r.update_attributes(deleted: true) }
+    OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id).each { |r| r.update_attributes(deleted: true, end_date: Time.now) }
   end
 
   def add_leader(person, current_person)

@@ -41,16 +41,32 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   end
 
   def update
-    if @person.update_attributes(params[:person])
-      render json: @person,
-             callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
-    else
-      render json: {errors: person.errors.full_messages},
-             status: :bad_request,
-             callback: params[:callback]
+    # add roles in current org
+    if params[:roles]
+      params[:roles].split(',').each do |role_id|
+        current_organization.add_role_to_person(person, role_id)
+      end
     end
 
+    # remove roles in current org
+    if params[:remove_roles]
+      params[:remove_roles].split(',').each do |role_id|
+        current_organization.remove_role_from_person(person, role_id)
+      end
+    end
+
+    if params[:person]
+      unless @person.update_attributes(params[:person])
+        render json: {errors: @person.errors.full_messages},
+               status: :bad_request,
+               callback: params[:callback]
+        return
+      end
+    end
+
+    render json: @person,
+           callback: params[:callback],
+           scope: {include: includes, organization: current_organization}
   end
 
   def destroy
