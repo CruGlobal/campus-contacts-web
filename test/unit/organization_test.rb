@@ -444,7 +444,7 @@ class OrganizationTest < ActiveSupport::TestCase
     org1 = Factory(:organization)
     person1 = Factory(:person)
     org1.add_contact(person1)
-    assert_difference("OrganizationalRole.count", -1, "An organization was not destroyed") do
+    assert_difference("OrganizationalRole.where(deleted: false).count", -1, "An organization was not destroyed") do
       org1.remove_contact(person1)
     end
   end
