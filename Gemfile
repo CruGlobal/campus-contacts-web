@@ -53,7 +53,7 @@ gem 'deadlock_retry'
 gem 'delegate_presenter'
 
 gem 'vpim', git: 'git://github.com/twinge/vpim.git'   # vcard maker
-gem 'i18n-js', git: 'git://github.com/fnando/i18n-js.git'     # allow i18n on js files 
+gem 'i18n-js', git: 'git://github.com/fnando/i18n-js.git'     # allow i18n on js files
 
 gem 'rest-client'                                     # to make FB api requests
 gem "paperclip", :git => 'git://github.com/thoughtbot/paperclip.git'
@@ -105,7 +105,7 @@ group :assets do
   gem 'uglifier', ">= 1.0.3"
 end
 
-group :capistrano do 
+group :capistrano do
   # Shared capistrano recipes
   gem 'pd-cap-recipes', :git => 'git://github.com/PagerDuty/pd-cap-recipes.git'
 

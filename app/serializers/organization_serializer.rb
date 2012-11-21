@@ -1,6 +1,6 @@
 class OrganizationSerializer < ActiveModel::Serializer
 
-  attributes :id, :name, :terminology, :ancestry, :show_sub_orgs, :status, :settings, :updated_at, :created_at
+  attributes :id, :name, :terminology, :ancestry, :show_sub_orgs, :status, :updated_at, :created_at
 
   has_many :contacts
   has_many :admins

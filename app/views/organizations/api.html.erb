@@ -1,0 +1,11 @@
+<h2>MissionHub API Access</h2>
+<% if client = current_organization.api_client %>
+  <strong>Client ID:</strong> <%= client.id %><br />
+  <!-- <strong>Code:</strong> <%= client.code %><br /> -->
+  <strong>Secret:</strong> <%= client.secret %><br /><br />
+  <%= link_to('Generate new secret', generate_api_secret_organizations_path, 
+              confirm: 'This will invalidate your old secret') %>
+<% else %>
+  <%= link_to('Click here to generate your API secret', generate_api_secret_organizations_path) %>
+<% end %>
+

@@ -123,6 +123,8 @@ Mh::Application.routes.draw do
       post :archive_contacts
       post :archive_leaders
       post :create_from_crs
+      get :api
+      get :generate_api_secret
     end
   end
 

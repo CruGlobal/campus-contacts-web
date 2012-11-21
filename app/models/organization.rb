@@ -32,6 +32,7 @@ class Organization < ActiveRecord::Base
   has_many :no_activity_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status = ?", Role::CONTACT_ID, 0, 'uncontacted']
   has_many :rejoicables
   has_many :groups
+  has_one :api_client, class_name: 'Rack::OAuth2::Server::Client', inverse_of: :organization
   belongs_to :conference, class_name: 'Ccc::Crs2Conference', foreign_key: 'conference_id'
 
   Rejoicable::OPTIONS.each do |option|
@@ -147,14 +148,14 @@ class Organization < ActiveRecord::Base
   def unassigned_contacts
     person_table_pkey = "#{Person.table_name}.#{Person.primary_key}"
     Person
-    .joins("INNER JOIN organizational_roles org_roles ON org_roles.person_id = #{person_table_pkey} 
-        AND org_roles.organization_id = #{id} 
-        AND org_roles.role_id = '#{Role::CONTACT_ID}' 
-        AND org_roles.followup_status <> 'do_not_contact' 
-        AND org_roles.followup_status <> 'completed' 
+    .joins("INNER JOIN organizational_roles org_roles ON org_roles.person_id = #{person_table_pkey}
+        AND org_roles.organization_id = #{id}
+        AND org_roles.role_id = '#{Role::CONTACT_ID}'
+        AND org_roles.followup_status <> 'do_not_contact'
+        AND org_roles.followup_status <> 'completed'
         AND org_roles.archive_date IS NULL
         AND org_roles.deleted = 0
-        LEFT JOIN contact_assignments ca ON ca.person_id = #{person_table_pkey} 
+        LEFT JOIN contact_assignments ca ON ca.person_id = #{person_table_pkey}
         AND ca.organization_id = #{id}")
         .where("ca.id IS NULL OR ca.assigned_to_id NOT IN (?)", only_leaders)
   end
@@ -162,14 +163,14 @@ class Organization < ActiveRecord::Base
   def inprogress_contacts
     person_table_pkey = "#{Person.table_name}.#{Person.primary_key}"
     Person
-    .joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{person_table_pkey} 
-        AND organizational_roles.organization_id = #{id} 
-        AND organizational_roles.role_id = '#{Role::CONTACT_ID}' 
-        AND followup_status <> 'do_not_contact' 
-        AND followup_status <> 'completed' 
+    .joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{person_table_pkey}
+        AND organizational_roles.organization_id = #{id}
+        AND organizational_roles.role_id = '#{Role::CONTACT_ID}'
+        AND followup_status <> 'do_not_contact'
+        AND followup_status <> 'completed'
         AND archive_date IS NULL
         AND deleted = 0
-        LEFT JOIN contact_assignments ON contact_assignments.person_id = #{person_table_pkey} 
+        LEFT JOIN contact_assignments ON contact_assignments.person_id = #{person_table_pkey}
         AND contact_assignments.organization_id = #{id}")
         .where("contact_assignments.assigned_to_id IN (?)", only_leaders)
   end
@@ -183,7 +184,7 @@ class Organization < ActiveRecord::Base
   end
 
   def validation_method_enum # ???
-    ['relay'] 
+    ['relay']
   end
 
   def terminology_enum
@@ -260,7 +261,7 @@ class Organization < ActiveRecord::Base
     person.remove_assigned_contacts(self)
   end
 
-  def move_contact(person, to_org, keep_contact, current_admin = nil)  
+  def move_contact(person, to_org, keep_contact, current_admin = nil)
     @followup_comments = followup_comments.where(contact_id: person.id)
     @rejoicables = rejoicables.where(person_id: person.id)
     if keep_contact == "false"
@@ -290,10 +291,10 @@ class Organization < ActiveRecord::Base
 
   def create_admin_user
     add_admin(Person.find(self.person_id)) if person_id
-  end 
+  end
 
   def notify_admin_of_request
-    begin 
+    begin
       if parent
         update_column(:status, 'active')
       else
@@ -310,7 +311,7 @@ class Organization < ActiveRecord::Base
     person.user.save(validate: false)
     LeaderMailer.added(person, added_by, self, token).deliver
   end
-  
+
   def attempting_to_delete_or_archive_all_the_admins_in_the_org?(ids)
     admin_ids = parent_organization_admins.collect(&:id)
     i = admin_ids & ids.collect(&:to_i)
