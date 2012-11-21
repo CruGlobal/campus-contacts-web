@@ -240,8 +240,7 @@ class Organization < ActiveRecord::Base
     organizational_roles.where(person_id: person_id).each do |ors|
       if(ors.role_id == Role::LEADER_ID)
         # remove contact assignments if this was a leader
-        Person.find(ors.person_id).contact_assignments.where(organization_id: id).all
-        ca.collect(&:destroy)
+        Person.find(ors.person_id).contact_assignments.where(organization_id: id).all.collect(&:destroy)
       end
       remove_role_from_person(person, ors.role_id)
     end
@@ -265,7 +264,7 @@ class Organization < ActiveRecord::Base
     @followup_comments = followup_comments.where(contact_id: person.id)
     @rejoicables = rejoicables.where(person_id: person.id)
     if keep_contact == "false"
-      remove_contact(person)
+      remove_person(person)
       # move call followup comments
       @followup_comments.update_all(organization_id: to_org.id)
       @rejoicables.update_all(organization_id: to_org.id)
