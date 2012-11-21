@@ -85,6 +85,7 @@ en:
     create_a_survey: Create a survey
     settings: Settings
   general:
+    transfer: "Transfer"
     roles_applied: "Labels have been applied."
     adv_search: "Advanced Search"
     archived: "Archived"
@@ -624,7 +625,7 @@ en:
       dnc_contacts: "All Contacts - 'Do Not Contact'"
       completed_contacts: "All Contacts - Completed"
       friend_responses: "Contacts who are also my friends on Facebook"
-      none_checked: "Sorry, you need to select a Contact before this function will work."
+      none_checked: "You need to select a person before this feature will work."
       show_all: Show 'In Progress' contacts
       matching_seach: Matching the criteria you searched for
       which_org: 'You need to choose which organization you want to do folow-up from'

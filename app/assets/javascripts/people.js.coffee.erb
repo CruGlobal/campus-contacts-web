@@ -232,15 +232,6 @@ $ ->
     else
       document.location.href = '/people/merge'
   false
-  
-  $('#assign_org .org_search_name').observe_field 0.5, ->
-    name = $(this).val()
-    $('#spinner_org_search').show()
-    $.ajax
-      url: '/organizations/search.js?q='+name, 
-      type: 'GET',
-      complete: ->
-        $('#spinner_org_search').hide()
 
 $.fn.fbNameSearch = (url)->
   prevBtn = $("#fb_name_search_dialog").next(".ui-dialog-buttonpane").find('button')[1]
@@ -651,41 +642,6 @@ $('#transfer_org').live 'click', ->
   else
     $.a(t('contacts.index.none_checked'))
   false
-  
-$('#assign_org .org a').live 'click', (e)->
-  e.preventDefault()
-  form = $('#new_contact_assignment')
-  from_id = $(this).closest('div').attr('data-org-id')
-  to_id = $(this).attr('data-id')
-  keep_contact = $('#keep-contact-copy > input').is(':checked')
-  
-  ids = []
-  $('.id_checkbox:checked:visible').each ->
-    ids.push($(this).val())
-  if($('#all_selected_text').is(':visible'))    
-    $('.all_row').each ->
-      ids.push($(this).attr('data-id'))
-  
-  $('#assign_org').dialog('destroy')
-  $.ajax
-    type: 'POST'
-    url: '/organizational_roles/move_to'
-    data: 'from_id='+from_id+'&to_id='+to_id+'&keep_contact='+keep_contact+'&ids='+ids
-    success: (data) ->
-      if data.indexOf("success") != -1
-        if keep_contact == false
-          $.a(data)
-          $('.id_checkbox:checked').each ->
-            $(this).closest('tr').fadeOut();
-        else
-          $.a(data)
-        if $('#people_controller.show')[0]
-          setTimeout "document.location = '/people'", 1000
-      else
-        $.a(data)
-        
-
-false
   
 $('.check_all_mine').live 'click', ->
   first_row = $('#contacts_table').find('tr:first')
