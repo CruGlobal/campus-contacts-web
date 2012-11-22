@@ -101,8 +101,35 @@ class ImportsController < ApplicationController
     @message ||= "Choices can't be blank " if params[:question_category] == 'ChoiceField' && !params[:options].present?
     
     unless @message.present?
-      @message = 'This feature is under development.'
+      if params[:create_survey_toggle]
+        @survey_status = 'NEW'
+        @survey = current_organization.surveys.create(
+          login_paragraph: I18n.t('application.survey.default_login_paragraph'),
+          title: params[:survey_name_field],
+          post_survey_message: I18n.t('application.survey_name_field.default_post_survey_message'),
+          terminology: 'Survey'
+        )
+      else
+        @survey = Survey.find(params[:select_survey_field].to_i)
+        authorize! :manage, @survey
+      end
+      
+      type, style = params[:question_category].split(':')
+      @question = type.constantize.create!(style: style, label: params[:question], content: params[:options], slug: '')
+      
+      if @survey.archived_questions.include?(@question)
+        survey_element = SurveyElement.where(survey_id: @survey.id, element_id: @question.id).first
+        survey_element.update_attribute(:archived, false)
+      else
+        begin
+          @survey.elements << @question
+          @message = "SUCCESS"
+        rescue ActiveRecord::RecordInvalid => e
+          @message = I18n.t('surveys.questions.create.duplicate_error')
+        end
+      end
     end
+    
   end
 
   protected

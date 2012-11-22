@@ -4,6 +4,9 @@
 
 en:
   application:
+    survey:
+      default_login_paragraph: "To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey."
+      default_post_survey_message: "Thank you fro your time!"
     add_contact: 
       add_contact: Add a contact to %{org}
       title_bio: Bio

@@ -7,14 +7,14 @@
   		</div>
   		<div id="survey_content" class="info_content">
   		  <%= check_box_tag 'create_survey_toggle', 'new_survey', checked: 'checked' %>
-  			<label>Create New Survey for Question</label>
+  			<label for='create_survey_toggle'>Create New Survey for Question</label>
   			<div id="new_survey">
-  				<label>Name of New Survey:</label>
+  				<label for='survey_name_field'>Name of New Survey:</label>
   				<%= text_field_tag 'survey_name_field', "", id: 'survey_name_field' %>
   			</div>
   			<div id="old_survey" style="display:none">
-  				<label>Select Survey for Question</label>
-  			  <%= select_tag('select_survey_field', options_for_select(current_organization.surveys), include_blank: true, class: 'question_type') %>
+  				<label for='select_survey_field'>Select Survey for Question</label>
+  			  <%= select_tag('select_survey_field', options_for_select(current_organization.surveys.collect{|x| [x.to_s, x.id]}), include_blank: true, class: 'question_type') %>
   			</div>
   		</div>
   	</div>
@@ -23,25 +23,25 @@
   			Question Info:
   		</div>
   		<div id="survey_content" class="info_content">
-  			<label>What type of question would you like to ask?</label>
-  			<%= select_tag('question_category', options_for_select([[t('.short_answer'), 'TextField'], [t('.multiple_choice'), 'ChoiceField'], [t('.checkboxes'), 'ChoiceField'], [t('.dropdown'),'ChoiceField']]), include_blank: true) %>
+  			<label for='question_category'>What type of question would you like to ask?</label>
+  			<%= select_tag('question_category', options_for_select([[t('.short_answer'), 'TextField:short'], [t('.multiple_choice'), 'ChoiceField:radio'], [t('.checkboxes'), 'ChoiceField:checkbox'], [t('.dropdown'),'ChoiceField:drop-down']]), include_blank: true) %>
   			<br/>
 
   			<div id="survey_question_set">
   				<div id="preview">
-  					<span>Text Message Length: <span id="length_counter"></span>/140</span>
+  					<span><b>Text Message Length:</b> <span id="length_counter"></span>/140</span>
   					<br/>
-  					<span>Text Message Preview:</span><br/>
+  					<span><b>Text Message Preview:</b></span><br/>
   					<span id="question_preview"></span>
   				</div>
   				<div id="question">
-  					<label><%= t('.question') %>:</label>
+  					<label for='question_field'><%= t('.question') %>:</label>
   					<br/>
   					<%= text_field_tag 'question', "", id: 'question_field' %>
   					<br/>
   					<br/>
   					<span id='import_survey_question_options_set'>
-  					<label>List out the possible choices, one per line:</label>
+  					<label for='question_options_field'>List out the possible choices, one per line:</label>
   					<br/>
   					<%= text_area_tag 'options', "", row: 5, id: 'question_options_field' %>
   				</div>
