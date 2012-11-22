@@ -33,7 +33,15 @@ class Batch # < ActiveRecord::Base
           end
         else
           error = "Root parent organization #{organization.name}(ID#{organization.id}) do not have admin with valid email."
-          Rails.env.production? ? Airbrake.notify(error) : (raise error)
+          if Rails.env.production?
+            Airbrake.notify(              
+              :error_class   => "Batch::PersonTransferNotify",
+              :error_message => "Batch::PersonTransferNotify: #{error}",
+              :parameters    => {receiving_organizations: receiving_orgs.collect(&:organization_id)}
+            )
+          else
+            raise error
+          end
         end
       end
     end
@@ -71,7 +79,15 @@ class Batch # < ActiveRecord::Base
           end
         else
           error = "Root parent organization #{organization.name}(ID#{organization.id}) do not have admin with valid email."
-          Rails.env.production? ? Airbrake.notify(error) : (raise error)
+          if Rails.env.production?
+            Airbrake.notify(              
+              :error_class   => "Batch::NewPersonNotify",
+              :error_message => "Batch::NewPersonNotify: #{error}",
+              :parameters    => {receiving_organizations: receiving_orgs.collect(&:organization_id)}
+            )
+          else
+            raise error
+          end
         end
       end
     end
