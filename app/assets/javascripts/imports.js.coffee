@@ -7,14 +7,14 @@ $ ->
       select_field = $(this).find('.import_column_survey_select')
       header = $.trim(parseCamelCase($(this).children('.column_header').text().replace(/_|-|:/g,' ')).toLowerCase())
       header_words = header.split(' ')
-      select_field.find('option:not(:first))').each ->
-        if $(this).val() == ''
+      if select_field.val() == ''
+        select_field.find('option:not(:first))').each ->
           match_question = true
           for word in header_words
             match_question = false if match_question && word.length > 2 && $(this).text().toLowerCase().search(word) == -1
           if match_question
             select_field.val($(this).val()) unless $(this).is(':disabled')
-      select_field.trigger('change')
+        select_field.trigger('change')
       
   	$('#create_question_dialog').dialog
   		resizable: false,

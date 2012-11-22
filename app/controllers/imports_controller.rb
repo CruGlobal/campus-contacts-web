@@ -123,6 +123,7 @@ class ImportsController < ApplicationController
       else
         begin
           @survey.elements << @question
+          @survey.survey_elements.find_by_element_id(@question.id).update_attribute(:hidden, true)
           @message = "SUCCESS"
         rescue ActiveRecord::RecordInvalid => e
           @message = I18n.t('surveys.questions.create.duplicate_error')
