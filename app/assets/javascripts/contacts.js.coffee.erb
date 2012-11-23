@@ -3,6 +3,29 @@ $ ->
     if (e.keyCode == $.ui.keyCode.ENTER)
       $('#contact_search_form').submit()
 
+  $('#transfer_to_org').dialog
+    resizable: false,
+    height:580,
+    width:500,
+    title: "Transfer to Another Organization",
+    autoOpen: false,
+    modal: true,
+    open: (event, ui) ->
+      $("body").css({ overflow: 'hidden' })
+      $('.ui-widget-overlay').width('100%');
+    close: (event, ui) ->
+      $("body").css({ overflow: 'inherit' })
+    buttons: 
+      Cancel: ->
+        $(this).dialog('close')
+  
+  $('#transfer_to_org_link').live 'click', (e)->
+    e.preventDefault()
+    if $('.id_checkbox:checked').length > 0
+      $('#transfer_to_org').dialog('open')
+    else
+      $.a(t('contacts.index.none_checked'))
+
   $('#bulk_export_link').live 'click', (e)->
     e.preventDefault()
     ids = []
@@ -212,8 +235,9 @@ $ ->
   false
 
   
-  $('#assign_search .org a').live 'click', (e)->
+  $('#transfer_to_org .org a').live 'click', (e)->
     e.preventDefault()
+    $('#global_loader').show()
     form = $('#new_contact_assignment')
     from_id = $(this).closest('div').attr('data-org-id')
     to_id = $(this).attr('data-id')
@@ -224,13 +248,15 @@ $ ->
     if($('#all_selected_text').is(':visible'))    
       $('.all_row').each ->
         ids.push($(this).attr('data-id'))
-    $('#assign_search').dialog('close')
-    $('#assign_search').dialog('destroy')
+    $('#transfer_to_org').dialog('close')
+    $('input.org_search_name').val('')
+    $('#keep_contact').attr('checked','checked')
     $.ajax
       type: 'POST'
       url: '/organizational_roles/move_to'
       data: 'from_id='+from_id+'&to_id='+to_id+'&keep_contact='+keep_contact+'&ids='+ids
       success: (data) ->
+        $('#global_loader').hide()
         if data.indexOf("success") != -1
           if keep_contact == false
             $.a(data)
@@ -330,7 +356,7 @@ $ ->
       else
         $(this).hide()
     
-  $('#assign_search .org_search_name').observe_field 0.5, ->
+  $('#transfer_to_org .org_search_name').observe_field 0.5, ->
     name = $(this).val()
     $('#spinner_org_search').show()
     $.ajax
@@ -357,7 +383,7 @@ $ ->
       else
         $(this).hide()
         
-  $('#assign_to_me, #assign_to_unassigned').live 'click', ->
+  $('#assign_to_me, #assign_to_unassigned, #assign_to_dnc').live 'click', ->
     $('#assign_search .leader_search').hide()
     $('#assign_search .org_search').hide()
     $('#assign_search .group_search').hide()

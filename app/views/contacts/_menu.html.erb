@@ -84,6 +84,7 @@
       <% if can? :manage, current_organization %>
         <li><%= link_to(t('general.delete'), bulk_delete_people_path, id: "bulk_delete") %></li>
         <li><%= link_to(t('general.archive'), bulk_archive_people_path, id: "bulk_archive") %></li>
+        <li><%= link_to(t('general.transfer'), '', id: "transfer_to_org_link") %></li>
       <% end %>
     </ul>
   </li>
