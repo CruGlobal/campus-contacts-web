@@ -76,6 +76,7 @@ $ ->
       $('#select_survey_field').attr('disabled','disabled')
       $('#question_field').val(selected_option.text())
       $('#question_options_field').val(selected_option.attr('question_content'))
+      $('#question_field').trigger('keyup')
       
     $('#create_question_dialog').attr('data_id', $(this).attr('data_id'))
     $('#create_question_dialog').dialog('option', 'position', 'center');
