@@ -42,6 +42,7 @@ $ ->
   $('.column_edit_link').live 'click', (e)->
     e.preventDefault()
     current_value = $("#import_column_survey_select_"+$(this).attr('data_id')).val()
+    $('#question_id_field').val(current_value)
     if current_value is ""
       $('#create_survey_toggle').attr('checked','checked')
       $('#survey_content #new_survey').show()
@@ -52,9 +53,30 @@ $ ->
       $('#question_field').val('')
       $('#question_category').val('')
       $('#question_options_field').val('')
+      $('#create_survey_toggle').removeAttr('disabled')
+      $('#select_survey_field').removeAttr('disabled')
+      $('#question_category').removeAttr('disabled')
       $('#length_counter').text('0')
       $('#question_preview').html('')
       $('#import_error_message').html('')
+    else
+      selected_question = $("#import_column_survey_select_"+$(this).attr('data_id')).val()
+      survey_title = $("#import_column_survey_select_"+$(this).attr('data_id')+" option[value="+selected_question+"]").parents('optgroup').attr('label')
+      selected_option = $("#import_column_survey_select_"+$(this).attr('data_id')).children().find("option[value="+selected_question+"]")
+      $('#create_survey_toggle').removeAttr('checked')
+      $('#survey_content #new_survey').hide()
+      $('#survey_content #old_survey').show()
+      $('#survey_question_set').show()
+      $('#select_survey_field option').each ->
+        $('#select_survey_field').val($(this).attr('value')) if $(this).text() == survey_title
+      $('#question_category').val(selected_option.attr('question_type'))
+      $("#question_category").trigger('change')
+      $('#create_survey_toggle').attr('disabled','disabled')
+      $('#question_category').attr('disabled','disabled')
+      $('#select_survey_field').attr('disabled','disabled')
+      $('#question_field').val(selected_option.text())
+      $('#question_options_field').val(selected_option.attr('question_content'))
+      
     $('#create_question_dialog').attr('data_id', $(this).attr('data_id'))
     $('#create_question_dialog').dialog('option', 'position', 'center');
     $('#create_question_dialog').dialog('open')
@@ -85,7 +107,8 @@ $ ->
     $('#question_preview').html($('#question_field').val() + "<br/>" + $('#question_options_field').val())
   
   $('.import_column_survey_select').live 'change', ->
-    if $(this).val() == ''
+    selected_option = $(this).children().find("option[value="+$(this).val()+"]")
+    if $(this).val() == "" || selected_option.attr('new') == 'true'
       $('#column_edit_' + $(this).attr('data_id')).show() 
     else
       $('#column_edit_' + $(this).attr('data_id')).hide() 
