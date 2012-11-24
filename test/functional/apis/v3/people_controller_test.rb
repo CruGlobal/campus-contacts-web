@@ -33,6 +33,47 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
       json = JSON.parse(response.body)
       assert_equal 'funk', json['person']['first_name']
     end
+
+    should 'create a phone number when the phone number attribute is passed' do
+      assert_difference "PhoneNumber.count" do
+        post :create, person: {first_name: 'funk', phone_number: '555-555-5555'},
+                      secret: @client.secret
+      end
+    end
+
+    should 'create a phone number when a nested phone number object is passed' do
+      assert_difference "PhoneNumber.count" do
+        post :create, person: {first_name: 'funk',
+                               phone_numbers_attributes: [number: '555-555-5555']},
+                      secret: @client.secret
+      end
+    end
+
+    should 'create a email address when the email address attribute is passed' do
+      assert_difference "EmailAddress.count" do
+        post :create, person: {first_name: 'funk', email: 'foo@example.com'},
+                      secret: @client.secret
+      end
+    end
+
+    should 'create a email address when a nested email address object is passed' do
+      assert_difference "EmailAddress.count" do
+        post :create, person: {first_name: 'funk',
+                               email_addresses_attributes: [email: 'foo@example.com']},
+                      secret: @client.secret
+      end
+    end
+
+    should 'match an existing person when email address is a match' do
+      person = Factory(:person)
+      person.email_addresses.create(email: 'foo@example.com')
+      assert_no_difference "Person.count" do
+        post :create, person: {first_name: 'funk',
+                               email_addresses_attributes: [email: 'foo@example.com']},
+                      secret: @client.secret
+      end
+
+    end
   end
 
   context '.update' do

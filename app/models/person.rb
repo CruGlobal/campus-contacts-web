@@ -963,7 +963,8 @@ class Person < ActiveRecord::Base
       phone = person.phone_numbers.first
     end
 
-    [other_person || person, email, phone]
+    #[other_person || person, email, phone]
+    other_person || person
   end
 
   def do_not_contact(organizational_role_id)

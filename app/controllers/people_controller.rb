@@ -149,7 +149,9 @@ class PeopleController < ApplicationController
       unless params[:person][:first_name].present?# && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
         render :nothing => true and return
       end
-      @person, @email, @phone = create_person(params[:person])
+      @person = create_person(params[:person])
+      @email = @person.email_addresses.first
+      @phone = @person.phone_numbers.first
 
       if @person.save
 

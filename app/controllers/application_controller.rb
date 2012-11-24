@@ -11,10 +11,10 @@ class ApplicationController < ActionController::Base
   before_filter :export_i18n_messages
   before_filter :set_newrelic_params
   around_filter :set_user_time_zone
-  
+
   rescue_from CanCan::AccessDenied, with: :access_denied
-  protect_from_forgery  
-  
+  protect_from_forgery
+
   def set_user_time_zone
     old_time_zone = Time.zone
     if user_signed_in? && current_user.settings[:time_zone]
@@ -50,13 +50,13 @@ class ApplicationController < ActionController::Base
   end
 
   protected
-  
+
   def set_newrelic_params
     if user_signed_in?
       NewRelic::Agent.add_custom_parameters(:user_id => current_user.id, :username => current_user.username, :person_id => current_person.try(:id), :name => current_person.to_s)
     end
   end
-  
+
   def set_login_cookie
     if user_signed_in?
       cookies['logged_in'] = true unless cookies['logged_in']
@@ -64,20 +64,20 @@ class ApplicationController < ActionController::Base
       cookies['logged_in'] = nil if cookies['logged_in']
     end
   end
-  
+
   def raise_or_hoptoad(e, options = {})
-    if Rails.env.production? 
+    if Rails.env.production?
       Airbrake.notify(e, options)
     else
       raise e
     end
   end
   helper_method :raise_or_hoptoad
-  
+
   def check_url
     render_404 if mhub?
   end
-  
+
   def render_404(nologin = false)
     if cookies[:keyword] && SmsKeyword.find_by_keyword(cookies[:keyword])
       url = "/c/#{cookies[:keyword]}"
@@ -92,17 +92,17 @@ class ApplicationController < ActionController::Base
     end
     return false
   end
-  
+
   def mhub?
     @mhub = request.host.include?(APP_CONFIG['public_host'] || 'mhub') if @mhub.nil?
     @mhub
   end
   helper_method :mhub?
-  
+
   def self.application_name
     'MH'
   end
-  
+
   def check_su
     # Act as another user
     if params[:user_id] && params[:su] && current_user.developer?
@@ -114,7 +114,7 @@ class ApplicationController < ActionController::Base
     end
     redirect_to params.except(:user_id, :su, :exit) and return false if redirect
   end
-  
+
   def switch_to_user(user_id, save_old = false)
     session['old_user_id'] = save_old ? current_user.id : nil
     sign_in(:user, User.find(user_id))
@@ -123,7 +123,7 @@ class ApplicationController < ActionController::Base
     #session['warden.user.user.key'] = ["User", [user_id.to_i], nil]
     #session['wizard'] = nil
   end
-  
+
   def current_user
     # check for access token, then do it the devise way
     if current_access_token
@@ -253,12 +253,12 @@ class ApplicationController < ActionController::Base
   #   session[:user_id] = @current_user.id
   #   @current_user
   # end
-  
+
   def unassigned_people(organization)
     @unassigned_people ||= organization.unassigned_people
   end
   helper_method :unassigned_people
-  
+
   def user_root_path
     if mhub?
       render_404
@@ -272,7 +272,7 @@ class ApplicationController < ActionController::Base
     end
   end
   helper_method :user_root_path
-  
+
   def wizard_path
     step = current_user.next_wizard_step(current_organization)
     if step
@@ -280,33 +280,33 @@ class ApplicationController < ActionController::Base
     end
   end
   helper_method :wizard_path
-  
+
   def create_person(person_params)
     Person.new_from_params(person_params)
   end
-  
+
   def ensure_current_org
     unless current_organization
       redirect_to '/wizard' and return false
     end
   end
-  
+
   def access_denied
     render 'application/access_denied'
     return false
   end
-  
+
   def is_leader?
     current_user.has_role?(Role::LEADER_ID, current_organization) || is_admin?
   end
-  
+
   def is_admin?
     current_user.has_role?(Role::ADMIN_ID, current_organization)
   end
-    
+
   def get_survey
     if params[:keyword]
-      @keyword ||= SmsKeyword.where(keyword: params[:keyword]).first 
+      @keyword ||= SmsKeyword.where(keyword: params[:keyword]).first
       @survey = @keyword ? @keyword.survey : Survey.find(params[:keyword])
     elsif params[:received_sms_id]
       sms_id = Base62.decode(params[:received_sms_id])
@@ -320,16 +320,16 @@ class ApplicationController < ActionController::Base
     end
     if params[:keyword] || params[:received_sms_id] || params[:survey_id] || params[:id]
       unless @survey
-        render_404 
+        render_404
         return false
       end
     end
   end
-  
+
   def set_keyword_cookie
     get_survey
     if @keyword
-      cookies[:keyword] = @keyword.keyword 
+      cookies[:keyword] = @keyword.keyword
     end
     if @survey
       cookies[:survey_id] = @survey.id
@@ -337,20 +337,20 @@ class ApplicationController < ActionController::Base
       return false
     end
   end
-  
+
   def roles_for_assign
     current_user_roles = current_user.person
                                      .organizational_roles
                                      .where(:organization_id => current_organization)
                                      .collect { |r| Role.find(r.role_id) }
-                             
+
     if current_user_roles.include? Role.find(1)
       @roles_for_assign = current_organization.roles
     else
       @roles_for_assign = current_organization.roles.delete_if { |role| role == Role.find(1) }
     end
   end
-  
+
   def current_user_super_admin?
     if SuperAdmin.all.collect(&:user_id).include? current_user.id
       true

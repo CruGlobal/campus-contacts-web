@@ -18,7 +18,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   end
 
   def create
-    person = people.new(params[:person])
+    person = Person.find_existing_person(Person.new(params[:person]))
 
     if person.save
 
