@@ -27,7 +27,7 @@ class Apis::V3::SurveysController < Apis::V3::BaseController
              scope: includes
     else
       render json: {errors: survey.errors.full_messages},
-             status: :bad_request,
+             status: :unprocessable_entity,
              callback: params[:callback]
     end
   end
@@ -39,7 +39,7 @@ class Apis::V3::SurveysController < Apis::V3::BaseController
              scope: includes
     else
       render json: {errors: survey.errors.full_messages},
-             status: :bad_request,
+             status: :unprocessable_entity,
              callback: params[:callback]
     end
 
