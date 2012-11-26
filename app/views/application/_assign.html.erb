@@ -11,8 +11,6 @@
     <label for="assign_to_unassigned"><%= t('contacts.index.unassigned') %></label>
     <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_leader', class: 'assign_to_radio' %> 
     <label for="assign_to_leader"><%= t('leader') %></label>
-    <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_org', class: 'assign_to_radio' %> 
-    <label for="assign_to_org"><%= current_organization.terminology %></label>
     <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_group', class: 'assign_to_radio' %>
     <label for="assign_to_group"><%= t('group') %></label>
     <%= radio_button_tag :assign_contact_to, 'do_not_contact', false, id: 'assign_to_dnc', class: 'assign_to_radio' %> 
@@ -28,20 +26,7 @@
         <% end %>
       </ul>
     </div>
-  </div>
-  <div class="org_search modalresults" style="display:none">
-    <p style="margin: 0 0 5px 0;"><%= t('.type_to_find_org', terminology: current_organization.terminology) %></p>
-    <%= text_field_tag :org_name, '', class: 'org_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>
-    <%= spinner('org_search') %>
-    <div id="keep-contact-copy">
-      <%= check_box_tag :keep_contact, 1, true %>
-      <%= t('.keep_contact') %>
-    </div>
-    <br/>
-    <div class="orgs_list" data-org-id="<%= current_organization.id %>">
-      <%= render 'organizations/search', organizations: current_person.orgs_with_children %>
-    </div>
-  </div>  
+  </div> 
   <div class="group_search modalresults" style="display:none">
     <p style="margin: 0 0 5px 0;"><%= t('.type_to_find_group') %></p>
     <%= text_field_tag :group_name, '', class: 'group_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>

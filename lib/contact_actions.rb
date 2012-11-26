@@ -1,5 +1,5 @@
 module ContactActions
-  
+
   def create_contact
     @organization ||= current_organization
 
@@ -10,22 +10,24 @@ module ContactActions
       unless params[:person][:first_name].present?# && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
         respond_to do |wants|
           wants.html { render :nothing => true }
-          wants.json do 
+          wants.json do
             raise ApiErrors::MissingData, "First Name is a required field but was not provided"
           end
         end
         return
       end
 
-      @person, @email, @phone = Person.new_from_params(params[:person])
-      
+      @person = Person.new_from_params(params[:person])
+      @email = @person.email_addresses.first
+      @phone = @person.phone_numbers.first
+
       if @person.save
         if params[:labels].present?
           params[:labels].each do |role_id|
             OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(@person.id, current_organization.id, role_id, added_by_id: current_user.person.id) if role_id.present?
           end
         end
-        
+
         @questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => false)
         save_survey_answers
 
@@ -58,11 +60,11 @@ module ContactActions
         errors << "#{I18n.t('people.create.email_error')}" if @email && !@email.valid?
 
         respond_to do |wants|
-          wants.js do 
+          wants.js do
             flash.now[:error] = errors.join('<br />')
             render 'add_contact'
           end
-          wants.json do 
+          wants.json do
             raise ApiErrors::MissingData, errors.join(', ')
           end
         end
@@ -87,7 +89,7 @@ module ContactActions
 
     @answer_sheets.each do |as|
       if as.reload.answers.blank?
-        as.destroy 
+        as.destroy
         @answer_sheets -= [as]
       end
     end
@@ -116,12 +118,12 @@ module ContactActions
     # Delete any answer_sheet with no answers
     @answer_sheets.each do |as|
       if as.reload.answers.blank?
-        as.destroy 
+        as.destroy
         @answer_sheets -= [as]
       end
     end
-    
-    
+
+
   end
 
 end

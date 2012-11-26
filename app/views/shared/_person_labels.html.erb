@@ -1,0 +1,19 @@
+<div id="labels_dialog">
+  <div class='title'>Labels for <%= @person %></div>
+  <%= form_tag update_all_organizational_roles_path(id: @person.id), remote: true do %>
+    <div class="labels_list">
+      <% @roles_for_assign.each do |role| %>
+        <% if @roles.include?(role) %>
+          <%= render partial: 'shared/label', locals: {role_id: role.id, role_name: role.name, checked: true}%>
+        <% else %>
+          <%= render partial: 'shared/label', locals: {role_id: role.id, role_name: role.name}%>
+        <% end %>
+      <% end %>
+    </div>
+    <div class='actions'>
+      <%= submit_tag 'Apply', onclick: "$('#labels_dialog').dialog('close')" %>
+    </div>
+  <% end %>
+</div>
+
+

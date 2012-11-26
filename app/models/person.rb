@@ -26,7 +26,7 @@ class Person < ActiveRecord::Base
   has_many :assigned_contacts, through: :contact_assignments, source: :assigned_to
   has_one :current_address, class_name: "Address", foreign_key: "person_id", conditions: {address_type: 'current'}, autosave: true
   has_many :addresses, class_name: 'Address', foreign_key: :person_id, dependent: :destroy
-  has_many :rejoicables, inverse_of: :created_by
+  has_many :rejoicables, inverse_of: :person
 
   has_many :organization_memberships, inverse_of: :person
   has_many :organizational_roles, conditions: {deleted: false, archive_date: nil}
@@ -306,7 +306,7 @@ class Person < ActiveRecord::Base
 
   def roles_by_org_id(org_id)
     unless @roles_by_org_id
-      @roles_by_org_id = Hash[OrganizationalRole.connection.select_all("select organization_id, group_concat(role_id) as role_ids from organizational_roles where person_id = #{id} group by organization_id").collect { |row| [row['organization_id'], row['role_ids'].split(',').map(&:to_i) ]}]
+      @roles_by_org_id = Hash[OrganizationalRole.connection.select_all("select organization_id, group_concat(role_id) as role_ids from organizational_roles where person_id = #{id} and deleted = 0 and archive_date is NULL group by organization_id").collect { |row| [row['organization_id'], row['role_ids'].split(',').map(&:to_i) ]}]
     end
     @roles_by_org_id[org_id]
   end
@@ -369,7 +369,7 @@ class Person < ActiveRecord::Base
   end
 
   def phone_number
-    @phone_number = primary_phone_number.try(:number)
+    @phone_number = phone_numbers.detect(&:primary?).try(:number)
 
     unless @phone_number
       if phone_numbers.present?
@@ -392,10 +392,11 @@ class Person < ActiveRecord::Base
       if val.to_s.strip.blank?
         primary_phone_number.try(:destroy)
       else
-        unless phone_numbers.find_by_number(PhoneNumber.strip_us_country_code(val))
+        if new_record? || (p = phone_numbers.find_by_number(PhoneNumber.strip_us_country_code(val))).blank?
           p = primary_phone_number || phone_numbers.new
           p.number = val
         end
+        p.primary = true
       end
     end
     p
@@ -844,7 +845,6 @@ class Person < ActiveRecord::Base
 
   def organizational_roles_hash
     @retries = 0
-    logger.debug("\n\n===========called=============\n\n")
     roles = {}
     @organizational_roles_hash ||= org_ids.collect { |org_id, values|
                                      values['roles'].select { |role_id|
@@ -931,7 +931,7 @@ class Person < ActiveRecord::Base
     return unless opts.slice(:first_name, :last_name, :number).all? {|_, v| v.present?}
 
     Person.where(first_name: opts[:first_name], last_name: opts[:last_name], 'phone_numbers.number' => opts[:number]).
-           joins(:phone_numbers).first
+           includes(:phone_numbers).first
   end
 
   def self.find_existing_person_by_email(email)
@@ -963,7 +963,8 @@ class Person < ActiveRecord::Base
       phone = person.phone_numbers.first
     end
 
-    [other_person || person, email, phone]
+    #[other_person || person, email, phone]
+    other_person || person
   end
 
   def do_not_contact(organizational_role_id)

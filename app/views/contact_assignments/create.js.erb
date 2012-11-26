@@ -1,1 +1,11 @@
-$('#left .block').html('<%= j(render('contacts/leaders')) %>')
+<% if @assign_to.present? %>
+  $('#person_info .title.assigned_to_leader').html('<%= I18n.t("people.show.assigned_to", assigned_to: "#{@assign_to}") %>')
+  $('#followup_comment_status').val('uncontacted')
+<% else %>
+  $('#person_info .title.assigned_to_leader').html('')
+  if("<%= params[:assign_to] %>" == 'do_not_contact'){
+    $('#followup_comment_status').val('do_not_contact')
+  }else if("<%= params[:assign_to] %>" == ''){
+    $('#followup_comment_status').val('uncontacted')
+  }
+<% end %>

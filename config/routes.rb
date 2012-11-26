@@ -47,6 +47,7 @@ Mh::Application.routes.draw do
   resources :organizational_roles, :only => :update do
     collection do
       post :move_to
+      post :update_all
     end
     member do
       get :set_current
@@ -104,7 +105,7 @@ Mh::Application.routes.draw do
 
   namespace :admin do
     resources :email_templates
-    
+
   end
 
   # namespace :admin do
@@ -122,6 +123,8 @@ Mh::Application.routes.draw do
       post :archive_contacts
       post :archive_leaders
       post :create_from_crs
+      get :api
+      get :generate_api_secret
     end
   end
 
@@ -143,7 +146,7 @@ Mh::Application.routes.draw do
       end
     end
   end
-  
+
   match "/dashboard" => "dashboard#index"
   get "welcome/index"
   get "welcome/duplicate"
@@ -207,6 +210,15 @@ Mh::Application.routes.draw do
     end
   end
 
+  namespace :apis do
+    api_version(module: "V3", header: "API-VERSION", value: "v3", parameter: "version", path: 'v3') do
+      resources :people
+      resources :organizations
+      resources :surveys
+      resources :roles
+    end
+  end
+
   root to: "welcome#index"
 #  match 'home' => 'welcome#home', as: 'user_root' ---- LOOK FOR THIS IN application_controller.rb
   match 'wizard' => 'welcome#wizard', as: 'wizard'
@@ -228,9 +240,9 @@ Mh::Application.routes.draw do
   get "/surveys/:keyword" => 'surveys#start'
   # mount RailsAdmin::Engine => "/admin"
 
-  # 
+  #
   match 'autoassign_suggest' => 'surveys/questions#suggestion', as: 'question_suggestion'
-  
+
   get "welcome/tour"
 
   # mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'

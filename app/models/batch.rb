@@ -5,8 +5,8 @@ class Batch # < ActiveRecord::Base
     receiving_orgs = notify_entries.group('new_organization_id')
     
     receiving_orgs.each do |o|
-      organization = Organization.find(o.new_organization_id)
-      if organization.present?
+      if Organization.exists?(o.new_organization_id)
+        organization = Organization.find(o.new_organization_id)
         transferred_contacts = notify_entries.where(new_organization_id: organization.id).order('old_organization_id')
         admins = organization.all_possible_admins_with_email
         if admins.present?
@@ -28,14 +28,20 @@ class Batch # < ActiveRecord::Base
               end
             end
             intro = I18n.t('batch.person_transfer_message', org_name: organization.name, contacts_count: formated_transferred_contacts.size)
-
-            OrganizationMailer.enqueue.notify_person_transfer(admin.email, intro, formated_transferred_contacts)
-            # OrganizationMailer.notify_person_transfer(admin.email, intro, formated_transferred_contacts).deliver
+            OrganizationMailer.notify_person_transfer(admin.email, intro, formated_transferred_contacts).deliver
             transferred_contacts.update_all(notified: true)
           end
         else
           error = "Root parent organization #{organization.name}(ID#{organization.id}) do not have admin with valid email."
-          Rails.env.production? ? Airbrake.notify(error) : (raise error)
+          if Rails.env.production?
+            Airbrake.notify(              
+              :error_class   => "Batch::PersonTransferNotify",
+              :error_message => "Batch::PersonTransferNotify: #{error}",
+              :parameters    => {receiving_organizations: receiving_orgs.collect(&:organization_id)}
+            )
+          else
+            raise error
+          end
         end
       end
     end
@@ -46,8 +52,8 @@ class Batch # < ActiveRecord::Base
     
     receiving_orgs = notify_entries.group('organization_id')
     receiving_orgs.each do |o|
-      organization = Organization.find(o.organization_id)
-      if organization.present?
+      if Organization.exists?(o.organization_id)
+        organization = Organization.find(o.organization_id)
         new_contacts = notify_entries.where(organization_id: organization.id).order('organization_id')
         admins = organization.all_possible_admins_with_email
         if admins.present?
@@ -66,15 +72,22 @@ class Batch # < ActiveRecord::Base
                 Rails.env.production? ? Airbrake.notify(e) : (raise e)
               end
             end
+            
             intro = I18n.t('batch.new_person_message', org_name: organization.name, contacts_count: new_contacts.size)
-          
-            OrganizationMailer.enqueue.notify_new_people(admin.email, intro, formated_new_contacts)
-            # OrganizationMailer.notify_new_people(admin.email, intro, formated_new_contacts).deliver
+            OrganizationMailer.notify_new_people(admin.email, intro, formated_new_contacts).deliver
             new_contacts.update_all(notified: true)
           end
         else
           error = "Root parent organization #{organization.name}(ID#{organization.id}) do not have admin with valid email."
-          Rails.env.production? ? Airbrake.notify(error) : (raise error)
+          if Rails.env.production?
+            Airbrake.notify(              
+              :error_class   => "Batch::NewPersonNotify",
+              :error_message => "Batch::NewPersonNotify: #{error}",
+              :parameters    => {receiving_organizations: receiving_orgs.collect(&:organization_id)}
+            )
+          else
+            raise error
+          end
         end
       end
     end

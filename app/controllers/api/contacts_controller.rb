@@ -18,16 +18,14 @@ class Api::ContactsController < ApiController
   end
 
   def search_2
-    @keywords = get_keywords
-    json_output = []
-    unless (@keywords.empty? || !params[:term].present?)
-      @surveys = @keywords.collect(&:survey)
-      @people = Person.who_answered(@surveys).where('CONCAT(`people`.`first_name`," ", `people`.`last_name`) LIKE ? OR `people`.`last_name` LIKE ?',"%#{params[:term]}%","%#{params[:term]}%")
+    output = @api_json_header
+
+    if params[:term].present?
+      @people = Person.where('CONCAT(`people`.`first_name`," ", `people`.`last_name`) LIKE ? OR `people`.`last_name` LIKE ?',"%#{params[:term]}%","%#{params[:term]}%")
       @people = paginate_filter_sort_people(@people,@organization)
+      output[:contacts] = @people.collect {|person| {person: person.to_hash_basic(@organization)}}
     end
 
-    output = @api_json_header
-    output[:contacts] = @people.collect {|person| {person: person.to_hash_basic(@organization)}}
 
     final_output = Rails.env.production? ? JSON.fast_generate(output) : JSON::pretty_generate(output)
 

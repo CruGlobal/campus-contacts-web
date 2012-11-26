@@ -106,7 +106,7 @@ class Import < ActiveRecord::Base
   end
 
   def create_contact_from_row(row, current_organization)
-    person, email, phone = Person.find_existing_person(Person.new(row[:person]))
+    person = Person.find_existing_person(Person.new(row[:person]))
     person.save
 
     unless @surveys_for_import

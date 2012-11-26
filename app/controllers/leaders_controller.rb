@@ -1,7 +1,7 @@
 class LeadersController < ApplicationController
   respond_to :html, :js
   cache_sweeper :organization_sweeper, only: [:create, :destroy, :update]
-  
+
   def leader_sign_in
     # Reconcile the person comeing from a leader link with the link itself.
     # This is for the case where the person gets entered with one email, but has a different email for FB
@@ -19,7 +19,7 @@ class LeadersController < ApplicationController
       redirect_to user_root_path
     end
   end
-  
+
   def search
     if params[:name].present?
       scope = Person.search_by_name(params[:name], current_person.orgs_with_children.collect(&:id))
@@ -27,7 +27,7 @@ class LeadersController < ApplicationController
       if params[:show_all].to_s == 'true'
         @total = @people.all.length
       else
-        @people = @people.limit(10) 
+        @people = @people.limit(10)
         @total = scope.count
       end
       @people
@@ -81,11 +81,11 @@ class LeadersController < ApplicationController
     current_organization.add_leader(@person, current_person)
     render :create
   end
-  
+
   def update
     @person = Person.find(params[:id])
     if params[:person]
-      email_attributes = params[:person].delete(:email_address) || {} 
+      email_attributes = params[:person].delete(:email_address) || {}
       phone_attributes = params[:person].delete(:phone_number) || {}
       if email_attributes[:email].present?
         @email = @person.email_addresses.find_or_create_by_email(email_attributes[:email])
@@ -111,7 +111,10 @@ class LeadersController < ApplicationController
 
   def add_person
 
-    @person, @email, @phone = create_person(params[:person])
+    @person = create_person(params[:person])
+    @email = @person.email_addresses.first
+    @phone = @person.phone_numbers.first
+
     @required_fields = {'First Name' => @person.first_name, 'Last Name' => @person.last_name, 'Gender' => @person.gender, 'Email' => @email.try(:email)}
     @person.valid?; @email.try(:valid?); @phone.try(:valid?)
 
@@ -134,5 +137,5 @@ class LeadersController < ApplicationController
 
     create and return
   end
-  
+
 end

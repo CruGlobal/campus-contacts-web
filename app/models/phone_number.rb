@@ -2,27 +2,27 @@ require 'open-uri'
 class PhoneNumber < ActiveRecord::Base
   @queue = :general
   belongs_to :carrier, class_name: 'SmsCarrier', foreign_key: 'carrier_id'
-  
+
   belongs_to :person
   validates_presence_of :number, message: "can't be blank"
-  
+
   before_create :set_primary
   before_save :clear_carrier_if_number_changed
   after_commit :async_update_carrier
   after_destroy :set_new_primary
-  
+
   def self.strip_us_country_code(num)
     return unless num
-    num = num.to_s.gsub(/[^\d]/, '')
+    num = num.to_s.strip.gsub(/[^\d]/, '')
     num.length == 11 && num.first == '1' ? num[1..-1] : num
   end
-  
+
   def number=(num)
     if num
       self[:number] = PhoneNumber.strip_us_country_code(num)
     end
   end
-  
+
   def pretty_number
     case number.length
     when 7
@@ -33,16 +33,16 @@ class PhoneNumber < ActiveRecord::Base
       number
     end
   end
-  
+
   def email_address
     # number + '@' + person.primary_phone_number.carrier.email
     txt_to_email
   end
-  
+
   def number_with_country_code
     number.length == 10 ? '1' + number : number
   end
-  
+
   def merge(other)
     PhoneNumber.transaction do
       %w{extension location primary}.each do |k, v|
@@ -59,16 +59,16 @@ class PhoneNumber < ActiveRecord::Base
       save(validate: false)
     end
   end
-  
+
   protected
-  
+
   def clear_carrier_if_number_changed
     if changed.include?('number')
       self.txt_to_email = nil
       self.carrier_id = nil
     end
   end
-  
+
   def async_update_carrier
     async(:update_carrier)
   end
@@ -98,14 +98,14 @@ class PhoneNumber < ActiveRecord::Base
       end
     end
   end
-  
+
   def set_primary
     if person
       self.primary = (person.primary_phone_number ? false : true)
     end
     true
   end
-  
+
   def set_new_primary
     if self.primary?
       if person && person.phone_numbers.present?
@@ -114,7 +114,7 @@ class PhoneNumber < ActiveRecord::Base
     end
     true
   end
-  
+
   def normalize_carrier(name)
     case name
     when /VERIZON/, /BELL ATLANTIC/
