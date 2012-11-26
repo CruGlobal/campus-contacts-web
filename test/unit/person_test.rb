@@ -20,8 +20,8 @@ class PersonTest < ActiveSupport::TestCase
   context "create a person from params" do
     should "not fail if there's no phone number when adding a person who already exists" do
       Factory(:user_with_auxs, email: 'test@uscm.org')
-      person, email, phone = Person.new_from_params({"email_address" => {"email" => "test@uscm.org"},"first_name" => "Test","last_name" => "Test","phone_number" => {"number" => ""}})
-      assert_nil(phone)
+      person = Person.new_from_params({"email_address" => {"email" => "test@uscm.org"},"first_name" => "Test","last_name" => "Test","phone_number" => {"number" => ""}})
+      assert_nil(person.phone_numbers.first)
     end
   end
 
@@ -268,11 +268,11 @@ class PersonTest < ActiveSupport::TestCase
       @person4 = Factory(:person)
       @org_role1 = Factory(:organizational_role, person: @person1,
                            organization: @org1, role: Role.contact, archive_date: Date.today)
-      @org_role2 = Factory(:organizational_role, person: @person2, 
+      @org_role2 = Factory(:organizational_role, person: @person2,
                            organization: @org1, role: Role.contact)
-      @org_role3 = Factory(:organizational_role, person: @person3, 
+      @org_role3 = Factory(:organizational_role, person: @person3,
                            organization: @org1, role: Role.contact, deleted: 1)
-      @org_role4 = Factory(:organizational_role, person: @person4, 
+      @org_role4 = Factory(:organizational_role, person: @person4,
                            organization: @org2, role: Role.contact)
     end
     should "return all included person that has active role" do
@@ -344,11 +344,11 @@ class PersonTest < ActiveSupport::TestCase
       @person_friend1 = Friend.new("1", 'Friend1', @person, 'provider')
       @person_interest1 = @person.interests.create(provider: "provider", name: "Interest1",
                                                    interest_id: "1", category: "category")
-      @person_education1 = @person.education_histories.create(school_type: "HighSchool", provider: "provider", 
+      @person_education1 = @person.education_histories.create(school_type: "HighSchool", provider: "provider",
                                                               school_name: "SchoolName1", school_id: "1")
-      @person_followup1 = @person.followup_comments.create(contact_id: @contact.id, comment: "Comment1", 
+      @person_followup1 = @person.followup_comments.create(contact_id: @contact.id, comment: "Comment1",
                                                            organization_id: @org.id)
-      @person_comment1 = @person.comments_on_me.create(commenter_id: @contact.id, comment: "Comment1", 
+      @person_comment1 = @person.comments_on_me.create(commenter_id: @contact.id, comment: "Comment1",
                                                        organization_id: @org.id)
       @person_email1 = @person.email_addresses.create(email: 'person@email.com')
 
@@ -358,11 +358,11 @@ class PersonTest < ActiveSupport::TestCase
       @other_friend1 = Friend.new("2", 'Friend2', @other, 'provider')
       @other_interest1 = @other.interests.create(provider: "provider", name: "Interest2",
                                                  interest_id: "2", category: "category")
-      @other_education1 = @other.education_histories.create(school_type: "HighSchool", provider: "provider", 
+      @other_education1 = @other.education_histories.create(school_type: "HighSchool", provider: "provider",
                                                             school_name: "SchoolName2", school_id: "2")
-      @other_followup1 = @other.followup_comments.create(contact_id: @contact.id, comment: "Comment2", 
+      @other_followup1 = @other.followup_comments.create(contact_id: @contact.id, comment: "Comment2",
                                                          organization_id: @org.id)
-      @other_comment1 = @other.comments_on_me.create(commenter_id: @contact.id, comment: "Comment2", 
+      @other_comment1 = @other.comments_on_me.create(commenter_id: @contact.id, comment: "Comment2",
                                                      organization_id: @org.id)
       @other_email1 = @other.email_addresses.create(email: 'other@email.com')
     end
@@ -413,12 +413,12 @@ class PersonTest < ActiveSupport::TestCase
       @person = Factory(:person)
       @authentication = Factory(:authentication)
     end
-    should "output the person's correct full name" do 
+    should "output the person's correct full name" do
       assert_equal(@person.to_s, "John Doe")
     end
 
     context "has a gender which" do
-      should "be set correctly for male case" do 
+      should "be set correctly for male case" do
         @person.gender = "Male"
         assert_equal(@person.gender, "Male")
         @person.gender = '1'
@@ -481,14 +481,14 @@ class PersonTest < ActiveSupport::TestCase
       #real_response = MiniFB.get(@authentication.token, @authentication.uid)
       array_of_responses = [ TestFBResponses::FULL, TestFBResponses::NO_CONCENTRATION, TestFBResponses::NO_YEAR, TestFBResponses::WITH_DEGREE, TestFBResponses::NO_EDUCATION]
 
-      array_of_responses.each do |response| 
+      array_of_responses.each do |response|
         @response = response
         num_schools_on_fb = @response.try(:education).nil? ? 0 : @response.education.length
         x = @person.get_education_history(@authentication, @response)
         number_of_schools1 = @person.education_histories.all.length
         #raise @response.education.first.school.name
         name1 = @response.try(:education).nil? ? "" : @response.education.first.school.name
-        name2 = @person.education_histories.all.length > 0 ? @person.education_histories.first.school_name : "" 
+        name2 = @person.education_histories.all.length > 0 ? @person.education_histories.first.school_name : ""
         assert_equal(name1, name2, "Assure name is properly written into DB")
 
         #do it again and ensure that no duplicate school entries are created
@@ -510,27 +510,27 @@ class PersonTest < ActiveSupport::TestCase
       assert(person.education_histories.first.school_name.is_a? String)
       assert(['Male', 'Female'].include?(person.gender))
       assert_equal(person.email, "mattrw89@gmail.com", "See if person has correct email address")
-    end    
+    end
 
     should "get organizational roles" do
       org = Factory(:organization)
       roles = Array.new
       (1..3).each do |index|
-        roles << Role.create!(organization_id: org.id, name: "role_#{index}", i18n: "role_#{index}") 
+        roles << Role.create!(organization_id: org.id, name: "role_#{index}", i18n: "role_#{index}")
       end
 
       roles.each do |role|
         @person.organizational_roles.create!(organization_id: org.id, role_id: role.id)
       end
 
-      assert_equal(@person.assigned_organizational_roles([org.id]).count, roles.count) 
+      assert_equal(@person.assigned_organizational_roles([org.id]).count, roles.count)
     end
 
-    should 'create and return vcard information of a person' do  
+    should 'create and return vcard information of a person' do
       vcard = @person.vcard
 
       assert_not_nil(vcard.name)
-      assert_equal(Vpim::Vcard, vcard.class)      
+      assert_equal(Vpim::Vcard, vcard.class)
     end
 
   end
@@ -564,7 +564,7 @@ class PersonTest < ActiveSupport::TestCase
     a = org.people.search_by_name_or_email("hnny", org.id) # as in Johnny
     assert_equal a.count, 2 #should be able to find contacts
   end
-  
+
   context "merging 2 same admin persons in an org with an implied admin should" do
     should "not loose its admin abilities in that org" do
       user = Factory(:user_with_auxs)

@@ -8,6 +8,7 @@
 //= require jquery.one_finger_scroll.js
 //= require jquery.url
 //= require jquery.chosen
+//= require jquery.cookie
 //= require colorpicker.js
 //= require ba-debug-0.4.min.js
 //= require hoverIntent

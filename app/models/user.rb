@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   WIZARD_STEPS = %w[welcome verify keyword survey leaders]
   self.primary_key = 'id'
   
-  store :settings, accessors: [:primary_organization_id]
+  store :settings, accessors: [:primary_organization_id, :time_zone]
   
   has_one :person, foreign_key: 'user_id'
   has_many :authentications

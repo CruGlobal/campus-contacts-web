@@ -2,7 +2,36 @@ $ ->
   $(document).on 'keypress', '#contact_search_form input', (e)->
     if (e.keyCode == $.ui.keyCode.ENTER)
       $('#contact_search_form').submit()
-      
+
+  $('#transfer_to_org').dialog
+    resizable: false,
+    height:580,
+    width:500,
+    title: "Transfer to Another Organization",
+    autoOpen: false,
+    modal: true,
+    open: (event, ui) ->
+      $("body").css({ overflow: 'hidden' })
+      $('.ui-widget-overlay').width('100%');
+    close: (event, ui) ->
+      $("body").css({ overflow: 'inherit' })
+    buttons: 
+      Cancel: ->
+        $(this).dialog('close')
+  
+  $('#transfer_to_org_link').live 'click', (e)->
+    e.preventDefault()
+    if $('.id_checkbox:checked').length > 0
+      $('#transfer_to_org').dialog('open')
+    else
+      $.a(t('contacts.index.none_checked'))
+
+  $('#bulk_export_link').live 'click', (e)->
+    e.preventDefault()
+    ids = []
+    $('.id_checkbox:checked').each ->
+      ids.push($(this).attr('data-id'))
+    document.location = $(this).attr('href')+"&only_ids="+ids.join(',')
       
   $('#contacts_controller #include_archived').live 'click', ->
     if $(this).is(':checked')
@@ -16,7 +45,7 @@ $ ->
     li = $(this).closest('li')
     li.remove()
     false
-    
+  
   $('#send_reminder_link').live 'click', -> 
     $('.to_list').html('')
     ids = []
@@ -188,6 +217,7 @@ $ ->
     leader = $('.leftmenu .leader[data-id=' + $('#assign_to').val() + ']')
     $.fn.assignTo(leader)
     $.fn.load_leader_name($('#person_title').attr('data-id'))
+    $('#assign_search').dialog('close')
     $('#assign_search').dialog('destroy')
     
   $('#assign_search .leader a').live 'click', (e)->
@@ -200,30 +230,33 @@ $ ->
       $.rails.handleRemote($('#new_contact_assignment'))
       unless $('#assign_to').val() == $('#my_id').val()
         $.fn.load_leader_name($('#person_title').attr('data-id'))
+    $('#assign_search').dialog('close')
     $('#assign_search').dialog('destroy')
   false
 
   
-  $('#assign_search .org a').live 'click', (e)->
+  $('#transfer_to_org .org a').live 'click', (e)->
     e.preventDefault()
+    $('#global_loader').show()
     form = $('#new_contact_assignment')
     from_id = $(this).closest('div').attr('data-org-id')
     to_id = $(this).attr('data-id')
     keep_contact = $('#keep-contact-copy > input').is(':checked')
-    
     ids = []
     $('.id_checkbox:checked:visible').each ->
       ids.push($(this).val())
     if($('#all_selected_text').is(':visible'))    
       $('.all_row').each ->
         ids.push($(this).attr('data-id'))
-  
-    $('#assign_search').dialog('destroy')
+    $('#transfer_to_org').dialog('close')
+    $('input.org_search_name').val('')
+    $('#keep_contact').attr('checked','checked')
     $.ajax
       type: 'POST'
       url: '/organizational_roles/move_to'
       data: 'from_id='+from_id+'&to_id='+to_id+'&keep_contact='+keep_contact+'&ids='+ids
       success: (data) ->
+        $('#global_loader').hide()
         if data.indexOf("success") != -1
           if keep_contact == false
             $.a(data)
@@ -250,6 +283,7 @@ $ ->
     .appendTo('body')
     .click()
     .remove()
+    $('#assign_search').dialog('close')
     $('#assign_search').dialog('destroy')
     $('#global_loader').show()
     $('.id_checkbox:checked').prop('checked',false)
@@ -270,6 +304,7 @@ $ ->
         $('#main').load('/contacts .index.carea')
         $('#left').load('/contacts .block')
         
+      $('#assign_search').dialog('close')
       $('#assign_search').dialog('destroy')
       if show_success
         $.n('Successfully assigned label.')
@@ -284,16 +319,18 @@ $ ->
         $('#main').load('/contacts/mine .mine.carea')
         $('#left').load('/contacts/mine .block')
         
+      $('#assign_search').dialog('close')
       $('#assign_search').dialog('destroy')
       if show_success
         $.n('Successfully assigned label.')
     else
-      person_id = $('.assign.headerlink').attr('data-id')
+      person_id = $('.assign.person_headerlink').attr('data-id')
       $.ajax
           type: 'POST',
           url: '/people/update_roles',
           data: 'role_ids='+role+'&person_id='+person_id+'&include_old_roles=yes'
           error: show_success = false
+      $('#assign_search').dialog('close')
       $('#assign_search').dialog('destroy')
       if show_success
         $.n('Successfully assigned label.')
@@ -319,7 +356,7 @@ $ ->
       else
         $(this).hide()
     
-  $('#assign_search .org_search_name').observe_field 0.5, ->
+  $('#transfer_to_org .org_search_name').observe_field 0.5, ->
     name = $(this).val()
     $('#spinner_org_search').show()
     $.ajax
@@ -346,7 +383,7 @@ $ ->
       else
         $(this).hide()
         
-  $('#assign_to_me, #assign_to_unassigned').live 'click', ->
+  $('#assign_to_me, #assign_to_unassigned, #assign_to_dnc').live 'click', ->
     $('#assign_search .leader_search').hide()
     $('#assign_search .org_search').hide()
     $('#assign_search .group_search').hide()
@@ -397,17 +434,28 @@ $ ->
         height:650,
         width:600,
         modal: true,
+        open: (event, ui) ->
+          $("body").css({ overflow: 'hidden' })
+          $('.ui-widget-overlay').width('100%');
+        close: (event, ui) ->
+          $("body").css({ overflow: 'inherit' })
         buttons: 
           Cancel: ->
+            $(this).dialog('close')
             $(this).dialog('destroy')
     else
       $.a(t('contacts.index.none_checked'))
     false
 
   $('#contacts_controller #bulk_unassign').live 'click', ->
-    if $('.id_checkbox:checked').length > 0 && $('#leaders')[0]?
+    checked_count = $('.id_checkbox:checked').length
+    if checked_count > 0 && $('#leaders')[0]?
       $.fn.assignTo($('.leader.unassigned'))
-      $('.id_checkbox:checked').closest('tr').fadeOut()
+      $('.id_checkbox:checked').each ->
+        $(this).parents('tr').children('.assigned_to').html("")
+      msg = "You have successfully unassigned " + checked_count + " contacts."
+      $('.carea').prepend("<div class='flash' style='margin:10px;'><div class='flash_message notice'><p>"+msg+"</p></div></div>")
+      $('.flash').delay(3000).slideUp()
     $('#check_all').prop('checked', false)
     false
     
@@ -596,6 +644,18 @@ $.fn.assignTo = (leader, skip_remote) ->
         $.rails.handleRemote($('#new_contact_assignment'))
       
       row.find('.id_checkbox').attr('checked', false)
+      if $('.leader.selected').size() > 0
+        row.hide() 
+        disp_string = $('.searchstat').html().trim()
+        disp_total = parseInt(disp_string.split(' of ')[1]) - 1
+        disp_over = parseInt(disp_string.split(' - ')[1].split(' of ')[0]) - 1
+        disp_num = disp_string.split(' - ')[0].split(' ')[1]
+        
+        if disp_total <= 0 || disp_over <= 0
+          $('.searchstat').html("")
+        else
+          $('.searchstat').html("Displaying " + disp_num + " - " + disp_over + " of " + disp_total)
+          
   $('#assign_to').val('')
   
 $.mh.saveContact = (add_more) ->

@@ -3,6 +3,26 @@ $ ->
     if $('#query').val().length > 0
       $('#search_filter_box').show()
       false
+    
+  $('#labels_dialog').dialog
+    resizable: false,
+    height: 450,
+    autoOpen: false,
+    width: 350,
+    modal: true,
+    title: "",
+    open: (event, ui) ->
+      $("body").css({ overflow: 'hidden' })
+      $('.ui-widget-overlay').width('100%');
+    close: (event, ui) ->
+      $("body").css({ overflow: 'inherit' })
+    buttons: 
+      Close: ->
+        $(this).dialog('close')
+    
+  $('#add_label_button').live 'click', (e)->
+    $('#labels_dialog').dialog('open')
+    e.preventDefault()
       
   if $('#advanced_filter_box')[0] && $('#first_name')[0]
     if $('#first_name').val().length > 0 || $('#last_name').val().length > 0 || (($('#role').val().length) > 0 && (window.location.search.indexOf('advanced')) > 1) ||
@@ -212,15 +232,6 @@ $ ->
     else
       document.location.href = '/people/merge'
   false
-  
-  $('#assign_org .org_search_name').observe_field 0.5, ->
-    name = $(this).val()
-    $('#spinner_org_search').show()
-    $.ajax
-      url: '/organizations/search.js?q='+name, 
-      type: 'GET',
-      complete: ->
-        $('#spinner_org_search').hide()
 
 $.fn.fbNameSearch = (url)->
   prevBtn = $("#fb_name_search_dialog").next(".ui-dialog-buttonpane").find('button')[1]
@@ -631,41 +642,6 @@ $('#transfer_org').live 'click', ->
   else
     $.a(t('contacts.index.none_checked'))
   false
-  
-$('#assign_org .org a').live 'click', (e)->
-  e.preventDefault()
-  form = $('#new_contact_assignment')
-  from_id = $(this).closest('div').attr('data-org-id')
-  to_id = $(this).attr('data-id')
-  keep_contact = $('#keep-contact-copy > input').is(':checked')
-  
-  ids = []
-  $('.id_checkbox:checked:visible').each ->
-    ids.push($(this).val())
-  if($('#all_selected_text').is(':visible'))    
-    $('.all_row').each ->
-      ids.push($(this).attr('data-id'))
-  
-  $('#assign_org').dialog('destroy')
-  $.ajax
-    type: 'POST'
-    url: '/organizational_roles/move_to'
-    data: 'from_id='+from_id+'&to_id='+to_id+'&keep_contact='+keep_contact+'&ids='+ids
-    success: (data) ->
-      if data.indexOf("success") != -1
-        if keep_contact == false
-          $.a(data)
-          $('.id_checkbox:checked').each ->
-            $(this).closest('tr').fadeOut();
-        else
-          $.a(data)
-        if $('#people_controller.show')[0]
-          setTimeout "document.location = '/people'", 1000
-      else
-        $.a(data)
-        
-
-false
   
 $('.check_all_mine').live 'click', ->
   first_row = $('#contacts_table').find('tr:first')

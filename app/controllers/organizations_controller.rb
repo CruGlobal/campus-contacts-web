@@ -127,7 +127,7 @@ class OrganizationsController < ApplicationController
       leaders = current_organization.only_leaders.find_by_last_login_date_before_date_given(date_given)
       leaders_count = leaders.count
 
-      leaders.each do |leader| 
+      leaders.each do |leader|
         leader.archive_leader_role(current_organization)
         assignments = leader.contact_assignments.where(organization_id: current_organization.id).all
         assignments.collect(&:destroy)
@@ -154,6 +154,21 @@ class OrganizationsController < ApplicationController
     end
 
     redirect_to '/organizations/settings'
+  end
+
+  def api
+
+  end
+
+  def generate_api_secret
+    if current_organization.api_client
+      current_organization.api_client.assign_code_and_secret
+      current_organization.api_client.save!
+    else
+      current_organization.create_api_client(link: organization_url(current_organization),
+                                             display_name: current_organization.to_s)
+    end
+    redirect_to api_organizations_path
   end
 
   protected

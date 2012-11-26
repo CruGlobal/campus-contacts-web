@@ -208,7 +208,7 @@
 				.selectTitleBg {
 					display: block;
 					padding: 0.25em 2.9em 0.25em 1em;
-					background: url('<%= asset_path('selectbox.png') %>') no-repeat right;
+					background: url("<%= asset_path('selectbox.png') %>") no-repeat right;
 					border: 1px solid #c7dff0;
 					cursor: default;
 				

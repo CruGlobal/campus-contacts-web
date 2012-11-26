@@ -1,4 +1,6 @@
 jQuery(document).ready(function(){
+  current_time = new Date()
+  $.cookie('timezone', current_time.getTimezoneOffset(), { path: '/', expires: 10 })
 	
 	// Load preview images
 	show_video_preview();

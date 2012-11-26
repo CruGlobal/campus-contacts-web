@@ -24,9 +24,10 @@ class ContactAssignmentsController < ApplicationController
             ca.update_attribute(:assigned_to_id, @assign_to.id) if ca
           end
         end if params[:ids].present?
+        @reload_sidebar = true
       end
     else
-      
+      @reload_sidebar = true
     end
     
     # proceed only if we're not bulk assinging contacts to the DNC list 

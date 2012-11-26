@@ -1,0 +1,11 @@
+<div class="org_search modalresults" style="">
+  <%= text_field_tag :org_name, '', class: 'org_search_name', autocomplete: 'off', placeholder: 'Type to search an organization' %>
+  <%= spinner('org_search') %>
+  <div id="keep-contact-copy">
+    <%= check_box_tag :keep_contact, 1, true %>
+    <%= t('application.assign.keep_contact') %>
+  </div><br/>
+  <div class="orgs_list" data-org-id="<%= current_organization.id %>">
+    <%= render 'organizations/search', organizations: current_person.orgs_with_children %>
+  </div>
+</div>  

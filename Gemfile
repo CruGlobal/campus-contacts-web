@@ -25,7 +25,7 @@ gem 'ancestry'
 gem 'activeadmin', '~> 0.4.4' #, git: 'git://github.com/gregbell/active_admin.git'
 gem 'twilio-rb', git: 'git://github.com/stevegraham/twilio-rb.git'
 gem "default_value_for"
-gem 'turbo-sprockets-rails3'
+#gem 'turbo-sprockets-rails3'
 gem "strip_attributes"
 
 gem 'dalli'
@@ -53,7 +53,7 @@ gem 'deadlock_retry'
 gem 'delegate_presenter'
 
 gem 'vpim', git: 'git://github.com/twinge/vpim.git'   # vcard maker
-gem 'i18n-js', git: 'git://github.com/fnando/i18n-js.git'     # allow i18n on js files 
+gem 'i18n-js', git: 'git://github.com/fnando/i18n-js.git'     # allow i18n on js files
 
 gem 'rest-client'                                     # to make FB api requests
 gem "paperclip", :git => 'git://github.com/thoughtbot/paperclip.git'
@@ -61,6 +61,9 @@ gem 'aws-sdk'#, '~> 1.3.4'
 
 gem 'bitly'
 gem 'copycopter_client'
+
+gem 'active_model_serializers'#, git: 'git://github.com/josevalim/active_model_serializers.git'
+gem 'versionist', git: 'git://github.com/twinge/versionist.git', branch: 'multiple_versioning_strategies'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
@@ -102,7 +105,7 @@ group :assets do
   gem 'uglifier', ">= 1.0.3"
 end
 
-group :capistrano do 
+group :capistrano do
   # Shared capistrano recipes
   gem 'pd-cap-recipes', :git => 'git://github.com/PagerDuty/pd-cap-recipes.git'
 
