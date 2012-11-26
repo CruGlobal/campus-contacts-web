@@ -59,7 +59,7 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
     should 'create a email address when a nested email address object is passed' do
       assert_difference "EmailAddress.count" do
         post :create, person: {first_name: 'funk',
-                               email_addresses_attributes: [email: 'foo@example.com']},
+                               email_addresses_attributes: [{email: 'foo@example.com'}]},
                       secret: @client.secret
       end
     end
