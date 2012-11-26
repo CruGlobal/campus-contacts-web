@@ -35,7 +35,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
              scope: {include: includes, organization: current_organization}
     else
       render json: {errors: person.errors.full_messages},
-             status: :bad_request,
+             status: :unprocessable_entity,
              callback: params[:callback]
     end
   end
@@ -58,7 +58,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
     if params[:person]
       unless @person.update_attributes(params[:person])
         render json: {errors: @person.errors.full_messages},
-               status: :bad_request,
+               status: :unprocessable_entity,
                callback: params[:callback]
         return
       end

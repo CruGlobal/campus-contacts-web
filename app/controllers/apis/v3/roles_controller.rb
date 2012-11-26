@@ -28,7 +28,7 @@ class Apis::V3::RolesController < Apis::V3::BaseController
              scope: {include: includes, organization: current_organization}
     else
       render json: {errors: role.errors.full_messages},
-             status: :bad_request,
+             status: :unprocessable_entity,
              callback: params[:callback]
     end
   end
@@ -40,7 +40,7 @@ class Apis::V3::RolesController < Apis::V3::BaseController
              scope: {include: includes, organization: current_organization}
     else
       render json: {errors: role.errors.full_messages},
-             status: :bad_request,
+             status: :unprocessable_entity,
              callback: params[:callback]
     end
 
