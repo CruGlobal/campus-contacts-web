@@ -204,9 +204,10 @@ $ ->
         false
     .data("autocomplete")
     ._renderItem = ( ul, item )->
+      image_src = 'http://graph.facebook.com/' + item.id + '/picture'
       return $( "<li></li>" )
-        .data( "item.autocomplete", item )
-        .append( '<div><img src="http://graph.facebook.com/' + item.id + '/picture" width="50" height="50"/></div><a>' + item.name + '</a>')
+        .data("item.autocomplete", item)
+        .append("<div class='fb_img' style='background:url(" + image_src + ");'>&nbsp;</div> <a>" + item.name + "</a>")
         .appendTo( ul );
       # + '<br/><span onclick="window.open(\'http://www.facebook.com/profile.php?id=' + item.id + '\')">' + t('people.edit.fb_profile_link') + '</span></a>'
       
