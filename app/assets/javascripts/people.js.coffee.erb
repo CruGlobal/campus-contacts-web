@@ -173,11 +173,11 @@ $ ->
               $.a(data)
     false
   
-  fromViewingFBProfile = false  
-  if $('#facebook_name_search')[0]?
-    $('#facebook_name_search').autocomplete
+  fromViewingFBProfile = true  
+  $('#facebook_name_search').live 'keyup', (e)->
+    $(this).autocomplete
       minLength: 3
-      source: '/people/facebook_search'
+      source: '/people/facebook_search.json'
       select: (event, ui)->
         if(isNaN(ui.item.id))
           url = escape(ui.item.id)
@@ -202,11 +202,11 @@ $ ->
             link = 'http://www.facebook.com/profile.php?id=' + ui.item.id
             $('#facebook_url').html('<a href="' + link + '">' + link + '<a>')
         false
-    .data( "autocomplete" )
+    .data("autocomplete")
     ._renderItem = ( ul, item )->
       return $( "<li></li>" )
         .data( "item.autocomplete", item )
-        .append( '<img src="http://graph.facebook.com/' + item.id + '/picture" /><a>' + item.name )
+        .append( '<div><img src="http://graph.facebook.com/' + item.id + '/picture" width="50" height="50"/></div><a>' + item.name + '</a>')
         .appendTo( ul );
       # + '<br/><span onclick="window.open(\'http://www.facebook.com/profile.php?id=' + item.id + '\')">' + t('people.edit.fb_profile_link') + '</span></a>'
       

@@ -197,7 +197,7 @@ ul.ui-autocomplete li:last-child img, ul.ui-autocomplete li:last-child span {
   }
 }
 
-#people_controller ul.ui-autocomplete {
+ul.ui-autocomplete {
 	margin: 0;
 	padding: 0;
 	max-width: 296px;
@@ -206,7 +206,7 @@ ul.ui-autocomplete li:last-child img, ul.ui-autocomplete li:last-child span {
 	-moz-border-radius: 0;
 	
 	li {
-		padding: 1em;
+		padding: 5px;
 		border-bottom: 1px solid #ddd;
 		overflow: hidden;
 		
@@ -218,7 +218,20 @@ ul.ui-autocomplete li:last-child img, ul.ui-autocomplete li:last-child span {
 		
 		a {
 			color: #0379ae;
+	    cursor: pointer;
+			&:hover {
+			  font-weight: normal;
+			}
 		}
+	}
+	
+	#ui-active-menuitem {
+	  background: none;
+	  border: none;
+	}
+	
+	.ui-menu-item .email {
+	  color: #aaa;
 	}
 }
 

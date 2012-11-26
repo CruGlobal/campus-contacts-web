@@ -50,9 +50,8 @@ class ContactsController < ApplicationController
     @people = params[:include_archived] ?
       current_organization.people.search_by_name_or_email(params[:term].strip, current_organization.id).uniq :
       current_organization.people.search_by_name_or_email(params[:term].strip, current_organization.id).uniq.archived_not_included
-
     respond_to do |wants|
-      wants.json { render text: @people.collect{|person| {"label" => "#{person.name} (#{person.email})", "id" => person.id}}.to_json }
+      wants.json { render text: @people.collect{|person| {"label" => person.name, "email" => person.email.downcase, "id" => person.id}}.to_json }
     end
   end
 
