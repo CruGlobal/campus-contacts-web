@@ -98,7 +98,10 @@ class OrganizationsController < ApplicationController
   def cleanup
     @date = (Date.today-1).strftime("%m-%d-%Y")
     @date_leaders = (Date.today-91).strftime("%m-%d-%Y")
-
+  end
+  
+  def transfer
+    render layout: 'no_sidebar'
   end
 
   def archive_contacts

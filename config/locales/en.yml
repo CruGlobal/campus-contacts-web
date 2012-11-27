@@ -59,6 +59,7 @@ en:
     organizations: Organizations
     manage: Organizations
     cleanup: Cleanup
+    transfer: 100% Sent
     archive: Archived
     enter_survey_mode: "Enter Survey Mode"
     use_keyword: 'Use Keyword: %{keyword}'

@@ -11,7 +11,7 @@ class ImportsController < ApplicationController
 
   def new
     @import = Import.new
-    render layout: 'import'
+    render layout: 'no_sidebar'
   end
 
   def create
@@ -22,25 +22,25 @@ class ImportsController < ApplicationController
         redirect_to edit_import_path(@import)
       else
         init_org
-        render :new, :layout => 'import' 
+        render :new, layout: 'no_sidebar' 
       end      
     rescue ArgumentError
       flash.now[:error] = t('imports.new.wrong_file_format_error')
       init_org
       @import = Import.new
-      render :new, :layout => 'import'
+      render :new, layout: 'no_sidebar'
     end
   end
 
   def edit
     get_survey_questions
-    render layout: 'import'
+    render layout: 'no_sidebar'
   end
   
   def labels
     @import_count =  @import.get_new_people.count
     @roles = current_organization.roles
-    render layout: 'import'
+    render layout: 'no_sidebar'
   end
 
   def update
@@ -50,7 +50,7 @@ class ImportsController < ApplicationController
     if errors.present?
       flash.now[:error] = errors.join('<br />').html_safe
       init_org
-      render :new, :layout => 'import'
+      render :new, layout: 'no_sidebar'
     else
       redirect_to :action => :labels
     end

@@ -57,6 +57,9 @@
           <li class="<%= 'current' if request.path == cleanup_organizations_path %>">
             <%= link_to(t('nav.cleanup'), "/organizations/cleanup", :class => "topset cleanup") %>
           </li>
+          <li class="<%= 'current' if request.path == transfer_organizations_path %>">
+            <%= link_to(t('nav.transfer'), "/organizations/transfer", :class => "topset transfer") %>
+          </li>
         </ul>
       </li>
     <% end %>

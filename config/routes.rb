@@ -121,6 +121,7 @@ Mh::Application.routes.draw do
       get :settings
       post :update_settings
       get :cleanup
+      get :transfer
       post :archive_contacts
       post :archive_leaders
       post :create_from_crs
