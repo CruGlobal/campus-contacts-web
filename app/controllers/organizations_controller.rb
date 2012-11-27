@@ -4,7 +4,6 @@ class OrganizationsController < ApplicationController
   cache_sweeper :organization_sweeper, only: [:update, :destroy, :create, :create_from_crs]
 
   def index
-
   end
 
   def show

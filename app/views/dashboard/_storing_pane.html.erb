@@ -1,0 +1,34 @@
+<div class="dash_title">
+	<span>
+		<%= t('dashboard.panel_storing') %>
+	</span>
+</div>
+<div class="dash_image">
+	<%= image_tag("dash_storing.png") %>
+</div>
+<div class="dash_buttons">
+	<%= link_to("/contacts?click=contacts_add_button", :class => "button")  do %>
+		<div>
+			<%= image_tag("dash_button_icon_add.png") %>
+			<div>
+				<p>
+					<span class="primary"><%= t('dashboard.button_add') %></span>
+					<br/>
+					<span class="secondary"><%= t('dashboard.button_add_sub') %></span>
+				</p>
+			</div>
+		</div>
+	<% end %>
+	<%= link_to("/imports/new", :class => "button") do %>
+		<div>
+			<%= image_tag("dash_button_icon_import.png") %>
+			<div>
+				<p>
+					<span class="primary"><%= t('dashboard.button_import') %></span>
+					<br/>
+					<span class="secondary"><%= t('dashboard.button_import_sub') %></span>
+				</p>
+			</div>
+		</div>
+	<% end %>
+</div>

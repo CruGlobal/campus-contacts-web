@@ -11,6 +11,7 @@ class ImportsController < ApplicationController
 
   def new
     @import = Import.new
+    render layout: 'import'
   end
 
   def create
@@ -21,23 +22,25 @@ class ImportsController < ApplicationController
         redirect_to edit_import_path(@import)
       else
         init_org
-        render :new
+        render :new, :layout => 'import' 
       end      
     rescue ArgumentError
       flash.now[:error] = t('imports.new.wrong_file_format_error')
       init_org
       @import = Import.new
-      render :new
+      render :new, :layout => 'import'
     end
   end
 
   def edit
     get_survey_questions
+    render layout: 'import'
   end
   
   def labels
     @import_count =  @import.get_new_people.count
     @roles = current_organization.roles
+    render layout: 'import'
   end
 
   def update
@@ -47,7 +50,7 @@ class ImportsController < ApplicationController
     if errors.present?
       flash.now[:error] = errors.join('<br />').html_safe
       init_org
-      render :new
+      render :new, :layout => 'import'
     else
       redirect_to :action => :labels
     end
@@ -87,6 +90,57 @@ class ImportsController < ApplicationController
     init_org
     flash.now[:error] = t('contacts.import_contacts.blank_header')
     render :new
+  end
+  
+  def create_survey_question
+    unless params[:question_id].present?
+      @message ||= "Enter new survey name." if params[:create_survey_toggle] == "new_survey" && !params[:survey_name_field].present?
+      @message ||= "Select an existing survey." if params[:create_survey_toggle].blank? && !params[:select_survey_field].present?
+      @message ||= "Select question type." unless params[:question_category].present?
+    end
+    @message ||= "Question can't be blank" unless params[:question].present?
+    @message ||= "Choices can't be blank " if params[:question_category] == 'ChoiceField' && !params[:options].present?
+    
+    unless @message.present?
+      
+      if params[:question_id].present?
+        @question = Element.find(params[:question_id])
+        @question.update_attributes({label: params[:question], content: params[:options], slug: ''})
+        @message = "UPDATE"
+      else
+        if params[:create_survey_toggle]
+          @survey_status = 'NEW'
+          @survey = current_organization.surveys.create(
+            login_paragraph: I18n.t('application.survey.default_login_paragraph'),
+            title: params[:survey_name_field],
+            post_survey_message: I18n.t('application.survey_name_field.default_post_survey_message'),
+            terminology: 'Survey'
+          )
+        else
+          @survey = Survey.find(params[:select_survey_field].to_i)
+          authorize! :manage, @survey
+        end
+        @question_category = params[:question_category]
+        type, style = @question_category.split(':')
+        @question = type.constantize.create!(style: style, label: params[:question], content: params[:options], slug: '')
+      end
+      
+      unless @message == "UPDATE"
+        if @survey.archived_questions.include?(@question)
+          survey_element = SurveyElement.where(survey_id: @survey.id, element_id: @question.id).first
+          survey_element.update_attribute(:archived, false)
+        else
+          begin
+            @survey.elements << @question
+            @survey.survey_elements.find_by_element_id(@question.id).update_attribute(:hidden, true)
+            @message = "SUCCESS"
+          rescue ActiveRecord::RecordInvalid => e
+            @message = I18n.t('surveys.questions.create.duplicate_error')
+          end
+        end
+      end
+    end
+    
   end
 
   protected

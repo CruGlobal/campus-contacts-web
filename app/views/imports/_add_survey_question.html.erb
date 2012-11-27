@@ -1,0 +1,53 @@
+<div id="import_survey_question">
+  <div id='import_error_message'></div>
+  <%= form_for 'imports', url: create_survey_question_imports_path, html: {remote: true, id: 'import_survey_form'} do |f| %>
+  	<div id="survey_info">
+  		<div id="survey_header" class="info_header">
+  			Survey Info:
+  		</div>
+  		<div id="survey_content" class="info_content">
+  		  <%= check_box_tag 'create_survey_toggle', 'new_survey', checked: 'checked' %>
+  			<label for='create_survey_toggle'>Create New Survey for Question</label>
+  			<div id="new_survey">
+  				<label for='survey_name_field'>Name of New Survey:</label>
+  				<%= text_field_tag 'survey_name_field', "", id: 'survey_name_field' %>
+  			</div>
+  			<div id="old_survey" style="display:none">
+  				<label for='select_survey_field'>Select Survey for Question</label>
+  			  <%= select_tag('select_survey_field', options_for_select(current_organization.surveys.collect{|x| [x.to_s, x.id]}), include_blank: true, class: 'question_type') %>
+  			</div>
+  		</div>
+  	</div>
+  	<div id="survey_question">
+  		<div id="survey_header" class="info_header">
+  			Question Info:
+  		</div>
+  		<div id="survey_content" class="info_content">
+  			<label for='question_category'>What type of question would you like to ask?</label>
+  			<%= select_tag('question_category', options_for_select([[t('.short_answer'), 'TextField:short'], [t('.multiple_choice'), 'ChoiceField:radio'], [t('.checkboxes'), 'ChoiceField:checkbox'], [t('.dropdown'),'ChoiceField:drop-down']]), include_blank: true) %>
+  			<br/>
+
+  			<div id="survey_question_set">
+  				<div id="preview">
+  					<span><b>Text Message Length:</b> <span id="length_counter"></span>/140</span>
+  					<br/>
+  					<span><b>Text Message Preview:</b></span><br/>
+  					<span id="question_preview"></span>
+  				</div>
+  				<div id="question">
+  					<label for='question_field'><%= t('.question') %>:</label>
+  					<br/>
+  					<%= text_field_tag 'question', "", id: 'question_field' %>
+  					<br/>
+  					<br/>
+  					<span id='import_survey_question_options_set'>
+  					<label for='question_options_field'>List out the possible choices, one per line:</label>
+  					<br/>
+  					<%= text_area_tag 'options', "", row: 5, id: 'question_options_field' %>
+  				</div>
+  			</div>
+				<%= hidden_field_tag 'question_id', "", id: 'question_id_field' %>
+  		</div>
+  	</div>
+  <% end %>
+</div>

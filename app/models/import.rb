@@ -6,6 +6,7 @@ class Import < ActiveRecord::Base
 
   @queue = :general
   serialize :headers
+  serialize :preview
   serialize :header_mappings
 
   belongs_to :user
@@ -182,16 +183,24 @@ class Import < ActiveRecord::Base
     return unless upload?
     tempfile = upload.queued_for_write[:original]
     unless tempfile.nil?
-      File.open(tempfile.path) do |f|
-        csv = CSV.new(f, :headers => :first_row)
-        csv.shift
-        begin
-          raise NilColumnHeader if csv.headers && csv.headers.length - csv.headers.compact.length != 0 #if there is a nil headers
-          self.headers = csv.headers.compact
-        rescue
-          raise NilColumnHeader
+      ctr = 0
+      CSV.foreach(tempfile.path) do |row|
+        Rails.logger.info "---COLLECT#{ctr}---"
+        if ctr == 0
+          begin
+            # if there is a nil headers
+            raise NilColumnHeader if row && row.length - row.compact.length != 0 
+            self.headers = row.compact
+          rescue
+            raise NilColumnHeader
+          end
+          raise NilColumnHeader if headers.empty?
+        elsif ctr == 1
+          self.preview = row
+        else
+          break
         end
-        raise NilColumnHeader if headers.empty?
+        ctr += 1
       end
     end
   end

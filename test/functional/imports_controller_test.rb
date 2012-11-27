@@ -21,6 +21,45 @@ class ImportsControllerTest < ActionController::TestCase
     @user, @org = admin_user_login_with_org
     get :download_sample_contacts_csv
   end
+  
+  context "Adding survey questions" do
+    setup do
+      @user, @organization = admin_user_login_with_org
+      @survey = Factory(:survey, organization: @organization)
+    end
+    
+    should "add question for an existing survey" do
+      xhr :get, :create_survey_question, {select_survey_field: @survey.id, question_category: "TextField:short", question: "This is a sample question", question_id: ''}
+      assert_equal assigns(:question), Element.last
+      assert_equal SurveyElement.last.survey, @survey
+      assert_equal SurveyElement.last.question.label, 'This is a sample question'
+    end
+    
+    should "create a new survey" do
+      xhr :get, :create_survey_question, {create_survey_toggle: 'new_survey', survey_name_field: 'New Survey for Testing', question_category: "ChoiceField:radio", question: "What is your gender?", options: 'Male\r\nFemale', question_id: ''}
+      assert_equal SurveyElement.last.question.label, 'What is your gender?'
+      assert_equal SurveyElement.last.survey.title, 'New Survey for Testing'
+    end
+  end
+  
+  context "Updating survey questions" do
+    setup do
+      @user, @organization = admin_user_login_with_org
+      @survey = Factory(:survey, organization: @organization)
+      @question = Factory(:choice_field, label: 'This is the original question', content: 'Male\r\nFemale')
+      Factory(:survey_element, survey: @survey, element: @question)
+    end
+    
+    should "change the question" do
+      assert_equal Element.find(@question.id).content, 'Male\r\nFemale'
+      assert_equal Element.find(@question.id).label, "This is the original question"
+      
+      xhr :get, :create_survey_question, {question: 'This is the revised question', options: 'Male\r\nFemale\r\nOther', question_id: @question.id}
+      
+      assert_equal Element.find(@question.id).label, "This is the revised question"
+      assert_equal Element.find(@question.id).content, 'Male\r\nFemale\r\nOther'
+    end
+  end
 
   context "Importing contacts" do
     setup do
@@ -128,7 +167,6 @@ class ImportsControllerTest < ActionController::TestCase
       # "use_labels"=>"1", "labels"=>["0", "5", "145"], "new_label_field"=>"", "commit"=>"Import Now", "id"=>"13"
       post :import, { :use_labels => "0", :id => Import.first.id}
       Import.first.do_import([])
-      puts assigns(:table).inspect
       assert_equal Person.count, person_count + 1
     end
     

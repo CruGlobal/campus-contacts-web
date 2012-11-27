@@ -1,44 +1,52 @@
-
-
 /*** adding the class mh-top in addition to sf-menu creates an all-horizontal nav-bar menu ***/
+
 .mh-top {
-	background:		url("<%= asset_path("topmenubgtall.png") %>") repeat-x 0 0 #eaf1f6;
+	/*background:		url("<%= asset_path("topmenubgtall.png") %>") repeat-x 0 0 #eaf1f6;*/
 	height:			88px;
 	padding-bottom:	0em;
 	position:		relative;
-	float: none;
-  border-radius: 9px 9px 0 0;
-  font-family: Tahoma, Arial;
-  font-size: 14px;
-  margin-bottom: 0px;
-  z-index: 0;
+	float: 			left;
+	border-radius: 	0;
+	font-family: 	Tahoma, Arial;
+	font-size: 		12px;
+	margin-bottom: 	0px;
+	z-index: 		2;
 }
 .mh-top li {
 	background: none;
 	position:		static;
 	border: none;
-	height: 48px;
-	line-height: 48px;
-	font-size: 14px;
+	height: 64px;
+	line-height: 64px;
+	font-size: 12px;
 }
 
 .mh-top li:first-child {
-  margin-left: 10px;
+  margin-left: 32px;
 }
+
+/*
+.mh-top li:first-child:hover {
+	background-image: url("<%= asset_path("whitebar.png") %>");
+	background-repeat: no-repeat;
+	background-repeat: repeat-x;
+	background-position: 50% 0%;
+}
+*/
 
 .mh-top a {
 	border-top:		none;
-	padding: 0 1.5em;
+	/*padding: 0 1.5em;*/
 }
 .mh-top li ul {
-	width:			44em; /*IE6 soils itself without this*/
+	/*width:			44em;*/ /*IE6 soils itself without this*/
 }
 .mh-top li li {
 	background:		none;
 	position:		relative;
-	height: 40px;
-	line-height: 40px;
-	font-size: 11px;
+	height: 30px;
+	line-height: 30px;
+	font-size: 12px;
 }
 
 .mh-top li li ul {
@@ -50,7 +58,6 @@
 .mh-top ul li {
 	width:			auto;
 	float:			left;
-	margin-right: 4px;
 }
 .mh-top a, .mh-top a:visited {
 	border:			none;
@@ -63,13 +70,26 @@
   padding-bottom: 0px;
 }
 
-#menutop .mh-top li li a {color: #000; line-height: 30px; margin-top: 5px;}
-
+#menutop .mh-top li li a {
+	color: #808284;
+	line-height: 30px;
+	margin-top: 0;
+}
 
 .mh-top li.current {
-	background:		none;
-	/* font-weight: bold; */
+	background-image: url("<%= asset_path("whitebar.png") %>");
+	background-repeat: no-repeat;
+	/*background-repeat: repeat-x;*/
+	background-position: 50% 0%;
 }
+
+.mh-top li.current:hover {
+	background-image: url("<%= asset_path("whitebar.png") %>");
+	background-repeat: no-repeat;
+	/*background-repeat: repeat-x;*/
+	background-position: 50% 0%;
+}
+
 .mh-top li:hover,
 .mh-top li.sfHover,
 .mh-top li li.current,
@@ -81,15 +101,15 @@
 ul.mh-top ul li:hover li,
 ul.mh-top ul li.sfHover li,
 .mh-top ul a:focus, .mh-top ul a:hover, .mh-top ul a:active {
-	background:		inherit
+	background:		inherit;
+	z-index: 100;
 }
 
 .mh-top ul a:focus, .mh-top ul a:hover, .mh-top ul a:active {
 	background:		inherit;
 	background-repeat: no-repeat;
 	background-color: #fff;
-	border-radius: 5px;
-	font-size: 11px;
+	font-size: 12px;
 	font-weight: normal;
 }
 
@@ -102,14 +122,16 @@ ul.mh-top li li li.sfHover,
 ul.mh-top .current ul,
 ul.mh-top ul li:hover ul,
 ul.mh-top ul li.sfHover ul {
-	left:			0 !important;
 	top:			48px; /* match top ul list item height */
 }
 
 .mh-top li:hover ul, .mh-top li.sfHover ul {
-left: 0px;
-top: 48px;
-z-index: 99;
+	top: 64px;
+	z-index: 99;
+	background: #fff;
+	border-right: 1px solid #0379ae;
+	border-left: 1px solid #0379ae;
+	border-bottom: 1px solid #3594be;
 }
 
 ul.mh-top .current ul ul {
@@ -148,12 +170,21 @@ ul.mh-top .current ul ul {
 	-webkit-border-bottom-left-radius: 0;
 }
 
+.mh-top > li > ul > li {
+	float: none;
+}
+
 .mh-top a.sf-with-ul {
   padding-right: 1em;
 }
 
 .mh-top li.sfHover {
-  background-image: url("<%= asset_path("groupselected.png") %>");
+  background-image: url("<%= asset_path("whitebar.png") %>");
   background-repeat: no-repeat;
-  background-position: 50% 100%;
+  /*background-repeat: repeat-x;*/
+  background-position: 50% 0%;
+}
+
+.mh-top li.sfHover ul li:first-child {
+	margin-left: 0;
 }
