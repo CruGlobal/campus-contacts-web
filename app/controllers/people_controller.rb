@@ -450,7 +450,7 @@ class PeopleController < ApplicationController
       if url.nil?
         # else, this is an initial search so we construct the url
         term = "\"#{params[:term]}\""
-        url = URI.escape("https://graph.facebook.com/search?q=#{term}&type=user&limit=24&access_token=#{session[:fb_token]}")
+        url = URI.escape("https://graph.facebook.com/search?q=#{term}&type=user&limit=5000&access_token=#{session[:fb_token]}")
       end
 
       begin
@@ -476,7 +476,8 @@ class PeopleController < ApplicationController
     end
 
     respond_to do |format|
-      format.js { render json: params[:url].nil? ? @data : @json } # we don't need an array for the dialog search result anymore so we are fine in just passing along the result from FB
+      format.json { render text: @data.to_json }
+      # we don't need an array for the dialog search result anymore so we are fine in just passing along the result from FB
     end
   end
 

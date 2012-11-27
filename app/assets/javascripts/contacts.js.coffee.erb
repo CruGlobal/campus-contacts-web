@@ -345,6 +345,13 @@ $ ->
 	    source: '/contacts/search_by_name_and_email.json'+inc,
       select: (event, ui) ->
         window.location = "/people/" + ui.item.id
+    .data("autocomplete")
+    ._renderItem = ( ul, item )->
+      temp = item
+      return $( "<li></li>" )
+        .data( "item.autocomplete", temp )
+        .append("<a>" + temp.label + "</a><div class='email'>" + temp.email + "</div>")
+        .appendTo( ul );
 
     
   $('#assign_search .leader_search_name').keyup ->
