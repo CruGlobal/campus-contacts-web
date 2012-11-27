@@ -177,6 +177,7 @@ $ ->
   $('#facebook_name_search').live 'keyup', (e)->
     $(this).autocomplete
       minLength: 3
+      delay: 1000
       source: '/people/facebook_search.json'
       select: (event, ui)->
         if(isNaN(ui.item.id))
