@@ -450,7 +450,7 @@ class PeopleController < ApplicationController
       if url.nil?
         # else, this is an initial search so we construct the url
         term = "\"#{params[:term]}\""
-        url = URI.escape("https://graph.facebook.com/search?q=#{term}&type=user&limit=24&access_token=#{session[:fb_token]}")
+        url = URI.escape("https://graph.facebook.com/search?q=#{term}&type=user&limit=5000&access_token=#{session[:fb_token]}")
       end
 
       begin
