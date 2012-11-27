@@ -1,16 +1,13 @@
 ActiveAdmin.register Organization do
-  controller do
-    cache_sweeper :organization_sweeper, only: [:update, :destroy, :create, :approve]
-  end
-  
+
   filter :name
   filter :terminology
   filter :status, :as => :select, :collection => %w[requested active denied inactive]
   filter :created_at
   filter :updated_at
-  
+
   form :partial => "form"
-  
+
   index do
     column :name
     column 'Admins' do |org|
@@ -28,26 +25,26 @@ ActiveAdmin.register Organization do
       ret << link_to("Delete", admin_organization_path(org), :method => :delete, :confirm => "Are you sure?")
       org.status_paths.events.each do |event|
         ret << link_to(event.to_s.titleize, "/admin/organizations/#{org.id}/t/#{event}", method: :post, class: "#{event} organization", confirm: "Are you sure you want to #{event} #{org}")
-      end 
+      end
       raw ret.join(' ')
     end
   end
-  
+
   member_action :transition, :method => :post do
     org = Organization.find(params[:id])
     org.send(params[:transition] + '!') if org.status_paths.events.include?(params[:transition].to_sym)
     redirect_to '/admin/organizations', notice: "#{org} is now #{org.status}"
   end
-  
+
   collection_action :approve, :method => :post do
     orgs = Organization.find(params[:bulk_ids])
-    orgs.map do |org| 
+    orgs.map do |org|
       begin
         Organization.transaction do
           org.approve!
         end
       # rescue StateMachine::InvalidTransition
-        
+
       end
     end
     redirect_to :back

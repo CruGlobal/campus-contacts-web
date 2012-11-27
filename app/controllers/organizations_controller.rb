@@ -1,7 +1,6 @@
 class OrganizationsController < ApplicationController
   respond_to :html, :js
   before_filter :get_organization, :only => [:show, :edit, :update, :destroy]
-  cache_sweeper :organization_sweeper, only: [:update, :destroy, :create, :create_from_crs]
 
   def index
 

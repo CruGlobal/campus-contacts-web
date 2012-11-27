@@ -3,9 +3,6 @@ require 'vpim/book'
 
 class Person < ActiveRecord::Base
 
-  serialize :organization_tree_cache, JSON
-  serialize :org_ids_cache, JSON
-
   has_many :person_transfers
   has_many :new_people
   has_one :transferred_by, class_name: "PersonTransfer", foreign_key: "transferred_by_id"
@@ -184,7 +181,6 @@ class Person < ActiveRecord::Base
     "#{first_name} #{last_name} #{'-' if last_name.present? || first_name.present?} #{email}"
   end
 
-
   def self.deleted
     self.get_deleted.collect()
   end
@@ -269,7 +265,7 @@ class Person < ActiveRecord::Base
 
   def org_ids
     unless @org_ids
-      unless org_ids_cache
+      unless Rails.cache.fetch(['org_ids_cache', self])
         organization_tree # make sure the tree is built
       end
       # convert org ids to integers (there has to be a better way, but i couldn't think of it)
@@ -279,21 +275,24 @@ class Person < ActiveRecord::Base
     @org_ids
   end
 
-  def clear_org_cache
-    update_column(:organization_tree_cache, nil)
-    update_column(:org_ids_cache, nil)
-  end
+  #def clear_org_cache
+    #update_column(:organization_tree_cache, nil)
+    #update_column(:org_ids_cache, nil)
+  #end
 
   def organization_tree
-    unless organization_tree_cache.present?
-      self.organization_tree_cache = org_tree_node
-      self.org_ids_cache = @org_ids
-      begin
-        save(validate: false)
-      rescue ActiveRecord::ReadOnlyRecord
-      end
+    Rails.cache.fetch(['organization_tree', self]) do
+      tree = org_tree_node
+      Rails.cache.write(['org_ids_cache', self], @org_ids)
+      tree
     end
-    organization_tree_cache
+  end
+
+  def org_ids_cache
+    unless Rails.cache.exist?(['org_ids_cache', self])
+      organization_tree # make sure the tree is built
+    end
+    Rails.cache.fetch(['org_ids_cache', self])
   end
 
   def organization_from_id(org_id)
@@ -856,8 +855,6 @@ class Person < ActiveRecord::Base
                                      }
                                    }.flatten
   rescue NoMethodError
-    self.organization_tree_cache = nil
-    self.org_ids_cache = nil
     @org_ids = nil
     @retries += 1
     retry if @retries == 1
