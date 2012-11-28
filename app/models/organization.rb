@@ -23,6 +23,7 @@ class Organization < ActiveRecord::Base
   has_many :leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id IN (?) AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role.leader_ids, 0], order: "people.last_name, people.first_name", uniq: true
   has_many :only_leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role::LEADER_ID, 0], order: "people.last_name, people.first_name", uniq: true
   has_many :admins, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role::ADMIN_ID, 0], order: "people.last_name, people.first_name", uniq: true
+  has_many :sent, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role::SENT_ID, 0], order: "people.last_name, people.first_name", uniq: true
   has_many :all_people, through: :organizational_roles, source: :person, conditions: ["organizational_roles.followup_status <> 'do_not_contact' AND organizational_roles.deleted = 0 AND organizational_roles.archive_date IS NULL"]
   has_many :all_people_with_archived, through: :organizational_roles, source: :person, conditions: ["organizational_roles.followup_status <> 'do_not_contact' AND organizational_roles.deleted = 0"]
   has_many :contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status <> 'do_not_contact' AND organizational_roles.deleted = 0", Role::CONTACT_ID]
@@ -68,6 +69,14 @@ class Organization < ActiveRecord::Base
     event :disable do
       transition any => :inactive
     end
+  end
+  
+  def pending_transfer
+    sent.includes(:sent_person).where('sent_people.id IS NULL')
+  end
+  
+  def completed_transfer
+    sent.includes(:sent_person).where('sent_people.id IS NOT NULL')
   end
   
   def has_parent?(org_id)

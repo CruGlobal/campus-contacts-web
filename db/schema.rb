@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121128073103) do
+ActiveRecord::Schema.define(:version => 20121128143328) do
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -656,6 +656,13 @@ ActiveRecord::Schema.define(:version => 20121128073103) do
   end
 
   add_index "saved_contact_searches", ["user_id"], :name => "index_saved_contact_searches_on_user_id"
+
+  create_table "sent_people", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "transferred_by_id"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
 
   create_table "sent_sms", :force => true do |t|
     t.text     "message"

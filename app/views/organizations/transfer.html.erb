@@ -21,76 +21,16 @@
 					</table>
 					<div class="transfer_info">
 						<table>
-							<tr>
-								<td><input type="checkbox" name="contact" value="contact_1"></td>
-								<td>Jonathan</td>
-								<td>Whitney</td>
-								<td>Keynote</td>
-								<td>5/5/2005</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" name="contact" value="contact_1"></td>
-								<td>Jonathan</td>
-								<td>Whitney</td>
-								<td>Keynote</td>
-								<td>5/5/2005</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" name="contact" value="contact_1"></td>
-								<td>Jonathan</td>
-								<td>Whitney</td>
-								<td>Keynote</td>
-								<td>5/5/2005</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" name="contact" value="contact_1"></td>
-								<td>Jonathan</td>
-								<td>Whitney</td>
-								<td>Keynote</td>
-								<td>5/5/2005</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" name="contact" value="contact_1"></td>
-								<td>Jonathan</td>
-								<td>Whitney</td>
-								<td>Keynote</td>
-								<td>5/5/2005</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" name="contact" value="contact_1"></td>
-								<td>Jonathan</td>
-								<td>Whitney</td>
-								<td>Keynote</td>
-								<td>5/5/2005</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" name="contact" value="contact_1"></td>
-								<td>Jonathan</td>
-								<td>Whitney</td>
-								<td>Keynote</td>
-								<td>5/5/2005</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" name="contact" value="contact_1"></td>
-								<td>Jonathan</td>
-								<td>Whitney</td>
-								<td>Keynote</td>
-								<td>5/5/2005</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" name="contact" value="contact_1"></td>
-								<td>Jonathan</td>
-								<td>Whitney</td>
-								<td>Keynote</td>
-								<td>5/5/2005</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" name="contact" value="contact_1"></td>
-								<td>Jonathan</td>
-								<td>Whitney</td>
-								<td>Keynote</td>
-								<td>5/5/2005</td>
-							</tr>
+						  <% @pending_transfer.each do |person| %>
+						    <% assigned_to = person.assigned_tos_by_org(current_organization) %>
+  							<tr>
+  								<td><input type="checkbox" name="contact" value="contact_1"></td>
+  								<td><%= person.first_name %></td>
+  								<td><%= person.last_name %></td>
+  								<td><%= assigned_to.present? ? assigned_to.first.person : "" %></td>
+  								<td><%= person.graduation_date %></td>
+  							</tr>
+  						<% end %>
 						</table>
 					</div>
 					<div class="transfer_actions actions_92">

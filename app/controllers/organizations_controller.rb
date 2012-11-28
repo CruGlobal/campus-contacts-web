@@ -101,6 +101,7 @@ class OrganizationsController < ApplicationController
   end
   
   def transfer
+    @pending_transfer = current_organization.pending_transfer
     render layout: 'no_sidebar'
   end
 

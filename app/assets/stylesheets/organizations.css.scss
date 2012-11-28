@@ -61,19 +61,28 @@
 						table-layout: fixed;
 						text-align: left;
 						
-						th, td {
+						th {
 							padding: 5px;
 							width: 100px;
 							vertical-align: middle;
 						}
 						
+						td {
+							padding: 5px 0px 5px 10px;
+							width: 100px;
+							vertical-align: middle;
+							&:first-child {
+								padding: 5px
+							}
+						}
+						
 						th:first-child, td:first-child {
 							text-align: center;
-							width: 48px;
+							width: 30px;
 						}
 						
 						th:last-child, td:last-child {
-							width: 150px;
+							width: 190px;
 						}
 						
 						tr {
@@ -84,7 +93,7 @@
 					.transfer_info {
 						overflow-y: scroll;
 						overflow-x: hidden;
-						max-height: 240px;
+						height: 240px;
 						background: #fff;
 						text-align: left;
 					}
