@@ -480,7 +480,10 @@ class Person < ActiveRecord::Base
       user.primary_organization_id = org.id
       user.save!
     end
-    update_attributes(updated_at: Time.now) # touch the timestamp to reset caches
+    begin
+      update_attributes(updated_at: Time.now) # touch the timestamp to reset caches
+    rescue ActiveRecord::ReadOnlyRecord
+    end
   end
 
   def primary_organization
