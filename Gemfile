@@ -89,6 +89,7 @@ group :development do
   gem 'bullet'
   gem 'mailcatcher'
   gem 'railroady'
+  gem 'localeapp'
 end
 
 group :performance do
