@@ -4,6 +4,10 @@ $ ->
       minLength: 3
       delay: 1000
       source: '/organizations/available_for_transfer.js'
+      select: (event, ui)->
+        $.ajax
+          url: '/organizations/queue_transfer?person_id=' + ui.item.id
+          type: 'GET'
     
   $('.import_from_crs_link').live 'click', ->
     $('#import_from_crs form')[0].reset()

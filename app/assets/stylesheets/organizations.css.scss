@@ -4,7 +4,7 @@
 	
 		.inside_container {
 			margin: 0 auto;
-			width: 574px;
+			width: 630px;
 		}
 	
 		h1.title {
@@ -134,7 +134,7 @@
 						
 						.info_left {
 							float: left;
-							width: 50%;
+							width: 240px;
 							
 							div:nth-child(odd) {
 								float: left;
@@ -168,20 +168,18 @@
 						.info_right {
 							overflow: hidden;
 							float: right;
-							width: 50%;
 							min-height: 24px;
 							text-align: right;
+							padding-right: 3px;
 							
-							input[type="text"] {
-								margin: 0 0 1em 0;
-								padding: 0.2em;
-								width: 222px;
-								height: 18px;
+							#add_sent_contact {
+								margin: 3px 0px 8px 3px;
+								padding: 3px;
+								width: 290px;
 								border: 1px solid #c7dff0;
 								font-family: Georgia;
 								font-size: 12px;
-								color: #c0c0c0;
-								font-style: italic;
+								color: #666;
 								text-align: center;
 							}
 							
@@ -211,7 +209,7 @@
 							}
 							
 							#begin_transfer {
-								margin: 0 0 0 1.1em;
+								margin: 0 0 0 5px;
 								padding: 0;
 								width: 108px;
 								height: 24px;

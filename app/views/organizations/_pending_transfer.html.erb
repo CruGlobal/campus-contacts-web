@@ -1,0 +1,8 @@
+<% assigned_to = person.assigned_tos_by_org(current_organization) %>
+<tr>
+	<td><input type="checkbox" name="contact" value="contact_1"></td>
+	<td><%= person.first_name %></td>
+	<td><%= person.last_name %></td>
+	<td><%= assigned_to.present? ? assigned_to.first.person : "" %></td>
+	<td><%= person.graduation_date %></td>
+</tr>

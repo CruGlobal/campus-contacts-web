@@ -102,11 +102,19 @@ class OrganizationsController < ApplicationController
   
   def available_for_transfer
     available = Array.new
-    people = current_organization.all_people.where("first_name LIKE :name OR last_name LIKE :name", name: "%#{params[:term]}%")
+    people = current_organization.all_people.where("first_name LIKE :name OR last_name LIKE :name", name: "%#{params[:term]}%") - current_organization.sent
     people.each do |person|
-      available << {name: person.to_s, id: person.id}
+      available << {label: person.to_s, id: person.id}
     end
     render json: available.to_json
+  end
+  
+  def queue_transfer
+    @person = Person.find(params[:person_id])
+    if @person.present?
+      org_role = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(@person.id, current_organization.id, Role::SENT_ID)
+      org_role.update_attributes({deleted: 0, added_by_id: current_user.person.id}) if org_role.deleted == true
+    end
   end
   
   def transfer
