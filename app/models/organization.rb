@@ -79,6 +79,10 @@ class Organization < ActiveRecord::Base
     sent.includes(:sent_person).where('sent_people.id IS NOT NULL')
   end
   
+  def available_transfer
+    all_people - sent
+  end
+  
   def has_parent?(org_id)
     ancestry.present? ? ancestry.split('/').include?(org_id.to_s) : true
   end

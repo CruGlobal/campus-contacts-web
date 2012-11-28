@@ -1,4 +1,10 @@
 $ ->
+  $('#add_sent_contact').live 'keyup', ->
+    $(this).autocomplete
+      minLength: 3
+      delay: 1000
+      source: '/organizations/available_for_transfer.js'
+    
   $('.import_from_crs_link').live 'click', ->
     $('#import_from_crs form')[0].reset()
     $('#organization_parent_id').val($(this).attr('data-parent-id'))

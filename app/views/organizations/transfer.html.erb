@@ -49,8 +49,9 @@
 							</div>
 						</div>
 						<div class="info_right">
-							<input id="add_another_contact" name="add_another_contact" type="text" placeholder="Add another contact to this list" /><br/>
-							<a href="#" id="cancel_transfer" class="action_button">Cancel</a><input id="begin_transfer" class="action_button" type="submit" value="Transfer" />
+						  <%= text_field_tag 'add_sent_contact', "", placeholder: 'Add contact to this list' %><br/>
+							<a href="#" id="cancel_transfer" class="action_button">Cancel</a>
+							<input id="begin_transfer" class="action_button" type="submit" value="Transfer" />
 						</div>
 					</div>
 				</form>

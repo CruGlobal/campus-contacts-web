@@ -100,6 +100,15 @@ class OrganizationsController < ApplicationController
     @date_leaders = (Date.today-91).strftime("%m-%d-%Y")
   end
   
+  def available_for_transfer
+    available = Array.new
+    people = current_organization.all_people.where("first_name LIKE :name OR last_name LIKE :name", name: "%#{params[:term]}%")
+    people.each do |person|
+      available << {name: person.to_s, id: person.id}
+    end
+    render json: available.to_json
+  end
+  
   def transfer
     @pending_transfer = current_organization.pending_transfer
     render layout: 'no_sidebar'
