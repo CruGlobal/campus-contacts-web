@@ -490,7 +490,7 @@ class Person < ActiveRecord::Base
         org = organizations.first
 
         # save this as the primary org
-        primary_organization = org
+        self.primary_organization = org
       end
       @primary_organization = org
     end
