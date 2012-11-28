@@ -4,23 +4,23 @@ class SurveysController < ApplicationController
   skip_before_filter :authenticate_user!
   skip_before_filter :check_url
   load_and_authorize_resource except: [:start, :stop, :index]
-  
+
   require 'api_helper'
   include ApiHelper
-  
+
   def index_admin
     @organization = current_person.organization_from_id(params[:org_id]) || current_organization
     authorize! :manage, @organization
     @surveys = @organization.surveys
   end
-   
+
   def index
     # authenticate_user! unless params[:access_token] && params[:org_id]
     @title = "Pick A Survey"
     if current_user
       @organization = current_person.organization_from_id(params[:org_id]) || current_organization
       @surveys = @organization ? @organization.self_and_children_surveys : nil
-      
+
       respond_to do |wants|
         wants.html { render 'index_admin' }
         wants.mobile
@@ -29,15 +29,15 @@ class SurveysController < ApplicationController
       return render_404
     end
   end
-  
+
   def edit
-    
+
   end
-  
+
   def new
-    
+
   end
-  
+
   def destroy
     @survey.destroy
     respond_to do |wants|
@@ -45,7 +45,7 @@ class SurveysController < ApplicationController
       wants.js {render :nothing => true}
     end
   end
-  
+
   def update
     if @survey.update_attributes(params[:survey])
       redirect_to index_admin_surveys_path
@@ -53,16 +53,17 @@ class SurveysController < ApplicationController
       render :edit
     end
   end
-  
+
   def create
-    @survey = current_organization.surveys.create(params[:survey])
+    @survey = current_organization.surveys.new(params[:survey])
     if @survey.save
       redirect_to index_admin_surveys_path
     else
-      redirect_to new_survey_path
+      current_organization.surveys -= [@survey]
+      render :new
     end
   end
-  
+
   # Enter survey mode
   def start
     unless mhub? #|| Rails.env.test?
@@ -73,7 +74,7 @@ class SurveysController < ApplicationController
     redirect_to sign_out_url(next: short_survey_url(@survey.id))
     #redirect_to short_survey_url(@survey.id)
   end
-  
+
   # Exit survey mode
   def stop
     cookies[:survey_mode] = nil
@@ -81,6 +82,6 @@ class SurveysController < ApplicationController
     cookies[:survey_id] = nil
     redirect_to(request.referrer ? :back : 'http://www.missionhub.com')
   end
-  
-    
+
+
 end

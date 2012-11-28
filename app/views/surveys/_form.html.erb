@@ -2,7 +2,7 @@
   <%= error_messages_for :survey %>
 
   <div class="stepwrap rwidth">
-    <div class="stepcontent"> 
+    <div class="stepcontent">
       <div class="field">
         <%= f.check_box :is_frozen %><%= t('.freeze') %>
       </div>
@@ -11,9 +11,8 @@
 
   <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step1.png") %>
     </div>
-    <div class="stepcontent">  
+    <div class="stepcontent">
       <label for="survey_label">
         <%= t('.login_paragraph') + ": " + t('.login_paragraph_tip') %>
       </label>
@@ -25,9 +24,8 @@
 
   <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step2.png") %>
     </div>
-    <div class="stepcontent"> 
+    <div class="stepcontent">
       <label for="survey_label">
         <%= t('.title') + ": " + t('.title_tip') %>
       </label>
@@ -38,22 +36,20 @@
   </div>
   <!-- <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step3.png") %>
     </div>
-    <div class="stepcontent">    
+    <div class="stepcontent">
       <div class="field">
         <label for="survey_initial_response">
-          <%= raw(t('surveys.form.initial_response')) %> 
+          <%= raw(t('surveys.form.initial_response')) %>
           <%= tip(t('surveys.form.post_survey_why')) %>
         </label>
         <%#= f.text_area :initial_response, rows: 3 %>
       </div>
     </div>
   </div> -->
-  
+
   <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step3.png") %>
     </div>
     <div class="stepcontent">
       <label for="survey_label">
@@ -64,10 +60,9 @@
       </div>
     </div>
   </div>
-  
+
   <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step4.png") %>
     </div>
     <div class="stepcontent">
       <label for="survey_label">
@@ -78,10 +73,9 @@
       </div>
     </div>
   </div>
-  
+
   <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step5.png") %>
     </div>
     <div class="stepcontent">
       <label for="survey_label">
@@ -95,15 +89,14 @@
       </div>
     </div>
   </div>
-  
+
   <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step6.png") %>
     </div>
-    <div class="stepcontent"> 
-      <% if current_organization.show_sub_orgs? && current_organization.has_children? %>   
+    <div class="stepcontent">
+      <% if current_organization.show_sub_orgs? && current_organization.has_children? %>
         <label for="survey_label">
-          <%= raw(t('.association', this_term: current_organization.terminology, child_term: current_organization.children.first.terminology)) %> 
+          <%= raw(t('.association', this_term: current_organization.terminology, child_term: current_organization.children.first.terminology)) %>
           <div class="icon help tipit help_bubble_keyword " title="<%= t('surveys.index_admin.association_help') %>"></div>
         </label>
         <div class="field">
@@ -121,7 +114,6 @@
 
   <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step7.png") %>
     </div>
     <div class="stepcontent">
       <div>
@@ -154,11 +146,24 @@
         <%= f.text_area :css %>
       </div>
 
+    </div>
+  </div>
 
+  <div class="stepwrap rwidth">
+    <div class="stepnumber">
+    </div>
+    <div class="stepcontent">
+      <label for="survey_label">
+        <%= t('.redirect_url') %>
+      </label>
+      <div class="field">
+        <%= f.text_field :redirect_url %>
+      </div>
 
       <div class="actions">
         <%= f.submit %>
       </div>
+
     </div>
   </div>
 <% end %>

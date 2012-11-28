@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121109101429) do
+ActiveRecord::Schema.define(:version => 20121128192052) do
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -280,7 +280,7 @@ ActiveRecord::Schema.define(:version => 20121109101429) do
     t.datetime "updated_at"
   end
 
-  add_index "email_addresses", ["email"], :name => "index_email_addresses_on_email"
+  add_index "email_addresses", ["email"], :name => "email"
   add_index "email_addresses", ["person_id"], :name => "person_id"
 
   create_table "followup_comments", :force => true do |t|
@@ -469,10 +469,10 @@ ActiveRecord::Schema.define(:version => 20121109101429) do
     t.string   "first_name",                    :limit => 50
     t.string   "middle_name",                   :limit => 50
     t.string   "gender",                        :limit => 1
-    t.string   "campus",                        :limit => 128
     t.string   "year_in_school",                :limit => 20
     t.string   "major",                         :limit => 70
     t.string   "minor",                         :limit => 70
+    t.string   "campus",                        :limit => 70
     t.string   "greek_affiliation",             :limit => 50
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -486,8 +486,6 @@ ActiveRecord::Schema.define(:version => 20121109101429) do
     t.integer  "mentor_id"
     t.integer  "fb_uid",                        :limit => 8
     t.datetime "date_attributes_updated"
-    t.text     "organization_tree_cache"
-    t.text     "org_ids_cache"
     t.integer  "crs_profile_id"
     t.integer  "sp_person_id"
     t.integer  "si_person_id"
@@ -495,12 +493,10 @@ ActiveRecord::Schema.define(:version => 20121109101429) do
   end
 
   add_index "people", ["accountNo"], :name => "accountNo_ministry_Person"
-  add_index "people", ["campus"], :name => "campus"
   add_index "people", ["crs_profile_id"], :name => "index_people_on_crs_profile_id"
   add_index "people", ["fb_uid"], :name => "index_ministry_person_on_fb_uid"
   add_index "people", ["first_name", "last_name"], :name => "firstName_lastName"
   add_index "people", ["last_name"], :name => "lastname_ministry_Person"
-  add_index "people", ["org_ids_cache"], :name => "index_ministry_person_on_org_ids_cache", :length => {"org_ids_cache"=>255}
   add_index "people", ["pr_person_id"], :name => "index_people_on_pr_person_id"
   add_index "people", ["si_person_id"], :name => "index_people_on_si_person_id"
   add_index "people", ["sp_person_id"], :name => "index_people_on_sp_person_id"
@@ -701,7 +697,7 @@ ActiveRecord::Schema.define(:version => 20121109101429) do
     t.string   "initial_response",               :limit => 145
     t.text     "post_survey_message_deprecated"
     t.string   "event_type"
-    t.string   "gateway",                                       :default => "", :null => false
+    t.string   "gateway",                                       :default => "twilio", :null => false
     t.integer  "survey_id"
   end
 
@@ -743,13 +739,13 @@ ActiveRecord::Schema.define(:version => 20121109101429) do
   add_index "survey_elements", ["survey_id", "element_id"], :name => "survey_id_element_id"
 
   create_table "surveys", :force => true do |t|
-    t.string   "title",                  :limit => 100, :default => "",       :null => false
+    t.string   "title",                  :limit => 100,  :default => "",       :null => false
     t.integer  "organization_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "post_survey_message"
-    t.string   "terminology",                           :default => "Survey"
-    t.integer  "login_option",                          :default => 0
+    t.string   "terminology",                            :default => "Survey"
+    t.integer  "login_option",                           :default => 0
     t.boolean  "is_frozen"
     t.text     "login_paragraph"
     t.string   "logo_file_name"
@@ -764,6 +760,7 @@ ActiveRecord::Schema.define(:version => 20121109101429) do
     t.string   "background_color"
     t.string   "text_color"
     t.integer  "crs_registrant_type_id"
+    t.string   "redirect_url",           :limit => 2000
   end
 
   add_index "surveys", ["crs_registrant_type_id"], :name => "index_surveys_on_crs_registrant_type_id"
@@ -794,9 +791,13 @@ ActiveRecord::Schema.define(:version => 20121109101429) do
   add_index "users", ["email"], :name => "index_simplesecuritymanager_user_on_email", :unique => true
   add_index "users", ["username"], :name => "CK_simplesecuritymanager_user_username", :unique => true
 
+  add_foreign_key "answers", "elements", :name => "answers_ibfk_1", :column => "question_id"
+
+  add_foreign_key "organization_memberships", "organizations", :name => "organization_memberships_ibfk_2", :dependent => :delete
+
   add_foreign_key "organizational_roles", "organizations", :name => "organizational_roles_ibfk_1", :dependent => :delete
 
-  add_foreign_key "sms_keywords", "organizations", :name => "sms_keywords_ibfk_2"
+  add_foreign_key "sms_keywords", "organizations", :name => "sms_keywords_ibfk_4", :dependent => :delete
   add_foreign_key "sms_keywords", "surveys", :name => "sms_keywords_ibfk_3", :dependent => :nullify
 
   add_foreign_key "surveys", "organizations", :name => "surveys_ibfk_1", :dependent => :delete
