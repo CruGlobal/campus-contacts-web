@@ -1,7 +1,6 @@
 class Role < ActiveRecord::Base
   has_many :people, through: :organizational_roles
-  has_many :organizational_roles, inverse_of: :role
-  belongs_to :organization, inverse_of: :roles
+  has_many :organizational_roles, inverse_of: :role, dependent: :destroy
   belongs_to :organization, inverse_of: :roles
   scope :default, where(organization_id: 0)
 	scope :leaders, where(i18n: %w[leader admin])
@@ -26,7 +25,6 @@ class Role < ActiveRecord::Base
     :order => "roles.name ASC"
   }}
   
-
   scope :non_default_cru_roles_asc, lambda { {
     :conditions => "i18n IS NULL OR i18n NOT IN #{self.default_roles_for_field_string(self::DEFAULT_CRU_ROLES)}",
     :order => "roles.name ASC"
@@ -39,23 +37,23 @@ class Role < ActiveRecord::Base
   def self.involved_ids
     @involved_ids ||= self.where(i18n: %w[leader admin involved]).pluck(:id)
   end
-  
+
   def self.admin
     @admin ||= Role.find_or_create_by_i18n_and_organization_id('admin', 0)
   end
-  
+
   def self.leader
     @leader ||= Role.find_or_create_by_i18n_and_organization_id('leader', 0)
   end
-  
+
   def self.contact
     @contact ||= Role.find_or_create_by_i18n_and_organization_id('contact', 0)
   end
-  
+
   def self.involved
     @involved ||= Role.find_or_create_by_i18n_and_organization_id('involved', 0)
   end
-  
+
   def self.alumni
     @alumni ||= Role.find_or_create_by_i18n_and_organization_id('alumni', 0)
   end
@@ -83,7 +81,7 @@ class Role < ActiveRecord::Base
       r = "(roles.i18n," + r
       r
     end
-  
+
   ADMIN_ID = admin.id
   LEADER_ID = leader.id
   CONTACT_ID = contact.id
