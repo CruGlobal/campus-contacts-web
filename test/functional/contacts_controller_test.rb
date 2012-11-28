@@ -196,6 +196,8 @@ class ContactsControllerTest < ActionController::TestCase
       assert_equal assigns(:header).upcase, "Contact".upcase
       xhr :get, :index, {:role => Role::INVOLVED_ID}
       assert_equal assigns(:header).upcase, "Involved".upcase
+      xhr :get, :index, {:role => Role::SENT_ID}
+      assert_equal assigns(:header).upcase, "Sent".upcase
       xhr :get, :index, {:assigned_to => "unassigned"}
       assert_equal assigns(:header), "Unassigned"
       xhr :get, :index, {:completed => "true"}

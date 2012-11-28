@@ -69,6 +69,10 @@ class Organization < ActiveRecord::Base
       transition any => :inactive
     end
   end
+  
+  def has_parent?(org_id)
+    ancestry.present? ? ancestry.split('/').include?(org_id.to_s) : true
+  end
 
   def is_root? # an org is considered root if it has no parents
     ancestry.nil? || !parent.show_sub_orgs
@@ -87,6 +91,18 @@ class Organization < ActiveRecord::Base
   def parent_organization
     org = Organization.find(ancestry.split('/').last) if ancestry.present?
     return org if org.present?
+  end
+  
+  def role_set
+    default_roles + non_default_roles
+  end
+  
+  def default_roles
+    has_parent?(1) ? roles.default_cru_roles_desc : roles.default_roles_desc
+  end
+  
+  def non_default_roles
+    has_parent?(1) ? roles.non_default_cru_roles_asc : roles.non_default_roles_asc
   end
 
   def parent_organization_admins

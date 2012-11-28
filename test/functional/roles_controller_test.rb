@@ -17,13 +17,22 @@ class RolesControllerTest < ActionController::TestCase
       sign_in @user
     end
     
-    should "show all the system and organizational roles" do
+    should "show all the system and organizational roles for CRU child org" do
       get :index, :id => @organization.id
       system_roles = assigns(:system_roles).collect { |role| role.i18n }
       organizational_roles = assigns(:organizational_roles).collect { |role| role.i18n }
       assert_response :success, @response.body
-      assert_equal ["admin", "leader", "contact", "involved"], system_roles 
+      assert_equal ["admin", "leader", "involved", "contact", "sent"], system_roles 
       assert_equal ["member"], organizational_roles
+    end
+    
+    should "show all the system and organizational roles" do
+      @organization.update_attribute('ancestry','2')
+      get :index, :id => @organization.id
+      system_roles = assigns(:system_roles).collect { |role| role.i18n }
+      organizational_roles = assigns(:organizational_roles).collect { |role| role.i18n }
+      assert_response :success, @response.body
+      assert_equal ["admin", "leader", "involved", "contact"], system_roles 
     end
   
     should "should get new" do
