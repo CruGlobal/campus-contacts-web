@@ -191,9 +191,6 @@ fr:
     plain:
       exit_survey: 
     role_assign_success: 
-    send_reminder_form:
-      subject: 
-      to: 
     show:
       add_comment: 
       add_comments_here: 
@@ -201,7 +198,6 @@ fr:
       edit_contact_info: 
       email: 
       facebook_profile: 
-      google_map: 
       phone_number: 
       previous_comments: 
       send_contact_info: 
@@ -516,9 +512,7 @@ fr:
           quadrillion: 
           thousand: 
           trillion: 
-          unit: 
       format:
-        delimiter: 
         precision: 
         significant: 
         strip_insignificant_zeros: 
@@ -530,12 +524,6 @@ fr:
           kb: 
           mb: 
           tb: 
-    percentage:
-      format:
-        delimiter: 
-    precision:
-      format:
-        delimiter: 
   org_membership:
     confirm_delete: 
   organization_mailer:
@@ -711,10 +699,6 @@ fr:
       send_vcard_desc: 
       status: 
       updated_time_difference: 
-    todos:
-      all_selected_html: 
-      page_selected_html: 
-      select_all_html: 
   questions:
     archived_help: 
     create:
@@ -781,22 +765,18 @@ fr:
       updated: 
     form:
       associated_survey_tip: 
-      association: 
       explanation: 
       initial_response: 
       initial_response_default: 
       keyword: 
-      keyword_associated_with: 
       keyword_instruct: 
       keyword_locked: 
       keyword_tip: 
       keyword_why: 
       note: 
-      post_survey_message: 
       post_survey_why: 
     index:
       association: 
-      association_help: 
       create_survey_first: 
       delete_confirm: 
       delete_tip: 
@@ -805,33 +785,6 @@ fr:
     new:
       choose_keyword_explanation_html: 
       predefined_help: 
-      your_questions_help: 
-    questions:
-      archived_help: 
-      create:
-        notice: 
-      form:
-        checkboxes: 
-        dropdown: 
-        list_choices: 
-        multiple_choice: 
-        short_answer: 
-        text_message_length: 
-        text_message_preview: 
-        web_only: 
-        what_question_type: 
-      index:
-        add_question: 
-        archived_questions: 
-        manage: 
-        note: 
-        predefined: 
-        your_questions: 
-      predefined_help: 
-      question:
-        confirm_delete: 
-      short_answer_form:
-        question: 
       your_questions_help: 
     show:
       explanation: 
@@ -860,8 +813,6 @@ fr:
       pick_keyword: 
     form:
       frozen: 
-    index:
-      pick_keyword: 
     new:
       greeting_no_name: 
       greeting_with_name: 

@@ -204,9 +204,6 @@ es:
     plain:
       exit_survey: Salir de modo encuesta
     role_assign_success: 
-    send_reminder_form:
-      subject: 
-      to: 
     show:
       add_comment: Agregar Comentario / Actualizar Estado
       add_comments_here: Agregar comentarios aquí...
@@ -214,7 +211,6 @@ es:
       edit_contact_info: Editar Información de Contacto
       email: ! 'Correo electrónico:'
       facebook_profile: Perfil de Facebook
-      google_map: Mapa de Google
       phone_number: ! 'Teléfono #:'
       previous_comments: Comentarios Previos
       send_contact_info: 
@@ -608,9 +604,7 @@ es:
           quadrillion: Cuatrillones
           thousand: Miles
           trillion: Trillones
-          unit: 
       format:
-        delimiter: 
         precision: 3
         significant: verdadero
         strip_insignificant_zeros: verdadero
@@ -624,12 +618,6 @@ es:
           kb: KB
           mb: MB
           tb: TB
-    percentage:
-      format:
-        delimiter: 
-    precision:
-      format:
-        delimiter: 
   org_membership:
     confirm_delete: Estás seguro que quieres disociarte de %{org}
   organization_mailer:
@@ -805,10 +793,6 @@ es:
       send_vcard_desc: 
       status: 
       updated_time_difference: 
-    todos:
-      all_selected_html: Todas <b>%{count}</b> las personas en el directorio han sido seleccionadas.
-      page_selected_html: Todas <b>%{count}</b> las personas en esta página están seleccionadas
-      select_all_html: Selecciona <b>%{count}</b> personas en el directorio.
   questions:
     archived_help: 
     create:
@@ -875,22 +859,18 @@ es:
       updated: La Palabra Clave fue actualizada correctamente.
     form:
       associated_survey_tip: 
-      association: El %{this_term} Usted está actualmente solicitando esta palabra clave para tener al menos una %{child_term} abajo de ella.<br/> Selecciona si quieres asociar esta palabra clave con %{this_term} o a %{child_term} abajo de ella %{this_term}
       explanation: Por favor explica para que va utilizar esta palabra clave.
       initial_response: ¿Qué respuesta debemos devolver a las personas cuando nos escriben? <br/>Si quieres que la persona complete la encuesta, la respuesta DEBE incluir {{ link }}<br/>(exactamente así, no cambies esa parte de la respuesta.)
       initial_response_default: 
       keyword: Palabra Clave
-      keyword_associated_with: Esta palabra clave se asociará con %{org}.
       keyword_instruct: ! '- Una palabra clave es requerida para coleccionar contactos y encuestas vía texto, web y teléfono inteligente. <br/> - ''FSUCRU'' es la palabra clave ''Escribe FSUCRU para 85005''.<br/>- Utiliza por lo menos 3 letras para tu palabra clave.'
       keyword_locked: La palabra clave no puede ser cambiada. Puedes eliminar esta y crear una nueva si es necesario.
       keyword_tip: Esto es lo que las personas escribirán en su teléfono.
       keyword_why: Esto para nuestro uso exclusivo. La descripción puede incluir el uso de palabras como 'reunión semanal', 'eventos de alcance', y otros usos que la palabra clave tendrá.
       note: ! 'Note: El proceso de la solicitud puede tomar hasta 24 horas.'
-      post_survey_message: Qué tipo de mensaje te gustaría mostrar después de que la persona haya completado la encuesta?
       post_survey_why: cuando alguien te envía un mensaje de texto, el mensaje será enviado ellos y '{{link}}' será sustituida por una dirección de sitio web que les llevará a una encuesta en línea para que la completen. Si no tienen Internet, contestando 'yo' les enviará a todas las preguntas a través de mensaje de texto interactivo.<br/><br/>Si desea incluir un enlace a su sitio, no se incluyen aquí - incluirla en el mensaje posterior a la encuesta (paso 3 en el proceso de la encuesta Crear)
     index:
       association: Asociar contactos con
-      association_help: Cuando un contactos responde a una encuesta, ellos se asocian con el mismo equipo o movimiento al igual que la palabra clave a la que responden.
       create_survey_first: 
       delete_confirm: 
       delete_tip: 
@@ -900,33 +880,6 @@ es:
       choose_keyword_explanation_html: ! 'Escoger una palabra clave para tu comunidad o evento te permite que las personas completen las encuestas a través de la web, texto interactivo, y celulares inteligentes.  <strong>Ellos escribirán tu palabra clave al número %{number}</strong> y tu encuesta de preguntas aparecerán en el dispositivo.  Note: El proceso de adquirir una nueva palabra clave requiere una intervención manual. Una vez que solicitas tu palabra clave, espera hasta 24 horas para ser notificado a través de tu correo electrónico de que tu palabra clave fue aprobada y está lista para su uso.'
       predefined_help: 
       your_questions_help: 
-    questions:
-      archived_help: Las preguntas archivadas ya no serán incluidas en la encuesta.  Si nadie ha dado respuesta a la pregunta, las preguntas archivadas serán eliminadas. Si usas una pregunta archivada, la pregunta se moverá a tu sección de preguntas y las respuestas previas aparecerán.
-      create:
-        notice: La pregunta fue exitosamente creada.
-      form:
-        checkboxes: Casillas de Verificación
-        dropdown: Flujo de Opciones
-        list_choices: ! 'Haz una lista de las posibles opciones una por línea:'
-        multiple_choice: Opción Multiple
-        short_answer: Respuesta corta
-        text_message_length: ! 'Longitud del mensaje de texto:'
-        text_message_preview: ! 'Texto del Mensaje Previo forma de elección múltiple:'
-        web_only: Solo mostrar esta pregunta en la web / dispositivos moviles, no incluidos "interactivo" modo.
-        what_question_type: Que tipo de pregunta te gustaría hacer?
-      index:
-        add_question: Agregar una pregunta
-        archived_questions: Preguntas guardadas
-        manage: Administrar Preguntas de la Encuesta
-        note: ! 'Note: Nombre y Apellido serán agregados automáticamente para cada encuesta. No tienes necesidad de agregarlo.'
-        predefined: Pregunta Predefinida
-        your_questions: Tus preguntas (arrastrar para ordenar)
-      predefined_help: Las preguntas predefinidas son usadas comúnmente pero no se incluirán en la encuesta al menos que le des clic en 'usar'. Para reportar precisión por favor no parafrasear preguntas definidas. Solo utilice lo que ha sido provisto.
-      question:
-        confirm_delete: ¿Estás seguro de querer eliminar '%{question}'?
-      short_answer_form:
-        question: ! 'Pregunta:'
-      your_questions_help: Solo tus preguntas se mostrarán en la encuesta. Trata de LIMITAR tu ENCUESTA a 4 preguntas (sin incluir nombre y apellido). Muchas preguntas pueden ser lentas para aquellos que utilizan Texto Interactivo que toma aproximadamente de 10-15 segundos/pregunta dependiendo del servicio telefónico.
     show:
       explanation: ! 'Explicación:'
       keyword: ! 'Palabra clave:'
@@ -954,8 +907,6 @@ es:
       pick_keyword: 
     form:
       frozen: 
-    index:
-      pick_keyword: Escoge una Palabra Clave
     new:
       greeting_no_name: ¡Hola!
       greeting_with_name: ¡Hola %{name}!

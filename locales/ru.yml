@@ -204,9 +204,6 @@ ru:
     plain:
       exit_survey: Exit survey mode
     role_assign_success: 
-    send_reminder_form:
-      subject: Subject
-      to: To
     show:
       add_comment: Add Comment / Update Status
       add_comments_here: Add comments here...
@@ -214,7 +211,6 @@ ru:
       edit_contact_info: Edit Contact Info
       email: ! 'Email:'
       facebook_profile: Facebook Profile
-      google_map: Google Map
       phone_number: ! 'Phone #:'
       previous_comments: Previous Comments
       send_contact_info: Send Contact Info
@@ -608,9 +604,7 @@ ru:
           quadrillion: Quadrillion
           thousand: Thousand
           trillion: Trillion
-          unit: 
       format:
-        delimiter: 
         precision: 3
         significant: true
         strip_insignificant_zeros: true
@@ -624,12 +618,6 @@ ru:
           kb: KB
           mb: MB
           tb: TB
-    percentage:
-      format:
-        delimiter: 
-    precision:
-      format:
-        delimiter: 
   org_membership:
     confirm_delete: Are you sure you want to dissociate yourself from %{org}
   organization_mailer:
@@ -805,10 +793,6 @@ ru:
       send_vcard_desc: 
       status: 
       updated_time_difference: 
-    todos:
-      all_selected_html: 
-      page_selected_html: 
-      select_all_html: 
   questions:
     archived_help: Archived questions will no longer be included in the survey.  If no answers have ever been given to the question, the archived question will be deleted.  If you USE an archived question, the question will move to the YOUR QUESTIONS section and the previous answers will re-appear.
     create:
@@ -875,22 +859,18 @@ ru:
       updated: 
     form:
       associated_survey_tip: 
-      association: 
       explanation: 
       initial_response: 
       initial_response_default: 
       keyword: 
-      keyword_associated_with: 
       keyword_instruct: 
       keyword_locked: 
       keyword_tip: 
       keyword_why: 
       note: 
-      post_survey_message: 
       post_survey_why: 
     index:
       association: 
-      association_help: 
       create_survey_first: 
       delete_confirm: 
       delete_tip: 
@@ -899,33 +879,6 @@ ru:
     new:
       choose_keyword_explanation_html: 
       predefined_help: 
-      your_questions_help: 
-    questions:
-      archived_help: 
-      create:
-        notice: 
-      form:
-        checkboxes: 
-        dropdown: 
-        list_choices: 
-        multiple_choice: 
-        short_answer: 
-        text_message_length: 
-        text_message_preview: 
-        web_only: 
-        what_question_type: 
-      index:
-        add_question: 
-        archived_questions: 
-        manage: 
-        note: 
-        predefined: 
-        your_questions: 
-      predefined_help: 
-      question:
-        confirm_delete: 
-      short_answer_form:
-        question: 
       your_questions_help: 
     show:
       explanation: 
@@ -954,8 +907,6 @@ ru:
       pick_keyword: 
     form:
       frozen: 
-    index:
-      pick_keyword: 
     new:
       greeting_no_name: 
       greeting_with_name: 

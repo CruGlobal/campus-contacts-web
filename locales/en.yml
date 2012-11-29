@@ -204,9 +204,6 @@ en:
     plain:
       exit_survey: Exit survey mode
     role_assign_success: Successfully assigned labels.
-    send_reminder_form:
-      subject: 
-      to: 
     show:
       add_comment: Add Comment / Update Status
       add_comments_here: Add comments here...
@@ -214,7 +211,6 @@ en:
       edit_contact_info: Edit Contact Info
       email: Email
       facebook_profile: Facebook Profile
-      google_map: 
       phone_number: ! 'Phone #'
       previous_comments: Previous Comments
       send_contact_info: Send Contact Info
@@ -608,9 +604,7 @@ en:
           quadrillion: Quadrillion
           thousand: Thousand
           trillion: Trillion
-          unit: 
       format:
-        delimiter: 
         precision: 3
         significant: true
         strip_insignificant_zeros: true
@@ -624,12 +618,6 @@ en:
           kb: KB
           mb: MB
           tb: TB
-    percentage:
-      format:
-        delimiter: 
-    precision:
-      format:
-        delimiter: 
   org_membership:
     confirm_delete: Are you sure you want to dissociate yourself from %{org}
   organization_mailer:
@@ -811,10 +799,6 @@ en:
       send_vcard_desc: This will create a vcard and send it to the email address you enter below.
       status: Status
       updated_time_difference: Updated %{time_diff} ago.
-    todos:
-      all_selected_html: 
-      page_selected_html: 
-      select_all_html: 
   questions:
     archived_help: Archived questions will no longer be included in the survey.  If no answers have ever been given to the question, the archived question will be deleted.  If you USE an archived question, the question will move to the YOUR QUESTIONS section and the previous answers will re-appear.
     create:
@@ -881,22 +865,18 @@ en:
       updated: Keyword was successfully updated.
     form:
       associated_survey_tip: When a person texts in this keyword, they'll be presented with questions from the survey you select below.
-      association: 
       explanation: Please explain what you plan to use this keyword for.
       initial_response: What response should we send back to people when they text in? <br/>If you want the person to complete a survey, the response MUST include {{ link }}<br/>(exactly like that, dont change that part of the response.)
       initial_response_default: Hi! Thanks for checking out %{org}. To get more involved, reply with "i" or click {{ link }} if you have a smartphone.
       keyword: Keyword
-      keyword_associated_with: 
       keyword_instruct: ! '- A keyword is required to collect contacts and surveys via text, web and smartphones. <br/> - ''FSUCRU'' is the keyword in ''Text FSUCRU to 85005''.<br/>- Use at least 3 letters for your keyword.'
       keyword_locked: Keywords can't be changed. You can delete this one and create a new one if necessary.
       keyword_tip: This is what people will type into their phone.
       keyword_why: This is for our use only. The use description could include words like 'weekly meeting', 'outreach event', and other uses the keyword will have.
       note: ! 'Note: Processing requests may take up to 24 hours.'
-      post_survey_message: 
       post_survey_why: When someone texts in the keyword, this message will be sent to them and '{{link}}' will be replaced by a website address that will take them to an online survey for them to fill out. If they don't have internet, replying 'i' will send them all the questions via interactive text message.<br/><br/>If you want to include a link to your site, don't include it here - include it in the post-survey message (step 3 in the Create Survey process)
     index:
       association: Associate Contacts With
-      association_help: 
       create_survey_first: You need to create a survey before requesting a keyword.
       delete_confirm: Are you sure you want to delete this keyword?
       delete_tip: Delete keyword
@@ -906,33 +886,6 @@ en:
       choose_keyword_explanation_html: ! 'Choosing a keyword for your community or event enables you to have people fill out your survey questions via the web, interactive texting, and smartphones.  <strong>They will text your keyword to the number %{number}</strong> and your survey questions will appear on their device.  Note: The process of acquiring new keywords requires manual intervention. Once you request your keyword expect to wait up to 24 hours before we notify you via email that your keyword is approved and ready for use.'
       predefined_help: Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided.
       your_questions_help: Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service.
-    questions:
-      archived_help: 
-      create:
-        notice: 
-      form:
-        checkboxes: 
-        dropdown: 
-        list_choices: 
-        multiple_choice: 
-        short_answer: 
-        text_message_length: 
-        text_message_preview: 
-        web_only: 
-        what_question_type: 
-      index:
-        add_question: 
-        archived_questions: 
-        manage: 
-        note: 
-        predefined: 
-        your_questions: 
-      predefined_help: 
-      question:
-        confirm_delete: 
-      short_answer_form:
-        question: 
-      your_questions_help: 
     show:
       explanation: ! 'Explanation:'
       keyword: ! 'Keyword:'
@@ -960,8 +913,6 @@ en:
       pick_keyword: Pick a Keyword
     form:
       frozen: Sorry. The survey '%{survey}' is currently on hold.
-    index:
-      pick_keyword: 
     new:
       greeting_no_name: Hi!
       greeting_with_name: Hi %{name}!
