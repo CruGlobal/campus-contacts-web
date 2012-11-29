@@ -59,7 +59,7 @@ class Role < ActiveRecord::Base
   end
   
   def self.sent
-    @alumni ||= Role.find_or_create_by_i18n_and_organization_id('sent', 0)
+    @sent ||= Role.find_or_create_by_i18n_and_organization_id('sent', 0)
   end
   
   def to_s
@@ -87,6 +87,7 @@ class Role < ActiveRecord::Base
   CONTACT_ID = contact.id
   INVOLVED_ID = involved.id
   SENT_ID = sent.id
+  ALUMNI_ID = alumni.id
 
   DEFAULT_ROLES = ["admin", "leader", "involved", "alumni", "contact"] # in DSC ORDER by SUPERIORITY
   DEFAULT_CRU_ROLES = DEFAULT_ROLES + ["sent"]

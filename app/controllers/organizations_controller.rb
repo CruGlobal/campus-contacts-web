@@ -123,7 +123,16 @@ class OrganizationsController < ApplicationController
   end
   
   def do_transfer
-    raise "Running"
+    people = Person.where(id: params[:ids])
+    sent_team_org = Organization.find(6816) # 100% Sent Team
+    people.each do |person|
+      sent_team_org.add_contact(person)
+      sent_record = person.set_as_sent
+      sent_record.update_attribute('transferred_by_id', current_person.id)
+      sent_team_org.add_role_to_person(person, Role::ALUMNI_ID) if params[:tag_as_alumni] == '1'
+      person.archive_contact_role(current_organization) if params[:tag_as_archived] == '1'
+    end
+    render layout: 'no_sidebar'
   end
 
   def archive_contacts

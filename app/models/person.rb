@@ -185,6 +185,9 @@ class Person < ActiveRecord::Base
     "#{first_name} #{last_name} #{'-' if last_name.present? || first_name.present?} #{email}"
   end
 
+  def set_as_sent
+    SentPerson.find_or_create_by_person_id(id)
+  end
 
   def self.deleted
     self.get_deleted.collect()
