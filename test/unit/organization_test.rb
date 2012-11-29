@@ -586,11 +586,41 @@ class OrganizationTest < ActiveSupport::TestCase
       assert_equal(@org.pending_transfer, [@contact1,@contact2])
     end
     should "return all people without label 100% Sent" do
-      puts @org.available_transfer.inspect
       assert_equal(@org.available_transfer, [@contact4])
     end
     should "return all people with label 100% Sent and already transferred" do
       assert_equal(@org.completed_transfer, [@contact3])
+    end
+  end
+  
+  context "checking parent" do
+    setup do
+      @org = Organization.new(name: 'test org', ancestry: '1/2/3')
+    end
+    should "return true if parent_id exist" do
+      assert @org.has_parent?(1)
+      assert @org.has_parent?(2)
+    end
+    should "return true if org is root" do
+      @org.update_attribute('ancestry', nil)
+      assert @org.has_parent?(1)
+    end
+    should "return false if parent_id does not exist" do
+      assert !@org.has_parent?(4)
+      assert !@org.has_parent?(5)
+    end
+  end
+  
+  context "fetching roles" do
+    setup do
+      @org = Factory(:organization)
+    end
+    should "return 'sent' role if org is root" do
+      assert @org.role_set.include?(Role.sent)
+    end
+    should "return 'sent' role if has parent org id = 1" do
+      @org.update_attribute('ancestry','1/2/3')
+      assert @org.role_set.include?(Role.sent)
     end
   end
   
