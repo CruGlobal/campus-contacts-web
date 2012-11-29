@@ -471,5 +471,8 @@ FactoryGirl.define do
     display_name 'foo'
     link 'bar'
   end
-  
+
+  factory :sent_person do
+    association :person
+  end  
 end

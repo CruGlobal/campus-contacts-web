@@ -545,7 +545,6 @@ class OrganizationTest < ActiveSupport::TestCase
     setup do
       @org = Factory(:organization)
       @child = Factory(:organization, parent: @org, name: 'org', terminology: 'org')
-      
       @another_org = Factory(:organization)
     end
     
@@ -568,9 +567,31 @@ class OrganizationTest < ActiveSupport::TestCase
   end
 
   # end deeper tests
+  
 
-
- 
-
+  context "fetching transfers for 100% Sent" do
+    setup do
+      @org = Factory(:organization)
+      @contact1 = Factory(:person)
+      @contact2 = Factory(:person)
+      @contact3 = Factory(:person)
+      @contact4 = Factory(:person)
+      Factory(:organizational_role, person: @contact1, role: Role.sent, organization: @org)
+      Factory(:organizational_role, person: @contact2, role: Role.sent, organization: @org)
+      Factory(:organizational_role, person: @contact3, role: Role.sent, organization: @org)
+      Factory(:organizational_role, person: @contact4, role: Role.contact, organization: @org)
+      Factory(:sent_person, person: @contact3)
+    end
+    should "return all people with label 100% Sent and not yet transferred" do
+      assert_equal(@org.pending_transfer, [@contact1,@contact2])
+    end
+    should "return all people without label 100% Sent" do
+      puts @org.available_transfer.inspect
+      assert_equal(@org.available_transfer, [@contact4])
+    end
+    should "return all people with label 100% Sent and already transferred" do
+      assert_equal(@org.completed_transfer, [@contact3])
+    end
+  end
   
 end
