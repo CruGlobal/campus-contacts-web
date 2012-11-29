@@ -35,6 +35,10 @@ Mh::Application.configure do
   config.assets.digest = true
   config.assets.initialize_on_precompile = true
 
+  cache_servers = ['127.0.0.1']
+
+  config.cache_store = :dalli_store, cache_servers,  { :namespace => 'MissionHubCache', :expire_after => 1.day, :compress => true }
+
   # Enable serving of images, stylesheets, and javascripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"
 
