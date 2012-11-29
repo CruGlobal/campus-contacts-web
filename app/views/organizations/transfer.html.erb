@@ -6,13 +6,15 @@
 	</div>
 	<div>
 		<h1 class="title">Contacts Pending Transfer to 100% Sent</h1>
-		<a href="http://blog.missionhub.com" class="helpme" target="_blank">Help Me</a>
+		<%= link_to "Help Me", "http://blog.missionhub.com", target: '_blank', class: 'helpme' %>
 		<div class="container">
 			<div class="content">
-				<form>
+				<%= form_for "transfer", url: do_transfer_organizations_path, html: {method: 'post'} do |f| %>
 					<table class="header_table">
 						<tr>
-							<th><input type="checkbox" name="select_all" value="select_all"></th>
+							<th>
+							  <%= check_box_tag "select_all_transfer" %>
+							</th>
 							<th>First Name</th>
 							<th>Last Name</th>
 							<th>Assigned To</th>
@@ -22,32 +24,36 @@
 					<div class="transfer_info">
 						<table id="pending_transfer_list">
 						  <% @pending_transfer.each do |person| %>
-						    <%= render partial: 'pending_transfer', locals: {person: person} %>
+						    <%= render partial: 'pending_transfer', locals: {person: person, f: f} %>
   						<% end %>
 						</table>
 					</div>
 					<div class="transfer_actions actions_92">
 						<div class="info_left">
 							<div class="select_option">
-								<input type="checkbox" name="select_all" value="select_all">
+							  <%= check_box_tag "tag_as_alumni" %>
 							</div>
 							<div class="options">
-								<span class="pri_text">Label transferred contacts as Alumni</span><br/><span class="sec_text">(description of what labeling as 'Alumni' will do.)</span>
+								<span class="pri_text">Label transferred contacts as Alumni</span>
+								<br/>
+								<span class="sec_text">(description of what labeling as 'Alumni' will do.)</span>
 							</div>
 							<div class="select_option">
-								<input type="checkbox" name="select_all" value="select_all">
+							  <%= check_box_tag "tag_as_archived" %>
 							</div>
 							<div>
-								<span class="pri_text">Archive transferred contacts</span><br/><span class="sec_text">(description of what archiving will do.)</span>
+								<span class="pri_text">Archive transferred contacts</span>
+								<br/>
+								<span class="sec_text">(description of what archiving will do.)</span>
 							</div>
 						</div>
 						<div class="info_right">
 						  <%= text_field_tag 'add_sent_contact', "", placeholder: 'Add contact to this list' %><br/>
-							<a href="#" id="cancel_transfer" class="action_button">Cancel</a>
-							<input id="begin_transfer" class="action_button" type="submit" value="Transfer" />
+							<%= link_to "Cancel", '/contacts', class: 'action_button', id: 'cancel_transfer' %>
+							<%= f.submit 'Transfer', class: 'action_button', id: 'begin_transfer' %>
 						</div>
 					</div>
-				</form>
+				<% end %>
 			</div>
 		</div>
 	</div>

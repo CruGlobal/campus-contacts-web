@@ -1,2 +1,4 @@
+$(".transfer_info").animate({ scrollTop: $('.transfer_info').height() }, "fast");
 $('#pending_transfer_list').append("<%= escape_javascript(render partial: 'pending_transfer', locals: {person: @person}) %>")
 $('#add_sent_contact').val('').focus()
+$('#pending_transfer_list tr').last().effect('highlight')

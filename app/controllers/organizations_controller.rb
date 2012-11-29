@@ -121,6 +121,10 @@ class OrganizationsController < ApplicationController
     @pending_transfer = current_organization.pending_transfer
     render layout: 'no_sidebar'
   end
+  
+  def do_transfer
+    raise "Running"
+  end
 
   def archive_contacts
     a = params[:archive_contacts_before].split('-')
