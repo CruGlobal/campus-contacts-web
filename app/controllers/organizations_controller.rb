@@ -178,6 +178,8 @@ class OrganizationsController < ApplicationController
     else
       @organization = Organization.subtree_of(current_organization.root_id).first
     end
-    authorize! :manage, @organization
+    unless can?(:manage, @organization) || can?(:manage, @organization.parent)
+      raise CanCan::AccessDenied
+    end
   end
 end
