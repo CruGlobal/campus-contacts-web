@@ -481,7 +481,7 @@ class Person < ActiveRecord::Base
       user.save!
     end
     begin
-      update_attributes(updated_at: Time.now) # touch the timestamp to reset caches
+      touch # touch the timestamp to reset caches
     rescue ActiveRecord::ReadOnlyRecord
     end
   end
