@@ -6,10 +6,10 @@
 	</div>
 	
 	<div>
-		<h1 class="title">Step 3 of 3 - Add New Contacts to Groups</h1>
+		<h1 class="title"><%= t('.title')%></h1>
 		<div class="container">
 			<div class="content">
-				<p><%= t('contacts.index.import_step3_body1', count: @import_count) %>! Use the list below to select any groups which should include these new contacts, then click the <strong>Import</strong> button.</p>
+				<p><%=raw t('.guide', count: @import_count) %></p>
 			</div>
 			<div class="labelform" id="import_label_space">
 				<%= form_tag controller: 'imports', action: 'import', id: @import.id do |f| %>
