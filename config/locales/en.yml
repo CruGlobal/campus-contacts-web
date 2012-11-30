@@ -1093,7 +1093,7 @@ en:
       guide: You can easily import hundreds of contacts at once by uploading a CSV (comma-seperated value) file. Microsoft Excel makes it easy to create a CSV file from a spreadsheet.
       guide1: "Download and open %{link} to get started."
       guide2: "Use the first row of the database to list your headings (First Name, Last Name, Email, etc.)."
-      guide3: "In Excel, chosse <strong>Save As</strong>."
+      guide3: "In Excel, choose <strong>Save As</strong>."
       guide4: "From the drop down menu for <strong>File Type</strong>, choose <strong>CSV, Comma Separated</strong>."
       guide5: "Click the <strong>Choose File</strong> button and locate your new CSV file, then click the <strong>Upload</strong> button to continue."
       sample_csv: "CSV Sample Template"
