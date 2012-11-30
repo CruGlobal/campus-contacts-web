@@ -548,7 +548,7 @@ en:
       body_html:
         <p>Hi %{name},</p>
 
-        <p>I've has just added you as a leader for %{org} on MissionHub</p>
+        <p>I've just added you as a leader for %{org} on MissionHub</p>
 
         <p>Visit %{link} to log in. Please don't share this link with anyone else.</p>
 
