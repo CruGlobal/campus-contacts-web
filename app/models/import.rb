@@ -133,7 +133,8 @@ class Import < ActiveRecord::Base
 
     if person.save
       question_sets.map { |qs| qs.save }
-      create_contact_at_org(person, current_organization)
+      contact_role = create_contact_at_org(person, current_organization)
+      # contact_role.update_attribute('followup_status','uncontacted') # Set default
     end
 
     return person
