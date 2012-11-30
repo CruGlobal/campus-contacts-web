@@ -1,0 +1,1078 @@
+es:
+  activerecord:
+    errors:
+      full_messages:
+        format: ! '%{attribute} %{message}'
+      messages:
+        accepted: debe ser aceptada
+        blank: no puede estar en blanco
+        confirmation: no coincide con la confirmación
+        empty: no puede estar vacío
+        equal_to: debe ser igual a %{count}
+        even: debe ser aún
+        exclusion: está reservado
+        greater_than: debe ser mayor que %{count}
+        greater_than_or_equal_to: debe ser mayor que o igual a %{count}
+        inclusion: no está incluido en la lista
+        invalid: es invalido
+        less_than: debe ser menos de %{count}
+        less_than_or_equal_to: debe ser menos de o igual a %{count}
+        not_a_number: no es un número
+        not_an_integer: debe ser un entero
+        odd: debe ser impar
+        record_invalid: ! 'Error de validación: %{errors}'
+        taken: ya lo están utilizando
+        too_long: está muy largo (máximo de %{count} caracteres)
+        too_short: es demasiado corto (mínimo de %{count} caracteres)
+        wrong_length: es la longitud incorrecta (en caso de ser %{count} caracteres)
+      template:
+        body: ! 'Hubo problemas con los siguientes campos:'
+        header:
+          one: 1 error está prohibido %{model} de ser guardados
+          other: ! '%{count} errores que prohíbe este %{model} de ser guardados'
+    models:
+      sms_keyword: Palabra clave
+  application:
+    add_contact:
+      add_contact: Agregar un contacto a %{org}
+      save_and_add: Guarda y añade otra
+      save_and_close: Guarda y cierra
+      survey_mode_instructions: Si la persona que estás agregando esta a lado tuyo, presiona "Entrar en modo de encuesta" en la esquina derecha de tu pantalla.
+      title_bio: 
+      title_label: 
+      title_optional: 
+      title_surveys: 
+    assign:
+      assign_explanation: ! 'Puedes añadir un contacto usando cualquiera de las opciones abajo:'
+      keep_contact: 
+      me: Yo
+      type_to_find_group: 
+      type_to_find_label: 
+      type_to_find_leader: Escribe para encontrar un líder y luego haz clic en el nombre del líder
+      type_to_find_org: Escribe para encontrar un %{terminology} luego haz clic en %{terminology} del nombre
+    messages:
+      question_too_long: 
+  batch:
+    new_person_message: 
+    person_transfer_message: 
+  bulk_email: Correo electrónico masivo
+  bulk_sms: Texto masivo
+  contacts:
+    add_contact: Agregar un Contacto
+    assign: Asignar
+    create:
+      email_taken: 
+      success: 
+    edit:
+      additional_information: Información Adicional
+      back: Regresar al perfil
+      basic_information: Información Básica
+      cancel: Cancelar y regresar a tu perfil
+    form:
+      email: Dirección de Correo electrónico
+      first_name: Nombre
+      last_name: Apellido
+      phone_number: Número Telefónico
+    import_contacts:
+      blank_header: 
+      cause_1: 
+      cause_2: 
+      cause_3: 
+      download_sample_csv: 
+      download_template_csv: 
+      duplicate_header_match: 
+      error: 
+      instruction_1: 
+      instruction_2: 
+      instruction_3: 
+      instruction_4: 
+      instructions_label: 
+      present_firstname: 
+      select_csv: 
+      success: 
+      tip_2: 
+    index:
+      add: Agregar
+      add_contact: 
+      add_label_empty: 
+      add_label_exists: 
+      add_label_failed: 
+      add_label_success: 
+      add_question_back: Haz clic en una pregunta para agregarla otra vez a la página
+      all: Todos
+      all_responses: Todos los contactos
+      archived: 
+      assign_people:
+        one: Asignar 1 persona
+        other: Asignar %{count} personas
+      assign_to: ! 'Asignar a:'
+      assigned_to: Asignado a
+      bulk_vcard_dialog_desc: 
+      bulk_vcard_dialog_title: 
+      bulk_vcard_download_message: 
+      bulk_vcard_email_message: 
+      clear_search_form: Borrar la búsqueda
+      completed: Completado
+      completed_contacts: 
+      contact_no_select_message: 
+      delete_confirm: Estás apunto de enviar un contacto a la lista de "No contactar". Si no es lo que quieres hacer, haz clic en cancelar.
+      delete_contact: Eliminar este contacto
+      delete_search_confirm: 
+      delete_this_search: 
+      destroy_confirm: Estás seguro que quieres eliminar este contacto? Si no es lo que quieres hacer, haz clic en cancelar.
+      dnc: No contactar
+      dnc_contacts: Todos los contactos - 'No contactar'
+      edit_true: 
+      export: Exportar
+      filter: Búsqueda
+      first_name: Nombre
+      friend_responses: Contactos que también son mis amigos en Facebook
+      friends: Amigos
+      hidden_questions: Preguntas Oculta
+      import_contacts: 
+      import_contacts2: 
+      import_contacts3: 
+      import_labels_checkbox: 
+      import_new_label: 
+      import_step3_body1: 
+      import_step3_body2: 
+      in_progress: Asignado
+      in_progress_responses: Todos los contactos - Asignados
+      last_name: Apellido
+      last_survey: 
+      leaders: Líderes
+      matching_seach: Coincide Criteria con tu búsqueda
+      my_friends: Mis amigos
+      no_activity: Sin Actividad
+      no_activity_responses: Todos los contactos - Sin Actividad
+      no_contacts: Lo sentimos, no hay contactos aquí.
+      no_name_message: 
+      none_checked: No has seleccionado ni un contacto para asignar.
+      phone_number: Número telefónico
+      reminder_email_body: ! 'Hola!
+
+
+        Solo para hacerte saber que se te ha dado nuevos contactos para que les des seguimiento.
+
+
+        Inicia sesión MissionHub en http://www.missionhub.com para accesar a tus contactos.
+
+
+        En Cristo,
+
+        %{name}'
+      reminder_email_subject: Un nuevo contacto ha llegado!
+      responses_assigned_to: Todos los contactos - Asignados a%{assigned_to}
+      save_this_search: 
+      save_this_search_placeholder: 
+      saved_searches: 
+      search_saved: 
+      send_reminder: Enviar Recordatorio
+      show_all: Show 'En Proceso' contactos
+      surveys: 
+      type_above_field: 
+      unassign_contact: Desasignar contacto
+      unassigned: Desasignado
+      unassigned_responses: Todos los contactos - Desasignados
+      vcard: 
+      which_org: Debes elegir con cual organización quieres tener seguimiento
+    leader:
+      archive_confirm: 
+      delete_confirm: ¿Estás seguro que quieres eliminar a%{person} como líder?
+      delete_confirm_with_instructions: 
+    leader_form:
+      start_typing: ! 'Comienza escribir un nombre para encontrar una persona para hacerle líder:'
+    leaders:
+      reminder_prompt: Alguno de tus líderes tienen contactos a los cuales no se les ha dado seguimiento! Hazle saber a tus líderes!
+      show_more: Mostrar más líderes
+    mailer:
+      bulk_vcard_email_content: 
+      bulk_vcard_email_subject: 
+      vcard_email_content: 
+      vcard_email_subject: 
+    mine:
+      all: 
+      comments: 
+      completed: Completado
+      detailed: 
+      email: Correo electrónico
+      in_progress: En Proceso
+      my_contacts: Mis Contactos
+      name: Nombre
+      phone: Número de Teléfono
+      year: Año
+    plain:
+      exit_survey: Salir de modo encuesta
+    role_assign_success: 
+    show:
+      add_comment: Agregar Comentario / Actualizar Estado
+      add_comments_here: Agregar comentarios aquí...
+      attach_rejoicable: Adjunto a Rejoicable
+      edit_contact_info: Editar Información de Contacto
+      email: ! 'Correo electrónico:'
+      facebook_profile: Perfil de Facebook
+      phone_number: ! 'Teléfono #:'
+      previous_comments: Comentarios Previos
+      send_contact_info: 
+      status: Estado
+      survey_answers: Respuestas de la Encuesta
+    statuses:
+      attempted_contact: Intento de contacto
+      completed: Completado
+      contacted: Contactado
+      do_not_contact: No Contactar
+      uncontacted: Quitar contacto
+    thanks:
+      done: Hecho
+      facebook: Haz cerrado sesión en Facebook.
+      message: Gracias por tu interés.
+    unassign: Desasignar
+    update_notice_content: 
+    update_notice_link: 
+    update_notice_link_url: 
+    update_notice_title: 
+    update_notice_toggle: 
+  dashboard:
+    close: 
+    learn_more: 
+    send_message_guide: 
+    send_message_video_guide: 
+  date:
+    abbr_day_names:
+    - Dom
+    - Lun
+    - Mar
+    - Mié
+    - Jue
+    - Vie
+    - Sáb
+    abbr_month_names:
+    - 
+    - Ene
+    - Feb
+    - Mar
+    - Abr
+    - May
+    - Jun
+    - Jul
+    - Ago
+    - Sep
+    - Oct
+    - Nov
+    - Dic
+    day_names:
+    - Domingo
+    - Lunes
+    - Martes
+    - Miércoles
+    - Jueves
+    - Viernes
+    - Sábado
+    formats:
+      default: ! '%Y-%m-%d'
+      long: ! '%B %d, %Y'
+      short: ! '%b %d'
+      time: ! '%l:%M %p'
+    month_names:
+    - 
+    - Enero
+    - Febrero
+    - Marzo
+    - Abril
+    - Mayo
+    - Junio
+    - Julio
+    - Agosto
+    - Septiembre
+    - Octubre
+    - Noviembre
+    - Diciembre
+    order:
+    - :año
+    - :mes
+    - :día
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: casi de 1 hora
+        other: casi %{count} horas
+      about_x_months:
+        one: casi 1 mes
+        other: casi %{count} meses
+      about_x_years:
+        one: casi 1 año
+        other: casi %{count} años
+      almost_x_years:
+        one: casi 1 año
+        other: casi %{count} años
+      half_a_minute: medio mínuto
+      less_than_x_minutes:
+        one: menos de un minuto
+        other: menos de %{count} minutos
+      less_than_x_seconds:
+        one: menos de un segundo
+        other: menos de %{count} segundos
+      over_x_years:
+        one: más de 1 año
+        other: más %{count} año
+      x_days:
+        one: 1 día
+        other: ! '%{count} días'
+      x_minutes:
+        one: 1 minuto
+        other: ! '%{count} minutos'
+      x_months:
+        one: 1 mes
+        other: ! '%{count} mes'
+      x_seconds:
+        one: 1 segundo
+        other: ! '%{count} segundos'
+    prompts:
+      day: Día
+      hour: Hora
+      minute: Minutos
+      month: Mes
+      second: Segundos
+      year: Año
+  errors:
+    format: ! '%{attribute} %{message}'
+    messages:
+      accepted: debe ser aceptada
+      blank: no puede estar en blanco
+      confirmation: no coincide con la confirmación
+      empty: no puede estar vacío
+      equal_to: debe ser igual a %{count}
+      even: debe ser aún
+      exclusion: está reservado
+      greater_than: debe ser mayor que %{count}
+      greater_than_or_equal_to: debe ser mayor que o igual a %{count}
+      inclusion: no está incluido en la lista
+      invalid: es invalido
+      less_than: debe ser menos de %{count}
+      less_than_or_equal_to: debe ser menos de o igual a %{count}
+      not_a_number: no es un número
+      not_an_integer: debe ser un entero
+      odd: debe ser impar
+      too_long: está muy largo (máximo de %{count} caracteres)
+      too_short: es demasiado corto (mínimo de %{count} caracteres)
+      wrong_length: es la longitud incorrecta (en caso de ser %{count} caracteres)
+  followup_comments:
+    index:
+      comment: 
+      comments_title: 
+      date_commented: 
+      email: 
+      filter: 
+      first_name: 
+      last_name: 
+      phone_number: 
+      status: 
+    search:
+      search_placeholder: 
+      search_title: 
+  general:
+    add: Agregar
+    add_a_leader: Agregar un líder
+    adding: Agregando...
+    address1: 
+    address2: 
+    adv_search: 
+    alert: 
+    archive: 
+    archived: 
+    assigned_to: 
+    autocomplete_name_hint: 
+    back: Atrás
+    both: Ambos
+    city: 
+    contacts_updated_from: 
+    country: 
+    dash: 
+    delete: Eliminar
+    edit: Editar
+    email: Correo electrónico
+    female: Femenino
+    first_name: Nombre
+    gender: Sexo
+    hide: Ocultar
+    home: 
+    keyword: Palabra Clave
+    last_name: Apellido
+    male: Masculino
+    match_found: 
+    message: 
+    mobile: 
+    phone: Teléfono
+    recipients: 
+    remove: Borrar
+    role: 
+    roles_applied: 
+    save: Guardar
+    search: Buscar
+    send_email: Enviar un correo
+    show: Mostrar
+    state: 
+    status: Estado
+    subject: Asunto
+    survey: 
+    survey_text_tip_html: Para iniciar tu encuesta, <strong>text %{keyword} de %{shortcode}.</strong>
+    survey_web_tip_html: Para la versión web de la encuesta, enviar a la gente a <strong>http://mhub.cc/c/%{keyword}/</strong>
+    to: A
+    transfer: 
+    unassign: 
+    work: 
+    zip: 
+  group_memberships:
+    form:
+      add_a_leader: Agregar un líder
+      add_a_member: Agregar un miembro
+      start_typing: ! 'Comienza a escribir un nombre para encontrar una persona para agregar a este grupo:'
+    search:
+      add_new_person_group: 
+      not_found: No pudimos encontrar a nadie en tu %{terminology} con ese nombre
+      show_all: muestra todo
+      showing_count: ! 'Mostrando %{length} de %{total}, sigue escribiendo o '
+      showing_count_complete: 
+  groups:
+    edit:
+      edit_group: Editar %{group}
+    form:
+      approve_join_tip: Si el grupo está listado como público, el marcar esta opción te solicitará aprobar cualquier solicitud para unirse al grupo.
+      back: Cancelar y regresar
+      list_publicly_tip: Si se selecciona esta opción, este grupo será visible al público general cuando hagan una búsqueda. (Búsqueda pública no existe aun, pero en algun momento la tendremos)
+      location_tip: Para tu ubicación, escribe una dirección en la que te gustaría trabajar si hiciste una búsqueda en un Mapa de Google (i.e. "1600 Pennsylvania Ave, Washington, DC 20006")
+      meets_on: En
+      meets_on_the: En el
+      of_month: del mes
+    index:
+      add: Agregar
+      add_a_label: Agregar una etiqueta
+      add_group: Agregar a grupo
+      assign_to_label:
+        one: 1 Grupo
+        other: ! '%{count} Grupo'
+      group_list: Lista de grupo para %{org}
+      group_name: Nombre del grupo
+      labeled_with: Etiquetar con "%{label}"
+      labels: Etiquetas
+      leaders: Líderes
+      members: Involucrado
+      new_label_prompt: Por favor, introduzca un nuevo nombre de etiqueta
+    label:
+      delete_confirm: ¿Estás seguro de querer eliminar '%{label}' etiqueta?
+    new:
+      new_group: Crear un nuevo grupo
+    person:
+      remove_confirm: ¿Estás seguro de querer eliminar %{name} de tu grupo?
+    see_all: Ver todo los grupos
+    show:
+      add_member: Agregar Miembro
+      confirm_delete_group: ¿Estás seguro de querer eliminar este grupo?
+      delete_group: Eliminar este grupo
+      edit: editar
+      edit_group: Editar este grupo
+      location: Ubicación
+      meets: Cumple
+      monthly: Mensualmente en el %{day}<br /> %{start_time} - %{end_time}
+      name: 
+      sporadically: Esporadicamente
+      weekly: Semanalmente en %{day}s<br/> %{start_time} - %{end_time}
+  helpers:
+    label:
+      group:
+        name: Nombre del Grupo
+        start_time: De
+      organization:
+        terminology: 
+      sms_keyword:
+        survey_id: 
+    submit:
+      update: 
+  imports:
+    new:
+      file_not_existing: 
+      wrong_file_format_error: 
+  keyword_request_mailer:
+    notify_user:
+      body_html: <h2>Tu solicitud para la palabra clave %{keyword} fue APROBADA</h2> <p> Para usar la palabra clave, dile a las personas que escriban%{keyword} a %{number}<br/> </p> <p> si tienes alguna pregunta, %{link}. </p>
+      link_text: envíanos un correo electrónico a support@missionhub.com
+    notify_user_of_denial:
+      body_html: ! '<p>Tu solicitud de palabra clave para la palabra clave ha sido denegada. Las palabras claves son denegadas por alguna de estas razones:</p>
+
+        <ul> <li>La palabra clave está muy larga. Te recomendamos que mantengas tu palabra clave lo más corta posible, preferiblemente abajo de los 10 caracteres.</li> <li>La palabra clave es demasiada genérica. La palabra clave debe ser específica para tu ubicación. Reservamos las palabras claves genéricas para una región o audiencia nacional. (e.g. osucru en vez de cru)</li> <li>Demasiadas palabras fueron solicitadas. En estos momentos, solo estamos permitiendo 2 palabras claves por ubicación para minimizar nuestro costo.</li> </ul>
+
+        <p>Si tienes una buena razón para una excepción, por favor envíanos una explicación a support@missionhub.com con la Solicitud de la Palabra Clave Denegada en el asunto y revisaremos tu situación.</p>
+
+        <p> Gracias,<br/> MissionHub Equipo de Soporte </p>'
+  keywords:
+    default_rejection_email: 
+    edit:
+      heading: 
+    flash:
+      created: 
+      pick_org: 
+      updated: 
+    form:
+      association: 
+      chartfield: 
+      explanation: 
+      initial_response: 
+      keyword: 
+      keyword_instruct: 
+      keyword_tip: 
+      keyword_why: 
+      post_survey_message: 
+      post_survey_why: 
+    index:
+      association: 
+      association_help: 
+  leader: Líder
+  leader_mailer:
+    added:
+      body_html: ! '<p>Hi %{name},</p>
+
+        <p>Te acabo de agregar como lider de%{org} en MissionHub</p>
+
+        <p>Visita %{link} para iniciar sesión. Por favor no compartas este enlace con nadie.</p>
+
+        <p>%{added_by}</p>'
+  leaders:
+    create:
+      no_user_account: 
+    form:
+      name_required: ! 'Se requiere llenar los campos de Nombre y correo para poder agregar un líder:'
+      notify: Notificarle a la persona que ha sido agregada y enviarle un enlace para que pueda iniciar sesión.
+    search:
+      not_in_system: Si la persona que buscas no está en el sistema, haga clic aquí para agregarle.
+  member: Miembro
+  monthly: Mensualmente
+  nav:
+    all_contacts: Todos los Contáctos
+    archive: 
+    back_to_dashboard: Regresar a mis Contactos
+    back_to_wizard: Ya he terminado. Regresar al asistente
+    cleanup: 
+    create_a_survey: 
+    dashboard: 
+    directory: Directorio
+    enter_survey_mode: Entrar en modo de encuesta
+    go_to: ir a
+    groups: Grupos
+    help: 
+    hide: Hide
+    keywords: Encuestas
+    login: Iniciar sesión
+    logout: Cerrar sesión
+    make_default: hacer por defecto
+    manage: 
+    my_comments: 
+    my_contacts: Mis Contáctos
+    my_profile: Mi Perfil
+    organizations: 
+    people: 
+    privacy: Política de Privacidad
+    profile: Mi Perfil
+    roles: Roles
+    settings: 
+    survey_mode_tip: El modo de encuesta permite que otras personas puedan llenar las encuestas en tu dispositivo. Les pedirá iniciar sesión con su cuenta de Facebook y se cerrará la sesión al completar la encuesta. La siguiente persona que entra a la encuesta se le pedirá iniciar sesión en Facebook, etc.. etc. Cuando haya terminado con la encuesta haga clic el el modo de salir de la encuesta, en la esquina superior izquierda y todos aquellos que completaron la encuesta aparecerán en Contactos sin Asignar
+    surveys: 
+    terms: Terminos y Condiciones
+    use_keyword: ! 'Utilizar palabra clave: %{keyword}'
+    view_details: Ver detalles
+  number:
+    currency:
+      format:
+        delimiter: ! ','
+        format: ! '%u%n'
+        precision: 2
+        separator: .
+        significant: falso
+        strip_insignificant_zeros: falso
+        unit: $
+    format:
+      delimiter: ! ','
+      precision: 3
+      separator: .
+      significant: falso
+      strip_insignificant_zeros: falso
+    human:
+      decimal_units:
+        format: ! '%n %u'
+        units:
+          billion: Billones
+          million: Millones
+          quadrillion: Cuatrillones
+          thousand: Miles
+          trillion: Trillones
+      format:
+        precision: 3
+        significant: verdadero
+        strip_insignificant_zeros: verdadero
+      storage_units:
+        format: ! '%n %u'
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+  org_membership:
+    confirm_delete: Estás seguro que quieres disociarte de %{org}
+  organization_mailer:
+    notify_user:
+      body_html: 
+      link_text: 
+    notify_user_of_denial:
+      body_html: 
+  organizational_roles:
+    cannot_delete_admin_error: 
+    cannot_delete_self_as_admin_error: 
+    copy_people_success: 
+    moving_people_success: 
+    moving_to_same_org: 
+  organizations:
+    add_org:
+      name_not_unique: 
+    add_org_from_crs:
+      admin_password: 
+      bad_password: 
+      bad_url: 
+      conference_is_importing: 
+      crs_import_instructions: 
+      example: 
+      url: 
+    cleanup:
+      alumni_inst: 
+      alumni_inst_path: 
+      annual_inst_1: 
+      annual_inst_2: 
+      archive_contacts_submit: 
+      archive_inst: 
+      archive_instructions: 
+      archive_notice: 
+      confirm_archive: 
+      confirm_remove_leaders: 
+      contact_tips: 
+      instructions: 
+      leader_tips: 
+      removal_notice: 
+      remove_leader_inst: 
+      remove_leaders_submit: 
+      title: 
+    edit:
+      back_to_orgs: 
+      danger_explanation: 
+      danger_zone: 
+      delete: 
+      delete_confirm: 
+      name_explain: 
+      show_sub_explain: 
+      term_explain: 
+      title: 
+    index:
+      add: 
+      add_a_sub_org: 
+      add_sub_org: 
+      crs_import_link: 
+      crs_import_tip: 
+    new:
+      signup: 
+      title: 
+      your_org: 
+    settings:
+      submit: 
+      title: 
+      year_in_school: 
+  people:
+    add_person:
+      add_person: 
+    advanced_search:
+      basic_search: 
+      clear_search_form: 
+      email: 
+      first_name: 
+      last_name: 
+      phone: 
+      role: 
+    all:
+      all_selected_html: 
+      all_selected_html_mine: 
+      page_selected_html: 
+      select_all_html: 
+      select_all_html_mine: 
+    assign:
+      keep_contact: 
+    bulk_archive:
+      archiving_people_success: 
+      cannot_archive_admin_error: 
+    bulk_delete:
+      cannot_delete_admin_error: 
+      deleting_people_success: 
+    create:
+      email_error: 
+      email_taken: 
+      error_creating_admin_no_valid_email: 
+      error_creating_leader_no_valid_email: 
+      firstname_error: 
+      phone_number_error: 
+    edit:
+      editing: Editar
+      fb_name_search_dialog_desc: 
+      fb_name_search_dialog_no_more: 
+      fb_name_search_dialog_title: 
+      fb_profile_link: 
+      more_facebook_matches: 
+      no_results: 
+    form:
+      facebook_url: 
+      facebook_url_tip: 
+    index:
+      add_person: 
+      apply_roles: Aplicar Roles
+      archived_directory_title: 
+      archived_label: 
+      cannot_archive_admin_error: 
+      cannot_delete_admin_error: 
+      directory_title: Directorio - %{org}
+      displaying: Mostrando %{start} - %{finish} de %{total}
+      email: Correo
+      error_message: 
+      error_message_update_admin_without_person: 
+      error_message_update_leader_without_person: 
+      export: Exportar esta lista
+      filter: 
+      gender: Sexo
+      group_comment: 
+      include_archived: 
+      include_archived_tips: 
+      labels: Etiquetas
+      manage_roles: Gestión de Roles
+      merge_contacts: 
+      merge_people: 
+      no_people: Lo siento, no hay gente involucrada aquí.
+      phone: Telefono
+      send_email: Enviar Correo
+      send_sms: Enviar texto
+      statistics: 
+      transfer_org: 
+      vcard: 
+      year_in_school: Año que cursa
+    involvement:
+      conferences: 
+      summer_projects: 
+    left_sidebar:
+      edit_profile: 
+      involvement: 
+      profile: 
+      survey_answers: 
+    person_form:
+      add_email_address: 
+      add_phone_number: 
+      preferred_name: 
+    search:
+      advanced_search: 
+      clear_search_form: 
+      search_placeholder: 
+      search_title: 
+    show:
+      add_comment: 
+      add_comments_here: 
+      assigned_to: 
+      attach_rejoicable: 
+      edit_profile: Editar Perfil
+      email: 
+      facebook_profile: 
+      google_map: 
+      label_button: 
+      persons_friends: 
+      phone_number: 
+      previous_comments: 
+      send_contact_info: 
+      send_vcard_desc: 
+      status: 
+      updated_time_difference: 
+  questions:
+    archived_help: 
+    create:
+      notice: 
+    form:
+      checkboxes: 
+      dropdown: 
+      multiple_choice: 
+      short_answer: 
+      web_only: 
+      what_question_type: 
+    predefined_help: 
+    your_questions_help: 
+  rejoicables:
+    gospel_presentation: Presentación del Evangelio
+    prayed_to_receive: Oró para recibir a Cristo
+    spiritual_conversation: Conversación Espiritual
+  roles:
+    admin: Administrador
+    alumni: graduados
+    contact: Contacto
+    involved: Involucrado
+    leader: Líder
+    views:
+      create: Crear
+      create_role: Crear un nuevo rol
+      delete_role: Eliminar un rol
+      edit_role: Editar un rol
+      i18n: i18n
+      name: Nombre
+      organizational_roles: Roles de la organización
+      system_roles: Roles del sistema
+      update: Actualizar
+  sessions:
+    destroy:
+      signed_out: Has cerrado tu sesión.
+    new:
+      back: Atrás al Inicio
+      dont_like_facebook: ¿No te gusta el Facebook?
+      instructions: Instrucciones
+      login: Iniciar
+      login_paragraph_html: Para comenzar, necesitarás tener una cuenta de Facebook. <br/> Haz clic en el enlace de iniciar que está a la izquierda y <strong>permite</strong> MHub para acceder tu información. <br/> Serás dirigido con el asistente si es tu primera vez accesando MissionHub.
+      login_paragraph_mhub: Para comenzar la encuesta, por favor inicia sesión con Facebook para saber quien realmente eres. Esto nos ayudará a ahorrarnos tiempo al completar la encuesta.
+      login_with_facebook: Por favor inicia sesión en Facebook para comenzar
+      no_facebook: ¿No te gusta el Facebook? Haz clic aquí para saltar el iniciar en Facebook
+      skip_facebook: Haz clic para saltar el iniciar en Facebook
+      start_survey: Para comenzar la encuesta, por favor inicia sesión con Facebook para saber quien realmente eres. Esto nos ayudará a ahorrarnos tiempo al completar la encuesta.
+      waiting_for_logout: 
+      welcome: Bienvenido!
+  sms:
+    email_invalid_msg: 
+    email_should_be_unique_msg: 
+    keyword_inactive: La palabra clave que acabas de escribir no está activa. Por favor verifique su ortografía e inténtelo de nuevo.
+    no_survey: 
+  sms_keywords:
+    default_rejection_email: Tu solicitud de palabra clave ha sido denegada
+    edit:
+      heading: Editando Palabra Clave
+      keywords: Palabra Clave
+      to_begin_survey_html: Para comenzar tu encuesta, <strong>text %{keyword} a %{number}.</strong>
+    flash:
+      created: La solicitud de la Palabra Clave fue enviada correctamente.
+      pick_org: Por favor elige con que organización te asocias
+      updated: La Palabra Clave fue actualizada correctamente.
+    form:
+      associated_survey_tip: 
+      explanation: Por favor explica para que va utilizar esta palabra clave.
+      initial_response: ¿Qué respuesta debemos devolver a las personas cuando nos escriben? <br/>Si quieres que la persona complete la encuesta, la respuesta DEBE incluir {{ link }}<br/>(exactamente así, no cambies esa parte de la respuesta.)
+      initial_response_default: 
+      keyword: Palabra Clave
+      keyword_instruct: ! '- Una palabra clave es requerida para coleccionar contactos y encuestas vía texto, web y teléfono inteligente. <br/> - ''FSUCRU'' es la palabra clave ''Escribe FSUCRU para 85005''.<br/>- Utiliza por lo menos 3 letras para tu palabra clave.'
+      keyword_locked: La palabra clave no puede ser cambiada. Puedes eliminar esta y crear una nueva si es necesario.
+      keyword_tip: Esto es lo que las personas escribirán en su teléfono.
+      keyword_why: Esto para nuestro uso exclusivo. La descripción puede incluir el uso de palabras como 'reunión semanal', 'eventos de alcance', y otros usos que la palabra clave tendrá.
+      note: ! 'Note: El proceso de la solicitud puede tomar hasta 24 horas.'
+      post_survey_why: cuando alguien te envía un mensaje de texto, el mensaje será enviado ellos y '{{link}}' será sustituida por una dirección de sitio web que les llevará a una encuesta en línea para que la completen. Si no tienen Internet, contestando 'yo' les enviará a todas las preguntas a través de mensaje de texto interactivo.<br/><br/>Si desea incluir un enlace a su sitio, no se incluyen aquí - incluirla en el mensaje posterior a la encuesta (paso 3 en el proceso de la encuesta Crear)
+    index:
+      association: Asociar contactos con
+      create_survey_first: 
+      delete_confirm: 
+      delete_tip: 
+      request_keyword: Solicita una Palabra
+    keyword_deleted: 
+    new:
+      choose_keyword_explanation_html: ! 'Escoger una palabra clave para tu comunidad o evento te permite que las personas completen las encuestas a través de la web, texto interactivo, y celulares inteligentes.  <strong>Ellos escribirán tu palabra clave al número %{number}</strong> y tu encuesta de preguntas aparecerán en el dispositivo.  Note: El proceso de adquirir una nueva palabra clave requiere una intervención manual. Una vez que solicitas tu palabra clave, espera hasta 24 horas para ser notificado a través de tu correo electrónico de que tu palabra clave fue aprobada y está lista para su uso.'
+      predefined_help: 
+      your_questions_help: 
+    show:
+      explanation: ! 'Explicación:'
+      keyword: ! 'Palabra clave:'
+      status: ! 'Estado:'
+  sporadically: Esporádicamente
+  support:
+    array:
+      last_word_connector: ! ', y '
+      two_words_connector: ! ' y '
+      words_connector: ! ', '
+    select:
+      prompt: Por favor seleccionar
+  survey:
+    drop_down_field:
+      choose_one: Elige una
+  survey_mailer:
+    notify:
+      content: 
+  survey_responses:
+    edit:
+      multiple_answers: 
+      title: 
+    facebook:
+      facebook_login: 
+      pick_keyword: 
+    form:
+      frozen: 
+    new:
+      greeting_no_name: ¡Hola!
+      greeting_with_name: ¡Hola %{name}!
+    show:
+      edit_answers: 
+      no_answers: 
+      title: 
+    thanks:
+      thanks: ¡Gracias!
+  surveys:
+    edit:
+      edit_survey: 
+    form:
+      association: 
+      background_color: 
+      css: 
+      css_file: 
+      customize_look: 
+      default_login_option: 
+      fb_only_login_option: 
+      freeze: 
+      login_option: 
+      login_paragraph: 
+      login_paragraph_tip: 
+      logo: 
+      no_fb_login_option: 
+      post_survey_message: 
+      post_survey_placeholder: 
+      skip_fb_login_option: 
+      survey_associated_with: 
+      terminology: 
+      text_color: 
+      title: 
+      title_placeholder: 
+      title_tip: 
+    index:
+      title: 
+    index_admin:
+      association_help: 
+      confirm_delete: 
+      delete_survey: 
+      edit_survey: 
+      link: 
+      new: 
+    new:
+      choose_keyword_explanation_html: 
+      create_a_survey: 
+    questions:
+      advanced_options:
+        autoassign_group_label: 
+        autoassign_guide: 
+        autoassign_keywords_label: 
+        autonotify_guide: 
+        autonotify_keywords_label: 
+        autonotify_leader_label: 
+        hidden: 
+        leaders: 
+        trigger_words: 
+        web_only: 
+      create:
+        duplicate_error: 
+        notice: 
+      edit:
+        leader_invalid_email: 
+        leader_invalid_email_with_name: 
+      form:
+        checkboxes: 
+        dropdown: 
+        hide_advanced_options: 
+        hide_assignment_options: 
+        hide_notification_options: 
+        multiple_choice: 
+        short_answer: 
+        show_advanced_options: 
+        show_assignment_options: 
+        show_notification_options: 
+        text_message_length: 
+        text_message_preview: 
+        toggle_advanced_options: 
+        web_only: 
+        what_question_type: 
+      index:
+        add_prev_question: 
+        add_question: 
+        forced_tip: 
+        manage: 
+        note: 
+        predefined: 
+        previously_used: 
+        your_questions: 
+      multiple_choice_form:
+        list_choices: 
+      question:
+        confirm_delete: 
+        delete_tip: 
+      short_answer_form:
+        column_header: 
+        column_header_hint: 
+        question: 
+  time:
+    am: am
+    formats:
+      date: 
+      default: ! '%m/%d/%Y %H:%M:%S'
+      long: ! '%B %d, %Y %H:%M'
+      short: ! '%d %b %H:%M'
+      time_only: ! '%l:%M %p'
+    pm: pm
+  views:
+    pagination:
+      first: ! '&laquo; Primero'
+      last: Último &raquo;
+      next: Siguiente &rsaquo;
+      previous: ! '&lsaquo; Anterior'
+      truncate: ! '...'
+  weekly: Semanalmente
+  welcome:
+    home:
+      delete: Borrar
+      delete_keyword_confirm: Estás seguro que quieres borrar esta palabra clave?
+      edit_keyword: Editar Palabra Clave
+      edit_orgs: Editar tus involucramiento en la Organización.
+      follow_up:
+        one: 1 Persona para darle seguimiento
+        other: ! '%{count} Personas para darle seguimiento'
+      keywords: Encuesta
+      manage_questions: Administrar Preguntas de Encuesta
+      no_mobile: La versión de esta página para móvil aun no está construida. Lo sentimos.
+      surveys: 
+      title_top: Bienvenido a MissionHub!
+      your_orgs: Involucramiento de tu Organización
+    index:
+      get_details_html: Obtener detalles& <a href="/welcome/tour" class="learnmore">Aprender más</a> or %{link}
+      get_started: Comenzar
+      go_home: Ir a mis contactos
+      headline_html: Un sistema de seguimiento <span class="babyblue">en línea</span> con tu audiencia en mente.
+      learn_more: 
+      request_key: Haz clic para pedir una palabra clave
+      request_key_help: La palabra clave es el nombre de la encuesta y también lo que la persona va escribir para llenar su encuesta. Por ejemplo, puedes decir, 'Escribe UFCRU al número 85005.' UFCRU es la palabra clave.
+      subheadline_html: Escribir a estudiante para conectar. Tu seguimiento potencial desde la web o un teléfono inteligente.
+      title_top: Bienvenido a MissionHub!
+      title_top_mobile: Encuesta
+      video_headline_html: Tiene preguntas?
+      video_subheadline_html: Podemos ayudarle!
+    tutorials:
+      get_started: 
+      video_headline_html: 
+      video_subheadline_html: 
+    wizard:
+      back: Back
+      create_a_survey: 
+      create_survey: Crear una encuesta
+      create_survey_link: Haz Clic aquí para crear tu encuesta.
+      designate_leaders: Designar líder
+      keyword_paragraph: Una potente característica de MissionHub es la capacidad de coleccionar contactos a través de los mensajes de texto. Para que esto funcione, debes elegir una palabra clave que sea única para tu ministerio y que haga que las personas envíen mensajes de texto. Con una palabra clave, podrás decir ‚ÄúText <strong>tu palabra clave</strong>  al 85005‚Äù a tu reunión o evento siguiente.
+      leaders_header: Dar acceso a otros líderes
+      leaders_paragraph: Esta parte es opcional. Hay probabilidades de que hayan otras personas con las que trabajas a quienes te gustaría darles la capacidad de administrar la palabra clave que configuraste la palabra clave que al igual que los contactos que obtienes de las personas que respondieron a tu encuesta. Este paso te permitirá agregar esas personas. Excepto que no lo hemos programado aun.
+      next: Next
+      not_found_paragraph: En estos momentos MissionHub está siendo probado con el Ministerio Estudiantil de los Estados Unidos. Si no eres parte del Ministerio Estudiantil en Estados Unidos, no te preocupes! Tenemos el plan de lanzarlo pronto a una audiencia mayor. Si tu eres parte del Ministerio Estudiantil en Estados Unidos y estás viendo este mensaje, envíanos un correo a support@missionhub.com y te ayudaremos.
+      request_a_keyword: 
+      request_keyword: Solicita una clave
+      request_keyword_link: Haz Clic aquí para solicitar una palabra clave. Te regresaremos a este asistente cuando termines.
+      skip_step: Saltar este paso
+      survey_paragraph: Ahora que has solicitado una palabra clave, vas a querer crear un par de preguntas para hacerle a las personas. Piensa a lo largo de las líneas en una encuesta corta o una tarjeta de contacto básico.
+      verify_identity: Verifica tu identidad
+      verify_paragraph: ! 'Si ya tienes una cuenta relacionada de acceso de CCC, por favor inicie sesión para vincular su cuenta. Solo necesitarás hacer esto una vez. ADVERTENCIA: Si haz iniciado sesión en MissionHub utilizando la cuenta de Facebook de alguien más, Cierra la sesión! Al hacer clic en verificar combinará su información con la de ellos, creando un gran enredo.'
+      verify_with_relay: Verificar con Relé
+      welcome: Bienvenido
+      welcome_paragraph: Bienvenido MissionHub!<br><br> Este asistente de configuración te ayudará a empezar y crear una palabra clave, que es una parte esencial para obtener contactos en el sistema.

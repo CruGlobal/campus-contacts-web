@@ -1,7 +1,6 @@
 class Role < ActiveRecord::Base
   has_many :people, through: :organizational_roles
-  has_many :organizational_roles, inverse_of: :role
-  belongs_to :organization, inverse_of: :roles
+  has_many :organizational_roles, inverse_of: :role, dependent: :destroy
   belongs_to :organization, inverse_of: :roles
   scope :default, where(organization_id: 0)
 	scope :leaders, where(i18n: %w[leader admin])
@@ -20,7 +19,7 @@ class Role < ActiveRecord::Base
     :conditions => "name NOT IN #{self.default_roles_for_field_string(self::DEFAULT_ROLES)}",
     :order => "roles.name ASC"
   } }
-  
+
   def self.leader_ids
     @leader_ids ||= self.leaders.collect(&:id)
   end
@@ -28,27 +27,27 @@ class Role < ActiveRecord::Base
   def self.involved_ids
     @involved_ids ||= self.where(i18n: %w[leader admin involved]).pluck(:id)
   end
-  
+
   def self.admin
     @admin ||= Role.find_or_create_by_i18n_and_organization_id('admin', 0)
   end
-  
+
   def self.leader
     @leader ||= Role.find_or_create_by_i18n_and_organization_id('leader', 0)
   end
-  
+
   def self.contact
     @contact ||= Role.find_or_create_by_i18n_and_organization_id('contact', 0)
   end
-  
+
   def self.involved
     @involved ||= Role.find_or_create_by_i18n_and_organization_id('involved', 0)
   end
-  
+
   def self.alumni
     @alumni ||= Role.find_or_create_by_i18n_and_organization_id('alumni', 0)
   end
-  
+
   def to_s
     organization_id == 0 ? I18n.t("roles.#{i18n}") : name
   end
@@ -68,12 +67,12 @@ class Role < ActiveRecord::Base
       r = "(roles.i18n," + r
       r
     end
-  
+
   ADMIN_ID = admin.id
   LEADER_ID = leader.id
   CONTACT_ID = contact.id
   INVOLVED_ID = involved.id
 
   DEFAULT_ROLES = ["admin", "leader", "involved", "alumni", "contact"] # in DSC ORDER by SUPERIORITY
-  
+
 end

@@ -1,8 +1,8 @@
 <div id="global">
-  
+
   <%= link_to("", "/", id: "logo") %>
-  
-  <div class="gmdropsplash">
+
+  <div class="gmdrop">
     <ul class="sf-menu mh-global">
       <% if session[:old_user_id].present? %>
         <li><%= link_to('Exit SU Mode', '?exit=true') %></li>
@@ -27,7 +27,7 @@
           <li>
             <%= link_to(current_organization, '/contacts') %>
             <% if current_person.organization_objects.length > 1 %>
-              <% cache(['org_nav', current_person.id]) do %>
+              <% cache(['org_nav', current_person]) do %>
                 <ul class="under_tree">
                   <%= new_render_org_tree(current_person.organization_tree) %>
                 </ul>
@@ -37,8 +37,8 @@
         <% end %>
         <li><%= link_to(t('nav.my_profile', name: current_user.to_s), person_path(current_person)) %></li>
         <li>
-          <%= link_to(t('nav.logout'), '#', onclick: "$.mh.logout()")  %> 
-        </li>   
+          <%= link_to(t('nav.logout'), '#', onclick: "$.mh.logout()")  %>
+        </li>
       <% else %>
         <% unless params[:controller] == 'sessions' %>
           <li>
@@ -61,6 +61,6 @@
       <% end %>
     </ul>
   </div>
-  
-  
+
+
 </div>

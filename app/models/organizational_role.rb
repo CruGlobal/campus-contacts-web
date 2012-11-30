@@ -1,6 +1,6 @@
 class OrganizationalRole < ActiveRecord::Base
   FOLLOWUP_STATUSES = ['uncontacted','attempted_contact','contacted','do_not_contact','completed']
-  belongs_to :person
+  belongs_to :person, :touch => true
   belongs_to :role
   belongs_to :organization
   scope :leaders, where(role_id: Role.leader_ids)
@@ -26,7 +26,7 @@ class OrganizationalRole < ActiveRecord::Base
   #def clear_person_org_cache
     #person.clear_org_cache if person
   #end
-  
+
   def merge(other)
     # We can have multiple roles, but if we're a contact that should be the only role
     OrganizationalRole.transaction do
@@ -46,7 +46,7 @@ class OrganizationalRole < ActiveRecord::Base
       end
     end
   end
-  
+
   def role_is_leader_or_admin
     if (role_id == Role::LEADER_ID || role_id == Role::ADMIN_ID) && added_by_id
       true
@@ -76,48 +76,48 @@ class OrganizationalRole < ActiveRecord::Base
       LeaderMailer.added(person, added_by, self.organization, token).deliver
     end
   end
-  
+
   def archive
     update_attributes({:archive_date => Date.today})
   end
-  
+
   def delete
     update_attributes({:deleted => true, :end_date => Date.today})
   end
-  
+
   def unarchive
     update_attributes({:archive_date => nil})
   end
-  
+
   class InvalidPersonAttributesError < StandardError
-  
+
   end
-  
+
   class CannotDestroyRoleError < StandardError
-    
+
   end
-  
+
   def check_if_only_remaining_admin_role_in_a_root_org
     raise CannotDestroyRoleError if role_id == Role::ADMIN_ID && organization.is_root_and_has_only_one_admin?
   end
-  
+
   def check_if_admin_is_destroying_own_admin_role(destroyer)
     raise CannotDestroyRoleError if role_id == Role::ADMIN_ID && destroyer && person_id == destroyer.id
   end
 
   private
-  
+
     def set_start_date
       self.start_date = Date.today
       true
     end
-    
+
     def set_end_date_if_deleted
       if changed.include?('deleted') && deleted?
         update_attribute(:end_date, Date.today)
       end
     end
-    
+
     def set_contact_uncontacted
       if role_id == Role::CONTACT_ID
         self.followup_status = OrganizationalRole::FOLLOWUP_STATUSES.first

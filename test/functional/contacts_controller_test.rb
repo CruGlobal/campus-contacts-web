@@ -362,13 +362,15 @@ class ContactsControllerTest < ActionController::TestCase
       assert_response :success, response
       res = ActiveSupport::JSON.decode(response.body)
       assert_equal res[0]['id'], @person1.id
-      assert_equal res[0]['label'], "#{@person1.name} (#{@person1.email})"
+      assert_equal res[0]['label'], @person1.name
+      assert_equal res[0]['email'], @person1.email
 
       xhr :get, :search_by_name_and_email, { :term => "ndc" } #should be able to find by an email address wildcard
       assert_response :success, response
       res = ActiveSupport::JSON.decode(response.body)
       assert_equal res[0]['id'], @person1.id
-      assert_equal res[0]['label'], "#{@person1.name} (#{@person1.email})"
+      assert_equal res[0]['label'], @person1.name
+      assert_equal res[0]['email'], @person1.email
 
       xhr :get, :search_by_name_and_email, { :term => "hnny" } #should be able to find contacts
       assert_response :success, response
@@ -379,7 +381,8 @@ class ContactsControllerTest < ActionController::TestCase
       assert_response :success, response
       res = ActiveSupport::JSON.decode(response.body)
       assert_equal res[0]['id'], @person4.id
-      assert_equal res[0]['label'], "#{@person4.name} (#{@person4.email})"
+      assert_equal res[0]['label'], @person4.name
+      assert_equal res[0]['email'], @person4.email
     end
 
     should "strip trailing whitespaces of search terms" do
@@ -387,7 +390,8 @@ class ContactsControllerTest < ActionController::TestCase
       assert_response :success, response
       res = ActiveSupport::JSON.decode(response.body)
       assert_equal res[0]['id'], @person1.id
-      assert_equal res[0]['label'], "#{@person1.name} (#{@person1.email})"
+      assert_equal res[0]['label'], @person1.name
+      assert_equal res[0]['email'], @person1.email
     end
 
   end

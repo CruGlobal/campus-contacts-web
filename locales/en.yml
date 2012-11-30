@@ -1,0 +1,1084 @@
+en:
+  activerecord:
+    errors:
+      full_messages:
+        format: ! '%{attribute} %{message}'
+      messages:
+        accepted: must be accepted
+        blank: can't be blank
+        confirmation: doesn't match confirmation
+        empty: can't be empty
+        equal_to: must be equal to %{count}
+        even: must be even
+        exclusion: is reserved
+        greater_than: must be greater than %{count}
+        greater_than_or_equal_to: must be greater than or equal to %{count}
+        inclusion: is not included in the list
+        invalid: is invalid
+        less_than: must be less than %{count}
+        less_than_or_equal_to: must be less than or equal to %{count}
+        not_a_number: is not a number
+        not_an_integer: must be an integer
+        odd: must be odd
+        record_invalid: ! 'Validation failed: %{errors}'
+        taken: has already been taken
+        too_long: is too long (maximum is %{count} characters)
+        too_short: is too short (minimum is %{count} characters)
+        wrong_length: is the wrong length (should be %{count} characters)
+      template:
+        body: ! 'There were problems with the following fields:'
+        header:
+          one: 1 error prohibited this %{model} from being saved
+          other: ! '%{count} errors prohibited this %{model} from being saved'
+    models:
+      sms_keyword: Keyword
+  application:
+    add_contact:
+      add_contact: Add a contact to %{org}
+      save_and_add: Save and add another
+      save_and_close: Save and close
+      survey_mode_instructions: If the person you are adding is standing next to you, click "Enter Survey Mode" from the top right corner of your screen.
+      title_bio: Bio
+      title_label: Labels
+      title_optional: (Optional)
+      title_surveys: Survey
+    assign:
+      assign_explanation: ! 'You can assign a contact using any of the options below:'
+      keep_contact: Check the box to leave a copy of the contact in the org.
+      me: Me
+      type_to_find_group: Type to find a group then click on the group's name
+      type_to_find_label: Type to find a label then click on the label's name
+      type_to_find_leader: Type to find a leader then click on the leader's name
+      type_to_find_org: Type to find a %{terminology} then click on the %{terminology}'s name
+    messages:
+      question_too_long: ! 'WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages.'
+  batch:
+    new_person_message: ! 'As the Admin of %{org_name} in <a href=''https://www.missionhub.com'' target=''_blank''>MissionHub</a>, there are new contacts in your organization. Please login to missionhub.com as soon as possible to followup the contacts. Below is the list of %{contacts_count} new contacts:'
+    person_transfer_message: ! 'As the Admin of %{org_name} in <a href=''https://www.missionhub.com'' target=''_blank''>MissionHub</a>, you have been sent new contacts. Please login to missionhub.com as soon as possible to followup the contacts. There may be more information about the contacts in the comment section of their individual profile. If not, you may want to contact the senders at their email address. Below is the list of %{contacts_count} contacts sent:'
+  bulk_email: Bulk Email
+  bulk_sms: Bulk Text
+  contacts:
+    add_contact: Add Contact
+    assign: Assign
+    create:
+      email_taken: Oops! This email address is already being used. Please email support@missionhub.com with the EMAIL address and NAME of the person whom you want to add the email to.
+      success: Succesfully updated %{name}'s profile
+    edit:
+      additional_information: Additional Information
+      back: Back to profile
+      basic_information: Basic Information
+      cancel: Cancel and go back to profile
+    form:
+      email: Email Address
+      first_name: First Name
+      last_name: Last Name
+      phone_number: Phone Number
+    import_contacts:
+      blank_header: One of the CSV headers is blank
+      cause_1: ! ' First name is blank at row'
+      cause_2: ! ' Invalid phone number at row'
+      cause_3: ! ' Invalid email address at row'
+      download_sample_csv: Download sample CSV file
+      download_template_csv: Download template CSV file
+      duplicate_header_match: At least two of the headers has the same selected person attribute/survey question
+      error: ! 'CSV Import unsuccessful and the cause is:'
+      instruction_1: Follow the order of the columns as illustrated above
+      instruction_2: First name should not be missing
+      instruction_3: Phone numbers and email addresses should have the right format
+      instruction_4: Headers should be present
+      instructions_label: Instructions
+      present_firstname: First name is required on import
+      select_csv: ! 'Select a CSV File :'
+      success: CSV Import Successful, new records added to database!
+      tip_2: ! 'In your first row list the headings like it shows here: <strong>FIRST NAME, LAST NAME, STATUS, GENDER, EMAIL, PHONE NUMBER, ADDRESS 1, ADDRESS 2, CITY, STATE, COUNTRY, ZIP</strong>'
+    index:
+      add: Add
+      add_contact: Add a Contact
+      add_label_empty: Cannot save blank label. Please try again.
+      add_label_exists: Label is already in the list!
+      add_label_failed: Failed to save label. Please try again.
+      add_label_success: New label successfully added!
+      add_question_back: Click on a question to add it back to the page
+      all: All
+      all_responses: All Contacts
+      archived: Archived
+      assign_people:
+        one: Assign 1 person
+        other: Assign %{count} people
+      assign_to: ! 'Assign To:'
+      assigned_to: Assigned To
+      bulk_vcard_dialog_desc: We can send the contacts information to you via email or you can download it all in one zip package
+      bulk_vcard_dialog_title: Bulk Vcard Options
+      bulk_vcard_download_message: A .vcf file now containing all the contact information you requested is being downloaded.
+      bulk_vcard_email_message: ! 'Contacts information has been sent to '
+      clear_search_form: Clear Search Form
+      completed: Completed
+      completed_contacts: All Contacts - Completed
+      contact_no_select_message: Please select atleast one contact.
+      delete_confirm: You are about to send this contact to the "Do Not Contact" list. If that's not what you meant to do, click cancel.
+      delete_contact: Delete this contact
+      delete_search_confirm: Are you sure you want to remove this search?
+      delete_this_search: Delete this search
+      destroy_confirm: Are you sure you want to delete this contact? If that's not what you meant to do, click cancel.
+      dnc: Do Not Contact
+      dnc_contacts: All Contacts - 'Do Not Contact'
+      edit_true: ! '&edit=true'
+      export: Export
+      filter: Search
+      first_name: First Name
+      friend_responses: Contacts who are also my friends on Facebook
+      friends: Friends
+      hidden_questions: Hidden Questions
+      import_contacts: Import Contacts
+      import_contacts2: Setup Your CSV Headers
+      import_contacts3: Label New Contacts
+      import_labels_checkbox: I would like to apply labels to my new contacts.
+      import_new_label: Add New Label
+      import_step3_body1: You are almost ready to upload %{count} new contacts.
+      import_step3_body2: Just select any labels from the list below that you would like to apply to these new contacts, and then click Import Now.
+      in_progress: Assigned
+      in_progress_responses: All Contacts - Assigned
+      last_name: Last Name
+      last_survey: Last Survey
+      leaders: Leaders
+      matching_seach: Matching the criteria you searched for
+      my_friends: My Friends
+      no_activity: No Activity
+      no_activity_responses: All Contacts - No Activity
+      no_contacts: Sorry, there are no contacts here.
+      no_name_message: At a minimum you need to provide a first name.
+      none_checked: You didn't select any contacts to assign.
+      phone_number: Phone Number
+      reminder_email_body: ! 'Hey!
+
+
+        Just letting you know that you have been given new contacts to follow-up.
+
+
+        Login to MissionHub at http://www.missionhub.com to access your contacts.
+
+
+        In Christ,
+
+        %{name}'
+      reminder_email_subject: New contacts have arrived!
+      responses_assigned_to: All Contacts - Assigned to %{assigned_to}
+      save_this_search: Save this search
+      save_this_search_placeholder: Name this search
+      saved_searches: Saved Searches
+      search_saved: This search has been saved
+      send_reminder: Send Reminder
+      show_all: Show 'In Progress' contacts
+      surveys: Surveys
+      type_above_field: Start typing in the field above to search for somewhere to transfer these people to.
+      unassign_contact: Unassign contact
+      unassigned: Unassigned
+      unassigned_responses: All Contacts - Unassigned
+      vcard: Vcard
+      which_org: You need to choose which organization you want to do folow-up from
+    leader:
+      archive_confirm: ! '%{person} will be moved to archives.'
+      delete_confirm: Are you sure you want to remove %{person} as a leader?
+      delete_confirm_with_instructions: If you want to retain %{person} in your organization you must first assign them another role or label, click CANCEL, go to the Directory screen and 'Add Label' such as involved or alumni, then remove them as a leader. If you want to remove them completely from your organization, click OK.
+    leader_form:
+      start_typing: ! 'Start typing a name to find a person to make a leader:'
+    leaders:
+      reminder_prompt: Some of your leaders have contacts that haven't been followed up! Let your leaders know!
+      show_more: Show More Leaders
+    mailer:
+      bulk_vcard_email_content: Attached to this email is a vcard containing the contacts you selected
+      bulk_vcard_email_subject: Your request for contact information
+      vcard_email_content: Attached in this email is a vcard containing the contact you selected
+      vcard_email_subject: Contact information
+    mine:
+      all: All
+      comments: My Comments
+      completed: Completed
+      detailed: Detailed
+      email: Email
+      in_progress: In Progress
+      my_contacts: My Contacts
+      name: Name
+      phone: Phone Number
+      year: Year
+    plain:
+      exit_survey: Exit survey mode
+    role_assign_success: Successfully assigned labels.
+    show:
+      add_comment: Add Comment / Update Status
+      add_comments_here: Add comments here...
+      attach_rejoicable: Attach a Rejoicable
+      edit_contact_info: Edit Contact Info
+      email: Email
+      facebook_profile: Facebook Profile
+      phone_number: ! 'Phone #'
+      previous_comments: Previous Comments
+      send_contact_info: Send Contact Info
+      status: Status
+      survey_answers: Survey Answers
+    statuses:
+      attempted_contact: Attempted Contact
+      completed: Completed
+      contacted: Contacted
+      do_not_contact: Do Not Contact
+      uncontacted: Uncontacted
+    thanks:
+      done: Done
+      facebook: You have been logged out of Facebook.
+      message: Thank you for your interest.
+    unassign: Unassign
+    update_notice_content: We’re rolling out changes to make using MissionHub even easier. With all of the Directory features now accessible via All Contacts, you can easily manage your contacts from one page.
+    update_notice_link: Learn about the new look on our blog.
+    update_notice_link_url: http://blog.missionhub.com/2012/10/16/new-all-contacts/
+    update_notice_title: New All Contacts Options
+    update_notice_toggle: Do not show this notice again
+  dashboard:
+    close: Close
+    learn_more: Learn More
+    send_message_guide: To send a text or email, click the box next to the contacts you'd like to message. You can also use the search function to find contacts quickly. <br/><br/>After selecting the contacts, click the "Send" button to compose your message.
+    send_message_video_guide: Click on the video below see how to do this.
+  date:
+    abbr_day_names:
+    - Sun
+    - Mon
+    - Tue
+    - Wed
+    - Thu
+    - Fri
+    - Sat
+    abbr_month_names:
+    - 
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - May
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Oct
+    - Nov
+    - Dec
+    day_names:
+    - Sunday
+    - Monday
+    - Tuesday
+    - Wednesday
+    - Thursday
+    - Friday
+    - Saturday
+    formats:
+      default: ! '%Y-%m-%d'
+      long: ! '%B %d, %Y'
+      short: ! '%b %d'
+      time: ! '%l:%M %p'
+    month_names:
+    - 
+    - January
+    - February
+    - March
+    - April
+    - May
+    - June
+    - July
+    - August
+    - September
+    - October
+    - November
+    - December
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: about 1 hour
+        other: about %{count} hours
+      about_x_months:
+        one: about 1 month
+        other: about %{count} months
+      about_x_years:
+        one: about 1 year
+        other: about %{count} years
+      almost_x_years:
+        one: almost 1 year
+        other: almost %{count} years
+      half_a_minute: half a minute
+      less_than_x_minutes:
+        one: less than a minute
+        other: less than %{count} minutes
+      less_than_x_seconds:
+        one: less than 1 second
+        other: less than %{count} seconds
+      over_x_years:
+        one: over 1 year
+        other: over %{count} years
+      x_days:
+        one: 1 day
+        other: ! '%{count} days'
+      x_minutes:
+        one: 1 minute
+        other: ! '%{count} minutes'
+      x_months:
+        one: 1 month
+        other: ! '%{count} months'
+      x_seconds:
+        one: 1 second
+        other: ! '%{count} seconds'
+    prompts:
+      day: Day
+      hour: Hour
+      minute: Minute
+      month: Month
+      second: Seconds
+      year: Year
+  errors:
+    format: ! '%{attribute} %{message}'
+    messages:
+      accepted: must be accepted
+      blank: can't be blank
+      confirmation: doesn't match confirmation
+      empty: can't be empty
+      equal_to: must be equal to %{count}
+      even: must be even
+      exclusion: is reserved
+      greater_than: must be greater than %{count}
+      greater_than_or_equal_to: must be greater than or equal to %{count}
+      inclusion: is not included in the list
+      invalid: is invalid
+      less_than: must be less than %{count}
+      less_than_or_equal_to: must be less than or equal to %{count}
+      not_a_number: is not a number
+      not_an_integer: must be an integer
+      odd: must be odd
+      too_long: is too long (maximum is %{count} characters)
+      too_short: is too short (minimum is %{count} characters)
+      wrong_length: is the wrong length (should be %{count} characters)
+  followup_comments:
+    index:
+      comment: Comment
+      comments_title: Comments
+      date_commented: Date
+      email: Email
+      filter: Search
+      first_name: First Name
+      last_name: Last Name
+      phone_number: Phone Number
+      status: Status
+    search:
+      search_placeholder: Enter your query here
+      search_title: Search
+  general:
+    add: Add
+    add_a_leader: Add a leader
+    adding: Adding...
+    address1: Address 1
+    address2: Address 2
+    adv_search: Advanced Search
+    alert: Alert
+    archive: Archive
+    archived: Archived
+    assigned_to: Assigned to
+    autocomplete_name_hint: ! 'Type a name or facebook profile url here:'
+    back: Back
+    both: Both
+    city: City
+    contacts_updated_from: Contacts Updated From
+    country: Country
+    dash: ! ' - '
+    delete: Delete
+    edit: Edit
+    email: Email
+    female: Female
+    first_name: First Name
+    gender: Gender
+    hide: hide
+    home: Home
+    keyword: Keyword
+    last_name: Last Name
+    male: Male
+    match_found: Match found
+    message: ! 'Message:'
+    mobile: Cell
+    phone: Phone
+    recipients: ! 'Recipients:'
+    remove: Remove
+    role: Label
+    roles_applied: Labels have been applied.
+    save: Save
+    search: Search
+    send_email: Send Email
+    show: Show
+    state: State
+    status: Status
+    subject: Subject
+    survey: Survey
+    survey_text_tip_html: To begin your survey, <strong>text %{keyword} to %{shortcode}.</strong>
+    survey_web_tip_html: For the web version of the survey, send people to <strong>http://mhub.cc/c/%{keyword}</strong>
+    to: To
+    transfer: Transfer
+    unassign: Unassign
+    work: Work
+    zip: Zip
+  group_memberships:
+    form:
+      add_a_leader: Add a leader
+      add_a_member: Add a member
+      start_typing: Start typing a name to find a person add to this group
+    search:
+      add_new_person_group: Add a new person
+      not_found: We couldn't find anyone in your %{terminology} with that name
+      show_all: show all
+      showing_count: ! 'Showing %{length} of %{total}, keep typing or '
+      showing_count_complete: Showing %{length} records.
+  groups:
+    edit:
+      edit_group: Editing %{group}
+    form:
+      approve_join_tip: If the group is listed publicly, checking this option will require you to approve any requests to join the group.
+      back: Cancel and go back
+      list_publicly_tip: If this option is selected, this group will be visible to the general public when they do a search. (Public search doesn't exist yet, but will at some point)
+      location_tip: For your location, type an address that you would expect to work if you did a search on a Google Map (i.e. "1600 Pennsylvania Ave, Washington, DC 20006")
+      meets_on: 'On'
+      meets_on_the: On the
+      of_month: of the month
+    index:
+      add: Add
+      add_a_label: Add a Label
+      add_group: Add a group
+      assign_to_label:
+        one: 1 Group
+        other: ! '%{count} Groups'
+      group_list: Group List for %{org}
+      group_name: Group Name
+      labeled_with: Labeled With "%{label}"
+      labels: Labels
+      leaders: Leaders
+      members: Involved
+      new_label_prompt: Please enter a new label name
+    label:
+      delete_confirm: Are you sure you want to remove the '%{label}' label?
+    new:
+      new_group: Create a New Group
+    person:
+      remove_confirm: Are you sure you want to remove %{name} from your group?
+    see_all: See all groups
+    show:
+      add_member: Add Member
+      confirm_delete_group: Are you sure you want to delete this group?
+      delete_group: Delete this group
+      edit: edit
+      edit_group: Edit Group
+      location: Location
+      meets: Meets
+      monthly: Monthly on the %{day}<br /> %{start_time} - %{end_time}
+      name: Name
+      sporadically: Sporadically
+      weekly: Weekly on %{day}s<br/> %{start_time} - %{end_time}
+  helpers:
+    label:
+      group:
+        name: Group Name
+        start_time: From
+      organization:
+        terminology: Type
+      sms_keyword:
+        survey_id: Associated Survey
+    submit:
+      update: Update
+  imports:
+    new:
+      file_not_existing: File does not exist.
+      wrong_file_format_error: Uploaded wrong file format. File must be .csv
+  keyword_request_mailer:
+    notify_user:
+      body_html: <h2>Your request for the keyword %{keyword} was APPROVED</h2> <p> To use the keyword, tell people to text %{keyword} to %{number}<br/> </p> <p> If you have any questions, %{link}. </p>
+      link_text: send us an email at support@missionhub.com
+    notify_user_of_denial:
+      body_html: ! '<p>Your request for the keyword %{keyword} has been declined. Keywords are typically declined for one of the following reasons:</p>
+
+        <ul> <li>The keyword was too long. We recommend that you keep your keywords as short as possible, preferably under 10 characters.</li> <li>The keyword was too generic. Keywords should be specific to your location. We reserve generic keywords for regional or national audiences.  (e.g. osucru instead of cru)</li> <li>Too many keywords were requested. At this point in time, we are only allowing 2 keywords per location to minimize our cost.</li> </ul>
+
+        <p>If you have good reason for an exception, please send an explanation to support@missionhub.com with Keyword Request Declined in the subject line and we will review your situation.</p>
+
+        <p> Thanks,<br/> MissionHub Support Team </p>'
+  keywords:
+    default_rejection_email: Your keyword request has been denied
+    edit:
+      heading: Editing Keyword
+    flash:
+      created: Keyword request was successfully submitted.
+      pick_org: Please pick which organization you are associated with
+      updated: Keyword was successfully updated.
+    form:
+      association: The %{this_term} you are currently requesting this keyword for has at leaset one %{child_term} under it.<br/> Select if you'd like to associate this keyword with the %{this_term} or a %{child_term} under this %{this_term}
+      chartfield: A keyword costs $7/month. Please enter a chart field to be billed for this keyword.
+      explanation: Please explain what you plan to use this keyword for.
+      initial_response: What response should we send back to people when they text in? <br/>If you want the person to complete a survey, the response MUST include {{ link }}<br/>(exactly like that, dont change that part of the response.)
+      keyword: Keyword
+      keyword_instruct: ! '- A keyword is required to collect contacts and surveys via text, web and smartphones. <br/> - ''FSUCRU'' is the keyword in ''Text FSUCRU to 85005''.<br/>- Use at least 3 letters for your keyword.'
+      keyword_tip: This is what people will type into their phone.
+      keyword_why: This is for our use only. The use description could include words like 'weekly meeting', 'outreach event', and other uses the keyword will have.
+      post_survey_message: What message would you like to show after the person has completed the survey?
+      post_survey_why: When someone texts in the keyword, this message will be sent to them and '{{link}}' will be replaced by a website address that will take them to an online survey for them to fill out. If they don't have internet, replying 'i' will send them all the questions via interactive text message.<br/><br/>If you want to include a link to your site, don't include it here - include it in the post-survey message (step 3 in the Create Survey process)
+    index:
+      association: Associate Contacts With
+      association_help: When a contact responds to a survey, they are associated with the same team or movement as the keyword they responded to.
+  leader: Leader
+  leader_mailer:
+    added:
+      body_html: ! '<p>Hi %{name},</p>
+
+        <p>I''ve has just added you as a leader for %{org} on MissionHub</p>
+
+        <p>Visit %{link} to log in. Please don''t share this link with anyone else.</p>
+
+        <p>%{added_by}</p>'
+  leaders:
+    create:
+      no_user_account: <font color='red'>Required email information missing to add this person as a Leader.</font>
+    form:
+      name_required: ! 'Name, gender, and email fields are required to add a leader:'
+      notify: Notify this person that they've been added and send them a link to log in.
+    search:
+      not_in_system: If the person you are looking for is not already in the system click here to add them.
+  member: Member
+  monthly: Monthly
+  nav:
+    all_contacts: All Contacts
+    archive: Archived
+    back_to_dashboard: Back To My Contacts
+    back_to_wizard: I'm done. Take me back to the Wizard
+    cleanup: Cleanup
+    create_a_survey: Create a survey
+    dashboard: Dashboard
+    directory: Directory
+    enter_survey_mode: Enter Survey Mode
+    go_to: go to
+    groups: Groups
+    help: Resources and Help
+    hide: Hide
+    keywords: Surveys
+    login: Log In
+    logout: Sign Out
+    make_default: make default
+    manage: Manage
+    my_comments: My Comments
+    my_contacts: My Contacts
+    my_profile: My Profile
+    organizations: Organizations
+    people: People
+    privacy: Privacy Policy
+    profile: My Profile
+    roles: Roles
+    settings: Settings
+    survey_mode_tip: Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts.
+    surveys: Surveys
+    terms: Terms and Conditions
+    use_keyword: ! 'Use Keyword: %{keyword}'
+    view_details: View details
+  number:
+    currency:
+      format:
+        delimiter: ! ','
+        format: ! '%u%n'
+        precision: 2
+        separator: .
+        significant: false
+        strip_insignificant_zeros: false
+        unit: $
+    format:
+      delimiter: ! ','
+      precision: 3
+      separator: .
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: ! '%n %u'
+        units:
+          billion: Billion
+          million: Million
+          quadrillion: Quadrillion
+          thousand: Thousand
+          trillion: Trillion
+      format:
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: ! '%n %u'
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+  org_membership:
+    confirm_delete: Are you sure you want to dissociate yourself from %{org}
+  organization_mailer:
+    notify_user:
+      body_html: <p>Congratulations, your organization request has been approved!  Go to %{manage_link} to add your sub-organizations, and please don't forget to give us feedback on your MissionHub experience!<p> <p> If you have any questions, %{link}. </p> <p> Thanks,<br/> MissionHub Support Team </p>
+      link_text: send us an email at support@missionhub.com
+    notify_user_of_denial:
+      body_html: ! '<p>We''re sorry, but the information you provided does not allow us to meet your request for a MissionHub organization.  If you have further questions, or would like a clarification, please email support@missionhub.com.</p>
+
+        <p> Thanks,<br/> MissionHub Support Team </p>'
+  organizational_roles:
+    cannot_delete_admin_error: You cannot remove <b>%{names}</b> since you are going to remove all the admins in this organization!
+    cannot_delete_self_as_admin_error: As an ADMIN you cannot remove yourself! Please assign another individual as an ADMIN for this organization and then ask that "new ADMIN" to remove your ADMIN label.
+    copy_people_success: People were successfully copied!
+    moving_people_success: People were successfully moved!
+    moving_to_same_org: You are just moving people to the same org they are from!
+  organizations:
+    add_org:
+      name_not_unique: Name is not Unique
+    add_org_from_crs:
+      admin_password: Enter your conference Admin Password
+      bad_password: The password you entered is not the Admin Password for the conference corresponding to the url you entered.
+      bad_url: The url you entered was not a valid conference registration url. Please check the example and try again.
+      conference_is_importing: Your conference data is now being imported. We will send you an email when the import is complete.
+      crs_import_instructions: This feature allows you to import all of the registrants from a conference into MissionHub as contacts. A new Sub-Organization will be created with the same name as the conference. This is a one-time import. Once you import people, any new registrants will not be imported later. Also, any changes you make to information on MissionHub will not be reflected back to CRS.
+      example: Example
+      url: Enter a URL that you would send to people to register for a conference (%{link})
+    cleanup:
+      alumni_inst: Go to the %{link} screen, select the leaders/involved people that have graduated from your ministry and label as "Alumni"
+      alumni_inst_path: All Contacts
+      annual_inst_1: People are messy - and so are databases. Every year your database gets clogged up with people who may have come to a meeting once upon a time, or filled out a survey once, but never got involved and don't intend to. If you are a campus ministry, you will also have a good number of people who graduate from your ministry each year. How do you get your database trimmed up and ready for the fall?
+      annual_inst_2: An Annual Clean Up can help. Simply walk through these steps once a year (or however often you want) and your Mission Hub Database will again be a well-oiled machine, ready to help you transform the world!
+      archive_contacts_submit: Archive Contacts Now
+      archive_inst: Archive all contacts created before %{date_field}
+      archive_instructions: Archive Contacts
+      archive_notice: ! '%{no} contacts successfully archived'
+      confirm_archive: Are you sure you wanted to archive the desired contacts?
+      confirm_remove_leaders: Are you sure you want to remove the desired leaders? Note that if any of these leaders have no other labels, then they will also be "archived" after removing their "Leader" label!
+      contact_tips: ! 'Step #1 will move everyone who is marked "CONTACT" into an archived location if they are created earlier than the date specified. <br><br>You can modify the date as the default will take all contacts created today or earlier. <br><br>The contacts can be "UnArchived" manually by going to the Directory screen, click on the "Include Archived" check-box, and add any label to individual. <br><br>Tip from a leader : Add a new, unique question to your keyword at the beginning of this year and ask everyone to take the survey. Even if all the other fields are full, their answer to that question will cause their record to be "UnArchived". '
+      instructions: Instructions
+      leader_tips: If the LEADER does not have another label besides "leader", they will disappear from your Directory and become part of the Archived individuals. But they can be added again with either the "Add Leader" button or by checking the "Include Archived" box and giving them any label. <br><br><br> The default date to determine inactive is 3 months earlier than today but you can modify the date.
+      removal_notice: ! '%{no} leaders successfully archived.'
+      remove_leader_inst: Archive leaders who have been inactive by not logging-in after %{date_field}
+      remove_leaders_submit: Remove Leaders Now
+      title: Cleanup
+    edit:
+      back_to_orgs: Back to Organizations
+      danger_explanation: Deleting this Organization will also delete all sub organizations under this organization. Deleting an organization cannot be undone! Be certain that you want to delete this item before proceeding
+      danger_zone: Danger Zone
+      delete: Delete Organization
+      delete_confirm: Are you really really sure you want to delete this %{terminology}? There's no going back, and all the related data will be deleted!
+      name_explain: A name is what you call something
+      show_sub_explain: Checking this box will cause sub-organizations you define under this level to show up in the navigation for people involved at the %{org} level. If this box is checked, Admins of %{org} will also be admins of levels under this one.
+      term_explain: Terminology is how you define this item, for example, Church, Organization, Ministry etc.
+      title: Edit %{org}
+    index:
+      add: Add
+      add_a_sub_org: Add new %{terminology}
+      add_sub_org: Add %{terminology} under this one
+      crs_import_link: Import a conference from the Conference Registration Tool
+      crs_import_tip: The Conference Registration Tool is another tool created by CRU that you can use to manage conferences.
+    new:
+      signup: Sign Up!
+      title: Sign up your organization
+      your_org: Your Organization
+    settings:
+      submit: Update Settings
+      title: Settings
+      year_in_school: Display 'Year in School' on the Directory Page
+  people:
+    add_person:
+      add_person: Add a person to %{org}
+    advanced_search:
+      basic_search: Toggle Basic Search
+      clear_search_form: Clear Search Form
+      email: Email Address
+      first_name: First Name
+      last_name: Last Name
+      phone: Phone Number
+      role: Label
+    all:
+      all_selected_html: All <b>%{count}</b> people in the directory are selected.
+      all_selected_html_mine: All <b>%{count}</b> people in your contacts are selected.
+      page_selected_html: All <b>%{count}</b> people on this page are selected.
+      select_all_html: Select all <b>%{count}</b> people in the directory.
+      select_all_html_mine: Select all <b>%{count}</b> people in the your contacts.
+    assign:
+      keep_contact: Check the box to leave a copy of the contact in the org.
+    bulk_archive:
+      archiving_people_success: People were successfully archived!
+      cannot_archive_admin_error: You cannot archive <b>%{names}</b> since you are going to remove all the admins in this organization!
+    bulk_delete:
+      cannot_delete_admin_error: You cannot delete <b>%{names}</b> since you are going to delete all the admins in this organization!
+      deleting_people_success: People were successfully deleted!
+    create:
+      email_error: <font color='red'>Invalid email.</font>
+      email_taken: <font color='red'>Oops! This email address is already being used. Please email <b>support@missionhub.com</b> with the EMAIL address and NAME of the person whom you want to add the email to.</font>
+      error_creating_admin_no_valid_email: ! 'Error: Cannot create Person with admin role without a valid email'
+      error_creating_leader_no_valid_email: ! 'Error: Cannot create Person with leader role without a valid email'
+      firstname_error: <font color='red'>First name is required.</font>
+      phone_number_error: <font color='red'>Invalid phone number</font>
+    edit:
+      editing: Editing
+      fb_name_search_dialog_desc: Please wait while we fetch additional names. Once the result shows up, click on any of the names to retrieve their profile url.
+      fb_name_search_dialog_no_more: There are no more results. Click previous button to see the previous searched names.
+      fb_name_search_dialog_title: Facebook Profile Search
+      fb_profile_link: link to profile on facebook
+      more_facebook_matches: Click here to see more results
+      no_results: We couldn't find anyone on facebook with that name
+    form:
+      facebook_url: ! 'Facebook Profile Url:'
+      facebook_url_tip: You can manually search facebook for this person's profile if they haven't already connected. Keep in mind that some people set their facebook privacy settings such that they won't show up in this search.
+    index:
+      add_person: Add Person
+      apply_roles: Apply Roles
+      archived_directory_title: Archived - %{org}
+      archived_label: Archived
+      cannot_archive_admin_error: As an ADMIN you cannot remove yourself! Please assign another individual as an ADMIN for this organization and then ask that "new ADMIN" to remove your ADMIN label.
+      cannot_delete_admin_error: As an ADMIN you cannot remove yourself! Please assign another individual as an ADMIN for this organization and then ask that "new ADMIN" to remove your ADMIN label.
+      directory_title: Directory - %{org}
+      displaying: Displaying %{start} - %{finish} of %{total}
+      email: Email
+      error_message: ! 'Error: %{person} does not have valid email to be leader'
+      error_message_update_admin_without_person: ! 'Error: Person does not have valid email to be admin'
+      error_message_update_leader_without_person: ! 'Error: Person does not have valid email to be leader'
+      export: Export this list
+      filter: Search
+      gender: Gender
+      group_comment: Add Comment
+      include_archived: Include Archived
+      include_archived_tips: You may click this checkbox to include all of your Archived individuals in your All Contacts listing. Notice Archived individuals now have green labels.<br/><br/>If you want to only see <b>archived individuals</b>, click on "Archived" on the bottom, left side-panel.<br/><br/>Contacts can be <b>unarchived</b> by adding any label. You need to add each label you wish to return to that contact.
+      labels: Labels
+      manage_roles: Manage Roles
+      merge_contacts: Merge Contacts
+      merge_people: Merge People
+      no_people: Sorry, there are no people involved here.
+      phone: Phone
+      send_email: Send Email
+      send_sms: Send Text
+      statistics: Statistics
+      transfer_org: Transfer to another team/organization
+      vcard: Export Vcard
+      year_in_school: Year in School
+    involvement:
+      conferences: Conferences
+      summer_projects: Summer Projects
+    left_sidebar:
+      edit_profile: Edit %{name}'s Profile
+      involvement: Involvement
+      profile: ! '%{name}''s Profile'
+      survey_answers: Survey Answers
+    person_form:
+      add_email_address: Add Email Address
+      add_phone_number: Add Phone Number
+      preferred_name: Nickname
+    search:
+      advanced_search: Toggle Advanced Search
+      clear_search_form: Clear Search Form
+      search_placeholder: Search for the first name, last name or email.
+      search_title: Search
+    show:
+      add_comment: Add Comment / Update Status
+      add_comments_here: Add comments here...
+      assigned_to: ! 'Assigned to: %{assigned_to}'
+      attach_rejoicable: Attach a Rejoicable
+      edit_profile: Edit Profile
+      email:
+        one: ! 'Email:'
+        other: ! 'Emails:'
+      facebook_profile: Facebook Profile
+      google_map: Google Map
+      label_button: Labels
+      persons_friends: ! '%{person} Friends:'
+      phone_number:
+        one: ! 'Phone #:'
+        other: ! 'Phone #s:'
+      previous_comments: Previous Comments
+      send_contact_info: Email me %{name}'s info
+      send_vcard_desc: This will create a vcard and send it to the email address you enter below.
+      status: Status
+      updated_time_difference: Updated %{time_diff} ago.
+  questions:
+    archived_help: Archived questions will no longer be included in the survey.  If no answers have ever been given to the question, the archived question will be deleted.  If you USE an archived question, the question will move to the YOUR QUESTIONS section and the previous answers will re-appear.
+    create:
+      notice: Question was successfully created.
+    form:
+      checkboxes: Checkboxes
+      dropdown: Dropdown
+      multiple_choice: Multiple Choice
+      short_answer: Short Answer
+      web_only: Only show this question on web / mobile devices, don't include it in "interactive" mode.
+      what_question_type: What type of question would you like to ask?
+    predefined_help: Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided.
+    your_questions_help: Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service.
+  rejoicables:
+    gospel_presentation: Gospel Presentation
+    prayed_to_receive: Prayed To Receive Christ
+    spiritual_conversation: Spiritual Conversation
+  roles:
+    admin: Admin
+    alumni: Alumni
+    contact: Contact
+    involved: Involved
+    leader: Leader
+    views:
+      create: Create
+      create_role: Create new role
+      delete_role: Delete role
+      edit_role: Edit role
+      i18n: i18n
+      name: Name
+      organizational_roles: Organizational Roles
+      system_roles: System Roles
+      update: Update
+  sessions:
+    destroy:
+      signed_out: You've been signed out.
+    new:
+      back: Back Home
+      dont_like_facebook: Don't like Facebook?
+      instructions: Instructions
+      login: Login
+      login_paragraph_html: To get started, you'll need to have a Facebook account. <br/> Click the login link to the left and <strong>allow</strong> MHub to access your information. <br/> You'll be taken to the wizard if this is your first time accessing MissionHub.
+      login_paragraph_mhub: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
+      login_with_facebook: Please login with Facebook to get started
+      no_facebook: Don't like Facebook? Click here to skip Facebook login
+      skip_facebook: Click here to skip Facebook login
+      start_survey: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
+      waiting_for_logout: Waiting for previous user to be logged out of facebook. If this message doesn't go away within 15 seconds, try reloading the page.
+      welcome: Welcome!
+  sms:
+    email_invalid_msg: Email is invalid, try again.
+    email_should_be_unique_msg: Email already used, try another email address.
+    keyword_inactive: The keyword you have just texted is not active. Please check your spelling and try again.
+    no_survey: There isn't a survey associated with that keyword
+  sms_keywords:
+    default_rejection_email: Your keyword request has been denied
+    edit:
+      heading: Editing Keyword
+      keywords: Keywords
+      to_begin_survey_html: To begin your survey, <strong>text %{keyword} to %{number}.</strong>
+    flash:
+      created: Keyword request was successfully submitted.
+      pick_org: Please pick which organization you are associated with
+      updated: Keyword was successfully updated.
+    form:
+      associated_survey_tip: When a person texts in this keyword, they'll be presented with questions from the survey you select below.
+      explanation: Please explain what you plan to use this keyword for.
+      initial_response: What response should we send back to people when they text in? <br/>If you want the person to complete a survey, the response MUST include {{ link }}<br/>(exactly like that, dont change that part of the response.)
+      initial_response_default: Hi! Thanks for checking out %{org}. To get more involved, reply with "i" or click {{ link }} if you have a smartphone.
+      keyword: Keyword
+      keyword_instruct: ! '- A keyword is required to collect contacts and surveys via text, web and smartphones. <br/> - ''FSUCRU'' is the keyword in ''Text FSUCRU to 85005''.<br/>- Use at least 3 letters for your keyword.'
+      keyword_locked: Keywords can't be changed. You can delete this one and create a new one if necessary.
+      keyword_tip: This is what people will type into their phone.
+      keyword_why: This is for our use only. The use description could include words like 'weekly meeting', 'outreach event', and other uses the keyword will have.
+      note: ! 'Note: Processing requests may take up to 24 hours.'
+      post_survey_why: When someone texts in the keyword, this message will be sent to them and '{{link}}' will be replaced by a website address that will take them to an online survey for them to fill out. If they don't have internet, replying 'i' will send them all the questions via interactive text message.<br/><br/>If you want to include a link to your site, don't include it here - include it in the post-survey message (step 3 in the Create Survey process)
+    index:
+      association: Associate Contacts With
+      create_survey_first: You need to create a survey before requesting a keyword.
+      delete_confirm: Are you sure you want to delete this keyword?
+      delete_tip: Delete keyword
+      request_keyword: Request a Keyword
+    keyword_deleted: Keyword has been deleted.
+    new:
+      choose_keyword_explanation_html: ! 'Choosing a keyword for your community or event enables you to have people fill out your survey questions via the web, interactive texting, and smartphones.  <strong>They will text your keyword to the number %{number}</strong> and your survey questions will appear on their device.  Note: The process of acquiring new keywords requires manual intervention. Once you request your keyword expect to wait up to 24 hours before we notify you via email that your keyword is approved and ready for use.'
+      predefined_help: Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided.
+      your_questions_help: Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service.
+    show:
+      explanation: ! 'Explanation:'
+      keyword: ! 'Keyword:'
+      status: ! 'Status:'
+  sporadically: Sporadically
+  support:
+    array:
+      last_word_connector: ! ', and '
+      two_words_connector: ! ' and '
+      words_connector: ! ', '
+    select:
+      prompt: Please select
+  survey:
+    drop_down_field:
+      choose_one: Choose One
+  survey_mailer:
+    notify:
+      content: ! '%{name} (%{number},%{email}) just replied to a survey with %{answer}.'
+  survey_responses:
+    edit:
+      multiple_answers: ! 'Choose one or more. '
+      title: Edit %{name}'s Survey Answers
+    facebook:
+      facebook_login: You can connect your account to Facebook so we can know who you really are.
+      pick_keyword: Pick a Keyword
+    form:
+      frozen: Sorry. The survey '%{survey}' is currently on hold.
+    new:
+      greeting_no_name: Hi!
+      greeting_with_name: Hi %{name}!
+    show:
+      edit_answers: Edit Answers
+      no_answers: ! '%{name} has not completed any surveys'
+      title: ! '%{name}''s Survey Answers'
+    thanks:
+      thanks: Thanks!
+  surveys:
+    edit:
+      edit_survey: Edit Survey
+    form:
+      association: The %{this_term} you are currently requesting this keyword for has at least one %{child_term} under it.<br/> Select if you'd like to associate this keyword with the %{this_term} or a %{child_term} under this %{this_term}
+      background_color: ! 'Background Color:'
+      css: Type in some custom css which will be embedded in a 'style' tag below all included css files
+      css_file: ! 'Upload your own custom css file (optional):'
+      customize_look: ! 'Optional - FOR ADVANCED USERS ONLY - Customize how the survey will look:'
+      default_login_option: Show Facebook login with an option to skip it
+      fb_only_login_option: Require Facebook login
+      freeze: Tick checkbox to freeze survey
+      login_option: Choose a login option for your users
+      login_paragraph: Login Paragraph
+      login_paragraph_tip: This is what people will see as they reach the Facebook login page for a survey
+      logo: ! 'Logo (we will wrap this is a div with the class "logo"):'
+      no_fb_login_option: No login
+      post_survey_message: What message would you like to show after the person has completed the survey?
+      post_survey_placeholder: ! 'Example: Thank you for your time! If you''re interested in Cru, we meet at Moore Auditorium every Thursday @ 8PM'
+      skip_fb_login_option: Present an option at the end of the survey to connect via Facebook
+      survey_associated_with: This survey will be associated with %{org}.
+      terminology: If you'd like this to be referred to as something other than a 'Survey', enter that here
+      text_color: ! 'Text Color:'
+      title: Title
+      title_placeholder: Shorter titles are better
+      title_tip: This is what people will see as the header on the survey
+    index:
+      title: Surveys for %{org}
+    index_admin:
+      association_help: When a contact responds to a survey, they are associated with the same team or movement as the keyword they responded to.
+      confirm_delete: Are you sure you want to delete this keyword?
+      delete_survey: Delete survey
+      edit_survey: Edit Survey
+      link: Link
+      new: New Survey
+    new:
+      choose_keyword_explanation_html: ! 'Choosing a keyword for your community or event enables you to have people fill out your survey questions via the web, interactive texting, and smartphones.  <strong>They will text your keyword to the number %{number}</strong> and your survey questions will appear on their device.  Note: The process of acquiring new keywords requires manual intervention. Once you request your keyword expect to wait up to 24 hours before we notify you via email that your keyword is approved and ready for use.'
+      create_a_survey: Create a Survey
+    questions:
+      advanced_options:
+        autoassign_group_label: ! 'Choose where to assign contacts:'
+        autoassign_guide: This option will assign the contacts to the selected Leader, Ministry, Group, or Label if the answer contains the listed keywords.
+        autoassign_keywords_label: List the words that will trigger the assignment:<br/>(must be separated with commas)
+        autonotify_guide: This option will notify the selected leaders if the answer contains the listed keywords.
+        autonotify_keywords_label: List the words that will trigger the notification:<br/>(must be separated with commas)
+        autonotify_leader_label: ! 'Select one or more leaders to be notified:'
+        hidden: Don't show this question on the survey
+        leaders: Select one or more leaders to be notified when this question is answered in a certain way
+        trigger_words: List one or more words or phrases that will trigger this notification if they appear in the answer.<br/>Separate words and phrases with commas.
+        web_only: Only show this question on web / mobile devices, don't include it in "interactive" mode.
+      create:
+        duplicate_error: You have already added that question. You cannot assign a question twice in a survey!
+        notice: Question was successfully created.
+      edit:
+        leader_invalid_email: Chosen leader has an invalid email.
+        leader_invalid_email_with_name: Chosen leader/s '%{leader_names}' have invalid email.
+      form:
+        checkboxes: Checkboxes (Choose one or more)
+        dropdown: Dropdown (Choose one)
+        hide_advanced_options: Hide Advanced Options
+        hide_assignment_options: Hide Contact Assignment Options
+        hide_notification_options: Hide Notification Options
+        multiple_choice: Radio buttons (Choose one)
+        short_answer: Short Answer (Free form response)
+        show_advanced_options: Show Advanced Options
+        show_assignment_options: Show Contact Assignment Options
+        show_notification_options: Show Notification Options
+        text_message_length: ! 'Text Message Length:'
+        text_message_preview: Text Message Preview
+        toggle_advanced_options: Toggle Advanced Options
+        web_only: Only show this question on web / mobile devices, don't include it in "interactive" mode.
+        what_question_type: What type of question would you like to ask?
+      index:
+        add_prev_question: Add a predefined or previously used question
+        add_question: Add a new question
+        forced_tip: This question is required on every survey and will be pre-filled if they connect with facebook.
+        manage: Manage Survey Questions
+        note: ! 'Note: First and Last name will be automatically added to every survey. There''s no need for you to add those.'
+        predefined: Predefined Questions
+        previously_used: Previously Used Questions
+        your_questions: Your Questions (drag to sort)
+      multiple_choice_form:
+        list_choices: ! 'List out the possible choices, one per line:'
+      question:
+        confirm_delete: Are you sure you want to remove '%{question}'?
+        delete_tip: If this question has been answered any contact, it will be archived. If no one has answered this question yet it will be deleted.
+      short_answer_form:
+        column_header: Column Header
+        column_header_hint: This is what will display at the top of the column when looking at contacts later
+        question: ! 'Question:'
+  time:
+    am: am
+    formats:
+      date: ! '%m/%d/%Y'
+      default: ! '%m/%d/%Y %H:%M:%S'
+      long: ! '%B %d, %Y %H:%M'
+      short: ! '%d %b %H:%M'
+      time_only: ! '%l:%M %p'
+    pm: pm
+  views:
+    pagination:
+      first: ! '&laquo; First'
+      last: Last &raquo;
+      next: Next &rsaquo;
+      previous: ! '&lsaquo; Prev'
+      truncate: ! '...'
+  weekly: Weekly
+  welcome:
+    home:
+      delete: Delete
+      delete_keyword_confirm: Are you sure you want to delete this keyword?
+      edit_keyword: Edit Keyword
+      edit_orgs: Edit your organizational involvements.
+      follow_up:
+        one: 1 Person to Follow-up
+        other: ! '%{count} People to Follow-up'
+      keywords: Surveys
+      manage_questions: Manage Survey Questions
+      no_mobile: The mobile version of this page hasn't been built yet. Sorry.
+      surveys: Surveys
+      title_top: Welcome to MissionHub!
+      your_orgs: Your Organizational Involvements
+    index:
+      get_details_html: Get the Details & <a href="/welcome/tour" class="learnmore">Learn More</a> or %{link}
+      get_started: Get Started
+      go_home: Go to My Contacts
+      headline_html: An online <span class="babyblue">follow-up system</span> with your audience in mind.
+      learn_more: ! 'Learn More '
+      request_key: Click here to request a keyword
+      request_key_help: A Keyword is both the name of the survey and what the person would text to fill out the survey questions. For example, you would say, 'Text UFCRU to the number 85005.' UFCRU is the keyword.
+      subheadline_html: Students text to connect. You empower follow-up from the web or a smart phone.
+      title_top: Welcome to MissionHub!
+      title_top_mobile: Survey
+      video_headline_html: Got questions?
+      video_subheadline_html: We can help!
+    tutorials:
+      get_started: Get Started!
+      video_headline_html: Got questions?
+      video_subheadline_html: We can help!
+    wizard:
+      back: Back
+      create_a_survey: Create a Survey!
+      create_survey: Create Survey
+      create_survey_link: Click here to create your survey.
+      designate_leaders: Designate Leaders
+      keyword_paragraph: A powerful feature of MissionHub is the ability for you to collect contacts through text messages. For this to work, you have to choose a keyword that is unique to your ministry that people will send messages to. With a keyword, you will be able to say, “Text <strong>your keyword</strong>  to 85005” at your next event or meeting.
+      leaders_header: Give access to other leaders
+      leaders_paragraph: This part is optional. Odds are decent that there are other people you work with who you'd like to give the ability to manage the keyword you set up as well as the contacts that will come from people responding to your survey. This step lets you add those people. Except we haven't programmed it quite yet.
+      next: Next
+      not_found_paragraph: At the current time MissionHub is being field tested with the US Campus Ministry. If you're not a part of the US Campus Ministry, sit tight! We plan to release to a larger audience soon. If you are part of the US Campus Ministry and are seeing this message, send us an email at support@missionhub.com and we'll help you out.
+      request_a_keyword: Request a Keyword!
+      request_keyword: Request a Keyword
+      request_keyword_link: Click here to request a keyword. We'll return you to this wizard when you're done.
+      skip_step: Skip this step
+      survey_paragraph: Now that you've requested a keyword, you're going to want to create a set of questions to ask people. Think along the lines of a short survey or a basic contact card.
+      verify_identity: Verify Your Identity
+      verify_paragraph: ! 'If you have a CCC Relay login account, please sign in to link your account. You only need to do this once. WARNING: If you logged into MissionHub using someone else''s Facebook Account, Log Out now! Clicking verify will merge your information with theirs, creating a big mess.'
+      verify_with_relay: Verify With Relay
+      welcome: Welcome
+      welcome_paragraph: Welcome to MissionHub!<br><br> This setup wizard will help you get started and set up a keyword, which is an essential part of getting contacts into the system.

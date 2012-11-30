@@ -62,10 +62,14 @@ class SurveyResponsesController < ApplicationController
         create_contact_at_org(@person, @survey.organization)
       end
       destroy_answer_sheet_when_answers_are_all_blank
-      @current_person = @eperson
-      respond_to do |wants|
-        wants.html { render :thanks, layout: 'mhub'}
-        wants.mobile { render :thanks }
+      if @survey.redirect_url.to_s =~ /https?:\/\//
+        redirect_to @survey.redirect_url and return false
+      else
+        @current_person = @eperson
+        respond_to do |wants|
+          wants.html { render :thanks, layout: 'mhub'}
+          wants.mobile { render :thanks }
+        end
       end
     else
       @answer_sheet = get_answer_sheet(@survey, @person)
@@ -128,8 +132,12 @@ class SurveyResponsesController < ApplicationController
               # If we saved successfully, destroy the session
               session[:person_id] = nil
               session[:survey_id] = nil
-              wants.html { render :thanks, layout: 'mhub'}
-              wants.mobile { render :thanks }
+              if @survey.redirect_url.to_s =~ /https?:\/\//
+                redirect_to @survey.redirect_url and return false
+              else
+                wants.html { render :thanks, layout: 'mhub'}
+                wants.mobile { render :thanks }
+              end
             end
           end
         else
