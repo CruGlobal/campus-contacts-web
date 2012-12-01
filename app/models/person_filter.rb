@@ -13,11 +13,6 @@ class PersonFilter
 
     if @filters[:roles]
       filtered_people = filtered_people.where('organizational_roles.role_id' => @filters[:roles].split(','))
-      if @filters[:include_archived] == 'true'
-        filtered_people = filtered_people.joins(:organizational_roles_including_archived)
-      else
-        filtered_people = filtered_people.joins(:organizational_roles)
-      end
     end
 
     if @filters[:first_name_like]

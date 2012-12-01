@@ -37,7 +37,7 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
 
         should 'include archived roles when requested' do
           @person2.organizational_roles.create!(organization: @client.organization, role_id: Role::ADMIN_ID, archive_date: Date.today)
-          get :index, secret: @client.secret, filters: {roles: Role::ADMIN_ID, include_archived: 'true'}
+          get :index, secret: @client.secret, filters: {roles: Role::ADMIN_ID}, include_archived: 'true'
           json = JSON.parse(response.body)
           assert_equal 2, json['people'].length, json.inspect
         end
