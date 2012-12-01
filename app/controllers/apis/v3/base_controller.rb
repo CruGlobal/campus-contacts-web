@@ -66,7 +66,7 @@ class Apis::V3::BaseController < ApplicationController
     render nothing: true, status: 404
   end
 
-  def add_includes_and_filters(resource, options = {})
+  def add_includes_and_order(resource, options = {})
     available_includes.each do |rel|
       resource = resource.includes(rel.to_sym) if includes.include?(rel.to_s)
     end

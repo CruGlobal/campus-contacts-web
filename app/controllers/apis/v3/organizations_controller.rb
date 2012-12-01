@@ -4,7 +4,7 @@ class Apis::V3::OrganizationsController < Apis::V3::BaseController
   def index
     order = params[:order] || 'name'
 
-    list = add_includes_and_filters(organizations, order: order)
+    list = add_includes_and_order(organizations, order: order)
 
     render json: list,
            callback: params[:callback],
@@ -67,7 +67,7 @@ class Apis::V3::OrganizationsController < Apis::V3::BaseController
   end
 
   def get_organization
-    @organization = add_includes_and_filters(organizations)
+    @organization = add_includes_and_order(organizations)
                       .find(params[:id])
 
   end

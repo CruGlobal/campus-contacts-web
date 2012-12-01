@@ -4,7 +4,8 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   def index
     order = params[:order] || 'last_name, first_name'
 
-    list = add_includes_and_filters(people, order: order)
+    list = add_includes_and_order(people, order: order)
+    list = PersonFilter.new(params[:filters]).filter(list) if params[:filters]
 
     render json: list,
            callback: params[:callback],
@@ -84,7 +85,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   end
 
   def get_person
-    @person = add_includes_and_filters(people)
+    @person = add_includes_and_order(people)
                 .find(params[:id])
 
   end
