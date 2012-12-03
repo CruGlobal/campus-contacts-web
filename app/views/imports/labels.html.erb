@@ -9,7 +9,7 @@
 		<h1 class="title"><%= t('.title')%></h1>
 		<div class="container">
 			<div class="content">
-				<p><%=raw t('.guide', count: @import_count) %></p>
+				<p><%=raw t('.guide', count_word: pluralize(@import_count, 'new contact')) %></p>
 			</div>
 			<div class="labelform" id="import_label_space">
 				<%= form_tag controller: 'imports', action: 'import', id: @import.id do |f| %>

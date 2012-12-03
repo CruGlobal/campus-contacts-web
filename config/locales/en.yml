@@ -1103,8 +1103,8 @@ en:
       title: "Step 2 of 3 - Match Columns"
       guide: "Match the headers from your CSV file with the corresponding Person attributes or Survey questions in MissionHub. <strong>First Name</strong> is required."
     labels:
-      title: "Step 3 of 3 - Add New Contacts to Groups"
-      guide: "You are almost ready to upload %{count} new contacts! Use the list below to select any groups which should include these new contacts, then click the <strong>Import</strong> button."
+      title: "Step 3 of 3 - Add Labels to New Contacts"
+      guide: "You are almost ready to upload %{count_word}! Use the list below to select any groups which should include these new contacts, then click the <strong>Import</strong> button. "
   batch:
     new_person_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, there are new contacts in your organization. Please login to missionhub.com as soon as possible to followup the contacts. Below is the list of %{contacts_count} new contacts:"
     person_transfer_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, you have been sent new contacts. Please login to missionhub.com as soon as possible to followup the contacts. There may be more information about the contacts in the comment section of their individual profile. If not, you may want to contact the senders at their email address. Below is the list of %{contacts_count} contacts sent:"
