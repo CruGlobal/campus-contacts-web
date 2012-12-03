@@ -45,7 +45,9 @@ class OrganizationsController < ApplicationController
 
   def create
     @parent = Organization.find(params[:organization][:parent_id])
-    authorize! :manage, @parent
+    unless can?(:manage, @parent) || can?(:manage, @parent.parent) || can?(:manage, @parent.root)
+      raise CanCan::AccessDenied
+    end
     @organization = Organization.create(params[:organization]) # @parent.children breaks for some reason
     if @organization.new_record?
       render 'add_org' and return
@@ -177,6 +179,8 @@ class OrganizationsController < ApplicationController
     else
       @organization = Organization.subtree_of(current_organization.root_id).first
     end
-    authorize! :manage, @organization
+    unless can?(:manage, @organization) || can?(:manage, @organization.parent) || can?(:manage, @organization.root)
+      raise CanCan::AccessDenied
+    end
   end
 end

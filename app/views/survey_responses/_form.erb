@@ -11,7 +11,7 @@
     <%#= f.hidden_field :phone_number unless @person.phone_number.blank? %>
     <%= f.hidden_field :email unless @person.email.blank? %>
   <% end %>
-  
+
   <ul class="rounded jqm">
     <%# if @person.first_name.blank? %>
       <li>
@@ -21,7 +21,7 @@
         </div>
       </li>
     <%# end %>
-    
+
     <%# if @person.last_name.blank? %>
       <li>
         <div data-role="fieldcontain" class="field">
@@ -30,7 +30,7 @@
         </div>
       </li>
     <%# end %>
-    
+
     <%# if @person.phone_number.blank? %>
       <li>
         <div data-role="fieldcontain" class="field">
@@ -39,7 +39,7 @@
         </div>
       </li>
     <%# end %>
-    
+
     <% @survey.questions.where(hidden: false).each do |question| %>
       <% case question.slug %>
       <% when 'email' %>
@@ -54,9 +54,9 @@
       <% else %>
         <li><div data-role="fieldcontain" class="field"><%= render 'survey/element', element: question %></div></li>
       <% end %>
-    <% end %>			
+    <% end %>
   </ul>
-  <div class="actionbarinline">
+  <div>
     <div data-role="fieldcontain"><%= f.submit "Submit" %></div>
   </div>
 <% end %>
