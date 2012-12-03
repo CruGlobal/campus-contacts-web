@@ -1,7 +1,9 @@
 $ ->
   $(document).ready ->
     $('.import_column_survey_select').each ->
-      $('#column_edit_' + $(this).attr('data_id')).show() if $(this).val() == ''
+      $('#column_edit_' + $(this).attr('data_id')).show() if $(this).val() == 'new_question'
+      $(this).children(':first').after("<option value='do_not_import'>Do Not Import</option>")
+      $(this).children(':first').after("<option value='new_question'>Create New Question</option>")
       
     $('#import_column_question tr:not(:first)').each ->
       select_field = $(this).find('.import_column_survey_select')
@@ -15,6 +17,7 @@ $ ->
           if match_question
             select_field.val($(this).val()) unless $(this).is(':disabled')
         select_field.trigger('change')
+      
       
   	$('#create_question_dialog').dialog
   		resizable: false,
@@ -31,6 +34,8 @@ $ ->
         Save: ->
           $('#import_survey_form').submit()
         Cancel: ->
+          $("#import_column_survey_select_"+$(this).attr('data_id')).val('do_not_import')
+          $("#import_column_survey_select_"+$(this).attr('data_id')).trigger('change')
           $(this).dialog('close')
       
   $('#use_labels').live 'change', ->
@@ -39,11 +44,21 @@ $ ->
     else
       $('.label_space').hide()
       
+  $('#header_mapping_submit').live 'click', (e)->
+    e.preventDefault()
+    should_submit = true
+    $('.import_column_survey_select').each ->
+      should_submit = false if $(this).val() == ''
+    if should_submit
+      $('#header_mapping_form').submit() 
+    else
+      $.a('Please match the following headers to a survey question.')
+  
   $('.column_edit_link').live 'click', (e)->
     e.preventDefault()
     current_value = $("#import_column_survey_select_"+$(this).attr('data_id')).val()
     $('#question_id_field').val(current_value)
-    if current_value is ""
+    if current_value is "new_question"
       $('#create_survey_toggle').attr('checked','checked')
       $('#survey_content #new_survey').show()
       $('#survey_content #old_survey').hide()
@@ -109,14 +124,16 @@ $ ->
   
   $('.import_column_survey_select').live 'change', ->
     selected_option = $(this).children().find("option[value="+$(this).val()+"]")
-    if $(this).val() == "" || selected_option.attr('new') == 'true'
-      $('#column_edit_' + $(this).attr('data_id')).show() 
+    if $(this).val() == "new_question"
+      $('#column_edit_' + $(this).attr('data_id')).show().click()
+    else if selected_option.attr('new') == 'true'
+      $('#column_edit_' + $(this).attr('data_id')).show()
     else
       $('#column_edit_' + $(this).attr('data_id')).hide() 
     $(".import_column_survey_select option").removeAttr('disabled')
     $(".import_column_survey_select").each ->
       value = $(this).val().toString()
-      $(".import_column_survey_select option[value=" + value + "]").attr('disabled','disabled') if value != ''
+      $(".import_column_survey_select option[value=" + value + "]").attr('disabled','disabled') if value != 'new_question' && value != 'do_not_import'
       $(this).find("option[value=" + $(this).val().toString() + "]").removeAttr('disabled')
     
   
