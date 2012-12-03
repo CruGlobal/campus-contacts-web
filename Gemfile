@@ -67,8 +67,8 @@ gem 'versionist', git: 'git://github.com/twinge/versionist.git', branch: 'multip
 
 gem 'oj'
 
-gem 'execjs'
-gem 'therubyracer', :platforms => :ruby
+#gem 'execjs'
+#gem 'therubyracer', :platforms => :ruby
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
