@@ -228,6 +228,7 @@ GEM
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
     kgio (2.7.4)
+    libv8 (3.3.10.4)
     localeapp (0.6.8)
       gli
       i18n
@@ -388,6 +389,8 @@ GEM
     state_machine (1.1.2)
     strip_attributes (1.1.1)
       activemodel (~> 3.0)
+    therubyracer (0.10.2)
+      libv8 (~> 3.3.10)
     thin (1.5.0)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
@@ -451,6 +454,7 @@ DEPENDENCIES
   devise (= 1.5.1)
   dynamic_form
   enforce_schema_rules
+  execjs
   factory_girl (~> 2.0.0.rc4)
   ffaker
   foreigner
@@ -492,6 +496,7 @@ DEPENDENCIES
   simplecov (>= 0.3.5)
   state_machine
   strip_attributes
+  therubyracer
   trumant-rack-oauth2-server!
   twilio-rb!
   uglifier (>= 1.0.3)
