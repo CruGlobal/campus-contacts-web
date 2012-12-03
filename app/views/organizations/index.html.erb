@@ -23,6 +23,13 @@
 	</div>
 	</div>
 	
+  <%= link_to(t('.crs_import_link'), '#', class: 'import_from_crs_link') %>
+  <%= tip(t('.crs_import_tip')) %>
+
+  <div id="import_from_crs" style="display:none" title="<%= t('.add') %>" class="fingerme">
+    <%= render 'add_org_from_crs', organization: Organization.new(parent_id: current_organization) %>
+  </div>
+
 	<div id="new_org" style="display:none" title="<%= t('.add') %>" class="fingerme">
 	  <%= render 'add_org', organization: Organization.new %>
 	</div>
