@@ -34,8 +34,6 @@ $ ->
         Save: ->
           $('#import_survey_form').submit()
         Cancel: ->
-          $("#import_column_survey_select_"+$(this).attr('data_id')).val('do_not_import')
-          $("#import_column_survey_select_"+$(this).attr('data_id')).trigger('change')
           $(this).dialog('close')
       
   $('#use_labels').live 'change', ->
