@@ -612,7 +612,7 @@ en:
       edit_true: '&edit=true'
       search_saved: 'This search has been saved'
       vcard: 'Export Vcard'
-      add_contact: Add a Contact
+      add_contact: "Add a Contact to %{org}"
       clear_search_form: 'Clear Search Form'
       no_contacts: 'Sorry, there are no contacts here.'
       export: 'Export CSV'

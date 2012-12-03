@@ -68,7 +68,7 @@
     <%= "Displaying #{@people.offset_value + 1} - #{@people.offset_value + @people.length} of #{@people.total_count}" %>
   </div>
 <% end %>
-<div id="add_contact_div" style="display:none" title="<%= t('.add_contact') %>" class="fingerme">
+<div id="add_contact_div" style="display:none" title="<%= t('.add_contact', org: current_organization) %>" class="fingerme">
   <%= render 'add_contact', person: Person.new %>
 </div>
 <%- unless current_user.settings[:hide_update_notice] == true %>
