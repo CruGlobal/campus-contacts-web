@@ -11,7 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20121128143328) do
+=======
+ActiveRecord::Schema.define(:version => 20121128192052) do
+>>>>>>> MH-502
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -486,8 +490,6 @@ ActiveRecord::Schema.define(:version => 20121128143328) do
     t.integer  "mentor_id"
     t.integer  "fb_uid",                        :limit => 8
     t.datetime "date_attributes_updated"
-    t.text     "organization_tree_cache"
-    t.text     "org_ids_cache"
     t.integer  "crs_profile_id"
     t.integer  "sp_person_id"
     t.integer  "si_person_id"
@@ -500,7 +502,6 @@ ActiveRecord::Schema.define(:version => 20121128143328) do
   add_index "people", ["fb_uid"], :name => "index_ministry_person_on_fb_uid"
   add_index "people", ["first_name", "last_name"], :name => "firstName_lastName"
   add_index "people", ["last_name"], :name => "lastname_ministry_Person"
-  add_index "people", ["org_ids_cache"], :name => "index_ministry_person_on_org_ids_cache", :length => {"org_ids_cache"=>255}
   add_index "people", ["pr_person_id"], :name => "index_people_on_pr_person_id"
   add_index "people", ["si_person_id"], :name => "index_people_on_si_person_id"
   add_index "people", ["sp_person_id"], :name => "index_people_on_sp_person_id"
@@ -750,13 +751,13 @@ ActiveRecord::Schema.define(:version => 20121128143328) do
   add_index "survey_elements", ["survey_id", "element_id"], :name => "survey_id_element_id"
 
   create_table "surveys", :force => true do |t|
-    t.string   "title",                  :limit => 100, :default => "",       :null => false
+    t.string   "title",                  :limit => 100,  :default => "",       :null => false
     t.integer  "organization_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "post_survey_message"
-    t.string   "terminology",                           :default => "Survey"
-    t.integer  "login_option",                          :default => 0
+    t.string   "terminology",                            :default => "Survey"
+    t.integer  "login_option",                           :default => 0
     t.boolean  "is_frozen"
     t.text     "login_paragraph"
     t.string   "logo_file_name"
@@ -771,6 +772,7 @@ ActiveRecord::Schema.define(:version => 20121128143328) do
     t.string   "background_color"
     t.string   "text_color"
     t.integer  "crs_registrant_type_id"
+    t.string   "redirect_url",           :limit => 2000
   end
 
   add_index "surveys", ["crs_registrant_type_id"], :name => "index_surveys_on_crs_registrant_type_id"

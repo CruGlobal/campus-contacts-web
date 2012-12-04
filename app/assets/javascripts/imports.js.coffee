@@ -2,12 +2,13 @@ $ ->
   $(document).ready ->
     $('.import_column_survey_select').each ->
       $('#column_edit_' + $(this).attr('data_id')).show() if $(this).val() == ''
+      $(this).children(':first').after("<option value='do_not_import'>Do Not Import</option>")
       
     $('#import_column_question tr:not(:first)').each ->
       select_field = $(this).find('.import_column_survey_select')
       header = $.trim(parseCamelCase($(this).children('.column_header').text().replace(/_|-|:/g,' ')).toLowerCase())
       header_words = header.split(' ')
-      if select_field.val() == ''
+      if select_field.attr('saved_value') == ''
         select_field.find('option:not(:first))').each ->
           match_question = true
           for word in header_words
@@ -15,6 +16,10 @@ $ ->
           if match_question
             select_field.val($(this).val()) unless $(this).is(':disabled')
         select_field.trigger('change')
+      else
+        select_field.val(select_field.attr('saved_value'))
+        select_field.trigger('change')
+      $('#create_question_dialog').dialog('close')
       
   	$('#create_question_dialog').dialog
   		resizable: false,
@@ -38,7 +43,7 @@ $ ->
       $('.label_space').show()
     else
       $('.label_space').hide()
-      
+  
   $('.column_edit_link').live 'click', (e)->
     e.preventDefault()
     current_value = $("#import_column_survey_select_"+$(this).attr('data_id')).val()
@@ -109,14 +114,16 @@ $ ->
   
   $('.import_column_survey_select').live 'change', ->
     selected_option = $(this).children().find("option[value="+$(this).val()+"]")
-    if $(this).val() == "" || selected_option.attr('new') == 'true'
-      $('#column_edit_' + $(this).attr('data_id')).show() 
+    if $(this).val() == ""
+      $('#column_edit_' + $(this).attr('data_id')).show().click()
+    else if selected_option.attr('new') == 'true'
+      $('#column_edit_' + $(this).attr('data_id')).show()
     else
       $('#column_edit_' + $(this).attr('data_id')).hide() 
     $(".import_column_survey_select option").removeAttr('disabled')
     $(".import_column_survey_select").each ->
       value = $(this).val().toString()
-      $(".import_column_survey_select option[value=" + value + "]").attr('disabled','disabled') if value != ''
+      $(".import_column_survey_select option[value=" + value + "]").attr('disabled','disabled') if value != '' && value != 'do_not_import'
       $(this).find("option[value=" + $(this).val().toString() + "]").removeAttr('disabled')
     
   

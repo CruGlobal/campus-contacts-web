@@ -4,7 +4,7 @@ gem 'rails', '~> 3.2.2'
 gem 'jquery-rails'
 gem 'mysql2', '~> 0.3.11'
 gem 'nokogiri'
-gem 'json_pure'
+#gem 'json_pure'
 gem 'redis'
 gem 'rack-offline'
 gem 'http_accept_language'
@@ -65,6 +65,8 @@ gem 'copycopter_client'
 gem 'active_model_serializers'#, git: 'git://github.com/josevalim/active_model_serializers.git'
 gem 'versionist', git: 'git://github.com/twinge/versionist.git', branch: 'multiple_versioning_strategies'
 
+gem 'oj'
+
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
@@ -89,6 +91,7 @@ group :development do
   gem 'bullet'
   gem 'mailcatcher'
   gem 'railroady'
+  gem 'localeapp'
 end
 
 group :performance do

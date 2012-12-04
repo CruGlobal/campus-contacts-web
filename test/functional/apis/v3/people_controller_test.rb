@@ -14,6 +14,86 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
       json = JSON.parse(response.body)
       assert_equal 1, json['people'].length, json.inspect
     end
+
+    context 'filters' do
+      setup do
+        # Add a second person
+        @person2 = Factory(:person, first_name: 'Bob', last_name: 'Jones')
+        @client.organization.add_involved(@person2)
+      end
+
+      context 'filter by role' do
+        should 'return no results for a role no one has' do
+          get :index, secret: @client.secret, filters: {roles: '-1'}, include: :organizational_roles
+          json = JSON.parse(response.body)
+          assert_equal 0, json['people'].length, json.inspect
+        end
+
+        should 'return results for a role someone has' do
+          get :index, secret: @client.secret, filters: {roles: Role::ADMIN_ID}
+          json = JSON.parse(response.body)
+          assert_equal 1, json['people'].length, json.inspect
+        end
+
+        should 'include archived roles when requested' do
+          @person2.organizational_roles.create!(organization: @client.organization, role_id: Role::ADMIN_ID, archive_date: Date.today)
+          get :index, secret: @client.secret, filters: {roles: Role::ADMIN_ID}, include_archived: 'true'
+          json = JSON.parse(response.body)
+          assert_equal 2, json['people'].length, json.inspect
+        end
+
+      end
+
+      should 'filter by first name' do
+        # No matches
+        get :index, secret: @client.secret, filters: {first_name_like: 'zzzzzzzzzz'}
+        json = JSON.parse(response.body)
+        assert_equal 0, json['people'].length, json.inspect
+
+        # 1 person
+        get :index, secret: @client.secret, filters: {first_name_like: @person.first_name[0..1]}
+        json = JSON.parse(response.body)
+        assert_equal 1, json['people'].length, json.inspect
+
+      end
+
+      should 'filter by last name' do
+        # No matches
+        get :index, secret: @client.secret, filters: {last_name_like: 'zzzzzzzzzz'}
+        json = JSON.parse(response.body)
+        assert_equal 0, json['people'].length, json.inspect
+
+        # 1 person
+        get :index, secret: @client.secret, filters: {last_name_like: @person.last_name[0..1]}
+        json = JSON.parse(response.body)
+        assert_equal 1, json['people'].length, json.inspect
+
+      end
+
+      context 'filtering by name_or_email_like' do
+
+        should 'match first name' do
+          get :index, secret: @client.secret, filters: {name_or_email_like: @person.first_name[0..1]}
+          json = JSON.parse(response.body)
+          assert_equal 1, json['people'].length, json.inspect
+        end
+
+        should 'match email address' do
+          @person2.email_addresses.create(email: 'foo@example.com')
+          get :index, secret: @client.secret, filters: {name_or_email_like: 'foo@'}
+          json = JSON.parse(response.body)
+          assert_equal 1, json['people'].length, json.inspect
+        end
+
+        should 'match name' do
+          @person2.email_addresses.create(email: 'foo@example.com')
+          get :index, secret: @client.secret, filters: {name_or_email_like: [@person.first_name, @person.last_name].join(' ')}
+          json = JSON.parse(response.body)
+          assert_equal 1, json['people'].length, json.inspect
+        end
+      end
+
+    end
   end
 
 

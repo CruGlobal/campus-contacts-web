@@ -435,8 +435,9 @@ class PersonTest < ActiveSupport::TestCase
     context "get friendships" do
       should "get friends" do
         #make sure # of friends from MiniFB = # written into DB
+        existing_friends = @person.friend_uids
         @x = @person.get_friends(@authentication, TestFBResponses::FRIENDS)
-        assert_equal(@x, @person.friend_uids.length )
+        assert_equal(@x, @person.friend_uids.length + existing_friends.length )
       end
 
       should "update friends" do

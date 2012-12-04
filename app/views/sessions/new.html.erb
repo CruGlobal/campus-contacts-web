@@ -1,4 +1,12 @@
 <% if mhub? %>
+  <% if @survey %>
+    <% provide :head do %>
+      <%= render 'survey_responses/survey_head' %>
+    <% end %>
+    <% if @survey.logo_file_name.present? %>
+      <%= image_tag(@survey.logo.url(:small), class: 'logo') %>
+    <% end %>
+  <% end %>
   <center>
     <% if !@survey || [0, 1].include?(@survey.login_option) %>
       <div id="login_paragraph"><h1><%= @survey && @survey.login_paragraph.present? ?  @survey.login_paragraph : t('.login_paragraph_mhub') %></h1></div>
@@ -12,7 +20,7 @@
         <div class="info"><br/><br/>
           <center>
             <%= t('.dont_like_facebook') %>
-            <%= link_to(t('.skip_facebook'), session[:return_to] ? add_params(session[:return_to], :nologin => true) : 
+            <%= link_to(t('.skip_facebook'), session[:return_to] ? add_params(session[:return_to], :nologin => true) :
                         "/s/#{@survey.id}?nologin=true") %>
           </center>
         </div>
@@ -25,7 +33,7 @@
       <div class="loginscreen" style="text-align: center;">
         <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook), rel: 'external') %>
         <p><a href="/"><%= t('.back') %></a></p>
-      </div>      
+      </div>
     </div>
 
 

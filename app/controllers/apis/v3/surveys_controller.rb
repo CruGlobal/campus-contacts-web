@@ -4,7 +4,7 @@ class Apis::V3::SurveysController < Apis::V3::BaseController
   def index
     order = params[:order] || 'title'
 
-    list = add_includes_and_filters(surveys, order: order)
+    list = add_includes_and_order(surveys, order: order)
 
     render json: list,
            callback: params[:callback],
@@ -60,7 +60,7 @@ class Apis::V3::SurveysController < Apis::V3::BaseController
   end
 
   def get_survey
-    @survey = add_includes_and_filters(surveys)
+    @survey = add_includes_and_order(surveys)
                 .find(params[:id])
 
   end

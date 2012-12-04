@@ -11,6 +11,7 @@ class Organization < ActiveRecord::Base
   has_many :activities, dependent: :destroy
   has_many :target_areas, through: :activities, class_name: 'TargetArea'
   has_many :people, through: :organizational_roles, conditions: ["organizational_roles.deleted = 0"], uniq: true
+  has_many :not_archived_people, through: :organizational_roles, source: :person, conditions: ["organizational_roles.deleted = 0 AND archive_date is NULL"], uniq: true
   has_many :contact_assignments
   has_many :keywords, class_name: 'SmsKeyword'
   has_many :surveys, dependent: :destroy

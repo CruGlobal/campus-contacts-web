@@ -39,7 +39,7 @@ class Import < ActiveRecord::Base
       answers = Hash.new
 
       header_mappings.keys.each do |k|
-        answers[header_mappings[k].to_i] = row[k.to_i] unless header_mappings[k] == ''
+        answers[header_mappings[k].to_i] = row[k.to_i] unless header_mappings[k] == '' || header_mappings[k] == 'do_not_import'
       end
 
       person_hash[:answers] = answers
@@ -61,7 +61,9 @@ class Import < ActiveRecord::Base
 
     a = header_mappings.values
     a.delete("")
-    if a.length > a.uniq.length # if they don't have the same length that means the user has selected on at least two of the headers the same selected person attribute/survey question
+    do_not_import_count = a.count('do_not_import')
+    do_not_import_count -= 1 if do_not_import_count > 0
+    if a.length > (a.uniq.length + do_not_import_count) # if they don't have the same length that means the user has selected on at least two of the headers the same selected person attribute/survey question
       return errors << I18n.t('contacts.import_contacts.duplicate_header_match')
     end
     errors
@@ -133,7 +135,8 @@ class Import < ActiveRecord::Base
 
     if person.save
       question_sets.map { |qs| qs.save }
-      create_contact_at_org(person, current_organization)
+      contact_role = create_contact_at_org(person, current_organization)
+      # contact_role.update_attribute('followup_status','uncontacted') # Set default
     end
 
     return person
@@ -146,7 +149,7 @@ class Import < ActiveRecord::Base
   private
 
   def create_table(new_person_ids)
-    @answered_question_ids = header_mappings.values.reject{ |c| c.empty? }.collect(&:to_i)
+    @answered_question_ids = header_mappings.values.reject{ |c| c.empty? || c == 'do_not_import' }.collect(&:to_i)
     #puts answered_question_ids.inspect
     predefined_question_ids = Survey.find(APP_CONFIG['predefined_survey']).elements.collect(&:id)
     #puts Survey.find(APP_CONFIG['predefined_survey']).elements.inspect

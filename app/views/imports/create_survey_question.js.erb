@@ -7,9 +7,6 @@ if("<%= @message %>" == "SUCCESS"){
   survey_id = "<%= @survey.id if @survey.present? %>"
   question_type = "<%= escape_javascript(@question_category) %>"
   
-  $('#import_error_message').text('')
-  $('#create_question_dialog').dialog('close')
-  
   if("<%= @survey_status %>" == "NEW"){
     $('.import_column_survey_select').each(function(){    
       $(this).append("<optgroup label='"+survey_title+"'><option value='"+question_id+"'>"+question_label+"</option></optgroup>")
@@ -27,14 +24,13 @@ if("<%= @message %>" == "SUCCESS"){
   
   $('#import_column_survey_select_'+id).val(question_id)
   $('#import_column_survey_select_'+id).trigger('change')
+  $('#import_error_message').text('')
+  $('#create_question_dialog').dialog('close')
 }else if("<%= @message %>" == "UPDATE"){
   id = $('#create_question_dialog').attr('data_id')
   question_id = "<%= @question.id if @question.present? %>"
   question_label = "<%= escape_javascript(@question.label) if @question.present? %>"
   question_content = "<%= escape_javascript(@question.content) if @question.present? %>"
-  
-  $('#import_error_message').text('')
-  $('#create_question_dialog').dialog('close')
   
   $('.import_column_survey_select').each(function(){    
     $(this).children().find("option[value="+question_id+"]").text(question_label)
@@ -43,6 +39,8 @@ if("<%= @message %>" == "SUCCESS"){
 
   $('#import_column_survey_select_'+id).val(question_id)
   $('#import_column_survey_select_'+id).trigger('change')
+  $('#import_error_message').text('')
+  $('#create_question_dialog').dialog('close')
 }else{
   $('#import_error_message').text("<%== @message %>")
 }

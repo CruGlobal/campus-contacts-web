@@ -1,0 +1,1078 @@
+ru:
+  activerecord:
+    errors:
+      full_messages:
+        format: ! '%{attribute} %{message}'
+      messages:
+        accepted: must be accepted
+        blank: can't be blank
+        confirmation: doesn't match confirmation
+        empty: can't be empty
+        equal_to: must be equal to %{count}
+        even: must be even
+        exclusion: is reserved
+        greater_than: must be greater than %{count}
+        greater_than_or_equal_to: must be greater than or equal to %{count}
+        inclusion: is not included in the list
+        invalid: is invalid
+        less_than: must be less than %{count}
+        less_than_or_equal_to: must be less than or equal to %{count}
+        not_a_number: is not a number
+        not_an_integer: must be an integer
+        odd: must be odd
+        record_invalid: ! 'Validation failed: %{errors}'
+        taken: has already been taken
+        too_long: is too long (maximum is %{count} characters)
+        too_short: is too short (minimum is %{count} characters)
+        wrong_length: is the wrong length (should be %{count} characters)
+      template:
+        body: ! 'There were problems with the following fields:'
+        header:
+          one: 1 error prohibited this %{model} from being saved
+          other: ! '%{count} errors prohibited this %{model} from being saved'
+    models:
+      sms_keyword: Keyword
+  application:
+    add_contact:
+      add_contact: Добавить контакт в %{org}
+      save_and_add: Сохранить и добавить еще
+      save_and_close: Сохранить и Закрыть
+      survey_mode_instructions: Если добавляемый вами человек стоит рядом с вами, нажмите "Enter Survey Mode" находящийся в верхнем правом углу вашего экрана.
+      title_bio: 
+      title_label: 
+      title_optional: 
+      title_surveys: 
+    assign:
+      assign_explanation: ! 'Вы можете назначить контакт используя любую из нижеприведенных опций:'
+      keep_contact: 
+      me: Я
+      type_to_find_group: 
+      type_to_find_label: 
+      type_to_find_leader: Чтобы найти лидера, наберите имя лидера и нажмите имя лидера
+      type_to_find_org: Наберите чтобы найти a %{terminology} нажмите на %{terminology}на имя
+    messages:
+      question_too_long: 
+  batch:
+    new_person_message: 
+    person_transfer_message: 
+  bulk_email: Bulk Email
+  bulk_sms: Bulk Text
+  contacts:
+    add_contact: Add Contact
+    assign: Назначить
+    create:
+      email_taken: 
+      success: 
+    edit:
+      additional_information: Additional Information
+      back: Back to profile
+      basic_information: Basic Information
+      cancel: Cancel and go back to profile
+    form:
+      email: Email Address
+      first_name: First Name
+      last_name: Last Name
+      phone_number: Phone Number
+    import_contacts:
+      blank_header: 
+      cause_1: 
+      cause_2: 
+      cause_3: 
+      download_sample_csv: 
+      download_template_csv: 
+      duplicate_header_match: 
+      error: 
+      instruction_1: 
+      instruction_2: 
+      instruction_3: 
+      instruction_4: 
+      instructions_label: 
+      present_firstname: 
+      select_csv: 
+      success: 
+      tip_2: 
+    index:
+      add: Add
+      add_contact: 
+      add_label_empty: 
+      add_label_exists: 
+      add_label_failed: 
+      add_label_success: 
+      add_question_back: Click on a question to add it back to the page
+      all: All
+      all_responses: All Contacts
+      archived: 
+      assign_people:
+        one: Assign 1 person
+        other: Assign %{count} people
+      assign_to: ! 'Assign To:'
+      assigned_to: Assigned To
+      bulk_vcard_dialog_desc: 
+      bulk_vcard_dialog_title: 
+      bulk_vcard_download_message: 
+      bulk_vcard_email_message: 
+      clear_search_form: Clear Search Form
+      completed: Completed
+      completed_contacts: 
+      contact_no_select_message: 
+      delete_confirm: You are about to send this contact to the "Do Not Contact" list. If that's not what you meant to do, click cancel.
+      delete_contact: Delete this contact
+      delete_search_confirm: 
+      delete_this_search: 
+      destroy_confirm: Are you sure you want to delete this contact? If that's not what you meant to do, click cancel.
+      dnc: Do Not Contact
+      dnc_contacts: All Contacts - 'Do Not Contact'
+      edit_true: 
+      export: Export
+      filter: Search
+      first_name: First Name
+      friend_responses: Contacts who are also my friends on Facebook
+      friends: Friends
+      hidden_questions: Hidden Questions
+      import_contacts: 
+      import_contacts2: 
+      import_contacts3: 
+      import_labels_checkbox: 
+      import_new_label: 
+      import_step3_body1: 
+      import_step3_body2: 
+      in_progress: Assigned
+      in_progress_responses: All Contacts - Assigned
+      last_name: Last Name
+      last_survey: 
+      leaders: Leaders
+      matching_seach: Matching the criteria you searched for
+      my_friends: My Friends
+      no_activity: No Activity
+      no_activity_responses: All Contacts - No Activity
+      no_contacts: Sorry, there are no contacts here.
+      no_name_message: 
+      none_checked: You didn't select any contacts to assign.
+      phone_number: Phone Number
+      reminder_email_body: ! 'Hey!
+
+
+        Just letting you know that you have been given new contacts to follow-up.
+
+
+        Login to MissionHub at http://www.missionhub.com to access your contacts.
+
+
+        In Christ,
+
+        %{name}'
+      reminder_email_subject: New contacts have arrived!
+      responses_assigned_to: All Contacts - Assigned to %{assigned_to}
+      save_this_search: 
+      save_this_search_placeholder: 
+      saved_searches: 
+      search_saved: 
+      send_reminder: Send Reminder
+      show_all: Show 'In Progress' contacts
+      surveys: 
+      type_above_field: 
+      unassign_contact: Unassign contact
+      unassigned: Unassigned
+      unassigned_responses: All Contacts - Unassigned
+      vcard: 
+      which_org: You need to choose which organization you want to do folow-up from
+    leader:
+      archive_confirm: 
+      delete_confirm: Вы уверены что вы хотите удалить человека %{person} из списка лидеров?
+      delete_confirm_with_instructions: 
+    leader_form:
+      start_typing: ! 'Start typing a name to find a person to make a leader:'
+    leaders:
+      reminder_prompt: Some of your leaders have contacts that haven't been followed up! Let your leaders know!
+      show_more: Show More Leaders
+    mailer:
+      bulk_vcard_email_content: 
+      bulk_vcard_email_subject: 
+      vcard_email_content: 
+      vcard_email_subject: 
+    mine:
+      all: 
+      comments: 
+      completed: Completed
+      detailed: 
+      email: Email
+      in_progress: In Progress
+      my_contacts: My Contacts
+      name: Name
+      phone: Phone Number
+      year: Year
+    plain:
+      exit_survey: Exit survey mode
+    role_assign_success: 
+    show:
+      add_comment: Add Comment / Update Status
+      add_comments_here: Add comments here...
+      attach_rejoicable: Attach a Rejoicable
+      edit_contact_info: Edit Contact Info
+      email: ! 'Email:'
+      facebook_profile: Facebook Profile
+      phone_number: ! 'Phone #:'
+      previous_comments: Previous Comments
+      send_contact_info: Send Contact Info
+      status: Status
+      survey_answers: Survey Answers
+    statuses:
+      attempted_contact: Attempted Contact
+      completed: Completed
+      contacted: Contacted
+      do_not_contact: Do Not Contact
+      uncontacted: Uncontacted
+    thanks:
+      done: Done
+      facebook: You have been logged out of Facebook.
+      message: Thank you for your interest.
+    unassign: Unassign
+    update_notice_content: 
+    update_notice_link: 
+    update_notice_link_url: 
+    update_notice_title: 
+    update_notice_toggle: 
+  dashboard:
+    close: 
+    learn_more: 
+    send_message_guide: 
+    send_message_video_guide: 
+  date:
+    abbr_day_names:
+    - Sun
+    - Mon
+    - Tue
+    - Wed
+    - Thu
+    - Fri
+    - Sat
+    abbr_month_names:
+    - 
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - May
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Oct
+    - Nov
+    - Dec
+    day_names:
+    - Sunday
+    - Monday
+    - Tuesday
+    - Wednesday
+    - Thursday
+    - Friday
+    - Saturday
+    formats:
+      default: ! '%Y-%m-%d'
+      long: ! '%B %d, %Y'
+      short: ! '%b %d'
+      time: ! '%l:%M %p'
+    month_names:
+    - 
+    - January
+    - February
+    - March
+    - April
+    - May
+    - June
+    - July
+    - August
+    - September
+    - October
+    - November
+    - December
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: about 1 hour
+        other: about %{count} hours
+      about_x_months:
+        one: about 1 month
+        other: about %{count} months
+      about_x_years:
+        one: about 1 year
+        other: about %{count} years
+      almost_x_years:
+        one: almost 1 year
+        other: almost %{count} years
+      half_a_minute: half a minute
+      less_than_x_minutes:
+        one: less than a minute
+        other: less than %{count} minutes
+      less_than_x_seconds:
+        one: less than 1 second
+        other: less than %{count} seconds
+      over_x_years:
+        one: over 1 year
+        other: over %{count} years
+      x_days:
+        one: 1 day
+        other: ! '%{count} days'
+      x_minutes:
+        one: 1 minute
+        other: ! '%{count} minutes'
+      x_months:
+        one: 1 month
+        other: ! '%{count} months'
+      x_seconds:
+        one: 1 second
+        other: ! '%{count} seconds'
+    prompts:
+      day: Day
+      hour: Hour
+      minute: Minute
+      month: Month
+      second: Seconds
+      year: Year
+  errors:
+    format: ! '%{attribute} %{message}'
+    messages:
+      accepted: must be accepted
+      blank: can't be blank
+      confirmation: doesn't match confirmation
+      empty: can't be empty
+      equal_to: must be equal to %{count}
+      even: must be even
+      exclusion: is reserved
+      greater_than: must be greater than %{count}
+      greater_than_or_equal_to: must be greater than or equal to %{count}
+      inclusion: is not included in the list
+      invalid: is invalid
+      less_than: must be less than %{count}
+      less_than_or_equal_to: must be less than or equal to %{count}
+      not_a_number: is not a number
+      not_an_integer: must be an integer
+      odd: must be odd
+      too_long: is too long (maximum is %{count} characters)
+      too_short: is too short (minimum is %{count} characters)
+      wrong_length: is the wrong length (should be %{count} characters)
+  followup_comments:
+    index:
+      comment: 
+      comments_title: 
+      date_commented: 
+      email: 
+      filter: 
+      first_name: 
+      last_name: 
+      phone_number: 
+      status: 
+    search:
+      search_placeholder: 
+      search_title: 
+  general:
+    add: Добавить
+    add_a_leader: Добавить лидера
+    adding: Добавление...
+    address1: 
+    address2: 
+    adv_search: 
+    alert: 
+    archive: 
+    archived: 
+    assigned_to: 
+    autocomplete_name_hint: 
+    back: Назад
+    both: Оба
+    city: 
+    contacts_updated_from: 
+    country: 
+    dash: 
+    delete: Стереть
+    edit: Редактировать
+    email: Email
+    female: Женский
+    first_name: Имя
+    gender: Пол
+    hide: скрыть
+    home: 
+    keyword: Ключевое слово
+    last_name: Фамилия
+    male: Мужской
+    match_found: 
+    message: 
+    mobile: 
+    phone: Телефон
+    recipients: 
+    remove: Удалить
+    role: 
+    roles_applied: 
+    save: Сохранить
+    search: Поиск
+    send_email: Отправить Email
+    show: Показать
+    state: 
+    status: Статус
+    subject: 
+    survey: 
+    survey_text_tip_html: To begin your survey, <strong>text %{keyword} to %{shortcode}.</strong>
+    survey_web_tip_html: For the web version of the survey, send people to <strong>http://mhub.cc/c/%{keyword}</strong>
+    to: 
+    transfer: 
+    unassign: 
+    work: 
+    zip: 
+  group_memberships:
+    form:
+      add_a_leader: Add a leader
+      add_a_member: Add a member
+      start_typing: ! 'Start typing a name to find a person add to this group:'
+    search:
+      add_new_person_group: 
+      not_found: We couldn't find anyone in your %{terminology} with that name
+      show_all: show all
+      showing_count: ! 'Showing %{length} of %{total}, keep typing or '
+      showing_count_complete: 
+  groups:
+    edit:
+      edit_group: Editing %{group}
+    form:
+      approve_join_tip: If the group is listed publicly, checking this option will require you to approve any requests to join the group.
+      back: Cancel and go back
+      list_publicly_tip: If this option is selected, this group will be visible to the general public when they do a search. (Public search doesn't exist yet, but will at some point)
+      location_tip: For your location, type an address that you would expect to work if you did a search on a Google Map (i.e. "1600 Pennsylvania Ave, Washington, DC 20006")
+      meets_on: 'On'
+      meets_on_the: On the
+      of_month: of the month
+    index:
+      add: Add
+      add_a_label: Add a Label
+      add_group: Add a group
+      assign_to_label:
+        one: 1 Group
+        other: ! '%{count} Groups'
+      group_list: Group List for %{org}
+      group_name: Group Name
+      labeled_with: Labeled With "%{label}"
+      labels: Labels
+      leaders: Leaders
+      members: Involved
+      new_label_prompt: Please enter a new label name
+    label:
+      delete_confirm: Are you sure you want to remove the '%{label}' label?
+    new:
+      new_group: Create a New Group
+    person:
+      remove_confirm: Are you sure you want to remove %{name} from your group?
+    see_all: See all groups
+    show:
+      add_member: Add Member
+      confirm_delete_group: Are you sure you want to delete this group?
+      delete_group: Delete this group
+      edit: edit
+      edit_group: Edit Group
+      location: Location
+      meets: Meets
+      monthly: Monthly on the %{day}<br /> %{start_time} - %{end_time}
+      name: 
+      sporadically: Sporadically
+      weekly: Weekly on %{day}s<br/> %{start_time} - %{end_time}
+  helpers:
+    label:
+      group:
+        name: Group Name
+        start_time: From
+      organization:
+        terminology: 
+      sms_keyword:
+        survey_id: 
+    submit:
+      update: 
+  imports:
+    new:
+      file_not_existing: 
+      wrong_file_format_error: 
+  keyword_request_mailer:
+    notify_user:
+      body_html: <h2>Your request for the keyword %{keyword} was APPROVED</h2> <p> To use the keyword, tell people to text %{keyword} to %{number}<br/> </p> <p> Если у вас есть вопросы, %{link}. </p>
+      link_text: send us an email at support@missionhub.com
+    notify_user_of_denial:
+      body_html: ! '<p>Your request for the keyword keyword has been declined. Keywords are typically declined for one of the following reasons:</p>
+
+        <ul> <li>The keyword was too long. We recommend that you keep your keywords as short as possible, preferably under 10 characters.</li> <li>The keyword was too generic. Keywords should be specific to your location. We reserve generic keywords for regional or national audiences.  (e.g. osucru instead of cru)</li> <li>Too many keywords were requested. At this point in time, we are only allowing 2 keywords per location to minimize our cost.</li> </ul>
+
+        <p>If you have good reason for an exception, please send an explanation to support@missionhub.com with Keyword Request Declined in the subject line and we will review your situation.</p>
+
+        <p> Спасибо,<br/> MissionHub Support Team </p>'
+  keywords:
+    default_rejection_email: Your keyword request has been denied
+    edit:
+      heading: Editing Keyword
+    flash:
+      created: Keyword request was successfully submitted.
+      pick_org: Please pick which organization you are associated with
+      updated: Keyword was successfully updated.
+    form:
+      association: The %{this_term} you are currently requesting this keyword for has at leaset one %{child_term} under it.<br/> Select if you'd like to associate this keyword with the %{this_term} or a %{child_term} under this %{this_term}
+      chartfield: A keyword costs $7/month. Please enter a chart field to be billed for this keyword.
+      explanation: Please explain what you plan to use this keyword for.
+      initial_response: What response should we send back to people when they text in? <br/>If you want the person to complete a survey, the response MUST include {{ link }}<br/>(exactly like that, dont change that part of the response.)
+      keyword: Keyword
+      keyword_instruct: ! '- A keyword is required to collect contacts and surveys via text, web and smartphones. <br/> - ''FSUCRU'' is the keyword in ''Text FSUCRU to 85005''.<br/>- Use at least 3 letters for your keyword.'
+      keyword_tip: This is what people will type into their phone.
+      keyword_why: This is for our use only. The use description could include words like 'weekly meeting', 'outreach event', and other uses the keyword will have.
+      post_survey_message: What message would you like to show after the person has completed the survey?
+      post_survey_why: When someone texts in the keyword, this message will be sent to them and '{{link}}' will be replaced by a website address that will take them to an online survey for them to fill out. If they don't have internet, replying 'i' will send them all the questions via interactive text message.<br/><br/>If you want to include a link to your site, don't include it here - include it in the post-survey message (step 3 in the Create Survey process)
+    index:
+      association: Ассоциировать контакты с
+      association_help: When a contact responds to a survey, they are associated with the same team or movement as the keyword they responded to.
+  leader: Leader
+  leader_mailer:
+    added:
+      body_html: ! '<p>Привет %{name},</p>
+
+        <p>Я только что добавил вас в качестве лидера %{org} на MissionHub</p>
+
+        <p>Посетите %{link} чтобы войти. Пожалуйста не делитесь этой ссылкой ни с кем.</p>
+
+        <p>%{added_by}</p>'
+  leaders:
+    create:
+      no_user_account: 
+    form:
+      name_required: ! 'Name and email fields are required to add a leader:'
+      notify: Notify this person that they've been added and send them a link to log in.
+    search:
+      not_in_system: Если человек которого вы ищете еще не в системе, нажмите сюда чтобы добавить его.
+  member: Member
+  monthly: Monthly
+  nav:
+    all_contacts: Все контакты
+    archive: 
+    back_to_dashboard: Вернуться в Мои контакты
+    back_to_wizard: Завершить. Вернуться в мастер установки
+    cleanup: 
+    create_a_survey: 
+    dashboard: 
+    directory: Директории
+    enter_survey_mode: 
+    go_to: go to
+    groups: Группы
+    help: 
+    hide: Скрыть
+    keywords: Surveys
+    login: Войти
+    logout: Выйти
+    make_default: Установить по умолчанию
+    manage: 
+    my_comments: 
+    my_contacts: Мои контакты
+    my_profile: 
+    organizations: 
+    people: 
+    privacy: Политика конфиденциальности
+    profile: Мой профиль
+    roles: Роли
+    settings: 
+    survey_mode_tip: Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts.
+    surveys: 
+    terms: Условия и Соглашения
+    use_keyword: 
+    view_details: Посмотреть детали
+  number:
+    currency:
+      format:
+        delimiter: ! ','
+        format: ! '%u%n'
+        precision: 2
+        separator: .
+        significant: false
+        strip_insignificant_zeros: false
+        unit: $
+    format:
+      delimiter: ! ','
+      precision: 3
+      separator: .
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: ! '%n %u'
+        units:
+          billion: Billion
+          million: Million
+          quadrillion: Quadrillion
+          thousand: Thousand
+          trillion: Trillion
+      format:
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: ! '%n %u'
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+  org_membership:
+    confirm_delete: Are you sure you want to dissociate yourself from %{org}
+  organization_mailer:
+    notify_user:
+      body_html: 
+      link_text: 
+    notify_user_of_denial:
+      body_html: 
+  organizational_roles:
+    cannot_delete_admin_error: 
+    cannot_delete_self_as_admin_error: 
+    copy_people_success: 
+    moving_people_success: 
+    moving_to_same_org: 
+  organizations:
+    add_org:
+      name_not_unique: 
+    add_org_from_crs:
+      admin_password: 
+      bad_password: 
+      bad_url: 
+      conference_is_importing: 
+      crs_import_instructions: 
+      example: 
+      url: 
+    cleanup:
+      alumni_inst: 
+      alumni_inst_path: 
+      annual_inst_1: 
+      annual_inst_2: 
+      archive_contacts_submit: 
+      archive_inst: 
+      archive_instructions: 
+      archive_notice: 
+      confirm_archive: 
+      confirm_remove_leaders: 
+      contact_tips: 
+      instructions: 
+      leader_tips: 
+      removal_notice: 
+      remove_leader_inst: 
+      remove_leaders_submit: 
+      title: 
+    edit:
+      back_to_orgs: 
+      danger_explanation: 
+      danger_zone: 
+      delete: 
+      delete_confirm: 
+      name_explain: 
+      show_sub_explain: 
+      term_explain: 
+      title: 
+    index:
+      add: 
+      add_a_sub_org: 
+      add_sub_org: 
+      crs_import_link: 
+      crs_import_tip: 
+    new:
+      signup: 
+      title: 
+      your_org: 
+    settings:
+      submit: 
+      title: 
+      year_in_school: 
+  people:
+    add_person:
+      add_person: 
+    advanced_search:
+      basic_search: 
+      clear_search_form: 
+      email: 
+      first_name: 
+      last_name: 
+      phone: 
+      role: 
+    all:
+      all_selected_html: Все <b>%{count}</b> люди в директории выбраны.
+      all_selected_html_mine: 
+      page_selected_html: Все <b>%{count}</b> люди на этой странице выбраны.
+      select_all_html: Выбрать всех <b>%{count}</b> людей в директории.
+      select_all_html_mine: 
+    assign:
+      keep_contact: 
+    bulk_archive:
+      archiving_people_success: 
+      cannot_archive_admin_error: 
+    bulk_delete:
+      cannot_delete_admin_error: 
+      deleting_people_success: 
+    create:
+      email_error: 
+      email_taken: 
+      error_creating_admin_no_valid_email: 
+      error_creating_leader_no_valid_email: 
+      firstname_error: 
+      phone_number_error: 
+    edit:
+      editing: Редактирование
+      fb_name_search_dialog_desc: 
+      fb_name_search_dialog_no_more: 
+      fb_name_search_dialog_title: 
+      fb_profile_link: 
+      more_facebook_matches: 
+      no_results: 
+    form:
+      facebook_url: 
+      facebook_url_tip: 
+    index:
+      add_person: 
+      apply_roles: Применить роли
+      archived_directory_title: 
+      archived_label: 
+      cannot_archive_admin_error: 
+      cannot_delete_admin_error: 
+      directory_title: Директория - %{org}
+      displaying: Отобразить %{start} - %{finish} of %{total}
+      email: Email
+      error_message: 
+      error_message_update_admin_without_person: 
+      error_message_update_leader_without_person: 
+      export: Экспортировать этот список
+      filter: 
+      gender: Пол
+      group_comment: 
+      include_archived: 
+      include_archived_tips: 
+      labels: Метки
+      manage_roles: Управление ролями
+      merge_contacts: 
+      merge_people: 
+      no_people: Извините, здесь вовлеченных людей нет.
+      phone: Телефон
+      send_email: Отправить Email
+      send_sms: Отправить текст
+      statistics: 
+      transfer_org: 
+      vcard: 
+      year_in_school: Годы учебы
+    involvement:
+      conferences: 
+      summer_projects: 
+    left_sidebar:
+      edit_profile: 
+      involvement: 
+      profile: 
+      survey_answers: 
+    person_form:
+      add_email_address: 
+      add_phone_number: 
+      preferred_name: 
+    search:
+      advanced_search: 
+      clear_search_form: 
+      search_placeholder: 
+      search_title: 
+    show:
+      add_comment: 
+      add_comments_here: 
+      assigned_to: 
+      attach_rejoicable: 
+      edit_profile: Редактировать профиль
+      email: 
+      facebook_profile: 
+      google_map: 
+      label_button: 
+      persons_friends: 
+      phone_number: 
+      previous_comments: 
+      send_contact_info: 
+      send_vcard_desc: 
+      status: 
+      updated_time_difference: 
+  questions:
+    archived_help: Archived questions will no longer be included in the survey.  If no answers have ever been given to the question, the archived question will be deleted.  If you USE an archived question, the question will move to the YOUR QUESTIONS section and the previous answers will re-appear.
+    create:
+      notice: Вопрос был успешно создан.
+    form:
+      checkboxes: Checkboxes
+      dropdown: Выпадающий
+      multiple_choice: Множественный выбор
+      short_answer: Короткий ответ
+      web_only: Only show this question on web / mobile devices, don't include it in "interactive" mode.
+      what_question_type: Какого типа вопрос вы хотели бы задать?
+    predefined_help: Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided.
+    your_questions_help: Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service.
+  rejoicables:
+    gospel_presentation: Рассказать евангелие
+    prayed_to_receive: Молитва принятия Христа
+    spiritual_conversation: Духовный разговор
+  roles:
+    admin: Админ
+    alumni: Выпускник
+    contact: Контакт
+    involved: Вовлечен
+    leader: Лидер
+    views:
+      create: Создать
+      create_role: Создать новую роль
+      delete_role: Удалить роль
+      edit_role: Редактировать роль
+      i18n: 
+      name: Имя
+      organizational_roles: Организационные роли
+      system_roles: Системные роли
+      update: Обновить
+  sessions:
+    destroy:
+      signed_out: 
+    new:
+      back: Домой
+      dont_like_facebook: Не нравится Facebook?
+      instructions: Инструкции
+      login: 
+      login_paragraph_html: To get started, you'll need to have a Facebook account. <br/> Click the login link to the left and <strong>allow</strong> MHub to access your information. <br/> You'll be taken to the wizard if this is your first time accessing MissionHub.
+      login_paragraph_mhub: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
+      login_with_facebook: 
+      no_facebook: 
+      skip_facebook: Нажмите чтобы пропустить Facebook login
+      start_survey: 
+      waiting_for_logout: 
+      welcome: 
+  sms:
+    email_invalid_msg: 
+    email_should_be_unique_msg: 
+    keyword_inactive: The keyword you have just texted is not active. Please check your spelling and try again.
+    no_survey: 
+  sms_keywords:
+    default_rejection_email: 
+    edit:
+      heading: 
+      keywords: 
+      to_begin_survey_html: 
+    flash:
+      created: 
+      pick_org: 
+      updated: 
+    form:
+      associated_survey_tip: 
+      explanation: 
+      initial_response: 
+      initial_response_default: 
+      keyword: 
+      keyword_instruct: 
+      keyword_locked: 
+      keyword_tip: 
+      keyword_why: 
+      note: 
+      post_survey_why: 
+    index:
+      association: 
+      create_survey_first: 
+      delete_confirm: 
+      delete_tip: 
+      request_keyword: 
+    keyword_deleted: 
+    new:
+      choose_keyword_explanation_html: 
+      predefined_help: 
+      your_questions_help: 
+    show:
+      explanation: 
+      keyword: 
+      status: 
+  sporadically: Sporadically
+  support:
+    array:
+      last_word_connector: ! ', and '
+      two_words_connector: ! ' and '
+      words_connector: ! ', '
+    select:
+      prompt: Please select
+  survey:
+    drop_down_field:
+      choose_one: 
+  survey_mailer:
+    notify:
+      content: 
+  survey_responses:
+    edit:
+      multiple_answers: 
+      title: 
+    facebook:
+      facebook_login: 
+      pick_keyword: 
+    form:
+      frozen: 
+    new:
+      greeting_no_name: 
+      greeting_with_name: 
+    show:
+      edit_answers: 
+      no_answers: 
+      title: 
+    thanks:
+      thanks: 
+  surveys:
+    edit:
+      edit_survey: 
+    form:
+      association: 
+      background_color: 
+      css: 
+      css_file: 
+      customize_look: 
+      default_login_option: 
+      fb_only_login_option: 
+      freeze: 
+      login_option: 
+      login_paragraph: 
+      login_paragraph_tip: 
+      logo: 
+      no_fb_login_option: 
+      post_survey_message: 
+      post_survey_placeholder: 
+      skip_fb_login_option: 
+      survey_associated_with: 
+      terminology: 
+      text_color: 
+      title: 
+      title_placeholder: 
+      title_tip: 
+    index:
+      title: 
+    index_admin:
+      association_help: 
+      confirm_delete: 
+      delete_survey: 
+      edit_survey: 
+      link: 
+      new: 
+    new:
+      choose_keyword_explanation_html: 
+      create_a_survey: 
+    questions:
+      advanced_options:
+        autoassign_group_label: 
+        autoassign_guide: 
+        autoassign_keywords_label: 
+        autonotify_guide: 
+        autonotify_keywords_label: 
+        autonotify_leader_label: 
+        hidden: 
+        leaders: 
+        trigger_words: 
+        web_only: 
+      create:
+        duplicate_error: 
+        notice: 
+      edit:
+        leader_invalid_email: 
+        leader_invalid_email_with_name: 
+      form:
+        checkboxes: 
+        dropdown: 
+        hide_advanced_options: 
+        hide_assignment_options: 
+        hide_notification_options: 
+        multiple_choice: 
+        short_answer: 
+        show_advanced_options: 
+        show_assignment_options: 
+        show_notification_options: 
+        text_message_length: 
+        text_message_preview: 
+        toggle_advanced_options: 
+        web_only: 
+        what_question_type: 
+      index:
+        add_prev_question: 
+        add_question: 
+        forced_tip: 
+        manage: 
+        note: 
+        predefined: 
+        previously_used: 
+        your_questions: 
+      multiple_choice_form:
+        list_choices: 
+      question:
+        confirm_delete: 
+        delete_tip: 
+      short_answer_form:
+        column_header: 
+        column_header_hint: 
+        question: 
+  time:
+    am: am
+    formats:
+      date: 
+      default: ! '%m/%d/%Y %H:%M:%S'
+      long: ! '%B %d, %Y %H:%M'
+      short: ! '%d %b %H:%M'
+      time_only: ! '%l:%M %p'
+    pm: pm
+  views:
+    pagination:
+      first: ! '&laquo; Первый'
+      last: Последний &raquo;
+      next: Следующий &rsaquo;
+      previous: ! '&lsaquo; Предыдущий'
+      truncate: ! '...'
+  weekly: Weekly
+  welcome:
+    home:
+      delete: Удалить
+      delete_keyword_confirm: 
+      edit_keyword: Редактировать ключевое слово
+      edit_orgs: Edit your organizational involvements.
+      follow_up:
+        one: 1 Person to Follow-up
+        other: ! '%{count} People to Follow-up'
+      keywords: Анкеты
+      manage_questions: Организовать вопросы анкеты
+      no_mobile: 
+      surveys: 
+      title_top: Добро пожаловать в MissionHub!
+      your_orgs: Your Organizational Involvements
+    index:
+      get_details_html: 
+      get_started: Начать
+      go_home: Перейти в Мои контакты
+      headline_html: 
+      learn_more: 
+      request_key: Click here to request a keyword
+      request_key_help: A Keyword is both the name of the survey and what the person would text to fill out the survey questions. For example, you would say, 'Text UFCRU to the number 85005.' UFCRU is the keyword.
+      subheadline_html: 
+      title_top: Добро пожаловать в MissionHub!
+      title_top_mobile: Survey
+      video_headline_html: 
+      video_subheadline_html: 
+    tutorials:
+      get_started: 
+      video_headline_html: 
+      video_subheadline_html: 
+    wizard:
+      back: Назад
+      create_a_survey: 
+      create_survey: Создать анкету
+      create_survey_link: Нажмите здесь чтобы создать вашу анкету.
+      designate_leaders: Обозначить лидеров
+      keyword_paragraph: A powerful feature of MissionHub is the ability for you to collect contacts through text messages. For this to work, you have to choose a keyword that is unique to your ministry that people will send messages to. With a keyword, you will be able to say, “Text <strong>your keyword</strong>  to 85005” at your next event or meeting.
+      leaders_header: Дать доступ другим лидерам
+      leaders_paragraph: This part is optional. Odds are decent that there are other people you work with who you'd like to give the ability to manage the keyword you set up as well as the contacts that will come from people responding to your survey. This step lets you add those people. Except we haven't programmed it quite yet.
+      next: Следующий
+      not_found_paragraph: At the current time MissionHub is being field tested with the US Campus Ministry. If you're not a part of the US Campus Ministry, sit tight! We plan to release to a larger audience soon. If you are part of the US Campus Ministry and are seeing this message, send us an email at support@missionhub.com and we'll help you out.
+      request_a_keyword: 
+      request_keyword: Запросить ключевое слово
+      request_keyword_link: Click here to request a keyword. We'll return you to this wizard when you're done.
+      skip_step: Пропустить этот шаг
+      survey_paragraph: Now that you've requested a keyword, you're going to want to create a set of questions to ask people. Think along the lines of a short survey or a basic contact card.
+      verify_identity: Подтвердите вашу личность
+      verify_paragraph: ! 'If you have a CCC Relay login account, please sign in to link your account. You only need to do this once. WARNING: If you logged into MissionHub using someone else''s Facebook Account, Log Out now! Clicking verify will merge your information with theirs, creating a big mess.'
+      verify_with_relay: Verify With Relay
+      welcome: Добро пожаловать
+      welcome_paragraph: Добро пожаловать в MissionHub!<br><br> This setup wizard will help you get started and set up a keyword, which is an essential part of getting contacts into the system.

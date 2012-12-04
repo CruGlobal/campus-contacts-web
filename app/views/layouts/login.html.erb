@@ -2,19 +2,20 @@
 <html>
 <head>
   <%= render 'shared/head' %>
+  <%= yield :head %>
 </head>
 <body id="<%= controller.controller_name %>_controller">
   <%= render 'fb_init' %>
-  
+
   <div id="outer" class="splash">
-  
+
     <%= render 'shared/nav' %>
-    <div>    
+    <div>
       <div class="<%= params[:action] %>">
         <%= yield %>
       </div>
     </div><!-- main -->
-    
+
   </div><!-- outer -->
 
 </body>

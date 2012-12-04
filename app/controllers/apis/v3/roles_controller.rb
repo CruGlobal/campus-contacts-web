@@ -4,7 +4,7 @@ class Apis::V3::RolesController < Apis::V3::BaseController
   def index
     order = params[:order] || 'name'
 
-    list = add_includes_and_filters(roles, order: order)
+    list = add_includes_and_order(roles, order: order)
 
     render json: list,
            callback: params[:callback],
@@ -61,7 +61,7 @@ class Apis::V3::RolesController < Apis::V3::BaseController
   end
 
   def get_role
-    @role = add_includes_and_filters(roles)
+    @role = add_includes_and_order(roles)
                 .find(params[:id])
 
   end

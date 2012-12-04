@@ -3,9 +3,6 @@ require 'vpim/book'
 
 class Person < ActiveRecord::Base
 
-  serialize :organization_tree_cache, JSON
-  serialize :org_ids_cache, JSON
-
   has_one :sent_person
   has_many :person_transfers
   has_many :new_people
@@ -188,7 +185,7 @@ class Person < ActiveRecord::Base
   def set_as_sent
     SentPerson.find_or_create_by_person_id(id)
   end
-
+  
   def self.deleted
     self.get_deleted.collect()
   end
@@ -273,7 +270,7 @@ class Person < ActiveRecord::Base
 
   def org_ids
     unless @org_ids
-      unless org_ids_cache
+      unless Rails.cache.fetch(['org_ids_cache', self])
         organization_tree # make sure the tree is built
       end
       # convert org ids to integers (there has to be a better way, but i couldn't think of it)
@@ -283,21 +280,24 @@ class Person < ActiveRecord::Base
     @org_ids
   end
 
-  def clear_org_cache
-    update_column(:organization_tree_cache, nil)
-    update_column(:org_ids_cache, nil)
-  end
+  #def clear_org_cache
+    #update_column(:organization_tree_cache, nil)
+    #update_column(:org_ids_cache, nil)
+  #end
 
   def organization_tree
-    unless organization_tree_cache.present?
-      self.organization_tree_cache = org_tree_node
-      self.org_ids_cache = @org_ids
-      begin
-        save(validate: false)
-      rescue ActiveRecord::ReadOnlyRecord
-      end
+    Rails.cache.fetch(['organization_tree', self]) do
+      tree = org_tree_node
+      Rails.cache.write(['org_ids_cache', self], @org_ids)
+      tree
     end
-    organization_tree_cache
+  end
+
+  def org_ids_cache
+    unless Rails.cache.exist?(['org_ids_cache', self])
+      organization_tree # make sure the tree is built
+    end
+    Rails.cache.fetch(['org_ids_cache', self])
   end
 
   def organization_from_id(org_id)
@@ -485,6 +485,10 @@ class Person < ActiveRecord::Base
       user.primary_organization_id = org.id
       user.save!
     end
+    begin
+      touch # touch the timestamp to reset caches
+    rescue ActiveRecord::ReadOnlyRecord
+    end
   end
 
   def primary_organization
@@ -494,7 +498,7 @@ class Person < ActiveRecord::Base
         org = organizations.first
 
         # save this as the primary org
-        primary_organization = org
+        self.primary_organization = org
       end
       @primary_organization = org
     end
@@ -519,19 +523,6 @@ class Person < ActiveRecord::Base
 
   def email
     @email = primary_email_address.try(:email)
-    # unless @email
-    #   if email_addresses.present?
-    #     @email = email_addresses.first.try(:email)
-    #     email_addresses.first.update_attribute(:primary, true) unless new_record?
-    #   else
-    #     @email ||= user.try(:username) || user.try(:email)
-    #     begin
-    #       new_record? ? email_addresses.new(:email => @email, :primary => true) : email_addresses.create(:email => @email, :primary => true) if @email
-    #     rescue ActiveRecord::RecordNotUnique
-    #       reload
-    #     end
-    #   end
-    # end
     @email.to_s
   end
 
@@ -860,8 +851,6 @@ class Person < ActiveRecord::Base
                                      }
                                    }.flatten
   rescue NoMethodError
-    self.organization_tree_cache = nil
-    self.org_ids_cache = nil
     @org_ids = nil
     @retries += 1
     retry if @retries == 1

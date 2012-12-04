@@ -424,6 +424,7 @@ en:
       text_color: 'Text Color:'
       css_file: 'Upload your own custom css file (optional):'
       css: "Type in some custom css which will be embedded in a 'style' tag below all included css files"
+      redirect_url: "If you would like the survey to redirect back to your site when it is completed, put the full url you would like to redirect to in here."
     questions:
       create:
         notice: 'Question was successfully created.'
@@ -572,7 +573,7 @@ en:
       body_html:
         <p>Hi %{name},</p>
 
-        <p>I've has just added you as a leader for %{org} on MissionHub</p>
+        <p>I've just added you as a leader for %{org} on MissionHub</p>
 
         <p>Visit %{link} to log in. Please don't share this link with anyone else.</p>
 
@@ -612,7 +613,7 @@ en:
       edit_true: '&edit=true'
       search_saved: 'This search has been saved'
       vcard: 'Export Vcard'
-      add_contact: Add a Contact
+      add_contact: "Add a Contact to %{org}"
       clear_search_form: 'Clear Search Form'
       no_contacts: 'Sorry, there are no contacts here.'
       export: 'Export CSV'
@@ -1089,8 +1090,22 @@ en:
       contact_tips: 'Step #1 will move everyone who is marked "CONTACT" into an archived location if they are created earlier than the date specified. <br><br>You can modify the date as the default will take all contacts created today or earlier. <br><br>The contacts can be "UnArchived" manually by going to the Directory screen, click on the "Include Archived" check-box, and add any label to individual. <br><br>Tip from a leader : Add a new, unique question to your keyword at the beginning of this year and ask everyone to take the survey. Even if all the other fields are full, their answer to that question will cause their record to be "UnArchived". '
   imports:
     new:
+      title: Step 1 of 3 - Upload a File
+      guide: You can easily import hundreds of contacts at once by uploading a CSV (comma-seperated value) file. Microsoft Excel makes it easy to create a CSV file from a spreadsheet.
+      guide1: "Download and open %{link} to get started."
+      guide2: "Use the first row of the database to list your headings (First Name, Last Name, Email, etc.)."
+      guide3: "In Excel, choose <strong>Save As</strong>."
+      guide4: "From the drop down menu for <strong>File Type</strong>, choose <strong>CSV, Comma Separated</strong>."
+      guide5: "Click the <strong>Choose File</strong> button and locate your new CSV file, then click the <strong>Upload</strong> button to continue."
+      sample_csv: "CSV Sample Template"
       wrong_file_format_error: "Uploaded wrong file format. File must be .csv"
       file_not_existing: "File does not exist."
+    edit:
+      title: "Step 2 of 3 - Match Columns"
+      guide: "Match the headers from your CSV file with the corresponding Person attributes or Survey questions in MissionHub. <strong>First Name</strong> is required."
+    labels:
+      title: "Step 3 of 3 - Add Labels to New Contacts"
+      guide: "You are almost ready to upload %{count_word}! Use the list below to select any groups which should include these new contacts, then click the <strong>Import</strong> button. "
   batch:
     new_person_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, there are new contacts in your organization. Please login to missionhub.com as soon as possible to followup the contacts. Below is the list of %{contacts_count} new contacts:"
     person_transfer_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, you have been sent new contacts. Please login to missionhub.com as soon as possible to followup the contacts. There may be more information about the contacts in the comment section of their individual profile. If not, you may want to contact the senders at their email address. Below is the list of %{contacts_count} contacts sent:"
