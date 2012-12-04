@@ -13,5 +13,11 @@ class OrganizationSerializer < ActiveModel::Serializer
     end if includes
   end
 
+  INCLUDES.each do |relationship|
+    define_method(relationship) do
+      add_since(object.send(relationship))
+    end
+  end
+
 end
 

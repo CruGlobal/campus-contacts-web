@@ -16,36 +16,27 @@ class PersonSerializer < ActiveModel::Serializer
   end
 
   def contact_assignments
-    if scope.is_a?(Hash) && organization = scope[:organization]
-      object.contact_assignments.where(organization_id: organization.id)
-    else
-      []
-    end
+    add_since(organization_filter(:contact_assignments))
   end
 
   def followup_comments
-    if scope.is_a?(Hash) && organization = scope[:organization]
-      object.comments_on_me.where(organization_id: organization.id)
-    else
-      []
-    end
+    add_since(organization_filter(:followup_comments))
   end
 
   def organizational_roles
-    if scope.is_a?(Hash) && organization = scope[:organization]
-      object.organizational_roles.where(organization_id: organization.id)
-    else
-      []
-    end
+    add_since(organization_filter(:organizational_roles))
   end
 
   def rejoicables
-    if scope.is_a?(Hash) && organization = scope[:organization]
-      object.rejoicables.where(organization_id: organization.id)
-    else
-      []
+    add_since(organization_filter(:rejoicables))
+  end
+
+  [:phone_numbers, :email_addresses, :person_transfers].each do |relationship|
+    define_method(relationship) do
+      add_since(object.send(relationship))
     end
   end
+
 
 end
 
