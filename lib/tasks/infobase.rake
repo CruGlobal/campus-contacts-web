@@ -17,7 +17,7 @@ namespace :infobase do
       "KC" => "Korean CCC",
       "GK" => "Greek",
       "VL" => "Valor",
-      "SV" => "Student Venture",
+      "SV" => "Cru",
       "OT" => "Other"
     }
     campus_ministry = Ccc::Ministry.find_or_create_by_name('Campus Ministry')
@@ -55,7 +55,7 @@ namespace :infobase do
       else
         region = regions[level['region']]
         next unless region
-        m = region.children.create!(attribs) 
+        m = region.children.create!(attribs)
       end
 
       team_id_to_ministry[level['teamID']] = m
@@ -64,9 +64,9 @@ namespace :infobase do
     puts "Done local level."
 
     puts "Copy ministry_missional_team_member"
-    
+
     #OrganizationMembership.set_table_name "sn_ministry_involvements2"
-    #OrganizationMembership.reset_column_information 
+    #OrganizationMembership.reset_column_information
     # mtms = OrganizationMembership.find_by_sql("select * from ministry_missional_team_member")
     # team_member_role_id = Organization.find(1).ministry_roles.find_by_name("Missional Team Member").id
     # team_leader_role_id = Organization.find(1).ministry_roles.find_by_name("Missional Team Leader").id
@@ -119,7 +119,7 @@ namespace :infobase do
     #strategy_abbrev_to_name = Hash[Strategy.all.collect{ |s| [ s.abbrv, s.name ] } ]
     #strategy_abbrev_to_id = Hash[Strategy.all.collect{ |s| [ s.abbrv, s.id ] } ]
     campus_id_to_name = Hash[Ccc::MinistryTargetarea.all(select: "targetAreaID, name").collect{ |c| [ c.targetAreaID.to_s, c.name ] }]
-    
+
     puts "Need to go through activity rows"
     i = 0
     Ccc::MinistryActivity.where("status NOT IN('IN', 'TN')").each do |activity|
@@ -130,7 +130,7 @@ namespace :infobase do
         m = Organization.where(importable_id: activity.id, importable_type: 'Ccc::MinistryActivity').first
         attribs = {name: "#{strategies[activity.strategy]} at #{target.name}", terminology: 'Movement', importable_id: activity.id, importable_type: 'Ccc::MinistryActivity', status: 'active'}
         team = Organization.where(importable_id: activity.fk_teamID, importable_type: 'Ccc::MinistryLocallevel').first
-        if m 
+        if m
           if team == m.parent
             m.update_attributes(attribs)
           else
@@ -140,7 +140,7 @@ namespace :infobase do
           end
         else
           next unless team
-          m = team.children.create!(attribs) 
+          m = team.children.create!(attribs)
           m.target_areas << target
           begin
             m.save!
@@ -149,16 +149,16 @@ namespace :infobase do
           end
         end
       end
-      
+
       # Find all the students active in the system in the past year, and add them to this movement
       # Person.where(["dateChanged > ? AND (isStaff is null OR isStaff = 0) AND campus = ?", 1.year.ago, target.name]).each do |person|
       #   unless OrganizationMembership.where(organization_id: m.id, person_id: person.id).present?
       #     OrganizationMembership.create!(organization_id: m.id, person_id: person.id, validated: 1, start_date: person.created_at)
       #   end
       # end
-      
+
     end
-    
+
     # Inactivate inactive activities
     # Ccc::MinistryActivity.where("status IN('IN', 'TN')").each do |activity|
     #   m = Organization.where(importable_id: activity.id, importable_type: 'Ccc::MinistryActivity').first
