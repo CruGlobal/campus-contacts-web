@@ -10,8 +10,8 @@ class Apis::V3::BaseController < ApplicationController
   protected
 
   def authenticate_user!
-    unless params[:secret]
-      render json: {errors: ["You need to pass in the your Organization's API secret"]},
+    unless params[:secret] || oauth_access_token
+      render json: {errors: ["You need to pass in the your Organization's API secret or a user's oauth token."]},
         status: :unauthorized,
         callback: params[:callback]
       return false
@@ -43,8 +43,13 @@ class Apis::V3::BaseController < ApplicationController
 
   def current_organization
     unless @current_organization
-      api_org = Rack::OAuth2::Server::Client.find_by_secret(params[:secret]).try(:organization)
-      @current_organization = params[:organization_id] ? api_org.subtree.find(params[:organization_id]) : api_org
+      if oauth_access_token
+        api_org = current_user.person.primary_organization
+        @current_organization = params[:organization_id] ? api_org.root.subtree.find(params[:organization_id]) : api_org
+      else
+        api_org = Rack::OAuth2::Server::Client.find_by_secret(params[:secret]).try(:organization)
+        @current_organization = params[:organization_id] ? api_org.subtree.find(params[:organization_id]) : api_org
+      end
     end
     @current_organization
   end
