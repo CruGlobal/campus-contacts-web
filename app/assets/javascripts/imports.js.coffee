@@ -8,7 +8,7 @@ $ ->
       select_field = $(this).find('.import_column_survey_select')
       header = $.trim(parseCamelCase($(this).children('.column_header').text().replace(/_|-|:/g,' ')).toLowerCase())
       header_words = header.split(' ')
-      if select_field.val() == ''
+      if select_field.attr('saved_value') == ''
         select_field.find('option:not(:first))').each ->
           match_question = true
           for word in header_words
@@ -16,7 +16,10 @@ $ ->
           if match_question
             select_field.val($(this).val()) unless $(this).is(':disabled')
         select_field.trigger('change')
-      
+      else
+        select_field.val(select_field.attr('saved_value'))
+        select_field.trigger('change')
+      $('#create_question_dialog').dialog('close')
       
   	$('#create_question_dialog').dialog
   		resizable: false,

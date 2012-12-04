@@ -44,6 +44,28 @@ class ImportsController < ApplicationController
   end
 
   def update
+    columns_without_question = params[:import][:header_mappings].reject{|x,y| y.present? }
+    if columns_without_question.count > 0
+      survey_title = "Import-#{@import.created_at.strftime('%Y-%m-%d')}"
+      unless @survey = current_organization.surveys.find_by_title(survey_title)
+        @survey = current_organization.surveys.create(
+          login_paragraph: I18n.t('application.survey.default_login_paragraph'),
+          title: survey_title,
+          post_survey_message: I18n.t('application.survey_name_field.default_post_survey_message'),
+          terminology: 'Survey'
+        )
+      end
+      columns_without_question.each do |column|
+        question_label = @import.headers[column[0].to_i]
+        unless @question = @survey.elements.find_by_label(question_label)
+          @question = TextField.create!(style: 'short', label: question_label, content: params[:options], slug: '')
+          @survey.elements << @question
+        end
+        @survey.survey_elements.find_by_element_id(@question.id).update_attribute(:hidden, true)
+        params[:import][:header_mappings][column[0]] = @question.id.to_s
+      end
+    end
+    
     @import.update_attributes(params[:import])
     errors = @import.check_for_errors
 

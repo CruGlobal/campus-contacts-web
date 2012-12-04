@@ -101,6 +101,18 @@ class ImportsControllerTest < ActionController::TestCase
       end
     end
     
+    should "create new survey and question for unmatched header" do
+      stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
+        to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv")), status: 200)
+      contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv"))
+      file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
+      post :create, { :import => { :upload => file } }
+      assert_response :redirect
+      post :update, { :import => { :header_mappings => {"0" => @first_name_element.id, "1" => @last_name_element.id, "2" => ""} }, :id => Import.first.id}
+      assert_equal "Import-#{assigns(:import).created_at.strftime('%Y-%m-%d')}", Survey.last.title
+      assert_equal assigns(:import).headers[2], Element.last.label
+    end
+    
     should "unsuccesfully create an import if file is empty" do 
       stub_request(:get, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/).
         to_return(body: File.new(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_blank.csv")), status: 200)
