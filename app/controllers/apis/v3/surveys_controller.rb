@@ -8,7 +8,7 @@ class Apis::V3::SurveysController < Apis::V3::BaseController
 
     render json: list,
            callback: params[:callback],
-           scope: includes
+           scope: {include: includes, since: params[:since]}
   end
 
   def show

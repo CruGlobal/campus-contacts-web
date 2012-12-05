@@ -1,24 +1,21 @@
 class OrganizationSerializer < ActiveModel::Serializer
+  INCLUDES = [:contacts, :admins, :leaders, :people, :surveys, :groups, :keywords]
 
   attributes :id, :name, :terminology, :ancestry, :show_sub_orgs, :status, :updated_at, :created_at
 
-  has_many :contacts
-  has_many :admins
-  has_many :leaders
-  has_many :people
-  has_many :surveys
-  has_many :groups
-  has_many :keywords
+  has_many *INCLUDES
 
   def include_associations!
-    if scope.is_a? Array
-      include! :contacts if scope.include?('contacts')
-      include! :admins if scope.include?('admins')
-      include! :leaders if scope.include?('leaders')
-      include! :people if scope.include?('people')
-      include! :surveys if scope.include?('surveys')
-      include! :groups if scope.include?('groups')
-      include! :keywords if scope.include?('keywords')
+    includes = scope if scope.is_a? Array
+    includes = scope[:include] if scope.is_a? Hash
+    includes.each do |rel|
+      include!(rel.to_sym) if INCLUDES.include?(rel.to_sym)
+    end if includes
+  end
+
+  INCLUDES.each do |relationship|
+    define_method(relationship) do
+      add_since(object.send(relationship))
     end
   end
 

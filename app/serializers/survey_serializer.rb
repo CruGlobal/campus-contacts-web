@@ -7,9 +7,17 @@ class SurveySerializer < ActiveModel::Serializer
   has_one :keyword
 
   def include_associations!
+    includes = scope if scope.is_a? Array
+    includes = scope[:include] if scope.is_a? Hash
     if scope.is_a? Array
-      include! :questions if scope.include?('questions')
-      include! :keyword if scope.include?('keyword')
+      include! :questions if includes.include?('questions')
+      include! :keyword if includes.include?('keyword')
+    end
+  end
+
+  [:questions, :keyword].each do |relationship|
+    define_method(relationship) do
+      add_since(object.send(relationship))
     end
   end
 

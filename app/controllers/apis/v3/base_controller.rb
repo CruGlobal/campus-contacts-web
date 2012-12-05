@@ -10,8 +10,8 @@ class Apis::V3::BaseController < ApplicationController
   protected
 
   def authenticate_user!
-    unless params[:secret]
-      render json: {errors: ["You need to pass in the your Organization's API secret"]},
+    unless params[:secret] || oauth_access_token
+      render json: {errors: ["You need to pass in the your Organization's API secret or a user's oauth token."]},
         status: :unauthorized,
         callback: params[:callback]
       return false
@@ -43,8 +43,13 @@ class Apis::V3::BaseController < ApplicationController
 
   def current_organization
     unless @current_organization
-      api_org = Rack::OAuth2::Server::Client.find_by_secret(params[:secret]).try(:organization)
-      @current_organization = params[:organization_id] ? api_org.subtree.find(params[:organization_id]) : api_org
+      if oauth_access_token
+        api_org = current_user.person.primary_organization
+        @current_organization = params[:organization_id] ? api_org.root.subtree.find(params[:organization_id]) : api_org
+      else
+        api_org = Rack::OAuth2::Server::Client.find_by_secret(params[:secret]).try(:organization)
+        @current_organization = params[:organization_id] ? api_org.subtree.find(params[:organization_id]) : api_org
+      end
     end
     @current_organization
   end
@@ -70,6 +75,7 @@ class Apis::V3::BaseController < ApplicationController
     available_includes.each do |rel|
       resource = resource.includes(rel.to_sym) if includes.include?(rel.to_s)
     end
+    resource = resource.where("#{resource.table.name}.updated_at > ?", Time.at(params[:since].to_i)) if params[:since].to_i > 0
     resource = resource.limit(params[:limit]) if params[:limit]
     resource = resource.offset(params[:offset]) if params[:offset]
     resource.order(options[:order]) if options[:order]
