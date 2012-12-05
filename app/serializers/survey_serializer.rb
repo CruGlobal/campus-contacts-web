@@ -1,7 +1,7 @@
 class SurveySerializer < ActiveModel::Serializer
 
-  attributes :id, :title, :organization_id, :post_survey_message, :login_paragraph,
-             :is_frozen, :updated_at, :created_at
+  attributes :id, :title, :organization_id, :post_survey_message, :terminology, :login_paragraph,
+             :is_frozen, :created_at, :updated_at
 
   has_many :questions, :serializer => QuestionSerializer
   has_one :keyword

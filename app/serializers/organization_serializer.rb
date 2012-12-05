@@ -1,7 +1,7 @@
 class OrganizationSerializer < ActiveModel::Serializer
   INCLUDES = [:contacts, :admins, :leaders, :people, :surveys, :groups, :keywords]
 
-  attributes :id, :name, :terminology, :ancestry, :show_sub_orgs, :status, :updated_at, :created_at
+  attributes :id, :name, :terminology, :ancestry, :show_sub_orgs, :status, :created_at, :updated_at
 
   has_many *INCLUDES
 
