@@ -1,5 +1,8 @@
 # Element represents a section, question or content element on the question sheet
 class Element < ActiveRecord::Base
+  has_paper_trail :on => [:destroy],
+                  :meta => { organization_id: :organization_id }
+
   QUESTION_TYPES = %w{TextField ChoiceField DateField StateChooser ReferenceQuestion SchoolPicker AttachmentField PaymentQuestion}
   belongs_to :question_grid, :class_name => "QuestionGrid", :foreign_key => "question_grid_id"
   belongs_to :choice_field, :class_name => "ChoiceField", :foreign_key => "conditional_id"
@@ -36,6 +39,10 @@ class Element < ActiveRecord::Base
   # def has_response?(answer_sheet = nil)
   #   false
   # end
+  
+  def organization_id
+    surveys.first.try(:organization_id)
+  end
   
   def required?(answer_sheet = nil)
     super()

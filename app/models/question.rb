@@ -10,6 +10,7 @@
 
 class Question < Element
   include ActionController::RecordIdentifier # dom_id
+
   has_many :sheet_answers, :class_name => "Answer", :foreign_key => "question_id", :dependent => :destroy
 
   belongs_to :related_question_sheet, :class_name => "QuestionSheet", :foreign_key => "related_question_sheet_id"

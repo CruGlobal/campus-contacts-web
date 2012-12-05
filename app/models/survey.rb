@@ -1,6 +1,9 @@
 class Survey < ActiveRecord::Base
+  has_paper_trail :on => [:destroy],
+                  :meta => { organization_id: :organization_id }
+
   belongs_to :organization
-  
+
   has_many :survey_elements, :dependent => :destroy, :order => :position
   has_many :elements, :through => :survey_elements, :order => SurveyElement.table_name + '.position'
   has_many :question_grid_with_totals, :through => :survey_elements, :conditions => "kind = 'QuestionGridWithTotal'", :source => :element
@@ -13,34 +16,34 @@ class Survey < ActiveRecord::Base
                              path: 'surveys/:attachment/:style/:id/:filename', s3_storage_class: :reduced_redundancy
   has_attached_file :css_file, s3_credentials: 'config/s3.yml', storage: :s3,
                              path: 'surveys/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy
-  
+
   has_many :rules, :through => :survey_elements
-  
+
   # validation
   validates_presence_of :title, :post_survey_message, :terminology
   validates_length_of :title, :maximum => 100, :allow_nil => true
-  
+
   default_value_for :terminology, "Survey"
-  
+
   def to_s
     title
   end
-  
+
   # def questions_before_position(position)
   #   self.elements.where(["#{SurveyElement.table_name}.position < ?", position])
   # end
-  
+
   # Include nested elements
   # def all_elements
   #   (elements + elements.collect(&:all_elements)).flatten
   # end
-  
+
   def question_rules
     question_ids = questions.collect(&:id)
     element_ids = SurveyElement.where(element_id: question_ids).collect(&:id)
     question_rules = QuestionRule.where(survey_element_id: element_ids)
   end
-  
+
   def has_assign_rule(type, extra_id = nil)
     rule_id = rules.find_by_rule_code('AUTOASSIGN').try(:id)
     return false unless rule_id
@@ -58,7 +61,7 @@ class Survey < ActiveRecord::Base
     end
     return false
   end
-  
+
   def has_assign_rule_applied(answer_sheet, type)
     rule_id = rules.find_by_rule_code('AUTOASSIGN')
     rules = question_rules.where(rule_id: rule_id)
@@ -74,7 +77,7 @@ class Survey < ActiveRecord::Base
     end
     return false
   end
-  
+
   def duplicate
     new_survey = Survey.new(self.attributes)
     new_survey.organization_id = organization_id
@@ -87,7 +90,7 @@ class Survey < ActiveRecord::Base
       end
     end
   end
-  
+
   private
-  
+
 end

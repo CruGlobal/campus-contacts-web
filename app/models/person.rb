@@ -2,6 +2,8 @@ require 'vpim/vcard'
 require 'vpim/book'
 
 class Person < ActiveRecord::Base
+  has_paper_trail :on => [:destroy],
+                  :meta => { person_id: :id }
 
   has_many :person_transfers
   has_many :new_people
@@ -18,7 +20,7 @@ class Person < ActiveRecord::Base
   has_one :primary_org_role, class_name: "OrganizationalRole", foreign_key: "person_id", conditions: {primary: true}
   has_one :primary_org, through: :primary_org_role, source: :organization
   has_many :answer_sheets
-  has_many :contact_assignments, class_name: "ContactAssignment", foreign_key: "assigned_to_id"
+  has_many :contact_assignments, class_name: "ContactAssignment", foreign_key: "assigned_to_id", dependent: :destroy
   has_many :assigned_tos, class_name: "ContactAssignment", foreign_key: "person_id"
   has_many :assigned_contacts, through: :contact_assignments, source: :assigned_to
   has_one :current_address, class_name: "Address", foreign_key: "person_id", conditions: {address_type: 'current'}, autosave: true
@@ -26,12 +28,12 @@ class Person < ActiveRecord::Base
   has_many :rejoicables, inverse_of: :person
 
   has_many :organization_memberships, inverse_of: :person
-  has_many :organizational_roles, conditions: {deleted: false, archive_date: nil}
+  has_many :organizational_roles, conditions: {archive_date: nil}
   has_one :contact_role, class_name: 'OrganizationalRole'
   has_many :roles, through: :organizational_roles
-  has_many :organizational_roles_including_archived, class_name: "OrganizationalRole", foreign_key: "person_id", conditions: {deleted: false}
+  has_many :organizational_roles_including_archived, class_name: "OrganizationalRole", foreign_key: "person_id"
   has_many :roles_including_archived, through: :organizational_roles_including_archived, source: :role
-  has_many :organizations, through: :organizational_roles, conditions: ["role_id IN(?) AND status = 'active' AND deleted = 0 AND organizational_roles.archive_date is null ", Role.involved_ids], uniq: true
+  has_many :organizations, through: :organizational_roles, conditions: ["role_id IN(?) AND status = 'active'", Role.involved_ids], uniq: true
 
   has_many :followup_comments, :class_name => "FollowupComment", :foreign_key => "commenter_id"
   has_many :comments_on_me, :class_name => "FollowupComment", :foreign_key => "contact_id"
@@ -51,7 +53,6 @@ class Person < ActiveRecord::Base
   accepts_nested_attributes_for :phone_numbers, :reject_if => lambda { |a| a[:number].blank? }, allow_destroy: true
   accepts_nested_attributes_for :current_address, allow_destroy: true
 
-  #scope :organizational_roles, where("end_date = ''")
   scope :find_by_person_updated_by_daterange, lambda { |date_from, date_to| {
     :conditions => ["date_attributes_updated >= ? AND date_attributes_updated <= ? ", date_from, date_to]
   }}
@@ -65,7 +66,7 @@ class Person < ActiveRecord::Base
   scope :find_by_date_created_before_date_given, lambda { |before_date| {
     :select => "people.*",
     :joins => "LEFT JOIN organizational_roles AS ors ON people.id = ors.person_id",
-    :conditions => ["ors.role_id = ? AND ors.created_at <= ? AND ors.archive_date IS NULL AND ors.deleted = 0", Role::CONTACT_ID, before_date]
+    :conditions => ["ors.role_id = ? AND ors.created_at <= ? AND ors.archive_date IS NULL", Role::CONTACT_ID, before_date]
   }}
 
   scope :order_by_highest_default_role, lambda { |order, tables_already_joined = false| {
@@ -99,7 +100,7 @@ class Person < ActiveRecord::Base
 
   scope :search_by_name_or_email, lambda { |keyword, org_id| {
     :select => "people.*",
-    :conditions => ["(org_roles.organization_id = #{org_id} AND (concat(first_name,' ',last_name) LIKE ? OR concat(last_name, ' ',first_name) LIKE ? OR emails.email LIKE ?) AND org_roles.deleted <> 1)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
+    :conditions => ["(org_roles.organization_id = #{org_id} AND (concat(first_name,' ',last_name) LIKE ? OR concat(last_name, ' ',first_name) LIKE ? OR emails.email LIKE ?))", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
     :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = people.id LEFT JOIN organizational_roles AS org_roles ON people.id = org_roles.person_id"
   } }
 
@@ -130,9 +131,9 @@ class Person < ActiveRecord::Base
   end
 
   scope :get_archived, lambda { |org_id| {
-    :conditions => "organizational_roles.archive_date IS NOT NULL AND organizational_roles.deleted = 0",
+    :conditions => "organizational_roles.archive_date IS NOT NULL",
     :group => "people.id",
-    :having => "COUNT(*) = (SELECT COUNT(*) FROM people AS mpp JOIN organizational_roles orss ON mpp.id = orss.person_id WHERE mpp.id = people.id AND orss.organization_id = #{org_id} AND orss.deleted = 0)"
+    :having => "COUNT(*) = (SELECT COUNT(*) FROM people AS mpp JOIN organizational_roles orss ON mpp.id = orss.person_id WHERE mpp.id = people.id AND orss.organization_id = #{org_id})"
   } }
 
   scope :get_from_group, lambda { |group_id| {
@@ -150,7 +151,6 @@ class Person < ActiveRecord::Base
   end
 
   scope :get_archived_included, lambda { {
-    :conditions => "organizational_roles.deleted = 0",
     :group => "people.id"
   } }
 
@@ -159,7 +159,7 @@ class Person < ActiveRecord::Base
   end
 
   scope :get_archived_not_included, lambda { {
-    :conditions => "organizational_roles.archive_date IS NULL AND organizational_roles.deleted = 0",
+    :conditions => "organizational_roles.archive_date IS NULL",
     :group => "people.id"
   } }
 
@@ -167,22 +167,12 @@ class Person < ActiveRecord::Base
     self.get_archived_not_included.collect()
   end
 
-  scope :get_deleted, lambda { {
-    :conditions => "organizational_roles.deleted = 1",
-    :group => "people.id",
-    :having => "COUNT(*) = (SELECT COUNT(*) FROM people AS mpp JOIN organizational_roles orss ON mpp.id = orss.person_id WHERE mpp.id = people.id)"
-  } }
-
   def select_name
     "#{first_name} #{last_name} #{'-' if last_name.present? || first_name.present?} #{pretty_phone_number}"
   end
 
   def select_name_email
     "#{first_name} #{last_name} #{'-' if last_name.present? || first_name.present?} #{email}"
-  end
-
-  def self.deleted
-    self.get_deleted.collect()
   end
 
   def unachive_contact_role(org)
@@ -305,7 +295,7 @@ class Person < ActiveRecord::Base
 
   def roles_by_org_id(org_id)
     unless @roles_by_org_id
-      @roles_by_org_id = Hash[OrganizationalRole.connection.select_all("select organization_id, group_concat(role_id) as role_ids from organizational_roles where person_id = #{id} and deleted = 0 and archive_date is NULL group by organization_id").collect { |row| [row['organization_id'], row['role_ids'].split(',').map(&:to_i) ]}]
+      @roles_by_org_id = Hash[OrganizationalRole.connection.select_all("select organization_id, group_concat(role_id) as role_ids from organizational_roles where person_id = #{id} and archive_date is NULL group by organization_id").collect { |row| [row['organization_id'], row['role_ids'].split(',').map(&:to_i) ]}]
     end
     @roles_by_org_id[org_id]
   end
@@ -967,11 +957,11 @@ class Person < ActiveRecord::Base
   end
 
   def assigned_organizational_roles(organization_id)
-    roles.where('organizational_roles.organization_id' => organization_id, 'organizational_roles.deleted' => 0)
+    roles.where('organizational_roles.organization_id' => organization_id)
   end
-
+  
   def assigned_organizational_roles_including_archived(organization_id)
-    roles_including_archived.where('organizational_roles.organization_id' => organization_id, 'organizational_roles.deleted' => 0)
+    roles_including_archived.where('organizational_roles.organization_id' => organization_id)
   end
 
   def is_role_archived?(org_id, role_id)
