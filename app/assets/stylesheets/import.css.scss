@@ -79,9 +79,11 @@
 	min-height: 30px;
 }
 
-#import_container {
+#imports_controller.new .inside_container,
+#imports_controller.edit .inside_container,
+#imports_controller.labels .inside_container {
 	margin: 0 auto;
-	width: 790px;
+	width: 630px;
 	
   #import_upload {
     width: 300px;
