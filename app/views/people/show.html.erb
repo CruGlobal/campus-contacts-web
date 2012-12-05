@@ -20,7 +20,7 @@
         <%= t('.assigned_to', assigned_to: "#{@assigned_tos}") if @assigned_tos.present? %>
       </div>
       <br/>
-      
+
       <% @roles = (@person.assigned_organizational_roles(current_organization.id).default_roles_desc + @person.assigned_organizational_roles(current_organization.id).non_default_roles_asc) %>
       <% if @roles.present? %>
 		    <div class="title"><%= t('nav.roles')%>:</div>
@@ -36,7 +36,7 @@
 <div style="clear:both;margin:0;padding:0;line-height:0;"></div>
 
 <div class="pad">
-  
+
   <div class="contact_leftcol">
     <div>
       <%= image_tag("https://graph.facebook.com/#{@person.fb_uid}/picture?type=large", alt: '') %>
@@ -65,7 +65,7 @@
       <% if @person.fb_uid.present? %>
         <p><%= link_to(t('.facebook_profile'), "http://www.facebook.com/profile.php?id=#{@person.fb_uid}", target: '_blank', :class => "icon facebook") %> <%= link_to(t('.facebook_profile'), "http://www.facebook.com/profile.php?id=#{@person.fb_uid}", target: '_blank') %></p>
       <% end %>
-      <p><%= link_to(t('.send_contact_info', name: @person.first_name), '#', class: 'send_contact_info', 'data-person_id' => @person.id ) %></p>      
+      <p><%= link_to(t('.send_contact_info', name: @person.first_name), '#', class: 'send_contact_info', 'data-person_id' => @person.id ) %></p>
       <%= render :partial => 'shared/send_contact_info_dialog', :locals => { person: @person } %>
     </div>
   </div>
@@ -77,7 +77,7 @@
         <%= f.hidden_field :contact_id %>
         <%= f.hidden_field :commenter_id %>
         <span class="statusline">
-          <%= t('.status') %>: 
+          <%= t('.status') %>:
           <%= f.select :status, OrganizationalRole::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]} %>
           <%= link_to("Assign", "", class: 'assign person_headerlink', 'data-id' => @person.id) if can?(:manage, @person) %>
           <%= link_to(t('.label_button'), "", class: 'person_headerlink', id: 'add_label_button') if can?(:manage, @person) %>
@@ -95,13 +95,13 @@
                 <br/>
               <% end %>
             </div>
-          </div>        
+          </div>
           <%= spinner('comment') %>
         </div>
-      
+
       <% end %>
     <% end %>
-    
+
     <div class="commentswall" style="<%= 'display:none' unless @followup_comments.present? %>">
       <h3><%= t('.previous_comments') %></h3>
       <ul id="previous_comments">

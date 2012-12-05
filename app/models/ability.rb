@@ -47,11 +47,11 @@ class Ability
           can :create, SmsMailer
           can :create, Person
           can :create, PersonPresenter
+          can :manage, Person, organizational_roles_including_archived: {organization_id: leader_of_org_ids}
+          can :manage, PersonPresenter, organizational_roles_including_archived: {organization_id: leader_of_org_ids}
         end
 
-        can :manage, Person, organizational_roles: {organization_id: leader_of_org_ids}
         can :manage, Person, id: user.person.try(:id)
-        can :manage, PersonPresenter, organizational_roles: {organization_id: leader_of_org_ids}
         can :manage, PersonPresenter, id: user.person.try(:id)
 
         can :manage, Group, organization_id: leader_of_org_ids
