@@ -1,12 +1,13 @@
-#organizations_container {
+#organizations_controller.transfer .inside_container,
+#organizations_controller.do_transfer .inside_container {
 	margin: 0 auto;
-	width: 790px;
-	
+	width: 640px;
+
 		.inside_container {
 			margin: 0 auto;
 			width: 630px;
 		}
-	
+
 		h1.title {
 			float: left;
 			font-family: Georgia;
@@ -15,7 +16,7 @@
 			font-weight: normal;
 			color: #808284;
 		}
-		
+
 		.helpme {
 			margin-top: 15px;
 			margin-right: 0;
@@ -29,44 +30,44 @@
 			font-weight: bold;
 			color: #222;
 		}
-		
+
 		.helpme:hover {
 			text-decoration: none;
 			background: #ffeb74;
 		}
-		
+
 		.helpme:active {
 			background: #fff2a2;
 		}
-	
+
 		.container {
 			clear: both;
 			background-color: #eaf1f6;
 			border: 1px solid #eaf1f6;
 			border-top: 25px solid #eaf1f6;
-				
+
 				.content {
 					font-family: Tahoma;
 					font-size: 11px;
 					color: #333;
-					
+
 					table {
 						&.header_table {
 							tr:first-child {
 								background: #c7dff0;
 							}
 						}
-						
+
 						width: 100%;
 						table-layout: fixed;
 						text-align: left;
-						
+
 						th {
 							padding: 5px;
 							width: 100px;
 							vertical-align: middle;
 						}
-						
+
 						td {
 							padding: 5px 0px 5px 10px;
 							width: 100px;
@@ -75,21 +76,21 @@
 								padding: 5px
 							}
 						}
-						
+
 						th:first-child, td:first-child {
 							text-align: center;
 							width: 30px;
 						}
-						
+
 						th:last-child, td:last-child {
 							width: 190px;
 						}
-						
+
 						tr {
 							border-bottom: 1px solid #eaf1f6;
 						}
 					}
-					
+
 					.transfer_info {
 						overflow-y: scroll;
 						overflow-x: hidden;
@@ -97,57 +98,57 @@
 						background: #fff;
 						text-align: left;
 					}
-					
+
 					.transfer_results {
 						background: #fff;
 						text-align: center;
-						
+
 						.transfer_message {
 							padding: 3.95em 0;
 							font-family: Georgia;
 							font-size: 18px;
 							line-height: 18px;
 							color: #808284;
-							font-style: italic;							
-							
+							font-style: italic;
+
 							p {
 								margin: 0;
 								padding: 0;
 								display: inline-block;
 								vertical-align: top;
 							}
-							
+
 							p.with_image {
 								margin-left: 1em;
 								padding: 0.9em 0;
 							}
 						}
-						
+
 						.with_error {
 							padding: 2.97em 0;
 						}
 					}
-					
+
 					.transfer_actions {
 						overflow: hidden;
 						background: #eaf1f6;
-						
+
 						.info_left {
 							float: left;
 							width: 240px;
-							
+
 							div:nth-child(odd) {
 								float: left;
 							}
-							
+
 							.select_option {
 								margin-right: 0.5em;
 							}
-							
+
 							.options {
 								margin-bottom: 0.6em;
 							}
-							
+
 							.pri_text {
 								font-family: Georgia;
 								font-size: 12px;
@@ -155,7 +156,7 @@
 								color: #808284;
 								font-style: italic;
 							}
-							
+
 							.sec_text {
 								font-family: Georgia;
 								font-size: 9px;
@@ -164,14 +165,14 @@
 								font-style: italic;
 							}
 						}
-						
+
 						.info_right {
 							overflow: hidden;
 							float: right;
 							min-height: 24px;
 							text-align: right;
 							padding-right: 3px;
-							
+
 							#add_sent_contact {
 								margin: 3px 0px 8px 3px;
 								padding: 3px;
@@ -182,7 +183,7 @@
 								color: #666;
 								text-align: center;
 							}
-							
+
 							.action_button {
 								background: #fff;
 								border-radius: 4px;
@@ -196,53 +197,53 @@
 								text-shadow: #eee 0px 1px 0px;
 								vertical-align: top;
 							}
-							
+
 							.action_button:hover {
 								text-decoration: none;
 								background: #c7dff0;
 								border-color: #0379ae;
 							}
-							
+
 							#cancel_transfer {
 								padding: 0.49em 3.18em;
 								display: inline-block;
 							}
-							
+
 							#begin_transfer {
 								margin: 0 0 0 5px;
 								padding: 0;
 								width: 108px;
 								height: 24px;
 							}
-							
+
 							#ok_transfer {
 								padding: 0.49em 2.15em;
 								display: inline-block;
 							}
-							
+
 							#re_start_transfer {
 								margin: 0;
 								padding: 0;
 								width: 162px;
 								height: 24px;
 							}
-							
+
 							#return_dashboard {
 								margin: 0 0 0 1.1em;
 								padding: 0.49em 2.25em;
 								display: inline-block;
 							}
 						}
-						
+
 						.info_full {
 							width: 100%;
 						}
 					}
-					
+
 					.actions_92 {
 						padding: 1.47em 1.5em;
 					}
-					
+
 					.actions_48 {
 						padding: 1.1em 1.5em;
 					}

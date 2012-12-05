@@ -100,7 +100,7 @@ class OrganizationsController < ApplicationController
     @date = (Date.today-1).strftime("%m-%d-%Y")
     @date_leaders = (Date.today-91).strftime("%m-%d-%Y")
   end
-  
+
   def available_for_transfer
     available = Array.new
     people = current_organization.all_people.where("first_name LIKE :name OR last_name LIKE :name", name: "%#{params[:term]}%") - current_organization.sent
@@ -109,7 +109,7 @@ class OrganizationsController < ApplicationController
     end
     render json: available.to_json
   end
-  
+
   def queue_transfer
     @person = Person.find(params[:person_id])
     if @person.present?
@@ -117,12 +117,11 @@ class OrganizationsController < ApplicationController
       org_role.update_attributes({deleted: 0, added_by_id: current_user.person.id}) if org_role.deleted == true
     end
   end
-  
+
   def transfer
     @pending_transfer = current_organization.pending_transfer
-    render layout: 'no_sidebar'
   end
-  
+
   def do_transfer
     people = Person.where(id: params[:ids])
     sent_team_org = Organization.find(6816) # 100% Sent Team
@@ -133,7 +132,6 @@ class OrganizationsController < ApplicationController
       sent_team_org.add_role_to_person(person, Role::ALUMNI_ID) if params[:tag_as_alumni] == '1'
       person.archive_contact_role(current_organization) if params[:tag_as_archived] == '1'
     end
-    render layout: 'no_sidebar'
   end
 
   def archive_contacts
