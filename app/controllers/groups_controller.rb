@@ -23,9 +23,9 @@ class GroupsController < ApplicationController
     @group = Present(@group)
 
     if params[:q] && params[:q][:s]
-      @people = current_organization.non_deleted_people.get_from_group(@group.id).includes(:group_memberships).uniq.order(params[:q][:s])
+      @people = current_organization.people.get_from_group(@group.id).includes(:group_memberships).uniq.order(params[:q][:s])
     else
-      @people = current_organization.non_deleted_people.get_from_group(@group.id).includes(:group_memberships).uniq
+      @people = current_organization.people.get_from_group(@group.id).includes(:group_memberships).uniq
     end
 
     authorize! :read, @group

@@ -1,9 +1,12 @@
 require 'open-uri'
 class PhoneNumber < ActiveRecord::Base
+  has_paper_trail :on => [:destroy],
+                  :meta => { person_id: :person_id }
+
   @queue = :general
   belongs_to :carrier, class_name: 'SmsCarrier', foreign_key: 'carrier_id'
 
-  belongs_to :person
+  belongs_to :person, touch: true
   validates_presence_of :number, message: "can't be blank"
 
   before_create :set_primary
