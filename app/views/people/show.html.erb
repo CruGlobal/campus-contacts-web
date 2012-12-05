@@ -20,13 +20,16 @@
         <%= t('.assigned_to', assigned_to: "#{@assigned_tos}") if @assigned_tos.present? %>
       </div>
       <br/>
-      <div class="title"><%= t('nav.roles')%>:</div>
-      <div class="assigned_labels">
-        <% @roles = (@person.assigned_organizational_roles(current_organization.id).default_roles_desc + @person.assigned_organizational_roles(current_organization.id).non_default_roles_asc) %>
-        <% @roles.each do |role| %>
-          <span class="assigned_label"><%= role %></span>
-        <% end %>
-      </div>
+      
+      <% @roles = (@person.assigned_organizational_roles(current_organization.id).default_roles_desc + @person.assigned_organizational_roles(current_organization.id).non_default_roles_asc) %>
+      <% if @roles.present? %>
+		    <div class="title"><%= t('nav.roles')%>:</div>
+		    <div class="assigned_labels">
+		      <% @roles.each do |role| %>
+		        <span class="assigned_label"><%= role %></span>
+		      <% end %>
+		    </div>
+		  <% end %>
     </div>
   </div>
 

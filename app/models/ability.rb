@@ -39,7 +39,7 @@ class Ability
 
         # involved members can see other people's info
         involved_org_ids = user.person.organizational_roles.where(role_id: [admin_role.id, leader_role.id, involved_role.id]).pluck(:organization_id)
-        can :read, Person, organizational_roles: {organization_id: involved_org_ids}
+        can :read, Person, organizational_roles_including_archived: {organization_id: involved_org_ids}
         can :read, PersonPresenter, organizational_roles: { organization_id: involved_org_ids }
 
         # leaders and admins can edit other ppl's info
