@@ -91,9 +91,11 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   end
 
   def get_person
-    @person = add_includes_and_order(people)
-                .find(params[:id])
-
+    if params[:id] == "me"
+      @person = current_user.person
+    else
+      @person = add_includes_and_order(people).find(params[:id])
+    end
   end
 
   def available_includes
