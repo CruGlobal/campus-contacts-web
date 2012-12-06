@@ -1,11 +1,10 @@
-class SurveySerializer < ActiveModel::Serializer
-  INCLUDES = [:questions, :keyword]
+class ContactAssignmentSerializer < ActiveModel::Serializer
 
-  attributes :id, :title, :organization_id, :post_survey_message, :terminology, :login_paragraph,
-             :is_frozen, :created_at, :updated_at
+  INCLUDES = [:assigned_to, :person]
 
-  has_many :questions, :serializer => QuestionSerializer
-  has_one :keyword
+  attributes :id, :assigned_to_id, :person_id, :organization_id, :created_at, :updated_at
+
+  has_one *INCLUDES
 
   def include_associations!
     includes = scope if scope.is_a? Array

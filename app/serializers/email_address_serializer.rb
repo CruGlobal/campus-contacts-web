@@ -1,6 +1,6 @@
 class EmailAddressSerializer < ActiveModel::Serializer
 
-  attributes :id, :email, :primary, :created_at, :updated_at, :person_id
+  attributes :id, :email, :person_id, :primary, :created_at, :updated_at
 
 end
 

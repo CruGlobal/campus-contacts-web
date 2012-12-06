@@ -11,6 +11,10 @@ class PersonFilter
   def filter(people)
     filtered_people = people
 
+    if @filters[:ids]
+      filtered_people = filtered_people.where('people.id' => @filters[:ids].split(','))
+    end
+
     if @filters[:roles]
       filtered_people = filtered_people.where('organizational_roles.role_id' => @filters[:roles].split(','))
     end

@@ -16,6 +16,13 @@ class Apis::V3::OrganizationsControllerTest < ActionController::TestCase
       json = JSON.parse(response.body)
       assert_equal 2, json['organizations'].length, json.inspect
     end
+
+    should 'include nested leaders' do
+      get :index, secret: @client.secret, include: 'admins'
+      assert_response :success
+      json = JSON.parse(response.body)
+      assert_equal 1, json['organizations'][0]['admins'].length, json.inspect
+    end
   end
 
 

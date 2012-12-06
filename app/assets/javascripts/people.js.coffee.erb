@@ -393,7 +393,7 @@ $('#send_bulksms_link_new').live 'click', ->
   $('#bulk_send_msg_dialog').dialog('open')    
   $('#bulk_send_msg_dialog #char_counter').show()
   $('#bulk_send_msg_dialog #bulk_send_body').simplyCountable({ 
-    maxCount: 160,
+    maxCount: 140,
     counter: '#bulk_send_msg_dialog #char_counter'
   })
   $('#bulk_send_msg_dialog #char_counter').show()
@@ -484,7 +484,7 @@ $('.send_sms_link').live 'click', ->
 	$('#bulk_send_dialog form').addClass('bulk-sms')    
 	$('#bulk_send_dialog .subject').hide()
 	$('#char_counter').show()
-	$('#bulk_send_dialog #bulk_send_body').simplyCountable( { maxCount: 160 } )
+	$('#bulk_send_dialog #bulk_send_body').simplyCountable( { maxCount: 140 } )
 	$('#bulk_send_body').val('')
 	$('#bulk_send_dialog').dialog
 		resizable: false,
@@ -547,7 +547,7 @@ $('#send_bulksms_link').live 'click', ->
   $('#bulk_send_dialog form').addClass('bulk-sms')
   $('#bulk_send_dialog .subject').hide()
   $('#char_counter').show()
-  $('#bulk_send_dialog #bulk_send_body').simplyCountable( { maxCount: 160 } )
+  $('#bulk_send_dialog #bulk_send_body').simplyCountable( { maxCount: 140 } )
   # $('#bulk_send_body').val($('#bulk_sms_message').val())  
   $('#bulk_send_dialog').dialog
     resizable: false,
@@ -602,7 +602,7 @@ $('#send_bulkcomment_link').live 'click', ->
   $('#bulk_send_dialog form').addClass('bulk-sms')
   $('#bulk_send_dialog .subject').hide()
   $('#char_counter').show()
-  $('#bulk_send_dialog #bulk_send_body').simplyCountable( { maxCount: 160 } )
+  $('#bulk_send_dialog #bulk_send_body').simplyCountable( { maxCount: 140 } )
   $('#bulk_send_body').val($('#bulk_sms_message').val())  
   $('#bulk_send_dialog').dialog
     resizable: false,

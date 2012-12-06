@@ -8,13 +8,13 @@ class Apis::V3::OrganizationsController < Apis::V3::BaseController
 
     render json: list,
            callback: params[:callback],
-           scope: includes
+           scope: {include: includes, organization: current_organization, since: params[:since]}
   end
 
   def show
     render json: @organization,
            callback: params[:callback],
-           scope: includes
+           scope: {include: includes, organization: current_organization}
   end
 
   def create

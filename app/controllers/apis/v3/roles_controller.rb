@@ -8,7 +8,7 @@ class Apis::V3::RolesController < Apis::V3::BaseController
 
     render json: list,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: {include: includes, organization: current_organization, since: params[:since]}
   end
 
   def show

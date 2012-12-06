@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class OrganizationTest < ActiveSupport::TestCase
-  
+
   should have_many(:roles)
   should have_many(:group_labels)
   should have_many(:activities)
@@ -28,25 +28,25 @@ class OrganizationTest < ActiveSupport::TestCase
   should have_many(:groups)
 
   # begin methods testing
-  
+
   context "get all people" do
     setup do
       @org1 = Factory(:organization)
       @person1 = Factory(:person)
       @person2 = Factory(:person)
       @person3 = Factory(:person)
-      
-      Factory(:organizational_role, person: @person2, role: Role.contact, organization: @org1, :added_by_id => @person1.id, deleted: 1)
-      Factory(:organizational_role, person: @person2, role: Role.involved, organization: @org1, :added_by_id => @person1.id, deleted: 1)
+
+      Factory(:organizational_role, person: @person2, role: Role.contact, organization: @org1, :added_by_id => @person1.id)
+      Factory(:organizational_role, person: @person2, role: Role.involved, organization: @org1, :added_by_id => @person1.id)
       Factory(:organizational_role, person: @person3, role: Role.contact, organization: @org1, :added_by_id => @person1.id)
       Factory(:organizational_role, person: @person3, role: Role.involved, organization: @org1, :added_by_id => @person1.id)
     end
-    
+
     should "only get people with some roles not yet deleted" do
-      assert_equal [@person3], @org1.people
+      assert_equal [@person2, @person3], @org1.people
     end
   end
-  
+
   context "get all leaders" do
     setup do
       @org1 = Factory(:organization)
@@ -106,13 +106,13 @@ class OrganizationTest < ActiveSupport::TestCase
       @org5 = Factory(:organization, id: '5', ancestry: '1/2/3/4')
       @org6 = Factory(:organization, id: '6', ancestry: '1/2/3/4/5')
     end
-    
+
     should "return the admins of org1" do
       Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
       Factory(:organizational_role, organization: @org1, person: @person2, role: Role.admin)
       assert_equal @org1.parent_organization_admins, [@person1, @person2]
     end
-    
+
     should "return the admins of org2" do
       Factory(:organizational_role, organization: @org2, person: @person1, role: Role.admin)
       Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
@@ -121,14 +121,14 @@ class OrganizationTest < ActiveSupport::TestCase
       assert(results.include?(@person1), "person1 should be returned")
       assert(results.include?(@person2), "person2 should be returned")
     end
-    
+
     should "return the admins of org3" do
       Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
       Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
       Factory(:organizational_role, organization: @org3, person: @person3, role: Role.admin)
       assert_equal @org3.parent_organization_admins, [@person1, @person2, @person3]
     end
-    
+
     should "return the admins of org4" do
       Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
       Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
@@ -136,7 +136,7 @@ class OrganizationTest < ActiveSupport::TestCase
       Factory(:organizational_role, organization: @org4, person: @person4, role: Role.admin)
       assert_equal @org4.parent_organization_admins, [@person1, @person2, @person3, @person4]
     end
-    
+
     should "return the admins of org5" do
       Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
       Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
@@ -145,7 +145,7 @@ class OrganizationTest < ActiveSupport::TestCase
       Factory(:organizational_role, organization: @org5, person: @person5, role: Role.admin)
       assert_equal @org5.parent_organization_admins, [@person5]
     end
-    
+
     should "return the admins of org6" do
       Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
       Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
@@ -155,7 +155,7 @@ class OrganizationTest < ActiveSupport::TestCase
       Factory(:organizational_role, organization: @org6, person: @person6, role: Role.admin)
       assert_equal @org6.parent_organization_admins, [@person5, @person6]
     end
-    
+
     should "return the admins of org1 if @org2 dont have admins" do
       Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
       results = @org3.parent_organization_admins
@@ -256,7 +256,7 @@ class OrganizationTest < ActiveSupport::TestCase
 
   test "test to_s()" do # Every model, in this application, should return .name of the record
     org1 = Factory(:organization, :name => "Chupakabra")
-    assert_equal org1.to_s, "Chupakabra", "Organization did not return correct value on to_s method" 
+    assert_equal org1.to_s, "Chupakabra", "Organization did not return correct value on to_s method"
   end
 
   test "self and children" do
@@ -280,7 +280,7 @@ class OrganizationTest < ActiveSupport::TestCase
     org2 = Factory(:organization, :parent => org1)
 
     assert_equal org1.self_and_children_ids.sort{ |a, b| 1*(b <=> a) }, [org1.id, org2.id].sort{ |a, b| 1*(b <=> a) }, "Parent organization did not return correct self and children ids"
-    #[2, 3, 1].sort{ |a, b| 1*(b <=> a) } == [2, 1, 3].sort{ |a, b| 1*(b <=> a) }    
+    #[2, 3, 1].sort{ |a, b| 1*(b <=> a) } == [2, 1, 3].sort{ |a, b| 1*(b <=> a) }
   end
 
   test "self and children surveys" do
@@ -315,7 +315,7 @@ class OrganizationTest < ActiveSupport::TestCase
   test "unassigned_people" do
 
   end
-  
+
   context "retrieving active keywords" do
     setup do
       @person = Factory(:person)
@@ -355,8 +355,8 @@ class OrganizationTest < ActiveSupport::TestCase
     role1 = Factory(:role, :organization => org1)
     a = Role.where("organization_id = 0")
     a << role1
-    
-    assert_equal org1.roles.sort{ |a, b| 1*(b <=> a) }, a.sort{ |a, b| 1*(b <=> a) }, "Organization class did not return correct roles"
+
+    assert_equal a.sort{ |a, b| 1*(b <=> a) }, org1.roles.sort{ |a, b| 1*(b <=> a) }, "Organization class did not return correct roles"
   end
 
   test "<=>(other)" do
@@ -385,7 +385,7 @@ class OrganizationTest < ActiveSupport::TestCase
 
     org.add_leader(user1.person, user2.person)
     org_role = OrganizationalRole.last
-    
+
     assert_equal org.id, org_role.organization_id, "The last role should have the org"
     assert_equal user1.person.id, org_role.person_id, "The last role should have the person"
     assert_equal user2.person.id, org_role.added_by_id, "The last role should have the person who adds the leader"
@@ -397,23 +397,23 @@ class OrganizationTest < ActiveSupport::TestCase
     user2 = Factory(:user_with_auxs)
     user3 = Factory(:user_with_auxs)
     org = Factory(:organization)
-    
+
     # Add Leader
     org.add_leader(user1.person, user2.person)
     org_role = OrganizationalRole.last
-    
+
     # Archive Leader
     org_role.archive
-    
+
     # Add Leader Again
     org.add_leader(user1.person, user3.person)
     org_role = OrganizationalRole.last
-    
+
     assert_equal org.id, org_role.organization_id, "The last role should have the org"
     assert_equal user1.person.id, org_role.person_id, "The last role should have the person"
     assert_equal user3.person.id, org_role.added_by_id, "The last role should have the other person who adds the leader"
     assert_equal Role::LEADER_ID, org_role.role_id, "The last role should have the leader role id"
-    
+
   end
 
   test "add_contact(person)" do
@@ -444,9 +444,9 @@ class OrganizationTest < ActiveSupport::TestCase
     org1 = Factory(:organization)
     person1 = Factory(:person)
     org1.add_contact(person1)
-    assert_difference("OrganizationalRole.where(deleted: false).count", -1, "An organization was not destroyed") do
-      org1.remove_contact(person1)
-    end
+    assert org1.contacts.include?(person1)
+    org1.remove_contact(person1)
+    assert !org1.contacts.include?(person1)
   end
 
   test "move_contact(person, to_org, keep_contact, current_user)" do # revise!
@@ -483,7 +483,7 @@ class OrganizationTest < ActiveSupport::TestCase
   end
 
   test "notify_new_leader(person, added_by)" do
-  
+
   end
 
   # end method testing
@@ -498,14 +498,14 @@ class OrganizationTest < ActiveSupport::TestCase
 
     should "delete suborganizations when deleted (root organizations cannot be deleted)" do
       # it seems like there comes a problem when you are destroying an organization in which its predecessor tree is more than 2 levels deep
-    
+
       org1 = Factory(:organization)
       org2 = Factory(:organization, :parent => org1)
       org3 = Factory(:organization, :parent => org2)
       org4 = Factory(:organization, :parent => org3)
       org5 = Factory(:organization, :parent => org4)
 
-      assert_difference("Organization.count", -2, "Organizations were not deleted after parent was destroyed.") do 
+      assert_difference("Organization.count", -2, "Organizations were not deleted after parent was destroyed.") do
         org4.destroy
       end
     end
@@ -519,7 +519,7 @@ class OrganizationTest < ActiveSupport::TestCase
       assert_difference("Organization.count", 0, "An organization was created despite the absence of name") do
         Organization.create(:terminology => "termi")
       end
-      
+
     end
 
     should "have at least one parent after creation" do #this test is not yet done
@@ -536,31 +536,31 @@ class OrganizationTest < ActiveSupport::TestCase
       Factory(:organization, person_id: person.id)
     end
   end
-  
+
   context "getting the admins of an org" do
-  
+
   end
-  
+
   context "Testing the uniqueness of an orgs children" do
     setup do
       @org = Factory(:organization)
       @child = Factory(:organization, parent: @org, name: 'org', terminology: 'org')
-      
+
       @another_org = Factory(:organization)
     end
-    
+
     should "not save a child org if the name is not unique" do
       another_child = Organization.new(:parent => @org, :name => 'org', :terminology => 'org')
       assert !another_child.save
       assert_not_nil another_child.errors[:name]
       assert_equal "Name is not Unique", another_child.errors[:name].first
     end
-    
+
     should "save a child org if the name is uniqie" do
       another_child = Organization.new(:parent => @org, :name => 'wat', :terminology => 'wat')
       assert another_child.save
     end
-  
+
     should "save a child org with the same name from another parent orgs children" do
       another_child = Organization.new(:parent => @another_org, :name => 'org', :terminology => 'org')
       assert another_child.save
@@ -570,7 +570,7 @@ class OrganizationTest < ActiveSupport::TestCase
   # end deeper tests
 
 
- 
 
-  
+
+
 end

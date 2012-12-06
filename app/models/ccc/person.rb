@@ -1,5 +1,5 @@
 class Ccc::Person < ActiveRecord::Base
-  
+
   self.table_name = 'ministry_person'
   self.primary_key = 'personID'
 
@@ -86,7 +86,7 @@ class Ccc::Person < ActiveRecord::Base
 
 
   def preferred_or_first
-    preferredName || firstName
+    preferredName.present? ? preferredName : firstName
   end
 
   def last_name
@@ -142,7 +142,7 @@ class Ccc::Person < ActiveRecord::Base
         pn.merge(opn) if opn
       end
       emails = email_addresses.collect(&:email)
-      other.email_addresses.each do |pn| 
+      other.email_addresses.each do |pn|
         if emails.include?(pn.email)
           pn.destroy
         else

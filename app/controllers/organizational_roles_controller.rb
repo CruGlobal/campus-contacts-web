@@ -4,18 +4,18 @@ class OrganizationalRolesController < ApplicationController
     role_ids = params[:labels]
     person = Person.find(params[:id])
     if role_ids.present?
-      person.assigned_organizational_roles(current_organization.id).where('roles.id NOT IN (?)', role_ids).update_all({deleted: 1})
+      person.organizational_roles(current_organization.id).where('role_id NOT IN (?)', role_ids).update_all({archive_date: Date.today})
 
       role_ids.each do |role_id|
         if role_id.present?
           org_role = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person.id, current_organization.id, role_id)
-          org_role.update_attributes({deleted: 0, added_by_id: current_user.person.id}) if org_role.deleted == true
+          org_role.update_attributes({archive_date: nil, added_by_id: current_user.person.id})
         end
       end
     else
-      person.assigned_organizational_roles(current_organization.id).update_all({deleted: 1})
+      # We don't want to remove all of a person's roles using this method.
     end
-    @new_label_set = (person.assigned_organizational_roles(current_organization.id).default_roles_desc + person.assigned_organizational_roles(current_organization.id).non_default_roles_asc).collect(&:name)
+    @new_label_set = (person.organizational_roles(current_organization.id).default_roles_desc + person.organizational_roles(current_organization.id).non_default_roles_asc).collect(&:name)
   end
 
   def update

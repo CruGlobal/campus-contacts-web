@@ -257,20 +257,13 @@ class PeopleController < ApplicationController
     end
 
     if ids.present?
-      current_organization.organizational_roles.where(:person_id => ids, :deleted => false).each do |ors|
-        if(ors.role_id == Role::LEADER_ID)
-          ca = Person.find(ors.person_id).contact_assignments.where(organization_id: current_organization.id).all
-          ca.collect(&:destroy)
-        end
-        ors.delete
+      current_organization.people.where('people.id' => ids).each do |person|
+        current_organization.delete_person(person)
       end
     end
 
 
     render :text => I18n.t('people.bulk_delete.deleting_people_success')
-    #respond_to do |format|
-    #  format.js
-    #end
   end
 
   def bulk_archive
@@ -288,7 +281,7 @@ class PeopleController < ApplicationController
     end
 
     if ids.present?
-      current_organization.organizational_roles.where(:person_id => ids, :archive_date => nil, :deleted => false).each do |ors|
+      current_organization.organizational_roles.where(person_id: ids, archive_date: nil).each do |ors|
         if(ors.role_id == Role::LEADER_ID)
           ca = Person.find(ors.person_id).contact_assignments.where(organization_id: current_organization.id).all
           ca.collect(&:destroy)
@@ -303,8 +296,12 @@ class PeopleController < ApplicationController
   # # DELETE /people/1
   # # DELETE /people/1.xml
   def destroy
-    @org_role = current_organization.organizational_roles.find_by_person_id(params[:id])
-    @org_role.destroy if @org_role.present?
+    authorize! :manage, current_organization
+
+    person = current_organization.people.find(params[:id])
+
+    current_organization.delete_person(person)
+
     render nothing: true
   end
 
@@ -392,7 +389,7 @@ class PeopleController < ApplicationController
     all.each_with_index do |role_id, index|
       begin
         ors = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) if to_be_added_roles.include?(role_id)
-        ors.update_attributes({:deleted => false, :end_date => '', :archive_date => nil}) unless ors.nil?
+        ors.update_attributes({:archive_date => nil}) unless ors.nil?
       rescue OrganizationalRole::InvalidPersonAttributesError
         render 'update_leader_error', :locals => { :person => person } if role_id == Role::LEADER_ID
         render 'update_admin_error', :locals => { :person => person } if role_id == Role::ADMIN_ID
@@ -486,7 +483,6 @@ class PeopleController < ApplicationController
     string.include?("http://") || string.include?("https://") ? true : false
   end
 
-
 =begin
     def uri?(string)
       uri = URI.parse(string)
@@ -515,7 +511,7 @@ class PeopleController < ApplicationController
 
     @q = @people_scope.includes(:primary_phone_number, :primary_email_address)
     #when specific role is selected from the directory
-    @q = @q.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ? AND organizational_roles.deleted = 0', params[:role], current_organization.id) unless params[:role].blank?
+    @q = @q.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ?', params[:role], current_organization.id) unless params[:role].blank?
     sort_by = ['last_name asc', 'first_name asc']
 
     #for searching

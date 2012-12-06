@@ -22,6 +22,12 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :remember_me, :password, :username
 
+  def self.from_access_token(token)
+    if access_token = Rack::OAuth2::Server::AccessToken.find_by_code(token)
+      return User.find(access_token.identity)
+    end
+  end
+
   def self.find_for_facebook_oauth(access_token, signed_in_resource=nil, attempts = 0, force = false)
     data = access_token['extra']['raw_info']
     unless data["email"].present?
