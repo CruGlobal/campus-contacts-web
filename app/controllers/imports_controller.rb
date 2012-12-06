@@ -112,7 +112,7 @@ class ImportsController < ApplicationController
   end
 
   def create_survey_question
-    unless params[:question_id].present?
+    if !params[:question_id].present? || params[:question_id] == 'new_question'
       @message ||= "Enter new survey name." if params[:create_survey_toggle] == "new_survey" && !params[:survey_name_field].present?
       @message ||= "Select an existing survey." if params[:create_survey_toggle].blank? && !params[:select_survey_field].present?
       @message ||= "Select question type." unless params[:question_category].present?
@@ -122,7 +122,7 @@ class ImportsController < ApplicationController
 
     unless @message.present?
 
-      if params[:question_id].present?
+      if params[:question_id].present? && params[:question_id] != 'new_question'
         @question = Element.find(params[:question_id])
         @question.update_attributes({label: params[:question], content: params[:options], slug: ''})
         @message = "UPDATE"
