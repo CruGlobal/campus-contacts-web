@@ -322,9 +322,12 @@ class ContactsController < ApplicationController
       # raise @q.sorts.inspect
       if params[:q]
         order_query = params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass').gsub('followup_status','organizational_roles.followup_status').gsub('role_id','organizational_roles.role_id') : ['last_name, first_name']
-        @people = @people.includes(:primary_phone_number, :primary_email_address, :contact_role).order(order_query)
+      else
+      	order_query = "last_name ASC,first_name ASC";
       end
-      @all_people = @people.group('people.id').order('last_name ASC','first_name ASC')
+      
+      @people = @people.includes(:primary_phone_number, :primary_email_address, :contact_role).order(order_query)
+      @all_people = @people.group('people.id')
       @people_for_labels = Person.people_for_labels(current_organization)
       @people = @all_people.page(params[:page])
 
