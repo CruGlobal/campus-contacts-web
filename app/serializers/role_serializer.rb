@@ -1,6 +1,6 @@
 class RoleSerializer < ActiveModel::Serializer
 
-  attributes :id, :name, :updated_at, :created_at
+  attributes :id, :organization_id, :name, :i18n, :created_at, :updated_at
 
 end
 
