@@ -4,7 +4,7 @@ class OrganizationalRolesController < ApplicationController
     role_ids = params[:labels]
     person = Person.find(params[:id])
     if role_ids.present?
-      person.organizational_roles(current_organization.id).where('roles.id NOT IN (?)', role_ids).update_all({archive_date: Date.today})
+      person.organizational_roles(current_organization.id).where('role_id NOT IN (?)', role_ids).update_all({archive_date: Date.today})
 
       role_ids.each do |role_id|
         if role_id.present?
