@@ -1,11 +1,12 @@
-# missionhub
+# MissionHub
 
-A ruby translation project managed on [Locale](http://www.localeapp.com/) that's open to all!
+MissionHub
 
-## Contributing to missionhub
+MissionHub is an online tool that makes it easier than ever for you to connect, communicate and track ministry relationships.
 
-- Edit the translations directly on the [missionhub](http://www.localeapp.com/projects/public?search=missionhub) project on Locale.
-- **That's it!**
-- The maintainer will then pull translations from the Locale project and push to Github.
+We're an open source project and always looking for more developers to help us expand MissionHub's features.  Contact support@missionhub.com to get involved.
 
-Happy translating!
+
+## License
+
+MissionHub is released under the MIT license:  http://www.opensource.org/licenses/MIT
