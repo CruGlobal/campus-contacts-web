@@ -4,7 +4,7 @@ $ ->
       $('#column_edit_' + $(this).attr('data_id')).show() if $(this).val() == ''
       $(this).children(':first').after("<option value='do_not_import'>Do Not Import</option>")
       $(this).children(':first').after("<option value='new_question'>Create New Question</option>")
-      
+
     $('#import_column_question tr:not(:first)').each ->
       select_field = $(this).find('.import_column_survey_select')
       header = $.trim(parseCamelCase($(this).children('.column_header').text().replace(/_|-|:/g,' ')).toLowerCase())
@@ -21,7 +21,7 @@ $ ->
         select_field.val(select_field.attr('saved_value'))
         select_field.trigger('change')
       $('#create_question_dialog').dialog('close')
-      
+
   	$('#create_question_dialog').dialog
   		resizable: false,
   		height: 444,
@@ -40,18 +40,18 @@ $ ->
           $("#import_column_survey_select_"+select_id).val('')
         $("#import_column_survey_select_"+select_id).trigger('change')
         $("body").css("overflow", "auto")
-      buttons: 
+      buttons:
         Save: ->
           $('#import_survey_form').submit()
         Cancel: ->
           $(this).dialog('close')
-      
+
   $('#use_labels').live 'change', ->
-    if $(this).is(':checked') 
+    if $(this).is(':checked')
       $('.label_space').show()
     else
       $('.label_space').hide()
-  
+
   $('.column_edit_link').live 'click', (e)->
     e.preventDefault()
     current_value = $("#import_column_survey_select_"+$(this).attr('data_id')).val()
@@ -91,11 +91,11 @@ $ ->
       $('#question_field').val(selected_option.text())
       $('#question_options_field').val(selected_option.attr('question_content'))
       $('#question_field').trigger('keyup')
-      
+
     $('#create_question_dialog').attr('data_id', $(this).attr('data_id'))
     $('#create_question_dialog').dialog('option', 'position', 'center');
     $('#create_question_dialog').dialog('open')
-          
+
   $('#create_survey_toggle').live 'change', ->
     if $(this).is(':checked')
       $('#survey_content #new_survey').show()
@@ -103,7 +103,7 @@ $ ->
     else
       $('#survey_content #new_survey').hide()
       $('#survey_content #old_survey').show()
-      
+
   $("#question_category").live 'change', ->
     questionType = $(this).val()
     $('#length_counter').text(countCharacters(questionType))
@@ -120,7 +120,7 @@ $ ->
   $('#question_field, #question_options_field').live 'keyup', ->
     $('#length_counter').text(countCharacters($("#question_category").val()))
     $('#question_preview').html($('#question_field').val() + "<br/>" + $('#question_options_field').val())
-  
+
   $('.import_column_survey_select').live 'change', ->
     selected_option = $(this).children().find("option[value="+$(this).val()+"]")
     if $(this).val() == "new_question"
@@ -128,18 +128,18 @@ $ ->
     else if selected_option.attr('new') == 'true'
       $('#column_edit_' + $(this).attr('data_id')).show()
     else
-      $('#column_edit_' + $(this).attr('data_id')).hide() 
+      $('#column_edit_' + $(this).attr('data_id')).hide()
     $(".import_column_survey_select option").removeAttr('disabled')
     $(".import_column_survey_select").each ->
       value = $(this).val().toString()
       $(".import_column_survey_select option[value=" + value + "]").attr('disabled','disabled') if value != '' && value != 'do_not_import' && value != 'new_question'
       $(this).find("option[value=" + $(this).val().toString() + "]").removeAttr('disabled')
-    
-  
+
+
 parseCamelCase = (val) ->
   val.replace /[a-z][A-Z]/g, (str, offset) ->
     str[0] + " " + str[1].toLowerCase()
-    
+
 countCharacters = (type) ->
   if type is 'TextField'
     return $('#question_field').val().length
@@ -148,4 +148,3 @@ countCharacters = (type) ->
     total += 1 if $('#question_options_field').val().length > 0
     return total
 
-  

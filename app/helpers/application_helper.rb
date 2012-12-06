@@ -125,7 +125,7 @@ module ApplicationHelper
     case "#{params[:controller]}/#{params[:action]}"
     when 'groups/create', 'groups/update', 'organizations/index', 'organizations/edit', 'organizations/update',
          'organizations/new', 'organizations/api', 'organizations/cleanup', 'organizations/settings',
-         'imports/new', 'imports/edit', 'imports/labels', 'imports/update'
+         'imports/new', 'imports/edit', 'imports/labels', 'imports/update', 'imports/create'
 
       true
     else

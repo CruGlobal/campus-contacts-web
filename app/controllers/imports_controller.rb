@@ -185,7 +185,7 @@ class ImportsController < ApplicationController
         @survey_questions[survey.title][q.label] = q.id
       end
     end
-    @survey_questions[I18n.t('surveys.questions.index.predefined')] = Survey.find(APP_CONFIG['predefined_survey']).questions.collect { |q| [q.label, q.id] }
+    @survey_questions[I18n.t('surveys.questions.index.predefined')] = Survey.find(APP_CONFIG['predefined_survey']).questions.collect { |q| [(q.slug || q.attribute_name || q.label).gsub('_',' ').titleize, q.id] }
   end
 
 end

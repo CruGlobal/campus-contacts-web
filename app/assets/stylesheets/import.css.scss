@@ -84,6 +84,16 @@
 		margin: 0 auto;
 	}
 
+	.select_import_file_button {
+		background: #fff;
+		border-radius: 4px;
+		border: 1px solid #808284;
+		&:hover {
+			background: #c7dff0;
+			border-color: #0379ae;
+		}
+	}
+
 	.inside_container {
 		margin: 0 auto;
 		width: 630px;
@@ -160,8 +170,12 @@
 				color: #808284;
 
 				ol {
-					margin: 2em 0;
+					margin: 10px 0 20px;
 					font-size: 12px;
+				}
+
+				.preview_link {
+					text-align: center;
 				}
 			}
 
@@ -360,11 +374,10 @@
 				background: #fff;
 				border-radius: 4px;
 				border: 1px solid #808284;
-			}
-
-			#new_label_button:hover {
-				background: #c7dff0;
-				border-color: #0379ae;
+				&:hover {
+					background: #c7dff0;
+					border-color: #0379ae;
+				}
 			}
 
 			.labelform {

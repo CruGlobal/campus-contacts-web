@@ -1,29 +1,29 @@
 <div class="inside_container">
-	<div class="titlebar titlebarmod">  
+	<div class="titlebar titlebarmod">
 	  <h1>
 		<%= t('contacts.index.import_contacts') %>
 	  </h1>
 	</div>
-	
+
 	<div>
 		<h1 class="title"><%= t('.title') %></h1>
 		<div class="container">
 			<div class="content">
-				<p><%= t('.guide') %></p>
-				
+				<p><%=raw t('.guide') %></p>
+				<p><%=raw t('.guide0') %></p>
 				<ol>
 					<li><span class="name"><%=raw t('.guide1', link: raw(link_to(t('.sample_csv'), download_sample_contacts_csv_imports_path))) %></span></li>
 					<li><%= t('.guide2') %></li>
 					<li><%=raw t('.guide3') %></li>
 					<li><%=raw t('.guide4') %></li>
+					<li><%=raw t('.guide5') %></li>
 				</ol>
-				
-				<p><%=raw t('.guide5') %></p>
+				<p class='preview_link'><%=raw link_to t('.preview'), '/assets/sample_contact_spreadsheet.png', target: '_blank' %></p>
 			</div>
-			
+
 			<div class="importform">
 				<%= form_for :import, :url=>{ :controller=>"imports", :action=>"create"}, :html => { :multipart => true } do |f| %>
-					<%= f.file_field :upload %><%= submit_tag 'Submit', :value=>"Upload" %>
+					<%= f.file_field :upload, class: 'select_import_file_button' %><%= submit_tag 'Submit', :value=>"Upload" %>
 				<% end %>
 			</div>
 		</div>
