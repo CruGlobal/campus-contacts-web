@@ -97,7 +97,7 @@ class ImportsController < ApplicationController
   def download_sample_contacts_csv
     csv_string = CSV.generate do |csv|
       c = 0
-      CSV.foreach(Rails.root.to_s + "/public/files/missionhub_contacts_new_columns.csv") do |row|
+      CSV.foreach(Rails.root.to_s + "/public/files/missionhub_import_contacts_template.csv") do |row|
         c = c + 1
         csv << row
       end
