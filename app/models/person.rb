@@ -864,7 +864,7 @@ class Person < ActiveRecord::Base
   def picture
     if person_photo
       Rails.env.development? ? "http://local.missionhub.com/#{person_photo.image.url}" : "http://www.missionhub.com/#{person_photo.image.url}"
-    else
+    elsif fb_uid.present?
       "http://graph.facebook.com/#{fb_uid}/picture"
     end
   end
