@@ -13,9 +13,9 @@
 			</div>
 			<table id="import_column_question">
 				<tr>
-					<th>Column</th>
-					<th>Preview</th>
-					<th>Match</th>
+					<th><%= t('.column1') %></th>
+					<th><%= t('.column2') %></th>
+					<th><%= t('.column3') %></th>
 				</tr>
 				<%= form_for @import, html: {id: 'header_mapping_form'} do |f| %>
 					<% @import.headers.each_with_index do |header, i| %>

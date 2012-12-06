@@ -1103,7 +1103,10 @@ en:
       file_not_existing: "File does not exist."
     edit:
       title: "Step 2 of 3 - Match Columns"
-      guide: "Match the category column headings from your CSV file with the corresponding questions in the dropdown boxes."
+      guide: "Match the category column headings from your CSV file with the corresponding questions/column headers in the dropdown boxes."
+      column1: Column
+      column2: Preview
+      column3: Question/Column Header
     labels:
       title: "Step 3 of 3 - Add Labels to New Contacts"
       guide: "You are almost ready to upload %{count_word}! Use the list below to select any labels to apply to all of these new contacts, then click <strong>Import</strong>."
