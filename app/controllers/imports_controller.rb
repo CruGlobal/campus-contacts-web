@@ -22,7 +22,7 @@ class ImportsController < ApplicationController
       else
         init_org
         render :new
-      end      
+      end
     rescue ArgumentError
       flash.now[:error] = t('imports.new.wrong_file_format_error')
       init_org
@@ -34,7 +34,7 @@ class ImportsController < ApplicationController
   def edit
     get_survey_questions
   end
-  
+
   def labels
     @import_count =  @import.get_new_people.count
     @roles = current_organization.roles
@@ -62,7 +62,7 @@ class ImportsController < ApplicationController
         params[:import][:header_mappings][column[0]] = @question.id.to_s
       end
     end
-    
+
     @import.update_attributes(params[:import])
     errors = @import.check_for_errors
 
@@ -82,12 +82,12 @@ class ImportsController < ApplicationController
     else
       @import.queue_import_contacts([])
     end
-    
+
     flash[:notice] = t('contacts.import_contacts.success')
-    
+
     redirect_to controller: :contacts
   end
-  
+
 
   #def destroy
   #  @import.destroy
@@ -110,7 +110,7 @@ class ImportsController < ApplicationController
     flash.now[:error] = t('contacts.import_contacts.blank_header')
     render :new
   end
-  
+
   def create_survey_question
     unless params[:question_id].present?
       @message ||= "Enter new survey name." if params[:create_survey_toggle] == "new_survey" && !params[:survey_name_field].present?
@@ -119,9 +119,9 @@ class ImportsController < ApplicationController
     end
     @message ||= "Question can't be blank" unless params[:question].present?
     @message ||= "Choices can't be blank " if params[:question_category] == 'ChoiceField' && !params[:options].present?
-    
+
     unless @message.present?
-      
+
       if params[:question_id].present?
         @question = Element.find(params[:question_id])
         @question.update_attributes({label: params[:question], content: params[:options], slug: ''})
@@ -143,7 +143,7 @@ class ImportsController < ApplicationController
         type, style = @question_category.split(':')
         @question = type.constantize.create!(style: style, label: params[:question], content: params[:options], slug: '')
       end
-      
+
       unless @message == "UPDATE"
         if @survey.archived_questions.include?(@question)
           survey_element = SurveyElement.where(survey_id: @survey.id, element_id: @question.id).first
@@ -159,7 +159,7 @@ class ImportsController < ApplicationController
         end
       end
     end
-    
+
   end
 
   protected
@@ -173,7 +173,7 @@ class ImportsController < ApplicationController
     org_ids = params[:subs] == 'true' ? @organization.self_and_children_ids : @organization.id
     @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles_including_archived)
     @people_scope = @people_scope.where(id: @people_scope.archived_not_included.collect(&:id)) if params[:include_archived].blank? && params[:archived].blank?
-    
+
     authorize! :manage, @organization
   end
 
