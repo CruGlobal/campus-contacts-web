@@ -152,7 +152,7 @@ class ContactsController < ApplicationController
                             .where("organizational_roles.role_id <> #{Role::CONTACT_ID} OR (organizational_roles.role_id = #{Role::CONTACT_ID} AND organizational_roles.followup_status <> 'do_not_contact')")
                             .joins(:organizational_roles_including_archived)
 
-      @people_scope = @people_scope.where('organizational_roles.archive_date' => nil, 'organizational_roles.deleted' => 0) if params[:include_archived].blank? && params[:archived].blank?
+      @people_scope = @people_scope.where('organizational_roles.archive_date' => nil) if params[:include_archived].blank? && params[:archived].blank?
 
       sort_by = ['lastName asc', 'firstName asc']
 
@@ -167,7 +167,7 @@ class ContactsController < ApplicationController
         @people = Person.where(id: current_organization.people.archived(current_organization.id).collect(&:id))
       elsif params[:role].present? || (params[:search].present? && params[:role].present?)
         if @role = Role.find(params[:role])
-          @people = @people_scope.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ? AND organizational_roles.deleted = 0', @role.id, current_organization.id)
+          @people = @people_scope.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ?', @role.id, current_organization.id)
           if params[:include_archived].present? && params[:include_archived] == 'true'
             @people = @people
                       .joins(:roles)

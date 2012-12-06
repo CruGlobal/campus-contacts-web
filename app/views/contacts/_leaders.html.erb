@@ -52,7 +52,7 @@
           if params[:include_archived]
             count = @people_scope.where('organizational_roles.role_id' => role.id).count
           else
-            count = @people_scope.where('organizational_roles.role_id' => role.id, 'organizational_roles.archive_date' => nil, 'organizational_roles.deleted' => 0).count
+            count = @people_scope.where('organizational_roles.role_id' => role.id, 'organizational_roles.archive_date' => nil).count
           end 
         %>
         <li class="leader" style="<%= 'display:none' if count == 0 %>">
