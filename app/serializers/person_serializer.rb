@@ -2,7 +2,7 @@ class PersonSerializer < ActiveModel::Serializer
   HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments,
              :followup_comments, :organizational_roles, :rejoicables, :answer_sheets]
 
-  HAS_ONE = [:user]
+  HAS_ONE = [:user, :current_address]
 
   INCLUDES = HAS_MANY + HAS_ONE
 
@@ -38,7 +38,7 @@ class PersonSerializer < ActiveModel::Serializer
     add_since(organization_filter(:rejoicables))
   end
 
-  [:phone_numbers, :email_addresses, :person_transfers, :user, :answer_sheets].each do |relationship|
+  [:phone_numbers, :email_addresses, :person_transfers, :user, :answer_sheets, :current_address].each do |relationship|
     define_method(relationship) do
       add_since(object.send(relationship))
     end
