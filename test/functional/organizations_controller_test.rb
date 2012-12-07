@@ -327,5 +327,28 @@ class OrganizationsControllerTest < ActionController::TestCase
       assert_redirected_to cleanup_organizations_path
     end
   end
-  
+
+  context "100% Sent feature" do
+    setup do
+      @user, @organization = admin_user_login_with_org
+      @contact1 = Factory(:person, first_name: 'abby')
+      @contact2 = Factory(:person, first_name: 'belly')
+      @contact3 = Factory(:person, first_name: 'cassy')
+      @contact4 = Factory(:person, first_name: 'daisy')
+      Factory(:organizational_role, person: @contact1, role: Role.sent, organization: @org)
+      Factory(:organizational_role, person: @contact2, role: Role.sent, organization: @org)
+      Factory(:organizational_role, person: @contact3, role: Role.contact, organization: @org)
+      Factory(:organizational_role, person: @contact4, role: Role.contact, organization: @org)
+      Factory(:sent_person, person: @contact3)
+    end
+    should "suggest available people when adding people to 100% Sent pending list" do
+      xhr :get, :available_for_transfer, {term: 's', format: 'js'}
+      assert assigns(:people).include?(@contact3)
+      assert assigns(:people).include?(@contact4)
+      assert_equal 2, assigns(:people).count
+    end
+  end
+
+
+
 end

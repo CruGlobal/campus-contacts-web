@@ -102,12 +102,12 @@ class OrganizationsController < ApplicationController
   end
 
   def available_for_transfer
-    available = Array.new
-    people = current_organization.all_people.where("first_name LIKE :name OR last_name LIKE :name", name: "%#{params[:term]}%") - current_organization.sent
-    people.each do |person|
-      available << {label: person.to_s, id: person.id}
+    @available = Array.new
+    @people = current_organization.all_people.where("first_name LIKE :name OR last_name LIKE :name", name: "%#{params[:term]}%") - current_organization.sent
+    @people.each do |person|
+      @available << {label: person.to_s, id: person.id}
     end
-    render json: available.to_json
+    render json: @available.to_json
   end
 
   def queue_transfer
