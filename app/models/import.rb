@@ -70,7 +70,7 @@ class Import < ActiveRecord::Base
   end
 
   def queue_import_contacts(labels = [])
-    raise async(:do_import, labels).inspect
+    async(:do_import, labels)
   end
 
   def do_import(labels = [])
