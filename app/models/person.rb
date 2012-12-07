@@ -824,7 +824,6 @@ class Person < ActiveRecord::Base
   end
 
   def organizational_roles_hash
-    #@retries = 0
     roles = {}
     @organizational_roles_hash ||= org_ids.collect { |org_id, values|
                                      values['roles'].select { |role_id|
@@ -835,10 +834,6 @@ class Person < ActiveRecord::Base
                                        {org_id: org_id, role: role.i18n, name: organization_from_id(org_id).name, primary: primary_organization.id == org_id ? 'true' : 'false'}
                                      }
                                    }.flatten
-  #rescue NoMethodError
-    #@org_ids = nil
-    #@retries += 1
-    #retry if @retries == 1
   end
 
   def to_hash(organization = nil)
