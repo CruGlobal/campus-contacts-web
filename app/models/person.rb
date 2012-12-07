@@ -831,7 +831,7 @@ class Person < ActiveRecord::Base
                                      }.collect { |role_id|
                                        roles[role_id] ||= Role.find_by_id(role_id)
                                      }.compact.collect { |role|
-                                       {org_id: org_id, role: role.i18n, name: organization_from_id(org_id).name, primary: primary_organization.id == org_id ? 'true' : 'false'}
+                                       {org_id: org_id, role: role.i18n, name: organization_from_id(org_id).try(:name), primary: primary_organization.id == org_id ? 'true' : 'false'}
                                      }
                                    }.flatten
   end
