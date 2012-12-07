@@ -1,4 +1,7 @@
 class Role < ActiveRecord::Base
+  has_paper_trail :on => [:destroy],
+                  :meta => { organization_id: :organization_id }
+
   has_many :people, through: :organizational_roles
   has_many :organizational_roles, inverse_of: :role, dependent: :destroy
   belongs_to :organization, inverse_of: :roles

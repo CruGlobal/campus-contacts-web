@@ -270,8 +270,6 @@ class PersonTest < ActiveSupport::TestCase
                            organization: @org1, role: Role.contact, archive_date: Date.today)
       @org_role2 = Factory(:organizational_role, person: @person2,
                            organization: @org1, role: Role.contact)
-      @org_role3 = Factory(:organizational_role, person: @person3,
-                           organization: @org1, role: Role.contact, deleted: 1)
       @org_role4 = Factory(:organizational_role, person: @person4,
                            organization: @org2, role: Role.contact)
     end

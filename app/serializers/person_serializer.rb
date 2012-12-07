@@ -1,17 +1,24 @@
 class PersonSerializer < ActiveModel::Serializer
-  INCLUDES = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments,
-           :followup_comments, :organizational_roles, :rejoicables]
+  HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments,
+             :followup_comments, :organizational_roles, :rejoicables, :answer_sheets]
+
+  HAS_ONE = [:user, :current_address]
+
+  INCLUDES = HAS_MANY + HAS_ONE
 
   attributes :id, :first_name, :last_name, :gender, :campus, :year_in_school, :major, :minor, :birth_date,
-             :date_became_christian, :graduation_date, :user_id, :fb_uid, :updated_at, :created_at
+             :date_became_christian, :graduation_date, :picture, :user_id, :fb_uid, :created_at, :updated_at
 
-  has_many *INCLUDES
+  has_many *HAS_MANY
+  has_one *HAS_ONE
 
   def include_associations!
     includes = scope if scope.is_a? Array
     includes = scope[:include] if scope.is_a? Hash
     includes.each do |rel|
-      include!(rel.to_sym) if INCLUDES.include?(rel.to_sym)
+      if INCLUDES.include?(rel.to_sym)
+        include!(rel.to_sym)
+      end
     end if includes
   end
 
@@ -31,7 +38,7 @@ class PersonSerializer < ActiveModel::Serializer
     add_since(organization_filter(:rejoicables))
   end
 
-  [:phone_numbers, :email_addresses, :person_transfers].each do |relationship|
+  [:phone_numbers, :email_addresses, :person_transfers, :user, :answer_sheets, :current_address].each do |relationship|
     define_method(relationship) do
       add_since(object.send(relationship))
     end

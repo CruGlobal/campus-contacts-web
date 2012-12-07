@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121128192052) do
+ActiveRecord::Schema.define(:version => 20121205205752) do
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -429,8 +429,6 @@ ActiveRecord::Schema.define(:version => 20121128192052) do
     t.integer  "person_id"
     t.integer  "role_id"
     t.date     "start_date"
-    t.date     "end_date"
-    t.boolean  "deleted",         :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "organization_id"
@@ -798,6 +796,21 @@ ActiveRecord::Schema.define(:version => 20121128192052) do
 
   add_index "users", ["email"], :name => "index_simplesecuritymanager_user_on_email", :unique => true
   add_index "users", ["username"], :name => "CK_simplesecuritymanager_user_username", :unique => true
+
+  create_table "versions", :force => true do |t|
+    t.string   "item_type",       :null => false
+    t.integer  "item_id",         :null => false
+    t.string   "event",           :null => false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.integer  "organization_id"
+    t.integer  "person_id"
+    t.datetime "created_at"
+  end
+
+  add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
+  add_index "versions", ["organization_id", "created_at"], :name => "index_versions_on_organization_id_and_created_at"
+  add_index "versions", ["person_id", "created_at"], :name => "index_versions_on_person_id_and_created_at"
 
   add_foreign_key "organizational_roles", "organizations", :name => "organizational_roles_ibfk_1", :dependent => :delete
 

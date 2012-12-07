@@ -1,11 +1,15 @@
 class OrganizationalRole < ActiveRecord::Base
+  has_paper_trail :on => [:destroy],
+                  :meta => { organization_id: :organization_id,
+                             person_id: :person_id }
+
   FOLLOWUP_STATUSES = ['uncontacted','attempted_contact','contacted','do_not_contact','completed']
   belongs_to :person, :touch => true
   belongs_to :role
   belongs_to :organization
   scope :leaders, where(role_id: Role.leader_ids)
   scope :involved, where(role_id: Role.involved_ids)
-  scope :active, where(deleted: false)
+  scope :active, where(archive_date: false)
   scope :contact, where("role_id = #{Role::CONTACT_ID}")
   # scope :not_dnc, where("followup_status <> 'do_not_contact' AND role_id = #{Role::CONTACT_ID}")
   scope :dnc, where("followup_status = 'do_not_contact' AND role_id = #{Role::CONTACT_ID}")
@@ -81,10 +85,6 @@ class OrganizationalRole < ActiveRecord::Base
     update_attributes({:archive_date => Date.today})
   end
 
-  def delete
-    update_attributes({:deleted => true, :end_date => Date.today})
-  end
-
   def unarchive
     update_attributes({:archive_date => nil})
   end
@@ -110,12 +110,6 @@ class OrganizationalRole < ActiveRecord::Base
     def set_start_date
       self.start_date = Date.today
       true
-    end
-
-    def set_end_date_if_deleted
-      if changed.include?('deleted') && deleted?
-        update_attribute(:end_date, Date.today)
-      end
     end
 
     def set_contact_uncontacted

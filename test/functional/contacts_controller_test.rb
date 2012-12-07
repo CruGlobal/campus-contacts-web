@@ -235,9 +235,9 @@ class ContactsControllerTest < ActionController::TestCase
       @user.person.organizations.first.add_contact(@contact4)
       @user.person.organizations.first.add_contact(@contact5)
 
-      @contact5.organizational_roles.first.update_attributes({:deleted => 1})
+      @contact5.organizational_roles.first.destroy
       xhr :get, :index, {:assigned_to => "unassigned"}
-      assert_equal assigns(:all_people).collect(&:id).sort, [@contact1.id, @contact2.id, @contact3.id, @contact4.id]
+      assert_equal [@contact1.id, @contact2.id, @contact3.id, @contact4.id], assigns(:all_people).collect(&:id).sort
     end
 
   end

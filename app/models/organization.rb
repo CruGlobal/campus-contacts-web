@@ -4,14 +4,16 @@ class Organization < ActiveRecord::Base
   attr_accessor :person_id
 
   has_ancestry
+  has_paper_trail :on => [:destroy],
+                  :meta => { organization_id: :parent_id }
 
   belongs_to :importable, polymorphic: true
   has_many :roles, inverse_of: :organization
   has_many :group_labels
   has_many :activities, dependent: :destroy
   has_many :target_areas, through: :activities, class_name: 'TargetArea'
-  has_many :people, through: :organizational_roles, conditions: ["organizational_roles.deleted = 0"], uniq: true
-  has_many :not_archived_people, through: :organizational_roles, source: :person, conditions: ["organizational_roles.deleted = 0 AND archive_date is NULL"], uniq: true
+  has_many :people, through: :organizational_roles, uniq: true
+  has_many :not_archived_people, through: :organizational_roles, source: :person, conditions: ["archive_date is NULL"], uniq: true
   has_many :contact_assignments
   has_many :keywords, class_name: 'SmsKeyword'
   has_many :surveys, dependent: :destroy
@@ -20,18 +22,17 @@ class Organization < ActiveRecord::Base
   has_many :all_questions, through: :surveys, source: :all_questions
   has_many :followup_comments
   has_many :organizational_roles, inverse_of: :organization
-  has_many :non_deleted_people, through: :organizational_roles, source: :person, conditions: ["organizational_roles.deleted = ?", 0], uniq: true
-  has_many :leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id IN (?) AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role.leader_ids, 0], order: "people.last_name, people.first_name", uniq: true
-  has_many :only_leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role::LEADER_ID, 0], order: "people.last_name, people.first_name", uniq: true
-  has_many :admins, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role::ADMIN_ID, 0], order: "people.last_name, people.first_name", uniq: true
-  has_many :sent, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL", Role::SENT_ID, 0], order: "people.last_name, people.first_name", uniq: true
-  has_many :all_people, through: :organizational_roles, source: :person, conditions: ["organizational_roles.followup_status <> 'do_not_contact' AND organizational_roles.deleted = 0 AND organizational_roles.archive_date IS NULL"]
-  has_many :all_people_with_archived, through: :organizational_roles, source: :person, conditions: ["organizational_roles.followup_status <> 'do_not_contact' AND organizational_roles.deleted = 0"]
-  has_many :contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status <> 'do_not_contact' AND organizational_roles.deleted = 0", Role::CONTACT_ID]
-  has_many :contacts_with_archived, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.followup_status <> 'do_not_contact' AND organizational_roles.deleted = 0", Role::CONTACT_ID]
+  has_many :leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id IN (?) AND organizational_roles.archive_date IS NULL", Role.leader_ids], order: "people.last_name, people.first_name", uniq: true
+  has_many :only_leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL", Role::LEADER_ID], order: "people.last_name, people.first_name", uniq: true
+  has_many :admins, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL", Role::ADMIN_ID], order: "people.last_name, people.first_name", uniq: true
+  has_many :sent, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL", Role::SENT_ID, 0], order: "people.last_name, people.first_name", uniq: true
+  has_many :all_people, through: :organizational_roles, source: :person, conditions: ["organizational_roles.followup_status <> 'do_not_contact' AND organizational_roles.archive_date IS NULL"]
+  has_many :all_people_with_archived, through: :organizational_roles, source: :person, conditions: ["organizational_roles.followup_status <> 'do_not_contact'"]
+  has_many :contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status <> 'do_not_contact'", Role::CONTACT_ID]
+  has_many :contacts_with_archived, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.followup_status <> 'do_not_contact'", Role::CONTACT_ID]
   has_many :dnc_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.archive_date IS NULL AND organizational_roles.followup_status = 'do_not_contact'"]
-  has_many :completed_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status = ?", Role::CONTACT_ID, 0, 'completed']
-  has_many :no_activity_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.deleted = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status = ?", Role::CONTACT_ID, 0, 'uncontacted']
+  has_many :completed_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status = ?", Role::CONTACT_ID, 'completed']
+  has_many :no_activity_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status = ?", Role::CONTACT_ID, 'uncontacted']
   has_many :rejoicables
   has_many :groups
   has_one :api_client, class_name: 'Rack::OAuth2::Server::Client', inverse_of: :organization
@@ -71,19 +72,19 @@ class Organization < ActiveRecord::Base
       transition any => :inactive
     end
   end
-  
+
   def pending_transfer
     sent.includes(:sent_person).where('sent_people.id IS NULL')
   end
-  
+
   def completed_transfer
     sent.includes(:sent_person).where('sent_people.id IS NOT NULL')
   end
-  
+
   def available_transfer
     all_people - sent
   end
-  
+
   def has_parent?(org_id)
     ancestry.present? ? ancestry.split('/').include?(org_id.to_s) : true
   end
@@ -106,15 +107,15 @@ class Organization < ActiveRecord::Base
     org = Organization.find(ancestry.split('/').last) if ancestry.present?
     return org if org.present?
   end
-  
+
   def role_set
     default_roles + non_default_roles
   end
-  
+
   def default_roles
     has_parent?(1) ? roles.default_cru_roles_desc : roles.default_roles_desc
   end
-  
+
   def non_default_roles
     has_parent?(1) ? roles.non_default_cru_roles_asc : roles.non_default_roles_asc
   end
@@ -184,7 +185,6 @@ class Organization < ActiveRecord::Base
         AND org_roles.followup_status <> 'do_not_contact'
         AND org_roles.followup_status <> 'completed'
         AND org_roles.archive_date IS NULL
-        AND org_roles.deleted = 0
         LEFT JOIN contact_assignments ca ON ca.person_id = #{person_table_pkey}
         AND ca.organization_id = #{id}")
         .where("ca.id IS NULL OR ca.assigned_to_id NOT IN (?)", only_leaders)
@@ -199,10 +199,22 @@ class Organization < ActiveRecord::Base
         AND followup_status <> 'do_not_contact'
         AND followup_status <> 'completed'
         AND archive_date IS NULL
-        AND deleted = 0
         LEFT JOIN contact_assignments ON contact_assignments.person_id = #{person_table_pkey}
         AND contact_assignments.organization_id = #{id}")
         .where("contact_assignments.assigned_to_id IN (?)", only_leaders)
+  end
+
+
+  def delete_person(person)
+    # If this person is only in the current org, delete the person
+    if person.organizational_roles.where("organization_id <> ?", id).blank?
+      person.destroy
+    else
+      # Otherwise just delete all their roles in this org
+      organizational_roles.where(person_id: person.id).destroy_all
+      # Delete any contact assignments for this person in this org
+      contact_assignments.where(assigned_to_id: person.id).destroy_all
+    end
   end
 
   def roles
@@ -228,13 +240,13 @@ class Organization < ActiveRecord::Base
   def add_role_to_person(person, role_id)
     person_id = person.is_a?(Person) ? person.id : person
     role = OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id).first_or_create!
-    role.update_attributes(end_date: nil, archive_date: nil, deleted: 0)
+    role.update_attributes(archive_date: nil)
     role
   end
 
   def remove_role_from_person(person, role_id)
     person_id = person.is_a?(Person) ? person.id : person
-    OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id).each { |r| r.update_attributes(deleted: true, end_date: Time.now) }
+    OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id).each { |r| r.update_attributes(archive_date: Time.now) }
   end
 
   def add_leader(person, current_person)
@@ -294,11 +306,14 @@ class Organization < ActiveRecord::Base
   def move_contact(person, to_org, keep_contact, current_admin = nil)
     @followup_comments = followup_comments.where(contact_id: person.id)
     @rejoicables = rejoicables.where(person_id: person.id)
+
+    to_org.add_contact(person)
+
     if keep_contact == "false"
-      remove_person(person)
       # move call followup comments
       @followup_comments.update_all(organization_id: to_org.id)
       @rejoicables.update_all(organization_id: to_org.id)
+      delete_person(person)
     else
       # copy followup comments
       @followup_comments.each do |fc|
@@ -308,8 +323,6 @@ class Organization < ActiveRecord::Base
         end
       end
     end
-
-    to_org.add_contact(person)
 
     # Save transfer log
     val_copy = keep_contact == "false" ? false : true
