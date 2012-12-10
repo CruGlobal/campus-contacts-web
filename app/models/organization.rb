@@ -47,7 +47,9 @@ class Organization < ActiveRecord::Base
   validates :name, :name_uniqueness => true
 
   @queue = :general
-  after_create :create_admin_user, :notify_admin_of_request
+  after_create :create_admin_user, :notify_admin_of_request, :touch_people
+  after_destroy :touch_people
+  after_update :touch_people_if_show_sub_orgs_changed
 
   serialize :settings, Hash
 
@@ -342,6 +344,15 @@ class Organization < ActiveRecord::Base
     async(:import_from_conference, user.id)
   end
 
+  def implied_involvement_root
+    # If there is no parent, or the parent is not set to show sub orgs,
+    # this org is the implied root
+    return self if !parent || !parent.show_sub_orgs
+
+    # Otherwise, recursively call this method on the parent
+    parent.implied_involvement_root
+  end
+
   private
 
   def import_from_conference(user_id)
@@ -362,6 +373,24 @@ class Organization < ActiveRecord::Base
       OrganizationMailer.enqueue.notify_user_of_denial(id)
     end
     true
+  end
+
+  # When an organization is added or removed, any person associated with that organization needs to
+  # have their updated_at column touched to clear their org cache. The hard part is figuring out which
+  # people need to be updated
+  def touch_people
+    # Anyone with an organizational role directly on this org will get updated by the OrganizationalRole
+    # class, so we only have to worry about implied involvement
+    # For implied ivolvement we need to walk up the tree until we find a root org, or an org with
+    # show_sub_orgs = false
+    relevant_org_ids = implied_involvement_root.self_and_children_ids & path_ids
+    Person.joins(:organizational_roles_including_archived).where('organizational_roles.organization_id' => relevant_org_ids).update_all("`people`.`updated_at` = '#{Time.now.to_s(:db)}'")
+  end
+
+  def touch_people_if_show_sub_orgs_changed
+    if changed.include?('show_sub_orgs')
+      touch_people
+    end
   end
 
 end
