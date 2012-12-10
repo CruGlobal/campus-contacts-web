@@ -212,7 +212,12 @@ Mh::Application.routes.draw do
 
   namespace :apis do
     api_version(module: "V3", header: "API-VERSION", value: "v3", parameter: "version", path: 'v3') do
-      resources :contact_assignments
+      resources :contact_assignments do
+        collection do
+          put :bulk_update
+          delete :bulk_destroy
+        end
+      end
       resources :people
       resources :organizations
       resources :surveys
