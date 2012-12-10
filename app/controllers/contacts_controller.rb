@@ -205,7 +205,7 @@ class ContactsController < ApplicationController
             @people = current_person.contact_friends(@organization)
             @header = I18n.t('contacts.index.friend_responses')
           when *Rejoicable::OPTIONS
-            @people = @organization.send(:"#{params[:assigned_to]}_contacts")
+            @people = @organization.send(:"#{params[:assigned_to]}_contacts").joins(:organizational_roles)
             @header = I18n.t("rejoicables.#{params[:assigned_to]}")
           else
             if params[:assigned_to].present? && @assigned_to = Person.find_by_id(params[:assigned_to])
