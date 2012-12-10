@@ -142,9 +142,10 @@ class ContactsController < ApplicationController
       @organization = Organization.where(id: current_organization.id).includes(:surveys, :groups, :questions).first
       @surveys = @organization.surveys
       @all_questions = @organization.all_questions.flatten.uniq
-      @predefined_questions = Survey.find(APP_CONFIG['predefined_survey']).questions.where("attribute_name NOT IN (?)", ['first_name','last_name'])
-      @questions = @organization.all_questions.where("survey_elements.hidden" => false)
-      @hidden_questions = (@predefined_questions + @all_questions - @questions).flatten.uniq
+      @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
+      @predefined_questions = @predefined_survey.questions
+      @questions = @organization.all_questions.where("survey_elements.hidden" => false) + @predefined_survey.elements.where(id: current_organization.settings[:visible_predefined_questions])
+      @hidden_questions = ((@predefined_questions + @all_questions) - @questions).flatten.uniq
 
       params[:assigned_to] = 'all' if !params[:assigned_to].present?
 
