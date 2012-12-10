@@ -126,6 +126,9 @@ Mh::Application.routes.draw do
       get :api
       get :generate_api_secret
     end
+    member do
+      get :update_from_crs
+    end
   end
 
   resources :surveys, :only => [:new, :create, :edit, :update, :index, :destroy] do
