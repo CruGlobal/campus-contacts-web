@@ -103,7 +103,7 @@ class OrganizationsController < ApplicationController
 
   def available_for_transfer
     @available = Array.new
-    @people = current_organization.all_people.where("first_name LIKE :name OR last_name LIKE :name", name: "%#{params[:term]}%") - current_organization.sent
+    @people = current_organization.all_people.includes(:sent_person).where("(people.first_name LIKE :name OR people.last_name LIKE :name) AND sent_people.id IS NULL", name: "%#{params[:term]}%") - current_organization.sent
     @people.each do |person|
       @available << {label: person.to_s, id: person.id}
     end
@@ -114,7 +114,7 @@ class OrganizationsController < ApplicationController
     @person = Person.find(params[:person_id])
     if @person.present?
       org_role = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(@person.id, current_organization.id, Role::SENT_ID)
-      org_role.update_attributes({deleted: 0, added_by_id: current_user.person.id}) if org_role.deleted == true
+      org_role.update_attributes({added_by_id: current_user.person.id})
     end
   end
 
@@ -123,13 +123,13 @@ class OrganizationsController < ApplicationController
   end
 
   def do_transfer
-    people = Person.where(id: params[:ids])
-    sent_team_org = Organization.find(6816) # 100% Sent Team
-    people.each do |person|
-      sent_team_org.add_contact(person)
+    @people = Person.where(id: params[:ids])
+    @sent_team_org = Organization.find(6816) # 100% Sent Team
+    @people.each do |person|
+      @sent_team_org.add_contact(person)
       sent_record = person.set_as_sent
       sent_record.update_attribute('transferred_by_id', current_person.id)
-      sent_team_org.add_role_to_person(person, Role::ALUMNI_ID) if params[:tag_as_alumni] == '1'
+      @sent_team_org.add_role_to_person(person, Role::ALUMNI_ID) if params[:tag_as_alumni] == '1'
       person.archive_contact_role(current_organization) if params[:tag_as_archived] == '1'
     end
   end
