@@ -6,15 +6,15 @@
 	line-height: 0;
 	height: 0;
 }
- 
+
 .clearfix {
 	display: inline-block;
 }
- 
+
 html[xmlns] .clearfix {
 	display: block;
 }
- 
+
 * html .clearfix {
 	height: 1%;
 }
@@ -45,7 +45,7 @@ $minpagewidth: 978px;
   margin: 0;
   padding: 0;
   li {
-    display: inline-block; 
+    display: inline-block;
   }
 }
 
@@ -437,7 +437,7 @@ ul.leftmenu {
     background-image: -moz-linear-gradient(
       center top,
       rgb(255,255,255) 49%,
-      rgb(234,241,246) 88%  
+      rgb(234,241,246) 88%
     );
   }
   .wizard_step_active,
@@ -537,6 +537,9 @@ div.wizard {
   }
   .checkbox_cell {
     width: 50px;
+    &.header_checkbox {
+      padding-left: 17px;
+    }
   }
   .spacer_cell {
     width: 20px;
@@ -659,7 +662,7 @@ input[type=submit], button[type=submit] {
   width: 120px !important;
 }
 
-input[type=submit].smallbtn, 
+input[type=submit].smallbtn,
 button[type=submit].smallbtn {
   font-size: 12px;
   line-height: 24px;
@@ -936,7 +939,7 @@ ul.pillmenu {
   overflow: hidden;
   width: 16px;
 	height: 16px;
-	display: inline-block 
+	display: inline-block
 }
 
 .icon_holder {
@@ -1086,11 +1089,11 @@ span.title {
   	height: 489px;
   	background: url("<%= asset_path("splash/people978x489.jpg") %>") no-repeat;
   }
-  
+
   #tutorialwrap {
   	width: 978px;
   }
-  
+
   #roundwrap {
 		padding: 25px;
 		&.video_space .inner_space {
@@ -1156,10 +1159,10 @@ span.title {
           font-size: 22px;
           text-align: center;
           .video_entry:first-child {
-           padding-top: 16px; 
+           padding-top: 16px;
           }
           .video_entry:last-child {
-           padding-bottom: 16px; 
+           padding-bottom: 16px;
           }
           .video_entry {
 					  cursor: pointer;
@@ -1196,7 +1199,7 @@ span.title {
       }
 		}
   }
-  
+
   .salespush {
     font-size: 32px;
     text-align: left;
@@ -1527,7 +1530,7 @@ span.title {
   tr {
     td {border-bottom: 1px solid #ddd;}
   }
-  
+
   width: 550px;
   th {
     padding: 3px;
@@ -1651,7 +1654,7 @@ span.title {
 	.surveymodeactions {
 		float: right;
 	}
-	
+
 	#select_keyword {
 	  margin-right: 5px;
 	  float:left;
@@ -1748,11 +1751,11 @@ span.title {
     border-radius: 12px 12px 12px 12px;
 		-webkit-border-radius: 12px 12px 12px 12px;
 		-moz-border-radius: 12px 12px 12px 12px;
-		
+
     box-shadow: 0 0 21px rgba(0, 0, 0, 0.16) inset;
 		-moz-box-shadow: 0 0 21px rgba(0, 0, 0, 0.16) inset;
 		-webkit-box-shadow: 0 0 21px rgba(0, 0, 0, 0.16) inset;
-		
+
 		margin-bottom: 20px;
 		color: #fff;
 		padding: 15px;
@@ -1818,7 +1821,7 @@ span.title {
 		a {color: #f0f0f0;}
 	}
 	.ui-tabs .ui-tabs-nav li.ui-tabs-selected  {
-		margin-bottom: -1px;	
+		margin-bottom: -1px;
 	}
 	.ui-tabs-nav li {
 		background: none;
@@ -1827,7 +1830,7 @@ span.title {
 	.ui-state-default a {
 		color:$blue;
 	}
-	
+
 	.ui-state-default .ui-icon {
 		background-image: url("<%= asset_path("pointer.png") %>");
     background-position: 0 2px;
@@ -1879,7 +1882,7 @@ ul.to_list, td.labels ul {
 	height: 47px;
 	overflow: auto;
 	li {
-		margin: 0 3px 5px 0; 
+		margin: 0 3px 5px 0;
 		padding: 2px;
 		border-radius: 3px;
 		-webkit-border-radius: 3px;
@@ -1966,7 +1969,7 @@ ul.leftmenu li.information {
   padding: 5px 7px;
   margin-top: 5px;
   margin-bottom: 5px;
-  
+
   h3 {
     margin: 0;
     padding: 0;
@@ -2114,7 +2117,7 @@ body#welcome_controller {
   .splash {
     background: #fff;
   }
-  
+
   #logo {
     margin-top: 0px;
     margin-left: 0px;
@@ -2215,12 +2218,12 @@ span.all_text {
   }
 .flash .error, .flash .error-list {
   border: 1px solid #993624;
-  background: #cc4831 url('<%= image_path("error.png") %>') no-repeat 10px center; 
+  background: #cc4831 url('<%= image_path("error.png") %>') no-repeat 10px center;
 }
 .flash .warning {
   border: 1px solid #bb9004;
   color: #000;
-  background: #f9e08e url("<%= image_path('warning.png') %>") no-repeat 10px center; 
+  background: #f9e08e url("<%= image_path('warning.png') %>") no-repeat 10px center;
   padding-left: 75px;}
 .flash .notice {
   color: #28485e;
@@ -2554,7 +2557,7 @@ div.help_bubble_group {
   float: right;
 }
 
-.fl_right { 
+.fl_right {
   float: right;
 }
 
@@ -2613,7 +2616,7 @@ ul#ui-autocomplete {
 }
 
 .advanced_options {
-  
+
   width: 340px;
   div.title {
     font-size: 16px;
@@ -2631,7 +2634,7 @@ ul#ui-autocomplete {
       width: 290px;
     }
   }
-  
+
   div.rule_form {
     margin-left: 10px;
     .title {
@@ -2785,7 +2788,7 @@ ul.divider {
 }
 
 #advanced_search {
-  padding: 7px 0px;  
+  padding: 7px 0px;
 }
 
 #global_loader {
