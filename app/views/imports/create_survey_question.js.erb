@@ -6,14 +6,14 @@ if("<%= @message %>" == "SUCCESS"){
   survey_title = "<%= escape_javascript(@survey.title) if @survey.present? %>"
   survey_id = "<%= @survey.id if @survey.present? %>"
   question_type = "<%= escape_javascript(@question_category) %>"
-  
+
   if("<%= @survey_status %>" == "NEW"){
-    $('.import_column_survey_select').each(function(){    
+    $('.import_column_survey_select').each(function(){
       $(this).append("<optgroup label='"+survey_title+"'><option value='"+question_id+"'>"+question_label+"</option></optgroup>")
     })
     $('#select_survey_field').append("<option value='"+survey_id+"' new='true'>"+survey_title+"</option>")
   }else{
-    $('.import_column_survey_select').each(function(){    
+    $('.import_column_survey_select').each(function(){
       $(this).children('optgroup').each(function(){
         if($(this).attr('label') == $('#select_survey_field option:selected').text()){
           $(this).append("<option value='"+question_id+"' new='true' question_type='"+question_type+"' question_content='"+question_content+"'>"+question_label+"</option>")
@@ -21,8 +21,9 @@ if("<%= @message %>" == "SUCCESS"){
       })
     })
   }
-  
+
   $('#import_column_survey_select_'+id).val(question_id)
+  $('#import_column_survey_select_'+id).attr('saved_value',question_id)
   $('#import_column_survey_select_'+id).trigger('change')
   $('#import_error_message').text('')
   $('#create_question_dialog').dialog('close')
@@ -31,13 +32,14 @@ if("<%= @message %>" == "SUCCESS"){
   question_id = "<%= @question.id if @question.present? %>"
   question_label = "<%= escape_javascript(@question.label) if @question.present? %>"
   question_content = "<%= escape_javascript(@question.content) if @question.present? %>"
-  
-  $('.import_column_survey_select').each(function(){    
+
+  $('.import_column_survey_select').each(function(){
     $(this).children().find("option[value="+question_id+"]").text(question_label)
     $(this).children().find("option[value="+question_id+"]").attr('question_content',question_content)
   })
 
   $('#import_column_survey_select_'+id).val(question_id)
+  $('#import_column_survey_select_'+id).attr('saved_value',question_id)
   $('#import_column_survey_select_'+id).trigger('change')
   $('#import_error_message').text('')
   $('#create_question_dialog').dialog('close')

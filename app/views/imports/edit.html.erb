@@ -1,10 +1,10 @@
 <div class="inside_container">
-	<div class="titlebar titlebarmod">  
+	<div class="titlebar titlebarmod">
 	  <h1>
 		<%= t('contacts.index.import_contacts') %>
 	  </h1>
 	</div>
-	
+
 	<div>
 		<h1 class="title"><%= t('.title')%></h1>
 		<div class="container">
@@ -13,9 +13,9 @@
 			</div>
 			<table id="import_column_question">
 				<tr>
-					<th>Column</th>
-					<th>Preview</th>
-					<th>Match</th>
+					<th><%= t('.column1') %></th>
+					<th><%= t('.column2') %></th>
+					<th><%= t('.column3') %></th>
 				</tr>
 				<%= form_for @import, html: {id: 'header_mapping_form'} do |f| %>
 					<% @import.headers.each_with_index do |header, i| %>
@@ -28,7 +28,7 @@
 							</td>
 						</tr>
 					<% end %>
-			
+
 			</table>
 			<div class="importform">
 					<%= submit_tag 'Continue', value: "Continue", id: 'header_mapping_submit' %><%= link_to("Cancel", "/imports/new", :class => "cancel") %>
@@ -36,12 +36,12 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<div id="new_question_div" style="display:none" title="Create Survey Question For Column">
 		<%= render 'import_add_question' %>
 	</div>
-	
+
 	<div id="create_question_dialog" style="display:none" title="Create Survey Question For Column">
-		<%= render 'add_survey_question' %> 
+		<%= render 'add_survey_question' %>
 	</div>
 </div>

@@ -192,7 +192,7 @@ class Import < ActiveRecord::Base
         if ctr == 0
           begin
             # if there is a nil headers
-            raise NilColumnHeader if row && row.length - row.compact.length != 0 
+            raise NilColumnHeader if row && row.length - row.compact.length != 0
             self.headers = row.compact
           rescue
             raise NilColumnHeader

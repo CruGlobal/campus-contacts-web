@@ -97,12 +97,12 @@ class ImportsController < ApplicationController
   def download_sample_contacts_csv
     csv_string = CSV.generate do |csv|
       c = 0
-      CSV.foreach(Rails.root.to_s + "/public/files/import_contacts_template.csv") do |row|
+      CSV.foreach(Rails.root.to_s + "/public/files/missionhub_import_contacts_template.csv") do |row|
         c = c + 1
         csv << row
       end
     end
-    send_data csv_string, :type => 'text/csv; charset=UTF-8; header=present', :disposition => "attachment; filename=import_contacts_template.csv"
+    send_data csv_string, :type => 'text/csv; charset=UTF-8; header=present', :disposition => "attachment; filename=missionhub_import_contacts_template.csv"
   end
 
   def nil_column_header
@@ -112,7 +112,7 @@ class ImportsController < ApplicationController
   end
 
   def create_survey_question
-    unless params[:question_id].present?
+    if !params[:question_id].present? || params[:question_id] == 'new_question'
       @message ||= "Enter new survey name." if params[:create_survey_toggle] == "new_survey" && !params[:survey_name_field].present?
       @message ||= "Select an existing survey." if params[:create_survey_toggle].blank? && !params[:select_survey_field].present?
       @message ||= "Select question type." unless params[:question_category].present?
@@ -121,8 +121,7 @@ class ImportsController < ApplicationController
     @message ||= "Choices can't be blank " if params[:question_category] == 'ChoiceField' && !params[:options].present?
 
     unless @message.present?
-
-      if params[:question_id].present?
+      if params[:question_id].present? && params[:question_id] != 'new_question'
         @question = Element.find(params[:question_id])
         @question.update_attributes({label: params[:question], content: params[:options], slug: ''})
         @message = "UPDATE"
@@ -185,7 +184,7 @@ class ImportsController < ApplicationController
         @survey_questions[survey.title][q.label] = q.id
       end
     end
-    @survey_questions[I18n.t('surveys.questions.index.predefined')] = Survey.find(APP_CONFIG['predefined_survey']).questions.collect { |q| [q.label, q.id] }
+    @survey_questions[I18n.t('surveys.questions.index.predefined')] = Survey.find(APP_CONFIG['predefined_survey']).questions.collect { |q| [(q.slug || q.attribute_name || q.label).gsub('_',' ').titleize, q.id] }
   end
 
 end

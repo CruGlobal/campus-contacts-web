@@ -7,7 +7,7 @@ en:
     survey:
       default_login_paragraph: "To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey."
       default_post_survey_message: "Thank you fro your time!"
-    add_contact: 
+    add_contact:
       add_contact: Add a contact to %{org}
       title_bio: Bio
       title_label: Labels
@@ -26,7 +26,9 @@ en:
       keep_contact: "Check the box to leave a copy of the contact in the org."
     messages:
       question_too_long: "WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages."
-  roles: 
+  roles:
+    index:
+      title: "%{org} Labels"
     admin: Admin
     contact: Contact
     involved: Involved
@@ -43,7 +45,7 @@ en:
       create: "Create"
       name: "Name"
       i18n: "i18n"
-     
+
   views:
     pagination:
       first: "&laquo; First"
@@ -52,8 +54,8 @@ en:
       next: "Next &rsaquo;"
       truncate: "..."
   rejoicables:
-    spiritual_conversation: 'Spiritual Conversation' 
-    prayed_to_receive: 'Prayed To Receive Christ' 
+    spiritual_conversation: 'Spiritual Conversation'
+    prayed_to_receive: 'Prayed To Receive Christ'
     gospel_presentation: 'Gospel Presentation'
   nav:
     dashboard: Dashboard
@@ -158,8 +160,8 @@ en:
       email_taken: "<font color='red'>Oops! This email address is already being used. Please email <b>support@missionhub.com</b> with the EMAIL address and NAME of the person whom you want to add the email to.</font>"
       email_error: "<font color='red'>Invalid email.</font>"
     person_form:
-      add_phone_number: "Add Phone Number" 
-      add_email_address: "Add Email Address" 
+      add_phone_number: "Add Phone Number"
+      add_email_address: "Add Email Address"
       preferred_name: 'Nickname'
     add_person:
       add_person: Add a person to %{org}
@@ -207,7 +209,7 @@ en:
       send_contact_info: "Email me %{name}'s info"
       send_vcard_desc: 'This will create a vcard and send it to the email address you enter below.'
       facebook_profile: 'Facebook Profile'
-      phone_number: 
+      phone_number:
         one:   "Phone #:"
         other: "Phone #s:"
       email:
@@ -233,7 +235,7 @@ en:
       email: 'Email Address'
       phone: 'Phone Number'
       basic_search: 'Toggle Basic Search'
-      clear_search_form: 'Clear Search Form'  
+      clear_search_form: 'Clear Search Form'
     form:
       facebook_url: "Facebook Profile Url:"
       facebook_url_tip: You can manually search facebook for this person's profile if they haven't already connected. Keep in mind that some people set their facebook privacy settings such that they won't show up in this search.
@@ -289,7 +291,7 @@ en:
       back: Back Home
       dont_like_facebook: Don't like Facebook?
       skip_facebook: Click here to skip Facebook login
-      login_with_facebook: Please login with Facebook to get started 
+      login_with_facebook: Please login with Facebook to get started
       login: Login
       welcome: Welcome!
       no_facebook: "Don't like Facebook? Click here to skip Facebook login"
@@ -326,18 +328,18 @@ en:
       next: Next
       welcome_paragraph: "Welcome to MissionHub!<br><br> This setup wizard will help you get started and set up a keyword, which is an essential part of getting contacts into the system."
       verify_paragraph: "If you have a CCC Relay login account, please sign in to link your account. You only need to do this once. WARNING: If you logged into MissionHub using someone else's Facebook Account, Log Out now! Clicking verify will merge your information with theirs, creating a big mess."
-      not_found_paragraph: 
-        "<p>We weren't able to match you up with an organization currently using MissionHub. There are two likely causes:</p> 
+      not_found_paragraph:
+        "<p>We weren't able to match you up with an organization currently using MissionHub. There are two likely causes:</p>
         <ol>
         <li>A leader in your organization who can already log into MissionHub needs to add you to MissionHub.</li>
         <li>Your facebook email address doesn't match the email that was entered for you when your leader added you.</li>
         </ol>
         <p>Please contact the person who told you about MissionHub and ask them to enter you with your facebook email address. If you are that person or need more help, shoot us an email at support@missionhub.com</p>"
-        
+
       keyword_paragraph: "A powerful feature of MissionHub is the ability for you to collect contacts through text messages. For this to work, you have to choose a keyword that is unique to your ministry that people will send messages to. With a keyword, you will be able to say, “Text <strong>your keyword</strong>  to 85005” at your next event or meeting."
       request_keyword_link: "Click here to request a keyword. We'll return you to this wizard when you're done."
       survey_paragraph:
-        "Now that you've requested a keyword, you're going to want to create a set of questions to ask people. Think along the lines of a short survey or a 
+        "Now that you've requested a keyword, you're going to want to create a set of questions to ask people. Think along the lines of a short survey or a
         basic contact card."
       create_survey_link: "Click here to create your survey."
       leaders_header: "Give access to other leaders"
@@ -355,7 +357,7 @@ en:
       edit_orgs: 'Edit your organizational involvements.'
       delete_keyword_confirm: "Are you sure you want to delete this keyword?"
       no_mobile: The mobile version of this page hasn't been built yet. Sorry.
-      follow_up: 
+      follow_up:
         one:   '1 Person to Follow-up'
         other: '%{count} People to Follow-up'
       delete: "Delete"
@@ -385,7 +387,7 @@ en:
   surveys:
     index:
       title: "Surveys for %{org}"
-    index_admin: 
+    index_admin:
       confirm_delete: "Are you sure you want to delete this keyword?"
       delete_survey: "Delete survey"
       new: 'New Survey'
@@ -394,7 +396,7 @@ en:
       association_help: "When a contact responds to a survey, they are associated with the same team or movement as the keyword they responded to."
     edit:
       edit_survey: "Edit Survey"
-    new: 
+    new:
       create_a_survey: "Create a Survey"
       choose_keyword_explanation_html:
         'Choosing a keyword for your community or event enables you to have people fill out your survey questions via the web, interactive texting,
@@ -432,7 +434,7 @@ en:
       edit:
         leader_invalid_email_with_name: "Chosen leader/s '%{leader_names}' have invalid email."
         leader_invalid_email: "Chosen leader has an invalid email."
-      form: 
+      form:
         text_message_length: 'Text Message Length:'
         what_question_type: What type of question would you like to ask?
         short_answer: 'Short Answer (Free form response)'
@@ -456,7 +458,7 @@ en:
         question: 'Question:'
         column_header: 'Column Header'
         column_header_hint: 'This is what will display at the top of the column when looking at contacts later'
-      index: 
+      index:
         manage: Manage Survey Questions
         note: "Note: First and Last name will be automatically added to every survey. There's no need for you to add those."
         predefined: Predefined Questions
@@ -510,7 +512,7 @@ en:
       explanation: 'Explanation:'
       keyword: 'Keyword:'
       status: 'Status:'
-      
+
     new:
       choose_keyword_explanation_html:
         'Choosing a keyword for your community or event enables you to have people fill out your survey questions via the web, interactive texting,
@@ -519,7 +521,7 @@ en:
     	  ready for use.'
       your_questions_help: "Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service."
       predefined_help: "Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided."
-  
+
   organization_mailer:
     notify_user:
       link_text: 'send us an email at support@missionhub.com'
@@ -540,7 +542,7 @@ en:
           Thanks,<br/>
           MissionHub Support Team
         </p>
-        
+
   keyword_request_mailer:
     notify_user:
       link_text: 'send us an email at support@missionhub.com'
@@ -604,7 +606,7 @@ en:
       delete_confirm: "Are you sure you want to remove %{person} as a leader?"
       delete_confirm_with_instructions: "If you want to retain %{person} in your organization you must first assign them another role or label, click CANCEL, go to the Directory screen and 'Add Label' such as involved or alumni, then remove them as a leader. If you want to remove them completely from your organization, click OK."
       archive_confirm: "%{person} will be moved to archives."
-    leader_form: 
+    leader_form:
       start_typing: "Start typing a name to find a person to make a leader:"
     leaders:
       reminder_prompt: "Some of your leaders have contacts that haven't been followed up! Let your leaders know!"
@@ -617,7 +619,7 @@ en:
       clear_search_form: 'Clear Search Form'
       no_contacts: 'Sorry, there are no contacts here.'
       export: 'Export CSV'
-      add_question_back: Click on a question to add it back to the page 
+      add_question_back: Click on a question to add it back to the page
       unassign_contact: "Unassign contact"
       delete_contact: "Delete this contact"
       friends: 'Friends'
@@ -625,16 +627,16 @@ en:
       reminder_email_subject: New contacts have arrived!
       reminder_email_body:
         Hey!
-        
-        
+
+
         Just letting you know that you have been given new contacts to follow-up.
-        
-        
+
+
         Login to MissionHub at http://www.missionhub.com to access your contacts.
-        
-        
+
+
         In Christ,
-        
+
         %{name}
       filter: 'Search'
       first_name: 'First'
@@ -677,7 +679,7 @@ en:
       no_activity: 'No Activity'
       my_friends: 'My Friends'
       delete_confirm: You are about to send this contact to the "Do Not Contact" list. If that's not what you meant to do, click cancel.
-      destroy_confirm: Are you sure you want to delete this contact? If that's not what you meant to do, click cancel.      
+      destroy_confirm: Are you sure you want to delete this contact? If that's not what you meant to do, click cancel.
       assign_people:
         one: Assign 1 person
         other: "Assign %{count} people"
@@ -686,8 +688,8 @@ en:
       bulk_vcard_dialog_title: 'Bulk Vcard Options'
       bulk_vcard_dialog_desc: 'We can send the contacts information to you via email or you can download it all in one zip package'
       bulk_vcard_download_message: 'A .vcf file now containing all the contact information you requested is being downloaded.'
-      bulk_vcard_email_message: 'Contacts information has been sent to '      
-      contact_no_select_message: 'Please select atleast one contact.'      
+      bulk_vcard_email_message: 'Contacts information has been sent to '
+      contact_no_select_message: 'Please select atleast one contact.'
       no_name_message: 'At a minimum you need to provide a first name.'
       saved_searches: 'Saved Searches'
       delete_this_search: "Delete this search"
@@ -704,7 +706,7 @@ en:
       email: Email
       year: Year
       detailed: Detailed
-      all: All 
+      all: All
       comments: 'My Comments'
 
     thanks:
@@ -714,12 +716,12 @@ en:
 
     plain:
       exit_survey: 'Exit survey mode'
-    form: 
+    form:
       first_name: 'First Name'
       last_name: 'Last Name'
       email: 'Email Address'
       phone_number: 'Phone Number'
-    edit: 
+    edit:
       back: "Back to profile"
       basic_information: Basic Information
       additional_information: Additional Information
@@ -727,7 +729,7 @@ en:
     mailer:
       vcard_email_subject: 'Contact information'
       vcard_email_content: 'Attached in this email is a vcard containing the contact you selected'
-      bulk_vcard_email_subject: 'Your request for contact information'      
+      bulk_vcard_email_subject: 'Your request for contact information'
       bulk_vcard_email_content: 'Attached to this email is a vcard containing the contacts you selected'
     import_contacts:
       success: "Your CSV upload is now being processed. You will receive an email when it finishes."
@@ -748,14 +750,14 @@ en:
       blank_header: "One of the CSV headers is blank"
       present_first_name: "First name is required on import"
       duplicate_header_match: "At least two of the headers has the same selected person attribute/survey question"
-      
+
   sms:
     keyword_inactive: "The keyword you have just texted is not active. Please check your spelling and try again."
     email_should_be_unique_msg: "Email already used, try another email address."
     email_invalid_msg: "Email is invalid, try again."
     no_survey: "There isn't a survey associated with that keyword"
   survey:
-    drop_down_field: 
+    drop_down_field:
       choose_one: "Choose One"
   survey_responses:
     new:
@@ -766,7 +768,7 @@ en:
     facebook:
       facebook_login: "You can connect your account to Facebook so we can know who you really are."
       pick_keyword: "Pick a Keyword"
-    show: 
+    show:
       title: "%{name}'s Survey Answers"
       edit_answers: "Edit Answers"
       no_answers: "%{name} has not completed any surveys"
@@ -960,11 +962,11 @@ en:
 
   bulk_sms: Bulk Text
   bulk_email: Bulk Email
-        
+
   weekly: Weekly
   monthly: Monthly
   sporadically: Sporadically
-  
+
   groups:
     see_all: See all groups
     index:
@@ -974,10 +976,10 @@ en:
       leaders: Leaders
       add_group: 'Add a group'
       labels: Group Labels
-      add: Add 
+      add: Add
       assign_to_label:
         one: '1 Group'
-        other: '%{count} Groups' 
+        other: '%{count} Groups'
       labeled_with: 'Labeled With "%{label}"'
       new_label_prompt: Please enter a new label name
       add_a_label: Add a Label
@@ -985,7 +987,7 @@ en:
       new_group: Create a New Group
     edit:
       edit_group: Editing %{group}
-    show:  
+    show:
       add_member: 'Add Member'
       location: Location
       edit: edit
@@ -1009,7 +1011,7 @@ en:
       remove_confirm: "Are you sure you want to remove %{name} from your group?"
     label:
       delete_confirm: "Are you sure you want to remove the '%{label}' label?"
-      
+
   group_memberships:
     form:
       start_typing: "Start typing a name to find a person add to this group:"
@@ -1021,7 +1023,7 @@ en:
       showing_count_complete: "Showing %{length} records."
       show_all: 'show all'
       add_new_person_group: Add a new person
-  
+
   helpers:
     label:
       group:
@@ -1070,7 +1072,7 @@ en:
       title: Settings
       year_in_school: Display 'Year in School' on the Directory Page
       submit: Update Settings
-    cleanup: 
+    cleanup:
       title: "Cleanup"
       archive_contacts_submit: "Archive Contacts Now"
       remove_leaders_submit: "Remove Leaders Now"
@@ -1091,21 +1093,26 @@ en:
   imports:
     new:
       title: Step 1 of 3 - Upload a File
-      guide: You can easily import hundreds of contacts at once by uploading a CSV (comma-seperated value) file. Microsoft Excel makes it easy to create a CSV file from a spreadsheet.
-      guide1: "Download and open %{link} to get started."
-      guide2: "Use the first row of the database to list your headings (First Name, Last Name, Email, etc.)."
-      guide3: "In Excel, choose <strong>Save As</strong>."
-      guide4: "From the drop down menu for <strong>File Type</strong>, choose <strong>CSV, Comma Separated</strong>."
-      guide5: "Click the <strong>Choose File</strong> button and locate your new CSV file, then click the <strong>Upload</strong> button to continue."
+      guide: "Easily import all your contacts quickly with a CSV (comma-separated value) file. If you have a CSV file to import, click <strong>Choose File</strong> to locate your file and then click <strong>Upload</strong>."
+      guide0: "To create a new CSV file, you can use Microsoft Excel to make one from a spreadsheet. "
+      guide1: "Open your current contact spreadsheet or download a %{link}."
+      guide2: "List your category (column) headings across the first row of your spreadsheet like first name, last name, email etc."
+      guide3: "Select <strong>File</strong>, choose <strong>Save As</strong>."
+      guide4: "In the <strong>Save As</strong> box, from the drop-down menu for <strong>File Type/Format</strong>, select <strong>CSV, Comma Separated</strong> and then continue by saving the spreadsheet to your computer."
+      guide5: "In MissionHub, click <strong>Choose File</strong> to locate your file and then click <strong>Upload</strong> to continue."
+      preview: 'View picture for an example.'
       sample_csv: "CSV Sample Template"
       wrong_file_format_error: "Uploaded wrong file format. File must be .csv"
       file_not_existing: "File does not exist."
     edit:
       title: "Step 2 of 3 - Match Columns"
-      guide: "Match the headers from your CSV file with the corresponding Person attributes or Survey questions in MissionHub. <strong>First Name</strong> is required."
+      guide: "Match the category column headings from your CSV file with the corresponding questions/column headers in the dropdown boxes."
+      column1: Column
+      column2: Preview
+      column3: Question/Column Header
     labels:
       title: "Step 3 of 3 - Add Labels to New Contacts"
-      guide: "You are almost ready to upload %{count_word}! Use the list below to select any groups which should include these new contacts, then click the <strong>Import</strong> button. "
+      guide: "You are almost ready to upload %{count_word}! Use the list below to select any labels to apply to all of these new contacts, then click <strong>Import</strong>."
   batch:
     new_person_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, there are new contacts in your organization. Please login to missionhub.com as soon as possible to followup the contacts. Below is the list of %{contacts_count} new contacts:"
     person_transfer_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, you have been sent new contacts. Please login to missionhub.com as soon as possible to followup the contacts. There may be more information about the contacts in the comment section of their individual profile. If not, you may want to contact the senders at their email address. Below is the list of %{contacts_count} contacts sent:"
