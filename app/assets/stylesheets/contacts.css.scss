@@ -1,4 +1,4 @@
-/* 
+/*
   Place all the styles related to the matching controller here.
   They will automatically be included in application.css.
 */
@@ -34,4 +34,8 @@
 	border: 1px solid #999;
 	border-image: initial;
 	box-shadow: #BBB 0px 2px 5px;
+}
+
+#all_contacts_select_all_option {
+  padding: 5px 7px;
 }

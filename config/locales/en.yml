@@ -944,6 +944,7 @@ en:
   activerecord:
     models:
       sms_keyword: Keyword
+      person: information
     errors:
       template:
         header:

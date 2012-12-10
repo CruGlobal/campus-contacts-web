@@ -255,7 +255,7 @@ class Person < ActiveRecord::Base
 
   def org_ids
     unless @org_ids
-      unless Rails.cache.fetch(['org_ids_cache', self])
+      unless Rails.cache.exist?(['org_ids_cache', self])
         organization_tree # make sure the tree is built
       end
       # convert org ids to integers (there has to be a better way, but i couldn't think of it)
@@ -824,7 +824,6 @@ class Person < ActiveRecord::Base
   end
 
   def organizational_roles_hash
-    @retries = 0
     roles = {}
     @organizational_roles_hash ||= org_ids.collect { |org_id, values|
                                      values['roles'].select { |role_id|
@@ -832,13 +831,9 @@ class Person < ActiveRecord::Base
                                      }.collect { |role_id|
                                        roles[role_id] ||= Role.find_by_id(role_id)
                                      }.compact.collect { |role|
-                                       {org_id: org_id, role: role.i18n, name: organization_from_id(org_id).name, primary: primary_organization.id == org_id ? 'true' : 'false'}
+                                       {org_id: org_id, role: role.i18n, name: organization_from_id(org_id).try(:name), primary: primary_organization.id == org_id ? 'true' : 'false'}
                                      }
                                    }.flatten
-  rescue NoMethodError
-    @org_ids = nil
-    @retries += 1
-    retry if @retries == 1
   end
 
   def to_hash(organization = nil)
@@ -864,7 +859,7 @@ class Person < ActiveRecord::Base
   def picture
     if person_photo
       Rails.env.development? ? "http://local.missionhub.com/#{person_photo.image.url}" : "http://www.missionhub.com/#{person_photo.image.url}"
-    else
+    elsif fb_uid.present?
       "http://graph.facebook.com/#{fb_uid}/picture"
     end
   end
@@ -959,7 +954,7 @@ class Person < ActiveRecord::Base
   def assigned_organizational_roles(organization_id)
     roles.where('organizational_roles.organization_id' => organization_id)
   end
-  
+
   def assigned_organizational_roles_including_archived(organization_id)
     roles_including_archived.where('organizational_roles.organization_id' => organization_id)
   end
