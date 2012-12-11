@@ -36,10 +36,10 @@ class CrsImport
                 question = kind.where(crs_question_id: crs_question.id).first
               end
             else
-              question = kind.new(crs_question_id: crs_question.id)
+              question = kind.new(crs_question_id: crs_question.id, label: crs_question.name)
             end
 
-            question.attributes = {style: style, label: crs_question.name}
+            question.attributes = {style: style}
 
             case style
             when 'checkbox'
