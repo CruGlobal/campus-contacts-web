@@ -130,9 +130,9 @@ class Surveys::QuestionsController < ApplicationController
   end
 
   def hide
-    predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
-    if predefined_survey.questions.collect(&:id).include?(params[:id].to_i)
-      @question = predefined_survey.elements.find(params[:id].to_i)
+    @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
+    if @predefined_survey.questions.collect(&:id).include?(params[:id].to_i)
+      @question = @predefined_survey.elements.find(params[:id].to_i)
       @organization = current_organization
 
       current_organization.settings[:visible_predefined_questions] = current_organization.settings[:visible_predefined_questions].reject {|x| x == @question.id}
@@ -148,9 +148,9 @@ class Surveys::QuestionsController < ApplicationController
   end
 
   def unhide
-    predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
-    if predefined_survey.questions.collect(&:id).include?(params[:id].to_i)
-      @question = predefined_survey.elements.find(params[:id].to_i)
+    @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
+    if @predefined_survey.questions.collect(&:id).include?(params[:id].to_i)
+      @question = @predefined_survey.elements.find(params[:id].to_i)
       @organization = current_organization
       current_organization.settings[:visible_predefined_questions] = Array.new if current_organization.settings[:visible_predefined_questions].nil?
       current_organization.settings[:visible_predefined_questions] << @question.id
