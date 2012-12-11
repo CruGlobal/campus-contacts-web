@@ -85,7 +85,9 @@ class Import < ActiveRecord::Base
         new_person_ids << person.id
         names << person.name
         if person.errors.present?
-          import_errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
+          person.errors.messages.each do |error|
+            import_errors << "#{person.to_s}: #{error[0].to_s.split('.')[0].gsub('_',' ').titleize} #{error[1].first}"
+          end
         else
           labels.each do |role_id|
             if role_id.to_i == 0
