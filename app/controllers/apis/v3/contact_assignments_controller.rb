@@ -2,10 +2,8 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
   before_filter :get_contact_assignment, only: [:show, :update, :destroy]
 
   def index
-    list = add_includes_and_order(contact_assignments)
-    list = ContactAssignmentFilter.new(params[:filters]).filter(list) if params[:filters]
 
-    render json: list,
+    render json: filtered_contact_assignments,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization, since: params[:since]}
   end
@@ -31,7 +29,7 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
              callback: params[:callback]
     end
   end
-  
+
   def update
     if @contact_assignment.update_attributes(params[:contact_assignment])
       render json: @contact_assignment,
@@ -44,34 +42,44 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
     end
 
   end
-  
+
   def bulk_update
+
     error_messages = []
+
     begin
+
       ActiveRecord::Base.transaction do
-          assignments = params[:contact_assignments].collect do |k, assignment|
-            contact_assignment = assignment[:id] ? contact_assignments.find(assignment[:id]) : contact_assignments.new  
-            contact_assignment.attributes = assignment
-            unless contact_assignment.save
-              error_messages += contact_assignment.errors.full_messages
-            end
+        assignments = params[:contact_assignments].collect do |_, assignment|
+          contact_assignment = assignment[:id] ? contact_assignments.find(assignment.delete(:id)) : contact_assignments.new
+          contact_assignment.attributes = assignment
+
+          unless contact_assignment.save
+            error_messages += contact_assignment.errors.full_messages
+          end
+
           contact_assignment
         end
-        
-        raise 'invalid' if error_messages.present?
-        
-        render json: assignments,
-               callback: params[:callback],
-               scope: {include: includes, organization: current_organization}
+
+        raise ActiveRecord::RecordInvalid if error_messages.present?
+
       end
-    rescue => err
-      error_messages = [err.to_s] if error_messages.empty?
+
+    rescue ActiveRecord::RecordInvalid
+      # Rescue the validation error we threw so we can send the error
+      # messages back to the user
       render json: {errors: error_messages},
-             status: :unprocessable_entity,
-             callback: params[:callback]
+        status: :unprocessable_entity,
+        callback: params[:callback]
+
+      return
     end
+
+    render json: assignments,
+       callback: params[:callback],
+       scope: {include: includes, organization: current_organization}
   end
-  
+
   def destroy
     @contact_assignment.destroy
 
@@ -79,12 +87,11 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
            callback: params[:callback],
            scope: {include: includes, organization: current_organization, deleted: true}
   end
-  
+
   def bulk_destroy
-    @contact_assignments = add_includes_and_order(contact_assignments).find(params[:ids].split(','))
-    @contact_assignments.each do |assignment|
-      assignment.destroy
-    end
+    @contact_assignments = filtered_contact_assignments
+    @contact_assignments.destroy_all
+
     render json: @contact_assignments,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization, deleted: true}
@@ -96,12 +103,18 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
     current_organization.contact_assignments
   end
 
+  def filtered_contact_assignments
+    list = add_includes_and_order(contact_assignments)
+    list = ContactAssignmentFilter.new(params[:filters]).filter(list) if params[:filters]
+    list
+  end
+
   def get_contact_assignment
     @contact_assignment = add_includes_and_order(contact_assignments)
                 .find(params[:id])
 
   end
-  
+
   def available_includes
     [:assigned_to, :person]
   end
