@@ -41,8 +41,13 @@ class CrsImport
 
             question.attributes = {style: style, label: crs_question.name}
 
-            # add options if it's a multiple choice question
-            question.content = crs_question.question_options.collect(&:value).join("\n")
+            case style
+            when 'checkbox'
+              question.content = "No\nYes"
+            else
+              # add options if it's a multiple choice question
+              question.content = crs_question.question_options.collect(&:value).join("\n")
+            end
 
             question.save!
             questions[crs_question.id] = question
@@ -137,17 +142,16 @@ class CrsImport
 
               # Copy over answers
               registrant.answers.each do |a|
-                value = a.value_boolean || a.value_date || a.value_double || a.value_int || a.value_string || a.value_text
-                question = questions[a.custom_questions_item.question_id]
-                # If this question is multiple choice, we need to capture all answers
-                if question.is_a?(ChoiceField)
-                  Answer.where(answer_sheet_id: answer_sheet.id, question_id: question.id, value: value).first_or_create
+                if a.value_boolean
+                  value = a.value_boolean? ? 'Yes' : 'No'
                 else
-                  # If it's not, we can just look for one answer and possibly update it
-                  a = Answer.where(answer_sheet_id: answer_sheet.id, question_id: question.id).first_or_initialize
-                  a.value = value if value
-                  a.save
+                  value = a.value_date || a.value_double || a.value_int || a.value_string || a.value_text
                 end
+                question = questions[a.custom_questions_item.question_id]
+
+                a = Answer.where(answer_sheet_id: answer_sheet.id, question_id: question.id).first_or_initialize
+                a.value = value if value
+                a.save
               end
 
             end
