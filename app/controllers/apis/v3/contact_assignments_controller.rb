@@ -69,15 +69,15 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
       # Rescue the validation error we threw so we can send the error
       # messages back to the user
       render json: {errors: error_messages},
-        status: :unprocessable_entity,
-        callback: params[:callback]
+             status: :unprocessable_entity,
+             callback: params[:callback]
 
       return
     end
 
     render json: assignments,
-       callback: params[:callback],
-       scope: {include: includes, organization: current_organization}
+           callback: params[:callback],
+           scope: {include: includes, organization: current_organization}
   end
 
   def destroy
@@ -89,6 +89,13 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
   end
 
   def bulk_destroy
+    unless params[:filters]
+      render json: {errors: ["You must include a 'filters' parameter for specifying which contact assignments you'd like to delete"]},
+             status: :bad_request,
+             callback: params[:callback]
+      return
+    end
+
     @contact_assignments = filtered_contact_assignments
     @contact_assignments.destroy_all
 

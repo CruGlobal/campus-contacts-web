@@ -471,5 +471,5 @@ FactoryGirl.define do
     display_name 'foo'
     link 'bar'
   end
-  
+
 end
