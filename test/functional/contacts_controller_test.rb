@@ -707,7 +707,7 @@ class ContactsControllerTest < ActionController::TestCase
     should "return admins when Admin link is clicked" do
       Factory(:organizational_role, organization: @org, person: @person1, role: Role.admin)
       xhr :get, :index, { :role => Role::ADMIN_ID }
-      assert_equal 1, assigns(:all_people).count.count, "only 1 record should be returned"
+      assert_equal 2, assigns(:all_people).count.count, "only 2 record should be returned"
       assert assigns(:all_people).include?(@person1)
       assert assigns(:all_people).include?(@user.person)
     end
