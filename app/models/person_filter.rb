@@ -59,6 +59,19 @@ class PersonFilter
                                                  {:search => "#{filters[:name_or_email_like]}%"})
     end
 
+    if @filters[:gender]
+      gender = case
+               when @filters[:gender].first.downcase == 'm'
+                 1
+               when @filters[:gender].first.downcase == 'f'
+                 0
+               else
+                 @filters[:gender]
+               end
+
+      filtered_people = filtered_people.where(gender: gender)
+    end
+
     filtered_people
   end
 end
