@@ -1,6 +1,6 @@
 class OrganizationsController < ApplicationController
   respond_to :html, :js
-  before_filter :get_organization, :only => [:show, :edit, :update, :destroy]
+  before_filter :get_organization, :only => [:show, :edit, :update, :destroy, :update_from_crs]
 
   def index
 
@@ -79,6 +79,12 @@ class OrganizationsController < ApplicationController
       flash.now[:error] = error
       render action: 'add_org_from_crs'
     end
+  end
+
+  def update_from_crs
+    @organization.queue_import_from_conference(current_user)
+    flash[:notice] = t('organizations.add_org_from_crs.conference_is_importing')
+    redirect_to :back
   end
 
   def destroy

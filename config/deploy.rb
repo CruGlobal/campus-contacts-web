@@ -68,9 +68,7 @@ end
 
 before 'deploy:restart', 'deploy:bluepill'
 deploy.task :bluepill, roles: :db do
-  if rails_env == 'production'
-    sudo "bluepill restart resque"
-  end
+  sudo "/etc/init.d/bluepill restart mh_#{rails_env}"
 end
 
 

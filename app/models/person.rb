@@ -255,7 +255,7 @@ class Person < ActiveRecord::Base
 
   def org_ids
     unless @org_ids
-      unless Rails.cache.fetch(['org_ids_cache', self])
+      unless Rails.cache.exist?(['org_ids_cache', self])
         organization_tree # make sure the tree is built
       end
       # convert org ids to integers (there has to be a better way, but i couldn't think of it)
@@ -306,7 +306,7 @@ class Person < ActiveRecord::Base
     (o ? o.children : organizations).order('name').each do |org|
       # collect roles associated with each org
       @org_ids[org.id] ||= {}
-      @org_ids[org.id]['roles'] = (Array.wrap(roles_by_org_id(org.id)) + Array.wrap(parent_roles)).uniq
+      @org_ids[org.id]['roles'] = (Array.wrap(@org_ids[org.id]['roles']) + Array.wrap(roles_by_org_id(org.id)) + Array.wrap(parent_roles)).uniq
       orgs[org.id] = (org.show_sub_orgs? ? org_tree_node(org, @org_ids[org.id]['roles']) : {})
     end
     orgs
@@ -824,7 +824,6 @@ class Person < ActiveRecord::Base
   end
 
   def organizational_roles_hash
-    @retries = 0
     roles = {}
     @organizational_roles_hash ||= org_ids.collect { |org_id, values|
                                      values['roles'].select { |role_id|
@@ -832,13 +831,9 @@ class Person < ActiveRecord::Base
                                      }.collect { |role_id|
                                        roles[role_id] ||= Role.find_by_id(role_id)
                                      }.compact.collect { |role|
-                                       {org_id: org_id, role: role.i18n, name: organization_from_id(org_id).name, primary: primary_organization.id == org_id ? 'true' : 'false'}
+                                       {org_id: org_id, role: role.i18n, name: organization_from_id(org_id).try(:name), primary: primary_organization.id == org_id ? 'true' : 'false'}
                                      }
                                    }.flatten
-  rescue NoMethodError
-    @org_ids = nil
-    @retries += 1
-    retry if @retries == 1
   end
 
   def to_hash(organization = nil)
@@ -864,7 +859,7 @@ class Person < ActiveRecord::Base
   def picture
     if person_photo
       Rails.env.development? ? "http://local.missionhub.com/#{person_photo.image.url}" : "http://www.missionhub.com/#{person_photo.image.url}"
-    else
+    elsif fb_uid.present?
       "http://graph.facebook.com/#{fb_uid}/picture"
     end
   end

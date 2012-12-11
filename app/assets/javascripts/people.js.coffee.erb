@@ -3,7 +3,7 @@ $ ->
     if $('#query').val().length > 0
       $('#search_filter_box').show()
       false
-    
+
   $('#labels_dialog').dialog
     resizable: false,
     height: 450,
@@ -16,41 +16,41 @@ $ ->
       $('.ui-widget-overlay').width('100%');
     close: (event, ui) ->
       $("body").css({ overflow: 'inherit' })
-    buttons: 
+    buttons:
       Close: ->
         $(this).dialog('close')
-    
+
   $('#add_label_button').live 'click', (e)->
     $('#labels_dialog').dialog('open')
     e.preventDefault()
-      
+
   if $('#advanced_filter_box')[0] && $('#first_name')[0]
     if $('#first_name').val().length > 0 || $('#last_name').val().length > 0 || (($('#role').val().length) > 0 && (window.location.search.indexOf('advanced')) > 1) ||
     $('#gender_1').is(':checked') || $('#gender_2').is(':checked') || $('#gender_').is(':checked') ||
     $('#email').val().length > 0 ||  $('#phone').val().length > 0
       $('#advanced_filter_box').show()
       false
-      
+
   $('#people_controller #include_archived').live 'click', ->
     if $(this).is(':checked')
       document.location = '/people?include_archived=true'
     else
       document.location = '/people'
-    
-  
+
+
   $('.action_dropdown').live 'mouseenter', ->
     $(this).click();
-  
+
   $('#people_controller.index #advanced_search').live 'click', ->
     $('#search_filter_box').hide()
     $('#advanced_filter_box').toggle()
     false
-    
+
   $('#basic_search').live 'click', ->
     $('#search_filter_box').toggle()
     $('#advanced_filter_box').hide()
     false
- 
+
   $('#people_controller.index .filter_link').click ->
     if !$('#search_filter_box').is(':visible') && !$('#advanced_filter_box').is(':visible')
       $('#search_filter_box').show()
@@ -61,20 +61,20 @@ $ ->
     else if !$('#search_filter_box').is(':visible') && $('#advanced_filter_box').is(':visible')
       $('#search_filter_box').hide()
       $('#advanced_filter_box').hide()
-      
+
   $('.person_row td:not(.checkbox_cell)').live 'click', ->
     unless $('a', this)[0]?
       tr = $(this).parent()
       document.location = '/people/' + tr.attr('data-id')
-      
+
   $('#apply_roles_spinner').hide()
   $("#apply_roles_successful").hide()
 
   if $('#people_controller.confirm_merge input[type=submit]')[0]
-    $('#people_controller.confirm_merge input[type=submit]')[0].focus() 
+    $('#people_controller.confirm_merge input[type=submit]')[0].focus()
   $('#user_merge_form input.person').observe_field 0.75, ->
     $(this).triggerPersonLookup()
-          
+
   $('#user_merge_form input.name').observe_field 1, ->
     $(this).triggerPersonSearch()
 
@@ -103,11 +103,11 @@ $ ->
       height:664,
       width:600,
       modal: true,
-      buttons: 
+      buttons:
         Cancel: ->
           $(this).dialog('destroy')
     false
-  
+
   $('#add_person_div .save').live 'click', ->
     form = $(this).closest('form')
     if $('#person_first_name', form).val() == '' #or ($('#person_email_address_email', form).val() == '' &&$('#person_phone_number_number', form).val() == '')
@@ -118,17 +118,17 @@ $ ->
     $.rails.handleRemote(form)
     form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
     false
-    
+
   true
 
   $("#people_controller a#bulk_delete, #contacts_controller a#bulk_delete").live 'click', ->
     ids = []
     $('.id_checkbox:checked:visible').each ->
       ids.push($(this).val())
-    if($('#all_selected_text').is(':visible'))    
+    if($('#all_selected_text').is(':visible'))
       $('.all_row').each ->
         ids.push($(this).attr('data-id'))
-        
+
     num_selected = ids.length
     if num_selected  > 0
       if(confirm('Are you sure you want to delete ' + num_selected + ' person(s) permanently?'))
@@ -145,17 +145,17 @@ $ ->
             else
               $.a(data)
     false
-  
-  
-    
+
+
+
   $("#people_controller a#bulk_archive, #contacts_controller a#bulk_archive").live 'click', ->
     ids = []
     $('.id_checkbox:checked:visible').each ->
       ids.push($(this).val())
-    if($('#all_selected_text').is(':visible'))    
+    if($('#all_selected_text').is(':visible'))
       $('.all_row').each ->
         ids.push($(this).attr('data-id'))
-        
+
     num_selected = ids.length
     if num_selected  > 0
       if(confirm('Are you sure you want to archive ' + num_selected + ' person(s)?'))
@@ -172,8 +172,8 @@ $ ->
             else
               $.a(data)
     false
-  
-  fromViewingFBProfile = false  
+
+  fromViewingFBProfile = false
   $('#facebook_name_search').live 'keyup', (e)->
     $(this).autocomplete
       minLength: 3
@@ -211,25 +211,25 @@ $ ->
         .append("<div class='fb_img' style='background:url(" + image_src + ");'>&nbsp;</div> <a>" + item.name + "</a>")
         .appendTo( ul );
       # + '<br/><span onclick="window.open(\'http://www.facebook.com/profile.php?id=' + item.id + '\')">' + t('people.edit.fb_profile_link') + '</span></a>'
-      
+
   $(window).focus ->
     if(fromViewingFBProfile)
       $('#people_controller.edit .ui-autocomplete').show();
       fromViewingFBProfile = false
-      
+
   $('#merge_people').live 'click', (e) ->
-    e.preventDefault()  
+    e.preventDefault()
     if $('.id_checkbox:checked').length > 0
       people = []
       $('.id_checkbox:checked').each ->
-        people.push($(this).val()) 
-      
+        people.push($(this).val())
+
       person1 = people[0]
       person2 = if people[1] == undefined then '' else people[1]
       person3 = if people[2] == undefined then '' else people[2]
       person4 = if people[3] == undefined then '' else people[3]
-      
-      document.location.href = '/people/merge?person1=' + person1 + 
+
+      document.location.href = '/people/merge?person1=' + person1 +
       '&person2=' + person2 + '&person3=' + person3 + '&person4=' + person4
     else
       document.location.href = '/people/merge'
@@ -251,7 +251,7 @@ $.fn.fbNameSearch = (url)->
 
       $('#fb_name_search_result').html('<ul></ul>')
       for v, k in response.data
-        $('#fb_name_search_result ul').append('<li><a class="name" data-id="' + v.id + '"><img src="http://graph.facebook.com/' + v.id + '/picture?type=square" /><div class="meta"><span class="fbname">' + v.name + '</span></div></a></li>')        
+        $('#fb_name_search_result ul').append('<li><a class="name" data-id="' + v.id + '"><img src="http://graph.facebook.com/' + v.id + '/picture?type=square" /><div class="meta"><span class="fbname">' + v.name + '</span></div></a></li>')
       # School Name Here
       # <a onclick="window.open(\'http://www.facebook.com/profile.php?id=' + v.id + '\')">' + t('people.edit.fb_profile_link') + '</a>
     if(response.paging.previous)
@@ -283,14 +283,14 @@ $.fn.triggerPersonSearch = ->
             field.val(val)
       complete: ->
         $("#spinner_name").hide()
-        
+
 $.fn.triggerPersonLookup = ->
   this.each ->
     css_class = $(this).attr('id')
     id = $(this).val()
     unless Number(id) > 0
       $('.merge.' + css_class).hide()
-      return false 
+      return false
     $("#spinner_" + css_class).show()
     $.ajax
       url: '/people/' + id + '/merge_preview?class=' + css_class
@@ -298,7 +298,7 @@ $.fn.triggerPersonLookup = ->
       complete: ->
         $('.merge.' + css_class).show()
         $("#spinner_" + css_class).hide()
-        
+
 $.fn.submitBulkSendTextDialog = ->
   if $('.bulk-msg').hasClass('bulk-text')
     $('#bulk_send_msg_dialog #to').val($('#bulk_send_msg_dialog #send_text_to').val().join(','))
@@ -307,11 +307,11 @@ $.fn.submitBulkSendTextDialog = ->
     $('#bulk_send_msg_dialog #to').val($('#bulk_send_msg_dialog #send_email_to').val().join(','))
     msg = "Email Successfully Sent"
 
-  $.rails.handleRemote($("#bulk_send_msg_dialog form"))  
-  $.n(msg)        
+  $.rails.handleRemote($("#bulk_send_msg_dialog form"))
+  $.n(msg)
   $('#bulk_send_msg_dialog').dialog('close')
   $('.id_checkbox, .check_all_contacts').attr('checked',false)
-     
+
 $.fn.submitBulkSendDialog = ->
   ids = []
   $('.to_list li').each ->
@@ -320,8 +320,8 @@ $.fn.submitBulkSendDialog = ->
   $('#bulk_send_dialog form #to').val(ids.join(','))
   $.rails.handleRemote($("#bulk_send_dialog form"))
   $('#bulk_send_dialog').dialog('destroy')
-        
-        
+
+
 $('#send_bulkemail_link_new').live 'click', ->
   $('#send_text_to_chzn').hide()
   $('#send_email_to_chzn').show()
@@ -330,36 +330,36 @@ $('#send_bulkemail_link_new').live 'click', ->
   $('.bulk-msg').removeClass('bulk-text')
   $('.bulk-msg').attr('action', '/people/bulk_email')
   $('#bulk_send_msg_dialog').dialog({title: 'Send Email'})
-  
+
   ids = []
   fails = []
   $('.id_checkbox:checked').each ->
     id = $(this).attr('data-id')
     if $(this).attr('data-email') && $(this).attr('data-email').length > 0
-      ids.push(id) 
+      ids.push(id)
     else
       fails.push($(this).attr('data-name'))
-      
+
   if fails.length > 0
     $('#bulk_send_msg_error').show()
     $('#bulk_send_msg_error #bulk_send_msg_message').html("The following contacts do not have a valid email: " + fails.join(', '))
   else
     $('#bulk_send_msg_error').hide()
-  
+
   $('#bulk_send_msg_dialog #bulk_send_body').val('')
   $('#bulk_send_msg_dialog #send_email_to').val(ids)
-  $('#bulk_send_msg_dialog #send_email_to').trigger("liszt:updated")  
+  $('#bulk_send_msg_dialog #send_email_to').trigger("liszt:updated")
   $('#bulk_send_msg_dialog #send_text_to').val('')
-  $('#bulk_send_msg_dialog #send_text_to').trigger("liszt:updated")  
-  $('#bulk_send_msg_dialog').dialog('open')   
-  $('#bulk_send_msg_dialog #bulk_send_body').simplyCountable({ 
+  $('#bulk_send_msg_dialog #send_text_to').trigger("liszt:updated")
+  $('#bulk_send_msg_dialog').dialog('open')
+  $('#bulk_send_msg_dialog #bulk_send_body').simplyCountable({
     maxCount: 999999,
     counter: '#bulk_send_msg_dialog #char_counter'
-  }) 
+  })
   $('#bulk_send_msg_dialog #char_counter').hide()
   $('#bulk_send_msg_dialog #bulk_send_body').focus()
   false
-  
+
 
 $('#send_bulksms_link_new').live 'click', ->
   $('#send_text_to_chzn').show()
@@ -369,30 +369,30 @@ $('#send_bulksms_link_new').live 'click', ->
   $('.bulk-msg').removeClass('bulk-email')
   $('.bulk-msg').attr('action', '/people/bulk_sms')
   $('#bulk_send_msg_dialog').dialog({title: 'Send Text'})
-  
+
   ids = []
   fails = []
   $('.id_checkbox:checked').each ->
     id = $(this).attr('data-id')
     if $(this).attr('data-number') && $(this).attr('data-number').length > 0
-      ids.push(id) 
+      ids.push(id)
     else
       fails.push($(this).attr('data-name'))
-      
+
   if fails.length > 0
     $('#bulk_send_msg_error').show()
     $('#bulk_send_msg_error #bulk_send_msg_message').html("The following contacts do not have a valid phone number: " + fails.join(', '))
   else
     $('#bulk_send_msg_error').hide()
-    
+
   $('#bulk_send_msg_dialog #bulk_send_body').val('')
   $('#bulk_send_msg_dialog #send_text_to').val(ids)
-  $('#bulk_send_msg_dialog #send_text_to').trigger("liszt:updated")  
+  $('#bulk_send_msg_dialog #send_text_to').trigger("liszt:updated")
   $('#bulk_send_msg_dialog #send_email_to').val('')
-  $('#bulk_send_msg_dialog #send_email_to').trigger("liszt:updated")  
-  $('#bulk_send_msg_dialog').dialog('open')    
+  $('#bulk_send_msg_dialog #send_email_to').trigger("liszt:updated")
+  $('#bulk_send_msg_dialog').dialog('open')
   $('#bulk_send_msg_dialog #char_counter').show()
-  $('#bulk_send_msg_dialog #bulk_send_body').simplyCountable({ 
+  $('#bulk_send_msg_dialog #bulk_send_body').simplyCountable({
     maxCount: 140,
     counter: '#bulk_send_msg_dialog #char_counter'
   })
@@ -400,45 +400,45 @@ $('#send_bulksms_link_new').live 'click', ->
   $('#bulk_send_msg_dialog #bulk_send_body').focus()
   false
 
-$('#send_bulkemail_link').live 'click', -> 
+$('#send_bulkemail_link').live 'click', ->
   if $('.id_checkbox:checked').length == 0
     alert("You didn't select any people to email")
     return false
   $('.to_list').html('')
   ids = []
   no_emails = []
-  
+
   $('.id_checkbox:checked').each ->
     id = $(this).val()
     tr = $(this).parent().parent();
     name = tr.attr('data-name')
     if tr.attr('data-email').length > 0
-      ids.push(id)    
+      ids.push(id)
       $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
     else
       no_emails.push($.trim(name))
-      
-  if($('#all_selected_text').is(':visible'))    
+
+  if($('#all_selected_text').is(':visible'))
     $('.all_row').each ->
       id = $(this).attr('data-id')
       name = $(this).attr('data-name')
       if $(this).attr('data-email').length > 0
-        ids.push(id)      
-        $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')    
+        ids.push(id)
+        $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
       else
         no_emails.push(name)
-        
+
   if ids.length == 0
     alert("Your selection didn't contain any person with a an email.")
     return false
-  
+
   $('#bulk_send_dialog form').addClass('bulk-email')
   $('#bulk_send_dialog form').removeClass('bulk-sms')
   $('#bulk_send_dialog .subject').show()
-  # disable char counter 
+  # disable char counter
   $('#char_counter').hide()
   $('#bulk_send_body').unbind('keyup')
-  $('#bulk_send_body').unbind('paste')  
+  $('#bulk_send_body').unbind('paste')
   $('#bulk_send_body').val($('#bulk_email_message').val())
   nicEdit = null
   $('#bulk_send_dialog').dialog
@@ -455,13 +455,13 @@ $('#send_bulkemail_link').live 'click', ->
         $('#bulk_send_dialog_message').show().find('.notice').html(html)
       else
         $('#bulk_send_dialog_message').hide()
-        
+
       nicEdit = new nicEditor({fullPanel : true}).panelInstance('bulk_send_body')
       $(this).find('form').attr('action', '/people/bulk_email')
     close: (event, ui) ->
       nicEdit.removeInstance('bulk_send_body');
       $('#bulk_email_message').val($('#bulk_send_body').val())
-    buttons: 
+    buttons:
       Send: ->
         nicEdit.removeInstance('bulk_send_body');
         $(this).submitBulkSendDialog()
@@ -471,7 +471,7 @@ $('#send_bulkemail_link').live 'click', ->
         nicEdit.removeInstance('bulk_send_body');
         $('#bulk_email_message').val($('#bulk_send_body').val())
         $(this).dialog('destroy')
-  false        
+  false
 
 $('.send_sms_link').live 'click', ->
 	ids = new Array()
@@ -481,7 +481,7 @@ $('.send_sms_link').live 'click', ->
 	ids.push(id)
 	element = '<li data-id="'.concat(id,'">',name,'<a href="" class="delete">x</a></li>')
 	$('.to_list').html(element)
-	$('#bulk_send_dialog form').addClass('bulk-sms')    
+	$('#bulk_send_dialog form').addClass('bulk-sms')
 	$('#bulk_send_dialog .subject').hide()
 	$('#char_counter').show()
 	$('#bulk_send_dialog #bulk_send_body').simplyCountable( { maxCount: 140 } )
@@ -496,16 +496,16 @@ $('.send_sms_link').live 'click', ->
 			$('#bulk_send_dialog_message').hide()
 			$(this).find('form').attr('action', '/people/bulk_sms')
 		close: (event, ui) ->
-			$('#bulk_sms_message').val($('#bulk_send_body').val())            
-		buttons: 
+			$('#bulk_sms_message').val($('#bulk_send_body').val())
+		buttons:
 			Send: ->
 				$(this).submitBulkSendDialog()
-				$('#bulk_sms_message').val($('#bulk_send_body').val())                
-				$.n('Text message sent')        
+				$('#bulk_sms_message').val($('#bulk_send_body').val())
+				$.n('Text message sent')
 			Cancel: ->
-				$('#bulk_sms_message').val($('#bulk_send_body').val())        
+				$('#bulk_sms_message').val($('#bulk_send_body').val())
 				$(this).dialog('destroy')
-	false 
+	false
 
 
 $('#send_bulksms_link').live 'click', ->
@@ -523,19 +523,19 @@ $('#send_bulksms_link').live 'click', ->
     name = tr.attr('data-name')
     number = tr.find('.phone_number').text().length
     if number > 0
-      ids.push(id)    
+      ids.push(id)
       $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
     else
       no_numbers.push($.trim(name))
 
-  if($('#all_selected_text').is(':visible'))    
+  if($('#all_selected_text').is(':visible'))
     $('.all_row').each ->
       id = $(this).attr('data-id')
       name = $(this).attr('data-name')
       number = $(this).attr('data-phone-number').length
       if number > 0
-        ids.push(id)      
-        $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')    
+        ids.push(id)
+        $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
       else
         no_numbers.push(name)
 
@@ -548,7 +548,7 @@ $('#send_bulksms_link').live 'click', ->
   $('#bulk_send_dialog .subject').hide()
   $('#char_counter').show()
   $('#bulk_send_dialog #bulk_send_body').simplyCountable( { maxCount: 140 } )
-  # $('#bulk_send_body').val($('#bulk_sms_message').val())  
+  # $('#bulk_send_body').val($('#bulk_sms_message').val())
   $('#bulk_send_dialog').dialog
     resizable: false,
     height:444,
@@ -563,19 +563,19 @@ $('#send_bulksms_link').live 'click', ->
         $('#bulk_send_dialog_message').show().find('.notice').html(html)
       else
         $('#bulk_send_dialog_message').hide()
-    
+
       $(this).find('form').attr('action', '/people/bulk_sms')
     close: (event, ui) ->
-      $('#bulk_sms_message').val($('#bulk_send_body').val())            
-    buttons: 
+      $('#bulk_sms_message').val($('#bulk_send_body').val())
+    buttons:
       Send: ->
         $(this).submitBulkSendDialog()
-        $('#bulk_sms_message').val($('#bulk_send_body').val())                
-        $.n('Text message sent')        
+        $('#bulk_sms_message').val($('#bulk_send_body').val())
+        $.n('Text message sent')
       Cancel: ->
-        $('#bulk_sms_message').val($('#bulk_send_body').val())        
+        $('#bulk_sms_message').val($('#bulk_send_body').val())
         $(this).dialog('destroy')
-  false        
+  false
 
 $('#send_bulkcomment_link').live 'click', ->
   if $('.id_checkbox:checked').length == 0
@@ -583,27 +583,27 @@ $('#send_bulkcomment_link').live 'click', ->
     return false
   $('.to_list').html('')
   ids = []
-  
+
   $('.id_checkbox:checked').each ->
     id = $(this).val()
     tr = $(this).parent().parent();
     name = tr.attr('data-name')
-    ids.push(id)    
+    ids.push(id)
     $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
 
-  if($('#all_selected_text').is(':visible'))    
+  if($('#all_selected_text').is(':visible'))
     $('.all_row').each ->
       id = $(this).attr('data-id')
       name = $(this).attr('data-name')
-      ids.push(id)      
-      $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')    
+      ids.push(id)
+      $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
 
   $('#bulk_send_dialog form').removeClass('bulk-email')
   $('#bulk_send_dialog form').addClass('bulk-sms')
   $('#bulk_send_dialog .subject').hide()
   $('#char_counter').show()
   $('#bulk_send_dialog #bulk_send_body').simplyCountable( { maxCount: 140 } )
-  $('#bulk_send_body').val($('#bulk_sms_message').val())  
+  $('#bulk_send_body').val($('#bulk_sms_message').val())
   $('#bulk_send_dialog').dialog
     resizable: false,
     height:444,
@@ -612,113 +612,113 @@ $('#send_bulkcomment_link').live 'click', ->
     title: 'Bulk Message',
     open: (event, ui) ->
       $('#bulk_send_dialog_message').hide()
-    
+
       $(this).find('form').attr('action', '/people/bulk_comment')
     close: (event, ui) ->
-      $('#bulk_sms_message').val($('#bulk_send_body').val())            
-    buttons: 
+      $('#bulk_sms_message').val($('#bulk_send_body').val())
+    buttons:
       Send: ->
         $(this).submitBulkSendDialog()
-        $('#bulk_sms_message').val($('#bulk_send_body').val())                
-        $.n('Comments posted')        
+        $('#bulk_sms_message').val($('#bulk_send_body').val())
+        $.n('Comments posted')
       Cancel: ->
-        $('#bulk_sms_message').val($('#bulk_send_body').val())        
+        $('#bulk_sms_message').val($('#bulk_send_body').val())
         $(this).dialog('destroy')
-  false        
+  false
 
 $('#bulk_send_dialog form').live 'submit', ->
   false
 
 $('#transfer_org').live 'click', ->
   if $('.id_checkbox:checked').length > 0
-    $('#keep_contact').attr checked: true 
+    $('#keep_contact').attr checked: true
     el = $('#assign_org')
     el.dialog
       resizable: false,
       height:650,
       width:600,
       modal: true,
-      buttons: 
+      buttons:
         Cancel: ->
           $(this).dialog('destroy')
   else
     $.a(t('contacts.index.none_checked'))
   false
-  
+
 $('.check_all_mine').live 'click', ->
   first_row = $('#contacts_table').find('tr:first')
   text = first_row.text()
   if text.indexOf('Fetching') == 0
-    $(this).attr('checked', true)  
-    $('input.id_checkbox').attr('checked', true)  
+    $(this).attr('checked', true)
+    $('input.id_checkbox').attr('checked', true)
     return false
-    
+
   if true || $('.pagination').length
-    if $(this).is(':checked')    
-      $('#contacts_table').prepend('<tr><td colspan="6" align="center" style="background:none;">Fetching information...</td></tr>') 
+    if $(this).is(':checked')
+      $('#contacts_table').prepend('<tr><td colspan="6" align="center" style="background:none;">Fetching information...</td></tr>')
       $.get '/contacts/mine_all?' + $(this).attr('data-status'), (html) ->
         $('#contacts_table').find('tr:first').remove()
-        $('#contacts_table').prepend(html)    
+        $('#contacts_table').prepend(html)
     else
       first_row.remove()
- 
+
 $('#fetch_all_contacts_link').live 'click', ->
   $('#all_text, #all_selected_text').toggle()
   $('.id_checkbox').attr('checked',true)
   change_all_role_checkboxes(true)
   disable_role_checkboxes()
   enable_all_unchecked()
- 
+
 $('.check_all_contacts').live 'click', ->
   first_row = $('#contacts_table').find('tr:first')
   if first_row.text().indexOf('Fetching') == 0
-    $(this).attr('checked', true)  
-    $('.id_checkbox').prop('checked', true)  
+    $(this).attr('checked', true)
+    $('.id_checkbox').prop('checked', true)
     return false
-  
-  checked = $(this).is(':checked')  
+
+  checked = $(this).is(':checked')
   if checked
     change_all_role_checkboxes(true)
   else
     change_all_role_checkboxes(false)
-  $('.id_checkbox').prop('checked', checked)  
-    
+  $('.id_checkbox').prop('checked', checked)
+
   if true || $('.pagination').length
     if checked
-      $('#contacts_table').prepend('<tr><td colspan="99" align="center" style="background:none;">Fetching information...</td></tr>') 
+      $('#contacts_table').prepend('<tr><td colspan="99" id="all_contacts_select_all_option" style="background:none;">Fetching information...</td></tr>')
       $.get '/contacts/contacts_all?' + $(this).attr('data-status'), (html) ->
         $('#contacts_table').find('tr:first').remove()
-        $('#contacts_table').prepend(html)    
+        $('#contacts_table').prepend(html)
     else
       first_row.remove()
   change_all_role_checkboxes(true) if $(this).is(':checked')
   disable_role_checkboxes()
   enable_all_unchecked()
-  
+
 $('#check_all').live 'click', ->
   first_row = $('#people_table').find('tr:first')
   text = first_row.text()
   if text.indexOf('Fetching') == 0
-    $(this).attr('checked', true)  
-    $('input.id_checkbox').attr('checked', true)  
+    $(this).attr('checked', true)
+    $('input.id_checkbox').attr('checked', true)
     return false
-  
-  checked = $(this).is(':checked')  
+
+  checked = $(this).is(':checked')
   if checked
     change_all_role_checkboxes(true)
   else
     change_all_role_checkboxes(false)
-  $('input.id_checkbox').prop('checked', checked)  
-  
-  params = $(this).attr('data-params')  
-  
-  # only show option to select more if there are more than 1 page 
+  $('input.id_checkbox').prop('checked', checked)
+
+  params = $(this).attr('data-params')
+
+  # only show option to select more if there are more than 1 page
   if $('.pagination').length
-    if checked    
-      $('#people_table').prepend('<tr><td colspan="8" align="center" style="background:none;">Fetching information...</td></tr>') 
+    if checked
+      $('#people_table').prepend('<tr><td colspan="8" align="center" style="background:none;">Fetching information...</td></tr>')
       $.get '/people/all?' + params, (html) ->
         $('#people_table').find('tr:first').remove()
-        $('#people_table').prepend(html)     
+        $('#people_table').prepend(html)
     else
       if $('span#all_text', first_row)[0]?
         first_row.hide()
@@ -735,8 +735,8 @@ $('#roles_menu_div').live 'click', ->
   else
     role_div.css('left', '24.6em')
     $(this).attr('style', 'background: url("/assets/pillbg_over.png") repeat-x')
-   
-$('#apply_roles').live 'click', -> 
+
+$('#apply_roles').live 'click', ->
   return false if check_selected_roles() == 0
   return false if check_selected_people() == 0
   update_persons_roles()
@@ -746,7 +746,7 @@ $('.role_link_checkbox').live 'click', ->
   role_checkbox = $(this).parent().find('input')
   update_checkbox_checkmark(role_checkbox)
   update_persons_roles()
-   
+
 $('.id_checkbox').live 'click', ->
   mark_as_checked = $(this).is ':checked'
   role_labels = get_role_labels($(this))
@@ -761,11 +761,11 @@ check_selected_people = () ->
   checked
 
 check_selected_roles = () ->
-  checked =  $('.role_id_checkbox:checked').length 
+  checked =  $('.role_id_checkbox:checked').length
   alert("You didn't select any roles to apply.") if checked == 0
   checked
 
-get_role_labels = (obj) ->   
+get_role_labels = (obj) ->
   $('span.role_label', obj.closest('tr'))
 
 disable_role_checkboxes = () -> # disable role checkboxes that only SOME of contacts have
@@ -827,12 +827,12 @@ change_role_checkboxes = (role_labels, check, n) ->
   role_labels.each ->
     role = $(this).attr('id').split('_')
     checkbox = '#role_ids_' + role[1]
-    $(checkbox).attr checked: check 
-    
+    $(checkbox).attr checked: check
+
 change_role_checkboxes_by_ids = (ids, check) ->
   for id in ids.split(',')
     checkbox = '#role_ids_' + id
-    $(checkbox).attr checked: check 
+    $(checkbox).attr checked: check
 
 change_all_role_checkboxes = (check) ->
   $('input.id_checkbox:checked').each ->
@@ -862,10 +862,10 @@ update_persons_roles = () ->
     #  role_ids.push(role_id)
   $('.role_id_checkbox:not(:enabled)').each ->
     some_role_ids.push($(this).val())
-  
+
 
   checked_elements = $('.id_checkbox:checked')
-  
+
   checked_elements.each ->
     person_id = $(this).val()
     $.ajax
@@ -886,4 +886,4 @@ update_persons_roles = () ->
           $("#apply_roles_spinner").hide()
           $("#apply_roles_successful").hide()
 
-  
+

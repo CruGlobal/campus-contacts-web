@@ -1,6 +1,6 @@
 <div id="add_org_from_conference_wrapper">
   <%= t('.crs_import_instructions') %>
-  <%= form_for organization, url: create_from_crs_organizations_path, method: :post, remote: true, validate: true do |f| %>
+  <%= form_for organization, url: create_from_crs_organizations_path, method: :post, remote: true do |f| %>
     <% if flash[:error] %>
       <div class="flash error" style="color:red;margin:2px"><%= raw flash[:error] %></div>
     <% end %>

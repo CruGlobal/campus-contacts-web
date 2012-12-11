@@ -1,5 +1,5 @@
 <tr id="all">
-	<td colspan="99" align="center">
+	<td colspan="99" id="all_contacts_select_all_option">
 		<span id="all_text">
       <% @filtered_people.each do |person| %>
         <% roles = if params[:include_archived] || params[:archived] %>
@@ -11,7 +11,7 @@
     		  <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox not_displayed', 'data-name' => "#{person.first_name} #{person.last_name}", style: 'display:none;', 'data-email'=>person.email, 'data-roles' => "#{roles.collect(&:id).join(',')}"%>
     		</span>
       <% end %>
-    
+
 			<%=raw t('people.all.page_selected_html', count: @people.length) %>
 			<% if @all_people.length > @people.length %>
 			  <a href="#" id="fetch_all_contacts_link">
