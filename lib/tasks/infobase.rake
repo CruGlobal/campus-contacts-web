@@ -97,7 +97,10 @@ namespace :infobase do
         attributes['first_name'] = attributes['preferredName'].present? ? attributes['preferredName'] : attributes['firstName']
         attributes['last_name'] = attributes.delete('lastName')
         attributes['middle_name'] = attributes.delete('middleName')
-        ['preferredName', 'firstName', 'lastName', 'middleName'].each { |a| attributes.delete(a) }
+
+        mh_person_attributes = Person.first.attributes.keys
+        attributes.slice!(mh_person_attributes)
+
         mh_person = Person.create!(attributes)
         mh_person.user = user || User.create!(username: ccc_person.user.username, password: Time.now.to_i)
 
