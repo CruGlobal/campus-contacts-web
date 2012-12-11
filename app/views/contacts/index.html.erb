@@ -2,10 +2,10 @@
   <%= render 'contacts/leaders' %>
 <% end %>
 
-<%= render 'shared/bulk_vcard_dialog' %>  
+<%= render 'shared/bulk_vcard_dialog' %>
 <%= render 'shared/bulk_send_msg' %>
 
-<div class="titlebar titlebarmod">  
+<div class="titlebar titlebarmod">
   <h1>
     <%= t('.all_responses') %>
     <%= "#{'-' if @header.present?} #{@header}" %>
@@ -22,7 +22,7 @@
 <%= form_tag("", :id => "move_to_dnc", :method => :put) do %>
   <%= hidden_field_tag :status, "do_not_contact" %>
 <% end %>
-  
+
 <span style="display:none" id="drag_helper_text_one"><%= I18n.t('contacts.index.assign_people', count: 1) %></span>
 <span style="display:none" id="drag_helper_text_other"><%= I18n.t('contacts.index.assign_people', count: 0) %></span>
 <%= form_for ContactAssignment.new do |f| %>
@@ -39,7 +39,11 @@
       <th><%= sort_link @q, 'role_id', t('nav.roles'), params %></th>
       <% @questions.each do |q| %>
         <th class="<%= dom_id(q) %>">
-          <%= q.slug.present? ? q.slug : q.label %>
+          <% if @predefined_questions.include?(q) %>
+            <%= q.attribute_name.gsub('_',' ').titleize %>
+          <% else %>
+            <%= q.slug.present? ? q.slug.titleize : q.label.titleize %>
+          <% end%>
           <%= link_to("(#{t('nav.hide')})", hide_survey_question_path(@organization.surveys.first, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
         </th>
       <% end %>
@@ -62,7 +66,7 @@
   <%= render 'assign' %>
 <% end %>
 
-  
+
 <% if @people.length > 0 %>
   <div class="searchstat">
     <%= "Displaying #{@people.offset_value + 1} - #{@people.offset_value + @people.length} of #{@people.total_count}" %>

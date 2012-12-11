@@ -35,11 +35,11 @@ class Surveys::QuestionsController < ApplicationController
   # GET /questions/1/edit
   def edit
   end
-  
-  def reorder 
+
+  def reorder
     @survey.survey_elements.each do |pe|
       if params['questions'].index(pe.element_id.to_s)
-        pe.position = params['questions'].index(pe.element_id.to_s) + 1 
+        pe.position = params['questions'].index(pe.element_id.to_s) + 1
         pe.save!
       end
     end
@@ -56,7 +56,7 @@ class Surveys::QuestionsController < ApplicationController
       type, style = params[:question_type].split(':')
       @question = type.constantize.create!(params[:question].merge(style: style))
     end
-    
+
     # If this was an archived question, unarchive it. otherwise, add it
     if @survey.archived_questions.include?(@question)
       pe = SurveyElement.where(survey_id: @survey.id, element_id: @question.id).first
@@ -69,20 +69,20 @@ class Surveys::QuestionsController < ApplicationController
          respond_to do |wants|
           wants.js
          end
-         
+
          return
       end
     end
-    
+
     params[:id] = @question.id
     return unless evaluate_option_autonotify # to avoid double render
     evaluate_option_autoassign
-    
+
     respond_to do |wants|
       if !@question.new_record?
         wants.html do
           #flash[:notice] = t('questions.create.notice')
-          #redirect_to(:back) 
+          #redirect_to(:back)
         end
         wants.xml  { render xml: @question, status: :created, location: @question }
         wants.js
@@ -130,23 +130,41 @@ class Surveys::QuestionsController < ApplicationController
   end
 
   def hide
-    @survey = Survey.find(params[:survey_id])
-    @question = Element.find(params[:id])
-    @organization = @survey.organization
-    @organization.survey_elements.each do |pe|
-      pe.update_attribute(:hidden, true) if pe.element_id == @question.id
+    @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
+    if @predefined_survey.questions.collect(&:id).include?(params[:id].to_i)
+      @question = @predefined_survey.elements.find(params[:id].to_i)
+      @organization = current_organization
+
+      current_organization.settings[:visible_predefined_questions] = current_organization.settings[:visible_predefined_questions].reject {|x| x == @question.id}
+      current_organization.save!
+    else
+      @survey = Survey.find(params[:survey_id])
+      @question = Element.find(params[:id])
+      @organization = @survey.organization
+      @organization.survey_elements.each do |pe|
+        pe.update_attribute(:hidden, true) if pe.element_id == @question.id
+      end
     end
   end
 
   def unhide
-    @survey = Survey.find(params[:survey_id])
-    @organization = @survey.organization
-    @organization.survey_elements.each do |pe|
-      pe.update_attribute(:hidden, false) if pe.element_id == params[:id].to_i
+    @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
+    if @predefined_survey.questions.collect(&:id).include?(params[:id].to_i)
+      @question = @predefined_survey.elements.find(params[:id].to_i)
+      @organization = current_organization
+      current_organization.settings[:visible_predefined_questions] = Array.new if current_organization.settings[:visible_predefined_questions].nil?
+      current_organization.settings[:visible_predefined_questions] << @question.id
+      current_organization.save!
+    else
+      @survey = Survey.find(params[:survey_id])
+      @organization = @survey.organization
+      @organization.survey_elements.each do |pe|
+        pe.update_attribute(:hidden, false) if pe.element_id == params[:id].to_i
+      end
     end
     redirect_to :back
   end
-  
+
   def suggestion
     type = params[:type]
     keyword = params[:keyword].strip
@@ -169,31 +187,31 @@ class Surveys::QuestionsController < ApplicationController
     end
     render json: response
   end
-  
+
   private
     def find_question
       @question = @survey.elements.find(params[:id])
     end
-    
+
     def find_survey_and_authorize
       @survey = Survey.find(params[:survey_id])
       authorize! :manage, @survey
     end
-    
+
     def get_predefined
       @predefined = Survey.find(APP_CONFIG['predefined_survey'])
     end
-    
+
     def get_leaders
       @leaders = current_organization.leaders
     end
-    
+
     def evaluate_option_autoassign
       parameters = Hash.new
       parameters['type'] = params[:assign_contact_to]
       parameters['id'] = params[:autoassign_selected_id]
       parameters['name'] = params[:autoassign_keyword]
-      
+
       rule = Rule.find_by_rule_code("AUTOASSIGN")
       triggers_array = Array.new
       triggers = params[:assignment_trigger_words].present? ? params[:assignment_trigger_words].split(',') : []
@@ -201,32 +219,32 @@ class Surveys::QuestionsController < ApplicationController
         triggers_array << t.strip if t.strip.present?
       end
       triggers = triggers_array.join(", ")
-      
+
       if parameters['id'].present? && parameters['name'].present?
         survey_element_id = SurveyElement.find_by_survey_id_and_element_id(params[:survey_id], params[:id]).id
         if question_rule = QuestionRule.find_by_survey_element_id_and_rule_id(survey_element_id, rule.id)
           question_rule.update_attribute('trigger_keywords',triggers)
           question_rule.update_attribute('extra_parameters',parameters)
         else
-          question_rule = QuestionRule.create(survey_element_id: survey_element_id, rule_id: rule.id, 
+          question_rule = QuestionRule.create(survey_element_id: survey_element_id, rule_id: rule.id,
             trigger_keywords: triggers, extra_parameters: parameters)
         end
       end
     end
-    
+
     def evaluate_option_autonotify
       leaders = params[:leaders] || []
-      
+
       parameters = Hash.new
       parameters['leaders'] = Array.new
       invalid_emails = Array.new
-      
+
       if leaders.present?
         survey_element_id = SurveyElement.find_by_survey_id_and_element_id(params[:survey_id], params[:id]).id
         leaders.each do |leader|
           Person.find(leader).has_a_valid_email? ? parameters['leaders'] << leader.to_i : invalid_emails << leader.to_i
         end
-      
+
         if invalid_emails.present?
           respond_to do |wants|
             wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(id: invalid_emails).collect{|p| p.name}.join(', ') } }
@@ -244,7 +262,7 @@ class Surveys::QuestionsController < ApplicationController
             question_rule.update_attribute('trigger_keywords',triggers)
             question_rule.update_attribute('extra_parameters',parameters)
           else
-            question_rule = QuestionRule.create(survey_element_id: survey_element_id, rule_id: rule.id, 
+            question_rule = QuestionRule.create(survey_element_id: survey_element_id, rule_id: rule.id,
               trigger_keywords: triggers, extra_parameters: parameters)
           end
         end

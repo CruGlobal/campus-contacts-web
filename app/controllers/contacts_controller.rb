@@ -142,8 +142,10 @@ class ContactsController < ApplicationController
       @organization = Organization.where(id: current_organization.id).includes(:surveys, :groups, :questions).first
       @surveys = @organization.surveys
       @all_questions = @organization.all_questions.flatten.uniq
-      @questions = @organization.all_questions.where("survey_elements.hidden" => false).flatten.uniq
-      @hidden_questions = @all_questions - @questions
+      @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
+      @predefined_questions = @predefined_survey.questions.where("attribute_name NOT IN (?)", ['first_name','last_name'])
+      @questions = @organization.all_questions.where("survey_elements.hidden" => false) + @predefined_survey.elements.where(id: current_organization.settings[:visible_predefined_questions])
+      @hidden_questions = ((@predefined_questions + @all_questions) - @questions).flatten.uniq
 
       params[:assigned_to] = 'all' if !params[:assigned_to].present?
 
@@ -356,7 +358,7 @@ class ContactsController < ApplicationController
 
         answers[answer_sheet.person_id] ||= {}
         questions.each do |q|
-          answers[answer_sheet.person_id][q.id] = [q.display_response(answer_sheet), answer_sheet.updated_at]# if q.display_response(answer_sheet).present?# or (q.attribute_name == "email" and q.object_name ==
+          answers[answer_sheet.person_id][q.id] = [q.display_response(answer_sheet), answer_sheet.updated_at] if q.display_response(answer_sheet).present?# or (q.attribute_name == "email" and q.object_name ==
         end
       end
       answers
