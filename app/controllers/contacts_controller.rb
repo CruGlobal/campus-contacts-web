@@ -180,10 +180,10 @@ class ContactsController < ApplicationController
         if params[:assigned_to]
           case params[:assigned_to]
           when 'all'
-            if params[:include_archived].present? && params[:include_archived] == 'true'
-              @people = @organization.all_people_with_archived
+          	if params[:include_archived].present? && params[:include_archived] == 'true'
+	            @people = @organization.all_people_with_archived
             else
-              @people = @organization.all_people
+  	          @people = @organization.all_people
             end
           when 'unassigned'
             @people = @organization.unassigned_contacts

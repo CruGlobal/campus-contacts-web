@@ -479,7 +479,7 @@ class ContactsControllerTest < ActionController::TestCase
 
     should "export all people" do
       xhr :get, :index, {:assigned_to => "all", :format => "csv"}
-      assert_equal(assigns(:all_people).count.count, 3)
+      assert_equal(assigns(:all_people).count.count, 4)
       assert_response :success
     end
 
@@ -743,12 +743,12 @@ class ContactsControllerTest < ActionController::TestCase
       end
       should "sort desc" do
         xhr :get, :index, {"q"=>{"s"=>"year_in_school desc"}}
-        assert_equal [@person3.id, @person2.id, @person1.id, @person4.id], assigns(:all_people).collect(&:id)
+        assert_equal [@person3.id, @person2.id, @person1.id, @user.person.id, @person4.id], assigns(:all_people).collect(&:id)
       end
 
       should "sort asc" do
         xhr :get, :index, {"q"=>{"s"=>"year_in_school asc"}}
-        assert_equal [@person4.id, @person1.id, @person2.id, @person3.id], assigns(:all_people).collect(&:id)
+        assert_equal [@user.person.id, @person4.id, @person1.id, @person2.id, @person3.id], assigns(:all_people).collect(&:id)
       end
     end
 
@@ -783,17 +783,17 @@ class ContactsControllerTest < ActionController::TestCase
 
       should "sort by phone_number should include person without primary_phone_numbers" do
         xhr :get, :index, {:assigned_to => "all", :q =>{:s => "phone_numbers.number asc"}}
-        assert_equal 4, assigns(:people).size
+        assert_equal 5, assigns(:people).size
       end
 
       should "sort by phone_number asc" do
         xhr :get, :index, {:assigned_to => "all", :q =>{:s => "phone_numbers.number asc"}}
-        assert_equal [@person4.id, @person1.id, @person2.id, @person3.id], assigns(:people).collect(&:id)
+        assert_equal [@user.person.id, @person4.id, @person1.id, @person2.id, @person3.id], assigns(:people).collect(&:id)
       end
 
       should "sort by phone_number desc" do
         xhr :get, :index, {:assigned_to => "all", :q =>{:s => "phone_numbers.number desc"}}
-        assert_equal [@person3.id, @person2.id, @person1.id, @person4.id], assigns(:people).collect(&:id)
+        assert_equal [@person3.id, @person2.id, @person1.id, @user.person.id, @person4.id], assigns(:people).collect(&:id)
       end
     end
 
