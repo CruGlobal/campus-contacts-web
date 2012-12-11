@@ -6,4 +6,11 @@ class ContactAssignment < ActiveRecord::Base
   belongs_to :person
   belongs_to :organization
   scope :for_org, lambda {|org_id| where(organization_id: org_id)}
+
+  def deleted_at
+    version = versions.last
+    if version
+      version.created_at
+    end
+  end
 end

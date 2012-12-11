@@ -11,6 +11,10 @@ class ContactAssignmentFilter
   def filter(contact_assignments)
     filtered = contact_assignments
 
+    if @filters[:ids]
+      filtered = filtered.where('contact_assignments.id' => @filters[:ids].split(','))
+    end
+
     if @filters[:assigned_to_id]
       filtered = filtered.where('contact_assignments.assigned_to_id' => @filters[:assigned_to_id])
     end

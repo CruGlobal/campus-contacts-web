@@ -2,7 +2,7 @@ class ContactAssignmentSerializer < ActiveModel::Serializer
 
   INCLUDES = [:assigned_to, :person]
 
-  attributes :id, :assigned_to_id, :person_id, :organization_id, :created_at, :updated_at
+  attributes :id, :assigned_to_id, :person_id, :organization_id, :created_at, :updated_at, :deleted_at
 
   has_one *INCLUDES
 
@@ -14,6 +14,10 @@ class ContactAssignmentSerializer < ActiveModel::Serializer
         include!(rel.to_sym)
       end
     end if includes
+  end
+  
+  def include_deleted_at?
+    scope[:deleted]
   end
 
   INCLUDES.each do |relationship|
