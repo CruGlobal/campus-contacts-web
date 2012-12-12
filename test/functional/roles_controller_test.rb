@@ -22,7 +22,7 @@ class RolesControllerTest < ActionController::TestCase
       system_roles = assigns(:system_roles).collect { |role| role.i18n }
       organizational_roles = assigns(:organizational_roles).collect { |role| role.i18n }
       assert_response :success, @response.body
-      assert_equal ["admin", "leader", "contact", "involved"], system_roles 
+      assert_equal ["admin", "leader", "contact", "involved", "alumni"], system_roles 
       assert_equal ["member"], organizational_roles
     end
   
