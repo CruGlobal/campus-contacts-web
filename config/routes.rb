@@ -225,6 +225,7 @@ Mh::Application.routes.draw do
       resources :organizations
       resources :surveys
       resources :roles
+      resources :followup_comments
     end
   end
 

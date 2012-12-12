@@ -116,6 +116,12 @@ FactoryGirl.define do
     last_name ''
   end
 
+  factory :contact, parent: :person do
+  end
+
+  factory :commenter, parent: :person do
+  end
+
   factory :user do
     email {"test#{Factory.next(:count)}@example.com"}
     password 'asdfasdf'
