@@ -134,6 +134,9 @@ class Surveys::QuestionsController < ApplicationController
     if @predefined_survey.questions.collect(&:id).include?(params[:id].to_i)
       @question = @predefined_survey.elements.find(params[:id].to_i)
       @organization = current_organization
+      @organization.survey_elements.each do |pe|
+        pe.update_attribute(:hidden, true) if pe.element_id == @question.id
+      end
 
       current_organization.settings[:visible_predefined_questions] = current_organization.settings[:visible_predefined_questions].reject {|x| x == @question.id}
       current_organization.save!
