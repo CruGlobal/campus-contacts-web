@@ -99,10 +99,12 @@ namespace :infobase do
         attributes['middle_name'] = attributes.delete('middleName')
 
         mh_person_attributes = Person.first.attributes.keys
-        attributes.slice!(mh_person_attributes)
+        attributes.slice!(*mh_person_attributes)
 
         mh_person = Person.create!(attributes)
-        mh_person.user = user || User.create!(username: ccc_person.user.username, password: Time.now.to_i)
+        mh_person.user = user ||
+                         User.find_by_username(ccc_person.user.username) ||
+                         User.create!(username: ccc_person.user.username, password: Time.now.to_i)
 
         # copy over email and phone data
         ccc_person.email_addresses.each do |email_address|
