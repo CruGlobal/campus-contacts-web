@@ -75,6 +75,7 @@ class Role < ActiveRecord::Base
   LEADER_ID = leader.id
   CONTACT_ID = contact.id
   INVOLVED_ID = involved.id
+  ALUMNI_ID = alumni.id
 
   DEFAULT_ROLES = ["admin", "leader", "involved", "alumni", "contact"] # in DSC ORDER by SUPERIORITY
 

@@ -35,9 +35,10 @@
       <th><%= sort_link @q, :first_name, t('.first_name'), params %></th>
       <th><%= sort_link @q, :last_name, t('.last_name'), params %></th>
       
-		  <% if !params[:role] %>
+  		<% if params[:role].blank? || ![Role::ADMIN_ID,Role::INVOLVED_ID,Role::LEADER_ID,Role::ALUMNI_ID].include?(params[:role]) %>
 	      <th><%= sort_link @q, :followup_status, t('general.status'), params %></th>
 		  <% end %>
+		  
       <th><%= sort_link @q, :gender, t('general.gender'), params %></th>
       <th style='min-width:100px;'><%= sort_link @q, 'phone_numbers.number', t('.phone_number'), params %></th>
       <th><%= sort_link @q, 'role_id', t('nav.roles'), params %></th>
