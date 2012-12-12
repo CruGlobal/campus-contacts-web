@@ -21,7 +21,9 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   def show
     render json: @person,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: {include: includes, 
+                   organization: current_organization,
+                   user: current_user}
   end
 
   def create

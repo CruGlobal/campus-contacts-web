@@ -1,6 +1,7 @@
 class PersonSerializer < ActiveModel::Serializer
   HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments,
-             :followup_comments, :organizational_roles, :rejoicables, :answer_sheets]
+             :followup_comments, :organizational_roles, :rejoicables, :answer_sheets,
+             :all_organizational_roles]
 
   HAS_ONE = [:user, :current_address]
 
@@ -32,6 +33,14 @@ class PersonSerializer < ActiveModel::Serializer
 
   def organizational_roles
     add_since(organization_filter(:organizational_roles))
+  end
+
+  def all_organizational_roles
+    if scope[:user] && scope[:user] == object.user
+      add_since(object.organizational_roles)
+    else
+      []
+    end
   end
 
   def rejoicables
