@@ -2,6 +2,9 @@ $ ->
   $(document).ready ->
     $('.import_column_survey_select').each ->
       $('#column_edit_' + $(this).attr('data_id')).show() if $(this).val() == ''
+      $('.import_column_survey_select option').each ->
+        if $(this).parents('optgroup').length != -1
+          $(this).attr('survey_title',$(this).parents('optgroup').attr('label'))
       $(this).children(':first').after("<option value='do_not_import'>Do Not Import</option>")
       $(this).children(':first').after("<option value='new_question'>Create New Question</option>")
 
@@ -9,13 +12,28 @@ $ ->
       select_field = $(this).find('.import_column_survey_select')
       header = $.trim(parseCamelCase($(this).children('.column_header').text().replace(/_|-|:/g,' ')).toLowerCase())
       header_words = header.split(' ')
+      check_non_predefined = true
       if select_field.attr('saved_value') == ''
-        select_field.find('option:not(:first))').each ->
-          match_question = true
-          for word in header_words
-            match_question = false if match_question && word.length > 2 && $(this).text().toLowerCase().search(word) == -1
-          if match_question
-            select_field.val($(this).val()) unless $(this).is(':disabled')
+        select_field.find('option:not(:first))').reverse().each ->
+          if $(this).attr('survey_title') == 'Predefined Questions'
+            match_question = true
+            for word in header_words
+              match_question = false if match_question && word.length > 2 && $(this).text().toLowerCase().search(word) == -1
+            if match_question && !$(this).is(':disabled')
+              select_field.find("option[value=" +$(this).val()+ "][survey_title='" +$(this).attr('survey_title') + "']").attr('selected',true)
+              check_non_predefined = false
+
+        if check_non_predefined
+          select_field.find('option:not(:first))').reverse().each ->
+            if $(this).attr('survey_title') != 'Predefined Questions'
+              match_question = true
+              for word in header_words
+                match_question = false if match_question && word.length > 2 && $(this).text().toLowerCase().search(word) == -1
+              if match_question && !$(this).is(':disabled')
+                select_field.find("option[value=" +$(this).val()+ "][survey_title='" +$(this).attr('survey_title') + "']").attr('selected',true)
+                select_field.val($(this).val())
+
+
         select_field.trigger('change')
       else
         select_field.val(select_field.attr('saved_value'))
@@ -122,7 +140,10 @@ $ ->
     $('#question_preview').html($('#question_field').val() + "<br/>" + $('#question_options_field').val())
 
   $('.import_column_survey_select').live 'change', ->
-    selected_option = $(this).children().find("option[value="+$(this).val()+"]")
+    selected_value = $(this).find('option:selected').val()
+    selected_survey_title = $(this).find('option:selected').attr('survey_title')
+    selected_option = $(this).children().find("option[value=" +selected_value+ "][survey_title=" +selected_survey_title+ "]")
+
     if $(this).val() == "new_question"
       $('#column_edit_' + $(this).attr('data_id')).show().click()
     else if selected_option.attr('new') == 'true'
@@ -130,10 +151,14 @@ $ ->
     else
       $('#column_edit_' + $(this).attr('data_id')).hide()
     $(".import_column_survey_select option").removeAttr('disabled')
+
     $(".import_column_survey_select").each ->
-      value = $(this).val().toString()
-      $(".import_column_survey_select option[value=" + value + "]").attr('disabled','disabled') if value != '' && value != 'do_not_import' && value != 'new_question'
-      $(this).find("option[value=" + $(this).val().toString() + "]").removeAttr('disabled')
+      selected_value = $(this).find('option:selected').val()
+      selected_survey_title= $(this).find('option:selected').attr('survey_title')
+      if selected_value != '' && selected_value != 'do_not_import' && selected_value != 'new_question'
+        $("option[value=" +selected_value+ "][survey_title=" +selected_survey_title+ "]").attr('disabled','disabled')
+      $(this).find("option[value=" +selected_value+ "][survey_title=" +selected_survey_title+ "]").removeAttr('disabled')
+
 
 
 parseCamelCase = (val) ->
