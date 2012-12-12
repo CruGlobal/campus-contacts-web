@@ -72,6 +72,16 @@ class PersonFilter
       filtered_people = filtered_people.where(gender: gender)
     end
 
+    if @filters[:followup_status]
+      filtered_people = filtered_people.includes(:organizational_roles)
+                                       .where('organizational_roles.followup_status' => @filters[:followup_status])
+    end
+
+    if @filters[:assigned_to]
+      filtered_people = filtered_people.includes(:contact_assignments)
+                                       .where('contact_assignments.assigned_to_id' => @filters[:assigned_to])
+    end
+
     filtered_people
   end
 end

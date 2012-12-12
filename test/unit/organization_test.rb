@@ -277,9 +277,9 @@ class OrganizationTest < ActiveSupport::TestCase
 
   test "self and children ids" do
     org1 = Factory(:organization)
-    org2 = Factory(:organization, :parent => org1)
+    org2 = org1.children.create!(name: 'foo', terminology: 'foo')
 
-    assert_equal org1.self_and_children_ids.sort{ |a, b| 1*(b <=> a) }, [org1.id, org2.id].sort{ |a, b| 1*(b <=> a) }, "Parent organization did not return correct self and children ids"
+    assert_equal [org1.id, org2.id].to_set, org1.self_and_children_ids.to_set, "Parent organization did not return correct self and children ids"
     #[2, 3, 1].sort{ |a, b| 1*(b <=> a) } == [2, 1, 3].sort{ |a, b| 1*(b <=> a) }
   end
 
@@ -298,7 +298,7 @@ class OrganizationTest < ActiveSupport::TestCase
     keyword1 = Factory(:sms_keyword, :organization => org1)
     keyword2 = Factory(:sms_keyword, :organization => org2)
 
-    assert_equal org1.self_and_children_keywords.sort{ |a, b| 1*(b <=> a) }, [keyword1, keyword2].sort{ |a, b| 1*(b <=> a) }, "Parent organization did not return correct self and children keywords"
+    assert_equal org1.self_and_children_keywords.to_set, [keyword1, keyword2].to_set, "Parent organization did not return correct self and children keywords"
   end
 
   test "self and children questions" do #this test is not done
