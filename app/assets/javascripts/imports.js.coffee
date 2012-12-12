@@ -31,8 +31,6 @@ $ ->
                 match_question = false if match_question && word.length > 2 && $(this).text().toLowerCase().search(word) == -1
               if match_question && !$(this).is(':disabled')
                 select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +$(this).attr("data-survey-title") + "']").attr('selected',true)
-                select_field.val($(this).val())
-
 
         select_field.trigger('change')
       else
