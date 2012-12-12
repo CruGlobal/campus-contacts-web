@@ -458,12 +458,6 @@ class PeopleControllerTest < ActionController::TestCase
           @person5 = Factory(:person, first_name: "clark", last_name: "kent")
         end
 
-        should "fail to confirm_merge people when one of the 'mergees' have a different name" do
-          post :confirm_merge, { :person1 =>  @person1.id, :person2 => @person2.id, :person3 => @person4.id }
-          assert_response(:redirect)
-          assert_equal("You can only merge people with the EXACT same first and last name.<br/>Go to the person's profile and edit their name to make them exactly the same and then try again.", flash[:alert])
-        end
-
         should "fail to confirm merge when only one person is selected" do
           post :confirm_merge, { :person1 => @person1.id }
           assert_response :redirect
