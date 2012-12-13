@@ -77,10 +77,7 @@ class Person < ActiveRecord::Base
   } }
 
   scope :order_by_followup_status, lambda { |order| {
-    #:select => "people.*",
-    #:joins => "#{'JOIN organizational_roles ON people.id = organizational_roles.person_id'}",
-    :conditions => ["organizational_roles.role_id = ?", Role::CONTACT_ID],
-    :order => "organizational_roles.#{order}"
+    :order => "ISNULL(organizational_roles.followup_status), organizational_roles.#{order}"
   } }
 
   scope :order_by_primary_phone_number, lambda { |order| {

@@ -186,7 +186,7 @@ class ContactsController < ApplicationController
   	          @people = @organization.all_people
             end
           when 'unassigned'
-            @people = @organization.unassigned_contacts
+            @people = @organization.unassigned_contacts.joins(:organizational_roles)
             @header = I18n.t('contacts.index.unassigned')
           when 'no_activity'
             @people = @organization.no_activity_contacts
