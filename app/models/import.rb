@@ -34,7 +34,7 @@ class Import < ActiveRecord::Base
       person_hash = Hash.new
       person_hash[:person] = Hash.new
       person_hash[:person][:first_name] = row[header_mappings.invert[first_name_question].to_i]
-      person_hash[:person][:email] = row[header_mappings.invert[email_question].to_i]
+      person_hash[:person][:email] = row[header_mappings.invert[email_question].to_i] if header_mappings.invert[email_question].present? && row[header_mappings.invert[email_question].to_i].present?
 
       answers = Hash.new
 
