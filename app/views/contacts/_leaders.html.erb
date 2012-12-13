@@ -47,17 +47,17 @@
   </li>
   <li>
     <ul id="leaders" class="indent expandable" data-height="244">
-      <% (current_organization.roles.default_roles_desc + current_organization.roles.non_default_roles_asc).each do |role| %>
-        <% 
+      <% (current_organization.default_roles + current_organization.non_default_roles).each do |role| %>
+        <%
           if params[:include_archived]
             count = @people_scope.where('organizational_roles.role_id' => role.id).count
           else
             count = @people_scope.where('organizational_roles.role_id' => role.id, 'organizational_roles.archive_date' => nil).count
-          end 
+          end
         %>
         <li class="leader" style="<%= 'display:none' if count == 0 %>">
           <span class="name">
-            <%= link_to("#{role.name}", controller: 'contacts', :role => role.id, :include_archived => params[:include_archived]) %>
+            <%= link_to("#{role.name}", {controller: 'contacts', :role => role.id, :include_archived => params[:include_archived]}, class: "#{'default_role' if role.organization_id == 0}") %>
           </span>
           (<%= count %>)
         </li>
@@ -115,7 +115,7 @@
           <%= link_to s.name, s.full_path %>
         </span>
         <%= link_to('x', saved_contact_search_path(s),
-          method: :delete, remote: true, class: 'delete_leader', 
+          method: :delete, remote: true, class: 'delete_leader',
           confirm: t('contacts.index.delete_search_confirm')) %>
         <%= link_to(image_tag("edit.png"),
           s.full_path + t('contacts.index.edit_true'), class: 'edit_search') %>

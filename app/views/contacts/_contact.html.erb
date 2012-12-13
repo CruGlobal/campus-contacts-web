@@ -30,9 +30,9 @@
     <div id="roles_user_<%= person.id %>" class="roles_spaces">
       <% roles.each do |role| %>
         <% unless person.is_role_archived?(current_organization.id, role.id) %>
-          <span id="<%= person.id%>_<%= role.id %>" class="role_label role_<%= role.id %>"><%= role %></span>
+          <div id="<%= person.id%>_<%= role.id %>" class="role_label role_<%= role.id %>"><%= role %></div>
         <% else %>
-          <span id="<%= person.id%>_<%= role.id %>" class="role_label_archived role_<%= role.id %>"><%= role %></span>
+          <div id="<%= person.id%>_<%= role.id %>" class="role_label_archived role_<%= role.id %>"><%= role %></div>
         <% end %>
       <% end %>
     </div>

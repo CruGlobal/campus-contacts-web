@@ -45,20 +45,24 @@
   }
 }
 
-td div.roles_spaces { 
-  display: block;
-}
-
-td span.role_label {
-  background: #EAF1F6;
-  font-size: 10px;
-  padding: 3px 5px;
-}
-
-td span.role_label_archived {
-  background: #C5DA6E;
-  font-size: 10px;
-  padding: 3px 5px;
+td {
+  div.roles_spaces {
+    display: block;
+  }
+  .role_label {
+    background: #EAF1F6;
+    font-size: 10px;
+    padding: 3px 5px;
+    display: inline-block;
+    margin: 1px 0;
+  }
+  .role_label_archived {
+    background: #C5DA6E;
+    font-size: 10px;
+    padding: 3px 5px;
+    display: inline-block;
+    margin: 1px 0;
+  }
 }
 
 #menu a.greybox {
@@ -208,18 +212,18 @@ ul.ui-autocomplete {
 	list-style: none;
 	border-radius: 0;
 	-moz-border-radius: 0;
-	
+
 	li {
 		padding: 5px;
 		border-bottom: 1px solid #ddd;
 		overflow: hidden;
-		
+
 		img {
 			display: block;
 			width: 50px;
 			height: 50px;
 		}
-		
+
 		a {
 			color: #0379ae;
 	    cursor: pointer;
@@ -228,16 +232,16 @@ ul.ui-autocomplete {
 			}
 		}
 	}
-	
+
 	#ui-active-menuitem {
 	  background: none;
 	  border: none;
 	}
-	
+
 	.ui-menu-item .email {
 	  color: #aaa;
 	}
-	
+
 	.ui-menu-item .fb_img {
 	  width: 50px;
 	  height: 50px;
