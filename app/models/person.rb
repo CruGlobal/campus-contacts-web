@@ -973,6 +973,10 @@ class Person < ActiveRecord::Base
     true
   end
 
+  def is_sent?
+    sent_person != nil
+  end
+
   def self.vcard(ids)
     ids = Array.wrap(ids)
     book = Vpim::Book.new
