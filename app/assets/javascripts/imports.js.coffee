@@ -141,10 +141,9 @@ $ ->
     selected_value = $(this).find('option:selected').val()
     selected_survey_title = $(this).find('option:selected').attr("data-survey-title")
     selected_option = $(this).children().find("option[value=" +selected_value+ "][data-survey-title=" +selected_survey_title+ "]")
-
     if $(this).val() == "new_question"
       $('#column_edit_' + $(this).attr('data_id')).show().click()
-    else if selected_option.attr('new') == 'true'
+    else if selected_option.attr('data-new') == 'true'
       $('#column_edit_' + $(this).attr('data_id')).show()
     else
       $('#column_edit_' + $(this).attr('data_id')).hide()

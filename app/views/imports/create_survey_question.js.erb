@@ -11,12 +11,12 @@ if("<%= @message %>" == "SUCCESS"){
     $('.import_column_survey_select').each(function(){
       $(this).append("<optgroup label='"+survey_title+"'><option value='"+question_id+"'>"+question_label+"</option></optgroup>")
     })
-    $('#select_survey_field').append("<option value='"+survey_id+"' new='true'>"+survey_title+"</option>")
+    $('#select_survey_field').append("<option data-survey-title='" +survey_title+ "' value='"+survey_id+"' data-new='true'>"+survey_title+"</option>")
   }else{
     $('.import_column_survey_select').each(function(){
       $(this).children('optgroup').each(function(){
         if($(this).attr('label') == $('#select_survey_field option:selected').text()){
-          $(this).append("<option value='"+question_id+"' new='true' question_type='"+question_type+"' question_content='"+question_content+"'>"+question_label+"</option>")
+          $(this).append("<option data-survey-title='" +survey_title+ "'value='"+question_id+"' data-new='true' question_type='"+question_type+"' question_content='"+question_content+"'>"+question_label+"</option>")
         }
       })
     })
