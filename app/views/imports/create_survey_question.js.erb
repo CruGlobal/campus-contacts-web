@@ -23,7 +23,7 @@ if("<%= @message %>" == "SUCCESS"){
   }
 
   $('#import_column_survey_select_'+id).val(question_id)
-  $('#import_column_survey_select_'+id).attr('saved_value',question_id)
+  $('#import_column_survey_select_'+id).attr('data-saved-value',question_id)
   $('#import_column_survey_select_'+id).trigger('change')
   $('#import_error_message').text('')
   $('#create_question_dialog').dialog('close')
@@ -39,7 +39,7 @@ if("<%= @message %>" == "SUCCESS"){
   })
 
   $('#import_column_survey_select_'+id).val(question_id)
-  $('#import_column_survey_select_'+id).attr('saved_value',question_id)
+  $('#import_column_survey_select_'+id).attr('data-saved-value',question_id)
   $('#import_column_survey_select_'+id).trigger('change')
   $('#import_error_message').text('')
   $('#create_question_dialog').dialog('close')
