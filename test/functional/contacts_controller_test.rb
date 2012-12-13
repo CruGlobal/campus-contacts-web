@@ -637,13 +637,12 @@ class ContactsControllerTest < ActionController::TestCase
 
     should "sort by status asc" do
       xhr :get, :index, {:assigned_to => "all", :q =>{:s => "followup_status asc"}}
-      assert_equal [@person2.id, @person3.id, @person1.id], assigns(:people).collect(&:id)
-
+      assert_equal [@person2.id, @person3.id, @person1.id, @user.person.id], assigns(:people).collect(&:id)
     end
 
     should "sort by status desc" do
       xhr :get, :index, {:assigned_to => "all", :q =>{:s => "followup_status desc"}}
-      assert_equal [@person1.id, @person3.id, @person2.id], assigns(:people).collect(&:id)
+      assert_equal [@person1.id, @person3.id, @person2.id, @user.person.id], assigns(:people).collect(&:id)
     end
   end
 
@@ -735,23 +734,6 @@ class ContactsControllerTest < ActionController::TestCase
       assert assigns(:all_people).include?(@person1)
     end
 
-    context "by year in school" do
-      setup do
-        @person1.update_attribute('year_in_school','2009')
-        @person2.update_attribute('year_in_school','2010')
-        @person3.update_attribute('year_in_school','2011')
-      end
-      should "sort desc" do
-        xhr :get, :index, {"q"=>{"s"=>"year_in_school desc"}}
-        assert_equal [@person3.id, @person2.id, @person1.id, @user.person.id, @person4.id], assigns(:all_people).collect(&:id)
-      end
-
-      should "sort asc" do
-        xhr :get, :index, {"q"=>{"s"=>"year_in_school asc"}}
-        assert_equal [@user.person.id, @person4.id, @person1.id, @person2.id, @person3.id], assigns(:all_people).collect(&:id)
-      end
-    end
-
     context "by gender" do
       setup do
         @person1.update_attribute('gender','male')
@@ -788,12 +770,12 @@ class ContactsControllerTest < ActionController::TestCase
 
       should "sort by phone_number asc" do
         xhr :get, :index, {:assigned_to => "all", :q =>{:s => "phone_numbers.number asc"}}
-        assert_equal [@user.person.id, @person4.id, @person1.id, @person2.id, @person3.id], assigns(:people).collect(&:id)
+        assert_equal [@person4.id, @user.person.id, @person1.id, @person2.id, @person3.id], assigns(:people).collect(&:id)
       end
 
       should "sort by phone_number desc" do
         xhr :get, :index, {:assigned_to => "all", :q =>{:s => "phone_numbers.number desc"}}
-        assert_equal [@person3.id, @person2.id, @person1.id, @user.person.id, @person4.id], assigns(:people).collect(&:id)
+        assert_equal [@person3.id, @person2.id, @person1.id, @person4.id, @user.person.id], assigns(:people).collect(&:id)
       end
     end
 
