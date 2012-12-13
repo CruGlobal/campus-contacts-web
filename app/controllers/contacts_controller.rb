@@ -186,7 +186,7 @@ class ContactsController < ApplicationController
   	          @people = @organization.all_people
             end
           when 'unassigned'
-            @people = @organization.unassigned_contacts.joins(:organizational_roles)
+            @people = @organization.unassigned_contacts
             @header = I18n.t('contacts.index.unassigned')
           when 'no_activity'
             @people = @organization.no_activity_contacts
@@ -195,7 +195,7 @@ class ContactsController < ApplicationController
             @people = current_person.contact_friends(@organization)
             @header = I18n.t('contacts.index.friend_responses')
           when *Rejoicable::OPTIONS
-            @people = @organization.send(:"#{params[:assigned_to]}_contacts").joins(:organizational_roles)
+            @people = @organization.send(:"#{params[:assigned_to]}_contacts")
             @header = I18n.t("rejoicables.#{params[:assigned_to]}")
           else
             if params[:assigned_to].present? && @assigned_to = Person.find_by_id(params[:assigned_to])
@@ -212,7 +212,7 @@ class ContactsController < ApplicationController
       end
 
       if params[:q] && params[:q][:s].include?('followup_status')
-      	@people = @people.order_by_followup_status(params[:q][:s])
+      	@people = @people.joins(:organizational_roles).order_by_followup_status(params[:q][:s])
       end
 
       if params[:q] && params[:q][:s].include?('phone_numbers.number')
