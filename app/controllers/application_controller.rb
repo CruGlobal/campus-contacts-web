@@ -342,7 +342,7 @@ class ApplicationController < ActionController::Base
     current_user_roles = current_user.person
                                      .organizational_roles
                                      .where(:organization_id => current_organization)
-                                     .collect { |r| Role.find(r.role_id) }
+                                     .collect { |r| Role.find_by_id(r.role_id) }.compact
 
     if current_user_roles.include? Role.find(1)
       @roles_for_assign = current_organization.roles
