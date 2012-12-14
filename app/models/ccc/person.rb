@@ -109,6 +109,10 @@ class Ccc::Person < ActiveRecord::Base
     yearInSchool
   end
 
+  def updated_at
+    dateChanged
+  end
+
   def merge(other)
     reload
     ::Person.transaction do

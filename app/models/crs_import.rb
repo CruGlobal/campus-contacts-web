@@ -94,19 +94,31 @@ class CrsImport
                   end
                 end
 
+              end
+
+              attributes = {
+                              first_name: crs2_person.preferred_or_first,
+                              last_name: crs2_person.last_name,
+                              middle_name: crs2_person.middle_name,
+                              gender: crs2_person.gender_as_int,
+                              major: crs2_person.major,
+                              campus: crs2_person.campus,
+                              greek_affiliation: crs2_person.greek_affiliation,
+                              birth_date: crs2_person.birth_date,
+                              date_became_christian: crs2_person.date_became_christian,
+                              graduation_date: crs2_person.graduation_date,
+                              year_in_school: crs2_person.year_in_school,
+                              minor: crs2_person.minor
+              }
+
+              if person
+                # update the person details if the crs record has been updated more recently
+                if person.updated_at < crs2_person.updated_at
+                  person.attributes = attributes.select { |_, v| v.present? }
+                end
+              else
                 # if we still couldn't find someone, we create a new record
-                person = Person.new(first_name: crs2_person.preferred_or_first,
-                                        last_name: crs2_person.last_name,
-                                        middle_name: crs2_person.middle_name,
-                                        gender: crs2_person.gender_as_int,
-                                        major: crs2_person.major,
-                                        campus: crs2_person.campus,
-                                        greek_affiliation: crs2_person.greek_affiliation,
-                                        birth_date: crs2_person.birth_date,
-                                        date_became_christian: crs2_person.date_became_christian,
-                                        graduation_date: crs2_person.graduation_date,
-                                        year_in_school: crs2_person.year_in_school,
-                                        minor: crs2_person.minor)
+                person = Person.new(attributes)
               end
 
               # Link to crs profile
