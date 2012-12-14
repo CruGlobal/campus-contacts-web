@@ -94,8 +94,6 @@ class CrsImport
                   end
                 end
 
-                raise "No first name: #{crs2_person.inspect}" if crs2_person.preferred_or_first.blank?
-
                 # if we still couldn't find someone, we create a new record
                 person = Person.new(first_name: crs2_person.preferred_or_first,
                                         last_name: crs2_person.last_name,
@@ -113,6 +111,9 @@ class CrsImport
 
               # Link to crs profile
               person.crs_profile_id = registrant.profile_id
+
+              raise "Invalid Person: #{person.inspect}" unless person.valid?
+
               person.save!
 
               # import latest address/email/phone
