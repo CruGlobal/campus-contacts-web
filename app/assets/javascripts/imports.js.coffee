@@ -4,7 +4,8 @@ $ ->
       $('#column_edit_' + $(this).attr('data_id')).show() if $(this).val() == ''
       $('.import_column_survey_select option').each ->
         if $(this).parents('optgroup').length != -1
-          $(this).attr("data-survey-title",$(this).parents('optgroup').attr('label'))
+          survey_title = $(this).parents('optgroup').attr('label')
+          $(this).attr("data-survey-title", survey_title.replace(/\'/g,'')) if survey_title
       $(this).children(':first').after("<option value='do_not_import'>Do Not Import</option>")
       $(this).children(':first').after("<option value='new_question'>Create New Question</option>")
 
@@ -20,7 +21,7 @@ $ ->
             for word in header_words
               match_question = false if match_question && word.length > 2 && $(this).text().toLowerCase().search(word) == -1
             if match_question && !$(this).is(':disabled')
-              select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +$(this).attr("data-survey-title") + "']").attr('selected',true)
+              select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +$(this).attr("data-survey-title").replace(/\'/g,'') + "']").attr('selected',true)
               check_non_predefined = false
 
         if check_non_predefined
@@ -30,7 +31,7 @@ $ ->
               for word in header_words
                 match_question = false if match_question && word.length > 2 && $(this).text().toLowerCase().search(word) == -1
               if match_question && !$(this).is(':disabled')
-                select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +$(this).attr("data-survey-title") + "']").attr('selected',true)
+                select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +$(this).attr("data-survey-title").replace(/\'/g,'') + "']").attr('selected',true)
 
         select_field.trigger('change')
       else
@@ -140,7 +141,8 @@ $ ->
   $('.import_column_survey_select').live 'change', ->
     selected_value = $(this).find('option:selected').val()
     selected_survey_title = $(this).find('option:selected').attr("data-survey-title")
-    selected_option = $(this).children().find("option[value=" +selected_value+ "][data-survey-title=" +selected_survey_title+ "]")
+    selected_survey_title = selected_survey_title.replace(/\'/g,'') if selected_survey_title
+    selected_option = $(this).children().find("option[value=" +selected_value+ "][data-survey-title=\"" +selected_survey_title+ "\"]")
     if $(this).val() == "new_question"
       $('#column_edit_' + $(this).attr('data_id')).show().click()
     else if selected_option.attr('data-new') == 'true'
@@ -151,7 +153,8 @@ $ ->
 
     $(".import_column_survey_select").each ->
       selected_value = $(this).find('option:selected').val()
-      selected_survey_title= $(this).find('option:selected').attr("data-survey-title")
+      selected_survey_title = $(this).find('option:selected').attr("data-survey-title")
+      selected_survey_title = selected_survey_title.replace(/\'/g,'') if selected_survey_title
       if selected_value != '' && selected_value != 'do_not_import' && selected_value != 'new_question'
         $("option[value=" +selected_value+ "][data-survey-title=" +selected_survey_title+ "]").attr('disabled','disabled')
       $(this).find("option[value=" +selected_value+ "][data-survey-title=" +selected_survey_title+ "]").removeAttr('disabled')

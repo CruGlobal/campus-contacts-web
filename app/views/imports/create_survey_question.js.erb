@@ -1,22 +1,23 @@
 if("<%= @message %>" == "SUCCESS"){
   id = $('#create_question_dialog').attr('data_id')
   question_id = "<%= @question.id if @question.present? %>"
-  question_label = "<%= escape_javascript(@question.label) if @question.present? %>"
-  question_content = "<%= escape_javascript(@question.content) if @question.present? %>"
-  survey_title = "<%= escape_javascript(@survey.title) if @survey.present? %>"
+  question_label = $("<div>").html("<%= escape_javascript(@question.label) if @question.present? %>").text()
+  question_content = $("<div>").html("<%= escape_javascript(@question.content) if @question.present? %>").text()
+  survey_title = $("<div>").html("<%= escape_javascript(@survey.title) if @survey.present? %>").text()
+  survey_title_escaped = survey_title.replace(/\'/g,'')
   survey_id = "<%= @survey.id if @survey.present? %>"
-  question_type = "<%= escape_javascript(@question_category) %>"
+  question_type = $("<div>").html("<%= escape_javascript(@question_category) %>").text()
 
   if("<%= @survey_status %>" == "NEW"){
     $('.import_column_survey_select').each(function(){
-      $(this).append("<optgroup label='"+survey_title+"'><option value='"+question_id+"'>"+question_label+"</option></optgroup>")
+      $(this).append("<optgroup label=\""+survey_title+"\"><option data-survey-title=\"" +survey_title_escaped+ "\" value='"+question_id+"' data-new='true' question_type=\""+question_type+"\" question_content=\""+question_content+"\">"+question_label+"</option></optgroup>")
     })
-    $('#select_survey_field').append("<option data-survey-title='" +survey_title+ "' value='"+survey_id+"' data-new='true'>"+survey_title+"</option>")
+    $('#select_survey_field').append("<option value='"+survey_id+"'>"+survey_title+"</option>")
   }else{
     $('.import_column_survey_select').each(function(){
       $(this).children('optgroup').each(function(){
         if($(this).attr('label') == $('#select_survey_field option:selected').text()){
-          $(this).append("<option data-survey-title='" +survey_title+ "'value='"+question_id+"' data-new='true' question_type='"+question_type+"' question_content='"+question_content+"'>"+question_label+"</option>")
+          $(this).append("<option data-survey-title=\"" +survey_title_escaped+ "\" value='"+question_id+"' data-new='true' question_type=\""+question_type+"\" question_content=\""+question_content+"\">"+question_label+"</option>")
         }
       })
     })
@@ -30,8 +31,8 @@ if("<%= @message %>" == "SUCCESS"){
 }else if("<%= @message %>" == "UPDATE"){
   id = $('#create_question_dialog').attr('data_id')
   question_id = "<%= @question.id if @question.present? %>"
-  question_label = "<%= escape_javascript(@question.label) if @question.present? %>"
-  question_content = "<%= escape_javascript(@question.content) if @question.present? %>"
+  question_label = $("<div>").html("<%= escape_javascript(@question.label) if @question.present? %>").text()
+  question_content = $("<div>").html("<%= escape_javascript(@question.content) if @question.present? %>").text()
 
   $('.import_column_survey_select').each(function(){
     $(this).children().find("option[value="+question_id+"]").text(question_label)
