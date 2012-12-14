@@ -1,14 +1,19 @@
 class ActiveRecord::Base
     # This will be called by a worker when a job needs to be processed
   def self.perform(id, method, *args)
-    if id
-      begin
-        find(id).send(method, *args)
-      rescue ActiveRecord::RecordNotFound
-        # If the record isn't in the db, there's not much we can do
+    begin
+      if id
+        begin
+          find(id).send(method, *args)
+        rescue ActiveRecord::RecordNotFound
+          # If the record isn't in the db, there's not much we can do
+        end
+      else
+        new.send(method, *args)
       end
-    else
-      new.send(method, *args)
+    rescue => e
+      Airbrake.notify(e)
+      raise
     end
   end
 
