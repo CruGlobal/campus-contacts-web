@@ -94,6 +94,8 @@ class CrsImport
                   end
                 end
 
+                raise "No first name: #{crs2_person.inspect}" if crs2_person.preferred_or_first.blank?
+
                 # if we still couldn't find someone, we create a new record
                 person = Person.new(first_name: crs2_person.preferred_or_first,
                                         last_name: crs2_person.last_name,
