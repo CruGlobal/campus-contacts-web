@@ -41,7 +41,7 @@ class EmailAddress < ActiveRecord::Base
 
   def set_primary
     if person
-      if person.primary_email_address && person.primary_email_address.valid?
+      if !person.primary_email_address.frozen? && person.primary_email_address && person.primary_email_address.valid?
         self.primary = false
       else
         person.primary_email_address.try(:destroy)
