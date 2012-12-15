@@ -398,9 +398,9 @@ class PeopleController < ApplicationController
 
       end
 
-      data << "<span id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
+      data << "<div id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
       data << "style='margin-right:4px;'" if index < all.length - 1
-      data << ">#{Role.find(role_id).to_s}</span>"
+      data << ">#{Role.find(role_id).to_s}</div>"
     end
 
     render :text => data
