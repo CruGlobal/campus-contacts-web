@@ -134,7 +134,7 @@ class Surveys::QuestionsController < ApplicationController
     if @predefined_survey.questions.collect(&:id).include?(params[:id].to_i)
       @question = @predefined_survey.elements.find(params[:id].to_i)
       @organization = current_organization
-
+      @survey = @predefined_survey
       current_organization.settings[:visible_predefined_questions] = current_organization.settings[:visible_predefined_questions].reject {|x| x == @question.id}
       current_organization.save!
     else
@@ -152,6 +152,7 @@ class Surveys::QuestionsController < ApplicationController
     if @predefined_survey.questions.collect(&:id).include?(params[:id].to_i)
       @question = @predefined_survey.elements.find(params[:id].to_i)
       @organization = current_organization
+      @survey = @predefined_survey
       current_organization.settings[:visible_predefined_questions] = Array.new if current_organization.settings[:visible_predefined_questions].nil?
       current_organization.settings[:visible_predefined_questions] << @question.id
       current_organization.save!

@@ -44,7 +44,7 @@
           <% else %>
             <%= q.slug.present? ? q.slug.titleize : q.label.titleize %>
           <% end%>
-          <%= link_to("(#{t('nav.hide')})", hide_survey_question_path(@organization.surveys.first, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
+          <%= link_to("(#{t('nav.hide')})", hide_survey_question_path(@organization.surveys.first || @predefined_survey.id, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
         </th>
       <% end %>
       <th><%= t('.surveys') %></th>
