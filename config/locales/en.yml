@@ -675,7 +675,9 @@ en:
       completed: 'Completed'
       my_contacts: "My Contacts"
       name: Name
-      phone: Phone Number
+      first_name: 'First Name'
+      last_name: 'Last Name'
+      phone: Phone
       email: Email
       year: Year
       detailed: Detailed

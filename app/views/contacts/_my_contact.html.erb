@@ -3,20 +3,23 @@
     <%#= image_tag('grippy.png', class: 'handle') %>
     <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
   </td>
-  <td class="name">
-    <%= person.name %>
+  <td>
+    <%= person.first_name %>
+  </td>
+  <td>
+    <%= person.last_name %>
     <% if person.organizational_roles.where('organizational_roles.organization_id' => current_organization.id).blank? %>
       <span>&nbsp&nbsp&nbsp</span><span class="archived_group_label">&nbsp<%= t('general.archived') %>&nbsp</span>
     <% end %>
   </td>
   
-  <td class="phone phone_number"><%= person.pretty_phone_number %></td>
-  <td class="email"><%= person.email %></td>
-  <td class="year"><%= person.year_in_school %></td>
+  <td><%= person.pretty_phone_number %></td>
+  <td><%= person.email %></td>
+  <td><%= person.year_in_school.present? ? person.year_in_school : "&nbsp;".html_safe %></td>
   
   <td class="controls">
-    <%= link_to(t('general.show'), person_path(person), :class => "icon magnify") %>
     <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign") %>
+    <%= link_to(t('general.show'), person_path(person), :class => "icon magnify") %>
     <% if org_role = OrganizationalRole.where(:person_id => person.id, :organization_id => current_organization.id, :role_id => Role::CONTACT_ID).first %>
       <%= link_to(t('general.delete'), organizational_role_path(:id => org_role.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete", :confirm => t('contacts.index.delete_confirm')) %>
     <% end %>

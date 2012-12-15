@@ -666,7 +666,8 @@ $.fn.assignTo = (leader, skip_remote) ->
   $('#assign_to').val('')
   
 $.mh.saveContact = (add_more) ->
-  form = $('#new_person')
+  form = $('#new_person')  
+  $('#assign_new_contact_to_me').val($('#mine_assign_to').val())
   if $('#person_first_name', form).val() == ''
     $.a(t('contacts.index.no_name_message'))
     return false
