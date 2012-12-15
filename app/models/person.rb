@@ -117,7 +117,7 @@ class Person < ActiveRecord::Base
   end
 
   def completed_answer_sheets(organization)
-    answer_sheets.where("survey_id IN (?)", organization.surveys.collect(&:id)).order('updated_at DESC')
+    answer_sheets.where("survey_id IN (?)", Survey.where("organization_id = ? OR id = ?", organization.id, APP_CONFIG['predefined_survey']).collect(&:id)).order('updated_at DESC')
   end
 
   def latest_answer_sheet(organization)

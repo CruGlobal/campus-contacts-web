@@ -34,7 +34,7 @@ class Import < ActiveRecord::Base
       person_hash = Hash.new
       person_hash[:person] = Hash.new
       person_hash[:person][:first_name] = row[header_mappings.invert[first_name_question].to_i]
-      person_hash[:person][:email] = row[header_mappings.invert[email_question].to_i]
+      person_hash[:person][:email] = row[header_mappings.invert[email_question].to_i] if header_mappings.invert[email_question].present? && row[header_mappings.invert[email_question].to_i].present?
 
       answers = Hash.new
 
@@ -85,7 +85,9 @@ class Import < ActiveRecord::Base
         new_person_ids << person.id
         names << person.name
         if person.errors.present?
-          import_errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
+          person.errors.messages.each do |error|
+            import_errors << "#{person.to_s}: #{error[0].to_s.split('.')[0].gsub('_',' ').titleize} #{error[1].first}"
+          end
         else
           labels.each do |role_id|
             if role_id.to_i == 0
