@@ -321,11 +321,12 @@ class ContactsController < ApplicationController
       @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
       # raise @q.sorts.inspect
       if params[:q]
-        order_query = params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass').gsub('followup_status','organizational_roles.followup_status').gsub('role_id','organizational_roles.role_id') : ['last_name, first_name']
-      else
-      	order_query = "last_name ASC,first_name ASC";
-      end
       
+        order_query = params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass').gsub('followup_status','organizational_roles.followup_status').gsub('role_id','organizational_roles.role_id') : ['last_name, first_name']
+        
+      else            
+      	order_query = "last_name ASC,first_name ASC";
+      end      
       @people = @people.includes(:primary_phone_number, :primary_email_address, :contact_role).order(order_query)
       @all_people = @people.group('people.id')
       @people_for_labels = Person.people_for_labels(current_organization)
