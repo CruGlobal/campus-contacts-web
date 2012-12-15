@@ -71,7 +71,7 @@ class ContactsController < ApplicationController
     order = params[:q].present? ? params[:q][:s] : "last_name ASC, first_name ASC";
 	  @all_people = @all_people.order("people.#{order}")
 		
-    @people = Kaminari.paginate_array(@all_people).page(params[:page])
+    @people = @all_people.group('people.id').page(params[:page])
   end
 
   def mine_all
