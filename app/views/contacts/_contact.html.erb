@@ -3,7 +3,7 @@
 <% else %>
   <% (person.assigned_organizational_roles(current_organization.id).default_roles_desc + person.assigned_organizational_roles(current_organization.id).non_default_roles_asc) %>
 <% end %>
-<% contact_role = person.contact_role %>
+<% contact_role = person.contact_role_for_org(current_organization) %>
 <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row <%= extra if defined?(extra) %>" data-name="<%= person.name %>" data-email="<%= person.email %>">
   <td nowrap="nowrap" class="checkbox_cell">
     <% if contact_role %>

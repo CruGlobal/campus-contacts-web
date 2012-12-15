@@ -112,6 +112,10 @@ class Person < ActiveRecord::Base
     :order => "#{order.gsub('answer_sheets', 'ass')}"
   }}
 
+  def contact_role_for_org(org)
+    organizational_roles.where("organizational_roles.organization_id = ? AND organizational_roles.role_id = ?", org.id, Role::CONTACT_ID).first
+  end
+
   def completed_answer_sheets(organization)
     answer_sheets.where("survey_id IN (?)", organization.surveys.collect(&:id)).order('updated_at DESC')
   end
