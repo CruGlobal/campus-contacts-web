@@ -527,7 +527,10 @@ $ ->
         error: (xhr, status, error)->
           $.e(error)
       response([])
-      
+   
+  $('#contacts_controller .controls a.mineunassign').live 'click', ->
+  	$(this).closest('tr').fadeOut()  
+       
   $('.search_show_all_link').live 'click', ->
     $('#spinner_leader_search').show()
     $('#show_all').val('true')

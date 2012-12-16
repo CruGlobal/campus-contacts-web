@@ -1,27 +1,38 @@
+<% roles = (person.assigned_organizational_roles(current_organization.id).default_roles_desc + person.assigned_organizational_roles(current_organization.id).non_default_roles_asc) %>
+<% contact_role = person.contact_role %>
+
 <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row <%= extra if defined?(extra) %>" data-name="<%= person.name %>" data-email="<%= person.email %>">
-  <td nowrap="nowrap" class="checkbox_cell check">
-    <%#= image_tag('grippy.png', class: 'handle') %>
-    <%= check_box_tag 'ids[]', person.id, false, id: "ids_#{person.id}", class: 'id_checkbox' %>
-  </td>
-  <td>
-    <%= person.first_name %>
-  </td>
-  <td>
-    <%= person.last_name %>
-    <% if person.organizational_roles.where('organizational_roles.organization_id' => current_organization.id).blank? %>
-      <span>&nbsp&nbsp&nbsp</span><span class="archived_group_label">&nbsp<%= t('general.archived') %>&nbsp</span>
+  <td nowrap="nowrap" class="checkbox_cell">
+    <% if contact_role %>
+      <%= image_tag('grippy.png', class: 'handle', 'data-row-id' => dom_id(person), 'data-dnc-url' => organizational_role_path(:id => contact_role.id, :status => 'do_not_contact') ) %>
+    <% else %>
+      <%= image_tag('grippy.png', class: 'handle' ) %>
     <% end %>
+    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email, 'data-roles' => "#{roles.collect(&:id).join(',')}"%>
   </td>
-  
-  <td><%= person.pretty_phone_number %></td>
+  <td class="firstName"><%= person.first_name %></td>
+  <td class="lastName"><%= person.last_name %></td>
+  <td class="phone_number"><%= person.pretty_phone_number %></td>
   <td><%= person.email %></td>
+  <td>
+    <div id="roles_user_<%= person.id %>" class="roles_spaces">
+      <% roles.each do |role| %>
+        <% unless person.is_role_archived?(current_organization.id, role.id) %>
+          <span id="<%= person.id%>_<%= role.id %>" class="role_label role_<%= role.id %>"><%= role %></span>
+        <% else %>
+          <span id="<%= person.id%>_<%= role.id %>" class="role_label_archived role_<%= role.id %>"><%= role %></span>
+        <% end %>
+      <% end %>
+    </div>
+  </td>  
   <td><%= person.year_in_school.present? ? person.year_in_school : "&nbsp;".html_safe %></td>
-  
-  <td class="controls">
-    <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign") %>
-    <%= link_to(t('general.show'), person_path(person), :class => "icon magnify") %>
-    <% if org_role = OrganizationalRole.where(:person_id => person.id, :organization_id => current_organization.id, :role_id => Role::CONTACT_ID).first %>
-      <%= link_to(t('general.delete'), organizational_role_path(:id => org_role.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete", :confirm => t('contacts.index.delete_confirm')) %>
+  <td class="controls"> 
+    <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign mineunassign tipit", :title => "#{t('contacts.index.unassign_contact')} from you") %>
+    <%= link_to(t('nav.view_details'), person_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
+    <% if contact_role %>
+      <%= link_to(t('contacts.index.delete_contact'), organizational_role_path(:id => contact_role.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), data: { confirm: t('contacts.index.delete_confirm') }) %>
     <% end %>
   </td>
 </tr>
+
+
