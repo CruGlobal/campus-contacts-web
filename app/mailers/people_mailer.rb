@@ -9,23 +9,23 @@ class PeopleMailer < ActionMailer::Base
   #
   #   en.people_mailer.bulk_message.subject
   #
-  
-  
-  def notify_on_survey_answer(to, question_rule, keyword, answer)
+
+
+  def notify_on_survey_answer(to, question_rule_id, keyword, answer_id)
     @keyword = keyword
-    @answer = answer.instance_of?(Hash) ? Answer.find(answer['id']) : answer
+    @answer = Answer.find(answer_id)
     @answer_sheet = @answer.answer_sheet
-    @person = Person.last #answer.answer_sheet.person
+    @person = @answer_sheet.person #Person.last
     @question = @answer.question
-    @question_rule = question_rule.instance_of?(Hash) ? QuestionRule.find(question_rule['id']) : question_rule
+    @question_rule = QuestionRule.find(question_rule_id)
     mail to: to, subject: "Someone answered \"#{@keyword.titleize}\" in your survey"
   end
-  
+
   def bulk_message(to, from, subject, content)
     @content = simple_format(content)
     mail to: to, from: from, subject: subject, content_type: "text/html"
   end
-  
+
   def self.queue
       :bulk_email
   end
