@@ -113,7 +113,7 @@ class CrsImport
 
               if person
                 # update the person details if the crs record has been updated more recently
-                if person.updated_at < crs2_person.updated_at
+                if person.updated_at && crs2_person.updated_at && person.updated_at < crs2_person.updated_at
                   person.attributes = attributes.select { |_, v| v.present? }
                 end
               else
