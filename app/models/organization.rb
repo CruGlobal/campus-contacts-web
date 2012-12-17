@@ -134,7 +134,7 @@ class Organization < ActiveRecord::Base
   end
 
   def self_and_children_ids
-    @self_and_children_ids ||= [id] + child_ids
+    [id] + child_ids
   end
 
   def self_and_children_surveys

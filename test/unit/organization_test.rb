@@ -280,7 +280,6 @@ class OrganizationTest < ActiveSupport::TestCase
     org2 = org1.children.create!(name: 'foo', terminology: 'foo')
 
     assert_equal [org1.id, org2.id].to_set, org1.self_and_children_ids.to_set, "Parent organization did not return correct self and children ids"
-    #[2, 3, 1].sort{ |a, b| 1*(b <=> a) } == [2, 1, 3].sort{ |a, b| 1*(b <=> a) }
   end
 
   test "self and children surveys" do
