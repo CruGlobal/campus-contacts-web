@@ -81,7 +81,7 @@ class Apis::V3::BaseController < ApplicationController
     resource = resource.where("#{resource.table.name}.updated_at > ?", Time.at(params[:since].to_i)) if params[:since].to_i > 0
     resource = resource.limit(params[:limit]) if params[:limit]
     resource = resource.offset(params[:offset]) if params[:offset]
-    resource.order(options[:order]) if options[:order]
+    resource = resource.order(options[:order]) if options[:order]
     resource
   end
 

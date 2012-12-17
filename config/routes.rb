@@ -131,6 +131,9 @@ Mh::Application.routes.draw do
       get :api
       get :generate_api_secret
     end
+    member do
+      get :update_from_crs
+    end
   end
 
   resources :surveys, :only => [:new, :create, :edit, :update, :index, :destroy] do
@@ -217,11 +220,17 @@ Mh::Application.routes.draw do
 
   namespace :apis do
     api_version(module: "V3", header: "API-VERSION", value: "v3", parameter: "version", path: 'v3') do
-      resources :contact_assignments
+      resources :contact_assignments do
+        collection do
+          put :bulk_update
+          delete :bulk_destroy
+        end
+      end
       resources :people
       resources :organizations
       resources :surveys
       resources :roles
+      resources :followup_comments
     end
   end
 

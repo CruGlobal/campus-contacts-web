@@ -426,7 +426,7 @@ en:
       text_color: 'Text Color:'
       css_file: 'Upload your own custom css file (optional):'
       css: "Type in some custom css which will be embedded in a 'style' tag below all included css files"
-      redirect_url: "If you would like the survey to redirect back to your site when it is completed, put the full url you would like to redirect to in here."
+      redirect_url: "If you would like the survey to redirect back to your site when it is completed, put the full url you would like to redirect to in here. (This will bypass the thank you response.)"
     questions:
       create:
         notice: 'Question was successfully created.'

@@ -93,8 +93,18 @@ namespace :infobase do
 
       # If we didn't find a corresponding person in MH, create one
       unless mh_person
-        mh_person = Person.create!(ccc_person.attributes.except('personID', 'created_at', 'dateChanged', 'fk_ssmUserId', 'fk_StaffSiteProfileID', 'fk_spouseID', 'fk_childOf', 'primary_campus_involvement_id', 'mentor_id'))
-        mh_person.user = user || User.create!(username: ccc_person.user.username, password: Time.now.to_i)
+        attributes = ccc_person.attributes.except('personID', 'created_at', 'dateChanged', 'fk_ssmUserId', 'fk_StaffSiteProfileID', 'fk_spouseID', 'fk_childOf', 'primary_campus_involvement_id', 'mentor_id')
+        attributes['first_name'] = attributes['preferredName'].present? ? attributes['preferredName'] : attributes['firstName']
+        attributes['last_name'] = attributes.delete('lastName')
+        attributes['middle_name'] = attributes.delete('middleName')
+
+        mh_person_attributes = Person.first.attributes.keys
+        attributes.slice!(*mh_person_attributes)
+
+        mh_person = Person.create!(attributes)
+        mh_person.user = user ||
+                         User.find_by_username(ccc_person.user.username) ||
+                         User.create!(username: ccc_person.user.username, password: Time.now.to_i)
 
         # copy over email and phone data
         ccc_person.email_addresses.each do |email_address|

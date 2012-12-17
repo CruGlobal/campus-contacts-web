@@ -36,13 +36,18 @@ class CrsImport
                 question = kind.where(crs_question_id: crs_question.id).first
               end
             else
-              question = kind.new(crs_question_id: crs_question.id)
+              question = kind.new(crs_question_id: crs_question.id, label: crs_question.name)
             end
 
-            question.attributes = {style: style, label: crs_question.name}
+            question.attributes = {style: style}
 
-            # add options if it's a multiple choice question
-            question.content = crs_question.question_options.collect(&:value).join("\n")
+            case style
+            when 'checkbox'
+              question.content = "No\nYes"
+            else
+              # add options if it's a multiple choice question
+              question.content = crs_question.question_options.collect(&:value).join("\n")
+            end
 
             question.save!
             questions[crs_question.id] = question
@@ -89,23 +94,38 @@ class CrsImport
                   end
                 end
 
+              end
+
+              attributes = {
+                              first_name: crs2_person.preferred_or_first,
+                              last_name: crs2_person.last_name,
+                              middle_name: crs2_person.middle_name,
+                              gender: crs2_person.gender_as_int,
+                              major: crs2_person.major,
+                              campus: crs2_person.campus,
+                              greek_affiliation: crs2_person.greek_affiliation,
+                              birth_date: crs2_person.birth_date,
+                              date_became_christian: crs2_person.date_became_christian,
+                              graduation_date: crs2_person.graduation_date,
+                              year_in_school: crs2_person.year_in_school,
+                              minor: crs2_person.minor
+              }
+
+              if person
+                # update the person details if the crs record has been updated more recently
+                if person.updated_at < crs2_person.updated_at
+                  person.attributes = attributes.select { |_, v| v.present? }
+                end
+              else
                 # if we still couldn't find someone, we create a new record
-                person = Person.new(first_name: crs2_person.preferred_or_first,
-                                        last_name: crs2_person.last_name,
-                                        middle_name: crs2_person.middle_name,
-                                        gender: crs2_person.gender_as_int,
-                                        major: crs2_person.major,
-                                        campus: crs2_person.campus,
-                                        greek_affiliation: crs2_person.greek_affiliation,
-                                        birth_date: crs2_person.birth_date,
-                                        date_became_christian: crs2_person.date_became_christian,
-                                        graduation_date: crs2_person.graduation_date,
-                                        year_in_school: crs2_person.year_in_school,
-                                        minor: crs2_person.minor)
+                person = Person.new(attributes)
               end
 
               # Link to crs profile
               person.crs_profile_id = registrant.profile_id
+
+              raise "Invalid Person: #{person.inspect}" unless person.valid?
+
               person.save!
 
               # import latest address/email/phone
@@ -137,17 +157,16 @@ class CrsImport
 
               # Copy over answers
               registrant.answers.each do |a|
-                value = a.value_boolean || a.value_date || a.value_double || a.value_int || a.value_string || a.value_text
-                question = questions[a.custom_questions_item.question_id]
-                # If this question is multiple choice, we need to capture all answers
-                if question.is_a?(ChoiceField)
-                  Answer.where(answer_sheet_id: answer_sheet.id, question_id: question.id, value: value).first_or_create
+                if a.value_boolean
+                  value = a.value_boolean? ? 'Yes' : 'No'
                 else
-                  # If it's not, we can just look for one answer and possibly update it
-                  a = Answer.where(answer_sheet_id: answer_sheet.id, question_id: question.id).first_or_initialize
-                  a.value = value if value
-                  a.save
+                  value = a.value_date || a.value_double || a.value_int || a.value_string || a.value_text
                 end
+                question = questions[a.custom_questions_item.question_id]
+
+                a = Answer.where(answer_sheet_id: answer_sheet.id, question_id: question.id).first_or_initialize
+                a.value = value if value
+                a.save
               end
 
             end

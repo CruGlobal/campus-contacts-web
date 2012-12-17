@@ -70,6 +70,34 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
 
       end
 
+      should 'filter by followup status' do
+        @person.organizational_roles.create(organization: @client.organization,
+                                            followup_status: 'contacted')
+        # No matches
+        get :index, secret: @client.secret, filters: {followup_status: 'zzzzzzzzzz'}
+        json = JSON.parse(response.body)
+        assert_equal 0, json['people'].length, json.inspect
+
+        # 1 person
+        get :index, secret: @client.secret, filters: {followup_status: 'contacted'}
+        json = JSON.parse(response.body)
+        assert_equal 1, json['people'].length, json.inspect
+
+      end
+
+      should 'filter by contact assignment' do
+        Factory(:contact_assignment, organization: @client.organization,
+                                      assigned_to: @person2,
+                                      person: @person)
+
+        # 1 person
+        get :index, secret: @client.secret, filters: {assigned_to: @person2.id.to_s}
+        json = JSON.parse(response.body)
+        assert_equal 1, json['people'].length, json.inspect
+
+      end
+
+
       context 'filtering by name_or_email_like' do
 
         should 'match first name' do

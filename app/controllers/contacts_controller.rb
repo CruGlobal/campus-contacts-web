@@ -27,6 +27,7 @@ class ContactsController < ApplicationController
         @all_people_with_phone_number = @all_people.includes(:primary_phone_number).where('phone_numbers.number is not NULL')
         @all_people_with_email = @all_people.includes(:primary_email_address).where('email_addresses.email is not NULL')
       end
+
       wants.csv do
         @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r]}]
         @all_answers = generate_answers(@all_people, @organization, @questions)

@@ -6,7 +6,7 @@ class Ccc::Person < ActiveRecord::Base
 
   establish_connection :uscm
 
-  belongs_to :user, class_name: 'Ccc::SimplesecuritymanagerUser', foreign_key: 'user_id'
+  belongs_to :user, class_name: 'Ccc::SimplesecuritymanagerUser', foreign_key: 'fk_ssmUserId'
   has_many :crs_registrations, class_name: 'Ccc::CrsRegistration', foreign_key: :person_id, dependent: :destroy
 
   has_one :crs2_profile, class_name: 'Ccc::Crs2Profile', foreign_key: :ministry_person_id, dependent: :destroy
@@ -107,6 +107,10 @@ class Ccc::Person < ActiveRecord::Base
 
   def year_in_school
     yearInSchool
+  end
+
+  def updated_at
+    dateChanged
   end
 
   def merge(other)

@@ -1,10 +1,19 @@
 class ActiveRecord::Base
     # This will be called by a worker when a job needs to be processed
   def self.perform(id, method, *args)
-    if id
-      find(id).send(method, *args)
-    else
-      new.send(method, *args)
+    begin
+      if id
+        begin
+          find(id).send(method, *args)
+        rescue ActiveRecord::RecordNotFound
+          # If the record isn't in the db, there's not much we can do
+        end
+      else
+        new.send(method, *args)
+      end
+    rescue => e
+      Airbrake.notify(e)
+      raise
     end
   end
 
@@ -19,7 +28,7 @@ end
 #   module ActiveRecord::ConnectionAdapters
 #     class Mysql2Adapter
 #       alias_method :execute_without_retry, :execute
-# 
+#
 #       def execute(*args)
 #         execute_without_retry(*args)
 #       rescue ActiveRecord:StatementInvalid: e
