@@ -210,4 +210,9 @@ module ApplicationHelper
     e = extra ? "spinner_#{extra}" : 'spinner'
     image_tag('spinner.gif', :id => e, :style => 'display:none', :class => 'spinner')
   end
+  
+  def word_shorten(limit,word)
+  	word.size > limit ? "#{word[0..limit]} ..." : word[0..limit]
+  end
+  
 end

@@ -42,11 +42,11 @@
     </div>
     <% end %>
   </li>
-  <li class="heading selected">
+  <li class="heading selected tipitright" title="hahahaha">
     <h3><%= t('people.index.labels') %></h3>
   </li>
   <li>
-    <ul id="leaders" class="indent expandable" data-height="244">
+    <ul id="labels_list" class="indent expandable" data-height="244">
       <% (current_organization.roles.default_roles_desc + current_organization.roles.non_default_roles_asc).each do |role| %>
         <% 
           if params[:include_archived]
@@ -56,13 +56,18 @@
           end 
         %>
         <li class="leader" style="<%= 'display:none' if count == 0 %>">
-          <span class="name">
-            <%= link_to("#{role.name}", controller: 'contacts', :role => role.id, :include_archived => params[:include_archived]) %>
+          <span class="name tipitright" title="<%= role.name %>">
+            <%= link_to(word_shorten(23,role.name), controller: 'contacts', :role => role.id, :include_archived => params[:include_archived]) %>
           </span>
           (<%= count %>)
         </li>
       <% end %>
     </ul>
+    <a href="#labels_list" class="moredown" style="display:none">
+      <span>
+        <strong>+</strong> <%= t('.show_more') %>
+      </span>
+    </a>
   </li>
   <li class="heading selected">
     <h3><%= t('people.index.statistics') %></h3>
