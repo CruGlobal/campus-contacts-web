@@ -654,16 +654,13 @@ $('#fetch_all_contacts_link').live 'click', ->
 
 $('.check_all_contacts, .check_all_mine').live 'click', ->
   first_row = $('#contacts_table').find('tr:first')
+  
   if first_row.text().indexOf('Fetching') == 0
     $(this).attr('checked', true)
     $('.id_checkbox').prop('checked', true)
     return false
 
   checked = $(this).is(':checked')
-  if checked
-    change_all_role_checkboxes(true)
-  else
-    change_all_role_checkboxes(false)
   $('.id_checkbox').prop('checked', checked)
 
   if true || $('.pagination').length
@@ -679,7 +676,7 @@ $('.check_all_contacts, .check_all_mine').live 'click', ->
 		      $('#contacts_table').prepend(html)
     else
       first_row.remove()
-  change_all_role_checkboxes(true) if $(this).is(':checked')
+  change_all_role_checkboxes(true) if checked
   disable_role_checkboxes()
   enable_all_unchecked()
 
