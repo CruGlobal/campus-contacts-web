@@ -14,7 +14,7 @@ class SurveyResponsesController < ApplicationController
 
     # If they haven't skipped facebook already, send them to the login page
     # Also skip login if we're in survey mode
-    unless params[:nologin] == 'true'
+    unless params[:nologin] == 'true' || (@sms && @sms.sms_keyword.survey.login_option == Survey::NO_LOGIN)
       return unless authenticate_user!
     end
     # If they texted in, save their phone number

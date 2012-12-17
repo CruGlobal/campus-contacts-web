@@ -1,4 +1,6 @@
 class Survey < ActiveRecord::Base
+  NO_LOGIN = 3
+
   has_paper_trail :on => [:destroy],
                   :meta => { organization_id: :organization_id }
 
