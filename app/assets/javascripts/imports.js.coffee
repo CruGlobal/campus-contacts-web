@@ -11,7 +11,9 @@ $ ->
 
     $('#import_column_question tr:not(:first)').each ->
       select_field = $(this).find('.import_column_survey_select')
-      header = $.trim(parseCamelCase($(this).children('.column_header').text().replace(/_|-|:/g,' ')).toLowerCase())
+      column_header = $(this).children('.column_header').text()
+      column_header = column_header.replace(/_|-|:/g,' ') if column_header
+      header = $.trim(parseCamelCase(column_header).toLowerCase())
       header_words = header.split(' ')
       check_non_predefined = true
       if select_field.attr("data-saved-value") == ''
@@ -21,7 +23,9 @@ $ ->
             for word in header_words
               match_question = false if match_question && word.length > 2 && $(this).text().toLowerCase().search(word) == -1
             if match_question && !$(this).is(':disabled')
-              select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +$(this).attr("data-survey-title").replace(/\'/g,'') + "']").attr('selected',true)
+              selected_survey_title = $(this).attr("data-survey-title")
+              selected_survey_title = selected_survey_title.replace(/\'/g,'') if selected_survey_title
+              select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +selected_survey_title+ "']").attr('selected',true)
               check_non_predefined = false
 
         if check_non_predefined
@@ -31,7 +35,9 @@ $ ->
               for word in header_words
                 match_question = false if match_question && word.length > 2 && $(this).text().toLowerCase().search(word) == -1
               if match_question && !$(this).is(':disabled')
-                select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +$(this).attr("data-survey-title").replace(/\'/g,'') + "']").attr('selected',true)
+                selected_survey_title = $(this).attr("data-survey-title")
+                selected_survey_title = selected_survey_title.replace(/\'/g,'') if selected_survey_title
+                select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +selected_survey_title+ "']").attr('selected',true)
 
         select_field.trigger('change')
       else
