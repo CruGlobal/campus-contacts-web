@@ -1039,6 +1039,12 @@ en:
   member: Member
   leader: Leader
   organizations:
+    transfer:
+      title: "Contacts Pending Transfer to 100% Sent"
+      set_alumni: "Label transferred contacts as Alumni"
+      set_alumni_desc: "(This will label all transferred contacts as Alumni)"
+      set_archived: "Archive transferred contacts"
+      set_archived_desc: "(This will mark all transferred contacts as Archived)"
     index:
       add_sub_org: Add %{terminology} under this one
       add_a_sub_org: Add new %{terminology}

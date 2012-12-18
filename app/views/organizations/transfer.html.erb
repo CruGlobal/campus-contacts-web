@@ -1,11 +1,11 @@
 <div class="inside_container">
-	<div class="titlebar titlebarmod">  
+	<div class="titlebar titlebarmod">
 		<h1>
 			100% Sent
 		</h1>
 	</div>
 	<div>
-		<h1 class="title">Contacts Pending Transfer to 100% Sent</h1>
+		<h1 class="title"><%= t('.title') %></h1>
 		<%= link_to "Help Me", "http://blog.missionhub.com", target: '_blank', class: 'helpme' %>
 		<div class="container">
 			<div class="content">
@@ -34,17 +34,17 @@
 							  <%= check_box_tag "tag_as_alumni" %>
 							</div>
 							<div class="options">
-								<span class="pri_text">Label transferred contacts as Alumni</span>
+								<span class="pri_text"><%= t('.set_alumni') %></span>
 								<br/>
-								<span class="sec_text">(description of what labeling as 'Alumni' will do.)</span>
+								<span class="sec_text"><%= t('.set_alumni_desc') %></span>
 							</div>
 							<div class="select_option">
 							  <%= check_box_tag "tag_as_archived" %>
 							</div>
 							<div>
-								<span class="pri_text">Archive transferred contacts</span>
+								<span class="pri_text"><%= t('.set_archived') %></span>
 								<br/>
-								<span class="sec_text">(description of what archiving will do.)</span>
+								<span class="sec_text"><%= t('.set_archived_desc') %></span>
 							</div>
 						</div>
 						<div class="info_right">
