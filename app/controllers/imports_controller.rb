@@ -46,9 +46,9 @@ class ImportsController < ApplicationController
       survey_title = "Import-#{@import.created_at.strftime('%Y-%m-%d')}"
       unless @survey = current_organization.surveys.find_by_title(survey_title)
         @survey = current_organization.surveys.create(
-          login_paragraph: I18n.t('application.survey.default_login_paragraph'),
+          login_paragraph: I18n.t('.imports.update.default_login_paragraph'),
           title: survey_title,
-          post_survey_message: I18n.t('application.survey_name_field.default_post_survey_message'),
+          post_survey_message: I18n.t('.imports.update.default_post_survey_message'),
           terminology: 'Survey'
         )
       end
