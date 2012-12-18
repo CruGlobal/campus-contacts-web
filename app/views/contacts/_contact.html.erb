@@ -33,7 +33,7 @@
         <% unless person.is_role_archived?(current_organization.id, role.id) %>
         <div id="<%= person.id%>_<%= role.id %>" class="role_label role_<%= role.id %> <%= 'transferred tipitmiddle' if sent %>" title="<%= 'Transferred' if sent %>" ><%= role %></div>
         <% else %>
-          <div id="<%= person.id%>_<%= role.id %>" class="role_label_archived role_<%= role.id %> <%= 'transferred tipitmiddle' if sent %>" title="<%= 'Transferred' if sent %>"><%= role %></div>
+          <div id="<%= person.id%>_<%= role.id %>" class="role_label_archived role_<%= role.id %> tipitmiddle <%= 'transferred' if sent %>" title="<%= sent ? 'Transferred' : 'Archived' %>"><%= role %></div>
         <% end %>
       <% end %>
     </div>
