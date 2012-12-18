@@ -13,7 +13,7 @@ class Organization < ActiveRecord::Base
   has_many :activities, dependent: :destroy
   has_many :target_areas, through: :activities, class_name: 'TargetArea'
   has_many :people, through: :organizational_roles, uniq: true
-  has_many :not_archived_people, through: :organizational_roles, source: :person, conditions: ["archive_date is NULL"], uniq: true
+  has_many :not_archived_people, through: :organizational_roles, source: :person, conditions: ["organizational_roles.archive_date is NULL"], uniq: true
   has_many :contact_assignments
   has_many :keywords, class_name: 'SmsKeyword'
   has_many :surveys, dependent: :destroy
@@ -169,9 +169,9 @@ class Organization < ActiveRecord::Base
     .joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{person_table_pkey}
         AND organizational_roles.organization_id = #{id}
         AND organizational_roles.role_id = '#{Role::CONTACT_ID}'
-        AND followup_status <> 'do_not_contact'
-        AND followup_status <> 'completed'
-        AND archive_date IS NULL
+        AND organizational_roles.followup_status <> 'do_not_contact'
+        AND organizational_roles.followup_status <> 'completed'
+        AND organizational_roles.archive_date IS NULL
         LEFT JOIN contact_assignments ON contact_assignments.person_id = #{person_table_pkey}
         AND contact_assignments.organization_id = #{id}")
         .where("contact_assignments.assigned_to_id IN (?)", only_leaders)

@@ -73,12 +73,12 @@ class PersonFilter
     end
 
     if @filters[:followup_status]
-      filtered_people = filtered_people.includes(:organizational_roles)
-                                       .where('organizational_roles.followup_status' => @filters[:followup_status].split(','))
+      filtered_people = filtered_people.where('organizational_roles.followup_status' => @filters[:followup_status].split(','))
+      filtered_people = filtered_people.includes(:organizational_roles) unless filtered_people.to_sql.include?('`organizational_roles`')
     end
 
     if @filters[:assigned_to]
-      filtered_people = filtered_people.includes(:contact_assignments)
+      filtered_people = filtered_people.includes(:assigned_tos)
                                        .where('contact_assignments.assigned_to_id' => @filters[:assigned_to].split(','))
     end
 

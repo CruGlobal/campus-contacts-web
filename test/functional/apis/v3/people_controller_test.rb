@@ -97,6 +97,19 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
 
       end
 
+      should 'filter by contact assignment and followup_status' do
+        Factory(:contact_assignment, organization: @client.organization,
+                                      assigned_to: @person2,
+                                      person: @person)
+        @person.organizational_roles.first.update_attributes(followup_status: 'contacted')
+                                            
+        # 1 person
+        get :index, secret: @client.secret, filters: {assigned_to: @person2.id.to_s, followup_status: 'contacted'}
+        json = JSON.parse(response.body)
+        assert_equal 1, json['people'].length, json.inspect
+
+      end
+
 
       context 'filtering by name_or_email_like' do
 
