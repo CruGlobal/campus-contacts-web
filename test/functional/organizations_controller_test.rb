@@ -370,9 +370,9 @@ class OrganizationsControllerTest < ActionController::TestCase
     end
     should "transfer checked contacts and mark contacts as alumni" do
       post :do_transfer, {ids: [@contact4.id], tag_as_alumni: '1'}
-      assert OrganizationalRole.exists?(role_id: Role::ALUMNI_ID, person_id: @contact4.id, organization_id: @sent_org.id), "contact should have an alumni role"
+      assert OrganizationalRole.exists?(role_id: Role::ALUMNI_ID, person_id: @contact4.id, organization_id: @organization.id), "contact should have an alumni role"
     end
-    should "transfer checked contacts and mark contacts as alumni" do
+    should "transfer checked contacts and archive contacts" do
       post :do_transfer, {ids: [@contact5.id], tag_as_archived: '1'}
       contact_role = OrganizationalRole.find_by_role_id_and_person_id_and_organization_id(Role::CONTACT_ID, @contact5.id, @organization.id)
       assert contact_role.archive_date != nil, "old contact should be archived"
