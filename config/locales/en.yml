@@ -583,8 +583,7 @@ en:
       start_typing: "Start typing a name to find a person to make a leader:"
     leaders:
       reminder_prompt: "Some of your leaders have contacts that haven't been followed up! Let your leaders know!"
-      show_more: "Show More Leaders"
-      show_more_labels: "Show More Labels"
+      show_more: "Show More"
     index:
       edit_true: '&edit=true'
       search_saved: 'This search has been saved'

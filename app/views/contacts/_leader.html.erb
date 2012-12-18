@@ -3,7 +3,7 @@
     <%= link_to('x', leader_path(person.id), method: :delete, remote: true, class: 'delete_leader', data: { confirm: t('.archive_confirm', person: person) }) %>
   <% end %>
   <span class="name tipitright" title="<%= person %>">
-  	<%= link_to(word_shorten(23,person.name), contacts_path(assigned_to: person.id)) %>
+  	<%= link_to(truncate(person.to_s, length: 20, omission: "..."), contacts_path(assigned_to: person.id)) %>
 	</span> 
   (<span class="count"><%= Person.includes(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => person.id).count %></span>)
 </li>

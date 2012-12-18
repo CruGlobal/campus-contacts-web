@@ -71,10 +71,10 @@ $ ->
     if target.hasClass('showall')
       target.attr('data-height', target.height())
       target.animate({height: target.attr("data-original-height")})
-      $('span', this).html('<strong>+</strong> Show Less Leaders')
+      $('span', this).html('<strong>-</strong> Show Less')
     else
       target.animate({height: target.attr("data-height")})
-      $('span', this).html('<strong>+</strong> Show More Leaders')
+      $('span', this).html('<strong>+</strong> Show More')
     false
     
   $('a.disabled').live 'click', ->

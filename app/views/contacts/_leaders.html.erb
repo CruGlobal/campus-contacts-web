@@ -57,7 +57,7 @@
         %>
         <li class="leader" style="<%= 'display:none' if count == 0 %>">
           <span class="name tipitright" title="<%= role.name %>">
-            <%= link_to(word_shorten(23,role.name), controller: 'contacts', :role => role.id, :include_archived => params[:include_archived]) %>
+            <%= link_to(truncate(role.name, length: 23, omission: "..."), controller: 'contacts', :role => role.id, :include_archived => params[:include_archived]) %>
           </span>
           (<%= count %>)
         </li>
@@ -65,7 +65,7 @@
     </ul>
     <a href="#labels_list" class="moredown" style="display:none">
       <span>
-        <strong>+</strong> <%= t('.show_more_labels') %>
+        <strong>+</strong> <%= t('.show_more') %>
       </span>
     </a>
   </li>
