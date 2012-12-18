@@ -1112,7 +1112,7 @@ en:
       guide: "You are almost ready to upload %{count_word}! Use the list below to select any labels to apply to all of these new contacts, then click <strong>Import</strong>."
     update:
       default_login_paragraph: "To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey."
-      default_post_survey_message: "Thank you fro your time!"
+      default_post_survey_message: "Thank you for your time!"
   batch:
     new_person_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, there are new contacts in your organization. Please login to missionhub.com as soon as possible to followup the contacts. Below is the list of %{contacts_count} new contacts:"
     person_transfer_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, you have been sent new contacts. Please login to missionhub.com as soon as possible to followup the contacts. There may be more information about the contacts in the comment section of their individual profile. If not, you may want to contact the senders at their email address. Below is the list of %{contacts_count} contacts sent:"
