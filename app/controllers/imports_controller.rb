@@ -130,9 +130,9 @@ class ImportsController < ApplicationController
         if params[:create_survey_toggle]
           @survey_status = 'NEW'
           @survey = current_organization.surveys.create(
-            login_paragraph: I18n.t('application.survey.default_login_paragraph'),
-            title: params[:survey_name_field],
-            post_survey_message: I18n.t('application.survey_name_field.default_post_survey_message'),
+            login_paragraph: I18n.t('.imports.update.default_login_paragraph'),
+            title: survey_title,
+            post_survey_message: I18n.t('.imports.update.default_post_survey_message'),
             terminology: 'Survey'
           )
         else
