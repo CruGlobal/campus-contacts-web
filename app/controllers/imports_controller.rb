@@ -131,7 +131,7 @@ class ImportsController < ApplicationController
           @survey_status = 'NEW'
           @survey = current_organization.surveys.create(
             login_paragraph: I18n.t('.imports.update.default_login_paragraph'),
-            title: survey_title,
+            title: params[:survey_name_field],
             post_survey_message: I18n.t('.imports.update.default_post_survey_message'),
             terminology: 'Survey'
           )
