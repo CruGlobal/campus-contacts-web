@@ -135,6 +135,7 @@ class OrganizationsController < ApplicationController
       @sent_team_org.add_contact(person)
       sent_record = person.set_as_sent
       sent_record.update_attribute('transferred_by_id', current_person.id)
+      current_organization.add_role_to_person(person, Role::ALUMNI_ID) if params[:tag_as_alumni] == '1'
       if params[:tag_as_archived] == '1'
         current_organization.organizational_roles.where(person_id: person.id, archive_date: nil).each do |org_role|
           if org_role.role_id == Role::LEADER_ID
@@ -144,7 +145,6 @@ class OrganizationsController < ApplicationController
           org_role.archive
         end
       end
-      current_organization.add_role_to_person(person, Role::ALUMNI_ID) if params[:tag_as_alumni] == '1'
     end
   end
 

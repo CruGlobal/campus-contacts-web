@@ -24,7 +24,7 @@
 					<div class="transfer_info">
 						<table id="pending_transfer_list">
 						  <% @pending_transfer.each do |person| %>
-						    <%= render partial: 'pending_transfer', locals: {person: person, f: f} %>
+                <%= render partial: 'pending_transfer', locals: {person: person, f: f, checked: true} %>
   						<% end %>
 						</table>
 					</div>
