@@ -662,7 +662,8 @@ $('.check_all_mine').live 'click', ->
     else
       first_row.remove()
 
-$('#fetch_all_contacts_link').live 'click', ->
+$('#fetch_all_contacts_link').live 'click', (e)->
+  e.preventDefault()
   $('#all_text, #all_selected_text').toggle()
   $('.id_checkbox').attr('checked',true)
   change_all_role_checkboxes(true)
