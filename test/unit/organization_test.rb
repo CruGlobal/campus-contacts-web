@@ -544,7 +544,6 @@ class OrganizationTest < ActiveSupport::TestCase
     setup do
       @org = Factory(:organization)
       @child = Factory(:organization, parent: @org, name: 'org', terminology: 'org')
-
       @another_org = Factory(:organization)
     end
 
@@ -568,8 +567,58 @@ class OrganizationTest < ActiveSupport::TestCase
 
   # end deeper tests
 
+  context "fetching transfers for 100% Sent" do
+    setup do
+      @org = Factory(:organization)
+      @contact1 = Factory(:person)
+      @contact2 = Factory(:person)
+      @contact3 = Factory(:person)
+      @contact4 = Factory(:person)
+      Factory(:organizational_role, person: @contact1, role: Role.sent, organization: @org)
+      Factory(:organizational_role, person: @contact2, role: Role.sent, organization: @org)
+      Factory(:organizational_role, person: @contact3, role: Role.sent, organization: @org)
+      Factory(:organizational_role, person: @contact4, role: Role.contact, organization: @org)
+      Factory(:sent_person, person: @contact3)
+    end
+    should "return all people with label 100% Sent and not yet transferred" do
+      assert_equal(@org.pending_transfer, [@contact1,@contact2])
+    end
+    should "return all people without label 100% Sent" do
+      assert_equal(@org.available_transfer, [@contact4])
+    end
+    should "return all people with label 100% Sent and already transferred" do
+      assert_equal(@org.completed_transfer, [@contact3])
+    end
+  end
 
+  context "checking parent" do
+    setup do
+      @org = Organization.new(name: 'test org', ancestry: '1/2/3')
+    end
+    should "return true if parent_id exist" do
+      assert @org.has_parent?(1)
+      assert @org.has_parent?(2)
+    end
+    should "return true if org is root" do
+      @org.update_attribute('ancestry', nil)
+      assert @org.has_parent?(1)
+    end
+    should "return false if parent_id does not exist" do
+      assert !@org.has_parent?(4)
+      assert !@org.has_parent?(5)
+    end
+  end
 
-
-
+  context "fetching roles" do
+    setup do
+      @org = Factory(:organization)
+    end
+    should "return 'sent' role if org is root" do
+      assert @org.role_set.include?(Role.sent)
+    end
+    should "return 'sent' role if has parent org id = 1" do
+      @org.update_attribute('ancestry','1/2/3')
+      assert @org.role_set.include?(Role.sent)
+    end
+  end
 end

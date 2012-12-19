@@ -1,5 +1,4 @@
   <div class="explain">
-    <p><%= t('.add_contact', org: current_organization) %></p>
     <p><%= t('.survey_mode_instructions') %></p>
   </div>
   <%= form_for person, url: contacts_path, method: :post, remote: true do |f| %>

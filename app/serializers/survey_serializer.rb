@@ -23,5 +23,11 @@ class SurveySerializer < ActiveModel::Serializer
     end
   end
 
+  [:questions, :keyword].each do |relationship|
+    define_method(relationship) do
+      add_since(object.send(relationship))
+    end
+  end
+
 end
 

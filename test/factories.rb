@@ -478,4 +478,8 @@ FactoryGirl.define do
     link 'bar'
   end
 
+  factory :sent_person do
+    association :person
+  end  
+  
 end

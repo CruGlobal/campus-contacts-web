@@ -25,6 +25,7 @@ class Organization < ActiveRecord::Base
   has_many :leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id IN (?) AND organizational_roles.archive_date IS NULL", Role.leader_ids], order: "people.last_name, people.first_name", uniq: true
   has_many :only_leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL", Role::LEADER_ID], order: "people.last_name, people.first_name", uniq: true
   has_many :admins, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL", Role::ADMIN_ID], order: "people.last_name, people.first_name", uniq: true
+  has_many :sent, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL", Role::SENT_ID], order: "people.last_name, people.first_name", uniq: true
   has_many :all_people, through: :organizational_roles, source: :person, conditions: ["organizational_roles.followup_status <> 'do_not_contact' AND organizational_roles.archive_date IS NULL"]
   has_many :all_people_with_archived, through: :organizational_roles, source: :person, conditions: ["organizational_roles.followup_status <> 'do_not_contact'"]
   has_many :contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status <> 'do_not_contact'", Role::CONTACT_ID]
@@ -74,6 +75,22 @@ class Organization < ActiveRecord::Base
     end
   end
 
+  def pending_transfer
+    sent.includes(:sent_person).where('sent_people.id IS NULL')
+  end
+
+  def completed_transfer
+    sent.includes(:sent_person).where('sent_people.id IS NOT NULL')
+  end
+
+  def available_transfer
+    all_people - sent
+  end
+
+  def has_parent?(org_id)
+    ancestry.present? ? ancestry.split('/').include?(org_id.to_s) : true
+  end
+
   def is_root? # an org is considered root if it has no parents
     ancestry.nil? || !parent.show_sub_orgs
   end
@@ -91,6 +108,18 @@ class Organization < ActiveRecord::Base
   def parent_organization
     org = Organization.find(ancestry.split('/').last) if ancestry.present?
     return org if org.present?
+  end
+
+  def role_set
+    default_roles + non_default_roles
+  end
+
+  def default_roles
+    has_parent?(1) ? roles.default_cru_roles_desc : roles.default_roles_desc
+  end
+
+  def non_default_roles
+    has_parent?(1) ? roles.non_default_cru_roles_asc : roles.non_default_roles_asc
   end
 
   def parent_organization_admins

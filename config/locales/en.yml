@@ -24,11 +24,14 @@ en:
     messages:
       question_too_long: "WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages."
   roles:
+    index:
+      title: "%{org} Labels"
     admin: Admin
     contact: Contact
     involved: Involved
     leader: Leader
     alumni: Alumni
+    sent: 100% Sent
     views:
       organizational_roles: "Organizational Labels"
       system_roles: "System Labels"
@@ -54,8 +57,9 @@ en:
   nav:
     dashboard: Dashboard
     organizations: Organizations
-    manage: Manage
+    manage: Organizations
     cleanup: Cleanup
+    transfer: 100% Sent
     archive: Archived
     enter_survey_mode: "Enter Survey Mode"
     use_keyword: 'Use Keyword: %{keyword}'
@@ -84,6 +88,7 @@ en:
     back_to_dashboard: "Back To My Contacts"
     create_a_survey: Create a survey
     settings: Settings
+    cru: "Cru"
   general:
     transfer: "Transfer"
     roles_applied: "Labels have been applied."
@@ -218,6 +223,7 @@ en:
       search_placeholder: 'Search for the first name, last name or email.'
       search_title: 'Search'
       advanced_search: 'Toggle Advanced Search'
+      advanced_search_link: 'Advanced Search'
       clear_search_form: 'Clear Search Form'
     advanced_search:
       first_name: 'First Name'
@@ -357,6 +363,24 @@ en:
     close: "Close"
     send_message_guide: "To send a text or email, click the box next to the contacts you'd like to message. You can also use the search function to find contacts quickly. <br/><br/>After selecting the contacts, click the \"Send\" button to compose your message."
     send_message_video_guide: 'Click on the video below see how to do this.'
+    header_text: 'Make It Easier To Care For The People Who Need You Most'
+    panel_storing: 'Storing Contacts'
+    panel_managing: 'Managing Contacts'
+    panel_messaging: 'Messaging Contacts'
+    button_add: 'ADD'
+    button_add_sub: 'A CONTACT'
+    button_import: 'IMPORT'
+    button_import_sub: 'CONTACTS'
+    button_view: 'VIEW'
+    button_view_sub: 'ALL CONTACTS'
+    button_label: 'LABEL'
+    button_label_sub: 'CREATE LISTS'
+    button_assign: 'ASSIGN'
+    button_assign_sub: 'FOR FOLLOWUP'
+    button_text: 'TEXT'
+    button_text_sub: 'SEND'
+    button_email: 'EMAIL'
+    button_email_sub: 'SEND'
   surveys:
     index:
       title: "Surveys for %{org}"
@@ -588,7 +612,7 @@ en:
       edit_true: '&edit=true'
       search_saved: 'This search has been saved'
       vcard: 'Export Vcard'
-      add_contact: Add a Contact
+      add_contact: "Add a Contact to %{org}"
       clear_search_form: 'Clear Search Form'
       no_contacts: 'Sorry, there are no contacts here.'
       export: 'Export CSV'
@@ -713,6 +737,7 @@ en:
       instruction_2: "First name should not be missing"
       instruction_3: "Phone numbers and email addresses should have the right format"
       instruction_4: "Headers should be present"
+      help_info: "I still don't understand, please"
 
       download_template_csv: "Download template CSV file"
       cause_1: " First name is blank at row/s"
@@ -720,7 +745,7 @@ en:
       cause_3: " Invalid email address at row/s"
       tip_2: "In your first row list the headings like it shows here: <strong>FIRST NAME, LAST NAME, STATUS, GENDER, EMAIL, PHONE NUMBER, ADDRESS 1, ADDRESS 2, CITY, STATE, COUNTRY, ZIP</strong>"
       blank_header: "One of the CSV headers is blank"
-      present_firstname: "First name is required on import"
+      present_first_name: "First name is required on import"
       duplicate_header_match: "At least two of the headers has the same selected person attribute/survey question"
 
   sms:
@@ -1011,6 +1036,12 @@ en:
   member: Member
   leader: Leader
   organizations:
+    transfer:
+      title: "Contacts Pending Transfer to 100% Sent"
+      set_alumni: "Label transferred contacts as Alumni"
+      set_alumni_desc: "(This will label all transferred contacts as Alumni)"
+      set_archived: "Archive transferred contacts"
+      set_archived_desc: "(This will mark all transferred contacts as Archived)"
     index:
       add_sub_org: Add %{terminology} under this one
       add_a_sub_org: Add new %{terminology}
@@ -1065,8 +1096,30 @@ en:
       contact_tips: 'Step #1 will move everyone who is marked "CONTACT" into an archived location if they are created earlier than the date specified. <br><br>You can modify the date as the default will take all contacts created today or earlier. <br><br>The contacts can be "UnArchived" manually by going to the Directory screen, click on the "Include Archived" check-box, and add any label to individual. <br><br>Tip from a leader : Add a new, unique question to your keyword at the beginning of this year and ask everyone to take the survey. Even if all the other fields are full, their answer to that question will cause their record to be "UnArchived". '
   imports:
     new:
+      title: Step 1 of 3 - Upload a File
+      guide: "Easily import all your contacts quickly with a CSV (comma-separated value) file. If you have a CSV file to import, click <strong>Choose File</strong> to locate your file and then click <strong>Upload</strong>."
+      guide0: "To create a new CSV file, you can use Microsoft Excel to make one from a spreadsheet. "
+      guide1: "Open your current contact spreadsheet or download a %{link}."
+      guide2: "List your category (column) headings across the first row of your spreadsheet like first name, last name, email etc."
+      guide3: "Select <strong>File</strong>, choose <strong>Save As</strong>."
+      guide4: "In the <strong>Save As</strong> box, from the drop-down menu for <strong>File Type/Format</strong>, select <strong>CSV, Comma Separated</strong> and then continue by saving the spreadsheet to your computer."
+      guide5: "In MissionHub, click <strong>Choose File</strong> to locate your file and then click <strong>Upload</strong> to continue."
+      preview: 'View picture for an example.'
+      sample_csv: "CSV Sample Template"
       wrong_file_format_error: "Uploaded wrong file format. File must be .csv"
       file_not_existing: "File does not exist."
+    edit:
+      title: "Step 2 of 3 - Match Columns"
+      guide: "Match the category column headings from your CSV file with the corresponding questions/column headers in the dropdown boxes."
+      column1: Column
+      column2: Preview
+      column3: Question/Column Header
+    labels:
+      title: "Step 3 of 3 - Add Labels to New Contacts"
+      guide: "You are almost ready to upload %{count_word}! Use the list below to select any labels to apply to all of these new contacts, then click <strong>Import</strong>."
+    update:
+      default_login_paragraph: "To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey."
+      default_post_survey_message: "Thank you for your time!"
   batch:
     new_person_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, there are new contacts in your organization. Please login to missionhub.com as soon as possible to followup the contacts. Below is the list of %{contacts_count} new contacts:"
     person_transfer_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, you have been sent new contacts. Please login to missionhub.com as soon as possible to followup the contacts. There may be more information about the contacts in the comment section of their individual profile. If not, you may want to contact the senders at their email address. Below is the list of %{contacts_count} contacts sent:"
@@ -1076,4 +1129,3 @@ en:
     moving_to_same_org: "You are just moving people to the same org they are from!"
     moving_people_success: "People were successfully moved!"
     copy_people_success: "People were successfully copied!"
-

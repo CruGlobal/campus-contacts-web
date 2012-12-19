@@ -1,6 +1,6 @@
 <div class="<%= params[:action] %> carea">
   <% if flash && (flash[:error] || flash[:notice] || flash[:alert]) %>
-    <div class="flash" style="margin:10px;width:770px">
+    <div class="flash">
       <% if flash[:error].present? || flash[:alert].present? %>
         <div class="flash_message error">
           <p><%= flash[:error] || flash[:alert] %></p>

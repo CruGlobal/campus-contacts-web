@@ -1,0 +1,70 @@
+<form id="new_question_form">
+	<div id="form_container">
+		<div id="survey_info">
+			<div id="survey_header" class="info_header">
+				Survey Info:
+			</div>
+			<div id="survey_content" class="info_content">
+				<input type="checkbox" checked="checked" id="create_new" name="create_new" value="Create New Survey for Question"><label>Create New Survey for Question</label>
+				<div id="survey_new">
+					<label>Name of New Survey:</label>
+					<input type="text" id="survey_name" name="survey_name">
+				</div>
+				<div id="survey_old" style="display:none;">
+					<label>Select Survey for Question</label>
+					<select id="select_survey" id="select_survey" name="select_survey">
+						<option value=""></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div id="question_info">
+			<div id="question_header" class="info_header">
+				Question Info:
+			</div>
+			<div id="question_content" class="info_content">
+				<label>What type of question would you like to ask?</label>
+				<br/>
+				<select id="question_type" name="question_type">
+					<option value=""></option>
+					<option value="text_field_short"><%= t('.short_answer') %> (Free form response)</option>
+					<option value="choice_field_radio"><%= t('.multiple_choice') %> (Choose one)</option>
+					<option value="choice_field_checkbox"><%= t('.checkboxes') %> (Choose one or more)</option>
+					<option value="choice_field_dropdown"><%= t('.dropdown') %> (Choose one)</option>
+				</select>
+				<div id="question_short_answer" style="display:none";>
+					<div class="question">
+						<label><%= t('.question') %></label>
+						<br/>
+						<input type="text" id="short_answer_question" name="short_answer_question">
+						<br/>
+					</div>
+					<div class="preview">
+						<span>Text Message Length: <span id="short_counter"></span>/140</span>
+						<br/>
+						<span>Text Message Preview:</span><br/>
+						<span id="short_answer_preview"></span>
+					</div>
+				</div>
+	
+				<div id="question_multiple_choice" style="display:none";>
+					<div class="question">
+						<label><%= t('.question') %>:</label>
+						<br/>
+						<input type="text" id="multiple_choice_question" name="multiple_choice_question">
+						<br/>
+						<label>List out the possible choices, one per line:</label>
+						<br/>
+						<textarea id="multiple_choice_options" name="multiple_choice_options" rows="5"></textarea>
+					</div>
+					<div class="preview">
+						<span>Text Message Length: <span id="choice_counter"></span>/140</span>
+						<br/>
+						<span>Text Message Preview:</span><br/>
+						<span id="multiple_choice_preview"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>

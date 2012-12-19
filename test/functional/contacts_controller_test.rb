@@ -20,6 +20,10 @@ class ContactsControllerTest < ActionController::TestCase
       @keyword = Factory.create(:sms_keyword)
       @user.person.organizations.first.add_leader(@user.person, @user.person)
       @org = org
+
+      @predefined = Factory(:survey, organization: org)
+      APP_CONFIG['predefined_survey'] = @predefined.id
+      @predefined.questions << Factory(:year_in_school_element)
     end
 
     should "be able to show a person" do
@@ -196,6 +200,8 @@ class ContactsControllerTest < ActionController::TestCase
       assert_equal assigns(:header).upcase, "Contact".upcase
       xhr :get, :index, {:role => Role::INVOLVED_ID}
       assert_equal assigns(:header).upcase, "Involved".upcase
+      xhr :get, :index, {:role => Role::SENT_ID}
+      assert_equal assigns(:header).upcase, "Sent".upcase
       xhr :get, :index, {:assigned_to => "unassigned"}
       assert_equal assigns(:header), "Unassigned"
       xhr :get, :index, {:completed => "true"}
@@ -248,6 +254,10 @@ class ContactsControllerTest < ActionController::TestCase
         Factory(:organizational_role, person: @user.person, role: Role.admin, organization: org)
         sign_in @user
         @request.session[:current_organization_id] = org.id
+
+        @predefined = Factory(:survey, organization: org)
+        APP_CONFIG['predefined_survey'] = @predefined.id
+        @predefined.questions << Factory(:year_in_school_element)
       end
 
       should "get all roles" do
@@ -269,6 +279,10 @@ class ContactsControllerTest < ActionController::TestCase
         Factory(:organizational_role, person: @user.person, role: Role.leader, organization: org, :added_by_id => @user2.person.id)
         sign_in @user
         @request.session[:current_organization_id] = org.id
+
+        @predefined = Factory(:survey, organization: org)
+        APP_CONFIG['predefined_survey'] = @predefined.id
+        @predefined.questions << Factory(:year_in_school_element)
       end
 
       should "not include admin role if user is not admin" do
@@ -398,11 +412,16 @@ class ContactsControllerTest < ActionController::TestCase
 
   context "Searching for contacts using 'Saved Searches'" do
     setup do
-      @user = Factory(:user_with_auxs)
+
+      @user, org = admin_user_login_with_org
       sign_in @user
 
       @contact1 = Factory(:person, first_name: "Neil", last_name: "delaCruz")
-      @user.person.organizations.first.add_contact(@contact1)
+      @org.add_contact(@contact1)
+
+      @predefined = Factory(:survey, organization: @org)
+      APP_CONFIG['predefined_survey'] = @predefined.id
+      @predefined.questions << Factory(:year_in_school_element)
     end
 
     should "search for contacts" do
@@ -456,6 +475,11 @@ class ContactsControllerTest < ActionController::TestCase
   context "exporting contacts" do
     setup do
       @user, org = admin_user_login_with_org
+
+      @predefined = Factory(:survey, organization: org)
+      APP_CONFIG['predefined_survey'] = @predefined.id
+      @predefined.questions << Factory(:year_in_school_element)
+
       @contact1 = Factory(:person)
       Factory(:organizational_role, role: Role.contact, organization: org, person: @contact1)
       @contact2 = Factory(:person)
@@ -495,6 +519,7 @@ class ContactsControllerTest < ActionController::TestCase
   context "retrieving contacts" do
     setup do
       @user, org = admin_user_login_with_org
+
       @contact1 = Factory(:person)
       @contact2 = Factory(:person)
       Factory(:organizational_role, role: Role.contact, organization: org, person: @contact1) #make them contacts in the org
@@ -521,6 +546,10 @@ class ContactsControllerTest < ActionController::TestCase
       @answer = Factory(:answer, answer_sheet: @answer_sheet, question: @notify_q, value: "Jesus", short_value: "Jesus")
 
       @phone_number = Factory(:phone_number, person: @contact1, number: "09167788889", primary: true)
+
+      @predefined = Factory(:survey, organization: org)
+      APP_CONFIG['predefined_survey'] = @predefined.id
+      @predefined.questions << Factory(:year_in_school_element)
     end
 
     should "retrieve 'mine' contacts" do
@@ -633,6 +662,10 @@ class ContactsControllerTest < ActionController::TestCase
       @person3 = Factory(:person)
       @role3 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person3)
       @role3.update_attributes({followup_status: "contacted"})
+
+      @predefined = Factory(:survey, organization: org)
+      APP_CONFIG['predefined_survey'] = @predefined.id
+      @predefined.questions << Factory(:year_in_school_element)
     end
 
     should "sort by status asc" do
@@ -661,6 +694,10 @@ class ContactsControllerTest < ActionController::TestCase
       org.add_contact(@contact3)
       org.add_contact(@contact4)
       org.add_contact(@contact5)
+
+      @predefined = Factory(:survey, organization: org)
+      APP_CONFIG['predefined_survey'] = @predefined.id
+      @predefined.questions << Factory(:year_in_school_element)
     end
 
     should "not display contacts multiple times" do
@@ -702,6 +739,10 @@ class ContactsControllerTest < ActionController::TestCase
       Factory(:organizational_role, organization: @org, role: Role.contact, person: @person2)
       Factory(:organizational_role, organization: @org, role: Role.contact, person: @person3)
       Factory(:organizational_role, organization: @org, role: Role.contact, person: @person4)
+
+      @predefined = Factory(:survey, organization: @org)
+      APP_CONFIG['predefined_survey'] = @predefined.id
+      @predefined.questions << Factory(:year_in_school_element)
     end
 
     should "return admins when Admin link is clicked" do

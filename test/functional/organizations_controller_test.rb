@@ -328,4 +328,57 @@ class OrganizationsControllerTest < ActionController::TestCase
     end
   end
 
+  context "100% Sent feature" do
+    setup do
+      @user, @organization = admin_user_login_with_org
+      @sent_org = Factory(:organization, id: 6816, name: '100% Sent Team')
+      @contact1 = Factory(:person, first_name: 'abby')
+      @contact2 = Factory(:person, first_name: 'belly')
+      @contact3 = Factory(:person, first_name: 'cassy')
+      @contact4 = Factory(:person, first_name: 'daisy')
+      @contact5 = Factory(:person, first_name: 'elssy')
+      Factory(:organizational_role, person: @contact1, role: Role.sent, organization: @org)
+      Factory(:organizational_role, person: @contact2, role: Role.sent, organization: @org)
+      Factory(:organizational_role, person: @contact3, role: Role.contact, organization: @org)
+      Factory(:organizational_role, person: @contact4, role: Role.contact, organization: @org)
+      Factory(:organizational_role, person: @contact5, role: Role.contact, organization: @org)
+      Factory(:sent_person, person: @contact3)
+    end
+    should "suggest available contacts when adding contacts to 100% Sent pending list" do
+      xhr :get, :available_for_transfer, {term: 's', format: 'js'}
+      assert assigns(:people).include?(@contact4), "contact should be suggested"
+      assert assigns(:people).include?(@contact5), "contact should be suggested"
+      assert_equal false, assigns(:people).include?(@contact3), "contact should not be suggested"
+      assert_equal 2, assigns(:people).count, "2 contacts should be suggested"
+    end
+    should "add contact to transfer queue" do
+      assert_equal false, @organization.pending_transfer.include?(@contact3), "contact should not be in the list yet"
+      xhr :get, :queue_transfer, {person_id: @contact4.id, format: 'js'}
+      assert @organization.pending_transfer.include?(@contact4), "contact should be in the list"
+    end
+    should "display all pending contacts for transfer" do
+      get :transfer
+      assert_equal @organization.pending_transfer.count, assigns(:pending_transfer).count
+    end
+    should "transfer checked contacts" do
+      post :do_transfer, {ids: [@contact4.id, @contact5.id]}
+      assert assigns(:sent_team_org) == @sent_org, "transfer destination should be 100% Sent Team"
+      assert @sent_org.all_people.include?(@contact4), "contact should be transferred"
+      assert @sent_org.all_people.include?(@contact5), "contact should be transferred"
+      assert SentPerson.find_by_person_id(@contact4.id), "contact should be marked as sent"
+      assert SentPerson.find_by_person_id(@contact5.id), "contact should be marked as sent"
+    end
+    should "transfer checked contacts and mark contacts as alumni" do
+      post :do_transfer, {ids: [@contact4.id], tag_as_alumni: '1'}
+      assert OrganizationalRole.exists?(role_id: Role::ALUMNI_ID, person_id: @contact4.id, organization_id: @organization.id), "contact should have an alumni role"
+    end
+    should "transfer checked contacts and archive contacts" do
+      post :do_transfer, {ids: [@contact5.id], tag_as_archived: '1'}
+      contact_role = OrganizationalRole.find_by_role_id_and_person_id_and_organization_id(Role::CONTACT_ID, @contact5.id, @organization.id)
+      assert contact_role.archive_date != nil, "old contact should be archived"
+    end
+  end
+
+
+
 end

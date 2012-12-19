@@ -662,7 +662,8 @@ $('.check_all_mine').live 'click', ->
     else
       first_row.remove()
 
-$('#fetch_all_contacts_link').live 'click', ->
+$('#fetch_all_contacts_link').live 'click', (e)->
+  e.preventDefault()
   $('#all_text, #all_selected_text').toggle()
   $('.id_checkbox').attr('checked',true)
   change_all_role_checkboxes(true)
@@ -766,7 +767,7 @@ check_selected_roles = () ->
   checked
 
 get_role_labels = (obj) ->
-  $('span.role_label', obj.closest('tr'))
+  $('.role_label', obj.closest('tr'))
 
 disable_role_checkboxes = () -> # disable role checkboxes that only SOME of contacts have
   role_labels_array = []

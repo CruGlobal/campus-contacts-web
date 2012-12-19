@@ -1,7 +1,7 @@
 <div class="label_space">
   <div class="label_list">
     <%= render partial: 'shared/label', locals: {role_id: 0, role_name: @import.label_name, checked: true} if @import.present? %>
-    <% (current_organization.roles.default_roles_desc + current_organization.roles.non_default_roles_asc).each do |role| %>
+    <% current_organization.role_set.each do |role| %>
       <% if role.name == 'Contact' %>
         <%= render partial: 'shared/label', locals: {role_id: role.id, role_name: role.name, checked: true, disabled: true}%>
       <% else %>
@@ -11,10 +11,12 @@
   </div>
   <div class="label_new">
     <%= text_field_tag 'new_label_field', '', placeholder: t('contacts.index.import_new_label') %>
-    <%= button_tag 'Save Label', :id => 'new_label_button' %>
+    <%= button_tag 'Add Label', :id => 'new_label_button' %>
     <br/>
     <div id="new_label_message">
     </div>
   </div>
 </div>
+<br/>
+<br/>
 <br/>

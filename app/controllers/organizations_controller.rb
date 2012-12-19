@@ -3,7 +3,6 @@ class OrganizationsController < ApplicationController
   before_filter :get_organization, :only => [:show, :edit, :update, :destroy, :update_from_crs]
 
   def index
-
   end
 
   def show
@@ -106,7 +105,47 @@ class OrganizationsController < ApplicationController
   def cleanup
     @date = (Date.today-1).strftime("%m-%d-%Y")
     @date_leaders = (Date.today-91).strftime("%m-%d-%Y")
+  end
 
+  def available_for_transfer
+    @available = Array.new
+    @people = current_organization.all_people.includes(:sent_person).where("(people.first_name LIKE :name OR people.last_name LIKE :name) AND sent_people.id IS NULL", name: "%#{params[:term]}%") - current_organization.sent
+    @people.each do |person|
+      @available << {label: person.to_s, id: person.id}
+    end
+    render json: @available.to_json
+  end
+
+  def queue_transfer
+    @person = Person.find(params[:person_id])
+    if @person.present?
+      org_role = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(@person.id, current_organization.id, Role::SENT_ID)
+      org_role.update_attributes({added_by_id: current_user.person.id})
+    end
+  end
+
+  def transfer
+    @pending_transfer = current_organization.pending_transfer
+  end
+
+  def do_transfer
+    @people = Person.where(id: params[:ids])
+    @sent_team_org = Organization.find(6816) # 100% Sent Team
+    @people.each do |person|
+      @sent_team_org.add_contact(person)
+      sent_record = person.set_as_sent
+      sent_record.update_attribute('transferred_by_id', current_person.id)
+      current_organization.add_role_to_person(person, Role::ALUMNI_ID) if params[:tag_as_alumni] == '1'
+      if params[:tag_as_archived] == '1'
+        current_organization.organizational_roles.where(person_id: person.id, archive_date: nil).each do |org_role|
+          if org_role.role_id == Role::LEADER_ID
+            contact_assigments = person.contact_assignments.where(organization_id: current_organization.id).all
+            contact_assigments.collect(&:destroy)
+          end
+          org_role.archive
+        end
+      end
+    end
   end
 
   def archive_contacts

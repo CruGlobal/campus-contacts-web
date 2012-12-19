@@ -163,7 +163,7 @@ $ ->
     $('ul.sf-menu').superfish({ 
       pathClass: 'current',
       speed: 0,
-      pathLevels: 2,
+      pathLevels: 0,
       delay: 300
     })
     if $('.sf-scrolling')[0]

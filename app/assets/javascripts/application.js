@@ -37,4 +37,5 @@
 //= require global
 //= require welcome
 //= require surveys
+//= require imports
 

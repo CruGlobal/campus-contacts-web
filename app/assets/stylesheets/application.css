@@ -1,7 +1,9 @@
 /*
  *= require contacts
  *= require people
- *= require import
+ *= require organizations
+ *= require imports
+ *= require roles
  *= require jquery.qtip
  *= require jquery.chosen
  *= require superfish

@@ -1,9 +1,21 @@
 <div id="dashboard_panels">
-  <div id="dashboard_left">
-    <%= render partial: "left_pane" %>
-  </div>
 
-  <div id="dashboard_right">
-    <%= render partial: "right_pane" %>
-  </div>
+	<h1><%= t('dashboard.header_text') %></h1>
+
+	<div id="dashboard_storing" class="dash_panel">
+		<%= render partial: "storing_pane" %>
+	</div>
+
+	<div id="panel_separator">
+		<div id="panel_bg">
+			<div id="dashboard_managing" class="dash_panel">
+				<%= render partial: "managing_pane" %>
+			</div>
+		</div>
+	</div>
+
+	<div id="dashboard_messaging" class="dash_panel">
+		<%= render partial: "messaging_pane" %>
+	</div>
+
 </div>

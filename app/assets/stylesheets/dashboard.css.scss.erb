@@ -1,0 +1,304 @@
+// Place all the styles related to the dashboard controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#dashboard_main {
+	padding: 0;
+	
+	h1 {
+		margin-bottom: 40px;
+		font-family: Georgia;
+		font-size: 21px;
+		font-style: italic;
+		font-weight: normal;
+		color: #808284;
+	}
+	
+	#dashboard_panels {
+		overflow: hidden;
+		text-align: center;
+		vertical-align: top;
+		width: 798px;
+		margin: 0 auto;
+		
+		#panel_separator {
+			display: block;
+			float: left;
+			width: 266px;
+			
+			#panel_bg {
+				height: 280px;
+				border-left: 1px solid #eaf1f6;
+				border-right: 1px solid #eaf1f6;
+			}
+		}
+		
+		.dash_panel {
+			float: left;
+			width: 160px;
+			margin: 0 53px;
+			
+			.dash_title {
+				margin: 0 auto 30px auto;
+				display: block;
+				background: url("<%= asset_path('dash_brackets.png') %>");
+				width: 116px;
+				height: 33px;
+				font-family: Georgia;
+				font-size: 14px;
+				font-style: italic;
+				color: #3594be;
+				
+				span {
+					margin: 0 auto;
+					display: block;
+					width: 75%;
+					text-align: center;
+				}
+			}
+				
+			.dash_image {
+				margin: 0 auto 36px auto;
+				display: block;
+				width: 144px;
+				height: 160px;
+			}
+				
+			.dash_buttons {
+				margin: 0 auto;
+				width: 160px;
+				
+				a.button {
+					padding: 0;
+					margin: 0;
+					margin-bottom: 16px;
+					display: block;
+					width: 160px;
+					height: 48px;
+					border: 1px solid #0379ae;
+					background-color: #195b79;
+					background: #195b79 url("<%= asset_path('grad_button.png') %>") repeat-x;
+					vertical-align: middle;
+					text-decoration: none;
+					text-align: left;
+					-moz-box-shadow: 0px 1px 5px 0px #999;
+					-webkit-box-shadow: 0px 1px 5px 0px #999;
+					box-shadow: 0 1px 5px 0px #999;
+					text-shadow: 0 -1px 1px #555;
+					
+					div {
+						margin-top: 7px;
+						margin-left: 7px;
+						height: 35px;
+						
+						img {
+							float: left;
+							margin-right: 7px;
+						}
+						
+						div {
+							padding-top: 5px;
+														
+							p {
+								margin: 0;
+								padding: 0;
+								line-height: 14px;
+								
+								.primary {
+									color: #ffffff;
+									font-family: Helvetica;
+									font-style: bold;
+									font-size: 21px;
+								}
+								.secondary {
+									color: #c7dff0;
+									font-family: Helvetica;
+									font-style: bold;
+									font-size: 11px;
+								}
+							}
+						}
+						div.mod {
+							padding-top: 0px;
+						
+							p {
+								margin: 0;
+								padding: 0;
+								line-height: 11px;
+								
+								.primary {
+									color: #c7dff0;
+									font-family: Helvetica;
+									font-style: bold;
+									font-size: 11px;
+								}
+								.secondary {
+									color: #ffffff;
+									font-family: Helvetica;
+									font-style: bold;
+									font-size: 21px;
+									line-height: 24px;
+								}
+							}							
+						}
+					}
+					
+				}
+				
+				a.button:hover {
+					background-color: #2480a9;
+					background: #2480a9 url("<%= asset_path('grad_button_hover.png') %>") repeat-x;
+				}
+			
+			}
+			
+			.helpme {
+				float: right;
+				margin-top: 3em;
+				margin-right: 0.5em;
+				padding: 0.5em 1em;
+				background: #fff2a2;
+				border: 1px solid #ffeb74;
+				-moz-border-radius: 4px;
+				border-radius: 4px;
+				font-weight: bold;
+				color: #222;
+			}
+				
+			.helpme:hover {
+				text-decoration: none;
+				background: #ffeb74;
+			}
+		}
+		
+		#dashboard_left {
+			float: left;
+			width: 300px;
+			
+			.dash_links {
+				border: 1px solid #ccc;
+				background: #F0F0F0;
+				-webkit-border-radius: 9px;
+				-moz-border-radius: 9px;
+				border-radius: 9px;
+				margin-bottom: 15px;
+				
+				.dash_link {
+					padding: 10px 10px;
+					height: 64px;
+					
+					.dash_icon {
+						width: 64px;
+						height: 64px;
+						float: left;
+						margin-right: 20px;
+					}
+					
+					.dash_content {
+						text-align: left;
+						height: 64px - 20px;
+						line-height: 22px;
+						vertical-align: middle;
+						padding: 10px;
+						
+						a {
+							font-size: 14px;
+							margin-top: 5px;
+							&:hover {
+								text-decoration: none;
+								opacity: 0.9;
+								cursor: pointer;
+							}
+						}
+			
+					}
+				}
+								
+				.dash_divider {
+					width: 95%;
+					margin: 0 auto;
+				}
+				
+				&.lower_box {
+					padding: 0 0 10px;
+				}
+				
+				.lower_box_title {
+					padding: 10px;
+					font-size: 18px;
+					text-align: left;
+					color: #666;
+				}
+				
+				.lower_box_item {
+					padding: 0px 15px 4px;
+					height: 25px;
+					
+					.lower_box_count {
+						background: #008db7;
+						width: 26px;
+						height: 22px;
+						float: left;
+						padding: 4px 0 0 0;
+						font-size: 14px;
+						text-align: center;
+						vertical-align: middle;
+						color: #fff;
+						margin-right: 10px;
+					}
+					
+					.lower_box_link {
+						text-align: left;
+						padding: 4px;
+						a {
+							font-size: 14px;
+							&:hover {
+								text-decoration: none;
+								opacity: 0.9;
+								cursor: pointer;
+							}
+						}
+					}
+				}
+			}
+		}
+	
+		#dashboard_right {
+			float: right;
+			width: 560px;
+			
+			#dash_content {
+				margin: 20px 0;
+				
+				.description {
+					float: left;
+					width: 65%;
+					padding: 0 0 20px 0;
+					text-align: left;
+					
+					.title {
+						font-weight: bold;
+						color: #0379AE;
+						font-size: 14px;
+					}
+					.date {
+						color: #0379AE;
+						font-size: 13px;
+						margin-bottom: 15px;
+					}
+					.info {
+						color: #666;
+						font-size: 13px;
+						text-align: justify;
+					}
+				}
+			
+				.social_buttons {
+					float: right;
+					width: 34%;
+					text-align: right;
+				}
+			}
+		}
+	}
+}

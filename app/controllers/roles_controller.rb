@@ -4,8 +4,8 @@ class RolesController < ApplicationController
   before_filter :set_role, :only => [:new, :edit, :update, :destroy]
  
   def index
-    @organizational_roles = Role.where(organization_id: current_organization.id)
-    @system_roles = Role.default
+    @organizational_roles = current_organization.non_default_roles
+    @system_roles = current_organization.default_roles
   end
   
   def new

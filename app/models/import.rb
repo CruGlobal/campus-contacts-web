@@ -6,6 +6,7 @@ class Import < ActiveRecord::Base
 
   @queue = :general
   serialize :headers
+  serialize :preview
   serialize :header_mappings
 
   belongs_to :user
@@ -33,12 +34,12 @@ class Import < ActiveRecord::Base
       person_hash = Hash.new
       person_hash[:person] = Hash.new
       person_hash[:person][:first_name] = row[header_mappings.invert[first_name_question].to_i]
-      person_hash[:person][:email] = row[header_mappings.invert[email_question].to_i]
+      person_hash[:person][:email] = row[header_mappings.invert[email_question].to_i] if header_mappings.invert[email_question].present? && row[header_mappings.invert[email_question].to_i].present?
 
       answers = Hash.new
 
       header_mappings.keys.each do |k|
-        answers[header_mappings[k].to_i] = row[k.to_i] unless header_mappings[k] == ''
+        answers[header_mappings[k].to_i] = row[k.to_i] unless header_mappings[k] == '' || header_mappings[k] == 'do_not_import'
       end
 
       person_hash[:answers] = answers
@@ -60,7 +61,9 @@ class Import < ActiveRecord::Base
 
     a = header_mappings.values
     a.delete("")
-    if a.length > a.uniq.length # if they don't have the same length that means the user has selected on at least two of the headers the same selected person attribute/survey question
+    do_not_import_count = a.count('do_not_import')
+    do_not_import_count -= 1 if do_not_import_count > 0
+    if a.length > (a.uniq.length + do_not_import_count) # if they don't have the same length that means the user has selected on at least two of the headers the same selected person attribute/survey question
       return errors << I18n.t('contacts.import_contacts.duplicate_header_match')
     end
     errors
@@ -82,7 +85,9 @@ class Import < ActiveRecord::Base
         new_person_ids << person.id
         names << person.name
         if person.errors.present?
-          import_errors << "#{person.to_s}: #{person.errors.full_messages.join(', ')}"
+          person.errors.messages.each do |error|
+            import_errors << "#{person.to_s}: #{error[0].to_s.split('.')[0].gsub('_',' ').titleize} #{error[1].first}"
+          end
         else
           labels.each do |role_id|
             if role_id.to_i == 0
@@ -132,7 +137,8 @@ class Import < ActiveRecord::Base
 
     if person.save
       question_sets.map { |qs| qs.save }
-      create_contact_at_org(person, current_organization)
+      contact_role = create_contact_at_org(person, current_organization)
+      # contact_role.update_attribute('followup_status','uncontacted') # Set default
     end
 
     return person
@@ -145,7 +151,7 @@ class Import < ActiveRecord::Base
   private
 
   def create_table(new_person_ids)
-    @answered_question_ids = header_mappings.values.reject{ |c| c.empty? }.collect(&:to_i)
+    @answered_question_ids = header_mappings.values.reject{ |c| c.empty? || c == 'do_not_import' }.collect(&:to_i)
     #puts answered_question_ids.inspect
     predefined_question_ids = Survey.find(APP_CONFIG['predefined_survey']).elements.collect(&:id)
     #puts Survey.find(APP_CONFIG['predefined_survey']).elements.inspect
@@ -182,16 +188,24 @@ class Import < ActiveRecord::Base
     return unless upload?
     tempfile = upload.queued_for_write[:original]
     unless tempfile.nil?
-      File.open(tempfile.path) do |f|
-        csv = CSV.new(f, :headers => :first_row)
-        csv.shift
-        begin
-          raise NilColumnHeader if csv.headers && csv.headers.length - csv.headers.compact.length != 0 #if there is a nil headers
-          self.headers = csv.headers.compact
-        rescue
-          raise NilColumnHeader
+      ctr = 0
+      CSV.foreach(tempfile.path) do |row|
+        Rails.logger.info "---COLLECT#{ctr}---"
+        if ctr == 0
+          begin
+            # if there is a nil headers
+            raise NilColumnHeader if row && row.length - row.compact.length != 0
+            self.headers = row.compact
+          rescue
+            raise NilColumnHeader
+          end
+          raise NilColumnHeader if headers.empty?
+        elsif ctr == 1
+          self.preview = row
+        else
+          break
         end
-        raise NilColumnHeader if headers.empty?
+        ctr += 1
       end
     end
   end

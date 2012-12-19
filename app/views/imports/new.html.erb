@@ -1,46 +1,37 @@
-<% provide :sidebar do %>
-  <%= render 'contacts/leaders' %>
-<% end %>
+<div class="inside_container">
+	<div class="titlebar titlebarmod">
+	  <h1>
+		<%= t('contacts.index.import_contacts') %>
+	  </h1>
+	</div>
 
-<div class="titlebar">  
-  <h1>
-    <%= image_tag("c_allcontacts.png") %>
-    <%= t('contacts.index.import_contacts') %>
-  </h1>
-</div>
+	<div>
+		<h1 class="title"><%= t('.title') %></h1>
+		<div class="container">
+			<div class="content">
+				<p><%=raw t('.guide') %></p>
+				<p><%=raw t('.guide0') %></p>
+				<ol>
+					<li><span class="name"><%=raw t('.guide1', link: raw(link_to(t('.sample_csv'), download_sample_contacts_csv_imports_path))) %></span></li>
+					<li><%= t('.guide2') %></li>
+					<li><%=raw t('.guide3') %></li>
+					<li><%=raw t('.guide4') %></li>
+					<li><%=raw t('.guide5') %></li>
+				</ol>
+				<p class='preview_link'><%=raw link_to t('.preview'), '/assets/sample_contact_spreadsheet.png', target: '_blank' %></p>
+			</div>
 
-<div class="pad">
-
-  
-  <h3>Instructions</h3>
-  <p>You can easily import hundreds of contacts at one time by simply uploading a CSV (Comma Seperated) file. Microsoft Excel makes it easy to create a CSV file.</p>
-  <p>All you need to do is a create a spreadsheet.<p>
-  
-  <ol class="instructions">
-    <li><span class="name"><strong><%= link_to(t('contacts.import_contacts.template_sample_csv'), download_sample_contacts_csv_imports_path, :class => "icon showtext csv") %></strong> to get started</span>
-    <li>In your first row list the headings. It could be: <strong>FIRST NAME, LAST NAME, EMAIL ADDRESS, PHONE NUMBER</strong> or any name you desire. </li>
-    <li>In Excel, go to <strong>Save As</strong></li>
-    <li>From the drop down menu for <strong>File Type</strong>, choose <strong>CSV, Comma Separated</strong></li>
-  </ol>
-  
-  
-  <ul style="display: none;">
-    <li><%= t('contacts.import_contacts.instruction_4') %></li>
-    <li><%= t('contacts.import_contacts.instruction_1') %></li>
-    <li><%= t('contacts.import_contacts.instruction_2') %></li>
-    <li><%= t('contacts.import_contacts.instruction_3') %></li>
-  </ul>
-  <br/>
-
-  <div class="uploadfiles">
-    <h3>Upload Files</h3>
-    <%= form_for :import, :url=>{ :controller=>"imports", :action=>"create"}, :html => { :multipart => true } do |f| %>
-  
-      
-    <%= f.file_field :upload, :class=> "fileinput" %><br/>
-    <%= submit_tag 'Submit', :value=>"Import Contacts" %>
+			<div class="importform">
+				<%= form_for :import, :url=>{ :controller=>"imports", :action=>"create"}, :html => { :multipart => true } do |f| %>
+					<%= f.file_field :upload, class: 'select_import_file_button' %><%= submit_tag 'Submit', :value=>"Upload" %>
+				<% end %>
+			</div>
+		</div>
+	</div>
+	<div class='bottom_area'>
+  	<div class='sub_info'>
+  	  <%= t('contacts.import_contacts.help_info') %>
+  	</div>
+  	<%= link_to("Help Me", "http://blog.missionhub.com/2012/12/18/importing-contacts-into-missionhub/", :class => "helpme", :target => "_blank") %>
   </div>
-  
 </div>
-
-<% end %>

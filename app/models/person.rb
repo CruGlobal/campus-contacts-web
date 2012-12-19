@@ -5,6 +5,7 @@ class Person < ActiveRecord::Base
   has_paper_trail :on => [:destroy],
                   :meta => { person_id: :id }
 
+  has_one :sent_person
   has_many :person_transfers
   has_many :new_people
   has_one :transferred_by, class_name: "PersonTransfer", foreign_key: "transferred_by_id"
@@ -111,8 +112,12 @@ class Person < ActiveRecord::Base
     :order => "#{order.gsub('answer_sheets', 'ass')}"
   }}
 
+  def contact_role_for_org(org)
+    organizational_roles.where("organizational_roles.organization_id = ? AND organizational_roles.role_id = ?", org.id, Role::CONTACT_ID).first
+  end
+
   def completed_answer_sheets(organization)
-    answer_sheets.where("survey_id IN (?)", organization.surveys.collect(&:id)).order('updated_at DESC')
+    answer_sheets.where("survey_id IN (?)", Survey.where("organization_id = ? OR id = ?", organization.id, APP_CONFIG['predefined_survey']).collect(&:id)).order('updated_at DESC')
   end
 
   def latest_answer_sheet(organization)
@@ -173,6 +178,14 @@ class Person < ActiveRecord::Base
 
   def select_name_email
     "#{first_name} #{last_name} #{'-' if last_name.present? || first_name.present?} #{email}"
+  end
+
+  def set_as_sent
+    SentPerson.find_or_create_by_person_id(id)
+  end
+
+  def self.deleted
+    self.get_deleted.collect()
   end
 
   def unachive_contact_role(org)
@@ -962,6 +975,10 @@ class Person < ActiveRecord::Base
   def is_role_archived?(org_id, role_id)
     return false if organizational_roles_including_archived.where(organization_id: org_id, role_id: role_id).first.archive_date.blank?
     true
+  end
+
+  def is_sent?
+    sent_person != nil
   end
 
   def self.vcard(ids)

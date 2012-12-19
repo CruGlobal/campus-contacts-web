@@ -143,8 +143,10 @@ class ContactsController < ApplicationController
       @organization = Organization.where(id: current_organization.id).includes(:surveys, :groups, :questions).first
       @surveys = @organization.surveys
       @all_questions = @organization.all_questions.flatten.uniq
-      @questions = @organization.all_questions.where("survey_elements.hidden" => false).flatten.uniq
-      @hidden_questions = @all_questions - @questions
+      @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
+      @predefined_questions = @predefined_survey.questions.where("attribute_name NOT IN (?)", ['first_name','last_name','gender','phone_number'])
+      @questions = (@organization.all_questions.where("survey_elements.hidden" => false) + @predefined_survey.elements.where(id: current_organization.settings[:visible_predefined_questions])).uniq
+      @hidden_questions = ((@predefined_questions + @all_questions) - @questions).flatten.uniq
 
       params[:assigned_to] = 'all' if !params[:assigned_to].present?
 
@@ -321,9 +323,10 @@ class ContactsController < ApplicationController
 
       @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
       # raise @q.sorts.inspect
+      @people = @people.includes(:primary_phone_number, :primary_email_address, :contact_role, :sent_person)
       if params[:q]
         order_query = params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass').gsub('followup_status','organizational_roles.followup_status').gsub('role_id','organizational_roles.role_id') : ['last_name, first_name']
-        @people = @people.includes(:primary_phone_number, :primary_email_address, :contact_role).order(order_query)
+        @people = @people.order(order_query)
       end
       @all_people = @people.group('people.id')
       @people_for_labels = Person.people_for_labels(current_organization)
@@ -357,7 +360,7 @@ class ContactsController < ApplicationController
 
         answers[answer_sheet.person_id] ||= {}
         questions.each do |q|
-          answers[answer_sheet.person_id][q.id] = [q.display_response(answer_sheet), answer_sheet.updated_at]# if q.display_response(answer_sheet).present?# or (q.attribute_name == "email" and q.object_name ==
+          answers[answer_sheet.person_id][q.id] = [q.display_response(answer_sheet), answer_sheet.updated_at] if q.display_response(answer_sheet).present?# or (q.attribute_name == "email" and q.object_name ==
         end
       end
       answers

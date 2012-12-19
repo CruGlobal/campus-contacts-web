@@ -28,7 +28,7 @@
   .role_actions {
     text-align: center;
     a.greybox {
-      background:#F4F4F4;
+      background:#fff;
       border:1px solid #bbbbbb;
       margin:3px 4px 10px;
       padding:0 8px;
@@ -38,23 +38,36 @@
       -webkit-border-radius: 5px;
       -khtml-border-radius: 5px;
     }
+    a.greybox:hover {
+    	background: #eaf1f6;
+    	border-color: #0379ae;
+    }
   }
 }
 
-td div.roles_spaces { 
-  display: block;
-}
-
-td span.role_label {
-  background: #EAF1F6;
-  font-size: 10px;
-  padding: 3px 5px;
-}
-
-td span.role_label_archived {
-  background: #C5DA6E;
-  font-size: 10px;
-  padding: 3px 5px;
+td {
+  div.roles_spaces {
+    display: block;
+  }
+  .role_label {
+    background: #EAF1F6;
+    font-size: 10px;
+    padding: 3px 5px;
+    display: inline-block;
+    margin: 1px 0;
+    cursor: default;
+  }
+  .role_label_archived {
+    background: #C5DA6E;
+    font-size: 10px;
+    padding: 3px 5px;
+    display: inline-block;
+    margin: 1px 0;
+    cursor: default;
+  }
+  .transferred {
+    background: #C8D0D4;
+  }
 }
 
 #menu a.greybox {
@@ -204,18 +217,18 @@ ul.ui-autocomplete {
 	list-style: none;
 	border-radius: 0;
 	-moz-border-radius: 0;
-	
+
 	li {
 		padding: 5px;
 		border-bottom: 1px solid #ddd;
 		overflow: hidden;
-		
+
 		img {
 			display: block;
 			width: 50px;
 			height: 50px;
 		}
-		
+
 		a {
 			color: #0379ae;
 	    cursor: pointer;
@@ -224,16 +237,16 @@ ul.ui-autocomplete {
 			}
 		}
 	}
-	
+
 	#ui-active-menuitem {
 	  background: none;
 	  border: none;
 	}
-	
+
 	.ui-menu-item .email {
 	  color: #aaa;
 	}
-	
+
 	.ui-menu-item .fb_img {
 	  width: 50px;
 	  height: 50px;

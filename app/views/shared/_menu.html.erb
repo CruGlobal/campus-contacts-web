@@ -2,6 +2,9 @@
 <% care_pattern = /people|contacts|followup_comments/ %>
 <% group_pattern = /groups/ %>
 <% if current_organization %>
+
+  <%= link_to("", "/", id: "logoInvert") %>
+
   <ul class="sf-menu sf-navbar mh-top">
     <li class="<%= 'current' if request.path == '/dashboard' %>">
       <%= link_to(t('nav.dashboard'), "/dashboard") %>
@@ -54,12 +57,18 @@
           <li class="<%= 'current' if request.path == cleanup_organizations_path %>">
             <%= link_to(t('nav.cleanup'), "/organizations/cleanup", :class => "topset cleanup") %>
           </li>
+          <% if current_organization.has_parent?(1) %>
+            <li class="<%= 'current' if request.path == transfer_organizations_path %>">
+              <%= link_to(t('nav.transfer'), "/organizations/transfer", :class => "topset transfer") %>
+            </li>
+          <% end %>
         </ul>
       </li>
     <% end %>
-    
-    <div id="menu_search">
-      <%= render 'contacts/search_top_right' %>
-    </div>
   </ul>
+
+  <div id="menu_search">
+    <%= render 'contacts/search_top_right' %>
+  </div>
+
 <% end %>

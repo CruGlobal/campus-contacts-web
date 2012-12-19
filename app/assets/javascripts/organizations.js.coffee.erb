@@ -1,4 +1,20 @@
 $ ->
+  $('#add_sent_contact').live 'keyup', ->
+    $(this).autocomplete
+      minLength: 3
+      delay: 1000
+      source: '/organizations/available_for_transfer.js'
+      select: (event, ui)->
+        $.ajax
+          url: '/organizations/queue_transfer?person_id=' + ui.item.id
+          type: 'GET'
+          
+  $('#add_sent_contact').live 'blur', ->
+    $(this).val('')
+    
+  $('#select_all_transfer').live 'click', ->
+    $('.transfer_person').attr('checked', $(this).is(':checked'))
+    
   $('.import_from_crs_link').live 'click', ->
     $('#import_from_crs form')[0].reset()
     $('#organization_parent_id').val($(this).attr('data-parent-id'))
