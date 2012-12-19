@@ -2006,7 +2006,8 @@ div.field_with_errors div.ui-effects-wrapper {
 /* PAGINATION  */
 div.pagination {
   margin: 15px 0 10px 0;
-  text-align: center;
+  text-align: center;  
+		display:inline-block;
   span.page {
     a {
       color: $blue;
@@ -2030,7 +2031,15 @@ div.pagination {
   text-align: center;
   font-weight: bold;
 }
-
+.paginate_container {
+	margin-top:-10px;
+	text-align: right;
+	.paginate_details{
+		display:inline-block;	
+		font-weight:bold;
+		padding-left:7px;
+	}
+}
 
 #people_controller {
   #check_all {
