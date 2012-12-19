@@ -1,8 +1,7 @@
 <% assigned_to = person.assigned_tos_by_org(current_organization) %>
-<% checked ||= false %>
 <tr>
 	<td>
-	  <%= check_box_tag "ids[]", person.id, false, class: 'transfer_person', checked: checked %>
+	  <%= check_box_tag "ids[]", person.id, false, class: 'transfer_person', checked: true %>
 	</td>
 	<td><%= person.first_name %></td>
 	<td><%= person.last_name %></td>
