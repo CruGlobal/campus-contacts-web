@@ -11,11 +11,61 @@
 
   <div class="pagemenu">
     <ul class="pillmenu">
-      <li><%= link_to(t('contacts.add_contact'), "", class: 'add_contact') %></li>
+      <li>	
+			  <%= hidden_field_tag :mine_assign_to, 'true', id: 'mine_assign_to' %>
+      	<%= link_to(t('contacts.add_contact'), "", class: 'add_contact') %>
+    	</li>
     </ul>
+    
+		<ul class='divider'></ul>
+		
     <ul class="pillmenu control_toggle">
       <li><%= link_to(t('contacts.assign'), "", id: 'assign_button', class: 'assign') %></li>
     </ul>
+    
+    <% if (can? :manage, current_organization) || (can? :lead, current_organization) %>
+		<ul class="pillmenu">
+			<li>
+			  <%= link_to("#{t('nav.roles')} ▾", '#', class: 'action_dropdown') %>  
+			  <ul id='label_menu'>
+			    <li>
+			      <% (current_organization.roles.default_roles_desc + current_organization.roles.non_default_roles_asc).each do |role| %>
+			        <div class="role_div_checkbox">
+			          <span>
+			            <%= check_box_tag 'role_ids[]', role.id, false, id: "role_ids_#{role.id}", class: 'role_id_checkbox', :hidden => !can?(:manage, current_organization) && role.id == Role::ADMIN_ID ? true : false %> 
+			            <span><%= role %></span>
+			            <% if role.name == 'Admin' %>
+			              <% role_help = "Access to all options within this specific organization including editing the organization, assigning other Admins, and modifying keywords and surveys." %>
+			            <% elsif role.name == 'Leader' %>
+			              <% role_help = "Access to all non-Admin features including viewing, modifying and assigning contacts." %>
+			            <% elsif role.name == 'Involved' %>
+			              <% role_help = "Currently no access but are displayed in Directory." %>
+			            <% elsif role.name == 'Alumni' %>
+			              <% role_help = "Currently no access but are displayed in Directory." %>
+			            <% elsif role.name == 'Contact' %>
+			              <% role_help = "No Access. Displayed on the All Contacts and Directory screen." %>
+			            <% end %>
+			            
+			            <% if role_help.present? %>
+			              <div class="icon help tipit help_bubble_keyword" title="<%=role_help%>"></div>
+			            <% end%>
+			          </span>
+			        </div>
+			      <% end %>
+			      <div class="role_actions">
+			        <%= link_to(t('people.index.apply_roles'), '#', :class => 'greybox', :id => 'apply_roles') %>
+			        <%= link_to(t('people.index.manage_roles'), roles_path(organization: current_organization), :class => 'greybox') %>
+			      </div>
+			      <div id="apply_roles_spinner"><%= image_tag('spinner.gif') %></div>
+			      <div id="apply_roles_successful"></div>
+			    </li>
+			  </ul>
+			</li>
+		</ul>
+		<% end %>
+		
+		<ul class='divider'></ul>
+		
     <ul class="pillmenu control_toggle">
       <li>
         <%= link_to('Send', '#', class: 'action_dropdown') %>
@@ -32,11 +82,14 @@
 
   <table class="listing" cellpadding="0" cellspacing="0">
     <tr style="">
-      <th class="check"><%= check_box_tag 'check_all', '1', false, class: 'check_all_mine no_margin', 'data-status' => @attr %></th>
-      <th class="name"><%= t('contacts.mine.name') %></th>
-      <th class="phone"><%= t('contacts.mine.phone') %></th>
-      <th class="email"><%= t('contacts.mine.email') %></th>
-      <th class="year"><%= t('contacts.mine.year') %></th>
+      <th class="check"><%= check_box_tag 'check_all_mine', true, false, class: 'check_all_mine', 'data-status' => @attr %></th>
+      	
+      <th><%= sort_link @q, :first_name, t('contacts.mine.first_name'), params %></th>
+      <th><%= sort_link @q, :last_name, t('contacts.mine.last_name'), params %></th>
+      <th><%= t('contacts.mine.phone') %></th>
+      <th><%= t('contacts.mine.email') %></th>
+      <th><%= t('nav.roles') %></th>
+      <th><%= t('contacts.mine.year') %></th>
       <th class="controls"></th>
     </tr>
     <tbody id="contacts_table">
