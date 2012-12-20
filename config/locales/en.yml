@@ -331,7 +331,7 @@ en:
         <li>A leader in your organization who can already log into MissionHub needs to add you to MissionHub.</li>
         <li>Your facebook email address doesn't match the email that was entered for you when your leader added you.</li>
         </ol>
-        <p>Please contact the person who told you about MissionHub and ask them to enter you with your facebook email address. If you are that person or need more help, shoot us an email at support@missionhub.com</p>"
+        <p>Please contact the person who told you about MissionHub and ask them to enter you with your facebook email address. If you are that person or need more help, shoot us an email at <a href='mailto:support@missionhub.com'>support@missionhub.com</a>.</p>"
 
       keyword_paragraph: "A powerful feature of MissionHub is the ability for you to collect contacts through text messages. For this to work, you have to choose a keyword that is unique to your ministry that people will send messages to. With a keyword, you will be able to say, “Text <strong>your keyword</strong>  to 85005” at your next event or meeting."
       request_keyword_link: "Click here to request a keyword. We'll return you to this wizard when you're done."
