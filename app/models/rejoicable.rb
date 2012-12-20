@@ -5,6 +5,8 @@ class Rejoicable < ActiveRecord::Base
   belongs_to :person
   OPTIONS = %w[spiritual_conversation prayed_to_receive gospel_presentation]
   
+  before_create :force_comment_attributes
+  
   default_scope where(:deleted_at => nil)
   
   def destroy
@@ -22,4 +24,16 @@ class Rejoicable < ActiveRecord::Base
   def to_s
     I18n.t("rejoicables.#{what}")
   end
+  
+  private
+  
+  def force_comment_attributes
+    if followup_comment
+      self.followup_comment_id = followup_comment.id
+      self.person_id = followup_comment.contact_id
+      self.created_by_id = followup_comment.commenter_id
+      self.organization_id = followup_comment.organization_id
+    end
+  end
+  
 end

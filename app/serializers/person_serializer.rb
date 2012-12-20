@@ -1,6 +1,6 @@
 class PersonSerializer < ActiveModel::Serializer
   HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments,
-             :followup_comments, :organizational_roles, :rejoicables, :answer_sheets,
+             :followup_comments, :comments_on_me, :organizational_roles, :rejoicables, :answer_sheets,
              :all_organizational_roles]
 
   HAS_ONE = [:user, :current_address]
@@ -29,6 +29,10 @@ class PersonSerializer < ActiveModel::Serializer
 
   def followup_comments
     add_since(organization_filter(:followup_comments))
+  end
+
+  def comments_on_me
+    add_since(organization_filter(:comments_on_me))
   end
 
   def organizational_roles
