@@ -213,7 +213,7 @@ class ContactsController < ApplicationController
           else
             if params[:assigned_to].present? && @assigned_to = Person.find_by_id(params[:assigned_to])
               @header = I18n.t('contacts.index.responses_assigned_to', assigned_to: @assigned_to)
-              @people = Person.joins(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
+              @people = @organization.all_people_with_archived.joins(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
             end
           end
         end
@@ -326,8 +326,11 @@ class ContactsController < ApplicationController
       @people = @people.includes(:primary_phone_number, :primary_email_address, :contact_role, :sent_person)
       if params[:q]
         order_query = params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass').gsub('followup_status','organizational_roles.followup_status').gsub('role_id','organizational_roles.role_id') : ['last_name, first_name']
-        @people = @people.order(order_query)
-      end
+      else            
+      	order_query = "last_name ASC,first_name ASC";
+      end      
+      @people = @people.includes(:primary_phone_number, :primary_email_address, :contact_role).order(order_query)
+      
       @all_people = @people.group('people.id')
       @people_for_labels = Person.people_for_labels(current_organization)
       @people = @all_people.page(params[:page])
