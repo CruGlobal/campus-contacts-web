@@ -1,9 +1,9 @@
 <% connect_pattern = /surveys|keywords|survey_responses/ %>
 <% care_pattern = /people|contacts|followup_comments/ %>
 <% group_pattern = /groups/ %>
-<% if current_organization %>
 
-  <%= link_to("", "/", id: "logoInvert") %>
+<%= link_to("", "/", id: "logoInvert") %>
+<% if current_organization %>
 
   <ul class="sf-menu sf-navbar mh-top">
     <li class="<%= 'current' if request.path == '/dashboard' %>">
