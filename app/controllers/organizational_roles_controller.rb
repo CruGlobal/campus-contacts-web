@@ -15,7 +15,7 @@ class OrganizationalRolesController < ApplicationController
     else
       # We don't want to remove all of a person's roles using this method.
     end
-    @new_label_set = (person.assigned_organizational_roles(current_organization.id).default_roles_desc + person.assigned_organizational_roles(current_organization.id).non_default_roles_asc).collect(&:name)
+    @new_label_set = (person.organizational_roles(current_organization.id).default_roles_desc + person.organizational_roles(current_organization.id).non_default_roles_asc).collect(&:name)
   end
 
   def update

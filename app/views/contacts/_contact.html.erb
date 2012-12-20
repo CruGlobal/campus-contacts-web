@@ -16,6 +16,8 @@
   </td>
   <td class="firstName"><%= person.first_name %></td>
   <td class="lastName"><%= person.last_name %></td>
+  
+  <% if params[:role].blank? || ![Role::ADMIN_ID,Role::INVOLVED_ID,Role::LEADER_ID,Role::ALUMNI_ID].include?(params[:role].to_i) %>
   <td>
     <% if contact_role %>
       <%= contact_role.followup_status.to_s.titleize %>
@@ -24,6 +26,8 @@
       <% end %>
     <% end %>
   </td>
+  <% end %>
+  
   <td><%= person.gender.to_s.titleize %></td>
   <td class="phone_number"><%= person.pretty_phone_number %></td>
   <td>

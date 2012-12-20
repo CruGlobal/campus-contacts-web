@@ -152,7 +152,7 @@ class ContactsController < ApplicationController
 
       org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
       @people_scope = Person.where('organizational_roles.organization_id' => org_ids)
-                            .where("organizational_roles.role_id <> #{Role::CONTACT_ID} OR (organizational_roles.role_id = #{Role::CONTACT_ID} AND organizational_roles.followup_status <> 'do_not_contact')")
+                            .where("organizational_roles.followup_status <> 'do_not_contact' OR organizational_roles.followup_status IS NULL")
                             .joins(:organizational_roles_including_archived)
 
       @people_scope = @people_scope.where('organizational_roles.archive_date' => nil) if params[:include_archived].blank? && params[:archived].blank?
@@ -170,19 +170,9 @@ class ContactsController < ApplicationController
         @people = Person.where(id: current_organization.people.archived(current_organization.id).collect(&:id))
       elsif params[:role].present? || (params[:search].present? && params[:role].present?)
         if @role = Role.find(params[:role])
-          @people = @people_scope.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ?', @role.id, current_organization.id)
-          if params[:include_archived].present? && params[:include_archived] == 'true'
-            @people = @people
-                      .joins(:roles)
-                      .where("roles.id = #{@role.id}")
-                      sort_by.unshift("roles.id").uniq
-          else
-            @people = @people
-                      .joins(:roles)
-                      .where("organizational_roles.archive_date" => nil)
-                      .where("roles.id = #{@role.id}")
-                      sort_by.unshift("roles.id").uniq
-
+          @people = @people_scope.where('organizational_roles.role_id = ?', @role.id)
+          if !params[:include_archived].present? && !params[:include_archived] == 'true'
+            @people = @people.where("organizational_roles.archive_date" => nil)
           end
           @header = params[:search] ? I18n.t('contacts.index.matching_seach') : @role.i18n
         end
@@ -193,10 +183,10 @@ class ContactsController < ApplicationController
         if params[:assigned_to]
           case params[:assigned_to]
           when 'all'
-            if params[:include_archived].present? && params[:include_archived] == 'true'
-              @people = @organization.all_people_with_archived
+          	if params[:include_archived].present? && params[:include_archived] == 'true'
+	            @people = @organization.all_people_with_archived
             else
-              @people = @organization.all_people
+  	          @people = @organization.all_people
             end
           when 'unassigned'
             @people = @organization.unassigned_contacts
@@ -225,7 +215,7 @@ class ContactsController < ApplicationController
       end
 
       if params[:q] && params[:q][:s].include?('followup_status')
-        @people = @people.order_by_followup_status(params[:q][:s])
+      	@people = @people.joins(:organizational_roles).order_by_followup_status(params[:q][:s])
       end
 
       if params[:q] && params[:q][:s].include?('phone_numbers.number')
