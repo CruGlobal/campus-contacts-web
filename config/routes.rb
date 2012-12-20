@@ -226,12 +226,13 @@ Mh::Application.routes.draw do
           delete :bulk_destroy
         end
       end
-      resources :people do
+      resources :organizational_roles do
         collection do
-          post :bulk_add_roles
-          delete :bulk_remove_roles
+          post :bulk_create
+          delete :bulk_destroy
         end
       end
+      resources :people
       resources :organizations
       resources :surveys
       resources :roles
