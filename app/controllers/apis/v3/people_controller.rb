@@ -1,7 +1,6 @@
 class Apis::V3::PeopleController < Apis::V3::BaseController
   before_filter :get_person, only: [:show, :update, :destroy]
-  before_filter :get_filtered_people, only: [:index, :bulk_add_roles, :bulk_remove_roles]
-
+  
   def index
     render json: filtered_people,
            callback: params[:callback],
