@@ -94,7 +94,7 @@ class Import < ActiveRecord::Base
               role = Role.find_or_create_by_organization_id_and_name(current_organization.id, label_name)
               role_id = role.id
             end
-            current_organization.add_role_to_person(person, role_id)
+            current_organization.add_role_to_person(person, role_id, current_user.person.id)
           end
         end
       end
