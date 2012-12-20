@@ -15,7 +15,7 @@
   <ul class="pillmenu">
     <li>
       <%= link_to("#{t('nav.roles')} ▾", '#', class: 'action_dropdown') %>  
-      <ul style="display:none; width:235px;" id='label_menu'>
+      <ul id='label_menu'>
         <li>
           <% current_organization.role_set.each do |role| %>
             <div class="role_div_checkbox">

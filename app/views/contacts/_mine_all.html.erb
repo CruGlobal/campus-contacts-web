@@ -1,13 +1,18 @@
 <tr id="all">
-	<td colspan="6" align="center">
-    <% @filtered_people.each do |person| %>
-  		<span class="all_row" data-id="<%= person.id %>" data-name="<%= person.first_name %> <%= person.last_name %>" data-email="<%= person.email %>" data-phone-number="<%= person.pretty_phone_number %>"></span>
-    <% end %>
-  
+	<td colspan="10" align="center">
 		<span id="all_text">
+		  <% @filtered_people.each do |person| %>
+        <% (person.assigned_organizational_roles(current_organization.id).default_roles_desc + person.assigned_organizational_roles(current_organization.id).non_default_roles_asc) %>
+				<span class="all_row" data-id="<%= person.id %>" data-name="<%= person.first_name %> <%= person.last_name %>" data-email="<%= person.email %>" data-phone-number="<%= person.pretty_phone_number %>">
+    		  <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox not_displayed', 'data-name' => "#{person.first_name} #{person.last_name}", style: 'display:none;', 'data-email'=>person.email, 'data-roles' => "#{roles.collect(&:id).join(',')}"%>
+				</span>
+		  <% end %>
+  
 			<%=raw t('people.all.page_selected_html', count: @people.size) %> 
 			<% if @all_people.size > @people.size %>
-			<a href="#" onclick="$('#all_text, #all_selected_text').toggle();"><%=raw t('people.all.select_all_html_mine', count: @all_people.size) %></a>
+			  <a href="#" id="fetch_all_contacts_link">
+					<%=raw t('people.all.select_all_html_mine', count: @all_people.size) %>
+				</a>
 			<% end %>
 		</span>
 		<span id="all_selected_text" style="display:none">

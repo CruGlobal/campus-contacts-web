@@ -65,7 +65,13 @@ class ContactsController < ApplicationController
     elsif params[:status] != 'all'
       @all_people = @all_people.where("organizational_roles.followup_status <> 'completed'")
     end
-    @people = Kaminari.paginate_array(@all_people).page(params[:page])
+    
+    @q = @all_people.where('1 <> 1').search(params[:q]) 
+    
+    order = params[:q].present? ? params[:q][:s] : "last_name ASC, first_name ASC";
+	  @all_people = @all_people.order("people.#{order}")
+		
+    @people = @all_people.group('people.id').page(params[:page])
   end
 
   def mine_all
@@ -339,7 +345,7 @@ class ContactsController < ApplicationController
 
     def fetch_mine
       #@all_people = Person.order('last_name, first_name').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.organization_id' => current_organization.id, 'organizational_roles.role_id' => Role::CONTACT_ID)
-      @all_people = Person.order('last_name, first_name').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id)
+      @all_people = Person.includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id)
     end
 
     def get_person
