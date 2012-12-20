@@ -5,9 +5,7 @@
   <h1><%= image_tag("contact.png") %><%= t('.my_contacts') %></h1>
 </div>
 
-<% if @people.length > 0 %>
-	<%= render 'contacts/pagination' %>
-<% end %>
+<%= render 'contacts/pagination' %>
 
 <%= form_for ContactAssignment.new do |f| %>
   <%= hidden_field_tag :assign_to %>
@@ -50,9 +48,8 @@
     </tbody>
   </table>
   
-	<% if @people.length > 0 %>
-  	<%= render 'contacts/pagination' %>
-	<% else %>
+	<%= render 'contacts/pagination' %>
+  <% if @people.blank? %>
     <div class="contentpad no_contacts">
       <%= t('contacts.index.no_contacts') %>
     </div>

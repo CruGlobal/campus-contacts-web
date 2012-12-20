@@ -16,9 +16,7 @@
   </h1>
 </div>
 
-<% if @people.length > 0 %>	
-  <%= render 'contacts/pagination' %>
-<% end %>
+<%= render 'contacts/pagination' %>
 
 <div class="pagemenu">
   <%= render partial: 'menu' %>
@@ -59,9 +57,8 @@
     </tbody>
   </table>
 
-	<% if @people.length > 0 %>
-  	<%= render 'contacts/pagination' %>
-	<% else %>
+	<%= render 'contacts/pagination' %>
+  <% if @people.blank? %>
     <div class="contentpad no_contacts">
       <%= t('contacts.index.no_contacts') %>
     </div>
