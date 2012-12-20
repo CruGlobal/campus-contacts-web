@@ -246,9 +246,23 @@ class Organization < ActiveRecord::Base
     role
   end
 
+  def add_roles_to_people(people, roles)
+    people.each do |person|
+      roles.each do |role|
+        add_role_to_person(person, role)
+      end
+    end
+  end
+
   def remove_role_from_person(person, role_id)
     person_id = person.is_a?(Person) ? person.id : person
     OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id).each { |r| r.update_attributes(archive_date: Time.now) }
+  end
+
+  def remove_roles_from_people(people, roles)
+    people.each do |person|
+      remove_role_from_person(person, roles)
+    end
   end
 
   def add_leader(person, current_person)

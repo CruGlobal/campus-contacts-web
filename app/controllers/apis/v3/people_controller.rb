@@ -1,19 +1,9 @@
 class Apis::V3::PeopleController < Apis::V3::BaseController
   before_filter :get_person, only: [:show, :update, :destroy]
+  before_filter :get_filtered_people, only: [:index, :bulk_add_roles, :bulk_remove_roles]
 
   def index
-    order = params[:order] || 'last_name, first_name'
-
-    list = if params[:include_archived] == 'true'
-      current_organization.people
-    else
-      current_organization.not_archived_people
-    end
-
-    list = add_includes_and_order(list, order: order)
-    list = PersonFilter.new(params[:filters]).filter(list) if params[:filters]
-
-    render json: list,
+    render json: filtered_people,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization, since: params[:since]}
   end
@@ -21,7 +11,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   def show
     render json: @person,
            callback: params[:callback],
-           scope: {include: includes, 
+           scope: {include: includes,
                    organization: current_organization,
                    user: current_user}
   end
@@ -98,6 +88,22 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
     else
       @person = add_includes_and_order(people).find(params[:id])
     end
+  end
+
+  def filtered_people
+    unless @filtered_people
+      order = params[:order] || 'last_name, first_name'
+
+      @filtered_people = if params[:include_archived] == 'true'
+        current_organization.people
+      else
+        current_organization.not_archived_people
+      end
+
+      @filtered_people = add_includes_and_order(@filtered_people, order: order)
+      @filtered_people = PersonFilter.new(params[:filters]).filter(@filtered_people) if params[:filters]
+    end
+    @filtered_people
   end
 
   def available_includes

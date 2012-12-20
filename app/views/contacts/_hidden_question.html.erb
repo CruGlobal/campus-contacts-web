@@ -1,4 +1,4 @@
-<% if @predefined_survey.questions.include?(hidden_question) %>
+<% if @predefined_survey.questions.include?(hidden_question) && hidden_question.attribute_name %>
   <% link_text = hidden_question.attribute_name.gsub('_',' ') %>
 <% else %>
   <% link_text = hidden_question.slug.present? ? hidden_question.slug : hidden_question.label %>
