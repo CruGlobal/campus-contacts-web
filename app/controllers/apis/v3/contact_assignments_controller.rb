@@ -47,10 +47,12 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
 
     error_messages = []
 
+    assignments = []
+    
     begin
 
       ActiveRecord::Base.transaction do
-        assignments = params[:contact_assignments].collect do |_, assignment|
+        params[:contact_assignments].collect do |_, assignment|
           contact_assignment = assignment[:id] ? contact_assignments.find(assignment.delete(:id)) : contact_assignments.new
           contact_assignment.attributes = assignment
 
@@ -58,13 +60,13 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
             error_messages += contact_assignment.errors.full_messages
           end
 
-          contact_assignment
+          assignments << contact_assignment
         end
 
         raise ActiveRecord::RecordInvalid if error_messages.present?
-
+        
       end
-
+      
     rescue ActiveRecord::RecordInvalid
       # Rescue the validation error we threw so we can send the error
       # messages back to the user
@@ -74,10 +76,11 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
 
       return
     end
-
+            
     render json: assignments,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization}
+    
   end
 
   def destroy

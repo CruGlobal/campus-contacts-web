@@ -1,5 +1,5 @@
 class PersonSerializer < ActiveModel::Serializer
-  HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments,
+  HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments, :assigned_tos,
              :followup_comments, :comments_on_me, :organizational_roles, :rejoicables, :answer_sheets,
              :all_organizational_roles]
 
@@ -22,33 +22,11 @@ class PersonSerializer < ActiveModel::Serializer
       end
     end if includes
   end
-
-  def contact_assignments
-    add_since(organization_filter(:contact_assignments))
-  end
-
-  def followup_comments
-    add_since(organization_filter(:followup_comments))
-  end
-
-  def comments_on_me
-    add_since(organization_filter(:comments_on_me))
-  end
-
-  def organizational_roles
-    add_since(organization_filter(:organizational_roles))
-  end
-
-  def all_organizational_roles
-    if scope[:user] && scope[:user] == object.user
-      add_since(object.organizational_roles)
-    else
-      []
+  
+  [:contact_assignments, :assigned_tos, :followup_comments, :comments_on_me, :organizational_roles, :rejoicables].each do |relationship|
+    define_method(relationship) do
+      add_since(organization_filter(relationship))
     end
-  end
-
-  def rejoicables
-    add_since(organization_filter(:rejoicables))
   end
 
   [:phone_numbers, :email_addresses, :person_transfers, :user, :answer_sheets, :current_address].each do |relationship|
@@ -56,7 +34,14 @@ class PersonSerializer < ActiveModel::Serializer
       add_since(object.send(relationship))
     end
   end
-
+  
+  def all_organizational_roles
+    if scope[:user] && scope[:user] == object.user
+      add_since(object.organizational_roles)
+    else
+      []
+    end
+  end
 
 end
 
