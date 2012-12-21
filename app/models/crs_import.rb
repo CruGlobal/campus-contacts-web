@@ -107,7 +107,7 @@ class CrsImport
                               birth_date: crs2_person.birth_date,
                               date_became_christian: crs2_person.date_became_christian,
                               graduation_date: crs2_person.graduation_date,
-                              year_in_school: crs2_person.year_in_school,
+                              year_in_school: year_in_school_mapping(crs2_person.year_in_school),
                               minor: crs2_person.minor
               }
 
@@ -192,5 +192,26 @@ class CrsImport
       raise
     end
     nil
+  end
+
+  def year_in_school_mapping(year)
+    case year.strip
+    when 'Freshman', 'F', 'Fr.'
+      'First Year'
+    when 'Sophomore', 'So', 'S'
+      'Second Year'
+    when 'Junior', 'JR', 'Jr.'
+      'Third Year'
+    when 'Senior', 'SR', 'Sr.'
+      'Fourth Year'
+    when 'Senior +'
+      'Fifth Year'
+    when 'Grad Student', 'Graduated', 'GR', 'Grad',
+          'Graduate_Student', 'Grd', '2nd year of grad',
+          'Year 2 Grad', 'Year 2 of Grad schoo', 'grad year 2',
+          'Year 1 and Grad', '1st Year (Grad)', '2nd Year (Grad)',
+          '3rd Year (Grad)', '3rd PhD', 'Master\'s'
+      'Graduate'
+    end
   end
 end
