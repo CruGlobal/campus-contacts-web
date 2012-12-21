@@ -321,6 +321,7 @@ class ContactsController < ApplicationController
       # raise @q.sorts.inspect
       @people = @people.includes(:primary_phone_number, :primary_email_address, :contact_role, :sent_person)
       if params[:q]
+      
         order_query = params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass').gsub('followup_status','organizational_roles.followup_status').gsub('role_id','organizational_roles.role_id') : ['last_name, first_name']
       else            
       	order_query = "last_name ASC,first_name ASC";
