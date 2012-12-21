@@ -78,7 +78,7 @@ class Person < ActiveRecord::Base
   } }
 
   scope :order_by_followup_status, lambda { |order| {
-    :order => "ISNULL(organizational_roles.followup_status), organizational_roles.#{order}"
+    :order => "ISNULL(organizational_roles.followup_status) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_roles.#{order}"
   } }
 
   scope :order_by_primary_phone_number, lambda { |order| {
