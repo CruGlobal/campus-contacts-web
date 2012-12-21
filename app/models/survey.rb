@@ -95,7 +95,8 @@ class Survey < ActiveRecord::Base
 
   def questions=(questions_attributes)
     current_question_ids = new_record? ? [] : questions.pluck('elements.id')
-    questions_attributes.each do |question_attributes|
+    questions_attributes.each do |question|
+      question_attributes = question['question'] ? question['question'] : question
       if question_attributes['id']
         survey_elements.new(element_id: question_attributes['id']) unless current_question_ids.include?(question_attributes['id'].to_i)
       else
