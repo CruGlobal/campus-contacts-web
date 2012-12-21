@@ -15,6 +15,8 @@
   </h1>
 </div>
 
+<%= render 'contacts/pagination' %>
+
 <div class="pagemenu">
   <%= render partial: 'menu' %>
 </div>
@@ -61,20 +63,14 @@
       <% end %>
     </tbody>
   </table>
-  <%= paginate @people %>
+
+	<%= render 'contacts/pagination' %>
   <% if @people.blank? %>
     <div class="contentpad no_contacts">
-      <%= t('.no_contacts') %>
+      <%= t('contacts.index.no_contacts') %>
     </div>
-  <% end %>
+	<% end %>
   <%= render 'assign' %>
-<% end %>
-
-
-<% if @people.length > 0 %>
-  <div class="searchstat">
-    <%= "Displaying #{@people.offset_value + 1} - #{@people.offset_value + @people.length} of #{@people.total_count}" %>
-  </div>
 <% end %>
 <div id="add_contact_div" style="display:none" title="<%= t('.add_contact', org: current_organization) %>" class="fingerme">
   <%= render 'add_contact', person: Person.new %>
