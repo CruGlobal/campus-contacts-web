@@ -7,7 +7,7 @@ class Survey < ActiveRecord::Base
   belongs_to :organization
 
   has_many :survey_elements, :dependent => :destroy, :order => :position
-  has_many :elements, :through => :survey_elements, :order => SurveyElement.table_name + '.position'
+  has_many :elements, :through => :survey_elements, :order => SurveyElement.table_name + '.position', autosave: true
   has_many :question_grid_with_totals, :through => :survey_elements, :conditions => "kind = 'QuestionGridWithTotal'", :source => :element
   has_many :questions, :through => :survey_elements, :source => :question, :order => 'position', :conditions => "#{SurveyElement.table_name}.archived = 0", :order => "#{SurveyElement.table_name}.position"
   has_many :archived_questions, :through => :survey_elements, :source => :question, :order => 'position', :conditions => "#{SurveyElement.table_name}.archived = 1", :order => "#{SurveyElement.table_name}.position"
@@ -89,6 +89,18 @@ class Survey < ActiveRecord::Base
         SurveyElement.create(:element => element, :survey => new_survey)
       else
         element.duplicate(new_survey)
+      end
+    end
+  end
+
+  def questions=(questions_attributes)
+    current_question_ids = new_record? ? [] : questions.pluck('elements.id')
+    questions_attributes.each do |question_attributes|
+      if question_attributes['id']
+        survey_elements.new(element_id: question_attributes['id']) unless current_question_ids.include?(question_attributes['id'].to_i)
+      else
+        q = question_attributes.delete('kind').constantize.create(question_attributes)
+        survey_elements.new(element_id: q.id)
       end
     end
   end
