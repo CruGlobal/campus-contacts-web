@@ -4,7 +4,7 @@
 	</li>
   <% if can? :edit, @person %>
     <li class="tipitright <%= 'selected' if current_page?(edit_person_path(@person)) %>" title="<%= t('.edit_profile', name: @person.first_name) %>">
-    	<%= link_to(t('.edit_profile', name: truncate(@person.first_name, length: 16, omission: "...")), edit_person_path(@person)) %>
+    	<%= link_to(t('.edit_profile', name: truncate(@person.first_name, length: 13, omission: "...")), edit_person_path(@person)) %>
   	</li>
     <li class="<%= 'selected' if current_page?(survey_response_path(@person)) %>">
     	<%= link_to(t('.survey_answers', name: @person.first_name), survey_response_path(@person)) %>
