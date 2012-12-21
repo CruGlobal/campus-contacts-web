@@ -5,6 +5,8 @@
   <h1><%= t('.my_contacts') %></h1>
 </div>
 
+<%= render 'contacts/pagination' %>
+
 <%= form_for ContactAssignment.new do |f| %>
   <%= hidden_field_tag :assign_to %>
   <%= hidden_field_tag :my_id, current_person.id %>
@@ -98,12 +100,14 @@
       <% end %>
     </tbody>
   </table>
-  <%= paginate @people %>
+  
+	<%= render 'contacts/pagination' %>
   <% if @people.blank? %>
     <div class="contentpad no_contacts">
       <%= t('contacts.index.no_contacts') %>
     </div>
-  <% end %>
+	<% end %>
+	
   <%= render 'assign' %>
 <% end %>
 <div id="add_contact_div" style="display:none" title="Add a Contact" class="fingerme">
