@@ -210,8 +210,12 @@ class CrsImport
           'Graduate_Student', 'Grd', '2nd year of grad',
           'Year 2 Grad', 'Year 2 of Grad schoo', 'grad year 2',
           'Year 1 and Grad', '1st Year (Grad)', '2nd Year (Grad)',
-          '3rd Year (Grad)', '3rd PhD', 'Master\'s'
-      'Graduate'
+          '3rd Year (Grad)', 'Master\'s'
+      'Graduate Student'
+    when '3rd PhD'
+      'Doctoral'
+    when 'Graduate'
+      'Graduated'
     end
   end
 end
