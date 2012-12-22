@@ -195,7 +195,7 @@ class CrsImport
   end
 
   def year_in_school_mapping(year)
-    case year.strip
+    case year.to_s.strip
     when 'Freshman', 'F', 'Fr.'
       'First Year'
     when 'Sophomore', 'So', 'S'
@@ -216,6 +216,8 @@ class CrsImport
       'Doctoral'
     when 'Graduate'
       'Graduated'
+    else
+      year
     end
   end
 end
