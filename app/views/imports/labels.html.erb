@@ -1,10 +1,10 @@
 <div class="inside_container">
-	<div class="titlebar titlebarmod">  
+	<div class="titlebar titlebarmod">
 	  <h1>
 		<%= t('contacts.index.import_contacts') %>
 	  </h1>
 	</div>
-	
+
 	<div>
 		<h1 class="title"><%= t('.title')%></h1>
 		<div class="container">
@@ -15,7 +15,7 @@
 				<%= form_tag controller: 'imports', action: 'import', id: @import.id do |f| %>
 					<%= check_box_tag :use_labels, 1, true %>
 					<%= t('contacts.index.import_labels_checkbox') %>
-					<%= render partial: 'shared/label_fields' %>
+					<%= render partial: 'shared/label_fields', locals: {block_admin_label: @block_admin_label} %>
 			</div>
 			<div class="importform">
 					<%= submit_tag 'Import Now', :value=>"Import" %><%= link_to("Cancel", "/imports/new", :class => "cancel") %>

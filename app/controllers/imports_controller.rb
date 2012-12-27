@@ -37,6 +37,8 @@ class ImportsController < ApplicationController
 
   def labels
     @import_count =  @import.get_new_people.count
+    email_element = Element.find_by_attribute_name('email')
+    @block_admin_label = !@import.header_mappings.has_value?(email_element.id.to_s)
     @roles = current_organization.roles
   end
 
