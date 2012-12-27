@@ -332,7 +332,7 @@
 				background: #eaf1f6;
 
 				input[type="file"] {
-					float: left;
+					display: none;
 					padding: 0.5em;
 					background: #fff;
 				}
@@ -344,7 +344,28 @@
 					border: 1px solid #808284;
 				}
 
-				input[type="submit"]:hover {
+        div#csv_file_name {
+          font-family: Georgia;
+          font-size: 14px;
+          font-style: italic;
+          color: #555;
+          float: left;
+          padding: 8px 8px;
+          width: 280px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+				button#browse_csv_file {
+					float: left;
+					background: #fff;
+					border-radius: 4px;
+					border: 1px solid #808284;
+				}
+
+				button#browse_csv_file:hover,
+        input[type="submit"]:hover {
 					background: #c7dff0;
 					border-color: #0379ae;
 				}

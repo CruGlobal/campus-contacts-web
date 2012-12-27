@@ -1,5 +1,12 @@
 $ ->
   $(document).ready ->
+    $('button#browse_csv_file').live 'click', (e)->
+      e.preventDefault()
+      $('#import_upload').click()
+
+    $('#import_upload').live 'change', ()->
+      $('#csv_file_name').text($(this).val().split('\\').pop())
+
     $('.import_column_survey_select').each ->
       $('#column_edit_' + $(this).attr('data_id')).show() if $(this).val() == ''
       $('.import_column_survey_select option').each ->
