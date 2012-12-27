@@ -675,7 +675,7 @@ class ContactsControllerTest < ActionController::TestCase
 
     should "sort by status desc" do
       xhr :get, :index, {:assigned_to => "all", :q =>{:s => "followup_status desc"}}
-      assert_equal [@person1.id, @person3.id, @person2.id, @user.person.id], assigns(:people).collect(&:id)
+      assert_equal [@user.person.id, @person1.id, @person3.id, @person2.id], assigns(:people).collect(&:id)
     end
   end
 
