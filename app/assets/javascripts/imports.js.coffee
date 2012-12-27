@@ -14,56 +14,23 @@ $ ->
       column_header = $(this).children('.column_header').text()
       column_header = column_header.replace(/_|-|:/g,' ') if column_header
       header = $.trim(parseCamelCase(column_header).toLowerCase())
-      header_words = header.split(' ')
       check_non_predefined = true
       if select_field.attr("data-saved-value") == ''
 
         # Find Predefined Question Match
         select_field.find('option:not(:first))').reverse().each ->
-          match_found = false
           if $(this).attr("data-survey-title") == 'Predefined Questions'
-            question = $(this).text()
-            match_question = true
-            for word in header_words
-              match_question = false if match_question && word.length > 2 && question.toLowerCase().search(word) == -1
-            if match_question && !$(this).is(':disabled')
-              match_found = true
-            else
-              question_words = question.split(' ')
-              match_question = true
-              for word in question_words
-                match_question = false if match_question && word.length > 2 && header.toLowerCase().search(word.toLowerCase()) == -1
-              if match_question && !$(this).is(':disabled')
-                match_found = true
+            match_found = find_match($(this), header)
           if match_found
-            selected_survey_title = $(this).attr("data-survey-title")
-            selected_survey_title = selected_survey_title.replace(/\'/g,'') if selected_survey_title
-            select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +selected_survey_title+ "']").attr('selected',true)
+            select_match($(this), select_field)
             check_non_predefined = false
 
         # Find NonPredefined Question Match
         if check_non_predefined
           select_field.find('option:not(:first))').reverse().each ->
-            match_found = false
             if $(this).attr("data-survey-title") != 'Predefined Questions'
-              question = $(this).text()
-              match_question = true
-              for word in header_words
-                match_question = false if match_question && word.length > 2 && question.toLowerCase().search(word) == -1
-              if match_question && !$(this).is(':disabled')
-                match_found = true
-              else
-                question_words = question.split(' ')
-                match_question = true
-                for word in question_words
-                  match_question = false if match_question && word.length > 2 && header.toLowerCase().search(word.toLowerCase()) == -1
-                if match_question && !$(this).is(':disabled')
-                  match_found = true
-            if match_found
-              selected_survey_title = $(this).attr("data-survey-title")
-              selected_survey_title = selected_survey_title.replace(/\'/g,'') if selected_survey_title
-              select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +selected_survey_title+ "']").attr('selected',true)
-
+              match_found = find_match($(this), header)
+            select_match($(this), select_field) if match_found
 
         select_field.trigger('change')
       else
@@ -190,6 +157,28 @@ $ ->
       if selected_value != '' && selected_value != 'do_not_import' && selected_value != 'new_question'
         $("option[value=" +selected_value+ "][data-survey-title=" +selected_survey_title+ "]").attr('disabled','disabled')
       $(this).find("option[value=" +selected_value+ "][data-survey-title=" +selected_survey_title+ "]").removeAttr('disabled')
+
+find_match = (option, header) ->
+  question = option.text().toLowerCase()
+  header_words = header.split(' ')
+  match_question = true
+  for word in header_words
+    match_question = false if match_question && word.length > 2 && question.toLowerCase().search(word) == -1
+  if match_question && !option.is(':disabled')
+    return true
+  else
+    question_words = question.split(' ')
+    match_question = true
+    for word in question_words
+      match_question = false if match_question && word.length > 2 && header.toLowerCase().search(word) == -1
+    if match_question && !option.is(':disabled')
+      return true
+  return false
+
+select_match = (option, select_field) ->
+  selected_survey_title = option.attr("data-survey-title")
+  selected_survey_title = selected_survey_title.replace(/\'/g,'') if selected_survey_title
+  select_field.find("option[value=" +option.val()+ "][data-survey-title='" +selected_survey_title+ "']").attr('selected',true)
 
 parseCamelCase = (val) ->
   val.replace /[a-z][A-Z]/g, (str, offset) ->
