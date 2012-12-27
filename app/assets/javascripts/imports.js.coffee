@@ -17,27 +17,52 @@ $ ->
       header_words = header.split(' ')
       check_non_predefined = true
       if select_field.attr("data-saved-value") == ''
+
+        # Find Predefined Question Match
         select_field.find('option:not(:first))').reverse().each ->
           if $(this).attr("data-survey-title") == 'Predefined Questions'
+            question = $(this).text()
             match_question = true
             for word in header_words
-              match_question = false if match_question && word.length > 2 && $(this).text().toLowerCase().search(word) == -1
+              match_question = false if match_question && word.length > 2 && question.toLowerCase().search(word) == -1
             if match_question && !$(this).is(':disabled')
               selected_survey_title = $(this).attr("data-survey-title")
               selected_survey_title = selected_survey_title.replace(/\'/g,'') if selected_survey_title
               select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +selected_survey_title+ "']").attr('selected',true)
               check_non_predefined = false
-
-        if check_non_predefined
-          select_field.find('option:not(:first))').reverse().each ->
-            if $(this).attr("data-survey-title") != 'Predefined Questions'
+            else
+              question_words = question.split(' ')
               match_question = true
-              for word in header_words
-                match_question = false if match_question && word.length > 2 && $(this).text().toLowerCase().search(word) == -1
+              for word in question_words
+                match_question = false if match_question && word.length > 2 && header.toLowerCase().search(word.toLowerCase()) == -1
               if match_question && !$(this).is(':disabled')
                 selected_survey_title = $(this).attr("data-survey-title")
                 selected_survey_title = selected_survey_title.replace(/\'/g,'') if selected_survey_title
                 select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +selected_survey_title+ "']").attr('selected',true)
+                check_non_predefined = false
+
+        # Find NonPredefined Question Match
+        if check_non_predefined
+          select_field.find('option:not(:first))').reverse().each ->
+            if $(this).attr("data-survey-title") != 'Predefined Questions'
+              question = $(this).text()
+              match_question = true
+              for word in header_words
+                match_question = false if match_question && word.length > 2 && question.toLowerCase().search(word) == -1
+              if match_question && !$(this).is(':disabled')
+                selected_survey_title = $(this).attr("data-survey-title")
+                selected_survey_title = selected_survey_title.replace(/\'/g,'') if selected_survey_title
+                select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +selected_survey_title+ "']").attr('selected',true)
+              else
+                question_words = question.split(' ')
+                match_question = true
+                for word in question_words
+                  match_question = false if match_question && word.length > 2 && header.toLowerCase().search(word.toLowerCase()) == -1
+                if match_question && !$(this).is(':disabled')
+                  selected_survey_title = $(this).attr("data-survey-title")
+                  selected_survey_title = selected_survey_title.replace(/\'/g,'') if selected_survey_title
+                  select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +selected_survey_title+ "']").attr('selected',true)
+                  check_non_predefined = false
 
         select_field.trigger('change')
       else
