@@ -20,49 +20,50 @@ $ ->
 
         # Find Predefined Question Match
         select_field.find('option:not(:first))').reverse().each ->
+          match_found = false
           if $(this).attr("data-survey-title") == 'Predefined Questions'
             question = $(this).text()
             match_question = true
             for word in header_words
               match_question = false if match_question && word.length > 2 && question.toLowerCase().search(word) == -1
             if match_question && !$(this).is(':disabled')
-              selected_survey_title = $(this).attr("data-survey-title")
-              selected_survey_title = selected_survey_title.replace(/\'/g,'') if selected_survey_title
-              select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +selected_survey_title+ "']").attr('selected',true)
-              check_non_predefined = false
+              match_found = true
             else
               question_words = question.split(' ')
               match_question = true
               for word in question_words
                 match_question = false if match_question && word.length > 2 && header.toLowerCase().search(word.toLowerCase()) == -1
               if match_question && !$(this).is(':disabled')
-                selected_survey_title = $(this).attr("data-survey-title")
-                selected_survey_title = selected_survey_title.replace(/\'/g,'') if selected_survey_title
-                select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +selected_survey_title+ "']").attr('selected',true)
-                check_non_predefined = false
+                match_found = true
+          if match_found
+            selected_survey_title = $(this).attr("data-survey-title")
+            selected_survey_title = selected_survey_title.replace(/\'/g,'') if selected_survey_title
+            select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +selected_survey_title+ "']").attr('selected',true)
+            check_non_predefined = false
 
         # Find NonPredefined Question Match
         if check_non_predefined
           select_field.find('option:not(:first))').reverse().each ->
+            match_found = false
             if $(this).attr("data-survey-title") != 'Predefined Questions'
               question = $(this).text()
               match_question = true
               for word in header_words
                 match_question = false if match_question && word.length > 2 && question.toLowerCase().search(word) == -1
               if match_question && !$(this).is(':disabled')
-                selected_survey_title = $(this).attr("data-survey-title")
-                selected_survey_title = selected_survey_title.replace(/\'/g,'') if selected_survey_title
-                select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +selected_survey_title+ "']").attr('selected',true)
+                match_found = true
               else
                 question_words = question.split(' ')
                 match_question = true
                 for word in question_words
                   match_question = false if match_question && word.length > 2 && header.toLowerCase().search(word.toLowerCase()) == -1
                 if match_question && !$(this).is(':disabled')
-                  selected_survey_title = $(this).attr("data-survey-title")
-                  selected_survey_title = selected_survey_title.replace(/\'/g,'') if selected_survey_title
-                  select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +selected_survey_title+ "']").attr('selected',true)
-                  check_non_predefined = false
+                  match_found = true
+            if match_found
+              selected_survey_title = $(this).attr("data-survey-title")
+              selected_survey_title = selected_survey_title.replace(/\'/g,'') if selected_survey_title
+              select_field.find("option[value=" +$(this).val()+ "][data-survey-title='" +selected_survey_title+ "']").attr('selected',true)
+
 
         select_field.trigger('change')
       else
@@ -189,8 +190,6 @@ $ ->
       if selected_value != '' && selected_value != 'do_not_import' && selected_value != 'new_question'
         $("option[value=" +selected_value+ "][data-survey-title=" +selected_survey_title+ "]").attr('disabled','disabled')
       $(this).find("option[value=" +selected_value+ "][data-survey-title=" +selected_survey_title+ "]").removeAttr('disabled')
-
-
 
 parseCamelCase = (val) ->
   val.replace /[a-z][A-Z]/g, (str, offset) ->
