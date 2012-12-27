@@ -65,12 +65,12 @@ class ContactsController < ApplicationController
     elsif params[:status] != 'all'
       @all_people = @all_people.where("organizational_roles.followup_status <> 'completed'")
     end
-    
-    @q = @all_people.where('1 <> 1').search(params[:q]) 
-    
+
+    @q = @all_people.where('1 <> 1').search(params[:q])
+
     order = params[:q].present? ? params[:q][:s] : "last_name ASC, first_name ASC";
 	  @all_people = @all_people.order("people.#{order}")
-		
+
     @people = @all_people.group('people.id').page(params[:page])
   end
 
@@ -185,36 +185,36 @@ class ContactsController < ApplicationController
       elsif params[:search]
         @header = I18n.t('contacts.index.matching_seach')
         @people = @people_scope
-      else
-        if params[:assigned_to]
-          case params[:assigned_to]
-          when 'all'
-          	if params[:include_archived].present? && params[:include_archived] == 'true'
-	            @people = @organization.all_people_with_archived
-            else
-  	          @people = @organization.all_people
-            end
-          when 'unassigned'
-            @people = @organization.unassigned_contacts
-            @header = I18n.t('contacts.index.unassigned')
-          when 'no_activity'
-            @people = @organization.no_activity_contacts
-            @header = I18n.t('contacts.index.no_activity')
-          when 'friends'
-            @people = current_person.contact_friends(@organization)
-            @header = I18n.t('contacts.index.friend_responses')
-          when *Rejoicable::OPTIONS
-            @people = @organization.send(:"#{params[:assigned_to]}_contacts")
-            @header = I18n.t("rejoicables.#{params[:assigned_to]}")
+      end
+
+      if params[:assigned_to]
+        case params[:assigned_to]
+        when 'all'
+          if params[:include_archived].present? && params[:include_archived] == 'true'
+            @people = @organization.all_people_with_archived
           else
-            if params[:assigned_to].present? && @assigned_to = Person.find_by_id(params[:assigned_to])
-              @header = I18n.t('contacts.index.responses_assigned_to', assigned_to: @assigned_to)
-              @people = @organization.all_people_with_archived.joins(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
-            end
+            @people = @organization.all_people
+          end
+        when 'unassigned'
+          @people = @organization.unassigned_contacts
+          @header = I18n.t('contacts.index.unassigned')
+        when 'no_activity'
+          @people = @organization.no_activity_contacts
+          @header = I18n.t('contacts.index.no_activity')
+        when 'friends'
+          @people = current_person.contact_friends(@organization)
+          @header = I18n.t('contacts.index.friend_responses')
+        when *Rejoicable::OPTIONS
+          @people = @organization.send(:"#{params[:assigned_to]}_contacts")
+          @header = I18n.t("rejoicables.#{params[:assigned_to]}")
+        else
+          if params[:assigned_to].present? && @assigned_to = Person.find_by_id(params[:assigned_to])
+            @header = I18n.t('contacts.index.responses_assigned_to', assigned_to: @assigned_to)
+            @people = @organization.all_people_with_archived.joins(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
           end
         end
-        @people ||= Person.where("1=0")
       end
+      @people ||= Person.where("1=0")
 
       if params[:q] && params[:q][:s].include?('answer_sheets')
         @people = @people.get_and_order_by_latest_answer_sheet_answered(params[:q][:s], current_organization.id)
@@ -321,13 +321,13 @@ class ContactsController < ApplicationController
       # raise @q.sorts.inspect
       @people = @people.includes(:primary_phone_number, :primary_email_address, :contact_role, :sent_person)
       if params[:q]
-      
+
         order_query = params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass').gsub('followup_status','organizational_roles.followup_status').gsub('role_id','organizational_roles.role_id') : ['last_name, first_name']
-      else            
+      else
       	order_query = "last_name ASC,first_name ASC";
-      end      
+      end
       @people = @people.includes(:primary_phone_number, :primary_email_address, :contact_role).order(order_query)
-      
+
       @all_people = @people.group('people.id')
       @people_for_labels = Person.people_for_labels(current_organization)
       @people = @all_people.page(params[:page])
