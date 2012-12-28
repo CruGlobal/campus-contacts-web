@@ -770,7 +770,7 @@ en:
     show:
       title: "%{name}'s Survey Answers"
       edit_answers: "Edit Answers"
-      no_answers: "%{name} has not completed any surveys"
+      no_answers: "There is no information for %{name}"
     edit:
       title: "Edit %{name}'s Survey Answers"
       multiple_answers: "Choose one or more. "
