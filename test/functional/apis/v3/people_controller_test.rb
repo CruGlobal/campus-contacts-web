@@ -44,39 +44,44 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
 
       end
 
-      should 'filter by first name' do
+      should 'filter by first name with no matches' do
         # No matches
         get :index, secret: @client.secret, filters: {first_name_like: 'zzzzzzzzzz'}
         json = JSON.parse(response.body)
         assert_equal 0, json['people'].length, json.inspect
+      end
 
+      should 'filter by first name with a match' do
         # 1 person
         get :index, secret: @client.secret, filters: {first_name_like: @person.first_name[0..1]}
         json = JSON.parse(response.body)
         assert_equal 1, json['people'].length, json.inspect
-
       end
 
-      should 'filter by last name' do
+      should 'filter by last name with no matches' do
         # No matches
         get :index, secret: @client.secret, filters: {last_name_like: 'zzzzzzzzzz'}
         json = JSON.parse(response.body)
         assert_equal 0, json['people'].length, json.inspect
+      end
 
+      should 'filter by last name with a match' do
         # 1 person
         get :index, secret: @client.secret, filters: {last_name_like: @person.last_name[0..1]}
         json = JSON.parse(response.body)
         assert_equal 1, json['people'].length, json.inspect
-
       end
 
-      should 'filter by followup status' do
-        @person.organizational_roles.create(organization: @client.organization,
-                                            followup_status: 'contacted')
+      should 'filter by followup status with no matches' do
         # No matches
         get :index, secret: @client.secret, filters: {followup_status: 'zzzzzzzzzz'}
         json = JSON.parse(response.body)
         assert_equal 0, json['people'].length, json.inspect
+      end
+
+      should 'filter by followup status with a match' do
+        @person.organizational_roles.create(organization: @client.organization,
+                                            followup_status: 'contacted')
 
         # 1 person
         get :index, secret: @client.secret, filters: {followup_status: 'contacted'}
@@ -102,7 +107,7 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
                                       assigned_to: @person2,
                                       person: @person)
         @person.organizational_roles.first.update_attributes(followup_status: 'contacted')
-                                            
+
         # 1 person
         get :index, secret: @client.secret, filters: {assigned_to: @person2.id.to_s, followup_status: 'contacted'}
         json = JSON.parse(response.body)
