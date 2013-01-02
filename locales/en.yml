@@ -75,13 +75,13 @@ en:
       phone_number: Phone Number
     import_contacts:
       blank_header: One of the CSV headers is blank
-      cause_1: ! ' First name is blank at row'
-      cause_2: ! ' Invalid phone number at row'
-      cause_3: ! ' Invalid email address at row'
+      cause_1: ! ' First name is blank at row/s'
+      cause_2: ! ' Invalid phone number at row/s'
+      cause_3: ! ' Invalid email address at row/s'
       download_sample_csv: Download sample CSV file
       download_template_csv: Download template CSV file
       duplicate_header_match: At least two of the headers has the same selected person attribute/survey question
-      error: ! 'CSV Import unsuccessful and the cause is:'
+      error: ! 'CSV Import unsuccessful for some rows:'
       instruction_1: Follow the order of the columns as illustrated above
       instruction_2: First name should not be missing
       instruction_3: Phone numbers and email addresses should have the right format
@@ -89,7 +89,7 @@ en:
       instructions_label: Instructions
       present_firstname: First name is required on import
       select_csv: ! 'Select a CSV File :'
-      success: CSV Import Successful, new records added to database!
+      success: Your CSV upload is now being processed. You will receive an email when it finishes.
       tip_2: ! 'In your first row list the headings like it shows here: <strong>FIRST NAME, LAST NAME, STATUS, GENDER, EMAIL, PHONE NUMBER, ADDRESS 1, ADDRESS 2, CITY, STATE, COUNTRY, ZIP</strong>'
     index:
       add: Add
@@ -123,9 +123,9 @@ en:
       dnc: Do Not Contact
       dnc_contacts: All Contacts - 'Do Not Contact'
       edit_true: ! '&edit=true'
-      export: Export
+      export: Export CSV
       filter: Search
-      first_name: First Name
+      first_name: First
       friend_responses: Contacts who are also my friends on Facebook
       friends: Friends
       hidden_questions: Hidden Questions
@@ -138,7 +138,7 @@ en:
       import_step3_body2: Just select any labels from the list below that you would like to apply to these new contacts, and then click Import Now.
       in_progress: Assigned
       in_progress_responses: All Contacts - Assigned
-      last_name: Last Name
+      last_name: Last
       last_survey: Last Survey
       leaders: Leaders
       matching_seach: Matching the criteria you searched for
@@ -147,8 +147,8 @@ en:
       no_activity_responses: All Contacts - No Activity
       no_contacts: Sorry, there are no contacts here.
       no_name_message: At a minimum you need to provide a first name.
-      none_checked: You didn't select any contacts to assign.
-      phone_number: Phone Number
+      none_checked: You need to select a person before this feature will work.
+      phone_number: Phone
       reminder_email_body: ! 'Hey!
 
 
@@ -162,7 +162,7 @@ en:
 
         %{name}'
       reminder_email_subject: New contacts have arrived!
-      responses_assigned_to: All Contacts - Assigned to %{assigned_to}
+      responses_assigned_to: Assigned to %{assigned_to}
       save_this_search: Save this search
       save_this_search_placeholder: Name this search
       saved_searches: Saved Searches
@@ -174,7 +174,7 @@ en:
       unassign_contact: Unassign contact
       unassigned: Unassigned
       unassigned_responses: All Contacts - Unassigned
-      vcard: Vcard
+      vcard: Export Vcard
       which_org: You need to choose which organization you want to do folow-up from
     leader:
       archive_confirm: ! '%{person} will be moved to archives.'
@@ -269,7 +269,7 @@ en:
     - Friday
     - Saturday
     formats:
-      default: ! '%Y-%m-%d'
+      default: ! '%m/%d/%Y'
       long: ! '%B %d, %Y'
       short: ! '%b %d'
       time: ! '%l:%M %p'
@@ -409,14 +409,14 @@ en:
     roles_applied: Labels have been applied.
     save: Save
     search: Search
-    send_email: Send Email
+    send_email: Email
     show: Show
     state: State
     status: Status
     subject: Subject
     survey: Survey
     survey_text_tip_html: To begin your survey, <strong>text %{keyword} to %{shortcode}.</strong>
-    survey_web_tip_html: For the web version of the survey, send people to <strong>http://mhub.cc/c/%{keyword}</strong>
+    survey_web_tip_html: For the web version of the survey, send people to <strong>%{link}/</strong>
     to: To
     transfer: Transfer
     unassign: Unassign
@@ -426,12 +426,12 @@ en:
     form:
       add_a_leader: Add a leader
       add_a_member: Add a member
-      start_typing: Start typing a name to find a person add to this group
+      start_typing: ! 'Start typing a name to find a person add to this group:'
     search:
       add_new_person_group: Add a new person
       not_found: We couldn't find anyone in your %{terminology} with that name
       show_all: show all
-      showing_count: ! 'Showing %{length} of %{total}, keep typing or '
+      showing_count: ! 'Showing %{length} of %{total} records, keep typing or '
       showing_count_complete: Showing %{length} records.
   groups:
     edit:
@@ -454,7 +454,7 @@ en:
       group_list: Group List for %{org}
       group_name: Group Name
       labeled_with: Labeled With "%{label}"
-      labels: Labels
+      labels: Group Labels
       leaders: Leaders
       members: Involved
       new_label_prompt: Please enter a new label name
@@ -560,25 +560,26 @@ en:
     groups: Groups
     help: Resources and Help
     hide: Hide
-    keywords: Surveys
+    keywords: Keywords
     login: Log In
     logout: Sign Out
     make_default: make default
-    manage: Manage
+    manage: Organizations
     my_comments: My Comments
     my_contacts: My Contacts
-    my_profile: My Profile
+    my_profile: ! '%{name} Profile'
     organizations: Organizations
     people: People
     privacy: Privacy Policy
     profile: My Profile
-    roles: Roles
+    roles: Labels
     settings: Settings
     survey_mode_tip: Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts.
     surveys: Surveys
     terms: Terms and Conditions
     use_keyword: ! 'Use Keyword: %{keyword}'
     view_details: View details
+    transfer: 100% Sent
   number:
     currency:
       format:
@@ -604,10 +605,12 @@ en:
           quadrillion: Quadrillion
           thousand: Thousand
           trillion: Trillion
+          unit: 
       format:
         precision: 3
         significant: true
         strip_insignificant_zeros: true
+        delimiter: 
       storage_units:
         format: ! '%n %u'
         units:
@@ -618,6 +621,12 @@ en:
           kb: KB
           mb: MB
           tb: TB
+    percentage:
+      format:
+        delimiter: 
+    precision:
+      format:
+        delimiter: 
   org_membership:
     confirm_delete: Are you sure you want to dissociate yourself from %{org}
   organization_mailer:
@@ -715,8 +724,8 @@ en:
     create:
       email_error: <font color='red'>Invalid email.</font>
       email_taken: <font color='red'>Oops! This email address is already being used. Please email <b>support@missionhub.com</b> with the EMAIL address and NAME of the person whom you want to add the email to.</font>
-      error_creating_admin_no_valid_email: ! 'Error: Cannot create Person with admin role without a valid email'
-      error_creating_leader_no_valid_email: ! 'Error: Cannot create Person with leader role without a valid email'
+      error_creating_admin_no_valid_email: <font color='red'>Cannot create Person with admin role without a valid email</font>
+      error_creating_leader_no_valid_email: <font color='red'>Cannot create Person with leader role without a valid email</font>
       firstname_error: <font color='red'>First name is required.</font>
       phone_number_error: <font color='red'>Invalid phone number</font>
     edit:
@@ -732,7 +741,7 @@ en:
       facebook_url_tip: You can manually search facebook for this person's profile if they haven't already connected. Keep in mind that some people set their facebook privacy settings such that they won't show up in this search.
     index:
       add_person: Add Person
-      apply_roles: Apply Roles
+      apply_roles: Apply Labels
       archived_directory_title: Archived - %{org}
       archived_label: Archived
       cannot_archive_admin_error: As an ADMIN you cannot remove yourself! Please assign another individual as an ADMIN for this organization and then ask that "new ADMIN" to remove your ADMIN label.
@@ -743,20 +752,20 @@ en:
       error_message: ! 'Error: %{person} does not have valid email to be leader'
       error_message_update_admin_without_person: ! 'Error: Person does not have valid email to be admin'
       error_message_update_leader_without_person: ! 'Error: Person does not have valid email to be leader'
-      export: Export this list
+      export: Export CSV
       filter: Search
       gender: Gender
       group_comment: Add Comment
       include_archived: Include Archived
       include_archived_tips: You may click this checkbox to include all of your Archived individuals in your All Contacts listing. Notice Archived individuals now have green labels.<br/><br/>If you want to only see <b>archived individuals</b>, click on "Archived" on the bottom, left side-panel.<br/><br/>Contacts can be <b>unarchived</b> by adding any label. You need to add each label you wish to return to that contact.
       labels: Labels
-      manage_roles: Manage Roles
+      manage_roles: Manage Labels
       merge_contacts: Merge Contacts
       merge_people: Merge People
       no_people: Sorry, there are no people involved here.
       phone: Phone
-      send_email: Send Email
-      send_sms: Send Text
+      send_email: Email
+      send_sms: Text
       statistics: Statistics
       transfer_org: Transfer to another team/organization
       vcard: Export Vcard
@@ -824,14 +833,17 @@ en:
     leader: Leader
     views:
       create: Create
-      create_role: Create new role
-      delete_role: Delete role
-      edit_role: Edit role
+      create_role: Create New Label
+      delete_role: Delete Label
+      edit_role: Edit Label
       i18n: i18n
       name: Name
-      organizational_roles: Organizational Roles
-      system_roles: System Roles
+      organizational_roles: Organizational Labels
+      system_roles: System Labels
       update: Update
+    index:
+      title: ! '%{org} Labels'
+    sent: 100% Sent
   sessions:
     destroy:
       signed_out: You've been signed out.
@@ -840,7 +852,7 @@ en:
       dont_like_facebook: Don't like Facebook?
       instructions: Instructions
       login: Login
-      login_paragraph_html: To get started, you'll need to have a Facebook account. <br/> Click the login link to the left and <strong>allow</strong> MHub to access your information. <br/> You'll be taken to the wizard if this is your first time accessing MissionHub.
+      login_paragraph_html: To get started, you'll need to have a Facebook account. <br/> Click the login link to the left and <strong>allow</strong> MissionHub to access your information. <br/> You'll be taken to the wizard if this is your first time accessing MissionHub.
       login_paragraph_mhub: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
       login_with_facebook: Please login with Facebook to get started
       no_facebook: Don't like Facebook? Click here to skip Facebook login
@@ -933,7 +945,7 @@ en:
       customize_look: ! 'Optional - FOR ADVANCED USERS ONLY - Customize how the survey will look:'
       default_login_option: Show Facebook login with an option to skip it
       fb_only_login_option: Require Facebook login
-      freeze: Tick checkbox to freeze survey
+      freeze: Check this box to freeze the survey. Once a survey is frozen, you will be able to see responses that have already come in, but no one new will be able to complete the survey.
       login_option: Choose a login option for your users
       login_paragraph: Login Paragraph
       login_paragraph_tip: This is what people will see as they reach the Facebook login page for a survey
@@ -948,6 +960,7 @@ en:
       title: Title
       title_placeholder: Shorter titles are better
       title_tip: This is what people will see as the header on the survey
+      redirect_url: If you would like the survey to redirect back to your site when it is completed, put the full url you would like to redirect to in here.
     index:
       title: Surveys for %{org}
     index_admin:
@@ -970,7 +983,7 @@ en:
         autonotify_leader_label: ! 'Select one or more leaders to be notified:'
         hidden: Don't show this question on the survey
         leaders: Select one or more leaders to be notified when this question is answered in a certain way
-        trigger_words: List one or more words or phrases that will trigger this notification if they appear in the answer.<br/>Separate words and phrases with commas.
+        trigger_words: List one or more words or phrases that will trigger this notification if they appear in the answer.<br/>(separate words and phrases with commas)
         web_only: Only show this question on web / mobile devices, don't include it in "interactive" mode.
       create:
         duplicate_error: You have already added that question. You cannot assign a question twice in a survey!
@@ -1001,7 +1014,7 @@ en:
         manage: Manage Survey Questions
         note: ! 'Note: First and Last name will be automatically added to every survey. There''s no need for you to add those.'
         predefined: Predefined Questions
-        previously_used: Previously Used Questions
+        previously_used: Previously Used Custom Questions
         your_questions: Your Questions (drag to sort)
       multiple_choice_form:
         list_choices: ! 'List out the possible choices, one per line:'
@@ -1038,7 +1051,7 @@ en:
       follow_up:
         one: 1 Person to Follow-up
         other: ! '%{count} People to Follow-up'
-      keywords: Surveys
+      keywords: Keywords
       manage_questions: Manage Survey Questions
       no_mobile: The mobile version of this page hasn't been built yet. Sorry.
       surveys: Surveys
@@ -1048,11 +1061,11 @@ en:
       get_details_html: Get the Details & <a href="/welcome/tour" class="learnmore">Learn More</a> or %{link}
       get_started: Get Started
       go_home: Go to My Contacts
-      headline_html: An online <span class="babyblue">follow-up system</span> with your audience in mind.
+      headline_html: Making it easy to <span class="babyblue">care</span> for the people that need you most.
       learn_more: ! 'Learn More '
       request_key: Click here to request a keyword
       request_key_help: A Keyword is both the name of the survey and what the person would text to fill out the survey questions. For example, you would say, 'Text UFCRU to the number 85005.' UFCRU is the keyword.
-      subheadline_html: Students text to connect. You empower follow-up from the web or a smart phone.
+      subheadline_html: Easier Connections. Easier Communication. Easier Tracking.
       title_top: Welcome to MissionHub!
       title_top_mobile: Survey
       video_headline_html: Got questions?
@@ -1071,7 +1084,7 @@ en:
       leaders_header: Give access to other leaders
       leaders_paragraph: This part is optional. Odds are decent that there are other people you work with who you'd like to give the ability to manage the keyword you set up as well as the contacts that will come from people responding to your survey. This step lets you add those people. Except we haven't programmed it quite yet.
       next: Next
-      not_found_paragraph: At the current time MissionHub is being field tested with the US Campus Ministry. If you're not a part of the US Campus Ministry, sit tight! We plan to release to a larger audience soon. If you are part of the US Campus Ministry and are seeing this message, send us an email at support@missionhub.com and we'll help you out.
+      not_found_paragraph: <p>We weren't able to match you up with an organization currently using MissionHub. There are two likely causes:</p> <ol> <li>A leader in your organization who can already log into MissionHub needs to add you to MissionHub.</li> <li>Your facebook email address doesn't match the email that was entered for you when your leader added you.</li> </ol> <p>Please contact the person who told you about MissionHub and ask them to enter you with your facebook email address. If you are that person or need more help, shoot us an email at support@missionhub.com</p>
       request_a_keyword: Request a Keyword!
       request_keyword: Request a Keyword
       request_keyword_link: Click here to request a keyword. We'll return you to this wizard when you're done.
@@ -1080,5 +1093,5 @@ en:
       verify_identity: Verify Your Identity
       verify_paragraph: ! 'If you have a CCC Relay login account, please sign in to link your account. You only need to do this once. WARNING: If you logged into MissionHub using someone else''s Facebook Account, Log Out now! Clicking verify will merge your information with theirs, creating a big mess.'
       verify_with_relay: Verify With Relay
-      welcome: Welcome
+      welcome: Welcome!
       welcome_paragraph: Welcome to MissionHub!<br><br> This setup wizard will help you get started and set up a keyword, which is an essential part of getting contacts into the system.

@@ -579,6 +579,7 @@ es:
     terms: Terminos y Condiciones
     use_keyword: ! 'Utilizar palabra clave: %{keyword}'
     view_details: Ver detalles
+    transfer: 
   number:
     currency:
       format:
@@ -604,10 +605,12 @@ es:
           quadrillion: Cuatrillones
           thousand: Miles
           trillion: Trillones
+          unit: 
       format:
         precision: 3
         significant: verdadero
         strip_insignificant_zeros: verdadero
+        delimiter: 
       storage_units:
         format: ! '%n %u'
         units:
@@ -618,6 +621,12 @@ es:
           kb: KB
           mb: MB
           tb: TB
+    percentage:
+      format:
+        delimiter: 
+    precision:
+      format:
+        delimiter: 
   org_membership:
     confirm_delete: Estás seguro que quieres disociarte de %{org}
   organization_mailer:
@@ -826,6 +835,9 @@ es:
       organizational_roles: Roles de la organización
       system_roles: Roles del sistema
       update: Actualizar
+    index:
+      title: 
+    sent: 
   sessions:
     destroy:
       signed_out: Has cerrado tu sesión.
@@ -942,6 +954,7 @@ es:
       title: 
       title_placeholder: 
       title_tip: 
+      redirect_url: 
     index:
       title: 
     index_admin:

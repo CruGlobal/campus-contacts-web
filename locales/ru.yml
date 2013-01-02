@@ -579,6 +579,7 @@ ru:
     terms: Условия и Соглашения
     use_keyword: 
     view_details: Посмотреть детали
+    transfer: 
   number:
     currency:
       format:
@@ -604,10 +605,12 @@ ru:
           quadrillion: Quadrillion
           thousand: Thousand
           trillion: Trillion
+          unit: 
       format:
         precision: 3
         significant: true
         strip_insignificant_zeros: true
+        delimiter: 
       storage_units:
         format: ! '%n %u'
         units:
@@ -618,6 +621,12 @@ ru:
           kb: KB
           mb: MB
           tb: TB
+    percentage:
+      format:
+        delimiter: 
+    precision:
+      format:
+        delimiter: 
   org_membership:
     confirm_delete: Are you sure you want to dissociate yourself from %{org}
   organization_mailer:
@@ -826,6 +835,9 @@ ru:
       organizational_roles: Организационные роли
       system_roles: Системные роли
       update: Обновить
+    index:
+      title: 
+    sent: 
   sessions:
     destroy:
       signed_out: 
@@ -942,6 +954,7 @@ ru:
       title: 
       title_placeholder: 
       title_tip: 
+      redirect_url: 
     index:
       title: 
     index_admin:
