@@ -22,8 +22,11 @@
 			</div>
 
 			<div class="importform">
+        <%= button_tag "Browse", id: 'browse_csv_file' %>
+        <div id="csv_file_name"></div>
 				<%= form_for :import, :url=>{ :controller=>"imports", :action=>"create"}, :html => { :multipart => true } do |f| %>
-					<%= f.file_field :upload, class: 'select_import_file_button' %><%= submit_tag 'Submit', :value=>"Upload" %>
+					<%= f.file_field :upload, class: 'select_import_file_button' %>
+          <%= submit_tag 'Submit', :value=>"Upload" %>
 				<% end %>
 			</div>
 		</div>
