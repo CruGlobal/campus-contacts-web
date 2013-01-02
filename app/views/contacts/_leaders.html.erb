@@ -114,7 +114,7 @@
     <li>
       <h3><%= t('contacts.index.saved_searches') %></h3>
     </li>
-    <% current_user.saved_contact_searches.each do |s| %>
+    <% @all_saved_contact_searches.each do |s| %>
       <li class="saved_search">
         <span class="name">
           <%= link_to s.name, s.full_path %>
