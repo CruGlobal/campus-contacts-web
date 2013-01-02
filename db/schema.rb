@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121205205752) do
+ActiveRecord::Schema.define(:version => 20130102161031) do
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -644,10 +644,11 @@ ActiveRecord::Schema.define(:version => 20121205205752) do
 
   create_table "saved_contact_searches", :force => true do |t|
     t.string   "name"
-    t.string   "full_path",  :limit => 4000
+    t.string   "full_path",       :limit => 4000
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "organization_id"
   end
 
   add_index "saved_contact_searches", ["user_id"], :name => "index_saved_contact_searches_on_user_id"
