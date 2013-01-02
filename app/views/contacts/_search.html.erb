@@ -77,6 +77,7 @@
               <%= form_for(@saved_contact_search, html: {id: 'save_search_form'}) do |f| %>
                 <%= hidden_field_tag 'saved_contact_search[user_id]', @person.user.id %>
                 <%= hidden_field_tag 'saved_contact_search[full_path]', request.fullpath %>
+                <%= hidden_field_tag 'saved_contact_search[organization_id]', @organization.id %>
                 <%= hidden_field_tag :id, @saved_contact_search.id %>
                 <%= f.text_field :name, :placeholder => t('contacts.index.save_this_search_placeholder') %>
               <% end %>
