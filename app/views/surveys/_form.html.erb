@@ -111,59 +111,63 @@
       <% end %>
     </div>
   </div>
+  
+	<div id="show_advanced_survey_option">Show Advanced Options</div>
+	
+	<div id="advanced_survey_option" class="hidden">
+		<div class="stepwrap rwidth">
+		  <div class="stepnumber">
+		  </div>
+		  <div class="stepcontent">
+		    <div>
+		      <strong><%= t('.customize_look') %></strong>
+		      <br /><br />
+		    </div>
+		    <%= f.label :logo, t('.logo') %>
+		    <div class="field">
+		      <%= f.file_field :logo %>
+		    </div>
 
-  <div class="stepwrap rwidth">
-    <div class="stepnumber">
-    </div>
-    <div class="stepcontent">
-      <div>
-        <strong><%= t('.customize_look') %></strong>
-        <br /><br />
-      </div>
-      <%= f.label :logo, t('.logo') %>
-      <div class="field">
-        <%= f.file_field :logo %>
-      </div>
+		    <%= f.label :background_color, t('.background_color') %>
+		    <div class="field">
+		      <%= f.text_field :background_color %>
+		    </div>
 
-      <%= f.label :background_color, t('.background_color') %>
-      <div class="field">
-        <%= f.text_field :background_color %>
-      </div>
-
-      <%= f.label :text_color, t('.text_color') %>
-      <div class="field">
-        <%= f.text_field :text_color %>
-      </div>
+		    <%= f.label :text_color, t('.text_color') %>
+		    <div class="field">
+		      <%= f.text_field :text_color %>
+		    </div>
 
 
-      <%= f.label :css_file, t('.css_file') %>
-      <div class="field">
-        <%= f.file_field :css_file %>
-      </div>
+		    <%= f.label :css_file, t('.css_file') %>
+		    <div class="field">
+		      <%= f.file_field :css_file %>
+		    </div>
 
-      <%= f.label :css, t('.css') %>
-      <div class="field">
-        <%= f.text_area :css %>
-      </div>
+		    <%= f.label :css, t('.css') %>
+		    <div class="field">
+		      <%= f.text_area :css %>
+		    </div>
 
-    </div>
-  </div>
+		  </div>
+		</div>
 
-  <div class="stepwrap rwidth">
-    <div class="stepnumber">
-    </div>
-    <div class="stepcontent">
-      <label for="survey_label">
-        <%= t('.redirect_url') %>
-      </label>
-      <div class="field">
-        <%= f.text_field :redirect_url %>
-      </div>
+		<div class="stepwrap rwidth">
+		  <div class="stepnumber">
+		  </div>
+		  <div class="stepcontent">
+		    <label for="survey_label">
+		      <%= t('.redirect_url') %>
+		    </label>
+		    <div class="field">
+		      <%= f.text_field :redirect_url %>
+		    </div>
 
-      <div class="actions">
-        <%= f.submit %>
-      </div>
+		  </div>
+		</div>
+	</div>	
 
-    </div>
+  <div class="actions">
+    <%= f.submit %>
   </div>
 <% end %>
