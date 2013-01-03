@@ -30,8 +30,11 @@ $ ->
     e.preventDefault()
     ids = []
     $('.id_checkbox:checked').each ->
-      ids.push($(this).attr('data-id'))
-    document.location = $(this).attr('href')+"&only_ids="+ids.join(',')
+      ids.push($(this).attr('data-id'))      
+    href = $(this).attr('href')
+    if href.indexOf('?') < 0
+    	href = href+"?" 
+    document.location = href+"&only_ids="+ids.join(',')
       
   $('#contacts_controller #include_archived').live 'click', ->
     if $(this).is(':checked')

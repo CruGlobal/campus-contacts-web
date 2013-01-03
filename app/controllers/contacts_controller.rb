@@ -29,7 +29,7 @@ class ContactsController < ApplicationController
       end
 
       wants.csv do
-        @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r]}]
+        @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r] if r.role_id == Role::CONTACT_ID }]
         @all_answers = generate_answers(@all_people, @organization, @questions)
         @questions.select! { |q| !%w{first_name last_name phone_number email}.include?(q.attribute_name) }
         filename = @organization.to_s
