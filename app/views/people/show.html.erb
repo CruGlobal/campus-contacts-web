@@ -8,36 +8,14 @@
   <%= render 'application/assign' %>
 <% end %>
 
-  <div class="titlebar" style="float:left">
-    <h1>
-      <%= image_tag("contact.png") %>
-      <%= @person %>
-    </h1>
-  </div>
+<div class="titlebar">
+  <h1>
+    <%= image_tag("contact.png") %>
+    <%= @person %>
+  </h1>
+</div>
 
-  <div class="titlebar" style="float:left;margin-bottom:0;" id="person_header" data-id="<%= @person.id %>">
-    <div id="person_info">
-      <div class="title assigned_to_leader">
-        <%= t('.assigned_to', assigned_to: "#{@assigned_tos}") if @assigned_tos.present? %>
-      </div>
-      <br/>
-
-      <% @roles = (@person.assigned_organizational_roles(current_organization.id).default_roles_desc + @person.assigned_organizational_roles(current_organization.id).non_default_roles_asc) %>
-      <% if @roles.present? %>
-		    <div class="title"><%= t('nav.roles')%>:</div>
-		    <div class="assigned_labels">
-		      <% @roles.each do |role| %>
-		        <span class="assigned_label"><%= role %></span>
-		      <% end %>
-		    </div>
-		  <% end %>
-    </div>
-  </div>
-
-<div style="clear:both;margin:0;padding:0;line-height:0;"></div>
-
-<div class="pad">
-
+<div class="pad_profile">
   <div class="contact_leftcol">
     <div>
       <%= image_tag("https://graph.facebook.com/#{@person.fb_uid}/picture?type=large", alt: '') %>
@@ -72,6 +50,26 @@
   </div>
 
   <div class="contact_rightbody">
+	  <div class="titlebar" id="person_header" data-id="<%= @person.id %>">
+		  <div id="person_info">
+		    <div class="title assigned_to_leader">
+		      <%= t('.assigned_to', assigned_to: "#{@assigned_tos}") if @assigned_tos.present? %>
+		    </div>
+
+		    <% @roles = (@person.assigned_organizational_roles(current_organization.id).default_roles_desc + @person.assigned_organizational_roles(current_organization.id).non_default_roles_asc) %>
+		    <% if @roles.present? %>
+		    <div>
+				  <div class="title"><%= t('nav.roles')%>:</div>
+				  <div class="assigned_labels">
+				    <% @roles.each do |role| %>
+				      <span class="assigned_label"><%= role %></span>
+				    <% end %>
+				  </div>
+		    </div>				  
+				<% end %>
+		  </div>
+		</div>
+
     <% if @followup_comment %>
       <%= form_for @followup_comment, remote: true, html: {id: 'comment_form'} do |f| %>
         <%= f.hidden_field :organization_id %>
