@@ -27,3 +27,4 @@ NERD_tree_3
 config/locales/copycopter.yml
 dump.rdb.localeapp
 .localeapp
+log/localeapp.yml
