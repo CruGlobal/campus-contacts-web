@@ -25,11 +25,11 @@ class EmailAddress < ActiveRecord::Base
       end
       begin
         MergeAudit.create!(mergeable: self, merge_looser: other)
+        other.reload
+        other.destroy
       rescue ActiveRecord::RecordNotFound
         # ???
       end
-      other.reload
-      other.destroy
     end
   end
 
