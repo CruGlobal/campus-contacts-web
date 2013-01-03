@@ -110,8 +110,8 @@
     </span>
   </li>
   <li><hr /></li>
-  <% if current_user.saved_contact_searches.any? %>
-    <li>
+  <% if @all_saved_contact_searches.any? %>
+    <li class="heading selected">
       <h3><%= t('contacts.index.saved_searches') %></h3>
     </li>
     <% @all_saved_contact_searches.each do |s| %>
