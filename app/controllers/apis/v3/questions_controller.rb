@@ -61,7 +61,7 @@ class Apis::V3::QuestionsController < Apis::V3::BaseController
 
   def survey
     survey_id = params[:survey_id]
-    survey_id ||= params[:question][:survey_id] if params[:question]
+    survey_id ||= params[:question].delete(:survey_id) if params[:question]
     @survey ||= current_organization.surveys.find(survey_id)
   end
 
