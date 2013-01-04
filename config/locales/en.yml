@@ -1062,6 +1062,7 @@ en:
       crs_import_link: "Import a conference from the Conference Registration Tool"
       crs_import_tip: 'The Conference Registration Tool is another tool created by CRU that you can use to manage conferences.'
     edit:
+      back: 'Cancel and go back'
       delete: Delete Organization
       title: Edit %{org}
       term_explain: Terminology is how you define this item, for example, Church, Organization, Ministry etc.
