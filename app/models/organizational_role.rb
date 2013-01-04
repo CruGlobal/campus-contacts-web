@@ -1,6 +1,5 @@
 class OrganizationalRole < ActiveRecord::Base
-  has_paper_trail :on => [:destroy],
-                  :meta => { organization_id: :organization_id,
+  has_paper_trail :meta => { organization_id: :organization_id,
                              person_id: :person_id }
 
   FOLLOWUP_STATUSES = ['uncontacted','attempted_contact','contacted','do_not_contact','completed']
