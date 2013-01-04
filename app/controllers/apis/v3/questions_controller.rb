@@ -60,7 +60,9 @@ class Apis::V3::QuestionsController < Apis::V3::BaseController
   end
 
   def survey
-    @survey ||= current_organization.surveys.find(params[:survey_id])
+    survey_id = params[:survey_id]
+    survey_id ||= params[:question][:survey_id] if params[:question]
+    @survey ||= current_organization.surveys.find(survey_id)
   end
 
   def get_question
