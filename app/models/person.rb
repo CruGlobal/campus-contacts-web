@@ -104,9 +104,9 @@ class Person < ActiveRecord::Base
 
   scope :get_and_order_by_latest_answer_sheet_answered, lambda { |order, org_id| {
     #"SELECT * FROM (SELECT * FROM missionhub_dev.people mp INNER JOIN missionhub_dev.organizational_roles ro ON mp.id = ro.person_id WHERE ro.organization_id = #{@organization.id} AND (ro.role_id = 3 AND ro.followup_status <> 'do_not_contact')) mp LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM missionhub_dev.answer_sheets ass INNER JOIN missionhub_dev.surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{@organization.id}) ass ON ass.person_id = mp.id GROUP BY mp.id ORDER BY #{params[:q][:s].gsub('answer_sheets', 'ass')}"
-    :joins => "LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM answer_sheets ass INNER JOIN surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{org_id}) ass ON ass.person_id = people.id",
+    :joins => "LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM answer_sheets ass INNER JOIN surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{org_id} ORDER BY ass.updated_at DESC) ass ON ass.person_id = people.id",
     :group => "people.id",
-    :order => "#{order.gsub('answer_sheets', 'ass')}"
+    :order => "ISNULL(ass.updated_at), ass.updated_at #{order.include?("asc") ? 'DESC' : 'ASC'}"
   }}
 
   def contact_role_for_org(org)
