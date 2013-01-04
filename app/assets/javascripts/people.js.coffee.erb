@@ -310,7 +310,7 @@ $.fn.submitBulkSendTextDialog = ->
   $.rails.handleRemote($("#bulk_send_msg_dialog form"))
   $.n(msg)
   $('#bulk_send_msg_dialog').dialog('close')
-  $('.id_checkbox, .check_all_contacts').attr('checked',false)
+  $('.id_checkbox, .check_all_contacts, #check_all_groups, .gid_checkbox').attr('checked',false)
 
 $.fn.submitBulkSendDialog = ->
   ids = []
@@ -333,7 +333,7 @@ $('#send_bulkemail_link_new').live 'click', ->
 
   ids = []
   fails = []
-  $('.id_checkbox:checked').each ->
+  $('.id_checkbox.contact_checkbox:checked').each ->
     id = $(this).attr('data-id')
     if $(this).attr('data-email') && $(this).attr('data-email').length > 0
       ids.push(id)
@@ -372,7 +372,7 @@ $('#send_bulksms_link_new').live 'click', ->
 
   ids = []
   fails = []
-  $('.id_checkbox:checked').each ->
+  $('.id_checkbox.contact_checkbox:checked').each ->
     id = $(this).attr('data-id')
     if $(this).attr('data-number') && $(this).attr('data-number').length > 0
       ids.push(id)
@@ -655,7 +655,7 @@ $('#fetch_all_contacts_link').live 'click', (e)->
 
 $('.check_all_contacts, .check_all_mine').live 'click', ->
   first_row = $('#contacts_table').find('tr:first')
-  
+
   if first_row.text().indexOf('Fetching') == 0
     $(this).attr('checked', true)
     $('.id_checkbox').prop('checked', true)

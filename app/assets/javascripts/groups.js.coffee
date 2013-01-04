@@ -1,7 +1,17 @@
 $ ->
+  $('#check_all_groups').live 'click', (e)->
+    $('.id_checkbox.group_checkbox').prop('checked',$(this).is(':checked'))
+    $('.id_checkbox.group_checkbox').each ->
+      group_class = $(this).attr('id')
+      $('.id_checkbox.contact_checkbox.'+group_class).prop('checked',$(this).is(':checked'))
+
+  $('.id_checkbox.group_checkbox').live 'click', (e)->
+    group_class = $(this).attr('id')
+    $('.id_checkbox.contact_checkbox.'+group_class).prop('checked',$(this).is(':checked'))
+
   $('#group_table .controls a.delete').live 'click', (e)->
     $(this).closest('tr').fadeOut()
-    
+
   if $('#group_meeting_day')?
     $('#group_meeting_day').val($('#day_of_week').val())
   $('#group_meets').live 'change', ->
@@ -20,13 +30,13 @@ $ ->
       when 'sporadically'
         $('.regular').hide()
         $('#group_meeting_day').val('')
-  
+
   $('#day_of_week').live 'change', ->
     $('#group_meeting_day').val($(this).val())
-    
+
   $('#day_of_month').live 'change', ->
     $('#group_meeting_day').val($(this).val())
-        
+
   $('#group_list_publicly').live 'change', ->
     if $('#group_list_publicly').prop('checked')
       $('.approve_join').show()
@@ -38,20 +48,20 @@ $ ->
     $('#member_search').attr('title', $('#add_member_prompt').text())
     $.fn.showSearchBox()
     false
-    
+
   $("a.add-leader").live 'click', ->
     $('#role').val('leader')
     $('#member_search').attr('title', $('#add_leader_prompt').text())
     $.fn.showSearchBox()
     false
-    
+
   $('#member_search_name').autocomplete
     source: (request, response)->
       form = $('#member_search_form')
       $('#spinner_member_search').show()
       $.ajax
-        url: form.attr('action'), 
-        data: form.serialize(), 
+        url: form.attr('action'),
+        data: form.serialize(),
         type: 'GET',
         success: (data)->
           $('#member_search_results').html(data)
@@ -79,7 +89,7 @@ $ ->
       alert('At a minimum you need to provide a first name.')
       return false
 
-    add_another = false      
+    add_another = false
     if $(this).hasClass('save_and_more')
       add_another = true
     params = form.serialize() + '&add_to_group=y'
@@ -96,8 +106,8 @@ $ ->
       $.fn.showSearchBox()
     $('#new_person')[0].reset()
     false
-      
-      
+
+
 $.fn.showSearchBox = ->
   $('#member_search .explain').show()
   $('#add_member_form').hide()
@@ -111,7 +121,7 @@ $.fn.showSearchBox = ->
     height:650,
     width:600,
     modal: true,
-    buttons: 
+    buttons:
       Cancel: ->
         $(this).dialog('destroy')
   false

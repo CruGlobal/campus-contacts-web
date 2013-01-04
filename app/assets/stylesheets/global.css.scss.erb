@@ -21,7 +21,6 @@ html[xmlns] .clearfix {
 
 .flash {
 	margin: 10px;
-	width: 750px;
 }
 
 hr {
@@ -283,7 +282,6 @@ img.tmenu {
 #left {
   float: left;
   width: 205px;
-  padding-top: 10px;
 }
 
 #logo {
@@ -882,7 +880,7 @@ ul.pillmenu {
   	display:none;
   	width:auto;
   	min-width: 235px;
-  }  
+  }
 }
 
 .pillbutton,
@@ -975,11 +973,11 @@ ul.pillmenu {
 }
 
 .icon.help {  background-image: url("<%= asset_path('qe/icons/question-balloon.png') %>"); }
-.icon.magnify {  background-image: url("<%= asset_path('magnify.png') %>");}
+.icon.magnify { margin-right: 0.5em; background-image: url("<%= asset_path('magnify.png') %>");}
 .icon.add {  background-image: url("<%= asset_path('add.png') %>");}
 .icon.unassign {  background-image: url("<%= asset_path('undo.png') %>");}
 .icon.send_contact_info {  background-image: url("<%= asset_path('email_go.png') %>");}
-.icon.delete {  margin-right: 0.5em; background-image: url("<%= asset_path('delete.png') %>"); background-position: 50% 50%;}
+.icon.delete {  background-image: url("<%= asset_path('delete.png') %>"); background-position: 50% 50%;}
 .icon.edit {  background-image: url("<%= asset_path('edit_sm.png') %>");}
 .icon.check {  background-image: url("<%= asset_path('check.png') %>");}
 .icon.lock {  background-image: url("<%= asset_path('lock.png') %>");}
@@ -1987,13 +1985,14 @@ ul.leftmenu li .moredown:hover span{
 	color: $light-blue;
 }
 
+ul.leftmenu li.mapinfo {
+  margin: 5px;
+}
 
 ul.leftmenu li.information {
   background: #FFF0D7;
-  margin-right: 5px;
+  margin: 5px;
   padding: 5px 7px;
-  margin-top: 5px;
-  margin-bottom: 5px;
 
   h3 {
     margin: 0;
@@ -2097,7 +2096,7 @@ div.field_with_errors div.ui-effects-wrapper {
 /* PAGINATION  */
 div.pagination {
   margin: 15px 0 10px 0;
-  text-align: center;  
+  text-align: center;
 		display:inline-block;
   span.page {
     a {
@@ -2126,7 +2125,7 @@ div.pagination {
 	margin-top:-10px;
 	text-align: center;
 	.paginate_details{
-		display:inline-block;	
+		display:inline-block;
 		font-weight:bold;
 		padding-left:7px;
 	}

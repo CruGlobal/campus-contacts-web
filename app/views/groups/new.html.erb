@@ -1,40 +1,6 @@
-<% provide :sidebar do %>
-  <ul class="leftmenu">
-    <li class="heading selected">
-      <% if can? :manage, current_organization %>
-        <%= link_to(raw(t('.add') + " " + image_tag('add.png')), '#', class: 'add-label listaction') %>
-      <% end %>
-      <h3><%= t('.labels') %></h3>
-    </li>
-    <li>
-      <ul id="labels" class="indent expandable">
-        <% current_organization.group_labels.each do |label| %>
-          <%= render 'label', label: label %>
-        <% end %>
-      </ul>
-    </li>
-  </ul>
-    <div id="new_label" style="display:none" title="<%= t('groups.index.add_a_label') %>">
-      <%= form_for GroupLabel.new, remote: true, validate: true do |f| %>
-        <div class="item">
-          <div class="group_label">
-            <%= t('groups.index.new_label_prompt') %>:
-          </div>
-          <div class="field al_center">
-            <%= f.text_field :name, :autocomplete => 'off' %>
-            <%= spinner('new_label') %>
-          </div>
-        </div>
-      <% end %>
-    </div>
-<% end %>
+<%= render partial: 'groups/sidebar'%>
 
-<% if @label %>
-  <div class="controlbar">
-    <%= link_to(t('groups.see_all'), '/groups', :class=>"backto") %>
-  </div>
-<% end %>
-
+<br/>
 <div class="titlebar titlebarmod"><h1><%= t('.new_group') %></h1></div>
 
 <%= render 'form' %>

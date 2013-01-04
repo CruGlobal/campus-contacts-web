@@ -1,0 +1,31 @@
+<%- group_presenter = Present(group) %>
+<tr data-id="<%= group.id %>">
+  <td nowrap="nowrap" class="checkbox_cell">
+    <%= image_tag('grippy.png', class: 'handle' ) %>
+    <%= check_box_tag 'gids[]', group.id, false, id: "gids_#{group.id}", class: 'id_checkbox group_checkbox' %>
+    <%- current_organization.people.get_from_group(group.id).each do |person| %>
+      <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: "id_checkbox contact_checkbox gids_#{group.id} hidden", 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email %>
+    <% end %>
+  </td>
+  <td class="group_name">
+    <%= link_to(group.name, group) %>
+  </td>
+  <td>
+    <% if !group.list_publicly %>
+      <%= image_tag('lock.gif', class: 'privategroup' ) %>
+    <% end %>
+  </td>
+  <td>
+    <%- involved_count = current_organization.people.get_from_group(group.id).collect(&:name).count %>
+    <%= involved_count %>
+  </td>
+  <td>
+    <%= group_presenter.leaders_names %>
+  </td>
+  <td class="labels">
+    <%= group_presenter.labels %>
+  </td>
+  <td class="controls" align="right">
+     <%= link_to("Show", group_path(group), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
+  </td>
+</tr>

@@ -20,17 +20,10 @@
         </li>
       </ul>
     </li>
-    <li class="<%= 'current' if request.path =~ group_pattern %>">
-      <%= link_to(t('nav.groups'), "/groups") %>
-      <ul>
-        <% if can? :manage, current_organization %>
-          <li class="<%= 'current' if  params[:controller] == 'groups' %>">
-            <%= link_to(t('nav.groups'), "/groups", :class => "topset groups") %>
-          </li>
-        <% end %>
-      </ul>
-    </li>
     <% if can? :manage, current_organization %>
+      <li class="<%= 'current' if request.path =~ group_pattern %>">
+        <%= link_to(t('nav.groups'), "/groups") %>
+      </li>
       <li class="<%= 'current' if request.path =~ connect_pattern %>">
         <%= link_to(t('nav.surveys'), index_admin_surveys_path) %>
         <ul>
