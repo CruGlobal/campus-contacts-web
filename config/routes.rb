@@ -234,7 +234,10 @@ Mh::Application.routes.draw do
       end
       resources :people
       resources :organizations
-      resources :surveys
+      resources :surveys do
+        resources :questions
+      end
+      resources :questions
       resources :roles
       resources :followup_comments
     end
