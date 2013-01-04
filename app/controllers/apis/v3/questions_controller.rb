@@ -18,18 +18,25 @@ class Apis::V3::QuestionsController < Apis::V3::BaseController
   end
 
   def create
-    question = questions.new(params[:question])
+    if survey
+      question = params[:question].delete(:kind).constantize.new(params[:question])
 
-    if question.save
-      render json: question,
-             status: :created,
-             callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
+      if question.save
+        render json: question,
+               status: :created,
+               callback: params[:callback],
+               scope: {include: includes, organization: current_organization}
+      else
+        render json: {errors: question.errors.full_messages},
+               status: :unprocessable_entity,
+               callback: params[:callback]
+      end
     else
-      render json: {errors: question.errors.full_messages},
-             status: :unprocessable_entity,
+      render json: {errors: "Your api key does not have access to the survey id you send in"},
+             status: :unauthorized,
              callback: params[:callback]
     end
+
   end
 
   def update
