@@ -19,7 +19,6 @@ class Apis::V3::QuestionsController < Apis::V3::BaseController
 
   def create
     question = questions.new(params[:question])
-    question.organization_id = current_organization.id
 
     if question.save
       render json: question,
