@@ -2,9 +2,9 @@
   <ul class="leftmenu">
     <li class="heading selected">
       <% if can? :manage, current_organization %>
-        <%= link_to(raw(t('.add') + " " + image_tag('add.png')), '#', class: 'add-label listaction') %>
+        <%= link_to(raw(t('groups.sidebar.add') + " " + image_tag('add.png')), '#', class: 'add-label listaction') %>
       <% end %>
-      <h3><%= t('.labels') %></h3>
+      <h3><%= t('groups.sidebar.labels') %></h3>
     </li>
     <li>
       <ul id="labels" class="indent expandable">
@@ -12,6 +12,12 @@
           <%= render 'label', label: label %>
         <% end %>
       </ul>
+    </li>
+    <li>
+      <span class="name">
+        <%= link_to(t('groups.see_all'), groups_path) %>
+      </span>
+      (<%= current_organization.groups.count %>)
     </li>
   </ul>
     <div id="new_label" style="display:none" title="<%= t('groups.index.add_a_label') %>">
@@ -34,6 +40,7 @@
     <%= link_to(t('groups.see_all'), '/groups', :class=>"backto") %>
   </div>
 <% end %>
+<br/>
 <div class="titlebar titlebarmod"><h1><%= t('.edit_group', group: @group) %></h1></div>
 
 <%= render 'form' %>

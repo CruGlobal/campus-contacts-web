@@ -2,11 +2,11 @@ class GroupPresenter < DelegatePresenter::Base
   def labels
     s(helpers.content_tag(:ul, s(self.group_labels.collect {|l| helpers.content_tag(:li, helpers.content_tag(:span, h(l), class: 'name') + s('<a href="#" class="delete">x</a>'), data: {id: l.id})}.join)))
   end
-  
+
   def leaders_names
     leaders.collect(&:name).join(', ')
   end
-  
+
   def meets_at
     case meets
     when 'sporadically' then I18n.t('groups.show.sporadically')
@@ -18,11 +18,11 @@ class GroupPresenter < DelegatePresenter::Base
       ''
     end
   end
-  
+
   def human_start_time
     I18n.l(Time.now.beginning_of_day + start_time, format: :time_only)
   end
-  
+
   def human_end_time
     I18n.l(Time.now.beginning_of_day + end_time, format: :time_only)
   end

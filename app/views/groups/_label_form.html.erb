@@ -1,0 +1,13 @@
+<div id="new_label" style="display:none" title="<%= t('groups.add_a_label_title') %>">
+  <%= form_for GroupLabel.new, remote: true, validate: true do |f| %>
+    <div class="item">
+      <div class="group_label">
+        <%= t('groups.new_label_prompt') %>:
+      </div>
+      <div class="field al_center">
+        <%= f.text_field :name, :autocomplete => 'off' %>
+        <%= spinner('new_label') %>
+      </div>
+    </div>
+  <% end %>
+</div>

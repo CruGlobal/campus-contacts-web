@@ -4,6 +4,7 @@
  *= require organizations
  *= require imports
  *= require roles
+ *= require groups
  *= require jquery.qtip
  *= require jquery.chosen
  *= require superfish

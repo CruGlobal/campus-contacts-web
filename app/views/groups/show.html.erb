@@ -2,7 +2,7 @@
   <ul class="leftmenu">
     <li class="heading selected"><h3><%= t('.details') %></h3></li>
     <li class="information">
-      
+
       <div class="field">
         <div class="ls"><label><%= t('.leaders') %>:</label></div>
         <div class="rs"><%= @group.leaders_names %></div>
@@ -16,17 +16,15 @@
         <div class="rs"><%= raw(@group.meets_at) %></div>
       </div>
     </li>
-    <li class="nostyle">
+    <li class="mapinfo">
       <%= link_to(image_tag("http://maps.googleapis.com/maps/api/staticmap?center=#{@group.location}&zoom=15&size=200x200&markers=color:blue|label:G|#{@group.location}&sensor=false"), "http://www.google.com/maps?q=#{@group.location}", target: '_blank', class: "nostyle") %>
     </li>
     <li><%= link_to(t('.edit_group'), edit_group_path(@group)) %></li>
     <li><%= link_to(t('.delete_group'), group_path(@group), method: :delete, confirm: t('.confirm_delete_group')) %></li>
+    <li><%= link_to(t('.back_to_list'), groups_path) %></li>
   </ul>
 <% end %>
 
-<div class="controlbar">
-  <%= link_to(t('groups.see_all'), '/groups', :class=>"backto") %>
-</div>
 <div class="titlebar titlebarmod">
   <h1>
     <%= @group %>
@@ -35,19 +33,25 @@
 
 <div class="pagemenu">
   <ul class="pillmenu">
-    <li>     
+    <li>
       <%= link_to(t('.add_member'), '#', class: 'add-member') %>
     </li>
-    <li>     
+  </ul>
+  <ul class="pillmenu">
+    <li>
       <%= link_to(t('.add_leader'), '#', class: 'add-leader') %>
     </li>
-  </ul>  
+  </ul>
+  <ul class="divider"></ul>
   <ul class="pillmenu">
-		<li><%= link_to(t('people.index.send_email'), nil, :id => "send_bulkemail_link") %></li>	
-		<li><%= link_to(t('people.index.send_sms'), nil, :id => "send_bulksms_link") %></li>			
+		<li><%= link_to(t('people.index.send_email'), nil, :id => "send_bulkemail_link_new") %></li>
 	</ul>
   <ul class="pillmenu">
-		<li><%= link_to(t('people.index.group_comment'), nil, :id => "send_bulkcomment_link") %></li>	
+		<li><%= link_to(t('people.index.send_sms'), nil, :id => "send_bulksms_link_new") %></li>
+	</ul>
+  <ul class="divider"></ul>
+  <ul class="pillmenu">
+		<li><%= link_to(t('people.index.group_comment'), nil, :id => "send_bulkcomment_link") %></li>
 	</ul>
 </div>
 
@@ -67,7 +71,7 @@
     </thead>
     <tbody id="group_table">
       <% @people.each do |person| %>
-        <%= render 'person', person: person, group_membership: person.group_memberships.where(group_id: @group.id).first %>
+      <%= render 'groups/person', person: person, group_membership: person.group_memberships.where(group_id: @group.id).first %>
       <% end %>
     </tbody>
   </table>
@@ -75,4 +79,4 @@
   <%= render 'group_memberships/form' %>
 </div>
 
-<%= render 'shared/bulk_send_form' %>
+<%= render 'shared/bulk_send_msg' %>
