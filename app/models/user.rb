@@ -2,6 +2,9 @@ require 'errors/no_email_error'
 require 'errors/failed_facebook_create_error'
 require 'errors/facebook_duplicate_email_error'
 class User < ActiveRecord::Base
+  has_paper_trail :on => [:destroy],
+                  :meta => { person_id: :person_id }
+
   WIZARD_STEPS = %w[welcome verify keyword survey leaders]
   self.primary_key = 'id'
 
@@ -148,5 +151,9 @@ class User < ActiveRecord::Base
 
   def has_role?(role_id, organization)
     OrganizationalRole.where(role_id: role_id, organization_id: organization.id).first.present?
+  end
+
+  def person_id
+    person.try(:id)
   end
 end
