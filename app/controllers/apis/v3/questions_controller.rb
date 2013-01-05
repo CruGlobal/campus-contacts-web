@@ -22,6 +22,9 @@ class Apis::V3::QuestionsController < Apis::V3::BaseController
       question = params[:question].delete(:kind).constantize.new(params[:question])
 
       if question.save
+        survey.elements << question
+        survey.save
+
         render json: question,
                status: :created,
                callback: params[:callback],
