@@ -5,13 +5,13 @@
 
 <div style="padding: 0 20px;">
 	<p>From this screen you can edit, delete or rearrange your organizations. Clicking "Add new organization"<br/>will do a quick add by name. To edit more details, permissions and other info, select "edit" from the item's<br/>name on the list.</p>
-  
+
 	<h2><%= root_org %> <small><%= link_to(t('general.edit'), edit_organization_path(root_org)) %></small></h2>
   <% if root_org.conference_id %>
     <%= link_to('Re-import conference data', update_from_crs_organization_path(root_org)) %>
     <br />
   <% end %>
-	
+
 	<% if root_org.children.length == 0 %>
 	  <br/><%= link_to(t('.add_sub_org', terminology: root_org.terminology.pluralize), '#', id: 'add_sub_orgs') %>
 	<% end %>
@@ -26,7 +26,7 @@
 	  </div>
 	</div>
 	</div>
-	
+
   <%= link_to(t('.crs_import_link'), '#', class: 'import_from_crs_link') %>
   <%= tip(t('.crs_import_tip')) %>
 
