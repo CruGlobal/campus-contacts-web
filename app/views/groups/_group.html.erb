@@ -1,7 +1,9 @@
 <%- group_presenter = Present(group) %>
 <tr data-id="<%= group.id %>">
-  <td nowrap="nowrap" class="checkbox_cell">
+	<td class="handle_container">
     <%= image_tag('grippy.png', class: 'handle' ) %>
+	</td>
+  <td nowrap="nowrap" class="checkbox_cell">
     <%= check_box_tag 'gids[]', group.id, false, id: "gids_#{group.id}", class: 'id_checkbox group_checkbox' %>
     <%- current_organization.people.get_from_group(group.id).each do |person| %>
       <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: "id_checkbox contact_checkbox gids_#{group.id} hidden", 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email %>
