@@ -10,12 +10,12 @@
         <% if flash[:error] %>
           <div class="flash error"><%= raw flash[:error] %></div>
         <% end %>
-        
+
         <%= hidden_field_tag :add_another %>
         <%= hidden_field_tag :assign_to_me, false, id: 'assign_new_contact_to_me' %>
         <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
         <%= hidden_field_tag :dnc, params[:dnc] %>
-        
+
         <%= render 'people/person_form', person: person %>
       </div>
       <div class="form_group_label">
@@ -34,16 +34,16 @@
           <%= t('.title_optional') %>
         </span>
       </div>
-      
+
       <div class="form_group_fields user_defined_contact_fields">
         <% current_organization.questions.uniq {|q| q.label}.each do |question| %>
-          <% next if ['email','phone'].include?(question.slug) %>
+          <% next if ['first_name', 'last_name', 'email', 'phone_number', 'gender', 'country', 'state', 'city', 'address1', 'zip'].include?(question.attribute_name) %>
           <div class="field">
           	<label><%= raw question.label %></label>
           	<%= render :partial => 'survey/' + question.ptemplate, :object => question, :locals => {:col => nil, :answer_sheet => @answer_sheet} %>
           </div>
         <% end %>
       </div>
-      
+
     </div>
   <% end %>
