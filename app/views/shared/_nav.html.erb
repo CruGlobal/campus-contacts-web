@@ -1,5 +1,7 @@
 <div id="globalNav">
-
+	<% unless user_signed_in? %>
+	<div id="logo_container">&nbsp;</div>
+	<% end %>
   <div class="gmdrop">
     <ul class="sf-menu mh-global">
       <% if session[:old_user_id].present? %>
@@ -59,7 +61,5 @@
       <% end %>
     </ul>
   </div>
-
-
 </div>
 
