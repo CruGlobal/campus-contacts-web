@@ -5,7 +5,7 @@
 <div class="pagemenu">
   <ul class="pillmenu">
     <li><%= link_to('Preview Survey', new_survey_response_url(survey_id: @survey.id, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), target: '_blank')%></li>
-    <li>     
+    <li>
       <% if session[:wizard] && wizard_path %>
         <%= link_to(t('nav.back_to_wizard'), wizard_path) %>
       <% else %>
@@ -24,11 +24,11 @@
   <p class="inlinehelp">
     <%= t('general.survey_web_tip_html', link: short_survey_url(@survey.id, host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port']))) %>
   </p>
-  
+
   <p><%= t('.note') %></p>
-  
-  
-  <h3><%= t('.your_questions') %> <%= tip(t('questions.your_questions_help')) %></h3>
+
+
+  <h3><%= t('.your_questions') %> <%= tip(t('.your_questions_help')) %></h3>
   <table border="0" cellspacing="0" cellpadding="0" class="yourquestions fakesort">
     <tbody>
       <tr>
@@ -52,15 +52,15 @@
     <tbody id="questions" data-sortable="true" data-sortable-url="<%= reorder_survey_questions_path(@survey) %>">
       <%= render partial: 'question', collection: @questions %>
     </tbody>
-  </table>  
-  
+  </table>
+
   <div class="button_block">
   <%= link_to('+ ' + t('.add_question'), '', id: 'add_question_link', class: "cleangray") %>
   <%= link_to('+ ' + t('.add_prev_question'), '', id: 'add_old_question_link', class: "cleangray") %>
   </div>
-  
+
   <div id="previously_used" style="display:none">
-    
+
     <table border="0" cellspacing="5" cellpadding="0" class="yourquestions">
       <thead>
         <th colspan="3"><%= t('.predefined') %> <%= tip(t('questions.predefined_help')) %></th>
@@ -71,7 +71,7 @@
         <% end %>
       </tbody>
     </table>
-    
+
     <table border="0" cellspacing="5" cellpadding="0" class="yourquestions">
       <thead>
         <th colspan="3"><%= t('.previously_used') %> <%#= tip(t('questions.previously_used_help')) %></th>
@@ -98,7 +98,7 @@
   </div>
   <div id="question_form" class="hidden">
   </div>
-  
+
   <script type="text/javascript" charset="utf-8">
     $(function() {
       $('#question_type').change()
