@@ -241,11 +241,9 @@ class Organization < ActiveRecord::Base
 
   def add_role_to_person(person, role_id, added_by_id = nil)
     person_id = person.is_a?(Person) ? person.id : person
-    with_lock do
-      role = OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id, added_by_id: added_by_id).first_or_create!
-      role.update_attributes(archive_date: nil)
-      role
-    end
+    role = OrganizationalRole.lock('LOCK IN SHARE MODE').where(person_id: person_id, organization_id: id, role_id: role_id, added_by_id: added_by_id).first_or_create!
+    role.update_attributes(archive_date: nil)
+    role
   end
 
   def add_roles_to_people(people, roles)
