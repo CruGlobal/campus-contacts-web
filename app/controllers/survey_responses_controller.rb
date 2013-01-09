@@ -97,6 +97,13 @@ class SurveyResponsesController < ApplicationController
                                                                           first_name: params[:person][:first_name],
                                                                           last_name: params[:person][:last_name])
         end
+      else
+        params[:person] = Hash.new
+      end
+
+      if @survey.questions.exists?(attribute_name: 'birth_date')
+        birth_date_element = @survey.questions.where(attribute_name: 'birth_date').first
+        params[:person][:birth_date] = params[:answers]["#{birth_date_element.id}"] if params[:answers]["#{birth_date_element.id}"].present?
       end
 
       if existing_person
@@ -112,6 +119,7 @@ class SurveyResponsesController < ApplicationController
       else
         @person = Person.create(params[:person])
       end
+
       @current_person = @person
       if @person.valid?
         NewPerson.create(person_id: @person.id, organization_id: @survey.organization.id)

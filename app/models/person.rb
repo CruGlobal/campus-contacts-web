@@ -50,6 +50,23 @@ class Person < ActiveRecord::Base
   validates_presence_of :first_name
   #validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, allow_blank: true
 
+  validate do |value|
+    birth_date = value.birth_date_before_type_cast
+    return unless birth_date.present?
+    if birth_date =~ /^([1-9]|0[1-9]|1[012])\/([1-9]|0[1-9]|[12][1-9]|3[01])\/(19|2\d)\d\d$/
+      begin
+        date_str = birth_date.split('/')
+        self[:birth_date] = Date.parse("#{date_str[2]}-#{date_str[0]}-#{date_str[1]}")
+      rescue
+        errors.add(:birth_date, "invalid")
+      end
+    elsif birth_date.is_a?(Date)
+      self[:birth_date] = birth_date
+    else
+      errors.add(:birth_date, "invalid")
+    end
+  end
+
   accepts_nested_attributes_for :email_addresses, :reject_if => lambda { |a| a[:email].blank? }, allow_destroy: true
   accepts_nested_attributes_for :phone_numbers, :reject_if => lambda { |a| a[:number].blank? }, allow_destroy: true
   accepts_nested_attributes_for :current_address, allow_destroy: true

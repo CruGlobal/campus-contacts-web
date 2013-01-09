@@ -222,6 +222,16 @@ class SurveyResponsesControllerTest < ActionController::TestCase
       assert_equal "123456789", Person.last.phone_numbers.first.number
     end
 
+    should "not create an answer sheet when the birth date is invalid date format" do
+      assert_no_difference "Answer.count" do
+        @birth_date_question = @question = Factory(:text_field, attribute_name: 'birth_date')
+        @survey.questions << @birth_date_question
+        @questions = @survey.questions
+        xhr :put, :create, {:survey_id => @survey.id, :answers => {@birth_date_question.id.to_s => "20"}}
+        assert_equal "invalid", assigns(:person).errors.messages[:birth_date].first
+      end
+    end
+
   end
 
   test "show" do

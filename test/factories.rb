@@ -108,7 +108,6 @@ FactoryGirl.define do
     last_name 'Doe'
     gender '1'
     fb_uid {"690860831#{Factory.next(:count)}"}
-    birth_date {DateTime.strptime('12/18/1989', '%m/%d/%Y')}
   end
 
   factory :person_without_name, parent: :person do
@@ -480,6 +479,6 @@ FactoryGirl.define do
 
   factory :sent_person do
     association :person
-  end  
-  
+  end
+
 end

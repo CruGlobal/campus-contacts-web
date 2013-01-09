@@ -125,13 +125,6 @@ class Question < Element
       end
       unless responses(app) == values
         value = values.first
-        if self.is_a?(DateField) && value.present?
-          begin
-            value = Date.strptime(value, (I18n.t 'date.formats.default'))
-          rescue
-            return value
-          end
-        end
         object.send("#{attribute_name}=".to_sym, value) if object
       end
     else
