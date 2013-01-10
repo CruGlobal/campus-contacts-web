@@ -1,15 +1,31 @@
 class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
-  before_filter :ensure_bulk_parameters, only: [:bulk]
-  before_filter :ensure_filters, only: [:bulk]
-  
+  before_filter :ensure_filters
+
   def bulk
-    current_organization.add_roles_to_people(filtered_people, params[:add_roles].split(',')) if params[:add_roles]
-    current_organization.remove_roles_from_people(filtered_people, params[:remove_roles].split(',')) if params[:remove_roles]
-    
+    add_roles(filtered_people, params[:add_roles])
+    remove_roles(filtered_people, params[:remove_roles])
+
     render json: filtered_people,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization}
   end
+
+  def bulk_create
+    add_roles(filtered_people, params[:roles])
+
+    render json: filtered_people,
+           callback: params[:callback],
+           scope: {include: includes, organization: current_organization}
+  end
+
+  def bulk_destroy
+    remove_roles(filtered_people, params[:roles])
+
+    render json: filtered_people,
+           callback: params[:callback],
+           scope: {include: includes, organization: current_organization}
+  end
+
 
   private
 
@@ -32,14 +48,6 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
                  callback: params[:callback]
     end
   end
-  
-  def ensure_bulk_parameters
-    unless params[:add_roles] || params[:remove_roles]
-      render json: {errors: ["The 'add_roles' and/or 'remove_roles' parameters are required for bulk role actions."]},
-                 status: :bad_request,
-                 callback: params[:callback]
-    end
-  end
 
   def filtered_people
     unless @filtered_people
@@ -54,5 +62,12 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
     end
     @filtered_people
   end
-  
+
+  def add_roles(people, roles)
+    current_organization.add_roles_to_people(filtered_people, roles.split(',')) if roles
+  end
+
+  def remove_roles(people, roles)
+    current_organization.remove_roles_from_people(filtered_people, roles.split(',')) if roles
+  end
 end
