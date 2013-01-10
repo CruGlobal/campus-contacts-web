@@ -228,8 +228,8 @@ Mh::Application.routes.draw do
       end
       resources :organizational_roles do
         collection do
-          post :bulk_create
-          delete :bulk_destroy
+          post :bulk
+          delete :bulk
         end
       end
       resources :people
