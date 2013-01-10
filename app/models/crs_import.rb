@@ -123,9 +123,9 @@ class CrsImport
             # Link to crs profile
             person.crs_profile_id = registrant.profile_id
 
-            raise "Invalid Person: #{person.inspect}" unless person.valid?
+            #raise "Invalid Person: #{person.inspect}" unless person.valid?
 
-            person.save!
+            person.save(validate: false)
 
             # import latest address/email/phone
             crs2_person.all_email_addresses.each do |email|
