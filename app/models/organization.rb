@@ -244,7 +244,7 @@ class Organization < ActiveRecord::Base
     person_id = person.is_a?(Person) ? person.id : person
 
     Retryable.retryable :times => 5 do
-      role = OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id, added_by_id: added_by_id).first_or_create!
+      role = OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id).first_or_create!(added_by_id: added_by_id)
       role.update_attributes(archive_date: nil)
       role
     end
