@@ -1,4 +1,5 @@
 require 'name_uniqueness_validator'
+require 'retryable'
 
 class Organization < ActiveRecord::Base
   attr_accessor :person_id
@@ -241,9 +242,12 @@ class Organization < ActiveRecord::Base
 
   def add_role_to_person(person, role_id, added_by_id = nil)
     person_id = person.is_a?(Person) ? person.id : person
-    role = OrganizationalRole.lock('LOCK IN SHARE MODE').where(person_id: person_id, organization_id: id, role_id: role_id, added_by_id: added_by_id).first_or_create!
-    role.update_attributes(archive_date: nil)
-    role
+
+    Retryable.retryable :times => 5 do
+      role = OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id, added_by_id: added_by_id).first_or_create!
+      role.update_attributes(archive_date: nil)
+      role
+    end
   end
 
   def add_roles_to_people(people, roles)

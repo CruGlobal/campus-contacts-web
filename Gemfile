@@ -1,78 +1,64 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 3.2.11'
-gem 'jquery-rails'
-gem 'mysql2', '~> 0.3.11'
-gem 'nokogiri'
-#gem 'json_pure'
-gem 'redis'
-gem 'rack-offline'
-gem 'http_accept_language'
-gem 'capistrano'
-gem 'rest-client'
-gem 'crack'
-gem 'resque', '~> 1.20.0'
-gem 'foreigner'
-gem "devise", '1.5.1' #, git: "git://github.com/plataformatec/devise.git"
-gem 'omniauth'
-gem 'omniauth-facebook', '~> 1.0.0.rc2'
-gem 'mini_fb'
-gem 'client_side_validations'
-gem 'rubycas-client', '~> 2.2.1'
-gem 'rubycas-client-rails', '~> 0.1.0'
-gem 'carmen', git: 'git://github.com/twinge/carmen.git'
-gem 'ancestry', git: 'git://github.com/stefankroes/ancestry.git'
-gem 'activeadmin', '~> 0.4.4' #, git: 'git://github.com/gregbell/active_admin.git'
-gem 'twilio-rb', git: 'git://github.com/stevegraham/twilio-rb.git'
 gem "default_value_for"
-#gem 'turbo-sprockets-rails3'
-gem "strip_attributes"
-
-gem 'dalli'
-gem 'resque_mail_queue'
-
-gem 'valium'
-gem 'newrelic_rpm', '>= 3.5.3.25'
-gem "state_machine"
-gem 'acts_as_list'
-gem 'dynamic_form'
-gem 'coffee-script'
-gem 'trumant-rack-oauth2-server', git: 'git://github.com/twinge/rack-oauth2-server.git', branch: 'active_record'
-gem 'rails_autolink'
-
-gem 'enforce_schema_rules'
-# gem 'sentient_user'
-gem 'paper_trail', '~> 2'
-gem 'unicorn'
-gem 'airbrake_user_attributes'
-gem 'cancan'
-gem 'kaminari'
-gem 'whenever'
+gem "devise", '1.5.1' #, git: "git://github.com/plataformatec/devise.git"
+gem "paperclip", :git => 'git://github.com/thoughtbot/paperclip.git'
 gem "ransack", :git => "git://github.com/ernie/ransack.git"
+gem "state_machine"
+gem "strip_attributes"
+gem 'active_model_serializers'#, git: 'git://github.com/josevalim/active_model_serializers.git'
+gem 'activeadmin', '~> 0.4.4' #, git: 'git://github.com/gregbell/active_admin.git'
+gem 'acts_as_list'
+gem 'airbrake_user_attributes'
+gem 'ancestry', git: 'git://github.com/stefankroes/ancestry.git'
+gem 'aws-sdk'#, '~> 1.3.4'
+gem 'bitly'
+gem 'cancan'
+gem 'capistrano'
+gem 'carmen', git: 'git://github.com/twinge/carmen.git'
+gem 'client_side_validations'
+gem 'coffee-script'
+gem 'copycopter_client'
+gem 'crack'
+gem 'dalli'
 gem 'deadlock_retry'
 gem 'delegate_presenter'
-
-gem 'vpim', git: 'git://github.com/twinge/vpim.git'   # vcard maker
+gem 'dynamic_form'
+gem 'enforce_schema_rules'
+gem 'foreigner'
+gem 'http_accept_language'
 gem 'i18n-js', git: 'git://github.com/fnando/i18n-js.git'     # allow i18n on js files
-
-gem 'rest-client'                                     # to make FB api requests
-gem "paperclip", :git => 'git://github.com/thoughtbot/paperclip.git'
-gem 'aws-sdk'#, '~> 1.3.4'
-
-gem 'bitly'
-gem 'copycopter_client'
-
-gem 'active_model_serializers'#, git: 'git://github.com/josevalim/active_model_serializers.git'
-gem 'versionist', git: 'git://github.com/twinge/versionist.git', branch: 'multiple_versioning_strategies'
-
+gem 'jquery-rails'
+gem 'kaminari'
+gem 'mini_fb'
+gem 'mysql2', '~> 0.3.11'
+gem 'newrelic_rpm', '>= 3.5.3.25'
+gem 'nokogiri'
 gem 'oj'
+gem 'omniauth'
+gem 'omniauth-facebook', '~> 1.0.0.rc2'
+gem 'paper_trail', '~> 2'
+gem 'rack-offline'
+gem 'rails', '~> 3.2.11'
+gem 'rails_autolink'
+gem 'redis'
+gem 'resque', '~> 1.20.0'
+gem 'resque_mail_queue'
+gem 'rest-client'                                     # to make FB api requests
+gem 'retryable-rb'
+gem 'rubycas-client', '~> 2.2.1'
+gem 'rubycas-client-rails', '~> 0.1.0'
+gem 'sass', '=3.1.14'
+gem 'sass-rails', "~>3.2.3"
+gem 'trumant-rack-oauth2-server', git: 'git://github.com/twinge/rack-oauth2-server.git', branch: 'active_record'
+gem 'twilio-rb', git: 'git://github.com/stevegraham/twilio-rb.git'
+gem 'unicorn'
+gem 'valium'
+gem 'versionist', git: 'git://github.com/twinge/versionist.git', branch: 'multiple_versioning_strategies'
+gem 'vpim', git: 'git://github.com/twinge/vpim.git'   # vcard maker
+gem 'whenever'
 
-#gem 'execjs'
-#gem 'therubyracer', :platforms => :ruby
 
-# Bundle gems for the local environment. Make sure to
-# put test-only gems in this group so their generators
-# and rake tasks are available in development mode:
 group :development, :test do
   gem 'awesome_print'
 end
@@ -104,8 +90,6 @@ end
 # Gems used only for assets and not required
 # in production environments by default.
 #gem 'sass-rails', "  ~> 3.1.0"
-gem 'sass-rails', "~>3.2.3"
-gem 'sass', '=3.1.14'
 group :assets do
   gem 'coffee-rails', "~> 3.2.1"
   gem 'uglifier', ">= 1.0.3"
@@ -113,7 +97,7 @@ end
 
 group :capistrano do
   # Shared capistrano recipes
-  gem 'pd-cap-recipes', :git => 'git://github.com/PagerDuty/pd-cap-recipes.git'
+  #gem 'pd-cap-recipes', :git => 'git://github.com/PagerDuty/pd-cap-recipes.git'
 
   # extra dependencies for some tasks
   #gem 'git', '1.2.5'
