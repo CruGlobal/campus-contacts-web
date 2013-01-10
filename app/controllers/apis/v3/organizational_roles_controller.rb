@@ -1,9 +1,17 @@
 class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
-  before_filter :ensure_roles, only: [:bulk_add_roles, :bulk_remove_roles]
-  before_filter :ensure_filters, only: [:bulk_add_roles, :bulk_remove_roles]
+  before_filter :ensure_filters
+
+  def bulk
+    add_roles(filtered_people, params[:add_roles])
+    remove_roles(filtered_people, params[:remove_roles])
+
+    render json: filtered_people,
+           callback: params[:callback],
+           scope: {include: includes, organization: current_organization}
+  end
 
   def bulk_create
-    current_organization.add_roles_to_people(filtered_people, params[:roles].split(','))
+    add_roles(filtered_people, params[:roles])
 
     render json: filtered_people,
            callback: params[:callback],
@@ -11,12 +19,13 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
   end
 
   def bulk_destroy
-    current_organization.remove_roles_from_people(filtered_people, params[:roles].split(','))
+    remove_roles(filtered_people, params[:roles])
 
     render json: filtered_people,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization}
   end
+
 
   private
 
@@ -40,14 +49,6 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
     end
   end
 
-  def ensure_roles
-    unless params[:roles]
-      render json: {errors: ["The 'roles' parameter is required for bulk role actions."]},
-                 status: :bad_request,
-                 callback: params[:callback]
-    end
-  end
-
   def filtered_people
     unless @filtered_people
       @filtered_people = if params[:include_archived] == 'true'
@@ -61,5 +62,12 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
     end
     @filtered_people
   end
-  
+
+  def add_roles(people, roles)
+    current_organization.add_roles_to_people(filtered_people, roles.split(',')) if roles
+  end
+
+  def remove_roles(people, roles)
+    current_organization.remove_roles_from_people(filtered_people, roles.split(',')) if roles
+  end
 end
