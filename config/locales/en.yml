@@ -465,6 +465,7 @@ en:
         add_prev_question: Add a predefined or previously used question
         forced_tip: This question is required on every survey and will be pre-filled if they connect with facebook.
         your_questions_help: "Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service."
+        predefined_help: "Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided."
       advanced_options:
         trigger_words: "List one or more words or phrases that will trigger this notification if they appear in the answer.<br/>(separate words and phrases with commas)"
         leaders: 'Select one or more leaders to be notified when this question is answered in a certain way'
@@ -517,7 +518,6 @@ en:
         and smartphones.  <strong>They will text your keyword to the number %{number}</strong> and your survey questions will appear on their device.  Note: The process of acquiring new keywords
         requires manual intervention. Once you request your keyword expect to wait up to 24 hours before we notify you via email that your keyword is approved and
     	  ready for use.'
-      predefined_help: "Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided."
 
   organization_mailer:
     notify_user:
