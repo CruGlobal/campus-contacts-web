@@ -8,7 +8,7 @@ class PhoneNumberTest < ActiveSupport::TestCase
   # should validate_presence_of(:location)
 
   context "a phone number" do
-    setup do 
+    setup do
       @person = Factory(:person)
     end
     should "set first number to primary" do
@@ -29,14 +29,14 @@ class PhoneNumberTest < ActiveSupport::TestCase
       number2.reload
       assert(number2.primary?, "second number should be primary")
     end
-  
+
     should "should store as digits only" do
       number = @person.phone_numbers.create(number: '555-555-5555', location: 'mobile')
       assert_equal('5555555555', number.number)
       number = @person.phone_numbers.create(number: '555-5555', location: 'mobile')
       assert_equal('5555555', number.number)
     end
-    
+
     should "have a pretty format" do
       number = @person.phone_numbers.create(number: '555-555-5555', location: 'mobile')
       assert_equal('(555) 555-5555', number.pretty_number)
@@ -46,7 +46,7 @@ class PhoneNumberTest < ActiveSupport::TestCase
       assert_equal('555555', number.pretty_number)
     end
   end
-  
+
   test "normalize carrier" do
     person = Factory(:person)
     p = PhoneNumber.create!(number: '444-444-4444', location: 'fooo', person_id: person.id)
@@ -112,5 +112,28 @@ class PhoneNumberTest < ActiveSupport::TestCase
     assert_equal "WINDSTREAM", p.send(:normalize_carrier, "WINDSTREAM")
     assert_equal "YMAX COMMUNICATIONS", p.send(:normalize_carrier, "YMAX COMMUNICATIONS")
     assert_equal nil, p.send(:normalize_carrier, "WAT")
+  end
+
+  context "phone number validation" do
+    setup do
+      @person = Factory(:person)
+    end
+
+    should "not accept blank value" do
+      assert_no_difference "PhoneNumber.count" do
+        number = @person.phone_numbers.create(number: '', location: 'mobile')
+      end
+    end
+
+    should "not accept non-numeric value" do
+      assert_no_difference "PhoneNumber.count" do
+        number = @person.phone_numbers.create(number: 'Mobile: 123456789', location: 'mobile')
+      end
+    end
+
+    should "strip special characters" do
+      number = @person.phone_numbers.create(number: '123-456-789', location: 'mobile')
+      assert_equal("123456789", PhoneNumber.last.number)
+    end
   end
 end

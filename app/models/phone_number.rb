@@ -7,7 +7,22 @@ class PhoneNumber < ActiveRecord::Base
   belongs_to :carrier, class_name: 'SmsCarrier', foreign_key: 'carrier_id'
 
   belongs_to :person, touch: true
-  validates_presence_of :number, message: "can't be blank"
+
+  # validates_presence_of :number, message: "can't be blank"
+  # validates :number, :format => { :with => /^(\d|\ |\(|\)|\-){1,100}$/, message: "must be numeric" }
+
+  validate do |value|
+    phone_number = value.number_before_type_cast || value.number || nil
+    if phone_number.present?
+      if !(phone_number =~ /^(\d|\ |\(|\)|\-){1,100}$/)
+        errors.add(:number, "must be numeric")
+      else
+        self[:number] = PhoneNumber.strip_us_country_code(phone_number)
+      end
+    else
+      errors.add(:number, "can't be blank")
+    end
+  end
 
   before_create :set_primary
   before_save :clear_carrier_if_number_changed
@@ -18,12 +33,6 @@ class PhoneNumber < ActiveRecord::Base
     return unless num
     num = num.to_s.strip.gsub(/[^\d]/, '')
     num.length == 11 && num.first == '1' ? num[1..-1] : num
-  end
-
-  def number=(num)
-    if num
-      self[:number] = PhoneNumber.strip_us_country_code(num)
-    end
   end
 
   def pretty_number
