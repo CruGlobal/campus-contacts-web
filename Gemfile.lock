@@ -34,7 +34,7 @@ GIT
 
 GIT
   remote: git://github.com/thoughtbot/paperclip.git
-  revision: adddf87cf30d416d71c7b2a80a004d170d10dc2c
+  revision: e362e5da9d2ddc9d052fac46e1f089f24c10a8fd
   specs:
     paperclip (3.4.0)
       activemodel (>= 3.0.0)
@@ -146,7 +146,7 @@ GEM
     bullet (4.3.0)
       uniform_notifier
     cancan (1.6.8)
-    capistrano (2.13.5)
+    capistrano (2.14.1)
       highline
       net-scp (>= 1.0.0)
       net-sftp (>= 2.0.0)
@@ -166,7 +166,7 @@ GEM
     copycopter_client (2.0.1)
       i18n (>= 0.5.0)
       json
-    crack (0.3.1)
+    crack (0.3.2)
     daemons (1.1.9)
     dalli (2.6.0)
     deadlock_retry (1.2.0)
@@ -203,7 +203,7 @@ GEM
     highline (1.6.15)
     hike (1.2.1)
     http_accept_language (1.0.2)
-    httparty (0.9.0)
+    httparty (0.10.0)
       multi_json (~> 1.0)
       multi_xml
     httpauth (0.2.0)
@@ -256,17 +256,17 @@ GEM
     mocha (0.10.5)
       metaclass (~> 0.0.1)
     multi_json (1.5.0)
-    multi_xml (0.5.1)
+    multi_xml (0.5.2)
     multipart-post (1.1.5)
     mysql2 (0.3.11)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
     net-sftp (2.0.5)
       net-ssh (>= 2.0.9)
-    net-ssh (2.6.2)
+    net-ssh (2.6.3)
     net-ssh-gateway (1.1.0)
       net-ssh (>= 1.99.1)
-    newrelic_rpm (3.5.4.34)
+    newrelic_rpm (3.5.5.38)
     nokogiri (1.5.6)
     oauth2 (0.8.0)
       faraday (~> 0.8)
@@ -414,7 +414,7 @@ GEM
     webmock (1.9.0)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
-    whenever (0.8.1)
+    whenever (0.8.2)
       activesupport (>= 2.3.4)
       chronic (>= 0.6.3)
     ya2yaml (0.31)
