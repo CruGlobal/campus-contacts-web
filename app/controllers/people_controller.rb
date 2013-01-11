@@ -45,6 +45,7 @@ class PeopleController < ApplicationController
     @person = Person.find(params[:id])
     @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id).collect { |a| a.assigned_to.try(:name) }.compact.to_sentence
     authorize!(:read, @person)
+    @org_friends = Person.where(fb_uid: Friend.followers(@person.id))
 
     if can? :manage, @person
       @organizational_roles = OrganizationalRole.where(organization_id: current_organization, person_id: @person)
