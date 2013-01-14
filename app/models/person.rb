@@ -60,6 +60,12 @@ class Person < ActiveRecord::Base
       rescue
         errors.add(:birth_date, "invalid")
       end
+    elsif birth_date =~ /^(19|2\d)\d\d\-([1-9]|0[1-9]|1[0-2])\-([1-9]|[012][0-9]|3[01])/
+      begin
+        self[:birth_date] = Date.parse(birth_date.split(' ').first)
+      rescue
+        errors.add(:birth_date, "invalid")
+      end
     elsif birth_date.is_a?(Date)
       self[:birth_date] = birth_date
     else
