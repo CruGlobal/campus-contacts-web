@@ -574,13 +574,15 @@ class PeopleController < ApplicationController
 
     @q = @q.where(id: current_organization.people.archived(current_organization.id).collect(&:id)) unless params[:archived].blank?
 
-    @q = @q.search(params[:q])
-    @q.sorts = sort_by if @q.sorts.empty?
-    @all_people = @q.result(distinct: false).order(params[:q] && params[:q][:s] ? params[:q][:s] : sort_by)
-    if params[:q].present? && params[:q][:s].include?("role_id")
-      order = params[:q][:s].include?("asc") ? params[:q][:s].gsub("asc", "desc") : params[:q][:s].gsub("desc", "asc")
+    @q_sort = Person.where('1 <> 1').search(params[:search])
+    # @q.sorts = sort_by if @q.sorts.empty?
+
+    @all_people = @q.order(params[:search] && params[:search][:meta_sort] ? params[:search][:meta_sort] : sort_by)
+
+    if params[:search].present? && params[:search][:meta_sort].include?("role_id")
+      order = params[:search][:meta_sort].include?("asc") ? params[:search][:meta_sort].gsub("asc", "desc") : params[:search][:meta_sort].gsub("desc", "asc")
       a = @q.result(distinct: false).order_by_highest_default_role(order, role_tables_joint)
-      if params[:q][:s].include?("asc")
+      if params[:search][:meta_sort].include?("asc")
         a = a.reverse
         a = a.uniq_by { |a| a.id }
         a = a.reverse

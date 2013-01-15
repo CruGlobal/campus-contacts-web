@@ -104,6 +104,35 @@ class Person < ActiveRecord::Base
     :order => "ISNULL(organizational_roles.followup_status) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_roles.#{order}"
   } }
 
+
+  # Start of custom sorting for meta_search
+
+  scope :sort_by_followup_status_asc,
+    order("ISNULL(organizational_roles.followup_status), organizational_roles.followup_status ASC")
+
+  scope :sort_by_followup_status_desc,
+    order("ISNULL(organizational_roles.followup_status), organizational_roles.followup_status DESC")
+
+  scope :sort_by_phone_number_asc,
+    order("phone_numbers.number ASC}")
+
+  scope :sort_by_phone_number_desc,
+    order("phone_numbers.number DESC}")
+
+  scope :sort_by_role_id_asc,
+    order("organizational_roles.role_id ASC")
+
+  scope :sort_by_role_id_desc,
+    order("organizational_roles.role_id DESC")
+
+  scope :sort_by_last_survey_asc,
+    order("ISNULL(ass.updated_at), MAX(ass.updated_at) DESC")
+
+  scope :sort_by_last_survey_desc,
+    order("ISNULL(ass.updated_at), MAX(ass.updated_at) ASC")
+
+  # End of custom sorting for meta_search
+
   scope :order_by_primary_phone_number, lambda { |order| {
     :select => "people.*, `phone_numbers`.number",
     :joins => "LEFT JOIN `phone_numbers` ON `phone_numbers`.`person_id` = `people`.`id` AND `phone_numbers`.`primary` = 1",
@@ -128,8 +157,8 @@ class Person < ActiveRecord::Base
   scope :get_and_order_by_latest_answer_sheet_answered, lambda { |order, org_id| {
     #"SELECT * FROM (SELECT * FROM missionhub_dev.people mp INNER JOIN missionhub_dev.organizational_roles ro ON mp.id = ro.person_id WHERE ro.organization_id = #{@organization.id} AND (ro.role_id = 3 AND ro.followup_status <> 'do_not_contact')) mp LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM missionhub_dev.answer_sheets ass INNER JOIN missionhub_dev.surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{@organization.id}) ass ON ass.person_id = mp.id GROUP BY mp.id ORDER BY #{params[:q][:s].gsub('answer_sheets', 'ass')}"
     :joins => "LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM answer_sheets ass INNER JOIN surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = '#{org_id}' ORDER BY ass.updated_at DESC) ass ON ass.person_id = people.id",
-    :group => "ass.person_id",
-    :order => "ISNULL(ass.updated_at), MAX(ass.updated_at) #{order.include?("asc") ? 'DESC' : 'ASC'}"
+    :group => "people.id",
+    :order => "ISNULL(ass.updated_at), MAX(ass.updated_at) #{order.include?("asc") ? 'ASC' : 'DESC'}"
   }}
 
   def contact_role_for_org(org)

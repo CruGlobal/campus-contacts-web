@@ -220,7 +220,7 @@ class ContactsControllerTest < ActionController::TestCase
       assert_equal assigns(:header), "Contacts who are also my friends on Facebook"
       xhr :get, :index, {:dnc => "true"}
       assert_equal assigns(:header), "Do Not Contact"
-      xhr :get, :index, {:search => "1"}
+      xhr :get, :index, {:do_search => "1"}
       assert_equal assigns(:header), "Matching the criteria you searched for"
       xhr :get, :index, {:assigned_to => @user.person.id}
       assert_equal assigns(:header), "Assigned to #{@user.person.name}"
@@ -425,7 +425,7 @@ class ContactsControllerTest < ActionController::TestCase
     end
 
     should "search for contacts" do
-      xhr :get, :index, {:search => "1", :first_name => "Neil", :last_name => "delaCruz"}
+      xhr :get, :index, {:do_search => "1", :first_name => "Neil", :last_name => "delaCruz"}
       assert_response :success
     end
     #more tests to come
@@ -558,65 +558,64 @@ class ContactsControllerTest < ActionController::TestCase
     end
 
     should "retrieve contacts with survey answers" do
-      xhr :get, :index, {:search => 1, :answers => {"#{@notify_q.id}" => {"1" => 1, "2" => 2}, "#{@email_q.id}" => "email@email.com", "#{@some_q.id}" => "hello", "#{@phone_q.id}" => "12311311231231", "#{@gender_q.id}" => "male"}}
+      xhr :get, :index, {:do_search => 1, :answers => {"#{@notify_q.id}" => {"1" => 1, "2" => 2}, "#{@email_q.id}" => "email@email.com", "#{@some_q.id}" => "hello", "#{@phone_q.id}" => "12311311231231", "#{@gender_q.id}" => "male"}}
       assert_response :success
     end
 
     should "retrive contacts according to latest answer sheets answered" do
-
-      xhr :get, :index, {:search => 1, "q"=>{"s"=>"MAX(answer_sheets.updated_at) asc"}}
+      xhr :get, :index, {:do_search => 1, :search=>{:meta_sort=>"MAX(answer_sheets.updated_at) asc"}}
       assert_response :success
     end
 
     should "retrive contacts according to surveys answered" do
-      xhr :get, :index, {:search => 1, :survey => @survey.id}
+      xhr :get, :index, {:do_search => 1, :survey => @survey.id}
       assert_response :success
     end
 
     should "retrive contacts searching by first_name" do
-      xhr :get, :index, {:search => 1, :first_name => "Neil"}
+      xhr :get, :index, {:do_search => 1, :first_name => "Neil"}
       assert_response :success
     end
 
     should "retrive contacts searching by last_name" do
-      xhr :get, :index, {:search => 1, :last_name => "dela Cruz"}
+      xhr :get, :index, {:do_search => 1, :last_name => "dela Cruz"}
       assert_response :success
     end
 
     should "retrive contacts searching by email" do
-      xhr :get, :index, {:search => 1, :email => "email@email.com"}
+      xhr :get, :index, {:do_search => 1, :email => "email@email.com"}
       assert_response :success
     end
 
     should "retrive contacts searching by phone_number" do
-      xhr :get, :index, {:search => 1, :phone_number => "09167788889"}
+      xhr :get, :index, {:do_search => 1, :phone_number => "09167788889"}
       assert_equal [@contact1], assigns(:people)
       assert_response :success
     end
 
     should "retrive contacts searching by phone_number wildcard" do
-      xhr :get, :index, {:search => 1, :phone_number => "88889"}
+      xhr :get, :index, {:do_search => 1, :phone_number => "88889"}
       assert_equal [@contact1], assigns(:people)
       assert_response :success
     end
 
     should "retrive contacts searching by gender" do
-      xhr :get, :index, {:search => 1, :gender => "Male"}
+      xhr :get, :index, {:do_search => 1, :gender => "Male"}
       assert_response :success
     end
 
     should "retrive contacts searching by status" do
-      xhr :get, :index, {:search => 1, :status => "uncontacted"}
+      xhr :get, :index, {:do_search => 1, :status => "uncontacted"}
       assert_response :success
     end
 
     should "retrive contacts searching by date updated" do
-      xhr :get, :index, {:search => 1, :person_updated_from => "05-08-2012", :person_updated_to => "05-08-2012"}
+      xhr :get, :index, {:do_search => 1, :person_updated_from => "05-08-2012", :person_updated_to => "05-08-2012"}
       assert_response :success
     end
 
     should "retrive contacts searching by basic search_type" do
-      xhr :get, :index, {:search => 1, :search_type => "basic"}
+      xhr :get, :index, {:do_search => 1, :search_type => "basic"}
       assert_response :success
     end
   end
@@ -669,12 +668,12 @@ class ContactsControllerTest < ActionController::TestCase
     end
 
     should "sort by status asc" do
-      xhr :get, :index, {:assigned_to => "all", :q =>{:s => "followup_status asc"}}
+      xhr :get, :index, {:assigned_to => "all", :search =>{:meta_sort => "followup_status asc"}}
       assert_equal [@person2.id, @person3.id, @person1.id, @user.person.id], assigns(:people).collect(&:id)
     end
 
     should "sort by status desc" do
-      xhr :get, :index, {:assigned_to => "all", :q =>{:s => "followup_status desc"}}
+      xhr :get, :index, {:assigned_to => "all", :search =>{:meta_sort => "followup_status desc"}}
       assert_equal [@user.person.id, @person1.id, @person3.id, @person2.id], assigns(:people).collect(&:id)
     end
   end
@@ -718,7 +717,7 @@ class ContactsControllerTest < ActionController::TestCase
       @phone_number4 = Factory(:phone_number, person: @contact4, number: "09167788887", primary: false)
       @phone_number4 = Factory(:phone_number, person: @contact5, number: "09167788888", primary: false) # included
 
-      xhr :get, :index, {:search => "1", :phone_number => '0916'}
+      xhr :get, :index, {:do_search => "1", :phone_number => '0916'}
       assert_equal 1, assigns(:all_people).where(id: @contact1.id).count.count
       assert_equal 1, assigns(:all_people).where(id: @contact3.id).count.count
       assert_equal 1, assigns(:all_people).where(id: @contact4.id).count.count
@@ -783,13 +782,13 @@ class ContactsControllerTest < ActionController::TestCase
       end
 
       should "sort desc" do
-        xhr :get, :index, {"q"=>{"s"=>"gender desc"}}
+        xhr :get, :index, {:search=>{:meta_sort=>"gender desc"}}
         assert assigns(:all_people).first.gender == "Male", "first result should be male"
         assert assigns(:all_people).last.gender == "Female", "last result should be female"
       end
 
       should "sort asc" do
-        xhr :get, :index, {"q"=>{"s"=>"gender asc"}}
+        xhr :get, :index, {:search=>{:meta_sort=>"gender asc"}}
         assert assigns(:all_people).first.gender == "Female", "first result should be female"
         assert assigns(:all_people).last.gender == "Male", "last result should be male"
       end
@@ -805,17 +804,17 @@ class ContactsControllerTest < ActionController::TestCase
       end
 
       should "sort by phone_number should include person without primary_phone_numbers" do
-        xhr :get, :index, {:assigned_to => "all", :q =>{:s => "phone_numbers.number asc"}}
+        xhr :get, :index, {:assigned_to => "all", :search =>{:meta_sort => "phone_numbers.number asc"}}
         assert_equal 5, assigns(:people).size
       end
 
       #should "sort by phone_number asc" do
-        #xhr :get, :index, {:assigned_to => "all", :q =>{:s => "phone_numbers.number asc"}}
+        #xhr :get, :index, {:assigned_to => "all", :search =>{:meta_sort => "phone_numbers.number asc"}}
         #assert_equal [@person4.id, @user.person.id, @person1.id, @person2.id, @person3.id], assigns(:people).collect(&:id)
       #end
 
       #should "sort by phone_number desc" do
-        #xhr :get, :index, {:assigned_to => "all", :q =>{:s => "phone_numbers.number desc"}}
+        #xhr :get, :index, {:assigned_to => "all", :search =>{:meta_sort => "phone_numbers.number desc"}}
         #assert_equal [@person3.id, @person2.id, @person1.id, @person4.id, @user.person.id], assigns(:people).collect(&:id)
       #end
     end
@@ -838,15 +837,15 @@ class ContactsControllerTest < ActionController::TestCase
         Factory(:organizational_role, organization: @org, person: @b_person, role: @b_role)
       end
 
-      #should "return people sorted by their roles (default roles) desc" do
-        #xhr :get, :index, {"q"=>{"s"=>"role_id desc"}}
-        #assert_equal [@b_person.id, @a_person.id, @person3.id, @person5.id, @person4.id, @person1.id, @person2.id], assigns(:all_people).collect(&:id)
-      #end
+      should "return people sorted by their roles (default roles) desc" do
+        xhr :get, :index, {:search=>{:meta_sort=>"role_id desc"}}
+        assert_equal [@b_person.id, @a_person.id, @person5.id, @person3.id, @person4.id, @person1.id, @user.person.id, @person2.id], assigns(:all_people).collect(&:id)
+      end
 
-      #should "return people sorted by their roles (default roles) asc" do
-        #xhr :get, :index, {"q"=>{"s"=>"role_id asc"}}
-        #assert_equal [@person2.id, @person1.id, @person3.id, @person5.id, @person4.id, @a_person.id, @b_person.id], assigns(:all_people).collect(&:id)
-      #end
+      should "return people sorted by their roles (default roles) asc" do
+        xhr :get, :index, {:search=>{:meta_sort=>"role_id asc"}}
+        assert_equal [@user.person.id, @person2.id, @person1.id, @person5.id, @person3.id, @person4.id, @a_person.id, @b_person.id], assigns(:all_people).collect(&:id)
+      end
     end
   end
 
@@ -876,7 +875,7 @@ class ContactsControllerTest < ActionController::TestCase
       @answer_sheet2 = Factory(:answer_sheet, survey: @survey, person: @contact2)
       Factory(:answer, answer_sheet: @answer_sheet2, question: @question, value: "SDSU", short_value: "SDSU")
 
-      xhr :get, :index, {:search => "1", "assigned_to"=>"all", "first_name"=>"", "last_name"=>"", "phone_number"=>"", "person_updated_from"=>"", "person_updated_to"=>"", "status"=>"", "survey"=>"", "answers"=>{"#{@question.id}" => "DSU"}, "commit"=>"Search"}
+      xhr :get, :index, {:do_search => "1", "assigned_to"=>"all", "first_name"=>"", "last_name"=>"", "phone_number"=>"", "person_updated_from"=>"", "person_updated_to"=>"", "status"=>"", "survey"=>"", "answers"=>{"#{@question.id}" => "DSU"}, "commit"=>"Search"}
 
       assert_equal 1, assigns(:all_people).count.count
       assert assigns(:people).include? @contact1
@@ -890,7 +889,7 @@ class ContactsControllerTest < ActionController::TestCase
       xhr :post, :create, {:person => {:first_name => "Neil", :last_name => "dela Cruz", :gender => "male"}, :answers => {"#{@campus_question.id}"=>"SDSU"}  }
       assert_equal "SDSU", Person.where(first_name: "Neil", last_name: "dela Cruz").first.campus
 
-      xhr :get, :index, {:search => "1", "assigned_to"=>"all", "first_name"=>"", "last_name"=>"", "phone_number"=>"", "person_updated_from"=>"", "person_updated_to"=>"", "status"=>"", "survey"=>"", "answers"=>{"#{@campus_question.id}" => "DSU"}, "commit"=>"Search"}
+      xhr :get, :index, {:do_search => "1", "assigned_to"=>"all", "first_name"=>"", "last_name"=>"", "phone_number"=>"", "person_updated_from"=>"", "person_updated_to"=>"", "status"=>"", "survey"=>"", "answers"=>{"#{@campus_question.id}" => "DSU"}, "commit"=>"Search"}
 
       assert_equal 1, assigns(:all_people).count.count
       assert assigns(:people).include? Person.where(first_name: "Eloisa", last_name: "Bongalbal").first

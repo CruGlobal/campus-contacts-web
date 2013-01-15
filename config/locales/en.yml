@@ -581,6 +581,10 @@ en:
     notify:
       content: '%{name} (%{number},%{email}) just replied to a survey with %{answer}.'
   contacts:
+    search:
+      first_name: First Name
+      last_name: Last Name
+      phone_number: Phone Number
     create:
       success: "Succesfully updated %{name}'s profile"
       email_taken: "Oops! This email address is already being used. Please email support@missionhub.com with the EMAIL address and NAME of the person whom you want to add the email to."

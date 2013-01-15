@@ -74,7 +74,7 @@ class PeopleControllerTest < ActionController::TestCase
         p1 = PhoneNumber.new(:number => "123129312", :person_id => @person1.id)
         assert p1.save
 
-        p2 = PhoneNumber.new(:number => "123i90900", :person_id => @person2.id, :primary => true)
+        p2 = PhoneNumber.new(:number => "12390900", :person_id => @person2.id, :primary => true)
         assert p2.save
 
         xhr :post, :bulk_sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
@@ -913,16 +913,16 @@ class PeopleControllerTest < ActionController::TestCase
 
     should "return people sorted alphabetically by first_name" do
 
-      xhr :get, :index, {"q"=>{"s"=>"first_name desc"}}
+      xhr :get, :index, {:search=>{:meta_sort=>"first_name desc"}}
       assert_equal assigns(:all_people).collect(&:name), [@involved1.person.name, @contact3.person.name, @contact2.person.name, @contact1.person.name, @leader1.person.name, @admin1.person.name]
 
-      xhr :get, :index, {"q"=>{"s"=>"first_name asc"}}
+      xhr :get, :index, {:search=>{:meta_sort=>"first_name asc"}}
       assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name]
 
-      xhr :get, :index, {"q"=>{"s"=>"last_name desc"}}
+      xhr :get, :index, {:search=>{:meta_sort=>"last_name desc"}}
       assert_equal assigns(:all_people).collect(&:name), [@involved1.person.name, @contact3.person.name, @contact2.person.name, @contact1.person.name, @leader1.person.name, @admin1.person.name]
 
-      xhr :get, :index, {"q"=>{"s"=>"last_name asc"}}
+      xhr :get, :index, {:search=>{:meta_sort=>"last_name asc"}}
       assert_equal assigns(:all_people).collect(&:name), [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name]
     end
   end

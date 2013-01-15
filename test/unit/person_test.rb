@@ -140,17 +140,19 @@ class PersonTest < ActiveSupport::TestCase
       @person1 = Factory(:person, first_name: 'First Answer')
       @person2 = Factory(:person, first_name: 'Second Answer')
       @person3 = Factory(:person, first_name: 'Last Answer')
+      Factory(:organizational_role, person: @person1, organization: @org, role: Role.contact)
+      Factory(:organizational_role, person: @person2, organization: @org, role: Role.contact)
+      Factory(:organizational_role, person: @person3, organization: @org, role: Role.contact)
       @answer_sheet1 = Factory(:answer_sheet, person: @person1, survey: @survey, updated_at: "2012-07-01".to_date)
-      @answer_sheet2 = Factory(:answer_sheet, person: @person1, survey: @survey, updated_at: "2012-07-02".to_date)
-      @answer_sheet3 = Factory(:answer_sheet, person: @person1, survey: @survey, updated_at: "2012-07-03".to_date)
+      @answer_sheet2 = Factory(:answer_sheet, person: @person2, survey: @survey, updated_at: "2012-07-02".to_date)
+      @answer_sheet3 = Factory(:answer_sheet, person: @person3, survey: @survey, updated_at: "2012-07-03".to_date)
 
       results = Person.get_and_order_by_latest_answer_sheet_answered('', @org.id)
       assert_equal(results[0].first_name, 'First Answer', "first result should be the first person who answered")
       assert_equal(results[1].first_name, 'Second Answer', "second result should be the second person who answered")
       assert_equal(results[2].first_name, 'Last Answer', "third result should be the last person who answered")
-
-
     end
+
     should "return people assigned to an org" do
       @org1 = Factory(:organization, name: 'Org 1')
       @org2 = Factory(:organization, name: 'Org 2')

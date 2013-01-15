@@ -4,8 +4,8 @@ class GroupsController < ApplicationController
   before_filter :leader_needed, :only => [:create, :new]
 
   def index
-    @groups = current_organization.groups.order(params[:q] && params[:q][:s] ? params[:q][:s] : ['name'])
-    @q = current_organization.groups.where('1 <> 1').search(params[:q])
+    @groups = current_organization.groups.order(params[:search] && params[:search][:meta_sort] ? params[:search][:meta_sort] : ['name'])
+    @q = current_organization.groups.where('1 <> 1').search(params[:search])
 
     if params[:label].present?
       begin
@@ -25,11 +25,11 @@ class GroupsController < ApplicationController
   end
 
   def show
-    @q = Person.where('1 <> 1').search(params[:q])
+    @q = Person.where('1 <> 1').search(params[:search])
     @group = Present(@group)
 
-    if params[:q] && params[:q][:s]
-      order_string = params[:q][:s].gsub('role','group_memberships.role')
+    if params[:search] && params[:search][:meta_sort]
+      order_string = params[:search][:meta_sort].gsub('role','group_memberships.role')
       @people = current_organization.people.get_from_group(@group.id).includes(:group_memberships).uniq.order(order_string)
     else
       @people = current_organization.people.get_from_group(@group.id).includes(:group_memberships).uniq
