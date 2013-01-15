@@ -201,9 +201,6 @@ class ContactsController < ApplicationController
 
       @people_scope = @people_scope.merge(@people_unfiltered)
 
-      sort_by = ['lastName asc', 'firstName asc']
-
-
       if params[:archived].present? && params[:archived] == 'true'
         @header = I18n.t('contacts.index.archived')
         @people_scope = @people_scope.where(id: current_organization.people.archived(current_organization.id).collect(&:id))
@@ -218,22 +215,6 @@ class ContactsController < ApplicationController
           @header = params[:search] ? I18n.t('contacts.index.matching_seach') : @role.i18n
         end
       end
-      if params[:search]
-        @header = I18n.t('contacts.index.matching_seach')
-      end
-
-      if params[:q] && params[:q][:s].include?('answer_sheets')
-        @people_scope = @people_scope.get_and_order_by_latest_answer_sheet_answered(params[:q][:s], current_organization.id)
-      end
-
-      if params[:q] && params[:q][:s].include?('followup_status')
-      	@people_scope = @people_scope.joins(:organizational_roles).order_by_followup_status(params[:q][:s])
-      end
-
-      if params[:q] && params[:q][:s].include?('phone_numbers.number')
-        @people_scope = @people_scope.order_by_primary_phone_number(params[:q][:s])
-      end
-
       if params[:survey].present?
         @people_scope = @people_scope.joins(:answer_sheets).where("answer_sheets.survey_id" => params[:survey])
       end
@@ -322,21 +303,35 @@ class ContactsController < ApplicationController
         @people_scope = @people_scope.search_by_name_or_email(params[:query], current_organization.id)
       end
 
+      if params[:search]
+        @header = I18n.t('contacts.index.matching_seach')
+        
+        sort_query = params[:search][:meta_sort].gsub('.',' ')
+        if sort_query.include?('answer_sheets')
+	        @people_scope = @people_scope.get_and_order_by_latest_answer_sheet_answered(sort_query, current_organization.id)
+		    end
 
-      @q = Person.where('1 <> 1').search(params[:q]) # Fake a search object for sorting
-      # raise @q.sorts.inspect
-      @people_scope = @people_scope.includes(:primary_phone_number, :primary_email_address, :contact_role, :sent_person)
-      if params[:q]
+		    if sort_query.include?('followup_status')
+		    	@people_scope = @people_scope.joins(:organizational_roles).order_by_followup_status(sort_query)
+		    end
 
-        order_query = params[:q][:s] ? params[:q][:s].gsub('answer_sheets','ass').gsub('followup_status','organizational_roles.followup_status').gsub('role_id','organizational_roles.role_id') : ['last_name, first_name']
+		    if sort_query.include?('phone_numbers')
+		      @people_scope = @people_scope.order_by_primary_phone_number(sort_query)
+		    end
+		    
+	    	if ['role_id','last_name','first_name','gender'].any?{ |i| sort_query.include?(i) }
+					order_query = sort_query.gsub('role_id','organizational_roles.role_id')
+																	.gsub('gender','ISNULL(people.gender), people.gender')
+				end
       else
-      	order_query = "last_name ASC,first_name ASC";
+      	order_query = "last_name asc, first_name asc"
       end
-
-      @all_people = @people_scope.includes(:primary_phone_number, :primary_email_address, :contact_role)
+      
+      @q = Person.where('1 <> 1').search(params[:search]) # Fake a search object for sorting
+      @all_people = @people_scope.includes(:primary_phone_number, :primary_email_address, :contact_role, :sent_person)
                                   .order(order_query)
                                   .group('people.id')
-
+                                  
       @people_for_labels = Person.people_for_labels(current_organization)
 
       @people = @all_people.page(params[:page])

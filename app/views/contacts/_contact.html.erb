@@ -69,7 +69,7 @@
   </td>
   <td>
     <% last_survey = person.latest_answer_sheet(current_organization) %>
-    <%= l(last_survey.created_at, :format => :date) if last_survey.present? %>
+    <%= l(last_survey.updated_at, :format => :date) if last_survey.present? %>
   </td>
   <td class="controls" align="right">
     <%- assigned_to = (assignments[person.id] || []).first.try(:assigned_to) %>
