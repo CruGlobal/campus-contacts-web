@@ -594,25 +594,19 @@ $ ->
     $('#hidden_questions_div').toggle()
     false
  
-  $.fn.activateDncDroppable()
-  $.fn.activateLeaderDroppable()
-  
-$.fn.activateLeaderDroppable = () ->
-  $('.leftmenu .leader').droppable 
+  $(".leftmenu .leader, .leftmenu .dnc").droppable 
     activeClass: 'ui-state-highlight'
+    accept: ".handle"
     drop: (event, ui) ->
-      leader = $(this)
-      leader.effect('highlight', {}, 'slow')
-      $('#assign_to').val(leader.attr('data-id'))
-      $.fn.assignTo(leader)
-      
-$.fn.activateDncDroppable = () ->
-  $('.leftmenu .dnc').droppable 
-    activeClass: 'ui-state-highlight'
-    drop: (event, ui) ->
-      li = $(this)
-      li.effect('highlight', {}, 'slow')
-      $.fn.moveToDnc(ui.draggable)      
+    	if $(this).hasClass("leader")
+		    leader = $(this)
+		    leader.effect('highlight', {}, 'slow')
+		    $('#assign_to').val(leader.attr('data-id'))
+		    $.fn.assignTo(leader)		    
+    	if $(this).hasClass("dnc")
+		    li = $(this)
+		    li.effect('highlight', {}, 'slow')
+		    $.fn.moveToDnc(ui.draggable)      
       
 $.fn.moveToDnc = (dragObject) ->
   $('#dnc_count').html(Number($('#dnc_count').html()) + 1)  
