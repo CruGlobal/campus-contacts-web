@@ -774,6 +774,7 @@ en:
     edit:
       title: "Edit %{name}'s Survey Answers"
       multiple_answers: "Choose one or more. "
+      cancel: "Cancel and go back"
     form:
       frozen: "Sorry. The survey '%{survey}' is currently on hold."
   date:
