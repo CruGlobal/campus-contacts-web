@@ -303,9 +303,10 @@ class ContactsController < ApplicationController
         @people_scope = @people_scope.search_by_name_or_email(params[:query], current_organization.id)
       end
 
-      @header = I18n.t('contacts.index.matching_seach') if params[:do_search]
-
-      if params[:search]
+      if params[:search] == "1" || params[:do_search]
+        @header = I18n.t('contacts.index.matching_seach')
+        params[:search] = nil if params[:search] == "1"
+      elsif params[:search]
 
         sort_query = params[:search][:meta_sort].gsub('.',' ')
         if sort_query.include?('last_survey')
