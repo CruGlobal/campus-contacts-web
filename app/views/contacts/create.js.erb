@@ -1,22 +1,34 @@
-<% unless params[:update] %>
-  <% if params[:assign_to_me] == 'true' %>
-	  $('#contacts_table').prepend("<%= j(render('contacts/my_contact', :person => @person)) %>")
-  <% else %>
-	  $('#contacts_table').prepend("<%= j(render('contacts/contact', person: @person, answers: @answers, questions: @questions, assignments: @assignments)) %>")
-  <% end %>
+<% if @add_to_group_tag %>
+	$('#group_table').prepend("<%= j(render('groups/person', person: @person, group_membership: @group_membership)) %>")
+	<% if params[:add_another] == 'true' %>
+		$("#add_person_group_div .explain").hide()
+		$("#add_contact_form").show()
+		$(".remove_add_new_person_to_group, .explain").hide()
+	<% else %>	
+		$("#add_person_group_div").html("<%= j(render('add_contact', person: Person.new)) %>")
+	<% end %>
 <% else %>
-  $.a("<%= t('contacts.create.success', name: Person.find(params[:id]).name) %>")
-  window.location = "/people/" + <%= params[:id] %>
-	$('#add_contact_div').dialog('destroy')
+	<% unless params[:update] %>
+		<% if params[:assign_to_me] == 'true' %>
+			$('#contacts_table').prepend("<%= j(render('contacts/my_contact', :person => @person)) %>")
+		<% else %>
+			$('#contacts_table').prepend("<%= j(render('contacts/contact', person: @person, answers: @answers, questions: @questions, assignments: @assignments)) %>")
+		<% end %>
+	<% else %>
+		$.a("<%= t('contacts.create.success', name: Person.find(params[:id]).name) %>")
+		window.location = "/people/" + <%= params[:id] %>
+		$('#add_contact_div').dialog('destroy')
+	<% end %>
+	$('.no_contacts').hide()
+	<% @email = EmailAddress.new %>
+	<% @phone = PhoneNumber.new %>
+	$("#add_contact_div").html("<%= j(render('add_contact', person: Person.new)) %>")
 <% end %>
+
 <% unless params[:add_another] == 'true' %>
-	$('#add_contact_div').dialog('destroy')
+	$("#add_contact_div, #member_search").dialog("destroy")
 <% end %>
 $('#<%= dom_id(@person) %>').effect('highlight')
-$('.no_contacts').hide()
-<% @email = EmailAddress.new %>
-<% @phone = PhoneNumber.new %>
-$('#add_contact_div').html("<%= j(render('add_contact', person: Person.new)) %>")
 
 $('#new_person').find('input[type=text], textarea').not('.default').val('')
 $('#new_person').find('input[type=checkbox], checkbox').not('.default').removeAttr('checked')

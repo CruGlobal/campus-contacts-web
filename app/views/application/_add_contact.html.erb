@@ -12,6 +12,9 @@
         <% end %>
 
         <%= hidden_field_tag :add_another %>
+				<%= hidden_field_tag :add_to_group_tag, false %>
+        <%= hidden_field_tag :add_to_group %>
+        <%= hidden_field_tag :add_to_group_role %>
         <%= hidden_field_tag :assign_to_me, false, id: 'assign_new_contact_to_me' %>
         <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
         <%= hidden_field_tag :dnc, params[:dnc] %>
@@ -28,14 +31,14 @@
         <%= render partial: 'shared/label_fields' %>
         <br/>
       </div>
-      <div class="form_group_label">
+      <div class="form_group_label remove_add_new_person_to_group">
         <%= t('.title_surveys') %>
         <span class='form_group_optional'>
           <%= t('.title_optional') %>
         </span>
       </div>
 
-      <div class="form_group_fields user_defined_contact_fields">
+      <div class="form_group_fields user_defined_contact_fields remove_add_new_person_to_group">
         <% current_organization.questions.uniq {|q| q.label}.each do |question| %>
           <% next if ['first_name', 'last_name', 'email', 'phone_number', 'gender', 'country', 'state', 'city', 'address1', 'zip'].include?(question.attribute_name) %>
           <div class="field">

@@ -43,17 +43,11 @@ $ ->
     else
       $('.approve_join').hide()
 
-  $("a.add-member").live 'click', ->
-    $('#role').val('member')
-    $('#member_search').attr('title', $('#add_member_prompt').text())
-    $.fn.showSearchBox()
-    false
-
-  $("a.add-leader").live 'click', ->
-    $('#role').val('leader')
-    $('#member_search').attr('title', $('#add_leader_prompt').text())
-    $.fn.showSearchBox()
-    false
+	$(".add_group_member, .add_group_leader").live "click", ->	
+		$("#add_to_group_role").val($(this).attr("data-role"))
+		$('#member_search').attr('title', $(this).attr("data-desc"))
+		$.fn.showSearchBox()
+		false
 
   $('#member_search_name').autocomplete
     source: (request, response)->
@@ -64,64 +58,57 @@ $ ->
         data: form.serialize(),
         type: 'GET',
         success: (data)->
-          $('#member_search_results').html(data)
+          $('#member_search_results').html(data) if $("#member_search_form").is(":visible")
           $("#member_search_results").show()
         complete: ->
           $('#spinner_member_search').hide()
         error: (xhr, status, error)->
           alert(error)
       response([]);
-
-  $('#add_new_person_group_button').live 'click', ->
-    $('#member_search .explain').hide()
-    $('#member_search_form').hide()
-    $('#member_search_results').hide()
-    $('#add_person_group_div').show()
-    $('#new_member_form').show()
-    name = $('#member_search_name').val().split(' ')
-    $('#person_first_name').val(name[0])
-    $('#person_last_name').val(name[1])
-    false
-
-  $('#add_person_group_div .save').live 'click', ->
-    form = $(this).closest('form')
-    if $('#person_first_name', form).val() == '' #or ($('#person_email_address_email', form).val() == '' &&$('#person_phone_number_number', form).val() == '')
-      alert('At a minimum you need to provide a first name.')
-      return false
-
-    add_another = false
-    if $(this).hasClass('save_and_more')
-      add_another = true
-    params = form.serialize() + '&add_to_group=y'
-    url = form.prop('action')
-    $.post url, params, (data) ->
-      group_id = window.location.pathname.split("/").reverse()[0]
-      id = data.person.id
-      $('<a href="/groups/' + group_id  + '/group_memberships?person_id=' + id + '&role=member&add_another=' + add_another + '"data-method="post" data-remote="true"></a>')
-      .appendTo('body')
-      .click()
-      .remove()
-    , 'json'
-    if add_another
-      $.fn.showSearchBox()
-    $('#new_person')[0].reset()
-    false
-
-
+      
+	$('#add_new_person_group_button').live 'click', ->
+		$("#member_search .explain_search, #member_search_form, #member_search_results, .remove_add_new_person_to_group, .explain").hide()
+		$(".add_new_person_group_member_butons, #add_person_group_div, #new_member_form").show()
+		name = $('#member_search_name').val().split(' ')
+		$('#person_first_name').val(name[0])
+		$('#person_last_name').val(name[1])
+		false
+		
+$.mh.addNewGroupMemberContact = (add_more) ->
+	form = $('#new_person')  
+	$("#add_person_group_div .explain").show()
+	$("#add_contact_form").hide()
+	if $('#person_first_name', form).val() == ''
+		$.a(t('contacts.index.no_name_message'))
+		return false	
+	$("#add_another").val(add_more) 
+	$("#add_to_group_tag").val("true")
+	$("#add_to_group").val($("#add_to_group_id").val())
+	$.rails.handleRemote(form)
+	false
+  
 $.fn.showSearchBox = ->
-  $('#member_search .explain').show()
-  $('#add_member_form').hide()
-  $('#member_search_form').show()
-  $('#member_search_name').val('')
-  $("#member_search_results").hide()
-  $('#new_member_form').hide();
-  el = $('#member_search')
-  el.dialog
-    resizable: false,
-    height:650,
-    width:600,
-    modal: true,
-    buttons:
-      Cancel: ->
-        $(this).dialog('destroy')
-  false
+	$("#member_search .explain_search, #member_search_form").show()
+	$("#add_member_form, #member_search_results, #new_member_form").hide()
+	$("#member_search_name").val("")
+	$("#member_search").dialog
+		resizable: false,
+		height:488,
+		width:600,
+		modal: true,
+		buttons: [
+			text: t("application.add_contact.save_and_close"),
+			"class": "add_new_person_group_member_butons hidden",			      
+			click: -> 
+				$.mh.addNewGroupMemberContact('false')
+		,
+			text: t("application.add_contact.save_and_add"),
+			"class": "add_new_person_group_member_butons hidden",			      			
+			click: -> 
+				$.mh.addNewGroupMemberContact('true')
+		,
+		text: "Cancel",
+		click: ->
+			$(this).dialog("destroy")
+		]
+	false  
