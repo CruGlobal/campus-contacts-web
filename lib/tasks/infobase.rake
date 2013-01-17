@@ -84,7 +84,7 @@ namespace :infobase do
 
       ccc_authentication = ccc_person.user.authentications.where(provider: 'facebook').first
       authentication = Authentication.where(ccc_authentication.attributes.slice('provider', 'uid')).first if ccc_authentication
-      if authentication
+      if authentication && authentication.user
         mh_person = authentication.user.person
       else
         user = User.find_by_username(ccc_person.user.username)
