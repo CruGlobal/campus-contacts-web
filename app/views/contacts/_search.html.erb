@@ -5,7 +5,7 @@
     <%= hidden_field_tag :assigned_to, params[:assigned_to] if params[:assigned_to].present? %>
     <div class="ononeline">
       <div class="field">
-        <label for="first_name"><span class="title"><%= t('.first_name') %></span></label> 
+        <label for="first_name"><span class="title"><%= t('.first_name') %></span></label>
         <%= text_field_tag :first_name, params[:first_name] %><br>
       </div>
       <div class="field">
@@ -71,7 +71,7 @@
           <%= submit_tag t('general.search') %>
           </td>
           <td>
-          <% if params[:search] == "1" && @people.length > 0 %>
+          <% if params[:do_search] == "1" && @people.length > 0 %>
             <%= button_to "Save Search","", :id=>"savesearchbtn" %>
             <div id="savesearchbox" style="display:none" title="<%= t('contacts.index.save_this_search') %>" >
               <%= form_for(@saved_contact_search, html: {id: 'save_search_form'}) do |f| %>
