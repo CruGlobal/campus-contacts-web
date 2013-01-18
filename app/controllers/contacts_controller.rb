@@ -264,6 +264,8 @@ class ContactsController < ApplicationController
                    @people_scope = @people_scope.joins(:email_addresses).where("#{EmailAddress.table_name}.email like ?", term) unless v.strip.blank?
                  when 'phone_number'
                    @people_scope = @people_scope.joins(:phone_numbers).where("#{PhoneNumber.table_name}.number like ?", term) unless v.strip.blank?
+                 when 'address1', 'city', 'state', 'country', 'dorm', 'room', 'zip'
+                   @people_scope = @people_scope.joins(:current_address).where("#{Address.table_name}.#{question.attribute_name} like ?", term) unless v.strip.blank?
                  else
                    @people_scope = @people_scope.where("#{Person.table_name}.#{question.attribute_name} like ?", term) unless v.strip.blank?
                  end
