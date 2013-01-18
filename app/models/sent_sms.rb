@@ -38,9 +38,9 @@ class SentSms < ActiveRecord::Base
         puts remaining_text
       end
       puts
-    end 
+    end
     unless too_big
-      next_chunk = previous_separator + text 
+      next_chunk = previous_separator + text
       new_text += next_chunk if next_chunk.length + new_text.length <= char_limit
     end
 
@@ -53,7 +53,7 @@ class SentSms < ActiveRecord::Base
     END
     SentSms.smart_split(message, separator).each do |message|
       xml += <<-END
-        <Sms>#{message}</Sms>
+        <Sms>#{CGI::escapeHTML(message.strip)}</Sms>
       END
     end
     xml += <<-END
@@ -68,9 +68,9 @@ class SentSms < ActiveRecord::Base
   private
 
   def send_sms
-    #case sent_via 
+    #case sent_via
     #when 'moonshado'
-    #self.moonshado_claimcheck = SMS.deliver(recipient, message).first # 
+    #self.moonshado_claimcheck = SMS.deliver(recipient, message).first #
     #when 'twilio'
     # Figure out which number to send from
     if received_sms
@@ -101,7 +101,7 @@ class SentSms < ActiveRecord::Base
     #end
     # Log count sent through this carrier (just for fun)
     # if received_sms && received_sms.carrier_name.present?
-    #   carrier = SmsCarrier.find_or_create_by_moonshado_name(received_sms.carrier_name) 
+    #   carrier = SmsCarrier.find_or_create_by_moonshado_name(received_sms.carrier_name)
     #   carrier.increment!(:sent_sms)
     # end
   end

@@ -6,8 +6,8 @@ class SmsController < ApplicationController
       # try to save the new message
       @received = ReceivedSms.create!(sms_params)
     rescue ActiveRecord::RecordNotUnique
-      # the mysql index just saved us from a duplicate message 
-      render xml: blank_response and return 
+      # the mysql index just saved us from a duplicate message
+      render xml: blank_response and return
     end
     # Process incoming text
     message = sms_params[:message]
@@ -141,7 +141,7 @@ class SmsController < ApplicationController
       end
 
       unless person.first_name.blank? || person.last_name.blank?
-        question_no = get_question_no(survey, person) 
+        question_no = get_question_no(survey, person)
         msg = "#{question_no} #{msg}"
       end
       @sent_sms = send_message(msg, phone_number, separator, question.id)
@@ -152,9 +152,9 @@ class SmsController < ApplicationController
   def save_survey_question(survey, person, answer)
     begin
       case
-      when person.first_name.blank? 
+      when person.first_name.blank?
         person.update_attribute(:first_name, answer)
-      when person.last_name.blank?  
+      when person.last_name.blank?
         person.update_attribute(:last_name, answer)
       else
         question = next_question(survey, person)
@@ -223,7 +223,7 @@ class SmsController < ApplicationController
       Person.exists?(["id = #{person.id} AND '#{attribute_name}' IS NOT NULL"])
     rescue
       false
-    end  
+    end
   end
 
   def try_to_extract_email_from(answer)
@@ -234,17 +234,16 @@ class SmsController < ApplicationController
     case
     when person.first_name.blank?
       Question.new(label: "What is your first name?")
-    when person.last_name.blank?  
+    when person.last_name.blank?
       Question.new(label: "What is your last name?")
     else
       @answer_sheet = get_answer_sheet(survey, person)
-      survey.questions.reload.where(web_only: false, hidden: false).detect {|q| q.responses(@answer_sheet).select {|a| a.present?}.blank?}      
+      survey.questions.reload.where(web_only: false, hidden: false).detect {|q| q.responses(@answer_sheet).select {|a| a.present?}.blank?}
     end
   end
 
   def send_message(msg, phone_number, separator = nil, question_id = nil)
-    sent_via = @sms_params[:shortcode] == '75572' ? 'moonshado' : 'twilio'
-    @sent_sms = SentSms.create!(message: msg, recipient: phone_number, received_sms_id: @received.try(:id), sent_via: sent_via, separator: separator, question_id: question_id)
+    @sent_sms = SentSms.create!(message: msg, recipient: phone_number.strip, received_sms_id: @received.try(:id), sent_via: 'twilio', separator: separator, question_id: question_id)
   end
 
   def blank_response
