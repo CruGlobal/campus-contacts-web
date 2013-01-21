@@ -1,3 +1,5 @@
+require 'net/http'
+require 'open-uri'
 class SentSms < ActiveRecord::Base
   belongs_to :received_sms
   @queue = :sms
@@ -5,7 +7,7 @@ class SentSms < ActiveRecord::Base
   serialize :separator
   default_value_for :sent_via, 'twilio'
 
-  #after_create :queue_sms
+  # after_create :queue_sms
 
   def self.smart_split(text, separator=nil, char_limit=160)
     return [text] if text.length <= char_limit
@@ -14,19 +16,13 @@ class SentSms < ActiveRecord::Base
     previous_separator = ''
     separator ||= /\s+/
     while match = separator.match(remaining_text)
-      puts match.inspect
       text_parts = remaining_text.split(match[0])
-      puts text_parts.inspect
       next_chunk = previous_separator + text_parts[0]
-      puts next_chunk.inspect
-      puts "#{new_text.length} + #{next_chunk.length}"
       if new_text.length + next_chunk.length > char_limit
         # If the first chunk is already too big, we need to split on space
         if next_chunk.length > char_limit
           return SentSms.smart_split(text)
         else
-          puts 'too big'
-          puts new_text.inspect
           too_big = true
           break
         end
@@ -34,10 +30,7 @@ class SentSms < ActiveRecord::Base
         new_text += next_chunk
         previous_separator = match[0]
         remaining_text = text_parts[1..-1].join(' ')
-        # remaining_text = text.sub(new_text, '')
-        puts remaining_text
       end
-      puts
     end
     unless too_big
       next_chunk = previous_separator + text
@@ -61,6 +54,37 @@ class SentSms < ActiveRecord::Base
     END
   end
 
+  def to_smseco
+    url = APP_CONFIG['smseco_url']
+    login = APP_CONFIG['smseco_username']
+    password = APP_CONFIG['smseco_password']
+    numero = recipient
+    expediteur = "0"
+
+    SentSms.smart_split(message, separator).each_with_index do |message, i|
+      msgid = URI.encode("#{id}-#{i+1}")
+      msg = URI.encode(message.strip)
+
+      request = "#{url}?login=#{login}&password=#{password}"
+      request += "&msgid=#{msgid}&expediteur=#{expediteur}&msg=#{msg}&numero=#{numero}"
+      request += "&flash=0&unicode=0&binaire=0"
+
+      begin
+        response = open(request).read
+        response_hash = Hash.from_xml(response)
+        response_code = response_hash['REPONSE']['statut'].to_i
+        self.update_attribute('reports', response_hash)
+        if response_code == 0
+          puts "Success (#{response_code})"
+        else
+          puts "Failed (#{response_code})"
+        end
+      rescue
+        puts "Connection Failed"
+      end
+    end
+  end
+
   def queue_sms
     async(:send_sms)
   end
@@ -68,42 +92,19 @@ class SentSms < ActiveRecord::Base
   private
 
   def send_sms
-    #case sent_via
-    #when 'moonshado'
-    #self.moonshado_claimcheck = SMS.deliver(recipient, message).first #
-    #when 'twilio'
-    # Figure out which number to send from
-    if received_sms
-      from = received_sms.shortcode
+    case sent_via
+    when 'smseco'
+      to_smseco
     else
-      # If the recipient is in the US, use the shortcode, otherwise use the long number
-      # from = recipient.first == '1' ? SmsKeyword::SHORT : SmsKeyword::LONG
-      #from = SmsKeyword::SHORT
-      from = SmsKeyword::LONG
+      if received_sms
+        from = received_sms.shortcode
+      else
+        from = SmsKeyword::LONG
+      end
+      SentSms.smart_split(message, separator).each do |message|
+        Twilio::SMS.create(:to => recipient, :body => message.strip, :from => from)
+      end
     end
-    #if message.length > 160
-      #split_message = SentSms.smart_split(message, separator)
-      #next_message = SentSms.new(attributes.merge(:message => split_message[1]))
-      #self.message = split_message[0]
-    #end
-    SentSms.smart_split(message, separator).each do |message|
-      Twilio::SMS.create(:to => recipient, :body => message.strip, :from => from)
-    end
-    #self.twilio_sid = sms.sid
-    #self.twilio_uri = sms.uri
-    #else
-    #raise "Not sure how to send this sms: sent_via = #{sent_via}"
-    #end
-    #save
-    #if next_message
-      #sleep(2)
-      #next_message.save
-    #end
-    # Log count sent through this carrier (just for fun)
-    # if received_sms && received_sms.carrier_name.present?
-    #   carrier = SmsCarrier.find_or_create_by_moonshado_name(received_sms.carrier_name)
-    #   carrier.increment!(:sent_sms)
-    # end
   end
 
 end

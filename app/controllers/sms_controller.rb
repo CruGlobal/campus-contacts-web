@@ -1,5 +1,6 @@
 class SmsController < ApplicationController
   skip_before_filter :authenticate_user!, :verify_authenticity_token, :check_valid_subdomain
+
   def mo
     render xml: blank_response and return if sms_params[:message].blank?
     begin
@@ -243,7 +244,7 @@ class SmsController < ApplicationController
   end
 
   def send_message(msg, phone_number, separator = nil, question_id = nil)
-    @sent_sms = SentSms.create!(message: msg, recipient: phone_number.strip, received_sms_id: @received.try(:id), sent_via: 'twilio', separator: separator, question_id: question_id)
+    @sent_sms = SentSms.create!(message: msg, recipient: phone_number.strip, received_sms_id: @received.try(:id), separator: separator, question_id: question_id)
   end
 
   def blank_response
