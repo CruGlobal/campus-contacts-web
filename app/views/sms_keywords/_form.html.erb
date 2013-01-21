@@ -4,7 +4,7 @@
     <div class="stepnumber">
       <%= image_tag("step1.png") %>
     </div>
-    <div class="stepcontent"> 
+    <div class="stepcontent">
       <% if @sms_keyword.new_record? %>
         <label for="survey_label">
           <%= t('sms_keywords.form.keyword') + ": " + t('sms_keywords.form.keyword_tip') %>
@@ -25,7 +25,7 @@
         <%= t('sms_keywords.form.explanation') %>
       </label>
       <div class="field">
-        <%= f.text_area :explanation, rows: 5, placeholder: t("keywords.form.keyword_why") %>
+        <%= f.text_area :explanation, rows: 5, placeholder: t("sms_keywords.form.keyword_why") %>
       </div>
     </div>
   </div>
@@ -33,30 +33,30 @@
     <div class="stepnumber">
       <%= image_tag("step2.png") %>
     </div>
-    <div class="stepcontent">    
+    <div class="stepcontent">
       <div class="field">
         <label for="survey_label">
-          <%= raw(t('sms_keywords.form.initial_response')) %> 
+          <%= raw(t('sms_keywords.form.initial_response')) %>
           <div class="icon help tipit help_bubble_keyword " title="<%= t('sms_keywords.form.post_survey_why') %>"></div>
         </label>
         <%= f.text_area :initial_response, rows: 3 %>
       </div>
-      
-      
+
+
     </div>
   </div>
-  
+
   <div class="stepwrap rwidth">
     <div class="stepnumber">
       <%= image_tag("step3.png") %>
     </div>
-    <div class="stepcontent"> 
+    <div class="stepcontent">
       <label for="survey_label">
         <%= raw(t('helpers.label.sms_keyword.survey_id')) %>
         <div class="icon help tipit help_bubble_keyword " title="<%= t('.associated_survey_tip') %>"></div>
       </label>
       <div class="field">
-        <%= f.select :survey_id, 
+        <%= f.select :survey_id,
             current_organization.self_and_children_surveys.collect {|s| [s, s.id]},
             include_blank: "Choose One"%>
       </div>
