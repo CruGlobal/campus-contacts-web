@@ -6,25 +6,25 @@
     <div class="ononeline">
       <div class="field">
         <label for="first_name"><span class="title"><%= t('.first_name') %></span></label>
-        <%= text_field_tag :first_name, params[:first_name] %><br>
+        <%= text_field_tag :first_name, params[:first_name] %>
       </div>
       <div class="field">
         <label for="last_name"><span class="title"><%= t('.last_name') %></span></label>
-        <%= text_field_tag :last_name, params[:last_name] %><br>
+        <%= text_field_tag :last_name, params[:last_name] %>
       </div>
       <div class="field">
         <label for="last_name"><span class="title"><%= t('.phone_number') %></span></label>
-        <%= text_field_tag :phone_number, params[:phone_number] %><br>
+        <%= text_field_tag :phone_number, params[:phone_number] %>
       </div>
       <div class="field">
         <label for="gender"><span class="title"><%= t('general.email') %></span></label>
-        <%= text_field_tag :email, params[:email] %><br>
+        <%= text_field_tag :email, params[:email] %>
       </div>
       <div class="field">
         <label for="gender"><span class="title"><%= t('general.gender') %></span></label>
         <%= radio_button_tag :gender, '1', params[:gender] == '1' %> <%= t('general.male') %>
         <%= radio_button_tag :gender, '0', params[:gender] == '0' %> <%= t('general.female') %>
-        <%= radio_button_tag :gender, '', params[:gender] == '' %> <%= t('general.both') %><br>
+        <%= radio_button_tag :gender, '', params[:gender] == '' %> <%= t('general.both') %>
       </div>
       <div class="field">
        <label for="contacts_updated"><span class="title"><%= t('general.contacts_updated_from') %></span></label>
@@ -32,18 +32,37 @@
         <%= t('general.dash') %>
        <%= text_field_tag :person_updated_to %>
       </div>
-      <br/>
+      </br>
       <div class="field">
         <label for="status"><span class="title"><%= t('general.status') %></span></label>
-        <%= select_tag :status, options_for_select(OrganizationalRole::FOLLOWUP_STATUSES.collect {|s| [s.titleize, s]}, params[:status]), include_blank: true %><br>
+        <%= select_tag :status, options_for_select(OrganizationalRole::FOLLOWUP_STATUSES.collect {|s| [s.titleize, s]}, params[:status]), include_blank: true %>
       </div>
       <div class="field">
         <label for="survey"><span class="title"><%= t('general.survey') %></span></label>
-        <%= select_tag :survey, options_for_select(current_organization.surveys.order(:title).collect {|s| [s, s.id]}, params[:survey]), include_blank: true %><br>
+        <%= select_tag :survey, options_for_select(current_organization.surveys.order(:title).collect {|s| [s, s.id]}, params[:survey]), include_blank: true %>
       </div>
+      </br>
       <div class="field">
-        <label for="role"><span class="title"><%= t('general.role') %></span></label>
-        <%= select_tag :role, options_for_select((current_organization.roles.default_roles_desc + current_organization.roles.non_default_roles_asc).collect {|s| [s.name, s.id]}, params[:role]), include_blank: true %><br>
+      	<% condition = params[:role].present? && params[:do_search].present? %>
+      	<div>
+		      <label for="role"><span class="title"><%= t('general.role') %></span></label>
+		      <%=raw I18n.t("general.label_select_description", element: raw(select_tag :role_tag, options_for_select(Role::LABEL_SEARCH_FILTERS, params[:role_tag] ||= Role::ANY_SELECTED_LABEL[1]))) %>
+		      
+      		<div class="icon help tipitright help_bubble_keyword" title="<%= t('general.label_search_help') %>"></div>
+        </div>
+				<div class="label_space" id="search_roles_container">
+					<div class="label_list">
+						<% current_organization.role_set.each do |role| %>
+							<div class="label_item">
+								<%= check_box_tag "role[]", role.id, condition && params[:role].include?(role.id.to_s), id: "search_role_#{role.id}", class: "search_role_checkbox" %>
+								<%= role.name %>
+							</div>
+						<% end %>
+					</div>
+				</div>
+				<div>						
+          <%= submit_tag t('general.label_clear_selected'), :id=>"search_clear_selected_labels" %>
+				</div>
       </div>
     </div>
     <!-- Email: <%#= text_field_tag :email, params[:email] %> -->
