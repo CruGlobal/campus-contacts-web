@@ -86,16 +86,38 @@ class ContactsController < ApplicationController
 
     @person.update_attributes(params[:person]) if params[:person]
 
-    update_survey_answers if params[:answers].present?
+    # birth_date validation
+    @valid_date = true
+    if params[:answers]
+      params[:answers].each do |survey,answers|
+        answers.each do |key,val|
+          if val.present? && date_question = Element.find_by_id(key.to_i)
+            @person.birth_date = val if date_question.attribute_name == 'birth_date'
+            @person.graduation_date = val if date_question.attribute_name == 'graduation_date'
+            @person.save if ['birth_date','graduation_date'].include?(date_question.attribute_name)
+            unless @person.valid?
+              @valid_date = false
+              break
+            end
+          end
+        end
+      end if @valid_date
+    end
+    update_survey_answers if params[:answers]
     @person.update_date_attributes_updated
-    if @person.valid? && (!@answer_sheet || (@answer_sheet.person.valid? && (!@answer_sheet.person.primary_phone_number || @answer_sheet.person.primary_phone_number.valid?)))
-      respond_to do |wants|
-        params[:update] = 'true'
-        wants.js
-        wants.html { redirect_to survey_response_path(@person) }
-      end
+
+    unless @valid_date
+      redirect_to edit_survey_response_path(@person), notice: @person.errors.full_messages.first
     else
-      redirect_to survey_response_path(params[:id])
+      if @person.valid? && (!@answer_sheet || @answer_sheet.valid_person?)
+        respond_to do |wants|
+          params[:update] = 'true'
+          wants.js
+          wants.html { redirect_to survey_response_path(@person) }
+        end
+      else
+        redirect_to edit_survey_response_path(params[:id])
+      end
     end
   end
 
@@ -108,6 +130,29 @@ class ContactsController < ApplicationController
   end
 
   def create
+    params[:answers].each do |answer|
+      answers = []
+      fields = answer[1]
+      if fields.is_a?(Hash)
+        # Read birth_date question from non-predefined survey
+        answers.each do |key,val|
+          if val.present? && date_question = Element.find_by_id(key.to_i)
+            @person.birth_date = val if date_question.attribute_name == 'birth_date'
+            @person.graduation_date = val if date_question.attribute_name == 'graduation_date'
+            break unless @person.valid?
+          end
+        end
+      else
+        # Read birth_date question from predefined survey
+        question_id = answers[0]
+        if fields.present? && date_question = Element.find_by_id(question_id.to_i)
+          @person.birth_date = fields if date_question.attribute_name == 'birth_date'
+          @person.graduation_date = fields if date_question.attribute_name == 'graduation_date'
+          break unless @person.valid?
+        end
+      end
+    end if params[:answers]
+
     @organization = current_organization
     create_contact
 

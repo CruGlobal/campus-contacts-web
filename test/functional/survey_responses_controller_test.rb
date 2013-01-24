@@ -228,7 +228,7 @@ class SurveyResponsesControllerTest < ActionController::TestCase
         @survey.questions << @birth_date_question
         @questions = @survey.questions
         xhr :put, :create, {:survey_id => @survey.id, :answers => {@birth_date_question.id.to_s => "20"}}
-        assert_equal "invalid", assigns(:person).errors.messages[:birth_date].first
+        assert_equal "invalid - should be MM/DD/YYYY", assigns(:person).errors.messages[:birth_date].first
       end
     end
 

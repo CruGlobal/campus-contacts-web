@@ -40,6 +40,15 @@ class Survey < ActiveRecord::Base
   #   (elements + elements.collect(&:all_elements)).flatten
   # end
 
+  def questions_with_answers(app = nil, person = nil)
+    question_ids = []
+    all_questions.each do |q|
+      next if ['email', 'phone_number'].include?(q.attribute_name)
+      question_ids << q.id if q.display_response(app, person).present?
+    end
+    all_questions.where(id: question_ids)
+  end
+
   def question_rules
     question_ids = questions.collect(&:id)
     element_ids = SurveyElement.where(element_id: question_ids).collect(&:id)

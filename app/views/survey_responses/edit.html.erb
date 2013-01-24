@@ -17,11 +17,11 @@
             <div class="survey_title"><%= survey.title %></div>
             <% answer_sheet = @person.answer_sheets.detect {|as| survey.id == as.survey_id} %>
             <% survey.questions.each do |question| %>
-              <% next if ['email','phone'].include?(question.slug) %>
-              <% answer = question.display_response(answer_sheet) %>
+              <% next if ['email', 'phone_number'].include?(question.attribute_name) %>
+              <% answer = question.display_response(answer_sheet, @person) %>
               <div class="field">
               	<label><%= raw question.label %></label>
-              	<%= render :partial => 'survey/' + question.ptemplate, object: question, locals: {col: nil, answer_sheet: answer_sheet, survey: survey} %>
+              	<%= render :partial => 'survey/' + question.ptemplate, object: question, locals: {col: nil, answer_sheet: answer_sheet, survey: survey, person: @person} %>
               </div>
             <% end %>
           <% end %>

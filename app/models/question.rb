@@ -82,12 +82,12 @@ class Question < Element
   #  end
 
   # shortcut to return first answer
-  def response(app)
-    responses(app).first.to_s
+  def response(app, person = nil)
+    responses(app, person).first.to_s
   end
 
-  def display_response(app)
-    r = responses(app)
+  def display_response(app, person = nil)
+    r = responses(app, person)
     if r.blank?
       ""
     else
@@ -95,7 +95,12 @@ class Question < Element
     end
   end
 
-  def responses(app)
+  def responses(app, person = nil)
+    # finding answers for pre-defined questions
+    if person.present? && object_name == 'person' && attribute_name.present?
+      data = person.send(attribute_name)
+      return [data] if data.present?
+    end
     return [] unless app
     # try to find answer from external object
     if !object_name.blank? and !attribute_name.blank?
@@ -153,7 +158,7 @@ class Question < Element
           @answers << answer
         end
       else
-        answer = Answer.find_by_question_id_and_answer_sheet_id(id, app.id) || Answer.new(:question_id => self.id, :answer_sheet_id => app.id)
+        answer = Answer.find_or_create_by_question_id_and_answer_sheet_id(id, app.id)
         answer.set(values.first)
         @answers << answer
       end
