@@ -41,7 +41,15 @@ module ContactActions
           ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
           ContactAssignment.create!(person_id: @person.id, organization_id: @organization.id, assigned_to_id: current_person.id)
         end
+        
 
+				if @add_to_group_tag = params[:add_to_group_tag] == "true"
+    			@group = @organization.groups.find(params[:add_to_group])
+		      @group_membership = @group.group_memberships.find_or_initialize_by_person_id(@person.id)
+		      @group_membership.role = params[:add_to_group_role]
+		      @group_membership.save
+				end
+				
         respond_to do |wants|
           wants.html { redirect_to :back }
           wants.mobile { redirect_to :back }

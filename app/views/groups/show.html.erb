@@ -31,15 +31,18 @@
   </h1>
 </div>
 
+<span id="add_member_prompt" style="display:none"><%= t('.add_a_member') %></span>
+<span id="add_leader_prompt" style="display:none"><%= t('.add_a_leader') %></span>
+
 <div class="pagemenu">
   <ul class="pillmenu">
     <li>
-      <%= link_to(t('.add_member'), '#', class: 'add-member') %>
+      <%= link_to(t('.add_member'), "#", class: "add_group_member", "data-desc"=>t('group_memberships.form.add_a_member'), "data-role"=>"member") %>
     </li>
   </ul>
   <ul class="pillmenu">
     <li>
-      <%= link_to(t('.add_leader'), '#', class: 'add-leader') %>
+      <%= link_to(t('.add_leader'), "#", class: "add_group_leader", "data-desc"=>t('group_memberships.form.add_a_leader'), "data-role"=>"leader") %>
     </li>
   </ul>
   <ul class="divider"></ul>
@@ -75,8 +78,7 @@
       <% end %>
     </tbody>
   </table>
-
-  <%= render 'group_memberships/form' %>
 </div>
 
+<%= render 'group_memberships/form' %>
 <%= render 'shared/bulk_send_msg' %>
