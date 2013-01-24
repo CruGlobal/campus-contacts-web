@@ -57,6 +57,15 @@ class SurveyResponsesController < ApplicationController
 
     save_survey
 
+    ['birth_date','graduation_date'].each do |attr_name|
+      if date_element = @survey.questions.where(attribute_name: attr_name)
+        if date_element.present? && params[:answers]["#{date_element.first.id}"].present?
+          @person.birth_date = params[:answers]["#{date_element.first.id}"] if attr_name == 'birth_date'
+          @person.graduation_date = params[:answers]["#{date_element.first.id}"] if attr_name == 'graduation_date'
+        end
+      end
+    end
+
     if @person.valid? && @answer_sheet.person.valid?
       unless @answer_sheet.survey.has_assign_rule_applied(@answer_sheet, 'ministry')
         create_contact_at_org(@person, @survey.organization)
@@ -101,9 +110,10 @@ class SurveyResponsesController < ApplicationController
         params[:person] = Hash.new
       end
 
-      if @survey.questions.exists?(attribute_name: 'birth_date')
-        birth_date_element = @survey.questions.where(attribute_name: 'birth_date').first
-        params[:person][:birth_date] = params[:answers]["#{birth_date_element.id}"] if params[:answers]["#{birth_date_element.id}"].present?
+      ['birth_date','graduation_date'].each do |attr_name|
+        if date_element = @survey.questions.where(attribute_name: attr_name)
+          params[:person][:"#{attr_name}"] = params[:answers]["#{date_element.first.id}"] if date_element.present? && params[:answers]["#{date_element.first.id}"].present?
+        end
       end
 
       if existing_person

@@ -5,6 +5,7 @@
  *= require imports
  *= require roles
  *= require groups
+ *= require survey_responses
  *= require jquery.qtip
  *= require jquery.chosen
  *= require superfish

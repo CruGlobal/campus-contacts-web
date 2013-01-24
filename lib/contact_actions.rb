@@ -17,6 +17,29 @@ module ContactActions
         return
       end
 
+      params[:answers].each do |answer|
+        answers = []
+        fields = answer[1]
+        if fields.is_a?(Hash)
+          # Read birth_date & graduation_date question from non-predefined survey
+          fields.each do |key,val|
+            if val.present? && date_question = Element.find_by_id(key.to_i)
+              params[:person][:birth_date] = val if date_question.attribute_name == 'birth_date'
+              params[:person][:graduation_date] = val if date_question.attribute_name == 'graduation_date'
+              break unless @person.valid?
+            end
+          end
+        else
+          # Read birth_date & graduation_date question from predefined survey
+          question_id = answer[0]
+          if fields.present? && date_question = Element.find_by_id(question_id.to_i)
+            params[:person][:birth_date] = fields if date_question.attribute_name == 'birth_date'
+            params[:person][:graduation_date] = fields if date_question.attribute_name == 'graduation_date'
+            break unless @person.valid?
+          end
+        end
+      end if params[:answers]
+
       @person = Person.new_from_params(params[:person])
       @email = @person.email_addresses.first
       @phone = @person.phone_numbers.first
@@ -41,7 +64,6 @@ module ContactActions
           ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
           ContactAssignment.create!(person_id: @person.id, organization_id: @organization.id, assigned_to_id: current_person.id)
         end
-        
 
 				if @add_to_group_tag = params[:add_to_group_tag] == "true"
     			@group = @organization.groups.find(params[:add_to_group])
@@ -49,7 +71,7 @@ module ContactActions
 		      @group_membership.role = params[:add_to_group_role]
 		      @group_membership.save
 				end
-				
+        
         respond_to do |wants|
           wants.html { redirect_to :back }
           wants.mobile { redirect_to :back }
@@ -62,11 +84,7 @@ module ContactActions
         end
         return
       else
-        errors = []
-        errors << "#{I18n.t('people.create.first_name_error')}" unless @person.first_name.present?
-        errors << "#{I18n.t('people.create.phone_number_error')}" if @phone && !@phone.valid?
-        errors << "#{I18n.t('people.create.email_error')}" if @email && !@email.valid?
-
+        errors = @person.errors.full_messages
         respond_to do |wants|
           wants.js do
             flash.now[:error] = errors.join('<br />')
@@ -85,14 +103,37 @@ module ContactActions
     @answer_sheets = []
     @organization ||= current_organization
 
-    @organization.surveys.each do |survey|
-      @answer_sheet = get_answer_sheet(survey, @person)
-      question_set = QuestionSet.new(survey.questions, @answer_sheet)
-      question_set.post(params[:answers], @answer_sheet)
-      question_set.save
-      @answer_sheet.person.save
-      @answer_sheets << @answer_sheet
-    end
+    params[:answers].each do |answer|
+      answers = []
+      fields = answer[1]
+      if fields.is_a?(Hash)
+        # Save Non-Predefined Survey Answers
+        survey_id = answer[0]
+        if survey = @organization.surveys.find(survey_id)
+          @answer_sheet = get_answer_sheet(survey, @person)
+          question_set = QuestionSet.new(survey.questions, @answer_sheet)
+          question_set.post(fields, @answer_sheet)
+          question_set.save
+          @answer_sheet.person.save
+          @answer_sheets << @answer_sheet
+        end
+      else
+        # Collect predefined survey answers
+        answers << answer
+      end
+      if answers.present?
+        # Save predefined survey answers
+        @organization.surveys.each do |survey|
+          @answer_sheet = get_answer_sheet(survey, @person)
+          question_set = QuestionSet.new(survey.questions, @answer_sheet)
+          question_set.post(answers, @answer_sheet)
+          question_set.save
+          @answer_sheet.person.save
+          @answer_sheets << @answer_sheet
+        end
+      end
+    end if params[:answers]
+
     # Delete any answer_sheet with no answers
 
     @answer_sheets.each do |as|
@@ -109,10 +150,9 @@ module ContactActions
     @answer_sheets = []
     @organization ||= current_organization
 
-    params[:answers].each do |survey|
-      survey_id = survey[0]
-      fields = survey[1]
-
+    params[:answers].each do |answer|
+      survey_id = answer[0]
+      fields = answer[1]
       if survey = @organization.surveys.find(survey_id)
         @answer_sheet = get_answer_sheet(survey, @person)
         question_set = QuestionSet.new(survey.questions, @answer_sheet)

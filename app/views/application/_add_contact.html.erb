@@ -8,7 +8,9 @@
       </div>
       <div class="form_group_fields">
         <% if flash[:error] %>
-          <div class="flash error"><%= raw flash[:error] %></div>
+          <div class="flash error red_errors">
+            <%= raw flash[:error].gsub("Phone numbers number", "Phone number").gsub("Email addresses email", "Email") %>
+          </div>
         <% end %>
 
         <%= hidden_field_tag :add_another %>
@@ -39,12 +41,19 @@
       </div>
 
       <div class="form_group_fields user_defined_contact_fields remove_add_new_person_to_group">
-        <% current_organization.questions.uniq {|q| q.label}.each do |question| %>
-          <% next if ['first_name', 'last_name', 'email', 'phone_number', 'gender', 'country', 'state', 'city', 'address1', 'zip'].include?(question.attribute_name) %>
-          <div class="field">
-          	<label><%= raw question.label %></label>
-          	<%= render :partial => 'survey/' + question.ptemplate, :object => question, :locals => {:col => nil, :answer_sheet => @answer_sheet} %>
-          </div>
+        <% current_organization.surveys.each do |survey| %>
+          <% if survey.questions.count > 0 %>
+            <div class="survey_title add_contact_survey_title"><%= survey.title %></div>
+            <% answer_sheet = @person.answer_sheets.detect {|as| survey.id == as.survey_id} if @person %>
+            <% survey.questions.each do |question| %>
+              <% next if ['first_name', 'last_name', 'email', 'phone_number', 'gender', 'country', 'state', 'city', 'address1', 'zip'].include?(question.attribute_name) %>
+              <% answer = question.display_response(answer_sheet) %>
+              <div class="field add_contact_survey_question_field">
+              	<label><%= raw question.label %></label>
+              	<%= render :partial => 'survey/' + question.ptemplate, object: question, locals: {col: nil, answer_sheet: answer_sheet, survey: survey} %>
+              </div>
+            <% end %>
+          <% end %>
         <% end %>
       </div>
 

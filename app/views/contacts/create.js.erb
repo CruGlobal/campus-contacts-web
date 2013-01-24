@@ -27,6 +27,7 @@
 
 <% unless params[:add_another] == 'true' %>
 	$("#add_contact_div, #member_search").dialog("destroy")
+  $("body").css({ overflow: 'inherit' })
 <% end %>
 $('#<%= dom_id(@person) %>').effect('highlight')
 

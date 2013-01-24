@@ -6,16 +6,24 @@
     <%= t('.title', name: @person) %>
   </h1>
 </div>
+<div class="pagemenu">
+  <ul class="pillmenu">
+    <li>
+      <%= link_to(t('.edit_answers'), edit_survey_response_path(@person)) %>
+    </li>
+  </ul>
+</div>
 <div class="pad">
   <div id="survey_answers">
     <% current_organization.surveys.flatten.uniq.each do |survey| %>
-      <% if @person.answer_sheets.where(survey_id: survey.id).present? %>
+      <% answer_sheet = @person.answer_sheets.detect {|as| survey.id == as.survey_id} %>
+      <% questions_with_answers = survey.questions_with_answers(answer_sheet, @person) %>
+      <% if questions_with_answers.present? %>
         <div class="survey_title"><%= survey.title %></div>
       <% end %>
       <ul>
-        <% answer_sheet = @person.answer_sheets.detect {|as| survey.id == as.survey_id} %>
-        <% survey.all_questions.each do |q| %>
-          <% q.display_response(answer_sheet).tap do |answer| %>
+        <% questions_with_answers.each do |q| %>
+          <% q.display_response(answer_sheet, @person).tap do |answer| %>
             <% if answer.present? %>
               <li><%= q.label %><%= ':' unless q.label[-1] =~ /\.;:\?/ %> <%= answer %></li>
             <% end %>
@@ -27,5 +35,4 @@
       <%= t('.no_answers', name: @person) %><br/><br/>
     <% end %>
   </div>
-  <%= link_to(t('.edit_answers'), edit_survey_response_path(@person)) %>
 </div>

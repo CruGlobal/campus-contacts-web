@@ -23,7 +23,8 @@ class ContactsControllerTest < ActionController::TestCase
 
       @predefined = Factory(:survey, organization: org)
       APP_CONFIG['predefined_survey'] = @predefined.id
-      @predefined.questions << Factory(:year_in_school_element)
+      @year_in_school_question = Factory(:year_in_school_element)
+      @predefined.questions << @year_in_school_question
     end
 
     should "be able to show a person" do
@@ -153,12 +154,68 @@ class ContactsControllerTest < ActionController::TestCase
       assert_equal(assigns(:person).id, @contact.id)
     end
 
-    should "update an invalid contact's info'" do
+    should "update a contact's survey answers" do
+      @contact = Factory(:person)
+      @user.person.organizations.first.add_contact(@contact)
+
+      @survey = Factory(:survey, organization: @org)
+      @question = Factory(:element, object_name: nil, attribute_name: nil)
+      @survey.questions << @question
+
+      @answer_sheet = Factory(:answer_sheet, survey: @survey, person: @contact)
+      @answer = Factory(:answer, answer_sheet: @answer_sheet, question: @question, value: "ExistingValue")
+
+      put :update, id: @contact.id, answers: {"#{@survey.id}"=>{"#{@question.id}"=>"NewValue"}}
+      assert_equal "NewValue", @contact.answer_sheets.first.answers.first.value, "survey answer should be updated"
+      assert_redirected_to survey_response_path(@contact)
+    end
+
+    should "update a contact's predefined survey answers" do
+      @contact = Factory(:person, room: 'OldSchoolYear')
+      @user.person.organizations.first.add_contact(@contact)
+
+      @survey = Factory(:survey, organization: @org)
+      @question = Factory(:element, object_name: 'person', attribute_name: 'year_in_school')
+      @survey.questions << @question
+
+      put :update, id: @contact.id, answers: {"#{@survey.id}"=>{"#{@question.id}"=>"NewSchoolYear"}}
+      @contact.reload
+      assert_equal "NewSchoolYear", @contact.year_in_school, "person should be updated"
+      assert_redirected_to survey_response_path(@contact)
+    end
+
+    should "not update a contact when birth_date is invalid format" do
+      @contact = Factory(:person, birth_date: nil)
+      @user.person.organizations.first.add_contact(@contact)
+
+      @birth_date_question = Factory(:element, object_name: 'person', attribute_name: 'birth_date')
+      @predefined.questions << @birth_date_question
+
+      put :update, id: @contact.id, answers: {"#{@predefined.id}"=>{"#{@birth_date_question.id}"=>"InvalidFormat"}}
+      @contact.reload
+      assert_nil @contact.birth_date, "birth_date should still be nil"
+      assert_redirected_to edit_survey_response_path(@contact)
+    end
+
+    should "update a contact when birth_date is valid" do
+      @contact = Factory(:person, birth_date: nil)
+      @user.person.organizations.first.add_contact(@contact)
+
+      @birth_date_question = Factory(:element, object_name: 'person', attribute_name: 'birth_date')
+      @predefined.questions << @birth_date_question
+
+      put :update, id: @contact.id, answers: {"#{@predefined.id}"=>{"#{@birth_date_question.id}"=>"02/13/1989"}}
+      @contact.reload
+      assert_equal "1989-02-13".to_date, @contact.birth_date, "birth_date should be updated"
+      assert_redirected_to survey_response_path(@contact)
+    end
+
+    should "not update an invalid contact's info'" do
       @contact = Factory.build(:person_without_name)
       @contact.save(validate: false)
       @user.person.organizations.first.add_contact(@contact)
       put :update, id: @contact.id, person: {last_name: 'Jake'}
-      assert_redirected_to survey_response_path(@contact)
+      assert_redirected_to edit_survey_response_path(@contact)
     end
 
     should "remove a contact from an organization" do
@@ -623,18 +680,56 @@ class ContactsControllerTest < ActionController::TestCase
   context "Creating contacts" do
     setup do
       @user, org = admin_user_login_with_org
-      @predefined_survey = Factory(:survey, organization: @org)
+      @predefined_survey = Factory(:survey, organization: org)
       APP_CONFIG['predefined_survey'] = @predefined_survey.id
       @year_in_school_question = Factory(:year_in_school_element)
       @predefined_survey.questions << @year_in_school_question
+
+      @simple_survey = Factory(:survey, organization: org)
+      @birth_date_question = Factory(:element, object_name: 'person', attribute_name: 'birth_date')
+      @simple_survey.questions << @birth_date_question
     end
 
     should "create an org with answered predefined survey" do
       assert_difference "Person.count", 1 do
         xhr :post, :create, {:person => {:first_name => "James", :last_name => "Ingram", :gender => "male"}, :answers => {"#{@year_in_school_question.id}"=>"4th"}  }
       end
-
       assert_equal "4th", Person.where(first_name: "James", last_name: "Ingram").first.year_in_school
+    end
+
+    should "create record with if birth_date is valid and in non-predefined survey" do
+      assert_difference "Person.count", 1 do
+        xhr :post, :create, :person => {:first_name => "Any"}, :answers => {"#{@simple_survey.id}" => {"#{@birth_date_question.id}"=>"02/13/1989"}}
+      end
+      assert_equal "1989-02-13".to_date, Person.last.birth_date
+    end
+
+    should "create record with if birth_date is valid and in predefined survey" do
+      assert_difference "Person.count", 1 do
+        xhr :post, :create, :person => {:first_name => "Any"}, :answers => {"#{@birth_date_question.id}"=>"02/13/1989"}
+      end
+      assert_equal "1989-02-13".to_date, Person.last.birth_date
+    end
+
+    should "not create record if the answer in date question of non-predefined survey is invalid" do
+      assert_no_difference "Person.count" do
+        xhr :post, :create, :person => {:first_name => "Any"}, :answers => {"#{@simple_survey.id}" => {"#{@birth_date_question.id}"=>"InvalidFormat"}}
+      end
+      assert_equal "Birth date invalid - should be MM/DD/YYYY", assigns(:person).errors.full_messages.first
+    end
+
+    should "not create record if the answer in date question of predefined survey is invalid" do
+      assert_no_difference "Person.count" do
+        xhr :post, :create, :person => {:first_name => "Any"}, :answers => {"#{@birth_date_question.id}"=>"InvalidFormat"}
+      end
+      assert_equal "Birth date invalid - should be MM/DD/YYYY", assigns(:person).errors.full_messages.first
+    end
+
+    should "create record if only name present" do
+      assert_difference "Person.count" do
+        xhr :post, :create, :person => {:first_name => "Any"}, :answers => {"#{@simple_survey.id}" => {"#{@birth_date_question.id}"=>""}}
+      end
+      assert_equal "Any", Person.last.first_name
     end
 
     should "retain all the roles if there's a merge (creating contact with the same first_name, last_name and email with an existing person in the db) during create contacts" do
@@ -644,7 +739,6 @@ class ContactsControllerTest < ActionController::TestCase
       assert_no_difference "Person.count" do
         xhr :post, :create, {:person => {:first_name => @user.person.first_name, :last_name => @user.person.last_name, :email_address => {:email => @user.person.email, :primary => 1}}, :labels => [Role.leader.id.to_s, Role.contact.id.to_s] }
       end
-
     end
   end
 

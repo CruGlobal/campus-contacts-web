@@ -12,7 +12,7 @@ class ChoiceField < Question
   has_many :elements, :class_name => "Element", :foreign_key => "conditional_id", :dependent => :nullify#, :order => :position
   # Returns choices stored one per line in content field
 	def choices
-    retVal = Array.new 
+    retVal = Array.new
     if ['yes-no', 'acceptance'].include?(self.style)
       return [["Yes",1],["No",0]]
     elsif !source.blank?
@@ -34,10 +34,10 @@ class ChoiceField < Question
     end
     return retVal
   end
-	
-	def has_answer?(choice, app)
-  	responses(app).each do |r|   # loop through Answers
-      # legacy field type choices may be int or tinyint 
+
+	def has_answer?(choice, app, person = nil)
+  	responses(app, person).each do |r|   # loop through Answers
+      # legacy field type choices may be int or tinyint
       # raise r.inspect + ' - ' + choice.inspect if id == 1137 && r != 1
       # r = r.to_s
       return true if  case true
@@ -49,7 +49,7 @@ class ChoiceField < Question
     end
     false
 	end
-	
+
 	# which view to render this element?
   def ptemplate
     if self.style == 'checkbox'
@@ -68,12 +68,12 @@ class ChoiceField < Question
       'country'
     end
 	end
-	
-  
+
+
   def multiple_answers_allowed?
     self.style == 'checkbox'
   end
-	
+
 	# element view provides the element label?
   def default_label?
     if self.style == 'acceptance' || self.hide_option_labels?
@@ -82,12 +82,12 @@ class ChoiceField < Question
       true
     end
   end
-	
+
 	# css class names for javascript-based validation
   def validation_class(answer_sheet)
     if self.required?(answer_sheet)
       if self.style == 'drop-down'
-        'validate-selection required' 
+        'validate-selection required'
       elsif self.style == 'rating'
         'validate-rating required'
       elsif self.style == 'acceptance'
@@ -99,12 +99,12 @@ class ChoiceField < Question
       ''
     end
   end
-  
-  def display_response(app=nil)
-    r = responses(app)
+
+  def display_response(app = nil, person = nil)
+    r = responses(app, person)
     r.reject! {|a| a.class == Answer && a.value.blank?}
     if r.blank?
-      "" 
+      ""
     elsif self.style == 'yes-no'
       ans = r.first
       if ans.class == Answer
@@ -118,12 +118,12 @@ class ChoiceField < Question
       r.compact.select {|a| a.to_s.strip.present? }.join(", ")
     end
   end
-  
+
   def choices_by_letter
     letters = ('a'..'z').to_a
     choices_by_letter = Hash[choices.map.with_index {|c, i| [letters[i], c[0]]}]
   end
-  
+
   def label_with_choices
     unless @label_with_choices
       @label_with_choices = label + ' ' + choices_by_letter.collect {|k, v| "#{k})#{v}"}.join(' ')

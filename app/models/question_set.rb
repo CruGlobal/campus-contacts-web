@@ -22,7 +22,6 @@ class QuestionSet
   # update with responses from form
   def post(params, answer_sheet)
     questions_indexed = @questions.index_by {|q| q.id}
-
     # loop over form values
     params ||= {}
     params.each do |question_id, response|

@@ -15,10 +15,10 @@ $ ->
       $('.ui-widget-overlay').width('100%');
     close: (event, ui) ->
       $("body").css({ overflow: 'inherit' })
-    buttons: 
+    buttons:
       Cancel: ->
         $(this).dialog('close')
-  
+
   $('#transfer_to_org_link').live 'click', (e)->
     e.preventDefault()
     if $('.id_checkbox:checked').length > 0
@@ -30,12 +30,12 @@ $ ->
     e.preventDefault()
     ids = []
     $('.id_checkbox:checked').each ->
-      ids.push($(this).attr('data-id'))      
+      ids.push($(this).attr('data-id'))
     href = $(this).attr('href')
     if href.indexOf('?') < 0
-    	href = href+"?" 
+    	href = href+"?"
     document.location = href+"&only_ids="+ids.join(',')
-      
+
   $('#contacts_controller #include_archived').live 'click', ->
     if $(this).is(':checked')
       document.location = '/contacts?include_archived=true'
@@ -48,8 +48,8 @@ $ ->
     li = $(this).closest('li')
     li.remove()
     false
-  
-  $('#send_reminder_link').live 'click', -> 
+
+  $('#send_reminder_link').live 'click', ->
     $('.to_list').html('')
     ids = []
     $('#leaders .leader').each ->
@@ -62,11 +62,11 @@ $ ->
       height:444,
       width:600,
       modal: true,
-      buttons: 
+      buttons:
         Cancel: ->
           $(this).dialog('destroy')
     false
-    
+
   $('#reminder_email form').live 'submit', ->
     ids = []
     $('.to_list li').each ->
@@ -76,15 +76,15 @@ $ ->
     $('#reminder_email').dialog('destroy')
     $.rails.handleRemote($(this))
     false
-    
+
   $('#savesearchbtn').live 'click', ->
     $('#savesearchbox').dialog
       resizable: false,
       height: 200,
       width: 400,
       modal: true,
-      buttons: 
-        Save: ->          
+      buttons:
+        Save: ->
           $('#save_search_form').submit()
           t('contacts.index.search_saved')
           $(this).dialog('destroy')
@@ -94,21 +94,21 @@ $ ->
 
   $('.send_contact_info').live 'click', ->
     form = $('#send_contact_info_form')
-    form.find('#person_id').val($(this).attr('data-person_id'))    
-    
+    form.find('#person_id').val($(this).attr('data-person_id'))
+
     $('#send_contact_info_dialog').dialog
       resizable: false,
       height: 200,
       width: 400,
       modal: true,
-      buttons: 
-        Ok: ->          
+      buttons:
+        Ok: ->
           form.submit()
-          $.n('Contact information has been sent.') 
-          $(this).dialog('destroy')   
+          $.n('Contact information has been sent.')
+          $(this).dialog('destroy')
         Cancel: ->
           $(this).dialog('destroy')
-    false   
+    false
 
   $('#send_contact_info_form').submit ->
     url = $(this).prop('action')
@@ -125,29 +125,29 @@ $ ->
     if ids.length == 0
       $.a(t('contacts.index.none_checked'))
       return false
-      
+
     $('#bulk_vcard_dialog').dialog
       resizable: false,
       height: 200,
       width: 400,
       modal: true,
-      buttons: 
-        "Send to email": ->          
+      buttons:
+        "Send to email": ->
           email = $('#bulk_vcard_email').val()
           url = $('#bulk_vcard_form').attr('action')
           $.get(url + '?ids=' + ids + '&email=' + email)
-          $.n(t('contacts.index.bulk_vcard_email_message') + email) 
-          $(this).dialog('destroy')   
+          $.n(t('contacts.index.bulk_vcard_email_message') + email)
+          $(this).dialog('destroy')
         "Download": ->
           url = $('#bulk_vcard_form').attr('action')
           window.location = url + '?ids=' + ids
-          $.n(t('contacts.index.bulk_vcard_download_message'))  
-          $(this).dialog('destroy')             
+          $.n(t('contacts.index.bulk_vcard_download_message'))
+          $(this).dialog('destroy')
         Cancel: ->
           $(this).dialog('destroy')
-    false   
-    
-    
+    false
+
+
   if $.params.answers
     $.each $.params.answers, (k, v) ->
       if $.isPlainObject(v)
@@ -161,13 +161,13 @@ $ ->
           field.prop('checked', true)
         else
           field.val(v)
-          
+
   $('#contacts_controller.index .filter_link').attr('href','#')
-  
-  $('#contacts_controller.index .filter_link').click -> 
+
+  $('#contacts_controller.index .filter_link').click ->
     $('#filter_box').toggle()
     false
-    
+
   $('#update_notice_div').dialog
     resizable: false,
     height: 200,
@@ -177,13 +177,13 @@ $ ->
     buttons: [
       text: 'Close',
       click: ->
-        if $('#update_notice_toggle').is(':checked')  
+        if $('#update_notice_toggle').is(':checked')
           $.ajax
             type: 'GET',
             url: '/people/hide_update_notice'
         $(this).dialog('destroy')
     ]
-    
+
   $('#contacts_controller a.add_contact').live 'click', ->
     $('#new_person')[0].reset()
     $('#add_contact_div').dialog
@@ -191,28 +191,34 @@ $ ->
       height:444,
       width:600,
       modal: true,
+      open: (event, ui) ->
+        $("body").css({ overflow: 'hidden' })
+        $('.ui-widget-overlay').width('100%');
+      close: (event, ui) ->
+        $("body").css({ overflow: 'inherit' })
       buttons: [
         text: t('application.add_contact.save_and_close'),
-        click: -> 
+        click: ->
           $.mh.saveContact(false)
       ,
         text: t('application.add_contact.save_and_add'),
-        click: -> 
+        click: ->
           $.mh.saveContact(true)
       ,
         text: 'Cancel',
         click: ->
           $(this).dialog('destroy')
+          $("body").css({ overflow: 'inherit' })
       ]
     false
-          
+
   $('#survey_answers_link').live 'click', ->
     $('#survey_answers').dialog
       resizable: false,
       height:444,
       width:600,
       modal: true,
-      buttons: 
+      buttons:
         Cancel: ->
           $(this).dialog('destroy')
     false
@@ -222,7 +228,7 @@ $ ->
     $.fn.load_leader_name($('#person_title').attr('data-id'))
     $('#assign_search').dialog('close')
     $('#assign_search').dialog('destroy')
-    
+
   $('#assign_search .leader a').live 'click', (e)->
     $('#assign_to').val($(this).closest('li').attr('data-id'))
     e.preventDefault()
@@ -237,7 +243,7 @@ $ ->
     $('#assign_search').dialog('destroy')
   false
 
-  
+
   $('#transfer_to_org .org a').live 'click', (e)->
     e.preventDefault()
     $('#global_loader').show()
@@ -248,7 +254,7 @@ $ ->
     ids = []
     $('.id_checkbox:checked:visible').each ->
       ids.push($(this).val())
-    if($('#all_selected_text').is(':visible'))    
+    if($('#all_selected_text').is(':visible'))
       $('.all_row').each ->
         ids.push($(this).attr('data-id'))
     $('#transfer_to_org').dialog('close')
@@ -270,17 +276,17 @@ $ ->
         else
           $.a(data)
   false
-  
+
   $('#assign_search .group a').live 'click', (e)->
     $('#assign_to').val($(this).closest('li'))
     e.preventDefault()
     group = $('#assign_to').val($(this).closest('li').attr('data-group')).val()
     person = ""
-    
+
     if $('.id_checkbox:checked').size() > 0
       $('.id_checkbox:checked').each (index, element) =>
         person += $(element).attr('value') + ","
-    
+
     add_another = false
     $('<a href="/groups/' + group  + '/group_memberships?person_id=' + person + '&role=member&render_in_contacts=true&add_another=' + add_another + '" data-method="post" data-remote="true"></a>')
     .appendTo('body')
@@ -291,7 +297,7 @@ $ ->
     $('#global_loader').show()
     $('.id_checkbox:checked').prop('checked',false)
   false
-  
+
   $('#assign_search .label a').live 'click', (e)->
     e.preventDefault()
     role = $('#assign_to').val($(this).closest('li').attr('data-role')).val()
@@ -306,7 +312,7 @@ $ ->
           error: show_success = false
         $('#main').load('/contacts .index.carea')
         $('#left').load('/contacts .block')
-        
+
       $('#assign_search').dialog('close')
       $('#assign_search').dialog('destroy')
       if show_success
@@ -321,7 +327,7 @@ $ ->
           error: show_success = false
         $('#main').load('/contacts/mine .mine.carea')
         $('#left').load('/contacts/mine .block')
-        
+
       $('#assign_search').dialog('close')
       $('#assign_search').dialog('destroy')
       if show_success
@@ -343,7 +349,7 @@ $ ->
     inc = ""
     if document.URL.indexOf("include_archived") isnt -1
       inc = "?include_archived=true"
-    
+
     $(this).autocomplete
 	    source: '/contacts/search_by_name_and_email.json'+inc,
       select: (event, ui) ->
@@ -356,7 +362,7 @@ $ ->
         .append("<a>" + temp.label + "</a><div class='email'>" + temp.email + "</div>")
         .appendTo( ul );
 
-    
+
   $('#assign_search .leader_search_name').keyup ->
     name = $(this).val()
     $('#assign_search ul li').each ->
@@ -365,16 +371,16 @@ $ ->
         $(this).show()
       else
         $(this).hide()
-    
+
   $('#transfer_to_org .org_search_name').observe_field 0.5, ->
     name = $(this).val()
     $('#spinner_org_search').show()
     $.ajax
-      url: '/organizations/search.js?q='+name, 
+      url: '/organizations/search.js?q='+name,
       type: 'GET',
       complete: ->
         $('#spinner_org_search').hide()
-        
+
   $('#assign_search .group_search_name').keyup ->
     name = $(this).val()
     $('#assign_search ul li').each ->
@@ -392,14 +398,14 @@ $ ->
         $(this).show()
       else
         $(this).hide()
-        
+
   $('#assign_to_me, #assign_to_unassigned, #assign_to_dnc').live 'click', ->
     $('#assign_search .leader_search').hide()
     $('#assign_search .org_search').hide()
     $('#assign_search .group_search').hide()
     $('#assign_search .label_search').hide()
     $('#assign_search .assign_button').show()
-    
+
   $('#assign_to_leader').live 'click', ->
     $('.leader_search_name').val("")
     $('#assign_search .leader_search').show()
@@ -409,34 +415,34 @@ $ ->
     $('#assign_search .assign_button').hide()
     $('#assign_search ul li').each ->
       $(this).show()
-    
+
   $('#assign_to_org').live 'click', ->
     $('#assign_search .leader_search').hide()
     $('#assign_search .org_search').show()
     $('#assign_search .group_search').hide()
     $('#assign_search .label_search').hide()
     $('#assign_search .assign_button').hide()
-    
+
   $('#assign_to_group').live 'click', ->
     $('#assign_search .leader_search').hide()
     $('#assign_search .org_search').hide()
     $('#assign_search .group_search').show()
     $('#assign_search .label_search').hide()
     $('#assign_search .assign_button').hide()
-    
+
   $('#assign_to_label').live 'click', ->
     $('#assign_search .leader_search').hide()
     $('#assign_search .org_search').hide()
     $('#assign_search .group_search').hide()
     $('#assign_search .label_search').show()
     $('#assign_search .assign_button').hide()
-    
-  $('.assign_to_radio').live 'click', -> 
+
+  $('.assign_to_radio').live 'click', ->
     $('#assign_to').val($(this).val())
-    
+
   $("a.assign").live 'click', ->
     if $('.id_checkbox:checked').length > 0
-      $('#keep_contact').attr checked: true 
+      $('#keep_contact').attr checked: true
       $('#assign_to_me').click()
       el = $('#assign_search')
       el.dialog
@@ -449,7 +455,7 @@ $ ->
           $('.ui-widget-overlay').width('100%');
         close: (event, ui) ->
           $("body").css({ overflow: 'inherit' })
-        buttons: 
+        buttons:
           Cancel: ->
             $(this).dialog('close')
             $(this).dialog('destroy')
@@ -468,22 +474,22 @@ $ ->
       $('.flash').delay(3000).slideUp()
     $('#check_all').prop('checked', false)
     false
-    
+
   $('#contacts_controller .controls a.delete').live 'click', (e)->
     $(this).closest('tr').fadeOut()
-    
+
     # Deduct 'do not contact' total records
     $("#dnc_count").html $("#dnc_count").html() - 1  if $(this).hasClass("dnc")
-      
+
     # Change paging count
     tmp = $(".searchstat").html().split(/-|of/)
     $(".searchstat").html tmp[0] + " - " + (tmp[1] - 1) + " of " + (tmp[2] - 1)
-    
+
     if $('#leaders')[0]?
       $('.id_checkbox', $(this).closest('tr')).prop('checked', true)
       $.fn.assignTo($('.leader.dnc'), true)
     false
-    
+
   $('#contacts_controller .controls a.unassign').live 'click', (e)->
     # $(this).closest('tr').fadeOut()
     if $('#leaders')[0]?
@@ -509,7 +515,7 @@ $ ->
       height:650,
       width:650,
       modal: true,
-      buttons: 
+      buttons:
         Cancel: ->
           $(this).dialog('destroy')
     false
@@ -519,8 +525,8 @@ $ ->
       form = $('#leader_search_form')
       $('#spinner_leader_search').show()
       $.ajax
-        url: form.attr('action'), 
-        data: form.serialize(), 
+        url: form.attr('action'),
+        data: form.serialize(),
         type: 'GET',
         success: (data)->
           $('#leader_search_results').html(data)
@@ -530,10 +536,10 @@ $ ->
         error: (xhr, status, error)->
           $.e(error)
       response([])
-   
+
   $('#contacts_controller .controls a.mineunassign').live 'click', ->
-  	$(this).closest('tr').fadeOut()  
-       
+  	$(this).closest('tr').fadeOut()
+
   $('.search_show_all_link').live 'click', ->
     $('#spinner_leader_search').show()
     $('#show_all').val('true')
@@ -548,7 +554,7 @@ $ ->
       complete: ->
         $('#spinner_leader_search').hide()
     false
-    
+
   $('.search_show_all_link_members').live 'click', ->
     $('#spinner_member_search').show()
     $('#show_all').val('true')
@@ -563,20 +569,20 @@ $ ->
       complete: ->
         $('#spinner_member_search').hide()
     false
-    
+
   $('#comment_submit').live 'click', ->
     $(this).hide()
     $('#spinner_comment').show()
-    
+
   $('#add_rejoicable').live 'click', ->
     $('#rejoicable_fields').slideToggle()
     false
-    
+
   $('.contact_row td:not(.checkbox_cell)').live 'click', ->
     unless $('a', this)[0]?
       tr = $(this).parent()
       document.location = '/people/' + tr.attr('data-id')
-  
+
   $('#assign_to').change ->
     if $('.id_checkbox:checked').length > 0
       name = $('option:selected', this).text()
@@ -587,14 +593,14 @@ $ ->
       $.a(t('contacts.index.none_checked'))
   $('#contacts_controller .index a.hide').live 'click', ->
     $('.' + $(this).attr('data-class')).fadeOut()
-  
+
   $('#hidden_questions_link').live 'click', ->
     position = parseInt($('#table_header').position().top) + parseInt($('#table_header').height())
     $('#hidden_questions_div').css('top': position)
     $('#hidden_questions_div').toggle()
     false
- 
-  $(".leftmenu .leader, .leftmenu .dnc").droppable 
+
+  $(".leftmenu .leader, .leftmenu .dnc").droppable
     activeClass: 'ui-state-highlight'
     accept: ".handle"
     drop: (event, ui) ->
@@ -602,19 +608,19 @@ $ ->
 		    leader = $(this)
 		    leader.effect('highlight', {}, 'slow')
 		    $('#assign_to').val(leader.attr('data-id'))
-		    $.fn.assignTo(leader)		    
+		    $.fn.assignTo(leader)
     	if $(this).hasClass("dnc")
 		    li = $(this)
 		    li.effect('highlight', {}, 'slow')
-		    $.fn.moveToDnc(ui.draggable)      
-      
+		    $.fn.moveToDnc(ui.draggable)
+
 $.fn.moveToDnc = (dragObject) ->
-  $('#dnc_count').html(Number($('#dnc_count').html()) + 1)  
+  $('#dnc_count').html(Number($('#dnc_count').html()) + 1)
   row = $("#" + $(dragObject).attr("data-row-id"))
-  row.hide()  
-  $('#move_to_dnc').attr('action', $(dragObject).attr("data-dnc-url"))  
+  row.hide()
+  $('#move_to_dnc').attr('action', $(dragObject).attr("data-dnc-url"))
   $.rails.handleRemote($('#move_to_dnc'))
-      
+
 $.fn.assignTo = (leader, skip_remote) ->
   leader_name = $('.name a', leader).text()
   $('.id_checkbox:checked').each ->
@@ -624,49 +630,49 @@ $.fn.assignTo = (leader, skip_remote) ->
       $('.unassign_link', row).hide()
     else
       $('.unassign_link', row).show()
-      
+
     unless assigned_to.html() == leader_name
-      
+
       $('.count', leader).html(Number($('.count', leader).html()) + 1)
       if assigned_to.html() == ''
         $('#unassigned_count').html(Number($('#unassigned_count').html()) - 1)
-        
+
       else
         $('.leader a').each ->
           if $(this).text() == assigned_to.html() || (leader.hasClass('unassigned') && assigned_to.html() == '')
             count = $(this).closest('.leader').find('.count')
             count.html(Number(count.html()) - 1)
-            
+
       if leader.hasClass('unassigned') or leader.hasClass('dn')
-        assigned_to.text('') 
-        
+        assigned_to.text('')
+
       else
-        assigned_to.text(leader_name) 
+        assigned_to.text(leader_name)
         #hide assigned to
         $('#person_title').hide()
     # hide people assigned to someone other than the current or if we're moving to dnc
-    assign_to = $('#new_contact_assignment').find("#assign_to").val()   
+    assign_to = $('#new_contact_assignment').find("#assign_to").val()
     if assign_to == "do_not_contact" || ($.params.assigned_to != leader_name)
       unless skip_remote
         $.rails.handleRemote($('#new_contact_assignment'))
-      
+
       row.find('.id_checkbox').attr('checked', false)
       if $('.leader.selected').size() > 0
-        row.hide() 
+        row.hide()
         disp_string = $('.searchstat').html().trim()
         disp_total = parseInt(disp_string.split(' of ')[1]) - 1
         disp_over = parseInt(disp_string.split(' - ')[1].split(' of ')[0]) - 1
         disp_num = disp_string.split(' - ')[0].split(' ')[1]
-        
+
         if disp_total <= 0 || disp_over <= 0
           $('.searchstat').html("")
         else
           $('.searchstat').html("Displaying " + disp_num + " - " + disp_over + " of " + disp_total)
-          
+
   $('#assign_to').val('')
-  
+
 $.mh.saveContact = (add_more) ->
-  form = $('#new_person')  
+  form = $('#new_person')
   $('#assign_new_contact_to_me').val($('#mine_assign_to').val())
   if $('#person_first_name', form).val() == ''
     $.a(t('contacts.index.no_name_message'))
@@ -676,8 +682,8 @@ $.mh.saveContact = (add_more) ->
   $.rails.handleRemote(form)
   form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
   false
-    
+
 $.fn.load_leader_name = (id) ->
   $('#person_title').html('<img src="/assets/spinner.gif" />')
   $('#person_title').show().load('/people/' + id + ' #assigned_leader')
-      
+
