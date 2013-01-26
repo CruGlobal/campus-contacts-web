@@ -1047,8 +1047,8 @@ class Person < ActiveRecord::Base
     card = Vpim::Vcard::Maker.make2 do |maker|
       maker.add_name do |name|
         name.prefix = ''
-        name.given = first_name
-        name.family = last_name
+        name.given = first_name.to_s
+        name.family = last_name.to_s
       end
 
       if current_address
