@@ -21,6 +21,7 @@ class Organization < ActiveRecord::Base
   has_many :survey_elements, through: :surveys
   has_many :questions, through: :surveys
   has_many :all_questions, through: :surveys, source: :all_questions
+  has_many :answers, through: :all_questions, source: :answers
   has_many :followup_comments
   has_many :organizational_roles, inverse_of: :organization
   has_many :leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id IN (?) AND organizational_roles.archive_date IS NULL", Role.leader_ids], order: "people.last_name, people.first_name", uniq: true
