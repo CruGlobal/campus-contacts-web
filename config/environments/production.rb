@@ -26,7 +26,7 @@ Mh::Application.configure do
 
   # Use a different cache store in production
   # config.cache_store = :mem_cache_store
-  cache_servers = ['10.180.4.111'] #'10.180.4.101',
+  cache_servers = ['10.180.4.101', '10.180.4.111']
 
   config.cache_store = :dalli_store, cache_servers,  { :namespace => 'MissionHubCache', :expire_after => 1.day, :compress => true }
 
