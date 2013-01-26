@@ -79,8 +79,13 @@ class PersonFilter
 
     if @filters[:assigned_to]
       filtered_people = filtered_people.includes(:assigned_tos)
-                                       .where('contact_assignments.assigned_to_id' => @filters[:assigned_to].split(','))
+                                        .where('contact_assignments.assigned_to_id' => @filters[:assigned_to].split(','))
     end
+
+      if @filters[:surveys].present?
+        filtered_people = filtered_people.joins(:answer_sheets)
+                                         .where("answer_sheets.survey_id" => @filters[:surveys].split(','))
+      end
 
     filtered_people
   end
