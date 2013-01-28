@@ -612,8 +612,12 @@ $ ->
     	if $(this).hasClass("dnc")
 		    li = $(this)
 		    li.effect('highlight', {}, 'slow')
-		    $.fn.moveToDnc(ui.draggable)
-
+		    $.fn.moveToDnc(ui.draggable)      
+ 
+	$("#search_clear_selected_labels").live "click", ->
+		$(".search_role_checkbox").removeAttr("checked")
+		false
+			     
 $.fn.moveToDnc = (dragObject) ->
   $('#dnc_count').html(Number($('#dnc_count').html()) + 1)
   row = $("#" + $(dragObject).attr("data-row-id"))
