@@ -175,6 +175,11 @@ class SurveyResponsesController < ApplicationController
     end
   end
 
+  def live
+    current_organization.generate_api_secret unless current_organization.api_client
+
+    render layout: false
+  end
   protected
 
   def save_survey

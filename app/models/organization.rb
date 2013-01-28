@@ -160,6 +160,16 @@ class Organization < ActiveRecord::Base
   #   Survey.where(organization_id: child_ids)
   # end
 
+  def generate_api_secret
+    if api_client
+      api_client.assign_code_and_secret
+      api_client.save!
+    else
+      create_api_client(link: "/organizations/#{id}",
+                        display_name: to_s)
+    end
+  end
+
   def active_keywords
     keywords.where(state: 'active')
   end

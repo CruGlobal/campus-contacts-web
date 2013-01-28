@@ -208,13 +208,8 @@ class OrganizationsController < ApplicationController
   end
 
   def generate_api_secret
-    if current_organization.api_client
-      current_organization.api_client.assign_code_and_secret
-      current_organization.api_client.save!
-    else
-      current_organization.create_api_client(link: organization_url(current_organization),
-                                             display_name: current_organization.to_s)
-    end
+    current_organization.generate_api_secret
+
     redirect_to api_organizations_path
   end
 

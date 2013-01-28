@@ -31,10 +31,11 @@ Mh::Application.routes.draw do
     end
   end
 
-  resources :survey_responses, :only => [:show, :new, :create, :edit, :update] do
+  resources :survey_responses do
     collection do
       get :thanks
       get :facebook
+      get :live
     end
   end
 
