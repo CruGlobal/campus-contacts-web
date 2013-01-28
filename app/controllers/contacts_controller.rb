@@ -251,13 +251,30 @@ class ContactsController < ApplicationController
         @people_scope = @people_scope.where(id: current_organization.people.archived(current_organization.id).collect(&:id))
       end
 
-      if params[:role].present? || (params[:search].present? && params[:role].present?)
-        if @role = Role.find(params[:role])
-          @people_scope = @people_scope.where('organizational_roles.role_id = ?', @role.id)
+      if params[:role].present? || ((params[:search] == "1" || params[:do_search].present?) && params[:role].present?)
+	      #make array for existing roles in saved search full path data
+      	params[:role] = [params[:role]] unless params[:role].is_a?(Array) 
+        if @roles = Role.select("id, name, i18n").where("id IN (?)",params[:role]) 
+        	if params[:role_tag].present? && params[:role_tag].to_i == Role::ALL_SELECTED_LABEL[1]        	
+						valid_ids = []
+				  	@roles.collect(&:id).each do |role|
+        			valid_ids << @people_scope.where('organizational_roles.role_id IN (?)', [role]).collect(&:id)
+						end
+						
+						filtered_ids = []
+						valid_ids.each do |person_ids|
+							filtered_ids = filtered_ids.present? ? filtered_ids &= person_ids : person_ids
+						end
+						
+						@people_scope = @people_scope.where("people.id IN (?)", filtered_ids)
+        	else
+          	@people_scope = @people_scope.where('organizational_roles.role_id IN (?)', @roles.collect(&:id))
+        	end
+        	
           if !params[:include_archived].present? && !params[:include_archived] == 'true'
             @people_scope = @people_scope.where("organizational_roles.archive_date" => nil)
           end
-          @header = params[:search] ? I18n.t('contacts.index.matching_seach') : @role.i18n
+          @header = params[:do_search] ? I18n.t('contacts.index.matching_seach') : @roles.collect{|desc| (desc.i18n.present? ? desc.i18n : desc.name).try('titleize')}.to_sentence
         end
       end
       if params[:survey].present?
@@ -359,7 +376,10 @@ class ContactsController < ApplicationController
 
       if params[:search] == "1" || params[:do_search]
         @header = I18n.t('contacts.index.matching_seach')
-        params[:search] = nil if params[:search] == "1"
+        if params[:search] == "1"
+	        params[:search] = nil 
+	        params[:do_search] = "1" #required to fix old search variable from saved searches
+	      end
       elsif params[:search]
 
         sort_query = params[:search][:meta_sort].gsub('.',' ')

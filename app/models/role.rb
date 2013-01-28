@@ -94,4 +94,8 @@ class Role < ActiveRecord::Base
 
   DEFAULT_ROLES = ["admin", "leader", "involved", "alumni", "contact"] # in DSC ORDER by SUPERIORITY
   DEFAULT_CRU_ROLES = DEFAULT_ROLES + ["sent"]
+  
+  ANY_SELECTED_LABEL = ["Any",1]
+	ALL_SELECTED_LABEL = ["All",2]
+	LABEL_SEARCH_FILTERS = [ANY_SELECTED_LABEL, ALL_SELECTED_LABEL]
 end
