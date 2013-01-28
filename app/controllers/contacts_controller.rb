@@ -384,12 +384,10 @@ class ContactsController < ApplicationController
       end
 
       @q = Person.where('1 <> 1').search(params[:search]) # Fake a search object for sorting
-      @all_people = @people_scope.includes(:primary_phone_number, :primary_email_address, :contact_role, :sent_person)
-                                  .order(order_query)
-                                  .group('people.id')
-
+      # .includes(:primary_phone_number, :primary_email_address, :contact_role, :sent_person)
+      @all_people = @people_scope.order(order_query).group('people.id')
+      
       @people_for_labels = Person.people_for_labels(current_organization)
-
       @people = @all_people.page(params[:page])
     end
 
