@@ -56,8 +56,8 @@
           end
         %>
         <li class="leader" style="<%= 'display:none' if count == 0 %>">
-          <span class="name tipitright" title="<%= role.name %>">
-            <%= link_to(truncate(role.name, length: 23, omission: "..."), controller: 'contacts', :role => role.id, :include_archived => params[:include_archived]) %>
+          <span class="name tipitright" title="<%= role.to_s %>">
+            <%= link_to(truncate(role.to_s, length: 23, omission: "..."), controller: 'contacts', :role => role.id, :include_archived => params[:include_archived]) %>
           </span>
           (<%= count %>)
         </li>
