@@ -110,12 +110,12 @@ namespace :infobase do
         ccc_person.email_addresses.each do |email_address|
           mh_person.email = email_address.email unless mh_person.email_addresses.detect {|e| email_address.email == e.email} || EmailAddress.where(email: email_address.email).first
         end
-
+        mh_person.save!
+        
         ccc_person.phone_numbers.each do |phone|
           mh_person.phone_number = phone.number unless mh_person.phone_numbers.detect {|p| p.number == phone.number}
         end
-
-        mh_person.save!
+        mh_person.save!(validate: false)
       end
 
       team.add_admin(mh_person)
