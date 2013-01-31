@@ -4,7 +4,16 @@ class GroupsController < ApplicationController
   before_filter :leader_needed, :only => [:create, :new]
 
   def index
-    @groups = current_organization.groups.order(params[:search] && params[:search][:meta_sort] ? params[:search][:meta_sort] : ['name'])
+    if params[:search].present? && params[:search][:meta_sort].present?
+      sort_query = params[:search][:meta_sort].gsub('.',' ')
+    	if ['name'].any?{ |i| sort_query.include?(i) }
+  			order_query = sort_query.gsub('name','groups.name')
+  		end
+    else
+      order_query = "groups.name"
+    end
+    
+    @groups = current_organization.groups.order(order_query)
     @q = current_organization.groups.where('1 <> 1').search(params[:search])
 
     if params[:label].present?
