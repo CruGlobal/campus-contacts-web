@@ -11,7 +11,7 @@ ActiveAdmin.register Organization do
   index do
     column :name
     column 'Admins' do |org|
-      org.admins.collect {|p| mail_to(p.email, p.to_s)}
+      raw org.admins.map {|p| p.email.present? ? mail_to(p.email, p.to_s) : p.to_s}.join(", ")
     end
     column :terminology
     column :created_at
