@@ -12,7 +12,7 @@ class GroupsController < ApplicationController
     else
       order_query = "groups.name"
     end
-    
+
     @groups = current_organization.groups.order(order_query)
     @q = current_organization.groups.where('1 <> 1').search(params[:search])
 
@@ -34,15 +34,20 @@ class GroupsController < ApplicationController
   end
 
   def show
-    @q = Person.where('1 <> 1').search(params[:search])
     @group = Present(@group)
+    @people = current_organization.people.get_from_group(@group.id).uniq
 
-    if params[:search] && params[:search][:meta_sort]
-      order_string = params[:search][:meta_sort].gsub('role','group_memberships.role')
-      @people = current_organization.people.get_from_group(@group.id).includes(:group_memberships).uniq.order(order_string)
+    if params[:search].present? && params[:search][:meta_sort].present?
+      sort_query = params[:search][:meta_sort].gsub('.',' ')
+      @people = @people.includes(:group_memberships) if sort_query.include?('role')
+			order_string = sort_query.gsub('first_name','people.first_name')
+                               .gsub('role','group_memberships.role')
     else
-      @people = current_organization.people.get_from_group(@group.id).includes(:group_memberships).uniq
+      order_string = "people.first_name"
     end
+
+    @q = @people.where('1 <> 1').search(params[:search])
+    @people = @people.order(order_string)
     @all_people_with_phone_number = @people.includes(:primary_phone_number).where('phone_numbers.number is not NULL')
     @all_people_with_email = @people.includes(:primary_email_address).where('email_addresses.email is not NULL')
 
