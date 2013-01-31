@@ -85,14 +85,34 @@ class GroupsControllerTest < ActionController::TestCase
   context "on index" do
     setup do
       @user, @org = admin_user_login_with_org
-      Factory(:group, organization: @org)
+
       @label = Factory(:group_label, organization: @user.person.organizations.first)
-      @group = Factory(:group, organization: @user.person.organizations.first)
+      @group = Factory(:group, organization: @user.person.organizations.first, name: 'Group1')
+      Factory(:group, organization: @org, name: 'Group2')
+      Factory(:group, organization: @org, name: 'Group3')
     end
 
     should "get index" do
       get :index
       assert_not_nil assigns(:groups)
+    end
+
+    should "get index should be sorted by name as default" do
+      get :index
+      assert_equal assigns(:groups).collect(&:name), ['Group1','Group2','Group3']
+      assert_response(:success)
+    end
+
+    should "get index should return groups sorted by name asc" do
+      get :index, {:search =>{:meta_sort => "name asc"}}
+      assert_equal assigns(:groups).collect(&:name), ['Group1','Group2','Group3']
+      assert_response(:success)
+    end
+
+    should "get index should return groups sorted by name desc" do
+      get :index, {:search =>{:meta_sort => "name desc"}}
+      assert_equal assigns(:groups).collect(&:name), ['Group3','Group2','Group1']
+      assert_response(:success)
     end
 
     should "get index with through labels with groups" do
