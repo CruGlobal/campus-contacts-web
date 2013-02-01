@@ -111,6 +111,9 @@ class Import < ActiveRecord::Base
   end
 
   def create_contact_from_row(row, current_organization)
+		row[:person] = row[:person].each_value {|p| p.strip! if p.present? }
+		row[:answers] = row[:answers].each_value {|a| a.strip! if a.present? }
+		
     person = Person.find_existing_person(Person.new(row[:person]))
     person.save
 
