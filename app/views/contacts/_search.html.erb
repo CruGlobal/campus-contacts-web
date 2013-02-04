@@ -55,7 +55,7 @@
 						<% current_organization.role_set.each do |role| %>
 							<div class="label_item">
 								<%= check_box_tag "role[]", role.id, condition && params[:role].include?(role.id.to_s), id: "search_role_#{role.id}", class: "search_role_checkbox" %>
-								<%= role.name %>
+								<%= role %>
 							</div>
 						<% end %>
 					</div>
