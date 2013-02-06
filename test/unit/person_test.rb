@@ -124,13 +124,6 @@ class PersonTest < ActiveSupport::TestCase
         result = @person1.latest_answer_sheet(@org)
         assert_not_equal result, @answer_sheet4
       end
-
-      should "return all answered surveys hash of a person in answered_surveys_hash function" do
-        results = @person1.answered_surveys_hash(@org)
-        assert_equal(results[0]['keyword'], @survey3.title, "first result should be the 3rd survey's title")
-        assert_equal(results[1]['keyword'], @survey1.title, "second result should be the 1st survey's title")
-        assert_equal(results[2]['keyword'], @survey2.title, "third result should be the 2nd survey's title")
-      end
     end
 
     should "return people based on last answered survey" do

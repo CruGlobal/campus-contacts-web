@@ -3,6 +3,25 @@ $ ->
     if $('div.carea div.flash_message').length > 0
       $('div.carea div.flash_message').delay(5000).hide(1);
 
+    $('#send_email_to').tokenInput "/contacts/auto_suggest_send_email.json"
+      theme: 'facebook'
+      preventDuplicates: true
+      minChars: 3
+      resultsLimit: 10
+      hintText: "Type to search contacts by first name, last name, or email."
+
+    $('#send_text_to').tokenInput "/contacts/auto_suggest_send_text.json"
+      theme: 'facebook'
+      preventDuplicates: true
+      minChars: 3
+      resultsLimit: 10
+      hintText: "Type to search contacts by first name, last name, or phone number."
+
+    if $('#sidebar_div').is(':visible')
+      $.ajax
+        type: 'GET',
+        url: '/display_sidebar'
+
   $('a#survey_keywords_mode_link').siblings('ul').width(300)
 
   $("#person_updated_from").datepicker dateFormat: "dd-mm-yy"
@@ -15,9 +34,6 @@ $ ->
   $("select, input[type=text], input[type=password], input[type=email]").live "keypress", (e) ->
     false if e.which is 13
 
-  $('.multiselect_text').chosen()
-  $('.multiselect_email').chosen()
-
   $('#bulk_send_msg_dialog').dialog
     resizable: false,
     height:444,
@@ -26,7 +42,8 @@ $ ->
     autoOpen: false,
     open: (event, ui) ->
       $("body").css({ overflow: 'hidden' })
-      $('.ui-widget-overlay').width('100%');
+      $('.ui-widget-overlay').width('100%')
+      $(".token-input-dropdown-facebook").hide()
     close: (event, ui) ->
       $("body").css({ overflow: 'inherit' })
       $('#bulk_sms_message').val($('#bulk_send_body').val())

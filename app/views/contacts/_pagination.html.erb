@@ -1,8 +1,8 @@
-<% if @all_people.length > 0 %>	
+<% if @people.total_count > 0 %>
 <div class="paginate_container">
 	<%= paginate @people %>
 	<div class="paginate_details">
 	  <%= "Displaying #{@people.offset_value + 1} - #{@people.offset_value + @people.length} of #{@people.total_count}" %>
-	</div>	
+	</div>
 </div>
 <% end %>

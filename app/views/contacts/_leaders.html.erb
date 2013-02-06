@@ -1,132 +1,48 @@
-<ul class="leftmenu">
-  <li class="heading selected">
-    <% if can? :create, Person %>
-      <%= link_to(raw(t('contacts.index.add') + " " + image_tag('add.png')), '#', class: 'add-leader listaction') %>
-    <% end %>
-    <h3><%= t('contacts.index.leaders') %></h3>
-  </li>
-  <li>
-    <ul id="leaders" class="indent expandable" data-height="244">
-      <% @organization.only_leaders.each do |person| %>
-        <%= render 'contacts/leader', person: person %>
-      <% end %>
-    </ul>
-    <a href="#leaders" class="moredown" style="display:none">
-      <span>
-        <strong>+</strong> <%= t('.show_more') %>
-      </span>
-    </a>
-  </li>
-  <li class="leader unassigned" data-id="">
-    <span class="name">
-      <%= link_to(t('contacts.index.unassigned'), contacts_path(assigned_to: 'unassigned')) %>
-    </span>
-    (<span id="unassigned_count" class="count"><%= @organization.unassigned_contacts.count %></span>)
-  </li>
-  <li>
-    <span class="name">
-      <%= link_to(t('contacts.index.completed'), contacts_path(completed: true)) %>
-    </span>
-    (<%= @organization.completed_contacts.count %>)
-  </li>
-  <li>
-    <span class="name">
-      <%= link_to(t('contacts.index.all'), contacts_path(assigned_to: 'all')) %>
-    </span>
-    (<%= @organization.all_people.count %>)
-    <% if current_organization.people.archived(current_organization.id).count > 0 %>
-    <div id="include_archived_div">
-      <%= t('people.index.include_archived') %>
-      <%= check_box_tag 'include_archived', t('people.index.include_archived'), params[:include_archived] %>
-      <div class="icon help tipitright help_bubble_keyword" title="<%= t('people.index.include_archived_tips') %>"></div>
-    </div>
-    <% end %>
-  </li>
-  <li class="heading selected">
-    <h3><%= t('people.index.labels') %></h3>
-  </li>
-  <li>
-    <ul id="labels_list" class="indent expandable" data-height="244">
-      <% current_organization.role_set.each do |role| %>
-        <% 
-          if params[:include_archived]
-            count = @people_unfiltered.where('organizational_roles.role_id' => role.id).count
-          else
-            count = @people_unfiltered.where('organizational_roles.role_id' => role.id, 'organizational_roles.archive_date' => nil).count
-          end
-        %>
-        <li class="leader" style="<%= 'display:none' if count == 0 %>">
-          <span class="name tipitright" title="<%= role.to_s %>">
-            <%= link_to(truncate(role.to_s, length: 23, omission: "..."), controller: 'contacts', :role => role.id, :include_archived => params[:include_archived]) %>
-          </span>
-          (<%= count %>)
-        </li>
-      <% end %>
-    </ul>
-    <a href="#labels_list" class="moredown" style="display:none">
-      <span>
-        <strong>+</strong> <%= t('.show_more') %>
-      </span>
-    </a>
-  </li>
-  <li class="heading selected">
-    <h3><%= t('people.index.statistics') %></h3>
-  </li>
-    <ul id="leaders" class="indent expandable" data-height="244">
-      <li>
-        <span class="name">
-          <%= link_to(t('contacts.index.no_activity'), contacts_path(assigned_to: 'no_activity')) %>
-        </span>
-        (<%= @organization.no_activity_contacts.count %>)
-      </li>
-      <% Rejoicable::OPTIONS.each do |option| %>
-        <li>
-          <span class="name">
-            <%= link_to(t("rejoicables.#{option}"), contacts_path(assigned_to: option)) %>
-          </span>
-          (<%= @organization.send(:"#{option}_contacts").count %>)
-        </li>
-      <% end %>
-    </ul>
-  <li><hr /></li>
-  <li>
-    <span class="name">
-      <%= link_to(t('contacts.index.my_friends'), contacts_path(assigned_to: 'friends')) %>
-    </span>
-    (<%= current_person.contact_friends(current_organization).count %>)
-  </li>
-  <li>
-    <span class="name">
-      <%= link_to(t('people.index.archived_label'), controller: 'contacts', :archived => true, :include_archived => params[:include_archived]) %>
-    </span>
-    (<%= current_organization.people.archived(current_organization.id).count %>)
-  </li>
-  <li class="dnc">
-    <span class="name">
-      <%= link_to(t('contacts.index.dnc'), contacts_path(dnc: true)) %>
-    </span>
-    <span id="dnc_count" class="count">
-      (<%= OrganizationalRole.dnc.where(organization_id: @organization.id).count %>)
-    </span>
-  </li>
-  <li><hr /></li>
-  <% if @all_saved_contact_searches.any? %>
-    <li class="heading selected">
-      <h3><%= t('contacts.index.saved_searches') %></h3>
-    </li>
-    <% @all_saved_contact_searches.each do |s| %>
-      <li class="saved_search">
-        <span class="name">
-          <%= link_to s.name, s.full_path %>
-        </span>
-        <%= link_to('x', saved_contact_search_path(s),
-          method: :delete, remote: true, class: 'delete_leader',
-          confirm: t('contacts.index.delete_search_confirm')) %>
-        <%= link_to(image_tag("edit.png"),
-          s.full_path + t('contacts.index.edit_true'), class: 'edit_search') %>
-      </li>
-    <% end %>
+<li class="heading selected">
+  <% if can? :create, Person %>
+    <%= link_to(raw(t('contacts.index.add') + " " + image_tag('add.png')), '#', class: 'add-leader listaction') %>
   <% end %>
-</ul>
-<%= render 'contacts/leader_form' %>
-<%= render 'contacts/send_reminder_form' %>
+  <h3><%= t('contacts.index.leaders') %></h3>
+</li>
+<li>
+  <ul id="leaders" class="indent expandable" data-height="244">
+    <% @display_leaders = @organization.only_leaders %>
+    <% @display_leaders.each_with_index do |person,i| %>
+      <%=raw "<div id='more_leaders' style='display:none;'>" if i == 6 %>
+      <%= render 'contacts/leader', person: person %>
+    <% end %>
+    <%=raw "</div>" if @display_leaders.size > 7 %>
+  </ul>
+  <% if @display_leaders.size > 7 %>
+    <a href="" class="moredown more_link" data-id="more_leaders">
+      <span>
+        <strong>+</strong> <%= t('contacts.sidebar.show_more') %>
+      </span>
+    </a>
+  <% end %>
+</li>
+<li class="leader unassigned" data-id="">
+  <span class="name">
+    <%= link_to(t('contacts.index.unassigned'), contacts_path(assigned_to: 'unassigned')) %>
+  </span>
+  (<span id="unassigned_count" class="count"><%= @organization.unassigned_contacts.count %></span>)
+</li>
+<li>
+  <span class="name">
+    <%= link_to(t('contacts.index.completed'), contacts_path(completed: true)) %>
+  </span>
+  (<%= @organization.completed_contacts.count %>)
+</li>
+<li>
+  <span class="name">
+    <%= link_to(t('contacts.index.all'), contacts_path(assigned_to: 'all')) %>
+  </span>
+  (<%= @organization.all_people.count %>)
+  <% if current_organization.people.archived(current_organization.id).count > 0 %>
+  <div id="include_archived_div">
+    <%= t('people.index.include_archived') %>
+    <%= check_box_tag 'include_archived', t('people.index.include_archived'), params[:include_archived] %>
+    <div class="icon help tipitright help_bubble_keyword" title="<%= t('people.index.include_archived_tips') %>"></div>
+  </div>
+  <% end %>
+</li>

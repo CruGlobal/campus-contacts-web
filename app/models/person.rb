@@ -155,10 +155,23 @@ class Person < ActiveRecord::Base
     :select => "people.*",
     :conditions => ["(org_roles.organization_id = #{org_id} AND (concat(first_name,' ',last_name) LIKE ? OR concat(last_name, ' ',first_name) LIKE ? OR emails.email LIKE ?))", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
     :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = people.id LEFT JOIN organizational_roles AS org_roles ON people.id = org_roles.person_id"
-  } }
+  }}
+
+  scope :email_search, lambda { |keyword, org_id| {
+    :select => "people.*",
+    :conditions => ["(org_roles.organization_id = #{org_id} AND (concat(first_name,' ',last_name) LIKE ? OR concat(last_name, ' ',first_name) LIKE ? OR emails.email LIKE ?)) AND emails.email IS NOT NULL", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
+    :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = people.id LEFT JOIN organizational_roles AS org_roles ON people.id = org_roles.person_id",
+    :limit => 10
+  }}
+
+  scope :phone_search, lambda { |keyword, org_id| {
+    :select => "people.*",
+    :conditions => ["(org_roles.organization_id = #{org_id} AND (concat(first_name,' ',last_name) LIKE ? OR concat(last_name, ' ',first_name) LIKE ? OR phone_numbers.number LIKE ?)) AND phone_numbers.number IS NOT NULL", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
+    :joins => "LEFT JOIN phone_numbers ON phone_numbers.person_id = people.id LEFT JOIN organizational_roles AS org_roles ON people.id = org_roles.person_id",
+    :limit => 10
+  }}
 
   scope :get_and_order_by_latest_answer_sheet_answered, lambda { |order, org_id| {
-    #"SELECT * FROM (SELECT * FROM missionhub_dev.people mp INNER JOIN missionhub_dev.organizational_roles ro ON mp.id = ro.person_id WHERE ro.organization_id = #{@organization.id} AND (ro.role_id = 3 AND ro.followup_status <> 'do_not_contact')) mp LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM missionhub_dev.answer_sheets ass INNER JOIN missionhub_dev.surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = #{@organization.id}) ass ON ass.person_id = mp.id GROUP BY mp.id ORDER BY #{params[:q][:s].gsub('answer_sheets', 'ass')}"
     :joins => "LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM answer_sheets ass INNER JOIN surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = '#{org_id}' ORDER BY ass.updated_at DESC) ass ON ass.person_id = people.id",
     :group => "people.id",
     :order => "ISNULL(ass.updated_at), MAX(ass.updated_at) #{order.include?("asc") ? 'ASC' : 'DESC'}"
@@ -175,18 +188,7 @@ class Person < ActiveRecord::Base
   def latest_answer_sheet(organization)
   	answer_sheets.includes(:survey).where("surveys.organization_id = ?",organization.id).order("answer_sheets.updated_at DESC").first
   end
-
-  def answered_surveys_hash(organization)
-    surveys = Array.new
-    completed_answer_sheets(organization).each do |answer_sheet|
-      survey = Hash.new
-      survey['keyword'] = answer_sheet.survey.title
-      survey['date'] = answer_sheet.updated_at
-      surveys << survey
-    end
-    return surveys
-  end
-
+  
   scope :get_archived, lambda { |org_id| {
     :conditions => "organizational_roles.archive_date IS NOT NULL",
     :group => "people.id",
@@ -315,7 +317,7 @@ class Person < ActiveRecord::Base
     OrganizationalRole.where(person_id: id, role_id: Role.leader_ids, :organization_id => org.id).present?
   end
   def organization_objects
-    @organization_objects ||= Hash[Organization.order('name').find_all_by_id(org_ids.keys).collect {|o| [o.id, o]}]
+    @organization_objects ||= Hash[Organization.where(:id => org_ids.keys).order('name').collect {|o| [o.id, o]}]
   end
 
   def org_ids

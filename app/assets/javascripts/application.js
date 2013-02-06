@@ -9,6 +9,7 @@
 //= require jquery.url
 //= require jquery.chosen
 //= require jquery.cookie
+//= require jquery.tokeninput
 //= require colorpicker.js
 //= require ba-debug-0.4.min.js
 //= require hoverIntent

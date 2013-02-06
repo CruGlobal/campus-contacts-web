@@ -301,10 +301,10 @@ $.fn.triggerPersonLookup = ->
 
 $.fn.submitBulkSendTextDialog = ->
   if $('.bulk-msg').hasClass('bulk-text')
-    $('#bulk_send_msg_dialog #to').val($('#bulk_send_msg_dialog #send_text_to').val().join(','))
+    $('#bulk_send_msg_dialog #to').val($('#bulk_send_msg_dialog #send_text_to').val())
     msg = "Text Successfully Sent"
   else
-    $('#bulk_send_msg_dialog #to').val($('#bulk_send_msg_dialog #send_email_to').val().join(','))
+    $('#bulk_send_msg_dialog #to').val($('#bulk_send_msg_dialog #send_email_to').val())
     msg = "Email Successfully Sent"
 
   $.rails.handleRemote($("#bulk_send_msg_dialog form"))
@@ -322,9 +322,14 @@ $.fn.submitBulkSendDialog = ->
   $('#bulk_send_dialog').dialog('destroy')
 
 
-$('#send_bulkemail_link_new').live 'click', ->
-  $('#send_text_to_chzn').hide()
-  $('#send_email_to_chzn').show()
+$('#send_bulkemail_link_new').live 'click', (e)->
+  e.preventDefault()
+  $('#token-input-send_email_to').parents('ul').show()
+  $('#token-input-send_text_to').parents('ul').hide()
+  $('#send_text_to').tokenInput('clear')
+  $('#send_email_to').tokenInput('clear')
+  $('#bulk_send_body').val('')
+  $('#bulk_send_subject').val('')
   $('#subject_div').show()
   $('.bulk-msg').addClass('bulk-email')
   $('.bulk-msg').removeClass('bulk-text')
@@ -335,8 +340,12 @@ $('#send_bulkemail_link_new').live 'click', ->
   fails = []
   $('.id_checkbox:checked').each ->
     id = $(this).attr('data-id')
+    name = $(this).attr('data-name')
+    email = $(this).attr('data-email')
     if $(this).attr('data-email') && $(this).attr('data-email').length > 0
-      ids.push(id)
+      $('#send_email_to').tokenInput 'add',
+        id: id,
+        name: "#{name} - #{email}"
     else
       fails.push($(this).attr('data-name'))
 
@@ -361,9 +370,14 @@ $('#send_bulkemail_link_new').live 'click', ->
   false
 
 
-$('#send_bulksms_link_new').live 'click', ->
-  $('#send_text_to_chzn').show()
-  $('#send_email_to_chzn').hide()
+$('#send_bulksms_link_new').live 'click', (e)->
+  e.preventDefault()
+  $('#token-input-send_email_to').parents('ul').hide()
+  $('#token-input-send_text_to').parents('ul').show()
+  $('#send_text_to').tokenInput('clear')
+  $('#send_email_to').tokenInput('clear')
+  $('#bulk_send_body').val('')
+  $('#bulk_send_subject').val('')
   $('#subject_div').hide()
   $('.bulk-msg').addClass('bulk-text')
   $('.bulk-msg').removeClass('bulk-email')
@@ -374,8 +388,12 @@ $('#send_bulksms_link_new').live 'click', ->
   fails = []
   $('.id_checkbox:checked').each ->
     id = $(this).attr('data-id')
+    name = $(this).attr('data-name')
+    number = $(this).attr('data-number')
     if $(this).attr('data-number') && $(this).attr('data-number').length > 0
-      ids.push(id)
+      $('#send_text_to').tokenInput 'add',
+        id: id,
+        name: "#{name} - #{number}"
     else
       fails.push($(this).attr('data-name'))
 

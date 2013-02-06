@@ -1,0 +1,34 @@
+<li class="heading selected">
+  <h3><%= t('people.index.labels') %></h3>
+</li>
+<li>
+  <ul id="labels_list" class="indent expandable" data-height="244">
+    <% @display_roles = current_organization.role_set %>
+    <% @display_roles.each_with_index do |role,i| %>
+      <%=raw "<div id='more_labels' style='display:none;'>" if i == 6 %>
+      <%
+        if params[:include_archived]
+          count = @people_unfiltered.where('organizational_roles.role_id' => role.id).count
+        else
+          count = @people_unfiltered.where('organizational_roles.role_id' => role.id, 'organizational_roles.archive_date' => nil).count
+        end
+      %>
+      <li class="leader" style="<%= 'display:none' if count == 0 %>">
+        <span class="name tipitright" title="<%= role.to_s %>">
+          <% trimmed_role =  truncate(role.to_s, length: 23, omission: "...") %>
+          <% role_name = role.organization_id == 0 ? content_tag(:b,trimmed_role) : trimmed_role %>
+          <%= link_to(role_name, {controller: 'contacts', :role => role.id, :include_archived => params[:include_archived]}) %>
+        </span>
+        (<%= count %>)
+      </li>
+    <% end %>
+    <%=raw "</div>" if @display_roles.size > 7 %>
+  </ul>
+  <% if @display_roles.size > 7 %>
+    <a href="#labels_list" class="moredown more_link" data-id="more_labels">
+      <span>
+        <strong>+</strong> <%= t('contacts.sidebar.show_more') %>
+      </span>
+    </a>
+  <% end %>
+</li>

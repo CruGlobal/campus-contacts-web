@@ -1,8 +1,8 @@
-<% if @predefined_survey.questions.include?(hidden_question) && hidden_question.attribute_name %>
+<% if @predefined_questions.include?(hidden_question) && hidden_question.attribute_name %>
   <% link_text = hidden_question.attribute_name.gsub('_',' ') %>
 <% else %>
   <% link_text = hidden_question.slug.present? ? hidden_question.slug : hidden_question.label %>
-<% end%>
+<% end %>
 <li>
   <%= link_to(link_text.titleize, unhide_survey_question_path(@organization.surveys.first || @predefined_survey.id, hidden_question.id), method: :put) %>
 </li>

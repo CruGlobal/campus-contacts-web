@@ -1,0 +1,22 @@
+$('#sidebar_div').html("<%= escape_javascript(render partial: 'contacts/sidebar') %>")
+$('#sidebar_div').addClass('loaded')
+
+$(document).ready(function(){
+  var li;
+
+  $(".leftmenu .leader, .leftmenu .dnc").droppable({
+    activeClass: 'ui-state-highlight',
+    accept: ".handle",
+    drop: function(event, ui) {
+      var leader;
+      if ($(this).hasClass("leader")) {
+        leader = $(this);
+      }
+      leader.effect('highlight', {}, 'slow');
+      $('#assign_to').val(leader.attr('data-id'));
+      return $.fn.assignTo(leader);
+    }
+  }, $(this).hasClass("dnc") ? (li = $(this), li.effect('highlight', {}, 'slow'), $.fn.moveToDnc(ui.draggable)) : void 0);
+  
+  $('.tipitright ').qtip()
+})

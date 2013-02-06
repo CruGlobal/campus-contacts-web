@@ -235,52 +235,85 @@ class ContactsControllerTest < ActionController::TestCase
        assert_response :success
     end
 
-    should "Have a header for every params[:assigned_to]" do
-      @contact1 = Factory(:person)
-      @contact2 = Factory(:person)
-      @contact3 = Factory(:person)
-      @contact4 = Factory(:person)
-      @contact5 = Factory(:person)
-      @user.person.organizations.first.add_leader(@user.person, @user.person)
-      @user.person.organizations.first.add_contact(@contact1)
-      @user.person.organizations.first.add_contact(@contact2)
-      @user.person.organizations.first.add_contact(@contact3)
-      @user.person.organizations.first.add_contact(@contact4)
-      @user.person.organizations.first.add_contact(@contact5)
+    context "every params" do
+      setup do
+        @contact1 = Factory(:person)
+        @contact2 = Factory(:person)
+        @contact3 = Factory(:person)
+        @contact4 = Factory(:person)
+        @contact5 = Factory(:person)
+        @user.person.organizations.first.add_leader(@user.person, @user.person)
+        @user.person.organizations.first.add_contact(@contact1)
+        @user.person.organizations.first.add_contact(@contact2)
+        @user.person.organizations.first.add_contact(@contact3)
+        @user.person.organizations.first.add_contact(@contact4)
+        @user.person.organizations.first.add_contact(@contact5)
+      end
 
-
-      xhr :get, :index, {:role => Role::ADMIN_ID}
-      assert_equal assigns(:header).upcase, "Admin".upcase
-      xhr :get, :index, {:role => Role::LEADER_ID}
-      assert_equal assigns(:header).upcase, "Leader".upcase
-      xhr :get, :index, {:role => Role::CONTACT_ID}
-      assert_equal assigns(:header).upcase, "Contact".upcase
-      xhr :get, :index, {:role => Role::INVOLVED_ID}
-      assert_equal assigns(:header).upcase, "Involved".upcase
-      xhr :get, :index, {:role => Role::SENT_ID}
-      assert_equal assigns(:header).upcase, "Sent".upcase
-      xhr :get, :index, {:assigned_to => "unassigned"}
-      assert_equal assigns(:header), "Unassigned"
-      xhr :get, :index, {:completed => "true"}
-      assert_equal assigns(:header), "Completed"
-      xhr :get, :index, {:assigned_to => nil}
-      assert_nil assigns(:header)
-      xhr :get, :index, {:assigned_to => "no_activity"}
-      assert_equal assigns(:header), "No Activity"
-      xhr :get, :index, {:assigned_to => "spiritual_conversation"}
-      assert_equal assigns(:header), "Spiritual Conversation"
-      xhr :get, :index, {:assigned_to => "prayed_to_receive"}
-      assert_equal assigns(:header), "Prayed To Receive Christ"
-      xhr :get, :index, {:assigned_to => "gospel_presentation"}
-      assert_equal assigns(:header), "Gospel Presentation"
-      xhr :get, :index, {:assigned_to => "friends"}
-      assert_equal assigns(:header), "Contacts who are also my friends on Facebook"
-      xhr :get, :index, {:dnc => "true"}
-      assert_equal assigns(:header), "Do Not Contact"
-      xhr :get, :index, {:do_search => "1"}
-      assert_equal assigns(:header), "Matching the criteria you searched for"
-      xhr :get, :index, {:assigned_to => @user.person.id}
-      assert_equal assigns(:header), "Assigned to #{@user.person.name}"
+      should "have header for admin" do
+        xhr :get, :index, {:role => Role::ADMIN_ID}
+        assert_equal assigns(:header).upcase, "Admin".upcase
+      end
+      should "have header for leader" do
+        xhr :get, :index, {:role => Role::LEADER_ID}
+        assert_equal assigns(:header).upcase, "Leader".upcase
+      end
+      should "have header for contact" do
+        xhr :get, :index, {:role => Role::CONTACT_ID}
+        assert_equal assigns(:header).upcase, "Contact".upcase
+      end
+      should "have header for involved" do
+        xhr :get, :index, {:role => Role::INVOLVED_ID}
+        assert_equal assigns(:header).upcase, "Involved".upcase
+      end
+      should "have header for sent" do
+        xhr :get, :index, {:role => Role::SENT_ID}
+        assert_equal assigns(:header).upcase, "Sent".upcase
+      end
+      should "have header when viewing unassigned contacts" do
+        xhr :get, :index, {:assigned_to => "unassigned"}
+        assert_equal assigns(:header), "Unassigned"
+      end
+      should "have header when viewing completed contacts" do
+        xhr :get, :index, {:completed => "true"}
+        assert_equal assigns(:header), "Completed"
+      end
+      should "not have header for when not assigned to any" do
+        xhr :get, :index, {:assigned_to => nil}
+        assert_nil assigns(:header)
+      end
+      should "have header when viewing no_activity" do
+        xhr :get, :index, {:assigned_to => "no_activity"}
+        assert_equal assigns(:header), "No Activity"
+      end
+      should "have header when viewing spiritual_conversation" do
+        xhr :get, :index, {:assigned_to => "spiritual_conversation"}
+        assert_equal assigns(:header), "Spiritual Conversation"
+      end
+      should "have header when viewing prayed_to_receive" do
+        xhr :get, :index, {:assigned_to => "prayed_to_receive"}
+        assert_equal assigns(:header), "Prayed To Receive Christ"
+      end
+      should "have header when viewing gospel_presentation" do
+        xhr :get, :index, {:assigned_to => "gospel_presentation"}
+        assert_equal assigns(:header), "Gospel Presentation"
+      end
+      should "have header when viewing friends" do
+        xhr :get, :index, {:assigned_to => "friends"}
+        assert_equal assigns(:header), "Contacts who are also my friends on Facebook"
+      end
+      should "have header when viewing do_not_contact" do
+        xhr :get, :index, {:dnc => "true"}
+        assert_equal assigns(:header), "Do Not Contact"
+      end
+      should "have header when searching" do
+        xhr :get, :index, {:do_search => "1"}
+        assert_equal assigns(:header), "Matching the criteria you searched for"
+      end
+      should "have header for assigned to specific person" do
+        xhr :get, :index, {:assigned_to => @user.person.id}
+        assert_equal assigns(:header), "Assigned to #{@user.person.name}"
+      end
     end
 
     should "get unassigned contacts ONLY" do
@@ -298,7 +331,7 @@ class ContactsControllerTest < ActionController::TestCase
 
       @contact5.organizational_roles.first.destroy
       xhr :get, :index, {:assigned_to => "unassigned"}
-      assert_equal [@contact1.id, @contact2.id, @contact3.id, @contact4.id], assigns(:all_people).collect(&:id).sort
+      assert_equal [@contact1.id, @contact2.id, @contact3.id, @contact4.id], assigns(:people).collect(&:id).sort
     end
 
   end
@@ -560,7 +593,7 @@ class ContactsControllerTest < ActionController::TestCase
 
     should "export all people" do
       xhr :get, :index, {:assigned_to => "all", :format => "csv"}
-      assert_equal(assigns(:all_people).count.count, 4)
+      assert_equal 4, assigns(:all_people).count.count
       assert_response :success
     end
 
@@ -794,11 +827,11 @@ class ContactsControllerTest < ActionController::TestCase
 
     should "not display contacts multiple times" do
       xhr :get, :index, {:assigned_to => "all"}
-      assert_equal 1, assigns(:all_people).where(id: @contact1.id).count.count
-      assert_equal 1, assigns(:all_people).where(id: @contact2.id).count.count
-      assert_equal 1, assigns(:all_people).where(id: @contact3.id).count.count
-      assert_equal 1, assigns(:all_people).where(id: @contact4.id).count.count
-      assert_equal 1, assigns(:all_people).where(id: @contact5.id).count.count
+      assert_equal 1, assigns(:people).where(id: @contact1.id).count.count
+      assert_equal 1, assigns(:people).where(id: @contact2.id).count.count
+      assert_equal 1, assigns(:people).where(id: @contact3.id).count.count
+      assert_equal 1, assigns(:people).where(id: @contact4.id).count.count
+      assert_equal 1, assigns(:people).where(id: @contact5.id).count.count
     end
 
     should "not display contacts multiple times when by searching phone_numbers" do
@@ -812,11 +845,11 @@ class ContactsControllerTest < ActionController::TestCase
       @phone_number4 = Factory(:phone_number, person: @contact5, number: "09167788888", primary: false) # included
 
       xhr :get, :index, {:do_search => "1", :phone_number => '0916'}
-      assert_equal 1, assigns(:all_people).where(id: @contact1.id).count.count
-      assert_equal 1, assigns(:all_people).where(id: @contact3.id).count.count
-      assert_equal 1, assigns(:all_people).where(id: @contact4.id).count.count
-      assert_equal 1, assigns(:all_people).where(id: @contact5.id).count.count
-      assert !assigns(:all_people).include?(@contact2)
+      assert_equal 1, assigns(:people).where(id: @contact1.id).count.count
+      assert_equal 1, assigns(:people).where(id: @contact3.id).count.count
+      assert_equal 1, assigns(:people).where(id: @contact4.id).count.count
+      assert_equal 1, assigns(:people).where(id: @contact5.id).count.count
+      assert !assigns(:people).include?(@contact2)
     end
   end
 
@@ -840,32 +873,32 @@ class ContactsControllerTest < ActionController::TestCase
     should "return admins when Admin link is clicked" do
       Factory(:organizational_role, organization: @org, person: @person1, role: Role.admin)
       xhr :get, :index, { :role => Role::ADMIN_ID }
-      assert_equal 2, assigns(:all_people).count.count, "only 2 record should be returned"
-      assert assigns(:all_people).include?(@person1)
-      assert assigns(:all_people).include?(@user.person)
+      assert_equal 2, assigns(:people).total_count, "only 2 record should be returned"
+      assert assigns(:people).include?(@person1)
+      assert assigns(:people).include?(@user.person)
     end
 
     should "return leaders when Leader link is clicked" do
       Factory(:organizational_role, organization: @org, person: @person1, role: Role.leader)
       xhr :get, :index, { :role => Role::LEADER_ID }
-      assert_equal 1, assigns(:all_people).count.count, "only 1 record should be returned"
-      assert assigns(:all_people).include?(@person1)
+      assert_equal 1, assigns(:people).total_count, "only 1 record should be returned"
+      assert assigns(:people).include?(@person1)
     end
 
     should "return contacts when Contact link is clicked" do
       xhr :get, :index, { :role => Role::CONTACT_ID }
-      assert_equal 4, assigns(:all_people).count.count, "4 records should be returned"
-      assert assigns(:all_people).include?(@person1)
-      assert assigns(:all_people).include?(@person2)
-      assert assigns(:all_people).include?(@person3)
-      assert assigns(:all_people).include?(@person4)
+      assert_equal 4, assigns(:people).total_count, "4 records should be returned"
+      assert assigns(:people).include?(@person1)
+      assert assigns(:people).include?(@person2)
+      assert assigns(:people).include?(@person3)
+      assert assigns(:people).include?(@person4)
     end
 
     should "return involveds when Involved link is clicked" do
       Factory(:organizational_role, organization: @org, person: @person1, role: Role.involved)
       xhr :get, :index, { :role => Role::INVOLVED_ID }
-      assert_equal 1, assigns(:all_people).count.count, "only 1 record should be returned"
-      assert assigns(:all_people).include?(@person1)
+      assert_equal 1, assigns(:people).total_count, "only 1 record should be returned"
+      assert assigns(:people).include?(@person1)
     end
 
     context "by gender" do
@@ -877,14 +910,14 @@ class ContactsControllerTest < ActionController::TestCase
 
       should "sort desc" do
         xhr :get, :index, {:search=>{:meta_sort=>"gender desc"}}
-        assert assigns(:all_people).first.gender == "Male", "first result should be male"
-        assert assigns(:all_people).last.gender == "Female", "last result should be female"
+        assert assigns(:people).first.gender == "Male", "first result should be male"
+        assert assigns(:people).last.gender == "Female", "last result should be female"
       end
 
       should "sort asc" do
         xhr :get, :index, {:search=>{:meta_sort=>"gender asc"}}
-        assert assigns(:all_people).first.gender == "Female", "first result should be female"
-        assert assigns(:all_people).last.gender == "Male", "last result should be male"
+        assert assigns(:people).first.gender == "Female", "first result should be female"
+        assert assigns(:people).last.gender == "Male", "last result should be male"
       end
     end
 
@@ -933,12 +966,12 @@ class ContactsControllerTest < ActionController::TestCase
 
       should "return people sorted by their roles (default roles) desc" do
         xhr :get, :index, {:search=>{:meta_sort=>"role_id desc"}}
-        assert_equal [@b_person.id, @a_person.id, @person5.id, @person3.id, @person4.id, @person1.id, @user.person.id, @person2.id], assigns(:all_people).collect(&:id)
+        assert_equal [@b_person.id, @a_person.id, @person5.id, @person3.id, @person4.id, @person1.id, @user.person.id, @person2.id], assigns(:people).collect(&:id)
       end
 
       should "return people sorted by their roles (default roles) asc" do
         xhr :get, :index, {:search=>{:meta_sort=>"role_id asc"}}
-        assert_equal [@user.person.id, @person2.id, @person1.id, @person5.id, @person3.id, @person4.id, @a_person.id, @b_person.id], assigns(:all_people).collect(&:id)
+        assert_equal [@user.person.id, @person2.id, @person1.id, @person5.id, @person3.id, @person4.id, @a_person.id, @b_person.id], assigns(:people).collect(&:id)
       end
     end
   end
@@ -971,7 +1004,7 @@ class ContactsControllerTest < ActionController::TestCase
 
       xhr :get, :index, {:do_search => "1", "assigned_to"=>"all", "first_name"=>"", "last_name"=>"", "phone_number"=>"", "person_updated_from"=>"", "person_updated_to"=>"", "status"=>"", "survey"=>"", "answers"=>{"#{@question.id}" => "DSU"}, "commit"=>"Search"}
 
-      assert_equal 1, assigns(:all_people).count.count
+      assert_equal 1, assigns(:people).count.count
       assert assigns(:people).include? @contact1
       assert assigns(:people).include?(@contact2) == false
     end
@@ -983,11 +1016,11 @@ class ContactsControllerTest < ActionController::TestCase
       xhr :post, :create, {:person => {:first_name => "Neil", :last_name => "dela Cruz", :gender => "male"}, :answers => {"#{@campus_question.id}"=>"SDSU"}  }
       assert_equal "SDSU", Person.where(first_name: "Neil", last_name: "dela Cruz").first.campus
 
-      xhr :get, :index, {:do_search => "1", "assigned_to"=>"all", "first_name"=>"", "last_name"=>"", "phone_number"=>"", "person_updated_from"=>"", "person_updated_to"=>"", "status"=>"", "survey"=>"", "answers"=>{"#{@campus_question.id}" => "DSU"}, "commit"=>"Search"}
+      xhr :get, :index, {:do_search => "1", "assigned_to"=>"all", "answers"=>{"#{@campus_question.id}" => "DSU"}, "commit"=>"Search"}
 
-      assert_equal 1, assigns(:all_people).count.count
-      assert assigns(:people).include? Person.where(first_name: "Eloisa", last_name: "Bongalbal").first
-      assert assigns(:people).include?(Person.where(first_name: "Neil", last_name: "dela Cruz").first) == false
+      assert_equal 1, assigns(:people).count.count
+      assert assigns(:people).include?(Person.where(first_name: "Eloisa", last_name: "Bongalbal").first)
+      assert !assigns(:people).include?(Person.where(first_name: "Neil", last_name: "dela Cruz").first)
     end
   end
 end
