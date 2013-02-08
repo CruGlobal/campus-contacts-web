@@ -1,0 +1,40 @@
+<li class="heading selected">
+  <h3><%= t('people.index.statistics') %></h3>
+</li>
+  <ul id="leaders" class="indent expandable" data-height="244">
+    <li>
+      <span class="name">
+        <%= link_to(t('contacts.index.no_activity'), contacts_path(assigned_to: 'no_activity')) %>
+      </span>
+      (<%= @organization.no_activity_contacts.count %>)
+    </li>
+    <% Rejoicable::OPTIONS.each do |option| %>
+      <li>
+        <span class="name">
+          <%= link_to(t("rejoicables.#{option}"), contacts_path(assigned_to: option)) %>
+        </span>
+        (<%= @organization.send(:"#{option}_contacts").count %>)
+      </li>
+    <% end %>
+  </ul>
+<li><hr /></li>
+<li>
+  <span class="name">
+    <%= link_to(t('contacts.index.my_friends'), contacts_path(assigned_to: 'friends')) %>
+  </span>
+  (<%= current_person.contact_friends(current_organization).count %>)
+</li>
+<li>
+  <span class="name">
+    <%= link_to(t('people.index.archived_label'), controller: 'contacts', :archived => true, :include_archived => params[:include_archived]) %>
+  </span>
+  (<%= current_organization.people.archived(current_organization.id).count %>)
+</li>
+<li class="dnc">
+  <span class="name">
+    <%= link_to(t('contacts.index.dnc'), contacts_path(dnc: true)) %>
+  </span>
+  <span id="dnc_count" class="count">
+    (<%= OrganizationalRole.dnc.where(organization_id: @organization.id).count %>)
+  </span>
+</li>

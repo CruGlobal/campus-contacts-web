@@ -11,7 +11,7 @@
     </li>
     <li class="<%= 'current' if request.path =~ care_pattern %>">
       <%= link_to(t('nav.people'), "/contacts") %>
-      <ul>
+      <ul style='display:none;'>
         <li class="<%= 'current' if request.fullpath == '/contacts/mine' %>">
           <%= link_to(t('nav.my_contacts'), "/contacts/mine", :class => "topset mycontacts") %>
         </li>
@@ -26,7 +26,7 @@
       </li>
       <li class="<%= 'current' if request.path =~ connect_pattern %>">
         <%= link_to(t('nav.surveys'), index_admin_surveys_path) %>
-        <ul>
+        <ul style='display:none;'>
           <li class="<%= 'current' if ['surveys','questions'].include?(controller.controller_name) %>">
             <%= link_to(t('nav.surveys'), index_admin_surveys_path, :class => "topset surveys") %>
           </li>
@@ -40,7 +40,7 @@
     <% if can? :manage, current_organization %>
       <li class="<%= 'current' if params[:controller] == 'organizations' %>">
         <%= link_to(t('nav.organizations'), "/organizations") %>
-        <ul>
+        <ul style='display:none;'>
           <li class="<%= 'current' if request.path == organizations_path %>">
             <%= link_to(t('nav.manage'), "/organizations", :class => "topset groups") %>
           </li>

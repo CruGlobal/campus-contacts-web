@@ -17,7 +17,7 @@ class Role < ActiveRecord::Base
     :conditions => "i18n IN #{self.default_roles_for_field_string(self::DEFAULT_ROLES)}",
     :order => "FIELD#{self.i18n_field_plus_default_roles_for_field_string(self::DEFAULT_ROLES)}"
   }}
-  
+
   scope :default_cru_roles_desc, lambda { {
     :conditions => "i18n IN #{self.default_roles_for_field_string(self::DEFAULT_CRU_ROLES)}",
     :order => "FIELD#{self.i18n_field_plus_default_roles_for_field_string(self::DEFAULT_CRU_ROLES)}"
@@ -27,12 +27,16 @@ class Role < ActiveRecord::Base
     :conditions => "i18n IS NULL OR i18n NOT IN #{self.default_roles_for_field_string(self::DEFAULT_ROLES)}",
     :order => "roles.name ASC"
   }}
-  
+
   scope :non_default_cru_roles_asc, lambda { {
     :conditions => "i18n IS NULL OR i18n NOT IN #{self.default_roles_for_field_string(self::DEFAULT_CRU_ROLES)}",
     :order => "roles.name ASC"
   }}
-  
+
+  scope :arrange_all, lambda {{
+    order: "FIELD#{self.default_roles_for_field_string(self::DEFAULT_CRU_ROLES)}"
+  }}
+
   def self.leader_ids
     @leader_ids ||= self.leaders.collect(&:id)
   end
@@ -60,11 +64,11 @@ class Role < ActiveRecord::Base
   def self.alumni
     @alumni ||= Role.find_or_create_by_i18n_and_organization_id('alumni', 0)
   end
-  
+
   def self.sent
     @sent ||= Role.find_or_create_by_i18n_and_organization_id('sent', 0)
   end
-  
+
   def to_s
     organization_id == 0 ? I18n.t("roles.#{i18n}") : name
   end
@@ -94,7 +98,7 @@ class Role < ActiveRecord::Base
 
   DEFAULT_ROLES = ["admin", "leader", "involved", "alumni", "contact"] # in DSC ORDER by SUPERIORITY
   DEFAULT_CRU_ROLES = DEFAULT_ROLES + ["sent"]
-  
+
   ANY_SELECTED_LABEL = ["Any",1]
 	ALL_SELECTED_LABEL = ["All",2]
 	LABEL_SEARCH_FILTERS = [ANY_SELECTED_LABEL, ALL_SELECTED_LABEL]

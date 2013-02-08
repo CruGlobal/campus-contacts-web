@@ -9,6 +9,8 @@ Mh::Application.routes.draw do
     end
   end
   match 'imports/:id/labels' => 'imports#labels'
+  match 'show_hidden_questions' => 'contacts#show_hidden_questions'
+  match 'display_sidebar' => 'contacts#display_sidebar'
 
   resources :group_labels, :only => [:create, :destroy]
 
@@ -131,6 +133,8 @@ Mh::Application.routes.draw do
       post :create_from_crs
       get :api
       get :generate_api_secret
+      get :show_hidden_questions
+      get :display_sidebar
     end
     member do
       get :update_from_crs
@@ -189,6 +193,8 @@ Mh::Application.routes.draw do
       post :csv_import
       get :download_sample_contacts_csv
       get :search_by_name_and_email
+      get :auto_suggest_send_email
+      get :auto_suggest_send_text
     end
   end
 

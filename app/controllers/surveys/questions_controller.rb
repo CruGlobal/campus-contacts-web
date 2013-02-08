@@ -131,7 +131,8 @@ class Surveys::QuestionsController < ApplicationController
 
   def hide
     @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
-    if @predefined_survey.questions.collect(&:id).include?(params[:id].to_i)
+    @predefined_questions = @predefined_survey.questions
+    if @predefined_questions.collect(&:id).include?(params[:id].to_i)
       @question = @predefined_survey.elements.find(params[:id].to_i)
       @organization = current_organization
       @organization.survey_elements.each do |pe|
@@ -153,7 +154,8 @@ class Surveys::QuestionsController < ApplicationController
 
   def unhide
     @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
-    if @predefined_survey.questions.collect(&:id).include?(params[:id].to_i)
+    @predefined_questions = @predefined_survey.questions
+    if @predefined_questions.collect(&:id).include?(params[:id].to_i)
       @question = @predefined_survey.elements.find(params[:id].to_i)
       @organization = current_organization
       @survey = @predefined_survey

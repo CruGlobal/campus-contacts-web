@@ -1,0 +1,8 @@
+<div id="hidden_questions_guide">
+  <%= t('contacts.menu.add_question_back') %>
+</div>
+<div id="hidden_questions_list">
+  <ul id="hidden_questions">
+    <%= render partial: 'contacts/hidden_question', collection: @hidden_questions %>
+  </ul>
+</div>

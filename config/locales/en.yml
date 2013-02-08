@@ -62,6 +62,7 @@ en:
     transfer: 100% Sent
     archive: Archived
     enter_survey_mode: "Enter Survey Mode"
+    exit_survey_mode: "Exit Survey Mode"
     use_keyword: 'Use Keyword: %{keyword}'
     my_profile: '%{name} Profile'
     groups: 'Groups'
@@ -135,7 +136,7 @@ en:
     to: "To"
     recipients: "Recipients:"
     message: "Message:"
-    subject: 'Subject'
+    subject: 'Subject:'
     autocomplete_name_hint: 'Type a name or facebook profile url here:'
     match_found: 'Match found'
     label_search_help: If you selected two labels such as "Admin" and "Leader", <b>"ANY"</b> would give you people with EITHER label while <b>"ALL"</b> would narrow the search by giving you only those people with BOTH labels.<br/><br/><b>"ANY"</b> uses the Boolean logic "OR" to broaden the search.<br/><br/><b>"ALL"</b> use the Boolean "AND" to narrow the search.
@@ -584,6 +585,9 @@ en:
     notify:
       content: '%{name} (%{number},%{email}) just replied to a survey with %{answer}.'
   contacts:
+    sidebar:
+      show_more: "Show More"
+      show_less: "Show Less"
     search:
       first_name: First Name
       last_name: Last Name
@@ -615,6 +619,8 @@ en:
     leaders:
       reminder_prompt: "Some of your leaders have contacts that haven't been followed up! Let your leaders know!"
       show_more: "Show More"
+    menu:
+      add_question_back: Click on a question to add it back to the page
     index:
       edit_true: '&edit=true'
       search_saved: 'This search has been saved'

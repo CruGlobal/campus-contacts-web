@@ -14,13 +14,13 @@
 <% if (can? :manage, current_organization) || (can? :lead, current_organization) %>
   <ul class="pillmenu">
     <li>
-      <%= link_to("#{t('nav.roles')} ▾", '#', class: 'action_dropdown') %>  
+      <%= link_to("#{t('nav.roles')} ▾", '#', class: 'action_dropdown') %>
       <ul id='label_menu'>
         <li>
           <% current_organization.role_set.each do |role| %>
             <div class="role_div_checkbox">
               <span>
-                <%= check_box_tag 'role_ids[]', role.id, false, id: "role_ids_#{role.id}", class: 'role_id_checkbox', :hidden => !can?(:manage, current_organization) && role.id == Role::ADMIN_ID ? true : false %> 
+                <%= check_box_tag 'role_ids[]', role.id, false, id: "role_ids_#{role.id}", class: 'role_id_checkbox', :hidden => !can?(:manage, current_organization) && role.id == Role::ADMIN_ID ? true : false %>
                 <span><%= role %></span>
                 <% if role.organization_id == 0 %>
                   <% if role.name == 'Admin' %>
@@ -66,7 +66,7 @@
 </ul>
 
 <ul class="pillmenu control_toggle">
-  <li><%= link_to(t('people.index.send_sms'), nil, :id => "send_bulksms_link_new") %></li>	
+  <li><%= link_to(t('people.index.send_sms'), nil, :id => "send_bulksms_link_new") %></li>
 </ul>
 
 <ul class='divider'></ul>
@@ -96,15 +96,15 @@
 <% if params[:dnc] == 'true' %>
   <ul class="pillmenu">
     <li><%= link_to(t('.bulk_delete'), bulk_destroy_contacts_path, id: "bulk_delete") %></li>
-  </ul>  
+  </ul>
 <% end %>
 
 <%= render 'search' %>
 
 <div id="hidden_questions_div" style="display:none">
-  <%= t('.add_question_back') %>
-  <ul id="hidden_questions">
-    <%= render partial: 'contacts/hidden_question', collection: @hidden_questions %>
-  </ul>
+  <div id="hidden_questions_loader">
+    <%= image_tag 'loader.gif'%>
+    <br/>
+    Fetching Questions...
+  </div>
 </div>
-

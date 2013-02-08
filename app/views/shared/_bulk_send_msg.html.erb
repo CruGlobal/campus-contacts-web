@@ -3,26 +3,26 @@
     <div class="field">
       <label><%= t('general.recipients') %></label>
       <%= hidden_field_tag :to %>
-      <%= select_tag :send_text_to, options_from_collection_for_select(@all_people_with_phone_number, :id, :select_name), multiple: true, id: 'send_text_to', class: 'multiselect_text', style: "width: 690px;", 'data-placeholder' => "Choose Contacts..."  %>
-      <%= select_tag :send_email_to, options_from_collection_for_select(@all_people_with_email, :id, :select_name_email), multiple: true, id: 'send_email_to', class: 'multiselect_email', style: "width: 690px;", 'data-placeholder' => "Choose Contacts..."  %>
+
+      <%= text_field_tag :send_email_to, "", id: 'send_email_to', autocomplete: 'off' %>
+      <%= text_field_tag :send_text_to, "", id: 'send_text_to', autocomplete: 'off' %>
+
       <%= hidden_field_tag 'followup_comment[organization_id]', current_organization.id %>
       <%= hidden_field_tag 'followup_comment[commenter_id]', current_user.person.id %>
     </div>
-    <div class="field_in subject" id="subject_div">
-      <label><%= t('general.subject') %></label> 
-      <div class="in"><%= text_field_tag :subject %></div>
+    <div class="field" id="subject_div">
+      <label><%= t('general.subject') %></label>
+      <div class="in"><%= text_field_tag :subject, "", id: 'bulk_send_subject' %></div>
     </div>
     <div class="field">
       <label><%= t('general.message') %></label>
-      <%= text_area_tag :body, '', id: 'bulk_send_body', style: 'width: 680px; height: 60px;' %>
+      <%= text_area_tag :body, '', id: 'bulk_send_body' %>
 		  <div id="char_counter"></div>
     </div>
   <% end %>
-  
+
   <div id="bulk_send_msg_error" class="flash" style="display: none;">
-    <div id="bulk_send_msg_message" class="flash_message notice alignleft" style="padding: 5px 5px 5px 40px; min-height: 30px;">
-      SAMPLE
-    </div>
+    <div id="bulk_send_msg_message" class="flash_message notice alignleft" style="padding: 5px 5px 5px 40px; min-height: 30px;"></div>
   </div>
 </div>
 

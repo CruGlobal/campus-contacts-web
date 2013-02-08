@@ -1,0 +1,18 @@
+<li><hr /></li>
+<% if @all_saved_contact_searches.any? %>
+  <li class="heading selected">
+    <h3><%= t('contacts.index.saved_searches') %></h3>
+  </li>
+  <% @all_saved_contact_searches.each do |s| %>
+    <li class="saved_search">
+      <span class="name">
+        <%= link_to s.name, s.full_path %>
+      </span>
+      <%= link_to('x', saved_contact_search_path(s),
+        method: :delete, remote: true, class: 'delete_leader',
+        confirm: t('contacts.index.delete_search_confirm')) %>
+      <%= link_to(image_tag("edit.png"),
+        s.full_path + t('contacts.index.edit_true'), class: 'edit_search') %>
+    </li>
+  <% end %>
+<% end %>

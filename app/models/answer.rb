@@ -10,7 +10,7 @@ class Answer < ActiveRecord::Base
   has_paper_trail :on => [:destroy],
                   :meta => { person_id: :person_id }
 
-  belongs_to :answer_sheet, inverse_of: :answers
+  belongs_to :answer_sheet, inverse_of: :answers, touch: true
   belongs_to :question, :class_name => "Element", :foreign_key => "question_id"
 
 #  validates_presence_of :value

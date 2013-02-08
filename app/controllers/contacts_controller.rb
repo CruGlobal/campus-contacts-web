@@ -16,21 +16,18 @@ class ContactsController < ApplicationController
   def index
     url = request.url.split('?')
     @attr = url.size > 1 ? url[1] : ''
-    fetch_all_contacts
 
     respond_to do |wants|
       wants.html do
-        #@roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, person_id: @people.collect(&:id)).map {|r| [r.person_id, r]}]
+        fetch_contacts(false)
         @assignments = ContactAssignment.includes(:assigned_to).where(person_id: @people.pluck('people.id'), organization_id: @organization.id).group_by(&:person_id)
-        @answers = generate_answers(@people, @organization, @questions)
-        #@filtered_people = @all_people - @people
-        @all_people_with_phone_number = @all_people.includes(:primary_phone_number).where('phone_numbers.number is not NULL')
-        @all_people_with_email = @all_people.includes(:primary_email_address).where('email_addresses.email is not NULL')
+        @answers = generate_answers(@people, @organization, @questions, @surveys)
       end
 
       wants.csv do
+        fetch_contacts(true)
         @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r] if r.role_id == Role::CONTACT_ID }]
-        @all_answers = generate_answers(@all_people, @organization, @questions)
+        @all_answers = generate_answers(@all_people, @organization, @questions, @surveys)
         @questions.select! { |q| !%w{first_name last_name phone_number email}.include?(q.attribute_name) }
         filename = @organization.to_s
         @all_people = @all_people.where('people.id IN (:ids)', ids: params[:only_ids].split(',')) if params[:only_ids].present?
@@ -41,18 +38,35 @@ class ContactsController < ApplicationController
   end
 
   def contacts_all
-    fetch_all_contacts
+    fetch_contacts(true)
     @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
     render partial: "contacts/contacts_all"
   end
 
   def search_by_name_and_email
-
     @people = params[:include_archived] ?
       current_organization.people.search_by_name_or_email(params[:term].strip, current_organization.id).uniq :
       current_organization.people.search_by_name_or_email(params[:term].strip, current_organization.id).uniq.archived_not_included
     respond_to do |wants|
       wants.json { render text: @people.collect{|person| {"label" => person.name, "email" => person.email.downcase, "id" => person.id}}.to_json }
+    end
+  end
+
+  def auto_suggest_send_email
+    term = params[:q].try(:strip)
+    @people = current_organization.people.email_search(term, current_organization.id).uniq
+    @people = @people.archived_not_included unless params[:include_archived].present?
+    respond_to do |format|
+      format.json { render json: @people.collect{|p| {name: "#{p.name} - #{p.email.downcase}", id: p.id}}.to_json }
+    end
+  end
+
+  def auto_suggest_send_text
+    term = params[:q].try(:strip)
+    @people = current_organization.people.phone_search(term, current_organization.id).uniq
+    @people = @people.archived_not_included unless params[:include_archived].present?
+    respond_to do |format|
+      format.json { render json: @people.collect{|p| {name: "#{p.name} - #{p.primary_phone_number.pretty_number}", id: p.id}}.to_json }
     end
   end
 
@@ -185,23 +199,71 @@ class ContactsController < ApplicationController
     render nothing: true
   end
 
-  protected
+  def show_hidden_questions
+    @organization = current_organization
+    @all_questions = @organization.all_questions
+    @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
+    excepted_predefined_fields = ['first_name','last_name','gender','phone_number']
+    @predefined_questions = @predefined_survey.questions.where("attribute_name NOT IN (?)", excepted_predefined_fields)
+    @questions = (@all_questions.where("survey_elements.hidden" => false) + @predefined_questions.where(id: current_organization.settings[:visible_predefined_questions])).uniq
+    @hidden_questions = ((@predefined_questions + @all_questions) - @questions).flatten.uniq
+  end
 
-    def fetch_all_contacts
+  def display_sidebar
+    @organization = current_organization
+
+    # Saved Search
+    @all_saved_contact_searches = current_user.saved_contact_searches.where('organization_id = ?', current_organization.id)
+
+    get_and_merge_unfiltered_people
+  end
+
+  protected
+    def fetch_contacts(load_all = false)
+      # Load Saved Searches, Surveys & Questions
+      initialize_variables
+
+      # Fix old search variable from saved searches
+      handle_old_search_variable if params[:search] == "1"
+
+      # Get people
+      build_people_scope
+      get_and_merge_unfiltered_people
+
+      # Filter results
+      filter_archived_only if params[:archived].present?
+      filter_by_label if params[:role].present?
+      filter_by_search if params[:do_search].present?
+
+      # Sort & Limit Results
+      sort_people(params[:page], load_all)
+    end
+
+    def initialize_variables
+      # Layout
       @header = nil
       @style = params[:edit] ? 'display:block' : 'display:none'
-      @saved_contact_search = @person.user.saved_contact_searches.find(:first, :conditions => "full_path = '#{request.fullpath.gsub(I18n.t('contacts.index.edit_true'),"")}'") || SavedContactSearch.new
-      @all_saved_contact_searches = current_user.saved_contact_searches.where('organization_id = ?', current_organization.id)
-      @organization = Organization.where(id: current_organization.id).includes(:surveys, :groups, :questions).first
-      @surveys = @organization.surveys
-      @all_questions = @organization.all_questions.flatten.uniq
-      @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
-      @predefined_questions = @predefined_survey.questions.where("attribute_name NOT IN (?)", ['first_name','last_name','gender','phone_number'])
-      @questions = (@organization.all_questions.where("survey_elements.hidden" => false) + @predefined_survey.elements.where(id: current_organization.settings[:visible_predefined_questions])).uniq
-      @hidden_questions = ((@predefined_questions + @all_questions) - @questions).flatten.uniq
 
-      case
-      when params[:assigned_to]
+      # Organization
+      @organization = Organization.includes(:surveys, :groups, :questions).find(current_organization.id)
+
+      # Saved Search
+      @saved_contact_search = current_user.saved_contact_searches.where("full_path = '#{request.fullpath.gsub(I18n.t('contacts.index.edit_true'),"")}'").first || SavedContactSearch.new
+
+      # Surveys & Questions
+      @surveys = @organization.surveys
+      excepted_predefined_fields = ['first_name','last_name','gender','phone_number']
+      @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
+      @predefined_questions = @predefined_survey.questions.where("attribute_name NOT IN (?)", excepted_predefined_fields)
+      @questions = @predefined_questions.where(id: current_organization.settings[:visible_predefined_questions]).uniq
+
+      # Labels
+      @people_for_labels = Person.people_for_labels(current_organization)
+    end
+
+    def build_people_scope
+      params[:assigned_to] = 'all' if params[:role].present?
+      if params[:assigned_to].present?
         case params[:assigned_to]
         when 'all'
           if params[:include_archived].present? && params[:include_archived] == 'true'
@@ -227,56 +289,71 @@ class ContactsController < ApplicationController
             @header = I18n.t('contacts.index.responses_assigned_to', assigned_to: @assigned_to)
           end
         end
-      when params[:dnc] == 'true'
+      elsif params[:dnc] == 'true'
         @people_scope = @organization.dnc_contacts
         @header = I18n.t('contacts.index.dnc')
-      when params[:completed] == 'true'
+      elsif params[:completed] == 'true'
         @header = I18n.t('contacts.index.completed')
         @people_scope = @organization.completed_contacts
       end
+      @people_scope ||= current_organization.people
+    end
 
-      @people_scope ||= Person.scoped
-
+    def get_and_merge_unfiltered_people
       org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
       @people_unfiltered = Person.where('organizational_roles.organization_id' => org_ids)
                                  .where("organizational_roles.followup_status <> 'do_not_contact' OR organizational_roles.followup_status IS NULL")
                                  .joins(:organizational_roles_including_archived)
 
-      @people_unfiltered = @people_unfiltered.where('organizational_roles.archive_date' => nil) if params[:include_archived].blank? && params[:archived].blank?
-
-      @people_scope = @people_scope.merge(@people_unfiltered)
-
-      if params[:archived].present? && params[:archived] == 'true'
-        @header = I18n.t('contacts.index.archived')
-        @people_scope = @people_scope.where(id: current_organization.people.archived(current_organization.id).collect(&:id))
+      if params[:include_archived].blank? && params[:archived].blank?
+        @people_unfiltered = @people_unfiltered.where('organizational_roles.archive_date' => nil)
       end
+      @people_scope = @people_scope.merge(@people_unfiltered) if @people_scope.present?
+    end
 
-      if params[:role].present? || ((params[:search] == "1" || params[:do_search].present?) && params[:role].present?)
-	      #make array for existing roles in saved search full path data
-      	params[:role] = [params[:role]] unless params[:role].is_a?(Array) 
-        if @roles = Role.select("id, name, i18n").where("id IN (?)",params[:role]) 
-        	if params[:role_tag].present? && params[:role_tag].to_i == Role::ALL_SELECTED_LABEL[1]        	
-						valid_ids = []
-				  	@roles.collect(&:id).each do |role|
-        			valid_ids << @people_scope.where('organizational_roles.role_id IN (?)', [role]).collect(&:id)
-						end
-						
-						filtered_ids = []
-						valid_ids.each do |person_ids|
-							filtered_ids = filtered_ids.present? ? filtered_ids &= person_ids : person_ids
-						end
-						
-						@people_scope = @people_scope.where("people.id IN (?)", filtered_ids)
-        	else
-          	@people_scope = @people_scope.where('organizational_roles.role_id IN (?)', @roles.collect(&:id))
-        	end
-        	
-          if !params[:include_archived].present? && !params[:include_archived] == 'true'
-            @people_scope = @people_scope.where("organizational_roles.archive_date" => nil)
-          end
-          @header = params[:do_search] ? I18n.t('contacts.index.matching_seach') : @roles.collect{|desc| (desc.i18n.present? ? desc.i18n : desc.name).try('titleize')}.to_sentence
+    def filter_archived_only
+      @header = I18n.t('contacts.index.archived')
+      @people_scope = @people_scope.where(id: current_organization.people.archived(current_organization.id).collect(&:id))
+    end
+
+    def handle_old_search_variable
+      params[:search] = nil
+      params[:do_search] = "1"
+    end
+
+    def filter_by_label
+    	params[:role] = [params[:role]] unless params[:role].is_a?(Array)
+      if @roles = Role.select("id, name, i18n").where("id IN (?)",params[:role])
+        if params[:do_search].present?
+          @header = I18n.t('contacts.index.matching_seach')
+        else
+          @header = @roles.collect{|desc| (desc.i18n.present? ? desc.i18n : desc.name).try('titleize')}.to_sentence
+        end
+
+      	if params[:role_tag].present? && params[:role_tag].to_i == Role::ALL_SELECTED_LABEL[1]
+					valid_ids = []
+			  	@roles.collect(&:id).each do |role|
+      			valid_ids << @people_scope.where('organizational_roles.role_id IN (?)', [role]).collect(&:id)
+					end
+
+					filtered_ids = []
+					valid_ids.each do |person_ids|
+						filtered_ids = filtered_ids.present? ? filtered_ids &= person_ids : person_ids
+					end
+
+					@people_scope = @people_scope.where("people.id IN (?)", filtered_ids)
+      	else
+        	@people_scope = @people_scope.where("organizational_roles.role_id IN (?)", @roles.collect(&:id))
+      	end
+
+        if !params[:include_archived].present? && !params[:include_archived] == 'true'
+          @people_scope = @people_scope.where("organizational_roles.archive_date" => nil)
         end
       end
+    end
+
+    def filter_by_search
+      @header = I18n.t('contacts.index.matching_seach')
       if params[:survey].present?
         @people_scope = @people_scope.joins(:answer_sheets).where("answer_sheets.survey_id" => params[:survey])
       end
@@ -320,25 +397,27 @@ class ContactsController < ApplicationController
             # If this question is assigned to a column, we need to handle that differently
             if question.object_name.present?
               table_name = case question.object_name
-               when 'person'
-                 case question.attribute_name
-                 when 'email'
-                   @people_scope = @people_scope.joins(:email_addresses).where("#{EmailAddress.table_name}.email like ?", term) unless v.strip.blank?
-                 when 'phone_number'
-                   @people_scope = @people_scope.joins(:phone_numbers).where("#{PhoneNumber.table_name}.number like ?", term) unless v.strip.blank?
-                 when 'address1', 'city', 'state', 'country', 'dorm', 'room', 'zip'
-                   @people_scope = @people_scope.joins(:current_address).where("#{Address.table_name}.#{question.attribute_name} like ?", term) unless v.strip.blank?
-                 else
-									if term =~ /^([1-9]|0[1-9]|1[012])\/([1-9]|0[1-9]|[12][1-9]|3[01])\/(19|2\d)\d\d$/
-										begin
+              when 'person'
+                case question.attribute_name
+                when 'email'
+                  @people_scope = @people_scope.joins(:email_addresses).where("#{EmailAddress.table_name}.email like ?", term) unless v.strip.blank?
+                when 'phone_number'
+                  @people_scope = @people_scope.joins(:phone_numbers).where("#{PhoneNumber.table_name}.number like ?", term) unless v.strip.blank?
+                when 'address1', 'city', 'state', 'country', 'dorm', 'room', 'zip'
+                  @people_scope = @people_scope.joins(:current_address).where("#{Address.table_name}.#{question.attribute_name} like ?", term) unless v.strip.blank?
+                else
+                  if term =~ /^([1-9]|0[1-9]|1[012])\/([1-9]|0[1-9]|[12][1-9]|3[01])\/(19|2\d)\d\d$/
+                    begin
 											get_date = term.split('/')
 											term = Date.parse("#{get_date[2]}-#{get_date[0]}-#{get_date[1]}").strftime("%Y-%m-%d")
 										rescue
 										end
   								end
-									@people_scope = @people_scope.where("#{Person.table_name}.#{question.attribute_name} LIKE ?", "%#{term}%") unless v.strip.blank?
-                 end
-               end
+                  unless v.strip.blank?
+                    @people_scope = @people_scope.where("#{Person.table_name}.#{question.attribute_name} LIKE ?", term)
+                  end
+                end
+              end
             else
               unless v.strip.blank?
                 @people_scope = @people_scope.joins(:answer_sheets)
@@ -369,26 +448,21 @@ class ContactsController < ApplicationController
       if params[:person_updated_from].present? && params[:person_updated_to].present?
         @people_scope = @people_scope.find_by_person_updated_by_daterange(params[:person_updated_from], params[:person_updated_to])
       end
-
       if params[:search_type].present? && params[:search_type] == "basic"
         @people_scope = @people_scope.search_by_name_or_email(params[:query], current_organization.id)
       end
+    end
 
-      if params[:search] == "1" || params[:do_search]
-        @header = I18n.t('contacts.index.matching_seach')
-        if params[:search] == "1"
-	        params[:search] = nil 
-	        params[:do_search] = "1" #required to fix old search variable from saved searches
-	      end
-      elsif params[:search]
-
+    def sort_people(page = 1, fetch_all = false)
+      @q = Person.where('1 <> 1').search(params[:search]) # Fake a search object for sorting
+      if params[:search].present?
         sort_query = params[:search][:meta_sort].gsub('.',' ')
         if sort_query.include?('last_survey')
-	        @people_scope = @people_scope.get_and_order_by_latest_answer_sheet_answered(sort_query, current_organization.id).uniq
+	        @people_scope = @people_scope.get_and_order_by_latest_answer_sheet_answered(sort_query, current_organization.id)
 		    end
 
 		    if sort_query.include?('followup_status')
-		    	@people_scope = @people_scope.order_by_followup_status(sort_query).uniq
+		    	@people_scope = @people_scope.order_by_followup_status(sort_query)
 		    end
 
 		    if sort_query.include?('phone_number')
@@ -402,17 +476,15 @@ class ContactsController < ApplicationController
       else
       	order_query = "last_name asc, first_name asc"
       end
-
-      @q = Person.where('1 <> 1').search(params[:search]) # Fake a search object for sorting
-      # .includes(:primary_phone_number, :primary_email_address, :contact_role, :sent_person)
-      @all_people = @people_scope.order(order_query).group('people.id')
-      
-      @people_for_labels = Person.people_for_labels(current_organization)
-      @people = @all_people.page(params[:page])
+      if fetch_all
+        @all_people = @people_scope.order(order_query).group('people.id')
+        @people = @all_people.page(page)
+      else
+        @people = @people_scope.order(order_query).group('people.id').page(page)
+      end
     end
 
     def fetch_mine
-      #@all_people = Person.order('last_name, first_name').includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.organization_id' => current_organization.id, 'organizational_roles.role_id' => Role::CONTACT_ID)
       @all_people = Person.includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id)
     end
 
@@ -424,14 +496,15 @@ class ContactsController < ApplicationController
       authorize! :manage_contacts, current_organization
     end
 
-    def generate_answers(people, organization, questions)
+    def generate_answers(people, organization, questions, surveys = nil)
       answers = {}
       people_ids = people.pluck('people.id')
+      survey_ids = surveys.present? ? surveys.collect(&:id) : organization.survey_ids
       people_ids.each do |id|
         answers[id] = {}
       end
       @surveys = {}
-      AnswerSheet.includes(:survey).where(survey_id: organization.survey_ids, person_id: people_ids).includes({:person => :primary_email_address}).each do |answer_sheet|
+      AnswerSheet.where(survey_id: survey_ids, person_id: people_ids).includes({:person => :primary_email_address}).each do |answer_sheet|
         @surveys[answer_sheet.person_id] ||= {}
         @surveys[answer_sheet.person_id][answer_sheet.survey] = answer_sheet.completed_at
 

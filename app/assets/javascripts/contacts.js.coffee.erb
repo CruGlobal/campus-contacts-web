@@ -3,6 +3,17 @@ $ ->
     if (e.keyCode == $.ui.keyCode.ENTER)
       $('#contact_search_form').submit()
 
+  $('.more_link').live 'click', (e)->
+    e.preventDefault()
+    list_id = '#'+$(this).attr('data-id')
+
+    if $(list_id).is(':visible')
+      $(list_id).slideUp()
+      $(this).html("<span><strong>+</strong> Show More</span>")
+    else
+      $(list_id).slideDown()
+      $(this).html("<span><strong>-</strong> Show Less</span>")
+
   $('#transfer_to_org').dialog
     resizable: false,
     height:580,
@@ -594,30 +605,22 @@ $ ->
   $('#contacts_controller .index a.hide').live 'click', ->
     $('.' + $(this).attr('data-class')).fadeOut()
 
-  $('#hidden_questions_link').live 'click', ->
+  $('#hidden_questions_link').live 'click', (e)->
+    e.preventDefault
     position = parseInt($('#table_header').position().top) + parseInt($('#table_header').height())
     $('#hidden_questions_div').css('top': position)
     $('#hidden_questions_div').toggle()
+    unless $('#hidden_questions_div').hasClass('loaded')
+      $.ajax
+        type: 'GET',
+        url: '/show_hidden_questions'
     false
 
-  $(".leftmenu .leader, .leftmenu .dnc").droppable
-    activeClass: 'ui-state-highlight'
-    accept: ".handle"
-    drop: (event, ui) ->
-    	if $(this).hasClass("leader")
-		    leader = $(this)
-		    leader.effect('highlight', {}, 'slow')
-		    $('#assign_to').val(leader.attr('data-id'))
-		    $.fn.assignTo(leader)
-    	if $(this).hasClass("dnc")
-		    li = $(this)
-		    li.effect('highlight', {}, 'slow')
-		    $.fn.moveToDnc(ui.draggable)      
- 
+
 	$("#search_clear_selected_labels").live "click", ->
 		$(".search_role_checkbox").removeAttr("checked")
 		false
-			     
+
 $.fn.moveToDnc = (dragObject) ->
   $('#dnc_count').html(Number($('#dnc_count').html()) + 1)
   row = $("#" + $(dragObject).attr("data-row-id"))

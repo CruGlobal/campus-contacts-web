@@ -1,18 +1,18 @@
 jQuery(document).ready(function(){
   current_time = new Date()
-  $.cookie('timezone', current_time.getTimezoneOffset(), { path: '/', expires: 10 })
-	
+  $.cookie('timezone', current_time.getTimezoneOffset(), { path: '/', expires: 10 })
+
 	// Load preview images
 	show_video_preview();
-	
+
 	// Show first video as default
 	select_video_by_position(0);
-	
+
 	// Make videos in the list a link
 	$("#welcome_controller .inner_space .menu .list .video_entry").click(function(){
 		select_video_by_id($(this));
 	});
-	
+
 	click_url();
 	hide_loader();
 })
@@ -32,7 +32,7 @@ function show_video_preview(){
 	});
 }
 
-function select_video_by_id(video_div){ 
+function select_video_by_id(video_div){
 	id = video_div.children('.youtube_video_id').html();
 	info = $("#welcome_controller .inner_space .content .description");
 	info.children('.title').html(video_div.children('.title').html());
