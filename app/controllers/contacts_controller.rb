@@ -357,6 +357,9 @@ class ContactsController < ApplicationController
       if params[:survey].present?
         @people_scope = @people_scope.joins(:answer_sheets).where("answer_sheets.survey_id" => params[:survey])
       end
+	    if params[:survey_updated_from].present? && params[:survey_updated_to].present?  
+	      @people_scope = @people_scope.find_by_survey_updated_by_daterange(format_date_for_search(params[:survey_updated_from]), format_date_for_search(params[:survey_updated_to]), current_organization.id)
+	    end
       if params[:first_name].present?
         v = params[:first_name].strip
         term = (v.first == v.last && v.last == '"') ? v[1..-2] : "%#{v}%"
@@ -444,9 +447,6 @@ class ContactsController < ApplicationController
             end
           end
         end
-      end
-      if params[:person_updated_from].present? && params[:person_updated_to].present?
-        @people_scope = @people_scope.find_by_person_updated_by_daterange(params[:person_updated_from], params[:person_updated_to])
       end
       if params[:search_type].present? && params[:search_type] == "basic"
         @people_scope = @people_scope.search_by_name_or_email(params[:query], current_organization.id)

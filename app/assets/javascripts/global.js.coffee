@@ -24,8 +24,8 @@ $ ->
 
   $('a#survey_keywords_mode_link').siblings('ul').width(300)
 
-  $("#person_updated_from").datepicker dateFormat: "dd-mm-yy"
-  $("#person_updated_to").datepicker dateFormat: "dd-mm-yy"
+  $("#survey_updated_from").datepicker dateFormat: "mm/dd/yy"
+  $("#survey_updated_to").datepicker dateFormat: "mm/dd/yy"
   $('#archive_contacts_before').datepicker dateFormat: "dd-mm-yy"
 
   $(".field_with_errors").each ->
