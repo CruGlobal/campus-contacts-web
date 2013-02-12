@@ -252,10 +252,11 @@ class ContactsController < ApplicationController
 
       # Surveys & Questions
       @surveys = @organization.surveys
+      @all_questions = @organization.all_questions
       excepted_predefined_fields = ['first_name','last_name','gender','phone_number']
       @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
       @predefined_questions = @predefined_survey.questions.where("attribute_name NOT IN (?)", excepted_predefined_fields)
-      @questions = @predefined_questions.where(id: current_organization.settings[:visible_predefined_questions]).uniq
+      @questions = (@all_questions.where("survey_elements.hidden" => false) + @predefined_questions.where(id: current_organization.settings[:visible_predefined_questions])).uniq
 
       # Labels
       @people_for_labels = Person.people_for_labels(current_organization)
