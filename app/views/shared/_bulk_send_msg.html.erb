@@ -18,9 +18,25 @@
       <label><%= t('general.message') %></label>
       <%= text_area_tag :body, '', id: 'bulk_send_body' %>
 		  <div id="char_counter"></div>
+		  <div id="sms_compose_message_preview">
+		  	<table>
+		  		<tr>
+		  			<td colspan="2" class="title"><%= t('general.sms_preview_title') %></td>
+		  		</tr>
+		  		<tr>
+		  			<td class="message_desc"><%= t('general.sms_preview_from') %></td>
+		  			<td class="message_body" id="preview_from"><%= current_user %></td>
+		  		</tr>
+		  		<tr>
+		  			<td class="message_desc" valign="top"><%= t('general.sms_preview_body') %></td>
+		  			<td>
+		  				<div class="message_body" id="preview_body">&nbsp;</div>
+	  				</td>
+		  		</tr>
+		  	</table>
+		  </div>
     </div>
   <% end %>
-
   <div id="bulk_send_msg_error" class="flash" style="display: none;">
     <div id="bulk_send_msg_message" class="flash_message notice alignleft" style="padding: 5px 5px 5px 40px; min-height: 30px;"></div>
   </div>

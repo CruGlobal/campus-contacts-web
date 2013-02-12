@@ -136,7 +136,10 @@ en:
     to: "To"
     recipients: "Recipients:"
     message: "Message:"
-    subject: 'Subject:'
+    subject: 'Subject:'   
+    sms_preview_title: "Your recipients will receive the following text message:"
+    sms_preview_from: "FRM:"
+    sms_preview_body: "MSG:"
     autocomplete_name_hint: 'Type a name or facebook profile url here:'
     match_found: 'Match found'
     label_search_help: If you selected two labels such as "Admin" and "Leader", <b>"ANY"</b> would give you people with EITHER label while <b>"ALL"</b> would narrow the search by giving you only those people with BOTH labels.<br/><br/><b>"ANY"</b> uses the Boolean logic "OR" to broaden the search.<br/><br/><b>"ALL"</b> use the Boolean "AND" to narrow the search.

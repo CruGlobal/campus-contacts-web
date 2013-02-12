@@ -15,6 +15,20 @@
   height: 60px;
 }
 
+#sms_compose_message_preview{
+	display: none;
+	.title{
+		font-weight: bold;
+	}
+	.message_desc {
+		width:10px;
+	}
+	.message_body {
+		width: 280px;
+		word-wrap:break-word;
+	}
+}
+
 #send_contact_info_dialog input {
   width: 270px;
 }
