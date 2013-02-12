@@ -77,6 +77,10 @@ class Organization < ActiveRecord::Base
     end
   end
 
+  def sms_gateway
+    settings[:sms_gateway] || 'twilio'
+  end
+
   def pending_transfer
     sent.includes(:sent_person).where('sent_people.id IS NULL')
   end

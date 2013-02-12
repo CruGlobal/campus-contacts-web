@@ -3,7 +3,7 @@ require 'test_helper'
 # curl http://local.missionhub.com:7888/sms/mo -d "AccountSid=AC31a3e671973a063466c3fda4a834e1c1&ToZip=&FromState=IL&ToCity=&SmsSid=SMe9b831c332752067a1be43635c733b25&ToState=&To=85005&ToCountry=KP&FromCountry=US&SmsMessageSid=SMe9b831c332752067a1be43635c733b25&ApiVersion=2010-04-01&FromCity=HINSDALE&SmsStatus=received&From=+16304182108&FromZip=60514&Body=test"
 class SmsControllerTest < ActionController::TestCase
   context "Receiving an incoming SMS" do
-    setup do 
+    setup do
       @carrier = Factory(:sms_carrier_sprint)
       @survey = Factory(:survey)
       @keyword = Factory(:approved_keyword, survey: @survey)
@@ -16,7 +16,7 @@ class SmsControllerTest < ActionController::TestCase
       @q3 = Factory(:survey_element, survey: @survey, element: element, position: 3)
 
       @phone_number = '16304182108'
-      @post_params = {message: @keyword.keyword, device_address: @phone_number, 
+      @post_params = {message: @keyword.keyword, device_address: @phone_number,
                       inbound_address: APP_CONFIG['sms_short_code'], country: 'US', carrier: @carrier.moonshado_name}
     end
 
@@ -24,14 +24,14 @@ class SmsControllerTest < ActionController::TestCase
       setup do
         post :mo, @post_params.merge!(timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
         assert_equal assigns(:received).sms_keyword, @keyword
-      end 
+      end
 
       should respond_with(:success)
     end
 
     context "using interactive" do
       setup do
-        @person = Factory.build(:person_without_name) 
+        @person = Factory.build(:person_without_name)
         @person.save(validate: false)
         @sms_session = Factory(:sms_session, person: @person, sms_keyword: @keyword, phone_number: @phone_number)
         @sms_params = @post_params.slice(:message, :carrier, :country).merge(phone_number: @phone_number, shortcode: APP_CONFIG['sms_short_code'], sms_keyword_id: @keyword.id, person: @person)
@@ -153,9 +153,9 @@ class SmsControllerTest < ActionController::TestCase
     should "have response when user sends help" do
       post :mo, @post_params.merge!({message: 'help', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
       assert_equal 'MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to http://mhub.cc/terms for more help.', assigns(:msg)
-
     end
   end
+
 
   should "Test for email validation" do
     assert_equal("herp@derp.com", @controller.send(:try_to_extract_email_from, "My email is herp@derp.com Thanks!"))

@@ -311,7 +311,6 @@ class PeopleController < ApplicationController
   def bulk_sms
     authorize! :lead, current_organization
     to_ids = params[:to].split(',').uniq
-
     Person.find(to_ids).each do |person|
       if person.primary_phone_number
         if person.primary_phone_number.email_address.present?
@@ -322,7 +321,8 @@ class PeopleController < ApplicationController
 
         else
           # Otherwise send it as a text
-          @sent_sms = SentSms.create!(message: params[:body], recipient: person.phone_number) # + ' Txt HELP for help STOP to quit'
+          @sent_sms = SentSms.create!(message: params[:body], recipient: person.phone_number, sent_via: current_organization.sms_gateway)
+          # + ' Txt HELP for help STOP to quit'
           @sent_sms.queue_sms
         end
       end

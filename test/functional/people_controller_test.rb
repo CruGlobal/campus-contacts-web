@@ -33,7 +33,7 @@ class PeopleControllerTest < ActionController::TestCase
   context "After logging in a person" do
 
     setup do
-      @person = Factory(:user_with_auxs)  #user with a person object
+      @person, @org = admin_user_login_with_org
       sign_in @person
     end
 
@@ -56,6 +56,11 @@ class PeopleControllerTest < ActionController::TestCase
       setup do
         @person1 = Factory(:person)
         @person2 = Factory(:person)
+        p1 = PhoneNumber.new(:number => "123129312", :person_id => @person1.id)
+        assert p1.save
+
+        p2 = PhoneNumber.new(:number => "12390900", :person_id => @person2.id, :primary => true)
+        assert p2.save
       end
 
       should "send bulk email" do
@@ -71,16 +76,27 @@ class PeopleControllerTest < ActionController::TestCase
       end
 
       should "send bulk sms" do
-        p1 = PhoneNumber.new(:number => "123129312", :person_id => @person1.id)
-        assert p1.save
-
-        p2 = PhoneNumber.new(:number => "12390900", :person_id => @person2.id, :primary => true)
-        assert p2.save
 
         xhr :post, :bulk_sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
 
         assert_response :success
         assert_not_nil assigns(:sent_sms)
+      end
+
+      should "send bulk SMS via twilio" do
+        assert_difference "SentSms.count", +2 do
+          xhr :post, :bulk_sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
+        end
+        assert_equal 'twilio', SentSms.last.sent_via
+      end
+
+      should "send bulk SMS via smseco" do
+        @org.settings[:sms_gateway] = 'smseco'
+        @org.save
+        assert_difference "SentSms.count", +2 do
+          xhr :post, :bulk_sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
+        end
+        assert_equal 'smseco', SentSms.last.sent_via
       end
 
       should "update roles" do
