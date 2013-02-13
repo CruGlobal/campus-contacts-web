@@ -201,7 +201,7 @@ class ContactsController < ApplicationController
 
   def show_hidden_questions
     @organization = current_organization
-    @all_questions = @organization.all_questions
+    @all_questions = @organization.questions
     @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
     excepted_predefined_fields = ['first_name','last_name','gender','phone_number']
     @predefined_questions = @predefined_survey.questions.where("attribute_name NOT IN (?)", excepted_predefined_fields)
@@ -252,7 +252,7 @@ class ContactsController < ApplicationController
 
       # Surveys & Questions
       @surveys = @organization.surveys
-      @all_questions = @organization.all_questions
+      @all_questions = @organization.questions
       excepted_predefined_fields = ['first_name','last_name','gender','phone_number']
       @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
       @predefined_questions = @predefined_survey.questions.where("attribute_name NOT IN (?)", excepted_predefined_fields)
