@@ -54,7 +54,7 @@ gem 'trumant-rack-oauth2-server', git: 'git://github.com/twinge/rack-oauth2-serv
 gem 'twilio-rb', git: 'git://github.com/stevegraham/twilio-rb.git'
 gem 'unicorn'
 gem 'valium'
-gem 'versionist', git: 'git://github.com/twinge/versionist.git', branch: 'multiple_versioning_strategies'
+gem 'versionist', '~> 1.0.0'
 gem 'vpim', git: 'git://github.com/twinge/vpim.git'   # vcard maker
 gem 'whenever'
 
@@ -67,6 +67,7 @@ group :test do
   gem 'webmock'#, '= 1.8.3'
   gem 'factory_girl','~> 2.0.0.rc4'
   gem 'simplecov', '>= 0.3.5', require: false
+  gem 'ZenTest', '= 4.8.3'
   gem 'autotest-rails'
   gem 'resque_unit'
   gem 'shoulda', :require => false
