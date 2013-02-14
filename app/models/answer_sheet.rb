@@ -16,6 +16,14 @@ class AnswerSheet < ActiveRecord::Base
     self.answers.group_by { |answer| answer.question_id }
   end
 
+  def save_survey(answers)
+    question_set = QuestionSet.new(survey.questions, self)
+    question_set.post(answers, self)
+    question_set.save
+    person.save
+    update_attribute(:completed_at, Time.now)
+  end
+
   # def has_answer_for?(question_id)
   #   answers_by_question[question_id].present?
   # end
