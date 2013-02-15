@@ -1,6 +1,6 @@
 class Apis::V3::PeopleController < Apis::V3::BaseController
   before_filter :get_person, only: [:show, :update, :destroy]
-  
+
   def index
     render json: filtered_people,
            callback: params[:callback],
@@ -16,6 +16,8 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   end
 
   def create
+    params[:person][:phone_numbers_attributes] = params[:person].delete(:phone_numbers) if params[:person][:phone_numbers]
+    params[:person][:email_addresses_attributes] = params[:person].delete(:email_addresses) if params[:person][:email_addresses]
     person = Person.find_existing_person(Person.new(params[:person]))
 
     if person.save
