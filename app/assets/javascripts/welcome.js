@@ -12,8 +12,10 @@ jQuery(document).ready(function(){
 	$("#welcome_controller .inner_space .menu .list .video_entry").click(function(){
 		select_video_by_id($(this));
 	});
-
-	click_url();
+	
+	$(window).load(function(){
+		click_url();
+	});
 	hide_loader();
 })
 
