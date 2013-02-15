@@ -20,31 +20,36 @@
     <div>
       <%= image_tag("https://graph.facebook.com/#{@person.fb_uid}/picture?type=large", alt: '') %>
     </div>
-    <div>
+    <div class="other_details">
       <% if @person.phone_number.present? %>
-        <p>
-        <label><%= t('.phone_number', count: @person.phone_numbers.length) %></label>
-        <%= link_to @person.phone_numbers_html, "#", class: "send_sms_link", 'data-number' => @person.pretty_phone_number, 'data-id' => @person.id, 'data-name' => @person %>
-        <br/>
-        </p>
+      	<div>
+		      <label><%= t('.phone_number', count: @person.phone_numbers.length) %></label>
+		      <%= link_to @person.phone_numbers_html, "#", class: "send_sms_link", 'data-number' => @person.pretty_phone_number, 'data-id' => @person.id, 'data-name' => @person %>
+        </div>
       <% end %>
       <% if @person.email.present? %>
-        <p>
-        <label><%= t('.email', count: @person.email_addresses.length) %></label>
-        <%= @person.email_addresses_html %><br/>
-        </p>
+	      <div>
+		      <label><%= t('.email', count: @person.email_addresses.length) %></label>
+		      <%= @person.email_addresses_html %>
+        </div>
       <% end %>
       <% if @person.current_address %>
-        <p>
+      	<div>
           <label>Address:</label>
           <%= raw @person.current_address.display_html %>
-        </p>
-        <%= link_to(t('.google_map'), @person.current_address.map_link, target: '_blank', :class => "maplink") %>
+        </div>
+        <div>
+	        <%= link_to(t('.google_map'), @person.current_address.map_link, target: '_blank', :class => "maplink") %>
+	      </div>
       <% end %>
       <% if @person.fb_uid.present? %>
-        <p><%= link_to(t('.facebook_profile'), "http://www.facebook.com/profile.php?id=#{@person.fb_uid}", target: '_blank', :class => "icon facebook") %> <%= link_to(t('.facebook_profile'), "http://www.facebook.com/profile.php?id=#{@person.fb_uid}", target: '_blank') %></p>
+      	<div>
+        	<%= link_to(t('.facebook_profile'), "http://www.facebook.com/profile.php?id=#{@person.fb_uid}", target: '_blank', :class => "icon facebook") %> <%= link_to(t('.facebook_profile'), "http://www.facebook.com/profile.php?id=#{@person.fb_uid}", target: '_blank') %>
+        </div>
       <% end %>
-      <p><%= link_to(t('.send_contact_info', name: @person.first_name), '#', class: 'send_contact_info', 'data-person_id' => @person.id ) %></p>
+      <div>
+      <%= link_to(t('.send_contact_info', name: @person.first_name), '#', class: 'send_contact_info', 'data-person_id' => @person.id ) %>
+      </div>
       <%= render :partial => 'shared/send_contact_info_dialog', :locals => { person: @person } %>
     </div>
   </div>
