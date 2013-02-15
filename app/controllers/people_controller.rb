@@ -497,10 +497,10 @@ class PeopleController < ApplicationController
 
   def fetch_people(search_params = {})
     org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
-    @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles_including_archived)
+    @people_scope = Person.joins(:organizational_roles_including_archived).where('organizational_roles.organization_id' => org_ids)
     @people_scope = @people_scope.where(id: @people_scope.archived_not_included.collect(&:id)) if params[:include_archived].blank? && params[:archived].blank?
 
-    @q = @people_scope.includes(:primary_phone_number, :primary_email_address)
+    @q = @people_scope.includes(:primary_phone_number, :primary_email_address).joins(:organizational_roles_including_archived)
     #when specific role is selected from the directory
     @q = @q.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ?', params[:role], current_organization.id) unless params[:role].blank?
     sort_by = ['last_name asc', 'first_name asc']
@@ -509,34 +509,22 @@ class PeopleController < ApplicationController
     if search_params[:search_type] == "basic"
       unless search_params[:query].blank?
         if search_params[:search_type] == "basic"
-          @q = @q.select("people.*, email_addresses.*")
-          .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = people.id")
-          .where("concat(first_name,' ',last_name) LIKE :search OR
-                           concat(last_name, ' ',first_name) LIKE :search OR
-                           emails.email LIKE :search",
-                           {:search => "%#{search_params[:query]}%"})
+          @q = @q.joins("LEFT JOIN email_addresses AS emails ON emails.person_id = people.id")
+                  .where("concat(first_name,' ',last_name) LIKE :search OR concat(last_name, ' ',first_name) LIKE :search OR emails.email LIKE :search",{:search => "%#{search_params[:query]}%"})
         end
       end
     else
       unless search_params[:role].blank?
         if params[:include_archived]
-          @q = @q.select("people.*, roles.*")
-          .joins("LEFT JOIN organizational_roles AS org_roles ON
-                   org_roles.person_id = people.id")
-                   .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
-                   .where("org_roles.organization_id" => current_organization.id)
-                   .where("roles.id = :search",
-                          {:search => "#{search_params[:role]}"})
+          @q = @q.joins("INNER JOIN roles ON roles.id = organizational_roles.role_id")
+                  .where("organizational_roles.organization_id" => current_organization.id)
+                  .where("roles.id = :search",{:search => "#{search_params[:role]}"})
                    sort_by.unshift("roles.id")
           role_tables_joint = true
         else
-          @q = @q.select("people.*, roles.*")
-          .joins("LEFT JOIN organizational_roles AS org_roles ON
-                   org_roles.person_id = people.id")
-                   .joins("INNER JOIN roles ON roles.id = org_roles.role_id")
-                   .where("org_roles.archive_date" => nil, "org_roles.organization_id" => current_organization.id)
-                   .where("roles.id = :search",
-                          {:search => "#{search_params[:role]}"})
+          @q = @q.joins("INNER JOIN roles ON roles.id = organizational_roles.role_id")
+                  .where("organizational_roles.archive_date" => nil, "organizational_roles.organization_id" => current_organization.id)
+                  .where("roles.id = :search",{:search => "#{search_params[:role]}"})
                    sort_by.unshift("roles.id")
           role_tables_joint = true
         end
@@ -548,15 +536,13 @@ class PeopleController < ApplicationController
       end
 
       unless search_params[:email].blank?
-        @q = @q.select("people.*, email_addresses.*")
-        .joins("LEFT JOIN email_addresses AS emails ON emails.person_id = people.id")
+        @q = @q.joins("LEFT JOIN email_addresses AS emails ON emails.person_id = people.id")
         .where("emails.email LIKE :search", {:search => "%#{search_params[:email]}%"})
         sort_by.unshift("emails.email")
       end
 
       unless search_params[:phone].blank?
-        @q = @q.select("people.*, phone_numbers.*")
-        .joins("LEFT JOIN phone_numbers AS phones ON phones.person_id = people.id")
+        @q = @q.joins("LEFT JOIN phone_numbers AS phones ON phones.person_id = people.id")
         .where("phones.number LIKE :search", {:search => "%#{search_params[:phone]}%"})
         sort_by.unshift("phones.number")
       end
@@ -571,7 +557,6 @@ class PeopleController < ApplicationController
         sort_by.unshift("last_name asc")
       end
     end
-
     @q = @q.where(id: current_organization.people.archived(current_organization.id).collect(&:id)) unless params[:archived].blank?
 
     @q_sort = Person.where('1 <> 1').search(params[:search])
@@ -586,9 +571,9 @@ class PeopleController < ApplicationController
         a = a.reverse
         a = a.uniq_by { |a| a.id }
         a = a.reverse
+        @all_people = @all_people.uniq_by { |a| a.id }
       end
       @all_people = a + @q.result(distinct: false).order_alphabetically_by_non_default_role(order, role_tables_joint)
-      @all_people = @all_people.uniq_by { |a| a.id }
     end
 
     @all_people = @all_people.where(id: current_organization.people.archived.where("organizational_roles.archive_date > ? AND organizational_roles.archive_date < ?", params[:archived_date], (params[:archived_date].to_date+1).strftime("%Y-%m-%d")).collect{|x| x.id}) unless params[:archived_date].blank?
