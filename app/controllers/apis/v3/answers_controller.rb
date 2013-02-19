@@ -14,7 +14,9 @@ class Apis::V3::AnswersController < Apis::V3::BaseController
   def create
     person = current_organization.people.find(params[:person_id])
     answer_sheet = person.answer_sheet_for_survey(params[:survey_id])
-    answer_sheet.save_survey
+    answer_sheet.save_survey(params[:answers])
+    render json: person,
+       callback: params[:callback]
   end
 
   private
