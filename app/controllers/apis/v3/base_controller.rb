@@ -35,7 +35,7 @@ class Apis::V3::BaseController < ApplicationController
       if oauth_access_token
         @current_user = User.from_access_token(oauth_access_token)
       else
-        @current_user = current_organization.admins.first.try(:user)
+        @current_user = current_organization.parent_organization_admins.first.try(:user)
       end
     end
     @current_user
@@ -48,7 +48,9 @@ class Apis::V3::BaseController < ApplicationController
         @current_organization = params[:organization_id] ? api_org.root.subtree.find(params[:organization_id]) : api_org
       else
         api_org = Rack::OAuth2::Server::Client.find_by_secret(params[:secret]).try(:organization)
-        @current_organization = params[:organization_id] ? api_org.subtree.find(params[:organization_id]) : api_org
+        if api_org
+          @current_organization = params[:organization_id] ? api_org.subtree.find(params[:organization_id]) : api_org
+        end
       end
     end
     @current_organization
