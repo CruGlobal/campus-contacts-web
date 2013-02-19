@@ -78,7 +78,11 @@ class Organization < ActiveRecord::Base
   end
 
   def sms_gateway
-    settings[:sms_gateway] || 'twilio'
+    return settings[:sms_gateway] if settings[:sms_gateway]
+    ancestors.reverse.each do |org|
+      return org.settings[:sms_gateway] if org.settings[:sms_gateway].present?
+    end
+    return 'twilio'
   end
 
   def pending_transfer
