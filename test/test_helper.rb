@@ -1,10 +1,10 @@
 ENV["RAILS_ENV"] = "test"
- # require 'simplecov'
- # SimpleCov.start 'rails' do
- #   add_filter "vendor"
- #   add_filter 'app/controllers/api'
- #   merge_timeout 36000
- # end
+# require 'simplecov'
+# SimpleCov.start 'rails' do
+#   add_filter "vendor"
+#   add_filter 'app/controllers/api'
+#   merge_timeout 36000
+# end
 
 require File.expand_path('../../config/environment', __FILE__)
 require 'rack/oauth2/server'
@@ -18,7 +18,7 @@ require 'webmock/test_unit'
 require "strip_attributes/shoulda"
 
 # EphemeralResponse.activate
-# 
+#
 # EphemeralResponse.configure do |config|
 #   config.fixture_directory = "test/fixtures/ephemeral_response"
 #   config.white_list = 'localhost'
@@ -33,7 +33,7 @@ class ActiveSupport::TestCase
   # Note: You'll currently still have to declare fixtures explicitly in integration tests
   # -- they do not yet inherit this setting
   # fixtures :all
-  # Add more helper methods to be used by all tests here... 
+  # Add more helper methods to be used by all tests here...
   Role.admin
   Role.leader
   Role.contact
@@ -68,9 +68,9 @@ end
 def admin_user_login_with_org
   @user = Factory(:user_with_auxs)
   @org = @user.person.organizations.first
-  
+
   @request.session[:current_organization_id] = @org.id
-  
+
   sign_in @user
   return @user, @org
 end

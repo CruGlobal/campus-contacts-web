@@ -1023,4 +1023,46 @@ class ContactsControllerTest < ActionController::TestCase
       assert !assigns(:people).include?(Person.where(first_name: "Neil", last_name: "dela Cruz").first)
     end
   end
+
+  context "fetching contacts_all" do
+    setup do
+      @user, @org = admin_user_login_with_org
+      @predefined_survey = Factory(:survey, organization: @org)
+      APP_CONFIG['predefined_survey'] = @predefined_survey.id
+    end
+    should "return all contacts without paging" do
+      (1..50).each do
+        contact = Factory(:person)
+        @org.add_contact(contact)
+      end
+      xhr :get, :contacts_all
+      assert_equal 51, assigns(:all_people).count.count
+    end
+  end
+
+  context "autosuggest" do
+    setup do
+      @user, @org = admin_user_login_with_org
+      @predefined_survey = Factory(:survey, organization: @org)
+      APP_CONFIG['predefined_survey'] = @predefined_survey.id
+      @contact1 = Factory(:person, phone_number: '445566778', email:'abcd@email.com')
+      @contact2 = Factory(:person, phone_number: '112233445', email:'cdef@email.com')
+      @contact3 = Factory(:person, phone_number: '566778899', email:'efgh@email.com')
+      @org.add_contact(@contact1)
+      @org.add_contact(@contact2)
+      @org.add_contact(@contact3)
+    end
+    should "return matching phone numbers" do
+      xhr :get, :auto_suggest_send_text, {:q => "77"}
+      assert assigns(:people).include?(@contact1)
+      assert !assigns(:people).include?(@contact2)
+      assert assigns(:people).include?(@contact3)
+    end
+    should "return matching emails" do
+      xhr :get, :auto_suggest_send_email, {:q => "cd"}
+      assert assigns(:people).include?(@contact1)
+      assert assigns(:people).include?(@contact2)
+      assert !assigns(:people).include?(@contact3)
+    end
+  end
 end
