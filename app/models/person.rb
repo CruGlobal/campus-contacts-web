@@ -986,12 +986,18 @@ class Person < ActiveRecord::Base
     find_existing_person_by_email(email_address.email)
   end
 
+  def self.find_existing_person_by_fb_uid(fb_uid)
+    return unless fb_uid.present?
+    Person.where(fb_uid: fb_uid).first
+  end
+
   def self.find_existing_person(person)
-    other_person = find_existing_person_by_email_address(person.email_addresses.first)
+    other_person = find_existing_person_by_fb_uid(person.fb_uid)
+    other_person ||= find_existing_person_by_email_address(person.email_addresses.first)
     person.phone_numbers.each do |phone_number|
       other_person ||= find_existing_person_by_name_and_phone({first_name: person.first_name,
                                                                last_name: person.last_name,
-                                                               number: phone_number.number.first})
+                                                               number: phone_number.number})
     end
 
     if other_person
