@@ -568,4 +568,11 @@ class PersonTest < ActiveSupport::TestCase
       assert_equal user.person.admin_of_org_ids.sort, [user.person.organizations.first.id, child_org.id].sort
     end
   end
+
+  should 'find an existing person based on name and phone number' do
+    person = Factory(:person)
+    person.phone_number = '555-555-5555'
+
+    assert_equal(person, Person.find_existing_person(person))
+  end
 end

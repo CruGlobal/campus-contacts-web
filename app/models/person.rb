@@ -967,7 +967,7 @@ class Person < ActiveRecord::Base
     find_existing_person(person)
   end
   def self.find_existing_person_by_name_and_phone(opts = {})
-    opts[:number] = PhoneNumber.strip_us_country_code(opts[:number])
+    opts[:number] = PhoneNumber.strip_us_country_code(opts[:number]) if opts[:number].present?
     return unless opts.slice(:first_name, :last_name, :number).all? {|_, v| v.present?}
 
     Person.where(first_name: opts[:first_name], last_name: opts[:last_name], 'phone_numbers.number' => opts[:number]).
@@ -988,6 +988,11 @@ class Person < ActiveRecord::Base
 
   def self.find_existing_person(person)
     other_person = find_existing_person_by_email_address(person.email_addresses.first)
+    person.phone_numbers.each do |phone_number|
+      other_person ||= find_existing_person_by_name_and_phone({first_name: person.first_name,
+                                                               last_name: person.last_name,
+                                                               number: phone_number.number.first})
+    end
 
     if other_person
       person.phone_numbers.each do |phone_number|
