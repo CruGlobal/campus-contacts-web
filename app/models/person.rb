@@ -177,6 +177,12 @@ class Person < ActiveRecord::Base
     :order => "ISNULL(ass.updated_at), MAX(ass.updated_at) #{order.include?("asc") ? 'ASC' : 'DESC'}"
   }}
 
+  scope :find_by_survey_updated_by_daterange, lambda { |date_from, date_to, org_id| {
+    :joins => "LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM answer_sheets ass INNER JOIN surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = '#{org_id}' ORDER BY ass.updated_at DESC) ass ON ass.person_id = people.id",
+    :group => "people.id",
+    :having => ["DATE(MAX(ass.updated_at)) >= ? AND DATE(MAX(ass.updated_at)) <= ? ", date_from, date_to]
+  }}
+  
   def contact_role_for_org(org)
     organizational_roles.where("organizational_roles.organization_id = ? AND organizational_roles.role_id = ?", org.id, Role::CONTACT_ID).first
   end

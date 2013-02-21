@@ -142,6 +142,7 @@ en:
     label_search_help: If you selected two labels such as "Admin" and "Leader", <b>"ANY"</b> would give you people with EITHER label while <b>"ALL"</b> would narrow the search by giving you only those people with BOTH labels.<br/><br/><b>"ANY"</b> uses the Boolean logic "OR" to broaden the search.<br/><br/><b>"ALL"</b> use the Boolean "AND" to narrow the search.
     label_select_description: List contacts that have %{element} of the following labels applied to them.
     label_clear_selected: Clear Selected Labels
+    label_search_last_survey: Last Survey 
     contacts_updated_from: 'Contacts Updated From'
     dash: ' - '
   leaders:

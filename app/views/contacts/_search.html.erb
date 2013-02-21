@@ -26,20 +26,21 @@
         <%= radio_button_tag :gender, '0', params[:gender] == '0' %> <%= t('general.female') %>
         <%= radio_button_tag :gender, '', params[:gender] == '' %> <%= t('general.both') %>
       </div>
+      <br/>
       <div class="field">
-       <label for="contacts_updated"><span class="title"><%= t('general.contacts_updated_from') %></span></label>
-       <%= text_field_tag :person_updated_from %>
-        <%= t('general.dash') %>
-       <%= text_field_tag :person_updated_to %>
+        <label for="survey"><span class="title"><%= t('general.survey') %></span></label>
+        <%= select_tag :survey, options_for_select(current_organization.surveys.order(:title).collect {|s| [s, s.id]}, params[:survey]), :prompt => "All" %>
       </div>
-      </br>
       <div class="field">
         <label for="status"><span class="title"><%= t('general.status') %></span></label>
         <%= select_tag :status, options_for_select(OrganizationalRole::FOLLOWUP_STATUSES.collect {|s| [s.titleize, s]}, params[:status]), include_blank: true %>
       </div>
+      <br/>
       <div class="field">
-        <label for="survey"><span class="title"><%= t('general.survey') %></span></label>
-        <%= select_tag :survey, options_for_select(current_organization.surveys.order(:title).collect {|s| [s, s.id]}, params[:survey]), include_blank: true %>
+       <label for="contacts_updated"><span class="title"><%= t('general.label_search_last_survey') %></span></label>
+       <%= text_field_tag :survey_updated_from, params[:survey_updated_from], :autocomplete => :off %>
+        <b><%= t('general.dash') %></b> 
+       <%= text_field_tag :survey_updated_to, params[:survey_updated_to], :autocomplete => :off %> (MM/DD/YYYY)
       </div>
       </br>
       <div class="field">
