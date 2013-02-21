@@ -5,14 +5,21 @@
   </li>
   <% @all_saved_contact_searches.each do |s| %>
     <li class="saved_search">
-      <span class="name">
-        <%= link_to s.name, s.full_path %>
-      </span>
-      <%= link_to('x', saved_contact_search_path(s),
-        method: :delete, remote: true, class: 'delete_leader',
-        confirm: t('contacts.index.delete_search_confirm')) %>
-      <%= link_to(image_tag("edit.png"),
-        s.full_path + t('contacts.index.edit_true'), class: 'edit_search') %>
+    	<div class="overflow_hidden">
+    		<div class="left name_container tipitright" title="<%= s.name %>">
+				  <%= link_to truncate(s.name, length: 25, omission: "..."), s.full_path %>
+    		</div>
+    		<div class="right overflow_hidden action_container">
+	  			<div class="right">
+						<%= link_to('x', saved_contact_search_path(s),
+							method: :delete, remote: true, class: 'delete_leader',
+							confirm: t('contacts.index.delete_search_confirm')) %>
+					</div>
+					<div class="left">
+						<%= link_to(image_tag("edit.png"), s.full_path, class: 'edit_search') %>
+					</div>
+    		</div>
+    	</div>
     </li>
   <% end %>
 <% end %>
