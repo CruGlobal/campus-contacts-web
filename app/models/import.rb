@@ -106,7 +106,7 @@ class Import < ActiveRecord::Base
         raise ActiveRecord::Rollback
       else
         # Send success email
-        table = create_table(new_person_ids)
+        table = create_table(new_person_ids, get_new_people)
         ImportMailer.import_successful(current_user, table).deliver
       end
     end
@@ -137,7 +137,19 @@ class Import < ActiveRecord::Base
     answer_sheet = AnswerSheet.new(person: person)
     predefined = Survey.find(APP_CONFIG['predefined_survey'])
     predefined.elements.where('object_name is not null').each do |question|
-      question.set_response(row[:answers][question.id], answer_sheet)
+    	answer = row[:answers][question.id]
+    	if answer.present?
+    		#set response
+	    	question.set_response(answer, answer_sheet) 
+	    	
+	    	#create unique phone number but not a primary
+	    	if question.attribute_name == "phone_number"
+	    		numbers = person.phone_numbers	    		
+	    		if numbers.find_by_primary(true).present?
+    				person.phone_numbers.create(number: answer, primary: false) unless numbers.where("number = ?", answer).present?
+	    		end
+	    	end
+	   	end
     end
 
     if person.save
@@ -154,39 +166,27 @@ class Import < ActiveRecord::Base
   end
 
   private
-
-  def create_table(new_person_ids)
+  
+  def create_table(new_person_ids, excel_answers)
     @answered_question_ids = header_mappings.values.reject{ |c| c.empty? || c == 'do_not_import' }.collect(&:to_i)
-    #puts answered_question_ids.inspect
-    predefined_question_ids = Survey.find(APP_CONFIG['predefined_survey']).elements.collect(&:id)
-    #puts Survey.find(APP_CONFIG['predefined_survey']).elements.inspect
-    answered_survey_ids = SurveyElement.where(element_id: @answered_question_ids).pluck(:survey_id).uniq
-    #answer_sheet_ids = AnswerSheet.where(survey_id: answered_survey_ids)
 
     @table = []
-    title = []
+    questions = []
     @answered_question_ids.each do |a|
-      title << Element.find(a).label
+      questions << Element.find(a).label
     end
-
-    @table << title
-
-    Person.find(new_person_ids).each do |p|
-      answers = []
-      answer_sheet_ids = p.answer_sheets.where(survey_id: answered_survey_ids).collect(&:id)
-      @answered_question_ids.each do |a|
-
-        if predefined_question_ids.include? a
-          answers << p.send(Element.find(a).attribute_name)
-        else
-          a = Answer.where(question_id: a, answer_sheet_id: answer_sheet_ids).first.nil? ? "" : Answer.where(question_id: a, answer_sheet_id: answer_sheet_ids).first.value
-
-          answers << a
-        end
-      end
-      @table << answers
-    end
-    @table
+    @table << questions
+    
+    if excel_answers.present?
+		  excel_answers.each do |new_person|
+	  		all_answers = []
+		  	@answered_question_ids.each do |q|
+		  		all_answers << new_person[:answers][q]
+		  	end
+	  		@table << all_answers
+		  end
+		end
+		@table
   end
 
   def parse_headers
