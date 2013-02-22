@@ -335,7 +335,7 @@ $('#send_bulkemail_link_new').live 'click', (e)->
   $('.bulk-msg').removeClass('bulk-text')
   $('.bulk-msg').attr('action', '/people/bulk_email')
   $('#bulk_send_msg_dialog').dialog({title: 'Send Email'})
-
+  
   ids = []
   fails = []
   $('.id_checkbox:checked').each ->
@@ -356,12 +356,10 @@ $('#send_bulkemail_link_new').live 'click', (e)->
     $('#bulk_send_msg_error').hide()
 
   $('#bulk_send_msg_dialog').dialog('open')
-  $('#bulk_send_msg_dialog #bulk_send_body').simplyCountable({
-    maxCount: 999999,
-    counter: '#bulk_send_msg_dialog #char_counter'
-  })
   $('#bulk_send_msg_dialog #char_counter').hide()
   $('#bulk_send_msg_dialog #bulk_send_body').focus()
+  $('#bulk_send_msg_dialog #sms_compose_message_preview').hide()
+  $('#bulk_send_msg_dialog #bulk_send_body').off()
   false
 
 
@@ -378,7 +376,7 @@ $('#send_bulksms_link_new').live 'click', (e)->
   $('.bulk-msg').removeClass('bulk-email')
   $('.bulk-msg').attr('action', '/people/bulk_sms')
   $('#bulk_send_msg_dialog').dialog({title: 'Send Text'})
-
+      
   ids = []
   fails = []
   $('.id_checkbox:checked').each ->
@@ -398,9 +396,20 @@ $('#send_bulksms_link_new').live 'click', (e)->
   else
     $('#bulk_send_msg_error').hide()
   $('#bulk_send_msg_dialog').dialog('open')
+  
+  $('#sms_compose_message_preview').show()
+  $('#preview_body').html('')
+  $('#bulk_send_msg_dialog #bulk_send_body').keyup ->
+    $('#preview_body').html($(this).val())
+    
+  total_chars = 0  
+  $('.message_desc').each ->
+  	  total_chars += $(this).length
+  total_headers = $('#preview_from').html().length + total_chars
+  
   $('#bulk_send_msg_dialog #char_counter').show()
   $('#bulk_send_msg_dialog #bulk_send_body').simplyCountable({
-    maxCount: 140,
+    maxCount: 140 - total_headers,
     counter: '#bulk_send_msg_dialog #char_counter'
   })
   $('#bulk_send_msg_dialog #char_counter').show()
