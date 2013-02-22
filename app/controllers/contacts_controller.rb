@@ -398,6 +398,14 @@ class ContactsController < ApplicationController
               term = v
             end
 
+						if term =~ /^([1-9]|0[1-9]|1[012])\/([1-9]|0[1-9]|[12][1-9]|3[01])\/(19|2\d)\d\d$/
+							begin
+								get_date = term.split('/')
+								term = Date.parse("#{get_date[2]}-#{get_date[0]}-#{get_date[1]}").strftime("%Y-%m-%d")
+							rescue
+							end
+						end
+						
             # If this question is assigned to a column, we need to handle that differently
             if question.object_name.present?
               table_name = case question.object_name
@@ -409,17 +417,12 @@ class ContactsController < ApplicationController
                   @people_scope = @people_scope.joins(:phone_numbers).where("#{PhoneNumber.table_name}.number like ?", term) unless v.strip.blank?
                 when 'address1', 'city', 'state', 'country', 'dorm', 'room', 'zip'
                   @people_scope = @people_scope.joins(:current_address).where("#{Address.table_name}.#{question.attribute_name} like ?", term) unless v.strip.blank?
+                when 'graduation_date'
+                	table = "#{Person.table_name}.#{question.attribute_name}"
+	              	where_query = term =~ /^\d{4}$/ ? "YEAR(#{table})" : table
+									@people_scope = @people_scope.where("#{where_query} like ?", term) unless v.strip.blank?
                 else
-                  if term =~ /^([1-9]|0[1-9]|1[012])\/([1-9]|0[1-9]|[12][1-9]|3[01])\/(19|2\d)\d\d$/
-                    begin
-											get_date = term.split('/')
-											term = Date.parse("#{get_date[2]}-#{get_date[0]}-#{get_date[1]}").strftime("%Y-%m-%d")
-										rescue
-										end
-  								end
-                  unless v.strip.blank?
-                    @people_scope = @people_scope.where("#{Person.table_name}.#{question.attribute_name} LIKE ?", term)
-                  end
+									@people_scope = @people_scope.where("#{Person.table_name}.#{question.attribute_name} like ?", term) unless v.strip.blank?
                 end
               end
             else
