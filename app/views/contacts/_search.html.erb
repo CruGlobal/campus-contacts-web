@@ -91,7 +91,7 @@
           <%= submit_tag t('general.search') %>
           </td>
           <td>
-          <% if params[:do_search] == "1" && @people.length > 0 %>
+          <% if (params[:do_search] == "1" || params[:search] == "1") && @people.length > 0 %>
             <%= button_to "Save Search","", :id=>"savesearchbtn" %>
             <div id="savesearchbox" style="display:none" title="<%= t('contacts.index.save_this_search') %>" >
               <%= form_for(@saved_contact_search, html: {id: 'save_search_form'}) do |f| %>
