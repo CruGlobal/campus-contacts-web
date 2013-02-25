@@ -374,7 +374,7 @@ $ ->
         .appendTo( ul );
 
 
-  $('#assign_search .leader_search_name').keyup ->
+  $('#assign_search .leader_search_name').live 'keyup', ->
     name = $(this).val()
     $('#assign_search ul li').each ->
       regex = new RegExp('.*' + name + '.*', 'i')
@@ -392,7 +392,7 @@ $ ->
       complete: ->
         $('#spinner_org_search').hide()
 
-  $('#assign_search .group_search_name').keyup ->
+  $('#assign_search .group_search_name').live 'keyup', ->
     name = $(this).val()
     $('#assign_search ul li').each ->
       regex = new RegExp('.*' + name + '.*', 'i')
@@ -401,7 +401,7 @@ $ ->
       else
         $(this).hide()
 
-  $('#assign_search .label_search_name').keyup ->
+  $('#assign_search .label_search_name').live 'keyup', ->
     name = $(this).val()
     $('#assign_search ul li').each ->
       regex = new RegExp('.*' + name + '.*', 'i')
@@ -531,22 +531,23 @@ $ ->
           $(this).dialog('destroy')
     false
 
-  $('#leader_search_name').autocomplete
-    source: (request, response)->
-      form = $('#leader_search_form')
-      $('#spinner_leader_search').show()
-      $.ajax
-        url: form.attr('action'),
-        data: form.serialize(),
-        type: 'GET',
-        success: (data)->
-          $('#leader_search_results').html(data)
-          $("#leader_search_results").show()
-        complete: ->
-          $('#spinner_leader_search').hide()
-        error: (xhr, status, error)->
-          $.e(error)
-      response([])
+  $('#leader_search_name').live 'keyup', ->
+    $(this).autocomplete
+      source: (request, response)->
+        form = $('#leader_search_form')
+        $('#spinner_leader_search').show()
+        $.ajax
+          url: form.attr('action'),
+          data: form.serialize(),
+          type: 'GET',
+          success: (data)->
+            $('#leader_search_results').html(data)
+            $("#leader_search_results").show()
+          complete: ->
+            $('#spinner_leader_search').hide()
+          error: (xhr, status, error)->
+            $.e(error)
+        response([])
 
   $('#contacts_controller .controls a.mineunassign').live 'click', ->
   	$(this).closest('tr').fadeOut()
