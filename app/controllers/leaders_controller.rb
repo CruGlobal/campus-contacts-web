@@ -21,7 +21,7 @@ class LeadersController < ApplicationController
 
   def search
     if params[:name].present?
-      scope = Person.search_by_name(params[:name], current_person.orgs_with_children.collect(&:id))
+      scope = Person.search_by_name(params[:name], [current_organization.id])
       @people = scope.includes(:user)
       if params[:show_all].to_s == 'true'
         @total = @people.all.length
