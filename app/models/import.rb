@@ -132,7 +132,8 @@ class Import < ActiveRecord::Base
       question_set.post(row[:answers], answer_sheet)
       question_sets << question_set
     end
-
+		
+		new_phone_numbers = []
     # Set values for predefined questions
     answer_sheet = AnswerSheet.new(person: person)
     predefined = Survey.find(APP_CONFIG['predefined_survey'])
@@ -146,7 +147,7 @@ class Import < ActiveRecord::Base
 	    	if question.attribute_name == "phone_number"
 	    		numbers = person.phone_numbers	    		
 	    		if numbers.find_by_primary(true).present?
-    				person.phone_numbers.create(number: answer, primary: false) unless numbers.where("number = ?", answer).present?
+    				new_phone_numbers << person.phone_numbers.new(number: answer, primary: false) unless numbers.where("number = ?", answer).present?
 	    		end
 	    	end
 	   	end
@@ -154,6 +155,7 @@ class Import < ActiveRecord::Base
 
     if person.save
       question_sets.map { |qs| qs.save }
+      new_phone_numbers.map { |pn| pn.save if pn.number.present? }
       contact_role = create_contact_at_org(person, current_organization)
       # contact_role.update_attribute('followup_status','uncontacted') # Set default
     end
