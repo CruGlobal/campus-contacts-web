@@ -150,7 +150,7 @@ class User < ActiveRecord::Base
   end
 
   def has_role?(role_id, organization)
-    OrganizationalRole.where(role_id: role_id, organization_id: organization.id).first.present?
+    person && OrganizationalRole.where(role_id: role_id, organization_id: organization.id, person_id: person.id).first.present?
   end
 
   def person_id

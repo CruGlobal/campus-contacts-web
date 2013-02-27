@@ -53,21 +53,57 @@ class ContactsController < ApplicationController
   end
 
   def auto_suggest_send_email
-    term = params[:q].try(:strip)
-    @people = current_organization.people.email_search(term, current_organization.id).uniq
-    @people = @people.archived_not_included unless params[:include_archived].present?
-    respond_to do |format|
-      format.json { render json: @people.collect{|p| {name: "#{p.name} - #{p.email.downcase}", id: p.id}}.to_json }
-    end
+    term = params[:q].try(:strip).downcase
+    
+		# Search - enable "All contacts" for admins
+		all_contacts = is_admin? && term =~ /all/ ? [{:name=>"All (#{current_organization.all_people.count})", :id=>"ALL-PEOPLE"}] : []
+		  
+		# Search Roles
+		roles = current_organization.role_search(term)
+		get_and_merge_unfiltered_people
+		roles_results = roles.collect{|p| {name: "#{p.name} (#{@people_unfiltered.where("role_id = ?", p.id).count})", id: "ROLE-#{p.id}"}}
+		
+		# Search Groups
+		groups = current_organization.group_search(term)
+		groups_results = groups.collect{|p| {name: "#{p.name} (#{p.group_memberships.count})", id: "GROUP-#{p.id}"}}
+		  
+		# Search People
+		people = current_organization.people.email_search(term, current_organization.id).uniq
+		people = people.archived_not_included unless params[:include_archived].present?
+		people_results = people.collect{|p| {name: "#{p.name} - #{p.email.downcase}", id: p.id.to_s}}
+		
+		results = all_contacts + roles_results + groups_results + people_results
+		
+		respond_to do |format|
+		  format.json { render json: results.to_json }
+		end
   end
 
   def auto_suggest_send_text
-    term = params[:q].try(:strip)
-    @people = current_organization.people.phone_search(term, current_organization.id).uniq
-    @people = @people.archived_not_included unless params[:include_archived].present?
-    respond_to do |format|
-      format.json { render json: @people.collect{|p| {name: "#{p.name} - #{p.primary_phone_number.pretty_number}", id: p.id}}.to_json }
-    end
+    term = params[:q].try(:strip).downcase
+
+		# Search - enable "All contacts" for admins
+		all_contacts = is_admin? && term =~ /all/ ? [{:name=>"All (#{current_organization.all_people.count})", :id=>"ALL-PEOPLE"}] : []		  
+		
+		# Search Roles
+		roles = current_organization.role_search(term)
+		get_and_merge_unfiltered_people
+		roles_results = roles.collect{|p| {name: "#{p.name} (#{@people_unfiltered.where("role_id = ?", p.id).count})", id: "ROLE-#{p.id}"}}
+		
+		# Search Groups
+		groups = current_organization.group_search(term)
+		groups_results = groups.collect{|p| {name: "#{p.name} (#{p.group_memberships.count})", id: "GROUP-#{p.id}"}}
+		  
+		# Search People
+    people = current_organization.people.phone_search(term, current_organization.id).uniq
+    people = people.archived_not_included unless params[:include_archived].present?
+		people_results = people.collect{|p| {name: "#{p.name} - #{p.primary_phone_number.pretty_number}", id: p.id.to_s}}
+				
+		results = all_contacts + roles_results + groups_results + people_results
+		
+		respond_to do |format|
+		  format.json { render json: results.to_json }
+		end
   end
 
   def mine

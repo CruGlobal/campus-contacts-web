@@ -298,9 +298,27 @@ class PeopleController < ApplicationController
 
   def bulk_email
     authorize! :lead, current_organization
-    to_ids = params[:to].split(',').uniq
-
-    to_ids.each do |id|
+    to_ids = params[:to]
+		
+		person_ids = []
+		if to_ids.present?
+			ids = to_ids.split(',').uniq
+			ids.each do |id|
+				if id.upcase =~ /GROUP-/	
+					group = Group.find_by_id_and_organization_id(id.gsub("GROUP-",""), current_organization.id)
+					group.group_memberships.collect{|p| person_ids << p.person_id.to_s } if group.present?
+				elsif id.upcase =~ /ROLE-/
+					role = Role.find(id.gsub("ROLE-",""))
+					role.members_from_role_org(current_organization.id).collect{|p| person_ids << p.person_id.to_s } if role.present?
+				elsif id.upcase =~ /ALL-PEOPLE/
+					current_organization.all_people.collect{|p| person_ids << p.id.to_s} if is_admin?
+				else
+					person_ids << id
+				end
+			end
+		end
+		
+    person_ids.uniq.each do |id|
       person = Person.find_by_id(id)
       PeopleMailer.enqueue.bulk_message(person.email, current_person.email, params[:subject], params[:body]) if person.present? && person.email.present?
     end
@@ -310,15 +328,33 @@ class PeopleController < ApplicationController
 
   def bulk_sms
     authorize! :lead, current_organization
-    to_ids = params[:to].split(',').uniq
-    Person.find(to_ids).each do |person|
-      if person.primary_phone_number
+    to_ids = params[:to]
+    
+		person_ids = []
+		if to_ids.present?
+			ids = to_ids.split(',').uniq
+			ids.each do |id|
+				if id.upcase =~ /GROUP-/	
+					group = Group.find_by_id_and_organization_id(id.gsub("GROUP-",""), current_organization.id)
+					group.group_memberships.collect{|p| person_ids << p.person_id.to_s } if group.present?
+				elsif id.upcase =~ /ROLE-/
+					role = Role.find(id.gsub("ROLE-",""))
+					role.members_from_role_org(current_organization.id).collect{|p| person_ids << p.person_id.to_s } if role.present?
+				elsif id.upcase =~ /ALL-PEOPLE/
+					current_organization.all_people.collect{|p| person_ids << p.id.to_s} if is_admin?
+				else
+					person_ids << id
+				end
+			end
+		end
+		
+    person_ids.uniq.each do |id|
+    	person = Person.find(id)
+      if person.present? && person.primary_phone_number
         if person.primary_phone_number.email_address.present?
           # Use email to sms if we have it
-          from_email = current_person.primary_phone_number && current_person.primary_phone_number.email_address.present? ?
-            current_person.primary_phone_number.email_address : current_person.email
+          from_email = current_person.primary_phone_number && current_person.primary_phone_number.email_address.present? ? current_person.primary_phone_number.email_address : current_person.email
           @sent_sms = SmsMailer.enqueue.text(person.primary_phone_number.email_address, "#{current_person.to_s} <#{from_email}>", params[:body])
-
         else
           # Otherwise send it as a text
           @sent_sms = SentSms.create!(message: params[:body], recipient: person.phone_number, sent_via: current_organization.sms_gateway)

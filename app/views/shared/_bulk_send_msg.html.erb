@@ -4,8 +4,8 @@
       <label><%= t('general.recipients') %></label>
       <%= hidden_field_tag :to %>
 
-      <%= text_field_tag :send_email_to, "", id: 'send_email_to', autocomplete: 'off' %>
-      <%= text_field_tag :send_text_to, "", id: 'send_text_to', autocomplete: 'off' %>
+      <%= text_field_tag :send_email_to, "", id: 'send_email_to', autocomplete: 'off', "data-search-desc" => is_admin? ? t('general.email_autocomplete_description_admin') : t('general.email_autocomplete_description') %>
+      <%= text_field_tag :send_text_to, "", id: 'send_text_to', autocomplete: 'off', "data-search-desc" => is_admin? ? t('general.sms_autocomplete_description_admin') : t('general.sms_autocomplete_description') %>
 
       <%= hidden_field_tag 'followup_comment[organization_id]', current_organization.id %>
       <%= hidden_field_tag 'followup_comment[commenter_id]', current_user.person.id %>

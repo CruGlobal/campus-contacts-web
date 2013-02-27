@@ -50,7 +50,12 @@ var DEFAULT_SETTINGS = {
     onResult: null,
     onAdd: null,
     onDelete: null,
-    onReady: null
+    onReady: null,
+    
+ 	//Custom
+ 		placeHolder: "",
+ 		placeHolderWidth: "30",
+ 		inputDefaultWidth: "30"
 };
 
 // Default classes to use when theming
@@ -190,16 +195,26 @@ $.TokenList = function (input, url_or_data, settings) {
             outline: "none"
         })
         .attr("id", settings.idPrefix + input.id)
+        .attr("placeholder", settings.placeHolder)
         .focus(function () {
+	        	check_width();
             if (settings.tokenLimit === null || settings.tokenLimit !== token_count) {
                 show_dropdown_hint();
             }
         })
-        .blur(function () {
+        .blur(function () {	
             hide_dropdown();
             $(this).val("");
+        		if(token_count >= 1){
+	        		default_resize_input();
+        		}else{
+  	      		placehoder_resize_input();
+        		}
         })
         .bind("keyup keydown blur update", resize_input)
+        .keyup(function(){
+        	check_width();
+        })
         .keydown(function (event) {
             var previous_token;
             var next_token;
@@ -429,6 +444,45 @@ $.TokenList = function (input, url_or_data, settings) {
         }
     }
 
+    function check_width() {
+      	if(input_box.val() == 0 || token_count == 0){
+      		input_box.css("width", settings.placeHolderWidth);
+      		input_box.attr("placeholder", settings.placeHolder);
+      	}
+      	
+      	if(input_box.val() == 1 || token_count >= 1){
+      		resize_input();
+      	}
+    }
+    
+    
+    function default_resize_input() {
+        if(input_val === (input_val = input_box.val())) {return;}
+
+        // Enter new content into resizer and resize input accordingly
+        var escaped = input_val.replace(/&/g, '&amp;').replace(/\s/g,' ').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        input_resizer.html(escaped);
+        input_box.width(settings.inputDefaultWidth);
+    }
+    
+    function placehoder_resize_input() {
+        if(input_val === (input_val = input_box.val())) {return;}
+
+        // Enter new content into resizer and resize input accordingly
+        var escaped = input_val.replace(/&/g, '&amp;').replace(/\s/g,' ').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        input_resizer.html(escaped);
+        input_box.width(settings.placeHolderWidth);
+    }
+    
+    function default_resize_input() {
+        if(input_val === (input_val = input_box.val())) {return;}
+
+        // Enter new content into resizer and resize input accordingly
+        var escaped = input_val.replace(/&/g, '&amp;').replace(/\s/g,' ').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        input_resizer.html(escaped);
+        input_box.width(settings.inputDefaultWidth);
+    }
+    
     function resize_input() {
         if(input_val === (input_val = input_box.val())) {return;}
 
@@ -520,7 +574,9 @@ $.TokenList = function (input, url_or_data, settings) {
 
         // Don't show the help dropdown, they've got the idea
         hide_dropdown();
-
+				
+				check_width();
+				
         // Execute the onAdd callback if defined
         if($.isFunction(callback)) {
             callback.call(hidden_input,item);
@@ -606,6 +662,7 @@ $.TokenList = function (input, url_or_data, settings) {
                 .focus();
         }
 
+				check_width();
         // Execute the onDelete callback if defined
         if($.isFunction(callback)) {
             callback.call(hidden_input,token_data);
