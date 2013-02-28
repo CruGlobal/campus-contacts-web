@@ -24,12 +24,7 @@ class Role < ActiveRecord::Base
   }}
 
   scope :non_default_roles_asc, lambda { {
-    :conditions => "i18n IS NULL OR i18n NOT IN #{self.default_roles_for_field_string(self::DEFAULT_ROLES)}",
-    :order => "roles.name ASC"
-  }}
-
-  scope :non_default_cru_roles_asc, lambda { {
-    :conditions => "i18n IS NULL OR i18n NOT IN #{self.default_roles_for_field_string(self::DEFAULT_CRU_ROLES)}",
+    :conditions => "i18n IS NULL",
     :order => "roles.name ASC"
   }}
 
@@ -97,7 +92,8 @@ class Role < ActiveRecord::Base
   ALUMNI_ID = alumni.id
 
   DEFAULT_ROLES = ["admin", "leader", "involved", "alumni", "contact"] # in DSC ORDER by SUPERIORITY
-  DEFAULT_CRU_ROLES = DEFAULT_ROLES + ["sent"]
+  CRU_ONLY_ROLES = ["sent"]
+  DEFAULT_CRU_ROLES = DEFAULT_ROLES + CRU_ONLY_ROLES
 
   ANY_SELECTED_LABEL = ["Any",1]
 	ALL_SELECTED_LABEL = ["All",2]

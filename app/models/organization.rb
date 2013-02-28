@@ -129,7 +129,7 @@ class Organization < ActiveRecord::Base
   end
 
   def non_default_roles
-    has_parent?(1) ? roles.non_default_cru_roles_asc : roles.non_default_roles_asc
+    roles.non_default_roles_asc
   end
 
   def parent_organization_admins
