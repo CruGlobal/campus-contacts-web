@@ -16,11 +16,11 @@ class ContactAssignmentFilter
     end
 
     if @filters[:assigned_to_id]
-      filtered = filtered.where('contact_assignments.assigned_to_id' => @filters[:assigned_to_id])
+      filtered = filtered.where('contact_assignments.assigned_to_id' => @filters[:assigned_to_id].split(','))
     end
 
     if @filters[:person_id]
-      filtered = filtered.where('contact_assignments.person_id' => @filters[:person_id])
+      filtered = filtered.where('contact_assignments.person_id' => @filters[:person_id].split(','))
     end
 
     filtered
