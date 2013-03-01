@@ -115,7 +115,7 @@ namespace :infobase do
         ccc_person.phone_numbers.each do |phone|
           mh_person.phone_number = phone.number unless mh_person.phone_numbers.detect {|p| p.number == phone.number}
         end
-        mh_person.save!(validate: false)
+        mh_person.save(validate: false)
       end
 
       team.add_admin(mh_person)
