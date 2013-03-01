@@ -5,7 +5,7 @@ class PersonFilter
     @filters = filters
 
     # strip extra spaces from filters
-    @filters.collect { |k, v| @filters[k] = v.strip }
+    @filters.collect { |k, v| @filters[k] = v.to_s.strip }
   end
 
   def filter(people)
