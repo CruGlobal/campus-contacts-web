@@ -33,7 +33,7 @@
       </div>
       <div class="field">
         <label for="status"><span class="title"><%= t('general.status') %></span></label>
-        <%= select_tag :status, options_for_select(OrganizationalRole::FOLLOWUP_STATUSES.collect {|s| [s.titleize, s]}, params[:status]), include_blank: true %>
+        <%= select_tag :status, options_for_select(OrganizationalRole::FOLLOWUP_STATUSES.collect {|s| [s.titleize, s]}, params[:status]), include_blank: true, :class=>"search_status"%>
       </div>
       <br/>
       <div class="field">
