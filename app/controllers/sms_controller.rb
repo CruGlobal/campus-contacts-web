@@ -28,7 +28,7 @@ class SmsController < ApplicationController
       @sent_sms = send_message(@msg, sms_params[:phone_number])
       render xml: @sent_sms.to_twilio and return
     when 'help'
-      @msg = 'MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to http://mhub.cc/terms for more help.'
+      @msg = 'MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to http://mhub.cc/terms for more help. Msg frequency depends on user.'
       @sent_sms = send_message(@msg, sms_params[:phone_number])
       render xml: @sent_sms.to_twilio and return
     when ''
