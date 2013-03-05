@@ -264,7 +264,7 @@ class ContactsController < ApplicationController
 
       # Get people
       build_people_scope
-      get_and_merge_unfiltered_people
+      get_and_merge_unfiltered_people unless params[:dnc] == 'true'
 
       # Filter results
       filter_archived_only if params[:archived].present?
@@ -309,7 +309,11 @@ class ContactsController < ApplicationController
             @people_scope = @organization.all_people
           end
         when 'unassigned'
-          @people_scope = @organization.unassigned_contacts
+          if params[:include_archived].present? && params[:include_archived] == 'true'
+            @people_scope = @organization.unassigned_contacts_with_archived
+          else
+            @people_scope = @organization.unassigned_contacts
+          end
           @header = I18n.t('contacts.index.unassigned')
         when 'no_activity'
           @people_scope = @organization.no_activity_contacts
@@ -394,7 +398,7 @@ class ContactsController < ApplicationController
       if params[:survey].present?
         @people_scope = @people_scope.joins(:answer_sheets).where("answer_sheets.survey_id" => params[:survey])
       end
-	    if params[:survey_updated_from].present? && params[:survey_updated_to].present?  
+	    if params[:survey_updated_from].present? && params[:survey_updated_to].present?
 	      @people_scope = @people_scope.find_by_survey_updated_by_daterange(format_date_for_search(params[:survey_updated_from]), format_date_for_search(params[:survey_updated_to]), current_organization.id)
 	    end
       if params[:first_name].present?
@@ -441,7 +445,7 @@ class ContactsController < ApplicationController
 							rescue
 							end
 						end
-						
+
             # If this question is assigned to a column, we need to handle that differently
             if question.object_name.present?
               table_name = case question.object_name

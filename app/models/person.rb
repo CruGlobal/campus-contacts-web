@@ -277,6 +277,18 @@ class Person < ActiveRecord::Base
     assigned_tos.where(organization_id: org.id)
   end
 
+  def assigned_contacts_limit_org(org)
+    assigned_id_list = ContactAssignment.where(assigned_to_id: id, organization_id: org.id).uniq
+    people = org.people.where(id: assigned_id_list.collect(&:person_id))
+    people.includes(:organizational_roles).where('organizational_roles.organization_id' => org.id, 'organizational_roles.archive_date' => nil)
+  end
+
+  def assigned_contacts_limit_org_with_archived(org)
+    assigned_id_list = ContactAssignment.where(assigned_to_id: id, organization_id: org.id).uniq
+    people = org.people.where(id: assigned_id_list.collect(&:person_id))
+    people.includes(:organizational_roles).where('organizational_roles.organization_id' => org.id)
+  end
+
   def has_similar_person_by_name_and_email?(email)
     Person.joins(:primary_email_address).where(first_name: first_name, last_name: last_name, 'email_addresses.email' => email).where("people.id != ?", id).first
   end

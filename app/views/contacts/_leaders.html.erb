@@ -22,22 +22,43 @@
   <% end %>
 </li>
 <li class="leader unassigned" data-id="">
-  <span class="name">
-    <%= link_to(t('contacts.index.unassigned'), contacts_path(assigned_to: 'unassigned')) %>
-  </span>
-  (<span id="unassigned_count" class="count"><%= @organization.unassigned_contacts.count %></span>)
+  <% if params[:include_archived] %>
+    <span class="name">
+      <%= link_to(t('contacts.index.unassigned'), contacts_path(assigned_to: 'unassigned', include_archived: 'true')) %>
+    </span>
+    (<%= @organization.unassigned_contacts_with_archived.count %>)
+  <% else %>
+    <span class="name">
+      <%= link_to(t('contacts.index.unassigned'), contacts_path(assigned_to: 'unassigned')) %>
+    </span>
+    (<%= @organization.unassigned_contacts.count %>)
+  <% end %>
 </li>
 <li>
-  <span class="name">
-    <%= link_to(t('contacts.index.completed'), contacts_path(completed: true)) %>
-  </span>
-  (<%= @organization.completed_contacts.count %>)
+  <% if params[:include_archived] %>
+    <span class="name">
+      <%= link_to(t('contacts.index.completed'), contacts_path(completed: true, include_archived: 'true')) %>
+    </span>
+    (<%= @organization.completed_contacts_with_archived.count %>)
+  <% else %>
+    <span class="name">
+      <%= link_to(t('contacts.index.completed'), contacts_path(completed: true)) %>
+    </span>
+    (<%= @organization.completed_contacts.count %>)
+  <% end %>
 </li>
 <li>
-  <span class="name">
-    <%= link_to(t('contacts.index.all'), contacts_path(assigned_to: 'all')) %>
-  </span>
-  (<%= @organization.all_people.count %>)
+  <% if params[:include_archived] %>
+    <span class="name">
+      <%= link_to(t('contacts.index.all'), contacts_path(assigned_to: 'all', include_archived: 'true')) %>
+    </span>
+    (<%= @organization.all_people_with_archived.count %>)
+  <% else %>
+    <span class="name">
+      <%= link_to(t('contacts.index.all'), contacts_path(assigned_to: 'all')) %>
+    </span>
+    (<%= @organization.all_people.count %>)
+  <% end %>
   <% if current_organization.people.archived(current_organization.id).count > 0 %>
   <div id="include_archived_div">
     <%= t('people.index.include_archived') %>

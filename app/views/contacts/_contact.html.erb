@@ -35,10 +35,12 @@
     <div id="roles_user_<%= person.id %>" class="roles_spaces">
       <% roles.each do |role| %>
         <% sent = role.id == Role::SENT_ID && person.is_sent? %>
-        <% unless !params[:include_archived] && person.is_role_archived?(current_organization.id, role.id) %>
-          <div id="<%= person.id%>_<%= role.id %>" class="role_label role_<%= role.id %> <%= 'transferred tipitmiddle' if sent %>" title="<%= 'Transferred' if sent %>" ><%= role %></div>
+        <% if person.is_role_archived?(current_organization.id, role.id) %>
+          <% if params[:include_archived] == 'true' || params[:archived] == 'true' %> 
+            <div id="<%= person.id%>_<%= role.id %>" class="role_label_archived role_<%= role.id %> tipitmiddle" title="<%= sent ? 'Transferred & Archived' : 'Archived' %>"><%= role %></div>
+          <% end %>
         <% else %>
-          <div id="<%= person.id%>_<%= role.id %>" class="role_label_archived role_<%= role.id %> tipitmiddle <%= 'transferred' if sent %>" title="<%= sent ? 'Transferred' : 'Archived' %>"><%= role %></div>
+          <div id="<%= person.id%>_<%= role.id %>" class="role_label role_<%= role.id %> <%= 'transferred tipitmiddle' if sent %>" title="<%= 'Transferred' if sent %>" ><%= role %></div>
         <% end %>
       <% end %>
     </div>
