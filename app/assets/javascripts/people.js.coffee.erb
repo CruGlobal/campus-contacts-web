@@ -742,6 +742,7 @@ $('#apply_roles').live 'click', ->
   return false if check_selected_roles() == 0
   return false if check_selected_people() == 0
   update_persons_roles()
+  false
 
 $('.role_link_checkbox').live 'click', ->
   return false if check_selected_people() == 0
@@ -777,11 +778,15 @@ disable_role_checkboxes = () -> # disable role checkboxes that only SOME of cont
   checked_length = $('input.id_checkbox:checked').length
 
   $('input.id_checkbox:checked').each ->
-    role_labels = get_role_labels($(this))
     r = []
-    role_labels.each ->
-      role = $(this).attr('id').split('_')
-      r.push(role[1])
+    if $(this).hasClass('not_displayed')
+      for role_id in $(this).attr('data-roles').split(',')
+        r.push(role_id)
+    else
+      role_labels = get_role_labels($(this))
+      role_labels.each ->
+        role = $(this).attr('id').split('_')
+        r.push(role[1])
     $.merge(role_labels_array, r)
   unique = role_labels_array.filter((itm, i, a) ->
     i is a.indexOf(itm))
@@ -856,6 +861,8 @@ update_persons_roles = () ->
 
   $('#apply_roles_spinner').show()
   $("#apply_roles_successful").hide()
+  $('#label_menu').live 'mouseleave', -> #Hook to avoid using the plugin, hiding the box while in process
+  	$(this).show()
   $('.role_id_checkbox:checked').each ->
     role_id = $(this).val()
     role_ids.push(role_id)
@@ -865,8 +872,10 @@ update_persons_roles = () ->
   $('.role_id_checkbox:not(:enabled)').each ->
     some_role_ids.push($(this).val())
 
-
   checked_elements = $('.id_checkbox:checked')
+  total_contacts = checked_elements.length
+  success_apply_counter = 0
+  fail_apply_counter = 0
 
   checked_elements.each ->
     person_id = $(this).val()
@@ -876,16 +885,17 @@ update_persons_roles = () ->
       data: 'role_ids='+role_ids+'&some_role_ids='+some_role_ids+'&person_id='+person_id,
       success: (data) ->
         roles_user = "#roles_user_" + person_id
+        $("#apply_roles_successful").show()
         if data.indexOf("$.a") == -1
+          success_apply_counter++
           $(roles_user).html data
-          $("#apply_roles_spinner").hide()
-          $("#apply_roles_successful").show()
-          $("#apply_roles_successful").html(t('general.roles_applied'))
-          setTimeout (->
-            $("#apply_roles_successful").hide()
-          ), 5000
         else
+          fail_apply_counter++
+        html = success_apply_counter+" out of "+total_contacts+" contacts "+t('general.roles_applied')
+        $("#apply_roles_successful").html(html)
+        total_apply = success_apply_counter + fail_apply_counter;
+        if total_apply == total_contacts
+          $('#label_menu').live 'mouseleave', -> #Return the original effects of the box
+            $('#label_menu').hide()
           $("#apply_roles_spinner").hide()
-          $("#apply_roles_successful").hide()
-
-
+          $('#label_menu').hide()
