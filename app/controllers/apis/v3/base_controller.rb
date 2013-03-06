@@ -44,8 +44,8 @@ class Apis::V3::BaseController < ApplicationController
   def current_organization
     unless @current_organization
       if oauth_access_token
-        api_org = current_user.person.primary_organization
-        @current_organization = params[:organization_id] ? api_org.root.subtree.find(params[:organization_id]) : api_org
+        primary_organization = current_user.person.primary_organization
+        @current_organization = params[:organization_id] ? current_user.person.all_organization_and_children.find(params[:organization_id]) : primary_organization
       else
         api_org = Rack::OAuth2::Server::Client.find_by_secret(params[:secret]).try(:organization)
         if api_org
