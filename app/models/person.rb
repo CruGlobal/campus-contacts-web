@@ -182,7 +182,7 @@ class Person < ActiveRecord::Base
     :group => "people.id",
     :having => ["DATE(MAX(ass.updated_at)) >= ? AND DATE(MAX(ass.updated_at)) <= ? ", date_from, date_to]
   }}
-  
+
   def contact_role_for_org(org)
     organizational_roles.where("organizational_roles.organization_id = ? AND organizational_roles.role_id = ?", org.id, Role::CONTACT_ID).first
   end
@@ -322,8 +322,13 @@ class Person < ActiveRecord::Base
     return false unless org
     OrganizationalRole.where(person_id: id, role_id: Role.leader_ids, :organization_id => org.id).present?
   end
+
   def organization_objects
-    @organization_objects ||= Hash[Organization.where(:id => org_ids.keys).order('name').collect {|o| [o.id, o]}]
+    @organization_objects ||= Hash[all_organization_and_children.collect {|o| [o.id, o]}]
+  end
+
+  def all_organization_and_children
+    @all_organization_and_children ||= Organization.where(:id => org_ids.keys).order('name')
   end
 
   def org_ids
@@ -337,11 +342,6 @@ class Person < ActiveRecord::Base
     end
     @org_ids
   end
-
-  #def clear_org_cache
-    #update_column(:organization_tree_cache, nil)
-    #update_column(:org_ids_cache, nil)
-  #end
 
   def organization_tree
     Rails.cache.fetch(['organization_tree', self]) do
@@ -359,11 +359,7 @@ class Person < ActiveRecord::Base
   end
 
   def organization_from_id(org_id)
-    begin
-      organization_objects[org_id.to_i]
-    #rescue
-      #raise org_id.inspect
-    end
+    organization_objects[org_id.to_i]
   end
 
   def roles_by_org_id(org_id)
@@ -406,28 +402,6 @@ class Person < ActiveRecord::Base
         org.show_sub_orgs? ? [org] + org.children : [org]
       end
     }.flatten.uniq_by{ |o| o.id }
-  end
-
-  def all_organization_and_children
-    orgs = Array.new
-    organizations.each do |org|
-      orgs << org
-      child_org = collect_all_child_organizations(org)
-      orgs += child_org
-    end
-    Organization.where(id: orgs.collect(&:id))
-  end
-
-  def collect_all_child_organizations(org)
-    child_orgs = Array.new
-    if org.children.present?
-      org.children.each do |child_org|
-        child_orgs << child_org
-        other_child_org = collect_all_child_organizations(child_org)
-        child_orgs += other_child_org
-      end
-    end
-    child_orgs
   end
 
   def phone_number
