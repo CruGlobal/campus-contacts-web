@@ -152,7 +152,7 @@ class SmsControllerTest < ActionController::TestCase
 
     should "have response when user sends help" do
       post :mo, @post_params.merge!({message: 'help', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
-      assert_equal 'MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to http://mhub.cc/terms for more help.', assigns(:msg)
+      assert_equal 'MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to http://mhub.cc/terms for more help. Msg frequency depends on user.', assigns(:msg)
     end
   end
 
