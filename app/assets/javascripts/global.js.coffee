@@ -8,14 +8,18 @@ $ ->
       preventDuplicates: true
       minChars: 3
       resultsLimit: 10
-      hintText: "Type to search contacts by first name, last name, or email."
+      hintText: $('#send_email_to').attr("data-search-desc"),
+      placeHolder: $('#send_email_to').attr("data-search-desc"),
+      placeHolderWidth: 650
 
     $('#send_text_to').tokenInput "/contacts/auto_suggest_send_text.json"
       theme: 'facebook'
       preventDuplicates: true
       minChars: 3
       resultsLimit: 10
-      hintText: "Type to search contacts by first name, last name, or phone number."
+      hintText: $('#send_text_to').attr("data-search-desc"),
+      placeHolder: $('#send_text_to').attr("data-search-desc"),
+      placeHolderWidth: 650
 
     if $('#sidebar_div').is(':visible')
       $.ajax

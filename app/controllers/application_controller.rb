@@ -303,6 +303,7 @@ class ApplicationController < ActionController::Base
   def is_admin?
     current_user.has_role?(Role::ADMIN_ID, current_organization)
   end
+  helper_method :is_admin?
 
   def get_survey
     if params[:keyword]

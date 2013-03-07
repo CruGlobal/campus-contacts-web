@@ -161,14 +161,14 @@ class Person < ActiveRecord::Base
     :select => "people.*",
     :conditions => ["(org_roles.organization_id = #{org_id} AND (concat(first_name,' ',last_name) LIKE ? OR concat(last_name, ' ',first_name) LIKE ? OR emails.email LIKE ?)) AND emails.email IS NOT NULL", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
     :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = people.id LEFT JOIN organizational_roles AS org_roles ON people.id = org_roles.person_id",
-    :limit => 10
+    :limit => 5
   }}
 
   scope :phone_search, lambda { |keyword, org_id| {
     :select => "people.*",
-    :conditions => ["(org_roles.organization_id = #{org_id} AND (concat(first_name,' ',last_name) LIKE ? OR concat(last_name, ' ',first_name) LIKE ? OR phone_numbers.number LIKE ?)) AND phone_numbers.number IS NOT NULL", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
-    :joins => "LEFT JOIN phone_numbers ON phone_numbers.person_id = people.id LEFT JOIN organizational_roles AS org_roles ON people.id = org_roles.person_id",
-    :limit => 10
+    :conditions => ["(org_roles.organization_id = ? AND (first_name LIKE ? OR last_name LIKE ? OR phone_numbers.number LIKE ?)) AND phone_numbers.number IS NOT NULL AND phone_numbers.primary = 1", org_id, "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
+    :joins => "LEFT JOIN phone_numbers ON phone_numbers.person_id = people.id LEFT JOIN organizational_roles AS org_roles ON org_roles.person_id = people.id",
+    :limit => 5
   }}
 
   scope :get_and_order_by_latest_answer_sheet_answered, lambda { |order, org_id| {

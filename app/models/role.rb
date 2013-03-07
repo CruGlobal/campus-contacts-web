@@ -31,7 +31,12 @@ class Role < ActiveRecord::Base
   scope :arrange_all, lambda {{
     order: "FIELD#{self.default_roles_for_field_string(self::DEFAULT_CRU_ROLES)}"
   }}
-
+  
+  def members_from_role_org(org_id, include_archive = false)
+  	is_archived = include_archive ? "" : "AND archive_date IS NULL"
+		organizational_roles.where("organization_id = ? AND (followup_status <> 'do_not_contact' OR followup_status IS NULL) #{is_archived}", org_id)
+  end
+    
   def self.leader_ids
     @leader_ids ||= self.leaders.collect(&:id)
   end
