@@ -258,6 +258,7 @@ class ContactsController < ApplicationController
     def fetch_contacts(load_all = false)
       # Load Saved Searches, Surveys & Questions
       initialize_variables
+      update_fb_friends
 
       # Fix old search variable from saved searches
       handle_old_search_variable if params[:search] == "1"
@@ -273,6 +274,11 @@ class ContactsController < ApplicationController
 
       # Sort & Limit Results
       sort_people(params[:page], load_all)
+    end
+    
+    def update_fb_friends
+      fb_auth = current_user.authentications.first
+      current_person.update_friends(fb_auth) if fb_auth.present?
     end
 
     def initialize_variables
