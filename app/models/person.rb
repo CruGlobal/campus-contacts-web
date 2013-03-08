@@ -1033,6 +1033,10 @@ class Person < ActiveRecord::Base
     Friend.followers(self) & organization.leaders.collect { |l| l.fb_uid.to_s }
   end
 
+  def friends_in_orgnization(org)
+    friends.includes(:organizational_roles).where('organizational_roles.organization_id = ?',org.id)
+  end
+
   def assigned_organizational_roles(organization_id)
     roles.where('organizational_roles.organization_id' => organization_id)
   end

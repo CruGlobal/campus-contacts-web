@@ -136,7 +136,7 @@ en:
     to: "To"
     recipients: "Recipients:"
     message: "Message:"
-    subject: 'Subject:'   
+    subject: 'Subject:'
     sms_preview_title: "Your recipients will receive the following text message:"
     sms_preview_from: "FRM:"
     sms_preview_body: "MSG:"
@@ -149,7 +149,7 @@ en:
     label_search_help: If you selected two labels such as "Admin" and "Leader", <b>"ANY"</b> would give you people with EITHER label while <b>"ALL"</b> would narrow the search by giving you only those people with BOTH labels.<br/><br/><b>"ANY"</b> uses the Boolean logic "OR" to broaden the search.<br/><br/><b>"ALL"</b> use the Boolean "AND" to narrow the search.
     label_select_description: List contacts that have %{element} of the following labels applied to them.
     label_clear_selected: Clear Selected Labels
-    label_search_last_survey: Last Survey 
+    label_search_last_survey: Last Survey
     contacts_updated_from: 'Contacts Updated From'
     dash: ' - '
   leaders:
@@ -230,7 +230,7 @@ en:
       attach_rejoicable: 'Attach a Rejoicable'
       add_comment: 'Add Comment / Update Status'
       assigned_to: 'Assigned to: %{assigned_to}'
-      persons_friends: '%{person} Friends:'
+      persons_friends: '%{person} Friends in %{org_name}:'
     search:
       search_placeholder: 'Search for the first name, last name or email.'
       search_title: 'Search'
