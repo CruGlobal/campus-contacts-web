@@ -8,7 +8,7 @@ $ ->
       $('#csv_file_name').text($(this).val().split('\\').pop())
 
     $('.import_column_survey_select').each ->
-      $('#column_edit_' + $(this).attr('data_id')).show() if $(this).val() == ''
+      $('#column_edit_' + $(this).attr('data_id')).show() unless $(this).val() == ''
       $('.import_column_survey_select option').each ->
         if $(this).parents('optgroup').length != -1
           survey_title = $(this).parents('optgroup').attr('label')
