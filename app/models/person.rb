@@ -586,45 +586,57 @@ class Person < ActiveRecord::Base
   end
 
   def get_friends(authentication, response = nil)
-    if friends.length == 0
-      response ||= MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
-      @friends = response['data']
+    begin
+      if friends.length == 0
+        response ||= MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
+        @friends = response['data']
 
-      @friends.each do |friend|
-        Friend.new(friend['id'], friend['name'], self)
+        @friends.each do |friend|
+          Friend.new(friend['id'], friend['name'], self)
+        end
+        @friends.length  #return how many friend you got from facebook for testing
       end
-      @friends.length  #return how many friend you got from facebook for testing
+    rescue
+      return false
     end
   end
 
   def update_friends(authentication, response = nil)
-    response ||= MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
-    @fb_friends = response["data"]
+    begin
+      response ||= MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
+      @fb_friends = response["data"]
 
-    @fb_friends.each do |fb_friend|
-      Friend.new(fb_friend['id'], fb_friend['name'], self)
-    end
+      @fb_friends.each do |fb_friend|
+        Friend.new(fb_friend['id'], fb_friend['name'], self)
+      end
 
-    (Friend.followers(self) - @fb_friends.collect {|f| f['id'] }).each do |uid|
-      Friend.unfollow(self, uid)
+      (Friend.followers(self) - @fb_friends.collect {|f| f['id'] }).each do |uid|
+        Friend.unfollow(self, uid)
+      end
+    rescue
+      return false
     end
   end
 
   def get_interests(authentication, response = nil)
-    if response.nil?
-      @interests = MiniFB.get(authentication['token'], authentication['uid'],type: "interests")
-    else @interests = response
-    end
-    @interests["data"].each do |interest|
-      interests.find_or_initialize_by_interest_id_and_person_id_and_provider(interest['id'], id.to_i, "facebook") do |i|
-        i.provider = "facebook"
-        i.category = interest['category']
-        i.name = interest['name']
-        i.interest_created_time = interest['created_time']
+    begin
+      if response.nil?
+        @interests = MiniFB.get(authentication['token'], authentication['uid'],type: "interests")
+      else @interests = response
       end
-      save
+      @interests["data"].each do |interest|
+        interests.find_or_initialize_by_interest_id_and_person_id_and_provider(interest['id'], id.to_i, "facebook") do |i|
+          i.provider = "facebook"
+          i.category = interest['category']
+          i.name = interest['name']
+          i.interest_created_time = interest['created_time']
+        end
+        save
+      end
+      interests.count
+    rescue
+      return false
     end
-    interests.count
   end
 
   def get_location(authentication, response = nil)
