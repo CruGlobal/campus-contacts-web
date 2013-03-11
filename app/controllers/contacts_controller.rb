@@ -54,26 +54,26 @@ class ContactsController < ApplicationController
 
   def auto_suggest_send_email
     term = params[:q].try(:strip).downcase
-    
+
 		# Search - enable "All contacts" for admins
 		all_contacts = is_admin? && term =~ /all/ ? [{:name=>"All (#{current_organization.all_people.count})", :id=>"ALL-PEOPLE"}] : []
-		  
+
 		# Search Roles
 		roles = current_organization.role_search(term)
 		get_and_merge_unfiltered_people
 		roles_results = roles.collect{|p| {name: "#{p.name} (#{@people_unfiltered.where("role_id = ?", p.id).count})", id: "ROLE-#{p.id}"}}
-		
+
 		# Search Groups
 		groups = current_organization.group_search(term)
 		groups_results = groups.collect{|p| {name: "#{p.name} (#{p.group_memberships.count})", id: "GROUP-#{p.id}"}}
-		  
+
 		# Search People
 		people = current_organization.people.email_search(term, current_organization.id).uniq
 		people = people.archived_not_included unless params[:include_archived].present?
 		people_results = people.collect{|p| {name: "#{p.name} - #{p.email.downcase}", id: p.id.to_s}}
-		
+
 		results = all_contacts + roles_results + groups_results + people_results
-		
+
 		respond_to do |format|
 		  format.json { render json: results.to_json }
 		end
@@ -83,24 +83,24 @@ class ContactsController < ApplicationController
     term = params[:q].try(:strip).downcase
 
 		# Search - enable "All contacts" for admins
-		all_contacts = is_admin? && term =~ /all/ ? [{:name=>"All (#{current_organization.all_people.count})", :id=>"ALL-PEOPLE"}] : []		  
-		
+		all_contacts = is_admin? && term =~ /all/ ? [{:name=>"All (#{current_organization.all_people.count})", :id=>"ALL-PEOPLE"}] : []
+
 		# Search Roles
 		roles = current_organization.role_search(term)
 		get_and_merge_unfiltered_people
 		roles_results = roles.collect{|p| {name: "#{p.name} (#{@people_unfiltered.where("role_id = ?", p.id).count})", id: "ROLE-#{p.id}"}}
-		
+
 		# Search Groups
 		groups = current_organization.group_search(term)
 		groups_results = groups.collect{|p| {name: "#{p.name} (#{p.group_memberships.count})", id: "GROUP-#{p.id}"}}
-		  
+
 		# Search People
     people = current_organization.people.phone_search(term, current_organization.id).uniq
     people = people.archived_not_included unless params[:include_archived].present?
 		people_results = people.collect{|p| {name: "#{p.name} - #{p.primary_phone_number.pretty_number}", id: p.id.to_s}}
-				
+
 		results = all_contacts + roles_results + groups_results + people_results
-		
+
 		respond_to do |format|
 		  format.json { render json: results.to_json }
 		end
@@ -258,13 +258,14 @@ class ContactsController < ApplicationController
     def fetch_contacts(load_all = false)
       # Load Saved Searches, Surveys & Questions
       initialize_variables
+      update_fb_friends if current_person.friends.count == 0
 
       # Fix old search variable from saved searches
       handle_old_search_variable if params[:search] == "1"
 
       # Get people
       build_people_scope
-      get_and_merge_unfiltered_people
+      get_and_merge_unfiltered_people unless params[:dnc] == 'true'
 
       # Filter results
       filter_archived_only if params[:archived].present?
@@ -273,6 +274,11 @@ class ContactsController < ApplicationController
 
       # Sort & Limit Results
       sort_people(params[:page], load_all)
+    end
+
+    def update_fb_friends
+      fb_auth = current_user.authentications.first
+      current_person.update_friends(fb_auth) if fb_auth.present?
     end
 
     def initialize_variables
@@ -309,7 +315,11 @@ class ContactsController < ApplicationController
             @people_scope = @organization.all_people
           end
         when 'unassigned'
-          @people_scope = @organization.unassigned_contacts
+          if params[:include_archived].present? && params[:include_archived] == 'true'
+            @people_scope = @organization.unassigned_contacts_with_archived
+          else
+            @people_scope = @organization.unassigned_contacts
+          end
           @header = I18n.t('contacts.index.unassigned')
         when 'no_activity'
           @people_scope = @organization.no_activity_contacts
@@ -394,7 +404,7 @@ class ContactsController < ApplicationController
       if params[:survey].present?
         @people_scope = @people_scope.joins(:answer_sheets).where("answer_sheets.survey_id" => params[:survey])
       end
-	    if params[:survey_updated_from].present? && params[:survey_updated_to].present?  
+	    if params[:survey_updated_from].present? && params[:survey_updated_to].present?
 	      @people_scope = @people_scope.find_by_survey_updated_by_daterange(format_date_for_search(params[:survey_updated_from]), format_date_for_search(params[:survey_updated_to]), current_organization.id)
 	    end
       if params[:first_name].present?
@@ -441,7 +451,7 @@ class ContactsController < ApplicationController
 							rescue
 							end
 						end
-						
+
             # If this question is assigned to a column, we need to handle that differently
             if question.object_name.present?
               table_name = case question.object_name

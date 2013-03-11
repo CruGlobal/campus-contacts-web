@@ -45,6 +45,10 @@ class PeopleController < ApplicationController
     @person = Person.find(params[:id])
     @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id).collect { |a| a.assigned_to.try(:name) }.compact.to_sentence
     authorize!(:read, @person)
+    if @person.friends.count == 0
+      fb_auth = @person.user.authentications.first
+      @person.update_friends(fb_auth) if fb_auth.present?
+    end
     @org_friends = Person.where(fb_uid: Friend.followers(@person.id))
 
     if can? :manage, @person
@@ -199,7 +203,7 @@ class PeopleController < ApplicationController
   # PUT /people/1
   # PUT /people/1.xml
   def update
-    @person = current_organization.people.find(params[:id])
+    @person = Person.find(params[:id])
 
     # Handle duplicate emails
     emails = []
@@ -299,12 +303,12 @@ class PeopleController < ApplicationController
   def bulk_email
     authorize! :lead, current_organization
     to_ids = params[:to]
-		
+
 		person_ids = []
 		if to_ids.present?
 			ids = to_ids.split(',').uniq
 			ids.each do |id|
-				if id.upcase =~ /GROUP-/	
+				if id.upcase =~ /GROUP-/
 					group = Group.find_by_id_and_organization_id(id.gsub("GROUP-",""), current_organization.id)
 					group.group_memberships.collect{|p| person_ids << p.person_id.to_s } if group.present?
 				elsif id.upcase =~ /ROLE-/
@@ -317,7 +321,7 @@ class PeopleController < ApplicationController
 				end
 			end
 		end
-		
+
     person_ids.uniq.each do |id|
       person = Person.find_by_id(id)
       PeopleMailer.enqueue.bulk_message(person.email, current_person.email, params[:subject], params[:body]) if person.present? && person.email.present?
@@ -329,12 +333,12 @@ class PeopleController < ApplicationController
   def bulk_sms
     authorize! :lead, current_organization
     to_ids = params[:to]
-    
+
 		person_ids = []
 		if to_ids.present?
 			ids = to_ids.split(',').uniq
 			ids.each do |id|
-				if id.upcase =~ /GROUP-/	
+				if id.upcase =~ /GROUP-/
 					group = Group.find_by_id_and_organization_id(id.gsub("GROUP-",""), current_organization.id)
 					group.group_memberships.collect{|p| person_ids << p.person_id.to_s } if group.present?
 				elsif id.upcase =~ /ROLE-/
@@ -347,7 +351,7 @@ class PeopleController < ApplicationController
 				end
 			end
 		end
-		
+
     person_ids.uniq.each do |id|
     	person = Person.find(id)
       if person.present? && person.primary_phone_number

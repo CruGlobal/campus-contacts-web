@@ -22,11 +22,11 @@
   <span class="name">
     <%= link_to(t('contacts.index.my_friends'), contacts_path(assigned_to: 'friends')) %>
   </span>
-  (<%= current_person.contact_friends(current_organization).count %>)
+  (<%= current_person.contact_friends(current_organization).collect(&:id).count %>)
 </li>
 <li>
   <span class="name">
-    <%= link_to(t('people.index.archived_label'), controller: 'contacts', :archived => true, :include_archived => params[:include_archived]) %>
+    <%= link_to(t('people.index.archived_label'), controller: 'contacts', :archived => true) %>
   </span>
   (<%= current_organization.people.archived(current_organization.id).count %>)
 </li>

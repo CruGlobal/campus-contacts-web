@@ -70,7 +70,7 @@
 				      <span class="assigned_label"><%= role %></span>
 				    <% end %>
 				  </div>
-		    </div>				  
+		    </div>
 				<% end %>
 		  </div>
 		</div>
@@ -115,8 +115,8 @@
   </div>
   <div style="clear:both;"></div>
   <div>
-    <% if friends = @person.friends_and_leaders(current_organization) %>
-      <p><b><%= @person.first_name.present? ? t('.persons_friends',person: declare_ownership(@person.first_name)) : "No Name Assigned" %></b></p>
+    <% if friends = @person.friends_in_orgnization(current_organization).collect(&:fb_uid) %>
+      <p><b><%= @person.first_name.present? ? t('.persons_friends',person: declare_ownership(@person.first_name), org_name: current_organization) : "No Name Assigned" %></b></p>
 
       <% friends.each do |friend_uid| %>
         <div style="float:left; margin-right: 5px;">

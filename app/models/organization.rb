@@ -34,6 +34,7 @@ class Organization < ActiveRecord::Base
   has_many :contacts_with_archived, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.followup_status <> 'do_not_contact'", Role::CONTACT_ID]
   has_many :dnc_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.archive_date IS NULL AND organizational_roles.followup_status = 'do_not_contact'"]
   has_many :completed_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status = ?", Role::CONTACT_ID, 'completed']
+  has_many :completed_contacts_with_archived, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.followup_status = ?", Role::CONTACT_ID, 'completed']
   has_many :no_activity_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status = ?", Role::CONTACT_ID, 'uncontacted']
   has_many :rejoicables
   has_many :groups
@@ -212,6 +213,19 @@ class Organization < ActiveRecord::Base
         .where("ca.id IS NULL OR ca.assigned_to_id NOT IN (?)", only_leaders)
   end
 
+  def unassigned_contacts_with_archived
+    person_table_pkey = "#{Person.table_name}.#{Person.primary_key}"
+    Person
+    .joins("INNER JOIN organizational_roles org_roles ON org_roles.person_id = #{person_table_pkey}
+        AND org_roles.organization_id = #{id}
+        AND org_roles.role_id = '#{Role::CONTACT_ID}'
+        AND org_roles.followup_status <> 'do_not_contact'
+        AND org_roles.followup_status <> 'completed'
+        LEFT JOIN contact_assignments ca ON ca.person_id = #{person_table_pkey}
+        AND ca.organization_id = #{id}")
+        .where("ca.id IS NULL OR ca.assigned_to_id NOT IN (?)", only_leaders)
+  end
+
   def inprogress_contacts
     person_table_pkey = "#{Person.table_name}.#{Person.primary_key}"
     Person
@@ -220,7 +234,19 @@ class Organization < ActiveRecord::Base
         AND organizational_roles.role_id = '#{Role::CONTACT_ID}'
         AND organizational_roles.followup_status <> 'do_not_contact'
         AND organizational_roles.followup_status <> 'completed'
-        AND organizational_roles.archive_date IS NULL
+        AND org_roles.archive_date IS NULL
+        LEFT JOIN contact_assignments ON contact_assignments.person_id = #{person_table_pkey}
+        AND contact_assignments.organization_id = #{id}")
+        .where("contact_assignments.assigned_to_id IN (?)", only_leaders)
+  end
+  def inprogress_contacts_with_archived
+    person_table_pkey = "#{Person.table_name}.#{Person.primary_key}"
+    Person
+    .joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{person_table_pkey}
+        AND organizational_roles.organization_id = #{id}
+        AND organizational_roles.role_id = '#{Role::CONTACT_ID}'
+        AND organizational_roles.followup_status <> 'do_not_contact'
+        AND organizational_roles.followup_status <> 'completed'
         LEFT JOIN contact_assignments ON contact_assignments.person_id = #{person_table_pkey}
         AND contact_assignments.organization_id = #{id}")
         .where("contact_assignments.assigned_to_id IN (?)", only_leaders)

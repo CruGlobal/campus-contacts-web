@@ -277,6 +277,18 @@ class Person < ActiveRecord::Base
     assigned_tos.where(organization_id: org.id)
   end
 
+  def assigned_contacts_limit_org(org)
+    assigned_id_list = ContactAssignment.where(assigned_to_id: id, organization_id: org.id).uniq
+    people = org.people.where(id: assigned_id_list.collect(&:person_id))
+    people.includes(:organizational_roles).where('organizational_roles.organization_id' => org.id, 'organizational_roles.archive_date' => nil)
+  end
+
+  def assigned_contacts_limit_org_with_archived(org)
+    assigned_id_list = ContactAssignment.where(assigned_to_id: id, organization_id: org.id).uniq
+    people = org.people.where(id: assigned_id_list.collect(&:person_id))
+    people.includes(:organizational_roles).where('organizational_roles.organization_id' => org.id)
+  end
+
   def has_similar_person_by_name_and_email?(email)
     Person.joins(:primary_email_address).where(first_name: first_name, last_name: last_name, 'email_addresses.email' => email).where("people.id != ?", id).first
   end
@@ -574,45 +586,57 @@ class Person < ActiveRecord::Base
   end
 
   def get_friends(authentication, response = nil)
-    if friends.length == 0
-      response ||= MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
-      @friends = response['data']
+    begin
+      if friends.length == 0
+        response ||= MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
+        @friends = response['data']
 
-      @friends.each do |friend|
-        Friend.new(friend['id'], friend['name'], self)
+        @friends.each do |friend|
+          Friend.new(friend['id'], friend['name'], self)
+        end
+        @friends.length  #return how many friend you got from facebook for testing
       end
-      @friends.length  #return how many friend you got from facebook for testing
+    rescue
+      return false
     end
   end
 
   def update_friends(authentication, response = nil)
-    response ||= MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
-    @fb_friends = response["data"]
+    begin
+      response ||= MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
+      @fb_friends = response["data"]
 
-    @fb_friends.each do |fb_friend|
-      Friend.new(fb_friend['id'], fb_friend['name'], self)
-    end
+      @fb_friends.each do |fb_friend|
+        Friend.new(fb_friend['id'], fb_friend['name'], self)
+      end
 
-    (Friend.followers(self) - @fb_friends.collect {|f| f['id'] }).each do |uid|
-      Friend.unfollow(self, uid)
+      (Friend.followers(self) - @fb_friends.collect {|f| f['id'] }).each do |uid|
+        Friend.unfollow(self, uid)
+      end
+    rescue
+      return false
     end
   end
 
   def get_interests(authentication, response = nil)
-    if response.nil?
-      @interests = MiniFB.get(authentication['token'], authentication['uid'],type: "interests")
-    else @interests = response
-    end
-    @interests["data"].each do |interest|
-      interests.find_or_initialize_by_interest_id_and_person_id_and_provider(interest['id'], id.to_i, "facebook") do |i|
-        i.provider = "facebook"
-        i.category = interest['category']
-        i.name = interest['name']
-        i.interest_created_time = interest['created_time']
+    begin
+      if response.nil?
+        @interests = MiniFB.get(authentication['token'], authentication['uid'],type: "interests")
+      else @interests = response
       end
-      save
+      @interests["data"].each do |interest|
+        interests.find_or_initialize_by_interest_id_and_person_id_and_provider(interest['id'], id.to_i, "facebook") do |i|
+          i.provider = "facebook"
+          i.category = interest['category']
+          i.name = interest['name']
+          i.interest_created_time = interest['created_time']
+        end
+        save
+      end
+      interests.count
+    rescue
+      return false
     end
-    interests.count
   end
 
   def get_location(authentication, response = nil)
@@ -1007,6 +1031,10 @@ class Person < ActiveRecord::Base
 
   def friends_and_leaders(organization)
     Friend.followers(self) & organization.leaders.collect { |l| l.fb_uid.to_s }
+  end
+
+  def friends_in_orgnization(org)
+    friends.includes(:organizational_roles).where('organizational_roles.organization_id = ?',org.id)
   end
 
   def assigned_organizational_roles(organization_id)
