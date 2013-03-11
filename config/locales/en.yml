@@ -92,7 +92,7 @@ en:
     cru: "Cru"
   general:
     transfer: "Transfer"
-    roles_applied: "Labels have been applied."
+    roles_applied: "labels have been applied."
     adv_search: "Advanced Search"
     archived: "Archived"
     assigned_to:  "Assigned to"
