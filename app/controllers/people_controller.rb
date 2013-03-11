@@ -203,7 +203,7 @@ class PeopleController < ApplicationController
   # PUT /people/1
   # PUT /people/1.xml
   def update
-    @person = current_organization.people.find(params[:id])
+    @person = Person.find(params[:id])
 
     # Handle duplicate emails
     emails = []
