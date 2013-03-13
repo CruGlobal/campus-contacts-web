@@ -35,6 +35,6 @@
     <%= link_to(t('contacts.index.dnc'), contacts_path(dnc: true)) %>
   </span>
   <span id="dnc_count" class="count">
-    (<%= OrganizationalRole.dnc.where(organization_id: @organization.id).count %>)
+    (<%= @organization.dnc_contacts.count %>)
   </span>
 </li>
