@@ -604,6 +604,7 @@ $ ->
     else
       $.a(t('contacts.index.none_checked'))
   $('#contacts_controller .index a.hide').live 'click', ->
+    $('#hidden_questions_div').hide()
     $('.' + $(this).attr('data-class')).fadeOut()
 
   $('#hidden_questions_link').live 'click', (e)->
