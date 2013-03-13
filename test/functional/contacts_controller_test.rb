@@ -1054,15 +1054,17 @@ class ContactsControllerTest < ActionController::TestCase
     end
     should "return matching phone numbers" do
       xhr :get, :auto_suggest_send_text, {:q => "77"}
-      assert assigns(:people).include?(@contact1)
-      assert !assigns(:people).include?(@contact2)
-      assert assigns(:people).include?(@contact3)
+      results = assigns(:results).collect{|x| x['id'].to_i}
+      assert results.include?(@contact1.id)
+      assert !results.include?(@contact2.id)
+      assert results.include?(@contact3.id)
     end
     should "return matching emails" do
       xhr :get, :auto_suggest_send_email, {:q => "cd"}
-      assert assigns(:people).include?(@contact1)
-      assert assigns(:people).include?(@contact2)
-      assert !assigns(:people).include?(@contact3)
+      results = assigns(:results).collect{|x| x['id'].to_i}
+      assert results.include?(@contact1.id)
+      assert results.include?(@contact2.id)
+      assert !results.include?(@contact3.id)
     end
   end
 end

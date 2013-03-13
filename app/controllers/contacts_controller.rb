@@ -72,10 +72,10 @@ class ContactsController < ApplicationController
 		people = people.archived_not_included unless params[:include_archived].present?
 		people_results = people.collect{|p| {name: "#{p.name} - #{p.email.downcase}", id: p.id.to_s}}
 
-		results = all_contacts + roles_results + groups_results + people_results
+		@results = all_contacts + roles_results + groups_results + people_results
 
 		respond_to do |format|
-		  format.json { render json: results.to_json }
+		  format.json { render json: @results.to_json }
 		end
   end
 
@@ -99,10 +99,10 @@ class ContactsController < ApplicationController
     people = people.archived_not_included unless params[:include_archived].present?
 		people_results = people.collect{|p| {name: "#{p.name} - #{p.primary_phone_number.pretty_number}", id: p.id.to_s}}
 
-		results = all_contacts + roles_results + groups_results + people_results
+		@results = all_contacts + roles_results + groups_results + people_results
 
 		respond_to do |format|
-		  format.json { render json: results.to_json }
+		  format.json { render json: @results.to_json }
 		end
   end
 
