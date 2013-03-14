@@ -245,6 +245,11 @@ class ContactsController < ApplicationController
     @hidden_questions = ((@predefined_questions + @all_questions) - @questions).flatten.uniq
   end
 
+  def show_search_hidden_questions
+    show_hidden_questions
+    @search_hidden_questions = @hidden_questions
+  end
+
   def display_sidebar
     @organization = current_organization
 

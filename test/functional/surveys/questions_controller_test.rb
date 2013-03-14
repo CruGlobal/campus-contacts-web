@@ -253,7 +253,7 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
       request.env["HTTP_REFERER"] = "localhost:3000"
       @question.update_attributes({:hidden => true})
       xhr :put, :unhide, {:survey_id => @survey.id, :id => @question.id}
-      assert_response :redirect
+      assert_response :success
     end
   end
 

@@ -16,6 +16,7 @@
         <label for="last_name"><span class="title"><%= t('.phone_number') %></span></label>
         <%= text_field_tag :phone_number, params[:phone_number] %>
       </div>
+      <br/>
       <div class="field">
         <label for="gender"><span class="title"><%= t('general.email') %></span></label>
         <%= text_field_tag :email, params[:email] %>
@@ -26,7 +27,6 @@
         <%= radio_button_tag :gender, '0', params[:gender] == '0' %> <%= t('general.female') %>
         <%= radio_button_tag :gender, '', params[:gender] == '' %> <%= t('general.both') %>
       </div>
-      <br/>
       <div class="field">
         <label for="survey"><span class="title"><%= t('general.survey') %></span></label>
         <%= select_tag :survey, options_for_select(current_organization.surveys.order(:title).collect {|s| [s, s.id]}, params[:survey]), :prompt => "All" %>
@@ -39,7 +39,7 @@
       <div class="field">
        <label for="contacts_updated"><span class="title"><%= t('general.label_search_last_survey') %></span></label>
        <%= text_field_tag :survey_updated_from, params[:survey_updated_from], :autocomplete => :off %>
-        <b><%= t('general.dash') %></b> 
+        <b><%= t('general.dash') %></b>
        <%= text_field_tag :survey_updated_to, params[:survey_updated_to], :autocomplete => :off %> (MM/DD/YYYY)
       </div>
       </br>
@@ -48,7 +48,7 @@
       	<div>
 		      <label for="role"><span class="title"><%= t('general.role') %></span></label>
 		      <%=raw I18n.t("general.label_select_description", element: raw(select_tag :role_tag, options_for_select(Role::LABEL_SEARCH_FILTERS, params[:role_tag] ||= Role::ANY_SELECTED_LABEL[1]))) %>
-		      
+
       		<div class="icon help tipitright help_bubble_keyword" title="<%= t('general.label_search_help') %>"></div>
         </div>
 				<div class="label_space" id="search_roles_container">
@@ -61,27 +61,15 @@
 						<% end %>
 					</div>
 				</div>
-				<div>						
+				<div>
           <%= submit_tag t('general.label_clear_selected'), :id=>"search_clear_selected_labels" %>
 				</div>
       </div>
     </div>
     <!-- Email: <%#= text_field_tag :email, params[:email] %> -->
-    <div class="q1b">
+    <div id="other_questions">
       <% @questions.each_with_index do |q, i| %>
-        <% if i == (@questions.length / 2.0).ceil %>
-          </div><div class="q2b">
-        <% end %>
-        <div class="field userdefinied">
-          <span class="title"><%= q.label %></span>
-          <% if q.style == 'radio' %>
-            <div class="field field_radio">
-              <input type="radio" value="" name="answers[<%= q.id %>]" class="radio ">
-              <label class="choice"></label>
-            </div>
-          <% end %>
-          <%= render :partial => 'survey/' + q.ptemplate, :object => q, :locals => {:col => nil, :answer_sheet => @answer_sheet} %>
-        </div>
+        <%= render partial: 'contacts/search_question', locals: {index: i, q: q, questions_length: @questions.length, col: nil, answer_sheet: @answer_sheet} %>
       <% end %>
     </div>
     <div class="actionbarinline">
@@ -91,19 +79,28 @@
           <%= submit_tag t('general.search') %>
           </td>
           <td>
-          <% if (params[:do_search] == "1" || params[:search] == "1") && @people.length > 0 %>
-            <%= button_to "Save Search","", :id=>"savesearchbtn" %>
-            <div id="savesearchbox" style="display:none" title="<%= t('contacts.index.save_this_search') %>" >
-              <%= form_for(@saved_contact_search, html: {id: 'save_search_form'}) do |f| %>
-                <%= hidden_field_tag 'saved_contact_search[user_id]', @person.user.id %>
-                <%= hidden_field_tag 'saved_contact_search[full_path]', request.fullpath %>
-                <%= hidden_field_tag 'saved_contact_search[organization_id]', @organization.id %>
-                <%= hidden_field_tag :id, @saved_contact_search.id %>
-                <%= f.text_field :name, :placeholder => t('contacts.index.save_this_search_placeholder') %>
-              <% end %>
+            <% if (params[:do_search] == "1" || params[:search] == "1") && @people.length > 0 %>
+              <%= button_to "Save Search","", :id=>"savesearchbtn" %>
+              <div id="savesearchbox" style="display:none" title="<%= t('contacts.index.save_this_search') %>" >
+                <%= form_for(@saved_contact_search, html: {id: 'save_search_form'}) do |f| %>
+                  <%= hidden_field_tag 'saved_contact_search[user_id]', @person.user.id %>
+                  <%= hidden_field_tag 'saved_contact_search[full_path]', request.fullpath %>
+                  <%= hidden_field_tag 'saved_contact_search[organization_id]', @organization.id %>
+                  <%= hidden_field_tag :id, @saved_contact_search.id %>
+                  <%= f.text_field :name, :placeholder => t('contacts.index.save_this_search_placeholder') %>
+                <% end %>
+              </div>
+            <% end %>
+          </td>
+          <td>
+            <%= button_to "Hidden Questions", "", id: "search_show_question" %>
+            <div id="search_hidden_questions_div" style="display:none" title="Show Hidden Question" >
+              <div id="search_hidden_questions_fetcher">
+                <%= image_tag 'loader.gif'%>
+                <br/>
+                Fetching Questions...
+              </div>
             </div>
-
-          <% end %>
           </td>
         </tr>
       </table>

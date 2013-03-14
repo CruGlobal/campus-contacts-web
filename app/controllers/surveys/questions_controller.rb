@@ -159,17 +159,23 @@ class Surveys::QuestionsController < ApplicationController
       @question = @predefined_survey.elements.find(params[:id].to_i)
       @organization = current_organization
       @survey = @predefined_survey
-      current_organization.settings[:visible_predefined_questions] = Array.new if current_organization.settings[:visible_predefined_questions].nil?
+      if current_organization.settings[:visible_predefined_questions].nil?
+        current_organization.settings[:visible_predefined_questions] = Array.new
+      end
       current_organization.settings[:visible_predefined_questions] << @question.id
       current_organization.save!
     else
       @survey = Survey.find(params[:survey_id])
       @organization = @survey.organization
-      @organization.survey_elements.each do |pe|
-        pe.update_attribute(:hidden, false) if pe.element_id == params[:id].to_i
-      end
+      @survey_element = @organization.survey_elements.find_by_element_id(params[:id].to_i)
+      @survey_element.update_attribute(:hidden, false)
+      @question = @survey_element.element
     end
-    redirect_to :back
+    respond_to do |wants|
+      wants.html { redirect_to :back }
+      wants.xml  { head :ok }
+      wants.js
+    end
   end
 
   def suggestion

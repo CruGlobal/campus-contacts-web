@@ -1,0 +1,10 @@
+<div class="field userdefinied">
+  <span class="title"><%= q.label %></span>
+  <% if q.style == 'radio' %>
+    <div class="field field_radio">
+      <input type="radio" value="" name="answers[<%= q.id %>]" class="radio ">
+      <label class="choice"></label>
+    </div>
+  <% end %>
+  <%= render partial: 'survey/' + q.ptemplate, object: q, locals: {col: col, answer_sheet: nil} %>
+</div>

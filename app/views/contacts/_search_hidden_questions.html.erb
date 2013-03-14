@@ -1,0 +1,15 @@
+<div id="search_hidden_questions_guide">
+  <%= t('contacts.search.add_question') %>
+</div>
+
+<div id="search_hidden_questions_loader" style="display:none;">
+  <%= image_tag 'loader.gif'%>
+  <br/>
+  Adding Question
+</div>
+
+<div id="search_hidden_questions_list">
+  <ul id="search_hidden_questions">
+    <%= render partial: 'contacts/search_hidden_question', collection: @search_hidden_questions %>
+  </ul>
+</div>

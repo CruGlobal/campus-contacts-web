@@ -2,4 +2,7 @@
 <% person ||= nil %>
 <%= calendar_date_select_tag name, date_field.format_date_response(answer_sheet, person),
       :class => 'text ' + date_field.validation_class(@answer_sheet),
-      :id => dom_id(date_field) %> <%=  date_field.attribute_name == "graduation_date" ? "(YYYY) or (MM/DD/YYYY)" : "(MM/DD/YYYY)" %>
+      :id => dom_id(date_field) %>
+<span class='slim_guide'>
+  <%= date_field.attribute_name == "graduation_date" ? "YYYY or MM/DD/YYYY" : "MM/DD/YYYY" %>
+</span>

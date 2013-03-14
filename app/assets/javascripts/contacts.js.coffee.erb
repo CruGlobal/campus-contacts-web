@@ -88,19 +88,50 @@ $ ->
     $.rails.handleRemote($(this))
     false
 
-  $('#savesearchbtn').live 'click', ->
+  $('#savesearchbtn').live 'click', (e)->
+    e.preventDefault()
     $('#savesearchbox').dialog
       resizable: false,
       height: 200,
       width: 400,
       modal: true,
+      open: (event, ui) ->
+        $("body").css({ overflow: 'hidden' })
+        $('.ui-widget-overlay').width('100%');
+      close: (event, ui) ->
+        $("body").css({ overflow: 'inherit' })
       buttons:
         Save: ->
           $('#save_search_form').submit()
           t('contacts.index.search_saved')
+          $("body").css({ overflow: 'inherit' })
           $(this).dialog('destroy')
         Cancel: ->
+          $("body").css({ overflow: 'inherit' })
           $(this).dialog('destroy')
+    false
+
+  $('#search_show_question').live 'click', (e)->
+    e.preventDefault()
+    $('#search_hidden_questions_loader').hide();
+    $('#search_hidden_questions_list').show();
+    $('#search_hidden_questions_div').dialog
+      resizable: false,
+      height: 450,
+      width: 400,
+      modal: true,
+      open: (event, ui) ->
+        $("body").css({ overflow: 'hidden' })
+        $('.ui-widget-overlay').width('100%');
+      close: (event, ui) ->
+        $("body").css({ overflow: 'inherit' })
+      buttons:
+        Close: ->
+          $(this).dialog('close')
+    unless $('#search_hidden_questions_div').hasClass('loaded')
+      $.ajax
+        type: 'GET',
+        url: '/show_search_hidden_questions'
     false
 
   $('.send_contact_info').live 'click', ->
@@ -620,10 +651,10 @@ $ ->
 	$("#search_clear_selected_labels").live "click", ->
 		$(".search_role_checkbox").removeAttr("checked")
 		$.fn.search_status()
-		
+
 	$(".search_status").live "change", ->
 		$.fn.search_status()
-		
+
 $.fn.search_status = () ->
 	label_contacts = $("#search_role_2")
 	check = $(".search_status :selected").val() != ""
