@@ -81,9 +81,9 @@
 <div id="add_contact_div" style="display:none" title="<%= t('.add_contact', org: current_organization) %>" class="fingerme">
   <%= render 'add_contact', person: Person.new %>
 </div>
-<%- unless current_user.settings[:hide_update_notice] == true %>
+<%- if false %>
   <div id="update_notice_div">
-    <%= render partial: 'update_notice' %>
+    <%= render partial: 'update_notice' if false %>
   </div>
 <%- end %>
 <input type="button" value="Show Message Guide" id="show_message_guide_button" style="display:none">

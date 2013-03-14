@@ -620,10 +620,10 @@ $ ->
 	$("#search_clear_selected_labels").live "click", ->
 		$(".search_role_checkbox").removeAttr("checked")
 		$.fn.search_status()
-		
+
 	$(".search_status").live "change", ->
 		$.fn.search_status()
-		
+
 $.fn.search_status = () ->
 	label_contacts = $("#search_role_2")
 	check = $(".search_status :selected").val() != ""
