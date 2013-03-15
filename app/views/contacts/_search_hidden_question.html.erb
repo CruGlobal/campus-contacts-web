@@ -1,0 +1,8 @@
+<% if @predefined_questions.include?(search_hidden_question) && search_hidden_question.attribute_name %>
+  <% link_text = search_hidden_question.attribute_name.gsub('_',' ') %>
+<% else %>
+  <% link_text = search_hidden_question.slug.present? ? search_hidden_question.slug : search_hidden_question.label %>
+<% end %>
+<li class="search_hidden_question_link" id="search_hidden_question_<%= search_hidden_question.id %>">
+  <%= link_to(link_text.titleize, unhide_survey_question_path(@organization.surveys.first || @predefined_survey.id, search_hidden_question.id), method: :put, remote: true, onclick: "$('#search_hidden_questions_div #search_hidden_questions_fetcher').hide();$('#search_hidden_questions_div #search_hidden_questions_loader').show();$('#search_hidden_questions_div #search_hidden_questions_content').html('')") %>
+</li>

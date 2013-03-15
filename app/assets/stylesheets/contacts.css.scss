@@ -102,3 +102,39 @@
     padding: 20px;
   }
 }
+
+#search_hidden_questions_div {
+  #search_hidden_questions_guide {
+    padding: 10px;
+    font-size: 14px;
+  }
+  #search_hidden_questions_list {
+    max-height: 300px;
+    overflow-x: auto;
+    ul#search_hidden_questions {
+      margin: 0px;
+      padding: 0px 10px 10px 20px;
+      li a {
+        color: #0379AE;
+      }
+    }
+  }
+  #search_hidden_questions_fetcher, #search_hidden_questions_loader {
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+  }
+}
+
+#other_questions {
+  .field.user_defined {
+    width: 265px;
+    padding-right: 10px;
+    padding-left: 0px;
+    display: inline-block;
+  }
+}
+
+input.text.validate-date {
+  width: 130px;
+}

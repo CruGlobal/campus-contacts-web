@@ -597,6 +597,7 @@ en:
       show_more: "Show More"
       show_less: "Show Less"
     search:
+      add_question: Click on a question to add a search field for it
       first_name: First Name
       last_name: Last Name
       phone_number: Phone Number

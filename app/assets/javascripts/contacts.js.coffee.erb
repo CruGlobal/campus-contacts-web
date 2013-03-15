@@ -88,19 +88,52 @@ $ ->
     $.rails.handleRemote($(this))
     false
 
-  $('#savesearchbtn').live 'click', ->
+  $('#savesearchbtn').live 'click', (e)->
+    e.preventDefault()
     $('#savesearchbox').dialog
       resizable: false,
       height: 200,
       width: 400,
       modal: true,
+      open: (event, ui) ->
+        $("body").css({ overflow: 'hidden' })
+        $('.ui-widget-overlay').width('100%');
+      close: (event, ui) ->
+        $("body").css({ overflow: 'inherit' })
       buttons:
         Save: ->
           $('#save_search_form').submit()
           t('contacts.index.search_saved')
+          $("body").css({ overflow: 'inherit' })
           $(this).dialog('destroy')
         Cancel: ->
+          $("body").css({ overflow: 'inherit' })
           $(this).dialog('destroy')
+    false
+
+  $('#search_show_question').live 'click', (e)->
+    e.preventDefault()
+    $('#search_hidden_questions_loader').hide();
+    $('#search_hidden_questions_list').show();
+    $('#search_hidden_questions_div').dialog
+      resizable: false,
+      height: 450,
+      width: 400,
+      modal: true,
+      open: (event, ui) ->
+        $("body").css({ overflow: 'hidden' })
+        $('.ui-widget-overlay').width('100%');
+      close: (event, ui) ->
+        $("body").css({ overflow: 'inherit' })
+      buttons:
+        Close: ->
+          $(this).dialog('close')
+    $('#search_hidden_questions_div #search_hidden_questions_fetcher').show()
+    $('#search_hidden_questions_div #search_hidden_questions_loader').hide()
+    $('#search_hidden_questions_div #search_hidden_questions_content').html('')
+    $.ajax
+      type: 'GET',
+      url: '/show_search_hidden_questions'
     false
 
   $('.send_contact_info').live 'click', ->
@@ -604,6 +637,7 @@ $ ->
     else
       $.a(t('contacts.index.none_checked'))
   $('#contacts_controller .index a.hide').live 'click', ->
+    $(".field.user_defined#search_question_field_"+$(this).attr('data-id')).fadeOut()
     $('#hidden_questions_div').hide()
     $('.' + $(this).attr('data-class')).fadeOut()
 
@@ -612,10 +646,13 @@ $ ->
     position = parseInt($('#table_header').position().top) + parseInt($('#table_header').height())
     $('#hidden_questions_div').css('top': position)
     $('#hidden_questions_div').toggle()
-    unless $('#hidden_questions_div').hasClass('loaded')
+    if $('#hidden_questions_div').is(':visible')
       $.ajax
         type: 'GET',
         url: '/show_hidden_questions'
+    else
+      $('#hidden_questions_div #hidden_questions_loader').show()
+      $('#hidden_questions_div #hidden_questions_content').html('')
     false
 
 	$("#search_clear_selected_labels").live "click", ->

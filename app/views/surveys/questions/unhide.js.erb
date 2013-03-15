@@ -1,0 +1,3 @@
+$('#other_questions').append("<%= escape_javascript(render partial: 'contacts/search_question', locals: {q: @question, col: nil, answer_sheet: nil})%>")
+$(".search_hidden_question_link#search_hidden_question_<%= @question.id%>").hide()
+$('#search_hidden_questions_div').dialog('close')

@@ -132,8 +132,8 @@ class Surveys::QuestionsController < ApplicationController
   def hide
   	@selected_question_id = params[:id]
   	@selected_survey_id = params[:survey_id]
-  	
-  	if @selected_question_id == "visible_surveys_column"  		
+
+  	if @selected_question_id == "visible_surveys_column"
       current_organization.settings[:visible_surveys_column] = false
       current_organization.save!
   	else
@@ -163,8 +163,8 @@ class Surveys::QuestionsController < ApplicationController
   def unhide
   	@selected_question_id = params[:id]
   	@selected_survey_id = params[:survey_id]
-  	
-  	if @selected_question_id == "visible_surveys_column"  		
+
+  	if @selected_question_id == "visible_surveys_column"
       current_organization.settings[:visible_surveys_column] = true
       current_organization.save!
   	else
@@ -177,15 +177,18 @@ class Surveys::QuestionsController < ApplicationController
 		    current_organization.settings[:visible_predefined_questions] = Array.new if current_organization.settings[:visible_predefined_questions].nil?
 		    current_organization.settings[:visible_predefined_questions] << @question.id
 		    current_organization.save!
-		  else
-		    @survey = Survey.find(@selected_survey_id)
-		    @organization = @survey.organization
-		    @organization.survey_elements.each do |pe|
-		      pe.update_attribute(:hidden, false) if pe.element_id == @selected_question_id.to_i
-		    end
-		  end
-		end
-    redirect_to :back
+      else
+        @survey = Survey.find(params[:survey_id])
+        @organization = @survey.organization
+        @survey_element = @organization.survey_elements.find_by_element_id(params[:id].to_i)
+        @survey_element.update_attribute(:hidden, false)
+        @question = @survey_element.element
+      end
+    end
+    respond_to do |wants|
+      wants.html { redirect_to :back }
+      wants.js
+    end
   end
 
   def suggestion
