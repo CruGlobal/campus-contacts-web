@@ -96,9 +96,12 @@
             <%= button_to "Hidden Questions", "", id: "search_show_question" %>
             <div id="search_hidden_questions_div" style="display:none" title="Show Hidden Question" >
               <div id="search_hidden_questions_fetcher">
-                <%= image_tag 'loader.gif'%>
-                <br/>
-                Fetching Questions...
+                <%= image_tag 'loader.gif'%><br/>Fetching Questions...
+              </div>
+              <div id="search_hidden_questions_loader">
+                <%= image_tag 'loader.gif'%><br/>Adding Question
+              </div>
+              <div id="search_hidden_questions_content">
               </div>
             </div>
           </td>

@@ -128,10 +128,12 @@ $ ->
       buttons:
         Close: ->
           $(this).dialog('close')
-    unless $('#search_hidden_questions_div').hasClass('loaded')
-      $.ajax
-        type: 'GET',
-        url: '/show_search_hidden_questions'
+    $('#search_hidden_questions_div #search_hidden_questions_fetcher').show()
+    $('#search_hidden_questions_div #search_hidden_questions_loader').hide()
+    $('#search_hidden_questions_div #search_hidden_questions_content').html('')
+    $.ajax
+      type: 'GET',
+      url: '/show_search_hidden_questions'
     false
 
   $('.send_contact_info').live 'click', ->
@@ -635,6 +637,7 @@ $ ->
     else
       $.a(t('contacts.index.none_checked'))
   $('#contacts_controller .index a.hide').live 'click', ->
+    $(".field.user_defined#search_question_field_"+$(this).attr('data-id')).fadeOut()
     $('.' + $(this).attr('data-class')).fadeOut()
 
   $('#hidden_questions_link').live 'click', (e)->
@@ -642,10 +645,13 @@ $ ->
     position = parseInt($('#table_header').position().top) + parseInt($('#table_header').height())
     $('#hidden_questions_div').css('top': position)
     $('#hidden_questions_div').toggle()
-    unless $('#hidden_questions_div').hasClass('loaded')
+    if $('#hidden_questions_div').is(':visible')
       $.ajax
         type: 'GET',
         url: '/show_hidden_questions'
+    else
+      $('#hidden_questions_div #hidden_questions_loader').show()
+      $('#hidden_questions_div #hidden_questions_content').html('')
     false
 
 	$("#search_clear_selected_labels").live "click", ->

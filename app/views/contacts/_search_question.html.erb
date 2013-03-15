@@ -1,5 +1,7 @@
-<div class="field userdefinied">
-  <span class="title"><%= q.label %></span>
+<div class="field user_defined" id="search_question_field_<%= q.id %>">
+  <span class="title">
+    <%= q.label %> <%= link_to("(#{t('nav.hide')})", hide_survey_question_path(@organization.surveys.first || @predefined_survey.id, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q), 'data-id' => q.id) %>
+  </span>
   <% if q.style == 'radio' %>
     <div class="field field_radio">
       <input type="radio" value="" name="answers[<%= q.id %>]" class="radio ">
