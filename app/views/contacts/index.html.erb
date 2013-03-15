@@ -59,7 +59,12 @@
           <%= link_to("(#{t('nav.hide')})", hide_survey_question_path(@organization.surveys.first || @predefined_survey.id, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q)) %>
         </th>
       <% end %>
-      <th><%= t('.surveys') %></th>
+      <% if current_organization.settings[:visible_surveys_column].nil? || (current_organization.settings[:visible_surveys_column].present? && current_organization.settings[:visible_surveys_column]) %>
+      <th class="visible_surveys_column">
+      	<%= t('.surveys') %>
+        <%= link_to("(#{t('nav.hide')})", hide_survey_question_path('0', 'visible_surveys_column'), remote: true, method: :put, class: 'hide', 'data-class' => 'visible_surveys_column') %>
+    	</th>
+    	<% end %>
       <th><%= sort_link @q, :last_survey, t('.last_survey'), params %></th>
       <th class="hidden_questions"><%= link_to "Hidden Questions ▾", "#", id: 'hidden_questions_link' %></th>
     </tr>

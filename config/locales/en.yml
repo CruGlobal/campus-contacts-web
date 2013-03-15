@@ -628,6 +628,7 @@ en:
       show_more: "Show More"
     menu:
       add_question_back: Click on a question to add it back to the page
+      answered_surveys: Surveys
     index:
       edit_true: '&edit=true'
       search_saved: 'This search has been saved'
