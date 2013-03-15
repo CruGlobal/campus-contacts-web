@@ -64,13 +64,16 @@
     </td>
   <% end %>
 
-  <td>
+  <% if current_organization.settings[:visible_surveys_column].nil? || (current_organization.settings[:visible_surveys_column].present? && current_organization.settings[:visible_surveys_column]) %>
+  <td class="visible_surveys_column">
     <% last_answer_sheet = "" %>
     <% person.completed_answer_sheets(current_organization).each_with_index do |answer_sheet, i| %>
       <% last_answer_sheet = answer_sheet if i == 0 %>
       <span title="<%= l(answer_sheet.updated_at, format: :date) %>" class="tipit"><%= answer_sheet.survey.title %></span><br/>
     <% end %>
   </td>
+  <% end %>
+  
   <td>
     <%= l(last_answer_sheet.updated_at, :format => :date) if last_answer_sheet.present? %>
   </td>

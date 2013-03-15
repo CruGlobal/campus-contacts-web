@@ -3,6 +3,11 @@
 </div>
 <div id="hidden_questions_list">
   <ul id="hidden_questions">
+    <% if current_organization.settings[:visible_surveys_column] == false %>
+			<li>
+				<%= link_to(t('contacts.menu.answered_surveys'), unhide_survey_question_path(0, 'visible_surveys_column'), method: :put) %>
+			</li>
+		<% end %>
     <%= render partial: 'contacts/hidden_question', collection: @hidden_questions %>
   </ul>
 </div>

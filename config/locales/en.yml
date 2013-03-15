@@ -608,9 +608,8 @@ en:
     assign: Assign
     unassign: 'Unassign'
     add_contact: "Add Contact"
-    update_notice_title: "New All Contacts Options"
-    update_notice_content: "We’re rolling out changes to make using MissionHub even easier. With all of the Directory features now accessible via All Contacts, you can easily manage your contacts from one page."
-    update_notice_link: "Learn about the new look on our blog."
+    update_notice_title: "Announcement Title"
+    update_notice_content: "Announcement Content"
     update_notice_link_url: 'http://blog.missionhub.com/2012/10/16/new-all-contacts/'
     update_notice_toggle: "Do not show this notice again"
     statuses:
@@ -630,6 +629,7 @@ en:
       show_more: "Show More"
     menu:
       add_question_back: Click on a question to add it back to the page
+      answered_surveys: Surveys
     index:
       edit_true: '&edit=true'
       search_saved: 'This search has been saved'
