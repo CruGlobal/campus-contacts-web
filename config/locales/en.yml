@@ -152,6 +152,7 @@ en:
     label_search_last_survey: Last Survey
     contacts_updated_from: 'Contacts Updated From'
     dash: ' - '
+    help_redirect_link: http://help.missionhub.com
   leaders:
     form:
       name_required: "Name, gender, and email fields are required to add a leader:"
