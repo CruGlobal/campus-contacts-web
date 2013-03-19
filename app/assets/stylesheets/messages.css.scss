@@ -1,0 +1,70 @@
+// Place all the styles related to the messages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#sent_messages_div {
+  #sent_messages_loader {
+    margin: 20px auto;
+    text-align: center;
+  }
+  #sent_messages_paginator_top {
+    padding-bottom: 5px;
+    text-align: center;
+  }
+  #sent_messages_paginator_bottom {
+    padding-top: 5px;
+    text-align: center;
+  }
+  #sent_messages_content {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+
+    #sent_messages_table {
+      border-spacing: 0;
+      width: 100%;
+      .alert_cell {
+        text-align: center;
+        padding-top: 20px;
+      }
+      .table_header {
+        font-weight: bold;
+        .info {
+          text-align: right;
+        }
+      }
+      &:last-child.table_content {
+        border-bottom: 1px solid #eee;
+      }
+      .table_content {
+        border-top: 1px solid #eee;
+        .table_cell {
+          vertical-align: top;
+        }
+        .receiver {
+          padding: 7px 0 0 5px;
+          .to {
+            font-size: 11px;
+            color: #aaa;
+            font-style: italic;
+          }
+        }
+        .info {
+          padding: 7px 5px 0 0;
+          font-size: 10px;
+          width: 150px;
+          font-color: #333;
+          vertical-align: top;
+          text-align: right;
+        }
+      }
+      .table_message {
+        .msg {
+          padding: 0 5px 8px 5px;
+          color: #777;
+          font-size: 11px;
+        }
+      }
+    }
+  }
+}

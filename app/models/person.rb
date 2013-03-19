@@ -6,6 +6,8 @@ class Person < ActiveRecord::Base
                   :meta => { person_id: :id }
 
   has_one :sent_person
+  has_many :sent_messages, class_name: "Message", foreign_key: "person_id"
+  has_many :received_messages, class_name: "Message", foreign_key: "receiver_id"
   has_many :person_transfers
   has_many :new_people
   has_one :transferred_by, class_name: "PersonTransfer", foreign_key: "transferred_by_id"
@@ -182,6 +184,10 @@ class Person < ActiveRecord::Base
     :group => "people.id",
     :having => ["DATE(MAX(ass.updated_at)) >= ? AND DATE(MAX(ass.updated_at)) <= ? ", date_from, date_to]
   }}
+
+  def messages_in_org(org_id)
+    sent_messages.where("organization_id = ?", org_id).order('created_at DESC')
+  end
 
   def contact_role_for_org(org)
     organizational_roles.where("organizational_roles.organization_id = ? AND organizational_roles.role_id = ?", org.id, Role::CONTACT_ID).first

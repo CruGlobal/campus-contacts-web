@@ -12,6 +12,7 @@ Mh::Application.routes.draw do
   match 'show_hidden_questions' => 'contacts#show_hidden_questions'
   match 'show_search_hidden_questions' => 'contacts#show_search_hidden_questions'
   match 'display_sidebar' => 'contacts#display_sidebar'
+  match 'sent_messages' => 'messages#sent_messages'
 
   resources :group_labels, :only => [:create, :destroy]
 

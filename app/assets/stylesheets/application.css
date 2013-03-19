@@ -4,6 +4,7 @@
  *= require organizations
  *= require imports
  *= require roles
+ *= require messages
  *= require groups
  *= require survey_responses
  *= require jquery.qtip

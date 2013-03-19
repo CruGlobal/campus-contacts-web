@@ -63,24 +63,31 @@ class PeopleControllerTest < ActionController::TestCase
         assert p2.save
       end
 
-      should "send bulk email" do
+      should "not send bulk email if receiver do not have an email" do
         xhr :post, :bulk_email, { :to => "#{@person1.id},#{@person2.id}", :subject => "functional test", :body => "test email body" }
-
         assert_response :success
+        assert_nil assigns(:message)
+      end
+
+      should "send bulk email if receivers have email" do
+
+        email1 = Factory(:email_address, email: "jonsnow1@email.com", person: @person1)
+        email2 = Factory(:email_address, email: "jonsnow2@email.com", person: @person2)
+        xhr :post, :bulk_email, { :to => "#{@person1.id},#{@person2.id}", :subject => "functional test", :body => "test email body" }
+        assert_response :success
+        assert_not_nil assigns(:message)
       end
 
       should "not send bulk email to unknown person" do
         xhr :post, :bulk_email, { :to => "999999", :subject => "functional test", :body => "test email body" }
-
         assert_response :success
+        assert_nil assigns(:message)
       end
 
       should "send bulk sms" do
-
         xhr :post, :bulk_sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
-
         assert_response :success
-        assert_not_nil assigns(:sent_sms)
+        assert_not_nil assigns(:message)
       end
 
       should "send bulk SMS via twilio" do

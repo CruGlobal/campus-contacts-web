@@ -98,4 +98,14 @@
 <div id="transfer_to_org" style="display:none">
   <%= render 'transfer' %>
 </div>
+<div id="sent_messages_div" style="display:none">
+  <div id="sent_messages_loader">
+    <%= image_tag 'loader.gif'%><br/>Loading Sent Messages
+  </div>
+  <div id="sent_messages_paginator_top"></div>
+  <div id="sent_messages_content">
+    <%= render partial: 'messages/sent_messages'%>
+  </div>
+  <div id="sent_messages_paginator_bottom"></div>
+</div>
 

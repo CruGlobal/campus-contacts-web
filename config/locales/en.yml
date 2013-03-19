@@ -192,6 +192,7 @@ en:
       year_in_school: 'Year in School'
       manage_roles: 'Manage Labels'
       send_sms: Text
+      sent_messages: Sent
       send_email: Email
       group_comment: Add Comment
       apply_roles: 'Apply Labels'
@@ -393,6 +394,8 @@ en:
     button_text_sub: 'SEND'
     button_email: 'EMAIL'
     button_email_sub: 'SEND'
+    button_sent: 'SENT'
+    button_sent_sub: 'MESSAGES'
   surveys:
     index:
       title: "Surveys for %{org}"

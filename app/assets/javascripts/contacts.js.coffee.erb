@@ -30,12 +30,41 @@ $ ->
       Cancel: ->
         $(this).dialog('close')
 
+  $('#sent_messages_div').dialog
+    resizable: false,
+    height: 500,
+    width: 550,
+    title: "Sent Messages",
+    autoOpen: false,
+    draggable: false,
+    modal: true,
+    open: (event, ui) ->
+      $("body").css({ overflow: 'hidden' })
+      $('.ui-widget-overlay').width('100%');
+    close: (event, ui) ->
+      $("body").css({ overflow: 'inherit' })
+    buttons:
+      Close: ->
+        $(this).dialog('close')
+
   $('#transfer_to_org_link').live 'click', (e)->
     e.preventDefault()
     if $('.id_checkbox:checked').length > 0
       $('#transfer_to_org').dialog('open')
     else
       $.a(t('contacts.index.none_checked'))
+
+  $("#sent_messages_link").live 'click', (e)->
+    e.preventDefault()
+    $("#sent_messages_div").dialog("option", "position", ['middle',30]);
+    $("#sent_messages_div").dialog('open')
+    $("#sent_messages_content").hide();
+    $('#sent_messages_paginator_top').hide();
+    $('#sent_messages_paginator_bottom').hide();
+    $("#sent_messages_loader").show()
+    $.ajax
+      type: 'GET',
+      url: '/sent_messages'
 
   $('#bulk_export_link').live 'click', (e)->
     e.preventDefault()
