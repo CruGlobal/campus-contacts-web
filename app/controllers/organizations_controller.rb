@@ -130,7 +130,7 @@ class OrganizationsController < ApplicationController
 
   def do_transfer
     @people = Person.where(id: params[:ids])
-    @sent_team_org = Organization.find(6816) # 100% Sent Team
+    @sent_team_org = Organization.find(472) # CM 100% Sent Team
     @people.each do |person|
       @sent_team_org.add_contact(person)
       sent_record = person.set_as_sent

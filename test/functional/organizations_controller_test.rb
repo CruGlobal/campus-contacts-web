@@ -331,7 +331,7 @@ class OrganizationsControllerTest < ActionController::TestCase
   context "100% Sent feature" do
     setup do
       @user, @organization = admin_user_login_with_org
-      @sent_org = Factory(:organization, id: 6816, name: '100% Sent Team')
+      @sent_org = Factory(:organization, id: 472, name: 'CM 100% Sent Team')
       @contact1 = Factory(:person, first_name: 'abby')
       @contact2 = Factory(:person, first_name: 'belly')
       @contact3 = Factory(:person, first_name: 'cassy')
