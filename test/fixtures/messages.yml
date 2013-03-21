@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  organization_id: 1
+  person_id: 1
+  receive_id: 1
+  from: MyString
+  to: MyString
+  subject: MyString
+  message: MyText
+  status: MyString
+  sent_via: MyString
+
+two:
+  organization_id: 1
+  person_id: 1
+  receive_id: 1
+  from: MyString
+  to: MyString
+  subject: MyString
+  message: MyText
+  status: MyString
+  sent_via: MyString

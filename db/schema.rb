@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130102161031) do
+ActiveRecord::Schema.define(:version => 20130319163107) do
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -73,6 +73,13 @@ ActiveRecord::Schema.define(:version => 20130102161031) do
   end
 
   add_index "activities", ["target_area_id", "organization_id"], :name => "index_activities_on_target_area_id_and_organization_id", :unique => true
+
+  create_table "add_relationship_to_sent_sms", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "organization_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
 
   create_table "addresses", :force => true do |t|
     t.string   "address1"
@@ -403,6 +410,20 @@ ActiveRecord::Schema.define(:version => 20130102161031) do
   add_index "merge_audits", ["merge_looser_id", "merge_looser_type"], :name => "merge_looser"
   add_index "merge_audits", ["mergeable_id", "mergeable_type"], :name => "mergeable"
 
+  create_table "messages", :force => true do |t|
+    t.integer  "organization_id"
+    t.integer  "person_id"
+    t.integer  "receiver_id"
+    t.string   "from"
+    t.string   "to"
+    t.string   "subject"
+    t.text     "message"
+    t.string   "status"
+    t.string   "sent_via"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
   create_table "new_people", :force => true do |t|
     t.integer  "person_id"
     t.integer  "organization_id"
@@ -661,6 +682,19 @@ ActiveRecord::Schema.define(:version => 20130102161031) do
     t.datetime "updated_at"
   end
 
+  create_table "sent_emails", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "organization_id"
+    t.integer  "receiver_id"
+    t.string   "sender"
+    t.string   "recipient"
+    t.string   "subject"
+    t.text     "message"
+    t.string   "status"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
   create_table "sent_people", :force => true do |t|
     t.integer  "person_id"
     t.integer  "transferred_by_id"
@@ -669,12 +703,16 @@ ActiveRecord::Schema.define(:version => 20130102161031) do
   end
 
   create_table "sent_sms", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "organization_id"
+    t.integer  "receiver_id"
     t.text     "message"
     t.string   "recipient"
     t.text     "reports"
     t.string   "moonshado_claimcheck"
     t.string   "sent_via"
     t.integer  "received_sms_id"
+    t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "twilio_sid"
@@ -683,6 +721,9 @@ ActiveRecord::Schema.define(:version => 20130102161031) do
     t.integer  "question_id"
   end
 
+  add_index "sent_sms", ["organization_id"], :name => "index_sent_sms_on_organization_id"
+  add_index "sent_sms", ["person_id"], :name => "index_sent_sms_on_person_id"
+  add_index "sent_sms", ["receiver_id"], :name => "index_sent_sms_on_receiver_id"
   add_index "sent_sms", ["twilio_sid"], :name => "index_sent_sms_on_twilio_sid", :unique => true
 
   create_table "sms_carriers", :force => true do |t|
@@ -822,6 +863,8 @@ ActiveRecord::Schema.define(:version => 20130102161031) do
   add_index "versions", ["person_id", "created_at"], :name => "index_versions_on_person_id_and_created_at"
 
   add_foreign_key "answers", "elements", :name => "answers_ibfk_1", :column => "question_id"
+
+  add_foreign_key "email_addresses", "people", :name => "email_addresses_ibfk_1", :dependent => :delete
 
   add_foreign_key "organization_memberships", "organizations", :name => "organization_memberships_ibfk_2", :dependent => :delete
 

@@ -324,9 +324,18 @@ class PeopleController < ApplicationController
 
     person_ids.uniq.each do |id|
       person = Person.find_by_id(id)
-      PeopleMailer.enqueue.bulk_message(person.email, current_person.email, params[:subject], params[:body]) if person.present? && person.email.present?
+      if person.present? && person.email.present?
+        @message = current_person.sent_messages.create(
+          receiver_id: person.id,
+          organization_id: current_organization.id,
+          from: current_person.email,
+          to: person.email,
+          sent_via: 'email',
+          subject: params[:subject],
+          message: params[:body]
+        )
+      end
     end
-
     render :nothing => true
   end
 
@@ -358,12 +367,24 @@ class PeopleController < ApplicationController
         if person.primary_phone_number.email_address.present?
           # Use email to sms if we have it
           from_email = current_person.primary_phone_number && current_person.primary_phone_number.email_address.present? ? current_person.primary_phone_number.email_address : current_person.email
-          @sent_sms = SmsMailer.enqueue.text(person.primary_phone_number.email_address, "#{current_person.to_s} <#{from_email}>", params[:body])
+          from = "#{current_person.to_s} <#{from_email}>"
+          @message = current_person.sent_messages.create(
+            receiver_id: person.id,
+            organization_id: current_organization.id,
+            from: from,
+            to: person.primary_phone_number.email_address,
+            sent_via: 'sms_email',
+            message: params[:body]
+          )
         else
           # Otherwise send it as a text
-          @sent_sms = SentSms.create!(message: params[:body], recipient: person.phone_number, sent_via: current_organization.sms_gateway)
-          # + ' Txt HELP for help STOP to quit'
-          @sent_sms.queue_sms
+          @message = current_person.sent_messages.create(
+            receiver_id: person.id,
+            organization_id: current_organization.id,
+            to: person.phone_number,
+            sent_via: 'sms',
+            message: params[:body]
+          )
         end
       end
     end

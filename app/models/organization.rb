@@ -9,6 +9,7 @@ class Organization < ActiveRecord::Base
                   :meta => { organization_id: :parent_id }
 
   belongs_to :importable, polymorphic: true
+  has_many :messages
   has_many :roles, inverse_of: :organization
   has_many :group_labels
   has_many :activities, dependent: :destroy
@@ -444,15 +445,15 @@ class Organization < ActiveRecord::Base
     # Otherwise, recursively call this method on the parent
     parent.implied_involvement_root
   end
-	
+
 	def group_search(term)
-		groups.where("LOWER(name) LIKE ?","%#{term}%").limit(5).uniq 
+		groups.where("LOWER(name) LIKE ?","%#{term}%").limit(5).uniq
 	end
-	
+
 	def role_search(term)
 		roles.where("LOWER(name) LIKE ?","%#{term}%").limit(5).uniq
 	end
-	
+
   private
 
   def import_from_conference(user_id)

@@ -1,0 +1,14 @@
+<tr class="table_content">
+  <td class="table_cell receiver">
+    <%= message.receiver.name %>
+    <span class="to">
+      - <%= message.to.downcase %>
+    </span>
+  </td>
+  <td class="table_cell info">
+    <%= message.date_sent %>
+  </td>
+</tr>
+<tr class="table_message">
+  <td colspan="2" class="table_cell msg"><%= message.message %></td>
+</tr>

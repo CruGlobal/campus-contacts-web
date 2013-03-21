@@ -48,6 +48,7 @@ $ ->
     height:444,
     width:730,
     modal: true,
+    draggable: false,
     autoOpen: false,
     open: (event, ui) ->
       $("body").css({ overflow: 'hidden' })
