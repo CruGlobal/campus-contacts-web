@@ -153,6 +153,7 @@ en:
     contacts_updated_from: 'Contacts Updated From'
     dash: ' - '
     help_redirect_link: http://help.missionhub.com
+    help_redirect_link_import: http://help.missionhub.com/entries/23347123-Import-Contacts
   leaders:
     form:
       name_required: "Name, gender, and email fields are required to add a leader:"
