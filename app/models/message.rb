@@ -1,6 +1,6 @@
 class Message < ActiveRecord::Base
   include ActionView::Helpers::DateHelper
-  attr_accessible :from, :message, :organization_id, :person_id, :receiver_id, :sent_via, :subject, :to
+  attr_accessible :from, :message, :organization_id, :person_id, :receiver_id, :sent_via, :subject, :to, :reply_to
 
   belongs_to :organization
   belongs_to :sender, class_name: "Person", foreign_key: "person_id"
@@ -21,12 +21,12 @@ class Message < ActiveRecord::Base
   def process_message
     case sent_via
     when 'sms_email'
-      SmsMailer.enqueue.text(to, from, message)
+      SmsMailer.enqueue.text(to, from, message, reply_to)
     when 'sms'
       sent_sms = SentSms.create!(message: message, recipient: to, sent_via: organization.sms_gateway)
       sent_sms.queue_sms
     when 'email'
-      PeopleMailer.enqueue.bulk_message(to, from, subject, message)
+      PeopleMailer.enqueue.bulk_message(to, from, subject, message, reply_to)
     end
   end
 end

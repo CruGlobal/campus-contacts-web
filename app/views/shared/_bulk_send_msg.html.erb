@@ -1,5 +1,17 @@
 <div id="bulk_send_msg_dialog" style="display:none" title="Send Bulk Text Message">
   <%= form_tag "", class: 'bulk-msg' do %>
+    <div class="note send_text">
+      <%=raw t('general.sms_note') %>
+    </div>
+    <div class="note send_email">
+      <div class="reply_to_toggle">
+        <%= check_box_tag :reply_to_email, "", id: 'reply_to_email' %>
+      </div>
+      <div class="reply_to_toggle">
+        <%=raw t('general.email_note') %>
+      </div>
+    </div>
+
     <div class="field">
       <label><%= t('general.recipients') %></label>
       <%= hidden_field_tag :to %>
