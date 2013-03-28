@@ -335,6 +335,10 @@ $('#send_bulkemail_link_new').live 'click', (e)->
   $('.bulk-msg').addClass('bulk-email')
   $('.bulk-msg').removeClass('bulk-text')
   $('.bulk-msg').attr('action', '/people/bulk_email')
+  $('#bulk_send_msg_dialog .note.send_text').hide()
+  $('#bulk_send_msg_dialog .note.send_email').show()
+  $('#bulk_send_msg_dialog #reply_to_email').attr('checked',false)
+  $('#bulk_send_msg_dialog #reply_to_email').focus()
   $('#bulk_send_msg_dialog').dialog({title: 'Send Email'})
 
   ids = []
@@ -377,6 +381,8 @@ $('#send_bulksms_link_new').live 'click', (e)->
   $('.bulk-msg').addClass('bulk-text')
   $('.bulk-msg').removeClass('bulk-email')
   $('.bulk-msg').attr('action', '/people/bulk_sms')
+  $('#bulk_send_msg_dialog .note.send_text').show()
+  $('#bulk_send_msg_dialog .note.send_email').hide()
   $('#bulk_send_msg_dialog').dialog({title: 'Send Text'})
 
   ids = []

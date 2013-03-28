@@ -137,6 +137,8 @@ en:
     recipients: "Recipients:"
     message: "Message:"
     subject: 'Subject:'
+    email_note: "Check this box to send your Email with an \"anonymous reply to\" of do-not-reply@missionhub.com<br/>Be sure to identify yourself or your organization in the text of your email message."
+    sms_note: "Due to the lack of local phone standards, the receiver is not able to use the \"reply function\" for this message,<br/>so if the sender wants a reply, a \"reply to phone number\" needs to be included in the text of the message."
     sms_preview_title: "Your recipients will receive the following text message:"
     sms_preview_from: "FRM:"
     sms_preview_body: "MSG:"

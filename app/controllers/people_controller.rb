@@ -325,10 +325,12 @@ class PeopleController < ApplicationController
     person_ids.uniq.each do |id|
       person = Person.find_by_id(id)
       if person.present? && person.email.present?
+        from = params[:reply_to_email] ? "do-not-reply@missionhub.com" : current_person.email
         @message = current_person.sent_messages.create(
           receiver_id: person.id,
           organization_id: current_organization.id,
-          from: current_person.email,
+          from: from,
+          reply_to: from,
           to: person.email,
           sent_via: 'email',
           subject: params[:subject],
@@ -366,12 +368,12 @@ class PeopleController < ApplicationController
       if person.present? && person.primary_phone_number
         if person.primary_phone_number.email_address.present?
           # Use email to sms if we have it
-          from_email = current_person.primary_phone_number && current_person.primary_phone_number.email_address.present? ? current_person.primary_phone_number.email_address : current_person.email
-          from = "#{current_person.to_s} <#{from_email}>"
+          from = "do-not-reply@missionhub.com"
           @message = current_person.sent_messages.create(
             receiver_id: person.id,
             organization_id: current_organization.id,
             from: from,
+            reply_to: from,
             to: person.primary_phone_number.email_address,
             sent_via: 'sms_email',
             message: params[:body]
