@@ -31,17 +31,5 @@
 			</div>
 		</div>
 	<% end %>
-	<%= link_to("/contacts?click=sent_messages_link", :class => "button") do %>
-		<div>
-			<%= image_tag("dash_button_icon_messages.png") %>
-			<div class="mod">
-				<p>
-					<span class="primary"><%= t('dashboard.button_sent') %></span>
-					<br/>
-					<span class="secondary"><%= t('dashboard.button_sent_sub') %></span>
-				</p>
-			</div>
-		</div>
-	<% end %>
 </div>
 <%= link_to("Help Me", t('general.help_redirect_link'), :target => "_blank", :class => "helpme") %>
