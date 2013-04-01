@@ -191,27 +191,33 @@ class Surveys::QuestionsController < ApplicationController
     end
   end
 
-  def suggestion
+  def suggestion    
     type = params[:type]
-    keyword = params[:keyword].strip
-    survey = @survey
-    response = Array.new
-    if type == 'Leader'
-      results = @survey.organization.leaders.where("last_name LIKE ? OR first_name LIKE ?", "%#{keyword}%", "%#{keyword}%")
-      response = results.uniq.collect{|leader| {"label"=>"#{leader.name} (#{leader.email})", "id"=>leader.id}}
-    elsif type == 'Ministry'
-      results = current_person.all_organization_and_children.where("name LIKE ?", "%#{keyword}%")
-      response = results.uniq.collect{|ministry| {"label"=>"#{ministry.name}", "id"=>ministry.id}}
-    elsif type == 'Group'
-      if current_organization.present?
-        results = current_organization.groups.where("name LIKE ?", "%#{keyword}%")
-        response = results.uniq.collect{|group| {"label"=>"#{group.name} (#{group.location})", "id"=>group.id}}
-      end
-    elsif type == 'Label'
-      results = current_organization.roles.where("name LIKE ?", "%#{keyword}%")
-      response = results.uniq.collect{|label| {"label"=>"#{label.name}", "id"=>label.id}}
-    end
-    render json: response
+    keyword = params[:keyword]
+    
+    @response = Array.new
+    if type.present? && keyword.present?
+   	 	keyword = keyword.strip
+		  case type
+			when 'Leader'
+		    leaders = @survey.organization.leaders.where("last_name LIKE ? OR first_name LIKE ?", "%#{keyword}%", "%#{keyword}%")
+		    @response = leaders.uniq.collect{|p| {label: "#{p.name} (#{p.email})", id: p.id}}
+			when 'Ministry'
+		    ministries = current_person.all_organization_and_children.where("name LIKE ?", "%#{keyword}%")
+		    @response = ministries.uniq.collect{|p|  {label: p.name, id: p.id}}
+			when 'Group'
+				groups = current_organization.group_search(keyword)
+				@response = groups.collect{|p| {label: "#{p.name} (#{p.location})", id: p.id}}
+			when 'Label'
+				roles = current_organization.role_search(keyword)
+				@response = roles.collect{|p| {label: p.name, id: p.id}}
+			else
+			end
+		end
+				
+		respond_to do |format|
+		  format.json { render json: @response.to_json }
+		end
   end
 
   private

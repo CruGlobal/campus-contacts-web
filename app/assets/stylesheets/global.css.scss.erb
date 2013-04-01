@@ -823,7 +823,6 @@ button[type=submit].smallbtn {
 	background-color: $blue;
 }
 
-
 .pagemenu {
   background: $light-blue;
   padding: 10px 15px;
@@ -2685,10 +2684,13 @@ ul#ui-autocomplete {
     select {
       width: 290px;
     }
+    input[type=text]{
+    	width: 290px;
+    }
   }
 
   div.rule_form {
-    margin-left: 10px;
+    margin: 2px 0px 2px 10px;
     .title {
       font-size: 14px;
       font-weight: bold;
@@ -2707,6 +2709,10 @@ ul#ui-autocomplete {
   }
 }
 
+#autoassign_selected_id {
+  display: none;
+}
+
 #question_form {
   width: 735px;
 }
@@ -2716,11 +2722,6 @@ ul#ui-autocomplete {
   width: 735px;
   text-align: center;
 }
-
-#autoassign_selected_id {
-  display: none;
-}
-
 
 #archive_contacts_before, #date_leaders_not_logged_in_after{
   width: 100px;

@@ -82,11 +82,11 @@ $ ->
     
   $('#advanced_toggle').live 'click', (e) ->
     e.preventDefault()
-    $('.advanced_options').slideToggle()
     if $('.advanced_options').is(':visible')
-      $(this).text(t('surveys.questions.form.hide_advanced_options'))
-    else
       $(this).text(t('surveys.questions.form.show_advanced_options'))
+    else
+      $(this).text(t('surveys.questions.form.hide_advanced_options'))
+    $('.advanced_options').slideToggle()
 
   $('#notify_advanced_toggle').live 'click', (e) ->
     e.preventDefault()

@@ -1,4 +1,4 @@
-<%= link_to t('.show_advanced_options'), '#', id: 'advanced_toggle' %>
+<%= link_to t('surveys.questions.form.show_notification_options'), '#', id: 'advanced_toggle' %>
 <br/>
 <br/>
 <div class="notify_advanced_options advanced_options hidden">
@@ -69,10 +69,11 @@
         <div class="label">
           <%= f.label :autoassign_keyword, "Search #{assign_contact_to_type}:" %>
         </div>
-        <div class="fieldset">
-          <%= text_field_tag :autoassign_keyword, autoassign_keyword, id: 'autoassign_autosuggest', 'data-survey-id'=>s.id %>
+        <div class="fieldset" style="width:50px;">
+	        <%= text_field_tag :autoassign_keyword, autoassign_keyword, id: 'autoassign_autosuggest', 'data-survey-id'=>s.id %>
           <br/>
           <%= text_field_tag :autoassign_selected_id, autoassign_selected_id, id: 'autoassign_selected_id' %>
+          <%#= text_field_tag :autoassign_keyword, autoassign_keyword, id: 'autoassign_autosuggest', 'data-survey-id'=>s.id, 'data-search-desc'=>'Type a term to search' %>
         </div>
       </div>
       
