@@ -21,14 +21,14 @@
   </div>
   
 
-  <div class="item" >
+  <div class="item" style="display:none;">
     <%= f.check_box :list_publicly %>
     <%= f.label :list_publicly %>
     <div class="icon help tipit help_bubble_keyword" title="<%= t('groups.form.list_publicly_tip') %>"></div>
   </div>
 
 
-  <div class="item" style="<%= 'display:none' if !@group.list_publicly? %>">
+  <div class="item" style="display:none; <%#= 'display:none' if !@group.list_publicly? %>">
     <%= f.check_box :approve_join_requests %>
     <%= f.label :approve_join_requests %>
     <div class="icon help tipit help_bubble_keyword" title="<%= t('.approve_join_tip') %>"></div>
