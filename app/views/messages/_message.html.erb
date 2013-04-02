@@ -1,6 +1,6 @@
 <tr class="table_content">
   <td class="table_cell receiver">
-    <%= message.receiver.name %>
+    <%= message.receiver.name if message.receiver %>
     <span class="to">
       - <%= message.to.downcase %>
     </span>
