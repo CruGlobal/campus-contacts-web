@@ -100,6 +100,11 @@ class Organization < ActiveRecord::Base
   end
 
   def has_parent?(org_id)
+    if id == org_id
+      return true
+    elsif !ancestry.present?
+      return false
+    end
     ancestry.present? ? ancestry.split('/').include?(org_id.to_s) : true
   end
 
