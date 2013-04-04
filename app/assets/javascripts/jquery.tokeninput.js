@@ -54,8 +54,7 @@ var DEFAULT_SETTINGS = {
     
  	//Custom
  		placeHolder: "",
- 		placeHolderWidth: "30",
- 		inputDefaultWidth: "30"
+ 		defaultWidth: "150"
 };
 
 // Default classes to use when theming
@@ -192,7 +191,8 @@ $.TokenList = function (input, url_or_data, settings) {
     // Create a new text input an attach keyup events
     var input_box = $("<input type=\"text\"  autocomplete=\"off\">")
         .css({
-            outline: "none"
+            outline: "none",
+            width: settings.defaultWidth
         })
         .attr("id", settings.idPrefix + input.id)
         .attr("placeholder", settings.placeHolder)
@@ -205,11 +205,7 @@ $.TokenList = function (input, url_or_data, settings) {
         .blur(function () {	
             hide_dropdown();
             $(this).val("");
-        		if(token_count >= 1){
-	        		default_resize_input();
-        		}else{
-  	      		placehoder_resize_input();
-        		}
+	      		placehoder_resize_input();
         })
         .bind("keyup keydown blur update", resize_input)
         .keyup(function(){
@@ -321,6 +317,9 @@ $.TokenList = function (input, url_or_data, settings) {
     // The list to store the token items in
     var token_list = $("<ul />")
         .addClass(settings.classes.tokenList)
+        .css({
+          width: settings.defaultWidth
+        })
         .click(function (event) {
             var li = $(event.target).closest("li");
             if(li && li.get(0) && $.data(li.get(0), "tokeninput")) {
@@ -358,6 +357,7 @@ $.TokenList = function (input, url_or_data, settings) {
     // The list to store the dropdown items in
     var dropdown = $("<div>")
         .addClass(settings.classes.dropdown)
+        .css("width", token_list.width())
         .appendTo("body")
         .hide();
 
@@ -446,7 +446,7 @@ $.TokenList = function (input, url_or_data, settings) {
 
     function check_width() {
       	if(input_box.val() == 0 || token_count == 0){
-      		input_box.css("width", settings.placeHolderWidth);
+      		input_box.css("width", settings.defaultWidth);
       		input_box.attr("placeholder", settings.placeHolder);
       	}
       	
@@ -456,33 +456,16 @@ $.TokenList = function (input, url_or_data, settings) {
     }
     
     
-    function default_resize_input() {
-        if(input_val === (input_val = input_box.val())) {return;}
-
-        // Enter new content into resizer and resize input accordingly
-        var escaped = input_val.replace(/&/g, '&amp;').replace(/\s/g,' ').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        input_resizer.html(escaped);
-        input_box.width(settings.inputDefaultWidth);
-    }
-    
     function placehoder_resize_input() {
         if(input_val === (input_val = input_box.val())) {return;}
 
         // Enter new content into resizer and resize input accordingly
         var escaped = input_val.replace(/&/g, '&amp;').replace(/\s/g,' ').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         input_resizer.html(escaped);
-        input_box.width(settings.placeHolderWidth);
+        input_box.width(settings.defaultWidth);
     }
     
-    function default_resize_input() {
-        if(input_val === (input_val = input_box.val())) {return;}
-
-        // Enter new content into resizer and resize input accordingly
-        var escaped = input_val.replace(/&/g, '&amp;').replace(/\s/g,' ').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        input_resizer.html(escaped);
-        input_box.width(settings.inputDefaultWidth);
-    }
-    
+        
     function resize_input() {
         if(input_val === (input_val = input_box.val())) {return;}
 

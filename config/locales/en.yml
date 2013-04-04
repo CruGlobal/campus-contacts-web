@@ -1078,6 +1078,8 @@ en:
       update: Update
   member: Member
   leader: Leader
+  group: Group
+  label: Label
   organizations:
     transfer:
       title: "Contacts Pending Transfer to 100% Sent"

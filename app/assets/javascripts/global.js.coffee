@@ -10,7 +10,7 @@ $ ->
       resultsLimit: 10
       hintText: $('#send_email_to').attr("data-search-desc"),
       placeHolder: $('#send_email_to').attr("data-search-desc"),
-      placeHolderWidth: 650
+      defaultWidth: 690
 
     $('#send_text_to').tokenInput "/contacts/auto_suggest_send_text.json"
       theme: 'facebook'
@@ -19,7 +19,7 @@ $ ->
       resultsLimit: 10
       hintText: $('#send_text_to').attr("data-search-desc"),
       placeHolder: $('#send_text_to').attr("data-search-desc"),
-      placeHolderWidth: 650
+      defaultWidth: 690
 
     include_archived = $.url(window.location.href).param("include_archived");
     if include_archived
