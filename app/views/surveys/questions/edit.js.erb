@@ -1,4 +1,12 @@
-$('#question_form').hide()
-$('#question_form').html('<%= j(render('form', question: @question)) %>') 
+$('#create_question_form').html('');
+$('#question_form').hide();
+$('#question_form').html('<%= j(render('form', question: @question)) %>');
 $('#loading').hide();
 $('#question_form').slideDown();
+
+//Instantiate search if has data for Automatic Assignment of Contacts
+$(document).ready(function() {
+  <% name = @auto_assign.present? ? @auto_assign.extra_parameters['name'] : "" %>
+  <% id = @auto_assign.present? ? @auto_assign.extra_parameters['id'] : "" %>
+	autoassign_search("<%= id %>", "<%= name %>");
+});

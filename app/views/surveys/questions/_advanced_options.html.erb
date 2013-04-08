@@ -2,19 +2,12 @@
 <br/>
 <br/>
 <div class="notify_advanced_options advanced_options hidden">
-  <% survey_element = s.survey_elements.find_by_element_id(q.id) %>
+  <% notify_leaders = @auto_notify.present? ? @auto_notify.extra_parameters['leaders'] : [] %>
+  <% notify_triggers = @auto_notify.present? ? @auto_notify.trigger_keywords : '' %>
   
-  <% rule_notify = Rule.find_by_rule_code('AUTONOTIFY') %>
-  <% auto_notify = survey_element.question_rules.find_by_rule_id(rule_notify.id) if survey_element %>
-  <% notify_leaders = auto_notify.present? ? auto_notify.extra_parameters['leaders'] : [] %>
-  <% notify_triggers = auto_notify.present? ? auto_notify.trigger_keywords : '' %>
-  
-  <% rule_assign = Rule.find_by_rule_code('AUTOASSIGN') %>
-  <% auto_assign = survey_element.question_rules.find_by_rule_id(rule_assign.id) if survey_element %>
-  <% assign_contact_to_type = auto_assign.present? ? auto_assign.extra_parameters['type'] : 'Leader' %>
-  <% assignment_trigger_words = auto_assign.present? ? auto_assign.trigger_keywords : '' %>
-  <% autoassign_keyword = auto_assign.present? ? auto_assign.extra_parameters['name'] : '' %>
-  <% autoassign_selected_id = auto_assign.present? ? auto_assign.extra_parameters['id'] : '' %>
+  <% assign_contact_to_type = @auto_assign.present? ? @auto_assign.extra_parameters['type'] : 'Leader' %>
+  <% assignment_trigger_words = @auto_assign.present? ? @auto_assign.trigger_keywords : '' %>
+  <% autoassign_selected_id = @auto_assign.present? ? @auto_assign.extra_parameters['id'] : '' %>
   
   <div class="rule_form" id="AUTONOTIFY">
     <div class="title">▶ Automatic Notification for Leaders</div>
@@ -69,11 +62,9 @@
         <div class="label">
           <%= f.label :autoassign_keyword, "Search #{assign_contact_to_type}:" %>
         </div>
-        <div class="fieldset" style="width:50px;">
-	        <%= text_field_tag :autoassign_keyword, autoassign_keyword, id: 'autoassign_autosuggest', 'data-survey-id'=>s.id %>
-          <br/>
-          <%= text_field_tag :autoassign_selected_id, autoassign_selected_id, id: 'autoassign_selected_id' %>
-          <%#= text_field_tag :autoassign_keyword, autoassign_keyword, id: 'autoassign_autosuggest', 'data-survey-id'=>s.id, 'data-search-desc'=>'Type a term to search' %>
+        <div class="fieldset">
+	        <%= text_field_tag :autoassign_keyword, '', id: 'autoassign_autosuggest', 'data-survey-id'=>s.id %>
+          <%= hidden_field_tag :autoassign_selected_id, autoassign_selected_id, id: 'autoassign_selected_id' %>
         </div>
       </div>
       

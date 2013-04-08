@@ -1,0 +1,13 @@
+$('.inlineform').hide();
+$('#new_question_form').closest('.inlineform').show();
+$('#loading').hide();
+$('#create_question_form').html('');
+$('#create_question_form').html("<%= j(render('form', question: Question.new)) %>");
+$('#create_question_form').slideDown();
+$('.advanced_options').hide();
+$('.sms_length').html(0);
+$('.sms_preview').html('');
+
+$(document).ready(function() {
+	autoassign_search();
+});
