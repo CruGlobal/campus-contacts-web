@@ -55,8 +55,8 @@
   </table>
 
   <div class="button_block">
-  <%= link_to('+ ' + t('.add_question'), '', id: 'add_question_link', class: "cleangray") %>
-  <%= link_to('+ ' + t('.add_prev_question'), '', id: 'add_old_question_link', class: "cleangray") %>
+    <%= link_to('+ ' + t('.add_question'), add_survey_question_path(@survey), {id:'add_suvey_question_link', remote: true, class: 'cleangray'}) %>
+		<%= link_to('+ ' + t('.add_prev_question'), '', id: 'add_old_question_link', class: "cleangray") %>
   </div>
 
   <div id="previously_used" style="display:none">
@@ -95,14 +95,7 @@
     Saving Changes
   </div>
   <div id="create_question_form" class="hidden">
-    <%= render 'form', question: Question.new %>
   </div>
   <div id="question_form" class="hidden">
   </div>
-
-  <script type="text/javascript" charset="utf-8">
-    $(function() {
-      $('#question_type').change()
-    })
-  </script>
 </div>

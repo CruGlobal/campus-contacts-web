@@ -277,6 +277,7 @@ Mh::Application.routes.draw do
 
   #
   match 'autoassign_suggest' => 'surveys/questions#suggestion', as: 'question_suggestion'
+  match 'add_survey_question/:survey_id' => 'surveys/questions#add', as: 'add_survey_question'
 
   match "welcome/tour" => 'welcome#tutorials'
 

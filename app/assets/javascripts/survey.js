@@ -2,6 +2,11 @@ $('.rule_form .title').live('click', function(){
   $(this).parents('.rule_form').children('.settings').slideToggle();
 });
 
+$('#add_suvey_question_link').live('click', function(){
+  $('#question_form').hide();
+  $('#saving').hide();
+  $('#loading').slideDown();
+});
 $('.edit_question_show_loading').live('click',function(){
   $('#create_question_form').hide();
   $('#question_form').hide();
@@ -22,36 +27,68 @@ $('#save_edit_survey_question').live('click',function(){
   $('#loading').hide();
   $('#saving').slideDown();
 });
-$('.assign_to_radio').live('click',function(){
-  type = $(this).val();
-  $(this).parent().siblings('#autoassign_suggestion').children().find('label').html("Search " + type + ": ");
-  $(this).parent().siblings('#autoassign_suggestion').attr('data-type', type);
-});
- 
-$('.assign_to_radio').live('change',function(){
-  $("#autoassign_selected_id, #autoassign_autosuggest").val("");
+
+$(".assign_to_radio").live('click',function(){
+  $("#autoassign_suggestion").find("label").html("Search " + $(this).val() + ": ");
+	$("#autoassign_suggestion").attr("data-type",$(this).val());
 });
 
-$(document).ready(function() {
-	ele = $('#autoassign_autosuggest');
-	keyword = ele.val();
-	type = ele.parent().parent().parent().children().find('input[name=assign_contact_to]:checked').val();
-	survey_id = ele.attr('data-survey-id');
-	ele.autocomplete({
-		source: "/autoassign_suggest?survey_id="+survey_id+"&type="+type+"&keyword="+keyword,
-		select: function(event, ui){
-		  $('#autoassign_selected_id').val(ui.item.id);
-		}
-	});
-	ele.live('keyup', function(){
-		keyword = ele.val();
-		type = ele.parent().parent().parent().children().find('input[name=assign_contact_to]:checked').val();
-		survey_id = ele.attr('data-survey-id');
-		ele.autocomplete({
-			source: "/autoassign_suggest?survey_id="+survey_id+"&type="+type+"&keyword="+keyword,
-			select: function(event, ui){
-			  $('#autoassign_selected_id').val(ui.item.id);
-			}
-		});
-	});
+$('.assign_to_radio').live('change',function(){
+	$("#autoassign_selected_id").val("");
+	$('#autoassign_autosuggest').tokenInput("clear");
 });
+
+function autoassign_search(id, name){
+	id = typeof id !== 'undefined' ? id : "";
+	name = typeof name !== 'undefined' ? name : "";
+  
+	$('#autoassign_autosuggest').off();
+	if(id != "" && name != ""){
+		$('#autoassign_autosuggest').tokenInput(function() {
+			return autoassign_search_url();
+		}, {
+			theme: 'facebook',
+			preventDuplicates: true,
+			minChars: 1,
+			resultsLimit: 10,
+			tokenLimit: 1,
+			animateDropdown: false,
+			defaultWidth: 420,
+			propertyToSearch: "label",
+      tokenValue: "label",
+	    onAdd: function (item) {
+				$("#autoassign_selected_id").val(item.id);
+	    },
+	    onDelete: function (item) {
+				$("#autoassign_selected_id").val("");
+	    },
+			prePopulate: [
+        {id: id, label: name}
+      ]
+		});
+	}else{
+		$('#autoassign_autosuggest').tokenInput(function() {
+			return autoassign_search_url();
+		}, {
+			theme: 'facebook',
+			preventDuplicates: true,
+			minChars: 1,
+			resultsLimit: 10,
+			tokenLimit: 1,
+			animateDropdown: false,
+			defaultWidth: 420,
+			propertyToSearch: "label" ,
+      tokenValue: "label",
+	    onAdd: function (item) {
+				$("#autoassign_selected_id").val(item.id);
+	    },
+	    onDelete: function (item) {
+				$("#autoassign_selected_id").val("");
+	    }
+		});
+	}
+}
+
+function autoassign_search_url(){
+	return "/autoassign_suggest.json?q&survey_id="+$("#autoassign_autosuggest").attr("data-survey-id")+"&type="+$(".assign_to_radio:checked").val();
+}
