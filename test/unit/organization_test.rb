@@ -601,7 +601,7 @@ class OrganizationTest < ActiveSupport::TestCase
     end
     should "return true if org is root" do
       @org.update_attribute('ancestry', nil)
-      assert @org.has_parent?(1)
+      assert @org.has_parent?(@org.id)
     end
     should "return false if parent_id does not exist" do
       assert !@org.has_parent?(4)
@@ -611,9 +611,9 @@ class OrganizationTest < ActiveSupport::TestCase
 
   context "fetching roles" do
     setup do
-      @org = Factory(:organization)
+      @org = Factory(:organization, id: 1)
     end
-    should "return 'sent' role if org is root" do
+    should "return 'sent' role if org is cru" do
       assert @org.role_set.include?(Role.sent)
     end
     should "return 'sent' role if has parent org id = 1" do

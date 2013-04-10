@@ -18,6 +18,7 @@ class RolesControllerTest < ActionController::TestCase
     end
 
     should "show all the system and organizational roles for CRU child org" do
+      @organization.update_attribute(:ancestry, "1")
       get :index, :id => @organization.id
       system_roles = assigns(:system_roles).collect { |role| role.i18n }
       organizational_roles = assigns(:organizational_roles).collect { |role| role.name.downcase }
