@@ -261,7 +261,7 @@ class Organization < ActiveRecord::Base
 
   def delete_person(person)
     # If this person is only in the current org, delete the person
-    if person.organizational_roles.where("organization_id <> ?", id).blank?
+    if person.organizational_roles_including_archived.where("organization_id <> ?", id).blank?
       person.destroy
     else
       # Otherwise just delete all their roles in this org
