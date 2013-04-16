@@ -5,7 +5,6 @@ class Person < ActiveRecord::Base
   has_paper_trail :on => [:destroy],
                   :meta => { person_id: :id }
 
-  after_destroy :delete_all_emails
   has_one :sent_person
   has_many :sent_messages, class_name: "Message", foreign_key: "person_id"
   has_many :received_messages, class_name: "Message", foreign_key: "receiver_id"
@@ -19,7 +18,7 @@ class Person < ActiveRecord::Base
   has_one :latest_location, order: "updated_at DESC", class_name: 'Location'
   has_many :interests
   has_many :education_histories
-  has_many :email_addresses, autosave: true
+  has_many :email_addresses, autosave: true, dependent: :destroy
   has_one :primary_email_address, class_name: "EmailAddress", foreign_key: "person_id", conditions: {primary: true}
   has_one :primary_org_role, class_name: "OrganizationalRole", foreign_key: "person_id", conditions: {primary: true}
   has_one :primary_org, through: :primary_org_role, source: :organization
@@ -1110,12 +1109,6 @@ class Person < ActiveRecord::Base
 
   def has_a_valid_email?
     return email.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
-  end
-
-  def delete_all_emails
-    if self.email_addresses.present?
-      self.email_addresses.destroy_all
-    end
   end
 
 end
