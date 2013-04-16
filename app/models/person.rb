@@ -5,6 +5,7 @@ class Person < ActiveRecord::Base
   has_paper_trail :on => [:destroy],
                   :meta => { person_id: :id }
 
+  after_destroy :delete_all_emails
   has_one :sent_person
   has_many :sent_messages, class_name: "Message", foreign_key: "person_id"
   has_many :received_messages, class_name: "Message", foreign_key: "receiver_id"
@@ -1109,6 +1110,12 @@ class Person < ActiveRecord::Base
 
   def has_a_valid_email?
     return email.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
+  end
+
+  def delete_all_emails
+    if self.email_addresses.present?
+      self.email_addresses.destroy_all
+    end
   end
 
 end
