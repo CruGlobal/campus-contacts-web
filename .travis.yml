@@ -1,10 +1,8 @@
 language: ruby
-rvm: 1.9.2
+rvm: 1.9.3
 branches:
   only:
     - master
-    - dev
-    - MH-610
 services:
   - redis-server
 
@@ -12,12 +10,10 @@ notifications:
   recipients:
     - josh.starcher@cojourners.com
     - kennethjohnbalgos@gmail.com
-    - marvindpunongbayan@gmail.com
 
 before_script:
   - mysql -u root -e 'create database missionhub_test;'
   - cp config/database.travis.yml config/database.yml
   - bundle exec rake db:migrate RAILS_ENV=test
-  - bundle install
 
 script: "bundle exec rake test"
