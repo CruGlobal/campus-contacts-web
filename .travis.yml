@@ -9,7 +9,7 @@ services:
 notifications:
   recipients:
     - josh.starcher@cojourners.com
-    - kennethjohnbalgos@gmail.com
+    # - kennethjohnbalgos@gmail.com
 
 before_script:
   - mysql -u root -e 'create database missionhub_test;'
