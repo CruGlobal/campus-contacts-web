@@ -6,7 +6,7 @@ development:
   resque_username: test
   resque_password: test
   fb_secret: test
-  fb_app_id:test
+  fb_app_id: test
   fb_secret_mhub: test
   fb_app_id_mhub: test
   public_host: test
