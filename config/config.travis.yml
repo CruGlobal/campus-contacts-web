@@ -1,0 +1,17 @@
+development:
+  sms_enabled: false
+  sms_short_code: 1234
+  sms_api_key: test
+  sms_default_keyword: test
+  resque_username: test
+  resque_password: test
+  fb_secret: test
+  fb_app_id:test
+  fb_secret_mhub: test
+  fb_app_id_mhub: test
+  public_host: test
+  predefined_survey: 1
+  from_email: test@email.com
+  smseco_username: test
+  smseco_password: test
+  smseco_url: test
