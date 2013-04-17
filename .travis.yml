@@ -1,15 +1,23 @@
+language: ruby
 rvm: 1.9.2
+branches:
+  only:
+    - master
+    - dev
+    - MH-610
+services:
+  - redis-server
+
 notifications:
   recipients:
     - josh.starcher@cojourners.com
-    
+    - kennethjohnbalgos@gmail.com
+    - marvindpunongbayan@gmail.com
+
 before_script:
-  - "sudo /etc/init.d/redis-server start"
-  - "git submodule init"
-  - "git submodule update"
-  - "cp /home/vagrant/builds/twinge/missionhub/config/database.example.yml /home/vagrant/builds/twinge/missionhub/config/database.yml >/dev/null"
-  - "cp /home/vagrant/builds/twinge/missionhub/config/config.example.yml /home/vagrant/builds/twinge/missionhub/config/config.yml >/dev/null"
-  - "mysql -e 'create database missionhub_test;' >/dev/null"
-  - "bundle exec rake db:schema:load"
-  - "bundle exec rake db:schema:load RAILS_ENV=test"
+  - mysql -u root -e 'create database missionhub_test;'
+  - cp config/database.travis.yml config/database.yml
+  - bundle exec rake db:migrate RAILS_ENV=test
+  - bundle install
+
 script: "bundle exec rake test"
