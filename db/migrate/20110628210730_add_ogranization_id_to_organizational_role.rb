@@ -2,11 +2,13 @@ class Organization < ActiveRecord::Base
 end
 class OrganizationalRole < ActiveRecord::Base
 end
+class OrganizationMembership < ActiveRecord::Base
+end
 
 class AddOgranizationIdToOrganizationalRole < ActiveRecord::Migration
   def up
     add_column :organizational_roles, :organization_id, :integer
-    
+
     OrganizationalRole.delete_all
     contact = Role.find_by_i18n('contact').id
     admin = Role.find_by_i18n('admin').id
@@ -18,7 +20,7 @@ class AddOgranizationIdToOrganizationalRole < ActiveRecord::Migration
     end
     remove_column :organization_memberships, :role
   end
-  
+
   def down
     add_column :organization_memberships, :role, :string
     remove_column :organizational_roles, :organization_id

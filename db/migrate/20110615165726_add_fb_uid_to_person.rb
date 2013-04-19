@@ -4,11 +4,6 @@ class AddFbUidToPerson < ActiveRecord::Migration
       t.column :fb_uid, 'BIGINT UNSIGNED'
     end
     add_index Person.table_name, :fb_uid
-    Authentication.where(provider: 'facebook').each do |a|
-      if a.user.try(:person)
-        a.user.person.update_attribute(:fb_uid, a.uid)
-      end
-    end
   end
   
   def self.down

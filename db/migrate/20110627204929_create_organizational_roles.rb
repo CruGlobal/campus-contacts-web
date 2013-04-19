@@ -1,3 +1,5 @@
+class OrganizationMembership < ActiveRecord::Base
+end
 class CreateOrganizationalRoles < ActiveRecord::Migration
   def up
     create_table :organizational_roles do |t|
@@ -6,10 +8,10 @@ class CreateOrganizationalRoles < ActiveRecord::Migration
       t.date :start_date
       t.date :end_date
       t.boolean :deleted, default: false, null: false
-    
+
       t.timestamps
     end
-    
+
     # Convert old roles system over to new system
     if Role.all.empty?
       Role.create(name: 'Admin', i18n: 'admin', organization_id: 0)
@@ -27,7 +29,7 @@ class CreateOrganizationalRoles < ActiveRecord::Migration
       end
     end
   end
-  
+
   def down
     drop_table :organizational_roles
   end

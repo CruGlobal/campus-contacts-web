@@ -1,3 +1,5 @@
+class Friend < ActiveRecord::Base
+end
 class CopyMysqlFriendshipToRedis < ActiveRecord::Migration
   def up
     Friend.connection.select_all("select person_id, uid from mh_friends").each do |values|

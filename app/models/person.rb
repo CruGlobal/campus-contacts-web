@@ -36,7 +36,10 @@ class Person < ActiveRecord::Base
   has_many :roles, through: :organizational_roles
   has_many :organizational_roles_including_archived, class_name: "OrganizationalRole", foreign_key: "person_id"
   has_many :roles_including_archived, through: :organizational_roles_including_archived, source: :role
-  has_many :organizations, through: :organizational_roles, conditions: ["role_id IN(?) AND status = 'active'", Role.involved_ids], uniq: true
+
+  if Role.table_exists? # added for travis testing
+    has_many :organizations, through: :organizational_roles, conditions: ["role_id IN(?) AND status = 'active'", Role.involved_ids], uniq: true
+  end
 
   has_many :followup_comments, :class_name => "FollowupComment", :foreign_key => "commenter_id"
   has_many :comments_on_me, :class_name => "FollowupComment", :foreign_key => "contact_id"

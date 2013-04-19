@@ -10,11 +10,13 @@ class PhoneNumber < ActiveRecord::Base
 
   # validates_presence_of :number, message: "can't be blank"
   # validates :number, :format => { :with => /^(\d|\ |\(|\)|\-){1,100}$/, message: "must be numeric" }
-
+  # validates_uniqueness_of :number, :scope => :person_id
   validate do |value|
     phone_number = value.number_before_type_cast || value.number || nil
     if phone_number.present?
-      if !(phone_number =~ /^(\d|\ |\/|\(|\)|\-){1,100}$/)
+      if PhoneNumber.exists?(person_id: person_id, number: phone_number)
+        errors.add(:number, "already exists")
+      elsif !(phone_number =~ /^(\d|\ |\/|\(|\)|\-){1,100}$/)
         errors.add(:number, "must be numeric")
       else
         self[:number] = PhoneNumber.strip_us_country_code(phone_number)
