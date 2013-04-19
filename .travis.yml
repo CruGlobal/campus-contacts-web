@@ -13,7 +13,6 @@ notifications:
 
 before_script:
   - mysql -e 'create database missionhub_test;'
-  - "mysql -e 'USE missionhub_test; CREATE TABLE roles (id int(11) NOT NULL AUTO_INCREMENT, organization_id int(11) DEFAULT NULL, name varchar(255) DEFAULT NULL, i18n varchar(255) DEFAULT NULL, created_at datetime DEFAULT NULL, updated_at datetime DEFAULT NULL, PRIMARY KEY (id)) ENGINE=InnoDB AUTO_INCREMENT=438 DEFAULT CHARSET=utf8;'"
   - cp config/database.travis.yml config/database.yml
   - cp config/config.travis.yml config/config.yml
   - bundle exec rake db:migrate RAILS_ENV=test
