@@ -1,5 +1,5 @@
 language: ruby
-rvm: 1.9.3
+rvm: 1.9.2
 branches:
   only:
     - master
@@ -8,7 +8,7 @@ services:
 
 notifications:
   recipients:
-    # - josh.starcher@cojourners.com
+    - josh.starcher@cojourners.com
     - kennethjohnbalgos@gmail.com
 
 before_script:
@@ -17,4 +17,4 @@ before_script:
   - cp config/config.travis.yml config/config.yml
   - bundle exec rake db:migrate RAILS_ENV=test
 
-script: "bundle exec rake test RAILS_ENV=test"
+script: "bundle exec rake test"
