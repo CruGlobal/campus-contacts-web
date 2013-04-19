@@ -8,13 +8,14 @@ services:
 
 notifications:
   recipients:
-    - josh.starcher@cojourners.com
-    # - kennethjohnbalgos@gmail.com
+    # - josh.starcher@cojourners.com
+    - kennethjohnbalgos@gmail.com
 
 before_script:
   - mysql -e 'create database missionhub_test;'
   - cp config/database.travis.yml config/database.yml
   - cp config/config.travis.yml config/config.yml
   - bundle exec rake db:migrate RAILS_ENV=test
+  - bundle exec rake db:test:prepare RAILS_ENV=test
 
 script: "bundle exec rake test"
