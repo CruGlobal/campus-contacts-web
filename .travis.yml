@@ -16,6 +16,5 @@ before_script:
   - cp config/database.travis.yml config/database.yml
   - cp config/config.travis.yml config/config.yml
   - bundle exec rake db:migrate RAILS_ENV=test
-  - bundle exec rake db:test:prepare RAILS_ENV=test
 
-script: "bundle exec rake test"
+script: "bundle exec rake test RAILS_ENV=test"
