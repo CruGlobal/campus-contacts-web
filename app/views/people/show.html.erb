@@ -61,7 +61,7 @@
 		      <%= t('.assigned_to', assigned_to: "#{@assigned_tos}") if @assigned_tos.present? %>
 		    </div>
 
-		    <% @roles = (@person.assigned_organizational_roles(current_organization.id).default_roles_desc + @person.assigned_organizational_roles(current_organization.id).non_default_roles_asc) %>
+  			<% @roles = @person.assigned_organizational_roles(current_organization.id).arrange_all %>
 		    <% if @roles.present? %>
 		    <div>
 				  <div class="title"><%= t('nav.roles')%>:</div>
