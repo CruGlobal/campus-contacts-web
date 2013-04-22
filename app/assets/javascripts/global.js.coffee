@@ -1,9 +1,9 @@
 $ ->
   $(document).ready ->
     if $('div.carea div.flash_message').length > 0
-      $('div.carea div.flash_message').delay(5000).hide(1);
+      $('div.carea div.flash_message').delay(5000).hide(1)
 
-    $('#send_email_to').tokenInput "/contacts/auto_suggest_send_email.json"
+    $('#send_email_to').tokenInput "/contacts/auto_suggest_send_email.json",
       theme: 'facebook'
       preventDuplicates: true
       minChars: 3
@@ -12,7 +12,7 @@ $ ->
       placeHolder: $('#send_email_to').attr("data-search-desc"),
       defaultWidth: 690
 
-    $('#send_text_to').tokenInput "/contacts/auto_suggest_send_text.json"
+    $('#send_text_to').tokenInput "/contacts/auto_suggest_send_text.json",
       theme: 'facebook'
       preventDuplicates: true
       minChars: 3
@@ -21,7 +21,7 @@ $ ->
       placeHolder: $('#send_text_to').attr("data-search-desc"),
       defaultWidth: 690
 
-    include_archived = $.url(window.location.href).param("include_archived");
+    include_archived = $.url(window.location.href).param("include_archived")
     if include_archived
       sidebar_url = '/display_sidebar?include_archived=' + include_archived
     else
