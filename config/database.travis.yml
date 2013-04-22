@@ -9,3 +9,9 @@ development:
   database: missionhub_test
   username: root
   encoding: utf8
+  
+production:
+  adapter: mysql2
+  database: missionhub_test
+  username: root
+  encoding: utf8
