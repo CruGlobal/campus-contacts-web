@@ -976,6 +976,13 @@ en:
       sms_keyword: Keyword
       person: information
     errors:
+      models:
+        email_address:
+          attributes:
+            email:
+              taken: " highlighted below is already used by another person in MissionHub or possibly there is a duplicate record in the system for this individual - contact support@missionhub.com if you need help. "
+              blank: " can't be blank"
+              invalid: " is invalid format"
       template:
         header:
           one:    "1 error prohibited this %{model} from being saved"

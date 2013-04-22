@@ -4,9 +4,9 @@
       <h2><%= pluralize(@person.errors.count, "error") %> prohibited this person from being saved:</h2>
 
       <ul>
-      <% @person.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
+      <% @person.errors.each do |attr, msg| %>
+	   		<li><%= "#{attr.to_s.split(".").first.humanize} #{msg}" %></li>
+			<% end %>
       </ul>
     </div>
   <% end %>
