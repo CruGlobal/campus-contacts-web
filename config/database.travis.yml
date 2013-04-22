@@ -2,3 +2,4 @@ test:
   adapter: mysql2
   database: missionhub_test
   username: root
+  encoding: utf8
