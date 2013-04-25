@@ -574,10 +574,9 @@ class PersonTest < ActiveSupport::TestCase
     person = Factory(:person)
     person.phone_number = '555-555-5555'
     person.save!
-
-    assert_equal(person, Person.find_existing_person(Person.new(first_name: person.first_name,
+    assert_equal(person, Person.find_existing_person_by_name_and_phone({first_name: person.first_name,
                                                                 last_name: person.last_name,
-                                                                phone_number: '555-555-5555')))
+                                                                number: '555-555-5555'}))
   end
 
   should 'find an existing person based on fb_uid' do
