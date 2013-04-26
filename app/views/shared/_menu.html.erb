@@ -20,10 +20,13 @@
         </li>
       </ul>
     </li>
-    <% if can? :manage, current_organization %>
+    <% if can? :manage_groups, current_organization %>
       <li class="<%= 'current' if request.path =~ group_pattern %>">
         <%= link_to(t('nav.groups'), "/groups") %>
       </li>
+    <% end %>
+    
+    <% if can? :manage, current_organization %>
       <li class="<%= 'current' if request.path =~ connect_pattern %>">
         <%= link_to(t('nav.surveys'), index_admin_surveys_path) %>
         <ul style='display:none;'>
