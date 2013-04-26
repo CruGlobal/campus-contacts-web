@@ -6,6 +6,7 @@
  *= require roles
  *= require messages
  *= require groups
+ *= require surveys
  *= require survey_responses
  *= require jquery.qtip
  *= require jquery.chosen

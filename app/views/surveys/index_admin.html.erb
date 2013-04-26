@@ -25,9 +25,9 @@
         </li>
       </ul>
     </div>
-  
-  
-  
+
+
+
     <table class="listing keywordtable" cellpadding="0" cellspacing="0">
       <tr>
         <th class="check"></th>
@@ -53,14 +53,36 @@
           <td><%= link_to(short_survey_url(survey.id, host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port'])), short_survey_url(survey.id, host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port'])), target: '_blank')%></td>
           <td class="controls">
             <%= link_to t("welcome.home.manage_questions"), survey_questions_path(survey) %>
-            <%= link_to('', edit_survey_path(survey), :class => "icon edit tipit", :title => t('.edit_survey')) %>
-            <%= link_to t("welcome.home.delete"), survey_path(survey), method: :delete, confirm: t('.confirm_delete'), :class => "icon delete tipit", :title => t('.delete_survey') %>
+            <%= link_to t('.copy_survey'), "#transfer", class: "icon copy tipit transfer_survey",
+                :title => t('.copy_survey'), "data-id" => survey.id, "data-name" => survey %>
+            <%= link_to t('.edit_survey'), edit_survey_path(survey),
+                class: "icon edit tipit", :title => t('.edit_survey') %>
+            <%= link_to t("welcome.home.delete"), survey_path(survey),
+                method: :delete, confirm: t('.confirm_delete'), class: "icon delete tipit",
+                title: t('.delete_survey') %>
           </td>
         </tr>
       <% end %>
     </table>
     <div class="contentpad">
-    
+
+    </div>
+    <div id="transfer_survey_div" style="display:none">
+      <div id="transfer_survey_guide">
+        You are about to copy the survey "<span id="survey_name"></span>" to another organization. Please select an organization you wish to have the same survey.
+      </div>
+      <div id="transfer_survey_processing">
+        <%= image_tag 'loader.gif'%><br/>Copying Survey to <span id="org_name"></span><br/>Please wait...
+      </div>
+      <div id="transfer_survey_content">
+        <div id="other_orgs_filter">
+          <%= text_field_tag "filter", "keyword", id: "other_orgs_filter_keyword", value: "", placeholder: "Type to search organization", class: "ui-autocomplete-input" %>
+        </div>
+        <div id="other_orgs_list">
+        </div>
+      </div>
+      <div id="transfer_survey_error">
+      </div>
     </div>
   <% end %>
 <% end %>

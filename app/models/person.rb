@@ -470,6 +470,16 @@ class Person < ActiveRecord::Base
     [first_name, last_name].collect(&:to_s).join(' ')
   end
 
+  def managed_orgs
+    org_roles = organizational_roles.where(role_id: Role::ADMIN_ID)
+    organizations.where(id: org_roles.collect(&:organization_id))
+  end
+
+  def managed_orgs_with_children
+    org_roles = organizational_roles.where(role_id: Role::ADMIN_ID)
+    organizations.where(id: org_roles.collect(&:organization_id))
+  end
+
   def self.find_from_facebook(data)
     EmailAddress.find_by_email(data.email).try(:person) if data.email.present?
   end

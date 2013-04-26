@@ -1,0 +1,2 @@
+$('#transfer_survey_div #transfer_survey_content #other_orgs_list').html("<%= escape_javascript(render partial: 'surveys/other_orgs', locals: {managed_orgs: @managed_orgs}) %>")
+$("#other_orgs_filter_keyword").removeClass("ui-autocomplete-loading")

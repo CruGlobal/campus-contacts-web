@@ -12,6 +12,8 @@ Mh::Application.routes.draw do
   match 'show_hidden_questions' => 'contacts#show_hidden_questions'
   match 'show_search_hidden_questions' => 'contacts#show_search_hidden_questions'
   match 'display_sidebar' => 'contacts#display_sidebar'
+  match 'show_other_orgs' => 'surveys#show_other_orgs'
+  match 'copy_survey' => 'surveys#copy_survey'
   match 'sent_messages' => 'messages#sent_messages'
   match 'check_email' => 'contacts#check_email'
 

@@ -1,0 +1,13 @@
+<% if @status == 'copied' %>
+  $('#transfer_survey_div').dialog('close')
+<% else %>
+  <% if @status == 'duplicate' %>
+    msg = "<b><%= @receiving_org.name %></b> already have this survey."
+  <% else %>
+    msg = "Failed to copy the survey."
+  <% end %>
+  $('#transfer_survey_div #transfer_survey_error').html(msg)
+  $('#transfer_survey_div #transfer_survey_error').show()
+  $('#transfer_survey_div #transfer_survey_content').show()
+  $('#transfer_survey_div #transfer_survey_processing').hide()
+<% end %>
