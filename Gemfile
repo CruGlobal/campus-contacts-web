@@ -11,7 +11,7 @@ gem 'activeadmin', '~> 0.4.4' #, git: 'git://github.com/gregbell/active_admin.gi
 gem 'acts_as_list'
 gem 'airbrake_user_attributes'
 gem 'ancestry', git: 'git://github.com/stefankroes/ancestry.git'
-gem 'aws-sdk'#, '~> 1.3.4'
+gem 'aws-sdk', '1.8.1.3'
 gem 'bitly'
 gem 'cancan'
 gem 'capistrano'
@@ -39,7 +39,7 @@ gem 'omniauth'
 gem 'omniauth-facebook', '~> 1.0.0.rc2'
 gem 'paper_trail', '~> 2'
 gem 'rack-offline'
-gem 'rails', '~> 3.2.11'
+gem 'rails', '3.2.12'
 gem 'rails_autolink'
 gem 'redis'
 gem 'resque', '~> 1.20.0'
@@ -71,7 +71,7 @@ group :test do
   # gem 'autotest-rails'
   gem 'resque_unit'
   gem 'shoulda', :require => false
-  gem 'mocha'
+  gem 'mocha', :require => false
   gem 'ffaker'
 end
 

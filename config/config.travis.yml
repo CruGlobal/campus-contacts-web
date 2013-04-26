@@ -9,7 +9,7 @@ test:
   fb_app_id: test
   fb_secret_mhub: test
   fb_app_id_mhub: test
-  public_host: 'test.mhub.cc'
+  public_host: 'mhub.cc'
   public_port: 80
   predefined_survey: 1
   from_email: test@email.com

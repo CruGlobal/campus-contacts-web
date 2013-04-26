@@ -10,9 +10,11 @@ notifications:
   recipients:
     - josh.starcher@cojourners.com
     - kennethjohnbalgos@gmail.com
+    - marvindpunongbayan@gmail.com
 
 before_script:
   - mysql -e 'create database missionhub_test;'
+  - cp config/s3.travis.yml config/s3.yml
   - cp config/database.travis.yml config/database.yml
   - cp config/config.travis.yml config/config.yml
   - bundle exec rake db:migrate RAILS_ENV=test
