@@ -46,7 +46,7 @@ class GroupMembershipsController < ApplicationController
   def destroy
     @group = current_organization.groups.find(params[:group_id])
     @group_membership = @group.group_memberships.find(params[:id])
-    return false unless can?(:manage, current_organization) || @group.leaders.include?(current_person) || @group_membership.person_id == current_person.id
+    return false unless can?(:manage_groups, current_organization) || @group.leaders.include?(current_person) || @group_membership.person_id == current_person.id
     @group_membership.destroy
     render nothing: true
   end
