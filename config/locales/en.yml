@@ -707,6 +707,9 @@ en:
       my_friends: 'My Friends'
       delete_confirm: You are about to send this contact to the "Do Not Contact" list. If that's not what you meant to do, click cancel.
       destroy_confirm: Are you sure you want to delete this contact? If that's not what you meant to do, click cancel.
+      assign_contact:
+        one: Assign 1 contact
+        other: Assign %{count} contact
       assign_people:
         one: Assign 1 person
         other: "Assign %{count} people"

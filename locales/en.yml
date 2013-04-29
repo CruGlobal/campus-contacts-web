@@ -102,6 +102,9 @@ en:
       all: All
       all_responses: All Contacts
       archived: Archived
+      assign_contact:
+        one: Assign 1 contact
+        other: Assign %{count} contact
       assign_people:
         one: Assign 1 person
         other: Assign %{count} people
