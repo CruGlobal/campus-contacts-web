@@ -258,6 +258,17 @@ class ContactsController < ApplicationController
 
     get_and_merge_unfiltered_people
   end
+  
+  def check_email
+    email = params[:email]
+    already_registered = false
+    if email.present?
+      if EmailAddress.find_by_email(email) || User.find_by_username(email) || User.find_by_email(email)
+        already_registered = true
+      end
+    end  
+    render :text => already_registered
+  end
 
   protected
     def fetch_contacts(load_all = false)
