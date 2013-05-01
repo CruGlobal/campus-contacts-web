@@ -76,6 +76,7 @@ group :test do
 end
 
 group :development do
+  gem 'bluepill'
   gem 'rails-dev-tweaks'
   gem 'rails-footnotes'
   gem 'bullet'
