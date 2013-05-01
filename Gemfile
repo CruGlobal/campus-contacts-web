@@ -13,7 +13,7 @@ gem 'airbrake_user_attributes'
 gem 'ancestry', git: 'git://github.com/stefankroes/ancestry.git'
 gem 'aws-sdk', '1.8.1.3'
 gem 'bitly'
-gem 'bluepill', require: false
+gem 'bluepill', '0.0.63', require: false
 gem 'cancan'
 gem 'capistrano'
 gem 'carmen', git: 'git://github.com/twinge/carmen.git'
