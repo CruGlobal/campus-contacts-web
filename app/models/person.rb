@@ -5,6 +5,10 @@ class Person < ActiveRecord::Base
   has_paper_trail :on => [:destroy],
                   :meta => { person_id: :id }
 
+  belongs_to :interaction_initiator
+  has_many :interactions, class_name: "Interaction", foreign_key: "receiver_id"
+  has_many :created_interactions, class_name: "Interaction", foreign_key: "created_by_id"
+  
   has_one :sent_person
   has_many :sent_messages, class_name: "Message", foreign_key: "person_id"
   has_many :received_messages, class_name: "Message", foreign_key: "receiver_id"

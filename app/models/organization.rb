@@ -8,6 +8,8 @@ class Organization < ActiveRecord::Base
   has_paper_trail :on => [:destroy],
                   :meta => { organization_id: :parent_id }
 
+  has_many :interactions
+  
   belongs_to :importable, polymorphic: true
   has_many :messages
   has_many :roles, inverse_of: :organization
