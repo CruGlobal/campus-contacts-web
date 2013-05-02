@@ -1,3 +1,5 @@
+include_recipe "missionhub::configure"
+
 Chef::Log.info("Running deploy/before_migrate.rb...")
 
 Chef::Log.info("Symlinking #{release_path}/public/assets to #{new_resource.deploy_to}/shared/assets")
