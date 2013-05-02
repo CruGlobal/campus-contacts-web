@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130610215048) do
+ActiveRecord::Schema.define(:version => 20130425064847) do
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -168,8 +168,7 @@ ActiveRecord::Schema.define(:version => 20130610215048) do
     t.string   "mobile_token"
   end
 
-  add_index "authentications", ["provider", "mobile_token"], :name => "provider_token"
-  add_index "authentications", ["uid", "provider"], :name => "uid_provider", :unique => true
+  add_index "authentications", ["provider", "uid"], :name => "index_authentications_on_provider_and_uid", :unique => true
 
   create_table "clients", :force => true do |t|
     t.string   "code"
@@ -372,6 +371,14 @@ ActiveRecord::Schema.define(:version => 20130610215048) do
 
   add_index "imports", ["organization_id"], :name => "index_mh_imports_on_organization_id"
   add_index "imports", ["user_id", "organization_id"], :name => "user_org"
+
+  create_table "infobase_users", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "type",       :default => "InfobaseAdminUser"
+    t.integer  "created_by"
+    t.datetime "created_at",                                  :null => false
+    t.datetime "updated_at",                                  :null => false
+  end
 
   create_table "interests", :force => true do |t|
     t.string   "name"
@@ -655,14 +662,6 @@ ActiveRecord::Schema.define(:version => 20130610215048) do
 
   add_index "saved_contact_searches", ["user_id"], :name => "index_saved_contact_searches_on_user_id"
 
-  create_table "school_years", :force => true do |t|
-    t.string   "name"
-    t.string   "level"
-    t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "sent_people", :force => true do |t|
     t.integer  "person_id"
     t.integer  "transferred_by_id"
@@ -781,11 +780,22 @@ ActiveRecord::Schema.define(:version => 20130610215048) do
   end
 
   add_index "surveys", ["crs_registrant_type_id"], :name => "index_surveys_on_crs_registrant_type_id"
-  add_index "surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
+  add_index "surveys", ["organization_id"], :name => "index_surveys_on_organization_id"
+
+  create_table "teams", :force => true do |t|
+    t.integer  "organization_id"
+    t.string   "name"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "teams", ["organization_id"], :name => "index_teams_on_organization_id"
 
   create_table "users", :force => true do |t|
-    t.string   "username",                  :limit => 200,                :null => false
-    t.string   "password",                  :limit => 80
+    t.string   "username"
+    t.string   "password"
+    t.datetime "lastLogin"
+    t.datetime "createdOn"
     t.string   "remember_token"
     t.datetime "remember_token_expires_at"
     t.boolean  "developer"
