@@ -2,6 +2,7 @@ class ImportsController < ApplicationController
   before_filter :get_import, only: [:show, :edit, :update, :destroy, :labels, :import]
   before_filter :init_org, only: [:index, :show, :edit, :update, :new, :labels, :import]
   rescue_from Import::NilColumnHeader, with: :nil_column_header
+  rescue_from CanCan::AccessDenied, with: :import_access_denied
 
   def index
   end
@@ -111,6 +112,11 @@ class ImportsController < ApplicationController
     init_org
     flash.now[:error] = t('contacts.import_contacts.blank_header')
     render :new
+  end
+
+  def import_access_denied
+    render 'application/import_access_denied'
+    return false
   end
 
   def create_survey_question
