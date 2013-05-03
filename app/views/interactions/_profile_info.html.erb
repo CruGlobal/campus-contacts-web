@@ -58,22 +58,20 @@
 		<button class="action_gray" href="#">Email Me This Contact Info</button>
 	</div>
 
-  <% if @person.fb_uid %>
-  	<div class="fb_link col_left">Facebook:</div>
-  	<div class="fb_link col_right">
-      <%= link_to("view #{@person.first_name}'s profile", "http://www.facebook.com/profile.php?id=#{@person.fb_uid}", target: '_blank') %>
-  	</div>
+	<div class="fb_link col_left">Facebook:</div>
+	<div class="fb_link col_right">
+    <%= link_to("view #{@person.first_name}'s profile", "http://www.facebook.com/profile.php?id=#{@person.fb_uid}", target: '_blank') %>
+	</div>
 
-  	<div class="col_left" id="fb_link">Friends:</div>
-  	<div class="col_right" id="fb_friends">
-  		<div id="fb_friends_thumbs">
-        <% @person.friends_in_orgnization(current_organization).collect(&:fb_uid).each do |friend_uid| %>
-          <% friend = Person.find_by_fb_uid(friend_uid) %>
-    			<div class="fb_thumb">
-            <%= link_to image_tag("https://graph.facebook.com/#{friend_uid}/picture?type=square"), profile_path(friend.id), target: "_blank", title: "friend.name" %>
-    			</div>
-        <% end %>
-  		</div>
-  	</div>
-  <% end %>
+	<div class="col_left" id="fb_link">Friends:</div>
+	<div class="col_right" id="fb_friends">
+		<div id="fb_friends_thumbs">
+      <% @person.friends_in_orgnization(current_organization).collect(&:fb_uid).each do |friend_uid| %>
+        <% friend = Person.find_by_fb_uid(friend_uid) %>
+  			<div class="fb_thumb">
+          <%= link_to image_tag("https://graph.facebook.com/#{friend_uid}/picture?type=square"), profile_path(friend.id), target: "_blank", title: "friend.name" %>
+  			</div>
+      <% end %>
+		</div>
+	</div>
 </div>

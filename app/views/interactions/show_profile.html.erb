@@ -4,8 +4,20 @@
   </div>
 
   <div id="profile_name">
-    <%= @person.name %>
-    <%= link_to image_tag("edit_sprite.png"), "#"%>
+    <span id="name"><%= @person.name %></span>
+    <%= link_to image_tag("edit_sprite.png"), "#", id: "edit_profile_name_button" %>
+  </div>
+  <div id="profile_name_edit">
+    <%= form_for @person, remote: true, html: {id: 'profile_name_form'} do |f| %>
+      <div id="profile_name_fields">
+        <%= f.text_field :first_name, class: "profile_name_field", placeholder: "First Name" %>
+        <%= f.text_field :last_name, class: "profile_name_field", placeholder: "Last Name" %>
+      </div>
+      <div id="profile_name_buttons">
+  			<button class="red_accent" id="profile_name_edit_save_button">Save</button>
+  			<button class="large_lightgray" id="profile_name_edit_cancel_button">Cancel</button>
+      </div>
+    <% end %>
   </div>
 
 	<div id="profile_sidebar">

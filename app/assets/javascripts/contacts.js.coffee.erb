@@ -681,7 +681,7 @@ $ ->
   $('.contact_row td:not(.checkbox_cell)').live 'click', ->
     unless $('a', this)[0]?
       tr = $(this).parent()
-      document.location = '/profile/' + tr.attr('data-id')
+      document.location = '/people/' + tr.attr('data-id')
 
   $('#assign_to').change ->
     if $('.id_checkbox:checked').length > 0

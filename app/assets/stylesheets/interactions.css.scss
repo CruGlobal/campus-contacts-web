@@ -13,8 +13,10 @@ body#interactions_controller {
       display: none;
     }
     #main {
+      margin: 0px;
       border: none;
       #person_profile {
+        margin: -10px auto 10px;
         width: 680px;
         min-height: 580px;
 
@@ -23,7 +25,35 @@ body#interactions_controller {
         }
 
         #profile_name {
+          height: 30px;
+        }
 
+        #profile_name_edit {
+          display: none;
+          height: 30px;
+          margin: 0px 0px 12px;
+          #profile_name_fields {
+            display: inline-block;
+            margin: 0 3px 0 0;
+            padding: 0px;
+            float: left;
+            .profile_name_field {
+              width: 180px;
+              margin: 0;
+              padding: 0px 3px;
+              font-family: tahoma, Sans-serif;
+              font-size: 24px;
+              font-weight: bold;
+              color: #333333;
+            }
+          }
+          #profile_name_buttons {
+            display: inline-block;
+            float: left;
+            button {
+              float: right;
+            }
+          }
         }
 
         #profile_feed {
