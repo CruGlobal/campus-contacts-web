@@ -110,7 +110,8 @@ class OrganizationTest < ActiveSupport::TestCase
     should "return the admins of org1" do
       Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
       Factory(:organizational_role, organization: @org1, person: @person2, role: Role.admin)
-      assert_equal @org1.parent_organization_admins, [@person1, @person2]
+      assert @org1.parent_organization_admins.include?(@person1)
+      assert @org1.parent_organization_admins.include?(@person2)
     end
 
     should "return the admins of org2" do
