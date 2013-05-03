@@ -581,7 +581,8 @@ class OrganizationTest < ActiveSupport::TestCase
       Factory(:sent_person, person: @contact3)
     end
     should "return all people with label 100% Sent and not yet transferred" do
-      assert_equal(@org.pending_transfer, [@contact1,@contact2])
+      assert @org.pending_transfer.include?(@contact1)
+      assert @org.pending_transfer.include?(@contact2)
     end
     should "return all people without label 100% Sent" do
       assert_equal(@org.available_transfer, [@contact4])

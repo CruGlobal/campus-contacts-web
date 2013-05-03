@@ -140,10 +140,11 @@ class PersonTest < ActiveSupport::TestCase
       @answer_sheet2 = Factory(:answer_sheet, person: @person2, survey: @survey, updated_at: "2012-07-02".to_date)
       @answer_sheet3 = Factory(:answer_sheet, person: @person3, survey: @survey, updated_at: "2012-07-03".to_date)
 
-      results = Person.get_and_order_by_latest_answer_sheet_answered('', @org.id)
-      assert_equal(results[0].first_name, 'First Answer', "first result should be the first person who answered")
-      #assert_equal(results[1].first_name, 'Second Answer', "second result should be the second person who answered")
-      #assert_equal(results[2].first_name, 'Last Answer', "third result should be the last person who answered")
+      results = Person.get_and_order_by_latest_answer_sheet_answered('ASC', @org.id)
+      puts results.collect(&:id).inspect
+      assert_equal(results[0], @person1, "first result should be the first person who answered")
+      assert_equal(results[1], @person2, "second result should be the second person who answered")
+      assert_equal(results[2], @person3, "third result should be the last person who answered")
     end
 
     should "return people assigned to an org" do

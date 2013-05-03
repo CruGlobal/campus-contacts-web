@@ -966,8 +966,9 @@ class ContactsControllerTest < ActionController::TestCase
 
       should "return people sorted by their roles (default roles) desc" do
         xhr :get, :index, {:search=>{:meta_sort=>"role_id desc"}}
-        assert_equal @b_person.id, assigns(:people).collect(&:id).first
-        assert_equal @person2.id, assigns(:people).collect(&:id).last
+        puts "#{assigns(:people).collect(&:id)} - #{@b_person.id} - #{@person2.id}"
+        assert_equal assigns(:people).collect(&:id).first, @b_person.id
+        assert_equal assigns(:people).collect(&:id).last, @person2.id
       end
 
       should "return people sorted by their roles (default roles) asc" do
