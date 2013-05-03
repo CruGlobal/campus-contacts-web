@@ -1,0 +1,13 @@
+<%= image_tag("https://graph.facebook.com/#{@person.fb_uid}/picture?width=200&height=200", alt: '', width: '200', height: '200', id: 'profile_image') %>
+<div id="profile_label_header">
+	Labels
+  <%= link_to image_tag("edit_sprite.png"), "#"%>
+</div>
+<div id="profile_label_box">
+	<% @roles = @person.assigned_organizational_roles(current_organization.id).arrange_all %>
+  <% if @roles.present? %>
+    <% @roles.each do |role| %>
+      <div class="profile_label"><%= role %></div>
+    <% end %>
+	<% end %>
+</div>

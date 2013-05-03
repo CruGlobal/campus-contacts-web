@@ -39,4 +39,5 @@
 //= require welcome
 //= require surveys
 //= require imports
+//= require interactions
 

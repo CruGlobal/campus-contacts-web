@@ -1,0 +1,43 @@
+// Place all the styles related to the interactions controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+body#interactions_controller {
+
+  #rest {
+    background: none;
+    #gandalfthewhite {
+      border-bottom: none;
+    }
+    #left {
+      display: none;
+    }
+    #main {
+      border: none;
+      #person_profile {
+        width: 680px;
+        min-height: 580px;
+
+        #action_menu {
+          margin: 0px 0px 20px;
+        }
+
+        #profile_name {
+
+        }
+
+        #profile_feed {
+          margin: 0 0 30px;
+
+          .feed_content .tab_content {
+            display: none;
+            &.current {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
+
+}

@@ -1,0 +1,42 @@
+<div id="person_profile">
+  <div id="action_menu">
+    <%= render partial: "interactions/action_menu"%>
+  </div>
+
+  <div id="profile_name">
+    <%= @person.name %>
+    <%= link_to image_tag("edit_sprite.png"), "#"%>
+  </div>
+
+	<div id="profile_sidebar">
+    <%= render partial: "interactions/profile_sidebar"%>
+	</div>
+
+	<div class="feed_panel" id="profile_feed">
+		<div class="feed_panel_top">
+			<ul id="panel_nav">
+				<li id="info" class="current">Info</li>
+				<li id="interactions">Interactions</li>
+				<li id="surveys">Surveys</li>
+				<li id="all">All</li>
+			</ul>
+		</div>
+
+		<div class="feed_content">
+      <div class="tab_content profile_info current">
+        <%= render partial: "interactions/profile_info" %>
+      </div>
+      <div class="tab_content profile_interactions">
+        <%= render partial: "interactions/profile_interactions" %>
+      </div>
+      <div class="tab_content profile_surveys">
+        <%= render partial: "interactions/profile_surveys" %>
+      </div>
+      <div class="tab_content profile_all">
+        <%= render partial: "interactions/profile_all" %>
+      </div>
+  	</div>
+  </div>
+
+
+</div>

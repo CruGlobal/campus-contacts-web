@@ -1,0 +1,79 @@
+<div class="info_display info_display_buttons">
+  <button class="red_accent" id="info_display_edit_button">Update Info</button>
+</div>
+
+<div class="feed_box info_display">
+
+	<div class="status col_left">Status:</div>
+	<div class="status col_right">
+    <%= select_tag :followup_comment_status, options_for_select(OrganizationalRole::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]}) %>
+	</div>
+
+	<div class="gender col_left">Gender:</div>
+	<div class="gender col_right"><%= @person.gender %></div>
+
+</div>
+
+
+
+<div class="feed_box info_display">
+
+	<div class="email col_left">Email:</div>
+	<div class="email col_right">
+    <% @person.email_addresses.each do |email| %>
+      <%= mail_to email.email %>
+  		<% if email.primary %>
+        <div class="info_tag">Primary</div>
+      <% end %>
+    <% end %>
+	</div>
+
+  <div class="phone col_left">Phone:</div>
+  <div class="phone col_right">
+    <% @person.phone_numbers.each do |phone| %>
+      <%= link_to phone.pretty_number, "tel:#{phone.number}" %>
+      <div class="info_tag"><%= phone.location.titleize %></div>
+  		<% if phone.primary %>
+        <div class="info_tag">Primary</div>
+      <% end %>
+    <% end %>
+  </div>
+
+	<div class="address col_left">Address:</div>
+	<div class="address col_right">
+    <% @person.addresses.each do |address| %>
+      <div class="info_tag"><%= address.address_type.titleize %></div>
+  		<div class="multi_line" id="address_line_1"><%= address.address1 %></div>
+  		<div class="multi_line" id="address_line_2"><%= address.address2 %></div>
+  		<div class="multi_line" id="address_line_3"><%= address.address3 %></div>
+  		<div class="multi_line" id="address_line_4"><%= address.address4 %></div>
+  		<div class="multi_line" id="address_city_state_zip">
+        <%= "#{address.city}, #{address.state} #{address.zip}" %>
+      </div>
+  		<div class="multi_line"><%= address.country %></div>
+    <% end %>
+	</div>
+
+	<div class="col_right multi_line" id="email_this_info">
+		<button class="action_gray" href="#">Email Me This Contact Info</button>
+	</div>
+
+  <% if @person.fb_uid %>
+  	<div class="fb_link col_left">Facebook:</div>
+  	<div class="fb_link col_right">
+      <%= link_to("view #{@person.first_name}'s profile", "http://www.facebook.com/profile.php?id=#{@person.fb_uid}", target: '_blank') %>
+  	</div>
+
+  	<div class="col_left" id="fb_link">Friends:</div>
+  	<div class="col_right" id="fb_friends">
+  		<div id="fb_friends_thumbs">
+        <% @person.friends_in_orgnization(current_organization).collect(&:fb_uid).each do |friend_uid| %>
+          <% friend = Person.find_by_fb_uid(friend_uid) %>
+    			<div class="fb_thumb">
+            <%= link_to image_tag("https://graph.facebook.com/#{friend_uid}/picture?type=square"), profile_path(friend.id), target: "_blank", title: "friend.name" %>
+    			</div>
+        <% end %>
+  		</div>
+  	</div>
+  <% end %>
+</div>

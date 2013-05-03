@@ -18,4 +18,6 @@
  *= require excolor
  *= require global
  *= require token-input-facebook
+ *= require profile_style
+ *= require interactions
 */

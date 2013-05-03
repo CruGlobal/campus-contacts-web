@@ -681,7 +681,7 @@ $ ->
   $('.contact_row td:not(.checkbox_cell)').live 'click', ->
     unless $('a', this)[0]?
       tr = $(this).parent()
-      document.location = '/people/' + tr.attr('data-id')
+      document.location = '/profile/' + tr.attr('data-id')
 
   $('#assign_to').change ->
     if $('.id_checkbox:checked').length > 0
@@ -844,9 +844,9 @@ $.fn.assignTo = (leader, skip_remote) ->
 $.mh.saveContact = (add_more) ->
   form = $('#new_person')
   $('#assign_new_contact_to_me').val($('#mine_assign_to').val())
-  
+
   dialog_buttons = $('.add_new_contact_dialog_buttons')
-  
+
   dialog_buttons.button('disable')
   if $('#person_first_name', form).val() == ''
     $.a(t('contacts.index.no_name_message'))
