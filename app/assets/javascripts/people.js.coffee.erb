@@ -604,7 +604,7 @@ $('#send_bulksms_link').live 'click', ->
 
 $('#send_bulkcomment_link').live 'click', ->
   if $('.id_checkbox:checked').length == 0
-    alert("You didn't select any people to comment on")
+    $.a(t('general.no_recipient_in_comment'))
     return false
   $('.to_list').html('')
   ids = []
@@ -622,32 +622,30 @@ $('#send_bulkcomment_link').live 'click', ->
       name = $(this).attr('data-name')
       ids.push(id)
       $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
-
-  $('#bulk_send_dialog form').removeClass('bulk-email')
-  $('#bulk_send_dialog form').addClass('bulk-sms')
+        
   $('#bulk_send_dialog .subject').hide()
-  $('#char_counter').show()
-  $('#bulk_send_dialog #bulk_send_body').simplyCountable( { maxCount: 140 } )
-  $('#bulk_send_body').val($('#bulk_sms_message').val())
+  $('#bulk_send_comment').val('')
   $('#bulk_send_dialog').dialog
     resizable: false,
-    height:444,
-    width:600,
+    height: 240,
+    width: 720,
     modal: true,
-    title: 'Bulk Message',
     open: (event, ui) ->
       $('#bulk_send_dialog_message').hide()
-
       $(this).find('form').attr('action', '/people/bulk_comment')
-    close: (event, ui) ->
-      $('#bulk_sms_message').val($('#bulk_send_body').val())
+      $("#bulk_send_comment").focus();
     buttons:
       Send: ->
-        $(this).submitBulkSendDialog()
-        $('#bulk_sms_message').val($('#bulk_send_body').val())
-        $.n('Comments posted')
+        if $('.to_list li').length < 1
+          $.a(t('general.no_recipient_in_send_comment'))
+          return false
+        else if !$('#bulk_send_comment').val()
+          $.a(t('general.comment_is_blank'))
+          return false
+        else  
+          $(this).submitBulkSendDialog()
+          $.n(t('general.send_comment_success'))
       Cancel: ->
-        $('#bulk_sms_message').val($('#bulk_send_body').val())
         $(this).dialog('destroy')
   false
 

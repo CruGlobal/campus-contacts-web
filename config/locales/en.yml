@@ -93,6 +93,10 @@ en:
   general:
     transfer: "Transfer"
     roles_applied: "labels have been applied."
+    no_recipient_in_comment: "You didn't select any people to comment on."
+    no_recipient_in_send_comment: "You have to select at least 1 recipient/person to comment on."
+    comment_is_blank: "Please enter your comment."
+    send_comment_success: "Your comment has been successfully posted."
     adv_search: "Advanced Search"
     archived: "Archived"
     assigned_to:  "Assigned to"
