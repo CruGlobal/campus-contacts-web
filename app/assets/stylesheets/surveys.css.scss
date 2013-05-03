@@ -1,0 +1,55 @@
+// Place all the styles related to the messages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#transfer_survey_div {
+  #transfer_survey_guide {
+    #survey_name {
+      font-weight: bold;
+    }
+  }
+  #transfer_survey_loader {
+    text-align: center;
+    margin-top: 20px;
+  }
+  #transfer_survey_processing {
+    text-align: center;
+    margin-top: 20px;
+    #org_name {
+      font-weight: bold;
+    }
+
+  }
+  #transfer_survey_content {
+    margin-top: 20px;
+    text-align: center;
+    #other_orgs_filter {
+      #other_orgs_filter_keyword {
+        padding: 2px 3px;
+        width: 504px;
+      }
+    }
+    #other_orgs_list {
+      height: 190px;
+      width: 510px;
+      margin: 0 auto;
+      border: 1px solid #ddd;
+      overflow-x: auto;
+      .other_org {
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        padding: 3px 4px;
+        cursor: pointer;
+        &:hover {
+          background: #eee;
+        }
+      }
+    }
+  }
+  #transfer_survey_error {
+    margin-top: 10px;
+    color: #990000;
+    text-align: center;
+    font-size: 12px;
+  }
+}

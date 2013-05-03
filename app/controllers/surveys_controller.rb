@@ -46,6 +46,36 @@ class SurveysController < ApplicationController
     end
   end
 
+  def show_other_orgs
+    org_ids = (current_person.admin_of_org_ids - [current_organization.id]).uniq
+    @managed_orgs = Organization.where(id: org_ids)
+    if params[:keyword]
+      @managed_orgs = @managed_orgs.where("name LIKE ? OR name = ?","%#{params[:keyword]}%", params[:keyword])
+    end
+    @managed_orgs = @managed_orgs.order('name')
+  end
+
+  def copy_survey
+    @survey = current_organization.surveys.find(params[:survey_id])
+    @receiving_org = Organization.find(params[:organization_id])
+    @status = 'failed'
+
+    if @survey && @receiving_org
+      if @receiving_org.surveys.where(title: @survey.title).present?
+        @status = 'duplicate'
+      else
+        new_survey = @receiving_org.surveys.new(@survey.attributes)
+        if new_survey.save
+          @survey.survey_elements.each do |q|
+            new_question = new_survey.survey_elements.new(q.attributes)
+            new_question.save
+          end
+          @status = 'copied'
+        end
+      end
+    end
+  end
+
   def update
     if @survey.update_attributes(params[:survey])
       redirect_to index_admin_surveys_path
