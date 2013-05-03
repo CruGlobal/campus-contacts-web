@@ -8,6 +8,10 @@ Mh::Application.routes.draw do
       post :import
     end
   end
+
+  # Interactions
+  match 'profile/:id' => 'interactions#show_profile', as: "profile"
+
   match 'imports/:id/labels' => 'imports#labels'
   match 'show_hidden_questions' => 'contacts#show_hidden_questions'
   match 'show_search_hidden_questions' => 'contacts#show_search_hidden_questions'
