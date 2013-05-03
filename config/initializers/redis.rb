@@ -1,8 +1,5 @@
-case
-when Rails.env.production?
-  $redis = Redis.new(:host => 'redis', :port => 6379)
-else
-  $redis = Redis.new(:host => '127.0.0.1', :port => 6379)
-  $redis.flushdb if Rails.env = "test"
-end
+redis_config = YAML.load_file(rails_root + '/config/redis.yml')
 
+$redis = Redis.new(:host => resque_config[rails_env], :port => 6379)
+
+$redis.flushdb if Rails.env = "test"
