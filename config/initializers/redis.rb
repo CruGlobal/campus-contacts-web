@@ -1,5 +1,6 @@
-redis_config = YAML.load_file(rails_root + '/config/redis.yml')
+redis_config = YAML.load_file(Rails.root.join('config','redis.yml'))
+server, port = redis_config[Rails.env].split(':')
 
-$redis = Redis.new(:host => resque_config[rails_env], :port => 6379)
+$redis = Redis.new(:host => server, :port => port)
 
 $redis.flushdb if Rails.env = "test"
