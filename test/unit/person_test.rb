@@ -136,13 +136,14 @@ class PersonTest < ActiveSupport::TestCase
       Factory(:organizational_role, person: @person1, organization: @org, role: Role.contact)
       Factory(:organizational_role, person: @person2, organization: @org, role: Role.contact)
       Factory(:organizational_role, person: @person3, organization: @org, role: Role.contact)
-      @answer_sheet1 = Factory(:answer_sheet, person: @person1, survey: @survey, updated_at: "2013-07-01".to_date)
-      @answer_sheet2 = Factory(:answer_sheet, person: @person2, survey: @survey, updated_at: "2013-07-02".to_date)
-      @answer_sheet3 = Factory(:answer_sheet, person: @person3, survey: @survey, updated_at: "2013-07-03".to_date)
+      @as1 = Factory(:answer_sheet, person: @person1, survey: @survey, updated_at: "2013-07-01".to_date)
+      @as2 = Factory(:answer_sheet, person: @person2, survey: @survey, updated_at: "2013-07-02".to_date)
+      @as3 = Factory(:answer_sheet, person: @person3, survey: @survey, updated_at: "2013-07-03".to_date)
+      puts "#{@person1.first_name}:#{@as1.updated_at} - #{@person2.first_name}:#{@as2.updated_at} - #{@person3.first_name}:#{@as3.updated_at}"
       results = Person.get_and_order_by_latest_answer_sheet_answered('ASC', @org.id)
-      assert_equal(results[0], @person1, "first result should be the first person who answered")
-      assert_equal(results[1], @person2, "second result should be the second person who answered")
-      assert_equal(results[2], @person3, "third result should be the last person who answered")
+      assert_equal(results[0].first_name, @person1.first_name, "first result should be the first person who answered")
+      assert_equal(results[1].first_name, @person2.first_name, "second result should be the second person who answered")
+      assert_equal(results[2].first_name, @person3.first_name, "third result should be the last person who answered")
     end
 
     should "return people assigned to an org" do
