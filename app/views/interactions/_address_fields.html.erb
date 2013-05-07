@@ -1,0 +1,32 @@
+<div class="edit_address_fields">
+  <%= builder.select :address_type, Address::TYPES %>
+  <div class="multi_line">
+    <%= builder.text_field :address1, placeholder: "Address Line 1" %>
+  </div>
+  <div class="multi_line">
+    <%= builder.text_field :address2, placeholder: "Address Line 2" %>
+  </div>
+  <div class="multi_line">
+    <%= builder.text_field :address3, placeholder: "Address Line 3" %>
+  </div>
+  <div class="multi_line">
+    <%= builder.text_field :address4, placeholder: "Address Line 4" %>
+  </div>
+	<div class="city multi_line">
+    <%= builder.label :city, t('general.city') %>:
+    <%= builder.text_field :city %>
+  </div>
+	<div class="state multi_line">
+    <%= builder.label :state, t('general.state') %>:
+		<%= builder.select :state, Carmen::states('US'), include_blank: true %>
+  </div>
+	<div class="zip multi_line">
+    <%= builder.label :zip, t('general.zip') %>:
+    <%= builder.text_field :zip, :class => "field_zip" %>
+  </div>
+	<div class="country multi_line">
+    <%= builder.label :country, t('general.country') %>:
+    <% Carmen.priority_countries = %w(US CA) %>
+    <%= builder.select :country, Carmen::countries(:locale => I18n.locale) %>
+	</div>
+</div>

@@ -1,0 +1,82 @@
+<%= form_for(@person, remote: true, html: {id: 'edit_profile_form'}) do |f| %>
+  <%= fields_for @person, {validators: {}} do |pf| %>
+  	<div class="info_edit info_edit_buttons">
+  		<button class="red_accent" id="info_edit_save_button">Save</button>
+  		<button class="large_lightgray" id="info_edit_cancel_button">Cancel</button>
+  	</div>
+
+  	<div class="feed_box info_edit">
+
+  		<div class="status col_left"><%= t('general.status') %>:</div>
+  		<div class="status col_right">
+  			<select id="followup_comment_status" name="followup_comment[status]">
+  				<option value="uncontacted" selected="selected">Uncontacted</option>
+  				<option value="attempted_contact">Attempted Contact</option>
+  				<option value="contacted">Contacted</option>
+  				<option value="do_not_contact">Do Not Contact</option>
+  				<option value="completed">Completed</option>
+  			</select>
+  		</div>
+
+  		<div class="gender col_left">
+        <label for="person_gender"><%= t('general.gender') %></label>:
+      </div>
+  		<div class="gender col_right">
+  			<%= pf.radio_button :gender, 'Male' %>
+        <label for="person_gender_male"><%= t('general.male') %></label>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <%= pf.radio_button :gender, 'Female' %>
+        <label for="person_gender_female"><%= t('general.female') %></label>
+  		</div>
+  	</div>
+
+  	<div class="feed_box info_edit">		
+  		<div class="email col_left">
+        <label><%= t('general.email') %></label>:
+      </div>
+  		<div class="email col_right">
+        <%= pf.fields_for :email_addresses do |builder| %>
+          <%= render 'interactions/email_address_fields', builder: builder, no_remove: @person.email_addresses.length <= 1 %>
+        <% end %>
+        
+        <div class="add_email">
+          <a href="#"><button class="add_gray"></button></a>
+        </div>
+  		</div>
+
+  		<div class="phone col_left">
+        <label><%= t('general.phone') %></label>:
+      </div>
+  		<div class="phone col_right">
+        <%= pf.fields_for :phone_numbers do |builder| %>
+          <%= render 'interactions/phone_number_fields', builder: builder, no_remove: @person.phone_numbers.length <= 1 %>
+        <% end %>
+      
+        <div class="add_phone">
+          <a href="#"><button class="add_gray"></button></a>
+        </div>
+  		</div>
+
+  		<div class="address col_left">
+        <label><%= t('general.address') %></label>:
+      </div>
+  		<div class="address col_right">
+        <%= pf.fields_for :addresses do |builder| %>
+          <%= render 'interactions/address_fields', builder: builder %>
+        <% end %>
+        
+        <div class="add_address">
+          <a href="#"><button class="add_gray"></button></a>
+        </div>
+  		</div>
+  	</div>
+
+  	<div class="feed_box info_edit">
+  		<div class="fb_link col_left">Facebook URL:</div>
+  		<div class="fb_link col_right">
+  			<input autocomplete="off" id="facebook_name_search" name="facebook_name_search" placeholder="Type a name or facebook profile url here:" type="text" value="">
+        <input id="person_fb_uid" name="person[fb_uid]" type="hidden">
+  		</div>
+  	</div>
+  <% end %>
+<% end %>

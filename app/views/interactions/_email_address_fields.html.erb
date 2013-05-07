@@ -1,0 +1,6 @@
+<div class="edit_email_fields">
+  <%= builder.text_field :email %>
+  <br/>
+  <%= builder.check_box :primary, class: 'primary' %> <%= builder.label :primary %>
+  <%- link_to_remove_fields(builder, no_remove) %>
+</div>

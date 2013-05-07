@@ -6,10 +6,19 @@ body#interactions_controller {
   .loader {
     display: inline-block;
     line-height: 16px;
+    font-size: 11px;
+    color: #777;
+    font-weight: normal;
     img {
-      margin: 0 0 -3px;
+      margin: 0 2px -3px 0;
       height: 16px;
+      width: 16px;
     }
+  }
+  .edit_email_fields,
+  .edit_phone_fields,
+  .edit_address_fields {
+    margin-bottom: 6px;
   }
   #rest {
     background: none;
@@ -70,6 +79,9 @@ body#interactions_controller {
             display: none;
             &.current {
               display: block;
+            }
+            &.profile_info .edit_space {
+              display: none;
             }
           }
         }
