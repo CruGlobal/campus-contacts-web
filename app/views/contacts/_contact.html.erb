@@ -7,7 +7,7 @@
 <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row <%= extra if defined?(extra) %>" data-name="<%= person.name %>" data-email="<%= person.email %>">
 	<td class="handle_container">
     <% if contact_role %>
-      <%= image_tag('grippy.png', class: 'handle', 'data-row-id' => dom_id(person), 'data-dnc-url' => organizational_role_path(:id => contact_role.id, :status => 'do_not_contact') ) %>
+      <%= image_tag('grippy.png', class: 'handle', 'data-row-id' => dom_id(person), 'data-id' => person.id, 'data-dnc-url' => organizational_role_path(:id => contact_role.id, :status => 'do_not_contact') ) %>
     <% else %>
       <%= image_tag('grippy.png', class: 'handle' ) %>
     <% end %>
@@ -19,7 +19,7 @@
   <td class="lastName"><%= person.last_name %></td>
 
 	<% if params[:role].blank? || ![Role::ADMIN_ID,Role::INVOLVED_ID,Role::LEADER_ID,Role::ALUMNI_ID].include?(params[:role].map{|id| id }) %>
-  <td>
+  <td class="status">
     <% if contact_role %>
       <%= contact_role.followup_status.to_s.titleize %>
       <% if person.organizational_roles.where('organizational_roles.organization_id' => current_organization.id).blank? %>
@@ -36,7 +36,7 @@
       <% roles.each do |role| %>
         <% sent = role.id == Role::SENT_ID && person.is_sent? %>
         <% if person.is_role_archived?(current_organization.id, role.id) %>
-          <% if params[:include_archived] == 'true' || params[:archived] == 'true' %> 
+          <% if params[:include_archived] == 'true' || params[:archived] == 'true' %>
             <div id="<%= person.id%>_<%= role.id %>" class="role_label_archived role_<%= role.id %> tipitmiddle" title="<%= sent ? 'Transferred & Archived' : 'Archived' %>"><%= role %></div>
           <% end %>
         <% else %>
@@ -73,7 +73,7 @@
     <% end %>
   </td>
   <% end %>
-  
+
   <td>
     <%= l(last_answer_sheet.updated_at, :format => :date) if last_answer_sheet.present? %>
   </td>

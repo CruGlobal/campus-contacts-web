@@ -107,20 +107,25 @@ class ContactsController < ApplicationController
   end
 
   def mine
+    params[:status] ||= 'in_progress'
     url = request.url.split('?')
     @attr = url.size > 1 ? url[1] : ''
+    @organization = current_organization
     fetch_mine
+
+    @all_contacts = @all_people
+    @inprogress_contacts = @all_people.where("organizational_roles.followup_status <> 'completed'")
+    @completed_contacts = @all_people.where("organizational_roles.followup_status = 'completed'")
     if params[:status] == 'completed'
-      @all_people = @all_people.where("organizational_roles.followup_status = 'completed'")
-    elsif params[:status] != 'all'
-      @all_people = @all_people.where("organizational_roles.followup_status <> 'completed'")
+      @all_people = @completed_contacts
+    elsif params[:status] == 'in_progress'
+      @all_people = @inprogress_contacts
     end
 
     @q = @all_people.where('1 <> 1').search(params[:q])
 
-    order = params[:q].present? ? params[:q][:s] : "last_name ASC, first_name ASC";
-	  @all_people = @all_people.order("people.#{order}")
-
+    order = params[:q].present? ? params[:q][:s] : "people.last_name ASC, people.first_name ASC";
+	  @all_people = @all_people.order("#{order}")
     @people = @all_people.group('people.id').page(params[:page])
   end
 
@@ -538,9 +543,11 @@ class ContactsController < ApplicationController
 	    	if ['role_id','last_name','first_name','gender'].any?{ |i| sort_query.include?(i) }
 					order_query = sort_query.gsub('role_id','organizational_roles.role_id')
 																	.gsub('gender','ISNULL(people.gender), people.gender')
+																	.gsub('first_name', 'people.first_name')
+																	.gsub('last_name', 'people.last_name')
 				end
       else
-      	order_query = "last_name asc, first_name asc"
+      	order_query = "people.last_name asc, people.first_name asc"
       end
       if fetch_all
         @all_people = @people_scope.order(order_query).group('people.id')
@@ -551,7 +558,7 @@ class ContactsController < ApplicationController
     end
 
     def fetch_mine
-      @all_people = Person.includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id)
+      @all_people = Person.includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'organizational_roles.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.role_id' => Role::CONTACT_ID).uniq
     end
 
     def get_person

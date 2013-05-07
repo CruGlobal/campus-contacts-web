@@ -2,6 +2,16 @@ $ ->
   $(document).on 'keypress', '#contact_search_form input', (e)->
     if (e.keyCode == $.ui.keyCode.ENTER)
       $('#contact_search_form').submit()
+      
+  $(".my_contacts.leftmenu .completed").droppable
+    activeClass: "ui-state-highlight"
+    accept: ".handle"
+    drop: (event, ui) ->
+      leader = undefined
+      if $(this).hasClass("completed")
+        li = $(this)
+        li.effect "highlight", {}, "slow"
+        $.fn.moveToCompleted ui.draggable
 
   $('.more_link').live 'click', (e)->
     e.preventDefault()
@@ -701,8 +711,34 @@ $.fn.search_status = () ->
 	label_contacts.attr("disabled", check)
 	false
 
+$.fn.moveToCompleted = (dragObject) ->
+  $('.id_checkbox:checked').each ->
+    data_id = $(this).attr("data-id")
+    tr_element = $("#person_" + data_id)
+    if $.trim(tr_element.children(".status").text()) != "Completed"
+      tr_element.children(".status").text("Completed")
+      tr_element.effect('highlight', {}, 'slow')
+      $.ajax
+        type: "POST",
+        url: "/followup_comments.js",
+        data: {followup_comment: {contact_id: data_id , status: "completed", comment: "Completed"}}
+      # add to completed count
+      current_count = $.trim($('#completed_count.count').text())
+      new_count = parseInt(current_count.substring(1, current_count.length - 1)) + 1
+      $('#completed_count.count').text("\("+ new_count + "\)")
+      # deduct to inprogress count
+      current_count = $.trim($('#in_progress_count.count').text())
+      new_count = parseInt(current_count.substring(1, current_count.length - 1)) - 1
+      $('#in_progress_count.count').text("\("+ new_count + "\)")
+      if $('.leftmenu.my_contacts').hasClass('in_progress')
+        tr_element.remove()
+        $('.drag-contact.ui-draggable-dragging').fadeOut()
+  $('.id_checkbox').prop('checked', false)
+
 $.fn.moveToDnc = (dragObject) ->
-  $('#dnc_count').html(Number($('#dnc_count').html()) + 1)
+  current_count = $.trim($('#dnc_count.count').text())
+  new_count = parseInt(current_count.substring(1, current_count.length - 1)) + 1
+  $('#dnc_count.count').text("\("+ new_count + "\)")
   row = $("#" + $(dragObject).attr("data-row-id"))
   row.hide()
   $('#move_to_dnc').attr('action', $(dragObject).attr("data-dnc-url"))

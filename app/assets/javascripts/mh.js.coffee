@@ -156,7 +156,11 @@ $ ->
         else
           checkboxes = $('.id_checkbox:checked').length
           
-        length = if $(this).parent().next().find('input').prop('checked') then checkboxes else 1
+        if $(this).parent().next().find('input').prop('checked')
+          length = checkboxes
+        else
+          length = 1
+          
         if length == 1
           helper_text = $('#drag_helper_text_one').html()
         else
