@@ -11,8 +11,10 @@
     <%= select_tag :followup_status, options_for_select(OrganizationalRole::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]}, followup_status), {disabled: contact_role.nil?, include_blank: contact_role.nil?, 'data-person-id' => "#{@person.id}"} %>
 	</div>
 
-	<div class="gender col_left">Gender:</div>
-	<div class="gender col_right"><%= @person.gender %></div>
+  <% if @person.gender.present? %>
+  	<div class="gender col_left">Gender:</div>
+  	<div class="gender col_right"><%= @person.gender %></div>
+  <% end %>
 
 </div>
 
@@ -20,41 +22,51 @@
 
 <div class="feed_box info_display">
 
-	<div class="email col_left">Email:</div>
-	<div class="email col_right">
-    <% @person.email_addresses.each do |email| %>
-      <%= mail_to email.email %>
-  		<% if email.primary %>
-        <div class="info_tag">Primary</div>
-      <% end %>
-    <% end %>
-	</div>
 
-  <div class="phone col_left">Phone:</div>
-  <div class="phone col_right">
-    <% @person.phone_numbers.each do |phone| %>
-      <%= link_to phone.pretty_number, "tel:#{phone.number}" %>
-      <div class="info_tag"><%= phone.location.titleize %></div>
-  		<% if phone.primary %>
-        <div class="info_tag">Primary</div>
+  <% email_addresses = @person.email_addresses %>
+  <% if email_addresses.present? %>
+  	<div class="email col_left">Email:</div>
+  	<div class="email col_right">
+      <% @person.email_addresses.each do |email| %>
+        <%= mail_to email.email %>
+    		<% if email.primary %>
+          <div class="info_tag">Primary</div>
+        <% end %>
       <% end %>
-    <% end %>
-  </div>
+  	</div>
+  <% end %>
 
-	<div class="address col_left">Address:</div>
-	<div class="address col_right">
-    <% @person.addresses.each do |address| %>
-      <div class="info_tag"><%= address.address_type.titleize %></div>
-  		<div class="multi_line" id="address_line_1"><%= address.address1 %></div>
-  		<div class="multi_line" id="address_line_2"><%= address.address2 %></div>
-  		<div class="multi_line" id="address_line_3"><%= address.address3 %></div>
-  		<div class="multi_line" id="address_line_4"><%= address.address4 %></div>
-  		<div class="multi_line" id="address_city_state_zip">
-        <%= "#{address.city}, #{address.state} #{address.zip}" %>
-      </div>
-  		<div class="multi_line"><%= address.country %></div>
-    <% end %>
-	</div>
+  <% phone_numbers = @person.phone_numbers %>
+  <% if phone_numbers.present? %>
+    <div class="phone col_left">Phone:</div>
+    <div class="phone col_right">
+      <% phone_numbers.each do |phone| %>
+        <%= link_to phone.pretty_number, "tel:#{phone.number}" %>
+        <div class="info_tag"><%= phone.location.titleize %></div>
+    		<% if phone.primary %>
+          <div class="info_tag">Primary</div>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% addresses = @person.addresses %>
+  <% if addresses.present? %>
+  	<div class="address col_left">Address:</div>
+  	<div class="address col_right">
+      <% addresses.each do |address| %>
+        <div class="info_tag"><%= address.address_type.titleize %></div>
+    		<div class="multi_line" id="address_line_1"><%= address.address1 %></div>
+    		<div class="multi_line" id="address_line_2"><%= address.address2 %></div>
+    		<div class="multi_line" id="address_line_3"><%= address.address3 %></div>
+    		<div class="multi_line" id="address_line_4"><%= address.address4 %></div>
+    		<div class="multi_line" id="address_city_state_zip">
+          <%= "#{address.city}, #{address.state} #{address.zip}" %>
+        </div>
+    		<div class="multi_line"><%= address.country %></div>
+      <% end %>
+  	</div>
+  <% end %>
 
 	<div class="col_right multi_line" id="email_this_info">
 		<button class="action_gray" href="#">Email Me This Contact Info</button>
