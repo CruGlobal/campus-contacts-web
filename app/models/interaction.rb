@@ -7,4 +7,5 @@ class Interaction < ActiveRecord::Base
   belongs_to :interaction_type
   belongs_to :receiver, class_name: 'Person', foreign_key: 'receiver_id'
   belongs_to :creator, class_name: 'Person', foreign_key: 'created_by_id'
+  
 end

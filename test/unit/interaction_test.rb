@@ -1,7 +1,11 @@
 require 'test_helper'
 
 class InteractionTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  should have_many(:interaction_initiators)
+  should have_many(:initiators)
+  should belong_to(:organization)
+  should belong_to(:interaction_type)
+  should belong_to(:receiver)
+  should belong_to(:creator)
+  
 end

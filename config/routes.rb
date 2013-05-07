@@ -11,6 +11,11 @@ Mh::Application.routes.draw do
 
   # Interactions
   match 'profile/:id' => 'interactions#show_profile', as: "profile"
+  resources :interactions do
+    collection do
+      get :change_followup_status
+    end
+  end
 
   match 'imports/:id/labels' => 'imports#labels'
   match 'show_hidden_questions' => 'contacts#show_hidden_questions'

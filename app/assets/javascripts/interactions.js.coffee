@@ -1,4 +1,10 @@
 $ ->
+  $('#followup_status').live 'change', (e)->
+    $.toggleLoader('followup_status_div')
+    $.ajax
+      type: 'GET',
+      url: '/interactions/change_followup_status?status=' + $(this).val() + '&person_id=' + $(this).attr('data-person-id')
+  
   $("#profile_name #edit_profile_name_button").live 'click', (e)->
     e.preventDefault()
     $("#profile_name").hide()
