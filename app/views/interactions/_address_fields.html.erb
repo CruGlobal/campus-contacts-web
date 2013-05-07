@@ -1,5 +1,6 @@
-<div class="edit_address_fields">
+<div class="edit_address_fields sfield" data-group="address">
   <%= builder.select :address_type, Address::TYPES %>
+  <%= link_to_remove_fields(builder, false) %>
   <div class="multi_line">
     <%= builder.text_field :address1, placeholder: "Address Line 1" %>
   </div>
@@ -13,16 +14,13 @@
     <%= builder.text_field :address4, placeholder: "Address Line 4" %>
   </div>
 	<div class="city multi_line">
-    <%= builder.label :city, t('general.city') %>:
-    <%= builder.text_field :city %>
+    <%= builder.label :city, t('general.city') %>:<%= builder.text_field :city %>
   </div>
 	<div class="state multi_line">
-    <%= builder.label :state, t('general.state') %>:
-		<%= builder.select :state, Carmen::states('US'), include_blank: true %>
+    <%= builder.label :state, t('general.state') %>: <%= builder.select :state, Carmen::states('US'), include_blank: true %>
   </div>
 	<div class="zip multi_line">
-    <%= builder.label :zip, t('general.zip') %>:
-    <%= builder.text_field :zip, :class => "field_zip" %>
+    <%= builder.label :zip, t('general.zip') %>:<%= builder.text_field :zip, :class => "field_zip" %>
   </div>
 	<div class="country multi_line">
     <%= builder.label :country, t('general.country') %>:

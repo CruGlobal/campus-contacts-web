@@ -1,7 +1,7 @@
-<div class="edit_phone_fields">
+<div class="edit_phone_fields sfield" data-group="phone">
   <%= builder.text_field :number %>
+  <%= link_to_remove_fields(builder, no_remove) %>
   <br/>
   <%= builder.select :location, %w[mobile home work].collect {|l| [t("general.#{l}"), l]} %>
-  <%= builder.check_box :primary, class: 'primary' %> <%= builder.label :primary %>
-  <%- link_to_remove_fields(builder, no_remove) %>
+  <%= builder.check_box :primary, class: 'primary phone' %> <%= builder.label :primary %>
 </div>

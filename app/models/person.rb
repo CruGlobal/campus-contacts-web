@@ -87,7 +87,7 @@ class Person < ActiveRecord::Base
 
   accepts_nested_attributes_for :email_addresses, :reject_if => lambda { |a| a[:email].blank? }, allow_destroy: true
   accepts_nested_attributes_for :phone_numbers, :reject_if => lambda { |a| a[:number].blank? }, allow_destroy: true
-  accepts_nested_attributes_for :addresses, allow_destroy: true
+  accepts_nested_attributes_for :addresses, :reject_if => lambda { |a| a[:address1].blank? }, allow_destroy: true
   accepts_nested_attributes_for :current_address, allow_destroy: true
 
   scope :find_by_person_updated_by_daterange, lambda { |date_from, date_to| {

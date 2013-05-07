@@ -30,8 +30,6 @@ $ ->
         data: 'name='+$(this).siblings('#new_label_field').val()
     false
 
-
-
   $('.action_dropdown').live 'click', ->
     link = $(this)
     link.toggleClass('active')
@@ -46,14 +44,18 @@ $ ->
     $('input[type=checkbox].primary', fieldset).prop('checked', false)
     $(this).prop('checked', true)
 
-  $('a.remove_field').live 'click', ->
-    link = this
-    $(link).prev("input[type=hidden]").val("1");
-    $(link).closest(".sfield").hide();
-    fieldset = $(link).closest('.fieldset')
-    if $('.sfield:visible', fieldset).length <= 2
-      $('.remove_field', fieldset).hide()
-    false
+  $('a.remove_field').live 'click', (e)->
+    e.preventDefault()
+    group_name = $(this).parents('.sfield').attr("data-group")
+    if group_name == 'address' || $(".sfield[data-group=" + group_name + "]:visible").size() > 1
+      link = this
+      $(link).prev("input[type=hidden]").val("1");
+      $(link).closest(".sfield").hide()
+      fieldset = $(link).closest('.fieldset')
+      if $('.sfield:visible', fieldset).length <= 2
+        $('.remove_field', fieldset).hide()
+    else
+      $(this).hide()
 
   if $.fn.oneFingerScroll?
     $('.fingerme').oneFingerScroll();

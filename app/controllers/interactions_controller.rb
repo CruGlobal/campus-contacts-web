@@ -12,4 +12,8 @@ class InteractionsController < ApplicationController
     
     @contact_role.update_attribute(:followup_status, params[:status])
   end
+  
+  def reset_edit_form
+    @person = current_organization.people.where(id: params[:person_id]).try(:first)
+  end
 end
