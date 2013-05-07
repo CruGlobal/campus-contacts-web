@@ -179,6 +179,14 @@ $ ->
 
 window.t = (s) -> I18n.translate(s)
 
+$.toggleLoader = (div_id) ->
+  if $('#' + div_id).children('.loader').size() == 0
+    $('#' + div_id).append("<div class='loader'><img src='/assets/loader.gif'></div>")
+  else
+    $('#' + div_id).children('.loader').last().remove()
+  false
+  
+
 $.a = (msg, title) ->
   unless $('#alert_dialog')[0]?
     $('body').append('<div id="alert_dialog" title="' + t('general.alert') + '"></div>')

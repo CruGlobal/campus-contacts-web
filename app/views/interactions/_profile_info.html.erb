@@ -5,8 +5,10 @@
 <div class="feed_box info_display">
 
 	<div class="status col_left">Status:</div>
-	<div class="status col_right">
-    <%= select_tag :followup_comment_status, options_for_select(OrganizationalRole::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]}) %>
+	<div class="status col_right" id="followup_status_div">
+    <%- contact_role = @person.contact_role_for_org(current_organization) %>
+    <%- followup_status = contact_role.nil? ? "" : contact_role.followup_status %>
+    <%= select_tag :followup_status, options_for_select(OrganizationalRole::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]}, followup_status), {disabled: contact_role.nil?, include_blank: contact_role.nil?, 'data-person-id' => "#{@person.id}"} %>
 	</div>
 
 	<div class="gender col_left">Gender:</div>

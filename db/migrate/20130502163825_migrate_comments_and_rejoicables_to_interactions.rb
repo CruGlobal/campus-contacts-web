@@ -49,7 +49,6 @@ class MigrateCommentsAndRejoicablesToInteractions < ActiveRecord::Migration
         end
       end
     end
-    raise "OK"
   end
 
   def down
