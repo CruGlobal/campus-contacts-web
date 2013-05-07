@@ -20,6 +20,7 @@ class Ability
         can :manage_contacts, Organization, id: leader_of_org_ids
         
         can :manage_groups, Organization, id: leader_of_org_ids + admin_of_org_ids
+        can :manage_locate_contact, Organization, id: leader_of_org_ids + admin_of_org_ids
         can :manage_roles, Organization, id: admin_of_org_ids
 
         # can only manage keywords from orgs you're an admin of

@@ -16,6 +16,7 @@ Mh::Application.routes.draw do
   match 'copy_survey' => 'surveys#copy_survey'
   match 'sent_messages' => 'messages#sent_messages'
   match 'check_email' => 'contacts#check_email'
+  match 'search_locate_contact' => 'contacts#search_locate_contact'
 
   resources :group_labels, :only => [:create, :destroy]
 

@@ -98,6 +98,7 @@ en:
     comment_is_blank: "Please enter your comment."
     send_comment_success: "Your comment has been successfully posted."
     adv_search: "Advanced Search"
+    contact_location: "Contact Location"
     archived: "Archived"
     assigned_to:  "Assigned to"
     survey: Survey
@@ -160,6 +161,7 @@ en:
     dash: ' - '
     help_redirect_link: http://help.missionhub.com
     help_redirect_link_import: http://help.missionhub.com/entries/23347123-Import-Contacts
+    locate_contact_search_required_fields: "You should enter at least 1 search field."
   leaders:
     form:
       name_required: "Name, gender, and email fields are required to add a leader:"
@@ -197,6 +199,7 @@ en:
       phone: 'Phone'
       email: 'Email'
       filter: 'Search'
+      locate_contact: 'Contact Location'
       year_in_school: 'Year in School'
       manage_roles: 'Manage Labels'
       send_sms: Text
@@ -692,6 +695,11 @@ en:
       hidden_questions: 'Hidden Questions'
       archived: 'Archived'
       unassigned: 'Unassigned'
+      search_contact_results_description: 'Please use the form to find a contact.'
+      search_contact_no_results: 'No results were found.'
+      search_locate_contact_button: 'Go find'
+      search_locate_title: "Find a Contact's Location"
+      search_locate_help: "You may enter all or any part of First Name, Last Name, and/or Email Address and then click the \"Go Find\" button to find in which of \"your MissionHub Organizations\" the individual is currently located."
       all: 'All'
       dnc: 'Do Not Contact'
       add_label_exists: 'Label is already in the list!'

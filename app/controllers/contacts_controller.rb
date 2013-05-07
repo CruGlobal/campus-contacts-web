@@ -289,6 +289,31 @@ class ContactsController < ApplicationController
     render :text => code
   end
 
+  def search_locate_contact
+    firstname = params[:fname]
+    lastname = params[:lname]
+    email = params[:email]
+    @manage_org_ids = current_person.organizational_roles.find_admin_or_leader
+    if @manage_org_ids
+      get_all_people = Person.where('organizational_roles.organization_id IN (?)', @manage_org_ids.collect(&:organization_id)).joins(:organizational_roles).uniq
+      if get_all_people.count > 0
+        query = ""
+        if firstname.present?
+          query += " first_name LIKE '#{manage_wild_card(firstname.strip)}' "
+        end
+        if lastname.present?
+          query += " AND " if query.length > 0
+          query += " last_name LIKE '#{manage_wild_card(lastname.strip)}' "
+        end
+        if email.present?
+          query += " AND " if query.length > 0
+          query += " email LIKE '#{manage_wild_card(email.strip)}' "
+        end
+        @filtered_contact = get_all_people.joins(:email_addresses).where(query) if query.length > 0
+      end
+    end
+  end
+  
   protected
     def fetch_contacts(load_all = false)
       # Load Saved Searches, Surveys & Questions
