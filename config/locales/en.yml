@@ -135,6 +135,7 @@ en:
     email: Email
     note: Note
     phone: Phone
+    address: Address
     send_email: 'Email'
     search: 'Search'
     add: Add

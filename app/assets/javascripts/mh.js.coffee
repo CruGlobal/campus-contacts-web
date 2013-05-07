@@ -179,11 +179,11 @@ $ ->
 
 window.t = (s) -> I18n.translate(s)
 
-$.toggleLoader = (div_id) ->
+$.toggleLoader = (div_id, words) ->
   if $('#' + div_id).children('.loader').size() == 0
-    $('#' + div_id).append("<div class='loader'><img src='/assets/loader.gif'></div>")
+    $('#' + div_id).append("<div class='loader'><img src='/assets/loader.gif'>" + words + "</div>")
   else
-    $('#' + div_id).children('.loader').last().remove()
+    $('#' + div_id).children('.loader').last().fadeOut().remove()
   false
   
 

@@ -1,1 +1,6 @@
 $("#profile_name span#name").text("<%= escape_javascript(@person.name)%>")
+if($('body').hasClass("reload_info")){
+  $('.feed_content .tab_content.profile_info .view_space').html("<%= escape_javascript(render partial: 'interactions/profile_info') %>")
+ $('body').removeClass("reload_info") 
+}
+$.toggleLoader('profile_name','')

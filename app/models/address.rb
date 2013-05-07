@@ -1,8 +1,8 @@
 class Address < ActiveRecord::Base
-	
+	TYPES = {"Current" => "current", "Permanent" => "permanent", "Emergency 1" => "emergency1", "Emergency 2" => "emergency2"}
 	validates_presence_of :address_type
 	
-	belongs_to :person, foreign_key: "person_id"
+	belongs_to :person, touch: true
 	
 	def display_html
 	  ret_val = address1 || ''

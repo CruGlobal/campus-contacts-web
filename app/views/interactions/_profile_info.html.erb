@@ -12,7 +12,7 @@
 	</div>
 
   <% if @person.gender.present? %>
-  	<div class="gender col_left">Gender:</div>
+  	<div class="gender col_left"><%= t('general.gender') %>:</div>
   	<div class="gender col_right"><%= @person.gender %></div>
   <% end %>
 
@@ -25,7 +25,7 @@
 
   <% email_addresses = @person.email_addresses %>
   <% if email_addresses.present? %>
-  	<div class="email col_left">Email:</div>
+  	<div class="email col_left"><%= t('general.email') %>:</div>
   	<div class="email col_right">
       <% @person.email_addresses.each do |email| %>
         <%= mail_to email.email %>
@@ -38,7 +38,7 @@
 
   <% phone_numbers = @person.phone_numbers %>
   <% if phone_numbers.present? %>
-    <div class="phone col_left">Phone:</div>
+    <div class="phone col_left"><%= t('general.phone') %>:</div>
     <div class="phone col_right">
       <% phone_numbers.each do |phone| %>
         <%= link_to phone.pretty_number, "tel:#{phone.number}" %>
@@ -52,7 +52,7 @@
 
   <% addresses = @person.addresses %>
   <% if addresses.present? %>
-  	<div class="address col_left">Address:</div>
+  	<div class="address col_left"><%= t('general.address') %>:</div>
   	<div class="address col_right">
       <% addresses.each do |address| %>
         <div class="info_tag"><%= address.address_type.titleize %></div>
