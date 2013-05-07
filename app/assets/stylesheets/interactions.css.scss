@@ -15,10 +15,25 @@ body#interactions_controller {
       width: 16px;
     }
   }
+  .field_with_errors {
+    display: inline-block;
+  }
   .edit_email_fields,
   .edit_phone_fields,
   .edit_address_fields {
     margin-bottom: 6px;
+    .remove_field {
+      display: none;
+    }
+    &:hover .remove_field {
+      display: inline-block;;
+    }
+  }
+  #profile_errors {
+    .error_msg {
+      text-align: center;
+      font-color: #990000;
+    }
   }
   #rest {
     background: none;

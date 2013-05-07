@@ -2,9 +2,17 @@
   <%= fields_for @person, {validators: {}} do |pf| %>
   	<div class="info_edit info_edit_buttons">
   		<button class="red_accent" id="info_edit_save_button">Save</button>
-  		<button class="large_lightgray" id="info_edit_cancel_button">Cancel</button>
+  		<button class="large_lightgray" id="info_edit_cancel_button" data-person-id="<%= @person.id %>">Cancel</button>
   	</div>
 
+    <% if @person.errors.any? %>
+    	<div class="feed_box info_edit" id="profile_errors">
+        <% @person.errors.each do |attr, msg| %>
+          <div class="error_msg"><%= "#{attr.to_s.split(".").first.humanize} #{msg}" %></div>
+        <% end %>
+      </div>
+    <% end %>
+      
   	<div class="feed_box info_edit">
 
   		<div class="status col_left"><%= t('general.status') %>:</div>
@@ -35,11 +43,12 @@
         <label><%= t('general.email') %></label>:
       </div>
   		<div class="email col_right">
-        <%= pf.fields_for :email_addresses do |builder| %>
-          <%= render 'interactions/email_address_fields', builder: builder, no_remove: @person.email_addresses.length <= 1 %>
-        <% end %>
-        
-        <div class="add_email">
+        <div id="edit_profile_email_list">
+          <%= pf.fields_for :email_addresses do |builder| %>
+            <%= render 'interactions/email_address_fields', builder: builder, no_remove: @person.email_addresses.length <= 1 %>
+          <% end %>
+        </div>
+        <div class="add_email" id="edit_profile_add_email_button">
           <a href="#"><button class="add_gray"></button></a>
         </div>
   		</div>
@@ -48,11 +57,12 @@
         <label><%= t('general.phone') %></label>:
       </div>
   		<div class="phone col_right">
-        <%= pf.fields_for :phone_numbers do |builder| %>
-          <%= render 'interactions/phone_number_fields', builder: builder, no_remove: @person.phone_numbers.length <= 1 %>
-        <% end %>
-      
-        <div class="add_phone">
+        <div id="edit_profile_phone_list">
+          <%= pf.fields_for :phone_numbers do |builder| %>
+            <%= render 'interactions/phone_number_fields', builder: builder, no_remove: @person.phone_numbers.length <= 1 %>
+          <% end %>
+        </div>
+        <div class="add_phone" id="edit_profile_add_phone_button">
           <a href="#"><button class="add_gray"></button></a>
         </div>
   		</div>
@@ -61,11 +71,12 @@
         <label><%= t('general.address') %></label>:
       </div>
   		<div class="address col_right">
-        <%= pf.fields_for :addresses do |builder| %>
-          <%= render 'interactions/address_fields', builder: builder %>
-        <% end %>
-        
-        <div class="add_address">
+        <div id="edit_profile_address_list">
+          <%= pf.fields_for :addresses do |builder| %>
+            <%= render 'interactions/address_fields', builder: builder %>
+          <% end %>
+        </div>
+        <div class="add_address" id="edit_profile_add_address_button">
           <a href="#"><button class="add_gray"></button></a>
         </div>
   		</div>
