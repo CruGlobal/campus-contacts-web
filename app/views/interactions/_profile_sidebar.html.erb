@@ -1,4 +1,10 @@
-<%= image_tag("https://graph.facebook.com/#{@person.fb_uid}/picture?width=200&height=200", alt: '', width: '200', height: '200', id: 'profile_image') %>
+<% if @person.fb_uid.present? %>
+  <%= image_tag("https://graph.facebook.com/#{@person.fb_uid}/picture?width=200&height=200", alt: '', width: '200', height: '200', id: 'profile_image') %>
+<% else %>
+  <%= image_tag("no_image.png", alt: '', width: '200', height: '200', id: 'profile_image') %>
+<% end %>
+
+  
 <div id="profile_label_header">
 	Labels
   <%= link_to image_tag("edit_sprite.png"), "#"%>
