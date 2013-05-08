@@ -65,7 +65,7 @@ $ ->
   $('.person_row td:not(.checkbox_cell)').live 'click', ->
     unless $('a', this)[0]?
       tr = $(this).parent()
-      document.location = '/people/' + tr.attr('data-id')
+      document.location = '/profile/' + tr.attr('data-id')
 
   $('#apply_roles_spinner').hide()
   $("#apply_roles_successful").hide()

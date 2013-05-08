@@ -614,6 +614,9 @@ en:
   survey_mailer:
     notify:
       content: '%{name} (%{number},%{email}) just replied to a survey with %{answer}.'
+  interactions:
+    profile_info:
+      email_contact_info: "Email Me This Contact Info"
   contacts:
     sidebar:
       show_more: "Show More"

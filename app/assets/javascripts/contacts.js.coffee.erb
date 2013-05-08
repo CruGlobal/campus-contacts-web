@@ -452,7 +452,7 @@ $ ->
     $(this).autocomplete
 	    source: '/contacts/search_by_name_and_email.json'+inc,
       select: (event, ui) ->
-        window.location = "/people/" + ui.item.id
+        window.location = "/profile/" + ui.item.id
     .data("autocomplete")
     ._renderItem = ( ul, item )->
       temp = item
@@ -681,7 +681,7 @@ $ ->
   $('.contact_row td:not(.checkbox_cell)').live 'click', ->
     unless $('a', this)[0]?
       tr = $(this).parent()
-      document.location = '/people/' + tr.attr('data-id')
+      document.location = '/profile/' + tr.attr('data-id')
 
   $('#assign_to').change ->
     if $('.id_checkbox:checked').length > 0
@@ -877,5 +877,5 @@ $.mh.saveContact = (add_more) ->
 
 $.fn.load_leader_name = (id) ->
   $('#person_title').html('<img src="/assets/spinner.gif" />')
-  $('#person_title').show().load('/people/' + id + ' #assigned_leader')
+  $('#person_title').show().load('/profile/' + id + ' #assigned_leader')
 
