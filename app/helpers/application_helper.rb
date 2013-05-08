@@ -215,4 +215,8 @@ module ApplicationHelper
     image_tag('spinner.gif', :id => e, :style => 'display:none', :class => 'spinner')
   end
   
+  def time_format(datetime)
+    return datetime.strftime("%d %b %Y")
+  end
+  
 end

@@ -1,62 +1,21 @@
-
-
 <div class="interaction_new interaction_new_buttons">
 	<button class="red_accent" id="interaction_new_record_button">Record A New Interaction</button>
 </div>
 
-<div class="feed_box interaction_display">
-	<div class="feed_icon"><%= image_tag("prc.png") %></div>
-	<div class="feed_item_header">
-    <span class="feed_item_date">01 Sep 2011</span>
-	  <span class="feed_item_privacy">
-      <strong>Visible to:&nbsp;</strong>Leaders In My Organization
-      <%= image_tag("edit_sprite.png") %>
-    </span>
+<% @interactions.each do |interaction| %>
+  <div class="feed_box interaction_display">
+  	<div class="feed_icon"><%= image_tag(interaction.icon) %></div>
+  	<div class="feed_item_header">
+      <span class="feed_item_date"><%= time_format(interaction.created_at) %></span>
+      <span class="feed_item_privacy">
+        <strong>Visible to:&nbsp;</strong><%= interaction.privacy_setting.titleize %>
+        <%= image_tag("edit_sprite.png") %>
+      </span>
+  	</div>
+  	<div class="feed_item_content"><%= interaction.title %></div>
+  	<div class="feed_item_comment">
+      <strong><%= interaction.creator %> wrote:</strong>
+      “<%= interaction.comment %>”
+    </div>
   </div>
-
-  <div class="feed_item_content">
-    <strong>Olivia Olson&nbsp;</strong>prayed to receive Christ with <strong>Kristen King</strong>.
-  </div>
-
-	<div class="feed_item_comment">
-    <strong>Kristen King wrote:&nbsp;</strong>"Olivia and I met up at the coffee shop off campus, to have another conversation. God has really been working in her life up to this point, and she was ready to accept Jesus into her heart!"
-  </div>
-</div>
-
-<div class="feed_box interaction_display">
-	<div class="feed_icon"><%= image_tag("comment.png") %></div>
-	<div class="feed_item_header">
-    <span class="feed_item_date">24 Aug 2011</span>
-    <span class="feed_item_privacy">
-      <strong>Visible to:&nbsp;</strong>Everyone In My Organization
-      <%= image_tag("edit_sprite.png") %>
-    </span>
-	</div>
-
-	<div class="feed_item_content">
-    <strong>Kristen King&nbsp;</strong>shared a comment.
-  </div>
-
-	<div class="feed_item_comment">
-    <strong>Kristen King wrote:&nbsp;</strong>“Olivia has been asking more questions today.  Please pray for her, that she would begin to understand what faith looks like, and that she would receive the answers she needs.”
-  </div>
-</div>
-
-<div class="feed_box interaction_display">
-	<div class="feed_icon"><%= image_tag("gospel_pres.png") %></div>
-	<div class="feed_item_header">
-    <span class="feed_item_date">24 Aug 2011</span>
-    <span class="feed_item_privacy">
-      <strong>Visible to:&nbsp;</strong>Leaders In My Organization
-      <%= image_tag("edit_sprite.png") %>
-    </span>
-	</div>
-
-	<div class="feed_item_content">
-    <strong>Kristen King&nbsp;</strong>shared a gospel presentation with <strong>Olivia Olson</strong>.
-  </div>
-
-	<div class="feed_item_comment">
-    <strong>Kristen King wrote:&nbsp;</strong>"I met Olivia in the cafeteria.  We have the same major and it was easy to strike up a conversation.  She seemed willing to talk, and we agreed to meet again next week at the same table."
-  </div>
-</div>
+<% end %>

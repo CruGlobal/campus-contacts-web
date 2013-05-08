@@ -2,6 +2,10 @@ class InteractionsController < ApplicationController
   def show_profile
     @person = current_organization.people.where(id: params[:id]).try(:first)
     redirect_to contacts_path unless @person.present?
+
+    if can? :manage, @person
+      @interactions = @person.interactions.recent
+    end
   end
   
   def change_followup_status
