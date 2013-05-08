@@ -11,7 +11,7 @@ end
 class MigrateCommentsAndRejoicablesToInteractions < ActiveRecord::Migration
   def up
     comment_interaction_type = InteractionType.find_by_i18n("comment")
-    FollowupComment.limit(100).each do |comment|
+    FollowupComment.order('id').each do |comment|
       interaction = Interaction.new(
         interaction_type_id: comment_interaction_type.id,
         receiver_id: comment.contact_id,
