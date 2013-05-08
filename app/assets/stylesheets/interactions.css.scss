@@ -46,6 +46,11 @@ body#interactions_controller {
     #main {
       margin: 0px;
       border: none;
+      .profile_interactions {
+        .edit_space {
+          display: none;
+        }
+      }
       #person_profile {
         margin: -10px auto 10px;
         width: 680px;

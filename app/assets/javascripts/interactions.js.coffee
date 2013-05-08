@@ -1,4 +1,16 @@
 $ ->
+  $('#interaction_save_cancel_button').live 'click', (e)->
+    e.preventDefault()
+    $('.feed_content .tab_content.profile_interactions .edit_space').hide()
+    $('.interaction_new_buttons').fadeIn()
+    
+  
+  $('#interaction_new_record_button').live 'click', (e)->
+    e.preventDefault()
+    $(this).parents('.interaction_new_buttons').first().hide()
+    $('.feed_content .tab_content.profile_interactions .edit_space').fadeIn()
+    
+  
   $('input.primary').live 'click', (e)->
     group_name = $(this).parents('.sfield').attr("data-group")
     $('input.primary.' + group_name).prop('checked',false)
