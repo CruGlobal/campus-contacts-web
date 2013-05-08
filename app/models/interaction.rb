@@ -15,9 +15,7 @@ class Interaction < ActiveRecord::Base
   end
   
   def icon
-    file_name = interaction_type.i18n
-    file_name = 'comment' if file_name == 'faculty_on_mission'
-    return "#{file_name}.png"
+    return interaction_type.icon
   end
   
   def title
