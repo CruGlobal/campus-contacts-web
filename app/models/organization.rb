@@ -84,6 +84,20 @@ class Organization < ActiveRecord::Base
       transition any => :inactive
     end
   end
+  
+  def interaction_types
+    return InteractionType.where(organization_id: [0,id]).order('id')
+  end
+  
+  def interaction_privacy_settings
+    list = Array.new
+    list << ["Everyone", "everyone"]
+    list << ["Everyone in #{parent.name}", "organization"] if parent.present?
+    list << ["Everyone in #{name}", "organization"]
+    list << ["Admins in #{name}", "admins"]
+    list << ["To only Me", "me"]
+    return list
+  end
 
   def sms_gateway
     return settings[:sms_gateway] if settings[:sms_gateway]
@@ -504,5 +518,4 @@ class Organization < ActiveRecord::Base
       touch_people
     end
   end
-
 end

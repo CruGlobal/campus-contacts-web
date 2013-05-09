@@ -1,14 +1,14 @@
 $ ->
   $('#interaction_save_cancel_button').live 'click', (e)->
     e.preventDefault()
-    $('.feed_content .tab_content.profile_interactions .edit_space').hide()
+    $('.feed_content .tab_content.profile_interactions .edit_space').slideUp()
     $('.interaction_new_buttons').fadeIn()
     
   
   $('#interaction_new_record_button').live 'click', (e)->
     e.preventDefault()
     $(this).parents('.interaction_new_buttons').first().hide()
-    $('.feed_content .tab_content.profile_interactions .edit_space').fadeIn()
+    $('.feed_content .tab_content.profile_interactions .edit_space').slideDown()
     
   
   $('input.primary').live 'click', (e)->

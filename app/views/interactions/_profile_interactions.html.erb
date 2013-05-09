@@ -3,19 +3,5 @@
 </div>
 
 <% @interactions.each do |interaction| %>
-  <div class="feed_box interaction_display">
-  	<div class="feed_icon"><%= image_tag(interaction.icon) %></div>
-  	<div class="feed_item_header">
-      <span class="feed_item_date"><%= time_format(interaction.created_at) %></span>
-      <span class="feed_item_privacy">
-        <strong>Visible to:&nbsp;</strong><%= interaction.privacy_setting.titleize %>
-        <%= image_tag("edit_sprite.png") %>
-      </span>
-  	</div>
-  	<div class="feed_item_content"><%= interaction.title %></div>
-  	<div class="feed_item_comment">
-      <strong><%= interaction.creator %> wrote:</strong>
-      “<%= interaction.comment %>”
-    </div>
-  </div>
+  <%= render partial: 'interactions/interaction_feed', locals: {interaction: interaction} %>
 <% end %>
