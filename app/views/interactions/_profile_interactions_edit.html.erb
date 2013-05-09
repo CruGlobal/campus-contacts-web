@@ -1,44 +1,38 @@
 <div class="feed_slug">New</div>
 
 <div class="feed_box interaction_new">
+  <%= form_for(@interaction, remote: true, html: {id: 'interaction_form'}) do |f| %>
+  	<div class="interaction_field interaction_edit_initiator fancy">Initiator:<br/>
+  		<select id="new_interaction_initiator">
+  			<option>Me (<%= current_person %>)</option>
+  		</select>
+  	</div>
 
-	<div class="interaction_field interaction_edit_initiator fancy">Initiator:<br/>
-		<select id="new_interaction_initiator">
-			<option>Me (Kristen King)</option>
-		</select>
-	</div>
+  	<div class="interaction_field interaction_edit_type fancy">Type:<br/>
+      <%= f.select :initiators, current_organization.interaction_types.collect{|i| [i.name, i.id]}, {}, id: 'new_interaction_type'  %>
+  	</div>
 
-	<div class="interaction_field interaction_edit_type fancy">Type:<br/>
-		<select id="new_interaction_type">
-			<option>Spiritual Conversation</option>
-		</select>
-	</div>
+  	<div class="interaction_field interaction_edit_receiver fancy">Receiver:<br/>
+      <%= f.select :receiver_id, [["#{@person.name} (This Person)", @person.id]], {}, id: 'new_interaction_receiver'  %>
+  	</div>
 
-	<div class="interaction_field interaction_edit_receiver fancy">Receiver:<br/>
-		<select id="new_interaction_receiver">
-			<option>Olivia (This Person)</option>
-		</select>
-	</div>
+  	<div class="interaction_field interaction_reveal">
+      Fewer Options &#x25B2;<br/>
+  	</div>
 
-	<div class="interaction_field interaction_reveal">
-    Fewer Options &#x25B2;<br/>
-	</div>
+  	<div class="interaction_field interaction_edit_permission fancy">Visible to:<br/>
+      <%= f.select :privacy_setting, current_organization.interaction_privacy_settings, {}, id: 'new_interaction_permission' %>
+  	</div>
 
-	<div class="interaction_field interaction_edit_permission fancy">Visible to:<br/>
-		<select id="new_interaction_permission">
-			<option>Everyone In My Organization</option>
-		</select>
-	</div>
+  	<div class="interaction_field interaction_edit_date fancy">Date:
+  		<input type="text" id="datepicker" />
+  	</div>
 
-	<div class="interaction_field interaction_edit_date fancy">Date:
-		<input type="text" id="datepicker" />
-	</div>
+    <%= f.text_area :comment, class: "interaction_edit_comment comment_box", placeholder: "Add a comment...", rows: 4 %>
 
-	<textarea rows="4" class="interaction_edit_comment comment_box" placeholder="Add a comment ..."></textarea>
-
-	<div class="interaction_new interaction_save">
-		<button class="red_accent" id="interaction_save_save_button">Save</button>
-		<button class="large_lightgray" id="interaction_save_cancel_button">Cancel</button>
-	</div>
-
+  	<div class="interaction_new interaction_save">
+  		<button class="red_accent" id="interaction_save_save_button">Save</button>
+  		<button class="large_lightgray" id="interaction_save_cancel_button">Cancel</button>
+  	</div>
+  <% end %>
 </div>

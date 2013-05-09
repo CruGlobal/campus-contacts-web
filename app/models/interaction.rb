@@ -18,6 +18,14 @@ class Interaction < ActiveRecord::Base
     return interaction_type.icon
   end
   
+  def privacy
+    return privacy_setting.titleize
+    # case privacy_setting
+    # when 'everyone'
+    #   return "Everyone"
+    # end
+  end
+  
   def title
     case interaction_type.i18n
     when 'comment'

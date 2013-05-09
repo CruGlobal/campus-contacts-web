@@ -2,7 +2,7 @@ class InteractionsController < ApplicationController
   def show_profile
     @person = current_organization.people.where(id: params[:id]).try(:first)
     redirect_to contacts_path unless @person.present?
-
+    @interaction = Interaction.new(created_by_id: current_person.id)
     if can? :manage, @person
       @interactions = @person.interactions.recent
     end
