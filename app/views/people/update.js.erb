@@ -5,6 +5,9 @@ if($('body').hasClass("reload_info")){
   if(<%= @person.errors.any? %>){
     $('.feed_content .tab_content.profile_info .view_space').hide()
     $('.feed_content .tab_content.profile_info .edit_space').fadeIn()
+  }else{
+    $('.feed_content .tab_content.profile_info .edit_space').hide()
+    $('.feed_content .tab_content.profile_info .view_space').fadeIn()
   }
   $('body').removeClass("reload_info") 
 }

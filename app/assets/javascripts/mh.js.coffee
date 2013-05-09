@@ -181,6 +181,16 @@ $ ->
 
 window.t = (s) -> I18n.translate(s)
 
+$.blur = (selector) ->
+  el = $(selector)
+  id = selector.replace(/\.|\#/g,'_').replace(/\ /g,'')
+  if $("#"+id).size() == 0
+    el.prepend("<div style='width:"+el.width()+"px; height:"+el.height()+"px; background:#666; position: absolute; z-index: 999; opacity: 0.1; display: none;' id='"+id+"'></div>")
+  if $("#"+id).is(':visible')
+    $("#"+id).fadeOut('slow')
+  else
+    $("#"+id).fadeIn('slow')
+
 $.toggleLoader = (div_id, words) ->
   if $('#' + div_id).children('.loader').size() == 0
     $('#' + div_id).append("<div class='loader'><img src='/assets/loader.gif'>" + words + "</div>")
@@ -188,7 +198,6 @@ $.toggleLoader = (div_id, words) ->
     $('#' + div_id).children('.loader').last().fadeOut().remove()
   false
   
-
 $.a = (msg, title) ->
   unless $('#alert_dialog')[0]?
     $('body').append('<div id="alert_dialog" title="' + t('general.alert') + '"></div>')
@@ -240,3 +249,4 @@ $.mh.fbEnsureInit = (callback) ->
       setTimeout(()->
         callback
       , 50)
+      

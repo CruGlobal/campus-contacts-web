@@ -33,8 +33,7 @@ $ ->
     e.preventDefault()
     $('body').addClass("reload_info")
     $.toggleLoader('profile_name','Applying Changes...')
-    $('.feed_content .tab_content.profile_info .edit_space').hide()
-    $('.feed_content .tab_content.profile_info .view_space').fadeIn()
+    $.blur('.feed_content .tab_content.profile_info .edit_space')
     $('form#edit_profile_form').submit()
     
   
