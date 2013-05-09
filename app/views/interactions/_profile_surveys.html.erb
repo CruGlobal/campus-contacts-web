@@ -1,40 +1,30 @@
-<div class="feed_box survey_display">
-	<div class="feed_icon"><%= image_tag("survey.png") %></div>
-	<div class="feed_item_header">
-    <span class="feed_item_date">20 Aug 2011</span>
-	  <span class="feed_item_privacy">
-      <strong>Visible to:&nbsp;</strong>Leaders In My Organization
-      <%= image_tag("edit_sprite.png") %>
-    </span>
-	</div>
+<% @completed_answer_sheets.each do |answer_sheet| %>
+  <% if answer_sheet.answers.count > 0 %>
+    <div class="feed_box survey_display">
+    	<div class="feed_icon"><%= image_tag("survey.png") %></div>
+    	<div class="feed_item_header">
+        <span class="feed_item_date"><%= time_format(answer_sheet.completed_at) %></span>
+    	  <span class="feed_item_privacy">
+          <strong>Visible to:</strong>
+          Leaders In My Organization
+          <%= image_tag("edit_sprite.png") %>
+        </span>
+    	</div>
 
-	<div class="feed_item_content">
-    <strong>Olivia Olson&nbsp;</strong>added new information via&nbsp;<strong>Fall Outreach</strong>&nbsp;survey.
-  </div>
-	<div class="feed_item_survey_answer"><strong>Year in School:&nbsp;</strong>Sophomore</div>
-	<div class="feed_item_survey_answer"><strong>Dorm:&nbsp;</strong>Rogers Hall</div>
-	<div class="feed_item_survey_answer"><strong>What are you most looking forward to this year?:&nbsp;</strong>Meeting more people and learning more about the tourism business.</div>
-	<div class="feed_item_survey_answer"><strong>Would you like to receive more information about Fall Retreat?:&nbsp;</strong>Yes</div>
-</div>
-
-<div class="feed_box survey_display">
-	<div class="feed_icon"><%= image_tag("survey.png") %></div>
-	<div class="feed_item_header">
-    <span class="feed_item_date">30 Aug 2010</span>
-	  <span class="feed_item_privacy">
-      <strong>Visible to:&nbsp;</strong>Leaders In My Organization
-      <%= image_tag("edit_sprite.png") %>
-    </span>
-	</div>
-
-	<div class="feed_item_content">
-    <strong>Olivia Olson&nbsp;</strong>added new information via&nbsp;<strong>Freshman Survey</strong>&nbsp;survey.
-  </div>
-
-	<div class="feed_item_survey_answer"><strong>Name:&nbsp;</strong>Olivia June Olson</div>
-	<div class="feed_item_survey_answer"><strong>Email Address:&nbsp;</strong>olson85@campus.edu</div>
-	<div class="feed_item_survey_answer"><strong>Year in School:&nbsp;</strong>Freshman</div>
-	<div class="feed_item_survey_answer"><strong>Major:&nbsp;</strong>Travel and Tourism</div>
-	<div class="feed_item_survey_answer"><strong>What is your favorite flavor of pizza?:&nbsp;</strong>Hawaiian</div>
-	<div class="feed_item_survey_answer"><strong>Would you like to receive more information about Bible study this semester?:&nbsp;</strong>No</div>
-</div>
+    	<div class="feed_item_content">
+        <strong><%= answer_sheet.person.name %></strong>
+        added new information via
+        <strong><%= answer_sheet.survey.title %></strong>
+        survey.
+      </div>
+      <% answer_sheet.answers.each do |answer| %>
+        <% if answer.value.present? %>
+          <div class="feed_item_survey_answer">
+            <strong><%= answer.question.label %></strong>
+            <%= answer.value %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

@@ -13,7 +13,7 @@
   	</div>
 
   	<div class="interaction_field interaction_edit_receiver fancy">Receiver:<br/>
-      <%= f.select :receiver_id, [["#{@person.name} (This Person)", @person.id]], {}, id: 'new_interaction_receiver'  %>
+      <%= f.select :receiver_id, [["#{@person.first_name} (This Person)", @person.id]], {}, id: 'new_interaction_receiver'  %>
   	</div>
 
   	<div class="interaction_field interaction_reveal">
