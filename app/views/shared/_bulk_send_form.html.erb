@@ -1,4 +1,4 @@
-<div id="bulk_send_dialog" style="display:none" title="Send Bulk Message">
+<div id="bulk_send_dialog" style="display:none" title="Add comment">
   <%= form_tag "" do %>
     <%= hidden_field_tag :to %>
     <div class="field_in">
@@ -12,7 +12,7 @@
       <div class="in"><%= text_field_tag :subject %></div>
     </div>
     <div class="field">
-    <%= text_area_tag :body, '', cols: 10, rows: 10, id: 'bulk_send_body' %>
+    <%= text_area_tag :body, '', cols: 10, rows: 10, id: 'bulk_send_comment' %>
 		<div id="char_counter"></div>
     </div>
   <% end %>
