@@ -266,13 +266,27 @@ class ContactsController < ApplicationController
   
   def check_email
     email = params[:email]
-    already_registered = false
-    if email.present?
-      if EmailAddress.find_by_email(email) || User.find_by_username(email) || User.find_by_email(email)
-        already_registered = true
+    fname = params[:fname]
+    lname = params[:lname]
+    
+    code = '100'
+    if email.present? && fname.present? && lname.present?
+      if fetched_email = EmailAddress.find_by_email(email) || User.find_by_username(email) || User.find_by_email(email)
+        person = fetched_email.person
+        if person.present?
+          if person.first_name.downcase.strip == fname.downcase.strip && person.last_name.downcase.strip == lname.downcase.strip
+            if person.organizational_roles.where(:organization_id => current_organization).first
+              code = '201'
+            end
+          else
+            code = '202'
+          end
+        end
       end
+    else
+      code = '203'
     end  
-    render :text => already_registered
+    render :text => code
   end
 
   protected
