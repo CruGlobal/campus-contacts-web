@@ -805,18 +805,26 @@ $.mh.saveContact = (add_more) ->
     $.a(t('contacts.index.no_name_message'))
     dialog_buttons.button('enable')
   else
+    email = $('#person_email_address_email').val()
+    fname = $('#person_first_name').val()
+    lname = $('#person_last_name').val()
     $.ajax
       type: 'POST',
       url: '/check_email',
-      data: 'email='+$('#person_email_address_email').val(),
-      success: (registered_email) ->
-        if registered_email == "true"
-          $.a(t('contacts.index.add_already_registered_email'))
-        else
+      data: 'email='+email+'&fname='+fname+'&lname='+lname,
+      success: (code) ->
+        if code == '100'
           if add_more
             $('#add_another').val('true')
           $.rails.handleRemote(form)
           form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
+        else
+          if code == '201'
+            $.a(t('contacts.index.add_already_registered_contact'))
+          if code == '202'
+            $.a(t('contacts.index.add_already_registered_email'))
+          if code == '203'
+            $.a(t('contacts.index.add_contact_required_fields'))
         dialog_buttons.button('enable')
   false
 

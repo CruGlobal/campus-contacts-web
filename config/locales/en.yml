@@ -731,6 +731,8 @@ en:
       save_this_search_placeholder: "Name this search"
       delete_search_confirm: "Are you sure you want to remove this search?"
       type_above_field: "Start typing in the field above to search for somewhere to transfer these people to."
+      add_contact_required_fields: "First name, Last name and Email are required."
+      add_already_registered_contact: "This individual already exist in your current organization."
       add_already_registered_email: "The Email address highlighted below is already used by another person in MissionHub or possibly there is a duplicate record in the system for this individual - contact support@missionhub.com if you need help. "
     mine:
       in_progress: 'In Progress'
