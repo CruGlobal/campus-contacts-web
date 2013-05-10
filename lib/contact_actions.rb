@@ -142,8 +142,6 @@ module ContactActions
         @answer_sheets -= [as]
       end
     end
-
-    FollowupComment.create_from_survey(@organization, @person, @organization.all_questions, @answer_sheets)
   end
 
   def update_survey_answers
