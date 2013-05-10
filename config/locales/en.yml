@@ -438,7 +438,7 @@ en:
       no_fb_login_option: "No login"
       freeze: "Check this box to freeze the survey. Once a survey is frozen, you will be able to see responses that have already come in, but no one new will be able to complete the survey."
       customize_look: 'Optional - FOR ADVANCED USERS ONLY - Customize how the survey will look:'
-      logo: 'Logo (we will wrap this is a div with the class "logo"):'
+      logo: 'Logo (we will wrap this in a div with the class "logo"):'
       background_color: 'Background Color:'
       text_color: 'Text Color:'
       css_file: 'Upload your own custom css file (optional):'
