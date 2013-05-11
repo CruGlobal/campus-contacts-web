@@ -216,6 +216,7 @@ module ApplicationHelper
   end
   
   def time_format(datetime)
+    return nil unless datetime.present?
     return datetime.strftime("%d %b %Y")
   end
   
