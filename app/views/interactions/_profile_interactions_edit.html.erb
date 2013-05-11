@@ -1,19 +1,63 @@
 <div class="feed_slug">New</div>
 
 <div class="feed_box interaction_new">
-  <%= form_for(@interaction, remote: true, html: {id: 'interaction_form'}) do |f| %>
+  <%= form_for(@interaction, remote: true, html: {id: 'new_interaction_form'}) do |f| %>
+    <%= f.select :interaction_type_id, current_organization.interaction_types.collect{|i| [i.name, i.id]}, {}, id: 'interaction_type_field', class: 'hidden' %>
+    <%= f.select :privacy_setting, current_organization.interaction_privacy_settings, {}, id: 'privacy_setting_field', class: 'hidden' %>
+    <%= text_field_tag :initiators, current_person.id, id: 'initiators_field', class: 'hidden' %>
+    <%= f.text_field :receiver_id, value: @person.id, id: 'receiver_field', class: 'hidden' %>
   	<div class="interaction_field interaction_edit_initiator fancy">Initiator:<br/>
-  		<select id="new_interaction_initiator">
-  			<option>Me (<%= current_person %>)</option>
-  		</select>
+      <div id="initiator_dropdown" class="custom_dropdown" data-current-ids="<%= @interaction.initiators.collect(&:person_id) %>" data-default-id="<%= current_person.id %>" data-default-name="<%= current_person.first_name %> (Me)">
+        <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+        <div id="selected"></div>
+        <div id="togglable">
+          <div class="option">
+            <%= check_box_tag 'initiator_id[]', current_person.id, true, class: "initiator_box", id: "initiator_#{current_person.id}" %>
+            <span class="receiver_name"><%= current_person.first_name%> (Me)</span>
+          </div>
+          <div class="option">
+            <%= check_box_tag 'initiator_id[]', @person.id, false, class: "initiator_box", id: "initiator_#{@person.id}" %>
+            <span class="receiver_name"><%= @person.first_name%> (Me)</span>
+          </div>
+          <div class="option">
+            <%= check_box_tag 'initiator_id[]', 2, false, class: "initiator_box", id: "initiator_2" %>
+            <span class="receiver_name"><%= "Two" %> (Me)</span>
+          </div>
+        </div>
+      </div>
   	</div>
 
   	<div class="interaction_field interaction_edit_type fancy">Type:<br/>
-      <%= f.select :initiators, current_organization.interaction_types.collect{|i| [i.name, i.id]}, {}, id: 'new_interaction_type'  %>
+      <div id="interaction_type_dropdown" class="custom_dropdown" data-current-id="<%= @interaction.interaction_type_id %>">
+        <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+        <div id="selected"></div>
+        <div id="togglable">
+          <% current_organization.interaction_types.each do |type| %>
+            <div class="option" data-id="<%= type.id %>" data-name="<%= type.name %>">
+              <%= type.name %>
+            </div>
+          <% end %>
+        </div>
+      </div>
   	</div>
 
   	<div class="interaction_field interaction_edit_receiver fancy">Receiver:<br/>
-      <%= f.select :receiver_id, [["#{@person.first_name} (This Person)", @person.id]], {}, id: 'new_interaction_receiver'  %>
+      <div id="receiver_id_dropdown" class="custom_dropdown" data-current-id="<%= @interaction.receiver_id %>" data-default-id="<%= @person.id %>" data-default-name="<%= @person.first_name %> (This Person)">
+        <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+        <div id="selected"></div>
+        <div id="togglable">
+          <% if @person != current_person %>
+            <div class="option">
+              <%= f.check_box :receiver_id, {class: "receiver_box"}, @person.id %>
+              <span class="receiver_name"><%= @person.first_name%> (This Person)</span>
+            </div>
+          <% end %>
+          <div class="option">
+            <%= f.check_box :receiver_id, {class: "receiver_box"}, current_person.id %>
+            <span class="receiver_name"><%= current_person.first_name%> (Me)</span>
+          </div>
+        </div>
+      </div>
   	</div>
 
   	<div class="interaction_field interaction_reveal more_div">
@@ -21,7 +65,17 @@
   	</div>
 
   	<div class="interaction_field interaction_edit_permission fancy">Visible to:<br/>
-      <%= f.select :privacy_setting, current_organization.interaction_privacy_settings, {}, id: 'new_interaction_permission' %>
+      <div id="privacy_setting_dropdown" class="custom_dropdown" data-current-id="<%= @interaction.privacy_setting %>">
+        <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+        <div id="selected"></div>
+        <div id="togglable">
+          <% current_organization.interaction_privacy_settings.each do |key, value| %>
+            <div class="option" data-id="<%= value %>" data-name="<%= key %>">
+              <%= key %>
+            </div>
+          <% end %>
+        </div>
+      </div>  
   	</div>
     
   	<div class="interaction_field interaction_edit_date fancy more_option">Date:
