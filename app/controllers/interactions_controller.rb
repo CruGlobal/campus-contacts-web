@@ -3,7 +3,7 @@ class InteractionsController < ApplicationController
     @person = current_organization.people.where(id: params[:id]).try(:first)
     redirect_to contacts_path unless @person.present?
     @interaction = Interaction.new(created_by_id: current_person.id)
-    @completed_answer_sheets = @person.completed_answer_sheets(current_organization).order('completed_at DESC')
+    @completed_answer_sheets = @person.completed_answer_sheets(current_organization).where("completed_at IS NOT NULL").order('completed_at DESC')
     if can? :manage, @person
       @interactions = @person.interactions.recent
     end

@@ -2,6 +2,12 @@
 	<button class="red_accent" id="interaction_new_record_button">Record A New Interaction</button>
 </div>
 
+<% if @interactions.count == 0 %>
+  <div class="feed_box notice">
+    No recorded interactions yet.
+  </div>
+<% end %>
+
 <% @interactions.each do |interaction| %>
   <%= render partial: 'interactions/interaction_feed', locals: {interaction: interaction} %>
 <% end %>

@@ -1,3 +1,8 @@
+<% if @completed_answer_sheets.count == 0 %>
+  <div class="feed_box notice">
+    No completed surveys yet.
+  </div>
+<% end %>
 <% @completed_answer_sheets.each do |answer_sheet| %>
   <% if answer_sheet.answers.count > 0 %>
     <div class="feed_box survey_display">

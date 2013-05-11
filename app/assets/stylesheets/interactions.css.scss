@@ -3,6 +3,14 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 body#interactions_controller {
+  .feed_box {
+    &.notice {
+      text-align: center;
+      font-weight: normal;
+      font-style: italic;
+      color: #999;
+    }
+  }
   .loader {
     display: inline-block;
     line-height: 16px;
