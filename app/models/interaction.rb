@@ -20,11 +20,20 @@ class Interaction < ActiveRecord::Base
   end
   
   def privacy
-    return privacy_setting.titleize
-    # case privacy_setting
-    # when 'everyone'
-    #   return "Everyone"
-    # end
+    case privacy_setting
+    when 'everyone'
+      return "Everyone"
+    when 'parents'
+      return "Everyone in #{organization.parent.name}"
+    when 'organization'
+      return "Everyone in #{organization.name}"
+    when 'admins'
+      return "Admins in #{organization.name}"
+    when 'me'
+      return "Me only"
+    else
+      privacy_setting.titleize
+    end
   end
   
   def title
