@@ -1,4 +1,95 @@
 $ ->
+  
+  $(document).live 'click', (e)->
+    $('#receiver_id_dropdown, #interaction_type_dropdown, #initiator_dropdown, #privacy_setting_dropdown').removeClass('active')
+    
+  $('#interaction_save_save_button').live 'click', (e)->
+    e.preventDefault()
+    $.toggleLoader('profile_name','Saving Interaction...')
+    $.blur('.feed_content .feed_box.interaction_new')
+    $('form#new_interaction_form').submit()
+  
+  $('#privacy_setting_dropdown .option').live 'click', (e)->
+    selected_name = $(this).attr('data-name')
+    selected_id = $(this).attr('data-id')
+    $('#privacy_setting_dropdown #selected').text(selected_name)
+    $('#privacy_setting_field').val(selected_id)
+    $('#privacy_setting_dropdown').removeClass('active')
+  
+  $('#initiator_dropdown .option').live 'click', (e)->
+    checkbox = $(this).children('input.initiator_box').eq(0)
+    if checkbox.is(':checked')
+      if $('input.initiator_box:checked').size() > 1
+        checkbox.prop('checked',false)
+      else
+        checkbox.prop('checked',true)
+    else
+      checkbox.prop('checked',true)
+    selected_name = $(this).children('input.initiator_box').eq(0).siblings('.receiver_name').text()
+    if $('input.initiator_box:checked').size() > 1
+      $('#initiator_dropdown #selected').text($('input.initiator_box:checked').size() + " people selected")
+      $('#initiators_field').val($('input.initiator_box:checked').first().val())
+      $('input.initiator_box:checked').each ->
+        current_value = $('#initiators_field').val()
+        if current_value != $(this).val()
+          $('#initiators_field').val(current_value + ',' + $(this).val())
+    else
+      $('#initiator_dropdown #selected').text(selected_name)
+      $('#initiators_field').val($('input.initiator_box:checked').first().val())
+      
+  
+  $('#initiator_dropdown input.initiator_box').live 'click', (e)->
+    if $(this).is(':checked')
+      if $('input.initiator_box:checked').size() > 1
+        $(this).prop('checked',false)
+      else
+        $(this).prop('checked',true)
+    else
+      $(this).prop('checked',true)
+    selected_name = $(this).siblings('.receiver_name').text()
+    if $('input.initiator_box:checked').size() > 1
+      $('#initiator_dropdown #selected').text($('input.initiator_box:checked').size() + " people selected")
+      $('#initiators_field').val($('input.initiator_box:checked').first().val())
+      $('input.initiator_box:checked').each ->
+        current_value = $('#initiators_field').val()
+        if current_value != $(this).val()
+          $('#initiators_field').val(current_value + ',' + $(this).val())
+    else
+      $('#initiator_dropdown #selected').text(selected_name)
+      $('#initiators_field').val($('input.initiator_box:checked').first().val())
+  
+  $('#interaction_type_dropdown .option').live 'click', (e)->
+    selected_name = $(this).attr('data-name')
+    selected_id = $(this).attr('data-id')
+    $('#interaction_type_dropdown #selected').text(selected_name )
+    $('#new_interaction_type').val(selected_id)
+    $('#interaction_type_dropdown').removeClass('active')
+  
+  $('#receiver_id_dropdown .option').live 'click', (e)->
+    $('input.receiver_box').prop('checked',false)
+    $(this).children('input.receiver_box').eq(0).prop('checked',true)
+    selected_name = $(this).children('input.receiver_box').eq(0).siblings('.receiver_name').text()
+    $('#receiver_field').val($(this).children('input.receiver_box').eq(0).val())
+    $('#receiver_id_dropdown #selected').text(selected_name )
+    $('#receiver_id_dropdown').removeClass('active')
+  
+  $('#receiver_id_dropdown input.receiver_box').live 'click', (e)->
+    $('input.receiver_box').prop('checked',false)
+    $(this).prop('checked',true)
+    $('#receiver_field').val($(this).val())
+    name = $(this).siblings('.receiver_name').text()
+    $('#receiver_id_dropdown #selected').text(name)
+    $('#receiver_id_dropdown').removeClass('active')
+  
+  $('#receiver_id_dropdown, #interaction_type_dropdown, #initiator_dropdown, #privacy_setting_dropdown').live 'click', (e)->
+    e.stopPropagation()
+  
+  $('#selected').live 'click', (e)->
+    e.stopPropagation()
+    unless $(this).parents('.custom_dropdown').first().hasClass('active')
+      $('.custom_dropdown').removeClass('active')
+      $(this).parents('.custom_dropdown').first().addClass('active')
+  
   $('.interaction_field.more_div .more_options_link').live 'click', (e)->
     e.preventDefault()
     if $(this).hasClass('shown')
@@ -22,6 +113,38 @@ $ ->
     $('.interaction_field.more_option').hide()
     $('.interaction_field.more_div .more_options_link').html('More Options &#x25BC;')
     $('.interaction_field.more_div .more_options_link').removeClass('shown')
+    
+    # set privacy
+    if $('#privacy_setting_dropdown').attr('data-current-id') == ""
+      first_option = $('#privacy_setting_dropdown #togglable').children('.option').eq(0)
+      default_id = first_option.attr('data-id')
+      default_name = first_option.attr('data-name')
+      $('#privacy_setting_dropdown #selected').html(default_name)
+      $('#privacy_setting_field').val(default_id)
+    
+    # set initiator
+    if $('#initiator_dropdown').attr('data-current-ids') == "[]"
+      default_initiator_name = $('#initiator_dropdown').attr('data-default-name')
+      default_initiator_id = $('#initiator_dropdown').attr('data-default-id')
+      $('#initiator_dropdown #selected').html(default_initiator_name)
+      $('#initiator_dropdown input.initiator_box').prop('checked',false)
+      $("#initiator_dropdown input.initiator_box[value=" + default_initiator_id + "]").prop('checked',true)
+    
+    # set interaction_type
+    if $('#interaction_type_dropdown').attr('data-current-id') == ""
+      first_option = $('#interaction_type_dropdown #togglable').children('.option').eq(0)
+      default_interaction_type_id = first_option.attr('data-id')
+      default_interaction_type_name = first_option.attr('data-name')
+      $('#interaction_type_dropdown #selected').html(default_interaction_type_name)
+      $('#new_interaction_type').val(default_interaction_type_id)
+      
+    # set receiver id
+    if $('#receiver_id_dropdown').attr('data-current-id') == ""
+      default_receiver_name = $('#receiver_id_dropdown').attr('data-default-name')
+      $('#receiver_id_dropdown #selected').html(default_receiver_name)
+      $('input.receiver_box').prop('checked',false)
+      default_receiver_id = $('#receiver_id_dropdown').attr('data-default-id')
+      $("input.receiver_box[value=" + default_receiver_id  + "]").prop('checked',true)
     $('.interaction_new #datepicker').datepicker
       dateFormat: 'yy-mm-dd'
     

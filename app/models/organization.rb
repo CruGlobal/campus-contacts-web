@@ -95,7 +95,7 @@ class Organization < ActiveRecord::Base
     list << ["Everyone in #{parent.name}", "organization"] if parent.present?
     list << ["Everyone in #{name}", "organization"]
     list << ["Admins in #{name}", "admins"]
-    list << ["To only Me", "me"]
+    list << ["Me only", "me"]
     return list
   end
 
