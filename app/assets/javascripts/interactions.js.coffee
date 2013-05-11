@@ -28,14 +28,8 @@ $ ->
     selected_name = $(this).children('input.initiator_box').eq(0).siblings('.receiver_name').text()
     if $('input.initiator_box:checked').size() > 1
       $('#initiator_dropdown #selected').text($('input.initiator_box:checked').size() + " people selected")
-      $('#initiators_field').val($('input.initiator_box:checked').first().val())
-      $('input.initiator_box:checked').each ->
-        current_value = $('#initiators_field').val()
-        if current_value != $(this).val()
-          $('#initiators_field').val(current_value + ',' + $(this).val())
     else
       $('#initiator_dropdown #selected').text(selected_name)
-      $('#initiators_field').val($('input.initiator_box:checked').first().val())
       
   
   $('#initiator_dropdown input.initiator_box').live 'click', (e)->
@@ -49,20 +43,14 @@ $ ->
     selected_name = $(this).siblings('.receiver_name').text()
     if $('input.initiator_box:checked').size() > 1
       $('#initiator_dropdown #selected').text($('input.initiator_box:checked').size() + " people selected")
-      $('#initiators_field').val($('input.initiator_box:checked').first().val())
-      $('input.initiator_box:checked').each ->
-        current_value = $('#initiators_field').val()
-        if current_value != $(this).val()
-          $('#initiators_field').val(current_value + ',' + $(this).val())
     else
       $('#initiator_dropdown #selected').text(selected_name)
-      $('#initiators_field').val($('input.initiator_box:checked').first().val())
   
   $('#interaction_type_dropdown .option').live 'click', (e)->
     selected_name = $(this).attr('data-name')
     selected_id = $(this).attr('data-id')
-    $('#interaction_type_dropdown #selected').text(selected_name )
-    $('#new_interaction_type').val(selected_id)
+    $('#interaction_type_dropdown #selected').text(selected_name)
+    $('#interaction_type_field').val(selected_id)
     $('#interaction_type_dropdown').removeClass('active')
   
   $('#receiver_id_dropdown .option').live 'click', (e)->
@@ -103,13 +91,13 @@ $ ->
   
   $('#interaction_save_cancel_button').live 'click', (e)->
     e.preventDefault()
-    $('.feed_content .tab_content.profile_interactions .edit_space').slideUp()
-    $('.interaction_new_buttons').fadeIn()
+    $('.feed_content .tab_content.profile_interactions .edit_space').hide()
+    $('.interaction_new_buttons').show()
   
   $('#interaction_new_record_button').live 'click', (e)->
     e.preventDefault()
     $(this).parents('.interaction_new_buttons').first().hide()
-    $('.feed_content .tab_content.profile_interactions .edit_space').slideDown()
+    $('.feed_content .tab_content.profile_interactions .edit_space').fadeIn()
     $('.interaction_field.more_option').hide()
     $('.interaction_field.more_div .more_options_link').html('More Options &#x25BC;')
     $('.interaction_field.more_div .more_options_link').removeClass('shown')
@@ -144,6 +132,7 @@ $ ->
       $('#receiver_id_dropdown #selected').html(default_receiver_name)
       $('input.receiver_box').prop('checked',false)
       default_receiver_id = $('#receiver_id_dropdown').attr('data-default-id')
+      $('#receiver_field').val(default_receiver_id)
       $("input.receiver_box[value=" + default_receiver_id  + "]").prop('checked',true)
     $('.interaction_new #datepicker').datepicker
       dateFormat: 'yy-mm-dd'

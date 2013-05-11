@@ -21,4 +21,8 @@ class InteractionsController < ApplicationController
   def reset_edit_form
     @person = current_organization.people.where(id: params[:person_id]).try(:first)
   end
+  
+  def create
+    
+  end
 end

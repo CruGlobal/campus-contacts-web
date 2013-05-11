@@ -25,7 +25,7 @@ body#interactions_controller {
   }
   
   .custom_dropdown {
-    z-index: 99;
+    z-index: 97;
     position: absolute;
     font-style: normal;
     font-family: Tahoma, Sans-serif;
@@ -48,6 +48,7 @@ body#interactions_controller {
 
     
     .arrow {
+      z-index: 98;
       float: right;
       width: 10px;
       height: 10px;
@@ -90,6 +91,7 @@ body#interactions_controller {
     }
     
     #selected {
+      z-index: 99;
       padding: 4px 6px;
       cursor: pointer;
     }
@@ -243,7 +245,7 @@ body#interactions_controller {
   }
   
   .hidden {
-    display: none;
+    display: block;
   }
 
 }
