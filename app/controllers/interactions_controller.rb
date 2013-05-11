@@ -2,7 +2,7 @@ class InteractionsController < ApplicationController
   def show_profile
     @person = current_organization.people.where(id: params[:id]).try(:first)
     redirect_to contacts_path unless @person.present?
-    @interaction = Interaction.new(created_by_id: current_person.id)
+    @interaction = Interaction.new
     @completed_answer_sheets = @person.completed_answer_sheets(current_organization).where("completed_at IS NOT NULL").order('completed_at DESC')
     if can? :manage, @person
       @interactions = @person.interactions.recent
@@ -23,6 +23,14 @@ class InteractionsController < ApplicationController
   end
   
   def create
-    
+    @interaction = Interaction.new(params[:interaction])
+    @interaction.created_by_id = current_person.id
+    @interaction.organization_id = current_organization.id
+    if @interaction.save
+      params[:initiator_id].each do |person_id|
+        InteractionInitiator.create(person_id: person_id, interaction_id: @interaction.id)
+      end
+    end
+    show_profile
   end
 end

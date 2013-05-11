@@ -1,0 +1,7 @@
+$.blur('.feed_content .feed_box.interaction_new')
+$('.feed_content .tab_content.profile_interactions .edit_space').hide()
+$('.feed_content .tab_content.profile_interactions .edit_space').html("<%= escape_javascript(render partial: 'interactions/profile_interactions_edit') %>")
+$('.feed_content .tab_content.profile_interactions .view_space').hide()
+$('.feed_content .tab_content.profile_interactions .view_space').html("<%= escape_javascript(render partial: 'interactions/profile_interactions') %>")
+$('.feed_content .tab_content.profile_interactions .view_space').fadeIn()
+$.toggleLoader('profile_name','')
