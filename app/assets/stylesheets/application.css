@@ -8,6 +8,7 @@
  *= require groups
  *= require surveys
  *= require survey_responses
+ *= require interactions
  *= require jquery.qtip
  *= require jquery.chosen
  *= require superfish
@@ -19,5 +20,4 @@
  *= require global
  *= require token-input-facebook
  *= require profile_style
- *= require interactions
 */

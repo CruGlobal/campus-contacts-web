@@ -1,16 +1,30 @@
 $ ->
+  $('.interaction_field.more_div .more_options_link').live 'click', (e)->
+    e.preventDefault()
+    if $(this).hasClass('shown')
+      $(this).removeClass('shown')
+      $('.interaction_field.more_option').fadeOut()
+      $(this).html('More Options &#x25BC;')
+    else
+      $('.interaction_field.more_option').fadeIn()
+      $(this).addClass('shown')
+      $(this).html('Fewer Options &#x25B2;')
+  
   $('#interaction_save_cancel_button').live 'click', (e)->
     e.preventDefault()
     $('.feed_content .tab_content.profile_interactions .edit_space').slideUp()
     $('.interaction_new_buttons').fadeIn()
-    
   
   $('#interaction_new_record_button').live 'click', (e)->
     e.preventDefault()
     $(this).parents('.interaction_new_buttons').first().hide()
     $('.feed_content .tab_content.profile_interactions .edit_space').slideDown()
+    $('.interaction_field.more_option').hide()
+    $('.interaction_field.more_div .more_options_link').html('More Options &#x25BC;')
+    $('.interaction_field.more_div .more_options_link').removeClass('shown')
+    $('.interaction_new #datepicker').datepicker
+      dateFormat: 'yy-mm-dd'
     
-  
   $('input.primary').live 'click', (e)->
     group_name = $(this).parents('.sfield').attr("data-group")
     $('input.primary.' + group_name).prop('checked',false)

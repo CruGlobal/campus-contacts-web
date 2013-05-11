@@ -9,6 +9,7 @@ class Interaction < ActiveRecord::Base
   belongs_to :creator, class_name: 'Person', foreign_key: 'created_by_id'
   
   scope :recent, order('created_at DESC')
+  after_save :ensure_timestamp
   
   def initiator
     self.initiators.first
@@ -45,4 +46,9 @@ class Interaction < ActiveRecord::Base
     end
   end
   
+  private 
+  
+  def ensure_timestamp
+    self.update_attribute(:timestamp, created_at) if timestamp.nil?
+  end
 end
