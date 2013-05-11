@@ -11,6 +11,17 @@ body#interactions_controller {
       color: #999;
     }
   }
+  .interaction_field {
+    &.clickable {
+      color: #333;
+      &:hover {
+        color: red;
+      }
+    }
+  }
+  .interaction_new #datepicker {
+    width: 80px;
+  }
   .loader {
     display: inline-block;
     line-height: 16px;

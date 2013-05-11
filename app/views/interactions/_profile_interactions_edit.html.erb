@@ -16,18 +16,17 @@
       <%= f.select :receiver_id, [["#{@person.first_name} (This Person)", @person.id]], {}, id: 'new_interaction_receiver'  %>
   	</div>
 
-  	<div class="interaction_field interaction_reveal">
-      Fewer Options &#x25B2;<br/>
+  	<div class="interaction_field interaction_reveal more_div">
+      <%= link_to raw("More Options &#x25BC;"), "", class: "more_options_link"%><br/>
   	</div>
 
   	<div class="interaction_field interaction_edit_permission fancy">Visible to:<br/>
       <%= f.select :privacy_setting, current_organization.interaction_privacy_settings, {}, id: 'new_interaction_permission' %>
   	</div>
-
-  	<div class="interaction_field interaction_edit_date fancy">Date:
-  		<input type="text" id="datepicker" />
+    
+  	<div class="interaction_field interaction_edit_date fancy more_option">Date:
+      <%= f.text_field :timestamp, id: 'datepicker', value: "#{Date.today}" %>
   	</div>
-
     <%= f.text_area :comment, class: "interaction_edit_comment comment_box", placeholder: "Add a comment...", rows: 4 %>
 
   	<div class="interaction_new interaction_save">
