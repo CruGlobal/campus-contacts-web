@@ -32,6 +32,12 @@ class InteractionsController < ApplicationController
     @interaction = Interaction.find(params[:id])
   end
   
+  def search_initiators
+    @person = Person.find(params[:person_id])
+    @current_person = current_person
+    @people = current_organization.people.where("(first_name LIKE :key OR last_name LIKE :key) AND people.id NOT IN (:except)", key: "%#{params[:keyword].strip}%", except: params[:except].split(',')).limit(5)
+  end
+  
   def create
     @interaction = Interaction.new(params[:interaction])
     @interaction.created_by_id = current_person.id

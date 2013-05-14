@@ -3,6 +3,11 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 body#interactions_controller {
+  .search_no_results {
+    text-align: center;
+    padding: 2px 5px 5px;
+  }
+  
   .feed_box {
     &.notice {
       text-align: center;
@@ -92,6 +97,9 @@ body#interactions_controller {
           background: #e9e9e9;
           cursor: pointer;
         }
+      }
+      .search input {
+        width: 167px;
       }
     }
     
