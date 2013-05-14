@@ -47,22 +47,20 @@
         <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
         <div id="selected"></div>
         <div id="togglable">
-          <% if @person != current_person %>
-            <div class="option">
-              <%= check_box_tag "receiver_id[]", @person.id, false, class: "receiver_box", id: "receiver_#{@person.id}"  %>
-              <span class="receiver_name"><%= @person.first_name%> (This Person)</span>
-            </div>
-          <% end %>
-          <div class="option">
-            <%= check_box_tag "receiver_id[]", current_person.id, false, class: "receiver_box", id: "receiver_#{current_person.id}" %>
-            <span class="receiver_name"><%= current_person.first_name%> (Me)</span>
+          <div id="default_receiver_options">
+            <% if @person != current_person %>
+              <%= render partial: 'interactions/option_receiver', locals: {person: @person, current_person: current_person, receiver: @person} %>
+            <% end %>
+            <%= render partial: 'interactions/option_receiver', locals: {person: @person, current_person: current_person, receiver: current_person} %>
+            <% if @interaction.receiver.present? && @interaction.receiver != current_person && @interaction.receiver != @person %>
+              <%= render partial: 'interactions/option_receiver', locals: {person: @person, current_person: current_person, receiver: @interaction.receiver} %>
+            <% end %>
           </div>
-          <% if @interaction.receiver.present? && @interaction.receiver != current_person && @interaction.receiver != @person %>
-            <div class="option">
-              <%= check_box_tag "receiver_id[]", @interaction.receiver.id, false, class: "receiver_box", id: "receiver_#{@interaction.receiver.id}" %>
-              <span class="receiver_name"><%= @interaction.receiver.name %></span>
-            </div>
-          <% end %>
+          <div class="search">
+            <%= text_field_tag :search_receiver, "", placeholder: "Search by name", id: "search_receiver_field", "data-person-id" => @person.id %>
+          </div>
+          <div class="results" id="search_receiver_results">
+          </div>
         </div>
       </div>
   	</div>

@@ -35,7 +35,17 @@ class InteractionsController < ApplicationController
   def search_initiators
     @person = Person.find(params[:person_id])
     @current_person = current_person
-    @people = current_organization.people.where("(first_name LIKE :key OR last_name LIKE :key) AND people.id NOT IN (:except)", key: "%#{params[:keyword].strip}%", except: params[:except].split(',')).limit(5)
+    @people = current_organization.people.where("first_name LIKE :key OR last_name LIKE :key", key: "%#{params[:keyword].strip}%")
+    @people = @people.where("people.id NOT IN (?)", params[:except].split(',')) if params[:except].present?
+    @people = @people.limit(5)
+  end
+  
+  def search_receivers
+    @person = Person.find(params[:person_id])
+    @current_person = current_person
+    @people = current_organization.people.where("first_name LIKE :key OR last_name LIKE :key", key: "%#{params[:keyword].strip}%")
+    @people = @people.where("people.id NOT IN (?)", params[:except].split(',')) if params[:except].present?
+    @people = @people.limit(5)
   end
   
   def create
