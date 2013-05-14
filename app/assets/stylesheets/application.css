@@ -8,8 +8,8 @@
  *= require groups
  *= require surveys
  *= require survey_responses
- *= require interactions
  *= require profile_style
+ *= require interactions
  *= require jquery.qtip
  *= require jquery.chosen
  *= require superfish

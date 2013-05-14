@@ -1,5 +1,4 @@
 <div class="feed_slug">New</div>
-
 <div class="feed_box interaction_new">
   <%= form_for(@interaction, remote: true, html: {id: 'new_interaction_form'}) do |f| %>
     <%= f.select :interaction_type_id, current_organization.interaction_types.collect{|i| [i.name, i.id]}, {}, id: 'interaction_type_field', class: 'hidden' %>
@@ -53,10 +52,10 @@
   	</div>
 
   	<div class="interaction_field interaction_reveal more_div">
-      <%= link_to raw("More Options &#x25BC;"), "", class: "more_options_link"%><br/>
+      <%= link_to raw("More Options &#x25BC;"), "", class: "more_options_link"%>
   	</div>
 
-  	<div class="interaction_field interaction_edit_permission fancy">Visible to:<br/>
+  	<div class="interaction_field interaction_edit_permission fancy more_option">Visible to:<br/>
       <div id="privacy_setting_dropdown" class="custom_dropdown" data-current-id="<%= @interaction.privacy_setting %>">
         <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
         <div id="selected"></div>
@@ -70,7 +69,7 @@
       </div>  
   	</div>
     
-  	<div class="interaction_field interaction_edit_date fancy more_option">Date:
+  	<div class="interaction_field interaction_edit_date fancy more_option date_field_box">Date:
       <%= f.text_field :timestamp, id: 'datepicker', value: "#{Date.today}" %>
   	</div>
     <%= f.text_area :comment, class: "interaction_edit_comment comment_box", placeholder: "Add a comment...", rows: 4 %>
