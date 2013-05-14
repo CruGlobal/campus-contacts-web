@@ -17,7 +17,6 @@
 	<% else %>
 		$.a("<%= t('contacts.create.success', name: Person.find(params[:id]).name) %>")
 		window.location = "/people/" + <%= params[:id] %>
-		$('#add_contact_div').dialog('destroy')
 	<% end %>
 	$('.no_contacts').hide()
 	<% @email = EmailAddress.new %>
@@ -27,7 +26,6 @@
 
 <% unless params[:add_another] == 'true' %>
 	$("#add_contact_div, #member_search").dialog("destroy")
-  $("body").css({ overflow: 'inherit' })
 <% end %>
 $('#<%= dom_id(@person) %>').effect('highlight')
 
