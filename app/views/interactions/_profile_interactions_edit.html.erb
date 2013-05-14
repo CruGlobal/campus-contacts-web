@@ -1,12 +1,13 @@
-<div class="feed_slug">New</div>
+<div class="feed_slug"></div>
 <div class="feed_box interaction_new">
   <%= form_for(@interaction, remote: true, html: {id: 'new_interaction_form'}) do |f| %>
     <%= f.select :interaction_type_id, current_organization.interaction_types.collect{|i| [i.name, i.id]}, {}, id: 'interaction_type_field', class: 'hidden' %>
     <%= f.select :privacy_setting, current_organization.interaction_privacy_settings, {}, id: 'privacy_setting_field', class: 'hidden' %>
     <%= f.text_field :receiver_id, id: 'receiver_field', class: 'hidden' %>
     <%= text_field_tag :id, @person.id, id: 'person_id', class: 'hidden' %>
+    
   	<div class="interaction_field interaction_edit_initiator fancy">Initiator:<br/>
-      <div id="initiator_dropdown" class="custom_dropdown" data-current-ids="<%= @interaction.initiators.collect(&:person_id) %>" data-default-id="<%= current_person.id %>" data-default-name="<%= current_person.first_name %> (Me)">
+      <div id="initiator_dropdown" class="custom_dropdown" data-current-ids="<%= @interaction.initiators.collect(&:id) %>" data-default-id="<%= current_person.id %>" data-default-name="<%= current_person.first_name %> (Me)">
         <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
         <div id="selected"></div>
         <div id="togglable">
@@ -14,6 +15,14 @@
             <%= check_box_tag 'initiator_id[]', current_person.id, true, class: "initiator_box", id: "initiator_#{current_person.id}" %>
             <span class="receiver_name"><%= current_person.first_name%> (Me)</span>
           </div>
+          <% @interaction.initiators.each do |initiator| %>
+            <% unless initiator == current_person %>
+              <div class="option">
+                <%= check_box_tag 'initiator_id[]', initiator.id, true, class: "initiator_box", id: "initiator_#{initiator.id}" %>
+                <span class="receiver_name"><%= initiator.name %></span>
+              </div>
+            <% end %>
+          <% end %>
         </div>
       </div>
   	</div>
@@ -39,14 +48,20 @@
         <div id="togglable">
           <% if @person != current_person %>
             <div class="option">
-              <%= check_box_tag "receiver_id[]", @person.id, false, class: "receiver_box"  %>
+              <%= check_box_tag "receiver_id[]", @person.id, false, class: "receiver_box", id: "receiver_#{@person.id}"  %>
               <span class="receiver_name"><%= @person.first_name%> (This Person)</span>
             </div>
           <% end %>
           <div class="option">
-            <%= check_box_tag "receiver_id[]", current_person.id, false, class: "receiver_box" %>
+            <%= check_box_tag "receiver_id[]", current_person.id, false, class: "receiver_box", id: "receiver_#{current_person.id}" %>
             <span class="receiver_name"><%= current_person.first_name%> (Me)</span>
           </div>
+          <% if @interaction.receiver.present? && @interaction.receiver != current_person && @interaction.receiver != @person %>
+            <div class="option">
+              <%= check_box_tag "receiver_id[]", @interaction.receiver.id, false, class: "receiver_box", id: "receiver_#{@interaction.receiver.id}" %>
+              <span class="receiver_name"><%= @interaction.receiver.name %></span>
+            </div>
+          <% end %>
         </div>
       </div>
   	</div>
@@ -76,7 +91,7 @@
 
   	<div class="interaction_new interaction_save">
   		<button class="red_accent" id="interaction_save_save_button">Save</button>
-  		<button class="large_lightgray" id="interaction_save_cancel_button">Cancel</button>
+  		<button class="large_lightgray" id="interaction_save_cancel_button" data-person-id="<%= @person.id %>">Cancel</button>
   	</div>
   <% end %>
 </div>

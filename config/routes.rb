@@ -15,6 +15,8 @@ Mh::Application.routes.draw do
     collection do
       get :change_followup_status
       get :reset_edit_form
+      get :show_edit_interaction_form
+      get :show_new_interaction_form
     end
   end
 

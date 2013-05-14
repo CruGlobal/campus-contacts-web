@@ -22,6 +22,16 @@ class InteractionsController < ApplicationController
     @person = current_organization.people.where(id: params[:person_id]).try(:first)
   end
   
+  def show_new_interaction_form
+    @person = Person.find(params[:person_id])
+    @interaction = Interaction.new
+  end
+  
+  def show_edit_interaction_form
+    @person = Person.find(params[:person_id])
+    @interaction = Interaction.find(params[:id])
+  end
+  
   def create
     @interaction = Interaction.new(params[:interaction])
     @interaction.created_by_id = current_person.id

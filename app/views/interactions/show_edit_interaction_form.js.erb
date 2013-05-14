@@ -1,0 +1,56 @@
+$.toggleLoader('profile_name','')
+$('.interaction_new').addClass('shouldReload')
+$('#interaction_new_record_button').parents('.interaction_new_buttons').first().hide();
+$('.feed_content .tab_content.profile_interactions .edit_space').html("<%= escape_javascript(render partial: 'interactions/profile_interactions_edit') %>")
+$('.feed_content .tab_content.profile_interactions .edit_space .feed_slug').text("Edit");
+$('.custom_dropdown').css('position', 'relative');
+$('.feed_content .tab_content.profile_interactions .edit_space').slideDown('fast', function() {
+  $('.custom_dropdown').css('position', 'absolute');
+});
+$('.interaction_field.more_option').hide();
+$('.interaction_field.more_div .more_options_link').html('More Options &#x25BC;');
+$('.interaction_field.more_div .more_options_link').removeClass('shown');
+
+// Set privacy setting
+selected = $("#privacy_setting_dropdown #togglable .option[data-id=<%= @interaction.privacy_setting %>]");
+default_id = selected.attr('data-id');
+default_name = selected.attr('data-name');
+$('#privacy_setting_dropdown #selected').html(default_name);
+$('#privacy_setting_field').val(default_id);
+
+// Set initiators
+$("input.initiator_box").prop('checked',false)
+<% @interaction.initiators.each do |initiator| %>
+  $("input.initiator_box#initiator_<%= initiator.id %>").prop('checked',true)
+<% end %>
+if ($('input.initiator_box:checked').size() > 1) {
+  $('#initiator_dropdown #selected').text($('input.initiator_box:checked').size() + " people selected");
+} else {
+  selected_name = $('input.initiator_box:checked').eq(0).siblings('.receiver_name').text()
+  $('#initiator_dropdown #selected').text(selected_name);
+}
+
+// Set receiver
+<% if @interaction.receiver == @person %>
+  selected_name = "<%= @interaction.receiver.name %>";
+<% else %>
+selected_name = "<%= @interaction.receiver.first_name %> (This Person)";
+<% end %>
+selected_id = "<%= @interaction.receiver.id %>"
+$('#receiver_id_dropdown #selected').html(selected_name);
+$('input.receiver_box').prop('checked', false);
+$('input.receiver_box#receiver_' + selected_id).prop('checked', true);
+$('#receiver_field').val(selected_id);
+
+// Set interaction type
+selected = $("#interaction_type_dropdown #togglable .option[data-id=<%= @interaction.interaction_type_id %>]");
+default_interaction_type_id = selected.attr('data-id');
+default_interaction_type_name = selected.attr('data-name');
+$('#interaction_type_dropdown #selected').html(default_interaction_type_name);
+$('#new_interaction_type').val(default_interaction_type_id);
+
+// Set timestamp
+$('.interaction_field #datepicker').val("<%= @interaction.timestamp %>")
+$('.interaction_new #datepicker').datepicker({
+  dateFormat: 'yy-mm-dd'
+});
