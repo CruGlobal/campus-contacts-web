@@ -2,6 +2,28 @@ $ ->
   
   $(document).live 'click', (e)->
     $('#receiver_id_dropdown, #interaction_type_dropdown, #initiator_dropdown, #privacy_setting_dropdown').removeClass('active')
+
+  $('#search_initiator_results .option.initiator input').live 'change', (e)->
+    if $(this).is(':checked')
+      data_id = $(this).attr('data-id')
+      if $('#default_initiator_options .option.initiator[data-id=' + data_id + ']').size() == 0
+        $('#default_initiator_options').append($(this).parents('.option'))
+      else
+        $(this).parents('.option').remove()
+
+
+  $('#search_initiator_field').live 'keyup', (e)->
+    e.preventDefault()
+    if $(this).val().length > 2
+      $(this).addClass("ui-autocomplete-input ui-autocomplete-loading")
+      ids = []
+      $("#default_initiator_options .option.initiator").each ->
+        ids.push($(this).attr('data-id'))
+      ids = ids.join(",")
+      $.ajax
+        type: 'GET',
+        url: '/interactions/search_initiators?keyword=' + $(this).val() + '&person_id=' + $(this).attr('data-person-id') + '&except=' + ids
+    
     
   $('.feed_box .edit_feed_icon').live 'click', (e)->
     e.preventDefault()
@@ -36,7 +58,7 @@ $ ->
         checkbox.prop('checked',true)
     else
       checkbox.prop('checked',true)
-    selected_name = $(this).children('input.initiator_box').eq(0).siblings('.receiver_name').text()
+    selected_name = $(this).children('input.initiator_box').eq(0).siblings('.initiator_name').text()
     if $('input.initiator_box:checked').size() > 1
       $('#initiator_dropdown #selected').text($('input.initiator_box:checked').size() + " people selected")
     else
@@ -51,7 +73,7 @@ $ ->
         $(this).prop('checked',true)
     else
       $(this).prop('checked',true)
-    selected_name = $(this).siblings('.receiver_name').text()
+    selected_name = $(this).siblings('.initiator_name').text()
     if $('input.initiator_box:checked').size() > 1
       $('#initiator_dropdown #selected').text($('input.initiator_box:checked').size() + " people selected")
     else

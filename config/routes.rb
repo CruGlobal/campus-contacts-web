@@ -17,6 +17,7 @@ Mh::Application.routes.draw do
       get :reset_edit_form
       get :show_edit_interaction_form
       get :show_new_interaction_form
+      get :search_initiators
     end
   end
 

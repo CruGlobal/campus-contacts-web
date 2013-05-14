@@ -1,0 +1,12 @@
+<div class="option initiator" data-id="<%= initiator.id %>">
+  <%= check_box_tag 'initiator_id[]', initiator.id, false, class: "initiator_box", id: "initiator_#{initiator.id}", "data-id" => initiator.id %>
+  <span class="initiator_name">
+    <% if initiator == person %>
+      <%= "#{initiator.first_name} (This Person)" %>
+    <% elsif initiator == current_person %>
+      <%= "#{initiator.first_name} (Me)" %>
+    <% else %>
+      <%= initiator.name %>
+    <% end %>
+  </span>
+</div>

@@ -1,0 +1,10 @@
+$('#search_initiator_results').html("")
+<% if @people.count == 0 %>
+  $('#search_initiator_results').html("<div class='search_no_results'>No Results</div>")
+<% end %>
+  
+<% @people.each do |initiator| %>
+  $('#search_initiator_results').append("<%= escape_javascript(render partial: 'interactions/option_initiator', locals: {person: @person, current_person: @current_person, initiator: initiator}) %>")
+<% end %>
+
+$('#search_initiator_field').removeClass("ui-autocomplete-input ui-autocomplete-loading")
