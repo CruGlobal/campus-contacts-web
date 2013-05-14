@@ -38,6 +38,13 @@ body#interactions_controller {
     border-bottom-color: #c5c5c5;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 
+    .dropdown_name {
+      width: 140px;
+      display: inline-block;
+    	white-space: nowrap;
+    	overflow: hidden;
+    	text-overflow: ellipsis;
+    }
     
     .arrow {
       float: right;
