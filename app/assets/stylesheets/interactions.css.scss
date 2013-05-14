@@ -12,20 +12,7 @@ body#interactions_controller {
     }
   }
   
-  #initiator_dropdown {
-    z-index: 999;
-  }
-  
-  #receiver_id_dropdown {
-    z-index: 998;
-  }
-  
-  #privacy_setting_dropdown {
-    z-index: 997;
-  }
-  
   .custom_dropdown {
-    z-index: 97;
     position: absolute;
     font-style: normal;
     font-family: Tahoma, Sans-serif;
@@ -48,7 +35,6 @@ body#interactions_controller {
 
     
     .arrow {
-      z-index: 98;
       float: right;
       width: 10px;
       height: 10px;
@@ -67,6 +53,7 @@ body#interactions_controller {
     }
     
     &.active {
+      z-index: 9999;
       min-height: 10px;
       .arrow.up {
         display: inline-block;
@@ -127,11 +114,18 @@ body#interactions_controller {
   }
   
   .interaction_field {
+    float: left;
     height: 45px;
     &.clickable {
       color: #333;
       &:hover {
         color: red;
+      }
+    }
+    &.more_div, &.date_field_box {
+      line-height: 52px;
+      a.more_options_link, input#more_options_link {
+        margin-right: 5px;
       }
     }
   }

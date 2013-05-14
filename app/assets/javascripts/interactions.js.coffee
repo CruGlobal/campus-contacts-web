@@ -91,13 +91,18 @@ $ ->
   
   $('#interaction_save_cancel_button').live 'click', (e)->
     e.preventDefault()
-    $('.feed_content .tab_content.profile_interactions .edit_space').hide()
     $('.interaction_new_buttons').show()
+    $('.custom_dropdown').css('position','relative')
+    $('.feed_content .tab_content.profile_interactions .edit_space').slideUp 'slow', ->
+      $('.custom_dropdown').css('position','absolute')
   
   $('#interaction_new_record_button').live 'click', (e)->
     e.preventDefault()
     $(this).parents('.interaction_new_buttons').first().hide()
-    $('.feed_content .tab_content.profile_interactions .edit_space').fadeIn()
+    $('.feed_content .tab_content.profile_interactions .edit_space .feed_slug').text("New")
+    $('.custom_dropdown').css('position','relative')
+    $('.feed_content .tab_content.profile_interactions .edit_space').slideDown 'slow', ->
+      $('.custom_dropdown').css('position','absolute')
     $('.interaction_field.more_option').hide()
     $('.interaction_field.more_div .more_options_link').html('More Options &#x25BC;')
     $('.interaction_field.more_div .more_options_link').removeClass('shown')
