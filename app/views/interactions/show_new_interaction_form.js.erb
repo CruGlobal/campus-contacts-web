@@ -1,2 +1,46 @@
 $('.feed_content .tab_content.profile_interactions .edit_space').html("<%= escape_javascript(render partial: 'interactions/profile_interactions_edit') %>")
 $('.interaction_new').removeClass('shouldReload')
+
+$('.feed_content .tab_content.profile_interactions .edit_space .feed_slug').text("New")
+$('.interaction_field.more_option').hide();
+$('.interaction_field.more_div .more_options_link').html('More Options &#x25BC;');
+$('.interaction_field.more_div .more_options_link').removeClass('shown');
+
+if ($('#privacy_setting_dropdown').attr('data-current-id') === "") {
+  first_option = $('#privacy_setting_dropdown #togglable').children('.option').eq(0);
+  default_id = first_option.attr('data-id');
+  default_name = first_option.attr('data-name');
+  $('#privacy_setting_dropdown #selected').html(default_name);
+  $('#privacy_setting_field').val(default_id);
+}
+
+if ($('#initiator_dropdown').attr('data-current-ids') === "[]") {
+  default_initiator_name = $('#initiator_dropdown').attr('data-default-name');
+  default_initiator_id = $('#initiator_dropdown').attr('data-default-id');
+  $('#initiator_dropdown #selected').html(default_initiator_name);
+  $('#initiator_dropdown input.initiator_box').prop('checked', false);
+  $("#initiator_dropdown input.initiator_box[value=" + default_initiator_id + "]").prop('checked', true);
+}
+
+if ($('#interaction_type_dropdown').attr('data-current-id') === "") {
+  first_option = $('#interaction_type_dropdown #togglable').children('.option').eq(0);
+  default_interaction_type_id = first_option.attr('data-id');
+  default_interaction_type_name = first_option.attr('data-name');
+  $('#interaction_type_dropdown #selected').html(default_interaction_type_name);
+  $('#new_interaction_type').val(default_interaction_type_id);
+}
+
+if ($('#receiver_id_dropdown').attr('data-current-id') === "") {
+  default_receiver_name = $('#receiver_id_dropdown').attr('data-default-name');
+  $('#receiver_id_dropdown #selected').html(default_receiver_name);
+  $('input.receiver_box').prop('checked', false);
+  default_receiver_id = $('#receiver_id_dropdown').attr('data-default-id');
+  $('#receiver_field').val(default_receiver_id);
+  $("input.receiver_box[value=" + default_receiver_id + "]").prop('checked', true);
+}
+
+$('.interaction_new #interaction_comment').val('');
+
+$('.interaction_new #datepicker').datepicker({
+  dateFormat: 'yy-mm-dd'
+});

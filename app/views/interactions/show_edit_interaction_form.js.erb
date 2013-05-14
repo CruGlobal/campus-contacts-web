@@ -26,15 +26,19 @@ $("input.initiator_box").prop('checked',false)
 if ($('input.initiator_box:checked').size() > 1) {
   $('#initiator_dropdown #selected').text($('input.initiator_box:checked').size() + " people selected");
 } else {
-  selected_name = $('input.initiator_box:checked').eq(0).siblings('.receiver_name').text()
+  <% if @interaction.initiator == @person %>
+    selected_name = "<%= @interaction.initiator.first_name %> (This Person)";
+  <% else %>
+    selected_name = "<%= @interaction.initiator.name %>";
+  <% end %>
   $('#initiator_dropdown #selected').text(selected_name);
 }
 
 // Set receiver
 <% if @interaction.receiver == @person %>
-  selected_name = "<%= @interaction.receiver.name %>";
+  selected_name = "<%= @interaction.receiver.first_name %> (This Person)";
 <% else %>
-selected_name = "<%= @interaction.receiver.first_name %> (This Person)";
+  selected_name = "<%= @interaction.receiver.name %>";
 <% end %>
 selected_id = "<%= @interaction.receiver.id %>"
 $('#receiver_id_dropdown #selected').html(selected_name);
