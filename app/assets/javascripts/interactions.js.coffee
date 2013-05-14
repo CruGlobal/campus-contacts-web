@@ -3,6 +3,17 @@ $ ->
   $(document).live 'click', (e)->
     $('#receiver_id_dropdown, #interaction_type_dropdown, #initiator_dropdown, #privacy_setting_dropdown').removeClass('active')
     
+  $('.feed_box .edit_feed_icon').live 'click', (e)->
+    e.preventDefault()
+    if $('.feed_content .tab_content.profile_interactions .edit_space').is(':visible')
+      $('.interaction_new').removeClass('shouldReload')
+      $('#interaction_save_cancel_button').click()
+    $('#interaction_new_record_button').parents('.interaction_new_buttons').first().hide();  
+    $.toggleLoader('profile_name','Loading Selected Interaction...')
+    $.ajax
+      type: 'GET',
+      url: '/interactions/show_edit_interaction_form?id=' + $(this).attr('data-id') + '&person_id=' + $(this).attr('data-person-id')    
+  
   $('#interaction_save_save_button').live 'click', (e)->
     e.preventDefault()
     $.toggleLoader('profile_name','Saving Interaction...')
@@ -93,15 +104,19 @@ $ ->
     e.preventDefault()
     $('.interaction_new_buttons').show()
     $('.custom_dropdown').css('position','relative')
-    $('.feed_content .tab_content.profile_interactions .edit_space').slideUp 'slow', ->
+    $('.feed_content .tab_content.profile_interactions .edit_space').slideUp 'fast', ->
       $('.custom_dropdown').css('position','absolute')
+      if $('.interaction_new').hasClass('shouldReload')
+        $.ajax
+          type: 'GET',
+          url: '/interactions/show_new_interaction_form?person_id=' + $('#interaction_save_cancel_button').attr('data-person-id')    
   
   $('#interaction_new_record_button').live 'click', (e)->
     e.preventDefault()
     $(this).parents('.interaction_new_buttons').first().hide()
     $('.feed_content .tab_content.profile_interactions .edit_space .feed_slug').text("New")
     $('.custom_dropdown').css('position','relative')
-    $('.feed_content .tab_content.profile_interactions .edit_space').slideDown 'slow', ->
+    $('.feed_content .tab_content.profile_interactions .edit_space').slideDown 'fast', ->
       $('.custom_dropdown').css('position','absolute')
     $('.interaction_field.more_option').hide()
     $('.interaction_field.more_div .more_options_link').html('More Options &#x25BC;')
@@ -139,6 +154,8 @@ $ ->
       default_receiver_id = $('#receiver_id_dropdown').attr('data-default-id')
       $('#receiver_field').val(default_receiver_id)
       $("input.receiver_box[value=" + default_receiver_id  + "]").prop('checked',true)
+      
+    $('.interaction_new #interaction_comment').val('')
     $('.interaction_new #datepicker').datepicker
       dateFormat: 'yy-mm-dd'
     
