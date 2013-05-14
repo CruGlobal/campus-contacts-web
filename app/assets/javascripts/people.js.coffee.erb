@@ -635,7 +635,7 @@ $('#send_bulkcomment_link').live 'click', ->
       $(this).find('form').attr('action', '/people/bulk_comment')
       $("#bulk_send_comment").focus();
     buttons:
-      Send: ->
+      Add: ->
         if $('.to_list li').length < 1
           $.a(t('general.no_recipient_in_send_comment'))
           return false
