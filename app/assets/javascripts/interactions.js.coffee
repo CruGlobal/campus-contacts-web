@@ -3,6 +3,14 @@ $ ->
   $(document).live 'click', (e)->
     $('#receiver_id_dropdown, #interaction_type_dropdown, #initiator_dropdown, #privacy_setting_dropdown').removeClass('active')
 
+  $('#search_receiver_results .option.receiver input').live 'change', (e)->
+    if $(this).is(':checked')
+      data_id = $(this).attr('data-id')
+      if $('#default_receiver_options .option.receiver[data-id=' + data_id + ']').size() == 0
+        $('#default_receiver_options').append($(this).parents('.option'))
+      else
+        $(this).parents('.option').remove()
+
   $('#search_initiator_results .option.initiator input').live 'change', (e)->
     if $(this).is(':checked')
       data_id = $(this).attr('data-id')
@@ -10,7 +18,6 @@ $ ->
         $('#default_initiator_options').append($(this).parents('.option'))
       else
         $(this).parents('.option').remove()
-
 
   $('#search_initiator_field').live 'keyup', (e)->
     e.preventDefault()
@@ -23,6 +30,18 @@ $ ->
       $.ajax
         type: 'GET',
         url: '/interactions/search_initiators?keyword=' + $(this).val() + '&person_id=' + $(this).attr('data-person-id') + '&except=' + ids
+        
+  $('#search_receiver_field').live 'keyup', (e)->
+    e.preventDefault()
+    if $(this).val().length > 2
+      $(this).addClass("ui-autocomplete-input ui-autocomplete-loading")
+      ids = []
+      $("#default_receiver_options .option.receiver").each ->
+        ids.push($(this).attr('data-id'))
+      ids = ids.join(",")
+      $.ajax
+        type: 'GET',
+        url: '/interactions/search_receivers?keyword=' + $(this).val() + '&person_id=' + $(this).attr('data-person-id') + '&except=' + ids
     
     
   $('.feed_box .edit_feed_icon').live 'click', (e)->
