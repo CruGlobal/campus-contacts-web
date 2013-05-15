@@ -5,7 +5,16 @@ class InteractionsController < ApplicationController
     @interaction = Interaction.new
     @completed_answer_sheets = @person.completed_answer_sheets(current_organization).where("completed_at IS NOT NULL").order('completed_at DESC')
     if can? :manage, @person
-      @interactions = @person.interactions.recent
+      @interactions = @person.interactions.recent.limited
+      @last_interaction = @person.interactions.recent.last
+    end
+  end
+  
+  def load_more_interactions
+    @person = Person.find(params[:person_id])
+    if can? :manage, @person
+      @interactions = @person.interactions.where("id < ?",params[:last_id]).recent.limited
+      @last_interaction = @person.interactions.recent.last
     end
   end
   
@@ -49,7 +58,7 @@ class InteractionsController < ApplicationController
   end
   
   def create
-    params[:id] = params[:person_id]
+    @person = Person.find(params[:person_id])
     @interaction = Interaction.new(params[:interaction])
     @interaction.created_by_id = current_person.id
     @interaction.organization_id = current_organization.id
@@ -58,7 +67,6 @@ class InteractionsController < ApplicationController
         @interaction.interaction_initiators.find_or_create_by_person_id(person_id.to_i)
       end
     end
-    show_profile
   end
   
   def update

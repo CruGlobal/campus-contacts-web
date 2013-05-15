@@ -1,7 +1,15 @@
 $.blur('.feed_content .feed_box.interaction_new')
 $('.feed_content .tab_content.profile_interactions .edit_space').hide()
 $('.feed_content .tab_content.profile_interactions .edit_space').html("<%= escape_javascript(render partial: 'interactions/profile_interactions_edit') %>")
-$('.feed_content .tab_content.profile_interactions .view_space').hide()
-$('.feed_content .tab_content.profile_interactions .view_space').html("<%= escape_javascript(render partial: 'interactions/profile_interactions') %>")
-$('.feed_content .tab_content.profile_interactions .view_space').fadeIn()
+
+
+$('#interaction_feeds_container').prepend("<div class='interaction_feed_container new' id='interaction_feed_container_<%= @interaction.id %>'><%= escape_javascript(render partial: 'interactions/interaction_feed', locals: {interaction: @interaction}) %></div>")
+$('.interaction_feed_container.new').each(function(){
+  $(this).hide().fadeIn('slow')
+  $(this).removeClass('new')
+})
+
+$('.interaction_new').addClass('shouldReload')
+$('#interaction_save_cancel_button').click()
+
 $.toggleLoader('profile_name','')

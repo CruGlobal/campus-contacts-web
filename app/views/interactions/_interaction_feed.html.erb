@@ -4,7 +4,7 @@
     <span class="feed_item_date"><%= time_format(interaction.created_at) %></span>
     <span class="feed_item_privacy">
       <strong>Visible to:&nbsp;</strong><%= interaction.privacy %>
-      <%= link_to image_tag("edit_sprite.png"), "", class: "edit_feed_icon", "data-id" => interaction.id, "data-person-id" => @person.id %>
+      <%= link_to image_tag("edit_sprite.png"), "#menutop", class: "edit_feed_icon", "data-id" => interaction.id, "data-person-id" => @person.id %>
     </span>
 	</div>
 	<div class="feed_item_content"><%= interaction.title %></div>
