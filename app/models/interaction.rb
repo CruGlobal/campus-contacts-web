@@ -9,7 +9,7 @@ class Interaction < ActiveRecord::Base
   belongs_to :creator, class_name: 'Person', foreign_key: 'created_by_id'
   
   scope :recent, order('created_at DESC')
-  scope :limited, limit(3)
+  scope :limited, limit(10)
   after_save :ensure_timestamp
   
   def initiator
