@@ -9,5 +9,7 @@
 <% end %>
 
 <% @interactions.each do |interaction| %>
-  <%= render partial: 'interactions/interaction_feed', locals: {interaction: interaction} %>
+  <div class="interaction_feed_container" id="interaction_feed_container_<%= interaction.id %>">
+    <%= render partial: 'interactions/interaction_feed', locals: {interaction: interaction} %>
+  </div>
 <% end %>

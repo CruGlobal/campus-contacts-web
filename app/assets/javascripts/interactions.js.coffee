@@ -21,6 +21,8 @@ $ ->
 
   $('#search_initiator_field').live 'keyup', (e)->
     e.preventDefault()
+    if $(this).val() == ""
+      $(this).removeClass("ui-autocomplete-input ui-autocomplete-loading")
     if $(this).val().length > 2
       $(this).addClass("ui-autocomplete-input ui-autocomplete-loading")
       ids = []

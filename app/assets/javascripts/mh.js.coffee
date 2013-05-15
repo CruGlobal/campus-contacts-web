@@ -192,7 +192,9 @@ $.blur = (selector) ->
     $("#"+id).fadeIn('slow')
 
 $.toggleLoader = (div_id, words) ->
-  if $('#' + div_id).children('.loader').size() == 0
+  if words != ""
+    if $('#' + div_id).children('.loader').size() > 0
+      $('#' + div_id).children('.loader').last().fadeOut().remove()
     $('#' + div_id).append("<div class='loader'><img src='/assets/loader.gif'>" + words + "</div>")
   else
     $('#' + div_id).children('.loader').last().fadeOut().remove()
