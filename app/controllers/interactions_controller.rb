@@ -49,14 +49,26 @@ class InteractionsController < ApplicationController
   end
   
   def create
+    params[:id] = params[:person_id]
     @interaction = Interaction.new(params[:interaction])
     @interaction.created_by_id = current_person.id
     @interaction.organization_id = current_organization.id
     if @interaction.save
       params[:initiator_id].each do |person_id|
-        InteractionInitiator.create(person_id: person_id, interaction_id: @interaction.id)
+        @interaction.interaction_initiators.find_or_create_by_person_id(person_id.to_i)
       end
     end
     show_profile
+  end
+  
+  def update
+    @person = Person.find(params[:person_id])
+    @interaction = Interaction.find(params[:interaction_id])
+    @interaction.update_attributes(params[:interaction])
+    params[:initiator_id].each do |person_id|
+      @interaction.interaction_initiators.find_or_create_by_person_id(person_id.to_i)
+    end
+    removed_initiators = @interaction.interaction_initiators.where("person_id NOT IN (?)",params[:initiator_id])
+    removed_initiators.delete_all if removed_initiators.present?
   end
 end
