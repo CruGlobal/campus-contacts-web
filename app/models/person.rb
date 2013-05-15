@@ -120,7 +120,7 @@ class Person < ActiveRecord::Base
   def all_feeds(page = 1)
     limit = 5
     offset = page > 1 ? (page * limit) - limit : 0
-    counts = Person.find_by_sql("SELECT COUNT(*) AS COUNT FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} UNION SELECT COUNT(*) AS COUNT FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id}")
+    counts = Person.find_by_sql("SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} UNION SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id}")
     total = 0;
     counts.each{|x| total += x['COUNT']}
     max_page = (total.to_f / limit.to_f).ceil
