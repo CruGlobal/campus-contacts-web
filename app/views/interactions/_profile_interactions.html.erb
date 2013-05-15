@@ -1,15 +1,22 @@
-<div class="interaction_new interaction_new_buttons">
-	<button class="red_accent" id="interaction_new_record_button">Record A New Interaction</button>
+<div class='interaction_new interaction_new_buttons'>
+	<button class='red_accent' id='interaction_new_record_button'>Record A New Interaction</button>
 </div>
 
 <% if @interactions.count == 0 %>
-  <div class="feed_box notice">
+  <div class='feed_box notice'>
     No recorded interactions yet.
   </div>
 <% end %>
 
-<% @interactions.each do |interaction| %>
-  <div class="interaction_feed_container" id="interaction_feed_container_<%= interaction.id %>">
-    <%= render partial: 'interactions/interaction_feed', locals: {interaction: interaction} %>
-  </div>
-<% end %>
+<div id='interaction_feeds_container'>
+  <% @interactions.each do |interaction| %>
+    <div class='interaction_feed_container' id='interaction_feed_container_<%= interaction.id %>'>
+      <%= render partial: 'interactions/interaction_feed', locals: {interaction: interaction} %>
+    </div>
+  <% end %>
+</div>
+<div id='interaction_paging'>
+  <% if @interactions.last != @last_interaction %>
+    <%= link_to(raw("<button class='action_gray'>Load More</button>"), '', id: 'interaction_paging_link', 'data-last-id' => @interactions.last.id, 'data-person-id' => @person.id) %>
+  <% end %>
+</div>

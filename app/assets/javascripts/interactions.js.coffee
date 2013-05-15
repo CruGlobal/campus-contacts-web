@@ -3,6 +3,14 @@ $ ->
   $(document).live 'click', (e)->
     $('#receiver_id_dropdown, #interaction_type_dropdown, #initiator_dropdown, #privacy_setting_dropdown').removeClass('active')
 
+  $('#interaction_paging_link').live 'click', (e)->
+    e.preventDefault()
+    $('#interaction_paging').html("")
+    $.toggleLoader('interaction_paging','Loading Interactions...')
+    $.ajax
+      type: 'GET',
+      url: "/interactions/load_more_interactions?person_id=" + $(this).attr("data-person-id") + "&last_id=" + $(this).attr("data-last-id")
+
   $('#search_receiver_results .option.receiver input').live 'change', (e)->
     if $(this).is(':checked')
       data_id = $(this).attr('data-id')
@@ -47,7 +55,6 @@ $ ->
     
     
   $('.feed_box .edit_feed_icon').live 'click', (e)->
-    e.preventDefault()
     if $('.feed_content .tab_content.profile_interactions .edit_space').is(':visible')
       $('.interaction_new').removeClass('shouldReload')
       $('#interaction_save_cancel_button').click()

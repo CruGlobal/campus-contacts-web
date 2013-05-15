@@ -19,6 +19,7 @@ Mh::Application.routes.draw do
       get :show_new_interaction_form
       get :search_initiators
       get :search_receivers
+      get :load_more_interactions
     end
   end
 
