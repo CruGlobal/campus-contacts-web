@@ -5,8 +5,13 @@ class InteractionsController < ApplicationController
     @interaction = Interaction.new
     @completed_answer_sheets = @person.completed_answer_sheets(current_organization).where("completed_at IS NOT NULL").order('completed_at DESC')
     if can? :manage, @person
-      @interactions = @person.interactions.recent.limited
-      @last_interaction = @person.interactions.recent.last
+      @interactions = @person.interactions.everyone
+      @interactions = @interactions.parents
+      @interactions = @interactions.organization(current_organization)
+      @interactions = @interactions.me if @person == current_person
+      @interactions = @interactions.recent # sort results
+      @last_interaction = @interactions.recent.last # get last record
+      @interactions = @interactions.limited # limit results
     end
   end
   

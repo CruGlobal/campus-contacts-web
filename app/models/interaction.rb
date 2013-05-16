@@ -10,6 +10,12 @@ class Interaction < ActiveRecord::Base
   
   scope :recent, order('created_at DESC')
   scope :limited, limit(5)
+  # Scopes for Filters
+  scope :everyone, where("privacy_setting = 'everyone'")
+  scope :parents, where("privacy_setting = 'parents'")
+  scope :organization, lambda {|org_id| { conditions: {organization_id: org_id, privacy_setting: 'organization'} }}
+  scope :admins, where("privacy_setting = 'admins'")
+  scope :me, where("privacy_setting = 'me'")
   after_save :ensure_timestamp
   
   def initiator
