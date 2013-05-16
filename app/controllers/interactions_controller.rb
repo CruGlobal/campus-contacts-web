@@ -5,21 +5,18 @@ class InteractionsController < ApplicationController
     @interaction = Interaction.new
     @completed_answer_sheets = @person.completed_answer_sheets(current_organization).where("completed_at IS NOT NULL").order('completed_at DESC')
     if can? :manage, @person
-      @interactions = @person.interactions.everyone
-      @interactions = @interactions.parents
-      @interactions = @interactions.organization(current_organization)
-      @interactions = @interactions.me if @person == current_person
-      @interactions = @interactions.recent # sort results
-      @last_interaction = @interactions.recent.last # get last record
-      @interactions = @interactions.limited # limit results
+      @interactions = @person.filtered_interactions(current_person, current_organization)
+      @last_interaction = @interactions.last
+      @interactions = @interactions.limited
     end
   end
   
   def load_more_interactions
     @person = Person.find(params[:person_id])
     if can? :manage, @person
-      @interactions = @person.interactions.where("id < ?",params[:last_id]).recent.limited
-      @last_interaction = @person.interactions.recent.last
+      @interactions = @person.filtered_interactions(current_person, current_organization).where("id < ?",params[:last_id])
+      @last_interaction = @interactions.last
+      @interactions = @interactions.limited
     end
   end
   

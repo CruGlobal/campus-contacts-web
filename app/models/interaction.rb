@@ -8,14 +8,8 @@ class Interaction < ActiveRecord::Base
   belongs_to :receiver, class_name: 'Person', foreign_key: 'receiver_id'
   belongs_to :creator, class_name: 'Person', foreign_key: 'created_by_id'
   
-  scope :recent, order('created_at DESC')
+  scope :sorted, order('created_at DESC')
   scope :limited, limit(5)
-  # Scopes for Filters
-  scope :everyone, where("privacy_setting = 'everyone'")
-  scope :parents, where("privacy_setting = 'parents'")
-  scope :organization, lambda {|org_id| { conditions: {organization_id: org_id, privacy_setting: 'organization'} }}
-  scope :admins, where("privacy_setting = 'admins'")
-  scope :me, where("privacy_setting = 'me'")
   after_save :ensure_timestamp
   
   def initiator
@@ -31,11 +25,11 @@ class Interaction < ActiveRecord::Base
     when 'everyone'
       return "Everyone"
     when 'parents'
-      return "Everyone in #{organization.parent.name}"
+      return "Everyone in #{self.organization.parent.name}"
     when 'organization'
-      return "Everyone in #{organization.name}"
+      return "Everyone in #{self.organization.name}"
     when 'admins'
-      return "Admins in #{organization.name}"
+      return "Admins in #{self.organization.name}"
     when 'me'
       return "Me only"
     else
