@@ -3,10 +3,18 @@ $ ->
   $(document).live 'click', (e)->
     $('#receiver_id_dropdown, #interaction_type_dropdown, #initiator_dropdown, #privacy_setting_dropdown').removeClass('active')
 
+  $('#all_feeds_paging_link').live 'click', (e)->
+    e.preventDefault()
+    $('#all_feed_paging').html("")
+    $.toggleLoader('all_feed_paging','Loading...')
+    $.ajax
+      type: 'GET',
+      url: "/interactions/load_more_all_feeds?person_id=" + $(this).attr("data-person-id") + "&next_page=" + $(this).attr("data-next-page")
+
   $('#interaction_paging_link').live 'click', (e)->
     e.preventDefault()
     $('#interaction_paging').html("")
-    $.toggleLoader('interaction_paging','Loading Interactions...')
+    $.toggleLoader('interaction_paging','Loading...')
     $.ajax
       type: 'GET',
       url: "/interactions/load_more_interactions?person_id=" + $(this).attr("data-person-id") + "&last_id=" + $(this).attr("data-last-id")
