@@ -5,31 +5,6 @@
 <% end %>
 <% @completed_answer_sheets.each do |answer_sheet| %>
   <% if answer_sheet.answers.count > 0 %>
-    <div class="feed_box survey_display">
-    	<div class="feed_icon"><%= image_tag("survey.png") %></div>
-    	<div class="feed_item_header">
-        <span class="feed_item_date"><%= time_format(answer_sheet.completed_at) %></span>
-    	  <span class="feed_item_privacy">
-          <strong>Visible to:</strong>
-          Leaders In My Organization
-          <%= image_tag("edit_sprite.png") %>
-        </span>
-    	</div>
-
-    	<div class="feed_item_content">
-        <strong><%= answer_sheet.person.name %></strong>
-        added new information via
-        <strong><%= answer_sheet.survey.title %></strong>
-        survey.
-      </div>
-      <% answer_sheet.answers.each do |answer| %>
-        <% if answer.value.present? %>
-          <div class="feed_item_survey_answer">
-            <strong><%= answer.question.label %></strong>
-            <%= answer.value %>
-          </div>
-        <% end %>
-      <% end %>
-    </div>
+    <%= render partial: 'interactions/survey_feed', locals: {answer_sheet: answer_sheet} %>
   <% end %>
 <% end %>
