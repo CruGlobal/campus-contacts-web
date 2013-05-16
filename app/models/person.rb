@@ -195,14 +195,14 @@ class Person < ActiveRecord::Base
   }}
   
   def filtered_interactions(viewer, current_org)
-    query = Array.new
-    query << "(privacy_setting = 'everyone')"
+    q = Array.new
+    q << "(interactions.privacy_setting = 'everyone')"
     parent_org = current_org.parent
-    query << "(privacy_setting = 'parent' AND organization_id = #{parent_org.id})" if parent_org.present?
-    query << "(privacy_setting = 'organization' AND organization_id = #{current_org.id})"
-    query << "(privacy_setting = 'admins' AND organization_id = #{current_org.id})" if viewer.admin_of_org?(current_org)
-    query << "(created_by_id = #{viewer.id})" # all interactions are visible to the person created it
-    query = query.join(" OR ")
+    q << "(interactions.privacy_setting = 'parent' AND interactions.organization_id = #{parent_org.id})" if parent_org.present?
+    q << "(interactions.privacy_setting = 'organization' AND interactions.organization_id = #{current_org.id})"
+    q << "(interactions.privacy_setting = 'admins' AND interactions.organization_id = #{current_org.id})" if viewer.admin_of_org?(current_org)
+    q << "(interactions.created_by_id = #{viewer.id})" # all interactions are visible to the person created it
+    query = q.join(" OR ")
     return self.interactions.where(query).sorted
   end
   
@@ -210,19 +210,28 @@ class Person < ActiveRecord::Base
     return admin_of_org_ids.include?(org.id)
   end
   
-  def all_feeds(page = 1)
+  def all_feeds(current_person, current_organization, page = 1)
     limit = 5
     offset = page > 1 ? (page * limit) - limit : 0
-    counts = Person.find_by_sql("SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} UNION SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id}")
+    interaction_ids = filtered_interactions(current_person, current_organization).collect{|x| x.id}.join(',')
+    survey_ids = current_organization.survey_ids.join(',')
+    counts = Person.find_by_sql("SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} AND interactions.id IN (#{interaction_ids}) UNION SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id} AND answer_sheets.survey_id IN (#{survey_ids})")
     total = 0;
     counts.each{|x| total += x['COUNT']}
     max_page = (total.to_f / limit.to_f).ceil
     if page > max_page
       return []
     else
-      records = Person.find_by_sql("SELECT @var := 'Interaction' AS CLASS, interactions.id AS RECORD_ID, interactions.timestamp AS SORT_DATE FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} UNION SELECT @var := 'AnswerSheet' AS CLASS, answer_sheets.id AS RECORD_ID, answer_sheets.completed_at AS SORT_DATE FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id} ORDER BY SORT_DATE DESC LIMIT #{limit} OFFSET #{offset}")
+      records = Person.find_by_sql("SELECT @var := 'Interaction' AS CLASS, interactions.id AS RECORD_ID, interactions.timestamp AS SORT_DATE FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} AND interactions.id IN (#{interaction_ids}) UNION SELECT @var := 'AnswerSheet' AS CLASS, answer_sheets.id AS RECORD_ID, answer_sheets.completed_at AS SORT_DATE FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id} AND answer_sheets.survey_id IN (#{survey_ids}) ORDER BY SORT_DATE DESC LIMIT #{limit} OFFSET #{offset}")
       return records.collect{|x| x['CLASS'].constantize.find(x['RECORD_ID']) }
     end
+  end
+  
+  def all_feeds_last(current_person, current_organization)
+    interaction_ids = filtered_interactions(current_person, current_organization).collect{|x| x.id}.join(',')
+    survey_ids = current_organization.survey_ids.join(',')
+    record = Person.find_by_sql("SELECT @var := 'Interaction' AS CLASS, interactions.id AS RECORD_ID, interactions.timestamp AS SORT_DATE FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} AND interactions.id IN (#{interaction_ids}) UNION SELECT @var := 'AnswerSheet' AS CLASS, answer_sheets.id AS RECORD_ID, answer_sheets.completed_at AS SORT_DATE FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id} AND answer_sheets.survey_id IN (#{survey_ids}) ORDER BY SORT_DATE ASC LIMIT 1")
+    return record.first['CLASS'].constantize.find(record.first['RECORD_ID'])
   end
 
   def messages_in_org(org_id)

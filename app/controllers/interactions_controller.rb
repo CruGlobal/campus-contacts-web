@@ -3,12 +3,17 @@ class InteractionsController < ApplicationController
     @person = current_organization.people.where(id: params[:id]).try(:first)
     redirect_to contacts_path unless @person.present?
     @interaction = Interaction.new
-    @completed_answer_sheets = @person.completed_answer_sheets(current_organization).where("completed_at IS NOT NULL").order('completed_at DESC')
+    @completed_answer_sheets = @person.completed_answer_sheets(current_organization).order('completed_at DESC')
     if can? :manage, @person
       @interactions = @person.filtered_interactions(current_person, current_organization)
       @last_interaction = @interactions.last
       @interactions = @interactions.limited
+      
+      @all_feeds_page = 1
+      @all_feeds = @person.all_feeds(current_person, current_organization, @all_feeds_page)
+      @last_all_feeds = @person.all_feeds_last(current_person, current_organization)
     end
+    
   end
   
   def load_more_interactions
