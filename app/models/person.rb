@@ -117,21 +117,6 @@ class Person < ActiveRecord::Base
     :order => "ISNULL(organizational_roles.followup_status) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_roles.#{order}"
   } }
   
-  def all_feeds(page = 1)
-    limit = 5
-    offset = page > 1 ? (page * limit) - limit : 0
-    counts = Person.find_by_sql("SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} UNION SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id}")
-    total = 0;
-    counts.each{|x| total += x['COUNT']}
-    max_page = (total.to_f / limit.to_f).ceil
-    if page > max_page
-      return []
-    else
-      records = Person.find_by_sql("SELECT @var := 'Interaction' AS CLASS, interactions.id AS RECORD_ID, interactions.timestamp AS SORT_DATE FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} UNION SELECT @var := 'AnswerSheet' AS CLASS, answer_sheets.id AS RECORD_ID, answer_sheets.completed_at AS SORT_DATE FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id} ORDER BY SORT_DATE DESC LIMIT #{limit} OFFSET #{offset}")
-      return records.collect{|x| x['CLASS'].constantize.find(x['RECORD_ID']) }
-    end
-  end
-  
 
 
   # Start of custom sorting for meta_search
@@ -208,6 +193,37 @@ class Person < ActiveRecord::Base
     :group => "people.id",
     :having => ["DATE(MAX(ass.updated_at)) >= ? AND DATE(MAX(ass.updated_at)) <= ? ", date_from, date_to]
   }}
+  
+  def filtered_interactions(viewer, current_org)
+    query = Array.new
+    query << "(privacy_setting = 'everyone')"
+    parent_org = current_org.parent
+    query << "(privacy_setting = 'parent' AND organization_id = #{parent_org.id})" if parent_org.present?
+    query << "(privacy_setting = 'organization' AND organization_id = #{current_org.id})"
+    query << "(privacy_setting = 'admins' AND organization_id = #{current_org.id})" if viewer.admin_of_org?(current_org)
+    query << "(created_by_id = #{viewer.id})" # all interactions are visible to the person created it
+    query = query.join(" OR ")
+    return self.interactions.where(query).sorted
+  end
+  
+  def admin_of_org?(org)
+    return admin_of_org_ids.include?(org.id)
+  end
+  
+  def all_feeds(page = 1)
+    limit = 5
+    offset = page > 1 ? (page * limit) - limit : 0
+    counts = Person.find_by_sql("SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} UNION SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id}")
+    total = 0;
+    counts.each{|x| total += x['COUNT']}
+    max_page = (total.to_f / limit.to_f).ceil
+    if page > max_page
+      return []
+    else
+      records = Person.find_by_sql("SELECT @var := 'Interaction' AS CLASS, interactions.id AS RECORD_ID, interactions.timestamp AS SORT_DATE FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} UNION SELECT @var := 'AnswerSheet' AS CLASS, answer_sheets.id AS RECORD_ID, answer_sheets.completed_at AS SORT_DATE FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id} ORDER BY SORT_DATE DESC LIMIT #{limit} OFFSET #{offset}")
+      return records.collect{|x| x['CLASS'].constantize.find(x['RECORD_ID']) }
+    end
+  end
 
   def messages_in_org(org_id)
     sent_messages.where("organization_id = ?", org_id).order('created_at DESC')
