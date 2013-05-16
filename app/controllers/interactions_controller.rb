@@ -16,6 +16,15 @@ class InteractionsController < ApplicationController
     
   end
   
+  def load_more_all_feeds
+    @person = Person.find(params[:person_id])
+    if can? :manage, @person
+      @all_feeds_page = params[:next_page].to_i
+      @all_feeds = @person.all_feeds(current_person, current_organization, @all_feeds_page)
+      @last_all_feeds = @person.all_feeds_last(current_person, current_organization)
+    end
+  end
+  
   def load_more_interactions
     @person = Person.find(params[:person_id])
     if can? :manage, @person

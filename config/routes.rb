@@ -20,6 +20,7 @@ Mh::Application.routes.draw do
       get :search_initiators
       get :search_receivers
       get :load_more_interactions
+      get :load_more_all_feeds
     end
   end
 
