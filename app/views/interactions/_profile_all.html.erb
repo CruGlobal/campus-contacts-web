@@ -1,13 +1,6 @@
 <div id='all_feeds_container'>
   <% @all_feeds.each do |feed| %>
-    <% case feed.class.to_s %>
-    <% when "Interaction" %>
-      <div class='all_feed_container' id='all_feed_container_<%= feed.id %>'>
-        <%= render partial: 'interactions/interaction_feed', locals: {interaction: feed} %>
-      </div>
-    <% when "AnswerSheet" %>
-      <%= render partial: 'interactions/survey_feed', locals: {answer_sheet: feed} %>
-    <% end %>
+    <%= render partial: 'interactions/any_feed', locals: {feed: feed} %>
   <% end %>
 </div>
 <div id='all_feed_paging'>

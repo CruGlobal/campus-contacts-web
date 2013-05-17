@@ -1,6 +1,6 @@
 $.toggleLoader('all_feed_paging','')
 <% @all_feeds.each do |feed| %>
-  $('#all_feeds_container').append("<div class='all_feed_container new' id='all_feed_container_<%= feed.id %>'><%= escape_javascript(render partial: 'interactions/interaction_feed', locals: {interaction: feed}) %></div>")
+  $('#all_feeds_container').append("<div class='all_feed_container new' id='all_feed_container_<%= feed.id %>'><%= escape_javascript(render partial: 'interactions/any_feed', locals: {feed: feed}) %></div>")
   $('.all_feed_container.new').each(function(){
     $(this).hide().fadeIn('slow')
     $(this).removeClass('new')
