@@ -1,7 +1,6 @@
 require 'test_helper'
 
-class InteractionsControllerTest < ActionController::TestCase
-
+class InteractionsControllerTest < ActionController::TestCase  
   context "Viewing a profile" do
     setup do
       @user, @org = admin_user_login_with_org
@@ -37,7 +36,7 @@ class InteractionsControllerTest < ActionController::TestCase
       @contact2 = Factory(:person, first_name: "Contact", last_name: "Two")
       @admin1 = Factory(:person, first_name: "Admin", last_name: "One")
       
-      Factory(:organizational_role, organization: @org, person: @contact1, role: Role.contact, followup_status: 'uncontacted')
+      Factory(:organizational_role, organization: @org, person: @contact1, role: Role.contact, followup_status: 'uncontacted')  
       Factory(:organizational_role, organization: @other_org, person: @contact2, role: Role.contact, followup_status: 'uncontacted')
       Factory(:organizational_role, organization: @org, person: @admin1, role: Role.admin, followup_status: nil)
     end

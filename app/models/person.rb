@@ -196,14 +196,34 @@ class Person < ActiveRecord::Base
   
   def filtered_interactions(viewer, current_org)
     q = Array.new
+    
+    # filter everyone
     q << "(interactions.privacy_setting = 'everyone')"
-    parent_org = current_org.parent
-    q << "(interactions.privacy_setting = 'parent' AND interactions.organization_id = #{parent_org.id})" if parent_org.present?
-    q << "(interactions.privacy_setting = 'organization' AND interactions.organization_id = #{current_org.id})"
-    q << "(interactions.privacy_setting = 'admins' AND interactions.organization_id = #{current_org.id})" if viewer.admin_of_org?(current_org)
-    q << "(interactions.created_by_id = #{viewer.id})" # all interactions are visible to the person created it
-    query = q.join(" OR ")
-    return self.interactions.where(query).sorted
+    
+    # filter parent
+    org_with_roles = viewer.organizational_roles.collect(&:organization_id).uniq
+    org_with_roles.each do |org_id|
+      q << "(interactions.privacy_setting = 'parent' AND (organizations.ancestry LIKE '#{org_id}/%' OR organizations.ancestry LIKE '%/#{org_id}/%' OR organizations.ancestry LIKE '%/#{org_id}' OR organizations.ancestry = #{org_id} OR organizations.id = #{org_id}))"
+    end
+    
+    # filter organization
+    if current_org.people.where(id: viewer.id).present?
+      q << "(interactions.privacy_setting = 'organization' AND interactions.organization_id = #{current_org.id})"
+    end
+    
+    # filter admins
+    if viewer.admin_of_org?(current_org)
+      q << "(interactions.privacy_setting = 'admins' AND interactions.organization_id = #{current_org.id})"
+    end
+    
+    # filter me
+    q << "(interactions.privacy_setting = 'me' AND interactions.created_by_id = #{viewer.id})"
+    
+    # all interactions are visible to the person created it
+    # q << "(interactions.created_by_id = #{viewer.id})" 
+    
+    query = q.join(" OR ") # combine queries
+    return self.interactions.joins(:organization).where(query).sorted
   end
   
   def admin_of_org?(org)
@@ -214,7 +234,10 @@ class Person < ActiveRecord::Base
     limit = 5
     offset = page > 1 ? (page * limit) - limit : 0
     interaction_ids = filtered_interactions(current_person, current_organization).collect{|x| x.id}.join(',')
+    interaction_ids = "0" unless interaction_ids.present?
     survey_ids = current_organization.survey_ids.join(',')
+    survey_ids = "0" unless survey_ids.present?
+    
     counts = Person.find_by_sql("SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} AND interactions.id IN (#{interaction_ids}) UNION SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id} AND answer_sheets.completed_at IS NOT NULL AND answer_sheets.survey_id IN (#{survey_ids})")
     total = 0;
     counts.each{|x| total += x['COUNT']}
@@ -228,9 +251,12 @@ class Person < ActiveRecord::Base
   end
   
   def all_feeds_last(current_person, current_organization)
-    interaction_ids = filtered_interactions(current_person, current_organization).collect{|x| x.id}.join(',')
+    interaction_ids = filtered_interactions(current_person, current_organization).collect{|x| x.id}.join(',') || 0
+    interaction_ids = "0" unless interaction_ids.present?
     survey_ids = current_organization.survey_ids.join(',')
+    survey_ids = "0" unless survey_ids.present?
     record = Person.find_by_sql("SELECT @var := 'Interaction' AS CLASS, interactions.id AS RECORD_ID, interactions.timestamp AS SORT_DATE FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} AND interactions.id IN (#{interaction_ids}) UNION SELECT @var := 'AnswerSheet' AS CLASS, answer_sheets.id AS RECORD_ID, answer_sheets.completed_at AS SORT_DATE FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id} AND answer_sheets.completed_at IS NOT NULL AND answer_sheets.survey_id IN (#{survey_ids}) ORDER BY SORT_DATE ASC LIMIT 1")
+    return [] unless record.present?
     return record.first['CLASS'].constantize.find(record.first['RECORD_ID'])
   end
 
