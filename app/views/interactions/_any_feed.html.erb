@@ -1,0 +1,10 @@
+<% case feed.class.to_s %>
+<% when "Interaction" %>
+  <div class='all_feed_container' id='all_feed_container_<%= feed.id %>'>
+    <%= render partial: 'interactions/interaction_feed', locals: {interaction: feed} %>
+  </div>
+<% when "AnswerSheet" %>
+  <%= render partial: 'interactions/survey_feed', locals: {answer_sheet: feed} %>
+<% when "OrganizationalRole" %>
+  <%= render partial: 'interactions/label_feed', locals: {org_role: feed} %>
+<% end %>
