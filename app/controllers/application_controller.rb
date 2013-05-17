@@ -49,6 +49,13 @@ class ApplicationController < ActionController::Base
     sign_out
   end
 
+  def manage_wild_card(term)
+    term = "%"+term[0..term.size-1]+"%" unless term.last == "*" || term.first == "*"
+    term = "%"+term[1..term.size] if term.first == "*"
+    term = term[0..term.size-2]+"%" if term.last == "*"
+    return term
+  end
+  
   protected
 
   def set_newrelic_params

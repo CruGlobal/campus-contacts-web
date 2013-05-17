@@ -1,0 +1,10 @@
+$(".locate_contact_list_tr").remove();
+<% if @filtered_contact.present? && @filtered_contact %>
+  $('#locate_contact_list_container').append("<%= escape_javascript(render partial: 'search_locate_contact_list') %>");
+<% else %>
+  $("#locate_contact_list_container").append("<tr class='locate_contact_list_tr'><td colspan='99' class='locate_contact_list'><%= t('contacts.index.search_contact_no_results') %></td></tr>");
+<% end %>
+
+$(document).ready(function() {
+  $('.tipitright').qtip();
+});

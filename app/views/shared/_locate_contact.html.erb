@@ -1,0 +1,47 @@
+<div id="locate_contact_container" style="display:none" title="<%= t("contacts.index.search_locate_title") %>">
+  <hr/>
+  <table align="center">
+    <tr>
+      <td>First Name: </td>
+      <td><%= text_field_tag :locate_contact_firstname %></td>
+    </tr>
+    <tr>
+      <td>Last Name: </td>
+      <td><%= text_field_tag :locate_contact_lastname %></td>
+    </tr>
+    <tr>
+      <td>Email Address: </td>
+      <td><%= text_field_tag :locate_contact_email %></td>
+    </tr>
+    <tr>
+      <td>
+        <div class="icon help tipitright help_bubble_keyword" title="<%= t("contacts.index.search_locate_help") %>"></div>
+      </td>
+      <td align="right">
+        <div id="search_locate_contact_button_containter">
+          <table>
+            <tr>
+              <td id="search_locate_contact_loading">
+                <img src='/assets/spinner.gif'/>
+              </td>
+              <td>
+                <%= submit_tag t("contacts.index.search_locate_contact_button"), :id=>"search_locate_contact_button", :remote => true%>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </td>
+    </tr>
+  </table>
+  <hr/>
+  <div id="locate_contact_results_container">
+    <table width="100%" id="locate_contact_list_container">
+      <tr>
+        <td class="locate_contact_list_head">First Name</td>
+        <td class="locate_contact_list_head">Last Name</td>
+        <td class="locate_contact_list_head">Email</td>
+        <td class="locate_contact_list_head">Organization Name</td>
+      </tr>
+    </table>
+  </div>
+</div>
