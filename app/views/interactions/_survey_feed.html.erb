@@ -4,8 +4,8 @@
     <span class="feed_item_date"><%= time_format(answer_sheet.completed_at) %></span>
 	  <span class="feed_item_privacy">
       <strong>Visible to:</strong>
-      Leaders In My Organization
-      <%= image_tag("edit_sprite.png") %>
+      <%= "Everyone in #{answer_sheet.survey.organization.name}" %>
+      <%= link_to image_tag("edit_sprite.png"), edit_survey_response_path(@person), class: "edit_survey_icon", "data-id" => answer_sheet.id, "data-person-id" => @person.id %>
     </span>
 	</div>
 	<div class="feed_item_content">

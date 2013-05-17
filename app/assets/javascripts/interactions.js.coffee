@@ -2,7 +2,14 @@ $ ->
   
   $(document).live 'click', (e)->
     $('#receiver_id_dropdown, #interaction_type_dropdown, #initiator_dropdown, #privacy_setting_dropdown').removeClass('active')
-
+    
+  # START - ACTION MENU
+  $('li a#action_menu_record_interaction').live 'click', (e)->
+    e.preventDefault()
+    $('li#interactions').click()
+    $('#interaction_new_record_button').click()
+  # END - ACTION MENU
+  
   $('#all_feeds_paging_link').live 'click', (e)->
     e.preventDefault()
     $('#all_feed_paging').html("")
@@ -179,6 +186,7 @@ $ ->
     $('.interaction_field.more_option').hide()
     $('.interaction_field.more_div .more_options_link').html('More Options &#x25BC;')
     $('.interaction_field.more_div .more_options_link').removeClass('shown')
+    $('#interaction_comment').focus()
     
     # set privacy
     if $('#privacy_setting_dropdown').attr('data-current-id') == ""
@@ -272,6 +280,11 @@ $ ->
 
   $("#profile_feed #panel_nav li").live 'click', (e)->
     e.preventDefault()
+    # close current opened
+    unless $(this).attr('id') == 'interactions'
+      $('#interaction_save_cancel_button').click()
+    unless $(this).attr('id') == 'info'
+      $('#info_edit_cancel_button').click()
     $("#profile_feed #panel_nav li").removeClass('current')
     $(this).addClass('current')
     $("#profile_feed .feed_content .tab_content").removeClass('current')
