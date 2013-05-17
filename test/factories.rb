@@ -23,6 +23,15 @@ FactoryGirl.define do
     video "http://www.youtube.com/watch?v=9bZkp7q19f0"
   end
 
+  factory :interaction do
+    association :organization
+    association :receiver
+    association :creator
+    interaction_type_id 1
+    comment "Sample Comment #{Factory.next(:count)}"
+    privacy_setting 'everyone'
+  end
+
   factory :group_membership do
     association :group
     association :person
