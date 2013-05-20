@@ -8,6 +8,11 @@ html.noscroll {
 }
 
 body#interactions_controller {
+  a.send_contact_info {
+    &:hover {
+      text-decoration: none;
+    }
+  }
   #profile_label_box {
     padding: 6px 12px;
     .profile_label {
