@@ -71,8 +71,7 @@
   <% end %>
 
 	<div class="col_right multi_line" id="email_this_info">
-		
-    <%= link_to(raw("<button class='action_gray'>#{t('.email_contact_info')}</button>"), '#', class: 'send_contact_info', 'data-person_id' => @person.id) %>
+    <%= link_to(raw("<button class='action_gray'>#{t('.email_contact_info')}</button>"), '', class: 'send_contact_info', 'data-person_id' => @person.id) %>
     <%= render :partial => 'shared/send_contact_info_dialog', :locals => { person: @person } %>
 	</div>
 
