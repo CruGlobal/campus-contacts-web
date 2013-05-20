@@ -1,0 +1,8 @@
+$.toggleLoader('labels_notice','')
+$('#labels_notice').text("<%= @msg_alert %>")
+if("<%= @new_role.present? %>"){
+  $('#labels_chooser_box').append("<%= escape_javascript(render partial: 'interactions/label', locals: {role: @new_role, checked: true}) if @new_role.present? %>")
+  $('#labels_new_input').val("")
+  scroll_height = parseInt($('#labels_chooser_box')[0].scrollHeight);
+  $('#labels_chooser_box').animate({ scrollTop: scroll_height},'1');
+}

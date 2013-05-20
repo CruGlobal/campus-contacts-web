@@ -462,6 +462,10 @@ class Person < ActiveRecord::Base
     @roles_by_org_id[org_id]
   end
 
+  def organizational_roles_for_org(org)
+    organizational_roles.where(organization_id: org.id)
+  end
+
   def org_tree_node(o = nil, parent_roles = [])
     orgs = {}
     @org_ids ||= {}
