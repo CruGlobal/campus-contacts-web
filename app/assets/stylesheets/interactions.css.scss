@@ -22,9 +22,14 @@ body#interactions_controller {
       
       &.labels_popup_box {
         .labels_chooser_box {
+          margin-top: 0;
+          padding: 6px 0px 2px;
           max-height: 160px;
           overflow: hidden;
           overflow-y: auto;
+          .labels_checkbox {
+            padding: 0px 10px;
+          }
         }
       } 
     }
