@@ -73,6 +73,7 @@ $ ->
     if $('.feed_content .tab_content.profile_interactions .edit_space').is(':visible')
       $('.interaction_new').removeClass('shouldReload')
       $('#interaction_save_cancel_button').click()
+    $('li#interactions').click()
     $('#interaction_new_record_button').parents('.interaction_new_buttons').first().hide();  
     $.toggleLoader('profile_name','Loading Selected Interaction...')
     $.ajax
