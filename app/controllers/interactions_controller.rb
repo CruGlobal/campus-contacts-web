@@ -1,9 +1,12 @@
 class InteractionsController < ApplicationController
   def show_profile
+    roles_for_assign
     @person = current_organization.people.where(id: params[:id]).try(:first)
     if @person.present?
       @interaction = Interaction.new
       @completed_answer_sheets = @person.completed_answer_sheets(current_organization).where("completed_at IS NOT NULL").order('completed_at DESC')
+
+			@roles = @person.assigned_organizational_roles(current_organization.id).arrange_all
       if can? :manage, @person
         @interactions = @person.filtered_interactions(current_person, current_organization)
         @last_interaction = @interactions.last

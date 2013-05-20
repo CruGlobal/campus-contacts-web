@@ -1,8 +1,35 @@
 // Place all the styles related to the interactions controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+html.noscroll {
+  position: fixed; 
+  overflow-y: scroll;
+  width: 100%;
+}
 
 body#interactions_controller {
+  .pop_box_container {
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    
+    .mh_popup_box {
+      z-index: 1002;
+      margin: 25px auto;
+      
+      &.labels_popup_box {
+        .labels_chooser_box {
+          max-height: 160px;
+          overflow: hidden;
+          overflow-y: auto;
+        }
+      } 
+    }
+  }
+  
   .results {
     max-height: 150px;
     overflow: hidden;

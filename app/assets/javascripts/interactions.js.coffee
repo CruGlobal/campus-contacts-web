@@ -1,3 +1,18 @@
+$.showDialog = (selector) ->
+  if $(document).height() > $(window).height() 
+    if $('html').scrollTop()
+      scrollTop = $('html').scrollTop()
+    else
+      scrollTop = $('body').scrollTop()
+    $('html').addClass('noscroll').css('top',-scrollTop)
+  selector.show()
+  
+$.hideDialog = (selector) ->
+  scrollTop = parseInt($('html').css('top'))
+  $('html').removeClass('noscroll');
+  $('html,body').scrollTop(-scrollTop);
+  selector.hide()
+  
 $ ->
   
   $(document).live 'click', (e)->
@@ -9,6 +24,14 @@ $ ->
     $('li#interactions').click()
     $('#interaction_new_record_button').click()
   # END - ACTION MENU
+  
+  $('#labels_popup_cancel_button').live 'click', (e)->
+    e.preventDefault()
+    $.hideDialog($("#profile_labels_dialog"))
+    
+  $('#show_profile_labels_button').live 'click', (e)->
+    e.preventDefault()
+    $.showDialog($("#profile_labels_dialog"))
   
   $('#all_feeds_paging_link').live 'click', (e)->
     e.preventDefault()
