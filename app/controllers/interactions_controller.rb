@@ -21,6 +21,36 @@ class InteractionsController < ApplicationController
     end
   end
   
+  def create_label
+    @status = "false"
+    if params[:name].present?
+      if Role.where("organization_id IN (?) AND LOWER(name) = ?", [current_organization.id,0], params[:name].downcase).present?
+        @msg_alert = t('contacts.index.add_label_exists')
+      else
+        @new_role = Role.create(organization_id: current_organization.id, name: params[:name]) if params[:name].present?
+        if @new_role.present?
+          @status = "true"
+          @msg_alert = t('contacts.index.add_label_success')
+        else
+          @msg_alert = t('contacts.index.add_label_failed')
+        end
+      end
+    else
+      @msg_alert = t('contacts.index.add_label_empty')
+    end
+  end
+  
+  def set_labels
+    @person = Person.find(params[:person_id])
+    @label_ids = params[:ids].split(',')
+    removed_roles = @person.organizational_roles_for_org(current_organization).where("role_id NOT IN (?)", params[:ids])
+    removed_roles.delete_all if removed_roles.present?
+    @label_ids.each do |role_id|
+      @person.organizational_roles.find_or_create_by_role_id_and_organization_id(role_id.to_i, current_organization.id)
+    end
+    @roles = @person.assigned_organizational_roles(current_organization.id).arrange_all
+  end
+  
   def load_more_all_feeds
     @person = Person.find(params[:person_id])
     if can? :manage, @person

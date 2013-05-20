@@ -8,6 +8,12 @@ html.noscroll {
 }
 
 body#interactions_controller {
+  #profile_label_box {
+    padding: 6px 12px;
+    .profile_label {
+      margin-left: 0;
+    }
+  }
   .pop_box_container {
     z-index: 1000;
     width: 100%;
@@ -21,8 +27,22 @@ body#interactions_controller {
       margin: 25px auto;
       
       &.labels_popup_box {
+        .labels_notice {
+          width: 260px;
+          margin: 0 auto;
+          text-align: center;
+        }
+        .labels_add_new {
+          width: 260px;
+          margin: 0 auto;
+          #labels_new_input {
+            width: 223px;
+            margin: 0;
+          }
+        }
         .labels_chooser_box {
-          margin-top: 0;
+          width: 260px;
+          margin: 0 auto;
           padding: 6px 0px 2px;
           max-height: 160px;
           overflow: hidden;

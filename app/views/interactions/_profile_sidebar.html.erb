@@ -13,7 +13,7 @@
 	<% @roles = @person.assigned_organizational_roles(current_organization.id).arrange_all %>
   <% if @roles.present? %>
     <% @roles.each do |role| %>
-      <div class="profile_label"><%= role %></div>
+      <div class='profile_label'><%= role %></div>
     <% end %>
 	<% end %>
 </div>
@@ -24,27 +24,34 @@
     <div class="mh_popup_box labels_popup_box" class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-alert_dialog">
     	<div class="mh_popup_box_top"><span class="mh_popup_heading">Labels</span></div>
     	<div class="fancy">Apply the following labels to <%= @person.name %>:</div>
-    	<div class="labels_chooser_box">
+    	<div class="labels_chooser_box" id="labels_chooser_box">
+        <% current_label_ids = Array.new %>
         <% @roles_for_assign.each do |role| %>
-      		<div class="labels_checkbox">
-            <%= check_box_tag 'role_ids', role.id, @roles.include?(role) %>
-            <span><%= role %></span>
-      		</div>
+          <% if @roles.include?(role) %>
+            <% current_label_ids << role.id %>
+            <% checked = true %>
+          <% else %>
+            <% checked = false %>
+          <% end %>
+            
+          <%= render partial: 'interactions/label', locals: {role: role, checked: checked} %>
         <% end %>
-
-    		<div class="labels_add_new">
-    			<input id="labels_new_input" type="text" placeholder="Create a new label ...">
-    			<div class="add_new_button">
-    				<a href="#"><button class="add_gray" id="labels_add_new_button"></button></a>
-    			</div>
-    		</div>
     	</div>
+  		<div class="labels_add_new" id="labels_add_new" data-current-label-ids="<%= current_label_ids.join(',') %>">
+        <%= text_field_tag :label_new_input, "", id: "labels_new_input", placeholder: "Create a new label..."%>
+  			<div class="add_new_button">
+  				<a href="#"><button class="add_gray" id="labels_add_new_button"></button></a>
+  			</div>
+  		</div>
+      <div class="labels_notice" id="labels_notice"></div>
+      
 
     	<div class="labels_save">
-    		<button class="red_accent" id="labels_popup_save_button">Save</button>
+    		<button class="red_accent" id="labels_popup_save_button" data-person-id="<%= @person.id %>">Save</button>
     		<button class="large_lightgray" id="labels_popup_cancel_button">Cancel</button>
-    		<button class="large_gray" id="labels_popup_manage_button">Manage Labels</button>
+        <%= link_to raw("<button class='large_gray' id='labels_popup_manage_button'>Manage Labels</button>"), roles_path(organization: current_organization.id) %>
     	</div>
+      
     </div>
   </div>
 </div>
