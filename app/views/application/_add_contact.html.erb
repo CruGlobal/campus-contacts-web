@@ -30,6 +30,7 @@
         </span>
       </div>
       <div class="form_group_fields">
+        <% @selected_labels = flash[:selected_labels] if flash[:selected_labels].present? %>
         <%= render partial: 'shared/label_fields' %>
         <br/>
       </div>
@@ -50,7 +51,16 @@
               <% answer = question.display_response(answer_sheet) %>
               <div class="field add_contact_survey_question_field">
               	<label><%= raw question.label %></label>
-              	<%= render :partial => 'survey/' + question.ptemplate, object: question, locals: {col: nil, answer_sheet: answer_sheet, survey: survey} %>
+                
+                <% @checked_or_val = false %>
+                <% if flash[:selected_answers].present? %>
+                  <% selected_answers = flash[:selected_answers] %>
+                  <% if selected_answers.include?(survey.id.to_s) %>
+                    <% @checked_or_val = selected_answers[survey.id.to_s][question.id.to_s] %>
+                  <% end %>
+                <% end %>
+                
+              	<%= render :partial => 'survey/' + question.ptemplate, object: question, locals: {col: nil, answer_sheet: answer_sheet, survey: survey } %>
               </div>
             <% end %>
           <% end %>

@@ -88,6 +88,8 @@ module ContactActions
         respond_to do |wants|
           wants.js do
             flash.now[:error] = errors.join('<br />')
+            flash[:selected_labels] = params[:labels]
+            flash[:selected_answers] = params[:answers]
             render 'add_contact'
           end
           wants.json do

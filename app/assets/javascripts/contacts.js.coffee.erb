@@ -273,12 +273,16 @@ $ ->
       resizable: false,
       height:444,
       width:600,
-      modal: true,
+      position: 'center',
       open: (event, ui) ->
-        $("body").css({ overflow: 'hidden' })
-        $('.ui-widget-overlay').width('100%');
-      close: (event, ui) ->
-        $("body").css({ overflow: 'inherit' })
+        $('#new_person')[0].reset()
+        $(".field_with_errors, .red_errors}").remove()
+        $("#add_contact_form input[type='text']").val("")
+        $("#add_contact_form .user_defined_contact_fields textarea").val("")
+        $("#add_contact_form .user_defined_contact_fields select").val(0)
+        $("#add_contact_form input[type='checkbox']").attr("checked",false)
+        $("#add_contact_form input[type='radio']").attr("checked",false)
+        $("#add_contact_form input[type='checkbox']:not(:disabled)").attr("checked",false)
       buttons: [
         text: t('application.add_contact.save_and_close'),
         'class': 'add_new_contact_dialog_buttons',
@@ -294,7 +298,6 @@ $ ->
         'class': 'add_new_contact_dialog_buttons',
         click: ->
           $(this).dialog('destroy')
-          $("body").css({ overflow: 'inherit' })
       ]
     false
 

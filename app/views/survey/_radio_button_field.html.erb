@@ -2,14 +2,17 @@
 <% person ||= nil %>
 <% css_class = 'radio ' -%>
 <% css_class += 'required' if radio_button_field.required? %>
+<% @checked_or_val ||= nil%>
 <div id="<%= dom_id(radio_button_field) %>">
   <% radio_button_field.choices.each_with_index do |choice, num| -%>
     <div class="field field_radio">
       <% dom_id = dom_id(radio_button_field) + "_" + pretty_tag(choice[1])
          last_choice =  (num == radio_button_field.choices.length - 1)
          css_class += radio_button_field.validation_class(answer_sheet) if last_choice
-         checked = radio_button_field.has_answer?(choice[1], answer_sheet, person) -%>
-      <%= radio_button_tag name, choice[1], checked,
+         value = radio_button_field.has_answer?(choice[1], answer_sheet, person)
+         value = @checked_or_val if @checked_or_val.present? && @checked_or_val == choice[0]
+      -%>
+      <%= radio_button_tag name, choice[1], value,
             :id => dom_id,
             :class => css_class %>
       <label class="choice" for="<%= dom_id %>"><%= choice[0] %></label>

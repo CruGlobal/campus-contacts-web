@@ -1,16 +1,18 @@
 <% name = defined?(survey) ? "answers[#{survey.id}][#{checkbox_field.id}]" : "answers[#{checkbox_field.id}]" %>
 <% person ||= nil %>
+<% @checked_or_val ||= nil%>
 <div id="<%= dom_id(checkbox_field) %>">
   <% css_class = 'checkbox ' -%>
   <% checkbox_field.choices.each_with_index do |choice, num| -%>
     <% dom_id = dom_id(checkbox_field) + "_" + pretty_tag(choice[1])
        last_choice = (num == checkbox_field.choices.length - 1)
        css_class += checkbox_field.validation_class(answer_sheet) if last_choice
+       value = @checked_or_val.present? && @checked_or_val[num.to_s].present? ? @checked_or_val[num.to_s] : checkbox_field.has_answer?(choice[1], answer_sheet, person)
     -%>
     <%= hidden_field_tag "#{name}[#{num}]", '', :id => '' %>
     <div class="field field_check">
     <%= check_box_tag("#{name}[#{num}]", choice[1],
-          checkbox_field.has_answer?(choice[1], answer_sheet, person),
+          value,
           :id => dom_id,
           :class => css_class) %>
     <label class="choice" for="<%= dom_id %>"><%= choice[0] %></label>
