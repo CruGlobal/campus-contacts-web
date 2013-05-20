@@ -9,7 +9,7 @@
  *= require surveys
  *= require survey_responses
  *= require interactions
- *= require profile_style
+ *= require mh_profile_style
  *= require jquery.qtip
  *= require jquery.chosen
  *= require superfish

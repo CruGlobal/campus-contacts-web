@@ -3,6 +3,11 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 body#interactions_controller {
+  .results {
+    max-height: 150px;
+    overflow: hidden;
+    overflow-y: scroll;
+  }
   #interaction_paging, #all_feed_paging {
     text-align: center;
     a {
@@ -55,7 +60,7 @@ body#interactions_controller {
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 
     .dropdown_name {
-      width: 140px;
+      width: 135px;
       display: inline-block;
     	white-space: nowrap;
     	overflow: hidden;
@@ -123,6 +128,7 @@ body#interactions_controller {
       }
       .search input {
         width: 167px;
+        margin: 0 0 1px 0;
       }
     }
     

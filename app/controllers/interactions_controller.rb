@@ -65,7 +65,7 @@ class InteractionsController < ApplicationController
     @current_person = current_person
     @people = current_organization.people.where("first_name LIKE :key OR last_name LIKE :key", key: "%#{params[:keyword].strip}%")
     @people = @people.where("people.id NOT IN (?)", params[:except].split(',')) if params[:except].present?
-    @people = @people.limit(5)
+    # @people = @people.limit(5)
   end
   
   def search_receivers
@@ -73,7 +73,7 @@ class InteractionsController < ApplicationController
     @current_person = current_person
     @people = current_organization.people.where("first_name LIKE :key OR last_name LIKE :key", key: "%#{params[:keyword].strip}%")
     @people = @people.where("people.id NOT IN (?)", params[:except].split(',')) if params[:except].present?
-    @people = @people.limit(5)
+    # @people = @people.limit(5)
   end
   
   def create
@@ -92,10 +92,15 @@ class InteractionsController < ApplicationController
     @person = Person.find(params[:person_id])
     @interaction = Interaction.find(params[:interaction_id])
     @interaction.update_attributes(params[:interaction])
-    params[:initiator_id].each do |person_id|
+    params[:initiator_id].uniq.each do |person_id|
       @interaction.interaction_initiators.find_or_create_by_person_id(person_id.to_i)
     end
+    # delete removed
     removed_initiators = @interaction.interaction_initiators.where("person_id NOT IN (?)",params[:initiator_id])
     removed_initiators.delete_all if removed_initiators.present?
+    # delete duplicates
+    interaction_initiator_ids = @interaction.interaction_initiators.group("person_id").collect(&:id)
+    duplicate_initiators = @interaction.interaction_initiators.where("id NOT IN (?)",interaction_initiator_ids)
+    duplicate_initiators.delete_all if duplicate_initiators.present?
   end
 end
