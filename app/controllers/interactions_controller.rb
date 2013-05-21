@@ -1,12 +1,13 @@
 class InteractionsController < ApplicationController
   def show_profile
     roles_for_assign
+    labels_for_assign
     @person = current_organization.people.where(id: params[:id]).try(:first)
     if @person.present?
       @interaction = Interaction.new
       @completed_answer_sheets = @person.completed_answer_sheets(current_organization).where("completed_at IS NOT NULL").order('completed_at DESC')
 
-			@roles = @person.assigned_organizational_roles(current_organization.id).arrange_all
+			@labels = @person.labels_for_org_id(current_organization.id)
       if can? :manage, @person
         @interactions = @person.filtered_interactions(current_person, current_organization)
         @last_interaction = @interactions.last
@@ -27,8 +28,8 @@ class InteractionsController < ApplicationController
       if Role.where("organization_id IN (?) AND LOWER(name) = ?", [current_organization.id,0], params[:name].downcase).present?
         @msg_alert = t('contacts.index.add_label_exists')
       else
-        @new_role = Role.create(organization_id: current_organization.id, name: params[:name]) if params[:name].present?
-        if @new_role.present?
+        @new_label = Role.create(organization_id: current_organization.id, name: params[:name]) if params[:name].present?
+        if @new_label.present?
           @status = "true"
           @msg_alert = t('contacts.index.add_label_success')
         else

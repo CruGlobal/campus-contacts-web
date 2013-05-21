@@ -10,10 +10,9 @@
   <%= link_to image_tag("edit_sprite.png"), "#", id: "show_profile_labels_button" %>
 </div>
 <div id="profile_label_box">
-	<% @roles = @person.assigned_organizational_roles(current_organization.id).arrange_all %>
-  <% if @roles.present? %>
-    <% @roles.each do |role| %>
-      <div class='profile_label'><%= role %></div>
+  <% if @labels.present? %>
+    <% @labels.each do |label| %>
+      <div class='profile_label'><%= label.name %></div>
     <% end %>
 	<% end %>
 </div>
@@ -26,15 +25,15 @@
     	<div class="fancy">Apply the following labels to <%= @person.name %>:</div>
     	<div class="labels_chooser_box" id="labels_chooser_box">
         <% current_label_ids = Array.new %>
-        <% @roles_for_assign.each do |role| %>
-          <% if @roles.include?(role) %>
-            <% current_label_ids << role.id %>
+        <% @labels_for_assign.each do |label| %>
+          <% if @labels.include?(label) %>
+            <% current_label_ids << label.id %>
             <% checked = true %>
           <% else %>
             <% checked = false %>
           <% end %>
             
-          <%= render partial: 'interactions/label', locals: {role: role, checked: checked} %>
+          <%= render partial: 'interactions/label', locals: {label: label, checked: checked} %>
         <% end %>
     	</div>
   		<div class="labels_add_new" id="labels_add_new" data-current-label-ids="<%= current_label_ids.join(',') %>">
