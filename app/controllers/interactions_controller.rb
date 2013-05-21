@@ -25,10 +25,10 @@ class InteractionsController < ApplicationController
   def create_label
     @status = "false"
     if params[:name].present?
-      if Role.where("organization_id IN (?) AND LOWER(name) = ?", [current_organization.id,0], params[:name].downcase).present?
+      if Label.where("organization_id IN (?) AND LOWER(name) = ?", [current_organization.id,0], params[:name].downcase).present?
         @msg_alert = t('contacts.index.add_label_exists')
       else
-        @new_label = Role.create(organization_id: current_organization.id, name: params[:name]) if params[:name].present?
+        @new_label = Label.create(organization_id: current_organization.id, name: params[:name]) if params[:name].present?
         if @new_label.present?
           @status = "true"
           @msg_alert = t('contacts.index.add_label_success')
