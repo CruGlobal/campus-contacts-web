@@ -8,6 +8,9 @@ class Person < ActiveRecord::Base
   belongs_to :interaction_initiator
   has_many :interactions, class_name: "Interaction", foreign_key: "receiver_id"
   has_many :created_interactions, class_name: "Interaction", foreign_key: "created_by_id"
+  has_many :organizational_labels
+  has_many :labels, through: :organizational_labels
+  has_many :created_organizational_labels, class_name: 'OrgnizationalLabel', foreign_key: 'added_by_id'
   
   has_one :sent_person
   has_many :sent_messages, class_name: "Message", foreign_key: "person_id"

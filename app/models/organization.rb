@@ -9,6 +9,8 @@ class Organization < ActiveRecord::Base
                   :meta => { organization_id: :parent_id }
 
   has_many :interactions
+  has_many :labels, inverse_of: :organization
+  has_many :organizational_labels, inverse_of: :organization
   
   belongs_to :importable, polymorphic: true
   has_many :messages
