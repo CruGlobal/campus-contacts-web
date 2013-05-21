@@ -546,14 +546,20 @@ $ ->
       el = $('#assign_search')
       el.dialog
         resizable: false,
-        height:650,
-        width:600,
+        height:500,
+        width:450,
         modal: true,
         open: (event, ui) ->
-          $("body").css({ overflow: 'hidden' })
-          $('.ui-widget-overlay').width('100%');
+          if $(document).height() > $(window).height() 
+            if $('html').scrollTop()
+              scrollTop = $('html').scrollTop()
+            else
+              scrollTop = $('body').scrollTop()
+            $('html').addClass('noscroll').css('top',-scrollTop)
         close: (event, ui) ->
-          $("body").css({ overflow: 'inherit' })
+          scrollTop = parseInt($('html').css('top'))
+          $('html').removeClass('noscroll');
+          $('html,body').scrollTop(-scrollTop);
         buttons:
           Cancel: ->
             $(this).dialog('close')

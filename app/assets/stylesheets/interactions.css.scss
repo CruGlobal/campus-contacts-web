@@ -8,6 +8,15 @@ html.noscroll {
 }
 
 body#interactions_controller {
+  .groups_list ul,
+  .leaders_list ul {
+    height: 260px;
+    width: 400px;
+    padding: 3px
+  }
+  input.group_search_name, input.leader_search_name {
+    width: 400px;
+  }
   a.send_contact_info {
     &:hover {
       text-decoration: none;

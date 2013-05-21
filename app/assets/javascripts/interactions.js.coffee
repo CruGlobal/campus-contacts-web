@@ -8,6 +8,35 @@ $ ->
     e.preventDefault()
     $('li#interactions').click()
     $('#interaction_new_record_button').click()
+
+  $('li #action_menu_assign').live 'click', (e)->
+    e.preventDefault()
+    if $('.id_checkbox:checked').length > 0
+      $('#keep_contact').attr checked: true
+      $('#assign_to_me').click()
+      el = $('#assign_search')
+      el.dialog
+        resizable: false,
+        height:500,
+        width:450,
+        modal: true,
+        open: (event, ui) ->
+          if $(document).height() > $(window).height() 
+            if $('html').scrollTop()
+              scrollTop = $('html').scrollTop()
+            else
+              scrollTop = $('body').scrollTop()
+            $('html').addClass('noscroll').css('top',-scrollTop)
+        close: (event, ui) ->
+          scrollTop = parseInt($('html').css('top'))
+          $('html').removeClass('noscroll');
+          $('html,body').scrollTop(-scrollTop);
+        buttons:
+          Cancel: ->
+            $(this).dialog('close')
+            $(this).dialog('destroy')
+    else
+      $.a(t('contacts.index.none_checked'))
     
   $('li #action_menu_labels').live 'click', (e)->
     e.preventDefault()
