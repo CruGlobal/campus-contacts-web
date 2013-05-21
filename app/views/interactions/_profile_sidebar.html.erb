@@ -14,6 +14,8 @@
     <% @labels.each do |label| %>
       <div class='profile_label'><%= label.name %></div>
     <% end %>
+  <% else %>
+    <div class="no_labels">No labels yet.</div>
 	<% end %>
 </div>
 

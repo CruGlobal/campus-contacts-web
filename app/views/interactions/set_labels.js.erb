@@ -1,8 +1,10 @@
 $.toggleLoader('profile_label_header','')
 $('#labels_add_new').attr('data-current-label-ids',"<%= params[:ids] %>")
 $('#profile_label_box').html("")
-<% if @roles.present? %>
-  <% @roles.each do |role| %>
-    $('#profile_label_box').append("<div class='profile_label'><%= role %></div>")
+<% if @labels.present? %>
+  <% @labels.each do |label| %>
+    $('#profile_label_box').append("<div class='profile_label'><%= label.name %></div>")
   <% end %>
+<% else %>
+  $('#profile_label_box').append("<div class='no_labels'>No labels yet.</div>")
 <% end %>
