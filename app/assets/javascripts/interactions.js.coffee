@@ -209,6 +209,10 @@ $ ->
   $('#receiver_id_dropdown, #interaction_type_dropdown, #initiator_dropdown, #privacy_setting_dropdown').live 'click', (e)->
     e.stopPropagation()
   
+  $('.arrow').live 'click', (e)->
+    e.preventDefault()
+    $(this).siblings('#selected').click()
+  
   $('#selected').live 'click', (e)->
     e.stopPropagation()
     unless $(this).parents('.custom_dropdown').first().hasClass('active')
