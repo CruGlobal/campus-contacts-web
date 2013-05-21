@@ -316,6 +316,7 @@ $.fn.submitBulkSendTextDialog = ->
   $('#bulk_send_msg_dialog').dialog('close')
   $('tr#all').remove()
   $('.id_checkbox, .check_all_contacts, #check_all_groups, .gid_checkbox').attr('checked',false)
+  $('.id_checkbox.profile_checkbox').prop('checked',true)
 
 $.fn.submitBulkSendDialog = ->
   ids = []
@@ -327,7 +328,7 @@ $.fn.submitBulkSendDialog = ->
   $('#bulk_send_dialog').dialog('destroy')
 
 
-$('#send_bulkemail_link_new').live 'click', (e)->
+$('#send_bulkemail_link_new, #action_menu_email').live 'click', (e)->
   e.preventDefault()
   $('#token-input-send_email_to').parents('ul').show()
   $('#token-input-send_text_to').parents('ul').hide()
@@ -373,7 +374,7 @@ $('#send_bulkemail_link_new').live 'click', (e)->
   false
 
 
-$('#send_bulksms_link_new').live 'click', (e)->
+$('#send_bulksms_link_new, #action_menu_text').live 'click', (e)->
   e.preventDefault()
   $('#token-input-send_email_to').parents('ul').hide()
   $('#token-input-send_text_to').parents('ul').show()
