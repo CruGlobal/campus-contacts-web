@@ -55,7 +55,7 @@ class ApplicationController < ActionController::Base
     term = term[0..term.size-2]+"%" if term.last == "*"
     return term
   end
-  
+
   protected
 
   def set_newrelic_params
@@ -192,7 +192,7 @@ class ApplicationController < ActionController::Base
 
   def check_valid_subdomain
     return if request.subdomains.first.blank?
-    unless (available_locales + %w[www local stage aws]).include?(request.subdomains.first)
+    unless (available_locales + %w[www local stage aws lwi]).include?(request.subdomains.first)
       redirect_to 'http://' + request.host_with_port.sub(request.subdomains.first, 'www') and return false
     end
   end
