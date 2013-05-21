@@ -93,7 +93,12 @@ en:
   general:
     transfer: "Transfer"
     roles_applied: "labels have been applied."
+    no_recipient_in_comment: "You didn't select any people to comment on."
+    no_recipient_in_send_comment: "You have to select at least 1 recipient/person to comment on."
+    comment_is_blank: "Please enter your comment."
+    send_comment_success: "Your comment has been successfully posted."
     adv_search: "Advanced Search"
+    contact_location: "Contact Location"
     archived: "Archived"
     assigned_to:  "Assigned to"
     survey: Survey
@@ -156,6 +161,7 @@ en:
     dash: ' - '
     help_redirect_link: http://help.missionhub.com
     help_redirect_link_import: http://help.missionhub.com/entries/23347123-Import-Contacts
+    locate_contact_search_required_fields: "You should enter at least 1 search field."
   leaders:
     form:
       name_required: "Name, gender, and email fields are required to add a leader:"
@@ -193,6 +199,7 @@ en:
       phone: 'Phone'
       email: 'Email'
       filter: 'Search'
+      locate_contact: 'Contact Location'
       year_in_school: 'Year in School'
       manage_roles: 'Manage Labels'
       send_sms: Text
@@ -438,7 +445,7 @@ en:
       no_fb_login_option: "No login"
       freeze: "Check this box to freeze the survey. Once a survey is frozen, you will be able to see responses that have already come in, but no one new will be able to complete the survey."
       customize_look: 'Optional - FOR ADVANCED USERS ONLY - Customize how the survey will look:'
-      logo: 'Logo (we will wrap this is a div with the class "logo"):'
+      logo: 'Logo (we will wrap this in a div with the class "logo"):'
       background_color: 'Background Color:'
       text_color: 'Text Color:'
       css_file: 'Upload your own custom css file (optional):'
@@ -688,6 +695,11 @@ en:
       hidden_questions: 'Hidden Questions'
       archived: 'Archived'
       unassigned: 'Unassigned'
+      search_contact_results_description: 'Please use the form to find a contact.'
+      search_contact_no_results: 'No results were found.'
+      search_locate_contact_button: 'Go find'
+      search_locate_title: "Find a Contact's Location"
+      search_locate_help: "You may enter all or any part of First Name, Last Name, and/or Email Address and then click the \"Go Find\" button to find in which of \"your MissionHub Organizations\" the individual is currently located."
       all: 'All'
       dnc: 'Do Not Contact'
       add_label_exists: 'Label is already in the list!'
@@ -707,6 +719,9 @@ en:
       my_friends: 'My Friends'
       delete_confirm: You are about to send this contact to the "Do Not Contact" list. If that's not what you meant to do, click cancel.
       destroy_confirm: Are you sure you want to delete this contact? If that's not what you meant to do, click cancel.
+      assign_contact:
+        one: Assign 1 contact
+        other: Assign %{count} contact
       assign_people:
         one: Assign 1 person
         other: "Assign %{count} people"
@@ -724,6 +739,8 @@ en:
       save_this_search_placeholder: "Name this search"
       delete_search_confirm: "Are you sure you want to remove this search?"
       type_above_field: "Start typing in the field above to search for somewhere to transfer these people to."
+      add_contact_required_fields: "First name, Last name and Email are required."
+      add_already_registered_contact: "This individual already exist in your current organization."
       add_already_registered_email: "The Email address highlighted below is already used by another person in MissionHub or possibly there is a duplicate record in the system for this individual - contact support@missionhub.com if you need help. "
     mine:
       in_progress: 'In Progress'

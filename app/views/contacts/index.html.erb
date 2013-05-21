@@ -35,7 +35,7 @@
 <%= form_for ContactAssignment.new do |f| %>
   <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
   <%= hidden_field_tag :assign_to %>
-  <table class="listing" cellpadding="0" cellspacing="0">
+  <table class="listing contact_listing <%= 'unassigned_contacts' if params[:assigned_to] == 'unassigned' %>" cellpadding="0" cellspacing="0">
     <tr id="table_header">
     	<th>&nbsp;</th>
       <th class="checkbox_cell header_checkbox"><%= check_box_tag 'check_all_contacts', true, false, 'data-target' => '#new_contact_assignment', class: 'check_all_contacts', 'data-status' => @attr %></th>
@@ -108,4 +108,3 @@
   </div>
   <div id="sent_messages_paginator_bottom"></div>
 </div>
-

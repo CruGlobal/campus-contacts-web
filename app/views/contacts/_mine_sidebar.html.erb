@@ -1,14 +1,32 @@
 <% provide :sidebar do %>
-  <ul class="leftmenu">
+  <ul class="leftmenu my_contacts <%= params[:status] %>">
     <% selected_class = "selected" %>
     <% if params[:controller] == 'followup_comments' %>
       <% selected_class = "" %>
     <% end %>
     <li class="<%= selected_class if params[:status] == 'all' %>">
-      <%= link_to(t('contacts.mine.all'), mine_contacts_path(status: 'all')) %>
+      <span class="name">
+        <%= link_to(t('contacts.mine.all'), mine_contacts_path(status: 'all')) %>
+      </span>
+      <span id="all_count" class="count">
+        (<%= @all_contacts.count %>)
+      </span>
     </li>
-    <li class="<%= selected_class if params[:status] == 'completed' %>">
-      <%= link_to(t('contacts.mine.completed'), mine_contacts_path(status: 'completed')) %>
+    <li class="status completed <%= selected_class if params[:status] == 'completed' %>">
+      <span class="name">
+        <%= link_to(t('contacts.mine.completed'), mine_contacts_path(status: 'completed')) %>
+      </span>
+      <span id="completed_count" class="count">
+        (<%= @completed_contacts.count %>)
+      </span>
+    </li>
+    <li class="status in_progress <%= selected_class if params[:status] == 'in_progress' %>">
+      <span class="name">
+        <%= link_to(t('contacts.mine.in_progress'), mine_contacts_path(status: 'in_progress')) %>
+      </span>
+      <span id="in_progress_count" class="count">
+        (<%= @inprogress_contacts.count %>)
+      </span>
     </li>
     <li class="<%= selected_class if params[:status] == 'detailed' %>">
       <%= link_to(t('contacts.mine.detailed'), contacts_path(assigned_to: current_person.id)) %>

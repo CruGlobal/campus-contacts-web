@@ -2,6 +2,16 @@ $ ->
   $(document).on 'keypress', '#contact_search_form input', (e)->
     if (e.keyCode == $.ui.keyCode.ENTER)
       $('#contact_search_form').submit()
+      
+  $(".my_contacts.leftmenu .completed").droppable
+    activeClass: "ui-state-highlight"
+    accept: ".handle"
+    drop: (event, ui) ->
+      leader = undefined
+      if $(this).hasClass("completed")
+        li = $(this)
+        li.effect "highlight", {}, "slow"
+        $.fn.moveToCompleted ui.draggable
 
   $('.more_link').live 'click', (e)->
     e.preventDefault()
@@ -263,12 +273,16 @@ $ ->
       resizable: false,
       height:444,
       width:600,
-      modal: true,
+      position: 'center',
       open: (event, ui) ->
-        $("body").css({ overflow: 'hidden' })
-        $('.ui-widget-overlay').width('100%');
-      close: (event, ui) ->
-        $("body").css({ overflow: 'inherit' })
+        $('#new_person')[0].reset()
+        $(".field_with_errors, .red_errors}").remove()
+        $("#add_contact_form input[type='text']").val("")
+        $("#add_contact_form .user_defined_contact_fields textarea").val("")
+        $("#add_contact_form .user_defined_contact_fields select").val(0)
+        $("#add_contact_form input[type='checkbox']").attr("checked",false)
+        $("#add_contact_form input[type='radio']").attr("checked",false)
+        $("#add_contact_form input[type='checkbox']:not(:disabled)").attr("checked",false)
       buttons: [
         text: t('application.add_contact.save_and_close'),
         'class': 'add_new_contact_dialog_buttons',
@@ -284,7 +298,6 @@ $ ->
         'class': 'add_new_contact_dialog_buttons',
         click: ->
           $(this).dialog('destroy')
-          $("body").css({ overflow: 'inherit' })
       ]
     false
 
@@ -692,8 +705,42 @@ $ ->
 		$.fn.search_status()
 
 	$(".search_status").live "change", ->
-		$.fn.search_status()
-
+    $.fn.search_status()
+  
+  $("#locate_contact").live "click", ->
+    $("#locate_contact_container").dialog
+      resizable: false,
+      height:580,
+      width:790,
+      open: (event, ui) ->
+        desc = t('contacts.index.search_contact_results_description')
+        $(".locate_contact_list_tr").remove()
+        $("#locate_contact_list_container").append("<tr class='locate_contact_list_tr'><td colspan='99'>" +desc+ "</td></tr>")
+        $("#locate_contact_firstname").val('')
+        $("#locate_contact_lastname").val('')
+        $("#locate_contact_email").val('')
+      buttons:
+        Cancel: ->
+          $(this).dialog('close')
+  $("#search_locate_contact_button").live "click", ->
+    ele = $(this)
+    fname = $("#locate_contact_firstname").val()
+    lname = $("#locate_contact_lastname").val()
+    email = $("#locate_contact_email").val()
+    if fname == '' && lname == '' && email == ''
+      $.a(t("general.locate_contact_search_required_fields"))
+      return false
+    else
+      $("#search_locate_contact_loading").show()
+      ele.attr("disabled", true)
+      $.ajax
+        type: 'GET',
+        url: '/search_locate_contact',
+        data: 'email='+email+'&fname='+fname+'&lname='+lname,
+        success: (s) ->
+          ele.attr("disabled", false)
+          $("#search_locate_contact_loading").hide()
+    false
 $.fn.search_status = () ->
 	label_contacts = $("#search_role_2")
 	check = $(".search_status :selected").val() != ""
@@ -701,8 +748,34 @@ $.fn.search_status = () ->
 	label_contacts.attr("disabled", check)
 	false
 
+$.fn.moveToCompleted = (dragObject) ->
+  $('.id_checkbox:checked').each ->
+    data_id = $(this).attr("data-id")
+    tr_element = $("#person_" + data_id)
+    if $.trim(tr_element.children(".status").text()) != "Completed"
+      tr_element.children(".status").text("Completed")
+      tr_element.effect('highlight', {}, 'slow')
+      $.ajax
+        type: "POST",
+        url: "/followup_comments.js",
+        data: {followup_comment: {contact_id: data_id , status: "completed", comment: "Completed"}}
+      # add to completed count
+      current_count = $.trim($('#completed_count.count').text())
+      new_count = parseInt(current_count.substring(1, current_count.length - 1)) + 1
+      $('#completed_count.count').text("\("+ new_count + "\)")
+      # deduct to inprogress count
+      current_count = $.trim($('#in_progress_count.count').text())
+      new_count = parseInt(current_count.substring(1, current_count.length - 1)) - 1
+      $('#in_progress_count.count').text("\("+ new_count + "\)")
+      if $('.leftmenu.my_contacts').hasClass('in_progress')
+        tr_element.remove()
+        $('.drag-contact.ui-draggable-dragging').fadeOut()
+  $('.id_checkbox').prop('checked', false)
+
 $.fn.moveToDnc = (dragObject) ->
-  $('#dnc_count').html(Number($('#dnc_count').html()) + 1)
+  current_count = $.trim($('#dnc_count.count').text())
+  new_count = parseInt(current_count.substring(1, current_count.length - 1)) + 1
+  $('#dnc_count.count').text("\("+ new_count + "\)")
   row = $("#" + $(dragObject).attr("data-row-id"))
   row.hide()
   $('#move_to_dnc').attr('action', $(dragObject).attr("data-dnc-url"))
@@ -769,18 +842,26 @@ $.mh.saveContact = (add_more) ->
     $.a(t('contacts.index.no_name_message'))
     dialog_buttons.button('enable')
   else
+    email = $('#person_email_address_email').val()
+    fname = $('#person_first_name').val()
+    lname = $('#person_last_name').val()
     $.ajax
       type: 'POST',
       url: '/check_email',
-      data: 'email='+$('#person_email_address_email').val(),
-      success: (registered_email) ->
-        if registered_email == "true"
-          $.a(t('contacts.index.add_already_registered_email'))
-        else
+      data: 'email='+email+'&fname='+fname+'&lname='+lname,
+      success: (code) ->
+        if code == '100'
           if add_more
             $('#add_another').val('true')
           $.rails.handleRemote(form)
           form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
+        else
+          if code == '201'
+            $.a(t('contacts.index.add_already_registered_contact'))
+          if code == '202'
+            $.a(t('contacts.index.add_already_registered_email'))
+          if code == '203'
+            $.a(t('contacts.index.add_contact_required_fields'))
         dialog_buttons.button('enable')
   false
 

@@ -13,6 +13,9 @@
         <% checked = false %>
         <% disabled = false %>
       <% end %>
+      
+      <% checked = true if @selected_labels.present? && @selected_labels.include?(role.id.to_s) %>
+      
       <%= render partial: 'shared/label', locals: {role_id: role.id, role_name: role.name, checked: checked, disabled: disabled} %>
     <% end %>
   </div>

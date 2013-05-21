@@ -3,18 +3,15 @@
   They will automatically be included in application.css.
 */
 .handle {cursor: pointer; vertical-align: middle; margin-left: 5px;}
-
 #bulk_send_subject {
   width: 680px;
   padding: 5px;
 }
-
-#bulk_send_body {
+#bulk_send_body, #bulk_send_comment {
   width: 680px;
   padding: 5px;
   height: 60px;
 }
-
 #sms_compose_message_preview{
 	display: none;
 	.title{
@@ -28,23 +25,18 @@
 		word-wrap:break-word;
 	}
 }
-
 #send_contact_info_dialog input {
   width: 270px;
 }
-
 .red_errors {
   color: #990000;
 }
-
 .add_contact_survey_question_field {
   padding: 0 20px;
 }
-
 .add_contact_survey_title {
   margin: 10px 0px;
 }
-
 #add_contact_form {
   .form_group_label {
     font-size: 18px;
@@ -59,7 +51,6 @@
     padding: 5px 10px 15px;
   }
 }
-
 #hidden_questions_div {
 	border: 1px solid red;
 	position: absolute;
@@ -91,18 +82,15 @@
     padding: 0px 10px 10px 30px;
   }
 }
-
 #all_contacts_select_all_option {
   padding: 5px 7px;
 }
-
 #sidebar_div {
   #sidebar_loader {
     text-align: center;
     padding: 20px;
   }
 }
-
 #search_hidden_questions_div {
   #search_hidden_questions_guide {
     padding: 10px;
@@ -125,7 +113,6 @@
     font-size: 14px;
   }
 }
-
 #other_questions {
   .field.user_defined {
     width: 265px;
@@ -134,7 +121,66 @@
     display: inline-block;
   }
 }
-
 input.text.validate-date {
   width: 130px;
+}
+#locate_contact_container{
+  #search_locate_contact_button{
+    width: 70px;
+  }
+  #search_locate_contact_loading{
+    display:none;
+  }
+  #search_locate_contact_button_containter{
+    min-height:35px;
+    overflow:hidden;
+  }
+  #locate_contact_results_container{
+    height: 275px;
+    overflow-y: scroll;
+    
+    .locate_contact_list_head{
+      border:1px solid #0379ae;
+      background-color: #eaf1f6;
+      font-weight:bold;
+    }
+    td {
+      border:1px solid #aaa;
+      font-size:11px;
+    }
+    .wrap_list {
+      word-wrap:break-word;
+      width: 180px;
+      overflow:hidden;    
+    }
+    .locate_contact_list_tr:hover{
+      td{
+        background-color:#f5ffc4;
+      }
+    }
+    .locate_contact_list_link{
+      font-weight:bold;
+      font-size:12px;
+      color:#0379ae;
+    }
+  }
+}
+#advanced_search_actions{
+  overflow:hidden;
+  a{
+    font-size: 10px;
+	 	color: #ffffff;
+	}
+  #advanced_search_right_container{
+    margin-right:4px;
+    float:right;
+    overflow:hidden;
+    width: 297px;
+    #search_locate_button_container{
+      float:left;
+    }
+    #advanced_search_button_container{
+      float:right;
+    }
+  }
 }

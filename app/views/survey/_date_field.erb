@@ -1,6 +1,7 @@
 <% name = defined?(survey) ? "answers[#{survey.id}][#{date_field.id}]" : "answers[#{date_field.id}]" %>
 <% person ||= nil %>
-<%= calendar_date_select_tag name, date_field.format_date_response(answer_sheet, person),
+<% value = @checked_or_val.present? ? @checked_or_val : date_field.format_date_response(answer_sheet, person) %>
+<%= calendar_date_select_tag name, value,
       :class => 'text ' + date_field.validation_class(@answer_sheet),
       :id => dom_id(date_field) %>
 <span class='slim_guide'>

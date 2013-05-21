@@ -22,7 +22,11 @@ class OrganizationalRole < ActiveRecord::Base
   scope :find_non_admin_and_non_leader_roles, {
     :conditions => ["role_id != ? AND role_id != ?", Role::ADMIN_ID, Role::LEADER_ID]
   }
-
+  
+  scope :find_admin_or_leader, {
+    :conditions => ["role_id = ? OR role_id = ?", Role::ADMIN_ID, Role::LEADER_ID]
+  }
+  
   #after_create :clear_person_org_cache
   #after_destroy :clear_person_org_cache
 
