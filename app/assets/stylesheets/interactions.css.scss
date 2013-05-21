@@ -150,6 +150,7 @@ body#interactions_controller {
       font-size: 8px;
       display: none;
       color: #999;
+      cursor: pointer;
       padding-top: 6px;
       padding-right: 3px;
       &.up {
@@ -190,6 +191,7 @@ body#interactions_controller {
       padding: 4px 6px;
       cursor: pointer;
     }
+    
     
     #togglable {
       display: none;
