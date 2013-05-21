@@ -44,12 +44,13 @@ class InteractionsController < ApplicationController
   def set_labels
     @person = Person.find(params[:person_id])
     @label_ids = params[:ids].split(',')
-    removed_roles = @person.organizational_roles_for_org(current_organization).where("role_id NOT IN (?)", params[:ids])
-    removed_roles.delete_all if removed_roles.present?
-    @label_ids.each do |role_id|
-      @person.organizational_roles.find_or_create_by_role_id_and_organization_id(role_id.to_i, current_organization.id)
+    removed_labels = @person.organizational_labels_for_org(current_organization).where("label_id NOT IN (?)", params[:ids])
+    removed_labels.delete_all if removed_labels.present?
+    @label_ids.each do |label_id|
+      label = @person.organizational_labels.find_or_create_by_label_id_and_organization_id(label_id.to_i, current_organization.id)
+      label.update_attribute(:added_by_id, current_person.id) if label.added_by_id.nil?
     end
-    @roles = @person.assigned_organizational_roles(current_organization.id).arrange_all
+		@labels = @person.labels_for_org_id(current_organization.id)
   end
   
   def load_more_all_feeds

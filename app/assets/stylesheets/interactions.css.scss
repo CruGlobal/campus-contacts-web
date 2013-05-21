@@ -8,6 +8,12 @@ html.noscroll {
 }
 
 body#interactions_controller {
+  .no_labels {
+    text-align: center;
+    font-weight: normal;
+    font-style: italic;
+    color: #999;
+  }
   .contact_checkbox {
     display: none;
   }
