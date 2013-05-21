@@ -346,6 +346,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def labels_for_assign
+    @labels_for_assign = current_organization.labels
+  end
+
   def roles_for_assign
     current_user_roles = current_user.person
                                      .organizational_roles
