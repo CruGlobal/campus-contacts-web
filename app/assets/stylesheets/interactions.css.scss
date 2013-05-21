@@ -8,6 +8,9 @@ html.noscroll {
 }
 
 body#interactions_controller {
+  .contact_checkbox {
+    display: none;
+  }
   .groups_list ul,
   .leaders_list ul {
     height: 260px;

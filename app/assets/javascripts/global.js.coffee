@@ -8,7 +8,7 @@ $ ->
       preventDuplicates: true
       minChars: 3
       resultsLimit: 10
-      hintText: $('#send_email_to').attr("data-search-desc"),
+      hintText: "",
       placeHolder: $('#send_email_to').attr("data-search-desc"),
       defaultWidth: 690
 
@@ -17,7 +17,7 @@ $ ->
       preventDuplicates: true
       minChars: 3
       resultsLimit: 10
-      hintText: $('#send_text_to').attr("data-search-desc"),
+      hintText: "",
       placeHolder: $('#send_text_to').attr("data-search-desc"),
       defaultWidth: 690
 
@@ -43,6 +43,20 @@ $ ->
   $("select, input[type=text], input[type=password], input[type=email]").live "keypress", (e) ->
     false if e.which is 13
 
+  $('#token-input-send_email_to').live 'blur', ->
+    $(this).width(675)
+
+  $('#token-input-send_email_to').live 'focus', ->
+    if $(this).val() == ""
+      $(this).width(675)
+
+  $('#token-input-send_text_to').live 'blur', ->
+    $(this).width(675)
+
+  $('#token-input-send_text_to').live 'focus', ->
+    if $(this).val() == ""
+      $(this).width(675)
+
   $('#bulk_send_msg_dialog').dialog
     resizable: false,
     height:444,
@@ -51,6 +65,8 @@ $ ->
     draggable: false,
     autoOpen: false,
     open: (event, ui) ->
+      $('#token-input-send_email_to').width(675)
+      $('#token-input-send_text_to').width(675)
       $.hideScroll()
     close: (event, ui) ->
       $.unhideScroll()
