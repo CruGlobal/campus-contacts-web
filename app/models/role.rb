@@ -3,8 +3,8 @@ class Role < ActiveRecord::Base
                   :meta => { organization_id: :organization_id }
 
   has_many :people, through: :organizational_roles
-  has_many :organizational_roles, inverse_of: :role, dependent: :destroy
-  belongs_to :organization, inverse_of: :roles
+  has_many :organizational_roles, dependent: :destroy
+  belongs_to :organization
 
   validates :i18n, uniqueness: true, allow_nil: true
   validates :name, presence: true, :if => Proc.new { |role| organization_id != 0 }

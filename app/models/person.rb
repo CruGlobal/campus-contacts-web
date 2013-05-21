@@ -457,16 +457,35 @@ class Person < ActiveRecord::Base
   def organization_from_id(org_id)
     organization_objects[org_id.to_i]
   end
-
+  
   def roles_by_org_id(org_id)
     unless @roles_by_org_id
       @roles_by_org_id = Hash[OrganizationalRole.connection.select_all("select organization_id, group_concat(role_id) as role_ids from organizational_roles where person_id = #{id} and archive_date is NULL group by organization_id").collect { |row| [row['organization_id'], row['role_ids'].split(',').map(&:to_i) ]}]
     end
     @roles_by_org_id[org_id]
   end
+  
+  def roles_for_org_id(org_id)
+    roles.where(id: roles_by_org_id(org_id))
+  end
+
+  def labels_by_org_id(org_id)
+    unless @labels_by_org_id
+      @labels_by_org_id = Hash[OrganizationalLabel.connection.select_all("select organization_id, group_concat(label_id) as label_ids from organizational_labels where person_id = #{id} and removed_date is NULL group by organization_id").collect { |row| [row['organization_id'], row['label_ids'].split(',').map(&:to_i) ]}]
+    end
+    @labels_by_org_id[org_id]
+  end
+  
+  def labels_for_org_id(org_id)
+    labels.where(id: labels_by_org_id(org_id))
+  end
 
   def organizational_roles_for_org(org)
     organizational_roles.where(organization_id: org.id)
+  end
+
+  def organizational_labels_for_org(org)
+    organizational_labels.where(organization_id: org.id)
   end
 
   def org_tree_node(o = nil, parent_roles = [])

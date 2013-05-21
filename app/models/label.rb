@@ -1,9 +1,10 @@
 class Label < ActiveRecord::Base
-  attr_accessible :i18n, :name, :organization_id
+  attr_accessible :i18n, :name, :organization_id, :created_at, :updated_at
+  # added :created_at and :updated_at for migration only
 
   has_many :people, through: :organizational_labels
-  has_many :organizational_labels, inverse_of: :label, dependent: :destroy
-  belongs_to :organization, inverse_of: :labels
+  has_many :organizational_labels, dependent: :destroy
+  belongs_to :organization
 
   validates :i18n, uniqueness: true, allow_nil: true
   validates :name, presence: true, :if => Proc.new { |role| organization_id != 0 }
