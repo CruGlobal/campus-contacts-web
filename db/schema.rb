@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130502163825) do
+ActiveRecord::Schema.define(:version => 20130521153531) do
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -419,6 +419,14 @@ ActiveRecord::Schema.define(:version => 20130502163825) do
     t.datetime "updated_at"
   end
 
+  create_table "labels", :force => true do |t|
+    t.integer  "organization_id"
+    t.string   "name"
+    t.string   "i18n"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
   create_table "locations", :force => true do |t|
     t.string   "location_id"
     t.string   "name"
@@ -484,6 +492,17 @@ ActiveRecord::Schema.define(:version => 20130502163825) do
 
   add_index "organization_memberships", ["organization_id", "person_id"], :name => "index_organization_memberships_on_organization_id_and_person_id", :unique => true
   add_index "organization_memberships", ["person_id"], :name => "person_id"
+
+  create_table "organizational_labels", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "label_id"
+    t.integer  "organization_id"
+    t.date     "start_date"
+    t.integer  "added_by_id"
+    t.date     "removed_date"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
 
   create_table "organizational_roles", :force => true do |t|
     t.integer  "person_id"
