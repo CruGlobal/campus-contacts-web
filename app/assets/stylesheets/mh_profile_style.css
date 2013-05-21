@@ -32,7 +32,7 @@ button.red_accent {
 	border-radius: 4px; /* Android 2.1+, Chrome, Firefox 4+, IE 9+, iOS 4+, Opera 10.50+, Safari 5+ */
 
 	/*--Gradient--*/
-	background: ##c93b0a; /* Old browsers */
+	background: #c93b0a; /* Old browsers */
 	background: -moz-linear-gradient(top,  #e5a189 0%, #d25c34 50%, #c93b0a 50%, #c93b0a 100%, #c93b0a 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e5a189), color-stop(50%,#d25c34), color-stop(50%,#c93b0a), color-stop(100%,#c93b0a), color-stop(100%,#c93b0a)); /* Chrome,Safari4+ */
 	background: -webkit-linear-gradient(top,  #e5a189 0%,#d25c34 50%,#c93b0a 50%,#c93b0a 100%,#c93b0a 100%); /* Chrome10+,Safari5.1+ */
@@ -61,7 +61,7 @@ button.red_accent {
 button.red_accent:hover {
 	background:#c93b0a;
 	/*--Gradient--*/
-	background: ##c93b0a; /* Old browsers */
+	background: #c93b0a; /* Old browsers */
 	background: -moz-linear-gradient(top,  #d25c34 0%, #c93b0a 50%, #c93b0a 100%, #c93b0a 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d25c34), color-stop(50%,#c93b0a), color-stop(100%,#c93b0a), color-stop(100%,#c93b0a)); /* Chrome,Safari4+ */
 	background: -webkit-linear-gradient(top,  #d25c34 0%,#c93b0a 50%,#c93b0a 100%,#c93b0a 100%); /* Chrome10+,Safari5.1+ */
