@@ -177,7 +177,7 @@ span.mh_popup_heading {
 }
 
 
-.roles_popup_box, .labels_popup_box, .error_popup_box{
+.groups_popup_box, .roles_popup_box, .labels_popup_box, .error_popup_box{
 	background-color:#FFF;
 	border:1px solid #808284;
 	-webkit-border-radius: 4px;
@@ -186,7 +186,7 @@ span.mh_popup_heading {
 	min-height:372px;
 }
 
-.roles_popup_box .fancy, .labels_popup_box .fancy {
+.groups_popup_box .fancy, .roles_popup_box .fancy, .labels_popup_box .fancy {
 	margin:48px 24px 24px;
 	font-size:14px;
 }
@@ -195,6 +195,14 @@ span.mh_popup_heading {
 	margin:96px 48px 48px;
 	font-size:18px;
 	text-align:center;
+}
+
+.groups_chooser_box {
+	margin:12px 96px 64px;
+	padding:24px;
+	clear:right;
+	border:1px solid #f2f2f2;
+	height:96px;
 }
 
 .roles_chooser_box {
@@ -213,7 +221,7 @@ span.mh_popup_heading {
 	min-height:120px;
 }
 
-.labels_checkbox, .roles_checkbox {
+.groups_checkbox, .labels_checkbox, .roles_checkbox {
 	font-family:Arial, Sans-serif;
 	font-size:12px;
 	font-weight:normal;
@@ -221,29 +229,29 @@ span.mh_popup_heading {
 	margin-bottom:6px;
 }
 
-.labels_checkbox input, .roles_checkbox input {
+.groups_checkbox input, .labels_checkbox input, .roles_checkbox input {
 	margin:0 8px 0 0;
 	position:relative;
 	bottom:1px;
 }
 
 
-.labels_add_new {
+.groups_add_new, .labels_add_new {
 	padding:6px 2px 30px;
 }
 
-button#labels_add_new_button {
+button#groups_add_new_button, button#labels_add_new_button {
 	float:left;
 	margin:1px 0 1px 8px;
 }
 
-.labels_add_new input {
+.groups_add_new input, .labels_add_new input {
 	float:left;
 	width:120px;
 }
 
 
-.roles_popup_box .roles_save, .labels_popup_box .labels_save, .error_popup_box .error_save {
+.groups_popup_box .groups_save, .roles_popup_box .roles_save, .labels_popup_box .labels_save, .error_popup_box .error_save {
 	position:absolute;
 	right:0px;
 	bottom:16px;
@@ -253,7 +261,7 @@ button#labels_add_new_button {
 	margin-left:24px;
 }
 
-.roles_popup_box button, .labels_popup_box button, .error_popup_box button {
+.groups_popup_box button, .roles_popup_box button, .labels_popup_box button, .error_popup_box button {
 	float:right;
 	display:inline-block;
 	margin-left:12px;

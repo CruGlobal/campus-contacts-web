@@ -277,7 +277,7 @@ button.add_gray:after {
 	top:-1px;
 }
 
-.profile_label {
+.profile_group, .profile_label {
 
 	-webkit-border-radius: 2px; /* Android ≤ 1.6, iOS 1-3.2, Safari 3-4 */
 	border-radius: 2px; /* Android 2.1+, Chrome, Firefox 4+, IE 9+, iOS 4+, Opera 10.50+, Safari 5+ */
@@ -383,7 +383,7 @@ li.btn_right {
 	color:#333333;
 }
 
-#profile_label_header {
+#profile_group_header, #profile_label_header {
 	margin: 10px 0;
 	font-family:Arial, Sans-serif;
 	font-size:16px;
@@ -391,7 +391,7 @@ li.btn_right {
 	color:#333;
 }
 
-#profile_label_box {
+#profile_label_box, #profile_group_box {
 	padding:12px;
 	border:1px solid #c0c0c0;
 	-webkit-border-radius: 4px ; 

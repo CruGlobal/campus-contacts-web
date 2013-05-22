@@ -18,3 +18,18 @@
     <div class="no_labels">No labels yet.</div>
 	<% end %>
 </div>
+
+  
+<div id="profile_group_header">
+	Groups
+  <%= link_to image_tag("edit_sprite.png"), "#", id: "show_profile_groups_button" %>
+</div>
+<div id="profile_group_box">
+  <% if @groups.present? %>
+    <% @groups.each do |group| %>
+      <div class='profile_group'><%= group.name %></div>
+    <% end %>
+  <% else %>
+    <div class="no_groups">No groups yet.</div>
+	<% end %>
+</div>

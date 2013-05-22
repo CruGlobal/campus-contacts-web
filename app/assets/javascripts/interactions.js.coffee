@@ -40,6 +40,14 @@ $ ->
     $.showDialog($("#profile_roles_dialog"))
   # END - ACTION MENU
   
+  $('#groups_popup_cancel_button').live 'click', (e)->
+    e.preventDefault()
+    $.hideDialog($("#profile_groups_dialog"))
+  
+  $('#show_profile_groups_button').live 'click', (e)->
+    e.preventDefault()
+    $.showDialog($("#profile_groups_dialog"))
+  
   $('#roles_popup_save_button').live 'click', (e)->
     e.preventDefault()
     ids = []
