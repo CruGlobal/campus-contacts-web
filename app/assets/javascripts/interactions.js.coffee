@@ -191,6 +191,7 @@ $ ->
         checkbox.prop('checked',true)
     else
       checkbox.prop('checked',true)
+    checkbox.change()
     selected_name = $(this).children('input.initiator_box').eq(0).siblings('.initiator_name').text()
     if $('input.initiator_box:checked').size() > 1
       $('#initiator_dropdown #selected').text($('input.initiator_box:checked').size() + " people selected")
@@ -221,8 +222,10 @@ $ ->
   
   $('#receiver_id_dropdown .option').live 'click', (e)->
     $('input.receiver_box').prop('checked',false)
-    $(this).children('input.receiver_box').eq(0).prop('checked',true)
-    selected_name = $(this).children('input.receiver_box').eq(0).siblings('.receiver_name').text()
+    checkbox = $(this).children('input.receiver_box').eq(0)
+    checkbox.prop('checked',true)
+    selected_name = checkbox.siblings('.receiver_name').text()
+    checkbox.change()
     $('#receiver_field').val($(this).children('input.receiver_box').eq(0).val())
     $('#receiver_id_dropdown #selected').text(selected_name )
     $('#receiver_id_dropdown').removeClass('active')
