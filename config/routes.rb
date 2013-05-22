@@ -24,6 +24,7 @@ Mh::Application.routes.draw do
       get :create_label
       get :set_labels
       get :set_roles
+      get :set_groups
     end
   end
 

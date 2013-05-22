@@ -492,6 +492,11 @@ class Person < ActiveRecord::Base
     groups.where(id: groups_by_org_id(org_id))
   end
 
+  def group_memberships_for_org(org)
+    group_ids = org.groups.where(organization_id: org.id).collect(&:id)
+    group_memberships.where(group_id: group_ids)
+  end
+
   def organizational_roles_for_org(org)
     organizational_roles.where(organization_id: org.id)
   end

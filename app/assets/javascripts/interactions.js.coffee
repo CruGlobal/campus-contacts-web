@@ -40,6 +40,19 @@ $ ->
     $.showDialog($("#profile_roles_dialog"))
   # END - ACTION MENU
   
+  $('#groups_popup_save_button').live 'click', (e)->
+    e.preventDefault()
+    ids = []
+    $('.group_checkbox:checked').each ->
+      ids.push($(this).val())
+    ids = ids.join(',')
+    $.hideDialog($("#profile_groups_dialog"))
+    if ids != $('#groups_save').attr('data-current-group-ids')
+      $.toggleLoader('profile_group_header','Applying Changes...')
+      $.ajax
+        type: 'GET',
+        url: "/interactions/set_groups?person_id=" + $(this).attr('data-person-id') + "&ids=" + ids
+    
   $('#groups_popup_cancel_button').live 'click', (e)->
     e.preventDefault()
     $.hideDialog($("#profile_groups_dialog"))

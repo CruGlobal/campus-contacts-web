@@ -25,6 +25,18 @@ class InteractionsController < ApplicationController
     end
   end
   
+  def set_groups
+    @person = Person.find(params[:person_id])
+    @group_ids = params[:ids].split(',')
+    removed_groups = @person.group_memberships_for_org(current_organization).where("group_id NOT IN (?)", params[:ids])
+    removed_groups.delete_all if removed_groups.present?
+    @group_ids.each do |group_id|
+      group = @person.group_memberships.find_or_create_by_group_id(group_id.to_i)
+      group.update_attribute(:role, 'member') if group.role.nil?
+    end
+    @groups = @person.groups_for_org_id(current_organization.id)
+  end
+  
   def set_roles
     @person = Person.find(params[:person_id])
     @role_ids = params[:ids].split(',')
