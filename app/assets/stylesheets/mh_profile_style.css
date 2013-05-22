@@ -797,10 +797,6 @@ a.ui-datepicker-prev:before {
 	margin:0 2% 8px 2%;
 }
 
-.interaction_field select {
-	width:100%;
-}
-
 .interaction_reveal {
 	font-family:Arial, Sans-serif;
 	font-size:11px;

@@ -8,6 +8,9 @@ html.noscroll {
 }
 
 body#interactions_controller {
+  .add_email, .add_phone, .add_address {
+    margin-top: -26px;
+  }
   .no_labels, .no_groups {
     text-align: center;
     font-weight: normal;
@@ -293,6 +296,7 @@ body#interactions_controller {
   }
   .interaction_new #datepicker {
     width: 80px;
+    color: #333333;
   }
   .loader {
     display: inline-block;
