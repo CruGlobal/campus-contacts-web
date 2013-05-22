@@ -8,7 +8,18 @@
 	<div class="status col_right view" id="followup_status_div">
     <%- contact_role = @person.contact_role_for_org(current_organization) %>
     <%- followup_status = contact_role.nil? ? "" : contact_role.followup_status %>
-    <%= select_tag :followup_status, options_for_select(OrganizationalRole::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]}, followup_status), {disabled: contact_role.nil?, include_blank: contact_role.nil?, 'data-person-id' => "#{@person.id}", class: "followup_status_field followup_status_field_view"} %>
+    <%= select_tag :followup_status, options_for_select(OrganizationalRole::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]}, followup_status), {disabled: contact_role.nil?, include_blank: contact_role.nil?, 'data-person-id' => "#{@person.id}", class: "followup_status_field followup_status_field_edit", style: 'display: none;'} %>
+    <div id="followup_status_dropdown" class="custom_dropdown view" data-current-id="<%= followup_status %>">
+      <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+      <div id="selected"><%= t("contacts.statuses.#{followup_status}") %></div>
+      <div id="togglable">
+        <% OrganizationalRole::FOLLOWUP_STATUSES.each do |fs| %>
+          <div class="option" data-id="<%= fs %>" data-name="<%= t("contacts.statuses.#{fs}") %>">
+            <%= t("contacts.statuses.#{fs}") %>
+          </div>
+        <% end %>
+      </div>
+    </div>
 	</div>
 
   <% if @person.gender.present? %>
