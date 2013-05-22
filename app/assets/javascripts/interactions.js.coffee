@@ -1,7 +1,7 @@
 $ ->
   
   $(document).live 'click', (e)->
-    $('#receiver_id_dropdown, #interaction_type_dropdown, #initiator_dropdown, #privacy_setting_dropdown').removeClass('active')
+    $('#receiver_id_dropdown, #interaction_type_dropdown, #initiator_dropdown, #privacy_setting_dropdown, #followup_status_dropdown.edit, #followup_status_dropdown.view').removeClass('active')
     
   # START - ACTION MENU
   $('li a#action_menu_record_interaction').live 'click', (e)->
@@ -39,6 +39,18 @@ $ ->
     e.preventDefault()
     $.showDialog($("#profile_roles_dialog"))
   # END - ACTION MENU
+
+  
+  $('#followup_status_dropdown.edit .option, #followup_status_dropdown.view .option').live 'click', (e)->
+    selected_name = $(this).attr('data-name')
+    selected_id = $(this).attr('data-id')
+    $('#followup_status_dropdown.edit #selected, #followup_status_dropdown.view #selected').text(selected_name)
+    if $(this).parents('#followup_status_dropdown.view') == 0
+      $('.followup_status_field_edit').change()
+    else
+      $('.followup_status_field_edit').change()
+    $('.followup_status_field_edit, .followup_status_field_view').val(selected_id)
+    $('#followup_status_dropdown.edit, #followup_status_dropdown.view').removeClass('active')
   
   $('#groups_popup_save_button').live 'click', (e)->
     e.preventDefault()
@@ -367,7 +379,7 @@ $ ->
       div_kind = 'view'
     else
       div_kind = 'edit'
-    $.toggleLoader("followup_status_div."+div_kind,'Applying...')
+      $.toggleLoader('profile_name','Saving Status...')
     $.ajax
       type: 'GET',
       url: '/interactions/change_followup_status?status=' + $(this).val() + '&person_id=' + $(this).attr('data-person-id')

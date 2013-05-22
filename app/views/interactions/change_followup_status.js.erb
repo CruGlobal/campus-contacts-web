@@ -1,9 +1,4 @@
 $('.followup_status_field').each(function(){
-  if ($(this).hasClass("followup_status_field_view")) {
-    div_kind = 'view';
-  } else {
-    div_kind = 'edit';
-  }
-  $.toggleLoader("followup_status_div."+div_kind,'')
-  $(this).val("<%= @new_status %>")  
+  $.toggleLoader('profile_name','')
+  $(this).val("<%= @new_status %>")
 })
