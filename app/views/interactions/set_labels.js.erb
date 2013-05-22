@@ -1,5 +1,5 @@
 $.toggleLoader('profile_label_header','')
-$('#labels_add_new').attr('data-current-label-ids',"<%= params[:ids] %>")
+$('#labels_save').attr('data-current-label-ids',"<%= params[:ids] %>")
 $('#profile_label_box').html("")
 <% if @labels.present? %>
   <% @labels.each do |label| %>

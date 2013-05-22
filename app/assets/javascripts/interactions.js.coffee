@@ -34,7 +34,28 @@ $ ->
   $('li #action_menu_labels').live 'click', (e)->
     e.preventDefault()
     $.showDialog($("#profile_labels_dialog"))
+    
+  $('li #action_menu_roles').live 'click', (e)->
+    e.preventDefault()
+    $.showDialog($("#profile_roles_dialog"))
   # END - ACTION MENU
+  
+  $('#roles_popup_save_button').live 'click', (e)->
+    e.preventDefault()
+    ids = []
+    $('.role_checkbox:checked').each ->
+      ids.push($(this).val())
+    ids = ids.join(',')
+    $.hideDialog($("#profile_roles_dialog"))
+    if ids != $('#roles_save').attr('data-current-role-ids')
+      $.toggleLoader('profile_name','Applying Changes...')
+      $.ajax
+        type: 'GET',
+        url: "/interactions/set_roles?person_id=" + $(this).attr('data-person-id') + "&ids=" + ids
+  
+  $('#roles_popup_cancel_button').live 'click', (e)->
+    e.preventDefault()
+    $.hideDialog($("#profile_roles_dialog"))
   
   $('#labels_popup_save_button').live 'click', (e)->
     e.preventDefault()
@@ -43,7 +64,7 @@ $ ->
       ids.push($(this).val())
     ids = ids.join(',')
     $.hideDialog($("#profile_labels_dialog"))
-    if ids != $('#labels_add_new').attr('data-current-label-ids')
+    if ids != $('#labels_save').attr('data-current-label-ids')
       $.toggleLoader('profile_label_header','Applying Changes...')
       $.ajax
         type: 'GET',

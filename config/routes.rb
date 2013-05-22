@@ -23,6 +23,7 @@ Mh::Application.routes.draw do
       get :load_more_all_feeds
       get :create_label
       get :set_labels
+      get :set_roles
     end
   end
 

@@ -347,7 +347,7 @@ class ApplicationController < ActionController::Base
   end
 
   def labels_for_assign
-    @labels_for_assign = current_organization.labels
+    @labels_for_assign = Label.where("organization_id IN (?)", [current_organization.id, 0])
   end
 
   def roles_for_assign
