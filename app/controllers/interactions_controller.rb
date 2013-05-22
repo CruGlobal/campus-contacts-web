@@ -1,6 +1,7 @@
 class InteractionsController < ApplicationController
   def show_profile
     roles_for_assign
+    groups_for_assign
     labels_for_assign
     @person = current_organization.people.where(id: params[:id]).try(:first)
     if @person.present?
@@ -9,6 +10,7 @@ class InteractionsController < ApplicationController
 
 			@labels = @person.labels_for_org_id(current_organization.id)
 			@roles = @person.roles_for_org_id(current_organization.id)
+      @groups = @person.groups_for_org_id(current_organization.id)
       if can? :manage, @person
         @interactions = @person.filtered_interactions(current_person, current_organization)
         @last_interaction = @interactions.last

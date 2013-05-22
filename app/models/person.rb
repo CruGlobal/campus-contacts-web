@@ -11,6 +11,8 @@ class Person < ActiveRecord::Base
   has_many :organizational_labels
   has_many :labels, through: :organizational_labels
   has_many :created_organizational_labels, class_name: 'OrgnizationalLabel', foreign_key: 'added_by_id'
+  has_many :group_memberships
+  has_many :groups, through: :group_memberships
   
   has_one :sent_person
   has_many :sent_messages, class_name: "Message", foreign_key: "person_id"
@@ -478,6 +480,16 @@ class Person < ActiveRecord::Base
   
   def labels_for_org_id(org_id)
     labels.where(id: labels_by_org_id(org_id))
+  end
+
+  def groups_by_org_id(org_id)
+    unless @groups_by_org_id
+      @groups_by_org_id = group_memberships.collect(&:group_id).uniq
+    end
+  end
+  
+  def groups_for_org_id(org_id)
+    groups.where(id: groups_by_org_id(org_id))
   end
 
   def organizational_roles_for_org(org)

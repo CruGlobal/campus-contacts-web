@@ -8,7 +8,7 @@ html.noscroll {
 }
 
 body#interactions_controller {
-  .no_labels {
+  .no_labels, .no_groups {
     text-align: center;
     font-weight: normal;
     font-style: italic;
@@ -31,9 +31,9 @@ body#interactions_controller {
       text-decoration: none;
     }
   }
-  #profile_label_box {
+  #profile_label_box, #profile_group_box {
     padding: 6px 12px;
-    .profile_label {
+    .profile_label, .profile_group {
       margin-left: 0;
     }
   }
@@ -48,6 +48,36 @@ body#interactions_controller {
     .mh_popup_box {
       z-index: 1002;
       margin: 25px auto;
+      
+      &.groups_popup_box {
+        .groups_chooser_box {
+          width: 260px;
+          margin: 0 auto;
+          padding: 6px 0px 2px;
+          height: 180px;
+          overflow: hidden;
+          overflow-y: auto;
+          .groups_checkbox {
+            padding: 0px 10px;
+          }
+        }
+        .groups_notice {
+          width: 260px;
+          margin: 0 auto;
+          text-align: center;
+        }
+        #groups_popup_manage_button {
+          float: left;
+        }
+        .groups_add_new {
+          width: 260px;
+          margin: 0 auto;
+          #groups_new_input {
+            width: 223px;
+            margin: 0;
+          }
+        }
+      }
       
       &.roles_popup_box {
         .roles_chooser_box {
