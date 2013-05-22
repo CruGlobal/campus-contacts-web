@@ -13,6 +13,7 @@ body#interactions_controller {
     font-weight: normal;
     font-style: italic;
     color: #999;
+    padding: 3px 3px 5px 3px;
   }
   .contact_checkbox {
     display: none;
@@ -32,7 +33,7 @@ body#interactions_controller {
     }
   }
   #profile_label_box, #profile_group_box {
-    padding: 6px 12px;
+    padding: 6px 8px;
     .profile_label, .profile_group {
       margin-left: 0;
     }
