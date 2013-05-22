@@ -49,6 +49,23 @@ body#interactions_controller {
       z-index: 1002;
       margin: 25px auto;
       
+      &.roles_popup_box {
+        .roles_chooser_box {
+          width: 260px;
+          margin: 0 auto;
+          padding: 6px 0px 2px;
+          height: 180px;
+          overflow: hidden;
+          overflow-y: auto;
+          .roles_checkbox {
+            padding: 0px 10px;
+          }
+        }
+        #roles_popup_manage_button {
+          float: left;
+        }
+      }
+      
       &.labels_popup_box {
         .labels_notice {
           width: 260px;

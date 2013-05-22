@@ -8,6 +8,7 @@ class InteractionsController < ApplicationController
       @completed_answer_sheets = @person.completed_answer_sheets(current_organization).where("completed_at IS NOT NULL").order('completed_at DESC')
 
 			@labels = @person.labels_for_org_id(current_organization.id)
+			@roles = @person.roles_for_org_id(current_organization.id)
       if can? :manage, @person
         @interactions = @person.filtered_interactions(current_person, current_organization)
         @last_interaction = @interactions.last
@@ -19,6 +20,17 @@ class InteractionsController < ApplicationController
       end
     else
       redirect_to contacts_path
+    end
+  end
+  
+  def set_roles
+    @person = Person.find(params[:person_id])
+    @role_ids = params[:ids].split(',')
+    removed_roles = @person.organizational_roles_for_org(current_organization).where("role_id NOT IN (?)", params[:ids])
+    removed_roles.delete_all if removed_roles.present?
+    @role_ids.each do |role_id|
+      role = @person.organizational_roles.find_or_create_by_role_id_and_organization_id(role_id.to_i, current_organization.id)
+      role.update_attribute(:added_by_id, current_person.id) if role.added_by_id.nil?
     end
   end
   

@@ -1,0 +1,30 @@
+<div id="profile_roles_dialog" style="display:none;">
+  <div class="ui-widget-overlay" style="position: fixed; width: 100%; height: 100%; z-index: 999; "></div>
+  <div class="pop_box_container">
+    <div class="mh_popup_box roles_popup_box" class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable" tabindex="-1" role="dialog" aria-roleledby="ui-dialog-title-alert_dialog">
+    	<div class="mh_popup_box_top"><span class="mh_popup_heading">Roles</span></div>
+    	<div class="fancy">Apply the following roles to <%= @person.name %>:</div>
+    	<div class="roles_chooser_box" id="roles_chooser_box">
+        <% current_role_ids = Array.new %>
+        <% @roles_for_assign.each do |role| %>
+          <% if @roles.include?(role) %>
+            <% current_role_ids << role.id %>
+            <% checked = true %>
+          <% else %>
+            <% checked = false %>
+          <% end %>
+            
+          <%= render partial: 'interactions/role', locals: {role: role, checked: checked} %>
+        <% end %>
+    	</div>
+      
+
+    	<div class="roles_save" id="roles_save" data-current-role-ids="<%= current_role_ids.join(',') %>">
+    		<button class="red_accent" id="roles_popup_save_button" data-person-id="<%= @person.id %>">Save</button>
+    		<button class="large_lightgray" id="roles_popup_cancel_button">Cancel</button>
+        <%= link_to raw("<button class='large_gray' id='roles_popup_manage_button'>Manage Roles</button>"), roles_path(organization: current_organization.id) %>
+    	</div>
+      
+    </div>
+  </div>
+</div>
