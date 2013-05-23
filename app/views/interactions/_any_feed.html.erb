@@ -5,6 +5,6 @@
   </div>
 <% when "AnswerSheet" %>
   <%= render partial: 'interactions/survey_feed', locals: {answer_sheet: feed} %>
-<% when "OrganizationalRole" %>
+<% when "OrganizationalLabel" %>
   <%= render partial: 'interactions/label_feed', locals: {org_role: feed} %>
 <% end %>
