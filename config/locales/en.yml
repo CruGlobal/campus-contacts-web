@@ -550,9 +550,14 @@ en:
     notify_user:
       link_text: 'send us an email at support@missionhub.com'
       body_html:
-        <p>Congratulations, your organization request has been approved!  Go to %{manage_link} to add your sub-organizations, and please don't forget to give us feedback on your MissionHub experience!<p>
+        <p>Congratulations, your organization request has been approved! You are now ready to begin adding the people in your organization.<p>
         <p>
-          If you have any questions, %{link}.
+          The MissionHub Help Center can make it easy for you to start using MissionHub today.
+        </p>
+        <p>
+          Learn how to add new contacts to your organization <br/>
+          Organize your new contacts with labels <br/>
+          Please let us know if there's anything else we can do to help you. The MissionHub Help Center is a great starting point.
         </p>
         <p>
           Thanks,<br/>
