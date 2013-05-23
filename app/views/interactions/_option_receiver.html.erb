@@ -1,10 +1,10 @@
 <div class="option receiver" data-id="<%= receiver.id %>">
   <%= check_box_tag "receiver_id[]", receiver.id, false, class: "receiver_box", id: "receiver_#{receiver.id}", "data-id" => receiver.id  %>
   <div class="receiver_name dropdown_name">
-    <% if receiver == person %>
-      <%= "#{receiver.first_name} (This Person)" %>
-    <% elsif receiver == current_person %>
+    <% if receiver == current_person %>
       <%= "#{receiver.first_name} (Me)" %>
+    <% elsif receiver == person %>
+      <%= "#{receiver.first_name} (This Person)" %>
     <% else %>
       <%= receiver.name %>
     <% end %>
