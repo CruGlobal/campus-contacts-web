@@ -488,7 +488,7 @@ class Person < ActiveRecord::Base
 
   def groups_by_org_id(org_id)
     unless @groups_by_org_id
-      @groups_by_org_id = group_memberships.collect(&:group_id).uniq
+      @groups_by_org_id = Organization.find(org_id).groups.collect(&:id).uniq
     end
   end
   
