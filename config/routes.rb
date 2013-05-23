@@ -25,6 +25,7 @@ Mh::Application.routes.draw do
       get :set_labels
       get :set_roles
       get :set_groups
+      get :search_leaders
     end
   end
 
