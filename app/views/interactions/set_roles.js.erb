@@ -1,2 +1,4 @@
 $.toggleLoader('profile_name','')
 $('#roles_save').attr('data-current-role-ids',"<%= params[:ids] %>")
+$('.feed_content .tab_content.profile_info .edit_space').html("<%= escape_javascript(render partial: 'interactions/profile_info_edit') %>")
+$('.feed_content .tab_content.profile_info .view_space').html("<%= escape_javascript(render partial: 'interactions/profile_info') %>")

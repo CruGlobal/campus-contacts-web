@@ -51,9 +51,12 @@ class InteractionsController < ApplicationController
     removed_roles = @person.organizational_roles_for_org(current_organization).where("role_id NOT IN (?)", params[:ids])
     removed_roles.delete_all if removed_roles.present?
     @role_ids.each do |role_id|
-      role = @person.organizational_roles.find_or_create_by_role_id_and_organization_id(role_id.to_i, current_organization.id)
+      role = @person.organizational_roles_including_archived.find_or_create_by_role_id_and_organization_id(role_id.to_i, current_organization.id)
+      role.update_attributes({archive_date: nil, added_by_id: current_person.id}) if role.archive_date.present?
       role.update_attribute(:added_by_id, current_person.id) if role.added_by_id.nil?
     end
+    @person.assigned_tos.delete_all unless @role_ids.include?(Role::CONTACT_ID)
+    @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
   end
   
   def create_label
