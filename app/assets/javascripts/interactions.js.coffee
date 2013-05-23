@@ -1,7 +1,7 @@
 $ ->
   
   $(document).live 'click', (e)->
-    $('#receiver_id_dropdown, #interaction_type_dropdown, #initiator_dropdown, #privacy_setting_dropdown, #followup_status_dropdown.edit, #followup_status_dropdown.view').removeClass('active')
+    $('#receiver_id_dropdown, #interaction_type_dropdown, #initiator_dropdown, #privacy_setting_dropdown, #followup_status_dropdown.edit, #followup_status_dropdown.view, #assigned_to_dropdown').removeClass('active')
     
   # START - ACTION MENU
   $('li a#action_menu_record_interaction').live 'click', (e)->
@@ -40,6 +40,19 @@ $ ->
     $.showDialog($("#profile_roles_dialog"))
   # END - ACTION MENU
 
+  $('#search_leader_field').live 'keyup', (e)->
+    e.preventDefault()
+    if $(this).val() == ""
+      $(this).removeClass("ui-autocomplete-input ui-autocomplete-loading")
+    if $(this).val().length > 2
+      $(this).addClass("ui-autocomplete-input ui-autocomplete-loading")
+      ids = []
+      $("#default_leader_options .option.leader").each ->
+        ids.push($(this).attr('data-id'))
+      ids = ids.join(",")
+      $.ajax
+        type: 'GET',
+        url: '/interactions/search_leaders?keyword=' + $(this).val() + '&person_id=' + $(this).attr('data-person-id') + '&except=' + ids
   
   $('#followup_status_dropdown.edit .option, #followup_status_dropdown.view .option').live 'click', (e)->
     selected_name = $(this).attr('data-name')
@@ -263,7 +276,7 @@ $ ->
     $('#receiver_id_dropdown #selected').text(name)
     $('#receiver_id_dropdown').removeClass('active')
   
-  $('#receiver_id_dropdown, #interaction_type_dropdown, #initiator_dropdown, #privacy_setting_dropdown').live 'click', (e)->
+  $('#assigned_to_dropdown, #receiver_id_dropdown, #interaction_type_dropdown, #initiator_dropdown, #privacy_setting_dropdown').live 'click', (e)->
     e.stopPropagation()
   
   $('.arrow').live 'click', (e)->

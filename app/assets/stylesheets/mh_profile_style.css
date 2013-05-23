@@ -784,7 +784,7 @@ a.ui-datepicker-prev:before {
 	margin-bottom:4px;
 }
 
-.ui-datepicker-calendar td a{
+.ui-datepicker-calendar td a.ui-state-default{
 	color:#c0c0c0;
 }
 

@@ -32,6 +32,36 @@
           </div>
         </div>
     	</div>
+      
+    	<div class="gender col_left">Assigned To:</div>
+    	<div class="gender col_right" id="followup_status_div">
+        <div id="assigned_to_dropdown" class="custom_dropdown" data-current-id="<%= @assigned_tos.collect(&:assigned_to_id).join(',') %>">
+          <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+          <div id="selected">
+            <% if @assigned_tos.count > 1 %>
+              <%= "#{@assigned_tos.count} people selected" %>
+            <% else %>
+              <%= @assigned_tos.first.assigned_to == current_person ? "#{@assigned_tos.first.assigned_to.first_name} (Me)" : "#{@assigned_tos.first.assigned_to.name}" %>
+            <% end %>
+          </div>
+          <div id="togglable">
+            <div id="default_leader_options">
+              <div class="option leader" data-id="<%= current_person.id %>" data-name="<%= '#{current_person.first_name} (Me)' %>">
+                <%= "#{current_person.first_name} (Me)" %>
+              </div>
+              <% @assigned_tos.where("assigned_to_id <> ?", current_person.id).each do |assignment| %>
+                <div class="option leader" data-id="<%= assignment.assigned_to_id %>" data-name="<%= '#{assignment.assigned_to.name}' %>">
+                  <%= "#{assignment.assigned_to.name}" %>
+                </div>
+              <% end %>
+            </div>
+            <div class="search">
+              <%= text_field_tag :search_leader, "", placeholder: "Search by name", id: "search_leader_field", "data-person-id" => @person.id %>
+            </div>
+            <div class="results" id="search_leader_results"></div>
+          </div>
+        </div>
+      </div>
 
   		<div class="gender col_left">
         <label for="person_gender"><%= t('general.gender') %></label>:

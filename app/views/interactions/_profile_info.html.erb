@@ -22,6 +22,13 @@
     </div>
 	</div>
 
+  <% if @assigned_tos.present? %>
+  	<div class="gender col_left">Assigned To:</div>
+  	<div class="gender col_right" id="followup_status_div">
+      <%= @assigned_tos.collect { |a| a.assigned_to.try(:name) }.compact.to_sentence %>
+    </div>
+  <% end %>
+
   <% if @person.gender.present? %>
   	<div class="gender col_left"><%= t('general.gender') %>:</div>
   	<div class="gender col_right"><%= @person.gender %></div>

@@ -11,6 +11,7 @@ class InteractionsController < ApplicationController
 			@labels = @person.labels_for_org_id(current_organization.id)
 			@roles = @person.roles_for_org_id(current_organization.id)
       @groups = @person.groups_for_org_id(current_organization.id)
+      @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
       if can? :manage, @person
         @interactions = @person.filtered_interactions(current_person, current_organization)
         @last_interaction = @interactions.last
@@ -23,6 +24,13 @@ class InteractionsController < ApplicationController
     else
       redirect_to contacts_path
     end
+  end
+  
+  def search_leaders
+    @person = Person.find(params[:person_id])
+    @current_person = current_person
+    @people = current_organization.leaders.where("first_name LIKE :key OR last_name LIKE :key", key: "%#{params[:keyword].strip}%")
+    @people = @people.where("people.id NOT IN (?)", params[:except].split(',')) if params[:except].present?
   end
   
   def set_groups
