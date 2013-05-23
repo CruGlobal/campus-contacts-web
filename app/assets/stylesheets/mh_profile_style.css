@@ -738,26 +738,28 @@ div.phone, div.address, div.email {
 	border-top-left-radius:4px;
 }
 
-.ui-widget-content {
+#ui-datepicker-div .ui-widget-content {
 	border:1px solid #c0c0c0;
 }
 
-td.ui-datepicker-today {
-	color:#FFF;
-	background-color:#808284;
+#ui-datepicker-div .ui-datepicker-calendar a.ui-state-default, .ui-datepicker-calendar thead th {
+  border: none;
+  background: none;
+  padding: 1px 0px;
+  text-align: center;
 }
 
-a.ui-datepicker-next:after {
+#ui-datepicker-div a.ui-datepicker-next:after {
 	content:url('mh_arrow_r.png');
 	cursor:auto;
 }
 
-a.ui-datepicker-prev:before {
+#ui-datepicker-div a.ui-datepicker-prev:before {
 	content:url('mh_arrow_l.png');
 }
 
 
-.ui-datepicker-prev {
+#ui-datepicker-div .ui-datepicker-prev {
 	float:left;
 }
 
@@ -784,9 +786,51 @@ a.ui-datepicker-prev:before {
 	margin-bottom:4px;
 }
 
-.ui-datepicker-calendar td a.ui-state-default{
-	color:#c0c0c0;
+#ui-datepicker-div .ui-datepicker-calendar a.ui-state-default.ui-state-active {
+  color: #fff;
+	background-color:#808284;
 }
+
+.ui-datepicker-calendar td a.ui-state-default {
+	color: #c0c0c0;
+}
+
+/* Kenn START */
+#ui-datepicker-divtd.ui-datepicker-today a {
+  color: #FFF;
+}
+
+#ui-datepicker-div {
+  padding: 6px;
+  border:1px solid #c0c0c0;
+  width: 160px;
+}
+
+#ui-datepicker-div .ui-datepicker-header {
+  background: none;
+  border: 0px;
+}
+
+#ui-datepicker-div .ui-datepicker-next.ui-state-hover {
+  background: none;
+  border: 0px;
+  right: 2px;
+  top: 2px;
+  cursor: pointer;
+}
+
+#ui-datepicker-div .ui-datepicker-prev.ui-state-hover {
+  background: none;
+  border: 0px;
+  left: 2px;
+  top: 2px;
+  cursor: pointer;
+}
+
+.ui-datepicker-title {
+  color: #888888;
+}
+/* Kenn END */
 
 
 /* Page 6 ----*/
