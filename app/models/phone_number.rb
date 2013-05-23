@@ -5,18 +5,12 @@ class PhoneNumber < ActiveRecord::Base
 
   @queue = :general
   belongs_to :carrier, class_name: 'SmsCarrier', foreign_key: 'carrier_id'
-
   belongs_to :person, touch: true
 
-  # validates_presence_of :number, message: "can't be blank"
-  # validates :number, :format => { :with => /^(\d|\ |\(|\)|\-){1,100}$/, message: "must be numeric" }
-  # validates_uniqueness_of :number, :scope => :person_id
   validate do |value|
     phone_number = value.number_before_type_cast || value.number || nil
     if phone_number.present?
-      if PhoneNumber.exists?(person_id: person_id, number: phone_number)
-        errors.add(:number, "already exists")
-      elsif !(phone_number =~ /^(\d|\ |\/|\(|\)|\-){1,100}$/)
+      unless (phone_number =~ /^(\d|\ |\/|\(|\)|\-){1,100}$/)
         errors.add(:number, "must be numeric")
       else
         self[:number] = PhoneNumber.strip_us_country_code(phone_number)
@@ -25,6 +19,8 @@ class PhoneNumber < ActiveRecord::Base
       errors.add(:number, "can't be blank")
     end
   end
+  validates_uniqueness_of :number, on: :create, message: "already exists"
+  validates_uniqueness_of :number, :scope => :person_id, on: :update, message: "already exists"
 
   before_create :set_primary
   before_save :clear_carrier_if_number_changed
