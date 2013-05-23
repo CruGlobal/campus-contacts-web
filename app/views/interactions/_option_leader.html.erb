@@ -1,10 +1,10 @@
 <div class="option leader" data-id="<%= leader.id %>">
   <%= check_box_tag 'leader_id[]', leader.id, false, class: "leader_box", id: "leader_#{leader.id}", "data-id" => leader.id %>
   <div class="leader_name dropdown_name">
-    <% if leader == person %>
-      <%= "#{leader.first_name} (This Person)" %>
-    <% elsif leader == current_person %>
+    <% if leader == current_person %>
       <%= "#{leader.first_name} (Me)" %>
+    <% elsif leader == person %>
+      <%= "#{leader.first_name} (This Person)" %>
     <% else %>
       <%= leader.name %>
     <% end %>

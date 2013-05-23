@@ -39,6 +39,24 @@ $ ->
     e.preventDefault()
     $.showDialog($("#profile_roles_dialog"))
   # END - ACTION MENU
+  
+  $('#assigned_to_dropdown .option').live 'click', (e)->
+    $('input.leader_box').prop('checked',false)
+    checkbox = $(this).children('input.leader_box').eq(0)
+    checkbox.prop('checked',true)
+    selected_name = checkbox.siblings('.leader_name').text()
+    checkbox.change()
+    $('#assigned_to_id').val(checkbox.attr('data-id'))
+    $('#assigned_to_dropdown #selected').text(selected_name)
+    $('#assigned_to_dropdown').removeClass('active')
+
+  $('#search_leader_results .option.leader input').live 'change', (e)->
+    if $(this).is(':checked')
+      data_id = $(this).attr('data-id')
+      if $('#default_leader_options .option.receiver[data-id=' + data_id + ']').size() == 0
+        $('#default_leader_options').append($(this).parents('.option'))
+      else
+        $(this).parents('.option').remove()
 
   $('#search_leader_field').live 'keyup', (e)->
     e.preventDefault()
@@ -369,6 +387,9 @@ $ ->
     e.preventDefault()
     $('.feed_content .tab_content.profile_info .view_space').hide()
     $('.feed_content .tab_content.profile_info .edit_space').fadeIn()
+    assigned_to_id = $('#assigned_to_dropdown').attr('data-current-id')
+    $(".option.leader[data-id=" + assigned_to_id  + "]").click()
+    
   
   $('#info_edit_cancel_button').live 'click', (e)->
     e.preventDefault()

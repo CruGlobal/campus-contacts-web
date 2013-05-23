@@ -273,6 +273,10 @@ class Person < ActiveRecord::Base
     organizational_roles.where("organizational_roles.organization_id = ? AND organizational_roles.role_id = ?", org.id, Role::CONTACT_ID).first
   end
 
+  def leader_role_for_org(org)
+    organizational_roles.where("organizational_roles.organization_id = ? AND organizational_roles.role_id = ?", org.id, Role::LEADER_ID).first
+  end
+
   def completed_answer_sheets(organization)
     answer_sheets.where("survey_id IN (?)", Survey.where("organization_id = ? OR id = ?", organization.id, APP_CONFIG['predefined_survey']).collect(&:id)).order('updated_at DESC')
   end

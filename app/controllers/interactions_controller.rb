@@ -117,6 +117,7 @@ class InteractionsController < ApplicationController
   
   def reset_edit_form
     @person = current_organization.people.where(id: params[:person_id]).try(:first)
+    @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
   end
   
   def show_new_interaction_form
@@ -171,5 +172,6 @@ class InteractionsController < ApplicationController
     interaction_initiator_ids = @interaction.interaction_initiators.group("person_id").collect(&:id)
     duplicate_initiators = @interaction.interaction_initiators.where("id NOT IN (?)",interaction_initiator_ids)
     duplicate_initiators.delete_all if duplicate_initiators.present?
+    @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
   end
 end
