@@ -849,7 +849,7 @@ div.phone, div.address, div.email {
 }
 
 .interaction_edit_date {
-	text-align:right;
+	text-align:left;
 }
 
 .interaction_edit_date input[type=text]{

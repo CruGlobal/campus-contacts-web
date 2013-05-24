@@ -41,6 +41,9 @@ if ($('#receiver_id_dropdown').attr('data-current-id') === "") {
 
 $('.interaction_new #interaction_comment').val('');
 
-$('.interaction_new #datepicker').datepicker({
-  dateFormat: 'yy-mm-dd'
+$('.interaction_new #datepicker').datetimepicker({
+  dateFormat: 'yy-mm-dd',
+  timeFormat: 'HH:mm:ss',
+  showSecond: false
 });
+

@@ -375,8 +375,10 @@ $ ->
       $("input.receiver_box[value=" + default_receiver_id  + "]").prop('checked',true)
       
     $('.interaction_new #interaction_comment').val('')
-    $('.interaction_new #datepicker').datepicker
+    $('.interaction_new #datepicker').datetimepicker
       dateFormat: 'yy-mm-dd'
+      timeFormat: 'HH:mm:ss'
+      showSecond: false
     
   $('input.primary').live 'click', (e)->
     group_name = $(this).parents('.sfield').attr("data-group")
