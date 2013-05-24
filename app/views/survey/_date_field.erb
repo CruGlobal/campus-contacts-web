@@ -5,5 +5,5 @@
       :class => 'text ' + date_field.validation_class(@answer_sheet),
       :id => dom_id(date_field) %>
 <span class='slim_guide'>
-  <%= date_field.attribute_name == "graduation_date" ? "YYYY or MM/DD/YYYY" : "MM/DD/YYYY" %>
+  <%= date_field.attribute_name == "graduation_date" ? "<span class='remove_in_add_contact'>YYYY or </span>MM/DD/YYYY".html_safe : "MM/DD/YYYY" %>
 </span>

@@ -283,6 +283,7 @@ $ ->
         $("#add_contact_form input[type='checkbox']").attr("checked",false)
         $("#add_contact_form input[type='radio']").attr("checked",false)
         $("#add_contact_form input[type='checkbox']:not(:disabled)").attr("checked",false)
+        $("#add_contact_form .remove_in_add_contact").remove()
       buttons: [
         text: t('application.add_contact.save_and_close'),
         'class': 'add_new_contact_dialog_buttons',
