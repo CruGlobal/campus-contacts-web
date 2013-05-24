@@ -54,7 +54,10 @@ $('#interaction_type_dropdown #selected').html(default_interaction_type_name);
 $('#new_interaction_type').val(default_interaction_type_id);
 
 // Set timestamp
-$('.interaction_field #datepicker').val("<%= @interaction.timestamp %>")
-$('.interaction_new #datepicker').datepicker({
-  dateFormat: 'yy-mm-dd'
+$('.interaction_field #datepicker').val("<%= @interaction.timestamp.strftime('%Y-%m-%d %H:%M:%S') %>")
+$('.interaction_new #datepicker').datetimepicker({
+  dateFormat: 'yy-mm-dd',
+  timeFormat: 'HH:mm:ss',
+  showSecond: false
 });
+

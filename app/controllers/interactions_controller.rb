@@ -101,7 +101,7 @@ class InteractionsController < ApplicationController
   def load_more_interactions
     @person = Person.find(params[:person_id])
     if can? :manage, @person
-      @interactions = @person.filtered_interactions(current_person, current_organization).where("id < ?",params[:last_id])
+      @interactions = @person.filtered_interactions(current_person, current_organization).where("interactions.id < ?",params[:last_id])
       @last_interaction = @interactions.last
       @interactions = @interactions.limited
     end

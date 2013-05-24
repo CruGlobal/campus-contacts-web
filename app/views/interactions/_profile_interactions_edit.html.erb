@@ -84,8 +84,8 @@
       </div>  
   	</div>
     
-  	<div class="interaction_field interaction_edit_date fancy more_option date_field_box">Date:
-      <%= f.text_field :timestamp, id: 'datepicker', value: "#{Date.today}" %>
+  	<div class="interaction_field interaction_edit_date fancy more_option date_field_box">Date / Time:
+      <%= f.text_field :timestamp, id: 'datepicker', value: "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}" %>
   	</div>
     <%= f.text_area :comment, class: "interaction_edit_comment comment_box", placeholder: "Add a comment...", rows: 4 %>
 

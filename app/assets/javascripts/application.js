@@ -10,6 +10,7 @@
 //= require jquery.chosen
 //= require jquery.cookie
 //= require jquery.tokeninput
+//= require jquery-ui-timepicker-addon_mh
 //= require colorpicker.js
 //= require ba-debug-0.4.min.js
 //= require hoverIntent

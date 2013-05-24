@@ -20,5 +20,6 @@
  *= require jquery.notifications
  *= require excolor
  *= require global
+ *= require date_time_picker_style
  *= require token-input-facebook
 */

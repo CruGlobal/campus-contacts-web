@@ -287,7 +287,7 @@ body#interactions_controller {
         color: red;
       }
     }
-    &.more_div, &.date_field_box {
+    &.more_div {
       line-height: 52px;
       a.more_options_link, input#more_options_link {
         margin-right: 5px;
@@ -295,7 +295,7 @@ body#interactions_controller {
     }
   }
   .interaction_new #datepicker {
-    width: 80px;
+    width: 165px;
     color: #333333;
   }
   .loader {
