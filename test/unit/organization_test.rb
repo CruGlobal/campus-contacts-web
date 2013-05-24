@@ -16,7 +16,8 @@ class OrganizationTest < ActiveSupport::TestCase
   should have_many(:followup_comments)
   should have_many(:organizational_roles)
   should have_many(:leaders)
-  should have_many(:only_leaders)
+  should have_many(:missionhub_users)
+  should have_many(:only_missionhub_users)
   should have_many(:admins)
   should have_many(:all_people)
   should have_many(:all_people_with_archived)
@@ -37,9 +38,7 @@ class OrganizationTest < ActiveSupport::TestCase
       @person3 = Factory(:person)
 
       Factory(:organizational_role, person: @person2, role: Role.contact, organization: @org1, :added_by_id => @person1.id)
-      Factory(:organizational_role, person: @person2, role: Role.involved, organization: @org1, :added_by_id => @person1.id)
       Factory(:organizational_role, person: @person3, role: Role.contact, organization: @org1, :added_by_id => @person1.id)
-      Factory(:organizational_role, person: @person3, role: Role.involved, organization: @org1, :added_by_id => @person1.id)
     end
 
     should "only get people with some roles not yet deleted" do
@@ -57,22 +56,22 @@ class OrganizationTest < ActiveSupport::TestCase
       @leader3 = Factory(:person, email: 'leader3@email.com')
       @contact = Factory(:person)
       Factory(:organizational_role, person: @contact, role: Role.contact, organization: @org1, :added_by_id => @person.id)
-      Factory(:organizational_role, person: @leader1, role: Role.leader, organization: @org1, :added_by_id => @person.id)
-      Factory(:organizational_role, person: @leader2, role: Role.leader, organization: @org1, :added_by_id => @person.id)
-      Factory(:organizational_role, person: @leader3, role: Role.leader, organization: @org2, :added_by_id => @person.id)
+      Factory(:organizational_role, person: @leader1, role: Role.missionhub_user, organization: @org1, :added_by_id => @person.id)
+      Factory(:organizational_role, person: @leader2, role: Role.missionhub_user, organization: @org1, :added_by_id => @person.id)
+      Factory(:organizational_role, person: @leader3, role: Role.missionhub_user, organization: @org2, :added_by_id => @person.id)
     end
     should "return all leader of an org" do
-      results = @org1.leaders
+      results = @org1.missionhub_users
       assert_equal(2, results.count, "leaders returned should be 2")
       assert(results.include?(@leader1), "should should be returned")
       assert(results.include?(@leader2), "should should be returned")
     end
     should "not return leaders from other org" do
-      results = @org1.leaders
+      results = @org1.missionhub_user
       assert(!results.include?(@leader3), "should not should be returned")
     end
     should "not return non-leaders organizational role" do
-      results = @org1.leaders
+      results = @org1.missionhub_user
       assert(!results.include?(@contact), "should not should be returned")
     end
   end
@@ -270,10 +269,10 @@ class OrganizationTest < ActiveSupport::TestCase
     person2 = Factory(:person, :email => "person2@email.com")
     person3 = Factory(:person, :email => "person3@email.com")
 		Factory(:organizational_role, organization: @org, person: person1, role: Role.admin)
-		Factory(:organizational_role, organization: @org, person: person2, role: Role.leader)
+		Factory(:organizational_role, organization: @org, person: person2, role: Role.missionhub_user)
 		Factory(:organizational_role, organization: @org, person: person3, role: Role.admin)
-		Factory(:organizational_role, organization: @org, person: person3, role: Role.leader)
-		@org.only_leaders.inspect
+		Factory(:organizational_role, organization: @org, person: person3, role: Role.missionhub_user)
+		@org.leaders.inspect
 	end
 
   test "self and children ids" do
@@ -575,21 +574,21 @@ class OrganizationTest < ActiveSupport::TestCase
       @contact2 = Factory(:person)
       @contact3 = Factory(:person)
       @contact4 = Factory(:person)
-      Factory(:organizational_role, person: @contact1, role: Role.sent, organization: @org)
-      Factory(:organizational_role, person: @contact2, role: Role.sent, organization: @org)
-      Factory(:organizational_role, person: @contact3, role: Role.sent, organization: @org)
-      Factory(:organizational_role, person: @contact4, role: Role.contact, organization: @org)
-      Factory(:sent_person, person: @contact3)
+      Factory(:organizational_label, person: @contact1, label: Label.sent, organization: @org)
+      Factory(:organizational_label, person: @contact2, label: Label.sent, organization: @org)
+      Factory(:organizational_label, person: @contact3, label: Label.sent, organization: @org)
+      Factory(:organizational_label, person: @contact4, label: Label.involved, organization: @org)
+      Factory(:organizational_label, person: @contact3, label: Label.alumni)
     end
     should "return all people with label 100% Sent and not yet transferred" do
       assert @org.pending_transfer.include?(@contact1)
       assert @org.pending_transfer.include?(@contact2)
     end
     should "return all people without label 100% Sent" do
-      assert_equal(@org.available_transfer, [@contact4])
+      assert_equal([@contact4], @org.available_transfer)
     end
     should "return all people with label 100% Sent and already transferred" do
-      assert_equal(@org.completed_transfer, [@contact3])
+      assert_equal([@contact3], @org.completed_transfer)
     end
   end
 
@@ -611,16 +610,16 @@ class OrganizationTest < ActiveSupport::TestCase
     end
   end
 
-  context "fetching roles" do
+  context "fetching labels" do
     setup do
       @org = Factory(:organization, id: 1)
     end
-    should "return 'sent' role if org is cru" do
-      assert @org.role_set.include?(Role.sent)
+    should "return 'sent' label if org is cru" do
+      assert @org.label_set.include?(Label.sent)
     end
-    should "return 'sent' role if has parent org id = 1" do
+    should "return 'sent' label if has parent org id = 1" do
       @org.update_attribute('ancestry','1/2/3')
-      assert @org.role_set.include?(Role.sent)
+      assert @org.label_set.include?(Label.sent)
     end
   end
 

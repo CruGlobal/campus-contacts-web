@@ -573,7 +573,7 @@ class PeopleControllerTest < ActionController::TestCase
       leader1 = Factory
 
       leader1 = Factory(:user_with_auxs)
-      Factory(:organizational_role, organization: @org, person: leader1.person, role: Role.leader)
+      Factory(:organizational_role, organization: @org, person: leader1.person, role: Role.missionhub_user)
 
       @org.add_contact(contact1)
       @org.add_contact(contact2)
@@ -680,7 +680,7 @@ class PeopleControllerTest < ActionController::TestCase
 
     should "not create a person with leader role without a valid email" do
       assert_no_difference "Person.count" do
-        post :create, {:person=> { :first_name =>"Waymar", :last_name =>"Royce", :gender =>"male", :email_address =>{:email =>"", :primary =>"1"}}, :roles =>{"1"=> Role.leader.id}}
+        post :create, {:person=> { :first_name =>"Waymar", :last_name =>"Royce", :gender =>"male", :email_address =>{:email =>"", :primary =>"1"}}, :roles =>{"1"=> Role.missionhub_user.id}}
       end
     end
 

@@ -45,6 +45,10 @@ class Role < ActiveRecord::Base
   def self.contact
     @contact ||= Role.find_or_create_by_i18n_and_organization_id('contact', 0)
   end
+
+  def self.archived
+    @archived ||= Role.find_or_create_by_i18n_and_organization_id('archived', 0)
+  end
   
   def to_s
     organization_id == 0 ? I18n.t("roles.#{i18n}") : name
