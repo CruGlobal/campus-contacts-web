@@ -1,7 +1,7 @@
 <div class="feed_box survey_display">
 	<div class="feed_icon"><%= image_tag("label.png") %></div>
 	<div class="feed_item_header">
-    <span class="feed_item_date"><%= time_format(org_role.start_date) %></span>
+    <span class="feed_item_date"><%= wiser_date(org_role.start_date) %></span>
 	  <span class="feed_item_privacy">
       <% if org_role.organization %>
         <strong>Visible to:</strong>
