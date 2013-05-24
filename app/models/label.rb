@@ -10,5 +10,10 @@ class Label < ActiveRecord::Base
   validates :name, presence: true, :if => Proc.new { |role| organization_id != 0 }
   validates :organization_id, presence: true
 
-  scope :default, where(organization_id: 0) if Label.table_exists? # added for travis testing
+  scope :default, where(organization_id: 0)
+  
+  def self.leader
+    where(i18n: 'leader').try(:first)
+  end
+  
 end

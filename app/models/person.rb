@@ -231,6 +231,10 @@ class Person < ActiveRecord::Base
     return self.interactions.joins(:organization).where(query).sorted
   end
   
+  def labeled_in_org?(label, org)
+    labels = organizational_labels.where(label_id: label.id, organization_id: org.id, removed_date: nil).count > 0
+  end
+  
   def admin_of_org?(org)
     return admin_of_org_ids.include?(org.id)
   end

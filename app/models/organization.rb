@@ -31,7 +31,7 @@ class Organization < ActiveRecord::Base
   has_many :organizational_roles, inverse_of: :organization
 
   if Role.table_exists? # added for travis testing
-    has_many :leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id IN (?) AND organizational_roles.archive_date IS NULL", Role.leader_ids], order: "people.last_name, people.first_name", uniq: true
+    has_many :leaders, through: :organizational_labels, source: :person, conditions: ["organizational_labels.label_id IN (?) AND organizational_labels.removed_date IS NULL", Label.leader], order: "people.last_name, people.first_name", uniq: true
     has_many :only_leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL", Role::LEADER_ID], order: "people.last_name, people.first_name", uniq: true
     has_many :admins, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL", Role::ADMIN_ID], order: "people.last_name, people.first_name", uniq: true
     has_many :sent, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL", Role::SENT_ID], order: "people.last_name, people.first_name", uniq: true
