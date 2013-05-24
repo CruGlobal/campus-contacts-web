@@ -47,7 +47,7 @@ class Person < ActiveRecord::Base
   has_many :roles_including_archived, through: :organizational_roles_including_archived, source: :role
 
   if Role.table_exists? # added for travis testing
-    has_many :organizations, through: :organizational_roles, conditions: ["role_id IN(?) AND status = 'active'", Role.involved_ids], uniq: true
+    has_many :organizations, through: :organizational_roles, conditions: ["status = 'active'"], uniq: true
   end
 
   has_many :followup_comments, :class_name => "FollowupComment", :foreign_key => "commenter_id"
@@ -277,7 +277,7 @@ class Person < ActiveRecord::Base
     organizational_roles.where("organizational_roles.organization_id = ? AND organizational_roles.role_id = ?", org.id, Role::CONTACT_ID).first
   end
 
-  def leader_role_for_org(org)
+  def mh_user_role_for_org(org)
     organizational_roles.where("organizational_roles.organization_id = ? AND organizational_roles.role_id = ?", org.id, Role::LEADER_ID).first
   end
 
@@ -354,7 +354,7 @@ class Person < ActiveRecord::Base
     end
   end
 
-  def archive_leader_role(org)
+  def archive_mh_user_role(org)
     begin
       OrganizationalRole.where(organization_id: org.id, role_id: Role::LEADER_ID, person_id: id).first.archive
     rescue
@@ -424,9 +424,9 @@ class Person < ActiveRecord::Base
     end
   end
 
-  def leader_in?(org)
+  def mh_user_in?(org)
     return false unless org
-    OrganizationalRole.where(person_id: id, role_id: Role.leader_ids, :organization_id => org.id).present?
+    OrganizationalRole.where(person_id: id, role_id: Role.mh_user_ids, :organization_id => org.id).present?
   end
 
   def organization_objects
@@ -529,12 +529,12 @@ class Person < ActiveRecord::Base
     @admin_of_org_ids ||= org_ids.select {|org_id, values| Array.wrap(values['roles']).include?(Role.admin.id)}.keys
   end
 
-  def leader_of_org_ids
-    @leader_of_org_ids ||= org_ids.select {|org_id, values| (Array.wrap(values['roles']) & Role.leader_ids).present?}.keys
+  def mh_user_of_org_ids
+    @mh_user_of_org_ids ||= org_ids.select {|org_id, values| (Array.wrap(values['roles']) & Role.mh_user_ids).present?}.keys
   end
 
-  def admin_or_leader?
-    (admin_of_org_ids + leader_of_org_ids).present?
+  def admin_or_mh_user?
+    (admin_of_org_ids + mh_user_of_org_ids).present?
   end
 
 
@@ -994,7 +994,7 @@ class Person < ActiveRecord::Base
     hash
   end
 
-  def to_hash_micro_leader(organization)
+  def to_hash_micro_mh_user(organization)
    hash = to_hash_mini
    hash['picture'] = picture unless fb_uid.nil?
    hash['num_contacts'] = contact_assignments.for_org(organization).count
@@ -1002,8 +1002,8 @@ class Person < ActiveRecord::Base
    hash
   end
 
-  def to_hash_mini_leader(org_id)
-    hash = to_hash_micro_leader(organization_from_id(org_id))
+  def to_hash_mini_mh_user(org_id)
+    hash = to_hash_micro_mh_user(organization_from_id(org_id))
     hash['organizational_roles'] = organizational_roles_hash
     hash
   end
@@ -1171,8 +1171,8 @@ class Person < ActiveRecord::Base
     organizational_role.save
   end
 
-  def friends_and_leaders(organization)
-    Friend.followers(self) & organization.leaders.collect { |l| l.fb_uid.to_s }
+  def friends_and_mh_users(organization)
+    Friend.followers(self) & organization.mh_users.collect { |l| l.fb_uid.to_s }
   end
 
   def friends_in_orgnization(org)

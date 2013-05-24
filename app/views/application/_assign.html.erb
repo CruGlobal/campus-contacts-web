@@ -21,7 +21,7 @@
     <%= text_field_tag :leader_name, '', class: 'leader_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>
     <div class="leaders_list">
       <ul>
-        <% current_organization.only_leaders.each do |person| %>
+        <% current_organization.leaders.each do |person| %>
           <li class="leader" data-id="<%= person.id %>"><span class="name"><%= link_to(person, '#') %></span></li>
         <% end %>
       </ul>

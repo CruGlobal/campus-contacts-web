@@ -28,10 +28,7 @@ en:
       title: "%{org} Labels"
     admin: Admin
     contact: Contact
-    involved: Involved
-    leader: Leader
-    alumni: Alumni
-    sent: 100% Sent
+    missionhub_user: MissionHub User
     views:
       organizational_roles: "Organizational Labels"
       system_roles: "System Labels"
