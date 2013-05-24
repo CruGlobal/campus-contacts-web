@@ -34,6 +34,8 @@ class Organization < ActiveRecord::Base
     has_many :leaders, through: :organizational_labels, source: :person, conditions: ["organizational_labels.label_id IN (?) AND organizational_labels.removed_date IS NULL", Label::LEADER_ID], order: "people.last_name, people.first_name", uniq: true
     has_many :sent, through: :organizational_labels, source: :person, conditions: ["organizational_labels.label_id IN (?) AND organizational_labels.removed_date IS NULL", Label::SENT_ID], order: "people.last_name, people.first_name", uniq: true
     
+    has_many :only_missionhub_users, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL", Role::MH_USER_ID], order: "people.last_name, people.first_name", uniq: true
+    has_many :missionhub_users, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id IN (?) AND organizational_roles.archive_date IS NULL", [Role::MH_USER_ID, Role::ADMIN_ID]], order: "people.last_name, people.first_name", uniq: true
     has_many :admins, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL", Role::ADMIN_ID], order: "people.last_name, people.first_name", uniq: true
     has_many :all_people, through: :organizational_roles, source: :person, conditions: ["(organizational_roles.followup_status <> 'do_not_contact' OR organizational_roles.followup_status IS NULL) AND organizational_roles.archive_date IS NULL"], uniq: true
     has_many :all_people_with_archived, through: :organizational_roles, source: :person, conditions: ["organizational_roles.followup_status <> 'do_not_contact' OR organizational_roles.followup_status IS NULL"], uniq: true
@@ -159,6 +161,18 @@ class Organization < ActiveRecord::Base
 
   def non_default_roles
     roles.non_default_roles
+  end
+
+  def label_set
+    default_labels + non_default_labels
+  end
+
+  def default_labels
+    has_parent?(1) ? roles.default_cru_labels : roles.default_labels
+  end
+
+  def non_default_labels
+    labels.non_default_labels
   end
 
   def parent_organization_admins
@@ -316,10 +330,27 @@ class Organization < ActiveRecord::Base
     end
   end
 
+  def add_label_to_person(person, label_id, added_by_id = nil)
+    person_id = person.is_a?(Person) ? person.id : person
+    Retryable.retryable :times => 5 do
+      label = OrganizationalLabel.where(person_id: person_id, organization_id: id, label_id: label_id).first_or_create!(added_by_id: added_by_id)
+      label.update_attributes(removed_date: nil)
+      label
+    end
+  end
+
   def add_roles_to_people(people, roles)
     people.each do |person|
       roles.each do |role|
         add_role_to_person(person, role)
+      end
+    end
+  end
+
+  def add_labels_to_people(people, labels)
+    people.each do |person|
+      labels.each do |label|
+        add_label_to_person(person, label)
       end
     end
   end
@@ -329,18 +360,31 @@ class Organization < ActiveRecord::Base
     OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id).each { |r| r.update_attributes(archive_date: Time.now) }
   end
 
+  def remove_label_from_person(person, label_id)
+    person_id = person.is_a?(Person) ? person.id : person
+    OrganizationalLabel.where(person_id: person_id, organization_id: id, label_id: label_id).each do |r|
+      r.update_attributes(removed_date: Time.now)
+    end
+  end
+
   def remove_roles_from_people(people, roles)
     people.each do |person|
       remove_role_from_person(person, roles)
     end
   end
 
+  def remove_labels_from_people(people, labels)
+    people.each do |person|
+      remove_label_from_person(person, labels)
+    end
+  end
+
   def add_leader(person, current_person)
     person_id = person.is_a?(Person) ? person.id : person
     begin
-      org_leader = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::LEADER_ID, :added_by_id => current_person.id)
-      unless org_leader.archive_date.nil?
-        org_leader.update_attributes({:added_by_id => current_person.id, :archive_date => nil})
+      org_leader = OrganizationalLabel.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Label::LEADER_ID, :added_by_id => current_person.id)
+      unless org_leader.removed_date.nil?
+        org_leader.update_attributes({:added_by_id => current_person.id, :removed_date => nil})
         org_leader.notify_new_leader
       end
     rescue => error
@@ -367,7 +411,7 @@ class Organization < ActiveRecord::Base
   def remove_person(person)
     person_id = person.is_a?(Person) ? person.id : person
     organizational_roles.where(person_id: person_id).each do |ors|
-      if(ors.role_id == Role::LEADER_ID)
+      if(ors.label_id == LABEL::LEADER_ID)
         # remove contact assignments if this was a leader
         Person.find(ors.person_id).contact_assignments.where(organization_id: id).all.collect(&:destroy)
       end
@@ -380,12 +424,12 @@ class Organization < ActiveRecord::Base
   end
 
   def add_involved(person)
-    add_role_to_person(person, Role::INVOLVED_ID)
+    add_label_to_person(person, Label::INVOLVED_ID)
   end
 
   def remove_leader(person)
     person = person.is_a?(Person) ? person : Person.find(person)
-    remove_role_from_person(person, Role::LEADER_ID)
+    remove_label_from_person(person, Label::LEADER_ID)
     person.remove_assigned_contacts(self)
   end
 

@@ -35,9 +35,14 @@ class ActiveSupport::TestCase
   # fixtures :all
   # Add more helper methods to be used by all tests here...
   Role.admin
-  Role.leader
+  Role.missionhub_user
   Role.contact
-  Role.involved
+  Role.archived
+  Label.involved
+  Label.engaged_disciple
+  Label.leader
+  Label.alumni
+  Label.sent
 end
 
 class Test::Unit::TestCase

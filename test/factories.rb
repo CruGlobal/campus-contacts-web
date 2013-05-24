@@ -243,6 +243,12 @@ FactoryGirl.define do
     followup_status "attempted_contact"
   end
 
+  factory :organizational_label do
+    association :organization
+    association :person
+    association :label
+  end
+
   factory :organization_membership do
     association :organization
     association :person

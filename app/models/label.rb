@@ -32,12 +32,24 @@ class Label < ActiveRecord::Base
     order: "FIELD#{self.default_labels_for_field_string(self::DEFAULT_CRU_LABELS)}"
   }}
   
+  def self.involved
+    @involved ||= Label.find_or_create_by_name_and_i18n_and_organization_id('Involved', 'involved', 0)
+  end
+  
+  def self.engaged_disciple
+    @engaged_disciple ||= Label.find_or_create_by_name_and_i18n_and_organization_id('Engaged Disciple', 'engaged_disciple', 0)
+  end
+  
   def self.leader
-    where(i18n: 'leader').try(:first)
+    @leader ||= Label.find_or_create_by_name_and_i18n_and_organization_id('Leader', 'leader', 0)
+  end
+  
+  def self.alumni
+    @alumni ||= Label.find_or_create_by_name_and_i18n_and_organization_id('Alumni', 'alumni', 0)
   end
   
   def self.sent
-    where(i18n: 'sent').try(:first)
+    @sent ||= Label.find_or_create_by_name_and_i18n_and_organization_id('100% Sent', 'sent', 0)
   end
 
   def self.default_labels_for_field_string(labels)
