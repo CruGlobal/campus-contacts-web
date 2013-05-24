@@ -1,7 +1,7 @@
 <div class="feed_box survey_display">
 	<div class="feed_icon"><%= image_tag("survey.png") %></div>
 	<div class="feed_item_header">
-    <span class="feed_item_date"><%= time_format(answer_sheet.completed_at) %></span>
+    <span class="feed_item_date"><%= wiser_date(answer_sheet.completed_at) %></span>
 	  <span class="feed_item_privacy">
       <strong>Visible to:</strong>
       <%= "Everyone in #{answer_sheet.survey.organization.name}" %>

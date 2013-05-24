@@ -1,7 +1,7 @@
 <div class="feed_box interaction_display interaction_feed" id="interaction_feed_<%= interaction.id %>">
 	<div class="feed_icon"><%= image_tag(interaction.icon) %></div>
 	<div class="feed_item_header">
-    <span class="feed_item_date"><%= time_format(interaction.timestamp) %></span>
+    <span class="feed_item_date"><%= wiser_date(interaction.timestamp) %></span>
     <span class="feed_item_privacy">
       <strong>Visible to:&nbsp;</strong><%= interaction.privacy %>
       <%= link_to image_tag("edit_sprite.png"), "#menutop", class: "edit_feed_icon", "data-id" => interaction.id, "data-person-id" => @person.id %>
