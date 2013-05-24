@@ -68,3 +68,8 @@ and replace it with this:  */
   color: #333;
   border: 1px solid #bbbbbb;
 }
+
+#ui-datepicker-div .ui-datepicker-buttonpane.ui-widget-content {
+  border: 0;
+  margin-top: -10px;
+}
