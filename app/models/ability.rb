@@ -6,21 +6,22 @@ class Ability
       #can :all, :all
     #else
       roles = Role.default.all
-      leader_role = roles.detect {|r| r.i18n == 'leader'}
+      mh_user_role = roles.detect {|r| r.i18n == 'missionhub_user'}
       admin_role = roles.detect {|r| r.i18n == 'admin'}
-      involved_role = roles.detect {|r| r.i18n == 'involved'}
       user ||= User.new # guest user (not logged in)
       if user && user.person
-        admin_of_org_ids = user.person.admin_of_org_ids #user.person.organizations.where('organizational_roles.role_id' => admin_role.id).collect {|org| org.subtree_ids}.flatten
-        leader_of_org_ids = user.person.leader_of_org_ids #user.person.organizations.where('organizational_roles.role_id' => Role.leader_ids).collect {|org| org.subtree_ids}.flatten
+        admin_of_org_ids = user.person.admin_of_org_ids
+        #user.person.organizations.where('organizational_roles.role_id' => admin_role.id).collect {|org| org.subtree_ids}.flatten
+        mh_user_of_org_ids = user.person.mh_user_of_org_ids
+        #user.person.organizations.where('organizational_roles.role_id' => Role.mh_user_ids).collect {|org| org.subtree_ids}.flatten
 
         can :manage, Organization, id: admin_of_org_ids
-        can :lead, Organization, id: leader_of_org_ids
+        can :lead, Organization, id: mh_user_of_org_ids
 
-        can :manage_contacts, Organization, id: leader_of_org_ids
+        can :manage_contacts, Organization, id: mh_user_of_org_ids
         
-        can :manage_groups, Organization, id: leader_of_org_ids + admin_of_org_ids
-        can :manage_locate_contact, Organization, id: leader_of_org_ids + admin_of_org_ids
+        can :manage_groups, Organization, id: mh_user_of_org_ids + admin_of_org_ids
+        can :manage_locate_contact, Organization, id: mh_user_of_org_ids + admin_of_org_ids
         can :manage_roles, Organization, id: admin_of_org_ids
 
         # can only manage keywords from orgs you're an admin of
@@ -40,24 +41,24 @@ class Ability
         end
 
         # involved members can see other people's info
-        involved_org_ids = user.person.organizational_roles.where(role_id: [admin_role.id, leader_role.id, involved_role.id]).pluck(:organization_id)
+        involved_org_ids = user.person.organizational_roles.where(role_id: [admin_role.id, mh_user_role.id]).pluck(:organization_id)
         can :read, Person, organizational_roles_including_archived: {organization_id: involved_org_ids}
         can :read, PersonPresenter, organizational_roles: { organization_id: involved_org_ids }
 
-        # leaders and admins can edit other ppl's info
-        if user.person.admin_or_leader?
+        # mh_users and admins can edit other ppl's info
+        if user.person.admin_or_mh_user?
           can :create, SmsMailer
           can :create, Person
           can :create, PersonPresenter
-          can :manage, Person, organizational_roles_including_archived: {organization_id: leader_of_org_ids}
-          can :manage, PersonPresenter, organizational_roles_including_archived: {organization_id: leader_of_org_ids}
+          can :manage, Person, organizational_roles_including_archived: {organization_id: mh_user_of_org_ids}
+          can :manage, PersonPresenter, organizational_roles_including_archived: {organization_id: mh_user_of_org_ids}
         end
 
         can :manage, Person, id: user.person.try(:id)
         can :manage, PersonPresenter, id: user.person.try(:id)
 
-        can :manage, Group, organization_id: leader_of_org_ids
-        can :manage, GroupPresenter, organization_id: leader_of_org_ids
+        can :manage, Group, organization_id: mh_user_of_org_ids
+        can :manage, GroupPresenter, organization_id: mh_user_of_org_ids
       #end
 
     end

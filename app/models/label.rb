@@ -2,18 +2,63 @@ class Label < ActiveRecord::Base
   attr_accessible :i18n, :name, :organization_id, :created_at, :updated_at
   # added :created_at and :updated_at for migration only
 
+  DEFAULT_LABELS = ["involved", "engaged_disciple", "leader", "alumni"] # in DSC ORDER by SUPERIORITY
+  CRU_ONLY_LABELS = ["sent"]
+  DEFAULT_CRU_LABELS = DEFAULT_LABELS + CRU_ONLY_LABELS
+
   has_many :people, through: :organizational_labels
   has_many :organizational_labels, dependent: :destroy
   belongs_to :organization
 
   validates :i18n, uniqueness: true, allow_nil: true
-  validates :name, presence: true, :if => Proc.new { |role| organization_id != 0 }
+  validates :name, presence: true, :if => Proc.new { |label| organization_id != 0 }
   validates :organization_id, presence: true
 
   scope :default, where(organization_id: 0)
+
+  scope :default_labels, lambda { {
+    :conditions => "i18n IN #{self.default_labels_for_field_string(self::DEFAULT_LABELS)}",
+    :order => "FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_LABELS)}"
+  }}
+  scope :default_cru_labels, lambda { {
+    :conditions => "i18n IN #{self.default_labels_for_field_string(self::DEFAULT_CRU_LABELS)}",
+    :order => "FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS)}"
+  }}
+  scope :non_default_labels, lambda { {
+    :conditions => "i18n IS NULL",
+    :order => "labels.name ASC"
+  }}
+  scope :arrange_all, lambda {{
+    order: "FIELD#{self.default_labels_for_field_string(self::DEFAULT_CRU_LABELS)}"
+  }}
   
   def self.leader
     where(i18n: 'leader').try(:first)
+  end
+  
+  def self.sent
+    where(i18n: 'sent').try(:first)
+  end
+
+  def self.default_labels_for_field_string(labels)
+    labels_string = "("
+    labels.each do |r|
+      labels_string = labels_string + "\"" + r + "\"" + ","
+    end
+    labels_string[labels_string.length-1] = ")"
+    labels_string
+  end
+
+  def self.i18n_field_plus_default_labels_for_field_string(labels)
+    r = self.default_labels_for_field_string(labels)
+    r[0] = ""
+    r = "(labels.i18n," + r
+    r
+  end
+  
+  if Label.table_exists? # added for travis testing
+    LEADER_ID = leader.id
+    SENT_ID = sent.id
   end
   
 end
