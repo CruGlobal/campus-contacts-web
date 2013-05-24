@@ -2,6 +2,7 @@
   <%= form_tag params, method: :get, id: 'contact_search_form' do %>
     <%= hidden_field_tag :completed, params[:completed] if params[:completed].present? %>
     <%= hidden_field_tag :do_search, 1 %>
+    <%= hidden_field_tag :include_archived, params[:include_archived] if params[:include_archived].present? %>
     <%= hidden_field_tag :assigned_to, params[:assigned_to] if params[:assigned_to].present? %>
     <div class="ononeline">
       <div class="field">
