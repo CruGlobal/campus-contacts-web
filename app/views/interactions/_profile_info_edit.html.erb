@@ -54,7 +54,7 @@
                   <%= check_box_tag 'leader_id[]', 0, false, class: "leader_box", id: "leader_0", "data-id" => "0" %>
                   <div class="leader_name dropdown_name">Unassigned</div>
                 </div>
-                <% if current_person.leader_role_for_org(current_organization) %>
+                <% if current_person.labeled_in_org?(Label.leader, current_organization) %>
                   <%= render partial: 'interactions/option_leader', locals: {person: current_person, current_person: current_person, leader: current_person} %>
                 <% end %>
                 <% @assigned_tos.where("assigned_to_id <> ?", current_person.id).each do |assignment| %>
