@@ -383,12 +383,12 @@ class OrganizationTest < ActiveSupport::TestCase
     org = Factory(:organization)
 
     org.add_leader(user1.person, user2.person)
-    org_label = OrganizationalLabel.last
+    org_role = OrganizationalRole.last
 
-    assert_equal org.id, org_label.organization_id, "The last role should have the org"
-    assert_equal user1.person.id, org_label.person_id, "The last role should have the person"
-    assert_equal user2.person.id, org_label.added_by_id, "The last role should have the person who adds the leader"
-    assert_equal Role::LEADER_ID, org_label.label_id, "The last role should have the leader role id"
+    assert_equal org.id, org_role.organization_id, "The last role should have the org"
+    assert_equal user1.person.id, org_role.person_id, "The last role should have the person"
+    assert_equal user2.person.id, org_role.added_by_id, "The last role should have the person who adds the leader"
+    assert_equal Role::MH_USER_ID, org_role.role_id, "The last role should have the leader role id"
   end
 
   test "using add_leader(person) in deleted leader" do
@@ -399,19 +399,19 @@ class OrganizationTest < ActiveSupport::TestCase
 
     # Add Leader
     org.add_leader(user1.person, user2.person)
-    org_label = OrganizationalLabel.last
+    org_role = OrganizationalRole.last
 
     # Archive Leader
-    org_label.archive
+    org_role.archive
 
     # Add Leader Again
     org.add_leader(user1.person, user3.person)
-    org_label = OrganizationalLabel.last
+    org_role = OrganizationalRole.last
 
-    assert_equal org.id, org_label.organization_id, "The last role should have the org"
-    assert_equal user1.person.id, org_label.person_id, "The last role should have the person"
-    assert_equal user3.person.id, org_label.added_by_id, "The last role should have the other person who adds the leader"
-    assert_equal Label::LEADER_ID, org_label.label_id, "The last role should have the leader role id"
+    assert_equal org.id, org_role.organization_id, "The last role should have the org"
+    assert_equal user1.person.id, org_role.person_id, "The last role should have the person"
+    assert_equal user3.person.id, org_role.added_by_id, "The last role should have the other person who adds the leader"
+    assert_equal Role::MH_USER_ID, org_role.role_id, "The last role should have the leader role id"
 
   end
 
