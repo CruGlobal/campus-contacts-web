@@ -74,6 +74,7 @@ class Role < ActiveRecord::Base
     ADMIN_ID = admin.id
     MH_USER_ID = missionhub_user.id
     CONTACT_ID = contact.id
+    ARCHIVED_ID = archived.id
   end
 
   DEFAULT_ROLES = ["admin", "missionhub_user", "contact"]

@@ -67,11 +67,11 @@ class OrganizationTest < ActiveSupport::TestCase
       assert(results.include?(@leader2), "should should be returned")
     end
     should "not return leaders from other org" do
-      results = @org1.missionhub_user
+      results = @org1.missionhub_users
       assert(!results.include?(@leader3), "should not should be returned")
     end
     should "not return non-leaders organizational role" do
-      results = @org1.missionhub_user
+      results = @org1.missionhub_users
       assert(!results.include?(@contact), "should not should be returned")
     end
   end
@@ -383,12 +383,12 @@ class OrganizationTest < ActiveSupport::TestCase
     org = Factory(:organization)
 
     org.add_leader(user1.person, user2.person)
-    org_role = OrganizationalRole.last
+    org_label = OrganizationalLabel.last
 
-    assert_equal org.id, org_role.organization_id, "The last role should have the org"
-    assert_equal user1.person.id, org_role.person_id, "The last role should have the person"
-    assert_equal user2.person.id, org_role.added_by_id, "The last role should have the person who adds the leader"
-    assert_equal Role::LEADER_ID, org_role.role_id, "The last role should have the leader role id"
+    assert_equal org.id, org_label.organization_id, "The last role should have the org"
+    assert_equal user1.person.id, org_label.person_id, "The last role should have the person"
+    assert_equal user2.person.id, org_label.added_by_id, "The last role should have the person who adds the leader"
+    assert_equal Role::LEADER_ID, org_label.label_id, "The last role should have the leader role id"
   end
 
   test "using add_leader(person) in deleted leader" do
@@ -399,19 +399,19 @@ class OrganizationTest < ActiveSupport::TestCase
 
     # Add Leader
     org.add_leader(user1.person, user2.person)
-    org_role = OrganizationalRole.last
+    org_label = OrganizationalLabel.last
 
     # Archive Leader
-    org_role.archive
+    org_label.archive
 
     # Add Leader Again
     org.add_leader(user1.person, user3.person)
-    org_role = OrganizationalRole.last
+    org_label = OrganizationalLabel.last
 
-    assert_equal org.id, org_role.organization_id, "The last role should have the org"
-    assert_equal user1.person.id, org_role.person_id, "The last role should have the person"
-    assert_equal user3.person.id, org_role.added_by_id, "The last role should have the other person who adds the leader"
-    assert_equal Role::LEADER_ID, org_role.role_id, "The last role should have the leader role id"
+    assert_equal org.id, org_label.organization_id, "The last role should have the org"
+    assert_equal user1.person.id, org_label.person_id, "The last role should have the person"
+    assert_equal user3.person.id, org_label.added_by_id, "The last role should have the other person who adds the leader"
+    assert_equal Label::LEADER_ID, org_label.label_id, "The last role should have the leader role id"
 
   end
 
@@ -435,8 +435,8 @@ class OrganizationTest < ActiveSupport::TestCase
     org1 = Factory(:organization)
     person1 = Factory(:person)
     org1.add_involved(person1)
-    om = OrganizationalRole.last
-    assert_equal om.organization.to_s + om.person.to_s + om.role_id.to_s, org1.to_s + person1.to_s + Role::INVOLVED_ID.to_s, "Organization method add_member does not correctly add involved"
+    om = OrganizationalLabel.last
+    assert_equal om.organization.to_s + om.person.to_s + om.label_id.to_s, org1.to_s + person1.to_s + Label::INVOLVED_ID.to_s, "Organization method add_member does not correctly add involved"
   end
 
   test "remove_contact(person)" do
@@ -574,6 +574,11 @@ class OrganizationTest < ActiveSupport::TestCase
       @contact2 = Factory(:person)
       @contact3 = Factory(:person)
       @contact4 = Factory(:person)
+      Factory(:organizational_role, person: @contact1, role: Role.contact, organization: @org)
+      Factory(:organizational_role, person: @contact2, role: Role.contact, organization: @org)
+      Factory(:organizational_role, person: @contact3, role: Role.contact, organization: @org)
+      Factory(:organizational_role, person: @contact4, role: Role.contact, organization: @org)
+      
       Factory(:organizational_label, person: @contact1, label: Label.sent, organization: @org)
       Factory(:organizational_label, person: @contact2, label: Label.sent, organization: @org)
       Factory(:organizational_label, person: @contact3, label: Label.sent, organization: @org)
@@ -588,6 +593,7 @@ class OrganizationTest < ActiveSupport::TestCase
       assert_equal([@contact4], @org.available_transfer)
     end
     should "return all people with label 100% Sent and already transferred" do
+      Factory(:sent_person, person: @contact3)
       assert_equal([@contact3], @org.completed_transfer)
     end
   end

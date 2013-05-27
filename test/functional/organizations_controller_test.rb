@@ -293,11 +293,11 @@ class OrganizationsControllerTest < ActionController::TestCase
   context "Archiving leaders" do
     setup do
       @leader1 = Factory(:user_with_auxs)
-      Factory(:organizational_role, organization: @org, person: @leader1.person, role: Role.leader)
+      Factory(:organizational_role, organization: @org, person: @leader1.person, role: Role.missionhub_user)
       @leader2 = Factory(:user_with_auxs)
-      Factory(:organizational_role, organization: @org, person: @leader2.person, role: Role.leader)
+      Factory(:organizational_role, organization: @org, person: @leader2.person, role: Role.missionhub_user)
       @leader3 = Factory(:user_with_auxs)
-      Factory(:organizational_role, organization: @org, person: @leader3.person, role: Role.leader)
+      Factory(:organizational_role, organization: @org, person: @leader3.person, role: Role.missionhub_user)
     end
 
     should "archive leaders" do
