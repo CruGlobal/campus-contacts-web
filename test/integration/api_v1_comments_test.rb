@@ -106,7 +106,7 @@ class ApiV1CommentsTest < ActionDispatch::IntegrationTest
 
       assert_equal(FollowupComment.where(contact_id: @user2.person.id).count, 1)
 
-      @user3.person.organizational_roles.first.update_attributes(role_id: Role::LEADER_ID)
+      @user3.person.organizational_roles.first.update_attributes(role_id: Role::MH_USER_ID)
       path = "/api/followup_comments/#{FollowupComment.where(:contact_id => @user2.person.id).first.id}"
       delete path, {'access_token' => @access_token3.code}
       @json = ActiveSupport::JSON.decode(@response.body)

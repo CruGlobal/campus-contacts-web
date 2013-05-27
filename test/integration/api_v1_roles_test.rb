@@ -28,7 +28,7 @@ class ApiV1RolesTest < ActionDispatch::IntegrationTest
     
     should "return a JSON error if the identity of the access token is not an admin" do
       path = "/api/roles/#{@user.person.id}"
-      @user3.person.organizational_roles.first.update_attributes(role_id: Role::LEADER_ID)
+      @user3.person.organizational_roles.first.update_attributes(role_id: Role::MH_USER_ID)
       put path, {'access_token' => @access_token3.code, role: "leader", org_id: @user3.person.primary_organization.id}
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal("39", @json['error']['code'], @json['error'])
@@ -63,7 +63,7 @@ class ApiV1RolesTest < ActionDispatch::IntegrationTest
       path = "/api/roles/#{@user.person.id}"
       user2 = Factory(:user_with_auxs)
       #@user.person.organizational_roles.first.update_attributes(role_id: Role::LEADER_ID)
-      Factory(:organizational_role, person: @user.person, role: Role.leader, organization: @user3.person.primary_organization, :added_by_id => user2.person.id)
+      Factory(:organizational_role, person: @user.person, role: Role.missionhub_user, organization: @user3.person.primary_organization, :added_by_id => user2.person.id)
       put path, {'access_token' => @access_token3.code, role: Role.contact, org_id: @user3.person.primary_organization.id}
       @json = ActiveSupport::JSON.decode(@response.body)
       
