@@ -255,20 +255,12 @@ class ContactsControllerTest < ActionController::TestCase
         assert_equal assigns(:header).upcase, "Admin".upcase
       end
       should "have header for leader" do
-        xhr :get, :index, {:role => Role::LEADER_ID}
-        assert_equal assigns(:header).upcase, "Leader".upcase
+        xhr :get, :index, {:role => Role::MH_USER_ID}
+        assert_equal assigns(:header).upcase, "Missionhub user".upcase
       end
       should "have header for contact" do
         xhr :get, :index, {:role => Role::CONTACT_ID}
         assert_equal assigns(:header).upcase, "Contact".upcase
-      end
-      should "have header for involved" do
-        xhr :get, :index, {:role => Role::INVOLVED_ID}
-        assert_equal assigns(:header).upcase, "Involved".upcase
-      end
-      should "have header for sent" do
-        xhr :get, :index, {:role => Role::SENT_ID}
-        assert_equal assigns(:header).upcase, "Sent".upcase
       end
       should "have header when viewing unassigned contacts" do
         xhr :get, :index, {:assigned_to => "unassigned"}
@@ -322,14 +314,13 @@ class ContactsControllerTest < ActionController::TestCase
       @contact3 = Factory(:person)
       @contact4 = Factory(:person)
       @contact5 = Factory(:person)
-      @user.person.organizations.first.add_leader(@user.person, @user.person)
-      @user.person.organizations.first.add_contact(@contact1)
-      @user.person.organizations.first.add_contact(@contact2)
-      @user.person.organizations.first.add_contact(@contact3)
-      @user.person.organizations.first.add_contact(@contact4)
-      @user.person.organizations.first.add_contact(@contact5)
+      
+      @org.add_leader(@user.person, @user.person)
+      @org.add_contact(@contact1)
+      @org.add_contact(@contact2)
+      @org.add_contact(@contact3)
+      @org.add_contact(@contact4)
 
-      @contact5.organizational_roles.first.destroy
       xhr :get, :index, {:assigned_to => "unassigned"}
       assert_equal [@contact1.id, @contact2.id, @contact3.id, @contact4.id], assigns(:people).collect(&:id).sort
     end
@@ -366,7 +357,7 @@ class ContactsControllerTest < ActionController::TestCase
         @user = Factory(:user_with_auxs)
         @user2 = Factory(:user_with_auxs)
         org = Factory(:organization)
-        Factory(:organizational_role, person: @user.person, role: Role.leader, organization: org, :added_by_id => @user2.person.id)
+        Factory(:organizational_role, person: @user.person, role: Role.missionhub_user, organization: org, :added_by_id => @user2.person.id)
         sign_in @user
         @request.session[:current_organization_id] = org.id
 
@@ -401,9 +392,10 @@ class ContactsControllerTest < ActionController::TestCase
       setup do
         get :index
       end
-      should redirect_to '/wizard'
+      should "show dashboard info page" do
+        assert_response :redirect
+      end
     end
-
   end
 
   context "After logging in as a contact" do
@@ -418,7 +410,9 @@ class ContactsControllerTest < ActionController::TestCase
       setup do
         get :index
       end
-      should redirect_to('/wizard')
+      should "show dashboard" do
+        assert_response :success
+      end
     end
   end
 
@@ -431,8 +425,8 @@ class ContactsControllerTest < ActionController::TestCase
 
     #org.add_leader(user1.person, user.person)
     #org.add_leader(user2.person, user.person)
-    Factory(:organizational_role, person: user1.person, organization: org, role: Role.leader)
-    Factory(:organizational_role, person: user2.person, organization: org, role: Role.leader)
+    Factory(:organizational_role, person: user1.person, organization: org, role: Role.missionhub_user)
+    Factory(:organizational_role, person: user2.person, organization: org, role: Role.missionhub_user)
 
     xhr :post, :send_reminder, { :to => "#{user1.person.id}, #{user2.person.id}" }
 
@@ -447,7 +441,7 @@ class ContactsControllerTest < ActionController::TestCase
       @user2 = Factory(:user_with_auxs)
 
       @user, @org = admin_user_login_with_org
-      Factory(:organizational_role, organization: @org, person: @user.person, role: Role.leader)
+      Factory(:organizational_role, organization: @org, person: @user.person, role: Role.missionhub_user)
       @person1 = Factory(:person, first_name: "Neil Marion", last_name: "dela Cruz", email: "ndc@email.com")
       Factory(:organizational_role, organization: @org, person: @person1, role: Role.contact)
       @person2 = Factory(:person, first_name: "Johnny", last_name: "English", email: "english@email.com")
@@ -770,7 +764,7 @@ class ContactsControllerTest < ActionController::TestCase
       @request.session[:current_organization_id] = @org_child.id
 
       assert_no_difference "Person.count" do
-        xhr :post, :create, {:person => {:first_name => @user.person.first_name, :last_name => @user.person.last_name, :email_address => {:email => @user.person.email, :primary => 1}}, :labels => [Role.leader.id.to_s, Role.contact.id.to_s] }
+        xhr :post, :create, {:person => {:first_name => @user.person.first_name, :last_name => @user.person.last_name, :email_address => {:email => @user.person.email, :primary => 1}}, :labels => [Role.missionhub_user.id.to_s, Role.contact.id.to_s] }
       end
     end
   end
@@ -879,8 +873,8 @@ class ContactsControllerTest < ActionController::TestCase
     end
 
     should "return leaders when Leader link is clicked" do
-      Factory(:organizational_role, organization: @org, person: @person1, role: Role.leader)
-      xhr :get, :index, { :role => Role::LEADER_ID }
+      Factory(:organizational_role, organization: @org, person: @person1, role: Role.missionhub_user)
+      xhr :get, :index, { :role => Role::MH_USER_ID }
       assert_equal 1, assigns(:people).total_count, "only 1 record should be returned"
       assert assigns(:people).include?(@person1)
     end
@@ -892,13 +886,6 @@ class ContactsControllerTest < ActionController::TestCase
       assert assigns(:people).include?(@person2)
       assert assigns(:people).include?(@person3)
       assert assigns(:people).include?(@person4)
-    end
-
-    should "return involveds when Involved link is clicked" do
-      Factory(:organizational_role, organization: @org, person: @person1, role: Role.involved)
-      xhr :get, :index, { :role => Role::INVOLVED_ID }
-      assert_equal 1, assigns(:people).total_count, "only 1 record should be returned"
-      assert assigns(:people).include?(@person1)
     end
 
     context "by gender" do
@@ -950,10 +937,8 @@ class ContactsControllerTest < ActionController::TestCase
       setup do
         # Default
         @person5 = Factory(:person, first_name: 'Five')
-        Factory(:organizational_role, organization: @org, person: @person1, role: Role.leader)
+        Factory(:organizational_role, organization: @org, person: @person1, role: Role.missionhub_user)
         Factory(:organizational_role, organization: @org, person: @person2, role: Role.admin)
-        Factory(:organizational_role, organization: @org, person: @person3, role: Role.involved)
-        Factory(:organizational_role, organization: @org, person: @person4, role: Role.alumni)
         Factory(:organizational_role, organization: @org, person: @person5, role: Role.contact)
         # Non-Default
         @a_person = Factory(:person, first_name: 'a_role')

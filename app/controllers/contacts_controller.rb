@@ -232,10 +232,10 @@ class ContactsController < ApplicationController
 
   def send_reminder
     to_ids = params[:to].split(',')
-    leaders = current_organization.leaders.where(id: to_ids)
+    missionhub_users = current_organization.missionhub_users.where(id: to_ids)
 
-    if leaders.present?
-      ContactsMailer.enqueue.reminder(leaders.collect(&:email).compact, current_person.email, params[:subject], params[:body])
+    if missionhub_users.present?
+      ContactsMailer.enqueue.reminder(missionhub_users.collect(&:email).compact, current_person.email, params[:subject], params[:body])
     end
     render nothing: true
   end

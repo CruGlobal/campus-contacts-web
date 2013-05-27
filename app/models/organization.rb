@@ -246,48 +246,46 @@ class Organization < ActiveRecord::Base
     @self_and_children_questions ||= self_and_children_surveys.collect(&:questions).flatten.uniq
   end
 
-  def unassigned_contacts
-    Person
-    .joins("INNER JOIN organizational_labels org_labels ON org_labels.person_id = people.id
-        AND org_labels.organization_id = #{id}
-        AND org_labels.label_id = '#{Label::LEADER_ID}'
-        LEFT JOIN contact_assignments ca ON ca.person_id = people.id
-        AND ca.organization_id = #{id}")
-        .where("ca.id IS NULL OR ca.assigned_to_id NOT IN (?)", leaders.collect(&:id))
+  def assigned_contacts
+    assignments = contact_assignments.where(person_id: contacts.collect(&:id), assigned_to_id: leaders.collect(&:id))
+    assignments.present? ? contacts.where(id: assignments.collect(&:person_id)) : contacts
   end
 
+  def assigned_contacts_with_archived
+    assignments = contact_assignments.where(person_id: contacts_with_archived.collect(&:id), assigned_to_id: leaders.collect(&:id))
+    assignments.present? ? contacts_with_archived.where(id: assignments.collect(&:person_id)) : contacts_with_archived
+  end
+
+  def unassigned_contacts
+    assignments = contact_assignments.where(person_id: contacts.collect(&:id), assigned_to_id: leaders.collect(&:id))
+    assignments.present? ? contacts.where("people.id NOT IN (?)", assignments.collect(&:person_id)) : contacts
+  end
+  
   def unassigned_contacts_with_archived
-    Person
-    .joins("INNER JOIN organizational_labels org_labels ON org_labels.person_id = people.id
-        AND org_labels.organization_id = #{id}
-        AND org_labels.label_id = '#{Label::LEADER_ID}'
-        LEFT JOIN contact_assignments ca ON ca.person_id = people.id
-        AND ca.organization_id = #{id}")
-        .where("ca.id IS NULL OR ca.assigned_to_id NOT IN (?)", leaders.collect(&:id))
+    assignments = contact_assignments.where(person_id: contacts_with_archived.collect(&:id), assigned_to_id: leaders.collect(&:id))
+    assignments.present? ? contacts_with_archived.where("people.id NOT IN (?)", assignments.collect(&:person_id)) : contacts_with_archived
   end
 
   def inprogress_contacts
-    person_table_pkey = "#{Person.table_name}.#{Person.primary_key}"
     Person
-    .joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{person_table_pkey}
+    .joins("INNER JOIN organizational_roles ON organizational_roles.person_id = people.id
         AND organizational_roles.organization_id = #{id}
         AND organizational_roles.role_id = '#{Role::CONTACT_ID}'
         AND organizational_roles.followup_status <> 'do_not_contact'
         AND organizational_roles.followup_status <> 'completed'
         AND org_roles.archive_date IS NULL
-        LEFT JOIN contact_assignments ON contact_assignments.person_id = #{person_table_pkey}
+        LEFT JOIN contact_assignments ON contact_assignments.person_id = people.id
         AND contact_assignments.organization_id = #{id}")
         .where("contact_assignments.assigned_to_id IN (?)", only_leaders)
   end
   def inprogress_contacts_with_archived
-    person_table_pkey = "#{Person.table_name}.#{Person.primary_key}"
     Person
-    .joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{person_table_pkey}
+    .joins("INNER JOIN organizational_roles ON organizational_roles.person_id = people.id
         AND organizational_roles.organization_id = #{id}
         AND organizational_roles.role_id = '#{Role::CONTACT_ID}'
         AND organizational_roles.followup_status <> 'do_not_contact'
         AND organizational_roles.followup_status <> 'completed'
-        LEFT JOIN contact_assignments ON contact_assignments.person_id = #{person_table_pkey}
+        LEFT JOIN contact_assignments ON contact_assignments.person_id = people.id
         AND contact_assignments.organization_id = #{id}")
         .where("contact_assignments.assigned_to_id IN (?)", only_leaders)
   end
@@ -391,9 +389,9 @@ class Organization < ActiveRecord::Base
   def add_leader(person, current_person)
     person_id = person.is_a?(Person) ? person.id : person
     begin
-      org_leader = OrganizationalLabel.find_or_create_by_person_id_and_organization_id_and_label_id(person_id, id, Label::LEADER_ID, :added_by_id => current_person.id)
-      unless org_leader.removed_date.nil?
-        org_leader.update_attributes({:added_by_id => current_person.id, :removed_date => nil})
+      org_leader = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::MH_USER_ID, :added_by_id => current_person.id)
+      unless org_leader.archive_date.nil?
+        org_leader.update_attributes({:added_by_id => current_person.id, :archive_date => nil})
         org_leader.notify_new_leader
       end
     rescue => error
@@ -420,7 +418,7 @@ class Organization < ActiveRecord::Base
   def remove_person(person)
     person_id = person.is_a?(Person) ? person.id : person
     organizational_roles.where(person_id: person_id).each do |ors|
-      if(ors.label_id == LABEL::LEADER_ID)
+      if(ors.role_id == Role::MH_USER_ID)
         # remove contact assignments if this was a leader
         Person.find(ors.person_id).contact_assignments.where(organization_id: id).all.collect(&:destroy)
       end
