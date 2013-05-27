@@ -180,7 +180,7 @@ class PeopleControllerTest < ActionController::TestCase
 
     should "archive roles when trying to remove them (instead of deleting them in the database)" do
       Factory(:organizational_role, organization: @user.person.organizations.first, person: @person2, role: Role.contact)
-      Factory(:organizational_role, organization: @user.person.organizations.first, person: @person2, role: Role.involved)
+      Factory(:organizational_role, organization: @user.person.organizations.first, person: @person2, role: Role.missionhub_user)
 
       assert_difference "OrganizationalRole.where(person_id: #{@person2.id}, organization_id: #{@user.person.organizations.first.id}, archive_date: nil).count", -1 do
         xhr :post, :update_roles, { :role_ids => "#{Role.contact.id}", :some_role_ids => "", :person_id => @person2.id }
@@ -394,7 +394,7 @@ class PeopleControllerTest < ActionController::TestCase
       @request.session[:current_organization_id] = @org.id
 
       @roles = []
-      @roles << Role.leader
+      @roles << Role.missionhub_user
       @roles = @roles.collect { |role| role.id }.join(',')
     end
 
@@ -419,7 +419,7 @@ class PeopleControllerTest < ActionController::TestCase
       setup do
         @existing_roles = []
         @existing_roles << Role.contact
-        @existing_roles << Role.leader
+        @existing_roles << Role.missionhub_user
         @existing_roles = @existing_roles.collect { |role| role.id }.join(',')
       end
 
@@ -433,7 +433,7 @@ class PeopleControllerTest < ActionController::TestCase
         #assert that the leader role was not added
         assert_response :success
         assert_equal(2, person.roles.count)
-        assert(person.roles.include? Role.leader)
+        assert(person.roles.include? Role.missionhub_user)
         assert(person.roles.include? Role.contact)
         assert_equal(person.id, OrganizationalRole.last.person_id)
         assert_equal("thisemailisalsounique@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s)
@@ -523,9 +523,9 @@ class PeopleControllerTest < ActionController::TestCase
       end
     end
 
-    context "when the logged in user is a leader" do
+    context "when the logged in user is a missionhub_user" do
       setup do
-        Factory(:organizational_role, organization: @org, person: @user.person, role: Role.leader)
+        Factory(:organizational_role, organization: @org, person: @user.person, role: Role.missionhub_user)
       end
 
       should "not be allowed to use the merge facility" do
@@ -678,7 +678,7 @@ class PeopleControllerTest < ActionController::TestCase
       end
     end
 
-    should "not create a person with leader role without a valid email" do
+    should "not create a person with missionhub_user role without a valid email" do
       assert_no_difference "Person.count" do
         post :create, {:person=> { :first_name =>"Waymar", :last_name =>"Royce", :gender =>"male", :email_address =>{:email =>"", :primary =>"1"}}, :roles =>{"1"=> Role.missionhub_user.id}}
       end
@@ -690,9 +690,9 @@ class PeopleControllerTest < ActionController::TestCase
       end
     end
 
-    should "create a person with leader role with a valid email" do
+    should "create a person with missionhub_user role with a valid email" do
       assert_difference "Person.count", 1 do
-        post :create, {:person=> { :first_name =>"Waymar", :last_name =>"Royce", :gender =>"male", :email_address =>{:email =>"wayarroyce@email.com", :primary =>"1"}}, :roles =>{"1"=> Role.leader.id}}
+        post :create, {:person=> { :first_name =>"Waymar", :last_name =>"Royce", :gender =>"male", :email_address =>{:email =>"wayarroyce@email.com", :primary =>"1"}}, :roles =>{"1"=> Role.missionhub_user.id}}
       end
     end
   end
@@ -861,7 +861,7 @@ class PeopleControllerTest < ActionController::TestCase
 
       @leader1 = Factory(:user_with_auxs)
       @leader1.person.update_attributes({first_name: "B", last_name: "B"})
-      Factory(:organizational_role, organization: @org, person: @leader1.person, role: Role.leader)
+      Factory(:organizational_role, organization: @org, person: @leader1.person, role: Role.missionhub_user)
 
       @contact1 = Factory(:user_with_auxs)
       @contact1.person.update_attributes({first_name: "C", last_name: "C"})
@@ -874,10 +874,6 @@ class PeopleControllerTest < ActionController::TestCase
       @contact3 = Factory(:user_with_auxs)
       @contact3.person.update_attributes({first_name: "E", last_name: "E"})
       Factory(:organizational_role, organization: @org, person: @contact3.person, role: Role.contact)
-
-      @involved1 = Factory(:user_with_auxs)
-      @involved1.person.update_attributes({first_name: "F", last_name: "F"})
-      Factory(:organizational_role, organization: @org, person: @involved1.person, role: Role.involved)
     end
 
     should "return admins when Admin link is clicked" do
@@ -885,19 +881,14 @@ class PeopleControllerTest < ActionController::TestCase
       assert_equal [@admin1.person.id, @user.person.id], assigns(:all_people).collect{|x| x.id}
     end
 
-    should "return leaders when Leader link is clicked" do
-      xhr :get, :index, { :role => Role::LEADER_ID }
+    should "return leaders when MissionHub Users link is clicked" do
+      xhr :get, :index, { :role => Role::MH_USER_ID }
       assert_equal [@leader1.person.id], assigns(:all_people).collect{|x| x.id}
     end
 
     should "return contacts when Contact link is clicked" do
       xhr :get, :index, { :role => Role::CONTACT_ID }
       assert_equal [@contact1.person.id, @contact2.person.id, @contact3.person.id].sort { |x, y| x <=> y }, assigns(:all_people).collect{|x| x.id}
-    end
-
-    should "return involveds when Involved link is clicked" do
-      xhr :get, :index, { :role => Role::INVOLVED_ID }
-      assert_equal [@involved1.person.id], assigns(:all_people).collect{|x| x.id}
     end
 
     should "return archiveds when Archived link is clicked" do
@@ -912,19 +903,19 @@ class PeopleControllerTest < ActionController::TestCase
     should "only return unarchived people when 'Include Archived' checkbox isn't checked'" do
       @contact1.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
       @contact2.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
-      @leader1.person.organizational_roles.where(role_id: Role::LEADER_ID).first.archive
+      @leader1.person.organizational_roles.where(role_id: Role::MH_USER_ID).first.archive
 
       xhr :get, :index
-      assert_equal [@admin1.person.id, @user.person.id, @contact3.person.id, @involved1.person.id], assigns(:all_people).collect{|x| x.id}
+      assert_equal [@admin1.person.id, @user.person.id, @contact3.person.id], assigns(:all_people).collect{|x| x.id}
     end
 
     should "return all people (even unarchived ones) when 'Include Archived' checkbox is checked'" do
       @contact1.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
       @contact2.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
-      @leader1.person.organizational_roles.where(role_id: Role::LEADER_ID).first.archive
+      @leader1.person.organizational_roles.where(role_id: Role::MH_USER_ID).first.archive
 
       xhr :get, :index, { :include_archived => true }
-      assert_equal [@admin1.person.id, @leader1.person.id, @contact1.person.id, @contact2.person.id, @user.person.id, @contact3.person.id, @involved1.person.id], assigns(:all_people).collect{|x| x.id}
+      assert_equal [@admin1.person.id, @leader1.person.id, @contact1.person.id, @contact2.person.id, @user.person.id, @contact3.person.id], assigns(:all_people).collect{|x| x.id}
     end
 
     should "return all admin even with archived roles when 'Include ARchived' checkbox is checked" do
@@ -937,16 +928,16 @@ class PeopleControllerTest < ActionController::TestCase
     should "return people sorted alphabetically by first_name" do
 
       xhr :get, :index, {:search=>{:meta_sort=>"first_name desc"}}
-      assert_equal [@user.person.name, @involved1.person.name, @contact3.person.name, @contact2.person.name, @contact1.person.name, @leader1.person.name, @admin1.person.name], assigns(:all_people).collect(&:name)
+      assert_equal [@user.person.name, @contact3.person.name, @contact2.person.name, @contact1.person.name, @leader1.person.name, @admin1.person.name], assigns(:all_people).collect(&:name)
 
       xhr :get, :index, {:search=>{:meta_sort=>"first_name asc"}}
-      assert_equal [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @involved1.person.name, @user.person.name], assigns(:all_people).collect(&:name)
+      assert_equal [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @contact3.person.name, @user.person.name], assigns(:all_people).collect(&:name)
 
       xhr :get, :index, {:search=>{:meta_sort=>"last_name desc"}}
-      assert_equal [@involved1.person.name, @contact3.person.name, @user.person.name, @contact2.person.name, @contact1.person.name, @leader1.person.name, @admin1.person.name], assigns(:all_people).collect(&:name)
+      assert_equal [@contact3.person.name, @user.person.name, @contact2.person.name, @contact1.person.name, @leader1.person.name, @admin1.person.name], assigns(:all_people).collect(&:name)
 
       xhr :get, :index, {:search=>{:meta_sort=>"last_name asc"}}
-      assert_equal [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @user.person.name, @contact3.person.name, @involved1.person.name], assigns(:all_people).collect(&:name)
+      assert_equal [@admin1.person.name, @leader1.person.name, @contact1.person.name, @contact2.person.name, @user.person.name, @contact3.person.name], assigns(:all_people).collect(&:name)
     end
   end
 
