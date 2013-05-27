@@ -7,7 +7,7 @@ class VcardMailerTest < ActiveSupport::TestCase
     VcardMailer.vcard("vincent.paca@gmail.com", user.person.id).deliver
     content = ActionMailer::Base.deliveries.last
     
-    assert_match /Contact information#{user.person.name}/, content.subject.to_s
+    assert_match "Contact information: #{user.person.name} from Mission Hub", content.subject.to_s
     assert_equal 1, content.attachments.count
   end
   

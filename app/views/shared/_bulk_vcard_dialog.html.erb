@@ -2,10 +2,16 @@
   <p>
     <%= t('contacts.index.bulk_vcard_dialog_desc') %> 
   </p>
-  <%= form_tag bulk_create_vcards_url, :id => "bulk_vcard_form" do %>
-    <div class="field_in">
-      <label><%= t('general.email') %></label> 
-      <div class="in"><%= text_field_tag :bulk_vcard_email, current_person.email %></div>
-    </div>
-  <% end %>
+  <div align="center">
+    <%= form_tag bulk_create_vcards_url, :id => "bulk_vcard_form" do %>
+      <div class="field_in">
+        <label><%= t('general.email') %></label> 
+        <div class="in"><%= text_field_tag :bulk_vcard_email, current_person.email %></div>
+      </div>
+      <div class="field_in">
+        <label><%= t('general.note') %></label> 
+        <div class="in"><%= text_field_tag :bulk_vcard_note, "", "placeholder"=>"Optional"%></div>
+      </div>
+    <% end %>
+  </div>
 </div>

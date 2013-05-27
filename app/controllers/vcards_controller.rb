@@ -9,15 +9,17 @@ class VcardsController < ApplicationController
   end
 
   def bulk_create
-
-    ids = params[:ids].split(',')
-
+    ids = params[:ids]
     if ids.present?
-
+      all_ids = ids.split(',')
       respond_to do |wants|
         wants.html do
           if params.has_key?(:email)
-            VcardMailer.enqueue.bulk_vcard(params[:email],  params[:ids])
+            if all_ids.count > 1
+              VcardMailer.bulk_vcard(params[:email], all_ids, params[:note]).deliver!
+            else
+              VcardMailer.vcard(params[:email], ids, params[:note]).deliver!
+            end
             render nothing: true
           else
             send_data Person.vcard(ids), :type => 'application/vcard', :disposition => 'attachment', :filename => "contacts.vcf"

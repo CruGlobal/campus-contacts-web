@@ -211,16 +211,25 @@ $ ->
 
     $('#bulk_vcard_dialog').dialog
       resizable: false,
-      height: 200,
+      height: 250,
       width: 400,
       modal: true,
+      open: (event, ui) ->
+        $('#bulk_vcard_note').val("")
+      ,
       buttons:
         "Send to email": ->
           email = $('#bulk_vcard_email').val()
+          note = $('#bulk_vcard_note').val()
           url = $('#bulk_vcard_form').attr('action')
-          $.get(url + '?ids=' + ids + '&email=' + email)
-          $.n(t('contacts.index.bulk_vcard_email_message') + email)
-          $(this).dialog('destroy')
+          
+          if email == ""
+            $.a(t('contacts.index.none_email_vcard'))
+            return false
+          else
+            $.get(url + '?ids=' + ids + '&email=' + email + '&note=' + note)
+            $.n(t('contacts.index.bulk_vcard_email_message') + email)
+            $(this).dialog('destroy')
         "Download": ->
           url = $('#bulk_vcard_form').attr('action')
           window.location = url + '?ids=' + ids

@@ -133,6 +133,7 @@ en:
     first_name: First Name
     last_name: Last Name
     email: Email
+    note: Note
     phone: Phone
     send_email: 'Email'
     search: 'Search'
@@ -693,6 +694,7 @@ en:
       completed_contacts: "All Contacts - Completed"
       friend_responses: "Contacts who are also my friends on Facebook"
       none_checked: "You need to select a person before this feature will work."
+      none_email_vcard: "Email is required to send this vcard."
       show_all: Show 'In Progress' contacts
       matching_seach: Matching the criteria you searched for
       which_org: 'You need to choose which organization you want to do folow-up from'
@@ -779,10 +781,10 @@ en:
       additional_information: Additional Information
       cancel: "Cancel and go back to profile"
     mailer:
-      vcard_email_subject: 'Contact information'
-      vcard_email_content: 'Attached in this email is a vcard containing the contact you selected'
+      vcard_email_subject: 'Contact information: %{name} from Mission Hub'
+      vcard_email_content: 'Attached in this email is a vcard containing the contact you selected.'
       bulk_vcard_email_subject: 'Your request for contact information'
-      bulk_vcard_email_content: 'Attached to this email is a vcard containing the contacts you selected'
+      bulk_vcard_email_content: 'Attached to this email is a vcard containing the contacts you selected.'
     import_contacts:
       success: "Your CSV upload is now being processed. You will receive an email when it finishes."
       error: "CSV Import unsuccessful for some rows:"
