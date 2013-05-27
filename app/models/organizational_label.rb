@@ -9,6 +9,11 @@ class OrganizationalLabel < ActiveRecord::Base
   belongs_to :created_by, class_name: 'Person', foreign_key: 'added_by_id'
   belongs_to :label
   belongs_to :organization
+
+
+  def archive
+    update_attributes({:removed_date => Time.now})
+  end
   
   private
 

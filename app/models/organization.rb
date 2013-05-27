@@ -32,7 +32,12 @@ class Organization < ActiveRecord::Base
 
   if Role.table_exists? # added for travis testing
     has_many :leaders, through: :organizational_labels, source: :person, conditions: ["organizational_labels.label_id IN (?) AND organizational_labels.removed_date IS NULL", Label::LEADER_ID], order: "people.last_name, people.first_name", uniq: true
-    has_many :sent, through: :organizational_labels, source: :person, conditions: ["organizational_labels.label_id IN (?) AND organizational_labels.removed_date IS NULL", Label::SENT_ID], order: "people.last_name, people.first_name", uniq: true
+    # has_many :sent, through: :organizational_labels, source: :person, conditions: ["organizational_labels.label_id IN (?) AND organizational_labels.removed_date IS NULL", Label::SENT_ID], order: "people.last_name, people.first_name", uniq: true
+    
+    def sent
+      labeled = organizational_labels.where(person_id: contacts.collect(&:id), label_id: Label::SENT_ID)
+      contacts.where(id: labeled.collect(&:person_id)).order('people.last_name, people.first_name').uniq
+    end
     
     has_many :only_missionhub_users, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL", Role::MH_USER_ID], order: "people.last_name, people.first_name", uniq: true
     has_many :missionhub_users, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id IN (?) AND organizational_roles.archive_date IS NULL", [Role::MH_USER_ID, Role::ADMIN_ID]], order: "people.last_name, people.first_name", uniq: true
@@ -120,7 +125,7 @@ class Organization < ActiveRecord::Base
   end
 
   def available_transfer
-    all_people - sent
+    contacts - sent
   end
 
   def has_parent?(org_id)
@@ -168,7 +173,7 @@ class Organization < ActiveRecord::Base
   end
 
   def default_labels
-    has_parent?(1) ? roles.default_cru_labels : roles.default_labels
+    has_parent?(1) ? labels.default_cru_labels : labels.default_labels
   end
 
   def non_default_labels
@@ -304,6 +309,10 @@ class Organization < ActiveRecord::Base
     Role.where("organization_id = 0 or organization_id = #{id}")
   end
 
+  def labels
+    Label.where("organization_id = 0 or organization_id = #{id}")
+  end
+
   def <=>(other)
     name <=> other.name
   end
@@ -382,7 +391,7 @@ class Organization < ActiveRecord::Base
   def add_leader(person, current_person)
     person_id = person.is_a?(Person) ? person.id : person
     begin
-      org_leader = OrganizationalLabel.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Label::LEADER_ID, :added_by_id => current_person.id)
+      org_leader = OrganizationalLabel.find_or_create_by_person_id_and_organization_id_and_label_id(person_id, id, Label::LEADER_ID, :added_by_id => current_person.id)
       unless org_leader.removed_date.nil?
         org_leader.update_attributes({:added_by_id => current_person.id, :removed_date => nil})
         org_leader.notify_new_leader

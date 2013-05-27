@@ -71,6 +71,8 @@ class Label < ActiveRecord::Base
   if Label.table_exists? # added for travis testing
     LEADER_ID = leader.id
     SENT_ID = sent.id
+    INVOLVED_ID = involved.id
+    ALUMNI_ID = alumni.id
   end
   
 end
