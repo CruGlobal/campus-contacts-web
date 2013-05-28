@@ -58,6 +58,9 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
     end
 
     should "move the people (involved roles) from one org to another org (keep contact)" do
+      @org.add_contact(@person1)
+      @org.add_contact(@person2)
+      @org.add_contact(@person3)
       @org.add_involved(@person1)
       @org.add_involved(@person2)
       @org.add_involved(@person3)
@@ -69,7 +72,7 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
 
       xhr :post, :move_to, { :from_id => @org.id , :to_id => @another_org.id, :ids => ids.join(','), :keep_contact => "true", :current_admin => @user }
       # for MH-448
-      assert_equal ids, @org.people.includes(:organizational_roles).where("organizational_roles.role_id" => Role.involved.id).collect(&:id)
+      assert_equal ids, @org.people.includes(:organizational_labels).where("organizational_labels.label_id" => Label::INVOLVED_ID).collect(&:id)
       assert_equal ids, @another_org.contacts.collect(&:id)
     end
 
@@ -85,7 +88,7 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
 
       xhr :post, :move_to, { :from_id => @org.id , :to_id => @another_org.id, :ids => ids.join(','), :keep_contact => "false", :current_admin => @user }
       # for MH-448
-      assert_equal [], @org.people.includes(:organizational_roles).where("organizational_roles.role_id" => Role.involved.id).collect(&:id)
+      assert_equal [], @org.people.includes(:organizational_roles).where("organizational_roles.role_id" => Role.contact.id).collect(&:id)
       assert_equal ids, @another_org.contacts.collect(&:id)
     end
 
@@ -106,9 +109,9 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
       xhr :post, :move_to, { :from_id => @org.id , :to_id => @another_org.id, :ids => ids.join(','), :keep_contact => "false", :current_admin => @user }
       # for MH-448
       assert_equal [], @org.contacts.collect(&:id)
-      assert_equal [], @org.people.includes(:organizational_roles).where("organizational_roles.role_id" => Role.involved.id).collect(&:id)
+      assert_equal [], @org.people.includes(:organizational_roles).where("organizational_roles.role_id" => Role.missionhub_user.id).collect(&:id)
       assert_equal ids, @another_org.contacts.collect(&:id)
-      assert_equal [], @another_org.people.includes(:organizational_roles).where("organizational_roles.role_id" => Role.involved.id).collect(&:id) # only contact role will be obtained by the transferred person
+      assert_equal [], @another_org.people.includes(:organizational_roles).where("organizational_roles.role_id" => Role.missionhub_user.id).collect(&:id) # only contact role will be obtained by the transferred person
     end
 
     should "not be able to move an admin person if he's the only remaining admin in the org" do
@@ -150,7 +153,7 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
       end
 
       assert_equal I18n.t('organizational_roles.moving_people_success'), @response.body
-      assert_equal [], @org.only_leaders.collect(&:id)
+      assert_equal [], @org.only_missionhub_users.collect(&:id)
       assert_equal [@user_2.person.id], @another_org.contacts.collect(&:id)
     end
 
