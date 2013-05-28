@@ -882,7 +882,7 @@ class PeopleControllerTest < ActionController::TestCase
     end
 
     should "return leaders when MissionHub Users link is clicked" do
-      xhr :get, :index, { :role => Role::MH_USER_ID }
+      xhr :get, :index, { :role => Role::MISSIONHUB_USER_ID }
       assert_equal [@leader1.person.id], assigns(:all_people).collect{|x| x.id}
     end
 
@@ -903,7 +903,7 @@ class PeopleControllerTest < ActionController::TestCase
     should "only return unarchived people when 'Include Archived' checkbox isn't checked'" do
       @contact1.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
       @contact2.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
-      @leader1.person.organizational_roles.where(role_id: Role::MH_USER_ID).first.archive
+      @leader1.person.organizational_roles.where(role_id: Role::MISSIONHUB_USER_ID).first.archive
 
       xhr :get, :index
       assert_equal [@admin1.person.id, @user.person.id, @contact3.person.id], assigns(:all_people).collect{|x| x.id}
@@ -912,7 +912,7 @@ class PeopleControllerTest < ActionController::TestCase
     should "return all people (even unarchived ones) when 'Include Archived' checkbox is checked'" do
       @contact1.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
       @contact2.person.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive
-      @leader1.person.organizational_roles.where(role_id: Role::MH_USER_ID).first.archive
+      @leader1.person.organizational_roles.where(role_id: Role::MISSIONHUB_USER_ID).first.archive
 
       xhr :get, :index, { :include_archived => true }
       assert_equal [@admin1.person.id, @leader1.person.id, @contact1.person.id, @contact2.person.id, @user.person.id, @contact3.person.id], assigns(:all_people).collect{|x| x.id}

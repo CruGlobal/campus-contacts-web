@@ -11,7 +11,7 @@ class Role < ActiveRecord::Base
   validates :organization_id, presence: true
 
   scope :default, where(organization_id: 0) if Role.table_exists? # added for travis testing
-	scope :mh_users, where(i18n: %w[missionhub_user admin])
+	scope :missionhub_users, where(i18n: %w[missionhub_user admin])
   
   scope :default_roles, lambda { {
     :conditions => "i18n IN #{self.default_roles_for_field_string(self::DEFAULT_ROLES)}",
@@ -30,8 +30,8 @@ class Role < ActiveRecord::Base
 		organizational_roles.where("organization_id = ? AND (followup_status <> 'do_not_contact' OR followup_status IS NULL) #{is_archived}", org_id)
   end
 
-  def self.mh_user_ids
-    @mh_user_ids ||= self.mh_users.collect(&:id)
+  def self.missionhub_user_ids
+    @mh_user_ids ||= self.missionhub_users.collect(&:id)
   end
 
   def self.admin
@@ -72,7 +72,7 @@ class Role < ActiveRecord::Base
 
   if Role.table_exists? # added for travis testing
     ADMIN_ID = admin.id
-    MH_USER_ID = missionhub_user.id
+    MISSIONHUB_USER_ID = missionhub_user.id
     CONTACT_ID = contact.id
     ARCHIVED_ID = archived.id
   end

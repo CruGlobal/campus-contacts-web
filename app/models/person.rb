@@ -277,7 +277,7 @@ class Person < ActiveRecord::Base
     organizational_roles.where("organizational_roles.organization_id = ? AND organizational_roles.role_id = ?", org.id, Role::CONTACT_ID).first
   end
 
-  def mh_user_role_for_org(org)
+  def missionhub_user_role_for_org(org)
     organizational_roles.where("organizational_roles.organization_id = ? AND organizational_roles.role_id = ?", org.id, Role::LEADER_ID).first
   end
 
@@ -290,7 +290,7 @@ class Person < ActiveRecord::Base
   end
 
   scope :get_archived, lambda { |org_id| {
-    :conditions => "organizational_roles.archive_date IS NOT NULL",
+    :conditions => "organizational_roles.archive_date IS NOT NULL OR organizational_roles.role_id = #{Role::ARCHIVED_ID}",
     :group => "people.id",
     :having => "COUNT(*) = (SELECT COUNT(*) FROM people AS mpp JOIN organizational_roles orss ON mpp.id = orss.person_id WHERE mpp.id = people.id AND orss.organization_id = #{org_id})"
   } }
@@ -354,9 +354,9 @@ class Person < ActiveRecord::Base
     end
   end
 
-  def archive_mh_user_role(org)
+  def archive_missionhub_user_role(org)
     begin
-      OrganizationalRole.where(organization_id: org.id, role_id: Role::LEADER_ID, person_id: id).first.archive
+      OrganizationalRole.where(organization_id: org.id, role_id: Role::MISSIONHUB_USER_ID, person_id: id).first.archive
     rescue
 
     end
@@ -424,9 +424,9 @@ class Person < ActiveRecord::Base
     end
   end
 
-  def mh_user_in?(org)
+  def missionhub_user_in?(org)
     return false unless org
-    OrganizationalRole.where(person_id: id, role_id: Role.mh_user_ids, :organization_id => org.id).present?
+    OrganizationalRole.where(person_id: id, role_id: Role.missionhub_user_ids, :organization_id => org.id).present?
   end
 
   def organization_objects
@@ -529,12 +529,12 @@ class Person < ActiveRecord::Base
     @admin_of_org_ids ||= org_ids.select {|org_id, values| Array.wrap(values['roles']).include?(Role.admin.id)}.keys
   end
 
-  def mh_user_of_org_ids
-    @mh_user_of_org_ids ||= org_ids.select {|org_id, values| (Array.wrap(values['roles']) & Role.mh_user_ids).present?}.keys
+  def missionhub_user_of_org_ids
+    @missionhub_user_of_org_ids ||= org_ids.select {|org_id, values| (Array.wrap(values['roles']) & Role.missionhub_user_ids).present?}.keys
   end
 
-  def admin_or_mh_user?
-    (admin_of_org_ids + mh_user_of_org_ids).present?
+  def admin_or_missionhub_user?
+    (admin_of_org_ids + missionhub_user_of_org_ids).present?
   end
 
 
@@ -994,7 +994,7 @@ class Person < ActiveRecord::Base
     hash
   end
 
-  def to_hash_micro_mh_user(organization)
+  def to_hash_micro_missionhub_user(organization)
    hash = to_hash_mini
    hash['picture'] = picture unless fb_uid.nil?
    hash['num_contacts'] = contact_assignments.for_org(organization).count
@@ -1002,8 +1002,8 @@ class Person < ActiveRecord::Base
    hash
   end
 
-  def to_hash_mini_mh_user(org_id)
-    hash = to_hash_micro_mh_user(organization_from_id(org_id))
+  def to_hash_mini_missionhub_user(org_id)
+    hash = to_hash_micro_missionhub_user(organization_from_id(org_id))
     hash['organizational_roles'] = organizational_roles_hash
     hash
   end
@@ -1171,8 +1171,8 @@ class Person < ActiveRecord::Base
     organizational_role.save
   end
 
-  def friends_and_mh_users(organization)
-    Friend.followers(self) & organization.mh_users.collect { |l| l.fb_uid.to_s }
+  def friends_and_missionhub_users(organization)
+    Friend.followers(self) & organization.missionhub_users.collect { |l| l.fb_uid.to_s }
   end
 
   def friends_in_orgnization(org)
