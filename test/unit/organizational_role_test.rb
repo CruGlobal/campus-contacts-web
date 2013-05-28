@@ -14,7 +14,7 @@ class OrganizationalRoleTest < ActiveSupport::TestCase
     
     should "assert exception" do
       assert_raises OrganizationalRole::InvalidPersonAttributesError do
-        Factory(:organizational_role, person: @person, role: Role.leader, organization: @org, :added_by_id => @user.person.id)
+        Factory(:organizational_role, person: @person, role: Role.missionhub_user, organization: @org, :added_by_id => @user.person.id)
       end
     end
   end
