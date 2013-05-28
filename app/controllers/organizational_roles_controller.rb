@@ -27,7 +27,7 @@ class OrganizationalRolesController < ApplicationController
       organization_id = @organizational_role.organization_id
 
       Person.find(person_id).organizational_roles.where(organization_id: current_organization.id).each do |ors|
-        if(ors.role_id == Role::LEADER_ID)
+        if(ors.role_id == Role::MISSIONHUB_USER_ID)
           ca = Person.find(person_id).contact_assignments.where(organization_id: current_organization.id).all
           ca.collect(&:destroy)
         end
