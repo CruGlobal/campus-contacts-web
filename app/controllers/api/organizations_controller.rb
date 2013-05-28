@@ -6,9 +6,9 @@ class Api::OrganizationsController < ApiController
     json_output = []
     
     if (params[:id].present? && params[:id].to_s.downcase != "all")
-      org_roles = OrganizationalRole.includes(:organization).where(organization_id: params[:id].split(','), person_id: current_person.id, role_id: Role.leader_ids)
+      org_roles = OrganizationalRole.includes(:organization).where(organization_id: params[:id].split(','), person_id: current_person.id, role_id: Role.missionhub_user_ids)
     else
-      org_roles = OrganizationalRole.includes(:organization).where(person_id: current_person.id, role_id: Role.leader_ids)
+      org_roles = OrganizationalRole.includes(:organization).where(person_id: current_person.id, role_id: Role.missionhub_user_ids)
     end
     
     # Get all of the organizations from org_roles

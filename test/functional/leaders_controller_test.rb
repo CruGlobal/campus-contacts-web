@@ -175,7 +175,7 @@ class LeadersControllerTest < ActionController::TestCase
       @request.session[:current_organization_id] = @org.id
       
       @roles = []
-      @roles << Role.leader
+      @roles << Role.missionhub_user
       @roles = @roles.collect { |role| role.id }.join(',')
     end
 

@@ -134,7 +134,7 @@ class ImportsControllerTest < ActionController::TestCase
 
         # Send email to imported leader and to the uploader
         assert_difference('ActionMailer::Base.deliveries.size', 2) do
-          Import.last.do_import([Role::LEADER_ID])
+          Import.last.do_import([Role::MISSIONHUB_USER_ID])
         end
       end
     end
