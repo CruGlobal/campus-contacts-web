@@ -45,7 +45,7 @@ class LeadersController < ApplicationController
 
   def destroy
     @person = Person.find(params[:id])
-    roles = OrganizationalRole.find_all_by_person_id_and_organization_id_and_role_id_and_archive_date(@person.id, current_organization.id, Role.leader_ids, nil)
+    roles = OrganizationalRole.find_all_by_person_id_and_organization_id_and_role_id_and_archive_date(@person.id, current_organization.id, Role.missionhub_user_ids, nil)
     if roles
       roles.each do |r|
         r.archive
