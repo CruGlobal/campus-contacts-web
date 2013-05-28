@@ -255,7 +255,7 @@ class ContactsControllerTest < ActionController::TestCase
         assert_equal assigns(:header).upcase, "Admin".upcase
       end
       should "have header for leader" do
-        xhr :get, :index, {:role => Role::MH_USER_ID}
+        xhr :get, :index, {:role => Role::MISSIONHUB_USER_ID}
         assert_equal assigns(:header).upcase, "Missionhub user".upcase
       end
       should "have header for contact" do
@@ -874,7 +874,7 @@ class ContactsControllerTest < ActionController::TestCase
 
     should "return leaders when Leader link is clicked" do
       Factory(:organizational_role, organization: @org, person: @person1, role: Role.missionhub_user)
-      xhr :get, :index, { :role => Role::MH_USER_ID }
+      xhr :get, :index, { :role => Role::MISSIONHUB_USER_ID }
       assert_equal 1, assigns(:people).total_count, "only 1 record should be returned"
       assert assigns(:people).include?(@person1)
     end

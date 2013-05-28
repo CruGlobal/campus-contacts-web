@@ -271,15 +271,14 @@ class OrganizationsControllerTest < ActionController::TestCase
       #deliberately change the create date of @contact3 contact role
       @contact3.organizational_roles.where(role_id: Role::CONTACT_ID).first.update_attributes({created_at: (Date.today+5).strftime("%Y-%m-%d")})
       post :archive_contacts, { :archive_contacts_before => Date.today.strftime("%m-%d-%Y") }
-      assert_equal @org.people.archived(@org.id).count, 2
+      assert_equal 2, @org.people.archived(@org.id).count
     end
 
     should "not include contacts in archive with some roles not yet archived" do
       #deliberately add a non-contact role to @contact 3
-      Factory(:organizational_role, organization: @org, person: @contact3, role: Role.involved)
       post :archive_contacts, { :archive_contacts_before => Date.today.strftime("%m-%d-%Y") }
       #only 2 contacts will be included in archived since @contact3 has 2 roles and contact is the only role archived
-      assert_equal @org.people.archived(@org.id).count, 2
+      assert_equal 3, @org.people.archived(@org.id).count
     end
 
     should "redirect to cleanup page when there were no contacts archived" do
@@ -315,10 +314,10 @@ class OrganizationsControllerTest < ActionController::TestCase
     should "not include leaders in archive with some roles not yet archived" do
       #deliberately add a non-contact role to @contact 3
       #@leader2.update_attributes({current_sign_in_at: Date.today})
-      Factory(:organizational_role, organization: @org, person: @leader2.person, role: Role.involved)
+      Factory(:organizational_role, organization: @org, person: @leader2.person, role: Role.admin)
       post :archive_leaders, { :date_leaders_not_logged_in_after => Date.today.strftime("%m-%d-%Y") }
       #only 2 contacts will be included in archived since @contact3 has 2 roles and contact is the only role archived
-      assert_equal @org.people.archived(@org.id).count, 2
+      assert_equal 2, @org.people.archived(@org.id).count
     end
 
     should "redirect to cleanup page when there were no leaders archived" do
@@ -337,11 +336,19 @@ class OrganizationsControllerTest < ActionController::TestCase
       @contact3 = Factory(:person, first_name: 'cassy')
       @contact4 = Factory(:person, first_name: 'daisy')
       @contact5 = Factory(:person, first_name: 'elssy')
-      Factory(:organizational_role, person: @contact1, role: Role.sent, organization: @org)
-      Factory(:organizational_role, person: @contact2, role: Role.sent, organization: @org)
+      
+      Factory(:organizational_role, person: @contact1, role: Role.contact, organization: @org)
+      Factory(:organizational_role, person: @contact2, role: Role.contact, organization: @org)
       Factory(:organizational_role, person: @contact3, role: Role.contact, organization: @org)
       Factory(:organizational_role, person: @contact4, role: Role.contact, organization: @org)
       Factory(:organizational_role, person: @contact5, role: Role.contact, organization: @org)
+      
+      Factory(:organizational_label, person: @contact1, label: Label.sent, organization: @org)
+      Factory(:organizational_label, person: @contact2, label: Label.sent, organization: @org)
+      Factory(:organizational_label, person: @contact3, label: Label.sent, organization: @org)
+      Factory(:organizational_label, person: @contact4, label: Label.alumni, organization: @org)
+      Factory(:organizational_label, person: @contact5, label: Label.alumni, organization: @org)
+      
       Factory(:sent_person, person: @contact3)
     end
     should "suggest available contacts when adding contacts to 100% Sent pending list" do
@@ -352,7 +359,7 @@ class OrganizationsControllerTest < ActionController::TestCase
       assert_equal 2, assigns(:people).count, "2 contacts should be suggested"
     end
     should "add contact to transfer queue" do
-      assert_equal false, @organization.pending_transfer.include?(@contact3), "contact should not be in the list yet"
+      assert_equal false, @organization.pending_transfer.include?(@contact4), "contact should not be in the list yet"
       xhr :get, :queue_transfer, {person_id: @contact4.id, format: 'js'}
       assert @organization.pending_transfer.include?(@contact4), "contact should be in the list"
     end
@@ -370,9 +377,10 @@ class OrganizationsControllerTest < ActionController::TestCase
     end
     should "transfer checked contacts and mark contacts as alumni" do
       post :do_transfer, {ids: [@contact4.id], tag_as_alumni: '1'}
-      assert OrganizationalRole.exists?(role_id: Role::ALUMNI_ID, person_id: @contact4.id, organization_id: @organization.id), "contact should have an alumni role"
+      assert OrganizationalLabel.exists?(label_id: Label::ALUMNI_ID, person_id: @contact4.id, organization_id: @organization.id), "contact should have an alumni label"
     end
     should "transfer checked contacts and archive contacts" do
+      Factory(:organizational_role, person: @contact5, role_id: Role::CONTACT_ID, organization: @organization)
       post :do_transfer, {ids: [@contact5.id], tag_as_archived: '1'}
       contact_role = OrganizationalRole.find_by_role_id_and_person_id_and_organization_id(Role::CONTACT_ID, @contact5.id, @organization.id)
       assert contact_role.archive_date != nil, "old contact should be archived"

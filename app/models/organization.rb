@@ -39,8 +39,8 @@ class Organization < ActiveRecord::Base
       contacts.where(id: labeled.collect(&:person_id)).order('people.last_name, people.first_name').uniq
     end
     
-    has_many :only_missionhub_users, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL", Role::MH_USER_ID], order: "people.last_name, people.first_name", uniq: true
-    has_many :missionhub_users, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id IN (?) AND organizational_roles.archive_date IS NULL", [Role::MH_USER_ID, Role::ADMIN_ID]], order: "people.last_name, people.first_name", uniq: true
+    has_many :only_missionhub_users, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL", Role::MISSIONHUB_USER_ID], order: "people.last_name, people.first_name", uniq: true
+    has_many :missionhub_users, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id IN (?) AND organizational_roles.archive_date IS NULL", [Role::MISSIONHUB_USER_ID, Role::ADMIN_ID]], order: "people.last_name, people.first_name", uniq: true
     has_many :admins, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL", Role::ADMIN_ID], order: "people.last_name, people.first_name", uniq: true
     has_many :all_people, through: :organizational_roles, source: :person, conditions: ["(organizational_roles.followup_status <> 'do_not_contact' OR organizational_roles.followup_status IS NULL) AND organizational_roles.archive_date IS NULL"], uniq: true
     has_many :all_people_with_archived, through: :organizational_roles, source: :person, conditions: ["organizational_roles.followup_status <> 'do_not_contact' OR organizational_roles.followup_status IS NULL"], uniq: true
@@ -389,7 +389,7 @@ class Organization < ActiveRecord::Base
   def add_leader(person, current_person)
     person_id = person.is_a?(Person) ? person.id : person
     begin
-      org_leader = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::MH_USER_ID, :added_by_id => current_person.id)
+      org_leader = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::MISSIONHUB_USER_ID, :added_by_id => current_person.id)
       unless org_leader.archive_date.nil?
         org_leader.update_attributes({:added_by_id => current_person.id, :archive_date => nil})
         org_leader.notify_new_leader
@@ -418,7 +418,7 @@ class Organization < ActiveRecord::Base
   def remove_person(person)
     person_id = person.is_a?(Person) ? person.id : person
     organizational_roles.where(person_id: person_id).each do |ors|
-      if(ors.role_id == Role::MH_USER_ID)
+      if(ors.role_id == Role::MISSIONHUB_USER_ID)
         # remove contact assignments if this was a leader
         Person.find(ors.person_id).contact_assignments.where(organization_id: id).all.collect(&:destroy)
       end

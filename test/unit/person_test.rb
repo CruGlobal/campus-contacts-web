@@ -44,7 +44,7 @@ class PersonTest < ActiveSupport::TestCase
       @person1 = Factory(:person, first_name: 'Leader')
       @person2 = Factory(:person, first_name: 'Contact')
       @person3 = Factory(:person, first_name: 'Admin')
-      @org_role1 = Factory(:organizational_role, person: @person1, organization: @org1, role: Role.leader)
+      @org_role1 = Factory(:organizational_role, person: @person1, organization: @org1, role: Role.missionhub_user)
       @org_role2 = Factory(:organizational_role, person: @person2, organization: @org1, role: Role.contact)
       @org_role3 = Factory(:organizational_role, person: @person3, organization: @org1, role: Role.admin)
 
@@ -64,7 +64,7 @@ class PersonTest < ActiveSupport::TestCase
       @person1 = Factory(:person, first_name: 'Leader')
       @person2 = Factory(:person, first_name: 'Contact')
       @person3 = Factory(:person, first_name: 'Admin')
-      @org_role1 = Factory(:organizational_role, person: @person1, organization: @org1, role: Role.leader)
+      @org_role1 = Factory(:organizational_role, person: @person1, organization: @org1, role: Role.missionhub_user)
       @org_role2 = Factory(:organizational_role, person: @person2, organization: @org1, role: Role.contact)
       @org_role5 = Factory(:organizational_role, person: @person3, organization: @org1, role: Role.admin)
 
@@ -532,18 +532,18 @@ class PersonTest < ActiveSupport::TestCase
   should "check if person is leader in an org" do
     user = Factory(:user_with_auxs)
     org = Factory(:organization)
-    Factory(:organizational_role, organization: org, person: user.person, role: Role.leader)
+    Factory(:organizational_role, organization: org, person: user.person, role: Role.missionhub_user)
     wat = nil
-    assert user.person.leader_in?(org)
-    assert_equal false, user.person.leader_in?(wat)
+    assert user.person.missionhub_user_in?(org)
+    assert_equal false, user.person.missionhub_user_in?(wat)
   end
 
   should "should find people by name or meail given wildcard strings" do
     org = Factory(:organization)
     user = Factory(:user_with_auxs)
-    Factory(:organizational_role, organization: org, person: user.person, role: Role.leader)
+    Factory(:organizational_role, organization: org, person: user.person, role: Role.missionhub_user)
     person1 = Factory(:person, first_name: "Neil Marion", last_name: "dela Cruz", email: "ndc@email.com")
-    Factory(:organizational_role, organization: org, person: person1, role: Role.leader)
+    Factory(:organizational_role, organization: org, person: person1, role: Role.missionhub_user)
     person2 = Factory(:person, first_name: "Johnny", last_name: "English", email: "english@email.com")
     Factory(:organizational_role, organization: org, person: person2, role: Role.contact)
     person3 = Factory(:person, first_name: "Johnny", last_name: "Bravo", email: "bravo@email.com")
@@ -564,7 +564,7 @@ class PersonTest < ActiveSupport::TestCase
       user = Factory(:user_with_auxs)
       child_org = Factory(:organization, :name => "neilmarion", :parent => user.person.organizations.first, :show_sub_orgs => true)
       Factory(:organizational_role, organization: child_org, person: user.person, role: Role.contact)
-      Factory(:organizational_role, organization: child_org, person: user.person, role: Role.leader)
+      Factory(:organizational_role, organization: child_org, person: user.person, role: Role.missionhub_user)
       assert_equal user.person.admin_of_org_ids.sort, [user.person.organizations.first.id, child_org.id].sort
     end
   end

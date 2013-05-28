@@ -227,7 +227,7 @@ class ApplicationController < ActionController::Base
       unless org
         if org = person.primary_organization
           # If they're a contact at their primary org (shouldn't happen), look for another org where they have a different role
-          if !person.org_ids[org.id] || (person.org_ids[org.id]['roles'] & Role.mh_user_ids).blank?
+          if !person.org_ids[org.id] || (person.org_ids[org.id]['roles'] & Role.missionhub_user_ids).blank?
             person.primary_organization = person.organizations.first
           end
           session[:current_organization_id] = person.primary_organization.id

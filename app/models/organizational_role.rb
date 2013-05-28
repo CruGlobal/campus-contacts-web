@@ -18,11 +18,11 @@ class OrganizationalRole < ActiveRecord::Base
   #attr_accessor :destroyer #temporary variable to remember which Person is about to destroy this role
 
   scope :find_non_admin_and_non_leader_roles, {
-    :conditions => ["role_id != ? AND role_id != ?", Role::ADMIN_ID, Role::MH_USER_ID]
+    :conditions => ["role_id != ? AND role_id != ?", Role::ADMIN_ID, Role::MISSIONHUB_USER_ID]
   }
   
   scope :find_admin_or_leader, {
-    :conditions => ["role_id = ? OR role_id = ?", Role::ADMIN_ID, Role::MH_USER_ID]
+    :conditions => ["role_id = ? OR role_id = ?", Role::ADMIN_ID, Role::MISSIONHUB_USER_ID]
   }
   
   #after_create :clear_person_org_cache
@@ -53,7 +53,7 @@ class OrganizationalRole < ActiveRecord::Base
   end
 
   def role_is_leader_or_admin
-    if (role_id == Role::MH_USER_ID || role_id == Role::ADMIN_ID) && added_by_id
+    if (role_id == Role::MISSIONHUB_USER_ID || role_id == Role::ADMIN_ID) && added_by_id
       true
     else
       false

@@ -388,7 +388,7 @@ class OrganizationTest < ActiveSupport::TestCase
     assert_equal org.id, org_role.organization_id, "The last role should have the org"
     assert_equal user1.person.id, org_role.person_id, "The last role should have the person"
     assert_equal user2.person.id, org_role.added_by_id, "The last role should have the person who adds the leader"
-    assert_equal Role::MH_USER_ID, org_role.role_id, "The last role should have the leader role id"
+    assert_equal Role::MISSIONHUB_USER_ID, org_role.role_id, "The last role should have the leader role id"
   end
 
   test "using add_leader(person) in deleted leader" do
@@ -411,7 +411,7 @@ class OrganizationTest < ActiveSupport::TestCase
     assert_equal org.id, org_role.organization_id, "The last role should have the org"
     assert_equal user1.person.id, org_role.person_id, "The last role should have the person"
     assert_equal user3.person.id, org_role.added_by_id, "The last role should have the other person who adds the leader"
-    assert_equal Role::MH_USER_ID, org_role.role_id, "The last role should have the leader role id"
+    assert_equal Role::MISSIONHUB_USER_ID, org_role.role_id, "The last role should have the leader role id"
 
   end
 
