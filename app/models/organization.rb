@@ -415,6 +415,10 @@ class Organization < ActiveRecord::Base
     add_role_to_person(person, Role::ADMIN_ID)
   end
 
+  def add_missionhub_user(person)
+    add_role_to_person(person, Role::MISSIONHUB_USER_ID)
+  end
+
   def remove_person(person)
     person_id = person.is_a?(Person) ? person.id : person
     organizational_roles.where(person_id: person_id).each do |ors|
