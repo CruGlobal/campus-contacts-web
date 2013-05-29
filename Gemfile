@@ -58,7 +58,7 @@ gem 'valium'
 gem 'versionist', '~> 1.0.0'
 gem 'vpim', git: 'git://github.com/twinge/vpim.git'   # vcard maker
 gem 'whenever'
-gem 'wiser_date', '~> 0.1.8'
+gem 'wiser_date', '~> 0.1.9'
 
 
 group :development, :test do
