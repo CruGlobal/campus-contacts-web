@@ -8,13 +8,15 @@ class OrganizationalLabel < ActiveRecord::Base
 end
 class MigrateLeaderRolesToLabels < ActiveRecord::Migration
   def up
-    new_leader_id = Label.find_or_create_by_name_and_i18n_and_organization_id('Leader', 'leader', 0)
-    old_leader_id = Role.find_or_create_by_i18n_and_organization_id('leader', 0)
-    if new_leader_id.present?
-      OrganizationalRole.where(role_id: old_leader_id.id).each do |org_role|
+    Role.where('name IS NULL').destroy_all
+    Label.where('name IS NULL').destroy_all
+    new_leader = Label.find_or_create_by_name_and_i18n_and_organization_id('Leader', 'leader', 0)
+    old_leader = Role.find_or_create_by_i18n_and_organization_id('leader', 0)
+    if new_leader.present?
+      OrganizationalRole.where(role_id: old_leader.id).each do |org_role|
         OrganizationalLabel.create(
           person_id: org_role.person_id,
-          label_id: new_leader_id,
+          label_id: new_leader.id,
           organization_id: org_role.organization_id,
           start_date: org_role.start_date,
           added_by_id: org_role.added_by_id,

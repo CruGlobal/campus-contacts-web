@@ -13,6 +13,8 @@ class MigrateRolesToLabels < ActiveRecord::Migration
     Label.create(name: 'Engaged Disciple', i18n: 'engaged_disciple', organization_id: 0)
     Label.create(name: 'Leader', i18n: 'leader', organization_id: 0)
     OrganizationalLabel.delete_all
+    Role.where('name IS NULL').destroy_all
+    Label.where('name IS NULL').destroy_all
     
     Role.where("(i18n IS NOT NULL AND i18n NOT IN (?)) OR organization_id > 0 OR organization_id IS NULL", ['admin','contact','leader']).each do |role|
       if role.organization_id.present?
@@ -45,8 +47,10 @@ class MigrateRolesToLabels < ActiveRecord::Migration
       role.destroy
     end
     # Data Cleanup
+    puts ">>  Cleaning data"
     remaining_role_ids = Role.where("name IN (?)", ['Admin','Contact','Leader']).collect(&:id)
     OrganizationalRole.where("role_id NOT IN (?)",remaining_role_ids).destroy_all
+    OrganizationalRole.where('role_id IS NULL').destroy_all
   end
 
   def down
