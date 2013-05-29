@@ -304,7 +304,7 @@ class ApplicationController < ActionController::Base
   end
 
   def is_leader?
-    current_user.has_role?(Role::LEADER_ID, current_organization) || is_admin?
+    current_user.has_role?(Role::MISSIONHUB_USER_ID, current_organization) || is_admin?
   end
 
   def is_admin?

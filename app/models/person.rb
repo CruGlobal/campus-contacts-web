@@ -278,7 +278,7 @@ class Person < ActiveRecord::Base
   end
 
   def missionhub_user_role_for_org(org)
-    organizational_roles.where("organizational_roles.organization_id = ? AND organizational_roles.role_id = ?", org.id, Role::LEADER_ID).first
+    organizational_roles.where("organizational_roles.organization_id = ? AND organizational_roles.role_id = ?", org.id, Role::MISSIONHUB_USER_ID).first
   end
 
   def completed_answer_sheets(organization)

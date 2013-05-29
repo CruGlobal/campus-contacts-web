@@ -32,7 +32,6 @@ class Organization < ActiveRecord::Base
 
   if Role.table_exists? # added for travis testing
     has_many :leaders, through: :organizational_labels, source: :person, conditions: ["organizational_labels.label_id IN (?) AND organizational_labels.removed_date IS NULL", Label::LEADER_ID], order: "people.last_name, people.first_name", uniq: true
-    # has_many :sent, through: :organizational_labels, source: :person, conditions: ["organizational_labels.label_id IN (?) AND organizational_labels.removed_date IS NULL", Label::SENT_ID], order: "people.last_name, people.first_name", uniq: true
     
     def sent
       labeled = organizational_labels.where(person_id: contacts.collect(&:id), label_id: Label::SENT_ID)
