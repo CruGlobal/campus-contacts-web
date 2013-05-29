@@ -29,6 +29,7 @@ en:
     admin: Admin
     contact: Contact
     missionhub_user: MissionHub User
+    archived: Archived
     views:
       organizational_roles: "Organizational Labels"
       system_roles: "System Labels"
