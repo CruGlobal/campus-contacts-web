@@ -51,12 +51,9 @@ $ ->
     draggable: false,
     autoOpen: false,
     open: (event, ui) ->
-      $("body").css({ overflow: 'hidden' })
-      $('.ui-widget-overlay').width('100%')
-      $(".token-input-dropdown-facebook").hide()
+      $.hideScroll()
     close: (event, ui) ->
-      $("body").css({ overflow: 'inherit' })
-      $('#bulk_sms_message').val($('#bulk_send_body').val())
+      $.unhideScroll()
     buttons:
       Send: ->
         $(this).submitBulkSendTextDialog()

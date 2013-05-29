@@ -49,10 +49,9 @@ $ ->
     draggable: false,
     modal: true,
     open: (event, ui) ->
-      $("body").css({ overflow: 'hidden' })
-      $('.ui-widget-overlay').width('100%');
+      $.hideScroll()
     close: (event, ui) ->
-      $("body").css({ overflow: 'inherit' })
+      $.unhideScroll()
     buttons:
       Close: ->
         $(this).dialog('close')
@@ -282,6 +281,7 @@ $ ->
       resizable: false,
       height:444,
       width:600,
+      modal: true,
       position: 'center',
       open: (event, ui) ->
         $('#new_person')[0].reset()
@@ -293,6 +293,9 @@ $ ->
         $("#add_contact_form input[type='radio']").attr("checked",false)
         $("#add_contact_form input[type='checkbox']:not(:disabled)").attr("checked",false)
         $("#add_contact_form .remove_in_add_contact").remove()
+        $.hideScroll()
+      close: (event, ui) ->
+        $.unhideScroll()
       buttons: [
         text: t('application.add_contact.save_and_close'),
         'class': 'add_new_contact_dialog_buttons',
@@ -317,8 +320,13 @@ $ ->
       height:444,
       width:600,
       modal: true,
+      open: (event, ui) ->
+        $.hideScroll()
+      close: (event, ui) ->
+        $.unhideScroll()
       buttons:
         Cancel: ->
+          $(this).dialog('close')
           $(this).dialog('destroy')
     false
   $('#assign_search .assign_button').live 'click', ->
@@ -550,16 +558,9 @@ $ ->
         width:450,
         modal: true,
         open: (event, ui) ->
-          if $(document).height() > $(window).height() 
-            if $('html').scrollTop()
-              scrollTop = $('html').scrollTop()
-            else
-              scrollTop = $('body').scrollTop()
-            $('html').addClass('noscroll').css('top',-scrollTop)
+          $.hideScroll()
         close: (event, ui) ->
-          scrollTop = parseInt($('html').css('top'))
-          $('html').removeClass('noscroll');
-          $('html,body').scrollTop(-scrollTop);
+          $.unhideScroll()
         buttons:
           Cancel: ->
             $(this).dialog('close')
