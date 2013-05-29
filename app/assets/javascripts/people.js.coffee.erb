@@ -12,10 +12,9 @@ $ ->
     modal: true,
     title: "",
     open: (event, ui) ->
-      $("body").css({ overflow: 'hidden' })
-      $('.ui-widget-overlay').width('100%');
+      $.hideScroll()
     close: (event, ui) ->
-      $("body").css({ overflow: 'inherit' })
+      $.unhideScroll()
     buttons:
       Close: ->
         $(this).dialog('close')
@@ -103,8 +102,13 @@ $ ->
       height:664,
       width:600,
       modal: true,
+      open: (event, ui) ->
+        $.hideScroll()
+      close: (event, ui) ->
+        $.unhideScroll()
       buttons:
         Cancel: ->
+          $(this).dialog('close')
           $(this).dialog('destroy')
     false
 

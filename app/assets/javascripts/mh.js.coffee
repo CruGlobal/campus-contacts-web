@@ -211,8 +211,13 @@ $.a = (msg, title) ->
     height: 200,
     width: 400,
     modal: true,
+    open: (event, ui) ->
+      $.hideScroll()
+    close: (event, ui) ->
+      $.unhideScroll()
     buttons:
       Ok: ->
+        $(this).dialog('close')
         $(this).dialog('destroy')
 
 window.addFields = (link, association, content) ->
