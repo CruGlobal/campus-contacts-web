@@ -34,7 +34,7 @@
               <% end %>
             <% end %>
           </li>
-          <li><%= link_to(t('nav.my_profile', name: current_user.to_s), profile_path(current_person)) %></li>
+          <li><%= link_to(t('nav.my_profile', name: current_user.to_s), profile_path(current_person), id: 'current_user_name') %></li>
         <% end %>
         <li>
           <%= link_to(t('nav.logout'), '#', onclick: "$.mh.logout()")  %>
