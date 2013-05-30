@@ -241,6 +241,11 @@ body#interactions_controller {
       z-index: 99;
       padding: 4px 6px;
       cursor: pointer;
+      width: 135px;
+      display: inline-block;
+    	white-space: nowrap;
+    	overflow: hidden;
+    	text-overflow: ellipsis;
     }
     
     
@@ -262,6 +267,11 @@ body#interactions_controller {
     
     .selected {
       color: #333;
+      width: 135px;
+      display: inline-block;
+    	white-space: nowrap;
+    	overflow: hidden;
+    	text-overflow: ellipsis;
     }
     
     &.active {
