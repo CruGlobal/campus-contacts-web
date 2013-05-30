@@ -41,11 +41,11 @@ class GroupsControllerTest < ActionController::TestCase
       @group = Factory(:group, organization: org)
 
       @contact1 = Factory(:person, first_name: "C", last_name: "C")
-      Factory(:organizational_role, organization: org, person: @contact1, role: Role.contact)
+      Factory(:organizational_role, organization: org, person: @contact1, role: Role.admin)
       @contact2 = Factory(:person, first_name: "D", last_name: "D")
       Factory(:organizational_role, organization: org, person: @contact2, role: Role.contact)
       @contact3 = Factory(:person, first_name: "E", last_name: "E")
-      Factory(:organizational_role, organization: org, person: @contact3, role: Role.contact)
+      Factory(:organizational_role, organization: org, person: @contact3, role: Role.missionhub_user)
 
       Factory(:group_membership, group: @group, person: @contact1)
       Factory(:group_membership, group: @group, person: @contact2)
@@ -72,7 +72,7 @@ class GroupsControllerTest < ActionController::TestCase
     should "get show with sorting by role desc" do
       get :show, { :search =>{:meta_sort => "role desc"}, :id => @group.id}
       assert_response(:success)
-      assert_equal assigns(:people).collect{|x| x.id}, [@contact1.id, @contact2.id, @contact3.id]
+      assert_equal [@contact1.id, @contact2.id, @contact3.id], assigns(:people).collect{|x| x.id}
     end
 
     should "get show with sorting by role asc" do
