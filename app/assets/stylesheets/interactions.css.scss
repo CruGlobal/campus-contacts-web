@@ -390,6 +390,9 @@ body#interactions_controller {
         #profile_feed {
           margin: 0 0 30px;
 
+          .view.col_right.status {
+            margin: 10px 0 10px 20px;
+          }
           .feed_content .tab_content {
             display: none;
             &.current {

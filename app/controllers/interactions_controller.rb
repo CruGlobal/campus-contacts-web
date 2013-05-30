@@ -112,9 +112,8 @@ class InteractionsController < ApplicationController
     return false unless @person.present?
     @new_status = params[:status]
     @contact_role = @person.contact_role_for_org(current_organization)
-    return false unless @contact_role.present?
-    
-    @contact_role.update_attribute(:followup_status, @new_status)
+    @contact_role.update_attribute(:followup_status, @new_status) if @contact_role.present?
+    puts @contact_role.inspect
   end
   
   def reset_edit_form

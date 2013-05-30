@@ -205,6 +205,12 @@ class PeopleController < ApplicationController
   def update
     @person = Person.find(params[:id])
 
+    if params[:followup_status].present?
+      @new_status = params[:followup_status]
+      @contact_role = @person.contact_role_for_org(current_organization)
+      @contact_role.update_attribute(:followup_status, @new_status) if @contact_role.present?
+    end
+
     # Handle duplicate emails
     emails = []
 		if params[:person][:email_address]
