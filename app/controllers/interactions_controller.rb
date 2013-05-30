@@ -156,7 +156,10 @@ class InteractionsController < ApplicationController
       params[:initiator_id].each do |person_id|
         @interaction.interaction_initiators.find_or_create_by_person_id(person_id.to_i)
       end
-    end
+    end 
+    @all_feeds_page = 1
+    @all_feeds = @person.all_feeds(current_person, current_organization, @all_feeds_page)
+    @last_all_feeds = @person.all_feeds_last(current_person, current_organization)
   end
   
   def update
