@@ -53,6 +53,11 @@ default_interaction_type_name = selected.attr('data-name');
 $('#interaction_type_dropdown #selected').html(default_interaction_type_name);
 $('#new_interaction_type').val(default_interaction_type_id);
 
+// Open More Options
+$('.interaction_field.more_div .more_options_link').addClass('shown')
+$('.interaction_field.more_option').show()
+$('.interaction_field.more_div .more_options_link').html('Fewer Options &#x25B2;')
+
 // Set timestamp
 $('.interaction_field #datepicker').val("<%= @interaction.timestamp.strftime('%Y-%m-%d %H:%M:%S') %>")
 $('.interaction_new #datepicker').datetimepicker({
