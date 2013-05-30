@@ -62,7 +62,7 @@
   <% end %>
 
   <% addresses = @person.addresses %>
-  <% if addresses.present? %>
+  <% if addresses.present? && addresses.first.address1.present?  %>
   	<div class="address col_left"><%= t('general.address') %>:</div>
   	<div class="address col_right">
       <% addresses.each do |address| %>
