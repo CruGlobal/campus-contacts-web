@@ -72,7 +72,7 @@ class GroupsControllerTest < ActionController::TestCase
     should "get show with sorting by role desc" do
       get :show, { :search =>{:meta_sort => "role desc"}, :id => @group.id}
       assert_response(:success)
-      assert_equal [@contact1.id, @contact2.id, @contact3.id], assigns(:people).collect{|x| x.id}
+      assert_equal @contact3.id, assigns(:people).last.id
     end
 
     should "get show with sorting by role asc" do
