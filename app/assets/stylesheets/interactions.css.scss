@@ -39,6 +39,17 @@ body#interactions_controller {
     padding: 6px 8px;
     .profile_label, .profile_group {
       margin-left: 0;
+      max-width: 165px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  #profile_labels_dialog {
+    .labels_checkbox {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
   .pop_box_container {
