@@ -1,4 +1,7 @@
 $("#profile_name span#name").text("<%= escape_javascript(@person.name)%>")
+if(<%= @person.id == @current_person.id %>){
+  $('#current_user_name').text("<%= @person.name %> Profile")
+}
 if($('body').hasClass("reload_info")){
   $('.feed_content .tab_content.profile_info .view_space').html("<%= escape_javascript(render partial: 'interactions/profile_info') %>")
   $('.feed_content .tab_content.profile_info .edit_space').html("<%= escape_javascript(render partial: 'interactions/profile_info_edit') %>")
@@ -9,7 +12,9 @@ if($('body').hasClass("reload_info")){
     $('.feed_content .tab_content.profile_info .edit_space').hide()
     $('.feed_content .tab_content.profile_info .view_space').fadeIn()
   }
-  $('.followup_status_field').val("<%= @new_status.humanize.titleize %>");
+  if("<%= @new_status.present? %>" == 'true'){
+    $('.followup_status_field').val("<%= @new_status.try(:humanize).try(:titleize) %>");
+  } 
   $('body').removeClass("reload_info") 
 }
 $.toggleLoader('profile_name','')

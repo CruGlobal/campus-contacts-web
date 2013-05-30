@@ -204,7 +204,7 @@ class PeopleController < ApplicationController
   # PUT /people/1.xml
   def update
     @person = Person.find(params[:id])
-
+    @current_person = current_person
     if params[:followup_status].present?
       @new_status = params[:followup_status]
       @contact_role = @person.contact_role_for_org(current_organization)
