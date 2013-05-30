@@ -3,6 +3,9 @@ $ ->
   $(document).live 'click', (e)->
     $('#receiver_id_dropdown, #interaction_type_dropdown, #initiator_dropdown, #privacy_setting_dropdown, #followup_status_dropdown.edit, #followup_status_dropdown.view, #assigned_to_dropdown').removeClass('active')
     
+  $('a').live 'click', (e)->
+    $('#receiver_id_dropdown, #interaction_type_dropdown, #initiator_dropdown, #privacy_setting_dropdown, #followup_status_dropdown.edit, #followup_status_dropdown.view, #assigned_to_dropdown').removeClass('active')
+    
   # START - ACTION MENU
   $('li a#action_menu_record_interaction').live 'click', (e)->
     e.preventDefault()
