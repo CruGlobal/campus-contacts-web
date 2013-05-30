@@ -9,7 +9,8 @@ html.noscroll {
 
 body#interactions_controller {
   .add_email, .add_phone, .add_address {
-    margin-top: -26px;
+    float: right;
+    padding: 0;
   }
   .no_labels, .no_groups {
     text-align: center;
@@ -43,6 +44,7 @@ body#interactions_controller {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      cursor: default;
     }
   }
   #profile_labels_dialog {
