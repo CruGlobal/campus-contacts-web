@@ -1,0 +1,31 @@
+<div class="titlebar titlebarmod">
+  <span style="font-size: 16px; font-weight:bold;"><%= t('.title', name: @person) %></span>
+</div>
+<br/>
+<div class="pagemenu">
+  <%= link_to("Back", person_url(@person)) %>
+</div>
+<br/>
+<div class="pad">
+  <div id="survey_answers">
+    <% current_organization.surveys.flatten.uniq.each do |survey| %>
+      <% answer_sheet = @person.answer_sheets.detect {|as| survey.id == as.survey_id} %>
+      <% questions_with_answers = survey.questions_with_answers(answer_sheet, @person) %>
+      <% if questions_with_answers.present? %>
+        <div class="survey_title"><%= survey.title %></div>
+      <% end %>
+      <ul>
+        <% questions_with_answers.each do |q| %>
+          <% q.display_response(answer_sheet, @person).tap do |answer| %>
+            <% if answer.present? %>
+              <li><%= q.label %><%= ':' unless q.label[-1] =~ /\.;:\?/ %> <%= answer %></li>
+            <% end %>
+          <% end %>
+        <% end %>
+      </ul>
+    <% end %>
+    <% unless @person.answer_sheets.present? %>
+      <%= t('.no_answers', name: @person) %><br/><br/>
+    <% end %>
+  </div>
+</div>

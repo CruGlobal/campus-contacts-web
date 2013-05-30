@@ -43,6 +43,7 @@ class SurveyResponsesController < ApplicationController
 
   def show
     @person = Person.find(params[:id])
+    
     authorize! :followup, @person
   end
 
