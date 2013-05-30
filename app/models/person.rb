@@ -476,7 +476,7 @@ class Person < ActiveRecord::Base
   end
   
   def roles_for_org_id(org_id)
-    roles.where(id: roles_by_org_id(org_id))
+    roles.where(id: roles_by_org_id(org_id)).uniq
   end
 
   def labels_by_org_id(org_id)
@@ -487,7 +487,7 @@ class Person < ActiveRecord::Base
   end
   
   def labels_for_org_id(org_id)
-    labels.where(id: labels_by_org_id(org_id))
+    labels.where(id: labels_by_org_id(org_id)).uniq
   end
 
   def groups_by_org_id(org_id)
