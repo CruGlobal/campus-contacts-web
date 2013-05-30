@@ -9,6 +9,7 @@ if($('body').hasClass("reload_info")){
     $('.feed_content .tab_content.profile_info .edit_space').hide()
     $('.feed_content .tab_content.profile_info .view_space').fadeIn()
   }
+  $('.followup_status_field').val("<%= @new_status.humanize.titleize %>");
   $('body').removeClass("reload_info") 
 }
 $.toggleLoader('profile_name','')

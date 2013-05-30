@@ -72,16 +72,13 @@ $ ->
         type: 'GET',
         url: '/interactions/search_leaders?keyword=' + $(this).val() + '&person_id=' + $(this).attr('data-person-id') + '&except=' + ids
   
-  $('#followup_status_dropdown.edit .option, #followup_status_dropdown.view .option').live 'click', (e)->
+  $('#followup_status_dropdown.edit .option').live 'click', (e)->
     selected_name = $(this).attr('data-name')
     selected_id = $(this).attr('data-id')
-    $('#followup_status_dropdown.edit #selected, #followup_status_dropdown.view #selected').text(selected_name)
-    if $(this).parents('#followup_status_dropdown.view') == 0
-      $('.followup_status_field_edit').change()
-    else
-      $('.followup_status_field_edit').change()
-    $('.followup_status_field_edit, .followup_status_field_view').val(selected_id)
-    $('#followup_status_dropdown.edit, #followup_status_dropdown.view').removeClass('active')
+    $('#followup_status_dropdown.edit #selected').text(selected_name)
+    $('.followup_status_field_edit').val(selected_id)
+    $('.followup_status_field_edit').change()
+    $('#followup_status_dropdown.edit').removeClass('active')
   
   $('#groups_popup_save_button').live 'click', (e)->
     e.preventDefault()
@@ -410,15 +407,15 @@ $ ->
     $('form#edit_profile_form').submit()
     
   
-  $('#followup_status').live 'change', (e)->
-    if $(this).hasClass("followup_status_field_view")
-      div_kind = 'view'
-    else
-      div_kind = 'edit'
-      $.toggleLoader('profile_name','Saving Status...')
-    $.ajax
-      type: 'GET',
-      url: '/interactions/change_followup_status?status=' + $(this).val() + '&person_id=' + $(this).attr('data-person-id')
+  # $('#followup_status').live 'change', (e)->
+  #   if $(this).hasClass("followup_status_field_view")
+  #     div_kind = 'view'
+  #   else
+  #     div_kind = 'edit'
+  #     $.toggleLoader('profile_name','Saving Status...')
+  #   $.ajax
+  #     type: 'GET',
+  #     url: '/interactions/change_followup_status.js?status=' + $(this).val() + '&person_id=' + $(this).attr('data-person-id')
   
   $("#profile_name #edit_profile_name_button").live 'click', (e)->
     e.preventDefault()

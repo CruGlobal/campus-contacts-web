@@ -23,7 +23,7 @@
           <%= select_tag :followup_status, options_for_select(OrganizationalRole::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]}, followup_status), {disabled: contact_role.nil?, include_blank: contact_role.nil?, 'data-person-id' => "#{@person.id}", class: "followup_status_field followup_status_field_edit", style: 'display: none;'} %>
           <div id="followup_status_dropdown" class="custom_dropdown edit" data-current-id="<%= followup_status %>">
             <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
-            <div id="selected"><%= t("contacts.statuses.#{followup_status}") %></div>
+            <div id="selected"><%= followup_status.present? ? t("contacts.statuses.#{followup_status}") : "Select Status" %></div>
             <div id="togglable">
               <% OrganizationalRole::FOLLOWUP_STATUSES.each do |fs| %>
                 <div class="option" data-id="<%= fs %>" data-name="<%= t("contacts.statuses.#{fs}") %>">
