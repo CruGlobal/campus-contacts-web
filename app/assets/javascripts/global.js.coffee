@@ -56,22 +56,3 @@ $ ->
   $('#token-input-send_text_to').live 'focus', ->
     if $(this).val() == ""
       $(this).width(675)
-
-  $('#bulk_send_msg_dialog').dialog
-    resizable: false,
-    height:444,
-    width:730,
-    modal: true,
-    draggable: false,
-    autoOpen: false,
-    open: (event, ui) ->
-      $('#token-input-send_email_to').width(675)
-      $('#token-input-send_text_to').width(675)
-      $.hideScroll()
-    close: (event, ui) ->
-      $.unhideScroll()
-    buttons:
-      Send: ->
-        $(this).submitBulkSendTextDialog()
-      Cancel: ->
-        $(this).dialog('close')

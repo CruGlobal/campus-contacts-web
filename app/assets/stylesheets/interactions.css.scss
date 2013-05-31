@@ -8,6 +8,14 @@ html.noscroll {
 }
 
 body#interactions_controller {
+  #char_counter {
+    font-family: Georgia, Serif;
+    font-style: italic;
+    font-weight: normal;
+    color: #808284;
+    font-size: 11px;
+    padding-right: 10px;
+  }
   .add_email, .add_phone, .add_address {
     float: right;
     padding: 0;
