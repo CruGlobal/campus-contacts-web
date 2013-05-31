@@ -16,6 +16,10 @@ class Interaction < ActiveRecord::Base
     self.initiators.first
   end
   
+  def type
+    interaction_type.name
+  end
+  
   def icon
     return interaction_type.icon
   end

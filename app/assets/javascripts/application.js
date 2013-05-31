@@ -2,7 +2,6 @@
 // FIXME: Tell people how Sprockets and CoffeeScript works
 //
 //= require jquery_ujs
-//= require jquery.qtip
 //= require jquery.counter-1.0.min
 //= require jquery.observe_field.js
 //= require jquery.one_finger_scroll.js
@@ -11,6 +10,7 @@
 //= require jquery.cookie
 //= require jquery.tokeninput
 //= require jquery.wiser_date
+//= require jquery.qtip2
 //= require jquery-ui-timepicker-addon_mh
 //= require colorpicker.js
 //= require ba-debug-0.4.min.js

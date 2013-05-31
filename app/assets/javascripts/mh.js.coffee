@@ -192,6 +192,8 @@ $.blur = (selector) ->
     $("#"+id).fadeIn('slow')
 
 $.toggleLoader = (div_id, words) ->
+  $(document).ready ->
+    $('.tip').qtip({position: {my: 'bottom center', at: 'top center'}, style: {classes: 'qtip-blue qtip-shadow'}})
   if words != ""
     if $('#' + div_id).children('.loader').size() > 0
       $('#' + div_id).children('.loader').last().fadeOut().remove()

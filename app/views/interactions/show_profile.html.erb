@@ -5,7 +5,7 @@
 
   <div id="profile_name">
     <span id="name"><%= @person.name %></span>
-    <%= link_to image_tag("edit_sprite.png"), "#", id: "edit_profile_name_button" %>
+    <%= link_to image_tag("edit_sprite.png", class: "tip", title: "Update Person Name"), "#", id: "edit_profile_name_button" %>
   </div>
   <div id="profile_name_edit">
     <%= form_for @person, remote: true, html: {id: 'profile_name_form'} do |f| %>

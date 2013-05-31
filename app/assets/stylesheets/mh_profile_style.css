@@ -697,6 +697,7 @@ div.phone, div.address, div.email {
 	font-size:10px;
 	color:#c0c0c0;
 	font-weight:normal;
+  cursor: default;
 }
 
 .feed_item_content {
