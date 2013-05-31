@@ -48,6 +48,14 @@ $ ->
     $.showDialog($("#profile_roles_dialog"))
   # END - ACTION MENU
   
+  $('#msg_popup_save_button').live 'click', (e)->
+    e.preventDefault()
+    $('#bulk_send_msg_dialog').submitBulkSendTextDialog()
+  
+  $('#msg_popup_cancel_button').live 'click', (e)->
+    e.preventDefault()
+    $.hideDialog($("#bulk_send_msg_dialog"))
+  
   $('#assigned_to_dropdown .option').live 'click', (e)->
     $('input.leader_box').prop('checked',false)
     checkbox = $(this).children('input.leader_box').eq(0)
@@ -477,25 +485,16 @@ $.hideScroll = () ->
   html.data "previous-overflow", html.css("overflow")
   html.css "overflow", "hidden"
   window.scrollTo scrollPosition[0], scrollPosition[1]
-  # if $(document).height() > $(window).height() 
-  #   if $('html').scrollTop()
-  #     scrollTop = $('html').scrollTop()
-  #   else
-  #     scrollTop = $('body').scrollTop()
-  #   $('html').addClass('noscroll').css('top',-scrollTop)
   
 $.showDialog = (selector) ->
   $.hideScroll()
-  selector.fadeIn()
+  selector.show()
   
 $.unhideScroll = () ->
   html = jQuery("html")
   scrollPosition = html.data("scroll-position")
   html.css "overflow", html.data("previous-overflow")
   window.scrollTo scrollPosition[0], scrollPosition[1]
-  # scrollTop = parseInt($('html').css('top'))
-  # $('html').removeClass('noscroll');
-  # $('html,body').scrollTop(-scrollTop);
   
 $.hideDialog = (selector) ->
   $.unhideScroll()
