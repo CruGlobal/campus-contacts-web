@@ -215,9 +215,14 @@ module ApplicationHelper
     image_tag('spinner.gif', :id => e, :style => 'display:none', :class => 'spinner')
   end
   
+  def date_format(datetime)
+    return nil unless datetime.present?
+    return datetime.to_datetime.strftime("%d %b %Y")
+  end
+  
   def time_format(datetime)
     return nil unless datetime.present?
-    return datetime.strftime("%d %b %Y %H:%M:%S")
+    return datetime.to_datetime.strftime("%d %b %Y %H:%M:%S")
   end
   
 end

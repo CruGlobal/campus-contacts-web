@@ -11,7 +11,7 @@
  *= require interactions
  *= require mh_profile_style
  *= require mh_roles_labels_style
- *= require jquery.qtip
+ *= require jquery.qtip2
  *= require jquery.chosen
  *= require superfish
  *= require superfish-navbar

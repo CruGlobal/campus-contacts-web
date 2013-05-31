@@ -7,7 +7,7 @@
   
 <div id="profile_label_header">
 	Labels
-  <%= link_to image_tag("edit_sprite.png"), "#", id: "show_profile_labels_button" %>
+  <%= link_to image_tag("edit_sprite.png", class: 'tip', title: 'Manage Labels'), "#", id: "show_profile_labels_button" %>
 </div>
 <div id="profile_label_box">
   <% if @labels.present? %>
@@ -22,7 +22,7 @@
   
 <div id="profile_group_header">
 	Groups
-  <%= link_to image_tag("edit_sprite.png"), "#", id: "show_profile_groups_button" %>
+  <%= link_to image_tag("edit_sprite.png", class: 'tip', title: 'Manage Groups'), "#", id: "show_profile_groups_button" %>
 </div>
 <div id="profile_group_box">
   <% if @groups.present? %>
