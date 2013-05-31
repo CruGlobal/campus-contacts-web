@@ -84,19 +84,13 @@
     
     
     
-
-
-    
-    
-    
-
   	<div class="feed_box info_edit">		
   		<div class="email col_left">
         <label><%= t('general.email') %></label>:
       </div>
   		<div class="email col_right">
         <div class="add_email" id="edit_profile_add_email_button">
-          <a href="#" class="tipitmiddle" title="Add Email Address"><button class="add_gray"></button></a>
+          <a href="#" class="tip" title="Add Email Address"><button class="add_gray"></button></a>
         </div>
         <div id="edit_profile_email_list">
           <%= pf.fields_for :email_addresses do |builder| %>
@@ -110,7 +104,7 @@
       </div>
   		<div class="phone col_right">
         <div class="add_phone" id="edit_profile_add_phone_button">
-          <a href="#"><button class="add_gray"></button></a>
+          <a href="#" class="tip" title="Add Phone Number"><button class="add_gray"></button></a>
         </div>
         <div id="edit_profile_phone_list">
           <%= pf.fields_for :phone_numbers do |builder| %>
@@ -124,7 +118,7 @@
       </div>
   		<div class="address col_right">
         <div class="add_address" id="edit_profile_add_address_button">
-          <a href="#"><button class="add_gray"></button></a>
+          <a href="#" class="tip" title="Add Address"><button class="add_gray"></button></a>
         </div>
         <div id="edit_profile_address_list">
           <%= pf.fields_for :addresses do |builder| %>
