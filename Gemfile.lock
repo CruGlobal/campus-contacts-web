@@ -416,7 +416,7 @@ GEM
     whenever (0.8.2)
       activesupport (>= 2.3.4)
       chronic (>= 0.6.3)
-    wiser_date (0.2.6)
+    wiser_date (0.2.9)
       rails (>= 3.1)
     ya2yaml (0.31)
     yard (0.8.6.1)
@@ -501,4 +501,4 @@ DEPENDENCIES
   vpim!
   webmock
   whenever
-  wiser_date (~> 0.2.6)
+  wiser_date (~> 0.2.9)
