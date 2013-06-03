@@ -1,4 +1,3 @@
-$.toggleLoader('profile_name','')
 $('.interaction_new').addClass('shouldReload')
 $('#interaction_new_record_button').parents('.interaction_new_buttons').first().hide();
 $('.feed_content .tab_content.profile_interactions .edit_space').html("<%= escape_javascript(render partial: 'interactions/profile_interactions_edit') %>")
@@ -66,3 +65,4 @@ $('.interaction_new #datepicker').datetimepicker({
   showSecond: false
 });
 
+$.toggleLoader('profile_name','')
