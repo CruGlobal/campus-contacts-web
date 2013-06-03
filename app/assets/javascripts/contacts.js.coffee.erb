@@ -329,12 +329,12 @@ $ ->
           $(this).dialog('close')
           $(this).dialog('destroy')
     false
+    
   $('#assign_search .assign_button').live 'click', ->
     leader = $('.leftmenu .leader[data-id=' + $('#assign_to').val() + ']')
     $.fn.assignTo(leader)
     $.fn.load_leader_name($('#person_title').attr('data-id'))
-    $('#assign_search').dialog('close')
-    $('#assign_search').dialog('destroy')
+    $.hideDialog($("#assign_search"))
 
   $('#assign_search .leader a').live 'click', (e)->
     $('#assign_to').val($(this).closest('li').attr('data-id'))
@@ -346,8 +346,8 @@ $ ->
       $.rails.handleRemote($('#new_contact_assignment'))
       unless $('#assign_to').val() == $('#my_id').val()
         $.fn.load_leader_name($('#person_title').attr('data-id'))
-    $('#assign_search').dialog('close')
-    $('#assign_search').dialog('destroy')
+    $.toggleLoader('profile_name','Assigning to Leader...')
+    $.hideDialog($("#assign_search"))
   false
 
 
@@ -399,10 +399,10 @@ $ ->
     .appendTo('body')
     .click()
     .remove()
-    $('#assign_search').dialog('close')
-    $('#assign_search').dialog('destroy')
+    $.hideDialog($("#assign_search"))
     $('#global_loader').show()
     $('.id_checkbox:checked').prop('checked',false)
+    $.toggleLoader('profile_name','Assigning to Group...')
   false
 
   $('#assign_search .label a').live 'click', (e)->
@@ -419,9 +419,7 @@ $ ->
           error: show_success = false
         $('#main').load('/contacts .index.carea')
         $('#left').load('/contacts .block')
-
-      $('#assign_search').dialog('close')
-      $('#assign_search').dialog('destroy')
+      $.hideDialog($("#assign_search"))
       if show_success
         $.n('Successfully assigned label.')
     else if window.location.pathname == '/contacts/mine'
@@ -434,9 +432,7 @@ $ ->
           error: show_success = false
         $('#main').load('/contacts/mine .mine.carea')
         $('#left').load('/contacts/mine .block')
-
-      $('#assign_search').dialog('close')
-      $('#assign_search').dialog('destroy')
+      $.hideDialog($("#assign_search"))
       if show_success
         $.n('Successfully assigned label.')
     else
@@ -446,8 +442,7 @@ $ ->
           url: '/people/update_roles',
           data: 'role_ids='+role+'&person_id='+person_id+'&include_old_roles=yes'
           error: show_success = false
-      $('#assign_search').dialog('close')
-      $('#assign_search').dialog('destroy')
+      $.hideDialog($("#assign_search"))
       if show_success
         $.n('Successfully assigned label.')
   false
@@ -551,20 +546,7 @@ $ ->
     if $('.id_checkbox:checked').length > 0
       $('#keep_contact').attr checked: true
       $('#assign_to_me').click()
-      el = $('#assign_search')
-      el.dialog
-        resizable: false,
-        height:500,
-        width:450,
-        modal: true,
-        open: (event, ui) ->
-          $.hideScroll()
-        close: (event, ui) ->
-          $.unhideScroll()
-        buttons:
-          Cancel: ->
-            $(this).dialog('close')
-            $(this).dialog('destroy')
+      $.showDialog($("#assign_search"))
     else
       $.a(t('contacts.index.none_checked'))
     false

@@ -13,7 +13,7 @@ en:
       survey_mode_instructions: If the person you are adding is standing next to you, click "Enter Survey Mode" from the top right corner of your screen.
       save_and_close: 'Save and close'
       save_and_add: 'Save and add another'
-    assign:
+    assign_dialog:
       assign_explanation: 'You can assign a contact using any of the options below:'
       me: Me
       type_to_find_leader: Type to find a leader then click on the leader's name

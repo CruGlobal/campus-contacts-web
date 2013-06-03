@@ -55,11 +55,7 @@
 </div>
 
 <!-- Assign dialog -->
-<%= form_for ContactAssignment.new, html: {style: 'display:none'} do |f| %>
-  <%= check_box_tag 'ids[]', @person.id, true, {'data-id'=>@person.id, 'data-number'=>@person.pretty_phone_number, id: "ids_#{@person.id}", class: 'id_checkbox contact_checkbox profile_checkbox', 'data-name' => "#{@person.first_name} #{@person.last_name}", 'data-email'=>@person.email, 'data-roles' => "#{@labels.collect(&:id).join(',')}"} %>
-  <%= hidden_field_tag :assign_to %>
-  <%= render 'application/assign' %>
-<% end %>
+<%= render 'application/assign_dialog' %>
 
 <!-- Message Dialog -->
 <%= render 'shared/bulk_send_msg' %>

@@ -22,23 +22,11 @@ $ ->
 
   $('li #action_menu_assign').live 'click', (e)->
     e.preventDefault()
+    $('.profile_checkbox').prop('checked',true)
     if $('.id_checkbox:checked').length > 0
       $('#keep_contact').attr checked: true
       $('#assign_to_me').click()
-      el = $('#assign_search')
-      el.dialog
-        resizable: false,
-        height:500,
-        width:450,
-        modal: true,
-        open: (event, ui) ->
-          $.hideScroll()
-        close: (event, ui) ->
-          $.unhideScroll()
-        buttons:
-          Cancel: ->
-            $(this).dialog('close')
-            $(this).dialog('destroy')
+      $.showDialog($("#assign_search"))
     else
       $.a(t('contacts.index.none_checked'))
     
@@ -50,6 +38,16 @@ $ ->
     e.preventDefault()
     $.showDialog($("#profile_roles_dialog"))
   # END - ACTION MENU
+  
+  $('#assign_popup_save_button').live 'click', (e)->
+    e.preventDefault()
+    $('.profile_checkbox').prop('checked',true)
+    $('#assign_to_button').click()
+    $.toggleLoader('profile_name','Assigning...')
+  
+  $('#assign_popup_cancel_button').live 'click', (e)->
+    e.preventDefault()
+    $.hideDialog($("#assign_search"))
   
   $('#msg_popup_save_button').live 'click', (e)->
     e.preventDefault()

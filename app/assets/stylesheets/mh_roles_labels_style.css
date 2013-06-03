@@ -203,6 +203,16 @@ span.mh_popup_heading {
 }
 
 
+.assign_popup_box {
+	background-color:#FFF;
+	border:1px solid #808284;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	width:455px;
+	min-height:170px;
+}
+
+
 .groups_popup_box, .roles_popup_box, .labels_popup_box, .error_popup_box{
 	background-color:#FFF;
 	border:1px solid #808284;
@@ -212,7 +222,15 @@ span.mh_popup_heading {
 	min-height:372px;
 }
 
-.msg_popup_box .fancy, .groups_popup_box .fancy, .roles_popup_box .fancy, .labels_popup_box .fancy {
+.assign_popup_box .fancy {
+	margin:10px 0px;
+	font-size:14px;
+}
+
+.msg_popup_box .fancy,
+.groups_popup_box .fancy, 
+.roles_popup_box .fancy, 
+.labels_popup_box .fancy {
 	margin:48px 24px 24px;
 	font-size:14px;
 }
@@ -280,9 +298,19 @@ button#groups_add_new_button, button#labels_add_new_button {
 	position:absolute;
 	right:0px;
 	bottom:16px;
-	width:720px;
+	width:650px;
 	display:inline-block;
 	margin-right:24px;
+	margin-left:24px;
+}
+
+.assign_popup_box .assign_save {
+	position:absolute;
+	right:0px;
+	bottom:16px;
+	width:400px;
+	display:inline-block;
+	margin-right:22px;
 	margin-left:24px;
 }
 
@@ -299,6 +327,7 @@ button#groups_add_new_button, button#labels_add_new_button {
 	margin-left:24px;
 }
 
+.assign_popup_box button,
 .msg_popup_box button,
 .groups_popup_box button,
 .roles_popup_box button,
