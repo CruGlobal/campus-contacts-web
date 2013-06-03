@@ -17,8 +17,8 @@ class OrganizationalLabel < ActiveRecord::Base
   
   private
 
-    def set_start_date
-      self.start_date = Date.today
-      true
-    end
+  def set_start_date
+    self.start_date = Date.today
+    true
+  end
 end

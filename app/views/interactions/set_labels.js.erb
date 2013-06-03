@@ -1,4 +1,3 @@
-$.toggleLoader('profile_label_header','')
 $('#labels_save').attr('data-current-label-ids',"<%= params[:ids] %>")
 $('#profile_label_box').html("")
 <% if @labels.present? %>
@@ -8,3 +7,5 @@ $('#profile_label_box').html("")
 <% else %>
   $('#profile_label_box').append("<div class='no_labels'>No labels assigned.</div>")
 <% end %>
+$('#all_feeds_box').html("<%= escape_javascript(render partial: 'interactions/all_feeds') %>")
+$.toggleLoader('profile_label_header','')
