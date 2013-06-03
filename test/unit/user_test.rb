@@ -15,8 +15,8 @@ class UserTest < ActiveSupport::TestCase
   
   test "has role" do
     user = Factory(:user_with_auxs)
-    org = user.person.organizations.first
-    Factory(:organizational_role, person: user.person, organization: org, role: Role.leader)
+    org = Factory(:organization)
+    Factory(:organizational_role, person: user.person, organization: org, role: Role.missionhub_user)
     
     assert user.has_role?(Role::LEADER_ID,  org)
   end

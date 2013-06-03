@@ -19,7 +19,7 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
       setup do
         # Add a second person
         @person2 = Factory(:person, first_name: 'Bob', last_name: 'Jones')
-        @client.organization.add_involved(@person2)
+        @client.organization.add_contact(@person2)
       end
 
       context 'filter by role' do
@@ -126,7 +126,7 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
 
         should 'match email address' do
           @person2.email_addresses.create(email: 'foo@example.com')
-          get :index, secret: @client.secret, filters: {name_or_email_like: 'foo@'}
+          get :index, secret: @client.secret, filters: {name_or_email_like: 'foo'}
           json = JSON.parse(response.body)
           assert_equal 1, json['people'].length, json.inspect
         end
