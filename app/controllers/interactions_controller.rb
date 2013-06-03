@@ -39,10 +39,11 @@ class InteractionsController < ApplicationController
   def change_followup_status
     @person = current_organization.people.where(id: params[:person_id]).try(:first)
     return false unless @person.present?
+    @new_status = params[:status]
     @contact_role = @person.contact_role_for_org(current_organization)
     return false unless @contact_role.present?
     
-    @contact_role.update_attribute(:followup_status, params[:status])
+    @contact_role.update_attribute(:followup_status, @new_status)
   end
   
   def reset_edit_form
