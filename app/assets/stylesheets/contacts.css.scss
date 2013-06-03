@@ -2,6 +2,71 @@
   Place all the styles related to the matching controller here.
   They will automatically be included in application.css.
 */
+
+#contacts_controller.all_contacts {
+  #gandalfthewhite {
+    border-bottom: none;
+    margin-bottom: 5px;
+  }
+  #ac_sidebar {
+    padding-left: 20px;
+    #sidebar_loader {
+      text-align: center;
+    }
+  }
+  #rest {
+    background: none;
+  }
+  #left {
+    width: 180px;
+  }
+  #main {
+    border: none;
+    margin-left: 185px;
+  }
+  .contact_listing {
+    width: 100%;
+    border: 1px solid #C7DFF0;
+    th {
+      &.last_survey, &.first_name, &.last_name {
+        min-width: 90px;
+      }
+      &.hidden_questions, &.phone {
+        min-width: 120px;
+      }
+      &.gender {
+        min-width: 60px;
+      }
+      &.status {
+        min-width: 80px;
+      }
+    }
+    tr {
+      &:hover {
+        background: #fff;
+      }
+    }
+    td.cell {
+      padding: 5px;
+      &.labels {
+        width: 160px;
+        .roles_spaces {
+          width: 160px;
+          overflow: hidden;
+          boarder: 1px solid red;
+          .roles_cover {
+            float: right;
+          }
+          .roles_container {
+            width: 2000px;
+            text-align: left;
+          }
+        }
+      }
+    }
+  }
+}
+
 .handle {cursor: pointer; vertical-align: middle; margin-left: 5px;}
 #bulk_send_subject {
   width: 680px;

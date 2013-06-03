@@ -616,6 +616,15 @@ en:
     profile_info:
       email_contact_info: "Email Me This Contact Info"
   contacts:
+    all_contacts:
+      title: "All Contacts"
+      first_name: "First Name"
+      last_name: "Last Name"
+      status: "Status"
+      gender: "Gender"
+      phone_number: "Phone"
+      labels: "Labels"
+      last_survey: "Last Survey"
     sidebar:
       show_more: "Show More"
       show_less: "Show Less"

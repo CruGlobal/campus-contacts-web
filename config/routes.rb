@@ -33,6 +33,7 @@ Mh::Application.routes.draw do
   match 'show_hidden_questions' => 'contacts#show_hidden_questions'
   match 'show_search_hidden_questions' => 'contacts#show_search_hidden_questions'
   match 'display_sidebar' => 'contacts#display_sidebar'
+  match 'display_new_sidebar' => 'contacts#display_new_sidebar'
   match 'show_other_orgs' => 'surveys#show_other_orgs'
   match 'copy_survey' => 'surveys#copy_survey'
   match 'sent_messages' => 'messages#sent_messages'
@@ -205,8 +206,12 @@ Mh::Application.routes.draw do
   post "sms/mo"
   get "sms/mo"
 
+  match "/allcontacts" => "contacts#all_contacts", as: 'all_contacts'
+  match "/mycontacts" => "contacts#my_contacts", as: 'my_contacts'
   resources :contacts, :only => [:show, :create, :edit, :update, :destroy, :index] do
     collection do
+      get :all_contacts
+      get :my_contacts
       get :mine
       get :mine_all
       get :contacts_all

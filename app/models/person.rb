@@ -1183,6 +1183,10 @@ class Person < ActiveRecord::Base
     roles.where('organizational_roles.organization_id' => organization_id)
   end
 
+  def assigned_organizational_labels(organization_id)
+    labels.where('organizational_labels.organization_id' => organization_id)
+  end
+
   def assigned_organizational_roles_including_archived(organization_id)
     roles_including_archived.where('organizational_roles.organization_id' => organization_id)
   end

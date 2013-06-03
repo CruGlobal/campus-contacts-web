@@ -1,8 +1,4 @@
-<% if params[:include_archived] || params[:archived] %>
-  <% roles = person.assigned_organizational_roles_including_archived(current_organization.id).arrange_all %>
-<% else %>
-  <% roles = person.assigned_organizational_roles(current_organization.id).arrange_all %>
-<% end %>
+<% labels = person.assigned_organizational_labels(current_organization.id) %>
 <% contact_role = person.contact_role_for_org(current_organization) %>
 <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row <%= extra if defined?(extra) %>" data-name="<%= person.name %>" data-email="<%= person.email %>">
 	<td class="handle_container">
@@ -13,13 +9,13 @@
     <% end %>
 	</td>
   <td nowrap="nowrap" class="checkbox_cell">
-    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox contact_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email, 'data-roles' => "#{roles.collect(&:id).join(',')}"%>
+    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox contact_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email, 'data-roles' => "#{labels.collect(&:id).join(',')}"%>
   </td>
-  <td class="firstName"><%= person.first_name %></td>
-  <td class="lastName"><%= person.last_name %></td>
+  <td class="cell firstName"><%= person.first_name %></td>
+  <td class="cell lastName"><%= person.last_name %></td>
 
 	<% if params[:role].blank? || ![Role::ADMIN_ID,Role::MISSIONHUB_USER_ID].include?(params[:role].map{|id| id }) %>
-  <td class="status">
+  <td class="cell status">
     <% if contact_role %>
       <%= contact_role.followup_status.to_s.titleize %>
       <% if person.organizational_roles.where('organizational_roles.organization_id' => current_organization.id).blank? %>
@@ -29,25 +25,22 @@
   </td>
   <% end %>
 
-  <td><%= person.gender.to_s.titleize %></td>
-  <td class="phone_number"><%= person.pretty_phone_number %></td>
-  <td>
+  <td class="cell"><%= person.gender.to_s.titleize %></td>
+  <td class="cell phone_number"><%= person.pretty_phone_number %></td>
+  <td class="cell labels">
     <div id="roles_user_<%= person.id %>" class="roles_spaces">
-      <% roles.each do |role| %>
-        <% if person.is_role_archived?(current_organization.id, role.id) %>
-          <% if params[:include_archived] == 'true' || params[:archived] == 'true' %>
-            <div id="<%= person.id%>_<%= role.id %>" class="role_label_archived role_<%= role.id %> tipitmiddle" title="<%= 'Archived' %>"><%= role %></div>
-          <% end %>
-        <% else %>
-          <div id="<%= person.id%>_<%= role.id %>" class="role_label role_<%= role.id %>" title="" ><%= role %></div>
+      <div class="roles_cover"></div>
+      <div class="roles_container">
+        <% labels.each do |label| %>
+          <div id="<%= person.id%>_<%= label.id %>" class="role_label role_<%= label.id %>"><%= label.name %></div>
         <% end %>
-      <% end %>
+      </div>
     </div>
   </td>
 
   <% dates = [] %>
   <% questions.uniq.each do |q| %>
-    <td class="<%= dom_id(q) %>">
+    <td class="cell <%= dom_id(q) %>">
       <% if q.slug == 'email' %>
         <span class="email"><%= mail_to(person.email) %></span>
       <% elsif q.object_name == 'person' %>
@@ -64,7 +57,7 @@
   <% end %>
 
   <% if current_organization.settings[:visible_surveys_column].nil? || (current_organization.settings[:visible_surveys_column].present? && current_organization.settings[:visible_surveys_column]) %>
-  <td class="visible_surveys_column">
+  <td class="cell visible_surveys_column">
     <% last_answer_sheet = "" %>
     <% person.completed_answer_sheets(current_organization).each_with_index do |answer_sheet, i| %>
       <% last_answer_sheet = answer_sheet if i == 0 %>
@@ -73,10 +66,10 @@
   </td>
   <% end %>
 
-  <td>
+  <td class="cell">
     <%= l(last_answer_sheet.updated_at, :format => :date) if last_answer_sheet.present? %>
   </td>
-  <td class="controls" align="right">
+  <td class="cell controls" align="right">
     <%- assigned_to = (assignments[person.id] || []).first.try(:assigned_to) %>
     <span class="unassign_link" style="<%= 'display:none' unless assigned_to.present? || params[:dnc].present? %>">
       <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign tipit", :title => "#{t('contacts.index.unassign_contact')} from #{assigned_to}") %>

@@ -14,7 +14,7 @@
 #ac_sidebar { /* Profile Page left sidebar */
 	float:left;
 	clear:left;
-	width:128px;
+	width:160px;
 }
 
 #ac_title {
@@ -32,6 +32,8 @@
 	height:24px;
 	float:right;
 	display:inline-block;
+  font-size: 18px;
+  padding-right: 15px;
 }
 
 #ac_contact_spread {

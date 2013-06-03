@@ -12,6 +12,30 @@ class ContactsController < ApplicationController
   rescue_from OrganizationalRole::InvalidPersonAttributesError do |exception|
     #render 'update_leader_error'
   end
+  
+  def all_contacts
+    url = request.url.split('?')
+    @attr = url.size > 1 ? url[1] : ''
+
+    respond_to do |wants|
+      wants.html do
+        fetch_contacts(false)
+        @assignments = ContactAssignment.includes(:assigned_to).where(person_id: @people.pluck('people.id'), organization_id: @organization.id).group_by(&:person_id)
+        @answers = generate_answers(@people, @organization, @questions, @surveys)
+      end
+
+      wants.csv do
+        fetch_contacts(true)
+        @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r] if r.role_id == Role::CONTACT_ID }]
+        @all_answers = generate_answers(@all_people, @organization, @questions, @surveys)
+        @questions.select! { |q| !%w{first_name last_name phone_number email}.include?(q.attribute_name) }
+        filename = @organization.to_s
+        @all_people = @all_people.where('people.id IN (:ids)', ids: params[:only_ids].split(',')) if params[:only_ids].present?
+        csv = ContactsCsvGenerator.generate(@roles, @all_answers, @questions, @all_people, @organization)
+        send_data(csv, :filename => "#{filename} - Contacts.csv", :type => 'application/csv' )
+      end
+    end
+  end
 
   def index
     url = request.url.split('?')
@@ -257,10 +281,15 @@ class ContactsController < ApplicationController
 
   def display_sidebar
     @organization = current_organization
-
     # Saved Search
     @all_saved_contact_searches = current_user.saved_contact_searches.where('organization_id = ?', current_organization.id)
-
+    get_and_merge_unfiltered_people
+  end
+  
+  def display_new_sidebar
+    @organization = current_organization
+    # Saved Search
+    @all_saved_contact_searches = current_user.saved_contact_searches.where('organization_id = ?', current_organization.id)
     get_and_merge_unfiltered_people
   end
   

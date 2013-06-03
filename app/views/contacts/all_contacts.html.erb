@@ -1,0 +1,148 @@
+<% provide :sidebar do %>
+  <div id="ac_sidebar">
+  	<button class="red_accent full_width_button" id="allcontacts_add_contact_button">Add a Contact</button>
+  	<button class="action_gray full_width_button" id="allcontacts_add_contact_button">Import Contacts</button>
+
+  	<div id="sidebar_lists">
+      <div id="sidebar_loader">
+        <%= image_tag 'loader.gif'%>
+        <br/>
+        Loading Sidebar
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="titlebar titlebarmod">
+  <h1>
+    <%= t('.title') %>
+    <%= "#{'-' if @header.present?} #{@header}" %>
+    <div id='global_loader' style=''>
+      <%= image_tag 'loader.gif'%>
+    </div>
+  </h1>
+</div>
+
+
+
+<div id="ac_button_bar">
+	<ul class="button_bar">
+		<li class="action_lightblue"><a href="#">Assign</a></li>
+	</ul>
+	<ul class="button_bar">
+		<li class="action_lightblue btn_left"><a href="#">Roles</a></li>
+	</ul>
+	<ul class="button_bar">
+		<li class="action_lightblue btn_right"><a href="#">Labels</a></li>
+	</ul>
+	<ul class="button_bar">
+		<li class="action_lightblue btn_left"><a href="#">Text</a></li>
+	</ul>
+	<ul class="button_bar">
+		<li class="action_lightblue btn_middle"><a href="#">Email</a></li>
+	</ul>
+	<ul class="button_bar">
+		<li class="action_lightblue btn_right"><a href="#">Sent</a></li>
+	</ul>
+	<ul class="button_bar">
+		<li class="action_lightblue"><a href="#">Search</a></li>
+	</ul>
+	<ul class="button_bar">
+		<li class="action_lightblue"><a href="#">More <span style="font-size:9px;">&#x25BC;</span></a></li>
+	</ul>
+</div>
+
+<div id="ac_pagination">
+	<div class="fancy"><%= "#{(params[:page].to_i * 25) - 24} - #{params[:page].to_i * 25} of #{@people.total_count}" %></div>
+	<%= link_to_previous_page @people, raw("<button class='action_lightblue btn_left'>#{image_tag('mh_arrow_l.png')}</button>") %>
+	<%= link_to_next_page @people, raw("<button class='action_lightblue btn_right'>#{image_tag('mh_arrow_r.png')}</button>") %>
+</div>
+
+<div id="ac_contact_spread">
+  <%= form_tag("", :id => "move_to_dnc", :method => :put) do %>
+    <%= hidden_field_tag :status, "do_not_contact" %>
+  <% end %>
+
+  <span style="display:none" id="drag_helper_text_one"><%= I18n.t('contacts.index.assign_people', count: 1) %></span>
+  <span style="display:none" id="drag_helper_text_other"><%= I18n.t('contacts.index.assign_people', count: 0) %></span>
+  <%= form_for ContactAssignment.new do |f| %>
+    <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
+    <%= hidden_field_tag :assign_to %>
+    <table class="listing contact_listing <%= 'unassigned_contacts' if params[:assigned_to] == 'unassigned' %>" cellpadding="0" cellspacing="0">
+      <tr id="table_header">
+      	<th>&nbsp;</th>
+        <th class="checkbox_cell header_checkbox">
+          <%= check_box_tag 'check_all_contacts', true, false, 'data-target' => '#new_contact_assignment',
+                class: 'check_all_contacts', 'data-status' => @attr %>
+        </th>
+        <th class='first_name'><%= sort_link @q, :first_name, t('.first_name'), params %></th>
+        <th class='last_name'><%= sort_link @q, :last_name, t('.last_name'), params %></th>
+
+    		<% if params[:role].blank? || ![Role::ADMIN_ID,Role::MISSIONHUB_USER_ID].include?(params[:role].map{|id| id }) %>
+  	      <th class='status'><%= sort_link @q, :followup_status, t('.status'), params %></th>
+  		  <% end %>
+
+        <th class='gender'><%= sort_link @q, :gender, t('.gender'), params %></th>
+        <th class='phone' style='min-width:100px;'><%= sort_link @q, :phone_number, t('.phone_number'), params %></th>
+        <th class='labels'><%= sort_link @q, :role_id, t('.labels'), params %></th>
+        <% @questions.each do |q| %>
+          <th class="question <%= dom_id(q) %>">
+            <% if @predefined_questions.include?(q) %>
+              <%= q.attribute_name.gsub('_',' ').titleize %>
+            <% else %>
+              <%= q.slug.present? ? q.slug.titleize : q.label.titleize %>
+            <% end%>
+            <%= link_to("(#{t('nav.hide')})", hide_survey_question_path(@organization.surveys.first || @predefined_survey.id, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q), 'data-id' => q.id) %>
+          </th>
+        <% end %>
+        <% if current_organization.settings[:visible_surveys_column].nil? || (current_organization.settings[:visible_surveys_column].present? && current_organization.settings[:visible_surveys_column]) %>
+          <th class="visible_surveys_column">
+        	  <%= t('.surveys') %>
+            <%= link_to("(#{t('nav.hide')})", hide_survey_question_path('0', 'visible_surveys_column'), remote: true, method: :put, class: 'hide', 'data-class' => 'visible_surveys_column') %>
+          </th>
+      	<% end %>
+        <th class='last_survey'><%= sort_link @q, :last_survey, t('.last_survey'), params %></th>
+        <th class="hidden_questions"><%= link_to "Hidden Questions ▾", "#", id: 'hidden_questions_link' %></th>
+      </tr>
+      <tbody id="contacts_table">
+        <% @people.each do |person| %>
+          <%= render 'contacts/contact', person: person, questions: @questions, answers: @answers, assignments: @assignments %>
+        <% end %>
+      </tbody>
+    </table>
+
+    <% if @people.blank? %>
+      <div class="contentpad no_contacts">
+        <%= t('contacts.index.no_contacts') %>
+      </div>
+  	<% end %>
+    <%= render 'assign' %>
+  <% end %>
+  <div id="add_contact_div" style="display:none" title="<%= t('.add_contact', org: current_organization) %>" class="fingerme">
+    <%= render 'add_contact', person: Person.new %>
+  </div>
+  <%- if false %>
+    <div id="update_notice_div">
+      <%= render partial: 'update_notice' if false %>
+    </div>
+  <%- end %>
+  <input type="button" value="Show Message Guide" id="show_message_guide_button" style="display:none">
+  <div id="send_message_guide" style="display:none">
+    <%= render 'shared/send_message_guide' %>
+  </div>
+  <div id="transfer_to_org" style="display:none">
+    <%= render 'transfer' %>
+  </div>
+  <div id="sent_messages_div" style="display:none">
+    <div id="sent_messages_loader">
+      <%= image_tag 'loader.gif'%><br/>Loading Sent Messages
+    </div>
+    <div id="sent_messages_paginator_top"></div>
+    <div id="sent_messages_content">
+      <%= render partial: 'messages/sent_messages'%>
+    </div>
+    <div id="sent_messages_paginator_bottom"></div>
+  </div>
+  <%= render 'shared/bulk_vcard_dialog' %>
+  <%= render 'shared/bulk_send_msg' %>
+</div>
