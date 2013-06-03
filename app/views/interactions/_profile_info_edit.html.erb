@@ -16,15 +16,11 @@
   	<div class="feed_box info_edit">
 
   		<div class="status col_left"><%= t('general.status') %>:</div>
-  		<div class="status col_right">
-  			<select id="followup_comment_status" name="followup_comment[status]">
-  				<option value="uncontacted" selected="selected">Uncontacted</option>
-  				<option value="attempted_contact">Attempted Contact</option>
-  				<option value="contacted">Contacted</option>
-  				<option value="do_not_contact">Do Not Contact</option>
-  				<option value="completed">Completed</option>
-  			</select>
-  		</div>
+    	<div class="status col_right edit" id="followup_status_div">
+        <%- contact_role = @person.contact_role_for_org(current_organization) %>
+        <%- followup_status = contact_role.nil? ? "" : contact_role.followup_status %>
+        <%= select_tag :followup_status, options_for_select(OrganizationalRole::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]}, followup_status), {disabled: contact_role.nil?, include_blank: contact_role.nil?, 'data-person-id' => "#{@person.id}", class: "followup_status_field followup_status_field_edit"} %>
+    	</div>
 
   		<div class="gender col_left">
         <label for="person_gender"><%= t('general.gender') %></label>:

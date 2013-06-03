@@ -237,11 +237,12 @@ $ ->
   
   $('#info_edit_cancel_button').live 'click', (e)->
     e.preventDefault()
-    $.ajax
-      type: 'GET',
-      url: '/interactions/reset_edit_form?person_id=' + $(this).attr('data-person-id')
-    $('.feed_content .tab_content.profile_info .edit_space').hide()
-    $('.feed_content .tab_content.profile_info .view_space').fadeIn()
+    if $('.feed_content .tab_content.profile_info .edit_space').is(':visible')
+      $.ajax
+        type: 'GET',
+        url: '/interactions/reset_edit_form?person_id=' + $(this).attr('data-person-id')
+      $('.feed_content .tab_content.profile_info .edit_space').hide()
+      $('.feed_content .tab_content.profile_info .view_space').fadeIn()
     
   $('#info_edit_save_button').live 'click', (e)->
     e.preventDefault()
@@ -252,7 +253,11 @@ $ ->
     
   
   $('#followup_status').live 'change', (e)->
-    $.toggleLoader('followup_status_div','Applying...')
+    if $(this).hasClass("followup_status_field_view")
+      div_kind = 'view'
+    else
+      div_kind = 'edit'
+    $.toggleLoader("followup_status_div."+div_kind,'Applying...')
     $.ajax
       type: 'GET',
       url: '/interactions/change_followup_status?status=' + $(this).val() + '&person_id=' + $(this).attr('data-person-id')
