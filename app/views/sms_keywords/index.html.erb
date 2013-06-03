@@ -12,15 +12,22 @@
     <h1><%= t('nav.keywords') %></h1>
   </div>
   <div class="pagemenu">
-    <ul class="pillmenu">
-      <li>
-        <% if current_organization.self_and_children_surveys.present? %>
-          <%= link_to(t("welcome.index.request_key"), new_sms_keyword_path) %>
-        <% else %>
-          <%= link_to(t(".create_survey_first"), new_survey_path) %>
-        <% end %>
-      </li>
-    </ul>
+    <table>
+      <td>
+        <ul class="pillmenu">
+          <li>
+            <% if current_organization.self_and_children_surveys.present? %>
+              <%= link_to(t("welcome.index.request_key"), new_sms_keyword_path) %>
+            <% else %>
+              <%= link_to(t(".create_survey_first"), new_survey_path) %>
+            <% end %>
+          </li>
+        </ul>
+      </td>
+      <td class="inlinehelp">
+        <%= t('general.survey_help_desc') %><b><%= t('general.survey_text_help_desc') %></b>
+      </td>
+    </table>
   </div>
   
   

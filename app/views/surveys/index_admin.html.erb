@@ -19,11 +19,18 @@
       <h1><%= t('nav.surveys') %></h1>
     </div>
     <div class="pagemenu">
-      <ul class="pillmenu">
-        <li>
-          <%= link_to(t(".new"), new_survey_path) %>
-        </li>
-      </ul>
+      <table>
+        <td>
+          <ul class="pillmenu">
+            <li>
+              <%= link_to(t(".new"), new_survey_path) %>
+            </li>
+          </ul>
+        </td>
+        <td class="inlinehelp">
+          <%= t('general.survey_help_desc') %><b><%= t('general.survey_text_help_desc') %></b>
+        </td>
+      </table>
     </div>
 
 
