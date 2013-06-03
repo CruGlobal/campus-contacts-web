@@ -12,7 +12,7 @@
                 <% if role.organization_id == 0 %>
                   <% if role.name == 'Admin' %>
                     <% role_help = "Access to all options within this specific organization including editing the organization, assigning other Admins, and modifying keywords and surveys." %>
-                  <% elsif role.name == 'Leader' %>
+                  <% elsif role.name == 'MissionHub User' %>
                     <% role_help = "Access to all non-Admin features including viewing, modifying and assigning contacts." %>
                   <% elsif role.name == 'Involved' %>
                     <% role_help = "Currently no access but are displayed in Directory." %>

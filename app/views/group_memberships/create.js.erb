@@ -21,9 +21,9 @@
   <% end %>
 <% end %>
 
-$('#groups_save').attr('data-current-group-ids',"<%= @groups.collect(&:id).join(',') %>")
-$('#profile_group_box').html("")
 <% if @groups.present? %>
+  $('#groups_save').attr('data-current-group-ids',"<%= @groups.collect(&:id).join(',') %>")
+  $('#profile_group_box').html("")
   <% @groups.each do |group| %>
     $('#profile_group_box').append("<div class='profile_group'><%= group.name %></div>")
     $(".groups_checkbox .group_checkbox[value=<%= group.id%>]").prop('checked',true)
