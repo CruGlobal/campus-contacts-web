@@ -18,7 +18,7 @@ class UserTest < ActiveSupport::TestCase
     org = Factory(:organization)
     Factory(:organizational_role, person: user.person, organization: org, role: Role.missionhub_user)
     
-    assert user.has_role?(Role::LEADER_ID,  org)
+    assert user.has_role?(Role::MISSIONHUB_USER_ID,  org)
   end
   
   test "merge" do
