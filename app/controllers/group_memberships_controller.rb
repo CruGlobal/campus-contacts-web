@@ -3,6 +3,13 @@ class GroupMembershipsController < ApplicationController
   def create
     @group = current_organization.groups.find(params[:group_id]) 
     @inContacts = params[:render_in_contacts].present?
+    
+    # Profile
+    @person = current_organization.people.where(id: params[:person_id].split(',').first).try(:first)
+    if @person
+      @groups = @person.groups_for_org_id(current_organization.id)
+    end
+    
     if params[:from_add_member_screen] == "true"
       @persons = Person.find(params[:person_id])
       if has_permission

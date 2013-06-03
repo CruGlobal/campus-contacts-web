@@ -36,8 +36,14 @@ class InteractionsController < ApplicationController
   def set_groups
     @person = Person.find(params[:person_id])
     @group_ids = params[:ids].split(',')
-    removed_groups = @person.group_memberships_for_org(current_organization).where("group_id NOT IN (?)", params[:ids])
-    removed_groups.delete_all if removed_groups.present?
+    
+    if @group_ids.present?
+      removed_groups = @person.group_memberships_for_org(current_organization).where("group_id NOT IN (?)", @group_ids)
+      removed_groups.delete_all if removed_groups.present?
+    else
+      @person.group_memberships_for_org(current_organization).delete_all
+    end
+    
     @group_ids.each do |group_id|
       group = @person.group_memberships.find_or_create_by_group_id(group_id.to_i)
       group.update_attribute(:role, 'member') if group.role.nil?
@@ -81,8 +87,14 @@ class InteractionsController < ApplicationController
   def set_labels
     @person = Person.find(params[:person_id])
     @label_ids = params[:ids].split(',')
-    removed_labels = @person.organizational_labels_for_org(current_organization).where("label_id NOT IN (?)", @label_ids)
-    removed_labels.delete_all if removed_labels.present?
+
+    if @label_ids.present?
+      removed_labels = @person.organizational_labels_for_org(current_organization).where("label_id NOT IN (?)", @label_ids)
+      removed_labels.delete_all if removed_labels.present?
+    else
+      @person.organizational_labels_for_org(current_organization).delete_all
+    end
+    
     @label_ids.each do |label_id|
       label = @person.organizational_labels.find_or_create_by_label_id_and_organization_id(label_id.to_i, current_organization.id)
       label.update_attribute(:added_by_id, current_person.id) if label.added_by_id.nil?

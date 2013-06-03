@@ -4,7 +4,13 @@ class ContactAssignmentsController < ApplicationController
     org_ids = params[:subs] == 'true' ? @organization.self_and_children_ids : @organization.id
     @people_scope = Person.where('organizational_roles.organization_id' => org_ids).includes(:organizational_roles_including_archived)
     @people_scope = @people_scope.where(id: @people_scope.archived_not_included.collect(&:id)) if params[:include_archived].blank? && params[:archived].blank?
-
+    
+    # Profile
+    @person = current_organization.people.where(id: params[:ids].first).try(:first)
+    if @person
+      @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
+    end
+    
     # @keyword = SmsKeyword.find(params[:keyword])
     ContactAssignment.where(person_id: params[:ids], organization_id: @organization.id).destroy_all unless ENV["RAILS_ENV"] == "test"
     if params[:assign_to].present?
