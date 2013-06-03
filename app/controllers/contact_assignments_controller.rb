@@ -7,7 +7,7 @@ class ContactAssignmentsController < ApplicationController
     
     # Profile
     @person = current_organization.people.where(id: params[:ids].first).try(:first)
-    if @person
+    if @person.present?
       @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
     end
     

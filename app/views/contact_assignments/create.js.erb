@@ -9,6 +9,8 @@
     $('#followup_comment_status').val('uncontacted')
   }
 <% end %>
-$('.feed_content .tab_content.profile_info .view_space').html("<%= escape_javascript(render partial: 'interactions/profile_info') %>")
-$('.feed_content .tab_content.profile_info .edit_space').html("<%= escape_javascript(render partial: 'interactions/profile_info_edit') %>")
-$.toggleLoader('profile_name','')
+<% if @person.present? %>
+  $('.feed_content .tab_content.profile_info .view_space').html("<%= escape_javascript(render partial: 'interactions/profile_info') %>")
+  $('.feed_content .tab_content.profile_info .edit_space').html("<%= escape_javascript(render partial: 'interactions/profile_info_edit') %>")
+  $.toggleLoader('profile_name','')
+<% end %>
