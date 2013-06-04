@@ -79,8 +79,8 @@ class Interaction < ActiveRecord::Base
   end
   
   def self.get_interactions_hash(person_id, org_id)
-    eh = Interaction.where(receiver_id: person_id, organization_id: org_id)
-    eh.collect(&:to_hash)
+    interactions = Interaction.where(receiver_id: person_id, organization_id: org_id).order("created_at DESC")
+    interactions.collect(&:to_hash)
   end
   
   private 

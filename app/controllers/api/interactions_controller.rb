@@ -16,9 +16,12 @@ class Api::InteractionsController < ApiController
   end
   
   def show_1
-    contact_id = params[:id].present? ? params[:id] : 0
-    @interactions = Interaction.where(receiver_id: params[:id], organization_id: @organization.id).order("created_at DESC")
-    json_output = @interactions.collect {|c| {interaction: {id: c.id, interaction_type_id: c.interaction_type_id, receiver_id: c.receiver_id, initiator_ids: c.initiator_ids, organization_id: c.organization_id, created_by_id: c.created_by_id, comment: c.comment, privacy_setting: c.privacy_setting, timestamp: c.timestamp, created_at: c.created_at, updated_at: c.updated_at, deleted_at: c.deleted_at}}}
+    if params[:id].present?
+      contact_id = params[:id] == "me" ? current_person.id : params[:id]
+    else
+      contact_id = 0
+    end
+    json_output = Interaction.get_interactions_hash(contact_id, current_organization.id)
     final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
     render json: final_output
   end
