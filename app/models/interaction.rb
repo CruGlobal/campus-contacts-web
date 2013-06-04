@@ -61,6 +61,28 @@ class Interaction < ActiveRecord::Base
     end
   end
   
+  def to_hash
+    @hash = {}
+    @hash['id'] = id
+    @hash['interaction_type_id'] = interaction_type_id
+    @hash['receiver_id'] = receiver_id
+    @hash['initiator_ids'] = initiator_ids
+    @hash['organization_id'] = organization_id
+    @hash['created_by_id'] = created_by_id
+    @hash['comment'] = comment
+    @hash['privacy_setting'] = privacy_setting
+    @hash['timestamp'] = timestamp
+    @hash['created_at'] = created_at
+    @hash['updated_at'] = updated_at
+    @hash['deleted_at'] = deleted_at
+    @hash
+  end
+  
+  def self.get_interactions_hash(person_id, org_id)
+    eh = Interaction.where(receiver_id: person_id, organization_id: org_id)
+    eh.collect(&:to_hash)
+  end
+  
   private 
   
   def ensure_timestamp

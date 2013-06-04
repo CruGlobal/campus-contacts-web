@@ -247,6 +247,7 @@ Mh::Application.routes.draw do
       get "contact_assignments/list_organizations" => "contact_assignments#list_organizations"
       resources :contact_assignments
       resources :followup_comments
+      resources :interactions
       resources :roles
       resources :organizations
     end
