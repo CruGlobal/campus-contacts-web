@@ -1,5 +1,5 @@
 class Api::InteractionsController < ApiController
-  #oauth_required scope: "interactions"
+  oauth_required scope: "interactions"
   before_filter :valid_request_before, :authorized_leader?, :organization_allowed?, :get_organization, :get_api_json_header
 
   def create_1
@@ -17,30 +17,31 @@ class Api::InteractionsController < ApiController
   
   def show_1
     if params[:id].present?
-      contact_id = params[:id] == "me" ? current_person.id : params[:id]
+      contact_id = clean_id(params[:id])
+      json_output = Interaction.get_interactions_hash(contact_id, current_organization.id)
+      final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
+      final_output
     else
-      contact_id = 0
+      final_output = "[]"
     end
-    json_output = Interaction.get_interactions_hash(contact_id, current_organization.id)
-    final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
     render json: final_output
   end
   
   def show_2
     json_output = @api_json_header
-    contact_id = params[:id].present? ? params[:id] : 0
+    contact_id = clean_id(params[:id])
     
-    @interaction = Interaction.unscoped.includes(:rejoicables).where(contact_id: contact_id).where(organization_id: @organization.id)
+    @interactions = Interaction.where(receiver_id: contact_id, organization_id: current_organization.id)
     if (params[:since].present?)
-      @interaction = @interaction.where("interaction.updated_at >= ?", Time.at(params[:since].to_i).utc)
+      @interactions = @interactions.where("interactions.updated_at >= ?", Time.at(params[:since].to_i).utc)
     end
     if (params[:until].present?)
-      @interaction = @interaction.where("interaction.updated_at < ?", Time.at(params[:until].to_i).utc)
+      @interactions = @interactions.where("interactions.updated_at < ?", Time.at(params[:until].to_i).utc)
     end
     
-    @interaction = @interaction.order("created_at DESC")
+    @interactions = @interactions.order("created_at DESC")
         
-    json_output[:interaction] = @interaction.collect {|c| {followup_comment: {comment: c.to_hash, rejoicables: c.rejoicables.collect{|y| y.attributes.slice('id','what')}}}}
+    json_output[:interaction] = @interactions.collect(&:to_hash)
     final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
     render json: final_output
   end
@@ -64,5 +65,16 @@ class Api::InteractionsController < ApiController
     
     comments.destroy_all
     render :json => '[]'
+  end
+  
+  def clean_id(id)
+    case id
+    when "me"
+      contact_id = current_person.id
+    when "anonymous"
+      contact_id = 0
+    else 
+      id.to_i
+    end
   end
 end

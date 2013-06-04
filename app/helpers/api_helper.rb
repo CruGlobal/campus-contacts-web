@@ -38,7 +38,7 @@ module ApiHelper
   
   def valid_fields?(fields,action,version)
     #return fields that are valid
-     valid_fields = []
+    valid_fields = []
     if Apic::API_ALLOWABLE_FIELDS[version.to_sym][action.to_sym].present?
       valid_fields = fields & Apic::API_ALLOWABLE_FIELDS[version.to_sym][action.to_sym]
     end
