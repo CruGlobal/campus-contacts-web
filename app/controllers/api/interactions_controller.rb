@@ -9,9 +9,10 @@ class Api::InteractionsController < ApiController
       raise InvalidJSONError
     end
 
-    raise InteractionCreateParamsError if @json['followup_comment'].blank?
-    @json['followup_comment']['organization_id'] ||= @organization.id
-    @followup_comment = Interaction.create(@json['followup_comment'])
+    raise InteractionCreateParamsError if @json['interaction'].blank?
+    @json['interaction']['organization_id'] ||= @organization.id
+    @json['interaction']['receiver_id'] ||= 0
+    @interaction = Interaction.create(@json['interaction'])
     render json: "[]"
   end
   
@@ -50,20 +51,20 @@ class Api::InteractionsController < ApiController
     raise InteractionDeleteParamsError unless (params[:id].present? && (is_int?(params[:id]) || (params[:id].is_a? Array)))
     ids = params[:id].split(',')
     
-    comments = Interaction.where(id: ids)
+    interactions = Interaction.where(id: ids)
     role = current_person.organizational_roles.where(organization_id: @organization.id).collect(&:role).collect(&:i18n)
     
-    comments.each_with_index do |comment,i|
+    interactions.each_with_index do |interaction,i|
       if role[i] == 'missionhub_user'
-        raise InteractionPermissionsError unless comment.commenter_id == current_person.id
+        raise InteractionPermissionsError unless interaction.created_by_id == current_person.id
       elsif role[i] == 'admin'
-        raise InteractionPermissionsError unless comment.organization_id == @organization.id
+        raise InteractionPermissionsError unless interaction.organization_id == @organization.id
       else
         raise InteractionPermissionsError
       end
     end
     
-    comments.destroy_all
+    interactions.destroy_all
     render :json => '[]'
   end
   
