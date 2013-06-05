@@ -37,7 +37,9 @@
   	<div class="email col_left"><%= t('general.email') %>:</div>
   	<div class="email col_right">
       <% @person.email_addresses.each do |email| %>
-        <%= mail_to email.email %>
+        <div class="email_record">
+          <%= mail_to email.email %>
+        </div>
     		<% if email.primary %>
           <div class="info_tag">Primary</div>
         <% end %>
