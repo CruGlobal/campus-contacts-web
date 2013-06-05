@@ -276,6 +276,7 @@ Mh::Application.routes.draw do
       resources :questions
       resources :roles
       resources :followup_comments
+      resources :interactions
       resources :answers
     end
   end
