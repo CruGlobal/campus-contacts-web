@@ -1,7 +1,7 @@
 class PersonSerializer < ActiveModel::Serializer
   HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments, :assigned_tos,
              :followup_comments, :comments_on_me, :organizational_roles, :rejoicables, :answer_sheets,
-             :all_organizational_roles, :all_organization_and_children]
+             :all_organizational_roles, :all_organization_and_children, :interactions]
 
   HAS_ONE = [:user, :current_address]
 
@@ -23,7 +23,7 @@ class PersonSerializer < ActiveModel::Serializer
     end if includes
   end
 
-  [:contact_assignments, :assigned_tos, :followup_comments, :comments_on_me, :organizational_roles, :rejoicables].each do |relationship|
+  [:contact_assignments, :assigned_tos, :followup_comments, :comments_on_me, :organizational_roles, :rejoicables, :interactions].each do |relationship|
     define_method(relationship) do
       add_since(organization_filter(relationship))
     end
