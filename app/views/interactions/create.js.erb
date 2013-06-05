@@ -5,8 +5,10 @@ $('.feed_content .tab_content.profile_interactions .edit_space').html("<%= escap
 if(<%= @interaction.receiver == @person %>){
   $('#interaction_feeds_container').prepend("<div class='interaction_feed_container new' id='interaction_feed_container_<%= @interaction.id %>'><%= escape_javascript(render partial: 'interactions/interaction_feed', locals: {interaction: @interaction}) %></div>")
   $('#interaction_feeds_container .feed_box.notice').hide()
+  $.n("Interaction has been added.")
+}else{
+  $.n("Interaction has been added to <%= @interaction.receiver.name %>'s profile.")
 }
-$.n("Interaction has been added to <%= @interaction.receiver.name %>'s profile.")
 $('.interaction_feed_container.new').each(function(){
   $(this).hide().fadeIn('slow')
   $(this).removeClass('new')

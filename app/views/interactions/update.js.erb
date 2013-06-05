@@ -1,5 +1,11 @@
-$(".interaction_feed_container#interaction_feed_container_<%= @interaction.id %>").html("")
-$(".interaction_feed_container#interaction_feed_container_<%= @interaction.id %>").html("<%= escape_javascript(render partial: 'interactions/interaction_feed', locals: {interaction: @interaction}) %>")
+if(<%= @interaction.receiver == @person %>){
+  $(".interaction_feed_container#interaction_feed_container_<%= @interaction.id %>").html("")
+  $(".interaction_feed_container#interaction_feed_container_<%= @interaction.id %>").html("<%= escape_javascript(render partial: 'interactions/interaction_feed', locals: {interaction: @interaction}) %>")
+  $.n("Interaction has been updated.")
+}else{
+  $(".interaction_feed_container#interaction_feed_container_<%= @interaction.id %>").remove()
+  $.n("Interaction has been updated and moved to <%= @interaction.receiver.name %>'s profile.")
+}
 $('.interaction_new').addClass('shouldReload')
 $('#interaction_save_cancel_button').click()
 
