@@ -31,6 +31,13 @@ FactoryGirl.define do
     comment "Sample Comment #{Factory.next(:count)}"
     privacy_setting 'everyone'
   end
+  
+  factory :interaction_type do
+    association :organization
+    name "Sample Interaction Type #{Factory.next(:count)}"
+    i18n "sample_interaction_type_#{Factory.next(:count)}"
+    icon "icon/path"
+  end
 
   factory :group_membership do
     association :group
