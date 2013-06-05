@@ -1056,6 +1056,7 @@ class Person < ActiveRecord::Base
     hash['phone_number'] = primary_phone_number.number if primary_phone_number
     hash['email_address'] = primary_email_address.to_s if primary_email_address
     hash['birthday'] = birth_date.to_s
+    hash['interactions'] = Interaction.get_interactions_hash(id, organization.id) if organization.present?
     hash['interests'] = Interest.get_interests_hash(id)
     hash['education'] = EducationHistory.get_education_history_hash(id)
     hash['location'] = latest_location.to_hash if latest_location

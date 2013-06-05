@@ -128,4 +128,19 @@ module ApiErrors
       super message, "41", "API Error"
     end
   end
+  class InteractionPermissionsError < ApiError
+    def initialize
+      super "You do not have the appropriate permissions to delete this interaction.","43", "Message"
+    end
+  end
+  class InteractionCreateParamsError < ApiError
+    def initialize
+      super "You did not provide the appropriate parameters to create an interaction.", "44", "API Error"
+    end
+  end
+  class InteractionDeleteParamsError < ApiError
+    def initialize
+      super "You did not provide the appropriate parameters to remove an interaction.", "45", "API Error"
+    end
+  end
 end
