@@ -8,10 +8,8 @@
     </span>
 	</div>
 	<div class="feed_item_content"><%= interaction.title %></div>
-  <% if interaction.comment.present? %>
-  	<div class="feed_item_comment">
-      <strong><%= interaction.creator %> wrote:</strong>
-      “<%= interaction.comment %>”
-    </div>
-  <% end %>
+	<div class="feed_item_comment">
+    <strong><%= interaction.creator %> wrote:</strong>
+    “<%= interaction.comment %>”
+  </div>
 </div>
