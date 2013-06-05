@@ -7,13 +7,13 @@ $ ->
     $.fn.tip()
     
   $(document).live 'click', (e)->
-    $('#receiver_id_dropdown, #interaction_type_dropdown, #initiator_dropdown, #privacy_setting_dropdown, #followup_status_dropdown.edit, #followup_status_dropdown.view, #assigned_to_dropdown').removeClass('active')
+    $('.custom_dropdown').removeClass('active')
     
   $(":not(.tip)").live 'click', (e)->
     $('.qtip').hide()
     
   $('a').live 'click', (e)->
-    $('#receiver_id_dropdown, #interaction_type_dropdown, #initiator_dropdown, #privacy_setting_dropdown, #followup_status_dropdown.edit, #followup_status_dropdown.view, #assigned_to_dropdown').removeClass('active')
+    $('.custom_dropdown').removeClass('active')
     
   # START - ACTION MENU
   $('li a#action_menu_record_interaction').live 'click', (e)->
@@ -244,6 +244,7 @@ $ ->
     e.preventDefault()
     $.toggleLoader('profile_name','Saving Interaction...')
     $.blur('.feed_content .feed_box.interaction_new')
+    $(document).click()
     $('form#new_interaction_form').submit()
   
   $('#privacy_setting_dropdown .option').live 'click', (e)->
@@ -253,36 +254,23 @@ $ ->
     $('#privacy_setting_field').val(selected_id)
     $('#privacy_setting_dropdown').removeClass('active')
   
-  $('#initiator_dropdown .option').live 'click', (e)->
-    checkbox = $(this).children('input.initiator_box').eq(0)
+  $('#initiator_dropdown .option.initiator').live 'click', (e)->
+    checkbox = $(this).children('input.initiator_box')
     if checkbox.is(':checked')
-      if $('input.initiator_box:checked').size() > 1
-        checkbox.prop('checked',false)
-      else
-        checkbox.prop('checked',true)
+      checkbox.prop('checked',false)
     else
       checkbox.prop('checked',true)
+    if $('input.initiator_box:checked').size() == 0
+      checkbox.prop('checked',true)
     checkbox.change()
-    selected_name = $(this).children('input.initiator_box').eq(0).siblings('.initiator_name').text()
     if $('input.initiator_box:checked').size() > 1
       $('#initiator_dropdown #selected').text($('input.initiator_box:checked').size() + " people selected")
     else
+      selected_name = $('input.initiator_box:checked').siblings('.initiator_name').text()
       $('#initiator_dropdown #selected').text(selected_name)
-      
   
   $('#initiator_dropdown input.initiator_box').live 'click', (e)->
-    if $(this).is(':checked')
-      if $('input.initiator_box:checked').size() > 1
-        $(this).prop('checked',false)
-      else
-        $(this).prop('checked',true)
-    else
-      $(this).prop('checked',true)
-    selected_name = $(this).siblings('.initiator_name').text()
-    if $('input.initiator_box:checked').size() > 1
-      $('#initiator_dropdown #selected').text($('input.initiator_box:checked').size() + " people selected")
-    else
-      $('#initiator_dropdown #selected').text(selected_name)
+    $(this).parents('.option.initiator').click()
   
   $('#interaction_type_dropdown .option').live 'click', (e)->
     selected_name = $(this).attr('data-name')

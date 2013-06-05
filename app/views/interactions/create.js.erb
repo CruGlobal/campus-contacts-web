@@ -2,8 +2,11 @@ $.blur('.feed_content .feed_box.interaction_new')
 $('.feed_content .tab_content.profile_interactions .edit_space').hide()
 $('.feed_content .tab_content.profile_interactions .edit_space').html("<%= escape_javascript(render partial: 'interactions/profile_interactions_edit') %>")
 
-
-$('#interaction_feeds_container').prepend("<div class='interaction_feed_container new' id='interaction_feed_container_<%= @interaction.id %>'><%= escape_javascript(render partial: 'interactions/interaction_feed', locals: {interaction: @interaction}) %></div>")
+if(<%= @interaction.receiver == @person %>){
+  $('#interaction_feeds_container').prepend("<div class='interaction_feed_container new' id='interaction_feed_container_<%= @interaction.id %>'><%= escape_javascript(render partial: 'interactions/interaction_feed', locals: {interaction: @interaction}) %></div>")
+  $('#interaction_feeds_container .feed_box.notice').hide()
+}
+$.n("Interaction has been added to <%= @interaction.receiver.name %>'s profile.")
 $('.interaction_feed_container.new').each(function(){
   $(this).hide().fadeIn('slow')
   $(this).removeClass('new')

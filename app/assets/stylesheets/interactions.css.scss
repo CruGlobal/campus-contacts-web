@@ -194,6 +194,13 @@ body{
         font-style: italic;
         color: #999;
       }
+      .email .email_record {
+        max-width: 150px;
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
 
     .custom_dropdown {
