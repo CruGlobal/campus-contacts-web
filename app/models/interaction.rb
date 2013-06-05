@@ -43,21 +43,23 @@ class Interaction < ActiveRecord::Base
   
   def title
     intiators_string = initiators.collect{|x| "<strong>#{x.name}</strong>"}.to_sentence
+    creator_string = "<strong>#{creator.name}</strong>"
+    receiver_string = "<strong>#{receiver.name}</strong>"
     case interaction_type.i18n
     when 'comment'
-      return "#{intiators_string} shared a comment.".html_safe
+      return "".html_safe
     when 'spiritual_conversation'
-      return "#{intiators_string} initiated spiritual conversation with <strong>#{receiver}</strong>.".html_safe
+      return "#{intiators_string} initiated spiritual conversation with #{receiver_string}.".html_safe
     when 'gospel_presentation'
-      return "#{intiators_string} shared the gospel with <strong>#{receiver}</strong>.".html_safe
+      return "#{intiators_string} shared the gospel with #{receiver_string}.".html_safe
     when 'prayed_to_receive_christ'
-      return "#{intiators_string} led <strong>#{receiver}</strong> to pray to receive Christ.".html_safe
+      return "#{intiators_string} led #{receiver_string} to pray to receive Christ.".html_safe
     when 'holy_spirit_presentation'
-      return "#{intiators_string} shared the holy spirit presentation with <strong>#{receiver}</strong>.".html_safe
+      return "#{intiators_string} shared the holy spirit presentation with #{receiver_string}.".html_safe
     when 'graduating_on_mission'
-      return "#{intiators_string} helped <strong>#{receiver}</strong> develop a plan for graduating on a mission.".html_safe
+      return "#{intiators_string} helped #{receiver_string} develop a plan for graduating on a mission.".html_safe
     when 'faculty_on_mission'
-      return "#{intiators_string} helped <strong>#{receiver}</strong> develop a plan to be a faculty member on a mission.".html_safe
+      return "#{intiators_string} helped #{receiver_string} develop a plan to be a faculty member on a mission.".html_safe
     end
   end
   
