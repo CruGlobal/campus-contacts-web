@@ -52,12 +52,12 @@ class Api::InteractionsController < ApiController
     ids = params[:id].split(',')
     
     interactions = Interaction.where(id: ids)
-    role = current_person.organizational_roles.where(organization_id: @organization.id).collect(&:role).collect(&:i18n)
+    permission = current_person.organizational_permissions.where(organization_id: @organization.id).collect(&:permission).collect(&:i18n)
     
     interactions.each_with_index do |interaction,i|
-      if role[i] == 'missionhub_user'
+      if permission[i] == 'user'
         raise InteractionPermissionsError unless interaction.created_by_id == current_person.id
-      elsif role[i] == 'admin'
+      elsif permission[i] == 'admin'
         raise InteractionPermissionsError unless interaction.organization_id == @organization.id
       else
         raise InteractionPermissionsError

@@ -1,18 +1,18 @@
 require 'test_helper'
 
-class OrganizationalRolesControllerTest < ActionController::TestCase
+class OrganizationalPermissionsControllerTest < ActionController::TestCase
   context "Updating contacts" do
     setup do
       @user, @org = admin_user_login_with_org
 
-      @org_role = Factory(:organizational_role)
+      @org_permission = Factory(:organizational_permission)
     end
 
-    should "update organizational role" do
-      xhr :put, :update, { :id => @org_role.id, :status => "" }
+    should "update organizational permission" do
+      xhr :put, :update, { :id => @org_permission.id, :status => "" }
       assert_response :success
-      assert_not_nil assigns(:organizational_role)
-      assert_equal OrganizationalRole.find(@org_role.id), assigns(:organizational_role)
+      assert_not_nil assigns(:organizational_permission)
+      assert_equal OrganizationalPermission.find(@org_permission.id), assigns(:organizational_permission)
     end
   end
 
@@ -27,7 +27,7 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
       @another_org = Factory(:organization)
     end
 
-    should "move the people (contact roles) from one org to another org (keep contact)" do
+    should "move the people (contact permissions) from one org to another org (keep contact)" do
       @org.add_contact(@person1)
       @org.add_contact(@person2)
       @org.add_contact(@person3)
@@ -42,7 +42,7 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
       assert_equal ids, @another_org.contacts.collect(&:id)
     end
 
-    should "move the people (contact roles) from one org to another org (do not keep contact)" do
+    should "move the people (contact permissions) from one org to another org (do not keep contact)" do
       @org.add_contact(@person1)
       @org.add_contact(@person2)
       @org.add_contact(@person3)
@@ -57,7 +57,7 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
       assert_equal ids, @another_org.contacts.collect(&:id)
     end
 
-    should "move the people (involved roles) from one org to another org (keep contact)" do
+    should "move the people (involved permissions) from one org to another org (keep contact)" do
       @org.add_contact(@person1)
       @org.add_contact(@person2)
       @org.add_contact(@person3)
@@ -76,7 +76,7 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
       assert_equal ids, @another_org.contacts.collect(&:id)
     end
 
-    should "move the people (involved roles) from one org to another org (do not keep contact)" do
+    should "move the people (involved permissions) from one org to another org (do not keep contact)" do
       @org.add_involved(@person1)
       @org.add_involved(@person2)
       @org.add_involved(@person3)
@@ -88,11 +88,11 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
 
       xhr :post, :move_to, { :from_id => @org.id , :to_id => @another_org.id, :ids => ids.join(','), :keep_contact => "false", :current_admin => @user }
       # for MH-448
-      assert_equal [], @org.people.includes(:organizational_roles).where("organizational_roles.role_id" => Role.contact.id).collect(&:id)
+      assert_equal [], @org.people.includes(:organizational_permissions).where("organizational_permissions.permission_id" => Permission.no_permissions.id).collect(&:id)
       assert_equal ids, @another_org.contacts.collect(&:id)
     end
 
-    should "move the people (contact role + other roles) from one org to another org (do not keep contact)" do
+    should "move the people (contact permission + other permissions) from one org to another org (do not keep contact)" do
       @org.add_involved(@person1)
       @org.add_involved(@person2)
       @org.add_involved(@person3)
@@ -109,9 +109,9 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
       xhr :post, :move_to, { :from_id => @org.id , :to_id => @another_org.id, :ids => ids.join(','), :keep_contact => "false", :current_admin => @user }
       # for MH-448
       assert_equal [], @org.contacts.collect(&:id)
-      assert_equal [], @org.people.includes(:organizational_roles).where("organizational_roles.role_id" => Role.missionhub_user.id).collect(&:id)
+      assert_equal [], @org.people.includes(:organizational_permissions).where("organizational_permissions.permission_id" => Permission.user.id).collect(&:id)
       assert_equal ids, @another_org.contacts.collect(&:id)
-      assert_equal [], @another_org.people.includes(:organizational_roles).where("organizational_roles.role_id" => Role.missionhub_user.id).collect(&:id) # only contact role will be obtained by the transferred person
+      assert_equal [], @another_org.people.includes(:organizational_permissions).where("organizational_permissions.permission_id" => Permission.user.id).collect(&:id) # only contact permission will be obtained by the transferred person
     end
 
     should "not be able to move an admin person if he's the only remaining admin in the org" do
@@ -119,7 +119,7 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
 
       xhr :post, :move_to, { :from_id => @org.id , :to_id => @another_org.id, :ids => ids.join(','), :keep_contact => "false", :current_admin => @user }
 
-      assert_equal I18n.t('organizational_roles.cannot_delete_self_as_admin_error'), @response.body
+      assert_equal I18n.t('organizational_permissions.cannot_delete_self_as_admin_error'), @response.body
       assert_equal ids, @org.admins.collect(&:id)
       assert_equal [], @another_org.contacts.collect(&:id)
     end
@@ -131,7 +131,7 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
 
       xhr :post, :move_to, { :from_id => @org.id , :to_id => @another_org.id, :ids => ids.join(','), :keep_contact => "false", :current_admin => @user }
 
-      assert_equal I18n.t('organizational_roles.moving_people_success'), @response.body
+      assert_equal I18n.t('organizational_permissions.moving_people_success'), @response.body
       assert_equal [@user.person.id], @org.admins.collect(&:id)
       assert_equal [@user_2.person.id], @another_org.contacts.collect(&:id)
     end
@@ -152,15 +152,15 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
         assert_equal 0, @contact.assigned_tos.count
       end
 
-      assert_equal I18n.t('organizational_roles.moving_people_success'), @response.body
+      assert_equal I18n.t('organizational_permissions.moving_people_success'), @response.body
       assert_equal [], @org.only_missionhub_users.collect(&:id)
       assert_equal [@user_2.person.id], @another_org.contacts.collect(&:id)
     end
 
     should "completely move an archived person to an org (do not keep contact)" do
       @archived_contact1 = Factory(:person, first_name: "Edmure", last_name: "Tully")
-      Factory(:organizational_role, organization: @user.person.organizations.first, person: @archived_contact1, role: Role.contact)
-      @archived_contact1.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive #archive his one and only role
+      Factory(:organizational_permission, organization: @user.person.organizations.first, person: @archived_contact1, permission: Permission.no_permissions)
+      @archived_contact1.organizational_permissions.where(permission_id: Permission::CONTACT_ID).first.archive #archive his one and only permission
 
       ids = [@archived_contact1.id]
 
@@ -173,16 +173,16 @@ class OrganizationalRolesControllerTest < ActionController::TestCase
   context "deleting a contact" do
     setup do
       @user, @organization = admin_user_login_with_org
-      @organizational_role = Factory(:organizational_role, person: @user.person, organization: @organization, :role => Role.contact)
+      @organizational_permission = Factory(:organizational_permission, person: @user.person, organization: @organization, :permission => Permission.no_permissions)
       @contact = Factory(:person)
-      @role = Factory(:organizational_role, person: @contact, organization: @organization, :role => Role.contact)
+      @permission = Factory(:organizational_permission, person: @contact, organization: @organization, :permission => Permission.no_permissions)
       sign_in @user
     end
 
-    should "make its organizational_role.followup_status = 'do_not_contact'" do
-      a = OrganizationalRole.where(:followup_status => 'do_not_contact').count
-      xhr :put, :update, {:status => "do_not_contact", :id => @role.id}
-      assert_equal a+1, OrganizationalRole.where(:followup_status => 'do_not_contact').count
+    should "make its organizational_permission.followup_status = 'do_not_contact'" do
+      a = OrganizationalPermission.where(:followup_status => 'do_not_contact').count
+      xhr :put, :update, {:status => "do_not_contact", :id => @permission.id}
+      assert_equal a+1, OrganizationalPermission.where(:followup_status => 'do_not_contact').count
       assert_equal [@contact], @organization.dnc_contacts
       assert_not_empty @organization.dnc_contacts.where(id: @contact.id)
     end

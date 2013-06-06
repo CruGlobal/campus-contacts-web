@@ -2,14 +2,14 @@
 
 one:
   person_id: 1
-  role_id: 1
+  permission_id: 1
   start_date: 2011-06-27
   end_date: 2011-06-27
   deleted: false
 
 two:
   person_id: 1
-  role_id: 1
+  permission_id: 1
   start_date: 2011-06-27
   end_date: 2011-06-27
   deleted: false

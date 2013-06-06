@@ -1,12 +1,12 @@
 require 'csv'
 class ContactsCsvGenerator
 
-  def self.generate(roles, all_answers, questions, people, organization)
+  def self.generate(permissions, all_answers, questions, people, organization)
     out = ""
     CSV.generate(out) do |rows|
       rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('general.status'), t('general.assigned_to'), t('general.gender'), t('contacts.index.phone_number'), t('people.index.email')] + questions.collect {|q| q.label} + [t('contacts.index.last_survey')]
       people.each do |person|
-        answers = [person.first_name, person.last_name, roles[person.id].present? ? roles[person.id].followup_status.to_s.titleize : nil, person.assigned_tos_by_org(organization).collect{|a| Person.find(a.assigned_to_id).name}.join(','), person.gender.to_s.titleize, person.pretty_phone_number, person.email]
+        answers = [person.first_name, person.last_name, permissions[person.id].present? ? permissions[person.id].followup_status.to_s.titleize : nil, person.assigned_tos_by_org(organization).collect{|a| Person.find(a.assigned_to_id).name}.join(','), person.gender.to_s.titleize, person.pretty_phone_number, person.email]
         dates = []
         questions.each do |q|
           answer = all_answers[person.id][q.id]

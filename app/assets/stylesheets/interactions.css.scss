@@ -67,19 +67,19 @@ body{
         }
       }
       
-      &.roles_popup_box {
-        .roles_chooser_box {
+      &.permissions_popup_box {
+        .permissions_chooser_box {
           width: 260px;
           margin: 0 auto;
           padding: 6px 0px 2px;
           height: 180px;
           overflow: hidden;
           overflow-y: auto;
-          .roles_checkbox {
+          .permissions_checkbox {
             padding: 0px 10px;
           }
         }
-        #roles_popup_manage_button {
+        #permissions_popup_manage_button {
           float: left;
         }
       }

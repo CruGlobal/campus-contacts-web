@@ -24,7 +24,7 @@ $ ->
     e.preventDefault()
 
   if $('#advanced_filter_box')[0] && $('#first_name')[0]
-    if $('#first_name').val().length > 0 || $('#last_name').val().length > 0 || (($('#role').val().length) > 0 && (window.location.search.indexOf('advanced')) > 1) ||
+    if $('#first_name').val().length > 0 || $('#last_name').val().length > 0 || (($('#permission').val().length) > 0 && (window.location.search.indexOf('advanced')) > 1) ||
     $('#gender_1').is(':checked') || $('#gender_2').is(':checked') || $('#gender_').is(':checked') ||
     $('#email').val().length > 0 ||  $('#phone').val().length > 0
       $('#advanced_filter_box').show()
@@ -66,8 +66,8 @@ $ ->
       tr = $(this).parent()
       document.location = '/profile/' + tr.attr('data-id')
 
-  $('#apply_roles_spinner').hide()
-  $("#apply_roles_successful").hide()
+  $('#apply_permissions_spinner').hide()
+  $("#apply_permissions_successful").hide()
 
   if $('#people_controller.confirm_merge input[type=submit]')[0]
     $('#people_controller.confirm_merge input[type=submit]')[0].focus()
@@ -674,8 +674,8 @@ $('#fetch_all_contacts_link').live 'click', (e)->
   e.preventDefault()
   $('#all_text, #all_selected_text').toggle()
   $('.id_checkbox').attr('checked',true)
-  change_all_role_checkboxes(true)
-  disable_role_checkboxes()
+  change_all_permission_checkboxes(true)
+  disable_permission_checkboxes()
   enable_all_unchecked()
 
 $('.check_all_contacts, .check_all_mine').live 'click', ->
@@ -702,8 +702,8 @@ $('.check_all_contacts, .check_all_mine').live 'click', ->
 		      $('#contacts_table').prepend(html)
     else
       first_row.remove()
-  change_all_role_checkboxes(true) if checked
-  disable_role_checkboxes()
+  change_all_permission_checkboxes(true) if checked
+  disable_permission_checkboxes()
   enable_all_unchecked()
 
 $('#check_all').live 'click', ->
@@ -716,9 +716,9 @@ $('#check_all').live 'click', ->
 
   checked = $(this).is(':checked')
   if checked
-    change_all_role_checkboxes(true)
+    change_all_permission_checkboxes(true)
   else
-    change_all_role_checkboxes(false)
+    change_all_permission_checkboxes(false)
   $('input.id_checkbox').prop('checked', checked)
 
   params = $(this).attr('data-params')
@@ -733,55 +733,55 @@ $('#check_all').live 'click', ->
     else
       if $('span#all_text', first_row)[0]?
         first_row.hide()
-  change_all_role_checkboxes(true) if checked
-  disable_role_checkboxes()
+  change_all_permission_checkboxes(true) if checked
+  disable_permission_checkboxes()
   enable_all_unchecked()
 
-$('#roles_menu_div').live 'click', ->
-  role_div = $(this).parent().find('.dropdown_1column')
+$('#permissions_menu_div').live 'click', ->
+  permission_div = $(this).parent().find('.dropdown_1column')
 
-  if $(role_div).attr('style')
-    role_div.attr('style', '')
+  if $(permission_div).attr('style')
+    permission_div.attr('style', '')
     $(this).attr('style', '')
   else
-    role_div.css('left', '24.6em')
+    permission_div.css('left', '24.6em')
     $(this).attr('style', 'background: url("/assets/pillbg_over.png") repeat-x')
 
-$('#apply_roles').live 'click', ->
-  return false if check_selected_roles() == 0
+$('#apply_permissions').live 'click', ->
+  return false if check_selected_permissions() == 0
   return false if check_selected_people() == 0
-  update_persons_roles()
+  update_persons_permissions()
   false
 
-$('.role_link_checkbox').live 'click', ->
+$('.permission_link_checkbox').live 'click', ->
   return false if check_selected_people() == 0
-  role_checkbox = $(this).parent().find('input')
-  update_checkbox_checkmark(role_checkbox)
-  update_persons_roles()
+  permission_checkbox = $(this).parent().find('input')
+  update_checkbox_checkmark(permission_checkbox)
+  update_persons_permissions()
 
 $('.id_checkbox').live 'click', ->
   mark_as_checked = $(this).is ':checked'
-  role_labels = get_role_labels($(this))
-  change_role_checkboxes(role_labels, mark_as_checked)
-  change_all_role_checkboxes(true) if !mark_as_checked
-  disable_role_checkboxes()
+  permission_labels = get_permission_labels($(this))
+  change_permission_checkboxes(permission_labels, mark_as_checked)
+  change_all_permission_checkboxes(true) if !mark_as_checked
+  disable_permission_checkboxes()
   enable_all_unchecked()
 
 check_selected_people = () ->
   checked = $('.id_checkbox:checked').length
-  alert("You didn't select any people to update roles.") if checked == 0
+  alert("You didn't select any people to update permissions.") if checked == 0
   checked
 
-check_selected_roles = () ->
-  checked =  $('.role_id_checkbox:checked').length
-  alert("You didn't select any roles to apply.") if checked == 0
+check_selected_permissions = () ->
+  checked =  $('.permission_id_checkbox:checked').length
+  alert("You didn't select any permissions to apply.") if checked == 0
   checked
 
-get_role_labels = (obj) ->
-  $('.role_label', obj.closest('tr'))
+get_permission_labels = (obj) ->
+  $('.permission_label', obj.closest('tr'))
 
-disable_role_checkboxes = () -> # disable role checkboxes that only SOME of contacts have
-  role_labels_array = []
+disable_permission_checkboxes = () -> # disable permission checkboxes that only SOME of contacts have
+  permission_labels_array = []
   to_be_disabled = []
   to_be_enabled = []
   checked_length = $('input.id_checkbox:checked').length
@@ -789,48 +789,48 @@ disable_role_checkboxes = () -> # disable role checkboxes that only SOME of cont
   $('input.id_checkbox:checked').each ->
     r = []
     if $(this).hasClass('not_displayed')
-      for role_id in $(this).attr('data-roles').split(',')
-        r.push(role_id)
+      for permission_id in $(this).attr('data-permissions').split(',')
+        r.push(permission_id)
     else
-      role_labels = get_role_labels($(this))
-      role_labels.each ->
-        role = $(this).attr('id').split('_')
-        r.push(role[1])
-    $.merge(role_labels_array, r)
-  unique = role_labels_array.filter((itm, i, a) ->
+      permission_labels = get_permission_labels($(this))
+      permission_labels.each ->
+        permission = $(this).attr('id').split('_')
+        r.push(permission[1])
+    $.merge(permission_labels_array, r)
+  unique = permission_labels_array.filter((itm, i, a) ->
     i is a.indexOf(itm))
   i = 0
   while(i < unique.length)
     j = 0
     count = 0
-    while(j < role_labels_array.length)
-      count++ if unique[i] == role_labels_array[j]
+    while(j < permission_labels_array.length)
+      count++ if unique[i] == permission_labels_array[j]
       j++
     to_be_disabled.push(unique[i]) if count < checked_length
     to_be_enabled.push(unique[i]) if count == checked_length
     i++
   l = 0
   while(l < to_be_disabled.length)
-    checkbox = '#role_ids_' + to_be_disabled[l]
+    checkbox = '#permission_ids_' + to_be_disabled[l]
     $(checkbox).attr disabled: true
     #$(checkbox).attr checked: false
     l++
 
   l = 0
   while(l < to_be_enabled.length)
-    checkbox = '#role_ids_' + to_be_enabled[l]
+    checkbox = '#permission_ids_' + to_be_enabled[l]
     $(checkbox).attr disabled: false
     $(checkbox).attr checked: true
     l++
 
-  enable_and_uncheck_if_role_not_included_in_role_labels(role_labels_array)
+  enable_and_uncheck_if_permission_not_included_in_permission_labels(permission_labels_array)
 
 enable_all_unchecked = () ->
-  $('.role_id_checkbox:not(:checked)').each ->
+  $('.permission_id_checkbox:not(:checked)').each ->
     $(this).attr disabled: false
 
-enable_and_uncheck_if_role_not_included_in_role_labels = (unique) ->
-  $('.role_id_checkbox:checked').each ->
+enable_and_uncheck_if_permission_not_included_in_permission_labels = (unique) ->
+  $('.permission_id_checkbox:checked').each ->
     l = 0
     while(l < unique)
       break if $(this).val() == unique[l]
@@ -839,47 +839,47 @@ enable_and_uncheck_if_role_not_included_in_role_labels = (unique) ->
       $(this).attr disabled: false
       $(this).attr checked: false
 
-change_role_checkboxes = (role_labels, check, n) ->
-  role_labels.each ->
-    role = $(this).attr('id').split('_')
-    checkbox = '#role_ids_' + role[1]
+change_permission_checkboxes = (permission_labels, check, n) ->
+  permission_labels.each ->
+    permission = $(this).attr('id').split('_')
+    checkbox = '#permission_ids_' + permission[1]
     $(checkbox).attr checked: check
 
-change_role_checkboxes_by_ids = (ids, check) ->
+change_permission_checkboxes_by_ids = (ids, check) ->
   for id in ids.split(',')
-    checkbox = '#role_ids_' + id
+    checkbox = '#permission_ids_' + id
     $(checkbox).attr checked: check
 
-change_all_role_checkboxes = (check) ->
+change_all_permission_checkboxes = (check) ->
   $('input.id_checkbox:checked').each ->
     if $(this).hasClass('not_displayed')
-      change_role_checkboxes_by_ids($(this).attr('data-roles'), check)
+      change_permission_checkboxes_by_ids($(this).attr('data-permissions'), check)
     else
-      role_labels = get_role_labels($(this))
-      change_role_checkboxes(role_labels, check)
+      permission_labels = get_permission_labels($(this))
+      change_permission_checkboxes(permission_labels, check)
 
-update_checkbox_checkmark = (role_checkbox) ->
-  if role_checkbox.is ':checked'
-    role_checkbox.attr checked: false
+update_checkbox_checkmark = (permission_checkbox) ->
+  if permission_checkbox.is ':checked'
+    permission_checkbox.attr checked: false
   else
-    role_checkbox.attr checked: true
+    permission_checkbox.attr checked: true
 
-update_persons_roles = () ->
-  role_ids = []
-  some_role_ids = []
+update_persons_permissions = () ->
+  permission_ids = []
+  some_permission_ids = []
 
-  $('#apply_roles_spinner').show()
-  $("#apply_roles_successful").hide()
+  $('#apply_permissions_spinner').show()
+  $("#apply_permissions_successful").hide()
   $('#label_menu').live 'mouseleave', -> #Hook to avoid using the plugin, hiding the box while in process
   	$(this).show()
-  $('.role_id_checkbox:checked').each ->
-    role_id = $(this).val()
-    role_ids.push(role_id)
+  $('.permission_id_checkbox:checked').each ->
+    permission_id = $(this).val()
+    permission_ids.push(permission_id)
     #if $(this).is ':enabled' #added for MH 299
-    #  role_id = $(this).val()
-    #  role_ids.push(role_id)
-  $('.role_id_checkbox:not(:enabled)').each ->
-    some_role_ids.push($(this).val())
+    #  permission_id = $(this).val()
+    #  permission_ids.push(permission_id)
+  $('.permission_id_checkbox:not(:enabled)').each ->
+    some_permission_ids.push($(this).val())
 
   checked_elements = $('.id_checkbox:checked')
   total_contacts = checked_elements.length
@@ -890,21 +890,21 @@ update_persons_roles = () ->
     person_id = $(this).val()
     $.ajax
       type: 'POST',
-      url: '/people/update_roles',
-      data: 'role_ids='+role_ids+'&some_role_ids='+some_role_ids+'&person_id='+person_id,
+      url: '/people/update_permissions',
+      data: 'permission_ids='+permission_ids+'&some_permission_ids='+some_permission_ids+'&person_id='+person_id,
       success: (data) ->
-        roles_user = "#roles_user_" + person_id
-        $("#apply_roles_successful").show()
+        permissions_user = "#permissions_user_" + person_id
+        $("#apply_permissions_successful").show()
         if data.indexOf("$.a") == -1
           success_apply_counter++
-          $(roles_user).html data
+          $(permissions_user).html data
         else
           fail_apply_counter++
-        html = success_apply_counter+" out of "+total_contacts+" contacts "+t('general.roles_applied')
-        $("#apply_roles_successful").html(html)
+        html = success_apply_counter+" out of "+total_contacts+" contacts "+t('general.permissions_applied')
+        $("#apply_permissions_successful").html(html)
         total_apply = success_apply_counter + fail_apply_counter;
         if total_apply == total_contacts
           $('#label_menu').live 'mouseleave', -> #Return the original effects of the box
             $('#label_menu').hide()
-          $("#apply_roles_spinner").hide()
+          $("#apply_permissions_spinner").hide()
           $('#label_menu').hide()

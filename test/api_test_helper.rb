@@ -10,7 +10,7 @@ def setup_api_env
   @user = Factory.create(:user_no_org_with_facebook)
   Factory.create(:authentication, user: @user)
   #@user.person.organization_memberships.create(organization_id: @temp_org.id, person_id: @user.person.id, primary: true)
-  #@user.person.organizational_roles.create(organization_id: @temp_org.id, person_id: @user.person.id, role_id: Role::CONTACT_ID)
+  #@user.person.organizational_permissions.create(organization_id: @temp_org.id, person_id: @user.person.id, permission_id: Permission::NO_PERMISSIONS_ID)
   @temp_org.add_contact(@user.person)
   
   @user2 = Factory.create(:user_no_org_with_facebook)
@@ -56,7 +56,7 @@ end
     assert_equal(json_comment['comment']['commenter']['name'], commenter.to_s)
     assert_equal(json_comment['comment']['comment'], comment.comment)
     assert_equal(json_comment['comment']['status'], comment.status)
-    assert_equal(json_comment['comment']['organization_id'], contact.organizational_roles.first.organization_id)
+    assert_equal(json_comment['comment']['organization_id'], contact.organizational_permissions.first.organization_id)
   
     rejoicables_test(json_comment['rejoicables'], comment.rejoicables)
   end
@@ -112,10 +112,10 @@ end
     assert_equal(json_person['picture'], user.person.picture)
     assert_equal(json_person['fb_id'], user.person.fb_uid.to_s)
     assert_equal(json_person['gender'], user.person.gender)
-    assert_equal(json_person['status'], user.person.organizational_roles.first.followup_status)
+    assert_equal(json_person['status'], user.person.organizational_permissions.first.followup_status)
     person_mini_test(json_person['assignment']['assigned_to_person'][0],user2) if json_person['assignment'] && json_person['assignment']['assigned_to_person'].present?
     person_mini_test(json_person['assignment']['person_assigned_to'][0],user2) if json_person['assignment'] && json_person['assignment']['person_assigned_to'].present?
-    assert_equal(json_person['request_org_id'], user.person.organizational_roles.first.organization_id)
+    assert_equal(json_person['request_org_id'], user.person.organizational_permissions.first.organization_id)
   end
 
   def person_full_test(json_person,user,user2)
@@ -130,7 +130,7 @@ end
     #assert_equal(json_person['interests'][1]['name'], "Test Interest 3")
     if json_person['organization_membership'].present?
       assert_equal(json_person['organization_membership'][0]['org_id'], user.person.organizations.first.id)
-      assert_equal(json_person['organizational_roles'][0]['role'], user.person.organizational_roles.first.role.i18n)
+      assert_equal(json_person['organizational_permissions'][0]['permission'], user.person.organizational_permissions.first.permission.i18n)
       assert_equal(json_person['organization_membership'][0]['primary'].downcase, 'true')
     end
   end

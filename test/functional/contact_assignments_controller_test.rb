@@ -20,10 +20,10 @@ class ContactAssignmentsControllerTest < ActionController::TestCase
       
       assert_equal 2, ContactAssignment.count
       
-      assert_not_nil OrganizationalRole.where(person_id: contact1.id, organization_id: @org.id, role_id: Role::CONTACT_ID)
-      assert_equal "uncontacted", OrganizationalRole.where(person_id: contact1.id, organization_id: @org.id, role_id: Role::CONTACT_ID).first.followup_status
-      assert_not_nil OrganizationalRole.where(person_id: contact2.id, organization_id: @org.id, role_id: Role::CONTACT_ID)
-      assert_equal "uncontacted", OrganizationalRole.where(person_id: contact2.id, organization_id: @org.id, role_id: Role::CONTACT_ID).first.followup_status
+      assert_not_nil OrganizationalPermission.where(person_id: contact1.id, organization_id: @org.id, permission_id: Permission::NO_PERMISSIONS_ID)
+      assert_equal "uncontacted", OrganizationalPermission.where(person_id: contact1.id, organization_id: @org.id, permission_id: Permission::NO_PERMISSIONS_ID).first.followup_status
+      assert_not_nil OrganizationalPermission.where(person_id: contact2.id, organization_id: @org.id, permission_id: Permission::NO_PERMISSIONS_ID)
+      assert_equal "uncontacted", OrganizationalPermission.where(person_id: contact2.id, organization_id: @org.id, permission_id: Permission::NO_PERMISSIONS_ID).first.followup_status
     end
     
     should "no new ContactAssignment created when rescued from RecordNotUnique error" do
@@ -50,8 +50,8 @@ class ContactAssignmentsControllerTest < ActionController::TestCase
       contact1 = Factory(:person)
       contact2 = Factory(:person)
       
-      Factory(:organizational_role, person: contact1, organization: @org, role: Role.contact).update_attributes({followup_status: "do_not_contact"})
-      Factory(:organizational_role, person: contact2, organization: @org, role: Role.contact).update_attributes({followup_status: "do_not_contact"})
+      Factory(:organizational_permission, person: contact1, organization: @org, permission: Permission.no_permissions).update_attributes({followup_status: "do_not_contact"})
+      Factory(:organizational_permission, person: contact2, organization: @org, permission: Permission.no_permissions).update_attributes({followup_status: "do_not_contact"})
       
       xhr :post, :create, { :assign_to => @user.person.id, :ids => [contact1.id, contact2.id], :org_id => @org.id }
     end
@@ -67,13 +67,13 @@ class ContactAssignmentsControllerTest < ActionController::TestCase
 
       assert_equal 0, ContactAssignment.where(person_id: contact1.id, organization_id: @org.id).size
       assert_equal 0, ContactAssignment.where(person_id: contact2.id, organization_id: @org.id).size        
-      assert_equal "do_not_contact", OrganizationalRole.where(person_id: contact1.id, organization_id: @org.id, role_id: Role::CONTACT_ID).first.followup_status
-      assert_equal "do_not_contact", OrganizationalRole.where(person_id: contact2.id, organization_id: @org.id, role_id: Role::CONTACT_ID).first.followup_status
+      assert_equal "do_not_contact", OrganizationalPermission.where(person_id: contact1.id, organization_id: @org.id, permission_id: Permission::NO_PERMISSIONS_ID).first.followup_status
+      assert_equal "do_not_contact", OrganizationalPermission.where(person_id: contact2.id, organization_id: @org.id, permission_id: Permission::NO_PERMISSIONS_ID).first.followup_status
       
       assert assigns(:reload_sidebar)
     end
     
-    should "not raise error when the role of an ID does not exist" do
+    should "not raise error when the permission of an ID does not exist" do
       contact1 = Factory(:person)
       contact2 = Factory(:person)
       
@@ -82,8 +82,8 @@ class ContactAssignmentsControllerTest < ActionController::TestCase
       xhr :post, :create, { :assign_to => "do_not_contact", :ids => [contact1, contact2], :org_id => @org.id }        
       
       assert_nil ContactAssignment.find_by_person_id_and_organization_id(contact1.id, @org.id)
-      assert_nil OrganizationalRole.find_by_person_id_and_organization_id_and_role_id(contact2.id, @org.id, Role::CONTACT_ID)
-      assert_equal "do_not_contact", OrganizationalRole.find_by_person_id_and_organization_id_and_role_id(contact1.id, @org.id, Role::CONTACT_ID).followup_status
+      assert_nil OrganizationalPermission.find_by_person_id_and_organization_id_and_permission_id(contact2.id, @org.id, Permission::NO_PERMISSIONS_ID)
+      assert_equal "do_not_contact", OrganizationalPermission.find_by_person_id_and_organization_id_and_permission_id(contact1.id, @org.id, Permission::NO_PERMISSIONS_ID).followup_status
       assert assigns(:reload_sidebar)
     end
     

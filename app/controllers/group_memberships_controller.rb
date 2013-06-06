@@ -14,7 +14,7 @@ class GroupMembershipsController < ApplicationController
       @persons = Person.find(params[:person_id])
       if has_permission
         @group_membership = @group.group_memberships.find_or_initialize_by_person_id(@persons.id)
-        @group_membership.role = params[:role]
+        @group_membership.permission = params[:permission]
         @group_membership.save
         respond_to do |wants|
           wants.html { render :nothing => true }
@@ -32,7 +32,7 @@ class GroupMembershipsController < ApplicationController
       if has_permission
         @persons.each do |person|
           @group_membership = @group.group_memberships.find_or_initialize_by_person_id(person.id)
-          @group_membership.role = params[:role]
+          @group_membership.permission = params[:permission]
           @group_membership.save
         end
         
@@ -80,8 +80,8 @@ class GroupMembershipsController < ApplicationController
       return true if can?(:manage, current_organization)
       #return true if can?(:lead, current_organization)
       return true if @group.organization.leaders.include?(current_person)
-      return true if @group.list_publicly? && params[:role] == 'interested' && @person == current_person
-      return true if @group.public_signup? && params[:role] == 'member' && @person == current_person
+      return true if @group.list_publicly? && params[:permission] == 'interested' && @person == current_person
+      return true if @group.public_signup? && params[:permission] == 'member' && @person == current_person
       return false
     end
 end

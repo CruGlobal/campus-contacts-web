@@ -1,0 +1,19 @@
+<% provide :sidebar do %>
+  <ul class="leftmenu">
+    <li class="selected"><%= link_to(t('permissions.views.organizational_permissions'), permissions_path) %></li>
+  </ul>
+<% end %>
+
+<div class="titlebar titlebarmod">
+  <h1>
+    <%= "#{current_organization} - #{t('permissions.views.edit_permission')}" %>
+  </h1>
+</div>
+
+<div class="pad">  
+  <div>
+    <%= form_for @permission, :method => 'put', validate: true do |f| %>
+      <%= render :partial => 'form', :locals => { :button_label => t('permissions.views.update'), :f => f } %>
+    <% end %>
+  </div>
+</div>

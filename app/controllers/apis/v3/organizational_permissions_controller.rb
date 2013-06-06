@@ -1,9 +1,9 @@
-class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
+class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
   before_filter :ensure_filters
 
   def bulk
-    add_roles(filtered_people, params[:add_roles])
-    remove_roles(filtered_people, params[:remove_roles])
+    add_permissions(filtered_people, params[:add_permissions])
+    remove_permissions(filtered_people, params[:remove_permissions])
 
     render json: filtered_people,
            callback: params[:callback],
@@ -11,7 +11,7 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
   end
 
   def bulk_create
-    add_roles(filtered_people, params[:roles])
+    add_permissions(filtered_people, params[:permissions])
 
     render json: filtered_people,
            callback: params[:callback],
@@ -19,7 +19,7 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
   end
 
   def bulk_destroy
-    remove_roles(filtered_people, params[:roles])
+    remove_permissions(filtered_people, params[:permissions])
 
     render json: filtered_people,
            callback: params[:callback],
@@ -43,7 +43,7 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
 
   def ensure_filters
     unless params[:filters]
-      render json: {errors: ["The 'filters' parameter is required for bulk role actions."]},
+      render json: {errors: ["The 'filters' parameter is required for bulk permission actions."]},
                  status: :bad_request,
                  callback: params[:callback]
     end
@@ -63,11 +63,11 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
     @filtered_people
   end
 
-  def add_roles(people, roles)
-    current_organization.add_roles_to_people(filtered_people, roles.split(',')) if roles
+  def add_permissions(people, permissions)
+    current_organization.add_permissions_to_people(filtered_people, permissions.split(',')) if permissions
   end
 
-  def remove_roles(people, roles)
-    current_organization.remove_roles_from_people(filtered_people, roles.split(',')) if roles
+  def remove_permissions(people, permissions)
+    current_organization.remove_permissions_from_people(filtered_people, permissions.split(',')) if permissions
   end
 end

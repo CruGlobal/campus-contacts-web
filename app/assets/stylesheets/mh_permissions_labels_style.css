@@ -1,5 +1,5 @@
 
-/* Roles and Labels CSS -------------------------*/
+/* Permissions and Labels CSS -------------------------*/
 
 @import url('mh_profile_style.css');
 
@@ -213,7 +213,7 @@ span.mh_popup_heading {
 }
 
 
-.groups_popup_box, .roles_popup_box, .labels_popup_box, .error_popup_box{
+.groups_popup_box, .permissions_popup_box, .labels_popup_box, .error_popup_box{
 	background-color:#FFF;
 	border:1px solid #808284;
 	-webkit-border-radius: 4px;
@@ -229,7 +229,7 @@ span.mh_popup_heading {
 
 .msg_popup_box .fancy,
 .groups_popup_box .fancy, 
-.roles_popup_box .fancy, 
+.permissions_popup_box .fancy, 
 .labels_popup_box .fancy {
 	margin:48px 24px 24px;
 	font-size:14px;
@@ -249,7 +249,7 @@ span.mh_popup_heading {
 	height:96px;
 }
 
-.roles_chooser_box {
+.permissions_chooser_box {
 	margin:12px 96px 64px;
 	padding:24px;
 	clear:right;
@@ -265,7 +265,7 @@ span.mh_popup_heading {
 	min-height:120px;
 }
 
-.groups_checkbox, .labels_checkbox, .roles_checkbox {
+.groups_checkbox, .labels_checkbox, .permissions_checkbox {
 	font-family:Arial, Sans-serif;
 	font-size:12px;
 	font-weight:normal;
@@ -273,7 +273,7 @@ span.mh_popup_heading {
 	margin-bottom:6px;
 }
 
-.groups_checkbox input, .labels_checkbox input, .roles_checkbox input {
+.groups_checkbox input, .labels_checkbox input, .permissions_checkbox input {
 	margin:0 8px 0 0;
 	position:relative;
 	bottom:1px;
@@ -315,7 +315,7 @@ button#groups_add_new_button, button#labels_add_new_button {
 }
 
 .groups_popup_box .groups_save,
-.roles_popup_box .roles_save,
+.permissions_popup_box .permissions_save,
 .labels_popup_box .labels_save,
 .error_popup_box .error_save {
 	position:absolute;
@@ -330,7 +330,7 @@ button#groups_add_new_button, button#labels_add_new_button {
 .assign_popup_box button,
 .msg_popup_box button,
 .groups_popup_box button,
-.roles_popup_box button,
+.permissions_popup_box button,
 .labels_popup_box button,
 .error_popup_box button {
 	float:right;

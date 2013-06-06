@@ -1,7 +1,7 @@
 <div id="assign_search" style="display:none">
   <div class="ui-widget-overlay" style="position: fixed; width: 100%; height: 100%; z-index: 999; "></div>
   <div class="pop_box_container">
-    <div class="mh_popup_box assign_popup_box" class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-alert_dialog">
+    <div class="mh_popup_box assign_popup_box" class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable" tabindex="-1" permission="dialog" aria-labelledby="ui-dialog-title-alert_dialog">
     	<div class="mh_popup_box_top"><span class="mh_popup_heading">Assign</span></div>
       <div class="mh_popup_box_content">
         <div class="fancy"><%= t('.assign_explanation') %></div>
@@ -49,10 +49,10 @@
           <%= text_field_tag :label_name, '', class: 'label_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>
           <div class="labels_list">
             <ul>
-              <% @roles_for_assign.each do |role| %>
-                <li class="label" data-role="<%= role.id %>">
+              <% @permissions_for_assign.each do |permission| %>
+                <li class="label" data-permission="<%= permission.id %>">
                   <span class="name">
-                    <%= link_to role.to_s, '#' %>
+                    <%= link_to permission.to_s, '#' %>
                   </span>
                 </li>
               <% end %>

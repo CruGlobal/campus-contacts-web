@@ -5,24 +5,24 @@ class Ability
     #if user.developer?
       #can :all, :all
     #else
-      roles = Role.default.all
-      missionhub_user_role = roles.detect {|r| r.i18n == 'missionhub_user'}
-      admin_role = roles.detect {|r| r.i18n == 'admin'}
+      permissions = Permission.default.all
+      user_permission = permissions.detect {|r| r.i18n == 'user'}
+      admin_permission = permissions.detect {|r| r.i18n == 'admin'}
       user ||= User.new # guest user (not logged in)
       if user && user.person
         admin_of_org_ids = user.person.admin_of_org_ids
-        #user.person.organizations.where('organizational_roles.role_id' => admin_role.id).collect {|org| org.subtree_ids}.flatten
-        missionhub_user_of_org_ids = user.person.missionhub_user_of_org_ids
-        #user.person.organizations.where('organizational_roles.role_id' => Role.missionhub_user_ids).collect {|org| org.subtree_ids}.flatten
+        #user.person.organizations.where('organizational_permissions.permission_id' => admin_permission.id).collect {|org| org.subtree_ids}.flatten
+        user_of_org_ids = user.person.user_of_org_ids
+        #user.person.organizations.where('organizational_permissions.permission_id' => Permission.user_ids).collect {|org| org.subtree_ids}.flatten
 
         can :manage, Organization, id: admin_of_org_ids
-        can :lead, Organization, id: missionhub_user_of_org_ids
+        can :lead, Organization, id: user_of_org_ids
 
-        can :manage_contacts, Organization, id: missionhub_user_of_org_ids
+        can :manage_contacts, Organization, id: user_of_org_ids
         
-        can :manage_groups, Organization, id: missionhub_user_of_org_ids + admin_of_org_ids
-        can :manage_locate_contact, Organization, id: missionhub_user_of_org_ids + admin_of_org_ids
-        can :manage_roles, Organization, id: admin_of_org_ids
+        can :manage_groups, Organization, id: user_of_org_ids + admin_of_org_ids
+        can :manage_locate_contact, Organization, id: user_of_org_ids + admin_of_org_ids
+        can :manage_permissions, Organization, id: admin_of_org_ids
 
         # can only manage keywords from orgs you're an admin of
         can :manage, SmsKeyword, organization_id: admin_of_org_ids
@@ -41,24 +41,24 @@ class Ability
         end
 
         # involved members can see other people's info
-        involved_org_ids = user.person.organizational_roles.where(role_id: [admin_role.id, missionhub_user_role.id]).pluck(:organization_id)
-        can :read, Person, organizational_roles_including_archived: {organization_id: involved_org_ids}
-        can :read, PersonPresenter, organizational_roles: { organization_id: involved_org_ids }
+        involved_org_ids = user.person.organizational_permissions.where(permission_id: [admin_permission.id, user_permission.id]).pluck(:organization_id)
+        can :read, Person, organizational_permissions_including_archived: {organization_id: involved_org_ids}
+        can :read, PersonPresenter, organizational_permissions: { organization_id: involved_org_ids }
 
-        # missionhub_users and admins can edit other ppl's info
-        if user.person.admin_or_missionhub_user?
+        # users and admins can edit other ppl's info
+        if user.person.admin_or_user?
           can :create, SmsMailer
           can :create, Person
           can :create, PersonPresenter
-          can :manage, Person, organizational_roles_including_archived: {organization_id: missionhub_user_of_org_ids}
-          can :manage, PersonPresenter, organizational_roles_including_archived: {organization_id: missionhub_user_of_org_ids}
+          can :manage, Person, organizational_permissions_including_archived: {organization_id: user_of_org_ids}
+          can :manage, PersonPresenter, organizational_permissions_including_archived: {organization_id: user_of_org_ids}
         end
 
         can :manage, Person, id: user.person.try(:id)
         can :manage, PersonPresenter, id: user.person.try(:id)
 
-        can :manage, Group, organization_id: missionhub_user_of_org_ids
-        can :manage, GroupPresenter, organization_id: missionhub_user_of_org_ids
+        can :manage, Group, organization_id: user_of_org_ids
+        can :manage, GroupPresenter, organization_id: user_of_org_ids
       #end
 
     end

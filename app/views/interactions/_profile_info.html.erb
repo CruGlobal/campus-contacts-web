@@ -5,11 +5,11 @@
 <div class="feed_box info_display">
 
   
-  <% if @person.contact_role_for_org(current_organization) %>
+  <% if @person.contact_permission_for_org(current_organization) %>
   	<div class="status col_left">Status:</div>
   	<div class="status col_right view" id="followup_status_div">
-      <%- contact_role = @person.contact_role_for_org(current_organization).try(:followup_status) %>
-      <%= contact_role.titleize if contact_role.present? %>
+      <%- contact_permission = @person.contact_permission_for_org(current_organization).try(:followup_status) %>
+      <%= contact_permission.titleize if contact_permission.present? %>
   	</div>
   <% end %>
 

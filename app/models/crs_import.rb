@@ -53,8 +53,8 @@ class CrsImport
         end
 
         @conference.registrant_types.each do |registrant_type|
-          # create role/label
-          role = Role.where(organization_id: @org.id, name: registrant_type.name).first_or_create!
+          # create permission/label
+          permission = Permission.where(organization_id: @org.id, name: registrant_type.name).first_or_create!
 
           # create survey
           survey = @org.surveys.where(crs_registrant_type_id: registrant_type.id).
@@ -148,8 +148,8 @@ class CrsImport
 
             # Make this person a contact in this org
             @org.add_contact(person)
-            # add them to the role corresponding to their registrant type
-            @org.add_role_to_person(person, role.id)
+            # add them to the permission corresponding to their registrant type
+            @org.add_permission_to_person(person, permission.id)
 
             # Each registrant gets an answer_sheet
             answer_sheet = AnswerSheet.where(person_id: person.id, survey_id: survey.id).first_or_create
@@ -175,7 +175,7 @@ class CrsImport
             person = Person.where(crs_profile_id: registrant.profile_id).first
             if person
               @org.remove_contact(person)
-              @org.remove_role_from_person(person, role.id)
+              @org.remove_permission_from_person(person, permission.id)
             end
           end
         end

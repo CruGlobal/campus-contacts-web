@@ -3,10 +3,10 @@ class FollowupCommentsController < ApplicationController
   def index
     get_comments
 
-    @all_people = Person.includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'organizational_roles.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.role_id' => Role::CONTACT_ID).uniq
+    @all_people = Person.includes(:assigned_tos, :organizational_permissions).where('contact_assignments.organization_id' => current_organization.id, 'organizational_permissions.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_permissions.permission_id' => Permission::NO_PERMISSIONS_ID).uniq
     @all_contacts = @all_people
-    @inprogress_contacts = @all_people.where("organizational_roles.followup_status <> 'completed'")
-    @completed_contacts = @all_people.where("organizational_roles.followup_status = 'completed'")
+    @inprogress_contacts = @all_people.where("organizational_permissions.followup_status <> 'completed'")
+    @completed_contacts = @all_people.where("organizational_permissions.followup_status = 'completed'")
   end
 
   def create

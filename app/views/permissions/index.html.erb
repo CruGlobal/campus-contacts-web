@@ -1,0 +1,54 @@
+<div class="inside_container">
+	<div class="titlebar titlebarmod">
+	  <h1>
+		<%= t('.title', org: current_organization) %>
+	  </h1>
+	</div>
+  <div>
+    <h1 class="title">
+      <%= t('permissions.views.system_permissions') %>
+    </h1>
+  	<div class="container">
+      <table class="listing" cellpadding="0" cellspacing="0">
+        <tr>
+          <th><%= t('permissions.views.name') %></th>
+        </tr>
+        <tbody id="system_permissions_table">
+          <% @system_permissions.each do |system_permission| %>
+            <tr id="<%= dom_id(system_permission) %>" data-id="<%= system_permission.id %>" class="system_permission_row">
+              <td class=""><%= system_permission.name %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div>
+    <h1 class="title">
+      <%= t('permissions.views.organizational_permissions') %>
+    </h1>
+    <%= link_to(t('permissions.views.create_permission'), new_permission_path, class: 'create_label_button') %></li>
+  	<div class="container">
+      <table class="listing" cellpadding="0" cellspacing="0">
+        <tr>
+          <th><%= t('permissions.views.name') %></th>
+          <th class="controls"></th>
+        </tr>
+        <tbody id="system_permissions_table">
+          <% @organizational_permissions.each do |organizational_permission| %>
+            <tr id="<%= dom_id(organizational_permission) %>" data-id="<%= organizational_permission.id %>" class="organizational_permission_row">
+              <td><%= organizational_permission.name %></td>
+              <td class="controls">
+                <%= link_to t("permissions.views.edit_permission"), edit_permission_path(organizational_permission),
+                  :class => "icon edit tipit", :title => "Edit Label" %>
+                <%= link_to t("permissions.views.delete_permission"), permission_path(organizational_permission),
+                  method: :delete, confirm: "Are you sure you want to delete this label?",
+                  :class => "icon delete tipit", :title => "Delete Label" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
