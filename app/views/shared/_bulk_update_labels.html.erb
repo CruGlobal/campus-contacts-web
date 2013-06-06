@@ -9,20 +9,12 @@
               <span>
                 <%= check_box_tag 'permission_ids[]', permission.id, false, id: "permission_ids_#{permission.id}", class: 'permission_id_checkbox', :hidden => !can?(:manage, current_organization) && permission.id == Permission::ADMIN_ID ? true : false %>
                 <span><%= permission %></span>
-                <% if permission.organization_id == 0 %>
-                  <% if permission.name == 'Admin' %>
-                    <% permission_help = "Access to all options within this specific organization including editing the organization, assigning other Admins, and modifying keywords and surveys." %>
-                  <% elsif permission.name == 'MissionHub User' %>
-                    <% permission_help = "Access to all non-Admin features including viewing, modifying and assigning contacts." %>
-                  <% elsif permission.name == 'Involved' %>
-                    <% permission_help = "Currently no access but are displayed in Directory." %>
-                  <% elsif permission.name == 'Alumni' %>
-                    <% permission_help = "Currently no access but are displayed in Directory." %>
-                  <% elsif permission.name == 'Contact' %>
-                    <% permission_help = "No Access. Displayed on the All Contacts and Directory screen." %>
-                  <% elsif permission.name == '100% Sent' %>
-                    <% permission_help = "Completed and ready to be transferred to 100% Sent Organization." %>
-                  <% end %>
+                <% if permission.name == 'Admin' %>
+                  <% permission_help = "Access to all options within this specific organization including editing the organization, assigning other Admins, and modifying keywords and surveys." %>
+                <% elsif permission.name == 'User' %>
+                  <% permission_help = "Access to all non-Admin features including viewing, modifying and assigning contacts." %>
+                <% elsif permission.name == 'No Permissions' %>
+                  <% permission_help = "No Access. Displayed on the All Contacts directory." %>
                 <% end %>
                 <% if permission_help.present? %>
                   <div class="icon help tipit help_bubble_keyword" title="<%=permission_help%>"></div>

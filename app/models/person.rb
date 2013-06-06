@@ -283,7 +283,7 @@ class Person < ActiveRecord::Base
   end
 
   scope :get_archived, lambda { |org_id| {
-    :conditions => "organizational_permissions.archive_date IS NOT NULL OR organizational_permissions.permission_id = #{Permission::ARCHIVED_ID}",
+    :conditions => "organizational_permissions.archive_date IS NOT NULL",
     :group => "people.id",
     :having => "COUNT(*) = (SELECT COUNT(*) FROM people AS mpp JOIN organizational_permissions orss ON mpp.id = orss.person_id WHERE mpp.id = people.id AND orss.organization_id = #{org_id})"
   } }
@@ -1033,7 +1033,7 @@ class Person < ActiveRecord::Base
     permissions = {}
     @organizational_permissions_hash ||= org_ids.collect { |org_id, values|
                                      values['permissions'].select { |permission_id|
-                                       permission_id != Permission.no_permission.id
+                                       permission_id != Permission.no_permissions.id
                                      }.collect { |permission_id|
                                        permissions[permission_id] ||= Permission.find_by_id(permission_id)
                                      }.compact.collect { |permission|

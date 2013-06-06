@@ -252,7 +252,11 @@ FactoryGirl.define do
   
   factory :permission do
     name "permission #{Factory.next(:count)}"
-    i18n "permission_#{Factory.next(:count)}"
+  end
+  
+  factory :label do
+    association :organization
+    name "label #{Factory.next(:count)}"
   end
 
   factory :organizational_label do

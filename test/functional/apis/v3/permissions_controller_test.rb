@@ -6,7 +6,7 @@ class Apis::V3::PermissionsControllerTest < ActionController::TestCase
     @client = Factory(:client)
     @user = Factory(:user_no_org)
     @client.organization.add_admin(@user.person)
-    @permission = Factory(:permission, organization: @client.organization)
+    @permission = Factory(:permission)
   end
 
   context '.index' do

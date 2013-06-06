@@ -108,7 +108,7 @@ class PeopleControllerTest < ActionController::TestCase
 
       should "update permissions" do
         permissions = []
-        (1..3).each { |index| permissions << Permission.create!(organization_id: 1, name: "member_#{index}", i18n: "member_#{index}") }
+        (1..3).each { |index| permissions << Permission.create!(name: "member_#{index}", i18n: "member_#{index}") }
         permissions = permissions.collect { |permission| permission.id }.join(',')
         xhr :post, :update_permissions, { :permission_ids => permissions, :some_permission_ids => "", :person_id => @person1.id }
         assert_response :success
@@ -116,7 +116,7 @@ class PeopleControllerTest < ActionController::TestCase
 
       should "update permissions with include_old_permissions as parameter" do
         permissions = []
-        (1..3).each { |index| permissions << Permission.create!(organization_id: 1, name: "member_#{index}", i18n: "member_#{index}") }
+        (1..3).each { |index| permissions << Permission.create!(name: "member_#{index}", i18n: "member_#{index}") }
         permissions = permissions.collect { |permission| permission.id }.join(',')
         xhr :post, :update_permissions, { :permission_ids => permissions, :some_permission_ids => "", :person_id => @person1.id, :include_old_permissions => "yes" }
         assert_response :success
@@ -124,7 +124,7 @@ class PeopleControllerTest < ActionController::TestCase
 
       should "try to update permissions with duplicate permissions" do
         permissions = []
-        (1..3).each { |index| permissions << Permission.create!(organization_id: 1, name: "member_#{index}", i18n: "member_#{index}") }
+        (1..3).each { |index| permissions << Permission.create!(name: "member_#{index}", i18n: "member_#{index}") }
         #duplicate the first permission
         permissions << permissions.first
         permissions = permissions.collect { |permission| permission.id }.join(',')
@@ -149,7 +149,7 @@ class PeopleControllerTest < ActionController::TestCase
       @request.session[:current_organization_id] = @org.id
 
       @permissions = []
-      (1..4).each { |index| @permissions << Permission.create!(organization_id: @org.id, name: "permission_#{index}", i18n: "permission_#{index}") }
+      (1..4).each { |index| @permissions << Permission.create!(name: "permission_#{index}", i18n: "permission_#{index}") }
 
     end
 

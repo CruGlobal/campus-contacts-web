@@ -16,7 +16,7 @@
       <li class="leader" style="<%= 'display:none' if count == 0 %>">
         <span class="name tipitright" title="<%= permission.to_s %>">
           <% trimmed_permission =  truncate(permission.to_s, length: 23, omission: "...") %>
-          <% permission_name = permission.organization_id == 0 ? content_tag(:b,trimmed_permission) : trimmed_permission %>
+          <% permission_name = trimmed_permission %>
           <%= link_to(permission_name, {controller: 'contacts', :permission => permission.id, :include_archived => params[:include_archived]}) %>
         </span>
         (<%= count %>)

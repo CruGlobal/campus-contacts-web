@@ -89,14 +89,14 @@ class Import < ActiveRecord::Base
             import_errors << "#{person.to_s}: #{error[0].to_s.split('.')[0].gsub('_',' ').titleize} #{error[1].first}"
           end
         else
-        	labels.each do |permission_id|
-						if permission_id.to_i == 0
-							permission = Permission.find_or_create_by_organization_id_and_name(current_organization.id, label_name)
-							permission_id = permission.id
-						elsif [Permission::ADMIN_ID, Permission::USER_ID].include?(permission_id.to_i)
-							import_errors << "#{person.to_s}: Email address is required to add Leader or Admin label" unless person.email_addresses.present?
+        	labels.each do |label_id|
+						if label_id.to_i == 0
+							label = Label.find_or_create_by_organization_id_and_name(current_organization.id, label_name)
+							label_id = label.id
+						elsif label_id.to_i == Label::LEADER_ID
+							import_errors << "#{person.to_s}: Email address is required to add Leader label" unless person.email_addresses.present?
 						end
-						current_organization.add_permission_to_person(person, permission_id, current_user.person.id) unless import_errors.present?
+						current_organization.add_label_to_person(person, label_id, current_user.person.id) unless import_errors.present?
 					end
         end
       end

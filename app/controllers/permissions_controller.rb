@@ -17,7 +17,6 @@ class PermissionsController < ApplicationController
   def create
     Permission.transaction do
       @permission = Permission.new(params[:permission])
-      @permission.organization_id = current_organization.id
       if @permission.save
         redirect_to permissions_path
       else
@@ -29,10 +28,10 @@ class PermissionsController < ApplicationController
   def create_now
     @status = false
     if params[:name].present?
-      if Permission.where("organization_id IN (?) AND LOWER(name) = ?", [current_organization.id,0], params[:name].downcase).present?
+      if Permission.where("LOWER(name) = ?", params[:name].downcase).present?
         @msg_alert = t('contacts.index.add_label_exists')
       else
-        @new_permission = Permission.create(organization_id: current_organization.id, name: params[:name]) if params[:name].present?
+        @new_permission = Permission.create(name: params[:name]) if params[:name].present?
         if @new_permission.present?
           @status = true
           @msg_alert = t('contacts.index.add_label_success')

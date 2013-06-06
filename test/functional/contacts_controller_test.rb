@@ -256,11 +256,11 @@ class ContactsControllerTest < ActionController::TestCase
       end
       should "have header for leader" do
         xhr :get, :index, {:permission => Permission::USER_ID}
-        assert_equal assigns(:header).upcase, "Missionhub user".upcase
+        assert_equal assigns(:header).upcase, "User".upcase
       end
       should "have header for contact" do
         xhr :get, :index, {:permission => Permission::NO_PERMISSIONS_ID}
-        assert_equal assigns(:header).upcase, "Contact".upcase
+        assert_equal assigns(:header).upcase, "No Permissions".upcase
       end
       should "have header when viewing unassigned contacts" do
         xhr :get, :index, {:assigned_to => "unassigned"}
@@ -933,31 +933,26 @@ class ContactsControllerTest < ActionController::TestCase
       #end
     end
 
-    context "by labels" do
+    context "by permissions" do
       setup do
-        # Default
-        @person5 = Factory(:person, first_name: 'Five')
-        Factory(:organizational_permission, organization: @org, person: @person1, permission: Permission.user)
-        Factory(:organizational_permission, organization: @org, person: @person2, permission: Permission.admin)
-        Factory(:organizational_permission, organization: @org, person: @person5, permission: Permission.no_permissions)
-        # Non-Default
-        @a_person = Factory(:person, first_name: 'a_permission')
-        @b_person = Factory(:person, first_name: 'b_permission')
-        @a_permission = Factory(:permission, organization: @org, name: 'a_permission')
-        @b_permission = Factory(:permission, organization: @org, name: 'b_permission')
-        Factory(:organizational_permission, organization: @org, person: @a_person, permission: @a_permission)
-        Factory(:organizational_permission, organization: @org, person: @b_person, permission: @b_permission)
+        @person_a = Factory(:person)
+        @person_b = Factory(:person)
+        @person_c = Factory(:person)
+        Factory(:organizational_permission, organization: @org, person: @person_a, permission: Permission.admin)
+        Factory(:organizational_permission, organization: @org, person: @person_b, permission: Permission.user)
+        Factory(:organizational_permission, organization: @org, person: @person_c, permission: Permission.no_permissions)
       end
 
       should "return people sorted by their permissions (default permissions) desc" do
         xhr :get, :index, {:search=>{:meta_sort=>"permission_id desc"}}
-        assert_equal assigns(:people).collect(&:id).first, @b_person.id
+        assert_equal @person_a.id, assigns(:people).collect(&:id).last 
       end
 
       should "return people sorted by their permissions (default permissions) asc" do
         xhr :get, :index, {:search=>{:meta_sort=>"permission_id asc"}}
-        assert_equal @user.person.id, assigns(:people).collect(&:id).first
-        assert_equal @b_person.id, assigns(:people).collect(&:id).last
+        results = assigns(:people).collect(&:id) & [@user.person.id, @person_a.id, @person_b.id, @person_c.id]
+        assert_equal @user.person.id, results.first
+        assert_equal @person_c.id, results.last
       end
     end
   end

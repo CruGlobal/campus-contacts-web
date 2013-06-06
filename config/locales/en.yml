@@ -28,7 +28,7 @@ en:
       title: "%{org} Permissions"
     admin: Admin
     user: User
-    no_permission: No Permission
+    no_permissions: No Permissions
     views:
       organizational_permissions: "Organizational Permissions"
       system_permissions: "System Permissions"

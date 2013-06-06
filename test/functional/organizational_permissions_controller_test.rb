@@ -153,14 +153,14 @@ class OrganizationalPermissionsControllerTest < ActionController::TestCase
       end
 
       assert_equal I18n.t('organizational_permissions.moving_people_success'), @response.body
-      assert_equal [], @org.only_missionhub_users.collect(&:id)
+      assert_equal [], @org.only_users.collect(&:id)
       assert_equal [@user_2.person.id], @another_org.contacts.collect(&:id)
     end
 
     should "completely move an archived person to an org (do not keep contact)" do
       @archived_contact1 = Factory(:person, first_name: "Edmure", last_name: "Tully")
       Factory(:organizational_permission, organization: @user.person.organizations.first, person: @archived_contact1, permission: Permission.no_permissions)
-      @archived_contact1.organizational_permissions.where(permission_id: Permission::CONTACT_ID).first.archive #archive his one and only permission
+      @archived_contact1.organizational_permissions.where(permission_id: Permission::NO_PERMISSIONS_ID).first.archive #archive his one and only permission
 
       ids = [@archived_contact1.id]
 

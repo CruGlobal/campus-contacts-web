@@ -19,7 +19,6 @@ class Apis::V3::PermissionsController < Apis::V3::BaseController
 
   def create
     permission = permissions.new(params[:permission])
-    permission.organization_id = current_organization.id
 
     if permission.save
       render json: permission,

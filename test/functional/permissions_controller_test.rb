@@ -47,7 +47,7 @@ class PermissionsControllerTest < ActionController::TestCase
       end
 
       should "not create a permission if it's already created in the organization (same name and org)" do
-        permission = Factory(:permission, organization: @organization)
+        permission = Factory(:permission)
 
         assert_no_difference 'Permission.count' do
           post :create_now, { :name => permission.name }

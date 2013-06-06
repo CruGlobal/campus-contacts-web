@@ -20,7 +20,7 @@ class Api::PermissionsController < ApiController
 
   def ensure_valid_request
     raise InvalidPermissionsParamaters unless params[:id].present? && params[:permission].present? && params[:org_id].present?
-    raise PermissionsPermissionsError if current_person.organizational_permissions.where(organization_id: @organization.id, permission_id: Permission::ADMIN_ID).empty?
+    raise PermissionsError if current_person.organizational_permissions.where(organization_id: @organization.id, permission_id: Permission::ADMIN_ID).empty?
     raise NoPermissionChangeMade unless Permission.default.collect(&:i18n).include?(params[:permission])
   end
 
