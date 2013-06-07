@@ -1,10 +1,10 @@
-class Apis::V3::PermissionsController < Apis::V3::BaseController
-  before_filter :get_permission, only: [:show, :update, :destroy]
+class Apis::V3::LabelsController < Apis::V3::BaseController
+  before_filter :get_label, only: [:show, :update, :destroy]
 
   def index
     order = params[:order] || 'name'
 
-    list = add_includes_and_order(permissions, order: order)
+    list = add_includes_and_order(labels, order: order)
 
     render json: list,
            callback: params[:callback],
@@ -12,33 +12,34 @@ class Apis::V3::PermissionsController < Apis::V3::BaseController
   end
 
   def show
-    render json: @permission,
+    render json: @label,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization}
   end
 
   def create
-    permission = permissions.new(params[:permission])
+    label = labels.new(params[:label])
+    label.organization_id = current_organization.id
 
-    if permission.save
-      render json: permission,
+    if label.save
+      render json: label,
              status: :created,
              callback: params[:callback],
              scope: {include: includes, organization: current_organization}
     else
-      render json: {errors: permission.errors.full_messages},
+      render json: {errors: label.errors.full_messages},
              status: :unprocessable_entity,
              callback: params[:callback]
     end
   end
 
   def update
-    if @permission.update_attributes(params[:permission])
-      render json: @permission,
+    if @label.update_attributes(params[:label])
+      render json: @label,
              callback: params[:callback],
              scope: {include: includes, organization: current_organization}
     else
-      render json: {errors: permission.errors.full_messages},
+      render json: {errors: label.errors.full_messages},
              status: :unprocessable_entity,
              callback: params[:callback]
     end
@@ -46,21 +47,21 @@ class Apis::V3::PermissionsController < Apis::V3::BaseController
   end
 
   def destroy
-    @permission.destroy
+    @label.destroy
 
-    render json: @permission,
+    render json: @label,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization}
   end
 
   private
 
-  def permissions
-    current_organization.permissions
+  def labels
+    current_organization.labels
   end
 
-  def get_permission
-    @permission = add_includes_and_order(permissions)
+  def get_label
+    @label = add_includes_and_order(labels)
                 .find(params[:id])
 
   end

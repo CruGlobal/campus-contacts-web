@@ -29,7 +29,7 @@
     	<div class="labels_save" id="labels_save" data-current-label-ids="<%= current_label_ids.join(',') %>">
     		<button class="red_accent" id="labels_popup_save_button" data-person-id="<%= @person.id %>">Save</button>
     		<button class="large_lightgray" id="labels_popup_cancel_button">Cancel</button>
-        <%# link_to raw("<button class='large_gray' id='labels_popup_manage_button'>Manage Labels</button>"), permissions_path(organization: current_organization.id) %>
+        <%= link_to raw("<button class='large_gray' id='labels_popup_manage_button'>Manage Labels</button>"), labels_path(organization: current_organization.id) %>
     	</div>
       
     </div>

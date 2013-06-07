@@ -1,7 +1,7 @@
-<% if @permission.errors.any? %>
+<% if @label.errors.any? %>
   <div id="error_explanation">
     <ul>
-      <% @permission.errors.full_messages.each do |msg| %>
+      <% @label.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
     </ul>
@@ -10,7 +10,7 @@
 
 <table border="0" cellspacing="0" cellpadding="0" class="modal_person_info">
   <tr>
-    <td class="left"><%= t('permissions.name') %>:</td>
+    <td class="left"><%= t('labels.name') %>:</td>
     <td><%= f.text_field :name %></td>
   </tr>
 </table>

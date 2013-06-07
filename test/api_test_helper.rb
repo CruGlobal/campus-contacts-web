@@ -12,15 +12,18 @@ def setup_api_env
   #@user.person.organization_memberships.create(organization_id: @temp_org.id, person_id: @user.person.id, primary: true)
   #@user.person.organizational_permissions.create(organization_id: @temp_org.id, person_id: @user.person.id, permission_id: Permission::NO_PERMISSIONS_ID)
   @temp_org.add_contact(@user.person)
+  @temp_org.add_label_to_person(@user.person, Label::LEADER_ID)
   
   @user2 = Factory.create(:user_no_org_with_facebook)
   Factory.create(:authentication, user: @user2, uid: "1234")
   @temp_org.add_contact(@user2.person)
+  @temp_org.add_label_to_person(@user2.person, Label::ALUMNI_ID)
   @user2.person.update_attributes(first_name: "Test", last_name: "Useroo")
   
   @user3 = Factory.create(:user_no_org_with_facebook)
   Factory.create(:authentication, user: @user3, uid: "123456")
   @temp_org.add_admin(@user3.person)
+  @temp_org.add_label_to_person(@user3.person, Label::LEADER_ID)
   @user3.person.update_attributes(first_name: "Another Test", last_name: "Usereeeee")  
     
   #create contact assignments

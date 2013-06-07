@@ -22,12 +22,12 @@
               </span>
             </div>
           <% end %>
-          <div class="permission_actions">
-            <%= link_to(t('people.index.apply_permissions'), '', :class => 'greybox', :id => 'apply_permissions') %>
-            <%= link_to(t('people.index.manage_permissions'), permissions_path(organization: current_organization), :class => 'greybox') %>
+          <div class="label_actions">
+            <%= link_to(t('people.index.apply_labels'), '', :class => 'greybox', :id => 'apply_labels') %>
+            <%= link_to(t('people.index.manage_labels'), labels_path(organization: current_organization), :class => 'greybox') %>
           </div>
-          <div id="apply_permissions_spinner"><%= image_tag('spinner.gif') %> Processing...</div>
-          <div id="apply_permissions_successful"></div>
+          <div id="apply_labels_spinner"><%= image_tag('spinner.gif') %> Processing...</div>
+          <div id="apply_labels_successful"></div>
         </li>
       </ul>
     </li>

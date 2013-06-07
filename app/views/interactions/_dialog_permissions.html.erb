@@ -22,7 +22,6 @@
     	<div class="permissions_save" id="permissions_save" data-current-permission-ids="<%= current_permission_ids.join(',') %>">
     		<button class="red_accent" id="permissions_popup_save_button" data-person-id="<%= @person.id %>">Save</button>
     		<button class="large_lightgray" id="permissions_popup_cancel_button">Cancel</button>
-        <%= link_to raw("<button class='large_gray' id='permissions_popup_manage_button'>Manage Permissions</button>"), permissions_path(organization: current_organization.id) %>
     	</div>
       
     </div>

@@ -96,7 +96,10 @@ class Import < ActiveRecord::Base
 						elsif label_id.to_i == Label::LEADER_ID
 							import_errors << "#{person.to_s}: Email address is required to add Leader label" unless person.email_addresses.present?
 						end
-						current_organization.add_label_to_person(person, label_id, current_user.person.id) unless import_errors.present?
+            unless import_errors.present?
+              current_organization.add_contact(person)
+  						current_organization.add_label_to_person(person, label_id, current_user.person.id)
+            end
 					end
         end
       end

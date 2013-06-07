@@ -1176,6 +1176,10 @@ class Person < ActiveRecord::Base
   def assigned_organizational_permissions(organization_id)
     permissions.where('organizational_permissions.organization_id' => organization_id)
   end
+  
+  def assigned_organizational_labels(organization_id)
+    labels.where('organizational_labels.organization_id' => organization_id)
+  end
 
   def assigned_organizational_permissions_including_archived(organization_id)
     permissions_including_archived.where('organizational_permissions.organization_id' => organization_id)

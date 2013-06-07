@@ -88,6 +88,6 @@
         <%= link_to(t('contacts.index.delete_contact'), organizational_permission_path(:id => contact_permission.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), data: { confirm: t('contacts.index.delete_confirm') }) %>
       <% end %>
     <% end %>
-    <%= link_to(t('nav.view_details'), person_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
+    <%= link_to(t('nav.view_details'), profile_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
   </td>
 </tr>

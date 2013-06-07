@@ -1,5 +1,5 @@
 if(<%= @status %>){
-  $('.label_space .label_list').append("<%= escape_javascript(render partial: 'shared/label', locals: {permission_id: @new_permission.id, permission_name: @new_permission.name, checked: true}) if @new_permission.present? %>")
+  $('.label_space .label_list').append("<%= escape_javascript(render partial: 'shared/label', locals: {label_id: @new_label.id, label_name: @new_label.name, checked: true}) if @new_label.present? %>")
   $('.label_space .label_list').prop({scrollTop:$('.label_list').prop('scrollHeight')})
   $('#new_label_field').val('')
   $('#new_label_message').html("")

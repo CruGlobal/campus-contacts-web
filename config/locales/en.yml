@@ -24,17 +24,21 @@ en:
     messages:
       question_too_long: "WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages."
   permissions:
-    index:
-      title: "%{org} Permissions"
     admin: Admin
     user: User
     no_permissions: No Permissions
+  labels:
+    index:
+      title: "%{org} Labels"
+    admin: Admin
+    user: User
+    no_labels: No Labels
     views:
-      organizational_permissions: "Organizational Permissions"
-      system_permissions: "System Permissions"
-      create_permission: "Create New Label"
-      edit_permission: "Edit Permission"
-      delete_permission: "Delete Permission"
+      organizational_labels: "Organizational Labels"
+      system_labels: "System Labels"
+      create_label: "Create New Label"
+      edit_label: "Edit Label"
+      delete_label: "Delete Label"
       update: "Update"
       create: "Create"
       name: "Name"
@@ -200,12 +204,12 @@ en:
       filter: 'Search'
       locate_contact: 'Contact Location'
       year_in_school: 'Year in School'
-      manage_permissions: 'Manage Labels'
+      manage_labels: 'Manage Labels'
       send_sms: Text
       sent_messages: Sent
       send_email: Email
       group_comment: Add Comment
-      apply_permissions: 'Apply Labels'
+      apply_labels: 'Apply Labels'
       no_people: "Sorry, there are no people involved here."
       displaying: "Displaying %{start} - %{finish} of %{total}"
       merge_people: "Merge People"

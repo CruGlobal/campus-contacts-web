@@ -86,6 +86,12 @@ Mh::Application.routes.draw do
     end
   end
 
+  resources :organizational_labels do
+    collection do
+      post :update_all
+    end
+  end
+
   # resources :rejoicables
 
   resources :saved_contact_searches#, :only => [:show, :create, :edit, :destroy, :index]
@@ -128,7 +134,7 @@ Mh::Application.routes.draw do
     end
   end
 
-  resources :permissions, :only => [:create, :update, :destroy, :index, :new, :edit] do
+  resources :labels, :only => [:create, :update, :destroy, :index, :new, :edit] do
     collection do
       post :create_now
     end
@@ -248,7 +254,7 @@ Mh::Application.routes.draw do
       resources :contact_assignments
       resources :followup_comments
       resources :interactions
-      resources :permissions
+      resources :labels
       resources :organizations
     end
   end
@@ -274,7 +280,7 @@ Mh::Application.routes.draw do
         resources :questions
       end
       resources :questions
-      resources :permissions
+      resources :labels
       resources :followup_comments
       resources :interactions
       resources :interaction_types

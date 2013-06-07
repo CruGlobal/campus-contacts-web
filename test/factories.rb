@@ -211,7 +211,7 @@ FactoryGirl.define do
 
   factory :access_token, class: Rack::OAuth2::Server::AccessToken do
     code "9d68af577f8a4c9076752c9699d2ac2ace64f9dcb407897f754439096cedbfca"
-    scope "userinfo contacts followup_comments contact_assignment permissions organization_info"
+    scope "userinfo contacts followup_comments contact_assignment permissions labels organization_info"
   end
 
   factory :user_with_authentication, parent: :user do

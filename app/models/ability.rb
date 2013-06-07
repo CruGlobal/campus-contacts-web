@@ -23,6 +23,7 @@ class Ability
         can :manage_groups, Organization, id: user_of_org_ids + admin_of_org_ids
         can :manage_locate_contact, Organization, id: user_of_org_ids + admin_of_org_ids
         can :manage_permissions, Organization, id: admin_of_org_ids
+        can :manage_labels, Organization, id: admin_of_org_ids
 
         # can only manage keywords from orgs you're an admin of
         can :manage, SmsKeyword, organization_id: admin_of_org_ids

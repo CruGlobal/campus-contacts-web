@@ -3,13 +3,15 @@ class PeopleController < ApplicationController
   before_filter :ensure_current_org
   before_filter :authorize_merge, only: [:merge, :confirm_merge, :do_merge, :merge_preview]
   before_filter :permissions_for_assign
+  before_filter :labels_for_assign
 
   # GET /people
   # GET /people.xml
   def index
     authorize! :read, Person
     fetch_people(params)
-    @permissions = current_organization.permissions # Admin or Leader, all permissions will appear in the index div.permission_div_checkboxes but checkobx of the admin permission will be hidden
+    @permissions = current_organization.permissions
+    @labels = current_organization.labels # Admin or Leader, all permissions will appear in the index div.permission_div_checkboxes but checkobx of the admin permission will be hidden
   end
 
   def all
@@ -50,7 +52,7 @@ class PeopleController < ApplicationController
       @person.update_friends(fb_auth) if fb_auth.present?
     end
     @org_friends = Person.where(fb_uid: Friend.followers(@person.id))
-
+    @labels = @person.labels_for_org_id(current_organization.id)
     if can? :manage, @person
       @organizational_permissions = OrganizationalPermission.where(organization_id: current_organization, person_id: @person)
       @followup_comment = FollowupComment.new(organization: current_organization, commenter: current_person, contact: @person, status: @organizational_permissions.collect(&:followup_status)) if @organizational_permissions

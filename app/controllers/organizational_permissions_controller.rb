@@ -15,7 +15,7 @@ class OrganizationalPermissionsController < ApplicationController
     else
       # We don't want to remove all of a person's permissions using this method.
     end    
-    @new_label_set = (person.assigned_organizational_permissions(current_organization.id).default_permissions_desc + person.assigned_organizational_permissions(current_organization.id).non_default_permissions_asc).collect(&:name)
+    @new_label_set = (person.assigned_organizational_permissions(current_organization.id).default_permissions + person.assigned_organizational_permissions(current_organization.id).non_default_permissions).collect(&:name)
   end
 
   def update

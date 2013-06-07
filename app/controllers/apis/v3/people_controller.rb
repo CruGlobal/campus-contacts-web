@@ -108,7 +108,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   end
 
   def available_includes
-    [:email_addresses, :phone_numbers, :interactions]
+    [:email_addresses, :phone_numbers, :interactions, :labels]
   end
 
 end

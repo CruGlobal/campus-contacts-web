@@ -1,9 +1,9 @@
 <div id="labels_dialog">
   <div class='title'>Labels for <%= @person %></div>
-  <%= form_tag update_all_organizational_permissions_path(id: @person.id), remote: true do %>
+  <%= form_tag update_all_organizational_labels_path(id: @person.id), remote: true do %>
     <div class="labels_list">
-      <% @permissions_for_assign.each do |permission| %>
-        <%= render partial: 'shared/label', locals: {permission_id: permission.id, permission_name: permission, checked: @permissions.include?(permission) }%>
+      <% @labels_for_assign.each do |label| %>
+        <%= render partial: 'shared/label', locals: {label_id: label.id, label_name: label, checked: @labels.include?(label) }%>
       <% end %>
     </div>
     <div class='actions'>
