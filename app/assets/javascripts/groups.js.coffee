@@ -44,7 +44,7 @@ $ ->
       $('.approve_join').hide()
 
 	$(".add_group_member, .add_group_leader").live "click", ->	
-		$("#add_to_group_permission, #permission").val($(this).attr("data-permission"))
+		$("#add_to_group_role, #role").val($(this).attr("data-role"))
 		$('#member_search').attr('title', $(this).attr("data-desc"))
 		$.fn.showSearchBox()
 		false

@@ -1061,7 +1061,7 @@ en:
       add_member: 'Add Member'
       email: 'Email Address'
       phone: 'Phone Number'
-      permission: 'Permission'
+      role: 'Role'
       leaders: Leaders
       location: Location
       edit: edit

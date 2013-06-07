@@ -46,7 +46,7 @@ class InteractionsController < ApplicationController
     
     @group_ids.each do |group_id|
       group = @person.group_memberships.find_or_create_by_group_id(group_id.to_i)
-      group.update_attribute(:permission, 'member') if group.permission.nil?
+      group.update_attribute(:role, 'member') if group.role.nil?
     end
     @groups = @person.groups_for_org_id(current_organization.id)
   end
