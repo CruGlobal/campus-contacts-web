@@ -1,10 +1,10 @@
-class Apis::V3::LabelsController < Apis::V3::BaseController
-  before_filter :get_label, only: [:show, :update, :destroy]
+class Apis::V3::PermissionsController < Apis::V3::BaseController
+  before_filter :get_permission, only: [:show, :update, :destroy]
 
   def index
     order = params[:order] || 'name'
 
-    list = add_includes_and_order(labels, order: order)
+    list = add_includes_and_order(permissions, order: order)
 
     render json: list,
            callback: params[:callback],
@@ -12,34 +12,33 @@ class Apis::V3::LabelsController < Apis::V3::BaseController
   end
 
   def show
-    render json: @label,
+    render json: @permission,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization}
   end
 
   def create
-    label = labels.new(params[:label])
-    label.organization_id = current_organization.id
+    permission = permissions.new(params[:permission])
 
-    if label.save
-      render json: label,
+    if permission.save
+      render json: permission,
              status: :created,
              callback: params[:callback],
              scope: {include: includes, organization: current_organization}
     else
-      render json: {errors: label.errors.full_messages},
+      render json: {errors: permission.errors.full_messages},
              status: :unprocessable_entity,
              callback: params[:callback]
     end
   end
 
   def update
-    if @label.update_attributes(params[:label])
-      render json: @label,
+    if @permission.update_attributes(params[:permission])
+      render json: @permission,
              callback: params[:callback],
              scope: {include: includes, organization: current_organization}
     else
-      render json: {errors: label.errors.full_messages},
+      render json: {errors: permission.errors.full_messages},
              status: :unprocessable_entity,
              callback: params[:callback]
     end
@@ -47,21 +46,21 @@ class Apis::V3::LabelsController < Apis::V3::BaseController
   end
 
   def destroy
-    @label.destroy
+    @permission.destroy
 
-    render json: @label,
+    render json: @permission,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization}
   end
 
   private
 
-  def labels
-    current_organization.labels
+  def permissions
+    current_organization.permissions
   end
 
-  def get_label
-    @label = add_includes_and_order(labels)
+  def get_permission
+    @permission = add_includes_and_order(permissions)
                 .find(params[:id])
 
   end

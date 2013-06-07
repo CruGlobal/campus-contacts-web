@@ -255,6 +255,9 @@ Mh::Application.routes.draw do
       resources :followup_comments
       resources :interactions
       resources :labels
+      resources :permissions
+      resources :organizational_labels
+      resources :organizational_permissions
       resources :organizations
     end
   end
@@ -281,6 +284,8 @@ Mh::Application.routes.draw do
       end
       resources :questions
       resources :labels
+      resources :permissions
+      resources :organizational_labels
       resources :followup_comments
       resources :interactions
       resources :interaction_types
