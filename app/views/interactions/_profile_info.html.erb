@@ -2,30 +2,30 @@
   <button class="red_accent" id="info_display_edit_button">Update Info</button>
 </div>
 
-<div class="feed_box info_display">
+<% if @person.contact_permission_for_org(current_organization) || @assigned_tos.present? || @person.gender.present?%>
+  <div class="feed_box info_display">
+    <% if @person.contact_permission_for_org(current_organization) %>
+    	<div class="status col_left">Status:</div>
+    	<div class="status col_right view" id="followup_status_div">
+        <%- contact_permission = @person.contact_permission_for_org(current_organization).try(:followup_status) %>
+        <%= contact_permission.titleize if contact_permission.present? %>
+    	</div>
+    <% end %>
 
-  
-  <% if @person.contact_permission_for_org(current_organization) %>
-  	<div class="status col_left">Status:</div>
-  	<div class="status col_right view" id="followup_status_div">
-      <%- contact_permission = @person.contact_permission_for_org(current_organization).try(:followup_status) %>
-      <%= contact_permission.titleize if contact_permission.present? %>
-  	</div>
-  <% end %>
+    <% if @assigned_tos.present? %>
+    	<div class="gender col_left">Assigned To:</div>
+    	<div class="gender col_right" id="assigned_to_div">
+        <%= @assigned_tos.collect { |a| a.assigned_to.try(:name) }.compact.to_sentence %>
+      </div>
+    <% end %>
 
-  <% if @assigned_tos.present? %>
-  	<div class="gender col_left">Assigned To:</div>
-  	<div class="gender col_right" id="assigned_to_div">
-      <%= @assigned_tos.collect { |a| a.assigned_to.try(:name) }.compact.to_sentence %>
-    </div>
-  <% end %>
+    <% if @person.gender.present? %>
+    	<div class="gender col_left"><%= t('general.gender') %>:</div>
+    	<div class="gender col_right"><%= @person.gender %></div>
+    <% end %>
 
-  <% if @person.gender.present? %>
-  	<div class="gender col_left"><%= t('general.gender') %>:</div>
-  	<div class="gender col_right"><%= @person.gender %></div>
-  <% end %>
-
-</div>
+  </div>
+<% end %>
 
 <% email_addresses = @person.email_addresses %>
 <% phone_numbers = @person.phone_numbers %>
