@@ -29,7 +29,7 @@ class Label < ActiveRecord::Base
     :order => "labels.name ASC"
   }}
   scope :arrange_all, lambda {{
-    order: "FIELD#{self.default_labels_for_field_string(self::DEFAULT_CRU_LABELS)}"
+    order: "FIELD#{self.default_labels_for_field_string(self::DEFAULT_CRU_LABELS)} DESC"
   }}
   
   def self.involved
