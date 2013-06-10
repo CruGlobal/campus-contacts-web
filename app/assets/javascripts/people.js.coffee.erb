@@ -66,8 +66,8 @@ $ ->
       tr = $(this).parent()
       document.location = '/profile/' + tr.attr('data-id')
 
-  $('#apply_permissions_spinner').hide()
-  $("#apply_permissions_successful").hide()
+  $('#apply_labels_spinner').hide()
+  $("#apply_labels_successful").hide()
 
   if $('#people_controller.confirm_merge input[type=submit]')[0]
     $('#people_controller.confirm_merge input[type=submit]')[0].focus()
@@ -868,8 +868,8 @@ update_persons_permissions = () ->
   permission_ids = []
   some_permission_ids = []
 
-  $('#apply_permissions_spinner').show()
-  $("#apply_permissions_successful").hide()
+  $('#apply_labels_spinner').show()
+  $("#apply_labels_successful").hide()
   $('#label_menu').live 'mouseleave', -> #Hook to avoid using the plugin, hiding the box while in process
   	$(this).show()
   $('.permission_id_checkbox:checked').each ->
@@ -894,17 +894,17 @@ update_persons_permissions = () ->
       data: 'permission_ids='+permission_ids+'&some_permission_ids='+some_permission_ids+'&person_id='+person_id,
       success: (data) ->
         permissions_user = "#permissions_user_" + person_id
-        $("#apply_permissions_successful").show()
+        $("#apply_labels_successful").show()
         if data.indexOf("$.a") == -1
           success_apply_counter++
           $(permissions_user).html data
         else
           fail_apply_counter++
         html = success_apply_counter+" out of "+total_contacts+" contacts "+t('general.permissions_applied')
-        $("#apply_permissions_successful").html(html)
+        $("#apply_labels_successful").html(html)
         total_apply = success_apply_counter + fail_apply_counter;
         if total_apply == total_contacts
           $('#label_menu').live 'mouseleave', -> #Return the original effects of the box
             $('#label_menu').hide()
-          $("#apply_permissions_spinner").hide()
+          $("#apply_labels_spinner").hide()
           $('#label_menu').hide()
