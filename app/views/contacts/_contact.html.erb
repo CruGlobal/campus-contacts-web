@@ -1,5 +1,5 @@
 <% labels = person.assigned_organizational_labels(current_organization.id) %>
-<% contact_role = person.contact_role_for_org(current_organization) %>
+<% contact_permission = person.contact_permission_for_org(current_organization) %>
 <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row <%= extra if defined?(extra) %>" data-name="<%= person.name %>" data-email="<%= person.email %>">
 	<td class="handle_container">
     <% if contact_permission %>
@@ -9,16 +9,16 @@
     <% end %>
 	</td>
   <td nowrap="nowrap" class="checkbox_cell">
-    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox contact_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email, 'data-roles' => "#{labels.collect(&:id).join(',')}"%>
+    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox contact_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email, 'data-permissions' => "#{labels.collect(&:id).join(',')}"%>
   </td>
   <td class="cell firstName"><%= person.first_name %></td>
   <td class="cell lastName"><%= person.last_name %></td>
 
-	<% if params[:role].blank? || ![Role::ADMIN_ID,Role::MISSIONHUB_USER_ID].include?(params[:role].map{|id| id }) %>
+	<% if params[:permission].blank? || ![Permission::ADMIN_ID,Permission::USER_ID].include?(params[:permission].map{|id| id }) %>
   <td class="cell status">
-    <% if contact_role %>
-      <%= contact_role.followup_status.to_s.titleize %>
-      <% if person.organizational_roles.where('organizational_roles.organization_id' => current_organization.id).blank? %>
+    <% if contact_permission %>
+      <%= contact_permission.followup_status.to_s.titleize %>
+      <% if person.organizational_permissions.where('organizational_permissions.organization_id' => current_organization.id).blank? %>
         <span class="archived_group_label">&nbsp<%= t('general.archived') %>&nbsp</span>
       <% end %>
     <% end %>
@@ -27,11 +27,11 @@
   <td class="cell"><%= person.gender.to_s.titleize %></td>
   <td class="cell phone_number"><%= person.pretty_phone_number %></td>
   <td class="cell labels">
-    <div id="roles_user_<%= person.id %>" class="roles_spaces">
-      <div class="roles_cover"></div>
-      <div class="roles_container">
+    <div id="permissions_user_<%= person.id %>" class="permissions_spaces">
+      <div class="permissions_cover"></div>
+      <div class="permissions_container">
         <% labels.each do |label| %>
-          <div id="<%= person.id%>_<%= label.id %>" class="role_label role_<%= label.id %>"><%= label.name %></div>
+          <div id="<%= person.id%>_<%= label.id %>" class="permission_label permission_<%= label.id %>"><%= label.name %></div>
         <% end %>
       </div>
     </div>

@@ -49,7 +49,7 @@ class Permission < ActiveRecord::Base
   end
 
   def self.default_permissions_for_field_string(permissions)
-    permissions_string = "("
+    permissions_string = "(i18n, "
     permissions.each do |r|
       permissions_string = permissions_string + "\"" + r + "\"" + ","
     end
@@ -62,6 +62,22 @@ class Permission < ActiveRecord::Base
     r[0] = ""
     r = "(permissions.i18n," + r
     r
+  end
+
+  def permission_contacts_from_org(org)
+    contact_ids = OrganizationalPermission.where(permission_id: id, organization_id: org.id).uniq
+    people = org.people.where(id: contact_ids.collect(&:person_id))
+    people.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id, 'organizational_permissions.archive_date' => nil)
+  end
+
+  def permission_contacts_from_org_with_archived(org)
+    contact_ids = OrganizationalPermission.where(permission_id: id, organization_id: org.id).uniq
+    people = org.people.where(id: contact_ids.collect(&:person_id))
+    people.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id)
+  end
+  
+  def to_s
+    name
   end
 
   if Permission.table_exists? # added for travis testing

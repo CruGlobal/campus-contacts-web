@@ -44,7 +44,6 @@ $ ->
     e.preventDefault()
     $('.profile_checkbox').prop('checked',true)
     $('#assign_to_button').click()
-    $.toggleLoader('profile_name','Assigning...')
   
   $('#assign_popup_cancel_button').live 'click', (e)->
     e.preventDefault()

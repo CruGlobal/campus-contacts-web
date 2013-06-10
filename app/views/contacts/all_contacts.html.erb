@@ -3,7 +3,7 @@
   	<button class="red_accent full_width_button" id="allcontacts_add_contact_button">Add a Contact</button>
   	<button class="action_gray full_width_button" id="allcontacts_add_contact_button">Import Contacts</button>
 
-  	<div id="sidebar_lists">
+  	<div id="sidebar_lists" class="leftmenu">
       <div id="sidebar_loader">
         <%= image_tag 'loader.gif'%>
         <br/>
@@ -26,11 +26,11 @@
 
 
 <div id="ac_button_bar">
-	<ul class="button_bar">
+	<ul class="button_bar" id="menu_assign_link">
 		<li class="action_lightblue"><a href="#">Assign</a></li>
 	</ul>
 	<ul class="button_bar">
-		<li class="action_lightblue btn_left"><a href="#">Roles</a></li>
+		<li class="action_lightblue btn_left"><a href="#">Permissions</a></li>
 	</ul>
 	<ul class="button_bar">
 		<li class="action_lightblue btn_right"><a href="#">Labels</a></li>
@@ -53,9 +53,11 @@
 </div>
 
 <div id="ac_pagination">
-	<div class="fancy"><%= "#{(params[:page].to_i * 25) - 24} - #{params[:page].to_i * 25} of #{@people.total_count}" %></div>
-	<%= link_to_previous_page @people, raw("<button class='action_lightblue btn_left'>#{image_tag('mh_arrow_l.png')}</button>") %>
-	<%= link_to_next_page @people, raw("<button class='action_lightblue btn_right'>#{image_tag('mh_arrow_r.png')}</button>") %>
+  <% min_display = (params[:page].to_i * 25) - 24 %>
+  <% max_display = @people.total_count <= 25 ? @people.total_count : params[:page].to_i * 25 %>
+	<div class="fancy"><%= "#{min_display} - #{max_display} of #{@people.total_count}" %></div>
+	<%= link_to_previous_page @people, raw("<button class='action_lightblue btn_left'>&#9664;</button>") %>
+	<%= link_to_next_page @people, raw("<button class='action_lightblue btn_right'>&#9654;</button>") %>
 </div>
 
 <div id="ac_contact_spread">
@@ -78,7 +80,7 @@
         <th class='first_name'><%= sort_link @q, :first_name, t('.first_name'), params %></th>
         <th class='last_name'><%= sort_link @q, :last_name, t('.last_name'), params %></th>
 
-    		<% if params[:role].blank? || ![Role::ADMIN_ID,Role::MISSIONHUB_USER_ID].include?(params[:role].map{|id| id }) %>
+    		<% if params[:role].blank? || ![Permission::ADMIN_ID,Permission::USER_ID].include?(params[:role].map{|id| id }) %>
   	      <th class='status'><%= sort_link @q, :followup_status, t('.status'), params %></th>
   		  <% end %>
 
@@ -116,7 +118,7 @@
         <%= t('contacts.index.no_contacts') %>
       </div>
   	<% end %>
-    <%= render 'assign' %>
+    <%= render 'application/assign' %>
   <% end %>
   <div id="add_contact_div" style="display:none" title="<%= t('.add_contact', org: current_organization) %>" class="fingerme">
     <%= render 'add_contact', person: Person.new %>

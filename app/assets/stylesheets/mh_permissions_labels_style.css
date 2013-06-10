@@ -4,7 +4,6 @@
 @import url('mh_profile_style.css');
 
 /* Containers */
-
 #ac_container { /* Container for all Profile Page content */
 	margin:0px auto 0px 0px;
 	padding:8px 24px 20px 24px;
@@ -14,7 +13,7 @@
 #ac_sidebar { /* Profile Page left sidebar */
 	float:left;
 	clear:left;
-	width:160px;
+	width:180px;
 }
 
 #ac_title {
@@ -37,9 +36,9 @@
 }
 
 #ac_contact_spread {
-	margin:13px 0 0 12px;
+	margin:13px 0 0 5px;
 	display:inline-block;
-	width:822px;
+	min-width:850px;
 }
 
 /* Sidebar */
@@ -84,7 +83,7 @@ ul.ac_dropdown_list {
 /* Button Bar */
 
 #ac_button_bar {
-	margin-left:12px;
+	margin-left:5px;
 	display:inline-block;
 }
 

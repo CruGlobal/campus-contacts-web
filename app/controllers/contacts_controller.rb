@@ -14,6 +14,7 @@ class ContactsController < ApplicationController
   end
   
   def all_contacts
+    params[:page] ||= 1
     url = request.url.split('?')
     @attr = url.size > 1 ? url[1] : ''
 
@@ -26,7 +27,7 @@ class ContactsController < ApplicationController
 
       wants.csv do
         fetch_contacts(true)
-        @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r] if r.role_id == Role::CONTACT_ID }]
+        @roles = Hash[OrganizationalPermission.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r] if r.role_id == Permission::CONTACT_ID }]
         @all_answers = generate_answers(@all_people, @organization, @questions, @surveys)
         @questions.select! { |q| !%w{first_name last_name phone_number email}.include?(q.attribute_name) }
         filename = @organization.to_s
@@ -43,7 +44,6 @@ class ContactsController < ApplicationController
 
     respond_to do |wants|
       wants.html do
-        fetch_contacts(false)
         @assignments = ContactAssignment.includes(:assigned_to).where(person_id: @people.pluck('people.id'), organization_id: @organization.id).group_by(&:person_id)
         @answers = generate_answers(@people, @organization, @questions, @surveys)
       end
@@ -358,7 +358,8 @@ class ContactsController < ApplicationController
 
       # Filter results
       filter_archived_only if params[:archived].present?
-      filter_by_label if params[:permission].present?
+      filter_by_permission if params[:permission].present?
+      filter_by_label if params[:label].present?
       filter_by_search if params[:do_search].present?
 
       # Sort & Limit Results
@@ -440,6 +441,7 @@ class ContactsController < ApplicationController
       @people_unfiltered = Person.where('organizational_permissions.organization_id' => org_ids)
                                  .where("organizational_permissions.followup_status <> 'do_not_contact' OR organizational_permissions.followup_status IS NULL")
                                  .joins(:organizational_permissions_including_archived)
+                                 .joins(:organizational_labels)
 
       if params[:include_archived].blank? && params[:archived].blank?
         @people_unfiltered = @people_unfiltered.where('organizational_permissions.archive_date' => nil)
@@ -456,8 +458,40 @@ class ContactsController < ApplicationController
       params[:search] = nil
       params[:do_search] = "1"
     end
-
+    
     def filter_by_label
+    	params[:label] = [params[:label]] unless params[:label].is_a?(Array)
+      if @labels = Label.select("id, name, i18n").where("id IN (?)",params[:label])
+        if params[:do_search].present?
+          @header = I18n.t('contacts.index.matching_seach')
+        else
+          @header = @labels.collect{|desc| (desc.i18n.present? ? desc.i18n : desc.name).try('titleize')}.to_sentence
+        end
+
+      	if params[:label_tag].present? && params[:label_tag].to_i == Label::ALL_SELECTED_LABEL[1]
+					valid_ids = []
+			  	@labels.collect(&:id).each do |label|
+      			valid_ids << @people_scope.where('organizational_labels.label_id IN (?)', [label]).collect(&:id)
+					end
+
+					filtered_ids = []
+					valid_ids.each do |person_ids|
+						filtered_ids = filtered_ids.present? ? filtered_ids &= person_ids : person_ids
+					end
+
+					@people_scope = @people_scope.where("people.id IN (?)", filtered_ids)
+      	else
+        	@people_scope = @people_scope.where("organizational_labels.label_id IN (?)", @labels.collect(&:id))
+      	end
+
+        if !params[:include_archived].present? && !params[:include_archived] == 'true'
+          @people_scope = @people_scope.where("organizational_labels.archive_date" => nil)
+        end
+      end
+      
+    end
+
+    def filter_by_permission
     	params[:permission] = [params[:permission]] unless params[:permission].is_a?(Array)
       if @permissions = Permission.select("id, name, i18n").where("id IN (?)",params[:permission])
         if params[:do_search].present?

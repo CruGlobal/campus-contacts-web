@@ -13,6 +13,32 @@
     #sidebar_loader {
       text-align: center;
     }
+    .leftmenu {
+      .entry {
+        .name {
+          max-width: 120px;
+          display: inline-block;
+        	white-space: nowrap;
+        	overflow: hidden;
+        	text-overflow: ellipsis;
+
+          a {
+            color: #0379ae;
+          }
+        }
+        .delete_icon {
+          display: none;
+          height: 10px;
+          padding: 0px;
+          img {
+            margin: 1px 0 0px;
+          }
+        }
+        &:hover .delete_icon {
+          display: inline-block;
+        }
+      }
+    }
   }
   #rest {
     background: none;
@@ -22,12 +48,13 @@
   }
   #main {
     border: none;
-    margin-left: 185px;
+    margin-left: 210px;
   }
   .contact_listing {
     width: 100%;
     border: 1px solid #C7DFF0;
     th {
+      color: #0379ae;
       &.last_survey, &.first_name, &.last_name {
         min-width: 90px;
       }
@@ -49,7 +76,7 @@
     td.cell {
       padding: 5px;
       &.labels {
-        width: 160px;
+        min-width: 150px;
         .roles_spaces {
           width: 160px;
           overflow: hidden;

@@ -8,6 +8,24 @@ html.noscroll {
 }
 
 body{
+
+  .loader {
+    display: inline-block;
+    line-height: 16px;
+    font-size: 11px;
+    color: #777;
+    font-weight: normal;
+    img {
+      margin: 0 2px -3px 0;
+      height: 16px;
+      width: 16px;
+    }
+  }
+
+  input.group_search_name, input.leader_search_name {
+    width: 400px;
+  }
+  
   .hidden {
     display: none;
   }
@@ -133,9 +151,6 @@ body{
       height: 260px;
       width: 400px;
       padding: 3px
-    }
-    input.group_search_name, input.leader_search_name {
-      width: 400px;
     }
     a.send_contact_info {
       &:hover {
@@ -346,18 +361,6 @@ body{
     .interaction_new #datepicker {
       width: 166px;
       color: #333333;
-    }
-    .loader {
-      display: inline-block;
-      line-height: 16px;
-      font-size: 11px;
-      color: #777;
-      font-weight: normal;
-      img {
-        margin: 0 2px -3px 0;
-        height: 16px;
-        width: 16px;
-      }
     }
     .field_with_errors {
       display: inline-block;

@@ -2,6 +2,26 @@ $ ->
   $(document).on 'keypress', '#contact_search_form input', (e)->
     if (e.keyCode == $.ui.keyCode.ENTER)
       $('#contact_search_form').submit()
+
+  $('.ac_dropdown_list .side_toggle').live 'click', (e)->
+    e.preventDefault()
+    side_list = $(this).parents('.ac_dropdown_list').find('.side_list')
+    if side_list.is(':visible')
+      side_list.slideUp()
+      $(this).html("&#x25BC;")
+    else
+      side_list.slideDown()
+      $(this).html("&#x25B2;")
+  
+  $('#ac_button_bar #menu_assign_link').live 'click', (e)->
+    e.preventDefault()
+    $('.profile_checkbox').prop('checked',true)
+    if $('.id_checkbox:checked').length > 0
+      $('#keep_contact').attr checked: true
+      $('#assign_to_me').click()
+      $.showDialog($("#assign_search"))
+    else
+      $.a(t('contacts.index.none_checked'))
       
   $(".my_contacts.leftmenu .completed").droppable
     activeClass: "ui-state-highlight"
@@ -333,7 +353,8 @@ $ ->
   $('#assign_search .assign_button').live 'click', ->
     leader = $('.leftmenu .leader[data-id=' + $('#assign_to').val() + ']')
     $.fn.assignTo(leader)
-    $.fn.load_leader_name($('#person_title').attr('data-id'))
+    $.toggleLoader('profile_name','Assigning...')
+    $.toggleLoader('ac_button_bar','Assigning to Leader...')
     $.hideDialog($("#assign_search"))
 
   $('#assign_search .leader a').live 'click', (e)->
@@ -347,6 +368,7 @@ $ ->
       unless $('#assign_to').val() == $('#my_id').val()
         $.fn.load_leader_name($('#person_title').attr('data-id'))
     $.toggleLoader('profile_name','Assigning to Leader...')
+    $.toggleLoader('ac_button_bar','Assigning to Leader...')
     $.hideDialog($("#assign_search"))
   false
 
