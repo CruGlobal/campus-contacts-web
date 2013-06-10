@@ -2,7 +2,7 @@ module ContactActions
 
   def create_contact
     @organization ||= current_organization
-
+    @add_to_group_tag = params[:add_to_group_tag]
     Person.transaction do
       params[:person] ||= {}
       params[:person][:email_address] ||= {}
@@ -64,8 +64,8 @@ module ContactActions
           ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
           ContactAssignment.create!(person_id: @person.id, organization_id: @organization.id, assigned_to_id: current_person.id)
         end
-
-				if @add_to_group_tag = params[:add_to_group_tag] == "true"
+        
+				if @add_to_group_tag == '1'
     			@group = @organization.groups.find(params[:add_to_group])
 		      @group_membership = @group.group_memberships.find_or_initialize_by_person_id(@person.id)
 		      @group_membership.role = params[:add_to_group_role]
@@ -90,6 +90,7 @@ module ContactActions
             flash.now[:error] = errors.join('<br />')
             flash[:selected_labels] = params[:labels]
             flash[:selected_answers] = params[:answers]
+            flash[:add_to_group_tag] = @add_to_group_tag
             render 'add_contact'
           end
           wants.json do

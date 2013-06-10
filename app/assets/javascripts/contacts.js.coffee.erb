@@ -276,7 +276,7 @@ $ ->
         $(this).dialog('destroy')
     ]
 
-  $('#contacts_controller a.add_contact').live 'click', ->
+  $('a.add_contact').live 'click', ->
     $('#new_person')[0].reset()
     $('#add_contact_div').dialog
       resizable: false,
@@ -843,9 +843,20 @@ $.fn.assignTo = (leader, skip_remote) ->
 
 $.mh.saveContact = (add_more) ->
   form = $('#new_person')
+  
+  #For My Contacts Page
   $('#assign_new_contact_to_me').val($('#mine_assign_to').val())
   
-  dialog_buttons = $('.add_new_contact_dialog_buttons')
+  #For Add a person in Group Members Page
+  group_tag = $("#add_to_group_id").val()
+  $("#add_to_group_tag").val(0)
+  if group_tag
+    $("#add_to_group").val(group_tag)
+    $("#add_to_group_tag").val(1)
+    $("#add_to_group_role").val($("#role").val())
+    $("#add_to_group").val($("#add_to_group_id").val())
+  
+  dialog_buttons = $('.add_new_contact_dialog_buttons, .add_new_person_group_member_butons')
   
   dialog_buttons.button('disable')
   if $('#person_first_name', form).val() == ''
@@ -861,8 +872,7 @@ $.mh.saveContact = (add_more) ->
       data: 'email='+email+'&fname='+fname+'&lname='+lname,
       success: (code) ->
         if code == '100'
-          if add_more
-            $('#add_another').val('true')
+          $('#add_another').val(add_more)
           $.rails.handleRemote(form)
           form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
         else

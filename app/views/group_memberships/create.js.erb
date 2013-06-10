@@ -1,26 +1,23 @@
+<% unless params[:add_another] == 'true' %>
+  $("#member_search").dialog('close');
+<% end %>
+
 <% if params[:from_add_member_screen] == "true" %>
-  <% unless params[:add_another] == 'true' %>
-    $("#member_search").dialog('close');
-  <% end %>
   <% unless @inContacts %>
     row = '<%= j(render('groups/person', person: @persons, group_membership: @group_membership)) %>'
     if($('#<%= dom_id(@persons) %>')[0]) {
       $('#<%= dom_id(@persons) %>').replaceWith(row)
     } else {
-      $('#group_table').append(row)
+      $('#group_table').prepend(row)
     }
   <% end %>
 <% else %>
-  <% unless params[:add_another] == 'true' %>
-    $("#member_search").dialog('close');
-  <% end %>
   <% unless @inContacts %>
     row = '<%= j(render('groups/person', person: @persons.first, group_membership: @group_membership)) %>'
     if($('#<%= dom_id(@persons.first) %>')[0]) {
-      $('#<%= dom_id(@persons.first) %>').replaceWith(row)
-    } else {
-      $('#group_table').append(row)
+      $('#<%= dom_id(@persons.first) %>').remove()
     }
+    $('#group_table').prepend(row)
   <% end %>
   $.n('Contacts added to group successfully');
 <% end %>
