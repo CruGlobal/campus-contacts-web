@@ -10,14 +10,14 @@ class Apis::V3::BaseController < ApplicationController
   protected
 
   def authenticate_user!
-    unless params[:secret] || oauth_access_token
+    unless params[:secret] || oauth_access_token || params[:facebook_token]
       render json: {errors: ["You need to pass in the your Organization's API secret or a user's oauth token."]},
         status: :unauthorized,
         callback: params[:callback]
       return false
     end
     unless current_organization
-      render json: {errors: ["The secret you sent over didn't match an Organization on MissionHub"]},
+      render json: {errors: ["The secret you sent over didn't match a user or organization on MissionHub"]},
         status: :unauthorized,
         callback: params[:callback]
       return false
@@ -32,8 +32,18 @@ class Apis::V3::BaseController < ApplicationController
 
   def current_user
     unless @current_user
-      if oauth_access_token
+      case
+      when oauth_access_token
         @current_user = User.from_access_token(oauth_access_token)
+      when params[:facebook_token]
+        begin
+          logger.debug(params[:facebook_token])
+          fb_user = MiniFB.get(params[:facebook_token], 'me')
+          logger.debug(fb_user)
+          @current_user = Authentication.where(provider: 'facebook', uid: fb_user.id).first.try(:user)
+        rescue MiniFB::FaceBookError => e
+          logger.debug(e)
+        end
       else
         @current_user = current_organization.parent_organization_admins.first.try(:user)
       end
@@ -43,7 +53,7 @@ class Apis::V3::BaseController < ApplicationController
 
   def current_organization
     unless @current_organization
-      if oauth_access_token
+      if (oauth_access_token || params[:facebook_token]) && current_user
         primary_organization = current_user.person.primary_organization
         @current_organization = params[:organization_id] ? current_user.person.all_organization_and_children.find(params[:organization_id]) : primary_organization
       else
