@@ -1,5 +1,5 @@
 <% person ||= nil %>
-<fieldset data-role="controlgroup">
+<fieldset data-permission="controlgroup">
   <% checkbox_field.choices.each_with_index do |choice, num| -%>
     <% dom_id = dom_id(checkbox_field) + "_" + pretty_tag(choice[1]) %>
     <%= hidden_field_tag "answers[#{checkbox_field.id}][#{num}]", '', :id => '' %>

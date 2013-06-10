@@ -2,8 +2,8 @@
 <% contact_role = person.contact_role_for_org(current_organization) %>
 <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row <%= extra if defined?(extra) %>" data-name="<%= person.name %>" data-email="<%= person.email %>">
 	<td class="handle_container">
-    <% if contact_role %>
-      <%= image_tag('grippy.png', class: 'handle', 'data-row-id' => dom_id(person), 'data-id' => person.id, 'data-dnc-url' => organizational_role_path(:id => contact_role.id, :status => 'do_not_contact') ) %>
+    <% if contact_permission %>
+      <%= image_tag('grippy.png', class: 'handle', 'data-row-id' => dom_id(person), 'data-id' => person.id, 'data-dnc-url' => organizational_permission_path(:id => contact_permission.id, :status => 'do_not_contact') ) %>
     <% else %>
       <%= image_tag('grippy.png', class: 'handle' ) %>
     <% end %>
@@ -24,7 +24,6 @@
     <% end %>
   </td>
   <% end %>
-
   <td class="cell"><%= person.gender.to_s.titleize %></td>
   <td class="cell phone_number"><%= person.pretty_phone_number %></td>
   <td class="cell labels">
@@ -77,10 +76,10 @@
     <% if params[:dnc] == 'true' %>
       <%= link_to(t('contacts.index.delete_contact'), person_path(person), :method => :delete, :remote => true, :class => "icon delete dnc tipit", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.destroy_confirm')) %>
     <% else %>
-      <% if contact_role %>
-        <%= link_to(t('contacts.index.delete_contact'), organizational_role_path(:id => contact_role.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), data: { confirm: t('contacts.index.delete_confirm') }) %>
+      <% if contact_permission %>
+        <%= link_to(t('contacts.index.delete_contact'), organizational_permission_path(:id => contact_permission.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), data: { confirm: t('contacts.index.delete_confirm') }) %>
       <% end %>
     <% end %>
-    <%= link_to(t('nav.view_details'), person_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
+    <%= link_to(t('nav.view_details'), profile_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
   </td>
 </tr>

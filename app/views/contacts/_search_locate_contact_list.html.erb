@@ -1,9 +1,9 @@
-<% @filtered_contact.includes(:organizational_roles).each do |person| %>
-<% orgs = person.organizational_roles.where(organization_id: @manage_org_ids.collect(&:organization_id)) %>
+<% @filtered_contact.includes(:organizational_permissions).each do |person| %>
+<% orgs = person.organizational_permissions.where(organization_id: @manage_org_ids.collect(&:organization_id)) %>
 <tr class="locate_contact_list_tr">
   <td><div class="wrap_list"><%= person.first_name %></div></td>
   <td><div class="wrap_list"><%= person.last_name %></div></td>
   <td><div class="wrap_list"><%= person.email_addresses.order("email_addresses.primary DESC").collect{|e| "<div class='awts'>"+e.email+"</div>" }.uniq.join("<br/>").html_safe %></div></td>
-  <td><div class="wrap_list"><%= orgs.collect{|org| link_to org.organization.name, set_current_organizational_role_path(org.organization.id), class: "tipitright locate_contact_list_link", title: "Go to #{org.organization.name}" }.uniq.join("<br/>").html_safe %></div></td> 
+  <td><div class="wrap_list"><%= orgs.collect{|org| link_to org.organization.name, set_current_organizational_permission_path(org.organization.id), class: "tipitright locate_contact_list_link", title: "Go to #{org.organization.name}" }.uniq.join("<br/>").html_safe %></div></td> 
 </tr>
 <% end %>

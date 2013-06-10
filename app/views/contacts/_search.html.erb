@@ -34,7 +34,7 @@
       </div>
       <div class="field">
         <label for="status"><span class="title"><%= t('general.status') %></span></label>
-        <%= select_tag :status, options_for_select(OrganizationalRole::FOLLOWUP_STATUSES.collect {|s| [s.titleize, s]}, params[:status]), include_blank: true, :class=>"search_status"%>
+        <%= select_tag :status, options_for_select(OrganizationalPermission::FOLLOWUP_STATUSES.collect {|s| [s.titleize, s]}, params[:status]), include_blank: true, :class=>"search_status"%>
       </div>
       <br/>
       <div class="field">
@@ -45,19 +45,19 @@
       </div>
       </br>
       <div class="field">
-      	<% condition = params[:role].present? && params[:do_search].present? %>
+      	<% condition = params[:permission].present? && params[:do_search].present? %>
       	<div>
-		      <label for="role"><span class="title"><%= t('general.role') %></span></label>
-		      <%=raw I18n.t("general.label_select_description", element: raw(select_tag :role_tag, options_for_select(Role::LABEL_SEARCH_FILTERS, params[:role_tag] ||= Role::ANY_SELECTED_LABEL[1]))) %>
+		      <label for="permission"><span class="title"><%= t('general.permission') %></span></label>
+		      <%=raw I18n.t("general.label_select_description", element: raw(select_tag :permission_tag, options_for_select(Permission::LABEL_SEARCH_FILTERS, params[:permission_tag] ||= Permission::ANY_SELECTED_LABEL[1]))) %>
 
       		<div class="icon help tipitright help_bubble_keyword" title="<%= t('general.label_search_help') %>"></div>
         </div>
-				<div class="label_space" id="search_roles_container">
+				<div class="label_space" id="search_permissions_container">
 					<div class="label_list">
-						<% current_organization.role_set.each do |role| %>
+						<% current_organization.permission_set.each do |permission| %>
 							<div class="label_item">
-								<%= check_box_tag "role[]", role.id, condition && params[:role].include?(role.id.to_s), id: "search_role_#{role.id}", class: "search_role_checkbox" %>
-								<%= role %>
+								<%= check_box_tag "permission[]", permission.id, condition && params[:permission].include?(permission.id.to_s), id: "search_permission_#{permission.id}", class: "search_permission_checkbox" %>
+								<%= permission %>
 							</div>
 						<% end %>
 					</div>

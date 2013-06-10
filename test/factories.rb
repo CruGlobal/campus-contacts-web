@@ -31,6 +31,13 @@ FactoryGirl.define do
     comment "Sample Comment #{Factory.next(:count)}"
     privacy_setting 'everyone'
   end
+  
+  factory :interaction_type do
+    association :organization
+    name "Sample Interaction Type #{Factory.next(:count)}"
+    i18n "sample_interaction_type_#{Factory.next(:count)}"
+    icon "icon/path"
+  end
 
   factory :group_membership do
     association :group
@@ -204,7 +211,7 @@ FactoryGirl.define do
 
   factory :access_token, class: Rack::OAuth2::Server::AccessToken do
     code "9d68af577f8a4c9076752c9699d2ac2ace64f9dcb407897f754439096cedbfca"
-    scope "userinfo contacts followup_comments contact_assignment roles organization_info"
+    scope "userinfo contacts followup_comments contact_assignment permissions labels organization_info"
   end
 
   factory :user_with_authentication, parent: :user do
@@ -236,11 +243,20 @@ FactoryGirl.define do
     end
   end
 
-  factory :organizational_role do
+  factory :organizational_permission do
     association :organization
     association :person
-    association :role
+    association :permission
     followup_status "attempted_contact"
+  end
+  
+  factory :permission do
+    name "permission #{Factory.next(:count)}"
+  end
+  
+  factory :label do
+    association :organization
+    name "label #{Factory.next(:count)}"
   end
 
   factory :organizational_label do
@@ -440,11 +456,6 @@ FactoryGirl.define do
   factory :import do
     association :user
     association :organization
-  end
-
-  factory :role do
-    association :organization
-    name        {"role #{Factory.next(:count)}"}
   end
 
   factory :infobase_user, class: Ccc::InfobaseUser do

@@ -33,7 +33,7 @@ class PersonTest < ActiveSupport::TestCase
     should "notify person_transfer with 'notified' = false" do
       @admin = Factory(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
-      @admin_role = Factory(:organizational_role, person: @admin, organization: @org2, role: Role.admin)
+      @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org2, permission: Permission.admin)
       
       transfer1 = Factory(:person_transfer, person: @person1, new_organization: @org2, 
         old_organization: @org1, transferred_by: @admin)
@@ -49,7 +49,7 @@ class PersonTest < ActiveSupport::TestCase
     should "not notify person_transfer with deleted org" do
       @admin = Factory(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
-      @admin_role = Factory(:organizational_role, person: @admin, organization: @org1, role: Role.admin)
+      @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org1, permission: Permission.admin)
       
       transfer1 = Factory(:person_transfer, person: @person1, new_organization_id: 99999, 
         old_organization: @org1, transferred_by: @admin)
@@ -67,7 +67,7 @@ class PersonTest < ActiveSupport::TestCase
     should "not notify person_transfer with 'notified' = true" do
       @admin = Factory(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
-      @admin_role = Factory(:organizational_role, person: @admin, organization: @org2, role: Role.admin)
+      @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org2, permission: Permission.admin)
       
       transfer1 = Factory(:person_transfer, person: @person1, new_organization: @org2, 
         old_organization: @org1, transferred_by: @admin)
@@ -84,7 +84,7 @@ class PersonTest < ActiveSupport::TestCase
     end
     should "not notify person_transfer from org with admin without email and raise an error" do
       @admin = Factory(:person)
-      @admin_role = Factory(:organizational_role, person: @admin, organization: @org2, role: Role.admin)
+      @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org2, permission: Permission.admin)
       
       transfer1 = Factory(:person_transfer, person: @person1, new_organization: @org2, 
         old_organization: @org1, transferred_by: @admin)
@@ -116,7 +116,7 @@ class PersonTest < ActiveSupport::TestCase
     should "not notify person_transfer with invalid person" do
       @admin = Factory(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
-      @admin_role = Factory(:organizational_role, person: @admin, organization: @org2, role: Role.admin)
+      @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org2, permission: Permission.admin)
       transfer1 = Factory(:person_transfer, person_id: 0, new_organization: @org2, 
         old_organization: @org1, transferred_by: @admin)
         
@@ -159,7 +159,7 @@ class PersonTest < ActiveSupport::TestCase
     should "notify new_person with 'notified' = false" do
       @admin = Factory(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
-      @admin_role = Factory(:organizational_role, person: @admin, organization: @org1, role: Role.admin)
+      @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org1, permission: Permission.admin)
       
       newperson1 = Factory(:new_person, person: @person1, organization: @org1)
       newperson2 = Factory(:new_person, person: @person2, organization: @org1)
@@ -173,7 +173,7 @@ class PersonTest < ActiveSupport::TestCase
     should "not notify new_person with deleted org" do
       @admin = Factory(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
-      @admin_role = Factory(:organizational_role, person: @admin, organization: @org1, role: Role.admin)
+      @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org1, permission: Permission.admin)
       
       newperson1 = Factory(:new_person, person: @person1, organization: @org1)
       newperson2 = Factory(:new_person, person: @person2, organization_id: 99999)
@@ -189,7 +189,7 @@ class PersonTest < ActiveSupport::TestCase
     should "not notify new_person with 'notified' = true" do
       @admin = Factory(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
-      @admin_role = Factory(:organizational_role, person: @admin, organization: @org1, role: Role.admin)
+      @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org1, permission: Permission.admin)
       
       newperson1 = Factory(:new_person, person: @person1, organization: @org1)
       newperson2 = Factory(:new_person, person: @person2, organization: @org1, notified: true)
@@ -204,7 +204,7 @@ class PersonTest < ActiveSupport::TestCase
     end
     should "not notify new_person from org with admin without email and raise an error" do
       @admin = Factory(:person)
-      @admin_role = Factory(:organizational_role, person: @admin, organization: @org1, role: Role.admin)
+      @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org1, permission: Permission.admin)
       
       newperson1 = Factory(:new_person, person: @person1, organization: @org1)
       newperson2 = Factory(:new_person, person: @person2, organization: @org1)
@@ -232,7 +232,7 @@ class PersonTest < ActiveSupport::TestCase
     should "not notify new_person with invalid peron" do
       @admin = Factory(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
-      @admin_role = Factory(:organizational_role, person: @admin, organization: @org1, role: Role.admin)
+      @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org1, permission: Permission.admin)
       newperson1 = Factory(:new_person, person_id: 0, organization: @org1)
         
       results = Batch.new_person_notify

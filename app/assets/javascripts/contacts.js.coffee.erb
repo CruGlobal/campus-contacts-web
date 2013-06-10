@@ -369,7 +369,7 @@ $ ->
     $('#keep_contact').attr('checked','checked')
     $.ajax
       type: 'POST'
-      url: '/organizational_roles/move_to'
+      url: '/organizational_permissions/move_to'
       data: 'from_id='+from_id+'&to_id='+to_id+'&keep_contact='+keep_contact+'&ids='+ids
       success: (data) ->
         $('#global_loader').hide()
@@ -395,7 +395,7 @@ $ ->
         person += $(element).attr('value') + ","
 
     add_another = false
-    $('<a href="/groups/' + group  + '/group_memberships?person_id=' + person + '&role=member&render_in_contacts=true&add_another=' + add_another + '" data-method="post" data-remote="true"></a>')
+    $('<a href="/groups/' + group  + '/group_memberships?person_id=' + person + '&permission=member&render_in_contacts=true&add_another=' + add_another + '" data-method="post" data-remote="true"></a>')
     .appendTo('body')
     .click()
     .remove()
@@ -407,15 +407,15 @@ $ ->
 
   $('#assign_search .label a').live 'click', (e)->
     e.preventDefault()
-    role = $('#assign_to').val($(this).closest('li').attr('data-role')).val()
+    permission = $('#assign_to').val($(this).closest('li').attr('data-permission')).val()
     show_success = true
     if window.location.pathname == '/contacts'
       $('.id_checkbox:checked').each ->
         person_id = $(this).val()
         $.ajax
           type: 'POST',
-          url: '/people/update_roles',
-          data: 'role_ids='+role+'&person_id='+person_id+'&include_old_roles=yes'
+          url: '/people/update_permissions',
+          data: 'permission_ids='+permission+'&person_id='+person_id+'&include_old_permissions=yes'
           error: show_success = false
         $('#main').load('/contacts .index.carea')
         $('#left').load('/contacts .block')
@@ -427,8 +427,8 @@ $ ->
         person_id = $(this).val()
         $.ajax
           type: 'POST',
-          url: '/people/update_roles',
-          data: 'role_ids='+role+'&person_id='+person_id+'&include_old_roles=yes'
+          url: '/people/update_permissions',
+          data: 'permission_ids='+permission+'&person_id='+person_id+'&include_old_permissions=yes'
           error: show_success = false
         $('#main').load('/contacts/mine .mine.carea')
         $('#left').load('/contacts/mine .block')
@@ -439,8 +439,8 @@ $ ->
       person_id = $('.assign.person_headerlink').attr('data-id')
       $.ajax
           type: 'POST',
-          url: '/people/update_roles',
-          data: 'role_ids='+role+'&person_id='+person_id+'&include_old_roles=yes'
+          url: '/people/update_permissions',
+          data: 'permission_ids='+permission+'&person_id='+person_id+'&include_old_permissions=yes'
           error: show_success = false
       $.hideDialog($("#assign_search"))
       if show_success
@@ -700,7 +700,7 @@ $ ->
     false
 
 	$("#search_clear_selected_labels").live "click", ->
-		$(".search_role_checkbox").removeAttr("checked")
+		$(".search_permission_checkbox").removeAttr("checked")
 		$.fn.search_status()
 
 	$(".search_status").live "change", ->
@@ -741,7 +741,7 @@ $ ->
           $("#search_locate_contact_loading").hide()
     false
 $.fn.search_status = () ->
-	label_contacts = $("#search_role_2")
+	label_contacts = $("#search_permission_2")
 	check = $(".search_status :selected").val() != ""
 	label_contacts.attr("checked", check)
 	label_contacts.attr("disabled", check)

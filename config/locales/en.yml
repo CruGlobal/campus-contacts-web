@@ -23,19 +23,22 @@ en:
       keep_contact: "Check the box to leave a copy of the contact in the org."
     messages:
       question_too_long: "WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages."
-  roles:
+  permissions:
+    admin: Admin
+    user: User
+    no_permissions: No Permissions
+  labels:
     index:
       title: "%{org} Labels"
     admin: Admin
-    contact: Contact
-    missionhub_user: MissionHub User
-    archived: Archived
+    user: User
+    no_labels: No Labels
     views:
-      organizational_roles: "Organizational Labels"
-      system_roles: "System Labels"
-      create_role: "Create New Label"
-      edit_role: "Edit Label"
-      delete_role: "Delete Label"
+      organizational_labels: "Organizational Labels"
+      system_labels: "System Labels"
+      create_label: "Create New Label"
+      edit_label: "Edit Label"
+      delete_label: "Delete Label"
       update: "Update"
       create: "Create"
       name: "Name"
@@ -83,14 +86,14 @@ en:
     surveys: "Surveys"
     people: "People"
     keywords: "Keywords"
-    roles: "Labels"
+    permissions: "Labels"
     back_to_dashboard: "Back To My Contacts"
     create_a_survey: Create a survey
     settings: Settings
     cru: "Cru"
   general:
     transfer: "Transfer"
-    roles_applied: "labels have been applied."
+    permissions_applied: "labels have been applied."
     no_recipient_in_comment: "You didn't select any people to comment on."
     no_recipient_in_send_comment: "You have to select at least 1 recipient/person to comment on."
     comment_is_blank: "Please enter your comment."
@@ -110,7 +113,7 @@ en:
     country: Country
     zip: Zip
     alert: Alert
-    role: Label
+    permission: Label
     save: 'Save'
     show: Show
     delete: Delete
@@ -172,8 +175,8 @@ en:
       no_user_account: "<font color='red'>Required email information missing to add this person as a Leader.</font>"
   people:
     create:
-      error_creating_leader_no_valid_email: "<font color='red'>Cannot create Person with leader role without a valid email</font>"
-      error_creating_admin_no_valid_email: "<font color='red'>Cannot create Person with admin role without a valid email</font>"
+      error_creating_leader_no_valid_email: "<font color='red'>Cannot create Person with leader permission without a valid email</font>"
+      error_creating_admin_no_valid_email: "<font color='red'>Cannot create Person with admin permission without a valid email</font>"
       firstname_error: "<font color='red'>First name is required.</font>"
       phone_number_error: "<font color='red'>Invalid phone number</font>"
       email_taken: "<font color='red'>Oops! This email address is already being used. Please email <b>support@missionhub.com</b> with the EMAIL address and NAME of the person whom you want to add the email to.</font>"
@@ -201,12 +204,12 @@ en:
       filter: 'Search'
       locate_contact: 'Contact Location'
       year_in_school: 'Year in School'
-      manage_roles: 'Manage Labels'
+      manage_labels: 'Manage Labels'
       send_sms: Text
       sent_messages: Sent
       send_email: Email
       group_comment: Add Comment
-      apply_roles: 'Apply Labels'
+      apply_labels: 'Apply Labels'
       no_people: "Sorry, there are no people involved here."
       displaying: "Displaying %{start} - %{finish} of %{total}"
       merge_people: "Merge People"
@@ -252,7 +255,7 @@ en:
     advanced_search:
       first_name: 'First Name'
       last_name: 'Last Name'
-      role: 'Label'
+      permission: 'Label'
       email: 'Email Address'
       phone: 'Phone Number'
       basic_search: 'Toggle Basic Search'
@@ -636,7 +639,7 @@ en:
     create:
       success: "Succesfully updated %{name}'s profile"
       email_taken: "Oops! This email address is already being used. Please email support@missionhub.com with the EMAIL address and NAME of the person whom you want to add the email to."
-    role_assign_success: 'Successfully assigned labels.'
+    permission_assign_success: 'Successfully assigned labels.'
     assign: Assign
     unassign: 'Unassign'
     add_contact: "Add Contact"
@@ -652,7 +655,7 @@ en:
       completed: Completed
     leader:
       delete_confirm: "Are you sure you want to remove %{person} as a leader?"
-      delete_confirm_with_instructions: "If you want to retain %{person} in your organization you must first assign them another role or label, click CANCEL, go to the Directory screen and 'Add Label' such as involved or alumni, then remove them as a leader. If you want to remove them completely from your organization, click OK."
+      delete_confirm_with_instructions: "If you want to retain %{person} in your organization you must first assign them another permission or label, click CANCEL, go to the Directory screen and 'Add Label' such as involved or alumni, then remove them as a leader. If you want to remove them completely from your organization, click OK."
       archive_confirm: "%{person} will be moved to archives."
     leader_form:
       start_typing: "Start typing a name to find a person to make a leader:"
@@ -1213,7 +1216,7 @@ en:
   batch:
     new_person_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, there are new contacts in your organization. Please login to missionhub.com as soon as possible to followup the contacts. Below is the list of %{contacts_count} new contacts:"
     person_transfer_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, you have been sent new contacts. Please login to missionhub.com as soon as possible to followup the contacts. There may be more information about the contacts in the comment section of their individual profile. If not, you may want to contact the senders at their email address. Below is the list of %{contacts_count} contacts sent:"
-  organizational_roles:
+  organizational_permissions:
     cannot_delete_admin_error: "You cannot remove <b>%{names}</b> since you are going to remove all the admins in this organization!"
     cannot_delete_self_as_admin_error: "As an ADMIN you cannot remove yourself! Please assign another individual as an ADMIN for this organization and then ask that \"new ADMIN\" to remove your ADMIN label."
     moving_to_same_org: "You are just moving people to the same org they are from!"

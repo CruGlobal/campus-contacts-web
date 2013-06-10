@@ -3,28 +3,28 @@
 </li>
 <li>
   <ul id="labels_list" class="indent expandable" data-height="244">
-    <% @display_roles = current_organization.role_set %>
-    <% @display_roles.each_with_index do |role,i| %>
+    <% @display_permissions = current_organization.permission_set %>
+    <% @display_permissions.each_with_index do |permission,i| %>
       <%=raw "<div id='more_labels' style='display:none;'>" if i == 6 %>
       <%
         if params[:include_archived]
-          count = @people_unfiltered.where('organizational_roles.role_id' => role.id).count
+          count = @people_unfiltered.where('organizational_permissions.permission_id' => permission.id).count
         else
-          count = @people_unfiltered.where('organizational_roles.role_id' => role.id, 'organizational_roles.archive_date' => nil).count
+          count = @people_unfiltered.where('organizational_permissions.permission_id' => permission.id, 'organizational_permissions.archive_date' => nil).count
         end
       %>
       <li class="leader" style="<%= 'display:none' if count == 0 %>">
-        <span class="name tipitright" title="<%= role.to_s %>">
-          <% trimmed_role =  truncate(role.to_s, length: 23, omission: "...") %>
-          <% role_name = role.organization_id == 0 ? content_tag(:b,trimmed_role) : trimmed_role %>
-          <%= link_to(role_name, {controller: 'contacts', :role => role.id, :include_archived => params[:include_archived]}) %>
+        <span class="name tipitright" title="<%= permission.to_s %>">
+          <% trimmed_permission =  truncate(permission.to_s, length: 23, omission: "...") %>
+          <% permission_name = trimmed_permission %>
+          <%= link_to(permission_name, {controller: 'contacts', :permission => permission.id, :include_archived => params[:include_archived]}) %>
         </span>
         (<%= count %>)
       </li>
     <% end %>
-    <%=raw "</div>" if @display_roles.size > 7 %>
+    <%=raw "</div>" if @display_permissions.size > 7 %>
   </ul>
-  <% if @display_roles.size > 7 %>
+  <% if @display_permissions.size > 7 %>
     <a href="#labels_list" class="moredown more_link" data-id="more_labels">
       <span>
         <strong>+</strong> <%= t('contacts.sidebar.show_more') %>

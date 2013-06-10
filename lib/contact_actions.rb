@@ -46,8 +46,8 @@ module ContactActions
 
       if @person.save
         if params[:labels].present?
-          params[:labels].each do |role_id|
-            OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(@person.id, current_organization.id, role_id, added_by_id: current_user.person.id) if role_id.present?
+          params[:labels].each do |permission_id|
+            OrganizationalPermission.find_or_create_by_person_id_and_organization_id_and_permission_id(@person.id, current_organization.id, permission_id, added_by_id: current_user.person.id) if permission_id.present?
           end
         end
 
@@ -58,7 +58,7 @@ module ContactActions
         NewPerson.create(person_id: @person.id, organization_id: @organization.id)
 
         create_contact_at_org(@person, @organization)
-        @person.unachive_contact_role(@organization)
+        @person.unachive_contact_permission(@organization)
 
         if params[:assign_to_me] == 'true'
           ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
@@ -68,7 +68,7 @@ module ContactActions
 				if @add_to_group_tag = params[:add_to_group_tag] == "true"
     			@group = @organization.groups.find(params[:add_to_group])
 		      @group_membership = @group.group_memberships.find_or_initialize_by_person_id(@person.id)
-		      @group_membership.role = params[:add_to_group_role]
+		      @group_membership.permission = params[:add_to_group_permission]
 		      @group_membership.save
 				end
         
@@ -77,7 +77,7 @@ module ContactActions
           wants.mobile { redirect_to :back }
           wants.js do
             @assignments = ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).group_by(&:person_id)
-            @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, role_id: Role::CONTACT_ID, person_id: @person).map {|r| [r.person_id, r]}]
+            @permissions = Hash[OrganizationalPermission.active.where(organization_id: @organization.id, permission_id: Permission::NO_PERMISSIONS_ID, person_id: @person).map {|r| [r.person_id, r]}]
             @answers = generate_answers(Person.where(id: @person.id), @organization, @questions)
           end
           wants.json { render json: @person.to_hash_basic(@organization) }

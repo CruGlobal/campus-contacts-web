@@ -15,13 +15,13 @@
   </head>
   <body>
     <%= render 'fb_init' %>
-		<div data-role="page">
-       <div data-role="header">
-         <div data-role="header" role="banner">
+		<div data-permission="page">
+       <div data-permission="header">
+         <div data-permission="header" permission="banner">
            <h1 style='font-family:helvetica'><%= t('.login') %></h1>
          </div>
       </div>
-	    <div data-role="content">
+	    <div data-permission="content">
         <% title t('.welcome') %>
         <% if mhub? %>
           <% if !@survey || [0, 1].include?(@survey.login_option) %>

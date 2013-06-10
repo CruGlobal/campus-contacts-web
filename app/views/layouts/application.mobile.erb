@@ -18,21 +18,21 @@
   </head>
   <body>
     <%= render 'fb_init' %>
-		<div data-role="page">
+		<div data-permission="page">
 			<%- unless params[:simple] == 'true' -%>
-				<div data-role="header">
+				<div data-permission="header">
 	    		<div class="current" id="home">
 
-			        <div data-role="header" role="banner" data-backbtn="false">
-			          <h1 class="ui-title" tabindex="0" role="heading"><%=h yield(:title) %></h1>
+			        <div data-permission="header" permission="banner" data-backbtn="false">
+			          <h1 class="ui-title" tabindex="0" permission="heading"><%=h yield(:title) %></h1>
                 <% if cookies[:survey_mode].present? && cookies[:survey_id].present? %>
-                  <%= link_to(t('nav.logout'), sign_out_url(next: start_survey_url(cookies[:survey_id])), "data-role" => "button", rel: "external")  %>
+                  <%= link_to(t('nav.logout'), sign_out_url(next: start_survey_url(cookies[:survey_id])), "data-permission" => "button", rel: "external")  %>
                 <% end %>
 			        </div>
 				  </div>
 			  </div>
 			<%- end -%>
-      <div data-role="content">
+      <div data-permission="content">
 		    <%= yield %>
 		  </div>
 	  </div>

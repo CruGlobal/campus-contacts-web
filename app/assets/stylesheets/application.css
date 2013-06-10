@@ -3,14 +3,14 @@
  *= require people
  *= require organizations
  *= require imports
- *= require roles
+ *= require permissions
  *= require messages
  *= require groups
  *= require surveys
  *= require survey_responses
  *= require interactions
  *= require mh_profile_style
- *= require mh_roles_labels_style
+ *= require mh_permissions_labels_style
  *= require jquery.qtip2
  *= require jquery.chosen
  *= require superfish

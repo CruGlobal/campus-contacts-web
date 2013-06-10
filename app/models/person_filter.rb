@@ -15,8 +15,8 @@ class PersonFilter
       filtered_people = filtered_people.where('people.id' => @filters[:ids].split(','))
     end
 
-    if @filters[:roles]
-      filtered_people = filtered_people.where('organizational_roles.role_id' => @filters[:roles].split(','))
+    if @filters[:permissions]
+      filtered_people = filtered_people.where('organizational_permissions.permission_id' => @filters[:permissions].split(','))
     end
 
     if @filters[:first_name_like]
@@ -73,8 +73,8 @@ class PersonFilter
     end
 
     if @filters[:followup_status]
-      filtered_people = filtered_people.where('organizational_roles.followup_status' => @filters[:followup_status].split(','))
-      filtered_people = filtered_people.includes(:organizational_roles) unless filtered_people.to_sql.include?('`organizational_roles`')
+      filtered_people = filtered_people.where('organizational_permissions.followup_status' => @filters[:followup_status].split(','))
+      filtered_people = filtered_people.includes(:organizational_permissions) unless filtered_people.to_sql.include?('`organizational_permissions`')
     end
 
     if @filters[:assigned_to]
