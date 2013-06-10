@@ -23,7 +23,4 @@
     <%= t('.not_found', terminology: current_organization.terminology.downcase) %>
   </p>
 <% end %>
-
-<%= link_to(t('.add_new_person_group'), '#', 
-  :id => 'add_new_person_group_button', 
-  :class => 'add_new_person_group inlinebutton') %>
+<%= link_to(t('.add_new_person_group'), "#", class: 'add_contact inlinebutton', id: 'add_new_person_group_button') %>
