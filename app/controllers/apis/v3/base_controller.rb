@@ -11,17 +11,49 @@ class Apis::V3::BaseController < ApplicationController
 
   def authenticate_user!
     unless params[:secret] || oauth_access_token || params[:facebook_token]
-      render json: {errors: ["You need to pass in the your Organization's API secret or a user's oauth token."]},
+      render json: {errors: ["You need to pass in the your Organization's API secret or a user's oauth or facebook token."]},
         status: :unauthorized,
         callback: params[:callback]
       return false
     end
-    unless current_organization
+
+    if params[:facebook_token]
+      begin
+        unless @current_user = Authentication.where(provider: 'facebook', mobile_token: params[:facebook_token]).first.try(:user)
+          fb_user = MiniFB.get(params[:facebook_token], 'me')
+          auth = Authentication.where(provider: 'facebook', uid: fb_user.id).first
+          if auth
+            auth.update_attributes(mobile_token: params[:facebook_token])
+            @current_user = auth.user
+          else
+            render json: {errors: ["The person corresponding to that token has never logged into the web interface"], code: 'user_not_found'},
+              status: :unauthorized,
+              callback: params[:callback]
+            return false
+          end
+        end
+      rescue MiniFB::FaceBookError => e
+        render json: {errors: ["The facebook token you passed is invalid"], code: 'invalid_facebook_token'},
+          status: :unauthorized,
+          callback: params[:callback]
+        return false
+      end
+    end
+
+    if oauth_access_token && !current_user
+      render json: {errors: ["The oauth you sent over didn't match a user or organization on MissionHub"]},
+        status: :unauthorized,
+        callback: params[:callback]
+      return false
+    end
+
+    if params[:secret] && !current_organization
       render json: {errors: ["The secret you sent over didn't match a user or organization on MissionHub"]},
         status: :unauthorized,
         callback: params[:callback]
       return false
     end
+
     unless current_user
       render json: {errors: ["The organization associated with this API secret must have at least one admin, or you must pass in an oauth access token for a user with access to this org."]},
         status: :unauthorized,
@@ -32,19 +64,9 @@ class Apis::V3::BaseController < ApplicationController
 
   def current_user
     unless @current_user
-      case
-      when oauth_access_token
+      if oauth_access_token
         @current_user = User.from_access_token(oauth_access_token)
-      when params[:facebook_token]
-        begin
-          logger.debug(params[:facebook_token])
-          fb_user = MiniFB.get(params[:facebook_token], 'me')
-          logger.debug(fb_user)
-          @current_user = Authentication.where(provider: 'facebook', uid: fb_user.id).first.try(:user)
-        rescue MiniFB::FaceBookError => e
-          logger.debug(e)
-        end
-      else
+      elsif params[:secret]
         @current_user = current_organization.parent_organization_admins.first.try(:user)
       end
     end
@@ -53,21 +75,21 @@ class Apis::V3::BaseController < ApplicationController
 
   def current_organization
     unless @current_organization
-      if (oauth_access_token || params[:facebook_token]) && current_user
-        primary_organization = current_user.person.primary_organization
-        @current_organization = params[:organization_id] ? current_user.person.all_organization_and_children.find(params[:organization_id]) : primary_organization
-      else
+      if params[:secret]
         api_org = Rack::OAuth2::Server::Client.find_by_secret(params[:secret]).try(:organization)
         if api_org
           @current_organization = params[:organization_id] ? api_org.subtree.find(params[:organization_id]) : api_org
         end
+      elsif current_user
+        primary_organization = current_user.person.primary_organization
+        @current_organization = params[:organization_id] ? current_user.person.all_organization_and_children.find(params[:organization_id]) : primary_organization
       end
     end
     @current_organization
   end
 
   def oauth_access_token
-    oauth_access_token ||= (params[:access_token] || oauth_access_token_from_header)
+    @oauth_access_token ||= (params[:access_token] || oauth_access_token_from_header)
   end
 
 
