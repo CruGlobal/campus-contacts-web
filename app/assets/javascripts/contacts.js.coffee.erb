@@ -349,12 +349,22 @@ $ ->
           $(this).dialog('close')
           $(this).dialog('destroy')
     false
+
+  $('.unassign_link a').live 'click', (e)->
+    $(this).parents('.unassign_link').hide()
+    leader = $('.leftmenu .leader[data-id='+$(this).attr('data-assigned_to_id')+']')
+    $(this).parents('.controls').find('.assigned_to').text("")
+    $('.count', leader).html(Number($('.count', leader).html()) - 1)
+    $.toggleLoader('ac_button_bar','Unassigning...')
     
   $('#assign_search .assign_button').live 'click', ->
-    leader = $('.leftmenu .leader[data-id=' + $('#assign_to').val() + ']')
+    if $('#assign_to').val() != ""
+      leader = $('.leftmenu .leader[data-id=' + $('#assign_to').val() + ']')
+    else
+      leader = "Unassigned"
     $.fn.assignTo(leader)
     $.toggleLoader('profile_name','Assigning...')
-    $.toggleLoader('ac_button_bar','Assigning to Leader...')
+    $.toggleLoader('ac_button_bar','Assigning...')
     $.hideDialog($("#assign_search"))
 
   $('#assign_search .leader a').live 'click', (e)->
@@ -803,23 +813,31 @@ $.fn.moveToDnc = (dragObject) ->
   $.rails.handleRemote($('#move_to_dnc'))
 
 $.fn.assignTo = (leader, skip_remote) ->
-  leader_name = $('.name a', leader).text()
+  if leader == "Unassigned"
+    leader_name = "Unassigned"
+  else
+    leader_name = $('.name a', leader).text()
   $('.id_checkbox:checked').each ->
     row = $('tr[data-id=' + $(this).val() + ']')
     assigned_to = $('.assigned_to', row)
     if leader_name == 'Unassigned'
       $('.unassign_link', row).hide()
+      leader_id = $('.unassign_link a', row).attr('data-assigned_to_id')
+      old_leader = $('.leftmenu .leader[data-id='+leader_id+']')
+      $('.count', old_leader).html(Number($('.count', old_leader).html()) - 1)
+      $('.assigned_to', row).text("")
+      $.toggleLoader('ac_button_bar','Unassigning...')
     else
       $('.unassign_link', row).show()
 
-    unless assigned_to.html() == leader_name
-
+    if assigned_to.html() != leader_name && leader_name != "Unassigned"
+      
       $('.count', leader).html(Number($('.count', leader).html()) + 1)
       if assigned_to.html() == ''
         $('#unassigned_count').html(Number($('#unassigned_count').html()) - 1)
 
       else
-        $('.leader a').each ->
+        $('.leader .name a').each ->
           if $(this).text() == assigned_to.html() || (leader.hasClass('unassigned') && assigned_to.html() == '')
             count = $(this).closest('.leader').find('.count')
             count.html(Number(count.html()) - 1)
@@ -831,24 +849,18 @@ $.fn.assignTo = (leader, skip_remote) ->
         assigned_to.text(leader_name)
         #hide assigned to
         $('#person_title').hide()
+
+      $('.unassign_link a', row).attr('title', 'Unassign contact from ' + leader_name)
+      $('.unassign_link a', row).attr('data-assigned_to_id', leader.attr('data-id'))
+      $.fn.tip()
+      assigned_to.text(leader_name)
+      leader.show()
     # hide people assigned to someone other than the current or if we're moving to dnc
     assign_to = $('#new_contact_assignment').find("#assign_to").val()
     if assign_to == "do_not_contact" || ($.params.assigned_to != leader_name)
       unless skip_remote
         $.rails.handleRemote($('#new_contact_assignment'))
-
       row.find('.id_checkbox').attr('checked', false)
-      if $('.leader.selected').size() > 0
-        row.hide()
-        disp_string = $('.searchstat').html().trim()
-        disp_total = parseInt(disp_string.split(' of ')[1]) - 1
-        disp_over = parseInt(disp_string.split(' - ')[1].split(' of ')[0]) - 1
-        disp_num = disp_string.split(' - ')[0].split(' ')[1]
-
-        if disp_total <= 0 || disp_over <= 0
-          $('.searchstat').html("")
-        else
-          $('.searchstat').html("Displaying " + disp_num + " - " + disp_over + " of " + disp_total)
 
   $('#assign_to').val('')
 

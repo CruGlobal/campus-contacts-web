@@ -70,8 +70,9 @@
   </td>
   <td class="cell controls" align="right">
     <%- assigned_to = (assignments[person.id] || []).first.try(:assigned_to) %>
+    <span class="assigned_to" style="display:none;"><%= assigned_to %></span>
     <span class="unassign_link" style="<%= 'display:none' unless assigned_to.present? || params[:dnc].present? %>">
-      <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign tipit", :title => "#{t('contacts.index.unassign_contact')} from #{assigned_to}") %>
+      <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign tipitleft", :title => "#{t('contacts.index.unassign_contact')} from #{assigned_to}", "data-assigned_to_id" => "#{assigned_to.id if assigned_to}") %>
     </span>
     <% if params[:dnc] == 'true' %>
       <%= link_to(t('contacts.index.delete_contact'), person_path(person), :method => :delete, :remote => true, :class => "icon delete dnc tipit", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.destroy_confirm')) %>
