@@ -825,6 +825,8 @@ $.fn.assignTo = (leader, skip_remote) ->
       leader_id = $('.unassign_link a', row).attr('data-assigned_to_id')
       old_leader = $('.leftmenu .leader[data-id='+leader_id+']')
       $('.count', old_leader).html(Number($('.count', old_leader).html()) - 1)
+      if Number($('.count', old_leader).html()) == 0
+        old_leader.hide()
       $('.assigned_to', row).text("")
       $.toggleLoader('ac_button_bar','Unassigning...')
     else
