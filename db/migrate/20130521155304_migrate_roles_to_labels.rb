@@ -1,6 +1,7 @@
 class Label < ActiveRecord::Base
 end
 class Role < ActiveRecord::Base
+  has_many :organizational_roles
 end
 class OrganizationalRole < ActiveRecord::Base
 end

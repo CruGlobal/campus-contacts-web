@@ -1,7 +1,5 @@
 class Person < ActiveRecord::Base
 end
-class Permission < ActiveRecord::Base
-end
 class OrganizationalPermission < ActiveRecord::Base
 end
 class RemoveMultiplePermissions < ActiveRecord::Migration
