@@ -23,8 +23,6 @@
   </h1>
 </div>
 
-
-
 <div id="ac_button_bar">
 	<ul class="button_bar" id="menu_assign_link">
 		<li class="action_lightblue"><a href="#">Assign</a></li>
@@ -147,4 +145,13 @@
   </div>
   <%= render 'shared/bulk_vcard_dialog' %>
   <%= render 'shared/bulk_send_msg' %>
+
+
+  <div id="hidden_questions_div" style="display:none">
+    <div id="hidden_questions_loader">
+      <%= image_tag 'loader.gif'%><br/>Fetching Questions...
+    </div>
+    <div id="hidden_questions_content"></div>
+  </div>
+  
 </div>

@@ -712,7 +712,7 @@ $ ->
       $('#check_all').prop('checked', false)
     else
       $.a(t('contacts.index.none_checked'))
-  $('#contacts_controller .index a.hide').live 'click', ->
+  $('#contacts_controller .index a.hide, #contacts_controller .all_contacts a.hide').live 'click', ->
     $(".field.user_defined#search_question_field_"+$(this).attr('data-id')).fadeOut()
     $('#hidden_questions_div').hide()
     $('.' + $(this).attr('data-class')).fadeOut()
