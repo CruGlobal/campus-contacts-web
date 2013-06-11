@@ -470,7 +470,7 @@ DEPENDENCIES
   nokogiri
   oj
   omniauth
-  omniauth-facebook (~> 1.0.0.rc2)
+  omniauth-facebook
   paper_trail (~> 2)
   paperclip!
   rack-offline

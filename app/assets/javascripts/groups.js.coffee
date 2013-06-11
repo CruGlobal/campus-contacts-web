@@ -44,7 +44,7 @@ $ ->
       $('.approve_join').hide()
 
 	$(".add_group_member, .add_group_leader").live "click", ->	
-		$("#add_to_group_role, #role").val($(this).attr("data-role"))
+		$("#role").val($(this).attr("data-role"))
 		$('#member_search').attr('title', $(this).attr("data-desc"))
 		$.fn.showSearchBox()
 		false
@@ -67,8 +67,7 @@ $ ->
       response([]);
       
 	$('#add_new_person_group_button').live 'click', ->
-		$("#member_search .explain_search, #member_search_form, #member_search_results, .remove_add_new_person_to_group, .explain").hide()
-		$(".add_new_person_group_member_butons, #add_person_group_div, #new_member_form").show()
+		$(".remove_add_new_person_to_group, .explain").hide()
 		name = $('#member_search_name').val().split(' ')
 		$('#person_first_name').val(name[0])
 		$('#person_last_name').val(name[1])
@@ -82,7 +81,7 @@ $.mh.addNewGroupMemberContact = (add_more) ->
 		$.a(t('contacts.index.no_name_message'))
 		return false	
 	$("#add_another").val(add_more) 
-	$("#add_to_group_tag").val("true")
+	$("#add_to_group_tag").val(1)
 	$("#add_to_group").val($("#add_to_group_id").val())
 	$.rails.handleRemote(form)
 	false
@@ -96,16 +95,18 @@ $.fn.showSearchBox = ->
 		height:488,
 		width:600,
 		modal: true,
+    close: (event, ui) ->
+      $("#add_contact_div").dialog("destroy")
 		buttons: [
 			text: t("application.add_contact.save_and_close"),
 			"class": "add_new_person_group_member_butons hidden",			      
 			click: -> 
-				$.mh.addNewGroupMemberContact('false')
+        $.mh.saveContact(false)
 		,
 			text: t("application.add_contact.save_and_add"),
 			"class": "add_new_person_group_member_butons hidden",			      			
 			click: -> 
-				$.mh.addNewGroupMemberContact('true')
+        $.mh.saveContact(true)
 		,
 		text: "Cancel",
 		click: ->

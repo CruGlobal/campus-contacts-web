@@ -165,6 +165,7 @@ ActiveRecord::Schema.define(:version => 20130524183956) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "token"
+    t.string   "mobile_token"
   end
 
   add_index "authentications", ["uid", "provider"], :name => "uid_provider", :unique => true
@@ -188,14 +189,6 @@ ActiveRecord::Schema.define(:version => 20130524183956) do
   add_index "clients", ["display_name"], :name => "index_clients_on_display_name", :unique => true
   add_index "clients", ["link"], :name => "index_clients_on_link", :unique => true
   add_index "clients", ["organization_id"], :name => "index_clients_on_organization_id"
-
-  create_table "conditions", :force => true do |t|
-    t.integer "question_sheet_id", :null => false
-    t.integer "trigger_id",        :null => false
-    t.string  "expression",        :null => false
-    t.integer "toggle_page_id",    :null => false
-    t.integer "toggle_id"
-  end
 
   create_table "contact_assignments", :force => true do |t|
     t.integer  "assigned_to_id"
@@ -447,29 +440,6 @@ ActiveRecord::Schema.define(:version => 20130524183956) do
 
   add_index "merge_audits", ["merge_looser_id", "merge_looser_type"], :name => "merge_looser"
   add_index "merge_audits", ["mergeable_id", "mergeable_type"], :name => "mergeable"
-
-  create_table "messages", :force => true do |t|
-    t.integer  "organization_id"
-    t.integer  "person_id"
-    t.integer  "receiver_id"
-    t.string   "from"
-    t.string   "to"
-    t.string   "reply_to"
-    t.string   "subject"
-    t.text     "message"
-    t.string   "sent_via"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-  end
-
-  create_table "mh_surveys", :force => true do |t|
-    t.string   "title"
-    t.integer  "organization_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-  end
-
-  add_index "mh_surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
 
   create_table "new_people", :force => true do |t|
     t.integer  "person_id"
