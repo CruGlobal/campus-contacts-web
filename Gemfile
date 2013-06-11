@@ -63,6 +63,7 @@ gem 'wiser_date', '~> 0.2.9'
 
 group :development, :test do
   gem 'awesome_print'
+  gem 'quiet_assets'
 end
 
 group :test do

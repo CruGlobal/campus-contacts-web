@@ -287,6 +287,8 @@ GEM
     polyamorous (0.5.0)
       activerecord (~> 3.0)
     polyglot (0.3.3)
+    quiet_assets (1.0.2)
+      railties (>= 3.1, < 5.0)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -473,6 +475,7 @@ DEPENDENCIES
   omniauth-facebook
   paper_trail (~> 2)
   paperclip!
+  quiet_assets
   rack-offline
   railroady
   rails (= 3.2.12)
