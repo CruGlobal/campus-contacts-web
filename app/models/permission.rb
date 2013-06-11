@@ -20,7 +20,7 @@ class Permission < ActiveRecord::Base
     :order => "permissions.name ASC"
   }}
   scope :arrange_all, lambda {{
-    order: "FIELD#{self.default_permissions_for_field_string(self::DEFAULT_PERMISSIONS)}"
+    order: "FIELD#{self.i18n_field_plus_default_permissions_for_field_string(self::DEFAULT_PERMISSIONS)}"
   }}
 
   def members_from_permission_org(org_id, include_archive = false)
@@ -62,6 +62,22 @@ class Permission < ActiveRecord::Base
     r[0] = ""
     r = "(permissions.i18n," + r
     r
+  end
+
+  def permission_contacts_from_org(org)
+    contact_ids = OrganizationalPermission.where(permission_id: id, organization_id: org.id).uniq
+    people = org.people.where(id: contact_ids.collect(&:person_id))
+    people.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id, 'organizational_permissions.archive_date' => nil)
+  end
+
+  def permission_contacts_from_org_with_archived(org)
+    contact_ids = OrganizationalPermission.where(permission_id: id, organization_id: org.id).uniq
+    people = org.people.where(id: contact_ids.collect(&:person_id))
+    people.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id)
+  end
+  
+  def to_s
+    name
   end
 
   if Permission.table_exists? # added for travis testing

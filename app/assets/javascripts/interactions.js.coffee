@@ -1,5 +1,6 @@
 $.fn.tip = () ->
   $('.tip').qtip({position: {my: 'bottom center', at: 'top center'}, style: {classes: 'qtip-blue qtip-shadow'}})
+  $('.tipitleft').qtip({position: {my: 'center right', at: 'center left'}, style: {classes: 'qtip-blue qtip-shadow'}})
   $('.tipitright').qtip({position: {my: 'top left', at: 'bottom right'}, style: {classes: 'qtip-blue qtip-shadow'}})
     
 $ ->
@@ -44,7 +45,6 @@ $ ->
     e.preventDefault()
     $('.profile_checkbox').prop('checked',true)
     $('#assign_to_button').click()
-    $.toggleLoader('profile_name','Assigning...')
   
   $('#assign_popup_cancel_button').live 'click', (e)->
     e.preventDefault()

@@ -1172,17 +1172,17 @@ class Person < ActiveRecord::Base
   def friends_in_orgnization(org)
     friends.includes(:organizational_permissions).where('organizational_permissions.organization_id = ?',org.id)
   end
-
-  def assigned_organizational_permissions(organization_id)
-    permissions.where('organizational_permissions.organization_id' => organization_id)
-  end
   
   def assigned_organizational_labels(organization_id)
     labels.where('organizational_labels.organization_id' => organization_id)
   end
 
+  def assigned_organizational_permissions(organization_id)
+    permissions.where('organizational_permissions.organization_id' => organization_id, 'organizational_permissions.archive_date' => nil)
+  end
+  
   def assigned_organizational_permissions_including_archived(organization_id)
-    permissions_including_archived.where('organizational_permissions.organization_id' => organization_id)
+    permissions.where('organizational_permissions.organization_id = ? AND organizational_permissions.archive_date IS NOT NULL', organization_id)
   end
 
   def is_permission_archived?(org_id, permission_id)

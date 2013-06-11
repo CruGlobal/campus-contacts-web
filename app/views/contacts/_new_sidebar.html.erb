@@ -1,0 +1,118 @@
+<ul class="ac_dropdown_list">
+	<li class="ac_dropdown_list_header">
+    <a href="#" class="side_toggle" style="font-size:10px; position:relative; bottom:1px;">&#x25BC;</a>
+    Leaders
+  </li>
+  <div id='leader_list' class="side_list">
+    <% @organization.leaders.each_with_index do |person| %>
+      <% if params[:include_archived] %>
+        <% count = person.assigned_contacts_limit_org_with_archived(@organization).collect(&:id).count %>
+      <% else %>
+        <% count = person.assigned_contacts_limit_org(@organization).collect(&:id).count %>
+      <% end %>
+      <li class="entry leader <%= 'selected' if params[:assigned_to].to_i == person.id %>" data-id="<%= person.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
+        <% if params[:include_archived] %>
+          <div class="name">
+            <%= link_to person, all_contacts_path(assigned_to: person.id, include_archived: 'true') %>
+          </div>
+        <% else %>
+          <div class="name">
+            <%= link_to person, all_contacts_path(assigned_to: person.id) %>
+          </div>
+        <% end %>
+        (<span class="count"><%= count %></span>)
+        <% if can? :manage, @organization %>
+          <%= link_to(image_tag('delete.png'), leader_path(person.id), method: :delete, remote: true, class: 'delete_icon tip', title: 'Remove Leader', data: { confirm: t('general.remove_leader_confirm', person: person) }) %>
+        <% end %>
+      </li>
+    <% end %>
+  </div>
+</ul>
+
+
+<ul class="ac_dropdown_list">
+	<li class="ac_dropdown_list_header">
+    <a href="#" class="side_toggle" style="font-size:10px; position:relative; bottom:1px;">&#x25BC;</a>
+    Labels
+  </li>
+  <div id='label_list' class="side_list">
+    <% @organization.labels.arrange_all.each do |label| %>
+      <% if params[:include_archived] %>
+        <% count = label.label_contacts_from_org_with_archived(@organization).collect(&:id).count %>
+      <% else %>
+        <% count = label.label_contacts_from_org(@organization).collect(&:id).count %>
+      <% end %>
+      <li class="entry label <%= 'selected' if params[:assigned_to].to_i == label.id %>" data-id="<%= label.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
+        <% if params[:include_archived] %>
+          <div class="name">
+            <%= link_to label, all_contacts_path(label: label.id, include_archived: 'true') %>
+          </div>
+          (<%= count %>)
+        <% else %>
+          <div class="name">
+            <%= link_to label, all_contacts_path(label: label.id) %>
+          </div>
+          (<%= count %>)
+        <% end %>
+      </li>
+    <% end %>
+  </div>
+</ul>
+
+
+<ul class="ac_dropdown_list">
+	<li class="ac_dropdown_list_header">
+    <a href="#" class="side_toggle" style="font-size:10px; position:relative; bottom:1px;">&#x25BC;</a>
+    Permissions
+  </li>
+  <div id='permission_list' class="side_list">
+    <% @organization.permissions.arrange_all.each do |permission| %>
+      <% if params[:include_archived] %>
+        <% count = permission.permission_contacts_from_org_with_archived(@organization).collect(&:id).count %>
+      <% else %>
+        <% count = permission.permission_contacts_from_org(@organization).collect(&:id).count %>
+      <% end %>
+      <li class="entry permission <%= 'selected' if params[:assigned_to].to_i == permission.id %>" data-id="<%= permission.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
+        <% if params[:include_archived] %>
+          <div class="name">
+            <%= link_to permission, all_contacts_path(permission: permission.id, include_archived: 'true') %>
+          </div>
+          (<%= count %>)
+        <% else %>
+          <div class="name">
+            <%= link_to permission, all_contacts_path(permission: permission.id) %>
+          </div>
+          (<%= count %>)
+        <% end %>
+      </li>
+    <% end %>
+  </div>
+</ul>
+
+
+<ul class="ac_dropdown_list">
+	<li class="ac_dropdown_list_header">
+    <a href="#" class="side_toggle" style="font-size:10px; position:relative; bottom:1px;">&#x25BC;</a>
+    More
+  </li>
+  <div class="side_list">
+    <li class="entry more">
+      <div class="name">
+        <%= link_to(t('contacts.index.my_friends'), contacts_path(assigned_to: 'friends')) %>
+      </div>
+      (<%= current_person.contact_friends(current_organization).collect(&:id).count %>)
+    </li>
+    <li class="entry more">
+      <div class="name">
+        <%= link_to(t('people.index.archived_label'), controller: 'contacts', :archived => true) %>
+      </div>
+      (<%= current_organization.people.archived(current_organization.id).count %>)
+    </li>
+    <li class="entry more">
+      <div class="name">
+        <%= link_to(t('contacts.index.dnc'), contacts_path(dnc: true)) %>
+      </div>
+      (<%= @organization.dnc_contacts.count %>)
+    </li>
+  </div>
+</ul>

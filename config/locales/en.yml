@@ -92,6 +92,7 @@ en:
     settings: Settings
     cru: "Cru"
   general:
+    remove_leader_confirm: "Are you sure you want to remove %{person} from leaders?"
     transfer: "Transfer"
     permissions_applied: "labels have been applied."
     no_recipient_in_comment: "You didn't select any people to comment on."
@@ -619,6 +620,15 @@ en:
     profile_info:
       email_contact_info: "Email Me This Contact Info"
   contacts:
+    all_contacts:
+      title: "All Contacts"
+      first_name: "First Name"
+      last_name: "Last Name"
+      status: "Status"
+      gender: "Gender"
+      phone_number: "Phone"
+      labels: "Labels"
+      last_survey: "Last Survey"
     sidebar:
       show_more: "Show More"
       show_less: "Show Less"

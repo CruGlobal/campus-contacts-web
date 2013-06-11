@@ -1,0 +1,30 @@
+$('#sidebar_lists').html("<%= escape_javascript(render partial: 'contacts/new_sidebar') %>")
+$('#sidebar_lists').addClass('loaded')
+
+$(document).ready(function(){
+  var li;
+
+  $(".leftmenu .leader, .leftmenu .dnc, .leftmenu .completed").droppable({
+    activeClass: 'ui-state-highlight',
+    accept: ".handle",
+    drop: function(event, ui) {
+      var leader;
+      if ($(this).hasClass("leader")) {
+        leader = $(this);
+        leader.effect('highlight', {}, 'slow');
+        $('#assign_to').val(leader.attr('data-id'));
+        return $.fn.assignTo(leader);
+      }else if ($(this).hasClass("dnc")) {
+        li = $(this);
+        li.effect('highlight', {}, 'slow');
+        return $.fn.moveToDnc(ui.draggable);
+      }else if ($(this).hasClass("completed")) {
+        li = $(this);
+        li.effect('highlight', {}, 'slow');
+        return $.fn.moveToCompleted(ui.draggable);
+      }
+    }
+  });
+
+  $.fn.tip()
+})

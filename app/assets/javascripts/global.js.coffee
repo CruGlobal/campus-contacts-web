@@ -24,12 +24,18 @@ $ ->
     include_archived = $.url(window.location.href).param("include_archived")
     if include_archived
       sidebar_url = '/display_sidebar?include_archived=' + include_archived
+      new_sidebar_url = '/display_new_sidebar?include_archived=' + include_archived
     else
       sidebar_url = '/display_sidebar'
+      new_sidebar_url = '/display_new_sidebar'
     if $('#sidebar_div').is(':visible')
       $.ajax
         type: 'GET',
         url: sidebar_url
+    else if $('#ac_sidebar').is(':visible')
+      $.ajax
+        type: 'GET',
+        url: new_sidebar_url
 
   $('a#survey_keywords_mode_link').siblings('ul').width(300)
 

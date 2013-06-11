@@ -12,5 +12,6 @@
 <% if @person.present? %>
   $('.feed_content .tab_content.profile_info .view_space').html("<%= escape_javascript(render partial: 'interactions/profile_info') %>")
   $('.feed_content .tab_content.profile_info .edit_space').html("<%= escape_javascript(render partial: 'interactions/profile_info_edit') %>")
-  $.toggleLoader('profile_name','')
 <% end %>
+$.toggleLoader('profile_name','')
+$.toggleLoader('ac_button_bar','')

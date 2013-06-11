@@ -29,7 +29,7 @@ class Label < ActiveRecord::Base
     :order => "labels.name ASC"
   }}
   scope :arrange_all, lambda {{
-    order: "FIELD#{self.default_labels_for_field_string(self::DEFAULT_CRU_LABELS)}"
+    order: "FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS)} DESC"
   }}
   
   def self.involved
@@ -67,6 +67,22 @@ class Label < ActiveRecord::Base
     r = "(labels.i18n," + r
     r
   end
+
+  def label_contacts_from_org(org)
+    contact_ids = OrganizationalLabel.where(label_id: id, organization_id: org.id).uniq
+    people = org.people.where(id: contact_ids.collect(&:person_id))
+    people.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id, 'organizational_permissions.archive_date' => nil)
+  end
+
+  def label_contacts_from_org_with_archived(org)
+    contact_ids = OrganizationalLabel.where(label_id: id, organization_id: org.id).uniq
+    people = org.people.where(id: contact_ids.collect(&:person_id))
+    people.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id)
+  end
+  
+  def to_s
+    name
+  end
   
   if Label.table_exists? # added for travis testing
     LEADER_ID = leader.id
@@ -74,5 +90,8 @@ class Label < ActiveRecord::Base
     INVOLVED_ID = involved.id
     ALUMNI_ID = alumni.id
   end
+  ANY_SELECTED_LABEL = ["Any",1]
+	ALL_SELECTED_LABEL = ["All",2]
+	LABEL_SEARCH_FILTERS = [ANY_SELECTED_LABEL, ALL_SELECTED_LABEL]
   
 end
