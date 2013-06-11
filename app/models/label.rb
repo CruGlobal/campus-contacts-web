@@ -2,8 +2,8 @@ class Label < ActiveRecord::Base
   attr_accessible :i18n, :name, :organization_id, :created_at, :updated_at
   # added :created_at and :updated_at for migration only
 
-  DEFAULT_LABELS = ["involved", "engaged_disciple", "leader", "alumni"] # in DSC ORDER by SUPERIORITY
-  CRU_ONLY_LABELS = ["sent"]
+  DEFAULT_LABELS = ["involved", "leader", "alumni"] # in DSC ORDER by SUPERIORITY
+  CRU_ONLY_LABELS = ["sent", "engaged_disciple"]
   DEFAULT_CRU_LABELS = DEFAULT_LABELS + CRU_ONLY_LABELS
 
   has_many :people, through: :organizational_labels
