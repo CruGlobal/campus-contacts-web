@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130524183956) do
+ActiveRecord::Schema.define(:version => 20130607170230) do
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -474,9 +474,9 @@ ActiveRecord::Schema.define(:version => 20130524183956) do
     t.datetime "updated_at",      :null => false
   end
 
-  create_table "organizational_roles", :force => true do |t|
+  create_table "organizational_permissions", :force => true do |t|
     t.integer  "person_id"
-    t.integer  "role_id"
+    t.integer  "permission_id"
     t.date     "start_date"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -486,8 +486,8 @@ ActiveRecord::Schema.define(:version => 20130524183956) do
     t.datetime "archive_date"
   end
 
-  add_index "organizational_roles", ["organization_id", "role_id", "followup_status"], :name => "role_org_status"
-  add_index "organizational_roles", ["person_id", "organization_id", "role_id"], :name => "person_role_org", :unique => true
+  add_index "organizational_permissions", ["organization_id", "permission_id", "followup_status"], :name => "role_org_status"
+  add_index "organizational_permissions", ["person_id", "organization_id", "permission_id"], :name => "person_role_org", :unique => true
 
   create_table "organizations", :force => true do |t|
     t.string   "name"
@@ -549,6 +549,13 @@ ActiveRecord::Schema.define(:version => 20130524183956) do
   add_index "people", ["si_person_id"], :name => "index_people_on_si_person_id"
   add_index "people", ["sp_person_id"], :name => "index_people_on_sp_person_id"
   add_index "people", ["user_id"], :name => "fk_ssmUserId"
+
+  create_table "permissions", :force => true do |t|
+    t.string   "name"
+    t.string   "i18n"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "person_photos", :force => true do |t|
     t.integer  "person_id"
@@ -671,14 +678,6 @@ ActiveRecord::Schema.define(:version => 20130524183956) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
-  end
-
-  create_table "roles", :force => true do |t|
-    t.integer  "organization_id"
-    t.string   "name"
-    t.string   "i18n"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "rules", :force => true do |t|
@@ -896,7 +895,7 @@ ActiveRecord::Schema.define(:version => 20130524183956) do
 
   add_foreign_key "organization_memberships", "organizations", :name => "organization_memberships_ibfk_2", :dependent => :delete
 
-  add_foreign_key "organizational_roles", "organizations", :name => "organizational_roles_ibfk_1", :dependent => :delete
+  add_foreign_key "organizational_permissions", "organizations", :name => "organizational_permissions_ibfk_1", :dependent => :delete
 
   add_foreign_key "sms_keywords", "organizations", :name => "sms_keywords_ibfk_4", :dependent => :delete
   add_foreign_key "sms_keywords", "surveys", :name => "sms_keywords_ibfk_3", :dependent => :nullify

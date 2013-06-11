@@ -39,9 +39,9 @@ class GroupsController < ApplicationController
 
     if params[:search].present? && params[:search][:meta_sort].present?
       sort_query = params[:search][:meta_sort].gsub('.',' ')
-      @people = @people.includes(:group_memberships) if sort_query.include?('role')
+      @people = @people.includes(:group_memberships) if sort_query.include?('permission')
 			order_string = sort_query.gsub('first_name','people.first_name')
-                               .gsub('role','group_memberships.role')
+                               .gsub('permission','group_memberships.permission')
     else
       order_string = "people.first_name"
     end

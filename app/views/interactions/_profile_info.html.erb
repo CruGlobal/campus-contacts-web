@@ -2,110 +2,113 @@
   <button class="red_accent" id="info_display_edit_button">Update Info</button>
 </div>
 
-<div class="feed_box info_display">
+<% if @person.contact_permission_for_org(current_organization) || @assigned_tos.present? || @person.gender.present?%>
+  <div class="feed_box info_display">
+    <% if @person.contact_permission_for_org(current_organization) %>
+    	<div class="status col_left">Status:</div>
+    	<div class="status col_right view" id="followup_status_div">
+        <%- contact_permission = @person.contact_permission_for_org(current_organization).try(:followup_status) %>
+        <%= contact_permission.titleize if contact_permission.present? %>
+    	</div>
+    <% end %>
 
-  
-  <% if @person.contact_role_for_org(current_organization) %>
-  	<div class="status col_left">Status:</div>
-  	<div class="status col_right view" id="followup_status_div">
-      <%- contact_role = @person.contact_role_for_org(current_organization).try(:followup_status) %>
-      <%= contact_role.titleize if contact_role.present? %>
-  	</div>
-  <% end %>
+    <% if @assigned_tos.present? %>
+    	<div class="gender col_left">Assigned To:</div>
+    	<div class="gender col_right" id="assigned_to_div">
+        <%= @assigned_tos.collect { |a| a.assigned_to.try(:name) }.compact.to_sentence %>
+      </div>
+    <% end %>
 
-  <% if @assigned_tos.present? %>
-  	<div class="gender col_left">Assigned To:</div>
-  	<div class="gender col_right" id="assigned_to_div">
-      <%= @assigned_tos.collect { |a| a.assigned_to.try(:name) }.compact.to_sentence %>
-    </div>
-  <% end %>
+    <% if @person.gender.present? %>
+    	<div class="gender col_left"><%= t('general.gender') %>:</div>
+    	<div class="gender col_right"><%= @person.gender %></div>
+    <% end %>
 
-  <% if @person.gender.present? %>
-  	<div class="gender col_left"><%= t('general.gender') %>:</div>
-  	<div class="gender col_right"><%= @person.gender %></div>
-  <% end %>
+  </div>
+<% end %>
 
-</div>
+<% email_addresses = @person.email_addresses %>
+<% phone_numbers = @person.phone_numbers %>
+<% addresses = @person.addresses %>
 
+<% if (addresses.present? && addresses.first.address1.present?) || phone_numbers.present? || email_addresses.present? %>
+  <div class="feed_box info_display">
 
 
-<div class="feed_box info_display">
-
-
-  <% email_addresses = @person.email_addresses %>
-  <% if email_addresses.present? %>
-  	<div class="email col_left"><%= t('general.email') %>:</div>
-  	<div class="email col_right">
-      <% @person.email_addresses.each do |email| %>
-        <div class="email_record">
-          <%= mail_to email.email %>
-        </div>
-    		<% if email.primary %>
-          <div class="info_tag">Primary</div>
-        <% end %>
-        <br/>
-      <% end %>
-  	</div>
-  <% end %>
-
-  <% phone_numbers = @person.phone_numbers %>
-  <% if phone_numbers.present? %>
-    <div class="phone col_left"><%= t('general.phone') %>:</div>
-    <div class="phone col_right">
-      <% phone_numbers.each do |phone| %>
-        <%= link_to phone.pretty_number, "tel:#{phone.number}" %>
-        <div class="info_tag"><%= phone.location.titleize %></div>
-    		<% if phone.primary %>
-          <div class="info_tag">Primary</div>
-        <% end %>
-        <br/>
-      <% end %>
-    </div>
-  <% end %>
-
-  <% addresses = @person.addresses %>
-  <% if addresses.present? && addresses.first.address1.present?  %>
-  	<div class="address col_left"><%= t('general.address') %>:</div>
-  	<div class="address col_right">
-      <% addresses.each do |address| %>
-        <% if address.address1.present? %>
-          <div class="info_tag"><%= address.address_type.titleize %></div>
-      		<div class="multi_line" id="address_line_1"><%= address.address1 %></div>
-      		<div class="multi_line" id="address_line_2"><%= address.address2 %></div>
-      		<div class="multi_line" id="address_line_3"><%= address.address3 %></div>
-      		<div class="multi_line" id="address_line_4"><%= address.address4 %></div>
-      		<div class="multi_line" id="address_city_state_zip">
-            <%= "#{address.city}, #{address.state} #{address.zip}" %>
+    <% if email_addresses.present? %>
+    	<div class="email col_left"><%= t('general.email') %>:</div>
+    	<div class="email col_right">
+        <% @person.email_addresses.each do |email| %>
+          <div class="email_record">
+            <%= mail_to email.email %>
           </div>
-      		<div class="multi_line"><%= address.country %></div>
-        <% end %>
-      <% end %>
-  	</div>
-  <% end %>
-
-	<div class="col_right multi_line" id="email_this_info">
-    <%= link_to(raw("<button class='action_gray'>#{t('.email_contact_info')}</button>"), '', class: 'send_contact_info', 'data-person_id' => @person.id) %>
-    <%= render :partial => 'shared/send_contact_info_dialog', :locals => { person: @person } %>
-	</div>
-
-  <% if @person.fb_uid.present? %>
-  	<div class="fb_link col_left">Facebook:</div>
-  	<div class="fb_link col_right">
-      <%= link_to("view #{@person.first_name}'s profile", "http://www.facebook.com/profile.php?id=#{@person.fb_uid}", target: '_blank') %>
-  	</div>
-  <% end %>
-
-  <% friends = @person.friends_in_orgnization(current_organization) %>
-  <% if friends.present? %>
-    <div class="col_left" id="fb_link">Friends:</div>
-    <div class="col_right" id="fb_friends">
-    	<div id="fb_friends_thumbs">
-        <% friends.each do |friend| %>
-    			<div class="fb_thumb">
-            <%= link_to image_tag("https://graph.facebook.com/#{friend.fb_uid}/picture?type=square"), profile_path(friend.id), target: "_blank", title: "#{friend.name}" %>
-    			</div>
+      		<% if email.primary %>
+            <div class="info_tag">Primary</div>
+          <% end %>
+          <br/>
         <% end %>
     	</div>
-    </div>
-  <% end %>
-</div>
+    <% end %>
+
+    <% if phone_numbers.present? %>
+      <div class="phone col_left"><%= t('general.phone') %>:</div>
+      <div class="phone col_right">
+        <% phone_numbers.each do |phone| %>
+          <%= link_to phone.pretty_number, "tel:#{phone.number}" %>
+          <div class="info_tag"><%= phone.location.titleize %></div>
+      		<% if phone.primary %>
+            <div class="info_tag">Primary</div>
+          <% end %>
+          <br/>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if addresses.present? && addresses.first.address1.present?  %>
+    	<div class="address col_left"><%= t('general.address') %>:</div>
+    	<div class="address col_right">
+        <% addresses.each do |address| %>
+          <% if address.address1.present? %>
+            <div class="info_tag"><%= address.address_type.titleize %></div>
+        		<div class="multi_line" id="address_line_1"><%= address.address1 %></div>
+        		<div class="multi_line" id="address_line_2"><%= address.address2 %></div>
+        		<div class="multi_line" id="address_line_3"><%= address.address3 %></div>
+        		<div class="multi_line" id="address_line_4"><%= address.address4 %></div>
+        		<div class="multi_line" id="address_city_state_zip">
+              <%= "#{address.city}, #{address.state} #{address.zip}" %>
+            </div>
+        		<div class="multi_line"><%= address.country %></div>
+          <% end %>
+        <% end %>
+    	</div>
+    <% end %>
+
+    <% if (addresses.present? && addresses.first.address1.present?) || phone_numbers.present? || email_addresses.present? %>
+    	<div class="col_right multi_line" id="email_this_info">
+        <%= link_to(raw("<button class='action_gray'>#{t('.email_contact_info')}</button>"), '', class: 'send_contact_info', 'data-person_id' => @person.id) %>
+        <%= render :partial => 'shared/send_contact_info_dialog', :locals => { person: @person } %>
+    	</div>
+    <% end %>
+
+    <% if @person.fb_uid.present? %>
+    	<div class="fb_link col_left">Facebook:</div>
+    	<div class="fb_link col_right">
+        <%= link_to("view #{@person.first_name}'s profile", "http://www.facebook.com/profile.php?id=#{@person.fb_uid}", target: '_blank') %>
+    	</div>
+    <% end %>
+
+    <% friends = @person.friends_in_orgnization(current_organization) %>
+    <% if friends.present? %>
+      <div class="col_left" id="fb_link">Friends:</div>
+      <div class="col_right" id="fb_friends">
+      	<div id="fb_friends_thumbs">
+          <% friends.each do |friend| %>
+      			<div class="fb_thumb">
+              <%= link_to image_tag("https://graph.facebook.com/#{friend.fb_uid}/picture?type=square"), profile_path(friend.id), target: "_blank", title: "#{friend.name}" %>
+      			</div>
+          <% end %>
+      	</div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

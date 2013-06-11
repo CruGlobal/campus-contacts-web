@@ -7,9 +7,9 @@ class ContactsController < ApplicationController
   before_filter :get_person
   before_filter :ensure_current_org
   before_filter :authorize
-  before_filter :roles_for_assign
+  before_filter :permissions_for_assign
 
-  rescue_from OrganizationalRole::InvalidPersonAttributesError do |exception|
+  rescue_from OrganizationalPermission::InvalidPersonAttributesError do |exception|
     #render 'update_leader_error'
   end
 
@@ -26,12 +26,12 @@ class ContactsController < ApplicationController
 
       wants.csv do
         fetch_contacts(true)
-        @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r] if r.role_id == Role::CONTACT_ID }]
+        @permissions = Hash[OrganizationalPermission.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r] if r.permission_id == Permission::NO_PERMISSIONS_ID }]
         @all_answers = generate_answers(@all_people, @organization, @questions, @surveys)
         @questions.select! { |q| !%w{first_name last_name phone_number email}.include?(q.attribute_name) }
         filename = @organization.to_s
         @all_people = @all_people.where('people.id IN (:ids)', ids: params[:only_ids].split(',')) if params[:only_ids].present?
-        csv = ContactsCsvGenerator.generate(@roles, @all_answers, @questions, @all_people, @organization)
+        csv = ContactsCsvGenerator.generate(@permissions, @all_answers, @questions, @all_people, @organization)
         send_data(csv, :filename => "#{filename} - Contacts.csv", :type => 'application/csv' )
       end
     end
@@ -58,10 +58,10 @@ class ContactsController < ApplicationController
 		# Search - enable "All contacts" for admins
 		all_contacts = is_admin? && term =~ /all/ ? [{:name=>"All (#{current_organization.all_people.count})", :id=>"ALL-PEOPLE"}] : []
 
-		# Search Roles
-		roles = current_organization.role_search(term)
+		# Search Permissions
+		permissions = current_organization.permission_search(term)
 		get_and_merge_unfiltered_people
-		roles_results = roles.collect{|p| {name: "#{p.name} (#{@people_unfiltered.where("role_id = ?", p.id).count})", id: "ROLE-#{p.id}"}}
+		permissions_results = permissions.collect{|p| {name: "#{p.name} (#{@people_unfiltered.where("permission_id = ?", p.id).count})", id: "ROLE-#{p.id}"}}
 
 		# Search Groups
 		groups = current_organization.group_search(term)
@@ -72,7 +72,7 @@ class ContactsController < ApplicationController
 		people = people.archived_not_included unless params[:include_archived].present?
 		people_results = people.collect{|p| {name: "#{p.name} - #{p.email.downcase}", id: p.id.to_s}}
 
-		@results = all_contacts + roles_results + groups_results + people_results
+		@results = all_contacts + permissions_results + groups_results + people_results
 
 		respond_to do |format|
 		  format.json { render json: @results.to_json }
@@ -85,10 +85,10 @@ class ContactsController < ApplicationController
 		# Search - enable "All contacts" for admins
 		all_contacts = is_admin? && term =~ /all/ ? [{:name=>"All (#{current_organization.all_people.count})", :id=>"ALL-PEOPLE"}] : []
 
-		# Search Roles
-		roles = current_organization.role_search(term)
+		# Search Permissions
+		permissions = current_organization.permission_search(term)
 		get_and_merge_unfiltered_people
-		roles_results = roles.collect{|p| {name: "#{p.name} (#{@people_unfiltered.where("role_id = ?", p.id).count})", id: "ROLE-#{p.id}"}}
+		permissions_results = permissions.collect{|p| {name: "#{p.name} (#{@people_unfiltered.where("permission_id = ?", p.id).count})", id: "ROLE-#{p.id}"}}
 
 		# Search Groups
 		groups = current_organization.group_search(term)
@@ -99,7 +99,7 @@ class ContactsController < ApplicationController
     people = people.archived_not_included unless params[:include_archived].present?
 		people_results = people.collect{|p| {name: "#{p.name} - #{p.primary_phone_number.pretty_number}", id: p.id.to_s}}
 
-		@results = all_contacts + roles_results + groups_results + people_results
+		@results = all_contacts + permissions_results + groups_results + people_results
 
 		respond_to do |format|
 		  format.json { render json: @results.to_json }
@@ -114,8 +114,8 @@ class ContactsController < ApplicationController
     fetch_mine
 
     @all_contacts = @all_people
-    @inprogress_contacts = @all_people.where("organizational_roles.followup_status <> 'completed'")
-    @completed_contacts = @all_people.where("organizational_roles.followup_status = 'completed'")
+    @inprogress_contacts = @all_people.where("organizational_permissions.followup_status <> 'completed'")
+    @completed_contacts = @all_people.where("organizational_permissions.followup_status = 'completed'")
     if params[:status] == 'completed'
       @all_people = @completed_contacts
     elsif params[:status] == 'in_progress'
@@ -232,10 +232,10 @@ class ContactsController < ApplicationController
 
   def send_reminder
     to_ids = params[:to].split(',')
-    missionhub_users = current_organization.missionhub_users.where(id: to_ids)
+    users = current_organization.users.where(id: to_ids)
 
-    if missionhub_users.present?
-      ContactsMailer.enqueue.reminder(missionhub_users.collect(&:email).compact, current_person.email, params[:subject], params[:body])
+    if users.present?
+      ContactsMailer.enqueue.reminder(users.collect(&:email).compact, current_person.email, params[:subject], params[:body])
     end
     render nothing: true
   end
@@ -275,7 +275,7 @@ class ContactsController < ApplicationController
         person = fetched_email.person
         if person.present?
           if person.first_name.downcase.strip == fname.downcase.strip && person.last_name.downcase.strip == lname.downcase.strip
-            if person.organizational_roles.where(:organization_id => current_organization).first
+            if person.organizational_permissions.where(:organization_id => current_organization).first
               code = '201'
             end
           else
@@ -293,9 +293,9 @@ class ContactsController < ApplicationController
     firstname = params[:fname]
     lastname = params[:lname]
     email = params[:email]
-    @manage_org_ids = current_person.organizational_roles.find_admin_or_leader
+    @manage_org_ids = current_person.organizational_permissions.find_admin_or_leader
     if @manage_org_ids
-      get_all_people = Person.where('organizational_roles.organization_id IN (?)', @manage_org_ids.collect(&:organization_id)).joins(:organizational_roles).uniq
+      get_all_people = Person.where('organizational_permissions.organization_id IN (?)', @manage_org_ids.collect(&:organization_id)).joins(:organizational_permissions).uniq
       if get_all_people.count > 0
         query = ""
         if firstname.present?
@@ -329,7 +329,7 @@ class ContactsController < ApplicationController
 
       # Filter results
       filter_archived_only if params[:archived].present?
-      filter_by_label if params[:role].present?
+      filter_by_label if params[:permission].present?
       filter_by_search if params[:do_search].present?
 
       # Sort & Limit Results
@@ -365,7 +365,7 @@ class ContactsController < ApplicationController
     end
 
     def build_people_scope
-      params[:assigned_to] = 'all' if params[:role].present?
+      params[:assigned_to] = 'all' if params[:permission].present?
       if params[:assigned_to].present?
         case params[:assigned_to]
         when 'all'
@@ -408,12 +408,12 @@ class ContactsController < ApplicationController
 
     def get_and_merge_unfiltered_people
       org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
-      @people_unfiltered = Person.where('organizational_roles.organization_id' => org_ids)
-                                 .where("organizational_roles.followup_status <> 'do_not_contact' OR organizational_roles.followup_status IS NULL")
-                                 .joins(:organizational_roles_including_archived)
+      @people_unfiltered = Person.where('organizational_permissions.organization_id' => org_ids)
+                                 .where("organizational_permissions.followup_status <> 'do_not_contact' OR organizational_permissions.followup_status IS NULL")
+                                 .joins(:organizational_permissions_including_archived)
 
       if params[:include_archived].blank? && params[:archived].blank?
-        @people_unfiltered = @people_unfiltered.where('organizational_roles.archive_date' => nil)
+        @people_unfiltered = @people_unfiltered.where('organizational_permissions.archive_date' => nil)
       end
       @people_scope = @people_scope.merge(@people_unfiltered) if @people_scope.present?
     end
@@ -429,18 +429,18 @@ class ContactsController < ApplicationController
     end
 
     def filter_by_label
-    	params[:role] = [params[:role]] unless params[:role].is_a?(Array)
-      if @roles = Role.select("id, name, i18n").where("id IN (?)",params[:role])
+    	params[:permission] = [params[:permission]] unless params[:permission].is_a?(Array)
+      if @permissions = Permission.select("id, name, i18n").where("id IN (?)",params[:permission])
         if params[:do_search].present?
           @header = I18n.t('contacts.index.matching_seach')
         else
-          @header = @roles.collect{|desc| (desc.i18n.present? ? desc.i18n : desc.name).try('titleize')}.to_sentence
+          @header = @permissions.collect{|desc| (desc.i18n.present? ? desc.i18n : desc.name).try('titleize')}.to_sentence
         end
 
-      	if params[:role_tag].present? && params[:role_tag].to_i == Role::ALL_SELECTED_LABEL[1]
+      	if params[:permission_tag].present? && params[:permission_tag].to_i == Permission::ALL_SELECTED_LABEL[1]
 					valid_ids = []
-			  	@roles.collect(&:id).each do |role|
-      			valid_ids << @people_scope.where('organizational_roles.role_id IN (?)', [role]).collect(&:id)
+			  	@permissions.collect(&:id).each do |permission|
+      			valid_ids << @people_scope.where('organizational_permissions.permission_id IN (?)', [permission]).collect(&:id)
 					end
 
 					filtered_ids = []
@@ -450,11 +450,11 @@ class ContactsController < ApplicationController
 
 					@people_scope = @people_scope.where("people.id IN (?)", filtered_ids)
       	else
-        	@people_scope = @people_scope.where("organizational_roles.role_id IN (?)", @roles.collect(&:id))
+        	@people_scope = @people_scope.where("organizational_permissions.permission_id IN (?)", @permissions.collect(&:id))
       	end
 
         if !params[:include_archived].present? && !params[:include_archived] == 'true'
-          @people_scope = @people_scope.where("organizational_roles.archive_date" => nil)
+          @people_scope = @people_scope.where("organizational_permissions.archive_date" => nil)
         end
       end
     end
@@ -491,7 +491,7 @@ class ContactsController < ApplicationController
         @people_scope = @people_scope.where("gender = ?", params[:gender].strip)
       end
       if params[:status].present?
-        @people_scope = @people_scope.where("organizational_roles.followup_status" => params[:status].strip)
+        @people_scope = @people_scope.where("organizational_permissions.followup_status" => params[:status].strip)
       end
       if params[:answers].present?
         params[:answers].each do |q_id, v|
@@ -579,8 +579,8 @@ class ContactsController < ApplicationController
 		    	@people_scope = @people_scope.order_by_primary_phone_number(sort_query)
 		    end
 
-	    	if ['role_id','last_name','first_name','gender'].any?{ |i| sort_query.include?(i) }
-					order_query = sort_query.gsub('role_id','organizational_roles.role_id')
+	    	if ['permission_id','last_name','first_name','gender'].any?{ |i| sort_query.include?(i) }
+					order_query = sort_query.gsub('permission_id','organizational_permissions.permission_id')
 																	.gsub('gender','ISNULL(people.gender), people.gender')
 																	.gsub('first_name', 'people.first_name')
 																	.gsub('last_name', 'people.last_name')
@@ -597,7 +597,7 @@ class ContactsController < ApplicationController
     end
 
     def fetch_mine
-      @all_people = Person.includes(:assigned_tos, :organizational_roles).where('contact_assignments.organization_id' => current_organization.id, 'organizational_roles.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_roles.role_id' => Role::CONTACT_ID).uniq
+      @all_people = Person.includes(:assigned_tos, :organizational_permissions).where('contact_assignments.organization_id' => current_organization.id, 'organizational_permissions.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_permissions.permission_id' => Permission::NO_PERMISSIONS_ID).uniq
     end
 
     def get_person

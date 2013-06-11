@@ -29,8 +29,8 @@ class Person < ActiveRecord::Base
   has_many :education_histories
   has_many :email_addresses, autosave: true, dependent: :destroy
   has_one :primary_email_address, class_name: "EmailAddress", foreign_key: "person_id", conditions: {primary: true}
-  has_one :primary_org_role, class_name: "OrganizationalRole", foreign_key: "person_id", conditions: {primary: true}
-  has_one :primary_org, through: :primary_org_role, source: :organization
+  has_one :primary_org_permission, class_name: "OrganizationalPermission", foreign_key: "person_id", conditions: {primary: true}
+  has_one :primary_org, through: :primary_org_permission, source: :organization
   has_many :answer_sheets
   has_many :contact_assignments, class_name: "ContactAssignment", foreign_key: "assigned_to_id", dependent: :destroy
   has_many :assigned_tos, class_name: "ContactAssignment", foreign_key: "person_id"
@@ -40,14 +40,14 @@ class Person < ActiveRecord::Base
   has_many :rejoicables, inverse_of: :person
 
   has_many :organization_memberships, inverse_of: :person
-  has_many :organizational_roles, conditions: {archive_date: nil}
-  has_one :contact_role, class_name: 'OrganizationalRole'
-  has_many :roles, through: :organizational_roles
-  has_many :organizational_roles_including_archived, class_name: "OrganizationalRole", foreign_key: "person_id"
-  has_many :roles_including_archived, through: :organizational_roles_including_archived, source: :role
+  has_many :organizational_permissions, conditions: {archive_date: nil}
+  has_one :contact_permission, class_name: 'OrganizationalPermission'
+  has_many :permissions, through: :organizational_permissions
+  has_many :organizational_permissions_including_archived, class_name: "OrganizationalPermission", foreign_key: "person_id"
+  has_many :permissions_including_archived, through: :organizational_permissions_including_archived, source: :permission
 
-  if Role.table_exists? # added for travis testing
-    has_many :organizations, through: :organizational_roles, conditions: ["status = 'active'"], uniq: true
+  if Permission.table_exists? # added for travis testing
+    has_many :organizations, through: :organizational_permissions, conditions: ["status = 'active'"], uniq: true
   end
 
   has_many :followup_comments, :class_name => "FollowupComment", :foreign_key => "commenter_id"
@@ -107,19 +107,19 @@ class Person < ActiveRecord::Base
 
   scope :find_by_date_created_before_date_given, lambda { |before_date| {
     :select => "people.*",
-    :joins => "LEFT JOIN organizational_roles AS ors ON people.id = ors.person_id",
-    :conditions => ["ors.role_id = ? AND ors.created_at <= ? AND ors.archive_date IS NULL", Role::CONTACT_ID, before_date]
+    :joins => "LEFT JOIN organizational_permissions AS ors ON people.id = ors.person_id",
+    :conditions => ["ors.permission_id = ? AND ors.created_at <= ? AND ors.archive_date IS NULL", Permission::NO_PERMISSIONS_ID, before_date]
   }}
 
-  scope :order_by_highest_default_role, lambda { |order, tables_already_joined = false| {
+  scope :order_by_highest_default_permission, lambda { |order, tables_already_joined = false| {
     :select => "people.*",
-    :joins => "#{'JOIN organizational_roles ON people.id = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id' unless tables_already_joined}",
-    :conditions => "roles.i18n IN #{Role.default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}",
-    :order => "FIELD#{Role.i18n_field_plus_default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}"
+    :joins => "#{'JOIN organizational_permissions ON people.id = organizational_permissions.person_id JOIN permissions ON organizational_permissions.permission_id = permissions.id' unless tables_already_joined}",
+    :conditions => "permissions.i18n IN #{Permission.default_permissions_for_field_string(order.include?("asc") ? Permission::DEFAULT_PERMISSIONS : Permission::DEFAULT_PERMISSIONS.reverse)}",
+    :order => "FIELD#{Permission.i18n_field_plus_default_permissions_for_field_string(order.include?("asc") ? Permission::DEFAULT_PERMISSIONS : Permission::DEFAULT_PERMISSIONS.reverse)}"
   } }
 
   scope :order_by_followup_status, lambda { |order| {
-    :order => "ISNULL(organizational_roles.followup_status) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_roles.#{order}"
+    :order => "ISNULL(organizational_permissions.followup_status) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_permissions.#{order}"
   } }
   
 
@@ -127,10 +127,10 @@ class Person < ActiveRecord::Base
   # Start of custom sorting for meta_search
 
   scope :sort_by_followup_status_asc,
-    order("ISNULL(organizational_roles.followup_status), organizational_roles.followup_status ASC")
+    order("ISNULL(organizational_permissions.followup_status), organizational_permissions.followup_status ASC")
 
   scope :sort_by_followup_status_desc,
-    order("ISNULL(organizational_roles.followup_status), organizational_roles.followup_status DESC")
+    order("ISNULL(organizational_permissions.followup_status), organizational_permissions.followup_status DESC")
 
   scope :sort_by_phone_number_asc,
     order("phone_numbers.number ASC}")
@@ -138,11 +138,11 @@ class Person < ActiveRecord::Base
   scope :sort_by_phone_number_desc,
     order("phone_numbers.number DESC}")
 
-  scope :sort_by_role_id_asc,
-    order("organizational_roles.role_id ASC")
+  scope :sort_by_permission_id_asc,
+    order("organizational_permissions.permission_id ASC")
 
-  scope :sort_by_role_id_desc,
-    order("organizational_roles.role_id DESC")
+  scope :sort_by_permission_id_desc,
+    order("organizational_permissions.permission_id DESC")
 
   scope :sort_by_last_survey_asc,
     order("ISNULL(ass.updated_at), MAX(ass.updated_at) DESC")
@@ -158,32 +158,25 @@ class Person < ActiveRecord::Base
     :order => "ISNULL(`phone_numbers`.number), `phone_numbers`.number #{order.include?("asc") ? 'ASC' : 'DESC'}"
   } }
 
-  scope :order_alphabetically_by_non_default_role, lambda { |order, tables_already_joined = false| {
-    :select => "people.*",
-    :joins => "#{'JOIN organizational_roles ON people.id = organizational_roles.person_id JOIN roles ON organizational_roles.role_id = roles.id' unless tables_already_joined}",
-    :conditions => "roles.name NOT IN #{Role.default_roles_for_field_string(order.include?("asc") ? Role::DEFAULT_ROLES : Role::DEFAULT_ROLES.reverse)}",
-    :order => "roles.name #{order.include?("asc") ? 'DESC' : 'ASC'}"
-  } }
-
   scope :find_friends_with_fb_uid, lambda { |person| { conditions: {fb_uid: Friend.followers(person)} } }
 
   scope :search_by_name_or_email, lambda { |keyword, org_id| {
     :select => "people.*",
-    :conditions => ["(org_roles.organization_id = #{org_id} AND (concat(first_name,' ',last_name) LIKE ? OR concat(last_name, ' ',first_name) LIKE ? OR emails.email LIKE ?))", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
-    :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = people.id LEFT JOIN organizational_roles AS org_roles ON people.id = org_roles.person_id"
+    :conditions => ["(org_permissions.organization_id = #{org_id} AND (concat(first_name,' ',last_name) LIKE ? OR concat(last_name, ' ',first_name) LIKE ? OR emails.email LIKE ?))", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
+    :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = people.id LEFT JOIN organizational_permissions AS org_permissions ON people.id = org_permissions.person_id"
   }}
 
   scope :email_search, lambda { |keyword, org_id| {
     :select => "people.*",
-    :conditions => ["(org_roles.organization_id = #{org_id} AND (concat(first_name,' ',last_name) LIKE ? OR concat(last_name, ' ',first_name) LIKE ? OR emails.email LIKE ?)) AND emails.email IS NOT NULL", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
-    :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = people.id LEFT JOIN organizational_roles AS org_roles ON people.id = org_roles.person_id",
+    :conditions => ["(org_permissions.organization_id = #{org_id} AND (concat(first_name,' ',last_name) LIKE ? OR concat(last_name, ' ',first_name) LIKE ? OR emails.email LIKE ?)) AND emails.email IS NOT NULL", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
+    :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = people.id LEFT JOIN organizational_permissions AS org_permissions ON people.id = org_permissions.person_id",
     :limit => 5
   }}
 
   scope :phone_search, lambda { |keyword, org_id| {
     :select => "people.*",
-    :conditions => ["(org_roles.organization_id = ? AND (first_name LIKE ? OR last_name LIKE ? OR phone_numbers.number LIKE ?)) AND phone_numbers.number IS NOT NULL AND phone_numbers.primary = 1", org_id, "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
-    :joins => "LEFT JOIN phone_numbers ON phone_numbers.person_id = people.id LEFT JOIN organizational_roles AS org_roles ON org_roles.person_id = people.id",
+    :conditions => ["(org_permissions.organization_id = ? AND (first_name LIKE ? OR last_name LIKE ? OR phone_numbers.number LIKE ?)) AND phone_numbers.number IS NOT NULL AND phone_numbers.primary = 1", org_id, "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
+    :joins => "LEFT JOIN phone_numbers ON phone_numbers.person_id = people.id LEFT JOIN organizational_permissions AS org_permissions ON org_permissions.person_id = people.id",
     :limit => 5
   }}
 
@@ -206,8 +199,8 @@ class Person < ActiveRecord::Base
     q << "(interactions.privacy_setting = 'everyone')"
     
     # filter parent
-    org_with_roles = viewer.organizational_roles.collect(&:organization_id).uniq
-    org_with_roles.each do |org_id|
+    org_with_permissions = viewer.organizational_permissions.collect(&:organization_id).uniq
+    org_with_permissions.each do |org_id|
       q << "(interactions.privacy_setting = 'parent' AND (organizations.ancestry LIKE '#{org_id}/%' OR organizations.ancestry LIKE '%/#{org_id}/%' OR organizations.ancestry LIKE '%/#{org_id}' OR organizations.ancestry = #{org_id} OR organizations.id = #{org_id}))"
     end
     
@@ -273,12 +266,12 @@ class Person < ActiveRecord::Base
     sent_messages.where("organization_id = ?", org_id).order('created_at DESC')
   end
 
-  def contact_role_for_org(org)
-    organizational_roles.where("organizational_roles.organization_id = ? AND organizational_roles.role_id = ?", org.id, Role::CONTACT_ID).first
+  def contact_permission_for_org(org)
+    organizational_permissions.where("organizational_permissions.organization_id = ? AND organizational_permissions.permission_id = ?", org.id, Permission::NO_PERMISSIONS_ID).first
   end
 
-  def missionhub_user_role_for_org(org)
-    organizational_roles.where("organizational_roles.organization_id = ? AND organizational_roles.role_id = ?", org.id, Role::MISSIONHUB_USER_ID).first
+  def user_permission_for_org(org)
+    organizational_permissions.where("organizational_permissions.organization_id = ? AND organizational_permissions.permission_id = ?", org.id, Permission::USER_ID).first
   end
 
   def completed_answer_sheets(organization)
@@ -290,9 +283,9 @@ class Person < ActiveRecord::Base
   end
 
   scope :get_archived, lambda { |org_id| {
-    :conditions => "organizational_roles.archive_date IS NOT NULL OR organizational_roles.role_id = #{Role::ARCHIVED_ID}",
+    :conditions => "organizational_permissions.archive_date IS NOT NULL",
     :group => "people.id",
-    :having => "COUNT(*) = (SELECT COUNT(*) FROM people AS mpp JOIN organizational_roles orss ON mpp.id = orss.person_id WHERE mpp.id = people.id AND orss.organization_id = #{org_id})"
+    :having => "COUNT(*) = (SELECT COUNT(*) FROM people AS mpp JOIN organizational_permissions orss ON mpp.id = orss.person_id WHERE mpp.id = people.id AND orss.organization_id = #{org_id})"
   } }
 
   scope :get_from_group, lambda { |group_id| {
@@ -306,7 +299,7 @@ class Person < ActiveRecord::Base
   end
 
   def self.people_for_labels(org)
-    Person.where('organizational_roles.organization_id' => org.id).includes(:organizational_roles)
+    Person.where('organizational_permissions.organization_id' => org.id).includes(:organizational_permissions)
   end
 
   scope :get_archived_included, lambda { {
@@ -318,7 +311,7 @@ class Person < ActiveRecord::Base
   end
 
   scope :get_archived_not_included, lambda { {
-    :conditions => "organizational_roles.archive_date IS NULL",
+    :conditions => "organizational_permissions.archive_date IS NULL",
     :group => "people.id"
   } }
 
@@ -342,28 +335,28 @@ class Person < ActiveRecord::Base
     self.get_deleted.collect()
   end
 
-  def unachive_contact_role(org)
-    OrganizationalRole.where(organization_id: org.id, role_id: Role::CONTACT_ID, person_id: id).first.unarchive
+  def unachive_contact_permission(org)
+    OrganizationalPermission.where(organization_id: org.id, permission_id: Permission::NO_PERMISSIONS_ID, person_id: id).first.unarchive
   end
 
-  def archive_contact_role(org)
+  def archive_contact_permission(org)
     begin
-      OrganizationalRole.where(organization_id: org.id, role_id: Role::CONTACT_ID, person_id: id).first.archive
+      OrganizationalPermission.where(organization_id: org.id, permission_id: Permission::NO_PERMISSIONS_ID, person_id: id).first.archive
     rescue
 
     end
   end
 
-  def archive_missionhub_user_role(org)
+  def archive_user_permission(org)
     begin
-      OrganizationalRole.where(organization_id: org.id, role_id: Role::MISSIONHUB_USER_ID, person_id: id).first.archive
+      OrganizationalPermission.where(organization_id: org.id, permission_id: Permission::USER_ID, person_id: id).first.archive
     rescue
 
     end
   end
 
   def is_archived?(org)
-    return true if organizational_roles.where(organization_id: org.id).blank?
+    return true if organizational_permissions.where(organization_id: org.id).blank?
     false
   end
 
@@ -374,13 +367,13 @@ class Person < ActiveRecord::Base
   def assigned_contacts_limit_org(org)
     assigned_id_list = ContactAssignment.where(assigned_to_id: id, organization_id: org.id).uniq
     people = org.people.where(id: assigned_id_list.collect(&:person_id))
-    people.includes(:organizational_roles).where('organizational_roles.organization_id' => org.id, 'organizational_roles.archive_date' => nil)
+    people.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id, 'organizational_permissions.archive_date' => nil)
   end
 
   def assigned_contacts_limit_org_with_archived(org)
     assigned_id_list = ContactAssignment.where(assigned_to_id: id, organization_id: org.id).uniq
     people = org.people.where(id: assigned_id_list.collect(&:person_id))
-    people.includes(:organizational_roles).where('organizational_roles.organization_id' => org.id)
+    people.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id)
   end
 
   def has_similar_person_by_name_and_email?(email)
@@ -404,7 +397,7 @@ class Person < ActiveRecord::Base
       conditions = ["first_name like ? AND last_name like ?", first, last]
     end
     scope = scope.where(conditions)
-    scope = scope.where('organizational_roles.organization_id IN(?)', organization_ids).includes(:organizational_roles) if organization_ids
+    scope = scope.where('organizational_permissions.organization_id IN(?)', organization_ids).includes(:organizational_permissions) if organization_ids
     scope
   end
 
@@ -424,9 +417,9 @@ class Person < ActiveRecord::Base
     end
   end
 
-  def missionhub_user_in?(org)
+  def user_in?(org)
     return false unless org
-    OrganizationalRole.where(person_id: id, role_id: Role.missionhub_user_ids, :organization_id => org.id).present?
+    OrganizationalPermission.where(person_id: id, permission_id: Permission.user_ids, :organization_id => org.id).present?
   end
 
   def organization_objects
@@ -468,15 +461,15 @@ class Person < ActiveRecord::Base
     organization_objects[org_id.to_i]
   end
   
-  def roles_by_org_id(org_id)
-    unless @roles_by_org_id
-      @roles_by_org_id = Hash[OrganizationalRole.connection.select_all("select organization_id, group_concat(role_id) as role_ids from organizational_roles where person_id = #{id} and archive_date is NULL group by organization_id").collect { |row| [row['organization_id'], row['role_ids'].split(',').map(&:to_i) ]}]
+  def permissions_by_org_id(org_id)
+    unless @permissions_by_org_id
+      @permissions_by_org_id = Hash[OrganizationalPermission.connection.select_all("select organization_id, group_concat(permission_id) as permission_ids from organizational_permissions where person_id = #{id} and archive_date is NULL group by organization_id").collect { |row| [row['organization_id'], row['permission_ids'].split(',').map(&:to_i) ]}]
     end
-    @roles_by_org_id[org_id]
+    @permissions_by_org_id[org_id]
   end
   
-  def roles_for_org_id(org_id)
-    roles.where(id: roles_by_org_id(org_id)).uniq
+  def permissions_for_org_id(org_id)
+    permissions.where(id: permissions_by_org_id(org_id)).uniq
   end
 
   def labels_by_org_id(org_id)
@@ -505,36 +498,36 @@ class Person < ActiveRecord::Base
     group_memberships.where(group_id: group_ids)
   end
 
-  def organizational_roles_for_org(org)
-    organizational_roles.where(organization_id: org.id)
+  def organizational_permissions_for_org(org)
+    organizational_permissions.where(organization_id: org.id)
   end
 
   def organizational_labels_for_org(org)
     organizational_labels.where(organization_id: org.id)
   end
 
-  def org_tree_node(o = nil, parent_roles = [])
+  def org_tree_node(o = nil, parent_permissions = [])
     orgs = {}
     @org_ids ||= {}
     (o ? o.children : organizations).order('name').each do |org|
-      # collect roles associated with each org
+      # collect permissions associated with each org
       @org_ids[org.id] ||= {}
-      @org_ids[org.id]['roles'] = (Array.wrap(@org_ids[org.id]['roles']) + Array.wrap(roles_by_org_id(org.id)) + Array.wrap(parent_roles)).uniq
-      orgs[org.id] = (org.show_sub_orgs? ? org_tree_node(org, @org_ids[org.id]['roles']) : {})
+      @org_ids[org.id]['permissions'] = (Array.wrap(@org_ids[org.id]['permissions']) + Array.wrap(permissions_by_org_id(org.id)) + Array.wrap(parent_permissions)).uniq
+      orgs[org.id] = (org.show_sub_orgs? ? org_tree_node(org, @org_ids[org.id]['permissions']) : {})
     end
     orgs
   end
 
   def admin_of_org_ids
-    @admin_of_org_ids ||= org_ids.select {|org_id, values| Array.wrap(values['roles']).include?(Role.admin.id)}.keys
+    @admin_of_org_ids ||= org_ids.select {|org_id, values| Array.wrap(values['permissions']).include?(Permission.admin.id)}.keys
   end
 
-  def missionhub_user_of_org_ids
-    @missionhub_user_of_org_ids ||= org_ids.select {|org_id, values| (Array.wrap(values['roles']) & Role.missionhub_user_ids).present?}.keys
+  def user_of_org_ids
+    @user_of_org_ids ||= org_ids.select {|org_id, values| (Array.wrap(values['permissions']) & Permission.user_ids).present?}.keys
   end
 
-  def admin_or_missionhub_user?
-    (admin_of_org_ids + missionhub_user_of_org_ids).present?
+  def admin_or_user?
+    (admin_of_org_ids + user_of_org_ids).present?
   end
 
 
@@ -594,13 +587,13 @@ class Person < ActiveRecord::Base
   end
 
   def managed_orgs
-    org_roles = organizational_roles.where(role_id: Role::ADMIN_ID)
-    organizations.where(id: org_roles.collect(&:organization_id))
+    org_permissions = organizational_permissions.where(permission_id: Permission::ADMIN_ID)
+    organizations.where(id: org_permissions.collect(&:organization_id))
   end
 
   def managed_orgs_with_children
-    org_roles = organizational_roles.where(role_id: Role::ADMIN_ID)
-    organizations.where(id: org_roles.collect(&:organization_id))
+    org_permissions = organizational_permissions.where(permission_id: Permission::ADMIN_ID)
+    organizations.where(id: org_permissions.collect(&:organization_id))
   end
 
   def self.find_from_facebook(data)
@@ -946,16 +939,16 @@ class Person < ActiveRecord::Base
         end
       end
 
-      # Organizational Roles
-      organizational_roles.each do |pn|
-        opn = other.organizational_roles.detect {|oa| oa.organization_id == pn.organization_id}
+      # Organizational Permissions
+      organizational_permissions.each do |pn|
+        opn = other.organizational_permissions.detect {|oa| oa.organization_id == pn.organization_id}
         pn.merge(opn) if opn
       end
-      other.organizational_roles.each do |role|
+      other.organizational_permissions.each do |permission|
         begin
-          role.update_attribute(:person_id, id) unless role.frozen?
+          permission.update_attribute(:person_id, id) unless permission.frozen?
         rescue ActiveRecord::RecordNotUnique
-          role.destroy
+          permission.destroy
         end
       end
 
@@ -994,7 +987,7 @@ class Person < ActiveRecord::Base
     hash
   end
 
-  def to_hash_micro_missionhub_user(organization)
+  def to_hash_micro_user(organization)
    hash = to_hash_mini
    hash['picture'] = picture unless fb_uid.nil?
    hash['num_contacts'] = contact_assignments.for_org(organization).count
@@ -1002,9 +995,9 @@ class Person < ActiveRecord::Base
    hash
   end
 
-  def to_hash_mini_missionhub_user(org_id)
-    hash = to_hash_micro_missionhub_user(organization_from_id(org_id))
-    hash['organizational_roles'] = organizational_roles_hash
+  def to_hash_mini_user(org_id)
+    hash = to_hash_micro_user(organization_from_id(org_id))
+    hash['organizational_permissions'] = organizational_permissions_hash
     hash
   end
 
@@ -1027,24 +1020,24 @@ class Person < ActiveRecord::Base
     hash['gender'] = gender
     hash['fb_id'] = fb_uid.to_s unless fb_uid.nil?
     hash['picture'] = picture unless fb_uid.nil? and person_photo.nil?
-    status = organizational_roles.where(organization_id: organization.id).where('followup_status IS NOT NULL') unless organization.nil?
+    status = organizational_permissions.where(organization_id: organization.id).where('followup_status IS NOT NULL') unless organization.nil?
     hash['status'] = status.first.followup_status unless (status.nil? || status.empty?)
     hash['request_org_id'] = organization.id unless organization.nil?
     hash['first_contact_date'] = answer_sheets.first.created_at.utc.to_s unless answer_sheets.empty?
     hash['date_surveyed'] = answer_sheets.last.created_at.utc.to_s unless answer_sheets.empty?
-    hash['organizational_roles'] = organizational_roles_hash
+    hash['organizational_permissions'] = organizational_permissions_hash
     hash
   end
 
-  def organizational_roles_hash
-    roles = {}
-    @organizational_roles_hash ||= org_ids.collect { |org_id, values|
-                                     values['roles'].select { |role_id|
-                                       role_id != Role.contact.id
-                                     }.collect { |role_id|
-                                       roles[role_id] ||= Role.find_by_id(role_id)
-                                     }.compact.collect { |role|
-                                       {org_id: org_id, role: role.i18n, name: organization_from_id(org_id).try(:name), primary: primary_organization.id == org_id ? 'true' : 'false'}
+  def organizational_permissions_hash
+    permissions = {}
+    @organizational_permissions_hash ||= org_ids.collect { |org_id, values|
+                                     values['permissions'].select { |permission_id|
+                                       permission_id != Permission.no_permissions.id
+                                     }.collect { |permission_id|
+                                       permissions[permission_id] ||= Permission.find_by_id(permission_id)
+                                     }.compact.collect { |permission|
+                                       {org_id: org_id, permission: permission.i18n, name: organization_from_id(org_id).try(:name), primary: primary_organization.id == org_id ? 'true' : 'false'}
                                      }
                                    }.flatten
   end
@@ -1165,31 +1158,35 @@ class Person < ActiveRecord::Base
     other_person || person
   end
 
-  def do_not_contact(organizational_role_id)
-    organizational_role = OrganizationalRole.find(organizational_role_id)
-    organizational_role.followup_status = 'do_not_contact'
-    ContactAssignment.where(person_id: self.id, organization_id: organizational_role.organization_id).destroy_all
-    organizational_role.save
+  def do_not_contact(organizational_permission_id)
+    organizational_permission = OrganizationalPermission.find(organizational_permission_id)
+    organizational_permission.followup_status = 'do_not_contact'
+    ContactAssignment.where(person_id: self.id, organization_id: organizational_permission.organization_id).destroy_all
+    organizational_permission.save
   end
 
-  def friends_and_missionhub_users(organization)
-    Friend.followers(self) & organization.missionhub_users.collect { |l| l.fb_uid.to_s }
+  def friends_and_users(organization)
+    Friend.followers(self) & organization.users.collect { |l| l.fb_uid.to_s }
   end
 
   def friends_in_orgnization(org)
-    friends.includes(:organizational_roles).where('organizational_roles.organization_id = ?',org.id)
+    friends.includes(:organizational_permissions).where('organizational_permissions.organization_id = ?',org.id)
   end
 
-  def assigned_organizational_roles(organization_id)
-    roles.where('organizational_roles.organization_id' => organization_id)
+  def assigned_organizational_permissions(organization_id)
+    permissions.where('organizational_permissions.organization_id' => organization_id)
+  end
+  
+  def assigned_organizational_labels(organization_id)
+    labels.where('organizational_labels.organization_id' => organization_id)
   end
 
-  def assigned_organizational_roles_including_archived(organization_id)
-    roles_including_archived.where('organizational_roles.organization_id' => organization_id)
+  def assigned_organizational_permissions_including_archived(organization_id)
+    permissions_including_archived.where('organizational_permissions.organization_id' => organization_id)
   end
 
-  def is_role_archived?(org_id, role_id)
-    return false if organizational_roles_including_archived.where(organization_id: org_id, role_id: role_id).first.archive_date.blank?
+  def is_permission_archived?(org_id, permission_id)
+    return false if organizational_permissions_including_archived.where(organization_id: org_id, permission_id: permission_id).first.archive_date.blank?
     true
   end
 

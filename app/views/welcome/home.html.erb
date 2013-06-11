@@ -1,7 +1,7 @@
 <h1><%= t("welcome.index.title_top")%></h1>
 
 <h2><%= t('welcome.home.your_orgs') %></h2>
-<% current_person.organizational_roles.each do |membership| %>
+<% current_person.organizational_permissions.each do |membership| %>
   <% org = membership.organization %>
   <h3><%= org.name %></h3>
   <% if can? :manage, SmsKeyword %>

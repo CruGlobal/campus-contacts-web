@@ -12,7 +12,7 @@ class GroupMembershipsController < ApplicationController
     
     if params[:from_add_member_screen] == "true"
       @persons = Person.find(params[:person_id])
-      if has_permission
+      if has_role
         @group_membership = @group.group_memberships.find_or_initialize_by_person_id(@persons.id)
         @group_membership.role = params[:role]
         @group_membership.save
@@ -29,7 +29,7 @@ class GroupMembershipsController < ApplicationController
       end
     else
       @persons = Person.find(params[:person_id].split(","))
-      if has_permission
+      if has_role
         @persons.each do |person|
           @group_membership = @group.group_memberships.find_or_initialize_by_person_id(person.id)
           @group_membership.role = params[:role]
@@ -76,7 +76,7 @@ class GroupMembershipsController < ApplicationController
   end
   
   protected
-    def has_permission
+    def has_role
       return true if can?(:manage, current_organization)
       #return true if can?(:lead, current_organization)
       return true if @group.organization.leaders.include?(current_person)

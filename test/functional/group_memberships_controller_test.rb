@@ -53,7 +53,7 @@ class GroupMembershipsControllerTest < ActionController::TestCase
       setup do
         user2 = Factory(:user_with_auxs)
         user3 = Factory(:user_with_auxs)
-        @org.add_missionhub_user(@user.person)
+        @org.add_user(@user.person)
         @org.add_contact(user3.person)
         sign_in user3
       end

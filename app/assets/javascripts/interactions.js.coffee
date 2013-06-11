@@ -35,9 +35,9 @@ $ ->
     e.preventDefault()
     $.showDialog($("#profile_labels_dialog"))
     
-  $('li #action_menu_roles').live 'click', (e)->
+  $('li #action_menu_permissions').live 'click', (e)->
     e.preventDefault()
-    $.showDialog($("#profile_roles_dialog"))
+    $.showDialog($("#profile_permissions_dialog"))
   # END - ACTION MENU
   
   $('#assign_popup_save_button').live 'click', (e)->
@@ -119,22 +119,22 @@ $ ->
     e.preventDefault()
     $.showDialog($("#profile_groups_dialog"))
   
-  $('#roles_popup_save_button').live 'click', (e)->
+  $('#permissions_popup_save_button').live 'click', (e)->
     e.preventDefault()
     ids = []
-    $('.role_checkbox:checked').each ->
+    $('.permission_checkbox:checked').each ->
       ids.push($(this).val())
     ids = ids.join(',')
-    $.hideDialog($("#profile_roles_dialog"))
-    if ids != $('#roles_save').attr('data-current-role-ids')
+    $.hideDialog($("#profile_permissions_dialog"))
+    if ids != $('#permissions_save').attr('data-current-permission-ids')
       $.toggleLoader('profile_name','Applying Changes...')
       $.ajax
         type: 'GET',
-        url: "/interactions/set_roles?person_id=" + $(this).attr('data-person-id') + "&ids=" + ids
+        url: "/interactions/set_permissions?person_id=" + $(this).attr('data-person-id') + "&ids=" + ids
   
-  $('#roles_popup_cancel_button').live 'click', (e)->
+  $('#permissions_popup_cancel_button').live 'click', (e)->
     e.preventDefault()
-    $.hideDialog($("#profile_roles_dialog"))
+    $.hideDialog($("#profile_permissions_dialog"))
   
   $('#labels_popup_save_button').live 'click', (e)->
     e.preventDefault()

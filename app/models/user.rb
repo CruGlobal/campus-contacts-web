@@ -149,8 +149,8 @@ class User < ActiveRecord::Base
     User.connection.execute('SET foreign_key_checks = 1')
   end
 
-  def has_role?(role_id, organization)
-    person && OrganizationalRole.where(role_id: role_id, organization_id: organization.id, person_id: person.id).first.present?
+  def has_permission?(permission_id, organization)
+    person && OrganizationalPermission.where(permission_id: permission_id, organization_id: organization.id, person_id: person.id).first.present?
   end
 
   def person_id

@@ -23,7 +23,7 @@ Mh::Application.routes.draw do
       get :load_more_all_feeds
       get :create_label
       get :set_labels
-      get :set_roles
+      get :set_permissions
       get :set_groups
       get :search_leaders
     end
@@ -75,7 +75,7 @@ Mh::Application.routes.draw do
     end
   end
 
-  resources :organizational_roles, :only => :update do
+  resources :organizational_permissions, :only => :update do
     collection do
       post :move_to
       post :update_all
@@ -83,6 +83,12 @@ Mh::Application.routes.draw do
     member do
       get :set_current
       get :set_primary
+    end
+  end
+
+  resources :organizational_labels do
+    collection do
+      post :update_all
     end
   end
 
@@ -116,7 +122,7 @@ Mh::Application.routes.draw do
       post :bulk_sms
       post :bulk_comment
       get :all
-      post :update_roles
+      post :update_permissions
       post :bulk_delete
       post :bulk_archive
       get :facebook_search
@@ -128,7 +134,7 @@ Mh::Application.routes.draw do
     end
   end
 
-  resources :roles, :only => [:create, :update, :destroy, :index, :new, :edit] do
+  resources :labels, :only => [:create, :update, :destroy, :index, :new, :edit] do
     collection do
       post :create_now
     end
@@ -248,7 +254,10 @@ Mh::Application.routes.draw do
       resources :contact_assignments
       resources :followup_comments
       resources :interactions
-      resources :roles
+      resources :labels
+      resources :permissions
+      resources :organizational_labels
+      resources :organizational_permissions
       resources :organizations
     end
   end
@@ -261,7 +270,7 @@ Mh::Application.routes.draw do
           delete :bulk_destroy
         end
       end
-      resources :organizational_roles do
+      resources :organizational_permissions do
         collection do
           post :bulk
           post :bulk_create
@@ -274,7 +283,9 @@ Mh::Application.routes.draw do
         resources :questions
       end
       resources :questions
-      resources :roles
+      resources :labels
+      resources :permissions
+      resources :organizational_labels
       resources :followup_comments
       resources :interactions
       resources :interaction_types

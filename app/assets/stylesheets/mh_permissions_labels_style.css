@@ -1,0 +1,343 @@
+
+/* Permissions and Labels CSS -------------------------*/
+
+@import url('mh_profile_style.css');
+
+/* Containers */
+
+#ac_container { /* Container for all Profile Page content */
+	margin:0px auto 0px 0px;
+	padding:8px 24px 20px 24px;
+	width:964px;
+}
+
+#ac_sidebar { /* Profile Page left sidebar */
+	float:left;
+	clear:left;
+	width:128px;
+}
+
+#ac_title {
+	margin:0 0 12px 0;
+	width:100%;
+	float:left;
+	font-family:tahoma, Sans-serif;
+	font-size:24px;
+	font-weight:bold;
+	color:#333333;
+	clear:right;
+}
+
+#ac_pagination {
+	height:24px;
+	float:right;
+	display:inline-block;
+}
+
+#ac_contact_spread {
+	margin:13px 0 0 12px;
+	display:inline-block;
+	width:822px;
+}
+
+/* Sidebar */
+
+#ac_sidebar button {
+	margin-bottom:8px;
+}
+
+
+button.full_width_button {
+	width:100%;
+}
+
+
+#sidebar_lists {
+	margin-top:24px;
+}
+
+ul.ac_dropdown_list {
+	list-style-type:none;
+	margin-left:-24px;
+	font-family:Arial, Sans-serif;
+	font-size:12px;
+	color:#808284;
+
+}
+
+.ac_dropdown_list li {
+	margin-bottom:2px;
+}
+
+.ac_dropdown_list li.ac_dropdown_list_header {
+	font-weight:bold;
+	font-size:14px;
+	margin-left:-16px;
+}
+
+.ac_dropdown_list li a:hover {
+	color:#c0c0c0;
+	}
+
+/* Button Bar */
+
+#ac_button_bar {
+	margin-left:12px;
+	display:inline-block;
+}
+
+li.btn_left, button.btn_left {
+	-webkit-border-radius: 4px 0 0 4px;
+	border-radius: 4px 0 0 4px;
+	margin-right:-11px;
+	text-align:center;
+	position:relative;
+	right:0px;
+}
+
+li.btn_middle, button.btn_middle {
+	-webkit-border-radius: 0;
+	border-radius: 0;
+	margin-right:-11px;
+	text-align:center;
+	position:relative;
+	right:0px;
+}
+
+li.btn_right, button.btn_right {
+	-webkit-border-radius: 0 4px 4px 0;
+	border-radius: 0 4px 4px 0;
+	text-align:center;
+}
+
+/* Pagination */
+
+#ac_pagination button {
+	float:left;
+	min-width:10px;
+	padding:0 8px;
+}
+
+#ac_pagination button img {
+	margin-bottom:1px;
+}
+
+#ac_pagination .btn_left {
+	margin-right:-3px;
+}
+
+#ac_pagination .fancy {
+	float:left;
+	margin-right:8px;
+}
+
+/* Pop-Up Box */
+
+.mh_popup_box {
+	position:relative;
+	font-family:tahoma, Sans-serif;
+	color:#333333;
+}
+
+.mh_popup_box label {
+	font-family:tahoma, Sans-serif;
+	color:#333333;
+}
+
+.mh_popup_box .title {
+	font-family:tahoma, Sans-serif;
+	color:#333333;
+}
+
+.mh_popup_box_content {
+  padding: 40px 15px 15px;
+}
+
+.mh_popup_box_top{ 
+
+	/*--Border--*/
+	border-bottom:1px solid #c0c0c0;
+	-webkit-border-radius: 4px 4px 0 0; /* Android ≤ 1.6, iOS 1-3.2, Safari 3-4 */
+	border-radius: 4px 4px 0 0; /* Android 2.1+, Chrome, Firefox 4+, IE 9+, iOS 4+, Opera 10.50+, Safari 5+ */
+
+	/*--Gradient--*/
+	background: #fcfcfc; /* Old browsers */
+	background: -moz-linear-gradient(top,  #fcfcfc 0%, #f6f6f6 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fcfcfc), color-stop(100%,#f6f6f6)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #fcfcfc 0%,#f6f6f6 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #fcfcfc 0%,#f6f6f6 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #fcfcfc 0%,#f6f6f6 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #fcfcfc 0%,#f6f6f6 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#f6f6f6',GradientType=0 ); /* IE6-9 */
+
+	/*--Font--*/
+	font-family:Arial;
+	font-size:14px;
+	font-weight:bold;
+	color:#333;
+	line-height:35px;
+	text-shadow:0px 1px #fff;
+
+	/*--Other--*/
+	height:35px;
+	width:100%;
+	margin: 0;
+	padding:0;
+	float:left;
+	display:block;
+	list-style-type: none;
+	}
+
+span.mh_popup_heading {
+	margin:0 16px;
+}
+
+
+.msg_popup_box {
+	background-color:#FFF;
+	border:1px solid #808284;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	width:720px;
+	min-height:450px;
+}
+
+
+.assign_popup_box {
+	background-color:#FFF;
+	border:1px solid #808284;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	width:455px;
+	min-height:170px;
+}
+
+
+.groups_popup_box, .permissions_popup_box, .labels_popup_box, .error_popup_box{
+	background-color:#FFF;
+	border:1px solid #808284;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	width:482px;
+	min-height:372px;
+}
+
+.assign_popup_box .fancy {
+	margin:10px 0px;
+	font-size:14px;
+}
+
+.msg_popup_box .fancy,
+.groups_popup_box .fancy, 
+.permissions_popup_box .fancy, 
+.labels_popup_box .fancy {
+	margin:48px 24px 24px;
+	font-size:14px;
+}
+
+.error_popup_box .fancy {
+	margin:96px 48px 48px;
+	font-size:18px;
+	text-align:center;
+}
+
+.groups_chooser_box {
+	margin:12px 96px 64px;
+	padding:24px;
+	clear:right;
+	border:1px solid #f2f2f2;
+	height:96px;
+}
+
+.permissions_chooser_box {
+	margin:12px 96px 64px;
+	padding:24px;
+	clear:right;
+	border:1px solid #f2f2f2;
+	height:96px;
+}
+
+.labels_chooser_box {
+	margin:12px 96px 64px;
+	padding:24px;
+	clear:right;
+	border:1px solid #f2f2f2;
+	min-height:120px;
+}
+
+.groups_checkbox, .labels_checkbox, .permissions_checkbox {
+	font-family:Arial, Sans-serif;
+	font-size:12px;
+	font-weight:normal;
+	color:#808284;
+	margin-bottom:6px;
+}
+
+.groups_checkbox input, .labels_checkbox input, .permissions_checkbox input {
+	margin:0 8px 0 0;
+	position:relative;
+	bottom:1px;
+}
+
+
+.groups_add_new, .labels_add_new {
+	padding:6px 2px 30px;
+}
+
+button#groups_add_new_button, button#labels_add_new_button {
+	float:left;
+	margin:1px 0 1px 8px;
+}
+
+.groups_add_new input, .labels_add_new input {
+	float:left;
+	width:120px;
+}
+
+.msg_popup_box .msg_save {
+	position:absolute;
+	right:0px;
+	bottom:16px;
+	width:650px;
+	display:inline-block;
+	margin-right:24px;
+	margin-left:24px;
+}
+
+.assign_popup_box .assign_save {
+	position:absolute;
+	right:0px;
+	bottom:16px;
+	width:400px;
+	display:inline-block;
+	margin-right:22px;
+	margin-left:24px;
+}
+
+.groups_popup_box .groups_save,
+.permissions_popup_box .permissions_save,
+.labels_popup_box .labels_save,
+.error_popup_box .error_save {
+	position:absolute;
+	right:0px;
+	bottom:16px;
+	width:444px;
+	display:inline-block;
+	margin-right:24px;
+	margin-left:24px;
+}
+
+.assign_popup_box button,
+.msg_popup_box button,
+.groups_popup_box button,
+.permissions_popup_box button,
+.labels_popup_box button,
+.error_popup_box button {
+	float:right;
+	display:inline-block;
+	margin-left:12px;
+}
+
+button#labels_popup_manage_button {
+	float:left;
+}

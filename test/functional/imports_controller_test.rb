@@ -77,7 +77,7 @@ class ImportsControllerTest < ActionController::TestCase
       @email_question = Factory(:survey_element, survey: @survey, element: @email_element, position: 3, archived: true)
       @phone_question = Factory(:survey_element, survey: @survey, element: @phone_element, position: 4, archived: true)
 
-      @default_role = Factory(:role, organization: @organization)
+      @default_label = Factory(:label, organization: @organization)
 
       @survey2 = Factory(:survey, organization: @organization)
       @question = Factory(:some_question)
@@ -133,8 +133,8 @@ class ImportsControllerTest < ActionController::TestCase
         post :import, { :use_labels => "0", :id => Import.first.id}
 
         # Send email to imported leader and to the uploader
-        assert_difference('ActionMailer::Base.deliveries.size', 2) do
-          Import.last.do_import([Role::MISSIONHUB_USER_ID])
+        assert_difference('ActionMailer::Base.deliveries.size', 1) do
+          Import.last.do_import([Label::LEADER_ID])
         end
       end
     end
@@ -234,11 +234,11 @@ class ImportsControllerTest < ActionController::TestCase
       assert_equal Import.first.header_mappings['2'].to_i, @email_element.id
       person_count  = Person.count
       assert_response :redirect
-      post :import, { :use_labels => "1", :id => Import.first.id, :labels => [@default_role.id]}
-      Import.last.do_import([@default_role.id])
+      post :import, { :use_labels => "1", :id => Import.first.id, :labels => [@default_label.id]}
+      Import.last.do_import([@default_label.id])
       assert_equal Person.count, person_count + 1
       new_person = Person.last
-      assert new_person.organizational_roles.exists?(role_id: @default_role.id), 'imported person should have specified role'
+      assert new_person.organizational_labels.exists?(label_id: @default_label.id), 'imported person should have specified label'
       assert_response :redirect
     end
 
@@ -261,8 +261,8 @@ class ImportsControllerTest < ActionController::TestCase
       Import.first.do_import([0])
       assert_equal Person.count, person_count + 1
       new_person = Person.last
-      new_role = Role.find_by_name(Import.first.label_name)
-      assert new_person.organizational_roles.exists?(role_id: new_role.id), 'imported person should have the default role'
+      new_label = Label.find_by_name(Import.first.label_name)
+      assert new_person.organizational_labels.exists?(label_id: new_label.id), 'imported person should have the default label'
       assert_response :redirect
     end
 

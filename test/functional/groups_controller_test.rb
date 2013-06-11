@@ -41,11 +41,11 @@ class GroupsControllerTest < ActionController::TestCase
       @group = Factory(:group, organization: org)
 
       @contact1 = Factory(:person, first_name: "C", last_name: "C")
-      Factory(:organizational_role, organization: org, person: @contact1, role: Role.admin)
+      Factory(:organizational_permission, organization: org, person: @contact1, permission: Permission.admin)
       @contact2 = Factory(:person, first_name: "D", last_name: "D")
-      Factory(:organizational_role, organization: org, person: @contact2, role: Role.contact)
+      Factory(:organizational_permission, organization: org, person: @contact2, permission: Permission.no_permissions)
       @contact3 = Factory(:person, first_name: "E", last_name: "E")
-      Factory(:organizational_role, organization: org, person: @contact3, role: Role.missionhub_user)
+      Factory(:organizational_permission, organization: org, person: @contact3, permission: Permission.user)
 
       Factory(:group_membership, group: @group, person: @contact1)
       Factory(:group_membership, group: @group, person: @contact2)
@@ -175,7 +175,7 @@ class GroupsControllerTest < ActionController::TestCase
     @group = Factory(:group, organization: @org)
 
     @contact1 = Factory(:person, first_name: "C", last_name: "C")
-    Factory(:organizational_role, organization: @org, person: @contact1, role: Role.contact)
+    Factory(:organizational_permission, organization: @org, person: @contact1, permission: Permission.no_permissions)
     Factory(:group_membership, group: @group, person: @contact1)
 
     assert_difference "Group.count", -1 do

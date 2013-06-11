@@ -16,26 +16,26 @@ class InteractionTest < ActiveSupport::TestCase
       @org2 = Factory(:organization)
 
       @org1admin1 = Factory(:person)
-      Factory(:organizational_role, organization: @org1, person: @org1admin1, role: Role.admin)
+      Factory(:organizational_permission, organization: @org1, person: @org1admin1, permission: Permission.admin)
       @org1admin2 = Factory(:person)
-      Factory(:organizational_role, organization: @org1, person: @org1admin2, role: Role.admin)
+      Factory(:organizational_permission, organization: @org1, person: @org1admin2, permission: Permission.admin)
       @org1contact = Factory(:person)
-      Factory(:organizational_role, organization: @org1, person: @org1contact, role: Role.contact)
+      Factory(:organizational_permission, organization: @org1, person: @org1contact, permission: Permission.no_permissions)
       
       @org2admin1 = Factory(:person)
-      Factory(:organizational_role, organization: @org2, person: @org2admin1, role: Role.admin)
+      Factory(:organizational_permission, organization: @org2, person: @org2admin1, permission: Permission.admin)
       @org2contact = Factory(:person)
-      Factory(:organizational_role, organization: @org2, person: @org2contact, role: Role.contact)
+      Factory(:organizational_permission, organization: @org2, person: @org2contact, permission: Permission.no_permissions)
       
       @parent1admin1 = Factory(:person)
-      Factory(:organizational_role, organization: @parent1, person: @parent1admin1, role: Role.admin)
+      Factory(:organizational_permission, organization: @parent1, person: @parent1admin1, permission: Permission.admin)
       @parent1contact = Factory(:person)
-      Factory(:organizational_role, organization: @parent1, person: @parent1contact, role: Role.contact)
+      Factory(:organizational_permission, organization: @parent1, person: @parent1contact, permission: Permission.no_permissions)
       
       @parent2admin1 = Factory(:person)
-      Factory(:organizational_role, organization: @parent2, person: @parent2admin1, role: Role.admin)
+      Factory(:organizational_permission, organization: @parent2, person: @parent2admin1, permission: Permission.admin)
       @parent2contact = Factory(:person)
-      Factory(:organizational_role, organization: @parent2, person: @parent2contact, role: Role.contact)
+      Factory(:organizational_permission, organization: @parent2, person: @parent2contact, permission: Permission.no_permissions)
       
       @interaction1 = Factory(:interaction, organization: @org1, creator: @org1admin1, receiver: @org1contact)
     end

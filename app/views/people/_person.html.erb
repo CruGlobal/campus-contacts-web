@@ -8,17 +8,17 @@
   <td class="first_name"><%= person.first_name %></td>
   <td class="last_name"><%= person.last_name %></td>
   <td>
-    <div id="roles_user_<%= person.id %>" class="roles_spaces">
-      <% roles = if params[:include_archived] || params[:archived] %>
-        <% (person.assigned_organizational_roles_including_archived(current_organization.id).default_roles + person.assigned_organizational_roles_including_archived(current_organization.id).non_default_roles) %>
+    <div id="permissions_user_<%= person.id %>" class="permissions_spaces">
+      <% permissions = if params[:include_archived] || params[:archived] %>
+        <% (person.assigned_organizational_permissions_including_archived(current_organization.id).default_permissions + person.assigned_organizational_permissions_including_archived(current_organization.id).non_default_permissions) %>
       <% else %>
-        <% (person.assigned_organizational_roles(current_organization.id).default_roles + person.assigned_organizational_roles(current_organization.id).non_default_roles) %>
+        <% (person.assigned_organizational_permissions(current_organization.id).default_permissions + person.assigned_organizational_permissions(current_organization.id).non_default_permissions) %>
       <% end %>
-      <% roles.each do |role| %>
-        <% unless person.is_role_archived?(current_organization.id, role.id) %>
-          <span id="<%= person.id%>_<%= role.id %>" class="role_label role_<%= role.id %>"><%= role %></span>
+      <% permissions.each do |permission| %>
+        <% unless person.is_permission_archived?(current_organization.id, permission.id) %>
+          <span id="<%= person.id%>_<%= permission.id %>" class="permission_label permission_<%= permission.id %>"><%= permission %></span>
         <% else %>
-          <span id="<%= person.id%>_<%= role.id %>" class="role_label_archived role_<%= role.id %>"><%= role %></span>
+          <span id="<%= person.id%>_<%= permission.id %>" class="permission_label_archived permission_<%= permission.id %>"><%= permission %></span>
         <% end %>
       <% end %>
     </div>

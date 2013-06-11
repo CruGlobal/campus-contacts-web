@@ -26,7 +26,7 @@ $ ->
       $.ajax
         type: 'POST',
         dataType: 'script',
-        url: '/roles/create_now',
+        url: '/labels/create_now',
         data: 'name='+$(this).siblings('#new_label_field').val()
     false
 

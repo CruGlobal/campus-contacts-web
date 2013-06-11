@@ -143,8 +143,8 @@ class OrganizationsController < ApplicationController
       sent_record.update_attribute('transferred_by_id', current_person.id)
       current_organization.add_label_to_person(person, Label::ALUMNI_ID) if params[:tag_as_alumni] == '1'
       if params[:tag_as_archived] == '1'
-        # current_organization.add_role_to_person(person, Role::ARCHIVED_ID)
-        person.archive_contact_role(current_organization)
+        # current_organization.add_permission_to_person(person, Permission::ARCHIVED_ID)
+        person.archive_contact_permission(current_organization)
       end
     end
   end
@@ -156,8 +156,8 @@ class OrganizationsController < ApplicationController
     a = (a.to_date+1).strftime("%Y-%m-%d")
     to_archive = current_organization.contacts.find_by_date_created_before_date_given(a)
     no = 0
-    to_archive.each do |ta| # destroying contact roles of persons and replacing them with the new created role for archiving
-      ta.archive_contact_role(current_organization)
+    to_archive.each do |ta| # destroying contact permissions of persons and replacing them with the new created permission for archiving
+      ta.archive_contact_permission(current_organization)
       no+=1 if ta.is_archived?(current_organization)
     end
     flash[:notice] = t('organizations.cleanup.archive_notice', no: no)
@@ -172,11 +172,11 @@ class OrganizationsController < ApplicationController
   def archive_leaders
     if params[:date_leaders_not_logged_in_after].present?
       date_given = (Date.strptime(params[:date_leaders_not_logged_in_after], "%m-%d-%Y") + 1.day).strftime('%Y-%m-%d')
-      leaders = current_organization.only_missionhub_users.find_by_last_login_date_before_date_given(date_given)
+      leaders = current_organization.only_users.find_by_last_login_date_before_date_given(date_given)
       leaders_count = leaders.count
 
       leaders.each do |leader|
-        leader.archive_missionhub_user_role(current_organization)
+        leader.archive_user_permission(current_organization)
         assignments = leader.contact_assignments.where(organization_id: current_organization.id).all
         assignments.collect(&:destroy)
       end

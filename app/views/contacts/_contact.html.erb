@@ -1,28 +1,28 @@
 <% if params[:include_archived] || params[:archived] %>
-  <% roles = person.assigned_organizational_roles_including_archived(current_organization.id).arrange_all %>
+  <% permissions = person.assigned_organizational_permissions_including_archived(current_organization.id).arrange_all %>
 <% else %>
-  <% roles = person.assigned_organizational_roles(current_organization.id).arrange_all %>
+  <% permissions = person.assigned_organizational_permissions(current_organization.id).arrange_all %>
 <% end %>
-<% contact_role = person.contact_role_for_org(current_organization) %>
+<% contact_permission = person.contact_permission_for_org(current_organization) %>
 <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row <%= extra if defined?(extra) %>" data-name="<%= person.name %>" data-email="<%= person.email %>">
 	<td class="handle_container">
-    <% if contact_role %>
-      <%= image_tag('grippy.png', class: 'handle', 'data-row-id' => dom_id(person), 'data-id' => person.id, 'data-dnc-url' => organizational_role_path(:id => contact_role.id, :status => 'do_not_contact') ) %>
+    <% if contact_permission %>
+      <%= image_tag('grippy.png', class: 'handle', 'data-row-id' => dom_id(person), 'data-id' => person.id, 'data-dnc-url' => organizational_permission_path(:id => contact_permission.id, :status => 'do_not_contact') ) %>
     <% else %>
       <%= image_tag('grippy.png', class: 'handle' ) %>
     <% end %>
 	</td>
   <td nowrap="nowrap" class="checkbox_cell">
-    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox contact_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email, 'data-roles' => "#{roles.collect(&:id).join(',')}"%>
+    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox contact_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email, 'data-permissions' => "#{permissions.collect(&:id).join(',')}"%>
   </td>
   <td class="firstName"><%= person.first_name %></td>
   <td class="lastName"><%= person.last_name %></td>
 
-	<% if params[:role].blank? || ![Role::ADMIN_ID,Role::MISSIONHUB_USER_ID].include?(params[:role].map{|id| id }) %>
+	<% if params[:permission].blank? || ![Permission::ADMIN_ID,Permission::USER_ID].include?(params[:permission].map{|id| id }) %>
   <td class="status">
-    <% if contact_role %>
-      <%= contact_role.followup_status.to_s.titleize %>
-      <% if person.organizational_roles.where('organizational_roles.organization_id' => current_organization.id).blank? %>
+    <% if contact_permission %>
+      <%= contact_permission.followup_status.to_s.titleize %>
+      <% if person.organizational_permissions.where('organizational_permissions.organization_id' => current_organization.id).blank? %>
         <span class="archived_group_label">&nbsp<%= t('general.archived') %>&nbsp</span>
       <% end %>
     <% end %>
@@ -32,14 +32,14 @@
   <td><%= person.gender.to_s.titleize %></td>
   <td class="phone_number"><%= person.pretty_phone_number %></td>
   <td>
-    <div id="roles_user_<%= person.id %>" class="roles_spaces">
-      <% roles.each do |role| %>
-        <% if person.is_role_archived?(current_organization.id, role.id) %>
+    <div id="permissions_user_<%= person.id %>" class="permissions_spaces">
+      <% permissions.each do |permission| %>
+        <% if person.is_permission_archived?(current_organization.id, permission.id) %>
           <% if params[:include_archived] == 'true' || params[:archived] == 'true' %>
-            <div id="<%= person.id%>_<%= role.id %>" class="role_label_archived role_<%= role.id %> tipitmiddle" title="<%= 'Archived' %>"><%= role %></div>
+            <div id="<%= person.id%>_<%= permission.id %>" class="permission_label_archived permission_<%= permission.id %> tipitmiddle" title="<%= 'Archived' %>"><%= permission %></div>
           <% end %>
         <% else %>
-          <div id="<%= person.id%>_<%= role.id %>" class="role_label role_<%= role.id %>" title="" ><%= role %></div>
+          <div id="<%= person.id%>_<%= permission.id %>" class="permission_label permission_<%= permission.id %>" title="" ><%= permission %></div>
         <% end %>
       <% end %>
     </div>
@@ -84,10 +84,10 @@
     <% if params[:dnc] == 'true' %>
       <%= link_to(t('contacts.index.delete_contact'), person_path(person), :method => :delete, :remote => true, :class => "icon delete dnc tipit", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.destroy_confirm')) %>
     <% else %>
-      <% if contact_role %>
-        <%= link_to(t('contacts.index.delete_contact'), organizational_role_path(:id => contact_role.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), data: { confirm: t('contacts.index.delete_confirm') }) %>
+      <% if contact_permission %>
+        <%= link_to(t('contacts.index.delete_contact'), organizational_permission_path(:id => contact_permission.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), data: { confirm: t('contacts.index.delete_confirm') }) %>
       <% end %>
     <% end %>
-    <%= link_to(t('nav.view_details'), person_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
+    <%= link_to(t('nav.view_details'), profile_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
   </td>
 </tr>
