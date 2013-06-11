@@ -7,23 +7,23 @@ class Interaction < ActiveRecord::Base
   belongs_to :interaction_type
   belongs_to :receiver, class_name: 'Person', foreign_key: 'receiver_id'
   belongs_to :creator, class_name: 'Person', foreign_key: 'created_by_id'
-  
+
   scope :sorted, order('created_at DESC')
   scope :limited, limit(5)
   after_save :ensure_timestamp
-  
+
   def initiator
     self.initiators.first
   end
-  
+
   def type
     interaction_type.name
   end
-  
+
   def icon
     return interaction_type.icon
   end
-  
+
   def privacy
     case privacy_setting
     when 'everyone'
@@ -40,7 +40,7 @@ class Interaction < ActiveRecord::Base
       privacy_setting.titleize
     end
   end
-  
+
   def title
     intiators_string = initiators.collect{|x| "<strong>#{x.name}</strong>"}.to_sentence
     creator_string = "<strong>#{creator.name}</strong>"
@@ -62,7 +62,7 @@ class Interaction < ActiveRecord::Base
       return "#{intiators_string} helped #{receiver_string} develop a plan to be a faculty member on a mission.".html_safe
     end
   end
-  
+
   def to_hash
     @hash = {}
     @hash['id'] = id
@@ -79,14 +79,14 @@ class Interaction < ActiveRecord::Base
     @hash['deleted_at'] = deleted_at
     @hash
   end
-  
+
   def self.get_interactions_hash(person_id, org_id)
     interactions = Interaction.where(receiver_id: person_id, organization_id: org_id).order("created_at DESC")
     interactions.collect(&:to_hash)
   end
-  
-  private 
-  
+
+  private
+
   def ensure_timestamp
     self.update_attribute(:timestamp, created_at) if timestamp.nil?
   end

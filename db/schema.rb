@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130610215048) do
+ActiveRecord::Schema.define(:version => 20130611214719) do
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -442,6 +442,20 @@ ActiveRecord::Schema.define(:version => 20130610215048) do
   add_index "merge_audits", ["merge_looser_id", "merge_looser_type"], :name => "merge_looser"
   add_index "merge_audits", ["mergeable_id", "mergeable_type"], :name => "mergeable"
 
+  create_table "movement_indicator_suggestions", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "organization_id"
+    t.integer  "label_id"
+    t.boolean  "accepted"
+    t.string   "reason",          :limit => 1000
+    t.string   "action",                          :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+  end
+
+  add_index "movement_indicator_suggestions", ["organization_id", "person_id", "label_id", "action"], :name => "person_organization_label"
+  add_index "movement_indicator_suggestions", ["organization_id", "person_id"], :name => "person_organization"
+
   create_table "new_people", :force => true do |t|
     t.integer  "person_id"
     t.integer  "organization_id"
@@ -492,7 +506,7 @@ ActiveRecord::Schema.define(:version => 20130610215048) do
 
   create_table "organizations", :force => true do |t|
     t.string   "name"
-    t.boolean  "requires_validation", :default => false
+    t.boolean  "requires_validation",          :default => false
     t.string   "validation_method"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -500,10 +514,11 @@ ActiveRecord::Schema.define(:version => 20130610215048) do
     t.string   "terminology"
     t.integer  "importable_id"
     t.string   "importable_type"
-    t.boolean  "show_sub_orgs",       :default => false,    :null => false
-    t.string   "status",              :default => "active", :null => false
+    t.boolean  "show_sub_orgs",                :default => false,    :null => false
+    t.string   "status",                       :default => "active", :null => false
     t.text     "settings"
     t.integer  "conference_id"
+    t.datetime "last_indicator_suggestion_at"
   end
 
   add_index "organizations", ["ancestry"], :name => "index_organizations_on_ancestry"

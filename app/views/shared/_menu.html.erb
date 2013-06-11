@@ -25,7 +25,7 @@
         <%= link_to(t('nav.groups'), "/groups") %>
       </li>
     <% end %>
-    
+
     <% if can? :manage, current_organization %>
       <li class="<%= 'current' if request.path =~ connect_pattern %>">
         <%= link_to(t('nav.surveys'), index_admin_surveys_path) %>
@@ -41,7 +41,7 @@
     <% end %>
 
     <% if can? :manage, current_organization %>
-      <li class="<%= 'current' if params[:controller] == 'organizations' %>">
+      <li class="<%= 'current' if ['organizations', 'movement_indicator_suggestions'].include?(params[:controller]) %>">
         <%= link_to(t('nav.organizations'), "/organizations") %>
         <ul style='display:none;'>
           <li class="<%= 'current' if request.path == organizations_path %>">
@@ -58,6 +58,9 @@
               <%= link_to(t('nav.transfer'), "/organizations/transfer", :class => "topset transfer") %>
             </li>
           <% end %>
+          <li class="<%= 'current' if request.path == movement_indicator_suggestions_path %>">
+            <%= link_to(t('nav.report_movement_indicators'), movement_indicator_suggestions_path, :class => "topset cleanup") %>
+          </li>
         </ul>
       </li>
     <% end %>

@@ -127,7 +127,8 @@ module ApplicationHelper
          'organizations/new', 'organizations/api', 'organizations/cleanup', 'organizations/settings',
          'organizations/transfer', 'organizations/do_transfer', 
          'imports/new', 'imports/edit', 'imports/labels', 'imports/update', 'imports/create',
-         'permissions/index', 'permissions/new', 'permissions/create', 'permissions/edit', 'permissions/update'
+         'permissions/index', 'permissions/new', 'permissions/create', 'permissions/edit', 'permissions/update',
+         'movement_indicator_suggestions/index'
 
       true
     else
@@ -210,9 +211,9 @@ module ApplicationHelper
     image_tag('qe/icons/question-balloon.png', :title => t, :class => 'tip')
   end
 
-  def spinner(extra = nil)
+  def spinner(extra = nil, display = false)
     e = extra ? "spinner_#{extra}" : 'spinner'
-    image_tag('spinner.gif', :id => e, :style => 'display:none', :class => 'spinner')
+    image_tag('spinner.gif', :id => e, :style => display ? '' : 'display:none', :class => 'spinner')
   end
   
   def date_format(datetime)

@@ -1,0 +1,6 @@
+$ ->
+  if $('#movement_indicator_suggestions_controller.index')[0]?
+    $.ajax
+      dataType: 'script',
+      type:'GET',
+      url: '/movement_indicator_suggestions/fetch_suggestions'

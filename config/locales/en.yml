@@ -60,6 +60,7 @@ en:
     organizations: Organizations
     manage: Organizations
     cleanup: Cleanup
+    report_movement_indicators: Report Movement Indicators
     transfer: 100% Sent
     archive: Archived
     enter_survey_mode: "Enter Survey Mode"
@@ -1223,3 +1224,21 @@ en:
     moving_to_same_org: "You are just moving people to the same org they are from!"
     moving_people_success: "People were successfully moved!"
     copy_people_success: "People were successfully copied!"
+  movement_indicator_suggestions:
+    index:
+      title: Report Movement Indicators
+      list_heading: Suggested Movement Indicator Actions
+      fetching: 'Fetching suggestions'
+      show_old: 'Click here to show old suggestions'
+    reasons:
+      group_membership: "This person is in a group"
+      engaged_disciple: "This person is an engaged disciple"
+      leader: "This person is a leader"
+      spiritual_conversation: "This person initiated a spiritual conversation"
+      group_leader: "This person is a group leader"
+    suggestion_html: "<b>%{name}</b> look like they may be %{label}. Apply the <b>%{label}</b> label?"
+  labels:
+    leader: leader
+    involved: lnvolved
+    engaged_disciple: engaged disciple
+    alumni: alumni

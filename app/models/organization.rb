@@ -11,7 +11,7 @@ class Organization < ActiveRecord::Base
   has_many :interactions
   has_many :labels, inverse_of: :organization
   has_many :organizational_labels, inverse_of: :organization
-  
+
   belongs_to :importable, polymorphic: true
   has_many :messages
   has_many :group_labels
@@ -28,15 +28,16 @@ class Organization < ActiveRecord::Base
   has_many :answers, through: :all_questions, source: :answers
   has_many :followup_comments
   has_many :organizational_permissions, inverse_of: :organization
+  has_many :movement_indicator_suggestions
 
   if Permission.table_exists? # added for travis testing
     has_many :leaders, through: :organizational_labels, source: :person, conditions: ["organizational_labels.label_id IN (?) AND organizational_labels.removed_date IS NULL", Label::LEADER_ID], order: "people.last_name, people.first_name", uniq: true
-    
+
     def sent
       labeled = organizational_labels.where(person_id: contacts.collect(&:id), label_id: Label::SENT_ID)
       contacts.where(id: labeled.collect(&:person_id)).order('people.last_name, people.first_name').uniq
     end
-    
+
     has_many :only_users, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL", Permission::USER_ID], order: "people.last_name, people.first_name", uniq: true
     has_many :users, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id IN (?) AND organizational_permissions.archive_date IS NULL", [Permission::USER_ID, Permission::ADMIN_ID]], order: "people.last_name, people.first_name", uniq: true
     has_many :admins, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL", Permission::ADMIN_ID], order: "people.last_name, people.first_name", uniq: true
@@ -91,11 +92,11 @@ class Organization < ActiveRecord::Base
       transition any => :inactive
     end
   end
-  
+
   def interaction_types
     return InteractionType.where(organization_id: [0,id]).order('id')
   end
-  
+
   def interaction_privacy_settings
     list = Array.new
     list << ["Everyone", "everyone"]
@@ -258,7 +259,7 @@ class Organization < ActiveRecord::Base
     assignments = contact_assignments.where(person_id: contacts.collect(&:id), assigned_to_id: leaders.collect(&:id))
     assignments.present? ? contacts.where("people.id NOT IN (?)", assignments.collect(&:person_id)) : contacts
   end
-  
+
   def unassigned_contacts_with_archived
     assignments = contact_assignments.where(person_id: contacts_with_archived.collect(&:id), assigned_to_id: leaders.collect(&:id))
     assignments.present? ? contacts_with_archived.where("people.id NOT IN (?)", assignments.collect(&:person_id)) : contacts_with_archived

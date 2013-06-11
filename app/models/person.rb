@@ -13,7 +13,7 @@ class Person < ActiveRecord::Base
   has_many :created_organizational_labels, class_name: 'OrgnizationalLabel', foreign_key: 'added_by_id'
   has_many :group_memberships
   has_many :groups, through: :group_memberships
-  
+
   has_one :sent_person
   has_many :sent_messages, class_name: "Message", foreign_key: "person_id"
   has_many :received_messages, class_name: "Message", foreign_key: "receiver_id"
@@ -121,7 +121,7 @@ class Person < ActiveRecord::Base
   scope :order_by_followup_status, lambda { |order| {
     :order => "ISNULL(organizational_permissions.followup_status) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_permissions.#{order}"
   } }
-  
+
 
 
   # Start of custom sorting for meta_search
@@ -191,47 +191,51 @@ class Person < ActiveRecord::Base
     :group => "people.id",
     :having => ["DATE(MAX(ass.updated_at)) >= ? AND DATE(MAX(ass.updated_at)) <= ? ", date_from, date_to]
   }}
-  
+
   def filtered_interactions(viewer, current_org)
     q = Array.new
-    
+
     # filter everyone
     q << "(interactions.privacy_setting = 'everyone')"
-    
+
     # filter parent
     org_with_permissions = viewer.organizational_permissions.collect(&:organization_id).uniq
     org_with_permissions.each do |org_id|
       q << "(interactions.privacy_setting = 'parent' AND (organizations.ancestry LIKE '#{org_id}/%' OR organizations.ancestry LIKE '%/#{org_id}/%' OR organizations.ancestry LIKE '%/#{org_id}' OR organizations.ancestry = #{org_id} OR organizations.id = #{org_id}))"
     end
-    
+
     # filter organization
     if current_org.people.where(id: viewer.id).present?
       q << "(interactions.privacy_setting = 'organization' AND interactions.organization_id = #{current_org.id})"
     end
-    
+
     # filter admins
     if viewer.admin_of_org?(current_org)
       q << "(interactions.privacy_setting = 'admins' AND interactions.organization_id = #{current_org.id})"
     end
-    
+
     # filter me
     q << "(interactions.privacy_setting = 'me' AND interactions.created_by_id = #{viewer.id})"
-    
+
     # all interactions are visible to the person created it
-    # q << "(interactions.created_by_id = #{viewer.id})" 
-    
+    # q << "(interactions.created_by_id = #{viewer.id})"
+
     query = q.join(" OR ") # combine queries
     return self.interactions.joins(:organization).where(query).sorted
   end
-  
+
   def labeled_in_org?(label, org)
-    labels = organizational_labels.where(label_id: label.id, organization_id: org.id, removed_date: nil).count > 0
+    organizational_labels.where(label_id: label.id, organization_id: org.id, removed_date: nil).count > 0
   end
-  
+
+  def has_interaction_in_org?(interaction_type_ids, org)
+    interactions.where(interaction_type_id: interaction_type_ids, organization_id: org.id, deleted_at: nil).count > 0
+  end
+
   def admin_of_org?(org)
     return admin_of_org_ids.include?(org.id)
   end
-  
+
   def all_feeds(current_person, current_organization, page = 1)
     limit = 5
     offset = page > 1 ? (page * limit) - limit : 0
@@ -239,7 +243,7 @@ class Person < ActiveRecord::Base
     interaction_ids = "0" unless interaction_ids.present?
     survey_ids = current_organization.survey_ids.join(',')
     survey_ids = "0" unless survey_ids.present?
-    
+
     counts = Person.find_by_sql("SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} AND interactions.id IN (#{interaction_ids}) UNION SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id} AND answer_sheets.completed_at IS NOT NULL AND answer_sheets.survey_id IN (#{survey_ids}) UNION SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN organizational_labels ON organizational_labels.person_id = people.id WHERE organizational_labels.organization_id = #{current_organization.id} AND people.id = #{id}")
     total = 0;
     counts.each{|x| total += x['COUNT']}
@@ -251,7 +255,7 @@ class Person < ActiveRecord::Base
       return records.collect{|x| x['CLASS'].constantize.find(x['RECORD_ID']) }
     end
   end
-  
+
   def all_feeds_last(current_person, current_organization)
     interaction_ids = filtered_interactions(current_person, current_organization).collect{|x| x.id}.join(',') || 0
     interaction_ids = "0" unless interaction_ids.present?
@@ -460,14 +464,14 @@ class Person < ActiveRecord::Base
   def organization_from_id(org_id)
     organization_objects[org_id.to_i]
   end
-  
+
   def permissions_by_org_id(org_id)
     unless @permissions_by_org_id
       @permissions_by_org_id = Hash[OrganizationalPermission.connection.select_all("select organization_id, group_concat(permission_id) as permission_ids from organizational_permissions where person_id = #{id} and archive_date is NULL group by organization_id").collect { |row| [row['organization_id'], row['permission_ids'].split(',').map(&:to_i) ]}]
     end
     @permissions_by_org_id[org_id]
   end
-  
+
   def permissions_for_org_id(org_id)
     permissions.where(id: permissions_by_org_id(org_id)).uniq
   end
@@ -478,7 +482,7 @@ class Person < ActiveRecord::Base
     end
     @labels_by_org_id[org_id]
   end
-  
+
   def labels_for_org_id(org_id)
     labels.where(id: labels_by_org_id(org_id)).uniq
   end
@@ -488,7 +492,7 @@ class Person < ActiveRecord::Base
       @groups_by_org_id = Organization.find(org_id).groups.collect(&:id).uniq
     end
   end
-  
+
   def groups_for_org_id(org_id)
     groups.where(id: groups_by_org_id(org_id))
   end
@@ -1172,7 +1176,7 @@ class Person < ActiveRecord::Base
   def friends_in_orgnization(org)
     friends.includes(:organizational_permissions).where('organizational_permissions.organization_id = ?',org.id)
   end
-  
+
   def assigned_organizational_labels(organization_id)
     labels.where('organizational_labels.organization_id' => organization_id)
   end
@@ -1180,7 +1184,7 @@ class Person < ActiveRecord::Base
   def assigned_organizational_permissions(organization_id)
     permissions.where('organizational_permissions.organization_id' => organization_id, 'organizational_permissions.archive_date' => nil)
   end
-  
+
   def assigned_organizational_permissions_including_archived(organization_id)
     permissions.where('organizational_permissions.organization_id = ? AND organizational_permissions.archive_date IS NOT NULL', organization_id)
   end

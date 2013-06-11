@@ -1,4 +1,11 @@
 Mh::Application.routes.draw do
+  resources :movement_indicator_suggestions do
+    collection do
+      get :fetch_suggestions
+    end
+  end
+
+
   get "dashboard/index"
 
   resources :imports, :only => [:show, :new, :create, :update, :destroy, :edit] do
