@@ -349,14 +349,14 @@ class ContactsController < ApplicationController
       # Load Saved Searches, Surveys & Questions
       initialize_variables
       update_fb_friends if current_person.friends.count == 0
-
+      
       # Fix old search variable from saved searches
       handle_old_search_variable if params[:search] == "1"
-
+      
       # Get people
       build_people_scope
       get_and_merge_unfiltered_people unless params[:dnc] == 'true'
-
+      
       # Filter results
       filter_archived_only if params[:archived].present?
       filter_by_permission if params[:permission].present?
@@ -438,12 +438,12 @@ class ContactsController < ApplicationController
     end
 
     def get_and_merge_unfiltered_people
+      x = []
       org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
       @people_unfiltered = Person.where('organizational_permissions.organization_id' => org_ids)
                                  .where("organizational_permissions.followup_status <> 'do_not_contact' OR organizational_permissions.followup_status IS NULL")
                                  .joins(:organizational_permissions_including_archived)
-                                 .joins(:organizational_labels)
-
+     
       if params[:include_archived].blank? && params[:archived].blank?
         @people_unfiltered = @people_unfiltered.where('organizational_permissions.archive_date' => nil)
       end

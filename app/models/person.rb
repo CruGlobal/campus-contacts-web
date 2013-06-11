@@ -115,7 +115,7 @@ class Person < ActiveRecord::Base
     :select => "people.*",
     :joins => "#{'JOIN organizational_permissions ON people.id = organizational_permissions.person_id JOIN permissions ON organizational_permissions.permission_id = permissions.id' unless tables_already_joined}",
     :conditions => "permissions.i18n IN #{Permission.default_permissions_for_field_string(order.include?("asc") ? Permission::DEFAULT_PERMISSIONS : Permission::DEFAULT_PERMISSIONS.reverse)}",
-    :order => "FIELD#{Permission.i18n_field_plus_default_permissions_for_field_string(order.include?("asc") ? Permission::DEFAULT_PERMISSIONS : Permission::DEFAULT_PERMISSIONS.reverse)}"
+    :order => "FIELD#{Permission.default_permissions_for_field_string(order.include?("asc") ? Permission::DEFAULT_PERMISSIONS : Permission::DEFAULT_PERMISSIONS.reverse)}"
   } }
 
   scope :order_by_followup_status, lambda { |order| {
@@ -1172,17 +1172,17 @@ class Person < ActiveRecord::Base
   def friends_in_orgnization(org)
     friends.includes(:organizational_permissions).where('organizational_permissions.organization_id = ?',org.id)
   end
-
-  def assigned_organizational_permissions(organization_id)
-    permissions.where('organizational_permissions.organization_id' => organization_id)
-  end
   
   def assigned_organizational_labels(organization_id)
     labels.where('organizational_labels.organization_id' => organization_id)
   end
+
+  def assigned_organizational_permissions(organization_id)
+    permissions.where('organizational_permissions.organization_id' => organization_id, 'organizational_permissions.archive_date' => nil)
+  end
   
-  def assigned_organizational_roles_including_archived(organization_id)
-    roles_including_archived.where('organizational_roles.organization_id' => organization_id)
+  def assigned_organizational_permissions_including_archived(organization_id)
+    permissions.where('organizational_permissions.organization_id = ? AND organizational_permissions.archive_date IS NOT NULL', organization_id)
   end
 
   def is_permission_archived?(org_id, permission_id)
