@@ -20,7 +20,7 @@ class Permission < ActiveRecord::Base
     :order => "permissions.name ASC"
   }}
   scope :arrange_all, lambda {{
-    order: "FIELD#{self.default_permissions_for_field_string(self::DEFAULT_PERMISSIONS)}"
+    order: "FIELD#{self.i18n_field_plus_default_permissions_for_field_string(self::DEFAULT_PERMISSIONS)}"
   }}
 
   def members_from_permission_org(org_id, include_archive = false)
@@ -49,7 +49,7 @@ class Permission < ActiveRecord::Base
   end
 
   def self.default_permissions_for_field_string(permissions)
-    permissions_string = "(i18n, "
+    permissions_string = "("
     permissions.each do |r|
       permissions_string = permissions_string + "\"" + r + "\"" + ","
     end

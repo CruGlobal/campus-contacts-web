@@ -29,7 +29,7 @@ class Label < ActiveRecord::Base
     :order => "labels.name ASC"
   }}
   scope :arrange_all, lambda {{
-    order: "FIELD#{self.default_labels_for_field_string(self::DEFAULT_CRU_LABELS)} DESC"
+    order: "FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS)} DESC"
   }}
   
   def self.involved
@@ -53,7 +53,7 @@ class Label < ActiveRecord::Base
   end
 
   def self.default_labels_for_field_string(labels)
-    labels_string = "(i18n, "
+    labels_string = "("
     labels.each do |r|
       labels_string = labels_string + "\"" + r + "\"" + ","
     end
