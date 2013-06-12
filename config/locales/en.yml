@@ -1241,10 +1241,14 @@ en:
     remove_suggestion_html: "<b>%{name}</b> look like they may no longer be %{label_sentence}. Remove the <b>%{label}</b> label?"
   labels:
     leader: leader
-    involved: lnvolved
+    involved: involved
     engaged_disciple: engaged disciple
     alumni: alumni
     leader_sentence: a leader
-    involved_sentence: lnvolved
+    involved_sentence: involved
     engaged_disciple_sentence: an engaged disciple
     alumni_sentence: an alumni
+    leader_definition: "This is a person leading small groups of Win-Build-Send ministry. (Examples: groups focused on reaching target audiences, launching movements, etc.)"
+    involved_definition: "This is a person regularly involved and attending movement events."
+    engaged_disciple_definition: "This is a person who has intentionally engaged someone in a spiritual conversation within the past semester. (The heart is that they have gone from merely attending movement events and begun to look outside of themselves to pass on their faith)  Include all who are also leaders."
+    alumni_definition: "This is a person who was involved and has now graduated."

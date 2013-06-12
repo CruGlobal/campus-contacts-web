@@ -207,7 +207,7 @@ module ApplicationHelper
     text_field_tag(name, value, options )
   end
 
-  def tip(t)
+  def balloon_tip(t)
     image_tag('qe/icons/question-balloon.png', :title => t, :class => 'tip')
   end
 
