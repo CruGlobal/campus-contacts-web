@@ -1,0 +1,12 @@
+<% suggestions.each do |suggestion| %>
+  <% suggestion_presenter = Present(suggestion) %>
+<tr>
+  <td><%== suggestion_presenter.suggestion %></td>
+  <td><%= link_to('Yes', '#', data: {behavior: 'accept', id: suggestion.id}) %></td>
+  <td>
+    <% if suggestion.accepted.nil? %>
+      <%= link_to('No', '#', data: {behavior: 'decline', id: suggestion.id}) %>
+    <% end %>
+  </td>
+</tr>
+<% end %>

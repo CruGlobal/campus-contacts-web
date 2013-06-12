@@ -1228,7 +1228,7 @@ en:
     index:
       title: Report Movement Indicators
       list_heading: Suggested Movement Indicator Actions
-      fetching: 'Fetching suggestions'
+      fetching: 'Fetching suggestions (this might take a while)'
       show_old: 'Click here to show old suggestions'
     reasons:
       group_membership: "This person is in a group"
@@ -1236,9 +1236,15 @@ en:
       leader: "This person is a leader"
       spiritual_conversation: "This person initiated a spiritual conversation"
       group_leader: "This person is a group leader"
-    suggestion_html: "<b>%{name}</b> look like they may be %{label}. Apply the <b>%{label}</b> label?"
+      graduated: "This person has graduated"
+    suggestion_html: "<b>%{name}</b> look like they may be %{label_sentence}. Apply the <b>%{label}</b> label?"
+    remove_suggestion_html: "<b>%{name}</b> look like they may no longer be %{label_sentence}. Remove the <b>%{label}</b> label?"
   labels:
     leader: leader
     involved: lnvolved
     engaged_disciple: engaged disciple
     alumni: alumni
+    leader_sentence: a leader
+    involved_sentence: lnvolved
+    engaged_disciple_sentence: an engaged disciple
+    alumni_sentence: an alumni

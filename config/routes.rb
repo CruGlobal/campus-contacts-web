@@ -2,6 +2,7 @@ Mh::Application.routes.draw do
   resources :movement_indicator_suggestions do
     collection do
       get :fetch_suggestions
+      get :fetch_declined_suggestions
     end
   end
 

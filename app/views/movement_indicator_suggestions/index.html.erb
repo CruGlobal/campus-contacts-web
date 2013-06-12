@@ -2,9 +2,9 @@
 <h2><%= t('.list_heading') %></h2>
 <table border="0">
   <tbody id="suggestions">
-    <tr><td><%= t('.fetching') %> <%= spinner(nil, true) %></td></tr>
+    <tr><td colspan="3"><%= t('.fetching') %> <%= spinner(nil, true) %></td></tr>
   </tbody>
   <tfoot id="declined_suggestions">
-    <tr><td><%= link_to(t('.show_old'), '#') %></td></tr>
+    <tr><td colspan="3"><%= link_to(t('.show_old'), '#', id: 'show_old') %></td></tr>
   </tfoot>
 </table>
