@@ -355,7 +355,7 @@ class ContactsController < ApplicationController
       
       # Get people
       build_people_scope
-      get_and_merge_unfiltered_people unless params[:dnc] == 'true'
+      # get_and_merge_unfiltered_people unless params[:dnc] == 'true'
       
       # Filter results
       filter_archived_only if params[:archived].present?
@@ -462,7 +462,8 @@ class ContactsController < ApplicationController
     
     def filter_by_label
     	params[:label] = [params[:label]] unless params[:label].is_a?(Array)
-      if @labels = Label.select("id, name, i18n").where("id IN (?)",params[:label])
+      @people_scope = @people_scope.joins(:organizational_labels).where('organizational_labels.organization_id = ? AND organizational_labels.removed_date IS NULL', current_organization.id)
+      if @labels = Label.where("id IN (?)",params[:label])
         if params[:do_search].present?
           @header = I18n.t('contacts.index.matching_seach')
         else
@@ -484,10 +485,6 @@ class ContactsController < ApplicationController
       	else
         	@people_scope = @people_scope.where("organizational_labels.label_id IN (?)", @labels.collect(&:id))
       	end
-
-        if !params[:include_archived].present? && !params[:include_archived] == 'true'
-          @people_scope = @people_scope.where("organizational_labels.archive_date" => nil)
-        end
       end
       
     end
@@ -634,6 +631,10 @@ class ContactsController < ApplicationController
         if sort_query.include?('last_survey')
 	        @people_scope = @people_scope.get_and_order_by_latest_answer_sheet_answered(sort_query, current_organization.id)
 		    end
+        
+        if sort_query.include?('labels')
+          @people_scope = @people_scope.get_and_order_by_label(sort_query, current_organization.id)
+        end
 
 		    if sort_query.include?('followup_status')
 		    	@people_scope = @people_scope.order_by_followup_status(sort_query)
@@ -643,9 +644,8 @@ class ContactsController < ApplicationController
 		    	@people_scope = @people_scope.order_by_primary_phone_number(sort_query)
 		    end
 
-	    	if ['permission_id','last_name','first_name','gender'].any?{ |i| sort_query.include?(i) }
-					order_query = sort_query.gsub('permission_id','organizational_permissions.permission_id')
-																	.gsub('gender','ISNULL(people.gender), people.gender')
+	    	if ['last_name','first_name','gender'].any?{ |i| sort_query.include?(i) }
+					order_query = sort_query.gsub('gender','ISNULL(people.gender), people.gender')
 																	.gsub('first_name', 'people.first_name')
 																	.gsub('last_name', 'people.last_name')
 				end

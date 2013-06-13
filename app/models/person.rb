@@ -122,6 +122,8 @@ class Person < ActiveRecord::Base
     :order => "ISNULL(organizational_permissions.followup_status) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_permissions.#{order}"
   } }
 
+  
+
 
 
   # Start of custom sorting for meta_search
@@ -138,11 +140,11 @@ class Person < ActiveRecord::Base
   scope :sort_by_phone_number_desc,
     order("phone_numbers.number DESC}")
 
-  scope :sort_by_label_id_asc,
-    order("organizational_labels.label_id ASC")
+  scope :sort_by_labels_asc,
+    order("ISNULL(new_i18n.lbl_id), FIELD#{Label.custom_field_plus_default_labels_for_field_string('new_i18n.lbl_i18n',Label::DEFAULT_CRU_LABELS.reverse)} DESC, new_i18n.lbl_name ASC")
 
-  scope :sort_by_label_id_desc,
-    order("organizational_labels.label_id DESC")
+  scope :sort_by_labels_desc,
+    order("ISNULL(new_i18n.lbl_id), FIELD#{Label.custom_field_plus_default_labels_for_field_string('new_i18n.lbl_i18n',Label::DEFAULT_CRU_LABELS.reverse)} ASC, new_i18n.lbl_name DESC")
 
   scope :sort_by_last_survey_asc,
     order("ISNULL(ass.updated_at), MAX(ass.updated_at) DESC")
@@ -178,6 +180,12 @@ class Person < ActiveRecord::Base
     :conditions => ["(org_permissions.organization_id = ? AND (first_name LIKE ? OR last_name LIKE ? OR phone_numbers.number LIKE ?)) AND phone_numbers.number IS NOT NULL AND phone_numbers.primary = 1", org_id, "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
     :joins => "LEFT JOIN phone_numbers ON phone_numbers.person_id = people.id LEFT JOIN organizational_permissions AS org_permissions ON org_permissions.person_id = people.id",
     :limit => 5
+  }}
+
+  scope :get_and_order_by_label, lambda { |order, org_id| {
+    :joins => "LEFT JOIN (SELECT org_labels.person_id, org_labels.id as org_label_id, labels.name as lbl_name, labels.i18n as lbl_i18n, labels.id as lbl_id FROM organizational_labels org_labels INNER JOIN labels ON labels.id = org_labels.label_id WHERE org_labels.id IS NOT NULL AND org_labels.organization_id = '#{org_id}' AND org_labels.removed_date IS NULL ORDER BY FIELD#{Label.i18n_field_plus_default_labels_for_field_string(Label::DEFAULT_CRU_LABELS.reverse)} DESC, labels.name) new_i18n ON new_i18n.person_id = people.id",
+    :group => "people.id",
+    :order => "ISNULL(new_i18n.lbl_id), FIELD#{Label.custom_field_plus_default_labels_for_field_string('new_i18n.lbl_i18n',Label::DEFAULT_CRU_LABELS.reverse)} #{order.include?('desc') ? 'ASC' : 'DESC'}, new_i18n.lbl_name #{order.include?('desc') ? 'DESC' : 'ASC'}"
   }}
 
   scope :get_and_order_by_latest_answer_sheet_answered, lambda { |order, org_id| {
@@ -1178,7 +1186,7 @@ class Person < ActiveRecord::Base
   end
 
   def assigned_organizational_labels(organization_id)
-    labels.where('organizational_labels.organization_id' => organization_id)
+    labels.where('organizational_labels.organization_id' => organization_id, 'organizational_labels.removed_date' => nil)
   end
 
   def assigned_organizational_permissions(organization_id)

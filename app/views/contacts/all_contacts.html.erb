@@ -84,7 +84,7 @@
 
         <th class='gender'><%= sort_link @q, :gender, t('.gender'), params %></th>
         <th class='phone' style='min-width:100px;'><%= sort_link @q, :phone_number, t('.phone_number'), params %></th>
-        <th class='labels'><%= sort_link @q, :role_id, t('.labels'), params %></th>
+        <th class='labels'><%= sort_link @q, :labels, t('.labels'), params %></th>
         <% @questions.each do |q| %>
           <th class="question <%= dom_id(q) %>">
             <% if @predefined_questions.include?(q) %>

@@ -1,4 +1,4 @@
-<% labels = person.assigned_organizational_labels(current_organization.id) %>
+<% labels = person.assigned_organizational_labels(current_organization.id).uniq %>
 <% contact_permission = person.contact_permission_for_org(current_organization) %>
 <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row <%= extra if defined?(extra) %>" data-name="<%= person.name %>" data-email="<%= person.email %>">
 	<td class="handle_container">
@@ -30,8 +30,10 @@
     <div id="permissions_user_<%= person.id %>" class="permissions_spaces">
       <div class="permissions_cover"></div>
       <div class="permissions_container">
-        <% labels.each do |label| %>
-          <div id="<%= person.id%>_<%= label.id %>" class="permission_label permission_<%= label.id %>"><%= label.name %></div>
+        <% sorted_labels = labels.arrange_all %>
+        <% sorted_labels = labels.arrange_all_desc if params['search'] && params['search']['meta_sort'] == 'labels.desc' %>
+        <% sorted_labels.each do |label| %>
+          <div id="<%= person.id%>_<%= label.id %>" class="permission_label label_<%= label.id %>"><%= label.name %></div>
         <% end %>
       </div>
     </div>

@@ -29,7 +29,10 @@ class Label < ActiveRecord::Base
     :order => "labels.name ASC"
   }}
   scope :arrange_all, lambda {{
-    order: "FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS)} DESC"
+    order: "FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS.reverse)} DESC, name"
+  }}
+  scope :arrange_all_desc, lambda {{
+    order: "FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS.reverse)} ASC, name DESC"
   }}
   
   def self.involved
@@ -59,6 +62,13 @@ class Label < ActiveRecord::Base
     end
     labels_string[labels_string.length-1] = ")"
     labels_string
+  end
+
+  def self.custom_field_plus_default_labels_for_field_string(custom_field, labels)
+    r = self.default_labels_for_field_string(labels)
+    r[0] = ""
+    r = "(#{custom_field}," + r
+    r
   end
 
   def self.i18n_field_plus_default_labels_for_field_string(labels)

@@ -936,20 +936,22 @@ class ContactsControllerTest < ActionController::TestCase
     context "by labels" do
       setup do
         Factory(:organizational_label, organization: @org, person: @person1, label: Label.involved)
-        Factory(:organizational_label, organization: @org, person: @person2, label: Label.alumni)
-        Factory(:organizational_label, organization: @org, person: @person3, label: Label.leader)
+        Factory(:organizational_label, organization: @org, person: @person2, label: Label.leader)
+        Factory(:organizational_label, organization: @org, person: @person3, label: Label.alumni)
         Factory(:organizational_label, organization: @org, person: @person4, label: Label.sent)
-      end
-
-      should "return people sorted by their labels (default labels) desc" do
-        xhr :get, :index, {:search=>{:meta_sort=>"label_id desc"}}
-        assert_equal @user.person.id, assigns(:people).collect(&:id).first 
+        Factory(:organizational_label, organization: @org, person: @user.person, label: Label.engaged_disciple)
       end
 
       should "return people sorted by their labels (default labels) asc" do
-        xhr :get, :index, {:search=>{:meta_sort=>"label_id asc"}}
-        results = assigns(:people).collect(&:id) & [@user.person.id, @person1.id, @person2.id, @person3.id, @person4.id]
-        assert_equal @person4.id, results.last
+        xhr :get, :index, {:search=>{:meta_sort=>"labels.asc"}}
+        results = assigns(:people).collect(&:id)
+        assert_equal [@person1.id, @person2.id, @person3.id, @person4.id, @user.person.id], results
+      end
+
+      should "return people sorted by their labels (default labels) desc" do
+        xhr :get, :index, {:search=>{:meta_sort=>"labels.desc"}}
+        results = assigns(:people).collect(&:id)
+        assert_equal [@user.person.id, @person4.id, @person3.id, @person2.id, @person1.id], results
       end
     end
   end
