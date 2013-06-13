@@ -138,10 +138,10 @@ class Person < ActiveRecord::Base
     order("phone_numbers.number DESC}")
 
   scope :sort_by_labels_asc,
-    order("ISNULL(new_i18n.lbl_id), FIELD#{Label.custom_field_plus_default_labels_for_field_string('new_i18n.lbl_i18n',Label::DEFAULT_CRU_LABELS.reverse)} DESC, new_i18n.lbl_name ASC")
+    where("id <> 0")
 
   scope :sort_by_labels_desc,
-    order("ISNULL(new_i18n.lbl_id), FIELD#{Label.custom_field_plus_default_labels_for_field_string('new_i18n.lbl_i18n',Label::DEFAULT_CRU_LABELS.reverse)} ASC, new_i18n.lbl_name DESC")
+    where("id <> 0")
 
   scope :sort_by_last_survey_asc,
     order("ISNULL(ass.updated_at), MAX(ass.updated_at) DESC")
