@@ -1,6 +1,6 @@
 <tr id="<%= dom_id(person) %>" class="person_row" data-name="<%= person.name %>" data-email="<%= person.email %>" data-id="<%= person.id %>">
   <td nowrap="nowrap" class="checkbox_cell">
-    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox contact_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email %>
+    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox contact_checkbox group_contact_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email %>
   </td>
   <td class="name"><%= person.name %></td>
   <td class="email"><%= mail_to(person.email) if person.email.present? %></td>
