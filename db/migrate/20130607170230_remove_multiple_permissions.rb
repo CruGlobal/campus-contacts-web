@@ -1,12 +1,14 @@
+class Permission < ActiveRecord::Base
+end
 class Person < ActiveRecord::Base
 end
 class OrganizationalPermission < ActiveRecord::Base
 end
 class RemoveMultiplePermissions < ActiveRecord::Migration
   def up
-    admin_id = Permission::ADMIN_ID
-    user_id = Permission::USER_ID
-    contact_id = Permission::NO_PERMISSIONS_ID
+    admin_id = Permission.find_or_create_by_name_and_i18n('Admin','admin').try(:id)
+    user_id = Permission.find_or_create_by_name_and_i18n('User','user').try(:id)
+    contact_id = Permission.find_or_create_by_name_and_i18n('No Permissions','no_permissions').try(:id)
     OrganizationalPermission.where(person_id: nil).destroy_all
     OrganizationalPermission.select("person_id AS PERSON_ID, COUNT(person_id) AS PERMISSION_COUNT").group("person_id HAVING PERMISSION_COUNT > 1").each do |person_obj|
       if person_obj['PERSON_ID'].nil?

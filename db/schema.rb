@@ -191,6 +191,14 @@ ActiveRecord::Schema.define(:version => 20130611214719) do
   add_index "clients", ["link"], :name => "index_clients_on_link", :unique => true
   add_index "clients", ["organization_id"], :name => "index_clients_on_organization_id"
 
+  create_table "conditions", :force => true do |t|
+    t.integer "question_sheet_id", :null => false
+    t.integer "trigger_id",        :null => false
+    t.string  "expression",        :null => false
+    t.integer "toggle_page_id",    :null => false
+    t.integer "toggle_id"
+  end
+
   create_table "contact_assignments", :force => true do |t|
     t.integer  "assigned_to_id"
     t.integer  "person_id"
@@ -441,6 +449,29 @@ ActiveRecord::Schema.define(:version => 20130611214719) do
 
   add_index "merge_audits", ["merge_looser_id", "merge_looser_type"], :name => "merge_looser"
   add_index "merge_audits", ["mergeable_id", "mergeable_type"], :name => "mergeable"
+
+  create_table "messages", :force => true do |t|
+    t.integer  "organization_id"
+    t.integer  "person_id"
+    t.integer  "receiver_id"
+    t.string   "from"
+    t.string   "to"
+    t.string   "reply_to"
+    t.string   "subject"
+    t.text     "message"
+    t.string   "sent_via"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  create_table "mh_surveys", :force => true do |t|
+    t.string   "title"
+    t.integer  "organization_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "mh_surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
 
   create_table "movement_indicator_suggestions", :force => true do |t|
     t.integer  "person_id"
@@ -725,6 +756,19 @@ ActiveRecord::Schema.define(:version => 20130611214719) do
     t.datetime "updated_at"
   end
 
+  create_table "sent_emails", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "organization_id"
+    t.integer  "receiver_id"
+    t.string   "sender"
+    t.string   "recipient"
+    t.string   "subject"
+    t.text     "message"
+    t.string   "status"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
   create_table "sent_people", :force => true do |t|
     t.integer  "person_id"
     t.integer  "transferred_by_id"
@@ -845,9 +889,20 @@ ActiveRecord::Schema.define(:version => 20130611214719) do
   add_index "surveys", ["crs_registrant_type_id"], :name => "index_surveys_on_crs_registrant_type_id"
   add_index "surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
 
+  create_table "teams", :force => true do |t|
+    t.integer  "organization_id"
+    t.string   "name"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "teams", ["organization_id"], :name => "index_teams_on_organization_id"
+
   create_table "users", :force => true do |t|
     t.string   "username",                  :limit => 200,                :null => false
     t.string   "password",                  :limit => 80
+    t.datetime "lastLogin"
+    t.datetime "createdOn"
     t.string   "remember_token"
     t.datetime "remember_token_expires_at"
     t.boolean  "developer"

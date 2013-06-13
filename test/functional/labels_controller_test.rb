@@ -17,13 +17,22 @@ class LabelsControllerTest < ActionController::TestCase
       sign_in @user
     end
 
-    should "show all the system and organizational permissions" do
+    should "show all the system labels for non cru org" do
       @organization.update_attribute('ancestry','2')
       get :index, :id => @organization.id
       system_labels = assigns(:system_labels).collect { |label| label.i18n }
       organizational_labels = assigns(:organizational_labels).collect { |label| label.i18n }
       assert_response :success, @response.body
-      assert_equal ["involved", "engaged_disciple", "leader", "alumni"], system_labels
+      assert_equal ["involved", "leader", "alumni"], system_labels
+    end
+
+    should "show all the system labels for cru org" do
+      @organization.update_attribute('ancestry','1')
+      get :index, :id => @organization.id
+      system_labels = assigns(:system_labels).collect { |label| label.i18n }
+      organizational_labels = assigns(:organizational_labels).collect { |label| label.i18n }
+      assert_response :success, @response.body
+      assert_equal ["involved", "leader", "alumni", "sent", "engaged_disciple"], system_labels
     end
 
     should "should get new" do
