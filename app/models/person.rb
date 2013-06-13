@@ -122,9 +122,6 @@ class Person < ActiveRecord::Base
     :order => "ISNULL(organizational_permissions.followup_status) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_permissions.#{order}"
   } }
 
-  
-
-
 
   # Start of custom sorting for meta_search
 
