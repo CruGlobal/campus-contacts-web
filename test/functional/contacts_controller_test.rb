@@ -933,26 +933,23 @@ class ContactsControllerTest < ActionController::TestCase
       #end
     end
 
-    context "by permissions" do
+    context "by labels" do
       setup do
-        @person_a = Factory(:person)
-        @person_b = Factory(:person)
-        @person_c = Factory(:person)
-        Factory(:organizational_permission, organization: @org, person: @person_a, permission: Permission.admin)
-        Factory(:organizational_permission, organization: @org, person: @person_b, permission: Permission.user)
-        Factory(:organizational_permission, organization: @org, person: @person_c, permission: Permission.no_permissions)
+        Factory(:organizational_label, organization: @org, person: @person1, label: Label.involved)
+        Factory(:organizational_label, organization: @org, person: @person2, label: Label.alumni)
+        Factory(:organizational_label, organization: @org, person: @person3, label: Label.leader)
+        Factory(:organizational_label, organization: @org, person: @person4, label: Label.sent)
       end
 
-      should "return people sorted by their permissions (default permissions) desc" do
-        xhr :get, :index, {:search=>{:meta_sort=>"permission_id desc"}}
-        assert_equal @person_a.id, assigns(:people).collect(&:id).last 
+      should "return people sorted by their labels (default labels) desc" do
+        xhr :get, :index, {:search=>{:meta_sort=>"label_id desc"}}
+        assert_equal @user.person.id, assigns(:people).collect(&:id).first 
       end
 
-      should "return people sorted by their permissions (default permissions) asc" do
-        xhr :get, :index, {:search=>{:meta_sort=>"permission_id asc"}}
-        results = assigns(:people).collect(&:id) & [@user.person.id, @person_a.id, @person_b.id, @person_c.id]
-        assert_equal @user.person.id, results.first
-        assert_equal @person_c.id, results.last
+      should "return people sorted by their labels (default labels) asc" do
+        xhr :get, :index, {:search=>{:meta_sort=>"label_id asc"}}
+        results = assigns(:people).collect(&:id) & [@user.person.id, @person1.id, @person2.id, @person3.id, @person4.id]
+        assert_equal @person4.id, results.last
       end
     end
   end

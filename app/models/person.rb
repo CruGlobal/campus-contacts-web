@@ -138,11 +138,11 @@ class Person < ActiveRecord::Base
   scope :sort_by_phone_number_desc,
     order("phone_numbers.number DESC}")
 
-  scope :sort_by_permission_id_asc,
-    order("organizational_permissions.permission_id ASC")
+  scope :sort_by_label_id_asc,
+    order("organizational_labels.label_id ASC")
 
-  scope :sort_by_permission_id_desc,
-    order("organizational_permissions.permission_id DESC")
+  scope :sort_by_label_id_desc,
+    order("organizational_labels.label_id DESC")
 
   scope :sort_by_last_survey_asc,
     order("ISNULL(ass.updated_at), MAX(ass.updated_at) DESC")

@@ -46,7 +46,7 @@
 
       <th><%= sort_link @q, :gender, t('general.gender'), params %></th>
       <th style='min-width:100px;'><%= sort_link @q, :phone_number, t('.phone_number'), params %></th>
-      <th><%= sort_link @q, :permission_id, t('nav.permissions'), params %></th>
+      <th><%= sort_link @q, :permissions, t('nav.permissions'), params %></th>
       <% @questions.each do |q| %>
         <th class="<%= dom_id(q) %>">
           <% if @predefined_questions.include?(q) %>

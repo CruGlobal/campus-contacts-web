@@ -242,10 +242,13 @@ $ ->
   
   $('#interaction_save_save_button').live 'click', (e)->
     e.preventDefault()
-    $.toggleLoader('profile_name','Saving Interaction...')
-    $.blur('.feed_content .feed_box.interaction_new')
-    $(document).click()
-    $('form#new_interaction_form').submit()
+    if $('form #interaction_type_field').val() == "1" && $('form #interaction_comment').val() == ""
+      $.a("You cannot save blank comment on Comment Only interaction.")
+    else
+      $.toggleLoader('profile_name','Saving Interaction...')
+      $.blur('.feed_content .feed_box.interaction_new')
+      $(document).click()
+      $('form#new_interaction_form').submit()
   
   $('#privacy_setting_dropdown .option').live 'click', (e)->
     selected_name = $(this).attr('data-name')
