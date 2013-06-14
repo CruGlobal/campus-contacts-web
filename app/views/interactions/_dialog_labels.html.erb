@@ -1,4 +1,4 @@
-<div id="profile_labels_dialog" style="display:none;">
+<div id="profile_labels_dialog" style="display:none;"  class="custom_mh_popup_box">
   <div class="ui-widget-overlay" style="position: fixed; width: 100%; height: 100%; z-index: 999; "></div>
   <div class="pop_box_container">
     <div class="mh_popup_box labels_popup_box" class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable" tabindex="-1" permission="dialog" aria-labelledby="ui-dialog-title-alert_dialog">
@@ -13,7 +13,7 @@
           <% else %>
             <% checked = false %>
           <% end %>
-            
+
           <%= render partial: 'interactions/label', locals: {label: label, checked: checked} %>
         <% end %>
     	</div>
@@ -24,14 +24,14 @@
   			</div>
   		</div>
       <div class="labels_notice" id="labels_notice"></div>
-      
+
 
     	<div class="labels_save" id="labels_save" data-current-label-ids="<%= current_label_ids.join(',') %>">
     		<button class="red_accent" id="labels_popup_save_button" data-person-id="<%= @person.id %>">Save</button>
     		<button class="large_lightgray" id="labels_popup_cancel_button">Cancel</button>
         <%= link_to raw("<button class='large_gray' id='labels_popup_manage_button'>Manage Labels</button>"), labels_path(organization: current_organization.id) %>
     	</div>
-      
+
     </div>
   </div>
 </div>

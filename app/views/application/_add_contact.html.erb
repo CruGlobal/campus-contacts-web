@@ -52,7 +52,7 @@
               <% answer = question.display_response(answer_sheet) %>
               <div class="field add_contact_survey_question_field">
               	<label><%= raw question.label %></label>
-                
+
                 <% @checked_or_val = false %>
                 <% if flash[:selected_answers].present? %>
                   <% selected_answers = flash[:selected_answers] %>
@@ -60,7 +60,7 @@
                     <% @checked_or_val = selected_answers[survey.id.to_s][question.id.to_s] %>
                   <% end %>
                 <% end %>
-                
+
               	<%= render :partial => 'survey/' + question.ptemplate, object: question, locals: {col: nil, answer_sheet: answer_sheet, survey: survey } %>
               </div>
             <% end %>

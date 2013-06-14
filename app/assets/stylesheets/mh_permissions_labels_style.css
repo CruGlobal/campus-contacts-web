@@ -137,6 +137,27 @@ li.btn_right, button.btn_right {
 	position:relative;
 	font-family:tahoma, Sans-serif;
 	color:#333333;
+
+	background-color:#FFF;
+	border:1px solid #808284;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	width: 575px;
+	min-height: 170px;
+}
+
+.mh_popup_box .fancy {
+	margin:10px 0px;
+	font-size:14px;
+}
+
+.mh_popup_box_scroller {
+  margin: 0 -15px;
+  height: 300px;
+  padding: 10px 20px;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  overflow-y: scroll;
 }
 
 .mh_popup_box label {
@@ -153,7 +174,7 @@ li.btn_right, button.btn_right {
   padding: 40px 15px 15px;
 }
 
-.mh_popup_box_top{ 
+.mh_popup_box_top{
 
 	/*--Border--*/
 	border-bottom:1px solid #c0c0c0;
@@ -228,8 +249,8 @@ span.mh_popup_heading {
 }
 
 .msg_popup_box .fancy,
-.groups_popup_box .fancy, 
-.permissions_popup_box .fancy, 
+.groups_popup_box .fancy,
+.permissions_popup_box .fancy,
 .labels_popup_box .fancy {
 	margin:48px 24px 24px;
 	font-size:14px;
@@ -292,6 +313,19 @@ button#groups_add_new_button, button#labels_add_new_button {
 .groups_add_new input, .labels_add_new input {
 	float:left;
 	width:120px;
+}
+
+.mh_popup_buttons {
+  display: inline-block;
+  padding: 0px;
+  margin: -5px 0 10px;
+  width: 560px;:
+}
+
+.mh_popup_buttons button {
+  float:right;
+  display:inline-block;
+  margin-left:12px;
 }
 
 .msg_popup_box .msg_save {

@@ -1,7 +1,49 @@
 $ ->
   $(document).on 'keypress', '#contact_search_form input', (e)->
-    if (e.keyCode == $.ui.keyCode.ENTER)
+    if e.keyCode == $.ui.keyCode.ENTER
       $('#contact_search_form').submit()
+
+  $(document).on 'keyup', (e)->
+    if e.keyCode == $.ui.keyCode.ESCAPE
+      $('.custom_mh_popup_box').each ->
+        $.hideDialog($(this))
+
+  $('#allcontacts_add_contact_button').live 'click', (e)->
+    e.preventDefault()
+    $('#new_person')[0].reset()
+    $('#new_person')[0].reset()
+    $(".field_with_errors, .red_errors}").remove()
+    $("#add_contact_form input[type='text']").val("")
+    $("#add_contact_form .user_defined_contact_fields textarea").val("")
+    $("#add_contact_form .user_defined_contact_fields select").val(0)
+    $("#add_contact_form input[type='checkbox']").attr("checked",false)
+    $("#add_contact_form input[type='radio']").attr("checked",false)
+    $("#add_contact_form input[type='checkbox']:not(:disabled)").attr("checked",false)
+    $("#add_contact_form .remove_in_add_contact").remove()
+    $.showDialog($("#add_contact_div"))
+
+  $('#add_contact_cancel_button').live 'click', (e)->
+    e.preventDefault()
+    $.hideDialog($("#add_contact_div"))
+
+    # close: (event, ui) ->
+    #   $.unhideScroll()
+    # buttons: [
+    #   text: t('application.add_contact.save_and_close'),
+    #   'class': 'add_new_contact_dialog_buttons',
+    #   click: ->
+    #     $.mh.saveContact(false)
+    # ,
+    #   text: t('application.add_contact.save_and_add'),
+    #   'class': 'add_new_contact_dialog_buttons',
+    #   click: ->
+    #     $.mh.saveContact(true)
+    # ,
+    #   text: 'Cancel',
+    #   'class': 'add_new_contact_dialog_buttons',
+    #   click: ->
+    #     $(this).dialog('destroy')
+    # ]
 
   $('.ac_dropdown_list .side_toggle').live 'click', (e)->
     e.preventDefault()
@@ -12,7 +54,7 @@ $ ->
     else
       side_list.slideDown()
       $(this).html("&#x25B2;")
-  
+
   $('#ac_button_bar #menu_assign_link').live 'click', (e)->
     e.preventDefault()
     $('.profile_checkbox').prop('checked',true)
@@ -22,7 +64,7 @@ $ ->
       $.showDialog($("#assign_search"))
     else
       $.a(t('contacts.index.none_checked'))
-      
+
   $(".my_contacts.leftmenu .completed").droppable
     activeClass: "ui-state-highlight"
     accept: ".handle"
@@ -241,7 +283,7 @@ $ ->
           email = $('#bulk_vcard_email').val()
           note = $('#bulk_vcard_note').val()
           url = $('#bulk_vcard_form').attr('action')
-          
+
           if email == ""
             $.a(t('contacts.index.none_email_vcard'))
             return false
@@ -356,7 +398,7 @@ $ ->
     $(this).parents('.controls').find('.assigned_to').text("")
     $('.count', leader).html(Number($('.count', leader).html()) - 1)
     $.toggleLoader('ac_button_bar','Unassigning...')
-    
+
   $('#assign_search .assign_button').live 'click', ->
     if $('#assign_to').val() != ""
       leader = $('.leftmenu .leader[data-id=' + $('#assign_to').val() + ']')
@@ -737,7 +779,7 @@ $ ->
 
 	$(".search_status").live "change", ->
     $.fn.search_status()
-  
+
   $("#locate_contact").live "click", ->
     $("#locate_contact_container").dialog
       resizable: false,
@@ -833,7 +875,7 @@ $.fn.assignTo = (leader, skip_remote) ->
       $('.unassign_link', row).show()
 
     if assigned_to.html() != leader_name && leader_name != "Unassigned"
-      
+
       $('.count', leader).html(Number($('.count', leader).html()) + 1)
       if assigned_to.html() == ''
         $('#unassigned_count').html(Number($('#unassigned_count').html()) - 1)
@@ -868,7 +910,7 @@ $.fn.assignTo = (leader, skip_remote) ->
 
 $.mh.saveContact = (add_more) ->
   form = $('#new_person')
-  
+
   #For My Contacts Page
   $('#assign_new_contact_to_me').val($('#mine_assign_to').val())
   #For Add a person in Group Members Page
@@ -879,9 +921,9 @@ $.mh.saveContact = (add_more) ->
     $("#add_to_group_tag").val(1)
     $("#add_to_group_role").val($("#role").val())
     $("#add_to_group").val($("#add_to_group_id").val())
-  
+
   dialog_buttons = $('.add_new_contact_dialog_buttons, .add_new_person_group_member_butons')
-  
+
   dialog_buttons.button('disable')
   if $('#person_first_name', form).val() == ''
     $.a(t('contacts.index.no_name_message'))

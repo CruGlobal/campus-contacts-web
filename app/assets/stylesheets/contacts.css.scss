@@ -48,11 +48,13 @@
   }
   #left {
     width: 180px;
+    min-height: 420px;
   }
   #main {
     border: none;
     margin-left: 210px;
     margin-right: 20px;
+    min-height: 420px;
   }
   .contact_listing {
     width: 100%;
@@ -234,7 +236,7 @@ input.text.validate-date {
   #locate_contact_results_container{
     height: 275px;
     overflow-y: scroll;
-    
+
     .locate_contact_list_head{
       border:1px solid #0379ae;
       background-color: #eaf1f6;
@@ -247,7 +249,7 @@ input.text.validate-date {
     .wrap_list {
       word-wrap:break-word;
       width: 180px;
-      overflow:hidden;    
+      overflow:hidden;
     }
     .locate_contact_list_tr:hover{
       td{
