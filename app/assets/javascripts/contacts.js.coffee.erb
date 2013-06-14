@@ -7,7 +7,22 @@ $ ->
     if e.keyCode == $.ui.keyCode.ESCAPE
       $('.custom_mh_popup_box').each ->
         unless $(this).hasClass('locked')
-          $.hideDialog()
+          $.hideDialog($(this))
+
+  $("#new_sent_messages_link").live 'click', (e)->
+    e.preventDefault()
+    $("#new_sent_messages_div .mh_popup_box_scroller").hide();
+    $('#new_sent_messages_div #sent_messages_paginator_top').hide();
+    $("#new_sent_messages_div #sent_messages_loader").show()
+    $.showDialog($("#new_sent_messages_div"))
+    $.ajax
+      type: 'GET',
+      url: '/sent_messages'
+
+  $('#sent_messages_cancel_button').live 'click', (e)->
+    e.preventDefault()
+    $.hideDialog($("#new_sent_messages_div"))
+
 
   $('#allcontacts_add_contact_button').live 'click', (e)->
     e.preventDefault()

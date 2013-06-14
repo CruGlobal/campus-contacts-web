@@ -1,15 +1,34 @@
-$("#sent_messages_loader").hide();
-$("#sent_messages_content").hide();
-$('#sent_messages_paginator_top').hide();
-$('#sent_messages_paginator_bottom').hide();
-<% if @messages.count > 0 %>
-  $("#sent_messages_content #sent_messages_table #messages").html("<%= escape_javascript render(@messages) %>");
-  $('#sent_messages_paginator_top').html("<%= escape_javascript(paginate(@messages, :remote => true).to_s) %>");
-  $('#sent_messages_paginator_bottom').html("<%= escape_javascript(paginate(@messages, :remote => true).to_s) %>");
-  $('#sent_messages_paginator_top').show();
-  $('#sent_messages_paginator_bottom').show();
-<% else %>
-  $("#sent_messages_content #sent_messages_table #messages").html("<tr><td class='alert_cell' colspan='2'>No sent messages yet</td></tr>");
-<% end %>
-$("#sent_messages_content").show();
-$("#sent_messages_div").scrollTop(0);
+if($("#new_sent_messages_div .mh_popup_box_scroller").size() > 0){
+  $("#new_sent_messages_div .mh_popup_box_scroller").show();
+  $('#new_sent_messages_div #sent_messages_paginator_top').show();
+  $("#new_sent_messages_div #sent_messages_loader").hide()
+
+  <% if @messages.count > 0 %>
+    $("#new_sent_messages_div #sent_messages_table #messages").html("<%= escape_javascript render(@messages) %>");
+    $('#new_sent_messages_div #sent_messages_paginator_top').html("<%= escape_javascript(paginate(@messages, :remote => true).to_s) %>");
+    $('#new_sent_messages_div sent_messages_paginator_bottom').show();
+  <% else %>
+    $("#new_sent_messages_div #sent_messages_table #messages").html("<tr><td class='alert_cell' colspan='2'>No sent messages yet</td></tr>");
+  <% end %>
+
+  $("#new_sent_messages_div .mh_popup_box_content").show()
+  $("#new_sent_messages_div .mh_popup_box_content").scrollTop(0);
+}else{
+  $("#sent_messages_loader").hide();
+  $("#sent_messages_content").hide();
+  $('#sent_messages_paginator_top').hide();
+  $('#sent_messages_paginator_bottom').hide();
+
+  <% if @messages.count > 0 %>
+    $("#sent_messages_content #sent_messages_table #messages").html("<%= escape_javascript render(@messages) %>");
+    $('#sent_messages_paginator_top').html("<%= escape_javascript(paginate(@messages, :remote => true).to_s) %>");
+    $('#sent_messages_paginator_bottom').html("<%= escape_javascript(paginate(@messages, :remote => true).to_s) %>");
+    $('#sent_messages_paginator_top').show();
+    $('#sent_messages_paginator_bottom').show();
+  <% else %>
+    $("#sent_messages_div #sent_messages_table #messages").html("<tr><td class='alert_cell' colspan='2'>No sent messages yet</td></tr>");
+  <% end %>
+
+  $("#sent_messages_content").show();
+  $("#sent_messages_div").scrollTop(0);
+}

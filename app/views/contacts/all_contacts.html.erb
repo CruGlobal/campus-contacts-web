@@ -46,7 +46,9 @@
 		</li>
 	</ul>
 	<ul class="button_bar">
-		<li class="action_lightblue btn_right"><a href="#">Sent</a></li>
+		<li class="action_lightblue btn_right">
+		  <%= link_to(t('people.index.sent_messages'), "#", :id => "new_sent_messages_link") %>
+		</li>
 	</ul>
 	<ul class="button_bar">
 		<li class="action_lightblue"><a href="#">Search</a></li>
@@ -134,26 +136,7 @@
   <div id="transfer_to_org" style="display:none">
     <%= render 'transfer' %>
   </div>
-  <div id="sent_messages_div" style="display:none">
-    <div id="sent_messages_loader">
-      <%= image_tag 'loader.gif'%><br/>Loading Sent Messages
-    </div>
-    <div id="sent_messages_paginator_top"></div>
-    <div id="sent_messages_content">
-      <%= render partial: 'messages/sent_messages'%>
-    </div>
-    <div id="sent_messages_paginator_bottom"></div>
-  </div>
   <%= render 'shared/bulk_vcard_dialog' %>
-  <%= render 'shared/bulk_send_msg' %>
-
-
-  <div id="hidden_questions_div" style="display:none">
-    <div id="hidden_questions_loader">
-      <%= image_tag 'loader.gif'%><br/>Fetching Questions...
-    </div>
-    <div id="hidden_questions_content"></div>
-  </div>
 
 </div>
 
@@ -162,3 +145,9 @@
 
 <!-- Message Dialog -->
 <%= render 'dialogs/bulk_send_msg' %>
+
+<!-- Sent Messages Dialog -->
+<%= render 'dialogs/sent_messages' %>
+
+<!-- Hidden Questions Dialog -->
+<%= render 'dialogs/hidden_questions' %>
