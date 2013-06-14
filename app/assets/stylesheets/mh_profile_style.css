@@ -296,6 +296,8 @@ button.add_gray:after {
 }
 
 .info_tag {
+  text-shadow: none;
+  margin-top: 2px;
 	margin:0 0 0 2px;
 	color:#FFFFFF;
 	font-family:Arial, Sans-serif;
@@ -394,7 +396,7 @@ li.btn_right {
 #profile_label_box, #profile_group_box {
 	padding:12px;
 	border:1px solid #c0c0c0;
-	-webkit-border-radius: 4px ; 
+	-webkit-border-radius: 4px ;
 	border-radius: 4px;
 }
 
@@ -430,7 +432,7 @@ li.btn_right {
 
 /* Feed Panel Navigation */
 
-ul#panel_nav{ 
+ul#panel_nav{
 
 	/*--Border--*/
 	border-bottom:1px solid #c0c0c0;
