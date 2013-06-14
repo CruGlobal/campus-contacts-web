@@ -493,4 +493,5 @@ $.unhideScroll = () ->
 
 $.hideDialog = (selector) ->
   $.unhideScroll()
-  selector.hide()
+  if selector
+    selector.hide()

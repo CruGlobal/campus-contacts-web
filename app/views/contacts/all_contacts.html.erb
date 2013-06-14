@@ -25,7 +25,9 @@
 
 <div id="ac_button_bar">
 	<ul class="button_bar" id="menu_assign_link">
-		<li class="action_lightblue"><a href="#">Assign</a></li>
+		<li class="action_lightblue">
+		  <%= link_to "Assign", "#", id: "action_menu_assign"%>
+		</li>
 	</ul>
 	<ul class="button_bar">
 		<li class="action_lightblue btn_left"><a href="#">Permissions</a></li>
@@ -34,10 +36,14 @@
 		<li class="action_lightblue btn_right"><a href="#">Labels</a></li>
 	</ul>
 	<ul class="button_bar">
-		<li class="action_lightblue btn_left"><a href="#">Text</a></li>
+		<li class="action_lightblue btn_left">
+		  <%= link_to "Text", "#", id: "action_menu_text" %>
+		</li>
 	</ul>
 	<ul class="button_bar">
-		<li class="action_lightblue btn_middle"><a href="#">Email</a></li>
+		<li class="action_lightblue btn_middle">
+		  <%= link_to "Email", "#", id: "action_menu_email" %>
+		</li>
 	</ul>
 	<ul class="button_bar">
 		<li class="action_lightblue btn_right"><a href="#">Sent</a></li>
@@ -153,3 +159,6 @@
 
 <!-- Add Contact Dialog -->
 <%= render 'dialogs/add_contact', person: Person.new %>
+
+<!-- Message Dialog -->
+<%= render 'dialogs/bulk_send_msg' %>

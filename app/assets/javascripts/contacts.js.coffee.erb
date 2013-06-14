@@ -6,11 +6,11 @@ $ ->
   $(document).on 'keyup', (e)->
     if e.keyCode == $.ui.keyCode.ESCAPE
       $('.custom_mh_popup_box').each ->
-        $.hideDialog($(this))
+        unless $(this).hasClass('locked')
+          $.hideDialog()
 
   $('#allcontacts_add_contact_button').live 'click', (e)->
     e.preventDefault()
-    $('#new_person')[0].reset()
     $('#new_person')[0].reset()
     $(".field_with_errors, .red_errors}").remove()
     $("#add_contact_form input[type='text']").val("")
@@ -20,30 +20,24 @@ $ ->
     $("#add_contact_form input[type='radio']").attr("checked",false)
     $("#add_contact_form input[type='checkbox']:not(:disabled)").attr("checked",false)
     $("#add_contact_form .remove_in_add_contact").remove()
+    $.blur('#add_contact_div .mh_popup_box_scroller','hide')
+    $.toggleLoader('add_contact_title','')
     $.showDialog($("#add_contact_div"))
+
+  $('#add_contact_save_and_close_button').live 'click', (e)->
+    e.preventDefault()
+    unless $('#add_contact_div').hasClass('locked')
+      $.mh.saveContact(false)
+
+  $('#add_contact_save_and_add_another_button').live 'click', (e)->
+    e.preventDefault()
+    unless $('#add_contact_div').hasClass('locked')
+      $.mh.saveContact(true)
 
   $('#add_contact_cancel_button').live 'click', (e)->
     e.preventDefault()
-    $.hideDialog($("#add_contact_div"))
-
-    # close: (event, ui) ->
-    #   $.unhideScroll()
-    # buttons: [
-    #   text: t('application.add_contact.save_and_close'),
-    #   'class': 'add_new_contact_dialog_buttons',
-    #   click: ->
-    #     $.mh.saveContact(false)
-    # ,
-    #   text: t('application.add_contact.save_and_add'),
-    #   'class': 'add_new_contact_dialog_buttons',
-    #   click: ->
-    #     $.mh.saveContact(true)
-    # ,
-    #   text: 'Cancel',
-    #   'class': 'add_new_contact_dialog_buttons',
-    #   click: ->
-    #     $(this).dialog('destroy')
-    # ]
+    unless $('#add_contact_div').hasClass('locked')
+      $.hideDialog($("#add_contact_div"))
 
   $('.ac_dropdown_list .side_toggle').live 'click', (e)->
     e.preventDefault()
@@ -929,6 +923,9 @@ $.mh.saveContact = (add_more) ->
     $.a(t('contacts.index.no_name_message'))
     dialog_buttons.button('enable')
   else
+    $('#add_contact_div').addClass('locked')
+    $.blur('#add_contact_div .mh_popup_box_scroller')
+    $.toggleLoader('add_contact_title','Saving Contact...')
     email = $('#person_email_address_email').val()
     fname = $('#person_first_name').val()
     lname = $('#person_last_name').val()
@@ -940,8 +937,12 @@ $.mh.saveContact = (add_more) ->
         if code == '100'
           $('#add_another').val(add_more)
           $.rails.handleRemote(form)
-          form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
+          unless $("#add_contact_div .mh_popup_box_scroller").size() > 0
+            form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
         else
+          $('#add_contact_div').removeClass('locked')
+          $.blur('#add_contact_div .mh_popup_box_scroller')
+          $.toggleLoader('add_contact_title','')
           if code == '201'
             $.a(t('contacts.index.add_already_registered_contact'))
           if code == '202'

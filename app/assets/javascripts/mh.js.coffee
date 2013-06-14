@@ -136,16 +136,16 @@ $ ->
     handle = $(this).attr('data-sortable-handle');
     $(this).sortable("option", "handle", handle);
 
-  if $.fn.draggable?        
-    $('.handle').draggable 
+  if $.fn.draggable?
+    $('.handle').draggable
       revert: true
       start: (event, ui) ->
         # If this row isn't checked, store the previously checked rows and check this row '
-        unless $(this).parent().next().find('input').prop('checked') 
+        unless $(this).parent().next().find('input').prop('checked')
           $(this).data 'checked', $('.id_checkbox:checked').map ->
             return $(this).val()
-          $('.id_checkbox:checked').prop('checked', false) 
-          $(this).parent().next().find('input').prop('checked', true) 
+          $('.id_checkbox:checked').prop('checked', false)
+          $(this).parent().next().find('input').prop('checked', true)
       stop: (event, ui) ->
         if $(this).data('checked')?
           $(this).parent().next().find('input').prop('checked', false)
@@ -157,17 +157,17 @@ $ ->
           checkboxes = $('.id_checkbox.group_checkbox:checked').length
         else
           checkboxes = $('.id_checkbox:checked').length
-          
+
         if $(this).parent().next().find('input').prop('checked')
           length = checkboxes
         else
           length = 1
-          
+
         if length == 1
           helper_text = $('#drag_helper_text_one').html()
         else
           helper_text = $('#drag_helper_text_other').html().replace('0', length)
-        $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'));  
+        $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'));
 
   if $.fn.superfish?
     $('ul.sf-menu').superfish({
@@ -181,15 +181,32 @@ $ ->
 
 window.t = (s) -> I18n.translate(s)
 
-$.blur = (selector) ->
+$.blur = (selector, hide) ->
   el = $(selector)
   id = selector.replace(/\.|\#/g,'_').replace(/\ /g,'')
+
+  pad_top = el.css('padding-top');
+  pad_bottom = el.css('padding-bottom');
+  pad_left = el.css('padding-left');
+  pad_right = el.css('padding-right');
+  width = parseInt(el.width()) + parseInt(pad_left) + parseInt(pad_right);
+  height = parseInt(el.height()) + parseInt(pad_top) + parseInt(pad_bottom);
+
   if $("#"+id).size() == 0
-    el.prepend("<div style='width:"+el.width()+"px; height:"+el.height()+"px; background:#666; position: absolute; z-index: 999; opacity: 0.1; display: none;' id='"+id+"'></div>")
-  if $("#"+id).is(':visible')
+    el.prepend("<div style='width:"+width+"px; height:"+height+"px; background:#666; position: absolute; z-index: 999; opacity: 0.1; display: none;' id='"+id+"'></div>")
+
+  $('#'+id).css('margin-top','-'+pad_top)
+  $('#'+id).css('margin-left','-'+pad_left)
+  $('#'+id).css('width',width+'px')
+  $('#'+id).css('height',height+'px')
+
+  if hide == 'hide'
     $("#"+id).fadeOut('slow')
   else
-    $("#"+id).fadeIn('slow')
+    if $("#"+id).is(':visible')
+      $("#"+id).fadeOut('slow')
+    else
+      $("#"+id).fadeIn('slow')
 
 $.toggleLoader = (div_id, words) ->
   $(document).ready ->
@@ -201,7 +218,7 @@ $.toggleLoader = (div_id, words) ->
   else
     $('#' + div_id).children('.loader').last().fadeOut().remove()
   false
-  
+
 $.a = (msg, title) ->
   unless $('#alert_dialog')[0]?
     $('body').append('<div id="alert_dialog" title="' + t('general.alert') + '"></div>')
@@ -258,4 +275,4 @@ $.mh.fbEnsureInit = (callback) ->
       setTimeout(()->
         callback
       , 50)
-      
+
