@@ -11,8 +11,8 @@ $ ->
 
   $("#new_sent_messages_link").live 'click', (e)->
     e.preventDefault()
-    $("#new_sent_messages_div .mh_popup_box_scroller").hide();
-    $('#new_sent_messages_div #sent_messages_paginator_top').hide();
+    $("#new_sent_messages_div .mh_popup_box_scroller").hide()
+    $('#new_sent_messages_div #sent_messages_paginator_top').hide()
     $("#new_sent_messages_div #sent_messages_loader").show()
     $.showDialog($("#new_sent_messages_div"))
     $.ajax
@@ -33,7 +33,8 @@ $ ->
     $("#add_contact_form .user_defined_contact_fields select").val(0)
     $("#add_contact_form input[type='checkbox']").attr("checked",false)
     $("#add_contact_form input[type='radio']").attr("checked",false)
-    $("#add_contact_form input[type='checkbox']:not(:disabled)").attr("checked",false)
+    disabled = $("#add_contact_form input[type='checkbox']:not(:disabled)")
+    disabled.attr("checked",false)
     $("#add_contact_form .remove_in_add_contact").remove()
     $.blur('#add_contact_div .mh_popup_box_scroller','hide')
     $.toggleLoader('add_contact_title','')
@@ -59,10 +60,10 @@ $ ->
     side_list = $(this).parents('.ac_dropdown_list').find('.side_list')
     if side_list.is(':visible')
       side_list.slideUp()
-      $(this).html("&#x25BC;")
+      $(this).html("&#x25BC")
     else
       side_list.slideDown()
-      $(this).html("&#x25B2;")
+      $(this).html("&#x25B2")
 
   $('#ac_button_bar #menu_assign_link').live 'click', (e)->
     e.preventDefault()
@@ -104,7 +105,7 @@ $ ->
     modal: true,
     open: (event, ui) ->
       $("body").css({ overflow: 'hidden' })
-      $('.ui-widget-overlay').width('100%');
+      $('.ui-widget-overlay').width('100%')
     close: (event, ui) ->
       $("body").css({ overflow: 'inherit' })
     buttons:
@@ -136,11 +137,11 @@ $ ->
 
   $("#sent_messages_link").live 'click', (e)->
     e.preventDefault()
-    $("#sent_messages_div").dialog("option", "position", ['middle',30]);
+    $("#sent_messages_div").dialog("option", "position", ['middle',30])
     $("#sent_messages_div").dialog('open')
-    $("#sent_messages_content").hide();
-    $('#sent_messages_paginator_top').hide();
-    $('#sent_messages_paginator_bottom').hide();
+    $("#sent_messages_content").hide()
+    $('#sent_messages_paginator_top').hide()
+    $('#sent_messages_paginator_bottom').hide()
     $("#sent_messages_loader").show()
     $.ajax
       type: 'GET',
@@ -153,7 +154,7 @@ $ ->
       ids.push($(this).attr('data-id'))
     href = $(this).attr('href')
     if href.indexOf('?') < 0
-    	href = href+"?"
+      href = href+"?"
     document.location = href+"&only_ids="+ids.join(',')
 
   $('#contacts_controller #include_archived').live 'click', ->
@@ -206,7 +207,7 @@ $ ->
       modal: true,
       open: (event, ui) ->
         $("body").css({ overflow: 'hidden' })
-        $('.ui-widget-overlay').width('100%');
+        $('.ui-widget-overlay').width('100%')
       close: (event, ui) ->
         $("body").css({ overflow: 'inherit' })
       buttons:
@@ -222,8 +223,8 @@ $ ->
 
   $('#search_show_question').live 'click', (e)->
     e.preventDefault()
-    $('#search_hidden_questions_loader').hide();
-    $('#search_hidden_questions_list').show();
+    $('#search_hidden_questions_loader').hide()
+    $('#search_hidden_questions_list').show()
     $('#search_hidden_questions_div').dialog
       resizable: false,
       height: 450,
@@ -231,7 +232,7 @@ $ ->
       modal: true,
       open: (event, ui) ->
         $("body").css({ overflow: 'hidden' })
-        $('.ui-widget-overlay').width('100%');
+        $('.ui-widget-overlay').width('100%')
       close: (event, ui) ->
         $("body").css({ overflow: 'inherit' })
       buttons:
@@ -460,7 +461,7 @@ $ ->
           if keep_contact == false
             $.a(data)
             $('.id_checkbox:checked').each ->
-              $(this).closest('tr').fadeOut();
+              $(this).closest('tr').fadeOut()
           else
             $.a(data)
         else
@@ -521,10 +522,10 @@ $ ->
     else
       person_id = $('.assign.person_headerlink').attr('data-id')
       $.ajax
-          type: 'POST',
-          url: '/people/update_permissions',
-          data: 'permission_ids='+permission+'&person_id='+person_id+'&include_old_permissions=yes'
-          error: show_success = false
+        type: 'POST',
+        url: '/people/update_permissions',
+        data: 'permission_ids='+permission+'&person_id='+person_id+'&include_old_permissions=yes'
+        error: show_success = false
       $.hideDialog($("#assign_search"))
       if show_success
         $.n('Successfully assigned label.')
@@ -536,7 +537,7 @@ $ ->
       inc = "?include_archived=true"
 
     $(this).autocomplete
-	    source: '/contacts/search_by_name_and_email.json'+inc,
+      source: '/contacts/search_by_name_and_email.json'+inc,
       select: (event, ui) ->
         window.location = "/profile/" + ui.item.id
     .data("autocomplete")
@@ -545,7 +546,7 @@ $ ->
       return $( "<li></li>" )
         .data( "item.autocomplete", temp )
         .append("<a>" + temp.label + "</a><div class='email'>" + temp.email + "</div>")
-        .appendTo( ul );
+        .appendTo( ul )
 
 
   $('#assign_search .leader_search_name').live 'keyup', ->
@@ -641,7 +642,7 @@ $ ->
       $('.id_checkbox:checked').each ->
         $(this).parents('tr').children('.assigned_to').html("")
       msg = "You have successfully unassigned " + checked_count + " contacts."
-      $('.carea').prepend("<div class='flash' style='margin:10px;'><div class='flash_message notice'><p>"+msg+"</p></div></div>")
+      $('.carea').prepend("<div class='flash' style='margin:10px'><div class='flash_message notice'><p>"+msg+"</p></div></div>")
       $('.flash').delay(3000).slideUp()
     $('#check_all').prop('checked', false)
     false
@@ -710,7 +711,7 @@ $ ->
         response([])
 
   $('#contacts_controller .controls a.mineunassign').live 'click', ->
-  	$(this).closest('tr').fadeOut()
+    $(this).closest('tr').fadeOut()
 
   $('.search_show_all_link').live 'click', ->
     $('#spinner_leader_search').show()
@@ -782,11 +783,11 @@ $ ->
       $('#hidden_questions_div #hidden_questions_content').html('')
     false
 
-	$("#search_clear_selected_labels").live "click", ->
-		$(".search_permission_checkbox").removeAttr("checked")
-		$.fn.search_status()
+  $("#search_clear_selected_labels").live "click", ->
+    $(".search_permission_checkbox").removeAttr("checked")
+    $.fn.search_status()
 
-	$(".search_status").live "change", ->
+  $(".search_status").live "change", ->
     $.fn.search_status()
 
   $("#locate_contact").live "click", ->
@@ -824,11 +825,11 @@ $ ->
           $("#search_locate_contact_loading").hide()
     false
 $.fn.search_status = () ->
-	label_contacts = $("#search_permission_2")
-	check = $(".search_status :selected").val() != ""
-	label_contacts.attr("checked", check)
-	label_contacts.attr("disabled", check)
-	false
+  label_contacts = $("#search_permission_2")
+  check = $(".search_status :selected").val() != ""
+  label_contacts.attr("checked", check)
+  label_contacts.attr("disabled", check)
+  false
 
 $.fn.moveToCompleted = (dragObject) ->
   $('.id_checkbox:checked').each ->

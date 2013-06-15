@@ -49,7 +49,7 @@ $ ->
     group_name = $(this).parents('.sfield').attr("data-group")
     if group_name == 'address' || $(".sfield[data-group=" + group_name + "]:visible").size() > 1
       link = this
-      $(link).prev("input[type=hidden]").val("1");
+      $(link).prev("input[type=hidden]").val("1")
       $(link).closest(".sfield").hide()
       fieldset = $(link).closest('.fieldset')
       if $('.sfield:visible', fieldset).length <= 2
@@ -58,12 +58,12 @@ $ ->
       $(this).hide()
 
   if $.fn.oneFingerScroll?
-    $('.fingerme').oneFingerScroll();
+    $('.fingerme').oneFingerScroll()
 
   $('.expandable').each (i)->
     e = $(this)
     if e.height() > Number(e.attr("data-height"))
-      e.next('.moredown').show();
+      e.next('.moredown').show()
       e.attr("data-original-height", e.height())
       e.css({height: e.attr("data-height") + 'px', overflow: 'hidden'})
 
@@ -133,8 +133,8 @@ $ ->
         at: 'top left'
 
   $('[data-sortable][data-sortable-handle]').each ->
-    handle = $(this).attr('data-sortable-handle');
-    $(this).sortable("option", "handle", handle);
+    handle = $(this).attr('data-sortable-handle')
+    $(this).sortable("option", "handle", handle)
 
   if $.fn.draggable?
     $('.handle').draggable
@@ -167,7 +167,7 @@ $ ->
           helper_text = $('#drag_helper_text_one').html()
         else
           helper_text = $('#drag_helper_text_other').html().replace('0', length)
-        $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'));
+        $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'))
 
   if $.fn.superfish?
     $('ul.sf-menu').superfish({
@@ -185,15 +185,15 @@ $.blur = (selector, hide) ->
   el = $(selector)
   id = selector.replace(/\.|\#/g,'_').replace(/\ /g,'')
 
-  pad_top = el.css('padding-top');
-  pad_bottom = el.css('padding-bottom');
-  pad_left = el.css('padding-left');
-  pad_right = el.css('padding-right');
-  width = parseInt(el.width()) + parseInt(pad_left) + parseInt(pad_right);
-  height = parseInt(el.height()) + parseInt(pad_top) + parseInt(pad_bottom);
+  pad_top = el.css('padding-top')
+  pad_bottom = el.css('padding-bottom')
+  pad_left = el.css('padding-left')
+  pad_right = el.css('padding-right')
+  width = parseInt(el.width()) + parseInt(pad_left) + parseInt(pad_right)
+  height = parseInt(el.height()) + parseInt(pad_top) + parseInt(pad_bottom)
 
   if $("#"+id).size() == 0
-    el.prepend("<div style='width:"+width+"px; height:"+height+"px; background:#666; position: absolute; z-index: 999; opacity: 0.1; display: none;' id='"+id+"'></div>")
+    el.prepend("<div style='width:"+width+"px height:"+height+"px background:#666 position: absolute z-index: 999 opacity: 0.1 display: none' id='"+id+"'></div>")
 
   $('#'+id).css('margin-top','-'+pad_top)
   $('#'+id).css('margin-left','-'+pad_left)
@@ -259,7 +259,7 @@ $.mh.logout = (url) ->
     #    document.location = next
     #  )
     #catch err
-      document.location = next
+    document.location = next
 
   else
     document.location = next
