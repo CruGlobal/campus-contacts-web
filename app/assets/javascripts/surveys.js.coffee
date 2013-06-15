@@ -3,12 +3,12 @@ $ ->
   false
 
   $('#show_advanced_survey_option').live 'click', ()->
-  	$('#advanced_survey_option').toggle()
-  	if($('#advanced_survey_option').is(":visible"))
-  		$(this).html($(this).html().replace("Show","Hide"))
-  	else
-  		$(this).html($(this).html().replace("Hide","Show"))
-  	end
+    $('#advanced_survey_option').toggle()
+    if($('#advanced_survey_option').is(":visible"))
+      $(this).html($(this).html().replace("Show","Hide"))
+    else
+      $(this).html($(this).html().replace("Hide","Show"))
+    end
 
   $('#transfer_survey_div').dialog
     resizable: false,
@@ -20,7 +20,7 @@ $ ->
     modal: true,
     open: (event, ui) ->
       $("body").css({ overflow: 'hidden' })
-      $('.ui-widget-overlay').width('100%');
+      $('.ui-widget-overlay').width('100%')
     close: (event, ui) ->
       $("body").css({ overflow: 'inherit' })
     buttons:

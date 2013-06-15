@@ -38,7 +38,7 @@ $ ->
 
 
   $('.action_dropdown').live 'mouseenter', ->
-    $(this).click();
+    $(this).click()
 
   $('#people_controller.index #advanced_search').live 'click', ->
     $('#search_filter_box').hide()
@@ -145,7 +145,7 @@ $ ->
             hide_loader()
             if data.indexOf("success") != -1 #there might be a better way of doing this other than just basing the success on the returned data
               $('.id_checkbox:checked').each ->
-                $(this).closest('tr').remove();
+                $(this).closest('tr').remove()
             else
               $.a(data)
     false
@@ -172,7 +172,7 @@ $ ->
             hide_loader()
             if data.indexOf("success") != -1 #there might be a better way of doing this other than just basing the success on the returned data
               $('.id_checkbox:checked').each ->
-                $(this).closest('tr').remove();
+                $(this).closest('tr').remove()
             else
               $.a(data)
     false
@@ -212,13 +212,13 @@ $ ->
       image_src = 'http://graph.facebook.com/' + item.id + '/picture'
       return $( "<li></li>" )
         .data("item.autocomplete", item)
-        .append("<div class='fb_img' style='background:url(" + image_src + ");'>&nbsp;</div> <a>" + item.name + "</a>")
-        .appendTo( ul );
+        .append("<div class='fb_img' style='background:url(" + image_src + ")'>&nbsp</div> <a>" + item.name + "</a>")
+        .appendTo( ul )
       # + '<br/><span onclick="window.open(\'http://www.facebook.com/profile.php?id=' + item.id + '\')">' + t('people.edit.fb_profile_link') + '</span></a>'
 
   $(window).focus ->
     if(fromViewingFBProfile)
-      $('#people_controller.edit .ui-autocomplete').show();
+      $('#people_controller.edit .ui-autocomplete').show()
       fromViewingFBProfile = false
 
   $('#merge_people').live 'click', (e) ->
@@ -415,7 +415,7 @@ $('#send_bulksms_link_new, #action_menu_text').live 'click', (e)->
 
   total_chars = 0
   $('.message_desc').each ->
-  	  total_chars += $(this).length
+    total_chars += $(this).length
   total_headers = $('#preview_from').html().length + total_chars
 
   $('#bulk_send_msg_dialog #char_counter').show()
@@ -437,7 +437,7 @@ $('#send_bulkemail_link').live 'click', ->
 
   $('.id_checkbox:checked').each ->
     id = $(this).val()
-    tr = $(this).parent().parent();
+    tr = $(this).parent().parent()
     name = tr.attr('data-name')
     if tr.attr('data-email').length > 0
       ids.push(id)
@@ -486,53 +486,53 @@ $('#send_bulkemail_link').live 'click', ->
       nicEdit = new nicEditor({fullPanel : true}).panelInstance('bulk_send_body')
       $(this).find('form').attr('action', '/people/bulk_email')
     close: (event, ui) ->
-      nicEdit.removeInstance('bulk_send_body');
+      nicEdit.removeInstance('bulk_send_body')
       $('#bulk_email_message').val($('#bulk_send_body').val())
     buttons:
       Send: ->
-        nicEdit.removeInstance('bulk_send_body');
+        nicEdit.removeInstance('bulk_send_body')
         $(this).submitBulkSendDialog()
         $('#bulk_email_message').val($('#bulk_send_body').val())
         $.n('Email message sent')
       Cancel: ->
-        nicEdit.removeInstance('bulk_send_body');
+        nicEdit.removeInstance('bulk_send_body')
         $('#bulk_email_message').val($('#bulk_send_body').val())
         $(this).dialog('destroy')
   false
 
 $('.send_sms_link').live 'click', ->
-	ids = new Array()
-	id = $(this).attr('data-id')
-	name = $(this).attr('data-name')
-	number = $(this).attr('data-number')
-	ids.push(id)
-	element = '<li data-id="'.concat(id,'">',name,'<a href="" class="delete">x</a></li>')
-	$('.to_list').html(element)
-	$('#bulk_send_dialog form').addClass('bulk-sms')
-	$('#bulk_send_dialog .subject').hide()
-	$('#char_counter').show()
-	$('#bulk_send_dialog #bulk_send_body').simplyCountable( { maxCount: 140 } )
-	$('#bulk_send_body').val('')
-	$('#bulk_send_dialog').dialog
-		resizable: false,
-		height:444,
-		width:600,
-		modal: true,
-		title: 'Send Text Message',
-		open: (event, ui) ->
-			$('#bulk_send_dialog_message').hide()
-			$(this).find('form').attr('action', '/people/bulk_sms')
-		close: (event, ui) ->
-			$('#bulk_sms_message').val($('#bulk_send_body').val())
-		buttons:
-			Send: ->
-				$(this).submitBulkSendDialog()
-				$('#bulk_sms_message').val($('#bulk_send_body').val())
-				$.n('Text message sent')
-			Cancel: ->
-				$('#bulk_sms_message').val($('#bulk_send_body').val())
-				$(this).dialog('destroy')
-	false
+  ids = new Array()
+  id = $(this).attr('data-id')
+  name = $(this).attr('data-name')
+  number = $(this).attr('data-number')
+  ids.push(id)
+  element = '<li data-id="'.concat(id,'">',name,'<a href="" class="delete">x</a></li>')
+  $('.to_list').html(element)
+  $('#bulk_send_dialog form').addClass('bulk-sms')
+  $('#bulk_send_dialog .subject').hide()
+  $('#char_counter').show()
+  $('#bulk_send_dialog #bulk_send_body').simplyCountable( { maxCount: 140 } )
+  $('#bulk_send_body').val('')
+  $('#bulk_send_dialog').dialog
+    resizable: false,
+    height:444,
+    width:600,
+    modal: true,
+    title: 'Send Text Message',
+    open: (event, ui) ->
+      $('#bulk_send_dialog_message').hide()
+      $(this).find('form').attr('action', '/people/bulk_sms')
+    close: (event, ui) ->
+      $('#bulk_sms_message').val($('#bulk_send_body').val())
+    buttons:
+      Send: ->
+        $(this).submitBulkSendDialog()
+        $('#bulk_sms_message').val($('#bulk_send_body').val())
+        $.n('Text message sent')
+      Cancel: ->
+        $('#bulk_sms_message').val($('#bulk_send_body').val())
+        $(this).dialog('destroy')
+  false
 
 
 $('#send_bulksms_link').live 'click', ->
@@ -546,7 +546,7 @@ $('#send_bulksms_link').live 'click', ->
 
   $('.id_checkbox:checked').each ->
     id = $(this).val()
-    tr = $(this).parent().parent();
+    tr = $(this).parent().parent()
     name = tr.attr('data-name')
     number = tr.find('.phone_number').text().length
     if number > 0
@@ -624,7 +624,7 @@ $('#send_bulkcomment_link').live 'click', ->
       name = $(this).attr('data-name')
       ids.push(id)
       $('.to_list').append('<li data-id="'+id + '">'+ name + ' <a href="" class="delete">x</a></li>')
-        
+
   $('#bulk_send_dialog .subject').hide()
   $('#bulk_send_comment').val('')
   $('#bulk_send_dialog').dialog
@@ -635,7 +635,7 @@ $('#send_bulkcomment_link').live 'click', ->
     open: (event, ui) ->
       $('#bulk_send_dialog_message').hide()
       $(this).find('form').attr('action', '/people/bulk_comment')
-      $("#bulk_send_comment").focus();
+      $("#bulk_send_comment").focus()
     buttons:
       Add: ->
         if $('.to_list li').length < 1
@@ -644,7 +644,7 @@ $('#send_bulkcomment_link').live 'click', ->
         else if !$('#bulk_send_comment').val()
           $.a(t('general.comment_is_blank'))
           return false
-        else  
+        else
           $(this).submitBulkSendDialog()
           $.n(t('general.send_comment_success'))
       Cancel: ->
@@ -693,13 +693,13 @@ $('.check_all_contacts, .check_all_mine').live 'click', ->
     if checked
       $('#contacts_table').prepend('<tr><td colspan="99">Fetching information...</td></tr>')
       if $(this).hasClass("check_all_mine")
-	      $.get '/contacts/mine_all?' + $(this).attr('data-status'), (html) ->
-		      $('#contacts_table').find('tr:first').remove()
-		      $('#contacts_table').prepend(html)
+        $.get '/contacts/mine_all?' + $(this).attr('data-status'), (html) ->
+          $('#contacts_table').find('tr:first').remove()
+          $('#contacts_table').prepend(html)
       else
-  	    $.get '/contacts/contacts_all?' + $(this).attr('data-status'), (html) ->
-		      $('#contacts_table').find('tr:first').remove()
-		      $('#contacts_table').prepend(html)
+        $.get '/contacts/contacts_all?' + $(this).attr('data-status'), (html) ->
+          $('#contacts_table').find('tr:first').remove()
+          $('#contacts_table').prepend(html)
     else
       first_row.remove()
   change_all_permission_checkboxes(true) if checked
@@ -726,7 +726,7 @@ $('#check_all').live 'click', ->
   # only show option to select more if there are more than 1 page
   if $('.pagination').length
     if checked
-      $('#people_table').prepend('<tr><td colspan="8" align="center" style="background:none;">Fetching information...</td></tr>')
+      $('#people_table').prepend('<tr><td colspan="8" align="center" style="background:none">Fetching information...</td></tr>')
       $.get '/people/all?' + params, (html) ->
         $('#people_table').find('tr:first').remove()
         $('#people_table').prepend(html)
@@ -871,7 +871,7 @@ update_persons_permissions = () ->
   $('#apply_labels_spinner').show()
   $("#apply_labels_successful").hide()
   $('#label_menu').live 'mouseleave', -> #Hook to avoid using the plugin, hiding the box while in process
-  	$(this).show()
+    $(this).show()
   $('.permission_id_checkbox:checked').each ->
     permission_id = $(this).val()
     permission_ids.push(permission_id)
@@ -902,7 +902,7 @@ update_persons_permissions = () ->
           fail_apply_counter++
         html = success_apply_counter+" out of "+total_contacts+" contacts "+t('general.permissions_applied')
         $("#apply_labels_successful").html(html)
-        total_apply = success_apply_counter + fail_apply_counter;
+        total_apply = success_apply_counter + fail_apply_counter
         if total_apply == total_contacts
           $('#label_menu').live 'mouseleave', -> #Return the original effects of the box
             $('#label_menu').hide()
