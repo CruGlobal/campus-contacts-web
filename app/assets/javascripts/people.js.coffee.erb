@@ -239,6 +239,47 @@ $ ->
       document.location.href = '/people/merge'
   false
 
+
+  $('.all_contact_checkbox').live 'click', () ->
+    ctr_not_checked = 0
+    $('.all_contact_checkbox').each ->
+      ctr_not_checked++ unless $(this).is(':checked')
+    if ctr_not_checked > 0
+      $(".check_all_contacts").attr('checked', false)
+    else
+      $(".check_all_contacts").attr('checked', true)
+  false
+
+  $('.my_contact_checkbox').live 'click', () ->
+    ctr_not_checked = 0
+    $('.my_contact_checkbox').each ->
+      ctr_not_checked++ unless $(this).is(':checked')
+    if ctr_not_checked > 0
+      $(".check_all_mine").attr('checked', false)
+    else
+      $(".check_all_mine").attr('checked', true)
+  false
+
+  $('.group_contact_checkbox').live 'click', () ->
+    ctr_not_checked = 0
+    $('.group_contact_checkbox').each ->
+      ctr_not_checked++ unless $(this).is(':checked')
+    if ctr_not_checked > 0
+      $("#check_all").attr('checked', false)
+    else
+      $("#check_all").attr('checked', true)
+  false
+
+  $('.group_checkbox').live 'click', () ->
+    ctr_not_checked = 0
+    $('.group_checkbox').each ->
+      ctr_not_checked++ unless $(this).is(':checked')
+    if ctr_not_checked > 0
+      $("#check_all_groups").attr('checked', false)
+    else
+      $("#check_all_groups").attr('checked', true)
+  false
+
 $.fn.fbNameSearch = (url)->
   prevBtn = $("#fb_name_search_dialog").next(".ui-dialog-buttonpane").find('button')[1]
   moreBtn = $("#fb_name_search_dialog").next(".ui-dialog-buttonpane").find('button')[2]
@@ -315,8 +356,8 @@ $.fn.submitBulkSendTextDialog = ->
   $.n(msg)
   $.hideDialog($("#bulk_send_msg_dialog"))
   $('tr#all').remove()
-  $('.id_checkbox, .check_all_contacts, #check_all_groups, .gid_checkbox').attr('checked',false)
-  $('.id_checkbox.profile_checkbox').prop('checked',true)
+  # $('.id_checkbox, .check_all_contacts, #check_all_groups, .gid_checkbox').attr('checked',false)
+  # $('.id_checkbox.profile_checkbox').prop('checked',true)
 
 $.fn.submitBulkSendDialog = ->
   ids = []
@@ -691,6 +732,7 @@ $('.check_all_contacts, .check_all_mine').live 'click', ->
 
   if true || $('.pagination').length
     if checked
+      $("#all").remove()
       $('#contacts_table').prepend('<tr><td colspan="99">Fetching information...</td></tr>')
       if $(this).hasClass("check_all_mine")
         $.get '/contacts/mine_all?' + $(this).attr('data-status'), (html) ->

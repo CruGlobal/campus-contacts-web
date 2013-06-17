@@ -9,7 +9,7 @@
     <% end %>
 	</td>
   <td nowrap="nowrap" class="checkbox_cell">
-    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox contact_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email, 'data-permissions' => "#{permissions.collect(&:id).join(',')}"%>
+    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox contact_checkbox my_contact_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email, 'data-permissions' => "#{permissions.collect(&:id).join(',')}"%>
   </td>
   <td class="firstName"><%= person.first_name %></td>
   <td class="lastName"><%= person.last_name %></td>
@@ -25,9 +25,9 @@
         <% end %>
       <% end %>
     </div>
-  </td>  
+  </td>
   <td><%= person.year_in_school.present? ? person.year_in_school : "&nbsp;".html_safe %></td>
-  <td class="controls"> 
+  <td class="controls">
     <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign mineunassign tipit", :title => "#{t('contacts.index.unassign_contact')} from you") %>
     <%= link_to(t('nav.view_details'), person_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
     <% if contact_permission %>
