@@ -23,7 +23,7 @@ $ ->
       $.ajax
         dataType: 'script',
         type:'PUT',
-        data: {movement_indicator_suggestion : { accepted : true } }
+        data: {movement_indicator_suggestion : { accepted : true } },
         url: '/movement_indicator_suggestions/' + id
 
       false
@@ -36,7 +36,7 @@ $ ->
       $.ajax
         dataType: 'script',
         type:'PUT',
-        data: {movement_indicator_suggestion : { accepted : false } }
+        data: {movement_indicator_suggestion : { accepted : false } },
         url: '/movement_indicator_suggestions/' + id
 
       false
