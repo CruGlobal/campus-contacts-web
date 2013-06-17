@@ -6,7 +6,7 @@ $ ->
       url: '/movement_indicator_suggestions/fetch_suggestions'
 
     $(document).on 'click', '#show_old', ->
-      $('#declined_suggestions td').html("<%= image_tag('spinner.gif') %>")
+      $('#declined_suggestions td').html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
 
       $.ajax
         dataType: 'script',
