@@ -197,6 +197,13 @@ class Person < ActiveRecord::Base
     :having => ["DATE(MAX(ass.updated_at)) >= ? AND DATE(MAX(ass.updated_at)) <= ? ", date_from, date_to]
   }}
 
+  scope :with_label, lambda { |label|
+    joins(:organizational_labels).where('organizational_labels.label_id' => label.id, 'organizational_labels.removed_date' => nil)
+  }
+
+  scope :faculty, -> { where(faculty: true) }
+  scope :students, -> { where(faculty: false) }
+
   def filtered_interactions(viewer, current_org)
     q = Array.new
 
@@ -229,8 +236,12 @@ class Person < ActiveRecord::Base
     return self.interactions.joins(:organization).where(query).sorted
   end
 
+  def labeled_in_org(label, org)
+    organizational_labels.where(label_id: label.id, organization_id: org.id, removed_date: nil)
+  end
+
   def labeled_in_org?(label, org)
-    organizational_labels.where(label_id: label.id, organization_id: org.id, removed_date: nil).count > 0
+    labeled_in_org(label, org).count > 0
   end
 
   def has_interaction_in_org?(interaction_type_ids, org)

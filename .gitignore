@@ -23,7 +23,7 @@ tmp
 app/assets/javascripts/i18n/translations.js
 mh
 config/s3.yml
-NERD_tree_3
+NERD_tree_*
 config/locales/copycopter.yml
 dump.rdb.localeapp
 .localeapp

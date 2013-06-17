@@ -1224,6 +1224,9 @@ en:
     moving_to_same_org: "You are just moving people to the same org they are from!"
     moving_people_success: "People were successfully moved!"
     copy_people_success: "People were successfully copied!"
+  movement_indicators:
+    index:
+      list_heading: Confirm Movement Indicators
   movement_indicator_suggestions:
     index:
       title: Report Movement Indicators

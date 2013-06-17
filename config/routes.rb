@@ -1,8 +1,15 @@
 Mh::Application.routes.draw do
+
+  resources :movement_indicators, only: [:index, :create] do
+    get :done
+  end
+
   resources :movement_indicator_suggestions do
     collection do
       get :fetch_suggestions
       get :fetch_declined_suggestions
+      get :confirm
+      post :post_to_infobase
     end
   end
 

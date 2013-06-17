@@ -1,0 +1,104 @@
+<h1><%= t('movement_indicator_suggestions.index.title') %></h1>
+<h2><%= t('.list_heading') %></h2>
+<% if current_organization.last_push_to_infobase >= current_organization.last_week %>
+  <p>
+    You have already pushed your stats for last week. Please check back next week. 
+    If you'd like to change any numbers you submitted previously please go to <%= link_to('Infobase', 'http://infobase.uscm.org', target: '_blank') %>.
+  </p>
+<% else %>
+  <table border="0">
+    <thead>
+      <tr>
+        <td colspan="4">
+          <strong><%= l(current_organization.last_push_to_infobase) %></strong>
+          to
+          <strong><%= l(current_organization.last_week) %></strong>
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Spiritual Conversations</td>
+        <td><%= text_field_tag :spiritual_conversation, current_organization.recent_interactions_count('spiritual_conversation') %></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>Personal Evangelism</td>
+        <td><%= text_field_tag :gospel_presentation, current_organization.recent_interactions_count('gospel_presentation') %></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>Personal Evangelism Decisions</td>
+        <td><%= text_field_tag :prayed_to_receive_christ, current_organization.recent_interactions_count('prayed_to_receive_christ') %></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>Holy Spirit Presentations</td>
+        <td><%= text_field_tag :holy_spirit_presentation, current_organization.recent_interactions_count('holy_spirit_presentation') %></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>Graduating on Mission</td>
+        <td><%= text_field_tag :graduating_on_mission, current_organization.recent_interactions_count('graduating_on_mission') %></td>
+        <td>Faculty on Mission</td>
+        <td><%= text_field_tag :faculty_on_mission, current_organization.recent_interactions_count('faculty_on_mission') %></td>
+      </tr>
+      <tr>
+        <td>Group Evangelism</td>
+        <td><%= text_field_tag :group_evangelism %></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>Group Evangelism Decisions</td>
+        <td><%= text_field_tag :group_evangelism_decision %></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>Media Exposures</td>
+        <td><%= text_field_tag :media_exposure %></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>Media Exposure Decisions</td>
+        <td><%= text_field_tag :media_exposure_decisions %></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>&nbsp;</td>
+        <td><i>Students</i></td>
+        <td>&nbsp;</td>
+        <td><i>Faculty</i></td>
+      </tr>
+      <tr>
+        <td>Involved</td>
+        <td><%= text_field_tag :involved_students, current_organization.people.students.with_label(Label.involved).count %></td>
+        <td>&nbsp;</td>
+        <td><%= text_field_tag :involved_faculty, current_organization.people.faculty.with_label(Label.involved).count %></td>
+      </tr>
+      <tr>
+        <td>Engaged Disciples</td>
+        <td><%= text_field_tag :engaged_disciple, current_organization.people.students.with_label(Label.engaged_disciple).count %></td>
+        <td>&nbsp;</td>
+        <td><%= text_field_tag :engaged_disciple_faculty, current_organization.people.faculty.with_label(Label.engaged_disciple).count %></td>
+      </tr>
+      <tr>
+        <td>Leader</td>
+        <td><%= text_field_tag :leader, current_organization.people.students.with_label(Label.leader).count %></td>
+        <td>&nbsp;</td>
+        <td><%= text_field_tag :leader_faculty, current_organization.people.faculty.with_label(Label.leader).count %></td>
+      </tr>
+    </tfoot>
+  </table>
+  <%= link_to('Back', movement_indicator_suggestions_path) %><br />
+  <%= link_to('Submit', movement_indicators_path, method: :post, confirm: "If you want to change these number later you will need to go to Infobase to do so.") %>
+<% end %>

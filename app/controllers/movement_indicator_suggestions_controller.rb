@@ -1,6 +1,5 @@
 class MovementIndicatorSuggestionsController < ApplicationController
   def index
-    
   end
 
   def fetch_suggestions

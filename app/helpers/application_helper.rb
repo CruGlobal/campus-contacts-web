@@ -69,26 +69,6 @@ module ApplicationHelper
     end.html_safe
   end
 
-
-  #def org_nav(org, children)
-    #ret = ''
-    #(current_user.primary_organization_id == org.id).tap do |primary| %>
-    #ret +=<li <% if primary %>class="primary" title="This is your primary organization"<% end %>>
-      #<%= link_to(set_current_organization_membership_path(org), class: "orgname", title: "Go to #{org}") do  %><label><%= org %></label><% end %>
-      #<div class="orgactions">
-        #<%= link_to("", set_current_organization_membership_path(org), class: "icon magnify", title: "Go to #{org}") %>
-        #<%= link_to("", set_primary_organization_membership_path(org), class: "icon #{primary ? 'star' : 'star_empty'}", title: "Set #{org} as your default organization") %>
-      #</div>
-      #<% if children.present? %>
-        #<ul class="sf-scrolling" items="8" interval="100">
-          #<%= render_org_tree(children) %>
-        #</ul>
-      #<% end %>
-      #</li>
-    #end
-    #ret
-  #end
-
   def site_name
     mhub? ? '' : 'MissionHub'
   end
@@ -125,10 +105,10 @@ module ApplicationHelper
     case "#{params[:controller]}/#{params[:action]}"
     when 'groups/create', 'groups/update', 'organizations/index', 'organizations/edit', 'organizations/update',
          'organizations/new', 'organizations/api', 'organizations/cleanup', 'organizations/settings',
-         'organizations/transfer', 'organizations/do_transfer', 
+         'organizations/transfer', 'organizations/do_transfer',
          'imports/new', 'imports/edit', 'imports/labels', 'imports/update', 'imports/create',
          'permissions/index', 'permissions/new', 'permissions/create', 'permissions/edit', 'permissions/update',
-         'movement_indicator_suggestions/index'
+         'movement_indicator_suggestions/index', 'movement_indicators/index', 'movement_indicators/create'
 
       true
     else
@@ -215,15 +195,15 @@ module ApplicationHelper
     e = extra ? "spinner_#{extra}" : 'spinner'
     image_tag('spinner.gif', :id => e, :style => display ? '' : 'display:none', :class => 'spinner')
   end
-  
+
   def date_format(datetime)
     return nil unless datetime.present?
     return datetime.to_datetime.strftime("%d %b %Y")
   end
-  
+
   def time_format(datetime)
     return nil unless datetime.present?
     return datetime.to_datetime.strftime("%d %b %Y %H:%M:%S")
   end
-  
+
 end

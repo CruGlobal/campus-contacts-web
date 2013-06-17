@@ -107,6 +107,22 @@ class Organization < ActiveRecord::Base
     return list
   end
 
+  def push_to_infobase(numbers)
+    update_attributes(last_push_to_infobase: current_organization.last_week)
+  end
+  
+  def last_push_to_infobase
+    @last_push_to_infobase ||= self[:last_push_to_infobase] || created_at.to_date
+  end
+
+  def last_week
+    @last_week ||= 1.week.ago.end_of_week.to_date
+  end
+
+  def recent_interactions_count(type)
+    interactions.joins(:interaction_type).where("interaction_types.i18n = ? AND interactions.created_at > ? AND interactions.created_at <= ?", type, last_push_to_infobase, last_week).count
+  end
+
   def sms_gateway
     return settings[:sms_gateway] if settings[:sms_gateway]
     ancestors.reverse.each do |org|
