@@ -1,3 +1,4 @@
+<% @from_group = flash[:add_to_group_tag].present? && flash[:add_to_group_tag] != '0' ? 'display:none;' : nil %>
   <div class="explain">
     <p><%= t('.survey_mode_instructions') %></p>
   </div>
@@ -14,7 +15,7 @@
         <% end %>
 
         <%= hidden_field_tag :add_another %>
-				<%= hidden_field_tag :add_to_group_tag, false %>
+				<%= hidden_field_tag :add_to_group_tag, 0 %>
         <%= hidden_field_tag :add_to_group %>
         <%= hidden_field_tag :add_to_group_role %>
         <%= hidden_field_tag :assign_to_me, false, id: 'assign_new_contact_to_me' %>
@@ -34,14 +35,14 @@
         <%= render partial: 'shared/label_fields' %>
         <br/>
       </div>
-      <div class="form_group_label remove_add_new_person_to_group">
+      <div class="form_group_label remove_add_new_person_to_group" style="<%= @from_group %>">
         <%= t('.title_surveys') %>
         <span class='form_group_optional'>
           <%= t('.title_optional') %>
         </span>
       </div>
 
-      <div class="form_group_fields user_defined_contact_fields remove_add_new_person_to_group">
+      <div class="form_group_fields user_defined_contact_fields remove_add_new_person_to_group" style="<%= @from_group %>">
         <% current_organization.surveys.each do |survey| %>
           <% if survey.questions.count > 0 %>
             <div class="survey_title add_contact_survey_title"><%= survey.title %></div>
