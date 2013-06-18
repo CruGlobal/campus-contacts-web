@@ -19,25 +19,25 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
       setup do
         # Add a second person
         @person2 = Factory(:person, first_name: 'Bob', last_name: 'Jones')
-        @client.organization.add_contact(@person2)
+        @client.organization.add_involved(@person2)
       end
 
-      context 'filter by permission' do
-        should 'return no results for a permission no one has' do
-          get :index, secret: @client.secret, filters: {permissions: '-1'}, include: :organizational_permissions
+      context 'filter by role' do
+        should 'return no results for a role no one has' do
+          get :index, secret: @client.secret, filters: {roles: '-1'}, include: :organizational_roles
           json = JSON.parse(response.body)
           assert_equal 0, json['people'].length, json.inspect
         end
 
-        should 'return results for a permission someone has' do
-          get :index, secret: @client.secret, filters: {permissions: Permission::ADMIN_ID}
+        should 'return results for a role someone has' do
+          get :index, secret: @client.secret, filters: {roles: Role::ADMIN_ID}
           json = JSON.parse(response.body)
           assert_equal 1, json['people'].length, json.inspect
         end
 
-        should 'include archived permissions when requested' do
-          @person2.organizational_permissions.create!(organization: @client.organization, permission_id: Permission::ADMIN_ID, archive_date: Date.today)
-          get :index, secret: @client.secret, filters: {permissions: Permission::ADMIN_ID}, include_archived: 'true'
+        should 'include archived roles when requested' do
+          @person2.organizational_roles.create!(organization: @client.organization, role_id: Role::ADMIN_ID, archive_date: Date.today)
+          get :index, secret: @client.secret, filters: {roles: Role::ADMIN_ID}, include_archived: 'true'
           json = JSON.parse(response.body)
           assert_equal 2, json['people'].length, json.inspect
         end
@@ -80,7 +80,7 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
       end
 
       should 'filter by followup status with a match' do
-        @person.organizational_permissions.create(organization: @client.organization,
+        @person.organizational_roles.create(organization: @client.organization,
                                             followup_status: 'contacted')
 
         # 1 person
@@ -106,7 +106,7 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
         Factory(:contact_assignment, organization: @client.organization,
                                       assigned_to: @person2,
                                       person: @person)
-        @person.organizational_permissions.first.update_attributes(followup_status: 'contacted')
+        @person.organizational_roles.first.update_attributes(followup_status: 'contacted')
 
         # 1 person
         get :index, secret: @client.secret, filters: {assigned_to: @person2.id.to_s, followup_status: 'contacted'}
@@ -126,7 +126,7 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
 
         should 'match email address' do
           @person2.email_addresses.create(email: 'foo@example.com')
-          get :index, secret: @client.secret, filters: {name_or_email_like: 'foo'}
+          get :index, secret: @client.secret, filters: {name_or_email_like: 'foo@'}
           json = JSON.parse(response.body)
           assert_equal 1, json['people'].length, json.inspect
         end
@@ -213,7 +213,7 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
   context '.destroy' do
     should 'create and return a person' do
       delete :destroy, id: @person.id, secret: @client.secret
-      assert_equal [], assigns(:person).organizational_permissions
+      assert_equal [], assigns(:person).organizational_roles
     end
   end
 

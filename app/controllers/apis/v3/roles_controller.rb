@@ -1,45 +1,45 @@
-class Apis::V3::InteractionsController < Apis::V3::BaseController
-  before_filter :get_interaction, only: [:show, :update, :destroy]
+class Apis::V3::RolesController < Apis::V3::BaseController
+  before_filter :get_role, only: [:show, :update, :destroy]
 
   def index
-    order = params[:order] || 'created_at desc'
+    order = params[:order] || 'name'
 
-    list = add_includes_and_order(interactions, order: order)
+    list = add_includes_and_order(roles, order: order)
 
-    render json: list.collect(&:to_hash),
+    render json: list,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization, since: params[:since]}
   end
 
   def show
-    render json: @interaction.to_hash,
+    render json: @role,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization}
   end
 
   def create
-    interaction = interactions.new(params[:interaction])
-    interaction.organization_id = current_organization.id
+    role = roles.new(params[:role])
+    role.organization_id = current_organization.id
 
-    if interaction.save
-      render json: interaction.to_hash,
+    if role.save
+      render json: role,
              status: :created,
              callback: params[:callback],
              scope: {include: includes, organization: current_organization}
     else
-      render json: {errors: interaction.errors.full_messages},
+      render json: {errors: role.errors.full_messages},
              status: :unprocessable_entity,
              callback: params[:callback]
     end
   end
 
   def update
-    if @interaction.update_attributes(params[:interaction])
-      render json: @interaction.to_hash,
+    if @role.update_attributes(params[:role])
+      render json: @role,
              callback: params[:callback],
              scope: {include: includes, organization: current_organization}
     else
-      render json: {errors: interaction.errors.full_messages},
+      render json: {errors: role.errors.full_messages},
              status: :unprocessable_entity,
              callback: params[:callback]
     end
@@ -47,21 +47,27 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
   end
 
   def destroy
-    @interaction.destroy
+    @role.destroy
 
-    render json: @interaction.to_hash,
+    render json: @role,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization}
   end
 
   private
 
-  def interactions
-    current_organization.interactions
+  def roles
+    current_organization.roles
   end
 
-  def get_interaction
-    @interaction = add_includes_and_order(interactions).find(params[:id])
+  def get_role
+    @role = add_includes_and_order(roles)
+                .find(params[:id])
+
+  end
+
+  def available_includes
+    [:email_addresses, :phone_numbers]
   end
 
 end

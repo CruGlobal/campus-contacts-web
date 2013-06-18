@@ -22,11 +22,11 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
 
     if person.save
 
-      # add permissions in current org
-      permission_ids = params[:permissions].split(',') if params[:permissions]
-      permission_ids = [Permission::NO_PERMISSIONS_ID] if permission_ids.blank?
-      permission_ids.each do |permission_id|
-        current_organization.add_permission_to_person(person, permission_id)
+      # add roles in current org
+      role_ids = params[:roles].split(',') if params[:roles]
+      role_ids = [Role::CONTACT_ID] if role_ids.blank?
+      role_ids.each do |role_id|
+        current_organization.add_role_to_person(person, role_id)
       end
 
       render json: person,
@@ -41,17 +41,17 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   end
 
   def update
-    # add permissions in current org
-    if params[:permissions]
-      params[:permissions].split(',').each do |permission_id|
-        current_organization.add_permission_to_person(person, permission_id)
+    # add roles in current org
+    if params[:roles]
+      params[:roles].split(',').each do |role_id|
+        current_organization.add_role_to_person(person, role_id)
       end
     end
 
-    # remove permissions in current org
-    if params[:remove_permissions]
-      params[:remove_permissions].split(',').each do |permission_id|
-        current_organization.remove_permission_from_person(person, permission_id)
+    # remove roles in current org
+    if params[:remove_roles]
+      params[:remove_roles].split(',').each do |role_id|
+        current_organization.remove_role_from_person(person, role_id)
       end
     end
 
@@ -108,7 +108,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   end
 
   def available_includes
-    [:email_addresses, :phone_numbers, :interactions, :labels]
+    [:email_addresses, :phone_numbers]
   end
 
 end

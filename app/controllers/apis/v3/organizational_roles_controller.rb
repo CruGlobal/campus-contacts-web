@@ -1,18 +1,9 @@
-class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
-  before_filter :ensure_filters, only: [:bulk, :bulk_create, :bulk_destroy]
-
-  def index
-    order = params[:order] || 'id'
-    list = add_includes_and_order(organizational_permissions, order: order)
-
-    render json: list,
-           callback: params[:callback],
-           scope: {include: includes, organization: current_organization, since: params[:since]}
-  end
+class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
+  before_filter :ensure_filters
 
   def bulk
-    add_permissions(filtered_people, params[:add_permissions])
-    remove_permissions(filtered_people, params[:remove_permissions])
+    add_roles(filtered_people, params[:add_roles])
+    remove_roles(filtered_people, params[:remove_roles])
 
     render json: filtered_people,
            callback: params[:callback],
@@ -20,7 +11,7 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
   end
 
   def bulk_create
-    add_permissions(filtered_people, params[:permissions])
+    add_roles(filtered_people, params[:roles])
 
     render json: filtered_people,
            callback: params[:callback],
@@ -28,7 +19,7 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
   end
 
   def bulk_destroy
-    remove_permissions(filtered_people, params[:permissions])
+    remove_roles(filtered_people, params[:roles])
 
     render json: filtered_people,
            callback: params[:callback],
@@ -52,7 +43,7 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
 
   def ensure_filters
     unless params[:filters]
-      render json: {errors: ["The 'filters' parameter is required for bulk permission actions."]},
+      render json: {errors: ["The 'filters' parameter is required for bulk role actions."]},
                  status: :bad_request,
                  callback: params[:callback]
     end
@@ -72,22 +63,11 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
     @filtered_people
   end
 
-  def add_permissions(people, permissions)
-    current_organization.add_permissions_to_people(filtered_people, permissions.split(',')) if permissions
+  def add_roles(people, roles)
+    current_organization.add_roles_to_people(filtered_people, roles.split(',')) if roles
   end
 
-  def remove_permissions(people, permissions)
-    current_organization.remove_permissions_from_people(filtered_people, permissions.split(',')) if permissions
+  def remove_roles(people, roles)
+    current_organization.remove_roles_from_people(filtered_people, roles.split(',')) if roles
   end
-
-  def organizational_permissions
-    current_person.organizational_permissions
-  end
-
-  def get_organizational_permission
-    @organizational_permission = add_includes_and_order(current_organization.people).find(params[:id])
-
-  end
-
-
 end
