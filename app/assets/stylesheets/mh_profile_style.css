@@ -298,15 +298,16 @@ button.add_gray:after {
 .info_tag {
   text-shadow: none;
   margin-top: 2px;
-	margin:0 0 0 2px;
-	color:#FFFFFF;
+  margin-bottom: 2px;
+  color: #0379AE;
+  background-color: #EAF1F6;
+
 	font-family:Arial, Sans-serif;
 	font-size:10px;
 	font-style:bold;
 	line-height:9x;
 	height:12px;
-	padding:1px 4px 1px 4px;
-	background-color:#c0c0c0;
+	padding:1px 4px;
 	display:inline-block;
 	position:relative;
 	top:-1px;
