@@ -311,6 +311,14 @@ Mh::Application.routes.draw do
       resources :interaction_types
       resources :answers
     end
+    api_version(module: 'V4', header: {name: 'API-VERSION', value: 'v4'}, parameter: {name: "version", value: 'v3'}, path: {value: 'v4'}) do
+      resources :labels
+      resources :permissions
+      resources :interactions
+      resources :interaction_types
+      resources :people
+      resources :organizations
+    end
   end
 
   root to: "welcome#index"
