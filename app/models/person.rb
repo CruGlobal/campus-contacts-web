@@ -519,7 +519,7 @@ class Person < ActiveRecord::Base
   end
 
   def organizational_permissions_for_org(org)
-    organizational_permissions.where(organization_id: org.id)
+    organizational_permissions.where(organization_id: org.id, archive_date: nil)
   end
 
   def organizational_labels_for_org(org)

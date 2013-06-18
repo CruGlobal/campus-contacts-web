@@ -18,7 +18,6 @@ $.fn.openLabelsDialog = () ->
     contact_ctr = 0
     $('.contact_checkbox:checked').each ->
       contact_ctr += 1
-      contact_box = $(this)
       contact_labels = $(this).attr('data-labels').split(',')
 
       # Check Assigned Labels
@@ -39,6 +38,32 @@ $.fn.openLabelsDialog = () ->
           $('#profile_labels_dialog .label_checkbox[value='+value+']').prop('disabled',true)
 
     $.showDialog($("#profile_labels_dialog"))
+
+$.fn.openPermissionsDialog = () ->
+  $('.contact_checkbox.profile_checkbox').prop('checked',true)
+  if $('.contact_checkbox:checked').size() == 0
+    $.a(t('contacts.index.none_checked'))
+  else
+    $('#profile_permissions_dialog .permission_checkbox').prop('checked',false)
+    if $('.contact_checkbox:checked').size() == 1
+      displayed_text = $('.contact_checkbox:checked').first().attr('data-name')
+    else
+      displayed_text = $('.contact_checkbox:checked').size() + " selected people"
+    $('#profile_permissions_dialog .selected_contacts_name').text(displayed_text)
+
+    contact_ctr = 0
+    $('.contact_checkbox:checked').each ->
+      contact_ctr += 1
+      contact_permission_id = $(this).attr('data-permissions').toString()
+
+      permission_box = $('#profile_permissions_dialog .permission_checkbox[value='+contact_permission_id+']')
+      if contact_ctr == 1
+        permission_box.prop('checked',true)
+      else
+        unless permission_box.is(':checked')
+          $('#profile_permissions_dialog .permission_checkbox').prop('checked',false)
+
+    $.showDialog($("#profile_permissions_dialog"))
 
 $ ->
   $(document).ready ->
@@ -75,7 +100,7 @@ $ ->
 
   $('li #action_menu_permissions').live 'click', (e)->
     e.preventDefault()
-    $.showDialog($("#profile_permissions_dialog"))
+    $.fn.openPermissionsDialog()
   # END - ACTION MENU
 
   $('#assign_popup_save_button').live 'click', (e)->
@@ -158,16 +183,20 @@ $ ->
 
   $('#permissions_popup_save_button').live 'click', (e)->
     e.preventDefault()
-    ids = []
-    $('.permission_checkbox:checked').each ->
-      ids.push($(this).val())
-    ids = ids.join(',')
+    checked_permission_id = $('.permission_checkbox:checked').val()
+    people_ids = $('.contact_checkbox:checked').map ->
+      return $(this).attr('data-id')
+    if people_ids.size() > 1
+      people_ids = people_ids.get().join(',')
+    else
+      people_ids = people_ids[0]
+
     $.hideDialog($("#profile_permissions_dialog"))
-    if ids != $('#permissions_save').attr('data-current-permission-ids')
-      $.toggleLoader('profile_name','Applying Changes...')
-      $.ajax
-        type: 'GET',
-        url: "/interactions/set_permissions?person_id=" + $(this).attr('data-person-id') + "&ids=" + ids
+    $.toggleLoader('profile_name','Applying Changes...')
+    $.toggleLoader('ac_button_bar','Applying Changes...')
+    $.ajax
+      type: 'GET',
+      url: "/interactions/set_permissions?people_ids=" + people_ids + "&permission_id=" + checked_permission_id
 
   $('#permissions_popup_cancel_button').live 'click', (e)->
     e.preventDefault()
@@ -198,7 +227,7 @@ $ ->
       people_ids = people_ids[0]
 
     $.hideDialog($("#profile_labels_dialog"))
-    $.toggleLoader('profile_label_header','Applying Changes...')
+    $.toggleLoader('profile_name','Applying Changes...')
     $.toggleLoader('ac_button_bar','Applying Changes...')
     $.ajax
       type: 'GET',

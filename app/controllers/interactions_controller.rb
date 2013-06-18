@@ -8,8 +8,8 @@ class InteractionsController < ApplicationController
       @interaction = Interaction.new
       @completed_answer_sheets = @person.completed_answer_sheets(current_organization).where("completed_at IS NOT NULL").order('completed_at DESC')
 
-			@labels = @person.labels_for_org_id(current_organization.id)
-			@permissions = @person.permissions_for_org_id(current_organization.id)
+			@labels = @person.assigned_organizational_labels(current_organization.id).uniq
+			@permission = @person.assigned_organizational_permissions(current_organization.id).first
       @groups = @person.groups_for_org_id(current_organization.id)
       @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
       if can? :manage, @person
@@ -52,17 +52,24 @@ class InteractionsController < ApplicationController
   end
 
   def set_permissions
-    @person = Person.find(params[:person_id])
-    @permission_ids = params[:ids].split(',')
-    removed_permissions = @person.organizational_permissions_for_org(current_organization).where("permission_id NOT IN (?)", @permission_ids)
-    removed_permissions.delete_all if removed_permissions.present?
-    @permission_ids.each do |permission_id|
-      permission = @person.organizational_permissions_including_archived.find_or_create_by_permission_id_and_organization_id(permission_id.to_i, current_organization.id)
+    @people = Person.where(id: params[:people_ids].split(','))
+    @permission_id = params[:permission_id]
+
+    @people.each do |person|
+      old_permission = person.organizational_permissions_for_org(current_organization).where("permission_id <> ?", @permission_id)
+      old_permission.delete_all if old_permission.present?
+
+      permission = person.organizational_permissions_including_archived.find_or_create_by_permission_id_and_organization_id(@permission_id.to_i, current_organization.id)
       permission.update_attributes({archive_date: nil, added_by_id: current_person.id}) if permission.archive_date.present?
       permission.update_attribute(:added_by_id, current_person.id) if permission.added_by_id.nil?
+      person.assigned_tos.delete_all unless @permission_id == Permission::NO_PERMISSIONS_ID
+      @permissions = person.permissions_for_org_id(current_organization.id)
+      @assigned_tos = person.assigned_tos.where("contact_assignments.organization_id" => current_organization.id)
     end
-    @person.assigned_tos.delete_all unless @permission_ids.include?(Permission::NO_PERMISSIONS_ID)
-    @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
+
+    if @people.count == 1
+      @person = @people.first
+    end
   end
 
   def create_label
@@ -96,7 +103,9 @@ class InteractionsController < ApplicationController
       end
       removed_labels = person.organizational_labels_for_org(current_organization).where("label_id IN (?)", @remove_label_ids)
       removed_labels.delete_all if removed_labels.present?
+
       @labels = person.labels_for_org_id(current_organization.id)
+      person.assigned_tos.delete_all unless @labels.include?(Label::LEADER_ID)
     end
 
     if @people.count == 1

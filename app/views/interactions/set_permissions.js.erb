@@ -1,4 +1,12 @@
-$('#permissions_save').attr('data-current-permission-ids',"<%= params[:ids] %>")
-$('.feed_content .tab_content.profile_info .edit_space').html("<%= escape_javascript(render partial: 'interactions/profile_info_edit') %>")
-$('.feed_content .tab_content.profile_info .view_space').html("<%= escape_javascript(render partial: 'interactions/profile_info') %>")
+if($('#profile_label_box').size() > 0){
+  $('.feed_content .tab_content.profile_info .edit_space').html("<%= escape_javascript(render partial: 'interactions/profile_info_edit') if @person.present? %>")
+  $('.feed_content .tab_content.profile_info .view_space').html("<%= escape_javascript(render partial: 'interactions/profile_info') if @person.present? %>")
+}
+<% @people.each do |person| %>
+  <% permission = person.assigned_organizational_permissions(current_organization.id).first %>
+  <% if permission.present? %>
+    $(".contact_checkbox[data-id=<%= person.id %>]").attr('data-permissions',"<%= permission.id %>")
+  <% end %>
+<% end %>
 $.toggleLoader('profile_name','')
+$.toggleLoader('ac_button_bar','')

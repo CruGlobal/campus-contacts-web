@@ -55,7 +55,7 @@
 
 <!-- Assign dialog -->
 <%= form_for ContactAssignment.new do |f| %>
-  <%= check_box_tag 'ids[]', @person.id, true, {'data-id'=>@person.id, 'data-number'=>@person.pretty_phone_number, id: "ids_#{@person.id}", class: 'id_checkbox contact_checkbox profile_checkbox', 'data-name' => "#{@person.first_name} #{@person.last_name}", 'data-email'=>@person.email, 'data-permissions' => "#{@permissions.collect(&:id).join(',')}", 'data-labels'=>"#{@labels.collect(&:id).join(',')}"} %>
+  <%= check_box_tag 'ids[]', @person.id, true, {'data-id'=>@person.id, 'data-number'=>@person.pretty_phone_number, id: "ids_#{@person.id}", class: 'id_checkbox contact_checkbox profile_checkbox', 'data-name' => "#{@person.first_name} #{@person.last_name}", 'data-email'=>@person.email, 'data-permissions' => "#{@permission.id if @permission.present?}", 'data-labels'=>"#{@labels.collect(&:id).join(',')}"} %>
   <%= hidden_field_tag :assign_to %>
   <%= render 'application/assign' %>
 <% end %>

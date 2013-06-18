@@ -8,16 +8,17 @@ if($('#profile_label_box').size() > 0){
     $('#profile_label_box').append("<div class='no_labels'>No labels assigned.</div>")
   <% end %>
   $('#all_feeds_box').html("<%= escape_javascript(render partial: 'interactions/all_feeds') %>")
-}else{
+}
 
-  <% @people.each do |person| %>
-    <% labels = person.assigned_organizational_labels(current_organization.id).uniq %>
+<% @people.each do |person| %>
+  <% labels = person.assigned_organizational_labels(current_organization.id).uniq %>
+  $(".contact_checkbox[data-id=<%= person.id %>]").attr('data-labels',"<%= labels.collect(&:id).join(',') %>")
+  if($('.contact_listing').size() > 0){
     $(".contact_listing tr[data-id=<%= person.id %>] .permissions_container").html("")
-    $(".contact_listing tr[data-id=<%= person.id %>] .contact_checkbox").attr('data-labels',"<%= labels.collect(&:id).join(',') %>")
     <% labels.arrange_all.each do |label| %>
       $(".contact_listing tr[data-id=<%= person.id %>] .permissions_container").append("<div id='<%= person.id%>_<%= label.id %>' class='permission_label label_<%= label.id %>'><%= label.name %></div>&nbsp;")
     <% end %>
-  <% end %>
-}
-$.toggleLoader('profile_label_header','')
+  }
+<% end %>
+$.toggleLoader('profile_name','')
 $.toggleLoader('ac_button_bar','')

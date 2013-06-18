@@ -3,11 +3,14 @@
   <div class="pop_box_container">
     <div class="mh_popup_box permissions_popup_box" class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable" tabindex="-1" permission="dialog" aria-permissionledby="ui-dialog-title-alert_dialog">
     	<div class="mh_popup_box_top"><span class="mh_popup_heading">Permissions</span></div>
-    	<div class="fancy">Apply the following permissions to <%= @person.name %>:</div>
+    	<div class="fancy">
+        Apply selected permission to
+        <span class="selected_contacts_name"><%= @person.name %></span>:
+      </div>
     	<div class="permissions_chooser_box" id="permissions_chooser_box">
         <% current_permission_ids = Array.new %>
         <% @permissions_for_assign.each do |permission| %>
-          <% if @permissions.include?(permission) %>
+          <% if @permissions.present? && @permissions.include?(permission) %>
             <% current_permission_ids << permission.id %>
             <% checked = true %>
           <% else %>
@@ -19,8 +22,8 @@
     	</div>
 
 
-    	<div class="permissions_save" id="permissions_save" data-current-permission-ids="<%= current_permission_ids.join(',') %>">
-    		<button class="red_accent" id="permissions_popup_save_button" data-person-id="<%= @person.id %>">Save</button>
+    	<div class="permissions_save" id="permissions_save">
+    		<button class="red_accent" id="permissions_popup_save_button">Save</button>
     		<button class="large_lightgray" id="permissions_popup_cancel_button">Cancel</button>
     	</div>
 
