@@ -1229,18 +1229,18 @@ en:
       list_heading: Confirm Movement Indicators
   movement_indicator_suggestions:
     index:
-      title: Report Movement Indicators
+      title: Report Movement Indicators for %{org_name}
       list_heading: Suggested Movement Indicator Actions
       fetching: 'Fetching suggestions (this might take a while)'
       show_old: 'Click here to show old suggestions'
     reasons:
-      group_membership: "This person is in a group"
-      engaged_disciple: "This person is an engaged disciple"
-      leader: "This person is a leader"
-      spiritual_conversation: "This person initiated a spiritual conversation"
-      group_leader: "This person is a group leader"
+      group_membership: '<b>%{name}</b> was added to a group. Apply the "<b>%{label}</b>" label?'
+      engaged_disciple: '<b>%{name}</b> was labeled as an engaged disciple. Also apply the "<b>%{label}</b>" label?'
+      leader: '<b>%{name}</b> was labeled as a leader. Also apply the "<b>%{label}</b>" label?'
+      spiritual_conversation: '<b>%{name}</b> has initiated at least one spiritual conversation. Apply the "<b>%{label}</b>" label?'
+      gospel_presentation: '<b>%{name}</b> has initiated at least one gospel presentation. Apply the "<b>%{label}</b>" label?'
+      group_leader: '<b>%{name}</b> was added as a group leader. Also apply the "<b>%{label}</b>" label?'
       graduated: "This person has graduated"
-    suggestion_html: "<b>%{name}</b> look like they may be %{label_sentence}. Apply the <b>%{label}</b> label?"
     remove_suggestion_html: "<b>%{name}</b> look like they may no longer be %{label_sentence}. Remove the <b>%{label}</b> label?"
   labels:
     leader: leader

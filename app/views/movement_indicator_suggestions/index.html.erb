@@ -1,12 +1,20 @@
-<h1><%= t('.title') %></h1>
+<h1><%= t('.title', org_name: current_organization) %></h1>
 <h2><%= t('.list_heading') %></h2>
-<table border="0">
-  <tbody id="suggestions">
-    <tr><td colspan="3"><%= t('.fetching') %> <%= spinner(nil, true) %></td></tr>
-  </tbody>
-  <tfoot id="declined_suggestions">
-    <tr><td colspan="3"><%= link_to(t('.show_old'), '#', id: 'show_old') %></td></tr>
-  </tfoot>
-</table>
+<% if current_organization.importable_type == 'Ccc::MinistryActivity' %>
+  <table border="0">
+    <tbody id="suggestions">
+      <tr><td colspan="3"><%= t('.fetching') %> <%= spinner(nil, true) %></td></tr>
+    </tbody>
+    <tfoot id="declined_suggestions">
+      <tr><td colspan="3"><%= link_to(t('.show_old'), '#', id: 'show_old') %></td></tr>
+    </tfoot>
+  </table>
 
-<%= link_to(t('welcome.wizard.next'), movement_indicators_path) %>
+  <%= link_to(t('welcome.wizard.next'), movement_indicators_path) %>
+<% else %>
+  <p>
+    This MissionHub organization does NOT have a corresponding movement in the Infobase to
+    report your movement indicators.  Only movements can report movement indicators, not
+    teams or self created organizations.
+  </p>
+<% end %>
