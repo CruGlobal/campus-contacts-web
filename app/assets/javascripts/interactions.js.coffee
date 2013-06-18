@@ -3,6 +3,43 @@ $.fn.tip = () ->
   $('.tipitleft').qtip({position: {my: 'center right', at: 'center left'}, style: {classes: 'qtip-blue qtip-shadow'}})
   $('.tipitright').qtip({position: {my: 'top left', at: 'bottom right'}, style: {classes: 'qtip-blue qtip-shadow'}})
 
+$.fn.openLabelsDialog = () ->
+  $('.contact_checkbox.profile_checkbox').prop('checked',true)
+  if $('.contact_checkbox:checked').size() == 0
+    $.a(t('contacts.index.none_checked'))
+  else
+    if $('.contact_checkbox:checked').size() == 1
+      displayed_text = $('.contact_checkbox:checked').first().attr('data-name')
+    else
+      displayed_text = $('.contact_checkbox:checked').size() + " selected people"
+    $('#profile_labels_dialog .selected_contacts_name').text(displayed_text)
+    $('#labels_chooser_box').scrollTop(0)
+    $('#profile_labels_dialog .label_checkbox').prop('checked',false).prop('disabled',false)
+    contact_ctr = 0
+    $('.contact_checkbox:checked').each ->
+      contact_ctr += 1
+      contact_box = $(this)
+      contact_labels = $(this).attr('data-labels').split(',')
+
+      # Check Assigned Labels
+      $.each contact_labels, (index, value) ->
+        label_box = $('#profile_labels_dialog .label_checkbox[value='+value+']')
+        if contact_ctr == 1
+          label_box.prop('checked',true)
+        else
+          unless label_box.is(':checked')
+            label_box.prop('checked',true)
+            label_box.prop('disabled',true)
+
+      # Disable Checked Unassigned Labels
+      checked_labels = $('#profile_labels_dialog .label_checkbox:checked').map ->
+        return $(this).attr('value')
+      $.each checked_labels, (index, value) ->
+        if $.inArray(value, contact_labels) < 0
+          $('#profile_labels_dialog .label_checkbox[value='+value+']').prop('disabled',true)
+
+    $.showDialog($("#profile_labels_dialog"))
+
 $ ->
   $(document).ready ->
     $.fn.tip()
@@ -32,9 +69,9 @@ $ ->
     else
       $.a(t('contacts.index.none_checked'))
 
-  $('li #action_menu_labels').live 'click', (e)->
+  $('#action_menu_labels').live 'click', (e)->
     e.preventDefault()
-    $.showDialog($("#profile_labels_dialog"))
+    $.fn.openLabelsDialog()
 
   $('li #action_menu_permissions').live 'click', (e)->
     e.preventDefault()
@@ -138,16 +175,34 @@ $ ->
 
   $('#labels_popup_save_button').live 'click', (e)->
     e.preventDefault()
-    ids = []
-    $('.label_checkbox:checked').each ->
-      ids.push($(this).val())
-    ids = ids.join(',')
+
+    checked_label_ids = $('.label_checkbox:checked:not(:disabled)').map ->
+      return $(this).val()
+    if checked_label_ids.size() > 1
+      checked_label_ids = checked_label_ids.get().join(',')
+    else
+      checked_label_ids = checked_label_ids[0]
+
+    unchecked_label_ids = $('.label_checkbox:not(:checked):not(:disabled)').map ->
+      return $(this).val()
+    if unchecked_label_ids.size() > 1
+      unchecked_label_ids = unchecked_label_ids.get().join(',')
+    else
+      unchecked_label_ids = unchecked_label_ids[0]
+
+    people_ids = $('.contact_checkbox:checked').map ->
+      return $(this).attr('data-id')
+    if people_ids.size() > 1
+      people_ids = people_ids.get().join(',')
+    else
+      people_ids = people_ids[0]
+
     $.hideDialog($("#profile_labels_dialog"))
-    if ids != $('#labels_save').attr('data-current-label-ids')
-      $.toggleLoader('profile_label_header','Applying Changes...')
-      $.ajax
-        type: 'GET',
-        url: "/interactions/set_labels?person_id=" + $(this).attr('data-person-id') + "&ids=" + ids
+    $.toggleLoader('profile_label_header','Applying Changes...')
+    $.toggleLoader('ac_button_bar','Applying Changes...')
+    $.ajax
+      type: 'GET',
+      url: "/interactions/set_labels?people_ids=" + people_ids + "&label_ids=" + checked_label_ids + "&remove_label_ids=" + unchecked_label_ids
 
 
   $('#labels_add_new_button').live 'click', (e)->

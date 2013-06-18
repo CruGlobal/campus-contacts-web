@@ -12,8 +12,11 @@ class ContactsController < ApplicationController
   rescue_from OrganizationalPermission::InvalidPersonAttributesError do |exception|
     #render 'update_leader_error'
   end
-  
+
   def all_contacts
+    permissions_for_assign
+    groups_for_assign
+    labels_for_assign
     params[:page] ||= 1
     url = request.url.split('?')
     @attr = url.size > 1 ? url[1] : ''
@@ -286,19 +289,19 @@ class ContactsController < ApplicationController
     @all_saved_contact_searches = current_user.saved_contact_searches.where('organization_id = ?', current_organization.id)
     get_and_merge_unfiltered_people
   end
-  
+
   def display_new_sidebar
     @organization = current_organization
     # Saved Search
     @all_saved_contact_searches = current_user.saved_contact_searches.where('organization_id = ?', current_organization.id)
     get_and_merge_unfiltered_people
   end
-  
+
   def check_email
     email = params[:email]
     fname = params[:fname]
     lname = params[:lname]
-    
+
     code = '100'
     if email.present? && fname.present? && lname.present?
       if fetched_email = EmailAddress.find_by_email(email) || User.find_by_username(email) || User.find_by_email(email)
@@ -315,7 +318,7 @@ class ContactsController < ApplicationController
       end
     else
       code = '203'
-    end  
+    end
     render :text => code
   end
 
@@ -343,20 +346,20 @@ class ContactsController < ApplicationController
       end
     end
   end
-  
+
   protected
     def fetch_contacts(load_all = false)
       # Load Saved Searches, Surveys & Questions
       initialize_variables
       update_fb_friends if current_person.friends.count == 0
-      
+
       # Fix old search variable from saved searches
       handle_old_search_variable if params[:search] == "1"
-      
+
       # Get people
       build_people_scope
       # get_and_merge_unfiltered_people unless params[:dnc] == 'true'
-      
+
       # Filter results
       filter_archived_only if params[:archived].present?
       filter_by_permission if params[:permission].present?
@@ -443,7 +446,7 @@ class ContactsController < ApplicationController
       @people_unfiltered = Person.where('organizational_permissions.organization_id' => org_ids)
                                  .where("organizational_permissions.followup_status <> 'do_not_contact' OR organizational_permissions.followup_status IS NULL")
                                  .joins(:organizational_permissions_including_archived)
-     
+
       if params[:include_archived].blank? && params[:archived].blank?
         @people_unfiltered = @people_unfiltered.where('organizational_permissions.archive_date' => nil)
       end
@@ -459,7 +462,7 @@ class ContactsController < ApplicationController
       params[:search] = nil
       params[:do_search] = "1"
     end
-    
+
     def filter_by_label
     	params[:label] = [params[:label]] unless params[:label].is_a?(Array)
       @people_scope = @people_scope.joins(:organizational_labels).where('organizational_labels.organization_id = ? AND organizational_labels.removed_date IS NULL', current_organization.id)
@@ -486,7 +489,7 @@ class ContactsController < ApplicationController
         	@people_scope = @people_scope.where("organizational_labels.label_id IN (?)", @labels.collect(&:id))
       	end
       end
-      
+
     end
 
     def filter_by_permission
@@ -631,7 +634,7 @@ class ContactsController < ApplicationController
         if sort_query.include?('last_survey')
 	        @people_scope = @people_scope.get_and_order_by_latest_answer_sheet_answered(sort_query, current_organization.id)
 		    end
-        
+
         if sort_query.include?('labels')
           @people_scope = @people_scope.get_and_order_by_label(sort_query, current_organization.id)
         end

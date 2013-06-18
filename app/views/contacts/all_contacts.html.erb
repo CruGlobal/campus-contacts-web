@@ -30,10 +30,14 @@
 		</li>
 	</ul>
 	<ul class="button_bar">
-		<li class="action_lightblue btn_left"><a href="#">Permissions</a></li>
+		<li class="action_lightblue btn_left">
+		  <%= link_to "Permissions", "#", id: "action_menu_permissions" %>
+		</li>
 	</ul>
 	<ul class="button_bar">
-		<li class="action_lightblue btn_right"><a href="#">Labels</a></li>
+		<li class="action_lightblue btn_right">
+		  <%= link_to "Labels", "#", id: "action_menu_labels"%>
+		</li>
 	</ul>
 	<ul class="button_bar">
 		<li class="action_lightblue btn_left">
@@ -151,3 +155,6 @@
 
 <!-- Hidden Questions Dialog -->
 <%= render 'dialogs/hidden_questions' %>
+
+<!-- Labels Dialog -->
+<%= render 'dialogs/dialog_labels' %>

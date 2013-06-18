@@ -1,4 +1,5 @@
 <% labels = person.assigned_organizational_labels(current_organization.id).uniq %>
+<% permissions = person.assigned_organizational_permissions(current_organization.id).uniq %>
 <% contact_permission = person.contact_permission_for_org(current_organization) %>
 <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row <%= extra if defined?(extra) %>" data-name="<%= person.name %>" data-email="<%= person.email %>">
 	<td class="handle_container">
@@ -9,7 +10,7 @@
     <% end %>
 	</td>
   <td nowrap="nowrap" class="checkbox_cell">
-    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox contact_checkbox all_contact_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email, 'data-permissions' => "#{labels.collect(&:id).join(',')}"%>
+    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox contact_checkbox all_contact_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email, 'data-permissions' => "#{permissions.collect(&:id).join(',')}", 'data-labels'=>"#{labels.collect(&:id).join(',')}"%>
   </td>
   <td class="cell firstName"><%= person.first_name %></td>
   <td class="cell lastName"><%= person.last_name %></td>

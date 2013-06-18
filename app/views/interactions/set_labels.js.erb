@@ -1,11 +1,23 @@
-$('#labels_save').attr('data-current-label-ids',"<%= params[:ids] %>")
-$('#profile_label_box').html("")
-<% if @labels.present? %>
-  <% @labels.each do |label| %>
-    $('#profile_label_box').append("<div class='profile_label'><%= label.name %></div>")
+if($('#profile_label_box').size() > 0){
+  $('#profile_label_box').html("")
+  <% if @labels.present? %>
+    <% @labels.each do |label| %>
+      $('#profile_label_box').append("<div class='profile_label'><%= label.name %></div>")
+    <% end %>
+  <% else %>
+    $('#profile_label_box').append("<div class='no_labels'>No labels assigned.</div>")
   <% end %>
-<% else %>
-  $('#profile_label_box').append("<div class='no_labels'>No labels assigned.</div>")
-<% end %>
-$('#all_feeds_box').html("<%= escape_javascript(render partial: 'interactions/all_feeds') %>")
+  $('#all_feeds_box').html("<%= escape_javascript(render partial: 'interactions/all_feeds') %>")
+}else{
+
+  <% @people.each do |person| %>
+    <% labels = person.assigned_organizational_labels(current_organization.id).uniq %>
+    $(".contact_listing tr[data-id=<%= person.id %>] .permissions_container").html("")
+    $(".contact_listing tr[data-id=<%= person.id %>] .contact_checkbox").attr('data-labels',"<%= labels.collect(&:id).join(',') %>")
+    <% labels.arrange_all.each do |label| %>
+      $(".contact_listing tr[data-id=<%= person.id %>] .permissions_container").append("<div id='<%= person.id%>_<%= label.id %>' class='permission_label label_<%= label.id %>'><%= label.name %></div>&nbsp;")
+    <% end %>
+  <% end %>
+}
 $.toggleLoader('profile_label_header','')
+$.toggleLoader('ac_button_bar','')
