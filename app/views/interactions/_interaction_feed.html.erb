@@ -1,5 +1,5 @@
 <div class="feed_box interaction_display interaction_feed" id="interaction_feed_<%= interaction.id %>">
-	<div class="feed_icon"><%= image_tag(interaction.icon, class: "tip", title: interaction.type) %></div>
+	<div class="feed_icon" style="<%= 'visibility:hidden;' if interaction.type == 'Comment Only' %>"><%= image_tag(interaction.icon, class: "tip", title: interaction.type) %></div>
 	<div class="feed_item_header">
     <span class="feed_item_date"><%= wiser_date(interaction.timestamp, custom_class: 'tip') %></span>
     <span class="feed_item_privacy">
@@ -10,7 +10,9 @@
 	<div class="feed_item_content"><%= interaction.title %></div>
   <% if interaction.comment.present? %>
   	<div class="feed_item_comment">
-      <strong><%= interaction.creator %> wrote:</strong>
+      <% unless interaction.type == 'Comment Only'%>
+        <strong><%= interaction.creator %> wrote:</strong>
+      <% end %>
       “<%= interaction.comment %>”
     </div>
   <% end %>
