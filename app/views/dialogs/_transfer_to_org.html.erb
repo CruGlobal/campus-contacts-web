@@ -1,0 +1,28 @@
+<div id="transfer_to_org" style="display:none;" class="custom_mh_popup_box">
+  <div class="ui-widget-overlay" style="position: fixed; width: 100%; height: 100%; z-index: 999; "></div>
+  <div class="pop_box_container">
+    <div class="mh_popup_box" class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable" tabindex="-1" permission="dialog" aria-labelledby="ui-dialog-title-alert_dialog" id="transfer_to_org_box">
+    	<div class="mh_popup_box_top">
+        <span class="mh_popup_heading">
+          Transfer to Another Organization
+        </span>
+      </div>
+      <div class="fancy">
+        <%= text_field_tag :org_name, '', class: 'org_search_name', autocomplete: 'off', placeholder: 'Type to search an organization' %>
+        <%= spinner('org_search') %>
+        <div id="keep-contact-copy">
+          <%= check_box_tag :keep_contact, 1, true %>
+          <%= t('application.assign.keep_contact') %>
+        </div>
+      </div>
+      <div class="mh_popup_box_content">
+        <div class="mh_popup_box_scroller orgs_list" id="transfer_to_org_content" data-org-id="<%= current_organization.id %>">
+          <%= render 'organizations/search', organizations: current_person.orgs_with_children %>
+        </div>
+      </div>
+    	<div class="mh_popup_buttons" id="transfer_to_org_buttons">
+    		<button class="large_lightgray mh_popup_cancel_button" id="transfer_to_org_cancel_button">Cancel</button>
+    	</div>
+    </div>
+  </div>
+</div>

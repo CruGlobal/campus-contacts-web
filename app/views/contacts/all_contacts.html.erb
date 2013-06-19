@@ -60,7 +60,21 @@
 		</li>
 	</ul>
 	<ul class="button_bar">
-		<li class="action_lightblue"><a href="#">More <span style="font-size:9px;">&#x25BC;</span></a></li>
+		<li class="action_lightblue">
+      <%= link_to('More ▾', '#', class: 'action_dropdown') %>
+      <ul style="display:none" id="all_contacts_more_menu">
+        <% if can? :manage, current_organization %>
+          <li><%= link_to(t('people.index.merge_contacts'), "", id: "merge_people") %></li>
+        <% end %>
+        <li><%= link_to(t('people.index.export'), params.merge(format: 'csv'), id: 'bulk_export_link') %></li>
+        <li><%= link_to(t('people.index.vcard'), '', id: 'bulk_vcard_link' ) %></li>
+        <% if can? :manage, current_organization %>
+          <li><%= link_to(t('general.delete'), bulk_delete_people_path, id: "bulk_delete") %></li>
+          <li><%= link_to(t('general.archive'), bulk_archive_people_path, id: "bulk_archive") %></li>
+          <li><%= link_to(t('general.transfer'), '', id: "transfer_to_org_link") %></li>
+        <% end %>
+      </ul>
+    </li>
 	</ul>
 </div>
 
@@ -139,9 +153,6 @@
     </div>
   <%- end %>
   <input type="button" value="Show Message Guide" id="show_message_guide_button" style="display:none">
-  <div id="transfer_to_org" style="display:none">
-    <%= render 'transfer' %>
-  </div>
   <%= render 'shared/bulk_vcard_dialog' %>
 
 </div>
@@ -169,3 +180,6 @@
 
 <!-- Show Hidden Question Dialog -->
 <%= render 'dialogs/search_hidden_questions'%>
+
+<!-- Transfer to Org Dialog -->
+<%= render 'dialogs/transfer_to_org' %>

@@ -8,6 +8,64 @@
     border-bottom: none;
     margin-bottom: 5px;
   }
+  #all_contacts_more_menu {
+    position: absolute;
+    background: white;
+    padding: 0;
+    width: 140px;
+    border: 1px solid #C7DFF0;
+    margin-left: -13px;
+    box-shadow: 0 2px 5px #bbb;
+    li {
+      display: block;
+      text-align: left;
+      padding: 0;
+      color: #333;
+      a {
+        color: #0379ae;
+        font-size: 11px;
+        padding: 0px 8px;
+        line-height: 24px;
+        margin: 0;
+        &:hover {
+          background: #eaf1f6;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+  #transfer_to_org {
+    .fancy {
+      margin: 55px 20px -15px;
+      font-size: 14px;
+      input[type=text] {
+        width: 380px;
+      }
+    }
+    #transfer_to_org_content {
+      padding: 0;
+      ul {
+        padding: 0;
+        margin: 0;
+        li {
+          display: block;
+          text-align: left;
+          padding: 0;
+          a {
+            font-size: 12px;
+            padding: 0px 12px;
+            display: block;
+            line-height: 24px;
+            margin: 0;
+            &:hover {
+              text-decoration: none;
+              background: #eaf1f6;
+            }
+          }
+        }
+      }
+    }
+  }
   #ac_sidebar {
     padding-left: 20px;
     #sidebar_loader {

@@ -264,6 +264,14 @@ span.mh_popup_heading {
   font-size: 16px;
 }
 
+#transfer_to_org_box {
+  width: 450px;
+  min-height: 50px;
+}
+#transfer_to_org_buttons {
+  width: 436px;
+}
+
 .groups_popup_box, .permissions_popup_box, .labels_popup_box, .error_popup_box{
 	background-color:#FFF;
 	border:1px solid #808284;

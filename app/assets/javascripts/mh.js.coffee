@@ -1,7 +1,4 @@
 $ ->
-  $('#custom_alert_cancel_button').live 'click', (e)->
-    e.preventDefault()
-    $.hideDialog($('#custom_alert_div'))
 
   $('.org_control').not('.tree_no_child').each ->
     if $("." + $(this).attr('id')).not('.tree_no_child').size() > 1

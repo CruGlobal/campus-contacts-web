@@ -30,7 +30,7 @@ class ContactsController < ApplicationController
 
       wants.csv do
         fetch_contacts(true)
-        @roles = Hash[OrganizationalPermission.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r] if r.role_id == Permission::CONTACT_ID }]
+        @roles = Hash[OrganizationalPermission.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r] if r.permission_id == Permission::NO_PERMISSIONS_ID }]
         @all_answers = generate_answers(@all_people, @organization, @questions, @surveys)
         @questions.select! { |q| !%w{first_name last_name phone_number email}.include?(q.attribute_name) }
         filename = @organization.to_s

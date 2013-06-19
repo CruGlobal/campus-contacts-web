@@ -116,10 +116,6 @@ $ ->
     e.preventDefault()
     $('#bulk_send_msg_dialog').submitBulkSendTextDialog()
 
-  $('#msg_popup_cancel_button').live 'click', (e)->
-    e.preventDefault()
-    $.hideDialog($("#bulk_send_msg_dialog"))
-
   $('#assigned_to_dropdown .option').live 'click', (e)->
     $('input.leader_box').prop('checked',false)
     checkbox = $(this).children('input.leader_box').eq(0)
@@ -173,10 +169,6 @@ $ ->
         type: 'GET',
         url: "/interactions/set_groups?person_id=" + $(this).attr('data-person-id') + "&ids=" + ids
 
-  $('#groups_popup_cancel_button').live 'click', (e)->
-    e.preventDefault()
-    $.hideDialog($("#profile_groups_dialog"))
-
   $('#show_profile_groups_button').live 'click', (e)->
     e.preventDefault()
     $.showDialog($("#profile_groups_dialog"))
@@ -197,10 +189,6 @@ $ ->
     $.ajax
       type: 'GET',
       url: "/interactions/set_permissions?people_ids=" + people_ids + "&permission_id=" + checked_permission_id
-
-  $('#permissions_popup_cancel_button').live 'click', (e)->
-    e.preventDefault()
-    $.hideDialog($("#profile_permissions_dialog"))
 
   $('#labels_popup_save_button').live 'click', (e)->
     e.preventDefault()
@@ -245,10 +233,6 @@ $ ->
         url: "/interactions/create_label?name=" + escape(new_label_name )
     else
       $.toggleLoader('labels_notice','')
-
-  $('#labels_popup_cancel_button').live 'click', (e)->
-    e.preventDefault()
-    $.hideDialog($("#profile_labels_dialog"))
 
   $('#show_profile_labels_button').live 'click', (e)->
     e.preventDefault()

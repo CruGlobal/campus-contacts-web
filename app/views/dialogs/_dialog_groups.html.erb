@@ -21,7 +21,7 @@
 
     	<div class="groups_save" id="groups_save" data-current-group-ids="<%= current_group_ids.join(',') %>">
     		<button class="red_accent" id="groups_popup_save_button" data-person-id="<%= @person.id %>">Save</button>
-    		<button class="large_lightgray" id="groups_popup_cancel_button">Cancel</button>
+    		<button class="large_lightgray mh_popup_cancel_button" id="">Cancel</button>
         <%= link_to raw("<button class='large_gray' id='groups_popup_manage_button'>Manage Groups</button>"), groups_path %>
     	</div>
 

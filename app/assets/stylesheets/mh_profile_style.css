@@ -224,6 +224,7 @@ button.action_lightblue, li.action_lightblue {
 
 button.action_lightblue a:hover, li.action_lightblue a:hover {
 	background:#eaf1f6;
+  text-decoration: none;
 }
 
 button.action_lightblue a, li.action_lightblue a {
