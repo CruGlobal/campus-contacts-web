@@ -152,7 +152,7 @@ li.btn_right, button.btn_right {
 }
 
 .mh_popup_box_scroller {
-  margin: 0 -15px;
+  margin: -5px -15px 0;
   height: 300px;
   padding: 10px 20px;
   border-top: 1px solid #eee;
@@ -231,6 +231,24 @@ span.mh_popup_heading {
 	border-radius: 4px;
 	width:455px;
 	min-height:170px;
+}
+
+#search_people_filters_box {
+	width: 600px;
+}
+#search_people_filters_box input[type=text] {
+	max-width: 170px;
+}
+#search_people_filter_buttons {
+  width: 586px;
+}
+
+#search_hidden_questions_box {
+  width: 370px;
+  min-height: 100px;
+}
+#search_hidden_questions_buttons {
+  width: 356px;
 }
 
 

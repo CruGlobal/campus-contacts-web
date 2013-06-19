@@ -55,7 +55,9 @@
 		</li>
 	</ul>
 	<ul class="button_bar">
-		<li class="action_lightblue"><a href="#">Search</a></li>
+		<li class="action_lightblue">
+		  <%= link_to "Search", "#", id: "action_menu_search_filters" %>
+		</li>
 	</ul>
 	<ul class="button_bar">
 		<li class="action_lightblue"><a href="#">More <span style="font-size:9px;">&#x25BC;</span></a></li>
@@ -161,3 +163,9 @@
 
 <!-- Permissions Dialog -->
 <%= render 'dialogs/dialog_permissions' %>
+
+<!-- Search Filters Dialog -->
+<%= render 'dialogs/search_people_filters' %>
+
+<!-- Show Hidden Question Dialog -->
+<%= render 'dialogs/search_hidden_questions'%>

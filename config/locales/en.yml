@@ -3,6 +3,21 @@
 # Use this as the base for the locale file of your language.
 
 en:
+  dialogs:
+    search_people_filters:
+      search_placeholder: 'Search for the first name, last name or email.'
+      search_title: 'Search'
+      advanced_search: 'Toggle Advanced Search'
+      advanced_search_link: 'Advanced Search'
+      clear_search_form: 'Clear Search Form'
+      first_name: 'First Name'
+      last_name: 'Last Name'
+      permission: 'Label'
+      phone_number: 'Phone Number'
+      email: 'Email Address'
+      phone: 'Phone Number'
+      basic_search: 'Toggle Basic Search'
+      clear_search_form: 'Clear Search Form'
   application:
     add_contact:
       add_contact: Add a contact to %{org}

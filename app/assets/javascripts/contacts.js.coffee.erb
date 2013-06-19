@@ -9,6 +9,26 @@ $ ->
         unless $(this).hasClass('locked')
           $.hideDialog($(this))
 
+  $('#action_menu_search_filters').live 'click', (e)->
+    e.preventDefault()
+    $.showDialog($("#search_people_filters_div"))
+
+  $('#search_people_filters_search_button').live 'click', (e)->
+    e.preventDefault()
+    $('#search_people_form_submit').click()
+
+  $('#search_people_filters_save_search_button').live 'click', (e)->
+    e.preventDefault()
+    $('#savesearchbtn').click()
+
+  $('#search_people_filters_cancel_button').live 'click', (e)->
+    e.preventDefault()
+    $.hideDialog($("#search_people_filters_div"))
+
+  $('#search_hidden_questions_cancel_button').live 'click', (e)->
+    e.preventDefault()
+    $.hideDialog($("#search_hidden_questions_div"))
+
   $("#new_sent_messages_link").live 'click', (e)->
     e.preventDefault()
     $("#new_sent_messages_div .mh_popup_box_scroller").hide()
@@ -221,26 +241,14 @@ $ ->
           $(this).dialog('destroy')
     false
 
-  $('#search_show_question').live 'click', (e)->
+  $('#search_show_question, #search_people_filters_hidden_questions_button').live 'click', (e)->
     e.preventDefault()
     $('#search_hidden_questions_loader').hide()
     $('#search_hidden_questions_list').show()
-    $('#search_hidden_questions_div').dialog
-      resizable: false,
-      height: 450,
-      width: 400,
-      modal: true,
-      open: (event, ui) ->
-        $("body").css({ overflow: 'hidden' })
-        $('.ui-widget-overlay').width('100%')
-      close: (event, ui) ->
-        $("body").css({ overflow: 'inherit' })
-      buttons:
-        Close: ->
-          $(this).dialog('close')
     $('#search_hidden_questions_div #search_hidden_questions_fetcher').show()
     $('#search_hidden_questions_div #search_hidden_questions_loader').hide()
     $('#search_hidden_questions_div #search_hidden_questions_content').html('')
+    $.showDialog($("#search_hidden_questions_div"))
     $.ajax
       type: 'GET',
       url: '/show_search_hidden_questions'
@@ -784,7 +792,7 @@ $ ->
     false
 
   $("#search_clear_selected_labels").live "click", ->
-    $(".search_permission_checkbox").removeAttr("checked")
+    $(".search_label_checkbox").removeAttr("checked")
     $.fn.search_status()
 
   $(".search_status").live "change", ->
@@ -824,8 +832,8 @@ $ ->
           ele.attr("disabled", false)
           $("#search_locate_contact_loading").hide()
     false
+
 $.fn.search_status = () ->
-  label_contacts = $("#search_permission_2")
   check = $(".search_status :selected").val() != ""
   label_contacts.attr("checked", check)
   label_contacts.attr("disabled", check)
