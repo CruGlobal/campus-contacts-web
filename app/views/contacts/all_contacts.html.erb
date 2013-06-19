@@ -153,7 +153,6 @@
     </div>
   <%- end %>
   <input type="button" value="Show Message Guide" id="show_message_guide_button" style="display:none">
-  <%= render 'shared/bulk_vcard_dialog' %>
 
 </div>
 
@@ -182,4 +181,7 @@
 <%= render 'dialogs/search_hidden_questions'%>
 
 <!-- Transfer to Org Dialog -->
-<%= render 'dialogs/transfer_to_org' %>
+<%= render 'dialogs/dialog_transfer_to_org' %>
+
+<!-- Send Vcard Dialog -->
+<%= render 'dialogs/bulk_send_vcard' %>

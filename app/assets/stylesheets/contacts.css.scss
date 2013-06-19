@@ -66,6 +66,21 @@
       }
     }
   }
+  #bulk_vcard_dialog {
+    #bulk_vcard_dialog_box {
+      width: 400px;
+      .fancy {
+        margin: 55px 20px -15px;
+        font-size: 14px;
+      }
+      #bulk_vcard_dialog_content {
+        margin: 0px 15px 10px;
+      }
+      #bulk_vcard_dialog_buttons {
+        width: 386px;
+      }
+    }
+  }
   #ac_sidebar {
     padding-left: 20px;
     #sidebar_loader {

@@ -9,6 +9,37 @@ $ ->
         unless $(this).hasClass('locked')
           $.hideDialog($(this))
 
+  $('#bulk_vcard_dialog_download_button').live 'click', (e)->
+    e.preventDefault()
+    url = $('#bulk_vcard_form').attr('action')
+    ids = $('.id_checkbox:checked:visible').map ->
+      return $(this).val()
+    if ids.size() > 1
+      ids = ids.get().join(',')
+    else
+      ids = ids[0]
+    window.location = url + '?ids=' + ids
+    $.n(t('contacts.index.bulk_vcard_download_message'))
+    $.hideDialog($("#bulk_vcard_dialog"))
+
+  $('#bulk_vcard_dialog_send_button').live 'click', (e)->
+    e.preventDefault()
+    email = $('#bulk_vcard_email').val()
+    note = $('#bulk_vcard_note').val()
+    url = $('#bulk_vcard_form').attr('action')
+    if email == ""
+      $.a(t('contacts.index.none_email_vcard'))
+    else
+      ids = $('.id_checkbox:checked:visible').map ->
+        return $(this).val()
+      if ids.size() > 1
+        ids = ids.get().join(',')
+      else
+        ids = ids[0]
+      $.get(url + '?ids=' + ids + '&email=' + email + '&note=' + note)
+      $.n(t('contacts.index.bulk_vcard_email_message') + email)
+      $.hideDialog($("#bulk_vcard_dialog"))
+
   $('.mh_popup_cancel_button').live 'click', (e)->
     e.preventDefault()
     parent = $(this).parents('.custom_mh_popup_box').first()
@@ -251,45 +282,19 @@ $ ->
     $.post(url, params)
     false
 
-  $('#bulk_vcard_link').live 'click', ->
-    ids = []
-    $('.id_checkbox:checked').each ->
-      id = $(this).val()
-      ids.push(id)
+  $('#bulk_vcard_link').live 'click', (e)->
+    e.preventDefault()
 
-    if ids.length == 0
+    if $('.id_checkbox:checked:visible').size() == 0
       $.a(t('contacts.index.none_checked'))
-      return false
+    else
+      $('#bulk_vcard_note').val("")
+      ids = []
+      $('.id_checkbox:checked:visible').each ->
+        id = $(this).val()
+        ids.push(id)
+      $.showDialog($("#bulk_vcard_dialog"))
 
-    $('#bulk_vcard_dialog').dialog
-      resizable: false,
-      height: 250,
-      width: 400,
-      modal: true,
-      open: (event, ui) ->
-        $('#bulk_vcard_note').val("")
-      ,
-      buttons:
-        "Send to email": ->
-          email = $('#bulk_vcard_email').val()
-          note = $('#bulk_vcard_note').val()
-          url = $('#bulk_vcard_form').attr('action')
-
-          if email == ""
-            $.a(t('contacts.index.none_email_vcard'))
-            return false
-          else
-            $.get(url + '?ids=' + ids + '&email=' + email + '&note=' + note)
-            $.n(t('contacts.index.bulk_vcard_email_message') + email)
-            $(this).dialog('destroy')
-        "Download": ->
-          url = $('#bulk_vcard_form').attr('action')
-          window.location = url + '?ids=' + ids
-          $.n(t('contacts.index.bulk_vcard_download_message'))
-          $(this).dialog('destroy')
-        Cancel: ->
-          $(this).dialog('destroy')
-    false
 
 
   if $.params.answers
