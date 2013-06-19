@@ -1,4 +1,8 @@
 $ ->
+  $('#custom_alert_cancel_button').live 'click', (e)->
+    e.preventDefault()
+    $.hideDialog($('#custom_alert_div'))
+
   $('.org_control').not('.tree_no_child').each ->
     if $("." + $(this).attr('id')).not('.tree_no_child').size() > 1
       $("." + $(this).attr('id')).not('.tree_no_child').last().addClass('tree_no_child')
@@ -220,24 +224,11 @@ $.toggleLoader = (div_id, words) ->
   false
 
 $.a = (msg, title) ->
-  unless $('#alert_dialog')[0]?
-    $('body').append('<div id="alert_dialog" title="' + t('general.alert') + '"></div>')
-  if title?
-    $('#alert_dialog').attr('title', title)
-  $('#alert_dialog').html(msg)
-  $('#alert_dialog').dialog
-    resizable: false,
-    height: 200,
-    width: 400,
-    modal: true,
-    open: (event, ui) ->
-      $.hideScroll()
-    close: (event, ui) ->
-      $.unhideScroll()
-    buttons:
-      Ok: ->
-        $(this).dialog('close')
-        $(this).dialog('destroy')
+  unless title?
+    title = "Alert"
+  $('#custom_alert_div .mh_popup_heading').text(title)
+  $('#custom_alert_div .fancy').html(msg)
+  $.showDialog($('#custom_alert_div'))
 
 window.addFields = (link, association, content) ->
   new_id = new Date().getTime()

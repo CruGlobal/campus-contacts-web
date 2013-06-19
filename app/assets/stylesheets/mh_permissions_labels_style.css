@@ -251,6 +251,18 @@ span.mh_popup_heading {
   width: 356px;
 }
 
+#custom_alert_box {
+  margin-top: 150px;
+  width: 530px;
+  min-height: 50px;
+}
+#custom_alert_buttons {
+  width: 516px;
+}
+#custom_alert_box .fancy {
+  margin: 48px 25px 30px;
+  font-size: 16px;
+}
 
 .groups_popup_box, .permissions_popup_box, .labels_popup_box, .error_popup_box{
 	background-color:#FFF;

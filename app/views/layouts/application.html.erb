@@ -5,7 +5,7 @@
   </head>
   <body id="<%= controller.controller_name %>_controller" class="<%= params[:action] %>">
     <%= render 'fb_init' %>
-
+    <%= render 'dialogs/alert' %>
     <div id="outer">
 
       <%= render 'shared/nav' %>
@@ -23,7 +23,7 @@
           </div>
         </div>
 
-        <div id='main'>  
+        <div id='main'>
           <%= render "shared/main" %>
         </div><!-- main -->
 
