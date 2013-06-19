@@ -84,7 +84,7 @@ class Api::ContactsControllerTest < ActionController::TestCase
 
     context "When filtering contacts by status" do
       should "be able to view contacted with org id" do
-        @user2.person.organizational_permissions.first.update_attributes!(permission_id: Permission::NO_PERMISSIONS_ID, followup_status: "contacted")
+        @user2.person.organizational_roles.first.update_attributes!(role_id: Role::CONTACT_ID, followup_status: "contacted")
         get :index, {"filters"=>"status", "values"=>"contacted", "org_id"=> @user3.person.primary_organization.id}
         assert_response :success, @response.body
         @json = ActiveSupport::JSON.decode(@response.body)
@@ -94,8 +94,8 @@ class Api::ContactsControllerTest < ActionController::TestCase
       end
 
       should "be able to view contacted without org id" do
-        @user.person.organizational_permissions.first.update_attributes!(followup_status: "attempted_contact", permission_id: Permission::NO_PERMISSIONS_ID)
-        @user2.person.organizational_permissions.first.update_attributes!(followup_status: "attempted_contact", permission_id: Permission::NO_PERMISSIONS_ID)
+        @user.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: Role::CONTACT_ID)
+        @user2.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: Role::CONTACT_ID)
         get :index, {"filters"=>"status", "values"=>"contacted"}
         assert_response :success, @response.body
         @json = ActiveSupport::JSON.decode(@response.body)
@@ -103,8 +103,8 @@ class Api::ContactsControllerTest < ActionController::TestCase
       end
 
       should "be able to view attempted_contact" do
-        @user.person.organizational_permissions.first.update_attributes!(followup_status: "attempted_contact", permission_id: Permission::NO_PERMISSIONS_ID)
-        @user2.person.organizational_permissions.first.update_attributes!(followup_status: "attempted_contact", permission_id: Permission::NO_PERMISSIONS_ID)
+        @user.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: Role::CONTACT_ID)
+        @user2.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: Role::CONTACT_ID)
         get :index, {"filters"=>"status", "values"=>"attempted_contact"}
         assert_response :success, @response.body
         @json = ActiveSupport::JSON.decode(@response.body)
@@ -112,8 +112,8 @@ class Api::ContactsControllerTest < ActionController::TestCase
       end
 
       should "be able to filter by more than one criteria" do
-        @user.person.organizational_permissions.first.update_attributes!(followup_status: "attempted_contact", permission_id: Permission::NO_PERMISSIONS_ID)
-        @user2.person.organizational_permissions.first.update_attributes!(followup_status: "attempted_contact", permission_id: Permission::NO_PERMISSIONS_ID)
+        @user.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: Role::CONTACT_ID)
+        @user2.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: Role::CONTACT_ID)
 
         get :index, {"filters"=>"status,gender", "values"=>"attempted_contact,female"}
         assert_response :success, @response.body
@@ -122,8 +122,8 @@ class Api::ContactsControllerTest < ActionController::TestCase
       end
 
       should "be able to use filter and sort by status" do
-        @user.person.organizational_permissions.first.update_attributes!(followup_status: "attempted_contact", permission_id: Permission::NO_PERMISSIONS_ID)
-        @user2.person.organizational_permissions.first.update_attributes!(followup_status: "attempted_contact", permission_id: Permission::NO_PERMISSIONS_ID)
+        @user.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: Role::CONTACT_ID)
+        @user2.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: Role::CONTACT_ID)
         get :index, {"filters"=>"status", "values"=>"attempted_contact", "sort"=>"status", "direction"=>"asc"}
         assert_response :success, @response.body
         @json = ActiveSupport::JSON.decode(@response.body)
@@ -133,7 +133,7 @@ class Api::ContactsControllerTest < ActionController::TestCase
 
     should "not make the iPhone contacts category queries fail" do
       # contacts assigned to me (My contacts) on mobile app
-      @user2.person.organizational_permissions.first.update_attributes(followup_status: 'completed')
+      @user2.person.organizational_roles.first.update_attributes(followup_status: 'completed')
       @contact_assignment2.destroy
       ContactAssignment.create(assigned_to_id:@user3.person.id, person_id: @user.person.id, organization_id: @user3.person.primary_organization.id)
 
@@ -146,13 +146,13 @@ class Api::ContactsControllerTest < ActionController::TestCase
     end
 
     should "show my completed contacts" do
-      @user2.person.organizational_permissions.first.update_attributes(followup_status: 'uncontacted')
+      @user2.person.organizational_roles.first.update_attributes(followup_status: 'uncontacted')
       get :index, {"filters"=>"status", "values"=>"finished", "assigned_to"=>@user.person.id, "limit"=>"15", "start"=>"0", "org_id"=> @user3.person.primary_organization.id}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(0, @json.length)
 
-      @user2.person.organizational_permissions.where(organization_id: @user3.person.primary_organization.id).first.update_attributes(followup_status: 'completed')
+      @user2.person.organizational_roles.where(organization_id: @user3.person.primary_organization.id).first.update_attributes(followup_status: 'completed')
       get :index, {"filters"=>"status", "values"=>"finished", "assigned_to"=> @user.person.id, "limit"=>"15", "start"=>"0", "org_id"=> @user3.person.primary_organization.id}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
@@ -161,14 +161,14 @@ class Api::ContactsControllerTest < ActionController::TestCase
     end
 
     should "show my unassigned contacts" do
-      @user.person.organizational_permissions.where(organization_id: @user3.person.primary_organization.id).first.update_attributes(followup_status: 'uncontacted')
+      @user.person.organizational_roles.where(organization_id: @user3.person.primary_organization.id).first.update_attributes(followup_status: 'uncontacted')
       get :index, {"filters"=>"status", "values"=>"not_finished", "assigned_to"=>"none", "limit"=>"15", "start"=>"0", "org_id"=> @user3.person.primary_organization.id}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(@json.length,0)
 
       ContactAssignment.destroy_all
-      @user.person.organizational_permissions.first.update_attributes(followup_status: 'uncontacted')
+      @user.person.organizational_roles.first.update_attributes(followup_status: 'uncontacted')
       get :index, {"filters"=>"status", "values"=>"not_finished", "assigned_to"=>"none", "limit"=>"15", "start"=>"0", "org_id"=> @user3.person.primary_organization.id}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
@@ -178,7 +178,7 @@ class Api::ContactsControllerTest < ActionController::TestCase
 
 
     should "be able to view their contacts with sorting" do
-      @user2.person.organizational_permissions.first.update_attributes(created_at: 2.days.ago)
+      @user2.person.organizational_roles.first.update_attributes(created_at: 2.days.ago)
       get :index, {"sort"=>"time", "direction"=>"desc"}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
@@ -186,7 +186,7 @@ class Api::ContactsControllerTest < ActionController::TestCase
       assert_equal(@json.length, 2)
       person_mini_test(@json[0]['person'],@user)
 
-      @user2.person.organizational_permissions.first.update_attributes(created_at: 2.days.ago)
+      @user2.person.organizational_roles.first.update_attributes(created_at: 2.days.ago)
       get :index, {"sort"=>"time", "direction"=>"asc"}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
