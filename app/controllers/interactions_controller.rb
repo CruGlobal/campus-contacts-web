@@ -177,6 +177,7 @@ class InteractionsController < ApplicationController
     @interaction = Interaction.new(params[:interaction])
     @interaction.created_by_id = current_person.id
     @interaction.organization_id = current_organization.id
+    @interaction.updated_by_id = current_person.id
     if @interaction.save
       params[:initiator_id].each do |person_id|
         @interaction.interaction_initiators.find_or_create_by_person_id(person_id.to_i)
@@ -191,6 +192,7 @@ class InteractionsController < ApplicationController
     @person = Person.find(params[:person_id])
     @interaction = Interaction.find(params[:interaction_id])
     @interaction.update_attributes(params[:interaction])
+    @interaction.update_attribute(:updated_by_id, current_person.id)
     params[:initiator_id].uniq.each do |person_id|
       @interaction.interaction_initiators.find_or_create_by_person_id(person_id.to_i)
     end

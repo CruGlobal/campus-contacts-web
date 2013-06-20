@@ -711,12 +711,30 @@ div.phone, div.address, div.email {
 	font-weight:normal;
 }
 
-.feed_item_comment, .feed_item_survey_answer, .feed_item_text {
+.feed_item_footer {
+  font-family:Tahoma, Arial, Sans-serif;
+  color:#c0c0c0;
+  font-size: 10px;
+  font-weight: normal;
+  text-align: right;
+  margin: 10px 5px 0px;
+}
+
+.feed_item_survey_answer, .feed_item_text {
 	font-family:Arial, Sans-serif;
 	font-size:11px;
 	color:#808284;
 	font-weight:normal;
 	margin-top:8px;
+}
+
+.feed_item_comment {
+  font-family:Arial, Sans-serif;
+  font-size: 12px;
+  font-style: italic;
+	font-weight:normal;
+	margin-top:8px;
+  color: #808284;
 }
 
 .feed_item_header {

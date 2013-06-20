@@ -16,4 +16,7 @@
       “<%= interaction.comment %>”
     </div>
   <% end %>
+	<div class="feed_item_footer">
+	  <%=raw "Last updated by #{interaction.last_updater.name} on #{wiser_date(interaction.updated_at, custom_class: 'tip', humanize: false)}"%>
+	</div>
 </div>

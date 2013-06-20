@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130617204613) do
+ActiveRecord::Schema.define(:version => 20130620090540) do
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -401,6 +401,7 @@ ActiveRecord::Schema.define(:version => 20130617204613) do
     t.integer  "interaction_type_id"
     t.integer  "receiver_id"
     t.integer  "created_by_id"
+    t.integer  "updated_by_id"
     t.integer  "organization_id"
     t.string   "comment"
     t.string   "privacy_setting"

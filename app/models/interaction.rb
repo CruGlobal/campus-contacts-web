@@ -12,6 +12,11 @@ class Interaction < ActiveRecord::Base
   scope :limited, limit(5)
   after_save :ensure_timestamp
 
+  def last_updater
+    person_id = updated_by_id || created_by_id
+    Person.find(person_id)
+  end
+
   def initiator
     self.initiators.first
   end
@@ -53,13 +58,13 @@ class Interaction < ActiveRecord::Base
     when 'gospel_presentation'
       return "#{intiators_string} shared the gospel with #{receiver_string}.".html_safe
     when 'prayed_to_receive_christ'
-      return "#{intiators_string} led #{receiver_string} to pray to receive Christ.".html_safe
+      return "#{receiver_string} indicated a decision to receive Christ with #{intiators_string}.".html_safe
     when 'holy_spirit_presentation'
       return "#{intiators_string} shared the holy spirit presentation with #{receiver_string}.".html_safe
     when 'graduating_on_mission'
-      return "#{intiators_string} helped #{receiver_string} develop a plan for graduating on a mission.".html_safe
+      return "#{intiators_string} helped #{receiver_string} develop a plan for graduating on mission.".html_safe
     when 'faculty_on_mission'
-      return "#{intiators_string} helped #{receiver_string} develop a plan to be a faculty member on a mission.".html_safe
+      return "#{intiators_string} helped #{receiver_string} develop a plan to be a faculty member on mission.".html_safe
     end
   end
 
