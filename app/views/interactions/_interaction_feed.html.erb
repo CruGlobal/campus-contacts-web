@@ -10,9 +10,6 @@
 	<div class="feed_item_content"><%= interaction.title %></div>
   <% if interaction.comment.present? %>
   	<div class="feed_item_comment">
-      <% unless interaction.type == 'Comment Only'%>
-        <strong><%= interaction.creator %> wrote:</strong>
-      <% end %>
       “<%= interaction.comment %>”
     </div>
   <% end %>
