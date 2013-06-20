@@ -191,14 +191,6 @@ ActiveRecord::Schema.define(:version => 20130620090540) do
   add_index "clients", ["link"], :name => "index_clients_on_link", :unique => true
   add_index "clients", ["organization_id"], :name => "index_clients_on_organization_id"
 
-  create_table "conditions", :force => true do |t|
-    t.integer "question_sheet_id", :null => false
-    t.integer "trigger_id",        :null => false
-    t.string  "expression",        :null => false
-    t.integer "toggle_page_id",    :null => false
-    t.integer "toggle_id"
-  end
-
   create_table "contact_assignments", :force => true do |t|
     t.integer  "assigned_to_id"
     t.integer  "person_id"
@@ -290,7 +282,7 @@ ActiveRecord::Schema.define(:version => 20130620090540) do
     t.datetime "updated_at"
   end
 
-  add_index "email_addresses", ["email"], :name => "email"
+  add_index "email_addresses", ["email"], :name => "index_email_addresses_on_email"
   add_index "email_addresses", ["person_id"], :name => "person_id"
 
   create_table "followup_comments", :force => true do |t|
@@ -403,7 +395,7 @@ ActiveRecord::Schema.define(:version => 20130620090540) do
     t.integer  "created_by_id"
     t.integer  "updated_by_id"
     t.integer  "organization_id"
-    t.string   "comment"
+    t.text     "comment"
     t.string   "privacy_setting"
     t.datetime "timestamp"
     t.datetime "deleted_at"
@@ -466,15 +458,6 @@ ActiveRecord::Schema.define(:version => 20130620090540) do
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end
-
-  create_table "mh_surveys", :force => true do |t|
-    t.string   "title"
-    t.integer  "organization_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-  end
-
-  add_index "mh_surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
 
   create_table "movement_indicator_suggestions", :force => true do |t|
     t.integer  "person_id"
@@ -753,27 +736,6 @@ ActiveRecord::Schema.define(:version => 20130620090540) do
 
   add_index "saved_contact_searches", ["user_id"], :name => "index_saved_contact_searches_on_user_id"
 
-  create_table "school_years", :force => true do |t|
-    t.string   "name"
-    t.string   "level"
-    t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "sent_emails", :force => true do |t|
-    t.integer  "person_id"
-    t.integer  "organization_id"
-    t.integer  "receiver_id"
-    t.string   "sender"
-    t.string   "recipient"
-    t.string   "subject"
-    t.text     "message"
-    t.string   "status"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-  end
-
   create_table "sent_people", :force => true do |t|
     t.integer  "person_id"
     t.integer  "transferred_by_id"
@@ -825,7 +787,7 @@ ActiveRecord::Schema.define(:version => 20130620090540) do
     t.string   "initial_response",               :limit => 145
     t.text     "post_survey_message_deprecated"
     t.string   "event_type"
-    t.string   "gateway",                                       :default => "twilio", :null => false
+    t.string   "gateway",                                       :default => "", :null => false
     t.integer  "survey_id"
   end
 
@@ -894,15 +856,6 @@ ActiveRecord::Schema.define(:version => 20130620090540) do
   add_index "surveys", ["crs_registrant_type_id"], :name => "index_surveys_on_crs_registrant_type_id"
   add_index "surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
 
-  create_table "teams", :force => true do |t|
-    t.integer  "organization_id"
-    t.string   "name"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-  end
-
-  add_index "teams", ["organization_id"], :name => "index_teams_on_organization_id"
-
   create_table "users", :force => true do |t|
     t.string   "username",                  :limit => 200,                :null => false
     t.string   "password",                  :limit => 80
@@ -943,13 +896,9 @@ ActiveRecord::Schema.define(:version => 20130620090540) do
   add_index "versions", ["organization_id", "created_at"], :name => "index_versions_on_organization_id_and_created_at"
   add_index "versions", ["person_id", "created_at"], :name => "index_versions_on_person_id_and_created_at"
 
-  add_foreign_key "answers", "elements", :name => "answers_ibfk_1", :column => "question_id"
-
-  add_foreign_key "organization_memberships", "organizations", :name => "organization_memberships_ibfk_2", :dependent => :delete
-
   add_foreign_key "organizational_permissions", "organizations", :name => "organizational_permissions_ibfk_1", :dependent => :delete
 
-  add_foreign_key "sms_keywords", "organizations", :name => "sms_keywords_ibfk_4", :dependent => :delete
+  add_foreign_key "sms_keywords", "organizations", :name => "sms_keywords_ibfk_2"
   add_foreign_key "sms_keywords", "surveys", :name => "sms_keywords_ibfk_3", :dependent => :nullify
 
   add_foreign_key "surveys", "organizations", :name => "surveys_ibfk_1", :dependent => :delete
