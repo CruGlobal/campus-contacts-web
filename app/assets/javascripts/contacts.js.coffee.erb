@@ -779,21 +779,16 @@ $ ->
   $(".search_status").live "change", ->
     $.fn.search_status()
 
-  $("#locate_contact").live "click", ->
-    $("#locate_contact_container").dialog
-      resizable: false,
-      height:580,
-      width:790,
-      open: (event, ui) ->
-        desc = t('contacts.index.search_contact_results_description')
-        $(".locate_contact_list_tr").remove()
-        $("#locate_contact_list_container").append("<tr class='locate_contact_list_tr'><td colspan='99'>" +desc+ "</td></tr>")
-        $("#locate_contact_firstname").val('')
-        $("#locate_contact_lastname").val('')
-        $("#locate_contact_email").val('')
-      buttons:
-        Cancel: ->
-          $(this).dialog('close')
+  $("#locate_contact").live "click",(e) ->
+    e.preventDefault()
+    $.showDialog($("#locate_contact_container"))
+    desc = t('contacts.index.search_contact_results_description')
+    $(".locate_contact_list_tr").remove()
+    $("#locate_contact_list_container").append("<tr class='locate_contact_list_tr'><td colspan='99'>" +desc+ "</td></tr>")
+    $("#locate_contact_firstname").val('')
+    $("#locate_contact_lastname").val('')
+    $("#locate_contact_email").val('')
+
   $("#search_locate_contact_button").live "click", ->
     ele = $(this)
     fname = $("#locate_contact_firstname").val()
