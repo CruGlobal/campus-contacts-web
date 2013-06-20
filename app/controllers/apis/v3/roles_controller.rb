@@ -6,7 +6,9 @@ class Apis::V3::RolesController < Apis::V3::BaseController
     order = params[:order] || 'name'
 
     roles = []
-    roles << permission
+    permissions.each do |permission|
+      roles << permission
+    end
     labels.each do |label|
       roles << label
     end
@@ -63,12 +65,12 @@ class Apis::V3::RolesController < Apis::V3::BaseController
 
   private
 
-  def permission
-    current_person.permission_for_org_id(current_organization.id)
+  def permissions
+    current_organization.permissions
   end
 
   def labels
-    current_person.labels_for_org_id(current_organization.id)
+    current_organization.labels
   end
 
   def get_role

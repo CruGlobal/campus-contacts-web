@@ -9,7 +9,7 @@ class Person < ActiveRecord::Base
   has_many :interactions, class_name: "Interaction", foreign_key: "receiver_id"
   has_many :created_interactions, class_name: "Interaction", foreign_key: "created_by_id"
   has_many :organizational_labels
-  has_many :labels, through: :organizational_labels
+  has_many :labels, through: :organizational_labels, conditions: ["removed_date IS NULL"]
   has_many :created_organizational_labels, class_name: 'OrgnizationalLabel', foreign_key: 'added_by_id'
   has_many :group_memberships
   has_many :groups, through: :group_memberships

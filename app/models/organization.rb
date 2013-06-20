@@ -110,7 +110,7 @@ class Organization < ActiveRecord::Base
   def push_to_infobase(numbers)
     update_attributes(last_push_to_infobase: current_organization.last_week)
   end
-  
+
   def last_push_to_infobase
     @last_push_to_infobase ||= self[:last_push_to_infobase] || created_at.to_date
   end
@@ -348,7 +348,12 @@ class Organization < ActiveRecord::Base
     Retryable.retryable :times => 5 do
       permission = OrganizationalPermission.where(person_id: person_id, organization_id: id, permission_id: permission_id).first_or_create!(added_by_id: added_by_id)
       permission.update_attributes(archive_date: nil)
-      permission
+
+      # Assure single permission per organization
+      org_permissions = OrganizationalPermission.where(person_id: person_id, organization_id: id)
+      org_permissions.where("id <> ?", permission.id).destroy_all
+
+      return permission
     end
   end
 

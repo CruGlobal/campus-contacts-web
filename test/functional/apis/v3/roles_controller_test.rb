@@ -8,10 +8,10 @@ class Apis::V3::RolesControllerTest < ActionController::TestCase
 
     @org = @client.organization
     @org.add_admin(@user.person)
+    @other_org = Factory(:organization)
 
     @permission = @user.person.permission_for_org_id(@org.id)
     @label = Factory(:label, organization: @org)
-
     Factory(:organizational_label, organization: @org, person: @user.person, label: @label)
   end
 
@@ -20,11 +20,11 @@ class Apis::V3::RolesControllerTest < ActionController::TestCase
       get :index, secret: @client.secret, order: 'created_at'
       assert_response :success
       json = JSON.parse(response.body)
-      assert_equal @permission.id, json['roles'].first['id'], json.inspect
-      assert_equal @label.id, json['roles'].last['id'], json.inspect
+      assert_equal @org.permissions.count + @org.labels.count, json['roles'].count, json.inspect
+      assert_equal @permission.id, json['roles'].first['id'], json['roles'].first.inspect
+      assert_equal @label.id, json['roles'].last['id'], json['roles'].last.inspect
     end
   end
-
 
   context '.show' do
     should 'return a permission' do
