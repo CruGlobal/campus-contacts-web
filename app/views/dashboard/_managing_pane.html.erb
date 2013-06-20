@@ -7,7 +7,7 @@
 	<%= image_tag("dash_managing.png") %>
 </div>
 <div class="dash_buttons">
-	<%= link_to("/contacts", :class => "button") do %>
+	<%= link_to("/allcontacts", :class => "button") do %>
 		<div>
 			<%= image_tag("dash_button_icon_view.png") %>
 			<div>
@@ -19,7 +19,7 @@
 			</div>
 		</div>
 	<% end %>
-	<%= link_to("/permissions?organization=#{current_organization.id}", :class => "button") do %>
+	<%= link_to("/labels?organization=#{current_organization.id}", :class => "button") do %>
 		<div>
 			<%= image_tag("dash_button_icon_label.png") %>
 			<div>
@@ -31,7 +31,7 @@
 			</div>
 		</div>
 	<% end %>
-	<%= link_to("/contacts", :class => "button") do %>
+	<%= link_to("/allcontacts", :class => "button") do %>
 		<div>
 			<%= image_tag("dash_button_icon_assign.png") %>
 			<div>

@@ -774,7 +774,7 @@ $ ->
 
   $("#search_clear_selected_labels").live "click", ->
     $(".search_label_checkbox").removeAttr("checked")
-    $.fn.search_status()
+    false
 
   $(".search_status").live "change", ->
     $.fn.search_status()
