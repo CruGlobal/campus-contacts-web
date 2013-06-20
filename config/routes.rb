@@ -305,6 +305,7 @@ Mh::Application.routes.draw do
       resources :questions
       resources :labels
       resources :permissions
+      resources :roles
       resources :organizational_labels
       resources :followup_comments
       resources :interactions

@@ -286,6 +286,10 @@ class Person < ActiveRecord::Base
     sent_messages.where("organization_id = ?", org_id).order('created_at DESC')
   end
 
+  def permission_for_org_id(org_id)
+    organizational_permissions.where("organizational_permissions.organization_id = ?", org_id).first.permission
+  end
+
   def contact_permission_for_org(org)
     organizational_permissions.where("organizational_permissions.organization_id = ? AND organizational_permissions.permission_id = ?", org.id, Permission::NO_PERMISSIONS_ID).first
   end
