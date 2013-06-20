@@ -224,7 +224,6 @@
 }
 #hidden_questions_div {
 	border: 1px solid red;
-	position: absolute;
 	right: 20px;
 	width: 400px;
 	background: white;
@@ -306,10 +305,16 @@ input.text.validate-date {
     min-height:35px;
     overflow:hidden;
   }
+  #locate_contact_content{
+    width:790px;
+    height:565px;
+  }
+  .mh_popup_buttons{
+    margin-right: 10px;
+  }
   #locate_contact_results_container{
     height: 275px;
     overflow-y: scroll;
-
     .locate_contact_list_head{
       border:1px solid #0379ae;
       background-color: #eaf1f6;

@@ -175,6 +175,7 @@ li.btn_right, button.btn_right {
 }
 
 .mh_popup_box_top{
+  text-align:left;
 
 	/*--Border--*/
 	border-bottom:1px solid #c0c0c0;
@@ -207,7 +208,7 @@ li.btn_right, button.btn_right {
 	float:left;
 	display:block;
 	list-style-type: none;
-	}
+}
 
 span.mh_popup_heading {
 	margin:0 16px;
