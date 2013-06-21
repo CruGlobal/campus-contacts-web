@@ -5,15 +5,7 @@ class Apis::V3::RolesController < Apis::V3::BaseController
   def index
     order = params[:order] || 'name'
 
-    roles = []
-    permissions.each do |permission|
-      roles << permission
-    end
-    labels.each do |label|
-      roles << label
-    end
-
-    list = roles
+    list = permissions + labels
 
     render json: list,
            callback: params[:callback],

@@ -1,16 +1,11 @@
 class PersonSerializer < ActiveModel::Serializer
-  HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments, :assigned_tos,
-             :followup_comments, :comments_on_me, :organizational_permissions, :rejoicables, :answer_sheets,
-             :all_organizational_permissions, :all_organization_and_children, :interactions,
-             :organizational_labels, :organizational_permissions]
+  HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments, :assigned_tos, :followup_comments, :comments_on_me, :rejoicables, :answer_sheets, :all_organizational_permissions, :all_organization_and_children, :interactions, :organizational_labels, :organizational_permissions, :roles, :organizational_roles, :all_organizational_roles]
 
   HAS_ONE = [:user, :current_address]
 
   INCLUDES = HAS_MANY + HAS_ONE
 
-  attributes :id, :first_name, :last_name, :gender, :campus, :year_in_school, :major, :minor, :birth_date,
-             :date_became_christian, :graduation_date, :picture, :user_id, :fb_uid, :created_at, :updated_at,
-             {roles: hash}
+  attributes :id, :first_name, :last_name, :gender, :campus, :year_in_school, :major, :minor, :birth_date, :date_became_christian, :graduation_date, :picture, :user_id, :fb_uid, :created_at, :updated_at
 
   has_many *HAS_MANY
   has_one *HAS_ONE
@@ -38,7 +33,27 @@ class PersonSerializer < ActiveModel::Serializer
   end
 
   def roles
-    [permission: object.permissions.first]
+    if scope[:user] && scope[:user] == object.user
+      add_since(object.roles_for_org_id(scope[:organization].id))
+    else
+      []
+    end
+  end
+
+  def organizational_roles
+    if scope[:user] && scope[:user] == object.user
+      add_since(object.organizational_roles_for_org_id(scope[:organization].id))
+    else
+      []
+    end
+  end
+
+  def all_organizational_roles
+    if scope[:user] && scope[:user] == object.user
+      add_since(object.all_organizational_roles)
+    else
+      []
+    end
   end
 
   def all_organizational_permissions

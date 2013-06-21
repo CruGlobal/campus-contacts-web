@@ -1269,4 +1269,16 @@ class Person < ActiveRecord::Base
     return email.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
   end
 
+  def all_organizational_roles
+    self.organizational_permissions + self.organizational_labels
+  end
+
+  def organizational_roles_for_org_id(org_id)
+    self.organizational_permissions.where(organization_id: org_id) + self.organizational_labels.where(organization_id: org_id)
+  end
+
+  def roles_for_org_id(org_id)
+    self.permissions_for_org_id(org_id) + self.labels_for_org_id(org_id)
+  end
+
 end
