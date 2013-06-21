@@ -1,18 +1,9 @@
 class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
   before_filter :ensure_filters, only: [:bulk, :bulk_create, :bulk_destroy]
 
-  def index
-    order = params[:order] || 'id'
-    list = add_includes_and_order(organizational_permissions, order: order)
-
-    render json: list,
-           callback: params[:callback],
-           scope: {include: includes, organization: current_organization, since: params[:since]}
-  end
-
   def bulk
-    add_permissions(filtered_people, params[:add_permissions])
-    remove_permissions(filtered_people, params[:remove_permissions])
+    add_permissions(filtered_people, params[:add_permission])
+    remove_permissions(filtered_people, params[:remove_permission])
 
     render json: filtered_people,
            callback: params[:callback],
@@ -20,7 +11,7 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
   end
 
   def bulk_create
-    add_permissions(filtered_people, params[:permissions])
+    add_permissions(filtered_people, params[:permission])
 
     render json: filtered_people,
            callback: params[:callback],
@@ -28,7 +19,7 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
   end
 
   def bulk_destroy
-    remove_permissions(filtered_people, params[:permissions])
+    remove_permissions(filtered_people, params[:permission])
 
     render json: filtered_people,
            callback: params[:callback],
