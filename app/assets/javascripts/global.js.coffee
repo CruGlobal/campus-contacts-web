@@ -21,21 +21,27 @@ $ ->
       placeHolder: $('#send_text_to').attr("data-search-desc"),
       defaultWidth: 690
 
-    include_archived = $.url(window.location.href).param("include_archived")
-    if include_archived
-      sidebar_url = '/display_sidebar?include_archived=' + include_archived
-      new_sidebar_url = '/display_new_sidebar?include_archived=' + include_archived
-    else
-      sidebar_url = '/display_sidebar'
-      new_sidebar_url = '/display_new_sidebar'
+    get_url = $.url(window.location.href)
+    assigned_to = get_url.param("assigned_to")
+    label = get_url.param("label")
+    permission = get_url.param("permission")
+    archived = get_url.param("archived")
+    dnc = get_url.param("dnc")
+
     if $('#sidebar_div').is(':visible')
       $.ajax
         type: 'GET',
-        url: sidebar_url
+        url: '/display_sidebar'
     else if $('#ac_sidebar').is(':visible')
       $.ajax
         type: 'GET',
-        url: new_sidebar_url
+        url: '/display_new_sidebar',
+        data:
+          assigned_to: assigned_to
+          label: label
+          permission: permission
+          archived: archived
+          dnc: dnc
 
   $('a#survey_keywords_mode_link').siblings('ul').width(300)
 
