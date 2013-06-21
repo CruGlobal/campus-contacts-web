@@ -107,20 +107,124 @@ class Organization < ActiveRecord::Base
     return list
   end
 
-  def push_to_infobase(numbers)
-    update_attributes(last_push_to_infobase: current_organization.last_week)
+  # Push individual weeks of stats to infobase, starting with the first week afeter the last push
+  # If the user increased the numbers, push the extra values on the final week
+  def push_to_infobase(params)
+    start_date = last_push_to_infobase
+    end_date = last_week
+    periods = []
+    start_date.step(end_date, 7) do |period_begin|
+      period_end = period_begin + 7.days
+      period_end = period_end.to_s(:db)
+      period_begin = period_begin.to_s(:db)
+      end_date_string = end_date.to_s(:db)
+      stats = {activity_id: importable_id,
+               period_begin: period_begin,
+               period_end: period_end
+              }
+      if period_end == end_date_string
+        # Add the group stats and any additional bumps entered
+        students_involved = params[:involved_students].to_i -
+                            people.students.with_label(Label.involved).count +
+                            people.students.with_label(Label.involved).where("organizational_labels.created_at < ?", period_end).count
+
+        faculty_involved  = params[:involved_faculty].to_i -
+                            people.faculty.with_label(Label.involved).count +
+                            people.faculty.with_label(Label.involved).where("organizational_labels.created_at < ?", period_end).count
+
+        students_engaged  = params[:engaged_disciple].to_i -
+                            people.students.with_label(Label.engaged_disciple).count +
+                            people.students.with_label(Label.engaged_disciple).where("organizational_labels.created_at < ?", period_end).count
+
+        faculty_engaged   = params[:engaged_disciple_faculty].to_i -
+                            people.faculty.with_label(Label.engaged_disciple).count +
+                            people.faculty.with_label(Label.engaged_disciple).where("organizational_labels.created_at < ?", period_end).count
+
+        student_leaders   = params[:leader].to_i -
+                            people.students.with_label(Label.leader).count +
+                            people.students.with_label(Label.leader).where("organizational_labels.created_at < ?", period_end).count
+
+        faculty_leaders   = params[:leader_faculty].to_i -
+                            people.faculty.with_label(Label.leader).count +
+                            people.faculty.with_label(Label.leader).where("organizational_labels.created_at < ?", period_end).count
+
+        spiritual_conversations = params[:spiritual_conversation].to_i -
+                                  interactions_count('spiritual_conversation') +
+                                  interactions_count('spiritual_conversation', period_begin, period_end)
+
+        holy_spirit_presentations = params[:gospel_presentation].to_i -
+                                  interactions_count('gospel_presentation') +
+                                  interactions_count('gospel_presentation', period_begin, period_end)
+
+        personal_evangelism = params[:prayed_to_receive_christ].to_i -
+                                  interactions_count('prayed_to_receive_christ') +
+                                  interactions_count('prayed_to_receive_christ', period_begin, period_end)
+
+        personal_decisions = params[:holy_spirit_presentation].to_i -
+                                  interactions_count('holy_spirit_presentation') +
+                                  interactions_count('holy_spirit_presentation', period_begin, period_end)
+
+        graduating_on_mission = params[:graduating_on_mission].to_i -
+                                  interactions_count('graduating_on_mission') +
+                                  interactions_count('graduating_on_mission', period_begin, period_end)
+
+        faculty_on_mission = params[:faculty_on_mission].to_i -
+                                  interactions_count('faculty_on_mission') +
+                                  interactions_count('faculty_on_mission', period_begin, period_end)
+
+        stats.merge!({students_involved: students_involved,
+                      faculty_involved: faculty_involved,
+                      students_engaged: students_engaged,
+                      faculty_engaged: faculty_engaged,
+                      student_leaders: student_leaders,
+                      faculty_leaders: faculty_leaders,
+                      spiritual_conversations: spiritual_conversations,
+                      holy_spirit_presentations: holy_spirit_presentations,
+                      personal_evangelism: personal_evangelism,
+                      personal_decisions: personal_decisions,
+                      graduating_on_mission: graduating_on_mission,
+                      faculty_on_mission: faculty_on_mission,
+                      group_evangelism: params[:group_evangelism],
+                      group_decisions: params[:group_evangelism_decision],
+                      media_exposures: params[:media_exposure],
+                      media_decisions: params[:media_exposure_decisions],
+                    })
+      else
+        stats.merge!({students_involved: people.students.with_label(Label.involved).where("organizational_labels.created_at < ?", period_end).count,
+                      faculty_involved: people.faculty.with_label(Label.involved).where("organizational_labels.created_at < ?", period_end).count,
+                      students_engaged: people.students.with_label(Label.engaged_disciple).where("organizational_labels.created_at < ?", period_end).count,
+                      faculty_engaged: people.faculty.with_label(Label.engaged_disciple).where("organizational_labels.created_at < ?", period_end).count,
+                      student_leaders: people.students.with_label(Label.leader).where("organizational_labels.created_at < ?", period_end).count,
+                      spiritual_conversations: interactions_count('spiritual_conversation', period_begin, period_end),
+                      holy_spirit_presentations: interactions_count('holy_spirit_presentation', period_begin, period_end),
+                      personal_evangelism: interactions_count('gospel_presentation', period_begin, period_end),
+                      personal_decisions: interactions_count('prayed_to_receive_christ', period_begin, period_end),
+                      graduating_on_mission: interactions_count('graduating_on_mission', period_begin, period_end),
+                      faculty_on_mission: interactions_count('faculty_on_mission', period_begin, period_end)
+                     })
+      end
+      periods << stats
+    end
+    json = {statistics: periods}.to_json
+    begin
+      RestClient.put(APP_CONFIG['infobase_url'] + '/api/v1/stats/update', json, content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\"")
+    end
+
+    update_attributes(last_push_to_infobase: last_week)
   end
 
   def last_push_to_infobase
-    @last_push_to_infobase ||= self[:last_push_to_infobase] || created_at.to_date
+    @last_push_to_infobase ||= self[:last_push_to_infobase] || created_at.to_date.end_of_week
   end
 
   def last_week
     @last_week ||= 1.week.ago.end_of_week.to_date
   end
 
-  def recent_interactions_count(type)
-    interactions.joins(:interaction_type).where("interaction_types.i18n = ? AND interactions.created_at > ? AND interactions.created_at <= ?", type, last_push_to_infobase, last_week).count
+  def interactions_count(type, start_date = nil, end_date = nil)
+    start_date ||= last_push_to_infobase
+    last_week ||= last_week
+    interactions.joins(:interaction_type).where("interaction_types.i18n = ? AND interactions.created_at > ? AND interactions.created_at <= ?", type, start_date, end_date).count
   end
 
   def sms_gateway

@@ -5,9 +5,11 @@
     <tbody id="suggestions">
       <tr><td colspan="3"><%= t('.fetching') %> <%= spinner(nil, true) %></td></tr>
     </tbody>
-    <tfoot id="declined_suggestions">
-      <tr><td colspan="3"><%= link_to(t('.show_old'), '#', id: 'show_old') %></td></tr>
-    </tfoot>
+    <% if MovementIndicatorSuggestion.fetch_declined(current_organization).count > 0 %>
+      <tfoot id="declined_suggestions">
+        <tr><td colspan="3"><%= link_to(t('.show_old'), '#', id: 'show_old') %></td></tr>
+      </tfoot>
+    <% end %>
   </table>
 
   <%= link_to(t('welcome.wizard.next'), movement_indicators_path) %>
