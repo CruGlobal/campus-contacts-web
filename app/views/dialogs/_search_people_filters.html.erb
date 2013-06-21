@@ -1,7 +1,7 @@
 <div id="search_people_filters_div" style="display:none;" class="custom_mh_popup_box">
-  <div class="ui-widget-overlay" style="position: fixed; width: 100%; height: 100%; z-index: 999; "></div>
+  <div class="ui-widget-overlay pop_box_overlay_container"></div>
   <div class="pop_box_container">
-    <div class="mh_popup_box" class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable" tabindex="-1" permission="dialog" aria-labelledby="ui-dialog-title-alert_dialog" id="search_people_filters_box">
+    <div class="mh_popup_box" id="search_people_filters_box">
     	<div class="mh_popup_box_top">
         <span class="mh_popup_heading">
           Search Filters
@@ -111,10 +111,7 @@
               <%#= link_to t('.clear_search_form'), '', onclick: "$('form').clearForm(); return false;" %>
             </div>
           <% end %>
-
-
         </div>
-
       </div>
     	<div class="mh_popup_buttons" id="search_people_filter_buttons">
     		<button class="red_accent" id="search_people_filters_search_button">Search</button>
