@@ -1,4 +1,4 @@
-class Apis::V4::OrganizationalLabelsController < Apis::V3::BaseController
+class Apis::V3::OrganizationalLabelsController < Apis::V3::BaseController
 
   def index
     order = params[:order] || 'id'

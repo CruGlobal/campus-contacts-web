@@ -1,4 +1,4 @@
-class Apis::V4::InteractionTypesController < Apis::V3::BaseController
+class Apis::V3::InteractionTypesController < Apis::V3::BaseController
   before_filter :get_interaction_type, only: [:show, :update, :destroy]
 
   def index

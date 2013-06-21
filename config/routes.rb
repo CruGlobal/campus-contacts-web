@@ -290,6 +290,21 @@ Mh::Application.routes.draw do
           delete :bulk_destroy
         end
       end
+      resources :people
+      resources :organizations
+      resources :answers
+      resources :surveys do
+        resources :questions
+      end
+      resources :questions
+      resources :followup_comments
+      resources :roles
+      resources :organizational_roles
+      resources :interactions
+      resources :interaction_types
+      resources :labels
+      resources :permissions
+      resources :organizational_labels
       resources :organizational_permissions do
         collection do
           post :bulk
@@ -297,28 +312,6 @@ Mh::Application.routes.draw do
           delete :bulk_destroy
         end
       end
-      resources :people
-      resources :organizations
-      resources :surveys do
-        resources :questions
-      end
-      resources :questions
-      resources :labels
-      resources :permissions
-      resources :roles
-      resources :organizational_labels
-      resources :followup_comments
-      resources :interactions
-      resources :interaction_types
-      resources :answers
-    end
-    api_version(module: 'V4', header: {name: 'API-VERSION', value: 'v4'}, parameter: {name: "version", value: 'v3'}, path: {value: 'v4'}) do
-      resources :labels
-      resources :permissions
-      resources :interactions
-      resources :interaction_types
-      resources :people
-      resources :organizations
     end
   end
 

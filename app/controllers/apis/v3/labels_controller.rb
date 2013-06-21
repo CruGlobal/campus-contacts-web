@@ -1,4 +1,4 @@
-class Apis::V4::LabelsController < Apis::V3::BaseController
+class Apis::V3::LabelsController < Apis::V3::BaseController
   before_filter :get_label, only: [:show, :update, :destroy]
 
   def index

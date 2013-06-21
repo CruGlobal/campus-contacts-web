@@ -1,4 +1,4 @@
-class Apis::V4::OrganizationalPermissionsController < Apis::V3::BaseController
+class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
   before_filter :ensure_filters, only: [:bulk, :bulk_create, :bulk_destroy]
 
   def index
