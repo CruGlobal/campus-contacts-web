@@ -6,7 +6,7 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
 
     list = add_includes_and_order(interactions, order: order)
 
-    render json: list.collect(&:to_hash),
+    render json: list,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization, since: params[:since]}
   end
@@ -18,7 +18,7 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
   end
 
   def create
-    interaction = interactions.new(params[:interaction])
+    interaction = Interaction.new(params[:interaction])
     interaction.organization_id = current_organization.id
 
     if interaction.save
@@ -57,11 +57,15 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
   private
 
   def interactions
-    current_organization.interactions
+    current_person.interactions
   end
 
   def get_interaction
     @interaction = add_includes_and_order(interactions).find(params[:id])
+  end
+
+  def available_includes
+    [:initiators]
   end
 
 end

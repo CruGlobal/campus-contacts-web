@@ -38,7 +38,7 @@ class Apis::V3::InteractionTypesControllerTest < ActionController::TestCase
   end
 
   context '.update' do
-    should 'create and return a interaction_type' do
+    should 'update and return a interaction_type' do
       put :update, id: @interaction_type.id, interaction_type: {name: 'type1'}, secret: @client.secret
       json = JSON.parse(response.body)
       assert_equal 'type1', json['name']
@@ -46,9 +46,22 @@ class Apis::V3::InteractionTypesControllerTest < ActionController::TestCase
   end
 
   context '.destroy' do
-    should 'create and return a interaction_type' do
+    should 'delete and return a interaction_type' do
       assert_difference "InteractionType.count", -1 do
         delete :destroy, id: @interaction_type.id, secret: @client.secret
+      end
+    end
+    should "not delete other orgs' interaction_type" do
+      @new_org = Factory(:organization)
+      @new_interaction_type = Factory(:interaction_type, organization_id: @new_org.id)
+      assert_difference "InteractionType.count", 0 do
+        delete :destroy, id: @new_interaction_type.id, secret: @client.secret
+      end
+    end
+    should "not delete default interaction_type" do
+      @new_interaction_type = Factory(:interaction_type, organization_id: 0)
+      assert_difference "InteractionType.count", 0 do
+        delete :destroy, id: @new_interaction_type.id, secret: @client.secret
       end
     end
   end

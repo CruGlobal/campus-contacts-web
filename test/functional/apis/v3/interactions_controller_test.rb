@@ -34,7 +34,7 @@ class Apis::V3::InteractionsControllerTest < ActionController::TestCase
         post :create, interaction: {receiver_id: '1'}, secret: @client.secret
       end
       json = JSON.parse(response.body)
-      assert_equal 1, json['receiver_id']
+      assert_equal 1, json['receiver_id'], json.inspect
     end
   end
 

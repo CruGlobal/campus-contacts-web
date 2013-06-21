@@ -47,8 +47,7 @@ class Apis::V3::InteractionTypesController < Apis::V3::BaseController
   end
 
   def destroy
-    @interaction_type.destroy
-
+    @interaction_type.destroy if @interaction_type.organization_id == current_organization.id
     render json: @interaction_type.to_hash,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization}
