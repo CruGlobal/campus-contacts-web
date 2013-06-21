@@ -18,7 +18,7 @@ class Apis::V3::LabelsController < Apis::V3::BaseController
   end
 
   def create
-    label = labels.new(params[:label])
+    label = Label.new(params[:label])
     label.organization_id = current_organization.id
 
     if label.save
