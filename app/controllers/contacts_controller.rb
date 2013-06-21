@@ -294,6 +294,7 @@ class ContactsController < ApplicationController
     @organization = current_organization
     # Saved Search
     @all_saved_contact_searches = current_user.saved_contact_searches.where('organization_id = ?', current_organization.id)
+
     get_and_merge_unfiltered_people
   end
 
