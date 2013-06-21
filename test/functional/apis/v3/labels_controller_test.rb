@@ -5,55 +5,57 @@ class Apis::V3::LabelsControllerTest < ActionController::TestCase
     request.env['HTTP_ACCEPT'] = 'application/json'
     @client = Factory(:client)
     @user = Factory(:user_no_org)
-    @client.organization.add_admin(@user.person)
-    @label = Factory(:label, organization: @client.organization)
+
+    @org = @client.organization
+    @org.add_admin(@user.person)
+    @other_org = Factory(:organization)
+
+    @label1 = Factory(:label, organization: @org)
+    @label2 = Factory(:label, organization: @org)
   end
 
   context '.index' do
-    should 'return a list of labels' do
+    should 'return all labels' do
       get :index, secret: @client.secret, order: 'created_at'
       assert_response :success
       json = JSON.parse(response.body)
-      assert_equal @label.id, json['labels'].last['id'], json.inspect
+      assert_equal @org.labels.count, json['labels'].count, json.inspect
     end
   end
 
-
   context '.show' do
     should 'return a label' do
-      get :show, id: @label.id, secret: @client.secret
+      get :show, id: @label1.id, secret: @client.secret
       json = JSON.parse(response.body)
-      assert_equal @label.name, json['label']['name']
+      assert_equal @label1.name, json['label']['name'], json.inspect
     end
   end
 
   context '.create' do
     should 'create and return a label' do
       assert_difference "Label.count" do
-        post :create, label: {name: 'funk'}, secret: @client.secret
+        post :create, label: {name: 'sample_label'}, secret: @client.secret
       end
       json = JSON.parse(response.body)
-      assert_equal 'funk', json['label']['name']
+      assert_equal 'sample_label', json['label']['name'], json.inspect
+      assert_not_nil json['label']['created_at'], json.inspect
     end
   end
 
   context '.update' do
-    should 'create and return a label' do
-      put :update, id: @label.id, label: {name: 'funk'}, secret: @client.secret
+    should 'update and return a label' do
+      put :update, id: @label1.id, label: {name: 'new_label_name'}, secret: @client.secret
       json = JSON.parse(response.body)
-      assert_equal 'funk', json['label']['name']
+      assert_equal 'new_label_name', json['label']['name']
     end
   end
 
   context '.destroy' do
-    should 'create and return a label' do
+    should 'destroy label' do
       assert_difference "Label.count", -1 do
-        delete :destroy, id: @label.id, secret: @client.secret
+        delete :destroy, id: @label1.id, secret: @client.secret
       end
     end
   end
-
-
-
 end
 

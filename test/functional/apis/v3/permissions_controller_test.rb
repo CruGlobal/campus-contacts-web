@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Apis::V4::PermissionsControllerTest < ActionController::TestCase
+class Apis::V3::PermissionsControllerTest < ActionController::TestCase
   setup do
     request.env['HTTP_ACCEPT'] = 'application/json'
     @client = Factory(:client)
