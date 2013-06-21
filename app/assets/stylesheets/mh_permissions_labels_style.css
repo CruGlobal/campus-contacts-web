@@ -51,6 +51,9 @@ button.full_width_button {
 	width:100%;
 }
 
+#upper_sidebar_lists a{
+  text-decoration: none;
+}
 
 #sidebar_lists {
 	margin-top:24px;
@@ -65,19 +68,24 @@ ul.ac_dropdown_list {
 
 }
 
-.ac_dropdown_list li {
-	margin-bottom:2px;
-}
-
 .ac_dropdown_list li.ac_dropdown_list_header {
 	font-weight:bold;
 	font-size:14px;
 	margin-left:-16px;
 }
 
-.ac_dropdown_list li a:hover {
-	color:#c0c0c0;
-	}
+.ac_dropdown_list .entry{
+  padding: 2px;
+}
+
+.ac_dropdown_list .entry:hover{
+  background-color:rgb(234, 241, 246);
+}
+
+.ac_dropdown_list li a {
+  text-decoration:none;
+	color:rgb(3, 121, 174);
+}
 
 /* Button Bar */
 
@@ -365,16 +373,6 @@ button#groups_add_new_button, button#labels_add_new_button {
   float:right;
   display:inline-block;
   margin-left:12px;
-}
-
-.msg_popup_box .msg_save {
-	position:absolute;
-	right:0px;
-	bottom:16px;
-	width:650px;
-	display:inline-block;
-	margin-right:24px;
-	margin-left:24px;
 }
 
 .assign_popup_box .assign_save {

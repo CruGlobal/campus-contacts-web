@@ -310,7 +310,7 @@ input.text.validate-date {
     height:565px;
   }
   .mh_popup_buttons{
-    margin-right: 10px;
+    width:780px;
   }
   #locate_contact_results_container{
     height: 275px;
@@ -359,4 +359,26 @@ input.text.validate-date {
       float:right;
     }
   }
+}
+
+#bulk_send_msg_dialog {
+  .note {
+		margin: 10px 0;
+		font-family: Georgia;
+		font-size: 13px;
+		font-style: italic;
+		font-weight: normal;
+		color: #808284;
+    .reply_to_toggle {
+      display: inline-block;
+      vertical-align: top;
+    }
+  }
+  .mh_popup_box{
+    width:733px;
+  }
+  .mh_popup_buttons {
+  	width:721px;
+  }
+
 }
