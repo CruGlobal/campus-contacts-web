@@ -34,23 +34,23 @@ class Label < ActiveRecord::Base
   scope :arrange_all_desc, lambda {{
     order: "FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS.reverse)} ASC, name DESC"
   }}
-  
+
   def self.involved
     @involved ||= Label.find_or_create_by_name_and_i18n_and_organization_id('Involved', 'involved', 0)
   end
-  
+
   def self.engaged_disciple
     @engaged_disciple ||= Label.find_or_create_by_name_and_i18n_and_organization_id('Engaged Disciple', 'engaged_disciple', 0)
   end
-  
+
   def self.leader
     @leader ||= Label.find_or_create_by_name_and_i18n_and_organization_id('Leader', 'leader', 0)
   end
-  
+
   def self.alumni
     @alumni ||= Label.find_or_create_by_name_and_i18n_and_organization_id('Alumni', 'alumni', 0)
   end
-  
+
   def self.sent
     @sent ||= Label.find_or_create_by_name_and_i18n_and_organization_id('100% Sent', 'sent', 0)
   end
@@ -79,7 +79,7 @@ class Label < ActiveRecord::Base
   end
 
   def label_contacts_from_org(org)
-    contact_ids = OrganizationalLabel.where(label_id: id, organization_id: org.id).uniq
+    contact_ids = OrganizationalLabel.where(label_id: id, organization_id: org.id, removed_date: nil).uniq
     people = org.people.where(id: contact_ids.collect(&:person_id))
     people.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id, 'organizational_permissions.archive_date' => nil)
   end
@@ -89,11 +89,11 @@ class Label < ActiveRecord::Base
     people = org.people.where(id: contact_ids.collect(&:person_id))
     people.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id)
   end
-  
+
   def to_s
     name
   end
-  
+
   if Label.table_exists? # added for travis testing
     LEADER_ID = leader.id
     SENT_ID = sent.id
@@ -103,5 +103,5 @@ class Label < ActiveRecord::Base
   ANY_SELECTED_LABEL = ["Any",1]
 	ALL_SELECTED_LABEL = ["All",2]
 	LABEL_SEARCH_FILTERS = [ANY_SELECTED_LABEL, ALL_SELECTED_LABEL]
-  
+
 end

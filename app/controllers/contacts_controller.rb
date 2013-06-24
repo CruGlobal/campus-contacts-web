@@ -427,7 +427,11 @@ class ContactsController < ApplicationController
           @header = I18n.t("rejoicables.#{params[:assigned_to]}")
         else
           if params[:assigned_to].present? && @assigned_to = Person.find_by_id(params[:assigned_to])
-            @people_scope = @organization.all_people_with_archived.joins(:assigned_tos).where('contact_assignments.organization_id' => @organization.id, 'contact_assignments.assigned_to_id' => @assigned_to.id)
+            if params[:include_archived].present? && params[:include_archived] == 'true'
+              @people_scope = @assigned_to.assigned_contacts_limit_org_with_archived(@organization)
+            else
+              @people_scope = @assigned_to.assigned_contacts_limit_org(@organization)
+            end
             @header = I18n.t('contacts.index.responses_assigned_to', assigned_to: @assigned_to)
           end
         end
@@ -437,8 +441,14 @@ class ContactsController < ApplicationController
       elsif params[:completed] == 'true'
         @header = I18n.t('contacts.index.completed')
         @people_scope = @organization.completed_contacts
+      elsif params[:label].present? && @label_to = Label.find_by_id(params[:label])
+        if params[:include_archived].present? && params[:include_archived] == 'true'
+          @people_scope = @label_to.label_contacts_from_org_with_archived(@organization)
+        else
+          @people_scope = @label_to.label_contacts_from_org(@organization)
+        end
       end
-      @people_scope ||= current_organization.people
+      @people_scope ||= current_organization.all_people_with_archived
     end
 
     def get_and_merge_unfiltered_people
