@@ -285,7 +285,27 @@ Mh::Application.routes.draw do
   namespace :apis do
     api_version(module: 'V4', header: {name: 'API-VERSION', value: 'v4'}, parameter: {name: "version", value: 'v4'}, path: {value: 'v4'}) do
       resources :people
+      resources :interactions
+      resources :interaction_types
+      resources :organizations
+      resources :labels
+      resources :permissions
+      resources :organizational_labels do
+        collection do
+          post :bulk
+          post :bulk_create
+          delete :bulk_destroy
+        end
+      end
+      resources :organizational_permissions do
+        collection do
+          post :bulk
+          post :bulk_create
+          delete :bulk_destroy
+        end
+      end
     end
+
     api_version(module: 'V3', header: {name: 'API-VERSION', value: 'v3'}, parameter: {name: "version", value: 'v3'}, path: {value: 'v3'}) do
       resources :contact_assignments do
         collection do
@@ -307,7 +327,13 @@ Mh::Application.routes.draw do
       resources :interaction_types
       resources :labels
       resources :permissions
-      resources :organizational_labels
+      resources :organizational_labels do
+        collection do
+          post :bulk
+          post :bulk_create
+          delete :bulk_destroy
+        end
+      end
       resources :organizational_permissions do
         collection do
           post :bulk

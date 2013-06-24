@@ -20,11 +20,11 @@ class OrganizationalPermission < ActiveRecord::Base
   scope :find_non_admin_and_non_leader_permissions, {
     :conditions => ["permission_id != ? AND permission_id != ?", Permission::ADMIN_ID, Permission::USER_ID]
   }
-  
+
   scope :find_admin_or_leader, {
     :conditions => ["permission_id = ? OR permission_id = ?", Permission::ADMIN_ID, Permission::USER_ID]
   }
-  
+
   #after_create :clear_person_org_cache
   #after_destroy :clear_person_org_cache
 
