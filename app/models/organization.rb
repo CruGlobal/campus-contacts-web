@@ -207,7 +207,7 @@ class Organization < ActiveRecord::Base
     end
     json = {statistics: periods}.to_json
     begin
-      RestClient.put(APP_CONFIG['infobase_url'] + '/api/v1/stats/update', json, content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\"")
+      RestClient.post(APP_CONFIG['infobase_url'] + '/api/v1/stats', json, content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\"")
     end
 
     update_attributes(last_push_to_infobase: last_week)
