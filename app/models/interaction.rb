@@ -12,6 +12,20 @@ class Interaction < ActiveRecord::Base
   scope :limited, limit(5)
   after_save :ensure_timestamp
 
+  def destroy
+    run_callbacks :destroy do
+      self.update_attribute(:updated_at, DateTime.now)
+      self.update_attribute(:deleted_at, DateTime.now)
+    end
+  end
+
+  def delete
+    run_callbacks :delete do
+      self.update_attribute(:updated_at, DateTime.now)
+      self.update_attribute(:deleted_at, DateTime.now)
+    end
+  end
+
   def last_updater
     person_id = updated_by_id || created_by_id
     Person.find(person_id)

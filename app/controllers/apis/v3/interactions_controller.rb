@@ -20,6 +20,7 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
   def create
     interaction = Interaction.new(params[:interaction])
     interaction.organization_id = current_organization.id
+    interaction.created_by_id = current_person.id
 
     if interaction.save
       render json: interaction,
@@ -34,6 +35,8 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
   end
 
   def update
+    params[:interaction][:created_by_id] = current_person.id if params[:interaction].present?
+
     if @interaction.update_attributes(params[:interaction])
       render json: @interaction,
              callback: params[:callback],
@@ -47,7 +50,7 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
   end
 
   def destroy
-    @interaction.update_attribute(:deleted_at,Time.now)
+    @interaction.destroy
     render json: @interaction,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization}
@@ -56,7 +59,7 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
   private
 
   def interactions
-    current_person.interactions
+    current_organization.interactions
   end
 
   def get_interaction
