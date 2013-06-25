@@ -133,7 +133,6 @@ class Apis::V4::OrganizationalPermissionsController < Apis::V3::BaseController
 
   def get_organizational_permission
     @organizational_permission = add_includes_and_order(current_organization.people).find(params[:id])
-
   end
 
   private
@@ -143,9 +142,7 @@ class Apis::V4::OrganizationalPermissionsController < Apis::V3::BaseController
   end
 
   def get_org_permission
-    @organizational_permission = add_includes_and_order(organizational_permissions)
-                .find(params[:id])
-
+    @organizational_permission = add_includes_and_order(organizational_permissions).find(params[:id])
   end
 
 end

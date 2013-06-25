@@ -134,8 +134,6 @@ class Apis::V4::OrganizationalLabelsController < Apis::V3::BaseController
   end
 
   def get_org_label
-    @organizational_label = add_includes_and_order(organizational_labels)
-                .find(params[:id])
-
+    @organizational_label = add_includes_and_order(organizational_labels).find(params[:id])
   end
 end

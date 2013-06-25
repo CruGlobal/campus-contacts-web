@@ -13,14 +13,56 @@ class Apis::V3::OrganizationalLabelsControllerTest < ActionController::TestCase
     @permission = @user.person.permission_for_org_id(@org.id)
     @permission1 = Factory(:permission)
     @label = Factory(:label, organization: @org)
+    @label1 = Factory(:label, organization: @org)
 
-    Factory(:organizational_label, organization: @org, person: @person, label: @label)
+    @org_label = Factory(:organizational_label, organization: @org, person: @person, label: @label)
 
     @person1 = Factory(:person)
     @org.add_contact(@person1)
     @person2 = Factory(:person)
     @org.add_contact(@person2)
-    @label1 = Factory(:label, organization: @org)
+  end
+
+  context '.index' do
+    should "return a list of organization's organizational_labels" do
+      get :index, secret: @client.secret
+      json = JSON.parse(response.body)
+      assert_equal @org.organizational_labels.count, json['organizational_labels'].count, json.inspect
+    end
+  end
+
+  context '.show' do
+    should 'return an organizational_label' do
+      get :show, id: @org_label.id, secret: @client.secret
+      json = JSON.parse(response.body)
+      assert_equal @org_label.id, json['organizational_label']['id'], json.inspect
+    end
+  end
+
+  context '.create' do
+    should 'create and return an organizational_label' do
+      assert_difference "OrganizationalLabel.count" do
+        post :create, organizational_label: {label_id: @label.id, person_id: @person2.id}, secret: @client.secret
+      end
+      json = JSON.parse(response.body)
+      assert_equal @person2.id, json['organizational_label']['person_id'], json.inspect
+    end
+  end
+
+  context '.update' do
+    should 'create and return an organizational_label' do
+      put :update, id: @org_label.id, organizational_label: {removed_date: '2013-01-01'}, secret: @client.secret
+      json = JSON.parse(response.body)
+      assert_equal '2013-01-01', json['organizational_label']['removed_date'], json.inspect
+    end
+  end
+
+  context '.destroy' do
+    should 'create and return an organizational_label' do
+      delete :destroy, id: @org_label.id, secret: @client.secret
+      @org_label.reload
+      assert_equal Date.today, @org_label.removed_date, @org_label.inspect
+    end
   end
 
   context '.bulk' do

@@ -56,7 +56,7 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
   private
 
   def interactions
-    current_organization.interactions
+    current_person.interactions
   end
 
   def get_interaction

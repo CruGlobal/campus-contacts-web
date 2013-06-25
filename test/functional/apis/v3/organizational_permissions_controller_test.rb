@@ -20,8 +20,52 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
     @org.add_contact(@person1)
     @person2 = Factory(:person)
     @org.add_contact(@person2)
+    @org_permission = @org.organizational_permissions.last
     @permission_contact = @person2.permission_for_org_id(@org.id)
     @label1 = Factory(:label, organization: @org)
+  end
+
+  context '.index' do
+    should "return a list of organization's organizational_permissions" do
+      get :index, secret: @client.secret
+      json = JSON.parse(response.body)
+      assert_equal @org.organizational_permissions.count, json['organizational_permissions'].count, json.inspect
+    end
+  end
+
+  context '.show' do
+    should 'return an organizational_permission' do
+      get :show, id: @org_permission.id, secret: @client.secret
+      json = JSON.parse(response.body)
+      assert_equal @org_permission.id, json['organizational_permission']['id'], json.inspect
+    end
+  end
+
+  context '.create' do
+    should 'create and return an organizational_permission' do
+      @person3 = Factory(:person)
+      assert_difference "OrganizationalPermission.count" do
+        post :create, organizational_permission: {permission_id: @permission_contact.id, person_id: @person3.id}, secret: @client.secret
+      end
+      json = JSON.parse(response.body)
+      assert_equal @person3.id, json['organizational_permission']['person_id'], json.inspect
+    end
+  end
+
+  context '.update' do
+    should 'create and return an organizational_permission' do
+      put :update, id: @org_permission.id, organizational_permission: {archive_date: '2013-01-01'}, secret: @client.secret
+      json = JSON.parse(response.body)
+      assert_equal '2013-01-01'.to_date, json['organizational_permission']['archive_date'].to_date, json.inspect
+    end
+  end
+
+  context '.destroy' do
+    should 'create and return an organizational_permission' do
+      delete :destroy, id: @org_permission.id, secret: @client.secret
+      @org_permission.reload
+      assert_not_nil @org_permission.archive_date, @org_permission.inspect
+    end
   end
 
 

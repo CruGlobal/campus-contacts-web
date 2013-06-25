@@ -10,7 +10,7 @@ class Permission < ActiveRecord::Base
 
   scope :default, where(i18n: ['admin','user','no_permissions']) if Permission.table_exists? # added for travis testing
 	scope :users, where(i18n: %w[user admin])
-  
+
   scope :default_permissions, lambda { {
     :conditions => "i18n IN #{self.default_permissions_for_field_string(self::DEFAULT_PERMISSIONS)}",
     :order => "FIELD#{self.i18n_field_plus_default_permissions_for_field_string(self::DEFAULT_PERMISSIONS)}"
@@ -43,7 +43,7 @@ class Permission < ActiveRecord::Base
   def self.no_permissions
     @no_permissions ||= Permission.find_or_create_by_name_and_i18n('No Permissions','no_permissions')
   end
-  
+
   def to_s
     ['admin','user','no_permissions'].include?(i18n) ? I18n.t("permissions.#{i18n}") : name
   end
@@ -75,7 +75,7 @@ class Permission < ActiveRecord::Base
     people = org.people.where(id: contact_ids.collect(&:person_id))
     people.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id)
   end
-  
+
   def to_s
     name
   end
