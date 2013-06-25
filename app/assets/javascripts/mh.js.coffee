@@ -83,7 +83,7 @@ $ ->
   $('a.disabled').live 'click', ->
     false
 
-  $('[data-method=delete]').live 'ajax:before', ->
+  $('[data-method=delete]:not(.dont_hide)').live 'ajax:before', ->
     $(this).parent().fadeOut()
 
   $('#check_all').live 'click', ->

@@ -9,6 +9,7 @@ $('.feed_content .tab_content.profile_interactions .edit_space').slideDown('fast
 $('.interaction_field.more_option').hide();
 $('.interaction_field.more_div .more_options_link').html('More Options &#x25BC;');
 $('.interaction_field.more_div .more_options_link').removeClass('shown');
+$('#interaction_save_delete_button').show()
 
 // Set privacy setting
 selected = $("#privacy_setting_dropdown #togglable .option[data-id=<%= @interaction.privacy_setting %>]");

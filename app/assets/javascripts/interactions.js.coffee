@@ -308,6 +308,17 @@ $ ->
       type: 'GET',
       url: '/interactions/show_edit_interaction_form?id=' + $(this).attr('data-id') + '&person_id=' + $(this).attr('data-person-id')
 
+  $('#interaction_save_delete_button').live 'click', (e)->
+    e.preventDefault()
+    $.toggleLoader('profile_name','Deleting Interaction...')
+    $.blur('.feed_content .feed_box.interaction_new')
+
+    $('.feed_content .tab_content.profile_interactions .edit_space').hide()
+    $('#all_feeds_container #interaction_feed_' + $(this).attr('data-interaction_id')).remove()
+    $('#interaction_feeds_container #interaction_feed_container_' + $(this).attr('data-interaction_id')).remove()
+    $('.interaction_new').addClass('shouldReload')
+    $('#interaction_save_cancel_button').click()
+
   $('#interaction_save_save_button').live 'click', (e)->
     e.preventDefault()
     if $('form #interaction_type_field').val() == "1" && $('form #interaction_comment').val() == ""
@@ -409,6 +420,7 @@ $ ->
     $('.interaction_field.more_option').hide()
     $('.interaction_field.more_div .more_options_link').html('More Options &#x25BC;')
     $('.interaction_field.more_div .more_options_link').removeClass('shown')
+    $('#interaction_save_delete_button').hide()
     $('#interaction_comment').focus()
 
     # set privacy

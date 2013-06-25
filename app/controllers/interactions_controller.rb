@@ -205,4 +205,10 @@ class InteractionsController < ApplicationController
     duplicate_initiators.delete_all if duplicate_initiators.present?
     @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
   end
+
+  def destroy
+    @interaction = current_organization.interactions.find(params[:id])
+    @person = @interaction.receiver
+    @interaction.update_attribute(:deleted_at, Time.now)
+  end
 end

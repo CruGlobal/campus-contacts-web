@@ -6,7 +6,7 @@
     <%= f.text_field :receiver_id, id: 'receiver_field', class: 'hidden' %>
     <%= text_field_tag :person_id, @person.id, id: 'person_id', class: 'hidden' %>
     <%= text_field_tag :interaction_id, @interaction.id, id: 'interaction_id', class: 'hidden' %>
-    
+
   	<div class="interaction_field interaction_edit_initiator fancy">Initiator:<br/>
       <div id="initiator_dropdown" class="custom_dropdown" data-current-ids="<%= @interaction.initiators.collect(&:id) %>" data-default-id="<%= current_person.id %>" data-default-name="<%= current_person.first_name %> (Me)">
         <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
@@ -81,15 +81,16 @@
             </div>
           <% end %>
         </div>
-      </div>  
+      </div>
   	</div>
-    
+
   	<div class="interaction_field interaction_edit_date fancy more_option date_field_box">Date / Time:
       <%= f.text_field :timestamp, id: 'datepicker', value: "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}" %>
   	</div>
     <%= f.text_area :comment, class: "interaction_edit_comment comment_box", placeholder: "Add a comment...", rows: 4 %>
 
   	<div class="interaction_new interaction_save">
+      <%= link_to(raw("<button class='large_gray' data-person-id='#{@person.id}'>Delete</button>"), @interaction, method: :delete, remote: true, id: 'interaction_save_delete_button', 'data-interaction_id' => @interaction.id, class: 'dont_hide', data: { confirm: t('.confirm_delete_interaction')}) if @interaction.present? %>
   		<button class="red_accent" id="interaction_save_save_button">Save</button>
   		<button class="large_lightgray" id="interaction_save_cancel_button" data-person-id="<%= @person.id %>">Cancel</button>
   	</div>

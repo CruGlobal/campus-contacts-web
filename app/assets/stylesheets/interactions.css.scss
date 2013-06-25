@@ -317,6 +317,8 @@ body{
       #togglable {
         display: none;
         .option {
+          overflow: hidden;
+          text-overflow: ellipsis;
           padding: 4px 6px;
           color: #777;
           &:hover {

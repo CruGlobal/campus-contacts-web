@@ -920,6 +920,15 @@ div.phone, div.address, div.email {
 	float:right;
 }
 
+#interaction_save_delete_button {
+  float: left;
+  margin-left: 12px;
+}
+
+#interaction_save_delete_button button {
+  margin-right: 0px;
+}
+
 #interaction_edit_delete_button {
 	float:left;
 	margin-left:9px;

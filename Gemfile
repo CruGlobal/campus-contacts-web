@@ -69,8 +69,8 @@ end
 group :test do
   gem 'webmock'#, '= 1.8.3'
   gem 'factory_girl','~> 2.0.0.rc4'
-  gem 'simplecov', '>= 0.3.5', require: false
-  gem 'ZenTest', '= 4.8.3'
+  # gem 'simplecov', '>= 0.3.5', require: false
+  # gem 'ZenTest', '= 4.8.3'
   gem 'autotest-rails'
   gem 'resque_unit'
   gem 'shoulda', :require => false

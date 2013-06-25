@@ -635,6 +635,8 @@ en:
   interactions:
     profile_info:
       email_contact_info: "Email Me This Contact Info"
+    profile_interactions_edit:
+      confirm_delete_interaction: "Are you sure you want to delete this interaction?"
   contacts:
     new_sidebar:
       contact_assignments: "Contact Assignments"

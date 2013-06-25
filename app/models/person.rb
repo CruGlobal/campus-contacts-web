@@ -6,7 +6,8 @@ class Person < ActiveRecord::Base
                   :meta => { person_id: :id }
 
   belongs_to :interaction_initiator
-  has_many :interactions, class_name: "Interaction", foreign_key: "receiver_id"
+  has_many :interactions, class_name: "Interaction", foreign_key: "receiver_id", conditions: ["deleted_at IS NULL"]
+  has_many :interactions_with_deleted, class_name: "Interaction", foreign_key: "receiver_id"
   has_many :created_interactions, class_name: "Interaction", foreign_key: "created_by_id"
   has_many :organizational_labels, dependent: :destroy
   has_many :labels, through: :organizational_labels, conditions: ["removed_date IS NULL"]
