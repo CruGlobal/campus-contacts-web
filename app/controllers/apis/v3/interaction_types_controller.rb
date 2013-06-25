@@ -6,13 +6,13 @@ class Apis::V3::InteractionTypesController < Apis::V3::BaseController
 
     list = add_includes_and_order(interaction_types, order: order)
 
-    render json: list.collect(&:to_hash),
+    render json: list,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization, since: params[:since]}
   end
 
   def show
-    render json: @interaction_type.to_hash,
+    render json: @interaction_type,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization}
   end
@@ -22,7 +22,7 @@ class Apis::V3::InteractionTypesController < Apis::V3::BaseController
     interaction_type.organization_id = current_organization.id
 
     if interaction_type.save
-      render json: interaction_type.to_hash,
+      render json: interaction_type,
              status: :created,
              callback: params[:callback],
              scope: {include: includes, organization: current_organization}
@@ -34,23 +34,34 @@ class Apis::V3::InteractionTypesController < Apis::V3::BaseController
   end
 
   def update
-    if @interaction_type.update_attributes(params[:interaction_type])
-      render json: @interaction_type.to_hash,
-             callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
-    else
-      render json: {errors: interaction_type.errors.full_messages},
+    if @interaction_type.organization_id == 0
+      render json: {errors: ["You can't update default interaction_types"]},
              status: :unprocessable_entity,
              callback: params[:callback]
+    else
+      if @interaction_type.update_attributes(params[:interaction_type])
+        render json: @interaction_type,
+               callback: params[:callback],
+               scope: {include: includes, organization: current_organization}
+      else
+        render json: {errors: interaction_type.errors.full_messages},
+               status: :unprocessable_entity,
+               callback: params[:callback]
+      end
     end
-
   end
 
   def destroy
-    @interaction_type.destroy if @interaction_type.organization_id == current_organization.id
-    render json: @interaction_type.to_hash,
-           callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+    if @interaction_type.organization_id == 0
+      render json: {errors: ["You can't destroy default interaction_types"]},
+             status: :unprocessable_entity,
+             callback: params[:callback]
+    else
+      @interaction_type.destroy
+      render json: @interaction_type,
+             callback: params[:callback],
+             scope: {include: includes, organization: current_organization}
+    end
   end
 
   private
