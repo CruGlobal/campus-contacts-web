@@ -24,7 +24,7 @@ class Apis::V3::InteractionsControllerTest < ActionController::TestCase
     should 'return an interaction' do
       get :show, id: @interaction.id, secret: @client.secret
       json = JSON.parse(response.body)
-      assert_equal @interaction.id, json['id']
+      assert_equal @interaction.id, json['interaction']['id']
     end
   end
 
@@ -34,7 +34,7 @@ class Apis::V3::InteractionsControllerTest < ActionController::TestCase
         post :create, interaction: {receiver_id: '1'}, secret: @client.secret
       end
       json = JSON.parse(response.body)
-      assert_equal 1, json['receiver_id'], json.inspect
+      assert_equal 1, json['interaction']['receiver_id'], json.inspect
     end
   end
 
@@ -42,7 +42,7 @@ class Apis::V3::InteractionsControllerTest < ActionController::TestCase
     should 'update and return a interaction' do
       put :update, id: @interaction.id, interaction: {receiver_id: '5'}, secret: @client.secret
       json = JSON.parse(response.body)
-      assert_equal 5, json['receiver_id']
+      assert_equal 5, json['interaction']['receiver_id']
     end
   end
 

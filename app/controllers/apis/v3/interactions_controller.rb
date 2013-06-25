@@ -12,7 +12,7 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
   end
 
   def show
-    render json: @interaction.to_hash,
+    render json: @interaction,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization}
   end
@@ -22,7 +22,7 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
     interaction.organization_id = current_organization.id
 
     if interaction.save
-      render json: interaction.to_hash,
+      render json: interaction,
              status: :created,
              callback: params[:callback],
              scope: {include: includes, organization: current_organization}
@@ -35,7 +35,7 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
 
   def update
     if @interaction.update_attributes(params[:interaction])
-      render json: @interaction.to_hash,
+      render json: @interaction,
              callback: params[:callback],
              scope: {include: includes, organization: current_organization}
     else
@@ -48,7 +48,7 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
 
   def destroy
     @interaction.update_attribute(:deleted_at,Time.now)
-    render json: @interaction.to_hash,
+    render json: @interaction,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization}
   end
