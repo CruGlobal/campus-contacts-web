@@ -1,6 +1,6 @@
 class Apis::V3::OrganizationalLabelsController < Apis::V3::BaseController
   before_filter :ensure_filters, only: [:bulk, :bulk_create, :bulk_destroy]
-  before_filter :get_org_label, only: [:show, :update, :destroy]
+  before_filter :get_organizational_label, only: [:show, :update, :destroy]
 
   def index
     list = add_includes_and_order(organizational_labels)
@@ -34,26 +34,22 @@ class Apis::V3::OrganizationalLabelsController < Apis::V3::BaseController
   end
 
   def update
-    if @organizational_label.organization_id != 0
-      if @organizational_label.update_attributes(params[:organizational_label])
-        render json: @organizational_label,
-               callback: params[:callback],
-               scope: {include: includes, organization: current_organization}
-      else
-        render json: {errors: @organizational_label.errors.full_messages},
-               status: :unprocessable_entity,
-               callback: params[:callback]
-      end
+    if @organizational_label.update_attributes(params[:organizational_label])
+      render json: @organizational_label,
+             callback: params[:callback],
+             scope: {include: includes, organization: current_organization}
+    else
+      render json: {errors: @organizational_label.errors.full_messages},
+             status: :unprocessable_entity,
+             callback: params[:callback]
     end
   end
 
   def destroy
-    if @organizational_label.organization_id != 0
-      @organizational_label.update_attribute(:removed_date, Date.today)
-      render json: @organizational_label,
-             callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
-    end
+    @organizational_label.archive
+    render json: @organizational_label,
+           callback: params[:callback],
+           scope: {include: includes, organization: current_organization}
   end
 
 
@@ -85,33 +81,21 @@ class Apis::V3::OrganizationalLabelsController < Apis::V3::BaseController
 
   private
 
-  def people
-    current_organization.people
-  end
-
-  def get_person
-    if params[:id] == "me"
-      @person = current_user.person
-    else
-      @person = add_includes_and_order(people).find(params[:id])
-    end
-  end
-
   def ensure_filters
     unless params[:filters]
       render json: {errors: ["The 'filters' parameter is required for bulk label actions."]},
-                 status: :bad_request,
-                 callback: params[:callback]
+             status: :bad_request,
+             callback: params[:callback]
     end
   end
 
   def filtered_people
     unless @filtered_people
       @filtered_people = if params[:include_archived] == 'true'
-        current_organization.people
-      else
-        current_organization.not_archived_people
-      end
+                           current_organization.people
+                         else
+                           current_organization.not_archived_people
+                         end
 
       @filtered_people = add_includes_and_order(@filtered_people)
       @filtered_people = PersonFilter.new(params[:filters]).filter(@filtered_people) if params[:filters]
@@ -119,21 +103,19 @@ class Apis::V3::OrganizationalLabelsController < Apis::V3::BaseController
     @filtered_people
   end
 
-  def add_labels(people, labels)
-    current_organization.add_labels_to_people(filtered_people, labels.split(',')) if labels.present?
-  end
-
-  def remove_labels(people, labels)
-    current_organization.remove_labels_from_people(filtered_people, labels.split(',')) if labels.present?
-  end
-
-  private
-
   def organizational_labels
     current_organization.organizational_labels
   end
 
-  def get_org_label
+  def get_organizational_label
     @organizational_label = add_includes_and_order(organizational_labels).find(params[:id])
+  end
+
+  def add_labels(people, labels)
+    current_organization.add_labels_to_people(people, labels.split(',')) if labels.present?
+  end
+
+  def remove_labels(people, labels)
+    current_organization.remove_labels_from_people(people, labels.split(',')) if labels.present?
   end
 end
