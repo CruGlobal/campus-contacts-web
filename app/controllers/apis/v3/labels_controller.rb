@@ -12,15 +12,9 @@ class Apis::V3::LabelsController < Apis::V3::BaseController
   end
 
   def show
-    if @label.nil?
-      render json: {errors: ["Label not found"]},
-             status: :unprocessable_entity,
-             callback: params[:callback]
-    else
-      render json: @label,
-             callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
-    end
+    render json: @label,
+           callback: params[:callback],
+           scope: {include: includes, organization: current_organization}
   end
 
   def create
@@ -40,11 +34,7 @@ class Apis::V3::LabelsController < Apis::V3::BaseController
   end
 
   def update
-    if @label.nil?
-      render json: {errors: ["You can't update labels from another organization"]},
-             status: :unprocessable_entity,
-             callback: params[:callback]
-    elsif @label.organization_id == 0
+    if @label.organization_id == 0
       render json: {errors: ["You can't update the default labels"]},
              status: :unprocessable_entity,
              callback: params[:callback]
@@ -62,11 +52,7 @@ class Apis::V3::LabelsController < Apis::V3::BaseController
   end
 
   def destroy
-    if @label.nil?
-      render json: {errors: ["Label not found"]},
-             status: :unprocessable_entity,
-             callback: params[:callback]
-    elsif @label.organization_id == 0
+    if @label.organization_id == 0
       render json: {errors: ["You can't delete the default labels"]},
              status: :unprocessable_entity,
              callback: params[:callback]
@@ -85,7 +71,7 @@ class Apis::V3::LabelsController < Apis::V3::BaseController
   end
 
   def get_label
-    @label = add_includes_and_order(labels).where(id: params[:id]).try(:first)
+    @label = add_includes_and_order(labels).find(params[:id])
 
   end
 

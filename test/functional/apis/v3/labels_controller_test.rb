@@ -37,11 +37,6 @@ class Apis::V3::LabelsControllerTest < ActionController::TestCase
       json = JSON.parse(response.body)
       assert_equal @default_label.name, json['label']['name'], json.inspect
     end
-    should 'return error when passing label from other org' do
-      get :show, id: @other_org_label.id, secret: @client.secret
-      json = JSON.parse(response.body)
-      assert_not_nil json['errors'], json.inspect
-    end
   end
 
   context '.create' do
@@ -66,11 +61,6 @@ class Apis::V3::LabelsControllerTest < ActionController::TestCase
       json = JSON.parse(response.body)
       assert_not_nil json['errors'], json.inspect
     end
-    should 'return error when passing label from other org' do
-      put :update, id: @other_org_label.id, label: {name: 'new_label_name'}, secret: @client.secret
-      json = JSON.parse(response.body)
-      assert_not_nil json['errors'], json.inspect
-    end
   end
 
   context '.destroy' do
@@ -81,11 +71,6 @@ class Apis::V3::LabelsControllerTest < ActionController::TestCase
     end
     should 'return error when passing default label' do
       delete :destroy, id: @default_label.id, secret: @client.secret
-      json = JSON.parse(response.body)
-      assert_not_nil json['errors'], json.inspect
-    end
-    should 'return error when passing label from other org' do
-      delete :destroy, id: @other_org_label.id, secret: @client.secret
       json = JSON.parse(response.body)
       assert_not_nil json['errors'], json.inspect
     end
