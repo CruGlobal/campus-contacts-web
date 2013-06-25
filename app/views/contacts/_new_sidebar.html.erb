@@ -1,7 +1,7 @@
 <ul class="ac_dropdown_list">
 	<li class="ac_dropdown_list_header">
     <a href="#" class="side_toggle arrow_anchor">&#x25BC;</a>
-    Leaders
+    <%= t('.contact_assignments')%>
   </li>
   <div id='leader_list' class="side_list" style="<%= 'display:block;' if params[:assigned_to].present? && params[:assigned_to] != 'friends' %>">
     <% @organization.leaders.each_with_index do |person| %>
@@ -33,7 +33,7 @@
 <ul class="ac_dropdown_list">
 	<li class="ac_dropdown_list_header">
     <a href="#" class="side_toggle arrow_anchor">&#x25BC;</a>
-    Labels
+    <%= t('.labels')%>
   </li>
   <div id='label_list' class="side_list" style="<%= 'display:block;' if params[:label].present? %>">
     <% @organization.labels.arrange_all.each do |label| %>
@@ -63,7 +63,7 @@
 <ul class="ac_dropdown_list">
 	<li class="ac_dropdown_list_header">
     <a href="#" class="side_toggle arrow_anchor">&#x25BC;</a>
-    Permissions
+    <%= t('.permissions')%>
   </li>
   <div id='permission_list' class="side_list" style="<%= 'display:block;' if params[:permission].present? %>">
     <% @organization.permissions.arrange_all.each do |permission| %>
@@ -93,7 +93,7 @@
 <ul class="ac_dropdown_list">
 	<li class="ac_dropdown_list_header">
     <a href="#" class="side_toggle arrow_anchor">&#x25BC;</a>
-    More
+    <%= t('.more_options')%>
   </li>
   <div class="side_list" style="<%= 'display:block;' if params[:assigned_to].present? && params[:assigned_to] == 'friends' ||  params[:archived].present? || params[:dnc].present? %>">
     <li class="entry more <%= 'selected_entry' if params[:assigned_to] == 'friends' %>">

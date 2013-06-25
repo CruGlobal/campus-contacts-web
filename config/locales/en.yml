@@ -636,6 +636,11 @@ en:
     profile_info:
       email_contact_info: "Email Me This Contact Info"
   contacts:
+    new_sidebar:
+      contact_assignments: "Contact Assignments"
+      labels: "Labels"
+      permissions: "Permissions"
+      more_options: "More"
     all_contacts:
       title: "All Contacts"
       first_name: "First Name"

@@ -34,6 +34,10 @@
   font-size: 18px;
 }
 
+#ac_pagination button {
+  color: #0379ae;
+}
+
 #ac_contact_spread {
 	margin:13px 0 0 5px;
 	display:inline-block;
