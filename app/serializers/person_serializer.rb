@@ -1,7 +1,7 @@
 class PersonSerializer < ActiveModel::Serializer
-  HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments, :assigned_tos, :followup_comments, :comments_on_me, :rejoicables, :answer_sheets, :all_organizational_permissions, :all_organization_and_children, :interactions, :organizational_labels, :organizational_permissions, :roles, :organizational_roles, :all_organizational_roles]
+  HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments, :assigned_tos, :followup_comments, :comments_on_me, :rejoicables, :answer_sheets, :all_organizational_permissions, :all_organization_and_children, :interactions, :organizational_labels, :roles, :organizational_roles, :all_organizational_roles]
 
-  HAS_ONE = [:user, :current_address]
+  HAS_ONE = [:user, :current_address, :organizational_permission]
 
   INCLUDES = HAS_MANY + HAS_ONE
 
@@ -29,6 +29,14 @@ class PersonSerializer < ActiveModel::Serializer
   [:phone_numbers, :email_addresses, :person_transfers, :user, :answer_sheets, :current_address].each do |relationship|
     define_method(relationship) do
       add_since(object.send(relationship))
+    end
+  end
+
+  def organizational_permission
+    if scope[:user] && scope[:user] == object.user
+      object.organizational_permissions.first
+    else
+      []
     end
   end
 
