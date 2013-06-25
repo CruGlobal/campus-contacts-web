@@ -92,14 +92,17 @@
       }
       .entry {
         .name {
-          max-width: 120px;
+          max-width: 125px;
           display: inline-block;
         	white-space: nowrap;
         	overflow: hidden;
         	text-overflow: ellipsis;
-
           a {
             color: #0379ae;
+            font-weight: normal;
+            &:hover {
+              text-decoration: underline;
+            }
           }
         }
         .delete_icon {
