@@ -11,7 +11,7 @@ class Apis::V3::InteractionsControllerTest < ActionController::TestCase
   end
 
   context '.index' do
-    should 'return a list of interactions' do
+    should "return a list of org's interactions" do
       get :index, secret: @client.secret, order: 'created_at'
       assert_response :success
       json = JSON.parse(response.body)
@@ -21,7 +21,7 @@ class Apis::V3::InteractionsControllerTest < ActionController::TestCase
 
 
   context '.show' do
-    should 'return a interaction' do
+    should 'return an interaction' do
       get :show, id: @interaction.id, secret: @client.secret
       json = JSON.parse(response.body)
       assert_equal @interaction.id, json['id']
@@ -39,7 +39,7 @@ class Apis::V3::InteractionsControllerTest < ActionController::TestCase
   end
 
   context '.update' do
-    should 'create and return a interaction' do
+    should 'update and return a interaction' do
       put :update, id: @interaction.id, interaction: {receiver_id: '5'}, secret: @client.secret
       json = JSON.parse(response.body)
       assert_equal 5, json['receiver_id']
@@ -47,8 +47,13 @@ class Apis::V3::InteractionsControllerTest < ActionController::TestCase
   end
 
   context '.destroy' do
-    should 'create and return a interaction' do
-      assert_difference "Interaction.count", -1 do
+    should 'mark an interaction as deleted' do
+      delete :destroy, id: @interaction.id, secret: @client.secret
+      @interaction.reload
+      assert_not_nil @interaction.deleted_at, @interaction.inspect
+    end
+    should 'not actually delete an interaction' do
+      assert_difference "Interaction.count", 0 do
         delete :destroy, id: @interaction.id, secret: @client.secret
       end
     end

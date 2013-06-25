@@ -47,8 +47,7 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
   end
 
   def destroy
-    @interaction.destroy
-
+    @interaction.update_attribute(:deleted_at,Time.now)
     render json: @interaction.to_hash,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization}
@@ -57,7 +56,7 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
   private
 
   def interactions
-    current_person.interactions
+    current_organization.interactions
   end
 
   def get_interaction
