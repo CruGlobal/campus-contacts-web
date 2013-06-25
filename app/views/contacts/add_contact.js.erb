@@ -1,1 +1,6 @@
-$('#add_contact_div').html('<%= j(render('add_contact', person: @person)) %>')
+if($("#add_contact_div .mh_popup_box_scroller").size() > 0){
+  $("#add_contact_div").replaceWith("<%= j(render('dialogs/add_contact', person: @person)) %>")
+  $.showDialog($("#add_contact_div"))
+}else{
+  $("#add_contact_div").html("<%= j(render('add_contact', person: Person.new)) %>")
+}

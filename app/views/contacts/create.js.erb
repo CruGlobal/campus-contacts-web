@@ -23,6 +23,7 @@
   <% @email = EmailAddress.new %>
   <% @phone = PhoneNumber.new %>
   if($("#add_contact_div .mh_popup_box_scroller").size() > 0){
+    $.hideDialog($("#add_contact_div"))
     $("#add_contact_div").replaceWith("<%= j(render('dialogs/add_contact', person: Person.new)) %>")
     $.showDialog($("#add_contact_div"))
   }else{
