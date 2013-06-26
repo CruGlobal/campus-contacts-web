@@ -179,6 +179,7 @@ class InteractionsController < ApplicationController
     @interaction.organization_id = current_organization.id
     @interaction.updated_by_id = current_person.id
     if @interaction.save
+      @success = true
       params[:initiator_id].each do |person_id|
         @interaction.interaction_initiators.find_or_create_by_person_id(person_id.to_i)
       end
