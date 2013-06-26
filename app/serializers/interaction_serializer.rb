@@ -1,11 +1,11 @@
 class InteractionSerializer < ActiveModel::Serializer
 
   HAS_MANY = [:initiators]
-  HAS_ONE = [:interaction_type, :receiver, :creator]
+  HAS_ONE = [:interaction_type, :receiver, :creator, :last_updater]
   INCLUDES = HAS_MANY + HAS_ONE
 
-  attributes :id, :interaction_type_id, :receiver_id, :initiator_ids, :organization_id,
-             :created_by_id, :comment, :privacy_setting, :timestamp, :created_at, :updated_at, :deleted_at
+  attributes :id, :interaction_type_id, :receiver_id, :initiator_ids, :organization_id, :created_by_id,
+             :updated_by_id, :comment, :privacy_setting, :timestamp, :created_at, :updated_at, :deleted_at
 
   has_many *HAS_MANY
   has_one *HAS_ONE

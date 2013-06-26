@@ -35,8 +35,8 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
   end
 
   def update
-    params[:interaction][:created_by_id] = current_person.id if params[:interaction].present?
-
+    params[:interaction].delete(:created_by_id) if params[:interaction].present?
+    params[:interaction][:updated_by_id] = current_person.id if params[:interaction].present?
     if @interaction.update_attributes(params[:interaction])
       render json: @interaction,
              callback: params[:callback],
@@ -46,7 +46,6 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
              status: :unprocessable_entity,
              callback: params[:callback]
     end
-
   end
 
   def destroy
