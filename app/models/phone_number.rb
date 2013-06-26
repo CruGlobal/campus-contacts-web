@@ -19,7 +19,7 @@ class PhoneNumber < ActiveRecord::Base
       errors.add(:number, "can't be blank")
     end
   end
-  validates_uniqueness_of :number, on: :create, message: "already exists"
+  #validates_uniqueness_of :number, on: :create, message: "already exists"
   validates_uniqueness_of :number, :scope => :person_id, on: :update, message: "already exists"
 
   before_create :set_primary
