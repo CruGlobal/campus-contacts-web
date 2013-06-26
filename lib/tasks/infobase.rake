@@ -73,7 +73,8 @@ namespace :infobase do
       # team_leader_role_id = Organization.find(1).ministry_roles.find_by_name("Missional Team Leader").id
       puts "Adding team members"
       i = 0
-      Ccc::Person.connection.select_all("select * from ministry_missional_team_member").each do |mtm|
+      mtms = Ccc::Person.connection.select_all("select * from ministry_missional_team_member")
+      mtms.each do |mtm|
         # personID, teamID
         team = team_id_to_ministry[mtm['teamID']]
         next unless team
@@ -119,18 +120,23 @@ namespace :infobase do
             mh_person.phone_number = phone.number unless mh_person.phone_numbers.detect {|p| p.number == phone.number}
           end
         end
-        # check to see if this person is on staff
-        response = RestClient.get(APP_CONFIG['infobase_url'] + '/api/v1/people/is_staff', params: {'people[]' => ccc_person.id}, content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\"")
-        json = JSON.parse(response)
-        mh_person.is_staff = json['people'][ccc_person.id.to_s]
 
-        mh_person.save(validate: false)
+        mh_person.sp_person_id = mh_person.si_person_id = mh_person.pr_person_id = mh_person.infobase_person_id = ccc_person.id
+        mh_person.save(validate: false) if mh_person.changed?
 
 
         team.add_admin(mh_person)
 
         i += 1
         puts i if i % 1000 == 0
+      end
+
+      # update is_staff column
+      params = {people: mtms.collect {|mtm|  mtm['personID']}.join(',')}
+      response = RestClient.post(APP_CONFIG['infobase_url'] + '/api/v1/people/is_staff', params.to_json, content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\"")
+      json = JSON.parse(response)
+      json['people'].each do |ccc_person_id, is_staff|
+        Person.where(infobase_person_id: ccc_person_id).update_all(is_staff: is_staff)
       end
 
       # next is activity

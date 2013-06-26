@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130626160951) do
+ActiveRecord::Schema.define(:version => 20130626170858) do
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -559,6 +559,7 @@ ActiveRecord::Schema.define(:version => 20130626160951) do
     t.integer  "pr_person_id"
     t.boolean  "faculty",                                      :default => false, :null => false
     t.boolean  "is_staff",                                     :default => false, :null => false
+    t.integer  "infobase_person_id"
   end
 
   add_index "people", ["accountNo"], :name => "accountNo_ministry_Person"
@@ -566,6 +567,7 @@ ActiveRecord::Schema.define(:version => 20130626160951) do
   add_index "people", ["crs_profile_id"], :name => "index_people_on_crs_profile_id"
   add_index "people", ["fb_uid"], :name => "index_ministry_person_on_fb_uid"
   add_index "people", ["first_name", "last_name"], :name => "firstName_lastName"
+  add_index "people", ["infobase_person_id"], :name => "index_people_on_infobase_person_id"
   add_index "people", ["last_name"], :name => "lastname_ministry_Person"
   add_index "people", ["pr_person_id"], :name => "index_people_on_pr_person_id"
   add_index "people", ["si_person_id"], :name => "index_people_on_si_person_id"
