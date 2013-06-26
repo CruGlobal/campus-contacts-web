@@ -202,8 +202,9 @@ class Person < ActiveRecord::Base
     joins(:organizational_labels).where('organizational_labels.label_id' => label.id, 'organizational_labels.removed_date' => nil)
   }
 
-  scope :faculty, -> { where(faculty: true) }
-  scope :students, -> { where(faculty: false) }
+  scope :non_staff, -> { where(is_staff: false) }
+  scope :faculty, -> { non_staff.where(faculty: true) }
+  scope :students, -> { non_staff.where(faculty: false) }
 
   def filtered_interactions(viewer, current_org)
     q = Array.new
