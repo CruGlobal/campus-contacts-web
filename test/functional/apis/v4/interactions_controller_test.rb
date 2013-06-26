@@ -48,9 +48,11 @@ class Apis::V4::InteractionsControllerTest < ActionController::TestCase
 
   context '.destroy' do
     should 'create and return a interaction' do
-      assert_difference "Interaction.count", -1 do
+      assert_difference "Interaction.count", 0 do
         delete :destroy, id: @interaction.id, secret: @client.secret
       end
+      @interaction.reload
+      assert_not_nil @interaction.deleted_at, @interaction.inspect
     end
   end
 
