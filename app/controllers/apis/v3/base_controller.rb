@@ -60,6 +60,8 @@ class Apis::V3::BaseController < ApplicationController
              callback: params[:callback]
       return false
     end
+
+    current_organization #ensure the current organization is initialized
   end
 
   def current_user
