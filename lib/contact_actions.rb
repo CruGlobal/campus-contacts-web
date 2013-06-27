@@ -57,7 +57,7 @@ module ContactActions
         # Record that this person was created so we can notify leaders/admins
         NewPerson.create(person_id: @person.id, organization_id: @organization.id)
 
-        if params[:permissions_ids]
+        if params[:permissions_ids].present?
           @organization.add_permission_to_person(@person, params[:permissions_ids].first.to_i, current_person.id)
         else
           @organization.add_permission_to_person(@person, Permission::NO_PERMISSIONS_ID, current_person.id)

@@ -732,6 +732,7 @@ class ContactsControllerTest < ActionController::TestCase
   context "Creating contacts" do
     setup do
       @user, org = admin_user_login_with_org
+      @org = @user.person.organizations.first
       @predefined_survey = Factory(:survey, organization: org)
       APP_CONFIG['predefined_survey'] = @predefined_survey.id
       @year_in_school_question = Factory(:year_in_school_element)
@@ -784,12 +785,14 @@ class ContactsControllerTest < ActionController::TestCase
       assert_equal "Any", Person.last.first_name
     end
 
-    should "retain all the permissions if there's a merge (creating contact with the same first_name, last_name and email with an existing person in the db) during create contacts" do
+    should "retain all the labels if there's a merge (creating contact with the same first_name, last_name and email with an existing person in the db)" do
+      @person = Factory(:person, email:'abcd@email.com')
+      @org.add_contact(@person)
       @org_child = Factory(:organization, :name => "neilmarion", :parent => @user.person.organizations.first, :show_sub_orgs => 1)
       @request.session[:current_organization_id] = @org_child.id
 
       assert_no_difference "Person.count" do
-        xhr :post, :create, {:person => {:first_name => @user.person.first_name, :last_name => @user.person.last_name, :email_address => {:email => @user.person.email, :primary => 1}}, :labels => [Permission.user.id.to_s, Permission.no_permissions.id.to_s] }
+        xhr :post, :create, {:person => {:first_name => @person.first_name, :last_name => @person.last_name, :email_address => {:email => @person.email, :primary => 1}}, :labels => [Label.leader.id.to_s, Label.involved.id.to_s]}
       end
     end
   end
