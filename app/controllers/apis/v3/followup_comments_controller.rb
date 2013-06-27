@@ -21,6 +21,15 @@ class Apis::V3::FollowupCommentsController < Apis::V3::BaseController
     followup_comment.organization_id = current_organization.id
     followup_comment.interaction_type_id = InteractionType.comment.id
     if followup_comment.save
+      if params[:followup_comment][:status].present?
+        person = followup_comment.receiver
+        org_permission = person.organizational_permission_for_org(current_organization)
+        unless org_permission.present?
+          current_organization.add_contact(person)
+          org_permission = person.organizational_permission_for_org(current_organization)
+        end
+        org_permission.update_attribute(:followup_status, params[:followup_comment][:status])
+      end
       render json: fake_serialize(followup_comment),
              status: :created,
              callback: params[:callback],
@@ -35,6 +44,15 @@ class Apis::V3::FollowupCommentsController < Apis::V3::BaseController
   def update
     custom_attr = translate_followup_comment_to_interaction(params[:followup_comment])
     if @followup_comment.update_attributes(custom_attr)
+      if params[:followup_comment][:status].present?
+        person = @followup_comment.receiver
+        org_permission = person.organizational_permission_for_org(current_organization)
+        unless org_permission.present?
+          current_organization.add_contact(person)
+          org_permission = person.organizational_permission_for_org(current_organization)
+        end
+        org_permission.update_attribute(:followup_status, params[:followup_comment][:status])
+      end
       render json: fake_serialize(@followup_comment),
              callback: params[:callback],
              scope: {include: includes, organization: current_organization}
