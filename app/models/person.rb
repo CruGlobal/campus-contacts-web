@@ -528,6 +528,10 @@ class Person < ActiveRecord::Base
     organizational_permissions.where(organization_id: org.id, archive_date: nil)
   end
 
+  def organizational_permission_for_org(org)
+    organizational_permissions.where(organization_id: org.id, archive_date: nil).try(:first)
+  end
+
   def organizational_labels_for_org(org)
     organizational_labels.where(organization_id: org.id)
   end
