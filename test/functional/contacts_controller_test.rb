@@ -14,6 +14,31 @@ class ContactsControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
+  context "Viewing the new All Contacts page" do
+    context "when user is implied admin" do
+      setup do
+        @user = Factory(:user_with_auxs)
+        @person = @user.person
+        @org = Factory(:organization)
+        sign_in @user
+        @request.session[:current_organization_id] = @org.id
+
+        @child_org = Factory(:organization, ancestry: @org.id)
+        Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.admin)
+
+        @predefined = Factory(:survey, organization: @org)
+        APP_CONFIG['predefined_survey'] = @predefined.id
+        @year_in_school_question = Factory(:year_in_school_element)
+        @predefined.questions << @year_in_school_question
+      end
+
+      should "show the admin permission" do
+        get :all_contacts
+        assert assigns(:permissions_for_assign).include?(Permission.admin), assigns(:permissions_for_assign).inspect
+      end
+    end
+  end
+
   context "After logging in a person with orgs" do
     setup do
       @user, org = admin_user_login_with_org
@@ -314,7 +339,7 @@ class ContactsControllerTest < ActionController::TestCase
       @contact3 = Factory(:person)
       @contact4 = Factory(:person)
       @contact5 = Factory(:person)
-      
+
       @org.add_leader(@user.person, @user.person)
       @org.add_contact(@contact1)
       @org.add_contact(@contact2)

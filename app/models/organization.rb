@@ -323,6 +323,14 @@ class Organization < ActiveRecord::Base
     end
   end
 
+  def parents
+    ancestry.present? ? Organization.where(id: ancestry.split('/')) : []
+  end
+
+  def self_and_parents
+    [self] + parents
+  end
+
   def self_and_children
     [self] + children
   end
