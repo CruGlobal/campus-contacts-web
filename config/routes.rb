@@ -124,7 +124,7 @@ Mh::Application.routes.draw do
     end
   end
 
-  match "/people" => "contacts#index"
+  match "/people" => "contacts#all_contacts"
   match "/old_directory" => "people#index"
   resources :people, :only => [:show, :create, :edit, :update, :destroy] do
     collection do

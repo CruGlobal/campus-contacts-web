@@ -88,7 +88,7 @@ class ImportsController < ApplicationController
 
     flash[:notice] = t('contacts.import_contacts.success')
 
-    redirect_to controller: :contacts
+    redirect_to all_contacts_path
   end
 
 
