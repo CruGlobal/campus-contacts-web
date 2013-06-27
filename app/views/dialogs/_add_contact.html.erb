@@ -32,6 +32,16 @@
                 <%= render 'people/person_form', person: person %>
               </div>
               <div class="form_group_label">
+                <%= t('application.add_contact.title_permission') %>
+              </div>
+              <div class="form_group_fields">
+                <% @permissions_for_assign.each do |permission| %>
+                  <% checked = permission.id == Permission::NO_PERMISSIONS_ID %>
+                  <%= render partial: 'shared/permission', locals: {permission: permission, checked: checked} %>
+                <% end %>
+                <br/>
+              </div>
+              <div class="form_group_label">
                 <%= t('application.add_contact.title_label') %>
                 <span class='form_group_optional'>
                   <%= t('application.add_contact.title_optional') %>

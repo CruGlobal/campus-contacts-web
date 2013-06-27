@@ -46,8 +46,8 @@ module ContactActions
 
       if @person.save
         if params[:labels].present?
-          params[:labels].each do |permission_id|
-            OrganizationalPermission.find_or_create_by_person_id_and_organization_id_and_permission_id(@person.id, current_organization.id, permission_id, added_by_id: current_user.person.id) if permission_id.present?
+          params[:labels].each do |label_id|
+            OrganizationalLabel.find_or_create_by_person_id_and_organization_id_and_label_id(@person.id, current_organization.id, label_id, added_by_id: current_person.id) if permission_id.present?
           end
         end
 
@@ -57,21 +57,27 @@ module ContactActions
         # Record that this person was created so we can notify leaders/admins
         NewPerson.create(person_id: @person.id, organization_id: @organization.id)
 
-        create_contact_at_org(@person, @organization)
-        @person.unachive_contact_permission(@organization)
+        if params[:permissions_ids]
+          @organization.add_permission_to_person(@person, params[:permissions_ids].first.to_i, current_person.id)
+        else
+          @organization.add_permission_to_person(@person, Permission::NO_PERMISSIONS_ID, current_person.id)
+        end
+
+        # create_contact_at_org(@person, @organization)
+        # @person.unachive_contact_permission(@organization)
 
         if params[:assign_to_me] == 'true'
           ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
           ContactAssignment.create!(person_id: @person.id, organization_id: @organization.id, assigned_to_id: current_person.id)
         end
-        
+
 				if @add_to_group_tag == '1'
     			@group = @organization.groups.find(params[:add_to_group])
 		      @group_membership = @group.group_memberships.find_or_initialize_by_person_id(@person.id)
 		      @group_membership.permission = params[:add_to_group_permission]
 		      @group_membership.save
 				end
-        
+
         respond_to do |wants|
           wants.html { redirect_to :back }
           wants.mobile { redirect_to :back }

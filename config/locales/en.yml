@@ -23,6 +23,7 @@ en:
       add_contact: Add a contact to %{org}
       title_bio: Bio
       title_label: Labels
+      title_permission: Permissions
       title_surveys: Survey
       title_optional: (Optional)
       survey_mode_instructions: If the person you are adding is standing next to you, click "Enter Survey Mode" from the top right corner of your screen.
