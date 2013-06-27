@@ -43,4 +43,5 @@
 //= require imports
 //= require interactions
 //= require movement_indicator_suggestions
+//= require movement_indicators
 

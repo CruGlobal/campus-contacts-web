@@ -1,0 +1,12 @@
+<% if interactions.present? %>
+<ul id="indicator_details_list">
+  <% interactions.each do |interaction| %>
+    <li>
+      <%= interaction.created_at.to_date.to_s(:db) %>
+      <%= interaction.creator %>
+    </li>
+  <% end %>
+</ul>
+<% else %>
+  None found
+<% end %>

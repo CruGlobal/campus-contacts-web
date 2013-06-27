@@ -1,7 +1,9 @@
 Mh::Application.routes.draw do
 
   resources :movement_indicators, only: [:index, :create] do
-    get :done
+    collection do
+      get :details
+    end
   end
 
   resources :movement_indicator_suggestions do

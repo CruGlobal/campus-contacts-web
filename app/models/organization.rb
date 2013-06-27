@@ -230,10 +230,14 @@ class Organization < ActiveRecord::Base
     @last_week ||= 1.week.ago.end_of_week.to_date
   end
 
-  def interactions_count(type, start_date = nil, end_date = nil)
+  def interactions_of_type(type, start_date = nil, end_date = nil)
     start_date ||= last_push_to_infobase
     last_week ||= last_week
-    interactions.joins(:interaction_type).where("interaction_types.i18n = ? AND interactions.created_at > ? AND interactions.created_at <= ?", type, start_date, end_date).count
+    interactions.joins(:interaction_type).where("interaction_types.i18n = ? AND interactions.created_at > ? AND interactions.created_at <= ?", type, start_date, end_date)
+  end
+
+  def interactions_count(type, start_date = nil, end_date = nil)
+    interactions_of_type(type, start_date, end_date).count
   end
 
   def sms_gateway
