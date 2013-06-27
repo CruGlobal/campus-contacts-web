@@ -1,10 +1,11 @@
+<% (current_organization.last_push_to_infobase < current_organization.last_week).tap do |stats_need_reported| %>
 <div class="titlebar titlebarmod">
   <h1><%= t('movement_indicator_suggestions.index.title', org_name: current_organization) %></h1>
 </div>
 <div id="report_feed">
   <h2 class="fancy"><%= t('.list_heading') %></h2>
   <div class="feed_panel" >
-    <% if current_organization.last_push_to_infobase < current_organization.last_week %>
+    <% if stats_need_reported %>
       <div class="feed_panel_top">
         <ul id="panel_nav">
           <div id="report_feed_date"><strong><%= l(current_organization.last_push_to_infobase) %></strong>
@@ -17,7 +18,7 @@
 
     <div class="feed_content">
 
-      <% if current_organization.last_push_to_infobase >= current_organization.last_week %>
+      <% if !stats_need_reported %>
         <p>
           The submission of Movement Indicators for this movement is up to date. Please check back next week.
           If you'd like to change any numbers you submitted previously please go to <%= link_to('Infobase', 'http://infobase.uscm.org', target: '_blank') %>.
@@ -168,10 +169,13 @@
     <% end %>
     <div class="report_buttons">
       <%= link_to('<button class="large_gray" id="report_back_button">Back</button>'.html_safe, movement_indicator_suggestions_path) %>
-      <%= link_to('<button class="red_accent" id="report_submit_button">Submit</button>'.html_safe, movement_indicators_path, method: :post, confirm: "If you want to change these number later you will need to go to Infobase to do so.") %>
+      <% if stats_need_reported %>
+        <%= link_to('<button class="red_accent" id="report_submit_button">Submit</button>'.html_safe, movement_indicators_path, method: :post, confirm: "If you want to change these number later you will need to go to Infobase to do so.") %>
+      <% end %>
     </div>
 
   </div>
 </div>
 
+<% end %>
 <div id="indicator_dialog"></div>
