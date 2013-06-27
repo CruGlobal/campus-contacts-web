@@ -62,7 +62,7 @@ button {
     /*--Other--*/
     height: 32px;
     min-width: 85px;
-    padding: 0 9px;
+    padding: 0;
     display: block;
     cursor: pointer;
     &:hover {
@@ -84,6 +84,10 @@ button {
       /* W3C */
       filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e5a189', endColorstr='#c93b0a',GradientType=0 );
       /* IE6-9 */
+    }
+    &a {
+      display:block;
+      line-height:30px;
     }
   }
   &.large_gray {
@@ -121,11 +125,15 @@ button {
     /*--Other--*/
     height: 32px;
     min-width: 85px;
-    padding: 0 9px;
+    padding: 0;
     display: block;
     cursor: pointer;
     &:hover {
       background: #808284;
+    }
+    &a {
+      display:block;
+      line-height:30px;
     }
   }
   &.large_lightgray {
@@ -163,11 +171,16 @@ button {
     /*--Other--*/
     height: 32px;
     min-width: 85px;
-    padding: 0 9px;
+    padding: 0;
     display: block;
     cursor: pointer;
     &:hover {
       background: #f6f6f6;
+    }
+
+    &a {
+      display:block;
+      line-height:30px;
     }
   }
   &.action_gray {
@@ -204,12 +217,16 @@ button {
     text-shadow: 0px -1px #333333;
     /*--Other--*/
     height: 24px;
-    padding: 0 9px;
+    padding: 0;
     margin: 0 0 0 0;
     display: block;
     cursor: pointer;
     &:hover {
       background: #808284;
+    }
+    &a {
+      display:block;
+      line-height:22px;
     }
   }
   &.action_lightblue {
@@ -246,7 +263,7 @@ button {
     text-shadow: 0px 1px #FFF;
     /*--Other--*/
     height: 24px;
-    padding: 0 12px;
+    padding: 0;
     display: block;
     cursor: pointer;
   }
@@ -1030,4 +1047,222 @@ img#profile_image {
 
 #person_email_address_email {
   margin-right: 40px;
+}
+
+/* NEW MODS 06/25/13 */
+
+/*--- Common CSS for Suggestions and Report Pages -*/
+
+.index.carea h1 {
+    font-size:21px;
+}
+
+
+#suggestions_movement_selector select, #report_movement_selector select {
+    width:160px;
+}
+
+
+#suggestions_feed, #report_feed {
+    margin:0px auto 24px;
+}
+
+
+#suggestions_feed h2.fancy, #report_feed h2.fancy {
+    font-size:21px;
+    margin:8px 2px 12px;
+}
+
+
+#suggestions_feed, #suggestions_feed .feed_panel, #report_feed, #report_feed .feed_panel {
+    width:572px;
+    float:none;
+}
+
+
+#suggestions_feed ul#panel_nav, #report_feed ul#panel_nav {
+    border-bottom: 1px solid #c0c0c0;
+    -webkit-border-radius: 4px 4px 0 0;
+    border-radius: 4px 4px 0 0;
+    background: #fcfcfc;
+    background: -moz-linear-gradient(top, #fcfcfc 0%, #f6f6f6 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fcfcfc), color-stop(100%, #f6f6f6));
+    background: -webkit-linear-gradient(top, #fcfcfc 0%, #f6f6f6 100%);
+    background: -o-linear-gradient(top, #fcfcfc 0%, #f6f6f6 100%);
+    background: -ms-linear-gradient(top, #fcfcfc 0%, #f6f6f6 100%);
+    background: linear-gradient(to bottom, #fcfcfc 0%, #f6f6f6 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#f6f6f6',GradientType=0 );
+    font-family: Arial;
+    font-size: 11px;
+    font-weight: bold;
+    color: #333;
+    line-height: 35px;
+    text-shadow: 0px 1px #fff;
+    height: 35px;
+    width: 572px;
+    margin: 0;
+    padding: 0;
+    float: left;
+    display: block;
+    list-style-type: none;
+}
+
+
+#suggestions_feed .feed_content, #report_feed .feed_content {
+    padding:60px 24px 24px;
+}
+
+
+.suggestions_buttons, .report_buttons {
+    height:32px;
+    margin: 24px 0 0 0;
+}
+
+
+button#suggestions_next_button, button#report_submit_button {
+    float: right;
+}
+
+
+#suggestions_feed button a:link, #suggestions_feed button a:visited, #report_feed button a:link, #report_feed button a:visited {
+    color:#FFF;
+    text-decoration:none;
+}
+
+
+#suggestions_feed button:hover, #report_feed button:hover {
+    color:#FFFFFF;
+    text-shadow:none;
+    text-decoration:none;
+}
+
+
+/*--- Movement Indicator Suggestions Page -----*/
+
+tfoot#declined_suggestions td {
+    padding:24px 0px 12px 8px;
+}
+
+
+tbody#suggestions td{
+    padding:12px 8px;
+    color: #808284;
+    font-weight:normal;
+}
+
+
+tbody#suggestions td a{
+    font-weight:bold;
+}
+
+
+tbody#suggestions tr{
+    border-top:1px solid #f2f2f2;
+}
+
+tbody#suggestions tr:first-child {
+  border-top:none;
+}
+
+
+/*--- Report Movement Indicators Page ---------*/
+
+
+#report_feed_date {
+    font-size:14px;
+    margin:0px;
+    width:100%;
+    text-align:center;
+    color:#808284;
+    font-weight:normal;
+}
+
+#report_feed_date strong {
+    font-weight:bold;
+}
+
+#report_feed ul#panel_nav :hover {
+    color:inherit;
+    cursor:default;
+    text-shadow:inherit;
+    color:#808284;
+}
+
+
+#report_feed .feed_content {
+    padding:60px 24px 24px;
+    color:#808284;
+}
+
+
+#report_feed .feed_box {
+    padding:36px 16px;
+}
+
+
+#report_feed table td {
+    font-weight:normal;
+}
+
+
+#report_feed_date span.tiplight {
+    position:relative;
+    top:-2px;
+}
+
+
+#report_feed span.tiplight {
+    vertical-align:middle;
+}
+
+
+#report_feed table tr td:first-child {
+    min-width:200px;
+    text-align:right;
+}
+
+
+#report_feed table tr td:nth-child(3) {
+    min-width:120px;
+    text-align:right;
+}
+
+
+#report_feed table tbody tr:nth-child(6) {
+    height:72px;
+}
+
+
+#report_feed table tbody tr:nth-child(6) td {
+    padding-bottom:40px;
+}
+
+
+#report_feed table tfoot tr:first-child {
+    height:54px;
+    vertical-align:bottom;
+    font-family:Georgia, serif;
+    font-size:14px;
+    font-weight:normal;
+}
+
+
+#report_feed td input {
+    width:32px;
+}
+
+
+button#report_back_button {
+    float:left;
+}
+
+/* END NEW MODS 06/25/13 */
+
+/* CLEANUP MODS 06/27/13 */
+#movement_indicator_suggestions_controller #main, #movement_indicator_suggestions_controller #gandalfthewhite{
+  border:none;
+}
+
+#movement_indicators_controller #main, #movement_indicators_controller #gandalfthewhite{
+  border:none;
 }
