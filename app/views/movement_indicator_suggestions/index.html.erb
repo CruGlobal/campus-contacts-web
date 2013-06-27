@@ -20,7 +20,7 @@
           <% end %>
         </table>
         <div class="suggestions_buttons">
-          <button class="large_gray" id="suggestions_next_button"><%= link_to(t('welcome.wizard.next'), movement_indicators_path) %>
+          <%= link_to raw("<button class='large_gray' id='suggestions_next_button'>#{t('welcome.wizard.next')}</button>"), movement_indicators_path %>
           </button>                
         </div>
       </div>
