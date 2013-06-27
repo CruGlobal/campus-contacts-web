@@ -4,14 +4,16 @@
 <div id="report_feed">
   <h2 class="fancy"><%= t('.list_heading') %></h2>
   <div class="feed_panel" >
-    <div class="feed_panel_top">
-      <ul id="panel_nav">
-        <div id="report_feed_date"><strong><%= l(current_organization.last_push_to_infobase) %></strong>
-          &nbsp;&nbsp;to&nbsp;&nbsp;
-          <strong><%= l(current_organization.last_week) %> <%= tip('The pre-filled numbers below are a compilation of all activity in MissionHub within the date range specified. Any activity recorded between the end date and today will not be reflected below.') %></strong>
-        </div>
-      </ul>
-    </div>
+    <% if current_organization.last_push_to_infobase < current_organization.last_week %>
+      <div class="feed_panel_top">
+        <ul id="panel_nav">
+          <div id="report_feed_date"><strong><%= l(current_organization.last_push_to_infobase) %></strong>
+            &nbsp;&nbsp;to&nbsp;&nbsp;
+            <strong><%= l(current_organization.last_week) %> <%= tip('The pre-filled numbers below are a compilation of all activity in MissionHub within the date range specified. Any activity recorded between the end date and today will not be reflected below.') %></strong>
+          </div>
+        </ul>
+      </div>
+    <% end %>
 
     <div class="feed_content">
 
