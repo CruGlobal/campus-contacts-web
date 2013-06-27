@@ -47,7 +47,7 @@ module ContactActions
       if @person.save
         if params[:labels].present?
           params[:labels].each do |label_id|
-            OrganizationalLabel.find_or_create_by_person_id_and_organization_id_and_label_id(@person.id, current_organization.id, label_id, added_by_id: current_person.id) if permission_id.present?
+            OrganizationalLabel.find_or_create_by_person_id_and_organization_id_and_label_id(@person.id, current_organization.id, label_id, added_by_id: current_person.id) if label_id.present?
           end
         end
 

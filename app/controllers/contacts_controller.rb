@@ -448,7 +448,7 @@ class ContactsController < ApplicationController
           @people_scope = @label_to.label_contacts_from_org(@organization)
         end
       end
-      @people_scope ||= current_organization.all_people_with_archived
+      @people_scope ||= current_organization.all_people
     end
 
     def get_and_merge_unfiltered_people
