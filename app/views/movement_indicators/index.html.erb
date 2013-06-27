@@ -1,152 +1,175 @@
-<h1><%= t('movement_indicator_suggestions.index.title', org_name: current_organization) %></h1>
-<h2><%= t('.list_heading') %></h2>
-<% if current_organization.last_push_to_infobase >= current_organization.last_week %>
-  <p>
-    You have already pushed your stats for last week. Please check back next week.
-    If you'd like to change any numbers you submitted previously please go to <%= link_to('Infobase', 'http://infobase.uscm.org', target: '_blank') %>.
-  </p>
-<% else %>
-  <table border="0">
-    <thead>
-      <tr>
-        <td colspan="4">
-          <strong><%= l(current_organization.last_push_to_infobase) %></strong>
-          to
+<div class="titlebar titlebarmod">
+  <h1><%= t('movement_indicator_suggestions.index.title', org_name: current_organization) %></h1>
+</div>
+<div id="report_feed">
+  <h2 class="fancy"><%= t('.list_heading') %></h2>
+  <div class="feed_panel" >
+    <div class="feed_panel_top">
+      <ul id="panel_nav">
+        <div id="report_feed_date"><strong><%= l(current_organization.last_push_to_infobase) %></strong>
+          &nbsp;&nbsp;to&nbsp;&nbsp;
           <strong><%= l(current_organization.last_week) %> <%= tip('The pre-filled numbers below are a compilation of all activity in MissionHub within the date range specified. Any activity recorded between the end date and today will not be reflected below.') %></strong>
-        </td>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Spiritual Conversations</td>
-        <td>
-          <%= text_field_tag :spiritual_conversation, current_organization.interactions_count('spiritual_conversation') %>
-          <%= tip('How many people have you engaged in a spiritual conversation but did not present the gospel and bring them to a point of decision.') %>
-        </td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-      </tr>
-      <tr>
-        <td>Personal Evangelism </td>
-        <td>
-          <%= text_field_tag :gospel_presentation, current_organization.interactions_count('gospel_presentation') %>
-          <%= tip('How many people have heard the gospel and brought to a point of decision through personal evangelism? [each time you share the gospel with the same person count it]') %>
-        </td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-      </tr>
-      <tr>
-        <td>Personal Evangelism Decisions </td>
-        <td>
-          <%= text_field_tag :prayed_to_receive_christ, current_organization.interactions_count('prayed_to_receive_christ') %>
-          <%= tip('How many people have indicated a decision to receive Christ as their Savior and Lord after hearing a personal presentation of the Gospel?') %>
-        </td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-      </tr>
-      <tr>
-        <td>Holy Spirit Presentations </td>
-        <td>
-          <%= text_field_tag :holy_spirit_presentation, current_organization.interactions_count('holy_spirit_presentation') %>
-          <%= tip('How many people have heard a presentation of the ministry of the Holy Spirit and been given the opportunity to respond?') %>
-        </td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-      </tr>
-      <tr>
-        <td>Graduating on Mission </td>
-        <td>
-          <%= text_field_tag :graduating_on_mission, current_organization.interactions_count('graduating_on_mission') %>
-          <%= tip('How many transitioning students have you walked through the Five Things, and sent out with a personal plan to live missionally as Christ-centered laborers?') %>
-        </td>
-        <td>Faculty on Mission </td>
-        <td>
-          <%= text_field_tag :faculty_on_mission, current_organization.interactions_count('faculty_on_mission') %>
-          <%= tip('How many faculty have you walked through the Five Things, and sent with a personal plan to live missionally as Christ-centered laborers? Or how many faculty have you sent to launch movements in someplace new [another country, another school, another department etc.]?') %>
-        </td>
-      </tr>
-      <tr>
-        <td>Group Evangelism </td>
-        <td>
-          <%= text_field_tag :group_evangelism %>
-          <%= tip('What was the total number of people who heard the gospel and brought to a point of decision through group evangelism? ') %>
-        </td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-      </tr>
-      <tr>
-        <td>Group Evangelism Decisions </td>
-        <td>
-          <%= text_field_tag :group_evangelism_decision %>
-          <%= tip('How many people have indicated a decision to receive Christ as their Savior and Lord after hearing a large group presentation of the Gospel?') %>
-        </td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-      </tr>
-      <tr>
-        <td>Media Exposures </td>
-        <td>
-          <%= text_field_tag :media_exposure %>
-          <%= tip('How many people have been exposed to gospel content with an opportunity to respond through media exposures?') %>
-        </td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-      </tr>
-      <tr>
-        <td>Media Exposure Decisions </td>
-        <td>
-          <%= text_field_tag :media_exposure_decisions %>
-          <%= tip('How many people have indicated a decision to receive Christ as their Savior and Lord after being exposed to the Gospel via media?') %>
-        </td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td>&nbsp;</td>
-        <td><i>Students</i></td>
-        <td>&nbsp;</td>
-        <td><i>Faculty</i></td>
-      </tr>
-      <tr>
-        <td>Involved</td>
-        <td>
-          <%= text_field_tag :involved_students, current_organization.people.students.with_label(Label.involved).count %>
-          <%= tip('How many students are regularly involved - attending movement events?') %>
-        </td>
-        <td>&nbsp;</td>
-        <td>
-          <%= text_field_tag :involved_faculty, current_organization.people.faculty.with_label(Label.involved).count %>
-          <%= tip('How many faculty are regularly involved?') %>
-        </td>
-      </tr>
-      <tr>
-        <td>Engaged Disciples</td>
-        <td>
-          <%= text_field_tag :engaged_disciple, current_organization.people.students.with_label(Label.engaged_disciple).count %>
-          <%= tip('How many students have intentionally engaged someone in a spiritual conversation within the past semester?') %>
-        </td>
-        <td>&nbsp;</td>
-        <td>
-          <%= text_field_tag :engaged_disciple_faculty, current_organization.people.faculty.with_label(Label.engaged_disciple).count %>
-          <%= tip('How many faculty have intentionally engaged in a spiritual conversation within the past semester?') %>
-        </td>
-      </tr>
-      <tr>
-        <td>Leader</td>
-        <td>
-          <%= text_field_tag :leader, current_organization.people.students.with_label(Label.leader).count %>
-          <%= tip('How many students are leading small groups of Win, Build, Send ministry?') %>
-        </td>
-        <td>&nbsp;</td>
-        <td>
-          <%= text_field_tag :leader_faculty, current_organization.people.faculty.with_label(Label.leader).count %>
-          <%= tip('How many faculty are leading small groups of Win, Build, Send ministry?') %>
-        </td>
-      </tr>
-    </tfoot>
-  </table>
-  <%= link_to('Back', movement_indicator_suggestions_path) %><br />
-  <%= link_to('Submit', movement_indicators_path, method: :post, confirm: "If you want to change these number later you will need to go to Infobase to do so.") %>
-<% end %>
+        </div>
+      </ul>
+    </div>
+
+    <div class="feed_content">
+
+      <% if current_organization.last_push_to_infobase >= current_organization.last_week %>
+        <p>
+          The submission of Movement Indicators for this movement is up to date. Please check back next week.
+          If you'd like to change any numbers you submitted previously please go to <%= link_to('Infobase', 'http://infobase.uscm.org', target: '_blank') %>.
+        </p>
+      <% else %>
+
+        <div class="feed_box">
+        <table border="0">
+          <tbody>
+          <tr>
+            <td>Spiritual Conversations</td>
+            <td nowrap="nowrap">
+              <%= text_field_tag :spiritual_conversation, current_organization.interactions_count('spiritual_conversation') %>
+              <%= tip('How many people have you engaged in a spiritual conversation but did not present the gospel and bring them to a point of decision.') %>
+              <%= link_to(image_tag('magnify.png'), '#', data: {behavior: 'indicator_list'}) %>
+            </td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td>Personal Evangelism </td>
+            <td>
+              <%= text_field_tag :gospel_presentation, current_organization.interactions_count('gospel_presentation') %>
+              <%= tip('How many people have heard the gospel and brought to a point of decision through personal evangelism? [each time you share the gospel with the same person count it]') %>
+              <%= link_to(image_tag('magnify.png'), '#', data: {behavior: 'indicator_list'}) %>
+            </td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td>Personal Evangelism Decisions </td>
+            <td>
+              <%= text_field_tag :prayed_to_receive_christ, current_organization.interactions_count('prayed_to_receive_christ') %>
+              <%= tip('How many people have indicated a decision to receive Christ as their Savior and Lord after hearing a personal presentation of the Gospel?') %>
+              <%= link_to(image_tag('magnify.png'), '#', data: {behavior: 'indicator_list'}) %>
+            </td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td>Holy Spirit Presentations </td>
+            <td>
+              <%= text_field_tag :holy_spirit_presentation, current_organization.interactions_count('holy_spirit_presentation') %>
+              <%= tip('How many people have heard a presentation of the ministry of the Holy Spirit and been given the opportunity to respond?') %>
+              <%= link_to(image_tag('magnify.png'), '#', data: {behavior: 'indicator_list'}) %>
+            </td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td>Graduating on Mission </td>
+            <td>
+              <%= text_field_tag :graduating_on_mission, current_organization.interactions_count('graduating_on_mission') %>
+              <%= tip('How many transitioning students have you walked through the Five Things, and sent out with a personal plan to live missionally as Christ-centered laborers?') %>
+              <%= link_to(image_tag('magnify.png'), '#', data: {behavior: 'indicator_list'}) %>
+            </td>
+            <td>Faculty on Mission </td>
+            <td nowrap="nowrap">
+              <%= text_field_tag :faculty_on_mission, current_organization.interactions_count('faculty_on_mission') %>
+              <%= tip('How many faculty have you walked through the Five Things, and sent with a personal plan to live missionally as Christ-centered laborers? Or how many faculty have you sent to launch movements in someplace new [another country, another school, another department etc.]?') %>
+              <%= link_to(image_tag('magnify.png'), '#', data: {behavior: 'indicator_list'}) %>
+            </td>
+          </tr>
+          <tr>
+            <td>Group Evangelism </td>
+            <td>
+              <%= text_field_tag :group_evangelism %>
+              <%= tip('What was the total number of people who heard the gospel and brought to a point of decision through group evangelism? ') %>
+            </td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td>Group Evangelism Decisions </td>
+            <td>
+              <%= text_field_tag :group_evangelism_decision %>
+              <%= tip('How many people have indicated a decision to receive Christ as their Savior and Lord after hearing a large group presentation of the Gospel?') %>
+            </td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td>Media Exposures </td>
+            <td>
+              <%= text_field_tag :media_exposure %>
+              <%= tip('How many people have been exposed to gospel content with an opportunity to respond through media exposures?') %>
+            </td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td>Media Exposure Decisions </td>
+            <td>
+              <%= text_field_tag :media_exposure_decisions %>
+              <%= tip('How many people have indicated a decision to receive Christ as their Savior and Lord after being exposed to the Gospel via media?') %>
+            </td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>&nbsp;</td>
+              <td><i>Students</i></td>
+              <td>&nbsp;</td>
+              <td><i>Faculty</i></td>
+            </tr>
+            <tr>
+              <td>Involved</td>
+              <td>
+                <%= text_field_tag :involved_students, current_organization.people.students.with_label(Label.involved).count %>
+                <%= tip('How many students are regularly involved - attending movement events?') %>
+              </td>
+              <td>&nbsp;</td>
+              <td>
+                <%= text_field_tag :involved_faculty, current_organization.people.faculty.with_label(Label.involved).count %>
+                <%= tip('How many faculty are regularly involved?') %>
+              </td>
+            </tr>
+            <tr>
+              <td>Engaged Disciples</td>
+              <td>
+                <%= text_field_tag :engaged_disciple, current_organization.people.students.with_label(Label.engaged_disciple).count %>
+                <%= tip('How many students have intentionally engaged someone in a spiritual conversation within the past semester?') %>
+              </td>
+              <td>&nbsp;</td>
+              <td>
+                <%= text_field_tag :engaged_disciple_faculty, current_organization.people.faculty.with_label(Label.engaged_disciple).count %>
+                <%= tip('How many faculty have intentionally engaged in a spiritual conversation within the past semester?') %>
+              </td>
+            </tr>
+            <tr>
+              <td>Leader</td>
+              <td>
+                <%= text_field_tag :leader, current_organization.people.students.with_label(Label.leader).count %>
+                <%= tip('How many students are leading small groups of Win, Build, Send ministry?') %>
+              </td>
+              <td>&nbsp;</td>
+              <td>
+                <%= text_field_tag :leader_faculty, current_organization.people.faculty.with_label(Label.leader).count %>
+                <%= tip('How many faculty are leading small groups of Win, Build, Send ministry?') %>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+    <% end %>
+    <div class="report_buttons">
+      <button class="large_gray" id="report_back_button"><%= link_to('Back', movement_indicator_suggestions_path) %></button>
+      <button class="red_accent" id="report_submit_button"><%= link_to('Submit', movement_indicators_path, method: :post, confirm: "If you want to change these number later you will need to go to Infobase to do so.") %></button>
+    </div>
+
+  </div>
+</div>
+
+<div id="indicator_dialog"></div>
