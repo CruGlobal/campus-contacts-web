@@ -1,5 +1,5 @@
 class PersonSerializer < ActiveModel::Serializer
-  HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments, :assigned_tos, :followup_comments, :comments_on_me, :rejoicables, :answer_sheets, :all_organizational_permissions, :all_organization_and_children, :interactions, :organizational_labels, :roles]
+  HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments, :assigned_tos, :followup_comments, :comments_on_me, :rejoicables, :answer_sheets, :all_organizational_permissions, :all_organization_and_children, :interactions, :organizational_labels, :roles, :addresses]
 
   HAS_ONE = [:user, :current_address, :organizational_permission]
 
@@ -33,7 +33,7 @@ class PersonSerializer < ActiveModel::Serializer
     end
   end
 
-  [:phone_numbers, :email_addresses, :person_transfers, :user, :answer_sheets, :current_address].each do |relationship|
+  [:phone_numbers, :email_addresses, :person_transfers, :user, :answer_sheets, :current_address, :addresses].each do |relationship|
     define_method(relationship) do
       add_since(object.send(relationship))
     end
