@@ -3,7 +3,7 @@
   <% interactions.each do |interaction| %>
     <li>
       <%= interaction.created_at.to_date.to_s(:db) %>
-      <%= interaction.creator %>
+      <%= interaction.receiver %>
     </li>
   <% end %>
 </ul>
