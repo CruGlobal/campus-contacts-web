@@ -215,11 +215,11 @@ class Organization < ActiveRecord::Base
     @last_push_to_infobase ||= self[:last_push_to_infobase]
     unless @last_push_to_infobase
       # check infobase for a stat entry
-      stats = JSON.parse(RestClient.get(APP_CONFIG['infobase_url'] + "/api/v1/stats/activity?activity_id=#{importable_id}&begin_date=#{created_at.to_date.to_s(:db)}&end_date=#{Date.today.to_s(:db)}", content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\""))
-      if stats['statistics'].present?
+      begin
+        stats = JSON.parse(RestClient.get(APP_CONFIG['infobase_url'] + "/api/v1/stats/activity?activity_id=#{importable_id}&begin_date=#{created_at.to_date.to_s(:db)}&end_date=#{Date.today.to_s(:db)}", content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\""))
         @last_push_to_infobase = Date.parse(stats['statistics'].last['period_end'])
         update_column(:last_push_to_infobase, @last_push_to_infobase) if @last_push_to_infobase
-      else
+      rescue
         @last_push_to_infobase = created_at.to_date.end_of_week
       end
     end
