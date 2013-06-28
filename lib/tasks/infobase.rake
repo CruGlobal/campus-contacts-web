@@ -159,9 +159,11 @@ namespace :infobase do
             if team == m.parent
               m.update_attributes(attribs)
             else
-              # The movement was moved from one team to another
-              m.parent = team
-              m.save!
+              begin
+                # The movement was moved from one team to another
+                m.parent = team
+                m.save!
+              rescue; end
             end
           else
             next unless team
