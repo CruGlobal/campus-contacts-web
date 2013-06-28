@@ -74,7 +74,7 @@ class Apis::V3::OrganizationsController < Apis::V3::BaseController
 
   def available_includes
     [:contacts, :admins, :leaders, :people, :surveys,
-     :groups, :keywords]
+     :groups, :keywords, :labels]
   end
 
 end
