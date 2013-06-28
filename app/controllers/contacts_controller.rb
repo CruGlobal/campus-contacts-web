@@ -365,6 +365,7 @@ class ContactsController < ApplicationController
       filter_archived_only if params[:archived].present?
       filter_by_permission if params[:permission].present?
       filter_by_label if params[:label].present?
+      filter_by_interaction_type if params[:interaction_type].present?
       filter_by_search if params[:do_search].present?
 
       # Sort & Limit Results
@@ -501,6 +502,18 @@ class ContactsController < ApplicationController
       	end
       end
 
+    end
+
+    def filter_by_interaction_type
+    	params[:interaction_type] = [params[:interaction_type]] unless params[:interaction_type].is_a?(Array)
+      if @interaction_types = InteractionType.where("id IN (?)",params[:interaction_type])
+        if params[:do_search].present?
+          @header = I18n.t('contacts.index.matching_seach')
+        else
+          @header = @interaction_types.collect{|desc| desc.title.try('titleize')}.to_sentence
+        end
+        @people_scope = @people_scope.joins(:interactions).where('interactions.organization_id = ? AND interactions.deleted_at IS NULL AND interactions.interaction_type_id IN (?)', current_organization.id, @interaction_types.collect(&:id))
+      end
     end
 
     def filter_by_permission

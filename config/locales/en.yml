@@ -644,6 +644,7 @@ en:
       labels: "Labels"
       permissions: "Permissions"
       more_options: "More"
+      interaction_types: "Interactions"
     all_contacts:
       title: "All Contacts"
       first_name: "First Name"

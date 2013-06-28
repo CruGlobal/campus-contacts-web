@@ -63,6 +63,38 @@
 <ul class="ac_dropdown_list">
 	<li class="ac_dropdown_list_header">
     <a href="#" class="side_toggle arrow_anchor">&#x25B2;</a>
+    <%= t('.interaction_types')%>
+  </li>
+  <div id='interaction_list' class="side_list" style="<%= 'display:block;' if params[:interaction_type].present? %>">
+    <% @organization.interaction_types.exclude_comment.each do |interaction_type| %>
+      <% if params[:include_archived] %>
+        <% count = interaction_type.interaction_receivers_from_org_with_archived(@organization).collect(&:id).count %>
+      <% else %>
+        <% count = interaction_type.interaction_receivers_from_org(@organization).collect(&:id).count %>
+      <% end %>
+      <li class="entry interaction <%= 'selected_entry' if params[:interaction_type].to_i == interaction_type.id %>" data-id="<%= interaction_type.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
+        <% if params[:include_archived] %>
+          <div class="name">
+            <%= link_to interaction_type.title.humanize.titleize,
+                        all_contacts_path(interaction_type: interaction_type.id, include_archived: 'true') %>
+          </div>
+          (<%= count %>)
+        <% else %>
+          <div class="name">
+            <%= link_to interaction_type.title.humanize.titleize,
+                        all_contacts_path(interaction_type: interaction_type.id) %>
+          </div>
+          (<%= count %>)
+        <% end %>
+      </li>
+    <% end %>
+  </div>
+</ul>
+
+
+<ul class="ac_dropdown_list">
+	<li class="ac_dropdown_list_header">
+    <a href="#" class="side_toggle arrow_anchor">&#x25B2;</a>
     <%= t('.permissions')%>
   </li>
   <div id='permission_list' class="side_list" style="<%= 'display:block;' if params[:permission].present? %>">

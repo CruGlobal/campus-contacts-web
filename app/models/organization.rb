@@ -94,7 +94,7 @@ class Organization < ActiveRecord::Base
   end
 
   def interaction_types
-    return InteractionType.where(organization_id: [0,id]).order('id')
+    return InteractionType.where(organization_id: [0, id]).order('id')
   end
 
   def interaction_privacy_settings

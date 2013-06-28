@@ -37,6 +37,50 @@ class ContactsControllerTest < ActionController::TestCase
         assert assigns(:permissions_for_assign).include?(Permission.admin), assigns(:permissions_for_assign).inspect
       end
     end
+    context "when user is admin" do
+      setup do
+        @user = Factory(:user_with_auxs)
+        @person = @user.person
+        @org = Factory(:organization)
+        sign_in @user
+        @request.session[:current_organization_id] = @org.id
+
+        @child_org = Factory(:organization, ancestry: @org.id)
+        Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.admin)
+
+        @predefined = Factory(:survey, organization: @org)
+        APP_CONFIG['predefined_survey'] = @predefined.id
+        @year_in_school_question = Factory(:year_in_school_element)
+        @predefined.questions << @year_in_school_question
+
+      end
+
+      context "filter by interaction_types" do
+        setup do
+          @interaction_type1 = Factory(:interaction_type, organization_id: 0, i18n: "Interaction 1")
+          @interaction_type2 = Factory(:interaction_type, organization_id: 0, i18n: "Interaction 2")
+          @person1 = Factory(:person)
+          @person2 = Factory(:person)
+          @person3 = Factory(:person)
+          @org.add_contact(@person1)
+          @org.add_contact(@person2)
+          @org.add_contact(@person3)
+          Factory(:interaction, receiver: @person1, creator: @person, organization: @org, interaction_type_id: @interaction_type1.id)
+          Factory(:interaction, receiver: @person2, creator: @person, organization: @org, interaction_type_id: @interaction_type1.id)
+          Factory(:interaction, receiver: @person3, creator: @person, organization: @org, interaction_type_id: @interaction_type2.id)
+        end
+
+        should "return people with specified interaction" do
+          get :all_contacts, interaction_type: @interaction_type1.id
+          assert_response :success
+          assert_equal "Interaction 1", assigns(:header), assigns(:header).inspect
+          assert assigns(:people).include?(@person1)
+          assert assigns(:people).include?(@person2)
+          assert !assigns(:people).include?(@person3)
+        end
+
+      end
+    end
   end
 
   context "After logging in a person with orgs" do
