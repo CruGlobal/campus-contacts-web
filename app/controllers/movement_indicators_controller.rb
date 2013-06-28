@@ -11,6 +11,6 @@ class MovementIndicatorsController < ApplicationController
   end
 
   def details
-    @interactions = current_organization.interactions_of_type(params[:name]).includes(:creator).order(:created_at)
+    @interactions = current_organization.interactions_of_type(params[:name]).includes(:creator).order(:timestamp)
   end
 end
