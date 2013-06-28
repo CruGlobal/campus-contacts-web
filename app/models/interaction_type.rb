@@ -9,6 +9,10 @@ class InteractionType < ActiveRecord::Base
     i18n || name
   end
 
+  def self.old_rejoicable_ids
+    InteractionType.where(i18n: ['spiritual_conversation', 'gospel_presentation', 'prayed_to_receive_christ'], organization_id: 0).collect(&:id)
+  end
+
   def self.comment
     InteractionType.where(i18n: 'comment', organization_id: 0).try(:first)
   end

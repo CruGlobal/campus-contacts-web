@@ -1,5 +1,5 @@
 class PersonSerializer < ActiveModel::Serializer
-  HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments, :assigned_tos, :followup_comments, :comments_on_me, :rejoicables, :answer_sheets, :all_organizational_permissions, :all_organization_and_children, :interactions, :organizational_labels, :roles, :addresses]
+  HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments, :assigned_tos, :answer_sheets, :all_organizational_permissions, :all_organization_and_children, :interactions, :organizational_labels, :roles, :addresses]
 
   HAS_ONE = [:user, :current_address, :organizational_permission]
 
@@ -14,6 +14,9 @@ class PersonSerializer < ActiveModel::Serializer
     hash = super
     hash['organizational_roles'] = custom_organizational_roles(scope[:organization].id) if scope[:include].include?('organizational_roles')
     hash['all_organizational_roles'] = custom_organizational_roles if scope[:include].include?('all_organizational_roles')
+    hash['followup_comments'] = custom_followup_comments if scope[:include].include?('followup_comments')
+    hash['comments_on_me'] = custom_comments_on_me if scope[:include].include?('comments_on_me')
+    hash['rejoicables'] = custom_rejoicables if scope[:include].include?('rejoicables')
     hash
   end
 
@@ -27,7 +30,7 @@ class PersonSerializer < ActiveModel::Serializer
     end if includes
   end
 
-  [:contact_assignments, :assigned_tos, :followup_comments, :comments_on_me, :labels, :rejoicables, :interactions, :organizational_labels, :organizational_permissions].each do |relationship|
+  [:contact_assignments, :assigned_tos, :comments_on_me, :labels, :interactions, :organizational_labels, :organizational_permissions].each do |relationship|
     define_method(relationship) do
       add_since(organization_filter(relationship))
     end
@@ -61,6 +64,31 @@ class PersonSerializer < ActiveModel::Serializer
     else
       []
     end
+  end
+
+  def custom_followup_comments
+    followup_comments = []
+    object.created_interactions.each do |interaction|
+      followup_comments << translate_interaction_to_followup_status(interaction)
+    end
+    followup_comments
+  end
+
+  def custom_comments_on_me
+    comments_on_me = []
+    object.filtered_interactions(scope[:user].person, scope[:organization]).each do |interaction|
+      comments_on_me << translate_interaction_to_followup_status(interaction)
+    end
+    comments_on_me
+  end
+
+  def custom_rejoicables
+    rejoicables = []
+    interactions = object.filtered_interactions(scope[:user].person, scope[:organization])
+    interactions.where(interaction_type_id: InteractionType.old_rejoicable_ids).each do |interaction|
+      rejoicables << translate_interaction_to_rejoicable(interaction)
+    end
+    rejoicables
   end
 
   def custom_organizational_roles(org_id = nil)
@@ -99,6 +127,38 @@ class PersonSerializer < ActiveModel::Serializer
 
     organizational_roles = organizational_permissions_array + organizational_labels_array
     return organizational_roles
+  end
+
+  def translate_interaction_to_rejoicable(interaction)
+    rejoicable = {}
+    rejoicable['id'] = interaction.id
+    rejoicable['person_id'] = interaction.receiver_id
+    rejoicable['created_by_id'] = interaction.created_by_id
+    rejoicable['organization_id'] = interaction.organization_id
+    rejoicable['followup_comment_id'] = interaction.id
+    rejoicable['what'] = interaction.interaction_type.i18n
+    rejoicable['updated_at'] = interaction.updated_at
+    rejoicable['created_at'] = interaction.created_at
+    rejoicable['deleted_at'] = interaction.deleted_at
+    rejoicable
+  end
+
+  def translate_interaction_to_followup_status(interaction)
+    followup_comment = {}
+    followup_comment['id'] = interaction.id
+    followup_comment['contact_id'] = interaction.receiver_id
+    followup_comment['commenter_id'] = interaction.created_by_id
+    followup_comment['comment'] = interaction.comment
+    if interaction.receiver.present?
+      followup_comment['status'] = interaction.receiver.organizational_permission_for_org(scope[:organization]).try(:followup_status)
+    else
+      followup_comment['status'] = ""
+    end
+    followup_comment['organization_id'] = interaction.organization_id
+    followup_comment['updated_at'] = interaction.updated_at
+    followup_comment['created_at'] = interaction.created_at
+    followup_comment['deleted_at'] = interaction.deleted_at
+    followup_comment
   end
 
 end
