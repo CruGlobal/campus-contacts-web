@@ -12,9 +12,9 @@
         <% end %>
       </div>
     <% end %>
-      
+
   	<div class="feed_box info_edit">
-      
+
       <% if @person.contact_permission_for_org(current_organization) %>
     		<div class="status col_left"><%= t('general.status') %>:</div>
       	<div class="status col_right edit" id="followup_status_div">
@@ -33,7 +33,7 @@
             </div>
           </div>
       	</div>
-      
+
       	<div class="gender col_left">Assigned To:</div>
       	<div class="gender col_right" id="assigned_to_div">
           <%= text_field_tag :assigned_to_id, "#{@assigned_tos.count == 0 ? '0' : @assigned_tos.first.assigned_to_id}", id: 'assigned_to_id', class: 'hidden' %>
@@ -80,11 +80,34 @@
         <%= pf.radio_button :gender, 'Female' %>
         <label for="person_gender_female"><%= t('general.female') %></label>
   		</div>
+
+  		<div class="gender col_left">
+      </div>
+  		<div class="gender col_right">
+  			<%= pf.check_box :faculty %>
+        <label for="person_faculty"><%= t('general.faculty') %></label>
+  		</div>
+
+  		<div class="status col_left"><%= t('general.nationality') %>:</div>
+    	<div class="status col_right edit" id="followup_status_div">
+        <%= select_tag :nationality, options_for_select(Person::NATIONALITIES, @person.nationality), {include_blank: true, 'data-person-id' => "#{@person.id}", class: "nationality_field nationality_field_edit", style: 'display: none;'} %>
+        <div id="nationality_dropdown" class="custom_dropdown" data-current-id="<%= @person.nationality %>">
+          <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+          <div id="selected"><%= @person.nationality || "Select Nationality" %></div>
+          <div id="togglable">
+            <% Person::NATIONALITIES.each do |nationality| %>
+              <div class="option" data-name="<%= nationality %>">
+                <%= nationality %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+    	</div>
   	</div>
-    
-    
-    
-  	<div class="feed_box info_edit">		
+
+
+
+  	<div class="feed_box info_edit">
   		<div class="email col_left">
         <label><%= t('general.email') %></label>:
       </div>

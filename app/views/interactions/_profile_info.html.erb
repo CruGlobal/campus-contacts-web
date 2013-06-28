@@ -24,6 +24,16 @@
     	<div class="gender col_right"><%= @person.gender %></div>
     <% end %>
 
+    <% if @person.nationality.present? %>
+    	<div class="gender col_left"><%= t('general.nationality') %>:</div>
+    	<div class="gender col_right"><%= @person.nationality %></div>
+    <% end %>
+
+    <% if @person.faculty %>
+    	<div class="gender col_left"><%= t('general.faculty') %>:</div>
+    	<div class="gender col_right">Yes</div>
+    <% end %>
+
   </div>
 <% end %>
 

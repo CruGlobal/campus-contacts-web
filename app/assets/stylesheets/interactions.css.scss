@@ -249,6 +249,12 @@ body{
       border: 1px solid #ddd;
       border-bottom-color: #c5c5c5;
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      &#nationality_dropdown {
+        width: 215px;
+        #selected {
+          width: 190px;
+        }
+      }
 
       .dropdown_name {
         width: 135px;
@@ -259,7 +265,10 @@ body{
       }
 
       .arrow {
-        float: right;
+        z-index: 99999;
+        position: absolute;
+        top: 0;
+        right: 0;
         width: 10px;
         height: 10px;
         font-style: normal;

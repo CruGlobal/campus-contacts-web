@@ -121,6 +121,8 @@ en:
     archived: "Archived"
     assigned_to:  "Assigned to"
     survey: Survey
+    faculty: Faculty
+    nationality: Nationality
     mobile: Cell
     home: Home
     work: Work

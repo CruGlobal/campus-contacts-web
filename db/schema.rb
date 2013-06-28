@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130626170858) do
+ActiveRecord::Schema.define(:version => 20130628132340) do
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -591,6 +591,7 @@ ActiveRecord::Schema.define(:version => 20130626170858) do
     t.boolean  "faculty",                                      :default => false, :null => false
     t.boolean  "is_staff",                                     :default => false, :null => false
     t.integer  "infobase_person_id"
+    t.string   "nationality"
   end
 
   add_index "people", ["accountNo"], :name => "accountNo_ministry_Person"

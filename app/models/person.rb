@@ -1287,4 +1287,6 @@ class Person < ActiveRecord::Base
     self.permissions_for_org_id(org_id) + self.labels_for_org_id(org_id)
   end
 
+  NATIONALITIES = ["Chinese", "South Asian (India, Nepal, Sri Lanka)", "TIP/Muslim", "American", "All Other Nations"]
+
 end

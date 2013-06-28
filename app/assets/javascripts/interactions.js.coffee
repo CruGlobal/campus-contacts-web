@@ -103,6 +103,13 @@ $ ->
     $.fn.openPermissionsDialog()
   # END - ACTION MENU
 
+  $('.arrow.down').live 'click', (e)->
+    $('.custom_dropdown').removeClass('active')
+    $(this).parents('.custom_dropdown').addClass('active')
+
+  $('.arrow.up').live 'click', (e)->
+    $(this).parents('.custom_dropdown').removeClass('active')
+
   $('#assign_popup_save_button').live 'click', (e)->
     e.preventDefault()
     $('.profile_checkbox').prop('checked',true)
@@ -155,6 +162,15 @@ $ ->
     $('.followup_status_field_edit').val(selected_id)
     $('.followup_status_field_edit').change()
     $('#followup_status_dropdown.edit').removeClass('active')
+
+
+
+  $('#nationality_dropdown.edit .option').live 'click', (e)->
+    selected_name = $(this).attr('data-name')
+    $('#nationality_dropdown #selected').text(selected_name )
+    $('.nationality_field_edit').val(selected_name)
+    $('.nationality_field_edit').change()
+    $('#nationality_dropdown.edit').removeClass('active')
 
   $('#groups_popup_save_button').live 'click', (e)->
     e.preventDefault()
