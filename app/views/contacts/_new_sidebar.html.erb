@@ -16,7 +16,7 @@
         <% else %>
           <% link = all_contacts_path(assigned_to: person.id) %>
         <% end %>
-        <%= link_to person, link %>(<span class="count">&nbsp;<%= count %></span>)
+        <%= link_to person, link %> (<span class="count"><%= count %></span>)
         <% if can? :manage, @organization %>
           <%= link_to(image_tag('delete.png'), leader_path(person.id), method: :delete, remote: true, class: 'delete_icon tip', title: 'Remove Leader', data: { confirm: t('general.remove_leader_confirm', person: person) }) %>
         <% end %>
