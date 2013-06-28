@@ -12,15 +12,11 @@
       <% end %>
       <li class="entry leader <%= 'selected_entry' if params[:assigned_to].to_i == person.id %>" data-id="<%= person.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
         <% if params[:include_archived] %>
-          <div class="name">
-            <%= link_to person, all_contacts_path(assigned_to: person.id, include_archived: 'true') %>
-          </div>
+          <% link = all_contacts_path(assigned_to: person.id, include_archived: 'true') %>
         <% else %>
-          <div class="name">
-            <%= link_to person, all_contacts_path(assigned_to: person.id) %>
-          </div>
+          <% link = all_contacts_path(assigned_to: person.id) %>
         <% end %>
-        (<span class="count"><%= count %></span>)
+        <%= link_to person, link %>(<span class="count">&nbsp;<%= count %></span>)
         <% if can? :manage, @organization %>
           <%= link_to(image_tag('delete.png'), leader_path(person.id), method: :delete, remote: true, class: 'delete_icon tip', title: 'Remove Leader', data: { confirm: t('general.remove_leader_confirm', person: person) }) %>
         <% end %>
@@ -44,16 +40,11 @@
       <% end %>
       <li class="entry label <%= 'selected_entry' if params[:label].to_i == label.id %>" data-id="<%= label.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
         <% if params[:include_archived] %>
-          <div class="name">
-            <%= link_to label, all_contacts_path(label: label.id, include_archived: 'true') %>
-          </div>
-          (<%= count %>)
+          <% link = all_contacts_path(label: label.id, include_archived: 'true') %>
         <% else %>
-          <div class="name">
-            <%= link_to label, all_contacts_path(label: label.id) %>
-          </div>
-          (<%= count %>)
+          <% link = all_contacts_path(label: label.id) %>
         <% end %>
+        <%= link_to label, all_contacts_path(label: label.id) %>&nbsp;(<%= count %>)
       </li>
     <% end %>
   </div>
@@ -74,18 +65,11 @@
       <% end %>
       <li class="entry interaction <%= 'selected_entry' if params[:interaction_type].to_i == interaction_type.id %>" data-id="<%= interaction_type.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
         <% if params[:include_archived] %>
-          <div class="name">
-            <%= link_to interaction_type.title.humanize.titleize,
-                        all_contacts_path(interaction_type: interaction_type.id, include_archived: 'true') %>
-          </div>
-          (<%= count %>)
+          <% link = all_contacts_path(interaction_type: interaction_type.id, include_archived: 'true') %>
         <% else %>
-          <div class="name">
-            <%= link_to interaction_type.title.humanize.titleize,
-                        all_contacts_path(interaction_type: interaction_type.id) %>
-          </div>
-          (<%= count %>)
+          <% link = all_contacts_path(interaction_type: interaction_type.id) %>
         <% end %>
+        <%= link_to interaction_type.title.humanize.titleize, link %>&nbsp;(<%= count %>)
       </li>
     <% end %>
   </div>
@@ -106,16 +90,11 @@
       <% end %>
       <li class="entry permission <%= 'selected_entry' if params[:permission].to_i == permission.id %>" data-id="<%= permission.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
         <% if params[:include_archived] %>
-          <div class="name">
-            <%= link_to permission, all_contacts_path(permission: permission.id, include_archived: 'true') %>
-          </div>
-          (<%= count %>)
+          <% link = all_contacts_path(permission: permission.id, include_archived: 'true') %>
         <% else %>
-          <div class="name">
-            <%= link_to permission, all_contacts_path(permission: permission.id) %>
-          </div>
-          (<%= count %>)
+          <% link = all_contacts_path(permission: permission.id) %>
         <% end %>
+        <%= link_to permission, link %>&nbsp;(<%= count %>)
       </li>
     <% end %>
   </div>
@@ -129,22 +108,15 @@
   </li>
   <div class="side_list" style="<%= 'display:block;' if params[:assigned_to].present? && params[:assigned_to] == 'friends' ||  params[:archived].present? || params[:dnc].present? %>">
     <li class="entry more <%= 'selected_entry' if params[:assigned_to] == 'friends' %>">
-      <div class="name">
-        <%= link_to(t('contacts.index.my_friends'), all_contacts_path(assigned_to: 'friends')) %>
-      </div>
+      <%= link_to(t('contacts.index.my_friends'), all_contacts_path(assigned_to: 'friends')) %>
       (<%= current_person.contact_friends(current_organization).collect(&:id).count %>)
     </li>
     <li class="entry more <%= 'selected_entry' if params[:archived].present? %>">
-      <div class="name">
-        <%= link_to(t('people.index.archived_label'), all_contacts_path(archived: true)) %>
-      </div>
+      <%= link_to(t('people.index.archived_label'), all_contacts_path(archived: true)) %>
       (<%= current_organization.people.archived(current_organization.id).count %>)
     </li>
     <li class="entry more <%= 'selected_entry' if params[:dnc].present? %>">
-      <div class="name">
-        <%= link_to(t('contacts.index.dnc'), all_contacts_path(dnc: true)) %>
-      </div>
-      (<%= @organization.dnc_contacts.count %>)
+      <%= link_to(t('contacts.index.dnc'), all_contacts_path(dnc: true)) %>&nbsp;(<%= @organization.dnc_contacts.count %>)
     </li>
   </div>
 </ul>

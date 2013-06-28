@@ -91,30 +91,33 @@
         display: none;
       }
       .entry {
-        .name {
-          max-width: 125px;
-          display: inline-block;
-        	white-space: nowrap;
-        	overflow: hidden;
-        	text-overflow: ellipsis;
-          a {
-            color: #0379ae;
-            font-weight: normal;
-            &:hover {
-              text-decoration: underline;
-            }
-          }
+        max-width: 140px;
+        word-wrap: break-word;
+        text-indent:-2em;
+        margin: 2px 0px 2px 2em;
+        a {
+          color: #0379ae;
+          font-weight: normal;
         }
         .delete_icon {
           display: none;
           height: 10px;
           padding: 0px;
           img {
-            margin: 1px 0 0px;
+            margin: 2px 0px 0px 6px;
           }
         }
         &:hover .delete_icon {
           display: inline-block;
+          float:right;
+        }
+        &:hover a{
+          text-decoration: underline;
+        }
+      }
+      .selected_entry {
+        .count {
+          font-weight: bold;
         }
       }
     }
