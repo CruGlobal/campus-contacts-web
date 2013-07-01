@@ -1,5 +1,5 @@
 class PersonSerializer < ActiveModel::Serializer
-  HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments, :assigned_tos, :answer_sheets, :all_organizational_permissions, :all_organization_and_children, :interactions, :organizational_labels, :roles, :addresses]
+  HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments, :assigned_tos, :answer_sheets, :all_organizational_permissions, :all_organization_and_children, :organizational_labels, :roles, :addresses]
 
   HAS_ONE = [:user, :current_address, :organizational_permission]
 
@@ -17,6 +17,7 @@ class PersonSerializer < ActiveModel::Serializer
     hash['followup_comments'] = custom_followup_comments if scope[:include].include?('followup_comments')
     hash['comments_on_me'] = custom_comments_on_me if scope[:include].include?('comments_on_me')
     hash['rejoicables'] = custom_rejoicables if scope[:include].include?('rejoicables')
+    hash['interactions'] = custom_interactions if scope[:include].include?('interactions')
     hash
   end
 
@@ -30,7 +31,7 @@ class PersonSerializer < ActiveModel::Serializer
     end if includes
   end
 
-  [:contact_assignments, :assigned_tos, :comments_on_me, :labels, :interactions, :organizational_labels, :organizational_permissions].each do |relationship|
+  [:contact_assignments, :assigned_tos, :comments_on_me, :labels, :organizational_labels, :organizational_permissions].each do |relationship|
     define_method(relationship) do
       add_since(organization_filter(relationship))
     end
@@ -39,6 +40,14 @@ class PersonSerializer < ActiveModel::Serializer
   [:phone_numbers, :email_addresses, :person_transfers, :user, :answer_sheets, :current_address, :addresses].each do |relationship|
     define_method(relationship) do
       add_since(object.send(relationship))
+    end
+  end
+
+  def custom_interactions
+    if scope[:user] && scope[:user] == object.user
+      add_since(object.filtered_interactions(scope[:user].person, scope[:organization]))
+    else
+      []
     end
   end
 
