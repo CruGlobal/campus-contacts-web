@@ -1,8 +1,9 @@
 class PersonFilter
   attr_accessor :people, :filters
 
-  def initialize(filters)
+  def initialize(filters, organization = nil)
     @filters = filters
+    @organization = organization
 
     # strip extra spaces from filters
     @filters.collect { |k, v| @filters[k] = v.to_s.strip }
@@ -16,8 +17,12 @@ class PersonFilter
       filtered_people = filtered_people.where('people.id' => @filters[:ids].split(','))
     end
 
+    if @filters[:labels]
+      filtered_people = filtered_people.joins(:organizational_labels).where('organizational_labels.label_id IN (?) AND organizational_labels.organization_id = ? AND organizational_labels.removed_date IS NULL', @filters[:labels].split(','), @organization.id)
+    end
+
     if @filters[:permissions]
-      filtered_people = filtered_people.where('organizational_permissions.permission_id' => @filters[:permissions].split(','))
+      filtered_people = filtered_people.where('organizational_permissions.permission_id IN (?) AND organizational_permissions.organization_id = ?', @filters[:permissions].split(','), @organization.id)
     end
 
     if @filters[:first_name_like]

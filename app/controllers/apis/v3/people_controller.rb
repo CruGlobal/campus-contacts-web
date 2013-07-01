@@ -102,7 +102,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
       end
 
       @filtered_people = add_includes_and_order(@filtered_people, order: order)
-      @filtered_people = PersonFilter.new(params[:filters]).filter(@filtered_people) if params[:filters]
+      @filtered_people = PersonFilter.new(params[:filters], current_organization).filter(@filtered_people) if params[:filters]
     end
     @filtered_people
   end
