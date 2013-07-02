@@ -45,35 +45,15 @@ class PersonSerializer < ActiveModel::Serializer
   end
 
   def custom_interactions
-    if scope[:user] && scope[:user] == object.user
-      add_since(object.filtered_interactions(scope[:user].person, scope[:organization]))
-    else
-      []
-    end
+    add_since(object.filtered_interactions(scope[:user].person, scope[:organization]))
   end
 
-  # def organizational_permission
-  #   if scope[:user] && scope[:user] == object.user
-  #     object.organizational_permissions.find('organizational_permissions.organization_id' => scope[:organization].id)
-  #   else
-  #     []
-  #   end
-  # end
-
   def roles
-    if scope[:user] && scope[:user] == object.user
-      add_since(object.roles_for_org_id(scope[:organization].id))
-    else
-      []
-    end
+    add_since(object.roles_for_org_id(scope[:organization].id))
   end
 
   def all_organizational_permissions
-    if scope[:user] && scope[:user] == object.user
-      add_since(object.organizational_permissions)
-    else
-      []
-    end
+    add_since(object.organizational_permissions)
   end
 
   def custom_organizational_permission
