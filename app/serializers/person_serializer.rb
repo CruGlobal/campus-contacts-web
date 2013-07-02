@@ -1,7 +1,7 @@
 class PersonSerializer < ActiveModel::Serializer
   HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments, :assigned_tos, :answer_sheets, :all_organizational_permissions, :all_organization_and_children, :organizational_labels, :roles, :addresses]
 
-  HAS_ONE = [:user, :current_address, :organizational_permission]
+  HAS_ONE = [:user, :current_address]
 
   INCLUDES = HAS_MANY + HAS_ONE
 
@@ -18,6 +18,7 @@ class PersonSerializer < ActiveModel::Serializer
     hash['comments_on_me'] = custom_comments_on_me if scope[:include].include?('comments_on_me')
     hash['rejoicables'] = custom_rejoicables if scope[:include].include?('rejoicables')
     hash['interactions'] = custom_interactions if scope[:include].include?('interactions')
+    hash['organizational_permission'] = custom_organizational_permission if scope[:include].include?('organizational_permission')
     hash
   end
 
@@ -31,7 +32,7 @@ class PersonSerializer < ActiveModel::Serializer
     end if includes
   end
 
-  [:contact_assignments, :assigned_tos, :comments_on_me, :labels, :organizational_labels, :organizational_permissions].each do |relationship|
+  [:contact_assignments, :assigned_tos, :comments_on_me, :labels, :organizational_labels].each do |relationship|
     define_method(relationship) do
       add_since(organization_filter(relationship))
     end
@@ -51,13 +52,13 @@ class PersonSerializer < ActiveModel::Serializer
     end
   end
 
-  def organizational_permission
-    if scope[:user] && scope[:user] == object.user
-      object.organizational_permissions.first
-    else
-      []
-    end
-  end
+  # def organizational_permission
+  #   if scope[:user] && scope[:user] == object.user
+  #     object.organizational_permissions.find('organizational_permissions.organization_id' => scope[:organization].id)
+  #   else
+  #     []
+  #   end
+  # end
 
   def roles
     if scope[:user] && scope[:user] == object.user
@@ -73,6 +74,11 @@ class PersonSerializer < ActiveModel::Serializer
     else
       []
     end
+  end
+
+  def custom_organizational_permission
+    organizational_permission = object.organizational_permissions.where('organizational_permissions.organization_id' => scope[:organization].id).first
+    serialize_organizational_permission(organizational_permission) if organizational_permission.present?
   end
 
   def custom_followup_comments
@@ -136,6 +142,19 @@ class PersonSerializer < ActiveModel::Serializer
 
     organizational_roles = organizational_permissions_array + organizational_labels_array
     return organizational_roles
+  end
+
+  def serialize_organizational_permission(organizational_permission)
+    response = {}
+    response['id'] = organizational_permission.id
+    response['person_id'] = organizational_permission.person_id
+    response['permission_id'] = organizational_permission.permission_id
+    response['organization_id'] = organizational_permission.organization_id
+    response['followup_status'] = organizational_permission.followup_status
+    response['created_at'] = organizational_permission.created_at
+    response['updated_at'] = organizational_permission.updated_at
+    response['archive_date'] = organizational_permission.archive_date
+    response
   end
 
   def translate_interaction_to_rejoicable(interaction)
