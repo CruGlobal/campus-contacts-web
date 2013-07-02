@@ -3,7 +3,7 @@ class Label < ActiveRecord::Base
   # added :created_at and :updated_at for migration only
 
   DEFAULT_LABELS = ["involved", "leader", "alumni"] # in DSC ORDER by SUPERIORITY
-  CRU_ONLY_LABELS = ["sent", "engaged_disciple"]
+  CRU_ONLY_LABELS = ["engaged_disciple"]
   DEFAULT_CRU_LABELS = DEFAULT_LABELS + CRU_ONLY_LABELS
 
   has_many :people, through: :organizational_labels

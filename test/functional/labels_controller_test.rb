@@ -32,7 +32,7 @@ class LabelsControllerTest < ActionController::TestCase
       system_labels = assigns(:system_labels).collect { |label| label.i18n }
       organizational_labels = assigns(:organizational_labels).collect { |label| label.i18n }
       assert_response :success, @response.body
-      assert_equal ["involved", "leader", "alumni", "sent", "engaged_disciple"], system_labels
+      assert_equal ["involved", "leader", "alumni", "engaged_disciple"], system_labels
     end
 
     should "should get new" do

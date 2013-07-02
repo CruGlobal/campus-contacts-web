@@ -115,7 +115,7 @@ class OrganizationsController < ApplicationController
     else
       @people = current_organization.contacts.where("(people.first_name LIKE :name OR people.last_name LIKE :name)", name: "%#{params[:term]}%")
     end
-    
+
     @people.each do |person|
       @available << {label: person.to_s, id: person.id}
     end
@@ -125,8 +125,7 @@ class OrganizationsController < ApplicationController
   def queue_transfer
     @person = Person.find(params[:person_id])
     if @person.present?
-      org_label = OrganizationalLabel.find_or_create_by_person_id_and_organization_id_and_label_id(@person.id, current_organization.id, Label::SENT_ID)
-      org_label.update_attributes({added_by_id: current_user.person.id})
+      @person.queue_for_transfer(current_organization.id, current_person.id)
     end
   end
 
@@ -143,7 +142,6 @@ class OrganizationsController < ApplicationController
       sent_record.update_attribute('transferred_by_id', current_person.id)
       current_organization.add_label_to_person(person, Label::ALUMNI_ID) if params[:tag_as_alumni] == '1'
       if params[:tag_as_archived] == '1'
-        # current_organization.add_permission_to_person(person, Permission::ARCHIVED_ID)
         person.archive_contact_permission(current_organization)
       end
     end

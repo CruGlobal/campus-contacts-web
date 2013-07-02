@@ -1287,6 +1287,20 @@ class Person < ActiveRecord::Base
     self.permissions_for_org_id(org_id) + self.labels_for_org_id(org_id)
   end
 
+  def queue_for_transfer(org_id, added_by_person_id = nil)
+    interaction = Interaction.new(
+      interaction_type_id: InteractionType.graduating_on_mission.try(:id),
+      receiver_id: id,
+      created_by_id: added_by_person_id,
+      organization_id: org_id,
+      privacy_setting: 'everyone'
+    )
+    if interaction.save
+      interaction.interaction_initiators.find_or_create_by_person_id(added_by_person_id)
+      return interaction
+    end
+  end
+
   NATIONALITIES = ["Chinese", "South Asian (India, Nepal, Sri Lanka)", "TIP/Muslim", "American", "All Other Nations"]
 
 end

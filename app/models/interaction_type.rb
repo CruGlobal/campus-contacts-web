@@ -17,6 +17,10 @@ class InteractionType < ActiveRecord::Base
     InteractionType.where(i18n: 'comment', organization_id: 0).try(:first)
   end
 
+  def self.graduating_on_mission
+    InteractionType.where(i18n: 'graduating_on_mission', organization_id: 0).try(:first)
+  end
+
   def self.get_interaction_types_hash(org_id)
     interaction_types = InteractionType.where("organization_id = 0 OR organization_id = ?", org_id).order("id")
     interaction_types.collect(&:to_hash)

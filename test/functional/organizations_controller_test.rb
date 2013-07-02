@@ -330,25 +330,28 @@ class OrganizationsControllerTest < ActionController::TestCase
   context "100% Sent feature" do
     setup do
       @user, @organization = admin_user_login_with_org
+      @admin = @user.person
       @sent_org = Factory(:organization, id: 472, name: 'CM 100% Sent Team')
       @contact1 = Factory(:person, first_name: 'abby')
       @contact2 = Factory(:person, first_name: 'belly')
       @contact3 = Factory(:person, first_name: 'cassy')
       @contact4 = Factory(:person, first_name: 'daisy')
       @contact5 = Factory(:person, first_name: 'elssy')
-      
+
       Factory(:organizational_permission, person: @contact1, permission: Permission.no_permissions, organization: @org)
       Factory(:organizational_permission, person: @contact2, permission: Permission.no_permissions, organization: @org)
       Factory(:organizational_permission, person: @contact3, permission: Permission.no_permissions, organization: @org)
       Factory(:organizational_permission, person: @contact4, permission: Permission.no_permissions, organization: @org)
       Factory(:organizational_permission, person: @contact5, permission: Permission.no_permissions, organization: @org)
-      
-      Factory(:organizational_label, person: @contact1, label: Label.sent, organization: @org)
-      Factory(:organizational_label, person: @contact2, label: Label.sent, organization: @org)
-      Factory(:organizational_label, person: @contact3, label: Label.sent, organization: @org)
-      Factory(:organizational_label, person: @contact4, label: Label.alumni, organization: @org)
-      Factory(:organizational_label, person: @contact5, label: Label.alumni, organization: @org)
-      
+
+      graduating_on_mission = Factory(:interaction_type, organization_id: 0, i18n: 'graduating_on_mission')
+      other_interaction = Factory(:interaction_type, organization_id: 0, i18n: 'comment')
+      Factory(:interaction, interaction_type_id: graduating_on_mission.id, receiver: @contact1, creator: @admin, organization: @org)
+      Factory(:interaction, interaction_type_id: graduating_on_mission.id, receiver: @contact2, creator: @admin, organization: @org)
+      Factory(:interaction, interaction_type_id: graduating_on_mission.id, receiver: @contact3, creator: @admin, organization: @org)
+      Factory(:interaction, interaction_type_id: other_interaction.id, receiver: @contact4, creator: @admin, organization: @org)
+      Factory(:interaction, interaction_type_id: other_interaction.id, receiver: @contact5, creator: @admin, organization: @org)
+
       Factory(:sent_person, person: @contact3)
     end
     should "suggest available contacts when adding contacts to 100% Sent pending list" do

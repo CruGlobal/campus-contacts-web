@@ -34,8 +34,8 @@ class Organization < ActiveRecord::Base
     has_many :leaders, through: :organizational_labels, source: :person, conditions: ["organizational_labels.label_id IN (?) AND organizational_labels.removed_date IS NULL", Label::LEADER_ID], order: "people.last_name, people.first_name", uniq: true
 
     def sent
-      labeled = organizational_labels.where(person_id: contacts.collect(&:id), label_id: Label::SENT_ID)
-      contacts.where(id: labeled.collect(&:person_id)).order('people.last_name, people.first_name').uniq
+      people_ids = Interaction.where(organization_id: id, interaction_type_id: InteractionType.graduating_on_mission.try(:id))
+      contacts.where(id: people_ids.collect(&:receiver_id)).order('people.last_name, people.first_name').uniq
     end
 
     has_many :only_users, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL", Permission::USER_ID], order: "people.last_name, people.first_name", uniq: true
@@ -448,7 +448,7 @@ class Organization < ActiveRecord::Base
   end
 
   def labels
-    Label.where("organization_id = 0 or organization_id = #{id}")
+    Label.where("(organization_id = 0 OR organization_id = #{id}) AND (i18n <> 'sent' OR i18n IS NULL)")
   end
 
   def <=>(other)

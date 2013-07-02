@@ -568,20 +568,25 @@ class OrganizationTest < ActiveSupport::TestCase
   context "fetching transfers for 100% Sent" do
     setup do
       @org = Factory(:organization)
+      @other_org = Factory(:organization)
+      @admin = Factory(:person)
       @contact1 = Factory(:person)
       @contact2 = Factory(:person)
       @contact3 = Factory(:person)
       @contact4 = Factory(:person)
+      Factory(:organizational_permission, person: @admin, permission: Permission.admin, organization: @org)
       Factory(:organizational_permission, person: @contact1, permission: Permission.no_permissions, organization: @org)
       Factory(:organizational_permission, person: @contact2, permission: Permission.no_permissions, organization: @org)
       Factory(:organizational_permission, person: @contact3, permission: Permission.no_permissions, organization: @org)
       Factory(:organizational_permission, person: @contact4, permission: Permission.no_permissions, organization: @org)
-      
-      Factory(:organizational_label, person: @contact1, label: Label.sent, organization: @org)
-      Factory(:organizational_label, person: @contact2, label: Label.sent, organization: @org)
-      Factory(:organizational_label, person: @contact3, label: Label.sent, organization: @org)
-      Factory(:organizational_label, person: @contact4, label: Label.involved, organization: @org)
-      Factory(:organizational_label, person: @contact3, label: Label.alumni)
+
+      graduating_on_mission = Factory(:interaction_type, organization_id: 0, i18n: 'graduating_on_mission')
+      other_interaction = Factory(:interaction_type, organization_id: 0, i18n: 'comment')
+      Factory(:interaction, interaction_type_id: graduating_on_mission.id, receiver: @contact1, creator: @admin, organization: @org)
+      Factory(:interaction, interaction_type_id: graduating_on_mission.id, receiver: @contact2, creator: @admin, organization: @org)
+      Factory(:interaction, interaction_type_id: graduating_on_mission.id, receiver: @contact3, creator: @admin, organization: @org)
+      Factory(:interaction, interaction_type_id: other_interaction.id, receiver: @contact4, creator: @admin, organization: @org)
+      Factory(:interaction, interaction_type_id: other_interaction.id, receiver: @contact3, creator: @admin, organization: @other_org)
     end
     should "return all people with label 100% Sent and not yet transferred" do
       assert @org.pending_transfer.include?(@contact1)
@@ -618,12 +623,12 @@ class OrganizationTest < ActiveSupport::TestCase
     setup do
       @org = Factory(:organization, id: 1)
     end
-    should "return 'sent' label if org is cru" do
-      assert @org.label_set.include?(Label.sent)
+    should "not return 'sent' label if org is cru" do
+      assert !@org.label_set.include?(Label.sent)
     end
-    should "return 'sent' label if has parent org id = 1" do
+    should "not return 'sent' label if has parent org id = 1" do
       @org.update_attribute('ancestry','1/2/3')
-      assert @org.label_set.include?(Label.sent)
+      assert !@org.label_set.include?(Label.sent)
     end
   end
 

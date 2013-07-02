@@ -77,7 +77,7 @@ en:
     manage: Organizations
     cleanup: Cleanup
     report_movement_indicators: Report Movement Indicators
-    transfer: 100% Sent
+    transfer: Graduating on Mission
     archive: Archived
     enter_survey_mode: "Enter Survey Mode"
     exit_survey_mode: "Exit Survey Mode"
@@ -1160,7 +1160,7 @@ en:
   label: Label
   organizations:
     transfer:
-      title: "Contacts Pending Transfer to 100% Sent"
+      title: "Contacts Pending Transfer to Graduating On Mission"
       set_alumni: "Label transferred contacts as Alumni"
       set_alumni_desc: "(This will label all transferred contacts as Alumni)"
       set_archived: "Archive transferred contacts"
