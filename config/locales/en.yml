@@ -725,6 +725,8 @@ en:
       last_name: 'Last'
       phone_number: 'Phone'
       leaders: Leaders
+      user: User
+      group: Group
       assign_to: "Assign To:"
       assigned_to: "Assigned To"
       all_responses: "All Contacts"

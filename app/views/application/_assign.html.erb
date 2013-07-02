@@ -12,9 +12,9 @@
           <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_unassigned', class: 'assign_to_radio' %>
           <label for="assign_to_unassigned"><%= t('contacts.index.unassigned') %></label>
           <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_leader', class: 'assign_to_radio' %>
-          <label for="assign_to_leader"><%= t('leader') %></label>
+          <label for="assign_to_leader"><%= t('contacts.index.user') %></label>
           <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_group', class: 'assign_to_radio' %>
-          <label for="assign_to_group"><%= t('group') %></label>
+          <label for="assign_to_group"><%= t('contacts.index.group') %></label>
           <%= radio_button_tag :assign_contact_to, 'do_not_contact', false, id: 'assign_to_dnc', class: 'assign_to_radio' %>
           <label for="assign_to_dnc"><%= t('contacts.statuses.do_not_contact') %></label>
         </div>
