@@ -4,7 +4,7 @@
     <%= t('.contact_assignments')%>
   </li>
   <div id='leader_list' class="side_list" style="<%= 'display:block;' if params[:assigned_to].present? && params[:assigned_to] != 'friends' %>">
-    <% @organization.leaders.each_with_index do |person| %>
+    <% @organization.users.each_with_index do |person| %>
       <% if params[:include_archived] %>
         <% count = person.assigned_contacts_limit_org_with_archived(@organization).collect(&:id).count %>
       <% else %>

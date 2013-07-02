@@ -103,9 +103,6 @@ class InteractionsController < ApplicationController
       end
       removed_labels = person.organizational_labels_for_org(current_organization).where("label_id IN (?)", @remove_label_ids)
       removed_labels.delete_all if removed_labels.present?
-
-      @labels = person.labels_for_org_id(current_organization.id)
-      person.assigned_tos.delete_all unless @labels.include?(Label::LEADER_ID)
     end
 
     if @people.count == 1
