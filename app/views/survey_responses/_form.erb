@@ -15,7 +15,7 @@
   <ul class="rounded jqm">
     <%# if @person.first_name.blank? %>
       <li>
-        <div data-permission="fieldcontain" class="field">
+        <div data-role="fieldcontain" class="field">
           <label class="desc" for="first_name"><%= t('contacts.form.first_name') %></label>
         	<%= f.text_field :first_name, :readonly => @person.first_name.present? && session[:fb_token].present? %>
         </div>
@@ -24,7 +24,7 @@
 
     <%# if @person.last_name.blank? %>
       <li>
-        <div data-permission="fieldcontain" class="field">
+        <div data-role="fieldcontain" class="field">
           <label class="desc" for="last_name"><%= t('contacts.form.last_name') %></label>
           <%= f.text_field :last_name, :readonly => @person.last_name.present? && session[:fb_token].present? %>
         </div>
@@ -33,7 +33,7 @@
 
     <%# if @person.phone_number.blank? %>
       <li>
-        <div data-permission="fieldcontain" class="field">
+        <div data-role="fieldcontain" class="field">
           <label class="desc" for="last_name"><%= t('contacts.form.phone_number') %></label>
           <%= f.text_field :phone_number, :readonly => @person.phone_number.present? && session[:fb_token].present? %>
         </div>
@@ -45,19 +45,19 @@
       <% when 'email' %>
         <% if @person.email.blank? %>
           <li>
-            <div data-permission="fieldcontain" class="field">
+            <div data-role="fieldcontain" class="field">
               <label class="desc" for="email"><%= t('contacts.form.email') %></label>
               <%= f.text_field :email %>
             </div>
           </li>
         <% end %>
       <% else %>
-        <li><div data-permission="fieldcontain" class="field"><%= render 'survey/element', element: question %></div></li>
+        <li><div data-role="fieldcontain" class="field"><%= render 'survey/element', element: question %></div></li>
       <% end %>
     <% end %>
   </ul>
   <div>
-    <div data-permission="fieldcontain"><%= f.submit "Submit" %></div>
+    <div data-role="fieldcontain"><%= f.submit "Submit" %></div>
   </div>
 <% end %>
 

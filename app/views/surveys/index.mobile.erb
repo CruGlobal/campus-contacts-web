@@ -1,7 +1,7 @@
 <% provide :title, t('.title', org: @organization) %>
 
-<div data-permission="controlgroup">
+<div data-role="controlgroup">
   <% @surveys.each do |survey| %>
-    <%= link_to(survey, start_survey_url(survey.id, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), {"data-permission" => "button", "data-icon" => "arrow-r", "data-iconpos" => "right"}) %>
+    <%= link_to(survey, start_survey_url(survey.id, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), {"data-role" => "button", "data-icon" => "arrow-r", "data-iconpos" => "right"}) %>
   <% end %>
 </div>

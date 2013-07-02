@@ -3,11 +3,9 @@
 <html>
   <head>
     <title><%= h(yield(:title) || "Cru") %></title>
-    
-
-		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" />
-		<script src="http://code.jquery.com/jquery-1.5.2.min.js" ></script>
-		<script src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js" ></script>
+      <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+      <script src="http://code.jquery.com/jquery-1.9.1.min.js" ></script>
+      <script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js" ></script>
     <%= javascript_include_tag 'mh' %>
 		<%= stylesheet_link_tag 'mobile' %>
 
@@ -15,13 +13,13 @@
   </head>
   <body>
     <%= render 'fb_init' %>
-		<div data-permission="page">
-       <div data-permission="header">
-         <div data-permission="header" permission="banner">
+		<div data-role="page">
+       <div data-role="header">
+         <div data-role="header" role="banner">
            <h1 style='font-family:helvetica'><%= t('.login') %></h1>
          </div>
       </div>
-	    <div data-permission="content">
+	    <div data-role="content">
         <% title t('.welcome') %>
         <% if mhub? %>
           <% if !@survey || [0, 1].include?(@survey.login_option) %>

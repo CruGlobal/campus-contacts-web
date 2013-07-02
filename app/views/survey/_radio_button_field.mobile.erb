@@ -1,5 +1,5 @@
 <% person ||= nil %>
-<fieldset data-permission="controlgroup">
+<fieldset data-role="controlgroup">
   <% radio_button_field.choices.each_with_index do |choice, num| -%>
       <% dom_id = dom_id(radio_button_field) + "_" + pretty_tag(choice[1])
          checked = radio_button_field.has_answer?(choice[1], @answer_sheet, person) -%>

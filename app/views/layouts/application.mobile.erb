@@ -3,9 +3,9 @@
 <html>
   <head>
     <title><%= h(yield(:title) || "Cru") %></title>
-		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" />
-		<script src="http://code.jquery.com/jquery-1.5.2.min.js" ></script>
-		<script src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js" ></script>
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+		<script src="http://code.jquery.com/jquery-1.9.1.min.js" ></script>
+		<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js" ></script>
     <%= javascript_include_tag 'rails-validations' %>
     <%= javascript_include_tag 'mh' %>
 		
@@ -18,21 +18,21 @@
   </head>
   <body>
     <%= render 'fb_init' %>
-		<div data-permission="page">
+		<div date-role="page">
 			<%- unless params[:simple] == 'true' -%>
-				<div data-permission="header">
+				<div date-role="header">
 	    		<div class="current" id="home">
 
-			        <div data-permission="header" permission="banner" data-backbtn="false">
-			          <h1 class="ui-title" tabindex="0" permission="heading"><%=h yield(:title) %></h1>
+			        <div date-role="header" role="banner" data-backbtn="false">
+			          <h1 class="ui-title" tabindex="0" role="heading"><%=h yield(:title) %></h1>
                 <% if cookies[:survey_mode].present? && cookies[:survey_id].present? %>
-                  <%= link_to(t('nav.logout'), sign_out_url(next: start_survey_url(cookies[:survey_id])), "data-permission" => "button", rel: "external")  %>
+                  <%= link_to(t('nav.logout'), sign_out_url(next: start_survey_url(cookies[:survey_id])), "date-role" => "button", rel: "external")  %>
                 <% end %>
 			        </div>
 				  </div>
 			  </div>
 			<%- end -%>
-      <div data-permission="content">
+      <div date-role="content">
 		    <%= yield %>
 		  </div>
 	  </div>
