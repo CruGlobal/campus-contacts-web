@@ -3,7 +3,7 @@
   They will automatically be included in application.css.
 */
 
-#contacts_controller.all_contacts {
+#contacts_controller.all_contacts, #contacts_controller.my_contacts  {
   #gandalfthewhite {
     border-bottom: none;
     margin-bottom: 5px;
@@ -86,6 +86,19 @@
     #sidebar_loader {
       text-align: center;
     }
+    #mine_sidebar_lists{
+      a{
+    		color: #808284;
+      }
+      li {
+        padding:4px 0px;
+      }
+      .selected_class{
+        a{
+          color: rgb(3, 121, 174);
+        }
+      }
+    }
     .leftmenu {
       .side_list {
         display: none;
@@ -95,6 +108,9 @@
         word-wrap: break-word;
         text-indent:-2em;
         margin: 2px 0px 2px 2em;
+        .ui-droppable, .ui-state-highlight{
+          margin-left:-2em;
+        }
         a {
           color: #0379ae;
           font-weight: normal;
@@ -116,7 +132,7 @@
         }
       }
       .selected_entry {
-        .count {
+        a, .count {
           font-weight: bold;
         }
       }

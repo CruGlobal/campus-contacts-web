@@ -1,0 +1,97 @@
+<%= render 'new_mine_sidebar' %>
+
+<div class="titlebar titlebarmod">
+  <h1>
+    <%= t('contacts.mine.my_contacts') %>
+    <div id='global_loader'>
+      <%= image_tag 'loader.gif'%>
+    </div>
+  </h1>
+</div>
+
+<div id="ac_button_bar">
+	<ul class="button_bar" id="menu_assign_link">
+		<li class="action_lightblue">
+		  <%= link_to "Assign", "#", id: "action_menu_assign"%>
+		</li>
+	</ul>
+	<ul class="button_bar">
+		<li class="action_lightblue btn_right">
+		  <%= link_to "Labels", "#", id: "action_menu_labels"%>
+		</li>
+	</ul>
+	<ul class="button_bar">
+		<li class="action_lightblue btn_left">
+		  <%= link_to "Text", "#", id: "action_menu_text" %>
+		</li>
+	</ul>
+	<ul class="button_bar">
+		<li class="action_lightblue btn_right">
+		  <%= link_to "Email", "#", id: "action_menu_email" %>
+		</li>
+	</ul>
+</div>
+
+<div id="ac_pagination">
+  <% min_display = (params[:page].to_i * 25) - 24 %>
+  <% max_display = @people.total_count <= 25 ? @people.total_count : params[:page].to_i * 25 %>
+	<div class="fancy"><%= "#{min_display} - #{max_display} of #{@people.total_count}" %></div>
+	<%= link_to_previous_page @people, raw("<button class='action_lightblue btn_left'>&#9664;</button>") %>
+	<%= link_to_next_page @people, raw("<button class='action_lightblue btn_right'>&#9654;</button>") %>
+</div>
+
+<div id="ac_contact_spread">
+  <span style="display:none" id="drag_helper_text_one"><%= I18n.t('contacts.index.assign_contact', count: 1) %></span>
+  <span style="display:none" id="drag_helper_text_other"><%= I18n.t('contacts.index.assign_contact', count: 0) %></span>
+
+  <%= form_for ContactAssignment.new do |f| %>
+    <%= hidden_field_tag :assign_to %>
+    <%= hidden_field_tag :my_id, current_person.id %>
+	  <%= hidden_field_tag :mine_assign_to, 'true', id: 'mine_assign_to' %>
+
+    <table class="listing contact_listing <%= 'unassigned_contacts' if params[:assigned_to] == 'unassigned' %>" cellpadding="0" cellspacing="0">
+      <tr id="table_header">
+      	<th>&nbsp;</th>
+        <th class="checkbox_cell header_checkbox">
+          <%= check_box_tag 'check_all_contacts', true, false, 'data-target' => '#new_contact_assignment',
+                class: 'check_all_contacts', 'data-status' => @attr %>
+        </th>
+        <th class='first_name'><%= sort_link @q, :first_name, t('contacts.mine.first_name'), params %></th>
+        <th class='last_name'><%= sort_link @q, :last_name, t('contacts.mine.last_name'), params %></th>
+        <th><%= t('contacts.mine.phone') %></th>
+        <th><%= t('contacts.mine.email') %></th>
+        <th><%= t('nav.permissions') %></th>
+        <th><%= t('contacts.mine.year') %></th>
+        <th>&nbsp</th>
+      </tr>
+      <tbody id="contacts_table">
+        <% @people.each do |person| %>
+          <%= render 'contacts/my_contact', :person => person %>
+        <% end %>
+      </tbody>
+    </table>
+
+    <% if @people.blank? %>
+      <div class="contentpad no_contacts">
+        <%= t('contacts.index.no_contacts') %>
+      </div>
+  	<% end %>
+    <%= render 'application/assign' %>
+  <% end %>
+
+  <%- if false %>
+    <div id="update_notice_div">
+      <%= render partial: 'update_notice' if false %>
+    </div>
+  <%- end %>
+  <input type="button" value="Show Message Guide" id="show_message_guide_button" style="display:none">
+</div>
+
+<!-- Add Contact Dialog -->
+<%= render 'dialogs/add_contact', person: Person.new %>
+
+<!-- Message Dialog -->
+<%= render 'dialogs/bulk_send_msg' %>
+
+<!-- Labels Dialog -->
+<%= render 'dialogs/dialog_labels' %>

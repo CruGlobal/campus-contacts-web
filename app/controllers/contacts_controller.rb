@@ -41,6 +41,38 @@ class ContactsController < ApplicationController
     end
   end
 
+  def my_contacts
+    labels_for_assign
+    params[:page] ||= 1
+    url = request.url.split('?')
+    @attr = url.size > 1 ? url[1] : ''
+
+    respond_to do |wants|
+      wants.html do
+        params[:status] ||= 'in_progress'
+        url = request.url.split('?')
+        @attr = url.size > 1 ? url[1] : ''
+        @organization = current_organization
+        fetch_mine
+
+        @all_contacts = @all_people
+        @inprogress_contacts = @all_people.where("organizational_permissions.followup_status <> 'completed'")
+        @completed_contacts = @all_people.where("organizational_permissions.followup_status = 'completed'")
+        if params[:status] == 'completed'
+          @all_people = @completed_contacts
+        elsif params[:status] == 'in_progress'
+          @all_people = @inprogress_contacts
+        end
+
+        @q = @all_people.where('1 <> 1').search(params[:q])
+
+        order = params[:q].present? ? params[:q][:s] : "people.last_name ASC, people.first_name ASC";
+    	  @all_people = @all_people.order("#{order}")
+        @people = @all_people.group('people.id').page(params[:page])
+      end
+    end
+  end
+
   def index
     url = request.url.split('?')
     @attr = url.size > 1 ? url[1] : ''
