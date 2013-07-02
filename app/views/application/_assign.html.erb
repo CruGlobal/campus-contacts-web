@@ -3,68 +3,13 @@
   <div class="pop_box_container">
     <div class="mh_popup_box assign_popup_box" class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable" tabindex="-1" permission="dialog" aria-labelledby="ui-dialog-title-alert_dialog">
     	<div class="mh_popup_box_top"><span class="mh_popup_heading">Assign</span></div>
-      <div class="mh_popup_box_content">
-        <div class="fancy"><%= t('.assign_explanation') %></div>
-
-        <div class="modalfield">
-          <%= radio_button_tag :assign_contact_to, current_person.id, true, id: 'assign_to_me', class: 'assign_to_radio' %>
-          <label for="assign_to_me"><%= t('.me') %></label>
-          <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_unassigned', class: 'assign_to_radio' %>
-          <label for="assign_to_unassigned"><%= t('contacts.index.unassigned') %></label>
-          <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_leader', class: 'assign_to_radio' %>
-          <label for="assign_to_leader"><%= t('contacts.index.user') %></label>
-          <%= radio_button_tag :assign_contact_to, '', false, id: 'assign_to_group', class: 'assign_to_radio' %>
-          <label for="assign_to_group"><%= t('contacts.index.group') %></label>
-          <%= radio_button_tag :assign_contact_to, 'do_not_contact', false, id: 'assign_to_dnc', class: 'assign_to_radio' %>
-          <label for="assign_to_dnc"><%= t('contacts.statuses.do_not_contact') %></label>
-        </div>
-        <div class="leader_search modalresults" style="display:none">
-          <p style="margin: 0 0 5px 0;"><%= t('.type_to_find_leader') %></p>
-          <%= text_field_tag :leader_name, '', class: 'leader_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>
-          <div class="leaders_list">
-            <ul>
-              <% current_organization.users.each do |person| %>
-                <li class="leader" data-id="<%= person.id %>"><span class="name"><%= link_to(person, '#') %></span></li>
-              <% end %>
-            </ul>
-          </div>
-        </div>
-        <div class="group_search modalresults" style="display:none">
-          <p style="margin: 0 0 5px 0;"><%= t('.type_to_find_group') %></p>
-          <%= text_field_tag :group_name, '', class: 'group_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>
-          <div class="groups_list">
-            <ul>
-              <% current_organization.groups.each do |group| %>
-                <li class="group" data-group="<%= group.id %>" data-person="<%= @person.id %>">
-                  <span class="name">
-                    <%= link_to group.name, '#' %>
-                  </span>
-                </li>
-              <% end %>
-            </ul>
-          </div>
-        </div>
-        <div class="label_search modalresults" style="display:none">
-          <p style="margin: 0 0 5px 0;"><%= t('.type_to_find_label') %></p>
-          <%= text_field_tag :label_name, '', class: 'label_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>
-          <div class="labels_list">
-            <ul>
-              <% @permissions_for_assign.each do |permission| %>
-                <li class="label" data-permission="<%= permission.id %>">
-                  <span class="name">
-                    <%= link_to permission.to_s, '#' %>
-                  </span>
-                </li>
-              <% end %>
-            </ul>
-          </div>
-        </div>
-
-        <div id="add_leader_form">
-
-        </div>
+      <div id="assign_search_loader" style="display:none;">
+        <%= image_tag 'loader.gif'%><br/>Loading
       </div>
-    	<div class="assign_save" id="assign_save">
+      <div class="mh_popup_box_content" id="mh_popup_box_content">
+        <%= render partial: 'application/assign_search'%>
+      </div>
+    	<div class="assign_save" id="assign_save" style="">
     		<button class="red_accent assign_button" id="assign_popup_save_button">Assign</button>
     		<button class="large_lightgray" id="assign_popup_cancel_button">Cancel</button>
     	</div>

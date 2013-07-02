@@ -90,6 +90,13 @@ $ ->
     if $('.id_checkbox:checked').length > 0
       $('#keep_contact').attr checked: true
       $('#assign_to_me').click()
+      if $("#assign_search").hasClass('should_reload')
+        $("#assign_search #assign_search_loader").show()
+        $("#assign_search #mh_popup_box_content").hide()
+        $("#assign_search #assign_save").hide()
+        $.ajax
+          type: 'GET',
+          url: '/show_assign_search'
       $.showDialog($("#assign_search"))
     else
       $.a(t('contacts.index.none_checked'))
@@ -191,7 +198,7 @@ $ ->
 
   $('#permissions_popup_save_button').live 'click', (e)->
     e.preventDefault()
-    checked_permission_id = $('.permission_checkbox:checked').val()
+    checked_permission_id = $('.permissions_chooser_box .permission_checkbox:checked').val()
     people_ids = $('.contact_checkbox:checked').map ->
       return $(this).attr('data-id')
     if people_ids.size() > 1

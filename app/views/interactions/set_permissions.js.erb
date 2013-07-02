@@ -8,5 +8,6 @@ if($('#profile_label_box').size() > 0){
     $(".contact_checkbox[data-id=<%= person.id %>]").attr('data-permissions',"<%= permission.id %>")
   <% end %>
 <% end %>
+$("#assign_search").addClass('should_reload')
 $.toggleLoader('profile_name','')
 $.toggleLoader('ac_button_bar','')

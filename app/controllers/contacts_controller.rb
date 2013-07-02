@@ -268,6 +268,10 @@ class ContactsController < ApplicationController
     render nothing: true
   end
 
+  def show_assign_search
+
+  end
+
   def show_hidden_questions
     @organization = current_organization
     @all_questions = @organization.questions

@@ -47,6 +47,7 @@ Mh::Application.routes.draw do
   end
 
   match 'imports/:id/labels' => 'imports#labels'
+  match 'show_assign_search' => 'contacts#show_assign_search'
   match 'show_hidden_questions' => 'contacts#show_hidden_questions'
   match 'show_search_hidden_questions' => 'contacts#show_search_hidden_questions'
   match 'display_sidebar' => 'contacts#display_sidebar'
