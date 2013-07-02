@@ -313,6 +313,10 @@ button.action_lightblue a:hover, li.action_lightblue a:hover, li.action_lightblu
   text-decoration: none;
 }
 
+button.action_lightblue.nav_arrows {
+  font-size:12px;
+}
+
 button.action_lightblue a, li.action_lightblue a {
   display: block;
   margin: 0 -12px;
@@ -1265,4 +1269,10 @@ button#report_back_button {
 
 #movement_indicators_controller #main, #movement_indicators_controller #gandalfthewhite{
   border:none;
+}
+
+/* ALL CONTACTS PAGE MODS 07/02/2013 */
+
+.all_contacts.carea {
+  min-width:832px;
 }

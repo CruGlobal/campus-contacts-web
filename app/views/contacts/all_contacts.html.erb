@@ -83,8 +83,8 @@
   <% min_display = (params[:page].to_i * 25) - 24 %>
   <% max_display = @people.total_count <= 25 ? @people.total_count : params[:page].to_i * 25 %>
 	<div class="fancy"><%= "#{min_display} - #{max_display} of #{@people.total_count}" %></div>
-	<%= link_to_previous_page @people, raw("<button class='action_lightblue btn_left'>&#9664;</button>") %>
-	<%= link_to_next_page @people, raw("<button class='action_lightblue btn_right'>&#9654;</button>") %>
+	<%= link_to_previous_page @people, raw("<button class='action_lightblue btn_left nav_arrows'>&#9668;</button>") %>
+	<%= link_to_next_page @people, raw("<button class='action_lightblue btn_right nav_arrows'>&#9658;</button>") %>
 </div>
 
 <div id="ac_contact_spread">
