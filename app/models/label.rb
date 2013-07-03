@@ -2,7 +2,7 @@ class Label < ActiveRecord::Base
   attr_accessible :i18n, :name, :organization_id, :created_at, :updated_at
   # added :created_at and :updated_at for migration only
 
-  DEFAULT_LABELS = ["involved", "leader", "alumni"] # in DSC ORDER by SUPERIORITY
+  DEFAULT_LABELS = ["involved", "leader"] # in DSC ORDER by SUPERIORITY
   CRU_ONLY_LABELS = ["engaged_disciple"]
   DEFAULT_CRU_LABELS = DEFAULT_LABELS + CRU_ONLY_LABELS
 
@@ -47,14 +47,6 @@ class Label < ActiveRecord::Base
     @leader ||= Label.find_or_create_by_name_and_i18n_and_organization_id('Leader', 'leader', 0)
   end
 
-  def self.alumni
-    @alumni ||= Label.find_or_create_by_name_and_i18n_and_organization_id('Alumni', 'alumni', 0)
-  end
-
-  def self.sent
-    @sent ||= Label.find_or_create_by_name_and_i18n_and_organization_id('100% Sent', 'sent', 0)
-  end
-
   def self.default_labels_for_field_string(labels)
     labels_string = "("
     labels.each do |r|
@@ -96,9 +88,8 @@ class Label < ActiveRecord::Base
 
   if Label.table_exists? # added for travis testing
     LEADER_ID = leader.id
-    SENT_ID = sent.id
     INVOLVED_ID = involved.id
-    ALUMNI_ID = alumni.id
+    ENGAGED_DISCIPLE = engaged_disciple.id
   end
   ANY_SELECTED_LABEL = ["Any",1]
 	ALL_SELECTED_LABEL = ["All",2]

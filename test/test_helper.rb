@@ -40,8 +40,6 @@ class ActiveSupport::TestCase
   Label.involved
   Label.engaged_disciple
   Label.leader
-  Label.alumni
-  Label.sent
 end
 
 class Test::Unit::TestCase

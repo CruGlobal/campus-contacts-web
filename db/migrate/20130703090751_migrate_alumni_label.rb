@@ -25,7 +25,7 @@ class MigrateAlumniLabel < ActiveRecord::Migration
             org_label.destroy
           end
         end
-        puts ">>>> Migrated #{ctr} of #{alumni_labels.count}"
+        puts ">>>> Migrated #{ctr} organizational labels"
       end
       alumni_label.destroy
       puts ">>>> Migration complete! Alumni default label is now deleted."
