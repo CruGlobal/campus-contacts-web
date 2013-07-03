@@ -128,6 +128,7 @@ class Organization < ActiveRecord::Base
                             people.students.with_label(Label.involved).count +
                             people.students.with_label(Label.involved).where("organizational_labels.created_at < ?", period_end).count
 
+
         faculty_involved  = params[:involved_faculty].to_i -
                             people.faculty.with_label(Label.involved).count +
                             people.faculty.with_label(Label.involved).where("organizational_labels.created_at < ?", period_end).count
@@ -184,11 +185,13 @@ class Organization < ActiveRecord::Base
                       personal_decisions: personal_decisions,
                       graduating_on_mission: graduating_on_mission,
                       faculty_on_mission: faculty_on_mission,
-                      group_evangelism: params[:group_evangelism],
-                      group_decisions: params[:group_evangelism_decision],
-                      media_exposures: params[:media_exposure],
-                      media_decisions: params[:media_exposure_decisions],
+                      group_evangelism: params[:group_evangelism].to_i,
+                      group_decisions: params[:group_evangelism_decision].to_i,
+                      media_exposures: params[:media_exposure].to_i,
+                      media_decisions: params[:media_exposure_decisions].to_i
                     })
+        periods << stats
+        break
       else
         stats.merge!({students_involved: people.students.with_label(Label.involved).where("organizational_labels.created_at < ?", period_end).count,
                       faculty_involved: people.faculty.with_label(Label.involved).where("organizational_labels.created_at < ?", period_end).count,
@@ -202,9 +205,19 @@ class Organization < ActiveRecord::Base
                       graduating_on_mission: interactions_count('graduating_on_mission', period_begin, period_end),
                       faculty_on_mission: interactions_count('faculty_on_mission', period_begin, period_end)
                      })
+        periods << stats
       end
-      periods << stats
     end
+
+    # Make sure everything is positive
+    periods.each do |period|
+      period.each do |k, v|
+        if v.is_a?(Integer)
+          period[k] = period[k] > 0 ? period[k] : 0
+        end
+      end
+    end
+
     json = {statistics: periods}.to_json
     RestClient.post(APP_CONFIG['infobase_url'] + '/api/v1/stats', json, content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\"")
 
