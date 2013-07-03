@@ -9,18 +9,14 @@ $(document).ready(function(){
     accept: ".handle",
     drop: function(event, ui) {
       var leader;
+      li = $(this);
+      li.effect('highlight', {}, 'slow');
       if ($(this).hasClass("leader")) {
-        leader = $(this);
-        leader.effect('highlight', {}, 'slow');
-        $('#assign_to').val(leader.attr('data-id'));
-        return $.fn.assignTo(leader);
+        $('#assign_to').val(li.attr('data-id'));
+        return $.fn.assignTo(li);
       }else if ($(this).hasClass("dnc")) {
-        li = $(this);
-        li.effect('highlight', {}, 'slow');
         return $.fn.moveToDnc(ui.draggable);
       }else if ($(this).hasClass("completed")) {
-        li = $(this);
-        li.effect('highlight', {}, 'slow');
         return $.fn.moveToCompleted(ui.draggable);
       }
     }

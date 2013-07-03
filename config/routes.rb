@@ -142,6 +142,7 @@ Mh::Application.routes.draw do
       post :bulk_comment
       get :all
       post :update_permissions
+      post :update_permission_status
       post :bulk_delete
       post :bulk_archive
       get :facebook_search

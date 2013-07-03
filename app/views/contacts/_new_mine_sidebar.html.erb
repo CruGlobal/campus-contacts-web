@@ -9,13 +9,13 @@
           <%= link_to(t('contacts.mine.all'), my_contacts_path(status: 'all')) %>
           (<%= current_person.assigned_contacts_limit_org(@organization).collect(&:id).count %>)
         </li>
-      	<li class="ac_dropdown_list_header <%= 'selected_class' if params[:status] == 'completed' %>">
+      	<li class="my_completed ac_dropdown_list_header <%= 'selected_class' if params[:status] == 'completed' %>">
           <%= link_to(t('contacts.mine.completed'), my_contacts_path(status: 'completed')) %>
-          (<%= @completed_contacts.count %>)
+          (<span class="count"><%= @completed_contacts.count %></span>)
         </li>
-      	<li class="ac_dropdown_list_header <%= 'selected_class' if params[:status] == 'in_progress' %>">
+      	<li class="my_in_progress ac_dropdown_list_header <%= 'selected_class' if params[:status] == 'in_progress' %>">
           <%= link_to(t('contacts.mine.in_progress'), my_contacts_path(status: 'in_progress')) %>
-          (<%= @inprogress_contacts.count %>)
+          (<span class="count"><%= @inprogress_contacts.count %></span>)
         </li>
       	<li class="ac_dropdown_list_header <%= 'selected_class' if params[:status] == 'detailed' %>">
           <%= link_to(t('contacts.mine.detailed'), all_contacts_path(assigned_to: current_person.id)) %>

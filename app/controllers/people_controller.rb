@@ -431,6 +431,16 @@ class PeopleController < ApplicationController
     render :nothing => true
   end
 
+  def update_permission_status
+    response = false
+    if person = Person.find(params[:person_id])
+      response = true
+      permission = person.contact_permission_for_org(current_organization)
+      permission.followup_status = params[:status]
+      permission.save
+    end
+    render :text => response
+  end
 
   def update_permissions
     if current_user_permissions.include? Permission.admin
