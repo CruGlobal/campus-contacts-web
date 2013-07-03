@@ -140,7 +140,10 @@ class OrganizationsController < ApplicationController
       @sent_team_org.add_contact(person)
       sent_record = person.set_as_sent
       sent_record.update_attribute('transferred_by_id', current_person.id)
-      current_organization.add_label_to_person(person, Label::ALUMNI_ID) if params[:tag_as_alumni] == '1'
+      if params[:tag_as_alumni] == '1'
+        alumni_label = Label.find_or_create_by_name_and_organization_id("Alumni", current_organization.id)
+        current_organization.add_label_to_person(person, alumni_label.id)
+      end
       if params[:tag_as_archived] == '1'
         person.archive_contact_permission(current_organization)
       end

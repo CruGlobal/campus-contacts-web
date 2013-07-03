@@ -380,7 +380,8 @@ class OrganizationsControllerTest < ActionController::TestCase
     end
     should "transfer checked contacts and mark contacts as alumni" do
       post :do_transfer, {ids: [@contact4.id], tag_as_alumni: '1'}
-      assert OrganizationalLabel.exists?(label_id: Label::ALUMNI_ID, person_id: @contact4.id, organization_id: @organization.id), "contact should have an alumni label"
+      alumni_label = @organization.labels.find_by_name("Alumni")
+      assert OrganizationalLabel.exists?(label_id: alumni_label.id, person_id: @contact4.id, organization_id: @organization.id), "contact should have an alumni label"
     end
     should "transfer checked contacts and archive contacts" do
       # Factory(:organizational_permission, person: @contact5, permission_id: Permission::NO_PERMISSIONS_ID, organization: @organization)

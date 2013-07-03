@@ -622,13 +622,14 @@ class OrganizationTest < ActiveSupport::TestCase
   context "fetching labels" do
     setup do
       @org = Factory(:organization, id: 1)
+      @child_org = Factory(:organization, ancestry: '1')
+      @not_child_org = Factory(:organization, ancestry: nil)
     end
-    should "not return 'sent' label if org is cru" do
-      assert !@org.label_set.include?(Label.sent)
+    should "not return 'engaged_disciple' label if org is cru" do
+      assert !@not_child_org.label_set.include?(Label.engaged_disciple), @not_child_org.label_set.collect(&:name).inspect
     end
-    should "not return 'sent' label if has parent org id = 1" do
-      @org.update_attribute('ancestry','1/2/3')
-      assert !@org.label_set.include?(Label.sent)
+    should "return 'engaged_disciple' label if has parent org id = 1" do
+      assert @child_org.label_set.include?(Label.engaged_disciple), @child_org.label_set.collect(&:name).inspect
     end
   end
 
