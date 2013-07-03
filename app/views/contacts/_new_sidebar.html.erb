@@ -40,7 +40,7 @@
     <%= t('.labels')%>
   </li>
   <div id='label_list' class="side_list" style="<%= 'display:block;' if selected %>">
-    <% @organization.label_set.arrange_all.each do |label| %>
+    <% @organization.label_set.each do |label| %>
       <% if params[:include_archived] %>
         <% count = label.label_contacts_from_org_with_archived(@organization).collect(&:id).count %>
       <% else %>
