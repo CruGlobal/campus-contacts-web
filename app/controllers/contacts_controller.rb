@@ -43,32 +43,20 @@ class ContactsController < ApplicationController
 
   def my_contacts
     labels_for_assign
+
     params[:page] ||= 1
     url = request.url.split('?')
     @attr = url.size > 1 ? url[1] : ''
 
     respond_to do |wants|
       wants.html do
-        params[:status] ||= 'in_progress'
         url = request.url.split('?')
         @attr = url.size > 1 ? url[1] : ''
-        @organization = current_organization
-        fetch_mine
 
-        @all_contacts = @all_people
-        @inprogress_contacts = @all_people.where("organizational_permissions.followup_status <> 'completed'")
-        @completed_contacts = @all_people.where("organizational_permissions.followup_status = 'completed'")
-        if params[:status] == 'completed'
-          @all_people = @completed_contacts
-        elsif params[:status] == 'in_progress'
-          @all_people = @inprogress_contacts
-        end
+        params[:status] ||= 'in_progress' # set a default filter in my contacts
+        params[:assigned_to] = current_person.id # to hook and sync the assigned contacts for the current_person
 
-        @q = @all_people.where('1 <> 1').search(params[:q])
-
-        order = params[:q].present? ? params[:q][:s] : "people.last_name ASC, people.first_name ASC";
-    	  @all_people = @all_people.order("#{order}")
-        @people = @all_people.group('people.id').page(params[:page])
+        fetch_contacts(false)
       end
     end
   end
@@ -403,6 +391,7 @@ class ContactsController < ApplicationController
       filter_by_label if params[:label].present?
       filter_by_interaction_type if params[:interaction_type].present?
       filter_by_search if params[:do_search].present?
+      filter_by_mine if params[:status].present?
 
       # Sort & Limit Results
       sort_people(params[:page], load_all)
@@ -549,6 +538,17 @@ class ContactsController < ApplicationController
           @header = @interaction_types.collect{|desc| desc.title.try('titleize')}.to_sentence
         end
         @people_scope = @people_scope.joins(:interactions).where('interactions.organization_id = ? AND interactions.deleted_at IS NULL AND interactions.interaction_type_id IN (?)', current_organization.id, @interaction_types.collect(&:id))
+      end
+    end
+
+    def filter_by_mine
+      @inprogress_contacts = @people_scope.where("organizational_permissions.followup_status <> 'completed'")
+      @completed_contacts = @people_scope.where("organizational_permissions.followup_status = 'completed'")
+
+      if params[:status] == 'completed'
+        @people_scope = @completed_contacts
+      elsif params[:status] == 'in_progress'
+        @people_scope = @inprogress_contacts
       end
     end
 
