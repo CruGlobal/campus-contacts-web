@@ -1057,13 +1057,14 @@ en:
     edit:
       edit_group: Editing %{group}
     show:
+      page_title: "Group Name: %{group_name}"
       details: Details
       add_leader: 'Add Leader'
       add_member: 'Add Member'
       email: 'Email Address'
       phone: 'Phone Number'
       role: 'Role'
-      leaders: Leaders
+      leaders: Group Leaders
       location: Location
       edit: edit
       meets: Meets
