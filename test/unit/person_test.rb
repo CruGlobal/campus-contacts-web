@@ -38,53 +38,26 @@ class PersonTest < ActiveSupport::TestCase
       results = Person.find_by_person_updated_by_daterange("2012-07-28".to_date, "2012-07-31".to_date)
       assert(!results.include?(@person), "results should not include the updated person before the given range")
     end
-    should "return people based on highest default roles" do
+    should "return people based on highest default permissions" do
       @org = Factory(:organization)
 
       @person1 = Factory(:person, first_name: 'Leader')
       @person2 = Factory(:person, first_name: 'Contact')
       @person3 = Factory(:person, first_name: 'Admin')
-      @org_role1 = Factory(:organizational_role, person: @person1, organization: @org1, role: Role.leader)
-      @org_role2 = Factory(:organizational_role, person: @person2, organization: @org1, role: Role.contact)
-      @org_role3 = Factory(:organizational_role, person: @person3, organization: @org1, role: Role.admin)
+      @org_permission1 = Factory(:organizational_permission, person: @person1, organization: @org1, permission: Permission.user)
+      @org_permission2 = Factory(:organizational_permission, person: @person2, organization: @org1, permission: Permission.no_permissions)
+      @org_permission3 = Factory(:organizational_permission, person: @person3, organization: @org1, permission: Permission.admin)
 
-      results = Person.order_by_highest_default_role('role')
+      results = Person.order_by_highest_default_permission('permission')
       assert_equal(results[0].first_name, 'Contact', "first person of the results should be the contact")
       assert_equal(results[1].first_name, 'Leader', "second person of the results should be the leader")
       assert_equal(results[2].first_name, 'Admin', "third person of the results should be the admin")
 
-      results = Person.order_by_highest_default_role('role asc')
+      results = Person.order_by_highest_default_permission('permission asc')
       assert_equal(results[0].first_name, 'Admin', "first person of the results should be the admin when order is ASC")
       assert_equal(results[1].first_name, 'Leader', "second person of the results should be the leader when order is ASC")
       assert_equal(results[2].first_name, 'Contact', "third person of the results should be the contact when order is ASC")
     end
-    should "return people based on alphabetical roles" do
-      @org = Factory(:organization)
-
-      @person1 = Factory(:person, first_name: 'Leader')
-      @person2 = Factory(:person, first_name: 'Contact')
-      @person3 = Factory(:person, first_name: 'Admin')
-      @org_role1 = Factory(:organizational_role, person: @person1, organization: @org1, role: Role.leader)
-      @org_role2 = Factory(:organizational_role, person: @person2, organization: @org1, role: Role.contact)
-      @org_role5 = Factory(:organizational_role, person: @person3, organization: @org1, role: Role.admin)
-
-      @person4 = Factory(:person, first_name: 'Reader')
-      @person5 = Factory(:person, first_name: 'Visitor')
-      @role4 = Factory(:role, organization: @org, name: 'Reader')
-      @role5 = Factory(:role, organization: @org, name: 'Visitor')
-      @org_role4 = Factory(:organizational_role, person: @person4, organization: @org1, role: @role4)
-      @org_role5 = Factory(:organizational_role, person: @person5, organization: @org1, role: @role5)
-
-      results = Person.order_alphabetically_by_non_default_role('role')
-      assert_equal(results[0].first_name, 'Reader', "first person of the results should be the reader")
-      assert_equal(results[1].first_name, 'Visitor', "second person of the results should be the visitor")
-
-      results = Person.order_alphabetically_by_non_default_role('role asc')
-      assert_equal(results[0].first_name, 'Visitor', "first person of the results should be the visitor when order is ASC")
-      assert_equal(results[1].first_name, 'Reader', "second person of the results should be the reader when order is ASC")
-    end
-
-
     context "person's survey functions" do
       setup do
         @org = Factory(:organization)
@@ -133,9 +106,9 @@ class PersonTest < ActiveSupport::TestCase
       @person1 = Factory(:person, first_name: 'First Answer')
       @person2 = Factory(:person, first_name: 'Second Answer')
       @person3 = Factory(:person, first_name: 'Last Answer')
-      Factory(:organizational_role, person: @person1, organization: @org, role: Role.contact)
-      Factory(:organizational_role, person: @person2, organization: @org, role: Role.contact)
-      Factory(:organizational_role, person: @person3, organization: @org, role: Role.contact)
+      Factory(:organizational_permission, person: @person1, organization: @org, permission: Permission.no_permissions)
+      Factory(:organizational_permission, person: @person2, organization: @org, permission: Permission.no_permissions)
+      Factory(:organizational_permission, person: @person3, organization: @org, permission: Permission.no_permissions)
       @as1 = Factory(:answer_sheet, person: @person1, survey: @survey, updated_at: "2013-07-01".to_date)
       @as2 = Factory(:answer_sheet, person: @person2, survey: @survey, updated_at: "2013-07-02".to_date)
       @as3 = Factory(:answer_sheet, person: @person3, survey: @survey, updated_at: "2013-07-03".to_date)
@@ -185,7 +158,7 @@ class PersonTest < ActiveSupport::TestCase
       assert(!other_orgs.include?(@org1), "this should not be included")
       assert(!other_orgs.include?(@org2), "this should not be included")
       assert(!other_orgs.include?(@org3), "this should not be included")
-      assert(other_orgs.include?(@org4), "this should be included because other person has role")
+      assert(other_orgs.include?(@org4), "this should be included because other person has permission")
     end
 
     should "show multiple-generations of children as long as show_sub_orgs is true" do
@@ -261,14 +234,14 @@ class PersonTest < ActiveSupport::TestCase
       @person2 = Factory(:person)
       @person3 = Factory(:person)
       @person4 = Factory(:person)
-      @org_role1 = Factory(:organizational_role, person: @person1,
-                           organization: @org1, role: Role.contact, archive_date: Date.today)
-      @org_role2 = Factory(:organizational_role, person: @person2,
-                           organization: @org1, role: Role.contact)
-      @org_role4 = Factory(:organizational_role, person: @person4,
-                           organization: @org2, role: Role.contact)
+      @org_permission1 = Factory(:organizational_permission, person: @person1,
+                           organization: @org1, permission: Permission.no_permissions, archive_date: Date.today)
+      @org_permission2 = Factory(:organizational_permission, person: @person2,
+                           organization: @org1, permission: Permission.no_permissions)
+      @org_permission4 = Factory(:organizational_permission, person: @person4,
+                           organization: @org2, permission: Permission.no_permissions)
     end
-    should "return all included person that has active role" do
+    should "return all included person that has active permission" do
       results = @org1.people.archived_included
       assert_equal(results.count, 2)
     end
@@ -280,7 +253,7 @@ class PersonTest < ActiveSupport::TestCase
       results = @org1.people.archived_included
       assert(!results.include?(@person4), "Person 3 should not be included")
     end
-    should "return all not included person that has active role" do
+    should "return all not included person that has active permission" do
       results = @org1.people.archived_not_included
       assert_equal(results.count, 1)
     end
@@ -506,18 +479,18 @@ class PersonTest < ActiveSupport::TestCase
       assert_equal(person.email, "mattrw89@gmail.com", "See if person has correct email address")
     end
 
-    should "get organizational roles" do
+    should "get organizational permissions" do
       org = Factory(:organization)
-      roles = Array.new
+      permissions = Array.new
       (1..3).each do |index|
-        roles << Role.create!(organization_id: org.id, name: "role_#{index}", i18n: "role_#{index}")
+        permissions << Permission.create!(name: "permission_#{index}", i18n: "permission_#{index}")
       end
 
-      roles.each do |role|
-        @person.organizational_roles.create!(organization_id: org.id, role_id: role.id)
+      permissions.each do |permission|
+        @person.organizational_permissions.create!(organization_id: org.id, permission_id: permission.id)
       end
 
-      assert_equal(@person.assigned_organizational_roles([org.id]).count, roles.count)
+      assert_equal(@person.assigned_organizational_permissions([org.id]).count, permissions.count)
     end
 
     should 'create and return vcard information of a person' do
@@ -532,22 +505,22 @@ class PersonTest < ActiveSupport::TestCase
   should "check if person is leader in an org" do
     user = Factory(:user_with_auxs)
     org = Factory(:organization)
-    Factory(:organizational_role, organization: org, person: user.person, role: Role.leader)
+    Factory(:organizational_permission, organization: org, person: user.person, permission: Permission.user)
     wat = nil
-    assert user.person.leader_in?(org)
-    assert_equal false, user.person.leader_in?(wat)
+    assert user.person.user_in?(org)
+    assert_equal false, user.person.user_in?(wat)
   end
 
   should "should find people by name or meail given wildcard strings" do
     org = Factory(:organization)
     user = Factory(:user_with_auxs)
-    Factory(:organizational_role, organization: org, person: user.person, role: Role.leader)
+    Factory(:organizational_permission, organization: org, person: user.person, permission: Permission.user)
     person1 = Factory(:person, first_name: "Neil Marion", last_name: "dela Cruz", email: "ndc@email.com")
-    Factory(:organizational_role, organization: org, person: person1, role: Role.leader)
+    Factory(:organizational_permission, organization: org, person: person1, permission: Permission.user)
     person2 = Factory(:person, first_name: "Johnny", last_name: "English", email: "english@email.com")
-    Factory(:organizational_role, organization: org, person: person2, role: Role.contact)
+    Factory(:organizational_permission, organization: org, person: person2, permission: Permission.no_permissions)
     person3 = Factory(:person, first_name: "Johnny", last_name: "Bravo", email: "bravo@email.com")
-    Factory(:organizational_role, organization: org, person: person3, role: Role.contact)
+    Factory(:organizational_permission, organization: org, person: person3, permission: Permission.no_permissions)
 
     a = org.people.search_by_name_or_email("neil marion", org.id)
     assert_equal a.count, 1 # should be able to find a leader as well
@@ -563,8 +536,8 @@ class PersonTest < ActiveSupport::TestCase
     should "not loose its admin abilities in that org" do
       user = Factory(:user_with_auxs)
       child_org = Factory(:organization, :name => "neilmarion", :parent => user.person.organizations.first, :show_sub_orgs => true)
-      Factory(:organizational_role, organization: child_org, person: user.person, role: Role.contact)
-      Factory(:organizational_role, organization: child_org, person: user.person, role: Role.leader)
+      Factory(:organizational_permission, organization: child_org, person: user.person, permission: Permission.no_permissions)
+      Factory(:organizational_permission, organization: child_org, person: user.person, permission: Permission.user)
       assert_equal user.person.admin_of_org_ids.sort, [user.person.organizations.first.id, child_org.id].sort
     end
   end

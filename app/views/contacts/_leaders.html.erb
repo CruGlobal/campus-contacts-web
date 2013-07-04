@@ -6,7 +6,7 @@
 </li>
 <li>
   <ul id="leaders" class="indent expandable" data-height="244">
-    <% @display_leaders = @organization.only_leaders %>
+    <% @display_leaders = @organization.leaders %>
     <% @display_leaders.each_with_index do |person,i| %>
       <%=raw "<div id='more_leaders' style='display:none;'>" if i == 6 %>
       <%= render 'contacts/leader', person: person %>

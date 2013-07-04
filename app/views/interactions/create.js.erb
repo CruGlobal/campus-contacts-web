@@ -1,0 +1,24 @@
+if(<%= @success.present? %>){
+  $('.feed_content .tab_content.profile_interactions .edit_space').hide()
+  $('.feed_content .tab_content.profile_interactions .edit_space').html("<%= escape_javascript(render partial: 'interactions/profile_interactions_edit') %>")
+
+  if(<%= @interaction.receiver == @person %>){
+    $('#interaction_feeds_container').prepend("<div class='interaction_feed_container new' id='interaction_feed_container_<%= @interaction.id %>'><%= escape_javascript(render partial: 'interactions/interaction_feed', locals: {interaction: @interaction}) %></div>")
+    $('#interaction_feeds_container .feed_box.notice').hide()
+    $.n("Interaction has been added.")
+  }else{
+  }
+  $('.interaction_feed_container.new').each(function(){
+    $(this).hide().fadeIn('slow')
+    $(this).removeClass('new')
+  })
+
+  $('#all_feeds_box').html("<%= escape_javascript(render partial: 'interactions/all_feeds') %>")
+
+  $('.interaction_new').addClass('shouldReload')
+  $('#interaction_save_cancel_button').click()
+}else{
+  $.n("Failed to save an interaction. Please try again.")
+}
+$.blur('.feed_content .feed_box.interaction_new')
+$.toggleLoader('profile_name','')

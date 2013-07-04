@@ -109,7 +109,13 @@ class OrganizationsController < ApplicationController
 
   def available_for_transfer
     @available = Array.new
-    @people = current_organization.all_people.includes(:sent_person).where("(people.first_name LIKE :name OR people.last_name LIKE :name) AND sent_people.id IS NULL", name: "%#{params[:term]}%") - current_organization.sent
+    sent_people = current_organization.sent
+    if sent_people.present?
+      @people = current_organization.contacts.where("(people.first_name LIKE :name OR people.last_name LIKE :name) AND people.id NOT IN (:people_ids)", name: "%#{params[:term]}%", people_ids: sent_people.collect(&:id))
+    else
+      @people = current_organization.contacts.where("(people.first_name LIKE :name OR people.last_name LIKE :name)", name: "%#{params[:term]}%")
+    end
+
     @people.each do |person|
       @available << {label: person.to_s, id: person.id}
     end
@@ -119,8 +125,7 @@ class OrganizationsController < ApplicationController
   def queue_transfer
     @person = Person.find(params[:person_id])
     if @person.present?
-      org_role = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(@person.id, current_organization.id, Role::SENT_ID)
-      org_role.update_attributes({added_by_id: current_user.person.id})
+      @person.queue_for_transfer(current_organization.id, current_person.id)
     end
   end
 
@@ -135,15 +140,12 @@ class OrganizationsController < ApplicationController
       @sent_team_org.add_contact(person)
       sent_record = person.set_as_sent
       sent_record.update_attribute('transferred_by_id', current_person.id)
-      current_organization.add_role_to_person(person, Role::ALUMNI_ID) if params[:tag_as_alumni] == '1'
+      if params[:tag_as_alumni] == '1'
+        alumni_label = Label.find_or_create_by_name_and_organization_id("Alumni", current_organization.id)
+        current_organization.add_label_to_person(person, alumni_label.id)
+      end
       if params[:tag_as_archived] == '1'
-        current_organization.organizational_roles.where(person_id: person.id, archive_date: nil).each do |org_role|
-          if org_role.role_id == Role::LEADER_ID
-            contact_assigments = person.contact_assignments.where(organization_id: current_organization.id).all
-            contact_assigments.collect(&:destroy)
-          end
-          org_role.archive
-        end
+        person.archive_contact_permission(current_organization)
       end
     end
   end
@@ -155,8 +157,8 @@ class OrganizationsController < ApplicationController
     a = (a.to_date+1).strftime("%Y-%m-%d")
     to_archive = current_organization.contacts.find_by_date_created_before_date_given(a)
     no = 0
-    to_archive.each do |ta| # destroying contact roles of persons and replacing them with the new created role for archiving
-      ta.archive_contact_role(current_organization)
+    to_archive.each do |ta| # destroying contact permissions of persons and replacing them with the new created permission for archiving
+      ta.archive_contact_permission(current_organization)
       no+=1 if ta.is_archived?(current_organization)
     end
     flash[:notice] = t('organizations.cleanup.archive_notice', no: no)
@@ -171,11 +173,11 @@ class OrganizationsController < ApplicationController
   def archive_leaders
     if params[:date_leaders_not_logged_in_after].present?
       date_given = (Date.strptime(params[:date_leaders_not_logged_in_after], "%m-%d-%Y") + 1.day).strftime('%Y-%m-%d')
-      leaders = current_organization.only_leaders.find_by_last_login_date_before_date_given(date_given)
+      leaders = current_organization.only_users.find_by_last_login_date_before_date_given(date_given)
       leaders_count = leaders.count
 
       leaders.each do |leader|
-        leader.archive_leader_role(current_organization)
+        leader.archive_user_permission(current_organization)
         assignments = leader.contact_assignments.where(organization_id: current_organization.id).all
         assignments.collect(&:destroy)
       end

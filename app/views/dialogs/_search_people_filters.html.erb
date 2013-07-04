@@ -1,0 +1,126 @@
+<div id="search_people_filters_div" style="display:none;" class="custom_mh_popup_box">
+  <div class="ui-widget-overlay pop_box_overlay_container"></div>
+  <div class="pop_box_container">
+    <div class="mh_popup_box" id="search_people_filters_box">
+    	<div class="mh_popup_box_top">
+        <span class="mh_popup_heading">
+          Search Filters
+        </span>
+      </div>
+      <div class="mh_popup_box_content">
+        <div class="mh_popup_box_scroller">
+          <%= form_tag params, method: :get, id: 'contact_search_form' do %>
+            <%= hidden_field_tag :completed, params[:completed] if params[:completed].present? %>
+            <%= hidden_field_tag :do_search, 1 %>
+            <%= hidden_field_tag :include_archived, params[:include_archived] if params[:include_archived].present? %>
+            <%= hidden_field_tag :assigned_to, params[:assigned_to] if params[:assigned_to].present? %>
+            <div class="ononeline">
+              <div class="field">
+                <label for="first_name"><span class="title"><%= t('.first_name') %></span></label>
+                <%= text_field_tag :first_name, params[:first_name] %>
+              </div>
+              <div class="field">
+                <label for="last_name"><span class="title"><%= t('.last_name') %></span></label>
+                <%= text_field_tag :last_name, params[:last_name] %>
+              </div>
+              <div class="field">
+                <label for="last_name"><span class="title"><%= t('.phone_number') %></span></label>
+                <%= text_field_tag :phone_number, params[:phone_number] %>
+              </div>
+              <br/>
+              <div class="field">
+                <label for="gender"><span class="title"><%= t('general.email') %></span></label>
+                <%= text_field_tag :email, params[:email] %>
+              </div>
+              <div class="field">
+                <label for="gender"><span class="title"><%= t('general.gender') %></span></label>
+                <%= radio_button_tag :gender, '1', params[:gender] == '1' %> <%= t('general.male') %>
+                <%= radio_button_tag :gender, '0', params[:gender] == '0' %> <%= t('general.female') %>
+                <%= radio_button_tag :gender, '', params[:gender] == '' %> <%= t('general.both') %>
+              </div>
+              <div class="field">
+                <label for="survey"><span class="title"><%= t('general.survey') %></span></label>
+                <%= select_tag :survey, options_for_select(current_organization.surveys.order(:title).collect {|s| [s, s.id]}, params[:survey]), :prompt => "All" %>
+              </div>
+              <div class="field">
+                <label for="status"><span class="title"><%= t('general.status') %></span></label>
+                <%= select_tag :status, options_for_select(OrganizationalPermission::FOLLOWUP_STATUSES.collect {|s| [s.titleize, s]}, params[:status]), include_blank: true, :class=>"search_status"%>
+              </div>
+              <br/>
+              <div class="field">
+               <label for="contacts_updated"><span class="title"><%= t('general.label_search_last_survey') %></span></label>
+               <%= text_field_tag :survey_updated_from, params[:survey_updated_from], :autocomplete => :off %>
+                <b><%= t('general.dash') %></b>
+               <%= text_field_tag :survey_updated_to, params[:survey_updated_to], :autocomplete => :off %> (MM/DD/YYYY)
+              </div>
+              </br>
+              <div class="field">
+              	<% condition = params[:label].present? && params[:do_search].present? %>
+              	<div>
+        		      <label for="permission"><span class="title"><%= t('general.permission') %></span></label>
+        		      <%=raw I18n.t("general.label_select_description", element: raw(select_tag :permission_tag, options_for_select(Permission::LABEL_SEARCH_FILTERS, params[:permission_tag] ||= Permission::ANY_SELECTED_LABEL[1]))) %>
+
+              		<div class="icon help tipitright help_bubble_keyword" title="<%= t('general.label_search_help') %>"></div>
+                </div>
+        				<div class="label_space" id="search_permissions_container">
+        					<div class="label_list">
+        						<% current_organization.label_set.each do |label| %>
+        							<div class="label_item">
+        								<%= check_box_tag "label[]", label.id, condition && params[:label].include?(label.id.to_s), id: "search_label_#{label.id}", class: "search_label_checkbox" %>
+        								<%= label %>
+        							</div>
+        						<% end %>
+        					</div>
+        				</div>
+        				<div>
+                  <%= submit_tag t('general.label_clear_selected'), :id=>"search_clear_selected_labels" %>
+        				</div>
+              </div>
+            </div>
+            <!-- Email: <%#= text_field_tag :email, params[:email] %> -->
+            <div id="other_questions">
+              <% @questions.each_with_index do |q, i| %>
+                <%= render partial: 'contacts/search_question', locals: {index: i, q: q, questions_length: @questions.length, col: nil, answer_sheet: @answer_sheet} %>
+              <% end %>
+            </div>
+            <div class="actionbarinline" style="display:none;">
+              <table>
+                <tr>
+                  <td>
+                    <%= submit_tag t('general.search'), id: 'search_people_form_submit' %>
+                  </td>
+                  <td>
+                    <% if (params[:do_search] == "1" || params[:search] == "1") && @people.length > 0 %>
+                      <%= button_to "Save Search","", :id=>"savesearchbtn" %>
+                      <div id="savesearchbox" style="display:none" title="<%= t('contacts.index.save_this_search') %>" >
+                        <%= form_for(@saved_contact_search, html: {id: 'save_search_form'}) do |f| %>
+                          <%= hidden_field_tag 'saved_contact_search[user_id]', @person.user.id %>
+                          <%= hidden_field_tag 'saved_contact_search[full_path]', request.fullpath %>
+                          <%= hidden_field_tag 'saved_contact_search[organization_id]', @organization.id %>
+                          <%= hidden_field_tag :id, @saved_contact_search.id %>
+                          <%= f.text_field :name, :placeholder => t('contacts.index.save_this_search_placeholder') %>
+                        <% end %>
+                      </div>
+                    <% end %>
+                  </td>
+                  <td>
+                    <%= link_to "Hidden Questions", "", id: "search_show_question" %>
+                  </td>
+                </tr>
+              </table>
+              <%#= link_to t('.clear_search_form'), '', onclick: "$('form').clearForm(); return false;" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    	<div class="mh_popup_buttons" id="search_people_filter_buttons">
+    		<button class="red_accent" id="search_people_filters_search_button">Search</button>
+        <% if (params[:do_search] == "1" || params[:search] == "1") && @people.length > 0 %>
+          <button class="large_lightgray" id="search_people_filters_save_search_button">Save Search</button>
+        <% end %>
+    		<button class="large_lightgray" id="search_people_filters_hidden_questions_button">Hidden Questions</button>
+    		<button class="large_lightgray mh_popup_cancel_button" id="">Cancel</button>
+    	</div>
+    </div>
+  </div>
+</div>

@@ -36,13 +36,13 @@ class OrganizationsControllerTest < ActionController::TestCase
     end
 
     #context 'deleting' do
-      #should "clear cache of anyone who has a role in a grandparent of this org" do
+      #should "clear cache of anyone who has a permission in a grandparent of this org" do
         #@org_grandchild = Factory(:organization, :name => "foo", :parent => @org_child)
         #OrganizationsController.any_instance.expects(:expire_fragment).with("org_nav/#{@user.person.id}")
         #post :destroy, id: @org_grandchild.id
       #end
 
-      #should "clear cache of anyone who has a role in a parent of this org" do
+      #should "clear cache of anyone who has a permission in a parent of this org" do
         #OrganizationsController.any_instance.expects(:expire_fragment).with("org_nav/#{@user.person.id}")
         #post :destroy, id: @org_parent.id
       #end
@@ -110,7 +110,7 @@ class OrganizationsControllerTest < ActionController::TestCase
     #context "and the org settings hash is empty" do
       #setup do
         #@org = Factory(:organization)
-        #Factory(:organizational_role, organization: @org, person: @user.person, role: Role.admin)
+        #Factory(:organizational_permission, organization: @org, person: @user.person, permission: Permission.admin)
 
         #@request.session[:current_organization_id] = @org.id
       #end
@@ -244,11 +244,11 @@ class OrganizationsControllerTest < ActionController::TestCase
   context "Archiving Contacts" do
     setup do
       @contact1 = Factory(:person)
-      Factory(:organizational_role, organization: @org, person: @contact1, role: Role.contact)
+      Factory(:organizational_permission, organization: @org, person: @contact1, permission: Permission.no_permissions)
       @contact2 = Factory(:person)
-      Factory(:organizational_role, organization: @org, person: @contact2, role: Role.contact)
+      Factory(:organizational_permission, organization: @org, person: @contact2, permission: Permission.no_permissions)
       @contact3 = Factory(:person)
-      Factory(:organizational_role, organization: @org, person: @contact3, role: Role.contact)
+      Factory(:organizational_permission, organization: @org, person: @contact3, permission: Permission.no_permissions)
     end
 
     should "redirect to cleanup page" do
@@ -261,25 +261,24 @@ class OrganizationsControllerTest < ActionController::TestCase
       assert_equal @org.people.archived(@org.id).count, 3
     end
 
-    should "not delete contact roles" do
-      assert_no_difference('OrganizationalRole.count') do
+    should "not delete contact permissions" do
+      assert_no_difference('OrganizationalPermission.count') do
         post :archive_contacts, { :archive_contacts_before => Date.today.strftime("%m-%d-%Y") }
       end
     end
 
     should "archive contacts with the chosen time" do
-      #deliberately change the create date of @contact3 contact role
-      @contact3.organizational_roles.where(role_id: Role::CONTACT_ID).first.update_attributes({created_at: (Date.today+5).strftime("%Y-%m-%d")})
+      #deliberately change the create date of @contact3 contact permission
+      @contact3.organizational_permissions.where(permission_id: Permission::NO_PERMISSIONS_ID).first.update_attributes({created_at: (Date.today+5).strftime("%Y-%m-%d")})
       post :archive_contacts, { :archive_contacts_before => Date.today.strftime("%m-%d-%Y") }
-      assert_equal @org.people.archived(@org.id).count, 2
+      assert_equal 2, @org.people.archived(@org.id).count
     end
 
-    should "not include contacts in archive with some roles not yet archived" do
-      #deliberately add a non-contact role to @contact 3
-      Factory(:organizational_role, organization: @org, person: @contact3, role: Role.involved)
+    should "not include contacts in archive with some permissions not yet archived" do
+      #deliberately add a non-contact permission to @contact 3
       post :archive_contacts, { :archive_contacts_before => Date.today.strftime("%m-%d-%Y") }
-      #only 2 contacts will be included in archived since @contact3 has 2 roles and contact is the only role archived
-      assert_equal @org.people.archived(@org.id).count, 2
+      #only 2 contacts will be included in archived since @contact3 has 2 permissions and contact is the only permission archived
+      assert_equal 3, @org.people.archived(@org.id).count
     end
 
     should "redirect to cleanup page when there were no contacts archived" do
@@ -293,11 +292,11 @@ class OrganizationsControllerTest < ActionController::TestCase
   context "Archiving leaders" do
     setup do
       @leader1 = Factory(:user_with_auxs)
-      Factory(:organizational_role, organization: @org, person: @leader1.person, role: Role.leader)
+      Factory(:organizational_permission, organization: @org, person: @leader1.person, permission: Permission.user)
       @leader2 = Factory(:user_with_auxs)
-      Factory(:organizational_role, organization: @org, person: @leader2.person, role: Role.leader)
+      Factory(:organizational_permission, organization: @org, person: @leader2.person, permission: Permission.user)
       @leader3 = Factory(:user_with_auxs)
-      Factory(:organizational_role, organization: @org, person: @leader3.person, role: Role.leader)
+      Factory(:organizational_permission, organization: @org, person: @leader3.person, permission: Permission.user)
     end
 
     should "archive leaders" do
@@ -306,19 +305,19 @@ class OrganizationsControllerTest < ActionController::TestCase
 
     end
 
-    should "not delete leader roles" do
-      assert_no_difference('OrganizationalRole.count') do
+    should "not delete leader permissions" do
+      assert_no_difference('OrganizationalPermission.count') do
         post :archive_leaders, { :date_leaders_not_logged_in_after => Date.today.strftime("%m-%d-%Y") }
       end
     end
 
-    should "not include leaders in archive with some roles not yet archived" do
-      #deliberately add a non-contact role to @contact 3
+    should "not include leaders in archive with some permissions not yet archived" do
+      #deliberately add a non-contact permission to @contact 3
       #@leader2.update_attributes({current_sign_in_at: Date.today})
-      Factory(:organizational_role, organization: @org, person: @leader2.person, role: Role.involved)
+      Factory(:organizational_permission, organization: @org, person: @leader2.person, permission: Permission.admin)
       post :archive_leaders, { :date_leaders_not_logged_in_after => Date.today.strftime("%m-%d-%Y") }
-      #only 2 contacts will be included in archived since @contact3 has 2 roles and contact is the only role archived
-      assert_equal @org.people.archived(@org.id).count, 2
+      #only 2 contacts will be included in archived since @contact3 has 2 permissions and contact is the only permission archived
+      assert_equal 2, @org.people.archived(@org.id).count
     end
 
     should "redirect to cleanup page when there were no leaders archived" do
@@ -331,17 +330,28 @@ class OrganizationsControllerTest < ActionController::TestCase
   context "100% Sent feature" do
     setup do
       @user, @organization = admin_user_login_with_org
+      @admin = @user.person
       @sent_org = Factory(:organization, id: 472, name: 'CM 100% Sent Team')
       @contact1 = Factory(:person, first_name: 'abby')
       @contact2 = Factory(:person, first_name: 'belly')
       @contact3 = Factory(:person, first_name: 'cassy')
       @contact4 = Factory(:person, first_name: 'daisy')
       @contact5 = Factory(:person, first_name: 'elssy')
-      Factory(:organizational_role, person: @contact1, role: Role.sent, organization: @org)
-      Factory(:organizational_role, person: @contact2, role: Role.sent, organization: @org)
-      Factory(:organizational_role, person: @contact3, role: Role.contact, organization: @org)
-      Factory(:organizational_role, person: @contact4, role: Role.contact, organization: @org)
-      Factory(:organizational_role, person: @contact5, role: Role.contact, organization: @org)
+
+      Factory(:organizational_permission, person: @contact1, permission: Permission.no_permissions, organization: @org)
+      Factory(:organizational_permission, person: @contact2, permission: Permission.no_permissions, organization: @org)
+      Factory(:organizational_permission, person: @contact3, permission: Permission.no_permissions, organization: @org)
+      Factory(:organizational_permission, person: @contact4, permission: Permission.no_permissions, organization: @org)
+      Factory(:organizational_permission, person: @contact5, permission: Permission.no_permissions, organization: @org)
+
+      graduating_on_mission = Factory(:interaction_type, organization_id: 0, i18n: 'graduating_on_mission')
+      other_interaction = Factory(:interaction_type, organization_id: 0, i18n: 'comment')
+      Factory(:interaction, interaction_type_id: graduating_on_mission.id, receiver: @contact1, creator: @admin, organization: @org)
+      Factory(:interaction, interaction_type_id: graduating_on_mission.id, receiver: @contact2, creator: @admin, organization: @org)
+      Factory(:interaction, interaction_type_id: graduating_on_mission.id, receiver: @contact3, creator: @admin, organization: @org)
+      Factory(:interaction, interaction_type_id: other_interaction.id, receiver: @contact4, creator: @admin, organization: @org)
+      Factory(:interaction, interaction_type_id: other_interaction.id, receiver: @contact5, creator: @admin, organization: @org)
+
       Factory(:sent_person, person: @contact3)
     end
     should "suggest available contacts when adding contacts to 100% Sent pending list" do
@@ -352,7 +362,7 @@ class OrganizationsControllerTest < ActionController::TestCase
       assert_equal 2, assigns(:people).count, "2 contacts should be suggested"
     end
     should "add contact to transfer queue" do
-      assert_equal false, @organization.pending_transfer.include?(@contact3), "contact should not be in the list yet"
+      assert_equal false, @organization.pending_transfer.include?(@contact4), "contact should not be in the list yet"
       xhr :get, :queue_transfer, {person_id: @contact4.id, format: 'js'}
       assert @organization.pending_transfer.include?(@contact4), "contact should be in the list"
     end
@@ -370,12 +380,14 @@ class OrganizationsControllerTest < ActionController::TestCase
     end
     should "transfer checked contacts and mark contacts as alumni" do
       post :do_transfer, {ids: [@contact4.id], tag_as_alumni: '1'}
-      assert OrganizationalRole.exists?(role_id: Role::ALUMNI_ID, person_id: @contact4.id, organization_id: @organization.id), "contact should have an alumni role"
+      alumni_label = @organization.labels.find_by_name("Alumni")
+      assert OrganizationalLabel.exists?(label_id: alumni_label.id, person_id: @contact4.id, organization_id: @organization.id), "contact should have an alumni label"
     end
     should "transfer checked contacts and archive contacts" do
+      # Factory(:organizational_permission, person: @contact5, permission_id: Permission::NO_PERMISSIONS_ID, organization: @organization)
       post :do_transfer, {ids: [@contact5.id], tag_as_archived: '1'}
-      contact_role = OrganizationalRole.find_by_role_id_and_person_id_and_organization_id(Role::CONTACT_ID, @contact5.id, @organization.id)
-      assert contact_role.archive_date != nil, "old contact should be archived"
+      contact_permission = OrganizationalPermission.find_by_permission_id_and_person_id_and_organization_id(Permission::NO_PERMISSIONS_ID, @contact5.id, @organization.id)
+      assert contact_permission.archive_date != nil, "old contact should be archived"
     end
   end
 

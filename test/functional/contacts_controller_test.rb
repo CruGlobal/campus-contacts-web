@@ -14,6 +14,75 @@ class ContactsControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
+  context "Viewing the new All Contacts page" do
+    context "when user is implied admin" do
+      setup do
+        @user = Factory(:user_with_auxs)
+        @person = @user.person
+        @org = Factory(:organization)
+        sign_in @user
+        @request.session[:current_organization_id] = @org.id
+
+        @child_org = Factory(:organization, ancestry: @org.id)
+        Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.admin)
+
+        @predefined = Factory(:survey, organization: @org)
+        APP_CONFIG['predefined_survey'] = @predefined.id
+        @year_in_school_question = Factory(:year_in_school_element)
+        @predefined.questions << @year_in_school_question
+      end
+
+      should "show the admin permission" do
+        get :all_contacts
+        assert assigns(:permissions_for_assign).include?(Permission.admin), assigns(:permissions_for_assign).inspect
+      end
+    end
+    context "when user is admin" do
+      setup do
+        @user = Factory(:user_with_auxs)
+        @person = @user.person
+        @org = Factory(:organization)
+        sign_in @user
+        @request.session[:current_organization_id] = @org.id
+
+        @child_org = Factory(:organization, ancestry: @org.id)
+        Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.admin)
+
+        @predefined = Factory(:survey, organization: @org)
+        APP_CONFIG['predefined_survey'] = @predefined.id
+        @year_in_school_question = Factory(:year_in_school_element)
+        @predefined.questions << @year_in_school_question
+
+      end
+
+      context "filter by interaction_types" do
+        setup do
+          @interaction_type1 = Factory(:interaction_type, organization_id: 0, i18n: "Interaction 1")
+          @interaction_type2 = Factory(:interaction_type, organization_id: 0, i18n: "Interaction 2")
+          @person1 = Factory(:person)
+          @person2 = Factory(:person)
+          @person3 = Factory(:person)
+          @org.add_contact(@person1)
+          @org.add_contact(@person2)
+          @org.add_contact(@person3)
+          Factory(:interaction, receiver: @person1, creator: @person, organization: @org, interaction_type_id: @interaction_type1.id)
+          Factory(:interaction, receiver: @person2, creator: @person, organization: @org, interaction_type_id: @interaction_type1.id)
+          Factory(:interaction, receiver: @person3, creator: @person, organization: @org, interaction_type_id: @interaction_type2.id)
+        end
+
+        should "return people with specified interaction" do
+          get :all_contacts, interaction_type: @interaction_type1.id
+          assert_response :success
+          assert_equal "Interaction 1", assigns(:header), assigns(:header).inspect
+          assert assigns(:people).include?(@person1)
+          assert assigns(:people).include?(@person2)
+          assert !assigns(:people).include?(@person3)
+        end
+
+      end
+    end
+  end
+
   context "After logging in a person with orgs" do
     setup do
       @user, org = admin_user_login_with_org
@@ -106,33 +175,33 @@ class ContactsControllerTest < ActionController::TestCase
         assert_response :success, @response.body
       end
 
-      should "remove the being 'archived' Contact role of a Person when it is going to be created again (using existing first_name, last_name and email) in 'My Contacts' tab (:assign_to_me => true)" do
+      should "remove the being 'archived' Contact permission of a Person when it is going to be created again (using existing first_name, last_name and email) in 'My Contacts' tab (:assign_to_me => true)" do
         contact = Factory(:person, first_name: "Jon", last_name: "Snow")
         email = Factory(:email_address, email: "jonsnow@email.com", person: contact)
-        Factory(:organizational_role, role: Role.contact, person: contact, organization: @org)
-        assert_not_empty contact.organizational_roles.where(role_id: Role.contact.id)
+        Factory(:organizational_permission, permission: Permission.no_permissions, person: contact, organization: @org)
+        assert_not_empty contact.organizational_permissions.where(permission_id: Permission.no_permissions.id)
         assert_not_empty @org.contacts.joins(:email_addresses).where(first_name: "Jon", last_name: "Snow", "email_addresses.email" => "jonsnow@email.com")
-        #archive contact role
-        contact.organizational_roles.where(role_id: Role.contact.id).first.archive
-        assert_empty contact.organizational_roles.where(role_id: Role.contact.id)
+        #archive contact permission
+        contact.organizational_permissions.where(permission_id: Permission.no_permissions.id).first.archive
+        assert_empty contact.organizational_permissions.where(permission_id: Permission.no_permissions.id)
         assert_empty @org.contacts.joins(:email_addresses).where(first_name: "Jon", last_name: "Snow", "email_addresses.email" => "jonsnow@email.com")
         xhr :post, :create, {:assign_to_me => "true", :person => {:first_name => "Jon", :last_name => "Snow", :gender =>"male", :email_address => {:email => "jonsnow@email.com", :primary => 1}}}
-        assert_not_empty contact.organizational_roles.where(role_id: Role.contact.id), "Contact role of contact not unarchived"
+        assert_not_empty contact.organizational_permissions.where(permission_id: Permission.no_permissions.id), "Contact permission of contact not unarchived"
         assert_not_empty @org.contacts.joins(:email_addresses).where(first_name: "Jon", last_name: "Snow", "email_addresses.email" => "jonsnow@email.com")
       end
 
-      should "remove the being 'archived' Contact role of a Person when it is going to be created again (using existing first_name, last_name and email) in 'All Contacts' tab" do
+      should "remove the being 'archived' Contact permission of a Person when it is going to be created again (using existing first_name, last_name and email) in 'All Contacts' tab" do
         contact = Factory(:person, first_name: "Jon", last_name: "Snow")
         email = Factory(:email_address, email: "jonsnow@email.com", person: contact)
-        Factory(:organizational_role, role: Role.contact, person: contact, organization: @org)
-        assert_not_empty contact.organizational_roles.where(role_id: Role.contact.id)
+        Factory(:organizational_permission, permission: Permission.no_permissions, person: contact, organization: @org)
+        assert_not_empty contact.organizational_permissions.where(permission_id: Permission.no_permissions.id)
         assert_not_empty @org.contacts.joins(:email_addresses).where(first_name: "Jon", last_name: "Snow", "email_addresses.email" => "jonsnow@email.com")
-        #archive contact role
-        contact.organizational_roles.where(role_id: Role.contact.id).first.archive
-        assert_empty contact.organizational_roles.where(role_id: Role.contact.id)
+        #archive contact permission
+        contact.organizational_permissions.where(permission_id: Permission.no_permissions.id).first.archive
+        assert_empty contact.organizational_permissions.where(permission_id: Permission.no_permissions.id)
         assert_empty @org.contacts.joins(:email_addresses).where(first_name: "Jon", last_name: "Snow", "email_addresses.email" => "jonsnow@email.com")
         xhr :post, :create, {:person => {:first_name => "Jon", :last_name => "Snow", :gender =>"male", :email_address => {:email => "jonsnow@email.com", :primary => 1}}}
-        assert_not_empty contact.organizational_roles.where(role_id: Role.contact.id), "Contact role of contact not unarchived"
+        assert_not_empty contact.organizational_permissions.where(permission_id: Permission.no_permissions.id), "Contact permission of contact not unarchived"
         assert_not_empty @org.contacts.joins(:email_addresses).where(first_name: "Jon", last_name: "Snow", "email_addresses.email" => "jonsnow@email.com")
       end
     end
@@ -251,24 +320,16 @@ class ContactsControllerTest < ActionController::TestCase
       end
 
       should "have header for admin" do
-        xhr :get, :index, {:role => Role::ADMIN_ID}
+        xhr :get, :index, {:permission => Permission::ADMIN_ID}
         assert_equal assigns(:header).upcase, "Admin".upcase
       end
       should "have header for leader" do
-        xhr :get, :index, {:role => Role::LEADER_ID}
-        assert_equal assigns(:header).upcase, "Leader".upcase
+        xhr :get, :index, {:permission => Permission::USER_ID}
+        assert_equal assigns(:header).upcase, "User".upcase
       end
       should "have header for contact" do
-        xhr :get, :index, {:role => Role::CONTACT_ID}
-        assert_equal assigns(:header).upcase, "Contact".upcase
-      end
-      should "have header for involved" do
-        xhr :get, :index, {:role => Role::INVOLVED_ID}
-        assert_equal assigns(:header).upcase, "Involved".upcase
-      end
-      should "have header for sent" do
-        xhr :get, :index, {:role => Role::SENT_ID}
-        assert_equal assigns(:header).upcase, "Sent".upcase
+        xhr :get, :index, {:permission => Permission::NO_PERMISSIONS_ID}
+        assert_equal assigns(:header).upcase, "No Permissions".upcase
       end
       should "have header when viewing unassigned contacts" do
         xhr :get, :index, {:assigned_to => "unassigned"}
@@ -322,26 +383,25 @@ class ContactsControllerTest < ActionController::TestCase
       @contact3 = Factory(:person)
       @contact4 = Factory(:person)
       @contact5 = Factory(:person)
-      @user.person.organizations.first.add_leader(@user.person, @user.person)
-      @user.person.organizations.first.add_contact(@contact1)
-      @user.person.organizations.first.add_contact(@contact2)
-      @user.person.organizations.first.add_contact(@contact3)
-      @user.person.organizations.first.add_contact(@contact4)
-      @user.person.organizations.first.add_contact(@contact5)
 
-      @contact5.organizational_roles.first.destroy
+      @org.add_leader(@user.person, @user.person)
+      @org.add_contact(@contact1)
+      @org.add_contact(@contact2)
+      @org.add_contact(@contact3)
+      @org.add_contact(@contact4)
+
       xhr :get, :index, {:assigned_to => "unassigned"}
       assert_equal [@contact1.id, @contact2.id, @contact3.id, @contact4.id], assigns(:people).collect(&:id).sort
     end
 
   end
 
-  context "When retrieving roles depending on current user role" do
+  context "When retrieving permissions depending on current user permission" do
     context "When user is admin" do
       setup do
         @user = Factory(:user_with_auxs)  #user with a person object
         org = Factory(:organization)
-        Factory(:organizational_role, person: @user.person, role: Role.admin, organization: org)
+        Factory(:organizational_permission, person: @user.person, permission: Permission.admin, organization: org)
         sign_in @user
         @request.session[:current_organization_id] = org.id
 
@@ -350,14 +410,14 @@ class ContactsControllerTest < ActionController::TestCase
         @predefined.questions << Factory(:year_in_school_element)
       end
 
-      should "get all roles" do
+      should "get all permissions" do
         get :index
         assert_response(:success)
-        assert(assigns(:roles_for_assign).include? Role.admin)
+        assert(assigns(:permissions_for_assign).include? Permission.admin)
 
         get :mine
         assert_response(:success)
-        assert(assigns(:roles_for_assign).include? Role.admin)
+        assert(assigns(:permissions_for_assign).include? Permission.admin)
       end
     end
 
@@ -366,7 +426,7 @@ class ContactsControllerTest < ActionController::TestCase
         @user = Factory(:user_with_auxs)
         @user2 = Factory(:user_with_auxs)
         org = Factory(:organization)
-        Factory(:organizational_role, person: @user.person, role: Role.leader, organization: org, :added_by_id => @user2.person.id)
+        Factory(:organizational_permission, person: @user.person, permission: Permission.user, organization: org, :added_by_id => @user2.person.id)
         sign_in @user
         @request.session[:current_organization_id] = org.id
 
@@ -375,14 +435,14 @@ class ContactsControllerTest < ActionController::TestCase
         @predefined.questions << Factory(:year_in_school_element)
       end
 
-      should "not include admin role if user is not admin" do
+      should "not include admin permission if user is not admin" do
         get :index
         assert_response(:success)
-        assert(!(assigns(:roles_for_assign).include? Role.admin))
+        assert(!(assigns(:permissions_for_assign).include? Permission.admin))
 
         get :mine
         assert_response(:success)
-        assert(!(assigns(:roles_for_assign).include? Role.admin))
+        assert(!(assigns(:permissions_for_assign).include? Permission.admin))
       end
     end
 
@@ -401,16 +461,17 @@ class ContactsControllerTest < ActionController::TestCase
       setup do
         get :index
       end
-      should redirect_to '/wizard'
+      should "show dashboard info page" do
+        assert_response :redirect
+      end
     end
-
   end
 
   context "After logging in as a contact" do
     setup do
       @user = Factory(:user_no_org)  #user with a person object
       @organization = Factory(:organization)
-      @organizational_role = Factory(:organizational_role, person: @user.person, organization: @organization, :role => Role.contact)
+      @organizational_permission = Factory(:organizational_permission, person: @user.person, organization: @organization, :permission => Permission.no_permissions)
       sign_in @user
     end
 
@@ -418,7 +479,9 @@ class ContactsControllerTest < ActionController::TestCase
       setup do
         get :index
       end
-      should redirect_to('/wizard')
+      should "show dashboard" do
+        assert_response :success
+      end
     end
   end
 
@@ -431,8 +494,8 @@ class ContactsControllerTest < ActionController::TestCase
 
     #org.add_leader(user1.person, user.person)
     #org.add_leader(user2.person, user.person)
-    Factory(:organizational_role, person: user1.person, organization: org, role: Role.leader)
-    Factory(:organizational_role, person: user2.person, organization: org, role: Role.leader)
+    Factory(:organizational_permission, person: user1.person, organization: org, permission: Permission.user)
+    Factory(:organizational_permission, person: user2.person, organization: org, permission: Permission.user)
 
     xhr :post, :send_reminder, { :to => "#{user1.person.id}, #{user2.person.id}" }
 
@@ -447,15 +510,15 @@ class ContactsControllerTest < ActionController::TestCase
       @user2 = Factory(:user_with_auxs)
 
       @user, @org = admin_user_login_with_org
-      Factory(:organizational_role, organization: @org, person: @user.person, role: Role.leader)
+      Factory(:organizational_permission, organization: @org, person: @user.person, permission: Permission.user)
       @person1 = Factory(:person, first_name: "Neil Marion", last_name: "dela Cruz", email: "ndc@email.com")
-      Factory(:organizational_role, organization: @org, person: @person1, role: Role.contact)
+      Factory(:organizational_permission, organization: @org, person: @person1, permission: Permission.no_permissions)
       @person2 = Factory(:person, first_name: "Johnny", last_name: "English", email: "english@email.com")
-      Factory(:organizational_role, organization: @org, person: @person2, role: Role.contact)
+      Factory(:organizational_permission, organization: @org, person: @person2, permission: Permission.no_permissions)
       @person3 = Factory(:person, first_name: "Johnny", last_name: "Bravo", email: "bravo@email.com")
-      Factory(:organizational_role, organization: @org, person: @person3, role: Role.contact)
+      Factory(:organizational_permission, organization: @org, person: @person3, permission: Permission.no_permissions)
       @person4 = Factory(:person, first_name: "Neil", last_name: "O'neil", email: "neiloneil@email.com")
-      Factory(:organizational_role, organization: @org, person: @person4, role: Role.contact)
+      Factory(:organizational_permission, organization: @org, person: @person4, permission: Permission.no_permissions)
     end
 
 
@@ -527,11 +590,11 @@ class ContactsControllerTest < ActionController::TestCase
       sign_in @user
 
       @archived_contact1 = Factory(:person, first_name: "Edmure", last_name: "Tully")
-      Factory(:organizational_role, organization: @user.person.organizations.first, person: @archived_contact1, role: Role.contact)
-      @archived_contact1.organizational_roles.where(role_id: Role::CONTACT_ID).first.archive #archive his one and only role
+      Factory(:organizational_permission, organization: @user.person.organizations.first, person: @archived_contact1, permission: Permission.no_permissions)
+      @archived_contact1.organizational_permissions.where(permission_id: Permission::NO_PERMISSIONS_ID).first.archive #archive his one and only permission
 
       @unarchived_contact1 = Factory(:person, first_name: "Brynden", last_name: "Tully")
-      Factory(:organizational_role, organization: @user.person.organizations.first, person: @unarchived_contact1, role: Role.contact)
+      Factory(:organizational_permission, organization: @user.person.organizations.first, person: @unarchived_contact1, permission: Permission.no_permissions)
       Factory(:email_address, email: "bryndentully@email.com", person: @unarchived_contact1, primary: true)
     end
 
@@ -571,11 +634,11 @@ class ContactsControllerTest < ActionController::TestCase
       @predefined.questions << Factory(:year_in_school_element)
 
       @contact1 = Factory(:person)
-      Factory(:organizational_role, role: Role.contact, organization: org, person: @contact1)
+      Factory(:organizational_permission, permission: Permission.no_permissions, organization: org, person: @contact1)
       @contact2 = Factory(:person)
-      Factory(:organizational_role, role: Role.contact, organization: org, person: @contact2)
+      Factory(:organizational_permission, permission: Permission.no_permissions, organization: org, person: @contact2)
       @admin1 = Factory(:person)
-      Factory(:organizational_role, role: Role.admin, organization: org, person: @admin1)
+      Factory(:organizational_permission, permission: Permission.admin, organization: org, person: @admin1)
 
       @survey = Factory(:survey, organization: org) #create survey
       @keyword = Factory(:approved_keyword, organization: org, survey: @survey) #create keyword
@@ -612,8 +675,8 @@ class ContactsControllerTest < ActionController::TestCase
 
       @contact1 = Factory(:person)
       @contact2 = Factory(:person)
-      Factory(:organizational_role, role: Role.contact, organization: org, person: @contact1) #make them contacts in the org
-      Factory(:organizational_role, role: Role.contact, organization: org, person: @contact2) #make them contacts in the org
+      Factory(:organizational_permission, permission: Permission.no_permissions, organization: org, person: @contact1) #make them contacts in the org
+      Factory(:organizational_permission, permission: Permission.no_permissions, organization: org, person: @contact2) #make them contacts in the org
 
       @survey = Factory(:survey, organization: org) #create survey
       @keyword = Factory(:approved_keyword, organization: org, survey: @survey) #create keyword
@@ -713,6 +776,7 @@ class ContactsControllerTest < ActionController::TestCase
   context "Creating contacts" do
     setup do
       @user, org = admin_user_login_with_org
+      @org = @user.person.organizations.first
       @predefined_survey = Factory(:survey, organization: org)
       APP_CONFIG['predefined_survey'] = @predefined_survey.id
       @year_in_school_question = Factory(:year_in_school_element)
@@ -765,12 +829,14 @@ class ContactsControllerTest < ActionController::TestCase
       assert_equal "Any", Person.last.first_name
     end
 
-    should "retain all the roles if there's a merge (creating contact with the same first_name, last_name and email with an existing person in the db) during create contacts" do
+    should "retain all the labels if there's a merge (creating contact with the same first_name, last_name and email with an existing person in the db)" do
+      @person = Factory(:person, email:'abcd@email.com')
+      @org.add_contact(@person)
       @org_child = Factory(:organization, :name => "neilmarion", :parent => @user.person.organizations.first, :show_sub_orgs => 1)
       @request.session[:current_organization_id] = @org_child.id
 
       assert_no_difference "Person.count" do
-        xhr :post, :create, {:person => {:first_name => @user.person.first_name, :last_name => @user.person.last_name, :email_address => {:email => @user.person.email, :primary => 1}}, :labels => [Role.leader.id.to_s, Role.contact.id.to_s] }
+        xhr :post, :create, {:person => {:first_name => @person.first_name, :last_name => @person.last_name, :email_address => {:email => @person.email, :primary => 1}}, :labels => [Label.leader.id.to_s, Label.involved.id.to_s]}
       end
     end
   end
@@ -780,14 +846,14 @@ class ContactsControllerTest < ActionController::TestCase
       @user, org = admin_user_login_with_org
 
       @person1 = Factory(:person)
-      @role1 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person1)
-      @role1.update_attributes({followup_status: "uncontacted"})
+      @permission1 = Factory(:organizational_permission, organization: org, permission: Permission.no_permissions, person: @person1)
+      @permission1.update_attributes({followup_status: "uncontacted"})
       @person2 = Factory(:person)
-      @role2 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person2)
-      @role2.update_attributes({followup_status: "attempted_contact"})
+      @permission2 = Factory(:organizational_permission, organization: org, permission: Permission.no_permissions, person: @person2)
+      @permission2.update_attributes({followup_status: "attempted_contact"})
       @person3 = Factory(:person)
-      @role3 = Factory(:organizational_role, organization: org, role: Role.contact, person: @person3)
-      @role3.update_attributes({followup_status: "contacted"})
+      @permission3 = Factory(:organizational_permission, organization: org, permission: Permission.no_permissions, person: @person3)
+      @permission3.update_attributes({followup_status: "contacted"})
 
       @predefined = Factory(:survey, organization: org)
       APP_CONFIG['predefined_survey'] = @predefined.id
@@ -860,10 +926,10 @@ class ContactsControllerTest < ActionController::TestCase
       @person2 = Factory(:person, first_name: 'Two')
       @person3 = Factory(:person, first_name: 'Three')
       @person4 = Factory(:person, first_name: 'Four')
-      Factory(:organizational_role, organization: @org, role: Role.contact, person: @person1)
-      Factory(:organizational_role, organization: @org, role: Role.contact, person: @person2)
-      Factory(:organizational_role, organization: @org, role: Role.contact, person: @person3)
-      Factory(:organizational_role, organization: @org, role: Role.contact, person: @person4)
+      Factory(:organizational_permission, organization: @org, permission: Permission.no_permissions, person: @person1)
+      Factory(:organizational_permission, organization: @org, permission: Permission.no_permissions, person: @person2)
+      Factory(:organizational_permission, organization: @org, permission: Permission.no_permissions, person: @person3)
+      Factory(:organizational_permission, organization: @org, permission: Permission.no_permissions, person: @person4)
 
       @predefined = Factory(:survey, organization: @org)
       APP_CONFIG['predefined_survey'] = @predefined.id
@@ -871,34 +937,27 @@ class ContactsControllerTest < ActionController::TestCase
     end
 
     should "return admins when Admin link is clicked" do
-      Factory(:organizational_role, organization: @org, person: @person1, role: Role.admin)
-      xhr :get, :index, { :role => Role::ADMIN_ID }
+      Factory(:organizational_permission, organization: @org, person: @person1, permission: Permission.admin)
+      xhr :get, :index, { :permission => Permission::ADMIN_ID }
       assert_equal 2, assigns(:people).total_count, "only 2 record should be returned"
       assert assigns(:people).include?(@person1)
       assert assigns(:people).include?(@user.person)
     end
 
     should "return leaders when Leader link is clicked" do
-      Factory(:organizational_role, organization: @org, person: @person1, role: Role.leader)
-      xhr :get, :index, { :role => Role::LEADER_ID }
+      Factory(:organizational_permission, organization: @org, person: @person1, permission: Permission.user)
+      xhr :get, :index, { :permission => Permission::USER_ID }
       assert_equal 1, assigns(:people).total_count, "only 1 record should be returned"
       assert assigns(:people).include?(@person1)
     end
 
     should "return contacts when Contact link is clicked" do
-      xhr :get, :index, { :role => Role::CONTACT_ID }
+      xhr :get, :index, { :permission => Permission::NO_PERMISSIONS_ID }
       assert_equal 4, assigns(:people).total_count, "4 records should be returned"
       assert assigns(:people).include?(@person1)
       assert assigns(:people).include?(@person2)
       assert assigns(:people).include?(@person3)
       assert assigns(:people).include?(@person4)
-    end
-
-    should "return involveds when Involved link is clicked" do
-      Factory(:organizational_role, organization: @org, person: @person1, role: Role.involved)
-      xhr :get, :index, { :role => Role::INVOLVED_ID }
-      assert_equal 1, assigns(:people).total_count, "only 1 record should be returned"
-      assert assigns(:people).include?(@person1)
     end
 
     context "by gender" do
@@ -948,31 +1007,22 @@ class ContactsControllerTest < ActionController::TestCase
 
     context "by labels" do
       setup do
-        # Default
-        @person5 = Factory(:person, first_name: 'Five')
-        Factory(:organizational_role, organization: @org, person: @person1, role: Role.leader)
-        Factory(:organizational_role, organization: @org, person: @person2, role: Role.admin)
-        Factory(:organizational_role, organization: @org, person: @person3, role: Role.involved)
-        Factory(:organizational_role, organization: @org, person: @person4, role: Role.alumni)
-        Factory(:organizational_role, organization: @org, person: @person5, role: Role.contact)
-        # Non-Default
-        @a_person = Factory(:person, first_name: 'a_role')
-        @b_person = Factory(:person, first_name: 'b_role')
-        @a_role = Factory(:role, organization: @org, name: 'a_role')
-        @b_role = Factory(:role, organization: @org, name: 'b_role')
-        Factory(:organizational_role, organization: @org, person: @a_person, role: @a_role)
-        Factory(:organizational_role, organization: @org, person: @b_person, role: @b_role)
+        Factory(:organizational_label, organization: @org, person: @person1, label: Label.involved)
+        Factory(:organizational_label, organization: @org, person: @person2, label: Label.leader)
+        Factory(:organizational_label, organization: @org, person: @person3, label: Label.engaged_disciple)
+        Factory(:organizational_label, organization: @org, person: @user.person, label: Label.engaged_disciple)
       end
 
-      should "return people sorted by their roles (default roles) desc" do
-        xhr :get, :index, {:search=>{:meta_sort=>"role_id desc"}}
-        assert_equal assigns(:people).collect(&:id).first, @b_person.id
+      should "return people sorted by their labels (default labels) asc" do
+        xhr :get, :index, {:search=>{:meta_sort=>"labels.asc"}}
+        results = assigns(:people).collect(&:id)
+        assert_equal @person1.id, results.first
       end
 
-      should "return people sorted by their roles (default roles) asc" do
-        xhr :get, :index, {:search=>{:meta_sort=>"role_id asc"}}
-        assert_equal @user.person.id, assigns(:people).collect(&:id).first
-        assert_equal @b_person.id, assigns(:people).collect(&:id).last
+      should "return people sorted by their labels (default labels) desc" do
+        xhr :get, :index, {:search=>{:meta_sort=>"labels.desc"}}
+        results = assigns(:people).collect(&:id)
+        assert_equal @person4.id, results.last
       end
     end
   end

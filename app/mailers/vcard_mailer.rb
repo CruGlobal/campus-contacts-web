@@ -8,7 +8,6 @@ class VcardMailer < ActionMailer::Base
     person = Person.find(person_id)
     @name = person.to_s.titleize
     filename = @name + '.vcf'
-    
     subject = t('contacts.mailer.vcard_email_subject', name: @name)
 
     attachments[filename] = Person.vcard(person_id).to_s

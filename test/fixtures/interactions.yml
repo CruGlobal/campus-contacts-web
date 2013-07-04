@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  interaction_type_id: 1
+  receiver_id: 1
+  created_by_id: 1
+  organization_id: 1
+  comment: MyString
+  privacy_setting: MyString
+  timestamp: 2013-05-02 17:35:11
+  deleted_at: 2013-05-02 17:35:11
+
+two:
+  interaction_type_id: 1
+  receiver_id: 1
+  created_by_id: 1
+  organization_id: 1
+  comment: MyString
+  privacy_setting: MyString
+  timestamp: 2013-05-02 17:35:11
+  deleted_at: 2013-05-02 17:35:11

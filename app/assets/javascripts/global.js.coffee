@@ -8,7 +8,7 @@ $ ->
       preventDuplicates: true
       minChars: 3
       resultsLimit: 10
-      hintText: $('#send_email_to').attr("data-search-desc"),
+      hintText: "",
       placeHolder: $('#send_email_to').attr("data-search-desc"),
       defaultWidth: 690
 
@@ -17,19 +17,31 @@ $ ->
       preventDuplicates: true
       minChars: 3
       resultsLimit: 10
-      hintText: $('#send_text_to').attr("data-search-desc"),
+      hintText: "",
       placeHolder: $('#send_text_to').attr("data-search-desc"),
       defaultWidth: 690
 
-    include_archived = $.url(window.location.href).param("include_archived")
-    if include_archived
-      sidebar_url = '/display_sidebar?include_archived=' + include_archived
-    else
-      sidebar_url = '/display_sidebar'
+    get_url = $.url(window.location.href)
+    assigned_to = get_url.param("assigned_to")
+    label = get_url.param("label")
+    permission = get_url.param("permission")
+    archived = get_url.param("archived")
+    dnc = get_url.param("dnc")
+
     if $('#sidebar_div').is(':visible')
       $.ajax
         type: 'GET',
-        url: sidebar_url
+        url: '/display_sidebar'
+    else if $('#ac_sidebar').is(':visible')
+      $.ajax
+        type: 'GET',
+        url: '/display_new_sidebar',
+        data:
+          assigned_to: assigned_to
+          label: label
+          permission: permission
+          archived: archived
+          dnc: dnc
 
   $('a#survey_keywords_mode_link').siblings('ul').width(300)
 
@@ -43,22 +55,16 @@ $ ->
   $("select, input[type=text], input[type=password], input[type=email]").live "keypress", (e) ->
     false if e.which is 13
 
-  $('#bulk_send_msg_dialog').dialog
-    resizable: false,
-    height:444,
-    width:730,
-    modal: true,
-    draggable: false,
-    autoOpen: false,
-    open: (event, ui) ->
-      $("body").css({ overflow: 'hidden' })
-      $('.ui-widget-overlay').width('100%')
-      $(".token-input-dropdown-facebook").hide()
-    close: (event, ui) ->
-      $("body").css({ overflow: 'inherit' })
-      $('#bulk_sms_message').val($('#bulk_send_body').val())
-    buttons:
-      Send: ->
-        $(this).submitBulkSendTextDialog()
-      Cancel: ->
-        $(this).dialog('close')
+  $('#token-input-send_email_to').live 'blur', ->
+    $(this).width(675)
+
+  $('#token-input-send_email_to').live 'focus', ->
+    if $(this).val() == ""
+      $(this).width(675)
+
+  $('#token-input-send_text_to').live 'blur', ->
+    $(this).width(675)
+
+  $('#token-input-send_text_to').live 'focus', ->
+    if $(this).val() == ""
+      $(this).width(675)

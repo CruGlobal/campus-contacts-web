@@ -1,0 +1,11 @@
+if(<%= @status %>){
+  $('.label_space .label_list').append("<%= escape_javascript(render partial: 'shared/label', locals: {label_id: @new_label.id, label_name: @new_label.name, checked: true}) if @new_label.present? %>")
+  $('.label_space .label_list').prop({scrollTop:$('.label_list').prop('scrollHeight')})
+  $('#new_label_field').val('')
+  $('#new_label_message').html("")
+}else{
+  $('#new_label_message').html("<%= escape_javascript(@msg_alert) %>")
+}
+$("#new_label_button").attr('disabled',false)
+$('#new_label_field').removeClass('loading')
+$('#new_label_field').focus()

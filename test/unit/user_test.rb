@@ -13,12 +13,12 @@ class UserTest < ActiveSupport::TestCase
     assert_equal User.find_by_id(u.id), User.find_by_id(u.id)
   end
   
-  test "has role" do
+  test "has permission" do
     user = Factory(:user_with_auxs)
-    org = user.person.organizations.first
-    Factory(:organizational_role, person: user.person, organization: org, role: Role.leader)
+    org = Factory(:organization)
+    Factory(:organizational_permission, person: user.person, organization: org, permission: Permission.user)
     
-    assert user.has_role?(Role::LEADER_ID,  org)
+    assert user.has_permission?(Permission::USER_ID,  org)
   end
   
   test "merge" do

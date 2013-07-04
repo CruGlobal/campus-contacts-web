@@ -5,55 +5,65 @@ class Apis::V3::RolesControllerTest < ActionController::TestCase
     request.env['HTTP_ACCEPT'] = 'application/json'
     @client = Factory(:client)
     @user = Factory(:user_no_org)
-    @client.organization.add_admin(@user.person)
-    @role = Factory(:role, organization: @client.organization)
+
+    @org = @client.organization
+    @org.add_admin(@user.person)
+    @other_org = Factory(:organization)
+
+    @permission = @user.person.permission_for_org_id(@org.id)
+    @label = Factory(:label, organization: @org)
+    Factory(:organizational_label, organization: @org, person: @user.person, label: @label)
   end
 
   context '.index' do
-    should 'return a list of roles' do
+    should 'return a role and labels' do
       get :index, secret: @client.secret, order: 'created_at'
       assert_response :success
       json = JSON.parse(response.body)
-      assert_equal @role.id, json['roles'].last['id'], json.inspect
+      assert_equal @org.permissions.count + @org.labels.count, json['roles'].count, json.inspect
+      assert_equal @permission.id, json['roles'].first['id'], json['roles'].first.inspect
+      assert_equal @label.id, json['roles'].last['id'], json['roles'].last.inspect
     end
   end
 
-
   context '.show' do
-    should 'return a role' do
-      get :show, id: @role.id, secret: @client.secret
+    should 'return a permission' do
+      get :show, id: @permission.id, secret: @client.secret
       json = JSON.parse(response.body)
-      assert_equal @role.name, json['role']['name']
+      assert_equal @permission.name, json['role']['name'], json.inspect
+    end
+    should 'return a label' do
+      get :show, id: @label.id, secret: @client.secret
+      json = JSON.parse(response.body)
+      assert_equal @label.name, json['role']['name'], json.inspect
     end
   end
 
   context '.create' do
-    should 'create and return a role' do
-      assert_difference "Role.count" do
-        post :create, role: {name: 'funk'}, secret: @client.secret
+    should 'create and return a label' do
+      assert_difference "Label.count" do
+        post :create, role: {name: 'sample_label'}, secret: @client.secret
       end
       json = JSON.parse(response.body)
-      assert_equal 'funk', json['role']['name']
+      assert_equal 'sample_label', json['role']['name'], json.inspect
+      assert_not_nil json['role']['created_at'], json.inspect
     end
   end
 
   context '.update' do
-    should 'create and return a role' do
-      put :update, id: @role.id, role: {name: 'funk'}, secret: @client.secret
+    should 'update and return a label' do
+      put :update, id: @label.id, role: {name: 'new_label_name'}, secret: @client.secret
       json = JSON.parse(response.body)
-      assert_equal 'funk', json['role']['name']
+      assert_equal 'new_label_name', json['role']['name']
     end
   end
 
   context '.destroy' do
-    should 'create and return a role' do
-      assert_difference "Role.count", -1 do
-        delete :destroy, id: @role.id, secret: @client.secret
+    should 'destroy label' do
+      assert_difference "Label.count", -1 do
+        delete :destroy, id: @label.id, secret: @client.secret
       end
     end
   end
-
-
-
 end
 

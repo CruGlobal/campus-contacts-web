@@ -1,0 +1,11 @@
+<% @interactions.each do |interaction| %>
+  $('#interaction_feeds_container').append("<div class='interaction_feed_container new' id='interaction_feed_container_<%= interaction.id %>'><%= escape_javascript(render partial: 'interactions/interaction_feed', locals: {interaction: interaction}) %></div>")
+  $('.interaction_feed_container.new').each(function(){
+    $(this).hide().fadeIn('slow')
+    $(this).removeClass('new')
+  })
+<% end %>
+<% if @interactions.last != @last_interaction %>
+  $('#interaction_paging').html("<%= escape_javascript(link_to(raw('<button class=action_gray>Load More</button>'), '', id: 'interaction_paging_link', 'data-last-id' => @interactions.last.id, 'data-person-id' => @person.id)) %>")
+<% end %>
+$.toggleLoader('interaction_paging','')

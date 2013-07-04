@@ -1,0 +1,29 @@
+<% provide :sidebar do %>
+  <div id="ac_sidebar">
+    <div id="upper_sidebar_lists">
+    	<button class="red_accent full_width_button" id="allcontacts_add_contact_button">Add a Contact</button>
+    </div>
+  	<div id="mine_sidebar_lists">
+      <ul class="ac_dropdown_list">
+      	<li class="ac_dropdown_list_header <%= 'selected_class' if params[:status] == 'all' %>">
+          <%= link_to(t('contacts.mine.all'), my_contacts_path(status: 'all')) %>
+          (<%= current_person.assigned_contacts_limit_org(@organization).collect(&:id).count %>)
+        </li>
+      	<li class="my_completed ac_dropdown_list_header <%= 'selected_class' if params[:status] == 'completed' %>">
+          <%= link_to(t('contacts.mine.completed'), my_contacts_path(status: 'completed')) %>
+          (<span class="count"><%= @completed_contacts.count %></span>)
+        </li>
+      	<li class="my_in_progress ac_dropdown_list_header <%= 'selected_class' if params[:status] == 'in_progress' %>">
+          <%= link_to(t('contacts.mine.in_progress'), my_contacts_path(status: 'in_progress')) %>
+          (<span class="count"><%= @inprogress_contacts.count %></span>)
+        </li>
+      	<li class="ac_dropdown_list_header <%= 'selected_class' if params[:status] == 'detailed' %>">
+          <%= link_to(t('contacts.mine.detailed'), all_contacts_path(assigned_to: current_person.id)) %>
+        </li>
+      	<li class="ac_dropdown_list_header">
+          <%= link_to(t('contacts.mine.comments'), profile_path(current_person, :click=>"interactions")) %>
+        </li>
+      </ul>
+    </div>
+  </div>
+<% end %>

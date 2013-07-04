@@ -226,8 +226,8 @@ class ApplicationController < ActionController::Base
       end
       unless org
         if org = person.primary_organization
-          # If they're a contact at their primary org (shouldn't happen), look for another org where they have a different role
-          if !person.org_ids[org.id] || (person.org_ids[org.id]['roles'] & Role.leader_ids).blank?
+          # If they're a contact at their primary org (shouldn't happen), look for another org where they have a different permission
+          if !person.org_ids[org.id] || (person.org_ids[org.id]['permissions'] & Permission.user_ids).blank?
             person.primary_organization = person.organizations.first
           end
           session[:current_organization_id] = person.primary_organization.id
@@ -304,11 +304,11 @@ class ApplicationController < ActionController::Base
   end
 
   def is_leader?
-    current_user.has_role?(Role::LEADER_ID, current_organization) || is_admin?
+    current_user.has_permission?(Permission::USER_ID, current_organization) || is_admin?
   end
 
   def is_admin?
-    current_user.has_role?(Role::ADMIN_ID, current_organization)
+    current_user.has_permission?(Permission::ADMIN_ID, current_organization)
   end
   helper_method :is_admin?
 
@@ -346,16 +346,24 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def roles_for_assign
-    current_user_roles = current_user.person
-                                     .organizational_roles
-                                     .where(:organization_id => current_organization)
-                                     .collect { |r| Role.find_by_id(r.role_id) }.compact
+  def groups_for_assign
+    @groups_for_assign = current_organization.groups
+  end
 
-    if current_user_roles.include? Role.find(1)
-      @roles_for_assign = current_organization.roles
+  def labels_for_assign
+    @labels_for_assign = Label.where("organization_id IN (?)", [current_organization.id, 0])
+  end
+
+  def permissions_for_assign
+    current_user_permissions = current_user.person
+                                     .organizational_permissions
+                                     .where(:organization_id => current_organization.self_and_parents.collect(&:id))
+                                     .collect { |r| Permission.find_by_id(r.permission_id) }.compact
+
+    if current_user_permissions.include?(Permission.admin)
+      @permissions_for_assign = current_organization.permissions.arrange_all
     else
-      @roles_for_assign = current_organization.roles.delete_if { |role| role == Role.find(1) }
+      @permissions_for_assign = current_organization.permissions.arrange_all.delete_if { |permission| permission == Permission.admin }
     end
   end
 

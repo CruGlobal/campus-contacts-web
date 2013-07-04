@@ -54,12 +54,12 @@ class Api::FollowupCommentsController < ApiController
     ids = params[:id].split(',')
     
     comments = FollowupComment.where(id: ids)
-    role = current_person.organizational_roles.where(organization_id: @organization.id).collect(&:role).collect(&:i18n)
+    permission = current_person.organizational_permissions.where(organization_id: @organization.id).collect(&:permission).collect(&:i18n)
     
     comments.each_with_index do |comment,i|
-      if role[i] == 'leader'
+      if permission[i] == 'leader'
         raise FollowupCommentPermissionsError unless comment.commenter_id == current_person.id
-      elsif role[i] == 'admin'
+      elsif permission[i] == 'admin'
         raise FollowupCommentPermissionsError unless comment.organization_id == @organization.id
       else
         raise FollowupCommentPermissionsError

@@ -1,12 +1,9 @@
 <% block_admin_label = false unless defined?(block_admin_label) %>
 <div class="label_space">
   <div class="label_list">
-    <%= render partial: 'shared/label', locals: {role_id: 0, role_name: @import.label_name, checked: true} if @import.present? %>
-    <% current_organization.role_set.each do |role| %>
-      <% if role.name == 'Contact' %>
-        <% checked = true %>
-        <% disabled = true %>
-      <% elsif role.name == 'Leader' || role.name == 'Admin' %>
+    <%= render partial: 'shared/label', locals: {label_id: 0, label_name: @import.label_name, checked: true} if @import.present? %>
+    <% current_organization.label_set.each do |label| %>
+      <% if label.name == 'Leader' %>
         <% checked = false %>
         <% disabled = block_admin_label %>
       <% else %>
@@ -14,9 +11,9 @@
         <% disabled = false %>
       <% end %>
       
-      <% checked = true if @selected_labels.present? && @selected_labels.include?(role.id.to_s) %>
+      <% checked = true if @selected_labels.present? && @selected_labels.include?(label.id.to_s) %>
       
-      <%= render partial: 'shared/label', locals: {role_id: role.id, role_name: role.name, checked: checked, disabled: disabled} %>
+      <%= render partial: 'shared/label', locals: {label_id: label.id, label_name: label.name, checked: checked, disabled: disabled} %>
     <% end %>
   </div>
   <div class="label_new">

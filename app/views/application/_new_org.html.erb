@@ -1,9 +1,9 @@
 <% primary = current_user.primary_organization_id == org.id %>
 <div class="org_nav_item">
   <div class="org_control org_control_<%= org.id %> <%= 'tree_no_child' unless children.present? %>" child_div="children_org_<%= org.id %>" id="org_control_<%= org.id %>"></div>
-  <div class="org_star tipitmiddle <%= 'primary' if primary %>" url='<%= set_primary_organizational_role_path(org) %>' title="Set <%= org %> as your default organization"></div>
+  <div class="org_star tipitmiddle <%= 'primary' if primary %>" url='<%= set_primary_organizational_permission_path(org) %>' title="Set <%= org %> as your default organization"></div>
   <div class="org_name">
-    <%= link_to "#{org}", set_current_organizational_role_path(org),
+    <%= link_to "#{org}", set_current_organizational_permission_path(org),
       class: "plain_name org_nav_toggle", title: "Go to #{org}",
       id: "org_nav_#{org.id}" %>
   </div>

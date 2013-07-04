@@ -1,3 +1,9 @@
+#imports_controller {
+  .label_space {
+    margin: 10px auto;
+  }
+}
+
 .manage_labels {
 	width: 325px;
 	padding: 15px;
@@ -5,7 +11,6 @@
 .label_space {
 	height: 240px;
 	width: 300px;
-	margin: 10px auto 0;
 
   .label_list {
   	border: 1px solid #CCC;
@@ -48,6 +53,9 @@
 	border-bottom: 1px solid #CCC;
 	padding: 4px;
 	background: #FCFCFC;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .import_label {
 	width: 90px;

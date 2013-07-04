@@ -1,22 +1,26 @@
 <tr id="all">
-	<td colspan="10" align="center">
+	<td colspan="99">
 		<span id="all_text">
 		  <% @filtered_people.each do |person| %>
-        <% roles = (person.assigned_organizational_roles(current_organization.id).default_roles_desc + person.assigned_organizational_roles(current_organization.id).non_default_roles_asc) %>
+        <% if params[:include_archived] || params[:archived] %>
+					<% permissions = person.assigned_organizational_permissions_including_archived(current_organization.id).arrange_all %>
+				<% else %>
+					<% permissions = person.assigned_organizational_permissions(current_organization.id).arrange_all %>
+				<% end %>
 				<span class="all_row" data-id="<%= person.id %>" data-name="<%= person.first_name %> <%= person.last_name %>" data-email="<%= person.email %>" data-phone-number="<%= person.pretty_phone_number %>">
-    		  <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox not_displayed', 'data-name' => "#{person.first_name} #{person.last_name}", style: 'display:none;', 'data-email'=>person.email, 'data-roles' => "#{roles.collect(&:id).join(',')}"%>
+    		  <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox contact_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", style: 'display:none;', 'data-email'=>person.email, 'data-permissions' => "#{person.permissions.collect(&:id).join(',')}", 'data-labels'=>"#{person.labels.collect(&:id).join(',')}"%>
 				</span>
 		  <% end %>
-  
-			<%=raw t('people.all.page_selected_html', count: @people.size) %> 
-			<% if @all_people.size > @people.size %>
+
+			<%=raw t('people.all.page_selected_html', count: @people.length) %>
+			<% if @all_people.length > @people.length %>
 			  <a href="#" id="fetch_all_contacts_link">
-					<%=raw t('people.all.select_all_html_mine', count: @all_people.size) %>
+					<%=raw t('people.all.select_all_html_mine', count: @all_people.length) %>
 				</a>
 			<% end %>
 		</span>
 		<span id="all_selected_text" style="display:none">
-			<%=raw t('people.all.all_selected_html_mine', count: @all_people.size) %>
+			<%=raw t('people.all.all_selected_html_mine', count: @all_people.length) %>
 		</span>
 	</td>
 </tr>

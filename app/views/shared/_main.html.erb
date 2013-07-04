@@ -1,3 +1,4 @@
+<%- wiser_date_global(timezone: current_user.settings[:time_zone]) %>
 <div class="<%= params[:action] %> carea">
   <% if flash && (flash[:error] || flash[:notice] || flash[:alert]) %>
     <div class="flash">

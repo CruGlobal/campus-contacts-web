@@ -51,7 +51,7 @@ class LeadersControllerTest < ActionController::TestCase
       person.email = 'bad email'
       person.user = nil
       person.save(validate: false)
-      assert_no_difference('OrganizationalRole.count') do
+      assert_no_difference('OrganizationalPermission.count') do
         assert_no_difference('User.count') do
           xhr :post, :create, person_id: person.id
           assert_response :success
@@ -64,7 +64,7 @@ class LeadersControllerTest < ActionController::TestCase
       user2 = Factory(:user_with_auxs)
       user2.person.update_attribute(:email, 'test@example.com')
 
-      assert_difference('OrganizationalRole.count') do
+      assert_difference('OrganizationalPermission.count') do
         assert_no_difference('User.count') do
           xhr :post, :add_person, person: {first_name: 'John', last_name: 'Doe', email_address: {email: user2.person.email_addresses.first.email}}, notify: '1' #, person_id: user2.person.id
           assert_response :success
@@ -73,7 +73,7 @@ class LeadersControllerTest < ActionController::TestCase
     end
     
     should "add a leader manually (not already in db)" do 
-      assert_difference('OrganizationalRole.count') do
+      assert_difference('OrganizationalPermission.count') do
         assert_difference('User.count') do
           assert_difference('Person.count') do
             xhr :post, :add_person, person: {first_name: 'John1', last_name: 'Doe', gender: '1', email_address: {email: 'new_user@example.com'}, phone_number: {phone: '444-444-4444'}}, notify: '1' 
@@ -105,7 +105,7 @@ class LeadersControllerTest < ActionController::TestCase
       person.email = 'bad email'
       person.user = nil
       person.save(validate: false)
-      assert_difference('OrganizationalRole.count') do
+      assert_difference('OrganizationalPermission.count') do
         assert_difference('User.count') do
           xhr :put, :update, id: person.id, person: {first_name: 'John', last_name: 'Doe', email_address: {email: 'good_email@example.com'}, phone_number: {phone: '444-444-4444'}}, notify: '1' 
           assert_response :success
@@ -138,7 +138,7 @@ class LeadersControllerTest < ActionController::TestCase
       user2 = Factory(:user_with_auxs)
       user3 = Factory(:user_with_auxs)
       @user.person.primary_organization.add_leader(user2.person, user3.person)
-      assert_difference('OrganizationalRole.where("archive_date" => nil).count', -1) do
+      assert_difference('OrganizationalPermission.where("archive_date" => nil).count', -1) do
         xhr :get,  :destroy, id: user2.person.id
         assert_response :success
       end
@@ -165,18 +165,18 @@ class LeadersControllerTest < ActionController::TestCase
 =end
   end
 
-  context "Seaching for Persons to be assigned a leader role" do
+  context "Seaching for Persons to be assigned a leader permission" do
     setup do
       @user = Factory(:user_with_auxs)
       @org = Factory(:organization)
-      org_role = Factory(:organizational_role, organization: @org, person: @user.person, role: Role.admin)
+      org_permission = Factory(:organizational_permission, organization: @org, person: @user.person, permission: Permission.admin)
         
       sign_in @user
       @request.session[:current_organization_id] = @org.id
       
-      @roles = []
-      @roles << Role.leader
-      @roles = @roles.collect { |role| role.id }.join(',')
+      @permissions = []
+      @permissions << Permission.user
+      @permissions = @permissions.collect { |permission| permission.id }.join(',')
     end
 
     should "successfully find a searched Person if Person has valid email" do
@@ -199,11 +199,11 @@ class LeadersControllerTest < ActionController::TestCase
       assert_equal(mail_count, ActionMailer::Base.deliveries.count)
     end
 
-    should "update the contact's role to leader that has a valid email" do
+    should "update the contact's permission to leader that has a valid email" do
       person = Factory(:person, email: "super_duper_unique_email@mail.com")
       xhr :post, :create, { :person_id => person.id }
       assert_response :success
-      assert_equal(person.id, OrganizationalRole.last.person_id)
+      assert_equal(person.id, OrganizationalPermission.last.person_id)
       assert_equal("super_duper_unique_email@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s)
     end
 

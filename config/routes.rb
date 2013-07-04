@@ -1,4 +1,21 @@
 Mh::Application.routes.draw do
+
+  resources :movement_indicators, only: [:index, :create] do
+    collection do
+      get :details
+    end
+  end
+
+  resources :movement_indicator_suggestions do
+    collection do
+      get :fetch_suggestions
+      get :fetch_declined_suggestions
+      get :confirm
+      post :post_to_infobase
+    end
+  end
+
+
   get "dashboard/index"
 
   resources :imports, :only => [:show, :new, :create, :update, :destroy, :edit] do
@@ -8,10 +25,33 @@ Mh::Application.routes.draw do
       post :import
     end
   end
+
+  # Interactions
+  match 'profile/:id' => 'interactions#show_profile', as: "profile"
+  resources :interactions do
+    collection do
+      get :change_followup_status
+      get :reset_edit_form
+      get :show_edit_interaction_form
+      get :show_new_interaction_form
+      get :search_initiators
+      get :search_receivers
+      get :load_more_interactions
+      get :load_more_all_feeds
+      get :create_label
+      get :set_labels
+      get :set_permissions
+      get :set_groups
+      get :search_leaders
+    end
+  end
+
   match 'imports/:id/labels' => 'imports#labels'
+  match 'show_assign_search' => 'contacts#show_assign_search'
   match 'show_hidden_questions' => 'contacts#show_hidden_questions'
   match 'show_search_hidden_questions' => 'contacts#show_search_hidden_questions'
   match 'display_sidebar' => 'contacts#display_sidebar'
+  match 'display_new_sidebar' => 'contacts#display_new_sidebar'
   match 'show_other_orgs' => 'surveys#show_other_orgs'
   match 'copy_survey' => 'surveys#copy_survey'
   match 'sent_messages' => 'messages#sent_messages'
@@ -54,7 +94,7 @@ Mh::Application.routes.draw do
     end
   end
 
-  resources :organizational_roles, :only => :update do
+  resources :organizational_permissions, :only => :update do
     collection do
       post :move_to
       post :update_all
@@ -62,6 +102,12 @@ Mh::Application.routes.draw do
     member do
       get :set_current
       get :set_primary
+    end
+  end
+
+  resources :organizational_labels do
+    collection do
+      post :update_all
     end
   end
 
@@ -81,7 +127,7 @@ Mh::Application.routes.draw do
     end
   end
 
-  match "/people" => "contacts#index"
+  match "/people" => "contacts#all_contacts"
   match "/old_directory" => "people#index"
   resources :people, :only => [:show, :create, :edit, :update, :destroy] do
     collection do
@@ -95,7 +141,8 @@ Mh::Application.routes.draw do
       post :bulk_sms
       post :bulk_comment
       get :all
-      post :update_roles
+      post :update_permissions
+      post :update_permission_status
       post :bulk_delete
       post :bulk_archive
       get :facebook_search
@@ -107,7 +154,7 @@ Mh::Application.routes.draw do
     end
   end
 
-  resources :roles, :only => [:create, :update, :destroy, :index, :new, :edit] do
+  resources :labels, :only => [:create, :update, :destroy, :index, :new, :edit] do
     collection do
       post :create_now
     end
@@ -184,8 +231,12 @@ Mh::Application.routes.draw do
   post "sms/mo"
   get "sms/mo"
 
+  match "/allcontacts" => "contacts#all_contacts", as: 'all_contacts'
+  match "/mycontacts" => "contacts#my_contacts", as: 'my_contacts'
   resources :contacts, :only => [:show, :create, :edit, :update, :destroy, :index] do
     collection do
+      get :all_contacts
+      get :my_contacts
       get :mine
       get :mine_all
       get :contacts_all
@@ -226,12 +277,39 @@ Mh::Application.routes.draw do
       get "contact_assignments/list_organizations" => "contact_assignments#list_organizations"
       resources :contact_assignments
       resources :followup_comments
-      resources :roles
+      resources :interactions
+      resources :labels
+      resources :permissions
+      resources :organizational_labels
+      resources :organizational_permissions
       resources :organizations
     end
   end
 
   namespace :apis do
+    api_version(module: 'V4', header: {name: 'API-VERSION', value: 'v4'}, parameter: {name: "version", value: 'v4'}, path: {value: 'v4'}) do
+      resources :people
+      resources :interactions
+      resources :interaction_types
+      resources :organizations
+      resources :labels
+      resources :permissions
+      resources :organizational_labels do
+        collection do
+          post :bulk
+          post :bulk_create
+          delete :bulk_destroy
+        end
+      end
+      resources :organizational_permissions do
+        collection do
+          post :bulk
+          post :bulk_create
+          delete :bulk_destroy
+        end
+      end
+    end
+
     api_version(module: 'V3', header: {name: 'API-VERSION', value: 'v3'}, parameter: {name: "version", value: 'v3'}, path: {value: 'v3'}) do
       resources :contact_assignments do
         collection do
@@ -239,22 +317,34 @@ Mh::Application.routes.draw do
           delete :bulk_destroy
         end
       end
-      resources :organizational_roles do
+      resources :people
+      resources :organizations
+      resources :answers
+      resources :surveys do
+        resources :questions
+      end
+      resources :questions
+      resources :followup_comments
+      resources :roles
+      resources :organizational_roles
+      resources :interactions
+      resources :interaction_types
+      resources :labels
+      resources :permissions
+      resources :organizational_labels do
         collection do
           post :bulk
           post :bulk_create
           delete :bulk_destroy
         end
       end
-      resources :people
-      resources :organizations
-      resources :surveys do
-        resources :questions
+      resources :organizational_permissions do
+        collection do
+          post :bulk
+          post :bulk_create
+          delete :bulk_destroy
+        end
       end
-      resources :questions
-      resources :roles
-      resources :followup_comments
-      resources :answers
     end
   end
 

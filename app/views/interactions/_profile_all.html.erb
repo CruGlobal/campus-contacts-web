@@ -1,0 +1,9 @@
+<% if @all_feeds.count == 0 %>
+  <div class='feed_box notice'>
+    No feeds yet.
+  </div>
+<% else %>
+<div id='all_feeds_box'>
+  <%= render partial: 'interactions/all_feeds' %>
+</div>
+<% end %>

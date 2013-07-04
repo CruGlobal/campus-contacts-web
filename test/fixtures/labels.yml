@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  organization_id: 1
+  name: MyString
+  i18n: MyString
+
+two:
+  organization_id: 1
+  name: MyString
+  i18n: MyString

@@ -47,7 +47,7 @@ class Apis::V3::OrganizationsController < Apis::V3::BaseController
 
   def destroy
     if @current_organization == @organization
-      render json: {errors: ["You can't delete the organizationa associated with the API secret you are using"]},
+      render json: {errors: ["You can't delete the organization associated with the API secret you are using"]},
              status: :bad_request,
              callback: params[:callback]
     else
@@ -74,7 +74,7 @@ class Apis::V3::OrganizationsController < Apis::V3::BaseController
 
   def available_includes
     [:contacts, :admins, :leaders, :people, :surveys,
-     :groups, :keywords]
+     :groups, :keywords, :labels]
   end
 
 end

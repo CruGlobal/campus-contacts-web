@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  person_id: 1
+  label_id: 1
+  organization_id: 1
+  start_date: 2013-05-21
+  added_by_id: 1
+  removed_date: 2013-05-21
+
+two:
+  person_id: 1
+  label_id: 1
+  organization_id: 1
+  start_date: 2013-05-21
+  added_by_id: 1
+  removed_date: 2013-05-21

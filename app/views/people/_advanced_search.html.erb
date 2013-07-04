@@ -11,9 +11,9 @@
         <%= text_field_tag :last_name, params[:last_name] %>
       </div>
       <div class="field">
-        <label for="Role"><span class="title"><%= t('.role') %></span></label>
-        <%= select_tag :role,  
-            options_for_select(@roles.collect {|r| [r.to_s, r.id]}, "#{params[:role]}"), include_blank: true %>
+        <label for="Permission"><span class="title"><%= t('.permission') %></span></label>
+        <%= select_tag :permission,  
+            options_for_select(@permissions.collect {|r| [r.to_s, r.id]}, "#{params[:permission]}"), include_blank: true %>
       </div>
       <div class="field">
         <label for="Gender"><span class="title"><%= t('general.gender') %></span></label>

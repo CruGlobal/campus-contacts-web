@@ -108,25 +108,25 @@ class QuestionSet
                     if Group.exists?(assign_to_id)
                       @assign_to = Group.find(assign_to_id)
                       group_membership = @assign_to.group_memberships.find_or_initialize_by_person_id(person.id)
-                      group_membership.role = 'member'
+                      group_membership.permission = 'member'
                       group_membership.save
                     end
                   when 'label'
-                    if Role.exists?(assign_to_id)
+                    if Permission.exists?(assign_to_id)
 
-                      new_roles = [assign_to_id]
-                      old_roles = person.organizational_roles.where(organization_id: organization.id).collect { |role| role.role_id }
-                      roles_to_add = new_roles - old_roles
-                      roles_to_remove = old_roles - new_roles
+                      new_permissions = [assign_to_id]
+                      old_permissions = person.organizational_permissions.where(organization_id: organization.id).collect { |permission| permission.permission_id }
+                      permissions_to_add = new_permissions - old_permissions
+                      permissions_to_remove = old_permissions - new_permissions
 
-                      person.organizational_roles.where(organization_id: organization.id, role_id: roles_to_remove).destroy_all
+                      person.organizational_permissions.where(organization_id: organization.id, permission_id: permissions_to_remove).destroy_all
 
-                      all_roles = roles_to_add | (new_roles & old_roles)
-                      all_roles.sort!.each do |role_id|
-                        OrganizationalRole.find_or_create_by_person_id(
+                      all_permissions = permissions_to_add | (new_permissions & old_permissions)
+                      all_permissions.sort!.each do |permission_id|
+                        OrganizationalPermission.find_or_create_by_person_id(
                           person_id: person.id,
-                          role_id: role_id,
-                          organization_id: organization.id) if roles_to_add.include?(role_id)
+                          permission_id: permission_id,
+                          organization_id: organization.id) if permissions_to_add.include?(permission_id)
                       end
                     end
                   end

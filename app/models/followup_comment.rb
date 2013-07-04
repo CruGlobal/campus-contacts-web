@@ -43,7 +43,7 @@ class FollowupComment < ActiveRecord::Base
     timestamp ||= Time.now
     answer_sheets = Array.wrap(answer_sheet)
     answer_sheets.each {|as| as.reload}
-    status ||= OrganizationalRole::FOLLOWUP_STATUSES.first
+    status ||= OrganizationalPermission::FOLLOWUP_STATUSES.first
     answers = questions.collect do |q|
       sheet = answer_sheets.detect {|as| q.display_response(as).present?}
       "#{q.label} #{q.display_response(sheet)}" if sheet
@@ -56,7 +56,7 @@ class FollowupComment < ActiveRecord::Base
 
   private
   def update_followup_status
-    om = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(contact_id, organization_id, Role::CONTACT_ID)
+    om = OrganizationalPermission.find_or_create_by_person_id_and_organization_id_and_permission_id(contact_id, organization_id, Permission::NO_PERMISSIONS_ID)
     om.update_attribute(:followup_status, status)
   end
 end

@@ -1,4 +1,5 @@
 $ ->
+
   $('.org_control').not('.tree_no_child').each ->
     if $("." + $(this).attr('id')).not('.tree_no_child').size() > 1
       $("." + $(this).attr('id')).not('.tree_no_child').last().addClass('tree_no_child')
@@ -26,11 +27,9 @@ $ ->
       $.ajax
         type: 'POST',
         dataType: 'script',
-        url: '/roles/create_now',
+        url: '/labels/create_now',
         data: 'name='+$(this).siblings('#new_label_field').val()
     false
-
-
 
   $('.action_dropdown').live 'click', ->
     link = $(this)
@@ -46,22 +45,26 @@ $ ->
     $('input[type=checkbox].primary', fieldset).prop('checked', false)
     $(this).prop('checked', true)
 
-  $('a.remove_field').live 'click', ->
-    link = this
-    $(link).prev("input[type=hidden]").val("1");
-    $(link).closest(".sfield").hide();
-    fieldset = $(link).closest('.fieldset')
-    if $('.sfield:visible', fieldset).length <= 2
-      $('.remove_field', fieldset).hide()
-    false
+  $('a.remove_field').live 'click', (e)->
+    e.preventDefault()
+    group_name = $(this).parents('.sfield').attr("data-group")
+    if group_name == 'address' || $(".sfield[data-group=" + group_name + "]:visible").size() > 1
+      link = this
+      $(link).prev("input[type=hidden]").val("1")
+      $(link).closest(".sfield").hide()
+      fieldset = $(link).closest('.fieldset')
+      if $('.sfield:visible', fieldset).length <= 2
+        $('.remove_field', fieldset).hide()
+    else
+      $(this).hide()
 
   if $.fn.oneFingerScroll?
-    $('.fingerme').oneFingerScroll();
+    $('.fingerme').oneFingerScroll()
 
   $('.expandable').each (i)->
     e = $(this)
     if e.height() > Number(e.attr("data-height"))
-      e.next('.moredown').show();
+      e.next('.moredown').show()
       e.attr("data-original-height", e.height())
       e.css({height: e.attr("data-height") + 'px', overflow: 'hidden'})
 
@@ -80,7 +83,7 @@ $ ->
   $('a.disabled').live 'click', ->
     false
 
-  $('[data-method=delete]').live 'ajax:before', ->
+  $('[data-method=delete]:not(.dont_hide)').live 'ajax:before', ->
     $(this).parent().fadeOut()
 
   $('#check_all').live 'click', ->
@@ -131,19 +134,19 @@ $ ->
         at: 'top left'
 
   $('[data-sortable][data-sortable-handle]').each ->
-    handle = $(this).attr('data-sortable-handle');
-    $(this).sortable("option", "handle", handle);
+    handle = $(this).attr('data-sortable-handle')
+    $(this).sortable("option", "handle", handle)
 
-  if $.fn.draggable?        
-    $('.handle').draggable 
+  if $.fn.draggable?
+    $('.handle').draggable
       revert: true
       start: (event, ui) ->
         # If this row isn't checked, store the previously checked rows and check this row '
-        unless $(this).parent().next().find('input').prop('checked') 
+        unless $(this).parent().next().find('input').prop('checked')
           $(this).data 'checked', $('.id_checkbox:checked').map ->
             return $(this).val()
-          $('.id_checkbox:checked').prop('checked', false) 
-          $(this).parent().next().find('input').prop('checked', true) 
+          $('.id_checkbox:checked').prop('checked', false)
+          $(this).parent().next().find('input').prop('checked', true)
       stop: (event, ui) ->
         if $(this).data('checked')?
           $(this).parent().next().find('input').prop('checked', false)
@@ -155,17 +158,17 @@ $ ->
           checkboxes = $('.id_checkbox.group_checkbox:checked').length
         else
           checkboxes = $('.id_checkbox:checked').length
-          
+
         if $(this).parent().next().find('input').prop('checked')
           length = checkboxes
         else
           length = 1
-          
+
         if length == 1
           helper_text = $('#drag_helper_text_one').html()
         else
           helper_text = $('#drag_helper_text_other').html().replace('0', length)
-        $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'));  
+        $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'))
 
   if $.fn.superfish?
     $('ul.sf-menu').superfish({
@@ -179,20 +182,50 @@ $ ->
 
 window.t = (s) -> I18n.translate(s)
 
+$.blur = (selector, hide) ->
+  el = $(selector)
+  id = selector.replace(/\.|\#/g,'_').replace(/\ /g,'')
+
+  pad_top = el.css('padding-top')
+  pad_bottom = el.css('padding-bottom')
+  pad_left = el.css('padding-left')
+  pad_right = el.css('padding-right')
+  width = parseInt(el.width()) + parseInt(pad_left) + parseInt(pad_right)
+  height = parseInt(el.height()) + parseInt(pad_top) + parseInt(pad_bottom)
+
+  if $("#"+id).size() == 0
+    el.prepend("<div style='width:"+width+"px; height:"+height+"px; background:#666; position: absolute; z-index: 999; opacity: 0.1; display: none;' id='"+id+"'></div>")
+
+  $('#'+id).css('margin-top','-'+pad_top)
+  $('#'+id).css('margin-left','-'+pad_left)
+  $('#'+id).css('width',width+'px')
+  $('#'+id).css('height',height+'px')
+
+  if hide == 'hide'
+    $("#"+id).fadeOut('slow')
+  else
+    if $("#"+id).is(':visible')
+      $("#"+id).fadeOut('slow')
+    else
+      $("#"+id).fadeIn('slow')
+
+$.toggleLoader = (div_id, words) ->
+  $(document).ready ->
+    $.fn.tip()
+  if words != ""
+    if $('#' + div_id).children('.loader').size() > 0
+      $('#' + div_id).children('.loader').last().fadeOut().remove()
+    $('#' + div_id).append("<div class='loader'><img src='/assets/loader.gif'>" + words + "</div>")
+  else
+    $('#' + div_id).children('.loader').last().fadeOut().remove()
+  false
+
 $.a = (msg, title) ->
-  unless $('#alert_dialog')[0]?
-    $('body').append('<div id="alert_dialog" title="' + t('general.alert') + '"></div>')
-  if title?
-    $('#alert_dialog').attr('title', title)
-  $('#alert_dialog').html(msg)
-  $('#alert_dialog').dialog
-    resizable: false,
-    height: 200,
-    width: 400,
-    modal: true,
-    buttons:
-      Ok: ->
-        $(this).dialog('destroy')
+  unless title?
+    title = "Alert"
+  $('#custom_alert_div .mh_popup_heading').text(title)
+  $('#custom_alert_div .fancy').html(msg)
+  $.showDialog($('#custom_alert_div'))
 
 window.addFields = (link, association, content) ->
   new_id = new Date().getTime()
@@ -214,7 +247,7 @@ $.mh.logout = (url) ->
     #    document.location = next
     #  )
     #catch err
-      document.location = next
+    document.location = next
 
   else
     document.location = next
@@ -230,3 +263,4 @@ $.mh.fbEnsureInit = (callback) ->
       setTimeout(()->
         callback
       , 50)
+

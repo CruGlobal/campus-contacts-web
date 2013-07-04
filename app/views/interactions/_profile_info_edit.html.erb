@@ -1,0 +1,164 @@
+<%= form_for(@person, remote: true, html: {id: 'edit_profile_form'}) do |f| %>
+  <%= fields_for @person, {validators: {}} do |pf| %>
+  	<div class="info_edit info_edit_buttons">
+  		<button class="red_accent" id="info_edit_save_button">Save</button>
+  		<button class="large_lightgray" id="info_edit_cancel_button" data-person-id="<%= @person.id %>">Cancel</button>
+  	</div>
+
+    <% if @person.errors.any? %>
+    	<div class="feed_box info_edit" id="profile_errors">
+        <% @person.errors.each do |attr, msg| %>
+          <div class="error_msg"><%= "#{attr.to_s.split(".").first.humanize} #{msg}" %></div>
+        <% end %>
+      </div>
+    <% end %>
+
+  	<div class="feed_box info_edit">
+
+      <% if @person.contact_permission_for_org(current_organization) %>
+    		<div class="status col_left"><%= t('general.status') %>:</div>
+      	<div class="status col_right edit" id="followup_status_div">
+          <%- contact_permission = @person.contact_permission_for_org(current_organization) %>
+          <%- followup_status = contact_permission.nil? ? "" : contact_permission.followup_status %>
+          <%= select_tag :followup_status, options_for_select(OrganizationalPermission::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]}, followup_status), {disabled: contact_permission.nil?, include_blank: contact_permission.nil?, 'data-person-id' => "#{@person.id}", class: "followup_status_field followup_status_field_edit", style: 'display: none;'} %>
+          <div id="followup_status_dropdown" class="custom_dropdown edit" data-current-id="<%= followup_status %>">
+            <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+            <div id="selected"><%= followup_status.present? ? t("contacts.statuses.#{followup_status}") : "Select Status" %></div>
+            <div id="togglable">
+              <% OrganizationalPermission::FOLLOWUP_STATUSES.each do |fs| %>
+                <div class="option" data-id="<%= fs %>" data-name="<%= t("contacts.statuses.#{fs}") %>">
+                  <%= t("contacts.statuses.#{fs}") %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+      	</div>
+
+      	<div class="gender col_left">Assigned To:</div>
+      	<div class="gender col_right" id="assigned_to_div">
+          <%= text_field_tag :assigned_to_id, "#{@assigned_tos.count == 0 ? '0' : @assigned_tos.first.assigned_to_id}", id: 'assigned_to_id', class: 'hidden' %>
+          <div id="assigned_to_dropdown" class="custom_dropdown" data-current-id="<%= @assigned_tos.count == 0 ? '0' : @assigned_tos.first.assigned_to_id %>">
+            <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+            <div id="selected">
+              <% if @assigned_tos.count == 0 %>
+                <%= "Unassigned" %>
+              <% elsif @assigned_tos.count > 1 %>
+                <%= "#{@assigned_tos.count} people selected" %>
+              <% else %>
+                <%= @assigned_tos.first.assigned_to == current_person ? "#{@assigned_tos.first.assigned_to.first_name} (Me)" : "#{@assigned_tos.first.assigned_to.name}" %>
+              <% end %>
+            </div>
+            <div id="togglable">
+              <div id="default_leader_options">
+                <div class="option leader" data-id="0">
+                  <%= check_box_tag 'leader_id[]', 0, false, class: "leader_box", id: "leader_0", "data-id" => "0" %>
+                  <div class="leader_name dropdown_name">Unassigned</div>
+                </div>
+                <% if current_person.labeled_in_org?(Label.leader, current_organization) %>
+                  <%= render partial: 'interactions/option_leader', locals: {person: current_person, current_person: current_person, leader: current_person} %>
+                <% end %>
+                <% @assigned_tos.where("assigned_to_id <> ?", current_person.id).each do |assignment| %>
+                  <%= render partial: 'interactions/option_leader', locals: {person: @person, current_person: current_person, leader: assignment.assigned_to} %>
+                <% end %>
+              </div>
+              <div class="search">
+                <%= text_field_tag :search_leader, "", placeholder: "Search by name", id: "search_leader_field", "data-person-id" => @person.id %>
+              </div>
+              <div class="results" id="search_leader_results"></div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+  		<div class="gender col_left">
+        <label for="person_gender"><%= t('general.gender') %></label>:
+      </div>
+  		<div class="gender col_right">
+  			<%= pf.radio_button :gender, 'Male' %>
+        <label for="person_gender_male"><%= t('general.male') %></label>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <%= pf.radio_button :gender, 'Female' %>
+        <label for="person_gender_female"><%= t('general.female') %></label>
+  		</div>
+
+  		<div class="gender col_left">
+      </div>
+  		<div class="gender col_right">
+  			<%= pf.check_box :faculty %>
+        <label for="person_faculty"><%= t('general.faculty') %></label>
+  		</div>
+
+      <% if current_organization.name =~ /^Bridges at/ %>
+    		<div class="status col_left"><%= t('general.nationality') %>:</div>
+      	<div class="status col_right edit" id="followup_status_div">
+          <%= select_tag :nationality, options_for_select(Person::NATIONALITIES, @person.nationality), {include_blank: true, 'data-person-id' => "#{@person.id}", class: "nationality_field nationality_field_edit", style: 'display: none;'} %>
+          <div id="nationality_dropdown" class="custom_dropdown" data-current-id="<%= @person.nationality %>">
+            <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+            <div id="selected"><%= @person.nationality || "Select Nationality" %></div>
+            <div id="togglable">
+              <% Person::NATIONALITIES.each do |nationality| %>
+                <div class="option" data-name="<%= nationality %>">
+                  <%= nationality %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+      	</div>
+      <% end %>
+  	</div>
+
+
+
+  	<div class="feed_box info_edit">
+  		<div class="email col_left">
+        <label><%= t('general.email') %></label>:
+      </div>
+  		<div class="email col_right">
+        <div class="add_email" id="edit_profile_add_email_button">
+          <a href="#" class="tip" title="Add Email Address"><button class="add_gray"></button></a>
+        </div>
+        <div id="edit_profile_email_list">
+          <%= pf.fields_for :email_addresses do |builder| %>
+            <%= render 'interactions/email_address_fields', builder: builder, no_remove: @person.email_addresses.length <= 1 %>
+          <% end %>
+        </div>
+  		</div>
+
+  		<div class="phone col_left">
+        <label><%= t('general.phone') %></label>:
+      </div>
+  		<div class="phone col_right">
+        <div class="add_phone" id="edit_profile_add_phone_button">
+          <a href="#" class="tip" title="Add Phone Number"><button class="add_gray"></button></a>
+        </div>
+        <div id="edit_profile_phone_list">
+          <%= pf.fields_for :phone_numbers do |builder| %>
+            <%= render 'interactions/phone_number_fields', builder: builder, no_remove: @person.phone_numbers.length <= 1 %>
+          <% end %>
+        </div>
+  		</div>
+
+  		<div class="address col_left">
+        <label><%= t('general.address') %></label>:
+      </div>
+  		<div class="address col_right">
+        <div class="add_address" id="edit_profile_add_address_button">
+          <a href="#" class="tip" title="Add Address"><button class="add_gray"></button></a>
+        </div>
+        <div id="edit_profile_address_list">
+          <%= pf.fields_for :addresses do |builder| %>
+            <%= render 'interactions/address_fields', builder: builder %>
+          <% end %>
+        </div>
+  		</div>
+  	</div>
+
+  	<div class="feed_box info_edit">
+  		<div class="fb_link col_left">Facebook URL:</div>
+  		<div class="fb_link col_right">
+        <%= text_field_tag :facebook_name_search, "", id: 'facebook_name_search', placeholder: "Type a name or facebook profile url here", autocomplete: "off" %>
+  			<%= pf.hidden_field :fb_uid %>
+  		</div>
+  	</div>
+  <% end %>
+<% end %>

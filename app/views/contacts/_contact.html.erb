@@ -1,54 +1,48 @@
-<% if params[:include_archived] || params[:archived] %>
-  <% roles = person.assigned_organizational_roles_including_archived(current_organization.id).arrange_all %>
-<% else %>
-  <% roles = person.assigned_organizational_roles(current_organization.id).arrange_all %>
-<% end %>
-<% contact_role = person.contact_role_for_org(current_organization) %>
+<% labels = person.assigned_organizational_labels(current_organization.id).uniq %>
+<% permission = person.assigned_organizational_permissions(current_organization.id).first %>
+<% contact_permission = person.contact_permission_for_org(current_organization) %>
 <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row <%= extra if defined?(extra) %>" data-name="<%= person.name %>" data-email="<%= person.email %>">
 	<td class="handle_container">
-    <% if contact_role %>
-      <%= image_tag('grippy.png', class: 'handle', 'data-row-id' => dom_id(person), 'data-id' => person.id, 'data-dnc-url' => organizational_role_path(:id => contact_role.id, :status => 'do_not_contact') ) %>
+    <% if contact_permission %>
+      <%= image_tag('grippy.png', class: 'handle', 'data-row-id' => dom_id(person), 'data-id' => person.id, 'data-dnc-url' => organizational_permission_path(:id => contact_permission.id, :status => 'do_not_contact') ) %>
     <% else %>
       <%= image_tag('grippy.png', class: 'handle' ) %>
     <% end %>
 	</td>
   <td nowrap="nowrap" class="checkbox_cell">
-    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox contact_checkbox all_contact_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email, 'data-roles' => "#{roles.collect(&:id).join(',')}"%>
+    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox contact_checkbox all_contact_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email, 'data-permissions' => "#{permission.id if permission.present?}", 'data-labels'=>"#{labels.collect(&:id).join(',')}"%>
   </td>
-  <td class="firstName"><%= person.first_name %></td>
-  <td class="lastName"><%= person.last_name %></td>
+  <td class="cell firstName"><%= person.first_name %></td>
+  <td class="cell lastName"><%= person.last_name %></td>
 
-	<% if params[:role].blank? || ![Role::ADMIN_ID,Role::INVOLVED_ID,Role::LEADER_ID,Role::ALUMNI_ID].include?(params[:role].map{|id| id }) %>
-  <td class="status">
-    <% if contact_role %>
-      <%= contact_role.followup_status.to_s.titleize %>
-      <% if person.organizational_roles.where('organizational_roles.organization_id' => current_organization.id).blank? %>
+	<% if params[:permission].blank? || ![Permission::ADMIN_ID,Permission::USER_ID].include?(params[:permission].map{|id| id }) %>
+  <td class="cell status">
+    <% if contact_permission %>
+      <%= contact_permission.followup_status.to_s.titleize %>
+      <% if person.organizational_permissions.where('organizational_permissions.organization_id' => current_organization.id).blank? %>
         <span class="archived_group_label">&nbsp<%= t('general.archived') %>&nbsp</span>
       <% end %>
     <% end %>
   </td>
   <% end %>
-
-  <td><%= person.gender.to_s.titleize %></td>
-  <td class="phone_number"><%= person.pretty_phone_number %></td>
-  <td>
-    <div id="roles_user_<%= person.id %>" class="roles_spaces">
-      <% roles.each do |role| %>
-        <% sent = role.id == Role::SENT_ID && person.is_sent? %>
-        <% if person.is_role_archived?(current_organization.id, role.id) %>
-          <% if params[:include_archived] == 'true' || params[:archived] == 'true' %>
-            <div id="<%= person.id%>_<%= role.id %>" class="role_label_archived role_<%= role.id %> tipitmiddle" title="<%= sent ? 'Transferred & Archived' : 'Archived' %>"><%= role %></div>
-          <% end %>
-        <% else %>
-          <div id="<%= person.id%>_<%= role.id %>" class="role_label role_<%= role.id %> <%= 'transferred tipitmiddle' if sent %>" title="<%= 'Transferred' if sent %>" ><%= role %></div>
+  <td class="cell"><%= person.gender.to_s.titleize %></td>
+  <td class="cell phone_number"><%= person.pretty_phone_number %></td>
+  <td class="cell labels">
+    <div id="permissions_user_<%= person.id %>" class="permissions_spaces">
+      <div class="permissions_cover"></div>
+      <div class="permissions_container">
+        <% sorted_labels = labels.arrange_all %>
+        <% sorted_labels = labels.arrange_all_desc if params['search'] && params['search']['meta_sort'] == 'labels.desc' %>
+        <% sorted_labels.each do |label| %>
+          <div id="<%= person.id%>_<%= label.id %>" class="permission_label label_<%= label.id %>"><%= label.name %></div>
         <% end %>
-      <% end %>
+      </div>
     </div>
   </td>
 
   <% dates = [] %>
   <% questions.uniq.each do |q| %>
-    <td class="<%= dom_id(q) %>">
+    <td class="cell <%= dom_id(q) %>">
       <% if q.slug == 'email' %>
         <span class="email"><%= mail_to(person.email) %></span>
       <% elsif q.object_name == 'person' %>
@@ -65,7 +59,7 @@
   <% end %>
 
   <% if current_organization.settings[:visible_surveys_column].nil? || (current_organization.settings[:visible_surveys_column].present? && current_organization.settings[:visible_surveys_column]) %>
-  <td class="visible_surveys_column">
+  <td class="cell visible_surveys_column">
     <% last_answer_sheet = "" %>
     <% person.completed_answer_sheets(current_organization).each_with_index do |answer_sheet, i| %>
       <% last_answer_sheet = answer_sheet if i == 0 %>
@@ -74,21 +68,22 @@
   </td>
   <% end %>
 
-  <td>
+  <td class="cell">
     <%= l(last_answer_sheet.updated_at, :format => :date) if last_answer_sheet.present? %>
   </td>
-  <td class="controls" align="right">
+  <td class="cell controls" align="right">
     <%- assigned_to = (assignments[person.id] || []).first.try(:assigned_to) %>
+    <span class="assigned_to" style="display:none;"><%= assigned_to %></span>
     <span class="unassign_link" style="<%= 'display:none' unless assigned_to.present? || params[:dnc].present? %>">
-      <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign tipit", :title => "#{t('contacts.index.unassign_contact')} from #{assigned_to}") %>
+      <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign tipitleft", :title => "#{t('contacts.index.unassign_contact')} from #{assigned_to}", "data-assigned_to_id" => "#{assigned_to.id if assigned_to}") %>
     </span>
     <% if params[:dnc] == 'true' %>
       <%= link_to(t('contacts.index.delete_contact'), person_path(person), :method => :delete, :remote => true, :class => "icon delete dnc tipit", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.destroy_confirm')) %>
     <% else %>
-      <% if contact_role %>
-        <%= link_to(t('contacts.index.delete_contact'), organizational_role_path(:id => contact_role.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), data: { confirm: t('contacts.index.delete_confirm') }) %>
+      <% if contact_permission %>
+        <%= link_to(t('contacts.index.delete_contact'), organizational_permission_path(:id => contact_permission.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), data: { confirm: t('contacts.index.delete_confirm') }) %>
       <% end %>
     <% end %>
-    <%= link_to(t('nav.view_details'), person_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
+    <%= link_to(t('nav.view_details'), profile_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
   </td>
 </tr>

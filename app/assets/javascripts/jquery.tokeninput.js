@@ -468,6 +468,7 @@ $.TokenList = function (input, url_or_data, settings) {
         
     function resize_input() {
         if(input_val === (input_val = input_box.val())) {return;}
+        if(input_box.val() == "") {return;}
 
         // Enter new content into resizer and resize input accordingly
         var escaped = input_val.replace(/&/g, '&amp;').replace(/\s/g,' ').replace(/</g, '&lt;').replace(/>/g, '&gt;');

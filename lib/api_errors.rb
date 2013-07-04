@@ -103,17 +103,17 @@ module ApiErrors
       super "You need to go to www.MissionHub.com to setup your account in order use the MissionHub application.","36", "Message"
     end
   end
-  class InvalidRolesParamaters < ApiError
+  class InvalidLabelsParamaters < ApiError
     def initialize
-      super "You did not provide the appropriate parameters to change a person's role.", "37", "API Error"
+      super "You did not provide the appropriate parameters to change a person's labels.", "37", "API Error"
     end
   end
-  class NoRoleChangeMade < ApiError
+  class NoLabelChangeMade < ApiError
     def initialize
-      super "No role change was made. Try again.", "38", "Message"
+      super "No labels change was made. Try again.", "38", "Message"
     end
   end
-  class RolesPermissionsError < ApiError
+  class LabelsError < ApiError
     def initialize
       super "You do not have the appropriate permissions to change roles.","39", "Message"
     end
@@ -126,6 +126,21 @@ module ApiErrors
   class MissingData < ApiError
     def initialize(message = nil)
       super message, "41", "API Error"
+    end
+  end
+  class InteractionPermissionsError < ApiError
+    def initialize
+      super "You do not have the appropriate permissions to delete this interaction.","43", "Message"
+    end
+  end
+  class InteractionCreateParamsError < ApiError
+    def initialize
+      super "You did not provide the appropriate parameters to create an interaction.", "44", "API Error"
+    end
+  end
+  class InteractionDeleteParamsError < ApiError
+    def initialize
+      super "You did not provide the appropriate parameters to remove an interaction.", "45", "API Error"
     end
   end
 end

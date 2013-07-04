@@ -3,17 +3,33 @@
 # Use this as the base for the locale file of your language.
 
 en:
+  dialogs:
+    search_people_filters:
+      search_placeholder: 'Search for the first name, last name or email.'
+      search_title: 'Search'
+      advanced_search: 'Toggle Advanced Search'
+      advanced_search_link: 'Advanced Search'
+      clear_search_form: 'Clear Search Form'
+      first_name: 'First Name'
+      last_name: 'Last Name'
+      permission: 'Label'
+      phone_number: 'Phone Number'
+      email: 'Email Address'
+      phone: 'Phone Number'
+      basic_search: 'Toggle Basic Search'
+      clear_search_form: 'Clear Search Form'
   application:
     add_contact:
       add_contact: Add a contact to %{org}
       title_bio: Bio
       title_label: Labels
+      title_permission: Permissions
       title_surveys: Survey
       title_optional: (Optional)
       survey_mode_instructions: If the person you are adding is standing next to you, click "Enter Survey Mode" from the top right corner of your screen.
       save_and_close: 'Save and close'
       save_and_add: 'Save and add another'
-    assign:
+    assign_search:
       assign_explanation: 'You can assign a contact using any of the options below:'
       me: Me
       type_to_find_leader: Type to find a leader then click on the leader's name
@@ -23,21 +39,22 @@ en:
       keep_contact: "Check the box to leave a copy of the contact in the org."
     messages:
       question_too_long: "WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages."
-  roles:
+  permissions:
+    admin: Admin
+    user: User
+    no_permissions: No Permissions
+  labels:
     index:
       title: "%{org} Labels"
     admin: Admin
-    contact: Contact
-    involved: Involved
-    leader: Leader
-    alumni: Alumni
-    sent: 100% Sent
+    user: User
+    no_labels: No Labels
     views:
-      organizational_roles: "Organizational Labels"
-      system_roles: "System Labels"
-      create_role: "Create New Label"
-      edit_role: "Edit Label"
-      delete_role: "Delete Label"
+      organizational_labels: "Organizational Labels"
+      system_labels: "System Labels"
+      create_label: "Create New Label"
+      edit_label: "Edit Label"
+      delete_label: "Delete Label"
       update: "Update"
       create: "Create"
       name: "Name"
@@ -59,7 +76,8 @@ en:
     organizations: Organizations
     manage: Organizations
     cleanup: Cleanup
-    transfer: 100% Sent
+    report_movement_indicators: Report Movement Indicators
+    transfer: Graduating on Mission
     archive: Archived
     enter_survey_mode: "Enter Survey Mode"
     exit_survey_mode: "Exit Survey Mode"
@@ -85,14 +103,15 @@ en:
     surveys: "Surveys"
     people: "People"
     keywords: "Keywords"
-    roles: "Labels"
+    permissions: "Labels"
     back_to_dashboard: "Back To My Contacts"
     create_a_survey: Create a survey
     settings: Settings
     cru: "Cru"
   general:
+    remove_leader_confirm: "Are you sure you want to remove %{person} from leaders?"
     transfer: "Transfer"
-    roles_applied: "labels have been applied."
+    permissions_applied: "labels have been applied."
     no_recipient_in_comment: "You didn't select any people to comment on."
     no_recipient_in_send_comment: "You have to select at least 1 recipient/person to comment on."
     comment_is_blank: "Please enter your comment."
@@ -102,6 +121,8 @@ en:
     archived: "Archived"
     assigned_to:  "Assigned to"
     survey: Survey
+    faculty: Faculty
+    nationality: Nationality
     mobile: Cell
     home: Home
     work: Work
@@ -112,7 +133,7 @@ en:
     country: Country
     zip: Zip
     alert: Alert
-    role: Label
+    permission: Label
     save: 'Save'
     show: Show
     delete: Delete
@@ -135,6 +156,7 @@ en:
     email: Email
     note: Note
     phone: Phone
+    address: Address
     send_email: 'Email'
     search: 'Search'
     add: Add
@@ -175,8 +197,8 @@ en:
       no_user_account: "<font color='red'>Required email information missing to add this person as a Leader.</font>"
   people:
     create:
-      error_creating_leader_no_valid_email: "<font color='red'>Cannot create Person with leader role without a valid email</font>"
-      error_creating_admin_no_valid_email: "<font color='red'>Cannot create Person with admin role without a valid email</font>"
+      error_creating_leader_no_valid_email: "<font color='red'>Cannot create Person with leader permission without a valid email</font>"
+      error_creating_admin_no_valid_email: "<font color='red'>Cannot create Person with admin permission without a valid email</font>"
       firstname_error: "<font color='red'>First name is required.</font>"
       phone_number_error: "<font color='red'>Invalid phone number</font>"
       email_taken: "<font color='red'>Oops! This email address is already being used. Please email <b>support@missionhub.com</b> with the EMAIL address and NAME of the person whom you want to add the email to.</font>"
@@ -204,12 +226,12 @@ en:
       filter: 'Search'
       locate_contact: 'Contact Location'
       year_in_school: 'Year in School'
-      manage_roles: 'Manage Labels'
+      manage_labels: 'Manage Labels'
       send_sms: Text
       sent_messages: Sent
       send_email: Email
       group_comment: Add Comment
-      apply_roles: 'Apply Labels'
+      apply_labels: 'Apply Labels'
       no_people: "Sorry, there are no people involved here."
       displaying: "Displaying %{start} - %{finish} of %{total}"
       merge_people: "Merge People"
@@ -255,7 +277,7 @@ en:
     advanced_search:
       first_name: 'First Name'
       last_name: 'Last Name'
-      role: 'Label'
+      permission: 'Label'
       email: 'Email Address'
       phone: 'Phone Number'
       basic_search: 'Toggle Basic Search'
@@ -615,7 +637,27 @@ en:
   survey_mailer:
     notify:
       content: '%{name} (%{number},%{email}) just replied to a survey with %{answer}.'
+  interactions:
+    profile_info:
+      email_contact_info: "Email Me This Contact Info"
+    profile_interactions_edit:
+      confirm_delete_interaction: "Are you sure you want to delete this interaction?"
   contacts:
+    new_sidebar:
+      contact_assignments: "Contact Assignments"
+      labels: "Labels"
+      permissions: "Permissions"
+      more_options: "More"
+      interaction_types: "Interactions"
+    all_contacts:
+      title: "All Contacts"
+      first_name: "First Name"
+      last_name: "Last Name"
+      status: "Status"
+      gender: "Gender"
+      phone_number: "Phone"
+      labels: "Labels"
+      last_survey: "Last Survey"
     sidebar:
       show_more: "Show More"
       show_less: "Show Less"
@@ -627,7 +669,7 @@ en:
     create:
       success: "Succesfully updated %{name}'s profile"
       email_taken: "Oops! This email address is already being used. Please email support@missionhub.com with the EMAIL address and NAME of the person whom you want to add the email to."
-    role_assign_success: 'Successfully assigned labels.'
+    permission_assign_success: 'Successfully assigned labels.'
     assign: Assign
     unassign: 'Unassign'
     add_contact: "Add Contact"
@@ -643,7 +685,7 @@ en:
       completed: Completed
     leader:
       delete_confirm: "Are you sure you want to remove %{person} as a leader?"
-      delete_confirm_with_instructions: "If you want to retain %{person} in your organization you must first assign them another role or label, click CANCEL, go to the Directory screen and 'Add Label' such as involved or alumni, then remove them as a leader. If you want to remove them completely from your organization, click OK."
+      delete_confirm_with_instructions: "If you want to retain %{person} in your organization you must first assign them another permission or label, click CANCEL, go to the Directory screen and 'Add Label' such as involved or alumni, then remove them as a leader. If you want to remove them completely from your organization, click OK."
       archive_confirm: "%{person} will be moved to archives."
     leader_form:
       start_typing: "Start typing a name to find a person to make a leader:"
@@ -685,6 +727,9 @@ en:
       last_name: 'Last'
       phone_number: 'Phone'
       leaders: Leaders
+      user: User
+      group: Group
+      me: Me
       assign_to: "Assign To:"
       assigned_to: "Assigned To"
       all_responses: "All Contacts"
@@ -1118,7 +1163,7 @@ en:
   label: Label
   organizations:
     transfer:
-      title: "Contacts Pending Transfer to 100% Sent"
+      title: "Contacts Pending Transfer to Graduating On Mission"
       set_alumni: "Label transferred contacts as Alumni"
       set_alumni_desc: "(This will label all transferred contacts as Alumni)"
       set_archived: "Archive transferred contacts"
@@ -1205,9 +1250,40 @@ en:
   batch:
     new_person_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, there are new contacts in your organization. Please login to missionhub.com as soon as possible to followup the contacts. Below is the list of %{contacts_count} new contacts:"
     person_transfer_message: "As the Admin of %{org_name} in <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>, you have been sent new contacts. Please login to missionhub.com as soon as possible to followup the contacts. There may be more information about the contacts in the comment section of their individual profile. If not, you may want to contact the senders at their email address. Below is the list of %{contacts_count} contacts sent:"
-  organizational_roles:
+  organizational_permissions:
     cannot_delete_admin_error: "You cannot remove <b>%{names}</b> since you are going to remove all the admins in this organization!"
     cannot_delete_self_as_admin_error: "As an ADMIN you cannot remove yourself! Please assign another individual as an ADMIN for this organization and then ask that \"new ADMIN\" to remove your ADMIN label."
     moving_to_same_org: "You are just moving people to the same org they are from!"
     moving_people_success: "People were successfully moved!"
     copy_people_success: "People were successfully copied!"
+  movement_indicators:
+    index:
+      list_heading: Confirm Movement Indicators
+  movement_indicator_suggestions:
+    index:
+      title: Report Movement Indicators for %{org_name}
+      list_heading: Suggested Movement Indicator Actions
+      fetching: 'Fetching suggestions (this might take a while)'
+      show_old: 'Click here to show old suggestions'
+    reasons:
+      group_membership: '<b>%{name}</b> was added to a group. Apply the "<b>%{label}</b>" label?'
+      engaged_disciple: '<b>%{name}</b> was labeled as an engaged disciple. Also apply the "<b>%{label}</b>" label?'
+      leader: '<b>%{name}</b> was labeled as a leader. Also apply the "<b>%{label}</b>" label?'
+      spiritual_conversation: '<b>%{name}</b> has initiated at least one spiritual conversation. Apply the "<b>%{label}</b>" label?'
+      gospel_presentation: '<b>%{name}</b> has initiated at least one gospel presentation. Apply the "<b>%{label}</b>" label?'
+      group_leader: '<b>%{name}</b> was added as a group leader. Also apply the "<b>%{label}</b>" label?'
+      graduated: "This person has graduated"
+    remove_suggestion_html: "<b>%{name}</b> look like they may no longer be %{label_sentence}. Remove the <b>%{label}</b> label?"
+  labels:
+    leader: leader
+    involved: involved
+    engaged_disciple: engaged disciple
+    alumni: alumni
+    leader_sentence: a leader
+    involved_sentence: involved
+    engaged_disciple_sentence: an engaged disciple
+    alumni_sentence: an alumni
+    leader_definition: "This is a person leading small groups of Win-Build-Send ministry. (Examples: groups focused on reaching target audiences, launching movements, etc.)"
+    involved_definition: "This is a person regularly involved and attending movement events."
+    engaged_disciple_definition: "This is a person who has intentionally engaged someone in a spiritual conversation within the past semester. (The heart is that they have gone from merely attending movement events and begun to look outside of themselves to pass on their faith)  Include all who are also leaders."
+    alumni_definition: "This is a person who was involved and has now graduated."
