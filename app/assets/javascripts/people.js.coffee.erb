@@ -741,9 +741,15 @@ $('.check_all_contacts, .check_all_mine').live 'click', ->
       $("#all").remove()
       $('#contacts_table').prepend('<tr><td colspan="99">Fetching information...</td></tr>')
       if $(this).hasClass("check_all_mine")
-        $.get '/contacts/mine_all?' + $(this).attr('data-status'), (html) ->
-          $('#contacts_table').find('tr:first').remove()
-          $('#contacts_table').prepend(html)
+        status = $(this).attr('data-status')
+        id = $(this).attr('data-owner-id')
+        $.ajax
+          type: 'POST',
+          url: '/my_contacts_all',
+          data: 'status='+status+'&assigned_to='+id,
+          success: (html)->
+            $('#contacts_table').find('tr:first').remove()
+            $('#contacts_table').prepend(html)
       else
         $.get '/contacts/contacts_all?' + $(this).attr('data-status'), (html) ->
           $('#contacts_table').find('tr:first').remove()

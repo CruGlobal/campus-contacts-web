@@ -3,6 +3,12 @@
 # Use this as the base for the locale file of your language.
 
 en:
+  manage_labels:
+    title: "%{org} Labels"
+    add_button: "Add a Organizational Label"
+    system_labels: "System Labels"
+    name: "Name"
+    organizational_labels: "Organizational Labels"
   dialogs:
     search_people_filters:
       search_placeholder: 'Search for the first name, last name or email.'
@@ -46,6 +52,7 @@ en:
   labels:
     index:
       title: "%{org} Labels"
+      system_labels: "System Labels"
     admin: Admin
     user: User
     no_labels: No Labels

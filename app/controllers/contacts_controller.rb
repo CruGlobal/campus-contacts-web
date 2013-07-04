@@ -48,17 +48,17 @@ class ContactsController < ApplicationController
     url = request.url.split('?')
     @attr = url.size > 1 ? url[1] : ''
 
-    respond_to do |wants|
-      wants.html do
-        url = request.url.split('?')
-        @attr = url.size > 1 ? url[1] : ''
+    params[:status] ||= 'in_progress' # set a default filter in my contacts
+    params[:assigned_to] = current_person.id # to hook and sync the assigned contacts for the current_person
 
-        params[:status] ||= 'in_progress' # set a default filter in my contacts
-        params[:assigned_to] = current_person.id # to hook and sync the assigned contacts for the current_person
+    fetch_contacts(false)
+  end
 
-        fetch_contacts(false)
-      end
-    end
+  def my_contacts_all
+    # this needs to have status and assigned_to parameters
+    fetch_contacts(true)
+    @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
+    render :partial => 'contacts/mine_all'
   end
 
   def index

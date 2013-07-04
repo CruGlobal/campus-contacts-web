@@ -49,12 +49,12 @@
     <%= hidden_field_tag :my_id, current_person.id %>
 	  <%= hidden_field_tag :mine_assign_to, 'true', id: 'mine_assign_to' %>
 
-    <table class="listing contact_listing <%= 'unassigned_contacts' if params[:assigned_to] == 'unassigned' %>" cellpadding="0" cellspacing="0">
+    <table class="listing contact_listing" cellpadding="0" cellspacing="0">
       <tr id="table_header">
       	<th>&nbsp;</th>
         <th class="checkbox_cell header_checkbox">
-          <%= check_box_tag 'check_all_contacts', true, false, 'data-target' => '#new_contact_assignment',
-                class: 'check_all_contacts', 'data-status' => @attr %>
+          <%= check_box_tag 'check_all_mine', true, false, 'data-target' => '#new_contact_assignment',
+                class: 'check_all_mine', 'data-status' => params[:status], 'data-owner-id' => current_person.id%>
         </th>
         <th class='first_name'><%= sort_link @q, :first_name, t('contacts.mine.first_name'), params %></th>
         <th class='last_name'><%= sort_link @q, :last_name, t('contacts.mine.last_name'), params %></th>

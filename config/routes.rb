@@ -231,8 +231,9 @@ Mh::Application.routes.draw do
   post "sms/mo"
   get "sms/mo"
 
-  match "/allcontacts" => "contacts#all_contacts", as: 'all_contacts'
-  match "/mycontacts" => "contacts#my_contacts", as: 'my_contacts'
+  match "/allcontacts" => "contacts#all_contacts", as: "all_contacts"
+  match "/mycontacts" => "contacts#my_contacts", as: "my_contacts"
+  match "/my_contacts_all" => "contacts#my_contacts_all", as: "my_contacts_all"
   resources :contacts, :only => [:show, :create, :edit, :update, :destroy, :index] do
     collection do
       get :all_contacts
