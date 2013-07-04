@@ -211,6 +211,8 @@ en:
       add_person: Add a person to %{org}
     index:
       include_archived_tips: "You may click this checkbox to include all of your Archived individuals in your All Contacts listing. Notice Archived individuals now have green labels.<br/><br/>If you want to only see <b>archived individuals</b>, click on \"Archived\" on the bottom, left side-panel.<br/><br/>Contacts can be <b>unarchived</b> by adding any label. You need to add each label you wish to return to that contact."
+      include_archived_tips_interactions: "Include archived contacts in this interactions lookup? If you want to only see archived individuals click on Archived in the More section on the left sidebar."
+      include_archived_tips_labels: "Include archived contacts in this labels lookup? If you want to only see archived individuals click on Archived in the More section on the left sidebar."
       archived_label: "Archived"
       include_archived: "Include Archived"
       add_person: Add Person

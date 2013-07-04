@@ -186,6 +186,22 @@ $ ->
     else
       document.location = '/contacts'
 
+  $('#contacts_controller #include_archived_interactions').live 'click', ->
+    params = $(this).attr("data-params")
+    attr_url = "include_archived_interactions=true"
+    if $(this).is(':checked')
+      document.location = "/allcontacts?"+attr_url+"&"+params
+    else
+      document.location = "/allcontacts?"+params.replace(attr_url, "")
+
+  $('#contacts_controller #include_archived_labels').live 'click', ->
+    params = $(this).attr("data-params")
+    attr_url = "include_archived_labels=true"
+    if $(this).is(':checked')
+      document.location = "/allcontacts?"+attr_url+"&"+params
+    else
+      document.location = "/allcontacts?"+params.replace(attr_url, "")
+
   $('.friends_count').live 'click', ->
     false
   $('.to_list a.delete').live 'click', ->

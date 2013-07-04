@@ -388,7 +388,6 @@ class ContactsController < ApplicationController
       # Filter results
       filter_archived_only if params[:archived].present?
       filter_by_permission if params[:permission].present?
-      filter_by_label if params[:label].present?
       filter_by_interaction_type if params[:interaction_type].present?
       filter_by_search if params[:do_search].present?
       filter_by_mine if params[:status].present?
@@ -468,10 +467,16 @@ class ContactsController < ApplicationController
         @header = I18n.t('contacts.index.completed')
         @people_scope = @organization.completed_contacts
       elsif params[:label].present? && @label_to = Label.find_by_id(params[:label])
-        if params[:include_archived].present? && params[:include_archived] == 'true'
+        if params[:include_archived_labels].present? && params[:include_archived_labels] == 'true'
           @people_scope = @label_to.label_contacts_from_org_with_archived(@organization)
         else
           @people_scope = @label_to.label_contacts_from_org(@organization)
+        end
+      elsif params[:interaction_type].present? && @interaction_type = InteractionType.find_by_id(params[:interaction_type])
+        if params[:include_archived_labels].present? && params[:include_archived_labels] == 'true'
+          @people_scope = @interaction_type.interaction_receivers_from_org_with_archived(@organization)
+        else
+          @people_scope = @interaction_type.interaction_receivers_from_org(@organization)
         end
       end
       @people_scope ||= current_organization.all_people

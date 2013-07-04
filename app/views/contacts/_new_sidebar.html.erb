@@ -11,15 +11,12 @@
     <% @organization.users.each_with_index do |person| %>
       <% if params[:include_archived] %>
         <% count = person.assigned_contacts_limit_org_with_archived(@organization).collect(&:id).count %>
+        <% link = all_contacts_path(assigned_to: person.id, include_archived: 'true') %>
       <% else %>
         <% count = person.assigned_contacts_limit_org(@organization).collect(&:id).count %>
+        <% link = all_contacts_path(assigned_to: person.id) %>
       <% end %>
       <li class="entry leader <%= 'selected_entry' if params[:assigned_to].to_i == person.id %>" data-id="<%= person.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
-        <% if params[:include_archived] %>
-          <% link = all_contacts_path(assigned_to: person.id, include_archived: 'true') %>
-        <% else %>
-          <% link = all_contacts_path(assigned_to: person.id) %>
-        <% end %>
         <%= link_to person, link %>&nbsp;(<span class="count"><%= count %></span>)
         <% if can? :manage, @organization %>
           <%= link_to(image_tag('delete.png', title: 'Remove Leader', class: 'tip'), leader_path(person.id), method: :delete, remote: true, class: 'delete_icon', data: { confirm: t('general.remove_leader_confirm', person: person) }) %>
@@ -32,7 +29,7 @@
 
 <ul class="ac_dropdown_list">
 	<li class="ac_dropdown_list_header">
-    <% if selected = params[:label].present? %>
+    <% if selected = params[:label].present? || params[:include_archived_labels].present? %>
       <a href="#" class="side_toggle arrow_anchor">&#x25BC;</a>
     <% else %>
       <a href="#" class="side_toggle arrow_anchor">&#x25B6;</a>
@@ -41,27 +38,29 @@
   </li>
   <div id='label_list' class="side_list" style="<%= 'display:block;' if selected %>">
     <% @organization.label_set.each do |label| %>
-      <% if params[:include_archived] %>
+      <% if params[:include_archived_labels] %>
         <% count = label.label_contacts_from_org_with_archived(@organization).collect(&:id).count %>
+        <% link = all_contacts_path(label: label.id, include_archived_labels: 'true') %>
       <% else %>
         <% count = label.label_contacts_from_org(@organization).collect(&:id).count %>
+        <% link = all_contacts_path(label: label.id) %>
       <% end %>
       <li class="entry label <%= 'selected_entry' if params[:label].to_i == label.id %>" data-id="<%= label.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
-        <% if params[:include_archived] %>
-          <% link = all_contacts_path(label: label.id, include_archived: 'true') %>
-        <% else %>
-          <% link = all_contacts_path(label: label.id) %>
-        <% end %>
-        <%= link_to label, all_contacts_path(label: label.id) %>&nbsp;(<span class="count"><%= count %></span>)
+        <%= link_to label, link %>&nbsp;(<span class="count"><%= count %></span>)
       </li>
     <% end %>
+    <li class="ac_include_archived">
+      <%= check_box_tag 'include_archived_labels', t('people.index.include_archived'), params[:include_archived_labels], "data-params" => params.except(:controller, :action).to_query %>
+      <span><%= t('people.index.include_archived') %></span>
+      <div class="icon help tipitright help_bubble_keyword" title="<%= t('people.index.include_archived_tips_labels') %>"></div>
+    </li>
   </div>
 </ul>
 
 
 <ul class="ac_dropdown_list">
 	<li class="ac_dropdown_list_header">
-    <% if selected = params[:interaction_type].present? %>
+    <% if selected = params[:interaction_type].present? || params[:include_archived_interactions].present? %>
       <a href="#" class="side_toggle arrow_anchor">&#x25BC;</a>
     <% else %>
       <a href="#" class="side_toggle arrow_anchor">&#x25B6;</a>
@@ -70,20 +69,22 @@
   </li>
   <div id='interaction_list' class="side_list" style="<%= 'display:block;' if selected %>">
     <% @organization.interaction_types.exclude_comment.each do |interaction_type| %>
-      <% if params[:include_archived] %>
+      <% if params[:include_archived_interactions] %>
         <% count = interaction_type.interaction_receivers_from_org_with_archived(@organization).collect(&:id).count %>
+        <% link = all_contacts_path(interaction_type: interaction_type.id, include_archived_interactions: 'true') %>
       <% else %>
         <% count = interaction_type.interaction_receivers_from_org(@organization).collect(&:id).count %>
+        <% link = all_contacts_path(interaction_type: interaction_type.id) %>
       <% end %>
       <li class="entry interaction <%= 'selected_entry' if params[:interaction_type].to_i == interaction_type.id %>" data-id="<%= interaction_type.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
-        <% if params[:include_archived] %>
-          <% link = all_contacts_path(interaction_type: interaction_type.id, include_archived: 'true') %>
-        <% else %>
-          <% link = all_contacts_path(interaction_type: interaction_type.id) %>
-        <% end %>
         <%= link_to interaction_type.title.humanize.titleize, link %>&nbsp;(<span class="count"><%= count %></span>)
       </li>
     <% end %>
+    <li class="ac_include_archived">
+      <%= check_box_tag 'include_archived_interactions', t('people.index.include_archived'), params[:include_archived_interactions], "data-params" => params.except(:controller, :action).to_query %>
+      <span><%= t('people.index.include_archived') %></span>
+      <div class="icon help tipitright help_bubble_keyword" title="<%= t('people.index.include_archived_tips_interactions') %>"></div>
+    </li>
   </div>
 </ul>
 
@@ -101,15 +102,12 @@
     <% @organization.permissions.arrange_all.each do |permission| %>
       <% if params[:include_archived] %>
         <% count = permission.permission_contacts_from_org_with_archived(@organization).collect(&:id).count %>
+        <% link = all_contacts_path(permission: permission.id, include_archived: 'true') %>
       <% else %>
         <% count = permission.permission_contacts_from_org(@organization).collect(&:id).count %>
+        <% link = all_contacts_path(permission: permission.id) %>
       <% end %>
       <li class="entry permission <%= 'selected_entry' if params[:permission].to_i == permission.id %>" data-id="<%= permission.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
-        <% if params[:include_archived] %>
-          <% link = all_contacts_path(permission: permission.id, include_archived: 'true') %>
-        <% else %>
-          <% link = all_contacts_path(permission: permission.id) %>
-        <% end %>
         <%= link_to permission, link %>&nbsp;(<span class="count"><%= count %></span>)
       </li>
     <% end %>

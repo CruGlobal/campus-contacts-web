@@ -27,6 +27,8 @@ $ ->
     permission = get_url.param("permission")
     archived = get_url.param("archived")
     dnc = get_url.param("dnc")
+    include_archived_interactions = get_url.param("include_archived_interactions")
+    include_archived_labels = get_url.param("include_archived_labels")
 
     if $('#sidebar_div').is(':visible')
       $.ajax
@@ -42,6 +44,8 @@ $ ->
           permission: permission
           archived: archived
           dnc: dnc
+          include_archived_interactions: include_archived_interactions
+          include_archived_labels: include_archived_labels
 
   $('a#survey_keywords_mode_link').siblings('ul').width(300)
 
