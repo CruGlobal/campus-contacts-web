@@ -130,37 +130,89 @@ $ ->
     e.preventDefault()
     $('#bulk_send_msg_dialog').submitBulkSendTextDialog()
 
-  $('#assigned_to_dropdown .option').live 'click', (e)->
-    $('input.leader_box').prop('checked',false)
+  $('#assigned_to_dropdown.view, #assigned_to_dropdown.view #selected').live 'click', (e)->
+    assigned_to_id = $('#assigned_to_dropdown.view').attr('data-current-id')
+    $("#assigned_to_dropdown.view .option.leader[data-id='" + assigned_to_id  + "'] input").prop('checked',true)
+
+  $('#assigned_to_dropdown.edit, #assigned_to_dropdown.edit #selected').live 'click', (e)->
+    assigned_to_id = $('#assigned_to_dropdown.edit').attr('data-current-id')
+    $("#assigned_to_dropdown.edit .option.leader[data-id='" + assigned_to_id  + "'] input").prop('checked',true)
+
+  $('#assigned_to_dropdown.edit .option').live 'click', (e)->
+    $('#assigned_to_dropdown.edit input.leader_box').prop('checked',false)
     checkbox = $(this).children('input.leader_box').eq(0)
     checkbox.prop('checked',true)
     selected_name = checkbox.siblings('.leader_name').text()
     checkbox.change()
     $('#assigned_to_id').val(checkbox.attr('data-id'))
-    $('#assigned_to_dropdown #selected').text(selected_name)
-    $('#assigned_to_dropdown').removeClass('active')
+    $('#assigned_to_dropdown.edit #selected').text(selected_name)
+    $('#assigned_to_dropdown.edit').removeClass('active')
 
-  $('#search_leader_results .option.leader input').live 'change', (e)->
+  $('#assigned_to_dropdown.view .option').live 'click', (e)->
+    $('#assigned_to_dropdown.view input.leader_box').prop('checked',false)
+    checkbox = $(this).children('input.leader_box').eq(0)
+    checkbox.prop('checked',true)
+    selected_name = checkbox.siblings('.leader_name').text()
+    checkbox.change()
+    $('#assigned_to_id').val(checkbox.attr('data-id'))
+    $('#assigned_to_dropdown.view #selected').text(selected_name)
+    $('#assigned_to_dropdown.view').removeClass('active')
+    $('#info_edit_save_button').click()
+
+  $('#search_leader_results.view .option.leader input').live 'change', (e)->
     if $(this).is(':checked')
       data_id = $(this).attr('data-id')
-      if $('#default_leader_options .option.receiver[data-id=' + data_id + ']').size() == 0
-        $('#default_leader_options').append($(this).parents('.option'))
+      if $('#default_leader_options.edit .option.receiver[data-id=' + data_id + ']').size() == 0
+        $('#default_leader_options.edit').append($(this).parents('.option'))
       else
         $(this).parents('.option').remove()
 
-  $('#search_leader_field').live 'keyup', (e)->
+  $('#search_leader_results.view .option.leader input').live 'change', (e)->
+    if $(this).is(':checked')
+      data_id = $(this).attr('data-id')
+      if $('#default_leader_options.view .option.receiver[data-id=' + data_id + ']').size() == 0
+        $('#default_leader_options.view').append($(this).parents('.option'))
+      else
+        $(this).parents('.option').remove()
+
+  $('#search_leader_field.edit').live 'keyup', (e)->
     e.preventDefault()
     if $(this).val() == ""
       $(this).removeClass("ui-autocomplete-input ui-autocomplete-loading")
     if $(this).val().length > 2
       $(this).addClass("ui-autocomplete-input ui-autocomplete-loading")
       ids = []
-      $("#default_leader_options .option.leader").each ->
+      $("#default_leader_options.edit .option.leader").each ->
         ids.push($(this).attr('data-id'))
       ids = ids.join(",")
       $.ajax
         type: 'GET',
         url: '/interactions/search_leaders?keyword=' + $(this).val() + '&person_id=' + $(this).attr('data-person-id') + '&except=' + ids
+
+  $('#search_leader_field.view').live 'keyup', (e)->
+    e.preventDefault()
+    if $(this).val() == ""
+      $(this).removeClass("ui-autocomplete-input ui-autocomplete-loading")
+    if $(this).val().length > 2
+      $(this).addClass("ui-autocomplete-input ui-autocomplete-loading")
+      ids = []
+      $("#default_leader_options.view .option.leader").each ->
+        ids.push($(this).attr('data-id'))
+      ids = ids.join(",")
+      $.ajax
+        type: 'GET',
+        url: '/interactions/search_leaders?keyword=' + $(this).val() + '&person_id=' + $(this).attr('data-person-id') + '&except=' + ids
+
+  $('#followup_status_dropdown.view .option').live 'click', (e)->
+    selected_name = $(this).attr('data-name')
+    selected_id = $(this).attr('data-id')
+    $('.followup_status_field_edit').val(selected_id)
+    $('.followup_status_field_edit').change()
+    $('#followup_status_dropdown.edit').removeClass('active')
+    $('#followup_status_dropdown.view').removeClass('active')
+    $('#followup_status_dropdown.edit #selected').text(selected_name)
+    $('#followup_status_dropdown.view #selected').text(selected_name)
+    $('#info_edit_save_button').click()
 
   $('#followup_status_dropdown.edit .option').live 'click', (e)->
     selected_name = $(this).attr('data-name')
@@ -495,8 +547,6 @@ $ ->
     e.preventDefault()
     $('.feed_content .tab_content.profile_info .view_space').hide()
     $('.feed_content .tab_content.profile_info .edit_space').fadeIn()
-    assigned_to_id = $('#assigned_to_dropdown').attr('data-current-id')
-    $(".option.leader[data-id=" + assigned_to_id  + "]").click()
 
 
   $('#info_edit_cancel_button').live 'click', (e)->
@@ -513,6 +563,7 @@ $ ->
     $('body').addClass("reload_info")
     $.toggleLoader('profile_name','Applying Changes...')
     $.blur('.feed_content .tab_content.profile_info .edit_space')
+    $.blur('.feed_content .tab_content.profile_info .view_space')
     $('form#edit_profile_form').submit()
 
 
