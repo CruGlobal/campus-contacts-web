@@ -198,8 +198,8 @@ class Person < ActiveRecord::Base
     :having => ["DATE(MAX(ass.updated_at)) >= ? AND DATE(MAX(ass.updated_at)) <= ? ", date_from, date_to]
   }}
 
-  scope :with_label, lambda { |label|
-    joins(:organizational_labels).where('organizational_labels.label_id' => label.id, 'organizational_labels.removed_date' => nil)
+  scope :with_label, lambda { |label, org|
+    joins(:organizational_labels).where('organizational_labels.label_id' => label.id, 'organizational_labels.organization_id' => org.id, 'organizational_labels.removed_date' => nil)
   }
 
   scope :non_staff, -> { where(is_staff: false) }

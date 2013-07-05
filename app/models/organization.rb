@@ -124,17 +124,17 @@ class Organization < ActiveRecord::Base
               }
       if period_end == end_date_string
         # Add the group stats and any additional bumps entered
-        students_involved = people.students.with_label(Label.involved).where("organizational_labels.created_at < ?", period_end).count
+        students_involved = people.students.with_label(Label.involved, self).where("organizational_labels.created_at < ?", period_end).count
 
-        faculty_involved  = people.faculty.with_label(Label.involved).where("organizational_labels.created_at < ?", period_end).count
+        faculty_involved  = people.faculty.with_label(Label.involved, self).where("organizational_labels.created_at < ?", period_end).count
 
-        students_engaged  = people.students.with_label(Label.engaged_disciple).where("organizational_labels.created_at < ?", period_end).count
+        students_engaged  = people.students.with_label(Label.engaged_disciple, self).where("organizational_labels.created_at < ?", period_end).count
 
-        faculty_engaged   = people.faculty.with_label(Label.engaged_disciple).where("organizational_labels.created_at < ?", period_end).count
+        faculty_engaged   = people.faculty.with_label(Label.engaged_disciple, self).where("organizational_labels.created_at < ?", period_end).count
 
-        student_leaders   = people.students.with_label(Label.leader).where("organizational_labels.created_at < ?", period_end).count
+        student_leaders   = people.students.with_label(Label.leader, self).where("organizational_labels.created_at < ?", period_end).count
 
-        faculty_leaders   = people.faculty.with_label(Label.leader).where("organizational_labels.created_at < ?", period_end).count
+        faculty_leaders   = people.faculty.with_label(Label.leader, self).where("organizational_labels.created_at < ?", period_end).count
 
         spiritual_conversations = params[:spiritual_conversation].to_i -
                                   interactions_count('spiritual_conversation') +
@@ -180,11 +180,11 @@ class Organization < ActiveRecord::Base
         periods << stats
         break
       else
-        stats.merge!({students_involved: people.students.with_label(Label.involved).where("organizational_labels.created_at < ?", period_end).count,
-                      faculty_involved: people.faculty.with_label(Label.involved).where("organizational_labels.created_at < ?", period_end).count,
-                      students_engaged: people.students.with_label(Label.engaged_disciple).where("organizational_labels.created_at < ?", period_end).count,
-                      faculty_engaged: people.faculty.with_label(Label.engaged_disciple).where("organizational_labels.created_at < ?", period_end).count,
-                      student_leaders: people.students.with_label(Label.leader).where("organizational_labels.created_at < ?", period_end).count,
+        stats.merge!({students_involved: people.students.with_label(Label.involved, self).where("organizational_labels.created_at < ?", period_end).count,
+                      faculty_involved: people.faculty.with_label(Label.involved, self).where("organizational_labels.created_at < ?", period_end).count,
+                      students_engaged: people.students.with_label(Label.engaged_disciple, self).where("organizational_labels.created_at < ?", period_end).count,
+                      faculty_engaged: people.faculty.with_label(Label.engaged_disciple, self).where("organizational_labels.created_at < ?", period_end).count,
+                      student_leaders: people.students.with_label(Label.leader, self).where("organizational_labels.created_at < ?", period_end).count,
                       spiritual_conversations: interactions_count('spiritual_conversation', period_begin, period_end),
                       holy_spirit_presentations: interactions_count('holy_spirit_presentation', period_begin, period_end),
                       personal_evangelism: interactions_count('gospel_presentation', period_begin, period_end),
