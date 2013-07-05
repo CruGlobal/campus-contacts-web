@@ -87,6 +87,8 @@
 	<%= link_to_next_page @people, raw("<button class='action_lightblue btn_right nav_arrows'>&#9658;</button>"), :params => params %>
 </div>
 
+<br>
+
 <div id="ac_contact_spread">
   <%= form_tag("", :id => "move_to_dnc", :method => :put) do %>
     <%= hidden_field_tag :status, "do_not_contact" %>
