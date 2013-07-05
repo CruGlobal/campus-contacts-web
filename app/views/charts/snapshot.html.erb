@@ -1,0 +1,19 @@
+<% provide :sidebar do %>
+  <div id="snapshot_sidebar">
+    A bunch of movements
+  </div>
+<% end %>
+
+<div class="titlebar titlebarmod">
+  <h1>
+    Snapshot View
+  </h1>
+</div>
+
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/highcharts-more.js"></script>
+<div id="snap_container1" style="width: 50%; height: 300px; margin: 0 auto; float: left"></div>
+<div id="snap_container2" style="width: 50%; height: 300px; margin: 0 auto; float: left"></div>
+<div id="snap_container3" style="width: 50%; height: 300px; margin: 0 auto; float: left"></div>
+
+<%= javascript_include_tag 'snapshot' %>

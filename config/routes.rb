@@ -193,6 +193,12 @@ Mh::Application.routes.draw do
       get :update_from_crs
     end
   end
+  
+  resources :charts do
+    collection do
+      get :snapshot
+    end
+  end
 
   resources :surveys, :only => [:new, :create, :edit, :update, :index, :destroy] do
     member do

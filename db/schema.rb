@@ -282,7 +282,7 @@ ActiveRecord::Schema.define(:version => 20130703090751) do
     t.datetime "updated_at"
   end
 
-  add_index "email_addresses", ["email"], :name => "index_email_addresses_on_email"
+  add_index "email_addresses", ["email"], :name => "email"
   add_index "email_addresses", ["person_id"], :name => "person_id"
 
   create_table "followup_comments", :force => true do |t|
@@ -395,7 +395,7 @@ ActiveRecord::Schema.define(:version => 20130703090751) do
     t.integer  "created_by_id"
     t.integer  "updated_by_id"
     t.integer  "organization_id"
-    t.text     "comment"
+    t.string   "comment"
     t.string   "privacy_setting"
     t.datetime "timestamp"
     t.datetime "deleted_at"
@@ -454,6 +454,7 @@ ActiveRecord::Schema.define(:version => 20130703090751) do
     t.string   "reply_to"
     t.string   "subject"
     t.text     "message"
+    t.string   "status"
     t.string   "sent_via"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
@@ -740,6 +741,14 @@ ActiveRecord::Schema.define(:version => 20130703090751) do
 
   add_index "saved_contact_searches", ["user_id"], :name => "index_saved_contact_searches_on_user_id"
 
+  create_table "school_years", :force => true do |t|
+    t.string   "name"
+    t.string   "level"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "sent_people", :force => true do |t|
     t.integer  "person_id"
     t.integer  "transferred_by_id"
@@ -791,7 +800,7 @@ ActiveRecord::Schema.define(:version => 20130703090751) do
     t.string   "initial_response",               :limit => 145
     t.text     "post_survey_message_deprecated"
     t.string   "event_type"
-    t.string   "gateway",                                       :default => "", :null => false
+    t.string   "gateway",                                       :default => "twilio", :null => false
     t.integer  "survey_id"
   end
 
@@ -900,9 +909,13 @@ ActiveRecord::Schema.define(:version => 20130703090751) do
   add_index "versions", ["organization_id", "created_at"], :name => "index_versions_on_organization_id_and_created_at"
   add_index "versions", ["person_id", "created_at"], :name => "index_versions_on_person_id_and_created_at"
 
+  add_foreign_key "answers", "elements", :name => "answers_ibfk_1", :column => "question_id"
+
+  add_foreign_key "organization_memberships", "organizations", :name => "organization_memberships_ibfk_2", :dependent => :delete
+
   add_foreign_key "organizational_permissions", "organizations", :name => "organizational_permissions_ibfk_1", :dependent => :delete
 
-  add_foreign_key "sms_keywords", "organizations", :name => "sms_keywords_ibfk_2"
+  add_foreign_key "sms_keywords", "organizations", :name => "sms_keywords_ibfk_4", :dependent => :delete
   add_foreign_key "sms_keywords", "surveys", :name => "sms_keywords_ibfk_3", :dependent => :nullify
 
   add_foreign_key "surveys", "organizations", :name => "surveys_ibfk_1", :dependent => :delete

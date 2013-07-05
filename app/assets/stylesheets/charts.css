@@ -1,0 +1,25 @@
+div#snap_container1 {
+  position:relative;
+  top:0px;
+  right:0px;
+}
+
+div#snap_container2 {
+  position:relative;
+  top: 0px;
+  right:0px;
+}
+
+div#snap_container3 {
+  position:relative;
+  top:0px;
+  right:0px;
+}
+
+div#highcharts-0 defs+rect, div#highcharts-2 defs+rect, div#highcharts-4 defs+rect {
+  fill:none;
+}
+
+text[text-anchor=end] {
+  #display:none;
+}

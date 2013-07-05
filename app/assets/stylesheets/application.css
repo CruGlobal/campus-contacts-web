@@ -7,6 +7,7 @@
  *= require messages
  *= require groups
  *= require surveys
+ *= require charts
  *= require survey_responses
  *= require interactions
  *= require mh_profile_style
