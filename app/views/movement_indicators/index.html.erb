@@ -1,3 +1,4 @@
+<%= form_tag movement_indicators_path, onsubmit: "return confirm('If you want to change these numbers later you will need to go to Infobase to do so.')"  do %>
 <% (current_organization.last_push_to_infobase < current_organization.last_week).tap do |stats_need_reported| %>
 <div class="titlebar titlebarmod">
   <h1><%= t('movement_indicator_suggestions.index.title', org_name: current_organization) %></h1>
@@ -170,7 +171,7 @@
     <div class="report_buttons">
       <%= link_to('<button class="large_gray" id="report_back_button">Back</button>'.html_safe, movement_indicator_suggestions_path) %>
       <% if stats_need_reported %>
-        <%= link_to('<button class="red_accent" id="report_submit_button">Submit</button>'.html_safe, movement_indicators_path, method: :post, confirm: "If you want to change these numbers later you will need to go to Infobase to do so.") %>
+        <button class="red_accent" id="report_submit_button">Submit</button>
       <% end %>
     </div>
 
@@ -179,3 +180,4 @@
 
 <% end %>
 <div id="indicator_dialog"></div>
+<% end %>
