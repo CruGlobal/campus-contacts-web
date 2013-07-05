@@ -129,36 +129,36 @@
             <tr>
               <td>Involved</td>
               <td>
-                <%= text_field_tag :involved_students, current_organization.people.students.with_label(Label.involved, current_organization).count %>
+                <%= text_field_tag :involved_students, current_organization.people.students.with_label(Label.involved, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
                 <%= tip('How many students are regularly involved - attending movement events?') %>
               </td>
               <td>&nbsp;</td>
               <td>
-                <%= text_field_tag :involved_faculty, current_organization.people.faculty.with_label(Label.involved, current_organization).count %>
+                <%= text_field_tag :involved_faculty, current_organization.people.faculty.with_label(Label.involved, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
                 <%= tip('How many faculty are regularly involved?') %>
               </td>
             </tr>
             <tr>
               <td>Engaged Disciples</td>
               <td>
-                <%= text_field_tag :engaged_disciple, current_organization.people.students.with_label(Label.engaged_disciple, current_organization).count %>
+                <%= text_field_tag :engaged_disciple, current_organization.people.students.with_label(Label.engaged_disciple, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
                 <%= tip('How many students have intentionally engaged someone in a spiritual conversation within the past semester?') %>
               </td>
               <td>&nbsp;</td>
               <td>
-                <%= text_field_tag :engaged_disciple_faculty, current_organization.people.faculty.with_label(Label.engaged_disciple, current_organization).count %>
+                <%= text_field_tag :engaged_disciple_faculty, current_organization.people.faculty.with_label(Label.engaged_disciple, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
                 <%= tip('How many faculty have intentionally engaged in a spiritual conversation within the past semester?') %>
               </td>
             </tr>
             <tr>
               <td>Leader</td>
               <td>
-                <%= text_field_tag :leader, current_organization.people.students.with_label(Label.leader, current_organization).count %>
+                <%= text_field_tag :leader, current_organization.people.students.with_label(Label.leader, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
                 <%= tip('How many students are leading small groups of Win, Build, Send ministry?') %>
               </td>
               <td>&nbsp;</td>
               <td>
-                <%= text_field_tag :leader_faculty, current_organization.people.faculty.with_label(Label.leader, current_organization).count %>
+                <%= text_field_tag :leader_faculty, current_organization.people.faculty.with_label(Label.leader, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
                 <%= tip('How many faculty are leading small groups of Win, Build, Send ministry?') %>
               </td>
             </tr>
