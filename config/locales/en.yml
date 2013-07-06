@@ -653,7 +653,7 @@ en:
       confirm_delete_interaction: "Are you sure you want to delete this interaction?"
   contacts:
     new_sidebar:
-      contact_assignments: "Contact Assignments"
+      contact_assignments: "Assigned Contacts"
       labels: "Labels"
       permissions: "Permissions"
       more_options: "More"

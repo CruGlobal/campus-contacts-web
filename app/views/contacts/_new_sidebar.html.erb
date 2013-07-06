@@ -16,7 +16,7 @@
         <% count = person.assigned_contacts_limit_org(@organization).collect(&:id).count %>
         <% link = all_contacts_path(assigned_to: person.id) %>
       <% end %>
-      <li class="entry leader <%= 'selected_entry' if params[:assigned_to].to_i == person.id %>" data-id="<%= person.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
+      <li class="entry leader <%= 'selected_entry' if params[:assigned_to].to_i == person.id %>" data-id="<%= person.id %>">
         <%= link_to person, link %>&nbsp;(<span class="count"><%= count %></span>)
         <% if can? :manage, @organization %>
           <%= link_to(image_tag('delete.png', title: 'Remove Leader', class: 'tip'), leader_path(person.id), method: :delete, remote: true, class: 'delete_icon', data: { confirm: t('general.remove_leader_confirm', person: person) }) %>
