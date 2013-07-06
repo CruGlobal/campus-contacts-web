@@ -101,13 +101,13 @@
   <div id='permission_list' class="side_list" style="<%= 'display:block;' if selected %>">
     <% @organization.permissions.arrange_all.each do |permission| %>
       <% if params[:include_archived] %>
-        <% count = permission.permission_contacts_from_org_with_archived(@organization).collect(&:id).count %>
+        <% count = permission.permission_contacts_from_org_with_archived(@organization).count %>
         <% link = all_contacts_path(permission: permission.id, include_archived: 'true') %>
       <% else %>
-        <% count = permission.permission_contacts_from_org(@organization).collect(&:id).count %>
+        <% count = permission.permission_contacts_from_org(@organization).count %>
         <% link = all_contacts_path(permission: permission.id) %>
       <% end %>
-      <li class="entry permission <%= 'selected_entry' if params[:permission].to_i == permission.id %>" data-id="<%= permission.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
+      <li class="entry permission <%= 'selected_entry' if params[:permission].to_i == permission.id %>" data-id="<%= permission.id %>">
         <%= link_to permission, link %>&nbsp;(<span class="count"><%= count %></span>)
       </li>
     <% end %>

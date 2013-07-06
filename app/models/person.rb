@@ -391,15 +391,13 @@ class Person < ActiveRecord::Base
   end
 
   def assigned_contacts_limit_org(org)
-    assigned_id_list = ContactAssignment.where(assigned_to_id: id, organization_id: org.id).uniq
-    people = org.people.where(id: assigned_id_list.collect(&:person_id))
-    people.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id, 'organizational_permissions.archive_date' => nil)
+    assigned_id_list = ContactAssignment.where(assigned_to_id: id, organization_id: org.id)
+    people = org.all_people.where(id: assigned_id_list.collect(&:person_id).uniq)
   end
 
   def assigned_contacts_limit_org_with_archived(org)
-    assigned_id_list = ContactAssignment.where(assigned_to_id: id, organization_id: org.id).uniq
-    people = org.people.where(id: assigned_id_list.collect(&:person_id))
-    people.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id)
+    assigned_id_list = ContactAssignment.where(assigned_to_id: id, organization_id: org.id)
+    people = org.all_people_with_archived.where(id: assigned_id_list.collect(&:person_id).uniq)
   end
 
   def has_similar_person_by_name_and_email?(email)
