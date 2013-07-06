@@ -27,8 +27,8 @@ class Interaction < ActiveRecord::Base
   end
 
   def last_updater
-    person_id = updated_by_id || created_by_id
-    Person.find(person_id)
+    last_updater = Person.find_by_id(updated_by_id)
+    last_updater ||= Person.find_by_id(created_by_id)
   end
 
   def initiator
@@ -61,9 +61,9 @@ class Interaction < ActiveRecord::Base
   end
 
   def title
-    intiators_string = initiators.collect{|x| "<strong>#{x.name}</strong>"}.to_sentence
-    creator_string = "<strong>#{creator.name}</strong>"
-    receiver_string = "<strong>#{receiver.name}</strong>"
+    intiators_string = initiators.collect{|x| "<strong>#{x.name}</strong>" if x.present?}.to_sentence
+    creator_string = "<strong>#{creator.name if creator.present?}</strong>"
+    receiver_string = "<strong>#{receiver.name if receiver.present?}</strong>"
     case interaction_type.i18n
     when 'comment'
       return "".html_safe

@@ -300,6 +300,10 @@ class Person < ActiveRecord::Base
     organizational_permissions.where("organizational_permissions.organization_id = ? AND organizational_permissions.permission_id = ?", org.id, Permission::USER_ID).first
   end
 
+  def permission_for_org(org)
+    organizational_permissions.where("organizational_permissions.organization_id = ?", org.id).first
+  end
+
   def completed_answer_sheets(organization)
     answer_sheets.where("survey_id IN (?)", Survey.where("organization_id = ? OR id = ?", organization.id, APP_CONFIG['predefined_survey']).collect(&:id)).order('updated_at DESC')
   end

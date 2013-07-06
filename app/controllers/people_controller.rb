@@ -209,7 +209,7 @@ class PeopleController < ApplicationController
     @current_person = current_person
     if params[:followup_status].present?
       @new_status = params[:followup_status]
-      @contact_permission = @person.contact_permission_for_org(current_organization)
+      @contact_permission = @person.permission_for_org(current_organization)
       @contact_permission.update_attribute(:followup_status, @new_status) if @contact_permission.present?
     end
 
