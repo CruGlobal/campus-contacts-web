@@ -22,6 +22,7 @@
 //= require questions
 //= require contacts
 //= require my_contacts
+//= require manage_labels
 //= require rails-validations
 //= require rails.validations.callbacks
 //= require sms_keywords.js.coffee

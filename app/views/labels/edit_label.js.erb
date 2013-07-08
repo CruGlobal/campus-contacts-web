@@ -1,0 +1,6 @@
+<% if @status.present? && @status %>
+  $("#label_<%= @update_label.id%>").remove()
+  $('#organizational_label_table').prepend("<%= escape_javascript(render partial: 'labels/organizational_label', locals: {organizational_label: @update_label} ) %>")
+  $.hideDialog($("#add_label_div"))
+<% end %>
+$.a("<%= @message %>")
