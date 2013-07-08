@@ -50,6 +50,8 @@ class ApiV1LabelsTest < ActionDispatch::IntegrationTest
 
     should "successfully update a person from contact to leader status" do
       path = "/api/labels/#{@user.person.id}"
+      Factory(:email_address, email: 'user@email.com', person: @user.person)
+      @user.person.reload
       @user.person.organizational_labels.first.update_attributes(label_id: Label::ENGAGED_DISCIPLE)
 
       put path, {'access_token' => @access_token3.code, label: "leader", org_id: @user3.person.primary_organization.id}

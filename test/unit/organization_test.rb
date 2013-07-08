@@ -380,6 +380,10 @@ class OrganizationTest < ActiveSupport::TestCase
     user2 = Factory(:user_with_auxs)
     org = Factory(:organization)
 
+    Factory(:email_address, email: 'user1@email.com', person: user1.person)
+    Factory(:email_address, email: 'user2@email.com', person: user2.person)
+    user1.person.reload
+    user2.person.reload
     org.add_leader(user1.person, user2.person)
     org_permission = OrganizationalPermission.last
 
@@ -396,6 +400,12 @@ class OrganizationTest < ActiveSupport::TestCase
     org = Factory(:organization)
 
     # Add Leader
+    Factory(:email_address, email: 'leader1@email.com', person: user1.person)
+    Factory(:email_address, email: 'leader2@email.com', person: user2.person)
+    Factory(:email_address, email: 'leader3@email.com', person: user2.person)
+    user1.person.reload
+    user2.person.reload
+    user3.person.reload
     org.add_leader(user1.person, user2.person)
     org_permission = OrganizationalPermission.last
 

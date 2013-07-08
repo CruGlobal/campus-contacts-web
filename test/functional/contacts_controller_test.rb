@@ -86,6 +86,8 @@ class ContactsControllerTest < ActionController::TestCase
   context "After logging in a person with orgs" do
     setup do
       @user, org = admin_user_login_with_org
+      Factory(:email_address, email: 'leader1@email.com', person: @user.person)
+      @user.person.reload
       @keyword = Factory.create(:sms_keyword)
       @user.person.organizations.first.add_leader(@user.person, @user.person)
       @org = org
@@ -426,6 +428,11 @@ class ContactsControllerTest < ActionController::TestCase
         @user = Factory(:user_with_auxs)
         @user2 = Factory(:user_with_auxs)
         org = Factory(:organization)
+
+        Factory(:email_address, email: 'user@email.com', person: @user.person)
+        Factory(:email_address, email: 'user2@email.com', person: @user2.person)
+        @user.person.reload
+        @user2.person.reload
         Factory(:organizational_permission, person: @user.person, permission: Permission.user, organization: org, :added_by_id => @user2.person.id)
         sign_in @user
         @request.session[:current_organization_id] = org.id

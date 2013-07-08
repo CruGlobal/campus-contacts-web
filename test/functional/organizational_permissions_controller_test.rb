@@ -19,6 +19,8 @@ class OrganizationalPermissionsControllerTest < ActionController::TestCase
   context "Moving contacts" do
     setup do
       @user, @org = admin_user_login_with_org
+      Factory(:email_address, email: 'user@email.com', person: @user.person)
+      @user.person.reload
 
       @person1 = Factory(:person)
       @person2 = Factory(:person)
@@ -138,6 +140,8 @@ class OrganizationalPermissionsControllerTest < ActionController::TestCase
 
     should "be able to move an leader person" do
       @user_2 = Factory(:user_with_auxs)
+      Factory(:email_address, email: 'user2@email.com', person: @user_2.person)
+      @user_2.person.reload
       ids = [@user_2.person.id]
       @org.add_leader(@user_2.person, @user.person)
       @contact = Factory(:person)
