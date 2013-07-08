@@ -4,6 +4,8 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
   setup do
     @user, @org = admin_user_login_with_org
     sign_in @user
+    Factory(:email_address, email: 'current_user@email.com', person: @user.person)
+    @user.person.reload
     Factory(:approved_keyword, organization: @org, user: @user)
     @survey = @org.surveys.first
     @predefined_survey = Factory(:survey, organization: @org)
@@ -119,6 +121,10 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
     setup do
       @user, org = admin_user_login_with_org
       @user_2 = Factory(:user_with_auxs)
+      Factory(:email_address, email: 'user@email.com', person: @user.person)
+      Factory(:email_address, email: 'user2@email.com', person: @user_2.person)
+      @user.person.reload
+      @user_2.person.reload
       org.add_leader(@user_2.person, @user.person)
       @survey = Factory(:survey, organization: org) #create survey
       @question_3 = Factory(:some_question)
@@ -174,6 +180,10 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
       @survey.survey_elements.where(element_id: @question.id).first.update_attributes({archived: true})
 
       @user_2 = Factory(:user_with_auxs)
+      Factory(:email_address, email: 'user@email.com', person: @user.person)
+      Factory(:email_address, email: 'user_2@email.com', person: @user_2.person)
+      @user.person.reload
+      @user_2.person.reload
       org.add_leader(@user_2.person, @user.person)
     end
 

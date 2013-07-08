@@ -36,6 +36,10 @@ class GroupsControllerTest < ActionController::TestCase
       sign_in user
       user2 = Factory(:user_with_auxs)
       org = Factory(:organization)
+      Factory(:email_address, email: 'user@email.com', person: user.person)
+      Factory(:email_address, email: 'user2@email.com', person: user2.person)
+      user.person.reload
+      user2.person.reload
       org.add_leader(user.person, user2.person)
       request.session[:current_organization_id] = org.id
       @group = Factory(:group, organization: org)

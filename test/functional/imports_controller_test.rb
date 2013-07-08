@@ -66,6 +66,8 @@ class ImportsControllerTest < ActionController::TestCase
       stub_request(:put, /https:\/\/s3\.amazonaws\.com\/.*\/mh\/imports\/uploads\/.*/)
 
       @user, @organization = admin_user_login_with_org
+      Factory(:email_address, email: 'user@email.com', person: @user.person)
+      @user.person.reload
 
       @survey = Factory(:survey, organization: @organization, id: 2)
       @first_name_element = Factory(:first_name_element)
