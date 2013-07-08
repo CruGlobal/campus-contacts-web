@@ -12,8 +12,20 @@
 
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="http://code.highcharts.com/highcharts-more.js"></script>
-<div id="snap_container1" style="width: 50%; height: 300px; margin: 0 auto; float: left"></div>
-<div id="snap_container2" style="width: 50%; height: 300px; margin: 0 auto; float: left"></div>
-<div id="snap_container3" style="width: 50%; height: 300px; margin: 0 auto; float: left"></div>
+<div id="snap_gospel_exp">
+  <h2>GOSPEL EXPERIENCES</h2>
+  <%= select_tag "gospel_exp_range"%>
+</div>
+<div id="snap_laborers">
+  <h2>LABORERS</h2>
+  <%= select_tag "laborers_range"%>
+</div>
+<div id="snap_container1"></div>
+<div id="snap_container2"></div>
+<div id="snap_container3"></div>
+<div id="snap_numbers"></div>
+<div id="snap_on_mission">
+  <h2>FACULTY ON MISSION/<br/>GRADUATING ON MISSION</h2>
+</div>
 
 <%= javascript_include_tag 'snapshot' %>

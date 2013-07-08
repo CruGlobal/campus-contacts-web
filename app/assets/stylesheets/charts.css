@@ -1,25 +1,23 @@
-div#snap_container1 {
-  position:relative;
-  top:0px;
-  right:0px;
-}
-
-div#snap_container2 {
-  position:relative;
+div#snap_container1, div#snap_container2, div#snap_container3, div#snap_numbers {
+  position: relative;
   top: 0px;
-  right:0px;
+  right: 0px;
+  width: 50%; 
+  height: 300px; 
+  margin: 0 auto; 
+  float: left;
 }
 
-div#snap_container3 {
-  position:relative;
-  top:0px;
-  right:0px;
+div#snap_gospel_exp, div#snap_laborers, div#snap_on_mission {
+  width: 50%;
+  height: 75px;
+  float: left;
 }
 
 div#highcharts-0 defs+rect, div#highcharts-2 defs+rect, div#highcharts-4 defs+rect {
   fill:none;
 }
 
-text[text-anchor=end] {
-  #display:none;
+svg>text[text-anchor=end] tspan{
+  display:none;
 }
