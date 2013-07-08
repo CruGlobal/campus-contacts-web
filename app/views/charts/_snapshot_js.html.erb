@@ -1,0 +1,266 @@
+<script>
+  $(function () {
+  
+      // Parse the data from an inline table using the Highcharts Data plugin
+      $('#snap_container1').highcharts({
+  
+          chart: {
+              polar: true,
+              type: 'column',
+              margin: [0,0,0,0]
+          },
+  
+          title: {
+              text: null
+          },
+  
+          pane: {
+              center: ['95%','95%'],
+              size: 500,
+              startAngle: -90,
+              endAngle: 0
+          },
+  
+          legend: {
+              floating: true,
+              align: 'left',
+              verticalAlign: 'top',
+              layout: 'vertical'
+          },
+  
+          xAxis: {
+              labels: {
+                  enabled: false
+              },
+              min: 0,
+              max: 2
+          },
+  
+          yAxis: {
+              type: 'linear',
+              min: 0,
+              minTickInterval: 1,
+              endOnTick: false,
+              showLastLabel: true
+          },
+  
+          tooltip: {
+              followPointer: true
+          },
+  
+          plotOptions: {
+  
+              column: {
+                  grouping: false
+              },
+  
+              series: {
+                  shadow: false,
+                  groupPadding: 0,
+                  pointPlacement: 'on'
+              }
+          },
+          series: [{
+              data: [{
+                  x: 0.5,
+                  y: <%= @all_stats['holy_spirit_presentations']%>
+              }],
+              name: "Holy Spirit Presentations",
+              color: '#6BC989'
+          }, {
+              data: [{
+                  x: 1.5,
+                  y: <%= @all_stats['spiritual_conversations']%>
+              }],
+              name: "Spiritual Conversations",
+              color: '#D2E3F1'
+          }, {
+              data: [{
+                  x: 1.5,
+                  y: <%= @all_stats['personal_evangelism']%>
+              }],
+              name: "Personal Evangelism",
+              color: '#A4C8E4'
+          }, {
+              data: [{
+                  x: 1.5,
+                  y: <%= @all_stats['personal_decisions']%>
+              }],
+              name: "Decisions",
+              color: '#77ACD6'
+          }]
+      });
+  });
+  
+  $(function () {
+  
+      // Parse the data from an inline table using the Highcharts Data plugin
+      $('#snap_container2').highcharts({
+  
+          chart: {
+              polar: true,
+              margin: [0,0,0,0],
+              type: 'column'
+          },
+  
+          title: {
+              text: null
+          },
+  
+          pane: {
+              center: ['5%','95%'],
+              size: 500,
+              startAngle: 0,
+              endAngle: 90
+          },
+  
+          legend: {
+              floating: true,
+              align: 'right',
+              verticalAlign: 'top',
+              y: 0,
+              layout: 'vertical'
+          },
+  
+          xAxis: {
+              labels: {
+                  enabled: false
+              },
+              min: 0,
+              max: 1
+          },
+  
+          yAxis: {
+              type: 'linear',
+              min: 0,
+              minTickInterval: 1,
+              endOnTick: false,
+              showLastLabel: true
+          },
+  
+          tooltip: {
+              followPointer: true
+          },
+  
+          plotOptions: {
+  
+              column: {
+                  grouping: false
+              },
+  
+              series: {
+                  shadow: false,
+                  groupPadding: 0,
+                  pointPlacement: 'on'
+              }
+          },
+          series: [{
+              data: [{
+                  x: 0.5,
+                  y: <%= @all_stats['involved']%>
+              }],
+              name: "Students and Faculty Involved",
+              color: '#D2D9EB'
+          }, {
+              data: [{
+                  x: 0.5,
+                  y: <%= @all_stats['engaged_disciples']%>
+              }],
+              name: "Engaged Disciples",
+              color: '#A6B3D6'
+          }, {
+              data: [{
+                  x: 0.5,
+                  y: <%= @all_stats['leaders']%>
+              }],
+              name: "Leaders",
+              color: '#798CC2'
+          }]
+      });
+  });
+  
+  $(function () {
+  
+      // Parse the data from an inline table using the Highcharts Data plugin
+      $('#snap_container3').highcharts({
+  
+          chart: {
+              polar: true,
+              type: 'column',
+              margin: [0,0,0,0]
+          },
+  
+          title: {
+              text: null
+          },
+  
+          pane: {
+              center: ['95%','5%'],
+              size: 500,
+              startAngle: 180,
+              endAngle: 270
+          },
+  
+          legend: {
+              floating: true,
+              align: 'left',
+              verticalAlign: 'bottom',
+              x: 0,
+              y: 0,
+              layout: 'vertical'
+          },
+  
+          xAxis: {
+              labels: {
+                  enabled: false
+              },
+              min: 0,
+              max: 1
+          },
+  
+          yAxis: {
+              labels: {
+                  align: 'left',
+                  x: 1
+              },
+              type: 'linear',
+              min: 0,
+              minTickInterval: 1,
+              endOnTick: false,
+              showLastLabel: true
+          },
+  
+          tooltip: {
+              followPointer: true
+          },
+  
+          plotOptions: {
+  
+              column: {
+                  grouping: false
+              },
+  
+              series: {
+                  shadow: false,
+                  groupPadding: 0,
+                  pointPlacement: 'on'
+              }
+          },
+          series: [{
+              data: [{
+                  x: 0.5,
+                  y: <%= @all_stats['graduating_on_mission']%>
+              }],
+              name: "Graduating on Mission",
+              color: '#F7A37A'
+          }, {
+              data: [{
+                  x: 0.5,
+                  y: <%= @all_stats['faculty_on_mission']%>
+              }],
+              name: "Faculty on Mission",
+              color: '#F4844E'
+          }]
+      });
+  });
+</script>
