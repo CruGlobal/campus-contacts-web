@@ -435,7 +435,7 @@ class PeopleController < ApplicationController
     response = false
     if person = Person.find(params[:person_id])
       response = true
-      permission = person.contact_permission_for_org(current_organization)
+      permission = person.permission_for_org(current_organization)
       permission.followup_status = params[:status]
       permission.save
     end
