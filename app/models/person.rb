@@ -386,8 +386,8 @@ class Person < ActiveRecord::Base
   end
 
   def is_archived?(org)
-    return true if organizational_permissions.where(organization_id: org.id).blank?
-    false
+    org_permission = organizational_permission_for_org(org)
+    return org_permission.present? && org_permission.archive_date.present?
   end
 
   def assigned_tos_by_org(org)

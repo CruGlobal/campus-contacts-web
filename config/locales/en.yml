@@ -1095,7 +1095,7 @@ en:
       group_list: 'Group List for %{org}'
       group_name: Group Name
       members: Involved
-      leaders: Leaders
+      leaders: Group Leaders
       add_group: 'Add Group'
       labels: Group Labels
       add: Add
@@ -1113,7 +1113,7 @@ en:
     show:
       page_title: "Group Name: %{group_name}"
       details: Details
-      add_leader: 'Add Leader'
+      add_leader: 'Add Group Leader'
       add_member: 'Add Member'
       email: 'Email Address'
       phone: 'Phone Number'
@@ -1146,8 +1146,8 @@ en:
   group_memberships:
     form:
       start_typing: "Start typing a name to find a person add to this group:"
-      add_a_member: 'Add a member'
-      add_a_leader: 'Add a leader'
+      add_a_member: 'Add a Member'
+      add_a_leader: 'Add a Group leader'
     search:
       not_found: We couldn't find anyone in your %{terminology} with that name
       showing_count: "Showing %{length} of %{total} records, keep typing or "
