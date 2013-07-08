@@ -765,6 +765,7 @@ en:
       search_locate_help: "You may enter all or any part of First Name, Last Name, and/or Email Address and then click the \"Go Find\" button to find in which of \"your MissionHub Organizations\" the individual is currently located."
       all: 'All'
       dnc: 'Do Not Contact'
+      archived: 'Archived'
       add_label_exists: 'Label is already in the list!'
       add_label_success: 'New label successfully added!'
       add_label_failed: 'Failed to save label. Please try again.'

@@ -131,7 +131,7 @@
     </li>
     <li class="entry more <%= 'selected_entry' if params[:archived].present? %>">
       <%= link_to(t('people.index.archived_label'), all_contacts_path(archived: true)) %>
-      (<span class="count"><%= current_organization.people.archived(current_organization.id).count %></span>)
+      (<span class="count"><%= current_organization.all_archived_people.count %></span>)
     </li>
     <li class="entry more <%= 'selected_entry' if params[:dnc].present? %>">
       <%= link_to(t('contacts.index.dnc'), all_contacts_path(dnc: true)) %>
