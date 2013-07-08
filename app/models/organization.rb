@@ -45,6 +45,7 @@ class Organization < ActiveRecord::Base
     has_many :all_people_with_archived, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.followup_status <> 'do_not_contact' OR organizational_permissions.followup_status IS NULL"], uniq: true
     has_many :contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.followup_status <> 'do_not_contact'", Permission::NO_PERMISSIONS_ID]
     has_many :contacts_with_archived, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.followup_status <> 'do_not_contact'", Permission::NO_PERMISSIONS_ID]
+    has_many :all_archived_people, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date IS NOT NULL AND organizational_permissions.followup_status <> 'do_not_contact'"]
     has_many :dnc_contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date IS NULL AND organizational_permissions.followup_status = 'do_not_contact'"]
     has_many :completed_contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.followup_status = ?", Permission::NO_PERMISSIONS_ID, 'completed']
     has_many :completed_contacts_with_archived, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.followup_status = ?", Permission::NO_PERMISSIONS_ID, 'completed']
@@ -124,30 +125,17 @@ class Organization < ActiveRecord::Base
               }
       if period_end == end_date_string
         # Add the group stats and any additional bumps entered
-        students_involved = params[:involved_students].to_i -
-                            people.students.with_label(Label.involved).count +
-                            people.students.with_label(Label.involved).where("organizational_labels.created_at < ?", period_end).count
+        students_involved = people.students.with_label(Label.involved, self).where("organizational_labels.created_at < ?", period_end).count
 
+        faculty_involved  = people.faculty.with_label(Label.involved, self).where("organizational_labels.created_at < ?", period_end).count
 
-        faculty_involved  = params[:involved_faculty].to_i -
-                            people.faculty.with_label(Label.involved).count +
-                            people.faculty.with_label(Label.involved).where("organizational_labels.created_at < ?", period_end).count
+        students_engaged  = people.students.with_label(Label.engaged_disciple, self).where("organizational_labels.created_at < ?", period_end).count
 
-        students_engaged  = params[:engaged_disciple].to_i -
-                            people.students.with_label(Label.engaged_disciple).count +
-                            people.students.with_label(Label.engaged_disciple).where("organizational_labels.created_at < ?", period_end).count
+        faculty_engaged   = people.faculty.with_label(Label.engaged_disciple, self).where("organizational_labels.created_at < ?", period_end).count
 
-        faculty_engaged   = params[:engaged_disciple_faculty].to_i -
-                            people.faculty.with_label(Label.engaged_disciple).count +
-                            people.faculty.with_label(Label.engaged_disciple).where("organizational_labels.created_at < ?", period_end).count
+        student_leaders   = people.students.with_label(Label.leader, self).where("organizational_labels.created_at < ?", period_end).count
 
-        student_leaders   = params[:leader].to_i -
-                            people.students.with_label(Label.leader).count +
-                            people.students.with_label(Label.leader).where("organizational_labels.created_at < ?", period_end).count
-
-        faculty_leaders   = params[:leader_faculty].to_i -
-                            people.faculty.with_label(Label.leader).count +
-                            people.faculty.with_label(Label.leader).where("organizational_labels.created_at < ?", period_end).count
+        faculty_leaders   = people.faculty.with_label(Label.leader, self).where("organizational_labels.created_at < ?", period_end).count
 
         spiritual_conversations = params[:spiritual_conversation].to_i -
                                   interactions_count('spiritual_conversation') +
@@ -193,11 +181,11 @@ class Organization < ActiveRecord::Base
         periods << stats
         break
       else
-        stats.merge!({students_involved: people.students.with_label(Label.involved).where("organizational_labels.created_at < ?", period_end).count,
-                      faculty_involved: people.faculty.with_label(Label.involved).where("organizational_labels.created_at < ?", period_end).count,
-                      students_engaged: people.students.with_label(Label.engaged_disciple).where("organizational_labels.created_at < ?", period_end).count,
-                      faculty_engaged: people.faculty.with_label(Label.engaged_disciple).where("organizational_labels.created_at < ?", period_end).count,
-                      student_leaders: people.students.with_label(Label.leader).where("organizational_labels.created_at < ?", period_end).count,
+        stats.merge!({students_involved: people.students.with_label(Label.involved, self).where("organizational_labels.created_at < ?", period_end).count,
+                      faculty_involved: people.faculty.with_label(Label.involved, self).where("organizational_labels.created_at < ?", period_end).count,
+                      students_engaged: people.students.with_label(Label.engaged_disciple, self).where("organizational_labels.created_at < ?", period_end).count,
+                      faculty_engaged: people.faculty.with_label(Label.engaged_disciple, self).where("organizational_labels.created_at < ?", period_end).count,
+                      student_leaders: people.students.with_label(Label.leader, self).where("organizational_labels.created_at < ?", period_end).count,
                       spiritual_conversations: interactions_count('spiritual_conversation', period_begin, period_end),
                       holy_spirit_presentations: interactions_count('holy_spirit_presentation', period_begin, period_end),
                       personal_evangelism: interactions_count('gospel_presentation', period_begin, period_end),

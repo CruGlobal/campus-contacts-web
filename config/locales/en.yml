@@ -5,10 +5,17 @@
 en:
   manage_labels:
     title: "%{org} Labels"
-    add_button: "Add a Organizational Label"
+    add_title: "Add a Organizational Label"
+    edit_title: "Edit a Organizational Label"
     system_labels: "System Labels"
     name: "Name"
     organizational_labels: "Organizational Labels"
+    name_is_required: "Label name is required."
+    label_exists: "Label is already in the list."
+    add_label_success: "New label successfully added."
+    add_label_failed: "Failed to save label. Please try again."
+    edit_label_success: "Label successfully updated."
+    delete_label_confirmation: "Are you sure you want to delete this label?"
   dialogs:
     search_people_filters:
       search_placeholder: 'Search for the first name, last name or email.'
@@ -653,7 +660,7 @@ en:
       confirm_delete_interaction: "Are you sure you want to delete this interaction?"
   contacts:
     new_sidebar:
-      contact_assignments: "Contact Assignments"
+      contact_assignments: "Assigned Contacts"
       labels: "Labels"
       permissions: "Permissions"
       more_options: "More"
@@ -765,6 +772,7 @@ en:
       search_locate_help: "You may enter all or any part of First Name, Last Name, and/or Email Address and then click the \"Go Find\" button to find in which of \"your MissionHub Organizations\" the individual is currently located."
       all: 'All'
       dnc: 'Do Not Contact'
+      archived: 'Archived'
       add_label_exists: 'Label is already in the list!'
       add_label_success: 'New label successfully added!'
       add_label_failed: 'Failed to save label. Please try again.'
@@ -1095,7 +1103,7 @@ en:
       group_list: 'Group List for %{org}'
       group_name: Group Name
       members: Involved
-      leaders: Leaders
+      leaders: Group Leaders
       add_group: 'Add Group'
       labels: Group Labels
       add: Add
@@ -1113,7 +1121,7 @@ en:
     show:
       page_title: "Group Name: %{group_name}"
       details: Details
-      add_leader: 'Add Leader'
+      add_leader: 'Add Group Leader'
       add_member: 'Add Member'
       email: 'Email Address'
       phone: 'Phone Number'
@@ -1146,8 +1154,8 @@ en:
   group_memberships:
     form:
       start_typing: "Start typing a name to find a person add to this group:"
-      add_a_member: 'Add a member'
-      add_a_leader: 'Add a leader'
+      add_a_member: 'Add a Member'
+      add_a_leader: 'Add a Group leader'
     search:
       not_found: We couldn't find anyone in your %{terminology} with that name
       showing_count: "Showing %{length} of %{total} records, keep typing or "

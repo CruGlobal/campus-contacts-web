@@ -466,6 +466,9 @@ class ContactsController < ApplicationController
       elsif params[:completed] == 'true'
         @header = I18n.t('contacts.index.completed')
         @people_scope = @organization.completed_contacts
+      elsif params[:archived] == 'true'
+        @header = I18n.t('contacts.index.archived')
+        @people_scope = @organization.all_archived_people
       elsif params[:label].present? && @label_to = Label.find_by_id(params[:label])
         if params[:include_archived_labels].present? && params[:include_archived_labels] == 'true'
           @people_scope = @label_to.label_contacts_from_org_with_archived(@organization)
@@ -497,7 +500,7 @@ class ContactsController < ApplicationController
 
     def filter_archived_only
       @header = I18n.t('contacts.index.archived')
-      @people_scope = @people_scope.where(id: current_organization.people.archived(current_organization.id).collect(&:id))
+      @people_scope = @people_scope.where(id: current_organization.all_archived_people.collect(&:id))
     end
 
     def handle_old_search_variable

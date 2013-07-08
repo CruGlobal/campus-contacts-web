@@ -65,15 +65,13 @@ class Permission < ActiveRecord::Base
   end
 
   def permission_contacts_from_org(org)
-    contact_ids = OrganizationalPermission.where(permission_id: id, organization_id: org.id).uniq
-    people = org.people.where(id: contact_ids.collect(&:person_id))
-    people.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id, 'organizational_permissions.archive_date' => nil)
+    people_ids = OrganizationalPermission.where(permission_id: id, organization_id: org.id).collect(&:person_id).uniq
+    people = org.all_people.where(id: people_ids)
   end
 
   def permission_contacts_from_org_with_archived(org)
-    contact_ids = OrganizationalPermission.where(permission_id: id, organization_id: org.id).uniq
-    people = org.people.where(id: contact_ids.collect(&:person_id))
-    people.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id)
+    people_ids = OrganizationalPermission.where(permission_id: id, organization_id: org.id).collect(&:person_id).uniq
+    org.all_people_with_archived.where(id: people_ids)
   end
 
   def to_s

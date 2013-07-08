@@ -198,8 +198,8 @@ class Person < ActiveRecord::Base
     :having => ["DATE(MAX(ass.updated_at)) >= ? AND DATE(MAX(ass.updated_at)) <= ? ", date_from, date_to]
   }}
 
-  scope :with_label, lambda { |label|
-    joins(:organizational_labels).where('organizational_labels.label_id' => label.id, 'organizational_labels.removed_date' => nil)
+  scope :with_label, lambda { |label, org|
+    joins(:organizational_labels).where('organizational_labels.label_id' => label.id, 'organizational_labels.organization_id' => org.id, 'organizational_labels.removed_date' => nil)
   }
 
   scope :non_staff, -> { where(is_staff: false) }
@@ -300,6 +300,10 @@ class Person < ActiveRecord::Base
     organizational_permissions.where("organizational_permissions.organization_id = ? AND organizational_permissions.permission_id = ?", org.id, Permission::USER_ID).first
   end
 
+  def permission_for_org(org)
+    organizational_permissions.where("organizational_permissions.organization_id = ?", org.id).first
+  end
+
   def completed_answer_sheets(organization)
     answer_sheets.where("survey_id IN (?)", Survey.where("organization_id = ? OR id = ?", organization.id, APP_CONFIG['predefined_survey']).collect(&:id)).order('updated_at DESC')
   end
@@ -382,8 +386,8 @@ class Person < ActiveRecord::Base
   end
 
   def is_archived?(org)
-    return true if organizational_permissions.where(organization_id: org.id).blank?
-    false
+    org_permission = organizational_permission_for_org(org)
+    return org_permission.present? && org_permission.archive_date.present?
   end
 
   def assigned_tos_by_org(org)
@@ -391,15 +395,13 @@ class Person < ActiveRecord::Base
   end
 
   def assigned_contacts_limit_org(org)
-    assigned_id_list = ContactAssignment.where(assigned_to_id: id, organization_id: org.id).uniq
-    people = org.people.where(id: assigned_id_list.collect(&:person_id))
-    people.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id, 'organizational_permissions.archive_date' => nil)
+    assigned_id_list = ContactAssignment.where(assigned_to_id: id, organization_id: org.id)
+    people = org.all_people.where(id: assigned_id_list.collect(&:person_id).uniq)
   end
 
   def assigned_contacts_limit_org_with_archived(org)
-    assigned_id_list = ContactAssignment.where(assigned_to_id: id, organization_id: org.id).uniq
-    people = org.people.where(id: assigned_id_list.collect(&:person_id))
-    people.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id)
+    assigned_id_list = ContactAssignment.where(assigned_to_id: id, organization_id: org.id)
+    people = org.all_people_with_archived.where(id: assigned_id_list.collect(&:person_id).uniq)
   end
 
   def has_similar_person_by_name_and_email?(email)

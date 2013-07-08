@@ -1,0 +1,7 @@
+<tr id='<%= dom_id(organizational_label) %>' data-id='<%= organizational_label.id %>' class='organizational_label_row'>
+  <td><%= organizational_label.name %></td>
+  <td class='controls'>
+    <%= link_to t('labels.views.edit_label'), '#', :class => 'icon edit tipit edit_orgnizational_label_button', :title => 'Edit Label', 'data-id'=>organizational_label.id, 'data-name'=>organizational_label.name %>
+    <%= link_to t('labels.views.delete_label'), label_path(organizational_label), method: :delete, confirm: t('manage_labels.delete_label_confirmation'), :class => 'icon delete tipit', :title => 'Delete Label' %>
+  </td>
+</tr>

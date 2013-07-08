@@ -107,6 +107,7 @@ class InteractionsController < ApplicationController
 
     if @people.count == 1
       @person = @people.first
+      @labels = @person.assigned_organizational_labels(current_organization.id).uniq
       @all_feeds_page = 1
       @all_feeds = @person.all_feeds(current_person, current_organization, @all_feeds_page)
       @last_all_feeds = @person.all_feeds_last(current_person, current_organization)

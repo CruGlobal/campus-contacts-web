@@ -1,3 +1,4 @@
+<%= form_tag movement_indicators_path, onsubmit: "return confirm('If you want to change these numbers later you will need to go to Infobase to do so.')"  do %>
 <% (current_organization.last_push_to_infobase < current_organization.last_week).tap do |stats_need_reported| %>
 <div class="titlebar titlebarmod">
   <h1><%= t('movement_indicator_suggestions.index.title', org_name: current_organization) %></h1>
@@ -129,36 +130,36 @@
             <tr>
               <td>Involved</td>
               <td>
-                <%= text_field_tag :involved_students, current_organization.people.students.with_label(Label.involved).count %>
+                <%= text_field_tag :involved_students, current_organization.people.students.with_label(Label.involved, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
                 <%= tip('How many students are regularly involved - attending movement events?') %>
               </td>
               <td>&nbsp;</td>
               <td>
-                <%= text_field_tag :involved_faculty, current_organization.people.faculty.with_label(Label.involved).count %>
+                <%= text_field_tag :involved_faculty, current_organization.people.faculty.with_label(Label.involved, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
                 <%= tip('How many faculty are regularly involved?') %>
               </td>
             </tr>
             <tr>
               <td>Engaged Disciples</td>
               <td>
-                <%= text_field_tag :engaged_disciple, current_organization.people.students.with_label(Label.engaged_disciple).count %>
+                <%= text_field_tag :engaged_disciple, current_organization.people.students.with_label(Label.engaged_disciple, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
                 <%= tip('How many students have intentionally engaged someone in a spiritual conversation within the past semester?') %>
               </td>
               <td>&nbsp;</td>
               <td>
-                <%= text_field_tag :engaged_disciple_faculty, current_organization.people.faculty.with_label(Label.engaged_disciple).count %>
+                <%= text_field_tag :engaged_disciple_faculty, current_organization.people.faculty.with_label(Label.engaged_disciple, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
                 <%= tip('How many faculty have intentionally engaged in a spiritual conversation within the past semester?') %>
               </td>
             </tr>
             <tr>
               <td>Leader</td>
               <td>
-                <%= text_field_tag :leader, current_organization.people.students.with_label(Label.leader).count %>
+                <%= text_field_tag :leader, current_organization.people.students.with_label(Label.leader, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
                 <%= tip('How many students are leading small groups of Win, Build, Send ministry?') %>
               </td>
               <td>&nbsp;</td>
               <td>
-                <%= text_field_tag :leader_faculty, current_organization.people.faculty.with_label(Label.leader).count %>
+                <%= text_field_tag :leader_faculty, current_organization.people.faculty.with_label(Label.leader, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
                 <%= tip('How many faculty are leading small groups of Win, Build, Send ministry?') %>
               </td>
             </tr>
@@ -170,7 +171,7 @@
     <div class="report_buttons">
       <%= link_to('<button class="large_gray" id="report_back_button">Back</button>'.html_safe, movement_indicator_suggestions_path) %>
       <% if stats_need_reported %>
-        <%= link_to('<button class="red_accent" id="report_submit_button">Submit</button>'.html_safe, movement_indicators_path, method: :post, confirm: "If you want to change these number later you will need to go to Infobase to do so.") %>
+        <button class="red_accent" id="report_submit_button">Submit</button>
       <% end %>
     </div>
 
@@ -179,3 +180,4 @@
 
 <% end %>
 <div id="indicator_dialog"></div>
+<% end %>

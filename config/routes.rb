@@ -157,6 +157,8 @@ Mh::Application.routes.draw do
   resources :labels, :only => [:create, :update, :destroy, :index, :new, :edit] do
     collection do
       post :create_now
+      post :add_label
+      post :edit_label
     end
   end
 

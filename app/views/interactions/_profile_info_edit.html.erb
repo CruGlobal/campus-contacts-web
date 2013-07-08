@@ -15,10 +15,10 @@
 
   	<div class="feed_box info_edit">
 
-      <% if @person.contact_permission_for_org(current_organization) %>
+      <% if @person.contact_permission_for_org(current_organization) || @person.user_permission_for_org(current_organization)%>
     		<div class="status col_left"><%= t('general.status') %>:</div>
       	<div class="status col_right edit" id="followup_status_div">
-          <%- contact_permission = @person.contact_permission_for_org(current_organization) %>
+          <%- contact_permission = @person.permission_for_org(current_organization) %>
           <%- followup_status = contact_permission.nil? ? "" : contact_permission.followup_status %>
           <%= select_tag :followup_status, options_for_select(OrganizationalPermission::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]}, followup_status), {disabled: contact_permission.nil?, include_blank: contact_permission.nil?, 'data-person-id' => "#{@person.id}", class: "followup_status_field followup_status_field_edit", style: 'display: none;'} %>
           <div id="followup_status_dropdown" class="custom_dropdown edit" data-current-id="<%= followup_status %>">

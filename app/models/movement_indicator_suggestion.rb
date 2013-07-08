@@ -22,16 +22,16 @@ class MovementIndicatorSuggestion < ActiveRecord::Base
 
   def self.create_new_suggestions(org)
     since = org.last_indicator_suggestion_at ? org.last_indicator_suggestion_at : org.created_at
-    disqualifying_interaction_types = InteractionType.where(i18n: ['graduating_on_mission', 'faculty_on_mission']).pluck(:id)
+    #disqualifying_interaction_types = InteractionType.where(i18n: ['graduating_on_mission', 'faculty_on_mission']).pluck(:id)
 
     org.people.non_staff.where("people.updated_at > ?", since).find_each do |person|
 
       # Create 'add' suggestions
-      unless person.has_interaction_in_org?(disqualifying_interaction_types, org)
+      #unless person.has_interaction_in_org?(disqualifying_interaction_types, org)
         check_for_leader(person, org)
         check_for_disciple(person, org)
         check_for_involved(person, org)
-      end
+      #end
 
       # Create 'remove' suggestions
       #if person.has_interaction_in_org?(disqualifying_interaction_types, org)
