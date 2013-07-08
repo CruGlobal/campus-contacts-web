@@ -1,0 +1,5 @@
+<% if @new_label.present? %>
+  $('#organizational_label_table').prepend("<%= escape_javascript(render partial: 'labels/organizational_label', locals: {organizational_label: @new_label} ) %>")
+  $.hideDialog($("#add_label_div"))
+<% end %>
+$.a("<%= @message %>")

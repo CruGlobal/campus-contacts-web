@@ -1,7 +1,7 @@
 <% provide :sidebar do %>
   <div id="ac_sidebar">
     <div id="upper_sidebar_lists">
-    	<button class="red_accent full_width_button" id="allcontacts_add_contact_button"><%= t('manage_labels.add_button') %></button>
+    	<button class="red_accent full_width_button" id="add_orgnizational_label_button"><%= t('manage_labels.add_title') %></button>
       <%#= link_to(t('manage_labels.add_button'), new_label_path, class: 'create_label_button') %>
     </div>
   </div>
@@ -51,18 +51,9 @@
       <th><%= t('manage_labels.name') %></th>
       <th class="controls">&nbsp;</th>
     </tr>
-    <tbody id="contacts_table">
-    <% @organizational_labels.each do |organizational_label| %>
-      <tr id="<%= dom_id(organizational_label) %>" data-id="<%= organizational_label.id %>" class="organizational_label_row">
-        <td><%= organizational_label.name %></td>
-        <td class="controls">
-          <%= link_to t("labels.views.edit_label"), edit_label_path(organizational_label),
-            :class => "icon edit tipit", :title => "Edit Label" %>
-          <%= link_to t("labels.views.delete_label"), label_path(organizational_label),
-            method: :delete, confirm: "Are you sure you want to delete this label?",
-            :class => "icon delete tipit", :title => "Delete Label" %>
-        </td>
-      </tr>
+    <tbody id="organizational_label_table">
+    <% @organizational_labels.each do |org_label| %>
+      <%= render 'organizational_label', organizational_label: org_label %>
     <% end %>
     </tbody>
   </table>
@@ -73,3 +64,7 @@
     </div>
 	<% end %>
 </div>
+
+
+<!-- Add a Label Dialog -->
+<%= render 'dialogs/add_label', label: Label.new %>
