@@ -99,10 +99,10 @@ $ ->
     side_list = $(this).parents('.ac_dropdown_list').find('.side_list')
     if side_list.is(':visible')
       side_list.slideUp()
-      $(this).html("&#x25B6")
+      $(this).children('a div.arrow').html("&#x25B6")
     else
       side_list.slideDown()
-      $(this).html("&#x25BC")
+      $(this).children('a div.arrow').html("&#x25BC")
 
   $('#ac_button_bar #menu_assign_link').live 'click', (e)->
     e.preventDefault()
