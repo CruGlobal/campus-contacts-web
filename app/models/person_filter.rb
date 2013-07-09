@@ -29,6 +29,10 @@ class PersonFilter
       filtered_people = filtered_people.joins(:organizational_labels).where('(organizational_permissions.permission_id IN (:ids) AND organizational_permissions.organization_id = :org_id) OR (organizational_labels.label_id IN (:ids) AND organizational_labels.organization_id = :org_id AND organizational_labels.removed_date IS NULL)', ids: @filters[:roles].split(','), org_id: @organization.id)
     end
 
+    if @filters[:interactions]
+      filtered_people = filtered_people.joins(:interactions).where('interactions.organization_id = ? AND interactions.deleted_at IS NULL AND interactions.interaction_type_id IN (?)', @organization.id, @filters[:interactions].split(','))
+    end
+
     if @filters[:first_name_like]
       filtered_people = filtered_people.where("first_name like ? ", "#{@filters[:first_name_like]}%")
     end
