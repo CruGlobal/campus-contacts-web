@@ -48,6 +48,7 @@ class PersonFilter
       else
         filtered_people = filtered_people.includes(:email_addresses)
                                          .where("concat(first_name,' ',last_name) LIKE :search OR
+                                                  first_name LIKE :search OR last_name LIKE :search OR
                                                   email_addresses.email LIKE :search",
                                                  {:search => "#{filters[:name_or_email_like]}%"})
       end
