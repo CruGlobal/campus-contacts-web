@@ -46,6 +46,11 @@
                 <label for="status"><span class="title"><%= t('general.status') %></span></label>
                 <%= select_tag :status, options_for_select(OrganizationalPermission::FOLLOWUP_STATUSES.collect {|s| [s.titleize, s]}, params[:status]), include_blank: true, :class=>"search_status"%>
               </div>
+              <div class="field">
+                <label for="gender"><span class="title"><%= t('general.faculty') %></span></label>
+                <%= radio_button_tag :faculty, '1', params[:faculty] == '1' %> Yes
+                <%= radio_button_tag :faculty, '0', params[:faculty] == '0' %> No
+              </div>
               <br/>
               <div class="field">
                <label for="contacts_updated"><span class="title"><%= t('general.label_search_last_survey') %></span></label>

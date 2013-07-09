@@ -622,6 +622,9 @@ class ContactsController < ApplicationController
       if params[:gender].present?
         @people_scope = @people_scope.where("gender = ?", params[:gender].strip)
       end
+      if params[:faculty].present?
+        @people_scope = @people_scope.where("faculty = ?", params[:faculty].strip)
+      end
       if params[:status].present?
         @people_scope = @people_scope.where("organizational_permissions.followup_status" => params[:status].strip)
       end

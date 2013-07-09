@@ -77,7 +77,7 @@
         <% link = all_contacts_path(interaction_type: interaction_type.id) %>
       <% end %>
       <li class="entry interaction <%= 'selected_entry' if params[:interaction_type].to_i == interaction_type.id %>" data-id="<%= interaction_type.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
-        <%= link_to interaction_type.title.humanize.titleize, link %>&nbsp;(<span class="count"><%= count %></span>)
+        <%= link_to interaction_type.name, link %>&nbsp;(<span class="count"><%= count %></span>)
       </li>
     <% end %>
     <li class="ac_include_archived">

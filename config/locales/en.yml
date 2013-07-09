@@ -162,6 +162,7 @@ en:
     survey_web_tip_html: "For the web version of the survey, send people to <strong>%{link}/</strong>"
     male: Male
     female: Female
+    faculty: Faculty
     both: Both
     gender: Gender
     status: Status
@@ -1175,7 +1176,7 @@ en:
     submit:
       update: Update
   member: Member
-  leader: Leader
+  leader: Group Leader
   group: Group
   label: Label
   organizations:
