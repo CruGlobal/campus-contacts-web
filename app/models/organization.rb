@@ -141,17 +141,17 @@ class Organization < ActiveRecord::Base
                                   interactions_count('spiritual_conversation') +
                                   interactions_count('spiritual_conversation', period_begin, period_end)
 
-        holy_spirit_presentations = params[:gospel_presentation].to_i -
+        personal_evangelism = params[:gospel_presentation].to_i -
                                   interactions_count('gospel_presentation') +
                                   interactions_count('gospel_presentation', period_begin, period_end)
 
-        personal_evangelism = params[:prayed_to_receive_christ].to_i -
+        personal_decisions = params[:prayed_to_receive_christ].to_i -
                                   interactions_count('prayed_to_receive_christ') +
                                   interactions_count('prayed_to_receive_christ', period_begin, period_end)
 
-        personal_decisions = params[:holy_spirit_presentation].to_i -
-                                  interactions_count('holy_spirit_presentation') +
-                                  interactions_count('holy_spirit_presentation', period_begin, period_end)
+        holy_spirit_presentations = params[:holy_spirit_presentation].to_i -
+                                    interactions_count('holy_spirit_presentation') +
+                                    interactions_count('holy_spirit_presentation', period_begin, period_end)
 
         graduating_on_mission = params[:graduating_on_mission].to_i -
                                   interactions_count('graduating_on_mission') +
