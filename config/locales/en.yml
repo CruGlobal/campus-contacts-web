@@ -827,6 +827,7 @@ en:
       detailed: Detailed
       all: All
       comments: 'My Comments'
+      interactions: 'My Interactions'
 
     thanks:
       message: Thank you for your interest.

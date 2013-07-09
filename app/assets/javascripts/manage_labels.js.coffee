@@ -1,6 +1,7 @@
 $ ->
   $('#add_orgnizational_label_button').live 'click', (e)->
     e.preventDefault()
+    $("#org_title_dialog").html(t('manage_labels.add_title'))
     $.showDialog($("#add_label_div"))
     $("#add_label_save_button").show()
     $("#edit_label_save_button").hide()
@@ -11,13 +12,13 @@ $ ->
     e.preventDefault()
     name = $(this).attr("data-name")
     id = $(this).attr("data-id")
+    $("#org_title_dialog").html(t('manage_labels.edit_title'))
     $.showDialog($("#add_label_div"))
     $("#add_label_save_button").hide()
     $("#edit_label_save_button").show()
     $("#label_name").val(name)
     $("#edit_label_save_button").attr("data-id", id)
     $('#label_name').focus()
-    $("#org_title_dialog").html(t('manage_labels.edit_title'))
     false
 
   $('#add_label_save_button').live 'click', (e)->
@@ -44,7 +45,7 @@ $ ->
 
   $('#edit_label_save_button').live 'click', (e)->
     e.preventDefault()
-    $("#org_title_dialog").html(t('manage_labels.add_title'))
+    $("#org_title_dialog").html(t('manage_labels.edit_title'))
     name = $('#label_name').val()
     id = $(this).attr("data-id")
     loader = $("#add_label_loader")
