@@ -19,18 +19,11 @@ class Apis::V3::BaseController < ApplicationController
 
     if facebook_token
       begin
-        unless @current_user = Authentication.where(provider: 'facebook', mobile_token: facebook_token).first.try(:user)
-          fb_user = MiniFB.get(facebook_token, 'me')
-          auth = Authentication.where(provider: 'facebook', uid: fb_user.id).first
-          if auth
-            auth.update_attributes(mobile_token: facebook_token)
-            @current_user = auth.user
-          else
-            render json: {errors: ["The person corresponding to that token has never logged into the web interface"], code: 'user_not_found'},
+        unless @current_user = Authentication.user_from_mobile_facebook_token(facebook_token)
+          render json: {errors: ["The person corresponding to that token has never logged into the web interface"], code: 'user_not_found'},
                    status: :unauthorized,
                    callback: params[:callback]
-            return false
-          end
+          return false
         end
       rescue MiniFB::FaceBookError => e
         render json: {errors: ["The facebook token you passed is invalid"], code: 'invalid_facebook_token'},
@@ -94,22 +87,10 @@ class Apis::V3::BaseController < ApplicationController
     @oauth_access_token ||= (params[:access_token] || oauth_access_token_from_header)
   end
 
-  def facebook_token
-    @facebook_token ||= (params[:facebook_token] || facebook_token_from_header)
-  end
-
   # grabs access_token from header if one is present
   def oauth_access_token_from_header
     auth_header = request.env["HTTP_AUTHORIZATION"]||""
     match = auth_header.match(/^token\s(.*)/) || auth_header.match(/^Bearer\s(.*)/)
-    return match[1] if match.present?
-    false
-  end
-
-  # grabs facebook token from header if one is present
-  def facebook_token_from_header
-    auth_header = request.env["HTTP_AUTHORIZATION"]||""
-    match = auth_header.match(/^Facebook\s(.*)/)
     return match[1] if match.present?
     false
   end
