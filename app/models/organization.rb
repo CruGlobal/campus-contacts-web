@@ -221,14 +221,14 @@ class Organization < ActiveRecord::Base
         @last_push_to_infobase = Date.parse(stats['statistics'].last['period_end'])
         update_column(:last_push_to_infobase, @last_push_to_infobase) if @last_push_to_infobase
       rescue
-        @last_push_to_infobase = created_at.to_date.end_of_week
+        @last_push_to_infobase = created_at.to_date.end_of_week(:sunday)
       end
     end
     @last_push_to_infobase
   end
 
   def last_week
-    @last_week ||= 1.week.ago.end_of_week.to_date
+    @last_week ||= 1.week.ago.end_of_week(:sunday).to_date
   end
 
   def interactions_of_type(type, start_date = nil, end_date = nil)

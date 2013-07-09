@@ -9,7 +9,7 @@
     <% if stats_need_reported %>
       <div class="feed_panel_top">
         <ul id="panel_nav">
-          <div id="report_feed_date"><strong><%= l(current_organization.last_push_to_infobase) %></strong>
+          <div id="report_feed_date"><strong><%= l(current_organization.last_push_to_infobase + 1.day) %></strong>
             &nbsp;&nbsp;to&nbsp;&nbsp;
             <strong><%= l(current_organization.last_week) %> <%= tip('The pre-filled numbers below are a compilation of all activity in MissionHub within the date range specified. Any activity recorded between the end date and today will not be reflected below.') %></strong>
           </div>
