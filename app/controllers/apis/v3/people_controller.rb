@@ -4,15 +4,13 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   def index
     render json: filtered_people,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, since: params[:since]}
+           scope: {include: includes, organization: current_organization, since: params[:since], user: current_user}
   end
 
   def show
     render json: @person,
            callback: params[:callback],
-           scope: {include: includes,
-                   organization: current_organization,
-                   user: current_user}
+           scope: {include: includes, organization: current_organization, user: current_user}
   end
 
   def create
@@ -32,7 +30,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
       render json: person,
              status: :created,
              callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
+             scope: {include: includes, organization: current_organization, user: current_user}
     else
       render json: {errors: person.errors.full_messages},
              status: :unprocessable_entity,
@@ -66,7 +64,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
 
     render json: @person,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: {include: includes, organization: current_organization, user: current_user}
   end
 
   def destroy
@@ -74,7 +72,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
 
     render json: @person,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: {include: includes, organization: current_organization, user: current_user}
   end
 
   private
