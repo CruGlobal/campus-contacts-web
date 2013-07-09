@@ -21,7 +21,7 @@
           <%= link_to(t('contacts.mine.detailed'), all_contacts_path(assigned_to: current_person.id)) %>
         </li>
       	<li class="ac_dropdown_list_header">
-          <%= link_to(t('contacts.mine.comments'), profile_path(current_person, :click=>"interactions")) %>
+          <%= link_to(t('contacts.mine.interactions'), profile_path(current_person, :click=>"interactions")) %>
         </li>
       </ul>
     </div>
