@@ -1,51 +1,91 @@
-<%= render partial: 'groups/sidebar'%>
+<% provide :sidebar do %>
+  <div id="ac_sidebar">
+    <div id="upper_sidebar_lists">
+      <%= link_to raw("<button class='red_accent full_width_button'>#{t('.add_a_group')}</button>"), new_group_path %>
+      <%= link_to raw("<button class='action_gray full_width_button'>#{t('.add_a_label')}</button>"), '#', class: 'add-label listaction' %>
+    </div>
+  	<div class="leftmenu">
+      <ul class="ac_dropdown_list">
+      	<li class="ac_dropdown_list_header">
+          <%= link_to(t('groups.see_all'), groups_path) %>&nbsp;(<%= current_organization.groups.count %>)
+        </li>
+      </ul>
+
+      <ul class="ac_dropdown_list">
+      	<li class="ac_dropdown_list_header">
+          <a href="#" class="side_toggle arrow_anchor">
+            <div class="arrow">
+              <% if selected = params[:label].present? %>
+                &#x25BC;
+              <% else %>
+                &#x25B6;
+              <% end %>
+            </div>
+            <div class="category_name">
+              <%= t('.labels') %>
+            </div>
+          </a>
+        </li>
+        <div class="side_list" style="<%= 'display:block;' if selected %>">
+          <% current_organization.group_labels.each do |label| %>
+            <%= render partial: 'groups/label', locals: {label: label} %>
+          <% end %>
+        </div>
+      </ul>
+    </div>
+  </div>
+<% end %>
 
 <div class="titlebar titlebarmod">
   <h1>
     <%= t('.group_list', org: current_organization.to_s) %>
-    <% if @label %>
-      <%= t('.labeled_with', label: @label) %>
-    <% end %>
+    <%= t('.labeled_with', label: @label) if @label %>
+    <div id='global_loader'>
+      <%= image_tag 'loader.gif'%>
+    </div>
   </h1>
 </div>
 
-<div class="pagemenu">
-  <ul class="pillmenu">
-    <li>
-      <%= link_to(t('.add_group'), new_group_path) %>
-    </li>
-  </ul>
-  <ul class="divider"></ul>
-  <ul class="pillmenu">
-		<li><%= link_to(t('people.index.send_email'), nil, :id => "send_bulkemail_link_new") %></li>
+<div id="ac_button_bar">
+	<ul class="button_bar">
+		<li class="action_lightblue btn_left">
+		  <%= link_to t("people.index.send_sms"), "#", id: "action_menu_text" %>
+		</li>
 	</ul>
-  <ul class="pillmenu">
-		<li><%= link_to(t('people.index.send_sms'), nil, :id => "send_bulksms_link_new") %></li>
+	<ul class="button_bar">
+		<li class="action_lightblue btn_right">
+		  <%= link_to t("people.index.send_email"), "#", id: "action_menu_email" %>
+		</li>
 	</ul>
 </div>
 
-<span style="display:none" id="drag_helper_text_one"><%= t('.assign_to_label', count: 1) %></span>
-<span style="display:none" id="drag_helper_text_other"><%= t('.assign_to_label', count: 0) %></span>
-<table class="listing" cellpadding="0" cellspacing="0">
-  <thead>
-    <tr>
-    	<th>&nbsp;</th>
-      <th class="checkbox_cell">
-        <%= check_box_tag 'check_all_groups', true, false %>
-      </th>
-      <th class="groupname"><%= sort_link @q, :name, t('.group_name'), params %></th>
-      <th></th>
-      <th><%= t('.members') %></th>
-      <th><%= t('.leaders') %></th>
-      <th><%= t('.labels') %></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="groups_table">
-    <% @groups.each do |group| %>
-      <%= render partial: 'groups/group', locals: {group: group}%>
-    <% end %>
-  </tbody>
-</table>
+<div id="ac_contact_spread">
+  <span style="display:none" id="drag_helper_text_one"><%= t('.assign_to_label', count: 1) %></span>
+  <span style="display:none" id="drag_helper_text_other"><%= t('.assign_to_label', count: 0) %></span>
 
-<%= render 'shared/bulk_send_msg' %>
+    <table class="listing contact_listing" cellpadding="0" cellspacing="0">
+      <tr id="table_header">
+      	<th>&nbsp;</th>
+        <th class="checkbox_cell header_checkbox">
+          <%= check_box_tag 'check_all_groups', true, false %>
+        </th>
+        <th class="group_name_column"><%= sort_link @q, :name, t('.group_name'), params %></th>
+        <th>&nbsp;</th>
+        <th><%= t('.members') %></th>
+        <th><%= t('.leaders') %></th>
+        <th class="group_labels_column"><%= t('.labels') %></th>
+        <th>&nbsp;</th>
+      </tr>
+      <tbody id="groups_table">
+        <% @groups.each do |group| %>
+          <%= render partial: 'groups/group', locals: {group: group}%>
+        <% end %>
+      </tbody>
+    </table>
+</div>
+
+<!-- Message Dialog -->
+<%= render 'dialogs/bulk_send_msg' %>
+
+
+<%= render 'groups/label_form'%>

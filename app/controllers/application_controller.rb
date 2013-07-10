@@ -131,9 +131,22 @@ class ApplicationController < ActionController::Base
     #session['wizard'] = nil
   end
 
+  def facebook_token
+    @facebook_token ||= (params[:facebook_token] || facebook_token_from_header)
+  end
+
+  # grabs facebook token from header if one is present
+  def facebook_token_from_header
+    auth_header = request.env["HTTP_AUTHORIZATION"]||""
+    match = auth_header.match(/^Facebook\s(.*)/)
+    return match[1] if match.present?
+    false
+  end
+
   def current_user
     # check for access token, then do it the devise way
-    if current_access_token
+    case
+    when current_access_token
       token = Rack::OAuth2::Server.get_access_token(current_access_token)
       if token.identity
         @current_user ||= User.find(token.identity)
@@ -147,6 +160,8 @@ class ApplicationController < ActionController::Base
         end
       end
       @current_user
+    when facebook_token
+      @current_user = Authentication.user_from_mobile_facebook_token(facebook_token)
     else
       super # devise user
     end

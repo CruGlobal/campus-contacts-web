@@ -3,7 +3,8 @@
   They will automatically be included in application.css.
 */
 
-#contacts_controller.all_contacts, #contacts_controller.my_contacts, #labels_controller  {
+#contacts_controller.all_contacts, #contacts_controller.my_contacts, #labels_controller,
+#groups_controller {
   #gandalfthewhite {
     border-bottom: none;
     margin-bottom: 5px;
@@ -100,6 +101,7 @@
       }
     }
     .leftmenu {
+      margin-top: 24px;
       .side_list {
         display: none;
       }
@@ -190,6 +192,12 @@
             text-align: left;
           }
         }
+      }
+    }
+    .group_labels_column, .group_name_column{
+      min-width: 120px;
+      a {
+        color: #0379ae;
       }
     }
   }

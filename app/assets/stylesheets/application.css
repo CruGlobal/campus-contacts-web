@@ -5,7 +5,6 @@
  *= require imports
  *= require permissions
  *= require messages
- *= require groups
  *= require surveys
  *= require charts
  *= require survey_responses

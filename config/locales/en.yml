@@ -162,6 +162,7 @@ en:
     survey_web_tip_html: "For the web version of the survey, send people to <strong>%{link}/</strong>"
     male: Male
     female: Female
+    faculty: Faculty
     both: Both
     gender: Gender
     status: Status
@@ -826,6 +827,7 @@ en:
       detailed: Detailed
       all: All
       comments: 'My Comments'
+      interactions: 'My Interactions'
 
     thanks:
       message: Thank you for your interest.
@@ -1104,14 +1106,13 @@ en:
       group_name: Group Name
       members: Involved
       leaders: Group Leaders
-      add_group: 'Add Group'
+      add_a_group: 'Add a Group'
       labels: Group Labels
-      add: Add
       assign_to_label:
         one: '1 Group'
         other: '%{count} Groups'
       labeled_with: 'Labeled With "%{label}"'
-      add_a_label: "Add"
+      add_a_label: "Add a Group Label"
     new_label_prompt: "Please enter a new label name"
     add_a_label_title: "Add New Label"
     new:
@@ -1175,7 +1176,7 @@ en:
     submit:
       update: Update
   member: Member
-  leader: Leader
+  leader: Group Leader
   group: Group
   label: Label
   organizations:

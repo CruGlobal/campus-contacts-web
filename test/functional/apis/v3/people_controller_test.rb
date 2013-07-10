@@ -119,7 +119,7 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
       context 'filtering by name_or_email_like' do
 
         should 'match first name' do
-          get :index, secret: @client.secret, filters: {name_or_email_like: @person.first_name[0..1]}
+          get :index, secret: @client.secret, filters: {name_or_email_like: @person.first_name[0..2]}
           json = JSON.parse(response.body)
           assert_equal 1, json['people'].length, json.inspect
         end

@@ -141,17 +141,17 @@ class Organization < ActiveRecord::Base
                                   interactions_count('spiritual_conversation') +
                                   interactions_count('spiritual_conversation', period_begin, period_end)
 
-        holy_spirit_presentations = params[:gospel_presentation].to_i -
+        personal_evangelism = params[:gospel_presentation].to_i -
                                   interactions_count('gospel_presentation') +
                                   interactions_count('gospel_presentation', period_begin, period_end)
 
-        personal_evangelism = params[:prayed_to_receive_christ].to_i -
+        personal_decisions = params[:prayed_to_receive_christ].to_i -
                                   interactions_count('prayed_to_receive_christ') +
                                   interactions_count('prayed_to_receive_christ', period_begin, period_end)
 
-        personal_decisions = params[:holy_spirit_presentation].to_i -
-                                  interactions_count('holy_spirit_presentation') +
-                                  interactions_count('holy_spirit_presentation', period_begin, period_end)
+        holy_spirit_presentations = params[:holy_spirit_presentation].to_i -
+                                    interactions_count('holy_spirit_presentation') +
+                                    interactions_count('holy_spirit_presentation', period_begin, period_end)
 
         graduating_on_mission = params[:graduating_on_mission].to_i -
                                   interactions_count('graduating_on_mission') +
@@ -221,14 +221,14 @@ class Organization < ActiveRecord::Base
         @last_push_to_infobase = Date.parse(stats['statistics'].last['period_end'])
         update_column(:last_push_to_infobase, @last_push_to_infobase) if @last_push_to_infobase
       rescue
-        @last_push_to_infobase = created_at.to_date.end_of_week
+        @last_push_to_infobase = created_at.to_date.end_of_week(:sunday)
       end
     end
     @last_push_to_infobase
   end
 
   def last_week
-    @last_week ||= 1.week.ago.end_of_week.to_date
+    @last_week ||= 1.week.ago.end_of_week(:sunday).to_date
   end
 
   def interactions_of_type(type, start_date = nil, end_date = nil)
@@ -673,6 +673,10 @@ class Organization < ActiveRecord::Base
 
 	def permission_search(term)
 		permissions.where("LOWER(name) LIKE ?","%#{term}%").limit(5).uniq
+	end
+
+	def label_search(term)
+		labels.where("LOWER(name) LIKE ?","%#{term}%").limit(5).uniq
 	end
 
   private
