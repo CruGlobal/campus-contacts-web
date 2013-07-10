@@ -111,6 +111,15 @@ class ContactsController < ApplicationController
 		get_and_merge_unfiltered_people
 		permissions_results = permissions.collect{|p| {name: "#{p.name} (#{@people_unfiltered.where("permission_id = ?", p.id).count})", id: "ROLE-#{p.id}"}}
 
+    # Search Labels
+    labels = current_organization.label_search(term)
+    labels_results = labels.collect{|p| {name: "#{p.name} (#{p.label_contacts_from_org(current_organization).count})", id: "LABEL-#{p.id}"}}
+    #To remove all labels if has 0 contact
+    #labels_results = labels.collect{|p|
+    #   count = p.label_contacts_from_org(current_organization).count
+    #   count > 0 ? {name: "#{p.name} (#{count})", id: "LABEL-#{p.id}"} : nil
+    #}.delete_if{|x| x == nil}
+
 		# Search Groups
 		groups = current_organization.group_search(term)
 		groups_results = groups.collect{|p| {name: "#{p.name} (#{p.group_memberships.count})", id: "GROUP-#{p.id}"}}
@@ -120,7 +129,7 @@ class ContactsController < ApplicationController
 		people = people.archived_not_included unless params[:include_archived].present?
 		people_results = people.collect{|p| {name: "#{p.name} - #{p.email.downcase}", id: p.id.to_s}}
 
-		@results = all_contacts + permissions_results + groups_results + people_results
+		@results = all_contacts + permissions_results + labels_results + groups_results + people_results
 
 		respond_to do |format|
 		  format.json { render json: @results.to_json }
@@ -138,6 +147,10 @@ class ContactsController < ApplicationController
 		get_and_merge_unfiltered_people
 		permissions_results = permissions.collect{|p| {name: "#{p.name} (#{@people_unfiltered.where("permission_id = ?", p.id).count})", id: "ROLE-#{p.id}"}}
 
+    # Search Labels
+    labels = current_organization.label_search(term)
+    labels_results = labels.collect{|p| {name: "#{p.name} (#{p.label_contacts_from_org(current_organization).count})", id: "LABEL-#{p.id}"}}
+
 		# Search Groups
 		groups = current_organization.group_search(term)
 		groups_results = groups.collect{|p| {name: "#{p.name} (#{p.group_memberships.count})", id: "GROUP-#{p.id}"}}
@@ -147,7 +160,7 @@ class ContactsController < ApplicationController
     people = people.archived_not_included unless params[:include_archived].present?
 		people_results = people.collect{|p| {name: "#{p.name} - #{p.primary_phone_number.pretty_number}", id: p.id.to_s}}
 
-		@results = all_contacts + permissions_results + groups_results + people_results
+		@results = all_contacts + permissions_results + labels_results + groups_results + people_results
 
 		respond_to do |format|
 		  format.json { render json: @results.to_json }

@@ -675,6 +675,10 @@ class Organization < ActiveRecord::Base
 		permissions.where("LOWER(name) LIKE ?","%#{term}%").limit(5).uniq
 	end
 
+	def label_search(term)
+		labels.where("LOWER(name) LIKE ?","%#{term}%").limit(5).uniq
+	end
+
   private
 
   def import_from_conference(user_id)

@@ -340,6 +340,9 @@ class PeopleController < ApplicationController
 				elsif id.upcase =~ /ROLE-/
 					permission = Permission.find(id.gsub("ROLE-",""))
 					permission.members_from_permission_org(current_organization.id).collect{|p| person_ids << p.person_id.to_s } if permission.present?
+        elsif id.upcase =~ /LABEL-/
+					label = Label.find(id.gsub("LABEL-",""))
+					label.label_contacts_from_org(current_organization).collect{|p| person_ids << p.id.to_s } if label.present?
 				elsif id.upcase =~ /ALL-PEOPLE/
 					current_organization.all_people.collect{|p| person_ids << p.id.to_s} if is_admin?
 				else
@@ -381,6 +384,9 @@ class PeopleController < ApplicationController
 				elsif id.upcase =~ /ROLE-/
 					permission = Permission.find(id.gsub("ROLE-",""))
 					permission.members_from_permission_org(current_organization.id).collect{|p| person_ids << p.person_id.to_s } if permission.present?
+        elsif id.upcase =~ /LABEL-/
+					label = Label.find(id.gsub("LABEL-",""))
+					label.label_contacts_from_org(current_organization).collect{|p| person_ids << p.id.to_s } if label.present?
 				elsif id.upcase =~ /ALL-PEOPLE/
 					current_organization.all_people.collect{|p| person_ids << p.id.to_s} if is_admin?
 				else
