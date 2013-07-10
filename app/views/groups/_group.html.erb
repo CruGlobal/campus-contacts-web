@@ -9,7 +9,7 @@
       <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: "id_checkbox contact_checkbox gids_#{group.id} hidden", 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email %>
     <% end %>
   </td>
-  <td class="group_name">
+  <td class="group_name_column">
     <%= link_to(group.name, group) %>
   </td>
   <td>
@@ -18,8 +18,7 @@
     <% end %>
   </td>
   <td>
-    <%- involved_count = current_organization.people.get_from_group(group.id).collect(&:name).count %>
-    <%= involved_count %>
+    <%= current_organization.people.get_from_group(group.id).collect(&:name).count %>
   </td>
   <td>
     <%= group_presenter.leaders_names %>

@@ -3,7 +3,7 @@
     <div id="upper_sidebar_lists">
     	<button class="red_accent full_width_button" id="allcontacts_add_contact_button">Add a Contact</button>
     </div>
-  	<div id="mine_sidebar_lists">
+  	<div id="mine_sidebar_lists" class="leftmenu">
       <ul class="ac_dropdown_list">
       	<li class="ac_dropdown_list_header <%= 'selected_class' if params[:status] == 'all' %>">
           <%= link_to(t('contacts.mine.all'), my_contacts_path(status: 'all')) %>

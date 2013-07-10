@@ -69,10 +69,6 @@ button.full_width_button {
   text-decoration: none;
 }
 
-#sidebar_lists {
-  margin-top: 24px;
-}
-
 ul.ac_dropdown_list {
   list-style-type: none;
   margin-left: -24px;
@@ -82,18 +78,20 @@ ul.ac_dropdown_list {
 }
 
 .ac_dropdown_list {
-  li.ac_dropdown_list_header a div.arrow {
-    display: inline-block;
-    margin-left: -15px;
-    margin-right: 18px;
-    width: 10px;
-  }
-  li.ac_dropdown_list_header a div.category_name {
-    display: inline-block;
+  li.ac_dropdown_list_header a {
     font-weight: bold;
     font-size: 14px;
-    margin-left: -16px;
     color: #808284;
+    div.arrow {
+      display: inline-block;
+      margin-left: -15px;
+      margin-right: 18px;
+      width: 10px;
+    }
+    div.category_name {
+      display: inline-block;
+      margin-left: -16px;
+    }
   }
   a.all_contacts_link {
     display: inline-block;
