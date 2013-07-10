@@ -158,6 +158,19 @@ class Person < ActiveRecord::Base
     :order => "ISNULL(`phone_numbers`.number), `phone_numbers`.number #{order.include?("asc") ? 'ASC' : 'DESC'}"
   } }
 
+  scope :order_by_primary_email_address, lambda { |order| {
+      :select => "people.*, `email_addresses`.email",
+      :joins => "LEFT JOIN `email_addresses` ON `email_addresses`.`person_id` = `people`.`id` AND `email_addresses`.`primary` = 1",
+      :order => "ISNULL(`email_addresses`.email), `email_addresses`.email #{order.include?("asc") ? 'ASC' : 'DESC'}"
+  } }
+
+  scope :order_by_permission, lambda { |order| {
+      :select => "people.*",
+      :joins => 'JOIN permissions ON organizational_permissions.permission_id = permissions.id',
+      :conditions => "permissions.i18n IN #{Permission.default_permissions_for_field_string(Permission::DEFAULT_PERMISSIONS)}",
+      :order => "FIELD#{Permission.i18n_field_plus_default_permissions_for_field_string(order.include?("asc") ? Permission::DEFAULT_PERMISSIONS : Permission::DEFAULT_PERMISSIONS.reverse)}"
+  } }
+
   scope :find_friends_with_fb_uid, lambda { |person| { conditions: {fb_uid: Friend.followers(person)} } }
 
   scope :search_by_name_or_email, lambda { |keyword, org_id| {
