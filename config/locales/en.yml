@@ -1107,6 +1107,7 @@ en:
       members: Involved
       leaders: Group Leaders
       add_a_group: 'Add a Group'
+      add_group: 'Add Group'
       labels: Group Labels
       assign_to_label:
         one: '1 Group'
