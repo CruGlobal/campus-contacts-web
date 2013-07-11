@@ -14,4 +14,28 @@ class Chart < ActiveRecord::Base
       end
     end
   end
+  
+  def self.evang_range_options
+    {
+      "Past Week" => 0,
+      "Past 1 Month" => 1,
+      "Past 3 Months" => 3,
+      "Past 6 Months" => 6,
+      "Past 1 Year" => 12,
+      "Past 2 Years" => 24,
+      "Past 3 Years" => 36
+    }
+  end
+  
+  def self.laborers_range_options
+    {
+      "Today" => 0,
+      "1 Month Ago" => 1,
+      "3 Months Ago" => 3,
+      "6 Months Ago" => 6,
+      "1 Year Ago" => 12,
+      "2 Years Ago" => 24,
+      "3 Years Ago" => 36
+    }
+  end
 end

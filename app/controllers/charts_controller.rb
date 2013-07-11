@@ -1,21 +1,21 @@
 class ChartsController < ApplicationController
   def snapshot
-    chart = current_person.charts.where("chart_type = ?", Chart::SNAPSHOT).first
-    unless chart
-      chart = Chart.new
-      chart.person = current_person
-      chart.chart_type = Chart::SNAPSHOT
+    @chart = current_person.charts.where("chart_type = ?", Chart::SNAPSHOT).first
+    unless @chart
+      @chart = Chart.new
+      @chart.person = current_person
+      @chart.chart_type = Chart::SNAPSHOT
     end
     
     @movements = current_person.all_organization_and_children.where("importable_type = 'Ccc::MinistryActivity'")
-    chart.update_movements(@movements)
-    chart.save
+    @chart.update_movements(@movements)
+    @chart.save
     
-    begin_date = Date.today - chart.snapshot_evang_range.months
+    begin_date = Date.today - @chart.snapshot_evang_range.months
     end_date = Date.today
-    semester_date = Date.today - chart.snapsnot_laborers_range.months
-    @all_stats = {}
+    semester_date = Date.today - @chart.snapshot_laborers_range.months
     
+    @all_stats = {}
     infobase_hash = {
       :begin_date => begin_date,
       :end_date => end_date,

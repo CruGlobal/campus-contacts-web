@@ -188,7 +188,7 @@ ActiveRecord::Schema.define(:version => 20130711183515) do
     t.string   "chart_type"
     t.boolean  "snapshot_all_movements",  :default => true
     t.integer  "snapshot_evang_range",    :default => 6
-    t.integer  "snapsnot_laborers_range", :default => 0
+    t.integer  "snapshot_laborers_range", :default => 0
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
   end

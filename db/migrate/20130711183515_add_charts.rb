@@ -5,7 +5,7 @@ class AddCharts < ActiveRecord::Migration
       t.string :chart_type
       t.boolean :snapshot_all_movements, :default => true
       t.integer :snapshot_evang_range, :default => 6
-      t.integer :snapsnot_laborers_range, :default => 0
+      t.integer :snapshot_laborers_range, :default => 0
 
       t.timestamps
     end

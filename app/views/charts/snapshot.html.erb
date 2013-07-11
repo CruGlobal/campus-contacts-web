@@ -12,11 +12,11 @@
 <script src="http://code.highcharts.com/highcharts-more.js"></script>
 <div id="snap_gospel_exp">
   <h2>GOSPEL EXPERIENCES</h2>
-  <%= select_tag "gospel_exp_range" %>
+  <%= select_tag "gospel_exp_range", options_for_select(Chart.evang_range_options, @chart.snapshot_evang_range) %>
 </div>
 <div id="snap_laborers">
   <h2>LABORERS</h2>
-  <%= select_tag "laborers_range" %>
+  <%= select_tag "laborers_range", options_for_select(Chart.laborers_range_options, @chart.snapshot_laborers_range) %>
 </div>
 <div id="snap_container1"></div>
 <div id="snap_container2"></div>
