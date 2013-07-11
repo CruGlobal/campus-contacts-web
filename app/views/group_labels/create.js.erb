@@ -1,5 +1,5 @@
 <% if @group_label.present? %>
-  $('#group_labels').prepend('<%= j(render('groups/label', label: @group_label)) %>')
+  $('#group_labels').prepend("<%= escape_javascript(render partial: 'groups/label', locals: {label: @group_label} ) %>")
   $.hideDialog($("#add_group_label_div"))
   $.fn.activateGroupLabelDroppable()
 <% end %>

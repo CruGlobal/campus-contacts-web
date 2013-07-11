@@ -24,12 +24,12 @@ $ ->
 
   $('#add_group_label_save_button').live 'click', (e)->
     e.preventDefault()
-    group_label_name = $('#group_label_name').val()
+    name = $('#group_label_name').val()
     loader = $("#add_group_label_loader")
     fields = $(".add_group_label_content")
     loader.show()
     fields.hide()
-    if group_label_name == ''
+    if name == ''
       $.a(t('groups.label_name_is_required'))
       loader.hide()
       fields.show()
@@ -37,7 +37,7 @@ $ ->
       $.ajax
         type: 'POST',
         url: '/group_labels',
-        data: 'group_label_name='+group_label_name,
+        data: 'name='+name,
         success: () ->
           loader.hide()
           fields.show()

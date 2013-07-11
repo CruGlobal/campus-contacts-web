@@ -1,8 +1,8 @@
 class GroupLabelsController < ApplicationController
   def create
-    group_label_name = params[:group_label_name]
-    if group_label_name.present?
-      @group_label = GroupLabel.create(organization_id: current_organization.id, name: group_label_name)
+    label_name = params[:name]
+    if label_name.present?
+      @group_label = current_organization.group_labels.create(name: label_name)
       @message = t('groups.label_name_is_added')
     else
       @message = t('groups.label_name_is_required')
