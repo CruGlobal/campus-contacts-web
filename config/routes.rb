@@ -199,6 +199,7 @@ Mh::Application.routes.draw do
   resources :charts do
     collection do
       get :snapshot
+      put :update_snapshot_movements
     end
   end
 

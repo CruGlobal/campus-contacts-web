@@ -1,0 +1,14 @@
+<div id="snapshot_sidebar">
+  <%= form_tag update_snapshot_movements_charts_path, remote: true do %>
+    <div id="snapshot_radio">
+      <%= radio_button_tag 'all', 'true', true %>All<br/>
+      <%= radio_button_tag 'all', 'false' %>Custom<br/>
+      <div id="snapshot_movements">
+        <% @movements.each do |movement| %>
+          <%= check_box_tag 'movements', movement.id, true, disabled: :true %><%= movement.name %><br/>
+        <% end %>
+      </div>
+    </div>
+    <div><%= submit_tag 'Update Chart' %></div>
+  <% end %>
+</div>
