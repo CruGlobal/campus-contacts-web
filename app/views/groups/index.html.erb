@@ -2,7 +2,7 @@
   <div id="ac_sidebar">
     <div id="upper_sidebar_lists">
       <%= link_to raw("<button class='red_accent full_width_button'>#{t('.add_a_group')}</button>"), new_group_path %>
-      <%= link_to raw("<button class='action_gray full_width_button'>#{t('.add_a_label')}</button>"), '#', class: 'add-label listaction' %>
+      <%= link_to raw("<button id='add_group_label_button' class='action_gray full_width_button'>#{t('groups.add_a_label')}</button>"), '#' %>
     </div>
   	<div class="leftmenu">
       <ul class="ac_dropdown_list">
@@ -13,7 +13,7 @@
 
       <ul class="ac_dropdown_list">
       	<li class="ac_dropdown_list_header">
-          <a href="#" class="side_toggle arrow_anchor">
+          <a href="#" class="side_toggle arrow_anchor sidebar_group_labels_toggle">
             <div class="arrow">
               <% if selected = params[:label].present? %>
                 &#x25BC;
@@ -26,7 +26,7 @@
             </div>
           </a>
         </li>
-        <div class="side_list" style="<%= 'display:block;' if selected %>">
+        <div id="group_labels" class="side_list sidebar_group_labels" style="<%= 'display:block;' if selected %>">
           <% current_organization.group_labels.each do |label| %>
             <%= render partial: 'groups/label', locals: {label: label} %>
           <% end %>
@@ -58,34 +58,41 @@
 		</li>
 	</ul>
 </div>
+<br/>
 
 <div id="ac_contact_spread">
   <span style="display:none" id="drag_helper_text_one"><%= t('.assign_to_label', count: 1) %></span>
   <span style="display:none" id="drag_helper_text_other"><%= t('.assign_to_label', count: 0) %></span>
 
-    <table class="listing contact_listing" cellpadding="0" cellspacing="0">
-      <tr id="table_header">
-      	<th>&nbsp;</th>
-        <th class="checkbox_cell header_checkbox">
-          <%= check_box_tag 'check_all_groups', true, false %>
-        </th>
-        <th class="group_name_column"><%= sort_link @q, :name, t('.group_name'), params %></th>
-        <th>&nbsp;</th>
-        <th><%= t('.members') %></th>
-        <th><%= t('.leaders') %></th>
-        <th class="group_labels_column"><%= t('.labels') %></th>
-        <th>&nbsp;</th>
-      </tr>
-      <tbody id="groups_table">
-        <% @groups.each do |group| %>
-          <%= render partial: 'groups/group', locals: {group: group}%>
-        <% end %>
-      </tbody>
-    </table>
+  <table class="listing contact_listing" cellpadding="0" cellspacing="0">
+    <tr id="table_header">
+    	<th>&nbsp;</th>
+      <th class="checkbox_cell header_checkbox">
+        <%= check_box_tag 'check_all_groups', true, false %>
+      </th>
+      <th class="group_name_column"><%= sort_link @q, :name, t('.group_name'), params %></th>
+      <th>&nbsp;</th>
+      <th><%= t('.members') %></th>
+      <th><%= t('.leaders') %></th>
+      <th class="group_labels_column"><%= t('.labels') %></th>
+      <th>&nbsp;</th>
+    </tr>
+    <tbody id="groups_table">
+      <% @groups.each do |group| %>
+        <%= render partial: 'groups/group', locals: {group: group}%>
+      <% end %>
+    </tbody>
+  </table>
+
+  <% if @groups.blank? %>
+    <div class="contentpad no_contacts">
+      <%= t('.no_groups') %>
+    </div>
+	<% end %>
 </div>
 
 <!-- Message Dialog -->
 <%= render 'dialogs/bulk_send_msg' %>
 
-
-<%= render 'groups/label_form'%>
+<!-- Group Label Dialog -->
+<%= render 'dialogs/add_group_label'%>

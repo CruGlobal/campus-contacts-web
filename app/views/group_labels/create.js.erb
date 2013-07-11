@@ -1,7 +1,6 @@
-$('#new_label').dialog('destroy');
-$('#group_label_name').val('');
-<% unless @group_label.new_record? %>
-  $('#labels').append('<%= j(render('groups/label', label: @group_label)) %>')
+<% if @group_label.present? %>
+  $('#group_labels').prepend('<%= j(render('groups/label', label: @group_label)) %>')
+  $.hideDialog($("#add_group_label_div"))
   $.fn.activateGroupLabelDroppable()
 <% end %>
-$('#spinner_new_label').hide()
+$.a("<%= @message %>")

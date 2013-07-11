@@ -141,6 +141,10 @@ $ ->
     $('.handle').draggable
       revert: true
       start: (event, ui) ->
+        # to show group label list if the side list in groups page is hidden
+        unless $(".sidebar_group_labels").is(":visible")
+          $(".sidebar_group_labels_toggle").click()
+
         # If this row isn't checked, store the previously checked rows and check this row '
         unless $(this).parent().next().find('input').prop('checked')
           $(this).data 'checked', $('.id_checkbox:checked').map ->

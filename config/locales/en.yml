@@ -1097,6 +1097,10 @@ en:
   sporadically: Sporadically
 
   groups:
+    add_a_label: "Add a Group Label"
+    label_name: "Group Label Name"
+    label_name_is_required: "Group Label Name is required."
+    label_name_is_added: "You have successfully added a new group label."
     see_all: All Groups
     sidebar:
       add: Add
@@ -1112,7 +1116,7 @@ en:
         one: '1 Group'
         other: '%{count} Groups'
       labeled_with: 'Labeled With "%{label}"'
-      add_a_label: "Add a Group Label"
+      no_groups: 'Sorry, there are no groups here.'
     new_label_prompt: "Please enter a new label name"
     add_a_label_title: "Add New Label"
     new:
