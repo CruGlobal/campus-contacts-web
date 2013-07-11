@@ -1041,7 +1041,7 @@ en:
       group_list: 'Group List for %{org}'
       group_name: Group Name
       members: Involved
-      leaders: Leaders
+      leaders: Group Leaders
       add_group: 'Add Group'
       labels: Group Labels
       add: Add
@@ -1059,7 +1059,7 @@ en:
     show:
       page_title: "Group Name: %{group_name}"
       details: Details
-      add_leader: 'Add Leader'
+      add_leader: 'Add Group Leader'
       add_member: 'Add Member'
       email: 'Email Address'
       phone: 'Phone Number'
@@ -1113,7 +1113,7 @@ en:
     submit:
       update: Update
   member: Member
-  leader: Leader
+  leader: Group Leader
   group: Group
   label: Label
   organizations:
