@@ -14,6 +14,7 @@ class Person < ActiveRecord::Base
   has_many :created_organizational_labels, class_name: 'OrgnizationalLabel', foreign_key: 'added_by_id'
   has_many :group_memberships
   has_many :groups, through: :group_memberships
+  has_many :charts
 
   has_one :sent_person
   has_many :sent_messages, class_name: "Message", foreign_key: "person_id"

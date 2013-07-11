@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130703090751) do
+ActiveRecord::Schema.define(:version => 20130711183515) do
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -170,6 +170,32 @@ ActiveRecord::Schema.define(:version => 20130703090751) do
 
   add_index "authentications", ["provider", "mobile_token"], :name => "provider_token"
   add_index "authentications", ["uid", "provider"], :name => "uid_provider", :unique => true
+
+  create_table "chart_organizations", :force => true do |t|
+    t.integer  "chart_id"
+    t.integer  "organization_id"
+    t.boolean  "snapshot_display", :default => true
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+  end
+
+  add_index "chart_organizations", ["chart_id", "organization_id"], :name => "index_chart_organizations_on_chart_id_and_organization_id", :unique => true
+  add_index "chart_organizations", ["chart_id"], :name => "index_chart_organizations_on_chart_id"
+  add_index "chart_organizations", ["organization_id"], :name => "index_chart_organizations_on_organization_id"
+
+  create_table "charts", :force => true do |t|
+    t.integer  "person_id"
+    t.string   "chart_type"
+    t.boolean  "snapshot_all_movements",  :default => true
+    t.integer  "snapshot_evang_range",    :default => 6
+    t.integer  "snapsnot_laborers_range", :default => 0
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+  end
+
+  add_index "charts", ["chart_type"], :name => "index_charts_on_chart_type"
+  add_index "charts", ["person_id", "chart_type"], :name => "index_charts_on_person_id_and_chart_type", :unique => true
+  add_index "charts", ["person_id"], :name => "index_charts_on_person_id"
 
   create_table "clients", :force => true do |t|
     t.string   "code"
