@@ -3,7 +3,8 @@ class InteractionsController < ApplicationController
     permissions_for_assign
     groups_for_assign
     labels_for_assign
-    @person = current_organization.people.where(id: params[:id]).try(:first)
+
+    @person = current_person.id == params[:id].to_i ? current_person : current_organization.people.where(id: params[:id]).first
     if @person.present?
       @interaction = Interaction.new
       @completed_answer_sheets = @person.completed_answer_sheets(current_organization).where("completed_at IS NOT NULL").order('completed_at DESC')
@@ -22,7 +23,7 @@ class InteractionsController < ApplicationController
         @last_all_feeds = @person.all_feeds_last(current_person, current_organization)
       end
     else
-      redirect_to contacts_path
+      redirect_to all_contacts_path
     end
   end
 
