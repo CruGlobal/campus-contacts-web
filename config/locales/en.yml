@@ -804,14 +804,14 @@ en:
       bulk_vcard_download_message: 'A .vcf file now containing all the contact information you requested is being downloaded.'
       bulk_vcard_email_message: 'Contacts information has been sent to '
       contact_no_select_message: 'Please select atleast one contact.'
-      no_name_message: 'At a minimum you need to provide the First Name and Last Name.'
+      no_name_message: 'First Name and Last Name are required.'
       saved_searches: 'Saved Searches'
       delete_this_search: "Delete this search"
       save_this_search: "Save this search"
       save_this_search_placeholder: "Name this search"
       delete_search_confirm: "Are you sure you want to remove this search?"
       type_above_field: "Start typing in the field above to search for somewhere to transfer these people to."
-      add_contact_required_fields: "First name, Last name and Email are required."
+      add_contact_required_fields: "First Name and Last Name are required."
       add_already_registered_contact: "This individual already exist in your current organization."
       add_already_registered_email: "The Email address highlighted below is already used by another person in MissionHub or possibly there is a duplicate record in the system for this individual - contact support@missionhub.com if you need help. "
     mine:
