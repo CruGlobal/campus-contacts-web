@@ -13,7 +13,9 @@ class ChartsController < ApplicationController
     @chart.snapshot_all_movements = params[:all]
     @chart.save
     
-    @chart.update_movements_displayed(params[:movements])
+    if !@chart.snapshot_all_movements
+      @chart.update_movements_displayed(params[:movements])
+    end
     
     refresh_data
   end
