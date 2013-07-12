@@ -1,94 +1,74 @@
-<% provide :sidebar do %>
-  <ul class="leftmenu">
-    <li class="heading selected"><h3><%= t('.details') %></h3></li>
-    <li class="information">
-
-      <div class="field">
-        <div class="ls"><label><%= t('.leaders') %>:</label></div>
-        <div class="rs"><%= @group.leaders_names %></div>
-      </div>
-      <div class="field">
-        <div class="ls"><label><%= t('.location') %>:</label></div>
-        <div class="rs"><%= link_to(@group.location, "http://www.google.com/maps?q=#{@group.location}", target: '_blank') %></div>
-      </div>
-      <div class="field">
-        <div class="ls"><label><%= t('.meets') %>:</label></div>
-        <div class="rs"><%= raw(@group.meets_at) %></div>
-      </div>
-    </li>
-    <li class="mapinfo">
-      <%= link_to(image_tag("http://maps.googleapis.com/maps/api/staticmap?center=#{@group.location}&zoom=15&size=200x200&markers=color:blue|label:G|#{@group.location}&sensor=false"), "http://www.google.com/maps?q=#{@group.location}", target: '_blank', class: "nostyle") %>
-    </li>
-    <li><%= link_to(t('.edit_group'), edit_group_path(@group)) %></li>
-    <li><%= link_to(t('.delete_group'), group_path(@group), method: :delete, confirm: t('.confirm_delete_group')) %></li>
-    <li><%= link_to(t('.back_to_list'), groups_path) %></li>
-  </ul>
-<% end %>
+<%= render partial: 'groups/group_member_sidebar'%>
 
 <div class="titlebar titlebarmod">
   <h1>
     <%= t(".page_title", :group_name => @group) %>
+    <div id='global_loader'>
+      <%= image_tag 'loader.gif'%>
+    </div>
   </h1>
 </div>
 
-<span id="add_member_prompt" style="display:none"><%= t('.add_a_member') %></span>
-<span id="add_leader_prompt" style="display:none"><%= t('.add_a_leader') %></span>
-
-<div class="pagemenu">
-  <ul class="pillmenu">
-    <li>
+<div id="ac_button_bar">
+	<ul class="button_bar" id="menu_assign_link">
+		<li class="action_lightblue">
       <%= link_to(t('.add_member'), "#", class: "add_group_member", "data-desc"=>t('group_memberships.form.add_a_member'), "data-role"=>"member") %>
-    </li>
-  </ul>
-  <ul class="pillmenu">
-    <li>
+		</li>
+	</ul>
+
+	<ul class="button_bar" id="menu_assign_link">
+		<li class="action_lightblue">
       <%= link_to(t('.add_leader'), "#", class: "add_group_leader", "data-desc"=>t('group_memberships.form.add_a_leader'), "data-role"=>"leader") %>
-    </li>
-  </ul>
-  <ul class="divider"></ul>
-  <ul class="pillmenu">
-		<li><%= link_to(t('people.index.send_email'), nil, :id => "send_bulkemail_link_new") %></li>
+		</li>
 	</ul>
-  <ul class="pillmenu">
-		<li><%= link_to(t('people.index.send_sms'), nil, :id => "send_bulksms_link_new") %></li>
+
+	<ul class="button_bar">
+		<li class="action_lightblue btn_left">
+		  <%= link_to t("people.index.send_sms"), "#", id: "action_menu_text" %>
+		</li>
 	</ul>
-  <ul class="divider"></ul>
-  <ul class="pillmenu">
-		<li><%= link_to(t('people.index.group_comment'), nil, :id => "send_bulkcomment_link") %></li>
+	<ul class="button_bar">
+		<li class="action_lightblue btn_right">
+		  <%= link_to t("people.index.send_email"), "#", id: "action_menu_email" %>
+		</li>
 	</ul>
 </div>
+<br/>
 
-<div class="pad">
-  <table class="listing" cellpadding="0" cellspacing="0">
-    <thead>
-      <tr>
-        <th class="checkbox_cell">
-          <%= check_box_tag 'check_all', true, false %>
-        </th>
-        <th><%= sort_link @q, :first_name, t('.name'), params %></th>
-        <th><%= t('.email') %></th>
-        <th><%= t('.phone') %></th>
-        <th>
-          <% if params[:search] && params[:search][:meta_sort].include?('asc') %>
-            <%=raw sort_link(@q, :role, t('.role'), params).gsub('asc','desc') %>
-          <% else %>
-            <%= sort_link @q, :role, t('.role'), params %>
-          <% end %>
-        </th>
-        <th></th>
-      </tr>
-    </thead>
+<div id="ac_contact_spread">
+  <table class="listing contact_listing" cellpadding="0" cellspacing="0">
+    <tr id="table_header">
+      <th class="checkbox_cell header_checkbox">
+        <%= check_box_tag 'check_all', true, false %>
+      </th>
+      <th><%= sort_link @q, :first_name, t('.name'), params %></th>
+      <th><%= t('.email') %></th>
+      <th><%= t('.phone') %></th>
+      <th>
+        <% if params[:search] && params[:search][:meta_sort].include?('asc') %>
+          <%=raw sort_link(@q, :role, t('.role'), params).gsub('asc','desc') %>
+        <% else %>
+          <%= sort_link @q, :role, t('.role'), params %>
+        <% end %>
+      </th>
+      <th>&nbsp;</th>
+    </tr>
     <tbody id="group_table">
       <% @people.each do |person| %>
         <%= render 'groups/person', person: person, group_membership: person.group_memberships.where(group_id: @group.id).first %>
       <% end %>
     </tbody>
   </table>
+
+  <% if @people.blank? %>
+    <div class="contentpad no_contacts">
+      <%= t('groups.index.no_group_members') %>
+    </div>
+	<% end %>
 </div>
 
-<div id="add_contact_div" style="display:none" title="<%= t('contacts.add_contact', org: current_organization) %>" class="fingerme">
-  <%= render 'add_contact', person: Person.new %>
-</div>
-<%= render 'group_memberships/form' %>
-<%= render 'shared/bulk_send_msg' %>
-<%= render 'shared/bulk_send_form' %>
+<!-- Message Dialog -->
+<%= render 'dialogs/bulk_send_msg' %>
+
+<!-- Group Label Dialog -->
+<%= render 'dialogs/add_group_label'%>

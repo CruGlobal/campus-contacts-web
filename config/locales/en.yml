@@ -1118,6 +1118,7 @@ en:
         other: '%{count} Groups'
       labeled_with: 'Labeled With "%{label}"'
       no_groups: 'Sorry, there are no groups here.'
+      no_group_members: 'Sorry, there are no group members here.'
     new_label_prompt: "Please enter a new label name"
     add_a_label_title: "Add New Label"
     new:
@@ -1140,7 +1141,7 @@ en:
       weekly: Weekly on %{day}s<br/> %{start_time} - %{end_time}
       monthly: Monthly on the %{day}<br /> %{start_time} - %{end_time}
       delete_group: 'Delete this group'
-      edit_group: 'Edit Group'
+      edit_group: 'Edit this group'
       back_to_list: 'View All Groups'
       confirm_delete_group: Are you sure you want to delete this group?
       name: 'Name'

@@ -35,6 +35,25 @@
       }
     }
   }
+  #group_member_sidebar{
+    .information{
+      padding: 4px 2px;
+      background: #FFF0D7;
+      margin: 2px 0px 4px 0px;
+    }
+    .title_with_bg{
+      padding: 4px 2px;
+      background: #eaf1f6;
+      a {color: #fff;}
+      font-weight:bold;
+    }
+    .title{
+      font-weight:bold;
+    }
+    .content{
+      padding: 0px 16px;
+    }
+  }
   #transfer_to_org {
     .fancy {
       margin: 55px 20px -15px;

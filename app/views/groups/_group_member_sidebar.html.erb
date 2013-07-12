@@ -1,0 +1,33 @@
+<% provide :sidebar do %>
+  <div id="ac_sidebar">
+    <div id="upper_sidebar_lists">
+      <%= link_to raw("<button class='red_accent full_width_button'>#{t('groups.show.back_to_list')}</button>"), groups_path %>
+      <%= link_to raw("<button id='add_group_label_button' class='action_gray full_width_button'>#{t('groups.show.edit_group')}</button>"), edit_group_path(@group) %>
+      <%= link_to raw("<button id='add_group_label_button' class='action_gray full_width_button'>#{t('groups.show.delete_group')}</button>"), group_path(@group), method: :delete, confirm: t('.confirm_delete_group') %>
+    </div>
+  	<div id="group_member_sidebar">
+      <div class="title_with_bg">
+        <%= t('groups.show.details') %>
+      </div>
+      <div class="information">
+        <div>
+          <div class="title"><%= t('groups.index.leaders') %>:</div>
+          <div class="content"><%= @group.leaders_names %></div>
+        </div>
+        <br/>
+        <div>
+          <div class="title"><%= t('groups.show.location') %>:</div>
+          <div class="content"><%= link_to(@group.location, "http://www.google.com/maps?q=#{@group.location}", target: '_blank') %></div>
+        </div>
+        <br/>
+        <div>
+          <div class="title"><%= t('groups.show.meets') %>:</div>
+          <div class="content"><%= raw(@group.meets_at) %></div>
+        </div>
+      </div>
+      <div>
+        <%= link_to(image_tag("http://maps.googleapis.com/maps/api/staticmap?center=#{@group.location}&zoom=15&size=180x180&markers=color:blue|label:G|#{@group.location}&sensor=false"), "http://www.google.com/maps?q=#{@group.location}", target: '_blank', class: "nostyle") %>
+      </div>
+    </div>
+  </div>
+<% end %>
