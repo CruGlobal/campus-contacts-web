@@ -200,6 +200,7 @@ Mh::Application.routes.draw do
     collection do
       get :snapshot
       post :update_snapshot_movements
+      post :update_snapshot_range
     end
   end
 

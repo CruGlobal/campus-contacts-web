@@ -17,3 +17,25 @@ $(document).ready(function() {
     $('div#snap_spinner').show();
   });
 });
+$(document).ready(function() {
+  $('select#gospel_exp_range').change(function(){
+    $('div#snap_container1, div#snap_container2, div#snap_container3').hide();
+    $('div#snap_spinner').show();
+    $.ajax({
+      url: "/charts/update_snapshot_range",
+      type: "POST",
+      data: {gospel_exp_range: $('select#gospel_exp_range option:selected').val()},
+    })
+  });
+});
+$(document).ready(function() {
+  $('select#laborers_range').change(function(){
+    $('div#snap_container1, div#snap_container2, div#snap_container3').hide();
+    $('div#snap_spinner').show();
+    $.ajax({
+      url: "/charts/update_snapshot_range",
+      type: "POST",
+      data: {laborers_range: $('select#laborers_range option:selected').val()},
+    })
+  });
+});

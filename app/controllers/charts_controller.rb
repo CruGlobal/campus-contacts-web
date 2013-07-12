@@ -20,6 +20,18 @@ class ChartsController < ApplicationController
     refresh_data
   end
   
+  def update_snapshot_range
+    if params[:gospel_exp_range]
+      @chart.snapshot_evang_range = params[:gospel_exp_range]
+      @chart.save
+    elsif params[:laborers_range]
+      @chart.snapshot_laborers_range = params[:laborers_range]
+      @chart.save
+    end
+    
+    refresh_data
+  end
+  
   protected
   
   def get_chart
