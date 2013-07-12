@@ -1,5 +1,6 @@
 class Apis::V3::InteractionsController < Apis::V3::BaseController
   before_filter :get_interaction, only: [:show, :update, :destroy]
+  before_filter :get_initiator_ids, only: [:create, :update]
 
   def index
     render json: filtered_interactions,
@@ -19,6 +20,9 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
     interaction.created_by_id = current_person.id
 
     if interaction.save
+
+      interaction.set_initiators(get_initiator_ids)
+
       render json: interaction,
              status: :created,
              callback: params[:callback],
@@ -34,6 +38,9 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
     params[:interaction].delete(:created_by_id) if params[:interaction].present?
     params[:interaction][:updated_by_id] = current_person.id if params[:interaction].present?
     if @interaction.update_attributes(params[:interaction])
+
+      @interaction.set_initiators(get_initiator_ids)
+
       render json: @interaction,
              callback: params[:callback],
              scope: {include: includes, organization: current_organization}
@@ -72,6 +79,18 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
 
   def available_includes
     [:initiators]
+  end
+
+  def get_initiator_ids
+    unless @initiator_ids
+      @initiator_ids = params[:interaction][:initiator_ids].present? ? params[:interaction][:initiator_ids] : current_person.id
+      params[:interaction].delete(:initiator_ids) if params[:interaction]
+
+      unless @initiator_ids.is_a? Array
+        @initiator_ids = @initiator_ids.to_s.split(',').collect { |x| x.strip }
+      end
+    end
+    @initiator_ids
   end
 
 end

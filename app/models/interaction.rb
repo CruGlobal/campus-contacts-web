@@ -104,6 +104,20 @@ class Interaction < ActiveRecord::Base
     interactions.collect(&:to_hash)
   end
 
+
+  def set_initiators(initiator_ids)
+    initiator_ids.uniq.each do |person_id|
+      self.interaction_initiators.find_or_create_by_person_id(person_id.to_i)
+    end
+    # delete removed
+    removed_initiators = self.interaction_initiators.where("person_id NOT IN (?)", initiator_ids)
+    removed_initiators.delete_all if removed_initiators.present?
+    # delete duplicates
+    interaction_initiator_ids = self.interaction_initiators.group("person_id").collect(&:id)
+    duplicate_initiators = self.interaction_initiators.where("id NOT IN (?)", interaction_initiator_ids)
+    duplicate_initiators.delete_all if duplicate_initiators.present?
+  end
+
   private
 
   def ensure_timestamp
