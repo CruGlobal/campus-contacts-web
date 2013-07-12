@@ -40,10 +40,10 @@ class MigrateSentLabelsToInteractions < ActiveRecord::Migration
         sent_label.destroy
         puts "Migration complete! Default label '100% Sent' is now deleted."
       else
-        raise "Graduating On Mission InteractionType not found!"
+        puts "Graduating On Mission InteractionType not found!"
       end
     else
-      raise "Sent label was already deleted!"
+      puts "Sent label was already deleted!"
     end
   end
 

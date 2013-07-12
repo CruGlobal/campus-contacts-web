@@ -27,7 +27,7 @@ class RemoveSentLabel < ActiveRecord::Migration
       end
       puts "Cleaning Complete!"
     else
-      raise "100% Sent label not found!"
+      puts "100% Sent label not found!"
     end
     default_sent_label = Label.find_by_i18n('sent')
     default_sent_label.destroy if default_sent_label.present?
