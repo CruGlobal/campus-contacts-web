@@ -30,7 +30,7 @@ class MigrateAlumniLabel < ActiveRecord::Migration
       alumni_label.destroy
       puts ">>>> Migration complete! Alumni default label is now deleted."
     else
-      raise "Alumni label was already deleted!"
+      puts "Alumni label was already deleted!"
     end
   end
 
