@@ -122,6 +122,7 @@ en:
     create_a_survey: Create a survey
     settings: Settings
     cru: "Cru"
+    visual_tools: "Visual Tools"
   general:
     remove_leader_confirm: "Are you sure you want to remove %{person} from leaders?"
     transfer: "Transfer"

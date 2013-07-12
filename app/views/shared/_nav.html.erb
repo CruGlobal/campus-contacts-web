@@ -24,6 +24,7 @@
               </ul>
             </li>
           <% end %>
+          <li><%= link_to(t('nav.visual_tools'), charts_path) %></li>
           <li>
             <%= link_to(current_organization, '/contacts') %>
             <% if current_person.organization_objects.length > 1 %>
