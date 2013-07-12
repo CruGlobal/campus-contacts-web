@@ -3,7 +3,8 @@ class InteractionsController < ApplicationController
     permissions_for_assign
     groups_for_assign
     labels_for_assign
-    @person = current_organization.people.where(id: params[:id]).try(:first)
+
+    @person = current_person.id == params[:id].to_i ? current_person : current_organization.people.where(id: params[:id]).first
     if @person.present?
       @interaction = Interaction.new
       @completed_answer_sheets = @person.completed_answer_sheets(current_organization).where("completed_at IS NOT NULL").order('completed_at DESC')
@@ -22,7 +23,7 @@ class InteractionsController < ApplicationController
         @last_all_feeds = @person.all_feeds_last(current_person, current_organization)
       end
     else
-      redirect_to contacts_path
+      redirect_to all_contacts_path
     end
   end
 
@@ -178,9 +179,7 @@ class InteractionsController < ApplicationController
     @interaction.updated_by_id = current_person.id
     if @interaction.save
       @success = true
-      params[:initiator_id].each do |person_id|
-        @interaction.interaction_initiators.find_or_create_by_person_id(person_id.to_i)
-      end
+      @interaction.set_initiators(params[:initiator_id])
     end
     @all_feeds_page = 1
     @all_feeds = @person.all_feeds(current_person, current_organization, @all_feeds_page)
@@ -192,22 +191,13 @@ class InteractionsController < ApplicationController
     @interaction = Interaction.find(params[:interaction_id])
     @interaction.update_attributes(params[:interaction])
     @interaction.update_attribute(:updated_by_id, current_person.id)
-    params[:initiator_id].uniq.each do |person_id|
-      @interaction.interaction_initiators.find_or_create_by_person_id(person_id.to_i)
-    end
-    # delete removed
-    removed_initiators = @interaction.interaction_initiators.where("person_id NOT IN (?)",params[:initiator_id])
-    removed_initiators.delete_all if removed_initiators.present?
-    # delete duplicates
-    interaction_initiator_ids = @interaction.interaction_initiators.group("person_id").collect(&:id)
-    duplicate_initiators = @interaction.interaction_initiators.where("id NOT IN (?)",interaction_initiator_ids)
-    duplicate_initiators.delete_all if duplicate_initiators.present?
+    @interaction.set_initiators(params[:initiator_id])
     @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
   end
 
   def destroy
     @interaction = current_organization.interactions.find(params[:id])
     @person = @interaction.receiver
-    @interaction.update_attribute(:deleted_at, Time.now)
+    @interaction.destroy
   end
 end

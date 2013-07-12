@@ -641,6 +641,14 @@ class OrganizationTest < ActiveSupport::TestCase
     should "return 'engaged_disciple' label if has parent org id = 1" do
       assert @child_org.label_set.include?(Label.engaged_disciple), @child_org.label_set.collect(&:name).inspect
     end
+    should "return 'seeker' label for bridge org" do
+      @bridge_org = Factory(:organization, name: 'Bridges at Sample', ancestry: @org.id)
+      assert @bridge_org.label_set.include?(Label.engaged_disciple), @bridge_org.label_set.collect(&:name).inspect
+      assert @bridge_org.label_set.include?(Label.seeker), @bridge_org.label_set.collect(&:name).inspect
+    end
+    should "not return 'seeker' label for non-bridge org" do
+      assert !@child_org.label_set.include?(Label.seeker), @child_org.label_set.collect(&:name).inspect
+    end
   end
 
   context "getting sms_gateway" do

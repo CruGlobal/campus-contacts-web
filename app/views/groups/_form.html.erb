@@ -8,32 +8,32 @@
       <%= f.text_field :name %>
     </div>
   </div>
-  
-  
+
+
   <div class="item">
     <div class="group_label">
       <%= f.label :location %>
-      <div class="icon help tipit help_bubble_keyword" title="<%= t('groups.form.location_tip') %>"></div>
+      <div class="icon help tipitright help_bubble_keyword" title="<%= t('groups.form.location_tip') %>"></div>
     </div>
     <div class="field">
       <%= f.text_area :location, :class => "location" %>
     </div>
   </div>
-  
+
 
   <div class="item" style="display:none;">
     <%= f.check_box :list_publicly %>
     <%= f.label :list_publicly %>
-    <div class="icon help tipit help_bubble_keyword" title="<%= t('groups.form.list_publicly_tip') %>"></div>
+    <div class="icon help tipitright help_bubble_keyword" title="<%= t('groups.form.list_publicly_tip') %>"></div>
   </div>
 
 
   <div class="item" style="display:none; <%#= 'display:none' if !@group.list_publicly? %>">
     <%= f.check_box :approve_join_requests %>
     <%= f.label :approve_join_requests %>
-    <div class="icon help tipit help_bubble_keyword" title="<%= t('.approve_join_tip') %>"></div>
+    <div class="icon help tipitright help_bubble_keyword" title="<%= t('.approve_join_tip') %>"></div>
   </div>
-  
+
   <div class="item_half">
     <div class="group_label">
       <%= f.label :meets %>
@@ -42,8 +42,8 @@
       <%= f.select :meets, [[t('weekly'), 'weekly'], [t('monthly'), 'monthly'], [t('sporadically'), 'sporadically']] %>
     </div>
   </div>
-  
-  
+
+
   <div class="item_half_right" style="<%= 'display:none' if @group.meets == 'sporadically' %>">
     <div class="group_label">
       <div class="day_of_week_div regular" style="<%= 'display:none' unless @group.meets == 'weekly' || @group.meets.blank?  %>">
@@ -64,8 +64,8 @@
     </div>
     <%= f.hidden_field :meeting_day %>
   </div>
-  
-  
+
+
   <div class="item_half regular" style="<%= 'display:none' if @group.meets == 'sporadically' %>">
     <div class="group_label">
       From
@@ -74,8 +74,8 @@
       <%= f.select :start_time, times(6.hours.to_i, 22.hours.to_i) %>
     </div>
   </div>
-  
-  
+
+
   <div class="item_half_right regular" style="<%= 'display:none' if @group.meets == 'sporadically' %>">
     <div class="group_label">
       To

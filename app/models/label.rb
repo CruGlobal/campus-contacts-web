@@ -4,6 +4,7 @@ class Label < ActiveRecord::Base
 
   DEFAULT_LABELS = ["involved", "leader"] # in DSC ORDER by SUPERIORITY
   DEFAULT_CRU_LABELS = ["involved", "engaged_disciple", "leader"]
+  DEFAULT_BRIDGE_LABELS = DEFAULT_CRU_LABELS + ["seeker"]
 
   has_many :people, through: :organizational_labels
   has_many :organizational_labels, dependent: :destroy
@@ -22,6 +23,10 @@ class Label < ActiveRecord::Base
   scope :default_cru_labels, lambda { {
     :conditions => "i18n IN #{self.default_labels_for_field_string(self::DEFAULT_CRU_LABELS)}",
     :order => "FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS)}"
+  }}
+  scope :default_bridge_labels, lambda { {
+    :conditions => "i18n IN #{self.default_labels_for_field_string(self::DEFAULT_BRIDGE_LABELS)}",
+    :order => "FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_BRIDGE_LABELS)}"
   }}
   scope :non_default_labels, lambda { {
     :conditions => "i18n IS NULL",
@@ -44,6 +49,10 @@ class Label < ActiveRecord::Base
 
   def self.leader
     @leader ||= Label.find_or_create_by_name_and_i18n_and_organization_id('Leader', 'leader', 0)
+  end
+
+  def self.seeker
+    @seeker ||= Label.find_or_create_by_name_and_i18n_and_organization_id('Seeker', 'seeker', 0)
   end
 
   def self.default_labels_for_field_string(labels)
@@ -87,6 +96,7 @@ class Label < ActiveRecord::Base
     LEADER_ID = leader.id
     INVOLVED_ID = involved.id
     ENGAGED_DISCIPLE = engaged_disciple.id
+    SEEKER_ID = seeker.id
   end
   ANY_SELECTED_LABEL = ["Any",1]
 	ALL_SELECTED_LABEL = ["All",2]

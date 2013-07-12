@@ -1,15 +1,15 @@
 require 'test_helper'
 
-class InteractionsControllerTest < ActionController::TestCase  
+class InteractionsControllerTest < ActionController::TestCase
   context "Viewing a profile" do
     setup do
       @user, @org = admin_user_login_with_org
       @other_org = Factory(:organization)
-      
+
       @contact1 = Factory(:person, first_name: "Contact", last_name: "One")
       @contact2 = Factory(:person, first_name: "Contact", last_name: "Two")
       @contact3 = Factory(:person, first_name: "Contact", last_name: "Three")
-      
+
       Factory(:organizational_permission, organization: @org, person: @contact1, permission: Permission.no_permissions)
       Factory(:organizational_permission, organization: @other_org, person: @contact2, permission: Permission.no_permissions)
       Factory(:organizational_permission, organization: @org, person: @contact3, permission: Permission.admin)
@@ -25,18 +25,26 @@ class InteractionsControllerTest < ActionController::TestCase
       xhr :get, :show_profile, {:id => @contact2.id}
       assert_response :redirect
     end
+
+    should "show a current person even when current org is sub org" do
+      @sub_org = Factory(:organization, ancestry: @org.id)
+      @request.session[:current_organization_id] = @sub_org.id
+      xhr :get, :show_profile, {:id => @user.person.id}
+      assert_response :success
+      assert_equal @user.person, assigns(:person)
+    end
   end
 
   context "Updating followup status" do
     setup do
       @user, @org = admin_user_login_with_org
       @other_org = Factory(:organization)
-      
+
       @contact1 = Factory(:person, first_name: "Contact", last_name: "One")
       @contact2 = Factory(:person, first_name: "Contact", last_name: "Two")
       @admin1 = Factory(:person, first_name: "Admin", last_name: "One")
-      
-      Factory(:organizational_permission, organization: @org, person: @contact1, permission: Permission.no_permissions, followup_status: 'uncontacted')  
+
+      Factory(:organizational_permission, organization: @org, person: @contact1, permission: Permission.no_permissions, followup_status: 'uncontacted')
       Factory(:organizational_permission, organization: @other_org, person: @contact2, permission: Permission.no_permissions, followup_status: 'uncontacted')
       Factory(:organizational_permission, organization: @org, person: @admin1, permission: Permission.admin, followup_status: nil)
     end

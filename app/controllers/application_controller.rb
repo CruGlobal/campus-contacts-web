@@ -366,7 +366,7 @@ class ApplicationController < ActionController::Base
   end
 
   def labels_for_assign
-    @labels_for_assign = Label.where("organization_id IN (?)", [current_organization.id, 0])
+    @labels_for_assign = current_organization.label_set
   end
 
   def permissions_for_assign
