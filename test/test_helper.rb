@@ -40,6 +40,7 @@ class ActiveSupport::TestCase
   Label.involved
   Label.engaged_disciple
   Label.leader
+  Label.seeker
 end
 
 class Test::Unit::TestCase

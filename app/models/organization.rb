@@ -94,6 +94,10 @@ class Organization < ActiveRecord::Base
     end
   end
 
+  def is_bridge?
+    (name =~ /^Bridges at/) != nil
+  end
+
   def interaction_types
     return InteractionType.where(organization_id: [0, id]).order('id')
   end
@@ -306,7 +310,13 @@ class Organization < ActiveRecord::Base
   end
 
   def default_labels
-    has_parent?(1) ? labels.default_cru_labels : labels.default_labels
+    if is_bridge?
+      labels.default_bridge_labels
+    elsif has_parent?(1)
+      labels.default_cru_labels
+    else
+      labels.default_labels
+    end
   end
 
   def non_default_labels
