@@ -68,13 +68,13 @@ class Interaction < ActiveRecord::Base
     when 'comment'
       return "".html_safe
     when 'spiritual_conversation'
-      return "#{intiators_string} initiated spiritual conversation with #{receiver_string}.".html_safe
+      return "#{intiators_string} initiated a spiritual conversation with #{receiver_string}.".html_safe
     when 'gospel_presentation'
       return "#{intiators_string} shared the gospel with #{receiver_string}.".html_safe
     when 'prayed_to_receive_christ'
       return "#{receiver_string} indicated a decision to receive Christ with #{intiators_string}.".html_safe
     when 'holy_spirit_presentation'
-      return "#{intiators_string} shared the holy spirit presentation with #{receiver_string}.".html_safe
+      return "#{intiators_string} shared a Holy Spirit presentation with #{receiver_string}.".html_safe
     when 'graduating_on_mission'
       return "#{intiators_string} helped #{receiver_string} develop a plan for graduating on mission.".html_safe
     when 'faculty_on_mission'
