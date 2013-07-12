@@ -804,7 +804,7 @@ en:
       bulk_vcard_download_message: 'A .vcf file now containing all the contact information you requested is being downloaded.'
       bulk_vcard_email_message: 'Contacts information has been sent to '
       contact_no_select_message: 'Please select atleast one contact.'
-      no_name_message: 'At a minimum you need to provide a first name.'
+      no_name_message: 'At a minimum you need to provide the First Name and Last Name.'
       saved_searches: 'Saved Searches'
       delete_this_search: "Delete this search"
       save_this_search: "Save this search"

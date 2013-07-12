@@ -934,37 +934,43 @@ $.mh.saveContact = (add_more) ->
   dialog_buttons = $('.add_new_contact_dialog_buttons, .add_new_person_group_member_butons')
 
   dialog_buttons.button('disable')
-  if $('#person_first_name', form).val() == ''
+  email = $.trim($('#person_email_address_email').val())
+  fname = $.trim($('#person_first_name').val())
+  lname = $.trim($('#person_last_name').val())
+  if fname == '' || lname == ''
     $.a(t('contacts.index.no_name_message'))
     dialog_buttons.button('enable')
   else
     $('#add_contact_div').addClass('locked')
     $.blur('#add_contact_div .mh_popup_box_scroller')
     $.toggleLoader('add_contact_title','Saving Contact...')
-    email = $('#person_email_address_email').val()
-    fname = $('#person_first_name').val()
-    lname = $('#person_last_name').val()
-    $.ajax
-      type: 'POST',
-      url: '/check_email',
-      data: 'email='+email+'&fname='+fname+'&lname='+lname,
-      success: (code) ->
-        if code == '100'
-          $('#add_another').val(add_more)
-          $.rails.handleRemote(form)
-          unless $("#add_contact_div .mh_popup_box_scroller").size() > 0
-            form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
-        else
-          $('#add_contact_div').removeClass('locked')
-          $.blur('#add_contact_div .mh_popup_box_scroller')
-          $.toggleLoader('add_contact_title','')
-          if code == '201'
-            $.a(t('contacts.index.add_already_registered_contact'))
-          if code == '202'
-            $.a(t('contacts.index.add_already_registered_email'))
-          if code == '203'
-            $.a(t('contacts.index.add_contact_required_fields'))
-        dialog_buttons.button('enable')
+    if email == ""
+      $('#add_another').val(add_more)
+      $.rails.handleRemote(form)
+      unless $("#add_contact_div .mh_popup_box_scroller").size() > 0
+        form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
+    else
+      $.ajax
+        type: 'POST',
+        url: '/check_email',
+        data: 'email='+email+'&fname='+fname+'&lname='+lname,
+        success: (code) ->
+          if code == '100'
+            $('#add_another').val(add_more)
+            $.rails.handleRemote(form)
+            unless $("#add_contact_div .mh_popup_box_scroller").size() > 0
+              form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
+          else
+            $('#add_contact_div').removeClass('locked')
+            $.blur('#add_contact_div .mh_popup_box_scroller')
+            $.toggleLoader('add_contact_title','')
+            if code == '201'
+              $.a(t('contacts.index.add_already_registered_contact'))
+            if code == '202'
+              $.a(t('contacts.index.add_already_registered_email'))
+            if code == '203'
+              $.a(t('contacts.index.add_contact_required_fields'))
+          dialog_buttons.button('enable')
   false
 
 $.fn.load_leader_name = (id) ->
