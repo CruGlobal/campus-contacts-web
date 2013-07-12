@@ -18,10 +18,14 @@
   <h2>LABORERS</h2>
   <%= select_tag "laborers_range", options_for_select(Chart.laborers_range_options, @chart.snapshot_laborers_range) %>
 </div>
+<div id="snap_spinner">
+  Updating Chart...<%= image_tag "spinner.gif" %>
+</div>
 <div id="snap_container1"></div>
 <div id="snap_container2"></div>
 <div id="snap_container3"></div>
 <div id="snap_numbers"></div>
+<div class="clear"></div>
 <div id="snap_on_mission">
   <h2>FACULTY ON MISSION/<br/>GRADUATING ON MISSION</h2>
 </div>

@@ -1,3 +1,7 @@
+div#clear {
+  clear: both;
+}
+
 div#snap_container1, div#snap_container2, div#snap_container3, div#snap_numbers {
   position: relative;
   top: 0px;
@@ -19,6 +23,11 @@ div#highcharts-0 defs+rect, div#highcharts-2 defs+rect, div#highcharts-4 defs+re
 }
 
 svg>text[text-anchor=end] tspan{
+  display:none;
+}
+
+div#snap_spinner {
+  width: 100%;
   display:none;
 }
 
