@@ -115,19 +115,17 @@ class Organization < ActiveRecord::Base
   # Push individual weeks of stats to infobase, starting with the first week afeter the last push
   # If the user increased the numbers, push the extra values on the final week
   def push_to_infobase(params)
-    start_date = last_push_to_infobase
+    start_date = (last_push_to_infobase + 1.day).beginning_of_week(:sunday)
     end_date = last_week
     periods = []
     start_date.step(end_date, 7) do |period_begin|
-      period_end = period_begin + 7.days
-      period_end = period_end.to_s(:db)
-      period_begin = period_begin.to_s(:db)
-      end_date_string = end_date.to_s(:db)
+      period_end = period_begin + 6.days
+      period_end = period_end
       stats = {activity_id: importable_id,
-               period_begin: period_begin,
-               period_end: period_end
+               period_begin: period_begin.to_s(:db),
+               period_end: period_end.to_s(:db)
               }
-      if period_end == end_date_string
+      if period_end == end_date
         # Add the group stats and any additional bumps entered
         students_involved = people.students.with_label(Label.involved, self).where("organizational_labels.created_at < ?", period_end).count
 
@@ -238,7 +236,7 @@ class Organization < ActiveRecord::Base
   def interactions_of_type(type, start_date = nil, end_date = nil)
     start_date ||= last_push_to_infobase
     end_date ||= last_week
-    interactions.joins(:interaction_type).where("interaction_types.i18n = ? AND interactions.timestamp > ? AND interactions.timestamp <= ?", type, start_date, end_date)
+    interactions.joins(:interaction_type).where("interaction_types.i18n = ? AND interactions.timestamp > ? AND interactions.timestamp <= ?", type, start_date, end_date.end_of_day)
   end
 
   def interactions_count(type, start_date = nil, end_date = nil)
