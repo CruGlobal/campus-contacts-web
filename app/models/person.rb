@@ -34,7 +34,7 @@ class Person < ActiveRecord::Base
   has_one :primary_org_permission, class_name: "OrganizationalPermission", foreign_key: "person_id", conditions: {primary: true}
   has_one :primary_org, through: :primary_org_permission, source: :organization
   has_many :answer_sheets
-  has_many :contact_assignments, class_name: "ContactAssignment", foreign_key: "assigned_to_id", dependent: :destroy
+  has_many :contact_assignments, class_name: "ContactAssignment", foreign_key: "assigned_to_id", dependent: :destroy, conditions: ["contact_assignments.person_id IS NOT NULL"]
   has_many :assigned_tos, class_name: "ContactAssignment", foreign_key: "person_id"
   has_many :assigned_contacts, through: :contact_assignments, source: :assigned_to
   has_one :current_address, class_name: "Address", foreign_key: "person_id", conditions: {address_type: 'current'}, autosave: true

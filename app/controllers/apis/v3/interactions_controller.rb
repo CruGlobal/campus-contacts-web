@@ -2,11 +2,7 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
   before_filter :get_interaction, only: [:show, :update, :destroy]
 
   def index
-    order = params[:order] || 'created_at desc'
-
-    list = add_includes_and_order(interactions, order: order)
-
-    render json: list,
+    render json: filtered_interactions,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization, since: params[:since]}
   end
@@ -59,6 +55,15 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
 
   def interactions
     current_organization.interactions
+  end
+
+  def filtered_interactions
+    unless @filtered_interactions
+      order = params[:order] || 'interactions.created_at desc'
+      @filtered_interactions = add_includes_and_order(interactions, {order: order})
+      @filtered_interactions = InteractionFilter.new(params[:filters], current_organization).filter(@filtered_interactions) if params[:filters]
+    end
+    @filtered_interactions
   end
 
   def get_interaction

@@ -1,5 +1,5 @@
 class PersonSerializer < ActiveModel::Serializer
-  HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :contact_assignments, :assigned_tos, :answer_sheets, :all_organizational_permissions, :all_organization_and_children, :organizational_labels, :roles, :addresses]
+  HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :assigned_tos, :answer_sheets, :all_organizational_permissions, :all_organization_and_children, :organizational_labels, :roles, :addresses]
 
   HAS_ONE = [:user, :current_address]
 
@@ -18,6 +18,7 @@ class PersonSerializer < ActiveModel::Serializer
     hash['comments_on_me'] = custom_comments_on_me if scope[:include].include?('comments_on_me')
     hash['rejoicables'] = custom_rejoicables if scope[:include].include?('rejoicables')
     hash['interactions'] = custom_interactions if scope[:include].include?('interactions')
+    hash['contact_assignments'] = custom_contact_assignments if scope[:include].include?('contact_assignments')
     hash['organizational_permission'] = custom_organizational_permission if scope[:include].include?('organizational_permission')
     hash
   end
@@ -32,7 +33,7 @@ class PersonSerializer < ActiveModel::Serializer
     end if includes
   end
 
-  [:contact_assignments, :assigned_tos, :comments_on_me, :labels, :organizational_labels].each do |relationship|
+  [:assigned_tos, :comments_on_me, :labels, :organizational_labels].each do |relationship|
     define_method(relationship) do
       add_since(organization_filter(relationship))
     end
@@ -46,6 +47,11 @@ class PersonSerializer < ActiveModel::Serializer
 
   def custom_interactions
     add_since(object.filtered_interactions(scope[:user].person, scope[:organization]))
+  end
+
+  def custom_contact_assignments
+    active_people_ids = scope[:organization].all_people.collect(&:id)
+    object.contact_assignments.where(person_id: active_people_ids)
   end
 
   def roles

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130711183515) do
+ActiveRecord::Schema.define(:version => 20130712024551) do
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -216,6 +216,14 @@ ActiveRecord::Schema.define(:version => 20130711183515) do
   add_index "clients", ["display_name"], :name => "index_clients_on_display_name", :unique => true
   add_index "clients", ["link"], :name => "index_clients_on_link", :unique => true
   add_index "clients", ["organization_id"], :name => "index_clients_on_organization_id"
+
+  create_table "conditions", :force => true do |t|
+    t.integer "question_sheet_id", :null => false
+    t.integer "trigger_id",        :null => false
+    t.string  "expression",        :null => false
+    t.integer "toggle_page_id",    :null => false
+    t.integer "toggle_id"
+  end
 
   create_table "contact_assignments", :force => true do |t|
     t.integer  "assigned_to_id"
@@ -485,6 +493,15 @@ ActiveRecord::Schema.define(:version => 20130711183515) do
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end
+
+  create_table "mh_surveys", :force => true do |t|
+    t.string   "title"
+    t.integer  "organization_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "mh_surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
 
   create_table "movement_indicator_suggestions", :force => true do |t|
     t.integer  "person_id"
@@ -775,6 +792,19 @@ ActiveRecord::Schema.define(:version => 20130711183515) do
     t.datetime "updated_at"
   end
 
+  create_table "sent_emails", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "organization_id"
+    t.integer  "receiver_id"
+    t.string   "sender"
+    t.string   "recipient"
+    t.string   "subject"
+    t.text     "message"
+    t.string   "status"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
   create_table "sent_people", :force => true do |t|
     t.integer  "person_id"
     t.integer  "transferred_by_id"
@@ -894,6 +924,15 @@ ActiveRecord::Schema.define(:version => 20130711183515) do
 
   add_index "surveys", ["crs_registrant_type_id"], :name => "index_surveys_on_crs_registrant_type_id"
   add_index "surveys", ["organization_id"], :name => "index_mh_surveys_on_organization_id"
+
+  create_table "teams", :force => true do |t|
+    t.integer  "organization_id"
+    t.string   "name"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "teams", ["organization_id"], :name => "index_teams_on_organization_id"
 
   create_table "users", :force => true do |t|
     t.string   "username",                  :limit => 200,                :null => false

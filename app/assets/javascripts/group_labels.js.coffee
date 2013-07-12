@@ -10,7 +10,7 @@ $ ->
     li.remove()
     false
 
-  $('#groups_controller.index #labels a.delete_label').live 'click', ->
+  $('#group_labels a.delete_label').live 'click', ->
     li = $(this).closest('li')
     li.fadeOut()
     $.ajax
@@ -18,21 +18,29 @@ $ ->
       type: 'DELETE'
     false
 
-  $('#groups_controller.index a.add-label, #groups_controller.new a.add-label').live 'click', ->
-    el = $('#new_label')
-    el.dialog
-      resizable: false,
-      height:250,
-      width:400,
-      modal: true,
-      buttons:
-        Create: ->
-          $('form', el).submit()
-        Cancel: ->
-          $(this).dialog('destroy')
+  $('#add_group_label_button').live 'click', ->
+    $.showDialog($("#add_group_label_div"))
 
-  $('#new_label form').live 'submit', ->
-    $('#spinner_new_label').show()
+
+  $('#add_group_label_save_button').live 'click', (e)->
+    e.preventDefault()
+    name = $('#group_label_name').val()
+    loader = $("#add_group_label_loader")
+    fields = $(".add_group_label_content")
+    loader.show()
+    fields.hide()
+    if name == ''
+      $.a(t('groups.label_name_is_required'))
+      loader.hide()
+      fields.show()
+    else
+      $.ajax
+        type: 'POST',
+        url: '/group_labels',
+        data: 'name='+name,
+        success: () ->
+          loader.hide()
+          fields.show()
 
 $.fn.activateGroupLabelDroppable = () ->
   $('#groups_controller.index .leftmenu .label').droppable
@@ -43,7 +51,7 @@ $.fn.activateGroupLabelDroppable = () ->
       $.fn.applyGroupLabel(label)
 
 $.fn.applyGroupLabel = (label) ->
-  label_name = $('.name a', label).text()
+  label_name = $('a', label).text()
   $('.id_checkbox.group_checkbox:checked').each ->
     row = $('tr[data-id=' + $(this).val() + ']')
     labels = $('td.labels span.name', row).map ->
