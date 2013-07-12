@@ -15,6 +15,13 @@ class Chart < ActiveRecord::Base
     end
   end
   
+  def update_movements_displayed(selections)
+    chart_organizations.each do |movement|
+      movement.snapshot_display = selections.include?(movement.organization_id.to_s)
+      movement.save
+    end
+  end
+  
   def self.evang_range_options
     {
       "Past Week" => 0,

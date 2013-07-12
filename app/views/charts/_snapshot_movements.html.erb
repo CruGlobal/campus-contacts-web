@@ -1,11 +1,12 @@
 <div id="snapshot_sidebar">
   <%= form_tag update_snapshot_movements_charts_path, remote: true do %>
     <div id="snapshot_radio">
-      <%= radio_button_tag 'all', 'true', true %>All<br/>
-      <%= radio_button_tag 'all', 'false' %>Custom<br/>
+      <%= radio_button_tag 'all', 'true', @chart.snapshot_all_movements, :id => "snap_all_true" %>All<br/>
+      <%= radio_button_tag 'all', 'false', !@chart.snapshot_all_movements, :id => "snap_all_false" %>Custom<br/>
       <div id="snapshot_movements">
         <% @movements.each do |movement| %>
-          <%= check_box_tag 'movements', movement.id, true, disabled: :true %><%= movement.name %><br/>
+          <%= check_box_tag "movements[]", movement.id, @chart.chart_organizations.where("organization_id = ?", movement.id).first.snapshot_display, disabled: @chart.snapshot_all_movements, class: 'snap_movement' %>
+          <%= movement.name %><br/>
         <% end %>
       </div>
     </div>

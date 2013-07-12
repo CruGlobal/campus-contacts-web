@@ -34,6 +34,7 @@
 //= require groups
 //= require group_labels
 //= require organizations
+//= require charts
 //= require i18n
 //= require i18n/translations
 //= require followup_comments

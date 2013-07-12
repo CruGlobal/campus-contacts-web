@@ -1,5 +1,26 @@
 class ChartsController < ApplicationController
+  before_filter :get_chart
+  
+  def index
+    redirect_to snapshot_charts_path
+  end
+
   def snapshot
+    refresh_data
+  end
+  
+  def update_snapshot_movements
+    @chart.snapshot_all_movements = params[:all]
+    @chart.save
+    
+    @chart.update_movements_displayed(params[:movements])
+    
+    refresh_data
+  end
+  
+  protected
+  
+  def get_chart
     @chart = current_person.charts.where("chart_type = ?", Chart::SNAPSHOT).first
     unless @chart
       @chart = Chart.new
@@ -10,17 +31,26 @@ class ChartsController < ApplicationController
     @movements = current_person.all_organization_and_children.where("importable_type = 'Ccc::MinistryActivity'")
     @chart.update_movements(@movements)
     @chart.save
-    
+  end
+  
+  def refresh_data
     begin_date = Date.today - @chart.snapshot_evang_range.months
     end_date = Date.today
     semester_date = Date.today - @chart.snapshot_laborers_range.months
+    
+    if @chart.snapshot_all_movements
+      movements = @movements
+    else
+      org_ids = @chart.chart_organizations.where("snapshot_display = 1").all.collect(&:organization_id)
+      movements = Organization.where("id IN (?)", org_ids)
+    end
     
     @all_stats = {}
     infobase_hash = {
       :begin_date => begin_date,
       :end_date => end_date,
       :semester_date => semester_date,
-      :activity_ids => @movements.collect(&:importable_id)
+      :activity_ids => movements.collect(&:importable_id)
     }
     
     begin
@@ -35,9 +65,5 @@ class ChartsController < ApplicationController
     json['leaders'] = json['student_leaders'].to_i + json['faculty_leaders'].to_i
 
     @all_stats = json
-  end
-  
-  def index
-    redirect_to snapshot_charts_path
   end
 end
