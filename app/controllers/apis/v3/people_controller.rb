@@ -75,6 +75,10 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
            scope: {include: includes, organization: current_organization, user: current_user}
   end
 
+  def ids
+    render json: filtered_people.collect { |p| p.id }, root: 'people_ids', callback: params[:callback]
+  end
+
   private
 
   def people

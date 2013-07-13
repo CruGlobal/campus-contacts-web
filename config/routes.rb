@@ -328,7 +328,11 @@ Mh::Application.routes.draw do
           delete :bulk_destroy
         end
       end
-      resources :people
+      resources :people do
+        collection do
+          get :ids
+        end
+      end
       resources :organizations
       resources :answers
       resources :surveys do
