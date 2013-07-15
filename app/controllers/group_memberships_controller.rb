@@ -1,15 +1,15 @@
 class GroupMembershipsController < ApplicationController
 
   def create
-    @group = current_organization.groups.find(params[:group_id]) 
+    @group = current_organization.groups.find(params[:group_id])
     @inContacts = params[:render_in_contacts].present?
-    
+
     # Profile
     @person = current_organization.people.where(id: params[:person_id].split(',').first).try(:first)
     if @person
       @groups = @person.groups_for_org_id(current_organization.id)
     end
-    
+
     if params[:from_add_member_screen] == "true"
       @persons = Person.find(params[:person_id])
       if has_role
@@ -35,7 +35,7 @@ class GroupMembershipsController < ApplicationController
           @group_membership.role = params[:role]
           @group_membership.save
         end
-        
+
         respond_to do |wants|
           wants.html { render :nothing => true }
           wants.js
@@ -49,7 +49,7 @@ class GroupMembershipsController < ApplicationController
       end
     end
   end
-  
+
   def destroy
     @group = current_organization.groups.find(params[:group_id])
     @group_membership = @group.group_memberships.find(params[:id])
@@ -57,7 +57,7 @@ class GroupMembershipsController < ApplicationController
     @group_membership.destroy
     render nothing: true
   end
-  
+
   def search
     if params[:name].present?
       results = Person.search_by_name(params[:name], current_organization.id)
@@ -67,14 +67,14 @@ class GroupMembershipsController < ApplicationController
         @total = @people.count
       else
         @total = results.count
-        @people = @people.limit(10) 
+        @people = @people.limit(10)
       end
       render :layout => false
     else
       render :nothing => true
     end
   end
-  
+
   protected
     def has_role
       return true if can?(:manage, current_organization)

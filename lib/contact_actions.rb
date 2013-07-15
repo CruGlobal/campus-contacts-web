@@ -106,7 +106,7 @@ module ContactActions
 				if @add_to_group_tag == '1'
     			@group = @organization.groups.find(params[:add_to_group])
 		      @group_membership = @group.group_memberships.find_or_initialize_by_person_id(@person.id)
-		      @group_membership.permission = params[:add_to_group_permission]
+		      @group_membership.role = params[:add_to_group_role]
 		      @group_membership.save
 				end
 

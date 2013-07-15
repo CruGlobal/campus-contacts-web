@@ -7,20 +7,15 @@
     <% end %>
   </ul>
   <% if @total > @people.length %>
-    <span style="font-size: 11px;">
-      <%= t('.showing_count', length: @people.count, total: @total) %>
-      <%= link_to(t('.show_all'), '#', :class => 'search_show_all_link_members') %>
-    </span>
+    <%= t('.showing_count', length: @people.count, total: @total) %>
+    <%= link_to(t('.show_all'), '#', :class => 'search_show_all_link_members') %>
   <% else %>
-    <span style="font-size: 11px;">
-      <%= t('.showing_count_complete', length: @people.count) %>
-    </span>
+    <%= t('.showing_count_complete', length: @people.count) %>
   <% end %>
   <br/>
   <br/>
 <% else %>
-  <p>
-    <%= t('.not_found', terminology: current_organization.terminology.downcase) %>
-  </p>
+  <%= t('.not_found', terminology: current_organization.terminology.downcase) %>
 <% end %>
-<%= link_to(t('.add_new_person_group'), "#", class: 'add_contact inlinebutton', id: 'add_new_person_group_button') %>
+
+<%= link_to raw("<button class='red_accent' id='add_new_person_group_button'>#{t('.add_new_person_group')}</button>"), '#' %>

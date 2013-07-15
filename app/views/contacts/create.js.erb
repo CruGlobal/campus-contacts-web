@@ -1,13 +1,14 @@
 <% if @add_to_group_tag == '1' %>
 	$('#group_table').prepend("<%= j(render('groups/person', person: @person, group_membership: @group_membership)) %>")
   if($("#add_contact_div .mh_popup_box_scroller").size() > 0){
+    $.hideDialog($("#add_contact_div"))
     $("#add_contact_div").replaceWith("<%= j(render('dialogs/add_contact', person: Person.new)) %>")
     $.showDialog($("#add_contact_div"))
   }else{
     $("#add_contact_div").html("<%= j(render('add_contact', person: Person.new)) %>")
   }
   $(".remove_add_new_person_to_group, .explain").hide()
-  $.n('Contacts added to group successfully')
+  $.n("<%= t('groups.add_group_member_success') %>")
 <% else %>
 	<% unless params[:update] %>
 		<% if params[:assign_to_me] == 'true' %>
@@ -33,7 +34,7 @@
 
 <% unless params[:add_another] == 'true' %>
   if($("#add_contact_div .mh_popup_box_scroller").size() > 0){
-    $.hideDialog($("#add_contact_div"))
+    $.hideDialog($("#add_contact_div, #member_search_div"))
   }else{
     $("#add_contact_div, #member_search").dialog("destroy")
   }

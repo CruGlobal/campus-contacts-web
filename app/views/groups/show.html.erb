@@ -67,6 +67,12 @@
 	<% end %>
 </div>
 
+
+<%= render 'group_memberships/form' %>
+
+<!-- Add Contact Dialog -->
+<%= render 'dialogs/add_contact', person: Person.new %>
+
 <!-- Message Dialog -->
 <%= render 'dialogs/bulk_send_msg' %>
 

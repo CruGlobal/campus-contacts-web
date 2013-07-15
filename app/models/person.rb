@@ -431,13 +431,9 @@ class Person < ActiveRecord::Base
   def self.search_by_name(name, organization_ids = nil, scope = nil)
     return scope.where('1 = 0') unless name.present?
     scope ||= Person
-    query = name.strip.split(' ')
-    first, last = query[0].to_s + '%', query[1].to_s + '%'
-    if last == '%'
-      conditions = ["first_name like ? OR last_name like ?", first, first]
-    else
-      conditions = ["first_name like ? AND last_name like ?", first, last]
-    end
+
+    conditions = ["LOWER(CONCAT(first_name, ' ' , last_name)) LIKE ?", "%#{name.downcase}%"]
+
     scope = scope.where(conditions)
     scope = scope.where('organizational_permissions.organization_id IN(?)', organization_ids).includes(:organizational_permissions) if organization_ids
     scope

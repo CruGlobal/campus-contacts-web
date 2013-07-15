@@ -175,7 +175,7 @@ li.btn_right, button.btn_right {
   width: 575px;
   min-height: 170px;
   .fancy {
-    margin: 10px 0px;
+    margin: 10px 5px;
     font-size: 14px;
   }
 }
@@ -187,6 +187,9 @@ li.btn_right, button.btn_right {
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
   overflow-y: scroll;
+  a:hover {
+    text-decoration:none;
+  }
 }
 
 .mh_popup_box {
@@ -203,7 +206,7 @@ li.btn_right, button.btn_right {
 }
 
 .mh_popup_box_content {
-  padding: 40px 15px 15px;
+  padding: 40px 13px 13px;
 }
 
 .mh_popup_box_top {

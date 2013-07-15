@@ -1,5 +1,9 @@
 <% unless params[:add_another] == 'true' %>
-  $("#member_search").dialog('close');
+  if($("#member_search_div .mh_popup_box_scroller").size() > 0){
+    $.hideDialog($("#member_search_div"))
+  }else{
+    $("#member_search").dialog('close');
+  }
 <% end %>
 
 <% if params[:from_add_member_screen] == "true" %>
@@ -10,6 +14,7 @@
     } else {
       $('#group_table').prepend(row)
     }
+    $(".no_contacts").remove();
   <% end %>
 <% else %>
   <% unless @inContacts %>

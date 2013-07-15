@@ -42,7 +42,6 @@ $ ->
           loader.hide()
           fields.show()
 
-
   $('#edit_label_save_button').live 'click', (e)->
     e.preventDefault()
     $("#org_title_dialog").html(t('manage_labels.edit_title'))

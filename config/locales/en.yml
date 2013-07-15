@@ -1102,6 +1102,7 @@ en:
     label_name: "Group Label Name"
     label_name_is_required: "Group Label Name is required."
     label_name_is_added: "You have successfully added a new group label."
+    add_group_member_success: "You have successfully added a new contact to group."
     see_all: All Groups
     sidebar:
       add: Add

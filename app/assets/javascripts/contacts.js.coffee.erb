@@ -68,21 +68,9 @@ $ ->
       type: 'GET',
       url: '/sent_messages'
 
-
   $('#allcontacts_add_contact_button').live 'click', (e)->
     e.preventDefault()
-    $(".field_with_errors, .red_errors, #add_contact_form .remove_in_add_contact").remove()
-    $("#add_contact_form input[type='text']").val("")
-    $("#add_contact_form textarea").val("")
-    $("#add_contact_form select").val(0)
-    $("#add_contact_form input[type='checkbox']").attr("checked",false)
-    $("#add_contact_form input[type='radio']").attr("checked",false)
-    $(".form_group_fields .permission_checkbox.no_permissions").attr("checked",true)
-    disabled = $("#add_contact_form input[type='checkbox']:not(:disabled)")
-    disabled.attr("checked",false)
-    $.blur('#add_contact_div .mh_popup_box_scroller','hide')
-    $.toggleLoader('add_contact_title','')
-    $.showDialog($("#add_contact_div"))
+    $.fn.show_add_contact()
 
   $('#add_contact_save_and_close_button').live 'click', (e)->
     e.preventDefault()
@@ -824,6 +812,20 @@ $ ->
           $("#search_locate_contact_loading").hide()
     false
 
+$.fn.show_add_contact = () ->
+  $(".field_with_errors, .red_errors, #add_contact_form .remove_in_add_contact").remove()
+  $("#add_contact_form input[type='text']").val("")
+  $("#add_contact_form textarea").val("")
+  $("#add_contact_form select").val(0)
+  $("#add_contact_form input[type='checkbox']").attr("checked",false)
+  $("#add_contact_form input[type='radio']").attr("checked",false)
+  $(".form_group_fields .permission_checkbox.no_permissions").attr("checked",true)
+  disabled = $("#add_contact_form input[type='checkbox']:not(:disabled)")
+  disabled.attr("checked",false)
+  $.blur('#add_contact_div .mh_popup_box_scroller','hide')
+  $.toggleLoader('add_contact_title','')
+  $.showDialog($("#add_contact_div"))
+
 $.fn.search_status = () ->
   check = $(".search_status :selected").val() != ""
   label_contacts.attr("checked", check)
@@ -922,7 +924,8 @@ $.mh.saveContact = (add_more) ->
 
   #For My Contacts Page
   $('#assign_new_contact_to_me').val($('#mine_assign_to').val())
-  #For Add a person in Group Members Page
+
+  #For add a new contact record in Group Members Page
   group_tag = $("#add_to_group_id").val()
   $("#add_to_group_tag").val(0)
   if group_tag
@@ -931,8 +934,8 @@ $.mh.saveContact = (add_more) ->
     $("#add_to_group_role").val($("#role").val())
     $("#add_to_group").val($("#add_to_group_id").val())
 
+  #Dialog buttons
   dialog_buttons = $('.add_new_contact_dialog_buttons, .add_new_person_group_member_butons')
-
   dialog_buttons.button('disable')
   email = $.trim($('#person_email_address_email').val())
   fname = $.trim($('#person_first_name', form).val())

@@ -34,6 +34,8 @@ class GroupsController < ApplicationController
   end
 
   def show
+    permissions_for_assign
+
     @group = Present(@group)
     @people = current_organization.people.get_from_group(@group.id).uniq
 

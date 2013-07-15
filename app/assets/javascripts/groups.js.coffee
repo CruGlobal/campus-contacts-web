@@ -45,8 +45,12 @@ $ ->
 
   $(".add_group_member, .add_group_leader").live "click", ->
     $("#role").val($(this).attr("data-role"))
-    $('#member_search').attr('title', $(this).attr("data-desc"))
-    $.fn.showSearchBox()
+    $('#member_search_title').html($(this).attr("data-desc"))
+    $.showDialog($("#member_search_div"))
+    $("#member_search_name").focus()
+    $("#member_search_name").val("")
+    #clear the search form group members
+    $("#member_search_results").html("")
     false
 
   $('#member_search_name').autocomplete
@@ -67,6 +71,7 @@ $ ->
       response([])
 
   $('#add_new_person_group_button').live 'click', ->
+    $.fn.show_add_contact()
     $(".remove_add_new_person_to_group, .explain").hide()
     name = $('#member_search_name').val().split(' ')
     $('#person_first_name').val(name[0])
