@@ -203,7 +203,7 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
   end
 
   context '.update' do
-    should 'create and return a person' do
+    should 'update and return a person' do
       put :update, id: @person.id, person: {first_name: 'funk'}, secret: @client.secret
       json = JSON.parse(response.body)
       assert_equal 'funk', json['person']['first_name']
@@ -211,11 +211,42 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
   end
 
   context '.destroy' do
-    should 'create and return a person' do
+    should 'destroy person' do
       delete :destroy, id: @person.id, secret: @client.secret
       assert_equal [], assigns(:person).organizational_permissions
     end
   end
+
+  context '.bulk_destroy' do
+    should 'destroy people by filter ids' do
+      delete :bulk_destroy, filters: {ids: @person.id}, secret: @client.secret
+      assert_equal [@person], assigns(:people), assigns(:people).inspect
+      assert_equal [], assigns(:people).first.organizational_permissions
+    end
+    should 'destroy people by filter permission' do
+      delete :bulk_destroy, filters: {permissions: @person.organizational_permissions.first.permission_id}, secret: @client.secret
+      assert_equal [@person], assigns(:people), assigns(:people).inspect
+      assert_equal [], assigns(:people).first.organizational_permissions
+    end
+  end
+
+
+  # context '.bulk_archive' do
+  #   setup do
+  #     @person2 = Factory(:person, first_name: 'Bob', last_name: 'Jones')
+  #     @client.organization.add_contact(@person2)
+  #   end
+  #   should 'archive people by filter ids' do
+  #     post :bulk_archive, filters: {ids: @person2.id}, secret: @client.secret
+  #     assert_equal [@person2], assigns(:people), assigns(:people).inspect
+  #     assert_not_nil assigns(:people).first.organizational_permissions.first.archive_date
+  #   end
+  #   should 'archive people by filter permission' do
+  #     post :bulk_archive, filters: {permissions: @person2.organizational_permissions.first.permission_id}, secret: @client.secret
+  #     assert_equal [@person2], assigns(:people), assigns(:people).inspect
+  #     assert_not_nil assigns(:people).first.organizational_permissions.first.archive_date
+  #   end
+  # end
 
 
 

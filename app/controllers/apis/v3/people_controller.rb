@@ -69,8 +69,15 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
 
   def destroy
     current_organization.remove_person(@person)
-
     render json: @person,
+           callback: params[:callback],
+           scope: {include: includes, organization: current_organization, user: current_user}
+  end
+
+  def bulk_destroy
+    @people = filtered_people
+    current_organization.remove_people(@people)
+    render json: @people,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization, user: current_user}
   end

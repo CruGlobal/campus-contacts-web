@@ -869,7 +869,7 @@ $.fn.assignTo = (leader, skip_remote) ->
   if leader == "Unassigned"
     leader_name = "Unassigned"
   else
-    leader_name = $('.name a', leader).text()
+    leader_name = $('a', leader).text()
   $('.id_checkbox:checked').each ->
     row = $('tr[data-id=' + $(this).val() + ']')
     assigned_to = $('.assigned_to', row)
