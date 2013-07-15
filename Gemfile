@@ -9,7 +9,7 @@ gem "strip_attributes"
 gem 'active_model_serializers'#, git: 'git://github.com/josevalim/active_model_serializers.git'
 gem 'activeadmin', '~> 0.4.4' #, git: 'git://github.com/gregbell/active_admin.git'
 gem 'acts_as_list'
-gem 'airbrake_user_attributes'
+gem 'airbrake'
 gem 'ancestry', git: 'git://github.com/stefankroes/ancestry.git'
 gem 'aws-sdk', '1.8.1.3'
 gem 'bitly'
