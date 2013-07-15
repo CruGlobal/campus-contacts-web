@@ -127,17 +127,17 @@ class Organization < ActiveRecord::Base
               }
       if period_end == end_date
         # Add the group stats and any additional bumps entered
-        students_involved = people.students.with_label(Label.involved, self).where("organizational_labels.created_at < ?", period_end).count
+        students_involved = params[:involved_students]
 
-        faculty_involved  = people.faculty.with_label(Label.involved, self).where("organizational_labels.created_at < ?", period_end).count
+        faculty_involved  = params[:involved_faculty]
 
-        students_engaged  = people.students.with_label(Label.engaged_disciple, self).where("organizational_labels.created_at < ?", period_end).count
+        students_engaged  = params[:engaged_disciple]
 
-        faculty_engaged   = people.faculty.with_label(Label.engaged_disciple, self).where("organizational_labels.created_at < ?", period_end).count
+        faculty_engaged   = params[:engaged_disciple_faculty]
 
-        student_leaders   = people.students.with_label(Label.leader, self).where("organizational_labels.created_at < ?", period_end).count
+        student_leaders   = params[:leader]
 
-        faculty_leaders   = people.faculty.with_label(Label.leader, self).where("organizational_labels.created_at < ?", period_end).count
+        faculty_leaders   = params[:leader_faculty]
 
         spiritual_conversations = params[:spiritual_conversation].to_i -
                                   interactions_count('spiritual_conversation') +
