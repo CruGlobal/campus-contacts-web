@@ -128,10 +128,11 @@
         max-width: 140px;
         word-wrap: break-word;
         text-indent:-2em;
-        margin: 2px 0px 2px 2em;
+        padding: 2px 0px 2px 2em;
         a {
           color: #0379ae;
           font-weight: normal;
+          margin-left: 2px;
         }
         .delete_icon {
           display: none;
