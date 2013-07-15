@@ -195,7 +195,7 @@ Mh::Application.routes.draw do
       get :update_from_crs
     end
   end
-  
+
   resources :charts do
     collection do
       get :snapshot
@@ -331,6 +331,7 @@ Mh::Application.routes.draw do
       resources :people do
         collection do
           get :ids
+          delete :bulk_destroy
         end
       end
       resources :organizations

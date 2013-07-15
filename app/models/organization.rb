@@ -573,6 +573,12 @@ class Organization < ActiveRecord::Base
     add_permission_to_person(person, Permission::USER_ID)
   end
 
+  def remove_people(people)
+    people.each do |p|
+      remove_person(p)
+    end
+  end
+
   def remove_person(person)
     person_id = person.is_a?(Person) ? person.id : person
     organizational_permissions.where(person_id: person_id).each do |ors|
