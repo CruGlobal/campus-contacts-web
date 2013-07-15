@@ -129,6 +129,26 @@
         word-wrap: break-word;
         text-indent:-2em;
         padding: 2px 0px 2px 2em;
+        &.ui-state-active {
+          border: 1px solid #C7DFF0;
+          background: #fcfdfd;
+          color: #808284;
+          a {
+            color: #0379ae;
+            font-weight: normal;
+            margin-left: 2px;
+          }
+        }
+        &.ui-state-hover {
+          border: 1px solid #C7DFF0;
+          background: #eaf1f6;
+          color: #808284;
+          a {
+            color: #0379ae;
+            font-weight: normal;
+            margin-left: 2px;
+          }
+        }
         a {
           color: #0379ae;
           font-weight: normal;
@@ -166,7 +186,7 @@
   }
   #main {
     border: none;
-    margin-left: 210px;
+    margin-left: 200px;
     margin-right: 20px;
     min-height: 420px;
   }

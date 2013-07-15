@@ -5,7 +5,8 @@ $(document).ready(function(){
   var li;
 
   $(".leftmenu .leader, .leftmenu .dnc, .leftmenu .completed").droppable({
-    activeClass: 'ui-state-highlight',
+    activeClass: 'ui-state-active',
+    hoverClass: 'ui-state-hover',
     accept: ".handle",
     drop: function(event, ui) {
       var leader;
