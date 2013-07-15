@@ -1,6 +1,7 @@
 $ ->
   $(".my_completed, .my_in_progress").droppable
-    activeClass: "ui-state-highlight"
+    activeClass: 'ui-state-active'
+    hoverClass: 'ui-state-hover'
     accept: ".handle"
     drop: (event, ui) ->
       li = $(this)

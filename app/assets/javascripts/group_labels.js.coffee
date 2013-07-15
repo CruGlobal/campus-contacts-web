@@ -44,7 +44,8 @@ $ ->
 
 $.fn.activateGroupLabelDroppable = () ->
   $('#groups_controller.index .leftmenu .label').droppable
-    activeClass: 'ui-state-highlight'
+    activeClass: 'ui-state-active'
+    hoverClass: 'ui-state-hover'
     drop: (event, ui) ->
       label = $(this)
       label.effect('highlight', {}, 'slow')
