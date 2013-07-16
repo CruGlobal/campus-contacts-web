@@ -1,7 +1,12 @@
 class PersonSerializer < ActiveModel::Serializer
-  HAS_MANY = [:phone_numbers, :email_addresses, :person_transfers, :assigned_tos, :answer_sheets, :all_organizational_permissions, :all_organization_and_children, :organizational_labels, :roles, :addresses]
 
-  HAS_ONE = [:user, :current_address]
+  HAS_MANY_SIMPLE = [:addresses, :phone_numbers, :email_addresses, :person_transfers, :assigned_tos, :answer_sheets, :all_organization_and_children, :organizational_labels]
+  HAS_MANY_CUSTOM = [:contact_assignments, :interactions, :all_organizational_permissions]
+  HAS_MANY = HAS_MANY_SIMPLE + HAS_MANY_CUSTOM;
+
+  HAS_ONE_SIMPLE = [:user, :current_address]
+  HAS_ONE_CUSTOM = [:organizational_permission]
+  HAS_ONE = HAS_ONE_SIMPLE + HAS_ONE_CUSTOM
 
   INCLUDES = HAS_MANY + HAS_ONE
 
@@ -12,14 +17,7 @@ class PersonSerializer < ActiveModel::Serializer
 
   def attributes
     hash = super
-    hash['organizational_roles'] = custom_organizational_roles(scope[:organization].id) if scope[:include].include?('organizational_roles')
-    hash['all_organizational_roles'] = custom_organizational_roles if scope[:include].include?('all_organizational_roles')
-    hash['followup_comments'] = custom_followup_comments if scope[:include].include?('followup_comments')
-    hash['comments_on_me'] = custom_comments_on_me if scope[:include].include?('comments_on_me')
-    hash['rejoicables'] = custom_rejoicables if scope[:include].include?('rejoicables')
-    hash['interactions'] = custom_interactions if scope[:include].include?('interactions')
-    hash['contact_assignments'] = custom_contact_assignments if scope[:include].include?('contact_assignments')
-    hash['organizational_permission'] = custom_organizational_permission if scope[:include].include?('organizational_permission')
+    backported_attributes(hash)
     hash
   end
 
@@ -33,7 +31,7 @@ class PersonSerializer < ActiveModel::Serializer
     end if includes
   end
 
-  [:assigned_tos, :comments_on_me, :labels, :organizational_labels].each do |relationship|
+  [:assigned_tos, :organizational_roles, :organizational_labels].each do |relationship|
     define_method(relationship) do
       add_since(organization_filter(relationship))
     end
@@ -45,29 +43,38 @@ class PersonSerializer < ActiveModel::Serializer
     end
   end
 
-  def custom_interactions
+  def interactions
     add_since(object.filtered_interactions(scope[:user].person, scope[:organization]))
   end
 
-  def custom_contact_assignments
+
+  def contact_assignments
     active_people_ids = scope[:organization].all_people.collect(&:id)
     object.contact_assignments.where(person_id: active_people_ids)
-  end
-
-  def roles
-    add_since(object.roles_for_org_id(scope[:organization].id))
   end
 
   def all_organizational_permissions
     add_since(object.organizational_permissions)
   end
 
-  def custom_organizational_permission
-    organizational_permission = object.organizational_permissions.where('organizational_permissions.organization_id' => scope[:organization].id).first
-    serialize_organizational_permission(organizational_permission) if organizational_permission.present?
+  def organizational_permission
+    organization_filter(:organizational_permissions).first
   end
 
-  def custom_followup_comments
+  ###########################
+  ## Backported Attributes ##
+  ###########################
+
+  def backported_attributes(hash)
+    hash['organizational_roles'] = backported_organizational_roles(scope[:organization].id) if scope[:include].include?('organizational_roles')
+    hash['all_organizational_roles'] = backported_organizational_roles if scope[:include].include?('all_organizational_roles')
+    hash['followup_comments'] = backported_followup_comments if scope[:include].include?('followup_comments')
+    hash['comments_on_me'] = backported_comments_on_me if scope[:include].include?('comments_on_me')
+    hash['rejoicables'] = backported_rejoicables if scope[:include].include?('rejoicables')
+    hash
+  end
+
+  def backported_followup_comments
     followup_comments = []
     object.created_interactions.each do |interaction|
       followup_comments << translate_interaction_to_followup_status(interaction)
@@ -75,7 +82,7 @@ class PersonSerializer < ActiveModel::Serializer
     followup_comments
   end
 
-  def custom_comments_on_me
+  def backported_comments_on_me
     comments_on_me = []
     object.filtered_interactions(scope[:user].person, scope[:organization]).each do |interaction|
       comments_on_me << translate_interaction_to_followup_status(interaction)
@@ -83,7 +90,7 @@ class PersonSerializer < ActiveModel::Serializer
     comments_on_me
   end
 
-  def custom_rejoicables
+  def backported_rejoicables
     rejoicables = []
     interactions = object.filtered_interactions(scope[:user].person, scope[:organization])
     interactions.where(interaction_type_id: InteractionType.old_rejoicable_ids).each do |interaction|
@@ -92,7 +99,7 @@ class PersonSerializer < ActiveModel::Serializer
     rejoicables
   end
 
-  def custom_organizational_roles(org_id = nil)
+  def backported_organizational_roles(org_id = nil)
     organizational_permissions_array = []
     organizational_labels_array = []
     if org_id.present?
