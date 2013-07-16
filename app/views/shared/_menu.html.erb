@@ -40,10 +40,13 @@
       </li>
     <% end %>
 
-    <% if can? :manage, current_organization %>
-      <li class="<%= 'current' if ['organizations', 'movement_indicator_suggestions'].include?(params[:controller]) %>">
-        <%= link_to(t('nav.organizations'), "/organizations") %>
-        <ul style='display:none;'>
+    <li class="<%= 'current' if ['organizations', 'movement_indicator_suggestions'].include?(params[:controller]) %>">
+      <%= link_to(t('nav.organizations'), "/organizations") %>
+      <ul style='display:none;'>
+        <li class="<%= 'current' if request.path == snapshot_charts_path %>">
+          <%= link_to(t('nav.visual_tools'), charts_path) %>
+        </li>
+        <% if can? :manage, current_organization %>
           <li class="<%= 'current' if request.path == organizations_path %>">
             <%= link_to(t('nav.manage'), "/organizations", :class => "topset groups") %>
           </li>
@@ -61,9 +64,9 @@
           <li class="<%= 'current' if request.path == movement_indicator_suggestions_path %>">
             <%= link_to(t('nav.report_movement_indicators'), movement_indicator_suggestions_path, :class => "topset cleanup") %>
           </li>
-        </ul>
-      </li>
-    <% end %>
+        <% end %>
+      </ul>
+    </li>
   </ul>
 
   <div id="menu_search">
