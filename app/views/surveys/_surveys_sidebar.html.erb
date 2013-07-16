@@ -1,0 +1,12 @@
+<% provide :sidebar do %>
+  <div id="ac_sidebar">
+    <div id="upper_sidebar_lists">
+    <% if @survey %>
+      <%= link_to raw("<button class='red_accent full_width_button'>#{t('nav.all_surveys')}</button>"), index_admin_surveys_path %>
+      <%= link_to raw("<button class='action_gray full_width_button'>#{t('surveys.index_admin.delete_survey')}</button>"), survey_path(@survey), method: :delete, confirm: t('surveys.index_admin.confirm_delete_survey') %>
+    <% else %>
+      <%= link_to raw("<button class='red_accent full_width_button'>#{t('nav.create_a_survey')}</button>"), new_survey_path %>
+    <% end %>
+    </div>
+  </div>
+<% end %>
