@@ -2,6 +2,27 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+#sessions_controller {
+  #login_paragraph h1 {
+    color: #808284;
+    display: block;
+    font-family: Georgia;
+    font-size: 24px;
+    font-style: italic;
+    font-weight: normal;
+  }
+  .info {
+    color: #808284;
+    display: block;
+    font-family: Arial;
+    font-size: 12px;
+    font-weight: normal;
+    a {
+      color: #0379ae;
+    }
+  }
+}
+
 #survey_responses_controller {
   .pad {
     padding: 0 0 25px 15px;
@@ -9,11 +30,19 @@
   .formactions {
     padding-top: 20px;
   }
-  .create h1 {
+  h1 {
     color: #808284;
     display: block;
     font-family: Georgia;
     font-size: 34px;
+    font-style: italic;
+    font-weight: normal;
+  }
+  h4 {
+    color: #808284;
+    display: block;
+    font-family: Georgia;
+    font-size: 22px;
     font-style: italic;
     font-weight: normal;
   }
@@ -46,6 +75,9 @@
       font-family: Georgia, serif;
       font-style: italic;
       font-weight: normal !important;
+    }
+    label {
+      color: #808284;
     }
     input:not([type=submit]) {
       border: 1px solid #ccc !important;
