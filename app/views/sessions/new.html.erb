@@ -9,7 +9,7 @@
   <% end %>
   <center>
     <% if !@survey || [0, 1].include?(@survey.login_option) %>
-      <div id="login_paragraph"><h1><%= @survey && @survey.login_paragraph.present? ?  @survey.login_paragraph : t('.login_paragraph_mhub') %></h1></div>
+      <div id="login_paragraph"><h1><%=raw @survey && @survey.login_paragraph.present? ?  @survey.login_paragraph : t('.login_paragraph_mhub') %></h1></div>
       <br><br>
       <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook_mhub), id: 'facebook_button', rel: 'external', style: cookies[:survey_mode].present? ? 'display:none' : '' ) %>
       <% if cookies[:survey_mode].present? %>

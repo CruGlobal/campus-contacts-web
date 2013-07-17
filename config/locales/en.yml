@@ -351,7 +351,7 @@ en:
         To get started, you'll need to have a Facebook account. <br/>
         Click the login link to the left and <strong>allow</strong> MissionHub to access your information. <br/>
         You'll be taken to the wizard if this is your first time accessing MissionHub.
-      login_paragraph_mhub: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
+      login_paragraph_mhub: To start the survey, please login with Facebook so we can know who you really are.<br/>This will save time completing your survey.
       instructions: Instructions
       back: Back Home
       dont_like_facebook: Don't like Facebook?
