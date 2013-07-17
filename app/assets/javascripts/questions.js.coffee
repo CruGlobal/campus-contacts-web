@@ -30,14 +30,7 @@ $ ->
     false
 
   $('#add_old_question_link').live 'click', ->
-    $('#previously_used').dialog
-      resizable: false,
-      height: 700,
-      width: 800,
-      modal: true,
-      buttons:
-        Close: ->
-          $(this).dialog('destroy')
+    $.showDialog($("#previously_used"))
     false
 
   $('.use_question, .remove_question').live 'click', ->

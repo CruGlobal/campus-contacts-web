@@ -1,5 +1,5 @@
 <div class="inlineform" data-elem-id="<%= question.id %>">
-  <%= form_for question, url: question.new_record? ? survey_questions_path(@survey) : survey_question_path(@survey, question), 
+  <%= form_for question, url: question.new_record? ? survey_questions_path(@survey) : survey_question_path(@survey, question),
                          method: question.new_record? ? :post : :put, remote: true, html: {class: 'question_form', id: question.new_record? ? 'new_question_form' : "form_for_#{question.id}"} do |f| %>
     <% if question.new_record? %>
     <div class="field">
@@ -26,8 +26,8 @@
     <div class="submit_button" style="<%= question.new_record? ? 'display:none' : '' %>">
       <div id="advance_notification">
         <%= render 'advanced_options', f: f, q: question, s: @survey %>
-      </div>  
-      <%= f.submit "Update", :id => "save_edit_survey_question" %>
+      </div>
+      <%= f.submit "Submit", :id => "save_edit_survey_question" %>
       <%= button_tag "Cancel", :id => "cancel_edit_survey_question" %>
     </div>
   <% end %>

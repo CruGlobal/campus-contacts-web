@@ -116,6 +116,10 @@ ul.ac_dropdown_list {
 #ac_button_bar {
   margin-left: 5px;
   display: inline-block;
+  li a {
+    text-decoration: none;
+    color: rgb(3, 121, 174);
+  }
 }
 
 li.btn_left, button.btn_left {

@@ -4,7 +4,7 @@
 */
 
 #contacts_controller.all_contacts, #contacts_controller.my_contacts, #labels_controller,
-#groups_controller, #surveys_controller {
+#groups_controller, #surveys_controller, #questions_controller {
   #gandalfthewhite {
     border-bottom: none;
     margin-bottom: 5px;
@@ -231,11 +231,11 @@
         }
       }
     }
+    a {
+      color: rgb(3, 121, 174);
+    }
     .group_labels_column, .group_name_column{
       min-width: 120px;
-      a {
-        color: #0379ae;
-      }
     }
   }
 }

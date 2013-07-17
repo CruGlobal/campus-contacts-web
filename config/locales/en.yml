@@ -455,6 +455,7 @@ en:
     index:
       title: "Surveys for %{org}"
     index_admin:
+      preview_survey: "Preview this Survey"
       confirm_delete: "Are you sure you want to delete this keyword?"
       confirm_delete_survey: "Are you sure you want to delete this survey?"
       delete_survey: "Delete this survey"
@@ -465,7 +466,7 @@ en:
       association_help: "When a contact responds to a survey, they are associated with the same team or movement as the keyword they responded to."
       no_surveys: 'Sorry, there are no surveys here.'
     edit:
-      edit_survey: "Edit Survey"
+      edit_survey: "Edit Survey: \"%{survey}\""
     new:
       create_a_survey: "Create a Survey"
       choose_keyword_explanation_html:
@@ -502,6 +503,7 @@ en:
         notice: 'Question was successfully created.'
         duplicate_error: "You have already added that question. You cannot assign a question twice in a survey!"
       edit:
+        edit_question: "Edit this question"
         leader_invalid_email_with_name: "Chosen leader/s '%{leader_names}' have invalid email."
         leader_invalid_email: "Chosen leader has an invalid email."
       form:
@@ -529,7 +531,7 @@ en:
         column_header: 'Column Header'
         column_header_hint: 'This is what will display at the top of the column when looking at contacts later'
       index:
-        manage: Manage Survey Questions
+        manage: "Manage Survey Questions: \"%{survey}\""
         note: "Note: First and Last name will be automatically added to every survey. There's no need for you to add those."
         predefined: Predefined Questions
         your_questions: Your Questions (drag to sort)

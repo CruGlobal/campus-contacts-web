@@ -3,6 +3,7 @@ $('#question_form').hide();
 $('#question_form').html('<%= j(render('form', question: @question)) %>');
 $('#loading').hide();
 $('#question_form').slideDown();
+$.fn.tip()
 
 //Instantiate search if has data for Automatic Assignment of Contacts
 $(document).ready(function() {

@@ -2,7 +2,7 @@
 
 <div class="titlebar titlebarmod">
   <h1>
-    <%= t('.edit_survey') %>
+    <%= t('.edit_survey', survey: @survey) if @survey.present? %>
     <div id='global_loader'>
       <%= image_tag 'loader.gif'%>
     </div>
