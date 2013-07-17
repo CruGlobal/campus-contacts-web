@@ -1,0 +1,11 @@
+<tr>
+  <td><%= keyword.keyword %></td>
+  <td><%= keyword.state %></td>
+  <td><%= link_to(keyword.survey, survey_questions_path(keyword.survey)) if keyword.survey %></td>
+  <td class="controls" align="right">
+    <%= link_to t("sms_keywords.index.edit_keyword"), edit_sms_keyword_path(keyword),
+      :class => "icon edit tipitleft", :title => t('sms_keywords.index.edit_keyword') %>
+    <%= link_to t("sms_keywords.index.delete_keyword"), sms_keyword_path(keyword), method: :delete,
+      confirm: t('.delete_confirm'), :class => "icon delete tipitleft", :title => t('sms_keywords.index.delete_keyword') %>
+  </td>
+</tr>

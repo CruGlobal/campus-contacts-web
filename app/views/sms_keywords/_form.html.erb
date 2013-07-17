@@ -8,7 +8,7 @@
       <% if @sms_keyword.new_record? %>
         <label for="survey_label">
           <%= t('sms_keywords.form.keyword') + ": " + t('sms_keywords.form.keyword_tip') %>
-          <div class="icon help tipit help_bubble_keyword " title="<%= t('sms_keywords.form.keyword_instruct') %>"></div>
+          <div class="icon help tip help_bubble_keyword " title="<%= t('sms_keywords.form.keyword_instruct') %>"></div>
         </label>
         <div class="field">
           <%= f.text_field :keyword, placeholder: "Shorter keywords are better" %>
@@ -16,7 +16,7 @@
       <% else %>
         <label for="survey_label">
           <%=  t('sms_keywords.form.keyword') %>: <%= @sms_keyword.keyword %>
-          <div class="icon help tipit help_bubble_keyword " title="<%= t('sms_keywords.form.keyword_locked') %>"></div>
+          <div class="icon help tip help_bubble_keyword " title="<%= t('sms_keywords.form.keyword_locked') %>"></div>
           <br/>
           <br/>
         </label>
@@ -37,12 +37,10 @@
       <div class="field">
         <label for="survey_label">
           <%= raw(t('sms_keywords.form.initial_response')) %>
-          <div class="icon help tipit help_bubble_keyword " title="<%= t('sms_keywords.form.post_survey_why') %>"></div>
+          <div class="icon help tip help_bubble_keyword " title="<%= t('sms_keywords.form.post_survey_why') %>"></div>
         </label>
         <%= f.text_area :initial_response, rows: 3 %>
       </div>
-
-
     </div>
   </div>
 
@@ -53,7 +51,7 @@
     <div class="stepcontent">
       <label for="survey_label">
         <%= raw(t('helpers.label.sms_keyword.survey_id')) %>
-        <div class="icon help tipit help_bubble_keyword " title="<%= t('.associated_survey_tip') %>"></div>
+        <div class="icon help tip help_bubble_keyword " title="<%= t('.associated_survey_tip') %>"></div>
       </label>
       <div class="field">
         <%= f.select :survey_id,
