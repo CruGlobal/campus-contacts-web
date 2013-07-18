@@ -7,6 +7,8 @@ class ChartsController < ApplicationController
 
   def snapshot
     refresh_data
+    get_movement_stages
+    get_changed_lives
   end
   
   def update_snapshot_movements
@@ -79,5 +81,28 @@ class ChartsController < ApplicationController
     json['leaders'] = json['student_leaders'].to_i + json['faculty_leaders'].to_i
 
     @all_stats = json
+  end
+  
+  def get_movement_stages
+    infobase_hash = {
+      :activity_ids => @movements.collect(&:importable_id)
+    }
+
+    begin
+      resp = RestClient.post(APP_CONFIG['infobase_url'] + "/api/v1/stats/movement_stages", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\"")
+      json = JSON.parse(resp)
+    rescue
+      raise resp.inspect
+    end
+    
+    @movement_stages = json
+  end
+  
+  def get_changed_lives
+    org_ids = @movements.collect(&:id)
+    interactions = Interaction.where("interaction_type_id = ?", InteractionType::PERSONAL_DECISION).
+      where("organization_id IN (?)", org_ids).where("privacy_setting IN ('everyone','organization')").
+      order("created_at").limit(8).all
+    @changed_lives = interactions.collect(&:receiver)
   end
 end

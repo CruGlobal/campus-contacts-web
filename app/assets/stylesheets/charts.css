@@ -169,3 +169,29 @@ div#snap_on_mission {
   margin-top:-16px;
 }
 
+div#snap_movements_data h2 {
+  margin-bottom: 0px;
+}
+
+div#changed_lives {
+  margin-top: 70px;
+}
+
+h3.snap_movement_data {
+  width: 45%;
+  float: left;
+  margin: 5px;
+}
+
+div.changed_life {
+  width: 25%;
+  height: 90px;
+  float: left;
+  text-align: center;
+}
+
+div.changed_life img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
