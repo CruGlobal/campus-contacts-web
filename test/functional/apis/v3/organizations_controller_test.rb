@@ -1,66 +1,74 @@
 require 'test_helper'
 
 class Apis::V3::OrganizationsControllerTest < ActionController::TestCase
-  setup do
-    request.env['HTTP_ACCEPT'] = 'application/json'
-    @client = Factory(:client)
-    @user = Factory(:user_no_org)
-    @client.organization.add_admin(@user.person)
-    @organization = Factory(:organization, parent: @client.organization)
-  end
-
-  context '.index' do
-    should 'return a list of organizations' do
-      get :index, secret: @client.secret
-      assert_response :success
+  context "without session" do
+    should 'not raise error if org does not exist' do
+      get :show, id: 0, include: "all_questions,surveys,keywords,organizational_roles,leaders,groups"
       json = JSON.parse(response.body)
-      assert_equal 2, json['organizations'].length, json.inspect
+      assert_not_nil json['errors'], json.inspect
     end
 
-    should 'include nested leaders' do
-      get :index, secret: @client.secret, include: 'admins'
-      assert_response :success
-      json = JSON.parse(response.body)
-      assert_equal 1, json['organizations'][0]['admins'].length, json.inspect
-    end
   end
-
-
-  context '.show' do
-    should 'return a organization' do
-      get :show, id: @organization.id, secret: @client.secret
-      json = JSON.parse(response.body)
-      assert_equal @organization.name, json['organization']['name']
+  context "with session" do
+    setup do
+      request.env['HTTP_ACCEPT'] = 'application/json'
+      @client = Factory(:client)
+      @user = Factory(:user_no_org)
+      @client.organization.add_admin(@user.person)
+      @organization = Factory(:organization, parent: @client.organization)
     end
-  end
 
-  context '.create' do
-    should 'create and return a organization' do
-      assert_difference "Organization.count" do
-        post :create, organization: {name: 'funk', terminology: 'foo'}, secret: @client.secret
+    context '.index' do
+      should 'return a list of organizations' do
+        get :index, secret: @client.secret
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal 2, json['organizations'].length, json.inspect
       end
-      json = JSON.parse(response.body)
-      assert_equal 'funk', json['organization']['name']
-    end
-  end
 
-  context '.update' do
-    should 'create and return a organization' do
-      put :update, id: @organization.id, organization: {name: 'funk'}, secret: @client.secret
-      json = JSON.parse(response.body)
-      assert_equal 'funk', json['organization']['name']
-    end
-  end
-
-  context '.destroy' do
-    should 'create and return a organization' do
-      assert_difference "Organization.count", -1 do
-        delete :destroy, id: @organization.id, secret: @client.secret
+      should 'include nested leaders' do
+        get :index, secret: @client.secret, include: 'admins'
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal 1, json['organizations'][0]['admins'].length, json.inspect
       end
     end
+
+
+    context '.show' do
+      should 'return a organization' do
+        get :show, id: @organization.id, secret: @client.secret
+        json = JSON.parse(response.body)
+        assert_equal @organization.name, json['organization']['name']
+      end
+    end
+
+    context '.create' do
+      should 'create and return a organization' do
+        assert_difference "Organization.count" do
+          post :create, organization: {name: 'funk', terminology: 'foo'}, secret: @client.secret
+        end
+        json = JSON.parse(response.body)
+        assert_equal 'funk', json['organization']['name']
+      end
+    end
+
+    context '.update' do
+      should 'create and return a organization' do
+        put :update, id: @organization.id, organization: {name: 'funk'}, secret: @client.secret
+        json = JSON.parse(response.body)
+        assert_equal 'funk', json['organization']['name']
+      end
+    end
+
+    context '.destroy' do
+      should 'create and return a organization' do
+        assert_difference "Organization.count", -1 do
+          delete :destroy, id: @organization.id, secret: @client.secret
+        end
+      end
+    end
   end
-
-
 
 end
 
