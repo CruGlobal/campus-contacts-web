@@ -21,7 +21,7 @@
 					<% @import.headers.each_with_index do |header, i| %>
 						<tr id="<%= i %>" class='import_row'>
 							<td class='column_header'><%= header %>:</td>
-							<td class='column_preview'><%= @import.preview[i]%></td>
+							<td class='column_preview'><%= @import.preview[i] if @import.preview.present? %></td>
 							<td class='column_question customform ui-widget'>
                 <%= select_tag "import[header_mappings][#{i}]", grouped_options_for_select(@survey_questions, selected_key = @import.header_mappings.blank? ? "" : @import.header_mappings[i.to_s], prompt = "Automatically Generate Question"), class: "import_column_survey_select", id: "import_column_survey_select_#{i}", data_id: i , "data-saved-value" => "#{@import.header_mappings[i.to_s] if @import.header_mappings}"%>
 								<%= link_to("Edit", "", class: "column_edit_link hidden", id: "column_edit_#{i}", data_id: i) %>
