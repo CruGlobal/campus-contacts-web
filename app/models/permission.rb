@@ -89,4 +89,26 @@ class Permission < ActiveRecord::Base
   ANY_SELECTED_LABEL = ["Any",1]
 	ALL_SELECTED_LABEL = ["All",2]
 	LABEL_SEARCH_FILTERS = [ANY_SELECTED_LABEL, ALL_SELECTED_LABEL]
+
+  def apiv1_i18n
+    case self.i18n
+      when 'admin'
+        'admin'
+      when 'user'
+        'leader'
+      else
+        'contact'
+    end
+  end
+
+  def apiv1_name
+    case self.i18n
+      when 'admin'
+        'Admin'
+      when 'user'
+        'Leader'
+      else
+        'Contact'
+    end
+  end
 end

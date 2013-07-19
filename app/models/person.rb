@@ -1039,7 +1039,7 @@ class Person < ActiveRecord::Base
 
   def to_hash_mini_user(org_id)
     hash = to_hash_micro_user(organization_from_id(org_id))
-    hash['organizational_permissions'] = organizational_permissions_hash
+    hash['organizational_roles'] = apiv1_orgnizational_roles
     hash
   end
 
@@ -1067,21 +1067,30 @@ class Person < ActiveRecord::Base
     hash['request_org_id'] = organization.id unless organization.nil?
     hash['first_contact_date'] = answer_sheets.first.created_at.utc.to_s unless answer_sheets.empty?
     hash['date_surveyed'] = answer_sheets.last.created_at.utc.to_s unless answer_sheets.empty?
-    hash['organizational_permissions'] = organizational_permissions_hash
+    hash['organizational_roles'] = apiv1_orgnizational_roles
     hash
   end
 
-  def organizational_permissions_hash
-    permissions = {}
-    @organizational_permissions_hash ||= org_ids.collect { |org_id, values|
-                                     values['permissions'].select { |permission_id|
-                                       permission_id != Permission.no_permissions.id
-                                     }.collect { |permission_id|
-                                       permissions[permission_id] ||= Permission.find_by_id(permission_id)
-                                     }.compact.collect { |permission|
-                                       {org_id: org_id, permission: permission.i18n, name: organization_from_id(org_id).try(:name), primary: primary_organization.id == org_id ? 'true' : 'false'}
-                                     }
-                                   }.flatten
+  def apiv1_orgnizational_roles ()
+    unless @organizational_roles_hash
+      roles_array = []
+
+      organizational_permissions = self.organizational_permissions
+      organizational_permissions.each do |p|
+        unless p.permission_id == Permission.no_permissions.id
+          permission = Permission.find_by_id(p.permission_id)
+          roles_array << {
+              'org_id' => p.organization_id,
+              'role' => permission.apiv1_i18n,
+              'name' => permission.apiv1_name,
+              'primary' => primary_organization.id == p.organization_id ? 'true' : 'false'
+          }
+        end
+      end
+
+      @organizational_roles_hash = roles_array
+    end
+    @organizational_roles_hash
   end
 
   def to_hash(organization = nil)
@@ -1091,7 +1100,7 @@ class Person < ActiveRecord::Base
     hash['phone_number'] = primary_phone_number.number if primary_phone_number
     hash['email_address'] = primary_email_address.to_s if primary_email_address
     hash['birthday'] = birth_date.to_s
-    hash['interactions'] = Interaction.get_interactions_hash(id, organization.id) if organization.present?
+    #hash['interactions'] = Interaction.get_interactions_hash(id, organization.id) if organization.present?
     hash['interests'] = Interest.get_interests_hash(id)
     hash['education'] = EducationHistory.get_education_history_hash(id)
     hash['location'] = latest_location.to_hash if latest_location
@@ -1314,5 +1323,13 @@ class Person < ActiveRecord::Base
   end
 
   NATIONALITIES = ["Chinese", "South Asian (India, Nepal, Sri Lanka)", "TIP/Muslim", "American", "All Other Nations"]
+
+  def set_followup_status(organization, status)
+    permission = permission_for_org(organization)
+    if permission.present?
+      permission.followup_status = status
+      permission.save
+    end
+  end
 
 end

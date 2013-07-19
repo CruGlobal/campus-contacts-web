@@ -12,7 +12,7 @@ class Api::OrganizationsController < ApiController
     end
     
     # Get all of the organizations from org_permissions
-    orgs = Organization.includes(:leaders, {:surveys=>:questions}).find(org_permissions.collect{|x| x.organization_id})
+    orgs = Organization.includes(:users, {:surveys=>:questions}).find(org_permissions.collect{|x| x.organization_id})
     
     orgs.each do |org|
       # Initial hash with id and name
@@ -22,7 +22,7 @@ class Api::OrganizationsController < ApiController
       json[:ancestry] = org.ancestry unless org.ancestry.nil?
       
       # Leaders
-      json[:leaders] = org.leaders.collect{|l| l.to_hash_mini_user(@organization.id)}
+      json[:leaders] = org.users.collect{|l| l.to_hash_mini_user(@organization.id)}
       
       # Keywords and Questions
       json[:keywords] = []
