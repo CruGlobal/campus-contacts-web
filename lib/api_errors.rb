@@ -103,17 +103,17 @@ module ApiErrors
       super "You need to go to www.MissionHub.com to setup your account in order use the MissionHub application.","36", "Message"
     end
   end
-  class InvalidLabelsParamaters < ApiError
+  class InvalidRolesParamaters < ApiError
     def initialize
-      super "You did not provide the appropriate parameters to change a person's labels.", "37", "API Error"
+      super "You did not provide the appropriate parameters to change a person's roles.", "37", "API Error"
     end
   end
-  class NoLabelChangeMade < ApiError
+  class NoRoleChangeMade < ApiError
     def initialize
-      super "No labels change was made. Try again.", "38", "Message"
+      super "No roles change was made. Try again.", "38", "Message"
     end
   end
-  class LabelsError < ApiError
+  class RolesError < ApiError
     def initialize
       super "You do not have the appropriate permissions to change roles.","39", "Message"
     end

@@ -289,7 +289,7 @@ Mh::Application.routes.draw do
       resources :contact_assignments
       resources :followup_comments
       resources :interactions
-      resources :labels
+      resources :roles
       resources :permissions
       resources :organizational_labels
       resources :organizational_permissions

@@ -573,6 +573,10 @@ class Organization < ActiveRecord::Base
     add_permission_to_person(person, Permission::USER_ID)
   end
 
+  def add_no_permissions(person)
+    add_contact(person)
+  end
+
   def remove_people(people)
     people.each do |p|
       remove_person(p)
