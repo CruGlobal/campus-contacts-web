@@ -16,6 +16,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   def create
     params[:person][:phone_numbers_attributes] = params[:person].delete(:phone_numbers) if params[:person][:phone_numbers]
     params[:person][:email_addresses_attributes] = params[:person].delete(:email_addresses) if params[:person][:email_addresses]
+    params[:person][:addresses_attributes] = params[:person].delete(:addresses) if params[:person][:addresses]
     person = Person.find_existing_person(Person.new(params[:person]))
 
     if person.save
