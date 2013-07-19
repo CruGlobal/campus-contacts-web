@@ -21,16 +21,6 @@ $ ->
       placeHolder: $('#send_text_to').attr("data-search-desc"),
       defaultWidth: 690
 
-    if $('#sidebar_div').is(':visible')
-      $.ajax
-        type: 'GET',
-        url: '/display_sidebar'
-    else if $('#ac_sidebar').is(':visible')
-      $.ajax
-        type: 'GET',
-        url: '/display_new_sidebar',
-        data: $.url($.fn.cleanURL(window.location.href)).param()
-
   $('a#survey_keywords_mode_link').siblings('ul').width(300)
 
   $("#survey_updated_from").datepicker dateFormat: "mm/dd/yy"

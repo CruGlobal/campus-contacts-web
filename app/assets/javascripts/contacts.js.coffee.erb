@@ -1,4 +1,21 @@
 $ ->
+  $(document).ready ->
+    $(".leftmenu .leader, .leftmenu .dnc, .leftmenu .completed").droppable
+      activeClass: "ui-state-active"
+      hoverClass: "ui-state-hover"
+      accept: ".handle"
+      drop: (event, ui) ->
+        leader = undefined
+        li = $(this)
+        li.effect "highlight", {}, "slow"
+        if $(this).hasClass("leader")
+          $("#assign_to").val li.attr("data-id")
+          $.fn.assignTo li
+        else if $(this).hasClass("dnc")
+          $.fn.moveToDnc ui.draggable
+        else $.fn.moveToCompleted ui.draggable  if $(this).hasClass("completed")
+    $.fn.tip()
+
   $(document).on 'keypress', '#contact_search_form input', (e)->
     if e.keyCode == $.ui.keyCode.ENTER
       $('#contact_search_form').submit()

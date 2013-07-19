@@ -5,11 +5,7 @@
       <%= link_to raw("<button class='action_gray full_width_button' id='allcontacts_import_contacts_button'>#{t('contacts.index.import_contacts')}</button>"), new_import_path %>
     </div>
   	<div id="sidebar_lists" class="leftmenu">
-      <div id="sidebar_loader">
-        <%= image_tag 'loader.gif'%>
-        <br/>
-        Loading Sidebar
-      </div>
+      <%= render partial: 'contacts/new_sidebar' %>
     </div>
   </div>
 <% end %>
@@ -18,7 +14,7 @@
   <h1>
     <%= t('.title') %>
     <%= "#{'-' if @header.present?} #{@header}" %>
-    <div id='global_loader' style=''>
+    <div id='global_loader' style='display:none;'>
       <%= image_tag 'loader.gif'%>
     </div>
   </h1>
