@@ -78,12 +78,12 @@
       <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign tipitleft", :title => "#{t('contacts.index.unassign_contact')} from #{assigned_to}", "data-assigned_to_id" => "#{assigned_to.id if assigned_to}") %>
     </span>
     <% if params[:dnc] == 'true' %>
-      <%= link_to(t('contacts.index.delete_contact'), person_path(person), :method => :delete, :remote => true, :class => "icon delete dnc tipit", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.destroy_confirm')) %>
+      <%= link_to(t('contacts.index.delete_contact'), person_path(person), :method => :delete, :remote => true, :class => "icon delete dnc tipitleft", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.destroy_confirm')) %>
     <% else %>
       <% if contact_permission %>
-        <%= link_to(t('contacts.index.delete_contact'), organizational_permission_path(:id => contact_permission.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), data: { confirm: t('contacts.index.delete_confirm') }) %>
+        <%= link_to(t('contacts.index.delete_contact'), organizational_permission_path(:id => contact_permission.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipitleft", :title => t('contacts.index.delete_contact'), data: { confirm: t('contacts.index.delete_confirm') }) %>
       <% end %>
     <% end %>
-    <%= link_to(t('nav.view_details'), profile_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
+    <%= link_to(t('nav.view_details'), profile_path(person), :class => "icon magnify tipitleft", :title => t('nav.view_details')) %>
   </td>
 </tr>
