@@ -401,4 +401,25 @@ class ApplicationController < ActionController::Base
 		end
 		new_date.present? ? new_date : input_date
   end
+
+  def force_client_update
+    platform = params[:platform] if params[:platform].present?
+    version = params[:app] if params[:app].present?
+
+    if platform && version
+      version = version.to_i
+      if platform == 'android'
+        if version <= 6 #mh 1.x
+          render json: {error: {message: 'Your MissionHub client requires an update. Please check for updates in your app store now.', code: 'client_update_required', title: 'Update Required'}},
+                 status: :not_acceptable,
+                 callback: params[:callback]
+        elsif version <= 93 #mh 2.0.x-2.4.x-snapshot
+          render json: {errors: ['Your MissionHub client requires an update. Please check for updates in your app store now.'], code: 'client_update_required'},
+                 status: :not_acceptable,
+                 callback: params[:callback]
+          return false
+        end
+      end
+    end
+  end
 end

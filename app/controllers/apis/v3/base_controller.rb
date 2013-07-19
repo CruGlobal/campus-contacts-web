@@ -4,6 +4,7 @@ class Apis::V3::BaseController < ApplicationController
   skip_before_filter :check_valid_subdomain
   skip_before_filter :set_locale
   skip_before_filter :check_url
+  before_filter :force_client_update
 
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
 
