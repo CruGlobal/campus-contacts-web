@@ -107,7 +107,13 @@ class ChartsController < ApplicationController
     org_ids = @movements.collect(&:id)
     interactions = Interaction.where("interaction_type_id = ?", InteractionType::PERSONAL_DECISION).
       where("organization_id IN (?)", org_ids).where("privacy_setting IN ('everyone','organization')").
-      order("created_at").limit(8).all
-    @changed_lives = interactions.collect(&:receiver)
+      order("created_at desc").all
+    people = interactions.collect(&:receiver)
+    @changed_lives = []
+    people.each do |person|
+      unless (@changed_lives.size >= 8 || @changed_lives.include?(person))
+        @changed_lives << person
+      end
+    end
   end
 end
