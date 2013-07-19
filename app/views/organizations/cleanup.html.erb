@@ -1,66 +1,70 @@
-<div class="titlebar titlebarmod">
-  <h1><%= t('.title') %></h1>
-</div>
-
-<div class="pagemenu">
-  <ul class="pillmenu">
-    <li><%= link_to t('general.back'), :back %></li>
-  </ul>
-</div>
-
-<div class="contentpad">
-  <p class="explanation1"> 
-    <%= t('.annual_inst_1') %>
-    <br/><br/>
-    <%= t('.annual_inst_2') %>
-  </p>
-  <br>
-  <%= form_tag("/organizations/archive_contacts") do %>
-    <div class="stepwrap rwidth">
-      <div class="stepnumber">
-        <%= image_tag("step1.png", class: 'cleanup_number') %>
-      </div>
-      <div class="stepcontent cleanup_content"> 
-        <span class="name">
-          <%=raw t('.archive_inst', 
-            date_field: h(text_field_tag(:archive_contacts_before, @date))) %>
-          <br/>
-          <br/>
-          <%= submit_tag t('.archive_contacts_submit'), :confirm => t('.confirm_archive') %>
-          <div class="icon help tipit help_bubble_keyword " title="<%= t('.contact_tips') %>"></div>
-        </span>
-      </div>
+<% provide :sidebar do %>
+  <div id="ac_sidebar">
+    <div id="upper_sidebar_lists">
+      &nbsp;
     </div>
-  <% end %>
-  
+  	<div class="leftmenu">
+      &nbsp;
+    </div>
+  </div>
+<% end %>
+
+<div class="titlebar titlebarmod">
+  <h1>
+    <%= t('.title') %>
+    <div id='global_loader'>
+      <%= image_tag 'loader.gif'%>
+    </div>
+  </h1>
+</div>
+
+<p class="explanation1">
+  <%= t('.annual_inst_1') %>
+  <br/><br/>
+  <%= t('.annual_inst_2') %>
+</p>
+
+<%= form_tag("/organizations/archive_contacts", id: "archive_contacts_form") do %>
   <div class="stepwrap rwidth">
     <div class="stepnumber">
-      <%= image_tag("step2.png", class: 'cleanup_number') %>
+      <%= image_tag("step1.png", class: 'cleanup_number') %>
     </div>
-    <div class="stepcontent cleanup_content"> 
+    <div class="stepcontent cleanup_content">
       <span class="name">
-        <%=raw t('.alumni_inst', link: link_to(t('.alumni_inst_path'), "/contacts")) %>
+        <%=raw t('.archive_inst', date_field: h(text_field_tag(:archive_contacts_before, @date))) %>
+        <br/>
+        <br/>
+        <%= submit_tag t('.archive_contacts_submit'), :confirm => t('.confirm_archive'), class: "min_width_button" %>
+        <div class="icon help tip help_bubble_keyword " title="<%= t('.contact_tips') %>"></div>
       </span>
     </div>
   </div>
+<% end %>
 
-  <%= form_tag("/organizations/archive_leaders") do %>
-  
-    <div class="stepwrap rwidth">
-      <div class="stepnumber">
-        <%= image_tag("step3.png", class: 'cleanup_number') %>
-      </div>
-      <div class="stepcontent cleanup_content"> 
-        <span class="name">
-          <%=raw t('.remove_leader_inst', 
-            date_field: h(text_field_tag(:date_leaders_not_logged_in_after, @date_leaders))) %>
-          <br/>
-          <br/>
-          <%= submit_tag t('.remove_leaders_submit'), :confirm => t('.confirm_remove_leaders') %> <div class="icon help tipit help_bubble_keyword " title="<%= t('.leader_tips') %>"></div>
-        </span>
-      </div>
-    </div>
-
-  <% end %>
-
+<div class="stepwrap rwidth">
+  <div class="stepnumber">
+    <%= image_tag("step2.png", class: 'cleanup_number') %>
+  </div>
+  <div class="stepcontent cleanup_content">
+    <span class="name">
+      <%=raw t('.alumni_inst', link: link_to(t('.alumni_inst_path'), "/contacts")) %>
+    </span>
+  </div>
 </div>
+
+<%= form_tag("/organizations/archive_leaders", id: "archive_leaders_form") do %>
+  <div class="stepwrap rwidth">
+    <div class="stepnumber">
+      <%= image_tag("step3.png", class: 'cleanup_number') %>
+    </div>
+    <div class="stepcontent cleanup_content">
+      <span class="name">
+        <%=raw t('.remove_leader_inst', date_field: h(text_field_tag(:date_leaders_not_logged_in_after, @date_leaders))) %>
+        <br/>
+        <br/>
+        <%= submit_tag t('.remove_leaders_submit'), :confirm => t('.confirm_remove_leaders'), class: "min_width_button" %>
+        <div class="icon help tip help_bubble_keyword " title="<%= t('.leader_tips') %>"></div>
+      </span>
+    </div>
+  </div>
+<% end %>

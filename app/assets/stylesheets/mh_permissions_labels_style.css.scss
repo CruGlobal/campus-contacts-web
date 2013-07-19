@@ -65,6 +65,14 @@ button.full_width_button {
   width: 100%;
 }
 
+button.min_width_button {
+  min-width: 140px;
+}
+
+.link_no_underline:hover {
+  text-decoration:none;
+}
+
 #upper_sidebar_lists a {
   text-decoration: none;
 }
