@@ -489,7 +489,7 @@ class ContactsController < ApplicationController
           @people_scope = @label_to.label_contacts_from_org(@organization)
         end
       elsif params[:interaction_type].present? && @interaction_type = InteractionType.find_by_id(params[:interaction_type])
-        if params[:include_archived_labels].present? && params[:include_archived_labels] == 'true'
+        if params[:include_archived_interactions].present? && params[:include_archived_interactions] == 'true'
           @people_scope = @interaction_type.interaction_receivers_from_org_with_archived(@organization)
         else
           @people_scope = @interaction_type.interaction_receivers_from_org(@organization)

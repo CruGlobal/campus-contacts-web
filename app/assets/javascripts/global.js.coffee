@@ -21,15 +21,6 @@ $ ->
       placeHolder: $('#send_text_to').attr("data-search-desc"),
       defaultWidth: 690
 
-    get_url = $.url(window.location.href)
-    assigned_to = get_url.param("assigned_to")
-    label = get_url.param("label")
-    permission = get_url.param("permission")
-    archived = get_url.param("archived")
-    dnc = get_url.param("dnc")
-    include_archived_interactions = get_url.param("include_archived_interactions")
-    include_archived_labels = get_url.param("include_archived_labels")
-
     if $('#sidebar_div').is(':visible')
       $.ajax
         type: 'GET',
@@ -38,14 +29,7 @@ $ ->
       $.ajax
         type: 'GET',
         url: '/display_new_sidebar',
-        data:
-          assigned_to: assigned_to
-          label: label
-          permission: permission
-          archived: archived
-          dnc: dnc
-          include_archived_interactions: include_archived_interactions
-          include_archived_labels: include_archived_labels
+        data: $.url($.fn.cleanURL(window.location.href)).param()
 
   $('a#survey_keywords_mode_link').siblings('ul').width(300)
 
@@ -72,3 +56,11 @@ $ ->
   $('#token-input-send_text_to').live 'focus', ->
     if $(this).val() == ""
       $(this).width(675)
+
+$.fn.cleanURL = (url)->
+  values = url.split('?')
+  url = values[0]
+  if values.length > 1
+    url += '?' + values[1].split('&').filter(String).join('&')
+  return url
+
