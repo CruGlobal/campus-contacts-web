@@ -4,7 +4,8 @@
 */
 
 #contacts_controller.all_contacts, #contacts_controller.my_contacts, #labels_controller,
-#groups_controller, #surveys_controller, #questions_controller, #sms_keywords_controller {
+#groups_controller, #surveys_controller, #questions_controller, #sms_keywords_controller,
+#organizations_controller.cleanup {
   #gandalfthewhite {
     border-bottom: none;
     margin-bottom: 5px;
