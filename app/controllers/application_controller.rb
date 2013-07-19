@@ -410,11 +410,11 @@ class ApplicationController < ActionController::Base
       version = version.to_i
       if platform == 'android'
         if version <= 6 #mh 1.x
-          render json: {error: {message: 'Your MissionHub client requires an update. Please check for updates in your app store now.', code: 'client_update_required', title: 'Update Required'}},
+          render json: {error: {message: 'Your MissionHub app requires an update. Please check for updates in your app store now.', code: 'client_update_required', title: 'Update Required'}},
                  status: :not_acceptable,
                  callback: params[:callback]
         elsif version <= 93 #mh 2.0.x-2.4.x-snapshot
-          render json: {errors: ['Your MissionHub client requires an update. Please check for updates in your app store now.'], code: 'client_update_required'},
+          render json: {errors: ['Your MissionHub app requires an update. Please check for updates in your app store now.'], code: 'client_update_required'},
                  status: :not_acceptable,
                  callback: params[:callback]
           return false
