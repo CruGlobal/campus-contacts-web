@@ -7,8 +7,9 @@ class PersonOrder
 
     order.split(',').each do |x|
       parts = x.to_s.strip.split(' ')
-      parts.collect { |p| p.blank? ? nil : p.to_s.strip.downcase }
-      parts = parts.compact;
+      parts = parts.collect { |p| p.blank? ? nil : p.to_s.strip.downcase }
+      parts = parts.compact
+
       @order[parts.first.to_sym] = %w(asc desc).include?(parts.second) ? parts.second : 'asc' if parts.first
     end
   end
