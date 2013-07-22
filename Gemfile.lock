@@ -61,7 +61,7 @@ GIT
 
 GIT
   remote: git://github.com/twinge/vpim.git
-  revision: a26584128f95fcbe8e8f438e31d74b675e094a1f
+  revision: d1d95aac5eccccc7c258b7f9eacb00ba6b31d39e
   specs:
     vpim (11.9.6)
 
