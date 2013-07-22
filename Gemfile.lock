@@ -347,7 +347,7 @@ GEM
     rubycas-client-rails (0.1.0)
       rails (>= 3.0.0)
       rubycas-client (>= 2.2.0)
-    sass (3.1.14)
+    sass (3.2.9)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
@@ -485,7 +485,7 @@ DEPENDENCIES
   ruby-prof
   rubycas-client (~> 2.2.1)
   rubycas-client-rails (~> 0.1.0)
-  sass (= 3.1.14)
+  sass
   sass-rails (~> 3.2.3)
   shoulda
   simplecov (>= 0.3.5)
