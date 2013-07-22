@@ -1,41 +1,45 @@
 <% if !@survey.is_frozen? %>
 
-<%= form_for(@person, url: @person.new_record? ? survey_responses_path : survey_response_path(@person), html: {method: @person.new_record? ? :post : :put, class: 'form', validate: true, 'data-ajax' => false}) do |f| %>
-  <%= error_messages_for @person, @answer_sheet.person %>
+<%= form_for(person, url: person.new_record? ? survey_responses_path : survey_response_path(person), html: {method: person.new_record? ? :post : :put, class: 'form', validate: true, 'data-ajax' => false}) do |f| %>
+  <% if answer_sheet.present? && answer_sheet.person.present? %>
+    <%= error_messages_for person, answer_sheet.person %>
+  <% else %>
+    <%= error_messages_for person %>
+  <% end %>
   <%= hidden_field_tag :survey_id, @survey.id %>
   <%= hidden_field_tag :received_sms_id, params[:received_sms_id] if params[:received_sms_id] %>
   <%= hidden_field_tag :button, false if mobile_device? %>
-  <% if @person.new_record? %>
-    <%#= f.hidden_field :first_name unless @person.first_name.blank? %>
-    <%#= f.hidden_field :last_name unless @person.last_name.blank? %>
-    <%#= f.hidden_field :phone_number unless @person.phone_number.blank? %>
-    <%= f.hidden_field :email unless @person.email.blank? %>
+  <% if person.new_record? %>
+    <%#= f.hidden_field :first_name unless person.first_name.blank? %>
+    <%#= f.hidden_field :last_name unless person.last_name.blank? %>
+    <%#= f.hidden_field :phone_number unless person.phone_number.blank? %>
+    <%= f.hidden_field :email unless person.email.blank? %>
   <% end %>
 
   <ul class="rounded jqm">
-    <%# if @person.first_name.blank? %>
+    <%# if person.first_name.blank? %>
       <li>
         <div data-role="fieldcontain" class="field">
           <label class="desc" for="first_name"><%= t('contacts.form.first_name') %></label>
-        	<%= f.text_field :first_name, :readonly => @person.first_name.present? && session[:fb_token].present? %>
+        	<%= f.text_field :first_name, :readonly => person.first_name.present? && session[:fb_token].present? %>
         </div>
       </li>
     <%# end %>
 
-    <%# if @person.last_name.blank? %>
+    <%# if person.last_name.blank? %>
       <li>
         <div data-role="fieldcontain" class="field">
           <label class="desc" for="last_name"><%= t('contacts.form.last_name') %></label>
-          <%= f.text_field :last_name, :readonly => @person.last_name.present? && session[:fb_token].present? %>
+          <%= f.text_field :last_name, :readonly => person.last_name.present? && session[:fb_token].present? %>
         </div>
       </li>
     <%# end %>
 
-    <%# if @person.phone_number.blank? %>
+    <%# if person.phone_number.blank? %>
       <li>
         <div data-role="fieldcontain" class="field">
           <label class="desc" for="last_name"><%= t('contacts.form.phone_number') %></label>
-          <%= f.text_field :phone_number, :readonly => @person.phone_number.present? && session[:fb_token].present? %>
+          <%= f.text_field :phone_number, :readonly => person.phone_number.present? && session[:fb_token].present? %>
         </div>
       </li>
     <%# end %>
@@ -43,7 +47,7 @@
     <% @survey.questions.where(hidden: false).each do |question| %>
       <% case question.slug %>
       <% when 'email' %>
-        <% if @person.email.blank? %>
+        <% if person.email.blank? %>
           <li>
             <div data-role="fieldcontain" class="field">
               <label class="desc" for="email"><%= t('contacts.form.email') %></label>
