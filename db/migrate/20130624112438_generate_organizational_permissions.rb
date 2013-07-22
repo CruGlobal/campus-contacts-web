@@ -6,6 +6,14 @@ class OrganizationalPermission < ActiveRecord::Base
 end
 class Person < ActiveRecord::Base
 end
+class Permission < ActiveRecord::Base
+  def self.no_permissions
+    @no_permissions ||= Permission.find_or_create_by_name_and_i18n('No Permissions','no_permissions')
+  end
+  if Permission.table_exists?
+    NO_PERMISSIONS_ID = no_permissions.id
+  end
+end
 class GenerateOrganizationalPermissions < ActiveRecord::Migration
   def up
 
