@@ -396,7 +396,7 @@ class PeopleController < ApplicationController
 		end
 
     person_ids.uniq.each do |id|
-    	person = Person.find(id)
+    	person = Person.find_by_id(id)
       if person.present? && person.primary_phone_number
         if person.primary_phone_number.email_address.present?
           # Use email to sms if we have it

@@ -34,7 +34,7 @@ class Apis::V3::BaseController < ApplicationController
       end
     end
 
-    if oauth_access_token && !current_user
+    if oauth_access_token && (!current_user || current_user.person.organizations.empty?)
       render json: {errors: ["The oauth you sent over didn't match a user or organization on MissionHub"]},
              status: :unauthorized,
              callback: params[:callback]

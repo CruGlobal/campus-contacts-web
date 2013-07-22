@@ -1,4 +1,4 @@
-<% primary = current_user.primary_organization_id == org.id %>
+<% primary = current_organization.id == org.id %>
 <div class="org_nav_item">
   <div class="org_control org_control_<%= org.id %> <%= 'tree_no_child' unless children.present? %>" child_div="children_org_<%= org.id %>" id="org_control_<%= org.id %>"></div>
   <div class="org_star tipitmiddle <%= 'primary' if primary %>" url='<%= set_primary_organizational_permission_path(org) %>' title="Set <%= org %> as your default organization"></div>

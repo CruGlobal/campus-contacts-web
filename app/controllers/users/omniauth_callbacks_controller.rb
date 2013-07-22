@@ -48,13 +48,13 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       render_404(true)
     end
   end
-  
+
   protected
-  
+
   def after_sign_out_path_for(resource_or_scope)
     params[:next] ? params[:next] : user_root_path
   end
-  
+
   def facebook_login(person = nil, force = false)
     omniauth = env["omniauth.auth"]
     @user = User.find_for_facebook_oauth(omniauth, current_user, 0, force)

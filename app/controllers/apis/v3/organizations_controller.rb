@@ -63,7 +63,7 @@ class Apis::V3::OrganizationsController < Apis::V3::BaseController
   private
 
   def organizations
-    @current_organization.subtree
+    current_organization.subtree
   end
 
   def get_organization

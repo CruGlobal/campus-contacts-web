@@ -714,9 +714,9 @@ class Person < ActiveRecord::Base
 
   def primary_organization
     unless @primary_organization
-      org = organizations.find_by_id(user.primary_organization_id) if user && user.primary_organization_id.present?
+      org = self.organizations.find_by_id(user.primary_organization_id) if user && user.primary_organization_id.present?
       unless org
-        org = organizations.first
+        org = self.organizations.first
 
         # save this as the primary org
         self.primary_organization = org

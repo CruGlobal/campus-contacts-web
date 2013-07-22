@@ -234,11 +234,22 @@ class ApplicationController < ActionController::Base
     person ||= current_person if user_signed_in?
     return nil unless person
     @current_organizations ||= {}
+
     unless @current_organizations[person]
+      # Set current org based on the session, particularly uses in set_current org feature
       if session[:current_organization_id]
         org = person.organization_from_id(session[:current_organization_id])
         # org = nil unless org && (person.organizations.include?(org) || person.organizations.include?(org.parent))
       end
+
+      # Set current org if there's primary_organization_id in current_user's 'settings' as a default org
+      if current_user && !org
+        if default_organization_id = current_user.primary_organization_id
+          org = person.organization_from_id(default_organization_id)
+          session[:current_organization_id] = default_organization_id
+        end
+      end
+
       unless org
         if org = person.primary_organization
           # If they're a contact at their primary org (shouldn't happen), look for another org where they have a different permission
