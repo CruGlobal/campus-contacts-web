@@ -71,9 +71,19 @@ $ ->
     e.preventDefault()
     $('#search_people_form_submit').click()
 
-  $('#search_people_filters_save_search_button, #edit_saved_search_button').live 'click', (e)->
+  $('#search_people_filters_save_search_button').live 'click', (e)->
+    e.preventDefault()
+    $("#saved_search_title").html(t('contacts.index.save_this_search'))
+    $.showDialog($("#saved_search_div"))
+
+  $('#edit_saved_search_button').live 'click', (e)->
     e.preventDefault()
     $.showDialog($("#saved_search_div"))
+    $("#saved_search_title").html(t('contacts.index.edit_this_search'))
+    $("#saved_contact_search_name").val($(this).attr("data-name"))
+    $("#saved_contact_search_full_path").val($(this).attr("data-full-path"))
+    $("#saved_contact_search_id").val($(this).attr("data-id"))
+    $("#save_search_form").attr("action", "/saved_contact_searches/"+$(this).attr("data-id"))
 
   $('#add_saved_search_button').live 'click', (e)->
     e.preventDefault()

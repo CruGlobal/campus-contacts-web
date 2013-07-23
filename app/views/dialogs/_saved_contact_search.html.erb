@@ -3,12 +3,8 @@
   <div class="pop_box_container">
     <div class="mh_popup_box assign_popup_box">
     	<div class="mh_popup_box_top">
-        <span class="mh_popup_heading">
-          <% if  @saved_contact_search.full_path.present? %>
-            <%= t('contacts.index.edit_this_search') %>
-          <% else %>
-            <%= t('contacts.index.save_this_search') %>
-          <% end %>
+        <span class="mh_popup_heading" id="saved_search_title">
+          <%= t('contacts.index.save_this_search') %>
         </span>
       </div>
       <div id="add_saved_search_loader" style="display:none;" align="center">
@@ -17,10 +13,9 @@
       <div class="mh_popup_box_content add_label_content" id="mh_popup_box_content" align="center">
         <br/>
         <%= form_for(@saved_contact_search, html: {id: 'save_search_form'}) do |f| %>
-          <%= hidden_field_tag 'saved_contact_search[user_id]', @person.user.id %>
-          <%= hidden_field_tag 'saved_contact_search[full_path]', request.fullpath %>
-          <%= hidden_field_tag 'saved_contact_search[organization_id]', @organization.id %>
-          <%= hidden_field_tag :id, @saved_contact_search.id %>
+          <%= f.hidden_field :full_path, :value => request.fullpath %>
+          <%= f.hidden_field :organization_id, :value => current_organization.id %>
+          <%= hidden_field_tag :saved_contact_search_id, @saved_contact_search.id %>
           <table>
             <tr>
               <td class="field"><%= f.text_field :name, :placeholder => t('contacts.index.save_this_search_placeholder') %></td>

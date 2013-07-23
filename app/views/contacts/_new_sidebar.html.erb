@@ -163,7 +163,7 @@
     <% @saved_searches.each do |saved_search| %>
       <li class="entry <%= 'selected_entry' if request.fullpath == saved_search.full_path %>">
         <%= link_to saved_search.name, saved_search.full_path %>
-        <%= link_to(image_tag('edit.png', title: t('contacts.index.edit_saved_search'), class: 'tip'), '#', class: 'edit_icon', id: 'edit_saved_search_button') %>
+        <%= link_to(image_tag('edit.png', title: t('contacts.index.edit_saved_search'), class: 'tip'), '#', class: 'edit_icon', id: 'edit_saved_search_button', 'data-full-path'=>saved_search.full_path, 'data-name'=>saved_search.name, 'data-id'=>saved_search.id) %>
         <%= link_to(image_tag('delete.png', title: t('contacts.index.delete_saved_search'), class: 'tip'), saved_contact_search_path(saved_search), method: :delete, remote: true, class: 'delete_icon', data: { confirm: t('contacts.index.delete_search_confirm') }) %>
       </li>
     <% end %>
