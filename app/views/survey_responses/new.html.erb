@@ -7,4 +7,4 @@
 
 <h1><%= @survey.title %></h1>
 
-<%= render partial: 'form' %>
+<%= render partial: 'form', locals: {person: @person, survey: @survey, answer_sheet: @answer_sheet} %>
