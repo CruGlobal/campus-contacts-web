@@ -71,9 +71,16 @@ $ ->
     e.preventDefault()
     $('#search_people_form_submit').click()
 
-  $('#search_people_filters_save_search_button').live 'click', (e)->
+  $('#search_people_filters_save_search_button, #edit_saved_search_button').live 'click', (e)->
     e.preventDefault()
-    $('#savesearchbtn').click()
+    $.showDialog($("#saved_search_div"))
+
+  $('#add_saved_search_button').live 'click', (e)->
+    e.preventDefault()
+    if $("#saved_contact_search_name").val() == ""
+      $.a(t('contacts.index.saved_search_name'))
+    else
+      $("#save_search_form").submit()
 
   $("#new_sent_messages_link").live 'click', (e)->
     e.preventDefault()

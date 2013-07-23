@@ -24,6 +24,7 @@ class ContactsController < ApplicationController
     respond_to do |wants|
       wants.html do
         fetch_contacts(false)
+        @saved_searches = current_user.saved_contact_searches.where('organization_id = ?', current_organization.id)
         @assignments = ContactAssignment.includes(:assigned_to).where(person_id: @people.pluck('people.id'), organization_id: @organization.id).group_by(&:person_id)
         @answers = generate_answers(@people, @organization, @questions, @surveys)
       end
