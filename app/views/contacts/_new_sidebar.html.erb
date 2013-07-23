@@ -144,6 +144,31 @@
   </div>
 </ul>
 
+<ul class="ac_dropdown_list">
+	<li class="ac_dropdown_list_header">
+    <a href="#" class="side_toggle arrow_anchor">
+      <div class="arrow">
+        <% if selected = @saved_contact_search.full_path.present? %>
+          &#x25BC;
+        <% else %>
+          &#x25B6;
+        <% end %>
+      </div>
+      <div class="category_name">
+        <%= t('contacts.index.saved_searches')%>
+      </div>
+    </a>
+  </li>
+  <div id='saved_searches_list' class="side_list" style="<%= 'display:block;' if selected %>">
+    <% @saved_searches.each do |saved_search| %>
+      <li class="entry <%= 'selected_entry' if request.fullpath == saved_search.full_path %>">
+        <%= link_to saved_search.name, saved_search.full_path %>
+        <%= link_to(image_tag('edit.png', title: t('contacts.index.edit_saved_search'), class: 'tip'), '#', class: 'edit_icon', id: 'edit_saved_search_button') %>
+        <%= link_to(image_tag('delete.png', title: t('contacts.index.delete_saved_search'), class: 'tip'), saved_contact_search_path(saved_search), method: :delete, remote: true, class: 'delete_icon', data: { confirm: t('contacts.index.delete_search_confirm') }) %>
+      </li>
+    <% end %>
+  </div>
+</ul>
 
 <ul class="ac_dropdown_list">
 	<li class="ac_dropdown_list_header">

@@ -134,38 +134,26 @@
           border: 1px solid #C7DFF0;
           background: #fcfdfd;
           color: #808284;
-          a {
-            color: #0379ae;
-            font-weight: normal;
-            margin-left: 2px;
-          }
         }
         &.ui-state-hover {
           border: 1px solid #C7DFF0;
           background: #eaf1f6;
           color: #808284;
-          a {
-            color: #0379ae;
-            font-weight: normal;
-            margin-left: 2px;
-          }
         }
         a {
           color: #0379ae;
           font-weight: normal;
           margin-left: 2px;
         }
-        .delete_icon {
+        .delete_icon, .edit_icon{
           display: none;
           height: 10px;
-          padding: 0px;
-          img {
-            margin: 2px 0px 0px 6px;
-          }
+          width: 15px;
+          text-indent: 1px; /* to fix the alignment based on text indent style*/
         }
-        &:hover .delete_icon {
+        &:hover .delete_icon, &:hover .edit_icon {
           display: inline-block;
-          float:right;
+
         }
         &:hover a{
           text-decoration: underline;
