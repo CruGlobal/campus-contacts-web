@@ -114,6 +114,7 @@ Mh::Application.routes.draw do
   # resources :rejoicables
 
   resources :saved_contact_searches#, :only => [:show, :create, :edit, :destroy, :index]
+  match "/saved_contact_searches/:id" => "saved_contact_searches#update"
 
   resources :followup_comments, :only => [:index, :create, :destroy]
 
