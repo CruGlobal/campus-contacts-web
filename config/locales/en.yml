@@ -684,6 +684,7 @@ en:
       phone_number: "Phone"
       labels: "Labels"
       last_survey: "Last Survey"
+      surveys: "Surveys"
     sidebar:
       show_more: "Show More"
       show_less: "Show Less"
