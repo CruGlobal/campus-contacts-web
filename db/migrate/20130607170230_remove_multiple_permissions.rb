@@ -22,36 +22,36 @@ class RemoveMultiplePermissions < ActiveRecord::Migration
         if organizational_permissions.count > 1
           organizational_permissions.select('DISTINCT(organization_id)').each do |org_obj|
             org_id = org_obj['organization_id'].inspect
-            
+
             org_perms = organizational_permissions.where(organization_id: org_id)
 
             puts "Organization##{org_id} - #{org_perms.count} permission#{'s' if org_perms.count > 1}"
             if org_perms.count > 1
-              puts ">> Cleaning permissions - #{org_perms.collect(&:permission_id)}"
-              
-              admin = org_perms.where(permission_id: admin_id).try(:first)
+              puts ">> Cleaning permissions - #{org_perms.where(archive_date: nil).collect(&:permission_id)}"
+
+              admin = org_perms.where(permission_id: admin_id, archive_date: nil).try(:first)
               if admin.present?
                 puts ">> Clear other than ADMIN - #{admin_id}"
                 org_perms.where("id != ?", admin.id).destroy_all
               end
-              
-              user = org_perms.where(permission_id: user_id).try(:first)
+
+              user = org_perms.where(permission_id: user_id, archive_date: nil).try(:first)
               if user.present?
                 puts ">> Clear other than USER - #{user_id}"
                 org_perms.where("id != ?", user.id).destroy_all
               end
-              
-              contact = org_perms.where(permission_id: contact_id).try(:first)
+
+              contact = org_perms.where(permission_id: contact_id, archive_date: nil).try(:first)
               if contact.present?
                 puts ">> Clear other than NO_PERMISSIONS - #{contact_id}"
-                org_perms.where("id != ?", contact_id.id).destroy_all
+                org_perms.where("id != ?", contact.id).destroy_all
               end
-              
-              puts ">> Remaining permissions - #{organizational_permissions.where(organization_id: org_id).collect(&:permission_id)}"
+
+              puts ">> Remaining permissions - #{organizational_permissions.where(organization_id: org_id, archive_date: nil).collect(&:permission_id)}"
             end
           end
         end
-      else 
+      else
         puts "Missing Person##{person_obj['PERSON_ID']} - Permissions deleted"
         # Destroy permissions of missing person
         OrganizationalPermission.where(person_id: person_obj['PERSON_ID']).destroy_all
