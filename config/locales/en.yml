@@ -553,19 +553,16 @@ en:
     notify_user:
       link_text: 'send us an email at support@missionhub.com'
       body_html:
-        <p>Congratulations, your organization request has been approved! You are now ready to begin adding the people in your organization.<p>
+        "<p>Congratulations, your organization request has been approved! You are now ready to begin adding the people in your organization. Here is a direct link to your organization: <a href='https://www.missionhub.com/contacts' target='_blank'>www.missionhub.com/contacts</a><p>
         <p>
-          The MissionHub Help Center can make it easy for you to start using MissionHub today.
+          The <a href='http://help.missionhub.com/home' target='_blank'>MissionHub Help Center</a> can make it easy for you to start using MissionHub today. <br/>
+          Use our help tools at <a href='http://help.missionhub.com/home' target='_blank'>help.missionhub.com</a> to learn how to add new contacts to your organization and organize your new contacts with labels.
         </p>
         <p>
-          Learn how to add new contacts to your organization <br/>
-          Organize your new contacts with labels <br/>
-          Please let us know if there's anything else we can do to help you. The MissionHub Help Center is a great starting point.
-        </p>
-        <p>
+          Please let us know if there's anything else we can do to help you. <br/>
           Thanks,<br/>
           MissionHub Support Team
-        </p>
+        </p>"
     notify_user_of_denial:
       body_html:
         <p>We're sorry, but the information you provided does not allow us to meet your request for a MissionHub organization.  If you have further questions, or would like a clarification, please email support@missionhub.com.</p>
