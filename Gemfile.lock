@@ -68,7 +68,6 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    ZenTest (4.8.3)
     actionmailer (3.2.13)
       actionpack (= 3.2.13)
       mail (~> 2.5.3)
@@ -117,8 +116,6 @@ GEM
       builder
       json
     arel (3.0.2)
-    autotest-rails (4.1.2)
-      ZenTest (~> 4.5)
     awesome_print (1.1.0)
     aws-sdk (1.8.1.3)
       json (~> 1.4)
@@ -435,13 +432,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  ZenTest (= 4.8.3)
   active_model_serializers
   activeadmin (~> 0.4.4)
   acts_as_list
   airbrake
   ancestry!
-  autotest-rails
   awesome_print
   aws-sdk (= 1.8.1.3)
   better_errors (>= 0.7.2)
