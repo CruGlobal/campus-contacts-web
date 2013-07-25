@@ -5,7 +5,7 @@ class Api::FollowupCommentsController < ApiController
   def create_1
       begin
       @json = ActiveSupport::JSON.decode(params[:json])
-    rescue 
+    rescue
       raise InvalidJSONError
     end
 
@@ -22,7 +22,7 @@ class Api::FollowupCommentsController < ApiController
 
     render json: []
   end
-  
+
   def show_1
     contact = Person.find_by_id(params[:id]) if params[:id].present?
     comments = []
@@ -35,33 +35,35 @@ class Api::FollowupCommentsController < ApiController
     final_output = Rails.env.production? ? JSON.fast_generate(comments) : JSON::pretty_generate(comments)
     render json: final_output
   end
-  
+
   def show_2
     json_output = @api_json_header
-    contact_id = params[:id].present? ? params[:id] : 0
-    
-    @followup_comments = FollowupComment.unscoped.includes(:rejoicables).where(contact_id: contact_id).where(organization_id: @organization.id)
-    if (params[:since].present?)
-      @followup_comments = @followup_comments.where("followup_comments.updated_at >= ?", Time.at(params[:since].to_i).utc)
+    contact = Person.find_by_id(params[:id]) if params[:id].present?
+    comments = []
+    if contact
+      interactions = contact.filtered_interactions(current_person, @organization)
+      if params[:since].present?
+        interactions = interactions.where("interactions.updated_at >= ?", Time.at(params[:since].to_i).utc)
+      end
+      if (params[:until].present?)
+        interactions = interactions.where("interactions.updated_at < ?", Time.at(params[:until].to_i).utc)
+      end
+      interactions = interactions.order("created_at DESC")
+      json_output[:followup_comments] = interactions.collect { |interaction|
+        {followup_comment: hash_interaction_to_followup_comment(interaction) }
+      }
     end
-    if (params[:until].present?)
-      @followup_comments = @followup_comments.where("followup_comments.updated_at < ?", Time.at(params[:until].to_i).utc)
-    end
-    
-    @followup_comments = @followup_comments.order("created_at DESC")
-        
-    json_output[:followup_comments] = @followup_comments.collect {|c| {followup_comment: {comment: c.to_hash, rejoicables: c.rejoicables.collect{|y| y.attributes.slice('id','what')}}}}
     final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
     render json: final_output
   end
-  
+
   def destroy_1
     raise FollowupCommentDeleteParamsError unless (params[:id].present? && (is_int?(params[:id]) || (params[:id].is_a? Array)))
     ids = params[:id].split(',')
-    
+
     comments = Interaction.where(id: ids)
     permission = current_person.organizational_permissions.where(organization_id: @organization.id).collect(&:permission).collect(&:i18n)
-    
+
     comments.each_with_index do |comment,i|
       if permission[i] == 'user'
         raise FollowupCommentPermissionsError unless comment.created_by_id == current_person.id
@@ -70,7 +72,6 @@ class Api::FollowupCommentsController < ApiController
       else
         raise FollowupCommentPermissionsError
       end
-
       comment.destroy
     end
 
@@ -134,7 +135,7 @@ class Api::FollowupCommentsController < ApiController
     attributes[:interaction_type_id] = translate_what_to_type_id(what)
     attributes[:receiver_id] = comment_json['contact_id']
     attributes[:organization_id] = comment_json['organization_id']
-    attributes[:created_by_id] = current_person.id
+    attributes[:created_by_id] = comment_json['commenter_id']
     attributes[:comment] = comment_json['comment']
     attributes[:privacy_setting] = 'everyone'
 

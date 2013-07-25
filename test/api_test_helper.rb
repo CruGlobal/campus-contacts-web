@@ -58,10 +58,10 @@ end
     assert_equal(json_comment['comment']['commenter']['picture'], commenter.picture)
     assert_equal(json_comment['comment']['commenter']['name'], commenter.to_s)
     assert_equal(json_comment['comment']['comment'], comment.comment)
-    assert_equal(json_comment['comment']['status'], comment.status)
+    assert_equal(json_comment['comment']['status'], contact.organizational_permission_for_org(comment.organization).followup_status)
     assert_equal(json_comment['comment']['organization_id'], contact.organizational_permissions.first.organization_id)
 
-    rejoicables_test(json_comment['rejoicables'], comment.rejoicables)
+    # rejoicables_test(json_comment['rejoicables'], comment.rejoicables)
   end
 
   def rejoicables_test(json_rejoicables, rejoicables)
@@ -133,8 +133,10 @@ end
     #assert_equal(json_person['interests'][1]['name'], "Test Interest 3")
     if json_person['organization_membership'].present?
       assert_equal(json_person['organization_membership'][0]['org_id'], user.person.organizations.first.id)
-      assert_equal(json_person['organizational_permissions'][0]['permission'], user.person.organizational_permissions.first.permission.i18n)
       assert_equal(json_person['organization_membership'][0]['primary'].downcase, 'true')
+    end
+    if json_person['organization_permissions'].present?
+      assert_equal(json_person['organizational_permissions'][0]['permission'], user.person.organizational_permissions.first.permission.i18n)
     end
   end
 end
