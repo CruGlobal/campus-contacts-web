@@ -10,3 +10,8 @@ We're an open source project and always looking for more developers to help us e
 ## License
 
 MissionHub is released under the MIT license:  http://www.opensource.org/licenses/MIT
+
+
+## Latest Release
+
+MissionHub's latest release was 7/24/2013
