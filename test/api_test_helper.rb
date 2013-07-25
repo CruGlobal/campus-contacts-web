@@ -58,10 +58,10 @@ end
     assert_equal(json_comment['comment']['commenter']['picture'], commenter.picture)
     assert_equal(json_comment['comment']['commenter']['name'], commenter.to_s)
     assert_equal(json_comment['comment']['comment'], comment.comment)
-    assert_equal(json_comment['comment']['status'], comment.status)
+    assert_equal(json_comment['comment']['status'], contact.organizational_permission_for_org(comment.organization).followup_status)
     assert_equal(json_comment['comment']['organization_id'], contact.organizational_permissions.first.organization_id)
 
-    rejoicables_test(json_comment['rejoicables'], comment.rejoicables)
+    # rejoicables_test(json_comment['rejoicables'], comment.rejoicables)
   end
 
   def rejoicables_test(json_rejoicables, rejoicables)
