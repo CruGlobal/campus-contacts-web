@@ -70,7 +70,7 @@ class Apis::V3::OrganizationalLabelsControllerTest < ActionController::TestCase
       get :bulk, filters: {ids: "#{@person1.id},#{@person2.id}"}, add_labels: "#{@label1.id}", remove_labels: "#{@label.id}", secret: @client.secret, order: 'created_at'
       assert_response :success
       json = JSON.parse(response.body)
-      assert_equal 2, json['organizational_labels'].count, json.inspect
+      assert_equal 2, json['people'].count, json.inspect
       assert @person1.labels.include?(@label1), @person1.labels.inspect
       assert @person2.labels.include?(@label1), @person2.labels.inspect
       assert !@person1.labels.include?(@label), @person1.labels.inspect
@@ -83,7 +83,7 @@ class Apis::V3::OrganizationalLabelsControllerTest < ActionController::TestCase
       get :bulk_create, filters: {ids: "#{@person.id},#{@person1.id},#{@person2.id}"}, labels: "#{@label.id}", secret: @client.secret
       assert_response :success
       json = JSON.parse(response.body)
-      assert_equal 3, json['organizational_labels'].count, json.inspect
+      assert_equal 3, json['people'].count, json.inspect
       assert @person.labels.include?(@label)
       assert @person1.labels.include?(@label)
       assert @person2.labels.include?(@label)
@@ -92,7 +92,7 @@ class Apis::V3::OrganizationalLabelsControllerTest < ActionController::TestCase
       get :bulk_create, filters: {ids: "#{@person.id},#{@person1.id},#{@person2.id}"}, labels: "#{@label.id},#{@label1.id}", secret: @client.secret
       assert_response :success
       json = JSON.parse(response.body)
-      assert_equal 3, json['organizational_labels'].count, json.inspect
+      assert_equal 3, json['people'].count, json.inspect
       assert @person.labels.include?(@label)
       assert @person1.labels.include?(@label)
       assert @person2.labels.include?(@label)
@@ -113,7 +113,7 @@ class Apis::V3::OrganizationalLabelsControllerTest < ActionController::TestCase
       get :bulk_destroy, filters: {ids: "#{@person1.id},#{@person2.id}"}, labels: "#{@label.id}", secret: @client.secret
       assert_response :success
       json = JSON.parse(response.body)
-      assert_equal 2, json['organizational_labels'].count, json.inspect
+      assert_equal 2, json['people'].count, json.inspect
       assert !@person1.labels.include?(@label), @person1.labels.inspect
       assert !@person2.labels.include?(@label), @person2.labels.inspect
     end
