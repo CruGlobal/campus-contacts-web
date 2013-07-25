@@ -55,10 +55,12 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
   def bulk
     add_permissions(filtered_people, params[:add_permission])
     remove_permissions(filtered_people, params[:remove_permission])
+    set_status(filtered_people, params[:followup_status]) if params[:followup_status]
 
     render json: filtered_people,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: {include: includes, organization: current_organization},
+           root: 'people'
   end
 
   def bulk_create
@@ -66,7 +68,8 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
 
     render json: filtered_people,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: {include: includes, organization: current_organization},
+           root: 'people'
   end
 
   def bulk_destroy
@@ -74,7 +77,8 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
 
     render json: filtered_people,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: {include: includes, organization: current_organization},
+           root: 'people'
   end
 
 
@@ -101,6 +105,7 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
                          end
 
       @filtered_people = add_includes_and_order(@filtered_people)
+      @filtered_people = PersonOrder.new(params[:order]).order(@filtered_people) if params[:order]
       @filtered_people = PersonFilter.new(params[:filters]).filter(@filtered_people) if params[:filters]
     end
     @filtered_people
@@ -112,6 +117,12 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
 
   def remove_permissions(people, permissions)
     current_organization.remove_permissions_from_people(people, permissions.split(',')) if permissions
+  end
+
+  def set_status(people, status)
+    people.each do |person|
+      current_organization.set_followup_status(person, status)
+    end
   end
 
   def organizational_permissions

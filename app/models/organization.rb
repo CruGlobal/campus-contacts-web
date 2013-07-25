@@ -695,7 +695,18 @@ class Organization < ActiveRecord::Base
 
 	def label_search(term)
 		labels.where("LOWER(name) LIKE ?","%#{term}%").limit(5).uniq
-	end
+  end
+
+  def set_followup_status(person, status)
+    person_obj = person.is_a?(Person) ? Person.find(person) : person
+    if status.in?(OrganizationalPermission::FOLLOWUP_STATUSES)
+      permission = person_obj.permission_for_org(self)
+      if (permission)
+        permission.followup_status = status
+        permission.save!
+      end
+    end
+  end
 
   private
 

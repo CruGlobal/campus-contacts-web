@@ -59,7 +59,8 @@ class Apis::V3::OrganizationalLabelsController < Apis::V3::BaseController
 
     render json: filtered_people,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: {include: includes, organization: current_organization},
+           root: 'people'
   end
 
   def bulk_create
@@ -67,7 +68,8 @@ class Apis::V3::OrganizationalLabelsController < Apis::V3::BaseController
 
     render json: filtered_people,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: {include: includes, organization: current_organization},
+           root: 'people'
   end
 
   def bulk_destroy
@@ -75,7 +77,8 @@ class Apis::V3::OrganizationalLabelsController < Apis::V3::BaseController
 
     render json: filtered_people,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: {include: includes, organization: current_organization},
+           root: 'people'
   end
 
 
