@@ -7,12 +7,6 @@ end
 class Person < ActiveRecord::Base
 end
 class Permission < ActiveRecord::Base
-  def self.no_permissions
-    @no_permissions ||= Permission.find_or_create_by_name_and_i18n('No Permissions','no_permissions')
-  end
-  if Permission.table_exists?
-    NO_PERMISSIONS_ID = no_permissions.id
-  end
 end
 class GenerateOrganizationalPermissions < ActiveRecord::Migration
   def up
@@ -29,7 +23,7 @@ class GenerateOrganizationalPermissions < ActiveRecord::Migration
           if person.present?
             puts ">> Create role for Person##{person_id}"
             labels = OrganizationalLabel.where(organization_id: org.id, person_id: person_id)
-            OrganizationalPermission.create(organization_id: org.id, person_id: person_id, permission_id: Permission::NO_PERMISSIONS_ID, start_date: labels.first.created_at)
+            OrganizationalPermission.create(organization_id: org.id, person_id: person_id, permission_id: 2, start_date: labels.first.created_at)
           else
             puts ">> Person##{person_id} not found"
             OrganizationalLabel.where(organization_id: org.id, person_id: person_id).destroy_all
