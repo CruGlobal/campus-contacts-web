@@ -729,7 +729,7 @@ en:
       export: 'Export CSV'
       add_question_back: Click on a question to add it back to the page
       unassign_contact: "Unassign contact"
-      delete_contact: "Delete this contact"
+      delete_contact: "Do Not Contact"
       friends: 'Friends'
       send_reminder: 'Send Reminder'
       reminder_email_subject: New contacts have arrived!

@@ -63,7 +63,7 @@
         <% count = label.label_contacts_from_org(@organization).collect(&:id).count %>
         <% link = all_contacts_path(label: label.id) %>
       <% end %>
-      <li class="entry label <%= 'selected_entry' if params[:label].include?(label.id.to_s) %>" data-id="<%= label.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
+      <li class="entry label <%= 'selected_entry' if params[:label].present? && params[:label].include?(label.id.to_s) %>" data-id="<%= label.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
         <%= link_to label, link %>&nbsp;(<span class="count"><%= count %></span>)
       </li>
     <% end %>
