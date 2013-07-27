@@ -2,15 +2,15 @@
   <li class="heading selected">
     <h3><%= t('people.index.labels') %></h3>
   </li>
-  <% (current_organization.roles.default_roles_desc + current_organization.roles.non_default_roles_asc).each do |role| %>
+  <% (current_organization.permissions.default_permissions + current_organization.permissions.non_default_permissions).each do |permission| %>
     <% count = if params[:include_archived]
-      @people_scope.where('organizational_roles.role_id' => role.id).count
+      @people_scope.where('organizational_permissions.permission_id' => permission.id).count
         else
-      @people_scope.where('organizational_roles.role_id' => role.id, 'organizational_roles.archive_date' => nil).count
+      @people_scope.where('organizational_permissions.permission_id' => permission.id, 'organizational_permissions.archive_date' => nil).count
         end %>
     <li style="<%= 'display:none' if count == 0 %>">
       <span class="name">
-        <%= link_to(role, :role => role.id, :include_archived => params[:include_archived]) %>
+        <%= link_to(permission, :permission => permission.id, :include_archived => params[:include_archived]) %>
       </span>
       (<%= count %>)
     </li>

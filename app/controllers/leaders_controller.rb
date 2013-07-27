@@ -45,9 +45,9 @@ class LeadersController < ApplicationController
 
   def destroy
     @person = Person.find(params[:id])
-    roles = OrganizationalRole.find_all_by_person_id_and_organization_id_and_role_id_and_archive_date(@person.id, current_organization.id, Role.leader_ids, nil)
-    if roles
-      roles.each do |r|
+    permissions = OrganizationalPermission.find_all_by_person_id_and_organization_id_and_permission_id_and_archive_date(@person.id, current_organization.id, Permission.user_ids, nil)
+    if permissions
+      permissions.each do |r|
         r.archive
       end
       # make any contacts assigned to this person go back to unassinged

@@ -7,8 +7,6 @@
     </div>
   </div>
 <% end %>
-<%= render 'shared/bulk_vcard_dialog' %>
-<%= render 'shared/bulk_send_msg' %>
 
 <div class="titlebar titlebarmod">
   <h1>
@@ -42,13 +40,13 @@
       <th><%= sort_link @q, :first_name, t('.first_name'), params %></th>
       <th><%= sort_link @q, :last_name, t('.last_name'), params %></th>
 
-  		<% if params[:role].blank? || ![Role::ADMIN_ID,Role::INVOLVED_ID,Role::LEADER_ID,Role::ALUMNI_ID].include?(params[:role].map{|id| id }) %>
+  		<% if params[:permission].blank? || ![Permission::ADMIN_ID,Permission::USER_ID].include?(params[:permission].map{|id| id }) %>
 	      <th><%= sort_link @q, :followup_status, t('general.status'), params %></th>
 		  <% end %>
 
       <th><%= sort_link @q, :gender, t('general.gender'), params %></th>
       <th style='min-width:100px;'><%= sort_link @q, :phone_number, t('.phone_number'), params %></th>
-      <th><%= sort_link @q, :role_id, t('nav.roles'), params %></th>
+      <th><%= sort_link @q, :labels, t('nav.permissions'), params %></th>
       <% @questions.each do |q| %>
         <th class="<%= dom_id(q) %>">
           <% if @predefined_questions.include?(q) %>
@@ -108,3 +106,5 @@
   </div>
   <div id="sent_messages_paginator_bottom"></div>
 </div>
+<%= render 'shared/bulk_vcard_dialog' %>
+<%= render 'shared/bulk_send_msg' %>

@@ -1,0 +1,5 @@
+$('.followup_status_field').each(function(){
+  $.toggleLoader('profile_name','')
+  $(this).val("<%= @new_status %>")
+})
+$.fn.tip()

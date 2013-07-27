@@ -5,7 +5,8 @@
   </head>
   <body id="<%= controller.controller_name %>_controller" class="<%= params[:action] %>">
     <%= render 'fb_init' %>
-
+    <%= render 'dialogs/alert' %>
+    <%= render 'dialogs/locate_contact' %>
     <div id="outer">
 
       <%= render 'shared/nav' %>

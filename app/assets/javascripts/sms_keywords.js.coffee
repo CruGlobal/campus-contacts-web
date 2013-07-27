@@ -1,7 +1,7 @@
 $ ->
   $("#sms_keyword_post_survey_message, #sms_keyword_initial_response").counter
     goal: 140,
-    count: 'up'            
+    count: 'up'
 
   $('#sms_keyword_form input[type=submit]').click ->
     unless $('#sms_keyword_initial_response').val().search(/\{\{\s*link\s*\}\}/) >= 0

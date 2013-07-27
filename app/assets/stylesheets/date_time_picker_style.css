@@ -1,0 +1,75 @@
+/* style changes for MH Interactions feed to allow for time stamp in the date picker */
+
+/* add this */
+
+.ui-datepicker a.ui-state-active {
+	border:1px solid #c0c0c0;
+	padding:1px;
+	margin:-2px;
+}
+
+ .ui-datepicker-buttonpane.ui-widget-content {
+ 	border:none;
+ }
+
+ .ui-timepicker-div dt, .ui-timepicker-div dd {
+ 	display:inline-block;
+ 	margin-left:2px;
+ }
+
+button.ui-corner-all {
+	/*--Border--*/
+	border:1px solid #c0c0c0;
+	-webkit-border-radius: 4px; /* Android ≤ 1.6, iOS 1-3.2, Safari 3-4 */
+	border-radius: 4px; /* Android 2.1+, Chrome, Firefox 4+, IE 9+, iOS 4+, Opera 10.50+, Safari 5+ */
+
+	/*--Gradient--*/
+	background: #f6f6f6; /* Old browsers */
+	background: -moz-linear-gradient(top,  #fcfcfc 0%, #f6f6f6 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fcfcfc), color-stop(100%,#f6f6f6)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #fcfcfc 0%,#f6f6f6 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #fcfcfc 0%,#f6f6f6 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #fcfcfc 0%,#f6f6f6 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #fcfcfc 0%,#f6f6f6 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#f6f6f6',GradientType=0 ); /* IE6-9 */
+}
+
+button.ui-corner-all:hover {
+	background:#f6f6f6;
+}
+
+.ui-timepicker-div {
+	margin-bottom:12px;
+}
+
+/* remove this:
+
+.interaction_edit_date {
+	text-align:right;
+}
+
+.interaction_edit_date input[type=text]{
+	position:relative;
+	bottom:-1px;
+	margin-left:4px;
+}
+
+and replace it with this:  */
+
+.interaction_edit_date input[type=text]{
+	position:relative;
+	bottom:-2px;
+	width:173px;
+	padding:0 2px 2px;
+}
+
+.ui-datepicker-current.ui-state-default, .ui-datepicker-close.ui-state-default {
+  background: #fff;
+  color: #333;
+  border: 1px solid #bbbbbb;
+}
+
+#ui-datepicker-div .ui-datepicker-buttonpane.ui-widget-content {
+  border: 0;
+  margin-top: -10px;
+}

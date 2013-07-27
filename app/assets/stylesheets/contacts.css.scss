@@ -2,6 +2,233 @@
   Place all the styles related to the matching controller here.
   They will automatically be included in application.css.
 */
+
+#contacts_controller.all_contacts, #contacts_controller.my_contacts, #labels_controller,
+#groups_controller, #surveys_controller, #questions_controller, #sms_keywords_controller,
+#organizations_controller.cleanup {
+  #gandalfthewhite {
+    border-bottom: none;
+    margin-bottom: 5px;
+  }
+  #all_contacts_more_menu {
+    position: absolute;
+    background: white;
+    padding: 0;
+    width: 140px;
+    border: 1px solid #C7DFF0;
+    margin-left: -13px;
+    box-shadow: 0 2px 5px #bbb;
+    li {
+      display: block;
+      text-align: left;
+      padding: 0;
+      color: #333;
+      a {
+        color: #0379ae;
+        font-size: 11px;
+        padding: 0px 8px;
+        line-height: 24px;
+        margin: 0;
+        &:hover {
+          background: #eaf1f6;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+  #group_member_sidebar{
+    .information{
+      padding: 4px 2px;
+      background: #FFF0D7;
+      margin: 2px 0px 4px 0px;
+    }
+    .title_with_bg{
+      padding: 4px 2px;
+      background: #eaf1f6;
+      a {color: #fff;}
+      font-weight:bold;
+    }
+    .title{
+      font-weight:bold;
+    }
+    .content{
+      padding: 0px 16px;
+    }
+  }
+  #transfer_to_org {
+    .fancy {
+      margin: 55px 20px -15px;
+      font-size: 14px;
+      input[type=text] {
+        width: 380px;
+      }
+    }
+    #transfer_to_org_content {
+      padding: 0;
+      ul {
+        padding: 0;
+        margin: 0;
+        li {
+          display: block;
+          text-align: left;
+          padding: 0;
+          a {
+            font-size: 12px;
+            padding: 0px 12px;
+            display: block;
+            line-height: 24px;
+            margin: 0;
+            &:hover {
+              text-decoration: none;
+              background: #eaf1f6;
+            }
+          }
+        }
+      }
+    }
+  }
+  #bulk_vcard_dialog {
+    #bulk_vcard_dialog_box {
+      width: 400px;
+      .fancy {
+        margin: 55px 20px -15px;
+        font-size: 14px;
+      }
+      #bulk_vcard_dialog_content {
+        margin: 0px 15px 10px;
+      }
+      #bulk_vcard_dialog_buttons {
+        width: 386px;
+      }
+    }
+  }
+  #ac_sidebar {
+    padding-left: 20px;
+    #sidebar_loader {
+      text-align: center;
+    }
+    #mine_sidebar_lists{
+      a{
+    		color: #808284;
+      }
+      li {
+        padding:4px 0px;
+      }
+      .selected_class{
+        a{
+          color: rgb(3, 121, 174);
+        }
+      }
+    }
+    .leftmenu {
+      margin-top: 24px;
+      .side_list {
+        display: none;
+      }
+      .entry {
+        max-width: 140px;
+        word-wrap: break-word;
+        text-indent:-2em;
+        padding: 2px 0px 2px 2em;
+        &.ui-state-active {
+          border: 1px solid #C7DFF0;
+          background: #fcfdfd;
+          color: #808284;
+        }
+        &.ui-state-hover {
+          border: 1px solid #C7DFF0;
+          background: #eaf1f6;
+          color: #808284;
+        }
+        a {
+          color: #0379ae;
+          font-weight: normal;
+          margin-left: 2px;
+        }
+        .delete_icon, .edit_icon{
+          display: none;
+          height: 10px;
+          width: 15px;
+          text-indent: 1px; /* to fix the alignment based on text indent style*/
+        }
+        &:hover .delete_icon, &:hover .edit_icon {
+          display: inline-block;
+
+        }
+        &:hover a{
+          text-decoration: underline;
+        }
+      }
+      .selected_entry {
+        a, .count {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+  #rest {
+    background: none;
+  }
+  #left {
+    width: 180px;
+    min-height: 420px;
+  }
+  #main {
+    border: none;
+    margin-left: 200px;
+    margin-right: 20px;
+    min-height: 420px;
+  }
+  .contact_listing {
+    width: 100%;
+    border: 1px solid #C7DFF0;
+    th {
+      color: #0379ae;
+      &.last_survey, &.first_name, &.last_name {
+        min-width: 90px;
+      }
+      &.hidden_questions, &.phone {
+        min-width: 120px;
+      }
+      &.gender {
+        min-width: 60px;
+      }
+      &.status {
+        min-width: 80px;
+      }
+    }
+    tr {
+      &:hover {
+        background: #fff;
+      }
+    }
+    td.cell {
+      padding: 5px;
+      &.labels {
+        min-width: 150px;
+        .roles_spaces {
+          width: 160px;
+          overflow: hidden;
+          boarder: 1px solid red;
+          .roles_cover {
+            float: right;
+          }
+          .roles_container {
+            width: 2000px;
+            text-align: left;
+          }
+        }
+      }
+    }
+    a {
+      color: rgb(3, 121, 174);
+    }
+    .group_labels_column, .group_name_column{
+      min-width: 120px;
+    }
+  }
+}
+
 .handle {cursor: pointer; vertical-align: middle; margin-left: 5px;}
 #bulk_send_subject {
   width: 680px;
@@ -49,12 +276,19 @@
   }
   .form_group_fields {
     padding: 5px 10px 15px;
+    .permissions_checkbox {
+      display: inline-block;
+      margin-right: 20px;
+      input {
+        margin-right: 2px;
+      }
+    }
   }
 }
 #hidden_questions_div {
+  position: absolute;
 	border: 1px solid red;
-	position: absolute;
-	right: 12px;
+	right: 20px;
 	width: 400px;
 	background: white;
 	padding: 0px;
@@ -135,10 +369,16 @@ input.text.validate-date {
     min-height:35px;
     overflow:hidden;
   }
+  #locate_contact_content{
+    width:790px;
+    height:565px;
+  }
+  .mh_popup_buttons{
+    width:780px;
+  }
   #locate_contact_results_container{
     height: 275px;
     overflow-y: scroll;
-    
     .locate_contact_list_head{
       border:1px solid #0379ae;
       background-color: #eaf1f6;
@@ -151,7 +391,7 @@ input.text.validate-date {
     .wrap_list {
       word-wrap:break-word;
       width: 180px;
-      overflow:hidden;    
+      overflow:hidden;
     }
     .locate_contact_list_tr:hover{
       td{
@@ -183,4 +423,26 @@ input.text.validate-date {
       float:right;
     }
   }
+}
+
+#bulk_send_msg_dialog {
+  .note {
+		margin: 10px 0;
+		font-family: Georgia;
+		font-size: 13px;
+		font-style: italic;
+		font-weight: normal;
+		color: #808284;
+    .reply_to_toggle {
+      display: inline-block;
+      vertical-align: top;
+    }
+  }
+  .mh_popup_box{
+    width:733px;
+  }
+  .mh_popup_buttons {
+  	width:721px;
+  }
+
 }

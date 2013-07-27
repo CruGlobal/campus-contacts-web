@@ -1,0 +1,16 @@
+<div class="feed_box survey_display">
+	<div class="feed_icon"><%= image_tag("label.png", class: 'tip', title: 'Label') %></div>
+	<div class="feed_item_header">
+    <span class="feed_item_date"><%= wiser_date(org_label.start_date, custom_class: 'tip', time_format: "") %></span>
+	  <span class="feed_item_privacy">
+      <% if org_label.organization %>
+        <strong>Visible to:</strong>
+        <%= "Everyone in #{org_label.organization.name}" %>
+      <% end %>
+    </span>
+	</div>
+	<div class="feed_item_content">
+    <strong><%= org_label.label.name if org_label.label.present? %></strong>
+    label was first applied.
+  </div>
+</div>

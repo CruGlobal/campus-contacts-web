@@ -4,14 +4,14 @@
       <%= image_tag('dashicon_contact.png')%>
     </div>
     <div class="dash_content">
-      <%= link_to "See All Contacts", "/contacts" %>
+      <%= link_to "See All Contacts", "/allcontacts" %>
       <br/>
-      <%= link_to "Add New Contact", "/contacts?click=contacts_add_button" %>
+      <%= link_to "Add New Contact", "/allcontacts?click=allcontacts_add_contact_button" %>
     </div>
   </div>
-  
+
   <hr class="dash_divider"/>
-  
+
   <div class="dash_link">
     <div class="dash_icon">
       <%= image_tag('dashicon_group.png')%>
@@ -23,15 +23,15 @@
     </div>
   </div>
   <hr class="dash_divider"/>
-  
+
   <div class="dash_link">
     <div class="dash_icon">
       <%= image_tag('dashicon_mail.png')%>
     </div>
     <div class="dash_content">
-      <%= link_to "Send Text Message", "/contacts?click=show_message_guide_button" %>
+      <%= link_to "Send Text Message", "/allcontacts?click=action_menu_text" %>
       <br/>
-      <%= link_to "Send Email Message", "/contacts?click=show_message_guide_button" %>
+      <%= link_to "Send Email Message", "/allcontacts?click=action_menu_email" %>
     </div>
   </div>
 </div>

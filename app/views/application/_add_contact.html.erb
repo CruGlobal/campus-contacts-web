@@ -17,7 +17,7 @@
         <%= hidden_field_tag :add_another %>
 				<%= hidden_field_tag :add_to_group_tag, 0 %>
         <%= hidden_field_tag :add_to_group %>
-        <%= hidden_field_tag :add_to_group_role %>
+        <%= hidden_field_tag :add_to_group_permission %>
         <%= hidden_field_tag :assign_to_me, false, id: 'assign_new_contact_to_me' %>
         <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
         <%= hidden_field_tag :dnc, params[:dnc] %>
@@ -52,7 +52,7 @@
               <% answer = question.display_response(answer_sheet) %>
               <div class="field add_contact_survey_question_field">
               	<label><%= raw question.label %></label>
-                
+
                 <% @checked_or_val = false %>
                 <% if flash[:selected_answers].present? %>
                   <% selected_answers = flash[:selected_answers] %>
@@ -60,7 +60,7 @@
                     <% @checked_or_val = selected_answers[survey.id.to_s][question.id.to_s] %>
                   <% end %>
                 <% end %>
-                
+
               	<%= render :partial => 'survey/' + question.ptemplate, object: question, locals: {col: nil, answer_sheet: answer_sheet, survey: survey } %>
               </div>
             <% end %>

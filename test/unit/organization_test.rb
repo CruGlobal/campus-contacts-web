@@ -2,7 +2,6 @@ require 'test_helper'
 
 class OrganizationTest < ActiveSupport::TestCase
 
-  should have_many(:roles)
   should have_many(:group_labels)
   should have_many(:activities)
   should have_many(:target_areas)
@@ -14,9 +13,10 @@ class OrganizationTest < ActiveSupport::TestCase
   should have_many(:questions)
   should have_many(:all_questions)
   should have_many(:followup_comments)
-  should have_many(:organizational_roles)
+  should have_many(:organizational_permissions)
   should have_many(:leaders)
-  should have_many(:only_leaders)
+  should have_many(:users)
+  should have_many(:only_users)
   should have_many(:admins)
   should have_many(:all_people)
   should have_many(:all_people_with_archived)
@@ -36,13 +36,11 @@ class OrganizationTest < ActiveSupport::TestCase
       @person2 = Factory(:person)
       @person3 = Factory(:person)
 
-      Factory(:organizational_role, person: @person2, role: Role.contact, organization: @org1, :added_by_id => @person1.id)
-      Factory(:organizational_role, person: @person2, role: Role.involved, organization: @org1, :added_by_id => @person1.id)
-      Factory(:organizational_role, person: @person3, role: Role.contact, organization: @org1, :added_by_id => @person1.id)
-      Factory(:organizational_role, person: @person3, role: Role.involved, organization: @org1, :added_by_id => @person1.id)
+      Factory(:organizational_permission, person: @person2, permission: Permission.no_permissions, organization: @org1, :added_by_id => @person1.id)
+      Factory(:organizational_permission, person: @person3, permission: Permission.no_permissions, organization: @org1, :added_by_id => @person1.id)
     end
 
-    should "only get people with some roles not yet deleted" do
+    should "only get people with some permissions not yet deleted" do
       assert_equal [@person2, @person3], @org1.people
     end
   end
@@ -56,23 +54,23 @@ class OrganizationTest < ActiveSupport::TestCase
       @leader2 = Factory(:person, email: 'leader2@email.com')
       @leader3 = Factory(:person, email: 'leader3@email.com')
       @contact = Factory(:person)
-      Factory(:organizational_role, person: @contact, role: Role.contact, organization: @org1, :added_by_id => @person.id)
-      Factory(:organizational_role, person: @leader1, role: Role.leader, organization: @org1, :added_by_id => @person.id)
-      Factory(:organizational_role, person: @leader2, role: Role.leader, organization: @org1, :added_by_id => @person.id)
-      Factory(:organizational_role, person: @leader3, role: Role.leader, organization: @org2, :added_by_id => @person.id)
+      Factory(:organizational_permission, person: @contact, permission: Permission.no_permissions, organization: @org1, :added_by_id => @person.id)
+      Factory(:organizational_permission, person: @leader1, permission: Permission.user, organization: @org1, :added_by_id => @person.id)
+      Factory(:organizational_permission, person: @leader2, permission: Permission.user, organization: @org1, :added_by_id => @person.id)
+      Factory(:organizational_permission, person: @leader3, permission: Permission.user, organization: @org2, :added_by_id => @person.id)
     end
     should "return all leader of an org" do
-      results = @org1.leaders
+      results = @org1.users
       assert_equal(2, results.count, "leaders returned should be 2")
       assert(results.include?(@leader1), "should should be returned")
       assert(results.include?(@leader2), "should should be returned")
     end
     should "not return leaders from other org" do
-      results = @org1.leaders
+      results = @org1.users
       assert(!results.include?(@leader3), "should not should be returned")
     end
-    should "not return non-leaders organizational role" do
-      results = @org1.leaders
+    should "not return non-leaders organizational permission" do
+      results = @org1.users
       assert(!results.include?(@contact), "should not should be returned")
     end
   end
@@ -108,15 +106,15 @@ class OrganizationTest < ActiveSupport::TestCase
     end
 
     should "return the admins of org1" do
-      Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
-      Factory(:organizational_role, organization: @org1, person: @person2, role: Role.admin)
+      Factory(:organizational_permission, organization: @org1, person: @person1, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org1, person: @person2, permission: Permission.admin)
       assert @org1.parent_organization_admins.include?(@person1)
       assert @org1.parent_organization_admins.include?(@person2)
     end
 
     should "return the admins of org2" do
-      Factory(:organizational_role, organization: @org2, person: @person1, role: Role.admin)
-      Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
+      Factory(:organizational_permission, organization: @org2, person: @person1, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org2, person: @person2, permission: Permission.admin)
       results = @org3.parent_organization_admins
       assert_equal(2, results.count, "when org3 dont have admin")
       assert(results.include?(@person1), "person1 should be returned")
@@ -124,41 +122,41 @@ class OrganizationTest < ActiveSupport::TestCase
     end
 
     should "return the admins of org3" do
-      Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
-      Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
-      Factory(:organizational_role, organization: @org3, person: @person3, role: Role.admin)
+      Factory(:organizational_permission, organization: @org1, person: @person1, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org2, person: @person2, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org3, person: @person3, permission: Permission.admin)
       assert_equal @org3.parent_organization_admins, [@person1, @person2, @person3]
     end
 
     should "return the admins of org4" do
-      Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
-      Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
-      Factory(:organizational_role, organization: @org3, person: @person3, role: Role.admin)
-      Factory(:organizational_role, organization: @org4, person: @person4, role: Role.admin)
+      Factory(:organizational_permission, organization: @org1, person: @person1, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org2, person: @person2, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org3, person: @person3, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org4, person: @person4, permission: Permission.admin)
       assert_equal @org4.parent_organization_admins, [@person1, @person2, @person3, @person4]
     end
 
     should "return the admins of org5" do
-      Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
-      Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
-      Factory(:organizational_role, organization: @org3, person: @person3, role: Role.admin)
-      Factory(:organizational_role, organization: @org4, person: @person4, role: Role.admin)
-      Factory(:organizational_role, organization: @org5, person: @person5, role: Role.admin)
+      Factory(:organizational_permission, organization: @org1, person: @person1, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org2, person: @person2, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org3, person: @person3, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org4, person: @person4, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org5, person: @person5, permission: Permission.admin)
       assert_equal @org5.parent_organization_admins, [@person5]
     end
 
     should "return the admins of org6" do
-      Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
-      Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
-      Factory(:organizational_role, organization: @org3, person: @person3, role: Role.admin)
-      Factory(:organizational_role, organization: @org4, person: @person4, role: Role.admin)
-      Factory(:organizational_role, organization: @org5, person: @person5, role: Role.admin)
-      Factory(:organizational_role, organization: @org6, person: @person6, role: Role.admin)
+      Factory(:organizational_permission, organization: @org1, person: @person1, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org2, person: @person2, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org3, person: @person3, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org4, person: @person4, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org5, person: @person5, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org6, person: @person6, permission: Permission.admin)
       assert_equal @org6.parent_organization_admins, [@person5, @person6]
     end
 
     should "return the admins of org1 if @org2 dont have admins" do
-      Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
+      Factory(:organizational_permission, organization: @org1, person: @person1, permission: Permission.admin)
       results = @org3.parent_organization_admins
       assert_equal(1, results.count, "when org3 and org2 dont have admin")
       assert(results.include?(@person1), "person1 should be returned")
@@ -176,17 +174,17 @@ class OrganizationTest < ActiveSupport::TestCase
       @org3 = Factory(:organization, id: '3', ancestry: '1/2')
     end
     should "return the admins of org3" do
-      Factory(:organizational_role, organization: @org3, person: @person1, role: Role.admin)
-      Factory(:organizational_role, organization: @org3, person: @person2, role: Role.admin)
+      Factory(:organizational_permission, organization: @org3, person: @person1, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org3, person: @person2, permission: Permission.admin)
       results = @org3.all_possible_admins
       assert_equal(2, results.count, "when org3 have admins")
       assert(results.include?(@person1), "person1 should be returned")
       assert(results.include?(@person2), "person2 should be returned")
     end
     should "return the admins of org2" do
-      Factory(:organizational_role, organization: @org2, person: @person1, role: Role.admin)
-      Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
-      Factory(:organizational_role, organization: @org2, person: @person3, role: Role.admin)
+      Factory(:organizational_permission, organization: @org2, person: @person1, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org2, person: @person2, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org2, person: @person3, permission: Permission.admin)
       results = @org3.all_possible_admins
       assert_equal(3, results.count, "when org3 dont have admin")
       assert(results.include?(@person1), "person1 should be returned")
@@ -194,8 +192,8 @@ class OrganizationTest < ActiveSupport::TestCase
       assert(results.include?(@person3), "person3 should be returned")
     end
     should "return the admins of org1" do
-      Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
-      Factory(:organizational_role, organization: @org1, person: @person2, role: Role.admin)
+      Factory(:organizational_permission, organization: @org1, person: @person1, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org1, person: @person2, permission: Permission.admin)
       results = @org3.all_possible_admins
       assert_equal(2, results.count, "when org3 and org2 dont have admin")
       assert(results.include?(@person1), "person1 should be returned")
@@ -218,26 +216,26 @@ class OrganizationTest < ActiveSupport::TestCase
       @org3 = Factory(:organization, id: '3', ancestry: '1/2')
     end
     should "return the admins with email of org3" do
-      Factory(:organizational_role, organization: @org3, person: @person1, role: Role.admin)
-      Factory(:organizational_role, organization: @org3, person: @person3, role: Role.admin)
+      Factory(:organizational_permission, organization: @org3, person: @person1, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org3, person: @person3, permission: Permission.admin)
       results = @org3.all_possible_admins_with_email
       assert_equal(1, results.count, "when org3 have admins")
       assert(results.include?(@person1), "person1 should be returned")
     end
     should "return the admins of org2" do
-      Factory(:organizational_role, organization: @org2, person: @person1, role: Role.admin)
-      Factory(:organizational_role, organization: @org2, person: @person2, role: Role.admin)
-      Factory(:organizational_role, organization: @org2, person: @person3, role: Role.admin)
+      Factory(:organizational_permission, organization: @org2, person: @person1, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org2, person: @person2, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org2, person: @person3, permission: Permission.admin)
       results = @org3.all_possible_admins_with_email
       assert_equal(2, results.count, "when org3 dont have admin")
       assert(results.include?(@person1), "person1 should be returned")
       assert(results.include?(@person2), "person2 should be returned")
     end
     should "return the admins of org1" do
-      Factory(:organizational_role, organization: @org1, person: @person1, role: Role.admin)
-      Factory(:organizational_role, organization: @org1, person: @person2, role: Role.admin)
-      Factory(:organizational_role, organization: @org1, person: @person3, role: Role.admin)
-      Factory(:organizational_role, organization: @org1, person: @person4, role: Role.admin)
+      Factory(:organizational_permission, organization: @org1, person: @person1, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org1, person: @person2, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org1, person: @person3, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org1, person: @person4, permission: Permission.admin)
       results = @org3.all_possible_admins_with_email
       assert_equal(2, results.count, "when org3 and org2 dont have admin")
       assert(results.include?(@person1), "person1 should be returned")
@@ -248,8 +246,8 @@ class OrganizationTest < ActiveSupport::TestCase
       assert_nil(results, "when org3 and org2 and org1 dont have admins")
     end
     should "return null if no admin has email" do
-      Factory(:organizational_role, organization: @org3, person: @person3, role: Role.admin)
-      Factory(:organizational_role, organization: @org3, person: @person4, role: Role.admin)
+      Factory(:organizational_permission, organization: @org3, person: @person3, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org3, person: @person4, permission: Permission.admin)
       results = @org3.all_possible_admins_with_email
       assert_equal(0, results.count, "when org3 and org2 and org1 dont have admins")
     end
@@ -264,16 +262,16 @@ class OrganizationTest < ActiveSupport::TestCase
 
   end
 
-	test "only_leaders should only return people with leader roles not people with admin roles but does not have leader roles" do
+	test "only_leaders should only return people with leader permissions not people with admin permissions but does not have leader permissions" do
     @org = Factory(:organization)
     person1 = Factory(:person, :email => "person1@email.com")
     person2 = Factory(:person, :email => "person2@email.com")
     person3 = Factory(:person, :email => "person3@email.com")
-		Factory(:organizational_role, organization: @org, person: person1, role: Role.admin)
-		Factory(:organizational_role, organization: @org, person: person2, role: Role.leader)
-		Factory(:organizational_role, organization: @org, person: person3, role: Role.admin)
-		Factory(:organizational_role, organization: @org, person: person3, role: Role.leader)
-		@org.only_leaders.inspect
+		Factory(:organizational_permission, organization: @org, person: person1, permission: Permission.admin)
+		Factory(:organizational_permission, organization: @org, person: person2, permission: Permission.user)
+		Factory(:organizational_permission, organization: @org, person: person3, permission: Permission.admin)
+		Factory(:organizational_permission, organization: @org, person: person3, permission: Permission.user)
+		@org.leaders.inspect
 	end
 
   test "self and children ids" do
@@ -350,13 +348,12 @@ class OrganizationTest < ActiveSupport::TestCase
     assert_equal org1.terminology_enum.sort{ |a, b| 1*(b <=> a) }, [org1.terminology, org2.terminology].uniq.sort{ |a, b| 1*(b <=> a) }, "Organization class did not return correct unique terminologies"
   end
 
-  test "roles" do
+  test "permissions" do
     org1 = Factory(:organization)
-    role1 = Factory(:role, :organization => org1)
-    a = Role.where("organization_id = 0")
-    a << role1
-
-    assert_equal a.sort{ |a, b| 1*(b <=> a) }, org1.roles.sort{ |a, b| 1*(b <=> a) }, "Organization class did not return correct roles"
+    assert_equal 3, org1.permissions.count
+    assert org1.permissions.include?(Permission.admin)
+    assert org1.permissions.include?(Permission.user)
+    assert org1.permissions.include?(Permission.no_permissions)
   end
 
   test "<=>(other)" do
@@ -383,13 +380,17 @@ class OrganizationTest < ActiveSupport::TestCase
     user2 = Factory(:user_with_auxs)
     org = Factory(:organization)
 
+    Factory(:email_address, email: 'user1@email.com', person: user1.person)
+    Factory(:email_address, email: 'user2@email.com', person: user2.person)
+    user1.person.reload
+    user2.person.reload
     org.add_leader(user1.person, user2.person)
-    org_role = OrganizationalRole.last
+    org_permission = OrganizationalPermission.last
 
-    assert_equal org.id, org_role.organization_id, "The last role should have the org"
-    assert_equal user1.person.id, org_role.person_id, "The last role should have the person"
-    assert_equal user2.person.id, org_role.added_by_id, "The last role should have the person who adds the leader"
-    assert_equal Role::LEADER_ID, org_role.role_id, "The last role should have the leader role id"
+    assert_equal org.id, org_permission.organization_id, "The last permission should have the org"
+    assert_equal user1.person.id, org_permission.person_id, "The last permission should have the person"
+    assert_equal user2.person.id, org_permission.added_by_id, "The last permission should have the person who adds the leader"
+    assert_equal Permission::USER_ID, org_permission.permission_id, "The last permission should have the leader permission id"
   end
 
   test "using add_leader(person) in deleted leader" do
@@ -399,20 +400,26 @@ class OrganizationTest < ActiveSupport::TestCase
     org = Factory(:organization)
 
     # Add Leader
+    Factory(:email_address, email: 'leader1@email.com', person: user1.person)
+    Factory(:email_address, email: 'leader2@email.com', person: user2.person)
+    Factory(:email_address, email: 'leader3@email.com', person: user2.person)
+    user1.person.reload
+    user2.person.reload
+    user3.person.reload
     org.add_leader(user1.person, user2.person)
-    org_role = OrganizationalRole.last
+    org_permission = OrganizationalPermission.last
 
     # Archive Leader
-    org_role.archive
+    org_permission.archive
 
     # Add Leader Again
     org.add_leader(user1.person, user3.person)
-    org_role = OrganizationalRole.last
+    org_permission = OrganizationalPermission.last
 
-    assert_equal org.id, org_role.organization_id, "The last role should have the org"
-    assert_equal user1.person.id, org_role.person_id, "The last role should have the person"
-    assert_equal user3.person.id, org_role.added_by_id, "The last role should have the other person who adds the leader"
-    assert_equal Role::LEADER_ID, org_role.role_id, "The last role should have the leader role id"
+    assert_equal org.id, org_permission.organization_id, "The last permission should have the org"
+    assert_equal user1.person.id, org_permission.person_id, "The last permission should have the person"
+    assert_equal user3.person.id, org_permission.added_by_id, "The last permission should have the other person who adds the leader"
+    assert_equal Permission::USER_ID, org_permission.permission_id, "The last permission should have the leader permission id"
 
   end
 
@@ -420,24 +427,24 @@ class OrganizationTest < ActiveSupport::TestCase
     org1 = Factory(:organization)
     person1 = Factory(:person)
     org1.add_contact(person1)
-    om = OrganizationalRole.last
-    assert_equal om.organization.to_s + om.person.to_s + om.role_id.to_s, org1.to_s + person1.to_s + Role::CONTACT_ID.to_s, "Organization method add_member does not correctly add contact"
+    om = OrganizationalPermission.last
+    assert_equal om.organization.to_s + om.person.to_s + om.permission_id.to_s, org1.to_s + person1.to_s + Permission::NO_PERMISSIONS_ID.to_s, "Organization method add_member does not correctly add contact"
   end
 
   test "add_admin(person)" do
     org1 = Factory(:organization)
     person1 = Factory(:person)
     org1.add_admin(person1)
-    om = OrganizationalRole.last
-    assert_equal om.organization.to_s + om.person.to_s + om.role_id.to_s, org1.to_s + person1.to_s + Role::ADMIN_ID.to_s, "Organization method add_member does not correctly add admin"
+    om = OrganizationalPermission.last
+    assert_equal om.organization.to_s + om.person.to_s + om.permission_id.to_s, org1.to_s + person1.to_s + Permission::ADMIN_ID.to_s, "Organization method add_member does not correctly add admin"
   end
 
   test "add_involved(person)" do
     org1 = Factory(:organization)
     person1 = Factory(:person)
     org1.add_involved(person1)
-    om = OrganizationalRole.last
-    assert_equal om.organization.to_s + om.person.to_s + om.role_id.to_s, org1.to_s + person1.to_s + Role::INVOLVED_ID.to_s, "Organization method add_member does not correctly add involved"
+    om = OrganizationalLabel.last
+    assert_equal om.organization.to_s + om.person.to_s + om.label_id.to_s, org1.to_s + person1.to_s + Label::INVOLVED_ID.to_s, "Organization method add_member does not correctly add involved"
   end
 
   test "remove_contact(person)" do
@@ -468,14 +475,14 @@ class OrganizationTest < ActiveSupport::TestCase
     org1 = Factory(:organization)
     person1 = Factory(:person)
 
-    assert_difference "OrganizationalRole.count", 0, "Organization method create_admin_uer created admin user despite absence of Organization person_id" do
+    assert_difference "OrganizationalPermission.count", 0, "Organization method create_admin_uer created admin user despite absence of Organization person_id" do
       org1.create_admin_user
     end
 
     org1.person_id = person1.id
     org1.create_admin_user
-    om = OrganizationalRole.last
-    assert_equal om.organization.to_s + om.person.to_s + om.role_id.to_s, org1.to_s + person1.to_s + Role::ADMIN_ID.to_s, "Organization method create_admin_user does not correctly add admin"
+    om = OrganizationalPermission.last
+    assert_equal om.organization.to_s + om.person.to_s + om.permission_id.to_s, org1.to_s + person1.to_s + Permission::ADMIN_ID.to_s, "Organization method create_admin_user does not correctly add admin"
   end
 
   test "notify_admin_of_request" do
@@ -532,7 +539,7 @@ class OrganizationTest < ActiveSupport::TestCase
 
   test "add initial admin after creating an org" do
     person = Factory(:person)
-    assert_difference "OrganizationalRole.count", 1 do
+    assert_difference "OrganizationalPermission.count", 1 do
       Factory(:organization, person_id: person.id)
     end
   end
@@ -571,25 +578,36 @@ class OrganizationTest < ActiveSupport::TestCase
   context "fetching transfers for 100% Sent" do
     setup do
       @org = Factory(:organization)
+      @other_org = Factory(:organization)
+      @admin = Factory(:person)
       @contact1 = Factory(:person)
       @contact2 = Factory(:person)
       @contact3 = Factory(:person)
       @contact4 = Factory(:person)
-      Factory(:organizational_role, person: @contact1, role: Role.sent, organization: @org)
-      Factory(:organizational_role, person: @contact2, role: Role.sent, organization: @org)
-      Factory(:organizational_role, person: @contact3, role: Role.sent, organization: @org)
-      Factory(:organizational_role, person: @contact4, role: Role.contact, organization: @org)
-      Factory(:sent_person, person: @contact3)
+      Factory(:organizational_permission, person: @admin, permission: Permission.admin, organization: @org)
+      Factory(:organizational_permission, person: @contact1, permission: Permission.no_permissions, organization: @org)
+      Factory(:organizational_permission, person: @contact2, permission: Permission.no_permissions, organization: @org)
+      Factory(:organizational_permission, person: @contact3, permission: Permission.no_permissions, organization: @org)
+      Factory(:organizational_permission, person: @contact4, permission: Permission.no_permissions, organization: @org)
+
+      graduating_on_mission = Factory(:interaction_type, organization_id: 0, i18n: 'graduating_on_mission')
+      other_interaction = Factory(:interaction_type, organization_id: 0, i18n: 'comment')
+      Factory(:interaction, interaction_type_id: graduating_on_mission.id, receiver: @contact1, creator: @admin, organization: @org)
+      Factory(:interaction, interaction_type_id: graduating_on_mission.id, receiver: @contact2, creator: @admin, organization: @org)
+      Factory(:interaction, interaction_type_id: graduating_on_mission.id, receiver: @contact3, creator: @admin, organization: @org)
+      Factory(:interaction, interaction_type_id: other_interaction.id, receiver: @contact4, creator: @admin, organization: @org)
+      Factory(:interaction, interaction_type_id: other_interaction.id, receiver: @contact3, creator: @admin, organization: @other_org)
     end
     should "return all people with label 100% Sent and not yet transferred" do
       assert @org.pending_transfer.include?(@contact1)
       assert @org.pending_transfer.include?(@contact2)
     end
     should "return all people without label 100% Sent" do
-      assert_equal(@org.available_transfer, [@contact4])
+      assert_equal([@contact4], @org.available_transfer)
     end
     should "return all people with label 100% Sent and already transferred" do
-      assert_equal(@org.completed_transfer, [@contact3])
+      Factory(:sent_person, person: @contact3)
+      assert_equal([@contact3], @org.completed_transfer)
     end
   end
 
@@ -611,16 +629,25 @@ class OrganizationTest < ActiveSupport::TestCase
     end
   end
 
-  context "fetching roles" do
+  context "fetching labels" do
     setup do
       @org = Factory(:organization, id: 1)
+      @child_org = Factory(:organization, ancestry: '1')
+      @not_child_org = Factory(:organization, ancestry: nil)
     end
-    should "return 'sent' role if org is cru" do
-      assert @org.role_set.include?(Role.sent)
+    should "not return 'engaged_disciple' label if org is cru" do
+      assert !@not_child_org.label_set.include?(Label.engaged_disciple), @not_child_org.label_set.collect(&:name).inspect
     end
-    should "return 'sent' role if has parent org id = 1" do
-      @org.update_attribute('ancestry','1/2/3')
-      assert @org.role_set.include?(Role.sent)
+    should "return 'engaged_disciple' label if has parent org id = 1" do
+      assert @child_org.label_set.include?(Label.engaged_disciple), @child_org.label_set.collect(&:name).inspect
+    end
+    should "return 'seeker' label for bridge org" do
+      @bridge_org = Factory(:organization, name: 'Bridges at Sample', ancestry: @org.id)
+      assert @bridge_org.label_set.include?(Label.engaged_disciple), @bridge_org.label_set.collect(&:name).inspect
+      assert @bridge_org.label_set.include?(Label.seeker), @bridge_org.label_set.collect(&:name).inspect
+    end
+    should "not return 'seeker' label for non-bridge org" do
+      assert !@child_org.label_set.include?(Label.seeker), @child_org.label_set.collect(&:name).inspect
     end
   end
 

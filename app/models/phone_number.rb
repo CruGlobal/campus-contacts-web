@@ -39,6 +39,8 @@ class PhoneNumber < ActiveRecord::Base
       "#{number[0..2]}-#{number[3..-1]}"
     when 10
       "(#{number[0..2]}) #{number[3..5]}-#{number[6..-1]}"
+    when 11
+      "(#{number[0..3]}) #{number[4..6]}-#{number[7..-1]}"
     else
       number
     end

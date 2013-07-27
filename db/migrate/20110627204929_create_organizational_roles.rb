@@ -1,4 +1,8 @@
+class Role < ActiveRecord::Base
+end
 class OrganizationMembership < ActiveRecord::Base
+end
+class OrganizationalRole < ActiveRecord::Base
 end
 class CreateOrganizationalRoles < ActiveRecord::Migration
   def up

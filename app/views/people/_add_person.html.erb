@@ -11,14 +11,14 @@
     <%= render 'people/person_form', person: person %>
     
     <div class="user_defined_contact_fields customform contact_form">
-      <div class="ls">Roles:</div>
+      <div class="ls">Permissions:</div>
       <div class="rs">
-        <% role_ids = params[:roles] ? params[:roles].keys.map(&:to_i) : [] %>
-        <% current_organization.roles.each do |role| %>
-          <% if can?(:manage, current_organization) || role.i18n != 'admin' %>
+        <% permission_ids = params[:permissions] ? params[:permissions].keys.map(&:to_i) : [] %>
+        <% current_organization.permissions.each do |permission| %>
+          <% if can?(:manage, current_organization) || permission.i18n != 'admin' %>
             <div class="sfield">
-              <%= check_box_tag "roles[#{role.id}]", 1, role_ids.include?(role.id) %>
-            	<label for="<%= "roles_#{role.id}" %>"><%= role %></label>
+              <%= check_box_tag "permissions[#{permission.id}]", 1, permission_ids.include?(permission.id) %>
+            	<label for="<%= "permissions_#{permission.id}" %>"><%= permission %></label>
             </div>
           <% end %>
         <% end %>

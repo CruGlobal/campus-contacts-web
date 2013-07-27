@@ -7,7 +7,7 @@ $ ->
     sms = $('.label', parent).val()
     if $('.content', parent)[0]? and $('.content', parent).val().trim() != ''
       $.each $('.content', parent).val().split("\n"), (i, option) ->
-        sms += ' ' + letters[i] + ')' + option;
+        sms += ' ' + letters[i] + ')' + option
     if sms.length == 141
       inp = String.fromCharCode event.which
       if /[a-zA-Z0-9-_ ]/.test(inp)
@@ -19,7 +19,7 @@ $ ->
         return false
     $('.sms_length', parent).html(sms.length)
     $('.sms_preview').html(sms)
-  
+
   $('#add_question_link').live 'click', ->
     $('.inlineform').hide()
     $('#new_question_form').closest('.inlineform').show()
@@ -28,27 +28,20 @@ $ ->
     $('.sms_length').html(0)
     $('.sms_preview').html('')
     false
-    
+
   $('#add_old_question_link').live 'click', ->
-    $('#previously_used').dialog
-      resizable: false,
-      height: 700,
-      width: 800,
-      modal: true,
-      buttons: 
-        Close: ->
-          $(this).dialog('destroy')
+    $.showDialog($("#previously_used"))
     false
-    
+
   $('.use_question, .remove_question').live 'click', ->
-  	$(this).closest('tr').fadeOut()
-  	$(this).closest('tr').remove()
-  	false
-  	
+    $(this).closest('tr').fadeOut()
+    $(this).closest('tr').remove()
+    false
+
   $('.question_type').live 'change', ->
-	  form = $(this).closest('form')
-	  switch $(this).val()
-	    when ''
+    form = $(this).closest('form')
+    switch $(this).val()
+      when ''
         $('.right_col').hide()
         $('.multiple_choice_form', form).hide()
         $('.short_answer_form', form).hide()
@@ -65,7 +58,7 @@ $ ->
         $('.right_col').show()
       $('.short_answer_form', form).show()
       $('.submit_button', form).show()
-    
+
   $('.web_only').live 'click', ->
     if $(this).prop('checked')
       $(this).closest('.inlineform').find('.right_col').hide()
@@ -73,13 +66,13 @@ $ ->
       wrapper = $(this).closest('.inlineform')
       wrapper.find('.label').keyup()
       wrapper.find('.right_col').show()
-      
+
   $('.question_form').submit ->
     $('#question_form').slideUp 2000
   .bind 'ajax:complete', ->
     $('.question_form')[0].reset()
     $('#question_type').change()
-    
+
   $('#advanced_toggle').live 'click', (e) ->
     e.preventDefault()
     if $('.advanced_options').is(':visible')
@@ -103,7 +96,7 @@ $ ->
       $(this).text(t('surveys.questions.form.hide_assignment_options'))
     else
       $(this).text(t('surveys.questions.form.show_assignment_options'))
-	
+
   $('#cancel_survey_question').live 'click', (e)->
     e.preventDefault()
     $('.inlineform').show()
@@ -112,8 +105,8 @@ $ ->
     $('.question_form')[1].reset()
     $('#question_form').slideUp()
     false
-    
+
   $('#move_right').live 'click', ->
-   alert $('#leaders_').html()
-   alert $('#current_leaders_').html()
-   $('#leaders_').children().clone(true).appendTo('#current_leaders_').selectmenu('refresh')
+    alert $('#leaders_').html()
+    alert $('#current_leaders_').html()
+    $('#leaders_').children().clone(true).appendTo('#current_leaders_').selectmenu('refresh')

@@ -2,8 +2,8 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
   before_filter :ensure_filters
 
   def bulk
-    add_roles(filtered_people, params[:add_roles])
-    remove_roles(filtered_people, params[:remove_roles])
+    remove_roles(filtered_people, params[:remove_roles]) if params[:remove_roles].present?
+    add_roles(filtered_people, params[:add_roles]) if params[:add_roles].present?
 
     render json: filtered_people,
            callback: params[:callback],
@@ -11,7 +11,7 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
   end
 
   def bulk_create
-    add_roles(filtered_people, params[:roles])
+    add_roles(filtered_people, params[:roles]) if params[:roles].present?
 
     render json: filtered_people,
            callback: params[:callback],
@@ -19,7 +19,7 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
   end
 
   def bulk_destroy
-    remove_roles(filtered_people, params[:roles])
+    remove_roles(filtered_people, params[:roles]) if params[:roles].present?
 
     render json: filtered_people,
            callback: params[:callback],
@@ -64,10 +64,20 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
   end
 
   def add_roles(people, roles)
-    current_organization.add_roles_to_people(filtered_people, roles.split(',')) if roles
+    roles.split(',').each do |role_id|
+      permission = Permission.where(id: role_id).try(:first)
+      current_organization.add_permissions_to_people(filtered_people, [permission.id]) if permission.present?
+      label = Label.where(id: role_id).try(:first)
+      current_organization.add_labels_to_people(filtered_people, [label.id]) if label.present?
+    end
   end
 
   def remove_roles(people, roles)
-    current_organization.remove_roles_from_people(filtered_people, roles.split(',')) if roles
+    roles.split(',').each do |role_id|
+      permission = Permission.where(id: role_id).try(:first)
+      current_organization.remove_permissions_from_people(filtered_people, [permission.id]) if permission.present?
+      label = Label.where(id: role_id).try(:first)
+      current_organization.remove_labels_from_people(filtered_people, [label.id]) if label.present?
+    end
   end
 end

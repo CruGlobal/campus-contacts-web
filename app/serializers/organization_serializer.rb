@@ -1,5 +1,5 @@
 class OrganizationSerializer < ActiveModel::Serializer
-  INCLUDES = [:contacts, :admins, :leaders, :people, :surveys, :groups, :keywords]
+  INCLUDES = [:contacts, :admins, :users, :leaders, :people, :surveys, :groups, :keywords, :labels, :interaction_types]
 
   attributes :id, :name, :terminology, :ancestry, :show_sub_orgs, :status, :created_at, :updated_at
 
@@ -14,9 +14,14 @@ class OrganizationSerializer < ActiveModel::Serializer
   end
 
   INCLUDES.each do |relationship|
+    next if relationship == :leaders
     define_method(relationship) do
       add_since(object.send(relationship))
     end
+  end
+
+  def leaders
+    add_since(object.send(:users))
   end
 
 end

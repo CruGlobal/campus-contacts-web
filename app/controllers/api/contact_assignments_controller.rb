@@ -42,7 +42,7 @@ class Api::ContactAssignmentsController < ApiController
     if params[:current_assign_to_id].present?
       raise ContactAssignmentCreateParamsError unless params[:current_assign_to_id].present? && (params[:current_assign_to_id].to_i > 0 || params[:current_assign_to_id] == "none")
       if params[:type] == "leader"
-        raise ContactAssignmentStateError unless OrganizationalRole.where(person_id: id, organization_id: @organization.id, role_id: Role::CONTACT_ID).exists?
+        raise ContactAssignmentStateError unless OrganizationalPermission.where(person_id: id, organization_id: @organization.id, permission_id: Permission::NO_PERMISSIONS_ID).exists?
         if params[:current_assign_to_id] == "none"
           raise ContactAssignmentStateError unless !ContactAssignment.where(person_id: id, organization_id: @organization.id).exists?
         else

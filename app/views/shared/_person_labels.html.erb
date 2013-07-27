@@ -1,9 +1,9 @@
 <div id="labels_dialog">
   <div class='title'>Labels for <%= @person %></div>
-  <%= form_tag update_all_organizational_roles_path(id: @person.id), remote: true do %>
+  <%= form_tag update_all_organizational_labels_path(id: @person.id), remote: true do %>
     <div class="labels_list">
-      <% @roles_for_assign.each do |role| %>
-        <%= render partial: 'shared/label', locals: {role_id: role.id, role_name: role, checked: @roles.include?(role) }%>
+      <% @labels_for_assign.each do |label| %>
+        <%= render partial: 'shared/label', locals: {label_id: label.id, label_name: label, checked: @labels.include?(label) }%>
       <% end %>
     </div>
     <div class='actions'>

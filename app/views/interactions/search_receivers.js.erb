@@ -1,0 +1,10 @@
+$('#search_receiver_results').html("")
+<% if @people.count == 0 %>
+  $('#search_receiver_results').html("<div class='search_no_results'>No Results</div>")
+<% end %>
+  
+<% @people.each do |receiver| %>
+  $('#search_receiver_results').append("<%= escape_javascript(render partial: 'interactions/option_receiver', locals: {person: @person, current_person: @current_person, receiver: receiver}) %>")
+<% end %>
+
+$('#search_receiver_field').removeClass("ui-autocomplete-input ui-autocomplete-loading")

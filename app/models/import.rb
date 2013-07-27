@@ -89,14 +89,17 @@ class Import < ActiveRecord::Base
             import_errors << "#{person.to_s}: #{error[0].to_s.split('.')[0].gsub('_',' ').titleize} #{error[1].first}"
           end
         else
-        	labels.each do |role_id|
-						if role_id.to_i == 0
-							role = Role.find_or_create_by_organization_id_and_name(current_organization.id, label_name)
-							role_id = role.id
-						elsif [Role::ADMIN_ID, Role::LEADER_ID].include?(role_id.to_i)
-							import_errors << "#{person.to_s}: Email address is required to add Leader or Admin label" unless person.email_addresses.present?
+        	labels.each do |label_id|
+						if label_id.to_i == 0
+							label = Label.find_or_create_by_organization_id_and_name(current_organization.id, label_name)
+							label_id = label.id
+						elsif label_id.to_i == Label::LEADER_ID
+							import_errors << "#{person.to_s}: Email address is required to add Leader label" unless person.email_addresses.present?
 						end
-						current_organization.add_role_to_person(person, role_id, current_user.person.id) unless import_errors.present?
+            unless import_errors.present?
+              current_organization.add_contact(person)
+  						current_organization.add_label_to_person(person, label_id, current_user.person.id)
+            end
 					end
         end
       end
@@ -156,8 +159,8 @@ class Import < ActiveRecord::Base
     if person.save
       question_sets.map { |qs| qs.save }
       new_phone_numbers.map { |pn| pn.save if pn.number.present? }
-      contact_role = create_contact_at_org(person, current_organization)
-      # contact_role.update_attribute('followup_status','uncontacted') # Set default
+      contact_permission = create_contact_at_org(person, current_organization)
+      # contact_permission.update_attribute('followup_status','uncontacted') # Set default
     end
 
     return person

@@ -3,12 +3,15 @@
  *= require people
  *= require organizations
  *= require imports
- *= require roles
+ *= require permissions
  *= require messages
- *= require groups
  *= require surveys
+ *= require charts
  *= require survey_responses
- *= require jquery.qtip
+ *= require interactions
+ *= require mh_profile_style
+ *= require mh_permissions_labels_style
+ *= require jquery.qtip2
  *= require jquery.chosen
  *= require superfish
  *= require superfish-navbar
@@ -17,5 +20,6 @@
  *= require jquery.notifications
  *= require excolor
  *= require global
+ *= require date_time_picker_style
  *= require token-input-facebook
 */

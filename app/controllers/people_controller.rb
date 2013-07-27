@@ -2,14 +2,16 @@ require 'csv'
 class PeopleController < ApplicationController
   before_filter :ensure_current_org
   before_filter :authorize_merge, only: [:merge, :confirm_merge, :do_merge, :merge_preview]
-  before_filter :roles_for_assign
+  before_filter :permissions_for_assign
+  before_filter :labels_for_assign
 
   # GET /people
   # GET /people.xml
   def index
     authorize! :read, Person
     fetch_people(params)
-    @roles = current_organization.roles # Admin or Leader, all roles will appear in the index div.role_div_checkboxes but checkobx of the admin role will be hidden
+    @permissions = current_organization.permissions
+    @labels = current_organization.labels # Admin or Leader, all permissions will appear in the index div.permission_div_checkboxes but checkobx of the admin permission will be hidden
   end
 
   def all
@@ -35,7 +37,7 @@ class PeopleController < ApplicationController
       end
     end
     filename = current_organization.to_s
-    filename += " - #{Role.find_by_id(params[:role_id]).to_s.pluralize}" if params[:role_id].present?
+    filename += " - #{Permission.find_by_id(params[:permission_id]).to_s.pluralize}" if params[:permission_id].present?
     send_data(out, :filename => "#{filename}.csv", :type => 'application/csv' )
   end
 
@@ -50,10 +52,10 @@ class PeopleController < ApplicationController
       @person.update_friends(fb_auth) if fb_auth.present?
     end
     @org_friends = Person.where(fb_uid: Friend.followers(@person.id))
-
+    @labels = @person.labels_for_org_id(current_organization.id)
     if can? :manage, @person
-      @organizational_roles = OrganizationalRole.where(organization_id: current_organization, person_id: @person)
-      @followup_comment = FollowupComment.new(organization: current_organization, commenter: current_person, contact: @person, status: @organizational_roles.collect(&:followup_status)) if @organizational_roles
+      @organizational_permissions = OrganizationalPermission.where(organization_id: current_organization, person_id: @person)
+      @followup_comment = FollowupComment.new(organization: current_organization, commenter: current_person, contact: @person, status: @organizational_permissions.collect(&:followup_status)) if @organizational_permissions
       @followup_comments = FollowupComment.where(organization_id: current_organization, contact_id: @person).order('created_at desc')
     end
     @person = Present(@person)
@@ -149,24 +151,24 @@ class PeopleController < ApplicationController
 
       if @person.save
 
-        if params[:roles].present?
-          role_ids = params[:roles].keys.map(&:to_i)
+        if params[:permissions].present?
+          permission_ids = params[:permissions].keys.map(&:to_i)
           # we need a valid email address to make a leader
-          if role_ids.include?(Role::LEADER_ID) || role_ids.include?(Role::ADMIN_ID)
+          if permission_ids.include?(Permission::USER_ID) || permission_ids.include?(Permission::ADMIN_ID)
             @new_person = @person.create_user! if @email.present? && @person.user.nil? # create a user account if we have an email address
             if @new_person && @new_person.save
               @person = @new_person
             end
           end
 
-          role_ids.each do |role_id|
+          permission_ids.each do |permission_id|
             begin
-              @person.organizational_roles.create(role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id)
-            rescue OrganizationalRole::InvalidPersonAttributesError
+              @person.organizational_permissions.create(permission_id: permission_id, organization_id: current_organization.id, added_by_id: current_user.person.id)
+            rescue OrganizationalPermission::InvalidPersonAttributesError
               @person.destroy
               @person = Person.new(params[:person])
-              flash.now[:error] = I18n.t('people.create.error_creating_leader_no_valid_email') if role_id == Role::LEADER_ID.to_s
-              flash.now[:error] = I18n.t('people.create.error_creating_admin_no_valid_email') if role_id == Role::ADMIN_ID.to_s
+              flash.now[:error] = I18n.t('people.create.error_creating_leader_no_valid_email') if permission_id == Permission::USER_ID.to_s
+              flash.now[:error] = I18n.t('people.create.error_creating_admin_no_valid_email') if permission_id == Permission::ADMIN_ID.to_s
               params[:error] = 'true'
               render and return
             rescue ActiveRecord::RecordNotUnique
@@ -204,6 +206,17 @@ class PeopleController < ApplicationController
   # PUT /people/1.xml
   def update
     @person = Person.find(params[:id])
+    @current_person = current_person
+    if params[:followup_status].present?
+      @new_status = params[:followup_status]
+      @contact_permission = @person.permission_for_org(current_organization)
+      Rails.logger.info @contact_permission.inspect
+      if @contact_permission.present?
+        @contact_permission.followup_status = @new_status
+        @contact_permission.save!
+      end
+      Rails.logger.info @contact_permission.inspect
+    end
 
     # Handle duplicate emails
     emails = []
@@ -222,6 +235,19 @@ class PeopleController < ApplicationController
 
     authorize! :edit, @person
 
+    if params[:assigned_to_id].present?
+      leader_id = params[:assigned_to_id].to_i
+      if leader_id == 0
+        @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id).delete_all
+      else
+        if leader = current_organization.leaders.where(id: leader_id).try(:first)
+          @person.assigned_tos.delete_all
+          new_assignment = @person.assigned_tos.new(organization_id: current_organization.id, assigned_to_id: leader_id)
+          new_assignment.save
+        end
+      end
+    end
+    @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
     respond_to do |format|
       if @person.update_attributes(params[:person])
         @person.update_date_attributes_updated
@@ -276,8 +302,8 @@ class PeopleController < ApplicationController
     end
 
     if ids.present?
-      current_organization.organizational_roles.where(person_id: ids, archive_date: nil).each do |ors|
-        if(ors.role_id == Role::LEADER_ID)
+      current_organization.organizational_permissions.where(person_id: ids, archive_date: nil).each do |ors|
+        if(ors.permission_id == Permission::USER_ID)
           ca = Person.find(ors.person_id).contact_assignments.where(organization_id: current_organization.id).all
           ca.collect(&:destroy)
         end
@@ -312,8 +338,11 @@ class PeopleController < ApplicationController
 					group = Group.find_by_id_and_organization_id(id.gsub("GROUP-",""), current_organization.id)
 					group.group_memberships.collect{|p| person_ids << p.person_id.to_s } if group.present?
 				elsif id.upcase =~ /ROLE-/
-					role = Role.find(id.gsub("ROLE-",""))
-					role.members_from_role_org(current_organization.id).collect{|p| person_ids << p.person_id.to_s } if role.present?
+					permission = Permission.find(id.gsub("ROLE-",""))
+					permission.members_from_permission_org(current_organization.id).collect{|p| person_ids << p.person_id.to_s } if permission.present?
+        elsif id.upcase =~ /LABEL-/
+					label = Label.find(id.gsub("LABEL-",""))
+					label.label_contacts_from_org(current_organization).collect{|p| person_ids << p.id.to_s } if label.present?
 				elsif id.upcase =~ /ALL-PEOPLE/
 					current_organization.all_people.collect{|p| person_ids << p.id.to_s} if is_admin?
 				else
@@ -353,8 +382,11 @@ class PeopleController < ApplicationController
 					group = Group.find_by_id_and_organization_id(id.gsub("GROUP-",""), current_organization.id)
 					group.group_memberships.collect{|p| person_ids << p.person_id.to_s } if group.present?
 				elsif id.upcase =~ /ROLE-/
-					role = Role.find(id.gsub("ROLE-",""))
-					role.members_from_role_org(current_organization.id).collect{|p| person_ids << p.person_id.to_s } if role.present?
+					permission = Permission.find(id.gsub("ROLE-",""))
+					permission.members_from_permission_org(current_organization.id).collect{|p| person_ids << p.person_id.to_s } if permission.present?
+        elsif id.upcase =~ /LABEL-/
+					label = Label.find(id.gsub("LABEL-",""))
+					label.label_contacts_from_org(current_organization).collect{|p| person_ids << p.id.to_s } if label.present?
 				elsif id.upcase =~ /ALL-PEOPLE/
 					current_organization.all_people.collect{|p| person_ids << p.id.to_s} if is_admin?
 				else
@@ -403,16 +435,25 @@ class PeopleController < ApplicationController
       fc = FollowupComment.create(params[:followup_comment])
       fc.contact_id = id
       fc.comment = params[:body]
-      fc.status = person.organizational_roles.first.followup_status
+      fc.status = person.organizational_permissions.first.followup_status
       fc.save
     end
 
     render :nothing => true
   end
 
+  def update_permission_status
+    response = false
+    if person = Person.find(params[:person_id])
+      permission = person.permission_for_org(current_organization)
+      permission.followup_status = params[:status]
+      permission.save
+    end
+    render :text => response
+  end
 
-  def update_roles
-    if current_user_roles.include? Role.admin
+  def update_permissions
+    if current_user_permissions.include? Permission.admin
       authorize! :manage, current_organization
     else
       authorize! :lead, current_organization
@@ -421,51 +462,51 @@ class PeopleController < ApplicationController
     data = ""
     person = Person.find(params[:person_id])
 
-    role_ids = params[:role_ids].split(',').map(&:to_i)
+    permission_ids = params[:permission_ids].split(',').map(&:to_i)
 
 
-    new_roles = params[:role_ids].split(',').map(&:to_i)
-    old_roles = person.organizational_roles.where(organization_id: current_organization.id).collect { |role| role.role_id }
-    some_roles = params[:some_role_ids].nil? ? [] : params[:some_role_ids].split(',').map(&:to_i) # roles that only SOME persons have
+    new_permissions = params[:permission_ids].split(',').map(&:to_i)
+    old_permissions = person.organizational_permissions.where(organization_id: current_organization.id).collect { |permission| permission.permission_id }
+    some_permissions = params[:some_permission_ids].nil? ? [] : params[:some_permission_ids].split(',').map(&:to_i) # permissions that only SOME persons have
 
-    new_roles = new_roles - some_roles #remove roles that SOME of the persons have. We should not touch them. They are disabled in the views anyway.
+    new_permissions = new_permissions - some_permissions #remove permissions that SOME of the persons have. We should not touch them. They are disabled in the views anyway.
 
-    some_roles = old_roles if params[:include_old_roles] == "yes"
-    to_be_added_roles = new_roles - old_roles
-    to_be_removed_roles = old_roles - new_roles - some_roles
+    some_permissions = old_permissions if params[:include_old_permissions] == "yes"
+    to_be_added_permissions = new_permissions - old_permissions
+    to_be_removed_permissions = old_permissions - new_permissions - some_permissions
 
-    person.organizational_roles.where(organization_id: current_organization.id, role_id: to_be_removed_roles).each do |organizational_role|
-      return unless delete_role(organizational_role)
+    person.organizational_permissions.where(organization_id: current_organization.id, permission_id: to_be_removed_permissions).each do |organizational_permission|
+      return unless delete_permission(organizational_permission)
     end
 
-    all = to_be_added_roles | (new_roles & old_roles) | (old_roles & some_roles)
+    all = to_be_added_permissions | (new_permissions & old_permissions) | (old_permissions & some_permissions)
     all.sort!
-    all.each_with_index do |role_id, index|
+    all.each_with_index do |permission_id, index|
       begin
-        ors = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id: person.id, role_id: role_id, organization_id: current_organization.id, added_by_id: current_user.person.id) if to_be_added_roles.include?(role_id)
+        ors = OrganizationalPermission.find_or_create_by_person_id_and_organization_id_and_permission_id(person_id: person.id, permission_id: permission_id, organization_id: current_organization.id, added_by_id: current_user.person.id) if to_be_added_permissions.include?(permission_id)
         ors.update_attributes({:archive_date => nil}) unless ors.nil?
-      rescue OrganizationalRole::InvalidPersonAttributesError
-        render 'update_leader_error', :locals => { :person => person } if role_id == Role::LEADER_ID
-        render 'update_admin_error', :locals => { :person => person } if role_id == Role::ADMIN_ID
+      rescue OrganizationalPermission::InvalidPersonAttributesError
+        render 'update_leader_error', :locals => { :person => person } if permission_id == Permission::USER_ID
+        render 'update_admin_error', :locals => { :person => person } if permission_id == Permission::ADMIN_ID
         return
       rescue ActiveRecord::RecordNotUnique
 
       end
 
-      data << "<div id='#{person.id}_#{role_id}' class='role_label role_#{role_id}'"
+      data << "<div id='#{person.id}_#{permission_id}' class='permission_label permission_#{permission_id}'"
       data << "style='margin-right:4px;'" if index < all.length - 1
-      data << ">#{Role.find(role_id).to_s}</div>"
+      data << ">#{Permission.find(permission_id).to_s}</div>"
     end
 
     render :text => data
   end
 
-  def delete_role(ors)
+  def delete_permission(ors)
     begin
-      ors.check_if_only_remaining_admin_role_in_a_root_org
-      ors.check_if_admin_is_destroying_own_admin_role(current_person)
+      ors.check_if_only_remaining_admin_permission_in_a_root_org
+      ors.check_if_admin_is_destroying_own_admin_permission(current_person)
       ors.update_attributes({:archive_date => Date.today})
-    rescue OrganizationalRole::CannotDestroyRoleError
+    rescue OrganizationalPermission::CannotDestroyPermissionError
       render 'cannot_delete_admin_error'
       return false
     end
@@ -560,12 +601,12 @@ class PeopleController < ApplicationController
 
   def fetch_people(search_params = {})
     org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
-    @people_scope = Person.joins(:organizational_roles_including_archived).where('organizational_roles.organization_id' => org_ids)
+    @people_scope = Person.joins(:organizational_permissions_including_archived).where('organizational_permissions.organization_id' => org_ids)
     @people_scope = @people_scope.where(id: @people_scope.archived_not_included.collect(&:id)) if params[:include_archived].blank? && params[:archived].blank?
 
-    @q = @people_scope.includes(:primary_phone_number, :primary_email_address).joins(:organizational_roles_including_archived)
-    #when specific role is selected from the directory
-    @q = @q.where('organizational_roles.role_id = ? AND organizational_roles.organization_id = ?', params[:role], current_organization.id) unless params[:role].blank?
+    @q = @people_scope.includes(:primary_phone_number, :primary_email_address).joins(:organizational_permissions_including_archived)
+    #when specific permission is selected from the directory
+    @q = @q.where('organizational_permissions.permission_id = ? AND organizational_permissions.organization_id = ?', params[:permission], current_organization.id) unless params[:permission].blank?
     sort_by = ['last_name asc', 'first_name asc']
 
     #for searching
@@ -577,19 +618,19 @@ class PeopleController < ApplicationController
         end
       end
     else
-      unless search_params[:role].blank?
+      unless search_params[:permission].blank?
         if params[:include_archived]
-          @q = @q.joins("INNER JOIN roles ON roles.id = organizational_roles.role_id")
-                  .where("organizational_roles.organization_id" => current_organization.id)
-                  .where("roles.id = :search",{:search => "#{search_params[:role]}"})
-                   sort_by.unshift("roles.id")
-          role_tables_joint = true
+          @q = @q.joins("INNER JOIN permissions ON permissions.id = organizational_permissions.permission_id")
+                  .where("organizational_permissions.organization_id" => current_organization.id)
+                  .where("permissions.id = :search",{:search => "#{search_params[:permission]}"})
+                   sort_by.unshift("permissions.id")
+          permission_tables_joint = true
         else
-          @q = @q.joins("INNER JOIN roles ON roles.id = organizational_roles.role_id")
-                  .where("organizational_roles.archive_date" => nil, "organizational_roles.organization_id" => current_organization.id)
-                  .where("roles.id = :search",{:search => "#{search_params[:role]}"})
-                   sort_by.unshift("roles.id")
-          role_tables_joint = true
+          @q = @q.joins("INNER JOIN permissions ON permissions.id = organizational_permissions.permission_id")
+                  .where("organizational_permissions.archive_date" => nil, "organizational_permissions.organization_id" => current_organization.id)
+                  .where("permissions.id = :search",{:search => "#{search_params[:permission]}"})
+                   sort_by.unshift("permissions.id")
+          permission_tables_joint = true
         end
       end
 
@@ -627,19 +668,19 @@ class PeopleController < ApplicationController
 
     @all_people = @q.order(params[:search] && params[:search][:meta_sort] ? params[:search][:meta_sort] : sort_by)
 
-    if params[:search].present? && params[:search][:meta_sort].include?("role_id")
+    if params[:search].present? && params[:search][:meta_sort].include?("permission_id")
       order = params[:search][:meta_sort].include?("asc") ? params[:search][:meta_sort].gsub("asc", "desc") : params[:search][:meta_sort].gsub("desc", "asc")
-      a = @q.result(distinct: false).order_by_highest_default_role(order, role_tables_joint)
+      a = @q.result(distinct: false).order_by_highest_default_permission(order, permission_tables_joint)
       if params[:search][:meta_sort].include?("asc")
         a = a.reverse
         a = a.uniq_by { |a| a.id }
         a = a.reverse
         @all_people = @all_people.uniq_by { |a| a.id }
       end
-      @all_people = a + @q.result(distinct: false).order_alphabetically_by_non_default_role(order, role_tables_joint)
+      @all_people = a + @q.result(distinct: false).order_alphabetically_by_non_default_permission(order, permission_tables_joint)
     end
 
-    @all_people = @all_people.where(id: current_organization.people.archived.where("organizational_roles.archive_date > ? AND organizational_roles.archive_date < ?", params[:archived_date], (params[:archived_date].to_date+1).strftime("%Y-%m-%d")).collect{|x| x.id}) unless params[:archived_date].blank?
+    @all_people = @all_people.where(id: current_organization.people.archived.where("organizational_permissions.archive_date > ? AND organizational_permissions.archive_date < ?", params[:archived_date], (params[:archived_date].to_date+1).strftime("%Y-%m-%d")).collect{|x| x.id}) unless params[:archived_date].blank?
     @people = Kaminari.paginate_array(@all_people).page(params[:page])
   end
 
@@ -656,10 +697,10 @@ class PeopleController < ApplicationController
     end
   end
 
-  def current_user_roles
+  def current_user_permissions
     current_user.person
-    .organizational_roles
+    .organizational_permissions
     .where(:organization_id => current_organization)
-    .collect { |r| Role.find(r.role_id) }
+    .collect { |r| Permission.find(r.permission_id) }
   end
 end

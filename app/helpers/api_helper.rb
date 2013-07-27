@@ -38,7 +38,7 @@ module ApiHelper
   
   def valid_fields?(fields,action,version)
     #return fields that are valid
-     valid_fields = []
+    valid_fields = []
     if Apic::API_ALLOWABLE_FIELDS[version.to_sym][action.to_sym].present?
       valid_fields = fields & Apic::API_ALLOWABLE_FIELDS[version.to_sym][action.to_sym]
     end
@@ -128,11 +128,11 @@ module ApiHelper
     object
   end
   
-  def restrict_to_contact_role(people, organization)
-    people = people.where("`#{OrganizationalRole.table_name}`.`organization_id` = ?", organization.id).
-    where("`#{OrganizationalRole.table_name}`.`person_id` = `#{Person.table_name}`.`#{Person.primary_key}`").
-    where("`#{OrganizationalRole.table_name}`.`role_id` = #{Role::CONTACT_ID}").
-    where("`#{OrganizationalRole.table_name}`.`followup_status` <> 'do_not_contact'")
+  def restrict_to_contact_permission(people, organization)
+    people = people.where("`#{OrganizationalPermission.table_name}`.`organization_id` = ?", organization.id).
+    where("`#{OrganizationalPermission.table_name}`.`person_id` = `#{Person.table_name}`.`#{Person.primary_key}`").
+    where("`#{OrganizationalPermission.table_name}`.`permission_id` = #{Permission::NO_PERMISSIONS_ID}").
+    where("`#{OrganizationalPermission.table_name}`.`followup_status` <> 'do_not_contact'")
     
     people
   end
@@ -149,13 +149,13 @@ module ApiHelper
     allowed_sorting_fields = ["time","status"]
     allowed_sorting_directions = ["asc", "desc"]
     allowed_filter_fields = ["gender", "status"]
-    allowed_status = OrganizationalRole::FOLLOWUP_STATUSES + %w[finished not_finished]
+    allowed_status = OrganizationalPermission::FOLLOWUP_STATUSES + %w[finished not_finished]
     @sorting_fields = []
     
     people = limit_and_offset_object(people)
     
     #let's go ahead and include all of the possible tables needed for this filtering and sorting
-    people = people.includes(:contact_assignments).includes(:organizational_roles)
+    people = people.includes(:contact_assignments).includes(:organizational_permissions)
     
     if params[:assigned_to].present? && (params[:assigned_to] == 'none' || params[:assigned_to].to_i > 0)
       if params[:assigned_to] == 'none'
@@ -173,15 +173,15 @@ module ApiHelper
       @sorting_fields.each_with_index do |field,index|
         case field  
         when "time"
-          people = people.order("`#{OrganizationalRole.table_name}`.`created_at` #{@sorting_directions[index]}")
+          people = people.order("`#{OrganizationalPermission.table_name}`.`created_at` #{@sorting_directions[index]}")
         when "status"
-          people = people.order("`#{OrganizationalRole.table_name}`.`followup_status` #{@sorting_directions[index]}")
+          people = people.order("`#{OrganizationalPermission.table_name}`.`followup_status` #{@sorting_directions[index]}")
         end
       end
     end
     
-    #if there were no sorting fields then sort by most recent org_role
-    people = people.order("`#{OrganizationalRole.table_name}`.`created_at` DESC") if @sorting_fields.blank?
+    #if there were no sorting fields then sort by most recent org_permission
+    people = people.order("`#{OrganizationalPermission.table_name}`.`created_at` DESC") if @sorting_fields.blank?
 
     
     if params[:filters].present? && params[:values].present?
@@ -197,12 +197,12 @@ module ApiHelper
           status = allowed_status.include?(@filter_values[index].downcase) ? @filter_values[index].downcase : nil
           status = ["completed"] if status == "finished"
           status = ["uncontacted","attempted_contact","contacted"] if status == "not_finished"
-          people = people.where('organizational_roles.followup_status' => status)
+          people = people.where('organizational_permissions.followup_status' => status)
         end
       end
     end
     
-    people = restrict_to_contact_role(people,organization)
+    people = restrict_to_contact_permission(people,organization)
     people
   end
   

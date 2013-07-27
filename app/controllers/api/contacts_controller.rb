@@ -46,7 +46,7 @@ class Api::ContactsController < ApiController
   def index_2
     @people = @organization.all_people
     @people = limit_and_offset_object(@people)
-    @people = @people.includes(:contact_assignments).includes(:organizational_roles)
+    @people = @people.includes(:contact_assignments).includes(:organizational_permissions)
 
     # Filter the response
     @filters = {}
@@ -93,7 +93,7 @@ class Api::ContactsController < ApiController
         @people = @people.where("gender = ?", gender)
       end
       if @filters.key? 'status'
-        @people = @people.where("organizational_roles.followup_status" => @filters['status'])
+        @people = @people.where("organizational_permissions.followup_status" => @filters['status'])
       end
 
       # Dynamic Filtering
@@ -158,18 +158,18 @@ class Api::ContactsController < ApiController
         when 'gender'
           @people = @people.order("`#{Person.table_name}`.`gender` #{dir}")
         when 'status'
-          @people = @people.order("`#{OrganizationalRole.table_name}`.`followup_status` #{dir}")
+          @people = @people.order("`#{OrganizationalPermission.table_name}`.`followup_status` #{dir}")
         when 'date_created'
-          @people = @people.order("`#{OrganizationalRole.table_name}`.`created_at` #{dir}")
+          @people = @people.order("`#{OrganizationalPermission.table_name}`.`created_at` #{dir}")
         when 'date_surveyed'
           @people = @people.includes(:answer_sheets).order("`answer_sheets`.`created_at` #{dir}")
         end
       end
     else
-      @people = @people.order("`#{OrganizationalRole.table_name}`.`created_at` desc")
+      @people = @people.order("`#{OrganizationalPermission.table_name}`.`created_at` desc")
     end
 
-    @people = restrict_to_contact_role(@people,@organization)
+    @people = restrict_to_contact_permission(@people,@organization)
     @people = limit_and_offset_object(@people) if params[:start].present?
 
     output = @api_json_header

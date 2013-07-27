@@ -1,0 +1,70 @@
+<% provide :sidebar do %>
+  <div id="ac_sidebar">
+    <div id="upper_sidebar_lists">
+    	<button class="red_accent full_width_button" id="add_orgnizational_label_button"><%= t('manage_labels.add_title') %></button>
+      <%#= link_to(t('manage_labels.add_button'), new_label_path, class: 'create_label_button') %>
+    </div>
+  </div>
+<% end %>
+
+<div class="titlebar titlebarmod">
+  <h1>
+    <%= t('manage_labels.title', org: current_organization) %>
+    <div id='global_loader'>
+      <%= image_tag 'loader.gif'%>
+    </div>
+  </h1>
+</div>
+
+<div class="ac_contact_spread_title">
+  <%= t('manage_labels.system_labels') %>
+</div>
+<div id="ac_contact_spread">
+  <table class="listing contact_listing" cellpadding="0" cellspacing="0">
+    <tr id="table_header">
+      <th><%= t('manage_labels.name') %></th>
+    </tr>
+    <tbody id="contacts_table">
+      <% @system_labels.each do |system_label| %>
+        <tr id="<%= dom_id(system_label) %>" data-id="<%= system_label.id %>" class="system_label_row">
+          <td class=""><%= system_label.name %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <% if @system_labels.blank? %>
+    <div class="contentpad no_contacts">
+      <%= t('contacts.index.no_contacts') %>
+    </div>
+	<% end %>
+</div>
+
+<div class="ac_contact_spread_space">&nbsp;</div>
+
+<div class="ac_contact_spread_title">
+  <%= t('manage_labels.organizational_labels') %>
+</div>
+<div id="ac_contact_spread">
+  <table class="listing contact_listing" cellpadding="0" cellspacing="0">
+    <tr id="table_header">
+      <th><%= t('manage_labels.name') %></th>
+      <th class="controls">&nbsp;</th>
+    </tr>
+    <tbody id="organizational_label_table">
+    <% @organizational_labels.each do |org_label| %>
+      <%= render 'organizational_label', organizational_label: org_label %>
+    <% end %>
+    </tbody>
+  </table>
+
+  <% if @system_labels.blank? %>
+    <div class="contentpad no_contacts">
+      <%= t('contacts.index.no_contacts') %>
+    </div>
+	<% end %>
+</div>
+
+
+<!-- Add a Label Dialog -->
+<%= render 'dialogs/add_label', label: Label.new %>

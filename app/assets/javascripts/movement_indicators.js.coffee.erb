@@ -1,0 +1,20 @@
+$ ->
+  $(document).on 'click', '[data-behavior=indicator_list]', ->
+    $('#indicator_dialog').html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
+    $('#indicator_dialog').dialog {
+      title: $(this).closest('td').prev('td').html(),
+      modal: true,
+      height: 400,
+      width: 300,
+      buttons: [{
+        text: "Close",
+        click: ->
+          $( this ).dialog( "close" )
+      }]
+    }
+    $.ajax
+      type: 'GET',
+      dataType: 'script',
+      url: '/movement_indicators/details',
+      data: 'name='+$(this).siblings('input').attr('name')
+    false

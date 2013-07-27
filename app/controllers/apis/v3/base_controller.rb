@@ -4,62 +4,58 @@ class Apis::V3::BaseController < ApplicationController
   skip_before_filter :check_valid_subdomain
   skip_before_filter :set_locale
   skip_before_filter :check_url
+  before_filter :force_client_update
 
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
 
   protected
 
   def authenticate_user!
-    unless params[:secret] || oauth_access_token || params[:facebook_token]
-      render json: {errors: ["You need to pass in the your Organization's API secret or a user's oauth or facebook token."]},
-        status: :unauthorized,
-        callback: params[:callback]
+    unless params[:secret] || oauth_access_token || facebook_token
+      render json: {errors: ["You need to pass in your Organization's API secret or a user's oauth or facebook token."]},
+             status: :unauthorized,
+             callback: params[:callback]
       return false
     end
 
-    if params[:facebook_token]
+    if facebook_token
       begin
-        unless @current_user = Authentication.where(provider: 'facebook', mobile_token: params[:facebook_token]).first.try(:user)
-          fb_user = MiniFB.get(params[:facebook_token], 'me')
-          auth = Authentication.where(provider: 'facebook', uid: fb_user.id).first
-          if auth
-            auth.update_attributes(mobile_token: params[:facebook_token])
-            @current_user = auth.user
-          else
-            render json: {errors: ["The person corresponding to that token has never logged into the web interface"], code: 'user_not_found'},
-              status: :unauthorized,
-              callback: params[:callback]
-            return false
-          end
+        unless @current_user = Authentication.user_from_mobile_facebook_token(facebook_token)
+          render json: {errors: ["The person corresponding to that token has never logged into the web interface"], code: 'user_not_found'},
+                   status: :unauthorized,
+                   callback: params[:callback]
+          return false
         end
       rescue MiniFB::FaceBookError => e
         render json: {errors: ["The facebook token you passed is invalid"], code: 'invalid_facebook_token'},
-          status: :unauthorized,
-          callback: params[:callback]
+               status: :unauthorized,
+               callback: params[:callback]
         return false
       end
     end
 
     if oauth_access_token && (!current_user || current_user.person.organizations.empty?)
       render json: {errors: ["The oauth you sent over didn't match a user or organization on MissionHub"]},
-        status: :unauthorized,
-        callback: params[:callback]
+             status: :unauthorized,
+             callback: params[:callback]
       return false
     end
 
     if params[:secret] && !current_organization
       render json: {errors: ["The secret you sent over didn't match a user or organization on MissionHub"]},
-        status: :unauthorized,
-        callback: params[:callback]
+             status: :unauthorized,
+             callback: params[:callback]
       return false
     end
 
     unless current_user
       render json: {errors: ["The organization associated with this API secret must have at least one admin, or you must pass in an oauth access token for a user with access to this org."]},
-        status: :unauthorized,
-        callback: params[:callback]
+             status: :unauthorized,
+             callback: params[:callback]
       return false
     end
+
+    current_organization #ensure the current organization is initialized
   end
 
   def current_user
@@ -92,11 +88,10 @@ class Apis::V3::BaseController < ApplicationController
     @oauth_access_token ||= (params[:access_token] || oauth_access_token_from_header)
   end
 
-
   # grabs access_token from header if one is present
   def oauth_access_token_from_header
     auth_header = request.env["HTTP_AUTHORIZATION"]||""
-    match       = auth_header.match(/^token\s(.*)/) || auth_header.match(/^Bearer\s(.*)/)
+    match = auth_header.match(/^token\s(.*)/) || auth_header.match(/^Bearer\s(.*)/)
     return match[1] if match.present?
     false
   end

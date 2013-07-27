@@ -1,0 +1,19 @@
+<div class="feed_box interaction_display interaction_feed" id="interaction_feed_<%= interaction.id %>">
+	<div class="feed_icon" style="<%= 'visibility:hidden;' if interaction.type == 'Comment Only' %>"><%= image_tag(interaction.icon, class: "tip", title: interaction.type) %></div>
+	<div class="feed_item_header">
+    <span class="feed_item_date"><%= wiser_date(interaction.timestamp, custom_class: 'tip') %></span>
+    <span class="feed_item_privacy">
+      <strong>Visible to:&nbsp;</strong><%= interaction.privacy %>
+      <%= link_to image_tag("edit_sprite.png"), "#menutop", class: "edit_feed_icon tip", "data-id" => interaction.id, "data-person-id" => @person.id, title: "Edit Interaction" %>
+    </span>
+	</div>
+	<div class="feed_item_content"><%= interaction.title %></div>
+  <% if interaction.comment.present? %>
+  	<div class="feed_item_comment">
+      “<%= interaction.comment %>”
+    </div>
+  <% end %>
+	<div class="feed_item_footer">
+	  <%=raw "Last updated#{' by ' if interaction.last_updater.present?}#{interaction.last_updater.name if interaction.last_updater.present?} on #{wiser_date(interaction.updated_at, custom_class: 'tip', humanize: false)}"%>
+	</div>
+</div>

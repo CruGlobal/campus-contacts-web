@@ -1,0 +1,10 @@
+$('#groups_save').attr('data-current-group-ids',"<%= params[:ids] %>")
+$('#profile_group_box').html("")
+<% if @groups.present? %>
+  <% @groups.each do |group| %>
+    $('#profile_group_box').append("<div class='profile_group'><%= group.name %></div>")
+  <% end %>
+<% else %>
+  $('#profile_group_box').append("<div class='no_groups'>No groups assigned.</div>")
+<% end %>
+$.toggleLoader('profile_group_header','')

@@ -55,7 +55,7 @@ class ApiV2ContactsTest < ActionDispatch::IntegrationTest
     end
     
     should "be able to view their contacts filtered by status" do
-      @user2.person.organizational_roles.first.update_attributes!(role_id: Role::CONTACT_ID, followup_status: "contacted")
+      @user2.person.organizational_permissions.first.update_attributes!(permission_id: Permission::NO_PERMISSIONS_ID, followup_status: "contacted")
       path = "/api/contacts.json?filters[status]=contacted&org_id=#{@user3.person.primary_organization.id}"
       get path, {'access_token' => @access_token3.code},  {:accept => 'application/vnd.missionhub-v2+json'}
       assert_response :success, @response.body
@@ -63,8 +63,8 @@ class ApiV2ContactsTest < ActionDispatch::IntegrationTest
       
       assert_equal(1, @json['contacts'].length)
       person_basic_test(@json['contacts'][0]['person'],@user2,@user)
-      @user.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: Role::CONTACT_ID)
-      @user2.person.organizational_roles.first.update_attributes!(followup_status: "attempted_contact", role_id: Role::CONTACT_ID)
+      @user.person.organizational_permissions.first.update_attributes!(followup_status: "attempted_contact", permission_id: Permission::NO_PERMISSIONS_ID)
+      @user2.person.organizational_permissions.first.update_attributes!(followup_status: "attempted_contact", permission_id: Permission::NO_PERMISSIONS_ID)
       path = "/api/contacts.json?filters[status]=contacted"
       get path, {'access_token' => @access_token3.code},  {:accept => 'application/vnd.missionhub-v2+json'}
       assert_response :success, @response.body
@@ -89,7 +89,7 @@ class ApiV2ContactsTest < ActionDispatch::IntegrationTest
     should "not make the iPhone contacts category queries fail" do
       
       # contacts assigned to me (My contacts) on mobile app
-      @user2.person.organizational_roles.first.update_attributes(followup_status: 'completed')
+      @user2.person.organizational_permissions.first.update_attributes(followup_status: 'completed')
       @contact_assignment2.destroy
       ContactAssignment.create(assigned_to_id:@user3.person.id, person_id: @user.person.id, organization_id: @user3.person.primary_organization.id)
 
@@ -102,14 +102,14 @@ class ApiV2ContactsTest < ActionDispatch::IntegrationTest
       assert_equal(@json['contacts'][0]['person']['id'], @user.person.id)
 
       # my completed contacts on mobile app
-      @user2.person.organizational_roles.first.update_attributes(followup_status: 'uncontacted')
+      @user2.person.organizational_permissions.first.update_attributes(followup_status: 'uncontacted')
       path = "/api/contacts.json?filters[status]=completed%7Cdo_no_contact&filters[assigned_to]=#{@user.person.id}&limit=15&start=0&org_id=#{@user3.person.primary_organization.id}"
       get path, {'access_token' => @access_token3.code}, {:accept => 'application/vnd.missionhub-v2+json'}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
       assert_equal(0, @json['contacts'].length)
       
-      @user2.person.organizational_roles.where(organization_id: @user3.person.primary_organization.id).first.update_attributes(followup_status: 'completed')
+      @user2.person.organizational_permissions.where(organization_id: @user3.person.primary_organization.id).first.update_attributes(followup_status: 'completed')
       path = "/api/contacts.json?filters[status]=completed%7Cdo_not_contact&filters[assigned_to]=#{@user.person.id}&limit=15&start=0&org_id=#{@user3.person.primary_organization.id}"
       get path, {'access_token' => @access_token3.code}, {:accept => 'application/vnd.missionhub-v2+json'}
       assert_response :success, @response.body
@@ -117,7 +117,7 @@ class ApiV2ContactsTest < ActionDispatch::IntegrationTest
       assert_equal(@json['contacts'].length,1)
       assert_equal(@json['contacts'][0]['person']['id'], @user2.person.id)
       
-      @user.person.organizational_roles.where(organization_id: @user3.person.primary_organization.id).first.update_attributes(followup_status: 'uncontacted')      
+      @user.person.organizational_permissions.where(organization_id: @user3.person.primary_organization.id).first.update_attributes(followup_status: 'uncontacted')      
       path = "/api/contacts.json?filters[status]=uncontacted%7Cattempted_contact%7Ccontacted&filters[assigned_to]=none&limit=15&start=0&org_id=#{@user3.person.primary_organization.id}"
       get path, {'access_token' => @access_token3.code}, {:accept => 'application/vnd.missionhub-v2+json'}
       assert_response :success, @response.body
@@ -126,7 +126,7 @@ class ApiV2ContactsTest < ActionDispatch::IntegrationTest
       
       ContactAssignment.destroy_all
       # unassigned contacts mobile app query
-      @user.person.organizational_roles.first.update_attributes(followup_status: 'uncontacted')
+      @user.person.organizational_permissions.first.update_attributes(followup_status: 'uncontacted')
       path = "/api/contacts.json?filters[assigned_to]=none&filters[status]=uncontacted%7Cattempted_contact%7Ccontacted&limit=15&start=0&org_id=#{@user3.person.primary_organization.id}"
       get path, {'access_token' => @access_token3.code}, {:accept => 'application/vnd.missionhub-v2+json'}
       assert_response :success, @response.body

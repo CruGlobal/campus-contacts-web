@@ -10,86 +10,54 @@
   </ul>
 <% else %>
 
-  <% provide :sidebar do %>
-    <%= render 'surveys/left_sidebar' %>
-  <% end %>
+  <%= render 'surveys/surveys_sidebar' %>
 
-  <% if can? :manage, QuestionSheet %>
-    <div class="titlebar titlebarmod">
-      <h1><%= t('nav.surveys') %></h1>
-    </div>
-    <div class="pagemenu">
-      <table>
-        <td>
-          <ul class="pillmenu">
-            <li>
-              <%= link_to(t(".new"), new_survey_path) %>
-            </li>
-          </ul>
-        </td>
-        <td class="inlinehelp">
-          <%= t('general.survey_help_desc') %><b><%= t('general.survey_text_help_desc') %></b>
-        </td>
-      </table>
-    </div>
+  <div class="titlebar titlebarmod">
+    <h1>
+      <%= t('nav.surveys') %>
+      <div id='global_loader'>
+        <%= image_tag 'loader.gif'%>
+      </div>
+    </h1>
+  </div>
 
+  <div id="ac_button_bar">
+  	<ul class="button_bar">
+  		<li class="inlinehelp">
+        <%= t('general.survey_help_desc') %><b><%= t('general.survey_text_help_desc') %></b>
+  		</li>
+  	</ul>
+  </div>
+  <br/>
 
-
-    <table class="listing keywordtable" cellpadding="0" cellspacing="0">
-      <tr>
-        <th class="check"></th>
+  <div id="ac_contact_spread">
+    <table class="listing contact_listing" cellpadding="0" cellspacing="0">
+      <tr id="table_header">
         <th><%= t("general.survey") %></th>
         <% if current_organization.show_sub_orgs? %>
           <th>
             <%= t("sms_keywords.index.association") %>
-            <div class="icon help tipit help_bubble_keyword " title="<%= t('.association_help') %>"></div>
+            <div class="icon help tip help_bubble_keyword " title="<%= t('.association_help') %>"></div>
           </th>
         <% end %>
         <th><%= t("general.keyword") %></th>
         <th><%= t('.link') %></th>
-        <th class="controls">&nbsp;</th>
+        <th>&nbsp;</th>
       </tr>
-      <% @surveys.each do |survey| %>
-        <tr>
-          <td class="checkbox"></td>
-          <td><%= survey %></td>
-          <% if current_organization.show_sub_orgs? %>
-            <td><%= survey.organization %></td>
-          <% end %>
-          <td><%= link_to(survey.keyword, edit_sms_keyword_path(survey.keyword)) if survey.keyword %></td>
-          <td><%= link_to(short_survey_url(survey.id, host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port'])), short_survey_url(survey.id, host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port'])), target: '_blank')%></td>
-          <td class="controls">
-            <%= link_to t("welcome.home.manage_questions"), survey_questions_path(survey) %>
-            <%= link_to t('.copy_survey'), "#transfer", class: "icon copy tipit transfer_survey",
-                :title => t('.copy_survey'), "data-id" => survey.id, "data-name" => survey %>
-            <%= link_to t('.edit_survey'), edit_survey_path(survey),
-                class: "icon edit tipit", :title => t('.edit_survey') %>
-            <%= link_to t("welcome.home.delete"), survey_path(survey),
-                method: :delete, confirm: t('.confirm_delete'), class: "icon delete tipit",
-                title: t('.delete_survey') %>
-          </td>
-        </tr>
-      <% end %>
+      <tbody>
+        <% @surveys.each do |survey| %>
+          <%= render partial: 'surveys/survey', locals: {survey: survey}%>
+        <% end %>
+      </tbody>
     </table>
-    <div class="contentpad">
 
-    </div>
-    <div id="transfer_survey_div" style="display:none">
-      <div id="transfer_survey_guide">
-        You are about to copy the survey "<span id="survey_name"></span>" to another organization. Please select an organization you wish to have the same survey.
+    <% if @surveys.blank? %>
+      <div class="contentpad no_contacts">
+        <%= t('.no_surveys') %>
       </div>
-      <div id="transfer_survey_processing">
-        <%= image_tag 'loader.gif'%><br/>Copying Survey to <span id="org_name"></span><br/>Please wait...
-      </div>
-      <div id="transfer_survey_content">
-        <div id="other_orgs_filter">
-          <%= text_field_tag "filter", "keyword", id: "other_orgs_filter_keyword", value: "", placeholder: "Type to search organization", class: "ui-autocomplete-input" %>
-        </div>
-        <div id="other_orgs_list">
-        </div>
-      </div>
-      <div id="transfer_survey_error">
-      </div>
-    </div>
-  <% end %>
+  	<% end %>
+  </div>
+
+  <!-- Transfer Survey Dialog -->
+  <%= render 'surveys/transfer_survey' %>
 <% end %>

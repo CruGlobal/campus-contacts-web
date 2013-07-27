@@ -97,7 +97,7 @@
       <% if current_organization.show_sub_orgs? && current_organization.has_children? %>
         <label for="survey_label">
           <%= raw(t('.association', this_term: current_organization.terminology, child_term: current_organization.children.first.terminology)) %>
-          <div class="icon help tipit help_bubble_keyword " title="<%= t('surveys.index_admin.association_help') %>"></div>
+          <div class="icon help tip help_bubble_keyword " title="<%= t('surveys.index_admin.association_help') %>"></div>
         </label>
         <div class="field">
           <%= f.select :organization_id, ([current_organization] + current_organization.children).collect {|o| [o.to_s, o.id]} %>
@@ -111,9 +111,9 @@
       <% end %>
     </div>
   </div>
-  
+
 	<div id="show_advanced_survey_option">Show Advanced Options</div>
-	
+
 	<div id="advanced_survey_option" class="hidden">
 		<div class="stepwrap rwidth">
 		  <div class="stepnumber">
@@ -165,7 +165,7 @@
 
 		  </div>
 		</div>
-	</div>	
+	</div>
 
   <div class="actions">
     <%= f.submit %>

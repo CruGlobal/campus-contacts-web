@@ -1,0 +1,56 @@
+<% provide :sidebar do %>
+  <%= render :partial => 'snapshot_movements'%>
+<% end %>
+
+<div class="titlebar titlebarmod">
+  <h1>
+    Snapshot View
+  </h1>
+</div>
+
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/highcharts-more.js"></script>
+<div id="snap_gospel_exp">
+  <h2>GOSPEL EXPERIENCES</h2>
+  <%= select_tag "gospel_exp_range", options_for_select(Chart.evang_range_options, @chart.snapshot_evang_range) %>
+</div>
+<div id="snap_laborers">
+  <h2>LABORERS</h2>
+  <%= select_tag "laborers_range", options_for_select(Chart.laborers_range_options, @chart.snapshot_laborers_range) %>
+</div>
+<div id="snap_spinner">
+  <br/>Updating Chart...&nbsp;<%= image_tag "spinner.gif" %>
+</div>
+<div id="snap_container1"></div>
+<div id="snap_container2"></div>
+<div id="snap_container3"></div>
+<div id="snap_numbers">
+  <div id="snap_movements_data">
+    <h2>STAGE OF MOVEMENTS</h2>
+    <h3 class="snap_movement_data"><%= @movement_stages["Pioneering"] %> Pioneering</h3>
+    <h3 class="snap_movement_data"><%= @movement_stages["Key Leader"] %> Key Leader</h3>
+    <h3 class="snap_movement_data"><%= @movement_stages["Launched"] %> Launched</h3>
+    <h3 class="snap_movement_data"><%= @movement_stages["Multiplying (formerly Transformational)"] %> Multiplying</h3>
+  </div>
+  <div id="changed_lives">
+    <h2>CHANGED LIVES</h2>
+    <% @changed_lives.each do |person| %>
+      <div class="changed_life">
+        <% if person.fb_uid.present? %>
+          <%= image_tag("https://graph.facebook.com/#{person.fb_uid}/picture?width=50&height=50", alt: '', width: '50', height: '50', id: 'profile_image') %>
+        <% else %>
+          <%= image_tag("no_image.png", alt: '', width: '50', height: '50', id: 'profile_image') %>
+        <% end %>
+        <%= person.name %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<div class="clear"></div>
+<div id="snap_on_mission">
+  <h2>FACULTY ON MISSION/<br/>GRADUATING ON MISSION</h2>
+</div>
+
+<div id="snap_chart">
+  <%= render :partial => 'snapshot_js' %>
+</div>

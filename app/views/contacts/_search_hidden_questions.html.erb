@@ -1,7 +1,7 @@
-<div id="search_hidden_questions_guide">
+<div id="search_hidden_questions_guide" class="fancy">
   <%= t('contacts.search.add_question') %>
 </div>
-<div id="search_hidden_questions_list">
+<div class="mh_popup_box_scroller" id="search_hidden_questions_list">
   <ul id="search_hidden_questions">
     <%= render partial: 'contacts/search_hidden_question', collection: @search_hidden_questions %>
   </ul>

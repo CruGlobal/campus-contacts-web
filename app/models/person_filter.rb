@@ -1,11 +1,13 @@
 class PersonFilter
   attr_accessor :people, :filters
 
-  def initialize(filters)
+  def initialize(filters, organization = nil)
     @filters = filters
+    @organization = organization
 
     # strip extra spaces from filters
     @filters.collect { |k, v| @filters[k] = v.to_s.strip }
+
   end
 
   def filter(people)
@@ -15,8 +17,20 @@ class PersonFilter
       filtered_people = filtered_people.where('people.id' => @filters[:ids].split(','))
     end
 
+    if @filters[:labels]
+      filtered_people = filtered_people.joins(:organizational_labels).where('organizational_labels.label_id IN (?) AND organizational_labels.organization_id = ? AND organizational_labels.removed_date IS NULL', @filters[:labels].split(','), @organization.id)
+    end
+
+    if @filters[:permissions]
+      filtered_people = filtered_people.where('organizational_permissions.permission_id IN (?) AND organizational_permissions.organization_id = ?', @filters[:permissions].split(','), @organization.id)
+    end
+
     if @filters[:roles]
-      filtered_people = filtered_people.where('organizational_roles.role_id' => @filters[:roles].split(','))
+      filtered_people = filtered_people.joins(:organizational_labels).where('(organizational_permissions.permission_id IN (:ids) AND organizational_permissions.organization_id = :org_id) OR (organizational_labels.label_id IN (:ids) AND organizational_labels.organization_id = :org_id AND organizational_labels.removed_date IS NULL)', ids: @filters[:roles].split(','), org_id: @organization.id)
+    end
+
+    if @filters[:interactions]
+      filtered_people = filtered_people.joins(:interactions).where('interactions.organization_id = ? AND interactions.deleted_at IS NULL AND interactions.interaction_type_id IN (?)', @organization.id, @filters[:interactions].split(','))
     end
 
     if @filters[:first_name_like]
@@ -38,6 +52,7 @@ class PersonFilter
       else
         filtered_people = filtered_people.includes(:email_addresses)
                                          .where("concat(first_name,' ',last_name) LIKE :search OR
+                                                  first_name LIKE :search OR last_name LIKE :search OR
                                                   email_addresses.email LIKE :search",
                                                  {:search => "#{filters[:name_or_email_like]}%"})
       end
@@ -73,13 +88,13 @@ class PersonFilter
     end
 
     if @filters[:followup_status]
-      filtered_people = filtered_people.where('organizational_roles.followup_status' => @filters[:followup_status].split(','))
-      filtered_people = filtered_people.includes(:organizational_roles) unless filtered_people.to_sql.include?('`organizational_roles`')
+      filtered_people = filtered_people.where('organizational_permissions.followup_status' => @filters[:followup_status].split(','))
+      filtered_people = filtered_people.includes(:organizational_permissions) unless filtered_people.to_sql.include?('`organizational_permissions`')
     end
 
     if @filters[:assigned_to]
       filtered_people = filtered_people.includes(:assigned_tos)
-                                        .where('contact_assignments.assigned_to_id' => @filters[:assigned_to].split(','))
+                                       .where('contact_assignments.assigned_to_id' => @filters[:assigned_to].split(','), 'contact_assignments.organization_id' => @organization.id)
     end
 
       if @filters[:surveys].present?

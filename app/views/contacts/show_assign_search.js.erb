@@ -1,0 +1,5 @@
+$("#assign_search #assign_search_loader").hide()
+$("#assign_search #mh_popup_box_content").html("<%= escape_javascript(render partial: 'application/assign_search') %>")
+$("#assign_search #mh_popup_box_content").show()
+$("#assign_search #assign_save").show()
+$("#assign_search").removeClass('should_reload')

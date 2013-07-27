@@ -45,12 +45,12 @@ $ ->
         select_field.trigger('change')
       $('#create_question_dialog').dialog('close')
 
-  	$('#create_question_dialog').dialog
-  		resizable: false,
-  		height: 444,
-  		width: 600,
-  		modal: true,
-  		autoOpen: false,
+    $('#create_question_dialog').dialog
+      resizable: false,
+      height: 444,
+      width: 600,
+      modal: true,
+      autoOpen: false,
       open: (event, ui) ->
         $("body").css("overflow", "hidden")
         $('.ui-widget-overlay').width($('body').width())
@@ -116,7 +116,7 @@ $ ->
       $('#question_field').trigger('keyup')
 
     $('#create_question_dialog').attr('data_id', $(this).attr('data_id'))
-    $('#create_question_dialog').dialog('option', 'position', 'center');
+    $('#create_question_dialog').dialog('option', 'position', 'center')
     $('#create_question_dialog').dialog('open')
 
   $('#create_survey_toggle').live 'change', ->

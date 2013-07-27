@@ -46,4 +46,5 @@ Mh::Application.configure do
     Bullet.enable = false
     Bullet.bullet_logger = true
   end
+  config.assets.logger = false
 end

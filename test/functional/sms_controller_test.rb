@@ -54,7 +54,7 @@ class SmsControllerTest < ActionController::TestCase
 
       should 'add contact to org as soon as they reply with "i"' do
         Factory(:received_sms, @sms_params)
-        assert_difference('OrganizationalRole.count') do
+        assert_difference('OrganizationalPermission.count') do
           post :mo, @post_params.merge(message: 'i', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
         end
       end

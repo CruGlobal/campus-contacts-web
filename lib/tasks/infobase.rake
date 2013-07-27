@@ -73,7 +73,8 @@ namespace :infobase do
       # team_leader_role_id = Organization.find(1).ministry_roles.find_by_name("Missional Team Leader").id
       puts "Adding team members"
       i = 0
-      Ccc::Person.connection.select_all("select * from ministry_missional_team_member").each do |mtm|
+      mtms = Ccc::Person.connection.select_all("select * from ministry_missional_team_member")
+      mtms.each do |mtm|
         # personID, teamID
         team = team_id_to_ministry[mtm['teamID']]
         next unless team
@@ -111,18 +112,31 @@ namespace :infobase do
           ccc_person.email_addresses.each do |email_address|
             mh_person.email = email_address.email unless mh_person.email_addresses.detect {|e| email_address.email == e.email} || EmailAddress.where(email: email_address.email).first
           end
+
+
           mh_person.save!
 
           ccc_person.phone_numbers.each do |phone|
             mh_person.phone_number = phone.number unless mh_person.phone_numbers.detect {|p| p.number == phone.number}
           end
-          mh_person.save(validate: false)
         end
+
+        mh_person.sp_person_id = mh_person.si_person_id = mh_person.pr_person_id = mh_person.infobase_person_id = ccc_person.id
+        mh_person.save(validate: false) if mh_person.changed?
+
 
         team.add_admin(mh_person)
 
         i += 1
         puts i if i % 1000 == 0
+      end
+
+      # update is_staff column
+      params = {people: mtms.collect {|mtm|  mtm['personID']}.join(',')}
+      response = RestClient.post(APP_CONFIG['infobase_url'] + '/api/v1/people/is_staff', params.to_json, content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\"")
+      json = JSON.parse(response)
+      json['people'].each do |ccc_person_id, is_staff|
+        Person.where(infobase_person_id: ccc_person_id).update_all(is_staff: is_staff)
       end
 
       # next is activity
@@ -145,9 +159,11 @@ namespace :infobase do
             if team == m.parent
               m.update_attributes(attribs)
             else
-              # The movement was moved from one team to another
-              m.parent = team
-              m.save!
+              begin
+                # The movement was moved from one team to another
+                m.parent = team
+                m.save!
+              rescue; end
             end
           else
             next unless team

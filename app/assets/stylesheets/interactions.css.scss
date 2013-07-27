@@ -1,0 +1,483 @@
+// Place all the styles related to the interactions controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+html.noscroll {
+  position: fixed;
+  overflow-y: scroll;
+  width: 100%;
+}
+
+body{
+
+  .loader {
+    margin-left: 10px;
+    display: inline-block;
+    line-height: 16px;
+    font-size: 11px;
+    color: #777;
+    font-weight: normal;
+    img {
+      margin: 0 2px -3px 0;
+      height: 16px;
+      width: 16px;
+    }
+  }
+
+  input.group_search_name, input.leader_search_name {
+    width: 400px;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  #assign_to_button {
+    display: none;
+  }
+
+  #char_counter {
+    font-family: Georgia, Serif;
+    font-style: italic;
+    font-weight: normal;
+    color: #808284;
+    font-size: 11px;
+    padding-right: 10px;
+  }
+
+  .pop_box_overlay_container{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+  }
+
+  .pop_box_container {
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    .mh_popup_box {
+      z-index: 1002;
+      margin: 25px auto;
+
+      &.groups_popup_box {
+        .groups_chooser_box {
+          width: 260px;
+          margin: 0 auto;
+          padding: 6px 0px 2px;
+          height: 180px;
+          overflow: hidden;
+          overflow-y: auto;
+          .groups_checkbox {
+            padding: 0px 10px;
+          }
+        }
+        .groups_notice {
+          width: 260px;
+          margin: 0 auto;
+          text-align: center;
+        }
+        #groups_popup_manage_button {
+          float: left;
+        }
+        .groups_add_new {
+          width: 260px;
+          margin: 0 auto;
+          #groups_new_input {
+            width: 223px;
+            margin: 0;
+          }
+        }
+      }
+
+      &.permissions_popup_box {
+        .permissions_chooser_box {
+          width: 260px;
+          margin: 0 auto;
+          padding: 6px 0px 2px;
+          height: 180px;
+          overflow: hidden;
+          overflow-y: auto;
+          .permissions_checkbox {
+            padding: 0px 10px;
+          }
+        }
+        #permissions_popup_manage_button {
+          float: left;
+        }
+      }
+
+      &.labels_popup_box {
+        .labels_notice {
+          width: 260px;
+          margin: 0 auto;
+          text-align: center;
+        }
+        .labels_add_new {
+          width: 260px;
+          margin: 0 auto;
+          #labels_new_input {
+            width: 223px;
+            margin: 0;
+          }
+        }
+        .labels_chooser_box {
+          width: 260px;
+          margin: 0 auto;
+          padding: 6px 0px 2px;
+          max-height: 160px;
+          overflow: hidden;
+          overflow-y: auto;
+          .labels_checkbox {
+            padding: 0px 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+      }
+    }
+  }
+
+  &#interactions_controller {
+    .add_email, .add_phone, .add_address {
+      float: right;
+      padding: 0;
+    }
+    .no_labels, .no_groups {
+      text-align: center;
+      font-weight: normal;
+      font-style: italic;
+      color: #999;
+      padding: 3px 3px 5px 3px;
+    }
+    .contact_checkbox {
+      display: none;
+    }
+    .groups_list ul,
+    .leaders_list ul {
+      height: 260px;
+      width: 400px;
+      padding: 3px
+    }
+    a.send_contact_info {
+      &:hover {
+        text-decoration: none;
+      }
+    }
+    #profile_label_box, #profile_group_box {
+      padding: 6px 8px;
+      .profile_label, .profile_group {
+        margin-left: 0;
+        max-width: 165px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: default;
+      }
+    }
+    #profile_labels_dialog {
+      .labels_checkbox {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .results {
+      max-height: 150px;
+      overflow: hidden;
+      overflow-y: scroll;
+    }
+    #interaction_paging, #all_feed_paging {
+      text-align: center;
+      a {
+        display: inline-block;
+        button.action_gray {
+          display: inline-block;
+          border: 1px solid
+          rgb(51, 51, 51);
+          border-radius: 4px;
+          background: -webkit-linear-gradient(top, silver 0%, rgb(133, 135, 137) 50%, rgb(128, 130, 132) 50%, rgb(128, 130, 132) 100%);
+          padding: 0px 9px;
+          margin: 0px;
+        }
+      }
+    }
+
+    .search_no_results {
+      text-align: center;
+      padding: 2px 5px 5px;
+    }
+
+    .feed_box {
+      &.notice {
+        text-align: center;
+        font-weight: normal;
+        font-style: italic;
+        color: #999;
+      }
+      .email .email_record {
+        max-width: 170px;
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .custom_dropdown {
+      position: absolute;
+      font-style: normal;
+      font-family: Tahoma, Sans-serif;
+      font-size: 11px;
+      width: 175px;
+      display: inline-block;
+      padding: 0;
+      color: #333;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.9);
+      white-space: nowrap;
+      background-color: #eaeaea;
+      background-image: -moz-linear-gradient(#fafafa, #eaeaea);
+      background-image: -webkit-linear-gradient(#fafafa, #eaeaea);
+      background-image: linear-gradient(#fafafa, #eaeaea);
+      background-repeat: repeat-x;
+      border-radius: 3px;
+      border: 1px solid #ddd;
+      border-bottom-color: #c5c5c5;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      &#nationality_dropdown {
+        width: 215px;
+        #selected {
+          width: 190px;
+        }
+      }
+
+      .dropdown_name {
+        width: 135px;
+        display: inline-block;
+      	white-space: nowrap;
+      	overflow: hidden;
+      	text-overflow: ellipsis;
+      }
+
+      .arrow {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 10px;
+        height: 10px;
+        font-style: normal;
+        font-size: 8px;
+        display: none;
+        color: #999;
+        cursor: pointer;
+        padding-top: 6px;
+        padding-right: 3px;
+        &.up {
+          display: none;
+        }
+        &.down {
+          display: inline-block;
+        }
+      }
+
+      &.active {
+        z-index: 9999;
+        min-height: 10px;
+        .arrow.up {
+          display: inline-block;
+        }
+        .arrow.down {
+          display: none;
+        }
+      }
+
+
+      &.active, &:hover {
+        background-color: #ececec;
+        background-image: -moz-linear-gradient(#fafafa, #ececec);
+        background-image: -webkit-linear-gradient(#fafafa, #ececec);
+        background-image: linear-gradient(#fafafa, #ececec);
+        background-repeat: repeat-x;
+        border-radius: 3px;
+        border: 1px solid #bbb;
+        border-bottom-color: #b5b5b5;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+
+      }
+
+      #selected {
+        z-index: 99;
+        padding: 4px 20px 4px 6px;
+        cursor: pointer;
+        width: 150px;
+        display: inline-block;
+      	white-space: nowrap;
+      	overflow: hidden;
+      	text-overflow: ellipsis;
+      }
+
+
+      #togglable {
+        display: none;
+        .option {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          padding: 4px 6px;
+          color: #777;
+          &:hover {
+            background: #e9e9e9;
+            cursor: pointer;
+          }
+        }
+        .search input {
+          width: 167px;
+          margin: 0 0 1px 0;
+        }
+      }
+
+      .selected {
+        color: #333;
+        width: 135px;
+        display: inline-block;
+      	white-space: nowrap;
+      	overflow: hidden;
+      	text-overflow: ellipsis;
+      }
+
+      &.active {
+        #togglable {
+          display: block;
+        }
+        #selected {
+          display: none;
+        }
+      }
+    }
+
+    #receiver_id_dropdown {
+
+    }
+
+    .interaction_field {
+      float: left;
+      height: 45px;
+      &.clickable {
+        color: #333;
+        &:hover {
+          color: red;
+        }
+      }
+      &.more_div {
+        line-height: 52px;
+        a.more_options_link, input#more_options_link {
+          margin-right: 5px;
+        }
+      }
+    }
+    .interaction_new #datepicker {
+      width: 166px;
+      color: #333333;
+    }
+    .field_with_errors {
+      display: inline-block;
+    }
+    .edit_email_fields,
+    .edit_phone_fields,
+    .edit_address_fields {
+      margin-bottom: 6px;
+      .remove_field {
+        display: none;
+      }
+      &:hover .remove_field {
+        display: inline-block;;
+      }
+    }
+    #profile_errors {
+      .error_msg {
+        text-align: center;
+        font-color: #990000;
+      }
+    }
+    #rest {
+      background: none;
+      #gandalfthewhite {
+        border-bottom: none;
+      }
+      #left {
+        display: none;
+      }
+      #main {
+        margin: 0px;
+        border: none;
+        .profile_interactions {
+          .edit_space {
+            display: none;
+          }
+        }
+        #person_profile {
+          margin: -10px auto 10px;
+          width: 680px;
+          min-height: 580px;
+
+          #action_menu {
+            margin: 0px 0px 20px;
+          }
+
+          #profile_name {
+            height: 30px;
+          }
+
+          #profile_name_edit {
+            display: none;
+            height: 30px;
+            margin: 0px 0px 12px;
+            #profile_name_fields {
+              display: inline-block;
+              margin: 0 3px 0 0;
+              padding: 0px;
+              float: left;
+              .profile_name_field {
+                width: 180px;
+                margin: 0;
+                padding: 0px 3px;
+                font-family: tahoma, Sans-serif;
+                font-size: 24px;
+                font-weight: bold;
+                color: #333333;
+              }
+            }
+            #profile_name_buttons {
+              display: inline-block;
+              float: left;
+              button {
+                float: right;
+              }
+            }
+          }
+
+          #profile_feed {
+            margin: 0 0 30px;
+
+            .view.col_right.status {
+              margin: 10px 0 10px 20px;
+            }
+            .feed_content .tab_content {
+              display: none;
+              &.current {
+                display: block;
+              }
+              &.profile_info .edit_space {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

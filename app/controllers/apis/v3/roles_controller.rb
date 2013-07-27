@@ -1,10 +1,11 @@
 class Apis::V3::RolesController < Apis::V3::BaseController
-  before_filter :get_role, only: [:show, :update, :destroy]
+  before_filter :get_role, only: [:show]
+  before_filter :get_label, only: [:update, :destroy]
 
   def index
     order = params[:order] || 'name'
 
-    list = add_includes_and_order(roles, order: order)
+    list = permissions + labels
 
     render json: list,
            callback: params[:callback],
@@ -12,30 +13,31 @@ class Apis::V3::RolesController < Apis::V3::BaseController
   end
 
   def show
-    render json: @role,
+
+    render json: {role: @role.attributes},
            callback: params[:callback],
            scope: {include: includes, organization: current_organization}
   end
 
   def create
-    role = roles.new(params[:role])
-    role.organization_id = current_organization.id
+    label = Label.new(params[:role])
+    label.organization_id = current_organization.id
 
-    if role.save
-      render json: role,
+    if label.save
+      render json: {role: label.attributes},
              status: :created,
              callback: params[:callback],
              scope: {include: includes, organization: current_organization}
     else
-      render json: {errors: role.errors.full_messages},
+      render json: {errors: label.errors.full_messages},
              status: :unprocessable_entity,
              callback: params[:callback]
     end
   end
 
   def update
-    if @role.update_attributes(params[:role])
-      render json: @role,
+    if @label.update_attributes(params[:role])
+      render json: {role: @label.attributes},
              callback: params[:callback],
              scope: {include: includes, organization: current_organization}
     else
@@ -47,23 +49,29 @@ class Apis::V3::RolesController < Apis::V3::BaseController
   end
 
   def destroy
-    @role.destroy
-
-    render json: @role,
+    @label.destroy
+    render json: @label,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization}
   end
 
   private
 
-  def roles
-    current_organization.roles
+  def permissions
+    current_organization.permissions
+  end
+
+  def labels
+    current_organization.labels
   end
 
   def get_role
-    @role = add_includes_and_order(roles)
-                .find(params[:id])
+    @role = Permission.where(id: params[:id]).try(:first)
+    @role ||= Label.where(id: params[:id]).try(:first)
+  end
 
+  def get_label
+    @label = Label.where(id: params[:id]).try(:first)
   end
 
   def available_includes

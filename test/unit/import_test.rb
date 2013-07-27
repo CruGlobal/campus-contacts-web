@@ -8,7 +8,7 @@ class ImportTest < ActiveSupport::TestCase
   setup do    
     @user = Factory(:user_with_auxs)
     @org = Factory(:organization)
-    Factory(:organizational_role, organization: @org, person: @user.person, role: Role.admin)
+    Factory(:organizational_permission, organization: @org, person: @user.person, permission: Permission.admin)
   end
   
   # context "label_name function" do

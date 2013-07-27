@@ -1,50 +1,43 @@
+<%= render 'surveys/surveys_sidebar' %>
+
 <div class="titlebar titlebarmod">
-  <h1><%= t('.manage') %></h1>
+  <h1>
+    <%= t('.manage', survey: @survey) %>
+    <div id='global_loader'>
+      <%= image_tag 'loader.gif'%>
+    </div>
+  </h1>
 </div>
 
-<div class="pagemenu">
-  <ul class="pillmenu">
-    <li><%= link_to('Preview Survey', new_survey_response_url(survey_id: @survey.id, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']), target: '_blank')%></li>
-    <li>
-      <% if session[:wizard] && wizard_path %>
-        <%= link_to(t('nav.back_to_wizard'), wizard_path) %>
-      <% else %>
-        <% session[:wizard] = false %>
-        <%= link_to(t('nav.back_to_dashboard'), user_root_path) %>
-      <% end %>
-    </li>
-  </ul>
+<div id="ac_button_bar">
+	<ul class="button_bar">
+		<li class="inlinehelp">
+      <%= t('general.survey_web_tip_html', link: short_survey_url(@survey.id, host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port']))) %>
+		</li>
+	</ul>
 </div>
+<br/>
 
-<% provide :sidebar do %>
-  <%= render 'surveys/left_sidebar' %>
-<% end %>
-
-<div class="contentpad">
-  <p class="inlinehelp">
-    <%= t('general.survey_web_tip_html', link: short_survey_url(@survey.id, host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port']))) %>
-  </p>
-
+<div id="ac_contact_spread">
   <p><%= t('.note') %></p>
+  <h3><%= t('.your_questions') %> <spab class='icon help tip help_bubble_keyword' title="<%= t('.your_questions_help') %>">&nbsp;</span></h3>
 
-
-  <h3><%= t('.your_questions') %> <spab class='icon help tipitright' title="<%= t('.your_questions_help') %>">&nbsp;</span></h3>
   <table border="0" cellspacing="0" cellpadding="0" class="yourquestions fakesort">
     <tbody>
       <tr>
         <td class="questiontitle"><%= Element.find_by_attribute_name('first_name').present? ? Element.find_by_attribute_name('first_name').label : "First Name:" %></td>
         <td></td>
-        <td><span class="icon lock tiplight" title="<%= t('.forced_tip') %>"></span></td>
+        <td><span class="icon lock tipitleft" title="<%= t('.forced_tip') %>"></span></td>
       </tr>
       <tr>
         <td class="questiontitle"><%= Element.find_by_attribute_name('last_name').present? ? Element.find_by_attribute_name('last_name').label : "Last Name:" %></td>
         <td><span class="icon_holder"></span></td>
-        <td><span class="icon lock tiplight" title="<%= t('.forced_tip') %>"></span></td>
+        <td><span class="icon lock tipitleft" title="<%= t('.forced_tip') %>"></span></td>
       </tr>
       <tr>
         <td class="questiontitle"><%= Element.find_by_attribute_name('phone_number').label %></td>
         <td></td>
-        <td><span class="icon lock tiplight" title="<%= t('.forced_tip') %>"></span></td>
+        <td><span class="icon lock tipitleft" title="<%= t('.forced_tip') %>"></span></td>
       </tr>
     </tbody>
   </table>
@@ -55,35 +48,10 @@
   </table>
 
   <div class="button_block">
-    <%= link_to('+ ' + t('.add_question'), add_survey_question_path(@survey), {id:'add_suvey_question_link', remote: true, class: 'cleangray'}) %>
-		<%= link_to('+ ' + t('.add_prev_question'), '', id: 'add_old_question_link', class: "cleangray") %>
+    <%= link_to(t('.add_question'), add_survey_question_path(@survey), {id:'add_suvey_question_link', remote: true, class: 'cleangray'}) %>
+		<%= link_to(t('.add_prev_question'), '', id: 'add_old_question_link', class: "cleangray") %>
   </div>
 
-  <div id="previously_used" style="display:none">
-
-    <table border="0" cellspacing="5" cellpadding="0" class="yourquestions">
-      <thead>
-        <th colspan="3"><%= t('.predefined') %> <%= tip(t('.predefined_help')) %></th>
-      </thead>
-      <tbody id="predefined_questions">
-        <% @predefined_questions.each do |question| %>        	
-        	<% next if ['first_name','last_name','phone_number'].include?(question.attribute_name) %>
-          <%= render 'predefined_question', question: question %>
-        <% end %>
-      </tbody>
-    </table>
-
-    <table border="0" cellspacing="5" cellpadding="0" class="yourquestions">
-      <thead>
-        <th colspan="3"><%= t('.previously_used') %> <%#= tip(t('questions.previously_used_help')) %></th>
-      </thead>
-      <tbody id="other_questions">
-        <% @other_questions.each do |question| %>
-          <%= render 'predefined_question', question: question %>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
   <div id='loading' class="hidden">
     <img src='/assets/loader.gif'>
     <br/>
@@ -99,3 +67,6 @@
   <div id="question_form" class="hidden">
   </div>
 </div>
+
+<!-- Previous Questions Dialog -->
+<%= render 'surveys/questions/previous_used_questions' %>

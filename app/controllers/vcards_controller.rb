@@ -3,7 +3,7 @@ require 'vpim/book'
 class VcardsController < ApplicationController
 
   def create
-     VcardMailer.enqueue.vcard(params[:email], params[:person_id])
+     VcardMailer.vcard(params[:email], params[:person_id]).deliver
 
      render nothing: true      
   end

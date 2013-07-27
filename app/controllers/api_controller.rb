@@ -5,6 +5,7 @@ class ApiController < ApplicationController
   include ApiErrors
   include ApiHelper
   skip_before_filter :authenticate_user!, :verify_authenticity_token
+  before_filter :force_client_update
   after_filter :log_api_request
   rescue_from Exception, with: :render_json_error
   

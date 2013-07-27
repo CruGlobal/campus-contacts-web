@@ -1,0 +1,27 @@
+$('#sidebar_lists').html("<%= escape_javascript(render partial: 'contacts/new_sidebar') %>")
+$('#sidebar_lists').addClass('loaded')
+
+$(document).ready(function(){
+  var li;
+
+  $(".leftmenu .leader, .leftmenu .dnc, .leftmenu .completed").droppable({
+    activeClass: 'ui-state-active',
+    hoverClass: 'ui-state-hover',
+    accept: ".handle",
+    drop: function(event, ui) {
+      var leader;
+      li = $(this);
+      li.effect('highlight', {}, 'slow');
+      if ($(this).hasClass("leader")) {
+        $('#assign_to').val(li.attr('data-id'));
+        return $.fn.assignTo(li);
+      }else if ($(this).hasClass("dnc")) {
+        return $.fn.moveToDnc(ui.draggable);
+      }else if ($(this).hasClass("completed")) {
+        return $.fn.moveToCompleted(ui.draggable);
+      }
+    }
+  });
+
+  $.fn.tip()
+})

@@ -4,35 +4,34 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   def index
     render json: filtered_people,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, since: params[:since]}
+           scope: {include: includes, organization: current_organization, since: params[:since], user: current_user}
   end
 
   def show
     render json: @person,
            callback: params[:callback],
-           scope: {include: includes,
-                   organization: current_organization,
-                   user: current_user}
+           scope: {include: includes, organization: current_organization, user: current_user}
   end
 
   def create
     params[:person][:phone_numbers_attributes] = params[:person].delete(:phone_numbers) if params[:person][:phone_numbers]
     params[:person][:email_addresses_attributes] = params[:person].delete(:email_addresses) if params[:person][:email_addresses]
+    params[:person][:addresses_attributes] = params[:person].delete(:addresses) if params[:person][:addresses]
     person = Person.find_existing_person(Person.new(params[:person]))
 
     if person.save
 
-      # add roles in current org
-      role_ids = params[:roles].split(',') if params[:roles]
-      role_ids = [Role::CONTACT_ID] if role_ids.blank?
-      role_ids.each do |role_id|
-        current_organization.add_role_to_person(person, role_id)
+      # add permissions in current org
+      permission_ids = params[:permissions].split(',') if params[:permissions]
+      permission_ids = [Permission::NO_PERMISSIONS_ID] if permission_ids.blank?
+      permission_ids.each do |permission_id|
+        current_organization.add_permission_to_person(person, permission_id)
       end
 
       render json: person,
              status: :created,
              callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
+             scope: {include: includes, organization: current_organization, user: current_user}
     else
       render json: {errors: person.errors.full_messages},
              status: :unprocessable_entity,
@@ -41,17 +40,17 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   end
 
   def update
-    # add roles in current org
-    if params[:roles]
-      params[:roles].split(',').each do |role_id|
-        current_organization.add_role_to_person(person, role_id)
+    # add permissions in current org
+    if params[:permissions]
+      params[:permissions].split(',').each do |permission_id|
+        current_organization.add_permission_to_person(person, permission_id)
       end
     end
 
-    # remove roles in current org
-    if params[:remove_roles]
-      params[:remove_roles].split(',').each do |role_id|
-        current_organization.remove_role_from_person(person, role_id)
+    # remove permissions in current org
+    if params[:remove_permissions]
+      params[:remove_permissions].split(',').each do |permission_id|
+        current_organization.remove_permission_from_person(person, permission_id)
       end
     end
 
@@ -66,15 +65,26 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
 
     render json: @person,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: {include: includes, organization: current_organization, user: current_user}
   end
 
   def destroy
     current_organization.remove_person(@person)
-
     render json: @person,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: {include: includes, organization: current_organization, user: current_user}
+  end
+
+  def bulk_destroy
+    @people = filtered_people
+    current_organization.remove_people(@people)
+    render json: @people,
+           callback: params[:callback],
+           scope: {include: includes, organization: current_organization, user: current_user}
+  end
+
+  def ids
+    render json: filtered_people.collect { |p| p.id }, root: 'people_ids', callback: params[:callback]
   end
 
   private
@@ -101,14 +111,15 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
         current_organization.not_archived_people
       end
 
-      @filtered_people = add_includes_and_order(@filtered_people, order: order)
-      @filtered_people = PersonFilter.new(params[:filters]).filter(@filtered_people) if params[:filters]
+      @filtered_people = add_includes_and_order(@filtered_people)
+      @filtered_people = PersonOrder.new(order, current_organization).order(@filtered_people) if order
+      @filtered_people = PersonFilter.new(params[:filters], current_organization).filter(@filtered_people) if params[:filters]
     end
     @filtered_people
   end
 
   def available_includes
-    [:email_addresses, :phone_numbers]
+    [:email_addresses, :phone_numbers, :addresses]
   end
 
 end

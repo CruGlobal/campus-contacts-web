@@ -4,8 +4,8 @@
     <% if @predefined.questions.include?(question) %>
       <span class="icon_holder"></span>
     <% else %>
-      <%= link_to('edit', edit_survey_question_path(@survey, question), remote: true, class: 'edit_question_show_loading edit_question icon edit') unless @predefined.questions.include?(question) %>
+      <%= link_to('edit', edit_survey_question_path(@survey, question), remote: true, class: 'edit_question_show_loading edit_question icon edit tipitleft', title: t('surveys.questions.edit.edit_question')) unless @predefined.questions.include?(question) %>
     <% end %>
   </td>
-  <td><%= link_to('remove', survey_question_path(@survey, question), method: :delete, confirm: t('.confirm_delete', question: question.label), remote: true, class: 'remove_question icon delete tiplight', title: t('.delete_tip')) %></td>
+  <td><%= link_to('remove', survey_question_path(@survey, question), method: :delete, confirm: t('.confirm_delete', question: question.label), remote: true, class: 'remove_question icon delete tipitleft', title: t('.delete_tip')) %></td>
 </tr>

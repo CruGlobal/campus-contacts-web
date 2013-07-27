@@ -8,13 +8,13 @@ $ ->
         $.ajax
           url: '/organizations/queue_transfer?person_id=' + ui.item.id
           type: 'GET'
-          
+
   $('#add_sent_contact').live 'blur', ->
     $(this).val('')
-    
+
   $('#select_all_transfer').live 'click', ->
     $('.transfer_person').attr('checked', $(this).is(':checked'))
-    
+
   $('.import_from_crs_link').live 'click', ->
     $('#import_from_crs form')[0].reset()
     $('#organization_parent_id').val($(this).attr('data-parent-id'))
@@ -47,8 +47,8 @@ $ ->
   $('#add_sub_orgs').live 'click', ->
     $(this).hide()
     $('#orgs').show()
-    
-    
+
+
   $('.org_link').live 'ajax:before', ->
     col$ = $(this).closest('div')
     $('.org_link', col$).closest('li').removeClass('selected')
@@ -60,7 +60,7 @@ $ ->
     # $('[data-ancestor-id=' + $(this).attr('data-id') + ']').nextAll().hide()
     $(this).closest('li').addClass('selected')
     $('#spinner_column').show()
-    
+
   $('.add_sub_org').live 'click', ->
     $('#new_org form')[0].reset()
     $('#organization_parent_id').val($(this).attr('data-parent-id'))
@@ -69,7 +69,7 @@ $ ->
       height:444,
       width:600,
       modal: true,
-      buttons: 
+      buttons:
         Cancel: ->
           $(this).dialog('destroy')
           $('#new_org form')[0].reset()
@@ -88,5 +88,5 @@ $ ->
         $('#organization_terminology').focus()
       $.rails.handleRemote(form)
     false
-    
-    
+
+

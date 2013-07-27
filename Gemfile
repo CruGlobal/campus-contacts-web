@@ -40,7 +40,7 @@ gem 'omniauth'
 gem 'omniauth-facebook'#, '~> 1.0.0.rc2'
 gem 'paper_trail', '~> 2'
 gem 'rack-offline'
-gem 'rails', '3.2.12'
+gem 'rails', '3.2.13'
 gem 'rails_autolink'
 gem 'redis'
 gem 'resque', '~> 1.20.0'
@@ -49,7 +49,7 @@ gem 'rest-client'                                     # to make FB api requests
 gem 'retryable-rb'
 gem 'rubycas-client', '~> 2.2.1'
 gem 'rubycas-client-rails', '~> 0.1.0'
-gem 'sass'#, '=3.1.14'
+gem 'sass'
 gem 'sass-rails', "~>3.2.3"
 gem 'trumant-rack-oauth2-server', git: 'git://github.com/twinge/rack-oauth2-server.git', branch: 'active_record'
 gem 'twilio-rb', git: 'git://github.com/stevegraham/twilio-rb.git'
@@ -58,10 +58,12 @@ gem 'valium'
 gem 'versionist', '~> 1.0.0'
 gem 'vpim', git: 'git://github.com/twinge/vpim.git'   # vcard maker
 gem 'whenever'
+gem 'wiser_date', '~> 0.3.0'
 
 
 group :development, :test do
   gem 'awesome_print'
+  gem 'quiet_assets'
 end
 
 group :test do
@@ -84,6 +86,8 @@ group :development do
   gem 'mailcatcher'
   gem 'railroady'
   gem 'localeapp'
+  gem "better_errors", ">= 0.7.2"
+  #gem "binding_of_caller"
 end
 
 group :performance do

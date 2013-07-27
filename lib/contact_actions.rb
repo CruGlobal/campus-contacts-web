@@ -78,8 +78,8 @@ module ContactActions
 
       if @person.save
         if params[:labels].present?
-          params[:labels].each do |role_id|
-            OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(@person.id, current_organization.id, role_id, added_by_id: current_user.person.id) if role_id.present?
+          params[:labels].each do |label_id|
+            OrganizationalLabel.find_or_create_by_person_id_and_organization_id_and_label_id(@person.id, current_organization.id, label_id, added_by_id: current_person.id) if label_id.present?
           end
         end
 
@@ -89,8 +89,14 @@ module ContactActions
         # Record that this person was created so we can notify leaders/admins
         NewPerson.create(person_id: @person.id, organization_id: @organization.id)
 
-        create_contact_at_org(@person, @organization)
-        @person.unachive_contact_role(@organization)
+        if params[:permissions_ids].present?
+          @organization.add_permission_to_person(@person, params[:permissions_ids].first.to_i, current_person.id)
+        else
+          @organization.add_permission_to_person(@person, Permission::NO_PERMISSIONS_ID, current_person.id)
+        end
+
+        # create_contact_at_org(@person, @organization)
+        # @person.unachive_contact_permission(@organization)
 
         if params[:assign_to_me] == 'true'
           ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
@@ -109,7 +115,7 @@ module ContactActions
           wants.mobile { redirect_to :back }
           wants.js do
             @assignments = ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).group_by(&:person_id)
-            @roles = Hash[OrganizationalRole.active.where(organization_id: @organization.id, role_id: Role::CONTACT_ID, person_id: @person).map {|r| [r.person_id, r]}]
+            @permissions = Hash[OrganizationalPermission.active.where(organization_id: @organization.id, permission_id: Permission::NO_PERMISSIONS_ID, person_id: @person).map {|r| [r.person_id, r]}]
             @answers = generate_answers(Person.where(id: @person.id), @organization, @questions)
           end
           wants.json { render json: @person.to_hash_basic(@organization) }

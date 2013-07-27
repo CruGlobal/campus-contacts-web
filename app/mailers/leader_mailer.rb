@@ -11,7 +11,7 @@ class LeaderMailer < ActionMailer::Base
     @added_by = added_by
     @org = org
     @token = token
-    @from = added_by.present? ? added_by.email : 'support@missionhub.com'
+    @from = added_by.present? && added_by.primary_email_address.present? ? added_by.email : 'support@missionhub.com'
     mail to: person.email, from: @from, subject: "Missionhub.com - #{org}"
   end
 end

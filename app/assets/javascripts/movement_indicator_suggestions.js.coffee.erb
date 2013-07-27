@@ -1,0 +1,43 @@
+$ ->
+  if $('#movement_indicator_suggestions_controller.index #suggestions')[0]?
+    $.ajax
+      dataType: 'script',
+      type:'GET',
+      url: '/movement_indicator_suggestions/fetch_suggestions'
+
+    $(document).on 'click', '#show_old', ->
+      $('#declined_suggestions td').html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
+
+      $.ajax
+        dataType: 'script',
+        type:'GET',
+        url: '/movement_indicator_suggestions/fetch_declined_suggestions'
+
+      false
+
+    $(document).on 'click', '[data-behavior=accept]', ->
+      $(this).closest('tr').fadeOut('fast')
+
+      id = $(this).attr('data-id')
+
+      $.ajax
+        dataType: 'script',
+        type:'PUT',
+        data: {movement_indicator_suggestion : { accepted : true } },
+        url: '/movement_indicator_suggestions/' + id
+
+      false
+
+    $(document).on 'click', '[data-behavior=decline]', ->
+      $(this).closest('tr').fadeOut('fast')
+
+      id = $(this).attr('data-id')
+
+      $.ajax
+        dataType: 'script',
+        type:'PUT',
+        data: {movement_indicator_suggestion : { accepted : false } },
+        url: '/movement_indicator_suggestions/' + id
+
+      false
+

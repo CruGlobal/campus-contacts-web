@@ -1,5 +1,9 @@
 <% unless params[:add_another] == 'true' %>
-  $("#member_search").dialog('close');
+  if($("#member_search_div .mh_popup_box_scroller").size() > 0){
+    $.hideDialog($("#member_search_div"))
+  }else{
+    $("#member_search").dialog('close');
+  }
 <% end %>
 
 <% if params[:from_add_member_screen] == "true" %>
@@ -10,6 +14,7 @@
     } else {
       $('#group_table').prepend(row)
     }
+    $(".no_contacts").remove();
   <% end %>
 <% else %>
   <% unless @inContacts %>
@@ -19,6 +24,18 @@
     }
     $('#group_table').prepend(row)
   <% end %>
-  $.n('Contacts added to group successfully');
 <% end %>
+
+<% if @groups.present? %>
+  $('#groups_save').attr('data-current-group-ids',"<%= @groups.collect(&:id).join(',') %>")
+  $('#profile_group_box').html("")
+  <% @groups.each do |group| %>
+    $('#profile_group_box').append("<div class='profile_group'><%= group.name %></div>")
+    $(".groups_checkbox .group_checkbox[value=<%= group.id%>]").prop('checked',true)
+  <% end %>
+<% else %>
+  $('#profile_group_box').append("<div class='no_groups'>No groups assigned.</div>")
+<% end %>
+$.toggleLoader('profile_name','')
+
 $('#global_loader').hide()

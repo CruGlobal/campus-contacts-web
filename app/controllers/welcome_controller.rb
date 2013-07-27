@@ -7,11 +7,11 @@ class WelcomeController < ApplicationController
     end
     render layout: 'splash'#, stream: true
   end
-  
+
   def tutorials
     render layout: 'splash'
   end
-  
+
   def wizard
     session[:wizard] = nil
     case params[:step]
@@ -26,15 +26,15 @@ class WelcomeController < ApplicationController
       redirect_to wizard_path and return
     end
   end
-  
+
   def tour
     render layout: 'splash'
   end
-  
+
   def terms
     render layout: mhub? ? 'mhub' : 'splash'
   end
-  
+
   def privacy
     render layout: mhub? ? 'mhub' : 'splash'
   end

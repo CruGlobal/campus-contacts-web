@@ -34,10 +34,13 @@ class ActiveSupport::TestCase
   # -- they do not yet inherit this setting
   # fixtures :all
   # Add more helper methods to be used by all tests here...
-  Role.admin
-  Role.leader
-  Role.contact
-  Role.involved
+  Permission.admin
+  Permission.user
+  Permission.no_permissions
+  Label.involved
+  Label.engaged_disciple
+  Label.leader
+  Label.seeker
 end
 
 class Test::Unit::TestCase
@@ -68,7 +71,6 @@ end
 def admin_user_login_with_org
   @user = Factory(:user_with_auxs)
   @org = @user.person.organizations.first
-
   @request.session[:current_organization_id] = @org.id
 
   sign_in @user

@@ -213,7 +213,7 @@ a.headerlink:hover {
   	margin-left:8px;
   	float:left;
   	width: 92px;
-  	background: url("<%= asset_path("splash/mh_logo_90px.png") %>") no-repeat;
+  	background: url("<%= asset_path('splash/mh_logo_90px.png') %>") no-repeat;
   }
 }
 
@@ -260,13 +260,13 @@ a.headerlink:hover {
 .topmenu {
 	margin-bottom: 40px;
 	height: 64px;
-	background: #014a6a url("<%= asset_path("grad_topmenu.png") %>") repeat-x;
+	background: #014a6a url("<%= asset_path('grad_topmenu.png') %>") repeat-x;
 }
 
 .topmenu {
   a.topset {
     /*
-    background-image: url("<%= asset_path("iconslice.png") %>") !important;
+    background-image: url("<%= asset_path('iconslice.png') %>") !important;
     background-position: 8px 100px;
     background-repeat: no-repeat;
     padding-left: 30px;
@@ -292,7 +292,7 @@ img.tmenu {
 }
 
 #logo {
-  background: url('<%= asset_path('logo.png') %>') no-repeat;
+  background: url("<%= asset_path('logo.png') %>") no-repeat;
   float: left;
   width: 162px;
   height: 41px;
@@ -301,7 +301,7 @@ img.tmenu {
 }
 
 #logoInvert {
-  background: url('<%= asset_path('logoInvert.png') %>') no-repeat;
+  background: url("<%= asset_path('logoInvert.png') %>") no-repeat;
   float: left;
   width: 166px;
   height: 47px;
@@ -327,7 +327,7 @@ ul.leftmenu {
     font-size: 11px;
     li a {
       font-weight: normal;
-      &.default_role {
+      &.default_permission {
         font-weight: bold;
       }
     }
@@ -419,7 +419,7 @@ ul.leftmenu {
 }
 
 #rest {
- background: url('<%= asset_path('linebg.png') %>') repeat-y 0% 0%;
+ background: url("<%= asset_path('linebg.png') %>") repeat-y 0% 0%;
 }
 
 .pad {
@@ -474,14 +474,14 @@ ul.leftmenu {
     display: inline-block;
   }
   .wizard_step_visited {
-    background: url('<%= asset_path('check_complete.png') %>') no-repeat scroll 0 50% transparent;
+    background: url("<%= asset_path('check_complete.png') %>") no-repeat scroll 0 50% transparent;
     float: right;
     height: 30px;
     vertical-align: middle;
     width: 22px;
   }
   .wizard_step_not_visited {
-    background: url('<%= asset_path('check_incomplete.png') %>') no-repeat scroll 0 50% transparent;
+    background: url("<%= asset_path('check_incomplete.png') %>") no-repeat scroll 0 50% transparent;
     float: right;
     height: 30px;
     vertical-align: middle;
@@ -492,7 +492,7 @@ ul.leftmenu {
     width: 4px;
     margin-right: 9px;
     height: 30px;
-    background: url('<%= asset_path('blue_arrow.png') %>') no-repeat 0 50%;
+    background: url("<%= asset_path('blue_arrow.png') %>") no-repeat 0 50%;
     display: inline-block;
     float: left;
   }
@@ -508,7 +508,7 @@ div.wizard {
 }
 
 .btn {
-  background: url('<%= asset_path('btn.png') %>') repeat-x scroll 0 0 transparent;
+  background: url("<%= asset_path('btn.png') %>") repeat-x scroll 0 0 transparent;
   border: 1px solid silver;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
   color: #000000;
@@ -798,11 +798,11 @@ button[type=submit].smallbtn {
   }
 }
 
-.rj {background: url(<%= asset_path("del.png") %>) no-repeat 0 50%; padding-left: 24px;}
-.spiritual_conversation {background-image: url(<%= asset_path("icon-s-convo16.png") %>);}
-.prayed_to_receive {background-image: url(<%= asset_path("icon-r-christ16.png") %>);}
-.gospel_presentation {background-image: url(<%= asset_path("icon-g-present16.png") %>);}
-.rejoiceable {background-image: url(<%= asset_path("icon-rejoicable16.png") %>);}
+.rj {background: url("<%= asset_path('del.png') %>") no-repeat 0 50%; padding-left: 24px;}
+.spiritual_conversation {background-image: url("<%= asset_path('icon-s-convo16.png') %>");}
+.prayed_to_receive {background-image: url("<%= asset_path('icon-r-christ16.png') %>");}
+.gospel_presentation {background-image: url("<%= asset_path('icon-g-present16.png') %>");}
+.rejoiceable {background-image: url("<%= asset_path('icon-rejoicable16.png') %>");}
 
 #rejoicable_fields {
 	line-height: 26px;
@@ -810,7 +810,7 @@ button[type=submit].smallbtn {
 }
 
 .inlinedel {
-	background: url("<%= asset_path("del.png") %>") no-repeat 50% 50% silver;
+	background: url("<%= asset_path('del.png') %>") no-repeat 50% 50% silver;
 	display: inline-block;
   height: 11px;
   overflow: hidden;
@@ -1115,7 +1115,7 @@ span.title {
   #squarewrap {
   	width: 978px;
   	height: 489px;
-  	background: url("<%= asset_path("splash/people978x489.jpg") %>") no-repeat;
+  	background: url("<%= asset_path('splash/people978x489.jpg') %>") no-repeat;
   }
 
   #tutorialwrap {
@@ -1399,7 +1399,7 @@ span.title {
 }
 
 .modalresults {
-  padding: 8px;
+  padding: 8px 8px 50px;
   margin-top: 10px;
 }
 
@@ -1408,7 +1408,7 @@ span.title {
   list-style: none;
   margin: 0;
   padding: 0;
-  height: 385px;
+  height: 200px;
   border: 1px solid silver;
   overflow-x: hidden;
   overflow-y: scroll;
@@ -1426,12 +1426,16 @@ span.title {
 }
 
 .name_search_results ul {
-  height: auto;
   max-height: 400px;
+  li {
+    max-height: 60px;
+    word-wrap:break-word;
+    word-break:break-all;
+  }
 }
 
 .inlinebutton {
-  background: url('<%= asset_path('pillbg.png') %>') repeat-x;
+  background: url("<%= asset_path('pillbg.png') %>") repeat-x;
   color: #000 !important;
   border: 1px solid #999;
   font-size: 12px;
@@ -1476,7 +1480,7 @@ span.title {
 /* FORM */
 
 .inlinehelp {
-		background: url("<%= asset_path("light.png") %>") no-repeat #fff6d4 5px 5px;
+		background: url("<%= asset_path('light.png') %>") no-repeat #fff6d4 5px 5px;
 		border: 1px solid #ff7800;
 		padding: 5px 5px 5px 25px;
 		border-radius: 4px;
@@ -1708,11 +1712,11 @@ span.title {
 /* WELCOME */
 @font-face {
     font-family: 'SpecialEliteRegular';
-    src: url('<%= asset_path("SpecialElite-webfont.eot") %>');
-    src: url('<%= asset_path("SpecialElite-webfont.eot?#iefix") %>') format('embedded-opentype'),
-         url('<%= asset_path("SpecialElite-webfont.woff") %>') format('woff'),
-         url('<%= asset_path("SpecialElite-webfont.ttf") %>') format('truetype'),
-         url('<%= asset_path("SpecialElite-webfont.svg#SpecialEliteRegular") %>') format('svg');
+    src: url("<%= asset_path('SpecialElite-webfont.eot') %>");
+    src: url("<%= asset_path('SpecialElite-webfont.eot?#iefix') %>") format('embedded-opentype'),
+         url("<%= asset_path('SpecialElite-webfont.woff') %>") format('woff'),
+         url("<%= asset_path('SpecialElite-webfont.ttf') %>") format('truetype'),
+         url("<%= asset_path('SpecialElite-webfont.svg#SpecialEliteRegular') %>") format('svg');
     font-weight: normal;
     font-style: normal;
 
@@ -1775,7 +1779,7 @@ span.title {
 		padding: 0 0 10px 0;
 		list-style: none;
 		li {
-			background: url("<%= asset_path("arrow.png") %>") no-repeat 0 0;
+			background: url("<%= asset_path('arrow.png') %>") no-repeat 0 0;
 			margin-bottom: 8px;
 			padding: 0 0 0 22px;
 			font-size: 12px;
@@ -1811,7 +1815,7 @@ span.title {
 	}
 	hr.fun {
 		border: none;
-		background: url("<%= asset_path("fun.png") %>") no-repeat 50% 50%;
+		background: url("<%= asset_path('fun.png') %>") no-repeat 50% 50%;
 		margin: 30px 0;
 		height: 12px;
 	}
@@ -1868,12 +1872,12 @@ span.title {
 	}
 
 	.ui-state-default .ui-icon {
-		background-image: url("<%= asset_path("pointer.png") %>");
+		background-image: url("<%= asset_path('pointer.png') %>");
     background-position: 0 2px;
     left: 14px;
 	}
 	.ui-state-active .ui-icon {
-		background-image: url("<%= asset_path("pointer.png") %>");
+		background-image: url("<%= asset_path('pointer.png') %>");
     background-position: 0 -65px;
     left: 14px;
 	}
@@ -1961,19 +1965,7 @@ td.labels {
       font-weight: bold;
     }
   }
-  th.groupname {
-    width: 40%;
-  }
 }
-
-ul#leaders li.ui-state-highlight:hover {
-	background: red;
-}
-
-/*#leaders {
-  max-height: 265px;
-  overflow: hidden;
-}*/
 
 ul.leftmenu li .moredown {
 	font-weight: normal;
@@ -2040,7 +2032,7 @@ ul.leftmenu li.information {
 }
 
 .rs .field_with_errors {
-  background: url("<%= asset_path("alert_small.png") %>") no-repeat 100% 5px;
+  background: url("<%= asset_path('alert_small.png') %>") no-repeat 100% 5px;
   padding-right: 30px;
 }
 
@@ -2097,8 +2089,10 @@ div.field_with_errors div.ui-effects-wrapper {
   text-indent: 4px;
 }
 
+.tip {cursor: pointer}
+
 .tiplight {
-  background: url("<%= asset_path("qmark.png") %>") no-repeat;
+  background: url("<%= asset_path('qmark.png') %>") no-repeat;
   width: 16px;
   height: 16px;
   display: inline-block;
@@ -2539,7 +2533,7 @@ textarea, input[type=text], input[type=password] {
   border: 5px solid #f0f0f0;
   h3 {
     display: block;
-    background: url("<%= asset_path("dangerbg.png") %>") repeat-x;;
+    background: url("<%= asset_path('dangerbg.png') %>") repeat-x;;
     padding-left: 15px;
     margin: 0;
     color: #fff;
@@ -2588,7 +2582,7 @@ div.help_bubble {
   cursor: help;
 }
 
-div.help_bubble_keyword {
+.help_bubble_keyword {
   margin: -5px 0px -3px;
   width: 16px;
   height: 16px;
@@ -2882,17 +2876,9 @@ ul.divider {
   font-size: 12px;
 }
 
-#bulk_send_msg_dialog {
-  .note {
-		margin: 10px 0;
-		font-family: Georgia;
-		font-size: 13px;
-		font-style: italic;
-		font-weight: normal;
-		color: #808284;
-    .reply_to_toggle {
-      display: inline-block;
-      vertical-align: top;
-    }
-  }
+.arrow_anchor{
+  font-size:10px;
+  position:relative;
+  bottom:1px;
 }
+

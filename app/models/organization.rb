@@ -8,14 +8,17 @@ class Organization < ActiveRecord::Base
   has_paper_trail :on => [:destroy],
                   :meta => { organization_id: :parent_id }
 
+  has_many :interactions
+  has_many :labels, inverse_of: :organization
+  has_many :organizational_labels, inverse_of: :organization
+
   belongs_to :importable, polymorphic: true
   has_many :messages
-  has_many :roles, inverse_of: :organization
   has_many :group_labels
   has_many :activities, dependent: :destroy
   has_many :target_areas, through: :activities, class_name: 'TargetArea'
-  has_many :people, through: :organizational_roles, uniq: true
-  has_many :not_archived_people, through: :organizational_roles, source: :person, conditions: ["organizational_roles.archive_date is NULL"], uniq: true
+  has_many :people, through: :organizational_permissions, uniq: true
+  has_many :not_archived_people, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date is NULL"], uniq: true
   has_many :contact_assignments
   has_many :keywords, class_name: 'SmsKeyword'
   has_many :surveys, dependent: :destroy
@@ -24,21 +27,29 @@ class Organization < ActiveRecord::Base
   has_many :all_questions, through: :surveys, source: :all_questions
   has_many :answers, through: :all_questions, source: :answers
   has_many :followup_comments
-  has_many :organizational_roles, inverse_of: :organization
+  has_many :organizational_permissions, inverse_of: :organization
+  has_many :movement_indicator_suggestions
 
-  if Role.table_exists? # added for travis testing
-    has_many :leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id IN (?) AND organizational_roles.archive_date IS NULL", Role.leader_ids], order: "people.last_name, people.first_name", uniq: true
-    has_many :only_leaders, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL", Role::LEADER_ID], order: "people.last_name, people.first_name", uniq: true
-    has_many :admins, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL", Role::ADMIN_ID], order: "people.last_name, people.first_name", uniq: true
-    has_many :sent, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL", Role::SENT_ID], order: "people.last_name, people.first_name", uniq: true
-    has_many :all_people, through: :organizational_roles, source: :person, conditions: ["(organizational_roles.followup_status <> 'do_not_contact' OR organizational_roles.followup_status IS NULL) AND organizational_roles.archive_date IS NULL"], uniq: true
-    has_many :all_people_with_archived, through: :organizational_roles, source: :person, conditions: ["organizational_roles.followup_status <> 'do_not_contact' OR organizational_roles.followup_status IS NULL"], uniq: true
-    has_many :contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status <> 'do_not_contact'", Role::CONTACT_ID]
-    has_many :contacts_with_archived, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.followup_status <> 'do_not_contact'", Role::CONTACT_ID]
-    has_many :dnc_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.archive_date IS NULL AND organizational_roles.followup_status = 'do_not_contact'"]
-    has_many :completed_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status = ?", Role::CONTACT_ID, 'completed']
-    has_many :completed_contacts_with_archived, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.followup_status = ?", Role::CONTACT_ID, 'completed']
-    has_many :no_activity_contacts, through: :organizational_roles, source: :person, conditions: ["organizational_roles.role_id = ? AND organizational_roles.archive_date IS NULL AND organizational_roles.followup_status = ?", Role::CONTACT_ID, 'uncontacted']
+  if Permission.table_exists? # added for travis testing
+    has_many :leaders, through: :organizational_labels, source: :person, conditions: ["organizational_labels.label_id IN (?) AND organizational_labels.removed_date IS NULL", Label::LEADER_ID], order: "people.last_name, people.first_name", uniq: true
+
+    def sent
+      people_ids = Interaction.where(organization_id: id, interaction_type_id: InteractionType.graduating_on_mission.try(:id))
+      contacts.where(id: people_ids.collect(&:receiver_id)).order('people.last_name, people.first_name').uniq
+    end
+
+    has_many :only_users, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL", Permission::USER_ID], order: "people.last_name, people.first_name", uniq: true
+    has_many :users, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id IN (?) AND organizational_permissions.archive_date IS NULL", [Permission::USER_ID, Permission::ADMIN_ID]], order: "people.last_name, people.first_name", uniq: true
+    has_many :admins, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL", Permission::ADMIN_ID], order: "people.last_name, people.first_name", uniq: true
+    has_many :all_people, through: :organizational_permissions, source: :person, conditions: ["(organizational_permissions.followup_status <> 'do_not_contact' OR organizational_permissions.followup_status IS NULL) AND organizational_permissions.archive_date IS NULL"], uniq: true
+    has_many :all_people_with_archived, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.followup_status <> 'do_not_contact' OR organizational_permissions.followup_status IS NULL"], uniq: true
+    has_many :contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.followup_status <> 'do_not_contact'", Permission::NO_PERMISSIONS_ID]
+    has_many :contacts_with_archived, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.followup_status <> 'do_not_contact'", Permission::NO_PERMISSIONS_ID]
+    has_many :all_archived_people, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date IS NOT NULL AND organizational_permissions.followup_status <> 'do_not_contact'"]
+    has_many :dnc_contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date IS NULL AND organizational_permissions.followup_status = 'do_not_contact'"]
+    has_many :completed_contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.followup_status = ?", Permission::NO_PERMISSIONS_ID, 'completed']
+    has_many :completed_contacts_with_archived, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.followup_status = ?", Permission::NO_PERMISSIONS_ID, 'completed']
+    has_many :no_activity_contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.followup_status = ?", Permission::NO_PERMISSIONS_ID, 'uncontacted']
   end
 
   has_many :rejoicables
@@ -83,6 +94,155 @@ class Organization < ActiveRecord::Base
     end
   end
 
+  def is_bridge?
+    (name =~ /^Bridges at/) != nil
+  end
+
+  def interaction_types
+    return InteractionType.where(organization_id: [0, id]).order('id')
+  end
+
+  def interaction_privacy_settings
+    list = Array.new
+    list << ["Everyone", "everyone"]
+    list << ["Everyone in #{parent.name}", "organization"] if parent.present?
+    list << ["Everyone in #{name}", "organization"]
+    list << ["Admins in #{name}", "admins"]
+    list << ["Me only", "me"]
+    return list
+  end
+
+  # Push individual weeks of stats to infobase, starting with the first week afeter the last push
+  # If the user increased the numbers, push the extra values on the final week
+  def push_to_infobase(params)
+    start_date = (last_push_to_infobase + 1.day).beginning_of_week(:sunday)
+    end_date = last_week
+    periods = []
+    start_date.step(end_date, 7) do |period_begin|
+      period_end = period_begin + 6.days
+      period_end = period_end
+      stats = {activity_id: importable_id,
+               period_begin: period_begin.to_s(:db),
+               period_end: period_end.to_s(:db)
+              }
+      if period_end == end_date
+        # Add the group stats and any additional bumps entered
+        students_involved = params[:involved_students]
+
+        faculty_involved  = params[:involved_faculty]
+
+        students_engaged  = params[:engaged_disciple]
+
+        faculty_engaged   = params[:engaged_disciple_faculty]
+
+        student_leaders   = params[:leader]
+
+        faculty_leaders   = params[:leader_faculty]
+
+        spiritual_conversations = params[:spiritual_conversation].to_i -
+                                  interactions_count('spiritual_conversation') +
+                                  interactions_count('spiritual_conversation', period_begin, period_end)
+
+        personal_evangelism = params[:gospel_presentation].to_i -
+                                  interactions_count('gospel_presentation') +
+                                  interactions_count('gospel_presentation', period_begin, period_end)
+
+        personal_decisions = params[:prayed_to_receive_christ].to_i -
+                                  interactions_count('prayed_to_receive_christ') +
+                                  interactions_count('prayed_to_receive_christ', period_begin, period_end)
+
+        holy_spirit_presentations = params[:holy_spirit_presentation].to_i -
+                                    interactions_count('holy_spirit_presentation') +
+                                    interactions_count('holy_spirit_presentation', period_begin, period_end)
+
+        graduating_on_mission = params[:graduating_on_mission].to_i -
+                                  interactions_count('graduating_on_mission') +
+                                  interactions_count('graduating_on_mission', period_begin, period_end)
+
+        faculty_on_mission = params[:faculty_on_mission].to_i -
+                                  interactions_count('faculty_on_mission') +
+                                  interactions_count('faculty_on_mission', period_begin, period_end)
+
+        stats.merge!({students_involved: students_involved,
+                      faculty_involved: faculty_involved,
+                      students_engaged: students_engaged,
+                      faculty_engaged: faculty_engaged,
+                      student_leaders: student_leaders,
+                      faculty_leaders: faculty_leaders,
+                      spiritual_conversations: spiritual_conversations,
+                      holy_spirit_presentations: holy_spirit_presentations,
+                      personal_evangelism: personal_evangelism,
+                      personal_decisions: personal_decisions,
+                      graduating_on_mission: graduating_on_mission,
+                      faculty_on_mission: faculty_on_mission,
+                      group_evangelism: params[:group_evangelism].to_i,
+                      group_decisions: params[:group_evangelism_decision].to_i,
+                      media_exposures: params[:media_exposure].to_i,
+                      media_decisions: params[:media_exposure_decisions].to_i
+                    })
+        periods << stats
+        break
+      else
+        stats.merge!({students_involved: people.students.with_label(Label.involved, self).where("organizational_labels.created_at < ?", period_end).count,
+                      faculty_involved: people.faculty.with_label(Label.involved, self).where("organizational_labels.created_at < ?", period_end).count,
+                      students_engaged: people.students.with_label(Label.engaged_disciple, self).where("organizational_labels.created_at < ?", period_end).count,
+                      faculty_engaged: people.faculty.with_label(Label.engaged_disciple, self).where("organizational_labels.created_at < ?", period_end).count,
+                      student_leaders: people.students.with_label(Label.leader, self).where("organizational_labels.created_at < ?", period_end).count,
+                      spiritual_conversations: interactions_count('spiritual_conversation', period_begin, period_end),
+                      holy_spirit_presentations: interactions_count('holy_spirit_presentation', period_begin, period_end),
+                      personal_evangelism: interactions_count('gospel_presentation', period_begin, period_end),
+                      personal_decisions: interactions_count('prayed_to_receive_christ', period_begin, period_end),
+                      graduating_on_mission: interactions_count('graduating_on_mission', period_begin, period_end),
+                      faculty_on_mission: interactions_count('faculty_on_mission', period_begin, period_end)
+                     })
+        periods << stats
+      end
+    end
+
+    # Make sure everything is positive
+    periods.each do |period|
+      period.each do |k, v|
+        if v.is_a?(Integer)
+          period[k] = period[k] > 0 ? period[k] : 0
+        end
+      end
+    end
+
+    json = {statistics: periods}.to_json
+    RestClient.post(APP_CONFIG['infobase_url'] + '/api/v1/stats', json, content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\"")
+
+    update_attributes(last_push_to_infobase: last_week)
+  end
+
+  def last_push_to_infobase
+    @last_push_to_infobase ||= self[:last_push_to_infobase]
+    unless @last_push_to_infobase
+      # check infobase for a stat entry
+      begin
+        stats = JSON.parse(RestClient.get(APP_CONFIG['infobase_url'] + "/api/v1/stats/activity?activity_id=#{importable_id}&begin_date=#{created_at.to_date.to_s(:db)}&end_date=#{Date.today.to_s(:db)}", content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\""))
+        @last_push_to_infobase = Date.parse(stats['statistics'].last['period_end'])
+        update_column(:last_push_to_infobase, @last_push_to_infobase) if @last_push_to_infobase
+      rescue
+        @last_push_to_infobase = created_at.to_date.end_of_week(:sunday)
+      end
+    end
+    @last_push_to_infobase
+  end
+
+  def last_week
+    @last_week ||= 1.week.ago.end_of_week(:sunday).to_date
+  end
+
+  def interactions_of_type(type, start_date = nil, end_date = nil)
+    start_date ||= last_push_to_infobase
+    end_date ||= last_week
+    interactions.joins(:interaction_type).where("interaction_types.i18n = ? AND interactions.timestamp > ? AND interactions.timestamp <= ?", type, start_date, end_date.end_of_day)
+  end
+
+  def interactions_count(type, start_date = nil, end_date = nil)
+    interactions_of_type(type, start_date, end_date).count
+  end
+
   def sms_gateway
     return settings[:sms_gateway] if settings[:sms_gateway]
     ancestors.reverse.each do |org|
@@ -100,7 +260,7 @@ class Organization < ActiveRecord::Base
   end
 
   def available_transfer
-    all_people - sent
+    contacts - sent
   end
 
   def has_parent?(org_id)
@@ -131,16 +291,34 @@ class Organization < ActiveRecord::Base
     return org if org.present?
   end
 
-  def role_set
-    default_roles + non_default_roles
+  def permission_set
+    default_permissions + non_default_permissions
   end
 
-  def default_roles
-    has_parent?(1) ? roles.default_cru_roles_desc : roles.default_roles_desc
+  def default_permissions
+    permissions.default_permissions
   end
 
-  def non_default_roles
-    roles.non_default_roles_asc
+  def non_default_permissions
+    permissions.non_default_permissions
+  end
+
+  def label_set
+    default_labels + non_default_labels
+  end
+
+  def default_labels
+    if is_bridge?
+      labels.default_bridge_labels
+    elsif has_parent?(1)
+      labels.default_cru_labels
+    else
+      labels.default_labels
+    end
+  end
+
+  def non_default_labels
+    labels.non_default_labels
   end
 
   def parent_organization_admins
@@ -165,6 +343,14 @@ class Organization < ActiveRecord::Base
       end
       return admins_with_email
     end
+  end
+
+  def parents
+    ancestry.present? ? Organization.where(id: ancestry.split('/')) : []
+  end
+
+  def self_and_parents
+    [self] + parents
   end
 
   def self_and_children
@@ -209,55 +395,46 @@ class Organization < ActiveRecord::Base
     @self_and_children_questions ||= self_and_children_surveys.collect(&:questions).flatten.uniq
   end
 
+  def assigned_contacts
+    assignments = contact_assignments.where(person_id: contacts.collect(&:id), assigned_to_id: leaders.collect(&:id))
+    assignments.present? ? contacts.where(id: assignments.collect(&:person_id)) : contacts
+  end
+
+  def assigned_contacts_with_archived
+    assignments = contact_assignments.where(person_id: contacts_with_archived.collect(&:id), assigned_to_id: leaders.collect(&:id))
+    assignments.present? ? contacts_with_archived.where(id: assignments.collect(&:person_id)) : contacts_with_archived
+  end
+
   def unassigned_contacts
-    person_table_pkey = "#{Person.table_name}.#{Person.primary_key}"
-    Person
-    .joins("INNER JOIN organizational_roles org_roles ON org_roles.person_id = #{person_table_pkey}
-        AND org_roles.organization_id = #{id}
-        AND org_roles.role_id = '#{Role::CONTACT_ID}'
-        AND org_roles.followup_status <> 'do_not_contact'
-        AND org_roles.followup_status <> 'completed'
-        AND org_roles.archive_date IS NULL
-        LEFT JOIN contact_assignments ca ON ca.person_id = #{person_table_pkey}
-        AND ca.organization_id = #{id}")
-        .where("ca.id IS NULL OR ca.assigned_to_id NOT IN (?)", only_leaders)
+    assignments = contact_assignments.where(person_id: contacts.collect(&:id), assigned_to_id: leaders.collect(&:id))
+    assignments.present? ? contacts.where("people.id NOT IN (?)", assignments.collect(&:person_id)) : contacts
   end
 
   def unassigned_contacts_with_archived
-    person_table_pkey = "#{Person.table_name}.#{Person.primary_key}"
-    Person
-    .joins("INNER JOIN organizational_roles org_roles ON org_roles.person_id = #{person_table_pkey}
-        AND org_roles.organization_id = #{id}
-        AND org_roles.role_id = '#{Role::CONTACT_ID}'
-        AND org_roles.followup_status <> 'do_not_contact'
-        AND org_roles.followup_status <> 'completed'
-        LEFT JOIN contact_assignments ca ON ca.person_id = #{person_table_pkey}
-        AND ca.organization_id = #{id}")
-        .where("ca.id IS NULL OR ca.assigned_to_id NOT IN (?)", only_leaders)
+    assignments = contact_assignments.where(person_id: contacts_with_archived.collect(&:id), assigned_to_id: leaders.collect(&:id))
+    assignments.present? ? contacts_with_archived.where("people.id NOT IN (?)", assignments.collect(&:person_id)) : contacts_with_archived
   end
 
   def inprogress_contacts
-    person_table_pkey = "#{Person.table_name}.#{Person.primary_key}"
     Person
-    .joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{person_table_pkey}
-        AND organizational_roles.organization_id = #{id}
-        AND organizational_roles.role_id = '#{Role::CONTACT_ID}'
-        AND organizational_roles.followup_status <> 'do_not_contact'
-        AND organizational_roles.followup_status <> 'completed'
-        AND org_roles.archive_date IS NULL
-        LEFT JOIN contact_assignments ON contact_assignments.person_id = #{person_table_pkey}
+    .joins("INNER JOIN organizational_permissions ON organizational_permissions.person_id = people.id
+        AND organizational_permissions.organization_id = #{id}
+        AND organizational_permissions.permission_id = '#{Permission::NO_PERMISSIONS_ID}'
+        AND organizational_permissions.followup_status <> 'do_not_contact'
+        AND organizational_permissions.followup_status <> 'completed'
+        AND org_permissions.archive_date IS NULL
+        LEFT JOIN contact_assignments ON contact_assignments.person_id = people.id
         AND contact_assignments.organization_id = #{id}")
         .where("contact_assignments.assigned_to_id IN (?)", only_leaders)
   end
   def inprogress_contacts_with_archived
-    person_table_pkey = "#{Person.table_name}.#{Person.primary_key}"
     Person
-    .joins("INNER JOIN organizational_roles ON organizational_roles.person_id = #{person_table_pkey}
-        AND organizational_roles.organization_id = #{id}
-        AND organizational_roles.role_id = '#{Role::CONTACT_ID}'
-        AND organizational_roles.followup_status <> 'do_not_contact'
-        AND organizational_roles.followup_status <> 'completed'
-        LEFT JOIN contact_assignments ON contact_assignments.person_id = #{person_table_pkey}
+    .joins("INNER JOIN organizational_permissions ON organizational_permissions.person_id = people.id
+        AND organizational_permissions.organization_id = #{id}
+        AND organizational_permissions.permission_id = '#{Permission::NO_PERMISSIONS_ID}'
+        AND organizational_permissions.followup_status <> 'do_not_contact'
+        AND organizational_permissions.followup_status <> 'completed'
+        LEFT JOIN contact_assignments ON contact_assignments.person_id = people.id
         AND contact_assignments.organization_id = #{id}")
         .where("contact_assignments.assigned_to_id IN (?)", only_leaders)
   end
@@ -265,18 +442,22 @@ class Organization < ActiveRecord::Base
 
   def delete_person(person)
     # If this person is only in the current org, delete the person
-    if person.organizational_roles_including_archived.where("organization_id <> ?", id).blank?
+    if person.organizational_permissions_including_archived.where("organization_id <> ?", id).blank?
       person.destroy
     else
-      # Otherwise just delete all their roles in this org
-      organizational_roles.where(person_id: person.id).destroy_all
+      # Otherwise just delete all their permissions in this org
+      organizational_permissions.where(person_id: person.id).destroy_all
       # Delete any contact assignments for this person in this org
       contact_assignments.where(assigned_to_id: person.id).destroy_all
     end
   end
 
-  def roles
-    Role.where("organization_id = 0 or organization_id = #{id}")
+  def permissions
+    Permission.order('updated_at')
+  end
+
+  def labels
+    Label.where("(organization_id = 0 OR organization_id = #{id}) AND (i18n <> 'sent' OR i18n IS NULL)")
   end
 
   def <=>(other)
@@ -295,39 +476,74 @@ class Organization < ActiveRecord::Base
     "#{name} (#{keywords.count})"
   end
 
-  def add_role_to_person(person, role_id, added_by_id = nil)
+  def add_permission_to_person(person, permission_id, added_by_id = nil)
     person_id = person.is_a?(Person) ? person.id : person
 
     Retryable.retryable :times => 5 do
-      role = OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id).first_or_create!(added_by_id: added_by_id)
-      role.update_attributes(archive_date: nil)
-      role
+      permission = OrganizationalPermission.where(person_id: person_id, organization_id: id, permission_id: permission_id).first_or_create!(added_by_id: added_by_id)
+      permission.update_attributes(archive_date: nil)
+
+      # Assure single permission per organization
+      org_permissions = OrganizationalPermission.where(person_id: person_id, organization_id: id)
+      org_permissions.where("id <> ?", permission.id).destroy_all
+
+      return permission
     end
   end
 
-  def add_roles_to_people(people, roles)
+  def add_label_to_person(person, label_id, added_by_id = nil)
+    person_id = person.is_a?(Person) ? person.id : person
+    Retryable.retryable :times => 5 do
+      label = OrganizationalLabel.where(person_id: person_id, organization_id: id, label_id: label_id).first_or_create!(added_by_id: added_by_id)
+      label.update_attributes(removed_date: nil)
+      label
+    end
+  end
+
+  def add_permissions_to_people(people, permissions)
     people.each do |person|
-      roles.each do |role|
-        add_role_to_person(person, role)
+      permissions.each do |permission|
+        add_permission_to_person(person, permission)
       end
     end
   end
 
-  def remove_role_from_person(person, role_id)
-    person_id = person.is_a?(Person) ? person.id : person
-    OrganizationalRole.where(person_id: person_id, organization_id: id, role_id: role_id).each { |r| r.update_attributes(archive_date: Time.now) }
+  def add_labels_to_people(people, labels)
+    people.each do |person|
+      labels.each do |label|
+        add_label_to_person(person, label)
+      end
+    end
   end
 
-  def remove_roles_from_people(people, roles)
+  def remove_permission_from_person(person, permission_id)
+    person_id = person.is_a?(Person) ? person.id : person
+    OrganizationalPermission.where(person_id: person_id, organization_id: id, permission_id: permission_id).each { |r| r.update_attributes(archive_date: Time.now) }
+  end
+
+  def remove_label_from_person(person, label_id)
+    person_id = person.is_a?(Person) ? person.id : person
+    OrganizationalLabel.where(person_id: person_id, organization_id: id, label_id: label_id).each do |r|
+      r.update_attributes(removed_date: Time.now)
+    end
+  end
+
+  def remove_permissions_from_people(people, permissions)
     people.each do |person|
-      remove_role_from_person(person, roles)
+      remove_permission_from_person(person, permissions)
+    end
+  end
+
+  def remove_labels_from_people(people, labels)
+    people.each do |person|
+      remove_label_from_person(person, labels)
     end
   end
 
   def add_leader(person, current_person)
     person_id = person.is_a?(Person) ? person.id : person
     begin
-      org_leader = OrganizationalRole.find_or_create_by_person_id_and_organization_id_and_role_id(person_id, id, Role::LEADER_ID, :added_by_id => current_person.id)
+      org_leader = OrganizationalPermission.find_or_create_by_person_id_and_organization_id_and_permission_id(person_id, id, Permission::USER_ID, :added_by_id => current_person.id)
       unless org_leader.archive_date.nil?
         org_leader.update_attributes({:added_by_id => current_person.id, :archive_date => nil})
         org_leader.notify_new_leader
@@ -341,7 +557,7 @@ class Organization < ActiveRecord::Base
 
   def add_contact(person)
     begin
-      add_role_to_person(person, Role::CONTACT_ID)
+      add_permission_to_person(person, Permission::NO_PERMISSIONS_ID)
     rescue => error
       @save_retry_count =  (@save_retry_count || 5)
       retry if( (@save_retry_count -= 1) > 0 )
@@ -350,31 +566,45 @@ class Organization < ActiveRecord::Base
   end
 
   def add_admin(person)
-    add_role_to_person(person, Role::ADMIN_ID)
+    add_permission_to_person(person, Permission::ADMIN_ID)
+  end
+
+  def add_user(person)
+    add_permission_to_person(person, Permission::USER_ID)
+  end
+
+  def add_no_permissions(person)
+    add_contact(person)
+  end
+
+  def remove_people(people)
+    people.each do |p|
+      remove_person(p)
+    end
   end
 
   def remove_person(person)
     person_id = person.is_a?(Person) ? person.id : person
-    organizational_roles.where(person_id: person_id).each do |ors|
-      if(ors.role_id == Role::LEADER_ID)
+    organizational_permissions.where(person_id: person_id).each do |ors|
+      if(ors.permission_id == Permission::USER_ID)
         # remove contact assignments if this was a leader
         Person.find(ors.person_id).contact_assignments.where(organization_id: id).all.collect(&:destroy)
       end
-      remove_role_from_person(person, ors.role_id)
+      remove_permission_from_person(person, ors.permission_id)
     end
   end
 
   def remove_contact(person)
-    remove_role_from_person(person, Role::CONTACT_ID)
+    remove_permission_from_person(person, Permission::NO_PERMISSIONS_ID)
   end
 
   def add_involved(person)
-    add_role_to_person(person, Role::INVOLVED_ID)
+    add_label_to_person(person, Label::INVOLVED_ID)
   end
 
   def remove_leader(person)
     person = person.is_a?(Person) ? person : Person.find(person)
-    remove_role_from_person(person, Role::LEADER_ID)
+    remove_label_from_person(person, Label::LEADER_ID)
     person.remove_assigned_contacts(self)
   end
 
@@ -459,9 +689,24 @@ class Organization < ActiveRecord::Base
 		groups.where("LOWER(name) LIKE ?","%#{term}%").limit(5).uniq
 	end
 
-	def role_search(term)
-		roles.where("LOWER(name) LIKE ?","%#{term}%").limit(5).uniq
+	def permission_search(term)
+		permissions.where("LOWER(name) LIKE ?","%#{term}%").limit(5).uniq
 	end
+
+	def label_search(term)
+		labels.where("LOWER(name) LIKE ?","%#{term}%").limit(5).uniq
+  end
+
+  def set_followup_status(person, status)
+    person_obj = person.is_a?(Person) ? Person.find(person) : person
+    if status.in?(OrganizationalPermission::FOLLOWUP_STATUSES)
+      permission = person_obj.permission_for_org(self)
+      if (permission)
+        permission.followup_status = status
+        permission.save!
+      end
+    end
+  end
 
   private
 
@@ -489,12 +734,12 @@ class Organization < ActiveRecord::Base
   # have their updated_at column touched to clear their org cache. The hard part is figuring out which
   # people need to be updated
   def touch_people
-    # Anyone with an organizational role directly on this org will get updated by the OrganizationalRole
+    # Anyone with an organizational permission directly on this org will get updated by the OrganizationalPermission
     # class, so we only have to worry about implied involvement
     # For implied ivolvement we need to walk up the tree until we find a root org, or an org with
     # show_sub_orgs = false
     relevant_org_ids = implied_involvement_root.self_and_children_ids & path_ids
-    Person.joins(:organizational_roles_including_archived).where('organizational_roles.organization_id' => relevant_org_ids).update_all("`people`.`updated_at` = '#{Time.now.to_s(:db)}'")
+    Person.joins(:organizational_permissions_including_archived).where('organizational_permissions.organization_id' => relevant_org_ids).update_all("`people`.`updated_at` = '#{Time.now.to_s(:db)}'")
   end
 
   def touch_people_if_show_sub_orgs_changed
@@ -502,5 +747,4 @@ class Organization < ActiveRecord::Base
       touch_people
     end
   end
-
 end

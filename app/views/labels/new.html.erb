@@ -1,0 +1,19 @@
+<% provide :sidebar do %>
+  <ul class="leftmenu">
+    <li class="selected"><%= link_to(t('labels.views.organizational_labels'), labels_path) %></li>
+  </ul>
+<% end %>
+
+<div class="titlebar titlebarmod">
+  <h1>
+    <%= "#{current_organization} - #{t('labels.views.create_label')}" %>
+  </h1>
+</div>
+
+<div class="pad">
+  <div>
+    <%= form_for @label, validate: true do |f| %>
+      <%= render :partial => 'form', :locals => { :button_label => t('labels.views.create'), :f => f } %>
+    <% end %>
+  </div>
+</div>

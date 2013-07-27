@@ -1,0 +1,11 @@
+$('#search_leader_results.edit, #search_leader_results.view').html("")
+<% if @people.count == 0 %>
+  $('#search_leader_results').html("<div class='search_no_results'>No Results</div>")
+<% end %>
+
+<% @people.each do |leader| %>
+  $('#search_leader_results.edit').append("<%= escape_javascript(render partial: 'interactions/option_leader', locals: {person: @person, current_person: @current_person, leader: leader}) %>")
+  $('#search_leader_results.view').append("<%= escape_javascript(render partial: 'interactions/option_leader', locals: {person: @person, current_person: @current_person, leader: leader}) %>")
+<% end %>
+
+$('#search_leader_field.edit, #search_leader_field.view').removeClass("ui-autocomplete-input ui-autocomplete-loading")

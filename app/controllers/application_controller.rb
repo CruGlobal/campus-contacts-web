@@ -131,9 +131,22 @@ class ApplicationController < ActionController::Base
     #session['wizard'] = nil
   end
 
+  def facebook_token
+    @facebook_token ||= (params[:facebook_token] || facebook_token_from_header)
+  end
+
+  # grabs facebook token from header if one is present
+  def facebook_token_from_header
+    auth_header = request.env["HTTP_AUTHORIZATION"]||""
+    match = auth_header.match(/^Facebook\s(.*)/)
+    return match[1] if match.present?
+    false
+  end
+
   def current_user
     # check for access token, then do it the devise way
-    if current_access_token
+    case
+    when current_access_token
       token = Rack::OAuth2::Server.get_access_token(current_access_token)
       if token.identity
         @current_user ||= User.find(token.identity)
@@ -147,6 +160,8 @@ class ApplicationController < ActionController::Base
         end
       end
       @current_user
+    when facebook_token
+      @current_user = Authentication.user_from_mobile_facebook_token(facebook_token)
     else
       super # devise user
     end
@@ -237,8 +252,8 @@ class ApplicationController < ActionController::Base
 
       unless org
         if org = person.primary_organization
-          # If they're a contact at their primary org (shouldn't happen), look for another org where they have a different role
-          if !person.org_ids[org.id] || (person.org_ids[org.id]['roles'] & Role.leader_ids).blank?
+          # If they're a contact at their primary org (shouldn't happen), look for another org where they have a different permission
+          if !person.org_ids[org.id] || (person.org_ids[org.id]['permissions'] & Permission.user_ids).blank?
             person.primary_organization = person.organizations.first
           end
           session[:current_organization_id] = person.primary_organization.id
@@ -315,11 +330,11 @@ class ApplicationController < ActionController::Base
   end
 
   def is_leader?
-    current_user.has_role?(Role::LEADER_ID, current_organization) || is_admin?
+    current_user.has_permission?(Permission::USER_ID, current_organization) || is_admin?
   end
 
   def is_admin?
-    current_user.has_role?(Role::ADMIN_ID, current_organization)
+    current_user.has_permission?(Permission::ADMIN_ID, current_organization)
   end
   helper_method :is_admin?
 
@@ -357,16 +372,24 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def roles_for_assign
-    current_user_roles = current_user.person
-                                     .organizational_roles
-                                     .where(:organization_id => current_organization)
-                                     .collect { |r| Role.find_by_id(r.role_id) }.compact
+  def groups_for_assign
+    @groups_for_assign = current_organization.groups
+  end
 
-    if current_user_roles.include? Role.find(1)
-      @roles_for_assign = current_organization.roles
+  def labels_for_assign
+    @labels_for_assign = current_organization.label_set
+  end
+
+  def permissions_for_assign
+    current_user_permissions = current_user.person
+                                     .organizational_permissions
+                                     .where(:organization_id => current_organization.self_and_parents.collect(&:id))
+                                     .collect { |r| Permission.find_by_id(r.permission_id) }.compact
+
+    if current_user_permissions.include?(Permission.admin)
+      @permissions_for_assign = current_organization.permissions.arrange_all
     else
-      @roles_for_assign = current_organization.roles.delete_if { |role| role == Role.find(1) }
+      @permissions_for_assign = current_organization.permissions.arrange_all.delete_if { |permission| permission == Permission.admin }
     end
   end
 
@@ -388,5 +411,26 @@ class ApplicationController < ActionController::Base
 			end
 		end
 		new_date.present? ? new_date : input_date
+  end
+
+  def force_client_update
+    platform = params[:platform] if params[:platform].present?
+    version = params[:app] if params[:app].present?
+
+    if platform && version
+      version = version.to_i
+      if platform == 'android'
+        if version <= 6 #mh 1.x
+          render json: {error: {message: 'Your MissionHub app requires an update. Please check for updates in your app store now.', code: 'client_update_required', title: 'Update Required'}},
+                 status: :not_acceptable,
+                 callback: params[:callback]
+        elsif version <= 93 #mh 2.0.x-2.4.x-snapshot
+          render json: {errors: ['Your MissionHub app requires an update. Please check for updates in your app store now.'], code: 'client_update_required'},
+                 status: :not_acceptable,
+                 callback: params[:callback]
+          return false
+        end
+      end
+    end
   end
 end

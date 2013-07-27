@@ -1,62 +1,44 @@
-<% provide :sidebar do %>
-  <ul class="leftmenu">
-    <li class="selected"><a href="/sms_keywords"><%= t('sms_keywords.edit.keywords') %></a></li>
-    <li><%= link_to(t('.request_keyword'), new_sms_keyword_path) %></li>
-  </ul>
-<% end %>
+<%= render 'sms_keywords/keywords_sidebar' %>
 
+<div class="titlebar titlebarmod">
+  <h1>
+    <%= t('nav.keywords') %>
+    <div id='global_loader'>
+      <%= image_tag 'loader.gif'%>
+    </div>
+  </h1>
+</div>
 
+<div id="ac_button_bar">
+	<ul class="button_bar">
+		<li class="inlinehelp">
+      <%= t('general.survey_help_desc') %><b><%= t('general.survey_text_help_desc') %></b>
+		</li>
+	</ul>
+</div>
+<br/>
 
-<% if can? :manage, SmsKeyword %>
-  <div class="titlebar titlebarmod">
-    <h1><%= t('nav.keywords') %></h1>
-  </div>
-  <div class="pagemenu">
-    <table>
-      <td>
-        <ul class="pillmenu">
-          <li>
-            <% if current_organization.self_and_children_surveys.present? %>
-              <%= link_to(t("welcome.index.request_key"), new_sms_keyword_path) %>
-            <% else %>
-              <%= link_to(t(".create_survey_first"), new_survey_path) %>
-            <% end %>
-          </li>
-        </ul>
-      </td>
-      <td class="inlinehelp">
-        <%= t('general.survey_help_desc') %><b><%= t('general.survey_text_help_desc') %></b>
-      </td>
-    </table>
-  </div>
-  
-  
-  
-  <table class="listing keywordtable" cellpadding="0" cellspacing="0">
-    <tr>
-      <th class="check"></th>
+<div id="ac_contact_spread">
+  <table class="listing contact_listing" cellpadding="0" cellspacing="0">
+    <tr id="table_header">
       <th>
         <%= t("general.keyword") %>
-        <div class="icon help tipit help_bubble_keyword " title="<%= t('welcome.index.request_key_help') %>"></div>
+        <div class="icon help tipitright help_bubble_keyword " title="<%= t('welcome.index.request_key_help') %>"></div>
       </th>
       <th><%= t("general.status") %></th>
       <th><%= t("general.survey") %></th>
-      <th class="controls">&nbsp;</th>
+      <th>&nbsp;</th>
     </tr>
-    <% @keywords.each do |keyword| %>
-      <tr>
-        <td class="checkbox"></td>
-        <td><%= keyword.keyword %></td>
-        <td><%= keyword.state %></td>
-        <td><%= link_to(keyword.survey, survey_questions_path(keyword.survey)) if keyword.survey %></td>
-        <td class="controls">
-          <%= link_to t("welcome.home.edit_keyword"), edit_sms_keyword_path(keyword), :class => "icon edit tipit", :title => "Edit Keyword" %>
-          <%= link_to t("welcome.home.delete"), sms_keyword_path(keyword), method: :delete, confirm: t('.delete_confirm'), :class => "icon delete tipit", :title => t('.delete_tip') %>
-        </td>
-      </tr>
-    <% end %>
+    <tbody>
+      <% @keywords.each do |keyword| %>
+        <%= render partial: 'sms_keywords/keyword', locals: {keyword: keyword}%>
+      <% end %>
+    </tbody>
   </table>
-  <div class="contentpad">
-    
-  </div>
-<% end %>
+
+  <% if @keywords.blank? %>
+    <div class="contentpad no_contacts">
+      <%= t('surveys.index_admin.no_keywords') %>
+    </div>
+	<% end %>
+</div>

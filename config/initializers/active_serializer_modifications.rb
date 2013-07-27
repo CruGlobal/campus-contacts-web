@@ -1,4 +1,4 @@
-class  ActiveModel::Serializer
+class ActiveModel::Serializer
 
   def organization_filter(relationship)
     if scope.is_a?(Hash) && organization = scope[:organization]

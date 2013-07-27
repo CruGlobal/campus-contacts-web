@@ -1,0 +1,22 @@
+<% provide :sidebar do %>
+  <div id="ac_sidebar">
+    <div id="upper_sidebar_lists">
+    <% if @sms_keyword.present? %>
+      <%= link_to raw("<button class='red_accent full_width_button'>#{t('sms_keywords.all_keywords')} (#{current_organization.keywords.count})</button>"), sms_keywords_path %>
+      <%= link_to raw("<button class='action_gray full_width_button'>#{t('nav.create_a_survey')}</button>"), new_survey_path %>
+      <% unless @sms_keyword.new_record? %>
+         <!-- Buttons for Edit Keyword page -->
+        <%= link_to raw("<button class='action_gray full_width_button'>#{t('sms_keywords.index.delete_keyword')}</button>"), sms_keyword_path(@sms_keyword), method: :delete, confirm: t('sms_keywords.index.delete_confirm') %>
+      <% else %>
+         <!-- Buttons for New Keyword page -->
+      <% end %>
+    <% else %>
+      <!-- Buttons For Keywords List-->
+      <%= link_to raw("<button class='red_accent full_width_button'>#{t('sms_keywords.index.request_keyword')}</button>"),
+        new_sms_keyword_path %>
+      <%= link_to raw("<button class='action_gray full_width_button'>#{t('nav.create_a_survey')}</button>"),
+            new_survey_path %>
+    <% end %>
+    </div>
+  </div>
+<% end %>

@@ -10,13 +10,13 @@
       <%= link_to(t('nav.dashboard'), "/dashboard") %>
     </li>
     <li class="<%= 'current' if request.path =~ care_pattern %>">
-      <%= link_to(t('nav.people'), "/contacts") %>
+      <%= link_to(t('nav.people'), "/allcontacts") %>
       <ul style='display:none;'>
-        <li class="<%= 'current' if request.fullpath == '/contacts/mine' %>">
-          <%= link_to(t('nav.my_contacts'), "/contacts/mine", :class => "topset mycontacts") %>
+        <li class="<%= 'current' if request.fullpath == '/mycontacts' %>">
+          <%= link_to(t('nav.my_contacts'), "/mycontacts", :class => "topset mycontacts") %>
         </li>
         <li class="<%= 'current' if  params[:controller] == 'contacts' && params[:action] == 'index' %>">
-          <%= link_to(t('nav.all_contacts'), "/contacts", :class => "topset allcontacts") %>
+          <%= link_to(t('nav.all_contacts'), "/allcontacts", :class => "topset allcontacts") %>
         </li>
       </ul>
     </li>
@@ -25,7 +25,7 @@
         <%= link_to(t('nav.groups'), "/groups") %>
       </li>
     <% end %>
-    
+
     <% if can? :manage, current_organization %>
       <li class="<%= 'current' if request.path =~ connect_pattern %>">
         <%= link_to(t('nav.surveys'), index_admin_surveys_path) %>
@@ -40,10 +40,13 @@
       </li>
     <% end %>
 
-    <% if can? :manage, current_organization %>
-      <li class="<%= 'current' if params[:controller] == 'organizations' %>">
-        <%= link_to(t('nav.organizations'), "/organizations") %>
-        <ul style='display:none;'>
+    <li class="<%= 'current' if ['organizations', 'movement_indicator_suggestions'].include?(params[:controller]) %>">
+      <%= link_to(t('nav.organizations'), "/organizations") %>
+      <ul style='display:none;'>
+        <li class="<%= 'current' if request.path == snapshot_charts_path %>">
+          <%= link_to(t('nav.visual_tools'), charts_path) %>
+        </li>
+        <% if can? :manage, current_organization %>
           <li class="<%= 'current' if request.path == organizations_path %>">
             <%= link_to(t('nav.manage'), "/organizations", :class => "topset groups") %>
           </li>
@@ -58,9 +61,12 @@
               <%= link_to(t('nav.transfer'), "/organizations/transfer", :class => "topset transfer") %>
             </li>
           <% end %>
-        </ul>
-      </li>
-    <% end %>
+          <li class="<%= 'current' if request.path == movement_indicator_suggestions_path %>">
+            <%= link_to(t('nav.report_movement_indicators'), movement_indicator_suggestions_path, :class => "topset cleanup") %>
+          </li>
+        <% end %>
+      </ul>
+    </li>
   </ul>
 
   <div id="menu_search">

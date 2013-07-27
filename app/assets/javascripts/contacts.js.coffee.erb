@@ -1,8 +1,141 @@
 $ ->
+  $(document).ready ->
+    $(".leftmenu .leader, .leftmenu .dnc, .leftmenu .completed").droppable
+      activeClass: "ui-state-active"
+      hoverClass: "ui-state-hover"
+      accept: ".handle"
+      drop: (event, ui) ->
+        leader = undefined
+        li = $(this)
+        li.effect "highlight", {}, "slow"
+        if $(this).hasClass("leader")
+          $("#assign_to").val li.attr("data-id")
+          $.fn.assignTo li
+        else if $(this).hasClass("dnc")
+          $.fn.moveToDnc ui.draggable
+        else $.fn.moveToCompleted ui.draggable  if $(this).hasClass("completed")
+    $.fn.tip()
+
   $(document).on 'keypress', '#contact_search_form input', (e)->
-    if (e.keyCode == $.ui.keyCode.ENTER)
+    if e.keyCode == $.ui.keyCode.ENTER
       $('#contact_search_form').submit()
-      
+
+  $(document).on 'keyup', (e)->
+    if e.keyCode == $.ui.keyCode.ESCAPE
+      $('.custom_mh_popup_box').each ->
+        unless $(this).hasClass('locked')
+          $.hideDialog($(this))
+
+  $('#bulk_vcard_dialog_download_button').live 'click', (e)->
+    e.preventDefault()
+    url = $('#bulk_vcard_form').attr('action')
+    ids = $('.id_checkbox:checked:visible').map ->
+      return $(this).val()
+    if ids.size() > 1
+      ids = ids.get().join(',')
+    else
+      ids = ids[0]
+    window.location = url + '?ids=' + ids
+    $.n(t('contacts.index.bulk_vcard_download_message'))
+    $.hideDialog($("#bulk_vcard_dialog"))
+
+  $('#bulk_vcard_dialog_send_button').live 'click', (e)->
+    e.preventDefault()
+    email = $('#bulk_vcard_email').val()
+    note = $('#bulk_vcard_note').val()
+    url = $('#bulk_vcard_form').attr('action')
+    if email == ""
+      $.a(t('contacts.index.none_email_vcard'))
+    else
+      ids = $('.id_checkbox:checked:visible').map ->
+        return $(this).val()
+      if ids.size() > 1
+        ids = ids.get().join(',')
+      else
+        ids = ids[0]
+      $.get(url + '?ids=' + ids + '&email=' + email + '&note=' + note)
+      $.n(t('contacts.index.bulk_vcard_email_message') + email)
+      $.hideDialog($("#bulk_vcard_dialog"))
+
+  $('.mh_popup_cancel_button').live 'click', (e)->
+    e.preventDefault()
+    parent = $(this).parents('.custom_mh_popup_box').first()
+    unless parent.hasClass('locked')
+      $.hideDialog(parent)
+
+  $('#action_menu_search_filters').live 'click', (e)->
+    e.preventDefault()
+    $.showDialog($("#search_people_filters_div"))
+
+  $('#search_people_filters_search_button').live 'click', (e)->
+    e.preventDefault()
+    $('#search_people_form_submit').click()
+
+  $('#search_people_filters_save_search_button').live 'click', (e)->
+    e.preventDefault()
+    $("#saved_search_title").html(t('contacts.index.save_this_search'))
+    $.showDialog($("#saved_search_div"))
+
+  $('#edit_saved_search_button').live 'click', (e)->
+    e.preventDefault()
+    $.showDialog($("#saved_search_div"))
+    $("#saved_search_title").html(t('contacts.index.edit_this_search'))
+    $("#saved_contact_search_name").val($(this).attr("data-name"))
+    $("#saved_contact_search_full_path").val($(this).attr("data-full-path"))
+    $("#saved_contact_search_id").val($(this).attr("data-id"))
+    $("#save_search_form").attr("action", "/saved_contact_searches/"+$(this).attr("data-id"))
+
+  $('#add_saved_search_button').live 'click', (e)->
+    e.preventDefault()
+    if $("#saved_contact_search_name").val() == ""
+      $.a(t('contacts.index.saved_search_name'))
+    else
+      $("#save_search_form").submit()
+
+  $("#new_sent_messages_link").live 'click', (e)->
+    e.preventDefault()
+    $("#new_sent_messages_div .mh_popup_box_scroller").hide()
+    $('#new_sent_messages_div #sent_messages_paginator_top').hide()
+    $("#new_sent_messages_div #sent_messages_loader").show()
+    $.showDialog($("#new_sent_messages_div"))
+    $.ajax
+      type: 'GET',
+      url: '/sent_messages'
+
+  $('#allcontacts_add_contact_button').live 'click', (e)->
+    e.preventDefault()
+    $.fn.show_add_contact()
+
+  $('#add_contact_save_and_close_button').live 'click', (e)->
+    e.preventDefault()
+    unless $('#add_contact_div').hasClass('locked')
+      $.mh.saveContact(false)
+
+  $('#add_contact_save_and_add_another_button').live 'click', (e)->
+    e.preventDefault()
+    unless $('#add_contact_div').hasClass('locked')
+      $.mh.saveContact(true)
+
+  $('.ac_dropdown_list .side_toggle').live 'click', (e)->
+    e.preventDefault()
+    side_list = $(this).parents('.ac_dropdown_list').find('.side_list')
+    if side_list.is(':visible')
+      side_list.slideUp()
+      $(this).children('a div.arrow').html("&#x25B6")
+    else
+      side_list.slideDown()
+      $(this).children('a div.arrow').html("&#x25BC")
+
+  $('#ac_button_bar #menu_assign_link').live 'click', (e)->
+    e.preventDefault()
+    $('.profile_checkbox').prop('checked',true)
+    if $('.id_checkbox:checked').length > 0
+      $('#keep_contact').attr checked: true
+      $('#assign_to_me').click()
+      $.showDialog($("#assign_search"))
+    else
+      $.a(t('contacts.index.none_checked'))
+
   $(".my_contacts.leftmenu .completed").droppable
     activeClass: "ui-state-highlight"
     accept: ".handle"
@@ -24,22 +157,6 @@ $ ->
       $(list_id).slideDown()
       $(this).html("<span><strong>-</strong> Show Less</span>")
 
-  $('#transfer_to_org').dialog
-    resizable: false,
-    height:580,
-    width:500,
-    title: "Transfer to Another Organization",
-    autoOpen: false,
-    modal: true,
-    open: (event, ui) ->
-      $("body").css({ overflow: 'hidden' })
-      $('.ui-widget-overlay').width('100%');
-    close: (event, ui) ->
-      $("body").css({ overflow: 'inherit' })
-    buttons:
-      Cancel: ->
-        $(this).dialog('close')
-
   $('#sent_messages_div').dialog
     resizable: false,
     height: 500,
@@ -49,10 +166,9 @@ $ ->
     draggable: false,
     modal: true,
     open: (event, ui) ->
-      $("body").css({ overflow: 'hidden' })
-      $('.ui-widget-overlay').width('100%');
+      $.hideScroll()
     close: (event, ui) ->
-      $("body").css({ overflow: 'inherit' })
+      $.unhideScroll()
     buttons:
       Close: ->
         $(this).dialog('close')
@@ -60,17 +176,17 @@ $ ->
   $('#transfer_to_org_link').live 'click', (e)->
     e.preventDefault()
     if $('.id_checkbox:checked').length > 0
-      $('#transfer_to_org').dialog('open')
+      $.showDialog($('#transfer_to_org'))
     else
       $.a(t('contacts.index.none_checked'))
 
   $("#sent_messages_link").live 'click', (e)->
     e.preventDefault()
-    $("#sent_messages_div").dialog("option", "position", ['middle',30]);
+    $("#sent_messages_div").dialog("option", "position", ['middle',30])
     $("#sent_messages_div").dialog('open')
-    $("#sent_messages_content").hide();
-    $('#sent_messages_paginator_top').hide();
-    $('#sent_messages_paginator_bottom').hide();
+    $("#sent_messages_content").hide()
+    $('#sent_messages_paginator_top').hide()
+    $('#sent_messages_paginator_bottom').hide()
     $("#sent_messages_loader").show()
     $.ajax
       type: 'GET',
@@ -83,7 +199,7 @@ $ ->
       ids.push($(this).attr('data-id'))
     href = $(this).attr('href')
     if href.indexOf('?') < 0
-    	href = href+"?"
+      href = href+"?"
     document.location = href+"&only_ids="+ids.join(',')
 
   $('#contacts_controller #include_archived').live 'click', ->
@@ -91,6 +207,22 @@ $ ->
       document.location = '/contacts?include_archived=true'
     else
       document.location = '/contacts'
+
+  $('#contacts_controller #include_archived_interactions').live 'click', ->
+    params = $(this).attr("data-params")
+    attr_url = "include_archived_interactions=true"
+    if $(this).is(':checked')
+      document.location = "/allcontacts?"+attr_url+"&"+params
+    else
+      document.location = "/allcontacts?"+params.replace(attr_url, "")
+
+  $('#contacts_controller #include_archived_labels').live 'click', ->
+    params = $(this).attr("data-params")
+    attr_url = "include_archived_labels=true"
+    if $(this).is(':checked')
+      document.location = "/allcontacts?"+attr_url+"&"+params
+    else
+      document.location = "/allcontacts?"+params.replace(attr_url, "")
 
   $('.friends_count').live 'click', ->
     false
@@ -136,7 +268,7 @@ $ ->
       modal: true,
       open: (event, ui) ->
         $("body").css({ overflow: 'hidden' })
-        $('.ui-widget-overlay').width('100%');
+        $('.ui-widget-overlay').width('100%')
       close: (event, ui) ->
         $("body").css({ overflow: 'inherit' })
       buttons:
@@ -150,26 +282,14 @@ $ ->
           $(this).dialog('destroy')
     false
 
-  $('#search_show_question').live 'click', (e)->
+  $('#search_show_question, #search_people_filters_hidden_questions_button').live 'click', (e)->
     e.preventDefault()
-    $('#search_hidden_questions_loader').hide();
-    $('#search_hidden_questions_list').show();
-    $('#search_hidden_questions_div').dialog
-      resizable: false,
-      height: 450,
-      width: 400,
-      modal: true,
-      open: (event, ui) ->
-        $("body").css({ overflow: 'hidden' })
-        $('.ui-widget-overlay').width('100%');
-      close: (event, ui) ->
-        $("body").css({ overflow: 'inherit' })
-      buttons:
-        Close: ->
-          $(this).dialog('close')
+    $('#search_hidden_questions_loader').hide()
+    $('#search_hidden_questions_list').show()
     $('#search_hidden_questions_div #search_hidden_questions_fetcher').show()
     $('#search_hidden_questions_div #search_hidden_questions_loader').hide()
     $('#search_hidden_questions_div #search_hidden_questions_content').html('')
+    $.showDialog($("#search_hidden_questions_div"))
     $.ajax
       type: 'GET',
       url: '/show_search_hidden_questions'
@@ -199,45 +319,19 @@ $ ->
     $.post(url, params)
     false
 
-  $('#bulk_vcard_link').live 'click', ->
-    ids = []
-    $('.id_checkbox:checked').each ->
-      id = $(this).val()
-      ids.push(id)
+  $('#bulk_vcard_link').live 'click', (e)->
+    e.preventDefault()
 
-    if ids.length == 0
+    if $('.id_checkbox:checked:visible').size() == 0
       $.a(t('contacts.index.none_checked'))
-      return false
+    else
+      $('#bulk_vcard_note').val("")
+      ids = []
+      $('.id_checkbox:checked:visible').each ->
+        id = $(this).val()
+        ids.push(id)
+      $.showDialog($("#bulk_vcard_dialog"))
 
-    $('#bulk_vcard_dialog').dialog
-      resizable: false,
-      height: 250,
-      width: 400,
-      modal: true,
-      open: (event, ui) ->
-        $('#bulk_vcard_note').val("")
-      ,
-      buttons:
-        "Send to email": ->
-          email = $('#bulk_vcard_email').val()
-          note = $('#bulk_vcard_note').val()
-          url = $('#bulk_vcard_form').attr('action')
-          
-          if email == ""
-            $.a(t('contacts.index.none_email_vcard'))
-            return false
-          else
-            $.get(url + '?ids=' + ids + '&email=' + email + '&note=' + note)
-            $.n(t('contacts.index.bulk_vcard_email_message') + email)
-            $(this).dialog('destroy')
-        "Download": ->
-          url = $('#bulk_vcard_form').attr('action')
-          window.location = url + '?ids=' + ids
-          $.n(t('contacts.index.bulk_vcard_download_message'))
-          $(this).dialog('destroy')
-        Cancel: ->
-          $(this).dialog('destroy')
-    false
 
 
   if $.params.answers
@@ -282,6 +376,7 @@ $ ->
       resizable: false,
       height:444,
       width:600,
+      modal: true,
       position: 'center',
       open: (event, ui) ->
         $('#new_person')[0].reset()
@@ -293,6 +388,9 @@ $ ->
         $("#add_contact_form input[type='radio']").attr("checked",false)
         $("#add_contact_form input[type='checkbox']:not(:disabled)").attr("checked",false)
         $("#add_contact_form .remove_in_add_contact").remove()
+        $.hideScroll()
+      close: (event, ui) ->
+        $.unhideScroll()
       buttons: [
         text: t('application.add_contact.save_and_close'),
         'class': 'add_new_contact_dialog_buttons',
@@ -317,16 +415,32 @@ $ ->
       height:444,
       width:600,
       modal: true,
+      open: (event, ui) ->
+        $.hideScroll()
+      close: (event, ui) ->
+        $.unhideScroll()
       buttons:
         Cancel: ->
+          $(this).dialog('close')
           $(this).dialog('destroy')
     false
+
+  $('.unassign_link a').live 'click', (e)->
+    $(this).parents('.unassign_link').hide()
+    leader = $('.leftmenu .leader[data-id='+$(this).attr('data-assigned_to_id')+']')
+    $(this).parents('.controls').find('.assigned_to').text("")
+    $('.count', leader).html(Number($('.count', leader).html()) - 1)
+    $.toggleLoader('ac_button_bar','Unassigning...')
+
   $('#assign_search .assign_button').live 'click', ->
-    leader = $('.leftmenu .leader[data-id=' + $('#assign_to').val() + ']')
+    if $('#assign_to').val() != ""
+      leader = $('.leftmenu .leader[data-id=' + $('#assign_to').val() + ']')
+    else
+      leader = "Unassigned"
     $.fn.assignTo(leader)
-    $.fn.load_leader_name($('#person_title').attr('data-id'))
-    $('#assign_search').dialog('close')
-    $('#assign_search').dialog('destroy')
+    $.toggleLoader('profile_name','Assigning...')
+    $.toggleLoader('ac_button_bar','Assigning...')
+    $.hideDialog($("#assign_search"))
 
   $('#assign_search .leader a').live 'click', (e)->
     $('#assign_to').val($(this).closest('li').attr('data-id'))
@@ -338,38 +452,42 @@ $ ->
       $.rails.handleRemote($('#new_contact_assignment'))
       unless $('#assign_to').val() == $('#my_id').val()
         $.fn.load_leader_name($('#person_title').attr('data-id'))
-    $('#assign_search').dialog('close')
-    $('#assign_search').dialog('destroy')
+    $.toggleLoader('profile_name','Assigning to Leader...')
+    $.toggleLoader('ac_button_bar','Assigning to Leader...')
+    $.hideDialog($("#assign_search"))
   false
 
 
   $('#transfer_to_org .org a').live 'click', (e)->
     e.preventDefault()
-    $('#global_loader').show()
     form = $('#new_contact_assignment')
     from_id = $(this).closest('div').attr('data-org-id')
     to_id = $(this).attr('data-id')
     keep_contact = $('#keep-contact-copy > input').is(':checked')
+
     ids = []
     $('.id_checkbox:checked:visible').each ->
       ids.push($(this).val())
     if($('#all_selected_text').is(':visible'))
       $('.all_row').each ->
         ids.push($(this).attr('data-id'))
-    $('#transfer_to_org').dialog('close')
+
     $('input.org_search_name').val('')
     $('#keep_contact').attr('checked','checked')
+    $.hideDialog($('#transfer_to_org'))
+    $.toggleLoader('ac_button_bar','Transferring...')
+
     $.ajax
       type: 'POST'
-      url: '/organizational_roles/move_to'
+      url: '/organizational_permissions/move_to'
       data: 'from_id='+from_id+'&to_id='+to_id+'&keep_contact='+keep_contact+'&ids='+ids
       success: (data) ->
-        $('#global_loader').hide()
+        $.toggleLoader('ac_button_bar','')
         if data.indexOf("success") != -1
           if keep_contact == false
             $.a(data)
             $('.id_checkbox:checked').each ->
-              $(this).closest('tr').fadeOut();
+              $(this).closest('tr').remove()
           else
             $.a(data)
         else
@@ -387,33 +505,31 @@ $ ->
         person += $(element).attr('value') + ","
 
     add_another = false
-    $('<a href="/groups/' + group  + '/group_memberships?person_id=' + person + '&role=member&render_in_contacts=true&add_another=' + add_another + '" data-method="post" data-remote="true"></a>')
+    $('<a href="/groups/' + group  + '/group_memberships?person_id=' + person + '&permission=member&render_in_contacts=true&add_another=' + add_another + '" data-method="post" data-remote="true"></a>')
     .appendTo('body')
     .click()
     .remove()
-    $('#assign_search').dialog('close')
-    $('#assign_search').dialog('destroy')
+    $.hideDialog($("#assign_search"))
     $('#global_loader').show()
     $('.id_checkbox:checked').prop('checked',false)
+    $.toggleLoader('profile_name','Assigning to Group...')
   false
 
   $('#assign_search .label a').live 'click', (e)->
     e.preventDefault()
-    role = $('#assign_to').val($(this).closest('li').attr('data-role')).val()
+    permission = $('#assign_to').val($(this).closest('li').attr('data-permission')).val()
     show_success = true
     if window.location.pathname == '/contacts'
       $('.id_checkbox:checked').each ->
         person_id = $(this).val()
         $.ajax
           type: 'POST',
-          url: '/people/update_roles',
-          data: 'role_ids='+role+'&person_id='+person_id+'&include_old_roles=yes'
+          url: '/people/update_permissions',
+          data: 'permission_ids='+permission+'&person_id='+person_id+'&include_old_permissions=yes'
           error: show_success = false
         $('#main').load('/contacts .index.carea')
         $('#left').load('/contacts .block')
-
-      $('#assign_search').dialog('close')
-      $('#assign_search').dialog('destroy')
+      $.hideDialog($("#assign_search"))
       if show_success
         $.n('Successfully assigned label.')
     else if window.location.pathname == '/contacts/mine'
@@ -421,25 +537,22 @@ $ ->
         person_id = $(this).val()
         $.ajax
           type: 'POST',
-          url: '/people/update_roles',
-          data: 'role_ids='+role+'&person_id='+person_id+'&include_old_roles=yes'
+          url: '/people/update_permissions',
+          data: 'permission_ids='+permission+'&person_id='+person_id+'&include_old_permissions=yes'
           error: show_success = false
         $('#main').load('/contacts/mine .mine.carea')
         $('#left').load('/contacts/mine .block')
-
-      $('#assign_search').dialog('close')
-      $('#assign_search').dialog('destroy')
+      $.hideDialog($("#assign_search"))
       if show_success
         $.n('Successfully assigned label.')
     else
       person_id = $('.assign.person_headerlink').attr('data-id')
       $.ajax
-          type: 'POST',
-          url: '/people/update_roles',
-          data: 'role_ids='+role+'&person_id='+person_id+'&include_old_roles=yes'
-          error: show_success = false
-      $('#assign_search').dialog('close')
-      $('#assign_search').dialog('destroy')
+        type: 'POST',
+        url: '/people/update_permissions',
+        data: 'permission_ids='+permission+'&person_id='+person_id+'&include_old_permissions=yes'
+        error: show_success = false
+      $.hideDialog($("#assign_search"))
       if show_success
         $.n('Successfully assigned label.')
   false
@@ -450,16 +563,16 @@ $ ->
       inc = "?include_archived=true"
 
     $(this).autocomplete
-	    source: '/contacts/search_by_name_and_email.json'+inc,
+      source: '/contacts/search_by_name_and_email.json'+inc,
       select: (event, ui) ->
-        window.location = "/people/" + ui.item.id
+        window.location = "/profile/" + ui.item.id
     .data("autocomplete")
     ._renderItem = ( ul, item )->
       temp = item
       return $( "<li></li>" )
         .data( "item.autocomplete", temp )
         .append("<a>" + temp.label + "</a><div class='email'>" + temp.email + "</div>")
-        .appendTo( ul );
+        .appendTo( ul )
 
 
   $('#assign_search .leader_search_name').live 'keyup', ->
@@ -543,21 +656,7 @@ $ ->
     if $('.id_checkbox:checked').length > 0
       $('#keep_contact').attr checked: true
       $('#assign_to_me').click()
-      el = $('#assign_search')
-      el.dialog
-        resizable: false,
-        height:650,
-        width:600,
-        modal: true,
-        open: (event, ui) ->
-          $("body").css({ overflow: 'hidden' })
-          $('.ui-widget-overlay').width('100%');
-        close: (event, ui) ->
-          $("body").css({ overflow: 'inherit' })
-        buttons:
-          Cancel: ->
-            $(this).dialog('close')
-            $(this).dialog('destroy')
+      $.showDialog($("#assign_search"))
     else
       $.a(t('contacts.index.none_checked'))
     false
@@ -569,7 +668,7 @@ $ ->
       $('.id_checkbox:checked').each ->
         $(this).parents('tr').children('.assigned_to').html("")
       msg = "You have successfully unassigned " + checked_count + " contacts."
-      $('.carea').prepend("<div class='flash' style='margin:10px;'><div class='flash_message notice'><p>"+msg+"</p></div></div>")
+      $('.carea').prepend("<div class='flash' style='margin:10px'><div class='flash_message notice'><p>"+msg+"</p></div></div>")
       $('.flash').delay(3000).slideUp()
     $('#check_all').prop('checked', false)
     false
@@ -638,7 +737,7 @@ $ ->
         response([])
 
   $('#contacts_controller .controls a.mineunassign').live 'click', ->
-  	$(this).closest('tr').fadeOut()
+    $(this).closest('tr').fadeOut()
 
   $('.search_show_all_link').live 'click', ->
     $('#spinner_leader_search').show()
@@ -681,7 +780,7 @@ $ ->
   $('.contact_row td:not(.checkbox_cell)').live 'click', ->
     unless $('a', this)[0]?
       tr = $(this).parent()
-      document.location = '/people/' + tr.attr('data-id')
+      document.location = '/profile/' + tr.attr('data-id')
 
   $('#assign_to').change ->
     if $('.id_checkbox:checked').length > 0
@@ -691,7 +790,7 @@ $ ->
       $('#check_all').prop('checked', false)
     else
       $.a(t('contacts.index.none_checked'))
-  $('#contacts_controller .index a.hide').live 'click', ->
+  $('#contacts_controller .index a.hide, #contacts_controller .all_contacts a.hide').live 'click', ->
     $(".field.user_defined#search_question_field_"+$(this).attr('data-id')).fadeOut()
     $('#hidden_questions_div').hide()
     $('.' + $(this).attr('data-class')).fadeOut()
@@ -710,28 +809,23 @@ $ ->
       $('#hidden_questions_div #hidden_questions_content').html('')
     false
 
-	$("#search_clear_selected_labels").live "click", ->
-		$(".search_role_checkbox").removeAttr("checked")
-		$.fn.search_status()
+  $("#search_clear_selected_labels").live "click", ->
+    $(".search_label_checkbox").removeAttr("checked")
+    false
 
-	$(".search_status").live "change", ->
+  $(".search_status").live "change", ->
     $.fn.search_status()
-  
-  $("#locate_contact").live "click", ->
-    $("#locate_contact_container").dialog
-      resizable: false,
-      height:580,
-      width:790,
-      open: (event, ui) ->
-        desc = t('contacts.index.search_contact_results_description')
-        $(".locate_contact_list_tr").remove()
-        $("#locate_contact_list_container").append("<tr class='locate_contact_list_tr'><td colspan='99'>" +desc+ "</td></tr>")
-        $("#locate_contact_firstname").val('')
-        $("#locate_contact_lastname").val('')
-        $("#locate_contact_email").val('')
-      buttons:
-        Cancel: ->
-          $(this).dialog('close')
+
+  $("#locate_contact").live "click",(e) ->
+    e.preventDefault()
+    $.showDialog($("#locate_contact_container"))
+    desc = t('contacts.index.search_contact_results_description')
+    $(".locate_contact_list_tr").remove()
+    $("#locate_contact_list_container").append("<tr class='locate_contact_list_tr'><td colspan='99'>" +desc+ "</td></tr>")
+    $("#locate_contact_firstname").val('')
+    $("#locate_contact_lastname").val('')
+    $("#locate_contact_email").val('')
+
   $("#search_locate_contact_button").live "click", ->
     ele = $(this)
     fname = $("#locate_contact_firstname").val()
@@ -751,12 +845,26 @@ $ ->
           ele.attr("disabled", false)
           $("#search_locate_contact_loading").hide()
     false
+
+$.fn.show_add_contact = () ->
+  $(".field_with_errors, .red_errors, #add_contact_form .remove_in_add_contact").remove()
+  $("#add_contact_form input[type='text']").val("")
+  $("#add_contact_form textarea").val("")
+  $("#add_contact_form select").val(0)
+  $("#add_contact_form input[type='checkbox']").attr("checked",false)
+  $("#add_contact_form input[type='radio']").attr("checked",false)
+  $(".form_group_fields .permission_checkbox.no_permissions").attr("checked",true)
+  disabled = $("#add_contact_form input[type='checkbox']:not(:disabled)")
+  disabled.attr("checked",false)
+  $.blur('#add_contact_div .mh_popup_box_scroller','hide')
+  $.toggleLoader('add_contact_title','')
+  $.showDialog($("#add_contact_div"))
+
 $.fn.search_status = () ->
-	label_contacts = $("#search_role_2")
-	check = $(".search_status :selected").val() != ""
-	label_contacts.attr("checked", check)
-	label_contacts.attr("disabled", check)
-	false
+  check = $(".search_status :selected").val() != ""
+  label_contacts.attr("checked", check)
+  label_contacts.attr("disabled", check)
+  false
 
 $.fn.moveToCompleted = (dragObject) ->
   $('.id_checkbox:checked').each ->
@@ -792,23 +900,33 @@ $.fn.moveToDnc = (dragObject) ->
   $.rails.handleRemote($('#move_to_dnc'))
 
 $.fn.assignTo = (leader, skip_remote) ->
-  leader_name = $('.name a', leader).text()
+  if leader == "Unassigned"
+    leader_name = "Unassigned"
+  else
+    leader_name = $('a', leader).text()
   $('.id_checkbox:checked').each ->
     row = $('tr[data-id=' + $(this).val() + ']')
     assigned_to = $('.assigned_to', row)
     if leader_name == 'Unassigned'
       $('.unassign_link', row).hide()
+      leader_id = $('.unassign_link a', row).attr('data-assigned_to_id')
+      old_leader = $('.leftmenu .leader[data-id='+leader_id+']')
+      $('.count', old_leader).html(Number($('.count', old_leader).html()) - 1)
+      if Number($('.count', old_leader).html()) == 0
+        old_leader.hide()
+      $('.assigned_to', row).text("")
+      $.toggleLoader('ac_button_bar','Unassigning...')
     else
       $('.unassign_link', row).show()
 
-    unless assigned_to.html() == leader_name
+    if assigned_to.html() != leader_name && leader_name != "Unassigned"
 
       $('.count', leader).html(Number($('.count', leader).html()) + 1)
       if assigned_to.html() == ''
         $('#unassigned_count').html(Number($('#unassigned_count').html()) - 1)
 
       else
-        $('.leader a').each ->
+        $('.leader .name a').each ->
           if $(this).text() == assigned_to.html() || (leader.hasClass('unassigned') && assigned_to.html() == '')
             count = $(this).closest('.leader').find('.count')
             count.html(Number(count.html()) - 1)
@@ -820,34 +938,28 @@ $.fn.assignTo = (leader, skip_remote) ->
         assigned_to.text(leader_name)
         #hide assigned to
         $('#person_title').hide()
+
+      $('.unassign_link a', row).attr('title', 'Unassign contact from ' + leader_name)
+      $('.unassign_link a', row).attr('data-assigned_to_id', leader.attr('data-id'))
+      $.fn.tip()
+      assigned_to.text(leader_name)
+      leader.show()
     # hide people assigned to someone other than the current or if we're moving to dnc
     assign_to = $('#new_contact_assignment').find("#assign_to").val()
     if assign_to == "do_not_contact" || ($.params.assigned_to != leader_name)
       unless skip_remote
         $.rails.handleRemote($('#new_contact_assignment'))
-
       row.find('.id_checkbox').attr('checked', false)
-      if $('.leader.selected').size() > 0
-        row.hide()
-        disp_string = $('.searchstat').html().trim()
-        disp_total = parseInt(disp_string.split(' of ')[1]) - 1
-        disp_over = parseInt(disp_string.split(' - ')[1].split(' of ')[0]) - 1
-        disp_num = disp_string.split(' - ')[0].split(' ')[1]
-
-        if disp_total <= 0 || disp_over <= 0
-          $('.searchstat').html("")
-        else
-          $('.searchstat').html("Displaying " + disp_num + " - " + disp_over + " of " + disp_total)
 
   $('#assign_to').val('')
 
 $.mh.saveContact = (add_more) ->
   form = $('#new_person')
-  
+
   #For My Contacts Page
   $('#assign_new_contact_to_me').val($('#mine_assign_to').val())
-  
-  #For Add a person in Group Members Page
+
+  #For add a new contact record in Group Members Page
   group_tag = $("#add_to_group_id").val()
   $("#add_to_group_tag").val(0)
   if group_tag
@@ -855,37 +967,50 @@ $.mh.saveContact = (add_more) ->
     $("#add_to_group_tag").val(1)
     $("#add_to_group_role").val($("#role").val())
     $("#add_to_group").val($("#add_to_group_id").val())
-  
+
+  #Dialog buttons
   dialog_buttons = $('.add_new_contact_dialog_buttons, .add_new_person_group_member_butons')
-  
   dialog_buttons.button('disable')
-  if $('#person_first_name', form).val() == ''
+  email = $.trim($('#person_email_address_email').val())
+  fname = $.trim($('#person_first_name', form).val())
+  lname = $.trim($('#person_last_name', form).val())
+  if fname == '' || lname == ''
     $.a(t('contacts.index.no_name_message'))
     dialog_buttons.button('enable')
   else
-    email = $('#person_email_address_email').val()
-    fname = $('#person_first_name').val()
-    lname = $('#person_last_name').val()
-    $.ajax
-      type: 'POST',
-      url: '/check_email',
-      data: 'email='+email+'&fname='+fname+'&lname='+lname,
-      success: (code) ->
-        if code == '100'
-          $('#add_another').val(add_more)
-          $.rails.handleRemote(form)
-          form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
-        else
-          if code == '201'
-            $.a(t('contacts.index.add_already_registered_contact'))
-          if code == '202'
-            $.a(t('contacts.index.add_already_registered_email'))
-          if code == '203'
-            $.a(t('contacts.index.add_contact_required_fields'))
-        dialog_buttons.button('enable')
+    $('#add_contact_div').addClass('locked')
+    $.blur('#add_contact_div .mh_popup_box_scroller')
+    $.toggleLoader('add_contact_title','Saving Contact...')
+    if email == ""
+      $('#add_another').val(add_more)
+      $.rails.handleRemote(form)
+      unless $("#add_contact_div .mh_popup_box_scroller").size() > 0
+        form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
+    else
+      $.ajax
+        type: 'POST',
+        url: '/check_email',
+        data: 'email='+email+'&fname='+fname+'&lname='+lname,
+        success: (code) ->
+          if code == '100'
+            $('#add_another').val(add_more)
+            $.rails.handleRemote(form)
+            unless $("#add_contact_div .mh_popup_box_scroller").size() > 0
+              form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
+          else
+            $('#add_contact_div').removeClass('locked')
+            $.blur('#add_contact_div .mh_popup_box_scroller')
+            $.toggleLoader('add_contact_title','')
+            if code == '201'
+              $.a(t('contacts.index.add_already_registered_contact'))
+            if code == '202'
+              $.a(t('contacts.index.add_already_registered_email'))
+            if code == '203'
+              $.a(t('contacts.index.add_contact_required_fields'))
+          dialog_buttons.button('enable')
   false
 
 $.fn.load_leader_name = (id) ->
   $('#person_title').html('<img src="/assets/spinner.gif" />')
-  $('#person_title').show().load('/people/' + id + ' #assigned_leader')
+  $('#person_title').show().load('/profile/' + id + ' #assigned_leader')
 

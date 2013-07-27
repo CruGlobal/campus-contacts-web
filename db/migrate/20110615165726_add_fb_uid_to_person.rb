@@ -1,3 +1,5 @@
+class Person < ActiveRecord::Base
+end
 class AddFbUidToPerson < ActiveRecord::Migration
   def self.up
     change_table Person.table_name do |t|

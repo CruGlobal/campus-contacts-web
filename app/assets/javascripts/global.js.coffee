@@ -8,7 +8,7 @@ $ ->
       preventDuplicates: true
       minChars: 3
       resultsLimit: 10
-      hintText: $('#send_email_to').attr("data-search-desc"),
+      hintText: "",
       placeHolder: $('#send_email_to').attr("data-search-desc"),
       defaultWidth: 690
 
@@ -17,19 +17,9 @@ $ ->
       preventDuplicates: true
       minChars: 3
       resultsLimit: 10
-      hintText: $('#send_text_to').attr("data-search-desc"),
+      hintText: "",
       placeHolder: $('#send_text_to').attr("data-search-desc"),
       defaultWidth: 690
-
-    include_archived = $.url(window.location.href).param("include_archived")
-    if include_archived
-      sidebar_url = '/display_sidebar?include_archived=' + include_archived
-    else
-      sidebar_url = '/display_sidebar'
-    if $('#sidebar_div').is(':visible')
-      $.ajax
-        type: 'GET',
-        url: sidebar_url
 
   $('a#survey_keywords_mode_link').siblings('ul').width(300)
 
@@ -43,22 +33,24 @@ $ ->
   $("select, input[type=text], input[type=password], input[type=email]").live "keypress", (e) ->
     false if e.which is 13
 
-  $('#bulk_send_msg_dialog').dialog
-    resizable: false,
-    height:444,
-    width:730,
-    modal: true,
-    draggable: false,
-    autoOpen: false,
-    open: (event, ui) ->
-      $("body").css({ overflow: 'hidden' })
-      $('.ui-widget-overlay').width('100%')
-      $(".token-input-dropdown-facebook").hide()
-    close: (event, ui) ->
-      $("body").css({ overflow: 'inherit' })
-      $('#bulk_sms_message').val($('#bulk_send_body').val())
-    buttons:
-      Send: ->
-        $(this).submitBulkSendTextDialog()
-      Cancel: ->
-        $(this).dialog('close')
+  $('#token-input-send_email_to').live 'blur', ->
+    $(this).width(675)
+
+  $('#token-input-send_email_to').live 'focus', ->
+    if $(this).val() == ""
+      $(this).width(675)
+
+  $('#token-input-send_text_to').live 'blur', ->
+    $(this).width(675)
+
+  $('#token-input-send_text_to').live 'focus', ->
+    if $(this).val() == ""
+      $(this).width(675)
+
+$.fn.cleanURL = (url)->
+  values = url.split('?')
+  url = values[0]
+  if values.length > 1
+    url += '?' + values[1].split('&').filter(String).join('&')
+  return url
+

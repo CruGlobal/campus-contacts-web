@@ -19,25 +19,25 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
       setup do
         # Add a second person
         @person2 = Factory(:person, first_name: 'Bob', last_name: 'Jones')
-        @client.organization.add_involved(@person2)
+        @client.organization.add_contact(@person2)
       end
 
-      context 'filter by role' do
-        should 'return no results for a role no one has' do
-          get :index, secret: @client.secret, filters: {roles: '-1'}, include: :organizational_roles
+      context 'filter by permission' do
+        should 'return no results for a permission no one has' do
+          get :index, secret: @client.secret, filters: {permissions: '-1'}, include: :organizational_permissions
           json = JSON.parse(response.body)
           assert_equal 0, json['people'].length, json.inspect
         end
 
-        should 'return results for a role someone has' do
-          get :index, secret: @client.secret, filters: {roles: Role::ADMIN_ID}
+        should 'return results for a permission someone has' do
+          get :index, secret: @client.secret, filters: {permissions: Permission::ADMIN_ID}
           json = JSON.parse(response.body)
           assert_equal 1, json['people'].length, json.inspect
         end
 
-        should 'include archived roles when requested' do
-          @person2.organizational_roles.create!(organization: @client.organization, role_id: Role::ADMIN_ID, archive_date: Date.today)
-          get :index, secret: @client.secret, filters: {roles: Role::ADMIN_ID}, include_archived: 'true'
+        should 'include archived permissions when requested' do
+          @person2.organizational_permissions.create!(organization: @client.organization, permission_id: Permission::ADMIN_ID, archive_date: Date.today)
+          get :index, secret: @client.secret, filters: {permissions: Permission::ADMIN_ID}, include_archived: 'true'
           json = JSON.parse(response.body)
           assert_equal 2, json['people'].length, json.inspect
         end
@@ -80,7 +80,7 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
       end
 
       should 'filter by followup status with a match' do
-        @person.organizational_roles.create(organization: @client.organization,
+        @person.organizational_permissions.create(organization: @client.organization,
                                             followup_status: 'contacted')
 
         # 1 person
@@ -106,7 +106,7 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
         Factory(:contact_assignment, organization: @client.organization,
                                       assigned_to: @person2,
                                       person: @person)
-        @person.organizational_roles.first.update_attributes(followup_status: 'contacted')
+        @person.organizational_permissions.first.update_attributes(followup_status: 'contacted')
 
         # 1 person
         get :index, secret: @client.secret, filters: {assigned_to: @person2.id.to_s, followup_status: 'contacted'}
@@ -119,7 +119,7 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
       context 'filtering by name_or_email_like' do
 
         should 'match first name' do
-          get :index, secret: @client.secret, filters: {name_or_email_like: @person.first_name[0..1]}
+          get :index, secret: @client.secret, filters: {name_or_email_like: @person.first_name[0..2]}
           json = JSON.parse(response.body)
           assert_equal 1, json['people'].length, json.inspect
         end
@@ -203,7 +203,7 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
   end
 
   context '.update' do
-    should 'create and return a person' do
+    should 'update and return a person' do
       put :update, id: @person.id, person: {first_name: 'funk'}, secret: @client.secret
       json = JSON.parse(response.body)
       assert_equal 'funk', json['person']['first_name']
@@ -211,11 +211,42 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
   end
 
   context '.destroy' do
-    should 'create and return a person' do
+    should 'destroy person' do
       delete :destroy, id: @person.id, secret: @client.secret
-      assert_equal [], assigns(:person).organizational_roles
+      assert_equal [], assigns(:person).organizational_permissions
     end
   end
+
+  context '.bulk_destroy' do
+    should 'destroy people by filter ids' do
+      delete :bulk_destroy, filters: {ids: @person.id}, secret: @client.secret
+      assert_equal [@person], assigns(:people), assigns(:people).inspect
+      assert_equal [], assigns(:people).first.organizational_permissions
+    end
+    should 'destroy people by filter permission' do
+      delete :bulk_destroy, filters: {permissions: @person.organizational_permissions.first.permission_id}, secret: @client.secret
+      assert_equal [@person], assigns(:people), assigns(:people).inspect
+      assert_equal [], assigns(:people).first.organizational_permissions
+    end
+  end
+
+
+  # context '.bulk_archive' do
+  #   setup do
+  #     @person2 = Factory(:person, first_name: 'Bob', last_name: 'Jones')
+  #     @client.organization.add_contact(@person2)
+  #   end
+  #   should 'archive people by filter ids' do
+  #     post :bulk_archive, filters: {ids: @person2.id}, secret: @client.secret
+  #     assert_equal [@person2], assigns(:people), assigns(:people).inspect
+  #     assert_not_nil assigns(:people).first.organizational_permissions.first.archive_date
+  #   end
+  #   should 'archive people by filter permission' do
+  #     post :bulk_archive, filters: {permissions: @person2.organizational_permissions.first.permission_id}, secret: @client.secret
+  #     assert_equal [@person2], assigns(:people), assigns(:people).inspect
+  #     assert_not_nil assigns(:people).first.organizational_permissions.first.archive_date
+  #   end
+  # end
 
 
 

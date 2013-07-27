@@ -2,7 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-#sent_messages_div {
+#sent_messages_div, #new_sent_messages_div {
   #sent_messages_loader {
     margin: 20px auto;
     text-align: center;
@@ -16,9 +16,11 @@
     text-align: center;
   }
   #sent_messages_content {
-    width: 100%;
-    padding: 0;
-    margin: 0;
+    &:not(.mh_popup_box_scroller) {
+      width: 100%;
+      padding: 0;
+      margin: 0;
+    }
 
     #sent_messages_table {
       border-spacing: 0;
@@ -34,10 +36,10 @@
         }
       }
       &:last-child.table_content {
-        border-bottom: 1px solid #eee;
+        border-bottom: none;
       }
       .table_content {
-        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
         .table_cell {
           vertical-align: top;
         }

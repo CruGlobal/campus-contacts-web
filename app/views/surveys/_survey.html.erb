@@ -1,0 +1,16 @@
+<tr>
+  <td><%= survey %></td>
+  <% if current_organization.show_sub_orgs? %>
+    <td><%= survey.organization %></td>
+  <% end %>
+  <td><%= link_to(survey.keyword, edit_sms_keyword_path(survey.keyword)) if survey.keyword %></td>
+  <td>
+    <%= link_to(short_survey_url(survey.id, host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port'])), short_survey_url(survey.id, host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port'])), target: '_blank')%>
+  </td>
+  <td class="controls" align="right">
+    <%= link_to t("welcome.home.manage_questions"), survey_questions_path(survey) %>
+    <%= link_to t('surveys.index_admin.copy_survey'), "#transfer", class: "icon copy tipitleft transfer_survey", :title => t('surveys.index_admin.copy_survey'), "data-id" => survey.id, "data-name" => survey %>
+    <%= link_to t('surveys.index_admin.edit_survey'), edit_survey_path(survey), class: "icon edit tipitleft", :title => t('surveys.index_admin.edit_survey') %>
+    <%= link_to t("surveys.index_admin.delete_survey"), survey_path(survey), method: :delete, confirm: t('surveys.index_admin.confirm_delete_survey'), class: "icon delete tipitleft", title: t('surveys.index_admin.delete_survey') %>
+  </td>
+</tr>
