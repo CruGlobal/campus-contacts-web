@@ -118,17 +118,6 @@ class GroupsControllerTest < ActionController::TestCase
       assert_equal assigns(:groups).collect(&:name), ['Group3','Group2','Group1']
       assert_response(:success)
     end
-
-    should "get index with through labels with groups" do
-      Factory(:group_labeling, group: @group, group_label: @label)
-      get :index, { :label => @label.id }
-      assert_equal assigns(:groups).collect(&:id), [@group.id]
-    end
-
-    should "not get index when label id is not existing" do
-      get :index, { :label => @label.id + 1}
-      assert_not_nil assigns(:groups)
-    end
   end
 
   context "updating group" do
