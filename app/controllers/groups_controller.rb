@@ -16,17 +16,6 @@ class GroupsController < ApplicationController
     @groups = current_organization.groups.order(order_query)
     @q = current_organization.groups.where('1 <> 1').search(params[:search])
 
-    if params[:label].present?
-      begin
-        @label = current_organization.group_labels.find(params[:label])
-        @groups = @groups.where('group_labels.id' => params[:label]).joins(:group_labels)
-      rescue ActiveRecord::RecordNotFound
-        flash[:error] = "Label not found"
-      end
-    else
-      @groups = @groups.includes(:group_labels)
-    end
-
     people_ids = GroupMembership.where(group_id: @groups.collect(&:id)).collect(&:person_id)
     @people = current_organization.people.where(id: people_ids)
     @all_people_with_phone_number = @people.includes(:primary_phone_number).where('phone_numbers.number is not NULL').uniq
