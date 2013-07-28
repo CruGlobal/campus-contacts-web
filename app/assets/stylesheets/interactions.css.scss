@@ -63,6 +63,21 @@ body{
       z-index: 1002;
       margin: 25px auto;
 
+      &.add_new_org_content_div, &.import_from_crs_content_div{
+        min-height:100px;
+        padding-bottom: 40px; // gives space for the buttons which is set as absolute
+        .inline_block{
+          display: inline-block;
+        }
+        .add_org_save{
+          position: absolute;
+          right: 0px;
+          bottom: 16px;
+          margin-right: 22px;
+          margin-left: 24px;
+        }
+      }
+
       &.groups_popup_box {
         .groups_chooser_box {
           width: 260px;

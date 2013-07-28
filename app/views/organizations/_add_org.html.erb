@@ -1,36 +1,45 @@
-<div id="add_org_form">
-  <%= form_for organization, url: organizations_path, method: :post, remote: true, validate: true do |f| %>
-    <% if flash[:error] %>
-      <div class="flash error"><%= raw flash[:error] %></div>
-    <% end %>
-    <%= f.hidden_field :parent_id %>
-    <%= hidden_field_tag :add_another %>
-    <div class="customform">
-      <div class="sfield">
-        <div class="ls">
-          <%= f.label :name %>
-        </div>
-        <div class="rs">
-          <%= f.text_field :name %>
-        </div>
+<div id="add_new_org_div" style="display:none" class="custom_mh_popup_box">
+  <div class="ui-widget-overlay pop_box_overlay_container"></div>
+  <div class="pop_box_container">
+    <div class="mh_popup_box add_new_org_content_div">
+    	<div class="mh_popup_box_top">
+        <span class="mh_popup_heading">
+          <%= t('organizations.index.add_sub_org_title') %>
+        </span>
       </div>
-      <div class="sfield">
-        <div class="ls">
-          <%= f.label :terminology %>
-        </div>
-        <div class="rs">
-          <%= f.text_field :terminology %>
-        </div>
+      <div id="add_new_org_loader" style="display:none;" align="center">
+        <%= image_tag 'loader.gif' %><br/>Loading...
       </div>
-      <div class="ls"></div>
-      <div class="rs">
-        <div class="sfield">
-          <%= f.check_box :show_sub_orgs %>
-        	<%= f.label :show_sub_orgs %>
-        </div>
+      <div class="mh_popup_box_content" id="add_new_org_content" align="center">
+        <%= form_for organization, url: organizations_path, method: :post, remote: true, validate: true do |f| %>
+          <%= f.hidden_field :parent_id %>
+          <div class="customform group_form ">
+            <div class="item">
+              <div class="field">
+                <%= f.text_field :name, :placeholder=>"Name" %>
+                <div class="icon help tip help_bubble_keyword inline_block" title="<%= t('organizations.edit.name_explain') %>"></div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="field">
+                <%= f.text_field :terminology, :placeholder => "Type" %>
+                <div class="icon help tip help_bubble_keyword inline_block" title="<%= t('organizations.edit.term_explain') %>"></div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="group_label">
+                <%= f.check_box :show_sub_orgs %>
+              	<%= f.label :show_sub_orgs %>
+                <div class="icon help tip help_bubble_keyword inline_block" title="<%= t('organizations.edit.show_sub_explain', org: @organization) %>"></div>
+              </div>
+            </div>
+          </div>
+        <% end %>
       </div>
+    	<div class="add_org_save">
+    		<button class="large_lightgray inline_block mh_popup_cancel_button">Cancel</button>
+    		<button class="red_accent inline_block" id="add_new_org_save_button">Add</button>
+    	</div>
     </div>
-    <%= submit_tag t('application.add_contact.save_and_close'), class: 'save_and_close save' %>
-    <%= submit_tag t('application.add_contact.save_and_add'), class: 'save_and_more save' %>
-  <% end %>
+  </div>
 </div>

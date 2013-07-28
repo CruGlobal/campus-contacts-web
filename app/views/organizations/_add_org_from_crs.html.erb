@@ -1,27 +1,38 @@
-<div id="add_org_from_conference_wrapper">
-  <%= t('.crs_import_instructions') %>
-  <%= form_for organization, url: create_from_crs_organizations_path, method: :post, remote: true do |f| %>
-    <% if flash[:error] %>
-      <div class="flash error" style="color:red;margin:2px"><%= raw flash[:error] %></div>
-    <% end %>
-    <div class="customform">
-      <div class="sfield">
-        <div class="ls">
-          <%= label_tag :url, t('.url', link: link_to(t('.example'), image_path('crs_url.png'), target: '_blank')).html_safe %>
-        </div>
-        <div class="rs">
-          <%= text_field_tag :url, params[:url] %>
-        </div>
+<div id="import_from_crs" style="display:none" class="custom_mh_popup_box">
+  <div class="ui-widget-overlay pop_box_overlay_container"></div>
+  <div class="pop_box_container">
+    <div class="mh_popup_box import_from_crs_content_div">
+    	<div class="mh_popup_box_top">
+        <span class="mh_popup_heading">
+          <%= t('organizations.index.crs_import_link') %>
+        </span>
       </div>
-      <div class="sfield">
-        <div class="ls">
-          <%= label_tag :admin_password, t('.admin_password') %>
-        </div>
-        <div class="rs">
-          <%= password_field_tag :admin_password %>
-        </div>
+      <div id="import_from_crs_loader" style="display:none;" align="center">
+        <%= image_tag 'loader.gif' %><br/>Loading...
       </div>
+      <div class="mh_popup_box_content" id="import_from_crs_content" align="center">
+        <div class="fancy"><%= t('organizations.add_org_from_crs.crs_import_instructions') %></div>
+        <%= form_for organization, url: create_from_crs_organizations_path, method: :post, remote: true do |f| %>
+          <div class="customform group_form ">
+            <div class="item">
+              <div class="field">
+                <%= label_tag :url, t('.url', link: link_to(t('.example'), image_path('crs_url.png'), target: '_blank')).html_safe %>
+                <%= text_field_tag :url, params[:url] %>
+              </div>
+            </div>
+            <div class="item">
+              <div class="field">
+                <%= label_tag :admin_password, t('.admin_password') %>
+                <%= password_field_tag :admin_password %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    	<div class="add_org_save">
+    		<button class="large_lightgray inline_block mh_popup_cancel_button">Cancel</button>
+    		<button class="red_accent inline_block" id="import_crs_save_button">Save</button>
+    	</div>
     </div>
-  <% end %>
+  </div>
 </div>
-

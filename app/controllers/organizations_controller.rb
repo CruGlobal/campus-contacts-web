@@ -50,7 +50,7 @@ class OrganizationsController < ApplicationController
     end
     @organization = Organization.create(params[:organization]) # @parent.children breaks for some reason
     if @organization.new_record?
-      render 'add_org' and return
+      @error = @organization.errors.full_messages.join('<br />')
     else
       @organization.add_admin(current_person) unless @organization.parent && @organization.parent.show_sub_orgs?
     end
@@ -70,13 +70,12 @@ class OrganizationsController < ApplicationController
         @organization.save!
       end
       @organization.queue_import_from_conference(current_user)
-      flash[:notice] = t('organizations.add_org_from_crs.conference_is_importing')
-      render and return
+      @message = t('organizations.add_org_from_crs.conference_is_importing')
+      @success = true
     else
-      error = t('organizations.add_org_from_crs.bad_url') unless Ccc::Crs2Conference.get_id_from_url(params[:url])
-      error ||= t('organizations.add_org_from_crs.bad_password')
-      flash.now[:error] = error
-      render action: 'add_org_from_crs'
+      @success = false
+      @message = t('organizations.add_org_from_crs.bad_url') unless Ccc::Crs2Conference.get_id_from_url(params[:url])
+      @message ||= t('organizations.add_org_from_crs.bad_password')
     end
   end
 

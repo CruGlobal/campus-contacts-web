@@ -1,63 +1,56 @@
-<div class="controlbar">
-  <a href="/organizations"><%= t('.back_to_orgs') %></a>
-</div>
-<div class="form_no_sidebar">
-  <div class="titlebar">
-    <h1><%= t('.title', org: @organization) %></h1>
-    <!-- <p>
-      From this screen you can edit, delete or rearrange your organizations. Clicking "Add new organization"<br/>
-      will do a quick add by name. To edit more details, permissions and other info, select "edit" from the item's<br/>
-      name on the list.
-    </p> -->
-    <br/>
+<% provide :sidebar do %>
+  <div id="ac_sidebar">
+    <div id="upper_sidebar_lists">
+      <%= link_to raw("<button class='red_accent full_width_button'>#{t('.back_to_orgs')}</button>"), organizations_path %>
+    </div>
   </div>
+<% end %>
 
-  <%= form_for @organization, validate: true do |f| %>
-    <div class="customform group_form ">
-    
-      <div class="item">
-        <div class="group_label">
-          <%= f.label :name %>
-          <div class="icon help tipit help_bubble_keyword " title="<%= t('organizations.edit.name_explain') %>"></div>
-        </div>
-        <div class="field">
-          <%= f.text_field :name %>
-        </div>
-      </div>
-    
-      <div class="item">
-        <div class="group_label">
-          <%= f.label :terminology %>
-          <div class="icon help tipit help_bubble_keyword " title="<%= t('organizations.edit.term_explain') %>"></div>
-        </div>
-        <div class="field">
-          <%= f.text_field :terminology %>
-        </div>
-      </div>
-    
+<div class="titlebar titlebarmod">
+  <h1>
+    <%= t('.title', org: @organization) %>
+    <div id='global_loader'>
+      <%= image_tag 'loader.gif'%>
+    </div>
+  </h1>
+</div>
 
-      <div class="item" >
-        <%= f.check_box :show_sub_orgs %>
-        <%= f.label :show_sub_orgs %>
-        <div class="icon help tipit help_bubble_keyword" title="<%= t('organizations.edit.show_sub_explain', org: @organization) %>"></div>
+<%= form_for @organization, validate: true do |f| %>
+  <div class="customform group_form ">
+    <div class="item">
+      <div class="group_label">
+        <%= f.label :name %>
+        <div class="icon help tip help_bubble_keyword " title="<%= t('organizations.edit.name_explain') %>"></div>
       </div>
-    
-    
-
-      <br/>
-
-      <div class="item formactions">
-        <%= f.submit %><%= link_to(t('.back'), :back, :class=> "cancel")%>
-      </div>
-      <div class="formactions dangerzone">
-            <h3><%= t('.danger_zone') %></h3>
-            <div class="content">
-            <p><%= t('.danger_explanation') %></p>
-            <hr/>
-            <p style="margin-top: 15px;"><%= link_to(t('.delete'), organization_path(@organization), method: :delete, class: 'delete cleangray', data: { confirm: t('.delete_confirm', terminology: @organization.terminology) })%></p>
-            </div>
-      
+      <div class="field">
+        <%= f.text_field :name %>
       </div>
     </div>
-  <% end %>
-</div>
+    <div class="item">
+      <div class="group_label">
+        <%= f.label :terminology %>
+        <div class="icon help tip help_bubble_keyword " title="<%= t('organizations.edit.term_explain') %>"></div>
+      </div>
+      <div class="field">
+        <%= f.text_field :terminology %>
+      </div>
+    </div>
+    <div class="item">
+      <%= f.check_box :show_sub_orgs %>
+      <%= f.label :show_sub_orgs %>
+      <div class="icon help tip help_bubble_keyword" title="<%= t('organizations.edit.show_sub_explain', org: @organization) %>"></div>
+    </div>
+    <br/>
+    <div class="item formactions">
+      <%= f.submit %><%= link_to(t('.back'), :back, :class=> "cancel")%>
+    </div>
+    <div class="formactions dangerzone">
+      <h3><%= t('.danger_zone') %></h3>
+      <div class="content">
+      <p><%= t('.danger_explanation') %></p>
+      <hr/>
+      <p style="margin-top: 15px;"><%= link_to(t('.delete'), organization_path(@organization), method: :delete, class: 'delete cleangray', data: { confirm: t('.delete_confirm', terminology: @organization.terminology) })%></p>
+      </div>
+    </div>
+  </div>
+<% end %>
