@@ -33,11 +33,18 @@
                 <%= text_field_tag :email, params[:email] %>
               </div>
               <div class="field">
+                <label for="status">
+                  <span class="title"><%= t('general.group_name') %></span>
+                </label>
+                <%= text_field_tag :group_name, params[:group_name] %>
+              </div>
+              <div class="field">
                 <label for="gender"><span class="title"><%= t('general.gender') %></span></label>
                 <%= radio_button_tag :gender, '1', params[:gender] == '1' %> <%= t('general.male') %>
                 <%= radio_button_tag :gender, '0', params[:gender] == '0' %> <%= t('general.female') %>
                 <%= radio_button_tag :gender, '', params[:gender] == '' %> <%= t('general.both') %>
               </div>
+              <br/>
               <div class="field">
                 <label for="survey"><span class="title"><%= t('general.survey') %></span></label>
                 <%= select_tag :survey, options_for_select(current_organization.surveys.order(:title).collect {|s| [s, s.id]}, params[:survey]), :prompt => "All" %>

@@ -26,7 +26,7 @@ class GroupsController < ApplicationController
     permissions_for_assign
 
     @group = Present(@group)
-    @people = current_organization.people.get_from_group(@group.id).uniq
+    @people = current_organization.all_people.get_from_group(@group.id).uniq
 
     if params[:search].present? && params[:search][:meta_sort].present?
       sort_query = params[:search][:meta_sort].gsub('.',' ')
