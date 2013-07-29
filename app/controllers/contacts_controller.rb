@@ -401,6 +401,7 @@ class ContactsController < ApplicationController
 
       # Filter results
       filter_archived_only if params[:archived].present?
+      filter_by_label if params[:label].present?
       filter_by_permission if params[:permission].present?
       filter_by_interaction_type if params[:interaction_type].present?
       filter_by_search if params[:do_search].present?
@@ -483,12 +484,13 @@ class ContactsController < ApplicationController
       elsif params[:archived] == 'true'
         @header = I18n.t('contacts.index.archived')
         @people_scope = @organization.all_archived_people
-      elsif params[:label].present? && @label_to = Label.find_by_id(params[:label])
-        if params[:include_archived_labels].present? && params[:include_archived_labels] == 'true'
-          @people_scope = @label_to.label_contacts_from_org_with_archived(@organization)
+      elsif params[:label].present?
+        if params[:include_archived].present? && params[:include_archived] == 'true'
+          @people_scope = @organization.all_people_with_archived
         else
-          @people_scope = @label_to.label_contacts_from_org(@organization)
+          @people_scope = @organization.all_people
         end
+        @people_scope = @people_scope.joins(:organizational_labels).where('organizational_labels.organization_id = ? AND organizational_labels.removed_date IS NULL', current_organization.id)
       elsif params[:interaction_type].present? && @interaction_type = InteractionType.find_by_id(params[:interaction_type])
         if params[:include_archived_interactions].present? && params[:include_archived_interactions] == 'true'
           @people_scope = @interaction_type.interaction_receivers_from_org_with_archived(@organization)
@@ -523,9 +525,7 @@ class ContactsController < ApplicationController
     end
 
     def filter_by_label
-    	params[:label] = [params[:label]] unless params[:label].is_a?(Array)
-      @people_scope = @people_scope.joins(:organizational_labels).where('organizational_labels.organization_id = ? AND organizational_labels.removed_date IS NULL', current_organization.id)
-      if @labels = Label.where("id IN (?)",params[:label])
+      if @labels = Label.where("id IN (?)", (params[:label].is_a?(Array)) ? params[:label] : [params[:label]])
         if params[:do_search].present?
           @header = I18n.t('contacts.index.matching_seach')
         else
@@ -548,7 +548,6 @@ class ContactsController < ApplicationController
         	@people_scope = @people_scope.where("organizational_labels.label_id IN (?)", @labels.collect(&:id))
       	end
       end
-
     end
 
     def filter_by_interaction_type

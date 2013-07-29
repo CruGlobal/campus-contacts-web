@@ -63,8 +63,7 @@
               	<% condition = params[:label].present? && params[:do_search].present? %>
               	<div>
         		      <label for="permission"><span class="title"><%= t('general.permission') %></span></label>
-        		      <%=raw I18n.t("general.label_select_description", element: raw(select_tag :permission_tag, options_for_select(Permission::LABEL_SEARCH_FILTERS, params[:permission_tag] ||= Permission::ANY_SELECTED_LABEL[1]))) %>
-
+        		      <%=raw I18n.t("general.label_select_description", element: raw(select_tag :label_tag, options_for_select(Label::LABEL_SEARCH_FILTERS, params[:label_tag] ||= Label::ANY_SELECTED_LABEL[1]))) %>
               		<div class="icon help tipitright help_bubble_keyword" title="<%= t('general.label_search_help') %>"></div>
                 </div>
         				<div class="label_space" id="search_permissions_container">
