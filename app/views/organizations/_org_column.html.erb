@@ -1,12 +1,14 @@
 <% has_children = parent.children.count > 0 %>
 <div class="org_column" id="<%= dom_id(parent) %>" data-level="<%= parent.ancestry.to_s.split('/').length %>">
-  <a class="org_new add_sub_org" href="#" data-parent-id="<%= parent.id %>">+ <%= t('organizations.index.add_a_sub_org', terminology: has_children ? parent.children.first.terminology : parent.terminology) %></a>
+  <%= link_to "+#{t('organizations.index.add_a_sub_org', terminology: has_children ? parent.children.first.terminology : parent.terminology)}", "#", class: "org_new add_sub_org", "data-parent-id"=>parent.id %>
   <ul>
     <% parent.children.order('name').each do |org| %>
       <%= render 'org', org: org %>
     <% end %>
     <% unless has_children %>
-      <li><a class="org_big_add add_sub_org" data-parent-id="<%= parent.id %>" href="#"><span class="plus">+</span><span><%= t('organizations.index.add_a_sub_org', terminology: parent.terminology) %></span></a> </li>
+      <li>
+        <%= link_to raw("<span class='plus'>+</span><span>#{t('organizations.index.add_a_sub_org', terminology: parent.terminology)}</span>"), "#", class: "org_big_add add_sub_org", "data-parent-id"=>parent.id %>
+      </li>
     <% end %>
   </ul>
 </div>

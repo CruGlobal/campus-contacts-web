@@ -1,1 +1,3 @@
-$('#new_org').html('<%= j(render('add_org', organization: @organization)) %>')
+$("#add_new_org_div").replaceWith("<%= j(render('add_org', organization: @organization)) %>")
+$.showDialog($("#add_new_org_div"))
+

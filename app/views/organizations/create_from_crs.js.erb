@@ -1,1 +1,7 @@
-document.location = '<%= organizations_path %>'
+$.a("<%= @message %>");
+<% if @success.present? && @success %>
+  $("#import_from_crs").replaceWith("<%= j(render('add_org_from_crs', organization: Organization.new(parent_id: current_organization))) %>");
+  $.hideDialog($("#import_from_crs"));
+<% end %>
+$("#import_from_crs_loader").hide();
+$("#import_from_crs_content").show();

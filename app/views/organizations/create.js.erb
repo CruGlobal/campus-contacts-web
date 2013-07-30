@@ -1,7 +1,13 @@
-$('#<%= dom_id(@parent) %> ul').prepend('<%= j(render('org', org: @organization)) %>')
-<% unless params[:add_another] == 'true' %>
-	$('#new_org').dialog('destroy')
+<% if @error.present? %>
+  $.a("<%= @error %>");
+<% else %>
+  $('#<%= dom_id(@parent) %> ul').prepend('<%= j(render('org', org: @organization)) %>');
+  $('[data-id=<%= @organization.id %>]').effect('highlight');
+  $('.org_big_add').closest('li').hide();
+  $("#add_new_org_div").replaceWith("<%= j(render('add_org', organization: @parent.children.new)) %>");
+  $.hideDialog($("#add_new_org_div"));
+  $.fn.tip(); // to re-run the tooltip from the new rendered view
 <% end %>
-$('[data-id=<%= @organization.id %>]').effect('highlight')
-$('.org_big_add').closest('li').hide()
-$('#new_org').html('<%= j(render('add_org', organization: @parent.children.new)) %>')
+$("#add_new_org_loader").hide();
+$("#add_new_org_content").show();
+
