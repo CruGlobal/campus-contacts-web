@@ -11,6 +11,9 @@ class Authentication < ActiveRecord::Base
         user = auth.user
       end
     end
+    if user && user.person.organizations.empty?
+      user = nil
+    end
     user
   end
 end

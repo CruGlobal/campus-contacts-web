@@ -21,7 +21,7 @@ class Apis::V3::BaseController < ApplicationController
     if facebook_token
       begin
         unless @current_user = Authentication.user_from_mobile_facebook_token(facebook_token)
-          render json: {errors: ["The person corresponding to that token has never logged into the web interface"], code: 'user_not_found'},
+          render json: {errors: ["You have not yet logged in to the web interface. Please log in to www.missionhub.com on a computer or your device's web browser."], code: 'user_not_found'},
                    status: :unauthorized,
                    callback: params[:callback]
           return false

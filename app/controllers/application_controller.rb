@@ -424,7 +424,7 @@ class ApplicationController < ActionController::Base
           render json: {error: {message: 'Your MissionHub app requires an update. Please check for updates in your app store now.', code: 'client_update_required', title: 'Update Required'}},
                  status: :not_acceptable,
                  callback: params[:callback]
-        elsif version <= 93 #mh 2.0.x-2.4.x-snapshot
+        elsif version <= 125 #mh 2.0.x-2.4.x-snapshot
           render json: {errors: ['Your MissionHub app requires an update. Please check for updates in your app store now.'], code: 'client_update_required'},
                  status: :not_acceptable,
                  callback: params[:callback]
