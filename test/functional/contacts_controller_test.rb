@@ -679,7 +679,7 @@ class ContactsControllerTest < ActionController::TestCase
   context "retrieving contacts" do
     setup do
       @user, org = admin_user_login_with_org
-
+      @organization = org
       @contact1 = Factory(:person)
       @contact2 = Factory(:person)
       Factory(:organizational_permission, permission: Permission.no_permissions, organization: org, person: @contact1) #make them contacts in the org
@@ -776,6 +776,16 @@ class ContactsControllerTest < ActionController::TestCase
 
     should "retrive contacts searching by basic search_type" do
       xhr :get, :index, {:do_search => 1, :search_type => "basic"}
+      assert_response :success
+    end
+
+    should "retrive contacts searching by group" do
+      group = Factory(:group, organization: @organization, name: "sample")
+      Factory(:group_membership, group: group, person: @contact1)
+      Factory(:group_membership, group: group, person: @contact2)
+
+      xhr :get, :index, {:do_search => 1, :group_name => "samp"}
+      assert_equal 2, assigns(:people).size
       assert_response :success
     end
   end

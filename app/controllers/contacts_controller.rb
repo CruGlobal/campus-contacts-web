@@ -626,6 +626,12 @@ class ContactsController < ApplicationController
         term = (v.first == v.last && v.last == '"') ? v[1..-2] : "%#{v}%"
         @people_scope = @people_scope.joins(:email_addresses).where("email_addresses.email like ?", term)
       end
+      if params[:group_name].present?
+        v = params[:group_name].strip
+        groups = current_organization.groups.where("name LIKE ?", "%#{v}%")
+        people_ids = GroupMembership.where(group_id: groups.collect(&:id)).collect(&:person_id)
+        @people_scope = @people_scope.where("people.id" => people_ids)
+      end
       if params[:phone_number].present?
         v = PhoneNumber.strip_us_country_code(params[:phone_number])
         term = (v.first == v.last && v.last == '"') ? v[1..-2] : "%#{v}%"
