@@ -45,6 +45,17 @@
       <ul style='display:none;'>
         <li class="<%= 'current' if request.path == snapshot_charts_path %>">
           <%= link_to(t('nav.visual_tools'), charts_path) %>
+          <ul>
+            <li>
+              <%= link_to(t('nav.snapshot'), snapshot_charts_path) %>
+            </li>
+            <li>
+              <%= link_to(t('nav.goal'), goal_charts_path) %>
+            </li>
+            <li>
+              <%= link_to(t('nav.trend'), trend_charts_path) %>
+            </li>
+          </ul>
         </li>
         <% if can? :manage, current_organization %>
           <li class="<%= 'current' if request.path == organizations_path %>">

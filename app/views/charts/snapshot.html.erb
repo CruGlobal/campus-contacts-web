@@ -10,6 +10,7 @@
 
 <%= javascript_include_tag 'highcharts' %>
 <%= javascript_include_tag 'highcharts-more' %>
+
 <div id="snap_gospel_exp">
   <h2>GOSPEL EXPERIENCES</h2>
   <%= select_tag "gospel_exp_range", options_for_select(Chart.evang_range_options, @chart.snapshot_evang_range) %>
