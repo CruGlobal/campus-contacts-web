@@ -216,7 +216,6 @@ ActiveRecord::Schema.define(:version => 20130712094925) do
   add_index "clients", ["display_name"], :name => "index_clients_on_display_name", :unique => true
   add_index "clients", ["link"], :name => "index_clients_on_link", :unique => true
   add_index "clients", ["organization_id"], :name => "index_clients_on_organization_id"
-  add_index "clients", ["secret"], :name => "secret", :unique => true
 
   create_table "contact_assignments", :force => true do |t|
     t.integer  "assigned_to_id"
@@ -309,7 +308,7 @@ ActiveRecord::Schema.define(:version => 20130712094925) do
     t.datetime "updated_at"
   end
 
-  add_index "email_addresses", ["email"], :name => "email"
+  add_index "email_addresses", ["email"], :name => "index_email_addresses_on_email"
   add_index "email_addresses", ["person_id"], :name => "person_id"
 
   create_table "followup_comments", :force => true do |t|
@@ -324,6 +323,17 @@ ActiveRecord::Schema.define(:version => 20130712094925) do
   end
 
   add_index "followup_comments", ["organization_id", "contact_id"], :name => "comment_organization_id_contact_id"
+
+  create_table "friends_deprecated", :force => true do |t|
+    t.string   "name"
+    t.string   "uid"
+    t.string   "provider"
+    t.integer  "person_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "friends_deprecated", ["person_id", "uid"], :name => "person_uid", :unique => true
 
   create_table "group_labelings", :force => true do |t|
     t.integer  "group_id"
@@ -497,7 +507,7 @@ ActiveRecord::Schema.define(:version => 20130712094925) do
     t.datetime "updated_at",                         :null => false
   end
 
-  create_table "organization_memberships_deprecated", :force => true do |t|
+  create_table "organization_memberships", :force => true do |t|
     t.integer  "organization_id"
     t.integer  "person_id"
     t.boolean  "primary",         :default => false
@@ -508,8 +518,8 @@ ActiveRecord::Schema.define(:version => 20130712094925) do
     t.date     "end_date"
   end
 
-  add_index "organization_memberships_deprecated", ["organization_id", "person_id"], :name => "index_organization_memberships_on_organization_id_and_person_id", :unique => true
-  add_index "organization_memberships_deprecated", ["person_id"], :name => "person_id"
+  add_index "organization_memberships", ["organization_id", "person_id"], :name => "index_organization_memberships_on_organization_id_and_person_id", :unique => true
+  add_index "organization_memberships", ["person_id"], :name => "person_id"
 
   create_table "organizational_labels", :force => true do |t|
     t.integer  "person_id"
@@ -756,14 +766,6 @@ ActiveRecord::Schema.define(:version => 20130712094925) do
 
   add_index "saved_contact_searches", ["user_id"], :name => "index_saved_contact_searches_on_user_id"
 
-  create_table "school_years", :force => true do |t|
-    t.string   "name"
-    t.string   "level"
-    t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "sent_people", :force => true do |t|
     t.integer  "person_id"
     t.integer  "transferred_by_id"
@@ -815,7 +817,7 @@ ActiveRecord::Schema.define(:version => 20130712094925) do
     t.string   "initial_response",               :limit => 145
     t.text     "post_survey_message_deprecated"
     t.string   "event_type"
-    t.string   "gateway",                                       :default => "twilio", :null => false
+    t.string   "gateway",                                       :default => "", :null => false
     t.integer  "survey_id"
   end
 
@@ -887,6 +889,8 @@ ActiveRecord::Schema.define(:version => 20130712094925) do
   create_table "users", :force => true do |t|
     t.string   "username",                  :limit => 200,                :null => false
     t.string   "password",                  :limit => 80
+    t.datetime "lastLogin"
+    t.datetime "createdOn"
     t.string   "remember_token"
     t.datetime "remember_token_expires_at"
     t.boolean  "developer"
@@ -922,15 +926,9 @@ ActiveRecord::Schema.define(:version => 20130712094925) do
   add_index "versions", ["organization_id", "created_at"], :name => "index_versions_on_organization_id_and_created_at"
   add_index "versions", ["person_id", "created_at"], :name => "index_versions_on_person_id_and_created_at"
 
-  add_foreign_key "answers", "elements", :name => "answers_ibfk_1", :column => "question_id"
-
-  add_foreign_key "email_addresses", "people", :name => "email_addresses_ibfk_1", :dependent => :delete
-
-  add_foreign_key "organization_memberships_deprecated", "organizations", :name => "organization_memberships_deprecated_ibfk_2", :dependent => :delete
-
   add_foreign_key "organizational_permissions", "organizations", :name => "organizational_permissions_ibfk_1", :dependent => :delete
 
-  add_foreign_key "sms_keywords", "organizations", :name => "sms_keywords_ibfk_4", :dependent => :delete
+  add_foreign_key "sms_keywords", "organizations", :name => "sms_keywords_ibfk_2"
   add_foreign_key "sms_keywords", "surveys", :name => "sms_keywords_ibfk_3", :dependent => :nullify
 
   add_foreign_key "surveys", "organizations", :name => "surveys_ibfk_1", :dependent => :delete

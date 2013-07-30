@@ -559,7 +559,7 @@ class OrganizationTest < ActiveSupport::TestCase
       another_child = Organization.new(:parent => @org, :name => 'org', :terminology => 'org')
       assert !another_child.save
       assert_not_nil another_child.errors[:name]
-      assert_equal "Name is not Unique", another_child.errors[:name].first
+      assert_equal "is not unique", another_child.errors[:name].first
     end
 
     should "save a child org if the name is uniqie" do

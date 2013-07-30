@@ -15,39 +15,25 @@ $ ->
   $('#select_all_transfer').live 'click', ->
     $('.transfer_person').attr('checked', $(this).is(':checked'))
 
-  $('.import_from_crs_link').live 'click', ->
+  $('.import_from_crs_link').live 'click', (e)->
+    e.preventDefault()
     $('#import_from_crs form')[0].reset()
-    $('#organization_parent_id').val($(this).attr('data-parent-id'))
-    $('#import_from_crs').dialog
-      resizable: false,
-      height:444,
-      width:600,
-      modal: true,
-      buttons:
-        Cancel: ->
-          $(this).dialog('destroy')
-          $('#import_from_crs form')[0].reset()
-        Import: ->
-          form = $('form', this)
-          if $('#url').val() != "" && $('#admin_password').val() != ""
-            $.rails.handleRemote(form)
-            form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
-          else
-            if $('#url').val() == ""
-              $('#url').focus()
-            else
-              $('#admin_password').focus()
-          false
+    $.showDialog($("#import_from_crs"))
 
-  $('#import_from_crs .save').live 'click', ->
+  $('#import_crs_save_button').live 'click', ->
+    form = $("#import_from_crs form")
+    if $("#url").val() == ""
+      $("#url").focus()
+    else if $('#admin_password').val() == ""
+      $('#admin_password').focus()
+    else
+      $.rails.handleRemote(form)
+      $("#import_from_crs_loader").show()
+      $("#import_from_crs_content").hide()
+    false
 
   $("#archive_contacts_before").datepicker dateFormat: "mm-dd-yy"
   $("#date_leaders_not_logged_in_after").datepicker dateFormat: "mm-dd-yy"
-
-  $('#add_sub_orgs').live 'click', ->
-    $(this).hide()
-    $('#orgs').show()
-
 
   $('.org_link').live 'ajax:before', ->
     col$ = $(this).closest('div')
@@ -61,32 +47,22 @@ $ ->
     $(this).closest('li').addClass('selected')
     $('#spinner_column').show()
 
-  $('.add_sub_org').live 'click', ->
-    $('#new_org form')[0].reset()
+  $('.add_sub_org').live 'click', (e)->
+    e.preventDefault()
+    $('#add_new_org_div form')[0].reset()
     $('#organization_parent_id').val($(this).attr('data-parent-id'))
-    $('#new_org').dialog
-      resizable: false,
-      height:444,
-      width:600,
-      modal: true,
-      buttons:
-        Cancel: ->
-          $(this).dialog('destroy')
-          $('#new_org form')[0].reset()
+    $.showDialog($("#add_new_org_div"))
 
-  $('#new_org .save').live 'click', ->
-    form = $(this).closest('form')
-    if $(this).hasClass('save_and_more')
-      $('#add_another').val('true')
-    if $('#organization_terminology').val() != "" && $('#organization_name').val() != ""
-      $.rails.handleRemote(form)
-      form.html("<img src=\"<%= asset_path('spinner.gif') %>\" />")
+  $('#add_new_org_save_button').live 'click', ->
+    form = $("#new_organization")
+    if $('#organization_name').val() == ""
+      $('#organization_name').focus()
+    else if $('#organization_terminology').val() == ""
+      $('#organization_terminology').focus()
     else
-      if $('#organization_name').val() == ""
-        $('#organization_name').focus()
-      else
-        $('#organization_terminology').focus()
       $.rails.handleRemote(form)
+      $("#add_new_org_loader").show();
+      $("#add_new_org_content").hide()
     false
 
 
