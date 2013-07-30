@@ -1,3 +1,4 @@
 $('div#snap_spinner').hide()
-$('div#snap_container1, div#snap_container2, div#snap_container3').show()
+$("#snap_numbers").html("<%= escape_javascript(render partial: 'snapshot_movement_numbers') %>")
+$('div#snap_container1, div#snap_container2, div#snap_container3, div#snap_numbers').show()
 $("#snap_chart").html("<%= escape_javascript(render partial: 'snapshot_js') %>")
