@@ -8,7 +8,7 @@
 	<li class="ac_dropdown_list_header">
     <a href="#" class="side_toggle arrow_anchor">
       <div class="arrow">
-        <% if selected = params[:assigned_to].present? && params[:assigned_to] != 'friends' %>
+        <% if selected = params[:assigned_to].present? && !["friends","all"].include?(params[:assigned_to]) %>
           &#x25BC;
         <% else %>
           &#x25B6;
@@ -28,7 +28,7 @@
         <% count = person.assigned_contacts_limit_org(@organization).collect(&:id).count %>
         <% link = all_contacts_path(assigned_to: person.id) %>
       <% end %>
-      <li class="entry leader <%= 'selected_entry' if params[:assigned_to].to_i == person.id %>" data-id="<%= person.id %>">
+      <li class="entry leader <%= 'selected_entry' if params[:assigned_to].present? && params[:assigned_to].to_i == person.id %>" data-id="<%= person.id %>">
         <%= link_to person, link %>&nbsp;(<span class="count"><%= count %></span>)
         <% if can? :manage, @organization %>
           <%= link_to(image_tag('delete.png', title: 'Remove Leader', class: 'tip'), leader_path(person.id), method: :delete, remote: true, class: 'delete_icon', data: { confirm: t('general.remove_leader_confirm', person: person) }) %>
@@ -137,7 +137,7 @@
         <% count = permission.permission_contacts_from_org(@organization).count %>
         <% link = all_contacts_path(permission: permission.id) %>
       <% end %>
-      <li class="entry permission <%= 'selected_entry' if params[:permission].to_i == permission.id %>" data-id="<%= permission.id %>">
+      <li class="entry permission <%= 'selected_entry' if params[:permission].present? && params[:permission].include?(permission.id.to_s) %>" data-id="<%= permission.id %>">
         <%= link_to permission, link %>&nbsp;(<span class="count"><%= count %></span>)
       </li>
     <% end %>
