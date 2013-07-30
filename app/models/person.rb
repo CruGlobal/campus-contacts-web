@@ -318,6 +318,11 @@ class Person < ActiveRecord::Base
     organizational_permissions.where("organizational_permissions.organization_id = ?", org.id).first
   end
 
+  def leader_for_org(org)
+    has_permission = organizational_permissions.where("organizational_permissions.organization_id = ? AND organizational_permissions.permission_id <> ?", org.id, Permission::NO_PERMISSIONS_ID).first
+    return (has_permission.present?) ? has_permission : false
+  end
+
   def completed_answer_sheets(organization)
     answer_sheets.where("survey_id IN (?)", Survey.where("organization_id = ? OR id = ?", organization.id, APP_CONFIG['predefined_survey']).collect(&:id)).order('updated_at DESC')
   end
