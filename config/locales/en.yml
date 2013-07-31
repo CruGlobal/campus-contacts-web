@@ -1216,7 +1216,8 @@ en:
       add_a_sub_org: Add new %{terminology}
       add: Add
       crs_import_link: "Import a conference from the Conference Registration Tool"
-      crs_import_tip: 'The Conference Registration Tool is another tool created by CRU that you can use to manage conferences.'
+      crs_import_button_title: "Import a Conference"
+      crs_import_tip: "This will import people from a conference in the Conference Registration Tool* into %{org}. These people will not appear in %{org} but will have their own bucket under %{org}, which is accessable from drop down at the top of the page.<br/><br/> *The Conference Registration Tool is another tool created by Cru that you can use to manage conference registrations."
       form_explaination: "From this screen you can edit, delete or rearrange your organizations. Clicking \"Add new organization\"<br/>will do a quick add by name. To edit more details, permissions and other info, select \"edit\" from the item's<br/>name on the list."
     edit:
       back: 'Cancel and go back'
