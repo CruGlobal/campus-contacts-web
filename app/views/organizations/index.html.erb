@@ -3,13 +3,11 @@
     <div id="upper_sidebar_lists">
       <%= link_to raw("<button class='red_accent full_width_button'>#{t('.edit_button', org: current_organization)}</button>"), edit_organization_path(current_organization) %>
 
-      <% if current_organization.conference_id %>
-        <%= link_to raw("<button class='action_gray full_width_button'>#{t('.re_import_button')}</button>"), update_from_crs_organization_path(current_organization) %>
-      <% end %>
-
       <% if current_organization.children.count > 0 %>
         <%= link_to raw("<button class='action_gray full_width_button'>#{t('organizations.index.add_a_sub_org', terminology: current_organization.children.count ? current_organization.children.first.terminology : current_organization.terminology)}</button>"), '#', class: "add_sub_org", "data-parent-id"=>current_organization.id %>
       <% end %>
+
+      <%= link_to raw("<button class='action_gray full_width_button tipitright' title='#{t('.crs_import_tip', org: current_organization)}'>#{t('.crs_import_button_title')}</button>"), '#', class: "import_from_crs_link" %>
     </div>
   </div>
 <% end %>
@@ -38,9 +36,6 @@
   	  </div>
   	</div>
 	</div>
-
-  <%= link_to(t('.crs_import_link'), '#', class: 'import_from_crs_link') %>
-  <%= tip(t('.crs_import_tip')) %>
 </div>
 
 <!-- Add new organization dialog -->
