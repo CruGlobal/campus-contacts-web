@@ -525,7 +525,9 @@ class ContactsController < ApplicationController
     end
 
     def filter_by_label
-      if @labels = Label.where("id IN (?)", (params[:label].is_a?(Array)) ? params[:label] : [params[:label]])
+      @people_scope = @people_scope.joins(:organizational_labels).where('organizational_labels.organization_id = ? AND organizational_labels.removed_date IS NULL', current_organization.id)
+      @labels = Label.where("id IN (?)", (params[:label].is_a?(Array)) ? params[:label] : [params[:label]])
+      if @labels.present?
         if params[:do_search].present?
           @header = I18n.t('contacts.index.matching_seach')
         else
@@ -539,11 +541,13 @@ class ContactsController < ApplicationController
 					end
 
 					filtered_ids = []
+          null_ids = false
 					valid_ids.each do |person_ids|
+            null_ids = true unless person_ids.present?
 						filtered_ids = filtered_ids.present? ? filtered_ids &= person_ids : person_ids
 					end
 
-					@people_scope = @people_scope.where("people.id IN (?)", filtered_ids)
+					@people_scope = @people_scope.where("people.id IN (?)", (null_ids) ? [] : filtered_ids)
       	else
         	@people_scope = @people_scope.where("organizational_labels.label_id IN (?)", @labels.collect(&:id))
       	end
