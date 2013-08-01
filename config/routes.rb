@@ -28,7 +28,6 @@ Mh::Application.routes.draw do
 
   # Interactions
   match 'profile/:id' => 'interactions#show_profile', as: "profile"
-  match 'people/:id' => redirect("/profile/%{id}")
   resources :interactions do
     collection do
       get :change_followup_status
