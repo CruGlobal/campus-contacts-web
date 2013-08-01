@@ -212,7 +212,7 @@ en:
     search:
       not_in_system: 'If the person you are looking for is not already in the system click here to add them.'
     create:
-      no_user_account: "<font color='red'>Required email information missing to add this person as a Leader.</font>"
+      no_user_account: "<font color='red'>Required email information missing to add this person as a User.</font>"
   people:
     create:
       error_creating_leader_no_valid_email: "<font color='red'>Cannot create Person with leader permission without a valid email</font>"
@@ -549,7 +549,7 @@ en:
         autonotify_guide: 'This option will notify the selected leaders if the answer contains the listed keywords.'
         autonotify_leader_label: 'Select one or more leaders to be notified:'
         autonotify_keywords_label: 'List the words that will trigger the notification:<br/>(must be separated with commas)'
-        autoassign_guide: 'This option will assign the contacts to the selected Leader, Ministry, Group, or Label if the answer contains the listed keywords.'
+        autoassign_guide: 'This option will assign the contacts to the selected User, Ministry, Group, or Label if the answer contains the listed keywords.'
         autoassign_group_label: 'Choose where to assign contacts:'
         autoassign_keywords_label: 'List the words that will trigger the assignment:<br/>(must be separated with commas)'
         web_only: "Only show this question on web / mobile devices, don't include it in \"interactive\" mode."
@@ -653,7 +653,7 @@ en:
       body_html:
         <p>Hi %{name},</p>
 
-        <p>I've just added you as a leader for %{org} on MissionHub</p>
+        <p>I've just added you as a User for %{org} on MissionHub</p>
 
         <p>Visit %{link} to log in. Please don't share this link with anyone else.</p>
 
