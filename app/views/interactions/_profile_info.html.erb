@@ -21,7 +21,7 @@
       </div>
   	</div>
 
-
+    <% if @assigned_tos.present? %>
   	<div class="status col_left">Assigned To:</div>
   	<div class="status col_right" id="assigned_to_div">
       <div id="assigned_to_dropdown" class="custom_dropdown view" data-current-id="<%= @assigned_tos.count == 0 ? '0' : @assigned_tos.first.assigned_to_id %>">
@@ -55,6 +55,7 @@
         </div>
       </div>
     </div>
+    <% end %>
   <% end %>
 
   <% if @person.gender.present? %>
