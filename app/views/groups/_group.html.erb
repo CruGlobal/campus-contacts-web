@@ -18,7 +18,7 @@
     <% end %>
   </td>
   <td>
-    <%= current_organization.people.get_from_group(group.id).collect(&:name).count %>
+    <%= current_organization.all_people.get_from_group(group.id).collect(&:name).count %>
   </td>
   <td>
     <%= group_presenter.leaders_names %>
