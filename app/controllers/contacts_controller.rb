@@ -239,7 +239,7 @@ class ContactsController < ApplicationController
   end
 
   def show
-    redirect_to person_path(params[:id])
+    redirect_to profile_path(params[:id])
   end
 
   def edit
