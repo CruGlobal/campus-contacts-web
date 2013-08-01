@@ -39,7 +39,7 @@ class PeopleControllerTest < ActionController::TestCase
 
     should "should show person" do
       get :show, id: @person.person.id
-      assert_response :success, @response.body
+      assert_redirected_to "/profile/#{@person.person.id}"
     end
 
     should "should get edit" do
@@ -293,21 +293,6 @@ class PeopleControllerTest < ActionController::TestCase
 
   end
 
-  context "Showing leaders the person is assigned to" do
-    setup do
-      user = Factory(:user_with_auxs)
-      sign_in user
-      @person1 = Factory(:person)
-      Factory(:contact_assignment, organization: user.person.organizations.first, assigned_to: user.person, person: @person1)
-    end
-
-    should "get the person assigned" do
-      get :show, { 'id' => @person1.id }
-      assert_response(:success)
-      assert_not_nil(assigns(:assigned_tos))
-    end
-  end
-
   context "Searching for Facebook users" do
     setup do
       @user = Factory(:user_with_auxs)  #user with a person object
@@ -347,41 +332,6 @@ class PeopleControllerTest < ActionController::TestCase
       assert_equal(0, assigns(:data).length)
     end
 =end
-  end
-
-  context "displaying a person's friends in their profile" do
-    setup do
-      #setup user, orgs
-      @org = Factory(:organization)
-      user = Factory(:user_with_auxs)
-      Factory(:organizational_permission, organization: @org, person: user.person, permission: Permission.admin)
-      sign_in user
-      #setup the person, and non-friends
-      @person = Factory(:person_with_facebook_data)
-      assert_not_nil(@person.friends)
-      #create the person objects
-      @person1 = Factory(:person, fb_uid: 3248973)
-      @person2 = Factory(:person, fb_uid: 3343484)
-      #add them in the org
-      @org.add_contact(@person)
-      @org.add_contact(@person1)
-      @org.add_contact(@person2)
-      @request.session['current_organization_id'] = @org.id
-    end
-
-    should "return the friends who are members of the same org as person" do
-      #simulate their friendship with @person
-      friend1 = Friend.new(@person1.fb_uid, @person1.name, @person)
-      friend2 = Friend.new(@person2.fb_uid, @person1.name, @person)
-      #profile view
-      get :show, { 'id' => @person.id }
-      #check the friends on the same org
-      org_friends = assigns(:org_friends)
-      assert_not_nil(org_friends)
-      assert(org_friends.include?(@person1),"should include person1")
-      assert(org_friends.include?(@person2),"should include person2")
-      assert_equal(2, org_friends.length)
-    end
   end
 
   context "Assigning a contact to leader" do

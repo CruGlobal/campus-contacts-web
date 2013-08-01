@@ -13,6 +13,7 @@ class InteractionsController < ApplicationController
 			@permission = @person.assigned_organizational_permissions(current_organization.id).first
       @groups = @person.groups_for_org_id(current_organization.id)
       @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
+      @friends = @person.friends_in_orgnization(current_organization)
       if can? :manage, @person
         @interactions = @person.filtered_interactions(current_person, current_organization)
         @last_interaction = @interactions.last

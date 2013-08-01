@@ -145,12 +145,12 @@
     	</div>
     <% end %>
 
-    <% friends = @person.friends_in_orgnization(current_organization) %>
-    <% if friends.present? %>
+    <% @friends = @person.friends_in_orgnization(current_organization) %>
+    <% if @friends.present? %>
       <div class="col_left" id="fb_link">Friends:</div>
       <div class="col_right" id="fb_friends">
       	<div id="fb_friends_thumbs">
-          <% friends.each do |friend| %>
+          <% @friends.each do |friend| %>
       			<div class="fb_thumb">
               <%= link_to image_tag("https://graph.facebook.com/#{friend.fb_uid}/picture?type=square"), profile_path(friend.id), target: "_blank", title: "#{friend.name}" %>
       			</div>

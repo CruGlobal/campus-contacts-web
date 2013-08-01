@@ -45,21 +45,21 @@ class PeopleController < ApplicationController
   # GET /people/1.xml
   def show
     redirect_to profile_path(params[:id])
-    @person = Person.find(params[:id])
-    @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id).collect { |a| a.assigned_to.try(:name) }.compact.to_sentence
-    authorize!(:read, @person)
-    if @person.user && @person.friends.count == 0
-      fb_auth = @person.user.authentications.first
-      @person.update_friends(fb_auth) if fb_auth.present?
-    end
-    @org_friends = Person.where(fb_uid: Friend.followers(@person.id))
-    @labels = @person.labels_for_org_id(current_organization.id)
-    if can? :manage, @person
-      @organizational_permissions = OrganizationalPermission.where(organization_id: current_organization, person_id: @person)
-      @followup_comment = FollowupComment.new(organization: current_organization, commenter: current_person, contact: @person, status: @organizational_permissions.collect(&:followup_status)) if @organizational_permissions
-      @followup_comments = FollowupComment.where(organization_id: current_organization, contact_id: @person).order('created_at desc')
-    end
-    @person = Present(@person)
+    # @person = Person.find(params[:id])
+    # @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id).collect { |a| a.assigned_to.try(:name) }.compact.to_sentence
+    # authorize!(:read, @person)
+    # if @person.user && @person.friends.count == 0
+    #   fb_auth = @person.user.authentications.first
+    #   @person.update_friends(fb_auth) if fb_auth.present?
+    # end
+    # @org_friends = Person.where(fb_uid: Friend.followers(@person.id))
+    # @labels = @person.labels_for_org_id(current_organization.id)
+    # if can? :manage, @person
+    #   @organizational_permissions = OrganizationalPermission.where(organization_id: current_organization, person_id: @person)
+    #   @followup_comment = FollowupComment.new(organization: current_organization, commenter: current_person, contact: @person, status: @organizational_permissions.collect(&:followup_status)) if @organizational_permissions
+    #   @followup_comments = FollowupComment.where(organization_id: current_organization, contact_id: @person).order('created_at desc')
+    # end
+    # @person = Present(@person)
   end
 
   # GET /people/new
