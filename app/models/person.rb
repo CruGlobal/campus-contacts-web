@@ -1197,9 +1197,10 @@ class Person < ActiveRecord::Base
     end
 
     if other_person
+      all_phone_numbers = other_person.phone_numbers
       person.phone_numbers.each do |phone_number|
-        if phone_number.number.present?
-          other_person.phone_numbers.create(phone_number.attributes.except('person_id','id'))
+        if phone_number.number.present? && !all_phone_numbers.where(number: phone_number.number).first.present?
+          all_phone_numbers.create(phone_number.attributes.except('person_id','id'))
         end
       end
       phone = other_person.phone_numbers.first
