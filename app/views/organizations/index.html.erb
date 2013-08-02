@@ -26,7 +26,7 @@
     <%= raw(t('.form_explaination')) %>
   </p>
 	<div class="orgwrap">
-  	<div id="orgs" style="<%= 'display:none' if current_organization.children.length == 0 %>">
+  	<div id="orgs">
   	  <%= render 'org_column', parent: current_organization %>
   	  <div class="org_column" id="spinner_column" style="display:none">
     		<a class="org_new">+ </a>
