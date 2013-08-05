@@ -343,6 +343,12 @@ class Person < ActiveRecord::Base
     :conditions => ["gm.group_id = ?", group_id]
   } }
 
+  scope :get_leaders_from_group, lambda { |group_id| {
+    :select => "people.*",
+    :joins => "LEFT JOIN #{GroupMembership.table_name} AS gm ON gm.person_id = people.id",
+    :conditions => ["gm.group_id = ? AND gm.role = 'leader'", group_id]
+  } }
+
   def self.archived(org_id)
     self.get_archived(org_id).collect()
   end

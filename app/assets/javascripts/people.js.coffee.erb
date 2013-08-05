@@ -362,8 +362,11 @@ $.fn.submitBulkSendTextDialog = ->
   $.n(msg)
   $.hideDialog($("#bulk_send_msg_dialog"))
   $('tr#all').remove()
-  # $('.id_checkbox, .check_all_contacts, #check_all_groups, .gid_checkbox').attr('checked',false)
-  # $('.id_checkbox.profile_checkbox').prop('checked',true)
+  $.fn.listCheckboxes()
+
+$.fn.listCheckboxes = ->
+  $('.id_checkbox, .check_all_contacts, #check_all_mine, #groups_controller #check_all_groups, #groups_controller .gid_checkbox, #groups_controller #check_all').attr('checked',false)
+  $("#all").remove()
 
 $.fn.submitBulkSendDialog = ->
   ids = []

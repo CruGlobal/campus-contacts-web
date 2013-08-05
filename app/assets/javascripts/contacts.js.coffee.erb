@@ -949,7 +949,6 @@ $.fn.assignTo = (leader, skip_remote) ->
     if assign_to == "do_not_contact" || ($.params.assigned_to != leader_name)
       unless skip_remote
         $.rails.handleRemote($('#new_contact_assignment'))
-      row.find('.id_checkbox').attr('checked', false)
 
   $('#assign_to').val('')
 

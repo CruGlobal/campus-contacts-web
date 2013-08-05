@@ -263,7 +263,9 @@ $ ->
     $.toggleLoader('ac_button_bar','Applying Changes...')
     $.ajax
       type: 'GET',
-      url: "/interactions/set_permissions?people_ids=" + people_ids + "&permission_id=" + checked_permission_id
+      url: "/interactions/set_permissions?people_ids=" + people_ids + "&permission_id=" + checked_permission_id,
+      complete: ->
+        $.fn.listCheckboxes()
 
   $('#labels_popup_save_button').live 'click', (e)->
     e.preventDefault()
@@ -295,7 +297,8 @@ $ ->
     $.ajax
       type: 'GET',
       url: "/interactions/set_labels?people_ids=" + people_ids + "&label_ids=" + checked_label_ids + "&remove_label_ids=" + unchecked_label_ids
-
+      complete: ->
+        $.fn.listCheckboxes()
 
   $('#labels_add_new_button').live 'click', (e)->
     e.preventDefault()
