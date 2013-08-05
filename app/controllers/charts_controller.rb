@@ -111,7 +111,7 @@ class ChartsController < ApplicationController
     people = interactions.collect(&:receiver)
     @changed_lives = []
     people.each do |person|
-      unless (@changed_lives.size >= 8 || @changed_lives.include?(person))
+      unless (@changed_lives.size >= 8 || person.blank? || @changed_lives.include?(person))
         @changed_lives << person
       end
     end
