@@ -452,8 +452,8 @@ $ ->
       $.rails.handleRemote($('#new_contact_assignment'))
       unless $('#assign_to').val() == $('#my_id').val()
         $.fn.load_leader_name($('#person_title').attr('data-id'))
-    $.toggleLoader('profile_name','Assigning to Leader...')
-    $.toggleLoader('ac_button_bar','Assigning to Leader...')
+    $.toggleLoader('profile_name','Assigning to User...')
+    $.toggleLoader('ac_button_bar','Assigning to User...')
     $.hideDialog($("#assign_search"))
   false
 
