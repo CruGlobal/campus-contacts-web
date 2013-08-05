@@ -31,7 +31,7 @@ class InteractionsController < ApplicationController
   def search_leaders
     @person = Person.find(params[:person_id])
     @current_person = current_person
-    @people = current_organization.leaders.where("first_name LIKE :key OR last_name LIKE :key", key: "%#{params[:keyword].strip}%")
+    @people = current_organization.users.where("first_name LIKE :key OR last_name LIKE :key", key: "%#{params[:keyword].strip}%")
     @people = @people.where("people.id NOT IN (?)", params[:except].split(',')) if params[:except].present?
   end
 
