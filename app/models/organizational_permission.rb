@@ -1,3 +1,4 @@
+require 'permission'
 class OrganizationalPermission < ActiveRecord::Base
   has_paper_trail :meta => { organization_id: :organization_id,
                              person_id: :person_id }
