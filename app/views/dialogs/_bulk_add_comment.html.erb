@@ -1,0 +1,33 @@
+<div id="add_bulk_comment_div" style="display:none" class="custom_mh_popup_box">
+  <div class="ui-widget-overlay pop_box_overlay_container"></div>
+  <div class="pop_box_container">
+    <div class="mh_popup_box add_bulk_comment_content_div">
+    	<div class="mh_popup_box_top">
+        <span class="mh_popup_heading">
+          <%= t('interactions.add_comment_title') %>
+        </span>
+      </div>
+      <div id="add_bulk_comment_loader" style="display:none;" align="center">
+        <%= image_tag 'loader.gif' %><br/>Loading...
+      </div>
+      <div id="add_bulk_comment_content" class="mh_popup_box_content" align="center">
+        <br/>
+        <%= form_for "", method: :post, remote: true do |f| %>
+          <%= hidden_field_tag 'comment_receiver_ids', "" %>
+          <table>
+            <tr>
+              <td><%= t('interactions.comment_field_title') %></td>
+              <td class="field">
+                <%= text_area_tag 'interaction[comment]', '', id: 'bulk_send_comment' %>
+              </td>
+            </tr>
+          </table>
+        <% end %>
+      </div>
+    	<div class="buttons_div">
+    		<button class="large_lightgray inline_block mh_popup_cancel_button">Cancel</button>
+    		<button class="red_accent inline_block" id="add_bulk_comment_button">Add</button>
+    	</div>
+    </div>
+  </div>
+</div>

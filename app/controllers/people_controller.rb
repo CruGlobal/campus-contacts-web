@@ -429,18 +429,23 @@ class PeopleController < ApplicationController
 
   def bulk_comment
     authorize! :lead, current_organization
-    to_ids = params[:to].split(',').uniq
 
-    to_ids.each do |id|
-      person = Person.find_by_id(id)
-      fc = FollowupComment.create(params[:followup_comment])
-      fc.contact_id = id
-      fc.comment = params[:body]
-      fc.status = person.organizational_permissions.first.followup_status
-      fc.save
+    receivers = params[:comment_receiver_ids]
+    if receivers.present?
+      to_ids = receivers.split(',')
+      to_ids.each do |id|
+        @interaction = Interaction.new(params[:interaction])
+        @interaction.created_by_id = current_person.id
+        @interaction.organization_id = current_organization.id
+        @interaction.updated_by_id = current_person.id
+        @interaction.receiver_id = id
+        @interaction.privacy_setting = Interaction::DEFAULT_PRIVACY
+        @interaction.interaction_type_id = InteractionType::COMMENT
+        if @interaction.save
+          @interaction.set_initiators(current_person.id)
+        end
+      end
     end
-
-    render :nothing => true
   end
 
   def update_permission_status

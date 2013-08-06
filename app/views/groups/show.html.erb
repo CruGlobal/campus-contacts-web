@@ -27,9 +27,16 @@
 		  <%= link_to t("people.index.send_sms"), "#", id: "action_menu_text" %>
 		</li>
 	</ul>
+
 	<ul class="button_bar">
 		<li class="action_lightblue btn_right">
 		  <%= link_to t("people.index.send_email"), "#", id: "action_menu_email" %>
+		</li>
+	</ul>
+
+	<ul class="button_bar">
+		<li class="action_lightblue">
+      <%= link_to(t('people.index.group_comment'), "#", id: "action_menu_comment") %>
 		</li>
 	</ul>
 </div>
@@ -78,3 +85,6 @@
 
 <!-- Group Label Dialog -->
 <%= render 'dialogs/add_group_label'%>
+
+<!-- Group Label Dialog -->
+<%= render 'dialogs/bulk_add_comment'%>

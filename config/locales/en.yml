@@ -662,6 +662,8 @@ en:
     notify:
       content: '%{name} (%{number},%{email}) just replied to a survey with %{answer}.'
   interactions:
+    add_comment_title: "Add comment"
+    comment_field_title: "Comment"
     profile_info:
       email_contact_info: "Email Me This Contact Info"
     profile_interactions_edit:
