@@ -172,7 +172,7 @@ class OrganizationsController < ApplicationController
   def archive_leaders
     if params[:date_leaders_not_logged_in_after].present?
       date_given = (Date.strptime(params[:date_leaders_not_logged_in_after], "%m-%d-%Y") + 1.day).strftime('%Y-%m-%d')
-      leaders = current_organization.only_users.find_by_last_login_date_before_date_given(date_given)
+      leaders = current_organization.users.find_by_last_login_date_before_date_given(date_given)
       leaders_count = leaders.count
 
       leaders.each do |leader|
