@@ -16,7 +16,6 @@ class OrganizationTest < ActiveSupport::TestCase
   should have_many(:organizational_permissions)
   should have_many(:leaders)
   should have_many(:users)
-  should have_many(:only_users)
   should have_many(:admins)
   should have_many(:all_people)
   should have_many(:all_people_with_archived)

@@ -20,7 +20,7 @@
     </a>
   </li>
   <div id='leader_list' class="side_list" style="<%= 'display:block;' if selected %>">
-    <% @organization.users.each_with_index do |person| %>
+    <% @organization.leaders.each_with_index do |person| %>
       <% if params[:include_archived] %>
         <% count = person.assigned_contacts_limit_org_with_archived(@organization).collect(&:id).count %>
         <% link = all_contacts_path(assigned_to: person.id, include_archived: 'true') %>

@@ -157,7 +157,7 @@ class OrganizationalPermissionsControllerTest < ActionController::TestCase
       end
 
       assert_equal I18n.t('organizational_permissions.moving_people_success'), @response.body
-      assert_equal [], @org.only_users.collect(&:id)
+      assert_equal [], @org.users.collect(&:id)
       assert_equal [@user_2.person.id], @another_org.contacts.collect(&:id)
     end
 
