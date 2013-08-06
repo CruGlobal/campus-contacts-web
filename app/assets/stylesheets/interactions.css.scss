@@ -63,13 +63,13 @@ body{
       z-index: 1002;
       margin: 25px auto;
 
-      &.add_new_org_content_div, &.import_from_crs_content_div{
+      &.add_new_org_content_div, &.import_from_crs_content_div, &.add_bulk_comment_content_div{
         min-height:100px;
         padding-bottom: 40px; // gives space for the buttons which is set as absolute
         .inline_block{
           display: inline-block;
         }
-        .add_org_save{
+        .buttons_div{
           position: absolute;
           right: 0px;
           bottom: 16px;

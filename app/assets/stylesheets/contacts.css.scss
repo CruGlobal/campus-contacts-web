@@ -234,10 +234,17 @@
   width: 680px;
   padding: 5px;
 }
-#bulk_send_body, #bulk_send_comment {
+#bulk_send_body {
   width: 680px;
   padding: 5px;
   height: 60px;
+  resize: none;
+}
+#bulk_send_comment{
+  width: 340px;
+  padding: 5px;
+  height: 40px;
+  resize: none;
 }
 #sms_compose_message_preview{
 	display: none;

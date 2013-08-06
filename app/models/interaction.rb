@@ -12,6 +12,8 @@ class Interaction < ActiveRecord::Base
   scope :limited, limit(5)
   after_save :ensure_timestamp
 
+  DEFAULT_PRIVACY = "everyone"
+
   def destroy
     run_callbacks :destroy do
       self.update_attribute(:updated_at, DateTime.now)
@@ -106,6 +108,7 @@ class Interaction < ActiveRecord::Base
 
 
   def set_initiators(initiator_ids)
+    initiator_ids = (initiator_ids.is_a?(Array)) ? initiator_ids : [initiator_ids]
     initiator_ids.uniq.each do |person_id|
       self.interaction_initiators.find_or_create_by_person_id(person_id.to_i)
     end
