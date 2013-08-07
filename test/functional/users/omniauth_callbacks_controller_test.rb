@@ -48,16 +48,20 @@ class Users::OmniauthCallbacksControllerTest < ActionController::TestCase
       assert_equal('test@example.com', user.username)
     end
 
-    should "redirect to duplicate message if email is assigned to a person with a different name" do
-      user2 = Factory(:user_with_auxs)
-      user2.person.update_attribute(:email, 'test@example.com')
+    # Start, codes changed: August 06, 2013
+    # Purpose: to consider the possibility that the existing users will change their names from Facebook and tries to login to missionhub.
+    # Model: user.rb line 55
+    #should "redirect to duplicate message if email is assigned to a person with a different name" do
+    #  user2 = Factory(:user_with_auxs)
+    #  user2.person.update_attribute(:email, 'test@example.com')
 
-      assert_no_difference("User.count") do
-        get :facebook
-      end
+    #  assert_no_difference("User.count") do
+    #    get :facebook
+    #  end
 
-      assert_redirected_to '/welcome/duplicate'
-    end
+    #  assert_redirected_to '/welcome/duplicate'
+    #end
+    # End, codes changed: August 06, 2013
 
     should "merge gracefully if email is assigned to a person with the same name" do
       user2 = Factory(:user_with_auxs)
