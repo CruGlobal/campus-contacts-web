@@ -57,10 +57,21 @@ class User < ActiveRecord::Base
             else
               # If first and last name don't match, there's probably some bad data
               # If this person is logging in to fill out a survey, we want to handle this gracefully
+
               if force
                 user = existing.user
               else
-                raise FacebookDuplicateEmailError
+
+                # Start, codes changed: August 06, 2013
+                # Purpose: to consider the possibility that the existing users will change their names from Facebook and tries to login to missionhub.
+                existing.last_name = data['last_name'].strip
+                existing.first_name = data['first_name'].strip
+                if existing.save
+                  user = existing.user
+                end
+                # End, codes changed: August 06, 2013
+
+                #raise FacebookDuplicateEmailError
               end
             end
           end
