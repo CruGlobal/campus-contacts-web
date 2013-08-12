@@ -400,7 +400,6 @@ class ContactsController < ApplicationController
       # get_and_merge_unfiltered_people unless params[:dnc] == 'true'
 
       # Filter results
-      filter_archived_only if params[:archived].present?
       filter_by_label if params[:label].present?
       filter_by_permission if params[:permission].present?
       filter_by_interaction_type if params[:interaction_type].present?
@@ -440,7 +439,6 @@ class ContactsController < ApplicationController
     end
 
     def build_people_scope
-      params[:assigned_to] = 'all' if params[:permission].present?
       if params[:assigned_to].present?
         case params[:assigned_to]
         when 'all'
@@ -484,18 +482,25 @@ class ContactsController < ApplicationController
       elsif params[:archived] == 'true'
         @header = I18n.t('contacts.index.archived')
         @people_scope = @organization.all_archived_people
-      elsif params[:label].present?
-        if params[:include_archived].present? && params[:include_archived] == 'true'
-          @people_scope = @organization.all_people_with_archived
-        else
-          @people_scope = @organization.all_people
+      elsif params[:filter_label].present?
+        if filter_label = Label.find(params[:filter_label])
+          if params[:include_archived].present? && params[:include_archived] == 'true'
+            @people_scope = filter_label.label_contacts_from_org_with_archived(@organization)
+          else
+            @people_scope = filter_label.label_contacts_from_org(@organization)
+          end
         end
-        @people_scope = @people_scope.joins(:organizational_labels).where('organizational_labels.organization_id = ? AND organizational_labels.removed_date IS NULL', current_organization.id)
       elsif params[:interaction_type].present? && @interaction_type = InteractionType.find_by_id(params[:interaction_type])
         if params[:include_archived_interactions].present? && params[:include_archived_interactions] == 'true'
           @people_scope = @interaction_type.interaction_receivers_from_org_with_archived(@organization)
         else
           @people_scope = @interaction_type.interaction_receivers_from_org(@organization)
+        end
+      elsif params[:permission].present? && @permission = Permission.find_by_id(params[:permission])
+        if params[:include_archived].present? && params[:include_archived] == 'true'
+          @people_scope = @permission.permission_contacts_from_org_with_archived(@organization)
+        else
+          @people_scope = @permission.permission_contacts_from_org(@organization)
         end
       end
       @people_scope ||= current_organization.all_people
@@ -525,7 +530,6 @@ class ContactsController < ApplicationController
     end
 
     def filter_by_label
-      @people_scope = @people_scope.joins(:organizational_labels).where('organizational_labels.organization_id = ? AND organizational_labels.removed_date IS NULL', current_organization.id)
       @labels = Label.where("id IN (?)", (params[:label].is_a?(Array)) ? params[:label] : [params[:label]])
       if @labels.present?
         if params[:do_search].present?
@@ -534,6 +538,7 @@ class ContactsController < ApplicationController
           @header = @labels.collect{|desc| (desc.i18n.present? ? desc.i18n : desc.name).try('titleize')}.to_sentence
         end
 
+        @people_scope = @people_scope.joins(:organizational_labels).where('organizational_labels.organization_id = ? AND organizational_labels.removed_date IS NULL', current_organization.id)
       	if params[:label_tag].present? && params[:label_tag].to_i == Label::ALL_SELECTED_LABEL[1]
 					valid_ids = []
 			  	@labels.collect(&:id).each do |label|

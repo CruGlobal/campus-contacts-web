@@ -43,7 +43,7 @@
 	<li class="ac_dropdown_list_header">
     <a href="#" class="side_toggle arrow_anchor">
       <div class="arrow">
-        <% if selected = params[:label].present? || params[:include_archived_labels].present? %>
+        <% if selected = params[:filter_label].present? || params[:include_archived_labels].present? %>
           &#x25BC;
         <% else %>
           &#x25B6;
@@ -58,12 +58,12 @@
     <% @organization.label_set.each do |label| %>
       <% if params[:include_archived_labels] %>
         <% count = label.label_contacts_from_org_with_archived(@organization).collect(&:id).count %>
-        <% link = all_contacts_path(label: label.id, include_archived_labels: 'true') %>
+        <% link = all_contacts_path(filter_label: label.id, include_archived_labels: 'true') %>
       <% else %>
         <% count = label.label_contacts_from_org(@organization).collect(&:id).count %>
-        <% link = all_contacts_path(label: label.id) %>
+        <% link = all_contacts_path(filter_label: label.id) %>
       <% end %>
-      <li class="entry label <%= 'selected_entry' if params[:label].present? && params[:label].include?(label.id.to_s) %>" data-id="<%= label.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
+      <li class="entry label <%= 'selected_entry' if params[:filter_label].present? && params[:filter_label].include?(label.id.to_s) %>" data-id="<%= label.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
         <%= link_to label, link %>&nbsp;(<span class="count"><%= count %></span>)
       </li>
     <% end %>
