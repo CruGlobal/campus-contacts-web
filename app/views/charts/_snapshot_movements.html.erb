@@ -3,10 +3,13 @@
     <div id="snapshot_radio">
       <div id="snapshot_radio_buttons">
         <div id="snapshot_radio_button_all">
-          <%= radio_button_tag 'all', 'true', @chart.snapshot_all_movements, :id => "snap_all_true" %>All
+          <%= radio_button_tag 'all', 'true', @chart.snapshot_all_movements, :id => "snap_all_true" %> All
         </div>
         <div id="snapshot_radio_button_custom">
-          <%= radio_button_tag 'all', 'false', !@chart.snapshot_all_movements, :id => "snap_all_false" %>Custom
+          <%= radio_button_tag 'all', 'false', !@chart.snapshot_all_movements, :id => "snap_all_false" %> Custom
+        </div>
+        <div id="snapshot_button_uncheck_all">
+          <%= radio_button_tag 'all', 'none', false, :id => "snap_all_none" %> None
         </div>
       </div>
       <div id="snapshot_movements">
@@ -18,6 +21,8 @@
         <% end %>
       </div>
     </div>
-    <div id="snapshot_movements_submit"><%= submit_tag 'Update Chart', class: 'large_gray' %></div>
+    <div id="snapshot_movements_submit">
+      <%= submit_tag 'Update Chart', class: 'large_gray' %>
+    </div>
   <% end %>
 </div>
