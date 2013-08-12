@@ -10,10 +10,13 @@
       <div class="mh_popup_box_content">
         <div class="mh_popup_box_scroller">
           <%= form_tag params, method: :get, id: 'contact_search_form' do %>
-            <%= hidden_field_tag :completed, params[:completed] if params[:completed].present? %>
             <%= hidden_field_tag :do_search, 1 %>
-            <%= hidden_field_tag :include_archived, params[:include_archived] if params[:include_archived].present? %>
             <%= hidden_field_tag :assigned_to, params[:assigned_to] if params[:assigned_to].present? %>
+            <%= hidden_field_tag :filter_label, params[:filter_label] if params[:filter_label].present? %>
+            <%= hidden_field_tag :interaction_type, params[:interaction_type] if params[:interaction_type].present? %>
+            <%= hidden_field_tag :permission, params[:permission] if params[:permission].present? %>
+            <%= hidden_field_tag :completed, params[:completed] if params[:completed].present? %>
+            <%= hidden_field_tag :archived, params[:archived] if params[:archived].present? %>
             <div class="ononeline">
               <div class="field">
                 <label for="first_name"><span class="title"><%= t('.first_name') %></span></label>
