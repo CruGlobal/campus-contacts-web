@@ -361,6 +361,8 @@ en:
       login: Login
       welcome: Welcome!
       no_facebook: "Don't like Facebook? Click here to skip Facebook login"
+      login_no_email: "We're not able to retrieve your login information at this time. Please try again later. For additional help please email support@missionhub.com"
+      login_cannot_create_a_user: "We're not able to create your user data. Please try again later. For additional help please email support@missionhub.com"
   org_membership:
     confirm_delete: "Are you sure you want to dissociate yourself from %{org}"
   welcome:

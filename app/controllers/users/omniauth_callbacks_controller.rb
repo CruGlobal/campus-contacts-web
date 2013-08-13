@@ -6,9 +6,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       facebook_login
       redirect_to @user ? after_sign_in_path_for(@user) : "/"
     rescue NoEmailError
-      flash[:error] = t('.email_required')
+      flash[:error] = t('sessions.new.login_no_email')
       redirect_to '/users/sign_in'
     rescue FailedFacebookCreateError
+      flash[:error] = t('sessions.new.login_cannot_create_a_user')
       redirect_to '/users/sign_in'
     rescue FacebookDuplicateEmailError => e
       Airbrake.notify(e,

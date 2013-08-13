@@ -31,12 +31,11 @@
   <div class="splash login">
     <div class="left width30">
       <div class="loginscreen" style="text-align: center;">
+        <p class="error_container"><%= raw(flash[:error]) %></p>
         <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook), rel: 'external') %>
         <p><a href="/"><%= t('.back') %></a></p>
       </div>
     </div>
-
-
 
     <div class="right width68 instruct">
       <h3 style="margin: 10px 0 0;"><%= t('.instructions') %>:</h3>
