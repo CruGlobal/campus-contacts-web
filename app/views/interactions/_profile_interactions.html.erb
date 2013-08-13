@@ -4,16 +4,16 @@
 
 
 <div id='interaction_feeds_container'>
-  <% if @interactions.count == 0 %>
-    <div class='feed_box notice'>
-      No interactions yet.
-    </div>
-  <% else %>
+  <% if @interactions.present? %>
     <% @interactions.each do |interaction| %>
       <div class='interaction_feed_container' id='interaction_feed_container_<%= interaction.id %>'>
         <%= render partial: 'interactions/interaction_feed', locals: {interaction: interaction} %>
       </div>
     <% end %>
+  <% else %>
+    <div class='feed_box notice'>
+      No interactions yet.
+    </div>
   <% end %>
 </div>
 <div id='interaction_paging'>
