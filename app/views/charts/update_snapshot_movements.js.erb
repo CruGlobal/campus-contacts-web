@@ -1,3 +1,5 @@
 $('div#snap_spinner').hide()
-$('div#snap_container1, div#snap_container2, div#snap_container3').show()
-$("#snap_chart").html("<%= escape_javascript(render partial: 'snapshot_js') %>")
+if(<%= @selected_movements.present? || @chart.snapshot_all_movements %>){
+  $('div#snap_container1, div#snap_container2, div#snap_container3').show()
+  $("#snap_chart").html("<%= escape_javascript(render partial: 'snapshot_js') %>")
+}

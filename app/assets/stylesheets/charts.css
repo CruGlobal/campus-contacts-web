@@ -6,9 +6,9 @@ div#snap_container1, div#snap_container2, div#snap_container3, div#snap_numbers 
   position: relative;
   top: 0px;
   right: 0px;
-  width: 50%; 
-  height: 300px; 
-  margin: 0 auto; 
+  width: 50%;
+  height: 300px;
+  margin: 0 auto;
   float: left;
 }
 
@@ -76,16 +76,21 @@ div.movement_line span {
 }
 
 div#snapshot_radio_buttons {
-  padding:12px;
+  padding:12px 8px;
 }
 
 div#snapshot_radio_button_custom {
   display:inline-block;
-  margin-left:48px;
+  margin-left:6px;
 }
 
 div#snapshot_radio_button_all {
   display:inline-block;
+}
+
+div#snapshot_button_uncheck_all {
+  display:inline-block;
+  margin-left:6px;
 }
 
 /*
