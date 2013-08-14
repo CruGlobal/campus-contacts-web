@@ -13,9 +13,7 @@ class ChartsController < ApplicationController
 
   def update_snapshot_movements
     @selected_movements = params[:movements]
-    @all = params[:all]
-    @all = 'false' if @all == 'none'
-    @chart.snapshot_all_movements = @all
+    @chart.snapshot_all_movements = params[:all]
     @chart.save
     if @selected_movements.present? && !@chart.snapshot_all_movements
       @chart.update_movements_displayed(@selected_movements)
