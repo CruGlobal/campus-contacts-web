@@ -5,14 +5,6 @@ class ContactAssignmentsController < ApplicationController
     @people_scope = Person.where('organizational_permissions.organization_id' => org_ids).includes(:organizational_permissions_including_archived)
     @people_scope = @people_scope.where(id: @people_scope.archived_not_included.collect(&:id)) if params[:include_archived].blank? && params[:archived].blank?
 
-    # Profile
-    if params[:ids].present?
-      @person = current_organization.all_people.where(id: params[:ids].first).try(:first)
-      if @person.present?
-        @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
-      end
-    end
-
     # @keyword = SmsKeyword.find(params[:keyword])
     ContactAssignment.where(person_id: params[:ids], organization_id: @organization.id).destroy_all unless ENV["RAILS_ENV"] == "test"
     if params[:assign_to].present?
@@ -48,6 +40,15 @@ class ContactAssignmentsController < ApplicationController
         @reload_sidebar = true
       end
     end
+
+    # Profile
+    if params[:ids].present?
+      @person = current_organization.all_people.where(id: params[:ids].first).try(:first)
+      if @person.present?
+        @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
+      end
+    end
+
     unless @reload_sidebar
       render nothing: true
     end
