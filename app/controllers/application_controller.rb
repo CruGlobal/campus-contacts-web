@@ -381,7 +381,7 @@ class ApplicationController < ActionController::Base
   end
 
   def permissions_for_assign
-    current_user_permissions = current_user.person
+    current_user_permissions = current_person
                                      .organizational_permissions
                                      .where(:organization_id => current_organization.self_and_parents.collect(&:id))
                                      .collect { |r| Permission.find_by_id(r.permission_id) }.compact
