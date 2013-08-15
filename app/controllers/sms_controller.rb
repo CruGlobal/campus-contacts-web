@@ -36,11 +36,9 @@ class SmsController < ApplicationController
     end
 
     # If it is, check for interactive texting
-    if @sms_session && (@sms_session.interactive? || message.split(' ').first.downcase == 'i')
+    if @sms_session && (@sms_session.interactive? || message.split(' ').first.downcase == 'i') && @person = @sms_session.person
       @received.update_attributes(sms_keyword_id: @sms_session.sms_keyword_id, person_id: @sms_session.person_id, sms_session_id: @sms_session.id)
-      @person = @sms_session.person
-      keyword = @sms_session.sms_keyword
-      if keyword
+      if keyword = @sms_session.sms_keyword
         survey = keyword.survey
         if !@sms_session.interactive? # they just texted in 'i'
           # We're getting into a sticky session
@@ -58,10 +56,12 @@ class SmsController < ApplicationController
           # Mark answer_sheet as complete
           @answer_sheet.update_attribute(:completed_at, Time.now)
           @sms_session.update_attributes(ended: true)
-
-          @sent_sms = send_message(@msg, @received.phone_number)
         end
+      else
+        @msg = I18n.t('sms.keyword_inactive')
       end
+      @sent_sms = send_message(@msg, @received.phone_number)
+
     else
       # We're starting a new sms session
       # Try to find a person with this phone number. If we can't, create a new person
