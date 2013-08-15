@@ -16,6 +16,12 @@ $ ->
         else $.fn.moveToCompleted ui.draggable  if $(this).hasClass("completed")
     $.fn.tip()
 
+  $(document).on 'change', '#add_contact_div .permission_checkbox', (e)->
+    email_address = $("#person_email_address_email").val()
+    identify = $(this).attr("data-i18n")
+    if (identify == "admin" || identify == "user") && !email_address
+      $.a(t('contacts.index.for_this_permission_email_is_required_no_name'))
+
   $(document).on 'keypress', '#contact_search_form input', (e)->
     if e.keyCode == $.ui.keyCode.ENTER
       $('#contact_search_form').submit()

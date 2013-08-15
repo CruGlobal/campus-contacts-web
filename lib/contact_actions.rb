@@ -44,10 +44,27 @@ module ContactActions
       @email = @person.email_addresses.first
       @phone = @person.phone_numbers.first
 
+      #If has error message, this would set the selected values to the add contact form fields
+      flash[:selected_labels] = params[:labels]
+      flash[:selected_answers] = params[:answers]
+      flash[:selected_permissions] = params[:permissions_ids]
+      flash[:add_to_group_tag] = @add_to_group_tag
+
+      custom_errors = Array.new
+      # Validation that requires the email if the permission is set to User or Admin
+      if params[:permissions_ids].present? && Permission.is_set_to_user_or_admin?(params[:permissions_ids].first.to_i)
+        unless params[:person][:email_address][:email].present?
+          if permission_name = Permission.find_by_id(params[:permissions_ids])
+            custom_errors << t("contacts.index.for_this_permission_email_is_required", :permission => permission_name)
+          else
+            custom_errors << t("contacts.index.for_this_permission_email_is_required_no_name")
+          end
+        end
+      end
+
       # # validation for existing phone number
       #if @person.phone_numbers.present?
       #  phone_numbers = @person.phone_numbers.collect(&:number)
-      #  custom_errors = Array.new
       #  phone_numbers.each do |number|
       #    check_person = Person.find_existing_person_by_name_and_phone({first_name: params[:person][:first_name],
       #                                                           last_name:params[:person][:last_name],
@@ -56,25 +73,22 @@ module ContactActions
       #      custom_errors << "Phone number '#{number}' already in use" if PhoneNumber.find_by_number(number)
       #    end
       #  end
-
-      #  if custom_errors.present?
-      #    # Include the @person errors if invalid
-      #    if @person.invalid?
-      #      @person.save
-      #      custom_errors = @person.errors.full_messages << custom_errors
-      #    end
-      #    respond_to do |wants|
-      #      wants.js do
-      #        flash.now[:error] = custom_errors.join('<br />')
-      #        flash[:selected_labels] = params[:labels]
-      #        flash[:selected_answers] = params[:answers]
-      #        flash[:add_to_group_tag] = @add_to_group_tag
-      #        render 'add_contact'
-      #      end
-      #    end
-      #    return
-      #  end
       #end
+
+      if custom_errors.present?
+        # Include the @person errors if invalid
+        if @person.invalid?
+          @person.save
+          custom_errors = @person.errors.full_messages << custom_errors
+        end
+        respond_to do |wants|
+          wants.js do
+            flash.now[:error] = custom_errors.join('<br />')
+            render 'add_contact'
+          end
+        end
+        return
+      end
 
       if @person.save
         if params[:labels].present?
@@ -126,9 +140,6 @@ module ContactActions
         respond_to do |wants|
           wants.js do
             flash.now[:error] = errors.join('<br />')
-            flash[:selected_labels] = params[:labels]
-            flash[:selected_answers] = params[:answers]
-            flash[:add_to_group_tag] = @add_to_group_tag
             render 'add_contact'
           end
           wants.json do

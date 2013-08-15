@@ -90,6 +90,18 @@ class Permission < ActiveRecord::Base
 	ALL_SELECTED_LABEL = ["All",2]
 	LABEL_SEARCH_FILTERS = [ANY_SELECTED_LABEL, ALL_SELECTED_LABEL]
 
+  def self.is_set_to_user_or_admin?(permission_id)
+    (is_set_to_user?(permission_id) || is_set_to_admin?(permission_id))
+  end
+
+  def self.is_set_to_user?(permission_id)
+    permission_id == USER_ID
+  end
+
+  def self.is_set_to_admin?(permission_id)
+    permission_id == ADMIN_ID
+  end
+
   def apiv1_i18n
     case self.i18n
       when 'admin'

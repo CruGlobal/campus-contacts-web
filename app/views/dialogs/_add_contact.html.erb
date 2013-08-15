@@ -36,7 +36,9 @@
               </div>
               <div class="form_group_fields">
                 <% @permissions_for_assign.each do |permission| %>
+                  <% @selected_permissions = flash[:selected_permissions] if flash[:selected_permissions].present? %>
                   <% checked = permission.id == Permission::NO_PERMISSIONS_ID %>
+                  <% checked = permission.id == @selected_permissions.first.to_i if @selected_permissions.present? %>
                   <%= render partial: 'shared/permission', locals: {permission: permission, checked: checked} %>
                 <% end %>
                 <br/>
