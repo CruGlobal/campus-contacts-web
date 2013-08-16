@@ -6,9 +6,15 @@
 
 <ul class="ac_dropdown_list">
 	<li class="ac_dropdown_list_header">
+    <%= link_to "Unassigned Contacts", unassigned_contacts_path, class: "unassigned_contacts_link" %>
+  </li>
+</ul>
+
+<ul class="ac_dropdown_list">
+	<li class="ac_dropdown_list_header">
     <a href="#" class="side_toggle arrow_anchor">
       <div class="arrow">
-        <% if selected = params[:assigned_to].present? && !["friends","all"].include?(params[:assigned_to]) %>
+        <% if selected = params[:assigned_to].present? && !["friends","all","unassigned"].include?(params[:assigned_to]) %>
           &#x25BC;
         <% else %>
           &#x25B6;
