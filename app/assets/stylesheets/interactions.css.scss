@@ -126,13 +126,14 @@ body{
       }
 
       &.labels_popup_box {
+        height: 400px;
         .labels_notice {
-          width: 260px;
+          width: 300px;
           margin: 0 auto;
           text-align: center;
         }
         .labels_add_new {
-          width: 260px;
+          width: 300px;
           margin: 0 auto;
           #labels_new_input {
             width: 223px;
@@ -140,7 +141,7 @@ body{
           }
         }
         .labels_chooser_box {
-          width: 260px;
+          width: 300px;
           margin: 0 auto;
           padding: 6px 0px 2px;
           max-height: 160px;
