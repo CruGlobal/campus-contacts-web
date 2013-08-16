@@ -58,13 +58,7 @@ class InteractionsController < ApplicationController
     @permission_id = params[:permission_id]
 
     @people.each do |person|
-      old_permission = person.organizational_permissions_for_org(current_organization).where("permission_id <> ?", @permission_id)
-      old_permission.delete_all if old_permission.present?
-
-      permission = person.organizational_permissions_including_archived.find_or_create_by_permission_id_and_organization_id(@permission_id.to_i, current_organization.id)
-      permission.update_attributes({archive_date: nil, added_by_id: current_person.id}) if permission.archive_date.present?
-      permission.update_attribute(:added_by_id, current_person.id) if permission.added_by_id.nil?
-      person.assigned_tos.delete_all unless @permission_id == Permission::NO_PERMISSIONS_ID
+      current_organization.add_permission_to_person(person, @permission_id, current_person.id)
       @permissions = person.permissions_for_org_id(current_organization.id)
       @assigned_tos = person.assigned_tos.where("contact_assignments.organization_id" => current_organization.id)
     end
