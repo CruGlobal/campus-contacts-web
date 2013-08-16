@@ -41,9 +41,18 @@ $.fn.openLabelsDialog = () ->
 
 $.fn.openPermissionsDialog = () ->
   $('.contact_checkbox.profile_checkbox').prop('checked',true)
+  valid_leader = true
+  $('.contact_checkbox:checked').each ->
+    valid_leader = false if $(this).attr('data-email') == ""
   if $('.contact_checkbox:checked').size() == 0
     $.a(t('contacts.index.none_checked'))
   else
+    if !valid_leader
+      $.a(t('contacts.index.not_valid_leader_selected'))
+      $('input#permissions_ids__4, input#permissions_ids__1').prop('disabled',true)
+      $('input#permissions_ids__4, input#permissions_ids__1').prop('checked',false)
+    else
+      $('input#permissions_ids__4, input#permissions_ids__1').prop('disabled',false)
     $('#profile_permissions_dialog .permission_checkbox').prop('checked',false)
     if $('.contact_checkbox:checked').size() == 1
       displayed_text = $('.contact_checkbox:checked').first().attr('data-name')
