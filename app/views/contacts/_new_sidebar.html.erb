@@ -150,7 +150,7 @@
   </div>
 </ul>
 
-<ul class="ac_dropdown_list">
+<ul class="ac_dropdown_list" id="saved_searches_group" style="<%= @saved_searches.count > 0 ? 'display:block;' : 'display:none;'%>">
 	<li class="ac_dropdown_list_header">
     <a href="#" class="side_toggle arrow_anchor">
       <div class="arrow">
@@ -170,7 +170,7 @@
       <li class="entry <%= 'selected_entry' if request.fullpath == saved_search.full_path %>">
         <%= link_to saved_search.name, saved_search.full_path %>
         <%= link_to(image_tag('edit.png', title: t('contacts.index.edit_saved_search'), class: 'tip'), '#', class: 'edit_icon', id: 'edit_saved_search_button', 'data-full-path'=>saved_search.full_path, 'data-name'=>saved_search.name, 'data-id'=>saved_search.id) %>
-        <%= link_to(image_tag('delete.png', title: t('contacts.index.delete_saved_search'), class: 'tip'), saved_contact_search_path(saved_search), method: :delete, remote: true, class: 'delete_icon', data: { confirm: t('contacts.index.delete_search_confirm') }) %>
+        <%= link_to(image_tag('delete.png', title: t('contacts.index.delete_saved_search'), class: 'tip'), saved_contact_search_path(saved_search), method: :delete, remote: true, class: 'delete_icon delete_saved_search', data: { confirm: t('contacts.index.delete_search_confirm') }) %>
       </li>
     <% end %>
   </div>

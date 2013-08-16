@@ -51,11 +51,22 @@
 		  <%= link_to(t('people.index.sent_messages'), "#", :id => "new_sent_messages_link") %>
 		</li>
 	</ul>
+
+  <% with_save_search = (params[:do_search] == "1" || params[:search] == "1") && @people.length > 0 && !@saved_contact_search.full_path.present? %>
+
 	<ul class="button_bar">
-		<li class="action_lightblue">
+		<li class="action_lightblue <%= 'btn_left' if with_save_search %>">
 		  <%= link_to "Search", "#", id: "action_menu_search_filters" %>
 		</li>
 	</ul>
+
+  <% if with_save_search %>
+    <ul class="button_bar">
+      <li class="action_lightblue btn_right">
+        <%= link_to("Save Search", "", id: 'search_people_filters_save_search_button') %>
+      </li>
+    </ul>
+  <% end %>
 	<ul class="button_bar">
 		<li class="action_lightblue">
       <%= link_to('More ▾', '#', class: 'action_dropdown') %>
@@ -73,6 +84,7 @@
       </ul>
     </li>
 	</ul>
+
 </div>
 
 <div id="ac_pagination">
