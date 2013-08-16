@@ -393,7 +393,7 @@ $('#send_bulkemail_link_new, #action_menu_email').live 'click', (e)->
   $('#bulk_send_msg_dialog .note.send_text').hide()
   $('#bulk_send_msg_dialog .note.send_email').show()
   $('#bulk_send_msg_dialog #reply_to_email').attr('checked',false)
-  $('#bulk_send_msg_dialog #reply_to_email').focus()
+  $('#bulk_send_msg_dialog #bulk_send_body').focus()
   $("#bulk_send_msg_dialog .mh_popup_heading").text("Send Email")
 
   ids = []

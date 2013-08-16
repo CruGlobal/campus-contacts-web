@@ -6,19 +6,19 @@
         <span class="mh_popup_heading">Send Text</span>
       </div>
       <div class="mh_popup_box_content">
+      <%= form_tag "", class: 'bulk-msg' do %>
         <div class="note send_text">
           <%=raw t('general.sms_note') %>
         </div>
         <div class="note send_email">
           <div class="reply_to_toggle">
-            <%= check_box_tag :reply_to_email, "", id: 'reply_to_email' %>
+            <%= check_box_tag "reply_to_email", 1, id: "reply_to_email" %>
           </div>
           <div class="reply_to_toggle">
             <%=raw t('general.email_note') %>
           </div>
         </div>
         <div class="mh_popup_box_scroller">
-          <%= form_tag "", class: 'bulk-msg' do %>
           <div class="field">
             <label><%= t('general.recipients') %></label>
             <%= hidden_field_tag :to %>
@@ -55,11 +55,11 @@
       		  	</table>
       		  </div>
           </div>
-          <% end %>
           <div id="bulk_send_msg_error" class="flash" style="display: none;">
             <div id="bulk_send_msg_message" class="flash_message notice alignleft" style="margin-bottom: 50px; padding: 5px; padding-left: 40px; min-height: 30px;"></div>
           </div>
         </div>
+      <% end %>
       </div>
     	<div class="mh_popup_buttons">
     		<button class="red_accent" id="msg_popup_save_button">Send</button>
