@@ -49,7 +49,7 @@ class Person < ActiveRecord::Base
   has_many :permissions_including_archived, through: :organizational_permissions_including_archived, source: :permission
 
   if Permission.table_exists? # added for travis testing
-    has_many :organizations, through: :organizational_permissions, conditions: ["status = 'active'"], uniq: true
+    has_many :organizations, through: :organizational_permissions, conditions: ["status = 'active' AND organizational_permissions.permission_id <> #{Permission::NO_PERMISSIONS_ID}"], uniq: true
   end
 
   has_many :followup_comments, :class_name => "FollowupComment", :foreign_key => "commenter_id"

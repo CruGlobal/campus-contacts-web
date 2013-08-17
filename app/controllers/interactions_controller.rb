@@ -1,4 +1,6 @@
 class InteractionsController < ApplicationController
+  before_filter :authorize
+  
   def show_profile
     permissions_for_assign
     groups_for_assign
@@ -195,4 +197,10 @@ class InteractionsController < ApplicationController
     @person = @interaction.receiver
     @interaction.destroy
   end
+
+  protected
+  def authorize
+    authorize! :manage_contacts, current_organization
+  end
+
 end

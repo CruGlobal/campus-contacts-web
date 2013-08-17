@@ -296,12 +296,7 @@ class ApplicationController < ActionController::Base
     if mhub?
       render_404
     else
-      #if (!current_organization || current_person.organizations.include?(current_organization)) && wizard_path
-        #return wizard_path
-      #else
-        return '/dashboard'
-        #return '/contacts/mine'
-      #end
+      return '/dashboard'
     end
   end
   helper_method :user_root_path
