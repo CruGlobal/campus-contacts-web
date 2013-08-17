@@ -1,4 +1,5 @@
 class Label < ActiveRecord::Base
+  belongs_to :organization
 end
 class OrganizationalLabel < ActiveRecord::Base
 end
