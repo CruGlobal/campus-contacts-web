@@ -1,6 +1,6 @@
 class InteractionsController < ApplicationController
   before_filter :authorize
-  
+
   def show_profile
     permissions_for_assign
     groups_for_assign
@@ -139,7 +139,9 @@ class InteractionsController < ApplicationController
 
   def reset_edit_form
     @person = current_organization.people.where(id: params[:person_id]).try(:first)
-    @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
+    if @person.present?
+      @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
+    end
   end
 
   def show_new_interaction_form
