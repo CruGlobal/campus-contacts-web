@@ -15,60 +15,62 @@
 
   	<div class="feed_box info_edit">
 
-      <% if @person.contact_permission_for_org(current_organization) || @person.user_permission_for_org(current_organization)%>
-    		<div class="status col_left"><%= t('general.status') %>:</div>
-      	<div class="status col_right edit" id="followup_status_div">
-          <%- contact_permission = @person.permission_for_org(current_organization) %>
-          <%- followup_status = contact_permission.nil? ? "" : contact_permission.followup_status %>
-          <%= select_tag :followup_status, options_for_select(OrganizationalPermission::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]}, followup_status), {disabled: contact_permission.nil?, include_blank: contact_permission.nil?, 'data-person-id' => "#{@person.id}", class: "followup_status_field followup_status_field_edit", style: 'display: none;'} %>
-          <div id="followup_status_dropdown" class="custom_dropdown edit" data-current-id="<%= followup_status %>">
-            <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
-            <div id="selected"><%= followup_status.present? ? t("contacts.statuses.#{followup_status}") : "Select Status" %></div>
-            <div id="togglable">
-              <% OrganizationalPermission::FOLLOWUP_STATUSES.each do |fs| %>
-                <div class="option" data-id="<%= fs %>" data-name="<%= t("contacts.statuses.#{fs}") %>">
-                  <%= t("contacts.statuses.#{fs}") %>
-                </div>
-              <% end %>
-            </div>
-          </div>
-      	</div>
-
-      	<div class="gender col_left">Assigned To:</div>
-      	<div class="gender col_right" id="assigned_to_div">
-          <%= text_field_tag :assigned_to_id, "#{@assigned_tos.count == 0 ? '0' : @assigned_tos.first.assigned_to_id}", id: 'assigned_to_id', class: 'hidden' %>
-          <div id="assigned_to_dropdown" class="custom_dropdown edit" data-current-id="<%= @assigned_tos.count == 0 ? '0' : @assigned_tos.first.assigned_to_id %>">
-            <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
-            <div id="selected">
-              <% if @assigned_tos.count == 0 %>
-                <%= "Unassigned" %>
-              <% elsif @assigned_tos.count > 1 %>
-                <%= "#{@assigned_tos.count} people selected" %>
-              <% else %>
-                <%= @assigned_tos.first.assigned_to == current_person ? "#{@assigned_tos.first.assigned_to.first_name} (Me)" : "#{@assigned_tos.first.assigned_to.name}" %>
-              <% end %>
-            </div>
-            <div id="togglable">
-              <div id="default_leader_options" class="edit">
-                <div class="option leader" data-id="0">
-                  <%= check_box_tag 'leader_id[]', 0, false, class: "leader_box", id: "leader_0", "data-id" => "0" %>
-                  <div class="leader_name dropdown_name">Unassigned</div>
-                </div>
-                <% if current_person.labeled_in_org?(Label.leader, current_organization) %>
-                  <%= render partial: 'interactions/option_leader', locals: {person: current_person, current_person: current_person, leader: current_person} %>
-                <% end %>
-                <% @assigned_tos.where("assigned_to_id <> ?", current_person.id).each do |assignment| %>
-                  <%= render partial: 'interactions/option_leader', locals: {person: @person, current_person: current_person, leader: assignment.assigned_to} %>
-                <% end %>
+      <% if @person.contact_permission_for_org(current_organization) %>
+  		<div class="status col_left"><%= t('general.status') %>:</div>
+    	<div class="status col_right edit" id="followup_status_div">
+        <%- contact_permission = @person.permission_for_org(current_organization) %>
+        <%- followup_status = contact_permission.nil? ? "" : contact_permission.followup_status %>
+        <%= select_tag :followup_status, options_for_select(OrganizationalPermission::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]}, followup_status), {disabled: contact_permission.nil?, include_blank: contact_permission.nil?, 'data-person-id' => "#{@person.id}", class: "followup_status_field followup_status_field_edit", style: 'display: none;'} %>
+        <div id="followup_status_dropdown" class="custom_dropdown edit" data-current-id="<%= followup_status %>">
+          <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+          <div id="selected"><%= followup_status.present? ? t("contacts.statuses.#{followup_status}") : "Select Status" %></div>
+          <div id="togglable">
+            <% OrganizationalPermission::FOLLOWUP_STATUSES.each do |fs| %>
+              <div class="option" data-id="<%= fs %>" data-name="<%= t("contacts.statuses.#{fs}") %>">
+                <%= t("contacts.statuses.#{fs}") %>
               </div>
-              <div class="search">
-                <%= text_field_tag :search_leader, "", placeholder: "Search by name", id: "search_leader_field", class: "edit", "data-person-id" => @person.id %>
-              </div>
-              <div class="results edit" id="search_leader_results"></div>
-            </div>
+            <% end %>
           </div>
         </div>
+    	</div>
       <% end %>
+
+    	<div class="gender col_left">Assigned To:</div>
+    	<div class="gender col_right" id="assigned_to_div">
+        <% get_assigned = (@assigned_tos.count == 0) ? false : true %>
+        <% current_id = (get_assigned && @assigned_tos.first.present?) ? @assigned_tos.first.assigned_to_id : '0' %>
+        <%= text_field_tag :assigned_to_id, current_id, id: 'assigned_to_id', class: 'hidden' %>
+        <div id="assigned_to_dropdown" class="custom_dropdown edit" data-current-id="<%= current_id %>">
+          <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+          <div id="selected">
+            <% if @assigned_tos.count == 0 %>
+              <%= "Unassigned" %>
+            <% elsif @assigned_tos.count > 1 %>
+              <%= "#{@assigned_tos.count} people selected" %>
+            <% else %>
+              <%= @assigned_tos.first.assigned_to == current_person ? "#{@assigned_tos.first.assigned_to.first_name} (Me)" : "#{@assigned_tos.first.assigned_to.name}" %>
+            <% end %>
+          </div>
+          <div id="togglable">
+            <div id="default_leader_options" class="edit">
+              <div class="option leader" data-id="0">
+                <%= check_box_tag 'leader_id[]', 0, false, class: "leader_box", id: "leader_0", "data-id" => "0" %>
+                <div class="leader_name dropdown_name">Unassigned</div>
+              </div>
+              <% if current_person.labeled_in_org?(Label.leader, current_organization) %>
+                <%= render partial: 'interactions/option_leader', locals: {person: current_person, current_person: current_person, leader: current_person} %>
+              <% end %>
+              <% @assigned_tos.where("assigned_to_id <> ?", current_person.id).each do |assignment| %>
+                <%= render partial: 'interactions/option_leader', locals: {person: @person, current_person: current_person, leader: assignment.assigned_to} %>
+              <% end %>
+            </div>
+            <div class="search">
+              <%= text_field_tag :search_leader, "", placeholder: "Search by name", id: "search_leader_field", class: "edit", "data-person-id" => @person.id %>
+            </div>
+            <div class="results edit" id="search_leader_results"></div>
+          </div>
+        </div>
+      </div>
 
   		<div class="gender col_left">
         <label for="person_gender"><%= t('general.gender') %></label>:
@@ -106,8 +108,6 @@
       	</div>
       <% end %>
   	</div>
-
-
 
   	<div class="feed_box info_edit">
   		<div class="email col_left">
