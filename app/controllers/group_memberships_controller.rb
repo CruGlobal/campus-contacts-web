@@ -1,7 +1,7 @@
 class GroupMembershipsController < ApplicationController
 
   def create
-    @group = current_organization.groups.find(params[:group_id])
+    @group = current_organization.groups.where(id: params[:group_id]).first
     @inContacts = params[:render_in_contacts].present?
 
     # Profile
@@ -10,7 +10,12 @@ class GroupMembershipsController < ApplicationController
       @groups = @person.groups_for_org_id(current_organization.id)
     end
 
-    if params[:from_add_member_screen] == "true"
+    if @group.nil?
+      respond_to do |wants|
+        wants.html { render :nothing => true }
+        wants.js { render 'failed.js.erb' }
+      end
+    elsif params[:from_add_member_screen] == "true"
       @persons = Person.find(params[:person_id])
       if has_role
         @group_membership = @group.group_memberships.find_or_initialize_by_person_id(@persons.id)

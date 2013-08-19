@@ -487,7 +487,7 @@ class ContactsControllerTest < ActionController::TestCase
         get :index
       end
       should "show dashboard" do
-        assert_response :success
+        assert_response :redirect
       end
     end
   end
