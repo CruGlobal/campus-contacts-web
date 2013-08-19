@@ -110,7 +110,7 @@ class ApiV1CommentsTest < ActionDispatch::IntegrationTest
       path = "/api/followup_comments/#{interaction_to_be_deleted.id}"
       delete path, {'access_token' => @access_token2.code}
       @json = ActiveSupport::JSON.decode(@response.body)
-      assert ["35","25"].include?(@json['error']['code'])
+      assert ["25","35","32"].include?(@json['error']['code']), @json['error'].inspect
     end
   end
 end
