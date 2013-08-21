@@ -16,9 +16,16 @@ class Chart < ActiveRecord::Base
   end
   
   def update_movements_displayed(selections)
-    chart_organizations.each do |movement|
-      movement.snapshot_display = selections.include?(movement.organization_id.to_s)
-      movement.save
+    if selections
+      chart_organizations.each do |movement|
+        movement.snapshot_display = selections.include?(movement.organization_id.to_s)
+        movement.save
+      end
+    else
+      chart_organizations.each do |movement|
+        movement.snapshot_display = false
+        movement.save
+      end
     end
   end
   
