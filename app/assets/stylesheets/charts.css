@@ -111,7 +111,7 @@ div#snapshot_movements_submit input{
   margin:12px auto 0;
 }
 
-div#snapshot_movements_submit button{
+button#uncheck_all_movements{
   width:140px;
   margin:12px auto;
 }

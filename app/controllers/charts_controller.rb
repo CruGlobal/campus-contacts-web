@@ -12,7 +12,6 @@ class ChartsController < ApplicationController
   end
 
   def update_snapshot_movements
-    @selected_movements = params[:movements]
     @chart.snapshot_all_movements = params[:all]
     @chart.save
 

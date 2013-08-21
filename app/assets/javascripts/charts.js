@@ -16,12 +16,6 @@ $(document).ready(function() {
       disabled: false
     });
   });
-  $('#snapshot_movements input.snap_movement').bind('click', function () {
-    if($('input#snap_all_none').is(':checked')) {
-      $('input#snap_all_false').prop('checked',true)
-    }
-  });
-
 
   $('div#snapshot_movements_submit input.large_gray').bind('click', function () {
     $('div#snap_container1, div#snap_container2, div#snap_container3, div#snap_numbers').hide();
