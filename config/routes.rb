@@ -204,6 +204,8 @@ Mh::Application.routes.draw do
       get :snapshot
       post :update_snapshot_movements
       post :update_snapshot_range
+      get :goal
+      get :trend
     end
   end
 

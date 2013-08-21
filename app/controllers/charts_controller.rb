@@ -15,11 +15,14 @@ class ChartsController < ApplicationController
     @selected_movements = params[:movements]
     @chart.snapshot_all_movements = params[:all]
     @chart.save
-    if @selected_movements.present? && !@chart.snapshot_all_movements
-      @chart.update_movements_displayed(@selected_movements)
+
+    if !@chart.snapshot_all_movements
+      @chart.update_movements_displayed(params[:movements])
     end
 
     refresh_data
+    get_movement_stages
+    get_changed_lives
   end
 
   def update_snapshot_range
@@ -55,10 +58,10 @@ class ChartsController < ApplicationController
     semester_date = Date.today - @chart.snapshot_laborers_range.months
 
     if @chart.snapshot_all_movements
-      movements = @movements
+      @displayed_movements = @movements
     else
       org_ids = @chart.chart_organizations.where("snapshot_display = 1").all.collect(&:organization_id)
-      movements = Organization.where("id IN (?)", org_ids)
+      @displayed_movements = Organization.where("id IN (?)", org_ids)
     end
 
     @all_stats = {}
@@ -66,7 +69,7 @@ class ChartsController < ApplicationController
       :begin_date => begin_date,
       :end_date => end_date,
       :semester_date => semester_date,
-      :activity_ids => movements.collect(&:importable_id)
+      :activity_ids => @displayed_movements.collect(&:importable_id)
     }
 
     begin
@@ -85,7 +88,7 @@ class ChartsController < ApplicationController
 
   def get_movement_stages
     infobase_hash = {
-      :activity_ids => @movements.collect(&:importable_id)
+      :activity_ids => @displayed_movements.collect(&:importable_id)
     }
 
     begin
