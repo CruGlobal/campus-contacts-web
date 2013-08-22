@@ -66,11 +66,13 @@ class PersonSerializer < ActiveModel::Serializer
   ###########################
 
   def backported_attributes(hash)
-    hash['organizational_roles'] = backported_organizational_roles(scope[:organization].id) if scope[:include].include?('organizational_roles')
-    hash['all_organizational_roles'] = backported_organizational_roles if scope[:include].include?('all_organizational_roles')
-    hash['followup_comments'] = backported_followup_comments if scope[:include].include?('followup_comments')
-    hash['comments_on_me'] = backported_comments_on_me if scope[:include].include?('comments_on_me')
-    hash['rejoicables'] = backported_rejoicables if scope[:include].include?('rejoicables')
+    if scope[:include]
+      hash['organizational_roles'] = backported_organizational_roles(scope[:organization].id) if scope[:include].include?('organizational_roles')
+      hash['all_organizational_roles'] = backported_organizational_roles if scope[:include].include?('all_organizational_roles')
+      hash['followup_comments'] = backported_followup_comments if scope[:include].include?('followup_comments')
+      hash['comments_on_me'] = backported_comments_on_me if scope[:include].include?('comments_on_me')
+      hash['rejoicables'] = backported_rejoicables if scope[:include].include?('rejoicables')
+    end
     hash
   end
 
