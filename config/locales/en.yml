@@ -773,6 +773,7 @@ en:
       completed_contacts: "All Contacts - Completed"
       friend_responses: "Contacts who are also my friends on Facebook"
       none_checked: "You need to select a person before this feature will work."
+      not_valid_leader_selected: "You have selected some contacts without an email. Admin and User permissions will be disabled."
       none_email_vcard: "Email is required to send this vcard."
       for_this_permission_email_is_required: "Email is required for '%{permission}' permission."
       for_this_permission_email_is_required_no_name: "Email is required for this permission."
