@@ -235,7 +235,7 @@ $ ->
 
   $('#nationality_dropdown.edit .option').live 'click', (e)->
     selected_name = $(this).attr('data-name')
-    $('#nationality_dropdown #selected').text(selected_name )
+    $('#nationality_dropdown #selected').text(selected_name)
     $('.nationality_field_edit').val(selected_name)
     $('.nationality_field_edit').change()
     $('#nationality_dropdown.edit').removeClass('active')
