@@ -1,0 +1,12 @@
+<% provide :sidebar do %>
+  <div id="ac_sidebar">
+    <div id="upper_sidebar_lists">
+      <%= link_to raw("<button class='red_accent full_width_button'>#{t('people.left_sidebar.profile', name: @person.first_name)}</button>"), profile_path(@person) %>
+      <% if params[:action] == "edit" %>
+        <%= link_to raw("<button class='action_gray full_width_button'>#{t('people.left_sidebar.survey_answers')}</button>"), survey_response_path(@person) %>
+      <% else %>
+        <%= link_to raw("<button class='action_gray full_width_button'>#{t('interactions.edit_survey_results')}</button>"), edit_survey_response_path(@person) %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

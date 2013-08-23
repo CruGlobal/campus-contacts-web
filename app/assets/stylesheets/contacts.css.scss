@@ -5,7 +5,7 @@
 
 #contacts_controller.all_contacts, #contacts_controller.my_contacts, #labels_controller,
 #groups_controller, #surveys_controller, #questions_controller, #sms_keywords_controller,
-#organizations_controller.cleanup, #organizations_controller.index, #organizations_controller.edit {
+#organizations_controller.cleanup, #organizations_controller.index, #organizations_controller.edit, #survey_responses_controller.show, #survey_responses_controller.edit {
   #gandalfthewhite {
     border-bottom: none;
     margin-bottom: 5px;
@@ -209,7 +209,7 @@
         .roles_spaces {
           width: 160px;
           overflow: hidden;
-          boarder: 1px solid red;
+          border: 1px solid red;
           .roles_cover {
             float: right;
           }

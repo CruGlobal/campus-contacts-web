@@ -43,8 +43,10 @@ class SurveyResponsesController < ApplicationController
 
   def show
     @person = Person.find(params[:id])
-    
+
     authorize! :followup, @person
+
+    @completed_answer_sheets = @person.completed_answer_sheets(current_organization).where("completed_at IS NOT NULL").order('completed_at DESC') if @person.present?
   end
 
   def edit

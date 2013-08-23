@@ -670,6 +670,8 @@ en:
   interactions:
     add_comment_title: "Add comment"
     comment_field_title: "Comment"
+    edit_survey_results: "Edit Survey Results"
+    edit_this_survey: "Edit this survey"
     profile_info:
       email_contact_info: "Email Me This Contact Info"
     profile_interactions_edit:
