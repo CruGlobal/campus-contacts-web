@@ -81,6 +81,15 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
            root: 'people'
   end
 
+  def bulk_archive
+    archive_permissions(filtered_people, params[:permission])
+
+    render json: filtered_people,
+           callback: params[:callback],
+           scope: {include: includes, organization: current_organization},
+           root: 'people'
+  end
+
 
   private
 
@@ -117,6 +126,10 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
 
   def remove_permissions(people, permissions)
     current_organization.remove_permissions_from_people(people, permissions.split(',')) if permissions
+  end
+
+  def archive_permissions(people, permissions)
+    current_organization.archive_permissions_from_people(people, permissions.split(',')) if permissions
   end
 
   def set_status(people, status)

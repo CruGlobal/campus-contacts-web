@@ -119,6 +119,7 @@ class PersonSerializer < ActiveModel::Serializer
         'role_id' => p.permission_id,
         'start_date' => p.start_date,
         'archive_date' => p.archive_date,
+        'deleted_at' => p.deleted_at,
         'updated_at' => p.updated_at,
         'created_at' => p.created_at
       }

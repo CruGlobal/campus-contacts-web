@@ -36,7 +36,7 @@ class InteractionType < ActiveRecord::Base
 
   def interaction_receivers_from_org(org)
     people_with_interaction = Interaction.where(interaction_type_id: id, organization_id: org.id, deleted_at: nil).collect(&:receiver_id)
-    contacts_with_permission = org.all_people.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id, 'organizational_permissions.archive_date' => nil, 'organizational_permissions.person_id' => people_with_interaction)
+    contacts_with_permission = org.all_people.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id, 'organizational_permissions.archive_date' => nil, 'organizational_permissions.deleted_at' => nil, 'organizational_permissions.person_id' => people_with_interaction)
     contacts_with_permission
   end
 

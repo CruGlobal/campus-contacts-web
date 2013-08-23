@@ -182,7 +182,7 @@ class PeopleControllerTest < ActionController::TestCase
       Factory(:organizational_permission, organization: @user.person.organizations.first, person: @person2, permission: Permission.no_permissions)
       Factory(:organizational_permission, organization: @user.person.organizations.first, person: @person2, permission: Permission.user)
 
-      assert_difference "OrganizationalPermission.where(person_id: #{@person2.id}, organization_id: #{@user.person.organizations.first.id}, archive_date: nil).count", -1 do
+      assert_difference "OrganizationalPermission.where(person_id: #{@person2.id}, organization_id: #{@user.person.organizations.first.id}, archive_date: nil, deleted_at: nil).count", -1 do
         xhr :post, :update_permissions, { :permission_ids => "#{Permission.no_permissions.id}", :some_permission_ids => "", :person_id => @person2.id }
       end
     end

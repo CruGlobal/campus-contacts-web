@@ -45,7 +45,7 @@ class LeadersController < ApplicationController
 
   def destroy
     @person = Person.find(params[:id])
-    permissions = OrganizationalPermission.find_all_by_person_id_and_organization_id_and_permission_id_and_archive_date(@person.id, current_organization.id, Permission.user_ids, nil)
+    permissions = OrganizationalPermission.find_all_by_person_id_and_organization_id_and_permission_id_and_archive_date_and_deleted_at(@person.id, current_organization.id, Permission.user_ids, nil, nil)
     if permissions
       permissions.each do |r|
         r.archive
