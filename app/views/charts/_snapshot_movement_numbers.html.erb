@@ -1,9 +1,38 @@
 <div id="snap_movements_data">
-  <h2>STAGE OF MOVEMENTS</h2>
-  <h3 class="snap_movement_data"><%= @movement_stages["Pioneering"] %> Pioneering</h3>
-  <h3 class="snap_movement_data"><%= @movement_stages["Key Leader"] %> Key Leader</h3>
-  <h3 class="snap_movement_data"><%= @movement_stages["Launched"] %> Launched</h3>
-  <h3 class="snap_movement_data"><%= @movement_stages["Multiplying (formerly Transformational)"] %> Multiplying</h3>
+  <h2>STAGE OF MOVEMENTS</h2><div class="icon help tipitright help_bubble_keyword" title="<%= t('charts.snapshot.movement_stages') %>"></div>
+  <div class="clear"></div>
+  <h3 class="snap_movement_data tooltip">
+    <%= @movement_stages["Pioneering"] %> Pioneering
+    <span>
+      <%= image_tag "callout_black.gif", class: "callout" %>
+      <strong>Pioneering</strong><br />
+      <%= t('charts.snapshot.pioneering') %>
+    </span>
+  </h3>
+  <h3 class="snap_movement_data tooltip">
+    <%= @movement_stages["Key Leader"] %> Key Leader
+    <span>
+      <%= image_tag "callout_black.gif", class: "callout" %>
+       <strong>Key Leader</strong><br />
+       <%= t('charts.snapshot.key_leader') %>
+    </span>
+  </h3>
+  <h3 class="snap_movement_data tooltip">
+    <%= @movement_stages["Launched"] %> Launched
+    <span>
+      <%= image_tag "callout_black.gif", class: "callout" %>
+      <strong>Launched</strong><br />
+      <%= t('charts.snapshot.launched') %>
+    </span>
+  </h3>
+  <h3 class="snap_movement_data tooltip">
+    <%= @movement_stages["Multiplying (formerly Transformational)"] %> Multiplying
+    <span>
+      <%= image_tag "callout_black.gif", class: "callout" %>
+      <strong>Multiplying</strong><br />
+      <%= t('charts.snapshot.multiplying') %>
+    </span>
+  </h3>
 </div>
 <div id="changed_lives">
   <h2>CHANGED LIVES</h2>
