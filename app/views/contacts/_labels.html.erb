@@ -8,9 +8,9 @@
       <%=raw "<div id='more_labels' style='display:none;'>" if i == 6 %>
       <%
         if params[:include_archived]
-          count = @people_unfiltered.where('organizational_permissions.permission_id' => permission.id).count
+          count = @people_unfiltered.where('organizational_permissions.permission_id' => permission.id, 'organizational_permissions.deleted_at' => nil).count
         else
-          count = @people_unfiltered.where('organizational_permissions.permission_id' => permission.id, 'organizational_permissions.archive_date' => nil).count
+          count = @people_unfiltered.where('organizational_permissions.permission_id' => permission.id, 'organizational_permissions.deleted_at' => nil, 'organizational_permissions.archive_date' => nil).count
         end
       %>
       <li class="leader" style="<%= 'display:none' if count == 0 %>">

@@ -25,7 +25,7 @@ class Permission < ActiveRecord::Base
 
   def members_from_permission_org(org_id, include_archive = false)
   	is_archived = include_archive ? "" : "AND archive_date IS NULL"
-		organizational_permissions.where("organization_id = ? AND (followup_status <> 'do_not_contact' OR followup_status IS NULL) #{is_archived}", org_id)
+		organizational_permissions.where("deleted_at IS NULL AND organization_id = ? AND (followup_status <> 'do_not_contact' OR followup_status IS NULL) #{is_archived}", org_id)
   end
 
   def self.user_ids

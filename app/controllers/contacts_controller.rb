@@ -514,7 +514,7 @@ class ContactsController < ApplicationController
                                  .joins(:organizational_permissions_including_archived)
 
       if params[:include_archived].blank? && params[:archived].blank?
-        @people_unfiltered = @people_unfiltered.where('organizational_permissions.archive_date' => nil)
+        @people_unfiltered = @people_unfiltered.where('organizational_permissions.archive_date' => nil, 'organizational_permissions.deleted_at' => nil)
       end
       @people_scope = @people_scope.merge(@people_unfiltered) if @people_scope.present?
     end
@@ -607,7 +607,7 @@ class ContactsController < ApplicationController
       	end
 
         if !params[:include_archived].present? && !params[:include_archived] == 'true'
-          @people_scope = @people_scope.where("organizational_permissions.archive_date" => nil)
+          @people_scope = @people_scope.where("organizational_permissions.archive_date" => nil, "organizational_permissions.deleted_at" => nil)
         end
       end
     end
