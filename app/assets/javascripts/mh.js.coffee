@@ -84,7 +84,11 @@ $ ->
     false
 
   $('[data-method=delete]:not(.dont_hide)').live 'ajax:before', ->
-    $(this).parent().fadeOut()
+    delete_link = $(this)
+    delete_link.parent().fadeOut "slow", ->
+      $(this).remove()
+      if delete_link.hasClass("delete_saved_search")
+        $("#saved_searches_group").hide() if $("#saved_searches_group .delete_saved_search").size() == 0
 
   $('#check_all').live 'click', ->
     if $(this).attr('data-target')
