@@ -133,7 +133,8 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
       @org.add_permission_to_person(@contact2, @admin_permission.id)
       post :bulk_create, filters: {ids: "#{@contact1.id},#{@contact2.id}"}, permission: "#{@contact_permission.id}", secret: @client.secret, order: 'created_at'
       json = JSON.parse(response.body)
-      assert_equal 2, json['people'].count, json.inspect
+      raise json.inspect
+      # assert_equal 2, json['people'].count, json.inspect
       assert_equal @admin_permission.id, @contact1.permissions.first.id
       assert_equal @admin_permission.id, @contact2.permissions.first.id
     end
