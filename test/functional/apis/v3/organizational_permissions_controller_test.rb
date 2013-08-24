@@ -9,9 +9,6 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
     @org = @client.organization
 
     @org.add_admin(@person)
-
-    @permission = @user.person.permission_for_org_id(@org.id)
-    @permission1 = Factory(:permission)
     @label = Factory(:label, organization: @org)
 
     Factory(:organizational_label, organization: @org, person: @person, label: @label)
@@ -23,6 +20,10 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
     @org_permission = @org.organizational_permissions.last
     @permission_contact = @person2.permission_for_org_id(@org.id)
     @label1 = Factory(:label, organization: @org)
+
+    @admin_permission = Permission.find_or_create_by_i18n("admin")
+    @user_permission = Permission.find_or_create_by_i18n("user")
+    @contact_permission = Permission.find_or_create_by_i18n("no_permissions")
   end
 
   context '.index' do
@@ -94,9 +95,8 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
     setup do
       @contact1 = Factory(:person)
       @contact2 = Factory(:person)
-      @admin_permission = Permission.find_by_i18n("admin")
-      @user_permission = Permission.find_by_i18n("user")
-      @contact_permission = Permission.find_by_i18n("no_permissions")
+      @another_admin = Factory(:person)
+      @org.add_admin(@another_admin)
     end
     should 'replace contact to admin permissions' do
       @org.add_permission_to_person(@contact1, @contact_permission.id)
@@ -163,7 +163,7 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
 
   context '.bulk_destroy' do
     should 'destroy bulk organizational_permissions' do
-      delete :bulk_destroy, filters: {ids: "#{@person1.id},#{@person2.id}"}, permission: "#{@permission1.id}", secret: @client.secret, order: 'created_at'
+      delete :bulk_destroy, filters: {ids: "#{@person1.id},#{@person2.id}"}, permission: "#{@contact_permission.id}", secret: @client.secret, order: 'created_at'
       assert_response :success
       json = JSON.parse(response.body)
       assert_equal 2, json['people'].count, json.inspect
@@ -175,7 +175,7 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
 
   context '.bulk_archive' do
     should 'archive bulk organizational_permissions' do
-      post :bulk_archive, filters: {ids: "#{@person1.id},#{@person2.id}"}, permission: "#{@permission1.id}", secret: @client.secret, order: 'created_at'
+      post :bulk_archive, filters: {ids: "#{@person1.id},#{@person2.id}"}, permission: "#{@contact_permission.id}", secret: @client.secret, order: 'created_at'
       assert_response :success
       json = JSON.parse(response.body)
       assert_equal 2, json['people'].count, json.inspect
